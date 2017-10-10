@@ -129,6 +129,7 @@ export class DatasetEffects {
 
             const match = [];
             if (ownerGroup) {
+              console.log(ownerGroup);
               if (ownerGroup.length > 0 && ownerGroup.constructor !== Array &&
                   typeof ownerGroup[0] === 'object') {
                 const groupsArray = [];

@@ -8,7 +8,7 @@
 
       <h3>Beamline</h3>
         <!--<p-autoComplete [(ngModel)]="location" (onSelect)="locSelected()" [suggestions]="data" field="creationLocation" name="creationLocation" [suggestions]="filteredLocations" (completeMethod)="handleInputLocation($event)" [size]="30" [placeholder]="Beamline"></p-autoComplete>-->
-        <p-autoComplete id="location" placeholder="/SLS/..." (keyup.enter)="locSelected($event)" [(ngModel)]="location" name="location" (onSelect)="locSelected($event)" [suggestions]="filteredLocations"
+        <p-autoComplete #loc placeholder="/SLS/..." (keyup.enter)="locSelected($event)" [(ngModel)]="location" name="location" (onSelect)="locSelected($event)" [suggestions]="filteredLocations"
           (completeMethod)="handleInputLocation($event)" [size]="30" field="_id" [minLength]="1" placeholder="Beamline" [dropdown]="false"
           (ngModelChange)="textValueChanged($event, 'creationLocation')" (onDropdownClick)="handleDropClick($event)" [minLength]="1"
           [multiple]="false">
@@ -22,7 +22,7 @@
     </div>
     <div class="ui field">
       <h3>Group</h3>
-        <p-autoComplete id="group" [(ngModel)]="group" placeholder="p15624" (keyup.enter)="groupSelected()" (onSelect)="groupSelected()" name="group" field="_id" [suggestions]="filteredGroups"
+        <p-autoComplete #grp [(ngModel)]="group" placeholder="p15624" (keyup.enter)="groupSelected()" (onSelect)="groupSelected()" name="group" field="_id" [suggestions]="filteredGroups"
           (completeMethod)="handleInputOwner($event)" [size]="30" [minLength]="1" [dropdown]="false" (ngModelChange)="textValueChanged($event, 'groups')"
           (onDropdownClick)="handleDropClick($event)" [multiple]="false" [minLength]="1" placeholder="Group">
           <!--</p-autoComplete>-->

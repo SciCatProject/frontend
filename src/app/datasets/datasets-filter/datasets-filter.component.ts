@@ -1,7 +1,7 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Params, Router} from '@angular/router';
 import {Store} from '@ngrx/store';
-import {Tree, TreeNode} from 'primeng/primeng';
+import {Tree, TreeNode, AutoComplete} from 'primeng/primeng';
 import * as dua from 'state-management/actions/dashboard-ui.actions';
 import * as dsa from 'state-management/actions/datasets.actions';
 import * as dUIStore from 'state-management/state/dashboard-ui.store';
@@ -15,6 +15,8 @@ import * as dStore from 'state-management/state/datasets.store';
 export class DatasetsFilterComponent implements OnInit {
 
   @ViewChild('datetree') dateTree: Tree;
+  @ViewChild('loc') locField: AutoComplete;
+  @ViewChild('grp') grpField: AutoComplete;
 
   @Input() datasets: Array<any> = [];
   facets: Array<any> = [];
@@ -50,17 +52,9 @@ export class DatasetsFilterComponent implements OnInit {
     this.store.select(state => state.root.datasets.activeFilters)
         .subscribe(data => {
           this.filters = Object.assign({}, data);
-          this.location =
-              this.filters.creationLocation ? {_id : this.filters.creationLocation} : '';
-          // if (this.filters.groups && this.filters.groups.length > 0) {
-          //   this.group = {_id : data.groups[0]};
-          // }
           // Update URL params, activeFilters subscription does not fire. Need to test.
-          const queryParams: Params =
-              Object.assign({}, this.route.snapshot.queryParams);
-          const newParams = Object.assign(queryParams, this.filters);
-          this.router.navigate([ '/datasets' ],
-                               {queryParams : queryParams, replaceUrl : true});
+          // const newParams = Object.assign({}, this.filters);
+
         });
     this.store.select(state => state.root.datasets.filterValues)
         .subscribe(values => {
@@ -114,9 +108,16 @@ export class DatasetsFilterComponent implements OnInit {
 
     this.route.queryParams.subscribe(params => {  
         this.store.select(state => state.root.datasets.activeFilters).take(1).subscribe(filters => {
-          const newFilters = Object.assign(filters, params);   
-          this.store.dispatch({type : dsa.FILTER_UPDATE, payload : newFilters});
-          this.store.dispatch({type : dsa.SEARCH, payload : newFilters});
+          const newParams = Object.assign(filters, params);   
+                    this.location =
+              newParams.creationLocation ? {_id : newParams.creationLocation} : '';
+          if (newParams.groups && newParams.groups.length > 0) {
+            this.group = {_id : newParams.groups};
+          }
+          this.router.navigate([ '/datasets' ],
+                               {queryParams : newParams, replaceUrl : true});
+          this.store.dispatch({type : dsa.FILTER_UPDATE, payload : newParams});
+          this.store.dispatch({type : dsa.SEARCH, payload : newParams});
           this.onSubmit();
         });
         
@@ -238,12 +239,17 @@ export class DatasetsFilterComponent implements OnInit {
    */
   clearFacets() {
     this.dates = [];
-    this.location = '';
-    this.group = '';
+    this.location = undefined;
+    this.group = undefined;
+    this.locField.value = '';
+    this.grpField.value = '';
     this.filters = dStore.initialDatasetState.activeFilters;
     this.store.select(state => state.root.user.currentUserGroups)
         .take(1)
-        .subscribe(groups => this.filters.groups = groups);
+        .subscribe(groups => {
+          console.log(groups);
+          this.filters.groups = groups
+        });
     this.filterValues = dStore.initialDatasetState.filterValues;
     this.filterValues.text = '';
     this.store.dispatch({type : dsa.FILTER_UPDATE, payload : this.filters});
@@ -252,6 +258,8 @@ export class DatasetsFilterComponent implements OnInit {
     this.store.dispatch(
         {type : dua.SAVE, payload : dUIStore.initialDashboardUIState});
     this.store.dispatch({type : dsa.SEARCH, payload : this.filters});
+    this.router.navigate([ '/datasets' ],
+                               {queryParams : this.filters, replaceUrl : true});
     // TODO clear selected sets
   }
 
