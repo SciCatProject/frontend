@@ -1,0 +1,12 @@
+.ui#content{
+  padding-top: 75px;
+}
+
+td {
+    overflow: hidden;
+}
+
+.dash-container {
+    width: 90%;
+    margin-left: 5%;
+}

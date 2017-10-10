@@ -1,0 +1,38 @@
+<div class="ui fixed menu">
+    <!-- <div class="ui container"> -->
+      <a href="#" class="header item">
+        <img class="logo" src="favicon.ico">
+        {{title}}
+      </a>
+      <!--<a href="#" class="item">Home</a>-->
+      <div class="right menu">
+          <ng-container *ngIf="username !== null; then accountTemplate else loginTemplate"></ng-container>
+          <ng-template #accountTemplate>
+            <a class="item" [routerLink]="['/datasets/']" [routerLinkActive]="['active']">Home</a>
+            <a class="item" [routerLink]="['/end-of-shift']" [routerLinkActive]="['active']">End of Shift</a>
+            <a class="item" [routerLink]="['/sample-data/', 'add']" [routerLinkActive]="['active']">Sample Data Entry</a>
+            <a class="item" [routerLink]="['/user/','jobs']" [routerLinkActive]="['active']">Jobs</a>
+            <div class="ui simple dropdown item">
+            <i class="dropdown icon"></i>
+                {{ username }}
+            <div class="menu">
+            <div class="header">Account Actions</div>
+            <a class="item" [routerLinkActive]="['active']" [routerLink]="['/user/','details']">Details</a>
+            <a class="item" [routerLinkActive]="['active']" [routerLink]="['/user/','settings']">Settings</a>
+            <a class="item" (click)="logout()">Logout</a>
+            </div>
+        </div>
+          </ng-template>
+          <ng-template #loginTemplate>
+              <a class="active item" [routerLink]="['/','login']">Login</a>
+          </ng-template>
+          <a href="https://gwilliams_c.gitpages.psi.ch/docs_gitbook/General/deployment.html" class="item">Help</a>
+      </div>
+    <!-- </div> -->
+</div>
+<div id="content" class="ui dash-container">
+    <breadcrumb></breadcrumb>
+    <div *ngIf="message$" [attr.class]="msgClass$ | async">{{message$ | async}}</div>
+    <br>
+    <router-outlet ></router-outlet>
+</div>

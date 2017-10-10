@@ -1,0 +1,25 @@
+
+<!--<div class="ui raised segment" *ngIf="dataset">
+  <h4 class="ui header">Dataset Details</h4>
+  <!--http://stackoverflow.com/questions/35534959/access-key-and-value-of-object-using-ngfor-->
+  <!--<ul *ngFor="let d of dataset | objKeys">
+    <li >{{d.key}}: {{d.value}}</li>
+  </ul>
+</div>-->
+
+  <p-tabView *ngIf="dataset">
+    <p-tabPanel header="Details" leftIcon="fa-dedent">
+      <div class="ui raised segment" *ngIf="dataset">
+        <!--<h4 class="ui header">Dataset Details</h4>-->
+        <config-form [source]="dataset" [sourceType]="'RawDataset'" [service]="ds"></config-form>
+      </div>
+    </p-tabPanel>
+    <p-tabPanel header="Datafiles" leftIcon="fa-file">
+      <datafiles *ngIf="dataset.origdatablocks && dataset.origdatablocks.length > 0" [dataBlocks]="dataset.origdatablocks"></datafiles>
+      <div *ngIf="!dataset.origdatablocks">
+        <h3>No datafiles linked to this dataset</h3>
+      </div>
+    </p-tabPanel>
+  </p-tabView>
+
+

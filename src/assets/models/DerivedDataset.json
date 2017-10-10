@@ -1,0 +1,90 @@
+{
+    "investigator": {
+        "name": "investigator",
+        "type": "string"
+    },
+    "inputDatasets": {
+        "name": "inputDatasets",
+        "type": "Array&lt;string&gt;"
+    },
+    "usedSoftware": {
+        "name": "usedSoftware",
+        "type": "Array&lt;string&gt;"
+    },
+    "jobParameters": {
+        "name": "jobParameters",
+        "type": "any"
+    },
+    "jobLogData": {
+        "name": "jobLogData",
+        "type": "string"
+    },
+    "pid": {
+        "name": "pid",
+        "type": "string"
+    },
+    "owner": {
+        "name": "owner",
+        "type": "string"
+    },
+    "orcidOfOwner": {
+        "name": "orcidOfOwner",
+        "type": "string"
+    },
+    "contactEmail": {
+        "name": "contactEmail",
+        "type": "string"
+    },
+    "sourceFolder": {
+        "name": "sourceFolder",
+        "type": "string"
+    },
+    "size": {
+        "name": "size",
+        "type": "number"
+    },
+    "packagedSize": {
+        "name": "packagedSize",
+        "type": "number"
+    },
+    "creationTime": {
+        "name": "creationTime",
+        "type": "Date"
+    },
+    "type": {
+        "name": "type",
+        "type": "string"
+    },
+    "validationStatus": {
+        "name": "validationStatus",
+        "type": "string"
+    },
+    "keywords": {
+        "name": "keywords",
+        "type": "Array&lt;string&gt;"
+    },
+    "description": {
+        "name": "description",
+        "type": "string"
+    },
+    "userTargetLocation": {
+        "name": "userTargetLocation",
+        "type": "string"
+    },
+    "classification": {
+        "name": "classification",
+        "type": "string"
+    },
+    "license": {
+        "name": "license",
+        "type": "string"
+    },
+    "ownerGroup": {
+        "name": "ownerGroup",
+        "type": "string"
+    },
+    "accessGroups": {
+        "name": "accessGroups",
+        "type": "Array&lt;string&gt;"
+    }
+}

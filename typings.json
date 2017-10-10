@@ -1,0 +1,16 @@
+{
+  "globalDependencies": {
+    "angular-protractor": "registry:dt/angular-protractor#1.5.0+20161101133457",
+    "core-js": "registry:dt/core-js#0.9.0+20170324193834",
+    "socket.io-client": "registry:dt/socket.io-client#1.4.4+20161116080703",
+    "zone.js": "registry:dt/zone.js#0.0.0+20160510002910"
+  },
+  "globalDevDependencies": {
+    "karma": "registry:dt/karma#0.13.9+20160811111312",
+    "karma-jasmine": "registry:dt/karma-jasmine#0.0.0+20170207112528",
+    "protractor": "registry:dt/protractor#1.5.0+20161119044246"
+  },
+  "dependencies": {
+    "angular": "registry:dt/angular#1.6.0+20170321201455"
+  }
+}

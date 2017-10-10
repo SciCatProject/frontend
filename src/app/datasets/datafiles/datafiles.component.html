@@ -1,0 +1,12 @@
+<div class="ui raised segment">
+  <h4 class="ui header">Datafiles</h4>
+  <h5>Count: {{count}}</h5>
+  <p-dataTable [value]="files" (onRowClick)="onSelect($event)" [paginator]="true" [rows]="20">
+    <p-column field="path" header="Path"></p-column>
+    <p-column field="size" header="Size"></p-column>
+    <p-column field="time" header="Time"></p-column>
+</p-dataTable>
+</div>
+<div class="ui raised segment" *ngIf="selectedDF">
+  {{selectedDF['path']}}
+</div>

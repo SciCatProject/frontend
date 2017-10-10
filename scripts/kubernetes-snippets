@@ -1,0 +1,48 @@
+# Things that need to be done only once
+
+Note: the --validate=false is a workaround for the missing AFS support for hard links Note: define your KUBECONFIG variable to connect to the kubernetes cluster of your choice, e.g export KUBECONFIG=$DACATHOME/catamel-psisecrets/server/kubernetes/admin.conf
+
+```bash
+
+
+###### Application specific part
+
+# TODO: delete existing application specific PVs, otehrwise can not be reconnected
+
+envarray=(qa production)
+portarray=(30021 30023)
+hostextarray=('-qa' '')
+certarray=('discovery' 'discovery')
+
+# and now the catanie deployment
+# first ensure that image is up-to-date:
+
+cd $DACATHOME/catanie
+export CATANIE_IMAGE_VERSION=$(git rev-parse HEAD)
+sudo docker build -t registry.psi.ch:5000/egli/catanie:$CATANIE_IMAGE_VERSION .
+sudo docker push registry.psi.ch:5000/egli/catanie:$CATANIE_IMAGE_VERSION
+
+for ((i=0;i<${#envarray[@]};i++)); do
+   export LOCAL_ENV="${envarray[i]}"
+   export PORTOFFSET="${portarray[i]}"
+   export HOST_EXT="${hostextarray[i]}"
+   export CERTNAME="${certarray[i]}"
+   echo $LOCAL_ENV $PORTOFFSET $HOST_EXT
+   cd  $DACATHOME/catanie/scripts/
+   envsubst < catanie-deployment.yaml | kubectl apply -f - --validate=false
+done
+
+```
+# commands needed whenever catanie code changes
+
+```bash
+cd $DACATHOME/catanie
+# retrieve current git tag
+export CATANIE_IMAGE_VERSION=$(git rev-parse HEAD)
+docker build -t registry.psi.ch:5000/egli/catanie:$CATANIE_IMAGE_VERSION .
+docker push registry.psi.ch:5000/egli/catanie:$CATANIE_IMAGE_VERSION
+
+# update image in deployment triggers redeployment
+export LOCAL_ENV=.. make your choice...
+kubectl -n $LOCAL_ENV set image deployment/catanie catanie=registry.psi.ch:5000/egli/catanie:$CATANIE_IMAGE_VERSION
+```

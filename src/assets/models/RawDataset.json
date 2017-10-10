@@ -1,0 +1,158 @@
+{
+    "principalInvestigator": {
+        "name": "principalInvestigator",
+        "type": "string"
+    },
+    "endTime": {
+        "name": "endTime",
+        "type": "Date"
+    },
+    "creationLocation": {
+        "name": "creationLocation",
+        "type": "string",
+        "facet": {
+            "type": "text"
+        }
+    },
+    "dataFormat": {
+        "name": "dataFormat",
+        "type": "string"
+    },
+    "scientificMetadata": {
+        "name": "scientificMetadata",
+        "type": "object"
+    },
+    "pid": {
+        "name": "pid",
+        "type": "string"
+    },
+    "owner": {
+        "name": "owner",
+        "type": "string"
+    },
+    "orcidOfOwner": {
+        "name": "orcidOfOwner",
+        "type": "string"
+    },
+    "contactEmail": {
+        "name": "contactEmail",
+        "type": "string",
+        "visible": true
+    },
+    "sourceFolder": {
+        "name": "sourceFolder",
+        "type": "string",
+        "table": {
+            "header": "Source Folder",
+            "sortable": true,
+            "field": "sourceFolder"
+        }
+    },
+    "size": {
+        "name": "size",
+        "type": "number",
+        "table": {
+            "header": "Size (GB)",
+            "sortable": true,
+            "field": "size"
+        }
+    },
+    "packagedSize": {
+        "name": "packagedSize",
+        "type": "number"
+    },
+    "creationTime": {
+        "name": "creationTime",
+        "type": "Date",
+        "facet": {
+            "type": "date"
+        },
+        "table": {
+            "header": "Creation Time",
+            "sortable": true,
+            "field": "creationTime"
+        },
+        "visible": true
+    },
+    "type": {
+        "name": "type",
+        "type": "string",
+        "visible": false
+    },
+    "validationStatus": {
+        "name": "validationStatus",
+        "type": "string"
+    },
+    "keywords": {
+        "name": "keywords",
+        "type": "array"
+    },
+    "description": {
+        "name": "description",
+        "type": "string"
+    },
+    "userTargetLocation": {
+        "name": "userTargetLocation",
+        "type": "string"
+    },
+    "classification": {
+        "name": "classification",
+        "type": "string"
+    },
+    "license": {
+        "name": "license",
+        "type": "string"
+    },
+    "ownerGroup": {
+        "name": "ownerGroup",
+        "type": "string",
+        "table": {
+            "header": "Group",
+            "sortable": true,
+            "field": "ownerGroup"
+        }
+    },
+    "accessGroups": {
+        "name": "accessGroups",
+        "type": "array"
+    },
+    "sampleId": {
+        "name": "sampleId",
+        "type": "string"
+    },
+    "proposalId": {
+        "name": "proposalId",
+        "type": "string",
+        "table": {
+            "header": "Proposal ID",
+            "sortable": true,
+            "field": "proposalId"
+        }
+    },
+    "archiveStatus": {
+        "table": {
+            "header": "Archive Status",
+            "sortable": true,
+            "field": "archiveStatus"
+        }
+    },
+    "retrieveStatus": {
+        "table": {
+            "header": "Retrieve Status",
+            "sortable": true,
+            "field": "retrieveStatus"
+        }
+    },
+    "datasetlifecycle": {
+        "visible": false
+    },
+    "origdatablocks": {
+        "visible": false
+    },
+    "createdAt": {
+        "visible": false
+    },
+    "updatedAt": {
+        "visible": false
+    }
+}

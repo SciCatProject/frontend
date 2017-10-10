@@ -1,0 +1,68 @@
+<div>
+    <p-dataTable #ds [paginator]="true" [lazy]="true" [loading]="loading$ | async" [rows]="limit$ | async" [value]="datasets" [(selection)]="selectedSets" [rowHover]="true" (onLazyLoad)="onPage($event)"
+    (onRowSelect)="onSelect($event)" (onRowUnselect)="onSelect($event)" (onRowClick)="onRowSelect($event)" (onHeaderCheckboxToggle)="onSelect($event)"
+   [resizableColumns]="true" columnResizeMode="expand" [totalRecords]="datasetCount" dataKey="pid">
+	<p-column styleClass="ds-check" [style]="{'width': '30px'}" selectionMode="multiple"></p-column>
+        <p-column [style]="{'width':'38px', 'overflow':'hidden'}" *ngFor="let col of cols" [field]="col.field" [header]="col.header" [sortable]="col.sortable" (sortFunction)="colSort($event)"> 
+          <ng-template let-col let-ds="rowData" let-ri="rowIndex" pTemplate="body">
+              <span>{{getFormat(col.field, ds[col.field], ds)}}</span>
+          </ng-template>
+        </p-column>
+        <p-footer>
+            <ul>
+                <li *ngFor="let ds of selectedSets" style="text-align: left">{{ds.pid}}</li>
+            </ul>
+        </p-footer>
+    </p-dataTable>
+    <div [ngSwitch]="aremaOptions">
+         <!--*ngIf="selectedSets.length > 0">-->
+        <div class="ui buttons dataset-action" *ngSwitchDefault>
+            <button class="ui button" (click)="archiveClickHandle($event)"><i class="upload icon"></i>Archive</button>
+            <div class="or"></div>
+            <button class="ui positive button" (click)="retrieveClickHandle($event)"><i class="download icon"></i>Retrieve</button>
+        </div>
+        <div class="ui buttons dataset-action" *ngSwitchCase="'archive'">
+            <button class="ui button" (click)="archiveClickHandle($event)"><i class="upload icon"></i>Archive</button>
+	</div>
+        <div class="ui buttons dataset-action" *ngSwitchCase="'retrieve'">
+            <button class="ui button" (click)="archiveClickHandle($event)"><i class="upload icon"></i>Restore</button>
+	    </div>
+    </div>
+</div>
+
+<p-confirmDialog header="Archive" ></p-confirmDialog>
+
+<p-dialog header="Retrieve {{selectedSets.length}} Datasets?" [(visible)]="retrieveDisplay" [closable]="false" modal="modal" width="300" [responsive]="true">
+  <ul>
+    <li *ngFor="let ds of selectedSets" style="text-align: left">{{ds.sourceFolder}}</li>
+  </ul>
+  <p>Please enter the destination directory for your datasets:</p>
+  <form  #retrieveForm="ngForm" (ngSubmit)="retrieveSets(retrieveForm)">
+      <div class="form-group">
+        <label for="path">Destination Path: </label>
+ 
+        <input type="text" id="path" class="form-control"
+               required minlength="4" maxlength="24"
+               name="path" ngModel
+               #path="ngModel" >
+ 
+        <div *ngIf="path.errors && (path.dirty || path.touched)"
+             class="alert alert-danger">
+            <div [hidden]="!path.errors.required">
+              Path is required
+            </div>
+            <div [hidden]="!path.errors.minlength">
+              Path must be at least 4 characters long.
+            </div>
+            <div [hidden]="!path.errors.maxlength">
+              Path cannot be more than 24 characters long.
+            </div>
+        </div>
+      </div>
+    <!--<input type="text" class="form-control" ngModel required  name="dest" placeholder="Enter dataset destination"/>-->
+    <div class="pull-right top-buffer ">
+      <button type="button" class="btn btn-primary" (click)="retrieveDisplay = false; selectedSets=[]">Cancel</button>
+      <button type="button" (click)="retrieveSets(retrieveForm)" [disabled]="!retrieveForm.form.valid" class="btn btn-primary">Retrieve</button>
+    </div>
+  </form>
+</p-dialog>

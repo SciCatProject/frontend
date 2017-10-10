@@ -1,0 +1,22 @@
+{
+    "myid": {
+        "name": "myid",
+        "type": "number"
+    },
+    "lastSynchTime": {
+        "name": "lastSynchTime",
+        "type": "string"
+    },
+    "lastSynchSN": {
+        "name": "lastSynchSN",
+        "type": "number"
+    },
+    "affectedUsers": {
+        "name": "affectedUsers",
+        "type": "Array&lt;string&gt;"
+    },
+    "affectedGroups": {
+        "name": "affectedGroups",
+        "type": "Array&lt;string&gt;"
+    }
+}

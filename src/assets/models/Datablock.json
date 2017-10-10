@@ -1,0 +1,35 @@
+{
+    "id": {
+        "name": "id",
+        "type": "string"
+    },
+    "archivePath": {
+        "name": "archivePath",
+        "type": "string"
+    },
+    "size": {
+        "name": "size",
+        "type": "number"
+    },
+    "version": {
+        "name": "version",
+        "type": "string"
+    },
+    "dataFileList": {
+        "name": "dataFileList",
+        "type": "Array&lt;any&gt;",
+        "default": []
+    },
+    "datasetId": {
+        "name": "datasetId",
+        "type": "string"
+    },
+    "rawDatasetId": {
+        "name": "rawDatasetId",
+        "type": "string"
+    },
+    "derivedDatasetId": {
+        "name": "derivedDatasetId",
+        "type": "string"
+    }
+}

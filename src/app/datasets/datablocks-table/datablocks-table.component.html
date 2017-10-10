@@ -1,0 +1,8 @@
+<div class="ui raised segment">
+  <h4 class="ui header">Datablocks</h4>
+    <p-dataTable [value]="datablocks" (onRowSelect)="onSelect($event)">
+    <p-column field="id" header="ID"></p-column>
+    <p-column field="size" header="Size"></p-column>
+    <p-column field="datasetID" header="DatasetID"></p-column>
+</p-dataTable>
+</div>
