@@ -1,7 +1,7 @@
 import {DatePipe} from '@angular/common';
 import {Component, EventEmitter, Input, OnInit, Output, ViewChild, OnDestroy} from '@angular/core';
 import {Http} from '@angular/http';
-import {Router} from '@angular/router';
+import {Router, ActivatedRoute} from '@angular/router';
 import {Observable} from 'rxjs/Observable';
 import {Store} from '@ngrx/store';
 import {ConfirmationService, DataTable} from 'primeng/primeng';
@@ -38,6 +38,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
 
   constructor(public http: Http, private us: UserApi, private router: Router,
               private configSrv: ConfigService, private js: JobApi,
+              private route: ActivatedRoute,
               private confirmationService: ConfirmationService,
               private store: Store<any>) {
     this.configSrv.getConfigFile('RawDataset').subscribe(conf => {
@@ -53,6 +54,16 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     this.loading$ = this.store.select(state => state.root.datasets.loading);
     this.limit$ =
         this.store.select(state => state.root.user.settings.datasetCount);
+
+    this.route.queryParams.subscribe(params => {  
+        console.log(params);
+        this.store.select(state => state.root.datasets.activeFilters).take(1).subscribe(filters => {
+          const newFilters = Object.assign(filters, params);
+          this.setCurrentPage(newFilters.skip);
+          this.store.dispatch({type : dsa.FILTER_UPDATE, payload : newFilters});
+        });
+        
+    });
 
     // NOTE: Typescript picks this key up as the property of the state, but it
     // actually links to the reducer key in app module
@@ -96,6 +107,8 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
           this.router.navigateByUrl('/dataset/' + encodeURIComponent(ds.pid));
         }
     }));
+
+    
 
   }
 

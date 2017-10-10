@@ -111,6 +111,16 @@ export class DatasetsFilterComponent implements OnInit {
             }
           }
         });
+
+    this.route.queryParams.subscribe(params => {  
+        console.log(params);
+        this.store.select(state => state.root.datasets.activeFilters).take(1).subscribe(filters => {
+          const newFilters = Object.assign(filters, params);       
+          this.store.dispatch({type : dsa.FILTER_UPDATE, payload : newFilters});
+          this.onSubmit();
+        });
+        
+    });
   }
 
   /**
