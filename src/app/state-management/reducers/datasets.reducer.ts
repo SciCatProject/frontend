@@ -22,7 +22,6 @@ export function datasetsReducer(state = initialDatasetState, action: Action) {
     case dsa.FILTER_UPDATE: {
       const f = action['payload'];
       const newState = Object.assign({}, state, { activeFilters: f, selectedSets: [] });
-      console.log(newState);
       return newState;
     }
 

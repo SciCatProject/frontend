@@ -47,9 +47,9 @@ export class DatasetsFilterComponent implements OnInit {
    * only use unique values
    */
   ngOnInit() {
-    this.store.select(state => state.root.datasets)
+    this.store.select(state => state.root.datasets.activeFilters)
         .subscribe(data => {
-          this.filters = data.activeFilters;
+          this.filters = Object.assign({}, data);
           this.location =
               this.filters.creationLocation ? {_id : this.filters.creationLocation} : '';
           // if (this.filters.groups && this.filters.groups.length > 0) {
@@ -113,7 +113,6 @@ export class DatasetsFilterComponent implements OnInit {
         });
 
     this.route.queryParams.subscribe(params => {  
-        console.log(params);
         this.store.select(state => state.root.datasets.activeFilters).take(1).subscribe(filters => {
           const newFilters = Object.assign(filters, params);       
           this.store.dispatch({type : dsa.FILTER_UPDATE, payload : newFilters});
@@ -178,7 +177,7 @@ export class DatasetsFilterComponent implements OnInit {
     }
     // TODO handle text values changing
     // TODO debounce time needs to be here even though it is in the effects?
-    this.store.dispatch({type : dsa.FILTER_UPDATE, payload : this.filters});
+    // this.store.dispatch({type : dsa.FILTER_UPDATE, payload : this.filters});
   }
   /**
    * Creates a filtered array based
@@ -210,8 +209,8 @@ export class DatasetsFilterComponent implements OnInit {
    */
   locSelected(event) {
     this.filters.creationLocation = event['_id'];
-    this.store.dispatch(
-        {type : dua.SAVE, payload : {beamlineText : event['_id']}});
+    // this.store.dispatch(
+    //     {type : dua.SAVE, payload : {beamlineText : event['_id']}});
     this.store.dispatch({type : dsa.FILTER_UPDATE, payload : this.filters});
     this.onSubmit();
   }

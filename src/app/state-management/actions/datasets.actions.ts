@@ -28,7 +28,7 @@ export const ADD_GROUPS = '[User] Add Groups';
 export const ADD_GROUPS_COMPLETE = '[User] Add Groups Complete';
 export const ADD_GROUPS_FAILED = '[User] Add Groups Failed';
 
-export const SELECT_CURRENT = '[Dataset] Curnent set selected';
+export const SELECT_CURRENT = '[Dataset] Current set selected';
 
 export const SELECTED_UPDATE = '[Dataset]  Selected Datasets Update';
 // export const FILTER_UPDATE_COMPLETE = '[Dataset]  Filter Update Complete';

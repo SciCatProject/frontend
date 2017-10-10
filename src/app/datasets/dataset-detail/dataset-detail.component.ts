@@ -24,6 +24,10 @@ export class DatasetDetailComponent implements OnInit {
 
   constructor(private route: ActivatedRoute,
               private store: Store<any>) {
+  };
+
+  ngOnInit() {
+    const self = this;
 
     this.store.select(state => state.root.datasets.currentSet)
         .subscribe(dataset => {
@@ -37,10 +41,8 @@ export class DatasetDetailComponent implements OnInit {
             this.store.dispatch({type: dsa.SELECT_CURRENT, payload: undefined});
           }
         });
-  };
 
-  ngOnInit() {
-    const self = this;
+
     this.store.select(state => state.root.datasets.currentSet).take(1).subscribe(ds => {
       if (!ds) {
         this.route.params.subscribe(params => {

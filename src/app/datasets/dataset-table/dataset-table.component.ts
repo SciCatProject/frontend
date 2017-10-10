@@ -88,7 +88,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
 
     this.subscriptions.push(this.store.select(state => state.root.datasets.activeFilters)
         .subscribe(filters => {
-          console.log(filters);
           if (filters.skip !== this.dsTable.first) {
             setTimeout(() => {
               this.setCurrentPage(filters.skip);
@@ -101,12 +100,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
           this.selectedSets = selected;
 
         }));
-
-    this.subscriptions.push(this.store.select(state => state.root.datasets.currentSet).subscribe(ds => {
-        if (ds) {
-          this.router.navigateByUrl('/dataset/' + encodeURIComponent(ds.pid));
-        }
-    }));
 
     
 
@@ -130,8 +123,9 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     // before 5th July 2017
     if (event['originalEvent']['target']['innerHTML'].indexOf('chkbox') ===
         -1) {
-      this.store.dispatch(
-          {type : dsa.SELECT_CURRENT, payload : event.data});
+      this.router.navigateByUrl('/dataset/' + encodeURIComponent(event.data.pid));
+      // this.store.dispatch(
+      //     {type : dsa.SELECT_CURRENT, payload : event.data});
     }
   }
 

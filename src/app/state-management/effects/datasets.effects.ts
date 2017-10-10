@@ -24,7 +24,7 @@ export class DatasetEffects {
           .map(toPayload)
           .switchMap(payload => {
             const id = payload;
-
+            console.log(id);
             // TODO separate action for dataBlocks? or retrieve at once?
 
             return this.rds.findById(encodeURIComponent(id))
@@ -68,7 +68,7 @@ export class DatasetEffects {
                 })
                 .catch(err => {
                   return Observable.of(
-                      {type : DatasetActions.SEARCH_ID_FAILED, payload : err});
+                      {type : DatasetActions.DATABLOCKS_FAILED, payload : err});
                 });
           });
 
