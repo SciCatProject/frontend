@@ -1,0 +1,26 @@
+src/app/users/adauth.service.ts:        // TODO build loopback User from AD info?
+src/app/users/adauth.service.spec.ts:// TODO update to call login method and test resuling URL
+src/app/shared/MockStubs.ts:  // TODO hold datasets and return array of samples
+src/app/datasets/dataset.service.ts:    // TODO this should be in a different service? Maybe called when the user logs in
+src/app/users/user-settings/user-settings.component.ts:    // TODO handle service and endpoint for user settings
+src/app/users/login/login.component.ts:            //TODO implement errors
+src/app/state-management/reducers/user.reducer.ts:      // TODO check why susbcription does not receive this
+src/app/state-management/reducers/datasets.reducer.ts:    // TODO handle failed actions
+src/app/state-management/effects/datasets.effects.ts:            // TODO separate action for dataBlocks? or retrieve at once?
+src/app/state-management/effects/datasets.effects.ts:            // TODO separate action for dataBlocks? or retrieve at once?
+src/app/state-management/effects/datasets.effects.ts:            // TODO access state from here?
+src/app/state-management/effects/datasets.effects.ts:            // TODO access state from here?
+src/app/datasets/dataset-table/dataset-table.component.ts:            // TODO number of copies from settings table
+src/app/datasets/dataset-table/dataset-table.component.ts:              // TODO job params - retrieve, userTarget - archive
+src/app/datasets/dataset-table/dataset-table.component.ts:    // TODO maybe wipe the value when submitted?
+src/app/datasets/datafiles/datafiles.component.ts:          //TODO split out into error routing class Or use rxjs/store?
+src/app/shared/components/config-form/config-form.component.html:<!--TODO add configuration and error/success message div-->
+src/app/shared/components/config-form/config-form.component.html:    <!--TODO handle different kinds of input and formats. I.e. dropdowns, checkboxes etc-->
+src/app/shared/components/breadcrumb/breadcrumb.component.ts:    // TODO handle query params
+src/app/shared/components/config-form/config-form.component.ts:    // TODO check if config exists, do not use if doesn't (i.e. for normal
+src/app/shared/components/config-form/config-form.component.ts:    // TODO VALIDATE HERE or validate from a config file
+src/app/shared/components/config-form/config-form.component.ts:    // TODO inform user of errors returned from service
+src/app/shared/components/datasets-filter/datasets-filter.component.ts:    //TODO handle text values changing
+src/app/shared/components/datasets-filter/datasets-filter.component.ts:    //TODO debounce time needs to be here even though it is in the effects?
+src/app/shared/components/datasets-filter/datasets-filter.component.ts:    //TODO clear selected sets
+src/app/shared/components/datasets-filter/datasets-filter.component.ts:    // TODO handle selected item

@@ -1,0 +1,38 @@
+{
+    "provider": {
+        "name": "provider",
+        "type": "string"
+    },
+    "authScheme": {
+        "name": "authScheme",
+        "type": "string"
+    },
+    "externalId": {
+        "name": "externalId",
+        "type": "string"
+    },
+    "profile": {
+        "name": "profile",
+        "type": "any"
+    },
+    "credentials": {
+        "name": "credentials",
+        "type": "any"
+    },
+    "created": {
+        "name": "created",
+        "type": "Date"
+    },
+    "modified": {
+        "name": "modified",
+        "type": "Date"
+    },
+    "id": {
+        "name": "id",
+        "type": "any"
+    },
+    "userId": {
+        "name": "userId",
+        "type": "any"
+    }
+}

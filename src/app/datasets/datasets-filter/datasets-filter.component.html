@@ -1,0 +1,47 @@
+<div class="ui raised container" *ngIf="facets">
+  <h3>
+    <u>Filter Results</u>
+  </h3>
+  <form class="ui form">
+    <h3 *ngIf="resultCount > 0">Results: {{resultCount}}</h3>
+    <div class="ui field">
+
+      <h3>Beamline</h3>
+        <!--<p-autoComplete [(ngModel)]="location" (onSelect)="locSelected()" [suggestions]="data" field="creationLocation" name="creationLocation" [suggestions]="filteredLocations" (completeMethod)="handleInputLocation($event)" [size]="30" [placeholder]="Beamline"></p-autoComplete>-->
+        <p-autoComplete id="location" placeholder="/SLS/..." (keyup.enter)="locSelected" [(ngModel)]="location" name="location" (onSelect)="locSelected()" [suggestions]="filteredLocations"
+          (completeMethod)="handleInputLocation($event)" [size]="30" field="_id" [minLength]="1" placeholder="Beamline" [dropdown]="false"
+          (ngModelChange)="textValueChanged($event, 'creationLocation')" (onDropdownClick)="handleDropClick($event)" [minLength]="1"
+          [multiple]="false">
+          <ng-template let-g pTemplate="g">
+            <div class="ui-helper-clearfix" style="border-bottom:1px solid #D5D5D5">
+              <div style="font-size:18px;float:left;margin:10px 10px 0 0">{{g._id}}</div>
+              <div style="font-size:18px;float:right;margin:10px 10px 0 0">{{g.count}}</div>
+            </div>
+          </ng-template>
+        </p-autoComplete>
+    </div>
+    <div class="ui field">
+      <h3>Group</h3>
+        <p-autoComplete id="group" [(ngModel)]="group" placeholder="p15624" (keyup.enter)="groupSelected()" (onSelect)="groupSelected()" name="group" field="_id" [suggestions]="filteredGroups"
+          (completeMethod)="handleInputOwner($event)" [size]="30" [minLength]="1" [dropdown]="false" (ngModelChange)="textValueChanged($event, 'groups')"
+          (onDropdownClick)="handleDropClick($event)" [multiple]="false" [minLength]="1" placeholder="Group">
+          <!--</p-autoComplete>-->
+          <!--<p-autoComplete  id="group" [(ngModel)]="group" [suggestions]="filteredGroups" (completeMethod)="handleInputOwner($event)" [size]="30"-->
+          <!--[minLength]="1" placeholder="Group" [dropdown]="true" (onSelect)="groupSelected()" (onDropdownClick)="handleDropdownClick($event)">-->
+          <ng-template let-g pTemplate="g">
+            <div class="ui-helper-clearfix" style="border-bottom:1px solid #D5D5D5">
+              <div style="font-size:18px;float:left;margin:10px 10px 0 0">{{g._id}}</div>
+              <div style="font-size:18px;float:right;margin:10px 10px 0 0">{{g.count}}</div>
+            </div>
+          </ng-template>
+        </p-autoComplete>
+    </div>
+    <div class="ui field">
+      <h3>Date Range</h3>
+        <p-calendar [(ngModel)]="dates" name="date" selectionMode="range" yearNavigator="true" yearRange="1990:2017" (onSelect)="onTimeSelect($event)"></p-calendar>
+    </div>
+    <!--<button type="submit" class="ui button">Filter</button>-->
+    <button class="ui button" (click)="clearFacets()">Clear</button>
+  </form>
+  <br>
+</div>

@@ -1,0 +1,22 @@
+{
+    "sAMAccountName": {
+        "name": "sAMAccountName",
+        "type": "string"
+    },
+    "displayName": {
+        "name": "displayName",
+        "type": "string"
+    },
+    "description": {
+        "name": "description",
+        "type": "string"
+    },
+    "email": {
+        "name": "email",
+        "type": "string"
+    },
+    "memberOf": {
+        "name": "memberOf",
+        "type": "Array&lt;string&gt;"
+    }
+}

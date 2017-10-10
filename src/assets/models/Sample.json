@@ -1,0 +1,38 @@
+{
+    "samplelId": {
+        "name": "samplelId",
+        "type": "string"
+    },
+    "owner": {
+        "name": "owner",
+        "type": "string"
+    },
+    "description": {
+        "name": "description",
+        "type": "string"
+    },
+    "createdAt": {
+        "name": "createdAt",
+        "type": "Date"
+    },
+    "sampleCharacteristics": {
+        "name": "sampleCharacteristics",
+        "type": "any"
+    },
+    "attachments": {
+        "name": "attachments",
+        "type": "Array&lt;string&gt;"
+    },
+    "ownerGroup": {
+        "name": "ownerGroup",
+        "type": "string"
+    },
+    "accessGroups": {
+        "name": "accessGroups",
+        "type": "Array&lt;string&gt;"
+    },
+    "id": {
+        "name": "id",
+        "type": "any"
+    }
+}
