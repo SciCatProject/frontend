@@ -56,7 +56,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
         this.store.select(state => state.root.user.settings.datasetCount);
 
     this.route.queryParams.subscribe(params => {  
-        console.log(params);
         this.store.select(state => state.root.datasets.activeFilters).take(1).subscribe(filters => {
           const newFilters = Object.assign(filters, params);
           this.setCurrentPage(newFilters.skip);

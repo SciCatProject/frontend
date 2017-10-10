@@ -20,7 +20,10 @@ export function datasetsReducer(state = initialDatasetState, action: Action) {
     }
 
     case dsa.FILTER_UPDATE: {
-      const f = action['payload'];
+      let f = action['payload'];
+      if (f['groups'] && !Array.isArray(f['groups']) && f['groups'].length > 0) {
+        f['groups'] = [f['groups']];  
+      }
       const newState = Object.assign({}, state, { activeFilters: f, selectedSets: [] });
       return newState;
     }
@@ -38,7 +41,6 @@ export function datasetsReducer(state = initialDatasetState, action: Action) {
 
     case dsa.SEARCH_COMPLETE: {
       const d = <lb.RawDataset[]>action['payload'];
-
       return Object.assign({}, state, { datasets: d, loading: false });
     }
 
