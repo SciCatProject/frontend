@@ -1,0 +1,30 @@
+{
+    "realm": {
+        "name": "realm",
+        "type": "string"
+    },
+    "username": {
+        "name": "username",
+        "type": "string"
+    },
+    "password": {
+        "name": "password",
+        "type": "string"
+    },
+    "email": {
+        "name": "email",
+        "type": "string"
+    },
+    "emailVerified": {
+        "name": "emailVerified",
+        "type": "boolean"
+    },
+    "verificationToken": {
+        "name": "verificationToken",
+        "type": "string"
+    },
+    "id": {
+        "name": "id",
+        "type": "any"
+    }
+}

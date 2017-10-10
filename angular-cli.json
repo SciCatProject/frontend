@@ -1,0 +1,73 @@
+{
+    "project": {
+        "version": "1.0.0-beta.30",
+        "name": "catanie"
+    },
+    "apps": [{
+        "root": "src",
+        "outDir": "dist",
+        "assets": [
+            "assets",
+            "favicon.ico",
+            "app/loopback_form"
+        ],
+        "index": "index.html",
+        "main": "main.ts",
+        "polyfills": "polyfills.ts",
+        "test": "test.ts",
+        "tsconfig": "tsconfig.json",
+        "prefix": "app",
+        "styles": [
+            "styles.css",
+            "../node_modules/primeng/resources/themes/omega/theme.css",
+            "../node_modules/primeng/resources/primeng.min.css"
+        ],
+        "scripts": [],
+        "environmentSource": "environments/environment.ts",
+        "environments": {
+            "dev": "environments/environment.ts",
+            "production": "environments/environment.prod.ts",
+            "staging": "environments/environment.staging.ts",
+            "qa": "environments/environment.qa.ts"
+        }
+    }],
+    "e2e": {
+        "protractor": {
+            "config": "./protractor.conf.js"
+        }
+    },
+    "lint": [{
+            "files": "src/**/*.ts",
+            "project": "src/tsconfig.json"
+        },
+        {
+            "files": "e2e/**/*.ts",
+            "project": "e2e/tsconfig.json"
+        }
+    ],
+    "test": {
+        "karma": {
+            "config": "./karma.conf.js"
+        }
+    },
+    "defaults": {
+        "serve": {
+            "port": 4200,
+            "host": "0.0.0.0"
+        },
+        "styleExt": "css",
+        "prefixInterfaces": false,
+        "inline": {
+            "style": false,
+            "template": false
+        },
+        "spec": {
+            "class": false,
+            "component": true,
+            "directive": true,
+            "module": false,
+            "pipe": true,
+            "service": true
+        }
+    }
+}

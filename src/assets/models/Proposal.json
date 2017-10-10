@@ -1,0 +1,55 @@
+{
+    "proposalId": {
+        "name": "proposalId",
+        "type": "string"
+    },
+    "pi_email": {
+        "name": "pi_email",
+        "type": "string"
+    },
+    "pi_firstname": {
+        "name": "pi_firstname",
+        "type": "string"
+    },
+    "pi_lastname": {
+        "name": "pi_lastname",
+        "type": "string"
+    },
+    "email": {
+        "name": "email",
+        "type": "string"
+    },
+    "firstname": {
+        "name": "firstname",
+        "type": "string"
+    },
+    "lastname": {
+        "name": "lastname",
+        "type": "string"
+    },
+    "title": {
+        "name": "title",
+        "type": "string"
+    },
+    "abstract": {
+        "name": "abstract",
+        "type": "string"
+    },
+    "attachments": {
+        "name": "attachments",
+        "type": "Array&lt;string&gt;"
+    },
+    "ownerGroup": {
+        "name": "ownerGroup",
+        "type": "string"
+    },
+    "accessGroups": {
+        "name": "accessGroups",
+        "type": "Array&lt;string&gt;"
+    },
+    "MeasurementPeriodList": {
+        "name": "MeasurementPeriodList",
+        "type": "Array&lt;any&gt;",
+        "default": []
+    }
+}

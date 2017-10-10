@@ -1,0 +1,16 @@
+{  
+   "archivePath": "gpfs/Archive/rawdataDataBlock_Edgar1_1_2017-04-06-04-19-19.cnt",  
+   "size": 21474181120,  
+   "dataFileList": [  
+     {  
+       "path": "/home/dmae/admira/cache/psi/notify/files/DataBlock_Edgar1_1_2017-04-06-04-19-19.xml",  
+       "size": 0  
+     },  
+     {  
+       "path": "/daas_rawdata_nfs/data/test_3/file.x",  
+       "size": 21474181120  
+     }  
+   ],  
+   "datasetId": "20.500.11935/1234",  
+   "rawDatasetId": "20.500.11935/122"  
+ }

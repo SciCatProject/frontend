@@ -1,0 +1,30 @@
+{  
+   "principalInvestigator": "string",  
+   "endTime": "2017-05-15T09:34:26.550Z",  
+   "creationLocation": "string",  
+   "dataFormat": "string",  
+   "scientificMetadata": {},  
+   "pid": "122",  
+   "owner": "string",  
+   "orcidOfOwner": "string",  
+   "contactEmail": "string",  
+   "sourceFolder": "string",  
+   "size": 0,  
+   "packagedSize": 0,  
+   "creationTime": "2017-05-15T09:34:26.550Z",  
+   "type": "string",  
+   "validationStatus": "string",  
+   "keywords": [  
+     "string"  
+   ],  
+   "description": "string",  
+   "userTargetLocation": "string",  
+   "classification": "string",  
+   "license": "string",  
+   "ownerGroup": "string",  
+   "accessGroups": [  
+     "string"  
+   ],  
+   "sampleId": "string",  
+   "proposalId": "123"  
+ }

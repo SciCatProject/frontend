@@ -1,0 +1,76 @@
+{
+    "pid": {
+        "name": "pid",
+	"label": "PID",
+        "type": "string"
+    },
+    "owner": {
+        "name": "owner",
+	"label": "Owner",
+        "type": "string"
+    },
+    "orcidOfOwner": {
+        "name": "orcidOfOwner",
+	"label": "OrcID",
+        "type": "string"
+    },
+    "contactEmail": {
+        "name": "contactEmail",
+	"label": "Contact Email",
+        "type": "string"
+    },
+    "sourceFolder": {
+        "name": "sourceFolder",
+	"label": "Source Folder",
+        "type": "string"
+    },
+    "size": {
+        "name": "size",
+        "type": "number"
+    },
+    "packagedSize": {
+        "name": "packagedSize",
+        "type": "number"
+    },
+    "creationTime": {
+        "name": "creationTime",
+        "type": "Date"
+    },
+    "type": {
+        "name": "type",
+        "type": "string",
+	"visible": false
+    },
+    "validationStatus": {
+        "name": "validationStatus",
+        "type": "string"
+    },
+    "keywords": {
+        "name": "keywords",
+        "type": "Array&lt;string&gt;"
+    },
+    "description": {
+        "name": "description",
+        "type": "string"
+    },
+    "userTargetLocation": {
+        "name": "userTargetLocation",
+        "type": "string"
+    },
+    "classification": {
+        "name": "classification",
+        "type": "string"
+    },
+    "license": {
+        "name": "license",
+        "type": "string"
+    },
+    "ownerGroup": {
+        "name": "ownerGroup",
+        "type": "string"
+    },
+    "accessGroups": {
+        "name": "accessGroups",
+        "type": "Array&lt;string&gt;"
+    }
+}

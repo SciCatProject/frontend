@@ -1,0 +1,57 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: catanie
+  labels:
+    name: catanie
+  namespace: $LOCAL_ENV
+spec:
+  type: NodePort
+  ports:
+    # the port that this service should serve on
+  - port: 80
+    targetPort: 80
+    nodePort: $PORTOFFSET
+  selector:
+    name: catanie
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: catanie
+  namespace: $LOCAL_ENV
+spec:
+  tls:
+  - hosts:
+    - "discovery$HOST_EXT.psi.ch"
+    secretName: discovery$HOST_EXT-certificate-secret
+  rules:
+  - host: discovery$HOST_EXT.psi.ch
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: catanie
+          servicePort: 80
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: catanie
+  namespace: $LOCAL_ENV
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: catanie
+    spec:
+      containers:
+      - name: catanie
+        image: registry.psi.ch:5000/egli/catanie:$CATANIE_IMAGE_VERSION$LOCAL_ENV
+        # command: ["/bin/sh","-c","./node_modules/@angular/cli/bin/ng serve --host 129.129.160.105"]
+        ports:
+        - containerPort: 80
+        imagePullPolicy: Always
+      imagePullSecrets:
+        - name: registrypullsecret
