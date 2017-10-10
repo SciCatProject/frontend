@@ -53,7 +53,6 @@ export function datasetsReducer(state = initialDatasetState, action: Action) {
     case dsa.FILTER_UPDATE_COMPLETE: {
       const values = action['payload'];
       const s = Object.assign({}, state, { filterValues: values });
-      console.log(s);
       return s;
     }
 

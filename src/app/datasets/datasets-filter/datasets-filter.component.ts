@@ -50,12 +50,11 @@ export class DatasetsFilterComponent implements OnInit {
     this.store.select(state => state.root.datasets)
         .subscribe(data => {
           this.filters = data.activeFilters;
-          console.log(data);
           this.location =
               this.filters.creationLocation ? {_id : this.filters.creationLocation} : '';
-          if (this.filters.groups && this.filters.groups.length > 0) {
-            this.group = {_id : data.groups[0]};
-          }
+          // if (this.filters.groups && this.filters.groups.length > 0) {
+          //   this.group = {_id : data.groups[0]};
+          // }
           // Update URL params, activeFilters subscription does not fire. Need to test.
           const queryParams: Params =
               Object.assign({}, this.route.snapshot.queryParams);
@@ -199,10 +198,10 @@ export class DatasetsFilterComponent implements OnInit {
   /**
    * Handle clicking of available locations
    */
-  locSelected() {
-    this.filters.creationLocation = this.location['_id'];
+  locSelected(event) {
+    this.filters.creationLocation = event['_id'];
     this.store.dispatch(
-        {type : dua.SAVE, payload : {beamlineText : this.location}});
+        {type : dua.SAVE, payload : {beamlineText : event['_id']}});
     this.store.dispatch({type : dsa.FILTER_UPDATE, payload : this.filters});
     this.onSubmit();
   }
@@ -235,9 +234,7 @@ export class DatasetsFilterComponent implements OnInit {
     this.store.select(state => state.root.user.currentUserGroups)
         .take(1)
         .subscribe(groups => this.filters.groups = groups);
-    console.log(this.filters);
     this.filterValues = dStore.initialDatasetState.filterValues;
-    console.log(this.filterValues);
     this.filterValues.text = '';
     this.store.dispatch({type : dsa.FILTER_UPDATE, payload : this.filters});
     this.store.dispatch(
