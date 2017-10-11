@@ -22,7 +22,7 @@ export class DashboardComponent implements OnInit {
    */
   datasets: Array<RawDataset> = [];
   // rows: any[] = [];
-  searchText: string;
+  searchText$;
 
   constructor(private router: Router, private cds: DatasetService, private route: ActivatedRoute, private store: Store<any>) {
     this.datasets = [];
@@ -34,10 +34,12 @@ export class DashboardComponent implements OnInit {
    *
    */
   ngOnInit() {
-    this.store.select(state => state.root.datasets.activeFilters)
-        .subscribe(values => {
-          this.searchText = values.text ? values.text : '';
-        });
+    this.searchText$ = this.store.select(state => state.root.datasets.activeFilters.text);
+    // this.store.select(state => state.root.datasets.activeFilters)
+    //     .subscribe(values => {
+    //       const filters = Object.assign({}, values);
+    //       this.searchText = filters.text ? filters.text : '';
+    //     });
   }
 
   /**
@@ -50,14 +52,9 @@ export class DashboardComponent implements OnInit {
     this.store.select(state => state.root.datasets.activeFilters)
         .take(1)
         .subscribe(values => {
-          values['text'] = terms;
-          this.store.dispatch({type : dsa.FILTER_UPDATE, payload : values});
-          this.store.dispatch({type : dsa.SEARCH, payload : values});
+          let filters = Object.assign({}, values);
+          filters['text'] = terms;
+          this.store.dispatch({type : dsa.FILTER_UPDATE, payload : filters});
         });
-  }
-
-  onDatasetRedirect(event) {
-    this.store.dispatch({type : dua.SAVE, payload : event.pl});
-    this.router.navigateByUrl('/dataset/' + event.pid);
   }
 }

@@ -74,11 +74,12 @@ export class DatasetEffects {
 
   @Effect()
   protected facet$: Observable<Action> =
-      this.action$.ofType(DatasetActions.SEARCH)
+      this.action$.ofType(DatasetActions.FILTER_UPDATE)
           .debounceTime(300)
           .map(toPayload)
           .switchMap(payload => {
             const fq = payload;
+            console.log(fq);
             // TODO access state from here?
             const startDate =
                 fq['startDate'] ? fq['startDate'].toString() : fq['startDate'];
@@ -90,9 +91,10 @@ export class DatasetEffects {
                   .take(1)
                   .subscribe(user => { groups = user; });
               }
+            console.log(groups);
             return this.rds
                 .facet(fq['creationLocation'], groups, startDate, endDate,
-                       fq['text'])
+                       {'$search': fq['text']})
                 .switchMap(res => {
                   const filterValues = res['results'][0];
 

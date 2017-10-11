@@ -119,7 +119,6 @@ export class DatasetsFilterComponent implements OnInit {
           this.router.navigate([ '/datasets' ],
                                {queryParams : newParams, replaceUrl : true});
           this.store.dispatch({type : dsa.FILTER_UPDATE, payload : newParams});
-          this.store.dispatch({type : dsa.SEARCH, payload : newParams});
           this.onSubmit();
         });
         
@@ -172,7 +171,7 @@ export class DatasetsFilterComponent implements OnInit {
   textValueChanged(event, key) {
     if (event.length === 0) {
       this.filters[key] = null;
-    } else if (event.length >= 2) {
+    } else if (event.length >= 4) {
       if (key === 'groups') {
         this.filters[key] = [ event ];
       } else {
@@ -216,16 +215,17 @@ export class DatasetsFilterComponent implements OnInit {
     // this.store.dispatch(
     //     {type : dua.SAVE, payload : {beamlineText : event['_id']}});
     this.store.dispatch({type : dsa.FILTER_UPDATE, payload : this.filters});
-    this.onSubmit();
+    // this.onSubmit();
   }
 
   /**
    * Handle clicking of available groups
    */
-  groupSelected() {
+  groupSelected(event) {
+    console.log(event, this.group);
     this.filters.groups = [ this.group['_id'] ];
     this.store.dispatch({type : dsa.FILTER_UPDATE, payload : this.filters});
-    this.onSubmit();
+    // this.onSubmit();
   }
 
   onSubmit() {
@@ -259,7 +259,6 @@ export class DatasetsFilterComponent implements OnInit {
         {type : dsa.FILTER_VALUE_UPDATE, payload : this.filterValues});
     this.store.dispatch(
         {type : dua.SAVE, payload : dUIStore.initialDashboardUIState});
-    this.store.dispatch({type : dsa.SEARCH, payload : this.filters});
     this.router.navigate([ '/datasets' ],
                                {queryParams : this.filters, replaceUrl : true});
     // TODO clear selected sets
