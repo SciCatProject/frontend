@@ -26,6 +26,10 @@ export class AppComponent implements OnDestroy, OnInit {
     LoopBackConfig.setBaseURL(environment.lbBaseURL);
     console.log(LoopBackConfig.getPath());
     localStorage.clear();
+    if (window.location.pathname.indexOf('logout') !== -1) {
+      this.logout();
+      this.router.navigate(['/login']);
+    }
     this.message$ = this.store.select(state => state.root.user.message.content);
     this.msgClass$ = this.store.select(state => state.root.user.message.class);
     this.store

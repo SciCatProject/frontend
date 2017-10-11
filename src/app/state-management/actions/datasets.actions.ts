@@ -7,7 +7,6 @@ import * as lb from 'shared/sdk/models';
 
 export const LOAD = '[Dataset] Load';
 
-export const SEARCH = '[Dataset] Search';
 export const SEARCH_COMPLETE = '[Dataset] Search Complete';
 export const SEARCH_FAILED = '[Dataset] Search Failed';
 
@@ -28,16 +27,11 @@ export const ADD_GROUPS = '[User] Add Groups';
 export const ADD_GROUPS_COMPLETE = '[User] Add Groups Complete';
 export const ADD_GROUPS_FAILED = '[User] Add Groups Failed';
 
-export const SELECT_CURRENT = '[Dataset] Curnent set selected';
+export const SELECT_CURRENT = '[Dataset] Current set selected';
 
 export const SELECTED_UPDATE = '[Dataset]  Selected Datasets Update';
 // export const FILTER_UPDATE_COMPLETE = '[Dataset]  Filter Update Complete';
 
-export class SearchAction implements Action {
-  readonly type = SEARCH;
-
-  constructor(public payload: string) {}
-  }
 export class SearchCompleteAction implements Action {
   readonly type = SEARCH_COMPLETE;
 
@@ -130,7 +124,7 @@ export class CurrentSetAction implements Action {
   }
 
 export type Actions =
-    SearchAction | SearchCompleteAction | SearchFailedAction |
+    SearchCompleteAction | SearchFailedAction |
     UpdateFilterAction | UpdateFilterCompleteAction | FilterFailedAction |
     FilterValueAction | SearchIDAction | SearchIDCompleteAction |
     SearchIDFailedAction | DatablocksAction | DatablocksCompleteAction |

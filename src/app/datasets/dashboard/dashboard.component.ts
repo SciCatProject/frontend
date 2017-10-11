@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {Router} from '@angular/router';
+import {Router, Params, ActivatedRoute} from '@angular/router';
 import {Store} from '@ngrx/store';
 import {DatasetService} from 'datasets/dataset.service';
 import {RawDataset} from 'shared/sdk/models';
@@ -22,14 +22,11 @@ export class DashboardComponent implements OnInit {
    */
   datasets: Array<RawDataset> = [];
   // rows: any[] = [];
-  searchText: string;
 
-  constructor(private router: Router, private cds: DatasetService,
-              private store: Store<any>) {
+  searchText$;
+
+  constructor(private router: Router, private cds: DatasetService, private route: ActivatedRoute, private store: Store<any>) {
     this.datasets = [];
-    this.store.select(state => state.root.datasets.activeFilters)
-        .subscribe(
-            values => { this.searchText = values.text ? values.text : ''; });
   }
 
   /**
@@ -37,7 +34,9 @@ export class DashboardComponent implements OnInit {
    * using the filters in the state
    *
    */
-  ngOnInit() {}
+  ngOnInit() {
+    this.searchText$ = this.store.select(state => state.root.datasets.activeFilters.text);
+  }
 
   /**
    * Handles free text search.
@@ -49,14 +48,9 @@ export class DashboardComponent implements OnInit {
     this.store.select(state => state.root.datasets.activeFilters)
         .take(1)
         .subscribe(values => {
-          values['text'] = terms;
-          this.store.dispatch({type : dsa.FILTER_UPDATE, payload : values});
-          this.store.dispatch({type: dsa.SEARCH, payload: values});
+          let filters = Object.assign({}, values);
+          filters['text'] = terms;
+          this.store.dispatch({type : dsa.FILTER_UPDATE, payload : filters});
         });
-  }
-
-  onDatasetRedirect(event) {
-    this.store.dispatch({type : dua.SAVE, payload : event.pl});
-    this.router.navigateByUrl('/dataset/' + event.pid);
   }
 }
