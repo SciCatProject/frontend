@@ -6,10 +6,10 @@ import {Store} from '@ngrx/store';
 import {ConfirmationService, DataTable} from 'primeng/primeng';
 import {Subject} from 'rxjs/Subject';
 import {Job, RawDataset} from 'shared/sdk/models';
-import {JobApi, UserApi} from 'shared/sdk/services';
 import {ConfigService} from 'shared/services/config.service';
 import * as dsa from 'state-management/actions/datasets.actions';
 import * as ua from 'state-management/actions/user.actions';
+import * as ja from 'state-management/actions/jobs.actions';
 
 @Component({
   selector : 'dataset-table',
@@ -33,8 +33,8 @@ export class DatasetTableComponent implements OnInit {
   retrieveDisplay = false;
   dest = new Subject<string>();
 
-  constructor(public http: Http, private us: UserApi, private router: Router,
-              private configSrv: ConfigService, private js: JobApi,
+  constructor(public http: Http, private router: Router,
+              private configSrv: ConfigService,
               private confirmationService: ConfirmationService,
               private store: Store<any>) {
     this.configSrv.getConfigFile('RawDataset').subscribe(conf => {
@@ -93,6 +93,27 @@ export class DatasetTableComponent implements OnInit {
         }
     });
 
+    let msg = {};
+    this.store.select(state => state.root.jobs.jobSubmission).subscribe(
+      ret => {
+        this.selectedSets = [];
+        this.aremaOptions = '';
+        msg = {
+          class : 'ui message positive',
+          content : 'Job Created Successfully',
+          timeout : 3
+        };
+        this.store.dispatch({type : ua.SHOW_MESSAGE, payload : msg});
+      },
+      error => {
+        console.log(error);
+        msg = {
+          class : 'ui message negative',
+          content : error.message,
+          timeout : 3
+        };
+        this.store.dispatch({type : ua.SHOW_MESSAGE, payload : msg});
+      });
   }
 
   /**
@@ -227,6 +248,8 @@ export class DatasetTableComponent implements OnInit {
     });
   }
 
+
+
   /**
    * Sends retrieve command for selected datasets
    * @param {any} event - click handler (not currently used)
@@ -254,11 +277,12 @@ export class DatasetTableComponent implements OnInit {
     if (this.selectedSets.length > 0) {
       this.dest = new Subject<string>();
       const job = new Job();
+      console.log(job);
       job.creationTime = Date.now();
       const backupFiles = [];
       this.store.select(state => state.root.user.currentUser).take(1).subscribe(user => {
 //      this.us.getCurrent().subscribe(user => {
-        if ('realm' in user) {
+        if ( user['accountType'] === 'functional') {
           job.emailJobInitiator = this.selectedSets[0].ownerEmail;
         } else {
           job.emailJobInitiator = user['email'];
@@ -320,26 +344,9 @@ export class DatasetTableComponent implements OnInit {
               //         () => {});
             }
           }
-          this.js.create(job).subscribe(
-              ret => {
-                this.selectedSets = [];
-                this.aremaOptions = '';
-                msg = {
-                  class : 'ui message positive',
-                  content : 'Job Created Successfully',
-                  timeout : 3
-                };
-                this.store.dispatch({type : ua.SHOW_MESSAGE, payload : msg});
-              },
-              error => {
-                console.log(error);
-                msg = {
-                  class : 'ui message negative',
-                  content : error.message,
-                  timeout : 3
-                };
-                this.store.dispatch({type : ua.SHOW_MESSAGE, payload : msg});
-              });
+          this.store.dispatch({type : ja.SUBMIT, payload : job});
+
+
         }
 
       });
@@ -383,8 +390,6 @@ export class DatasetTableComponent implements OnInit {
     } else if ((key === 'archiveStatus' || key === 'retrieveStatus') &&
                ds['datasetlifecycle']) {
       return ds['datasetlifecycle'][key + 'Message'];
-    } else if (key === 'size') {
-      return (((ds[key] / 1024)/1024)/1024).toFixed(2);
     } else if (key in ds) {
       return value;
     } else {
