@@ -54,6 +54,8 @@ export class DatasetsFilterComponent implements OnInit {
           this.filters = Object.assign({}, data);
           // Update URL params, activeFilters subscription does not fire. Need to test.
           // const newParams = Object.assign({}, this.filters);
+          this.router.navigate([ '/datasets' ],
+                               {queryParams : this.filters, replaceUrl : true});
 
         });
     this.store.select(state => state.root.datasets.filterValues)
