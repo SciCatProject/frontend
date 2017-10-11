@@ -11,6 +11,7 @@ import {JobApi, UserApi} from 'shared/sdk/services';
 import {ConfigService} from 'shared/services/config.service';
 import * as dsa from 'state-management/actions/datasets.actions';
 import * as ua from 'state-management/actions/user.actions';
+import * as ja from 'state-management/actions/jobs.actions';
 
 @Component({
   selector : 'dataset-table',
@@ -103,6 +104,32 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
 
         }));
 
+
+    let msg = {};
+    this.store.select(state => state.root.jobs.jobSubmission).subscribe(
+      ret => {
+        if(ret) {
+          console.log(ret);
+          this.selectedSets = [];
+          this.aremaOptions = '';
+          msg = {
+            class : 'ui message positive',
+            content : 'Job Created Successfully',
+            timeout : 3
+          };
+          this.store.dispatch({type : ua.SHOW_MESSAGE, payload : msg});
+        }
+      },
+      error => {
+        console.log(error);
+        msg = {
+          class : 'ui message negative',
+          content : error.message,
+          timeout : 3
+        };
+        this.store.dispatch({type : ua.SHOW_MESSAGE, payload : msg});
+      });
+
     
 
   }
@@ -144,21 +171,21 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
       for (let i = 0; i < selected.length; i++) {
         const dl = selected[i]['datasetlifecycle'];
 
-        if (selected[i]['size'] === 0 || !dl || (dl && (dl['isOnDisk'] === 'unknown' &&
-                           dl['isOnTape'] === 'unknown') ||
-                    dl['archiveStatusMessage'].toLowerCase().indexOf(
-                        'archive') !== -1)) {
-          selected.splice(i, 1);
-          this.store.dispatch({
-            type : ua.SHOW_MESSAGE,
-            payload : {
-              content :
-                  'Cannot select datasets already archived or with unknown status',
-              class : 'ui negative message',
-              timeout : 2
-            }
-          });
-        }
+        // if (selected[i]['size'] === 0 || !dl || (dl && (dl['isOnDisk'] === 'unknown' &&
+        //                    dl['isOnTape'] === 'unknown') ||
+        //             dl['archiveStatusMessage'].toLowerCase().indexOf(
+        //                 'archive') !== -1)) {
+        //   selected.splice(i, 1);
+        //   this.store.dispatch({
+        //     type : ua.SHOW_MESSAGE,
+        //     payload : {
+        //       content :
+        //           'Cannot select datasets already archived or with unknown status',
+        //       class : 'ui negative message',
+        //       timeout : 2
+        //     }
+        //   });
+        // }
       }
       if (selected.length > 0) {
         this.aremaOptions =
@@ -337,26 +364,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
               //         () => {});
             }
           }
-          this.js.create(job).subscribe(
-              ret => {
-                this.selectedSets = [];
-                this.aremaOptions = '';
-                msg = {
-                  class : 'ui message positive',
-                  content : 'Job Created Successfully',
-                  timeout : 3
-                };
-                this.store.dispatch({type : ua.SHOW_MESSAGE, payload : msg});
-              },
-              error => {
-                console.log(error);
-                msg = {
-                  class : 'ui message negative',
-                  content : error.message,
-                  timeout : 3
-                };
-                this.store.dispatch({type : ua.SHOW_MESSAGE, payload : msg});
-              });
+          this.store.dispatch({type : ja.SUBMIT, payload : job});
         }
 
       });

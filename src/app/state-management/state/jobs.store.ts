@@ -8,6 +8,6 @@ export interface JobsState {
 
 export const initialJobsState: JobsState = {
   currentJobs : [],
-  jobSubmission : [],
+  jobSubmission : undefined,
   ui: []
 };
