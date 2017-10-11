@@ -3,12 +3,7 @@
 # export DACATHOME=/home/encima/dev/psi 
 # export KUBECONFIG=/home/encima/dev/psi/catamel-psisecrets/server/kubernetes/admin.conf
 
-<<<<<<< HEAD
-envarray=(qa)
-=======
 envarray=(qa production)
->>>>>>> feature/url-store-match
-portarray=(30021 30023)
 hostextarray=('-qa' '')
 certarray=('discovery' 'discovery')
 
