@@ -52,7 +52,7 @@ export class DatasetsFilterComponent implements OnInit {
     this.store.select(state => state.root.datasets.activeFilters)
         .subscribe(data => {
           this.filters = Object.assign({}, data);
-          this.router.navigate([ '/datasets' ], {queryParams : this.filters, replaceUrl : true});
+          // this.router.navigate([ '/datasets' ], {queryParams : this.filters, replaceUrl : true});
 
         });
     this.store.select(state => state.root.datasets.filterValues)
@@ -68,7 +68,6 @@ export class DatasetsFilterComponent implements OnInit {
               }
             if (this.filterValues['groups'] !== null) {
               this.groups = this.filterValues['groups'];
-              console.log(this.groups);
             }
             this.dateFacet = [];
             let dates = [];
@@ -113,8 +112,7 @@ export class DatasetsFilterComponent implements OnInit {
           if (newParams.groups && newParams.groups.length > 0) {
             this.group = {_id : newParams.groups};
           }
-          this.router.navigate([ '/datasets' ],
-                               {queryParams : newParams, replaceUrl : true});
+          // this.router.navigate([ '/datasets' ], {queryParams : newParams, replaceUrl : true});
           this.store.dispatch({type : dsa.FILTER_UPDATE, payload : newParams});
         });
         

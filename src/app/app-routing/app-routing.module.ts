@@ -18,7 +18,7 @@ import {AuthCheck} from '../AuthCheck';
 export const routes: Routes = [
   { path: '', redirectTo: '/datasets', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
-  { path: 'logout', component: LoginComponent, canActivate: [AuthCheck] },
+  { path: 'logout', component: AppComponent, canActivate: [AuthCheck] },
   { path: 'dataset', redirectTo: '/datasets', pathMatch: 'full' },
   { path: 'datasets',  component: DashboardComponent, canActivate: [AuthCheck], },
   { path: 'end-of-shift', component: EndOfShiftComponent, canActivate: [AuthCheck] },
