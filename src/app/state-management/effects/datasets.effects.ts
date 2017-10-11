@@ -90,9 +90,10 @@ export class DatasetEffects {
                   .take(1)
                   .subscribe(user => { groups = user; });
               }
+            const text = fq['text'] ? {'$search': fq['text']} : undefined;
             return this.rds
                 .facet(fq['creationLocation'], groups, startDate, endDate,
-                       {'$search': fq['text']})
+                       text)
                 .switchMap(res => {
                   const filterValues = res['results'][0];
 
