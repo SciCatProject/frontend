@@ -24,7 +24,6 @@ export class DatasetEffects {
           .map(toPayload)
           .switchMap(payload => {
             const id = payload;
-
             // TODO separate action for dataBlocks? or retrieve at once?
 
             return this.rds.findById(encodeURIComponent(id))
@@ -68,13 +67,13 @@ export class DatasetEffects {
                 })
                 .catch(err => {
                   return Observable.of(
-                      {type : DatasetActions.SEARCH_ID_FAILED, payload : err});
+                      {type : DatasetActions.DATABLOCKS_FAILED, payload : err});
                 });
           });
 
   @Effect()
   protected facet$: Observable<Action> =
-      this.action$.ofType(DatasetActions.SEARCH)
+      this.action$.ofType(DatasetActions.FILTER_UPDATE)
           .debounceTime(300)
           .map(toPayload)
           .switchMap(payload => {
@@ -116,7 +115,8 @@ export class DatasetEffects {
 
   @Effect()
   protected facetDatasets$: Observable<Action> =
-      this.action$.ofType(DatasetActions.SEARCH)
+      this.action$.ofType(DatasetActions.FILTER_UPDATE)
+
           .debounceTime(300)
           .map(toPayload)
           .switchMap(payload => {

@@ -1,7 +1,8 @@
 import {DatePipe} from '@angular/common';
-import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, ViewChild, OnDestroy} from '@angular/core';
 import {Http} from '@angular/http';
-import {Router} from '@angular/router';
+import {Router, ActivatedRoute} from '@angular/router';
+import {Observable} from 'rxjs/Observable';
 import {Store} from '@ngrx/store';
 import {ConfirmationService, DataTable} from 'primeng/primeng';
 import {Subject} from 'rxjs/Subject';
@@ -16,7 +17,9 @@ import * as ua from 'state-management/actions/user.actions';
   templateUrl : './dataset-table.component.html',
   styleUrls : [ './dataset-table.component.css' ]
 })
-export class DatasetTableComponent implements OnInit {
+
+export class DatasetTableComponent implements OnInit, OnDestroy {
+
 
   @Input() datasets;
   @Output() openDataset = new EventEmitter();
@@ -33,8 +36,11 @@ export class DatasetTableComponent implements OnInit {
   retrieveDisplay = false;
   dest = new Subject<string>();
 
+  subscriptions = [];
+
   constructor(public http: Http, private us: UserApi, private router: Router,
               private configSrv: ConfigService, private js: JobApi,
+              private route: ActivatedRoute,
               private confirmationService: ConfirmationService,
               private store: Store<any>) {
     this.configSrv.getConfigFile('RawDataset').subscribe(conf => {
@@ -51,11 +57,21 @@ export class DatasetTableComponent implements OnInit {
     this.limit$ =
         this.store.select(state => state.root.user.settings.datasetCount);
 
+    this.route.queryParams.subscribe(params => {  
+        this.store.select(state => state.root.datasets.activeFilters).take(1).subscribe(filters => {
+          const newFilters = Object.assign(filters, params);
+          this.setCurrentPage(newFilters.skip);
+          this.store.dispatch({type : dsa.FILTER_UPDATE, payload : newFilters});
+        });
+        
+    });
+
     // NOTE: Typescript picks this key up as the property of the state, but it
     // actually links to the reducer key in app module
     // This could also be subscribed to as an async value but then loading
     // becomes an issue
-    this.store.select(state => state.root.datasets.datasets)
+
+    this.subscriptions.push(this.store.select(state => state.root.datasets.datasets)
         .subscribe(
             data => {
               this.datasets = data;
@@ -70,31 +86,32 @@ export class DatasetTableComponent implements OnInit {
                     }
                   });
             },
-            error => { console.error(error); });
+            error => { console.error(error); }));
 
-    this.store.select(state => state.root.datasets.activeFilters)
+    this.subscriptions.push(this.store.select(state => state.root.datasets.activeFilters)
         .subscribe(filters => {
           if (filters.skip !== this.dsTable.first) {
             setTimeout(() => {
               this.setCurrentPage(filters.skip);
             }, 1000);
           }
-        });
+        }));
 
-    this.store.select(state => state.root.datasets.selectedSets)
+    this.subscriptions.push(this.store.select(state => state.root.datasets.selectedSets)
         .subscribe(selected => {
           this.selectedSets = selected;
 
-        });
+        }));
 
-    this.store.select(state => state.root.datasets.currentSet).subscribe(ds => {
-        if (ds) {
-          this.router.navigateByUrl('/dataset/' + encodeURIComponent(ds.pid));
-        }
-    });
+    
 
   }
 
+  ngOnDestroy() {
+    for (let i = 0; i < this.subscriptions.length; i++) {
+      this.subscriptions[i].unsubscribe();
+    }
+  }
   /**
    * Navigate to dataset detail page
    * on a row click
@@ -107,8 +124,9 @@ export class DatasetTableComponent implements OnInit {
     // before 5th July 2017
     if (event['originalEvent']['target']['innerHTML'].indexOf('chkbox') ===
         -1) {
-      this.store.dispatch(
-          {type : dsa.SELECT_CURRENT, payload : event.data});
+      this.router.navigateByUrl('/dataset/' + encodeURIComponent(event.data.pid));
+      // this.store.dispatch(
+      //     {type : dsa.SELECT_CURRENT, payload : event.data});
     }
   }
 
@@ -176,7 +194,6 @@ export class DatasetTableComponent implements OnInit {
               data['sortField'] = undefined;
             }
             this.store.dispatch({type : dsa.FILTER_UPDATE, payload : data});
-            this.store.dispatch({type : dsa.SEARCH, payload : data});
           }
           //        }
         });

@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { BrowserModule } from '@angular/platform-browser';
@@ -37,6 +38,7 @@ import { UsersModule } from 'users/users.module';
 import { AppComponent } from './app.component';
 import { AuthCheck } from './AuthCheck';
 
+import { routes } from './app-routing/app-routing.module';
 export function localStorageSyncWrapper(reducer: any) {
   return localStorageSync({keys: ['root'], rehydrate: true}) (reducer);
 }
@@ -49,7 +51,6 @@ export function localStorageSyncWrapper(reducer: any) {
     SampleDataFormComponent
   ],
   imports : [
-    AppRoutingModule,
     BrowserModule,
     FormsModule,
     CheckboxModule,
@@ -63,6 +64,7 @@ export function localStorageSyncWrapper(reducer: any) {
     SDKBrowserModule.forRoot(),
     // StoreModule.forRoot({router: routerReducer, root: rootReducer}, {metaReducers: [localStorageSyncWrapper]}),
     StoreModule.forRoot({router: routerReducer, root: rootReducer}),
+    RouterModule.forRoot(routes, { useHash: false }),
     StoreDevtoolsModule.instrument({
       maxAge: 25 //  Retains last 25 states
     }),

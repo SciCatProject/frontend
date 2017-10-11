@@ -1,6 +1,7 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {ActivatedRoute, Params, Router} from '@angular/router';
 import {Store} from '@ngrx/store';
-import {Tree, TreeNode} from 'primeng/primeng';
+import {Tree, TreeNode, AutoComplete} from 'primeng/primeng';
 import * as dua from 'state-management/actions/dashboard-ui.actions';
 import * as dsa from 'state-management/actions/datasets.actions';
 import * as dUIStore from 'state-management/state/dashboard-ui.store';
@@ -14,6 +15,8 @@ import * as dStore from 'state-management/state/datasets.store';
 export class DatasetsFilterComponent implements OnInit {
 
   @ViewChild('datetree') dateTree: Tree;
+  @ViewChild('loc') locField: AutoComplete;
+  @ViewChild('grp') grpField: AutoComplete;
 
   @Input() datasets: Array<any> = [];
   facets: Array<any> = [];
@@ -39,7 +42,19 @@ export class DatasetsFilterComponent implements OnInit {
   filters;
   filterValues;
 
-  constructor(private store: Store<any>) {
+  constructor(private store: Store<any>, private route: ActivatedRoute, private router: Router) {
+    this.route.queryParams.subscribe(params => {  
+        this.store.select(state => state.root.datasets.activeFilters).take(1).subscribe(filters => {
+          const newParams = Object.assign(filters, params);   
+          this.location = newParams.creationLocation ? {_id : newParams.creationLocation} : '';
+          if (newParams.groups && newParams.groups.length > 0) {
+            this.group = {_id : newParams.groups};
+          }
+          this.router.navigate([ '/datasets' ], {queryParams : newParams, replaceUrl : true});
+          this.store.dispatch({type : dsa.FILTER_UPDATE, payload : newParams});
+        });
+        
+    });
   }
 
   /**
@@ -49,25 +64,20 @@ export class DatasetsFilterComponent implements OnInit {
   ngOnInit() {
     this.store.select(state => state.root.datasets.activeFilters)
         .subscribe(data => {
-          this.filters = data;
-          this.location =
-              data.creationLocation ? {_id : data.creationLocation} : '';
-          console.log(data.groups);
-          if (data.groups && data.groups.length > 0 && data.groups[0].indexOf('p') === 0) {
-            this.group = {_id : data.groups[0]};
-            }
-          /*if(!this.dates) this.dates = [];*/
-          // this.dates.push(this.filters.startDate);
-          // this.dates.push(this.filters.endDate);
-        });
+          this.filters = Object.assign({}, data);
+          // this.router.navigate([ '/datasets' ], {queryParams : this.filters, replaceUrl : true});
+    });
     this.store.select(state => state.root.datasets.filterValues)
         .subscribe(values => {
-          this.filterValues = values;
+          this.filterValues = Object.assign({}, values);
           if (this.filterValues) {
             if (this.filterValues['locations'] !== null) {
-              this.locations = this.filterValues['locations'] ? this.filterValues['locations'] : [];
-              this.resultCount = this.locations.reduce((sum, value) => sum + value['count'], 0);
-            }
+              this.locations = this.filterValues['locations']
+                                   ? this.filterValues['locations']
+                                   : [];
+              this.resultCount = this.locations.reduce(
+                  (sum, value) => sum + value['count'], 0);
+              }
             if (this.filterValues['groups'] !== null) {
               this.groups = this.filterValues['groups'];
             }
@@ -116,10 +126,10 @@ export class DatasetsFilterComponent implements OnInit {
   onTimeSelect(event) {
     console.log(this.dates);
     this.filters.startDate = new Date(this.dates[0]);
-    this.filters.endDate = this.dates[1] !== null ? new Date(this.dates[1]) : new Date(this.dates[0]);
+    this.filters.endDate = this.dates[1] !== null ? new Date(this.dates[1])
+                                                  : new Date(this.dates[0]);
     this.filters.endDate.setHours(23, 59, 59, 0);
     this.store.dispatch({type : dsa.FILTER_UPDATE, payload : this.filters});
-    this.onSubmit();
   }
 
   /**
@@ -153,7 +163,7 @@ export class DatasetsFilterComponent implements OnInit {
   textValueChanged(event, key) {
     if (event.length === 0) {
       this.filters[key] = null;
-    } else if (event.length >= 2) {
+    } else if (event.length >= 4) {
       if (key === 'groups') {
         this.filters[key] = [ event ];
       } else {
@@ -162,7 +172,7 @@ export class DatasetsFilterComponent implements OnInit {
     }
     // TODO handle text values changing
     // TODO debounce time needs to be here even though it is in the effects?
-    this.store.dispatch({type : dsa.FILTER_UPDATE, payload : this.filters});
+    // this.store.dispatch({type : dsa.FILTER_UPDATE, payload : this.filters});
   }
   /**
    * Creates a filtered array based
@@ -194,25 +204,18 @@ export class DatasetsFilterComponent implements OnInit {
    */
   locSelected() {
     this.filters.creationLocation = this.location['_id'];
-    this.store.dispatch(
-        {type : dua.SAVE, payload : {beamlineText : this.location}});
+    // this.store.dispatch(
+    //     {type : dua.SAVE, payload : {beamlineText : this.location}});
     this.store.dispatch({type : dsa.FILTER_UPDATE, payload : this.filters});
-    this.onSubmit();
   }
 
   /**
    * Handle clicking of available groups
    */
-  groupSelected() {
+  groupSelected(event) {
+    console.log(event, this.group);
     this.filters.groups = [ this.group['_id'] ];
     this.store.dispatch({type : dsa.FILTER_UPDATE, payload : this.filters});
-    this.onSubmit();
-  }
-
-  onSubmit() {
-    this.store.select(state => state.root.datasets.activeFilters).take(1).subscribe(filters => {
-      this.store.dispatch({ type: dsa.SEARCH, payload: filters });
-    });
   }
 
   /**
@@ -220,22 +223,26 @@ export class DatasetsFilterComponent implements OnInit {
    */
   clearFacets() {
     this.dates = [];
-    this.location = '';
-    this.group = '';
+    this.location = undefined;
+    this.group = undefined;
+    this.locField.value = '';
+    this.grpField.value = '';
     this.filters = dStore.initialDatasetState.activeFilters;
     this.store.select(state => state.root.user.currentUserGroups)
         .take(1)
-        .subscribe(groups => this.filters.groups = groups);
-    console.log(this.filters);
+        .subscribe(groups => {
+          console.log(groups);
+          this.filters.groups = groups
+        });
     this.filterValues = dStore.initialDatasetState.filterValues;
-    console.log(this.filterValues);
     this.filterValues.text = '';
     this.store.dispatch({type : dsa.FILTER_UPDATE, payload : this.filters});
     this.store.dispatch(
         {type : dsa.FILTER_VALUE_UPDATE, payload : this.filterValues});
     this.store.dispatch(
         {type : dua.SAVE, payload : dUIStore.initialDashboardUIState});
-    this.store.dispatch({type: dsa.SEARCH, payload: this.filters});
+    this.router.navigate([ '/datasets' ],
+                               {queryParams : this.filters, replaceUrl : true});
     // TODO clear selected sets
   }
 
