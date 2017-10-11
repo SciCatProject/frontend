@@ -17,6 +17,8 @@ import {AuthCheck} from '../AuthCheck';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/datasets', pathMatch: 'full' },
+  { path: 'login', component: LoginComponent },
+  { path: 'logout', component: LoginComponent, canActivate: [AuthCheck] },
   { path: 'dataset', redirectTo: '/datasets', pathMatch: 'full' },
   { path: 'datasets',  component: DashboardComponent, canActivate: [AuthCheck], },
   { path: 'end-of-shift', component: EndOfShiftComponent, canActivate: [AuthCheck] },
@@ -27,9 +29,7 @@ export const routes: Routes = [
   { path: 'user/details', component: UserDetailsComponent, canActivate: [AuthCheck] },
   { path: 'user/jobs', component: JobsComponent, canActivate: [AuthCheck] },
   { path: 'sample-data/add', component: SampleDataFormComponent, canActivate: [AuthCheck] },
-  { path: 'error', component: ErrorPageComponent, data: {message: 'Location Not Found', 'breadcrumb': 'Error'} },
-  { path: 'login', component: LoginComponent },
-  { path: 'logout', component: LoginComponent, canActivate: [AuthCheck] }
+  { path: 'error', component: ErrorPageComponent, data: {message: 'Location Not Found', 'breadcrumb': 'Error'} }
 ];
 @NgModule({
   imports: [ RouterModule.forRoot(routes) ],

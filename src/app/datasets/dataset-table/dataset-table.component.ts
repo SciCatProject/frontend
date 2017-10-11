@@ -192,7 +192,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
               data['sortField'] = undefined;
             }
             this.store.dispatch({type : dsa.FILTER_UPDATE, payload : data});
-            this.store.dispatch({type : dsa.SEARCH, payload : data});
           }
           //        }
         });

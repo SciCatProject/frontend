@@ -54,8 +54,8 @@ export class DatasetsFilterComponent implements OnInit {
           this.filters = Object.assign({}, data);
           // Update URL params, activeFilters subscription does not fire. Need to test.
           // const newParams = Object.assign({}, this.filters);
-          this.router.navigate([ '/datasets' ],
-                               {queryParams : this.filters, replaceUrl : true});
+          // this.router.navigate([ '/datasets' ],
+          //                      {queryParams : this.filters, replaceUrl : true});
 
         });
     this.store.select(state => state.root.datasets.filterValues)
@@ -116,10 +116,9 @@ export class DatasetsFilterComponent implements OnInit {
           if (newParams.groups && newParams.groups.length > 0) {
             this.group = {_id : newParams.groups};
           }
-          this.router.navigate([ '/datasets' ],
-                               {queryParams : newParams, replaceUrl : true});
+          // this.router.navigate([ '/datasets' ],
+          //                      {queryParams : newParams, replaceUrl : true});
           this.store.dispatch({type : dsa.FILTER_UPDATE, payload : newParams});
-          this.onSubmit();
         });
         
     });
@@ -137,7 +136,6 @@ export class DatasetsFilterComponent implements OnInit {
                                                   : new Date(this.dates[0]);
     this.filters.endDate.setHours(23, 59, 59, 0);
     this.store.dispatch({type : dsa.FILTER_UPDATE, payload : this.filters});
-    this.onSubmit();
   }
 
   /**
@@ -215,7 +213,6 @@ export class DatasetsFilterComponent implements OnInit {
     // this.store.dispatch(
     //     {type : dua.SAVE, payload : {beamlineText : event['_id']}});
     this.store.dispatch({type : dsa.FILTER_UPDATE, payload : this.filters});
-    // this.onSubmit();
   }
 
   /**
@@ -225,15 +222,6 @@ export class DatasetsFilterComponent implements OnInit {
     console.log(event, this.group);
     this.filters.groups = [ this.group['_id'] ];
     this.store.dispatch({type : dsa.FILTER_UPDATE, payload : this.filters});
-    // this.onSubmit();
-  }
-
-  onSubmit() {
-    this.store.select(state => state.root.datasets.activeFilters)
-        .take(1)
-        .subscribe(filters => {
-          this.store.dispatch({type : dsa.SEARCH, payload : filters});
-        });
   }
 
   /**

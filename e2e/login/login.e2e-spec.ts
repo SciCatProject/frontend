@@ -7,7 +7,7 @@ describe('catanie Login', function() {
   beforeAll(() => {
     lp = new LoginPage();
     browser.get('/logout');
-    browser.sleep(2000);
+    browser.sleep(4000);
     lp.navigateTo();
   });
 

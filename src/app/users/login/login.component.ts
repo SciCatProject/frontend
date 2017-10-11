@@ -41,6 +41,7 @@ export class LoginComponent implements OnInit {
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
     const self = this;
     if (window.location.pathname.indexOf('logout') !== -1) {
+      console.log('logout');
       this.store.dispatch({ type: ua.LOGOUT });
     };
     this.store.select(state => state.root.user.currentUser)

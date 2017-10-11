@@ -79,7 +79,6 @@ export class DatasetEffects {
           .map(toPayload)
           .switchMap(payload => {
             const fq = payload;
-            console.log(fq);
             // TODO access state from here?
             const startDate =
                 fq['startDate'] ? fq['startDate'].toString() : fq['startDate'];
@@ -91,7 +90,6 @@ export class DatasetEffects {
                   .take(1)
                   .subscribe(user => { groups = user; });
               }
-            console.log(groups);
             return this.rds
                 .facet(fq['creationLocation'], groups, startDate, endDate,
                        {'$search': fq['text']})
@@ -117,7 +115,7 @@ export class DatasetEffects {
 
   @Effect()
   protected facetDatasets$: Observable<Action> =
-      this.action$.ofType(DatasetActions.SEARCH)
+      this.action$.ofType(DatasetActions.FILTER_UPDATE)
           .debounceTime(300)
           .map(toPayload)
           .switchMap(payload => {
@@ -131,7 +129,6 @@ export class DatasetEffects {
 
             const match = [];
             if (ownerGroup) {
-              console.log(ownerGroup);
               if (ownerGroup.length > 0 && ownerGroup.constructor !== Array &&
                   typeof ownerGroup[0] === 'object') {
                 const groupsArray = [];
