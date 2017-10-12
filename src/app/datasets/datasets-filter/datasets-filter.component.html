@@ -3,7 +3,7 @@
     <u>Filter Results</u>
   </h3>
   <form class="ui form">
-    <h3 *ngIf="resultCount > 0">Results: {{resultCount}}</h3>
+    <h3>Results: {{resultCount$ | async}}</h3>
     <div class="ui field">
 
       <h3>Beamline</h3>

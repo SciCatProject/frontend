@@ -26,7 +26,7 @@ export class DatasetsFilterComponent implements OnInit {
   ];
   startDate: Date;
   endDate: Date;
-  resultCount = 0;
+  resultCount$;
   dates = [];
 
   dateFacet = [];
@@ -67,17 +67,21 @@ export class DatasetsFilterComponent implements OnInit {
           this.filters = Object.assign({}, data);
           // this.router.navigate([ '/datasets' ], {queryParams : this.filters, replaceUrl : true});
     });
+    this.resultCount$ = this.store.select(state => state.root.datasets.totalSets);
     this.store.select(state => state.root.datasets.filterValues)
         .subscribe(values => {
           this.filterValues = Object.assign({}, values);
+          console.log(values);
           if (this.filterValues) {
             if (this.filterValues['locations'] !== null) {
               this.locations = this.filterValues['locations']
                                    ? this.filterValues['locations']
                                    : [];
-              this.resultCount = this.locations.reduce(
+              const totalSets = this.locations.reduce(
                   (sum, value) => sum + value['count'], 0);
-              }
+              this.store.dispatch({type: dsa.TOTAL_UPDATE, payload: totalSets});
+            }
+              
             if (this.filterValues['groups'] !== null) {
               this.groups = this.filterValues['groups'];
             }

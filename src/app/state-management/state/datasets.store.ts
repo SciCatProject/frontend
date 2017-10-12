@@ -9,6 +9,7 @@ export interface DatasetState {
     filterValues: object;
     currentSet: lb.RawDataset;
     selectedSets: lb.RawDataset[];
+    totalSets: number;
 }
 
 export const initialDatasetState: DatasetState = {
@@ -18,5 +19,6 @@ export const initialDatasetState: DatasetState = {
       creationLocation: null, groups: [], skip: 0, initial: true, sortField: undefined},
     filterValues: {startDate: null, endDate: null, creationLocation: null, groups: [], text: null},
     selectedSets: [],
-    currentSet: undefined
+    currentSet: undefined,
+    totalSets: 0
 };

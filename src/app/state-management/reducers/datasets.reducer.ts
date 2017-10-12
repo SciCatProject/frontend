@@ -21,6 +21,7 @@ export function datasetsReducer(state = initialDatasetState, action: Action) {
 
     case dsa.FILTER_VALUE_UPDATE: {
       const f = action['payload'];
+      console.log(f);
       return Object.assign({}, state, { filterValues: f });
     }
 
@@ -56,6 +57,11 @@ export function datasetsReducer(state = initialDatasetState, action: Action) {
     case dsa.SELECTED_UPDATE: {
       const s = <lb.RawDataset[]>action['payload'];
       return Object.assign({}, state, {selectedSets: s});
+    }
+
+    case dsa.TOTAL_UPDATE: {
+      const s = <number>action['payload'];
+      return Object.assign({}, state, {totalSets: s});
     }
 
     // TODO handle failed actions

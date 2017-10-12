@@ -89,10 +89,13 @@ export class DatasetEffects {
                   .take(1)
                   .subscribe(user => { groups = user; });
               }
-            const textObj = {'$search' : '"' + fq['text'] + '"', '$language': 'none'};
+             let textObj = undefined;
+             if (fq['text']) {
+              textObj = {'$search' : '"' + fq['text'] + '"', '$language': 'none'};
+             }
             return this.rds
                 .facet(fq['creationLocation'], groups, startDate, endDate,
-                       textObj)
+                       '')
                 .switchMap(res => {
                   const filterValues = res['results'][0];
 
