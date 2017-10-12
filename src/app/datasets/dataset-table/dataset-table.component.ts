@@ -26,7 +26,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   @Output() openDataset = new EventEmitter();
   @ViewChild('ds') dsTable: DataTable;
   selectedSets: Array<RawDataset> = [];
-  datasetCount = 1000;
+  datasetCount$;
 
   cols = [];
   loading$: any = false;
@@ -57,7 +57,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     this.loading$ = this.store.select(state => state.root.datasets.loading);
     this.limit$ =
         this.store.select(state => state.root.user.settings.datasetCount);
-
+    this.datasetCount$ = this.store.select(state => state.root.datasets.totalSets);
     this.route.queryParams.subscribe(params => {  
         this.store.select(state => state.root.datasets.activeFilters).take(1).subscribe(filters => {
           const newFilters = Object.assign(filters, params);
@@ -76,16 +76,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
         .subscribe(
             data => {
               this.datasets = data;
-              // Retrieve the array of locations and use this to calculate the
-              // total number
-              this.store
-                  .select(state => state.root.datasets.filterValues.locations)
-                  .take(1)
-                  .subscribe(locs => {
-                    if (locs) {
-                      this.datasetCount = locs.reduce((sum, value) => sum + value['count'], 0);
-                    }
-                  });
             },
             error => { console.error(error); }));
 
