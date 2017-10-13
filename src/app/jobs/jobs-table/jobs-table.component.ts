@@ -1,7 +1,12 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {Store} from '@ngrx/store';
 import * as JobActions from 'state-management/actions/jobs.actions';
-import {DataTable} from 'primeng/primeng';
+import {ConfirmationService, DataTable} from 'primeng/primeng';
+import {Http} from '@angular/http';
+import {ActivatedRoute, Router} from '@angular/router';
+import {Job} from 'shared/sdk/models';
+import {JobApi, UserApi} from 'shared/sdk/services';
+import {ConfigService} from 'shared/services/config.service';
 
 @Component({
   selector: 'app-jobs',
@@ -21,24 +26,17 @@ export class JobsTableComponent implements OnInit {
     {field: 'jobStatusMessage', header: 'Status', sortable: true}
   ];
 
-  constructor(private store: Store<any>) {
-    const jobsTree = {'data': []};
-    this.store.select(state => state.root.jobs.currentJobs).subscribe(jobs => {
-      let index = -1;
-      jobs.map(job => {
-        const entry = {
-          'data': {
-            'creationTime': job['creationTime'],
-            'emailJobInitiator': job['emailJobInitiator'],
-            'type': job['type'],
-            'jobStatusMessage': job['jobStatusMessage'],
-            'datasetList': job['datasetList'],
-            'index': index += 1
-          },
-          'leaf': false
-        };
-        this.jobs.push(entry);
-      });
+  constructor(public http: Http, private us: UserApi, private router: Router,
+              private configSrv: ConfigService, private js: JobApi,
+              private route: ActivatedRoute,
+              private confirmationService: ConfirmationService,
+              private store: Store<any>) {
+    this.configSrv.getConfigFile('Job').subscribe(conf => {
+      for (const prop in conf) {
+        if (prop in conf && 'table' in conf[prop]) {
+          this.cols.push(conf[prop]['table']);
+        }
+      }
     });
   }
 
