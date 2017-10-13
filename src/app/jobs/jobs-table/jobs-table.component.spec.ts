@@ -1,24 +1,15 @@
 import {NO_ERRORS_SCHEMA} from '@angular/core';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import {Headers, Http, RequestOptions} from '@angular/http';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import {Http} from '@angular/http';
 import {Router} from '@angular/router';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {DataTableModule, SharedModule, TreeModule,
-  TreeTableModule, AutoCompleteModule, DropdownModule, ConfirmationService, TabViewModule} from 'primeng/primeng';
+import {ConfirmationService, DataTableModule, SharedModule, TreeTableModule} from 'primeng/primeng';
 
-import {JobsTableComponent } from './jobs-table.component';
+import {JobsTableComponent} from './jobs-table.component';
 import {Store, StoreModule} from '@ngrx/store';
 import {ConfigService} from 'shared/services/config.service';
-import {
-  MockConfigService,
-  MockHttp,
-  MockUserApi,
-  MockDatasetApi,
-  MockRouter,
-  MockUserMsgService,  MockJobApi, MockStore
-} from 'shared/MockStubs';
-import {JobApi, UserApi } from 'shared/sdk/services';
-
+import {MockConfigService, MockHttp, MockJobApi, MockRouter, MockStore, MockUserApi} from 'shared/MockStubs';
+import {JobApi, UserApi} from 'shared/sdk/services';
 
 
 describe('JobsTableComponent', () => {
@@ -29,16 +20,16 @@ describe('JobsTableComponent', () => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
       imports: [DataTableModule, SharedModule, TreeTableModule, FormsModule, ReactiveFormsModule, StoreModule.forRoot({})],
-      declarations: [ JobsTableComponent ]
+      declarations: [JobsTableComponent]
     });
     TestBed.overrideComponent(JobsTableComponent, {
-      set : {
-        providers : [
-          {provide : JobApi, useClass : MockJobApi},
-          {provide : UserApi, useClass : MockUserApi},
-          {provide : Http, useClass : MockHttp},
-          {provide : Router, useClass : MockRouter},
-          {provide : ConfigService, useClass : MockConfigService},
+      set: {
+        providers: [
+          {provide: JobApi, useClass: MockJobApi},
+          {provide: UserApi, useClass: MockUserApi},
+          {provide: Http, useClass: MockHttp},
+          {provide: Router, useClass: MockRouter},
+          {provide: ConfigService, useClass: MockConfigService},
           {provide: ConfirmationService, useClass: ConfirmationService},
           {provide: Store, useClass: MockStore}
         ]
