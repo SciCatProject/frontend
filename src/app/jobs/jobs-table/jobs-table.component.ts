@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {Store} from '@ngrx/store';
 import * as JobActions from 'state-management/actions/jobs.actions';
 import {ConfirmationService, DataTable} from 'primeng/primeng';
@@ -15,8 +15,8 @@ import {ConfigService} from 'shared/services/config.service';
 })
 export class JobsTableComponent implements OnInit {
 
-  @ViewChild('ds') jobsTable: DataTable;
-  jobs = [];
+  @Input() jobs;
+  @ViewChild('js') jobsTable: DataTable;
   jobsCount = 30;
 
   cols = [
@@ -25,6 +25,12 @@ export class JobsTableComponent implements OnInit {
     {field: 'type', header: 'Type', sortable: true},
     {field: 'jobStatusMessage', header: 'Status', sortable: true}
   ];
+  loading$: any = false;
+  limit$: any = 10;
+
+  selectedSets: Array<Job> = [];
+  subscriptions = [];
+
 
   constructor(public http: Http, private us: UserApi, private router: Router,
               private configSrv: ConfigService, private js: JobApi,
@@ -42,7 +48,16 @@ export class JobsTableComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.loading$ = this.store.select(state => state.root.jobs.loading);
+    this.limit$ =
+      this.store.select(state => state.root.user.settings.jobCount);
     this.store.dispatch({type: JobActions.RETRIEVE});
+
+
+    this.subscriptions.push(this.store.select(state => state.root.jobs)
+      .subscribe(selected => {
+        this.selectedSets = selected;
+      }));
   }
 
   onRowSelect(event) {
@@ -62,8 +77,8 @@ export class JobsTableComponent implements OnInit {
   onPage(event) {
     this.store.select(state => state.root.jobs)
       .take(1)
-      .subscribe(dStore => {
-        const jobs = dStore.activeFilters;
+      .subscribe(jStore => {
+        const jobs = jStore.activeFilters;
         if (jobs) {
           jobs['skip'] = event.first;
           jobs['initial'] = false;

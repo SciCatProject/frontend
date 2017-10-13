@@ -1,10 +1,19 @@
-<p-dataTable #ds [paginator]="true" [lazy]="true" [loading]="loading$ | async" [rows]="limit$ | async" [value]="jobs" [rowHover]="true" (onLazyLoad)="onPage($event)"
+<div>
+<p-dataTable #js [paginator]="true" [lazy]="true" [loading]="loading$ | async" [rows]="limit$ | async" [value]="jobs" [rowHover]="true" (onLazyLoad)="onPage($event)"
              [resizableColumns]="true" columnResizeMode="expand" [totalRecords]="jobsCount" dataKey="creationTime">
-  <p-column [style]="{'width':'38px', 'overflow':'hidden'}" *ngFor="let col of cols" [field]="col.field" [header]="col.header" [sortable]="col.sortable" (sortFunction)="colSort($event)">
-    <ng-template let-col let-ds="rowData" let-ri="rowIndex" pTemplate="body">
-      <span>{{getFormat(col.field, ds[col.field], ds)}}</span>
+  <p-column [style]="{'width':'38px', 'overflow':'hidden'}" *ngFor="let col of cols" [field]="col.field" [header]="col.header" [sortable]="col.sortable">
+    <ng-template let-col let-js="rowData" let-ri="rowIndex" pTemplate="body">
+      <span>{{getFormat(col.field, js[col.field], js)}}</span>
     </ng-template>
   </p-column>
   <p-footer>
   </p-footer>
 </p-dataTable>
+</div>
+
+
+
+<p-treeTable [value]="jobs" [style]="{'margin-top':'50px'}"
+             (onNodeExpand)="nodeExpand($event)">
+  <p-column *ngFor="let col of cols" [field]="col.field" [header]="col.header" [sortable]="col.sortable"></p-column>
+</p-treeTable>

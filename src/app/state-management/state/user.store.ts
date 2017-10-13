@@ -3,6 +3,7 @@ import * as lb from 'shared/sdk/models';
 interface Settings {
   tapeCopies: string;
   datasetCount: number;
+  jobCount: number;
 }
 
 // NOTE It IS ok to make up a state of other sub states
@@ -21,6 +22,7 @@ export const initialUserState: UserState = {
   message : {'content' : undefined, 'timeout' : 5, class : 'hidden'},
   settings : {
     'tapeCopies' : 'two',
-    'datasetCount' : 30
+    'datasetCount' : 30,
+    'jobCount' : 30
   } // TODO sync with server settings?
 };
