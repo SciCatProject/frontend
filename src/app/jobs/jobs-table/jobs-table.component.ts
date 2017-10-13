@@ -1,15 +1,18 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {Store} from '@ngrx/store';
 import * as JobActions from 'state-management/actions/jobs.actions';
+import {DataTable} from 'primeng/primeng';
 
 @Component({
   selector: 'app-jobs',
-  templateUrl: './jobs.component.html',
-  styleUrls: ['./jobs.component.css']
+  templateUrl: './jobs-table.component.html',
+  styleUrls: ['./jobs-table.component.css']
 })
-export class JobsComponent implements OnInit {
+export class JobsTableComponent implements OnInit {
 
+  @ViewChild('ds') jobsTable: DataTable;
   jobs = [];
+  jobsCount = 30;
 
   cols = [
     {field: 'creationTime', header: 'Creation Time', sortable: true},
@@ -54,6 +57,31 @@ export class JobsComponent implements OnInit {
       console.log(jobs);
       event.node.children = jobs;
     });
+  }
+
+
+  onPage(event) {
+    this.store.select(state => state.root.jobs)
+      .take(1)
+      .subscribe(dStore => {
+        const jobs = dStore.activeFilters;
+        if (jobs) {
+          jobs['skip'] = event.first;
+          jobs['initial'] = false;
+          if (event.sortField) {
+            const sortOrder = event.sortOrder === 1 ? 'ASC' : 'DESC';
+            jobs['sortField'] = event.sortField + ' ' + sortOrder;
+          } else {
+            jobs['sortField'] = undefined;
+          }
+        }
+        //        }
+      });
+  }
+
+
+  setCurrentPage(n: number) {
+    this.jobsTable.onPageChange({'first': n, 'rows': this.jobsTable.rows});
   }
 
 }

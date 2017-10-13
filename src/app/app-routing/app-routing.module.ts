@@ -7,6 +7,7 @@ import {DatasetDetailComponent} from '../datasets/dataset-detail/dataset-detail.
 import {EndOfShiftComponent} from '../end-of-shift/end-of-shift.component';
 import {LoginComponent} from '../users/login/login.component';
 import {JobsComponent} from '../jobs/jobs.component';
+import {JobsTableComponent} from '../jobs/jobs-table/jobs-table.component';
 import {AppComponent} from '../app.component';
 import {ErrorPageComponent} from '../shared/components/error-page/error-page.component';
 import {UserSettingsComponent} from '../users/user-settings/user-settings.component';
@@ -28,7 +29,8 @@ export const routes: Routes = [
   { path: 'dataset/:id/datafiles', component: DatafilesComponent, canActivate: [AuthCheck] },
   { path: 'user/settings', component: UserSettingsComponent, canActivate: [AuthCheck] },
   { path: 'user/details', component: UserDetailsComponent, canActivate: [AuthCheck] },
-  { path: 'user/jobs', component: JobsComponent, canActivate: [AuthCheck] },
+  { path: 'user/jobs', component: JobsTableComponent, canActivate: [AuthCheck] },
+  { path: 'user/oldjobs', component: JobsComponent, canActivate: [AuthCheck] },
   { path: 'sample-data/add', component: SampleDataFormComponent, canActivate: [AuthCheck] },
   { path: 'error', component: ErrorPageComponent, data: {message: 'Location Not Found', 'breadcrumb': 'Error'} }
 ];

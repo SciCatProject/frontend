@@ -14,6 +14,7 @@ import { DatasetService } from 'datasets/dataset.service';
 import { DatasetsModule } from 'datasets/datasets.module';
 import { EndOfShiftComponent } from 'end-of-shift/end-of-shift.component';
 import { JobsComponent } from 'jobs/jobs.component';
+import { JobsTableComponent } from 'jobs/jobs-table/jobs-table.component';
 import { localStorageSync } from 'ngrx-store-localstorage';
 import {
     AutoCompleteModule,
@@ -48,6 +49,7 @@ export function localStorageSyncWrapper(reducer: any) {
     AppComponent,
     EndOfShiftComponent,
     JobsComponent,
+    JobsTableComponent,
     SampleDataFormComponent
   ],
   imports : [
