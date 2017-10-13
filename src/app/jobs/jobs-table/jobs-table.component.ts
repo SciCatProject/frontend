@@ -44,7 +44,6 @@ export class JobsTableComponent implements OnInit {
         }
       }
     });
-    console.log(this.cols);
   }
 
   ngOnInit() {
