@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, OnDestroy} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {Store} from '@ngrx/store';
 import {OrigDatablock, RawDataset} from 'shared/sdk/models';
@@ -16,11 +16,13 @@ import * as dsa from 'state-management/actions/datasets.actions';
   templateUrl : './dataset-detail.component.html',
   styleUrls : [ './dataset-detail.component.css' ]
 })
-export class DatasetDetailComponent implements OnInit {
+export class DatasetDetailComponent implements OnInit, OnDestroy {
 
   dataset: RawDataset = undefined;
   dataBlocks: Array<OrigDatablock>;
   error;
+
+  subscriptions = [];
 
   constructor(private route: ActivatedRoute,
               private store: Store<any>) {
@@ -30,7 +32,7 @@ export class DatasetDetailComponent implements OnInit {
     const self = this;
 
 
-    this.store.select(state => state.root.datasets.currentSet)
+    this.subscriptions.push(this.store.select(state => state.root.datasets.currentSet)
         .subscribe(dataset => {
           if (dataset && Object.keys(dataset).length > 0) {
             this.dataset = <RawDataset>dataset;
@@ -41,7 +43,7 @@ export class DatasetDetailComponent implements OnInit {
             }
             this.store.dispatch({type: dsa.SELECT_CURRENT, payload: undefined});
           }
-        });
+        }));
 
     this.store.select(state => state.root.datasets.currentSet).take(1).subscribe(ds => {
       if (!ds) {
@@ -50,5 +52,11 @@ export class DatasetDetailComponent implements OnInit {
         });
       }
     });
+  }
+
+  ngOnDestroy() {
+    for (let i = 0; i < this.subscriptions.length; i++) {
+      this.subscriptions[i].unsubscribe();
+    }
   }
 }
