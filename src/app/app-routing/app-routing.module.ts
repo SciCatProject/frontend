@@ -1,5 +1,6 @@
+import {ModuleWithProviders } from '@angular/core';
 import {NgModule} from '@angular/core';
-import {RouterModule, Routes} from '@angular/router';
+import {Routes, RouterModule } from '@angular/router';
 import {DashboardComponent} from '../datasets/dashboard/dashboard.component';
 import {DatafilesComponent} from '../datasets/datafiles/datafiles.component';
 import {DatablocksComponent} from '../datasets/datablocks-table/datablocks-table.component';
@@ -14,7 +15,6 @@ import {UserSettingsComponent} from '../users/user-settings/user-settings.compon
 import {UserDetailsComponent} from '../users/user-details/user-details.component';
 import {SampleDataFormComponent} from '../sample-data-form/sample-data-form.component';
 import {AuthCheck} from '../AuthCheck';
-
 
 
 export const routes: Routes = [
@@ -34,11 +34,15 @@ export const routes: Routes = [
   { path: 'sample-data/add', component: SampleDataFormComponent, canActivate: [AuthCheck] },
   { path: 'error', component: ErrorPageComponent, data: {message: 'Location Not Found', 'breadcrumb': 'Error'} }
 ];
+
 @NgModule({
-  imports: [ RouterModule.forRoot(routes) ],
-  exports: [ RouterModule ]
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule]
 })
-export class AppRoutingModule {}
+export class AppRoutingModule {
+}
+
+
 
 
 

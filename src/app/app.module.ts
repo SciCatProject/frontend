@@ -10,6 +10,8 @@ import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { NguiDatetimePickerModule } from '@ngui/datetime-picker';
 import { AppRoutingModule } from 'app-routing/app-routing.module';
+import { routes } from 'app-routing/app-routing.module';
+import { routing, appRoutingProviders } from 'app-routing/app-routing.module';
 import { DatasetService } from 'datasets/dataset.service';
 import { DatasetsModule } from 'datasets/datasets.module';
 import { EndOfShiftComponent } from 'end-of-shift/end-of-shift.component';
@@ -39,7 +41,8 @@ import { UsersModule } from 'users/users.module';
 import { AppComponent } from './app.component';
 import { AuthCheck } from './AuthCheck';
 
-import { routes } from './app-routing/app-routing.module';
+
+
 export function localStorageSyncWrapper(reducer: any) {
   return localStorageSync({keys: ['root'], rehydrate: true}) (reducer);
 }
@@ -71,6 +74,7 @@ export function localStorageSyncWrapper(reducer: any) {
       maxAge: 25 //  Retains last 25 states
     }),
     EffectsModule.forRoot([DatasetEffects, UserEffects, JobsEffects]),
+    routing,
     StoreRouterConnectingModule
   ],
   exports: [
@@ -79,6 +83,7 @@ export function localStorageSyncWrapper(reducer: any) {
       AuthCheck,
       DatasetService,
       UserApi,
+    appRoutingProviders,
     //      {provide: RouteReuseStrategy, useClass: CustomReuseStrategy}
   ],
   bootstrap : [ AppComponent ]
