@@ -1,8 +1,7 @@
 import {DatePipe} from '@angular/common';
-import {Component, EventEmitter, Input, OnInit, Output, ViewChild, OnDestroy} from '@angular/core';
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
 import {Http} from '@angular/http';
-import {Router, ActivatedRoute} from '@angular/router';
-import {Observable} from 'rxjs/Observable';
+import {ActivatedRoute, Router} from '@angular/router';
 import {Store} from '@ngrx/store';
 import {ConfirmationService, DataTable} from 'primeng/primeng';
 import {Subject} from 'rxjs/Subject';
@@ -14,9 +13,9 @@ import * as ua from 'state-management/actions/user.actions';
 import * as ja from 'state-management/actions/jobs.actions';
 
 @Component({
-  selector : 'dataset-table',
-  templateUrl : './dataset-table.component.html',
-  styleUrls : [ './dataset-table.component.css' ]
+  selector: 'dataset-table',
+  templateUrl: './dataset-table.component.html',
+  styleUrls: ['./dataset-table.component.css']
 })
 
 export class DatasetTableComponent implements OnInit, OnDestroy {
@@ -56,15 +55,15 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.loading$ = this.store.select(state => state.root.datasets.loading);
     this.limit$ =
-        this.store.select(state => state.root.user.settings.datasetCount);
+      this.store.select(state => state.root.user.settings.datasetCount);
 
-    this.route.queryParams.subscribe(params => {  
-        this.store.select(state => state.root.datasets.activeFilters).take(1).subscribe(filters => {
-          const newFilters = Object.assign(filters, params);
-          this.setCurrentPage(newFilters.skip);
-          this.store.dispatch({type : dsa.FILTER_UPDATE, payload : newFilters});
-        });
-        
+    this.route.queryParams.subscribe(params => {
+      this.store.select(state => state.root.datasets.activeFilters).take(1).subscribe(filters => {
+        const newFilters = Object.assign(filters, params);
+        this.setCurrentPage(newFilters.skip);
+        this.store.dispatch({type: dsa.FILTER_UPDATE, payload: newFilters});
+      });
+
     });
 
     // NOTE: Typescript picks this key up as the property of the state, but it
@@ -73,64 +72,65 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     // becomes an issue
 
     this.subscriptions.push(this.store.select(state => state.root.datasets.datasets)
-        .subscribe(
-            data => {
-              this.datasets = data;
-              // Retrieve the array of locations and use this to calculate the
-              // total number
-              this.store
-                  .select(state => state.root.datasets.filterValues.locations)
-                  .take(1)
-                  .subscribe(locs => {
-                    if (locs) {
-                      this.datasetCount = locs.reduce((sum, value) => sum + value['count'], 0);
-                    }
-                  });
-            },
-            error => { console.error(error); }));
+      .subscribe(
+        data => {
+          this.datasets = data;
+          // Retrieve the array of locations and use this to calculate the
+          // total number
+          this.store
+            .select(state => state.root.datasets.filterValues.locations)
+            .take(1)
+            .subscribe(locs => {
+              if (locs) {
+                this.datasetCount = locs.reduce((sum, value) => sum + value['count'], 0);
+              }
+            });
+        },
+        error => {
+          console.error(error);
+        }));
 
     this.subscriptions.push(this.store.select(state => state.root.datasets.activeFilters)
-        .subscribe(filters => {
-          if (filters.skip !== this.dsTable.first) {
-            setTimeout(() => {
-              this.setCurrentPage(filters.skip);
-            }, 1000);
-          }
-        }));
+      .subscribe(filters => {
+        if (filters.skip !== this.dsTable.first) {
+          setTimeout(() => {
+            this.setCurrentPage(filters.skip);
+          }, 1000);
+        }
+      }));
 
     this.subscriptions.push(this.store.select(state => state.root.datasets.selectedSets)
-        .subscribe(selected => {
-          this.selectedSets = selected;
+      .subscribe(selected => {
+        this.selectedSets = selected;
 
-        }));
+      }));
 
 
     let msg = {};
     this.store.select(state => state.root.jobs.jobSubmission).subscribe(
       ret => {
-        if(ret) {
+        if (ret) {
           console.log(ret);
           this.selectedSets = [];
           this.aremaOptions = '';
           msg = {
-            class : 'ui message positive',
-            content : 'Job Created Successfully',
-            timeout : 3
+            class: 'ui message positive',
+            content: 'Job Created Successfully',
+            timeout: 3
           };
-          this.store.dispatch({type : ua.SHOW_MESSAGE, payload : msg});
+          this.store.dispatch({type: ua.SHOW_MESSAGE, payload: msg});
         }
       },
       error => {
         console.log(error);
         msg = {
-          class : 'ui message negative',
-          content : error.message,
-          timeout : 3
+          class: 'ui message negative',
+          content: error.message,
+          timeout: 3
         };
-        this.store.dispatch({type : ua.SHOW_MESSAGE, payload : msg});
+        this.store.dispatch({type: ua.SHOW_MESSAGE, payload: msg});
       });
 
-    
 
   }
 
@@ -139,6 +139,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
       this.subscriptions[i].unsubscribe();
     }
   }
+
   /**
    * Navigate to dataset detail page
    * on a row click
@@ -150,7 +151,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     // Odd hack to stop click event in column loading dataset view, not needed
     // before 5th July 2017
     if (event['originalEvent']['target']['innerHTML'].indexOf('chkbox') ===
-        -1) {
+      -1) {
       this.router.navigateByUrl('/dataset/' + encodeURIComponent(event.data.pid));
       // this.store.dispatch(
       //     {type : dsa.SELECT_CURRENT, payload : event.data});
@@ -189,11 +190,11 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
       }
       if (selected.length > 0) {
         this.aremaOptions =
-            this.setOptions(this.selectedSets[this.selectedSets.length - 1]);
+          this.setOptions(this.selectedSets[this.selectedSets.length - 1]);
       } else {
         this.aremaOptions = '';
       }
-      this.store.dispatch({type : dsa.SELECTED_UPDATE, payload : selected});
+      this.store.dispatch({type: dsa.SELECTED_UPDATE, payload: selected});
       this.selectedSets = selected;
     }, 600);
   }
@@ -205,32 +206,32 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
    */
   onPage(event) {
     this.store.select(state => state.root.datasets)
-        .take(1)
-        .subscribe(dStore => {
-          const data = dStore.activeFilters;
-          //        if (dStore.datasets.length === 0 ||
-          //           (dStore.datasets.length !== 0 &&
-          //             dStore.activeFilters.skip !== event.first)) {
-          if (data) {
-            data['skip'] = event.first;
-            data['initial'] = false;
-            if (event.sortField) {
-              const sortOrder = event.sortOrder === 1 ? 'ASC' : 'DESC';
-              data['sortField'] = event.sortField + ' ' + sortOrder;
-            } else {
-              data['sortField'] = undefined;
-            }
-            this.store.dispatch({type : dsa.FILTER_UPDATE, payload : data});
+      .take(1)
+      .subscribe(dStore => {
+        const data = dStore.activeFilters;
+        //        if (dStore.datasets.length === 0 ||
+        //           (dStore.datasets.length !== 0 &&
+        //             dStore.activeFilters.skip !== event.first)) {
+        if (data) {
+          data['skip'] = event.first;
+          data['initial'] = false;
+          if (event.sortField) {
+            const sortOrder = event.sortOrder === 1 ? 'ASC' : 'DESC';
+            data['sortField'] = event.sortField + ' ' + sortOrder;
+          } else {
+            data['sortField'] = undefined;
           }
-          //        }
-        });
+          this.store.dispatch({type: dsa.FILTER_UPDATE, payload: data});
+        }
+        //        }
+      });
   }
 
   // NOTE: this does not set the page number for the table, there is a
   // `paginate` method but
   // this takes no arguments and requires changing protected vars
   setCurrentPage(n: number) {
-    this.dsTable.onPageChange({'first' : n, 'rows' : this.dsTable.rows});
+    this.dsTable.onPageChange({'first': n, 'rows': this.dsTable.rows});
   }
 
   /**
@@ -245,10 +246,10 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     const dl = set['datasetlifecycle'];
     if (dl && dl['isOnDisk']) {
       options += 'archive';
-      }
+    }
     if (dl && (dl['isOnTape'] || dl['isOnDisk'])) {
       options += 'retrieve';
-      }
+    }
     return options;
   }
 
@@ -265,9 +266,11 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
       message += element.sourceFolder + ': ' + size + '\n';
     });
     this.confirmationService.confirm({
-      header : 'Archive ' + this.selectedSets.length + ' Datasets?',
-      message : message,
-      accept : () => { this.archiveOrRetrieve(true); }
+      header: 'Archive ' + this.selectedSets.length + ' Datasets?',
+      message: message,
+      accept: () => {
+        this.archiveOrRetrieve(true);
+      }
     });
   }
 
@@ -276,7 +279,9 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
    * @param {any} event - click handler (not currently used)
    * @memberof DashboardComponent
    */
-  retrieveClickHandle(event) { this.retrieveDisplay = true; }
+  retrieveClickHandle(event) {
+    this.retrieveDisplay = true;
+  }
 
   retrieveSets(f) {
     const destPath = f.form.value['path'];
@@ -307,14 +312,14 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
         } else {
           job.emailJobInitiator = user['email'];
           this.store.select(state => state.root.user.currentUser)
-              .take(1)
-              .subscribe(current => {
-                if ('accessEmail' in current) {
-                  job.emailJobInitiator = current['accessEmail'];
-                } else {
-                  console.log('cannot find user email');
-                }
-              });
+            .take(1)
+            .subscribe(current => {
+              if ('accessEmail' in current) {
+                job.emailJobInitiator = current['accessEmail'];
+              } else {
+                console.log('cannot find user email');
+              }
+            });
         }
         this.selectedSets.map(set => {
           // if ('datablocks' in set && set['datablocks'].length > 0) {
@@ -332,26 +337,28 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
         });
         if (backupFiles.length === 0) {
           msg = {
-            class : 'ui message negative',
-            content :
-                'Selected datasets have no datablocks associated with them',
-            timeout : 3
+            class: 'ui message negative',
+            content:
+              'Selected datasets have no datablocks associated with them',
+            timeout: 3
           };
-          this.store.dispatch({type : ua.SHOW_MESSAGE, payload : msg});
+          this.store.dispatch({type: ua.SHOW_MESSAGE, payload: msg});
           this.selectedSets = [];
         } else {
           job.datasetList = backupFiles;
           job.type = archive ? 'archive' : 'retrieve';
           this.store.select(state => state.root.user.settings.tapeCopies)
-              .take(1)
-              .subscribe(copies => {job.jobParams = {'tapeCopies' : copies}; });
+            .take(1)
+            .subscribe(copies => {
+              job.jobParams = {'tapeCopies': copies};
+            });
           if (!archive) {
             // TODO number of copies from settings table
             job.jobParams['destinationPath'] = destPath;
           } else {
             for (let i = 0; i < this.selectedSets.length; i++) {
               const ds = <RawDataset>this.selectedSets[i];
-              const loc = { 'userTargetLocation' : destPath };
+              const loc = {'userTargetLocation': destPath};
               // TODO job params - retrieve, userTarget - archive
               // this.rds.updateAttributes(encodeURIComponent(ds.pid), loc)
               //     .subscribe(
@@ -364,17 +371,17 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
               //         () => {});
             }
           }
-          this.store.dispatch({type : ja.SUBMIT, payload : job});
+          this.store.dispatch({type: ja.SUBMIT, payload: job});
         }
 
       });
     } else {
       msg = {
-        class : 'ui message negative',
-        content : 'No Datasets selected',
-        timeout : 3
+        class: 'ui message negative',
+        content: 'No Datasets selected',
+        timeout: 3
       };
-      this.store.dispatch({type : ua.SHOW_MESSAGE, payload : msg});
+      this.store.dispatch({type: ua.SHOW_MESSAGE, payload: msg});
     }
   }
 
@@ -392,13 +399,13 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   }
 
   /**
- * Checks type against config and
- * fallback to type if not available
- * @param {any} key
- * @param {any} value
- * @returns
- * @memberof ConfigFormComponent
- */
+   * Checks type against config and
+   * fallback to type if not available
+   * @param {any} key
+   * @param {any} value
+   * @returns
+   * @memberof ConfigFormComponent
+   */
   getFormat(key, value, ds) {
     if (key === 'creationTime') {
       const date = new Date(value);
@@ -406,10 +413,10 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
       const formattedDate = datePipe.transform(date, 'dd/MM/yyyy HH:mm');
       return formattedDate;
     } else if ((key === 'archiveStatus' || key === 'retrieveStatus') &&
-               ds['datasetlifecycle']) {
+      ds['datasetlifecycle']) {
       return ds['datasetlifecycle'][key + 'Message'];
     } else if (key === 'size') {
-      return (((ds[key] / 1024)/1024)/1024).toFixed(2);
+      return (((ds[key] / 1024) / 1024) / 1024).toFixed(2);
     } else if (key in ds) {
       return value;
     } else {

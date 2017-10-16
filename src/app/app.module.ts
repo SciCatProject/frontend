@@ -39,6 +39,7 @@ import { UsersModule } from 'users/users.module';
 
 import { AppComponent } from './app.component';
 import { AuthCheck } from './AuthCheck';
+import { JobsDetailComponent } from './jobs/jobs-detail/jobs-detail.component';
 
 
 
@@ -52,7 +53,8 @@ export function localStorageSyncWrapper(reducer: any) {
     EndOfShiftComponent,
     JobsComponent,
     JobsTableComponent,
-    SampleDataFormComponent
+    SampleDataFormComponent,
+    JobsDetailComponent
   ],
   imports : [
     BrowserModule,

@@ -12,6 +12,10 @@ export const RETRIEVE_COMPLETE = '[Jobs] Retrieve Complete';
 export const UI_STORE = '[Jobs] UI Store';
 export const CHILD_RETRIEVE = '[Jobs] Child Retrieve';
 export const CHILD_RETRIEVE_COMPLETE = '[Jobs] Child Retrieve Complete';
+export const SEARCH_ID = '[Jobs] Search ID';
+export const SEARCH_ID_COMPLETE = '[Jobs] Search ID Complete';
+export const SEARCH_ID_FAILED = '[Jobs] Search ID Failed';
+export const SELECT_CURRENT = '[Dataset] Current set selected';
 
 export class SubmitAction implements Action {
   readonly type = SUBMIT;
@@ -48,8 +52,35 @@ export class ChildRetrieveCompleteAction implements Action {
 
   constructor(public payload?: any) {}
 }
+
+
+export class SearchIDAction implements Action {
+  readonly type = SEARCH_ID;
+
+  constructor() {}
+}
+export class SearchIDCompleteAction implements Action {
+  readonly type = SEARCH_ID_COMPLETE;
+
+  constructor() {}
+}
+export class SearchIDFailedAction implements Action {
+  readonly type = SEARCH_ID_FAILED;
+
+  constructor() {}
+}
+
+export class CurrentSetAction implements Action {
+  readonly type = SELECT_CURRENT;
+
+  constructor(public payload: lb.RawDataset) {}
+}
+
+
 export type Actions =
   SubmitAction |
   SubmitCompleteAction |
+  SearchIDAction | SearchIDCompleteAction |
+  SearchIDFailedAction |
   RetrieveAction|
   RetrieveCompleteAction;

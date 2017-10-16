@@ -25,6 +25,7 @@ export const routes: Routes = [
   { path: 'datasets',  component: DashboardComponent, canActivate: [AuthCheck], },
   { path: 'end-of-shift', component: EndOfShiftComponent, canActivate: [AuthCheck] },
   { path: 'dataset/:id', component: DatasetDetailComponent, canActivate: [AuthCheck] },
+  { path: 'job/:id', component: DatasetDetailComponent, canActivate: [AuthCheck] },
   { path: 'dataset/:id/datablocks', component: DatablocksComponent, canActivate: [AuthCheck] },
   { path: 'dataset/:id/datafiles', component: DatafilesComponent, canActivate: [AuthCheck] },
   { path: 'user/settings', component: UserSettingsComponent, canActivate: [AuthCheck] },

@@ -1,5 +1,6 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {Store} from '@ngrx/store';
+import {Router} from '@angular/router';
 import * as JobActions from 'state-management/actions/jobs.actions';
 import {DataTable} from 'primeng/primeng';
 import {Http} from '@angular/http';
@@ -31,7 +32,7 @@ export class JobsTableComponent implements OnInit {
 
 
   constructor(public http: Http,
-              private configSrv: ConfigService,
+              private configSrv: ConfigService, private router: Router,
               private store: Store<any>) {
     this.configSrv.getConfigFile('Job').subscribe(conf => {
       for (const prop in conf) {
@@ -55,8 +56,17 @@ export class JobsTableComponent implements OnInit {
       }));
   }
 
+
   onRowSelect(event) {
-    console.log(event);
+    const pid = encodeURIComponent(event.data.pid);
+    // Odd hack to stop click event in column loading dataset view, not needed
+    // before 5th July 2017
+    if (event['originalEvent']['target']['innerHTML'].indexOf('chkbox') ===
+      -1) {
+      this.router.navigateByUrl('/job/' + encodeURIComponent(event.data.pid));
+      // this.store.dispatch(
+      //     {type : dsa.SELECT_CURRENT, payload : event.data});
+    }
   }
 
   nodeExpand(event) {
