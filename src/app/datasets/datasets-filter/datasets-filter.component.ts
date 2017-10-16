@@ -43,9 +43,9 @@ export class DatasetsFilterComponent implements OnInit {
   filterValues;
 
   constructor(private store: Store<any>, private route: ActivatedRoute, private router: Router) {
-    this.route.queryParams.subscribe(params => {  
+    this.route.queryParams.subscribe(params => {
         this.store.select(state => state.root.datasets.activeFilters).take(1).subscribe(filters => {
-          const newParams = Object.assign(filters, params);   
+          const newParams = Object.assign(filters, params);
           this.location = newParams.creationLocation ? {_id : newParams.creationLocation} : '';
           if (newParams.groups && newParams.groups.length > 0) {
             this.group = {_id : newParams.groups};
@@ -53,7 +53,7 @@ export class DatasetsFilterComponent implements OnInit {
           this.router.navigate([ '/datasets' ], {queryParams : newParams, replaceUrl : true});
           this.store.dispatch({type : dsa.FILTER_UPDATE, payload : newParams});
         });
-        
+
     });
   }
 

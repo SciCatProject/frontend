@@ -13,7 +13,7 @@ import { environment } from '../environments/environment';
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
-  providers: [UserApi]
+  providers: [UserApi],
 })
 export class AppComponent implements OnDestroy, OnInit {
   title = 'CATANIE';
@@ -52,8 +52,8 @@ export class AppComponent implements OnDestroy, OnInit {
             window.location.replace('/login');
           }
         }
-      });  
-    
+      });
+
   }
 
   /**

@@ -1,11 +1,9 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {Store} from '@ngrx/store';
 import * as JobActions from 'state-management/actions/jobs.actions';
-import {ConfirmationService, DataTable} from 'primeng/primeng';
+import {DataTable} from 'primeng/primeng';
 import {Http} from '@angular/http';
-import {ActivatedRoute, Router} from '@angular/router';
 import {Job} from 'shared/sdk/models';
-import {JobApi, UserApi} from 'shared/sdk/services';
 import {ConfigService} from 'shared/services/config.service';
 
 @Component({
@@ -32,10 +30,8 @@ export class JobsTableComponent implements OnInit {
   subscriptions = [];
 
 
-  constructor(public http: Http, private us: UserApi, private router: Router,
-              private configSrv: ConfigService, private js: JobApi,
-              private route: ActivatedRoute,
-              private confirmationService: ConfirmationService,
+  constructor(public http: Http,
+              private configSrv: ConfigService,
               private store: Store<any>) {
     this.configSrv.getConfigFile('Job').subscribe(conf => {
       for (const prop in conf) {
