@@ -25,6 +25,14 @@ export class AppComponent implements OnDestroy, OnInit {
   subscriptions = [];
 
   constructor(private router: Router, private store: Store<any>) {
+  }
+
+  /**
+   * Handles initial check of username and updates
+   * auth service (loopback does not by default)
+   * @memberof AppComponent
+   */
+  ngOnInit() {
     LoopBackConfig.setBaseURL(environment.lbBaseURL);
     console.log(LoopBackConfig.getPath());
     localStorage.clear();
@@ -50,14 +58,8 @@ export class AppComponent implements OnDestroy, OnInit {
             }
           }
         }));
-  }
-
-  /**
-   * Handles initial check of username and updates
-   * auth service (loopback does not by default)
-   * @memberof AppComponent
-   */
-  ngOnInit() { this.store.dispatch({type : ua.RETRIEVE_USER}); }
+    this.store.dispatch({type : ua.RETRIEVE_USER});
+ }
 
   ngOnDestroy() {
     for (let i = 0; i < this.subscriptions.length; i++) {
