@@ -45,6 +45,8 @@ export class JobsTableComponent implements OnInit {
   }
 
   ngOnInit() {
+    //this.loading$ = this.store.select(state => state.root.jobs.loading);
+    this.loading$ = false;
     this.limit$ =
       this.store.select(state => state.root.user.settings.jobCount);
     this.store.dispatch({type: JobActions.RETRIEVE});
@@ -52,7 +54,7 @@ export class JobsTableComponent implements OnInit {
 
     this.subscriptions.push(this.store.select(state => state.root.jobs)
       .subscribe(selected => {
-        this.selectedSets = selected;
+        this.jobs = selected;
       }));
 
 
