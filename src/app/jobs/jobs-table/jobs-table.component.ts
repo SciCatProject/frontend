@@ -30,6 +30,7 @@ export class JobsTableComponent implements OnInit {
 
   selectedSets: Array<Job> = [];
   subscriptions = [];
+  jobsCount = 1000;
 
 
   constructor(public http: Http,
@@ -56,7 +57,6 @@ export class JobsTableComponent implements OnInit {
     this.subscriptions.push(this.store.select(state => state.root.jobs.currentJobs)
       .subscribe(selected => {
         this.jobs = selected;
-        console.log('gm print', this.jobs);
       }));
 
 
@@ -64,15 +64,7 @@ export class JobsTableComponent implements OnInit {
 
 
   onRowSelect(event) {
-    const pid = encodeURIComponent(event.data.pid);
-    // Odd hack to stop click event in column loading dataset view, not needed
-    // before 5th July 2017
-    if (event['originalEvent']['target']['innerHTML'].indexOf('chkbox') ===
-      -1) {
-      this.router.navigateByUrl('/job/' + encodeURIComponent(event.data.pid));
-      // this.store.dispatch(
-      //     {type : dsa.SELECT_CURRENT, payload : event.data});
-    }
+      this.router.navigateByUrl('/job/' + encodeURIComponent(event.job.id));
   }
 
   nodeExpand(event) {
@@ -90,7 +82,6 @@ export class JobsTableComponent implements OnInit {
       .take(1)
       .subscribe(jStore => {
         const jobs = jStore.currentJobs;
-        console.log('gm print 2 jobs', jobs);
         if (jobs) {
           jobs['skip'] = event.first;
           jobs['initial'] = false;
@@ -100,6 +91,7 @@ export class JobsTableComponent implements OnInit {
           } else {
             jobs['sortField'] = undefined;
           }
+          this.store.dispatch({type: JobActions.SORT_UPDATE, payload: jobs});
         }
         //        }
       });

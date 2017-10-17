@@ -116,8 +116,46 @@ export class JobsEffects {
                 {type : JobActions.RETRIEVE_COMPLETE, payload : err});
           });
 
-  constructor(private action$: Actions, private store: Store<AppState>,
+  @Effect()
+  protected get_updated_sort$: Observable<Action> =
+    this.action$.ofType(JobActions.SORT_UPDATE)
+      .debounceTime(300)
+      .map(toPayload)
+      .switchMap(payload => {
+        const fq = payload;
+        // TODO access state from here?
+        let groups = fq['groups'];
+        if (!groups || groups.length === 0) {
+          this.store.select(state => state.root.user.currentUserGroups)
+            .take(1)
+            .subscribe(user => { groups = user; });
+        }
+        const textObj = {'$search' : '"' + fq['text'] + '"', '$language': 'none'};
+        return this.jobSrv.findOne()
+          .catch(err => {
+            console.log(err);
+            return Observable.of(
+              {type : JobActions.SORT_FAILED, payload : err});
+          });
+      });
+
+
+  constructor(private action$: Actions, private store: Store<any>,
               private jobSrv: lb.JobApi, private dsSrv: lb.RawDatasetApi) {}
 
 
+}
+
+
+
+function stringSort(a, b) {
+  const val_a = a._id,
+    val_b = b._id;
+  if (val_a < val_b) {
+    return -1;
+  }
+  if (val_a > val_b) {
+    return 1;
+  }
+  return 0;
 }

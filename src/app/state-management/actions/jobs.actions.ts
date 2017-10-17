@@ -1,7 +1,4 @@
-import { Action, Store } from '@ngrx/store';
-import { Actions, Effect, toPayload } from '@ngrx/effects';
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import {Action} from '@ngrx/store';
 
 import * as lb from 'shared/sdk/models';
 
@@ -15,72 +12,129 @@ export const CHILD_RETRIEVE_COMPLETE = '[Jobs] Child Retrieve Complete';
 export const SEARCH_ID = '[Jobs] Search ID';
 export const SEARCH_ID_COMPLETE = '[Jobs] Search ID Complete';
 export const SEARCH_ID_FAILED = '[Jobs] Search ID Failed';
-export const SELECT_CURRENT = '[Dataset] Current set selected';
+export const SELECT_CURRENT = '[Jobs] Current set selected';
+
+export const SORT_UPDATE = '[Jobs]  Sort Update';
+export const SORT_UPDATE_COMPLETE = '[Jobs]  Sort Update Complete';
+export const SORT_VALUE_UPDATE = '[Jobs]  Sort Update';
+export const SORT_FAILED = '[Jobs]  Sort Failed';
 
 export class SubmitAction implements Action {
   readonly type = SUBMIT;
 
-  constructor(public payload?: any) { }
+  constructor(public payload?: any) {
+  }
 }
+
 export class RetrieveAction implements Action {
   readonly type = RETRIEVE;
 
-  constructor() { }
+  constructor() {
+  }
 }
+
 export class UIStoreAction implements Action {
   readonly type = UI_STORE;
 
-  constructor(public payload?: any) { }
+  constructor(public payload?: any) {
+  }
 }
+
 export class SubmitCompleteAction implements Action {
   readonly type = SUBMIT_COMPLETE;
 
-  constructor(public payload?: any) { }
+  constructor(public payload?: any) {
+  }
 }
+
 export class RetrieveCompleteAction implements Action {
   readonly type = RETRIEVE_COMPLETE;
 
-  constructor(public payload?: any) { }
+  constructor(public payload?: any) {
+  }
 }
+
 export class ChildRetrieveAction implements Action {
   readonly type = CHILD_RETRIEVE;
 
-  constructor(public payload?: any) {}
+  constructor(public payload?: any) {
+  }
 }
+
 export class ChildRetrieveCompleteAction implements Action {
   readonly type = CHILD_RETRIEVE_COMPLETE;
 
-  constructor(public payload?: any) {}
+  constructor(public payload?: any) {
+  }
 }
 
 
 export class SearchIDAction implements Action {
   readonly type = SEARCH_ID;
 
-  constructor() {}
+  constructor() {
+  }
 }
+
 export class SearchIDCompleteAction implements Action {
   readonly type = SEARCH_ID_COMPLETE;
 
-  constructor() {}
+  constructor() {
+  }
 }
+
 export class SearchIDFailedAction implements Action {
   readonly type = SEARCH_ID_FAILED;
 
-  constructor() {}
+  constructor() {
+  }
 }
 
 export class CurrentSetAction implements Action {
   readonly type = SELECT_CURRENT;
 
-  constructor(public payload: lb.RawDataset) {}
+  constructor(public payload: lb.Job) {
+  }
+}
+
+export class SortUpdateAction implements Action {
+  readonly type = SORT_UPDATE;
+
+  constructor(public payload: lb.Job) {
+  }
+}
+
+export class UpdateSortCompleteAction implements Action {
+  readonly type = SORT_UPDATE_COMPLETE;
+
+  constructor(public payload: lb.Job) {
+  }
+}
+
+export class SortFailedAction implements Action {
+  readonly type = SORT_FAILED;
+
+  constructor() {
+  }
+}
+
+export class SortValueAction implements Action {
+  readonly type = SORT_VALUE_UPDATE;
+
+  constructor(public payload?: any) {
+  }
 }
 
 
 export type Actions =
+  SortUpdateAction |
+  UpdateSortCompleteAction |
+  SortFailedAction |
+  SortValueAction |
+  CurrentSetAction |
   SubmitAction |
   SubmitCompleteAction |
   SearchIDAction | SearchIDCompleteAction |
   SearchIDFailedAction |
-  RetrieveAction|
+  RetrieveAction |
   RetrieveCompleteAction;
