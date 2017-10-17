@@ -1,3 +1,4 @@
+import {DatePipe} from '@angular/common';
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {Store} from '@ngrx/store';
 import {Router} from '@angular/router';
@@ -44,7 +45,6 @@ export class JobsTableComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.loading$ = this.store.select(state => state.root.jobs.loading);
     this.limit$ =
       this.store.select(state => state.root.user.settings.jobCount);
     this.store.dispatch({type: JobActions.RETRIEVE});
@@ -54,6 +54,36 @@ export class JobsTableComponent implements OnInit {
       .subscribe(selected => {
         this.selectedSets = selected;
       }));
+
+
+    this.jobs = [
+      {
+      id: '5',
+      emailJobInitiator: 'test@test.com',
+      type: 'retrieve',
+      creationTime: '2015-04-11T11:00:00Z',
+      executionTime: '2015-04-11T11:00:00Z',
+      jobParams: {'0': 's'},
+      jobStatusMessage: 'retrieve',
+      datasetList: {'0': 'm'},
+      createdAt: '2015-04-11T11:00:00Z',
+      updatedAt: '2017-10-17T08:33:00Z'
+    }
+    ,
+      {
+        id: '6',
+        emailJobInitiator: 'zest@test.com',
+        type: 'retrieve',
+        creationTime: '2016-04-11T11:00:00Z',
+        executionTime: '2016-04-11T11:00:00Z',
+        jobParams: {'0': 's'},
+        jobStatusMessage: 'retrieve',
+        datasetList: {'0': 'm'},
+        createdAt: '2016-04-11T11:00:00Z',
+        updatedAt: '2017-10-17T08:33:00Z'
+      }
+    ];
+
   }
 
 
@@ -101,6 +131,24 @@ export class JobsTableComponent implements OnInit {
 
   setCurrentPage(n: number) {
     this.jobsTable.onPageChange({'first': n, 'rows': this.jobsTable.rows});
+  }
+
+  getFormat(key, value, ds) {
+    if (key === 'creationTime') {
+      const date = new Date(value);
+      const datePipe = new DatePipe('en-US');
+      const formattedDate = datePipe.transform(date, 'dd/MM/yyyy HH:mm');
+      return formattedDate;
+    } else if ((key === 'archiveStatus' || key === 'retrieveStatus') &&
+      ds['datasetlifecycle']) {
+      return ds['datasetlifecycle'][key + 'Message'];
+    } else if (key === 'size') {
+      return (((ds[key] / 1024) / 1024) / 1024).toFixed(2);
+    } else if (key in ds) {
+      return value;
+    } else {
+      return key;
+    }
   }
 
 }

@@ -13,10 +13,9 @@ export class JobsDetailComponent implements OnInit {
 
   job: Job = undefined;
 
-    constructor(private route: ActivatedRoute,
+  constructor(private route: ActivatedRoute,
               private store: Store<any>) {
   };
-
 
 
   ngOnInit() {
@@ -38,5 +37,6 @@ export class JobsDetailComponent implements OnInit {
         });
       }
     });
+    console.log('gm test print job', this.job);
   }
 }

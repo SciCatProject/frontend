@@ -16,6 +16,31 @@ import {AppState} from 'state-management/state/app.store';
 @Injectable()
 export class JobsEffects {
 
+
+  @Effect()
+  protected getDataset$: Observable<Action> =
+    this.action$.ofType(JobActions.SEARCH_ID)
+      .debounceTime(300)
+      .map(toPayload)
+      .switchMap(payload => {
+        const id = payload;
+        // TODO separate action for dataBlocks? or retrieve at once?
+
+        return this.jobSrv.findById(encodeURIComponent(id))
+          .switchMap(res => {
+            return Observable.of({
+              type : JobActions.SEARCH_ID_COMPLETE,
+              payload : res
+            });
+          })
+          .catch(err => {
+            console.log(err);
+
+            return Observable.of(
+              {type : JobActions.SEARCH_ID_FAILED, payload : err});
+          });
+      });
+
   @Effect()
   protected submit$: Observable<Action> =
       this.action$.ofType(JobActions.SUBMIT)

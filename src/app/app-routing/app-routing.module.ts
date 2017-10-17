@@ -9,6 +9,7 @@ import {EndOfShiftComponent} from '../end-of-shift/end-of-shift.component';
 import {LoginComponent} from '../users/login/login.component';
 import {JobsComponent} from '../jobs/jobs.component';
 import {JobsTableComponent} from '../jobs/jobs-table/jobs-table.component';
+import {JobsDetailComponent} from '../jobs/jobs-detail/jobs-detail.component';
 import {AppComponent} from '../app.component';
 import {ErrorPageComponent} from '../shared/components/error-page/error-page.component';
 import {UserSettingsComponent} from '../users/user-settings/user-settings.component';
@@ -25,7 +26,7 @@ export const routes: Routes = [
   { path: 'datasets',  component: DashboardComponent, canActivate: [AuthCheck], },
   { path: 'end-of-shift', component: EndOfShiftComponent, canActivate: [AuthCheck] },
   { path: 'dataset/:id', component: DatasetDetailComponent, canActivate: [AuthCheck] },
-  { path: 'job/:id', component: DatasetDetailComponent, canActivate: [AuthCheck] },
+  { path: 'job/:id', component: JobsDetailComponent, canActivate: [AuthCheck] },
   { path: 'dataset/:id/datablocks', component: DatablocksComponent, canActivate: [AuthCheck] },
   { path: 'dataset/:id/datafiles', component: DatafilesComponent, canActivate: [AuthCheck] },
   { path: 'user/settings', component: UserSettingsComponent, canActivate: [AuthCheck] },
