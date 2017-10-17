@@ -18,7 +18,7 @@ export class JobsEffects {
 
 
   @Effect()
-  protected getDataset$: Observable<Action> =
+  protected getJob$: Observable<Action> =
     this.action$.ofType(JobActions.SEARCH_ID)
       .debounceTime(300)
       .map(toPayload)

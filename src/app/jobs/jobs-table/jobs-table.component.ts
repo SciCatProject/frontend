@@ -16,8 +16,8 @@ import {ConfigService} from 'shared/services/config.service';
 export class JobsTableComponent implements OnInit {
 
   @Input() jobs;
+  @Input() jobs2;
   @ViewChild('js') jobsTable: DataTable;
-  jobsCount = 30;
 
   cols = [
     {field: 'creationTime', header: 'Creation Time', sortable: true},
@@ -45,46 +45,20 @@ export class JobsTableComponent implements OnInit {
   }
 
   ngOnInit() {
-    //this.loading$ = this.store.select(state => state.root.jobs.loading);
+    // this.loading$ = this.store.select(state => state.root.jobs.loading);
     this.loading$ = false;
     this.limit$ =
       this.store.select(state => state.root.user.settings.jobCount);
+    console.log('this.limit$', this.limit$)
     this.store.dispatch({type: JobActions.RETRIEVE});
 
 
-    this.subscriptions.push(this.store.select(state => state.root.jobs)
+    this.subscriptions.push(this.store.select(state => state.root.jobs.currentJobs)
       .subscribe(selected => {
         this.jobs = selected;
+        console.log('gm print', this.jobs);
       }));
 
-
-    this.jobs = [
-      {
-      id: '5',
-      emailJobInitiator: 'test@test.com',
-      type: 'retrieve',
-      creationTime: '2015-04-11T11:00:00Z',
-      executionTime: '2015-04-11T11:00:00Z',
-      jobParams: {'0': 's'},
-      jobStatusMessage: 'retrieve',
-      datasetList: {'0': 'm'},
-      createdAt: '2015-04-11T11:00:00Z',
-      updatedAt: '2017-10-17T08:33:00Z'
-    }
-    ,
-      {
-        id: '6',
-        emailJobInitiator: 'zest@test.com',
-        type: 'retrieve',
-        creationTime: '2016-04-11T11:00:00Z',
-        executionTime: '2016-04-11T11:00:00Z',
-        jobParams: {'0': 's'},
-        jobStatusMessage: 'retrieve',
-        datasetList: {'0': 'm'},
-        createdAt: '2016-04-11T11:00:00Z',
-        updatedAt: '2017-10-17T08:33:00Z'
-      }
-    ];
 
   }
 
@@ -115,7 +89,8 @@ export class JobsTableComponent implements OnInit {
     this.store.select(state => state.root.jobs)
       .take(1)
       .subscribe(jStore => {
-        const jobs = jStore.activeFilters;
+        const jobs = jStore.currentJobs;
+        console.log('gm print 2 jobs', jobs);
         if (jobs) {
           jobs['skip'] = event.first;
           jobs['initial'] = false;
