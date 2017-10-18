@@ -64,7 +64,7 @@ export class JobsTableComponent implements OnInit {
 
 
   onRowSelect(event) {
-      this.router.navigateByUrl('/job/' + encodeURIComponent(event.job.id));
+    this.router.navigateByUrl('/job/' + encodeURIComponent(event.job.id));
   }
 
   nodeExpand(event) {
@@ -91,9 +91,7 @@ export class JobsTableComponent implements OnInit {
           } else {
             jobs['sortField'] = undefined;
           }
-          this.store.dispatch({type: JobActions.SORT_UPDATE, payload: jobs});
         }
-        //        }
       });
   }
 
@@ -106,7 +104,7 @@ export class JobsTableComponent implements OnInit {
     if (key === 'creationTime') {
       const date = new Date(value);
       const datePipe = new DatePipe('en-US');
-      const formattedDate = datePipe.transform(date, 'dd/MM/yyyy HH:mm');
+      const formattedDate = datePipe.transform(date, 'yyyy/MM/dd HH:mm');
       return formattedDate;
     } else if ((key === 'archiveStatus' || key === 'retrieveStatus') &&
       ds['datasetlifecycle']) {

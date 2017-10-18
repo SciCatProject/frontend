@@ -1,7 +1,7 @@
 <div>
 <p-dataTable #js [paginator]="true" [lazy]="true" [rows]="limit$ | async" [value]="jobs" [rowHover]="true" (onLazyLoad)="onPage($event)"
              [resizableColumns]="true" columnResizeMode="expand" [totalRecords]="jobsCount" dataKey="creationTime">
-  <p-column [style]="{'width':'28px', 'overflow':'hidden'}" *ngFor="let col of cols" [field]="col.field" [header]="col.header" [sortable]="col.sortable">
+  <p-column [style]="{'width':'28px', 'overflow':'hidden'}" *ngFor="let col of cols" [field]="col.field" [header]="col.header" [sortable]="false">
     <ng-template let-col let-js="rowData" let-ri="rowIndex" pTemplate="body">
       <span>{{getFormat(col.field, js[col.field], js)}}</span>
     </ng-template>
