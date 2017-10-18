@@ -122,7 +122,10 @@ export class JobsEffects {
       .debounceTime(300)
       .map(toPayload)
       .switchMap(payload => {
-        return this.jobSrv.find()
+        const fq = payload;
+        const filter = {};
+        filter['skip'] = fq['skip'] ? fq['skip'] : 0;
+        return this.jobSrv.find(filter)
           .switchMap(res => {
             console.log(res);
             return Observable.of(
@@ -130,10 +133,10 @@ export class JobsEffects {
           });
       })
       .catch(err => {
-          console.log(err);
-          return Observable.of(
-            {type: JobActions.RETRIEVE_COMPLETE, payload: err});
-        });
+        console.log(err);
+        return Observable.of(
+          {type: JobActions.RETRIEVE_COMPLETE, payload: err});
+      });
 
 
   constructor(private action$: Actions, private store: Store<any>,

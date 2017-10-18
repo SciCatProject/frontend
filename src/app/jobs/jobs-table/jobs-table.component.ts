@@ -91,6 +91,7 @@ export class JobsTableComponent implements OnInit {
           } else {
             jobs['sortField'] = undefined;
           }
+          this.store.dispatch({type: JobActions.RETRIEVE});
         }
       });
   }
