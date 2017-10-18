@@ -10,6 +10,12 @@ export function jobsReducer(state = initialJobsState, action: Action): JobsState
   }
   switch (action.type) {
 
+    case ja.SORT_UPDATE: {
+      let f = action['payload'];
+      const newState = Object.assign({}, state, { activeFilters: f, loading: true, selectedSets: [] });
+      return newState;
+    }
+
     case ja.UI_STORE: {
       const s = Object.assign({}, state, {ui: action['payload']});
       return s;
