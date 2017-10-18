@@ -32,6 +32,8 @@ export const SELECT_CURRENT = '[Dataset] Current set selected';
 export const SELECTED_UPDATE = '[Dataset]  Selected Datasets Update';
 // export const FILTER_UPDATE_COMPLETE = '[Dataset]  Filter Update Complete';
 
+export const TOTAL_UPDATE = '[Dataset] Total Datasets Update';
+
 export class SearchCompleteAction implements Action {
   readonly type = SEARCH_COMPLETE;
 
@@ -123,10 +125,16 @@ export class CurrentSetAction implements Action {
   constructor(public payload: lb.RawDataset) {}
   }
 
+export class TotalSetsAction implements Action {
+  readonly type = TOTAL_UPDATE;
+
+  constructor(public payload: lb.RawDataset) {}
+  }
+
 export type Actions =
     SearchCompleteAction | SearchFailedAction |
     UpdateFilterAction | UpdateFilterCompleteAction | FilterFailedAction |
     FilterValueAction | SearchIDAction | SearchIDCompleteAction |
     SearchIDFailedAction | DatablocksAction | DatablocksCompleteAction |
     DatablocksAction | AddGroupsAction | AddGroupsCompleteAction |
-    AddGroupsFailedAction | UpdateSelectedAction;
+    AddGroupsFailedAction | UpdateSelectedAction | TotalSetsAction;
