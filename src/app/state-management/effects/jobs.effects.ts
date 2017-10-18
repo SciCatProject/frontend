@@ -125,6 +125,7 @@ export class JobsEffects {
         const fq = payload;
         const filter = {};
         filter['skip'] = fq['skip'] ? fq['skip'] : 0;
+        filter['order'] = 'creationTime DESC';
         return this.jobSrv.find(filter)
           .switchMap(res => {
             console.log(res);

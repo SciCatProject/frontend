@@ -31,6 +31,7 @@ export class JobsTableComponent implements OnInit {
   selectedSets: Array<Job> = [];
   subscriptions = [];
   jobsCount = 1000;
+  totalJobNumber$: any;
 
 
   constructor(public http: Http,
@@ -50,7 +51,8 @@ export class JobsTableComponent implements OnInit {
     this.loading$ = false;
     this.limit$ =
       this.store.select(state => state.root.user.settings.jobCount);
-    console.log('this.limit$', this.limit$)
+    this.totalJobNumber$ = this.store.select(state => state.root.jobs.currentJobs.length);
+    console.log('this.limit$', this.limit$);
     this.store.dispatch({type: JobActions.RETRIEVE});
 
 
@@ -81,18 +83,10 @@ export class JobsTableComponent implements OnInit {
     this.store.select(state => state.root.jobs)
       .take(1)
       .subscribe(jStore => {
-        const jobs = jStore.currentJobs;
-        if (jobs) {
-          jobs['skip'] = event.first;
-          jobs['initial'] = false;
-          if (event.sortField) {
-            const sortOrder = event.sortOrder === 1 ? 'ASC' : 'DESC';
-            jobs['sortField'] = event.sortField + ' ' + sortOrder;
-          } else {
-            jobs['sortField'] = undefined;
-          }
-          this.store.dispatch({type: JobActions.RETRIEVE});
-        }
+        jStore.skip = event.first;
+        const jobs = {};
+        jobs['skip'] = event.first;
+        this.store.dispatch({type: JobActions.SORT_UPDATE, payload: jobs});
       });
   }
 
