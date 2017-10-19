@@ -17,7 +17,7 @@ export class IO {
 
   on(event: string): Observable<any> {
     if (this.observables[event]) { return this.observables[event]; }
-    const subject: Subject<any> = new Subject<any>();
+    let subject: Subject<any> = new Subject<any>();
     this.socket.on(event, (res: any) => subject.next(res));
     this.observables[event] = subject.asObservable();
     return this.observables[event];

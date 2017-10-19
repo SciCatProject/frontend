@@ -699,15 +699,17 @@ export class RawDatasetApi extends BaseLoopBackApi {
   /**
    * Find all datasets within a date range
    *
-   * @param {string} creationLocation 
+   * @param {object} data Request data.
    *
-   * @param {string} ownerGroup 
+   *  - `creationLocation` – `{string}` - 
    *
-   * @param {string} startDate 
+   *  - `ownerGroup` – `{any}` - 
    *
-   * @param {string} endDate 
+   *  - `startDate` – `{string}` - 
    *
-   * @param {string} text 
+   *  - `endDate` – `{string}` - 
+   *
+   *  - `text` – `{object}` - 
    *
    * @returns {object} An empty reference that will be
    *   populated with the actual data once the response is returned
@@ -717,8 +719,8 @@ export class RawDatasetApi extends BaseLoopBackApi {
    *
    *  - `results` – `{Object}` - 
    */
-  public facet(creationLocation: any = undefined, ownerGroup: any = undefined, startDate: any = undefined, endDate: any = undefined, text: any = undefined): Observable<any> {
-    let _method: string = "GET";
+  public facet(creationLocation: any = {}, ownerGroup: any = {}, startDate: any = {}, endDate: any = {}, text: any = {}): Observable<any> {
+    let _method: string = "POST";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
     "/RawDatasets/facet";
     let _routeParams: any = {};

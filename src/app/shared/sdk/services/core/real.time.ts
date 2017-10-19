@@ -77,14 +77,14 @@ export class RealTime {
     // If there is a valid connection, then we just send back to the EventLoop
     // Or next will be executed before the actual subscription.
     if (this.connection.isConnected()) {
-      const to = setTimeout(() => {
+      let to = setTimeout(() => {
         this.onReadySubject.next('shared-connection');
         clearTimeout(to);
       });
     // Else if there is a current attempt of connection we wait for the prior
     // process that started the connection flow.
     } else if (this.connecting) {
-      const ti = setInterval(() => {
+      let ti = setInterval(() => {
         if (this.connection.isConnected()) {
           this.onReadySubject.next('shared-connection');
           clearInterval(ti);
@@ -100,11 +100,11 @@ export class RealTime {
       this.IO       = new IO(this.connection);
       this.FireLoop = new FireLoop(this.connection, this.models);
       // Fire event for those subscribed 
-      const s1: Subscription = this.connection.sharedObservables.sharedOnConnect.subscribe(() => {
+      let s1: Subscription = this.connection.sharedObservables.sharedOnConnect.subscribe(() => {
         console.log('Real-Time connection has been established');
         this.connecting = false;
         this.onReadySubject.next('connected');
-        const s2: Subscription = this.connection.sharedObservables.sharedOnDisconnect.subscribe(() => {
+        let s2: Subscription = this.connection.sharedObservables.sharedOnDisconnect.subscribe(() => {
           s1.unsubscribe();
           s2.unsubscribe();
         });

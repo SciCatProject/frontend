@@ -48,7 +48,7 @@ export class JobApi extends BaseLoopBackApi {
    * </em>
    */
   public patchOrCreate(data: any = {}): Observable<any> {
-    let _method: string = "PATCH";
+    let _method: string = "PUT";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
     "/Jobs";
     let _routeParams: any = {};
@@ -79,7 +79,7 @@ export class JobApi extends BaseLoopBackApi {
    * </em>
    */
   public patchAttributes(id: any, data: any = {}): Observable<any> {
-    let _method: string = "PATCH";
+    let _method: string = "PUT";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
     "/Jobs/:id";
     let _routeParams: any = {

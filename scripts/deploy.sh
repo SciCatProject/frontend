@@ -18,11 +18,13 @@ for ((i=0;i<${#envarray[@]};i++)); do
    export CERTNAME="${certarray[i]}"
    echo $LOCAL_ENV $PORTOFFSET $HOST_EXT
    echo $LOCAL_ENV 
+   echo pwd
    echo "Building release"
    ./node_modules/@angular/cli/bin/ng build --environment $LOCAL_ENV -op dist/$LOCAL_ENV
    docker build -t registry.psi.ch:5000/egli/catanie:$CATANIE_IMAGE_VERSION$LOCAL_ENV --build-arg env=$LOCAL_ENV .
    docker push registry.psi.ch:5000/egli/catanie:$CATANIE_IMAGE_VERSION$LOCAL_ENV
-   cd  $DACATHOME/catanie/scripts/ 
+   cd  $DACATHOME/catamel-psiconfig/server/kubernetes/helm/ 
    echo "Deploying to Kubernetes"
-   envsubst < catanie-deployment.yaml | kubectl apply -f - --validate=false
+   helm del --purge catanie-$LOCAL_ENV
+   helm install dacat-gui --name catanie-$LOCAL_ENV --namespace $LOCAL_ENV --set image.tag=$CATANIE_IMAGE_VERSION$LOCAL_ENV
 done

@@ -178,6 +178,7 @@ export class LoopBackAuth {
    * Subscription to receive user
    * Mainly for app component
    * @returns {Observable<any>}
+   * @memberof UserMsgService
    */
   getUser(): Observable < any > {
     return this.subject.asObservable();
