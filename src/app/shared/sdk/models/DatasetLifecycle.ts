@@ -10,6 +10,8 @@ export interface DatasetLifecycleInterface {
   "isOnTape"?: any;
   "archiveStatusMessage"?: any;
   "retrieveStatusMessage"?: any;
+  "lastUpdateMessage"?: any;
+  "archiveReturnMessage"?: any;
   "dateOfLastMessage"?: any;
   "dateOfDiskPurging"?: any;
   "archiveRetentionTime"?: any;
@@ -30,6 +32,8 @@ export class DatasetLifecycle implements DatasetLifecycleInterface {
   "isOnTape": any;
   "archiveStatusMessage": any;
   "retrieveStatusMessage": any;
+  "lastUpdateMessage": any;
+  "archiveReturnMessage": any;
   "dateOfLastMessage": any;
   "dateOfDiskPurging": any;
   "archiveRetentionTime": any;
@@ -91,6 +95,14 @@ export class DatasetLifecycle implements DatasetLifecycleInterface {
         },
         "retrieveStatusMessage": {
           name: 'retrieveStatusMessage',
+          type: 'any'
+        },
+        "lastUpdateMessage": {
+          name: 'lastUpdateMessage',
+          type: 'any'
+        },
+        "archiveReturnMessage": {
+          name: 'archiveReturnMessage',
           type: 'any'
         },
         "dateOfLastMessage": {

@@ -8,6 +8,8 @@ export interface JobInterface {
   "executionTime"?: any;
   "jobParams"?: any;
   "jobStatusMessage"?: any;
+  "archiveReturnMessage"?: any;
+  "dateOfLastMessage"?: any;
   "datasetList": any;
   "id"?: any;
   "createdAt"?: any;
@@ -21,6 +23,8 @@ export class Job implements JobInterface {
   "executionTime": any;
   "jobParams": any;
   "jobStatusMessage": any;
+  "archiveReturnMessage": any;
+  "dateOfLastMessage": any;
   "datasetList": any;
   "id": any;
   "createdAt": any;
@@ -79,6 +83,14 @@ export class Job implements JobInterface {
         },
         "jobStatusMessage": {
           name: 'jobStatusMessage',
+          type: 'any'
+        },
+        "archiveReturnMessage": {
+          name: 'archiveReturnMessage',
+          type: 'any'
+        },
+        "dateOfLastMessage": {
+          name: 'dateOfLastMessage',
           type: 'any'
         },
         "datasetList": {

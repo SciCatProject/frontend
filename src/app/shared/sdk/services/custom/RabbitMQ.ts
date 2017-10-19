@@ -61,7 +61,7 @@ export class RabbitMQApi extends BaseLoopBackApi {
   /**
    * Get queues of connected rabbitmq server
    *
-   * @returns {object} An empty reference that will be
+   * @returns {object[]} An empty reference that will be
    *   populated with the actual data once the response is returned
    *   from the server.
    *
