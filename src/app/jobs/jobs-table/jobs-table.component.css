@@ -1,0 +1,12 @@
+.job-action {
+  float: right;
+}
+
+/*Columns are dynamically injected, so this /deep/ ensures it is reflected onto the selector  */
+:host /deep/ .js-check {
+  width: 25px !important;
+}
+
+/*td {
+    overflow: hidden;
+}*/

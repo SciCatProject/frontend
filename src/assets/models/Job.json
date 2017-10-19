@@ -1,0 +1,39 @@
+{
+  "emailJobInitiator": {
+    "name": "emailJobInitiator",
+    "type": "string"
+  },
+  "type": {
+    "name": "type",
+    "type": "string"
+  },
+  "creationTime": {
+    "name": "creationTime",
+    "type": "Date"
+  },
+  "executionTime": {
+    "name": "executionTime",
+    "type": "Date"
+  },
+  "jobParams": {
+    "name": "jobParams",
+    "type": "string"
+  },
+  "jobStatusMessage": {
+    "name": "jobStatusMessage",
+    "type": "string"
+  },
+  "datasetList": {
+    "name": "datasetList",
+    "type": "string"
+  },
+  "createdAt": {
+    "name": "createdAt",
+    "type": "Date"
+  },
+  "updatedAt": {
+    "name": "updatedAt",
+    "type": "Date"
+  }
+}
+
