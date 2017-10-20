@@ -1,4 +1,3 @@
-/* tslint:disable */
 import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Rx';
 import { LoopBackFilter, StatFilter } from './index';
@@ -51,7 +50,7 @@ export class FireLoopRef<T> {
   * This method requires to be called on components destroy
   *
   * ngOnDestroy() {
-  *  this.someRef.dispose()
+  *  this.someRef.dispose() 
   * }
   **/
   public dispose(): void {
@@ -182,7 +181,7 @@ export class FireLoopRef<T> {
   * we actually want to have more than 1 instance of same model.
   **/
   public make(instance: any): FireLoopRef<T> {
-    const reference: FireLoopRef<T> = new FireLoopRef<T>(this.model, this.socket);
+    let reference: FireLoopRef<T> = new FireLoopRef<T>(this.model, this.socket);
         reference.instance = instance;
     return reference;
   }
@@ -198,7 +197,7 @@ export class FireLoopRef<T> {
     // Return singleton instance
     if (this.childs[relationship]) { return this.childs[relationship]; }
     // Try to get relation settings from current model
-    const settings: any = this.model.getModelDefinition().relations[relationship];
+    let settings: any = this.model.getModelDefinition().relations[relationship];
     // Verify the relationship actually exists
     if (!settings) {
       throw new Error(`Invalid model relationship ${ this.model.getModelName() } <-> ${ relationship }, verify your model settings.`);
@@ -208,7 +207,7 @@ export class FireLoopRef<T> {
       throw new Error(`Relationship model is private, cam't use ${ relationship } unless you set your model as public.`);
     }
     // Lets get a model reference and add a reference for all of the models
-    const model: any   = this.model.models.get(settings.model);
+    let model: any   = this.model.models.get(settings.model);
         model.models = this.model.models;
     // If everything goes well, we will store a child reference and return it.
     this.childs[relationship] = new FireLoopRef<T>(model, this.socket, this, relationship);
@@ -223,16 +222,16 @@ export class FireLoopRef<T> {
   * This method will pull initial data from server
   **/
   private pull(event: string, request: any): Observable<T> {
-    const sbj: Subject<T> = new Subject<T>();
-    const that: FireLoopRef<T> = this;
-    const nowEvent: any = `${event}.pull.requested.${ this.id }`;
+    let sbj: Subject<T> = new Subject<T>();
+    let that: FireLoopRef<T> = this;
+    let nowEvent: any = `${event}.pull.requested.${ this.id }`;
     this.socket.emit(`${event}.pull.request.${ this.id }`, request);
     function pullNow(data: any) {
       if (that.socket.removeListener) {
         that.socket.removeListener(nowEvent, pullNow);
       }
       sbj.next(data);
-    }
+    };
     this.socket.on(nowEvent, pullNow);
     return sbj.asObservable();
   }
@@ -246,7 +245,7 @@ export class FireLoopRef<T> {
   * for data according a specific client request, not shared with other clients.
   **/
   private broadcasts(event: string, request: any): Observable<T> {
-    const sbj: Subject<T> = new Subject<T>();
+    let sbj: Subject<T> = new Subject<T>();
     this.socket.on(
       `${event}.broadcast.announce.${ this.id }`,
       (res: T) =>
@@ -261,7 +260,7 @@ export class FireLoopRef<T> {
   * @param {any} data Any type of data sent to the server
   * @return {Observable<T>}
   * @description
-  * This internal method will run operations depending on current context
+  * This internal method will run operations depending on current context 
   **/
   private operation(event: string, data: any): Observable<T> {
     if (!this.relationship) {
@@ -269,8 +268,8 @@ export class FireLoopRef<T> {
     } else {
       event = `${ this.parent.model.getModelName() }.${ this.relationship }.${ event }.${ this.id }`;
     }
-    const subject: Subject<T> = new Subject<T>();
-    const config: { data: any, parent: any } = {
+    let subject: Subject<T> = new Subject<T>();
+    let config: { data: any, parent: any } = {
       data,
       parent: this.parent && this.parent.instance ? this.parent.instance : null
     };

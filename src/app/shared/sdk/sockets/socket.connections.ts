@@ -82,18 +82,18 @@ export class SocketConnection {
       // Listen for connection
       this.on('connect', () => {
         this.subjects.onConnect.next('connected');
-        // Authenticate or start heartbeat now
+        // Authenticate or start heartbeat now    
         this.emit('authentication', token);
       });
       // Listen for authentication
       this.on('authenticated', () => {
         this.subjects.onAuthenticated.next();
         this.heartbeater();
-      });
+      })
       // Listen for authentication
       this.on('unauthorized', (err: any) => {
         this.subjects.onUnAuthorized.next(err);
-      });
+      })
       // Listen for disconnections
       this.on('disconnect', (status: any) => this.subjects.onDisconnect.next(status));
     } else if (this.socket && !this.socket.connected){

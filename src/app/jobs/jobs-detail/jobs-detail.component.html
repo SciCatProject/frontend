@@ -1,0 +1,9 @@
+
+<p-tabView *ngIf="dataset">
+  <p-tabPanel header="Details" leftIcon="fa-dedent">
+    <div class="ui raised segment" *ngIf="job">
+      <!--<h4 class="ui header">Job Details</h4>-->
+      <config-form [source]="job" [sourceType]="'Job'" [service]="job"></config-form>
+    </div>
+  </p-tabPanel>
+</p-tabView>

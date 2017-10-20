@@ -7,7 +7,7 @@ export class FireLoop {
   constructor(private socket: any, private models: { get: Function }) {}
 
   public ref<T>(model: any): FireLoopRef<T> {
-    const name: string = model.getModelName();
+    let name: string = model.getModelName();
     model.models = this.models;
     this.references[name] = new FireLoopRef<T>(model, this.socket);
     return this.references[name];
