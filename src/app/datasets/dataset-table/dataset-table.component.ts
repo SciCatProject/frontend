@@ -305,7 +305,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
       const backupFiles = [];
       this.store.select(state => state.root.user.currentUser).take(1).subscribe(user => {
         console.log(user);
-        if ('realm' in user || !this.selectedSets[0].ownerEmail) {
+        if (this.selectedSets[0].ownerEmail) {
           job.emailJobInitiator = this.selectedSets[0].ownerEmail;
         } else {
           job.emailJobInitiator = user['email'] || user['accessEmail'];
