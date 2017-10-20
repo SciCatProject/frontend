@@ -1,0 +1,7 @@
+FROM node
+
+COPY package.json .
+RUN npm install
+COPY . /usr/
+WORKDIR /usr/
+RUN npm test
