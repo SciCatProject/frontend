@@ -348,6 +348,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
           this.store.select(state => state.root.user.settings.tapeCopies)
               .take(1)
               .subscribe(copies => {job.jobParams = {'tapeCopies' : copies}; });
+          job.jobParams['username'] = user['username'];
           if (!archive) {
             // TODO number of copies from settings table
             job.jobParams['destinationPath'] = destPath;
