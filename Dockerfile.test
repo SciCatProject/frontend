@@ -12,4 +12,4 @@ RUN npm install
 RUN npm install --save-dev karma-phantomjs-launcher
 
 
-RUN npm run -- ng test --watch false --single-run true
+# RUN npm run -- ng test --watch false --single-run true
