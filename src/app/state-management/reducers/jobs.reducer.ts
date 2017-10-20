@@ -26,6 +26,11 @@ export function jobsReducer(state = initialJobsState, action: Action): JobsState
       return s;
    }
 
+   case ja.FAILED: {
+    const s = Object.assign({}, state, {jobSubmission: [], error: action['payload']});
+    return s;
+  }
+
     case ja.RETRIEVE_COMPLETE: {
       const s = Object.assign({}, state, {currentJobs: action['payload']});
       return s;

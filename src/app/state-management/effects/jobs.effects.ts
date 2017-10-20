@@ -35,7 +35,6 @@ export class JobsEffects {
           })
           .catch(err => {
             console.log(err);
-
             return Observable.of(
               {type: JobActions.SEARCH_ID_FAILED, payload: err});
           });
@@ -73,7 +72,7 @@ export class JobsEffects {
       .catch(err => {
         console.log(err);
         return Observable.of(
-          {type: JobActions.RETRIEVE_COMPLETE, payload: err});
+          {type: JobActions.FAILED, payload: err});
       });
 
   @Effect()

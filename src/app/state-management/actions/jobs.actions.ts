@@ -5,6 +5,7 @@ import * as lb from 'shared/sdk/models';
 export const SUBMIT = '[Jobs] Submit';
 export const RETRIEVE = '[Jobs] Retrieve';
 export const SUBMIT_COMPLETE = '[Jobs] Submit Complete';
+export const FAILED = '[Jobs] Action Failed';
 export const RETRIEVE_COMPLETE = '[Jobs] Retrieve Complete';
 export const UI_STORE = '[Jobs] UI Store';
 export const CHILD_RETRIEVE = '[Jobs] Child Retrieve';
@@ -42,6 +43,13 @@ export class UIStoreAction implements Action {
 
 export class SubmitCompleteAction implements Action {
   readonly type = SUBMIT_COMPLETE;
+
+  constructor(public payload?: any) {
+  }
+}
+
+export class FailedAction implements Action {
+  readonly type = FAILED;
 
   constructor(public payload?: any) {
   }
@@ -133,6 +141,7 @@ export type Actions =
   SortValueAction |
   CurrentSetAction |
   SubmitAction |
+  FailedAction |
   SubmitCompleteAction |
   SearchIDAction | SearchIDCompleteAction |
   SearchIDFailedAction |
