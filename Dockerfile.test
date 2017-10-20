@@ -1,7 +1,15 @@
 FROM node
+LABEL maintainer="gareth.murphy@esss.se"
 
-COPY package.json .
+RUN npm config set proxy http://192.168.1.1:8123/
+RUN npm config set https-proxy http://192.168.1.1:8123/
+RUN npm config set registry http://registry.npmjs.org/
+RUN npm config set strict-ssl false
+
+COPY . /usr/app/
+WORKDIR /usr/app/
 RUN npm install
-COPY . /usr/
-WORKDIR /usr/
-RUN npm test
+RUN npm install --save-dev karma-phantomjs-launcher
+
+
+RUN npm run -- ng test --watch false --single-run true
