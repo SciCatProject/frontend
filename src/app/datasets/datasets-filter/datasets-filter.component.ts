@@ -94,7 +94,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
         .select(state => state.root.datasets.activeFilters)
         .subscribe(data => {
           this.filters = Object.assign({}, data);
-          // this.router.navigate([ '/datasets' ], {queryParams : this.filters, replaceUrl : true});
+          this.router.navigate([ '/datasets' ], {queryParams : this.filters, replaceUrl : true});
         })
     );
     this.resultCount$ = this.store.select(
