@@ -6,6 +6,7 @@ export interface JobsState {
   skip: any;
   totalJobNumber: number;
   ui: any;
+  error: string;
   }
 
 export const initialJobsState: JobsState = {
@@ -13,5 +14,6 @@ export const initialJobsState: JobsState = {
   jobSubmission : undefined,
   skip: 0,
   totalJobNumber: 1000,
-  ui: []
+  ui: [],
+  error: undefined
 };

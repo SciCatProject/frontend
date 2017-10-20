@@ -96,7 +96,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
 
 
     let msg = {};
-    this.store.select(state => state.root.jobs.jobSubmission).subscribe(
+   this.subscriptions.push(this.store.select(state => state.root.jobs.jobSubmission).subscribe(
       ret => {
         if(ret) {
           console.log(ret);
@@ -118,8 +118,21 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
           timeout : 3
         };
         this.store.dispatch({type : ua.SHOW_MESSAGE, payload : msg});
-      });
-
+      }));
+    
+    this.subscriptions.push(this.store.select(state => state.root.jobs.error).subscribe(
+      err => {
+        if(err) {
+          msg = {
+            class : 'ui message negative',
+            content : err.message,
+            timeout : 3
+          };
+          this.store.dispatch({type : ua.SHOW_MESSAGE, payload : msg});
+          this.store.dispatch({type: ja.SEARCH_ID_FAILED, payload: undefined});
+        }
+      }
+    ));
     
 
   }
@@ -291,20 +304,11 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
       job.creationTime = Date.now();
       const backupFiles = [];
       this.store.select(state => state.root.user.currentUser).take(1).subscribe(user => {
-//      this.us.getCurrent().subscribe(user => {
-        if ('realm' in user) {
+        console.log(user);
+        if ('realm' in user || !this.selectedSets[0].ownerEmail) {
           job.emailJobInitiator = this.selectedSets[0].ownerEmail;
         } else {
-          job.emailJobInitiator = user['email'];
-          this.store.select(state => state.root.user.currentUser)
-              .take(1)
-              .subscribe(current => {
-                if ('accessEmail' in current) {
-                  job.emailJobInitiator = current['accessEmail'];
-                } else {
-                  console.log('cannot find user email');
-                }
-              });
+          job.emailJobInitiator = user['email'] || user['accessEmail'];
         }
         this.selectedSets.map(set => {
           // if ('datablocks' in set && set['datablocks'].length > 0) {
@@ -325,6 +329,15 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
             class : 'ui message negative',
             content :
                 'Selected datasets have no datablocks associated with them',
+            timeout : 3
+          };
+          this.store.dispatch({type : ua.SHOW_MESSAGE, payload : msg});
+          this.selectedSets = [];
+        } else if (!job.emailJobInitiator) {
+          msg = {
+            class : 'ui message negative',
+            content :
+                'No email could be found',
             timeout : 3
           };
           this.store.dispatch({type : ua.SHOW_MESSAGE, payload : msg});
