@@ -14,7 +14,7 @@ node {
             sh 'docker run  -t catanie_test npm run -- ng test --watch false --single-run true'
        }
        stage('e2e Test Catanie '){
-            sh 'docker run  -t catanie_test ./node_modules/\@angular/cli/bin/ng e2e'
+            sh 'docker run  -t catanie_test npm run e2e'
        }
 
 }
