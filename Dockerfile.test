@@ -1,15 +1,13 @@
-FROM node
+FROM markadams/chromium-xvfb-js:8
 LABEL maintainer="gareth.murphy@esss.se"
 
-RUN npm config set proxy http://192.168.1.1:8123/
-RUN npm config set https-proxy http://192.168.1.1:8123/
+#RUN npm config set proxy http://192.168.1.1:8123/
+#RUN npm config set https-proxy http://192.168.1.1:8123/
 RUN npm config set registry http://registry.npmjs.org/
 RUN npm config set strict-ssl false
-
-COPY . /usr/app/
-WORKDIR /usr/app/
+COPY package.json /usr/src/app/package.json
+COPY package-lock.json /usr/src/app/package-lock.json
 RUN npm install
-RUN npm install --save-dev karma-phantomjs-launcher
-
-
+COPY . /usr/src/app
+WORKDIR /usr/src/app
 # RUN npm run -- ng test --watch false --single-run true
