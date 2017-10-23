@@ -17,6 +17,8 @@ import { EndOfShiftComponent } from 'end-of-shift/end-of-shift.component';
 import { JobsComponent } from 'jobs/jobs.component';
 import { JobsTableComponent } from 'jobs/jobs-table/jobs-table.component';
 import { localStorageSync } from 'ngrx-store-localstorage';
+import { SimpleNotificationsModule } from 'angular2-notifications';
+
 import {
     AutoCompleteModule,
     CheckboxModule,
@@ -69,6 +71,7 @@ export function localStorageSyncWrapper(reducer: any) {
     DatasetsModule,
     UsersModule,
     SDKBrowserModule.forRoot(),
+    SimpleNotificationsModule.forRoot(),
     // StoreModule.forRoot({router: routerReducer, root: rootReducer}, {metaReducers: [localStorageSyncWrapper]}),
     StoreModule.forRoot({router: routerReducer, root: rootReducer}),
     RouterModule.forRoot(routes, { useHash: false }),
