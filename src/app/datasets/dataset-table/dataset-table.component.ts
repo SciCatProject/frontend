@@ -48,6 +48,8 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
 
   subscriptions = [];
 
+  rowStyleMap = {};
+
   constructor(
     public http: Http,
     private us: UserApi,
@@ -197,15 +199,46 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   onModeChange(event, mode) {
     this.mode = mode.toLowerCase();
     this.selectedSets = [];
+    for (let d = 0; d < this.datasets.length; d++) {
+      const set = this.datasets[d];
+      let c = '';
+      if (this.mode === 'archive' && set.datasetlifecycle.isOnDisk) {
+        c = 'disabled-row';
+      } else if (this.mode === 'retrieve' && set.datasetlifecycle.isOnTape) {
+        c = 'disabled-row';
+      } else {
+        c = '';
+      }
+      console.log(set.pid, c);
+      this.rowStyleMap = c;
+    }
   }
 
   getModeButtonClasses(m) {
-    console.log(m, this.mode);
     if (m.toLowerCase() === this.mode.toLowerCase()) {
       return {'positive': true};
     } else {
       return {};
-    } 
+    }
+  }
+  
+
+  getRowEnabled(rowData, rowIndex) {
+    console.log(this)
+    if (rowData.datasetlifecycle.isOnDisk) {
+      return 'test-class';
+    } else {
+      return 'test-class';
+    }
+    
+    // switch (this.mode) {
+    //   case 'archive':
+    //     return 'disabled-row';
+    //   case 'retrieve':
+    //     return 'disabled-row';
+    //   default:
+    //     return '';
+    // }
   }
 
   /**

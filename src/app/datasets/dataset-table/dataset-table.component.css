@@ -16,6 +16,11 @@
   /* padding: 50px; */
 }
 
+:host /deep/ .disabled-row {
+    pointer-events: none;
+    background-color: 'green';
+}
+
 /*td {
     overflow: hidden;
 }*/

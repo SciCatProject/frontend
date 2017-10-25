@@ -5,13 +5,15 @@
         </div>
     <p-dataTable #ds [paginator]="true" [lazy]="true" [loading]="loading$ | async" [rows]="limit$ | async" [value]="datasets" [(selection)]="selectedSets" [rowHover]="true" (onLazyLoad)="onPage($event)"
     (onRowSelect)="onSelect($event)" (onRowUnselect)="onSelect($event)" (onRowClick)="onRowSelect($event)" (onHeaderCheckboxToggle)="onSelect($event)"
-   [resizableColumns]="true" columnResizeMode="expand" [totalRecords]="datasetCount$ | async" dataKey="pid">
-	<p-column *ngIf="mode === 'archive' || mode === 'retrieve'" styleClass="ds-check" [style]="{'width': '30px'}" selectionMode="multiple"></p-column>
-        <p-column [style]="{'width':'38px', 'overflow':'hidden'}" *ngFor="let col of cols" [field]="col.field" [header]="col.header" [sortable]="col.sortable" (sortFunction)="colSort($event)"> 
+   [resizableColumns]="true" columnResizeMode="expand" [rowStyleMap]="rowStyleMap" [totalRecords]="datasetCount$ | async" dataKey="pid">
+      	<p-column  *ngIf="mode === 'archive' || mode === 'retrieve'" [style]="{'width': '30px'}" selectionMode="multiple"></p-column>
+        
+        <p-column [hidden]="false" [style]="{'width':'38px', 'overflow':'hidden'}" *ngFor="let col of cols" [field]="col.field" [header]="col.header" [sortable]="col.sortable" (sortFunction)="colSort($event)"> 
           <ng-template let-col let-ds="rowData" let-ri="rowIndex" pTemplate="body">
-              <span>{{getFormat(col.field, ds[col.field], ds)}}</span>
+              <span [ngClass]="disabled-row">{{getFormat(col.field, ds[col.field], ds)}}</span>
           </ng-template>
         </p-column>
+        
         <p-footer>
             <ul>
                 <li *ngFor="let ds of selectedSets" style="text-align: left">{{ds.pid}}</li>
