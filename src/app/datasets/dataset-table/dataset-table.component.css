@@ -1,16 +1,20 @@
 .dataset-action {
-    float: right;
+  float: right;
 }
 
 /*Columns are dynamically injected, so this /deep/ ensures it is reflected onto the selector  */
 :host /deep/ .ds-check {
-	width: 25px !important;
+  width: 25px !important;
 }
 
+:host /deep/ .mode-container {
+  padding-left: 30px;
+  text-align: center;
+}
 :host /deep/ .buttons {
-	text-align: center;
+  display: inline-block;
+  /* padding: 50px; */
 }
-
 
 /*td {
     overflow: hidden;
