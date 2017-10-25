@@ -49,8 +49,8 @@ export function jobsReducer(state = initialJobsState, action: Action): JobsState
 
 
     case ja.SEARCH_ID_COMPLETE: {
-      const d = <lb.Job[]>action['payload'];
-      return Object.assign({}, state, { datasets: d, loading: false });
+      const d = <lb.Job>action['payload'];
+      return Object.assign({}, state, { currentSet: d, loading: false });
     }
 
     default: {
