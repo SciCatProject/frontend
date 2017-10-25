@@ -33,9 +33,13 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   selectedSets: Array<RawDataset> = [];
   datasetCount$;
 
+  modeButtons = ['Archive', 'View', 'Retrieve'];
+
   cols = [];
   loading$: any = false;
   limit$: any = 10;
+
+  mode = 'View';
 
   aremaOptions = "archiveretrieve";
 
@@ -188,6 +192,20 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
       // this.store.dispatch(
       //     {type : dsa.SELECT_CURRENT, payload : event.data});
     }
+  }
+
+  onModeChange(event, mode) {
+    this.mode = mode.toLowerCase();
+    this.selectedSets = [];
+  }
+
+  getModeButtonClasses(m) {
+    console.log(m, this.mode);
+    if (m.toLowerCase() === this.mode.toLowerCase()) {
+      return {'positive': true};
+    } else {
+      return {};
+    } 
   }
 
   /**
