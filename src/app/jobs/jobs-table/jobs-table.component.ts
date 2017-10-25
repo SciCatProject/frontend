@@ -73,7 +73,7 @@ export class JobsTableComponent implements OnInit, OnDestroy {
 
   onRowSelect(event) {
     this.store.dispatch({type: JobActions.SELECT_CURRENT, payload: event.data});
-    this.router.navigateByUrl('/job/' + encodeURIComponent(event.data.id));
+    this.router.navigateByUrl('/user/job/' + encodeURIComponent(event.data.id));
   }
 
   nodeExpand(event) {

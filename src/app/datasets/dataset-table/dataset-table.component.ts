@@ -91,7 +91,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
       this.store.select(state => state.root.datasets.datasets).subscribe(
         data => {
           this.datasets = data;
-          console.log(data[0]);
         },
         error => {
           console.error(error);
