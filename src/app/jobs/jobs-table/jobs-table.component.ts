@@ -1,5 +1,5 @@
 import {DatePipe} from '@angular/common';
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import {Store} from '@ngrx/store';
 import {Router} from '@angular/router';
 import * as JobActions from 'state-management/actions/jobs.actions';
@@ -13,7 +13,7 @@ import {ConfigService} from 'shared/services/config.service';
   templateUrl: './jobs-table.component.html',
   styleUrls: ['./jobs-table.component.css']
 })
-export class JobsTableComponent implements OnInit {
+export class JobsTableComponent implements OnInit, OnDestroy {
 
   @Input() jobs;
   @Input() jobs2;
@@ -64,9 +64,16 @@ export class JobsTableComponent implements OnInit {
 
   }
 
+  ngOnDestroy() {
+    for (let i = 0; i < this.subscriptions.length; i++) {
+      this.subscriptions[i].unsubscribe();
+    }
+  }
+
 
   onRowSelect(event) {
-    this.router.navigateByUrl('/job/' + encodeURIComponent(event.job.id));
+    this.store.dispatch({type: JobActions.SELECT_CURRENT, payload: event.data});
+    this.router.navigateByUrl('/job/' + encodeURIComponent(event.data.id));
   }
 
   nodeExpand(event) {
