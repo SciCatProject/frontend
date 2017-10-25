@@ -61,7 +61,7 @@ export class BreadcrumbComponent implements OnInit {
               path: url.path,
               params: url.parameters,
               url: '/' + encodeURIComponent(url.path),
-              fallback: '/' // + encodeURIComponent(url.path + 's')
+              fallback: '/' + encodeURIComponent(url.path + 's')
             };
             self.breadcrumbs.push(bc);
           }
@@ -97,7 +97,7 @@ export class BreadcrumbComponent implements OnInit {
     for (let i = 0; i < index; i++) {
       url += this.breadcrumbs[i].url;
     }
-    console.log(crumb.url);
+    console.log(crumb);
     // this catches errors and redirects to the fallback, this could/should be set in the routing module?
     this.router.navigateByUrl(url + crumb.url).catch(error => this.router.navigateByUrl(url + crumb.fallback));
   }

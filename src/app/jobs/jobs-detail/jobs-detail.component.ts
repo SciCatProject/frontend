@@ -24,8 +24,8 @@ export class JobsDetailComponent implements OnInit, OnDestroy {
       .subscribe(job => {
         if (job && Object.keys(job).length > 0) {
           this.job = <Job>job;
-          this.store.dispatch({type: JobActions.SELECT_CURRENT, payload: undefined});
         }else {
+          console.log('Searching from URL params');
           this.route.params.subscribe(params => {
             this.store.dispatch({type: JobActions.SEARCH_ID, payload: params.id});
           });
@@ -37,5 +37,6 @@ export class JobsDetailComponent implements OnInit, OnDestroy {
     for (let i = 0; i < this.subscriptions.length; i++) {
       this.subscriptions[i].unsubscribe();
     }
+    this.store.dispatch({type: JobActions.SELECT_CURRENT, payload: undefined});
   }
 }

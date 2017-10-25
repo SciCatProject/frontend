@@ -66,7 +66,7 @@ export class ConfigFormComponent implements OnInit {
       configFile = this.source.constructor.name;
     } else if (this.service) {
       configFile = this.service.constructor.name.replace('Api', '');
-      }
+    }
     if (configFile) {
       this.configService.getConfigFile(configFile)
           .subscribe(
