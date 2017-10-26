@@ -5,10 +5,12 @@ export interface DashboardUIState {
     dsTable: Array<RawDataset>;
     groupText: any;
     dateChoice: any;
+    mode: string;
 }
 
 export const initialDashboardUIState: DashboardUIState = {
     dsTable: [],
     groupText: undefined,
-    dateChoice: []
+    dateChoice: [],
+    mode: 'View' 
 };

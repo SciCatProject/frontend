@@ -17,6 +17,7 @@ import { Subject } from "rxjs/Subject";
 import { Job, RawDataset } from "shared/sdk/models";
 import { JobApi, UserApi } from "shared/sdk/services";
 import { ConfigService } from "shared/services/config.service";
+import * as dua from "state-management/actions/dashboard-ui.actions";
 import * as dsa from "state-management/actions/datasets.actions";
 import * as ua from "state-management/actions/user.actions";
 import * as ja from "state-management/actions/jobs.actions";
@@ -74,10 +75,30 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     this.limit$ = this.store.select(
       state => state.root.user.settings.datasetCount
     );
+
+    this.store.select(state => state.root.dashboardUI.mode).subscribe(mode => {
+      this.mode = mode;
+      this.selectedSets = [];
+      this.rowStyleMap = {};
+      for (let d = 0; d < this.datasets.length; d++) {
+        const set = this.datasets[d];
+        let c = '';
+        if (this.mode === 'archive' && set.datasetlifecycle.isOnDisk) {
+          c = 'disabled-row';
+        } else if (this.mode === 'retrieve' && set.datasetlifecycle.isOnTape) {
+          c = 'disabled-row';
+        } else {
+          c = '';
+        }
+        this.rowStyleMap[set.pid] = c;
+      }
+    });
     this.datasetCount$ = this.store.select(
       state => state.root.datasets.totalSets
     );
     this.route.queryParams.subscribe(params => {
+      this.mode =  params['mode'] || 'View';
+      this.store.dispatch({type: dua.SAVE_MODE, payload: this.mode});
       this.store
         .select(state => state.root.datasets.activeFilters)
         .take(1)
@@ -204,21 +225,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
    */
   onModeChange(event, mode) {
     this.mode = mode.toLowerCase();
-    this.selectedSets = [];
-    this.rowStyleMap = {};
-    for (let d = 0; d < this.datasets.length; d++) {
-      const set = this.datasets[d];
-      let c = '';
-      if (this.mode === 'archive' && set.datasetlifecycle.isOnDisk) {
-        c = 'disabled-row';
-      } else if (this.mode === 'retrieve' && set.datasetlifecycle.isOnTape) {
-        c = 'disabled-row';
-      } else {
-        c = '';
-      }
-      this.rowStyleMap[set.pid] = c;
-    }
-    console.log(this.rowStyleMap);
+    this.store.dispatch({type: dua.SAVE_MODE, payload: this.mode});
   }
 
   /**
