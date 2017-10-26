@@ -199,6 +199,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   onModeChange(event, mode) {
     this.mode = mode.toLowerCase();
     this.selectedSets = [];
+    this.rowStyleMap = {};
     for (let d = 0; d < this.datasets.length; d++) {
       const set = this.datasets[d];
       let c = '';
@@ -209,9 +210,9 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
       } else {
         c = '';
       }
-      console.log(set.pid, c);
-      this.rowStyleMap = c;
+      this.rowStyleMap[set.pid] = c;
     }
+    console.log(this.rowStyleMap);
   }
 
   getModeButtonClasses(m) {
@@ -221,10 +222,8 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
       return {};
     }
   }
-  
 
   getRowEnabled(rowData, rowIndex) {
-    console.log(this)
     if (rowData.datasetlifecycle.isOnDisk) {
       return 'test-class';
     } else {
