@@ -97,6 +97,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
       this.store.select(state => state.root.datasets.datasets).subscribe(
         data => {
           this.datasets = data;
+          this.onModeChange(undefined, this.mode);
         },
         error => {
           console.error(error);
@@ -196,6 +197,11 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   * Hanlde changing of view mode and disabling selected rows
+   * @param event 
+   * @param mode 
+   */
   onModeChange(event, mode) {
     this.mode = mode.toLowerCase();
     this.selectedSets = [];
@@ -215,29 +221,16 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     console.log(this.rowStyleMap);
   }
 
+  /**
+   * Return the classes for the view buttons based on what is selected
+   * @param m 
+   */
   getModeButtonClasses(m) {
     if (m.toLowerCase() === this.mode.toLowerCase()) {
       return {'positive': true};
     } else {
       return {};
     }
-  }
-
-  getRowEnabled(rowData, rowIndex) {
-    if (rowData.datasetlifecycle.isOnDisk) {
-      return 'test-class';
-    } else {
-      return 'test-class';
-    }
-    
-    // switch (this.mode) {
-    //   case 'archive':
-    //     return 'disabled-row';
-    //   case 'retrieve':
-    //     return 'disabled-row';
-    //   default:
-    //     return '';
-    // }
   }
 
   /**
