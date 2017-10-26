@@ -92,13 +92,20 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
         }
         this.rowStyleMap[set.pid] = c;
       }
+      this.route.queryParams.take(1).subscribe(params => {
+        const newParams = Object.assign({} , params, {'mode': this.mode});
+        this.router.navigate(["/datasets"], {
+          queryParams: newParams,
+          replaceUrl: true
+        });
+      });
     });
     this.datasetCount$ = this.store.select(
       state => state.root.datasets.totalSets
     );
     this.route.queryParams.subscribe(params => {
       this.mode =  params['mode'] || 'View';
-      this.store.dispatch({type: dua.SAVE_MODE, payload: this.mode});
+      // this.store.dispatch({type: dua.SAVE_MODE, payload: this.mode});
       this.store
         .select(state => state.root.datasets.activeFilters)
         .take(1)
