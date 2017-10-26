@@ -20,18 +20,16 @@
             </ul>
         </p-footer>
     </p-dataTable>
-    <div [ngSwitch]="aremaOptions">
+    <div [ngSwitch]="mode">
          <!--*ngIf="selectedSets.length > 0">-->
         <div class="ui buttons dataset-action" *ngSwitchDefault>
-            <button class="ui button" (click)="archiveClickHandle($event)"><i class="upload icon"></i>Archive</button>
-            <div class="or"></div>
-            <button class="ui positive button" (click)="retrieveClickHandle($event)"><i class="download icon"></i>Retrieve</button>
+
         </div>
         <div class="ui buttons dataset-action" *ngSwitchCase="'archive'">
             <button class="ui button" (click)="archiveClickHandle($event)"><i class="upload icon"></i>Archive</button>
 	</div>
         <div class="ui buttons dataset-action" *ngSwitchCase="'retrieve'">
-            <button class="ui button" (click)="archiveClickHandle($event)"><i class="upload icon"></i>Restore</button>
+            <button class="ui button" (click)="archiveClickHandle($event)"><i class="upload icon"></i>Retrieve</button>
 	    </div>
     </div>
   </div>

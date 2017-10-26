@@ -71,7 +71,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
           .select(state => state.root.datasets.activeFilters)
           .take(1)
           .subscribe(filters => {
-            const newParams = Object.assign(filters, params);
+            const newParams = Object.assign({}, filters, params);
             this.location = newParams.creationLocation
               ? { _id: newParams.creationLocation }
               : "";
@@ -82,10 +82,10 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
               queryParams: newParams,
               replaceUrl: true
             });
-            this.store.dispatch({
-              type: dsa.FILTER_UPDATE,
-              payload: newParams
-            });
+            // this.store.dispatch({
+            //   type: dsa.FILTER_UPDATE,
+            //   payload: newParams
+            // });
           });
       })
     );

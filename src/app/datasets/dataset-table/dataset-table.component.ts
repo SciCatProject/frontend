@@ -112,7 +112,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
         .subscribe(filters => {
           const newFilters = Object.assign(filters, params);
           this.setCurrentPage(newFilters.skip);
-          this.store.dispatch({ type: dsa.FILTER_UPDATE, payload: newFilters });
+          // this.store.dispatch({ type: dsa.FILTER_UPDATE, payload: newFilters });
         });
     });
 
@@ -237,7 +237,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
 
   /**
    * Return the classes for the view buttons based on what is selected
-   * @param m 
+   * @param m
    */
   getModeButtonClasses(m) {
     if (m.toLowerCase() === this.mode.toLowerCase()) {
@@ -253,40 +253,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
    * @memberof DashboardComponent
    */
   onSelect(event) {
-    // annoying hack to ensure the selected set has been added to the selected
-    // array
-    setTimeout(() => {
-      const selected = this.selectedSets.slice(0);
-      // const dl = event.data['datasetlifecycle'];
-      for (let i = 0; i < selected.length; i++) {
-        const dl = selected[i]["datasetlifecycle"];
-
-        // if (selected[i]['size'] === 0 || !dl || (dl && (dl['isOnDisk'] === 'unknown' &&
-        //                    dl['isOnTape'] === 'unknown') ||
-        //             dl['archiveStatusMessage'].toLowerCase().indexOf(
-        //                 'archive') !== -1)) {
-        //   selected.splice(i, 1);
-        //   this.store.dispatch({
-        //     type : ua.SHOW_MESSAGE,
-        //     payload : {
-        //       content :
-        //           'Cannot select datasets already archived or with unknown status',
-        //       class : 'ui negative message',
-        //       timeout : 2
-        //     }
-        //   });
-        // }
-      }
-      if (selected.length > 0) {
-        this.aremaOptions = this.setOptions(
-          this.selectedSets[this.selectedSets.length - 1]
-        );
-      } else {
-        this.aremaOptions = "";
-      }
-      this.store.dispatch({ type: dsa.SELECTED_UPDATE, payload: selected });
-      this.selectedSets = selected;
-    }, 600);
+    this.store.dispatch({ type: dsa.SELECTED_UPDATE, payload: this.selectedSets });
   }
 
   /**
@@ -296,25 +263,25 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
    */
   onPage(event) {
     this.store
-      .select(state => state.root.datasets)
+      .select(state => state.root.datasets.activeFilters)
       .take(1)
-      .subscribe(dStore => {
-        const data = dStore.activeFilters;
-        //        if (dStore.datasets.length === 0 ||
-        //           (dStore.datasets.length !== 0 &&
-        //             dStore.activeFilters.skip !== event.first)) {
-        if (data) {
-          data["skip"] = event.first;
-          data["initial"] = false;
+      .subscribe(f => {
+        const filters = Object.assign({}, f);
+        if (filters) {
+          filters["skip"] = event.first;
+          filters["initial"] = false;
           if (event.sortField) {
             const sortOrder = event.sortOrder === 1 ? "ASC" : "DESC";
-            data["sortField"] = event.sortField + " " + sortOrder;
+            filters["sortField"] = event.sortField + " " + sortOrder;
           } else {
-            data["sortField"] = undefined;
+            filters["sortField"] = undefined;
           }
-          this.store.dispatch({ type: dsa.FILTER_UPDATE, payload: data });
+          // TODO reduce calls when not needed (i.e. no change)
+          if (f.first !== event.first || this.datasets.length === 0) {
+            this.store.dispatch({ type: dsa.FILTER_UPDATE, payload: filters });
+          }
+
         }
-        //        }
       });
   }
 
