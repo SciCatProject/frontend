@@ -60,6 +60,22 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     private router: Router
   ) {}
 
+  compareObj(source, comp) {
+    const k = Object.keys(source);
+    let diff = false;
+    for (let i = 0; i < k.length; i++) {
+      const s = source[k[i]];
+      const c = comp[k[i]];
+      if (!Array.isArray(s) && String(s) !== String(c)) {
+        return true;
+      } else if (Array.isArray(s) && s.length !== c.length) {
+      // (s.every(function(element, index) {return element !== c[index]; }))) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   /**
    * Load locations and ownergroups on start up and
    * only use unique values
@@ -67,25 +83,29 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.subscriptions.push(
       this.route.queryParams.subscribe(params => {
+        let newParams = Object.assign({}, params);
+        delete newParams['mode'];
         this.store
           .select(state => state.root.datasets.activeFilters)
           .take(1)
           .subscribe(filters => {
-            const newParams = Object.assign({}, filters, params);
-            this.location = newParams.creationLocation
-              ? { _id: newParams.creationLocation }
-              : "";
-            if (newParams.groups && newParams.groups.length > 0) {
-              this.group = { _id: newParams.groups };
-            }
-            this.router.navigate(["/datasets"], {
-              queryParams: newParams,
-              replaceUrl: true
+            if (this.compareObj(newParams, filters)) {
+              const p = Object.assign({}, filters, newParams);
+              this.location = p.creationLocation
+                ? { _id: p.creationLocation }
+                : '';
+              if (p.groups && p.groups.length > 0) {
+                this.group = { _id: p.groups };
+              }
+              this.router.navigate(["/datasets"], {
+                queryParams: newParams,
+                replaceUrl: true
+              });
+              this.store.dispatch({
+              type: dsa.FILTER_UPDATE,
+              payload: newParams
             });
-            // this.store.dispatch({
-            //   type: dsa.FILTER_UPDATE,
-            //   payload: newParams
-            // });
+            }
           });
       })
     );

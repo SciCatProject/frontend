@@ -34,13 +34,13 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   selectedSets: Array<RawDataset> = [];
   datasetCount$;
 
-  modeButtons = ['Archive', 'View', 'Retrieve'];
+  modeButtons = ["Archive", "View", "Retrieve"];
 
   cols = [];
   loading$: any = false;
   limit$: any = 10;
 
-  mode = 'View';
+  mode = "View";
 
   aremaOptions = "archiveretrieve";
 
@@ -50,6 +50,8 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   subscriptions = [];
 
   rowStyleMap = {};
+
+  paranms = {};
 
   constructor(
     public http: Http,
@@ -72,9 +74,8 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.loading$ = this.store.select(state => state.root.datasets.loading);
-    this.limit$ = this.store.select(
-      state => state.root.user.settings.datasetCount
-    );
+    this.datasetCount$ = this.store.select(state => state.root.datasets.totalSets);
+    this.limit$ = this.store.select(state => state.root.user.settings.datasetCount);
 
     this.store.select(state => state.root.dashboardUI.mode).subscribe(mode => {
       this.mode = mode;
@@ -82,37 +83,33 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
       this.rowStyleMap = {};
       for (let d = 0; d < this.datasets.length; d++) {
         const set = this.datasets[d];
-        let c = '';
-        if (this.mode === 'archive' && set.datasetlifecycle.isOnDisk) {
-          c = 'disabled-row';
-        } else if (this.mode === 'retrieve' && set.datasetlifecycle.isOnTape) {
-          c = 'disabled-row';
+        let c = "";
+        if (this.mode === "archive" && set.datasetlifecycle.isOnDisk) {
+          c = "disabled-row";
+        } else if (this.mode === "retrieve" && set.datasetlifecycle.isOnTape) {
+          c = "disabled-row";
         } else {
-          c = '';
+          c = "";
         }
         this.rowStyleMap[set.pid] = c;
       }
-      this.route.queryParams.take(1).subscribe(params => {
-        const newParams = Object.assign({} , params, {'mode': this.mode});
+      // this.route.queryParams.take(1).subscribe(params => {
+      //   const newParams = Object.assign({}, params, { mode: this.mode });
         this.router.navigate(["/datasets"], {
-          queryParams: newParams,
+          queryParams: {'mode': this.mode},
           replaceUrl: true
         });
-      });
+      // });
     });
-    this.datasetCount$ = this.store.select(
-      state => state.root.datasets.totalSets
-    );
+
     this.route.queryParams.subscribe(params => {
-      this.mode =  params['mode'] || 'View';
-      // this.store.dispatch({type: dua.SAVE_MODE, payload: this.mode});
+      this.mode = params["mode"] || "View";
       this.store
         .select(state => state.root.datasets.activeFilters)
         .take(1)
         .subscribe(filters => {
           const newFilters = Object.assign(filters, params);
-          this.setCurrentPage(newFilters.skip);
-          // this.store.dispatch({ type: dsa.FILTER_UPDATE, payload: newFilters });
+          // this.setCurrentPage(newFilters.skip);
         });
     });
 
@@ -232,7 +229,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
    */
   onModeChange(event, mode) {
     this.mode = mode.toLowerCase();
-    this.store.dispatch({type: dua.SAVE_MODE, payload: this.mode});
+    this.store.dispatch({ type: dua.SAVE_MODE, payload: this.mode });
   }
 
   /**
@@ -241,7 +238,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
    */
   getModeButtonClasses(m) {
     if (m.toLowerCase() === this.mode.toLowerCase()) {
-      return {'positive': true};
+      return { positive: true };
     } else {
       return {};
     }
@@ -253,7 +250,10 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
    * @memberof DashboardComponent
    */
   onSelect(event) {
-    this.store.dispatch({ type: dsa.SELECTED_UPDATE, payload: this.selectedSets });
+    this.store.dispatch({
+      type: dsa.SELECTED_UPDATE,
+      payload: this.selectedSets
+    });
   }
 
   /**
@@ -271,16 +271,16 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
           filters["skip"] = event.first;
           filters["initial"] = false;
           if (event.sortField) {
-            const sortOrder = event.sortOrder === 1 ? "ASC" : "DESC";
-            filters["sortField"] = event.sortField + " " + sortOrder;
+            const sortOrder = event.sortOrder === 1 ? 'ASC' : 'DESC';
+            filters["sortField"] = event.sortField + ' ' + sortOrder;
           } else {
             filters["sortField"] = undefined;
           }
           // TODO reduce calls when not needed (i.e. no change)
           if (f.first !== event.first || this.datasets.length === 0) {
+            console.log(f, event);
             this.store.dispatch({ type: dsa.FILTER_UPDATE, payload: filters });
           }
-
         }
       });
   }
