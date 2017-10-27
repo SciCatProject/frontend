@@ -6,6 +6,7 @@ import * as dua from "state-management/actions/dashboard-ui.actions";
 import * as dsa from "state-management/actions/datasets.actions";
 import * as dUIStore from "state-management/state/dashboard-ui.store";
 import * as dStore from "state-management/state/datasets.store";
+import * as utils from "shared/utils";
 
 @Component({
   selector: "datasets-filter",
@@ -60,6 +61,8 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     private router: Router
   ) {}
 
+
+
   /**
    * Load locations and ownergroups on start up and
    * only use unique values
@@ -67,25 +70,33 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.subscriptions.push(
       this.route.queryParams.subscribe(params => {
+        let newParams = Object.assign({}, params);
+
+        delete newParams['mode'];
         this.store
           .select(state => state.root.datasets.activeFilters)
           .take(1)
           .subscribe(filters => {
-            const newParams = Object.assign(filters, params);
-            this.location = newParams.creationLocation
-              ? { _id: newParams.creationLocation }
-              : "";
-            if (newParams.groups && newParams.groups.length > 0) {
-              this.group = { _id: newParams.groups };
-            }
-            this.router.navigate(["/datasets"], {
-              queryParams: newParams,
-              replaceUrl: true
-            });
-            this.store.dispatch({
+            
+            const f = utils.filter(filters, newParams);
+
+            if (utils.compareObj(newParams, f)) {
+              const p = Object.assign({}, f, newParams);
+              this.location = p.creationLocation
+                ? { _id: p.creationLocation }
+                : '';
+              if (p.groups && p.groups.length > 0) {
+                this.group = { _id: p.groups };
+              }
+              this.router.navigate(["/datasets"], {
+                queryParams: newParams,
+                replaceUrl: true
+              });
+              this.store.dispatch({
               type: dsa.FILTER_UPDATE,
-              payload: newParams
+              payload: f
             });
+            }
           });
       })
     );
@@ -94,7 +105,11 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
         .select(state => state.root.datasets.activeFilters)
         .subscribe(data => {
           this.filters = Object.assign({}, data);
-          this.router.navigate([ '/datasets' ], {queryParams : this.filters, replaceUrl : true});
+          const currentParams = this.route.snapshot.queryParams;
+          this.router.navigate(["/datasets"], {
+             queryParams: Object.assign({}, currentParams, data),
+          });
+          // this.router.navigate([ '/datasets' ], {queryParams : this.filters, replaceUrl : true});
         })
     );
     this.resultCount$ = this.store.select(
@@ -105,7 +120,6 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
         .select(state => state.root.datasets.filterValues)
         .subscribe(values => {
           this.filterValues = Object.assign({}, values);
-          console.log(values);
           if (this.filterValues) {
             if (this.filterValues["locations"] !== null) {
               this.locations = this.filterValues["locations"]
@@ -115,6 +129,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
                 (sum, value) => sum + value["count"],
                 0
               );
+              console.log(totalSets);
               this.store.dispatch({
                 type: dsa.TOTAL_UPDATE,
                 payload: totalSets
@@ -296,23 +311,24 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
       .select(state => state.root.user.currentUserGroups)
       .take(1)
       .subscribe(groups => {
-        console.log(groups);
         this.filters.groups = groups;
       });
     this.filterValues = dStore.initialDatasetState.filterValues;
-    this.filterValues.text = "";
-    this.store.dispatch({ type: dsa.FILTER_UPDATE, payload: this.filters });
+    this.filterValues.text = '';
+    // this.store.dispatch({ type: dsa.FILTER_UPDATE, payload: this.filters });
     this.store.dispatch({
       type: dsa.FILTER_VALUE_UPDATE,
       payload: this.filterValues
     });
-    this.store.dispatch({
-      type: dua.SAVE,
-      payload: dUIStore.initialDashboardUIState
-    });
+    // this.store.dispatch({
+    //   type: dua.SAVE,
+    //   payload: dUIStore.initialDashboardUIState
+    // });
+    let m;
+    this.store.select(state => state.root.dashboardUI.mode).take(1).subscribe(mode => m = mode);
+    const currentParams = this.route.snapshot.queryParams;
     this.router.navigate(["/datasets"], {
-      queryParams: this.filters,
-      replaceUrl: true
+      queryParams: Object.assign({}, currentParams, this.filters, {mode: m})
     });
     // TODO clear selected sets
   }

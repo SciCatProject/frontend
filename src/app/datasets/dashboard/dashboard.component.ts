@@ -36,6 +36,8 @@ export class DashboardComponent implements OnInit {
    */
   ngOnInit() {
     this.searchText$ = this.store.select(state => state.root.datasets.activeFilters.text);
+
+
   }
 
   /**

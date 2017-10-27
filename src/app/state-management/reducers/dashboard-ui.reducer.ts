@@ -14,6 +14,11 @@ export function dashboardUIReducer(state = initialDashboardUIState, action: Acti
       return s;
     }
 
+    case dua.SAVE_MODE: {
+      const s = Object.assign({}, state, {'mode': action['payload']});
+      return s;
+    }
+
     default: {
       return state;
     }

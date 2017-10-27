@@ -1,10 +1,30 @@
 .dataset-action {
-    float: right;
+  /* float: right; */
 }
 
 /*Columns are dynamically injected, so this /deep/ ensures it is reflected onto the selector  */
 :host /deep/ .ds-check {
-	width: 25px !important;
+  width: 25px !important;
+}
+
+:host /deep/ .mode-container {
+  padding-left: 30px;
+  text-align: center;
+}
+:host /deep/ .buttons {
+  display: inline-block;
+  /* padding: 50px; */
+}
+
+:host /deep/ .ui-selection-column {
+  width: 30px !important;
+  /* padding: 50px; */
+}
+
+
+:host /deep/ .disabled-row {
+    pointer-events: none;
+    opacity: 0.2 !important;
 }
 
 /*td {

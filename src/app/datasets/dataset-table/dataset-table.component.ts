@@ -17,9 +17,11 @@ import { Subject } from "rxjs/Subject";
 import { Job, RawDataset } from "shared/sdk/models";
 import { JobApi, UserApi } from "shared/sdk/services";
 import { ConfigService } from "shared/services/config.service";
+import * as dua from "state-management/actions/dashboard-ui.actions";
 import * as dsa from "state-management/actions/datasets.actions";
 import * as ua from "state-management/actions/user.actions";
 import * as ja from "state-management/actions/jobs.actions";
+import * as utils from "shared/utils";
 
 @Component({
   selector: "dataset-table",
@@ -33,9 +35,13 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   selectedSets: Array<RawDataset> = [];
   datasetCount$;
 
+  modeButtons = ["Archive", "View", "Retrieve"];
+
   cols = [];
   loading$: any = false;
   limit$: any = 10;
+
+  mode = "View";
 
   aremaOptions = "archiveretrieve";
 
@@ -43,6 +49,10 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   dest = new Subject<string>();
 
   subscriptions = [];
+
+  rowStyleMap = {};
+
+  paranms = {};
 
   constructor(
     public http: Http,
@@ -65,21 +75,35 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.loading$ = this.store.select(state => state.root.datasets.loading);
-    this.limit$ = this.store.select(
-      state => state.root.user.settings.datasetCount
-    );
-    this.datasetCount$ = this.store.select(
-      state => state.root.datasets.totalSets
-    );
+    this.datasetCount$ = this.store.select(state => state.root.datasets.totalSets);
+    this.limit$ = this.store.select(state => state.root.user.settings.datasetCount);
+
+    this.store.select(state => state.root.dashboardUI.mode).subscribe(mode => {
+      this.mode = mode;
+      this.selectedSets = [];
+      this.rowStyleMap = {};
+      for (let d = 0; d < this.datasets.length; d++) {
+        const set = this.datasets[d];
+        let c = '';
+        if (this.mode === 'archive' && set.datasetlifecycle.isOnDisk) {
+          c = 'disabled-row';
+        } else if (this.mode === 'retrieve' && set.datasetlifecycle.isOnTape) {
+          c = 'disabled-row';
+        } else {
+          c = '';
+        }
+        this.rowStyleMap[set.pid] = c;
+      }
+      const currentParams = this.route.snapshot.queryParams;
+      this.router.navigate(["/datasets"], {
+         queryParams: {...currentParams, 'mode': this.mode},
+      });
+    });
+
     this.route.queryParams.subscribe(params => {
-      this.store
-        .select(state => state.root.datasets.activeFilters)
-        .take(1)
-        .subscribe(filters => {
-          const newFilters = Object.assign(filters, params);
-          this.setCurrentPage(newFilters.skip);
-          this.store.dispatch({ type: dsa.FILTER_UPDATE, payload: newFilters });
-        });
+      const f = utils.filter({'mode': '', 'skip': ''}, params);
+      this.mode = f["mode"] || "view";
+      // this.setCurrentPage(f['skip']);
     });
 
     // NOTE: Typescript picks this key up as the property of the state, but it
@@ -91,6 +115,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
       this.store.select(state => state.root.datasets.datasets).subscribe(
         data => {
           this.datasets = data;
+          this.onModeChange(undefined, this.mode);
         },
         error => {
           console.error(error);
@@ -191,45 +216,37 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Hanlde changing of view mode and disabling selected rows
+   * @param event 
+   * @param mode 
+   */
+  onModeChange(event, mode) {
+    this.mode = mode.toLowerCase();
+    this.store.dispatch({ type: dua.SAVE_MODE, payload: this.mode });
+  }
+
+  /**
+   * Return the classes for the view buttons based on what is selected
+   * @param m
+   */
+  getModeButtonClasses(m) {
+    if (m.toLowerCase() === this.mode.toLowerCase()) {
+      return { positive: true };
+    } else {
+      return {};
+    }
+  }
+
+  /**
    * Handles selection of checkboxes and retrieves datablocks
    * @param {any} event
    * @memberof DashboardComponent
    */
   onSelect(event) {
-    // annoying hack to ensure the selected set has been added to the selected
-    // array
-    setTimeout(() => {
-      const selected = this.selectedSets.slice(0);
-      // const dl = event.data['datasetlifecycle'];
-      for (let i = 0; i < selected.length; i++) {
-        const dl = selected[i]["datasetlifecycle"];
-
-        // if (selected[i]['size'] === 0 || !dl || (dl && (dl['isOnDisk'] === 'unknown' &&
-        //                    dl['isOnTape'] === 'unknown') ||
-        //             dl['archiveStatusMessage'].toLowerCase().indexOf(
-        //                 'archive') !== -1)) {
-        //   selected.splice(i, 1);
-        //   this.store.dispatch({
-        //     type : ua.SHOW_MESSAGE,
-        //     payload : {
-        //       content :
-        //           'Cannot select datasets already archived or with unknown status',
-        //       class : 'ui negative message',
-        //       timeout : 2
-        //     }
-        //   });
-        // }
-      }
-      if (selected.length > 0) {
-        this.aremaOptions = this.setOptions(
-          this.selectedSets[this.selectedSets.length - 1]
-        );
-      } else {
-        this.aremaOptions = "";
-      }
-      this.store.dispatch({ type: dsa.SELECTED_UPDATE, payload: selected });
-      this.selectedSets = selected;
-    }, 600);
+    this.store.dispatch({
+      type: dsa.SELECTED_UPDATE,
+      payload: this.selectedSets
+    });
   }
 
   /**
@@ -239,25 +256,24 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
    */
   onPage(event) {
     this.store
-      .select(state => state.root.datasets)
+      .select(state => state.root.datasets.activeFilters)
       .take(1)
-      .subscribe(dStore => {
-        const data = dStore.activeFilters;
-        //        if (dStore.datasets.length === 0 ||
-        //           (dStore.datasets.length !== 0 &&
-        //             dStore.activeFilters.skip !== event.first)) {
-        if (data) {
-          data["skip"] = event.first;
-          data["initial"] = false;
+      .subscribe(f => {
+        const filters = Object.assign({}, f);
+        if (filters) {
+          filters["skip"] = event.first;
+          filters["initial"] = false;
           if (event.sortField) {
-            const sortOrder = event.sortOrder === 1 ? "ASC" : "DESC";
-            data["sortField"] = event.sortField + " " + sortOrder;
+            const sortOrder = event.sortOrder === 1 ? 'ASC' : 'DESC';
+            filters["sortField"] = event.sortField + ' ' + sortOrder;
           } else {
-            data["sortField"] = undefined;
+            filters["sortField"] = undefined;
           }
-          this.store.dispatch({ type: dsa.FILTER_UPDATE, payload: data });
+          // TODO reduce calls when not needed (i.e. no change)
+          if (f.first !== event.first || this.datasets.length === 0) {
+            this.store.dispatch({ type: dsa.FILTER_UPDATE, payload: filters });
+          }
         }
-        //        }
       });
   }
 

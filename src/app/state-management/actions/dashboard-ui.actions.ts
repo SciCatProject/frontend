@@ -7,9 +7,15 @@ import * as lb from 'shared/sdk/models';
 
 export const SAVE = '[DashboardUI] Save';
 export const RESTORE = '[DashboardUI] Restore';
+export const SAVE_MODE = '[Dashboard] Save Mode';
 
 export class SaveAction implements Action {
   readonly type = SAVE;
+
+  constructor(public payload?: any) { }
+}
+export class SaveModeAction implements Action {
+  readonly type = SAVE_MODE;
 
   constructor(public payload?: any) { }
 }
@@ -20,4 +26,5 @@ export class RestoreAction implements Action {
 }
 export type Actions =
   SaveAction |
+  SaveModeAction |
   RestoreAction;

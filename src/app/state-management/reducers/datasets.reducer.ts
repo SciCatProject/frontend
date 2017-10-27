@@ -11,9 +11,9 @@ export function datasetsReducer(state = initialDatasetState, action: Action) {
 
   switch (action.type) {
     case dsa.FILTER_UPDATE: {
-      let f = action['payload'];
+      const f = action['payload'];
       if (f['groups'] && !Array.isArray(f['groups']) && f['groups'].length > 0) {
-        f['groups'] = [f['groups']];  
+        f['groups'] = [f['groups']];
       }
       const newState = Object.assign({}, state, { activeFilters: f, loading: true, selectedSets: [] });
       return newState;
