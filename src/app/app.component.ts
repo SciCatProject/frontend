@@ -24,6 +24,7 @@ export class AppComponent implements OnDestroy, OnInit {
   message$ = null;
   msgClass$ = null;
   subscriptions = [];
+  options = [];
 
   constructor(private router: Router,
               private _service: NotificationsService,
