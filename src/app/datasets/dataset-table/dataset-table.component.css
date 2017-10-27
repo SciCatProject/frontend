@@ -16,6 +16,12 @@
   /* padding: 50px; */
 }
 
+:host /deep/ .ui-selection-column {
+  width: 30px !important;
+  /* padding: 50px; */
+}
+
+
 :host /deep/ .disabled-row {
     pointer-events: none;
     opacity: 0.2 !important;
