@@ -1,5 +1,5 @@
 .dataset-action {
-  float: right;
+  /* float: right; */
 }
 
 /*Columns are dynamically injected, so this /deep/ ensures it is reflected onto the selector  */

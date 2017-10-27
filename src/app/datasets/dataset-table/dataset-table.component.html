@@ -3,6 +3,18 @@
         <div class="ui buttons">
             <button class='ui button' [ngClass]="getModeButtonClasses(m)" *ngFor="let m of modeButtons" (click)="onModeChange($event, m)" >{{m}}</button>
         </div>
+        <div [ngSwitch]="mode">
+          <!--*ngIf="selectedSets.length > 0">-->
+         <div class="ui buttons dataset-action" *ngSwitchDefault>
+ 
+         </div>
+         <div class="ui buttons dataset-action" *ngSwitchCase="'archive'">
+             <button class="ui button" (click)="archiveClickHandle($event)"><i class="upload icon"></i>Archive</button>
+   </div>
+         <div class="ui buttons dataset-action" *ngSwitchCase="'retrieve'">
+             <button class="ui button" (click)="archiveClickHandle($event)"><i class="upload icon"></i>Retrieve</button>
+       </div>
+     </div>
     <p-dataTable #ds [paginator]="true" [lazy]="true" [loading]="loading$ | async" [rows]="limit$ | async" [value]="datasets" [(selection)]="selectedSets" [rowHover]="true" (onLazyLoad)="onPage($event)"
     (onRowSelect)="onSelect($event)" (onRowUnselect)="onSelect($event)" (onRowClick)="onRowSelect($event)" (onHeaderCheckboxToggle)="onSelect($event)"
    [resizableColumns]="true" columnResizeMode="expand" [rowStyleMap]="rowStyleMap" [totalRecords]="datasetCount$ | async" dataKey="pid">
@@ -20,18 +32,6 @@
             </ul>
         </p-footer>
     </p-dataTable>
-    <div [ngSwitch]="mode">
-         <!--*ngIf="selectedSets.length > 0">-->
-        <div class="ui buttons dataset-action" *ngSwitchDefault>
-
-        </div>
-        <div class="ui buttons dataset-action" *ngSwitchCase="'archive'">
-            <button class="ui button" (click)="archiveClickHandle($event)"><i class="upload icon"></i>Archive</button>
-	</div>
-        <div class="ui buttons dataset-action" *ngSwitchCase="'retrieve'">
-            <button class="ui button" (click)="archiveClickHandle($event)"><i class="upload icon"></i>Retrieve</button>
-	    </div>
-    </div>
   </div>
 </div>
 

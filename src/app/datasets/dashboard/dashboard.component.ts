@@ -25,9 +25,6 @@ export class DashboardComponent implements OnInit {
 
   searchText$;
 
-  mode = 'view';
-  filters = {};
-
   constructor(private router: Router, private cds: DatasetService, private route: ActivatedRoute, private store: Store<any>) {
     this.datasets = [];
   }
