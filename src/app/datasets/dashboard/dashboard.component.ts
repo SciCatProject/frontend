@@ -25,6 +25,9 @@ export class DashboardComponent implements OnInit {
 
   searchText$;
 
+  mode = 'view';
+  filters = {};
+
   constructor(private router: Router, private cds: DatasetService, private route: ActivatedRoute, private store: Store<any>) {
     this.datasets = [];
   }
@@ -36,6 +39,8 @@ export class DashboardComponent implements OnInit {
    */
   ngOnInit() {
     this.searchText$ = this.store.select(state => state.root.datasets.activeFilters.text);
+
+
   }
 
   /**

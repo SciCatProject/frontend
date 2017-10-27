@@ -21,6 +21,7 @@ import * as dua from "state-management/actions/dashboard-ui.actions";
 import * as dsa from "state-management/actions/datasets.actions";
 import * as ua from "state-management/actions/user.actions";
 import * as ja from "state-management/actions/jobs.actions";
+import * as utils from "shared/utils";
 
 @Component({
   selector: "dataset-table",
@@ -100,14 +101,9 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     });
 
     this.route.queryParams.subscribe(params => {
-      this.mode = params["mode"] || "view";
-      this.store
-        .select(state => state.root.datasets.activeFilters)
-        .take(1)
-        .subscribe(filters => {
-          const newFilters = Object.assign(filters, params);
-          // this.setCurrentPage(newFilters.skip);
-        });
+      const f = utils.filter({'mode': '', 'skip': ''}, params);
+      this.mode = f["mode"] || "view";
+      // this.setCurrentPage(f['skip']);
     });
 
     // NOTE: Typescript picks this key up as the property of the state, but it
@@ -275,7 +271,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
           }
           // TODO reduce calls when not needed (i.e. no change)
           if (f.first !== event.first || this.datasets.length === 0) {
-            console.log(f, event);
             this.store.dispatch({ type: dsa.FILTER_UPDATE, payload: filters });
           }
         }

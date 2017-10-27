@@ -6,6 +6,7 @@ import * as dua from "state-management/actions/dashboard-ui.actions";
 import * as dsa from "state-management/actions/datasets.actions";
 import * as dUIStore from "state-management/state/dashboard-ui.store";
 import * as dStore from "state-management/state/datasets.store";
+import * as utils from "shared/utils";
 
 @Component({
   selector: "datasets-filter",
@@ -60,21 +61,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     private router: Router
   ) {}
 
-  compareObj(source, comp) {
-    const k = Object.keys(source);
-    let diff = false;
-    for (let i = 0; i < k.length; i++) {
-      const s = source[k[i]];
-      const c = comp[k[i]];
-      if (!Array.isArray(s) && String(s) !== String(c)) {
-        return true;
-      } else if (Array.isArray(s) && s.length !== c.length) {
-      // (s.every(function(element, index) {return element !== c[index]; }))) {
-        return true;
-      }
-    }
-    return false;
-  }
+
 
   /**
    * Load locations and ownergroups on start up and
@@ -84,13 +71,17 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.route.queryParams.subscribe(params => {
         let newParams = Object.assign({}, params);
+
         delete newParams['mode'];
         this.store
           .select(state => state.root.datasets.activeFilters)
           .take(1)
           .subscribe(filters => {
-            if (this.compareObj(newParams, filters)) {
-              const p = Object.assign({}, filters, newParams);
+            
+            const f = utils.filter(filters, newParams);
+
+            if (utils.compareObj(newParams, f)) {
+              const p = Object.assign({}, f, newParams);
               this.location = p.creationLocation
                 ? { _id: p.creationLocation }
                 : '';
@@ -103,7 +94,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
               });
               this.store.dispatch({
               type: dsa.FILTER_UPDATE,
-              payload: newParams
+              payload: f
             });
             }
           });
