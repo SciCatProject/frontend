@@ -129,6 +129,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
                 (sum, value) => sum + value["count"],
                 0
               );
+              console.log(totalSets);
               this.store.dispatch({
                 type: dsa.TOTAL_UPDATE,
                 payload: totalSets
