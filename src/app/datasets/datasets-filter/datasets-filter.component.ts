@@ -114,7 +114,11 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
         .select(state => state.root.datasets.activeFilters)
         .subscribe(data => {
           this.filters = Object.assign({}, data);
-          this.router.navigate([ '/datasets' ], {queryParams : this.filters, replaceUrl : true});
+          const currentParams = this.route.snapshot.queryParams;
+          this.router.navigate(["/datasets"], {
+             queryParams: Object.assign({}, currentParams, data),
+          });
+          // this.router.navigate([ '/datasets' ], {queryParams : this.filters, replaceUrl : true});
         })
     );
     this.resultCount$ = this.store.select(
@@ -315,23 +319,24 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
       .select(state => state.root.user.currentUserGroups)
       .take(1)
       .subscribe(groups => {
-        console.log(groups);
         this.filters.groups = groups;
       });
     this.filterValues = dStore.initialDatasetState.filterValues;
-    this.filterValues.text = "";
-    this.store.dispatch({ type: dsa.FILTER_UPDATE, payload: this.filters });
+    this.filterValues.text = '';
+    // this.store.dispatch({ type: dsa.FILTER_UPDATE, payload: this.filters });
     this.store.dispatch({
       type: dsa.FILTER_VALUE_UPDATE,
       payload: this.filterValues
     });
-    this.store.dispatch({
-      type: dua.SAVE,
-      payload: dUIStore.initialDashboardUIState
-    });
+    // this.store.dispatch({
+    //   type: dua.SAVE,
+    //   payload: dUIStore.initialDashboardUIState
+    // });
+    let m;
+    this.store.select(state => state.root.dashboardUI.mode).take(1).subscribe(mode => m = mode);
+    const currentParams = this.route.snapshot.queryParams;
     this.router.navigate(["/datasets"], {
-      queryParams: this.filters,
-      replaceUrl: true
+      queryParams: Object.assign({}, currentParams, this.filters, {mode: m})
     });
     // TODO clear selected sets
   }

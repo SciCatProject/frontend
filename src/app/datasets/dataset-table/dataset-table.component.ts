@@ -83,27 +83,24 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
       this.rowStyleMap = {};
       for (let d = 0; d < this.datasets.length; d++) {
         const set = this.datasets[d];
-        let c = "";
-        if (this.mode === "archive" && set.datasetlifecycle.isOnDisk) {
-          c = "disabled-row";
-        } else if (this.mode === "retrieve" && set.datasetlifecycle.isOnTape) {
-          c = "disabled-row";
+        let c = '';
+        if (this.mode === 'archive' && set.datasetlifecycle.isOnDisk) {
+          c = 'disabled-row';
+        } else if (this.mode === 'retrieve' && set.datasetlifecycle.isOnTape) {
+          c = 'disabled-row';
         } else {
-          c = "";
+          c = '';
         }
         this.rowStyleMap[set.pid] = c;
       }
-      // this.route.queryParams.take(1).subscribe(params => {
-      //   const newParams = Object.assign({}, params, { mode: this.mode });
-        this.router.navigate(["/datasets"], {
-          queryParams: {'mode': this.mode},
-          replaceUrl: true
-        });
-      // });
+      const currentParams = this.route.snapshot.queryParams;
+      this.router.navigate(["/datasets"], {
+         queryParams: {...currentParams, 'mode': this.mode},
+      });
     });
 
     this.route.queryParams.subscribe(params => {
-      this.mode = params["mode"] || "View";
+      this.mode = params["mode"] || "view";
       this.store
         .select(state => state.root.datasets.activeFilters)
         .take(1)
