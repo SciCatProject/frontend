@@ -12,6 +12,7 @@ import {ConfigService} from 'shared/services/config.service';
 import * as dsa from 'state-management/actions/datasets.actions';
 import * as ua from 'state-management/actions/user.actions';
 import * as ja from 'state-management/actions/jobs.actions';
+import {NotificationsService} from 'angular2-notifications';
 
 @Component({
   selector : 'dataset-table',
@@ -41,6 +42,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
 
   constructor(public http: Http, private us: UserApi, private router: Router,
               private configSrv: ConfigService, private js: JobApi,
+              private _notif_service: NotificationsService,
               private route: ActivatedRoute,
               private confirmationService: ConfirmationService,
               private store: Store<any>) {
@@ -58,14 +60,15 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     this.limit$ =
         this.store.select(state => state.root.user.settings.datasetCount);
     this.datasetCount$ = this.store.select(state => state.root.datasets.totalSets);
-    this.route.queryParams.subscribe(params => {  
+    this.route.queryParams.subscribe(params => {
         this.store.select(state => state.root.datasets.activeFilters).take(1).subscribe(filters => {
           const newFilters = Object.assign(filters, params);
           this.setCurrentPage(newFilters.skip);
           this.store.dispatch({type : dsa.FILTER_UPDATE, payload : newFilters});
         });
-        
+
     });
+
 
     // NOTE: Typescript picks this key up as the property of the state, but it
     // actually links to the reducer key in app module
@@ -119,7 +122,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
         };
         this.store.dispatch({type : ua.SHOW_MESSAGE, payload : msg});
       }));
-    
+
     this.subscriptions.push(this.store.select(state => state.root.jobs.error).subscribe(
       err => {
         if(err) {
@@ -133,7 +136,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
         }
       }
     ));
-    
+
 
   }
 

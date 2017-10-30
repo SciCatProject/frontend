@@ -14,7 +14,6 @@ import {environment} from '../environments/environment';
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
-  // template: '<simple-notifications [options]="options"></simple-notifications>',
   providers: [UserApi]
 })
 export class AppComponent implements OnDestroy, OnInit {
@@ -24,10 +23,14 @@ export class AppComponent implements OnDestroy, OnInit {
   message$ = null;
   msgClass$ = null;
   subscriptions = [];
-  options = [];
+  public options = {
+    position: ['top', 'left'],
+    timeOut: 0,
+    lastOnBottom: true,
+  };
 
   constructor(private router: Router,
-              private _service: NotificationsService,
+              private _notif_service: NotificationsService,
               private store: Store<any>) {
   }
 
@@ -38,17 +41,17 @@ export class AppComponent implements OnDestroy, OnInit {
    */
 
 
-  create() {
-    this._service.success(
-      'Some Title',
-      'Some Content',
+  create( msg) {
+    this._notif_service.success(
+      msg,
+      '',
       {
         showProgressBar: true,
         pauseOnHover: false,
         clickToClose: false,
-        maxLength: 10
+        maxLength: 50
       }
-    )
+    );
   };
 
   ngOnInit() {
@@ -62,6 +65,11 @@ export class AppComponent implements OnDestroy, OnInit {
     }
     this.message$ = this.store.select(state => state.root.user.message.content);
     this.msgClass$ = this.store.select(state => state.root.user.message.class);
+    this.subscriptions.push(this.store.select(state => state.root.user.message)
+      .subscribe(current => {
+        console.log('gm trying to send message', current);
+        this.create( current.content);
+      }));
     this.subscriptions.push(this.store.select(state => state.root.user.currentUser)
       .subscribe(current => {
         if (current && current['username']) {
