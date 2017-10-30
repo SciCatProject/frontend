@@ -25,7 +25,7 @@ export class AppComponent implements OnDestroy, OnInit {
   subscriptions = [];
   public options = {
     position: ['top', 'left'],
-    timeOut: 50,
+    timeOut: 30,
     lastOnBottom: true,
   };
 
@@ -42,16 +42,19 @@ export class AppComponent implements OnDestroy, OnInit {
 
 
   create(msg) {
-    this._notif_service.success(
-      msg,
-      '',
-      {
-        showProgressBar: true,
-        pauseOnHover: false,
-        clickToClose: false,
-        maxLength: 50
-      }
-    );
+    if ( msg.class === 'ui message positive') {
+      this._notif_service.success(
+        msg.content,
+        '',
+      );
+    }
+    else {
+      this._notif_service.success(
+        msg.content,
+        '',
+      );
+
+    }
   };
 
   ngOnInit() {
@@ -68,7 +71,8 @@ export class AppComponent implements OnDestroy, OnInit {
     this.subscriptions.push(this.store.select(state => state.root.user.message)
       .subscribe(current => {
         if (current.content != null)
-          this.create(current.content);
+          console.log ('gm message', current)
+          this.create(current);
       }));
     this.subscriptions.push(this.store.select(state => state.root.user.currentUser)
       .subscribe(current => {
