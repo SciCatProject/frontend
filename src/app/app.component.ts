@@ -41,7 +41,7 @@ export class AppComponent implements OnDestroy, OnInit {
    */
 
 
-  create( msg) {
+  create(msg) {
     this._notif_service.success(
       msg,
       '',
@@ -67,8 +67,8 @@ export class AppComponent implements OnDestroy, OnInit {
     this.msgClass$ = this.store.select(state => state.root.user.message.class);
     this.subscriptions.push(this.store.select(state => state.root.user.message)
       .subscribe(current => {
-        console.log('gm trying to send message', current);
-        this.create( current.content);
+        if (current.content != null)
+          this.create(current.content);
       }));
     this.subscriptions.push(this.store.select(state => state.root.user.currentUser)
       .subscribe(current => {
