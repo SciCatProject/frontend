@@ -25,7 +25,7 @@ export class AppComponent implements OnDestroy, OnInit {
   subscriptions = [];
   public options = {
     position: ['top', 'left'],
-    timeOut: 0,
+    timeOut: 50,
     lastOnBottom: true,
   };
 
