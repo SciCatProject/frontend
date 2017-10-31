@@ -17,7 +17,7 @@
   },
   "jobParams": {
     "name": "jobParams",
-    "type": "string"
+    "type": "object"
   },
   "jobStatusMessage": {
     "name": "jobStatusMessage",
@@ -25,7 +25,7 @@
   },
   "datasetList": {
     "name": "datasetList",
-    "type": "string"
+    "type": "object"
   },
   "createdAt": {
     "name": "createdAt",

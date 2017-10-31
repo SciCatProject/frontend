@@ -92,6 +92,7 @@ export class ConfigFormComponent implements OnInit {
     // datatypes
     this.formData = Object.assign({}, this.source);
     for (const prop in this.formData) {
+      console.log(prop)
       if (prop && this.formData.hasOwnProperty(prop)) {
         if (this.formConfig) {
           config = this.formConfig[prop];
