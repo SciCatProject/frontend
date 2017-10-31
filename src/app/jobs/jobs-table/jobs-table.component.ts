@@ -106,11 +106,6 @@ export class JobsTableComponent implements OnInit, OnDestroy {
       const datePipe = new DatePipe('en-US');
       const formattedDate = datePipe.transform(date, 'yyyy/MM/dd HH:mm');
       return formattedDate;
-    } else if ((key === 'archiveStatus' || key === 'retrieveStatus') &&
-      ds['datasetlifecycle']) {
-      return ds['datasetlifecycle'][key + 'Message'];
-    } else if (key === 'size') {
-      return (((ds[key] / 1024) / 1024) / 1024).toFixed(2);
     } else if (key in ds) {
       return value;
     } else {
