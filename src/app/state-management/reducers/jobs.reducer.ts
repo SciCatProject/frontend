@@ -35,11 +35,6 @@ export function jobsReducer(state = initialJobsState, action: Action): JobsState
       const s = Object.assign({}, state, {currentJobs: action['payload'], loading: false});
       return s;
     }
-
-    case ja.FILTER_UPDATE: {
-      const s = Object.assign({}, state, {filters: action['payload']});
-    }
-
     case ja.CHILD_RETRIEVE_COMPLETE: {
       const s = Object.assign({}, state, {ui: action['payload']});
       return s;
