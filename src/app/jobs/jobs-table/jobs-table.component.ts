@@ -26,11 +26,12 @@ export class JobsTableComponent implements OnInit, OnDestroy {
     {field: 'jobStatusMessage', header: 'Status', sortable: true}
   ];
   loading$: any = false;
-  limit$: any = 10;
+  limit: any = 50;
 
   selectedSets: Array<Job> = [];
   subscriptions = [];
   jobsCount = 1000;
+  filters = {};
   totalJobNumber$: any;
 
 
@@ -47,20 +48,23 @@ export class JobsTableComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    // this.loading$ = this.store.select(state => state.root.jobs.loading);
-    this.loading$ = false;
-    this.limit$ =
-      this.store.select(state => state.root.user.settings.jobCount);
+    this.loading$ = this.store.select(state => state.root.jobs.loading);
+    this.store.select(state => state.root.user.settings.jobCount).subscribe(limit => {
+      this.limit = limit;
+    });
+    this.store.select(state => state.root.jobs.filters).subscribe(filters => {
+      this.filters = Object.assign({}, filters);
+    });
+    
     this.totalJobNumber$ = this.store.select(state => state.root.jobs.currentJobs.length);
-    console.log('this.limit$', this.limit$);
-    this.store.dispatch({type: JobActions.RETRIEVE});
-
 
     this.subscriptions.push(this.store.select(state => state.root.jobs.currentJobs)
       .subscribe(selected => {
-        this.jobs = selected;
+        if (selected.length > 0) {
+          this.jobs = selected.slice();
+          console.log(this.jobs);
+        }
       }));
-
 
   }
 
@@ -87,14 +91,8 @@ export class JobsTableComponent implements OnInit, OnDestroy {
 
 
   onPage(event) {
-    this.store.select(state => state.root.jobs)
-      .take(1)
-      .subscribe(jStore => {
-        jStore.skip = event.first;
-        const jobs = {};
-        jobs['skip'] = event.first;
-        this.store.dispatch({type: JobActions.SORT_UPDATE, payload: jobs});
-      });
+    this.filters['skip'] = event.first;
+    this.store.dispatch({type: JobActions.SORT_UPDATE, payload: this.filters});
   }
 
 

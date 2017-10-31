@@ -12,7 +12,7 @@ export function jobsReducer(state = initialJobsState, action: Action): JobsState
 
     case ja.SORT_UPDATE: {
       let f = action['payload'];
-      const newState = Object.assign({}, state, { activeFilters: f, loading: true, selectedSets: [] });
+      const newState = Object.assign({}, state, { filters: f, loading: true, selectedSets: [] });
       return newState;
     }
 
@@ -32,10 +32,9 @@ export function jobsReducer(state = initialJobsState, action: Action): JobsState
   }
 
     case ja.RETRIEVE_COMPLETE: {
-      const s = Object.assign({}, state, {currentJobs: action['payload']});
+      const s = Object.assign({}, state, {currentJobs: action['payload'], loading: false});
       return s;
     }
-
     case ja.CHILD_RETRIEVE_COMPLETE: {
       const s = Object.assign({}, state, {ui: action['payload']});
       return s;

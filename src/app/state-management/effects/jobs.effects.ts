@@ -61,8 +61,10 @@ export class JobsEffects {
   @Effect()
   protected retrieve$: Observable<Action> =
     this.action$.ofType(JobActions.RETRIEVE)
-      .switchMap(() => {
-        return this.jobSrv.find({'order': 'creationTime DESC'})
+      .map(toPayload)
+      .switchMap((filters) => {
+        console.log(filters);
+        return this.jobSrv.find({'order': 'creationTime DESC', 'limit': filters.limit, 'skip': filters.skip})
           .switchMap(res => {
             console.log(res);
             return Observable.of(
@@ -127,7 +129,6 @@ export class JobsEffects {
         filter['order'] = 'creationTime DESC';
         return this.jobSrv.find(filter)
           .switchMap(res => {
-            console.log(res);
             return Observable.of(
               {type: JobActions.RETRIEVE_COMPLETE, payload: res});
           });

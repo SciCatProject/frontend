@@ -30,7 +30,7 @@ export class SubmitAction implements Action {
 export class RetrieveAction implements Action {
   readonly type = RETRIEVE;
 
-  constructor() {
+  constructor(public payload?: any) {
   }
 }
 
