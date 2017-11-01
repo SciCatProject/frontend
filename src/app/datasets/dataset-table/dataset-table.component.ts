@@ -12,7 +12,6 @@ import {ConfigService} from 'shared/services/config.service';
 import * as dsa from 'state-management/actions/datasets.actions';
 import * as ua from 'state-management/actions/user.actions';
 import * as ja from 'state-management/actions/jobs.actions';
-import {NotificationsService} from 'angular2-notifications';
 
 @Component({
   selector : 'dataset-table',
@@ -42,7 +41,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
 
   constructor(public http: Http, private us: UserApi, private router: Router,
               private configSrv: ConfigService, private js: JobApi,
-              private _notif_service: NotificationsService,
               private route: ActivatedRoute,
               private confirmationService: ConfirmationService,
               private store: Store<any>) {

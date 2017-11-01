@@ -105,3 +105,10 @@ export class MockStore {
 
   public select(obj) { return Observable.of([]); }
 }
+
+
+export class MockNotificationService {
+  public dispatch(obj) {}
+
+  public select(obj) { return Observable.of([]); }
+}

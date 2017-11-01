@@ -42,18 +42,18 @@ export class AppComponent implements OnDestroy, OnInit {
 
 
   create(msg) {
-    if ( msg.class === 'ui message positive') {
+    console.log('in create');
+    if (msg.class === 'ui message positive') {
       this._notif_service.success(
         msg.content,
         '',
       );
-    }
-    else {
+    } else {
+      console.log('in alert');
       this._notif_service.success(
         msg.content,
         '',
       );
-
     }
   };
 
@@ -70,9 +70,10 @@ export class AppComponent implements OnDestroy, OnInit {
     this.msgClass$ = this.store.select(state => state.root.user.message.class);
     this.subscriptions.push(this.store.select(state => state.root.user.message)
       .subscribe(current => {
-        if (current.content != null)
-          console.log ('gm message', current)
+        if (current.content != null) {
+          console.log('gm message', current)
           this.create(current);
+        }
       }));
     this.subscriptions.push(this.store.select(state => state.root.user.currentUser)
       .subscribe(current => {
