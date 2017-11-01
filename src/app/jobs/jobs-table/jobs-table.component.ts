@@ -1,5 +1,5 @@
 import {DatePipe} from '@angular/common';
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import {Store} from '@ngrx/store';
 import {Router} from '@angular/router';
 import * as JobActions from 'state-management/actions/jobs.actions';
@@ -13,7 +13,7 @@ import {ConfigService} from 'shared/services/config.service';
   templateUrl: './jobs-table.component.html',
   styleUrls: ['./jobs-table.component.css']
 })
-export class JobsTableComponent implements OnInit {
+export class JobsTableComponent implements OnInit, OnDestroy {
 
   @Input() jobs;
   @Input() jobs2;
@@ -26,11 +26,12 @@ export class JobsTableComponent implements OnInit {
     {field: 'jobStatusMessage', header: 'Status', sortable: true}
   ];
   loading$: any = false;
-  limit$: any = 10;
+  limit: any = 50;
 
   selectedSets: Array<Job> = [];
   subscriptions = [];
   jobsCount = 1000;
+  filters = {};
   totalJobNumber$: any;
 
 
@@ -47,26 +48,36 @@ export class JobsTableComponent implements OnInit {
   }
 
   ngOnInit() {
-    // this.loading$ = this.store.select(state => state.root.jobs.loading);
-    this.loading$ = false;
-    this.limit$ =
-      this.store.select(state => state.root.user.settings.jobCount);
+    this.loading$ = this.store.select(state => state.root.jobs.loading);
+    this.store.select(state => state.root.user.settings.jobCount).subscribe(limit => {
+      this.limit = limit;
+    });
+    this.store.select(state => state.root.jobs.filters).subscribe(filters => {
+      this.filters = Object.assign({}, filters);
+    });
+    
     this.totalJobNumber$ = this.store.select(state => state.root.jobs.currentJobs.length);
-    console.log('this.limit$', this.limit$);
-    this.store.dispatch({type: JobActions.RETRIEVE});
-
 
     this.subscriptions.push(this.store.select(state => state.root.jobs.currentJobs)
       .subscribe(selected => {
-        this.jobs = selected;
+        if (selected.length > 0) {
+          this.jobs = selected.slice();
+          console.log(this.jobs);
+        }
       }));
 
+  }
 
+  ngOnDestroy() {
+    for (let i = 0; i < this.subscriptions.length; i++) {
+      this.subscriptions[i].unsubscribe();
+    }
   }
 
 
   onRowSelect(event) {
-    this.router.navigateByUrl('/job/' + encodeURIComponent(event.job.id));
+    this.store.dispatch({type: JobActions.SELECT_CURRENT, payload: event.data});
+    this.router.navigateByUrl('/user/job/' + encodeURIComponent(event.data.id));
   }
 
   nodeExpand(event) {
@@ -80,14 +91,8 @@ export class JobsTableComponent implements OnInit {
 
 
   onPage(event) {
-    this.store.select(state => state.root.jobs)
-      .take(1)
-      .subscribe(jStore => {
-        jStore.skip = event.first;
-        const jobs = {};
-        jobs['skip'] = event.first;
-        this.store.dispatch({type: JobActions.SORT_UPDATE, payload: jobs});
-      });
+    this.filters['skip'] = event.first;
+    this.store.dispatch({type: JobActions.SORT_UPDATE, payload: this.filters});
   }
 
 
@@ -101,11 +106,6 @@ export class JobsTableComponent implements OnInit {
       const datePipe = new DatePipe('en-US');
       const formattedDate = datePipe.transform(date, 'yyyy/MM/dd HH:mm');
       return formattedDate;
-    } else if ((key === 'archiveStatus' || key === 'retrieveStatus') &&
-      ds['datasetlifecycle']) {
-      return ds['datasetlifecycle'][key + 'Message'];
-    } else if (key === 'size') {
-      return (((ds[key] / 1024) / 1024) / 1024).toFixed(2);
     } else if (key in ds) {
       return value;
     } else {

@@ -1,33 +1,38 @@
 <div>
+    <div class="mode-container">
+        <div class="ui buttons">
+            <button class='ui button' [ngClass]="getModeButtonClasses(m)" *ngFor="let m of modeButtons" (click)="onModeChange($event, m)" >{{m}}</button>
+        </div>
+        <div [ngSwitch]="mode">
+          <!--*ngIf="selectedSets.length > 0">-->
+         <div class="ui buttons dataset-action" *ngSwitchDefault>
+ 
+         </div>
+         <div class="ui buttons dataset-action" *ngSwitchCase="'archive'">
+             <button class="ui button" (click)="archiveClickHandle($event)"><i class="upload icon"></i>Archive</button>
+   </div>
+         <div class="ui buttons dataset-action" *ngSwitchCase="'retrieve'">
+             <button class="ui button" (click)="archiveClickHandle($event)"><i class="upload icon"></i>Retrieve</button>
+       </div>
+     </div>
     <p-dataTable #ds [paginator]="true" [lazy]="true" [loading]="loading$ | async" [rows]="limit$ | async" [value]="datasets" [(selection)]="selectedSets" [rowHover]="true" (onLazyLoad)="onPage($event)"
     (onRowSelect)="onSelect($event)" (onRowUnselect)="onSelect($event)" (onRowClick)="onRowSelect($event)" (onHeaderCheckboxToggle)="onSelect($event)"
-   [resizableColumns]="true" columnResizeMode="expand" [totalRecords]="datasetCount$ | async" dataKey="pid">
-	<p-column styleClass="ds-check" [style]="{'width': '30px'}" selectionMode="multiple"></p-column>
-        <p-column [style]="{'width':'38px', 'overflow':'hidden'}" *ngFor="let col of cols" [field]="col.field" [header]="col.header" [sortable]="col.sortable" (sortFunction)="colSort($event)"> 
+   [resizableColumns]="true" columnResizeMode="expand" [rowStyleMap]="rowStyleMap" [totalRecords]="datasetCount$ | async" dataKey="pid">
+      	<p-column *ngIf="mode !== 'view'" [style]="{'width': '30px'}" selectionMode="multiple"></p-column>
+        
+        <p-column [hidden]="false" [style]="{'width':'38px', 'overflow':'hidden'}" *ngFor="let col of cols" [field]="col.field" [header]="col.header" [sortable]="col.sortable" (sortFunction)="colSort($event)"> 
           <ng-template let-col let-ds="rowData" let-ri="rowIndex" pTemplate="body">
-              <span>{{getFormat(col.field, ds[col.field], ds)}}</span>
+              <span [ngClass]="disabled-row">{{getFormat(col.field, ds[col.field], ds)}}</span>
           </ng-template>
         </p-column>
+        
         <p-footer>
             <ul>
                 <li *ngFor="let ds of selectedSets" style="text-align: left">{{ds.pid}}</li>
             </ul>
         </p-footer>
     </p-dataTable>
-    <div [ngSwitch]="aremaOptions">
-         <!--*ngIf="selectedSets.length > 0">-->
-        <div class="ui buttons dataset-action" *ngSwitchDefault>
-            <button class="ui button" (click)="archiveClickHandle($event)"><i class="upload icon"></i>Archive</button>
-            <div class="or"></div>
-            <button class="ui positive button" (click)="retrieveClickHandle($event)"><i class="download icon"></i>Retrieve</button>
-        </div>
-        <div class="ui buttons dataset-action" *ngSwitchCase="'archive'">
-            <button class="ui button" (click)="archiveClickHandle($event)"><i class="upload icon"></i>Archive</button>
-	</div>
-        <div class="ui buttons dataset-action" *ngSwitchCase="'retrieve'">
-            <button class="ui button" (click)="archiveClickHandle($event)"><i class="upload icon"></i>Restore</button>
-	    </div>
-    </div>
+  </div>
 </div>
 
 <p-confirmDialog header="Archive" ></p-confirmDialog>

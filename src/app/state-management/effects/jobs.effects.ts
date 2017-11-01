@@ -55,23 +55,6 @@ export class JobsEffects {
       .catch(err => {
         console.log(err);
         return Observable.of(
-          {type: JobActions.SUBMIT_COMPLETE, payload: err});
-      });
-
-  @Effect()
-  protected retrieve$: Observable<Action> =
-    this.action$.ofType(JobActions.RETRIEVE)
-      .switchMap(() => {
-        return this.jobSrv.find({'order': 'creationTime DESC'})
-          .switchMap(res => {
-            console.log(res);
-            return Observable.of(
-              {type: JobActions.RETRIEVE_COMPLETE, payload: res});
-          });
-      })
-      .catch(err => {
-        console.log(err);
-        return Observable.of(
           {type: JobActions.FAILED, payload: err});
       });
 
@@ -112,7 +95,7 @@ export class JobsEffects {
       .catch(err => {
         console.log(err);
         return Observable.of(
-          {type: JobActions.RETRIEVE_COMPLETE, payload: err});
+          {type: JobActions.FAILED, payload: err});
       });
 
   @Effect()
@@ -124,10 +107,10 @@ export class JobsEffects {
         const fq = payload;
         const filter = {};
         filter['skip'] = fq['skip'] ? fq['skip'] : 0;
+        filter['limit'] = fq['limit'] ? fq['limit'] : 50;
         filter['order'] = 'creationTime DESC';
         return this.jobSrv.find(filter)
           .switchMap(res => {
-            console.log(res);
             return Observable.of(
               {type: JobActions.RETRIEVE_COMPLETE, payload: res});
           });
@@ -135,7 +118,7 @@ export class JobsEffects {
       .catch(err => {
         console.log(err);
         return Observable.of(
-          {type: JobActions.RETRIEVE_COMPLETE, payload: err});
+          {type: JobActions.FAILED, payload: err});
       });
 
 

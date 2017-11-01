@@ -66,7 +66,7 @@ export class ConfigFormComponent implements OnInit {
       configFile = this.source.constructor.name;
     } else if (this.service) {
       configFile = this.service.constructor.name.replace('Api', '');
-      }
+    }
     if (configFile) {
       this.configService.getConfigFile(configFile)
           .subscribe(
@@ -92,6 +92,7 @@ export class ConfigFormComponent implements OnInit {
     // datatypes
     this.formData = Object.assign({}, this.source);
     for (const prop in this.formData) {
+      console.log(prop)
       if (prop && this.formData.hasOwnProperty(prop)) {
         if (this.formConfig) {
           config = this.formConfig[prop];
