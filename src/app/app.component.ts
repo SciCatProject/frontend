@@ -24,9 +24,12 @@ export class AppComponent implements OnDestroy, OnInit {
   msgClass$ = null;
   subscriptions = [];
   public options = {
-    position: ['top', 'left'],
-    timeOut: 30,
+    position: ['top', 'right'],
+    timeOut: 3000,
     lastOnBottom: true,
+    showProgressBar: false,
+    pauseOnHover: true,
+    clickToClose: true
   };
 
   constructor(private router: Router,
@@ -41,24 +44,23 @@ export class AppComponent implements OnDestroy, OnInit {
    */
 
 
-  create(msg) {
-    console.log('in create');
-    if (msg.class === 'ui message positive') {
-      this._notif_service.success(
-        msg.content,
-        '',
-      );
-    } else {
-      console.log('in alert');
-      this._notif_service.success(
-        msg.content,
-        '',
-      );
+  createNotification(msg) {
+    switch (msg.type) {
+      case 'error':
+        this._notif_service.error(msg.title, msg.content);
+        break;
+      case 'alert':
+        this._notif_service.alert(msg.title, msg.content);
+        break;
+      case 'success':
+        this._notif_service.success(msg.title, msg.content);
+        break;
+      default:
+        break;
     }
   };
 
   ngOnInit() {
-
     LoopBackConfig.setBaseURL(environment.lbBaseURL);
     console.log(LoopBackConfig.getPath());
     localStorage.clear();
@@ -66,13 +68,11 @@ export class AppComponent implements OnDestroy, OnInit {
       this.logout();
       this.router.navigate(['/login']);
     }
-    this.message$ = this.store.select(state => state.root.user.message.content);
-    this.msgClass$ = this.store.select(state => state.root.user.message.class);
     this.subscriptions.push(this.store.select(state => state.root.user.message)
       .subscribe(current => {
         if (current.content != null) {
           console.log('gm message', current)
-          this.create(current);
+          this.createNotification(current);
         }
       }));
     this.subscriptions.push(this.store.select(state => state.root.user.currentUser)

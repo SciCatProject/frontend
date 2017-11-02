@@ -4,6 +4,7 @@
         <img class="logo" src="favicon.ico">
         {{title}}
       </a>
+      <simple-notifications [options]="options"></simple-notifications>
       <!--<a href="#" class="item">Home</a>-->
       <div class="right menu">
           <ng-container *ngIf="username !== null; then accountTemplate else loginTemplate"></ng-container>
@@ -32,10 +33,9 @@
 </div>
 <div id="content" class="ui dash-container">
     <breadcrumb></breadcrumb>
-    <div *ngIf="message$" [attr.class]="msgClass$ | async">{{message$ | async}}</div>
+    <!-- <div *ngIf="message$" [attr.class]="msgClass$ | async">{{message$ | async}}</div> -->
     <br>
     <router-outlet ></router-outlet>
 </div>
-<simple-notifications [options]="options"></simple-notifications>
 
 

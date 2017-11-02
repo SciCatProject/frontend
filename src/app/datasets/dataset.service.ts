@@ -160,9 +160,9 @@ export class DatasetService {
               this.store.dispatch({
                 type : ua.SHOW_MESSAGE,
                 payload : {
-                  content : 'error.message',
-                  class : 'ui negative message',
-                  timeout : 3
+                  content : error.message,
+                  type : 'error',
+                  title: 'Error searching for datablocks'
                 }
               });
             });

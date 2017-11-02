@@ -49,18 +49,18 @@ export class LoginComponent implements OnInit {
             self.store.dispatch({
               type : ua.SHOW_MESSAGE,
               payload : {
-                content : 'Login Failed: ' + result.message,
-                class : 'ui negative message',
-                timeout : 6
+                content :  result.message,
+                type : 'error',
+                title : 'Login Failed'
               }
             });
           } else if (!(result instanceof Object)) {
             self.store.dispatch({
               type : ua.SHOW_MESSAGE,
               payload : {
-                content : 'Login Failed: ' + result,
-                class : 'ui negative message',
-                timeout : 6
+                content :  result,
+                type : 'error',
+                title : 'Login Failed'
               }
             });
           }

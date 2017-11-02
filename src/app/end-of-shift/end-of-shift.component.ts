@@ -34,8 +34,8 @@ export class EndOfShiftComponent implements OnInit {
           type: ua.SHOW_MESSAGE,
           payload: {
             content: error.message,
-            class: "ui negative message",
-            timeout: 3
+            type: 'error',
+            title: 'Error search datasets'
           }
         });
       },
@@ -64,8 +64,8 @@ export class EndOfShiftComponent implements OnInit {
             type: ua.SHOW_MESSAGE,
             payload: {
               content: "No datasets found for group",
-              class: "ui negative message",
-              timeout: 3
+              type: 'error',
+              title: 'Error searching datasets'
             }
           });
         }
@@ -75,8 +75,8 @@ export class EndOfShiftComponent implements OnInit {
           type: ua.SHOW_MESSAGE,
           payload: {
             content: error.message,
-            class: "ui negative message",
-            timeout: 3
+            class: 'error',
+            title: 'API Error'
           }
         });
       }
