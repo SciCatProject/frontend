@@ -6,12 +6,18 @@ interface Settings {
   jobCount: number;
 }
 
+interface Message {
+  content: string;
+  title: string;
+  type: string;
+}
+
 // NOTE It IS ok to make up a state of other sub states
 export interface UserState {
   currentUser: lb.User;
   currentUserGroups: lb.AccessGroup[];
   email: string;
-  message: any;
+  message: Message;
   settings: Settings;
   }
 
@@ -19,7 +25,7 @@ export const initialUserState: UserState = {
   currentUser : <lb.User>{},
   currentUserGroups : [],
   email : undefined,
-  message : {'content' : undefined, 'timeout' : 5, class : 'hidden'},
+  message : {'content' : undefined, 'title' : undefined, type : undefined},
   settings : {
     'tapeCopies' : 'two',
     'datasetCount' : 30,

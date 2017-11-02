@@ -45,10 +45,11 @@ export class MockActivatedRoute {
   snapshot = {queryParams : {returnUrl : '/'}};
   params = Observable.from([ {'id' : 1} ]);
   queryParams = Observable.from([ {'limit' : 10} ]);
-  }
+}
 
 export class MockRouter {
-  navigate = jasmine.createSpy('navigate');
+  navigate = function(url, params){};
+  // jasmine.createSpy('navigate');
   navigateByUrl(url: string) { return url; }
   }
 
@@ -67,7 +68,7 @@ export class MockJobApi {
   }
 
 export class MockConfigService {
-  getConfigFile() { return Observable.from([ {'config' : {}} ]); }
+  getConfigFile() { return Observable.from([ undefined ]); }
   }
 
 export class MockJobHandlerService {}
@@ -101,6 +102,13 @@ export class MockUserMsgService {
   }
 
 export class MockStore {
+  public dispatch(obj) {}
+
+  public select(obj) { return Observable.of([]); }
+}
+
+
+export class MockNotificationService {
   public dispatch(obj) {}
 
   public select(obj) { return Observable.of([]); }

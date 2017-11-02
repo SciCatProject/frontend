@@ -4,7 +4,8 @@ import { Store, StoreModule } from '@ngrx/store';
 import { AutoCompleteModule, DataTableModule, SharedModule, TreeModule } from 'primeng/primeng';
 import { rootReducer } from 'state-management/reducers/root.reducer';
 import { DatasetsFilterComponent } from 'datasets/datasets-filter/datasets-filter.component';
-import { MockStore } from '../../shared/MockStubs';
+import {MockStore, MockActivatedRoute, MockRouter} from '../../shared/MockStubs';
+import {ActivatedRoute, Router} from '@angular/router';
 
 describe('DatasetsFilterComponent', () => {
   let component: DatasetsFilterComponent;
@@ -22,8 +23,17 @@ describe('DatasetsFilterComponent', () => {
           providers : [
             {provide : Store, useClass : MockStore},
           ]
-        })
-        .compileComponents();
+        });
+    TestBed.overrideComponent(DatasetsFilterComponent, {
+      set: {
+        providers: [
+          {provide: Store, useClass: MockStore},
+          {provide: Router, useClass: MockRouter},
+          {provide: ActivatedRoute, useClass: MockActivatedRoute}
+        ]
+      }
+    });
+    TestBed.compileComponents();
   }));
 
   beforeEach(() => {

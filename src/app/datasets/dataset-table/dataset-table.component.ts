@@ -59,21 +59,24 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     private us: UserApi,
     private router: Router,
     private configSrv: ConfigService,
-    private js: JobApi,
     private route: ActivatedRoute,
     private confirmationService: ConfirmationService,
     private store: Store<any>
   ) {
-    this.configSrv.getConfigFile("RawDataset").subscribe(conf => {
-      for (const prop in conf) {
-        if (prop in conf && "table" in conf[prop]) {
-          this.cols.push(conf[prop]["table"]);
-        }
-      }
-    });
   }
 
   ngOnInit() {
+
+    this.configSrv.getConfigFile("RawDataset").subscribe(conf => {
+      if (conf) {
+        for (const prop in conf) {
+          if (prop in conf && "table" in conf[prop]) {
+            this.cols.push(conf[prop]["table"]);
+          }
+        }
+      }
+    });
+
     this.loading$ = this.store.select(state => state.root.datasets.loading);
     this.datasetCount$ = this.store.select(state => state.root.datasets.totalSets);
     this.limit$ = this.store.select(state => state.root.user.settings.datasetCount);
@@ -82,17 +85,19 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
       this.mode = mode;
       this.selectedSets = [];
       this.rowStyleMap = {};
-      for (let d = 0; d < this.datasets.length; d++) {
-        const set = this.datasets[d];
-        let c = '';
-        if (this.mode === 'archive' && set.datasetlifecycle.isOnDisk) {
-          c = 'disabled-row';
-        } else if (this.mode === 'retrieve' && set.datasetlifecycle.isOnTape) {
-          c = 'disabled-row';
-        } else {
-          c = '';
+      if (this.datasets) {
+        for (let d = 0; d < this.datasets.length; d++) {
+          const set = this.datasets[d];
+          let c = '';
+          if (this.mode === 'archive' && set.datasetlifecycle.isOnDisk) {
+            c = 'disabled-row';
+          } else if (this.mode === 'retrieve' && set.datasetlifecycle.isOnTape) {
+            c = 'disabled-row';
+          } else {
+            c = '';
+          }
+          this.rowStyleMap[set.pid] = c;
         }
-        this.rowStyleMap[set.pid] = c;
       }
       const currentParams = this.route.snapshot.queryParams;
       this.router.navigate(["/datasets"], {
@@ -105,6 +110,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
       this.mode = f["mode"] || "view";
       // this.setCurrentPage(f['skip']);
     });
+
 
     // NOTE: Typescript picks this key up as the property of the state, but it
     // actually links to the reducer key in app module
@@ -150,11 +156,10 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
           if (ret) {
             console.log(ret);
             this.selectedSets = [];
-            this.aremaOptions = "";
             msg = {
-              class: "ui message positive",
-              content: "Job Created Successfully",
-              timeout: 5
+              type: 'success',
+              title: 'Job Created Successfully',
+              content: ''
             };
             this.store.dispatch({ type: ua.SHOW_MESSAGE, payload: msg });
           }
@@ -162,9 +167,9 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
         error => {
           console.log(error);
           msg = {
-            class: "ui message negative",
-            content: error.message,
-            timeout: 10
+            type: 'error',
+            title: error.message,
+            content: 'Job not submitted'
           };
           this.store.dispatch({ type: ua.SHOW_MESSAGE, payload: msg });
         }
@@ -175,9 +180,9 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
       this.store.select(state => state.root.jobs.error).subscribe(err => {
         if (err) {
           msg = {
-            class: "ui message negative",
-            content: err.message,
-            timeout: 10
+            type: 'error',
+            title: err.message,
+            content: 'Job not submitted'
           };
           this.store.dispatch({ type: ua.SHOW_MESSAGE, payload: msg });
           this.store.dispatch({
@@ -376,19 +381,19 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
           });
           if (backupFiles.length === 0) {
             msg = {
-              class: "ui message negative",
+              type: 'error',
               content:
-                "Selected datasets have no datablocks associated with them",
-              timeout: 10
+                'Selected datasets have no datablocks associated with them',
+              title: 'Job not submitted'
             };
             this.store.dispatch({ type: ua.SHOW_MESSAGE, payload: msg });
             this.selectedSets = [];
           } else if (!job.emailJobInitiator) {
             msg = {
-              class: "ui message negative",
+              type: 'error',
               content:
-                "No email for this user could be found, the job will not be submitted",
-              timeout: 10
+                'No email for this user could be found, the job will not be submitted',
+              title: 'Job not submitted'
             };
             this.store.dispatch({ type: ua.SHOW_MESSAGE, payload: msg });
             this.selectedSets = [];
@@ -426,9 +431,9 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
         });
     } else {
       msg = {
-        class: "ui message negative",
-        content: "No Datasets selected",
-        timeout: 5
+        type: 'error',
+        title: 'No Datasets selected',
+        content: ''
       };
       this.store.dispatch({ type: ua.SHOW_MESSAGE, payload: msg });
     }
@@ -441,7 +446,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
    */
   onDestSubmit(form) {
     // TODO maybe wipe the value when submitted?
-    this.dest.next(form.value["dest"]);
+    this.dest.next(form.value['dest']);
     this.dest.complete();
     this.dest.unsubscribe();
     this.dest = null;

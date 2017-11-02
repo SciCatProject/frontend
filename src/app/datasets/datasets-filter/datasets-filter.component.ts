@@ -18,7 +18,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   @ViewChild("loc") locField: AutoComplete;
   @ViewChild("grp") grpField: AutoComplete;
 
-  @Input() datasets: Array<any> = [];
+  // @Input() datasets: Array<any> = [];
   facets: Array<any> = [];
   months = [
     "",
