@@ -25,11 +25,11 @@ export class AppComponent implements OnDestroy, OnInit {
   subscriptions = [];
   public options = {
     position: ['top', 'right'],
-    timeOut: 5000,
     lastOnBottom: true,
-    showProgressBar: false,
+    showProgressBar: true,
     pauseOnHover: true,
-    clickToClose: true
+    clickToClose: true,
+    timeOut: 500
   };
 
   constructor(private router: Router,
@@ -58,7 +58,6 @@ export class AppComponent implements OnDestroy, OnInit {
       default:
         break;
     }
-    this.store.dispatch({type: ua.CLEAR_MESSAGE});
   };
 
   ngOnInit() {
@@ -71,9 +70,9 @@ export class AppComponent implements OnDestroy, OnInit {
     }
     this.subscriptions.push(this.store.select(state => state.root.user.message)
       .subscribe(current => {
-        if (current.content != null) {
-          console.log('gm message', current)
+        if (current.title !== undefined) {
           this.createNotification(current);
+          this.store.dispatch({type: ua.CLEAR_MESSAGE});
         }
       }));
     this.subscriptions.push(this.store.select(state => state.root.user.currentUser)

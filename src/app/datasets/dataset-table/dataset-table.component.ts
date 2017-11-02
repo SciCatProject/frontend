@@ -151,7 +151,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
           if (ret) {
             console.log(ret);
             this.selectedSets = [];
-            this.aremaOptions = "";
             msg = {
               type: 'success',
               title: 'Job Created Successfully',
