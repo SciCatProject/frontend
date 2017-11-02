@@ -5,7 +5,6 @@ import {DashboardComponent} from '../datasets/dashboard/dashboard.component';
 import {DatafilesComponent} from '../datasets/datafiles/datafiles.component';
 import {DatablocksComponent} from '../datasets/datablocks-table/datablocks-table.component';
 import {DatasetDetailComponent} from '../datasets/dataset-detail/dataset-detail.component';
-import {EndOfShiftComponent} from '../end-of-shift/end-of-shift.component';
 import {LoginComponent} from '../users/login/login.component';
 import {JobsComponent} from '../jobs/jobs.component';
 import {JobsTableComponent} from '../jobs/jobs-table/jobs-table.component';
@@ -24,7 +23,6 @@ export const routes: Routes = [
   { path: 'logout', component: AppComponent, canActivate: [AuthCheck] },
   { path: 'dataset', redirectTo: '/datasets', pathMatch: 'full' },
   { path: 'datasets',  component: DashboardComponent, canActivate: [AuthCheck], },
-  { path: 'end-of-shift', component: EndOfShiftComponent, canActivate: [AuthCheck] },
   { path: 'dataset/:id', component: DatasetDetailComponent, canActivate: [AuthCheck] },
   { path: 'dataset/:id/datablocks', component: DatablocksComponent, canActivate: [AuthCheck] },
   { path: 'dataset/:id/datafiles', component: DatafilesComponent, canActivate: [AuthCheck] },
