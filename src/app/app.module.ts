@@ -13,7 +13,6 @@ import { AppRoutingModule } from 'app-routing/app-routing.module';
 import { routes } from 'app-routing/app-routing.module';
 import { DatasetService } from 'datasets/dataset.service';
 import { DatasetsModule } from 'datasets/datasets.module';
-import { EndOfShiftComponent } from 'end-of-shift/end-of-shift.component';
 import { JobsComponent } from 'jobs/jobs.component';
 import { JobsTableComponent } from 'jobs/jobs-table/jobs-table.component';
 import { localStorageSync } from 'ngrx-store-localstorage';
@@ -52,7 +51,6 @@ export function localStorageSyncWrapper(reducer: any) {
 @NgModule({
   declarations : [
     AppComponent,
-    EndOfShiftComponent,
     JobsComponent,
     JobsTableComponent,
     SampleDataFormComponent,
