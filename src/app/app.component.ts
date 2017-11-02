@@ -17,7 +17,7 @@ import {environment} from '../environments/environment';
   providers: [UserApi]
 })
 export class AppComponent implements OnDestroy, OnInit {
-  title = 'CATANIE';
+  title = 'SciCat';
   us: UserApi;
   username: string = null;
   message$ = null;

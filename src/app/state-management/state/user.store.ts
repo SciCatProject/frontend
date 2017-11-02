@@ -27,7 +27,7 @@ export const initialUserState: UserState = {
   email : undefined,
   message : {'content' : undefined, 'title' : undefined, type : undefined},
   settings : {
-    'tapeCopies' : 'two',
+    'tapeCopies' : 'one',
     'datasetCount' : 30,
     'jobCount' : 30
   } // TODO sync with server settings?
