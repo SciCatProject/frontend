@@ -10,7 +10,6 @@
           <ng-container *ngIf="username !== null; then accountTemplate else loginTemplate"></ng-container>
           <ng-template #accountTemplate>
             <a class="item" [routerLink]="['/datasets/']" [routerLinkActive]="['active']">Home</a>
-            <a class="item" [routerLink]="['/end-of-shift']" [routerLinkActive]="['active']">End of Shift</a>
             <a class="item" [routerLink]="['/sample-data/', 'add']" [routerLinkActive]="['active']">Sample Data Entry</a>
             <a class="item" [routerLink]="['/user/','jobs']" [routerLinkActive]="['active']">Jobs</a>
             <div class="ui simple dropdown item">
