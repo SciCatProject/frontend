@@ -77,17 +77,15 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
           .select(state => state.root.datasets.activeFilters)
           .take(1)
           .subscribe(filters => {
-            
             const f = utils.filter(filters, newParams);
-
+            this.location = filters.creationLocation
+            ? { _id: filters.creationLocation }
+            : '';
+            if (filters.groups && filters.groups.length > 0) {
+              this.group = { _id: filters.groups };
+            }
             if (utils.compareObj(newParams, f)) {
               const p = Object.assign({}, f, newParams);
-              this.location = p.creationLocation
-                ? { _id: p.creationLocation }
-                : '';
-              if (p.groups && p.groups.length > 0) {
-                this.group = { _id: p.groups };
-              }
               this.router.navigate(["/datasets"], {
                 queryParams: newParams,
                 replaceUrl: true
