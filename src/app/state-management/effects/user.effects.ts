@@ -46,16 +46,6 @@ export class UserEffects {
           });
 
   @Effect()
-  protected messageTimeout$: Observable<Action> =
-      this.action$.ofType(UserActions.SHOW_MESSAGE)
-          .map(toPayload)
-          .switchMap((message) => {
-            const to = message.timeout ? message.timeout : 6;
-            return Observable.timer(to * 1000)
-            .switchMap(() => Observable.of({ type: UserActions.CLEAR_MESSAGE }));
-          });
-
-  @Effect()
   protected login$: Observable<Action> =
       this.action$.ofType(UserActions.LOGIN)
           .debounceTime(300)

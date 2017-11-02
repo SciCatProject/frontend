@@ -25,7 +25,7 @@ export class AppComponent implements OnDestroy, OnInit {
   subscriptions = [];
   public options = {
     position: ['top', 'right'],
-    timeOut: 3000,
+    timeOut: 5000,
     lastOnBottom: true,
     showProgressBar: false,
     pauseOnHover: true,
@@ -58,6 +58,7 @@ export class AppComponent implements OnDestroy, OnInit {
       default:
         break;
     }
+    this.store.dispatch({type: ua.CLEAR_MESSAGE});
   };
 
   ngOnInit() {
