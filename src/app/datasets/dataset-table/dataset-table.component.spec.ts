@@ -33,11 +33,10 @@ describe('DatasetTableComponent', () => {
     TestBed.overrideComponent(DatasetTableComponent, {
       set: {
         providers: [
-          {provide: ActivatedRoute, useClass: MockActivatedRoute},
-          {provide: JobApi, useClass: MockJobApi},
           {provide: UserApi, useClass: MockUserApi},
           {provide: Http, useClass: MockHttp},
           {provide: Router, useClass: MockRouter},
+          {provide: ActivatedRoute, useClass: MockActivatedRoute},
           {provide: ConfigService, useClass: MockConfigService},
           {provide: ConfirmationService, useClass: ConfirmationService},
           {provide: Store, useClass: MockStore}

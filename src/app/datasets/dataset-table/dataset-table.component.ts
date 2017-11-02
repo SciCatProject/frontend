@@ -59,21 +59,24 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     private us: UserApi,
     private router: Router,
     private configSrv: ConfigService,
-    private js: JobApi,
     private route: ActivatedRoute,
     private confirmationService: ConfirmationService,
     private store: Store<any>
   ) {
-    this.configSrv.getConfigFile("RawDataset").subscribe(conf => {
-      for (const prop in conf) {
-        if (prop in conf && "table" in conf[prop]) {
-          this.cols.push(conf[prop]["table"]);
-        }
-      }
-    });
   }
 
   ngOnInit() {
+
+    this.configSrv.getConfigFile("RawDataset").subscribe(conf => {
+      if (conf) {
+        for (const prop in conf) {
+          if (prop in conf && "table" in conf[prop]) {
+            this.cols.push(conf[prop]["table"]);
+          }
+        }
+      }
+    });
+
     this.loading$ = this.store.select(state => state.root.datasets.loading);
     this.datasetCount$ = this.store.select(state => state.root.datasets.totalSets);
     this.limit$ = this.store.select(state => state.root.user.settings.datasetCount);
@@ -82,17 +85,19 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
       this.mode = mode;
       this.selectedSets = [];
       this.rowStyleMap = {};
-      for (let d = 0; d < this.datasets.length; d++) {
-        const set = this.datasets[d];
-        let c = '';
-        if (this.mode === 'archive' && set.datasetlifecycle.isOnDisk) {
-          c = 'disabled-row';
-        } else if (this.mode === 'retrieve' && set.datasetlifecycle.isOnTape) {
-          c = 'disabled-row';
-        } else {
-          c = '';
+      if (this.datasets) {
+        for (let d = 0; d < this.datasets.length; d++) {
+          const set = this.datasets[d];
+          let c = '';
+          if (this.mode === 'archive' && set.datasetlifecycle.isOnDisk) {
+            c = 'disabled-row';
+          } else if (this.mode === 'retrieve' && set.datasetlifecycle.isOnTape) {
+            c = 'disabled-row';
+          } else {
+            c = '';
+          }
+          this.rowStyleMap[set.pid] = c;
         }
-        this.rowStyleMap[set.pid] = c;
       }
       const currentParams = this.route.snapshot.queryParams;
       this.router.navigate(["/datasets"], {

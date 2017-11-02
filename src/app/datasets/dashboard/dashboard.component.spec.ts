@@ -46,14 +46,11 @@ describe('DashboardComponent', () => {
         providers: [
           {provide: ActivatedRoute, useClass: MockActivatedRoute},
           {provide: Router, useClass: MockRouter},
-          {provide: Http, useClass: MockHttp},
-          {provide: DatasetService, useClass: MockDatasetService},
           {provide: Store, useClass: MockStore},
           {provide: UserApi, useClass: MockUserApi},
-          {provide: OrigDatablockApi, useClass: MockDatablockApi},
+          {provide: Http, useClass: MockHttp},
           {provide: ConfigService, useClass: MockConfigService},
-          {provide: JobApi, useClass: MockJobApi},
-          {provide: ConfirmationService, useClass: ConfirmationService}
+          {provide: ConfirmationService, useClass: ConfirmationService},
         ]
       }
     });
