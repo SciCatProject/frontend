@@ -1,39 +1,39 @@
-import { Component, Input, OnInit, OnDestroy, ViewChild } from "@angular/core";
-import { ActivatedRoute, Params, Router } from "@angular/router";
-import { Store } from "@ngrx/store";
-import { Tree, TreeNode, AutoComplete } from "primeng/primeng";
-import * as dua from "state-management/actions/dashboard-ui.actions";
-import * as dsa from "state-management/actions/datasets.actions";
-import * as dUIStore from "state-management/state/dashboard-ui.store";
-import * as dStore from "state-management/state/datasets.store";
-import * as utils from "shared/utils";
+import { Component, Input, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { ActivatedRoute, Params, Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { Tree, TreeNode, AutoComplete } from 'primeng/primeng';
+import * as dua from 'state-management/actions/dashboard-ui.actions';
+import * as dsa from 'state-management/actions/datasets.actions';
+import * as dUIStore from 'state-management/state/dashboard-ui.store';
+import * as dStore from 'state-management/state/datasets.store';
+import * as utils from 'shared/utils';
 
 @Component({
-  selector: "datasets-filter",
-  templateUrl: "./datasets-filter.component.html",
-  styleUrls: ["./datasets-filter.component.css"]
+  selector: 'datasets-filter',
+  templateUrl: './datasets-filter.component.html',
+  styleUrls: ['./datasets-filter.component.css']
 })
 export class DatasetsFilterComponent implements OnInit, OnDestroy {
-  @ViewChild("datetree") dateTree: Tree;
-  @ViewChild("loc") locField: AutoComplete;
-  @ViewChild("grp") grpField: AutoComplete;
+  @ViewChild('datetree') dateTree: Tree;
+  @ViewChild('loc') locField: AutoComplete;
+  @ViewChild('grp') grpField: AutoComplete;
 
   // @Input() datasets: Array<any> = [];
   facets: Array<any> = [];
   months = [
-    "",
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December"
+    '',
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December'
   ];
   startDate: Date;
   endDate: Date;
@@ -48,9 +48,10 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
 
   group: {};
   groups = [];
+  selectedGroups = [];
   filteredGroups = [];
 
-  filters;
+  filters = dStore.initialDatasetState.activeFilters;
   filterValues;
 
   subscriptions = [];
@@ -60,8 +61,6 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router
   ) {}
-
-
 
   /**
    * Load locations and ownergroups on start up and
@@ -79,21 +78,26 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
           .subscribe(filters => {
             const f = utils.filter(filters, newParams);
             this.location = filters.creationLocation
-            ? { _id: filters.creationLocation }
-            : '';
+              ? { _id: filters.creationLocation }
+              : '';
             if (filters.groups && filters.groups.length > 0) {
-              this.group = { _id: filters.groups };
+              this.selectedGroups = this.filters.groups.map(x => {
+                return { _id: x };
+              });
+            } else {
+              this.selectedGroups = [];
             }
+            console.log(this.selectedGroups);
             if (utils.compareObj(newParams, f)) {
               const p = Object.assign({}, f, newParams);
-              this.router.navigate(["/datasets"], {
+              this.router.navigate(['/datasets'], {
                 queryParams: newParams,
                 replaceUrl: true
               });
               this.store.dispatch({
-              type: dsa.FILTER_UPDATE,
-              payload: f
-            });
+                type: dsa.FILTER_UPDATE,
+                payload: f
+              });
             }
           });
       })
@@ -104,8 +108,8 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
         .subscribe(data => {
           this.filters = Object.assign({}, data);
           const currentParams = this.route.snapshot.queryParams;
-          this.router.navigate(["/datasets"], {
-             queryParams: Object.assign({}, currentParams, data),
+          this.router.navigate(['/datasets'], {
+            queryParams: Object.assign({}, currentParams, data)
           });
           // this.router.navigate([ '/datasets' ], {queryParams : this.filters, replaceUrl : true});
         })
@@ -119,62 +123,25 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
         .subscribe(values => {
           this.filterValues = Object.assign({}, values);
           if (this.filterValues) {
-            if (this.filterValues["locations"] !== null) {
-              this.locations = this.filterValues["locations"]
-                ? this.filterValues["locations"]
+            if (this.filterValues['locations'] !== null) {
+              this.locations = this.filterValues['locations']
+                ? this.filterValues['locations']
                 : [];
               const totalSets = this.locations.reduce(
-                (sum, value) => sum + value["count"],
+                (sum, value) => sum + value['count'],
                 0
               );
-              console.log(totalSets);
               this.store.dispatch({
                 type: dsa.TOTAL_UPDATE,
                 payload: totalSets
               });
             }
 
-            if (this.filterValues["groups"] !== null) {
-              this.groups = this.filterValues["groups"];
-            }
-            this.dateFacet = [];
-            let dates = [];
-            if (this.filterValues["years"]) {
-              dates = dates.concat(this.filterValues["years"]);
-              dates.forEach(date => {
-                const year = date["_id"]["year"];
-                const month = date["_id"]["month"];
-                const yid = { year: year };
-                const yindex = dates.findIndex(found => {
-                  if (
-                    found._id.year === year &&
-                    !("month" in found._id) &&
-                    !("day" in found._id)
-                  ) {
-                    return found;
-                  }
-                });
-                if (yindex !== -1) {
-                  dates[yindex]["count"] += Number(date["count"]);
-                } else {
-                  dates.push({ _id: yid, count: Number(date["count"]) });
-                }
-                const mid = { year: year, month: month };
-                const mindex = dates.findIndex(found => {
-                  if (
-                    found._id.year === year &&
-                    found._id.month === month &&
-                    !("day" in found._id)
-                  ) {
-                    return found;
-                  }
-                });
-                if (mindex !== -1) {
-                  dates[mindex]["count"] += Number(date["count"]);
-                } else {
-                  dates.push({ _id: mid, count: Number(date["count"]) });
-                }
-              });
+            if (
+              this.groups.length === 0 &&
+              this.filterValues['groups'] !== null
+            ) {
+              this.groups = this.filterValues['groups'];
             }
           }
         })
@@ -193,7 +160,6 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
    * @param event
    */
   onTimeSelect(event) {
-    console.log(this.dates);
     this.filters.startDate = new Date(this.dates[0]);
     this.filters.endDate =
       this.dates[1] !== null
@@ -212,7 +178,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   handleInputLocation(event) {
     this.filteredLocations = this.filterDatasets(
       event.query,
-      "creationLocation"
+      'creationLocation'
     );
   }
 
@@ -223,7 +189,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
    * @memberof DatasetsFilterComponent
    */
   handleInputOwner(event) {
-    this.filteredGroups = this.filterDatasets(event.query, "ownerGroup");
+    this.filteredGroups = this.filterDatasets(event.query, 'ownerGroup');
   }
 
   /**
@@ -237,7 +203,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     if (event.length === 0) {
       this.filters[key] = null;
     } else if (event.length >= 4) {
-      if (key === "groups") {
+      if (key === 'groups') {
         this.filters[key] = [event];
       } else {
         this.filters[key] = event;
@@ -257,13 +223,13 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
    */
   filterDatasets(query, key) {
     const filtered = [];
-    const array = key === "creationLocation" ? this.locations : this.groups;
+    const array = key === 'creationLocation' ? this.locations : this.groups;
     if (array) {
       for (let i = 0; i < array.length; i++) {
         const loc =
-          typeof array[i] === "object" && !("_id" in array[i])
+          typeof array[i] === 'object' && !('_id' in array[i])
             ? array[i]
-            : array[i]["_id"];
+            : array[i]['_id'];
         if (
           loc &&
           loc.toLowerCase().indexOf(query.toLowerCase()) === 0 &&
@@ -280,19 +246,23 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
    * Handle clicking of available locations
    */
   locSelected() {
-    this.filters.creationLocation = this.location["_id"];
+    this.filters.creationLocation = this.location['_id'];
     // this.store.dispatch(
     //     {type : dua.SAVE, payload : {beamlineText : this.location}});
     this.store.dispatch({ type: dsa.FILTER_UPDATE, payload: this.filters });
   }
 
   /**
-   * Handle clicking of available groups
+   * Handle clicking of available groups (contains ANOTHER primeng hack to wait for array to be cleared 
+   * since this is called before that happens)
    */
   groupSelected(event) {
-    console.log(event, this.group);
-    this.filters.groups = [this.group["_id"]];
-    this.store.dispatch({ type: dsa.FILTER_UPDATE, payload: this.filters });
+    setTimeout(() => {
+      this.filters.groups = this.selectedGroups.map(x => {
+        return x['_id'];
+      });
+      this.store.dispatch({ type: dsa.FILTER_UPDATE, payload: this.filters });
+    }, 400);
   }
 
   /**
@@ -302,8 +272,17 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     this.dates = [];
     this.location = undefined;
     this.group = undefined;
-    this.locField.value = "";
-    this.grpField.value = "";
+
+    // YES, another primeng hack to clear the field
+    this.grpField.value = [];
+    this.selectedGroups.map(x => {
+      this.grpField.removeItem(x);
+    });
+    
+    // TODO clearing this does not visually clear (although it is removed from the array)
+    this.selectedGroups = [];
+    this.locField.value = '';
+    this.grpField.value = '';
     this.filters = dStore.initialDatasetState.activeFilters;
     this.store
       .select(state => state.root.user.currentUserGroups)
@@ -323,10 +302,13 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     //   payload: dUIStore.initialDashboardUIState
     // });
     let m;
-    this.store.select(state => state.root.dashboardUI.mode).take(1).subscribe(mode => m = mode);
+    this.store
+      .select(state => state.root.dashboardUI.mode)
+      .take(1)
+      .subscribe(mode => (m = mode));
     const currentParams = this.route.snapshot.queryParams;
-    this.router.navigate(["/datasets"], {
-      queryParams: Object.assign({}, currentParams, this.filters, {mode: m})
+    this.router.navigate(['/datasets'], {
+      queryParams: Object.assign({}, currentParams, this.filters, { mode: m })
     });
     // TODO clear selected sets
   }

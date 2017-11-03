@@ -9,8 +9,19 @@
 
 :host /deep/ .mode-container {
   padding-left: 30px;
+  text-align: center ;
+}
+
+:host /deep/ .center-align {
   text-align: center;
 }
+
+:host /deep/ .left-align {
+  width: 100%;
+  text-align: left !important;
+}
+
+
 :host /deep/ .buttons {
   display: inline-block;
   /* padding: 50px; */

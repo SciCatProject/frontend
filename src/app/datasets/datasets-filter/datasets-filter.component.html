@@ -10,7 +10,7 @@
         <p-autoComplete #loc placeholder="/SLS/..." [(ngModel)]="location" name="location" (onSelect)="locSelected($event)" [suggestions]="filteredLocations"
           (completeMethod)="handleInputLocation($event)" [size]="30" field="_id" [minLength]="1" [dropdown]="false"
           (ngModelChange)="textValueChanged($event, 'creationLocation')" (onDropdownClick)="handleDropClick($event)" [minLength]="1"
-          [multiple]="false">
+          [multiple]="false" forceSelection="true" [dropdown]="true">
           <ng-template let-g pTemplate="g">
             <div class="ui-helper-clearfix" style="border-bottom:1px solid #D5D5D5">
               <div style="font-size:18px;float:left;margin:10px 10px 0 0">{{g._id}}</div>
@@ -21,9 +21,9 @@
     </div>
     <div class="ui field">
       <h3>Group</h3>
-        <p-autoComplete #grp [(ngModel)]="group"  placeholder="p15624" (onSelect)="groupSelected($event)" name="group" field="_id" [suggestions]="filteredGroups"
+        <p-autoComplete #grp [(ngModel)]="selectedGroups" [multiple]="true"  placeholder="p15624" (onUnselect)="groupSelected($event)" (onSelect)="groupSelected($event)" name="group" field="_id" [suggestions]="filteredGroups"
           (completeMethod)="handleInputOwner($event)" [size]="30" [minLength]="1" [dropdown]="false" (ngModelChange)="textValueChanged($event, 'groups')"
-          (onDropdownClick)="handleDropClick($event)" [multiple]="false" [minLength]="1">
+          (onDropdownClick)="handleDropClick($event)" [multiple]="false" [minLength]="1" forceSelection="true" [dropdown]="true">
           <ng-template let-g pTemplate="g">
             <div class="ui-helper-clearfix" style="border-bottom:1px solid #D5D5D5">
               <div style="font-size:18px;float:left;margin:10px 10px 0 0">{{g._id}}</div>
