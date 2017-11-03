@@ -48,6 +48,8 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
 
   group: {};
   groups = [];
+  selectedGroups = [];
+  selectedGroupIDs = [];
   filteredGroups = [];
 
   filters;
@@ -82,7 +84,9 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
             ? { _id: filters.creationLocation }
             : '';
             if (filters.groups && filters.groups.length > 0) {
-              this.group = { _id: filters.groups };
+              this.selectedGroups = this.filters.groups.map(x => {
+                return { _id: x };
+              });
             }
             if (utils.compareObj(newParams, f)) {
               const p = Object.assign({}, f, newParams);
@@ -290,8 +294,10 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
    * Handle clicking of available groups
    */
   groupSelected(event) {
-    console.log(event, this.group);
-    this.filters.groups = [this.group["_id"]];
+    console.log(event);
+    this.filters.groups = this.selectedGroups.map(x => {
+      return x['_id'];
+    });
     this.store.dispatch({ type: dsa.FILTER_UPDATE, payload: this.filters });
   }
 
