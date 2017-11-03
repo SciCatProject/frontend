@@ -49,7 +49,6 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   group: {};
   groups = [];
   selectedGroups = [];
-  selectedGroupIDs = [];
   filteredGroups = [];
 
   filters = dStore.initialDatasetState.activeFilters;
@@ -87,6 +86,8 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
               this.selectedGroups = this.filters.groups.map(x => {
                 return { _id: x };
               });
+            } else {
+              this.selectedGroups = [];
             }
             if (utils.compareObj(newParams, f)) {
               const p = Object.assign({}, f, newParams);
@@ -252,14 +253,16 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Handle clicking of available groups
+   * Handle clicking of available groups (contains ANOTHER primeng hack to wait for array to be cleared 
+   * since this is called before that happens)
    */
   groupSelected(event) {
-    console.log(event);
-    this.filters.groups = this.selectedGroups.map(x => {
-      return x['_id'];
-    });
-    this.store.dispatch({ type: dsa.FILTER_UPDATE, payload: this.filters });
+    setTimeout(() => {
+      this.filters.groups = this.selectedGroups.map(x => {
+        return x['_id'];
+      });
+      this.store.dispatch({ type: dsa.FILTER_UPDATE, payload: this.filters });
+    }, 400);
   }
 
   /**
@@ -269,8 +272,10 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     this.dates = [];
     this.location = undefined;
     this.group = undefined;
-    this.locField.value = "";
-    this.grpField.value = "";
+    // TODO clearing this does not visually clear (although it is removed from the array)
+    this.selectedGroups = [];
+    this.locField.value = '';
+    this.grpField.value = '';
     this.filters = dStore.initialDatasetState.activeFilters;
     this.store
       .select(state => state.root.user.currentUserGroups)
