@@ -52,7 +52,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   selectedGroupIDs = [];
   filteredGroups = [];
 
-  filters;
+  filters = dStore.initialDatasetState.activeFilters;
   filterValues;
 
   subscriptions = [];
@@ -138,47 +138,8 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
               });
             }
 
-            if (this.filterValues["groups"] !== null) {
+            if (this.groups.length === 0 && this.filterValues["groups"] !== null) {
               this.groups = this.filterValues["groups"];
-            }
-            this.dateFacet = [];
-            let dates = [];
-            if (this.filterValues["years"]) {
-              dates = dates.concat(this.filterValues["years"]);
-              dates.forEach(date => {
-                const year = date["_id"]["year"];
-                const month = date["_id"]["month"];
-                const yid = { year: year };
-                const yindex = dates.findIndex(found => {
-                  if (
-                    found._id.year === year &&
-                    !("month" in found._id) &&
-                    !("day" in found._id)
-                  ) {
-                    return found;
-                  }
-                });
-                if (yindex !== -1) {
-                  dates[yindex]["count"] += Number(date["count"]);
-                } else {
-                  dates.push({ _id: yid, count: Number(date["count"]) });
-                }
-                const mid = { year: year, month: month };
-                const mindex = dates.findIndex(found => {
-                  if (
-                    found._id.year === year &&
-                    found._id.month === month &&
-                    !("day" in found._id)
-                  ) {
-                    return found;
-                  }
-                });
-                if (mindex !== -1) {
-                  dates[mindex]["count"] += Number(date["count"]);
-                } else {
-                  dates.push({ _id: mid, count: Number(date["count"]) });
-                }
-              });
             }
           }
         })
