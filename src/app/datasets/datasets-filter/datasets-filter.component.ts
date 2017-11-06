@@ -87,7 +87,6 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
             } else {
               this.selectedGroups = [];
             }
-            console.log(this.selectedGroups);
             if (utils.compareObj(newParams, f)) {
               const p = Object.assign({}, f, newParams);
               this.router.navigate(['/datasets'], {

@@ -1,4 +1,5 @@
-import { DatePipe } from "@angular/common";
+import { environment } from '../../../environments/environment.qa';
+import { DatePipe } from '@angular/common';
 import {
   Component,
   EventEmitter,
@@ -7,43 +8,45 @@ import {
   Output,
   ViewChild,
   OnDestroy
-} from "@angular/core";
-import { Http } from "@angular/http";
-import { Router, ActivatedRoute } from "@angular/router";
-import { Observable } from "rxjs/Observable";
-import { Store } from "@ngrx/store";
-import { ConfirmationService, DataTable } from "primeng/primeng";
-import { Subject } from "rxjs/Subject";
-import { Job, RawDataset } from "shared/sdk/models";
-import { JobApi, UserApi } from "shared/sdk/services";
-import { ConfigService } from "shared/services/config.service";
-import * as dua from "state-management/actions/dashboard-ui.actions";
-import * as dsa from "state-management/actions/datasets.actions";
-import * as ua from "state-management/actions/user.actions";
-import * as ja from "state-management/actions/jobs.actions";
-import * as utils from "shared/utils";
+} from '@angular/core';
+import { Http } from '@angular/http';
+import { Router, ActivatedRoute } from '@angular/router';
+import { Observable } from 'rxjs/Observable';
+import { Store } from '@ngrx/store';
+import { ConfirmationService, DataTable } from 'primeng/primeng';
+import { Subject } from 'rxjs/Subject';
+import { Job, RawDataset } from 'shared/sdk/models';
+import { JobApi, UserApi } from 'shared/sdk/services';
+import { ConfigService } from 'shared/services/config.service';
+import * as dua from 'state-management/actions/dashboard-ui.actions';
+import * as dsa from 'state-management/actions/datasets.actions';
+import * as ua from 'state-management/actions/user.actions';
+import * as ja from 'state-management/actions/jobs.actions';
+import * as utils from 'shared/utils';
+
+import { config  } from '../../../config/config';
 
 @Component({
-  selector: "dataset-table",
-  templateUrl: "./dataset-table.component.html",
-  styleUrls: ["./dataset-table.component.css"]
+  selector: 'dataset-table',
+  templateUrl: './dataset-table.component.html',
+  styleUrls: ['./dataset-table.component.css']
 })
 export class DatasetTableComponent implements OnInit, OnDestroy {
   @Input() datasets;
   @Output() openDataset = new EventEmitter();
-  @ViewChild("ds") dsTable: DataTable;
+  @ViewChild('ds') dsTable: DataTable;
   selectedSets: Array<RawDataset> = [];
   datasetCount$;
 
-  modeButtons = ["Archive", "View", "Retrieve"];
+  modeButtons = ['Archive', 'View', 'Retrieve'];
 
   cols = [];
   loading$: any = false;
   limit$: any = 10;
 
-  mode = "View";
+  mode = 'View';
 
-  aremaOptions = "archiveretrieve";
+  aremaOptions = 'archiveretrieve';
 
   retrieveDisplay = false;
   dest = new Subject<string>();
@@ -54,6 +57,9 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
 
   paranms = {};
 
+  archiveable;
+  retrievable;
+
   constructor(
     public http: Http,
     private us: UserApi,
@@ -63,15 +69,17 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     private confirmationService: ConfirmationService,
     private store: Store<any>
   ) {
+    this.archiveable = config.archiveable;
+    this.retrievable = config.retrieveable;
   }
 
   ngOnInit() {
 
-    this.configSrv.getConfigFile("RawDataset").subscribe(conf => {
+    this.configSrv.getConfigFile('RawDataset').subscribe(conf => {
       if (conf) {
         for (const prop in conf) {
-          if (prop in conf && "table" in conf[prop]) {
-            this.cols.push(conf[prop]["table"]);
+          if (prop in conf && 'table' in conf[prop]) {
+            this.cols.push(conf[prop]['table']);
           }
         }
       }
@@ -86,12 +94,13 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
       this.selectedSets = [];
       this.rowStyleMap = {};
       if (this.datasets) {
+        console.log(this.datasets[0]);
         for (let d = 0; d < this.datasets.length; d++) {
           const set = this.datasets[d];
           let c = '';
-          if (this.mode === 'archive' && set.datasetlifecycle && set.datasetlifecycle.isOnDisk) {
+          if (this.mode === 'archive' && set.datasetlifecycle && this.archiveable.indexOf(set.datasetlifecycle.archiveStatusMessage) === -1) {
             c = 'disabled-row';
-          } else if (this.mode === 'retrieve' && set.datasetlifecycle && set.datasetlifecycle.isOnTape) {
+          } else if (this.mode === 'retrieve' && set.datasetlifecycle && this.retrievable.indexOf(set.datasetlifecycle.retrieveStatusMessage) === -1) {
             c = 'disabled-row';
           } else {
             c = '';
@@ -100,14 +109,14 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
         }
       }
       const currentParams = this.route.snapshot.queryParams;
-      this.router.navigate(["/datasets"], {
+      this.router.navigate(['/datasets'], {
          queryParams: {...currentParams, 'mode': this.mode},
       });
     });
 
     this.route.queryParams.subscribe(params => {
       const f = utils.filter({'mode': '', 'skip': ''}, params);
-      this.mode = f["mode"] || "view";
+      this.mode = f['mode'] || 'view';
       // this.setCurrentPage(f['skip']);
     });
 
@@ -210,10 +219,10 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     // Odd hack to stop click event in column loading dataset view, not needed
     // before 5th July 2017
     if (
-      event["originalEvent"]["target"]["innerHTML"].indexOf("chkbox") === -1
+      event['originalEvent']['target']['innerHTML'].indexOf('chkbox') === -1
     ) {
       this.router.navigateByUrl(
-        "/dataset/" + encodeURIComponent(event.data.pid)
+        '/dataset/' + encodeURIComponent(event.data.pid)
       );
       // this.store.dispatch(
       //     {type : dsa.SELECT_CURRENT, payload : event.data});
@@ -266,13 +275,13 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
       .subscribe(f => {
         const filters = Object.assign({}, f);
         if (filters) {
-          filters["skip"] = event.first;
-          filters["initial"] = false;
+          filters['skip'] = event.first;
+          filters['initial'] = false;
           if (event.sortField) {
             const sortOrder = event.sortOrder === 1 ? 'ASC' : 'DESC';
-            filters["sortField"] = event.sortField + ' ' + sortOrder;
+            filters['sortField'] = event.sortField + ' ' + sortOrder;
           } else {
-            filters["sortField"] = undefined;
+            filters['sortField'] = undefined;
           }
           // TODO reduce calls when not needed (i.e. no change)
           if (f.first !== event.first || this.datasets.length === 0) {
@@ -297,13 +306,13 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
    * @returns {string}
    */
   setOptions(set) {
-    let options = "";
-    const dl = set["datasetlifecycle"];
-    if (dl && dl["isOnDisk"]) {
-      options += "archive";
+    let options = '';
+    const dl = set['datasetlifecycle'];
+    if (dl && dl['isOnDisk']) {
+      options += 'archive';
     }
-    if (dl && (dl["isOnTape"] || dl["isOnDisk"])) {
-      options += "retrieve";
+    if (dl && (dl['isOnTape'] || dl['isOnDisk'])) {
+      options += 'retrieve';
     }
     return options;
   }
@@ -315,13 +324,13 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
    * @memberof DashboardComponent
    */
   archiveClickHandle(event) {
-    let message = "";
+    let message = '';
     this.selectedSets.forEach(element => {
-      const size = element.size ? element.size : "Size unknown";
-      message += element.sourceFolder + ": " + size + "\n";
+      const size = element.size ? element.size : 'Size unknown';
+      message += element.sourceFolder + ': ' + size + '\n';
     });
     this.confirmationService.confirm({
-      header: "Archive " + this.selectedSets.length + " Datasets?",
+      header: 'Archive ' + this.selectedSets.length + ' Datasets?',
       message: message,
       accept: () => {
         this.archiveOrRetrieve(true);
@@ -339,7 +348,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   }
 
   retrieveSets(f) {
-    const destPath = f.form.value["path"];
+    const destPath = f.form.value['path'];
     if (destPath.length > 0) {
       this.retrieveDisplay = false;
       this.archiveOrRetrieve(false, destPath);
@@ -364,12 +373,12 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
         .select(state => state.root.user.currentUser)
         .take(1)
         .subscribe(user => {
-          job.emailJobInitiator = user["email"] || user["accessEmail"];
+          job.emailJobInitiator = user['email'] || user['accessEmail'];
           this.selectedSets.map(set => {
             // if ('datablocks' in set && set['datablocks'].length > 0) {
             const fileObj = {};
-            fileObj["pid"] = set["pid"];
-            fileObj["files"] = [];
+            fileObj['pid'] = set['pid'];
+            fileObj['files'] = [];
             backupFiles.push(fileObj);
             //   set['datablocks'].map(file => {
             //     const id = encodeURIComponent(set.pid);
@@ -377,7 +386,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
             // }
             // Removing keys added by PrimeNG, no real need yet but could impact
             // if written to DB
-            delete set["$$index"];
+            delete set['$$index'];
           });
           if (backupFiles.length === 0) {
             msg = {
@@ -399,17 +408,17 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
             this.selectedSets = [];
           } else {
             job.datasetList = backupFiles;
-            job.type = archive ? "archive" : "retrieve";
+            job.type = archive ? 'archive' : 'retrieve';
             this.store
               .select(state => state.root.user.settings.tapeCopies)
               .take(1)
               .subscribe(copies => {
                 job.jobParams = { tapeCopies: copies };
               });
-            job.jobParams["username"] = user["username"];
+            job.jobParams['username'] = user['username'];
             if (!archive) {
               // TODO number of copies from settings table
-              job.jobParams["destinationPath"] = destPath;
+              job.jobParams['destinationPath'] = destPath;
             } else {
               for (let i = 0; i < this.selectedSets.length; i++) {
                 const ds = <RawDataset>this.selectedSets[i];
@@ -461,17 +470,17 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
  * @memberof ConfigFormComponent
  */
   getFormat(key, value, ds) {
-    if (key === "creationTime") {
+    if (key === 'creationTime') {
       const date = new Date(value);
-      const datePipe = new DatePipe("en-US");
-      const formattedDate = datePipe.transform(date, "dd/MM/yyyy HH:mm");
+      const datePipe = new DatePipe('en-US');
+      const formattedDate = datePipe.transform(date, 'dd/MM/yyyy HH:mm');
       return formattedDate;
     } else if (
-      (key === "archiveStatus" || key === "retrieveStatus") &&
-      ds["datasetlifecycle"]
+      (key === 'archiveStatus' || key === 'retrieveStatus') &&
+      ds['datasetlifecycle']
     ) {
-      return ds["datasetlifecycle"][key + "Message"];
-    } else if (key === "size") {
+      return ds['datasetlifecycle'][key + 'Message'];
+    } else if (key === 'size') {
       return (ds[key] / 1024 / 1024 / 1024).toFixed(2);
     } else if (key in ds) {
       return value;
