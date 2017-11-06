@@ -89,9 +89,9 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
         for (let d = 0; d < this.datasets.length; d++) {
           const set = this.datasets[d];
           let c = '';
-          if (this.mode === 'archive' && set.datasetlifecycle.isOnDisk) {
+          if (this.mode === 'archive' && set.datasetlifecycle && set.datasetlifecycle.isOnDisk) {
             c = 'disabled-row';
-          } else if (this.mode === 'retrieve' && set.datasetlifecycle.isOnTape) {
+          } else if (this.mode === 'retrieve' && set.datasetlifecycle && set.datasetlifecycle.isOnTape) {
             c = 'disabled-row';
           } else {
             c = '';
