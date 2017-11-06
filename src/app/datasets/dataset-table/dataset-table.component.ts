@@ -93,7 +93,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
       this.mode = mode;
       this.selectedSets = [];
       this.rowStyleMap = {};
-      if (this.datasets) {
+      if (this.datasets && this.datasets.length > 0) {
         console.log(this.datasets[0]);
         for (let d = 0; d < this.datasets.length; d++) {
           const set = this.datasets[d];
@@ -107,6 +107,8 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
           }
           this.rowStyleMap[set.pid] = c;
         }
+      } else {
+        this.store.dispatch({ type: dua.SAVE_MODE, payload: this.mode });
       }
       const currentParams = this.route.snapshot.queryParams;
       this.router.navigate(['/datasets'], {
@@ -130,7 +132,10 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
       this.store.select(state => state.root.datasets.datasets).subscribe(
         data => {
           this.datasets = data;
-          this.onModeChange(undefined, this.mode);
+          if (this.datasets && this.datasets.length > 0) {
+            this.store.dispatch({ type: dua.SAVE_MODE, payload: this.mode });
+          }
+          // this.onModeChange(undefined, this.mode);
         },
         error => {
           console.error(error);
