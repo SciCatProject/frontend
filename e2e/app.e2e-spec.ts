@@ -9,6 +9,6 @@ describe('catanie App', function() {
   });
 
   it('should contain app name', () => {
-    expect(page.getParagraphText('app-root')).toContain('CATANIE');
+    expect(page.getParagraphText('app-root')).toContain('SciCat');
   });
 });
