@@ -2,33 +2,33 @@
 
 declare var Object: any;
 export interface JobInterface {
-  "emailJobInitiator": any;
-  "type": any;
-  "creationTime"?: any;
-  "executionTime"?: any;
+  "emailJobInitiator": string;
+  "type": string;
+  "creationTime"?: Date;
+  "executionTime"?: Date;
   "jobParams"?: any;
-  "jobStatusMessage"?: any;
-  "archiveReturnMessage"?: any;
-  "dateOfLastMessage"?: any;
+  "jobStatusMessage"?: string;
+  "archiveReturnMessage"?: string;
+  "dateOfLastMessage"?: Date;
   "datasetList": any;
   "id"?: any;
-  "createdAt"?: any;
-  "updatedAt"?: any;
+  "createdAt"?: Date;
+  "updatedAt"?: Date;
 }
 
 export class Job implements JobInterface {
-  "emailJobInitiator": any;
-  "type": any;
-  "creationTime": any;
-  "executionTime": any;
+  "emailJobInitiator": string;
+  "type": string;
+  "creationTime": Date;
+  "executionTime": Date;
   "jobParams": any;
-  "jobStatusMessage": any;
-  "archiveReturnMessage": any;
-  "dateOfLastMessage": any;
+  "jobStatusMessage": string;
+  "archiveReturnMessage": string;
+  "dateOfLastMessage": Date;
   "datasetList": any;
   "id": any;
-  "createdAt": any;
-  "updatedAt": any;
+  "createdAt": Date;
+  "updatedAt": Date;
   constructor(data?: JobInterface) {
     Object.assign(this, data);
   }
@@ -59,23 +59,25 @@ export class Job implements JobInterface {
     return {
       name: 'Job',
       plural: 'Jobs',
+      path: 'Jobs',
+      idName: 'id',
       properties: {
         "emailJobInitiator": {
           name: 'emailJobInitiator',
-          type: 'any'
+          type: 'string'
         },
         "type": {
           name: 'type',
-          type: 'any',
+          type: 'string',
           default: 'retrieve'
         },
         "creationTime": {
           name: 'creationTime',
-          type: 'any'
+          type: 'Date'
         },
         "executionTime": {
           name: 'executionTime',
-          type: 'any'
+          type: 'Date'
         },
         "jobParams": {
           name: 'jobParams',
@@ -83,15 +85,15 @@ export class Job implements JobInterface {
         },
         "jobStatusMessage": {
           name: 'jobStatusMessage',
-          type: 'any'
+          type: 'string'
         },
         "archiveReturnMessage": {
           name: 'archiveReturnMessage',
-          type: 'any'
+          type: 'string'
         },
         "dateOfLastMessage": {
           name: 'dateOfLastMessage',
-          type: 'any'
+          type: 'Date'
         },
         "datasetList": {
           name: 'datasetList',
@@ -103,11 +105,11 @@ export class Job implements JobInterface {
         },
         "createdAt": {
           name: 'createdAt',
-          type: 'any'
+          type: 'Date'
         },
         "updatedAt": {
           name: 'updatedAt',
-          type: 'any'
+          type: 'Date'
         },
       },
       relations: {

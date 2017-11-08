@@ -6,26 +6,24 @@ import {
 
 declare var Object: any;
 export interface UserInterface {
-  "realm"?: any;
-  "username"?: any;
-  "password": any;
-  "email": any;
-  "emailVerified"?: any;
-  "verificationToken"?: any;
+  "realm"?: string;
+  "username"?: string;
+  "email": string;
+  "emailVerified"?: boolean;
   "id"?: any;
+  "password"?: string;
   accessTokens?: any[];
   identities?: UserIdentity[];
   credentials?: UserCredential[];
 }
 
 export class User implements UserInterface {
-  "realm": any;
-  "username": any;
-  "password": any;
-  "email": any;
-  "emailVerified": any;
-  "verificationToken": any;
+  "realm": string;
+  "username": string;
+  "email": string;
+  "emailVerified": boolean;
   "id": any;
+  "password": string;
   accessTokens: any[];
   identities: UserIdentity[];
   credentials: UserCredential[];
@@ -59,51 +57,58 @@ export class User implements UserInterface {
     return {
       name: 'User',
       plural: 'Users',
+      path: 'Users',
+      idName: 'id',
       properties: {
         "realm": {
           name: 'realm',
-          type: 'any'
+          type: 'string'
         },
         "username": {
           name: 'username',
-          type: 'any'
-        },
-        "password": {
-          name: 'password',
-          type: 'any'
+          type: 'string'
         },
         "email": {
           name: 'email',
-          type: 'any'
+          type: 'string'
         },
         "emailVerified": {
           name: 'emailVerified',
-          type: 'any'
-        },
-        "verificationToken": {
-          name: 'verificationToken',
-          type: 'any'
+          type: 'boolean'
         },
         "id": {
           name: 'id',
           type: 'any'
+        },
+        "password": {
+          name: 'password',
+          type: 'string'
         },
       },
       relations: {
         accessTokens: {
           name: 'accessTokens',
           type: 'any[]',
-          model: ''
+          model: '',
+          relationType: 'hasMany',
+                  keyFrom: 'id',
+          keyTo: 'userId'
         },
         identities: {
           name: 'identities',
           type: 'UserIdentity[]',
-          model: 'UserIdentity'
+          model: 'UserIdentity',
+          relationType: 'hasMany',
+                  keyFrom: 'id',
+          keyTo: 'userId'
         },
         credentials: {
           name: 'credentials',
           type: 'UserCredential[]',
-          model: 'UserCredential'
+          model: 'UserCredential',
+          relationType: 'hasMany',
+                  keyFrom: 'id',
+          keyTo: 'userId'
         },
       }
     }

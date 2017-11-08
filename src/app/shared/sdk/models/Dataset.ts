@@ -7,58 +7,58 @@ import {
 
 declare var Object: any;
 export interface DatasetInterface {
-  "pid"?: any;
-  "owner": any;
-  "ownerEmail"?: any;
-  "orcidOfOwner"?: any;
-  "contactEmail": any;
-  "sourceFolder": any;
-  "size"?: any;
-  "packedSize"?: any;
-  "creationTime": any;
-  "type": any;
-  "validationStatus"?: any;
-  "keywords"?: any;
-  "description"?: any;
-  "userTargetLocation"?: any;
-  "classification"?: any;
-  "license"?: any;
-  "version"?: any;
-  "doi"?: any;
-  "isPublished"?: any;
-  "ownerGroup": any;
-  "accessGroups"?: any;
-  "createdAt"?: any;
-  "updatedAt"?: any;
+  "pid"?: string;
+  "owner": string;
+  "ownerEmail"?: string;
+  "orcidOfOwner"?: string;
+  "contactEmail": string;
+  "sourceFolder": string;
+  "size"?: number;
+  "packedSize"?: number;
+  "creationTime": Date;
+  "type": string;
+  "validationStatus"?: string;
+  "keywords"?: Array<any>;
+  "description"?: string;
+  "userTargetLocation"?: string;
+  "classification"?: string;
+  "license"?: string;
+  "version"?: string;
+  "doi"?: string;
+  "isPublished"?: boolean;
+  "ownerGroup": string;
+  "accessGroups"?: Array<any>;
+  "createdAt"?: Date;
+  "updatedAt"?: Date;
   datasetlifecycle?: DatasetLifecycle;
   datablocks?: Datablock[];
   origdatablocks?: OrigDatablock[];
 }
 
 export class Dataset implements DatasetInterface {
-  "pid": any;
-  "owner": any;
-  "ownerEmail": any;
-  "orcidOfOwner": any;
-  "contactEmail": any;
-  "sourceFolder": any;
-  "size": any;
-  "packedSize": any;
-  "creationTime": any;
-  "type": any;
-  "validationStatus": any;
-  "keywords": any;
-  "description": any;
-  "userTargetLocation": any;
-  "classification": any;
-  "license": any;
-  "version": any;
-  "doi": any;
-  "isPublished": any;
-  "ownerGroup": any;
-  "accessGroups": any;
-  "createdAt": any;
-  "updatedAt": any;
+  "pid": string;
+  "owner": string;
+  "ownerEmail": string;
+  "orcidOfOwner": string;
+  "contactEmail": string;
+  "sourceFolder": string;
+  "size": number;
+  "packedSize": number;
+  "creationTime": Date;
+  "type": string;
+  "validationStatus": string;
+  "keywords": Array<any>;
+  "description": string;
+  "userTargetLocation": string;
+  "classification": string;
+  "license": string;
+  "version": string;
+  "doi": string;
+  "isPublished": boolean;
+  "ownerGroup": string;
+  "accessGroups": Array<any>;
+  "createdAt": Date;
+  "updatedAt": Date;
   datasetlifecycle: DatasetLifecycle;
   datablocks: Datablock[];
   origdatablocks: OrigDatablock[];
@@ -92,115 +92,126 @@ export class Dataset implements DatasetInterface {
     return {
       name: 'Dataset',
       plural: 'Datasets',
+      path: 'Datasets',
+      idName: 'pid',
       properties: {
         "pid": {
           name: 'pid',
-          type: 'any'
+          type: 'string'
         },
         "owner": {
           name: 'owner',
-          type: 'any'
+          type: 'string'
         },
         "ownerEmail": {
           name: 'ownerEmail',
-          type: 'any'
+          type: 'string'
         },
         "orcidOfOwner": {
           name: 'orcidOfOwner',
-          type: 'any'
+          type: 'string'
         },
         "contactEmail": {
           name: 'contactEmail',
-          type: 'any'
+          type: 'string'
         },
         "sourceFolder": {
           name: 'sourceFolder',
-          type: 'any'
+          type: 'string'
         },
         "size": {
           name: 'size',
-          type: 'any'
+          type: 'number'
         },
         "packedSize": {
           name: 'packedSize',
-          type: 'any'
+          type: 'number'
         },
         "creationTime": {
           name: 'creationTime',
-          type: 'any'
+          type: 'Date'
         },
         "type": {
           name: 'type',
-          type: 'any'
+          type: 'string'
         },
         "validationStatus": {
           name: 'validationStatus',
-          type: 'any'
+          type: 'string'
         },
         "keywords": {
           name: 'keywords',
-          type: 'any'
+          type: 'Array&lt;any&gt;'
         },
         "description": {
           name: 'description',
-          type: 'any'
+          type: 'string'
         },
         "userTargetLocation": {
           name: 'userTargetLocation',
-          type: 'any'
+          type: 'string'
         },
         "classification": {
           name: 'classification',
-          type: 'any'
+          type: 'string'
         },
         "license": {
           name: 'license',
-          type: 'any'
+          type: 'string'
         },
         "version": {
           name: 'version',
-          type: 'any'
+          type: 'string'
         },
         "doi": {
           name: 'doi',
-          type: 'any'
+          type: 'string'
         },
         "isPublished": {
           name: 'isPublished',
-          type: 'any'
+          type: 'boolean'
         },
         "ownerGroup": {
           name: 'ownerGroup',
-          type: 'any'
+          type: 'string'
         },
         "accessGroups": {
           name: 'accessGroups',
-          type: 'any'
+          type: 'Array&lt;any&gt;'
         },
         "createdAt": {
           name: 'createdAt',
-          type: 'any'
+          type: 'Date'
         },
         "updatedAt": {
           name: 'updatedAt',
-          type: 'any'
+          type: 'Date'
         },
       },
       relations: {
         datasetlifecycle: {
           name: 'datasetlifecycle',
           type: 'DatasetLifecycle',
-          model: 'DatasetLifecycle'
+          model: 'DatasetLifecycle',
+          relationType: 'hasOne',
+                  keyFrom: 'pid',
+          keyTo: 'datasetId'
         },
         datablocks: {
           name: 'datablocks',
           type: 'Datablock[]',
-          model: 'Datablock'
+          model: 'Datablock',
+          relationType: 'hasMany',
+                  keyFrom: 'pid',
+          keyTo: 'datasetId'
         },
         origdatablocks: {
           name: 'origdatablocks',
           type: 'OrigDatablock[]',
-          model: 'OrigDatablock'
+          model: 'OrigDatablock',
+          relationType: 'hasMany',
+                  keyFrom: 'pid',
+          keyTo: 'datasetId'
         },
       }
     }

@@ -47,14 +47,14 @@ export class RabbitMQApi extends BaseLoopBackApi {
    * This usually means the response is a `RabbitMQ` object.)
    * </em>
    */
-  public status(): Observable<any> {
+  public status(customHeaders?: Function): Observable<any> {
     let _method: string = "GET";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
     "/RabbitMQ/status";
     let _routeParams: any = {};
     let _postBody: any = {};
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody);
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
     return result;
   }
 
@@ -70,14 +70,14 @@ export class RabbitMQApi extends BaseLoopBackApi {
    * This usually means the response is a `RabbitMQ` object.)
    * </em>
    */
-  public queues(): Observable<any> {
+  public queues(customHeaders?: Function): Observable<any> {
     let _method: string = "GET";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
     "/RabbitMQ/queues";
     let _routeParams: any = {};
     let _postBody: any = {};
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody);
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
     return result;
   }
 

@@ -2,19 +2,19 @@
 
 declare var Object: any;
 export interface AccessUserInterface {
-  "sAMAccountName": any;
-  "displayName"?: any;
-  "description"?: any;
-  "email"?: any;
-  "memberOf"?: any;
+  "sAMAccountName": string;
+  "displayName"?: string;
+  "description"?: string;
+  "email"?: string;
+  "memberOf"?: Array<any>;
 }
 
 export class AccessUser implements AccessUserInterface {
-  "sAMAccountName": any;
-  "displayName": any;
-  "description": any;
-  "email": any;
-  "memberOf": any;
+  "sAMAccountName": string;
+  "displayName": string;
+  "description": string;
+  "email": string;
+  "memberOf": Array<any>;
   constructor(data?: AccessUserInterface) {
     Object.assign(this, data);
   }
@@ -45,26 +45,28 @@ export class AccessUser implements AccessUserInterface {
     return {
       name: 'AccessUser',
       plural: 'AccessUsers',
+      path: 'AccessUsers',
+      idName: 'sAMAccountName',
       properties: {
         "sAMAccountName": {
           name: 'sAMAccountName',
-          type: 'any'
+          type: 'string'
         },
         "displayName": {
           name: 'displayName',
-          type: 'any'
+          type: 'string'
         },
         "description": {
           name: 'description',
-          type: 'any'
+          type: 'string'
         },
         "email": {
           name: 'email',
-          type: 'any'
+          type: 'string'
         },
         "memberOf": {
           name: 'memberOf',
-          type: 'any'
+          type: 'Array&lt;any&gt;'
         },
       },
       relations: {

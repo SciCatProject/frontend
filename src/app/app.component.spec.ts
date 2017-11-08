@@ -8,7 +8,7 @@ import { rootReducer } from 'state-management/reducers/root.reducer';
 import { AppComponent } from './app.component';
 import { BreadcrumbComponent } from './shared/components/breadcrumb/breadcrumb.component';
 import {MockNotificationService, MockStore} from './shared/MockStubs';
-import {NotificationsService} from 'angular2-notifications/dist';
+import {NotificationsService} from 'angular2-notifications';
 
 /* tslint:disable:no-unused-variable */
 

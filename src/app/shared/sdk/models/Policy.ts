@@ -2,25 +2,25 @@
 
 declare var Object: any;
 export interface PolicyInterface {
-  "availability"?: any;
-  "tapeRetentionTime"?: any;
-  "autoArchiveDelay"?: any;
-  "ownerGroup": any;
-  "accessGroups"?: any;
+  "availability"?: string;
+  "tapeRetentionTime"?: number;
+  "autoArchiveDelay"?: number;
+  "ownerGroup": string;
+  "accessGroups"?: Array<any>;
   "id"?: any;
-  "createdAt"?: any;
-  "updatedAt"?: any;
+  "createdAt"?: Date;
+  "updatedAt"?: Date;
 }
 
 export class Policy implements PolicyInterface {
-  "availability": any;
-  "tapeRetentionTime": any;
-  "autoArchiveDelay": any;
-  "ownerGroup": any;
-  "accessGroups": any;
+  "availability": string;
+  "tapeRetentionTime": number;
+  "autoArchiveDelay": number;
+  "ownerGroup": string;
+  "accessGroups": Array<any>;
   "id": any;
-  "createdAt": any;
-  "updatedAt": any;
+  "createdAt": Date;
+  "updatedAt": Date;
   constructor(data?: PolicyInterface) {
     Object.assign(this, data);
   }
@@ -51,29 +51,31 @@ export class Policy implements PolicyInterface {
     return {
       name: 'Policy',
       plural: 'Policies',
+      path: 'Policies',
+      idName: 'id',
       properties: {
         "availability": {
           name: 'availability',
-          type: 'any',
+          type: 'string',
           default: 'low'
         },
         "tapeRetentionTime": {
           name: 'tapeRetentionTime',
-          type: 'any',
+          type: 'number',
           default: 10
         },
         "autoArchiveDelay": {
           name: 'autoArchiveDelay',
-          type: 'any',
+          type: 'number',
           default: 7
         },
         "ownerGroup": {
           name: 'ownerGroup',
-          type: 'any'
+          type: 'string'
         },
         "accessGroups": {
           name: 'accessGroups',
-          type: 'any'
+          type: 'Array&lt;any&gt;'
         },
         "id": {
           name: 'id',
@@ -81,11 +83,11 @@ export class Policy implements PolicyInterface {
         },
         "createdAt": {
           name: 'createdAt',
-          type: 'any'
+          type: 'Date'
         },
         "updatedAt": {
           name: 'updatedAt',
-          type: 'any'
+          type: 'Date'
         },
       },
       relations: {

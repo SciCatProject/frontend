@@ -5,46 +5,46 @@ import {
 
 declare var Object: any;
 export interface DatasetLifecycleInterface {
-  "id": any;
-  "isOnDisk"?: any;
-  "isOnTape"?: any;
-  "archiveStatusMessage"?: any;
-  "retrieveStatusMessage"?: any;
-  "lastUpdateMessage"?: any;
-  "archiveReturnMessage"?: any;
-  "dateOfLastMessage"?: any;
-  "dateOfDiskPurging"?: any;
-  "archiveRetentionTime"?: any;
-  "isExported"?: any;
-  "exportedTo"?: any;
-  "dateOfPublishing"?: any;
-  "datasetId"?: any;
-  "rawDatasetId"?: any;
-  "derivedDatasetId"?: any;
-  "createdAt"?: any;
-  "updatedAt"?: any;
+  "id": string;
+  "isOnDisk"?: boolean;
+  "isOnTape"?: boolean;
+  "archiveStatusMessage"?: string;
+  "retrieveStatusMessage"?: string;
+  "lastUpdateMessage"?: string;
+  "archiveReturnMessage"?: string;
+  "dateOfLastMessage"?: Date;
+  "dateOfDiskPurging"?: Date;
+  "archiveRetentionTime"?: Date;
+  "isExported"?: boolean;
+  "exportedTo"?: string;
+  "dateOfPublishing"?: Date;
+  "datasetId"?: string;
+  "rawDatasetId"?: string;
+  "derivedDatasetId"?: string;
+  "createdAt"?: Date;
+  "updatedAt"?: Date;
   dataset?: Dataset;
 }
 
 export class DatasetLifecycle implements DatasetLifecycleInterface {
-  "id": any;
-  "isOnDisk": any;
-  "isOnTape": any;
-  "archiveStatusMessage": any;
-  "retrieveStatusMessage": any;
-  "lastUpdateMessage": any;
-  "archiveReturnMessage": any;
-  "dateOfLastMessage": any;
-  "dateOfDiskPurging": any;
-  "archiveRetentionTime": any;
-  "isExported": any;
-  "exportedTo": any;
-  "dateOfPublishing": any;
-  "datasetId": any;
-  "rawDatasetId": any;
-  "derivedDatasetId": any;
-  "createdAt": any;
-  "updatedAt": any;
+  "id": string;
+  "isOnDisk": boolean;
+  "isOnTape": boolean;
+  "archiveStatusMessage": string;
+  "retrieveStatusMessage": string;
+  "lastUpdateMessage": string;
+  "archiveReturnMessage": string;
+  "dateOfLastMessage": Date;
+  "dateOfDiskPurging": Date;
+  "archiveRetentionTime": Date;
+  "isExported": boolean;
+  "exportedTo": string;
+  "dateOfPublishing": Date;
+  "datasetId": string;
+  "rawDatasetId": string;
+  "derivedDatasetId": string;
+  "createdAt": Date;
+  "updatedAt": Date;
   dataset: Dataset;
   constructor(data?: DatasetLifecycleInterface) {
     Object.assign(this, data);
@@ -76,85 +76,90 @@ export class DatasetLifecycle implements DatasetLifecycleInterface {
     return {
       name: 'DatasetLifecycle',
       plural: 'DatasetLifecycles',
+      path: 'DatasetLifecycles',
+      idName: 'id',
       properties: {
         "id": {
           name: 'id',
-          type: 'any'
+          type: 'string'
         },
         "isOnDisk": {
           name: 'isOnDisk',
-          type: 'any'
+          type: 'boolean'
         },
         "isOnTape": {
           name: 'isOnTape',
-          type: 'any'
+          type: 'boolean'
         },
         "archiveStatusMessage": {
           name: 'archiveStatusMessage',
-          type: 'any'
+          type: 'string'
         },
         "retrieveStatusMessage": {
           name: 'retrieveStatusMessage',
-          type: 'any'
+          type: 'string'
         },
         "lastUpdateMessage": {
           name: 'lastUpdateMessage',
-          type: 'any'
+          type: 'string'
         },
         "archiveReturnMessage": {
           name: 'archiveReturnMessage',
-          type: 'any'
+          type: 'string'
         },
         "dateOfLastMessage": {
           name: 'dateOfLastMessage',
-          type: 'any'
+          type: 'Date'
         },
         "dateOfDiskPurging": {
           name: 'dateOfDiskPurging',
-          type: 'any'
+          type: 'Date'
         },
         "archiveRetentionTime": {
           name: 'archiveRetentionTime',
-          type: 'any'
+          type: 'Date'
         },
         "isExported": {
           name: 'isExported',
-          type: 'any'
+          type: 'boolean'
         },
         "exportedTo": {
           name: 'exportedTo',
-          type: 'any'
+          type: 'string'
         },
         "dateOfPublishing": {
           name: 'dateOfPublishing',
-          type: 'any'
+          type: 'Date'
         },
         "datasetId": {
           name: 'datasetId',
-          type: 'any'
+          type: 'string'
         },
         "rawDatasetId": {
           name: 'rawDatasetId',
-          type: 'any'
+          type: 'string'
         },
         "derivedDatasetId": {
           name: 'derivedDatasetId',
-          type: 'any'
+          type: 'string'
         },
         "createdAt": {
           name: 'createdAt',
-          type: 'any'
+          type: 'Date'
         },
         "updatedAt": {
           name: 'updatedAt',
-          type: 'any'
+          type: 'Date'
         },
       },
       relations: {
         dataset: {
           name: 'dataset',
           type: 'Dataset',
-          model: 'Dataset'
+          model: 'Dataset',
+          relationType: 'belongsTo',
+                  keyFrom: 'datasetId',
+          keyTo: 'pid'
         },
       }
     }
