@@ -50,7 +50,7 @@ export class DatasetApi extends BaseLoopBackApi {
    * This usually means the response is a `Dataset` object.)
    * </em>
    */
-  public getDatasetlifecycle(id: any, refresh: any = {}): Observable<any> {
+  public getDatasetlifecycle(id: any, refresh: any = {}, customHeaders?: Function): Observable<any> {
     let _method: string = "GET";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
     "/Datasets/:id/datasetlifecycle";
@@ -59,8 +59,8 @@ export class DatasetApi extends BaseLoopBackApi {
     };
     let _postBody: any = {};
     let _urlParams: any = {};
-    if (refresh) _urlParams.refresh = refresh;
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody);
+    if (typeof refresh !== 'undefined' && refresh !== null) _urlParams.refresh = refresh;
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
     return result;
   }
 
@@ -82,7 +82,7 @@ export class DatasetApi extends BaseLoopBackApi {
    * This usually means the response is a `Dataset` object.)
    * </em>
    */
-  public createDatasetlifecycle(id: any, data: any = {}): Observable<any> {
+  public createDatasetlifecycle(id: any, data: any = {}, customHeaders?: Function): Observable<any> {
     let _method: string = "POST";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
     "/Datasets/:id/datasetlifecycle";
@@ -93,7 +93,7 @@ export class DatasetApi extends BaseLoopBackApi {
       data: data
     };
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody);
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
     return result;
   }
 
@@ -115,7 +115,7 @@ export class DatasetApi extends BaseLoopBackApi {
    * This usually means the response is a `Dataset` object.)
    * </em>
    */
-  public updateDatasetlifecycle(id: any, data: any = {}): Observable<any> {
+  public updateDatasetlifecycle(id: any, data: any = {}, customHeaders?: Function): Observable<any> {
     let _method: string = "PUT";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
     "/Datasets/:id/datasetlifecycle";
@@ -126,7 +126,7 @@ export class DatasetApi extends BaseLoopBackApi {
       data: data
     };
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody);
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
     return result;
   }
 
@@ -141,7 +141,7 @@ export class DatasetApi extends BaseLoopBackApi {
    *
    * This method returns no data.
    */
-  public destroyDatasetlifecycle(id: any): Observable<any> {
+  public destroyDatasetlifecycle(id: any, customHeaders?: Function): Observable<any> {
     let _method: string = "DELETE";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
     "/Datasets/:id/datasetlifecycle";
@@ -150,7 +150,7 @@ export class DatasetApi extends BaseLoopBackApi {
     };
     let _postBody: any = {};
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody);
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
     return result;
   }
 
@@ -170,7 +170,7 @@ export class DatasetApi extends BaseLoopBackApi {
    * This usually means the response is a `Dataset` object.)
    * </em>
    */
-  public findByIdDatablocks(id: any, fk: any): Observable<any> {
+  public findByIdDatablocks(id: any, fk: any, customHeaders?: Function): Observable<any> {
     let _method: string = "GET";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
     "/Datasets/:id/datablocks/:fk";
@@ -180,7 +180,7 @@ export class DatasetApi extends BaseLoopBackApi {
     };
     let _postBody: any = {};
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody);
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
     return result;
   }
 
@@ -197,7 +197,7 @@ export class DatasetApi extends BaseLoopBackApi {
    *
    * This method returns no data.
    */
-  public destroyByIdDatablocks(id: any, fk: any): Observable<any> {
+  public destroyByIdDatablocks(id: any, fk: any, customHeaders?: Function): Observable<any> {
     let _method: string = "DELETE";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
     "/Datasets/:id/datablocks/:fk";
@@ -207,7 +207,7 @@ export class DatasetApi extends BaseLoopBackApi {
     };
     let _postBody: any = {};
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody);
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
     return result;
   }
 
@@ -231,7 +231,7 @@ export class DatasetApi extends BaseLoopBackApi {
    * This usually means the response is a `Dataset` object.)
    * </em>
    */
-  public updateByIdDatablocks(id: any, fk: any, data: any = {}): Observable<any> {
+  public updateByIdDatablocks(id: any, fk: any, data: any = {}, customHeaders?: Function): Observable<any> {
     let _method: string = "PUT";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
     "/Datasets/:id/datablocks/:fk";
@@ -243,7 +243,7 @@ export class DatasetApi extends BaseLoopBackApi {
       data: data
     };
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody);
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
     return result;
   }
 
@@ -263,7 +263,7 @@ export class DatasetApi extends BaseLoopBackApi {
    * This usually means the response is a `Dataset` object.)
    * </em>
    */
-  public findByIdOrigdatablocks(id: any, fk: any): Observable<any> {
+  public findByIdOrigdatablocks(id: any, fk: any, customHeaders?: Function): Observable<any> {
     let _method: string = "GET";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
     "/Datasets/:id/origdatablocks/:fk";
@@ -273,7 +273,7 @@ export class DatasetApi extends BaseLoopBackApi {
     };
     let _postBody: any = {};
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody);
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
     return result;
   }
 
@@ -290,7 +290,7 @@ export class DatasetApi extends BaseLoopBackApi {
    *
    * This method returns no data.
    */
-  public destroyByIdOrigdatablocks(id: any, fk: any): Observable<any> {
+  public destroyByIdOrigdatablocks(id: any, fk: any, customHeaders?: Function): Observable<any> {
     let _method: string = "DELETE";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
     "/Datasets/:id/origdatablocks/:fk";
@@ -300,7 +300,7 @@ export class DatasetApi extends BaseLoopBackApi {
     };
     let _postBody: any = {};
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody);
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
     return result;
   }
 
@@ -324,7 +324,7 @@ export class DatasetApi extends BaseLoopBackApi {
    * This usually means the response is a `Dataset` object.)
    * </em>
    */
-  public updateByIdOrigdatablocks(id: any, fk: any, data: any = {}): Observable<any> {
+  public updateByIdOrigdatablocks(id: any, fk: any, data: any = {}, customHeaders?: Function): Observable<any> {
     let _method: string = "PUT";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
     "/Datasets/:id/origdatablocks/:fk";
@@ -336,7 +336,7 @@ export class DatasetApi extends BaseLoopBackApi {
       data: data
     };
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody);
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
     return result;
   }
 
@@ -356,7 +356,7 @@ export class DatasetApi extends BaseLoopBackApi {
    * This usually means the response is a `Dataset` object.)
    * </em>
    */
-  public getDatablocks(id: any, filter: LoopBackFilter = {}): Observable<any> {
+  public getDatablocks(id: any, filter: LoopBackFilter = {}, customHeaders?: Function): Observable<any> {
     let _method: string = "GET";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
     "/Datasets/:id/datablocks";
@@ -365,8 +365,8 @@ export class DatasetApi extends BaseLoopBackApi {
     };
     let _postBody: any = {};
     let _urlParams: any = {};
-    if (filter) _urlParams.filter = filter;
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody);
+    if (typeof filter !== 'undefined' && filter !== null) _urlParams.filter = filter;
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
     return result;
   }
 
@@ -388,7 +388,7 @@ export class DatasetApi extends BaseLoopBackApi {
    * This usually means the response is a `Dataset` object.)
    * </em>
    */
-  public createDatablocks(id: any, data: any = {}): Observable<any> {
+  public createDatablocks(id: any, data: any = {}, customHeaders?: Function): Observable<any> {
     let _method: string = "POST";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
     "/Datasets/:id/datablocks";
@@ -399,7 +399,7 @@ export class DatasetApi extends BaseLoopBackApi {
       data: data
     };
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody);
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
     return result;
   }
 
@@ -414,7 +414,7 @@ export class DatasetApi extends BaseLoopBackApi {
    *
    * This method returns no data.
    */
-  public deleteDatablocks(id: any): Observable<any> {
+  public deleteDatablocks(id: any, customHeaders?: Function): Observable<any> {
     let _method: string = "DELETE";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
     "/Datasets/:id/datablocks";
@@ -423,7 +423,7 @@ export class DatasetApi extends BaseLoopBackApi {
     };
     let _postBody: any = {};
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody);
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
     return result;
   }
 
@@ -442,7 +442,7 @@ export class DatasetApi extends BaseLoopBackApi {
    *
    *  - `count` – `{number}` - 
    */
-  public countDatablocks(id: any, where: any = {}): Observable<any> {
+  public countDatablocks(id: any, where: any = {}, customHeaders?: Function): Observable<any> {
     let _method: string = "GET";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
     "/Datasets/:id/datablocks/count";
@@ -451,8 +451,8 @@ export class DatasetApi extends BaseLoopBackApi {
     };
     let _postBody: any = {};
     let _urlParams: any = {};
-    if (where) _urlParams.where = where;
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody);
+    if (typeof where !== 'undefined' && where !== null) _urlParams.where = where;
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
     return result;
   }
 
@@ -472,7 +472,7 @@ export class DatasetApi extends BaseLoopBackApi {
    * This usually means the response is a `Dataset` object.)
    * </em>
    */
-  public getOrigdatablocks(id: any, filter: LoopBackFilter = {}): Observable<any> {
+  public getOrigdatablocks(id: any, filter: LoopBackFilter = {}, customHeaders?: Function): Observable<any> {
     let _method: string = "GET";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
     "/Datasets/:id/origdatablocks";
@@ -481,8 +481,8 @@ export class DatasetApi extends BaseLoopBackApi {
     };
     let _postBody: any = {};
     let _urlParams: any = {};
-    if (filter) _urlParams.filter = filter;
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody);
+    if (typeof filter !== 'undefined' && filter !== null) _urlParams.filter = filter;
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
     return result;
   }
 
@@ -504,7 +504,7 @@ export class DatasetApi extends BaseLoopBackApi {
    * This usually means the response is a `Dataset` object.)
    * </em>
    */
-  public createOrigdatablocks(id: any, data: any = {}): Observable<any> {
+  public createOrigdatablocks(id: any, data: any = {}, customHeaders?: Function): Observable<any> {
     let _method: string = "POST";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
     "/Datasets/:id/origdatablocks";
@@ -515,7 +515,7 @@ export class DatasetApi extends BaseLoopBackApi {
       data: data
     };
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody);
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
     return result;
   }
 
@@ -530,7 +530,7 @@ export class DatasetApi extends BaseLoopBackApi {
    *
    * This method returns no data.
    */
-  public deleteOrigdatablocks(id: any): Observable<any> {
+  public deleteOrigdatablocks(id: any, customHeaders?: Function): Observable<any> {
     let _method: string = "DELETE";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
     "/Datasets/:id/origdatablocks";
@@ -539,7 +539,7 @@ export class DatasetApi extends BaseLoopBackApi {
     };
     let _postBody: any = {};
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody);
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
     return result;
   }
 
@@ -558,7 +558,7 @@ export class DatasetApi extends BaseLoopBackApi {
    *
    *  - `count` – `{number}` - 
    */
-  public countOrigdatablocks(id: any, where: any = {}): Observable<any> {
+  public countOrigdatablocks(id: any, where: any = {}, customHeaders?: Function): Observable<any> {
     let _method: string = "GET";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
     "/Datasets/:id/origdatablocks/count";
@@ -567,8 +567,8 @@ export class DatasetApi extends BaseLoopBackApi {
     };
     let _postBody: any = {};
     let _urlParams: any = {};
-    if (where) _urlParams.where = where;
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody);
+    if (typeof where !== 'undefined' && where !== null) _urlParams.where = where;
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
     return result;
   }
 
@@ -588,7 +588,7 @@ export class DatasetApi extends BaseLoopBackApi {
    * This usually means the response is a `Dataset` object.)
    * </em>
    */
-  public patchOrCreate(data: any = {}): Observable<any> {
+  public patchOrCreate(data: any = {}, customHeaders?: Function): Observable<any> {
     let _method: string = "PATCH";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
     "/Datasets";
@@ -597,7 +597,7 @@ export class DatasetApi extends BaseLoopBackApi {
       data: data
     };
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody);
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
     return result;
   }
 
@@ -619,7 +619,7 @@ export class DatasetApi extends BaseLoopBackApi {
    * This usually means the response is a `Dataset` object.)
    * </em>
    */
-  public patchAttributes(id: any, data: any = {}): Observable<any> {
+  public patchAttributes(id: any, data: any = {}, customHeaders?: Function): Observable<any> {
     let _method: string = "PATCH";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
     "/Datasets/:id";
@@ -630,7 +630,7 @@ export class DatasetApi extends BaseLoopBackApi {
       data: data
     };
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody);
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
     return result;
   }
 
@@ -652,7 +652,7 @@ export class DatasetApi extends BaseLoopBackApi {
    * This usually means the response is a `Dataset` object.)
    * </em>
    */
-  public createManyDatasetlifecycle(id: any, data: any[] = []): Observable<any> {
+  public createManyDatasetlifecycle(id: any, data: any[] = [], customHeaders?: Function): Observable<any> {
     let _method: string = "POST";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
     "/Datasets/:id/datasetlifecycle";
@@ -663,7 +663,7 @@ export class DatasetApi extends BaseLoopBackApi {
       data: data
     };
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody);
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
     return result;
   }
 
@@ -685,7 +685,7 @@ export class DatasetApi extends BaseLoopBackApi {
    * This usually means the response is a `Dataset` object.)
    * </em>
    */
-  public createManyDatablocks(id: any, data: any[] = []): Observable<any> {
+  public createManyDatablocks(id: any, data: any[] = [], customHeaders?: Function): Observable<any> {
     let _method: string = "POST";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
     "/Datasets/:id/datablocks";
@@ -696,7 +696,7 @@ export class DatasetApi extends BaseLoopBackApi {
       data: data
     };
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody);
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
     return result;
   }
 
@@ -718,7 +718,7 @@ export class DatasetApi extends BaseLoopBackApi {
    * This usually means the response is a `Dataset` object.)
    * </em>
    */
-  public createManyOrigdatablocks(id: any, data: any[] = []): Observable<any> {
+  public createManyOrigdatablocks(id: any, data: any[] = [], customHeaders?: Function): Observable<any> {
     let _method: string = "POST";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
     "/Datasets/:id/origdatablocks";
@@ -729,7 +729,7 @@ export class DatasetApi extends BaseLoopBackApi {
       data: data
     };
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody);
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
     return result;
   }
 

@@ -2,40 +2,40 @@
 
 declare var Object: any;
 export interface ProposalInterface {
-  "proposalId": any;
-  "pi_email"?: any;
-  "pi_firstname"?: any;
-  "pi_lastname"?: any;
-  "email": any;
-  "firstname"?: any;
-  "lastname"?: any;
-  "title"?: any;
-  "abstract"?: any;
-  "attachments"?: any;
-  "ownerGroup": any;
-  "accessGroups"?: any;
-  "createdAt"?: any;
-  "updatedAt"?: any;
-  "MeasurementPeriodList"?: any;
+  "proposalId": string;
+  "pi_email"?: string;
+  "pi_firstname"?: string;
+  "pi_lastname"?: string;
+  "email": string;
+  "firstname"?: string;
+  "lastname"?: string;
+  "title"?: string;
+  "abstract"?: string;
+  "attachments"?: Array<any>;
+  "ownerGroup": string;
+  "accessGroups"?: Array<any>;
+  "createdAt"?: Date;
+  "updatedAt"?: Date;
+  "MeasurementPeriodList"?: Array<any>;
   measurementPeriods?: any[];
 }
 
 export class Proposal implements ProposalInterface {
-  "proposalId": any;
-  "pi_email": any;
-  "pi_firstname": any;
-  "pi_lastname": any;
-  "email": any;
-  "firstname": any;
-  "lastname": any;
-  "title": any;
-  "abstract": any;
-  "attachments": any;
-  "ownerGroup": any;
-  "accessGroups": any;
-  "createdAt": any;
-  "updatedAt": any;
-  "MeasurementPeriodList": any;
+  "proposalId": string;
+  "pi_email": string;
+  "pi_firstname": string;
+  "pi_lastname": string;
+  "email": string;
+  "firstname": string;
+  "lastname": string;
+  "title": string;
+  "abstract": string;
+  "attachments": Array<any>;
+  "ownerGroup": string;
+  "accessGroups": Array<any>;
+  "createdAt": Date;
+  "updatedAt": Date;
+  "MeasurementPeriodList": Array<any>;
   measurementPeriods: any[];
   constructor(data?: ProposalInterface) {
     Object.assign(this, data);
@@ -67,66 +67,68 @@ export class Proposal implements ProposalInterface {
     return {
       name: 'Proposal',
       plural: 'Proposals',
+      path: 'Proposals',
+      idName: 'proposalId',
       properties: {
         "proposalId": {
           name: 'proposalId',
-          type: 'any'
+          type: 'string'
         },
         "pi_email": {
           name: 'pi_email',
-          type: 'any'
+          type: 'string'
         },
         "pi_firstname": {
           name: 'pi_firstname',
-          type: 'any'
+          type: 'string'
         },
         "pi_lastname": {
           name: 'pi_lastname',
-          type: 'any'
+          type: 'string'
         },
         "email": {
           name: 'email',
-          type: 'any'
+          type: 'string'
         },
         "firstname": {
           name: 'firstname',
-          type: 'any'
+          type: 'string'
         },
         "lastname": {
           name: 'lastname',
-          type: 'any'
+          type: 'string'
         },
         "title": {
           name: 'title',
-          type: 'any'
+          type: 'string'
         },
         "abstract": {
           name: 'abstract',
-          type: 'any'
+          type: 'string'
         },
         "attachments": {
           name: 'attachments',
-          type: 'any'
+          type: 'Array&lt;any&gt;'
         },
         "ownerGroup": {
           name: 'ownerGroup',
-          type: 'any'
+          type: 'string'
         },
         "accessGroups": {
           name: 'accessGroups',
-          type: 'any'
+          type: 'Array&lt;any&gt;'
         },
         "createdAt": {
           name: 'createdAt',
-          type: 'any'
+          type: 'Date'
         },
         "updatedAt": {
           name: 'updatedAt',
-          type: 'any'
+          type: 'Date'
         },
         "MeasurementPeriodList": {
           name: 'MeasurementPeriodList',
-          type: 'any',
+          type: 'Array&lt;any&gt;',
           default: <any>[]
         },
       },
@@ -134,7 +136,10 @@ export class Proposal implements ProposalInterface {
         measurementPeriods: {
           name: 'measurementPeriods',
           type: 'any[]',
-          model: ''
+          model: '',
+          relationType: 'embedsMany',
+                  keyFrom: 'MeasurementPeriodList',
+          keyTo: 'id'
         },
       }
     }

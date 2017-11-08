@@ -2,17 +2,17 @@
 
 declare var Object: any;
 export interface AccessGroupInterface {
-  "sAMAccountName": any;
-  "description"?: any;
-  "member"?: any;
-  "memberOf"?: any;
+  "sAMAccountName": string;
+  "description"?: string;
+  "member"?: Array<any>;
+  "memberOf"?: Array<any>;
 }
 
 export class AccessGroup implements AccessGroupInterface {
-  "sAMAccountName": any;
-  "description": any;
-  "member": any;
-  "memberOf": any;
+  "sAMAccountName": string;
+  "description": string;
+  "member": Array<any>;
+  "memberOf": Array<any>;
   constructor(data?: AccessGroupInterface) {
     Object.assign(this, data);
   }
@@ -43,22 +43,24 @@ export class AccessGroup implements AccessGroupInterface {
     return {
       name: 'AccessGroup',
       plural: 'AccessGroups',
+      path: 'AccessGroups',
+      idName: 'sAMAccountName',
       properties: {
         "sAMAccountName": {
           name: 'sAMAccountName',
-          type: 'any'
+          type: 'string'
         },
         "description": {
           name: 'description',
-          type: 'any'
+          type: 'string'
         },
         "member": {
           name: 'member',
-          type: 'any'
+          type: 'Array&lt;any&gt;'
         },
         "memberOf": {
           name: 'memberOf',
-          type: 'any'
+          type: 'Array&lt;any&gt;'
         },
       },
       relations: {

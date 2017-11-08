@@ -3,6 +3,7 @@ import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/observable/of';
+import 'rxjs/add/operator/debounceTime';
 
 import {Injectable} from '@angular/core';
 import {Actions, Effect, toPayload} from '@ngrx/effects';
@@ -17,7 +18,6 @@ import {ADAuthService} from 'users/adauth.service';
 
 @Injectable()
 export class UserEffects {
-
 
   @Effect()
   protected loginActiveDirectory$: Observable<Action> =
@@ -39,7 +39,7 @@ export class UserEffects {
                       {type : UserActions.AD_LOGIN_COMPLETE, payload : res});
                 })
                 .catch(err => {
-                  const error = {'message': err.json(), 'errSrc': 'AD'};
+                  const error = {'message' : err.json(), 'errSrc' : 'AD'};
                   return Observable.of(
                       {type : UserActions.LOGIN_FAILED, payload : error});
                 });
@@ -60,13 +60,13 @@ export class UserEffects {
                 .catch(err => {
                   console.log(err);
                   if (typeof(err) === 'string') {
-                    const error = {'message': err, 'errSrc': 'AD'};
+                    const error = {'message' : err, 'errSrc' : 'AD'};
                     return Observable.of(
-                        {type : UserActions.LOGIN_FAILED, payload : error});                    
+                        {type : UserActions.LOGIN_FAILED, payload : error});
                   } else {
                     err['errSrc'] = 'functional';
                     return Observable.of(
-                        {type : UserActions.AD_LOGIN, payload : form});                    
+                        {type : UserActions.AD_LOGIN, payload : form});
                   }
 
                 });
@@ -77,7 +77,7 @@ export class UserEffects {
       this.action$.ofType(UserActions.LOGOUT)
           .debounceTime(300)
           .switchMap((payload) => {
-            if(this.userSrv.isAuthenticated()) {
+            if (this.userSrv.isAuthenticated()) {
               return this.userSrv.logout().switchMap(res => {
                 return Observable.of({type : UserActions.LOGOUT_COMPLETE});
               });
@@ -135,10 +135,10 @@ export class UserEffects {
           .switchMap(payload => {
             if (!this.userSrv.isAuthenticated()) {
               return Observable.of({
-                  type : UserActions.RETRIEVE_USER_FAILED, 
-                  payload : new Error('No user is logged in')
-                });
-            }
+                type : UserActions.RETRIEVE_USER_FAILED,
+                payload : new Error('No user is logged in')
+              });
+              }
 
             return this.userSrv.getCurrent()
                 .switchMap(res => {

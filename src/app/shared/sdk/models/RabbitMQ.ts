@@ -2,11 +2,11 @@
 
 declare var Object: any;
 export interface RabbitMQInterface {
-  "id"?: any;
+  "id"?: number;
 }
 
 export class RabbitMQ implements RabbitMQInterface {
-  "id": any;
+  "id": number;
   constructor(data?: RabbitMQInterface) {
     Object.assign(this, data);
   }
@@ -37,10 +37,12 @@ export class RabbitMQ implements RabbitMQInterface {
     return {
       name: 'RabbitMQ',
       plural: 'RabbitMQ',
+      path: 'RabbitMQ',
+      idName: 'id',
       properties: {
         "id": {
           name: 'id',
-          type: 'any'
+          type: 'number'
         },
       },
       relations: {

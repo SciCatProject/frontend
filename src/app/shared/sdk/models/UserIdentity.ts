@@ -5,26 +5,26 @@ import {
 
 declare var Object: any;
 export interface UserIdentityInterface {
-  "provider"?: any;
-  "authScheme"?: any;
-  "externalId"?: any;
+  "provider"?: string;
+  "authScheme"?: string;
+  "externalId"?: string;
   "profile"?: any;
   "credentials"?: any;
-  "created"?: any;
-  "modified"?: any;
+  "created"?: Date;
+  "modified"?: Date;
   "id"?: any;
   "userId"?: any;
   user?: User;
 }
 
 export class UserIdentity implements UserIdentityInterface {
-  "provider": any;
-  "authScheme": any;
-  "externalId": any;
+  "provider": string;
+  "authScheme": string;
+  "externalId": string;
   "profile": any;
   "credentials": any;
-  "created": any;
-  "modified": any;
+  "created": Date;
+  "modified": Date;
   "id": any;
   "userId": any;
   user: User;
@@ -58,18 +58,20 @@ export class UserIdentity implements UserIdentityInterface {
     return {
       name: 'UserIdentity',
       plural: 'UserIdentities',
+      path: 'UserIdentities',
+      idName: 'id',
       properties: {
         "provider": {
           name: 'provider',
-          type: 'any'
+          type: 'string'
         },
         "authScheme": {
           name: 'authScheme',
-          type: 'any'
+          type: 'string'
         },
         "externalId": {
           name: 'externalId',
-          type: 'any'
+          type: 'string'
         },
         "profile": {
           name: 'profile',
@@ -81,11 +83,11 @@ export class UserIdentity implements UserIdentityInterface {
         },
         "created": {
           name: 'created',
-          type: 'any'
+          type: 'Date'
         },
         "modified": {
           name: 'modified',
-          type: 'any'
+          type: 'Date'
         },
         "id": {
           name: 'id',
@@ -100,7 +102,10 @@ export class UserIdentity implements UserIdentityInterface {
         user: {
           name: 'user',
           type: 'User',
-          model: 'User'
+          model: 'User',
+          relationType: 'belongsTo',
+                  keyFrom: 'userId',
+          keyTo: 'id'
         },
       }
     }

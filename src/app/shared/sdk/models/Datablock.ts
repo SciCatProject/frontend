@@ -5,36 +5,36 @@ import {
 
 declare var Object: any;
 export interface DatablockInterface {
-  "id"?: any;
-  "archiveId": any;
-  "size": any;
-  "packedSize"?: any;
-  "version": any;
-  "dataFileList": any;
-  "ownerGroup": any;
-  "accessGroups"?: any;
-  "datasetId"?: any;
-  "rawDatasetId"?: any;
-  "derivedDatasetId"?: any;
-  "createdAt"?: any;
-  "updatedAt"?: any;
+  "id"?: string;
+  "archiveId": string;
+  "size": number;
+  "packedSize"?: number;
+  "version": string;
+  "dataFileList": Array<any>;
+  "ownerGroup": string;
+  "accessGroups"?: Array<any>;
+  "datasetId"?: string;
+  "rawDatasetId"?: string;
+  "derivedDatasetId"?: string;
+  "createdAt"?: Date;
+  "updatedAt"?: Date;
   dataset?: Dataset;
 }
 
 export class Datablock implements DatablockInterface {
-  "id": any;
-  "archiveId": any;
-  "size": any;
-  "packedSize": any;
-  "version": any;
-  "dataFileList": any;
-  "ownerGroup": any;
-  "accessGroups": any;
-  "datasetId": any;
-  "rawDatasetId": any;
-  "derivedDatasetId": any;
-  "createdAt": any;
-  "updatedAt": any;
+  "id": string;
+  "archiveId": string;
+  "size": number;
+  "packedSize": number;
+  "version": string;
+  "dataFileList": Array<any>;
+  "ownerGroup": string;
+  "accessGroups": Array<any>;
+  "datasetId": string;
+  "rawDatasetId": string;
+  "derivedDatasetId": string;
+  "createdAt": Date;
+  "updatedAt": Date;
   dataset: Dataset;
   constructor(data?: DatablockInterface) {
     Object.assign(this, data);
@@ -66,65 +66,70 @@ export class Datablock implements DatablockInterface {
     return {
       name: 'Datablock',
       plural: 'Datablocks',
+      path: 'Datablocks',
+      idName: 'id',
       properties: {
         "id": {
           name: 'id',
-          type: 'any'
+          type: 'string'
         },
         "archiveId": {
           name: 'archiveId',
-          type: 'any'
+          type: 'string'
         },
         "size": {
           name: 'size',
-          type: 'any'
+          type: 'number'
         },
         "packedSize": {
           name: 'packedSize',
-          type: 'any'
+          type: 'number'
         },
         "version": {
           name: 'version',
-          type: 'any'
+          type: 'string'
         },
         "dataFileList": {
           name: 'dataFileList',
-          type: 'any'
+          type: 'Array&lt;any&gt;'
         },
         "ownerGroup": {
           name: 'ownerGroup',
-          type: 'any'
+          type: 'string'
         },
         "accessGroups": {
           name: 'accessGroups',
-          type: 'any'
+          type: 'Array&lt;any&gt;'
         },
         "datasetId": {
           name: 'datasetId',
-          type: 'any'
+          type: 'string'
         },
         "rawDatasetId": {
           name: 'rawDatasetId',
-          type: 'any'
+          type: 'string'
         },
         "derivedDatasetId": {
           name: 'derivedDatasetId',
-          type: 'any'
+          type: 'string'
         },
         "createdAt": {
           name: 'createdAt',
-          type: 'any'
+          type: 'Date'
         },
         "updatedAt": {
           name: 'updatedAt',
-          type: 'any'
+          type: 'Date'
         },
       },
       relations: {
         dataset: {
           name: 'dataset',
           type: 'Dataset',
-          model: 'Dataset'
+          model: 'Dataset',
+          relationType: 'belongsTo',
+                  keyFrom: 'datasetId',
+          keyTo: 'pid'
         },
       }
     }

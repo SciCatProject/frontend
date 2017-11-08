@@ -47,7 +47,7 @@ export class ProposalApi extends BaseLoopBackApi {
    * This usually means the response is a `Proposal` object.)
    * </em>
    */
-  public findByIdMeasurementPeriods(id: any, fk: any): Observable<any> {
+  public findByIdMeasurementPeriods(id: any, fk: any, customHeaders?: Function): Observable<any> {
     let _method: string = "GET";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
     "/Proposals/:id/measurementPeriods/:fk";
@@ -57,7 +57,7 @@ export class ProposalApi extends BaseLoopBackApi {
     };
     let _postBody: any = {};
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody);
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
     return result;
   }
 
@@ -74,7 +74,7 @@ export class ProposalApi extends BaseLoopBackApi {
    *
    * This method returns no data.
    */
-  public destroyByIdMeasurementPeriods(id: any, fk: any): Observable<any> {
+  public destroyByIdMeasurementPeriods(id: any, fk: any, customHeaders?: Function): Observable<any> {
     let _method: string = "DELETE";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
     "/Proposals/:id/measurementPeriods/:fk";
@@ -84,7 +84,7 @@ export class ProposalApi extends BaseLoopBackApi {
     };
     let _postBody: any = {};
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody);
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
     return result;
   }
 
@@ -108,7 +108,7 @@ export class ProposalApi extends BaseLoopBackApi {
    * This usually means the response is a `Proposal` object.)
    * </em>
    */
-  public updateByIdMeasurementPeriods(id: any, fk: any, data: any = {}): Observable<any> {
+  public updateByIdMeasurementPeriods(id: any, fk: any, data: any = {}, customHeaders?: Function): Observable<any> {
     let _method: string = "PUT";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
     "/Proposals/:id/measurementPeriods/:fk";
@@ -120,7 +120,7 @@ export class ProposalApi extends BaseLoopBackApi {
       data: data
     };
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody);
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
     return result;
   }
 
@@ -140,7 +140,7 @@ export class ProposalApi extends BaseLoopBackApi {
    * This usually means the response is a `Proposal` object.)
    * </em>
    */
-  public getMeasurementPeriods(id: any, filter: LoopBackFilter = {}): Observable<any> {
+  public getMeasurementPeriods(id: any, filter: LoopBackFilter = {}, customHeaders?: Function): Observable<any> {
     let _method: string = "GET";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
     "/Proposals/:id/measurementPeriods";
@@ -149,8 +149,8 @@ export class ProposalApi extends BaseLoopBackApi {
     };
     let _postBody: any = {};
     let _urlParams: any = {};
-    if (filter) _urlParams.filter = filter;
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody);
+    if (typeof filter !== 'undefined' && filter !== null) _urlParams.filter = filter;
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
     return result;
   }
 
@@ -172,7 +172,7 @@ export class ProposalApi extends BaseLoopBackApi {
    * This usually means the response is a `Proposal` object.)
    * </em>
    */
-  public createMeasurementPeriods(id: any, data: any = {}): Observable<any> {
+  public createMeasurementPeriods(id: any, data: any = {}, customHeaders?: Function): Observable<any> {
     let _method: string = "POST";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
     "/Proposals/:id/measurementPeriods";
@@ -183,7 +183,7 @@ export class ProposalApi extends BaseLoopBackApi {
       data: data
     };
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody);
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
     return result;
   }
 
@@ -198,7 +198,7 @@ export class ProposalApi extends BaseLoopBackApi {
    *
    * This method returns no data.
    */
-  public deleteMeasurementPeriods(id: any): Observable<any> {
+  public deleteMeasurementPeriods(id: any, customHeaders?: Function): Observable<any> {
     let _method: string = "DELETE";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
     "/Proposals/:id/measurementPeriods";
@@ -207,7 +207,7 @@ export class ProposalApi extends BaseLoopBackApi {
     };
     let _postBody: any = {};
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody);
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
     return result;
   }
 
@@ -226,7 +226,7 @@ export class ProposalApi extends BaseLoopBackApi {
    *
    *  - `count` – `{number}` - 
    */
-  public countMeasurementPeriods(id: any, where: any = {}): Observable<any> {
+  public countMeasurementPeriods(id: any, where: any = {}, customHeaders?: Function): Observable<any> {
     let _method: string = "GET";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
     "/Proposals/:id/measurementPeriods/count";
@@ -235,8 +235,8 @@ export class ProposalApi extends BaseLoopBackApi {
     };
     let _postBody: any = {};
     let _urlParams: any = {};
-    if (where) _urlParams.where = where;
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody);
+    if (typeof where !== 'undefined' && where !== null) _urlParams.where = where;
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
     return result;
   }
 
@@ -256,7 +256,7 @@ export class ProposalApi extends BaseLoopBackApi {
    * This usually means the response is a `Proposal` object.)
    * </em>
    */
-  public patchOrCreate(data: any = {}): Observable<any> {
+  public patchOrCreate(data: any = {}, customHeaders?: Function): Observable<any> {
     let _method: string = "PATCH";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
     "/Proposals";
@@ -265,7 +265,7 @@ export class ProposalApi extends BaseLoopBackApi {
       data: data
     };
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody);
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
     return result;
   }
 
@@ -287,7 +287,7 @@ export class ProposalApi extends BaseLoopBackApi {
    * This usually means the response is a `Proposal` object.)
    * </em>
    */
-  public patchAttributes(id: any, data: any = {}): Observable<any> {
+  public patchAttributes(id: any, data: any = {}, customHeaders?: Function): Observable<any> {
     let _method: string = "PATCH";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
     "/Proposals/:id";
@@ -298,7 +298,7 @@ export class ProposalApi extends BaseLoopBackApi {
       data: data
     };
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody);
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
     return result;
   }
 
@@ -319,16 +319,16 @@ export class ProposalApi extends BaseLoopBackApi {
    *
    *  - `findByInstrumentAndDate` – `{Object}` - 
    */
-  public findByInstrumentAndDate(instrument: any = {}, measureTime: any = {}): Observable<Proposal> {
+  public findByInstrumentAndDate(instrument: any = {}, measureTime: any = {}, customHeaders?: Function): Observable<Proposal> {
     let _method: string = "GET";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
     "/Proposals/findByInstrumentAndDate";
     let _routeParams: any = {};
     let _postBody: any = {};
     let _urlParams: any = {};
-    if (instrument) _urlParams.instrument = instrument;
-    if (measureTime) _urlParams.measureTime = measureTime;
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody);
+    if (typeof instrument !== 'undefined' && instrument !== null) _urlParams.instrument = instrument;
+    if (typeof measureTime !== 'undefined' && measureTime !== null) _urlParams.measureTime = measureTime;
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
     return result.map((instance: Proposal) => new Proposal(instance));
   }
 
@@ -345,14 +345,14 @@ export class ProposalApi extends BaseLoopBackApi {
    *
    *  - `searchText` – `{Object}` - 
    */
-  public searchText(): Observable<any> {
+  public searchText(customHeaders?: Function): Observable<any> {
     let _method: string = "GET";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
     "/Proposals/searchText";
     let _routeParams: any = {};
     let _postBody: any = {};
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody);
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
     return result;
   }
 
@@ -374,7 +374,7 @@ export class ProposalApi extends BaseLoopBackApi {
    * This usually means the response is a `Proposal` object.)
    * </em>
    */
-  public createManyMeasurementPeriods(id: any, data: any[] = []): Observable<any> {
+  public createManyMeasurementPeriods(id: any, data: any[] = [], customHeaders?: Function): Observable<any> {
     let _method: string = "POST";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
     "/Proposals/:id/measurementPeriods";
@@ -385,7 +385,7 @@ export class ProposalApi extends BaseLoopBackApi {
       data: data
     };
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody);
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
     return result;
   }
 

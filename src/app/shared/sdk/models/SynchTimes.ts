@@ -2,19 +2,19 @@
 
 declare var Object: any;
 export interface SynchTimesInterface {
-  "myid"?: any;
-  "lastSynchTime": any;
-  "lastSynchSN": any;
-  "affectedUsers"?: any;
-  "affectedGroups"?: any;
+  "myid"?: number;
+  "lastSynchTime": string;
+  "lastSynchSN": number;
+  "affectedUsers"?: Array<any>;
+  "affectedGroups"?: Array<any>;
 }
 
 export class SynchTimes implements SynchTimesInterface {
-  "myid": any;
-  "lastSynchTime": any;
-  "lastSynchSN": any;
-  "affectedUsers": any;
-  "affectedGroups": any;
+  "myid": number;
+  "lastSynchTime": string;
+  "lastSynchSN": number;
+  "affectedUsers": Array<any>;
+  "affectedGroups": Array<any>;
   constructor(data?: SynchTimesInterface) {
     Object.assign(this, data);
   }
@@ -45,26 +45,28 @@ export class SynchTimes implements SynchTimesInterface {
     return {
       name: 'SynchTimes',
       plural: 'SynchTimes',
+      path: 'SynchTimes',
+      idName: 'myid',
       properties: {
         "myid": {
           name: 'myid',
-          type: 'any'
+          type: 'number'
         },
         "lastSynchTime": {
           name: 'lastSynchTime',
-          type: 'any'
+          type: 'string'
         },
         "lastSynchSN": {
           name: 'lastSynchSN',
-          type: 'any'
+          type: 'number'
         },
         "affectedUsers": {
           name: 'affectedUsers',
-          type: 'any'
+          type: 'Array&lt;any&gt;'
         },
         "affectedGroups": {
           name: 'affectedGroups',
-          type: 'any'
+          type: 'Array&lt;any&gt;'
         },
       },
       relations: {

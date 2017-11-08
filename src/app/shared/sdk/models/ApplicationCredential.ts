@@ -2,20 +2,20 @@
 
 declare var Object: any;
 export interface ApplicationCredentialInterface {
-  "provider": any;
-  "authScheme"?: any;
+  "provider": string;
+  "authScheme"?: string;
   "credentials"?: any;
-  "created"?: any;
-  "modified"?: any;
+  "created"?: Date;
+  "modified"?: Date;
   "id"?: any;
 }
 
 export class ApplicationCredential implements ApplicationCredentialInterface {
-  "provider": any;
-  "authScheme": any;
+  "provider": string;
+  "authScheme": string;
   "credentials": any;
-  "created": any;
-  "modified": any;
+  "created": Date;
+  "modified": Date;
   "id": any;
   constructor(data?: ApplicationCredentialInterface) {
     Object.assign(this, data);
@@ -47,14 +47,16 @@ export class ApplicationCredential implements ApplicationCredentialInterface {
     return {
       name: 'ApplicationCredential',
       plural: 'ApplicationCredentials',
+      path: 'ApplicationCredentials',
+      idName: 'id',
       properties: {
         "provider": {
           name: 'provider',
-          type: 'any'
+          type: 'string'
         },
         "authScheme": {
           name: 'authScheme',
-          type: 'any'
+          type: 'string'
         },
         "credentials": {
           name: 'credentials',
@@ -62,11 +64,11 @@ export class ApplicationCredential implements ApplicationCredentialInterface {
         },
         "created": {
           name: 'created',
-          type: 'any'
+          type: 'Date'
         },
         "modified": {
           name: 'modified',
-          type: 'any'
+          type: 'Date'
         },
         "id": {
           name: 'id',

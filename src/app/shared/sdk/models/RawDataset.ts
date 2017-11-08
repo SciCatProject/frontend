@@ -9,36 +9,36 @@ import {
 
 declare var Object: any;
 export interface RawDatasetInterface {
-  "principalInvestigator": any;
-  "endTime"?: any;
-  "creationLocation": any;
-  "dataFormat"?: any;
+  "principalInvestigator": string;
+  "endTime"?: Date;
+  "creationLocation": string;
+  "dataFormat"?: string;
   "scientificMetadata"?: any;
-  "pid"?: any;
-  "owner": any;
-  "ownerEmail"?: any;
-  "orcidOfOwner"?: any;
-  "contactEmail": any;
-  "sourceFolder": any;
-  "size"?: any;
-  "packedSize"?: any;
-  "creationTime": any;
-  "type": any;
-  "validationStatus"?: any;
-  "keywords"?: any;
-  "description"?: any;
-  "userTargetLocation"?: any;
-  "classification"?: any;
-  "license"?: any;
-  "version"?: any;
-  "doi"?: any;
-  "isPublished"?: any;
-  "ownerGroup": any;
-  "accessGroups"?: any;
-  "createdAt"?: any;
-  "updatedAt"?: any;
-  "sampleId"?: any;
-  "proposalId"?: any;
+  "pid"?: string;
+  "owner": string;
+  "ownerEmail"?: string;
+  "orcidOfOwner"?: string;
+  "contactEmail": string;
+  "sourceFolder": string;
+  "size"?: number;
+  "packedSize"?: number;
+  "creationTime": Date;
+  "type": string;
+  "validationStatus"?: string;
+  "keywords"?: Array<any>;
+  "description"?: string;
+  "userTargetLocation"?: string;
+  "classification"?: string;
+  "license"?: string;
+  "version"?: string;
+  "doi"?: string;
+  "isPublished"?: boolean;
+  "ownerGroup": string;
+  "accessGroups"?: Array<any>;
+  "createdAt"?: Date;
+  "updatedAt"?: Date;
+  "sampleId"?: string;
+  "proposalId"?: string;
   sample?: Sample;
   proposal?: Proposal;
   datasetlifecycle?: DatasetLifecycle;
@@ -47,36 +47,36 @@ export interface RawDatasetInterface {
 }
 
 export class RawDataset implements RawDatasetInterface {
-  "principalInvestigator": any;
-  "endTime": any;
-  "creationLocation": any;
-  "dataFormat": any;
+  "principalInvestigator": string;
+  "endTime": Date;
+  "creationLocation": string;
+  "dataFormat": string;
   "scientificMetadata": any;
-  "pid": any;
-  "owner": any;
-  "ownerEmail": any;
-  "orcidOfOwner": any;
-  "contactEmail": any;
-  "sourceFolder": any;
-  "size": any;
-  "packedSize": any;
-  "creationTime": any;
-  "type": any;
-  "validationStatus": any;
-  "keywords": any;
-  "description": any;
-  "userTargetLocation": any;
-  "classification": any;
-  "license": any;
-  "version": any;
-  "doi": any;
-  "isPublished": any;
-  "ownerGroup": any;
-  "accessGroups": any;
-  "createdAt": any;
-  "updatedAt": any;
-  "sampleId": any;
-  "proposalId": any;
+  "pid": string;
+  "owner": string;
+  "ownerEmail": string;
+  "orcidOfOwner": string;
+  "contactEmail": string;
+  "sourceFolder": string;
+  "size": number;
+  "packedSize": number;
+  "creationTime": Date;
+  "type": string;
+  "validationStatus": string;
+  "keywords": Array<any>;
+  "description": string;
+  "userTargetLocation": string;
+  "classification": string;
+  "license": string;
+  "version": string;
+  "doi": string;
+  "isPublished": boolean;
+  "ownerGroup": string;
+  "accessGroups": Array<any>;
+  "createdAt": Date;
+  "updatedAt": Date;
+  "sampleId": string;
+  "proposalId": string;
   sample: Sample;
   proposal: Proposal;
   datasetlifecycle: DatasetLifecycle;
@@ -112,22 +112,24 @@ export class RawDataset implements RawDatasetInterface {
     return {
       name: 'RawDataset',
       plural: 'RawDatasets',
+      path: 'RawDatasets',
+      idName: 'pid',
       properties: {
         "principalInvestigator": {
           name: 'principalInvestigator',
-          type: 'any'
+          type: 'string'
         },
         "endTime": {
           name: 'endTime',
-          type: 'any'
+          type: 'Date'
         },
         "creationLocation": {
           name: 'creationLocation',
-          type: 'any'
+          type: 'string'
         },
         "dataFormat": {
           name: 'dataFormat',
-          type: 'any'
+          type: 'string'
         },
         "scientificMetadata": {
           name: 'scientificMetadata',
@@ -135,130 +137,145 @@ export class RawDataset implements RawDatasetInterface {
         },
         "pid": {
           name: 'pid',
-          type: 'any'
+          type: 'string'
         },
         "owner": {
           name: 'owner',
-          type: 'any'
+          type: 'string'
         },
         "ownerEmail": {
           name: 'ownerEmail',
-          type: 'any'
+          type: 'string'
         },
         "orcidOfOwner": {
           name: 'orcidOfOwner',
-          type: 'any'
+          type: 'string'
         },
         "contactEmail": {
           name: 'contactEmail',
-          type: 'any'
+          type: 'string'
         },
         "sourceFolder": {
           name: 'sourceFolder',
-          type: 'any'
+          type: 'string'
         },
         "size": {
           name: 'size',
-          type: 'any'
+          type: 'number'
         },
         "packedSize": {
           name: 'packedSize',
-          type: 'any'
+          type: 'number'
         },
         "creationTime": {
           name: 'creationTime',
-          type: 'any'
+          type: 'Date'
         },
         "type": {
           name: 'type',
-          type: 'any'
+          type: 'string'
         },
         "validationStatus": {
           name: 'validationStatus',
-          type: 'any'
+          type: 'string'
         },
         "keywords": {
           name: 'keywords',
-          type: 'any'
+          type: 'Array&lt;any&gt;'
         },
         "description": {
           name: 'description',
-          type: 'any'
+          type: 'string'
         },
         "userTargetLocation": {
           name: 'userTargetLocation',
-          type: 'any'
+          type: 'string'
         },
         "classification": {
           name: 'classification',
-          type: 'any'
+          type: 'string'
         },
         "license": {
           name: 'license',
-          type: 'any'
+          type: 'string'
         },
         "version": {
           name: 'version',
-          type: 'any'
+          type: 'string'
         },
         "doi": {
           name: 'doi',
-          type: 'any'
+          type: 'string'
         },
         "isPublished": {
           name: 'isPublished',
-          type: 'any'
+          type: 'boolean'
         },
         "ownerGroup": {
           name: 'ownerGroup',
-          type: 'any'
+          type: 'string'
         },
         "accessGroups": {
           name: 'accessGroups',
-          type: 'any'
+          type: 'Array&lt;any&gt;'
         },
         "createdAt": {
           name: 'createdAt',
-          type: 'any'
+          type: 'Date'
         },
         "updatedAt": {
           name: 'updatedAt',
-          type: 'any'
+          type: 'Date'
         },
         "sampleId": {
           name: 'sampleId',
-          type: 'any'
+          type: 'string'
         },
         "proposalId": {
           name: 'proposalId',
-          type: 'any'
+          type: 'string'
         },
       },
       relations: {
         sample: {
           name: 'sample',
           type: 'Sample',
-          model: 'Sample'
+          model: 'Sample',
+          relationType: 'belongsTo',
+                  keyFrom: 'sampleId',
+          keyTo: 'samplelId'
         },
         proposal: {
           name: 'proposal',
           type: 'Proposal',
-          model: 'Proposal'
+          model: 'Proposal',
+          relationType: 'belongsTo',
+                  keyFrom: 'proposalId',
+          keyTo: 'proposalId'
         },
         datasetlifecycle: {
           name: 'datasetlifecycle',
           type: 'DatasetLifecycle',
-          model: 'DatasetLifecycle'
+          model: 'DatasetLifecycle',
+          relationType: 'hasOne',
+                  keyFrom: 'pid',
+          keyTo: 'rawDatasetId'
         },
         datablocks: {
           name: 'datablocks',
           type: 'Datablock[]',
-          model: 'Datablock'
+          model: 'Datablock',
+          relationType: 'hasMany',
+                  keyFrom: 'pid',
+          keyTo: 'rawDatasetId'
         },
         origdatablocks: {
           name: 'origdatablocks',
           type: 'OrigDatablock[]',
-          model: 'OrigDatablock'
+          model: 'OrigDatablock',
+          relationType: 'hasMany',
+                  keyFrom: 'pid',
+          keyTo: 'rawDatasetId'
         },
       }
     }

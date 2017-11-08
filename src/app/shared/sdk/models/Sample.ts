@@ -2,27 +2,27 @@
 
 declare var Object: any;
 export interface SampleInterface {
-  "samplelId"?: any;
-  "owner"?: any;
-  "description"?: any;
-  "createdAt"?: any;
+  "samplelId"?: string;
+  "owner"?: string;
+  "description"?: string;
+  "createdAt"?: Date;
   "sampleCharacteristics"?: any;
-  "attachments"?: any;
-  "ownerGroup": any;
-  "accessGroups"?: any;
-  "updatedAt"?: any;
+  "attachments"?: Array<any>;
+  "ownerGroup": string;
+  "accessGroups"?: Array<any>;
+  "updatedAt"?: Date;
 }
 
 export class Sample implements SampleInterface {
-  "samplelId": any;
-  "owner": any;
-  "description": any;
-  "createdAt": any;
+  "samplelId": string;
+  "owner": string;
+  "description": string;
+  "createdAt": Date;
   "sampleCharacteristics": any;
-  "attachments": any;
-  "ownerGroup": any;
-  "accessGroups": any;
-  "updatedAt": any;
+  "attachments": Array<any>;
+  "ownerGroup": string;
+  "accessGroups": Array<any>;
+  "updatedAt": Date;
   constructor(data?: SampleInterface) {
     Object.assign(this, data);
   }
@@ -53,22 +53,24 @@ export class Sample implements SampleInterface {
     return {
       name: 'Sample',
       plural: 'Samples',
+      path: 'Samples',
+      idName: 'samplelId',
       properties: {
         "samplelId": {
           name: 'samplelId',
-          type: 'any'
+          type: 'string'
         },
         "owner": {
           name: 'owner',
-          type: 'any'
+          type: 'string'
         },
         "description": {
           name: 'description',
-          type: 'any'
+          type: 'string'
         },
         "createdAt": {
           name: 'createdAt',
-          type: 'any'
+          type: 'Date'
         },
         "sampleCharacteristics": {
           name: 'sampleCharacteristics',
@@ -76,19 +78,19 @@ export class Sample implements SampleInterface {
         },
         "attachments": {
           name: 'attachments',
-          type: 'any'
+          type: 'Array&lt;any&gt;'
         },
         "ownerGroup": {
           name: 'ownerGroup',
-          type: 'any'
+          type: 'string'
         },
         "accessGroups": {
           name: 'accessGroups',
-          type: 'any'
+          type: 'Array&lt;any&gt;'
         },
         "updatedAt": {
           name: 'updatedAt',
-          type: 'any'
+          type: 'Date'
         },
       },
       relations: {
