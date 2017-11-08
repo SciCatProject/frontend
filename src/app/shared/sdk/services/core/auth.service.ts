@@ -3,21 +3,15 @@ declare var Object: any;
 import { Injectable, Inject } from '@angular/core';
 import { InternalStorage } from '../../storage/storage.swaps';
 import { SDKToken } from '../../models/BaseModels';
-import {
-  Subject
-} from 'rxjs/Subject';
-import {
-  Observable
-} from 'rxjs';
 /**
- * @author Jonathan Casarrubias <twitter:@johncasarrubias> <github:@mean-expert-official>
- * @module SocketConnection
- * @license MIT
- * @description
- * This module handle socket connections and return singleton instances for each
- * connection, it will use the SDK Socket Driver Available currently supporting
- * Angular 2 for web, NativeScript 2 and Angular Universal.
- **/
+* @author Jonathan Casarrubias <twitter:@johncasarrubias> <github:@mean-expert-official>
+* @module SocketConnection
+* @license MIT
+* @description
+* This module handle socket connections and return singleton instances for each
+* connection, it will use the SDK Socket Driver Available currently supporting
+* Angular 2 for web, NativeScript 2 and Angular Universal.
+**/
 @Injectable()
 export class LoopBackAuth {
   /**
@@ -28,8 +22,6 @@ export class LoopBackAuth {
    * @type {string}
    **/
   protected prefix: string = '$LoopBackSDK$';
-
-  private subject = new Subject < any > ();
   /**
    * @method constructor
    * @param {InternalStorage} storage Internal Storage Driver
@@ -37,12 +29,11 @@ export class LoopBackAuth {
    * The constructor will initialize the token loading data from storage
    **/
   constructor(@Inject(InternalStorage) protected storage: InternalStorage) {
-    this.token.id         = this.load('id');
-    this.token.user       = this.load('user');
-    this.token.userId     = this.load('userId');
-    this.token.issuedAt   = this.load('issuedAt');
-    this.token.created    = this.load('created');
-    this.token.ttl        = this.load('ttl');
+    this.token.id = this.load('id');
+    this.token.user = this.load('user');
+    this.token.userId = this.load('userId');
+    this.token.created = this.load('created');
+    this.token.ttl = this.load('ttl');
     this.token.rememberMe = this.load('rememberMe');
   }
   /**
@@ -66,7 +57,6 @@ export class LoopBackAuth {
   public setUser(user: any) {
     this.token.user = user;
     this.save();
-    this.subject.next(user);
   }
   /**
    * @method setToken
@@ -76,7 +66,7 @@ export class LoopBackAuth {
    * This method will set a flag in order to remember the current credentials
    **/
   public setToken(token: SDKToken): void {
-    this.token = Object.assign(this.token, token);
+    this.token = Object.assign({}, this.token, token);
     this.save();
   }
   /**
@@ -86,7 +76,7 @@ export class LoopBackAuth {
    * This method will set a flag in order to remember the current credentials.
    **/
   public getToken(): SDKToken {
-    return <SDKToken> this.token;
+    return <SDKToken>this.token;
   }
   /**
    * @method getAccessTokenId
@@ -117,20 +107,21 @@ export class LoopBackAuth {
   }
   /**
    * @method save
-   * @return {boolean} Wether or not the information was saved
+   * @return {boolean} Whether or not the information was saved
    * @description
    * This method will save in either local storage or cookies the current credentials.
    * But only if rememberMe is enabled.
    **/
   public save(): boolean {
     if (this.token.rememberMe) {
-      this.persist('id', this.token.id);
-      this.persist('user', this.token.user);
-      this.persist('userId', this.token.userId);
-      this.persist('issuedAt', this.token.issuedAt);
-      this.persist('created', this.token.created);
-      this.persist('ttl', this.token.ttl);
-      this.persist('rememberMe', this.token.rememberMe);
+      let today = new Date();
+      let expires = new Date(today.getTime() + (this.token.ttl * 1000));
+      this.persist('id', this.token.id, expires);
+      this.persist('user', this.token.user, expires);
+      this.persist('userId', this.token.userId, expires);
+      this.persist('created', this.token.created, expires);
+      this.persist('ttl', this.token.ttl, expires);
+      this.persist('rememberMe', this.token.rememberMe, expires);
       return true;
     } else {
       return false;
@@ -157,30 +148,21 @@ export class LoopBackAuth {
     this.token = new SDKToken();
   }
   /**
-   * @method clear
+   * @method persist
    * @return {void}
    * @description
-   * This method will clear cookies or the local storage.
+   * This method saves values to storage
    **/
-  protected persist(prop: string, value: any): void {
+  protected persist(prop: string, value: any, expires?: Date): void {
     try {
       this.storage.set(
         `${this.prefix}${prop}`,
-        (typeof value === 'object') ? JSON.stringify(value) : value
+        (typeof value === 'object') ? JSON.stringify(value) : value,
+        expires
       );
     }
-    catch(err) {
+    catch (err) {
       console.error('Cannot access local/session storage:', err);
     }
-  }
-
-  /**
-   * Subscription to receive user
-   * Mainly for app component
-   * @returns {Observable<any>}
-   * @memberof UserMsgService
-   */
-  getUser(): Observable < any > {
-    return this.subject.asObservable();
   }
 }

@@ -372,7 +372,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     if (this.selectedSets.length > 0) {
       this.dest = new Subject<string>();
       const job = new Job();
-      job.creationTime = Date.now();
+      job.creationTime = new Date();
       const backupFiles = [];
       this.store
         .select(state => state.root.user.currentUser)
