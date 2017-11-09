@@ -12,12 +12,11 @@ import {
   MockActivatedRoute,
   MockConfigService,
   MockHttp,
-  MockJobApi,
   MockRouter,
   MockStore,
   MockUserApi
 } from 'shared/MockStubs';
-import {JobApi, UserApi} from 'shared/sdk/services';
+import {UserApi} from 'shared/sdk/services';
 
 
 describe('DatasetTableComponent', () => {

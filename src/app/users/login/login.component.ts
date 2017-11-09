@@ -3,9 +3,7 @@ import {FormBuilder, Validators} from '@angular/forms';
 import {Http} from '@angular/http';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Store} from '@ngrx/store';
-import {LoopBackAuth, UserApi} from 'shared/sdk/services';
 import * as ua from 'state-management/actions/user.actions';
-import {ADAuthService} from 'users/adauth.service';
 
 /**
  * Component to handle user login. Allows for AD and

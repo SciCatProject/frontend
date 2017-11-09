@@ -1,7 +1,6 @@
-import {NO_ERRORS_SCHEMA} from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { Router, ActivatedRoute, RouterModule } from '@angular/router';
+import { Router, ActivatedRoute} from '@angular/router';
 import { RawDatasetApi, DatablockApi } from 'shared/sdk/services';
 
 import {DataTableModule} from 'primeng/primeng';

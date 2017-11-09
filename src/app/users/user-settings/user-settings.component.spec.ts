@@ -51,7 +51,7 @@ describe('UserSettingsComponent', () => {
   // NOTE this test could be written inside the dataset form by changing the
   // enabled flag and passing mock data, maybe this is better?
   it('should have enabled form fields', () => {
-    const compiled = fixture.debugElement.nativeElement;
+    // const compiled = fixture.debugElement.nativeElement;
     // expect(compiled.querySelector('input').getAttribute("disabled")).toBeNull();
   });
 

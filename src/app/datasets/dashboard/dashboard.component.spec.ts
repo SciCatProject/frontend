@@ -5,25 +5,20 @@ import {Http} from '@angular/http';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Store, StoreModule} from '@ngrx/store';
 import {DatasetTableComponent} from 'datasets/dataset-table/dataset-table.component';
-import {DatasetService} from 'datasets/dataset.service';
 import {DatasetsFilterComponent} from 'datasets/datasets-filter/datasets-filter.component';
 import {ConfirmationService} from 'primeng/primeng';
-import {JobApi, UserApi} from 'shared/sdk/services';
+import {UserApi} from 'shared/sdk/services';
 import {ConfigService} from 'shared/services/config.service';
 import {rootReducer} from 'state-management/reducers/root.reducer';
 
 import {
   MockActivatedRoute,
   MockConfigService,
-  MockDatablockApi,
-  MockDatasetService,
   MockHttp,
-  MockJobApi,
   MockRouter,
   MockStore,
   MockUserApi,
 } from '../../shared/MockStubs';
-import {OrigDatablockApi} from '../../shared/sdk';
 import {DashboardComponent} from './dashboard.component';
 
 /* tslint:disable:no-unused-variable */

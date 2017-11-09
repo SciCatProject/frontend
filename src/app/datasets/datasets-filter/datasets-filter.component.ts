@@ -1,13 +1,11 @@
 import 'rxjs/add/operator/take';
 
-import {Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {ActivatedRoute, Params, Router} from '@angular/router';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
 import {Store} from '@ngrx/store';
-import {AutoComplete, Tree, TreeNode} from 'primeng/primeng';
+import {AutoComplete, Tree} from 'primeng/primeng';
 import * as utils from 'shared/utils';
-import * as dua from 'state-management/actions/dashboard-ui.actions';
 import * as dsa from 'state-management/actions/datasets.actions';
-import * as dUIStore from 'state-management/state/dashboard-ui.store';
 import * as dStore from 'state-management/state/datasets.store';
 
 @Component({
@@ -73,7 +71,6 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
               this.selectedGroups = [];
               }
             if (utils.compareObj(newParams, f)) {
-              const p = Object.assign({}, f, newParams);
               this.router.navigate(
                   [ '/datasets' ],
                   {queryParams : newParams, replaceUrl : true});

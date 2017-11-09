@@ -4,9 +4,7 @@ import {DataTableModule, SharedModule} from 'primeng/primeng';
 import {Store, StoreModule} from '@ngrx/store';
 import { JobsComponent } from './jobs.component';
 
-import {Job} from '../shared/sdk/models';
-
-import {MockJobApi, MockDatasetApi, MockStore} from '../shared/MockStubs';
+import {MockStore} from '../shared/MockStubs';
 
 describe('JobsComponent', () => {
   let component: JobsComponent;

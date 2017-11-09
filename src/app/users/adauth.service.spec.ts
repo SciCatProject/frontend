@@ -1,5 +1,5 @@
 import { TestBed, inject } from '@angular/core/testing';
-import { HttpModule, Http } from '@angular/http';
+import { Http } from '@angular/http';
 import { ADAuthService } from './adauth.service';
 
 

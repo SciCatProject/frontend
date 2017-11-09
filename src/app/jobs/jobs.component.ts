@@ -1,26 +1,26 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
-import { Store } from "@ngrx/store";
-import * as JobActions from "state-management/actions/jobs.actions";
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Store } from '@ngrx/store';
+import * as JobActions from 'state-management/actions/jobs.actions';
 
 @Component({
-  selector: "app-jobs",
-  templateUrl: "./jobs.component.html",
-  styleUrls: ["./jobs.component.css"]
+  selector: 'app-jobs',
+  templateUrl: './jobs.component.html',
+  styleUrls: ['./jobs.component.css']
 })
 export class JobsComponent implements OnInit, OnDestroy {
   jobs = [];
 
   cols = [
-    { field: "creationTime", header: "Creation Time", sortable: true },
-    { field: "emailJobInitiator", header: "Email", sortable: true },
-    { field: "type", header: "Type", sortable: true },
-    { field: "jobStatusMessage", header: "Status", sortable: true }
+    { field: 'creationTime', header: 'Creation Time', sortable: true },
+    { field: 'emailJobInitiator', header: 'Email', sortable: true },
+    { field: 'type', header: 'Type', sortable: true },
+    { field: 'jobStatusMessage', header: 'Status', sortable: true }
   ];
 
   subscriptions = [];
 
   constructor(private store: Store<any>) {
-    const jobsTree = { data: [] };
+    // const jobsTree = { data: [] };
   }
 
   ngOnInit() {
@@ -29,11 +29,11 @@ export class JobsComponent implements OnInit, OnDestroy {
       jobs.map(job => {
         const entry = {
           data: {
-            creationTime: job["creationTime"],
-            emailJobInitiator: job["emailJobInitiator"],
-            type: job["type"],
-            jobStatusMessage: job["jobStatusMessage"],
-            datasetList: job["datasetList"],
+            creationTime: job['creationTime'],
+            emailJobInitiator: job['emailJobInitiator'],
+            type: job['type'],
+            jobStatusMessage: job['jobStatusMessage'],
+            datasetList: job['datasetList'],
             index: (index += 1)
           },
           leaf: false
