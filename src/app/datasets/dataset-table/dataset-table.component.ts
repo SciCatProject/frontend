@@ -94,13 +94,14 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
       this.selectedSets = [];
       this.rowStyleMap = {};
       if (this.datasets && this.datasets.length > 0) {
-        console.log(this.datasets[0]);
         for (let d = 0; d < this.datasets.length; d++) {
           const set = this.datasets[d];
           let c = '';
-          if (this.mode === 'archive' && set.datasetlifecycle && this.archiveable.indexOf(set.datasetlifecycle.archiveStatusMessage) === -1) {
+          if (this.mode === 'archive' && set.datasetlifecycle
+            && this.archiveable.indexOf(set.datasetlifecycle.archiveStatusMessage) === -1) {
             c = 'disabled-row';
-          } else if (this.mode === 'retrieve' && set.datasetlifecycle && this.retrievable.indexOf(set.datasetlifecycle.retrieveStatusMessage) === -1) {
+          } else if (this.mode === 'retrieve'
+            && set.datasetlifecycle && this.retrievable.indexOf(set.datasetlifecycle.retrieveStatusMessage) === -1) {
             c = 'disabled-row';
           } else {
             c = '';
@@ -329,14 +330,9 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
    * @memberof DashboardComponent
    */
   archiveClickHandle(event) {
-    let message = '';
-    this.selectedSets.forEach(element => {
-      const size = element.size ? element.size : 'Size unknown';
-      message += element.sourceFolder + ': ' + size + '\n';
-    });
     this.confirmationService.confirm({
       header: 'Archive ' + this.selectedSets.length + ' Datasets?',
-      message: message,
+      message: 'The selected datasets will be scheduled for archive',
       accept: () => {
         this.archiveOrRetrieve(true);
       }
