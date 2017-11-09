@@ -1,7 +1,4 @@
-import {Injectable} from '@angular/core';
-import {Actions, Effect, toPayload} from '@ngrx/effects';
-import {Action, Store} from '@ngrx/store';
-import {Observable} from 'rxjs/Observable';
+import {Action} from '@ngrx/store';
 import * as lb from 'shared/sdk/models';
 
 export const LOGIN = '[User] Login';

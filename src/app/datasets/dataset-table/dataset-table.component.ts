@@ -1,4 +1,3 @@
-import { environment } from '../../../environments/environment.qa';
 import { DatePipe } from '@angular/common';
 import {
   Component,
@@ -11,12 +10,11 @@ import {
 } from '@angular/core';
 import { Http } from '@angular/http';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
 import { ConfirmationService, DataTable } from 'primeng/primeng';
 import { Subject } from 'rxjs/Subject';
 import { Job, RawDataset } from 'shared/sdk/models';
-import { JobApi, UserApi } from 'shared/sdk/services';
+import { UserApi } from 'shared/sdk/services';
 import { ConfigService } from 'shared/services/config.service';
 import * as dua from 'state-management/actions/dashboard-ui.actions';
 import * as dsa from 'state-management/actions/datasets.actions';
@@ -228,7 +226,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
       event['originalEvent']['target']['innerHTML'].indexOf('chkbox') === -1
     ) {
       this.router.navigateByUrl(
-        '/dataset/' + encodeURIComponent(event.data.pid)
+        '/dataset/' + pid
       );
       // this.store.dispatch(
       //     {type : dsa.SELECT_CURRENT, payload : event.data});
@@ -280,19 +278,17 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
       .take(1)
       .subscribe(f => {
         const filters = Object.assign({}, f);
-        if (filters) {
-          filters['skip'] = event.first;
-          filters['initial'] = false;
-          if (event.sortField) {
-            const sortOrder = event.sortOrder === 1 ? 'ASC' : 'DESC';
-            filters['sortField'] = event.sortField + ' ' + sortOrder;
-          } else {
-            filters['sortField'] = undefined;
-          }
-          // TODO reduce calls when not needed (i.e. no change)
-          if (f.first !== event.first || this.datasets.length === 0) {
-            this.store.dispatch({ type: dsa.FILTER_UPDATE, payload: filters });
-          }
+        filters['skip'] = event.first;
+        filters['initial'] = false;
+        if (event.sortField) {
+          const sortOrder = event.sortOrder === 1 ? 'ASC' : 'DESC';
+          filters['sortField'] = event.sortField + ' ' + sortOrder;
+        } else {
+          filters['sortField'] = undefined;
+        }
+        // TODO reduce calls when not needed (i.e. no change)
+        if (f.first !== event.first || this.datasets.length === 0) {
+          this.store.dispatch({ type: dsa.FILTER_UPDATE, payload: filters });
         }
       });
   }
@@ -353,7 +349,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     if (destPath.length > 0) {
       this.retrieveDisplay = false;
       this.archiveOrRetrieve(false, destPath);
-    } else {
     }
   }
 
@@ -420,21 +415,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
             if (!archive) {
               // TODO number of copies from settings table
               job.jobParams['destinationPath'] = destPath;
-            } else {
-              for (let i = 0; i < this.selectedSets.length; i++) {
-                const ds = <RawDataset>this.selectedSets[i];
-                const loc = { userTargetLocation: destPath };
-                // TODO job params - retrieve, userTarget - archive
-                // this.rds.updateAttributes(encodeURIComponent(ds.pid), loc)
-                //     .subscribe(
-                //         res => { console.log(res); },
-                //         err => {
-                //           console.error(err);
-                //           msg = {class : 'ui message negative', text : err};
-                //           this.uMsg.sendMessage(msg, 3);
-                //         },
-                //         () => {});
-              }
             }
             this.store.dispatch({ type: ja.SUBMIT, payload: job });
           }

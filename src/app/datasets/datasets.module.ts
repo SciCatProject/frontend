@@ -21,7 +21,6 @@ import {
   SharedModule,
   TabViewModule,
   TreeModule,
-  TreeNode,
   TreeTableModule
 } from 'primeng/primeng';
 import {SharedCatanieModule} from 'shared/shared.module';

@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import {
     Http,
     Response,
-    RequestOptions,
     Headers
 } from '@angular/http';
 import { LoopBackConfig } from 'shared/sdk/lb.config';
