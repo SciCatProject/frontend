@@ -1,4 +1,3 @@
-import {ModuleWithProviders } from '@angular/core';
 import {NgModule} from '@angular/core';
 import {Routes, RouterModule } from '@angular/router';
 import {DashboardComponent} from '../datasets/dashboard/dashboard.component';
