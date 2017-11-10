@@ -1,0 +1,8 @@
+FROM markadams/chromium-xvfb-js:8
+LABEL maintainer="gareth.murphy@esss.se"
+
+COPY package.json /usr/src/app/package.json
+COPY package-lock.json /usr/src/app/package-lock.json
+RUN npm install
+COPY . /usr/src/app
+WORKDIR /usr/src/app
