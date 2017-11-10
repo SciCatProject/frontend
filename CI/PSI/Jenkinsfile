@@ -1,4 +1,3 @@
-
 node {
        stage('Checkout'){
 
@@ -8,7 +7,7 @@ node {
 
        stage('Build Docker'){
 
-            sh 'docker build -f CI/ESS/Dockerfile.test . -t catanie_test'
+            sh 'docker build -f CI/PSI/Dockerfile.test . -t catanie_test'
        }
        stage('Unit Test Catanie '){
             sh 'docker run  -t catanie_test npm run -- ng test --watch false --single-run true'
