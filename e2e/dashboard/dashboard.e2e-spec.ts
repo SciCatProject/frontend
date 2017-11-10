@@ -26,7 +26,7 @@ describe('catanie Dashboard', function() {
   });
 
   it('should change active menu item', () => {
-    const eos = element(by.partialLinkText('End of Shift'));
+    const eos = element(by.partialLinkText('Sample Data Entry'));
     eos.click();
     expect(eos.getAttribute('class')).toContain('active');
   });
