@@ -6,8 +6,7 @@ import {
   Router,
   ActivatedRoute,
   NavigationEnd,
-  Params,
-  PRIMARY_OUTLET
+  Params
 } from '@angular/router';
 import 'rxjs/add/operator/filter';
 import { TitleCasePipe } from '../../pipes/index';
@@ -44,7 +43,7 @@ export class BreadcrumbComponent implements OnInit {
   }
 
   ngOnInit() {
-    const ROUTE_DATA_BREADCRUMB = 'breadcrumb';
+    // const ROUTE_DATA_BREADCRUMB = 'breadcrumb';
 
     // TODO handle query params
     this.router.events.filter(event => event instanceof NavigationEnd).subscribe(event => {

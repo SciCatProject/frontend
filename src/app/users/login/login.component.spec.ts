@@ -1,6 +1,5 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {ReactiveFormsModule} from '@angular/forms';
-import {By} from '@angular/platform-browser';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Store, StoreModule} from '@ngrx/store';
 import {MockActivatedRoute, MockAuthService, MockLoopBackAuth, MockRouter, MockStore} from 'shared/MockStubs';
@@ -13,8 +12,8 @@ import {LoginComponent} from './login.component';
 describe('LoginComponent', () => {
   let component: LoginComponent;
   let fixture: ComponentFixture<LoginComponent>;
-  let el;
-  let de;
+  // let el;
+  // let de;
 
 
   beforeEach(async(() => {
@@ -41,8 +40,8 @@ describe('LoginComponent', () => {
     fixture = TestBed.createComponent(LoginComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-    de = fixture.debugElement.query(By.css('form'));
-    el = de.nativeElement;
+    // de = fixture.debugElement.query(By.css('form'));
+    // el = de.nativeElement;
   });
 
     it('should create component', () => {

@@ -1,6 +1,6 @@
 import { LoginPage } from '../login/login.po';
 import { DashboardPage } from '../dashboard/dashboard.po';
-import { browser, element, by, protractor } from 'protractor';
+import { browser, element, by } from 'protractor';
 
 describe('catanie Dataset Filters', function() {
   let lp: LoginPage;

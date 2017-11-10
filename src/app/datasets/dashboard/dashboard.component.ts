@@ -1,15 +1,13 @@
-import { Component, OnInit } from "@angular/core";
-import { Router, Params, ActivatedRoute } from "@angular/router";
-import { Store } from "@ngrx/store";
-import { DatasetService } from "datasets/dataset.service";
-import { RawDataset } from "shared/sdk/models";
-import * as dua from "state-management/actions/dashboard-ui.actions";
-import * as dsa from "state-management/actions/datasets.actions";
+import { Component, OnInit } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { RawDataset } from 'shared/sdk/models';
+import * as dsa from 'state-management/actions/datasets.actions';
 
 @Component({
-  selector: "dashboard",
-  templateUrl: "./dashboard.component.html",
-  styleUrls: ["./dashboard.component.css"]
+  selector: 'dashboard',
+  templateUrl: './dashboard.component.html',
+  styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
   apiEndpoint: string;
@@ -55,8 +53,8 @@ export class DashboardComponent implements OnInit {
       .select(state => state.root.datasets.activeFilters)
       .take(1)
       .subscribe(values => {
-        let filters = Object.assign({}, values);
-        filters["text"] = terms;
+        const filters = Object.assign({}, values);
+        filters['text'] = terms;
         this.store.dispatch({ type: dsa.FILTER_UPDATE, payload: filters });
       });
   }

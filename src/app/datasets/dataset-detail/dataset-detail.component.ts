@@ -35,13 +35,14 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
     this.subscriptions.push(this.store.select(state => state.root.datasets.currentSet)
         .subscribe(dataset => {
           if (dataset && Object.keys(dataset).length > 0) {
-            this.dataset = <RawDataset>dataset;
-            console.log(this.dataset);
-            if (!('origdatablocks' in this.dataset)) {
-              this.store.dispatch(
-                  {type : dsa.DATABLOCKS, payload : this.dataset.pid});
+            self.dataset = <RawDataset>dataset;
+            console.log(self.dataset);
+            if (!('origdatablocks' in self.dataset)) {
+              self.store.dispatch(
+                  {type : dsa.DATABLOCKS, payload : self.dataset.pid});
             }
-            this.store.dispatch({type: dsa.SELECT_CURRENT, payload: undefined});
+            // clear selected dataset
+            self.store.dispatch({type: dsa.SELECT_CURRENT, payload: undefined});
           }
         }));
 

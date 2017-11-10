@@ -13,8 +13,6 @@ import {Observable} from 'rxjs/Observable';
 import * as lb from 'shared/sdk/services';
 import * as DatasetActions from 'state-management/actions/datasets.actions';
 // import store state interface
-import {AppState} from 'state-management/state/app.store';
-
 @Injectable()
 export class DatasetEffects {
 
@@ -96,7 +94,7 @@ export class DatasetEffects {
              }
             return this.rds
                 .facet(fq['creationLocation'], groups, startDate, endDate,
-                       '')
+                       textObj)
                 .switchMap(res => {
                   const filterValues = res['results'][0];
 

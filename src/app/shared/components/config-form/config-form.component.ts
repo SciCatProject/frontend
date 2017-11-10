@@ -1,11 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {
   FormBuilder,
-  FormControl,
-  FormGroup,
-  FormsModule,
-  ReactiveFormsModule,
-  Validators
+  FormGroup
 } from '@angular/forms';
 import {Store} from '@ngrx/store';
 import {TreeNode} from 'primeng/primeng';
@@ -102,13 +98,13 @@ export class ConfigFormComponent implements OnInit {
             this.formData[prop] = formattedDate;
             }
           if (config && config['type'] === 'number' && config['name'] === 'size') {
-            this.formData[prop] = (((this.source[prop] / 1024)/1024)/1024).toFixed(2);
+            this.formData[prop] = (((this.source[prop] / 1024) / 1024) / 1024).toFixed(2);
             }
           if (config && 'visible' in config && config['visible'] === false) {
             delete this.formData[prop];
           }
           }
-        if (prop && this.getType(prop, this.source[prop]) === 'object') {
+        if (this.getType(prop, this.source[prop]) === 'object') {
           this.objData[prop] =
               <TreeNode[]>this.getTreeFromObject(this.source[prop]);
         } else if (this.getType(prop, this.source[prop]) === 'array') {
