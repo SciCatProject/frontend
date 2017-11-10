@@ -1,0 +1,37 @@
+FROM node:stretch
+
+RUN apt-get update && \
+    DEBIAN_FRONTEND="noninteractive" \
+    apt-get install -y --no-install-recommends \
+    chromium \
+    libgconf-2-4 \
+    openjdk-8-jre-headless \
+    && rm -rf /var/lib/apt/lists/*
+
+ENV CHROME_BIN /usr/bin/chromium
+
+
+WORKDIR /project
+
+
+RUN git config --global http.proxy http://192.168.1.1:8123/
+RUN git clone https://www.github.com/SciCatProject/catanie
+
+WORKDIR /project/catanie
+
+RUN npm config set proxy http://192.168.1.1:8123/
+RUN npm config set https-proxy http://192.168.1.1:8123/
+RUN npm config set registry http://registry.npmjs.org/
+RUN npm config set strict-ssl false
+
+RUN npm install
+
+RUN npm run ng build
+
+COPY CI/ESS/rune2e.sh /entrypoint.sh
+
+
+COPY protractor.conf.js /project/catanie/
+
+CMD /entrypoint.sh
+

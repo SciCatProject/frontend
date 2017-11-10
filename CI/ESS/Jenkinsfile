@@ -8,13 +8,14 @@ node {
 
        stage('Build Docker'){
 
-            sh 'docker build -f CI/ESS/Dockerfile.test . -t catanie_test'
+            sh 'docker build --file CI/ESS/Dockerfile.test . --tag catanie_test'
+            sh 'docker build --file CI/ESS/Dockerfile.e2e . --tag e2e-catanie'
        }
        stage('Unit Test Catanie '){
             sh 'docker run  -t catanie_test npm run -- ng test --watch false --single-run true'
        }
        stage('e2e Test Catanie '){
-            sh 'docker run  -t catanie_test npm run e2e'
+            sh 'docker run  --tag  e2e-catanie '
        }
 
 }
