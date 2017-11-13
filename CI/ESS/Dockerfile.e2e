@@ -1,5 +1,7 @@
 FROM node:stretch
 
+ENV http_proxy  http://192.168.1.1:8123/
+ENV https_proxy  http://192.168.1.1:8123/
 RUN apt-get update && \
     DEBIAN_FRONTEND="noninteractive" \
     apt-get install -y --no-install-recommends \
