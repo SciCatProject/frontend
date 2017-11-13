@@ -1,34 +1,40 @@
-import { LoginPage } from '../login/login.po';
-import { DashboardPage } from '../dashboard/dashboard.po';
-import { browser, element, by } from 'protractor';
+import {browser, by, element} from 'protractor';
+
+import {DashboardPage} from '../dashboard/dashboard.po';
+import {LoginPage} from '../login/login.po';
 
 describe('catanie Dataset Filters', function() {
   let lp: LoginPage;
   let page: DashboardPage;
+  const urlParams =
+      '/datasets?text=house&groups=p16623&skip=0&initial=false&mode=View';
 
-  beforeEach(() => {
-    lp = new LoginPage();
+  beforeAll(() => {
+   /* lp = new LoginPage();
     lp.navigateTo().then(() => {
       lp.enterDetails(browser.params.login.user, browser.params.login.pwd);
       lp.login();
-      page = new DashboardPage();
-      page.navigateTo('/datasets?text=house&groups=p16623&skip=0&initial=false');
-      browser.waitForAngular();
-      browser.sleep(3000);
-    });
+    });*/
   });
 
   it('should contain correct url', () => {
-    expect(browser.getCurrentUrl()).toContain('datasets');
-    expect(browser.getCurrentUrl()).toContain('text=house');
-    expect(browser.getCurrentUrl()).toContain('groups=p16623');
+      page = new DashboardPage();
+    page.navigateTo(urlParams).then(
+        () => { expect(browser.getCurrentUrl()).toContain(urlParams); });
   });
 
   it('should have a prefilled search box', () => {
-    expect(element(by.name('search')).getAttribute('value')).toContain('house');
+    page.navigateTo(urlParams).then(() => {
+      expect(element(by.name('search')).getAttribute('value'))
+          .toContain('house');
+    });
   });
 
   it('should have a prefilled groups input', () => {
-    expect(element(by.name('group')).element(by.tagName('span')).element(by.tagName('input')).getAttribute('value')).toContain('p16623');
+    page.navigateTo(urlParams).then(() => {
+      element(by.css('.ui-autocomplete-token-label')).getText().then(text => {
+        expect(text).toContain('p16623');
+      });
+    });
   });
 });
