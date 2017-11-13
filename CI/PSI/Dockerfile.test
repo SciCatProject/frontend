@@ -1,4 +1,4 @@
-FROM markadams/chromium-xvfb-js:8
+FROM node:9.1
 LABEL maintainer="gareth.murphy@esss.se"
 
 RUN apt-get update && \
