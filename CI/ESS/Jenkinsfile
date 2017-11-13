@@ -14,7 +14,7 @@ node {
             sh 'docker build --file CI/ESS/Dockerfile.e2e . --tag e2e-catanie'
        }
        stage('e2e Test Catanie '){
-            sh 'docker run  --tag  e2e-catanie '
+            sh 'docker run  -t  e2e-catanie '
        }
 
 }
