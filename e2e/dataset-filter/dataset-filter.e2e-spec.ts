@@ -32,7 +32,7 @@ describe('catanie Dataset Filters', function() {
 
   it('should have a prefilled groups input', () => {
     page.navigateTo(urlParams).then(() => {
-      element(by.css('.ui-autocomplete-token-label')).getText().then(text => {
+      element(by.name('group')).element(by.css('.ui-autocomplete-token-label')).getText().then(text => {
         expect(text).toContain('p16623');
       });
     });
