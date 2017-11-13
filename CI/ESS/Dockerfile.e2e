@@ -33,7 +33,7 @@ RUN npm run ng build
 COPY CI/ESS/rune2e.sh /entrypoint.sh
 
 
-COPY protractor.conf.js /project/catanie/
+COPY CI/ESS/protractor.conf.js /project/catanie/
 
 CMD /entrypoint.sh
 

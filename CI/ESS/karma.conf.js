@@ -52,7 +52,7 @@ module.exports = function (config) {
     browsers: ['ChromeHeadless'],
     singleRun: false,
 	junitReporter : {
-	  outputDir: '../../',
+	  outputDir: '../../test',
 	  outputFile: 'test-results.xml',
 	   useBrowserName: false,
 	  },
