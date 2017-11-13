@@ -55,39 +55,38 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.subscriptions.push(this.route.queryParams.subscribe(params => {
       let newParams = Object.assign({}, params);
-
       delete newParams['mode'];
       this.store.select(state => state.root.datasets.activeFilters)
           .take(1)
           .subscribe(filters => {
             const f = utils.filter(filters, newParams);
-            this.location = filters.creationLocation
-                                ? {_id : filters.creationLocation}
+            console.log(f);
+            this.location = f['creationLocation']
+                                ? {_id : filters['creationLocation']}
                                 : '';
-            if (filters.groups && filters.groups.length > 0) {
+            if (f['groups'] && f['groups'] && Array.isArray(f['groups']) && f['groups'].length > 0) {
               this.selectedGroups =
-                  this.filters.groups.map(x => { return {_id : x}; });
+                  f['groups'].map(x => { return {_id : x}; });
+            } else if (f['groups'] && !Array.isArray(f['groups'])) {
+              this.selectedGroups = [{'_id': f['groups']}];
             } else {
-              this.selectedGroups = [];
-              }
+              this.selectedGroups= [];
+            }
             if (utils.compareObj(newParams, f)) {
               this.router.navigate(
                   [ '/datasets' ],
                   {queryParams : newParams, replaceUrl : true});
-              this.store.dispatch({type : dsa.FILTER_UPDATE, payload : f});
             }
+            this.store.dispatch({type : dsa.FILTER_UPDATE, payload : f});
           });
     }));
     this.subscriptions.push(
         this.store.select(state => state.root.datasets.activeFilters)
             .subscribe(data => {
-              this.filters = Object.assign({}, data);
-              const currentParams = this.route.snapshot.queryParams;
-              this.router.navigate(
-                  [ '/datasets' ],
-                  {queryParams : Object.assign({}, currentParams, data)});
-              // this.router.navigate([ '/datasets' ], {queryParams :
-              // this.filters, replaceUrl : true});
+              this.filters = Object.assign({}, this.route.snapshot.queryParams, data);
+              // this.router.navigate(
+              //     [ '/datasets' ],
+              //     {queryParams : this.filters});
             }));
     this.resultCount$ =
         this.store.select(state => state.root.datasets.totalSets);

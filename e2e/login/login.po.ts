@@ -8,7 +8,7 @@ export class LoginPage {
     return browser.get('/login');
   }
 
-  enterDetails(username, passwd) {  
+  enterDetails(username, passwd) {
     this.user.sendKeys(username);
     this.pwd.sendKeys(passwd);
     expect(this.user.getAttribute('value')).toEqual(username);
