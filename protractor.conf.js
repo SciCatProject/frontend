@@ -13,7 +13,7 @@ exports.config = {
         'browserName': 'chrome',
         // chromeDriver: '../node_modules/protractor/node_modules/webdriver-manager/selenium/chromedriver_2.30',
         chromeOptions: {
-            // args: ["--headless", "--disable-gpu", "--window-size=800x600"]
+            // args: ["--headless", "--disable-gpu"]
             args: ["--window-size=800x600"]
         }
 
@@ -39,10 +39,6 @@ exports.config = {
         });
     },
     onPrepare: function () {
-      jasmine.getEnv().addReporter(new SpecReporter({
-        spec: {
-          displayStacktrace: true
-        }
-      }));
+      jasmine.getEnv().addReporter(new SpecReporter());
     }
 };

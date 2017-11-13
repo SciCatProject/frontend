@@ -111,7 +111,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
       }
       const currentParams = this.route.snapshot.queryParams;
       this.router.navigate(['/datasets'], {
-         queryParams: {...currentParams, 'mode': this.mode},
+         queryParams: Object.assign({}, currentParams, {'mode': this.mode})
       });
     });
 

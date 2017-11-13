@@ -6,13 +6,14 @@ describe('catanie Dataset Filters', function() {
   let lp: LoginPage;
   let page: DashboardPage;
 
-  beforeAll(() => {
+  beforeEach(() => {
     lp = new LoginPage();
     lp.navigateTo().then(() => {
       lp.enterDetails(browser.params.login.user, browser.params.login.pwd);
       lp.login();
-      page = new DashboardPage('/datasets?text=house&groups=p16623&skip=0&initial=false');
+      page = new DashboardPage();
       page.navigateTo('/datasets?text=house&groups=p16623&skip=0&initial=false');
+      browser.waitForAngular();
       browser.sleep(3000);
     });
   });

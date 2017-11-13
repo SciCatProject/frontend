@@ -17,6 +17,7 @@ describe('catanie Login', function() {
 
   it('should match input details', () => {
     lp = new LoginPage();
+    lp.enterDetails('ingestor', 'aman');
   });
 
   it('should login with correct credentials', () => {

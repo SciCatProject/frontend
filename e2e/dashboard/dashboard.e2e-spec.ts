@@ -9,7 +9,7 @@ describe('catanie Dashboard', function() {
   beforeAll(() => {
     lp = new LoginPage();
     lp.navigateTo().then(() => {
-      lp.enterDetails(browser.params.login.user, browser.params.login.pwd);
+      lp.enterDetails('ingestor', 'aman');
       lp.login();
       browser.sleep(2000);
       page = new DashboardPage();
