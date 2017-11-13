@@ -4,15 +4,14 @@ node {
 
           checkout scm
        }
-
-
        stage('Build Docker'){
-
             sh 'docker build --file CI/ESS/Dockerfile.test . --tag catanie_test'
-            sh 'docker build --file CI/ESS/Dockerfile.e2e . --tag e2e-catanie'
        }
        stage('Unit Test Catanie '){
             sh 'docker run  -t catanie_test npm run -- ng test --watch false --single-run true'
+       }
+       stage('Build e2e'){
+            sh 'docker build --file CI/ESS/Dockerfile.e2e . --tag e2e-catanie'
        }
        stage('e2e Test Catanie '){
             sh 'docker run  -t  e2e-catanie '
