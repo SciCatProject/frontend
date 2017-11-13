@@ -60,6 +60,7 @@
     "karma-cli": "1.0.1",
     "karma-coverage": "^1.1.1",
     "karma-jasmine": "1.1.0",
+    "karma-junit-reporter": "^1.2.0",
     "karma-remap-istanbul": "0.6.0",
     "karma-source-map-support": "^1.2.0",
     "ngrx-store-localstorage": "^0.2.4",

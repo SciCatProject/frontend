@@ -42,8 +42,8 @@ module.exports = function (config) {
       }
     },
     reporters: config.angularCli && config.angularCli.codeCoverage
-              ? ['progress', 'coverage-istanbul']
-              : ['progress'],
+              ? ['progress', 'coverage-istanbul', 'junit']
+              : ['progress', 'junit'],
     port: 9876,
     colors: true,
     logLevel: config.LOG_DEBUG,
