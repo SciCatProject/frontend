@@ -16,5 +16,13 @@ node {
        stage('e2e Test Catanie '){
             sh 'docker run  -t  e2e-catanie '
        }
+       post {
+        always {
+            junit '**/target/*.xml'
+        }
+        failure {
+            mail to: gareth.murphy@esss.se, subject: 'The Pipeline failed :('
+        }
+    }
 
 }

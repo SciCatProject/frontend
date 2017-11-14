@@ -29,6 +29,7 @@ RUN npm config set strict-ssl false
 RUN npm install
 
 RUN npm run ng build
+RUN npm install -g protractor
 
 COPY CI/ESS/rune2e.sh /entrypoint.sh
 
