@@ -10,6 +10,7 @@ import * as dsa from 'state-management/actions/datasets.actions';
 import * as dStore from 'state-management/state/datasets.store';
 import {DatepickerState, SelectionModes} from 'shared/modules/datepicker/datepicker.reducer';
 import TimeRange from 'shared/modules/datepicker/LocalizedDateTime/timerange';
+import {Day} from 'shared/modules/datepicker/LocalizedDateTime/timeranges';
 
 @Component({
   selector : 'datasets-filter',
@@ -50,6 +51,22 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   filterValues;
 
   subscriptions = [];
+
+  specialDayClassGetter = (d: Day): string[] => {
+    // // example
+    // const specialClasses = [];
+    // specialClasses.push('day-of-week-' + (d.dayOfWeekIdx).toString());
+    // return specialClasses;
+    return [];
+  };
+
+  specialDayTitleAttribGetter = (d: Day): string => {
+    // // example
+    // let titleAttr = '';
+    // titleAttr = new Date(Math.round((d.startTime + d.endTime) / 2.0)).toDateString();
+    // return titleAttr;
+    return '';
+  };
 
   constructor(private store: Store<any>, private route: ActivatedRoute,
               private router: Router) {}

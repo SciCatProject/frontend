@@ -31,22 +31,30 @@ const defaultSelectionTextFormatter = (selectedRanges: TimeRange[]) => {
     const mm = ('0' + (d2.getUTCMonth() + 1).toString()).substr(-2);
     const dd = ('0' + d2.getUTCDate().toString()).substr(-2);
     const yyyy = d2.getUTCFullYear().toString();
-    // const joinStr = '/';
-    // return [mm, dd, yyyy].join(joinStr);
-    const joinStr = '-';
-    return [yyyy, mm, dd].join(joinStr);
+    // const dateJoinStr = '/';
+    // return [mm, dd, yyyy].join(dateJoinStr);
+    const dateJoinStr = '-';
+    return [yyyy, mm, dd].join(dateJoinStr);
   };
-  // const joinStr = ' — '; //note this is longer than a normal dash in non-monospace fonts
-  // const joinStr = '/';
-  // const joinStr = ' - ';
-  const joinStr = ' -- ';
+  // const rangeJoinStr = ' — '; //note this is longer than a normal dash in non-monospace fonts
+  // const rangeJoinStr = '/';
+  // const rangeJoinStr = ' - ';
+  const rangeJoinStr = ' -- ';
   return selectedRanges.map((sr: Day | MultiDayRange) => {
     if (sr instanceof Day) {
       return getDayStr(sr);
     } else if (sr instanceof MultiDayRange) {
-      return [sr.firstDay, sr.lastDay].map(getDayStr).join(joinStr);
+      return [sr.firstDay, sr.lastDay].map(getDayStr).join(rangeJoinStr);
     }
   }).join(', ');
+};
+
+const defaultSpecialDayClassGetter = (day: Day) => {
+  return [];
+};
+
+const defaultSpecialDayTitleAttribGetter = (day: Day) => {
+  return '';
 };
 
 @Component ({
@@ -62,6 +70,9 @@ export class DatePickerComponent implements OnInit, OnDestroy {
   @Input() datepickerSelectionMode: SelectionModes = SelectionModes.range;
   @Input() selectionTextFormatter: ((selectedRanges: TimeRange[]) => string) = defaultSelectionTextFormatter;
   @Input() placeholder: string;
+  @Input() specialDayClassGetter: ((day: Day) => string[]) = defaultSpecialDayClassGetter;
+  @Input() specialDayTitleAttribGetter: ((day: Day) => string) = defaultSpecialDayTitleAttribGetter;
+
   @Output() selectedRanges: EventEmitter<TimeRange[]> = new EventEmitter();
   CalModes = CalModes;
 
@@ -179,7 +190,7 @@ export class DatePickerComponent implements OnInit, OnDestroy {
     const thisYear = today.year;
     const focusYear = focusMonth.year;
     const isoSubstr = d.isoSubstr;
-    const classes = [];
+    const classes = [].concat(this.specialDayClassGetter(d));
 
     if (thisYear.contains(d)) {
       classes.push('this-year');

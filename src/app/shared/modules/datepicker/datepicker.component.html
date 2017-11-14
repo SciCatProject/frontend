@@ -54,7 +54,7 @@
             </thead>
             <tbody>
               <tr *ngFor="let weekInCalMonth of (calSuperMonth$ | async).weeks">
-                <td *ngFor="let day of weekInCalMonth.days" (click)="updateSelections(day)" ngClass="{{dayClasses(day, (focusMonth$ | async), (today$ | async), (selectedRanges$ | async)).join(' ')}}">
+                <td *ngFor="let day of weekInCalMonth.days" (click)="updateSelections(day)" [attr.title]="specialDayTitleAttribGetter(day)" ngClass="{{dayClasses(day, (focusMonth$ | async), (today$ | async), (selectedRanges$ | async)).join(' ')}}">
                   {{getDayDisplayText(day, (numFormatter$ | async))}}
                 </td>
               </tr>
