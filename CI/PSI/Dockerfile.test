@@ -7,6 +7,8 @@ RUN apt-get update && \
     nodejs \
     google-chrome-beta \
     && rm -rf /var/lib/apt/lists/*
+    
+RUN npm install -g chromedriver
 
 ENV CHROME_BIN /usr/bin/google-chrome-beta
 
