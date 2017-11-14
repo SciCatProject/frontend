@@ -4,13 +4,12 @@ LABEL maintainer="gareth.murphy@esss.se"
 RUN apt-get update && \
     DEBIAN_FRONTEND="noninteractive" \
     apt-get install -y --no-install-recommends \
-    nodejs \
-    google-chrome-beta \
+    chromium \
     && rm -rf /var/lib/apt/lists/*
     
 RUN npm install -g chromedriver
 
-ENV CHROME_BIN /usr/bin/google-chrome-beta
+ENV CHROME_BIN /usr/bin/chromium
 
 COPY package.json /usr/src/app/package.json
 COPY package-lock.json /usr/src/app/package-lock.json
