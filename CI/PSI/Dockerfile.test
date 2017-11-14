@@ -7,7 +7,7 @@ RUN apt-get update && \
     chromium \
     && rm -rf /var/lib/apt/lists/*
     
-RUN npm install -g chromedriver
+RUN sudo npm install -g chromedriver
 
 ENV CHROME_BIN /usr/bin/chromium
 
