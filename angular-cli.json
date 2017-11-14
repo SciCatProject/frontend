@@ -26,6 +26,7 @@
         "environmentSource": "environments/environment.ts",
         "environments": {
             "dev": "environments/environment.ts",
+            "max4demo": "environments/environment.max4demo.ts",
             "development": "environments/environment.development.ts",
             "production": "environments/environment.prod.ts",
             "staging": "environments/environment.staging.ts",
