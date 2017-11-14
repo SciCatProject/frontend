@@ -1,42 +1,26 @@
 import {NgModule} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {RouterModule} from '@angular/router';
 
-import {NguiDatetimePickerModule} from '@ngui/datetime-picker';
-import {AutoCompleteModule, DropdownModule, SharedModule, TreeModule, TreeTableModule} from 'primeng/primeng';
+import {BreadcrumbModule} from 'shared/modules/breadcrumb/breadcrumb.module';
+import {ConfigFormModule} from 'shared/modules/config-form/config-form.module';
+import {ErrorPageModule} from 'shared/modules/error-page/error-page.module';
 
-import {ObjKeysPipe, TitleCasePipe} from './pipes';
 import {ConfigService} from './services';
-
-import {BreadcrumbComponent, ConfigFormComponent, ErrorPageComponent} from './components';
 
 @NgModule({
   imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    NguiDatetimePickerModule,
-    TreeTableModule,
-    SharedModule,
-    TreeModule,
-    AutoCompleteModule,
-    DropdownModule,
-    RouterModule
+    BreadcrumbModule,
+    ConfigFormModule,
+    ErrorPageModule,
   ],
   declarations: [
-    ConfigFormComponent,
-    BreadcrumbComponent,
-    ErrorPageComponent,
-    ObjKeysPipe,
-    TitleCasePipe
   ],
   providers: [
     ConfigService,
   ],
   exports: [
-    ConfigFormComponent,
-    BreadcrumbComponent
+    BreadcrumbModule,
+    ConfigFormModule,
+    ErrorPageModule,
   ]
 })
 export class SharedCatanieModule { }

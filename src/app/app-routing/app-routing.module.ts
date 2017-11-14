@@ -9,7 +9,7 @@ import {JobsComponent} from '../jobs/jobs.component';
 import {JobsTableComponent} from '../jobs/jobs-table/jobs-table.component';
 import {JobsDetailComponent} from '../jobs/jobs-detail/jobs-detail.component';
 import {AppComponent} from '../app.component';
-import {ErrorPageComponent} from '../shared/components/error-page/error-page.component';
+import {ErrorPageComponent} from '../shared/modules/error-page/error-page.component';
 import {UserSettingsComponent} from '../users/user-settings/user-settings.component';
 import {UserDetailsComponent} from '../users/user-details/user-details.component';
 import {SampleDataFormComponent} from '../sample-data-form/sample-data-form.component';

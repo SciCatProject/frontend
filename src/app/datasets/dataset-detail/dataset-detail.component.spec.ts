@@ -4,7 +4,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Store, StoreModule } from '@ngrx/store';
 import { DatafilesComponent } from 'datasets/datafiles/datafiles.component';
-import { ConfigFormComponent } from 'shared/components/config-form/config-form.component';
+import { ConfigFormComponent } from 'shared/modules/config-form/config-form.component';
 import { MockActivatedRoute, MockStore } from 'shared/MockStubs';
 import { ObjKeysPipe, TitleCasePipe } from 'shared/pipes/index';
 import { rootReducer } from 'state-management/reducers/root.reducer';
