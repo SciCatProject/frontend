@@ -7,7 +7,8 @@ RUN npm config set registry http://registry.npmjs.org/
 RUN npm config set strict-ssl false
 COPY package.json /usr/src/app/package.json
 COPY package-lock.json /usr/src/app/package-lock.json
-RUN npm install
+
 COPY . /usr/src/app
 WORKDIR /usr/src/app
+RUN npm install
 # RUN npm run -- ng test --watch false --single-run true
