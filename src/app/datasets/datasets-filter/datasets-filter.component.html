@@ -33,10 +33,7 @@
         </p-autoComplete>
     </div>
     <div class="ui field">
-      <!--
       <h3>Date Range</h3>
-        <p-calendar [(ngModel)]="dates" name="date" selectionMode="range" yearNavigator="true" yearRange="1990:2017" (onSelect)="onTimeSelect($event)"></p-calendar>
-      -->
       <datepicker [datepickerSelector]="datepickerSelector" [datepickerSelectionMode]="dateSelectionMode" [placeholder]="'Date Range'" (selectedRanges)="updateDateRange($event)"></datepicker>
     </div>
     <!--<button type="submit" class="ui button">Filter</button>-->

@@ -1,7 +1,7 @@
 import 'rxjs/add/operator/take';
 
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import { createSelector, OutputSelector } from 'reselect';
+import {OutputSelector, createSelector} from 'reselect';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Store} from '@ngrx/store';
 import {AutoComplete, Tree} from 'primeng/primeng';

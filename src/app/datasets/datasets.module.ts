@@ -12,7 +12,6 @@ import {
 } from 'datasets/index';
 import {
   AutoCompleteModule,
-  CalendarModule,
   ConfirmationService,
   ConfirmDialogModule,
   DataTableModule,
@@ -32,7 +31,7 @@ import {SharedCatanieModule} from 'shared/shared.module';
   imports : [
     CommonModule, FormsModule, DialogModule, ReactiveFormsModule,
     SharedCatanieModule, DataTableModule, SharedModule, TabViewModule,
-    ConfirmDialogModule, TreeModule, /*CalendarModule, */TreeTableModule,
+    ConfirmDialogModule, TreeModule, TreeTableModule,
     DropdownModule, AutoCompleteModule,
     DatePickerModule
   ],
