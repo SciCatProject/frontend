@@ -51,6 +51,11 @@ module.exports = function (config) {
     autoWatch: true,
     browsers: ['ChromeHeadless'],
     singleRun: false,
+	junitReporter : {
+	  outputDir: '../../test',
+	  outputFile: 'test-results.xml',
+	   useBrowserName: false,
+	  },
 
   });
 };
