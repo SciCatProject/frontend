@@ -1,0 +1,66 @@
+
+  <label>
+    <input class="dates-text" type="text" [ngModel]="selectionsText$ | async" [placeholder]="placeholder" readonly  (click)="toggleCalDisp()"/>
+  </label><br/>
+  <div class="datepicker">
+    <div *ngIf="showCal$ | async" class="cal-container">
+      <div class="cal-controls">
+        <button (click)="toggleCalMode()" class="month-year">
+          <span class="cal-active-month">{{monthDisplayText$ | async}}</span>
+          <span class="cal-active-year">{{yearDisplayText$ | async}}</span>
+          <span ngClass="{{'arrow ' + (arrowDir$ | async)}}"></span>
+        </button>
+        <div class="cal-spacer"></div>
+        <div class="nav">
+          <button (click)="stepFocusBack()" class="prev" [attr.title]="titleTextPrev$ | async"></button>
+          <button (click)="setFocusNow()" class="now" [attr.title]="titleTextNow$ | async"></button>
+          <button (click)="stepFocusForward()" class="next" [attr.title]="titleTextNext$ | async"></button>
+        </div>
+      </div>
+      <div [ngSwitch]="calMode$ | async">
+        <ng-container *ngSwitchCase="CalModes.moty">
+          <table class="cal-moty">
+              <thead>
+                <tr>
+                  <td class="cal-active-year" colspan=3>
+                    {{yearDisplayText$ | async}}
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan=3>
+                    <input [ngModel]="sliderYear$ | async" (ngModelChange)="updateSliderYear($event)" id="yearSlider" class="slider" type="range" min="{{minYear$ | async}}" max="{{maxYear$ | async}}" step="1">
+                  </td>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let row of makeRange(4)">
+                  <ng-container *ngFor="let col of makeRange(3)"><ng-container *ngFor="let month of [(calYearMonths$ | async)[(row * 3) + col]]">
+                  <td [attr.data-month]="month.isoSubstr" (click)="focusOnMonth(month)" ngClass="{{monthClasses(month, (focusMonth$ | async), (today$ | async), (selectedRanges$ | async)).join(' ')}}">
+                    {{month.monthName}}
+                  </td>
+                  </ng-container></ng-container>
+                </tr>
+              </tbody>
+            </table>
+        </ng-container>
+        <ng-container *ngSwitchCase="CalModes.dotm">
+          <table class="cal-dotm">
+            <thead>
+              <tr class="cal-dotw">
+                <th *ngFor="let weekdayName of (weekdayNames$ | async)">
+                  {{weekdayName.short}}
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let weekInCalMonth of (calSuperMonth$ | async).weeks">
+                <td *ngFor="let day of weekInCalMonth.days" (click)="updateSelections(day)" ngClass="{{dayClasses(day, (focusMonth$ | async), (today$ | async), (selectedRanges$ | async)).join(' ')}}">
+                  {{getDayDisplayText(day, (numFormatter$ | async))}}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </ng-container>
+      </div>
+    </div>
+  </div>

@@ -2,8 +2,14 @@ import {Action} from '@ngrx/store';
 import * as lb from 'shared/sdk/models';
 import * as dsa from 'state-management/actions/datasets.actions';
 import {DatasetState, initialDatasetState} from 'state-management/state/datasets.store';
+import {DatepickerState, datepickerReducer} from 'shared/modules/datepicker/datepicker.reducer';
 
 export function datasetsReducer(state = initialDatasetState, action: Action) {
+  if (action.type.indexOf('[DatePicker]') !== -1) {
+    console.log('Action came in! ' + action.type);
+    return Object.assign({}, state, {datepicker: datepickerReducer(state.datepicker, action)});
+  }
+
   if (action.type.indexOf('[Dataset]') !== -1) {
     console.log('Action came in! ' + action.type);
   }

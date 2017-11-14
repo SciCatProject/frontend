@@ -1,12 +1,15 @@
 import 'rxjs/add/operator/take';
 
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import { createSelector, OutputSelector } from 'reselect';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Store} from '@ngrx/store';
 import {AutoComplete, Tree} from 'primeng/primeng';
 import * as utils from 'shared/utils';
 import * as dsa from 'state-management/actions/datasets.actions';
 import * as dStore from 'state-management/state/datasets.store';
+import {DatepickerState, SelectionModes} from 'shared/modules/datepicker/datepicker.reducer';
+import TimeRange from 'shared/modules/datepicker/LocalizedDateTime/timerange';
 
 @Component({
   selector : 'datasets-filter',
@@ -17,6 +20,9 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   @ViewChild('datetree') dateTree: Tree;
   @ViewChild('loc') locField: AutoComplete;
   @ViewChild('grp') grpField: AutoComplete;
+
+  datepickerSelector: OutputSelector<any, DatepickerState, (res: any) => DatepickerState>;
+  dateSelectionMode = SelectionModes.range;
 
   // @Input() datasets: Array<any> = [];
   facets: Array<any> = [];
@@ -53,6 +59,17 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
    * only use unique values
    */
   ngOnInit() {
+    const datasetsStoreSlicePath = ['root', 'datasets'];
+    const datasetsSelector = createSelector(
+      (state: any) : any => {
+        return datasetsStoreSlicePath.reduce((obj: any, sliceKey: any) => obj[sliceKey], state);
+      },
+      (selectedDatasets: any) : any => selectedDatasets);
+
+    this.datepickerSelector = createSelector(
+      datasetsSelector,
+      (selectedDatasets: any) : DatepickerState => selectedDatasets['datepicker']);
+
     this.subscriptions.push(this.route.queryParams.subscribe(params => {
       let newParams = Object.assign({}, params);
       delete newParams['mode'];
@@ -113,23 +130,29 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
             }));
   }
 
+  /**
+   *
+   * @param timeranges
+   */
+  updateDateRange(timeranges: TimeRange[]) {
+    let startDate: Date = null;
+    let endDate: Date = null;
+    const selectedRange: TimeRange = timeranges[0];
+    if (selectedRange != null) {
+      startDate = selectedRange.datePair[0];
+      endDate = selectedRange.datePair[1];
+    }
+    if ((startDate instanceof Date) && (endDate instanceof Date)) {
+      this.filters.startDate = new Date(startDate.getTime());
+      this.filters.endDate = new Date(endDate.getTime());
+    }
+    this.store.dispatch({type : dsa.FILTER_UPDATE, payload : this.filters});
+  }
+
   ngOnDestroy() {
     for (let i = 0; i < this.subscriptions.length; i++) {
       this.subscriptions[i].unsubscribe();
     }
-  }
-
-  /**
-   * Callback used whenever a time checkbox has been selected or
-   * deselected
-   * @param event
-   */
-  onTimeSelect(event) {
-    this.filters.startDate = new Date(this.dates[0]);
-    this.filters.endDate = this.dates[1] !== null ? new Date(this.dates[1])
-                                                  : new Date(this.dates[0]);
-    this.filters.endDate.setHours(23, 59, 59, 0);
-    this.store.dispatch({type : dsa.FILTER_UPDATE, payload : this.filters});
   }
 
   /**
