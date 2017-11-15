@@ -11,7 +11,7 @@ node {
             sh 'docker run  -t catanie_test npm run -- ng test --watch false --single-run true -v ./test:./test '
                    post {
                     always {
-                        junit '**/target/*.xml'
+                        junit '**/test/*.xml'
                     }
                     failure {
                         mail to: gareth.murphy@esss.se, subject: 'The Pipeline failed :('
