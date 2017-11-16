@@ -61,17 +61,17 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   ngOnInit() {
     const datasetsStoreSlicePath = ['root', 'datasets'];
     const datasetsSelector = createSelector(
-      (state: any) : any => {
+      (state: any): any => {
         return datasetsStoreSlicePath.reduce((obj: any, sliceKey: any) => obj[sliceKey], state);
       },
-      (selectedDatasets: any) : any => selectedDatasets);
+      (selectedDatasets: any): any => selectedDatasets);
 
     this.datepickerSelector = createSelector(
       datasetsSelector,
-      (selectedDatasets: any) : DatepickerState => selectedDatasets['datepicker']);
+      (selectedDatasets: any): DatepickerState => selectedDatasets['datepicker']);
 
     this.subscriptions.push(this.route.queryParams.subscribe(params => {
-      let newParams = Object.assign({}, params);
+      const newParams = Object.assign({}, params);
       delete newParams['mode'];
       this.store.select(state => state.root.datasets.activeFilters)
           .take(1)
@@ -87,7 +87,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
             } else if (f['groups'] && !Array.isArray(f['groups'])) {
               this.selectedGroups = [{'_id': f['groups']}];
             } else {
-              this.selectedGroups= [];
+              this.selectedGroups = [];
             }
             if (utils.compareObj(newParams, f)) {
               this.router.navigate(
@@ -100,10 +100,10 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
         this.store.select(state => state.root.datasets.activeFilters)
             .subscribe(data => {
-              this.filters = Object.assign({}, this.route.snapshot.queryParams, data);
-              // this.router.navigate(
-              //     [ '/datasets' ],
-              //     {queryParams : this.filters});
+              this.filters = Object.assign({}, data, this.route.snapshot.queryParams);
+               this.router.navigate(
+                   [ '/datasets' ],
+                   {queryParams : this.filters});
             }));
     this.resultCount$ =
         this.store.select(state => state.root.datasets.totalSets);
