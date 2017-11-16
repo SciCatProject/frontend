@@ -38,6 +38,10 @@
     opacity: 0.2 !important;
 }
 
+:host /deep/ table thead tr th p-dtcheckbox {
+  visibility:hidden;
+}
+
 /*td {
     overflow: hidden;
 }*/

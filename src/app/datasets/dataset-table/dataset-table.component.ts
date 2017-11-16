@@ -42,7 +42,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   loading$: any = false;
   limit$: any = 10;
 
-  mode = 'View';
+  mode = 'view';
 
   aremaOptions = 'archiveretrieve';
 
@@ -235,8 +235,8 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
 
   /**
    * Hanlde changing of view mode and disabling selected rows
-   * @param event 
-   * @param mode 
+   * @param event
+   * @param mode
    */
   onModeChange(event, mode) {
     this.mode = mode.toLowerCase();
