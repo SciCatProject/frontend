@@ -6,7 +6,6 @@ module.exports = function (config) {
     basePath: '',
     frameworks: ['jasmine', '@angular/cli'],
     plugins: [
-      require('karma-junit-reporter'),
       require('karma-jasmine'),
       require('karma-chrome-launcher'),
       require('karma-coverage-istanbul-reporter'),
@@ -43,19 +42,16 @@ module.exports = function (config) {
       }
     },
     reporters: config.angularCli && config.angularCli.codeCoverage
-              ? ['progress', 'coverage-istanbul', 'junit']
-              : ['progress', 'junit'],
+              ? ['progress', 'coverage-istanbul']
+              : ['progress'],
     port: 9876,
     colors: true,
     logLevel: config.LOG_DEBUG,
     autoWatch: true,
     browsers: ['ChromeHeadless'],
     singleRun: false,
-	junitReporter : {
-	  outputDir: '../../test',
-	  outputFile: 'test-results.xml',
-	   useBrowserName: false,
-	  },
 
   });
 };
+
+
