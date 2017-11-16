@@ -9,7 +9,7 @@ import * as utils from 'shared/utils';
 import * as dsa from 'state-management/actions/datasets.actions';
 import * as dStore from 'state-management/state/datasets.store';
 import {DatepickerState, SelectionModes} from 'shared/modules/datepicker/datepicker.reducer';
-import TimeRange from 'shared/modules/datepicker/LocalizedDateTime/timerange';
+import TimeRange from 'shared/modules/datepicker/LocalizedDateTime/TimeRange';
 
 @Component({
   selector : 'datasets-filter',
