@@ -10,5 +10,6 @@ COPY package-lock.json /usr/src/app/package-lock.json
 RUN npm install
 RUN npm install -g karma
 COPY . /usr/src/app
+COPY CI/ESS/karma.conf.js /project/catanie/
 WORKDIR /usr/src/app
 # RUN npm run -- ng test --watch false --single-run true
