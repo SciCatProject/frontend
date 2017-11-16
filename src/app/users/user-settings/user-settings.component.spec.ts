@@ -5,7 +5,7 @@ import {Store, StoreModule} from '@ngrx/store';
 import {NguiDatetimePickerModule} from '@ngui/datetime-picker';
 import {
   ConfigFormComponent
-} from 'shared/components/config-form/config-form.component';
+} from 'shared/modules/config-form/config-form.component';
 import {MockConfigService, MockStore, MockUserApi} from 'shared/MockStubs';
 import {ObjKeysPipe, TitleCasePipe} from 'shared/pipes/index';
 import {UserApi} from 'shared/sdk/services';

@@ -12,7 +12,6 @@ import {
 } from 'datasets/index';
 import {
   AutoCompleteModule,
-  CalendarModule,
   ConfirmationService,
   ConfirmDialogModule,
   DataTableModule,
@@ -23,14 +22,18 @@ import {
   TreeModule,
   TreeTableModule
 } from 'primeng/primeng';
+import {
+  DatePickerModule
+} from 'shared/modules/datepicker/datepicker.module';
 import {SharedCatanieModule} from 'shared/shared.module';
 
 @NgModule({
   imports : [
     CommonModule, FormsModule, DialogModule, ReactiveFormsModule,
     SharedCatanieModule, DataTableModule, SharedModule, TabViewModule,
-    ConfirmDialogModule, TreeModule, CalendarModule, TreeTableModule,
-    DropdownModule, AutoCompleteModule
+    ConfirmDialogModule, TreeModule, TreeTableModule,
+    DropdownModule, AutoCompleteModule,
+    DatePickerModule
   ],
   declarations : [
     DashboardComponent, DatasetTableComponent, DatablocksComponent,

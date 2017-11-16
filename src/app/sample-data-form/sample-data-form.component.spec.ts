@@ -4,7 +4,7 @@ import {Store, StoreModule} from '@ngrx/store';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 import { SampleDataFormComponent } from './sample-data-form.component';
-import { ConfigFormComponent} from 'shared/components/config-form/config-form.component';
+import { ConfigFormComponent} from 'shared/modules/config-form/config-form.component';
 import {MockConfigService, MockStore} from 'shared/MockStubs';
 import {ObjKeysPipe, TitleCasePipe} from 'shared/pipes/index';
 import {ConfigService} from 'shared/services';
