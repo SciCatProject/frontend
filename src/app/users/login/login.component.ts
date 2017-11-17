@@ -42,7 +42,7 @@ export class LoginComponent implements OnInit {
         .subscribe(result => {
           console.log(result);
           if (result && result['username']) {
-            self.router.navigate([ decodeURIComponent(self.returnUrl) ]);
+            self.router.navigateByUrl(decodeURIComponent(self.returnUrl));
           } else if (result && result['errSrc']) {
             self.store.dispatch({
               type : ua.SHOW_MESSAGE,
