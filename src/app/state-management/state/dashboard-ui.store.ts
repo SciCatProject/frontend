@@ -12,5 +12,5 @@ export const initialDashboardUIState: DashboardUIState = {
     dsTable: [],
     groupText: undefined,
     dateChoice: [],
-    mode: 'View' 
+    mode: 'view'
 };

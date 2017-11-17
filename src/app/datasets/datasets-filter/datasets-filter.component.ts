@@ -1,15 +1,18 @@
 import 'rxjs/add/operator/take';
 
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {OutputSelector, createSelector} from 'reselect';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Store} from '@ngrx/store';
 import {AutoComplete, Tree} from 'primeng/primeng';
+import {createSelector, OutputSelector} from 'reselect';
+import {
+  DatepickerState,
+  SelectionModes
+} from 'shared/modules/datepicker/datepicker.reducer';
+import TimeRange from 'shared/modules/datepicker/LocalizedDateTime/TimeRange';
 import * as utils from 'shared/utils';
 import * as dsa from 'state-management/actions/datasets.actions';
 import * as dStore from 'state-management/state/datasets.store';
-import {DatepickerState, SelectionModes} from 'shared/modules/datepicker/datepicker.reducer';
-import TimeRange from 'shared/modules/datepicker/LocalizedDateTime/TimeRange';
 
 @Component({
   selector : 'datasets-filter',
@@ -21,7 +24,8 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   @ViewChild('loc') locField: AutoComplete;
   @ViewChild('grp') grpField: AutoComplete;
 
-  datepickerSelector: OutputSelector<any, DatepickerState, (res: any) => DatepickerState>;
+  datepickerSelector:
+      OutputSelector<any, DatepickerState, (res: any) => DatepickerState>;
   dateSelectionMode = SelectionModes.range;
 
   // @Input() datasets: Array<any> = [];
@@ -59,16 +63,16 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
    * only use unique values
    */
   ngOnInit() {
-    const datasetsStoreSlicePath = ['root', 'datasets'];
-    const datasetsSelector = createSelector(
-      (state: any): any => {
-        return datasetsStoreSlicePath.reduce((obj: any, sliceKey: any) => obj[sliceKey], state);
-      },
-      (selectedDatasets: any): any => selectedDatasets);
+    const datasetsStoreSlicePath = [ 'root', 'datasets' ];
+    const datasetsSelector = createSelector((state: any): any => {
+      return datasetsStoreSlicePath.reduce(
+          (obj: any, sliceKey: any) => obj[sliceKey], state);
+    }, (selectedDatasets: any): any => selectedDatasets);
 
-    this.datepickerSelector = createSelector(
-      datasetsSelector,
-      (selectedDatasets: any): DatepickerState => selectedDatasets['datepicker']);
+    this.datepickerSelector =
+        createSelector(datasetsSelector,
+                       (selectedDatasets: any): DatepickerState =>
+                           selectedDatasets['datepicker']);
 
     this.subscriptions.push(this.route.queryParams.subscribe(params => {
       const newParams = Object.assign({}, params);
@@ -80,32 +84,40 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
             this.location = f['creationLocation']
                                 ? {_id : filters['creationLocation']}
                                 : '';
-            if (f['groups'] && f['groups'] && Array.isArray(f['groups']) && f['groups'].length > 0) {
-              this.selectedGroups =
-                  f['groups'].map(x => { return {_id : x}; });
+            if (f['groups'] && f['groups'] && Array.isArray(f['groups']) &&
+                f['groups'].length > 0) {
+              this.selectedGroups = f['groups'].map(x => { return {_id : x}; });
             } else if (f['groups'] && !Array.isArray(f['groups'])) {
-              this.selectedGroups = [{'_id': f['groups']}];
+              this.selectedGroups = [ {'_id' : f['groups']} ];
             } else {
               this.selectedGroups = [];
             }
-            this.store.select(state => state.root.dashboardUI.mode).take(1).subscribe(mode => {
-              if (utils.compareObj(f, newParams)) {
-                this.router.navigate(
-                    [ '/datasets' ],
-                    {queryParams : newParams, replaceUrl : true});
-              } else if (params['mode'] !==  mode) {
-                this.store.dispatch({type : dsa.FILTER_UPDATE, payload : f});
-              }
-            });
+            this.store.select(state => state.root.dashboardUI.mode)
+                .take(1)
+                .subscribe(mode => {
+                  if (utils.compareObj(f, newParams)) {
+                    this.router.navigate(
+                        [ '/datasets' ],
+                        {queryParams : newParams, replaceUrl : true});
+                  } else if (params['mode'] !== mode) {
+                    this.store.dispatch(
+                        {type : dsa.FILTER_UPDATE, payload : f});
+                  }
+                });
           });
     }));
     this.subscriptions.push(
         this.store.select(state => state.root.datasets.activeFilters)
             .subscribe(data => {
-              this.filters = Object.assign({}, data, this.route.snapshot.queryParams);
-               this.router.navigate(
-                   [ '/datasets' ],
-                   {queryParams : this.filters});
+              // this.filters = Object.assign({}, data,
+              // this.route.snapshot.queryParams);
+              this.filters = Object.assign({}, data);
+              this.store.select(state => state.root.dashboardUI.mode)
+                  .take(1)
+                  .subscribe(mode => {
+                    const p = Object.assign(this.filters, {'mode' : mode});
+                    this.router.navigate([ '/datasets' ], {queryParams : p});
+                  });
             }));
     this.resultCount$ =
         this.store.select(state => state.root.datasets.totalSets);
@@ -143,7 +155,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     if (selectedRange != null) {
       startDate = selectedRange.datePair[0];
       endDate = selectedRange.datePair[1];
-    }
+      }
     if ((startDate instanceof Date) && (endDate instanceof Date)) {
       this.filters.startDate = new Date(startDate.getTime());
       this.filters.endDate = new Date(endDate.getTime());

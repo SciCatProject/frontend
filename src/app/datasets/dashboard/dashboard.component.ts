@@ -48,7 +48,6 @@ export class DashboardComponent implements OnInit {
    * @param {any} customTerm - free text search term@memberof DashboardComponent
    */
   textSearch(terms) {
-    console.log(terms);
     this.store
       .select(state => state.root.datasets.activeFilters)
       .take(1)
