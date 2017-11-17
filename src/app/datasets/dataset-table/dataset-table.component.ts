@@ -99,7 +99,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
             && this.archiveable.indexOf(set.datasetlifecycle.archiveStatusMessage) === -1) {
             c = 'disabled-row';
           } else if (this.mode === 'retrieve'
-            && set.datasetlifecycle && this.retrievable.indexOf(set.datasetlifecycle.retrieveStatusMessage) === -1) {
+            && set.datasetlifecycle && this.retrievable.indexOf(set.datasetlifecycle.archiveStatusMessage) === -1) {
             c = 'disabled-row';
           } else {
             c = '';

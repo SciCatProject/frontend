@@ -12,7 +12,6 @@ export function filter(src, cmp) {
 
 export function compareObj(source, comp) {
     const k = Object.keys(source);
-    let diff = false;
     for (let i = 0; i < k.length; i++) {
       const s = source[k[i]];
       const c = comp[k[i]];

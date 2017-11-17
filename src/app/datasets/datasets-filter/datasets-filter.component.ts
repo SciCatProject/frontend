@@ -77,7 +77,6 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
           .take(1)
           .subscribe(filters => {
             const f = utils.filter(filters, newParams);
-            console.log(f);
             this.location = f['creationLocation']
                                 ? {_id : filters['creationLocation']}
                                 : '';
@@ -89,12 +88,15 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
             } else {
               this.selectedGroups = [];
             }
-            if (utils.compareObj(newParams, f)) {
-              this.router.navigate(
-                  [ '/datasets' ],
-                  {queryParams : newParams, replaceUrl : true});
-            }
-            this.store.dispatch({type : dsa.FILTER_UPDATE, payload : f});
+            this.store.select(state => state.root.dashboardUI.mode).take(1).subscribe(mode => {
+              if (utils.compareObj(f, newParams)) {
+                this.router.navigate(
+                    [ '/datasets' ],
+                    {queryParams : newParams, replaceUrl : true});
+              } else if (params['mode'] !==  mode) {
+                this.store.dispatch({type : dsa.FILTER_UPDATE, payload : f});
+              }
+            });
           });
     }));
     this.subscriptions.push(
@@ -253,8 +255,8 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     this.group = undefined;
 
     // YES, another primeng hack to clear the field
-    this.grpField.value = [];
-    this.selectedGroups.map(x => { this.grpField.removeItem(x); });
+    // this.grpField.value = [];
+    // this.selectedGroups.map(x => { this.grpField.removeItem(x); });
 
     // TODO clearing this does not visually clear (although it is removed from
     // the array)
