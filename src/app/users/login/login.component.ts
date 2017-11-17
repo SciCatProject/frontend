@@ -14,7 +14,7 @@ import * as ua from 'state-management/actions/user.actions';
 @Component({selector : 'login-form', templateUrl : './login.component.html'})
 export class LoginComponent implements OnInit {
 
-  returnUrl: String;
+  returnUrl: string;
   postError = '';
 
   public loginForm = this.fb.group({
@@ -42,7 +42,7 @@ export class LoginComponent implements OnInit {
         .subscribe(result => {
           console.log(result);
           if (result && result['username']) {
-            self.router.navigate([ self.returnUrl ]);
+            self.router.navigate([ decodeURIComponent(self.returnUrl) ]);
           } else if (result && result['errSrc']) {
             self.store.dispatch({
               type : ua.SHOW_MESSAGE,
