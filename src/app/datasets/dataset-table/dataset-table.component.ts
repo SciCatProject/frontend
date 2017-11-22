@@ -94,9 +94,10 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
       if (this.datasets && this.datasets.length > 0) {
         for (let d = 0; d < this.datasets.length; d++) {
           const set = this.datasets[d];
+          console.log(set.size);
           let c = '';
           if (this.mode === 'archive' && set.datasetlifecycle
-            && this.archiveable.indexOf(set.datasetlifecycle.archiveStatusMessage) === -1) {
+            && (this.archiveable.indexOf(set.datasetlifecycle.archiveStatusMessage) === -1) || set.size === 0) {
             c = 'disabled-row';
           } else if (this.mode === 'retrieve'
             && set.datasetlifecycle && this.retrievable.indexOf(set.datasetlifecycle.archiveStatusMessage) === -1) {
