@@ -142,6 +142,7 @@ export class UserEffects {
 
             return this.userSrv.getCurrent()
                 .switchMap(res => {
+                  console.log(res);
                   return Observable.of({
                     type : UserActions.RETRIEVE_USER_COMPLETE,
                     payload : res

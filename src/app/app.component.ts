@@ -1,3 +1,4 @@
+const { version: appVersion } = require('../../package.json')
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {Store} from '@ngrx/store';
@@ -18,6 +19,7 @@ import {environment} from '../environments/environment';
 })
 export class AppComponent implements OnDestroy, OnInit {
   title = 'SciCat';
+  appVersion = 0;
   us: UserApi;
   username: string = null;
   message$ = null;
@@ -35,6 +37,7 @@ export class AppComponent implements OnDestroy, OnInit {
   constructor(private router: Router,
               private _notif_service: NotificationsService,
               private store: Store<any>) {
+    this.appVersion = appVersion;
   }
 
   /**
@@ -89,6 +92,7 @@ export class AppComponent implements OnDestroy, OnInit {
           if (window.location.pathname.indexOf('login') === -1) {
             window.location.replace('/login');
           }
+        } else {
         }
       }));
     this.store.dispatch({type: ua.RETRIEVE_USER});

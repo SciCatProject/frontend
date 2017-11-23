@@ -21,6 +21,7 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
   dataset: RawDataset = undefined;
   dataBlocks: Array<OrigDatablock>;
   error;
+  admin = false;
 
   subscriptions = [];
 
@@ -30,6 +31,14 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     const self = this;
+
+    this.store.select(state => state.root.user).take(1).subscribe
+    (user => {
+      console.log(user);
+      if ('accountType' in user && user['accountType'] === 'functional') {
+        console.log('admin');
+      }
+    });
 
 
     this.subscriptions.push(this.store.select(state => state.root.datasets.currentSet)
