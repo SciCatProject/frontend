@@ -221,7 +221,7 @@ export class DatasetEffects {
       .map(toPayload)
       .switchMap(payload => {
         console.log(payload);
-        return this.dls.updateAttributes(encodeURIComponent(payload['id']), {'archiveStatusMessage': payload['status']}).switchMap(res => {
+        return this.dls.updateAttributes(encodeURIComponent(payload['id']), payload['attributes']).switchMap(res => {
           console.log(res);
           return Observable.of({
             type : UserActions.SHOW_MESSAGE,
