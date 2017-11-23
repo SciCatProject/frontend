@@ -32,13 +32,12 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
   ngOnInit() {
     const self = this;
 
-    this.store.select(state => state.root.user).take(1).subscribe
+    this.subscriptions.push(this.store.select(state => state.root.user.currentUser).subscribe
     (user => {
-      console.log(user);
-      if ('accountType' in user && user['accountType'] === 'functional') {
-        console.log('admin');
+      if (('accountType' in user && user['accountType'] === 'functional') || user['username'] == "ingestor" || user["username"] === "archiveManager") {
+        this.admin = true;
       }
-    });
+    }));
 
 
     this.subscriptions.push(this.store.select(state => state.root.datasets.currentSet)

@@ -31,7 +31,7 @@ export class AppComponent implements OnDestroy, OnInit {
     showProgressBar: true,
     pauseOnHover: true,
     clickToClose: true,
-    timeOut: 500
+    timeOut: 2000
   };
 
   constructor(private router: Router,
