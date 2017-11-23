@@ -3,6 +3,7 @@ import {ActivatedRoute} from '@angular/router';
 import {Store} from '@ngrx/store';
 import {OrigDatablock, RawDataset} from 'shared/sdk/models';
 import * as dsa from 'state-management/actions/datasets.actions';
+import {config} from '../../../config/config';
 
 /**
  * Component to show details for a dataset, using the
@@ -71,7 +72,7 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
 
   onAdminReset() {
     if (this.admin) {
-      const pl = {'id': this.dataset.pid, 'status': 'datasetCreated'};
+      const pl = {'id': this.dataset.pid, 'status': Object.keys(config['datasetStatusMessages'])[0]};
       this.store.dispatch({type: dsa.RESET_STATUS, payload: pl});
     }
   }

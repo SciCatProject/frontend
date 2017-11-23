@@ -12,6 +12,7 @@ import {DatasetService} from 'datasets/dataset.service';
 import {Observable} from 'rxjs/Observable';
 import * as lb from 'shared/sdk/services';
 import * as DatasetActions from 'state-management/actions/datasets.actions';
+import * as UserActions from 'state-management/actions/user.actions';
 // import store state interface
 @Injectable()
 export class DatasetEffects {
@@ -222,7 +223,24 @@ export class DatasetEffects {
         console.log(payload);
         return this.dls.updateAttributes(encodeURIComponent(payload['id']), {'archiveStatusMessage': payload['status']}).switchMap(res => {
           console.log(res);
-          return Observable.of({type: DatasetActions.RESET_STATUS_COMPLETE, payload: res});
+          return Observable.of({
+            type : UserActions.SHOW_MESSAGE,
+            payload : {
+              content : '',
+              type : 'success',
+              title: 'Dataset Status Reset'
+            }
+          });
+          // return Observable.of({type: DatasetActions.RESET_STATUS_COMPLETE, payload: res});
+         }).catch(err => {
+          return Observable.of({
+            type : UserActions.SHOW_MESSAGE,
+            payload : {
+              content : '',
+              type : 'error',
+              title: 'Dataset Status Reset Failed'
+            }
+          });
          });
         
       });
