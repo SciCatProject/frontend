@@ -29,9 +29,9 @@ export function userReducer(state = initialUserState, action: Action): UserState
     }
 
     case ua.ACCESS_USER_EMAIL_COMPLETE: {
-        const c = state.currentUser;
-        c['accessEmail'] = action['payload'];
-        return Object.assign({}, state, { currentUser: c });
+        // const c = state.currentUser;
+        // c['email'] = action['payload'];
+        return Object.assign({}, state, { email: action['payload'] });
     }
 
     case ua.LOGIN_FAILED: {

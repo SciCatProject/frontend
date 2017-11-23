@@ -371,10 +371,13 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
       job.creationTime = new Date();
       const backupFiles = [];
       this.store
-        .select(state => state.root.user.currentUser)
+        .select(state => state.root.user)
         .take(1)
         .subscribe(user => {
-          job.emailJobInitiator = user['email'] || user['accessEmail'];
+          job.emailJobInitiator = user['email'];
+          if (!user['email']) {
+            job.emailJobInitiator = user['currentUser']['email'] || user['currentUser']['accessEmail'];
+          }
           this.selectedSets.map(set => {
             // if ('datablocks' in set && set['datablocks'].length > 0) {
             const fileObj = {};

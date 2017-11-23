@@ -114,6 +114,7 @@ export class UserEffects {
           .switchMap((action) => {
             return this.accessUserSrv.findById(action)
                 .switchMap(res => {
+                  console.log(res);
                   return Observable.of({
                     type : UserActions.ACCESS_USER_EMAIL_COMPLETE,
                     payload : res['mail']
