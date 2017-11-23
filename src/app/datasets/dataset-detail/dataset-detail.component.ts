@@ -68,4 +68,11 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
       this.subscriptions[i].unsubscribe();
     }
   }
+
+  onAdminReset() {
+    if (this.admin) {
+      const pl = {'id': this.dataset.pid, 'status': 'datasetCreated'};
+      this.store.dispatch({type: dsa.RESET_STATUS, payload: pl});
+    }
+  }
 }

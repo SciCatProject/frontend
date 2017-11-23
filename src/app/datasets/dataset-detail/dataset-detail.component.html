@@ -21,7 +21,7 @@
       </div>
     </p-tabPanel>
     <p-tabPanel header="Admin" leftIcon="fa-wrench" *ngIf="admin">
-      RESET
+      <button (click)="onAdminReset()" class="ui yellow button">Reset Status</button>
     </p-tabPanel>
   </p-tabView>
 

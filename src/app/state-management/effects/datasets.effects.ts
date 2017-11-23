@@ -214,8 +214,21 @@ export class DatasetEffects {
                 });
           });
 
+  @Effect()
+  protected resetStatus$: Observable<Action> = 
+    this.action$.ofType(DatasetActions.RESET_STATUS)
+      .map(toPayload)
+      .switchMap(payload => {
+        console.log(payload);
+        return this.dls.updateAttributes(encodeURIComponent(payload['id']), {'archiveStatusMessage': payload['status']}).switchMap(res => {
+          console.log(res);
+          return Observable.of({type: DatasetActions.RESET_STATUS_COMPLETE, payload: res});
+         });
+        
+      });
+
   constructor(private action$: Actions, private store: Store<any>,
-              private cds: DatasetService, private rds: lb.RawDatasetApi,
+              private cds: DatasetService, private rds: lb.RawDatasetApi, private dls: lb.DatasetLifecycleApi,
               private accessUserSrv: lb.AccessUserApi) {}
   }
 
