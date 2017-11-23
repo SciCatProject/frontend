@@ -1,8 +1,9 @@
-import {Component, OnInit, OnDestroy} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {Store} from '@ngrx/store';
 import {OrigDatablock, RawDataset} from 'shared/sdk/models';
 import * as dsa from 'state-management/actions/datasets.actions';
+
 import {config} from '../../../config/config';
 
 /**
@@ -13,12 +14,11 @@ import {config} from '../../../config/config';
  * @implements {OnInit}
  */
 @Component({
-  selector : 'dataset-detail',
-  templateUrl : './dataset-detail.component.html',
-  styleUrls : [ './dataset-detail.component.css' ]
+  selector: 'dataset-detail',
+  templateUrl: './dataset-detail.component.html',
+  styleUrls: ['./dataset-detail.component.css']
 })
 export class DatasetDetailComponent implements OnInit, OnDestroy {
-
   dataset: RawDataset = undefined;
   dataBlocks: Array<OrigDatablock>;
   error;
@@ -26,42 +26,48 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
 
   subscriptions = [];
 
-  constructor(private route: ActivatedRoute,
-              private store: Store<any>) {
-  };
+  constructor(private route: ActivatedRoute, private store: Store<any>){};
 
   ngOnInit() {
     const self = this;
 
-    this.subscriptions.push(this.store.select(state => state.root.user.currentUser).subscribe
-    (user => {
-      if (('accountType' in user && user['accountType'] === 'functional') || user['username'] == "ingestor" || user["username"] === "archiveManager") {
-        this.admin = true;
-      }
-    }));
+    this.subscriptions.push(
+        this.store.select(state => state.root.user.currentUser)
+            .subscribe(user => {
+              if (('accountType' in user &&
+                   user['accountType'] === 'functional') ||
+                  user['username'] == 'ingestor' ||
+                  user['username'] === 'archiveManager') {
+                this.admin = true;
+              }
+            }));
 
 
-    this.subscriptions.push(this.store.select(state => state.root.datasets.currentSet)
-        .subscribe(dataset => {
-          if (dataset && Object.keys(dataset).length > 0) {
-            self.dataset = <RawDataset>dataset;
-            console.log(self.dataset);
-            if (!('origdatablocks' in self.dataset)) {
-              self.store.dispatch(
-                  {type : dsa.DATABLOCKS, payload : self.dataset.pid});
-            }
-            // clear selected dataset
-            self.store.dispatch({type: dsa.SELECT_CURRENT, payload: undefined});
+    this.subscriptions.push(
+        this.store.select(state => state.root.datasets.currentSet)
+            .subscribe(dataset => {
+              if (dataset && Object.keys(dataset).length > 0) {
+                self.dataset = <RawDataset>dataset;
+                console.log(self.dataset);
+                if (!('origdatablocks' in self.dataset)) {
+                  self.store.dispatch(
+                      {type: dsa.DATABLOCKS, payload: self.dataset.pid});
+                }
+                // clear selected dataset
+                self.store.dispatch(
+                    {type: dsa.SELECT_CURRENT, payload: undefined});
+              }
+            }));
+
+    this.store.select(state => state.root.datasets.currentSet)
+        .take(1)
+        .subscribe(ds => {
+          if (!ds) {
+            this.route.params.subscribe(params => {
+              this.store.dispatch({type: dsa.SEARCH_ID, payload: params.id});
+            });
           }
-        }));
-
-    this.store.select(state => state.root.datasets.currentSet).take(1).subscribe(ds => {
-      if (!ds) {
-        this.route.params.subscribe(params => {
-          this.store.dispatch({type : dsa.SEARCH_ID, payload : params.id});
         });
-      }
-    });
   }
 
   ngOnDestroy() {
@@ -72,7 +78,14 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
 
   onAdminReset() {
     if (this.admin) {
-      const pl = {'id': this.dataset.pid, 'status': Object.keys(config['datasetStatusMessages'])[0]};
+      const pl = {
+        'id': this.dataset.pid,
+        'attributes': {
+          'archiveStatusMessage':
+              Object.keys(config['datasetStatusMessages'])[0],
+          'retrieveStatusMessage': ''
+        }
+      };
       this.store.dispatch({type: dsa.RESET_STATUS, payload: pl});
     }
   }
