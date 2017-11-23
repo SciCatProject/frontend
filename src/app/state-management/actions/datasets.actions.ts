@@ -25,7 +25,8 @@ export const ADD_GROUPS_COMPLETE = '[User] Add Groups Complete';
 export const ADD_GROUPS_FAILED = '[User] Add Groups Failed';
 
 export const SELECT_CURRENT = '[Dataset] Current set selected';
-
+export const RESET_STATUS = '[Dataset] Status Reset';
+export const RESET_STATUS_COMPLETE = '[Dataset] Status Reset Complete';
 export const SELECTED_UPDATE = '[Dataset]  Selected Datasets Update';
 // export const FILTER_UPDATE_COMPLETE = '[Dataset]  Filter Update Complete';
 
@@ -122,6 +123,18 @@ export class CurrentSetAction implements Action {
   constructor(public payload: lb.RawDataset) {}
   }
 
+export class ResetStatusAction implements Action {
+  readonly type = RESET_STATUS;
+
+  constructor(public payload: any) {}
+  }
+
+export class ResetStatusCompleteAction implements Action {
+  readonly type = RESET_STATUS_COMPLETE;
+
+  constructor(public payload: any) {}
+  }
+
 export class TotalSetsAction implements Action {
   readonly type = TOTAL_UPDATE;
 
@@ -134,4 +147,4 @@ export type Actions =
     FilterValueAction | SearchIDAction | SearchIDCompleteAction |
     SearchIDFailedAction | DatablocksAction | DatablocksCompleteAction |
     DatablocksAction | AddGroupsAction | AddGroupsCompleteAction |
-    AddGroupsFailedAction | UpdateSelectedAction | TotalSetsAction;
+    AddGroupsFailedAction | UpdateSelectedAction | TotalSetsAction | ResetStatusAction | ResetStatusCompleteAction;

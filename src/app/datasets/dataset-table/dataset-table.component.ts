@@ -89,31 +89,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
 
     this.store.select(state => state.root.dashboardUI.mode).subscribe(mode => {
       this.mode = mode;
-      this.selectedSets = [];
-      this.rowStyleMap = {};
-      if (this.datasets && this.datasets.length > 0) {
-        for (let d = 0; d < this.datasets.length; d++) {
-          const set = this.datasets[d];
-          console.log(set.size);
-          let c = '';
-          if (this.mode === 'archive' && set.datasetlifecycle
-            && (this.archiveable.indexOf(set.datasetlifecycle.archiveStatusMessage) === -1) || set.size === 0) {
-            c = 'disabled-row';
-          } else if (this.mode === 'retrieve'
-            && set.datasetlifecycle && this.retrievable.indexOf(set.datasetlifecycle.archiveStatusMessage) === -1) {
-            c = 'disabled-row';
-          } else {
-            c = '';
-          }
-          this.rowStyleMap[set.pid] = c;
-        }
-      } else {
-        this.store.dispatch({ type: dua.SAVE_MODE, payload: this.mode });
-      }
-      const currentParams = this.route.snapshot.queryParams;
-      this.router.navigate(['/datasets'], {
-         queryParams: Object.assign({}, currentParams, {'mode': this.mode})
-      });
+      this.updateRowView(mode);
     });
 
     this.route.queryParams.subscribe(params => {
@@ -134,6 +110,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
           this.datasets = data;
           if (this.datasets && this.datasets.length > 0) {
             this.store.dispatch({ type: dua.SAVE_MODE, payload: this.mode });
+            this.updateRowView(this.mode);
           }
           // this.onModeChange(undefined, this.mode);
         },
@@ -235,13 +212,40 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Hanlde changing of view mode and disabling selected rows
+   * Handle changing of view mode and disabling selected rows
    * @param event
    * @param mode
    */
   onModeChange(event, mode) {
     this.mode = mode.toLowerCase();
     this.store.dispatch({ type: dua.SAVE_MODE, payload: this.mode });
+  }
+
+  updateRowView(mode) {
+      this.selectedSets = [];
+      this.rowStyleMap = {};
+      if (this.datasets && this.datasets.length > 0) {
+        for (let d = 0; d < this.datasets.length; d++) {
+          const set = this.datasets[d];
+          let c = '';
+          if (this.mode === 'archive' && set.datasetlifecycle
+            && (this.archiveable.indexOf(set.datasetlifecycle.archiveStatusMessage) === -1 || set.size === 0)) {
+            c = 'disabled-row';
+          } else if (this.mode === 'retrieve'
+            && set.datasetlifecycle && this.retrievable.indexOf(set.datasetlifecycle.archiveStatusMessage) === -1) {
+            c = 'disabled-row';
+          } else {
+            c = '';
+          }
+          this.rowStyleMap[set.pid] = c;
+        }
+      } else {
+        this.store.dispatch({ type: dua.SAVE_MODE, payload: this.mode });
+      }
+      const currentParams = this.route.snapshot.queryParams;
+      this.router.navigate(['/datasets'], {
+         queryParams: Object.assign({}, currentParams, {'mode': this.mode})
+      });
   }
 
   /**

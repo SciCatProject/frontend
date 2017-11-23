@@ -20,6 +20,9 @@
         <h3>No datafiles linked to this dataset</h3>
       </div>
     </p-tabPanel>
+    <p-tabPanel header="Admin" leftIcon="fa-wrench" *ngIf="admin">
+      <button (click)="onAdminReset()" class="ui yellow button">Reset Status</button>
+    </p-tabPanel>
   </p-tabView>
 
 

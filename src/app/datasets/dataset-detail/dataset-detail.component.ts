@@ -3,6 +3,7 @@ import {ActivatedRoute} from '@angular/router';
 import {Store} from '@ngrx/store';
 import {OrigDatablock, RawDataset} from 'shared/sdk/models';
 import * as dsa from 'state-management/actions/datasets.actions';
+import {config} from '../../../config/config';
 
 /**
  * Component to show details for a dataset, using the
@@ -21,6 +22,7 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
   dataset: RawDataset = undefined;
   dataBlocks: Array<OrigDatablock>;
   error;
+  admin = false;
 
   subscriptions = [];
 
@@ -30,6 +32,13 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     const self = this;
+
+    this.subscriptions.push(this.store.select(state => state.root.user.currentUser).subscribe
+    (user => {
+      if (('accountType' in user && user['accountType'] === 'functional') || user['username'] == "ingestor" || user["username"] === "archiveManager") {
+        this.admin = true;
+      }
+    }));
 
 
     this.subscriptions.push(this.store.select(state => state.root.datasets.currentSet)
@@ -58,6 +67,13 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     for (let i = 0; i < this.subscriptions.length; i++) {
       this.subscriptions[i].unsubscribe();
+    }
+  }
+
+  onAdminReset() {
+    if (this.admin) {
+      const pl = {'id': this.dataset.pid, 'status': Object.keys(config['datasetStatusMessages'])[0]};
+      this.store.dispatch({type: dsa.RESET_STATUS, payload: pl});
     }
   }
 }
