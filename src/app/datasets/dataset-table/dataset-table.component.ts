@@ -108,7 +108,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
       this.store.select(state => state.root.datasets.datasets).subscribe(
         data => {
           this.datasets = data;
-          console.log(data);
           if (this.datasets && this.datasets.length > 0) {
             this.store.dispatch({ type: dua.SAVE_MODE, payload: this.mode });
             this.updateRowView(this.mode);

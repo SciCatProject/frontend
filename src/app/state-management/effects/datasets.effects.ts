@@ -255,7 +255,6 @@ export class DatasetEffects {
             filter['skip'] = fq['skip'] ? fq['skip'] : 0;
             filter['include'] = [ {relation : 'datasetlifecycle'} ];
             filter['order'] = fq['sortField'];
-            console.log(filter);
             return this.rds.find(filter)
                 .switchMap(res => {
                   return Observable.of(
