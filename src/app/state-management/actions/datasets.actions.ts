@@ -7,6 +7,8 @@ export const LOAD = '[Dataset] Load';
 export const SEARCH_COMPLETE = '[Dataset] Search Complete';
 export const SEARCH_FAILED = '[Dataset] Search Failed';
 
+export const COUNT_COMPLETE = '[Dataset]  Complete';
+
 export const SEARCH_ID = '[Dataset] Search ID';
 export const SEARCH_ID_COMPLETE = '[Dataset] Search ID Complete';
 export const SEARCH_ID_FAILED = '[Dataset] Search ID Failed';

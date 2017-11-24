@@ -1,10 +1,9 @@
 
 export interface DatasetFilters {
     text: string;
-    groups: string[];
+    ownerGroup: string[];
+    creationTime: {'start': Date, 'end': Date};
     creationLocation: string;
-    startDate: Date;
-    endDate: Date;
     skip: number;
     initial: boolean;
 }
