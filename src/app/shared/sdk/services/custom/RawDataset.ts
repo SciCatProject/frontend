@@ -701,15 +701,7 @@ export class RawDatasetApi extends BaseLoopBackApi {
    *
    * @param {object} data Request data.
    *
-   *  - `creationLocation` – `{string}` - 
-   *
-   *  - `ownerGroup` – `{any}` - 
-   *
-   *  - `startDate` – `{string}` - 
-   *
-   *  - `endDate` – `{string}` - 
-   *
-   *  - `text` – `{object}` - 
+   *  - `fields` – `{object}` - 
    *
    * @returns {object} An empty reference that will be
    *   populated with the actual data once the response is returned
@@ -719,18 +711,14 @@ export class RawDatasetApi extends BaseLoopBackApi {
    *
    *  - `results` – `{Object}` - 
    */
-  public facet(creationLocation: any = {}, ownerGroup: any = {}, startDate: any = {}, endDate: any = {}, text: any = {}, customHeaders?: Function): Observable<any> {
+  public facet(fields: any = {}, customHeaders?: Function): Observable<any> {
     let _method: string = "POST";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
     "/RawDatasets/facet";
     let _routeParams: any = {};
     let _postBody: any = {};
     let _urlParams: any = {};
-    if (typeof creationLocation !== 'undefined' && creationLocation !== null) _urlParams.creationLocation = creationLocation;
-    if (typeof ownerGroup !== 'undefined' && ownerGroup !== null) _urlParams.ownerGroup = ownerGroup;
-    if (typeof startDate !== 'undefined' && startDate !== null) _urlParams.startDate = startDate;
-    if (typeof endDate !== 'undefined' && endDate !== null) _urlParams.endDate = endDate;
-    if (typeof text !== 'undefined' && text !== null) _urlParams.text = text;
+    if (typeof fields !== 'undefined' && fields !== null) _urlParams.fields = fields;
     let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
     return result;
   }

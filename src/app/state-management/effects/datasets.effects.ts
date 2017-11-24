@@ -77,32 +77,31 @@ export class DatasetEffects {
           .debounceTime(300)
           .map(toPayload)
           .switchMap(payload => {
-            const fq = payload;
+            const fq = Object.assign({}, payload);
             // TODO access state from here?
-            const startDate =
-                fq['startDate'] ? fq['startDate'].toString() : fq['startDate'];
-            const endDate =
-                fq['endDate'] ? fq['endDate'].toString() : fq['endDate'];
-            let groups = fq['groups'];
+            // const startDate =
+            //     fq['startDate'] ? fq['startDate'].toString() : fq['startDate'];
+            // const endDate =
+            //     fq['endDate'] ? fq['endDate'].toString() : fq['endDate'];
+            let groups = fq['ownerGroup'];
             if (!groups || groups.length === 0) {
               this.store.select(state => state.root.user.currentUserGroups)
                   .take(1)
                   .subscribe(user => { groups = user; });
               }
-             let textObj = undefined;
              if (fq['text']) {
-              textObj = {'$search' : '"' + fq['text'] + '"', '$language': 'none'};
+              fq['text'] = {'$search' : '"' + fq['text'] + '"', '$language': 'none'};
              }
+            console.log(fq);
             return this.rds
-                .facet(fq['creationLocation'], groups, startDate, endDate,
-                       textObj)
+                .facet(fq)
                 .switchMap(res => {
                   const filterValues = res['results'][0];
 
-                  const groupsArr = filterValues['groups'];
+                  const groupsArr = filterValues['ownerGroup'];
                   groupsArr.sort(stringSort);
 
-                  const locationArr = filterValues['locations'];
+                  const locationArr = filterValues['creationLocation'];
                   locationArr.sort(stringSort);
                   return Observable.of({
                     type : DatasetActions.FILTER_UPDATE_COMPLETE,
@@ -117,17 +116,14 @@ export class DatasetEffects {
           });
 
   @Effect()
-  protected facetDatasets$: Observable<Action> =
+  protected facetDatasetCount$: Observable<Action> = 
       this.action$.ofType(DatasetActions.FILTER_UPDATE)
-
           .debounceTime(300)
           .map(toPayload)
           .switchMap(payload => {
-            const fq = payload;
-
-            let ownerGroup = fq['groups'];
-            const startDate = fq['startDate'], endDate = fq['endDate'],
-                  text = fq['text'], creationLocation = fq['creationLocation'];
+            const fq = Object.assign({}, payload);
+            let ownerGroup = fq['ownerGroup'];
+            const text = fq['text'], creationLocation = fq['creationLocation'];
 
             // TODO access state from here?
 
@@ -154,15 +150,89 @@ export class DatasetEffects {
               match.push({creationLocation : creationLocation});
               }
 
-            if (startDate && endDate) {
-              match.push({creationTime : {gte : startDate}});
-              match.push({creationTime : {lte : endDate}});
-            } else if ((startDate && !endDate) || (!startDate && endDate)) {
+            if (fq['creationTime']) {
+              match.push({creationTime : {gte : fq['creationTime']['start']}});
+              match.push({creationTime : {lte : fq['creationTime']['end']}});
+            } 
+           /*  else if ((startDate && !endDate) || (!startDate && endDate)) {
               return Observable.of({
                 type : DatasetActions.SEARCH_FAILED,
                 payload : {message : 'Start and End Date must be specified'}
               });
+              }*/
+            if (text) {
+              match.push({'$text' : {'search' :'"' + text + '"', 'language': 'none'}});
               }
+            // ensure fields have been specified and both dates have been set
+            // NOTE: the dollar sign is added by loopback and is not needed here
+            // match.push({$text: {"search":"psi"}});
+            let filter = {};
+            if (match.length > 1) {
+              filter = {};
+
+              filter['and'] = match;
+            } else if (match.length === 1) {
+              filter = match[0];
+            }
+
+            return this.rds.count(filter)
+            .switchMap(res => {
+              return Observable.of(
+                  {type : DatasetActions.TOTAL_UPDATE, payload : res['count']});
+            })
+            .catch(err => {
+              console.log(err);
+              return Observable.of(
+                  {type : DatasetActions.SEARCH_FAILED, payload : err});
+            });
+
+          });
+
+  @Effect()
+  protected facetDatasets$: Observable<Action> =
+      this.action$.ofType(DatasetActions.FILTER_UPDATE)
+          .debounceTime(300)
+          .map(toPayload)
+          .switchMap(payload => {
+            const fq = Object.assign({}, payload);
+            let ownerGroup = fq['ownerGroup'];
+            const text = fq['text'], creationLocation = fq['creationLocation'];
+
+            // TODO access state from here?
+
+            const match = [];
+            if (ownerGroup) {
+              if (ownerGroup.length > 0 && ownerGroup.constructor !== Array &&
+                  typeof ownerGroup[0] === 'object') {
+                const groupsArray = [];
+                console.log('Converting object');
+                const keys = Object.keys(ownerGroup[0]);
+
+                for (let i = 0; i < keys.length; i++) {
+                  groupsArray.push(ownerGroup[0][keys[i]]);
+                }
+
+                ownerGroup = groupsArray;
+                }
+              if (ownerGroup.length > 0) {
+                match.push({ownerGroup : {inq : ownerGroup}});
+              }
+              }
+
+            if (creationLocation) {
+              match.push({creationLocation : creationLocation});
+              }
+
+            if (fq['creationTime']) {
+              match.push({creationTime : {gte : fq['creationTime']['start']}});
+              match.push({creationTime : {lte : fq['creationTime']['end']}});
+            } 
+           /*  else if ((startDate && !endDate) || (!startDate && endDate)) {
+              return Observable.of({
+                type : DatasetActions.SEARCH_FAILED,
+                payload : {message : 'Start and End Date must be specified'}
+              });
+              }*/
             if (text) {
               match.push({'$text' : {'search' :'"' + text + '"', 'language': 'none'}});
               }
@@ -177,6 +247,7 @@ export class DatasetEffects {
             } else if (match.length === 1) {
               filter['where'] = match[0];
             }
+
             this.store.select(state => state.root.user.settings.datasetCount)
                 .take(1)
                 .subscribe(d => { filter['limit'] = d; });

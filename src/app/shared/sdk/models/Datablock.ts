@@ -9,6 +9,7 @@ export interface DatablockInterface {
   "archiveId": string;
   "size": number;
   "packedSize"?: number;
+  "chkAlg"?: string;
   "version": string;
   "dataFileList": Array<any>;
   "ownerGroup": string;
@@ -26,6 +27,7 @@ export class Datablock implements DatablockInterface {
   "archiveId": string;
   "size": number;
   "packedSize": number;
+  "chkAlg": string;
   "version": string;
   "dataFileList": Array<any>;
   "ownerGroup": string;
@@ -84,6 +86,10 @@ export class Datablock implements DatablockInterface {
         "packedSize": {
           name: 'packedSize',
           type: 'number'
+        },
+        "chkAlg": {
+          name: 'chkAlg',
+          type: 'string'
         },
         "version": {
           name: 'version',

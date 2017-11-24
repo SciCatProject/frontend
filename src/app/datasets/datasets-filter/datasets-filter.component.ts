@@ -84,11 +84,12 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
             this.location = f['creationLocation']
                                 ? {_id : filters['creationLocation']}
                                 : '';
-            if (f['groups'] && f['groups'] && Array.isArray(f['groups']) &&
-                f['groups'].length > 0) {
-              this.selectedGroups = f['groups'].map(x => { return {_id : x}; });
-            } else if (f['groups'] && !Array.isArray(f['groups'])) {
-              this.selectedGroups = [ {'_id' : f['groups']} ];
+            const group = f['ownerGroup'];
+            if (group && group && Array.isArray(group) &&
+                group.length > 0) {
+              this.selectedGroups = group.map(x => { return {_id : x}; });
+            } else if (group && !Array.isArray(group)) {
+              this.selectedGroups = [ {'_id' : group} ];
             } else {
               this.selectedGroups = [];
             }
@@ -126,19 +127,15 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
             .subscribe(values => {
               this.filterValues = Object.assign({}, values);
               if (this.filterValues) {
-                if (this.filterValues['locations'] !== null) {
-                  this.locations = this.filterValues['locations']
-                                       ? this.filterValues['locations']
+                if (this.filterValues['creationLocation'] !== null) {
+                  this.locations = this.filterValues['creationLocation']
+                                       ? this.filterValues['creationLocation']
                                        : [];
-                  const totalSets = this.locations.reduce(
-                      (sum, value) => sum + value['count'], 0);
-                  this.store.dispatch(
-                      {type : dsa.TOTAL_UPDATE, payload : totalSets});
                   }
 
                 if (this.groups.length === 0 &&
-                    this.filterValues['groups'] !== null) {
-                  this.groups = this.filterValues['groups'];
+                    this.filterValues['ownerGroup'] !== null) {
+                  this.groups = this.filterValues['ownerGroup'];
                 }
               }
             }));
@@ -157,8 +154,8 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
       endDate = selectedRange.datePair[1];
       }
     if ((startDate instanceof Date) && (endDate instanceof Date)) {
-      this.filters.startDate = new Date(startDate.getTime());
-      this.filters.endDate = new Date(endDate.getTime());
+      this.filters.creationTime.start = new Date(startDate.getTime());
+      this.filters.creationTime.end = new Date(endDate.getTime());
     }
     this.store.dispatch({type : dsa.FILTER_UPDATE, payload : this.filters});
   }
@@ -253,7 +250,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
    */
   groupSelected(event) {
     setTimeout(() => {
-      this.filters.groups = this.selectedGroups.map(x => { return x['_id']; });
+      this.filters.ownerGroup = this.selectedGroups.map(x => { return x['_id']; });
       this.store.dispatch({type : dsa.FILTER_UPDATE, payload : this.filters});
     }, 400);
   }
@@ -278,7 +275,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     this.filters = dStore.initialDatasetState.activeFilters;
     this.store.select(state => state.root.user.currentUserGroups)
         .take(1)
-        .subscribe(groups => { this.filters.groups = groups; });
+        .subscribe(groups => { this.filters.ownerGroup = groups; });
     this.filterValues = dStore.initialDatasetState.filterValues;
     this.filterValues.text = '';
     // this.store.dispatch({ type: dsa.FILTER_UPDATE, payload: this.filters });

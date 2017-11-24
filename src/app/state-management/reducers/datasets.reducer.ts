@@ -17,8 +17,9 @@ export function datasetsReducer(state = initialDatasetState, action: Action) {
   switch (action.type) {
     case dsa.FILTER_UPDATE: {
       const f = action['payload'];
-      if (f['groups'] && !Array.isArray(f['groups']) && f['groups'].length > 0) {
-        f['groups'] = [f['groups']];
+      const group = f['ownerGroup'];
+      if (group && !Array.isArray(group) && group.length > 0) {
+        f['ownerGroup'] = [group];
       }
       const newState = Object.assign({}, state, { activeFilters: f, loading: true, selectedSets: [] });
       return newState;
@@ -44,7 +45,7 @@ export function datasetsReducer(state = initialDatasetState, action: Action) {
     case dsa.ADD_GROUPS_COMPLETE: {
       const g = action['payload'];
       const a = state.activeFilters;
-      a['groups'] = g;
+      a['ownerGroup'] = g;
       return Object.assign({}, state, a);
     }
 
