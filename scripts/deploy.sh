@@ -1,7 +1,7 @@
 #!/bin/bash 
 
-# export DACATHOME=/home/encima/dev/psi 
-# export KUBECONFIG=/home/encima/dev/psi/catamel-psisecrets/server/kubernetes/admin.conf
+export DACATHOME=~/dev/psi 
+export KUBECONFIG=~/dev/psi/catamel-psisecrets/server/kubernetes/admin.conf
 
 envarray=(development qa production)
 
