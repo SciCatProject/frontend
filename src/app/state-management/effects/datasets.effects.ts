@@ -116,60 +116,16 @@ export class DatasetEffects {
           });
 
   @Effect()
-  protected facetDatasetCount$: Observable<Action> = 
+  protected facetDatasetCount$: Observable<Action> =
       this.action$.ofType(DatasetActions.FILTER_UPDATE)
           .debounceTime(300)
           .map(toPayload)
           .switchMap(payload => {
             const fq = Object.assign({}, payload);
-            let ownerGroup = fq['ownerGroup'];
-            const text = fq['text'], creationLocation = fq['creationLocation'];
-
-            // TODO access state from here?
-
-            const match = [];
-            if (ownerGroup) {
-              if (ownerGroup.length > 0 && ownerGroup.constructor !== Array &&
-                  typeof ownerGroup[0] === 'object') {
-                const groupsArray = [];
-                console.log('Converting object');
-                const keys = Object.keys(ownerGroup[0]);
-
-                for (let i = 0; i < keys.length; i++) {
-                  groupsArray.push(ownerGroup[0][keys[i]]);
-                }
-
-                ownerGroup = groupsArray;
-                }
-              if (ownerGroup.length > 0) {
-                match.push({ownerGroup : {inq : ownerGroup}});
-              }
-              }
-
-            if (creationLocation) {
-              match.push({creationLocation : creationLocation});
-              }
-
-            if (fq['creationTime']) {
-              match.push({creationTime : {gte : fq['creationTime']['start']}});
-              match.push({creationTime : {lte : fq['creationTime']['end']}});
-            } 
-           /*  else if ((startDate && !endDate) || (!startDate && endDate)) {
-              return Observable.of({
-                type : DatasetActions.SEARCH_FAILED,
-                payload : {message : 'Start and End Date must be specified'}
-              });
-              }*/
-            if (text) {
-              match.push({'$text' : {'search' :'"' + text + '"', 'language': 'none'}});
-              }
-            // ensure fields have been specified and both dates have been set
-            // NOTE: the dollar sign is added by loopback and is not needed here
-            // match.push({$text: {"search":"psi"}});
+            const match = handleFacetPayload(fq);
             let filter = {};
             if (match.length > 1) {
               filter = {};
-
               filter['and'] = match;
             } else if (match.length === 1) {
               filter = match[0];
@@ -195,50 +151,7 @@ export class DatasetEffects {
           .map(toPayload)
           .switchMap(payload => {
             const fq = Object.assign({}, payload);
-            let ownerGroup = fq['ownerGroup'];
-            const text = fq['text'], creationLocation = fq['creationLocation'];
-
-            // TODO access state from here?
-
-            const match = [];
-            if (ownerGroup) {
-              if (ownerGroup.length > 0 && ownerGroup.constructor !== Array &&
-                  typeof ownerGroup[0] === 'object') {
-                const groupsArray = [];
-                console.log('Converting object');
-                const keys = Object.keys(ownerGroup[0]);
-
-                for (let i = 0; i < keys.length; i++) {
-                  groupsArray.push(ownerGroup[0][keys[i]]);
-                }
-
-                ownerGroup = groupsArray;
-                }
-              if (ownerGroup.length > 0) {
-                match.push({ownerGroup : {inq : ownerGroup}});
-              }
-              }
-
-            if (creationLocation) {
-              match.push({creationLocation : creationLocation});
-              }
-
-            if (fq['creationTime']) {
-              match.push({creationTime : {gte : fq['creationTime']['start']}});
-              match.push({creationTime : {lte : fq['creationTime']['end']}});
-            } 
-           /*  else if ((startDate && !endDate) || (!startDate && endDate)) {
-              return Observable.of({
-                type : DatasetActions.SEARCH_FAILED,
-                payload : {message : 'Start and End Date must be specified'}
-              });
-              }*/
-            if (text) {
-              match.push({'$text' : {'search' :'"' + text + '"', 'language': 'none'}});
-              }
-            // ensure fields have been specified and both dates have been set
-            // NOTE: the dollar sign is added by loopback and is not needed here
-            // match.push({$text: {"search":"psi"}});
+            const match = handleFacetPayload(fq);
             const filter = {};
             if (match.length > 1) {
               filter['where'] = {};
@@ -287,7 +200,7 @@ export class DatasetEffects {
           });
 
   @Effect()
-  protected resetStatus$: Observable<Action> = 
+  protected resetStatus$: Observable<Action> =
     this.action$.ofType(DatasetActions.RESET_STATUS)
       .map(toPayload)
       .switchMap(payload => {
@@ -313,13 +226,58 @@ export class DatasetEffects {
             }
           });
          });
-        
       });
 
   constructor(private action$: Actions, private store: Store<any>,
               private cds: DatasetService, private rds: lb.RawDatasetApi, private dls: lb.DatasetLifecycleApi,
               private accessUserSrv: lb.AccessUserApi) {}
   }
+
+function handleFacetPayload(fq) {
+    let ownerGroup = fq['ownerGroup'];
+    const text = fq['text'], creationLocation = fq['creationLocation'];
+
+    // TODO access state from here?
+
+    const match = [];
+    if (ownerGroup) {
+      if (ownerGroup.length > 0 && ownerGroup.constructor !== Array &&
+          typeof ownerGroup[0] === 'object') {
+        const groupsArray = [];
+        console.log('Converting object');
+        const keys = Object.keys(ownerGroup[0]);
+
+        for (let i = 0; i < keys.length; i++) {
+          groupsArray.push(ownerGroup[0][keys[i]]);
+        }
+
+        ownerGroup = groupsArray;
+        }
+      if (ownerGroup.length > 0) {
+        match.push({ownerGroup : {inq : ownerGroup}});
+      }
+      }
+
+    if (creationLocation) {
+      match.push({creationLocation : creationLocation});
+      }
+
+    if (fq['creationTime']) {
+      match.push({creationTime : {gte : fq['creationTime']['start']}});
+      match.push({creationTime : {lte : fq['creationTime']['end']}});
+    }
+   /*  else if ((startDate && !endDate) || (!startDate && endDate)) {
+      return Observable.of({
+        type : DatasetActions.SEARCH_FAILED,
+        payload : {message : 'Start and End Date must be specified'}
+      });
+      }*/
+    if (text) {
+      match.push({'$text' : {'search' : '"' + text + '"', 'language': 'none'}});
+    }
+  return match;
+}
+
 
 function stringSort(a, b) {
   const val_a = a._id,
