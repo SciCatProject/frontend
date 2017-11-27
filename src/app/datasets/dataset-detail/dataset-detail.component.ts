@@ -87,16 +87,11 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
       };
       if(this.dataset.datablocks.length > 0) {
         this.dataset.datablocks.map((block, index) => {
-          // this.store.dispatch({type: dsa.DATABLOCK_DELETE, payload: block});
-          console.log(index, this.dataset.datablocks.length);
-          if (index === this.dataset.datablocks.length) {
-            this.store.dispatch({type: dsa.RESET_STATUS, payload: pl});
-          }
+          this.store.dispatch({type: dsa.DATABLOCK_DELETE, payload: block});
         });
-      } else {
-        this.store.dispatch({type: dsa.RESET_STATUS, payload: pl});
+        // TODO handle errors on datablocks
       }
-      
+      this.store.dispatch({type: dsa.RESET_STATUS, payload: pl});
     }
   }
 }
