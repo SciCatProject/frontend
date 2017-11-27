@@ -48,7 +48,6 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
             .subscribe(dataset => {
               if (dataset && Object.keys(dataset).length > 0) {
                 self.dataset = <RawDataset>dataset;
-                console.log(self.dataset);
                 if (!('origdatablocks' in self.dataset)) {
                   self.store.dispatch(
                       {type: dsa.DATABLOCKS, payload: self.dataset.pid});
@@ -86,7 +85,17 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
           'retrieveStatusMessage': ''
         }
       };
-      this.store.dispatch({type: dsa.RESET_STATUS, payload: pl});
+      if(this.dataset.datablocks.length > 0) {
+        this.dataset.datablocks.map((block, index) => {
+          this.store.dispatch({type: dsa.DATABLOCK_DELETE, payload: block});
+          if (index === this.dataset.datablocks.length) {
+            this.store.dispatch({type: dsa.RESET_STATUS, payload: pl});
+          }
+        });
+      } else {
+        this.store.dispatch({type: dsa.RESET_STATUS, payload: pl});
+      }
+      
     }
   }
 }

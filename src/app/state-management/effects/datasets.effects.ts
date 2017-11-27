@@ -52,6 +52,7 @@ export class DatasetEffects {
             const blockFilter = {
               include : [
                 {relation : 'origdatablocks'},
+                {relation : 'datablocks'},
                 {relation : 'datasetlifecycle'}
               ]
             };
@@ -78,11 +79,6 @@ export class DatasetEffects {
           .map(toPayload)
           .switchMap(payload => {
             const fq = Object.assign({}, payload);
-            // TODO access state from here?
-            // const startDate =
-            //     fq['startDate'] ? fq['startDate'].toString() : fq['startDate'];
-            // const endDate =
-            //     fq['endDate'] ? fq['endDate'].toString() : fq['endDate'];
             let groups = fq['ownerGroup'];
             if (!groups || groups.length === 0) {
               this.store.select(state => state.root.user.currentUserGroups)
@@ -91,8 +87,9 @@ export class DatasetEffects {
               }
              if (fq['text']) {
               fq['text'] = {'$search' : '"' + fq['text'] + '"', '$language': 'none'};
+             } else {
+               delete fq['text'];
              }
-            console.log(fq);
             return this.rds
                 .facet(fq)
                 .switchMap(res => {
@@ -200,13 +197,33 @@ export class DatasetEffects {
           });
 
   @Effect()
+  protected deleteDatablocks$: Observable<Action> =
+    this.action$.ofType(DatasetActions.DATABLOCK_DELETE)
+      .map(toPayload)
+      .switchMap(payload => {
+        const block = payload;
+        return this.dbs.deleteById(block['id']).switchMap(res => {
+            return Observable.of({
+              type: DatasetActions.DATABLOCK_DELETE_COMPLETE
+            });
+          }).catch(err => {
+            return Observable.of({
+              type : UserActions.SHOW_MESSAGE,
+              payload : {
+                content : 'Failed to delete datablock',
+                type : 'error',
+                title: 'Dataset Status Reset Failed'
+              }
+            });
+          })
+        });
+
+  @Effect()
   protected resetStatus$: Observable<Action> =
     this.action$.ofType(DatasetActions.RESET_STATUS)
       .map(toPayload)
       .switchMap(payload => {
-        console.log(payload);
         return this.dls.updateAttributes(encodeURIComponent(payload['id']), payload['attributes']).switchMap(res => {
-          console.log(res);
           return Observable.of({
             type : UserActions.SHOW_MESSAGE,
             payload : {
@@ -229,7 +246,7 @@ export class DatasetEffects {
       });
 
   constructor(private action$: Actions, private store: Store<any>,
-              private cds: DatasetService, private rds: lb.RawDatasetApi, private dls: lb.DatasetLifecycleApi,
+              private cds: DatasetService, private rds: lb.RawDatasetApi, private dls: lb.DatasetLifecycleApi, private dbs: lb.DatablockApi,
               private accessUserSrv: lb.AccessUserApi) {}
   }
 
