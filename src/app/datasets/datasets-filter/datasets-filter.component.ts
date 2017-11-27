@@ -173,8 +173,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
    * @memberof DatasetsFilterComponent
    */
   handleInputLocation(event) {
-    this.filteredLocations =
-        this.filterDatasets(event.query, 'creationLocation');
+    this.filteredLocations = this.filterDatasets(event.query || '', 'creationLocation');
   }
 
   /**
@@ -195,12 +194,12 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
    * @memberof DatasetsFilterComponent
    */
   textValueChanged(event, key) {
-    if (event.length === 0) {
+    if (event && event.length === 0) {
       this.filters[key] = null;
-    } else if (event.length >= 4) {
+    } else if (event && event.length >= 4) {
       if (key === 'groups') {
         this.filters[key] = [ event ];
-      } else {
+      } else if (event) {
         this.filters[key] = event;
       }
     }
@@ -265,6 +264,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
 
     // YES, another primeng hack to clear the field
     // this.grpField.value = [];
+    console.log(this.grpField);
     // this.selectedGroups.map(x => { this.grpField.removeItem(x); });
 
     // TODO clearing this does not visually clear (although it is removed from
@@ -278,14 +278,13 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
         .subscribe(groups => { this.filters.ownerGroup = groups; });
     this.filterValues = dStore.initialDatasetState.filterValues;
     this.filterValues.text = '';
-    // this.store.dispatch({ type: dsa.FILTER_UPDATE, payload: this.filters });
-    this.store.dispatch(
-        {type : dsa.FILTER_VALUE_UPDATE, payload : this.filterValues});
+    this.store.dispatch({ type: dsa.FILTER_UPDATE, payload: this.filters });
+    // this.store.dispatch({type : dsa.FILTER_VALUE_UPDATE, payload : this.filterValues});
     // this.store.dispatch({
     //   type: dua.SAVE,
     //   payload: dUIStore.initialDashboardUIState
     // });
-    let m;
+    /* let m;
     this.store.select(state => state.root.dashboardUI.mode)
         .take(1)
         .subscribe(mode => (m = mode));
@@ -293,7 +292,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     this.router.navigate([ '/datasets' ], {
       queryParams :
           Object.assign({}, currentParams, this.filters, {mode : m})
-    });
+    }); */
     // TODO clear selected sets
   }
 

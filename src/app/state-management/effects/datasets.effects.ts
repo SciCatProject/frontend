@@ -261,10 +261,15 @@ function handleFacetPayload(fq) {
     if (creationLocation) {
       match.push({creationLocation : creationLocation});
       }
-
     if (fq['creationTime']) {
-      match.push({creationTime : {gte : fq['creationTime']['start']}});
-      match.push({creationTime : {lte : fq['creationTime']['end']}});
+      const start = fq['creationTime']['start'] || undefined;
+      const end = fq['creationTime']['end'] || undefined;
+      if (start) {
+        match.push({creationTime : {gte : start}});
+      }
+      if (end) {
+        match.push({creationTime : {lte : end}});
+      }
     }
    /*  else if ((startDate && !endDate) || (!startDate && endDate)) {
       return Observable.of({
