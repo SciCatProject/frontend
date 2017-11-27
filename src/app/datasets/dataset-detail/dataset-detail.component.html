@@ -22,6 +22,12 @@
     </p-tabPanel>
     <p-tabPanel header="Admin" leftIcon="fa-wrench" *ngIf="admin">
       <button (click)="onAdminReset()" class="ui yellow button">Reset Status</button>
+      <ng-container *ngIf="dataset.datablocks">
+        <h3>Datablocks: {{dataset.datablocks.length}}</h3>
+        <ul *ngFor="let block of dataset.datablocks">
+          <li>{{block.id}}</li>
+        </ul>
+    </ng-container>
     </p-tabPanel>
   </p-tabView>
 

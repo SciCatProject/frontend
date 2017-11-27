@@ -22,6 +22,10 @@ export const DATABLOCKS = '[Dataset]  Datablocks Update';
 export const DATABLOCKS_COMPLETE = '[Dataset]  Datablocks Update Complete';
 export const DATABLOCKS_FAILED = '[Dataset]  Datablocks Failed';
 
+export const DATABLOCK_DELETE = '[Dataset]  Datablock Delete';
+export const DATABLOCK_DELETE_COMPLETE = '[Dataset] Datablock Delete Complete';
+export const DATABLOCK_DELETE_FAILED = '[Dataset]  Datablock Delete Failed';
+
 export const ADD_GROUPS = '[User] Add Groups';
 export const ADD_GROUPS_COMPLETE = '[User] Add Groups Complete';
 export const ADD_GROUPS_FAILED = '[User] Add Groups Failed';
@@ -97,6 +101,22 @@ export class DatablocksFailedAction implements Action {
   constructor() {}
   }
 
+  export class DatablockDeleteAction implements Action {
+    readonly type = DATABLOCK_DELETE;
+  
+    constructor() {}
+    }
+  export class DatablockDeleteCompleteAction implements Action {
+    readonly type = DATABLOCK_DELETE_COMPLETE;
+  
+    constructor() {}
+    }
+  export class DatablockDeleteFailedAction implements Action {
+    readonly type = DATABLOCK_DELETE_FAILED;
+  
+    constructor() {}
+    }
+
 export class AddGroupsAction implements Action {
   readonly type = ADD_GROUPS;
 
@@ -148,5 +168,6 @@ export type Actions =
     UpdateFilterAction | UpdateFilterCompleteAction | FilterFailedAction |
     FilterValueAction | SearchIDAction | SearchIDCompleteAction |
     SearchIDFailedAction | DatablocksAction | DatablocksCompleteAction |
+    DatablockDeleteAction | DatablockDeleteCompleteAction | DatablockDeleteFailedAction |
     DatablocksAction | AddGroupsAction | AddGroupsCompleteAction |
     AddGroupsFailedAction | UpdateSelectedAction | TotalSetsAction | ResetStatusAction | ResetStatusCompleteAction;

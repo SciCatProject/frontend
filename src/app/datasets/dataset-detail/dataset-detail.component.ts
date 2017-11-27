@@ -36,7 +36,7 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
             .subscribe(user => {
               if (('accountType' in user &&
                    user['accountType'] === 'functional') ||
-                  user['username'] == 'ingestor' ||
+                  user['username'] === 'ingestor' ||
                   user['username'] === 'archiveManager') {
                 this.admin = true;
               }
@@ -48,7 +48,6 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
             .subscribe(dataset => {
               if (dataset && Object.keys(dataset).length > 0) {
                 self.dataset = <RawDataset>dataset;
-                console.log(self.dataset);
                 if (!('origdatablocks' in self.dataset)) {
                   self.store.dispatch(
                       {type: dsa.DATABLOCKS, payload: self.dataset.pid});
@@ -86,6 +85,12 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
           'retrieveStatusMessage': ''
         }
       };
+      if(this.dataset.datablocks.length > 0) {
+        this.dataset.datablocks.map((block, index) => {
+          this.store.dispatch({type: dsa.DATABLOCK_DELETE, payload: block});
+        });
+        // TODO handle errors on datablocks
+      }
       this.store.dispatch({type: dsa.RESET_STATUS, payload: pl});
     }
   }

@@ -469,6 +469,9 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
       ds['datasetlifecycle']
     ) {
       return ds['datasetlifecycle'][key + 'Message'];
+    } else if ((key === 'archiveStatus' || key === 'retrieveStatus') &&
+    !ds['datasetlifecycle']) {
+      return 'Unknown';
     } else if (key === 'size') {
       return (ds[key] / 1024 / 1024 / 1024).toFixed(2);
     } else if (key in ds) {
