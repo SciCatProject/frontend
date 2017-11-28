@@ -85,11 +85,10 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
           'retrieveStatusMessage': ''
         }
       };
-      if(this.dataset.datablocks.length > 0) {
-        this.dataset.datablocks.map((block, index) => {
-          this.store.dispatch({type: dsa.DATABLOCK_DELETE, payload: block});
-        });
-        // TODO handle errors on datablocks
+
+      // TODO this should be moved into a reset endpoint for a dataset
+      for (let i = 0; i < this.dataset.datablocks.length; i++) {
+        this.store.dispatch({type: dsa.DATABLOCK_DELETE, payload: this.dataset.datablocks[i]});
       }
       this.store.dispatch({type: dsa.RESET_STATUS, payload: pl});
     }
