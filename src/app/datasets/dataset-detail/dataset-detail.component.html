@@ -11,7 +11,7 @@
     <p-tabPanel header="Details" leftIcon="fa-dedent">
       <div class="ui raised segment" *ngIf="dataset">
         <!--<h4 class="ui header">Dataset Details</h4>-->
-        <config-form [source]="dataset" [sourceType]="'RawDataset'" [service]="ds"></config-form>
+        <config-form [source]="dataset" [sourceType]="'RawDataset'"></config-form>
       </div>
     </p-tabPanel>
     <p-tabPanel header="Datafiles" leftIcon="fa-file">
@@ -24,10 +24,12 @@
       <button (click)="onAdminReset()" class="ui yellow button">Reset Status</button>
       <ng-container *ngIf="dataset.datablocks">
         <h3>Datablocks: {{dataset.datablocks.length}}</h3>
-        <ul *ngFor="let block of dataset.datablocks">
-          <li>{{block.archiveId}}</li>
-        </ul>
-    </ng-container>
+        <p-tabView>
+          <p-tabPanel header="Datablock" *ngFor="let block of dataset.datablocks">
+            <config-form [source]="block" [sourceType]="'Datablock'" [enabled]="false"></config-form>
+          </p-tabPanel>
+        </p-tabView>
+      </ng-container>
     </p-tabPanel>
   </p-tabView>
 
