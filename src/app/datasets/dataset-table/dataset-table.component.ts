@@ -428,7 +428,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
               job.jobParams['destinationPath'] = destPath;
             }
             console.log(job);
-            // this.store.dispatch({ type: ja.SUBMIT, payload: job });
+            this.store.dispatch({ type: ja.SUBMIT, payload: job });
           }
         });
     } else {
