@@ -24,11 +24,12 @@
       <button (click)="onAdminReset()" class="ui yellow button">Reset Status</button>
       <ng-container *ngIf="dataset.datablocks">
         <h3>Datablocks: {{dataset.datablocks.length}}</h3>
-        <p-tabView>
-          <p-tabPanel header="Datablock" *ngFor="let block of dataset.datablocks">
-            <config-form [source]="block" [sourceType]="'Datablock'" [enabled]="false"></config-form>
-          </p-tabPanel>
-        </p-tabView>
+        <ul *ngFor="let block of dataset.datablocks">
+          <li>{{block.id}}</li>
+            <ul>
+                <li>{{block.archiveId}}</li>
+            </ul>
+        </ul>
       </ng-container>
     </p-tabPanel>
   </p-tabView>

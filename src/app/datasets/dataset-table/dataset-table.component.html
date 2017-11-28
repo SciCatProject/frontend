@@ -37,7 +37,7 @@
 
 <p-confirmDialog header="Archive" ></p-confirmDialog>
 
-<p-dialog header="Retrieve {{selectedSets.length}} Datasets?" [(visible)]="retrieveDisplay" [closable]="false" modal="modal" width="300" [responsive]="true">
+<p-dialog header="Retrieve {{selectedSets.length}} Datasets?" [(visible)]="retrieveDisplay" [closable]="false" modal="modal" [responsive]="true">
   <ul>
     <li *ngFor="let ds of selectedSets" style="text-align: left">{{ds.sourceFolder}}</li>
   </ul>
