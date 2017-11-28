@@ -11,7 +11,7 @@ node {
             sh 'docker run  -t catanie_test npm run -- ng test --watch false --single-run true -v ./test:./test '
                    post {
                     always {
-                        junit '**/test/*.xml'
+                        junit './test/**/*.xml'
                     }
                     failure {
                         mail to: gareth.murphy@esss.se, subject: 'The Pipeline failed :('
@@ -23,6 +23,11 @@ node {
        }
        stage('e2e Test Catanie '){
             sh 'docker run  -t  e2e-catanie '
+                            post {
+                    always {
+                        junit './test/**/*.xml'
+                    }
+                   }
        }
 
 
