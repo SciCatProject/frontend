@@ -18,7 +18,6 @@ export class ConfigFormComponent implements OnInit {
 
   @Input() source: object;
   @Input() sourceType;
-  @Input() service: BaseLoopBackApi = null;
   @Input() enabled = true;
 
   @Output() onSubmit: EventEmitter<any> = new EventEmitter();
@@ -31,37 +30,16 @@ export class ConfigFormComponent implements OnInit {
 
   constructor(private formBuilder: FormBuilder,
               private configService: ConfigService, private store: Store<any>) {
-    if (this.sourceType === 'RawDataset') {
-      this.store.select(state => state.root.datasets.currentSet)
-          .subscribe(dataset => {
-            if (dataset && Object.keys(dataset).length > 0) {
-              this.source = dataset;
-              if (this.sourceType === 'RawDataset') {
-                this.configService.getConfigFile(this.sourceType)
-                    .subscribe(
-                        res => {
-                          this.formConfig = res;
-                          this.loadForm(res);
-                        },
-                        error => { console.error(error); });
-              } else {
-                this.loadForm();
-              }
-            }
-          });
-    }
   }
 
   ngOnInit() {
     // TODO check if config exists, do not use if doesn't (i.e. for normal
     // objects)
-    let configFile;
+    let configFile = undefined;
     if (this.sourceType) {
       configFile = this.sourceType;
     } else if (this.source && this.source.constructor.name !== 'Object') {
       configFile = this.source.constructor.name;
-    } else if (this.service) {
-      configFile = this.service.constructor.name.replace('Api', '');
     }
     if (configFile) {
       this.configService.getConfigFile(configFile)
@@ -173,21 +151,6 @@ export class ConfigFormComponent implements OnInit {
    */
   updateModel(values) {
     this.onSubmit.emit(values);
-    /*for (const prop in this.formConfig) {
-      if (this.formConfig[prop]['type'] === 'object' &&
-          values[prop].length > 0) {
-        this.source[prop] = JSON.parse(values[prop]);
-      } else if (this.formConfig[prop] &&
-                 (this.formConfig[prop]['visible'] !== false)) {
-        this.source[prop] = values[prop];
-      }
-    }
-    // TODO VALIDATE HERE or validate from a config file
-    // TODO inform user of errors returned from service
-    this.service
-        .replaceById(encodeURIComponent(this.source['pid']), this.source)
-        .subscribe(function(update) { console.log(update); },
-                   error => console.log(error));*/
   }
 
   /**

@@ -18,7 +18,8 @@
     "dataFileList": {
         "name": "dataFileList",
         "type": "Array&lt;any&gt;",
-        "default": []
+        "default": [],
+        "visible": false
     },
     "datasetId": {
         "name": "datasetId",
