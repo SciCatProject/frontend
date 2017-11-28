@@ -350,10 +350,10 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   }
 
   retrieveSets(f) {
-    const destPath = f.form.value['path'];
+    const destPath = f.form.value['path'] || '/archive/retrieve';
     if (destPath.length > 0) {
       this.retrieveDisplay = false;
-      this.archiveOrRetrieve(false, destPath);
+      this.archiveOrRetrieve(false);
     }
   }
 
@@ -363,17 +363,19 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
    * action performed
    * @memberof DashboardComponent
    */
-  archiveOrRetrieve(archive: boolean, destPath = null) {
+  archiveOrRetrieve(archive: boolean, destPath = '/archive/retrieve/') {
     let msg = {};
     if (this.selectedSets.length > 0) {
       this.dest = new Subject<string>();
       const job = new Job();
+      job.jobParams = {};
       job.creationTime = new Date();
       const backupFiles = [];
       this.store
         .select(state => state.root.user)
         .take(1)
         .subscribe(user => {
+          job.jobParams['username'] = user['currentUser']['username'] || undefined;
           job.emailJobInitiator = user['email'];
           if (!user['email']) {
             job.emailJobInitiator = user['currentUser']['email'] || user['currentUser']['accessEmail'];
@@ -417,14 +419,16 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
               .select(state => state.root.user.settings.tapeCopies)
               .take(1)
               .subscribe(copies => {
-                job.jobParams = { tapeCopies: copies };
+                job.jobParams['tapeCopies'] = copies;
               });
-            job.jobParams['username'] = user['username'];
+              // TODO check username in job object
+            // job.jobParams['username'] = user['username'];
             if (!archive) {
-              // TODO number of copies from settings table
+              // TODO fix the path here
               job.jobParams['destinationPath'] = destPath;
             }
-            this.store.dispatch({ type: ja.SUBMIT, payload: job });
+            console.log(job);
+            // this.store.dispatch({ type: ja.SUBMIT, payload: job });
           }
         });
     } else {

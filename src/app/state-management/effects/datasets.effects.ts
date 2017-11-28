@@ -234,6 +234,7 @@ export class DatasetEffects {
           });
           // return Observable.of({type: DatasetActions.RESET_STATUS_COMPLETE, payload: res});
          }).catch(err => {
+           console.error(err);
           return Observable.of({
             type : UserActions.SHOW_MESSAGE,
             payload : {

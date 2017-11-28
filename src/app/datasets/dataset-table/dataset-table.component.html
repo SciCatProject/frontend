@@ -41,9 +41,9 @@
   <ul>
     <li *ngFor="let ds of selectedSets" style="text-align: left">{{ds.sourceFolder}}</li>
   </ul>
-  <p>Please enter the destination directory for your datasets:</p>
+  <!-- <p>Please enter the destination directory for your datasets:</p> -->
   <form  #retrieveForm="ngForm" (ngSubmit)="retrieveSets(retrieveForm)">
-      <div class="form-group">
+      <!-- <div class="form-group">
         <label for="path">Destination Path: </label>
  
         <input type="text" id="path" class="form-control"
@@ -58,9 +58,9 @@
             </div>
             <div [hidden]="!path.errors.minlength">
               Path must be at least 4 characters long.
-            </div>git
+            </div>
         </div>
-      </div>
+      </div> -->
     <!--<input type="text" class="form-control" ngModel required  name="dest" placeholder="Enter dataset destination"/>-->
     <div class="pull-right top-buffer ">
       <button type="button" class="btn btn-primary" (click)="retrieveDisplay = false; selectedSets=[]">Cancel</button>
