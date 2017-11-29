@@ -7,6 +7,7 @@ import {DataTable} from 'primeng/primeng';
 import {Http} from '@angular/http';
 import {Job} from 'shared/sdk/models';
 import {ConfigService} from 'shared/services/config.service';
+import * as jSelectors from 'state-management/selectors/jobs.selectors';
 
 @Component({
   selector: 'app-jobs',
@@ -48,17 +49,17 @@ export class JobsTableComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.loading$ = this.store.select(state => state.root.jobs.loading);
+    this.loading$ = this.store.select(jSelectors.getLoading);
     this.store.select(state => state.root.user.settings.jobCount).subscribe(limit => {
       this.limit = limit;
     });
-    this.store.select(state => state.root.jobs.filters).subscribe(filters => {
+    this.store.select(jSelectors.getFilters).subscribe(filters => {
       this.filters = Object.assign({}, filters);
     });
     
     this.totalJobNumber$ = this.store.select(state => state.root.jobs.currentJobs.length);
 
-    this.subscriptions.push(this.store.select(state => state.root.jobs.currentJobs)
+    this.subscriptions.push(this.store.select(jSelectors.getJobs)
       .subscribe(selected => {
         if (selected.length > 0) {
           this.jobs = selected.slice();
@@ -75,14 +76,14 @@ export class JobsTableComponent implements OnInit, OnDestroy {
 
 
   onRowSelect(event) {
-    this.store.dispatch({type: JobActions.SELECT_CURRENT, payload: event.data});
+    this.store.dispatch(new JobActions.CurrentJobAction(event.data));
     this.router.navigateByUrl('/user/job/' + encodeURIComponent(event.data.id));
   }
 
   nodeExpand(event) {
-    this.store.dispatch({type: JobActions.CHILD_RETRIEVE, payload: event.node});
+    this.store.dispatch(new JobActions.ChildRetrieveAction(event.node));
     event.node.children = [];
-    this.store.select(state => state.root.jobs.ui).take(1).subscribe(jobs => {
+    this.store.select(jSelectors.getUI).take(1).subscribe(jobs => {
       console.log(jobs);
       event.node.children = jobs;
     });

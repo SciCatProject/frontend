@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import * as JobActions from 'state-management/actions/jobs.actions';
 import {Job} from 'shared/sdk/models';
 import {Store} from '@ngrx/store';
+import * as jSelectors from 'state-management/selectors/jobs.selectors';
 import {ActivatedRoute} from '@angular/router';
 
 @Component({
@@ -20,11 +21,11 @@ export class JobsDetailComponent implements OnInit, OnDestroy {
 
 
   ngOnInit() {
-    this.subscriptions.push(this.store.select(state => state.root.jobs.currentSet)
+    this.subscriptions.push(this.store.select(jSelectors.getCurrentJob)
       .subscribe(job => {
         if (job && Object.keys(job).length > 0) {
           this.job = <Job>job;
-        }else {
+        } else {
           console.log('Searching from URL params');
           this.route.params.subscribe(params => {
             this.store.dispatch(new JobActions.SearchIDAction(params.id));
