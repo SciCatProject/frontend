@@ -1,5 +1,6 @@
 import {createSelector, Store} from '@ngrx/store';
 
+export const getFilterValues = (state: any) => state.root.datasets.filterValues;
 export const getActiveFilters = (state: any) => state.root.datasets.activeFilters;
 export const getText = (state: any) => state.root.datasets.activeFilters.text;
 
@@ -8,3 +9,5 @@ export const getSelectedSets = (state: any) => state.root.datasets.selectedSets;
 
 export const getLoading = (state: any) => state.root.datasets.loading;
 export const getTotalSets = (state: any) => state.root.datasets.totalSets;
+
+export const getCurrentSet = (state: any) => state.root.datasets.currentSet;

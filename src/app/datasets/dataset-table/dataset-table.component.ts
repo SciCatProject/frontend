@@ -401,7 +401,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
                 'Selected datasets have no datablocks associated with them',
               title: 'Job not submitted'
             };
-            this.store.dispatch({ type: ua.SHOW_MESSAGE, payload: msg });
+            this.store.dispatch(new ua.ShowMessageAction(msg));
             this.selectedSets = [];
           } else if (!job.emailJobInitiator) {
             msg = {
@@ -410,7 +410,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
                 'No email for this user could be found, the job will not be submitted',
               title: 'Job not submitted'
             };
-            this.store.dispatch({ type: ua.SHOW_MESSAGE, payload: msg });
+            this.store.dispatch(new ua.ShowMessageAction(msg));
             this.selectedSets = [];
           } else {
             job.datasetList = backupFiles;

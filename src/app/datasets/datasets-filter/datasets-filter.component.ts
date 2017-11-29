@@ -13,6 +13,8 @@ import TimeRange from 'shared/modules/datepicker/LocalizedDateTime/TimeRange';
 import * as utils from 'shared/utils';
 import * as dsa from 'state-management/actions/datasets.actions';
 import * as dStore from 'state-management/state/datasets.store';
+import * as dSelectors from 'state-management/selectors/datasets.selectors';
+import * as uSelectors from 'state-management/selectors/users.selectors';
 import {DatasetFilters} from 'datasets/datasets-filter/dataset-filters';
 
 @Component({
@@ -78,7 +80,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     this.subscriptions.push(this.route.queryParams.subscribe(params => {
       const newParams = Object.assign({}, params);
       delete newParams['mode'];
-      this.store.select(state => state.root.datasets.activeFilters)
+      this.store.select(dSelectors.getActiveFilters)
           .take(1)
           .subscribe(filters => {
             const f = utils.filter(filters, newParams);
@@ -108,7 +110,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
           });
     }));
     this.subscriptions.push(
-        this.store.select(state => state.root.datasets.activeFilters)
+        this.store.select(dSelectors.getActiveFilters)
             .subscribe(data => {
               // this.filters = Object.assign({}, data,
               // this.route.snapshot.queryParams);
@@ -121,9 +123,9 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
                   });
             }));
     this.resultCount$ =
-        this.store.select(state => state.root.datasets.totalSets);
+        this.store.select(dSelectors.getTotalSets);
     this.subscriptions.push(
-        this.store.select(state => state.root.datasets.filterValues)
+        this.store.select(dSelectors.getFilterValues)
             .subscribe(values => {
               this.filterValues = Object.assign({}, values);
               if (this.filterValues) {
@@ -273,7 +275,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     this.locField.value = '';
     this.grpField.value = '';
     this.filters = dStore.initialDatasetState.activeFilters;
-    this.store.select(state => state.root.user.currentUserGroups)
+    this.store.select(uSelectors.getCurrentUserGroups)
         .take(1)
         .subscribe(groups => { this.filters.ownerGroup = groups; });
     this.filterValues = dStore.initialDatasetState.filterValues;
