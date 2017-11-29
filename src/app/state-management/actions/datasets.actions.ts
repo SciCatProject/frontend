@@ -121,7 +121,7 @@ export class DatablocksFailedAction implements Action {
 export class AddGroupsAction implements Action {
   readonly type = ADD_GROUPS;
 
-  constructor(public payload: lb.User) {}
+  constructor(public payload: string) {}
   }
 export class AddGroupsCompleteAction implements Action {
   readonly type = ADD_GROUPS_COMPLETE;

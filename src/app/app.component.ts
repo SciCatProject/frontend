@@ -75,7 +75,7 @@ export class AppComponent implements OnDestroy, OnInit {
       .subscribe(current => {
         if (current.title !== undefined) {
           this.createNotification(current);
-          this.store.dispatch({type: ua.CLEAR_MESSAGE});
+          this.store.dispatch(new ua.ClearMessageAction());
         }
       }));
     this.subscriptions.push(this.store.select(state => state.root.user.currentUser)
@@ -83,10 +83,8 @@ export class AppComponent implements OnDestroy, OnInit {
         if (current && current['username']) {
           this.username = current['username'].replace('ms-ad.', '');
           if (!('realm' in current)) {
-            this.store.dispatch(
-              {type: dsa.ADD_GROUPS, payload: this.username});
-            this.store.dispatch(
-              {type: ua.ACCESS_USER_EMAIL, payload: this.username});
+            this.store.dispatch(new dsa.AddGroupsAction(this.username));
+            this.store.dispatch(new ua.AccessUserEmailAction(this.username));
           }
         } else if (current && current['loggedOut']) {
           if (window.location.pathname.indexOf('login') === -1) {
@@ -95,7 +93,7 @@ export class AppComponent implements OnDestroy, OnInit {
         } else {
         }
       }));
-    this.store.dispatch({type: ua.RETRIEVE_USER});
+    this.store.dispatch(new ua.RetrieveUserAction());
   }
 
   ngOnDestroy() {
@@ -105,7 +103,7 @@ export class AppComponent implements OnDestroy, OnInit {
   }
 
   logout() {
-    this.store.dispatch({type: ua.LOGOUT});
+    this.store.dispatch(new ua.LogoutAction());
   }
 
   login() {
