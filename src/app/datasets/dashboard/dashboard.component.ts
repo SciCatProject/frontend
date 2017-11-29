@@ -4,7 +4,7 @@ import { Store } from '@ngrx/store';
 import { RawDataset } from 'shared/sdk/models';
 import * as dsa from 'state-management/actions/datasets.actions';
 import * as ds from 'state-management/selectors/datasets.selectors';
-import * as dSelectors from 'state-management/selectors/datasets.selectors';
+import * as selectors from 'state-management/selectors';
 
 @Component({
   selector: 'dashboard',
@@ -49,7 +49,7 @@ export class DashboardComponent implements OnInit {
    */
   textSearch(terms) {
     this.store
-      .select(dSelectors.getActiveFilters)
+      .select(selectors.datasets.getActiveFilters)
       .take(1)
       .subscribe(values => {
         const filters = Object.assign({}, values);

@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {Store} from '@ngrx/store';
 import {UserApi} from 'shared/sdk/services';
 import * as ua from 'state-management/actions/user.actions';
-
+import * as selectors from 'state-management/selectors';
 @Component({
   selector : 'app-user-settings',
   templateUrl : './user-settings.component.html',
@@ -14,11 +14,11 @@ export class UserSettingsComponent implements OnInit {
   settings$ = null;
 
   constructor(private us: UserApi, private store: Store<any>) {
-    this.store.select(state => state.root.user.currentUser).subscribe(user => {
+    this.store.select(selectors.users.getCurrentUser).subscribe(user => {
       this.user = user;
     });
     console.log(this.us.getCurrentToken());
-    this.settings$ = this.store.select(state => state.root.user.settings);
+    this.settings$ = this.store.select(selectors.users.getSettings);
     // TODO handle service and endpoint for user settings
   }
 
