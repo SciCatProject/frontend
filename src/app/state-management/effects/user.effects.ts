@@ -79,10 +79,10 @@ export class UserEffects {
           .switchMap((payload) => {
             if (this.userSrv.isAuthenticated()) {
               return this.userSrv.logout().switchMap(res => {
-                return Observable.of({type : UserActions.LOGOUT_COMPLETE});
+                return Observable.of(new UserActions.LogoutCompleteAction());
               });
             } else {
-              return Observable.of({type : UserActions.LOGOUT_COMPLETE});
+              return Observable.of(new UserActions.LogoutCompleteAction());
             }
           });
 
@@ -94,15 +94,11 @@ export class UserEffects {
           .switchMap((payload) => {
             return this.accessUserSrv.findById(payload)
                 .switchMap(res => {
-                  return Observable.of({
-                    type : UserActions.ADD_GROUPS_COMPLETE,
-                    payload : res['memberOf']
-                  });
+                  return Observable.of(new UserActions.AddGroupsCompleteAction(res['memberOf']));
                 })
                 .catch(err => {
                   console.error(err);
-                  return Observable.of(
-                      {type : UserActions.ADD_GROUPS_FAILED, payload : err});
+                  return Observable.of(new UserActions.AddGroupsFailedAction(err));
                 });
           });
 
@@ -115,17 +111,11 @@ export class UserEffects {
             return this.accessUserSrv.findById(action)
                 .switchMap(res => {
                   console.log(res);
-                  return Observable.of({
-                    type : UserActions.ACCESS_USER_EMAIL_COMPLETE,
-                    payload : res['mail']
-                  });
+                  return Observable.of(new UserActions.AccessUserEmailCompleteAction(res['email']));
                 })
                 .catch(err => {
                   console.error(err);
-                  return Observable.of({
-                    type : UserActions.ACCESS_USER_EMAIL_FAILED,
-                    payload : err
-                  });
+                  return Observable.of(new UserActions.AccessUserEmailFailedAction(err));
                 });
           });
 
@@ -135,22 +125,15 @@ export class UserEffects {
           .debounceTime(300)
           .switchMap(payload => {
             if (!this.userSrv.isAuthenticated()) {
-              return Observable.of({
-                type : UserActions.RETRIEVE_USER_FAILED,
-                payload : new Error('No user is logged in')
-              });
+              return Observable.of(new UserActions.RetrieveUserFailedAction(new Error('No user is logged in')));
               }
 
             return this.userSrv.getCurrent()
                 .switchMap(res => {
-                  return Observable.of({
-                    type : UserActions.RETRIEVE_USER_COMPLETE,
-                    payload : res
-                  });
+                  return Observable.of(new UserActions.RetrieveUserCompleteAction(res));
                 })
                 .catch(err => {
-                  return Observable.of(
-                      {type : UserActions.RETRIEVE_USER_FAILED, payload : err});
+                  return Observable.of(new UserActions.RetrieveUserFailedAction(err));
                 });
           });
 
@@ -161,16 +144,12 @@ export class UserEffects {
           .switchMap(payload => {
             return this.userSrv.getCurrent()
                 .switchMap(res => {
-                  return Observable.of({
-                    type : UserActions.RETRIEVE_USER_COMPLETE,
-                    payload : res
-                  });
+                  return Observable.of(new UserActions.RetrieveUserCompleteAction(res));
                 })
                 .catch(err => {
                   // Most likely because the user is logged out so not
                   // authorised to make a call
-                  return Observable.of(
-                      {type : UserActions.RETRIEVE_USER_FAILED, payload : err});
+                  return Observable.of(new UserActions.RetrieveUserFailedAction(err));
                 });
           });
 
