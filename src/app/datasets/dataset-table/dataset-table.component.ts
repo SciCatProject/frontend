@@ -18,11 +18,15 @@ import { UserApi } from 'shared/sdk/services';
 import { ConfigService } from 'shared/services/config.service';
 import * as dua from 'state-management/actions/dashboard-ui.actions';
 import * as dsa from 'state-management/actions/datasets.actions';
+import * as dSelectors from 'state-management/selectors/datasets.selectors';
+import * as jSelectors from 'state-management/selectors/jobs.selectors';
+import * as uSelectors from 'state-management/selectors/users.selectors';
 import * as ua from 'state-management/actions/user.actions';
 import * as ja from 'state-management/actions/jobs.actions';
 import * as utils from 'shared/utils';
 
 import { config  } from '../../../config/config';
+import { last } from 'rxjs/operator/last';
 
 @Component({
   selector: 'dataset-table',
@@ -83,8 +87,8 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.loading$ = this.store.select(state => state.root.datasets.loading);
-    this.datasetCount$ = this.store.select(state => state.root.datasets.totalSets);
+    this.loading$ = this.store.select(dSelectors.getLoading);
+    this.datasetCount$ = this.store.select(dSelectors.getTotalSets);
     this.limit$ = this.store.select(state => state.root.user.settings.datasetCount);
 
     this.store.select(state => state.root.dashboardUI.mode).subscribe(mode => {
@@ -105,7 +109,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     // becomes an issue
 
     this.subscriptions.push(
-      this.store.select(state => state.root.datasets.datasets).subscribe(
+      this.store.select(dSelectors.getDatasets).subscribe(
         data => {
           this.datasets = data;
           if (this.datasets && this.datasets.length > 0) {
@@ -122,7 +126,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
 
     this.subscriptions.push(
       this.store
-        .select(state => state.root.datasets.activeFilters)
+        .select(dSelectors.getActiveFilters)
         .subscribe(filters => {
           if (filters.skip !== this.dsTable.first) {
             setTimeout(() => {
@@ -134,7 +138,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
 
     this.subscriptions.push(
       this.store
-        .select(state => state.root.datasets.selectedSets)
+        .select(dSelectors.getSelectedSets)
         .subscribe(selected => {
           this.selectedSets = selected;
         })
@@ -142,7 +146,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
 
     let msg = {};
     this.subscriptions.push(
-      this.store.select(state => state.root.jobs.jobSubmission).subscribe(
+      this.store.select(jSelectors.submitJob).subscribe(
         ret => {
           if (ret) {
             console.log(ret);
@@ -168,7 +172,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     );
 
     this.subscriptions.push(
-      this.store.select(state => state.root.jobs.error).subscribe(err => {
+      this.store.select(jSelectors.getError).subscribe(err => {
         if (err) {
           msg = {
             type: 'error',
@@ -275,7 +279,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
    */
   onPage(event) {
     this.store
-      .select(state => state.root.datasets.activeFilters)
+      .select(dSelectors.getActiveFilters)
       .take(1)
       .subscribe(f => {
         const filters = Object.assign({}, f);
@@ -368,7 +372,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
       job.creationTime = new Date();
       const backupFiles = [];
       this.store
-        .select(state => state.root.user)
+        .select(uSelectors.getState)
         .take(1)
         .subscribe(user => {
           job.jobParams['username'] = user['currentUser']['username'] || undefined;
@@ -412,7 +416,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
             job.datasetList = backupFiles;
             job.type = archive ? 'archive' : 'retrieve';
             this.store
-              .select(state => state.root.user.settings.tapeCopies)
+              .select(uSelectors.getTapeCopies)
               .take(1)
               .subscribe(copies => {
                 job.jobParams['tapeCopies'] = copies;
