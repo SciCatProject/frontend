@@ -26,14 +26,11 @@ export class UserSettingsComponent implements OnInit {
 
   onSubmit(values) {
     // TODO validate here
-    this.store.dispatch({type : ua.SAVE_SETTINGS, payload : values});
-    this.store.dispatch({
-      type : ua.SHOW_MESSAGE,
-      payload : {
+    this.store.dispatch(new ua.SaveSettingsAction(values));
+    this.store.dispatch(new ua.ShowMessageAction({
         content : 'Settings Saved Locally',
         timeout : 3,
         class : 'ui positive message'
-      }
-    });
+      }));
   }
 }
