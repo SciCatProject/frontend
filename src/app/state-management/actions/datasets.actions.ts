@@ -42,12 +42,12 @@ export const TOTAL_UPDATE = '[Dataset] Total Datasets Update';
 export class SearchCompleteAction implements Action {
   readonly type = SEARCH_COMPLETE;
 
-  constructor(public payload: lb.RawDataset[]) {}
+  constructor(public payload: {}[]) {}
   }
 export class SearchFailedAction implements Action {
   readonly type = SEARCH_FAILED;
 
-  constructor() {}
+  constructor(public payload: any) {}
   }
 
 export class UpdateFilterAction implements Action {
@@ -63,7 +63,7 @@ export class UpdateFilterCompleteAction implements Action {
 export class FilterFailedAction implements Action {
   readonly type = FILTER_FAILED;
 
-  constructor() {}
+  constructor(public payload: any) {}
   }
 export class FilterValueAction implements Action {
   readonly type = FILTER_VALUE_UPDATE;
@@ -78,12 +78,12 @@ export class SearchIDAction implements Action {
 export class SearchIDCompleteAction implements Action {
   readonly type = SEARCH_ID_COMPLETE;
 
-  constructor() {}
+  constructor(public payload: {}) {}
   }
 export class SearchIDFailedAction implements Action {
   readonly type = SEARCH_ID_FAILED;
 
-  constructor() {}
+  constructor(public payload: any) {}
   }
 
 export class DatablocksAction implements Action {
@@ -99,7 +99,7 @@ export class DatablocksCompleteAction implements Action {
 export class DatablocksFailedAction implements Action {
   readonly type = DATABLOCKS_FAILED;
 
-  constructor() {}
+  constructor(public payload: any) {}
   }
 
   export class DatablockDeleteAction implements Action {
@@ -161,7 +161,7 @@ export class ResetStatusCompleteAction implements Action {
 export class TotalSetsAction implements Action {
   readonly type = TOTAL_UPDATE;
 
-  constructor(public payload: lb.RawDataset) {}
+  constructor(public payload: number) {}
   }
 
 export type Actions =

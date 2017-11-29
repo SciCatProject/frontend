@@ -70,6 +70,6 @@ export class LoginComponent implements OnInit {
    */
   doADLogin(event) {
     const self = this;
-    this.store.dispatch({type : ua.LOGIN, payload : self.loginForm.value});
+    this.store.dispatch(new ua.LoginAction(self.loginForm.value));
   }
 }
