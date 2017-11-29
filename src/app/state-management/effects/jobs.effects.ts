@@ -29,15 +29,11 @@ export class JobsEffects {
 
         return this.jobSrv.findById(encodeURIComponent(id))
           .switchMap(res => {
-            return Observable.of({
-              type: JobActions.SEARCH_ID_COMPLETE,
-              payload: res
-            });
+            return Observable.of(new JobActions.SearchIDCompleteAction(res));
           })
           .catch(err => {
             console.log(err);
-            return Observable.of(
-              {type: JobActions.SEARCH_ID_FAILED, payload: err});
+            return Observable.of(new JobActions.SearchIDFailedAction(err));
           });
       });
 
@@ -49,14 +45,12 @@ export class JobsEffects {
         return this.jobSrv.create(job)
           .switchMap(res => {
             console.log(res);
-            return Observable.of(
-              {type: JobActions.SUBMIT_COMPLETE, payload: res});
+            return Observable.of(new JobActions.SubmitCompleteAction(res));
           });
       })
       .catch(err => {
         console.log(err);
-        return Observable.of(
-          {type: JobActions.FAILED, payload: err});
+        return Observable.of(new JobActions.FailedAction(err));
       });
 
   @Effect()
@@ -91,12 +85,11 @@ export class JobsEffects {
           node.children.push(
             {'data': {'type': 'No datasets could be found'}});
         }
-        return Observable.of({type: JobActions.CHILD_RETRIEVE_COMPLETE, payload: node.children});
+        return Observable.of(new JobActions.ChildRetrieveCompleteAction(node.children));
       })
       .catch(err => {
         console.log(err);
-        return Observable.of(
-          {type: JobActions.FAILED, payload: err});
+        return Observable.of(new JobActions.FailedAction(err));
       });
 
   @Effect()
@@ -112,14 +105,12 @@ export class JobsEffects {
         filter['order'] = 'creationTime DESC';
         return this.jobSrv.find(filter)
           .switchMap(res => {
-            return Observable.of(
-              {type: JobActions.RETRIEVE_COMPLETE, payload: res});
+            return Observable.of(new JobActions.RetrieveCompleteAction(res));
           });
       })
       .catch(err => {
         console.log(err);
-        return Observable.of(
-          {type: JobActions.FAILED, payload: err});
+        return Observable.of(new JobActions.FailedAction(err));
       });
 
 

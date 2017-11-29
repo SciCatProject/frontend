@@ -87,14 +87,14 @@ export class SearchIDAction implements Action {
 export class SearchIDCompleteAction implements Action {
   readonly type = SEARCH_ID_COMPLETE;
 
-  constructor() {
+  constructor(public payload: {}) {
   }
 }
 
 export class SearchIDFailedAction implements Action {
   readonly type = SEARCH_ID_FAILED;
 
-  constructor() {
+  constructor(public payload: any) {
   }
 }
 
