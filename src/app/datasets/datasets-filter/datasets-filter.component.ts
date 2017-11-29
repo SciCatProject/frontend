@@ -274,7 +274,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     this.locField.value = '';
     this.grpField.value = '';
     this.filters = dStore.initialDatasetState.activeFilters;
-    this.store.select(uSelectors.getCurrentUserGroups)
+    this.store.select(selectors.users.getCurrentUserGroups)
         .take(1)
         .subscribe(groups => { this.filters.ownerGroup = groups; });
     this.filterValues = dStore.initialDatasetState.filterValues;
