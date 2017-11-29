@@ -28,20 +28,17 @@ export class UserEffects {
             return this.activeDirSrv.login(form['username'], form['password'])
                 .switchMap(result => {
                   const res = result.json();
-                  console.log(res);
                   res['rememberMe'] = true;
                   res['id'] = res['access_token'];
                   // result['user'] = self.loginForm.get('username').value;
                   this.authSrv.setToken(res);
                   this.userSrv.getCurrent().subscribe(
                       user => { this.authSrv.setUser(user); });
-                  return Observable.of(
-                      {type : UserActions.AD_LOGIN_COMPLETE, payload : res});
+                  return Observable.of(new UserActions.LoginCompleteAction(res));
                 })
                 .catch(err => {
                   const error = {'message' : err.json(), 'errSrc' : 'AD'};
-                  return Observable.of(
-                      {type : UserActions.LOGIN_FAILED, payload : error});
+                  return Observable.of(new UserActions.LoginFailedAction(error));
                 });
           });
 
@@ -54,19 +51,16 @@ export class UserEffects {
             return this.userSrv.login(form)
                 .switchMap(res => {
                   res['user']['accountType'] = 'functional';
-                  return Observable.of(
-                      {type : UserActions.LOGIN_COMPLETE, payload : res});
+                  return Observable.of(new UserActions.LoginCompleteAction(res));
                 })
                 .catch(err => {
                   console.log(err);
                   if (typeof(err) === 'string') {
                     const error = {'message' : err, 'errSrc' : 'AD'};
-                    return Observable.of(
-                        {type : UserActions.LOGIN_FAILED, payload : error});
+                    return Observable.of(new UserActions.LoginFailedAction(error));
                   } else {
                     err['errSrc'] = 'functional';
-                    return Observable.of(
-                        {type : UserActions.AD_LOGIN, payload : form});
+                    return Observable.of(new UserActions.ActiveDirLoginAction(form));
                   }
 
                 });
