@@ -1,6 +1,7 @@
 import {Action} from '@ngrx/store';
 import {DatasetFilters} from 'datasets/datasets-filter/dataset-filters';
 import * as lb from 'shared/sdk/models';
+import { Datablock } from 'shared/sdk/models';
 
 export const LOAD = '[Dataset] Load';
 
@@ -72,7 +73,7 @@ export class FilterValueAction implements Action {
 export class SearchIDAction implements Action {
   readonly type = SEARCH_ID;
 
-  constructor() {}
+  constructor(public payload: string) {}
   }
 export class SearchIDCompleteAction implements Action {
   readonly type = SEARCH_ID_COMPLETE;
@@ -88,7 +89,7 @@ export class SearchIDFailedAction implements Action {
 export class DatablocksAction implements Action {
   readonly type = DATABLOCKS;
 
-  constructor() {}
+  constructor(public payload: string) {}
   }
 export class DatablocksCompleteAction implements Action {
   readonly type = DATABLOCKS_COMPLETE;
@@ -104,7 +105,7 @@ export class DatablocksFailedAction implements Action {
   export class DatablockDeleteAction implements Action {
     readonly type = DATABLOCK_DELETE;
   
-    constructor() {}
+    constructor(public payload: Datablock) {}
     }
   export class DatablockDeleteCompleteAction implements Action {
     readonly type = DATABLOCK_DELETE_COMPLETE;

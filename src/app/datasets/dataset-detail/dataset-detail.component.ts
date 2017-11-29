@@ -49,12 +49,10 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
               if (dataset && Object.keys(dataset).length > 0) {
                 self.dataset = <RawDataset>dataset;
                 if (!('origdatablocks' in self.dataset)) {
-                  self.store.dispatch(
-                      {type: dsa.DATABLOCKS, payload: self.dataset.pid});
+                  self.store.dispatch(new dsa.DatablocksAction(self.dataset.pid));
                 }
                 // clear selected dataset
-                self.store.dispatch(
-                    {type: dsa.SELECT_CURRENT, payload: undefined});
+                self.store.dispatch(new dsa.CurrentSetAction(undefined));
               }
             }));
 
@@ -63,7 +61,7 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
         .subscribe(ds => {
           if (!ds) {
             this.route.params.subscribe(params => {
-              this.store.dispatch({type: dsa.SEARCH_ID, payload: params.id});
+              this.store.dispatch(new dsa.SearchIDAction(params.id));
             });
           }
         });
@@ -88,9 +86,9 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
 
       // TODO this should be moved into a reset endpoint for a dataset
       for (let i = 0; i < this.dataset.datablocks.length; i++) {
-        this.store.dispatch({type: dsa.DATABLOCK_DELETE, payload: this.dataset.datablocks[i]});
+        this.store.dispatch(new dsa.DatablockDeleteAction(this.dataset.datablocks[i]));
       }
-      this.store.dispatch({type: dsa.RESET_STATUS, payload: pl});
+      this.store.dispatch(new dsa.ResetStatusAction(pl));
     }
   }
 }
