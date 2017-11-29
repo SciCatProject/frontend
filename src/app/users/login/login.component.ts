@@ -45,23 +45,17 @@ export class LoginComponent implements OnInit {
             self.router.navigateByUrl('/datasets');
             // self.router.navigateByUrl(decodeURIComponent(self.returnUrl));
           } else if (result && result['errSrc']) {
-            self.store.dispatch({
-              type : ua.SHOW_MESSAGE,
-              payload : {
+            self.store.dispatch(new ua.ShowMessageAction({
                 content :  result.message,
                 type : 'error',
                 title : 'Login Failed'
-              }
-            });
+              }));
           } else if (!(result instanceof Object)) {
-            self.store.dispatch({
-              type : ua.SHOW_MESSAGE,
-              payload : {
+            self.store.dispatch(new ua.ShowMessageAction({
                 content :  result,
                 type : 'error',
                 title : 'Login Failed'
-              }
-            });
+              }));
           }
         });
   }
@@ -76,6 +70,6 @@ export class LoginComponent implements OnInit {
    */
   doADLogin(event) {
     const self = this;
-    this.store.dispatch({type : ua.LOGIN, payload : self.loginForm.value});
+    this.store.dispatch(new ua.LoginAction(self.loginForm.value));
   }
 }

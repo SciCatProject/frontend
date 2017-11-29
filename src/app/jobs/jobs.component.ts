@@ -41,7 +41,7 @@ export class JobsComponent implements OnInit, OnDestroy {
         this.jobs.push(entry);
       });
     }));
-    this.store.dispatch({ type: JobActions.RETRIEVE });
+    this.store.dispatch(new JobActions.RetrieveAction());
   }
 
   ngOnDestroy() {
@@ -55,10 +55,7 @@ export class JobsComponent implements OnInit, OnDestroy {
   }
 
   nodeExpand(event) {
-    this.store.dispatch({
-      type: JobActions.CHILD_RETRIEVE,
-      payload: event.node
-    });
+    this.store.dispatch(new JobActions.ChildRetrieveAction(event.node));
     event.node.children = [];
     this.store
       .select(state => state.root.jobs.ui)

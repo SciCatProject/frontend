@@ -28,20 +28,17 @@ export class UserEffects {
             return this.activeDirSrv.login(form['username'], form['password'])
                 .switchMap(result => {
                   const res = result.json();
-                  console.log(res);
                   res['rememberMe'] = true;
                   res['id'] = res['access_token'];
                   // result['user'] = self.loginForm.get('username').value;
                   this.authSrv.setToken(res);
                   this.userSrv.getCurrent().subscribe(
                       user => { this.authSrv.setUser(user); });
-                  return Observable.of(
-                      {type : UserActions.AD_LOGIN_COMPLETE, payload : res});
+                  return Observable.of(new UserActions.LoginCompleteAction(res));
                 })
                 .catch(err => {
                   const error = {'message' : err.json(), 'errSrc' : 'AD'};
-                  return Observable.of(
-                      {type : UserActions.LOGIN_FAILED, payload : error});
+                  return Observable.of(new UserActions.LoginFailedAction(error));
                 });
           });
 
@@ -54,19 +51,16 @@ export class UserEffects {
             return this.userSrv.login(form)
                 .switchMap(res => {
                   res['user']['accountType'] = 'functional';
-                  return Observable.of(
-                      {type : UserActions.LOGIN_COMPLETE, payload : res});
+                  return Observable.of(new UserActions.LoginCompleteAction(res));
                 })
                 .catch(err => {
                   console.log(err);
                   if (typeof(err) === 'string') {
                     const error = {'message' : err, 'errSrc' : 'AD'};
-                    return Observable.of(
-                        {type : UserActions.LOGIN_FAILED, payload : error});
+                    return Observable.of(new UserActions.LoginFailedAction(error));
                   } else {
                     err['errSrc'] = 'functional';
-                    return Observable.of(
-                        {type : UserActions.AD_LOGIN, payload : form});
+                    return Observable.of(new UserActions.ActiveDirLoginAction(form));
                   }
 
                 });
@@ -79,10 +73,10 @@ export class UserEffects {
           .switchMap((payload) => {
             if (this.userSrv.isAuthenticated()) {
               return this.userSrv.logout().switchMap(res => {
-                return Observable.of({type : UserActions.LOGOUT_COMPLETE});
+                return Observable.of(new UserActions.LogoutCompleteAction());
               });
             } else {
-              return Observable.of({type : UserActions.LOGOUT_COMPLETE});
+              return Observable.of(new UserActions.LogoutCompleteAction());
             }
           });
 
@@ -94,15 +88,11 @@ export class UserEffects {
           .switchMap((payload) => {
             return this.accessUserSrv.findById(payload)
                 .switchMap(res => {
-                  return Observable.of({
-                    type : UserActions.ADD_GROUPS_COMPLETE,
-                    payload : res['memberOf']
-                  });
+                  return Observable.of(new UserActions.AddGroupsCompleteAction(res['memberOf']));
                 })
                 .catch(err => {
                   console.error(err);
-                  return Observable.of(
-                      {type : UserActions.ADD_GROUPS_FAILED, payload : err});
+                  return Observable.of(new UserActions.AddGroupsFailedAction(err));
                 });
           });
 
@@ -115,17 +105,11 @@ export class UserEffects {
             return this.accessUserSrv.findById(action)
                 .switchMap(res => {
                   console.log(res);
-                  return Observable.of({
-                    type : UserActions.ACCESS_USER_EMAIL_COMPLETE,
-                    payload : res['mail']
-                  });
+                  return Observable.of(new UserActions.AccessUserEmailCompleteAction(res['email']));
                 })
                 .catch(err => {
                   console.error(err);
-                  return Observable.of({
-                    type : UserActions.ACCESS_USER_EMAIL_FAILED,
-                    payload : err
-                  });
+                  return Observable.of(new UserActions.AccessUserEmailFailedAction(err));
                 });
           });
 
@@ -135,22 +119,15 @@ export class UserEffects {
           .debounceTime(300)
           .switchMap(payload => {
             if (!this.userSrv.isAuthenticated()) {
-              return Observable.of({
-                type : UserActions.RETRIEVE_USER_FAILED,
-                payload : new Error('No user is logged in')
-              });
+              return Observable.of(new UserActions.RetrieveUserFailedAction(new Error('No user is logged in')));
               }
 
             return this.userSrv.getCurrent()
                 .switchMap(res => {
-                  return Observable.of({
-                    type : UserActions.RETRIEVE_USER_COMPLETE,
-                    payload : res
-                  });
+                  return Observable.of(new UserActions.RetrieveUserCompleteAction(res));
                 })
                 .catch(err => {
-                  return Observable.of(
-                      {type : UserActions.RETRIEVE_USER_FAILED, payload : err});
+                  return Observable.of(new UserActions.RetrieveUserFailedAction(err));
                 });
           });
 
@@ -161,16 +138,12 @@ export class UserEffects {
           .switchMap(payload => {
             return this.userSrv.getCurrent()
                 .switchMap(res => {
-                  return Observable.of({
-                    type : UserActions.RETRIEVE_USER_COMPLETE,
-                    payload : res
-                  });
+                  return Observable.of(new UserActions.RetrieveUserCompleteAction(res));
                 })
                 .catch(err => {
                   // Most likely because the user is logged out so not
                   // authorised to make a call
-                  return Observable.of(
-                      {type : UserActions.RETRIEVE_USER_FAILED, payload : err});
+                  return Observable.of(new UserActions.RetrieveUserFailedAction(err));
                 });
           });
 

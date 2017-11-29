@@ -24,18 +24,18 @@ export const SAVE_SETTINGS = '[User] Settings Save';
 export class LoginAction implements Action {
   readonly type = LOGIN;
 
-  constructor() {}
+  constructor(public payload: any) {}
   }
 
 export class ActiveDirLoginAction implements Action {
   readonly type = AD_LOGIN;
 
-  constructor() {}
+  constructor(public payload: any) {}
   }
 export class ActiveDirLoginCompleteAction implements Action {
   readonly type = AD_LOGIN_COMPLETE;
 
-  constructor() {}
+  constructor(public payload: any) {}
   }
 
 export class LoginCompleteAction implements Action {

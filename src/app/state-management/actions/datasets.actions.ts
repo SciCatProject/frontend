@@ -1,6 +1,7 @@
 import {Action} from '@ngrx/store';
 import {DatasetFilters} from 'datasets/datasets-filter/dataset-filters';
 import * as lb from 'shared/sdk/models';
+import { Datablock } from 'shared/sdk/models';
 
 export const LOAD = '[Dataset] Load';
 
@@ -41,28 +42,28 @@ export const TOTAL_UPDATE = '[Dataset] Total Datasets Update';
 export class SearchCompleteAction implements Action {
   readonly type = SEARCH_COMPLETE;
 
-  constructor(public payload: lb.RawDataset[]) {}
+  constructor(public payload: {}[]) {}
   }
 export class SearchFailedAction implements Action {
   readonly type = SEARCH_FAILED;
 
-  constructor() {}
+  constructor(public payload: any) {}
   }
 
 export class UpdateFilterAction implements Action {
   readonly type = FILTER_UPDATE;
 
-  constructor(public payload: DatasetFilters) {}
+  constructor(public payload: any) {}
   }
 export class UpdateFilterCompleteAction implements Action {
   readonly type = FILTER_UPDATE_COMPLETE;
 
-  constructor(public payload: DatasetFilters) {}
+  constructor(public payload: any) {}
   }
 export class FilterFailedAction implements Action {
   readonly type = FILTER_FAILED;
 
-  constructor() {}
+  constructor(public payload: any) {}
   }
 export class FilterValueAction implements Action {
   readonly type = FILTER_VALUE_UPDATE;
@@ -72,23 +73,23 @@ export class FilterValueAction implements Action {
 export class SearchIDAction implements Action {
   readonly type = SEARCH_ID;
 
-  constructor() {}
+  constructor(public payload: string) {}
   }
 export class SearchIDCompleteAction implements Action {
   readonly type = SEARCH_ID_COMPLETE;
 
-  constructor() {}
+  constructor(public payload: {}) {}
   }
 export class SearchIDFailedAction implements Action {
   readonly type = SEARCH_ID_FAILED;
 
-  constructor() {}
+  constructor(public payload: any) {}
   }
 
 export class DatablocksAction implements Action {
   readonly type = DATABLOCKS;
 
-  constructor() {}
+  constructor(public payload: string) {}
   }
 export class DatablocksCompleteAction implements Action {
   readonly type = DATABLOCKS_COMPLETE;
@@ -98,13 +99,13 @@ export class DatablocksCompleteAction implements Action {
 export class DatablocksFailedAction implements Action {
   readonly type = DATABLOCKS_FAILED;
 
-  constructor() {}
+  constructor(public payload: any) {}
   }
 
   export class DatablockDeleteAction implements Action {
     readonly type = DATABLOCK_DELETE;
   
-    constructor() {}
+    constructor(public payload: Datablock) {}
     }
   export class DatablockDeleteCompleteAction implements Action {
     readonly type = DATABLOCK_DELETE_COMPLETE;
@@ -120,7 +121,7 @@ export class DatablocksFailedAction implements Action {
 export class AddGroupsAction implements Action {
   readonly type = ADD_GROUPS;
 
-  constructor(public payload: lb.User) {}
+  constructor(public payload: string) {}
   }
 export class AddGroupsCompleteAction implements Action {
   readonly type = ADD_GROUPS_COMPLETE;
@@ -160,7 +161,7 @@ export class ResetStatusCompleteAction implements Action {
 export class TotalSetsAction implements Action {
   readonly type = TOTAL_UPDATE;
 
-  constructor(public payload: lb.RawDataset) {}
+  constructor(public payload: number) {}
   }
 
 export type Actions =

@@ -28,16 +28,11 @@ export class DatasetEffects {
 
             return this.rds.findById(encodeURIComponent(id))
                 .switchMap(res => {
-                  return Observable.of({
-                    type : DatasetActions.SEARCH_ID_COMPLETE,
-                    payload : res
-                  });
+                  return Observable.of(new DatasetActions.SearchIDCompleteAction(res));
                 })
                 .catch(err => {
                   console.log(err);
-
-                  return Observable.of(
-                      {type : DatasetActions.SEARCH_ID_FAILED, payload : err});
+                  return Observable.of(new DatasetActions.SearchIDFailedAction(err));
                 });
           });
 
@@ -61,14 +56,10 @@ export class DatasetEffects {
 
             return this.rds.findById(encodeURIComponent(id), blockFilter)
                 .switchMap(res => {
-                  return Observable.of({
-                    type : DatasetActions.SEARCH_ID_COMPLETE,
-                    payload : res
-                  });
+                  return Observable.of(new DatasetActions.SearchIDCompleteAction(res));
                 })
                 .catch(err => {
-                  return Observable.of(
-                      {type : DatasetActions.DATABLOCKS_FAILED, payload : err});
+                  return Observable.of(new DatasetActions.DatablocksFailedAction(err));
                 });
           });
 
@@ -100,15 +91,11 @@ export class DatasetEffects {
 
                   const locationArr = filterValues['creationLocation'];
                   locationArr.sort(stringSort);
-                  return Observable.of({
-                    type : DatasetActions.FILTER_UPDATE_COMPLETE,
-                    payload : filterValues
-                  });
+                  return Observable.of(new DatasetActions.UpdateFilterCompleteAction(filterValues));
                 })
                 .catch(err => {
                   console.log(err);
-                  return Observable.of(
-                      {type : DatasetActions.FILTER_FAILED, payload : err});
+                  return Observable.of(new DatasetActions.FilterFailedAction(err));
                 });
           });
 
@@ -130,13 +117,11 @@ export class DatasetEffects {
 
             return this.rds.count(filter)
             .switchMap(res => {
-              return Observable.of(
-                  {type : DatasetActions.TOTAL_UPDATE, payload : res['count']});
+              return Observable.of(new DatasetActions.TotalSetsAction(res['count']));
             })
             .catch(err => {
               console.log(err);
-              return Observable.of(
-                  {type : DatasetActions.SEARCH_FAILED, payload : err});
+              return Observable.of(new DatasetActions.SearchFailedAction(err));
             });
 
           });
@@ -167,13 +152,11 @@ export class DatasetEffects {
             filter['order'] = fq['sortField'];
             return this.rds.find(filter)
                 .switchMap(res => {
-                  return Observable.of(
-                      {type : DatasetActions.SEARCH_COMPLETE, payload : res});
+                  return Observable.of(new DatasetActions.SearchCompleteAction(res));
                 })
                 .catch(err => {
                   console.log(err);
-                  return Observable.of(
-                      {type : DatasetActions.SEARCH_FAILED, payload : err});
+                  return Observable.of(new DatasetActions.SearchFailedAction(err));
                 });
           });
   @Effect()
@@ -184,15 +167,11 @@ export class DatasetEffects {
           .switchMap(payload => {
             return this.accessUserSrv.findById(payload)
                 .switchMap(res => {
-                  return Observable.of({
-                    type : DatasetActions.ADD_GROUPS_COMPLETE,
-                    payload : res['memberOf']
-                  });
+                  return Observable.of(new DatasetActions.AddGroupsCompleteAction(res['memberOf']));
                 })
                 .catch(err => {
                   console.error(err);
-                  return Observable.of(
-                      {type : DatasetActions.ADD_GROUPS_FAILED, payload : err});
+                  return Observable.of(new DatasetActions.AddGroupsFailedAction(err));
                 });
           });
 
@@ -207,14 +186,11 @@ export class DatasetEffects {
               type: DatasetActions.DATABLOCK_DELETE_COMPLETE
             });
           }).catch(err => {
-            return Observable.of({
-              type : UserActions.SHOW_MESSAGE,
-              payload : {
+            return Observable.of(new UserActions.ShowMessageAction({
                 content : 'Failed to delete datablock',
                 type : 'error',
                 title: 'Dataset Status Reset Failed'
-              }
-            });
+              }));
           })
         });
 
@@ -224,25 +200,19 @@ export class DatasetEffects {
       .map(toPayload)
       .switchMap(payload => {
         return this.dls.updateAttributes(encodeURIComponent(payload['id']), payload['attributes']).switchMap(res => {
-          return Observable.of({
-            type : UserActions.SHOW_MESSAGE,
-            payload : {
+          return Observable.of(new UserActions.ShowMessageAction({
               content : '',
               type : 'success',
               title: 'Dataset Status Reset'
-            }
-          });
+            }));
           // return Observable.of({type: DatasetActions.RESET_STATUS_COMPLETE, payload: res});
          }).catch(err => {
            console.error(err);
-          return Observable.of({
-            type : UserActions.SHOW_MESSAGE,
-            payload : {
+          return Observable.of(new UserActions.ShowMessageAction({
               content : '',
               type : 'error',
               title: 'Dataset Status Reset Failed'
-            }
-          });
+            }));
          });
       });
 

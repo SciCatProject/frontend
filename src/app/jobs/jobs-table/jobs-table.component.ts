@@ -62,7 +62,6 @@ export class JobsTableComponent implements OnInit, OnDestroy {
       .subscribe(selected => {
         if (selected.length > 0) {
           this.jobs = selected.slice();
-          console.log(this.jobs);
         }
       }));
 
@@ -92,7 +91,7 @@ export class JobsTableComponent implements OnInit, OnDestroy {
 
   onPage(event) {
     this.filters['skip'] = event.first;
-    this.store.dispatch({type: JobActions.SORT_UPDATE, payload: this.filters});
+    this.store.dispatch(new JobActions.SortUpdateAction(this.filters));
   }
 
 

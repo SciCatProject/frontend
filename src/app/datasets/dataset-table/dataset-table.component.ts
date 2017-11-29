@@ -109,7 +109,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
         data => {
           this.datasets = data;
           if (this.datasets && this.datasets.length > 0) {
-            this.store.dispatch({ type: dua.SAVE_MODE, payload: this.mode });
+            this.store.dispatch(new dua.SaveModeAction(this.mode));
             this.updateRowView(this.mode);
           }
           // this.onModeChange(undefined, this.mode);
@@ -152,7 +152,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
               title: 'Job Created Successfully',
               content: ''
             };
-            this.store.dispatch({ type: ua.SHOW_MESSAGE, payload: msg });
+            this.store.dispatch(new ua.ShowMessageAction(msg));
           }
         },
         error => {
@@ -162,7 +162,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
             title: error.message,
             content: 'Job not submitted'
           };
-          this.store.dispatch({ type: ua.SHOW_MESSAGE, payload: msg });
+          this.store.dispatch(new ua.ShowMessageAction(msg));
         }
       )
     );
@@ -175,11 +175,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
             title: err.message,
             content: 'Job not submitted'
           };
-          this.store.dispatch({ type: ua.SHOW_MESSAGE, payload: msg });
-          this.store.dispatch({
-            type: ja.SEARCH_ID_FAILED,
-            payload: undefined
-          });
+          this.store.dispatch(new ua.ShowMessageAction(msg));
         }
       })
     );
@@ -218,7 +214,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
    */
   onModeChange(event, mode) {
     this.mode = mode.toLowerCase();
-    this.store.dispatch({ type: dua.SAVE_MODE, payload: this.mode });
+    this.store.dispatch(new dua.SaveModeAction(this.mode));
   }
 
   updateRowView(mode) {
@@ -240,7 +236,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
           this.rowStyleMap[set.pid] = c;
         }
       } else {
-        this.store.dispatch({ type: dua.SAVE_MODE, payload: this.mode });
+        this.store.dispatch(new dua.SaveModeAction(this.mode));
       }
       const currentParams = this.route.snapshot.queryParams;
       this.router.navigate(['/datasets'], {
@@ -293,7 +289,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
         }
         // TODO reduce calls when not needed (i.e. no change)
         if (f.first !== event.first || this.datasets.length === 0) {
-          this.store.dispatch({ type: dsa.FILTER_UPDATE, payload: filters });
+          this.store.dispatch(new dsa.UpdateFilterAction(filters));
         }
       });
   }
@@ -428,7 +424,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
               job.jobParams['destinationPath'] = destPath;
             }
             console.log(job);
-            this.store.dispatch({ type: ja.SUBMIT, payload: job });
+            this.store.dispatch(new ja.SubmitAction(job));
           }
         });
     } else {
@@ -437,7 +433,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
         title: 'No Datasets selected',
         content: ''
       };
-      this.store.dispatch({ type: ua.SHOW_MESSAGE, payload: msg });
+      this.store.dispatch(new ua.ShowMessageAction(msg));
     }
   }
 

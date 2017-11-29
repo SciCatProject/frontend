@@ -80,25 +80,25 @@ export class ChildRetrieveCompleteAction implements Action {
 export class SearchIDAction implements Action {
   readonly type = SEARCH_ID;
 
-  constructor() {
+  constructor(public payload: string) {
   }
 }
 
 export class SearchIDCompleteAction implements Action {
   readonly type = SEARCH_ID_COMPLETE;
 
-  constructor() {
+  constructor(public payload: {}) {
   }
 }
 
 export class SearchIDFailedAction implements Action {
   readonly type = SEARCH_ID_FAILED;
 
-  constructor() {
+  constructor(public payload: any) {
   }
 }
 
-export class CurrentSetAction implements Action {
+export class CurrentJobAction implements Action {
   readonly type = SELECT_CURRENT;
 
   constructor(public payload: lb.Job) {
@@ -108,7 +108,7 @@ export class CurrentSetAction implements Action {
 export class SortUpdateAction implements Action {
   readonly type = SORT_UPDATE;
 
-  constructor(public payload: lb.Job) {
+  constructor(public payload: any) {
   }
 }
 
@@ -139,7 +139,7 @@ export type Actions =
   UpdateSortCompleteAction |
   SortFailedAction |
   SortValueAction |
-  CurrentSetAction |
+  CurrentJobAction |
   SubmitAction |
   FailedAction |
   SubmitCompleteAction |

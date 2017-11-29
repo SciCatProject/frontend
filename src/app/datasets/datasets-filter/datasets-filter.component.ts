@@ -13,6 +13,7 @@ import TimeRange from 'shared/modules/datepicker/LocalizedDateTime/TimeRange';
 import * as utils from 'shared/utils';
 import * as dsa from 'state-management/actions/datasets.actions';
 import * as dStore from 'state-management/state/datasets.store';
+import {DatasetFilters} from 'datasets/datasets-filter/dataset-filters';
 
 @Component({
   selector : 'datasets-filter',
@@ -101,8 +102,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
                         [ '/datasets' ],
                         {queryParams : newParams, replaceUrl : true});
                   } else if (params['mode'] !== mode) {
-                    this.store.dispatch(
-                        {type : dsa.FILTER_UPDATE, payload : f});
+                    this.store.dispatch(new dsa.UpdateFilterAction(f));
                   }
                 });
           });
@@ -157,7 +157,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
       this.filters.creationTime.start = new Date(startDate.getTime());
       this.filters.creationTime.end = new Date(endDate.getTime());
     }
-    this.store.dispatch({type : dsa.FILTER_UPDATE, payload : this.filters});
+    this.store.dispatch(new dsa.UpdateFilterAction(this.filters));
   }
 
   ngOnDestroy() {
@@ -239,7 +239,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     this.filters.creationLocation = this.location['_id'];
     // this.store.dispatch(
     //     {type : dua.SAVE, payload : {beamlineText : this.location}});
-    this.store.dispatch({type : dsa.FILTER_UPDATE, payload : this.filters});
+    this.store.dispatch(new dsa.UpdateFilterAction(this.filters));
   }
 
   /**
@@ -250,7 +250,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   groupSelected(event) {
     setTimeout(() => {
       this.filters.ownerGroup = this.selectedGroups.map(x => { return x['_id']; });
-      this.store.dispatch({type : dsa.FILTER_UPDATE, payload : this.filters});
+      this.store.dispatch(new dsa.UpdateFilterAction(this.filters));
     }, 400);
   }
 
@@ -278,7 +278,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
         .subscribe(groups => { this.filters.ownerGroup = groups; });
     this.filterValues = dStore.initialDatasetState.filterValues;
     this.filterValues.text = '';
-    this.store.dispatch({ type: dsa.FILTER_UPDATE, payload: this.filters });
+    this.store.dispatch(new dsa.UpdateFilterAction(this.filters));
     // this.store.dispatch({type : dsa.FILTER_VALUE_UPDATE, payload : this.filterValues});
     // this.store.dispatch({
     //   type: dua.SAVE,
