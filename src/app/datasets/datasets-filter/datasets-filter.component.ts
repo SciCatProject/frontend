@@ -13,8 +13,7 @@ import TimeRange from 'shared/modules/datepicker/LocalizedDateTime/TimeRange';
 import * as utils from 'shared/utils';
 import * as dsa from 'state-management/actions/datasets.actions';
 import * as dStore from 'state-management/state/datasets.store';
-import * as dSelectors from 'state-management/selectors/datasets.selectors';
-import * as uSelectors from 'state-management/selectors/users.selectors';
+import * as selectors from 'state-management/selectors';
 import {DatasetFilters} from 'datasets/datasets-filter/dataset-filters';
 
 @Component({
@@ -80,7 +79,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     this.subscriptions.push(this.route.queryParams.subscribe(params => {
       const newParams = Object.assign({}, params);
       delete newParams['mode'];
-      this.store.select(dSelectors.getActiveFilters)
+      this.store.select(selectors.datasets.getActiveFilters)
           .take(1)
           .subscribe(filters => {
             const f = utils.filter(filters, newParams);
@@ -110,7 +109,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
           });
     }));
     this.subscriptions.push(
-        this.store.select(dSelectors.getActiveFilters)
+        this.store.select(selectors.datasets.getActiveFilters)
             .subscribe(data => {
               // this.filters = Object.assign({}, data,
               // this.route.snapshot.queryParams);
@@ -123,9 +122,9 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
                   });
             }));
     this.resultCount$ =
-        this.store.select(dSelectors.getTotalSets);
+        this.store.select(selectors.datasets.getTotalSets);
     this.subscriptions.push(
-        this.store.select(dSelectors.getFilterValues)
+        this.store.select(selectors.datasets.getFilterValues)
             .subscribe(values => {
               this.filterValues = Object.assign({}, values);
               if (this.filterValues) {

@@ -7,7 +7,7 @@ import {DataTable} from 'primeng/primeng';
 import {Http} from '@angular/http';
 import {Job} from 'shared/sdk/models';
 import {ConfigService} from 'shared/services/config.service';
-import * as jSelectors from 'state-management/selectors/jobs.selectors';
+import * as selectors from 'state-management/selectors';
 
 @Component({
   selector: 'app-jobs',
@@ -49,17 +49,17 @@ export class JobsTableComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.loading$ = this.store.select(jSelectors.getLoading);
+    this.loading$ = this.store.select(selectors.jobs.getLoading);
     this.store.select(state => state.root.user.settings.jobCount).subscribe(limit => {
       this.limit = limit;
     });
-    this.store.select(jSelectors.getFilters).subscribe(filters => {
+    this.store.select(selectors.jobs.getFilters).subscribe(filters => {
       this.filters = Object.assign({}, filters);
     });
     
     this.totalJobNumber$ = this.store.select(state => state.root.jobs.currentJobs.length);
 
-    this.subscriptions.push(this.store.select(jSelectors.getJobs)
+    this.subscriptions.push(this.store.select(selectors.jobs.getJobs)
       .subscribe(selected => {
         if (selected.length > 0) {
           this.jobs = selected.slice();
@@ -83,7 +83,7 @@ export class JobsTableComponent implements OnInit, OnDestroy {
   nodeExpand(event) {
     this.store.dispatch(new JobActions.ChildRetrieveAction(event.node));
     event.node.children = [];
-    this.store.select(jSelectors.getUI).take(1).subscribe(jobs => {
+    this.store.select(selectors.jobs.getUI).take(1).subscribe(jobs => {
       console.log(jobs);
       event.node.children = jobs;
     });
