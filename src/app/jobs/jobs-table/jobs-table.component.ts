@@ -62,7 +62,6 @@ export class JobsTableComponent implements OnInit, OnDestroy {
       .subscribe(selected => {
         if (selected.length > 0) {
           this.jobs = selected.slice();
-          console.log(this.jobs);
         }
       }));
 
