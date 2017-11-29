@@ -92,7 +92,7 @@ export class JobsTableComponent implements OnInit, OnDestroy {
 
   onPage(event) {
     this.filters['skip'] = event.first;
-    this.store.dispatch({type: JobActions.SORT_UPDATE, payload: this.filters});
+    this.store.dispatch(new JobActions.SortUpdateAction(this.filters));
   }
 
 

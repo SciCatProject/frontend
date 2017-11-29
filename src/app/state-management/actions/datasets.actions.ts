@@ -53,12 +53,12 @@ export class SearchFailedAction implements Action {
 export class UpdateFilterAction implements Action {
   readonly type = FILTER_UPDATE;
 
-  constructor(public payload: DatasetFilters) {}
+  constructor(public payload: any) {}
   }
 export class UpdateFilterCompleteAction implements Action {
   readonly type = FILTER_UPDATE_COMPLETE;
 
-  constructor(public payload: DatasetFilters) {}
+  constructor(public payload: any) {}
   }
 export class FilterFailedAction implements Action {
   readonly type = FILTER_FAILED;
