@@ -82,48 +82,46 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     this.subscriptions.push(this.route.queryParams.subscribe(params => {
       const newParams = Object.assign({}, params);
       delete newParams['mode'];
-      this.store.select(state => state.root.datasets.activeFilters)
-          .takeLast(1)
-          .subscribe(filters => {
-            const f = utils.filter(filters, newParams);
-            this.location = f['creationLocation']
-                                ? {_id : filters['creationLocation']}
-                                : '';
-            const group = f['ownerGroup'];
-            if (group && group && Array.isArray(group) &&
-                group.length > 0) {
-              this.selectedGroups = group.map(x => { return {_id : x}; });
-            } else if (group && !Array.isArray(group)) {
-              this.selectedGroups = [ {'_id' : group} ];
-            } else {
-              this.selectedGroups = [];
-            }
-            this.store.select(state => state.root.dashboardUI.mode)
-                .takeLast(1)
-                .subscribe(mode => {
-                  if (utils.compareObj(f, newParams)) {
-                    this.router.navigate(
-                        [ '/datasets' ],
-                        {queryParams : newParams, replaceUrl : true});
-                  } else if (params['mode'] !== mode) {
-                    this.store.dispatch(new dsa.UpdateFilterAction(f));
-                  }
-                });
-          });
+      const activeFilters$ = this.store.select(selectors.datasets.getActiveFilters);
+      const mode$ = this.store.select(selectors.ui.getMode);
+      Observable.combineLatest(activeFilters$, mode$).takeLast(1).subscribe(combined => {
+        const filters = combined[0];
+        const mode = combined[1];
+        const f = utils.filter(filters, newParams);
+        this.location = f['creationLocation']
+          ? { _id: filters['creationLocation'] }
+          : '';
+        const group = f['ownerGroup'];
+        if (group && group && Array.isArray(group) &&
+          group.length > 0) {
+          this.selectedGroups = group.map(x => { return { _id: x }; });
+        } else if (group && !Array.isArray(group)) {
+          this.selectedGroups = [{ '_id': group }];
+        } else {
+          this.selectedGroups = [];
+        }
+        if (utils.compareObj(f, newParams)) {
+          this.router.navigate(
+            ['/datasets'],
+            { queryParams: newParams, replaceUrl: true });
+        } else if (params['mode'] !== mode) {
+          this.store.dispatch(new dsa.UpdateFilterAction(f));
+        }
+      });
     }));
     this.subscriptions.push(
-        this.store.select(state => state.root.datasets.activeFilters)
-            .subscribe(data => {
-              // this.filters = Object.assign({}, data,
-              // this.route.snapshot.queryParams);
-              this.filters = Object.assign({}, data);
-              this.store.select(state => state.root.dashboardUI.mode)
-                  .takeLast(1)
-                  .subscribe(mode => {
-                    const p = Object.assign(this.filters, {'mode' : mode});
-                    this.router.navigate([ '/datasets' ], {queryParams : p});
-                  });
-            }));
+      this.store.select(selectors.datasets.getActiveFilters)
+        .subscribe(data => {
+          // this.filters = Object.assign({}, data,
+          // this.route.snapshot.queryParams);
+          this.filters = Object.assign({}, data);
+          this.store.select(state => state.root.dashboardUI.mode)
+            .take(1)
+            .subscribe(mode => {
+              const p = Object.assign(this.filters, { 'mode': mode });
+              this.router.navigate(['/datasets'], { queryParams: p });
+            });
+        }));
     this.resultCount$ =
       this.store.select(selectors.datasets.getTotalSets);
     this.subscriptions.push(
@@ -266,16 +264,11 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     this.location = undefined;
     this.group = undefined;
 
-    // YES, another primeng hack to clear the field
-    // this.grpField.value = [];
-    console.log(this.grpField);
-    // this.selectedGroups.map(x => { this.grpField.removeItem(x); });
-
     // TODO clearing this does not visually clear (although it is removed from
     // the array)
     this.selectedGroups = [];
     this.locField.value = '';
-    this.grpField.value = '';
+    this.grpField.value = [];
     this.filters = dStore.initialDatasetState.activeFilters;
     this.store.select(state => state.root.user.currentUserGroups)
         .takeLast(1)
