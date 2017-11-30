@@ -133,7 +133,7 @@ export class DatePickerComponent implements OnInit, OnDestroy {
         self.resyncToday();
       }, timeLeftToday);
     };
-    Observable.of([1, 2, 3]).takeLast(2).subscribe((x) => console.log(x));
+    // Observable.of([1, 2, 3]).takeLast(2).subscribe((x) => console.log(x));
     this.subscriptions.push(this.today$
       .takeLast(1)
       .subscribe(resyncAfterTimeout));
