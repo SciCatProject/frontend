@@ -79,7 +79,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
       const newParams = Object.assign({}, params);
       delete newParams['mode'];
       this.store.select(state => state.root.datasets.activeFilters)
-          .take(1)
+          .takeLast(1)
           .subscribe(filters => {
             const f = utils.filter(filters, newParams);
             this.location = f['creationLocation']
@@ -95,7 +95,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
               this.selectedGroups = [];
             }
             this.store.select(state => state.root.dashboardUI.mode)
-                .take(1)
+                .takeLast(1)
                 .subscribe(mode => {
                   if (utils.compareObj(f, newParams)) {
                     this.router.navigate(
@@ -114,7 +114,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
               // this.route.snapshot.queryParams);
               this.filters = Object.assign({}, data);
               this.store.select(state => state.root.dashboardUI.mode)
-                  .take(1)
+                  .takeLast(1)
                   .subscribe(mode => {
                     const p = Object.assign(this.filters, {'mode' : mode});
                     this.router.navigate([ '/datasets' ], {queryParams : p});
@@ -274,7 +274,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     this.grpField.value = '';
     this.filters = dStore.initialDatasetState.activeFilters;
     this.store.select(state => state.root.user.currentUserGroups)
-        .take(1)
+        .takeLast(1)
         .subscribe(groups => { this.filters.ownerGroup = groups; });
     this.filterValues = dStore.initialDatasetState.filterValues;
     this.filterValues.text = '';
@@ -286,7 +286,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     // });
     /* let m;
     this.store.select(state => state.root.dashboardUI.mode)
-        .take(1)
+        .takeLast(1)
         .subscribe(mode => (m = mode));
     const currentParams = this.route.snapshot.queryParams;
     this.router.navigate([ '/datasets' ], {

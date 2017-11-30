@@ -82,7 +82,7 @@ export class JobsTableComponent implements OnInit, OnDestroy {
   nodeExpand(event) {
     this.store.dispatch({type: JobActions.CHILD_RETRIEVE, payload: event.node});
     event.node.children = [];
-    this.store.select(state => state.root.jobs.ui).take(1).subscribe(jobs => {
+    this.store.select(state => state.root.jobs.ui).takeLast(1).subscribe(jobs => {
       console.log(jobs);
       event.node.children = jobs;
     });

@@ -59,7 +59,7 @@ export class JobsComponent implements OnInit, OnDestroy {
     event.node.children = [];
     this.store
       .select(state => state.root.jobs.ui)
-      .take(1)
+      .takeLast(1)
       .subscribe(jobs => {
         console.log(jobs);
         event.node.children = jobs;
