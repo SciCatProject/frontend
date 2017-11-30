@@ -264,16 +264,11 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     this.location = undefined;
     this.group = undefined;
 
-    // YES, another primeng hack to clear the field
-    // this.grpField.value = [];
-    console.log(this.grpField);
-    // this.selectedGroups.map(x => { this.grpField.removeItem(x); });
-
     // TODO clearing this does not visually clear (although it is removed from
     // the array)
     this.selectedGroups = [];
     this.locField.value = '';
-    this.grpField.value = '';
+    this.grpField.value = [];
     this.filters = dStore.initialDatasetState.activeFilters;
     this.store.select(state => state.root.user.currentUserGroups)
         .takeLast(1)

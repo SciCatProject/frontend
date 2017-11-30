@@ -279,7 +279,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   onPage(event) {
     this.store
       .select(state => state.root.datasets.activeFilters)
-      .takeLast(1)
+      .take(1)
       .subscribe(f => {
         const filters = Object.assign({}, f);
         filters['skip'] = event.first;
