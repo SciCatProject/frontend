@@ -3,7 +3,7 @@ import {ActivatedRoute} from '@angular/router';
 import {Store} from '@ngrx/store';
 import {OrigDatablock, RawDataset} from 'shared/sdk/models';
 import * as dsa from 'state-management/actions/datasets.actions';
-
+import * as selectors from 'state-management/selectors';
 import {config} from '../../../config/config';
 
 /**
@@ -26,13 +26,13 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
 
   subscriptions = [];
 
-  constructor(private route: ActivatedRoute, private store: Store<any>){};
+  constructor(private route: ActivatedRoute, private store: Store<any>) {};
 
   ngOnInit() {
     const self = this;
 
     this.subscriptions.push(
-        this.store.select(state => state.root.user.currentUser)
+        this.store.select(selectors.users.getCurrentUser)
             .subscribe(user => {
               if (('accountType' in user &&
                    user['accountType'] === 'functional') ||
@@ -44,7 +44,7 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
 
 
     this.subscriptions.push(
-        this.store.select(state => state.root.datasets.currentSet)
+        this.store.select(selectors.datasets.getCurrentSet)
             .subscribe(dataset => {
               if (dataset && Object.keys(dataset).length > 0) {
                 self.dataset = <RawDataset>dataset;

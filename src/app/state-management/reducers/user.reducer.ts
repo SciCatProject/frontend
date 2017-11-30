@@ -74,3 +74,6 @@ export function userReducer(state = initialUserState, action: Action): UserState
     }
   }
 }
+
+export const getEmail = (state: UserState) => state.email;
+export const getCurrentUser = (state: UserState) => state.currentUser;

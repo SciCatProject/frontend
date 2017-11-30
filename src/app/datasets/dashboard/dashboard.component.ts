@@ -3,6 +3,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { RawDataset } from 'shared/sdk/models';
 import * as dsa from 'state-management/actions/datasets.actions';
+import * as ds from 'state-management/selectors/datasets.selectors';
+import * as selectors from 'state-management/selectors';
 
 @Component({
   selector: 'dashboard',
@@ -37,9 +39,7 @@ export class DashboardComponent implements OnInit {
    *
    */
   ngOnInit() {
-    this.searchText$ = this.store.select(
-      state => state.root.datasets.activeFilters.text
-    );
+    this.searchText$ = this.store.select(ds.getText);
   }
 
   /**

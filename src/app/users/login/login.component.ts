@@ -4,7 +4,7 @@ import {Http} from '@angular/http';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Store} from '@ngrx/store';
 import * as ua from 'state-management/actions/user.actions';
-
+import * as selectors from 'state-management/selectors';
 /**
  * Component to handle user login. Allows for AD and
  * functional account login.
@@ -38,7 +38,7 @@ export class LoginComponent implements OnInit {
               private route: ActivatedRoute, private store: Store<any>) {
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
     const self = this;
-    this.store.select(state => state.root.user.currentUser)
+    this.store.select(selectors.users.getCurrentUser)
         .subscribe(result => {
           console.log(result);
           if (result && result['username']) {

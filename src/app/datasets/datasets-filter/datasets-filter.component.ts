@@ -1,10 +1,12 @@
 import 'rxjs/add/operator/take';
+import 'rxjs/add/observable/combineLatest';
 
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
-import {Store} from '@ngrx/store';
-import {AutoComplete, Tree} from 'primeng/primeng';
-import {createSelector, OutputSelector} from 'reselect';
+
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { AutoComplete, Tree } from 'primeng/primeng';
+import { createSelector, OutputSelector } from 'reselect';
 import {
   DatepickerState,
   SelectionModes
@@ -13,12 +15,14 @@ import TimeRange from 'shared/modules/datepicker/LocalizedDateTime/TimeRange';
 import * as utils from 'shared/utils';
 import * as dsa from 'state-management/actions/datasets.actions';
 import * as dStore from 'state-management/state/datasets.store';
-import {DatasetFilters} from 'datasets/datasets-filter/dataset-filters';
+import * as selectors from 'state-management/selectors';
+import { DatasetFilters } from 'datasets/datasets-filter/dataset-filters';
+import { Observable } from 'rxjs/Observable';
 
 @Component({
-  selector : 'datasets-filter',
-  templateUrl : './datasets-filter.component.html',
-  styleUrls : [ './datasets-filter.component.css' ]
+  selector: 'datasets-filter',
+  templateUrl: './datasets-filter.component.html',
+  styleUrls: ['./datasets-filter.component.css']
 })
 export class DatasetsFilterComponent implements OnInit, OnDestroy {
   @ViewChild('datetree') dateTree: Tree;
@@ -26,7 +30,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   @ViewChild('grp') grpField: AutoComplete;
 
   datepickerSelector:
-      OutputSelector<any, DatepickerState, (res: any) => DatepickerState>;
+    OutputSelector<any, DatepickerState, (res: any) => DatepickerState>;
   dateSelectionMode = SelectionModes.range;
 
   // @Input() datasets: Array<any> = [];
@@ -57,23 +61,23 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   subscriptions = [];
 
   constructor(private store: Store<any>, private route: ActivatedRoute,
-              private router: Router) {}
+    private router: Router) { }
 
   /**
    * Load locations and ownergroups on start up and
    * only use unique values
    */
   ngOnInit() {
-    const datasetsStoreSlicePath = [ 'root', 'datasets' ];
+    const datasetsStoreSlicePath = ['root', 'datasets'];
     const datasetsSelector = createSelector((state: any): any => {
       return datasetsStoreSlicePath.reduce(
-          (obj: any, sliceKey: any) => obj[sliceKey], state);
+        (obj: any, sliceKey: any) => obj[sliceKey], state);
     }, (selectedDatasets: any): any => selectedDatasets);
 
     this.datepickerSelector =
-        createSelector(datasetsSelector,
-                       (selectedDatasets: any): DatepickerState =>
-                           selectedDatasets['datepicker']);
+      createSelector(datasetsSelector,
+        (selectedDatasets: any): DatepickerState =>
+          selectedDatasets['datepicker']);
 
     this.subscriptions.push(this.route.queryParams.subscribe(params => {
       const newParams = Object.assign({}, params);
@@ -121,24 +125,24 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
                   });
             }));
     this.resultCount$ =
-        this.store.select(state => state.root.datasets.totalSets);
+      this.store.select(selectors.datasets.getTotalSets);
     this.subscriptions.push(
-        this.store.select(state => state.root.datasets.filterValues)
-            .subscribe(values => {
-              this.filterValues = Object.assign({}, values);
-              if (this.filterValues) {
-                if (this.filterValues['creationLocation'] !== null) {
-                  this.locations = this.filterValues['creationLocation']
-                                       ? this.filterValues['creationLocation']
-                                       : [];
-                  }
+      this.store.select(selectors.datasets.getFilterValues)
+        .subscribe(values => {
+          this.filterValues = Object.assign({}, values);
+          if (this.filterValues) {
+            if (this.filterValues['creationLocation'] !== null) {
+              this.locations = this.filterValues['creationLocation']
+                ? this.filterValues['creationLocation']
+                : [];
+            }
 
-                if (this.groups.length === 0 &&
-                    this.filterValues['ownerGroup'] !== null) {
-                  this.groups = this.filterValues['ownerGroup'];
-                }
-              }
-            }));
+            if (this.groups.length === 0 &&
+              this.filterValues['ownerGroup'] !== null) {
+              this.groups = this.filterValues['ownerGroup'];
+            }
+          }
+        }));
   }
 
   /**
@@ -152,7 +156,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     if (selectedRange != null) {
       startDate = selectedRange.datePair[0];
       endDate = selectedRange.datePair[1];
-      }
+    }
     if ((startDate instanceof Date) && (endDate instanceof Date)) {
       this.filters.creationTime.start = new Date(startDate.getTime());
       this.filters.creationTime.end = new Date(endDate.getTime());
@@ -198,7 +202,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
       this.filters[key] = null;
     } else if (event && event.length >= 4) {
       if (key === 'groups') {
-        this.filters[key] = [ event ];
+        this.filters[key] = [event];
       } else if (event) {
         this.filters[key] = event;
       }
@@ -221,14 +225,14 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     if (array) {
       for (let i = 0; i < array.length; i++) {
         const loc = typeof array[i] === 'object' && !('_id' in array[i])
-                        ? array[i]
-                        : array[i]['_id'];
+          ? array[i]
+          : array[i]['_id'];
         if (loc && loc.toLowerCase().indexOf(query.toLowerCase()) === 0 &&
-            filtered.indexOf(loc) === -1) {
+          filtered.indexOf(loc) === -1) {
           filtered.push(array[i]);
         }
       }
-      }
+    }
     return filtered;
   }
 
