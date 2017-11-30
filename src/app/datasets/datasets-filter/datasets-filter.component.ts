@@ -84,8 +84,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
       delete newParams['mode'];
       const activeFilters$ = this.store.select(selectors.datasets.getActiveFilters);
       const mode$ = this.store.select(selectors.ui.getMode);
-      Observable.combineLatest(activeFilters$, mode$).subscribe(combined => {
-        console.log(combined);
+      Observable.combineLatest(activeFilters$, mode$).take(1).subscribe(combined => {
         const filters = combined[0];
         const mode = combined[1];
         const f = utils.filter(filters, newParams);

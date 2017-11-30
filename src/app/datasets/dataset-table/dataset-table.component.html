@@ -16,9 +16,10 @@
        </div>
      </div>
     </div>
+    {{ datasetCount$ | async}}
     <p-dataTable #ds [paginator]="true" paginatorPosition="both" [lazy]="true" [loading]="loading$ | async" [rows]="limit$ | async" [value]="datasets" [(selection)]="selectedSets" [rowHover]="true" (onLazyLoad)="onPage($event)"
     (onRowSelect)="onSelect($event)" (onRowUnselect)="onSelect($event)" (onRowClick)="onRowSelect($event)" (onHeaderCheckboxToggle)="onSelect($event)"
-   [resizableColumns]="true" columnResizeMode="expand" [rowStyleMap]="rowStyleMap" [totalRecords]="datasetCount$ | async" dataKey="pid">
+   [resizableColumns]="true" columnResizeMode="expand" [rowStyleMap]="rowStyleMap" dataKey="pid">
       	<p-column *ngIf="mode.toLowerCase() !== 'view'" [style]="{'width': '30px'}" selectionMode="multiple"></p-column>
         
         <p-column [hidden]="false" [style]="{'width':'38px', 'overflow':'hidden'}" *ngFor="let col of cols" [field]="col.field" [header]="col.header" [sortable]="col.sortable" (sortFunction)="colSort($event)"> 

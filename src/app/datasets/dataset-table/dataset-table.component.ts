@@ -25,6 +25,7 @@ import * as utils from 'shared/utils';
 
 import { config  } from '../../../config/config';
 import { last } from 'rxjs/operator/last';
+import { Observable } from 'rxjs/Observable';
 
 @Component({
   selector: 'dataset-table',
@@ -71,6 +72,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   ) {
     this.archiveable = config.archiveable;
     this.retrievable = config.retrieveable;
+    this.datasetCount$ = Observable.of([100]); // this.store.select(selectors.datasets.getTotalSets);
   }
 
   ngOnInit() {
@@ -86,7 +88,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     });
 
     this.loading$ = this.store.select(selectors.datasets.getLoading);
-    this.datasetCount$ = this.store.select(selectors.datasets.getTotalSets);
     this.limit$ = this.store.select(state => state.root.user.settings.datasetCount);
 
     this.store.select(state => state.root.dashboardUI.mode).subscribe(mode => {
