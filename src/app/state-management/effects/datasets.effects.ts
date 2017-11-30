@@ -73,7 +73,7 @@ export class DatasetEffects {
             let groups = fq['ownerGroup'];
             if (!groups || groups.length === 0) {
               this.store.select(state => state.root.user.currentUserGroups)
-                  .take(1)
+                  .takeLast(1)
                   .subscribe(user => { groups = user; });
               }
              if (fq['text']) {
@@ -144,7 +144,7 @@ export class DatasetEffects {
             }
 
             this.store.select(state => state.root.user.settings.datasetCount)
-                .take(1)
+                .takeLast(1)
                 .subscribe(d => { filter['limit'] = d; });
             // filterfilter["limit"] = fq["limit"] ? fq['limit'] : 10;
             filter['skip'] = fq['skip'] ? fq['skip'] : 0;

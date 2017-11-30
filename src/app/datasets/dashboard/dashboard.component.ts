@@ -49,8 +49,8 @@ export class DashboardComponent implements OnInit {
    */
   textSearch(terms) {
     this.store
-      .select(selectors.datasets.getActiveFilters)
-      .take(1)
+      .select(state => state.root.datasets.activeFilters)
+      .takeLast(1)
       .subscribe(values => {
         const filters = Object.assign({}, values);
         filters['text'] = terms;

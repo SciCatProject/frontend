@@ -72,7 +72,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   ) {
     this.archiveable = config.archiveable;
     this.retrievable = config.retrieveable;
-    this.datasetCount$ = Observable.of([100]); // this.store.select(selectors.datasets.getTotalSets);
+    this.datasetCount$ = this.store.select(selectors.datasets.getTotalSets);
   }
 
   ngOnInit() {
@@ -278,8 +278,8 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
    */
   onPage(event) {
     this.store
-      .select(selectors.datasets.getActiveFilters)
-      .take(1)
+      .select(state => state.root.datasets.activeFilters)
+      .takeLast(1)
       .subscribe(f => {
         const filters = Object.assign({}, f);
         filters['skip'] = event.first;
@@ -371,8 +371,8 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
       job.creationTime = new Date();
       const backupFiles = [];
       this.store
-        .select(selectors.users.getState)
-        .take(1)
+        .select(state => state.root.user)
+        .takeLast(1)
         .subscribe(user => {
           job.jobParams['username'] = user['currentUser']['username'] || undefined;
           job.emailJobInitiator = user['email'];
@@ -415,8 +415,8 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
             job.datasetList = backupFiles;
             job.type = archive ? 'archive' : 'retrieve';
             this.store
-              .select(selectors.users.getTapeCopies)
-              .take(1)
+              .select(state => state.root.user.settings.tapeCopies)
+              .takeLast(1)
               .subscribe(copies => {
                 job.jobParams['tapeCopies'] = copies;
               });

@@ -275,9 +275,15 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     this.locField.value = '';
     this.grpField.value = '';
     this.filters = dStore.initialDatasetState.activeFilters;
+<<<<<<< HEAD
     this.store.select(selectors.users.getCurrentUserGroups)
       .take(1)
       .subscribe(groups => { this.filters.ownerGroup = groups; });
+=======
+    this.store.select(state => state.root.user.currentUserGroups)
+        .takeLast(1)
+        .subscribe(groups => { this.filters.ownerGroup = groups; });
+>>>>>>> 63e33ff95c3333516bfd7c6803f9278ea732e8a5
     this.filterValues = dStore.initialDatasetState.filterValues;
     this.filterValues.text = '';
     this.store.dispatch(new dsa.UpdateFilterAction(this.filters));
@@ -288,7 +294,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     // });
     /* let m;
     this.store.select(state => state.root.dashboardUI.mode)
-        .take(1)
+        .takeLast(1)
         .subscribe(mode => (m = mode));
     const currentParams = this.route.snapshot.queryParams;
     this.router.navigate([ '/datasets' ], {
