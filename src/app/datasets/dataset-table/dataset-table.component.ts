@@ -276,7 +276,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   onPage(event) {
     this.store
       .select(state => state.root.datasets.activeFilters)
-      .take(1)
+      .takeLast(1)
       .subscribe(f => {
         const filters = Object.assign({}, f);
         filters['skip'] = event.first;
@@ -369,7 +369,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
       const backupFiles = [];
       this.store
         .select(state => state.root.user)
-        .take(1)
+        .takeLast(1)
         .subscribe(user => {
           job.jobParams['username'] = user['currentUser']['username'] || undefined;
           job.emailJobInitiator = user['email'];
@@ -413,7 +413,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
             job.type = archive ? 'archive' : 'retrieve';
             this.store
               .select(state => state.root.user.settings.tapeCopies)
-              .take(1)
+              .takeLast(1)
               .subscribe(copies => {
                 job.jobParams['tapeCopies'] = copies;
               });

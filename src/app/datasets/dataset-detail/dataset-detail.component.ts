@@ -57,7 +57,7 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
             }));
 
     this.store.select(state => state.root.datasets.currentSet)
-        .take(1)
+        .takeLast(1)
         .subscribe(ds => {
           if (!ds) {
             this.route.params.subscribe(params => {
