@@ -34,7 +34,7 @@
     </div>
     <div class="ui field">
       <h3>Date Range</h3>
-      <datepicker [datepickerSelector]="datepickerSelector" [datepickerSelectionMode]="dateSelectionMode" [placeholder]="'Date Range'" (selectedRanges)="updateDateRange($event)"></datepicker>
+      <datepicker [selections]="dateSelections$ | async" [datepickerSelector]="datepickerSelector" [datepickerSelectionMode]="dateSelectionMode" [placeholder]="'Date Range'" (selectionsChange)="updateDateRange($event)"></datepicker>
     </div>
     <!--<button type="submit" class="ui button">Filter</button>-->
     <button class="ui button" (click)="clearFacets()">Clear</button>
