@@ -18,6 +18,8 @@ import * as dStore from 'state-management/state/datasets.store';
 import * as selectors from 'state-management/selectors';
 import { DatasetFilters } from 'datasets/datasets-filter/dataset-filters';
 import { Observable } from 'rxjs/Observable';
+import * as rison from 'rison';
+
 
 @Component({
   selector: 'datasets-filter',
@@ -80,7 +82,8 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
           selectedDatasets['datepicker']);
 
     this.subscriptions.push(this.route.queryParams.subscribe(params => {
-      const newParams = Object.assign({}, params);
+      const decoded = rison.decode(params['args']);
+      const newParams = Object.assign({}, decoded);
       delete newParams['mode'];
       const activeFilters$ = this.store.select(selectors.datasets.getActiveFilters);
       const mode$ = this.store.select(selectors.ui.getMode);
@@ -101,9 +104,10 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
           this.selectedGroups = [];
         }
         if (utils.compareObj(f, newParams)) {
+          const encoded = rison.encode(newParams);
           this.router.navigate(
             ['/datasets'],
-            { queryParams: newParams, replaceUrl: true });
+            { queryParams: {args: encoded}, replaceUrl: true });
         } else if (params['mode'] !== mode) {
           this.store.dispatch(new dsa.UpdateFilterAction(f));
         }
@@ -119,7 +123,8 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
             .take(1)
             .subscribe(mode => {
               const p = Object.assign(this.filters, { 'mode': mode });
-              this.router.navigate(['/datasets'], { queryParams: p });
+              const encoded = rison.encode(p);
+              this.router.navigate(['/datasets'], { queryParams: {args: encoded} });
             });
         }));
     this.resultCount$ =

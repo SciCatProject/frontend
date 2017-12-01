@@ -48,7 +48,7 @@ export class MockActivatedRoute {
 }
 
 export class MockRouter {
-  navigate = function(url, params){};
+  navigate = function(url, params) {};
   // jasmine.createSpy('navigate');
   navigateByUrl(url: string) { return url; }
   }
