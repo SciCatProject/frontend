@@ -372,7 +372,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
       const backupFiles = [];
       this.store
         .select(state => state.root.user)
-        .takeLast(1)
+        .take(1)
         .subscribe(user => {
           job.jobParams['username'] = user['currentUser']['username'] || undefined;
           job.emailJobInitiator = user['email'];
@@ -416,7 +416,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
             job.type = archive ? 'archive' : 'retrieve';
             this.store
               .select(state => state.root.user.settings.tapeCopies)
-              .takeLast(1)
+              .take(1)
               .subscribe(copies => {
                 job.jobParams['tapeCopies'] = copies;
               });

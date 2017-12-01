@@ -82,38 +82,39 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
           selectedDatasets['datepicker']);
 
     this.subscriptions.push(this.route.queryParams.subscribe(params => {
+      let decoded = {};
       if ('args' in params) {
-        const decoded = rison.decode(params['args']);
-        const newParams = Object.assign({}, decoded);
-        delete newParams['mode'];
-        const activeFilters$ = this.store.select(selectors.datasets.getActiveFilters);
-        const mode$ = this.store.select(selectors.ui.getMode);
-        Observable.combineLatest(activeFilters$, mode$).takeLast(1).subscribe(combined => {
-          const filters = combined[0];
-          const mode = combined[1];
-          const f = utils.filter(filters, newParams);
-          this.location = f['creationLocation']
-            ? { _id: filters['creationLocation'] }
-            : '';
-          const group = f['ownerGroup'];
-          if (group && group && Array.isArray(group) &&
-            group.length > 0) {
-            this.selectedGroups = group.map(x => { return { _id: x }; });
-          } else if (group && !Array.isArray(group)) {
-            this.selectedGroups = [{ '_id': group }];
-          } else {
-            this.selectedGroups = [];
-          }
-          if (utils.compareObj(f, newParams)) {
-            const encoded = rison.encode(newParams);
-            this.router.navigate(
-              ['/datasets'],
-              { queryParams: {args: encoded}, replaceUrl: true });
-          } else if (params['mode'] !== mode) {
-            this.store.dispatch(new dsa.UpdateFilterAction(f));
-          }
-        });
+        decoded = rison.decode(params['args']);
       }
+      const newParams = Object.assign({}, decoded);
+      delete newParams['mode'];
+      const activeFilters$ = this.store.select(selectors.datasets.getActiveFilters);
+      const mode$ = this.store.select(selectors.ui.getMode);
+      Observable.combineLatest(activeFilters$, mode$).takeLast(1).subscribe(combined => {
+        const filters = combined[0];
+        const mode = combined[1];
+        const f = utils.filter(filters, newParams);
+        this.location = f['creationLocation']
+          ? { _id: filters['creationLocation'] }
+          : '';
+        const group = f['ownerGroup'];
+        if (group && group && Array.isArray(group) &&
+          group.length > 0) {
+          this.selectedGroups = group.map(x => { return { _id: x }; });
+        } else if (group && !Array.isArray(group)) {
+          this.selectedGroups = [{ '_id': group }];
+        } else {
+          this.selectedGroups = [];
+        }
+        if (utils.compareObj(f, newParams)) {
+          const encoded = rison.encode(newParams);
+          this.router.navigate(
+            ['/datasets'],
+            { queryParams: {args: encoded}, replaceUrl: true });
+        } else if (params['mode'] !== mode) {
+          this.store.dispatch(new dsa.UpdateFilterAction(f));
+        }
+      });
     }));
     this.subscriptions.push(
       this.store.select(selectors.datasets.getActiveFilters)
