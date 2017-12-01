@@ -1,11 +1,13 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {Store} from '@ngrx/store';
-import {OrigDatablock, RawDataset} from 'shared/sdk/models';
+import {OrigDatablock, RawDataset, Datablock} from 'shared/sdk/models';
 import * as dsa from 'state-management/actions/datasets.actions';
-import * as selectors from 'state-management/selectors';
-import {config} from '../../../config/config';
 
+import {config} from '../../../config/config';
+import {Observable} from 'rxjs/Observable';
+import {Subscription} from 'rxjs/Subscription';
+import 'rxjs/add/operator/distinctUntilChanged';
 /**
  * Component to show details for a dataset, using the
  * form compoennt
@@ -19,76 +21,83 @@ import {config} from '../../../config/config';
   styleUrls: ['./dataset-detail.component.css']
 })
 export class DatasetDetailComponent implements OnInit, OnDestroy {
-  dataset: RawDataset = undefined;
-  dataBlocks: Array<OrigDatablock>;
-  error;
-  admin = false;
+  private subscriptions: Subscription[] = [];
+  dataset$: Observable<RawDataset>;
+  origDatablocks$: Observable<OrigDatablock[]>;
+  datablocks$: Observable<Datablock[]>;
+  admin$: Observable<boolean>;
 
-  subscriptions = [];
-
-  constructor(private route: ActivatedRoute, private store: Store<any>) {};
+  constructor(private route: ActivatedRoute, private store: Store<any>){};
 
   ngOnInit() {
-    const self = this;
+    const currentUser$ = this.store.select(state => state.root.user.currentUser);
+    const adminUserNames = ['ingestor', 'archiveManager'];
+    const userIsAdmin = (user) => {
+      return (user['accountType'] === 'functional')  || (adminUserNames.indexOf(user.username) !== -1);
+    };
+    this.admin$ = currentUser$.map(userIsAdmin);
 
-    this.subscriptions.push(
-        this.store.select(selectors.users.getCurrentUser)
-            .subscribe(user => {
-              if (('accountType' in user &&
-                   user['accountType'] === 'functional') ||
-                  user['username'] === 'ingestor' ||
-                  user['username'] === 'archiveManager') {
-                this.admin = true;
-              }
-            }));
+    const routeParams$ = this.route.params;
+    const currentSet$ = this.store.select(state => state.root.datasets.currentSet);
+    this.subscriptions.push(routeParams$
+      .subscribe(params => {
+        // console.log({params});
+        this.reloadDatasetWithDatablocks(params.id);
+      }));
 
+    this.dataset$ = currentSet$.distinctUntilChanged().filter((dataset: RawDataset) => {
+      return dataset && (Object.keys(dataset).length > 0);
+    });
 
-    this.subscriptions.push(
-        this.store.select(selectors.datasets.getCurrentSet)
-            .subscribe(dataset => {
-              if (dataset && Object.keys(dataset).length > 0) {
-                self.dataset = <RawDataset>dataset;
-                if (!('origdatablocks' in self.dataset)) {
-                  self.store.dispatch(new dsa.DatablocksAction(self.dataset.pid));
-                }
-                // clear selected dataset
-                self.store.dispatch(new dsa.CurrentSetAction(undefined));
-              }
-            }));
+    this.origDatablocks$ = this.dataset$.map((dataset: RawDataset) => {
+      return (dataset && ('origdatablocks' in dataset)) ? dataset.origdatablocks : [];
+    });
 
-    this.store.select(state => state.root.datasets.currentSet)
-        .take(1)
-        .subscribe(ds => {
-          if (!ds) {
-            this.route.params.subscribe(params => {
-              this.store.dispatch(new dsa.SearchIDAction(params.id));
-            });
-          }
-        });
+    this.datablocks$ = this.dataset$.map((dataset: RawDataset) => {
+      return (dataset && ('datablocks' in dataset)) ? dataset.datablocks : [];
+    });
+
+    // if we weren't clearing the cache and the current set's datablocks
+    //   may not have been loaded, we would want to make sure that we load them:
+    // this.subscriptions.push(this.dataset$.subscribe(this.ensureDatablocksForDatasetAreLoaded));
   }
 
   ngOnDestroy() {
-    for (let i = 0; i < this.subscriptions.length; i++) {
-      this.subscriptions[i].unsubscribe();
+    this.subscriptions.forEach(subscription => subscription.unsubscribe());
+  }
+
+  private clearCurrentSet() {
+    this.store.dispatch(new dsa.CurrentSetAction(undefined)); // clear cache
+  }
+  private loadDatasetWithDatablocks(datasetPID) {
+    this.store.dispatch(new dsa.DatablocksAction(datasetPID));
+  }
+  // (not currently in use since we are clearing current dataset entirely)
+  private ensureDatablocksForDatasetAreLoaded(dataset: RawDataset) {
+    if (dataset && !('origdatablocks' in dataset)) {
+      this.loadDatasetWithDatablocks(dataset.pid);
     }
   }
 
-  onAdminReset() {
-    if (this.admin) {
-      const pl = {
-        'id': this.dataset.pid,
-        'attributes': {
-          'archiveStatusMessage':
-              Object.keys(config['datasetStatusMessages'])[0],
-          'retrieveStatusMessage': ''
-        }
-      };
+  private reloadDatasetWithDatablocks(datasetPID) {
+    console.log('Loading data for ' + datasetPID)
+    this.clearCurrentSet(); // clear current dataset entirely from the cache
+    this.loadDatasetWithDatablocks(datasetPID);
+  }
 
-      // TODO this should be moved into a reset endpoint for a dataset
-      for (let i = 0; i < this.dataset.datablocks.length; i++) {
-        this.store.dispatch(new dsa.DatablockDeleteAction(this.dataset.datablocks[i]));
+  private resetDataset(dataset: RawDataset) {
+    // TODO this should be moved into a reset endpoint for a dataset
+    dataset.datablocks.forEach(datablock => {
+      this.store.dispatch(new dsa.DatablockDeleteAction(datablock));
+    })
+    const archiveStatusMessage = Object.keys(config['datasetStatusMessages'])[0];
+    const payload = {
+      'id': dataset.pid,
+      'attributes': {
+        'archiveStatusMessage': archiveStatusMessage,
+        'retrieveStatusMessage': ''
       }
-      this.store.dispatch(new dsa.ResetStatusAction(pl));
-    }
+    };
+    this.store.dispatch(new dsa.ResetStatusAction(payload));
   }
 }
