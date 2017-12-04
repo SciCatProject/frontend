@@ -7,11 +7,9 @@ RUN apt-get update && \
     chromium \
     && rm -rf /var/lib/apt/lists/*
 
-RUN curl -o- -L https://yarnpkg.com/install.sh | bash
-
 ENV CHROME_BIN /usr/bin/chromium
 
 COPY package.json /usr/src/app/package.json
 WORKDIR /usr/src/app
-RUN yarn install
+RUN npm install
 COPY . /usr/src/app
