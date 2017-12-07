@@ -291,9 +291,9 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
           filters['sortField'] = undefined;
         }
         // TODO reduce calls when not needed (i.e. no change)
-        if (f.first !== event.first || this.datasets.length === 0) {
+        // if (f.first !== event.first || this.datasets.length === 0) {
           this.store.dispatch(new dsa.UpdateFilterAction(filters));
-        }
+        // }
       });
   }
 
