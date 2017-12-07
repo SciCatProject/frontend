@@ -10,7 +10,7 @@ import { createSelector, OutputSelector } from 'reselect';
 import {
   DatepickerState,
   SelectionModes
-} from 'shared/modules/datepicker/datepicker.reducer';
+} from 'shared/modules/datepicker/datepicker.store';
 import TimeRange from 'shared/modules/datepicker/LocalizedDateTime/TimeRange';
 import * as utils from 'shared/utils';
 import * as dsa from 'state-management/actions/datasets.actions';
@@ -19,6 +19,8 @@ import * as selectors from 'state-management/selectors';
 import { DatasetFilters } from 'datasets/datasets-filter/dataset-filters';
 import { Observable } from 'rxjs/Observable';
 import * as rison from 'rison';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { MultiDayRange } from 'shared/modules/datepicker/LocalizedDateTime/timeRanges';
 
 
 @Component({
@@ -35,16 +37,11 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     OutputSelector<any, DatepickerState, (res: any) => DatepickerState>;
   dateSelectionMode = SelectionModes.range;
 
+  dateSelections$: BehaviorSubject<TimeRange[]>;
+
   // @Input() datasets: Array<any> = [];
   facets: Array<any> = [];
-  months = [
-    '', 'January', 'February', 'March', 'April', 'May', 'June', 'July',
-    'August', 'September', 'October', 'November', 'December'
-  ];
-  startDate: Date;
-  endDate: Date;
   resultCount$;
-  dates = [];
 
   dateFacet = [];
 
@@ -70,6 +67,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
    * only use unique values
    */
   ngOnInit() {
+    this.dateSelections$ = new BehaviorSubject<TimeRange[]>([]);
     const datasetsStoreSlicePath = ['root', 'datasets'];
     const datasetsSelector = createSelector((state: any): any => {
       return datasetsStoreSlicePath.reduce(
@@ -159,15 +157,16 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     let startDate: Date = null;
     let endDate: Date = null;
     const selectedRange: TimeRange = timeranges[0];
-    if (selectedRange != null) {
+    if (selectedRange) {
       startDate = selectedRange.datePair[0];
       endDate = selectedRange.datePair[1];
     }
-    if ((startDate instanceof Date) && (endDate instanceof Date)) {
-      this.filters.creationTime.start = new Date(startDate.getTime());
-      this.filters.creationTime.end = new Date(endDate.getTime());
-    }
+    this.filters.creationTime = {
+      start: startDate,
+      end: endDate
+    };
     this.store.dispatch(new dsa.UpdateFilterAction(this.filters));
+    this.dateSelections$.next(timeranges);
   }
 
   ngOnDestroy() {
@@ -268,7 +267,6 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
    * Clear the filters and reset the user groups (when not a functional account)
    */
   clearFacets() {
-    this.dates = [];
     this.location = undefined;
     this.group = undefined;
 
@@ -278,6 +276,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     this.locField.value = '';
     this.grpField.value = [];
     this.filters = dStore.initialDatasetState.activeFilters;
+    this.dateSelections$.next([]);
     this.store.select(state => state.root.user.currentUserGroups)
         .takeLast(1)
         .subscribe(groups => { this.filters.ownerGroup = groups; });

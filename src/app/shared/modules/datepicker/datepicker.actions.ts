@@ -2,7 +2,8 @@ import { Action, Store } from '@ngrx/store';
 import { type } from './util';
 
 import {Day, Month} from './LocalizedDateTime/timeRanges';
-import {CalModes, SelectionModes} from './datepicker.reducer';
+import {CalModes, SelectionModes} from './datepicker.store';
+import TimeRange from 'shared/modules/datepicker/LocalizedDateTime/TimeRange';
 
 /**
  * For each action type in an action group, make a simple
@@ -23,7 +24,8 @@ export const datepickerActionTypes = {
   UPDATE_SELECTIONS: type('[DatePicker] Update Selections'),
   FOCUS_ON_MONTH: type('[DatePicker] Focus on Month'),
   SET_FOCUS_YEAR: type('[DatePicker] Set Focus Year'),
-  SET_SELECTION_MODE: type('[DatePicker] Set Selection Mode')
+  SET_SELECTION_MODE: type('[DatePicker] Set Selection Mode'),
+  SET_SELECTIONS: type('[DatePicker] Set Selections'),
 };
 
 export class ToggleCalDispAction implements Action {
@@ -80,6 +82,10 @@ export class SetSelectionModeAction implements Action {
   readonly type = datepickerActionTypes.SET_SELECTION_MODE;
   constructor(public payload: SelectionModes) { }
 }
+export class SetSelectionsAction implements Action {
+  readonly type = datepickerActionTypes.SET_SELECTIONS;
+  constructor(public payload: TimeRange[]) { }
+}
 
 
 export type DatePickerAction =
@@ -93,4 +99,5 @@ export type DatePickerAction =
   UpdateSelectionsAction |
   FocusOnMonthAction |
   SetFocusYearAction |
-  SetSelectionModeAction;
+  SetSelectionModeAction |
+  SetSelectionsAction;
