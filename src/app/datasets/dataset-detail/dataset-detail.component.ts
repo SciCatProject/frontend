@@ -85,19 +85,9 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
     this.loadDatasetWithDatablocks(datasetPID);
   }
 
-  private resetDataset(dataset: RawDataset) {
-    // TODO this should be moved into a reset endpoint for a dataset
-    dataset.datablocks.forEach(datablock => {
-      this.store.dispatch(new dsa.DatablockDeleteAction(datablock));
-    })
-    const archiveStatusMessage = Object.keys(config['datasetStatusMessages'])[0];
-    const payload = {
-      'id': dataset.pid,
-      'attributes': {
-        'archiveStatusMessage': archiveStatusMessage,
-        'retrieveStatusMessage': ''
-      }
-    };
-    this.store.dispatch(new dsa.ResetStatusAction(payload));
+  onAdminReset() {
+    if (this.admin) {
+      this.store.dispatch(new dsa.ResetStatusAction(this.dataset.pid));
+    }
   }
 }

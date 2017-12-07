@@ -146,12 +146,14 @@ export class DatasetEffects {
             this.store.select(state => state.root.user.settings.datasetCount)
                 .take(1)
                 .subscribe(d => { filter['limit'] = d; });
-            // filterfilter["limit"] = fq["limit"] ? fq['limit'] : 10;
             filter['skip'] = fq['skip'] ? fq['skip'] : 0;
             filter['include'] = [ {relation : 'datasetlifecycle'} ];
-            filter['order'] = fq['sortField'];
+            if (fq['sortField']) {
+              filter['order'] = fq['sortField'];
+            }
             return this.rds.find(filter)
                 .switchMap(res => {
+                  console.log(res);
                   return Observable.of(new DatasetActions.SearchCompleteAction(res));
                 })
                 .catch(err => {
@@ -199,7 +201,7 @@ export class DatasetEffects {
     this.action$.ofType(DatasetActions.RESET_STATUS)
       .map(toPayload)
       .switchMap(payload => {
-        return this.dls.updateAttributes(encodeURIComponent(payload['id']), payload['attributes']).switchMap(res => {
+        return this.ds.reset(encodeURIComponent(payload['id'])).switchMap(res => {
           return Observable.of(new UserActions.ShowMessageAction({
               content : '',
               type : 'success',
@@ -217,7 +219,8 @@ export class DatasetEffects {
       });
 
   constructor(private action$: Actions, private store: Store<any>,
-              private cds: DatasetService, private rds: lb.RawDatasetApi, private dls: lb.DatasetLifecycleApi, private dbs: lb.DatablockApi,
+              private cds: DatasetService, private ds: lb.DatasetApi, private rds: lb.RawDatasetApi,
+              private dls: lb.DatasetLifecycleApi, private dbs: lb.DatablockApi,
               private accessUserSrv: lb.AccessUserApi) {}
   }
 
