@@ -27,7 +27,7 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
   datablocks$: Observable<Datablock[]>;
   admin$: Observable<boolean>;
 
-  constructor(private route: ActivatedRoute, private store: Store<any>){};
+  constructor(private route: ActivatedRoute, private store: Store<any>) {};
 
   ngOnInit() {
     const currentUser$ = this.store.select(state => state.root.user.currentUser);
@@ -85,9 +85,9 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
     this.loadDatasetWithDatablocks(datasetPID);
   }
 
-  onAdminReset() {
-    if (this.admin) {
-      this.store.dispatch(new dsa.ResetStatusAction(this.dataset.pid));
+  resetDataset(dataset) {
+    if (this.admin$) {
+      this.store.dispatch(new dsa.ResetStatusAction(dataset.pid));
     }
   }
 }
