@@ -75,20 +75,7 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
 
   onAdminReset() {
     if (this.admin) {
-      const pl = {
-        'id': this.dataset.pid,
-        'attributes': {
-          'archiveStatusMessage':
-              Object.keys(config['datasetStatusMessages'])[0],
-          'retrieveStatusMessage': ''
-        }
-      };
-
-      // TODO this should be moved into a reset endpoint for a dataset
-      for (let i = 0; i < this.dataset.datablocks.length; i++) {
-        this.store.dispatch(new dsa.DatablockDeleteAction(this.dataset.datablocks[i]));
-      }
-      this.store.dispatch(new dsa.ResetStatusAction(pl));
+      this.store.dispatch(new dsa.ResetStatusAction(this.dataset.pid));
     }
   }
 }
