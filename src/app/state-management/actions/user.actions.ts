@@ -41,7 +41,7 @@ export class ActiveDirLoginCompleteAction implements Action {
 export class LoginCompleteAction implements Action {
   readonly type = LOGIN_COMPLETE;
 
-  constructor(public payload: lb.User) {}
+  constructor(public payload: any) {}
   }
 export class LoginFailedAction implements Action {
   readonly type = LOGIN_FAILED;

@@ -153,7 +153,6 @@ export class DatasetEffects {
             }
             return this.rds.find(filter)
                 .switchMap(res => {
-                  console.log(res);
                   return Observable.of(new DatasetActions.SearchCompleteAction(res));
                 })
                 .catch(err => {

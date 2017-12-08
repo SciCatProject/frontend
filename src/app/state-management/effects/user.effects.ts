@@ -32,9 +32,13 @@ export class UserEffects {
                   res['id'] = res['access_token'];
                   // result['user'] = self.loginForm.get('username').value;
                   this.authSrv.setToken(res);
-                  this.userSrv.getCurrent().subscribe(
-                      user => { this.authSrv.setUser(user); });
-                  return Observable.of(new UserActions.LoginCompleteAction(res));
+                  return this.userSrv.getCurrent().switchMap(
+                      user => { this.authSrv.setUser(user);
+                      console.log(user);
+                      res['user'] = user;
+                      return Observable.of(new UserActions.LoginCompleteAction(res));
+                      });
+
                 })
                 .catch(err => {
                   const error = {'message' : err.json(), 'errSrc' : 'AD'};
@@ -51,6 +55,7 @@ export class UserEffects {
             return this.userSrv.login(form)
                 .switchMap(res => {
                   res['user']['accountType'] = 'functional';
+                  console.log(res);
                   return Observable.of(new UserActions.LoginCompleteAction(res));
                 })
                 .catch(err => {
