@@ -10,10 +10,10 @@ node {
             sh 'docker build -f CI/PSI/Dockerfile.test . -t catanie_test'
        }
        stage('Unit Test Catanie '){
-            sh 'docker run  -t catanie_test npm run -- ng test --watch false --single-run true'
+            sh 'docker run  --privileged -t catanie_test npm run -- ng test --watch false --single-run true'
        }
        stage('e2e Test Catanie '){
-            sh 'docker run  -t catanie_test npm run e2e --environment qa'
+            sh 'docker run  --privileged -t catanie_test npm run e2e --environment qa'
        }
 
 }
