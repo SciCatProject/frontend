@@ -46,17 +46,25 @@ export class JobsEffects {
         return this.jobSrv.create(job)
           .switchMap(res => {
             console.log(res);
-            const msg = {
-              type: 'success',
-              title: 'Job Created Successfully',
-              content: ''
-            };
-            return Observable.of(new UserActions.ShowMessageAction(msg));
+            return Observable.of(new JobActions.SubmitCompleteAction(res));
           });
       })
       .catch(err => {
         console.log(err);
         return Observable.of(new JobActions.FailedAction(err));
+      });
+
+  @Effect()
+  protected submitMessage$: Observable<Action> =
+    this.action$.ofType(JobActions.SUBMIT_COMPLETE)
+      .map(toPayload)
+      .switchMap((res) => {
+        const msg = {
+          type: 'success',
+          title: 'Job Created Successfully',
+          content: ''
+        };
+        return Observable.of(new UserActions.ShowMessageAction(msg));
       });
 
   @Effect()
