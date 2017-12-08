@@ -1,8 +1,9 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {Store} from '@ngrx/store';
-import {OrigDatablock, RawDataset} from 'shared/sdk/models';
+import {OrigDatablock, RawDataset, Job} from 'shared/sdk/models';
 import * as dsa from 'state-management/actions/datasets.actions';
+import * as ja from 'state-management/actions/jobs.actions';
 import * as selectors from 'state-management/selectors';
 import {config} from '../../../config/config';
 
@@ -75,7 +76,26 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
 
   onAdminReset() {
     if (this.admin) {
-      this.store.dispatch(new dsa.ResetStatusAction(this.dataset.pid));
+      this.store
+      .select(state => state.root.user)
+      .take(1)
+      .subscribe(user => {
+        const job = new Job();
+        job.jobParams = {};
+        job.jobParams['username'] = user['currentUser']['username'] || undefined;
+        job.emailJobInitiator = user['email'];
+        if (!user['email']) {
+          job.emailJobInitiator = user['currentUser']['email'] || user['currentUser']['accessEmail'];
+        }
+        job.creationTime = new Date();
+        job.type = 'reset';
+        const fileObj = {};
+        fileObj['pid'] = this.dataset['pid'];
+        fileObj['files'] = [];
+        job.datasetList = [fileObj];
+        console.log(job);
+        this.store.dispatch(new ja.SubmitAction(job));
+      });
     }
   }
 }
