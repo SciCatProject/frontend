@@ -1,9 +1,11 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {Store} from '@ngrx/store';
-import {OrigDatablock, RawDataset, Datablock} from 'shared/sdk/models';
+import {OrigDatablock, RawDataset, Job} from 'shared/sdk/models';
 import * as dsa from 'state-management/actions/datasets.actions';
-
+import * as ja from 'state-management/actions/jobs.actions';
+import * as ua from 'state-management/actions/user.actions';
+import * as selectors from 'state-management/selectors';
 import {config} from '../../../config/config';
 import {Observable} from 'rxjs/Observable';
 import {Subscription} from 'rxjs/Subscription';
@@ -48,6 +50,30 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
     this.dataset$ = currentSet$.distinctUntilChanged().filter((dataset: RawDataset) => {
       return dataset && (Object.keys(dataset).length > 0);
     });
+    let msg = {};
+    this.subscriptions.push(
+      this.store.select(selectors.jobs.submitJob).subscribe(
+        ret => {
+          if (ret) {
+            msg = {
+              type: 'success',
+              title: 'Job Created Successfully',
+              content: ''
+            };
+            this.store.dispatch(new ua.ShowMessageAction(msg));
+          }
+        },
+        error => {
+          console.log(error);
+          msg = {
+            type: 'error',
+            title: error.message,
+            content: 'Job not submitted'
+          };
+          this.store.dispatch(new ua.ShowMessageAction(msg));
+        }
+      )
+    );
 
     this.origDatablocks$ = this.dataset$.map((dataset: RawDataset) => {
       return (dataset && ('origdatablocks' in dataset)) ? dataset.origdatablocks : [];
@@ -86,8 +112,26 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
   }
 
   resetDataset(dataset) {
-    if (this.admin$) {
-      this.store.dispatch(new dsa.ResetStatusAction(dataset.pid));
+      this.store
+      .select(state => state.root.user)
+      .take(1)
+      .subscribe(user => {
+        const job = new Job();
+        job.jobParams = {};
+        job.jobParams['username'] = user['currentUser']['username'] || undefined;
+        job.emailJobInitiator = user['email'];
+        if (!user['email']) {
+          job.emailJobInitiator = user['currentUser']['email'] || user['currentUser']['accessEmail'];
+        }
+        job.creationTime = new Date();
+        job.type = 'reset';
+        const fileObj = {};
+        fileObj['pid'] = dataset['pid'];
+        fileObj['files'] = [];
+        job.datasetList = [fileObj];
+        console.log(job);
+        this.store.dispatch(new ja.SubmitAction(job));
+      });
     }
   }
 }
