@@ -147,15 +147,10 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.store.select(selectors.jobs.submitJob).subscribe(
         ret => {
-          if (ret) {
+          if (ret && Array.isArray(ret)) {
             console.log(ret);
             this.selectedSets = [];
-            msg = {
-              type: 'success',
-              title: 'Job Created Successfully',
-              content: ''
-            };
-            this.store.dispatch(new ua.ShowMessageAction(msg));
+            console.log(this.selectedSets);
           }
         },
         error => {
