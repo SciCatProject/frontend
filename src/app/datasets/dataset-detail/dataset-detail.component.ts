@@ -133,5 +133,4 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
         this.store.dispatch(new ja.SubmitAction(job));
       });
     }
-  }
 }
