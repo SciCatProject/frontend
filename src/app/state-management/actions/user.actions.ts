@@ -111,7 +111,7 @@ export class AccessUserEmailFailedAction implements Action {
 export class ShowMessageAction implements Action {
   readonly type = SHOW_MESSAGE;
 
-  constructor(public payload: {}) {}
+  constructor(public payload?: {}) {}
   }
 export class ClearMessageAction implements Action {
   readonly type = CLEAR_MESSAGE;

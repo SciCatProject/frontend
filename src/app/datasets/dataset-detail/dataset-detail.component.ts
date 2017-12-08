@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {Store} from '@ngrx/store';
-import {OrigDatablock, RawDataset, Job} from 'shared/sdk/models';
+import {OrigDatablock, Datablock, RawDataset, Job} from 'shared/sdk/models';
 import * as dsa from 'state-management/actions/datasets.actions';
 import * as ja from 'state-management/actions/jobs.actions';
 import * as ua from 'state-management/actions/user.actions';
@@ -50,30 +50,6 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
     this.dataset$ = currentSet$.distinctUntilChanged().filter((dataset: RawDataset) => {
       return dataset && (Object.keys(dataset).length > 0);
     });
-    let msg = {};
-    this.subscriptions.push(
-      this.store.select(selectors.jobs.submitJob).subscribe(
-        ret => {
-          if (ret) {
-            msg = {
-              type: 'success',
-              title: 'Job Created Successfully',
-              content: ''
-            };
-            this.store.dispatch(new ua.ShowMessageAction(msg));
-          }
-        },
-        error => {
-          console.log(error);
-          msg = {
-            type: 'error',
-            title: error.message,
-            content: 'Job not submitted'
-          };
-          this.store.dispatch(new ua.ShowMessageAction(msg));
-        }
-      )
-    );
 
     this.origDatablocks$ = this.dataset$.map((dataset: RawDataset) => {
       return (dataset && ('origdatablocks' in dataset)) ? dataset.origdatablocks : [];

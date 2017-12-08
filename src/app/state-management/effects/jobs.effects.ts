@@ -11,6 +11,7 @@ import {Action, Store} from '@ngrx/store';
 import {Observable} from 'rxjs/Observable';
 import * as lb from 'shared/sdk/services';
 import * as JobActions from 'state-management/actions/jobs.actions';
+import * as UserActions from 'state-management/actions/user.actions';
 
 // import store state interface
 
@@ -45,7 +46,12 @@ export class JobsEffects {
         return this.jobSrv.create(job)
           .switchMap(res => {
             console.log(res);
-            return Observable.of(new JobActions.SubmitCompleteAction(res));
+            const msg = {
+              type: 'success',
+              title: 'Job Created Successfully',
+              content: ''
+            };
+            return Observable.of(new UserActions.ShowMessageAction(msg));
           });
       })
       .catch(err => {
