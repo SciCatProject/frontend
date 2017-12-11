@@ -50,7 +50,7 @@ export class DashboardComponent implements OnInit {
   textSearch(terms) {
     this.store
       .select(state => state.root.datasets.activeFilters)
-      .takeLast(1)
+      .take(1)
       .subscribe(values => {
         const filters = Object.assign({}, values);
         filters['text'] = terms;
