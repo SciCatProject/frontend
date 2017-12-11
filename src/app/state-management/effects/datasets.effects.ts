@@ -150,10 +150,12 @@ export class DatasetEffects {
                 .take(1)
                 .subscribe(d => { filter['limit'] = d; });
             filter['skip'] = fq['skip'] ? fq['skip'] : 0;
-            filter['include'] = [ {relation : 'datasetlifecycle'} ];
+            // filter['include'] = [ {relation : 'datasetlifecycle'} ];
             if (fq['sortField']) {
               filter['order'] = fq['sortField'];
             }
+            filter['limit'] = 10;
+            console.log(filter);
             return this.rds.find(filter)
                 .switchMap(res => {
                   return Observable.of(new DatasetActions.SearchCompleteAction(res));
