@@ -86,12 +86,16 @@ export class DatasetEffects {
                 .switchMap(res => {
                   const filterValues = res['results'][0];
 
-                  const groupsArr = filterValues['ownerGroup'];
+                  const groupsArr = filterValues['groups'];
                   groupsArr.sort(stringSort);
 
-                  const locationArr = filterValues['creationLocation'];
+                  const locationArr = filterValues['locations'];
                   locationArr.sort(stringSort);
-                  return Observable.of(new DatasetActions.UpdateFilterCompleteAction(filterValues));
+                  const fv = {};
+                  fv['ownerGroup'] = groupsArr;
+                  fv['creationLocation'] = locationArr;
+                  fv['years'] = filterValues['years'];
+                  return Observable.of(new DatasetActions.UpdateFilterCompleteAction(fv));
                 })
                 .catch(err => {
                   console.log(err);
