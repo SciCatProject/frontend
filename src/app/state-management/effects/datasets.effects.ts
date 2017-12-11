@@ -86,10 +86,10 @@ export class DatasetEffects {
                 .switchMap(res => {
                   const filterValues = res['results'][0];
 
-                  const groupsArr = filterValues['groups'];
+                  const groupsArr = filterValues['groups'] || filterValues['ownerGroup'];
                   groupsArr.sort(stringSort);
 
-                  const locationArr = filterValues['locations'];
+                  const locationArr = filterValues['locations'] || filterValues['creationLocation'];
                   locationArr.sort(stringSort);
                   const fv = {};
                   fv['ownerGroup'] = groupsArr;
