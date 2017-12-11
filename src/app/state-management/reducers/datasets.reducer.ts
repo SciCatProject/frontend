@@ -22,7 +22,6 @@ export function datasetsReducer(state = initialDatasetState, action: Action) {
       if (group && !Array.isArray(group) && group.length > 0) {
         f['ownerGroup'] = [group];
       }
-      console.log({f})
       const newState = Object.assign({}, state, { activeFilters: f, loading: true, selectedSets: [] });
       return newState;
     }

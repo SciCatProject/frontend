@@ -23,9 +23,43 @@ import * as ua from 'state-management/actions/user.actions';
 import * as ja from 'state-management/actions/jobs.actions';
 import * as utils from 'shared/utils';
 
-import { config  } from '../../../config/config';
+import { config } from '../../../config/config';
 import { last } from 'rxjs/operator/last';
 import { Observable } from 'rxjs/Observable';
+
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import {MatTableDataSource} from '@angular/material';
+
+
+export interface Element {
+  name: string;
+  position: number;
+  weight: number;
+  symbol: string;
+}
+
+const ELEMENT_DATA: Element[] = [
+  {position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H'},
+  {position: 2, name: 'Helium', weight: 4.0026, symbol: 'He'},
+  {position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li'},
+  {position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be'},
+  {position: 5, name: 'Boron', weight: 10.811, symbol: 'B'},
+  {position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C'},
+  {position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N'},
+  {position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O'},
+  {position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F'},
+  {position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne'},
+  {position: 11, name: 'Sodium', weight: 22.9897, symbol: 'Na'},
+  {position: 12, name: 'Magnesium', weight: 24.305, symbol: 'Mg'},
+  {position: 13, name: 'Aluminum', weight: 26.9815, symbol: 'Al'},
+  {position: 14, name: 'Silicon', weight: 28.0855, symbol: 'Si'},
+  {position: 15, name: 'Phosphorus', weight: 30.9738, symbol: 'P'},
+  {position: 16, name: 'Sulfur', weight: 32.065, symbol: 'S'},
+  {position: 17, name: 'Chlorine', weight: 35.453, symbol: 'Cl'},
+  {position: 18, name: 'Argon', weight: 39.948, symbol: 'Ar'},
+  {position: 19, name: 'Potassium', weight: 39.0983, symbol: 'K'},
+  {position: 20, name: 'Calcium', weight: 40.078, symbol: 'Ca'},
+];
 
 @Component({
   selector: 'dataset-table',
@@ -33,11 +67,13 @@ import { Observable } from 'rxjs/Observable';
   styleUrls: ['./dataset-table.component.css']
 })
 export class DatasetTableComponent implements OnInit, OnDestroy {
-  @Input() datasets;
+  @Input() datasets = [];
   @Output() openDataset = new EventEmitter();
   @ViewChild('ds') dsTable: DataTable;
   selectedSets: Array<RawDataset> = [];
   datasetCount$;
+  dataSource: MatTableDataSource<any> | null;
+  displayedColumns = [];
 
   modeButtons = ['Archive', 'View', 'Retrieve'];
 
@@ -76,12 +112,14 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.displayedColumns = [];
 
     this.configSrv.getConfigFile('RawDataset').subscribe(conf => {
       if (conf) {
         for (const prop in conf) {
           if (prop in conf && 'table' in conf[prop]) {
             this.cols.push(conf[prop]['table']);
+            this.displayedColumns.push(conf[prop]['table']['field']);
           }
         }
       }
@@ -96,7 +134,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     });
 
     this.route.queryParams.subscribe(params => {
-      const f = utils.filter({'mode': '', 'skip': ''}, params);
+      const f = utils.filter({ 'mode': '', 'skip': '' }, params);
       this.mode = f['mode'] || 'view';
       // this.setCurrentPage(f['skip']);
     });
@@ -111,6 +149,9 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
       this.store.select(selectors.datasets.getDatasets).subscribe(
         data => {
           this.datasets = data;
+          this.dataSource = new MatTableDataSource(this.datasets);
+          
+          console.log(data);
           if (this.datasets && this.datasets.length > 0) {
             this.store.dispatch(new dua.SaveModeAction(this.mode));
             this.updateRowView(this.mode);
@@ -127,11 +168,11 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
       this.store
         .select(selectors.datasets.getActiveFilters)
         .subscribe(filters => {
-          if (filters.skip !== this.dsTable.first) {
-            setTimeout(() => {
-              this.setCurrentPage(filters.skip);
-            }, 1000);
-          }
+          // if (filters.skip !== this.dsTable.first) {
+          setTimeout(() => {
+            this.setCurrentPage(filters.skip);
+          }, 1000);
+          // }
         })
     );
 
@@ -216,30 +257,30 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   }
 
   updateRowView(mode) {
-      this.selectedSets = [];
-      this.rowStyleMap = {};
-      if (this.datasets && this.datasets.length > 0) {
-        for (let d = 0; d < this.datasets.length; d++) {
-          const set = this.datasets[d];
-          let c = '';
-          if (this.mode === 'archive' && set.datasetlifecycle
-            && (this.archiveable.indexOf(set.datasetlifecycle.archiveStatusMessage) === -1 || set.size === 0)) {
-            c = 'disabled-row';
-          } else if (this.mode === 'retrieve'
-            && set.datasetlifecycle && this.retrievable.indexOf(set.datasetlifecycle.archiveStatusMessage) === -1) {
-            c = 'disabled-row';
-          } else {
-            c = '';
-          }
-          this.rowStyleMap[set.pid] = c;
+    this.selectedSets = [];
+    this.rowStyleMap = {};
+    if (this.datasets && this.datasets.length > 0) {
+      for (let d = 0; d < this.datasets.length; d++) {
+        const set = this.datasets[d];
+        let c = '';
+        if (this.mode === 'archive' && set.datasetlifecycle
+          && (this.archiveable.indexOf(set.datasetlifecycle.archiveStatusMessage) === -1 || set.size === 0)) {
+          c = 'disabled-row';
+        } else if (this.mode === 'retrieve'
+          && set.datasetlifecycle && this.retrievable.indexOf(set.datasetlifecycle.archiveStatusMessage) === -1) {
+          c = 'disabled-row';
+        } else {
+          c = '';
         }
-      } else {
-        this.store.dispatch(new dua.SaveModeAction(this.mode));
+        this.rowStyleMap[set.pid] = c;
       }
-      const currentParams = this.route.snapshot.queryParams;
-      this.router.navigate(['/datasets'], {
-         queryParams: Object.assign({}, currentParams, {'mode': this.mode})
-      });
+    } else {
+      this.store.dispatch(new dua.SaveModeAction(this.mode));
+    }
+    const currentParams = this.route.snapshot.queryParams;
+    this.router.navigate(['/datasets'], {
+      queryParams: Object.assign({}, currentParams, { 'mode': this.mode })
+    });
   }
 
   /**
@@ -287,7 +328,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
         }
         // TODO reduce calls when not needed (i.e. no change)
         // if (f.first !== event.first || this.datasets.length === 0) {
-          this.store.dispatch(new dsa.UpdateFilterAction(filters));
+        this.store.dispatch(new dsa.UpdateFilterAction(filters));
         // }
       });
   }
@@ -296,7 +337,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   // `paginate` method but
   // this takes no arguments and requires changing protected vars
   setCurrentPage(n: number) {
-    this.dsTable.onPageChange({ first: n, rows: this.dsTable.rows });
+    // this.dsTable.onPageChange({ first: n, rows: this.dsTable.rows });
   }
 
   /**
@@ -415,7 +456,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
               .subscribe(copies => {
                 job.jobParams['tapeCopies'] = copies;
               });
-              // TODO check username in job object
+            // TODO check username in job object
             // job.jobParams['username'] = user['username'];
             if (!archive) {
               // TODO fix the path here
@@ -468,7 +509,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     ) {
       return ds['datasetlifecycle'][key + 'Message'];
     } else if ((key === 'archiveStatus' || key === 'retrieveStatus') &&
-    !ds['datasetlifecycle']) {
+      !ds['datasetlifecycle']) {
       return 'Unknown';
     } else if (key === 'size') {
       return (ds[key] / 1024 / 1024 / 1024).toFixed(2);
@@ -479,3 +520,5 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     }
   }
 }
+
+

@@ -120,6 +120,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
           // this.filters = Object.assign({}, data,
           // this.route.snapshot.queryParams);
           this.filters = Object.assign({}, data);
+          console.log(data);
           this.store.select(state => state.root.dashboardUI.mode)
             .take(1)
             .subscribe(mode => {
