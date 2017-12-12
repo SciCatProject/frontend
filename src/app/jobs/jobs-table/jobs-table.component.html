@@ -1,14 +1,18 @@
-<div>
-<p-dataTable #js [paginator]="true" [lazy]="true" [rows]="limit" [value]="jobs"  [rowHover]="true" (onLazyLoad)="onPage($event)"
-             [resizableColumns]="true" columnResizeMode="expand" (onRowClick)="onRowSelect($event)" [totalRecords]="totalJobNumber$ | async" dataKey="creationTime">
-  <p-column [style]="{'width':'28px', 'overflow':'hidden'}" *ngFor="let col of cols" [field]="col.field" [header]="col.header" [sortable]="false">
-    <ng-template let-col let-js="rowData" let-ri="rowIndex" pTemplate="body">
-      <span>{{getFormat(col.field, js[col.field], js)}}</span>
-    </ng-template>
-  </p-column>
-  <p-footer>
-  </p-footer>
-</p-dataTable>
+<div class="example-container mat-elevation-z8">
+  <mat-table #table [dataSource]="dataSource">
+    <ng-container *ngFor="let col of cols">
+      <ng-container matColumnDef="{{col.field}}">
+        <mat-header-cell *matHeaderCellDef> {{col.header}} </mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row[col.field]}} </mat-cell>
+      </ng-container>  
+    </ng-container>
+    
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row (click)="onRowSelect($event, row)" *matRowDef="let row; columns: displayedColumns;"></mat-row>
+  </mat-table>
+
+  <mat-paginator [pageSize]="30" [length]="totalJobNumber$ | async" (page)="onPage(event)"></mat-paginator>
 </div>
 
 

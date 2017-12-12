@@ -1,7 +1,9 @@
 <form (ngSubmit)="textSearch(search.value)" #searchForm="ngForm">
-    <div class="ui input icon focus" style="width:100%;">
-      <input #search pInputText [ngModel]="searchText$ | async" name="search" class="ui search" placeholder="Search...." type="text" style="width:80%" (keyup)="textSearch(search.value)" pInputText>
-        <button type="submit" (click)="textSearch(search.value)" class="ui primary button" type="button" style="text-align: center;"><i class="search icon"></i>Search</button>
+    <div style="width:100%;">
+      <mat-form-field class="example-full-width" style="width:90%">
+    <input matInput #search placeholder="Search..." (keyUp)="textSearch(search.value)" [ngModel]="searchText$ | async" name="text">
+  </mat-form-field>
+        <button mat-raised-button color="accent" type="submit" (click)="textSearch(search.value)"><i class="search icon"></i>Search</button>
     </div>
 </form>
 <br>
