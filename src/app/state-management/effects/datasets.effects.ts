@@ -76,6 +76,7 @@ export class DatasetEffects {
                   .take(1)
                   .subscribe(user => { groups = user; });
               }
+              console.log(fq);
              if (fq['text']) {
               fq['text'] = {'$search' : '"' + fq['text'] + '"', '$language': 'none'};
              } else {
@@ -85,15 +86,16 @@ export class DatasetEffects {
                 .facet(fq)
                 .switchMap(res => {
                   const filterValues = res['results'][0];
-                  const groupsArr = filterValues['groups'];
+
+                  const groupsArr = filterValues['groups'] || filterValues['ownerGroup'];
                   groupsArr.sort(stringSort);
 
-                  const locationArr = filterValues['locations'];
+                  const locationArr = filterValues['locations'] || filterValues['creationLocation'];
                   locationArr.sort(stringSort);
                   const fv = {};
                   fv['ownerGroup'] = groupsArr;
                   fv['creationLocation'] = locationArr;
-                  fv['years'] = filterValues['years']; 
+                  fv['years'] = filterValues['years'];
                   return Observable.of(new DatasetActions.UpdateFilterCompleteAction(fv));
                 })
                 .catch(err => {
