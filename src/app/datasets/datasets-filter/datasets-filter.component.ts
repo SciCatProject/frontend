@@ -1,9 +1,11 @@
 import 'rxjs/add/operator/take';
 import 'rxjs/add/observable/combineLatest';
-
+import {startWith} from 'rxjs/operators/startWith';
+import {map} from 'rxjs/operators/map';
 
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import {FormControl} from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { AutoComplete, Tree } from 'primeng/primeng';
 import { createSelector, OutputSelector } from 'reselect';
@@ -33,6 +35,11 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   @ViewChild('loc') locField: AutoComplete;
   @ViewChild('grp') grpField: AutoComplete;
 
+  beamlineInput: FormControl;
+  groupInput: FormControl;
+  filteredBeams: Observable<any[]>;
+  filteredGroups: Observable<any[]>;
+
   datepickerSelector:
     OutputSelector<any, DatepickerState, (res: any) => DatepickerState>;
   dateSelectionMode = SelectionModes.range;
@@ -45,14 +52,14 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
 
   dateFacet = [];
 
-  location: {};
+  selectedLocs = [];
   locations = [];
   filteredLocations = [];
 
   group: {};
   groups = [];
   selectedGroups = [];
-  filteredGroups = [];
+  // filteredGroups = [];
 
   filters = dStore.initialDatasetState.activeFilters;
   filterValues;
@@ -60,7 +67,23 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   subscriptions = [];
 
   constructor(private store: Store<any>, private route: ActivatedRoute,
-    private router: Router) { }
+    private router: Router) {
+      this.beamlineInput = new FormControl();
+      this.groupInput = new FormControl();
+      this.filteredBeams = this.beamlineInput.valueChanges
+        .pipe(startWith(''), map(beam => beam ? this.filterBeams(beam) : this.filterValues.creationLocation.slice()));
+      this.filteredGroups = this.groupInput.valueChanges
+        .pipe(startWith(''), map(group => group ? this.filterGroups(group) : this.filterValues.ownerGroup.slice()));
+
+    }
+
+  filterBeams(beam: string) {
+    return this.filterValues.creationLocation.filter(b => b._id.toLowerCase().indexOf(beam.toLowerCase()) === 0);
+  }
+
+  filterGroups(group: string) {
+    return this.filterValues.ownerGroup.filter(g => g._id.toLowerCase().indexOf(group.toLowerCase()) === 0);
+  }
 
   /**
    * Load locations and ownergroups on start up and
@@ -177,76 +200,11 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Handles search queries for the creation
-   * location dropdown, this links to a mongo filter query
-   * @param {any} event
-   * @memberof DatasetsFilterComponent
-   */
-  handleInputLocation(event) {
-    this.filteredLocations = this.filterDatasets(event.query || '', 'creationLocation');
-  }
-
-  /**
-   * Could be combined with above and handled based on event but
-   * complicated to access source element through event
-   * @param {any} event
-   * @memberof DatasetsFilterComponent
-   */
-  handleInputOwner(event) {
-    this.filteredGroups = this.filterDatasets(event.query, 'ownerGroup');
-  }
-
-  /**
-   * Handles the event of the ngModel changing
-   * Linked to both autocomplete values. Currently re runs the search when they
-   * are cleared
-   * @param {any} event
-   * @memberof DatasetsFilterComponent
-   */
-  textValueChanged(event, key) {
-    if (event && event.length === 0) {
-      this.filters[key] = null;
-    } else if (event && event.length >= 4) {
-      if (key === 'groups') {
-        this.filters[key] = [event];
-      } else if (event) {
-        this.filters[key] = event;
-      }
-    }
-    // TODO handle text values changing
-    // TODO debounce time needs to be here even though it is in the effects?
-    // this.store.dispatch({type : dsa.FILTER_UPDATE, payload : this.filters});
-  }
-  /**
-   * Creates a filtered array based
-   * on provided search term that matches the given key
-   * @param {any} query
-   * @param {any} key
-   * @returns
-   * @memberof DatasetsFilterComponent
-   */
-  filterDatasets(query, key) {
-    const filtered = [];
-    const array = key === 'creationLocation' ? this.locations : this.groups;
-    if (array) {
-      for (let i = 0; i < array.length; i++) {
-        const loc = typeof array[i] === 'object' && !('_id' in array[i])
-          ? array[i]
-          : array[i]['_id'];
-        if (loc && loc.toLowerCase().indexOf(query.toLowerCase()) === 0 &&
-          filtered.indexOf(loc) === -1) {
-          filtered.push(array[i]);
-        }
-      }
-    }
-    return filtered;
-  }
-
-  /**
    * Handle clicking of available locations
    */
-  locSelected() {
-    this.filters.creationLocation = this.location['_id'];
+  locSelected(event) {
+    console.log(event);
+    this.filters.creationLocation = this.selectedLocs['_id'];
     // this.store.dispatch(
     //     {type : dua.SAVE, payload : {beamlineText : this.location}});
     this.store.dispatch(new dsa.UpdateFilterAction(this.filters));

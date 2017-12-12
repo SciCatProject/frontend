@@ -148,15 +148,16 @@ export class DatasetEffects {
               filter['where'] = match[0];
             }
 
-            this.store.select(state => state.root.user.settings.datasetCount)
+            if (!('limit' in match)) {
+              this.store.select(state => state.root.user.settings.datasetCount)
                 .take(1)
                 .subscribe(d => { filter['limit'] = d; });
+            }
             filter['skip'] = fq['skip'] ? fq['skip'] : 0;
             // filter['include'] = [ {relation : 'datasetlifecycle'} ];
             if (fq['sortField']) {
               filter['order'] = fq['sortField'];
             }
-            filter['limit'] = 10;
             console.log(filter);
             return this.rds.find(filter)
                 .switchMap(res => {

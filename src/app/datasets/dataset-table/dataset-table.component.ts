@@ -194,7 +194,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
-    console.log(this.paginator);
   }
 
 
@@ -209,19 +208,20 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
    * @param {any} event
    * @memberof DatasetTableComponent
    */
-  onRowSelect(event) {
-    const pid = encodeURIComponent(event.data.pid);
+  onRowSelect(event, row) {
+    console.log(row);
+    const pid = encodeURIComponent(row.pid);
     // Odd hack to stop click event in column loading dataset view, not needed
     // before 5th July 2017
-    if (
-      event['originalEvent']['target']['innerHTML'].indexOf('chkbox') === -1
-    ) {
+    // if (
+    //   event['originalEvent']['target']['innerHTML'].indexOf('chkbox') === -1
+    // ) {
       this.router.navigateByUrl(
         '/dataset/' + pid
       );
       // this.store.dispatch(
       //     {type : dsa.SELECT_CURRENT, payload : event.data});
-    }
+    // }
   }
 
   /**
@@ -291,19 +291,23 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
    * @param event
    */
   onPage(event) {
+    const index = this.paginator.pageIndex;
+    const size = this.paginator.pageSize;
     this.store
       .select(state => state.root.datasets.activeFilters)
       .take(1)
       .subscribe(f => {
         const filters = Object.assign({}, f);
-        filters['skip'] = event.first;
+        filters['skip'] = index * size;
         filters['initial'] = false;
-        if (event.sortField) {
-          const sortOrder = event.sortOrder === 1 ? 'ASC' : 'DESC';
-          filters['sortField'] = event.sortField + ' ' + sortOrder;
-        } else {
+        filters['limit'] = size;
+        // if (event.sortField) {
+          // const sortOrder = event.sortOrder === 1 ? 'ASC' : 'DESC';
+          // filters['sortField'] = event.sortField + ' ' + sortOrder;
+        // } else {
           filters['sortField'] = undefined;
-        }
+        // }
+        console.log(filters);
         // TODO reduce calls when not needed (i.e. no change)
         // if (f.first !== event.first || this.datasets.length === 0) {
         this.store.dispatch(new dsa.UpdateFilterAction(filters));
