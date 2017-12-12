@@ -54,6 +54,7 @@ import {
   MatToolbarModule,
   MatTooltipModule,
   MatStepperModule,
+  MatFormFieldModule,
 } from '@angular/material';
 import {CdkTableModule} from '@angular/cdk/table';
 import {
@@ -63,7 +64,8 @@ import {SharedCatanieModule} from 'shared/shared.module';
 
 @NgModule({
   imports : [
-    MatPaginatorModule, MatTableModule, MatTabsModule, CommonModule, FormsModule, DialogModule, ReactiveFormsModule,
+    MatPaginatorModule, MatTableModule, MatFormFieldModule, MatAutocompleteModule,
+    MatTabsModule, MatInputModule, CommonModule, FormsModule, DialogModule, ReactiveFormsModule,
     SharedCatanieModule, DataTableModule, SharedModule, TabViewModule,
     ConfirmDialogModule, TreeModule, TreeTableModule,
     DropdownModule, AutoCompleteModule,
