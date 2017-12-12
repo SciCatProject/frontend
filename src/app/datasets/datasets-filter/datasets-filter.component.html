@@ -6,9 +6,9 @@
 
   <form class="example-form">
     <mat-form-field class="example-full-width">
-      <input matInput [(ngModel)]="selectedLocs" (optionSelected)="locSelected" placeholder="Beamline" aria-label="Beamline" [matAutocomplete]="beam" [formControl]="beamlineInput">
+      <input matInput placeholder="Beamline" aria-label="Beamline" [matAutocomplete]="beam" [formControl]="beamlineInput">
       <mat-autocomplete #beam="matAutocomplete">
-        <mat-option *ngFor="let b of filteredBeams | async" [value]="b._id">
+        <mat-option (onSelectionChange)="locSelected(b)" *ngFor="let b of filteredBeams | async" [value]="b._id">
           <span>{{ b._id }}</span> |
           <small>Results:kljchjkld</small>
         </mat-option>
@@ -20,7 +20,7 @@
     <mat-form-field class="example-full-width">
       <input matInput [(ngModel)]="selectedGroup" (optionSelected)="groupSelected" placeholder="Group" aria-label="Group" [matAutocomplete]="grp" [formControl]="groupInput">
       <mat-autocomplete #grp="matAutocomplete">
-        <mat-option *ngFor="let g of filteredGroups | async" [value]="g._id">
+        <mat-option (onSelectionChange)="groupSelected(g)" *ngFor="let g of filteredGroups | async" [value]="g._id">
           <span>{{ g._id }}</span> |
           <small>Results: {{g.count}}</small>
         </mat-option>

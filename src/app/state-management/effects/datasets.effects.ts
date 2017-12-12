@@ -256,8 +256,8 @@ function handleFacetPayload(fq) {
       }
       }
 
-    if (creationLocation) {
-      match.push({creationLocation : creationLocation});
+    if (creationLocation.length > 0) {
+      match.push({creationLocation : {inq: creationLocation}});
       }
     if (fq['creationTime']) {
       const start = fq['creationTime']['start'] || undefined;

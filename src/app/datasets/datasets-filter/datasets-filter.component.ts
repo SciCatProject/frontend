@@ -52,6 +52,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
 
   dateFacet = [];
 
+  location: {};
   selectedLocs = [];
   locations = [];
   filteredLocations = [];
@@ -115,9 +116,9 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
         const filters = combined[0];
         const mode = combined[1];
         const f = utils.filter(filters, newParams);
-        this.location = f['creationLocation']
-          ? { _id: filters['creationLocation'] }
-          : '';
+        //this.location = f['creationLocation']
+        //  ? { _id: filters['creationLocation'] }
+        //  : '';
         const group = f['ownerGroup'];
         if (group && group && Array.isArray(group) &&
           group.length > 0) {
@@ -202,11 +203,8 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   /**
    * Handle clicking of available locations
    */
-  locSelected(event) {
-    console.log(event);
-    this.filters.creationLocation = this.selectedLocs['_id'];
-    // this.store.dispatch(
-    //     {type : dua.SAVE, payload : {beamlineText : this.location}});
+  locSelected(loc) {
+    this.filters.creationLocation.push(loc['_id']);
     this.store.dispatch(new dsa.UpdateFilterAction(this.filters));
   }
 
@@ -215,11 +213,9 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
    * for array to be cleared
    * since this is called before that happens)
    */
-  groupSelected(event) {
-    setTimeout(() => {
-      this.filters.ownerGroup = this.selectedGroups.map(x => { return x['_id']; });
-      this.store.dispatch(new dsa.UpdateFilterAction(this.filters));
-    }, 400);
+  groupSelected(grp) {
+    this.filters.ownerGroup.push(grp['_id']);
+    this.store.dispatch(new dsa.UpdateFilterAction(this.filters));
   }
 
   /**
