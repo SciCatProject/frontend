@@ -222,37 +222,18 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
    * Clear the filters and reset the user groups (when not a functional account)
    */
   clearFacets() {
-    this.location = undefined;
-    this.group = undefined;
-
-    // TODO clearing this does not visually clear (although it is removed from
-    // the array)
     this.selectedGroups = [];
-    this.locField.value = '';
-    this.grpField.value = [];
+    this.beamlineInput.setValue('');
+    this.groupInput.setValue('');
     this.filters = dStore.initialDatasetState.activeFilters;
     this.dateSelections$.next([]);
     this.store.select(state => state.root.user.currentUserGroups)
         .takeLast(1)
         .subscribe(groups => { this.filters.ownerGroup = groups; });
+    this.filters.ownerGroup = [];
     this.filterValues = dStore.initialDatasetState.filterValues;
     this.filterValues.text = '';
     this.store.dispatch(new dsa.UpdateFilterAction(this.filters));
-    // this.store.dispatch({type : dsa.FILTER_VALUE_UPDATE, payload : this.filterValues});
-    // this.store.dispatch({
-    //   type: dua.SAVE,
-    //   payload: dUIStore.initialDashboardUIState
-    // });
-    /* let m;
-    this.store.select(state => state.root.dashboardUI.mode)
-        .takeLast(1)
-        .subscribe(mode => (m = mode));
-    const currentParams = this.route.snapshot.queryParams;
-    this.router.navigate([ '/datasets' ], {
-      queryParams :
-          Object.assign({}, currentParams, this.filters, {mode : m})
-    }); */
-    // TODO clear selected sets
   }
 
   /**
