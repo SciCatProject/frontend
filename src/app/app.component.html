@@ -1,12 +1,47 @@
-<div class="ui fixed menu">
-    <!-- <div class="ui container"> -->
+<!-- <div class="ui fixed menu"> -->
+<mat-toolbar color="primary">
+    <mat-toolbar-row>
+        <i (click)="sidenavToggle()" class="fa fa-bars" aria-hidden="true"></i>       
+        <h3 class="app-title">  {{title}}</h3>
+        <span class="example-spacer"></span>
+    </mat-toolbar-row>
+</mat-toolbar>
+        <mat-sidenav-container
+        class="example-container" (backdropClick)="sidenavToggle()">
+      <mat-sidenav #sidenav (keydown.escape)="sidenavToggle()" mode="push">
+        <mat-list>
+            <mat-list-item><a class="item" [routerLink]="['/datasets/']" [routerLinkActive]="['active']">Home</a></mat-list-item>
+            <mat-list-item><a class="item" [routerLink]="['/sample-data/', 'add']" [routerLinkActive]="['active']">Sample Data Entry</a></mat-list-item>
+            <mat-list-item><a class="item" [routerLink]="['/user/','jobs']" [routerLinkActive]="['active']">Jobs</a></mat-list-item>
+            <mat-list-item><a class="item" [matMenuTriggerFor]="userMenu">{{ username }}</a></mat-list-item>
+        </mat-list>
+
+        
+        <mat-menu #userMenu="matMenu">
+            <a mat-menu-item [routerLinkActive]="['active']" [routerLink]="['/user/','details']">Details</a>
+            <a mat-menu-item [routerLinkActive]="['active']" [routerLink]="['/user/','settings']">Settings</a>
+            <a mat-menu-item (click)="logout()">Logout</a>
+        </mat-menu>
+        
+      </mat-sidenav>
+    
+      <mat-sidenav-content>
+          <mat-card>
+            <breadcrumb></breadcrumb>
+            <br>
+            <router-outlet ></router-outlet>
+          </mat-card>
+      </mat-sidenav-content>
+    </mat-sidenav-container>
+<!-- 
+<mat-toolbar>
       <a href="#" class="header item">
         <img class="logo" src="favicon.ico">
         {{title}}
       </a>
-      <simple-notifications [options]="options"></simple-notifications>
-      <!--<a href="#" class="item">Home</a>-->
-      <div class="right menu">
+      <span class="example-spacer"></span>
+      <!-- <simple-notifications [options]="options"></simple-notifications> -->
+      <!-- <mat-menu> 
           <ng-container *ngIf="username !== null; then accountTemplate else loginTemplate"></ng-container>
           <ng-template #accountTemplate>
             <a class="item" [routerLink]="['/datasets/']" [routerLinkActive]="['active']">Home</a>
@@ -36,14 +71,11 @@
           <ng-template #loginTemplate>
               <a class="active item" [routerLink]="['/','login']">Login</a>
           </ng-template>
-      </div>
-    <!-- </div> -->
-</div>
+      </mat-menu>
+     </div> 
+</mat-toolbar>
 <div id="content" class="ui dash-container">
-    <breadcrumb></breadcrumb>
-    <!-- <div *ngIf="message$" [attr.class]="msgClass$ | async">{{message$ | async}}</div> -->
-    <br>
-    <router-outlet ></router-outlet>
+    
 </div>
 
-
+ -->

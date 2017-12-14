@@ -91,6 +91,13 @@ export function localStorageSyncWrapper(reducer: any) {
     JobsDetailComponent
   ],
   imports : [
+    MatToolbarModule,
+    MatIconModule,
+    MatSnackBarModule,
+    MatCardModule,
+    MatListModule,
+    MatMenuModule,
+    MatSidenavModule,
     MatTableModule,
     MatPaginatorModule,
     BrowserModule,

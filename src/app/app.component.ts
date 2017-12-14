@@ -1,11 +1,13 @@
 const { version: appVersion } = require('../../package.json')
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {MatSidenav} from '@angular/material/sidenav';
+import {Component, ViewChild, OnDestroy, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {Store} from '@ngrx/store';
 import {LoopBackConfig} from 'shared/sdk';
 import {UserApi} from 'shared/sdk/services';
 import * as dsa from 'state-management/actions/datasets.actions';
 import * as ua from 'state-management/actions/user.actions';
+import {MatSnackBar} from '@angular/material';
 
 import {NotificationsService} from 'angular2-notifications';
 
@@ -18,6 +20,9 @@ import {environment} from '../environments/environment';
   providers: [UserApi]
 })
 export class AppComponent implements OnDestroy, OnInit {
+
+  @ViewChild('sidenav') sidenav: MatSidenav;
+
   title = 'SciCat';
   appVersion = 0;
   us: UserApi;
@@ -35,6 +40,7 @@ export class AppComponent implements OnDestroy, OnInit {
   };
 
   constructor(private router: Router,
+              public snackBar: MatSnackBar,
               private _notif_service: NotificationsService,
               private store: Store<any>) {
     this.appVersion = appVersion;
@@ -75,6 +81,11 @@ export class AppComponent implements OnDestroy, OnInit {
       .subscribe(current => {
         if (current.title !== undefined) {
           this.createNotification(current);
+          
+            this.snackBar.open(current.title, undefined, {
+              duration: 5000,
+            });
+  
           this.store.dispatch(new ua.ClearMessageAction());
         }
       }));
@@ -108,5 +119,9 @@ export class AppComponent implements OnDestroy, OnInit {
 
   login() {
     this.router.navigateByUrl('/login');
+  }
+
+  sidenavToggle() {
+     this.sidenav.opened ? this.sidenav.close() : this.sidenav.open();
   }
 }
