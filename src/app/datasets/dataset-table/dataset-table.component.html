@@ -18,11 +18,28 @@
     </div>
 
     <div class="example-container mat-elevation-z8">
-      <mat-table #table [dataSource]="dataSource">
+      <mat-table #table [dataSource]="dataSource" matSort>
+
+          <!-- Checkbox Column -->
+    <ng-container matColumnDef="select">
+        <mat-header-cell *matHeaderCellDef>
+          <mat-checkbox (change)="$event ? masterToggle() : null"
+                       [checked]="isAllSelected()"
+                       [indeterminate]="selection.hasValue() && !isAllSelected()">
+          </mat-checkbox>
+        </mat-header-cell>
+        <mat-cell *matCellDef="let row">
+          <mat-checkbox (click)="$event.stopPropagation()"
+                       (change)="$event ? selection.toggle(row.id) : null"
+                       [checked]="selection.isSelected(row.id)">
+          </mat-checkbox>
+        </mat-cell>
+      </ng-container>
         
         <ng-container *ngFor="let col of cols">
           <ng-container matColumnDef="{{col.field}}">
             <mat-header-cell *matHeaderCellDef> {{col.header}} </mat-header-cell>
+            
             <mat-cell *matCellDef="let row"> {{row[col.field]}} </mat-cell>
           </ng-container>  
         </ng-container>

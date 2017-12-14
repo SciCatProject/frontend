@@ -30,6 +30,7 @@ import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import {MatTableDataSource, MatPaginator} from '@angular/material';
 import { AfterViewInit } from '@angular/core/src/metadata/lifecycle_hooks';
+import {SelectionModel} from '@angular/cdk/collections';
 
 
 @Component({
@@ -42,9 +43,12 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
   @Output() openDataset = new EventEmitter();
   @ViewChild('ds') dsTable: DataTable;
   selectedSets: Array<RawDataset> = [];
+
+  selection = new SelectionModel<Element>(true, []);
+
   datasetCount$;
   dataSource: MatTableDataSource<any> | null;
-  displayedColumns = [];
+  displayedColumns = ['select'];
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
@@ -85,7 +89,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnInit() {
-    this.displayedColumns = [];
 
     this.configSrv.getConfigFile('RawDataset').subscribe(conf => {
       if (conf) {
@@ -232,6 +235,19 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
   onModeChange(event, mode) {
     this.mode = mode.toLowerCase();
     this.store.dispatch(new dua.SaveModeAction(this.mode));
+  }
+
+  isAllSelected() {
+    const numSelected = this.selection.selected.length;
+    const numRows = this.dataSource.data.length;
+    return numSelected === numRows;
+  }
+
+  /** Selects all rows if they are not all selected; otherwise clear selection. */
+  masterToggle() {
+    this.isAllSelected() ?
+        this.selection.clear() :
+        this.dataSource.data.forEach(row => this.selection.select(row));
   }
 
   updateRowView(mode) {
