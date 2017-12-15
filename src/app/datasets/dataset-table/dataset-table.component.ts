@@ -32,6 +32,10 @@ import {MatTableDataSource, MatPaginator} from '@angular/material';
 import { AfterViewInit } from '@angular/core/src/metadata/lifecycle_hooks';
 import {SelectionModel} from '@angular/cdk/collections';
 
+import {MatDialog} from '@angular/material';
+
+import {DialogComponent} from 'shared/modules/dialog/dialog.component';
+
 
 @Component({
   selector: 'dataset-table',
@@ -81,7 +85,8 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
     private configSrv: ConfigService,
     private route: ActivatedRoute,
     private confirmationService: ConfirmationService,
-    private store: Store<any>
+    private store: Store<any>,
+    public dialog: MatDialog
   ) {
     this.archiveable = config.archiveable;
     this.retrievable = config.retrieveable;
@@ -221,7 +226,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   onRowCheck(row) {
-    this.selection.toggle(row.pid);
+    this.selection.toggle(row);
   }
 
   /**
@@ -242,7 +247,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
 
   /** Selects all rows if they are not all selected; otherwise clear selection. */
   masterToggle() {
-    console.log(this.isAllSelected());
     this.isAllSelected() ?
         this.selection.clear() :
         this.dataSource.data.forEach(row => this.selection.select(row));
@@ -362,12 +366,18 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
    * @memberof DashboardComponent
    */
   archiveClickHandle(event) {
-    this.confirmationService.confirm({
-      header: 'Archive ' + this.selectedSets.length + ' Datasets?',
-      message: 'The selected datasets will be scheduled for archive',
-      accept: () => {
+    let dialogRef = this.dialog.open(DialogComponent, {
+      width: 'auto',
+      data: {title: "Really archive?", question: ''}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      console.log(result);
+      if(result) {
         this.archiveOrRetrieve(true);
       }
+      // this.onClose.emit(result);
     });
   }
 
@@ -377,15 +387,18 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
    * @memberof DashboardComponent
    */
   retrieveClickHandle(event) {
-    this.retrieveDisplay = true;
-  }
+    const destPath = '/archive/retrieve';
+    
+    let dialogRef = this.dialog.open(DialogComponent, {
+      width: 'auto',
+      data: {title: "Really retrieve?", question: '', input: destPath}
+    });
 
-  retrieveSets(f) {
-    const destPath = f.form.value['path'] || '/archive/retrieve';
-    if (destPath.length > 0) {
-      this.retrieveDisplay = false;
-      this.archiveOrRetrieve(false);
-    }
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.archiveOrRetrieve(false, result.input);
+      }
+    });
   }
 
   /**
@@ -396,7 +409,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
    */
   archiveOrRetrieve(archive: boolean, destPath = '/archive/retrieve/') {
     let msg = {};
-    if (this.selectedSets.length > 0) {
+    if (this.selection.selected.length > 0) {
       this.dest = new Subject<string>();
       const job = new Job();
       job.jobParams = {};
@@ -411,7 +424,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
           if (!user['email']) {
             job.emailJobInitiator = user['currentUser']['email'] || user['currentUser']['accessEmail'];
           }
-          this.selectedSets.map(set => {
+          this.selection.selected.map(set => {
             // if ('datablocks' in set && set['datablocks'].length > 0) {
             const fileObj = {};
             fileObj['pid'] = set['pid'];
