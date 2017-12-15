@@ -212,19 +212,16 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
    * @memberof DatasetTableComponent
    */
   onRowSelect(event, row) {
+    console.log(event);
     console.log(row);
     const pid = encodeURIComponent(row.pid);
-    // Odd hack to stop click event in column loading dataset view, not needed
-    // before 5th July 2017
-    // if (
-    //   event['originalEvent']['target']['innerHTML'].indexOf('chkbox') === -1
-    // ) {
-      this.router.navigateByUrl(
-        '/dataset/' + pid
-      );
-      // this.store.dispatch(
-      //     {type : dsa.SELECT_CURRENT, payload : event.data});
-    // }
+    this.router.navigateByUrl(
+      '/dataset/' + pid
+    );
+  }
+
+  onRowCheck(row) {
+    this.selection.toggle(row.pid);
   }
 
   /**
@@ -245,6 +242,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
 
   /** Selects all rows if they are not all selected; otherwise clear selection. */
   masterToggle() {
+    console.log(this.isAllSelected());
     this.isAllSelected() ?
         this.selection.clear() :
         this.dataSource.data.forEach(row => this.selection.select(row));
