@@ -13,12 +13,12 @@
       <config-form [source]="dataset" [sourceType]="'RawDataset'"></config-form>
     </div>
   </mat-tab>
-  <!-- <mat-tab label="Datafiles">
-    <datafiles *ngIf="origDatablocks.length > 0" [dataBlocks]="origDatablocks"></datafiles>
-    <div *ngIf="origDatablocks.length === 0">
+  <mat-tab label="Datafiles">
+    <datafiles [dataBlocks]="origDatablocks$ | async"></datafiles>
+    <!-- <div *ngIf="origDatablocks$.length === 0">
       <h3>No datafiles linked to this dataset</h3>
-    </div>
-  </mat-tab> -->
+    </div> -->
+  </mat-tab>
   <mat-tab label="Admin" *ngIf="(admin$ | async) as admin">
     <button (click)="resetDataset(dataset)" class="ui yellow button">Reset Status</button>
     <ng-container *ngIf="(datablocks$ | async) as datablocks">

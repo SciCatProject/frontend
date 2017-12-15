@@ -44,6 +44,7 @@ import {
 @NgModule({
   imports : [
     MatButtonModule,
+    MatCardModule,
     MatInputModule,
     CommonModule,
     FormsModule,

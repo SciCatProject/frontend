@@ -64,7 +64,7 @@ import {SharedCatanieModule} from 'shared/shared.module';
 
 @NgModule({
   imports : [
-    MatDialogModule, MatPaginatorModule, MatCheckboxModule, MatTableModule, MatFormFieldModule, MatAutocompleteModule,
+    MatCardModule, MatDialogModule, MatPaginatorModule, MatCheckboxModule, MatTableModule, MatFormFieldModule, MatAutocompleteModule,
     MatTabsModule, MatInputModule, MatButtonModule, CommonModule, FormsModule, DialogModule, ReactiveFormsModule,
     SharedCatanieModule, DataTableModule, SharedModule, TabViewModule,
     ConfirmDialogModule, TreeModule, TreeTableModule,

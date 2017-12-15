@@ -1,12 +1,35 @@
-<div class="ui raised segment">
-  <h4 class="ui header">Datafiles</h4>
+<mat-card>
+  <h4>Datafiles</h4>
   <h5>Count: {{count}}</h5>
-  <p-dataTable [value]="files" (onRowClick)="onSelect($event)" [paginator]="true" [rows]="20">
-    <p-column [sortable]="true" field="path" header="Path"></p-column>
-    <p-column [sortable]="true" field="size" header="Size"></p-column>
-    <p-column [sortable]="true" field="time" header="Time"></p-column>
-</p-dataTable>
-</div>
-<div class="ui raised segment" *ngIf="selectedDF">
-  {{selectedDF['path']}}
-</div>
+  <div *ngIf="dataBlocks.length > 0">
+      <div class="example-container mat-elevation-z8">
+          <mat-table #table [dataSource]="dataSource">
+        
+            <!--- Note that these columns can be defined in any order.
+                  The actual rendered columns are set as a property on the row definition" -->
+        
+            <ng-container matColumnDef="name">
+              <mat-header-cell *matHeaderCellDef> Path. </mat-header-cell>
+              <mat-cell *matCellDef="let element"> {{element.path}} </mat-cell>
+            </ng-container>
+        
+            <ng-container matColumnDef="path">
+              <mat-header-cell *matHeaderCellDef> Time </mat-header-cell>
+              <mat-cell *matCellDef="let element"> {{element.time}} </mat-cell>
+            </ng-container>
+        
+            <ng-container matColumnDef="size">
+              <mat-header-cell *matHeaderCellDef> Size </mat-header-cell>
+              <mat-cell *matCellDef="let element"> {{element.size}} </mat-cell>
+            </ng-container>
+        
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+          </mat-table>
+        </div>
+        
+          
+        <mat-paginator [pageSize]="30" [pageSizeOptions]="[10,30, 50, 100]" [length]="files.length"></mat-paginator>
+
+  </div>
+</mat-card>
