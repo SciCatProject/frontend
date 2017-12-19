@@ -66,6 +66,12 @@ export class AppComponent implements OnDestroy, OnInit {
   ngOnInit() {
     LoopBackConfig.setBaseURL(environment.lbBaseURL);
     console.log(LoopBackConfig.getPath());
+    
+    if ('lbApiVersion' in environment) {
+      const lbApiVersion = environment['lbApiVersion'];
+      LoopBackConfig.setApiVersion(lbApiVersion);
+    }
+
     localStorage.clear();
     if (window.location.pathname.indexOf('logout') !== -1) {
       this.logout();
