@@ -12,6 +12,7 @@ import {MatSnackBar} from '@angular/material';
 import {NotificationsService} from 'angular2-notifications';
 
 import {environment} from '../environments/environment';
+import * as selectors from 'state-management/selectors';
 
 @Component({
   selector: 'app-root',
@@ -26,6 +27,7 @@ export class AppComponent implements OnDestroy, OnInit {
   title = 'SciCat';
   appVersion = 0;
   us: UserApi;
+  darkTheme$;
   username: string = null;
   message$ = null;
   msgClass$ = null;
@@ -44,6 +46,7 @@ export class AppComponent implements OnDestroy, OnInit {
               private _notif_service: NotificationsService,
               private store: Store<any>) {
     this.appVersion = appVersion;
+    this.darkTheme$ = this.store.select(selectors.users.getTheme);
   }
 
   /**
@@ -80,13 +83,10 @@ export class AppComponent implements OnDestroy, OnInit {
     this.subscriptions.push(this.store.select(state => state.root.user.message)
       .subscribe(current => {
         if (current.title !== undefined) {
-          this.createNotification(current);
-          
             this.snackBar.open(current.title, undefined, {
               duration: 5000,
             });
-  
-          this.store.dispatch(new ua.ClearMessageAction());
+            this.store.dispatch(new ua.ClearMessageAction());
         }
       }));
     this.subscriptions.push(this.store.select(state => state.root.user.currentUser)

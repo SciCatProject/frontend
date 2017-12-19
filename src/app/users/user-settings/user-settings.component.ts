@@ -29,6 +29,7 @@ export class UserSettingsComponent implements OnInit {
     this.store.dispatch(new ua.SaveSettingsAction(values));
     this.store.dispatch(new ua.ShowMessageAction({
         content : 'Settings Saved Locally',
+        title: 'Settings Saved Locally',
         timeout : 3,
         class : 'ui positive message'
       }));

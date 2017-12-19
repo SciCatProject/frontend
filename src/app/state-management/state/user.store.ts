@@ -4,6 +4,7 @@ interface Settings {
   tapeCopies: string;
   datasetCount: number;
   jobCount: number;
+  darkTheme: false;
 }
 
 interface Message {
@@ -29,6 +30,7 @@ export const initialUserState: UserState = {
   settings : {
     'tapeCopies' : 'one',
     'datasetCount' : 30,
-    'jobCount' : 30
+    'jobCount' : 30,
+    'darkTheme' : false
   } // TODO sync with server settings?
 };

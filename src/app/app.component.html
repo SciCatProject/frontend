@@ -1,38 +1,40 @@
 <!-- <div class="ui fixed menu"> -->
-<mat-toolbar color="primary">
-    <mat-toolbar-row>
-        <i (click)="sidenavToggle()" class="fa fa-bars" aria-hidden="true"></i>       
-        <h3 class="app-title">  {{title}}</h3>
-        <span class="example-spacer"></span>
-    </mat-toolbar-row>
-</mat-toolbar>
-        <mat-sidenav-container
-        class="example-container" (backdropClick)="sidenavToggle()">
-      <mat-sidenav #sidenav (keydown.escape)="sidenavToggle()" mode="push">
-        <mat-list>
-            <mat-list-item><a class="item" [routerLink]="['/datasets/']" [routerLinkActive]="['active']">Home</a></mat-list-item>
-            <mat-list-item><a class="item" [routerLink]="['/sample-data/', 'add']" [routerLinkActive]="['active']">Sample Data Entry</a></mat-list-item>
-            <mat-list-item><a class="item" [routerLink]="['/user/','jobs']" [routerLinkActive]="['active']">Jobs</a></mat-list-item>
-            <mat-list-item><a class="item" [matMenuTriggerFor]="userMenu">{{ username }}</a></mat-list-item>
-        </mat-list>
+<div [class.dark-theme]="darkTheme$ | async">
+    <mat-toolbar color="primary">
+        <mat-toolbar-row>
+            <i (click)="sidenavToggle()" class="fa fa-bars" aria-hidden="true"></i>       
+            <h3 class="app-title">  {{title}}</h3>
+            <span class="example-spacer"></span>
+        </mat-toolbar-row>
+    </mat-toolbar>
+            <mat-sidenav-container
+            class="example-container" (backdropClick)="sidenavToggle()">
+        <mat-sidenav #sidenav (keydown.escape)="sidenavToggle()" mode="push">
+            <mat-list>
+                <mat-list-item><a class="item" [routerLink]="['/datasets/']" [routerLinkActive]="['active']">Home</a></mat-list-item>
+                <mat-list-item><a class="item" [routerLink]="['/sample-data/', 'add']" [routerLinkActive]="['active']">Sample Data Entry</a></mat-list-item>
+                <mat-list-item><a class="item" [routerLink]="['/user/','jobs']" [routerLinkActive]="['active']">Jobs</a></mat-list-item>
+                <mat-list-item><a class="item" [matMenuTriggerFor]="userMenu">{{ username }}</a></mat-list-item>
+            </mat-list>
 
+            
+            <mat-menu #userMenu="matMenu">
+                <a mat-menu-item [routerLinkActive]="['active']" [routerLink]="['/user/','details']">Details</a>
+                <a mat-menu-item [routerLinkActive]="['active']" [routerLink]="['/user/','settings']">Settings</a>
+                <a mat-menu-item (click)="logout()">Logout</a>
+            </mat-menu>
+            
+        </mat-sidenav>
         
-        <mat-menu #userMenu="matMenu">
-            <a mat-menu-item [routerLinkActive]="['active']" [routerLink]="['/user/','details']">Details</a>
-            <a mat-menu-item [routerLinkActive]="['active']" [routerLink]="['/user/','settings']">Settings</a>
-            <a mat-menu-item (click)="logout()">Logout</a>
-        </mat-menu>
-        
-      </mat-sidenav>
-    
-      <mat-sidenav-content>
-          <mat-card>
-            <breadcrumb></breadcrumb>
-            <br>
-            <router-outlet ></router-outlet>
-          </mat-card>
-      </mat-sidenav-content>
-    </mat-sidenav-container>
+        <mat-sidenav-content>
+            <mat-card>
+                <breadcrumb></breadcrumb>
+                <br>
+                <router-outlet ></router-outlet>
+            </mat-card>
+        </mat-sidenav-content>
+        </mat-sidenav-container>
+</div>
 <!-- 
 <mat-toolbar>
       <a href="#" class="header item">
