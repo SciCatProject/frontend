@@ -26,6 +26,8 @@ export class UserSettingsComponent implements OnInit {
 
   onSubmit(values) {
     // TODO validate here
+    console.log(values);
+    // values['darkTheme'] = (values['darkTheme'].toLowerCase() === 'true')
     this.store.dispatch(new ua.SaveSettingsAction(values));
     this.store.dispatch(new ua.ShowMessageAction({
         content : 'Settings Saved Locally',

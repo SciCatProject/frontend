@@ -10,6 +10,13 @@
                     <p-column field="name" header="Name"></p-column>
                     <p-column field="value" header="Value"></p-column>
                 </p-treeTable>
+                        <mat-slide-toggle
+                        [color]="color"
+                        [checked]="d.value"
+                        formControlName="{{d.key}}"
+                        *ngSwitchCase="'Boolean'"
+                        >
+                    </mat-slide-toggle>
                 <!--<textarea *ngSwitchCase="'object'" formControlName="{{d.key}}"></textarea>-->
                 <mat-form-field class="example-full-width" *ngSwitchDefault>
                     <input matInput formControlName="{{d.key}}" placeholder="">

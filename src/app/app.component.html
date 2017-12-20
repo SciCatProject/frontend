@@ -1,5 +1,5 @@
 <!-- <div class="ui fixed menu"> -->
-<div [class.dark-theme]="darkTheme$ | async">
+<div [class.dark-theme]="(darkTheme$ | async)" [class.light-theme]="!(darkTheme$ | async)">
     <mat-toolbar color="primary">
         <mat-toolbar-row>
             <i (click)="sidenavToggle()" class="fa fa-bars" aria-hidden="true"></i>       

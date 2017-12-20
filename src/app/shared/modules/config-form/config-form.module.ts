@@ -46,6 +46,8 @@ import {
     MatButtonModule,
     MatCardModule,
     MatInputModule,
+    MatSelectModule,
+    MatSlideToggleModule,
     CommonModule,
     FormsModule,
     ReactiveFormsModule,

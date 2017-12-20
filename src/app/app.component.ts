@@ -80,6 +80,10 @@ export class AppComponent implements OnDestroy, OnInit {
       this.logout();
       this.router.navigate(['/login']);
     }
+
+    this.store.select(selectors.users.getSettings).subscribe(stg => {
+      console.log(stg);
+    });
     this.subscriptions.push(this.store.select(state => state.root.user.message)
       .subscribe(current => {
         if (current.title !== undefined) {
