@@ -4,7 +4,7 @@ import {Http} from '@angular/http';
 import {ActivatedRoute, Router} from '@angular/router';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {ConfirmationService, DataTableModule, SharedModule, TreeTableModule} from 'primeng/primeng';
-
+import {MatTableModule, MatDialogModule} from '@angular/material';
 import {DatasetTableComponent} from './dataset-table.component';
 import {Store, StoreModule} from '@ngrx/store';
 import {ConfigService} from 'shared/services/config.service';
@@ -26,7 +26,7 @@ describe('DatasetTableComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
-      imports: [DataTableModule, SharedModule, TreeTableModule, FormsModule, ReactiveFormsModule, StoreModule.forRoot({})],
+      imports: [MatTableModule, MatDialogModule, TreeTableModule, FormsModule, ReactiveFormsModule, StoreModule.forRoot({})],
       declarations: [DatasetTableComponent]
     });
     TestBed.overrideComponent(DatasetTableComponent, {

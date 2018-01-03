@@ -71,10 +71,6 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     private router: Router) {
       this.beamlineInput = new FormControl();
       this.groupInput = new FormControl();
-      this.filteredBeams = this.beamlineInput.valueChanges
-        .pipe(startWith(''), map(beam => beam ? this.filterBeams(beam) : this.filterValues.creationLocation.slice()));
-      this.filteredGroups = this.groupInput.valueChanges
-        .pipe(startWith(''), map(group => group ? this.filterGroups(group) : this.filterValues.ownerGroup.slice()));
 
     }
 
@@ -169,6 +165,14 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
             if (this.groups.length === 0 &&
               this.filterValues['ownerGroup'] !== null) {
               this.groups = this.filterValues['ownerGroup'];
+            }
+            if (this.filterValues.creationLocation) {
+              this.filteredBeams = this.beamlineInput.valueChanges
+            .pipe(startWith(''), map(beam => beam ? this.filterBeams(beam) : this.filterValues.creationLocation.slice()));
+            }
+            if (this.filterValues.ownerGroup) {
+            this.filteredGroups = this.groupInput.valueChanges
+              .pipe(startWith(''), map(group => group ? this.filterGroups(group) : this.filterValues.ownerGroup.slice()));
             }
           }
         }));

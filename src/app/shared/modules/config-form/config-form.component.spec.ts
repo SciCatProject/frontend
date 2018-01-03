@@ -10,6 +10,14 @@ import {ConfigFormComponent} from './config-form.component';
 import {Store, StoreModule} from '@ngrx/store';
 import {TreeTableModule} from 'primeng/primeng';
 
+import {
+  MatButtonModule,
+  MatCardModule,
+  MatInputModule,
+  MatSelectModule,
+  MatSlideToggleModule,
+} from '@angular/material';
+
 describe('ConfigFormComponent', () => {
   let component: ConfigFormComponent;
   let fixture: ComponentFixture<ConfigFormComponent>;
@@ -17,7 +25,8 @@ describe('ConfigFormComponent', () => {
   beforeEach(async(() => {
     TestBed
         .configureTestingModule({
-          imports : [ FormsModule, ReactiveFormsModule, NguiDatetimePickerModule, TreeTableModule, StoreModule.forRoot({}) ],
+          imports : [ FormsModule, ReactiveFormsModule, NguiDatetimePickerModule, TreeTableModule, StoreModule.forRoot({}),
+             MatButtonModule, MatCardModule, MatInputModule, MatSelectModule, MatSlideToggleModule ],
           declarations : [ ConfigFormComponent, ObjKeysPipe, TitleCasePipe ],
           providers :
               [

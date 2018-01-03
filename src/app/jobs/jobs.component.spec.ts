@@ -1,9 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
-import {DataTableModule, SharedModule} from 'primeng/primeng';
 import {Store, StoreModule} from '@ngrx/store';
 import { JobsComponent } from './jobs.component';
-
+import { MatTableModule, MatPaginatorModule } from '@angular/material';
 import {MockStore} from '../shared/MockStubs';
 
 describe('JobsComponent', () => {
@@ -13,7 +12,7 @@ describe('JobsComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       schemas : [ NO_ERRORS_SCHEMA ],
-      imports: [ DataTableModule, SharedModule, StoreModule.forRoot({}) ],
+      imports: [ MatTableModule, MatPaginatorModule, StoreModule.forRoot({}) ],
       declarations: [ JobsComponent ]
     });
     TestBed.overrideComponent(JobsComponent, {

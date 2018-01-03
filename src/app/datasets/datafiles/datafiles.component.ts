@@ -26,6 +26,7 @@ export class DatafilesComponent implements OnInit {
 
   ngOnInit() {
     if (this.dataBlocks) {
+      console.log(this.dataBlocks);
       this.getDatafiles(this.dataBlocks);
     }
   }

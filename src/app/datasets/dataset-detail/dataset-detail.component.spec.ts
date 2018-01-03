@@ -8,8 +8,9 @@ import { ConfigFormComponent } from 'shared/modules/config-form/config-form.comp
 import { MockActivatedRoute, MockStore } from 'shared/MockStubs';
 import { ObjKeysPipe, TitleCasePipe } from 'shared/pipes/index';
 import { rootReducer } from 'state-management/reducers/root.reducer';
-
+import { MatTableModule} from '@angular/material';
 import { DatasetDetailComponent } from './dataset-detail.component';
+
 
 
 describe('DatasetDetailComponent', () => {
@@ -19,7 +20,7 @@ describe('DatasetDetailComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       schemas : [ NO_ERRORS_SCHEMA ],
-      imports : [ ReactiveFormsModule, StoreModule.forRoot({rootReducer}) ],
+      imports : [ ReactiveFormsModule, MatTableModule, StoreModule.forRoot({rootReducer}) ],
       declarations : [
         DatasetDetailComponent, DatafilesComponent, ConfigFormComponent,
         ObjKeysPipe, TitleCasePipe

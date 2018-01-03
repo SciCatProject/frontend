@@ -1,7 +1,7 @@
 <mat-card>
   <h4>Datafiles</h4>
   <h5>Count: {{count}}</h5>
-  <div *ngIf="dataBlocks.length > 0">
+  <div *ngIf="dataBlocks && dataBlocks.length > 0">
       <div class="example-container mat-elevation-z8">
           <mat-table #table [dataSource]="dataSource">
         
