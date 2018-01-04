@@ -100,11 +100,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
           selectedDatasets['datepicker']);
 
     this.subscriptions.push(this.route.queryParams.subscribe(params => {
-      let decoded = {};
-      if ('args' in params) {
-        decoded = rison.decode(params['args']);
-      }
-      const newParams = Object.assign({}, decoded);
+      const newParams = 'args' in params ? rison.decode(params['args']) : {};
       delete newParams['mode'];
       const activeFilters$ = this.store.select(selectors.datasets.getActiveFilters);
       const mode$ = this.store.select(selectors.ui.getMode);
@@ -112,7 +108,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
         const filters = combined[0];
         const mode = combined[1];
         const f = utils.filter(filters, newParams);
-        //this.location = f['creationLocation']
+        // this.location = f['creationLocation']
         //  ? { _id: filters['creationLocation'] }
         //  : '';
         const group = f['ownerGroup'];
@@ -137,17 +133,9 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.store.select(selectors.datasets.getActiveFilters)
         .subscribe(data => {
-          // this.filters = Object.assign({}, data,
-          // this.route.snapshot.queryParams);
-          this.filters = Object.assign({}, data);
-          console.log(data);
-          this.store.select(state => state.root.dashboardUI.mode)
-            .take(1)
-            .subscribe(mode => {
-              const p = Object.assign(this.filters, { 'mode': mode });
-              const encoded = rison.encode(p);
-              this.router.navigate(['/datasets'], { queryParams: {args: encoded} });
-            });
+          const args = 'args' in this.route.snapshot.queryParams ? rison.decode(this.route.snapshot.queryParams['args']) : {};
+          this.filters = Object.assign(args, data);
+          this.router.navigate(['/datasets'], { queryParams: {args: rison.encode(this.filters)} });
         }));
     this.resultCount$ =
       this.store.select(selectors.datasets.getTotalSets);

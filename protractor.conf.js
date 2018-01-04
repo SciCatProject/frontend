@@ -5,7 +5,7 @@
 var SpecReporter = require('jasmine-spec-reporter').SpecReporter;
 
 exports.config = {
-    allScriptsTimeout: 11000,
+    allScriptsTimeout: 15000,
     specs: [
       './e2e/**/*.e2e-spec.ts'
     ],
@@ -13,8 +13,8 @@ exports.config = {
         'browserName': 'chrome',
         // chromeDriver: '../node_modules/protractor/node_modules/webdriver-manager/selenium/chromedriver_2.30',
         chromeOptions: {
-            args: ["--headless", "--disable-gpu", "--no-sandbox"]
-           // args: ["--window-size=800x600"]
+            // args: ["--headless", "--disable-gpu", "--no-sandbox"]
+           args: ["--window-size=800x600"]
         }
 
     },

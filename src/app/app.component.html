@@ -2,7 +2,7 @@
 <div [class.dark-theme]="(darkTheme$ | async)" [class.light-theme]="!(darkTheme$ | async)">
     <mat-toolbar color="primary">
         <mat-toolbar-row>
-            <i (click)="sidenavToggle()" class="fa fa-bars" aria-hidden="true"></i>       
+            <i (click)="sidenavToggle()" class="sidenav-toggle fa fa-bars" aria-hidden="true"></i>       
             <h3 class="app-title">  {{title}}</h3>
             <span class="example-spacer"></span>
         </mat-toolbar-row>

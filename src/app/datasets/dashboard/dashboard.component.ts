@@ -54,6 +54,7 @@ export class DashboardComponent implements OnInit {
       .subscribe(values => {
         const filters = Object.assign({}, values);
         filters['text'] = terms;
+        console.log(filters);
         this.store.dispatch(new dsa.UpdateFilterAction(filters));
       });
   }

@@ -82,7 +82,7 @@ export class AppComponent implements OnDestroy, OnInit {
     }
 
     this.store.select(selectors.users.getSettings).subscribe(stg => {
-      console.log(stg);
+      // console.log(stg);
     });
     this.subscriptions.push(this.store.select(state => state.root.user.message)
       .subscribe(current => {

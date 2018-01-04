@@ -17,7 +17,7 @@ export class LoginPage {
 
   login() {
     this.pwd.sendKeys(protractor.Key.ENTER);
-    browser.waitForAngular();
+    browser.waitForAngularEnabled(false);
     browser.sleep(5000);
     expect(browser.getCurrentUrl()).toContain('/datasets');
   }

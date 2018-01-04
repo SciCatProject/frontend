@@ -35,7 +35,7 @@ import {SelectionModel} from '@angular/cdk/collections';
 import {MatDialog} from '@angular/material';
 
 import {DialogComponent} from 'shared/modules/dialog/dialog.component';
-
+import * as rison from 'rison';
 
 @Component({
   selector: 'dataset-table',
@@ -131,7 +131,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
         data => {
           this.datasets = data;
           this.dataSource = new MatTableDataSource(this.datasets);
-          console.log(data);
           if (this.datasets && this.datasets.length > 0) {
             this.store.dispatch(new dua.SaveModeAction(this.mode));
             this.updateRowView(this.mode);
@@ -273,9 +272,10 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
     } else {
       this.store.dispatch(new dua.SaveModeAction(this.mode));
     }
-    const currentParams = this.route.snapshot.queryParams;
+    let currentParams = rison.decode(this.route.snapshot.queryParams['args']);
+    currentParams = Object.assign({}, currentParams, { 'mode': this.mode });
     this.router.navigate(['/datasets'], {
-      queryParams: Object.assign({}, currentParams, { 'mode': this.mode })
+      queryParams: {args: rison.encode(currentParams)}
     });
   }
 
@@ -368,13 +368,13 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
   archiveClickHandle(event) {
     let dialogRef = this.dialog.open(DialogComponent, {
       width: 'auto',
-      data: {title: "Really archive?", question: ''}
+      data: {title: 'Really archive?', question: ''}
     });
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
       console.log(result);
-      if(result) {
+      if (result) {
         this.archiveOrRetrieve(true);
       }
       // this.onClose.emit(result);
