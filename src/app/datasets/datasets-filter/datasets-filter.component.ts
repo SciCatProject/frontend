@@ -56,6 +56,8 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   selectedLocs = [];
   locations = [];
   filteredLocations = [];
+  selectedBeam;
+  selectedGroup;
 
   group: {};
   groups = [];
@@ -110,7 +112,10 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.store.select(selectors.datasets.getActiveFilters)
         .subscribe(combined => {
-          this.filters = combined;
+          this.filters = Object.assign({}, combined);
+          const group = combined['ownerGroup'];
+          this.selectedGroup = group.toString();
+          // TODO autoselect locations and dates as well
         this.store.select(selectors.ui.getMode).take(1).subscribe(currentMode => {
            combined['mode'] = currentMode;
            console.log(combined);
@@ -238,6 +243,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     this.selectedGroups = [];
     this.beamlineInput.setValue('');
     this.groupInput.setValue('');
+    this.selectedGroup = '';
     this.filters = dStore.initialDatasetState.activeFilters;
     this.dateSelections$.next([]);
     this.store.select(state => state.root.user.currentUserGroups)
