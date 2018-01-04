@@ -272,7 +272,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
     } else {
       this.store.dispatch(new dua.SaveModeAction(this.mode));
     }
-    let currentParams = rison.decode(this.route.snapshot.queryParams['args']);
+    let currentParams = 'args' in this.route.snapshot.queryParams ? rison.decode(this.route.snapshot.queryParams['args']) : {};
     currentParams = Object.assign({}, currentParams, { 'mode': this.mode });
     this.router.navigate(['/datasets'], {
       queryParams: {args: rison.encode(currentParams)}

@@ -7,7 +7,7 @@ describe('catanie Dataset Filters', function() {
   let lp: LoginPage;
   let page: DashboardPage;
   const urlParams =
-      '/datasets?args=(creationLocation:!(),creationTime:(end:!n,start:!n),initial:!t,mode:view,ownerGroup:!(),skip:0,sortField:!n,text:!n)&mode=view';
+      '/datasets?args=(creationLocation:!(),creationTime:(end:!n,start:!n),initial:!t,mode:view,ownerGroup:!(),skip:0,sortField:!n,text:!n)';
 
   beforeAll(() => {
    /* lp = new LoginPage();
