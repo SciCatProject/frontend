@@ -102,41 +102,65 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     this.subscriptions.push(this.route.queryParams.subscribe(params => {
       const newParams = 'args' in params ? rison.decode(params['args']) : {};
       delete newParams['mode'];
-      const activeFilters$ = this.store.select(selectors.datasets.getActiveFilters);
-      const mode$ = this.store.select(selectors.ui.getMode);
-      Observable.combineLatest(activeFilters$, mode$).takeLast(1).subscribe(combined => {
-        const filters = combined[0];
-        const mode = combined[1];
-        const f = utils.filter(filters, newParams);
-        // this.location = f['creationLocation']
-        //  ? { _id: filters['creationLocation'] }
-        //  : '';
-        const group = f['ownerGroup'];
-        if (group && group && Array.isArray(group) &&
-          group.length > 0) {
-          this.selectedGroups = group.map(x => { return { _id: x }; });
-        } else if (group && !Array.isArray(group)) {
-          this.selectedGroups = [{ '_id': group }];
-        } else {
-          this.selectedGroups = [];
-        }
-        if (utils.compareObj(f, newParams)) {
-          const encoded = rison.encode(newParams);
-          this.router.navigate(
-            ['/datasets'],
-            { queryParams: {args: encoded}, replaceUrl: true });
-        } else if (params['mode'] !== mode) {
-          this.store.dispatch(new dsa.UpdateFilterAction(f));
-        }
-      });
+      this.store.dispatch(new dsa.UpdateFilterAction(newParams));
     }));
+
     this.subscriptions.push(
       this.store.select(selectors.datasets.getActiveFilters)
-        .subscribe(data => {
+      // , this.store.select(selectors.ui.getMode))
+        .subscribe(combined => {
+          console.log(combined);
+          const data = combined;
+          const currentMode = 'view';
           const args = 'args' in this.route.snapshot.queryParams ? rison.decode(this.route.snapshot.queryParams['args']) : {};
-          this.filters = Object.assign(args, data);
-          this.router.navigate(['/datasets'], { queryParams: {args: rison.encode(this.filters)} });
+          const mode = args['mode'];
+          delete args['mode'];
+         if (utils.compareObj(data, args) || currentMode !== mode) {
+           const newParams = Object.assign(data, args);
+           newParams['mode'] = mode;
+          //  console.log(newParams);
+            this.router.navigate(['/datasets'], { queryParams: {args: rison.encode(newParams)} });
+         }
         }));
+    //   const newParams = 'args' in params ? rison.decode(params['args']) : {};
+    //   delete newParams['mode'];
+    //   const activeFilters$ = this.store.select(selectors.datasets.getActiveFilters);
+    //   const mode$ = this.store.select(selectors.ui.getMode);
+    //   Observable.combineLatest(activeFilters$, mode$).takeLast(1).subscribe(combined => {
+    //     const filters = combined[0];
+    //     const mode = combined[1];
+    //     const f = utils.filter(filters, newParams);
+    //     // this.location = f['creationLocation']
+    //     //  ? { _id: filters['creationLocation'] }
+    //     //  : '';
+    //     const group = f['ownerGroup'];
+    //     if (group && group && Array.isArray(group) &&
+    //       group.length > 0) {
+    //       this.selectedGroups = group.map(x => { return { _id: x }; });
+    //     } else if (group && !Array.isArray(group)) {
+    //       this.selectedGroups = [{ '_id': group }];
+    //     } else {
+    //       this.selectedGroups = [];
+    //     }
+    //     if (utils.compareObj(f, newParams)) {
+    //       const encoded = rison.encode(newParams);
+    //       console.log(encoded);
+    //       this.router.navigate(
+    //         ['/datasets'],
+    //         { queryParams: {args: encoded}, replaceUrl: true });
+    //     } else if (params['mode'] !== mode) {
+    //       this.store.dispatch(new dsa.UpdateFilterAction(f));
+    //     }
+    //   });
+    // }));
+    // this.subscriptions.push(
+    //   this.store.select(selectors.datasets.getActiveFilters)
+    //     .subscribe(data => {
+    //       const args = 'args' in this.route.snapshot.queryParams ? rison.decode(this.route.snapshot.queryParams['args']) : {};
+    //       this.filters = Object.assign(args, data);
+    //       console.log(this.filters);
+    //       this.router.navigate(['/datasets'], { queryParams: {args: rison.encode(this.filters)} });
+    //     }));
     this.resultCount$ =
       this.store.select(selectors.datasets.getTotalSets);
     this.subscriptions.push(
