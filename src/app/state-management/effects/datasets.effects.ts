@@ -76,7 +76,7 @@ export class DatasetEffects {
                   .take(1)
                   .subscribe(user => { groups = user; });
               }
-              console.log(fq);
+//              console.log(fq);
              if (fq['text']) {
               fq['text'] = {'$search' : '"' + fq['text'] + '"', '$language': 'none'};
              } else {

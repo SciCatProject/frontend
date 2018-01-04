@@ -12,7 +12,6 @@ const setSelections = (state: DatepickerState, timeranges: TimeRange[]) => {
   newState.selections.selectedRanges = [];
   newState.selections.activeSelectedRangeIdx = 0;
   const selectionMode = dps.getSelectionMode(newState);
-  console.log(JSON.stringify({timeranges}));
   switch (selectionMode) {
     case SelectionModes.day:
       if (timeranges.length > 1) {
@@ -185,7 +184,7 @@ const setFocusYear = (state: DatepickerState, newFocusYearNumber: number) => {
 export function datepickerReducer(state = dps.initialDatepickerState, action: DatePickerAction): DatepickerState {
 
   if (action.type.indexOf('[DatePicker]') !== -1) {
-    console.log('Action came in! ' + action.type);
+//    console.log('Action came in! ' + action.type);
   }
   switch (action.type) {
 

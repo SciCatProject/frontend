@@ -62,7 +62,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   selectedGroups = [];
   // filteredGroups = [];
 
-  filters = dStore.initialDatasetState.activeFilters;
+  filters: any = dStore.initialDatasetState.activeFilters;
   filterValues;
 
   subscriptions = [];
@@ -102,25 +102,20 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     this.subscriptions.push(this.route.queryParams.subscribe(params => {
       const newParams = 'args' in params ? rison.decode(params['args']) : {};
       delete newParams['mode'];
+      this.filters = Object.assign({}, newParams);
+      console.log(newParams);
       this.store.dispatch(new dsa.UpdateFilterAction(newParams));
     }));
 
     this.subscriptions.push(
       this.store.select(selectors.datasets.getActiveFilters)
-      // , this.store.select(selectors.ui.getMode))
         .subscribe(combined => {
-          console.log(combined);
-          const data = combined;
-          const currentMode = 'view';
-          const args = 'args' in this.route.snapshot.queryParams ? rison.decode(this.route.snapshot.queryParams['args']) : {};
-          const mode = args['mode'];
-          delete args['mode'];
-         if (utils.compareObj(data, args) || currentMode !== mode) {
-           const newParams = Object.assign(data, args);
-           newParams['mode'] = mode;
-          //  console.log(newParams);
-            this.router.navigate(['/datasets'], { queryParams: {args: rison.encode(newParams)} });
-         }
+          this.filters = combined;
+        this.store.select(selectors.ui.getMode).take(1).subscribe(currentMode => {
+           combined['mode'] = currentMode;
+           console.log(combined);
+            this.router.navigate(['/datasets'], { queryParams: {args: rison.encode(combined)} });
+        });
         }));
     //   const newParams = 'args' in params ? rison.decode(params['args']) : {};
     //   delete newParams['mode'];
@@ -202,12 +197,14 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
       startDate = selectedRange.datePair[0];
       endDate = selectedRange.datePair[1];
     }
-    this.filters.creationTime = {
-      start: startDate,
-      end: endDate
-    };
-    this.store.dispatch(new dsa.UpdateFilterAction(this.filters));
-    this.dateSelections$.next(timeranges);
+    if (startDate !== null && endDate !== null) {
+      this.filters.creationTime = {
+        start: startDate,
+        end: endDate
+      };
+      this.store.dispatch(new dsa.UpdateFilterAction(this.filters));
+      this.dateSelections$.next(timeranges);
+    }
   }
 
   ngOnDestroy() {
