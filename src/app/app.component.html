@@ -9,7 +9,7 @@
     </mat-toolbar>
             <mat-sidenav-container
             class="example-container" (backdropClick)="sidenavToggle()">
-        <mat-sidenav #sidenav (keydown.escape)="sidenavToggle()" mode="push">
+        <mat-sidenav #sidenav (keydown.escape)="sidenavToggle()" mode="side">
             <mat-list>
                 <mat-list-item><a class="item" [routerLink]="['/datasets/']" [routerLinkActive]="['active']">Home</a></mat-list-item>
                 <mat-list-item><a class="item" [routerLink]="['/sample-data/', 'add']" [routerLinkActive]="['active']">Sample Data Entry</a></mat-list-item>
