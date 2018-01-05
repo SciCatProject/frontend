@@ -23,16 +23,16 @@ describe('catanie Dataset Filters', function() {
         () => { expect(browser.getCurrentUrl()).toContain(urlParams); });
   });
 
-  it('should have a prefilled search box', () => {
-    page.navigateTo(urlParams).then(() => {
-      expect(element(by.name('search')).getAttribute('value'))
-          .toContain('house');
-    });
-  });
+  // it('should have a prefilled search box', () => {
+  //   page.navigateTo(urlParams).then(() => {
+  //     expect(element(by.name('search')).getAttribute('value'))
+  //         .toContain('house');
+  //   });
+  // });
 
-  it('should have a prefilled groups input', () => {
-    page.navigateTo(urlParams).then(() => {
-      expect(element(by.name('group')).getAttribute('value')).toContain('p11114');
-    });
-  });
+  // it('should have a prefilled groups input', () => {
+  //   page.navigateTo(urlParams).then(() => {
+  //     expect(element(by.name('group')).getAttribute('value')).toContain('p11114');
+  //   });
+  // });
 });

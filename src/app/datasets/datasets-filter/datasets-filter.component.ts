@@ -102,7 +102,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
           selectedDatasets['datepicker']);
 
     this.subscriptions.push(this.route.queryParams.subscribe(params => {
-      const newParams = 'args' in params ? rison.decode(params['args']) : {};
+      const newParams = 'args' in params ? rison.decode(params['args']) : this.filters;
       delete newParams['mode'];
       this.filters = Object.assign({}, newParams);
       console.log(newParams);

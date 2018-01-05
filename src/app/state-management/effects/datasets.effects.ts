@@ -256,7 +256,7 @@ function handleFacetPayload(fq) {
       }
       }
 
-    if (creationLocation.length > 0) {
+    if (creationLocation && creationLocation.length > 0) {
       match.push({creationLocation : {inq: creationLocation}});
       }
     if (fq['creationTime']) {
