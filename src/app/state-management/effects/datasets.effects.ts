@@ -76,7 +76,7 @@ export class DatasetEffects {
                   .take(1)
                   .subscribe(user => { groups = user; });
               }
-              console.log(fq);
+//              console.log(fq);
              if (fq['text']) {
               fq['text'] = {'$search' : '"' + fq['text'] + '"', '$language': 'none'};
              } else {
@@ -148,14 +148,17 @@ export class DatasetEffects {
               filter['where'] = match[0];
             }
 
-            this.store.select(state => state.root.user.settings.datasetCount)
+            if (!('limit' in match)) {
+              this.store.select(state => state.root.user.settings.datasetCount)
                 .take(1)
                 .subscribe(d => { filter['limit'] = d; });
+            }
             filter['skip'] = fq['skip'] ? fq['skip'] : 0;
-            filter['include'] = [ {relation : 'datasetlifecycle'} ];
+            // filter['include'] = [ {relation : 'datasetlifecycle'} ];
             if (fq['sortField']) {
               filter['order'] = fq['sortField'];
             }
+            console.log(filter);
             return this.rds.find(filter)
                 .switchMap(res => {
                   return Observable.of(new DatasetActions.SearchCompleteAction(res));
@@ -253,8 +256,8 @@ function handleFacetPayload(fq) {
       }
       }
 
-    if (creationLocation) {
-      match.push({creationLocation : creationLocation});
+    if (creationLocation && creationLocation.length > 0) {
+      match.push({creationLocation : {inq: creationLocation}});
       }
     if (fq['creationTime']) {
       const start = fq['creationTime']['start'] || undefined;

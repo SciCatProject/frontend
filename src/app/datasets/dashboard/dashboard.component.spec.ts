@@ -10,6 +10,7 @@ import {ConfirmationService} from 'primeng/primeng';
 import {UserApi} from 'shared/sdk/services';
 import {ConfigService} from 'shared/services/config.service';
 import {rootReducer} from 'state-management/reducers/root.reducer';
+import { MatAutocompleteModule, MatTableModule, MatDialogModule} from '@angular/material';
 
 import {
   MockActivatedRoute,
@@ -29,7 +30,7 @@ describe('DashboardComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
-      imports: [
+      imports: [MatAutocompleteModule, MatTableModule, MatDialogModule,
         FormsModule, ReactiveFormsModule, StoreModule.forRoot({rootReducer})
       ],
       declarations: [

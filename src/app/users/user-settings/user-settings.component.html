@@ -1,4 +1,4 @@
 <ng-container *ngIf="user">
     <h1>{{user['username']}} Settings</h1>
-    <config-form *ngIf="settings$" [source]="settings$ | async" (onSubmit)="onSubmit($event)"></config-form>
+    <config-form *ngIf="settings$" [sourceType]="'UserSettings'" [source]="settings$ | async" (onSubmit)="onSubmit($event)"></config-form>
 </ng-container>

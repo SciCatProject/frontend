@@ -1,15 +1,18 @@
 const { version: appVersion } = require('../../package.json')
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {MatSidenav} from '@angular/material/sidenav';
+import {Component, ViewChild, OnDestroy, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {Store} from '@ngrx/store';
 import {LoopBackConfig} from 'shared/sdk';
 import {UserApi} from 'shared/sdk/services';
 import * as dsa from 'state-management/actions/datasets.actions';
 import * as ua from 'state-management/actions/user.actions';
+import {MatSnackBar} from '@angular/material';
 
 import {NotificationsService} from 'angular2-notifications';
 
 import {environment} from '../environments/environment';
+import * as selectors from 'state-management/selectors';
 
 @Component({
   selector: 'app-root',
@@ -18,9 +21,13 @@ import {environment} from '../environments/environment';
   providers: [UserApi]
 })
 export class AppComponent implements OnDestroy, OnInit {
+
+  @ViewChild('sidenav') sidenav: MatSidenav;
+
   title = 'SciCat';
   appVersion = 0;
   us: UserApi;
+  darkTheme$;
   username: string = null;
   message$ = null;
   msgClass$ = null;
@@ -35,9 +42,11 @@ export class AppComponent implements OnDestroy, OnInit {
   };
 
   constructor(private router: Router,
+              public snackBar: MatSnackBar,
               private _notif_service: NotificationsService,
               private store: Store<any>) {
     this.appVersion = appVersion;
+    this.darkTheme$ = this.store.select(selectors.users.getTheme);
   }
 
   /**
@@ -77,11 +86,17 @@ export class AppComponent implements OnDestroy, OnInit {
       this.logout();
       this.router.navigate(['/login']);
     }
+
+    this.store.select(selectors.users.getSettings).subscribe(stg => {
+      // console.log(stg);
+    });
     this.subscriptions.push(this.store.select(state => state.root.user.message)
       .subscribe(current => {
         if (current.title !== undefined) {
-          this.createNotification(current);
-          this.store.dispatch(new ua.ClearMessageAction());
+            this.snackBar.open(current.title, undefined, {
+              duration: 5000,
+            });
+            this.store.dispatch(new ua.ClearMessageAction());
         }
       }));
     this.subscriptions.push(this.store.select(state => state.root.user.currentUser)
@@ -114,5 +129,9 @@ export class AppComponent implements OnDestroy, OnInit {
 
   login() {
     this.router.navigateByUrl('/login');
+  }
+
+  sidenavToggle() {
+     this.sidenav.opened ? this.sidenav.close() : this.sidenav.open();
   }
 }

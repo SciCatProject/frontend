@@ -3,7 +3,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { DatafilesComponent } from './datafiles.component';
-
+import { MatTableModule} from '@angular/material';
 
 describe('DatafilesComponent', () => {
   let component: DatafilesComponent;
@@ -12,7 +12,7 @@ describe('DatafilesComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       schemas : [ NO_ERRORS_SCHEMA ],
-      imports: [ReactiveFormsModule],
+      imports: [ReactiveFormsModule, MatTableModule],
       declarations: [ DatafilesComponent ]
     });
      TestBed.overrideComponent(DatafilesComponent, {

@@ -1,15 +1,30 @@
 {
   "emailJobInitiator": {
     "name": "emailJobInitiator",
-    "type": "string"
+    "type": "string",
+    "table": {
+        "header": "Email",
+        "sortable": true,
+        "field": "emailJobInitiator"
+    }
   },
   "type": {
     "name": "type",
-    "type": "string"
+    "type": "string",
+    "table": {
+        "header": "Type",
+        "sortable": true,
+        "field": "type"
+    }
   },
   "creationTime": {
     "name": "creationTime",
-    "type": "Date"
+    "type": "Date",
+    "table": {
+        "header": "Creation Time",
+        "sortable": true,
+        "field": "creationTime"
+    }
   },
   "executionTime": {
     "name": "executionTime",
@@ -21,7 +36,12 @@
   },
   "jobStatusMessage": {
     "name": "jobStatusMessage",
-    "type": "string"
+    "type": "string",
+    "table": {
+        "header": "Job Status",
+        "sortable": true,
+        "field": "jobStatusMessage"
+    }
   },
   "datasetList": {
     "name": "datasetList",

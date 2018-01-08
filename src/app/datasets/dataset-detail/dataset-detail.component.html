@@ -6,34 +6,32 @@
   </ul>
 </div>-->
 
-<p-tabView *ngIf="(dataset$ | async) as dataset">
-    <p-tabPanel header="Details" leftIcon="fa-dedent">
-      <div class="ui raised segment" *ngIf="dataset">
-        <!--<h4 class="ui header">Dataset Details</h4>-->
-        <config-form [source]="dataset" [sourceType]="'RawDataset'"></config-form>
-      </div>
-    </p-tabPanel>
-    <p-tabPanel header="Datafiles" leftIcon="fa-file">
-      <ng-container *ngIf="(origDatablocks$ | async) as origDatablocks">
-        <datafiles *ngIf="origDatablocks.length > 0" [dataBlocks]="origDatablocks"></datafiles>
-        <div *ngIf="origDatablocks.length === 0">
-          <h3>No datafiles linked to this dataset</h3>
-        </div>
-      </ng-container>
-    </p-tabPanel>
-    <p-tabPanel header="Admin" leftIcon="fa-wrench" *ngIf="(admin$ | async) as admin">
-      <button (click)="resetDataset(dataset)" class="ui yellow button">Reset Status</button>
-      <ng-container *ngIf="(datablocks$ | async) as datablocks">
-        <h3>Datablocks: {{datablocks.length}}</h3>
-        <ul *ngFor="let block of datablocks">
-          <li>{{block.id}}</li>
-            <ul>
-                <li>{{block.archiveId}}</li>
-            </ul>
-        </ul>
-      </ng-container>
-    </p-tabPanel>
-  </p-tabView>
+
+<mat-tab-group *ngIf="(dataset$ | async) as dataset">
+  <mat-tab label="Details">
+    <div class="ui raised segment" *ngIf="dataset">
+      <config-form [source]="dataset" [sourceType]="'RawDataset'"></config-form>
+    </div>
+  </mat-tab>
+  <mat-tab label="Datafiles">
+    <datafiles [dataBlocks]="origDatablocks$ | async"></datafiles>
+    <!-- <div *ngIf="origDatablocks$.length === 0">
+      <h3>No datafiles linked to this dataset</h3>
+    </div> -->
+  </mat-tab>
+  <mat-tab label="Admin" *ngIf="(admin$ | async) as admin">
+    <button (click)="resetDataset(dataset)" class="ui yellow button">Reset Status</button>
+    <ng-container *ngIf="(datablocks$ | async) as datablocks">
+      <h3>Datablocks: {{datablocks.length}}</h3>
+      <ul *ngFor="let block of datablocks">
+        <li>{{block.id}}</li>
+          <ul>
+              <li>{{block.archiveId}}</li>
+          </ul>
+      </ul>
+    </ng-container>
+  </mat-tab>
+</mat-tab-group>
 
 
 

@@ -21,6 +21,14 @@ export class MockDatasetApi {
   findById() { return Observable.from([]); }
   }
 
+export class MockMatDialogRef {
+
+}
+
+export class MockMatDialogData {
+  
+}
+
 export class MockDatablockApi {
   getDatafiles() { return Observable.from([]); }
   }

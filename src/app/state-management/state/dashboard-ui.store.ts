@@ -6,11 +6,13 @@ export interface DashboardUIState {
     groupText: any;
     dateChoice: any;
     mode: string;
+    darkTheme: boolean;
 }
 
 export const initialDashboardUIState: DashboardUIState = {
     dsTable: [],
     groupText: undefined,
     dateChoice: [],
-    mode: 'view'
+    mode: 'view',
+    darkTheme: true
 };

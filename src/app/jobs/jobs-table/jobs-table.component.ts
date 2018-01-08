@@ -8,24 +8,21 @@ import {Http} from '@angular/http';
 import {Job} from 'shared/sdk/models';
 import {ConfigService} from 'shared/services/config.service';
 import * as selectors from 'state-management/selectors';
+import {MatTableDataSource, MatPaginator} from '@angular/material';
+import { AfterViewInit } from '@angular/core/src/metadata/lifecycle_hooks';
 
 @Component({
   selector: 'app-jobs',
   templateUrl: './jobs-table.component.html',
   styleUrls: ['./jobs-table.component.css']
 })
-export class JobsTableComponent implements OnInit, OnDestroy {
+export class JobsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 
   @Input() jobs;
   @Input() jobs2;
   @ViewChild('js') jobsTable: DataTable;
 
-  cols = [
-    {field: 'creationTime', header: 'Creation Time', sortable: true},
-    {field: 'emailJobInitiator', header: 'Email', sortable: true},
-    {field: 'type', header: 'Type', sortable: true},
-    {field: 'jobStatusMessage', header: 'Status', sortable: true}
-  ];
+  cols = [ ];
   loading$: any = false;
   limit: any = 50;
 
@@ -34,8 +31,11 @@ export class JobsTableComponent implements OnInit, OnDestroy {
   jobsCount = 1000;
   filters = {};
   totalJobNumber$: any;
-
-
+  
+  dataSource: MatTableDataSource<any> | null;
+  displayedColumns = [];
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  
   constructor(public http: Http,
               private configSrv: ConfigService, private router: Router,
               private store: Store<any>) {
@@ -43,6 +43,7 @@ export class JobsTableComponent implements OnInit, OnDestroy {
       for (const prop in conf) {
         if (prop in conf && 'table' in conf[prop]) {
           this.cols.push(conf[prop]['table']);
+          this.displayedColumns.push(conf[prop]['table']['field']);
         }
       }
     });
@@ -63,9 +64,15 @@ export class JobsTableComponent implements OnInit, OnDestroy {
       .subscribe(selected => {
         if (selected.length > 0) {
           this.jobs = selected.slice();
+          this.dataSource = new MatTableDataSource(this.jobs);
+          console.log(this.jobs);
         }
       }));
 
+  }
+
+  ngAfterViewInit() {
+    this.store.dispatch(new JobActions.SortUpdateAction(this.filters));
   }
 
   ngOnDestroy() {
@@ -75,9 +82,9 @@ export class JobsTableComponent implements OnInit, OnDestroy {
   }
 
 
-  onRowSelect(event) {
-    this.store.dispatch(new JobActions.CurrentJobAction(event.data));
-    this.router.navigateByUrl('/user/job/' + encodeURIComponent(event.data.id));
+  onRowSelect(event, job) {
+    this.store.dispatch(new JobActions.CurrentJobAction(job));
+    this.router.navigateByUrl('/user/job/' + encodeURIComponent(job.id));
   }
 
   nodeExpand(event) {
@@ -91,7 +98,7 @@ export class JobsTableComponent implements OnInit, OnDestroy {
 
 
   onPage(event) {
-    this.filters['skip'] = event.first;
+    this.filters['skip'] = this.paginator.pageIndex * this.paginator.pageSize;
     this.store.dispatch(new JobActions.SortUpdateAction(this.filters));
   }
 

@@ -1,8 +1,46 @@
 <div class="ui raised container" *ngIf="facets">
   <h3>
     <u>Filter Results</u>
+    <h3>Results: {{resultCount$ | async}}</h3>
   </h3>
-  <form class="ui form">
+
+  <form class="example-form">
+    <mat-form-field class="example-full-width">
+      <input matInput [(ngModel)]="selectedBeam" placeholder="Beamline" aria-label="Beamline" [matAutocomplete]="beam" [formControl]="beamlineInput">
+      <mat-autocomplete #beam="matAutocomplete">
+        <mat-option (onSelectionChange)="locSelected(b)" *ngFor="let b of filteredBeams | async" [value]="b._id">
+          <span>{{ b._id }}</span> |
+          <small>Results:kljchjkld</small>
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+  
+    <br />
+
+    <mat-form-field class="example-full-width">
+      <input matInput name="group" [(ngModel)]="selectedGroup" (optionSelected)="groupSelected" placeholder="Group" aria-label="Group" [matAutocomplete]="grp" [formControl]="groupInput">
+      <mat-autocomplete #grp="matAutocomplete">
+        <mat-option (onSelectionChange)="groupSelected(g)" *ngFor="let g of filteredGroups | async" [value]="g._id">
+          <span>{{ g._id }}</span> |
+          <small>Results: {{g.count}}</small>
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+
+    <br />
+
+    <div class="ui field">
+      <h3>Date Range</h3>
+      <datepicker [selections]="dateSelections$ | async" [datepickerSelector]="datepickerSelector" [datepickerSelectionMode]="dateSelectionMode" [placeholder]="'Date Range'" (selectionsChange)="updateDateRange($event)"></datepicker>
+    </div>
+    <br>
+    <!--<button type="submit" class="ui button">Filter</button>-->
+    <button class="ui button" (click)="clearFacets()">Clear</button>
+  
+  </form>
+  
+
+  <!-- <form class="ui form">
     <h3>Results: {{resultCount$ | async}}</h3>
     <div class="ui field">
 
@@ -31,13 +69,8 @@
             </div>
           </ng-template>
         </p-autoComplete>
-    </div>
-    <div class="ui field">
-      <h3>Date Range</h3>
-      <datepicker [selections]="dateSelections$ | async" [datepickerSelector]="datepickerSelector" [datepickerSelectionMode]="dateSelectionMode" [placeholder]="'Date Range'" (selectionsChange)="updateDateRange($event)"></datepicker>
-    </div>
-    <!--<button type="submit" class="ui button">Filter</button>-->
-    <button class="ui button" (click)="clearFacets()">Clear</button>
-  </form>
+    </div> -->
+    
+  <!-- </form> -->
   <br>
 </div>

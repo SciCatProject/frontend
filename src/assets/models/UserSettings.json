@@ -1,0 +1,18 @@
+{
+    "tapeCopies": {
+        "name": "tapeCopies",
+        "type": "string"
+    },
+    "datasetCount": {
+        "name": "datasetCount",
+        "type": "number"
+    },
+    "jobCount": {
+        "name": "jobCount",
+        "type": "number"
+    },
+    "darkTheme": {
+        "name": "darkTheme",
+        "type": "Boolean"
+    }
+}

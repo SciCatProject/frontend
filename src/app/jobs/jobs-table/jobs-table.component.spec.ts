@@ -4,7 +4,7 @@ import {Http} from '@angular/http';
 import {Router} from '@angular/router';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {ConfirmationService, DataTableModule, SharedModule, TreeTableModule} from 'primeng/primeng';
-
+import { MatTableModule, MatPaginatorModule } from '@angular/material';
 import {JobsTableComponent} from './jobs-table.component';
 import {Store, StoreModule} from '@ngrx/store';
 import {ConfigService} from 'shared/services/config.service';
@@ -19,7 +19,7 @@ describe('JobsTableComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
-      imports: [DataTableModule, SharedModule, TreeTableModule, FormsModule, ReactiveFormsModule, StoreModule.forRoot({})],
+      imports: [MatTableModule, TreeTableModule, FormsModule, ReactiveFormsModule, StoreModule.forRoot({})],
       declarations: [JobsTableComponent]
     });
     TestBed.overrideComponent(JobsTableComponent, {

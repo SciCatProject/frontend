@@ -23,13 +23,49 @@ import {
   TreeTableModule
 } from 'primeng/primeng';
 import {
+  MatAutocompleteModule,
+  MatButtonModule,
+  MatButtonToggleModule,
+  MatCardModule,
+  MatCheckboxModule,
+  MatChipsModule,
+  MatDatepickerModule,
+  MatDialogModule,
+  MatExpansionModule,
+  MatGridListModule,
+  MatIconModule,
+  MatInputModule,
+  MatListModule,
+  MatMenuModule,
+  MatNativeDateModule,
+  MatPaginatorModule,
+  MatProgressBarModule,
+  MatProgressSpinnerModule,
+  MatRadioModule,
+  MatRippleModule,
+  MatSelectModule,
+  MatSidenavModule,
+  MatSliderModule,
+  MatSlideToggleModule,
+  MatSnackBarModule,
+  MatSortModule,
+  MatTableModule,
+  MatTabsModule,
+  MatToolbarModule,
+  MatTooltipModule,
+  MatStepperModule,
+  MatFormFieldModule,
+} from '@angular/material';
+import {CdkTableModule} from '@angular/cdk/table';
+import {
   DatePickerModule
 } from 'shared/modules/datepicker/datepicker.module';
 import {SharedCatanieModule} from 'shared/shared.module';
 
 @NgModule({
   imports : [
-    CommonModule, FormsModule, DialogModule, ReactiveFormsModule,
+    MatCardModule, MatDialogModule, MatPaginatorModule, MatCheckboxModule, MatTableModule, MatFormFieldModule, MatAutocompleteModule,
+    MatTabsModule, MatInputModule, MatButtonModule, CommonModule, FormsModule, DialogModule, ReactiveFormsModule,
     SharedCatanieModule, DataTableModule, SharedModule, TabViewModule,
     ConfirmDialogModule, TreeModule, TreeTableModule,
     DropdownModule, AutoCompleteModule,

@@ -42,6 +42,11 @@
   visibility:hidden;
 }
 
+:host /deep/ .mat-row:hover {
+  background-color: rgba(32, 32, 216, 0.3);
+  cursor: pointer;
+}
+
 /*td {
     overflow: hidden;
 }*/

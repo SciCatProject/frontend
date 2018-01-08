@@ -1,19 +1,30 @@
 <!--TODO add configuration and error/success message div-->
-<form #f="ngForm" [formGroup]="dsFormGroup" class="ui equal width form" (ngSubmit)="updateModel(f.value)" *ngIf="formData">
-    <!--TODO handle different kinds of input and formats. I.e. dropdowns, checkboxes etc-->
-    <div class="inline field entry" *ngFor="let d of formData | objKeys">
-        <label>{{d.key | titleCase}}</label>
-         <div [ngSwitch]="getType(d.key, d.value)">
-             <input ngui-datetime-picker *ngSwitchCase="'Date'" formControlName="{{d.key}}" placeholder="" [close-on-select]="false">
-             <p-treeTable [value]="objData[d.key]" selectionMode="single" *ngSwitchCase="'object'">
-                <p-column field="name" header="Name"></p-column>
-                <p-column field="value" header="Value"></p-column>
-            </p-treeTable>
-            <!--<textarea *ngSwitchCase="'object'" formControlName="{{d.key}}"></textarea>-->
-             <input *ngSwitchDefault formControlName="{{d.key}}" placeholder="">
+<mat-card>
+    <form #f="ngForm" [formGroup]="dsFormGroup" (ngSubmit)="updateModel(f.value)" *ngIf="formData">
+        <!--TODO handle different kinds of input and formats. I.e. dropdowns, checkboxes etc-->
+        <div *ngFor="let d of formData | objKeys">
+            <label>{{d.key | titleCase}}</label>
+            <div [ngSwitch]="getType(d.key, d.value)">
+                <input ngui-datetime-picker *ngSwitchCase="'Date'" formControlName="{{d.key}}" placeholder="" [close-on-select]="false">
+                <p-treeTable [value]="objData[d.key]" selectionMode="single" *ngSwitchCase="'object'">
+                    <p-column field="name" header="Name"></p-column>
+                    <p-column field="value" header="Value"></p-column>
+                </p-treeTable>
+                        <mat-slide-toggle
+                        [color]="color"
+                        [checked]="d.value"
+                        formControlName="{{d.key}}"
+                        *ngSwitchCase="'Boolean'"
+                        >
+                    </mat-slide-toggle>
+                <!--<textarea *ngSwitchCase="'object'" formControlName="{{d.key}}"></textarea>-->
+                <mat-form-field class="example-full-width" *ngSwitchDefault>
+                    <input matInput formControlName="{{d.key}}" placeholder="">
+                </mat-form-field>
+            </div>
         </div>
-    </div>
-    <ng-container *ngIf="enabled">
-        <button class="ui button">Update</button>
-    </ng-container>
-</form>
+        <ng-container *ngIf="enabled">
+            <button mat-raised-button>Update</button>
+        </ng-container>
+    </form>
+</mat-card>

@@ -10,3 +10,12 @@ td {
     width: 90%;
     margin-left: 5%;
 }
+
+.app-title {
+    margin-left: 2%;
+}
+
+
+.example-spacer {
+    flex: 1 1 auto;
+  }

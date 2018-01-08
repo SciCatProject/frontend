@@ -1,5 +1,7 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {OrigDatablock} from 'shared/sdk/models';
+
+import {MatTableDataSource, MatPaginator} from '@angular/material';
 
 @Component({
   selector : 'datafiles',
@@ -15,10 +17,16 @@ export class DatafilesComponent implements OnInit {
   dsId: string;
   dataFiles: Array<any> = [];
 
+  displayedColumns = ['name', 'size', 'path'];
+
+  dataSource: MatTableDataSource<any> | null;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+
   constructor() {}
 
   ngOnInit() {
     if (this.dataBlocks) {
+      console.log(this.dataBlocks);
       this.getDatafiles(this.dataBlocks);
     }
   }
@@ -33,6 +41,8 @@ export class DatafilesComponent implements OnInit {
       self.files = self.files.concat(block.dataFileList);
       self.count += block.dataFileList.length;
     });
+    this.dataSource = new MatTableDataSource(this.files);
+    console.log(this.files);
   }
 
   /**

@@ -16,55 +16,39 @@
        </div>
      </div>
     </div>
-    <p-dataTable #ds [paginator]="true" paginatorPosition="both" [lazy]="true" [loading]="loading$ | async" [rows]="limit$ | async" [value]="datasets" [(selection)]="selectedSets" [rowHover]="true" (onLazyLoad)="onPage($event)"
-    (onRowSelect)="onSelect($event)" (onRowUnselect)="onSelect($event)" (onRowClick)="onRowSelect($event)" (onHeaderCheckboxToggle)="onSelect($event)"
-   [resizableColumns]="true" columnResizeMode="expand" [rowStyleMap]="rowStyleMap" [totalRecords]="datasetCount$ | async" dataKey="pid">
-      	<p-column *ngIf="mode.toLowerCase() !== 'view'" [style]="{'width': '30px'}" selectionMode="multiple"></p-column>
-        
-        <p-column [hidden]="false" [style]="{'width':'38px', 'overflow':'hidden'}" *ngFor="let col of cols" [field]="col.field" [header]="col.header" [sortable]="col.sortable" (sortFunction)="colSort($event)"> 
-          <ng-template let-col let-ds="rowData" let-ri="rowIndex" pTemplate="body">
-              <p [ngClass]="{ 'left-align': col.field === 'sourceFolder', 'center-align': col.field !== 'sourceFolder'}">{{getFormat(col.field, ds[col.field], ds)}}</p>
-          </ng-template>
-        </p-column>
-        
-        <p-footer>
-            <ul>
-                <li *ngFor="let ds of selectedSets" style="text-align: left">{{ds.sourceFolder}}, {{ds.pid}}</li>
-            </ul>
-        </p-footer>
-    </p-dataTable>
-</div>
 
-<p-confirmDialog header="Archive" ></p-confirmDialog>
+    <div class="example-container mat-elevation-z8">
+      <mat-table #table [dataSource]="dataSource" matSort>
 
-<p-dialog header="Retrieve {{selectedSets.length}} Datasets?" [(visible)]="retrieveDisplay" [closable]="false" modal="modal" [responsive]="true">
-  <ul>
-    <li *ngFor="let ds of selectedSets" style="text-align: left">{{ds.sourceFolder}}</li>
-  </ul>
-  <!-- <p>Please enter the destination directory for your datasets:</p> -->
-  <form  #retrieveForm="ngForm" (ngSubmit)="retrieveSets(retrieveForm)">
-      <!-- <div class="form-group">
-        <label for="path">Destination Path: </label>
- 
-        <input type="text" id="path" class="form-control"
-               required minlength="4"
-               name="path" ngModel
-               #path="ngModel" >
- 
-        <div *ngIf="path.errors && (path.dirty || path.touched)"
-             class="alert alert-danger">
-            <div [hidden]="!path.errors.required">
-              Path is required
-            </div>
-            <div [hidden]="!path.errors.minlength">
-              Path must be at least 4 characters long.
-            </div>
-        </div>
-      </div> -->
-    <!--<input type="text" class="form-control" ngModel required  name="dest" placeholder="Enter dataset destination"/>-->
-    <div class="pull-right top-buffer ">
-      <button type="button" class="btn btn-primary" (click)="retrieveDisplay = false; selectedSets=[]">Cancel</button>
-      <button type="button" (click)="retrieveSets(retrieveForm)" [disabled]="!retrieveForm.form.valid" class="btn btn-primary">Retrieve</button>
+          <!-- Checkbox Column -->
+    <ng-container matColumnDef="select">
+        <mat-header-cell *matHeaderCellDef>
+          <mat-checkbox (change)="$event ? masterToggle() : null"
+                       [checked]="isAllSelected()"
+                       [indeterminate]="selection.hasValue() && !isAllSelected()">
+          </mat-checkbox>
+        </mat-header-cell>
+        <mat-cell *matCellDef="let row">
+          <mat-checkbox (click)="$event.stopPropagation()"
+                       (change)="onRowCheck(row)"
+                       [checked]="selection.isSelected(row)">
+          </mat-checkbox>
+        </mat-cell>
+      </ng-container>
+        
+        <ng-container *ngFor="let col of cols">
+          <ng-container matColumnDef="{{col.field}}">
+            <mat-header-cell *matHeaderCellDef> {{col.header}} </mat-header-cell>
+            
+            <mat-cell *matCellDef="let row"> {{row[col.field]}} </mat-cell>
+          </ng-container>  
+        </ng-container>
+        
+    
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row (click)="onRowSelect($event, row)" *matRowDef="let row; columns: displayedColumns;"></mat-row>
+      </mat-table>
+
+      <mat-paginator [pageSize]="limit$ | async" [pageSizeOptions]="[10,30, 50, 100]" [length]="datasetCount$ | async" (page)="onPage(event)"></mat-paginator>
     </div>
-  </form>
-</p-dialog>
+</div>

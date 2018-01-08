@@ -23,21 +23,38 @@ import * as ua from 'state-management/actions/user.actions';
 import * as ja from 'state-management/actions/jobs.actions';
 import * as utils from 'shared/utils';
 
-import { config  } from '../../../config/config';
+import { config } from '../../../config/config';
 import { last } from 'rxjs/operator/last';
 import { Observable } from 'rxjs/Observable';
+
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import {MatTableDataSource, MatPaginator} from '@angular/material';
+import { AfterViewInit } from '@angular/core/src/metadata/lifecycle_hooks';
+import {SelectionModel} from '@angular/cdk/collections';
+
+import {MatDialog} from '@angular/material';
+
+import {DialogComponent} from 'shared/modules/dialog/dialog.component';
+import * as rison from 'rison';
 
 @Component({
   selector: 'dataset-table',
   templateUrl: './dataset-table.component.html',
   styleUrls: ['./dataset-table.component.css']
 })
-export class DatasetTableComponent implements OnInit, OnDestroy {
-  @Input() datasets;
+export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
+  @Input() datasets = [];
   @Output() openDataset = new EventEmitter();
   @ViewChild('ds') dsTable: DataTable;
   selectedSets: Array<RawDataset> = [];
+
+  selection = new SelectionModel<Element>(true, []);
+
   datasetCount$;
+  dataSource: MatTableDataSource<any> | null;
+  displayedColumns = ['select'];
+
+  @ViewChild(MatPaginator) paginator: MatPaginator;
 
   modeButtons = ['Archive', 'View', 'Retrieve'];
 
@@ -68,7 +85,8 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     private configSrv: ConfigService,
     private route: ActivatedRoute,
     private confirmationService: ConfirmationService,
-    private store: Store<any>
+    private store: Store<any>,
+    public dialog: MatDialog
   ) {
     this.archiveable = config.archiveable;
     this.retrievable = config.retrieveable;
@@ -82,6 +100,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
         for (const prop in conf) {
           if (prop in conf && 'table' in conf[prop]) {
             this.cols.push(conf[prop]['table']);
+            this.displayedColumns.push(conf[prop]['table']['field']);
           }
         }
       }
@@ -96,7 +115,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     });
 
     this.route.queryParams.subscribe(params => {
-      const f = utils.filter({'mode': '', 'skip': ''}, params);
+      const f = utils.filter({ 'mode': '', 'skip': '' }, params);
       this.mode = f['mode'] || 'view';
       // this.setCurrentPage(f['skip']);
     });
@@ -111,6 +130,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
       this.store.select(selectors.datasets.getDatasets).subscribe(
         data => {
           this.datasets = data;
+          this.dataSource = new MatTableDataSource(this.datasets);
           if (this.datasets && this.datasets.length > 0) {
             this.store.dispatch(new dua.SaveModeAction(this.mode));
             this.updateRowView(this.mode);
@@ -127,11 +147,11 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
       this.store
         .select(selectors.datasets.getActiveFilters)
         .subscribe(filters => {
-          if (filters.skip !== this.dsTable.first) {
-            setTimeout(() => {
-              this.setCurrentPage(filters.skip);
-            }, 1000);
-          }
+          // if (filters.skip !== this.dsTable.first) {
+          setTimeout(() => {
+            this.setCurrentPage(filters.skip);
+          }, 1000);
+          // }
         })
     );
 
@@ -179,6 +199,11 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     );
   }
 
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
+  }
+
+
   ngOnDestroy() {
     for (let i = 0; i < this.subscriptions.length; i++) {
       this.subscriptions[i].unsubscribe();
@@ -190,19 +215,17 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
    * @param {any} event
    * @memberof DatasetTableComponent
    */
-  onRowSelect(event) {
-    const pid = encodeURIComponent(event.data.pid);
-    // Odd hack to stop click event in column loading dataset view, not needed
-    // before 5th July 2017
-    if (
-      event['originalEvent']['target']['innerHTML'].indexOf('chkbox') === -1
-    ) {
-      this.router.navigateByUrl(
-        '/dataset/' + pid
-      );
-      // this.store.dispatch(
-      //     {type : dsa.SELECT_CURRENT, payload : event.data});
-    }
+  onRowSelect(event, row) {
+    console.log(event);
+    console.log(row);
+    const pid = encodeURIComponent(row.pid);
+    this.router.navigateByUrl(
+      '/dataset/' + pid
+    );
+  }
+
+  onRowCheck(row) {
+    this.selection.toggle(row);
   }
 
   /**
@@ -215,31 +238,45 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     this.store.dispatch(new dua.SaveModeAction(this.mode));
   }
 
+  isAllSelected() {
+    const numSelected = this.selection.selected.length;
+    const numRows = this.dataSource.data.length;
+    return numSelected === numRows;
+  }
+
+  /** Selects all rows if they are not all selected; otherwise clear selection. */
+  masterToggle() {
+    this.isAllSelected() ?
+        this.selection.clear() :
+        this.dataSource.data.forEach(row => this.selection.select(row));
+  }
+
   updateRowView(mode) {
-      this.selectedSets = [];
-      this.rowStyleMap = {};
-      if (this.datasets && this.datasets.length > 0) {
-        for (let d = 0; d < this.datasets.length; d++) {
-          const set = this.datasets[d];
-          let c = '';
-          if (this.mode === 'archive' && set.datasetlifecycle
-            && (this.archiveable.indexOf(set.datasetlifecycle.archiveStatusMessage) === -1 || set.size === 0)) {
-            c = 'disabled-row';
-          } else if (this.mode === 'retrieve'
-            && set.datasetlifecycle && this.retrievable.indexOf(set.datasetlifecycle.archiveStatusMessage) === -1) {
-            c = 'disabled-row';
-          } else {
-            c = '';
-          }
-          this.rowStyleMap[set.pid] = c;
+    this.selectedSets = [];
+    this.rowStyleMap = {};
+    if (this.datasets && this.datasets.length > 0) {
+      for (let d = 0; d < this.datasets.length; d++) {
+        const set = this.datasets[d];
+        let c = '';
+        if (this.mode === 'archive' && set.datasetlifecycle
+          && (this.archiveable.indexOf(set.datasetlifecycle.archiveStatusMessage) === -1 || set.size === 0)) {
+          c = 'disabled-row';
+        } else if (this.mode === 'retrieve'
+          && set.datasetlifecycle && this.retrievable.indexOf(set.datasetlifecycle.archiveStatusMessage) === -1) {
+          c = 'disabled-row';
+        } else {
+          c = '';
         }
-      } else {
-        this.store.dispatch(new dua.SaveModeAction(this.mode));
+        this.rowStyleMap[set.pid] = c;
       }
-      const currentParams = this.route.snapshot.queryParams;
-      this.router.navigate(['/datasets'], {
-         queryParams: Object.assign({}, currentParams, {'mode': this.mode})
-      });
+    } else {
+      this.store.dispatch(new dua.SaveModeAction(this.mode));
+    }
+    // let currentParams = 'args' in this.route.snapshot.queryParams ? rison.decode(this.route.snapshot.queryParams['args']) : {};
+    // currentParams = Object.assign({}, currentParams, { 'mode': this.mode });
+    // this.router.navigate(['/datasets'], {
+    //   queryParams: {args: rison.encode(currentParams)}
+    // });
   }
 
   /**
@@ -272,22 +309,26 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
    * @param event
    */
   onPage(event) {
+    const index = this.paginator.pageIndex;
+    const size = this.paginator.pageSize;
     this.store
       .select(state => state.root.datasets.activeFilters)
       .take(1)
       .subscribe(f => {
         const filters = Object.assign({}, f);
-        filters['skip'] = event.first;
+        filters['skip'] = index * size;
         filters['initial'] = false;
-        if (event.sortField) {
-          const sortOrder = event.sortOrder === 1 ? 'ASC' : 'DESC';
-          filters['sortField'] = event.sortField + ' ' + sortOrder;
-        } else {
+        filters['limit'] = size;
+        // if (event.sortField) {
+          // const sortOrder = event.sortOrder === 1 ? 'ASC' : 'DESC';
+          // filters['sortField'] = event.sortField + ' ' + sortOrder;
+        // } else {
           filters['sortField'] = undefined;
-        }
+        // }
+        console.log(filters);
         // TODO reduce calls when not needed (i.e. no change)
         // if (f.first !== event.first || this.datasets.length === 0) {
-          this.store.dispatch(new dsa.UpdateFilterAction(filters));
+        this.store.dispatch(new dsa.UpdateFilterAction(filters));
         // }
       });
   }
@@ -296,7 +337,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   // `paginate` method but
   // this takes no arguments and requires changing protected vars
   setCurrentPage(n: number) {
-    this.dsTable.onPageChange({ first: n, rows: this.dsTable.rows });
+    // this.dsTable.onPageChange({ first: n, rows: this.dsTable.rows });
   }
 
   /**
@@ -325,12 +366,18 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
    * @memberof DashboardComponent
    */
   archiveClickHandle(event) {
-    this.confirmationService.confirm({
-      header: 'Archive ' + this.selectedSets.length + ' Datasets?',
-      message: 'The selected datasets will be scheduled for archive',
-      accept: () => {
+    let dialogRef = this.dialog.open(DialogComponent, {
+      width: 'auto',
+      data: {title: 'Really archive?', question: ''}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      console.log(result);
+      if (result) {
         this.archiveOrRetrieve(true);
       }
+      // this.onClose.emit(result);
     });
   }
 
@@ -340,15 +387,18 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
    * @memberof DashboardComponent
    */
   retrieveClickHandle(event) {
-    this.retrieveDisplay = true;
-  }
+    const destPath = '/archive/retrieve';
+    
+    let dialogRef = this.dialog.open(DialogComponent, {
+      width: 'auto',
+      data: {title: "Really retrieve?", question: '', input: destPath}
+    });
 
-  retrieveSets(f) {
-    const destPath = f.form.value['path'] || '/archive/retrieve';
-    if (destPath.length > 0) {
-      this.retrieveDisplay = false;
-      this.archiveOrRetrieve(false);
-    }
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.archiveOrRetrieve(false, result.input);
+      }
+    });
   }
 
   /**
@@ -359,7 +409,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
    */
   archiveOrRetrieve(archive: boolean, destPath = '/archive/retrieve/') {
     let msg = {};
-    if (this.selectedSets.length > 0) {
+    if (this.selection.selected.length > 0) {
       this.dest = new Subject<string>();
       const job = new Job();
       job.jobParams = {};
@@ -374,7 +424,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
           if (!user['email']) {
             job.emailJobInitiator = user['currentUser']['email'] || user['currentUser']['accessEmail'];
           }
-          this.selectedSets.map(set => {
+          this.selection.selected.map(set => {
             // if ('datablocks' in set && set['datablocks'].length > 0) {
             const fileObj = {};
             fileObj['pid'] = set['pid'];
@@ -415,7 +465,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
               .subscribe(copies => {
                 job.jobParams['tapeCopies'] = copies;
               });
-              // TODO check username in job object
+            // TODO check username in job object
             // job.jobParams['username'] = user['username'];
             if (!archive) {
               // TODO fix the path here
@@ -468,7 +518,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     ) {
       return ds['datasetlifecycle'][key + 'Message'];
     } else if ((key === 'archiveStatus' || key === 'retrieveStatus') &&
-    !ds['datasetlifecycle']) {
+      !ds['datasetlifecycle']) {
       return 'Unknown';
     } else if (key === 'size') {
       return (ds[key] / 1024 / 1024 / 1024).toFixed(2);
@@ -479,3 +529,5 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     }
   }
 }
+
+

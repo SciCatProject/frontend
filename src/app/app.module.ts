@@ -37,7 +37,41 @@ import { UserEffects } from 'state-management/effects/user.effects';
 import { JobsEffects } from 'state-management/effects/jobs.effects';
 import { rootReducer } from 'state-management/reducers/root.reducer';
 import { UsersModule } from 'users/users.module';
-
+import {
+  MatAutocompleteModule,
+  MatButtonModule,
+  MatButtonToggleModule,
+  MatCardModule,
+  MatCheckboxModule,
+  MatChipsModule,
+  MatDatepickerModule,
+  MatDialogModule,
+  MatExpansionModule,
+  MatGridListModule,
+  MatIconModule,
+  MatInputModule,
+  MatListModule,
+  MatMenuModule,
+  MatNativeDateModule,
+  MatPaginatorModule,
+  MatProgressBarModule,
+  MatProgressSpinnerModule,
+  MatRadioModule,
+  MatRippleModule,
+  MatSelectModule,
+  MatSidenavModule,
+  MatSliderModule,
+  MatSlideToggleModule,
+  MatSnackBarModule,
+  MatSortModule,
+  MatTableModule,
+  MatTabsModule,
+  MatToolbarModule,
+  MatTooltipModule,
+  MatStepperModule,
+  MatFormFieldModule,
+} from '@angular/material';
+import {CdkTableModule} from '@angular/cdk/table';
 import { AppComponent } from './app.component';
 import { AuthCheck } from './AuthCheck';
 import { JobsDetailComponent } from './jobs/jobs-detail/jobs-detail.component';
@@ -57,6 +91,15 @@ export function localStorageSyncWrapper(reducer: any) {
     JobsDetailComponent
   ],
   imports : [
+    MatToolbarModule,
+    MatIconModule,
+    MatSnackBarModule,
+    MatCardModule,
+    MatListModule,
+    MatMenuModule,
+    MatSidenavModule,
+    MatTableModule,
+    MatPaginatorModule,
     BrowserModule,
     FormsModule,
     CheckboxModule,
