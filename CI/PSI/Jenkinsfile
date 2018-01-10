@@ -13,7 +13,7 @@ node {
             sh 'docker run  --privileged -t catanie_test npm run -- ng test --watch false --single-run true --sourcemap false'
        }
        stage('e2e Test Catanie '){
-            sh 'docker run  --privileged -t catanie_test npm run e2e --environment qa'
+            sh 'docker run  --privileged -t catanie_test ./node_modules/@angular/cli/bin/ng e2e -e qa'
        }
 
 }
