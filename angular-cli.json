@@ -33,7 +33,8 @@
             "development": "environments/environment.development.ts",
             "production": "environments/environment.prod.ts",
             "staging": "environments/environment.staging.ts",
-            "qa": "environments/environment.qa.ts"
+            "qa": "environments/environment.qa.ts",
+            "docker": "environments/environment.docker.ts"
         }
     }],
     "e2e": {
