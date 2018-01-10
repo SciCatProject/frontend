@@ -36,9 +36,6 @@
                         <a data-type="chapter-link" href="./index.html"><span class="fa fa-home"></span>Getting started</a>
                         <ul class="links">
                                 <li class="link">
-                                    <a href="./index.html" ><span class="fa fa-file-text-o"></span>README</a>
-                                </li>
-                                <li class="link">
                                     <a 
                                          href="./overview.html" 
                                         
@@ -47,26 +44,55 @@
                                         <span class="fa fa-th"></span>Overview
                                     </a>
                                 </li>
+                                <li class="link">
+                                  <a href="./index.html" ><span class="fa fa-file-text-o"></span>README</a>
+                                </li>
+                                <li class="link">
+                                        <a href="./license.html"
+                                    >
+                                        <span class="fa fa-file-text-o"></span>LICENSE
+                                    </a>
+                                </li>
                         </ul>
                     </li>
             
             
                     <li class="chapter">
                         <a data-type="chapter-link" href="./modules.html" >
-                            <span class="fa fa-archive"></span>
-                            <span>Modules</span>
-                            <span class="menu-toggler fa fa-angle-up" data-toggle="collapse"
+                            <div class="menu-toggler linked" data-toggle="collapse"
                                     data-target="#xs-modules-links"
-                            ></span>
+                            >
+                                <span class="fa fa-archive"></span>
+                                <span class="link-name">Modules</span>
+                                <span class="fa fa-angle-down"></span>
+                            </div>
                         </a>
-                        <ul class="links collapse in"
+                        <ul class="links collapse "
                                 id="xs-modules-links"
                             >
                                 <li class="link">
                                     <a href="./modules/AppModule.html" >AppModule</a>
                                 </li>
                                 <li class="link">
+                                    <a href="./modules/AppRoutingModule.html" >AppRoutingModule</a>
+                                </li>
+                                <li class="link">
+                                    <a href="./modules/BreadcrumbModule.html" >BreadcrumbModule</a>
+                                </li>
+                                <li class="link">
+                                    <a href="./modules/ConfigFormModule.html" >ConfigFormModule</a>
+                                </li>
+                                <li class="link">
                                     <a href="./modules/DatasetsModule.html" >DatasetsModule</a>
+                                </li>
+                                <li class="link">
+                                    <a href="./modules/DatePickerModule.html" >DatePickerModule</a>
+                                </li>
+                                <li class="link">
+                                    <a href="./modules/DialogModule.html" >DialogModule</a>
+                                </li>
+                                <li class="link">
+                                    <a href="./modules/ErrorPageModule.html" >ErrorPageModule</a>
                                 </li>
                                 <li class="link">
                                     <a href="./modules/SDKBrowserModule.html" >SDKBrowserModule</a>
@@ -81,14 +107,14 @@
                     </li>
             
                     <li class="chapter">
-                        <div class="simple">
+                        <div class="simple menu-toggler" data-toggle="collapse"
+                                data-target="#xs-components-links"
+                            >
                             <span class="fa fa-cogs"></span>
                             <span>Components</span>
-                            <span class="menu-toggler fa fa-angle-up" data-toggle="collapse"
-                                    data-target="#xs-components-links"
-                                ></span>
+                            <span class="fa fa-angle-down"></span>
                         </div>
-                        <ul class="links collapse in"
+                        <ul class="links collapse "
                                 id="xs-components-links"
                             >
                                 <li class="link">
@@ -119,13 +145,22 @@
                                     <a href="./components/DatasetsFilterComponent.html" >DatasetsFilterComponent</a>
                                 </li>
                                 <li class="link">
-                                    <a href="./components/EndOfShiftComponent.html" >EndOfShiftComponent</a>
+                                    <a href="./components/DatePickerComponent.html" >DatePickerComponent</a>
+                                </li>
+                                <li class="link">
+                                    <a href="./components/DialogComponent.html" >DialogComponent</a>
                                 </li>
                                 <li class="link">
                                     <a href="./components/ErrorPageComponent.html" >ErrorPageComponent</a>
                                 </li>
                                 <li class="link">
                                     <a href="./components/JobsComponent.html" >JobsComponent</a>
+                                </li>
+                                <li class="link">
+                                    <a href="./components/JobsDetailComponent.html" >JobsDetailComponent</a>
+                                </li>
+                                <li class="link">
+                                    <a href="./components/JobsTableComponent.html" >JobsTableComponent</a>
                                 </li>
                                 <li class="link">
                                     <a href="./components/LoginComponent.html" >LoginComponent</a>
@@ -144,14 +179,14 @@
             
             
                     <li class="chapter">
-                        <div class="simple">
+                        <div class="simple menu-toggler" data-toggle="collapse"
+                                data-target="#xs-classes-links"
+                            >
                             <span class="fa fa-file-code-o"></span>
                             <span>Classes</span>
-                            <span class="menu-toggler fa fa-angle-up" data-toggle="collapse"
-                                    data-target="#xs-classes-links"
-                                ></span>
+                            <span class="fa fa-angle-down"></span>
                         </div>
-                        <ul class="links collapse in"
+                        <ul class="links collapse "
                                 id="xs-classes-links"
                             >
                                 <li class="link">
@@ -182,7 +217,16 @@
                                     <a href="./classes/AddGroupsAction.html" >AddGroupsAction</a>
                                 </li>
                                 <li class="link">
+                                    <a href="./classes/AddGroupsAction.html" >AddGroupsAction</a>
+                                </li>
+                                <li class="link">
                                     <a href="./classes/AddGroupsCompleteAction.html" >AddGroupsCompleteAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="./classes/AddGroupsCompleteAction.html" >AddGroupsCompleteAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="./classes/AddGroupsFailedAction.html" >AddGroupsFailedAction</a>
                                 </li>
                                 <li class="link">
                                     <a href="./classes/AddGroupsFailedAction.html" >AddGroupsFailedAction</a>
@@ -197,10 +241,40 @@
                                     <a href="./classes/ApplicationCredential.html" >ApplicationCredential</a>
                                 </li>
                                 <li class="link">
+                                    <a href="./classes/BaseStorage.html" >BaseStorage</a>
+                                </li>
+                                <li class="link">
+                                    <a href="./classes/CalSuperMonth.html" >CalSuperMonth</a>
+                                </li>
+                                <li class="link">
+                                    <a href="./classes/ChildRetrieveAction.html" >ChildRetrieveAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="./classes/ChildRetrieveCompleteAction.html" >ChildRetrieveCompleteAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="./classes/ClearMessageAction.html" >ClearMessageAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="./classes/CurrentJobAction.html" >CurrentJobAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="./classes/CurrentSetAction.html" >CurrentSetAction</a>
+                                </li>
+                                <li class="link">
                                     <a href="./classes/CustomReuseStrategy.html" >CustomReuseStrategy</a>
                                 </li>
                                 <li class="link">
                                     <a href="./classes/Datablock.html" >Datablock</a>
+                                </li>
+                                <li class="link">
+                                    <a href="./classes/DatablockDeleteAction.html" >DatablockDeleteAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="./classes/DatablockDeleteCompleteAction.html" >DatablockDeleteCompleteAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="./classes/DatablockDeleteFailedAction.html" >DatablockDeleteFailedAction</a>
                                 </li>
                                 <li class="link">
                                     <a href="./classes/DatablocksAction.html" >DatablocksAction</a>
@@ -218,16 +292,31 @@
                                     <a href="./classes/DatasetLifecycle.html" >DatasetLifecycle</a>
                                 </li>
                                 <li class="link">
+                                    <a href="./classes/DateWrapper.html" >DateWrapper</a>
+                                </li>
+                                <li class="link">
+                                    <a href="./classes/Day.html" >Day</a>
+                                </li>
+                                <li class="link">
                                     <a href="./classes/DerivedDataset.html" >DerivedDataset</a>
                                 </li>
                                 <li class="link">
+                                    <a href="./classes/FailedAction.html" >FailedAction</a>
+                                </li>
+                                <li class="link">
                                     <a href="./classes/FilterFailedAction.html" >FilterFailedAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="./classes/FilterValueAction.html" >FilterValueAction</a>
                                 </li>
                                 <li class="link">
                                     <a href="./classes/FireLoop.html" >FireLoop</a>
                                 </li>
                                 <li class="link">
                                     <a href="./classes/FireLoopRef.html" >FireLoopRef</a>
+                                </li>
+                                <li class="link">
+                                    <a href="./classes/FocusOnMonthAction.html" >FocusOnMonthAction</a>
                                 </li>
                                 <li class="link">
                                     <a href="./classes/IO.html" >IO</a>
@@ -293,13 +382,43 @@
                                     <a href="./classes/MockLoopBackAuth.html" >MockLoopBackAuth</a>
                                 </li>
                                 <li class="link">
+                                    <a href="./classes/MockMatDialogData.html" >MockMatDialogData</a>
+                                </li>
+                                <li class="link">
+                                    <a href="./classes/MockMatDialogRef.html" >MockMatDialogRef</a>
+                                </li>
+                                <li class="link">
+                                    <a href="./classes/MockNotificationService.html" >MockNotificationService</a>
+                                </li>
+                                <li class="link">
+                                    <a href="./classes/MockProposalApi.html" >MockProposalApi</a>
+                                </li>
+                                <li class="link">
                                     <a href="./classes/MockRouter.html" >MockRouter</a>
+                                </li>
+                                <li class="link">
+                                    <a href="./classes/MockStore.html" >MockStore</a>
                                 </li>
                                 <li class="link">
                                     <a href="./classes/MockUserApi.html" >MockUserApi</a>
                                 </li>
                                 <li class="link">
                                     <a href="./classes/MockUserMsgService.html" >MockUserMsgService</a>
+                                </li>
+                                <li class="link">
+                                    <a href="./classes/Month.html" >Month</a>
+                                </li>
+                                <li class="link">
+                                    <a href="./classes/MultiDayRange.html" >MultiDayRange</a>
+                                </li>
+                                <li class="link">
+                                    <a href="./classes/MultiMonthRange.html" >MultiMonthRange</a>
+                                </li>
+                                <li class="link">
+                                    <a href="./classes/MultiWeekRange.html" >MultiWeekRange</a>
+                                </li>
+                                <li class="link">
+                                    <a href="./classes/MultiYearRange.html" >MultiYearRange</a>
                                 </li>
                                 <li class="link">
                                     <a href="./classes/OrigDatablock.html" >OrigDatablock</a>
@@ -315,6 +434,27 @@
                                 </li>
                                 <li class="link">
                                     <a href="./classes/RawDataset.html" >RawDataset</a>
+                                </li>
+                                <li class="link">
+                                    <a href="./classes/RefocusToCurrentMonthAction.html" >RefocusToCurrentMonthAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="./classes/ResetStatusAction.html" >ResetStatusAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="./classes/ResetStatusCompleteAction.html" >ResetStatusCompleteAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="./classes/RestoreAction.html" >RestoreAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="./classes/ResyncTodayAction.html" >ResyncTodayAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="./classes/RetrieveAction.html" >RetrieveAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="./classes/RetrieveCompleteAction.html" >RetrieveCompleteAction</a>
                                 </li>
                                 <li class="link">
                                     <a href="./classes/RetrieveUserAction.html" >RetrieveUserAction</a>
@@ -335,13 +475,13 @@
                                     <a href="./classes/Sample.html" >Sample</a>
                                 </li>
                                 <li class="link">
-                                    <a href="./classes/SearchAction.html" >SearchAction</a>
+                                    <a href="./classes/SaveAction.html" >SaveAction</a>
                                 </li>
                                 <li class="link">
-                                    <a href="./classes/SearchAction.html" >SearchAction</a>
+                                    <a href="./classes/SaveModeAction.html" >SaveModeAction</a>
                                 </li>
                                 <li class="link">
-                                    <a href="./classes/SearchCompleteAction.html" >SearchCompleteAction</a>
+                                    <a href="./classes/SaveSettingsAction.html" >SaveSettingsAction</a>
                                 </li>
                                 <li class="link">
                                     <a href="./classes/SearchCompleteAction.html" >SearchCompleteAction</a>
@@ -353,10 +493,31 @@
                                     <a href="./classes/SearchIDAction.html" >SearchIDAction</a>
                                 </li>
                                 <li class="link">
+                                    <a href="./classes/SearchIDAction.html" >SearchIDAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="./classes/SearchIDCompleteAction.html" >SearchIDCompleteAction</a>
+                                </li>
+                                <li class="link">
                                     <a href="./classes/SearchIDCompleteAction.html" >SearchIDCompleteAction</a>
                                 </li>
                                 <li class="link">
                                     <a href="./classes/SearchIDFailedAction.html" >SearchIDFailedAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="./classes/SearchIDFailedAction.html" >SearchIDFailedAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="./classes/SetFocusYearAction.html" >SetFocusYearAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="./classes/SetSelectionModeAction.html" >SetSelectionModeAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="./classes/SetSelectionsAction.html" >SetSelectionsAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="./classes/ShowMessageAction.html" >ShowMessageAction</a>
                                 </li>
                                 <li class="link">
                                     <a href="./classes/SocketBrowser.html" >SocketBrowser</a>
@@ -365,16 +526,61 @@
                                     <a href="./classes/SocketDriver.html" >SocketDriver</a>
                                 </li>
                                 <li class="link">
-                                    <a href="./classes/Storage.html" >Storage</a>
+                                    <a href="./classes/SortFailedAction.html" >SortFailedAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="./classes/SortUpdateAction.html" >SortUpdateAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="./classes/SortValueAction.html" >SortValueAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="./classes/StepFocusBackAction.html" >StepFocusBackAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="./classes/StepFocusForwardAction.html" >StepFocusForwardAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="./classes/SubmitAction.html" >SubmitAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="./classes/SubmitCompleteAction.html" >SubmitCompleteAction</a>
                                 </li>
                                 <li class="link">
                                     <a href="./classes/SynchTimes.html" >SynchTimes</a>
+                                </li>
+                                <li class="link">
+                                    <a href="./classes/TimeRange.html" >TimeRange</a>
+                                </li>
+                                <li class="link">
+                                    <a href="./classes/ToggleCalDispAction.html" >ToggleCalDispAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="./classes/ToggleCalModeAction.html" >ToggleCalModeAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="./classes/TotalSetsAction.html" >TotalSetsAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="./classes/UIStoreAction.html" >UIStoreAction</a>
                                 </li>
                                 <li class="link">
                                     <a href="./classes/UpdateFilterAction.html" >UpdateFilterAction</a>
                                 </li>
                                 <li class="link">
                                     <a href="./classes/UpdateFilterCompleteAction.html" >UpdateFilterCompleteAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="./classes/UpdateFocusMonthAction.html" >UpdateFocusMonthAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="./classes/UpdateSelectedAction.html" >UpdateSelectedAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="./classes/UpdateSelectionsAction.html" >UpdateSelectionsAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="./classes/UpdateSortCompleteAction.html" >UpdateSortCompleteAction</a>
                                 </li>
                                 <li class="link">
                                     <a href="./classes/User.html" >User</a>
@@ -385,18 +591,24 @@
                                 <li class="link">
                                     <a href="./classes/UserIdentity.html" >UserIdentity</a>
                                 </li>
+                                <li class="link">
+                                    <a href="./classes/Week.html" >Week</a>
+                                </li>
+                                <li class="link">
+                                    <a href="./classes/Year.html" >Year</a>
+                                </li>
                         </ul>
                     </li>
             
                     <li class="chapter">
-                        <div class="simple">
+                        <div class="simple menu-toggler" data-toggle="collapse"
+                                data-target="#xs-injectables-links"
+                            >
                             <span class="fa fa-long-arrow-down"></span>
                             <span>Injectables</span>
-                            <span class="menu-toggler fa fa-angle-up" data-toggle="collapse"
-                                    data-target="#xs-injectables-links"
-                                ></span>
+                            <span class="fa fa-angle-down"></span>
                         </div>
-                        <ul class="links collapse in"
+                        <ul class="links collapse "
                                 id="xs-injectables-links"
                             >
                                 <li class="link">
@@ -451,6 +663,9 @@
                                     <a href="./injectables/JobApi.html" >JobApi</a>
                                 </li>
                                 <li class="link">
+                                    <a href="./injectables/JobsEffects.html" >JobsEffects</a>
+                                </li>
+                                <li class="link">
                                     <a href="./injectables/LoggerService.html" >LoggerService</a>
                                 </li>
                                 <li class="link">
@@ -501,22 +716,150 @@
                                 <li class="link">
                                     <a href="./injectables/UserIdentityApi.html" >UserIdentityApi</a>
                                 </li>
-                                <li class="link">
-                                    <a href="./injectables/UserMsgService.html" >UserMsgService</a>
-                                </li>
                         </ul>
                     </li>
             
             
                     <li class="chapter">
-                        <div class="simple">
+                        <div class="simple menu-toggler" data-toggle="collapse"
+                                data-target="#xs-interfaces-links"
+                            >
+                            <span class="fa fa-info"></span>
+                            <span>Interfaces</span>
+                            <span class="fa fa-angle-down"></span>
+                        </div>
+                        <ul class="links collapse "
+                                id="xs-interfaces-links"
+                            >
+                                <li class="link">
+                                    <a href="./interfaces/AccessGroupInterface.html" >AccessGroupInterface</a>
+                                </li>
+                                <li class="link">
+                                    <a href="./interfaces/AccessTokenInterface.html" >AccessTokenInterface</a>
+                                </li>
+                                <li class="link">
+                                    <a href="./interfaces/AccessUserInterface.html" >AccessUserInterface</a>
+                                </li>
+                                <li class="link">
+                                    <a href="./interfaces/AppState.html" >AppState</a>
+                                </li>
+                                <li class="link">
+                                    <a href="./interfaces/AppState.html" >AppState</a>
+                                </li>
+                                <li class="link">
+                                    <a href="./interfaces/ApplicationCredentialInterface.html" >ApplicationCredentialInterface</a>
+                                </li>
+                                <li class="link">
+                                    <a href="./interfaces/Breadcrumb.html" >Breadcrumb</a>
+                                </li>
+                                <li class="link">
+                                    <a href="./interfaces/CookieInterface.html" >CookieInterface</a>
+                                </li>
+                                <li class="link">
+                                    <a href="./interfaces/DashboardUIState.html" >DashboardUIState</a>
+                                </li>
+                                <li class="link">
+                                    <a href="./interfaces/DatablockInterface.html" >DatablockInterface</a>
+                                </li>
+                                <li class="link">
+                                    <a href="./interfaces/DatasetFilters.html" >DatasetFilters</a>
+                                </li>
+                                <li class="link">
+                                    <a href="./interfaces/DatasetInterface.html" >DatasetInterface</a>
+                                </li>
+                                <li class="link">
+                                    <a href="./interfaces/DatasetLifecycleInterface.html" >DatasetLifecycleInterface</a>
+                                </li>
+                                <li class="link">
+                                    <a href="./interfaces/DatasetState.html" >DatasetState</a>
+                                </li>
+                                <li class="link">
+                                    <a href="./interfaces/DatepickerState.html" >DatepickerState</a>
+                                </li>
+                                <li class="link">
+                                    <a href="./interfaces/DerivedDatasetInterface.html" >DerivedDatasetInterface</a>
+                                </li>
+                                <li class="link">
+                                    <a href="./interfaces/GeoPoint.html" >GeoPoint</a>
+                                </li>
+                                <li class="link">
+                                    <a href="./interfaces/IStringToBoolDict.html" >IStringToBoolDict</a>
+                                </li>
+                                <li class="link">
+                                    <a href="./interfaces/IStringToNumDict.html" >IStringToNumDict</a>
+                                </li>
+                                <li class="link">
+                                    <a href="./interfaces/JobInterface.html" >JobInterface</a>
+                                </li>
+                                <li class="link">
+                                    <a href="./interfaces/JobsState.html" >JobsState</a>
+                                </li>
+                                <li class="link">
+                                    <a href="./interfaces/LoopBackFilter.html" >LoopBackFilter</a>
+                                </li>
+                                <li class="link">
+                                    <a href="./interfaces/Message.html" >Message</a>
+                                </li>
+                                <li class="link">
+                                    <a href="./interfaces/Models.html" >Models</a>
+                                </li>
+                                <li class="link">
+                                    <a href="./interfaces/OrigDatablockInterface.html" >OrigDatablockInterface</a>
+                                </li>
+                                <li class="link">
+                                    <a href="./interfaces/PolicyInterface.html" >PolicyInterface</a>
+                                </li>
+                                <li class="link">
+                                    <a href="./interfaces/ProposalInterface.html" >ProposalInterface</a>
+                                </li>
+                                <li class="link">
+                                    <a href="./interfaces/RabbitMQInterface.html" >RabbitMQInterface</a>
+                                </li>
+                                <li class="link">
+                                    <a href="./interfaces/RawDatasetInterface.html" >RawDatasetInterface</a>
+                                </li>
+                                <li class="link">
+                                    <a href="./interfaces/SampleInterface.html" >SampleInterface</a>
+                                </li>
+                                <li class="link">
+                                    <a href="./interfaces/Settings.html" >Settings</a>
+                                </li>
+                                <li class="link">
+                                    <a href="./interfaces/StatFilter.html" >StatFilter</a>
+                                </li>
+                                <li class="link">
+                                    <a href="./interfaces/SynchTimesInterface.html" >SynchTimesInterface</a>
+                                </li>
+                                <li class="link">
+                                    <a href="./interfaces/TimerRangeSelectorState.html" >TimerRangeSelectorState</a>
+                                </li>
+                                <li class="link">
+                                    <a href="./interfaces/UserCredentialInterface.html" >UserCredentialInterface</a>
+                                </li>
+                                <li class="link">
+                                    <a href="./interfaces/UserIdentityInterface.html" >UserIdentityInterface</a>
+                                </li>
+                                <li class="link">
+                                    <a href="./interfaces/UserInterface.html" >UserInterface</a>
+                                </li>
+                                <li class="link">
+                                    <a href="./interfaces/UserState.html" >UserState</a>
+                                </li>
+                                <li class="link">
+                                    <a href="./interfaces/WeekdayNameObject.html" >WeekdayNameObject</a>
+                                </li>
+                        </ul>
+                    </li>
+            
+                    <li class="chapter">
+                        <div class="simple menu-toggler" data-toggle="collapse"
+                                data-target="#xs-pipes-links"
+                            >
                             <span class="fa fa-plus"></span>
                             <span>Pipes</span>
-                            <span class="menu-toggler fa fa-angle-up" data-toggle="collapse"
-                                    data-target="#xs-pipes-links"
-                                ></span>
+                            <span class="fa fa-angle-down"></span>
                         </div>
-                        <ul class="links collapse in"
+                        <ul class="links collapse "
                                 id="xs-pipes-links"
                             >
                                 <li class="link">
@@ -528,9 +871,34 @@
                         </ul>
                     </li>
             
+                    <li class="chapter">
+                        <div class="simple menu-toggler" data-toggle="collapse"
+                                data-target="#xs-miscellaneous-links"
+                            >
+                            <span class="fa fa-cubes"></span>
+                            <span>Miscellaneous</span>
+                            <span class="fa fa-angle-down"></span>
+                        </div>
+                        <ul class="links collapse "
+                                id="xs-miscellaneous-links"
+                            >
+                                <li class="link">
+                                  <a href="./miscellaneous/enumerations.html" data-type="entity-link" >Enums</a>
+                                </li>
+                                <li class="link">
+                                  <a href="./miscellaneous/functions.html" data-type="entity-link" >Functions</a>
+                                </li>
+                                <li class="link">
+                                  <a href="./miscellaneous/typealiases.html" data-type="entity-link" >Type aliases</a>
+                                </li>
+                                <li class="link">
+                                  <a href="./miscellaneous/variables.html" data-type="entity-link" >Variables</a>
+                                </li>
+                        </ul>
+                    </li>
             
                     <li class="chapter">
-                        <a data-type="chapter-link" href="./miscellaneous.html" ><span class="fa fa-cubes"></span>Miscellaneous</a>
+                        <a data-type="chapter-link" href="./routes.html" ><span class="fa fa-code-fork"></span>Routes</a>
                     </li>
             
                     <li class="chapter">
@@ -570,9 +938,6 @@
                                <a data-type="chapter-link" href="./index.html"><span class="fa fa-home"></span>Getting started</a>
                                <ul class="links">
                                        <li class="link">
-                                           <a href="./index.html" ><span class="fa fa-file-text-o"></span>README</a>
-                                       </li>
-                                       <li class="link">
                                            <a 
                                                 href="./overview.html" 
                                                
@@ -581,26 +946,55 @@
                                                <span class="fa fa-th"></span>Overview
                                            </a>
                                        </li>
+                                       <li class="link">
+                                         <a href="./index.html" ><span class="fa fa-file-text-o"></span>README</a>
+                                       </li>
+                                       <li class="link">
+                                               <a href="./license.html"
+                                           >
+                                               <span class="fa fa-file-text-o"></span>LICENSE
+                                           </a>
+                                       </li>
                                </ul>
                            </li>
                    
                    
                            <li class="chapter">
                                <a data-type="chapter-link" href="./modules.html" >
-                                   <span class="fa fa-archive"></span>
-                                   <span>Modules</span>
-                                   <span class="menu-toggler fa fa-angle-up" data-toggle="collapse"
+                                   <div class="menu-toggler linked" data-toggle="collapse"
                                            data-target="#modules-links"
-                                   ></span>
+                                   >
+                                       <span class="fa fa-archive"></span>
+                                       <span class="link-name">Modules</span>
+                                       <span class="fa fa-angle-down"></span>
+                                   </div>
                                </a>
-                               <ul class="links collapse in"
+                               <ul class="links collapse "
                                        id="modules-links"
                    >
                                        <li class="link">
                                            <a href="./modules/AppModule.html" >AppModule</a>
                                        </li>
                                        <li class="link">
+                                           <a href="./modules/AppRoutingModule.html" >AppRoutingModule</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="./modules/BreadcrumbModule.html" >BreadcrumbModule</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="./modules/ConfigFormModule.html" >ConfigFormModule</a>
+                                       </li>
+                                       <li class="link">
                                            <a href="./modules/DatasetsModule.html" >DatasetsModule</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="./modules/DatePickerModule.html" >DatePickerModule</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="./modules/DialogModule.html" >DialogModule</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="./modules/ErrorPageModule.html" >ErrorPageModule</a>
                                        </li>
                                        <li class="link">
                                            <a href="./modules/SDKBrowserModule.html" >SDKBrowserModule</a>
@@ -615,14 +1009,14 @@
                            </li>
                    
                            <li class="chapter">
-                               <div class="simple">
+                               <div class="simple menu-toggler" data-toggle="collapse"
+                                       data-target="#components-links"
+                   >
                                    <span class="fa fa-cogs"></span>
                                    <span>Components</span>
-                                   <span class="menu-toggler fa fa-angle-up" data-toggle="collapse"
-                                           data-target="#components-links"
-                   ></span>
+                                   <span class="fa fa-angle-down"></span>
                                </div>
-                               <ul class="links collapse in"
+                               <ul class="links collapse "
                                        id="components-links"
                    >
                                        <li class="link">
@@ -653,13 +1047,22 @@
                                            <a href="./components/DatasetsFilterComponent.html" >DatasetsFilterComponent</a>
                                        </li>
                                        <li class="link">
-                                           <a href="./components/EndOfShiftComponent.html" >EndOfShiftComponent</a>
+                                           <a href="./components/DatePickerComponent.html" >DatePickerComponent</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="./components/DialogComponent.html" >DialogComponent</a>
                                        </li>
                                        <li class="link">
                                            <a href="./components/ErrorPageComponent.html" >ErrorPageComponent</a>
                                        </li>
                                        <li class="link">
                                            <a href="./components/JobsComponent.html" >JobsComponent</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="./components/JobsDetailComponent.html" >JobsDetailComponent</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="./components/JobsTableComponent.html" >JobsTableComponent</a>
                                        </li>
                                        <li class="link">
                                            <a href="./components/LoginComponent.html" >LoginComponent</a>
@@ -678,14 +1081,14 @@
                    
                    
                            <li class="chapter">
-                               <div class="simple">
+                               <div class="simple menu-toggler" data-toggle="collapse"
+                                       data-target="#classes-links"
+                   >
                                    <span class="fa fa-file-code-o"></span>
                                    <span>Classes</span>
-                                   <span class="menu-toggler fa fa-angle-up" data-toggle="collapse"
-                                           data-target="#classes-links"
-                   ></span>
+                                   <span class="fa fa-angle-down"></span>
                                </div>
-                               <ul class="links collapse in"
+                               <ul class="links collapse "
                                        id="classes-links"
                    >
                                        <li class="link">
@@ -716,7 +1119,16 @@
                                            <a href="./classes/AddGroupsAction.html" >AddGroupsAction</a>
                                        </li>
                                        <li class="link">
+                                           <a href="./classes/AddGroupsAction.html" >AddGroupsAction</a>
+                                       </li>
+                                       <li class="link">
                                            <a href="./classes/AddGroupsCompleteAction.html" >AddGroupsCompleteAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="./classes/AddGroupsCompleteAction.html" >AddGroupsCompleteAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="./classes/AddGroupsFailedAction.html" >AddGroupsFailedAction</a>
                                        </li>
                                        <li class="link">
                                            <a href="./classes/AddGroupsFailedAction.html" >AddGroupsFailedAction</a>
@@ -731,10 +1143,40 @@
                                            <a href="./classes/ApplicationCredential.html" >ApplicationCredential</a>
                                        </li>
                                        <li class="link">
+                                           <a href="./classes/BaseStorage.html" >BaseStorage</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="./classes/CalSuperMonth.html" >CalSuperMonth</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="./classes/ChildRetrieveAction.html" >ChildRetrieveAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="./classes/ChildRetrieveCompleteAction.html" >ChildRetrieveCompleteAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="./classes/ClearMessageAction.html" >ClearMessageAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="./classes/CurrentJobAction.html" >CurrentJobAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="./classes/CurrentSetAction.html" >CurrentSetAction</a>
+                                       </li>
+                                       <li class="link">
                                            <a href="./classes/CustomReuseStrategy.html" >CustomReuseStrategy</a>
                                        </li>
                                        <li class="link">
                                            <a href="./classes/Datablock.html" >Datablock</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="./classes/DatablockDeleteAction.html" >DatablockDeleteAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="./classes/DatablockDeleteCompleteAction.html" >DatablockDeleteCompleteAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="./classes/DatablockDeleteFailedAction.html" >DatablockDeleteFailedAction</a>
                                        </li>
                                        <li class="link">
                                            <a href="./classes/DatablocksAction.html" >DatablocksAction</a>
@@ -752,16 +1194,31 @@
                                            <a href="./classes/DatasetLifecycle.html" >DatasetLifecycle</a>
                                        </li>
                                        <li class="link">
+                                           <a href="./classes/DateWrapper.html" >DateWrapper</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="./classes/Day.html" >Day</a>
+                                       </li>
+                                       <li class="link">
                                            <a href="./classes/DerivedDataset.html" >DerivedDataset</a>
                                        </li>
                                        <li class="link">
+                                           <a href="./classes/FailedAction.html" >FailedAction</a>
+                                       </li>
+                                       <li class="link">
                                            <a href="./classes/FilterFailedAction.html" >FilterFailedAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="./classes/FilterValueAction.html" >FilterValueAction</a>
                                        </li>
                                        <li class="link">
                                            <a href="./classes/FireLoop.html" >FireLoop</a>
                                        </li>
                                        <li class="link">
                                            <a href="./classes/FireLoopRef.html" >FireLoopRef</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="./classes/FocusOnMonthAction.html" >FocusOnMonthAction</a>
                                        </li>
                                        <li class="link">
                                            <a href="./classes/IO.html" >IO</a>
@@ -827,13 +1284,43 @@
                                            <a href="./classes/MockLoopBackAuth.html" >MockLoopBackAuth</a>
                                        </li>
                                        <li class="link">
+                                           <a href="./classes/MockMatDialogData.html" >MockMatDialogData</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="./classes/MockMatDialogRef.html" >MockMatDialogRef</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="./classes/MockNotificationService.html" >MockNotificationService</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="./classes/MockProposalApi.html" >MockProposalApi</a>
+                                       </li>
+                                       <li class="link">
                                            <a href="./classes/MockRouter.html" >MockRouter</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="./classes/MockStore.html" >MockStore</a>
                                        </li>
                                        <li class="link">
                                            <a href="./classes/MockUserApi.html" >MockUserApi</a>
                                        </li>
                                        <li class="link">
                                            <a href="./classes/MockUserMsgService.html" >MockUserMsgService</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="./classes/Month.html" >Month</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="./classes/MultiDayRange.html" >MultiDayRange</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="./classes/MultiMonthRange.html" >MultiMonthRange</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="./classes/MultiWeekRange.html" >MultiWeekRange</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="./classes/MultiYearRange.html" >MultiYearRange</a>
                                        </li>
                                        <li class="link">
                                            <a href="./classes/OrigDatablock.html" >OrigDatablock</a>
@@ -849,6 +1336,27 @@
                                        </li>
                                        <li class="link">
                                            <a href="./classes/RawDataset.html" >RawDataset</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="./classes/RefocusToCurrentMonthAction.html" >RefocusToCurrentMonthAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="./classes/ResetStatusAction.html" >ResetStatusAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="./classes/ResetStatusCompleteAction.html" >ResetStatusCompleteAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="./classes/RestoreAction.html" >RestoreAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="./classes/ResyncTodayAction.html" >ResyncTodayAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="./classes/RetrieveAction.html" >RetrieveAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="./classes/RetrieveCompleteAction.html" >RetrieveCompleteAction</a>
                                        </li>
                                        <li class="link">
                                            <a href="./classes/RetrieveUserAction.html" >RetrieveUserAction</a>
@@ -869,13 +1377,13 @@
                                            <a href="./classes/Sample.html" >Sample</a>
                                        </li>
                                        <li class="link">
-                                           <a href="./classes/SearchAction.html" >SearchAction</a>
+                                           <a href="./classes/SaveAction.html" >SaveAction</a>
                                        </li>
                                        <li class="link">
-                                           <a href="./classes/SearchAction.html" >SearchAction</a>
+                                           <a href="./classes/SaveModeAction.html" >SaveModeAction</a>
                                        </li>
                                        <li class="link">
-                                           <a href="./classes/SearchCompleteAction.html" >SearchCompleteAction</a>
+                                           <a href="./classes/SaveSettingsAction.html" >SaveSettingsAction</a>
                                        </li>
                                        <li class="link">
                                            <a href="./classes/SearchCompleteAction.html" >SearchCompleteAction</a>
@@ -887,10 +1395,31 @@
                                            <a href="./classes/SearchIDAction.html" >SearchIDAction</a>
                                        </li>
                                        <li class="link">
+                                           <a href="./classes/SearchIDAction.html" >SearchIDAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="./classes/SearchIDCompleteAction.html" >SearchIDCompleteAction</a>
+                                       </li>
+                                       <li class="link">
                                            <a href="./classes/SearchIDCompleteAction.html" >SearchIDCompleteAction</a>
                                        </li>
                                        <li class="link">
                                            <a href="./classes/SearchIDFailedAction.html" >SearchIDFailedAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="./classes/SearchIDFailedAction.html" >SearchIDFailedAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="./classes/SetFocusYearAction.html" >SetFocusYearAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="./classes/SetSelectionModeAction.html" >SetSelectionModeAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="./classes/SetSelectionsAction.html" >SetSelectionsAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="./classes/ShowMessageAction.html" >ShowMessageAction</a>
                                        </li>
                                        <li class="link">
                                            <a href="./classes/SocketBrowser.html" >SocketBrowser</a>
@@ -899,16 +1428,61 @@
                                            <a href="./classes/SocketDriver.html" >SocketDriver</a>
                                        </li>
                                        <li class="link">
-                                           <a href="./classes/Storage.html" >Storage</a>
+                                           <a href="./classes/SortFailedAction.html" >SortFailedAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="./classes/SortUpdateAction.html" >SortUpdateAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="./classes/SortValueAction.html" >SortValueAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="./classes/StepFocusBackAction.html" >StepFocusBackAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="./classes/StepFocusForwardAction.html" >StepFocusForwardAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="./classes/SubmitAction.html" >SubmitAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="./classes/SubmitCompleteAction.html" >SubmitCompleteAction</a>
                                        </li>
                                        <li class="link">
                                            <a href="./classes/SynchTimes.html" >SynchTimes</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="./classes/TimeRange.html" >TimeRange</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="./classes/ToggleCalDispAction.html" >ToggleCalDispAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="./classes/ToggleCalModeAction.html" >ToggleCalModeAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="./classes/TotalSetsAction.html" >TotalSetsAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="./classes/UIStoreAction.html" >UIStoreAction</a>
                                        </li>
                                        <li class="link">
                                            <a href="./classes/UpdateFilterAction.html" >UpdateFilterAction</a>
                                        </li>
                                        <li class="link">
                                            <a href="./classes/UpdateFilterCompleteAction.html" >UpdateFilterCompleteAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="./classes/UpdateFocusMonthAction.html" >UpdateFocusMonthAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="./classes/UpdateSelectedAction.html" >UpdateSelectedAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="./classes/UpdateSelectionsAction.html" >UpdateSelectionsAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="./classes/UpdateSortCompleteAction.html" >UpdateSortCompleteAction</a>
                                        </li>
                                        <li class="link">
                                            <a href="./classes/User.html" >User</a>
@@ -919,18 +1493,24 @@
                                        <li class="link">
                                            <a href="./classes/UserIdentity.html" >UserIdentity</a>
                                        </li>
+                                       <li class="link">
+                                           <a href="./classes/Week.html" >Week</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="./classes/Year.html" >Year</a>
+                                       </li>
                                </ul>
                            </li>
                    
                            <li class="chapter">
-                               <div class="simple">
+                               <div class="simple menu-toggler" data-toggle="collapse"
+                                       data-target="#injectables-links"
+                   >
                                    <span class="fa fa-long-arrow-down"></span>
                                    <span>Injectables</span>
-                                   <span class="menu-toggler fa fa-angle-up" data-toggle="collapse"
-                                           data-target="#injectables-links"
-                   ></span>
+                                   <span class="fa fa-angle-down"></span>
                                </div>
-                               <ul class="links collapse in"
+                               <ul class="links collapse "
                                        id="injectables-links"
                    >
                                        <li class="link">
@@ -985,6 +1565,9 @@
                                            <a href="./injectables/JobApi.html" >JobApi</a>
                                        </li>
                                        <li class="link">
+                                           <a href="./injectables/JobsEffects.html" >JobsEffects</a>
+                                       </li>
+                                       <li class="link">
                                            <a href="./injectables/LoggerService.html" >LoggerService</a>
                                        </li>
                                        <li class="link">
@@ -1035,22 +1618,150 @@
                                        <li class="link">
                                            <a href="./injectables/UserIdentityApi.html" >UserIdentityApi</a>
                                        </li>
-                                       <li class="link">
-                                           <a href="./injectables/UserMsgService.html" >UserMsgService</a>
-                                       </li>
                                </ul>
                            </li>
                    
                    
                            <li class="chapter">
-                               <div class="simple">
+                               <div class="simple menu-toggler" data-toggle="collapse"
+                                       data-target="#interfaces-links"
+                   >
+                                   <span class="fa fa-info"></span>
+                                   <span>Interfaces</span>
+                                   <span class="fa fa-angle-down"></span>
+                               </div>
+                               <ul class="links collapse "
+                                       id="interfaces-links"
+                   >
+                                       <li class="link">
+                                           <a href="./interfaces/AccessGroupInterface.html" >AccessGroupInterface</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="./interfaces/AccessTokenInterface.html" >AccessTokenInterface</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="./interfaces/AccessUserInterface.html" >AccessUserInterface</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="./interfaces/AppState.html" >AppState</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="./interfaces/AppState.html" >AppState</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="./interfaces/ApplicationCredentialInterface.html" >ApplicationCredentialInterface</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="./interfaces/Breadcrumb.html" >Breadcrumb</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="./interfaces/CookieInterface.html" >CookieInterface</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="./interfaces/DashboardUIState.html" >DashboardUIState</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="./interfaces/DatablockInterface.html" >DatablockInterface</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="./interfaces/DatasetFilters.html" >DatasetFilters</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="./interfaces/DatasetInterface.html" >DatasetInterface</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="./interfaces/DatasetLifecycleInterface.html" >DatasetLifecycleInterface</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="./interfaces/DatasetState.html" >DatasetState</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="./interfaces/DatepickerState.html" >DatepickerState</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="./interfaces/DerivedDatasetInterface.html" >DerivedDatasetInterface</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="./interfaces/GeoPoint.html" >GeoPoint</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="./interfaces/IStringToBoolDict.html" >IStringToBoolDict</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="./interfaces/IStringToNumDict.html" >IStringToNumDict</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="./interfaces/JobInterface.html" >JobInterface</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="./interfaces/JobsState.html" >JobsState</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="./interfaces/LoopBackFilter.html" >LoopBackFilter</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="./interfaces/Message.html" >Message</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="./interfaces/Models.html" >Models</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="./interfaces/OrigDatablockInterface.html" >OrigDatablockInterface</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="./interfaces/PolicyInterface.html" >PolicyInterface</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="./interfaces/ProposalInterface.html" >ProposalInterface</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="./interfaces/RabbitMQInterface.html" >RabbitMQInterface</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="./interfaces/RawDatasetInterface.html" >RawDatasetInterface</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="./interfaces/SampleInterface.html" >SampleInterface</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="./interfaces/Settings.html" >Settings</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="./interfaces/StatFilter.html" >StatFilter</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="./interfaces/SynchTimesInterface.html" >SynchTimesInterface</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="./interfaces/TimerRangeSelectorState.html" >TimerRangeSelectorState</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="./interfaces/UserCredentialInterface.html" >UserCredentialInterface</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="./interfaces/UserIdentityInterface.html" >UserIdentityInterface</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="./interfaces/UserInterface.html" >UserInterface</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="./interfaces/UserState.html" >UserState</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="./interfaces/WeekdayNameObject.html" >WeekdayNameObject</a>
+                                       </li>
+                               </ul>
+                           </li>
+                   
+                           <li class="chapter">
+                               <div class="simple menu-toggler" data-toggle="collapse"
+                                       data-target="#pipes-links"
+                   >
                                    <span class="fa fa-plus"></span>
                                    <span>Pipes</span>
-                                   <span class="menu-toggler fa fa-angle-up" data-toggle="collapse"
-                                           data-target="#pipes-links"
-                   ></span>
+                                   <span class="fa fa-angle-down"></span>
                                </div>
-                               <ul class="links collapse in"
+                               <ul class="links collapse "
                                        id="pipes-links"
                    >
                                        <li class="link">
@@ -1062,9 +1773,34 @@
                                </ul>
                            </li>
                    
+                           <li class="chapter">
+                               <div class="simple menu-toggler" data-toggle="collapse"
+                                       data-target="#miscellaneous-links"
+                   >
+                                   <span class="fa fa-cubes"></span>
+                                   <span>Miscellaneous</span>
+                                   <span class="fa fa-angle-down"></span>
+                               </div>
+                               <ul class="links collapse "
+                                       id="miscellaneous-links"
+                   >
+                                       <li class="link">
+                                         <a href="./miscellaneous/enumerations.html" data-type="entity-link" >Enums</a>
+                                       </li>
+                                       <li class="link">
+                                         <a href="./miscellaneous/functions.html" data-type="entity-link" >Functions</a>
+                                       </li>
+                                       <li class="link">
+                                         <a href="./miscellaneous/typealiases.html" data-type="entity-link" >Type aliases</a>
+                                       </li>
+                                       <li class="link">
+                                         <a href="./miscellaneous/variables.html" data-type="entity-link" >Variables</a>
+                                       </li>
+                               </ul>
+                           </li>
                    
                            <li class="chapter">
-                               <a data-type="chapter-link" href="./miscellaneous.html" ><span class="fa fa-cubes"></span>Miscellaneous</a>
+                               <a data-type="chapter-link" href="./routes.html" ><span class="fa fa-code-fork"></span>Routes</a>
                            </li>
                    
                            <li class="chapter">
@@ -1084,591 +1820,790 @@
                </div>
                <div class="content overview">
                    <div class="content-data">
+
+
 <h3>Overview</h3>
-<div class="text-center">
-    <div id="module-graph-svg">
-        <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+            <div class="text-center module-graph-container">
+                <div id="module-graph-svg">
+                    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <!-- Generated by graphviz version 2.40.1 (20161225.0304)
  -->
 <!-- Title: dependencies Pages: 1 -->
-<svg width="3941pt" height="425pt"
- viewBox="0.00 0.00 3941.00 425.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 421)">
+<svg width="4792pt" height="504pt"
+ viewBox="0.00 0.00 4792.00 504.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 500)">
 <title>dependencies</title>
-<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-421 3937,-421 3937,4 -4,4"/>
-<text text-anchor="start" x="1945.5091" y="-42.4" font-family="sans-serif" font-weight="bold" font-size="14.00" fill="#000000">Legend</text>
-<polygon fill="#ffffb3" stroke="transparent" points="1732.5,-10 1732.5,-30 1752.5,-30 1752.5,-10 1732.5,-10"/>
-<text text-anchor="start" x="1756.129" y="-15.4" font-family="sans-serif" font-size="14.00" fill="#000000"> &#160;Declarations</text>
-<polygon fill="#8dd3c7" stroke="transparent" points="1845.5,-10 1845.5,-30 1865.5,-30 1865.5,-10 1845.5,-10"/>
-<text text-anchor="start" x="1869.2251" y="-15.4" font-family="sans-serif" font-size="14.00" fill="#000000"> &#160;Module</text>
-<polygon fill="#80b1d3" stroke="transparent" points="1931.5,-10 1931.5,-30 1951.5,-30 1951.5,-10 1931.5,-10"/>
-<text text-anchor="start" x="1955.2812" y="-15.4" font-family="sans-serif" font-size="14.00" fill="#000000"> &#160;Bootstrap</text>
-<polygon fill="#fdb462" stroke="transparent" points="2028.5,-10 2028.5,-30 2048.5,-30 2048.5,-10 2028.5,-10"/>
-<text text-anchor="start" x="2052.1732" y="-15.4" font-family="sans-serif" font-size="14.00" fill="#000000"> &#160;Providers</text>
-<polygon fill="#fb8072" stroke="transparent" points="2124.5,-10 2124.5,-30 2144.5,-30 2144.5,-10 2124.5,-10"/>
-<text text-anchor="start" x="2148.2258" y="-15.4" font-family="sans-serif" font-size="14.00" fill="#000000"> &#160;Exports</text>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-500 4788,-500 4788,4 -4,4"/>
+<text text-anchor="start" x="2371.0091" y="-42.4" font-family="sans-serif" font-weight="bold" font-size="14.00" fill="#000000">Legend</text>
+<polygon fill="#ffffb3" stroke="transparent" points="2158,-10 2158,-30 2178,-30 2178,-10 2158,-10"/>
+<text text-anchor="start" x="2181.629" y="-15.4" font-family="sans-serif" font-size="14.00" fill="#000000"> &#160;Declarations</text>
+<polygon fill="#8dd3c7" stroke="transparent" points="2271,-10 2271,-30 2291,-30 2291,-10 2271,-10"/>
+<text text-anchor="start" x="2294.7251" y="-15.4" font-family="sans-serif" font-size="14.00" fill="#000000"> &#160;Module</text>
+<polygon fill="#80b1d3" stroke="transparent" points="2357,-10 2357,-30 2377,-30 2377,-10 2357,-10"/>
+<text text-anchor="start" x="2380.7812" y="-15.4" font-family="sans-serif" font-size="14.00" fill="#000000"> &#160;Bootstrap</text>
+<polygon fill="#fdb462" stroke="transparent" points="2454,-10 2454,-30 2474,-30 2474,-10 2454,-10"/>
+<text text-anchor="start" x="2477.6732" y="-15.4" font-family="sans-serif" font-size="14.00" fill="#000000"> &#160;Providers</text>
+<polygon fill="#fb8072" stroke="transparent" points="2550,-10 2550,-30 2570,-30 2570,-10 2550,-10"/>
+<text text-anchor="start" x="2573.7258" y="-15.4" font-family="sans-serif" font-size="14.00" fill="#000000"> &#160;Exports</text>
 <g id="clust1" class="cluster">
 <title>cluster_AppModule</title>
-<polygon fill="none" stroke="#000000" stroke-dasharray="1,5" points="676,-70 676,-409 3312,-409 3312,-70 676,-70"/>
+<polygon fill="none" stroke="#000000" stroke-dasharray="1,5" points="745,-214 745,-488 1875,-488 1875,-214 745,-214"/>
+</g>
+<g id="clust2" class="cluster">
+<title>cluster_AppModule_declarations</title>
+<polygon fill="none" stroke="#000000" points="785,-298 785,-350 1543,-350 1543,-298 785,-298"/>
 </g>
 <g id="clust3" class="cluster">
+<title>cluster_AppModule_AppComponent_providers</title>
+<polygon fill="none" stroke="#000000" points="1247,-222 1247,-274 1351,-274 1351,-222 1247,-222"/>
+</g>
+<g id="clust8" class="cluster">
 <title>cluster_AppModule_imports</title>
-<polygon fill="none" stroke="#000000" points="684,-78 684,-271 3304,-271 3304,-78 684,-78"/>
-</g>
-<g id="clust5" class="cluster">
-<title>cluster_AppModule_bootstrap</title>
-<polygon fill="none" stroke="#000000" points="2310,-349 2310,-401 2434,-401 2434,-349 2310,-349"/>
-</g>
-<g id="clust7" class="cluster">
-<title>cluster_DatasetsModule</title>
-<polygon fill="none" stroke="#000000" stroke-dasharray="1,5" points="3320,-135 3320,-203 3925,-203 3925,-135 3320,-135"/>
-</g>
-<g id="clust9" class="cluster">
-<title>cluster_DatasetsModule_imports</title>
-<polygon fill="none" stroke="#000000" points="3510,-143 3510,-195 3917,-195 3917,-143 3510,-143"/>
+<polygon fill="none" stroke="#000000" points="1563,-222 1563,-350 1867,-350 1867,-222 1563,-222"/>
 </g>
 <g id="clust10" class="cluster">
-<title>cluster_DatasetsModule_exports</title>
-<polygon fill="none" stroke="#000000" points="3328,-143 3328,-195 3502,-195 3502,-143 3328,-143"/>
+<title>cluster_AppModule_bootstrap</title>
+<polygon fill="none" stroke="#000000" points="1350,-428 1350,-480 1474,-480 1474,-428 1350,-428"/>
 </g>
-<g id="clust13" class="cluster">
-<title>cluster_SDKBrowserModule</title>
-<polygon fill="none" stroke="#000000" stroke-dasharray="1,5" points="3718,-219 3718,-271 3868,-271 3868,-219 3718,-219"/>
+<g id="clust11" class="cluster">
+<title>cluster_AppModule_providers</title>
+<polygon fill="none" stroke="#000000" points="753,-222 753,-274 1035,-274 1035,-222 753,-222"/>
+</g>
+<g id="clust18" class="cluster">
+<title>cluster_BreadcrumbModule</title>
+<polygon fill="none" stroke="#000000" stroke-dasharray="1,5" points="551,-70 551,-282 737,-282 737,-70 551,-70"/>
 </g>
 <g id="clust19" class="cluster">
-<title>cluster_SharedCatanieModule</title>
-<polygon fill="none" stroke="#000000" stroke-dasharray="1,5" points="8,-211 8,-279 668,-279 668,-211 8,-211"/>
-</g>
-<g id="clust21" class="cluster">
-<title>cluster_SharedCatanieModule_imports</title>
-<polygon fill="none" stroke="#000000" points="546,-219 546,-271 660,-271 660,-219 546,-219"/>
+<title>cluster_BreadcrumbModule_declarations</title>
+<polygon fill="none" stroke="#000000" points="562,-78 562,-130 728,-130 728,-78 562,-78"/>
 </g>
 <g id="clust22" class="cluster">
-<title>cluster_SharedCatanieModule_exports</title>
-<polygon fill="none" stroke="#000000" points="16,-219 16,-271 538,-271 538,-219 16,-219"/>
+<title>cluster_BreadcrumbModule_exports</title>
+<polygon fill="none" stroke="#000000" points="559,-222 559,-274 729,-274 729,-222 559,-222"/>
 </g>
-<!-- AppRoutingModule -->
+<g id="clust25" class="cluster">
+<title>cluster_ConfigFormModule</title>
+<polygon fill="none" stroke="#000000" stroke-dasharray="1,5" points="1883,-70 1883,-282 2287,-282 2287,-70 1883,-70"/>
+</g>
+<g id="clust26" class="cluster">
+<title>cluster_ConfigFormModule_declarations</title>
+<polygon fill="none" stroke="#000000" points="1891,-78 1891,-130 2279,-130 2279,-78 1891,-78"/>
+</g>
+<g id="clust31" class="cluster">
+<title>cluster_ConfigFormModule_exports</title>
+<polygon fill="none" stroke="#000000" points="1960,-222 1960,-274 2130,-274 2130,-222 1960,-222"/>
+</g>
+<g id="clust34" class="cluster">
+<title>cluster_DatasetsModule</title>
+<polygon fill="none" stroke="#000000" stroke-dasharray="1,5" points="2477,-214 2477,-282 4115,-282 4115,-214 2477,-214"/>
+</g>
+<g id="clust35" class="cluster">
+<title>cluster_DatasetsModule_declarations</title>
+<polygon fill="none" stroke="#000000" points="3110,-222 3110,-274 4107,-274 4107,-222 3110,-222"/>
+</g>
+<g id="clust42" class="cluster">
+<title>cluster_DatasetsModule_imports</title>
+<polygon fill="none" stroke="#000000" points="2848,-222 2848,-274 3102,-274 3102,-222 2848,-222"/>
+</g>
+<g id="clust43" class="cluster">
+<title>cluster_DatasetsModule_exports</title>
+<polygon fill="none" stroke="#000000" points="2485,-222 2485,-274 2840,-274 2840,-222 2485,-222"/>
+</g>
+<g id="clust46" class="cluster">
+<title>cluster_DatePickerModule</title>
+<polygon fill="none" stroke="#000000" stroke-dasharray="1,5" points="2943,-138 2943,-206 3291,-206 3291,-138 2943,-138"/>
+</g>
+<g id="clust47" class="cluster">
+<title>cluster_DatePickerModule_declarations</title>
+<polygon fill="none" stroke="#000000" points="3123,-146 3123,-198 3283,-198 3283,-146 3123,-146"/>
+</g>
+<g id="clust50" class="cluster">
+<title>cluster_DatePickerModule_exports</title>
+<polygon fill="none" stroke="#000000" points="2951,-146 2951,-198 3115,-198 3115,-146 2951,-146"/>
+</g>
+<g id="clust53" class="cluster">
+<title>cluster_DialogModule</title>
+<polygon fill="none" stroke="#000000" stroke-dasharray="1,5" points="2783,-138 2783,-206 2935,-206 2935,-138 2783,-138"/>
+</g>
+<g id="clust54" class="cluster">
+<title>cluster_DialogModule_declarations</title>
+<polygon fill="none" stroke="#000000" points="2791,-146 2791,-198 2927,-198 2927,-146 2791,-146"/>
+</g>
+<g id="clust60" class="cluster">
+<title>cluster_ErrorPageModule</title>
+<polygon fill="none" stroke="#000000" stroke-dasharray="1,5" points="2295,-70 2295,-282 2469,-282 2469,-70 2295,-70"/>
+</g>
+<g id="clust61" class="cluster">
+<title>cluster_ErrorPageModule_declarations</title>
+<polygon fill="none" stroke="#000000" points="2304,-78 2304,-130 2458,-130 2458,-78 2304,-78"/>
+</g>
+<g id="clust64" class="cluster">
+<title>cluster_ErrorPageModule_exports</title>
+<polygon fill="none" stroke="#000000" points="2303,-222 2303,-274 2461,-274 2461,-222 2303,-222"/>
+</g>
+<g id="clust67" class="cluster">
+<title>cluster_SDKBrowserModule</title>
+<polygon fill="none" stroke="#000000" stroke-dasharray="1,5" points="3868,-70 3868,-198 4207,-198 4207,-70 3868,-70"/>
+</g>
+<g id="clust72" class="cluster">
+<title>cluster_SDKBrowserModule_providers</title>
+<polygon fill="none" stroke="#000000" points="3876,-78 3876,-130 4199,-130 4199,-78 3876,-78"/>
+</g>
+<g id="clust73" class="cluster">
+<title>cluster_SharedCatanieModule</title>
+<polygon fill="none" stroke="#000000" stroke-dasharray="1,5" points="8,-290 8,-358 737,-358 737,-290 8,-290"/>
+</g>
+<g id="clust76" class="cluster">
+<title>cluster_SharedCatanieModule_exports</title>
+<polygon fill="none" stroke="#000000" points="174,-298 174,-350 729,-350 729,-298 174,-298"/>
+</g>
+<g id="clust78" class="cluster">
+<title>cluster_SharedCatanieModule_providers</title>
+<polygon fill="none" stroke="#000000" points="16,-298 16,-350 166,-350 166,-298 16,-298"/>
+</g>
+<g id="clust79" class="cluster">
+<title>cluster_UsersModule</title>
+<polygon fill="none" stroke="#000000" stroke-dasharray="1,5" points="4123,-214 4123,-282 4776,-282 4776,-214 4123,-214"/>
+</g>
+<g id="clust80" class="cluster">
+<title>cluster_UsersModule_declarations</title>
+<polygon fill="none" stroke="#000000" points="4301,-222 4301,-274 4768,-274 4768,-222 4301,-222"/>
+</g>
+<g id="clust87" class="cluster">
+<title>cluster_UsersModule_providers</title>
+<polygon fill="none" stroke="#000000" points="4131,-222 4131,-274 4293,-274 4293,-222 4131,-222"/>
+</g>
+<!-- AppComponent -->
 <g id="node1" class="node">
-<title>AppRoutingModule</title>
-<polygon fill="#8dd3c7" stroke="#000000" points="1226.2744,-122 1223.2744,-126 1202.2744,-126 1199.2744,-122 1097.7256,-122 1097.7256,-86 1226.2744,-86 1226.2744,-122"/>
-<text text-anchor="middle" x="1162" y="-99.8" font-family="Times,serif" font-size="14.00" fill="#000000">AppRoutingModule</text>
+<title>AppComponent</title>
+<polygon fill="#ffffb3" stroke="#000000" points="898.9399,-342 793.0601,-342 793.0601,-306 898.9399,-306 898.9399,-342"/>
+<text text-anchor="middle" x="846" y="-319.8" font-family="Times,serif" font-size="14.00" fill="#000000">AppComponent</text>
 </g>
 <!-- AppModule -->
-<g id="node23" class="node">
+<g id="node6" class="node">
 <title>AppModule</title>
-<polygon fill="#8dd3c7" stroke="#000000" points="2413.6571,-328 2410.6571,-332 2389.6571,-332 2386.6571,-328 2330.3429,-328 2330.3429,-292 2413.6571,-292 2413.6571,-328"/>
-<text text-anchor="middle" x="2372" y="-305.8" font-family="Times,serif" font-size="14.00" fill="#000000">AppModule</text>
+<polygon fill="#8dd3c7" stroke="#000000" points="1453.6571,-407 1450.6571,-411 1429.6571,-411 1426.6571,-407 1370.3429,-407 1370.3429,-371 1453.6571,-371 1453.6571,-407"/>
+<text text-anchor="middle" x="1412" y="-384.8" font-family="Times,serif" font-size="14.00" fill="#000000">AppModule</text>
+</g>
+<!-- AppComponent&#45;&gt;AppModule -->
+<g id="edge1" class="edge">
+<title>AppComponent&#45;&gt;AppModule</title>
+<path fill="none" stroke="#000000" d="M846,-342.2843C846,-363.3211 846,-395 846,-395 846,-395 1359.9204,-395 1359.9204,-395"/>
+<polygon fill="#000000" stroke="#000000" points="1359.9205,-398.5001 1369.9204,-395 1359.9204,-391.5001 1359.9205,-398.5001"/>
+</g>
+<!-- JobsComponent -->
+<g id="node2" class="node">
+<title>JobsComponent</title>
+<polygon fill="#ffffb3" stroke="#000000" points="1535.2218,-342 1428.7782,-342 1428.7782,-306 1535.2218,-306 1535.2218,-342"/>
+<text text-anchor="middle" x="1482" y="-319.8" font-family="Times,serif" font-size="14.00" fill="#000000">JobsComponent</text>
+</g>
+<!-- JobsComponent&#45;&gt;AppModule -->
+<g id="edge3" class="edge">
+<title>JobsComponent&#45;&gt;AppModule</title>
+<path fill="none" stroke="#000000" d="M1441.3587,-342.1061C1441.3587,-342.1061 1441.3587,-360.991 1441.3587,-360.991"/>
+<polygon fill="#000000" stroke="#000000" points="1437.8588,-360.9909 1441.3587,-370.991 1444.8588,-360.991 1437.8588,-360.9909"/>
+</g>
+<!-- JobsTableComponent -->
+<g id="node3" class="node">
+<title>JobsTableComponent</title>
+<polygon fill="#ffffb3" stroke="#000000" points="1411.094,-342 1272.906,-342 1272.906,-306 1411.094,-306 1411.094,-342"/>
+<text text-anchor="middle" x="1342" y="-319.8" font-family="Times,serif" font-size="14.00" fill="#000000">JobsTableComponent</text>
+</g>
+<!-- JobsTableComponent&#45;&gt;AppModule -->
+<g id="edge4" class="edge">
+<title>JobsTableComponent&#45;&gt;AppModule</title>
+<path fill="none" stroke="#000000" d="M1390.6094,-342.1061C1390.6094,-342.1061 1390.6094,-360.991 1390.6094,-360.991"/>
+<polygon fill="#000000" stroke="#000000" points="1387.1095,-360.9909 1390.6094,-370.991 1394.1095,-360.991 1387.1095,-360.9909"/>
+</g>
+<!-- SampleDataFormComponent -->
+<g id="node4" class="node">
+<title>SampleDataFormComponent</title>
+<polygon fill="#ffffb3" stroke="#000000" points="1255.0856,-342 1074.9144,-342 1074.9144,-306 1255.0856,-306 1255.0856,-342"/>
+<text text-anchor="middle" x="1165" y="-319.8" font-family="Times,serif" font-size="14.00" fill="#000000">SampleDataFormComponent</text>
+</g>
+<!-- SampleDataFormComponent&#45;&gt;AppModule -->
+<g id="edge5" class="edge">
+<title>SampleDataFormComponent&#45;&gt;AppModule</title>
+<path fill="none" stroke="#000000" d="M1165,-342.2396C1165,-357.5706 1165,-377 1165,-377 1165,-377 1360.0998,-377 1360.0998,-377"/>
+<polygon fill="#000000" stroke="#000000" points="1360.0999,-380.5001 1370.0998,-377 1360.0998,-373.5001 1360.0999,-380.5001"/>
+</g>
+<!-- JobsDetailComponent -->
+<g id="node5" class="node">
+<title>JobsDetailComponent</title>
+<polygon fill="#ffffb3" stroke="#000000" points="1057.4299,-342 916.5701,-342 916.5701,-306 1057.4299,-306 1057.4299,-342"/>
+<text text-anchor="middle" x="987" y="-319.8" font-family="Times,serif" font-size="14.00" fill="#000000">JobsDetailComponent</text>
+</g>
+<!-- JobsDetailComponent&#45;&gt;AppModule -->
+<g id="edge6" class="edge">
+<title>JobsDetailComponent&#45;&gt;AppModule</title>
+<path fill="none" stroke="#000000" d="M987,-342.0225C987,-359.3734 987,-383 987,-383 987,-383 1360.0862,-383 1360.0862,-383"/>
+<polygon fill="#000000" stroke="#000000" points="1360.0863,-386.5001 1370.0862,-383 1360.0862,-379.5001 1360.0863,-386.5001"/>
+</g>
+<!-- AppComponent  -->
+<g id="node12" class="node">
+<title>AppComponent </title>
+<polygon fill="#80b1d3" stroke="#000000" points="1466.439,-472 1357.561,-472 1357.561,-436 1466.439,-436 1466.439,-472"/>
+<text text-anchor="middle" x="1412" y="-449.8" font-family="Times,serif" font-size="14.00" fill="#000000">AppComponent </text>
+</g>
+<!-- AppModule&#45;&gt;AppComponent  -->
+<g id="edge11" class="edge">
+<title>AppModule&#45;&gt;AppComponent </title>
+<path fill="none" stroke="#000000" stroke-dasharray="1,5" d="M1412,-407.1061C1412,-407.1061 1412,-425.991 1412,-425.991"/>
+<polygon fill="#000000" stroke="#000000" points="1408.5001,-425.9909 1412,-435.991 1415.5001,-425.991 1408.5001,-425.9909"/>
+</g>
+<!-- UserApi -->
+<g id="node7" class="node">
+<title>UserApi</title>
+<ellipse fill="#fdb462" stroke="#000000" cx="1299" cy="-248" rx="43.9983" ry="18"/>
+<text text-anchor="middle" x="1299" y="-243.8" font-family="Times,serif" font-size="14.00" fill="#000000">UserApi</text>
+</g>
+<!-- UserApi&#45;&gt;AppComponent -->
+<g id="edge2" class="edge">
+<title>UserApi&#45;&gt;AppComponent</title>
+<path fill="none" stroke="#000000" d="M1264.1023,-259.0279C1264.1023,-274.292 1264.1023,-300 1264.1023,-300 1264.1023,-300 893.8866,-300 893.8866,-300 893.8866,-300 893.8866,-300.581 893.8866,-300.581"/>
+<polygon fill="#000000" stroke="#000000" points="890.3868,-295.8097 893.8866,-305.8097 897.3868,-295.8098 890.3868,-295.8097"/>
+</g>
+<!-- UserApi&#45;&gt;AppModule -->
+<g id="edge14" class="edge">
+<title>UserApi&#45;&gt;AppModule</title>
+<path fill="none" stroke="#000000" d="M1340.2687,-254C1374.2949,-254 1416.9944,-254 1416.9944,-254 1416.9944,-254 1416.9944,-360.7933 1416.9944,-360.7933"/>
+<polygon fill="#000000" stroke="#000000" points="1413.4945,-360.7933 1416.9944,-370.7933 1420.4945,-360.7933 1413.4945,-360.7933"/>
+</g>
+<!-- AppRoutingModule -->
+<g id="node8" class="node">
+<title>AppRoutingModule</title>
+<polygon fill="#8dd3c7" stroke="#000000" points="1859.2744,-266 1856.2744,-270 1835.2744,-270 1832.2744,-266 1730.7256,-266 1730.7256,-230 1859.2744,-230 1859.2744,-266"/>
+<text text-anchor="middle" x="1795" y="-243.8" font-family="Times,serif" font-size="14.00" fill="#000000">AppRoutingModule</text>
 </g>
 <!-- AppRoutingModule&#45;&gt;AppModule -->
-<g id="edge1" class="edge">
+<g id="edge7" class="edge">
 <title>AppRoutingModule&#45;&gt;AppModule</title>
-<path fill="none" stroke="#000000" d="M1162,-122.3558C1162,-173.6908 1162,-315 1162,-315 1162,-315 2319.9977,-315 2319.9977,-315"/>
-<polygon fill="#000000" stroke="#000000" points="2319.9977,-318.5001 2329.9977,-315 2319.9976,-311.5001 2319.9977,-318.5001"/>
-</g>
-<!-- BrowserModule -->
-<g id="node2" class="node">
-<title>BrowserModule</title>
-<polygon fill="#8dd3c7" stroke="#000000" points="1351.4734,-122 1348.4734,-126 1327.4734,-126 1324.4734,-122 1244.5266,-122 1244.5266,-86 1351.4734,-86 1351.4734,-122"/>
-<text text-anchor="middle" x="1298" y="-99.8" font-family="Times,serif" font-size="14.00" fill="#000000">BrowserModule</text>
-</g>
-<!-- BrowserModule&#45;&gt;AppModule -->
-<g id="edge2" class="edge">
-<title>BrowserModule&#45;&gt;AppModule</title>
-<path fill="none" stroke="#000000" d="M1298,-122.0948C1298,-172.6999 1298,-312 1298,-312 1298,-312 2320.2276,-312 2320.2276,-312"/>
-<polygon fill="#000000" stroke="#000000" points="2320.2276,-315.5001 2330.2276,-312 2320.2275,-308.5001 2320.2276,-315.5001"/>
-</g>
-<!-- FormsModule -->
-<g id="node3" class="node">
-<title>FormsModule</title>
-<polygon fill="#8dd3c7" stroke="#000000" points="3193.8288,-122 3190.8288,-126 3169.8288,-126 3166.8288,-122 3098.1712,-122 3098.1712,-86 3193.8288,-86 3193.8288,-122"/>
-<text text-anchor="middle" x="3146" y="-99.8" font-family="Times,serif" font-size="14.00" fill="#000000">FormsModule</text>
+<path fill="none" stroke="#000000" d="M1758.3875,-266.1446C1758.3875,-304.2265 1758.3875,-389 1758.3875,-389 1758.3875,-389 1463.7824,-389 1463.7824,-389"/>
+<polygon fill="#000000" stroke="#000000" points="1463.7825,-385.5001 1453.7824,-389 1463.7824,-392.5001 1463.7825,-385.5001"/>
 </g>
 <!-- SharedCatanieModule -->
-<g id="node15" class="node">
+<g id="node9" class="node">
 <title>SharedCatanieModule</title>
-<polygon fill="#8dd3c7" stroke="#000000" points="2642.6839,-187 2639.6839,-191 2618.6839,-191 2615.6839,-187 2501.3161,-187 2501.3161,-151 2642.6839,-151 2642.6839,-187"/>
-<text text-anchor="middle" x="2572" y="-164.8" font-family="Times,serif" font-size="14.00" fill="#000000">SharedCatanieModule</text>
+<polygon fill="#8dd3c7" stroke="#000000" points="1712.6839,-266 1709.6839,-270 1688.6839,-270 1685.6839,-266 1571.3161,-266 1571.3161,-230 1712.6839,-230 1712.6839,-266"/>
+<text text-anchor="middle" x="1642" y="-243.8" font-family="Times,serif" font-size="14.00" fill="#000000">SharedCatanieModule</text>
 </g>
-<!-- FormsModule&#45;&gt;SharedCatanieModule -->
-<g id="edge37" class="edge">
-<title>FormsModule&#45;&gt;SharedCatanieModule</title>
-<path fill="none" stroke="#000000" d="M3122.168,-122.0449C3122.168,-129.749 3122.168,-137 3122.168,-137 3122.168,-137 2637.2908,-137 2637.2908,-137 2637.2908,-137 2637.2908,-140.7566 2637.2908,-140.7566"/>
-<polygon fill="#000000" stroke="#000000" points="2633.7909,-140.7566 2637.2908,-150.7566 2640.7909,-140.7566 2633.7909,-140.7566"/>
+<!-- SharedCatanieModule&#45;&gt;AppModule -->
+<g id="edge8" class="edge">
+<title>SharedCatanieModule&#45;&gt;AppModule</title>
+<path fill="none" stroke="#000000" d="M1571.1806,-242C1507.1796,-242 1422.9418,-242 1422.9418,-242 1422.9418,-242 1422.9418,-360.9749 1422.9418,-360.9749"/>
+<polygon fill="#000000" stroke="#000000" points="1419.4419,-360.9749 1422.9418,-370.9749 1426.4419,-360.9749 1419.4419,-360.9749"/>
 </g>
 <!-- DatasetsModule -->
-<g id="node17" class="node">
-<title>DatasetsModule</title>
-<polygon fill="#8dd3c7" stroke="#000000" points="3090.4706,-263 3087.4706,-267 3066.4706,-267 3063.4706,-263 2983.5294,-263 2983.5294,-227 3090.4706,-227 3090.4706,-263"/>
-<text text-anchor="middle" x="3037" y="-240.8" font-family="Times,serif" font-size="14.00" fill="#000000">DatasetsModule</text>
-</g>
-<!-- FormsModule&#45;&gt;DatasetsModule -->
-<g id="edge25" class="edge">
-<title>FormsModule&#45;&gt;DatasetsModule</title>
-<path fill="none" stroke="#000000" d="M3098.0501,-104C3089.2264,-104 3082.7355,-104 3082.7355,-104 3082.7355,-104 3082.7355,-216.8554 3082.7355,-216.8554"/>
-<polygon fill="#000000" stroke="#000000" points="3079.2356,-216.8553 3082.7355,-226.8554 3086.2356,-216.8554 3079.2356,-216.8553"/>
-</g>
-<!-- UsersModule -->
-<g id="node18" class="node">
-<title>UsersModule</title>
-<polygon fill="#8dd3c7" stroke="#000000" points="2756.9218,-263 2753.9218,-267 2732.9218,-267 2729.9218,-263 2665.0782,-263 2665.0782,-227 2756.9218,-227 2756.9218,-263"/>
-<text text-anchor="middle" x="2711" y="-240.8" font-family="Times,serif" font-size="14.00" fill="#000000">UsersModule</text>
-</g>
-<!-- FormsModule&#45;&gt;UsersModule -->
-<g id="edge50" class="edge">
-<title>FormsModule&#45;&gt;UsersModule</title>
-<path fill="none" stroke="#000000" d="M3146,-122.1505C3146,-134.2708 3146,-148 3146,-148 3146,-148 2716.1613,-148 2716.1613,-148 2716.1613,-148 2716.1613,-216.755 2716.1613,-216.755"/>
-<polygon fill="#000000" stroke="#000000" points="2712.6614,-216.755 2716.1613,-226.755 2719.6614,-216.7551 2712.6614,-216.755"/>
-</g>
-<!-- FormsModule&#45;&gt;AppModule -->
-<g id="edge3" class="edge">
-<title>FormsModule&#45;&gt;AppModule</title>
-<path fill="none" stroke="#000000" d="M3169.8321,-122.0445C3169.8321,-173.9579 3169.8321,-320 3169.8321,-320 3169.8321,-320 2423.7716,-320 2423.7716,-320"/>
-<polygon fill="#000000" stroke="#000000" points="2423.7716,-316.5001 2413.7716,-320 2423.7716,-323.5001 2423.7716,-316.5001"/>
-</g>
-<!-- CheckboxModule -->
-<g id="node4" class="node">
-<title>CheckboxModule</title>
-<polygon fill="#8dd3c7" stroke="#000000" points="1486.316,-122 1483.316,-126 1462.316,-126 1459.316,-122 1369.684,-122 1369.684,-86 1486.316,-86 1486.316,-122"/>
-<text text-anchor="middle" x="1428" y="-99.8" font-family="Times,serif" font-size="14.00" fill="#000000">CheckboxModule</text>
-</g>
-<!-- CheckboxModule&#45;&gt;AppModule -->
-<g id="edge4" class="edge">
-<title>CheckboxModule&#45;&gt;AppModule</title>
-<path fill="none" stroke="#000000" d="M1428,-122.1924C1428,-172.3636 1428,-309 1428,-309 1428,-309 2320.2195,-309 2320.2195,-309"/>
-<polygon fill="#000000" stroke="#000000" points="2320.2195,-312.5001 2330.2195,-309 2320.2194,-305.5001 2320.2195,-312.5001"/>
-</g>
-<!-- ReactiveFormsModule -->
-<g id="node5" class="node">
-<title>ReactiveFormsModule</title>
-<polygon fill="#8dd3c7" stroke="#000000" points="3080.3047,-122 3077.3047,-126 3056.3047,-126 3053.3047,-122 2935.6953,-122 2935.6953,-86 3080.3047,-86 3080.3047,-122"/>
-<text text-anchor="middle" x="3008" y="-99.8" font-family="Times,serif" font-size="14.00" fill="#000000">ReactiveFormsModule</text>
-</g>
-<!-- ReactiveFormsModule&#45;&gt;SharedCatanieModule -->
-<g id="edge38" class="edge">
-<title>ReactiveFormsModule&#45;&gt;SharedCatanieModule</title>
-<path fill="none" stroke="#000000" d="M2966.8328,-122.2015C2966.8328,-128.028 2966.8328,-133 2966.8328,-133 2966.8328,-133 2634.6403,-133 2634.6403,-133 2634.6403,-133 2634.6403,-140.5782 2634.6403,-140.5782"/>
-<polygon fill="#000000" stroke="#000000" points="2631.1403,-140.5781 2634.6403,-150.5782 2638.1403,-140.5782 2631.1403,-140.5781"/>
-</g>
-<!-- ReactiveFormsModule&#45;&gt;DatasetsModule -->
-<g id="edge27" class="edge">
-<title>ReactiveFormsModule&#45;&gt;DatasetsModule</title>
-<path fill="none" stroke="#000000" d="M3038.985,-122.1446C3038.985,-122.1446 3038.985,-216.925 3038.985,-216.925"/>
-<polygon fill="#000000" stroke="#000000" points="3035.485,-216.925 3038.985,-226.925 3042.485,-216.925 3035.485,-216.925"/>
-</g>
-<!-- ReactiveFormsModule&#45;&gt;UsersModule -->
-<g id="edge52" class="edge">
-<title>ReactiveFormsModule&#45;&gt;UsersModule</title>
-<path fill="none" stroke="#000000" d="M2982.3252,-122.1274C2982.3252,-132.7109 2982.3252,-144 2982.3252,-144 2982.3252,-144 2699.204,-144 2699.204,-144 2699.204,-144 2699.204,-216.9432 2699.204,-216.9432"/>
-<polygon fill="#000000" stroke="#000000" points="2695.7041,-216.9432 2699.204,-226.9432 2702.7041,-216.9433 2695.7041,-216.9432"/>
-</g>
-<!-- ReactiveFormsModule&#45;&gt;AppModule -->
-<g id="edge5" class="edge">
-<title>ReactiveFormsModule&#45;&gt;AppModule</title>
-<path fill="none" stroke="#000000" d="M2951.3403,-122.1679C2951.3403,-124.4478 2951.3403,-126 2951.3403,-126 2951.3403,-126 2378.1042,-126 2378.1042,-126 2378.1042,-126 2378.1042,-281.6847 2378.1042,-281.6847"/>
-<polygon fill="#000000" stroke="#000000" points="2374.6043,-281.6846 2378.1042,-291.6847 2381.6043,-281.6847 2374.6043,-281.6846"/>
-</g>
-<!-- HttpModule -->
-<g id="node6" class="node">
-<title>HttpModule</title>
-<polygon fill="#8dd3c7" stroke="#000000" points="3296.4387,-122 3293.4387,-126 3272.4387,-126 3269.4387,-122 3211.5613,-122 3211.5613,-86 3296.4387,-86 3296.4387,-122"/>
-<text text-anchor="middle" x="3254" y="-99.8" font-family="Times,serif" font-size="14.00" fill="#000000">HttpModule</text>
-</g>
-<!-- HttpModule&#45;&gt;AppModule -->
-<g id="edge6" class="edge">
-<title>HttpModule&#45;&gt;AppModule</title>
-<path fill="none" stroke="#000000" d="M3239.9271,-122.0035C3239.9271,-174.546 3239.9271,-324 3239.9271,-324 3239.9271,-324 2423.8619,-324 2423.8619,-324"/>
-<polygon fill="#000000" stroke="#000000" points="2423.862,-320.5001 2413.8619,-324 2423.8619,-327.5001 2423.862,-320.5001"/>
-</g>
-<!-- SDKBrowserModule -->
-<g id="node29" class="node">
-<title>SDKBrowserModule</title>
-<polygon fill="#8dd3c7" stroke="#000000" points="3860.4692,-263 3857.4692,-267 3836.4692,-267 3833.4692,-263 3725.5308,-263 3725.5308,-227 3860.4692,-227 3860.4692,-263"/>
-<text text-anchor="middle" x="3793" y="-240.8" font-family="Times,serif" font-size="14.00" fill="#000000">SDKBrowserModule</text>
-</g>
-<!-- HttpModule&#45;&gt;SDKBrowserModule -->
-<g id="edge35" class="edge">
-<title>HttpModule&#45;&gt;SDKBrowserModule</title>
-<path fill="none" stroke="#000000" d="M3268.0729,-122.1446C3268.0729,-160.2265 3268.0729,-245 3268.0729,-245 3268.0729,-245 3715.4496,-245 3715.4496,-245"/>
-<polygon fill="#000000" stroke="#000000" points="3715.4496,-248.5001 3725.4496,-245 3715.4496,-241.5001 3715.4496,-248.5001"/>
-</g>
-<!-- DataTableModule -->
-<g id="node7" class="node">
-<title>DataTableModule</title>
-<polygon fill="#8dd3c7" stroke="#000000" points="2867.8487,-187 2864.8487,-191 2843.8487,-191 2840.8487,-187 2750.1513,-187 2750.1513,-151 2867.8487,-151 2867.8487,-187"/>
-<text text-anchor="middle" x="2809" y="-164.8" font-family="Times,serif" font-size="14.00" fill="#000000">DataTableModule</text>
-</g>
-<!-- DataTableModule&#45;&gt;DatasetsModule -->
-<g id="edge29" class="edge">
-<title>DataTableModule&#45;&gt;DatasetsModule</title>
-<path fill="none" stroke="#000000" d="M2830.853,-187.1985C2830.853,-211.3563 2830.853,-251 2830.853,-251 2830.853,-251 2973.3754,-251 2973.3754,-251"/>
-<polygon fill="#000000" stroke="#000000" points="2973.3755,-254.5001 2983.3754,-251 2973.3754,-247.5001 2973.3755,-254.5001"/>
-</g>
-<!-- DataTableModule&#45;&gt;AppModule -->
-<g id="edge7" class="edge">
-<title>DataTableModule&#45;&gt;AppModule</title>
-<path fill="none" stroke="#000000" d="M2793.7817,-187.2067C2793.7817,-224.0559 2793.7817,-304 2793.7817,-304 2793.7817,-304 2423.984,-304 2423.984,-304"/>
-<polygon fill="#000000" stroke="#000000" points="2423.9841,-300.5001 2413.984,-304 2423.984,-307.5001 2423.9841,-300.5001"/>
-</g>
-<!-- SharedModule -->
-<g id="node8" class="node">
-<title>SharedModule</title>
-<polygon fill="#8dd3c7" stroke="#000000" points="2918.4231,-122 2915.4231,-126 2894.4231,-126 2891.4231,-122 2819.5769,-122 2819.5769,-86 2918.4231,-86 2918.4231,-122"/>
-<text text-anchor="middle" x="2869" y="-99.8" font-family="Times,serif" font-size="14.00" fill="#000000">SharedModule</text>
-</g>
-<!-- SharedModule&#45;&gt;SharedCatanieModule -->
-<g id="edge41" class="edge">
-<title>SharedModule&#45;&gt;SharedCatanieModule</title>
-<path fill="none" stroke="#000000" d="M2843.8566,-122.0579C2843.8566,-126.4945 2843.8566,-130 2843.8566,-130 2843.8566,-130 2631.9897,-130 2631.9897,-130 2631.9897,-130 2631.9897,-140.8701 2631.9897,-140.8701"/>
-<polygon fill="#000000" stroke="#000000" points="2628.4898,-140.8701 2631.9897,-150.8701 2635.4898,-140.8701 2628.4898,-140.8701"/>
-</g>
-<!-- SharedModule&#45;&gt;DatasetsModule -->
-<g id="edge30" class="edge">
-<title>SharedModule&#45;&gt;DatasetsModule</title>
-<path fill="none" stroke="#000000" d="M2880.0963,-122.2067C2880.0963,-159.0559 2880.0963,-239 2880.0963,-239 2880.0963,-239 2973.4415,-239 2973.4415,-239"/>
-<polygon fill="#000000" stroke="#000000" points="2973.4415,-242.5001 2983.4415,-239 2973.4415,-235.5001 2973.4415,-242.5001"/>
-</g>
-<!-- SharedModule&#45;&gt;AppModule -->
-<g id="edge8" class="edge">
-<title>SharedModule&#45;&gt;AppModule</title>
-<path fill="none" stroke="#000000" d="M2874.0103,-122.1036C2874.0103,-172.0301 2874.0103,-308 2874.0103,-308 2874.0103,-308 2423.9377,-308 2423.9377,-308"/>
-<polygon fill="#000000" stroke="#000000" points="2423.9377,-304.5001 2413.9377,-308 2423.9376,-311.5001 2423.9377,-304.5001"/>
-</g>
-<!-- TreeModule -->
-<g id="node9" class="node">
-<title>TreeModule</title>
-<polygon fill="#8dd3c7" stroke="#000000" points="2175.6924,-122 2172.6924,-126 2151.6924,-126 2148.6924,-122 2090.3076,-122 2090.3076,-86 2175.6924,-86 2175.6924,-122"/>
-<text text-anchor="middle" x="2133" y="-99.8" font-family="Times,serif" font-size="14.00" fill="#000000">TreeModule</text>
-</g>
-<!-- TreeModule&#45;&gt;SharedCatanieModule -->
-<g id="edge42" class="edge">
-<title>TreeModule&#45;&gt;SharedCatanieModule</title>
-<path fill="none" stroke="#000000" d="M2147.1987,-122.0225C2147.1987,-139.3734 2147.1987,-163 2147.1987,-163 2147.1987,-163 2491.3758,-163 2491.3758,-163"/>
-<polygon fill="#000000" stroke="#000000" points="2491.3759,-166.5001 2501.3758,-163 2491.3758,-159.5001 2491.3759,-166.5001"/>
-</g>
-<!-- TreeModule&#45;&gt;AppModule -->
-<g id="edge9" class="edge">
-<title>TreeModule&#45;&gt;AppModule</title>
-<path fill="none" stroke="#000000" d="M2118.8013,-122.0629C2118.8013,-169.8586 2118.8013,-296 2118.8013,-296 2118.8013,-296 2320.1894,-296 2320.1894,-296"/>
-<polygon fill="#000000" stroke="#000000" points="2320.1894,-299.5001 2330.1894,-296 2320.1893,-292.5001 2320.1894,-299.5001"/>
-</g>
-<!-- TabViewModule -->
 <g id="node10" class="node">
-<title>TabViewModule</title>
-<polygon fill="#8dd3c7" stroke="#000000" points="2997.636,-187 2994.636,-191 2973.636,-191 2970.636,-187 2886.364,-187 2886.364,-151 2997.636,-151 2997.636,-187"/>
-<text text-anchor="middle" x="2942" y="-164.8" font-family="Times,serif" font-size="14.00" fill="#000000">TabViewModule</text>
-</g>
-<!-- TabViewModule&#45;&gt;DatasetsModule -->
-<g id="edge31" class="edge">
-<title>TabViewModule&#45;&gt;DatasetsModule</title>
-<path fill="none" stroke="#000000" d="M2993.05,-187.0109C2993.05,-187.0109 2993.05,-216.855 2993.05,-216.855"/>
-<polygon fill="#000000" stroke="#000000" points="2989.5501,-216.8549 2993.05,-226.855 2996.5501,-216.855 2989.5501,-216.8549"/>
-</g>
-<!-- TabViewModule&#45;&gt;AppModule -->
-<g id="edge10" class="edge">
-<title>TabViewModule&#45;&gt;AppModule</title>
-<path fill="none" stroke="#000000" d="M2934.8485,-187.111C2934.8485,-225.5903 2934.8485,-312 2934.8485,-312 2934.8485,-312 2423.8453,-312 2423.8453,-312"/>
-<polygon fill="#000000" stroke="#000000" points="2423.8453,-308.5001 2413.8453,-312 2423.8452,-315.5001 2423.8453,-308.5001"/>
-</g>
-<!-- AutoCompleteModule -->
-<g id="node11" class="node">
-<title>AutoCompleteModule</title>
-<polygon fill="#8dd3c7" stroke="#000000" points="2335.9846,-122 2332.9846,-126 2311.9846,-126 2308.9846,-122 2194.0154,-122 2194.0154,-86 2335.9846,-86 2335.9846,-122"/>
-<text text-anchor="middle" x="2265" y="-99.8" font-family="Times,serif" font-size="14.00" fill="#000000">AutoCompleteModule</text>
-</g>
-<!-- AutoCompleteModule&#45;&gt;SharedCatanieModule -->
-<g id="edge43" class="edge">
-<title>AutoCompleteModule&#45;&gt;SharedCatanieModule</title>
-<path fill="none" stroke="#000000" d="M2325.958,-122.0091C2325.958,-138.0494 2325.958,-159 2325.958,-159 2325.958,-159 2491.1646,-159 2491.1646,-159"/>
-<polygon fill="#000000" stroke="#000000" points="2491.1646,-162.5001 2501.1646,-159 2491.1645,-155.5001 2491.1646,-162.5001"/>
-</g>
-<!-- AutoCompleteModule&#45;&gt;AppModule -->
-<g id="edge11" class="edge">
-<title>AutoCompleteModule&#45;&gt;AppModule</title>
-<path fill="none" stroke="#000000" d="M2321.7443,-122.0854C2321.7443,-174.8666 2321.7443,-325 2321.7443,-325 2321.7443,-325 2322.5741,-325 2322.5741,-325"/>
-<polygon fill="#000000" stroke="#000000" points="2320.043,-328.5001 2330.043,-325 2320.0429,-321.5001 2320.043,-328.5001"/>
-</g>
-<!-- DropdownModule -->
-<g id="node12" class="node">
-<title>DropdownModule</title>
-<polygon fill="#8dd3c7" stroke="#000000" points="2473.9244,-122 2470.9244,-126 2449.9244,-126 2446.9244,-122 2354.0756,-122 2354.0756,-86 2473.9244,-86 2473.9244,-122"/>
-<text text-anchor="middle" x="2414" y="-99.8" font-family="Times,serif" font-size="14.00" fill="#000000">DropdownModule</text>
-</g>
-<!-- DropdownModule&#45;&gt;SharedCatanieModule -->
-<g id="edge44" class="edge">
-<title>DropdownModule&#45;&gt;SharedCatanieModule</title>
-<path fill="none" stroke="#000000" d="M2450.0907,-122.1243C2450.0907,-136.7832 2450.0907,-155 2450.0907,-155 2450.0907,-155 2491.0848,-155 2491.0848,-155"/>
-<polygon fill="#000000" stroke="#000000" points="2491.0849,-158.5001 2501.0848,-155 2491.0848,-151.5001 2491.0849,-158.5001"/>
-</g>
-<!-- DropdownModule&#45;&gt;AppModule -->
-<g id="edge12" class="edge">
-<title>DropdownModule&#45;&gt;AppModule</title>
-<path fill="none" stroke="#000000" d="M2366.1962,-122.2811C2366.1962,-122.2811 2366.1962,-281.7598 2366.1962,-281.7598"/>
-<polygon fill="#000000" stroke="#000000" points="2362.6963,-281.7598 2366.1962,-291.7598 2369.6963,-281.7599 2362.6963,-281.7598"/>
-</g>
-<!-- BrowserAnimationsModule -->
-<g id="node13" class="node">
-<title>BrowserAnimationsModule</title>
-<polygon fill="#8dd3c7" stroke="#000000" points="1676.3019,-122 1673.3019,-126 1652.3019,-126 1649.3019,-122 1503.6981,-122 1503.6981,-86 1676.3019,-86 1676.3019,-122"/>
-<text text-anchor="middle" x="1590" y="-99.8" font-family="Times,serif" font-size="14.00" fill="#000000">BrowserAnimationsModule</text>
-</g>
-<!-- BrowserAnimationsModule&#45;&gt;AppModule -->
-<g id="edge13" class="edge">
-<title>BrowserAnimationsModule&#45;&gt;AppModule</title>
-<path fill="none" stroke="#000000" d="M1590,-122.2824C1590,-172.0066 1590,-306 1590,-306 1590,-306 2320.2327,-306 2320.2327,-306"/>
-<polygon fill="#000000" stroke="#000000" points="2320.2328,-309.5001 2330.2327,-306 2320.2327,-302.5001 2320.2328,-309.5001"/>
-</g>
-<!-- TreeTableModule -->
-<g id="node14" class="node">
-<title>TreeTableModule</title>
-<polygon fill="#8dd3c7" stroke="#000000" points="2608.5646,-122 2605.5646,-126 2584.5646,-126 2581.5646,-122 2491.4354,-122 2491.4354,-86 2608.5646,-86 2608.5646,-122"/>
-<text text-anchor="middle" x="2550" y="-99.8" font-family="Times,serif" font-size="14.00" fill="#000000">TreeTableModule</text>
-</g>
-<!-- TreeTableModule&#45;&gt;SharedCatanieModule -->
-<g id="edge40" class="edge">
-<title>TreeTableModule&#45;&gt;SharedCatanieModule</title>
-<path fill="none" stroke="#000000" d="M2554.9702,-122.1061C2554.9702,-122.1061 2554.9702,-140.991 2554.9702,-140.991"/>
-<polygon fill="#000000" stroke="#000000" points="2551.4703,-140.9909 2554.9702,-150.991 2558.4703,-140.991 2551.4703,-140.9909"/>
-</g>
-<!-- TreeTableModule&#45;&gt;AppModule -->
-<g id="edge14" class="edge">
-<title>TreeTableModule&#45;&gt;AppModule</title>
-<path fill="none" stroke="#000000" d="M2496.4379,-122.0629C2496.4379,-169.8586 2496.4379,-296 2496.4379,-296 2496.4379,-296 2423.7822,-296 2423.7822,-296"/>
-<polygon fill="#000000" stroke="#000000" points="2423.7822,-292.5001 2413.7822,-296 2423.7822,-299.5001 2423.7822,-292.5001"/>
+<title>DatasetsModule</title>
+<polygon fill="#8dd3c7" stroke="#000000" points="1749.4706,-342 1746.4706,-346 1725.4706,-346 1722.4706,-342 1642.5294,-342 1642.5294,-306 1749.4706,-306 1749.4706,-342"/>
+<text text-anchor="middle" x="1696" y="-319.8" font-family="Times,serif" font-size="14.00" fill="#000000">DatasetsModule</text>
 </g>
 <!-- SharedCatanieModule&#45;&gt;DatasetsModule -->
 <g id="edge28" class="edge">
 <title>SharedCatanieModule&#45;&gt;DatasetsModule</title>
-<path fill="none" stroke="#000000" d="M2572,-187.1467C2572,-200.7395 2572,-217 2572,-217 2572,-217 2988.2824,-217 2988.2824,-217 2988.2824,-217 2988.2824,-217.9793 2988.2824,-217.9793"/>
-<polygon fill="#000000" stroke="#000000" points="2984.7825,-216.793 2988.2824,-226.793 2991.7825,-216.7931 2984.7825,-216.793"/>
+<path fill="none" stroke="#000000" d="M1670.5456,-266.0109C1670.5456,-266.0109 1670.5456,-295.855 1670.5456,-295.855"/>
+<polygon fill="#000000" stroke="#000000" points="1667.0457,-295.8549 1670.5456,-305.855 1674.0457,-295.855 1667.0457,-295.8549"/>
+</g>
+<!-- UsersModule -->
+<g id="node11" class="node">
+<title>UsersModule</title>
+<polygon fill="#8dd3c7" stroke="#000000" points="1858.9218,-342 1855.9218,-346 1834.9218,-346 1831.9218,-342 1767.0782,-342 1767.0782,-306 1858.9218,-306 1858.9218,-342"/>
+<text text-anchor="middle" x="1813" y="-319.8" font-family="Times,serif" font-size="14.00" fill="#000000">UsersModule</text>
 </g>
 <!-- SharedCatanieModule&#45;&gt;UsersModule -->
-<g id="edge51" class="edge">
+<g id="edge52" class="edge">
 <title>SharedCatanieModule&#45;&gt;UsersModule</title>
-<path fill="none" stroke="#000000" d="M2642.7566,-169C2664.2263,-169 2682.2468,-169 2682.2468,-169 2682.2468,-169 2682.2468,-216.9891 2682.2468,-216.9891"/>
-<polygon fill="#000000" stroke="#000000" points="2678.7469,-216.989 2682.2468,-226.9891 2685.7469,-216.9891 2678.7469,-216.989"/>
+<path fill="none" stroke="#000000" d="M1698.5765,-266.2819C1698.5765,-281.9478 1698.5765,-302 1698.5765,-302 1698.5765,-302 1813,-302 1813,-302 1813,-302 1813,-302.3832 1813,-302.3832"/>
+<polygon fill="#000000" stroke="#000000" points="1809.5003,-295.832 1813,-305.8321 1816.5003,-295.8322 1809.5003,-295.832"/>
 </g>
-<!-- SharedCatanieModule&#45;&gt;AppModule -->
-<g id="edge15" class="edge">
-<title>SharedCatanieModule&#45;&gt;AppModule</title>
-<path fill="none" stroke="#000000" d="M2501.3783,-183C2450.2228,-183 2390.0122,-183 2390.0122,-183 2390.0122,-183 2390.0122,-281.804 2390.0122,-281.804"/>
-<polygon fill="#000000" stroke="#000000" points="2386.5123,-281.804 2390.0122,-291.804 2393.5123,-281.804 2386.5123,-281.804"/>
+<!-- BreadcrumbModule  -->
+<g id="node42" class="node">
+<title>BreadcrumbModule </title>
+<polygon fill="#fb8072" stroke="#000000" points="314.2422,-342 181.7578,-342 181.7578,-306 314.2422,-306 314.2422,-342"/>
+<text text-anchor="middle" x="248" y="-319.8" font-family="Times,serif" font-size="14.00" fill="#000000">BreadcrumbModule </text>
 </g>
-<!-- ConfigFormComponent  -->
-<g id="node31" class="node">
-<title>ConfigFormComponent </title>
-<polygon fill="#fb8072" stroke="#000000" points="530.054,-263 375.946,-263 375.946,-227 530.054,-227 530.054,-263"/>
-<text text-anchor="middle" x="453" y="-240.8" font-family="Times,serif" font-size="14.00" fill="#000000">ConfigFormComponent </text>
+<!-- SharedCatanieModule&#45;&gt;BreadcrumbModule  -->
+<g id="edge44" class="edge">
+<title>SharedCatanieModule&#45;&gt;BreadcrumbModule </title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1595.1103,-266.1679C1595.1103,-268.4478 1595.1103,-270 1595.1103,-270 1595.1103,-270 248,-270 248,-270 248,-270 248,-295.7181 248,-295.7181"/>
+<polygon fill="#000000" stroke="#000000" points="244.5001,-295.718 248,-305.7181 251.5001,-295.7181 244.5001,-295.718"/>
 </g>
-<!-- SharedCatanieModule&#45;&gt;ConfigFormComponent  -->
+<!-- ConfigFormModule  -->
+<g id="node43" class="node">
+<title>ConfigFormModule </title>
+<polygon fill="#fb8072" stroke="#000000" points="721.2717,-342 588.7283,-342 588.7283,-306 721.2717,-306 721.2717,-342"/>
+<text text-anchor="middle" x="655" y="-319.8" font-family="Times,serif" font-size="14.00" fill="#000000">ConfigFormModule </text>
+</g>
+<!-- SharedCatanieModule&#45;&gt;ConfigFormModule  -->
+<g id="edge45" class="edge">
+<title>SharedCatanieModule&#45;&gt;ConfigFormModule </title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1630.6636,-266.1097C1630.6636,-275.897 1630.6636,-286 1630.6636,-286 1630.6636,-286 654.9383,-286 654.9383,-286 654.9383,-286 654.9383,-295.8903 654.9383,-295.8903"/>
+<polygon fill="#000000" stroke="#000000" points="651.4384,-295.8903 654.9383,-305.8903 658.4384,-295.8904 651.4384,-295.8903"/>
+</g>
+<!-- ErrorPageModule  -->
+<g id="node44" class="node">
+<title>ErrorPageModule </title>
+<polygon fill="#fb8072" stroke="#000000" points="570.7962,-342 451.2038,-342 451.2038,-306 570.7962,-306 570.7962,-342"/>
+<text text-anchor="middle" x="511" y="-319.8" font-family="Times,serif" font-size="14.00" fill="#000000">ErrorPageModule </text>
+</g>
+<!-- SharedCatanieModule&#45;&gt;ErrorPageModule  -->
 <g id="edge46" class="edge">
-<title>SharedCatanieModule&#45;&gt;ConfigFormComponent </title>
-<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M2501.1944,-175C2132.8967,-175 453,-175 453,-175 453,-175 453,-216.9733 453,-216.9733"/>
-<polygon fill="#000000" stroke="#000000" points="449.5001,-216.9732 453,-226.9733 456.5001,-216.9733 449.5001,-216.9732"/>
+<title>SharedCatanieModule&#45;&gt;ErrorPageModule </title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1618.8125,-266.4218C1618.8125,-275.2791 1618.8125,-284 1618.8125,-284 1618.8125,-284 509.0449,-284 509.0449,-284 509.0449,-284 509.0449,-295.8726 509.0449,-295.8726"/>
+<polygon fill="#000000" stroke="#000000" points="505.5449,-295.8725 509.0449,-305.8726 512.5449,-295.8726 505.5449,-295.8725"/>
+</g>
+<!-- DialogModule  -->
+<g id="node45" class="node">
+<title>DialogModule </title>
+<polygon fill="#fb8072" stroke="#000000" points="433.6523,-342 332.3477,-342 332.3477,-306 433.6523,-306 433.6523,-342"/>
+<text text-anchor="middle" x="383" y="-319.8" font-family="Times,serif" font-size="14.00" fill="#000000">DialogModule </text>
+</g>
+<!-- SharedCatanieModule&#45;&gt;DialogModule  -->
+<g id="edge47" class="edge">
+<title>SharedCatanieModule&#45;&gt;DialogModule </title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1606.9614,-266.1944C1606.9614,-274.2782 1606.9614,-282 1606.9614,-282 1606.9614,-282 383,-282 383,-282 383,-282 383,-295.9445 383,-295.9445"/>
+<polygon fill="#000000" stroke="#000000" points="379.5001,-295.9444 383,-305.9445 386.5001,-295.9445 379.5001,-295.9444"/>
+</g>
+<!-- DatasetsModule&#45;&gt;AppModule -->
+<g id="edge9" class="edge">
+<title>DatasetsModule&#45;&gt;AppModule</title>
+<path fill="none" stroke="#000000" d="M1696,-342.027C1696,-358.3976 1696,-380 1696,-380 1696,-380 1463.9052,-380 1463.9052,-380"/>
+<polygon fill="#000000" stroke="#000000" points="1463.9052,-376.5001 1453.9052,-380 1463.9051,-383.5001 1463.9052,-376.5001"/>
+</g>
+<!-- DatasetTableComponent  -->
+<g id="node31" class="node">
+<title>DatasetTableComponent </title>
+<polygon fill="#fb8072" stroke="#000000" points="2832.1813,-266 2673.8187,-266 2673.8187,-230 2832.1813,-230 2832.1813,-266"/>
+<text text-anchor="middle" x="2753" y="-243.8" font-family="Times,serif" font-size="14.00" fill="#000000">DatasetTableComponent </text>
+</g>
+<!-- DatasetsModule&#45;&gt;DatasetTableComponent  -->
+<g id="edge30" class="edge">
+<title>DatasetsModule&#45;&gt;DatasetTableComponent </title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1746.7892,-305.8056C1746.7892,-297.7218 1746.7892,-290 1746.7892,-290 1746.7892,-290 2753,-290 2753,-290 2753,-290 2753,-276.0555 2753,-276.0555"/>
+<polygon fill="#000000" stroke="#000000" points="2756.5001,-276.0555 2753,-266.0555 2749.5001,-276.0556 2756.5001,-276.0555"/>
 </g>
 <!-- DatasetsFilterComponent  -->
 <g id="node32" class="node">
 <title>DatasetsFilterComponent </title>
-<polygon fill="#fb8072" stroke="#000000" points="358.0833,-263 195.9167,-263 195.9167,-227 358.0833,-227 358.0833,-263"/>
-<text text-anchor="middle" x="277" y="-240.8" font-family="Times,serif" font-size="14.00" fill="#000000">DatasetsFilterComponent </text>
+<polygon fill="#fb8072" stroke="#000000" points="2655.0833,-266 2492.9167,-266 2492.9167,-230 2655.0833,-230 2655.0833,-266"/>
+<text text-anchor="middle" x="2574" y="-243.8" font-family="Times,serif" font-size="14.00" fill="#000000">DatasetsFilterComponent </text>
 </g>
-<!-- SharedCatanieModule&#45;&gt;DatasetsFilterComponent  -->
-<g id="edge47" class="edge">
-<title>SharedCatanieModule&#45;&gt;DatasetsFilterComponent </title>
-<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M2501.1154,-171C2114.4298,-171 277,-171 277,-171 277,-171 277,-216.7079 277,-216.7079"/>
-<polygon fill="#000000" stroke="#000000" points="273.5001,-216.7078 277,-226.7079 280.5001,-216.7079 273.5001,-216.7078"/>
-</g>
-<!-- BreadcrumbComponent  -->
-<g id="node33" class="node">
-<title>BreadcrumbComponent </title>
-<polygon fill="#fb8072" stroke="#000000" points="178.0246,-263 23.9754,-263 23.9754,-227 178.0246,-227 178.0246,-263"/>
-<text text-anchor="middle" x="101" y="-240.8" font-family="Times,serif" font-size="14.00" fill="#000000">BreadcrumbComponent </text>
-</g>
-<!-- SharedCatanieModule&#45;&gt;BreadcrumbComponent  -->
-<g id="edge48" class="edge">
-<title>SharedCatanieModule&#45;&gt;BreadcrumbComponent </title>
-<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M2501.3718,-167C2097.7349,-167 101,-167 101,-167 101,-167 101,-216.9092 101,-216.9092"/>
-<polygon fill="#000000" stroke="#000000" points="97.5001,-216.9091 101,-226.9092 104.5001,-216.9092 97.5001,-216.9091"/>
-</g>
-<!-- NguiDatetimePickerModule -->
-<g id="node16" class="node">
-<title>NguiDatetimePickerModule</title>
-<polygon fill="#8dd3c7" stroke="#000000" points="2801.1232,-122 2798.1232,-126 2777.1232,-126 2774.1232,-122 2626.8768,-122 2626.8768,-86 2801.1232,-86 2801.1232,-122"/>
-<text text-anchor="middle" x="2714" y="-99.8" font-family="Times,serif" font-size="14.00" fill="#000000">NguiDatetimePickerModule</text>
-</g>
-<!-- NguiDatetimePickerModule&#45;&gt;SharedCatanieModule -->
-<g id="edge39" class="edge">
-<title>NguiDatetimePickerModule&#45;&gt;SharedCatanieModule</title>
-<path fill="none" stroke="#000000" d="M2629.3391,-122.1061C2629.3391,-122.1061 2629.3391,-140.991 2629.3391,-140.991"/>
-<polygon fill="#000000" stroke="#000000" points="2625.8392,-140.9909 2629.3391,-150.991 2632.8392,-140.991 2625.8392,-140.9909"/>
-</g>
-<!-- NguiDatetimePickerModule&#45;&gt;AppModule -->
-<g id="edge16" class="edge">
-<title>NguiDatetimePickerModule&#45;&gt;AppModule</title>
-<path fill="none" stroke="#000000" d="M2653.9407,-122.0879C2653.9407,-170.6094 2653.9407,-300 2653.9407,-300 2653.9407,-300 2423.9049,-300 2423.9049,-300"/>
-<polygon fill="#000000" stroke="#000000" points="2423.905,-296.5001 2413.9049,-300 2423.9049,-303.5001 2423.905,-296.5001"/>
-</g>
-<!-- DatasetsModule&#45;&gt;AppModule -->
-<g id="edge17" class="edge">
-<title>DatasetsModule&#45;&gt;AppModule</title>
-<path fill="none" stroke="#000000" d="M3037,-263.2843C3037,-284.3211 3037,-316 3037,-316 3037,-316 2423.8506,-316 2423.8506,-316"/>
-<polygon fill="#000000" stroke="#000000" points="2423.8507,-312.5001 2413.8506,-316 2423.8506,-319.5001 2423.8507,-312.5001"/>
-</g>
-<!-- DatasetTableComponent  -->
-<g id="node28" class="node">
-<title>DatasetTableComponent </title>
-<polygon fill="#fb8072" stroke="#000000" points="3494.1813,-187 3335.8187,-187 3335.8187,-151 3494.1813,-151 3494.1813,-187"/>
-<text text-anchor="middle" x="3415" y="-164.8" font-family="Times,serif" font-size="14.00" fill="#000000">DatasetTableComponent </text>
-</g>
-<!-- DatasetsModule&#45;&gt;DatasetTableComponent  -->
-<g id="edge33" class="edge">
-<title>DatasetsModule&#45;&gt;DatasetTableComponent </title>
-<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M3085.3188,-226.9891C3085.3188,-204.5148 3085.3188,-169 3085.3188,-169 3085.3188,-169 3325.6136,-169 3325.6136,-169"/>
-<polygon fill="#000000" stroke="#000000" points="3325.6136,-172.5001 3335.6136,-169 3325.6136,-165.5001 3325.6136,-172.5001"/>
+<!-- DatasetsModule&#45;&gt;DatasetsFilterComponent  -->
+<g id="edge31" class="edge">
+<title>DatasetsModule&#45;&gt;DatasetsFilterComponent </title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1744.0932,-305.5782C1744.0932,-296.7209 1744.0932,-288 1744.0932,-288 1744.0932,-288 2574,-288 2574,-288 2574,-288 2574,-276.1274 2574,-276.1274"/>
+<polygon fill="#000000" stroke="#000000" points="2577.5001,-276.1274 2574,-266.1274 2570.5001,-276.1275 2577.5001,-276.1274"/>
 </g>
 <!-- UsersModule&#45;&gt;AppModule -->
-<g id="edge18" class="edge">
+<g id="edge10" class="edge">
 <title>UsersModule&#45;&gt;AppModule</title>
-<path fill="none" stroke="#000000" d="M2665.0614,-245C2578.9613,-245 2401.9202,-245 2401.9202,-245 2401.9202,-245 2401.9202,-281.8939 2401.9202,-281.8939"/>
-<polygon fill="#000000" stroke="#000000" points="2398.4203,-281.8938 2401.9202,-291.8939 2405.4203,-281.8939 2398.4203,-281.8938"/>
+<path fill="none" stroke="#000000" d="M1813,-342.2921C1813,-364.2057 1813,-398 1813,-398 1813,-398 1463.7792,-398 1463.7792,-398"/>
+<polygon fill="#000000" stroke="#000000" points="1463.7793,-394.5001 1453.7792,-398 1463.7792,-401.5001 1463.7793,-394.5001"/>
 </g>
-<!-- SDKBrowserModule.forRoot() -->
-<g id="node19" class="node">
-<title>SDKBrowserModule.forRoot()</title>
-<polygon fill="#8dd3c7" stroke="#000000" points="1885.8391,-122 1882.8391,-126 1861.8391,-126 1858.8391,-122 1694.1609,-122 1694.1609,-86 1885.8391,-86 1885.8391,-122"/>
-<text text-anchor="middle" x="1790" y="-99.8" font-family="Times,serif" font-size="14.00" fill="#000000">SDKBrowserModule.forRoot()</text>
+<!-- AuthCheck -->
+<g id="node13" class="node">
+<title>AuthCheck</title>
+<ellipse fill="#fdb462" stroke="#000000" cx="816" cy="-248" rx="55.0381" ry="18"/>
+<text text-anchor="middle" x="816" y="-243.8" font-family="Times,serif" font-size="14.00" fill="#000000">AuthCheck</text>
 </g>
-<!-- SDKBrowserModule.forRoot()&#45;&gt;AppModule -->
-<g id="edge19" class="edge">
-<title>SDKBrowserModule.forRoot()&#45;&gt;AppModule</title>
-<path fill="none" stroke="#000000" d="M1790,-122.2725C1790,-171.2891 1790,-302 1790,-302 1790,-302 2320.144,-302 2320.144,-302"/>
-<polygon fill="#000000" stroke="#000000" points="2320.144,-305.5001 2330.144,-302 2320.144,-298.5001 2320.144,-305.5001"/>
+<!-- AuthCheck&#45;&gt;AppModule -->
+<g id="edge12" class="edge">
+<title>AuthCheck&#45;&gt;AppModule</title>
+<path fill="none" stroke="#000000" d="M777.1307,-260.7815C777.1307,-297.5535 777.1307,-401 777.1307,-401 777.1307,-401 1359.8528,-401 1359.8528,-401"/>
+<polygon fill="#000000" stroke="#000000" points="1359.8528,-404.5001 1369.8528,-401 1359.8527,-397.5001 1359.8528,-404.5001"/>
 </g>
-<!-- StoreModule.forRoot(args) -->
-<g id="node20" class="node">
-<title>StoreModule.forRoot(args)</title>
-<polygon fill="#8dd3c7" stroke="#000000" points="2072.2877,-122 2069.2877,-126 2048.2877,-126 2045.2877,-122 1903.7123,-122 1903.7123,-86 2072.2877,-86 2072.2877,-122"/>
-<text text-anchor="middle" x="1988" y="-99.8" font-family="Times,serif" font-size="14.00" fill="#000000">StoreModule.forRoot(args)</text>
+<!-- DatasetService -->
+<g id="node14" class="node">
+<title>DatasetService</title>
+<ellipse fill="#fdb462" stroke="#000000" cx="958" cy="-248" rx="68.8927" ry="18"/>
+<text text-anchor="middle" x="958" y="-243.8" font-family="Times,serif" font-size="14.00" fill="#000000">DatasetService</text>
 </g>
-<!-- StoreModule.forRoot(args)&#45;&gt;AppModule -->
-<g id="edge20" class="edge">
-<title>StoreModule.forRoot(args)&#45;&gt;AppModule</title>
-<path fill="none" stroke="#000000" d="M1988,-122.3451C1988,-170.8877 1988,-299 1988,-299 1988,-299 2320.1743,-299 2320.1743,-299"/>
-<polygon fill="#000000" stroke="#000000" points="2320.1743,-302.5001 2330.1743,-299 2320.1742,-295.5001 2320.1743,-302.5001"/>
+<!-- DatasetService&#45;&gt;AppModule -->
+<g id="edge13" class="edge">
+<title>DatasetService&#45;&gt;AppModule</title>
+<path fill="none" stroke="#000000" d="M907.7525,-260.5128C907.7525,-295.0208 907.7525,-389 907.7525,-389 907.7525,-389 1360.3063,-389 1360.3063,-389"/>
+<polygon fill="#000000" stroke="#000000" points="1360.3063,-392.5001 1370.3063,-389 1360.3063,-385.5001 1360.3063,-392.5001"/>
 </g>
-<!-- EffectsModule.forRoot(args) -->
+<!-- DatasetService&#45;&gt;DatasetsModule -->
+<g id="edge32" class="edge">
+<title>DatasetService&#45;&gt;DatasetsModule</title>
+<path fill="none" stroke="#000000" d="M971.8659,-265.7188C971.8659,-282.125 971.8659,-304 971.8659,-304 971.8659,-304 1656.5301,-304 1656.5301,-304 1656.5301,-304 1656.5301,-304.1846 1656.5301,-304.1846"/>
+<polygon fill="#000000" stroke="#000000" points="1653.0307,-295.8455 1656.5301,-305.8457 1660.0307,-295.8459 1653.0307,-295.8455"/>
+</g>
+<!-- BreadcrumbComponent -->
+<g id="node15" class="node">
+<title>BreadcrumbComponent</title>
+<polygon fill="#ffffb3" stroke="#000000" points="720.0253,-122 569.9747,-122 569.9747,-86 720.0253,-86 720.0253,-122"/>
+<text text-anchor="middle" x="645" y="-99.8" font-family="Times,serif" font-size="14.00" fill="#000000">BreadcrumbComponent</text>
+</g>
+<!-- BreadcrumbModule -->
+<g id="node16" class="node">
+<title>BreadcrumbModule</title>
+<polygon fill="#8dd3c7" stroke="#000000" points="709.2423,-190 706.2423,-194 685.2423,-194 682.2423,-190 580.7577,-190 580.7577,-154 709.2423,-154 709.2423,-190"/>
+<text text-anchor="middle" x="645" y="-167.8" font-family="Times,serif" font-size="14.00" fill="#000000">BreadcrumbModule</text>
+</g>
+<!-- BreadcrumbComponent&#45;&gt;BreadcrumbModule -->
+<g id="edge15" class="edge">
+<title>BreadcrumbComponent&#45;&gt;BreadcrumbModule</title>
+<path fill="none" stroke="#000000" d="M645,-122.2228C645,-122.2228 645,-143.7269 645,-143.7269"/>
+<polygon fill="#000000" stroke="#000000" points="641.5001,-143.7269 645,-153.7269 648.5001,-143.727 641.5001,-143.7269"/>
+</g>
+<!-- BreadcrumbModule&#45;&gt;SharedCatanieModule -->
+<g id="edge40" class="edge">
+<title>BreadcrumbModule&#45;&gt;SharedCatanieModule</title>
+<path fill="none" stroke="#000000" d="M709.5934,-166C925.2194,-166 1606.7041,-166 1606.7041,-166 1606.7041,-166 1606.7041,-219.8015 1606.7041,-219.8015"/>
+<polygon fill="#000000" stroke="#000000" points="1603.2041,-219.8015 1606.7041,-229.8015 1610.2041,-219.8016 1603.2041,-219.8015"/>
+</g>
+<!-- BreadcrumbComponent  -->
+<g id="node17" class="node">
+<title>BreadcrumbComponent </title>
+<polygon fill="#fb8072" stroke="#000000" points="721.0246,-266 566.9754,-266 566.9754,-230 721.0246,-230 721.0246,-266"/>
+<text text-anchor="middle" x="644" y="-243.8" font-family="Times,serif" font-size="14.00" fill="#000000">BreadcrumbComponent </text>
+</g>
+<!-- BreadcrumbModule&#45;&gt;BreadcrumbComponent  -->
+<g id="edge16" class="edge">
+<title>BreadcrumbModule&#45;&gt;BreadcrumbComponent </title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M645,-190.0109C645,-190.0109 645,-219.855 645,-219.855"/>
+<polygon fill="#000000" stroke="#000000" points="641.5001,-219.8549 645,-229.855 648.5001,-219.855 641.5001,-219.8549"/>
+</g>
+<!-- ConfigFormComponent -->
+<g id="node18" class="node">
+<title>ConfigFormComponent</title>
+<polygon fill="#ffffb3" stroke="#000000" points="2049.0547,-122 1898.9453,-122 1898.9453,-86 2049.0547,-86 2049.0547,-122"/>
+<text text-anchor="middle" x="1974" y="-99.8" font-family="Times,serif" font-size="14.00" fill="#000000">ConfigFormComponent</text>
+</g>
+<!-- ConfigFormModule -->
 <g id="node21" class="node">
-<title>EffectsModule.forRoot(args)</title>
-<polygon fill="#8dd3c7" stroke="#000000" points="870.3774,-122 867.3774,-126 846.3774,-126 843.3774,-122 691.6226,-122 691.6226,-86 870.3774,-86 870.3774,-122"/>
-<text text-anchor="middle" x="781" y="-99.8" font-family="Times,serif" font-size="14.00" fill="#000000">EffectsModule.forRoot(args)</text>
+<title>ConfigFormModule</title>
+<polygon fill="#8dd3c7" stroke="#000000" points="2109.2716,-190 2106.2716,-194 2085.2716,-194 2082.2716,-190 1980.7284,-190 1980.7284,-154 2109.2716,-154 2109.2716,-190"/>
+<text text-anchor="middle" x="2045" y="-167.8" font-family="Times,serif" font-size="14.00" fill="#000000">ConfigFormModule</text>
 </g>
-<!-- EffectsModule.forRoot(args)&#45;&gt;AppModule -->
-<g id="edge21" class="edge">
-<title>EffectsModule.forRoot(args)&#45;&gt;AppModule</title>
-<path fill="none" stroke="#000000" d="M781,-122.2116C781,-174.6057 781,-322 781,-322 781,-322 2320.2624,-322 2320.2624,-322"/>
-<polygon fill="#000000" stroke="#000000" points="2320.2624,-325.5001 2330.2624,-322 2320.2624,-318.5001 2320.2624,-325.5001"/>
+<!-- ConfigFormComponent&#45;&gt;ConfigFormModule -->
+<g id="edge17" class="edge">
+<title>ConfigFormComponent&#45;&gt;ConfigFormModule</title>
+<path fill="none" stroke="#000000" d="M2014.9457,-122.2228C2014.9457,-122.2228 2014.9457,-143.7269 2014.9457,-143.7269"/>
+<polygon fill="#000000" stroke="#000000" points="2011.4457,-143.7269 2014.9457,-153.7269 2018.4457,-143.727 2011.4457,-143.7269"/>
 </g>
-<!-- StoreRouterConnectingModule -->
+<!-- ObjKeysPipe -->
+<g id="node19" class="node">
+<title>ObjKeysPipe</title>
+<polygon fill="#ffffb3" stroke="#000000" points="2271.1515,-122 2180.8485,-122 2180.8485,-86 2271.1515,-86 2271.1515,-122"/>
+<text text-anchor="middle" x="2226" y="-99.8" font-family="Times,serif" font-size="14.00" fill="#000000">ObjKeysPipe</text>
+</g>
+<!-- ObjKeysPipe&#45;&gt;ConfigFormModule -->
+<g id="edge18" class="edge">
+<title>ObjKeysPipe&#45;&gt;ConfigFormModule</title>
+<path fill="none" stroke="#000000" d="M2226,-122.2228C2226,-142.3652 2226,-172 2226,-172 2226,-172 2119.3235,-172 2119.3235,-172"/>
+<polygon fill="#000000" stroke="#000000" points="2119.3235,-168.5001 2109.3235,-172 2119.3234,-175.5001 2119.3235,-168.5001"/>
+</g>
+<!-- TitleCasePipe -->
+<g id="node20" class="node">
+<title>TitleCasePipe</title>
+<polygon fill="#ffffb3" stroke="#000000" points="2162.0383,-122 2067.9617,-122 2067.9617,-86 2162.0383,-86 2162.0383,-122"/>
+<text text-anchor="middle" x="2115" y="-99.8" font-family="Times,serif" font-size="14.00" fill="#000000">TitleCasePipe</text>
+</g>
+<!-- TitleCasePipe&#45;&gt;ConfigFormModule -->
+<g id="edge19" class="edge">
+<title>TitleCasePipe&#45;&gt;ConfigFormModule</title>
+<path fill="none" stroke="#000000" d="M2088.5585,-122.2228C2088.5585,-122.2228 2088.5585,-143.7269 2088.5585,-143.7269"/>
+<polygon fill="#000000" stroke="#000000" points="2085.0586,-143.7269 2088.5585,-153.7269 2092.0586,-143.727 2085.0586,-143.7269"/>
+</g>
+<!-- ConfigFormModule&#45;&gt;SharedCatanieModule -->
+<g id="edge41" class="edge">
+<title>ConfigFormModule&#45;&gt;SharedCatanieModule</title>
+<path fill="none" stroke="#000000" d="M1980.6978,-178C1866.92,-178 1642,-178 1642,-178 1642,-178 1642,-219.9733 1642,-219.9733"/>
+<polygon fill="#000000" stroke="#000000" points="1638.5001,-219.9732 1642,-229.9733 1645.5001,-219.9733 1638.5001,-219.9732"/>
+</g>
+<!-- ConfigFormComponent  -->
 <g id="node22" class="node">
-<title>StoreRouterConnectingModule</title>
-<polygon fill="#8dd3c7" stroke="#000000" points="1079.7478,-122 1076.7478,-126 1055.7478,-126 1052.7478,-122 888.2522,-122 888.2522,-86 1079.7478,-86 1079.7478,-122"/>
-<text text-anchor="middle" x="984" y="-99.8" font-family="Times,serif" font-size="14.00" fill="#000000">StoreRouterConnectingModule</text>
+<title>ConfigFormComponent </title>
+<polygon fill="#fb8072" stroke="#000000" points="2122.054,-266 1967.946,-266 1967.946,-230 2122.054,-230 2122.054,-266"/>
+<text text-anchor="middle" x="2045" y="-243.8" font-family="Times,serif" font-size="14.00" fill="#000000">ConfigFormComponent </text>
 </g>
-<!-- StoreRouterConnectingModule&#45;&gt;AppModule -->
-<g id="edge22" class="edge">
-<title>StoreRouterConnectingModule&#45;&gt;AppModule</title>
-<path fill="none" stroke="#000000" d="M984,-122.3308C984,-174.3238 984,-319 984,-319 984,-319 2320.0818,-319 2320.0818,-319"/>
-<polygon fill="#000000" stroke="#000000" points="2320.0818,-322.5001 2330.0818,-319 2320.0817,-315.5001 2320.0818,-322.5001"/>
+<!-- ConfigFormModule&#45;&gt;ConfigFormComponent  -->
+<g id="edge20" class="edge">
+<title>ConfigFormModule&#45;&gt;ConfigFormComponent </title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M2045,-190.0109C2045,-190.0109 2045,-219.855 2045,-219.855"/>
+<polygon fill="#000000" stroke="#000000" points="2041.5001,-219.8549 2045,-229.855 2048.5001,-219.855 2041.5001,-219.8549"/>
 </g>
-<!-- AppComponent  -->
+<!-- DashboardComponent -->
+<g id="node23" class="node">
+<title>DashboardComponent</title>
+<polygon fill="#ffffb3" stroke="#000000" points="3745.9734,-266 3604.0266,-266 3604.0266,-230 3745.9734,-230 3745.9734,-266"/>
+<text text-anchor="middle" x="3675" y="-243.8" font-family="Times,serif" font-size="14.00" fill="#000000">DashboardComponent</text>
+</g>
+<!-- DashboardComponent&#45;&gt;DatasetsModule -->
+<g id="edge21" class="edge">
+<title>DashboardComponent&#45;&gt;DatasetsModule</title>
+<path fill="none" stroke="#000000" d="M3675,-266.207C3675,-271.5549 3675,-276 3675,-276 3675,-276 1719.8003,-276 1719.8003,-276 1719.8003,-276 1719.8003,-295.8533 1719.8003,-295.8533"/>
+<polygon fill="#000000" stroke="#000000" points="1716.3004,-295.8532 1719.8003,-305.8533 1723.3004,-295.8533 1716.3004,-295.8532"/>
+</g>
+<!-- DatasetTableComponent -->
 <g id="node24" class="node">
-<title>AppComponent </title>
-<polygon fill="#80b1d3" stroke="#000000" points="2426.439,-393 2317.561,-393 2317.561,-357 2426.439,-357 2426.439,-393"/>
-<text text-anchor="middle" x="2372" y="-370.8" font-family="Times,serif" font-size="14.00" fill="#000000">AppComponent </text>
+<title>DatasetTableComponent</title>
+<polygon fill="#ffffb3" stroke="#000000" points="3585.6811,-266 3430.3189,-266 3430.3189,-230 3585.6811,-230 3585.6811,-266"/>
+<text text-anchor="middle" x="3508" y="-243.8" font-family="Times,serif" font-size="14.00" fill="#000000">DatasetTableComponent</text>
 </g>
-<!-- AppModule&#45;&gt;AppComponent  -->
-<g id="edge23" class="edge">
-<title>AppModule&#45;&gt;AppComponent </title>
-<path fill="none" stroke="#000000" stroke-dasharray="1,5" d="M2372,-328.1061C2372,-328.1061 2372,-346.991 2372,-346.991"/>
-<polygon fill="#000000" stroke="#000000" points="2368.5001,-346.9909 2372,-356.991 2375.5001,-346.991 2368.5001,-346.9909"/>
+<!-- DatasetTableComponent&#45;&gt;DatasetsModule -->
+<g id="edge22" class="edge">
+<title>DatasetTableComponent&#45;&gt;DatasetsModule</title>
+<path fill="none" stroke="#000000" d="M3508,-266.0579C3508,-270.4945 3508,-274 3508,-274 3508,-274 1716.1961,-274 1716.1961,-274 1716.1961,-274 1716.1961,-295.9489 1716.1961,-295.9489"/>
+<polygon fill="#000000" stroke="#000000" points="1712.6962,-295.9488 1716.1961,-305.9489 1719.6962,-295.9489 1712.6962,-295.9488"/>
 </g>
-<!-- CommonModule -->
+<!-- DatablocksComponent -->
 <g id="node25" class="node">
-<title>CommonModule</title>
-<polygon fill="#8dd3c7" stroke="#000000" points="3792.6681,-187 3789.6681,-191 3768.6681,-191 3765.6681,-187 3681.3319,-187 3681.3319,-151 3792.6681,-151 3792.6681,-187"/>
-<text text-anchor="middle" x="3737" y="-164.8" font-family="Times,serif" font-size="14.00" fill="#000000">CommonModule</text>
+<title>DatablocksComponent</title>
+<polygon fill="#ffffb3" stroke="#000000" points="3412.3089,-266 3267.6911,-266 3267.6911,-230 3412.3089,-230 3412.3089,-266"/>
+<text text-anchor="middle" x="3340" y="-243.8" font-family="Times,serif" font-size="14.00" fill="#000000">DatablocksComponent</text>
 </g>
-<!-- CommonModule&#45;&gt;SharedCatanieModule -->
-<g id="edge36" class="edge">
-<title>CommonModule&#45;&gt;SharedCatanieModule</title>
-<path fill="none" stroke="#000000" d="M3737,-150.793C3737,-145.4451 3737,-141 3737,-141 3737,-141 2639.9414,-141 2639.9414,-141 2639.9414,-141 2639.9414,-141.9793 2639.9414,-141.9793"/>
-<polygon fill="#000000" stroke="#000000" points="2636.4415,-140.793 2639.9414,-150.793 2643.4415,-140.7931 2636.4415,-140.793"/>
+<!-- DatablocksComponent&#45;&gt;DatasetsModule -->
+<g id="edge23" class="edge">
+<title>DatablocksComponent&#45;&gt;DatasetsModule</title>
+<path fill="none" stroke="#000000" d="M3340,-266.0511C3340,-280.373 3340,-298 3340,-298 3340,-298 1741.3971,-298 1741.3971,-298 1741.3971,-298 1741.3971,-298.7942 1741.3971,-298.7942"/>
+<polygon fill="#000000" stroke="#000000" points="1737.8973,-295.9421 1741.3971,-305.9421 1744.8973,-295.9422 1737.8973,-295.9421"/>
 </g>
-<!-- CommonModule&#45;&gt;DatasetsModule -->
+<!-- DatafilesComponent -->
+<g id="node26" class="node">
+<title>DatafilesComponent</title>
+<polygon fill="#ffffb3" stroke="#000000" points="3249.8599,-266 3118.1401,-266 3118.1401,-230 3249.8599,-230 3249.8599,-266"/>
+<text text-anchor="middle" x="3184" y="-243.8" font-family="Times,serif" font-size="14.00" fill="#000000">DatafilesComponent</text>
+</g>
+<!-- DatafilesComponent&#45;&gt;DatasetsModule -->
 <g id="edge24" class="edge">
-<title>CommonModule&#45;&gt;DatasetsModule</title>
-<path fill="none" stroke="#000000" d="M3710.7323,-187.0263C3710.7323,-211.9773 3710.7323,-254 3710.7323,-254 3710.7323,-254 3100.7123,-254 3100.7123,-254"/>
-<polygon fill="#000000" stroke="#000000" points="3100.7124,-250.5001 3090.7123,-254 3100.7123,-257.5001 3100.7124,-250.5001"/>
+<title>DatafilesComponent&#45;&gt;DatasetsModule</title>
+<path fill="none" stroke="#000000" d="M3184,-266.1467C3184,-279.7395 3184,-296 3184,-296 3184,-296 1738.7011,-296 1738.7011,-296 1738.7011,-296 1738.7011,-296.9793 1738.7011,-296.9793"/>
+<polygon fill="#000000" stroke="#000000" points="1735.2012,-295.793 1738.7011,-305.793 1742.2012,-295.7931 1735.2012,-295.793"/>
 </g>
-<!-- CommonModule&#45;&gt;UsersModule -->
-<g id="edge49" class="edge">
-<title>CommonModule&#45;&gt;UsersModule</title>
-<path fill="none" stroke="#000000" d="M3695.9493,-187.207C3695.9493,-192.5549 3695.9493,-197 3695.9493,-197 3695.9493,-197 2733.1185,-197 2733.1185,-197 2733.1185,-197 2733.1185,-216.8533 2733.1185,-216.8533"/>
-<polygon fill="#000000" stroke="#000000" points="2729.6186,-216.8532 2733.1185,-226.8533 2736.6186,-216.8533 2729.6186,-216.8532"/>
+<!-- DatasetsFilterComponent -->
+<g id="node27" class="node">
+<title>DatasetsFilterComponent</title>
+<polygon fill="#ffffb3" stroke="#000000" points="4098.5828,-266 3939.4172,-266 3939.4172,-230 4098.5828,-230 4098.5828,-266"/>
+<text text-anchor="middle" x="4019" y="-243.8" font-family="Times,serif" font-size="14.00" fill="#000000">DatasetsFilterComponent</text>
 </g>
-<!-- CommonModule&#45;&gt;SDKBrowserModule -->
-<g id="edge34" class="edge">
-<title>CommonModule&#45;&gt;SDKBrowserModule</title>
-<path fill="none" stroke="#000000" d="M3759.1746,-187.0109C3759.1746,-187.0109 3759.1746,-216.855 3759.1746,-216.855"/>
-<polygon fill="#000000" stroke="#000000" points="3755.6747,-216.8549 3759.1746,-226.855 3762.6747,-216.855 3755.6747,-216.8549"/>
+<!-- DatasetsFilterComponent&#45;&gt;DatasetsModule -->
+<g id="edge25" class="edge">
+<title>DatasetsFilterComponent&#45;&gt;DatasetsModule</title>
+<path fill="none" stroke="#000000" d="M4019,-266.2434C4019,-273.4297 4019,-280 4019,-280 4019,-280 1727.0087,-280 1727.0087,-280 1727.0087,-280 1727.0087,-295.8495 1727.0087,-295.8495"/>
+<polygon fill="#000000" stroke="#000000" points="1723.5088,-295.8494 1727.0087,-305.8495 1730.5088,-295.8495 1723.5088,-295.8494"/>
+</g>
+<!-- DatasetDetailComponent -->
+<g id="node28" class="node">
+<title>DatasetDetailComponent</title>
+<polygon fill="#ffffb3" stroke="#000000" points="3921.5169,-266 3764.4831,-266 3764.4831,-230 3921.5169,-230 3921.5169,-266"/>
+<text text-anchor="middle" x="3843" y="-243.8" font-family="Times,serif" font-size="14.00" fill="#000000">DatasetDetailComponent</text>
+</g>
+<!-- DatasetDetailComponent&#45;&gt;DatasetsModule -->
+<g id="edge26" class="edge">
+<title>DatasetDetailComponent&#45;&gt;DatasetsModule</title>
+<path fill="none" stroke="#000000" d="M3843,-266.1432C3843,-272.4611 3843,-278 3843,-278 3843,-278 1723.4045,-278 1723.4045,-278 1723.4045,-278 1723.4045,-295.8196 1723.4045,-295.8196"/>
+<polygon fill="#000000" stroke="#000000" points="1719.9046,-295.8195 1723.4045,-305.8196 1726.9046,-295.8196 1719.9046,-295.8195"/>
 </g>
 <!-- DialogModule -->
-<g id="node26" class="node">
+<g id="node29" class="node">
 <title>DialogModule</title>
-<polygon fill="#8dd3c7" stroke="#000000" points="3908.6528,-187 3905.6528,-191 3884.6528,-191 3881.6528,-187 3811.3472,-187 3811.3472,-151 3908.6528,-151 3908.6528,-187"/>
-<text text-anchor="middle" x="3860" y="-164.8" font-family="Times,serif" font-size="14.00" fill="#000000">DialogModule</text>
+<polygon fill="#8dd3c7" stroke="#000000" points="2953.6528,-266 2950.6528,-270 2929.6528,-270 2926.6528,-266 2856.3472,-266 2856.3472,-230 2953.6528,-230 2953.6528,-266"/>
+<text text-anchor="middle" x="2905" y="-243.8" font-family="Times,serif" font-size="14.00" fill="#000000">DialogModule</text>
+</g>
+<!-- DialogModule&#45;&gt;SharedCatanieModule -->
+<g id="edge43" class="edge">
+<title>DialogModule&#45;&gt;SharedCatanieModule</title>
+<path fill="none" stroke="#000000" d="M2888.7246,-266.1903C2888.7246,-269.5376 2888.7246,-272 2888.7246,-272 2888.7246,-272 1684.561,-272 1684.561,-272 1684.561,-272 1684.561,-271.419 1684.561,-271.419"/>
+<polygon fill="#000000" stroke="#000000" points="1688.0612,-276.1902 1684.561,-266.1903 1681.0612,-276.1903 1688.0612,-276.1902"/>
 </g>
 <!-- DialogModule&#45;&gt;DatasetsModule -->
-<g id="edge26" class="edge">
+<g id="edge27" class="edge">
 <title>DialogModule&#45;&gt;DatasetsModule</title>
-<path fill="none" stroke="#000000" d="M3835.8293,-187.1097C3835.8293,-196.897 3835.8293,-207 3835.8293,-207 3835.8293,-207 3087.902,-207 3087.902,-207 3087.902,-207 3087.902,-216.8903 3087.902,-216.8903"/>
-<polygon fill="#000000" stroke="#000000" points="3084.4021,-216.8903 3087.902,-226.8903 3091.4021,-216.8904 3084.4021,-216.8903"/>
+<path fill="none" stroke="#000000" d="M2921.2754,-266.1505C2921.2754,-278.2708 2921.2754,-292 2921.2754,-292 2921.2754,-292 1733.309,-292 1733.309,-292 1733.309,-292 1733.309,-295.7566 1733.309,-295.7566"/>
+<polygon fill="#000000" stroke="#000000" points="1729.8091,-295.7566 1733.309,-305.7566 1736.8091,-295.7566 1729.8091,-295.7566"/>
 </g>
-<!-- ConfirmDialogModule -->
-<g id="node27" class="node">
-<title>ConfirmDialogModule</title>
-<polygon fill="#8dd3c7" stroke="#000000" points="3663.5912,-187 3660.5912,-191 3639.5912,-191 3636.5912,-187 3518.4088,-187 3518.4088,-151 3663.5912,-151 3663.5912,-187"/>
-<text text-anchor="middle" x="3591" y="-164.8" font-family="Times,serif" font-size="14.00" fill="#000000">ConfirmDialogModule</text>
-</g>
-<!-- ConfirmDialogModule&#45;&gt;DatasetsModule -->
-<g id="edge32" class="edge">
-<title>ConfirmDialogModule&#45;&gt;DatasetsModule</title>
-<path fill="none" stroke="#000000" d="M3591,-187.308C3591,-207.1455 3591,-236 3591,-236 3591,-236 3100.6232,-236 3100.6232,-236"/>
-<polygon fill="#000000" stroke="#000000" points="3100.6233,-232.5001 3090.6232,-236 3100.6232,-239.5001 3100.6233,-232.5001"/>
-</g>
-<!-- RouterModule -->
+<!-- DatePickerModule -->
 <g id="node30" class="node">
-<title>RouterModule</title>
-<polygon fill="#8dd3c7" stroke="#000000" points="651.6528,-263 648.6528,-267 627.6528,-267 624.6528,-263 554.3472,-263 554.3472,-227 651.6528,-227 651.6528,-263"/>
-<text text-anchor="middle" x="603" y="-240.8" font-family="Times,serif" font-size="14.00" fill="#000000">RouterModule</text>
+<title>DatePickerModule</title>
+<polygon fill="#8dd3c7" stroke="#000000" points="3093.7395,-266 3090.7395,-270 3069.7395,-270 3066.7395,-266 2972.2605,-266 2972.2605,-230 3093.7395,-230 3093.7395,-266"/>
+<text text-anchor="middle" x="3033" y="-243.8" font-family="Times,serif" font-size="14.00" fill="#000000">DatePickerModule</text>
 </g>
-<!-- RouterModule&#45;&gt;SharedCatanieModule -->
-<g id="edge45" class="edge">
-<title>RouterModule&#45;&gt;SharedCatanieModule</title>
-<path fill="none" stroke="#000000" d="M603,-226.9652C603,-207.4238 603,-179 603,-179 603,-179 2491.3417,-179 2491.3417,-179"/>
-<polygon fill="#000000" stroke="#000000" points="2491.3418,-182.5001 2501.3417,-179 2491.3417,-175.5001 2491.3418,-182.5001"/>
+<!-- DatePickerModule&#45;&gt;DatasetsModule -->
+<g id="edge29" class="edge">
+<title>DatePickerModule&#45;&gt;DatasetsModule</title>
+<path fill="none" stroke="#000000" d="M3033,-266.1804C3033,-279.0382 3033,-294 3033,-294 3033,-294 1736.005,-294 1736.005,-294 1736.005,-294 1736.005,-295.8568 1736.005,-295.8568"/>
+<polygon fill="#000000" stroke="#000000" points="1732.5051,-295.8568 1736.005,-305.8568 1739.5051,-295.8568 1732.5051,-295.8568"/>
+</g>
+<!-- DatePickerComponent  -->
+<g id="node34" class="node">
+<title>DatePickerComponent </title>
+<polygon fill="#fb8072" stroke="#000000" points="3106.5218,-190 2959.4782,-190 2959.4782,-154 3106.5218,-154 3106.5218,-190"/>
+<text text-anchor="middle" x="3033" y="-167.8" font-family="Times,serif" font-size="14.00" fill="#000000">DatePickerComponent </text>
+</g>
+<!-- DatePickerModule&#45;&gt;DatePickerComponent  -->
+<g id="edge34" class="edge">
+<title>DatePickerModule&#45;&gt;DatePickerComponent </title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M3033,-229.9891C3033,-229.9891 3033,-200.145 3033,-200.145"/>
+<polygon fill="#000000" stroke="#000000" points="3036.5001,-200.145 3033,-190.145 3029.5001,-200.1451 3036.5001,-200.145"/>
+</g>
+<!-- DatePickerComponent -->
+<g id="node33" class="node">
+<title>DatePickerComponent</title>
+<polygon fill="#ffffb3" stroke="#000000" points="3274.5226,-190 3131.4774,-190 3131.4774,-154 3274.5226,-154 3274.5226,-190"/>
+<text text-anchor="middle" x="3203" y="-167.8" font-family="Times,serif" font-size="14.00" fill="#000000">DatePickerComponent</text>
+</g>
+<!-- DatePickerComponent&#45;&gt;DatePickerModule -->
+<g id="edge33" class="edge">
+<title>DatePickerComponent&#45;&gt;DatePickerModule</title>
+<path fill="none" stroke="#000000" d="M3131.0856,-172C3120.0762,-172 3112.2905,-172 3112.2905,-172 3112.2905,-172 3112.2905,-248 3112.2905,-248 3112.2905,-248 3103.9004,-248 3103.9004,-248"/>
+<polygon fill="#000000" stroke="#000000" points="3103.9004,-244.5001 3093.9004,-248 3103.9003,-251.5001 3103.9004,-244.5001"/>
+</g>
+<!-- DialogComponent -->
+<g id="node35" class="node">
+<title>DialogComponent</title>
+<polygon fill="#ffffb3" stroke="#000000" points="2918.9356,-190 2799.0644,-190 2799.0644,-154 2918.9356,-154 2918.9356,-190"/>
+<text text-anchor="middle" x="2859" y="-167.8" font-family="Times,serif" font-size="14.00" fill="#000000">DialogComponent</text>
+</g>
+<!-- DialogComponent&#45;&gt;DialogModule -->
+<g id="edge35" class="edge">
+<title>DialogComponent&#45;&gt;DialogModule</title>
+<path fill="none" stroke="#000000" d="M2887.4456,-190.0109C2887.4456,-190.0109 2887.4456,-219.855 2887.4456,-219.855"/>
+<polygon fill="#000000" stroke="#000000" points="2883.9457,-219.8549 2887.4456,-229.855 2890.9457,-219.855 2883.9457,-219.8549"/>
+</g>
+<!-- ErrorPageComponent -->
+<g id="node36" class="node">
+<title>ErrorPageComponent</title>
+<polygon fill="#ffffb3" stroke="#000000" points="2450.0786,-122 2311.9214,-122 2311.9214,-86 2450.0786,-86 2450.0786,-122"/>
+<text text-anchor="middle" x="2381" y="-99.8" font-family="Times,serif" font-size="14.00" fill="#000000">ErrorPageComponent</text>
+</g>
+<!-- ErrorPageModule -->
+<g id="node37" class="node">
+<title>ErrorPageModule</title>
+<polygon fill="#8dd3c7" stroke="#000000" points="2439.2964,-190 2436.2964,-194 2415.2964,-194 2412.2964,-190 2322.7036,-190 2322.7036,-154 2439.2964,-154 2439.2964,-190"/>
+<text text-anchor="middle" x="2381" y="-167.8" font-family="Times,serif" font-size="14.00" fill="#000000">ErrorPageModule</text>
+</g>
+<!-- ErrorPageComponent&#45;&gt;ErrorPageModule -->
+<g id="edge36" class="edge">
+<title>ErrorPageComponent&#45;&gt;ErrorPageModule</title>
+<path fill="none" stroke="#000000" d="M2381,-122.2228C2381,-122.2228 2381,-143.7269 2381,-143.7269"/>
+<polygon fill="#000000" stroke="#000000" points="2377.5001,-143.7269 2381,-153.7269 2384.5001,-143.727 2377.5001,-143.7269"/>
+</g>
+<!-- ErrorPageModule&#45;&gt;SharedCatanieModule -->
+<g id="edge42" class="edge">
+<title>ErrorPageModule&#45;&gt;SharedCatanieModule</title>
+<path fill="none" stroke="#000000" d="M2361.6173,-190.1097C2361.6173,-199.897 2361.6173,-210 2361.6173,-210 2361.6173,-210 1677.296,-210 1677.296,-210 1677.296,-210 1677.296,-219.8903 1677.296,-219.8903"/>
+<polygon fill="#000000" stroke="#000000" points="1673.796,-219.8903 1677.296,-229.8903 1680.796,-219.8904 1673.796,-219.8903"/>
+</g>
+<!-- ErrorPageComponent  -->
+<g id="node38" class="node">
+<title>ErrorPageComponent </title>
+<polygon fill="#fb8072" stroke="#000000" points="2452.5792,-266 2311.4208,-266 2311.4208,-230 2452.5792,-230 2452.5792,-266"/>
+<text text-anchor="middle" x="2382" y="-243.8" font-family="Times,serif" font-size="14.00" fill="#000000">ErrorPageComponent </text>
+</g>
+<!-- ErrorPageModule&#45;&gt;ErrorPageComponent  -->
+<g id="edge37" class="edge">
+<title>ErrorPageModule&#45;&gt;ErrorPageComponent </title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M2400.3827,-190.0109C2400.3827,-190.0109 2400.3827,-219.855 2400.3827,-219.855"/>
+<polygon fill="#000000" stroke="#000000" points="2396.8828,-219.8549 2400.3827,-229.855 2403.8828,-219.855 2396.8828,-219.8549"/>
+</g>
+<!-- ErrorHandler -->
+<g id="node39" class="node">
+<title>ErrorHandler</title>
+<ellipse fill="#fdb462" stroke="#000000" cx="4128" cy="-104" rx="62.518" ry="18"/>
+<text text-anchor="middle" x="4128" y="-99.8" font-family="Times,serif" font-size="14.00" fill="#000000">ErrorHandler</text>
+</g>
+<!-- SDKBrowserModule -->
+<g id="node41" class="node">
+<title>SDKBrowserModule</title>
+<polygon fill="#8dd3c7" stroke="#000000" points="4114.4692,-190 4111.4692,-194 4090.4692,-194 4087.4692,-190 3979.5308,-190 3979.5308,-154 4114.4692,-154 4114.4692,-190"/>
+<text text-anchor="middle" x="4047" y="-167.8" font-family="Times,serif" font-size="14.00" fill="#000000">SDKBrowserModule</text>
+</g>
+<!-- ErrorHandler&#45;&gt;SDKBrowserModule -->
+<g id="edge38" class="edge">
+<title>ErrorHandler&#45;&gt;SDKBrowserModule</title>
+<path fill="none" stroke="#000000" d="M4089.9878,-118.4211C4089.9878,-118.4211 4089.9878,-143.9613 4089.9878,-143.9613"/>
+<polygon fill="#000000" stroke="#000000" points="4086.4879,-143.9613 4089.9878,-153.9613 4093.4879,-143.9614 4086.4879,-143.9613"/>
+</g>
+<!-- SocketConnection -->
+<g id="node40" class="node">
+<title>SocketConnection</title>
+<ellipse fill="#fdb462" stroke="#000000" cx="3966" cy="-104" rx="81.6847" ry="18"/>
+<text text-anchor="middle" x="3966" y="-99.8" font-family="Times,serif" font-size="14.00" fill="#000000">SocketConnection</text>
+</g>
+<!-- SocketConnection&#45;&gt;SDKBrowserModule -->
+<g id="edge39" class="edge">
+<title>SocketConnection&#45;&gt;SDKBrowserModule</title>
+<path fill="none" stroke="#000000" d="M4013.6788,-118.755C4013.6788,-118.755 4013.6788,-143.8833 4013.6788,-143.8833"/>
+<polygon fill="#000000" stroke="#000000" points="4010.1789,-143.8833 4013.6788,-153.8833 4017.1789,-143.8833 4010.1789,-143.8833"/>
+</g>
+<!-- ConfigService -->
+<g id="node46" class="node">
+<title>ConfigService</title>
+<ellipse fill="#fdb462" stroke="#000000" cx="91" cy="-324" rx="66.6325" ry="18"/>
+<text text-anchor="middle" x="91" y="-319.8" font-family="Times,serif" font-size="14.00" fill="#000000">ConfigService</text>
+</g>
+<!-- ConfigService&#45;&gt;SharedCatanieModule -->
+<g id="edge48" class="edge">
+<title>ConfigService&#45;&gt;SharedCatanieModule</title>
+<path fill="none" stroke="#000000" d="M91,-305.973C91,-289.6024 91,-268 91,-268 91,-268 1583.2592,-268 1583.2592,-268 1583.2592,-268 1583.2592,-267.8154 1583.2592,-267.8154"/>
+<polygon fill="#000000" stroke="#000000" points="1586.7598,-276.1541 1583.2592,-266.1543 1579.7598,-276.1545 1586.7598,-276.1541"/>
+</g>
+<!-- LoginComponent -->
+<g id="node47" class="node">
+<title>LoginComponent</title>
+<polygon fill="#ffffb3" stroke="#000000" points="4423.2758,-266 4308.7242,-266 4308.7242,-230 4423.2758,-230 4423.2758,-266"/>
+<text text-anchor="middle" x="4366" y="-243.8" font-family="Times,serif" font-size="14.00" fill="#000000">LoginComponent</text>
+</g>
+<!-- LoginComponent&#45;&gt;UsersModule -->
+<g id="edge49" class="edge">
+<title>LoginComponent&#45;&gt;UsersModule</title>
+<path fill="none" stroke="#000000" d="M4366,-266.0449C4366,-287.6623 4366,-321 4366,-321 4366,-321 1868.942,-321 1868.942,-321"/>
+<polygon fill="#000000" stroke="#000000" points="1868.942,-317.5001 1858.942,-321 1868.942,-324.5001 1868.942,-317.5001"/>
+</g>
+<!-- UserDetailsComponent -->
+<g id="node48" class="node">
+<title>UserDetailsComponent</title>
+<polygon fill="#ffffb3" stroke="#000000" points="4759.9116,-266 4612.0884,-266 4612.0884,-230 4759.9116,-230 4759.9116,-266"/>
+<text text-anchor="middle" x="4686" y="-243.8" font-family="Times,serif" font-size="14.00" fill="#000000">UserDetailsComponent</text>
+</g>
+<!-- UserDetailsComponent&#45;&gt;UsersModule -->
+<g id="edge50" class="edge">
+<title>UserDetailsComponent&#45;&gt;UsersModule</title>
+<path fill="none" stroke="#000000" d="M4686,-266.0265C4686,-291.5093 4686,-335 4686,-335 4686,-335 1868.9994,-335 1868.9994,-335"/>
+<polygon fill="#000000" stroke="#000000" points="1868.9994,-331.5001 1858.9994,-335 1868.9994,-338.5001 1868.9994,-331.5001"/>
+</g>
+<!-- UserSettingsComponent -->
+<g id="node49" class="node">
+<title>UserSettingsComponent</title>
+<polygon fill="#ffffb3" stroke="#000000" points="4594.3725,-266 4441.6275,-266 4441.6275,-230 4594.3725,-230 4594.3725,-266"/>
+<text text-anchor="middle" x="4518" y="-243.8" font-family="Times,serif" font-size="14.00" fill="#000000">UserSettingsComponent</text>
+</g>
+<!-- UserSettingsComponent&#45;&gt;UsersModule -->
+<g id="edge51" class="edge">
+<title>UserSettingsComponent&#45;&gt;UsersModule</title>
+<path fill="none" stroke="#000000" d="M4518,-266.1532C4518,-289.7566 4518,-328 4518,-328 4518,-328 1868.8154,-328 1868.8154,-328"/>
+<polygon fill="#000000" stroke="#000000" points="1868.8154,-324.5001 1858.8154,-328 1868.8153,-331.5001 1868.8154,-324.5001"/>
+</g>
+<!-- ADAuthService -->
+<g id="node50" class="node">
+<title>ADAuthService</title>
+<ellipse fill="#fdb462" stroke="#000000" cx="4212" cy="-248" rx="73.4939" ry="18"/>
+<text text-anchor="middle" x="4212" y="-243.8" font-family="Times,serif" font-size="14.00" fill="#000000">ADAuthService</text>
+</g>
+<!-- ADAuthService&#45;&gt;UsersModule -->
+<g id="edge53" class="edge">
+<title>ADAuthService&#45;&gt;UsersModule</title>
+<path fill="none" stroke="#000000" d="M4212,-266.0348C4212,-285.5762 4212,-314 4212,-314 4212,-314 1868.781,-314 1868.781,-314"/>
+<polygon fill="#000000" stroke="#000000" points="1868.7811,-310.5001 1858.781,-314 1868.781,-317.5001 1868.7811,-310.5001"/>
 </g>
 </g>
 </svg>
 
-    </div>
-    <div class="btn-group">
-        <button id="zoom-in" class="btn btn-default btn-sm">Zoom in</button>
-        <button id="reset" class="btn btn-default btn-sm">Reset</button>
-        <button id="zoom-out" class="btn btn-default btn-sm">Zoom out</button>
-    </div>
-</div>
+                </div>
+                <i id="fullscreen" class="fa fa-expand module-graph-fullscreen-btn" aria-hidden="true"></i>
+                <div class="btn-group">
+                    <button id="zoom-in" class="btn btn-default btn-sm">Zoom in</button>
+                    <button id="reset" class="btn btn-default btn-sm">Reset</button>
+                    <button id="zoom-out" class="btn btn-default btn-sm">Zoom out</button>
+                </div>
+            </div>
 <div class="container-fluid overview">
     <div class="row">
             <div class="col-sm-3">
@@ -1676,7 +2611,7 @@
                     <div class="card-block">
                         <h4 class="card-title"><span class="fa fa-archive"></span></h4>
                         <p class="card-text">
-                            <a href="./modules.html">5 modules</a>
+                            <a href="./modules.html">11 modules</a>
                         </p>
                     </div>
                 </div>
@@ -1685,7 +2620,7 @@
                 <div class="card text-center">
                     <div class="card-block">
                         <h4 class="card-title"><span class="fa fa-cogs"></span></h4>
-                        <p class="card-text">16 components</p>
+                        <p class="card-text">19 components</p>
                     </div>
                 </div>
             </div>
@@ -1709,7 +2644,25 @@
                 <div class="card text-center">
                     <div class="card-block">
                         <h4 class="card-title"><span class="fa fa-file-code-o"></span></h4>
-                        <p class="card-text">77 classes</p>
+                        <p class="card-text">136 classes</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="card text-center">
+                    <div class="card-block">
+                        <h4 class="card-title"><span class="fa fa-info"></span></h4>
+                        <p class="card-text">39 interfaces</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="card text-center">
+                    <div class="card-block">
+                        <h4 class="card-title"><span class="fa fa-code-fork"></span></h4>
+                        <p class="card-text">
+                            <a href="./routes.html">16 routes</a>
+                        </p>
                     </div>
                 </div>
             </div>
@@ -1717,6 +2670,7 @@
 </div>
 <script src="js/libs/svg-pan-zoom.min.js"></script>
 <script src="js/svg-pan-zoom.controls.js"></script>
+
 
 
 

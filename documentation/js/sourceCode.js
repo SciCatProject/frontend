@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if ($prismPre) {
         $prismCode = $prismPre.querySelector('code'),
         $content = document.querySelector('.content'),
-        prismLinks = document.querySelectorAll('.link-to-prism');
+        prismLinks = document.querySelectorAll('.link-to-prism')
 
         for (var i = 0; i < prismLinks.length; i++) {
             prismLinks[i].addEventListener('click', linkToPrism, false);
@@ -24,6 +24,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     top = parseInt(getComputedStyle($prismHighlightLine)['top']);
                 $content.scrollTop = top;
             }, 500);
-        }
+        };
     }
 });

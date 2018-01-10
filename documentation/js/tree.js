@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', function() {
         _id: 0,
         label: parsedHtml.name,
         type: parsedHtml.type
-    });
+    })
     //Add id for nodes
     var traverseIds = function(o) {
         for (i in o) {
@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 traverseIds(o[i]);
             }
         }
-    };
+    }
     parsedHtml._id = 0;
     traverseIds(parsedHtml);
 

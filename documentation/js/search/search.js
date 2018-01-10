@@ -23,7 +23,7 @@
             var ctx = this, args = arguments;
             if (!timeout) {
                 timeout = setTimeout(function() {
-                    timeout = null;
+                    timeout = undefined;
                     fn.apply(ctx, args);
                 }, wait);
             }
@@ -68,7 +68,7 @@
             var $link = $('<a>', {
                 'href': link + res.url,
                 'text': res.title
-            });
+            })
 
             if (content.length > MAX_DESCRIPTION_SIZE) {
                 content = content.slice(0, MAX_DESCRIPTION_SIZE).trim()+'...';

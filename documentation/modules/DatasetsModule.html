@@ -36,9 +36,6 @@
                         <a data-type="chapter-link" href="../index.html"><span class="fa fa-home"></span>Getting started</a>
                         <ul class="links">
                                 <li class="link">
-                                    <a href="../index.html" ><span class="fa fa-file-text-o"></span>README</a>
-                                </li>
-                                <li class="link">
                                     <a 
                                         
                                          href="../overview.html" 
@@ -47,26 +44,55 @@
                                         <span class="fa fa-th"></span>Overview
                                     </a>
                                 </li>
+                                <li class="link">
+                                  <a href="../index.html" ><span class="fa fa-file-text-o"></span>README</a>
+                                </li>
+                                <li class="link">
+                                        <a href="../license.html"
+                                    >
+                                        <span class="fa fa-file-text-o"></span>LICENSE
+                                    </a>
+                                </li>
                         </ul>
                     </li>
             
             
                     <li class="chapter">
                         <a data-type="chapter-link" href="../modules.html" >
-                            <span class="fa fa-archive"></span>
-                            <span>Modules</span>
-                            <span class="menu-toggler fa fa-angle-up" data-toggle="collapse"
+                            <div class="menu-toggler linked" data-toggle="collapse"
                                     data-target="#xs-modules-links"
-                            ></span>
+                            >
+                                <span class="fa fa-archive"></span>
+                                <span class="link-name">Modules</span>
+                                <span class="fa fa-angle-down"></span>
+                            </div>
                         </a>
-                        <ul class="links collapse in"
+                        <ul class="links collapse "
                                 id="xs-modules-links"
                             >
                                 <li class="link">
                                     <a href="../modules/AppModule.html" >AppModule</a>
                                 </li>
                                 <li class="link">
+                                    <a href="../modules/AppRoutingModule.html" >AppRoutingModule</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../modules/BreadcrumbModule.html" >BreadcrumbModule</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../modules/ConfigFormModule.html" >ConfigFormModule</a>
+                                </li>
+                                <li class="link">
                                     <a href="../modules/DatasetsModule.html"  data-type="entity-link" class="active" >DatasetsModule</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../modules/DatePickerModule.html" >DatePickerModule</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../modules/DialogModule.html" >DialogModule</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../modules/ErrorPageModule.html" >ErrorPageModule</a>
                                 </li>
                                 <li class="link">
                                     <a href="../modules/SDKBrowserModule.html" >SDKBrowserModule</a>
@@ -81,14 +107,14 @@
                     </li>
             
                     <li class="chapter">
-                        <div class="simple">
+                        <div class="simple menu-toggler" data-toggle="collapse"
+                                data-target="#xs-components-links"
+                            >
                             <span class="fa fa-cogs"></span>
                             <span>Components</span>
-                            <span class="menu-toggler fa fa-angle-up" data-toggle="collapse"
-                                    data-target="#xs-components-links"
-                                ></span>
+                            <span class="fa fa-angle-down"></span>
                         </div>
-                        <ul class="links collapse in"
+                        <ul class="links collapse "
                                 id="xs-components-links"
                             >
                                 <li class="link">
@@ -119,13 +145,22 @@
                                     <a href="../components/DatasetsFilterComponent.html" >DatasetsFilterComponent</a>
                                 </li>
                                 <li class="link">
-                                    <a href="../components/EndOfShiftComponent.html" >EndOfShiftComponent</a>
+                                    <a href="../components/DatePickerComponent.html" >DatePickerComponent</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../components/DialogComponent.html" >DialogComponent</a>
                                 </li>
                                 <li class="link">
                                     <a href="../components/ErrorPageComponent.html" >ErrorPageComponent</a>
                                 </li>
                                 <li class="link">
                                     <a href="../components/JobsComponent.html" >JobsComponent</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../components/JobsDetailComponent.html" >JobsDetailComponent</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../components/JobsTableComponent.html" >JobsTableComponent</a>
                                 </li>
                                 <li class="link">
                                     <a href="../components/LoginComponent.html" >LoginComponent</a>
@@ -144,14 +179,14 @@
             
             
                     <li class="chapter">
-                        <div class="simple">
+                        <div class="simple menu-toggler" data-toggle="collapse"
+                                data-target="#xs-classes-links"
+                            >
                             <span class="fa fa-file-code-o"></span>
                             <span>Classes</span>
-                            <span class="menu-toggler fa fa-angle-up" data-toggle="collapse"
-                                    data-target="#xs-classes-links"
-                                ></span>
+                            <span class="fa fa-angle-down"></span>
                         </div>
-                        <ul class="links collapse in"
+                        <ul class="links collapse "
                                 id="xs-classes-links"
                             >
                                 <li class="link">
@@ -182,7 +217,16 @@
                                     <a href="../classes/AddGroupsAction.html" >AddGroupsAction</a>
                                 </li>
                                 <li class="link">
+                                    <a href="../classes/AddGroupsAction.html" >AddGroupsAction</a>
+                                </li>
+                                <li class="link">
                                     <a href="../classes/AddGroupsCompleteAction.html" >AddGroupsCompleteAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/AddGroupsCompleteAction.html" >AddGroupsCompleteAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/AddGroupsFailedAction.html" >AddGroupsFailedAction</a>
                                 </li>
                                 <li class="link">
                                     <a href="../classes/AddGroupsFailedAction.html" >AddGroupsFailedAction</a>
@@ -197,10 +241,40 @@
                                     <a href="../classes/ApplicationCredential.html" >ApplicationCredential</a>
                                 </li>
                                 <li class="link">
+                                    <a href="../classes/BaseStorage.html" >BaseStorage</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/CalSuperMonth.html" >CalSuperMonth</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/ChildRetrieveAction.html" >ChildRetrieveAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/ChildRetrieveCompleteAction.html" >ChildRetrieveCompleteAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/ClearMessageAction.html" >ClearMessageAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/CurrentJobAction.html" >CurrentJobAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/CurrentSetAction.html" >CurrentSetAction</a>
+                                </li>
+                                <li class="link">
                                     <a href="../classes/CustomReuseStrategy.html" >CustomReuseStrategy</a>
                                 </li>
                                 <li class="link">
                                     <a href="../classes/Datablock.html" >Datablock</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/DatablockDeleteAction.html" >DatablockDeleteAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/DatablockDeleteCompleteAction.html" >DatablockDeleteCompleteAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/DatablockDeleteFailedAction.html" >DatablockDeleteFailedAction</a>
                                 </li>
                                 <li class="link">
                                     <a href="../classes/DatablocksAction.html" >DatablocksAction</a>
@@ -218,16 +292,31 @@
                                     <a href="../classes/DatasetLifecycle.html" >DatasetLifecycle</a>
                                 </li>
                                 <li class="link">
+                                    <a href="../classes/DateWrapper.html" >DateWrapper</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/Day.html" >Day</a>
+                                </li>
+                                <li class="link">
                                     <a href="../classes/DerivedDataset.html" >DerivedDataset</a>
                                 </li>
                                 <li class="link">
+                                    <a href="../classes/FailedAction.html" >FailedAction</a>
+                                </li>
+                                <li class="link">
                                     <a href="../classes/FilterFailedAction.html" >FilterFailedAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/FilterValueAction.html" >FilterValueAction</a>
                                 </li>
                                 <li class="link">
                                     <a href="../classes/FireLoop.html" >FireLoop</a>
                                 </li>
                                 <li class="link">
                                     <a href="../classes/FireLoopRef.html" >FireLoopRef</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/FocusOnMonthAction.html" >FocusOnMonthAction</a>
                                 </li>
                                 <li class="link">
                                     <a href="../classes/IO.html" >IO</a>
@@ -293,13 +382,43 @@
                                     <a href="../classes/MockLoopBackAuth.html" >MockLoopBackAuth</a>
                                 </li>
                                 <li class="link">
+                                    <a href="../classes/MockMatDialogData.html" >MockMatDialogData</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/MockMatDialogRef.html" >MockMatDialogRef</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/MockNotificationService.html" >MockNotificationService</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/MockProposalApi.html" >MockProposalApi</a>
+                                </li>
+                                <li class="link">
                                     <a href="../classes/MockRouter.html" >MockRouter</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/MockStore.html" >MockStore</a>
                                 </li>
                                 <li class="link">
                                     <a href="../classes/MockUserApi.html" >MockUserApi</a>
                                 </li>
                                 <li class="link">
                                     <a href="../classes/MockUserMsgService.html" >MockUserMsgService</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/Month.html" >Month</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/MultiDayRange.html" >MultiDayRange</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/MultiMonthRange.html" >MultiMonthRange</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/MultiWeekRange.html" >MultiWeekRange</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/MultiYearRange.html" >MultiYearRange</a>
                                 </li>
                                 <li class="link">
                                     <a href="../classes/OrigDatablock.html" >OrigDatablock</a>
@@ -315,6 +434,27 @@
                                 </li>
                                 <li class="link">
                                     <a href="../classes/RawDataset.html" >RawDataset</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/RefocusToCurrentMonthAction.html" >RefocusToCurrentMonthAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/ResetStatusAction.html" >ResetStatusAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/ResetStatusCompleteAction.html" >ResetStatusCompleteAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/RestoreAction.html" >RestoreAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/ResyncTodayAction.html" >ResyncTodayAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/RetrieveAction.html" >RetrieveAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/RetrieveCompleteAction.html" >RetrieveCompleteAction</a>
                                 </li>
                                 <li class="link">
                                     <a href="../classes/RetrieveUserAction.html" >RetrieveUserAction</a>
@@ -335,13 +475,13 @@
                                     <a href="../classes/Sample.html" >Sample</a>
                                 </li>
                                 <li class="link">
-                                    <a href="../classes/SearchAction.html" >SearchAction</a>
+                                    <a href="../classes/SaveAction.html" >SaveAction</a>
                                 </li>
                                 <li class="link">
-                                    <a href="../classes/SearchAction.html" >SearchAction</a>
+                                    <a href="../classes/SaveModeAction.html" >SaveModeAction</a>
                                 </li>
                                 <li class="link">
-                                    <a href="../classes/SearchCompleteAction.html" >SearchCompleteAction</a>
+                                    <a href="../classes/SaveSettingsAction.html" >SaveSettingsAction</a>
                                 </li>
                                 <li class="link">
                                     <a href="../classes/SearchCompleteAction.html" >SearchCompleteAction</a>
@@ -353,10 +493,31 @@
                                     <a href="../classes/SearchIDAction.html" >SearchIDAction</a>
                                 </li>
                                 <li class="link">
+                                    <a href="../classes/SearchIDAction.html" >SearchIDAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/SearchIDCompleteAction.html" >SearchIDCompleteAction</a>
+                                </li>
+                                <li class="link">
                                     <a href="../classes/SearchIDCompleteAction.html" >SearchIDCompleteAction</a>
                                 </li>
                                 <li class="link">
                                     <a href="../classes/SearchIDFailedAction.html" >SearchIDFailedAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/SearchIDFailedAction.html" >SearchIDFailedAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/SetFocusYearAction.html" >SetFocusYearAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/SetSelectionModeAction.html" >SetSelectionModeAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/SetSelectionsAction.html" >SetSelectionsAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/ShowMessageAction.html" >ShowMessageAction</a>
                                 </li>
                                 <li class="link">
                                     <a href="../classes/SocketBrowser.html" >SocketBrowser</a>
@@ -365,16 +526,61 @@
                                     <a href="../classes/SocketDriver.html" >SocketDriver</a>
                                 </li>
                                 <li class="link">
-                                    <a href="../classes/Storage.html" >Storage</a>
+                                    <a href="../classes/SortFailedAction.html" >SortFailedAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/SortUpdateAction.html" >SortUpdateAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/SortValueAction.html" >SortValueAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/StepFocusBackAction.html" >StepFocusBackAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/StepFocusForwardAction.html" >StepFocusForwardAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/SubmitAction.html" >SubmitAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/SubmitCompleteAction.html" >SubmitCompleteAction</a>
                                 </li>
                                 <li class="link">
                                     <a href="../classes/SynchTimes.html" >SynchTimes</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/TimeRange.html" >TimeRange</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/ToggleCalDispAction.html" >ToggleCalDispAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/ToggleCalModeAction.html" >ToggleCalModeAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/TotalSetsAction.html" >TotalSetsAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/UIStoreAction.html" >UIStoreAction</a>
                                 </li>
                                 <li class="link">
                                     <a href="../classes/UpdateFilterAction.html" >UpdateFilterAction</a>
                                 </li>
                                 <li class="link">
                                     <a href="../classes/UpdateFilterCompleteAction.html" >UpdateFilterCompleteAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/UpdateFocusMonthAction.html" >UpdateFocusMonthAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/UpdateSelectedAction.html" >UpdateSelectedAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/UpdateSelectionsAction.html" >UpdateSelectionsAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/UpdateSortCompleteAction.html" >UpdateSortCompleteAction</a>
                                 </li>
                                 <li class="link">
                                     <a href="../classes/User.html" >User</a>
@@ -385,18 +591,24 @@
                                 <li class="link">
                                     <a href="../classes/UserIdentity.html" >UserIdentity</a>
                                 </li>
+                                <li class="link">
+                                    <a href="../classes/Week.html" >Week</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/Year.html" >Year</a>
+                                </li>
                         </ul>
                     </li>
             
                     <li class="chapter">
-                        <div class="simple">
+                        <div class="simple menu-toggler" data-toggle="collapse"
+                                data-target="#xs-injectables-links"
+                            >
                             <span class="fa fa-long-arrow-down"></span>
                             <span>Injectables</span>
-                            <span class="menu-toggler fa fa-angle-up" data-toggle="collapse"
-                                    data-target="#xs-injectables-links"
-                                ></span>
+                            <span class="fa fa-angle-down"></span>
                         </div>
-                        <ul class="links collapse in"
+                        <ul class="links collapse "
                                 id="xs-injectables-links"
                             >
                                 <li class="link">
@@ -451,6 +663,9 @@
                                     <a href="../injectables/JobApi.html" >JobApi</a>
                                 </li>
                                 <li class="link">
+                                    <a href="../injectables/JobsEffects.html" >JobsEffects</a>
+                                </li>
+                                <li class="link">
                                     <a href="../injectables/LoggerService.html" >LoggerService</a>
                                 </li>
                                 <li class="link">
@@ -501,22 +716,150 @@
                                 <li class="link">
                                     <a href="../injectables/UserIdentityApi.html" >UserIdentityApi</a>
                                 </li>
-                                <li class="link">
-                                    <a href="../injectables/UserMsgService.html" >UserMsgService</a>
-                                </li>
                         </ul>
                     </li>
             
             
                     <li class="chapter">
-                        <div class="simple">
+                        <div class="simple menu-toggler" data-toggle="collapse"
+                                data-target="#xs-interfaces-links"
+                            >
+                            <span class="fa fa-info"></span>
+                            <span>Interfaces</span>
+                            <span class="fa fa-angle-down"></span>
+                        </div>
+                        <ul class="links collapse "
+                                id="xs-interfaces-links"
+                            >
+                                <li class="link">
+                                    <a href="../interfaces/AccessGroupInterface.html" >AccessGroupInterface</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/AccessTokenInterface.html" >AccessTokenInterface</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/AccessUserInterface.html" >AccessUserInterface</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/AppState.html" >AppState</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/AppState.html" >AppState</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/ApplicationCredentialInterface.html" >ApplicationCredentialInterface</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/Breadcrumb.html" >Breadcrumb</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/CookieInterface.html" >CookieInterface</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/DashboardUIState.html" >DashboardUIState</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/DatablockInterface.html" >DatablockInterface</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/DatasetFilters.html" >DatasetFilters</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/DatasetInterface.html" >DatasetInterface</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/DatasetLifecycleInterface.html" >DatasetLifecycleInterface</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/DatasetState.html" >DatasetState</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/DatepickerState.html" >DatepickerState</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/DerivedDatasetInterface.html" >DerivedDatasetInterface</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/GeoPoint.html" >GeoPoint</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/IStringToBoolDict.html" >IStringToBoolDict</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/IStringToNumDict.html" >IStringToNumDict</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/JobInterface.html" >JobInterface</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/JobsState.html" >JobsState</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/LoopBackFilter.html" >LoopBackFilter</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/Message.html" >Message</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/Models.html" >Models</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/OrigDatablockInterface.html" >OrigDatablockInterface</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/PolicyInterface.html" >PolicyInterface</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/ProposalInterface.html" >ProposalInterface</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/RabbitMQInterface.html" >RabbitMQInterface</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/RawDatasetInterface.html" >RawDatasetInterface</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/SampleInterface.html" >SampleInterface</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/Settings.html" >Settings</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/StatFilter.html" >StatFilter</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/SynchTimesInterface.html" >SynchTimesInterface</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/TimerRangeSelectorState.html" >TimerRangeSelectorState</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/UserCredentialInterface.html" >UserCredentialInterface</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/UserIdentityInterface.html" >UserIdentityInterface</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/UserInterface.html" >UserInterface</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/UserState.html" >UserState</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/WeekdayNameObject.html" >WeekdayNameObject</a>
+                                </li>
+                        </ul>
+                    </li>
+            
+                    <li class="chapter">
+                        <div class="simple menu-toggler" data-toggle="collapse"
+                                data-target="#xs-pipes-links"
+                            >
                             <span class="fa fa-plus"></span>
                             <span>Pipes</span>
-                            <span class="menu-toggler fa fa-angle-up" data-toggle="collapse"
-                                    data-target="#xs-pipes-links"
-                                ></span>
+                            <span class="fa fa-angle-down"></span>
                         </div>
-                        <ul class="links collapse in"
+                        <ul class="links collapse "
                                 id="xs-pipes-links"
                             >
                                 <li class="link">
@@ -528,9 +871,34 @@
                         </ul>
                     </li>
             
+                    <li class="chapter">
+                        <div class="simple menu-toggler" data-toggle="collapse"
+                                data-target="#xs-miscellaneous-links"
+                            >
+                            <span class="fa fa-cubes"></span>
+                            <span>Miscellaneous</span>
+                            <span class="fa fa-angle-down"></span>
+                        </div>
+                        <ul class="links collapse "
+                                id="xs-miscellaneous-links"
+                            >
+                                <li class="link">
+                                  <a href="../miscellaneous/enumerations.html" data-type="entity-link" >Enums</a>
+                                </li>
+                                <li class="link">
+                                  <a href="../miscellaneous/functions.html" data-type="entity-link" >Functions</a>
+                                </li>
+                                <li class="link">
+                                  <a href="../miscellaneous/typealiases.html" data-type="entity-link" >Type aliases</a>
+                                </li>
+                                <li class="link">
+                                  <a href="../miscellaneous/variables.html" data-type="entity-link" >Variables</a>
+                                </li>
+                        </ul>
+                    </li>
             
                     <li class="chapter">
-                        <a data-type="chapter-link" href="../miscellaneous.html" ><span class="fa fa-cubes"></span>Miscellaneous</a>
+                        <a data-type="chapter-link" href="../routes.html" ><span class="fa fa-code-fork"></span>Routes</a>
                     </li>
             
                     <li class="chapter">
@@ -570,9 +938,6 @@
                                <a data-type="chapter-link" href="../index.html"><span class="fa fa-home"></span>Getting started</a>
                                <ul class="links">
                                        <li class="link">
-                                           <a href="../index.html" ><span class="fa fa-file-text-o"></span>README</a>
-                                       </li>
-                                       <li class="link">
                                            <a 
                                                
                                                 href="../overview.html" 
@@ -581,26 +946,55 @@
                                                <span class="fa fa-th"></span>Overview
                                            </a>
                                        </li>
+                                       <li class="link">
+                                         <a href="../index.html" ><span class="fa fa-file-text-o"></span>README</a>
+                                       </li>
+                                       <li class="link">
+                                               <a href="../license.html"
+                                           >
+                                               <span class="fa fa-file-text-o"></span>LICENSE
+                                           </a>
+                                       </li>
                                </ul>
                            </li>
                    
                    
                            <li class="chapter">
                                <a data-type="chapter-link" href="../modules.html" >
-                                   <span class="fa fa-archive"></span>
-                                   <span>Modules</span>
-                                   <span class="menu-toggler fa fa-angle-up" data-toggle="collapse"
+                                   <div class="menu-toggler linked" data-toggle="collapse"
                                            data-target="#modules-links"
-                                   ></span>
+                                   >
+                                       <span class="fa fa-archive"></span>
+                                       <span class="link-name">Modules</span>
+                                       <span class="fa fa-angle-down"></span>
+                                   </div>
                                </a>
-                               <ul class="links collapse in"
+                               <ul class="links collapse "
                                        id="modules-links"
                    >
                                        <li class="link">
                                            <a href="../modules/AppModule.html" >AppModule</a>
                                        </li>
                                        <li class="link">
+                                           <a href="../modules/AppRoutingModule.html" >AppRoutingModule</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../modules/BreadcrumbModule.html" >BreadcrumbModule</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../modules/ConfigFormModule.html" >ConfigFormModule</a>
+                                       </li>
+                                       <li class="link">
                                            <a href="../modules/DatasetsModule.html"  data-type="entity-link" class="active" >DatasetsModule</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../modules/DatePickerModule.html" >DatePickerModule</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../modules/DialogModule.html" >DialogModule</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../modules/ErrorPageModule.html" >ErrorPageModule</a>
                                        </li>
                                        <li class="link">
                                            <a href="../modules/SDKBrowserModule.html" >SDKBrowserModule</a>
@@ -615,14 +1009,14 @@
                            </li>
                    
                            <li class="chapter">
-                               <div class="simple">
+                               <div class="simple menu-toggler" data-toggle="collapse"
+                                       data-target="#components-links"
+                   >
                                    <span class="fa fa-cogs"></span>
                                    <span>Components</span>
-                                   <span class="menu-toggler fa fa-angle-up" data-toggle="collapse"
-                                           data-target="#components-links"
-                   ></span>
+                                   <span class="fa fa-angle-down"></span>
                                </div>
-                               <ul class="links collapse in"
+                               <ul class="links collapse "
                                        id="components-links"
                    >
                                        <li class="link">
@@ -653,13 +1047,22 @@
                                            <a href="../components/DatasetsFilterComponent.html" >DatasetsFilterComponent</a>
                                        </li>
                                        <li class="link">
-                                           <a href="../components/EndOfShiftComponent.html" >EndOfShiftComponent</a>
+                                           <a href="../components/DatePickerComponent.html" >DatePickerComponent</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../components/DialogComponent.html" >DialogComponent</a>
                                        </li>
                                        <li class="link">
                                            <a href="../components/ErrorPageComponent.html" >ErrorPageComponent</a>
                                        </li>
                                        <li class="link">
                                            <a href="../components/JobsComponent.html" >JobsComponent</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../components/JobsDetailComponent.html" >JobsDetailComponent</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../components/JobsTableComponent.html" >JobsTableComponent</a>
                                        </li>
                                        <li class="link">
                                            <a href="../components/LoginComponent.html" >LoginComponent</a>
@@ -678,14 +1081,14 @@
                    
                    
                            <li class="chapter">
-                               <div class="simple">
+                               <div class="simple menu-toggler" data-toggle="collapse"
+                                       data-target="#classes-links"
+                   >
                                    <span class="fa fa-file-code-o"></span>
                                    <span>Classes</span>
-                                   <span class="menu-toggler fa fa-angle-up" data-toggle="collapse"
-                                           data-target="#classes-links"
-                   ></span>
+                                   <span class="fa fa-angle-down"></span>
                                </div>
-                               <ul class="links collapse in"
+                               <ul class="links collapse "
                                        id="classes-links"
                    >
                                        <li class="link">
@@ -716,7 +1119,16 @@
                                            <a href="../classes/AddGroupsAction.html" >AddGroupsAction</a>
                                        </li>
                                        <li class="link">
+                                           <a href="../classes/AddGroupsAction.html" >AddGroupsAction</a>
+                                       </li>
+                                       <li class="link">
                                            <a href="../classes/AddGroupsCompleteAction.html" >AddGroupsCompleteAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/AddGroupsCompleteAction.html" >AddGroupsCompleteAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/AddGroupsFailedAction.html" >AddGroupsFailedAction</a>
                                        </li>
                                        <li class="link">
                                            <a href="../classes/AddGroupsFailedAction.html" >AddGroupsFailedAction</a>
@@ -731,10 +1143,40 @@
                                            <a href="../classes/ApplicationCredential.html" >ApplicationCredential</a>
                                        </li>
                                        <li class="link">
+                                           <a href="../classes/BaseStorage.html" >BaseStorage</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/CalSuperMonth.html" >CalSuperMonth</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/ChildRetrieveAction.html" >ChildRetrieveAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/ChildRetrieveCompleteAction.html" >ChildRetrieveCompleteAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/ClearMessageAction.html" >ClearMessageAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/CurrentJobAction.html" >CurrentJobAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/CurrentSetAction.html" >CurrentSetAction</a>
+                                       </li>
+                                       <li class="link">
                                            <a href="../classes/CustomReuseStrategy.html" >CustomReuseStrategy</a>
                                        </li>
                                        <li class="link">
                                            <a href="../classes/Datablock.html" >Datablock</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/DatablockDeleteAction.html" >DatablockDeleteAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/DatablockDeleteCompleteAction.html" >DatablockDeleteCompleteAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/DatablockDeleteFailedAction.html" >DatablockDeleteFailedAction</a>
                                        </li>
                                        <li class="link">
                                            <a href="../classes/DatablocksAction.html" >DatablocksAction</a>
@@ -752,16 +1194,31 @@
                                            <a href="../classes/DatasetLifecycle.html" >DatasetLifecycle</a>
                                        </li>
                                        <li class="link">
+                                           <a href="../classes/DateWrapper.html" >DateWrapper</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/Day.html" >Day</a>
+                                       </li>
+                                       <li class="link">
                                            <a href="../classes/DerivedDataset.html" >DerivedDataset</a>
                                        </li>
                                        <li class="link">
+                                           <a href="../classes/FailedAction.html" >FailedAction</a>
+                                       </li>
+                                       <li class="link">
                                            <a href="../classes/FilterFailedAction.html" >FilterFailedAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/FilterValueAction.html" >FilterValueAction</a>
                                        </li>
                                        <li class="link">
                                            <a href="../classes/FireLoop.html" >FireLoop</a>
                                        </li>
                                        <li class="link">
                                            <a href="../classes/FireLoopRef.html" >FireLoopRef</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/FocusOnMonthAction.html" >FocusOnMonthAction</a>
                                        </li>
                                        <li class="link">
                                            <a href="../classes/IO.html" >IO</a>
@@ -827,13 +1284,43 @@
                                            <a href="../classes/MockLoopBackAuth.html" >MockLoopBackAuth</a>
                                        </li>
                                        <li class="link">
+                                           <a href="../classes/MockMatDialogData.html" >MockMatDialogData</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/MockMatDialogRef.html" >MockMatDialogRef</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/MockNotificationService.html" >MockNotificationService</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/MockProposalApi.html" >MockProposalApi</a>
+                                       </li>
+                                       <li class="link">
                                            <a href="../classes/MockRouter.html" >MockRouter</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/MockStore.html" >MockStore</a>
                                        </li>
                                        <li class="link">
                                            <a href="../classes/MockUserApi.html" >MockUserApi</a>
                                        </li>
                                        <li class="link">
                                            <a href="../classes/MockUserMsgService.html" >MockUserMsgService</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/Month.html" >Month</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/MultiDayRange.html" >MultiDayRange</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/MultiMonthRange.html" >MultiMonthRange</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/MultiWeekRange.html" >MultiWeekRange</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/MultiYearRange.html" >MultiYearRange</a>
                                        </li>
                                        <li class="link">
                                            <a href="../classes/OrigDatablock.html" >OrigDatablock</a>
@@ -849,6 +1336,27 @@
                                        </li>
                                        <li class="link">
                                            <a href="../classes/RawDataset.html" >RawDataset</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/RefocusToCurrentMonthAction.html" >RefocusToCurrentMonthAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/ResetStatusAction.html" >ResetStatusAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/ResetStatusCompleteAction.html" >ResetStatusCompleteAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/RestoreAction.html" >RestoreAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/ResyncTodayAction.html" >ResyncTodayAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/RetrieveAction.html" >RetrieveAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/RetrieveCompleteAction.html" >RetrieveCompleteAction</a>
                                        </li>
                                        <li class="link">
                                            <a href="../classes/RetrieveUserAction.html" >RetrieveUserAction</a>
@@ -869,13 +1377,13 @@
                                            <a href="../classes/Sample.html" >Sample</a>
                                        </li>
                                        <li class="link">
-                                           <a href="../classes/SearchAction.html" >SearchAction</a>
+                                           <a href="../classes/SaveAction.html" >SaveAction</a>
                                        </li>
                                        <li class="link">
-                                           <a href="../classes/SearchAction.html" >SearchAction</a>
+                                           <a href="../classes/SaveModeAction.html" >SaveModeAction</a>
                                        </li>
                                        <li class="link">
-                                           <a href="../classes/SearchCompleteAction.html" >SearchCompleteAction</a>
+                                           <a href="../classes/SaveSettingsAction.html" >SaveSettingsAction</a>
                                        </li>
                                        <li class="link">
                                            <a href="../classes/SearchCompleteAction.html" >SearchCompleteAction</a>
@@ -887,10 +1395,31 @@
                                            <a href="../classes/SearchIDAction.html" >SearchIDAction</a>
                                        </li>
                                        <li class="link">
+                                           <a href="../classes/SearchIDAction.html" >SearchIDAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/SearchIDCompleteAction.html" >SearchIDCompleteAction</a>
+                                       </li>
+                                       <li class="link">
                                            <a href="../classes/SearchIDCompleteAction.html" >SearchIDCompleteAction</a>
                                        </li>
                                        <li class="link">
                                            <a href="../classes/SearchIDFailedAction.html" >SearchIDFailedAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/SearchIDFailedAction.html" >SearchIDFailedAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/SetFocusYearAction.html" >SetFocusYearAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/SetSelectionModeAction.html" >SetSelectionModeAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/SetSelectionsAction.html" >SetSelectionsAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/ShowMessageAction.html" >ShowMessageAction</a>
                                        </li>
                                        <li class="link">
                                            <a href="../classes/SocketBrowser.html" >SocketBrowser</a>
@@ -899,16 +1428,61 @@
                                            <a href="../classes/SocketDriver.html" >SocketDriver</a>
                                        </li>
                                        <li class="link">
-                                           <a href="../classes/Storage.html" >Storage</a>
+                                           <a href="../classes/SortFailedAction.html" >SortFailedAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/SortUpdateAction.html" >SortUpdateAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/SortValueAction.html" >SortValueAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/StepFocusBackAction.html" >StepFocusBackAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/StepFocusForwardAction.html" >StepFocusForwardAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/SubmitAction.html" >SubmitAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/SubmitCompleteAction.html" >SubmitCompleteAction</a>
                                        </li>
                                        <li class="link">
                                            <a href="../classes/SynchTimes.html" >SynchTimes</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/TimeRange.html" >TimeRange</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/ToggleCalDispAction.html" >ToggleCalDispAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/ToggleCalModeAction.html" >ToggleCalModeAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/TotalSetsAction.html" >TotalSetsAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/UIStoreAction.html" >UIStoreAction</a>
                                        </li>
                                        <li class="link">
                                            <a href="../classes/UpdateFilterAction.html" >UpdateFilterAction</a>
                                        </li>
                                        <li class="link">
                                            <a href="../classes/UpdateFilterCompleteAction.html" >UpdateFilterCompleteAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/UpdateFocusMonthAction.html" >UpdateFocusMonthAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/UpdateSelectedAction.html" >UpdateSelectedAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/UpdateSelectionsAction.html" >UpdateSelectionsAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/UpdateSortCompleteAction.html" >UpdateSortCompleteAction</a>
                                        </li>
                                        <li class="link">
                                            <a href="../classes/User.html" >User</a>
@@ -919,18 +1493,24 @@
                                        <li class="link">
                                            <a href="../classes/UserIdentity.html" >UserIdentity</a>
                                        </li>
+                                       <li class="link">
+                                           <a href="../classes/Week.html" >Week</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/Year.html" >Year</a>
+                                       </li>
                                </ul>
                            </li>
                    
                            <li class="chapter">
-                               <div class="simple">
+                               <div class="simple menu-toggler" data-toggle="collapse"
+                                       data-target="#injectables-links"
+                   >
                                    <span class="fa fa-long-arrow-down"></span>
                                    <span>Injectables</span>
-                                   <span class="menu-toggler fa fa-angle-up" data-toggle="collapse"
-                                           data-target="#injectables-links"
-                   ></span>
+                                   <span class="fa fa-angle-down"></span>
                                </div>
-                               <ul class="links collapse in"
+                               <ul class="links collapse "
                                        id="injectables-links"
                    >
                                        <li class="link">
@@ -985,6 +1565,9 @@
                                            <a href="../injectables/JobApi.html" >JobApi</a>
                                        </li>
                                        <li class="link">
+                                           <a href="../injectables/JobsEffects.html" >JobsEffects</a>
+                                       </li>
+                                       <li class="link">
                                            <a href="../injectables/LoggerService.html" >LoggerService</a>
                                        </li>
                                        <li class="link">
@@ -1035,22 +1618,150 @@
                                        <li class="link">
                                            <a href="../injectables/UserIdentityApi.html" >UserIdentityApi</a>
                                        </li>
-                                       <li class="link">
-                                           <a href="../injectables/UserMsgService.html" >UserMsgService</a>
-                                       </li>
                                </ul>
                            </li>
                    
                    
                            <li class="chapter">
-                               <div class="simple">
+                               <div class="simple menu-toggler" data-toggle="collapse"
+                                       data-target="#interfaces-links"
+                   >
+                                   <span class="fa fa-info"></span>
+                                   <span>Interfaces</span>
+                                   <span class="fa fa-angle-down"></span>
+                               </div>
+                               <ul class="links collapse "
+                                       id="interfaces-links"
+                   >
+                                       <li class="link">
+                                           <a href="../interfaces/AccessGroupInterface.html" >AccessGroupInterface</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/AccessTokenInterface.html" >AccessTokenInterface</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/AccessUserInterface.html" >AccessUserInterface</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/AppState.html" >AppState</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/AppState.html" >AppState</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/ApplicationCredentialInterface.html" >ApplicationCredentialInterface</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/Breadcrumb.html" >Breadcrumb</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/CookieInterface.html" >CookieInterface</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/DashboardUIState.html" >DashboardUIState</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/DatablockInterface.html" >DatablockInterface</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/DatasetFilters.html" >DatasetFilters</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/DatasetInterface.html" >DatasetInterface</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/DatasetLifecycleInterface.html" >DatasetLifecycleInterface</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/DatasetState.html" >DatasetState</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/DatepickerState.html" >DatepickerState</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/DerivedDatasetInterface.html" >DerivedDatasetInterface</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/GeoPoint.html" >GeoPoint</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/IStringToBoolDict.html" >IStringToBoolDict</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/IStringToNumDict.html" >IStringToNumDict</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/JobInterface.html" >JobInterface</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/JobsState.html" >JobsState</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/LoopBackFilter.html" >LoopBackFilter</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/Message.html" >Message</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/Models.html" >Models</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/OrigDatablockInterface.html" >OrigDatablockInterface</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/PolicyInterface.html" >PolicyInterface</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/ProposalInterface.html" >ProposalInterface</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/RabbitMQInterface.html" >RabbitMQInterface</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/RawDatasetInterface.html" >RawDatasetInterface</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/SampleInterface.html" >SampleInterface</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/Settings.html" >Settings</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/StatFilter.html" >StatFilter</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/SynchTimesInterface.html" >SynchTimesInterface</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/TimerRangeSelectorState.html" >TimerRangeSelectorState</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/UserCredentialInterface.html" >UserCredentialInterface</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/UserIdentityInterface.html" >UserIdentityInterface</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/UserInterface.html" >UserInterface</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/UserState.html" >UserState</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/WeekdayNameObject.html" >WeekdayNameObject</a>
+                                       </li>
+                               </ul>
+                           </li>
+                   
+                           <li class="chapter">
+                               <div class="simple menu-toggler" data-toggle="collapse"
+                                       data-target="#pipes-links"
+                   >
                                    <span class="fa fa-plus"></span>
                                    <span>Pipes</span>
-                                   <span class="menu-toggler fa fa-angle-up" data-toggle="collapse"
-                                           data-target="#pipes-links"
-                   ></span>
+                                   <span class="fa fa-angle-down"></span>
                                </div>
-                               <ul class="links collapse in"
+                               <ul class="links collapse "
                                        id="pipes-links"
                    >
                                        <li class="link">
@@ -1062,9 +1773,34 @@
                                </ul>
                            </li>
                    
+                           <li class="chapter">
+                               <div class="simple menu-toggler" data-toggle="collapse"
+                                       data-target="#miscellaneous-links"
+                   >
+                                   <span class="fa fa-cubes"></span>
+                                   <span>Miscellaneous</span>
+                                   <span class="fa fa-angle-down"></span>
+                               </div>
+                               <ul class="links collapse "
+                                       id="miscellaneous-links"
+                   >
+                                       <li class="link">
+                                         <a href="../miscellaneous/enumerations.html" data-type="entity-link" >Enums</a>
+                                       </li>
+                                       <li class="link">
+                                         <a href="../miscellaneous/functions.html" data-type="entity-link" >Functions</a>
+                                       </li>
+                                       <li class="link">
+                                         <a href="../miscellaneous/typealiases.html" data-type="entity-link" >Type aliases</a>
+                                       </li>
+                                       <li class="link">
+                                         <a href="../miscellaneous/variables.html" data-type="entity-link" >Variables</a>
+                                       </li>
+                               </ul>
+                           </li>
                    
                            <li class="chapter">
-                               <a data-type="chapter-link" href="../miscellaneous.html" ><span class="fa fa-cubes"></span>Miscellaneous</a>
+                               <a data-type="chapter-link" href="../routes.html" ><span class="fa fa-code-fork"></span>Routes</a>
                            </li>
                    
                            <li class="chapter">
@@ -1085,289 +1821,235 @@
                <div class="content module">
                    <div class="content-data">
 
+
+
 <ol class="breadcrumb">
   <li>Modules</li>
   <li>DatasetsModule</li>
 </ol>
 
-<div class="text-center">
-    <div id="module-graph-svg">
-        <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+      <div class="text-center module-graph-container">
+          <div id="module-graph-svg">
+              <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <!-- Generated by graphviz version 2.40.1 (20161225.0304)
  -->
 <!-- Title: dependencies Pages: 1 -->
-<svg width="2455pt" height="284pt"
- viewBox="0.00 0.00 2455.00 284.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg width="1618pt" height="284pt"
+ viewBox="0.00 0.00 1618.00 284.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 <g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 280)">
 <title>dependencies</title>
-<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-280 2451,-280 2451,4 -4,4"/>
-<text text-anchor="start" x="1202.5091" y="-42.4" font-family="sans-serif" font-weight="bold" font-size="14.00" fill="#000000">Legend</text>
-<polygon fill="#ffffb3" stroke="transparent" points="989.5,-10 989.5,-30 1009.5,-30 1009.5,-10 989.5,-10"/>
-<text text-anchor="start" x="1013.129" y="-15.4" font-family="sans-serif" font-size="14.00" fill="#000000"> &#160;Declarations</text>
-<polygon fill="#8dd3c7" stroke="transparent" points="1102.5,-10 1102.5,-30 1122.5,-30 1122.5,-10 1102.5,-10"/>
-<text text-anchor="start" x="1126.2251" y="-15.4" font-family="sans-serif" font-size="14.00" fill="#000000"> &#160;Module</text>
-<polygon fill="#80b1d3" stroke="transparent" points="1188.5,-10 1188.5,-30 1208.5,-30 1208.5,-10 1188.5,-10"/>
-<text text-anchor="start" x="1212.2812" y="-15.4" font-family="sans-serif" font-size="14.00" fill="#000000"> &#160;Bootstrap</text>
-<polygon fill="#fdb462" stroke="transparent" points="1285.5,-10 1285.5,-30 1305.5,-30 1305.5,-10 1285.5,-10"/>
-<text text-anchor="start" x="1309.1732" y="-15.4" font-family="sans-serif" font-size="14.00" fill="#000000"> &#160;Providers</text>
-<polygon fill="#fb8072" stroke="transparent" points="1381.5,-10 1381.5,-30 1401.5,-30 1401.5,-10 1381.5,-10"/>
-<text text-anchor="start" x="1405.2258" y="-15.4" font-family="sans-serif" font-size="14.00" fill="#000000"> &#160;Exports</text>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-280 1614,-280 1614,4 -4,4"/>
+<text text-anchor="start" x="784.0091" y="-42.4" font-family="sans-serif" font-weight="bold" font-size="14.00" fill="#000000">Legend</text>
+<polygon fill="#ffffb3" stroke="transparent" points="571,-10 571,-30 591,-30 591,-10 571,-10"/>
+<text text-anchor="start" x="594.629" y="-15.4" font-family="sans-serif" font-size="14.00" fill="#000000"> &#160;Declarations</text>
+<polygon fill="#8dd3c7" stroke="transparent" points="684,-10 684,-30 704,-30 704,-10 684,-10"/>
+<text text-anchor="start" x="707.7251" y="-15.4" font-family="sans-serif" font-size="14.00" fill="#000000"> &#160;Module</text>
+<polygon fill="#80b1d3" stroke="transparent" points="770,-10 770,-30 790,-30 790,-10 770,-10"/>
+<text text-anchor="start" x="793.7812" y="-15.4" font-family="sans-serif" font-size="14.00" fill="#000000"> &#160;Bootstrap</text>
+<polygon fill="#fdb462" stroke="transparent" points="867,-10 867,-30 887,-30 887,-10 867,-10"/>
+<text text-anchor="start" x="890.6732" y="-15.4" font-family="sans-serif" font-size="14.00" fill="#000000"> &#160;Providers</text>
+<polygon fill="#fb8072" stroke="transparent" points="963,-10 963,-30 983,-30 983,-10 963,-10"/>
+<text text-anchor="start" x="986.7258" y="-15.4" font-family="sans-serif" font-size="14.00" fill="#000000"> &#160;Exports</text>
 <g id="clust1" class="cluster">
 <title>cluster_DatasetsModule</title>
-<polygon fill="none" stroke="#000000" stroke-dasharray="1,5" points="8,-70 8,-268 2439,-268 2439,-70 8,-70"/>
+<polygon fill="none" stroke="#000000" stroke-dasharray="1,5" points="8,-70 8,-268 1602,-268 1602,-70 8,-70"/>
 </g>
 <g id="clust2" class="cluster">
 <title>cluster_DatasetsModule_declarations</title>
-<polygon fill="none" stroke="#000000" points="1611,-78 1611,-130 2431,-130 2431,-78 1611,-78"/>
-</g>
-<g id="clust8" class="cluster">
-<title>cluster_DatasetsModule_imports</title>
-<polygon fill="none" stroke="#000000" points="380,-78 380,-130 1603,-130 1603,-78 380,-78"/>
+<polygon fill="none" stroke="#000000" points="598,-78 598,-130 1594,-130 1594,-78 598,-78"/>
 </g>
 <g id="clust9" class="cluster">
-<title>cluster_DatasetsModule_exports</title>
-<polygon fill="none" stroke="#000000" points="1147,-208 1147,-260 1321,-260 1321,-208 1147,-208"/>
+<title>cluster_DatasetsModule_imports</title>
+<polygon fill="none" stroke="#000000" points="178,-78 178,-130 590,-130 590,-78 178,-78"/>
 </g>
-<g id="clust11" class="cluster">
+<g id="clust10" class="cluster">
+<title>cluster_DatasetsModule_exports</title>
+<polygon fill="none" stroke="#000000" points="595,-208 595,-260 950,-260 950,-208 595,-208"/>
+</g>
+<g id="clust12" class="cluster">
 <title>cluster_DatasetsModule_providers</title>
-<polygon fill="none" stroke="#000000" points="16,-78 16,-130 372,-130 372,-78 16,-78"/>
+<polygon fill="none" stroke="#000000" points="16,-78 16,-130 170,-130 170,-78 16,-78"/>
 </g>
 <!-- DashboardComponent -->
 <g id="node1" class="node">
 <title>DashboardComponent</title>
-<polygon fill="#ffffb3" stroke="#000000" points="2422.9734,-122 2281.0266,-122 2281.0266,-86 2422.9734,-86 2422.9734,-122"/>
-<text text-anchor="middle" x="2352" y="-99.8" font-family="Times,serif" font-size="14.00" fill="#000000">DashboardComponent</text>
+<polygon fill="#ffffb3" stroke="#000000" points="1585.9734,-122 1444.0266,-122 1444.0266,-86 1585.9734,-86 1585.9734,-122"/>
+<text text-anchor="middle" x="1515" y="-99.8" font-family="Times,serif" font-size="14.00" fill="#000000">DashboardComponent</text>
 </g>
 <!-- DatasetsModule -->
-<g id="node6" class="node">
+<g id="node7" class="node">
 <title>DatasetsModule</title>
-<polygon fill="#8dd3c7" stroke="#000000" points="1287.4706,-187 1284.4706,-191 1263.4706,-191 1260.4706,-187 1180.5294,-187 1180.5294,-151 1287.4706,-151 1287.4706,-187"/>
-<text text-anchor="middle" x="1234" y="-164.8" font-family="Times,serif" font-size="14.00" fill="#000000">DatasetsModule</text>
+<polygon fill="#8dd3c7" stroke="#000000" points="826.4706,-187 823.4706,-191 802.4706,-191 799.4706,-187 719.5294,-187 719.5294,-151 826.4706,-151 826.4706,-187"/>
+<text text-anchor="middle" x="773" y="-164.8" font-family="Times,serif" font-size="14.00" fill="#000000">DatasetsModule</text>
 </g>
 <!-- DashboardComponent&#45;&gt;DatasetsModule -->
 <g id="edge1" class="edge">
 <title>DashboardComponent&#45;&gt;DatasetsModule</title>
-<path fill="none" stroke="#000000" d="M2352,-122.3228C2352,-145.6602 2352,-183 2352,-183 2352,-183 1297.5468,-183 1297.5468,-183"/>
-<polygon fill="#000000" stroke="#000000" points="1297.5468,-179.5001 1287.5468,-183 1297.5468,-186.5001 1297.5468,-179.5001"/>
+<path fill="none" stroke="#000000" d="M1515,-122.0109C1515,-144.4852 1515,-180 1515,-180 1515,-180 836.6613,-180 836.6613,-180"/>
+<polygon fill="#000000" stroke="#000000" points="836.6613,-176.5001 826.6613,-180 836.6613,-183.5001 836.6613,-176.5001"/>
 </g>
 <!-- DatasetTableComponent -->
 <g id="node2" class="node">
 <title>DatasetTableComponent</title>
-<polygon fill="#ffffb3" stroke="#000000" points="2262.6811,-122 2107.3189,-122 2107.3189,-86 2262.6811,-86 2262.6811,-122"/>
-<text text-anchor="middle" x="2185" y="-99.8" font-family="Times,serif" font-size="14.00" fill="#000000">DatasetTableComponent</text>
+<polygon fill="#ffffb3" stroke="#000000" points="1425.6811,-122 1270.3189,-122 1270.3189,-86 1425.6811,-86 1425.6811,-122"/>
+<text text-anchor="middle" x="1348" y="-99.8" font-family="Times,serif" font-size="14.00" fill="#000000">DatasetTableComponent</text>
 </g>
 <!-- DatasetTableComponent&#45;&gt;DatasetsModule -->
 <g id="edge2" class="edge">
 <title>DatasetTableComponent&#45;&gt;DatasetsModule</title>
-<path fill="none" stroke="#000000" d="M2185,-122.2921C2185,-144.2057 2185,-178 2185,-178 2185,-178 1297.5107,-178 1297.5107,-178"/>
-<polygon fill="#000000" stroke="#000000" points="1297.5107,-174.5001 1287.5107,-178 1297.5107,-181.5001 1297.5107,-174.5001"/>
+<path fill="none" stroke="#000000" d="M1348,-122.1289C1348,-142.5724 1348,-173 1348,-173 1348,-173 836.5783,-173 836.5783,-173"/>
+<polygon fill="#000000" stroke="#000000" points="836.5783,-169.5001 826.5783,-173 836.5782,-176.5001 836.5783,-169.5001"/>
 </g>
 <!-- DatablocksComponent -->
 <g id="node3" class="node">
 <title>DatablocksComponent</title>
-<polygon fill="#ffffb3" stroke="#000000" points="2089.3089,-122 1944.6911,-122 1944.6911,-86 2089.3089,-86 2089.3089,-122"/>
-<text text-anchor="middle" x="2017" y="-99.8" font-family="Times,serif" font-size="14.00" fill="#000000">DatablocksComponent</text>
+<polygon fill="#ffffb3" stroke="#000000" points="1252.3089,-122 1107.6911,-122 1107.6911,-86 1252.3089,-86 1252.3089,-122"/>
+<text text-anchor="middle" x="1180" y="-99.8" font-family="Times,serif" font-size="14.00" fill="#000000">DatablocksComponent</text>
 </g>
 <!-- DatablocksComponent&#45;&gt;DatasetsModule -->
 <g id="edge3" class="edge">
 <title>DatablocksComponent&#45;&gt;DatasetsModule</title>
-<path fill="none" stroke="#000000" d="M2017,-122.0267C2017,-142.7672 2017,-174 2017,-174 2017,-174 1297.5106,-174 1297.5106,-174"/>
-<polygon fill="#000000" stroke="#000000" points="1297.5106,-170.5001 1287.5106,-174 1297.5106,-177.5001 1297.5106,-170.5001"/>
+<path fill="none" stroke="#000000" d="M1180,-122.2667C1180,-140.5552 1180,-166 1180,-166 1180,-166 836.6267,-166 836.6267,-166"/>
+<polygon fill="#000000" stroke="#000000" points="836.6267,-162.5001 826.6267,-166 836.6266,-169.5001 836.6267,-162.5001"/>
 </g>
 <!-- DatafilesComponent -->
 <g id="node4" class="node">
 <title>DatafilesComponent</title>
-<polygon fill="#ffffb3" stroke="#000000" points="1926.8599,-122 1795.1401,-122 1795.1401,-86 1926.8599,-86 1926.8599,-122"/>
-<text text-anchor="middle" x="1861" y="-99.8" font-family="Times,serif" font-size="14.00" fill="#000000">DatafilesComponent</text>
+<polygon fill="#ffffb3" stroke="#000000" points="1089.8599,-122 958.1401,-122 958.1401,-86 1089.8599,-86 1089.8599,-122"/>
+<text text-anchor="middle" x="1024" y="-99.8" font-family="Times,serif" font-size="14.00" fill="#000000">DatafilesComponent</text>
 </g>
 <!-- DatafilesComponent&#45;&gt;DatasetsModule -->
 <g id="edge4" class="edge">
 <title>DatafilesComponent&#45;&gt;DatasetsModule</title>
-<path fill="none" stroke="#000000" d="M1861,-122.1061C1861,-141.3391 1861,-169 1861,-169 1861,-169 1297.7287,-169 1297.7287,-169"/>
-<polygon fill="#000000" stroke="#000000" points="1297.7288,-165.5001 1287.7287,-169 1297.7287,-172.5001 1297.7288,-165.5001"/>
+<path fill="none" stroke="#000000" d="M1024,-122.0091C1024,-138.0494 1024,-159 1024,-159 1024,-159 836.5379,-159 836.5379,-159"/>
+<polygon fill="#000000" stroke="#000000" points="836.538,-155.5001 826.5379,-159 836.5379,-162.5001 836.538,-155.5001"/>
+</g>
+<!-- DatasetsFilterComponent -->
+<g id="node5" class="node">
+<title>DatasetsFilterComponent</title>
+<polygon fill="#ffffb3" stroke="#000000" points="940.5828,-122 781.4172,-122 781.4172,-86 940.5828,-86 940.5828,-122"/>
+<text text-anchor="middle" x="861" y="-99.8" font-family="Times,serif" font-size="14.00" fill="#000000">DatasetsFilterComponent</text>
+</g>
+<!-- DatasetsFilterComponent&#45;&gt;DatasetsModule -->
+<g id="edge5" class="edge">
+<title>DatasetsFilterComponent&#45;&gt;DatasetsModule</title>
+<path fill="none" stroke="#000000" d="M803.972,-122.1061C803.972,-122.1061 803.972,-140.991 803.972,-140.991"/>
+<polygon fill="#000000" stroke="#000000" points="800.472,-140.9909 803.972,-150.991 807.472,-140.991 800.472,-140.9909"/>
 </g>
 <!-- DatasetDetailComponent -->
-<g id="node5" class="node">
+<g id="node6" class="node">
 <title>DatasetDetailComponent</title>
-<polygon fill="#ffffb3" stroke="#000000" points="1776.5169,-122 1619.4831,-122 1619.4831,-86 1776.5169,-86 1776.5169,-122"/>
-<text text-anchor="middle" x="1698" y="-99.8" font-family="Times,serif" font-size="14.00" fill="#000000">DatasetDetailComponent</text>
+<polygon fill="#ffffb3" stroke="#000000" points="763.5169,-122 606.4831,-122 606.4831,-86 763.5169,-86 763.5169,-122"/>
+<text text-anchor="middle" x="685" y="-99.8" font-family="Times,serif" font-size="14.00" fill="#000000">DatasetDetailComponent</text>
 </g>
 <!-- DatasetDetailComponent&#45;&gt;DatasetsModule -->
-<g id="edge5" class="edge">
+<g id="edge6" class="edge">
 <title>DatasetDetailComponent&#45;&gt;DatasetsModule</title>
-<path fill="none" stroke="#000000" d="M1698,-122.302C1698,-140.2699 1698,-165 1698,-165 1698,-165 1297.68,-165 1297.68,-165"/>
-<polygon fill="#000000" stroke="#000000" points="1297.68,-161.5001 1287.68,-165 1297.6799,-168.5001 1297.68,-161.5001"/>
+<path fill="none" stroke="#000000" d="M741.6364,-122.1061C741.6364,-122.1061 741.6364,-140.991 741.6364,-140.991"/>
+<polygon fill="#000000" stroke="#000000" points="738.1365,-140.9909 741.6364,-150.991 745.1365,-140.991 738.1365,-140.9909"/>
 </g>
 <!-- DatasetTableComponent  -->
-<g id="node16" class="node">
+<g id="node11" class="node">
 <title>DatasetTableComponent </title>
-<polygon fill="#fb8072" stroke="#000000" points="1313.1813,-252 1154.8187,-252 1154.8187,-216 1313.1813,-216 1313.1813,-252"/>
-<text text-anchor="middle" x="1234" y="-229.8" font-family="Times,serif" font-size="14.00" fill="#000000">DatasetTableComponent </text>
+<polygon fill="#fb8072" stroke="#000000" points="942.1813,-252 783.8187,-252 783.8187,-216 942.1813,-216 942.1813,-252"/>
+<text text-anchor="middle" x="863" y="-229.8" font-family="Times,serif" font-size="14.00" fill="#000000">DatasetTableComponent </text>
 </g>
 <!-- DatasetsModule&#45;&gt;DatasetTableComponent  -->
-<g id="edge15" class="edge">
+<g id="edge10" class="edge">
 <title>DatasetsModule&#45;&gt;DatasetTableComponent </title>
-<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1234,-187.1061C1234,-187.1061 1234,-205.991 1234,-205.991"/>
-<polygon fill="#000000" stroke="#000000" points="1230.5001,-205.9909 1234,-215.991 1237.5001,-205.991 1230.5001,-205.9909"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M805.0724,-187.1061C805.0724,-187.1061 805.0724,-205.991 805.0724,-205.991"/>
+<polygon fill="#000000" stroke="#000000" points="801.5725,-205.9909 805.0724,-215.991 808.5725,-205.991 801.5725,-205.9909"/>
 </g>
-<!-- CommonModule -->
-<g id="node7" class="node">
-<title>CommonModule</title>
-<polygon fill="#8dd3c7" stroke="#000000" points="1594.6681,-122 1591.6681,-126 1570.6681,-126 1567.6681,-122 1483.3319,-122 1483.3319,-86 1594.6681,-86 1594.6681,-122"/>
-<text text-anchor="middle" x="1539" y="-99.8" font-family="Times,serif" font-size="14.00" fill="#000000">CommonModule</text>
+<!-- DatasetsFilterComponent  -->
+<g id="node12" class="node">
+<title>DatasetsFilterComponent </title>
+<polygon fill="#fb8072" stroke="#000000" points="765.0833,-252 602.9167,-252 602.9167,-216 765.0833,-216 765.0833,-252"/>
+<text text-anchor="middle" x="684" y="-229.8" font-family="Times,serif" font-size="14.00" fill="#000000">DatasetsFilterComponent </text>
 </g>
-<!-- CommonModule&#45;&gt;DatasetsModule -->
-<g id="edge6" class="edge">
-<title>CommonModule&#45;&gt;DatasetsModule</title>
-<path fill="none" stroke="#000000" d="M1539,-122.027C1539,-138.3976 1539,-160 1539,-160 1539,-160 1297.476,-160 1297.476,-160"/>
-<polygon fill="#000000" stroke="#000000" points="1297.476,-156.5001 1287.476,-160 1297.4759,-163.5001 1297.476,-156.5001"/>
-</g>
-<!-- FormsModule -->
-<g id="node8" class="node">
-<title>FormsModule</title>
-<polygon fill="#8dd3c7" stroke="#000000" points="1465.8288,-122 1462.8288,-126 1441.8288,-126 1438.8288,-122 1370.1712,-122 1370.1712,-86 1465.8288,-86 1465.8288,-122"/>
-<text text-anchor="middle" x="1418" y="-99.8" font-family="Times,serif" font-size="14.00" fill="#000000">FormsModule</text>
-</g>
-<!-- FormsModule&#45;&gt;DatasetsModule -->
-<g id="edge7" class="edge">
-<title>FormsModule&#45;&gt;DatasetsModule</title>
-<path fill="none" stroke="#000000" d="M1418,-122.1871C1418,-137.1824 1418,-156 1418,-156 1418,-156 1297.715,-156 1297.715,-156"/>
-<polygon fill="#000000" stroke="#000000" points="1297.7151,-152.5001 1287.715,-156 1297.715,-159.5001 1297.7151,-152.5001"/>
+<!-- DatasetsModule&#45;&gt;DatasetsFilterComponent  -->
+<g id="edge11" class="edge">
+<title>DatasetsModule&#45;&gt;DatasetsFilterComponent </title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M742.403,-187.1061C742.403,-187.1061 742.403,-205.991 742.403,-205.991"/>
+<polygon fill="#000000" stroke="#000000" points="738.9031,-205.9909 742.403,-215.991 745.9031,-205.991 738.9031,-205.9909"/>
 </g>
 <!-- DialogModule -->
-<g id="node9" class="node">
+<g id="node8" class="node">
 <title>DialogModule</title>
-<polygon fill="#8dd3c7" stroke="#000000" points="1352.6528,-122 1349.6528,-126 1328.6528,-126 1325.6528,-122 1255.3472,-122 1255.3472,-86 1352.6528,-86 1352.6528,-122"/>
-<text text-anchor="middle" x="1304" y="-99.8" font-family="Times,serif" font-size="14.00" fill="#000000">DialogModule</text>
+<polygon fill="#8dd3c7" stroke="#000000" points="581.6528,-122 578.6528,-126 557.6528,-126 554.6528,-122 484.3472,-122 484.3472,-86 581.6528,-86 581.6528,-122"/>
+<text text-anchor="middle" x="533" y="-99.8" font-family="Times,serif" font-size="14.00" fill="#000000">DialogModule</text>
 </g>
 <!-- DialogModule&#45;&gt;DatasetsModule -->
-<g id="edge8" class="edge">
+<g id="edge7" class="edge">
 <title>DialogModule&#45;&gt;DatasetsModule</title>
-<path fill="none" stroke="#000000" d="M1271.3296,-122.1061C1271.3296,-122.1061 1271.3296,-140.991 1271.3296,-140.991"/>
-<polygon fill="#000000" stroke="#000000" points="1267.8297,-140.9909 1271.3296,-150.991 1274.8297,-140.991 1267.8297,-140.9909"/>
-</g>
-<!-- ReactiveFormsModule -->
-<g id="node10" class="node">
-<title>ReactiveFormsModule</title>
-<polygon fill="#8dd3c7" stroke="#000000" points="1237.3047,-122 1234.3047,-126 1213.3047,-126 1210.3047,-122 1092.6953,-122 1092.6953,-86 1237.3047,-86 1237.3047,-122"/>
-<text text-anchor="middle" x="1165" y="-99.8" font-family="Times,serif" font-size="14.00" fill="#000000">ReactiveFormsModule</text>
-</g>
-<!-- ReactiveFormsModule&#45;&gt;DatasetsModule -->
-<g id="edge9" class="edge">
-<title>ReactiveFormsModule&#45;&gt;DatasetsModule</title>
-<path fill="none" stroke="#000000" d="M1208.8335,-122.1061C1208.8335,-122.1061 1208.8335,-140.991 1208.8335,-140.991"/>
-<polygon fill="#000000" stroke="#000000" points="1205.3335,-140.9909 1208.8335,-150.991 1212.3335,-140.991 1205.3335,-140.9909"/>
+<path fill="none" stroke="#000000" d="M533,-122.0091C533,-138.0494 533,-159 533,-159 533,-159 709.438,-159 709.438,-159"/>
+<polygon fill="#000000" stroke="#000000" points="709.4381,-162.5001 719.438,-159 709.438,-155.5001 709.4381,-162.5001"/>
 </g>
 <!-- SharedCatanieModule -->
-<g id="node11" class="node">
+<g id="node9" class="node">
 <title>SharedCatanieModule</title>
-<polygon fill="#8dd3c7" stroke="#000000" points="1074.6839,-122 1071.6839,-126 1050.6839,-126 1047.6839,-122 933.3161,-122 933.3161,-86 1074.6839,-86 1074.6839,-122"/>
-<text text-anchor="middle" x="1004" y="-99.8" font-family="Times,serif" font-size="14.00" fill="#000000">SharedCatanieModule</text>
+<polygon fill="#8dd3c7" stroke="#000000" points="466.6839,-122 463.6839,-126 442.6839,-126 439.6839,-122 325.3161,-122 325.3161,-86 466.6839,-86 466.6839,-122"/>
+<text text-anchor="middle" x="396" y="-99.8" font-family="Times,serif" font-size="14.00" fill="#000000">SharedCatanieModule</text>
 </g>
 <!-- SharedCatanieModule&#45;&gt;DatasetsModule -->
-<g id="edge10" class="edge">
+<g id="edge8" class="edge">
 <title>SharedCatanieModule&#45;&gt;DatasetsModule</title>
-<path fill="none" stroke="#000000" d="M1004,-122.1871C1004,-137.1824 1004,-156 1004,-156 1004,-156 1170.3655,-156 1170.3655,-156"/>
-<polygon fill="#000000" stroke="#000000" points="1170.3655,-159.5001 1180.3655,-156 1170.3655,-152.5001 1170.3655,-159.5001"/>
+<path fill="none" stroke="#000000" d="M396,-122.2667C396,-140.5552 396,-166 396,-166 396,-166 709.3855,-166 709.3855,-166"/>
+<polygon fill="#000000" stroke="#000000" points="709.3855,-169.5001 719.3855,-166 709.3854,-162.5001 709.3855,-169.5001"/>
 </g>
-<!-- DataTableModule -->
-<g id="node12" class="node">
-<title>DataTableModule</title>
-<polygon fill="#8dd3c7" stroke="#000000" points="914.8487,-122 911.8487,-126 890.8487,-126 887.8487,-122 797.1513,-122 797.1513,-86 914.8487,-86 914.8487,-122"/>
-<text text-anchor="middle" x="856" y="-99.8" font-family="Times,serif" font-size="14.00" fill="#000000">DataTableModule</text>
+<!-- DatePickerModule -->
+<g id="node10" class="node">
+<title>DatePickerModule</title>
+<polygon fill="#8dd3c7" stroke="#000000" points="307.7395,-122 304.7395,-126 283.7395,-126 280.7395,-122 186.2605,-122 186.2605,-86 307.7395,-86 307.7395,-122"/>
+<text text-anchor="middle" x="247" y="-99.8" font-family="Times,serif" font-size="14.00" fill="#000000">DatePickerModule</text>
 </g>
-<!-- DataTableModule&#45;&gt;DatasetsModule -->
-<g id="edge11" class="edge">
-<title>DataTableModule&#45;&gt;DatasetsModule</title>
-<path fill="none" stroke="#000000" d="M856,-122.027C856,-138.3976 856,-160 856,-160 856,-160 1170.2433,-160 1170.2433,-160"/>
-<polygon fill="#000000" stroke="#000000" points="1170.2433,-163.5001 1180.2433,-160 1170.2432,-156.5001 1170.2433,-163.5001"/>
-</g>
-<!-- SharedModule -->
-<g id="node13" class="node">
-<title>SharedModule</title>
-<polygon fill="#8dd3c7" stroke="#000000" points="779.4231,-122 776.4231,-126 755.4231,-126 752.4231,-122 680.5769,-122 680.5769,-86 779.4231,-86 779.4231,-122"/>
-<text text-anchor="middle" x="730" y="-99.8" font-family="Times,serif" font-size="14.00" fill="#000000">SharedModule</text>
-</g>
-<!-- SharedModule&#45;&gt;DatasetsModule -->
-<g id="edge12" class="edge">
-<title>SharedModule&#45;&gt;DatasetsModule</title>
-<path fill="none" stroke="#000000" d="M730,-122.302C730,-140.2699 730,-165 730,-165 730,-165 1170.0632,-165 1170.0632,-165"/>
-<polygon fill="#000000" stroke="#000000" points="1170.0632,-168.5001 1180.0632,-165 1170.0631,-161.5001 1170.0632,-168.5001"/>
-</g>
-<!-- TabViewModule -->
-<g id="node14" class="node">
-<title>TabViewModule</title>
-<polygon fill="#8dd3c7" stroke="#000000" points="662.636,-122 659.636,-126 638.636,-126 635.636,-122 551.364,-122 551.364,-86 662.636,-86 662.636,-122"/>
-<text text-anchor="middle" x="607" y="-99.8" font-family="Times,serif" font-size="14.00" fill="#000000">TabViewModule</text>
-</g>
-<!-- TabViewModule&#45;&gt;DatasetsModule -->
-<g id="edge13" class="edge">
-<title>TabViewModule&#45;&gt;DatasetsModule</title>
-<path fill="none" stroke="#000000" d="M607,-122.1061C607,-141.3391 607,-169 607,-169 607,-169 1170.2713,-169 1170.2713,-169"/>
-<polygon fill="#000000" stroke="#000000" points="1170.2713,-172.5001 1180.2713,-169 1170.2712,-165.5001 1170.2713,-172.5001"/>
-</g>
-<!-- ConfirmDialogModule -->
-<g id="node15" class="node">
-<title>ConfirmDialogModule</title>
-<polygon fill="#8dd3c7" stroke="#000000" points="533.5912,-122 530.5912,-126 509.5912,-126 506.5912,-122 388.4088,-122 388.4088,-86 533.5912,-86 533.5912,-122"/>
-<text text-anchor="middle" x="461" y="-99.8" font-family="Times,serif" font-size="14.00" fill="#000000">ConfirmDialogModule</text>
-</g>
-<!-- ConfirmDialogModule&#45;&gt;DatasetsModule -->
-<g id="edge14" class="edge">
-<title>ConfirmDialogModule&#45;&gt;DatasetsModule</title>
-<path fill="none" stroke="#000000" d="M461,-122.0267C461,-142.7672 461,-174 461,-174 461,-174 1170.2579,-174 1170.2579,-174"/>
-<polygon fill="#000000" stroke="#000000" points="1170.2579,-177.5001 1180.2579,-174 1170.2578,-170.5001 1170.2579,-177.5001"/>
+<!-- DatePickerModule&#45;&gt;DatasetsModule -->
+<g id="edge9" class="edge">
+<title>DatePickerModule&#45;&gt;DatasetsModule</title>
+<path fill="none" stroke="#000000" d="M247,-122.1289C247,-142.5724 247,-173 247,-173 247,-173 709.1807,-173 709.1807,-173"/>
+<polygon fill="#000000" stroke="#000000" points="709.1807,-176.5001 719.1807,-173 709.1807,-169.5001 709.1807,-176.5001"/>
 </g>
 <!-- DatasetService -->
-<g id="node17" class="node">
+<g id="node13" class="node">
 <title>DatasetService</title>
-<ellipse fill="#fdb462" stroke="#000000" cx="295" cy="-104" rx="68.8927" ry="18"/>
-<text text-anchor="middle" x="295" y="-99.8" font-family="Times,serif" font-size="14.00" fill="#000000">DatasetService</text>
+<ellipse fill="#fdb462" stroke="#000000" cx="93" cy="-104" rx="68.8927" ry="18"/>
+<text text-anchor="middle" x="93" y="-99.8" font-family="Times,serif" font-size="14.00" fill="#000000">DatasetService</text>
 </g>
 <!-- DatasetService&#45;&gt;DatasetsModule -->
-<g id="edge16" class="edge">
+<g id="edge12" class="edge">
 <title>DatasetService&#45;&gt;DatasetsModule</title>
-<path fill="none" stroke="#000000" d="M295,-122.2921C295,-144.2057 295,-178 295,-178 295,-178 1170.4842,-178 1170.4842,-178"/>
-<polygon fill="#000000" stroke="#000000" points="1170.4843,-181.5001 1180.4842,-178 1170.4842,-174.5001 1170.4843,-181.5001"/>
-</g>
-<!-- ConfirmationService -->
-<g id="node18" class="node">
-<title>ConfirmationService</title>
-<ellipse fill="#fdb462" stroke="#000000" cx="116" cy="-104" rx="92.0509" ry="18"/>
-<text text-anchor="middle" x="116" y="-99.8" font-family="Times,serif" font-size="14.00" fill="#000000">ConfirmationService</text>
-</g>
-<!-- ConfirmationService&#45;&gt;DatasetsModule -->
-<g id="edge17" class="edge">
-<title>ConfirmationService&#45;&gt;DatasetsModule</title>
-<path fill="none" stroke="#000000" d="M116,-122.3228C116,-145.6602 116,-183 116,-183 116,-183 1170.4532,-183 1170.4532,-183"/>
-<polygon fill="#000000" stroke="#000000" points="1170.4532,-186.5001 1180.4532,-183 1170.4532,-179.5001 1170.4532,-186.5001"/>
+<path fill="none" stroke="#000000" d="M93,-122.0109C93,-144.4852 93,-180 93,-180 93,-180 709.3577,-180 709.3577,-180"/>
+<polygon fill="#000000" stroke="#000000" points="709.3577,-183.5001 719.3577,-180 709.3576,-176.5001 709.3577,-183.5001"/>
 </g>
 </g>
 </svg>
 
-    </div>
-    <div class="btn-group">
-        <button id="zoom-in" class="btn btn-default btn-sm">Zoom in</button>
-        <button id="reset" class="btn btn-default btn-sm">Reset</button>
-        <button id="zoom-out" class="btn btn-default btn-sm">Zoom out</button>
-    </div>
-</div>
-<script src="../js/libs/svg-pan-zoom.min.js"></script>
-<script src="../js/svg-pan-zoom.controls.js"></script>
+          </div>
+          <i id="fullscreen" class="fa fa-expand module-graph-fullscreen-btn" aria-hidden="true"></i>
+          <div class="btn-group">
+              <button id="zoom-in" class="btn btn-default btn-sm">Zoom in</button>
+              <button id="reset" class="btn btn-default btn-sm">Reset</button>
+              <button id="zoom-out" class="btn btn-default btn-sm">Zoom out</button>
+          </div>
+      </div>
+      <script src="../js/libs/svg-pan-zoom.min.js"></script>
+      <script src="../js/svg-pan-zoom.controls.js"></script>
 
 <ul class="nav nav-tabs" role="tablist">
     <li class="active">
-        <a href="#infos" id="infos-tab" role="tab" data-toggle="tab">Infos</a>
+        <a href="#info" id="info-tab" role="tab" data-toggle="tab" data-link="info">Info</a>
     </li>
+
+
     <li>
         <a href="#source" role="tab" id="source-tab" data-toggle="tab" data-link="source">Source</a>
     </li>
 </ul>
 
 <div class="tab-content">
-    <div class="tab-pane fade active in" id="infos">
+    <div class="tab-pane fade active in" id="info">
+
         <p class="comment">
             <h3>File</h3>
         </p>
@@ -1379,7 +2061,7 @@
         <div class="container-fluid module">
             <div class="row">
                 <div class="col-sm-3">
-                    <h3>Declarations<a href="https://angular.io/docs/ts/latest/api/core/index/NgModule-interface.html#!#declarations-anchor" target="_blank"><span class="fa fa-info-circle"></span></a></h3>
+                    <h3>Declarations<a href="https://angular.io/api/core/NgModule#declarations" target="_blank" title="Official documentation about module declarations"><span class="fa fa-info-circle"></span></a></h3>
                     <ul class="list-group">
                             <li class="list-group-item">
                                 <a href="../components/DashboardComponent.html">DashboardComponent</a>
@@ -1394,86 +2076,138 @@
                                 <a href="../components/DatafilesComponent.html">DatafilesComponent</a>
                             </li>
                             <li class="list-group-item">
+                                <a href="../components/DatasetsFilterComponent.html">DatasetsFilterComponent</a>
+                            </li>
+                            <li class="list-group-item">
                                 <a href="../components/DatasetDetailComponent.html">DatasetDetailComponent</a>
                             </li>
                     </ul>
                 </div>
                 <div class="col-sm-3">
-                    <h3>Providers<a href="https://angular.io/docs/ts/latest/api/core/index/NgModule-interface.html#!#providers-anchor" target="_blank"><span class="fa fa-info-circle"></a></h3>
+                    <h3>Providers<a href="https://angular.io/api/core/NgModule#providers" target="_blank" title="Official documentation about module providers"><span class="fa fa-info-circle"></a></h3>
                     <ul class="list-group">
                             <li class="list-group-item">
-                                <a href="../injectables/DatasetService.html" >DatasetService</a>
+                                     <a href="../injectables/DatasetService.html" >DatasetService</a>
                             </li>
                     </ul>
                 </div>
                 <div class="col-sm-3">
-                    <h3>Imports<a href="https://angular.io/docs/ts/latest/api/core/index/NgModule-interface.html#!#imports-anchor" target="_blank"><span class="fa fa-info-circle"></a></h3>
+                    <h3>Imports<a href="https://angular.io/api/core/NgModule#imports" target="_blank" title="Official documentation about module imports"><span class="fa fa-info-circle"></a></h3>
                     <ul class="list-group">
+                            <li class="list-group-item">
+                                    <a href="../modules/DialogModule.html" >DialogModule</a>
+                            </li>
                             <li class="list-group-item">
                                     <a href="../modules/SharedCatanieModule.html" >SharedCatanieModule</a>
                             </li>
+                            <li class="list-group-item">
+                                    <a href="../modules/DatePickerModule.html" >DatePickerModule</a>
+                            </li>
                     </ul>
                 </div>
                 <div class="col-sm-3">
-                    <h3>Exports<a href="https://angular.io/docs/ts/latest/api/core/index/NgModule-interface.html#!#exports-anchor" target="_blank"><span class="fa fa-info-circle"></a></h3>
+                    <h3>Exports<a href="https://angular.io/api/core/NgModule#exports" target="_blank" title="Official documentation about module exports"><span class="fa fa-info-circle"></a></h3>
                     <ul class="list-group">
                             <li class="list-group-item">
                                     <a href="../components/DatasetTableComponent.html" >DatasetTableComponent</a>
+                            </li>
+                            <li class="list-group-item">
+                                    <a href="../components/DatasetsFilterComponent.html" >DatasetsFilterComponent</a>
                             </li>
                     </ul>
                 </div>
             </div>
         </div>
     </div>
+
+
     <div class="tab-pane fade tab-source-code" id="source">
-        <pre class="line-numbers"><code class="language-typescript">import {NgModule} from &#x27;@angular/core&#x27;;
-import {CommonModule} from &#x27;@angular/common&#x27;;
+        <pre class="line-numbers"><code class="language-typescript">import {CommonModule} from &#x27;@angular/common&#x27;;
+import {NgModule} from &#x27;@angular/core&#x27;;
 import {FormsModule, ReactiveFormsModule} from &#x27;@angular/forms&#x27;;
-
-import {DataTableModule, DialogModule, SharedModule, TabViewModule, ConfirmationService, ConfirmDialogModule} from &#x27;primeng/primeng&#x27;;
-
 import {
   DashboardComponent,
   DatablocksComponent,
   DatafilesComponent,
   DatasetDetailComponent,
   DatasetService,
+  DatasetsFilterComponent,
   DatasetTableComponent
 } from &#x27;datasets/index&#x27;;
-
+import {
+  AutoCompleteModule,
+  ConfirmationService,
+  ConfirmDialogModule,
+  DataTableModule,
+  DialogModule,
+  DropdownModule,
+  SharedModule,
+  TabViewModule,
+  TreeModule,
+  TreeTableModule
+} from &#x27;primeng/primeng&#x27;;
+import {
+  MatAutocompleteModule,
+  MatButtonModule,
+  MatButtonToggleModule,
+  MatCardModule,
+  MatCheckboxModule,
+  MatChipsModule,
+  MatDatepickerModule,
+  MatDialogModule,
+  MatExpansionModule,
+  MatGridListModule,
+  MatIconModule,
+  MatInputModule,
+  MatListModule,
+  MatMenuModule,
+  MatNativeDateModule,
+  MatPaginatorModule,
+  MatProgressBarModule,
+  MatProgressSpinnerModule,
+  MatRadioModule,
+  MatRippleModule,
+  MatSelectModule,
+  MatSidenavModule,
+  MatSliderModule,
+  MatSlideToggleModule,
+  MatSnackBarModule,
+  MatSortModule,
+  MatTableModule,
+  MatTabsModule,
+  MatToolbarModule,
+  MatTooltipModule,
+  MatStepperModule,
+  MatFormFieldModule,
+} from &#x27;@angular/material&#x27;;
+import {CdkTableModule} from &#x27;@angular/cdk/table&#x27;;
+import {
+  DatePickerModule
+} from &#x27;shared/modules/datepicker/datepicker.module&#x27;;
 import {SharedCatanieModule} from &#x27;shared/shared.module&#x27;;
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    DialogModule,
-    ReactiveFormsModule,
-    SharedCatanieModule,
-    DataTableModule,
-    SharedModule,
-    TabViewModule,
-    ConfirmDialogModule
+  imports : [
+    MatCardModule, MatDialogModule, MatPaginatorModule, MatCheckboxModule, MatTableModule, MatFormFieldModule, MatAutocompleteModule,
+    MatTabsModule, MatInputModule, MatButtonModule, CommonModule, FormsModule, DialogModule, ReactiveFormsModule,
+    SharedCatanieModule, DataTableModule, SharedModule, TabViewModule,
+    ConfirmDialogModule, TreeModule, TreeTableModule,
+    DropdownModule, AutoCompleteModule,
+    DatePickerModule
   ],
-  declarations: [
-    DashboardComponent,
-    DatasetTableComponent,
-    DatablocksComponent,
-    DatafilesComponent,
-    DatasetDetailComponent
+  declarations : [
+    DashboardComponent, DatasetTableComponent, DatablocksComponent,
+    DatafilesComponent, DatasetsFilterComponent, DatasetDetailComponent
   ],
-  providers: [
-    DatasetService,
-    ConfirmationService
-  ],
-  exports: [
-    DatasetTableComponent
-  ]
+  providers : [ DatasetService, ConfirmationService ],
+  exports : [ DatasetTableComponent, DatasetsFilterComponent ]
 })
-export class DatasetsModule { }
+export class DatasetsModule {
+}
 </code></pre>
     </div>
 </div>
+
 
 
 

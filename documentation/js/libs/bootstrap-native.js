@@ -132,7 +132,7 @@
       c.setAttribute('aria-expanded', 'true');
       addClass(c, 'collapsing');
       setTimeout(function() {
-        c.style.height = self.getMaxHeight(c) + 'px';
+        c.style.height = self.getMaxHeight(c) + 'px'
         c.style.overflowY = 'hidden';
       }, 0);
       setTimeout(function() {
@@ -145,7 +145,7 @@
     this._close = function(c) {
       this.removeEvent();
       c.setAttribute('aria-expanded', 'false');
-      c.style.height = this.getMaxHeight(c) + 'px';
+      c.style.height = this.getMaxHeight(c) + 'px'
       setTimeout(function() {
         c.style.height = '0px';
         c.style.overflowY = 'hidden';

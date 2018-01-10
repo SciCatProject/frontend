@@ -36,9 +36,6 @@
                         <a data-type="chapter-link" href="../index.html"><span class="fa fa-home"></span>Getting started</a>
                         <ul class="links">
                                 <li class="link">
-                                    <a href="../index.html" ><span class="fa fa-file-text-o"></span>README</a>
-                                </li>
-                                <li class="link">
                                     <a 
                                         
                                          href="../overview.html" 
@@ -47,26 +44,55 @@
                                         <span class="fa fa-th"></span>Overview
                                     </a>
                                 </li>
+                                <li class="link">
+                                  <a href="../index.html" ><span class="fa fa-file-text-o"></span>README</a>
+                                </li>
+                                <li class="link">
+                                        <a href="../license.html"
+                                    >
+                                        <span class="fa fa-file-text-o"></span>LICENSE
+                                    </a>
+                                </li>
                         </ul>
                     </li>
             
             
                     <li class="chapter">
                         <a data-type="chapter-link" href="../modules.html" >
-                            <span class="fa fa-archive"></span>
-                            <span>Modules</span>
-                            <span class="menu-toggler fa fa-angle-up" data-toggle="collapse"
+                            <div class="menu-toggler linked" data-toggle="collapse"
                                     data-target="#xs-modules-links"
-                            ></span>
+                            >
+                                <span class="fa fa-archive"></span>
+                                <span class="link-name">Modules</span>
+                                <span class="fa fa-angle-down"></span>
+                            </div>
                         </a>
-                        <ul class="links collapse in"
+                        <ul class="links collapse "
                                 id="xs-modules-links"
                             >
                                 <li class="link">
                                     <a href="../modules/AppModule.html" >AppModule</a>
                                 </li>
                                 <li class="link">
+                                    <a href="../modules/AppRoutingModule.html" >AppRoutingModule</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../modules/BreadcrumbModule.html" >BreadcrumbModule</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../modules/ConfigFormModule.html" >ConfigFormModule</a>
+                                </li>
+                                <li class="link">
                                     <a href="../modules/DatasetsModule.html" >DatasetsModule</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../modules/DatePickerModule.html" >DatePickerModule</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../modules/DialogModule.html" >DialogModule</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../modules/ErrorPageModule.html" >ErrorPageModule</a>
                                 </li>
                                 <li class="link">
                                     <a href="../modules/SDKBrowserModule.html" >SDKBrowserModule</a>
@@ -81,14 +107,14 @@
                     </li>
             
                     <li class="chapter">
-                        <div class="simple">
+                        <div class="simple menu-toggler" data-toggle="collapse"
+                                data-target="#xs-components-links"
+                            >
                             <span class="fa fa-cogs"></span>
                             <span>Components</span>
-                            <span class="menu-toggler fa fa-angle-up" data-toggle="collapse"
-                                    data-target="#xs-components-links"
-                                ></span>
+                            <span class="fa fa-angle-down"></span>
                         </div>
-                        <ul class="links collapse in"
+                        <ul class="links collapse "
                                 id="xs-components-links"
                             >
                                 <li class="link">
@@ -119,13 +145,22 @@
                                     <a href="../components/DatasetsFilterComponent.html" >DatasetsFilterComponent</a>
                                 </li>
                                 <li class="link">
-                                    <a href="../components/EndOfShiftComponent.html" >EndOfShiftComponent</a>
+                                    <a href="../components/DatePickerComponent.html" >DatePickerComponent</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../components/DialogComponent.html" >DialogComponent</a>
                                 </li>
                                 <li class="link">
                                     <a href="../components/ErrorPageComponent.html" >ErrorPageComponent</a>
                                 </li>
                                 <li class="link">
                                     <a href="../components/JobsComponent.html" >JobsComponent</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../components/JobsDetailComponent.html" >JobsDetailComponent</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../components/JobsTableComponent.html" >JobsTableComponent</a>
                                 </li>
                                 <li class="link">
                                     <a href="../components/LoginComponent.html" >LoginComponent</a>
@@ -144,14 +179,14 @@
             
             
                     <li class="chapter">
-                        <div class="simple">
+                        <div class="simple menu-toggler" data-toggle="collapse"
+                                data-target="#xs-classes-links"
+                            >
                             <span class="fa fa-file-code-o"></span>
                             <span>Classes</span>
-                            <span class="menu-toggler fa fa-angle-up" data-toggle="collapse"
-                                    data-target="#xs-classes-links"
-                                ></span>
+                            <span class="fa fa-angle-down"></span>
                         </div>
-                        <ul class="links collapse in"
+                        <ul class="links collapse "
                                 id="xs-classes-links"
                             >
                                 <li class="link">
@@ -182,7 +217,16 @@
                                     <a href="../classes/AddGroupsAction.html" >AddGroupsAction</a>
                                 </li>
                                 <li class="link">
+                                    <a href="../classes/AddGroupsAction.html" >AddGroupsAction</a>
+                                </li>
+                                <li class="link">
                                     <a href="../classes/AddGroupsCompleteAction.html" >AddGroupsCompleteAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/AddGroupsCompleteAction.html" >AddGroupsCompleteAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/AddGroupsFailedAction.html" >AddGroupsFailedAction</a>
                                 </li>
                                 <li class="link">
                                     <a href="../classes/AddGroupsFailedAction.html" >AddGroupsFailedAction</a>
@@ -197,10 +241,40 @@
                                     <a href="../classes/ApplicationCredential.html" >ApplicationCredential</a>
                                 </li>
                                 <li class="link">
+                                    <a href="../classes/BaseStorage.html" >BaseStorage</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/CalSuperMonth.html" >CalSuperMonth</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/ChildRetrieveAction.html" >ChildRetrieveAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/ChildRetrieveCompleteAction.html" >ChildRetrieveCompleteAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/ClearMessageAction.html" >ClearMessageAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/CurrentJobAction.html" >CurrentJobAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/CurrentSetAction.html" >CurrentSetAction</a>
+                                </li>
+                                <li class="link">
                                     <a href="../classes/CustomReuseStrategy.html" >CustomReuseStrategy</a>
                                 </li>
                                 <li class="link">
                                     <a href="../classes/Datablock.html" >Datablock</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/DatablockDeleteAction.html" >DatablockDeleteAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/DatablockDeleteCompleteAction.html" >DatablockDeleteCompleteAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/DatablockDeleteFailedAction.html" >DatablockDeleteFailedAction</a>
                                 </li>
                                 <li class="link">
                                     <a href="../classes/DatablocksAction.html" >DatablocksAction</a>
@@ -218,16 +292,31 @@
                                     <a href="../classes/DatasetLifecycle.html" >DatasetLifecycle</a>
                                 </li>
                                 <li class="link">
+                                    <a href="../classes/DateWrapper.html" >DateWrapper</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/Day.html" >Day</a>
+                                </li>
+                                <li class="link">
                                     <a href="../classes/DerivedDataset.html"  data-type="entity-link" class="active" >DerivedDataset</a>
                                 </li>
                                 <li class="link">
+                                    <a href="../classes/FailedAction.html" >FailedAction</a>
+                                </li>
+                                <li class="link">
                                     <a href="../classes/FilterFailedAction.html" >FilterFailedAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/FilterValueAction.html" >FilterValueAction</a>
                                 </li>
                                 <li class="link">
                                     <a href="../classes/FireLoop.html" >FireLoop</a>
                                 </li>
                                 <li class="link">
                                     <a href="../classes/FireLoopRef.html" >FireLoopRef</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/FocusOnMonthAction.html" >FocusOnMonthAction</a>
                                 </li>
                                 <li class="link">
                                     <a href="../classes/IO.html" >IO</a>
@@ -293,13 +382,43 @@
                                     <a href="../classes/MockLoopBackAuth.html" >MockLoopBackAuth</a>
                                 </li>
                                 <li class="link">
+                                    <a href="../classes/MockMatDialogData.html" >MockMatDialogData</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/MockMatDialogRef.html" >MockMatDialogRef</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/MockNotificationService.html" >MockNotificationService</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/MockProposalApi.html" >MockProposalApi</a>
+                                </li>
+                                <li class="link">
                                     <a href="../classes/MockRouter.html" >MockRouter</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/MockStore.html" >MockStore</a>
                                 </li>
                                 <li class="link">
                                     <a href="../classes/MockUserApi.html" >MockUserApi</a>
                                 </li>
                                 <li class="link">
                                     <a href="../classes/MockUserMsgService.html" >MockUserMsgService</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/Month.html" >Month</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/MultiDayRange.html" >MultiDayRange</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/MultiMonthRange.html" >MultiMonthRange</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/MultiWeekRange.html" >MultiWeekRange</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/MultiYearRange.html" >MultiYearRange</a>
                                 </li>
                                 <li class="link">
                                     <a href="../classes/OrigDatablock.html" >OrigDatablock</a>
@@ -315,6 +434,27 @@
                                 </li>
                                 <li class="link">
                                     <a href="../classes/RawDataset.html" >RawDataset</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/RefocusToCurrentMonthAction.html" >RefocusToCurrentMonthAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/ResetStatusAction.html" >ResetStatusAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/ResetStatusCompleteAction.html" >ResetStatusCompleteAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/RestoreAction.html" >RestoreAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/ResyncTodayAction.html" >ResyncTodayAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/RetrieveAction.html" >RetrieveAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/RetrieveCompleteAction.html" >RetrieveCompleteAction</a>
                                 </li>
                                 <li class="link">
                                     <a href="../classes/RetrieveUserAction.html" >RetrieveUserAction</a>
@@ -335,13 +475,13 @@
                                     <a href="../classes/Sample.html" >Sample</a>
                                 </li>
                                 <li class="link">
-                                    <a href="../classes/SearchAction.html" >SearchAction</a>
+                                    <a href="../classes/SaveAction.html" >SaveAction</a>
                                 </li>
                                 <li class="link">
-                                    <a href="../classes/SearchAction.html" >SearchAction</a>
+                                    <a href="../classes/SaveModeAction.html" >SaveModeAction</a>
                                 </li>
                                 <li class="link">
-                                    <a href="../classes/SearchCompleteAction.html" >SearchCompleteAction</a>
+                                    <a href="../classes/SaveSettingsAction.html" >SaveSettingsAction</a>
                                 </li>
                                 <li class="link">
                                     <a href="../classes/SearchCompleteAction.html" >SearchCompleteAction</a>
@@ -353,10 +493,31 @@
                                     <a href="../classes/SearchIDAction.html" >SearchIDAction</a>
                                 </li>
                                 <li class="link">
+                                    <a href="../classes/SearchIDAction.html" >SearchIDAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/SearchIDCompleteAction.html" >SearchIDCompleteAction</a>
+                                </li>
+                                <li class="link">
                                     <a href="../classes/SearchIDCompleteAction.html" >SearchIDCompleteAction</a>
                                 </li>
                                 <li class="link">
                                     <a href="../classes/SearchIDFailedAction.html" >SearchIDFailedAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/SearchIDFailedAction.html" >SearchIDFailedAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/SetFocusYearAction.html" >SetFocusYearAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/SetSelectionModeAction.html" >SetSelectionModeAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/SetSelectionsAction.html" >SetSelectionsAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/ShowMessageAction.html" >ShowMessageAction</a>
                                 </li>
                                 <li class="link">
                                     <a href="../classes/SocketBrowser.html" >SocketBrowser</a>
@@ -365,16 +526,61 @@
                                     <a href="../classes/SocketDriver.html" >SocketDriver</a>
                                 </li>
                                 <li class="link">
-                                    <a href="../classes/Storage.html" >Storage</a>
+                                    <a href="../classes/SortFailedAction.html" >SortFailedAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/SortUpdateAction.html" >SortUpdateAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/SortValueAction.html" >SortValueAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/StepFocusBackAction.html" >StepFocusBackAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/StepFocusForwardAction.html" >StepFocusForwardAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/SubmitAction.html" >SubmitAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/SubmitCompleteAction.html" >SubmitCompleteAction</a>
                                 </li>
                                 <li class="link">
                                     <a href="../classes/SynchTimes.html" >SynchTimes</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/TimeRange.html" >TimeRange</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/ToggleCalDispAction.html" >ToggleCalDispAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/ToggleCalModeAction.html" >ToggleCalModeAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/TotalSetsAction.html" >TotalSetsAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/UIStoreAction.html" >UIStoreAction</a>
                                 </li>
                                 <li class="link">
                                     <a href="../classes/UpdateFilterAction.html" >UpdateFilterAction</a>
                                 </li>
                                 <li class="link">
                                     <a href="../classes/UpdateFilterCompleteAction.html" >UpdateFilterCompleteAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/UpdateFocusMonthAction.html" >UpdateFocusMonthAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/UpdateSelectedAction.html" >UpdateSelectedAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/UpdateSelectionsAction.html" >UpdateSelectionsAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/UpdateSortCompleteAction.html" >UpdateSortCompleteAction</a>
                                 </li>
                                 <li class="link">
                                     <a href="../classes/User.html" >User</a>
@@ -385,18 +591,24 @@
                                 <li class="link">
                                     <a href="../classes/UserIdentity.html" >UserIdentity</a>
                                 </li>
+                                <li class="link">
+                                    <a href="../classes/Week.html" >Week</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/Year.html" >Year</a>
+                                </li>
                         </ul>
                     </li>
             
                     <li class="chapter">
-                        <div class="simple">
+                        <div class="simple menu-toggler" data-toggle="collapse"
+                                data-target="#xs-injectables-links"
+                            >
                             <span class="fa fa-long-arrow-down"></span>
                             <span>Injectables</span>
-                            <span class="menu-toggler fa fa-angle-up" data-toggle="collapse"
-                                    data-target="#xs-injectables-links"
-                                ></span>
+                            <span class="fa fa-angle-down"></span>
                         </div>
-                        <ul class="links collapse in"
+                        <ul class="links collapse "
                                 id="xs-injectables-links"
                             >
                                 <li class="link">
@@ -451,6 +663,9 @@
                                     <a href="../injectables/JobApi.html" >JobApi</a>
                                 </li>
                                 <li class="link">
+                                    <a href="../injectables/JobsEffects.html" >JobsEffects</a>
+                                </li>
+                                <li class="link">
                                     <a href="../injectables/LoggerService.html" >LoggerService</a>
                                 </li>
                                 <li class="link">
@@ -501,22 +716,150 @@
                                 <li class="link">
                                     <a href="../injectables/UserIdentityApi.html" >UserIdentityApi</a>
                                 </li>
-                                <li class="link">
-                                    <a href="../injectables/UserMsgService.html" >UserMsgService</a>
-                                </li>
                         </ul>
                     </li>
             
             
                     <li class="chapter">
-                        <div class="simple">
+                        <div class="simple menu-toggler" data-toggle="collapse"
+                                data-target="#xs-interfaces-links"
+                            >
+                            <span class="fa fa-info"></span>
+                            <span>Interfaces</span>
+                            <span class="fa fa-angle-down"></span>
+                        </div>
+                        <ul class="links collapse "
+                                id="xs-interfaces-links"
+                            >
+                                <li class="link">
+                                    <a href="../interfaces/AccessGroupInterface.html" >AccessGroupInterface</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/AccessTokenInterface.html" >AccessTokenInterface</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/AccessUserInterface.html" >AccessUserInterface</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/AppState.html" >AppState</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/AppState.html" >AppState</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/ApplicationCredentialInterface.html" >ApplicationCredentialInterface</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/Breadcrumb.html" >Breadcrumb</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/CookieInterface.html" >CookieInterface</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/DashboardUIState.html" >DashboardUIState</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/DatablockInterface.html" >DatablockInterface</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/DatasetFilters.html" >DatasetFilters</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/DatasetInterface.html" >DatasetInterface</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/DatasetLifecycleInterface.html" >DatasetLifecycleInterface</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/DatasetState.html" >DatasetState</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/DatepickerState.html" >DatepickerState</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/DerivedDatasetInterface.html" >DerivedDatasetInterface</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/GeoPoint.html" >GeoPoint</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/IStringToBoolDict.html" >IStringToBoolDict</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/IStringToNumDict.html" >IStringToNumDict</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/JobInterface.html" >JobInterface</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/JobsState.html" >JobsState</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/LoopBackFilter.html" >LoopBackFilter</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/Message.html" >Message</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/Models.html" >Models</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/OrigDatablockInterface.html" >OrigDatablockInterface</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/PolicyInterface.html" >PolicyInterface</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/ProposalInterface.html" >ProposalInterface</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/RabbitMQInterface.html" >RabbitMQInterface</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/RawDatasetInterface.html" >RawDatasetInterface</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/SampleInterface.html" >SampleInterface</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/Settings.html" >Settings</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/StatFilter.html" >StatFilter</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/SynchTimesInterface.html" >SynchTimesInterface</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/TimerRangeSelectorState.html" >TimerRangeSelectorState</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/UserCredentialInterface.html" >UserCredentialInterface</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/UserIdentityInterface.html" >UserIdentityInterface</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/UserInterface.html" >UserInterface</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/UserState.html" >UserState</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/WeekdayNameObject.html" >WeekdayNameObject</a>
+                                </li>
+                        </ul>
+                    </li>
+            
+                    <li class="chapter">
+                        <div class="simple menu-toggler" data-toggle="collapse"
+                                data-target="#xs-pipes-links"
+                            >
                             <span class="fa fa-plus"></span>
                             <span>Pipes</span>
-                            <span class="menu-toggler fa fa-angle-up" data-toggle="collapse"
-                                    data-target="#xs-pipes-links"
-                                ></span>
+                            <span class="fa fa-angle-down"></span>
                         </div>
-                        <ul class="links collapse in"
+                        <ul class="links collapse "
                                 id="xs-pipes-links"
                             >
                                 <li class="link">
@@ -528,9 +871,34 @@
                         </ul>
                     </li>
             
+                    <li class="chapter">
+                        <div class="simple menu-toggler" data-toggle="collapse"
+                                data-target="#xs-miscellaneous-links"
+                            >
+                            <span class="fa fa-cubes"></span>
+                            <span>Miscellaneous</span>
+                            <span class="fa fa-angle-down"></span>
+                        </div>
+                        <ul class="links collapse "
+                                id="xs-miscellaneous-links"
+                            >
+                                <li class="link">
+                                  <a href="../miscellaneous/enumerations.html" data-type="entity-link" >Enums</a>
+                                </li>
+                                <li class="link">
+                                  <a href="../miscellaneous/functions.html" data-type="entity-link" >Functions</a>
+                                </li>
+                                <li class="link">
+                                  <a href="../miscellaneous/typealiases.html" data-type="entity-link" >Type aliases</a>
+                                </li>
+                                <li class="link">
+                                  <a href="../miscellaneous/variables.html" data-type="entity-link" >Variables</a>
+                                </li>
+                        </ul>
+                    </li>
             
                     <li class="chapter">
-                        <a data-type="chapter-link" href="../miscellaneous.html" ><span class="fa fa-cubes"></span>Miscellaneous</a>
+                        <a data-type="chapter-link" href="../routes.html" ><span class="fa fa-code-fork"></span>Routes</a>
                     </li>
             
                     <li class="chapter">
@@ -570,9 +938,6 @@
                                <a data-type="chapter-link" href="../index.html"><span class="fa fa-home"></span>Getting started</a>
                                <ul class="links">
                                        <li class="link">
-                                           <a href="../index.html" ><span class="fa fa-file-text-o"></span>README</a>
-                                       </li>
-                                       <li class="link">
                                            <a 
                                                
                                                 href="../overview.html" 
@@ -581,26 +946,55 @@
                                                <span class="fa fa-th"></span>Overview
                                            </a>
                                        </li>
+                                       <li class="link">
+                                         <a href="../index.html" ><span class="fa fa-file-text-o"></span>README</a>
+                                       </li>
+                                       <li class="link">
+                                               <a href="../license.html"
+                                           >
+                                               <span class="fa fa-file-text-o"></span>LICENSE
+                                           </a>
+                                       </li>
                                </ul>
                            </li>
                    
                    
                            <li class="chapter">
                                <a data-type="chapter-link" href="../modules.html" >
-                                   <span class="fa fa-archive"></span>
-                                   <span>Modules</span>
-                                   <span class="menu-toggler fa fa-angle-up" data-toggle="collapse"
+                                   <div class="menu-toggler linked" data-toggle="collapse"
                                            data-target="#modules-links"
-                                   ></span>
+                                   >
+                                       <span class="fa fa-archive"></span>
+                                       <span class="link-name">Modules</span>
+                                       <span class="fa fa-angle-down"></span>
+                                   </div>
                                </a>
-                               <ul class="links collapse in"
+                               <ul class="links collapse "
                                        id="modules-links"
                    >
                                        <li class="link">
                                            <a href="../modules/AppModule.html" >AppModule</a>
                                        </li>
                                        <li class="link">
+                                           <a href="../modules/AppRoutingModule.html" >AppRoutingModule</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../modules/BreadcrumbModule.html" >BreadcrumbModule</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../modules/ConfigFormModule.html" >ConfigFormModule</a>
+                                       </li>
+                                       <li class="link">
                                            <a href="../modules/DatasetsModule.html" >DatasetsModule</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../modules/DatePickerModule.html" >DatePickerModule</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../modules/DialogModule.html" >DialogModule</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../modules/ErrorPageModule.html" >ErrorPageModule</a>
                                        </li>
                                        <li class="link">
                                            <a href="../modules/SDKBrowserModule.html" >SDKBrowserModule</a>
@@ -615,14 +1009,14 @@
                            </li>
                    
                            <li class="chapter">
-                               <div class="simple">
+                               <div class="simple menu-toggler" data-toggle="collapse"
+                                       data-target="#components-links"
+                   >
                                    <span class="fa fa-cogs"></span>
                                    <span>Components</span>
-                                   <span class="menu-toggler fa fa-angle-up" data-toggle="collapse"
-                                           data-target="#components-links"
-                   ></span>
+                                   <span class="fa fa-angle-down"></span>
                                </div>
-                               <ul class="links collapse in"
+                               <ul class="links collapse "
                                        id="components-links"
                    >
                                        <li class="link">
@@ -653,13 +1047,22 @@
                                            <a href="../components/DatasetsFilterComponent.html" >DatasetsFilterComponent</a>
                                        </li>
                                        <li class="link">
-                                           <a href="../components/EndOfShiftComponent.html" >EndOfShiftComponent</a>
+                                           <a href="../components/DatePickerComponent.html" >DatePickerComponent</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../components/DialogComponent.html" >DialogComponent</a>
                                        </li>
                                        <li class="link">
                                            <a href="../components/ErrorPageComponent.html" >ErrorPageComponent</a>
                                        </li>
                                        <li class="link">
                                            <a href="../components/JobsComponent.html" >JobsComponent</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../components/JobsDetailComponent.html" >JobsDetailComponent</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../components/JobsTableComponent.html" >JobsTableComponent</a>
                                        </li>
                                        <li class="link">
                                            <a href="../components/LoginComponent.html" >LoginComponent</a>
@@ -678,14 +1081,14 @@
                    
                    
                            <li class="chapter">
-                               <div class="simple">
+                               <div class="simple menu-toggler" data-toggle="collapse"
+                                       data-target="#classes-links"
+                   >
                                    <span class="fa fa-file-code-o"></span>
                                    <span>Classes</span>
-                                   <span class="menu-toggler fa fa-angle-up" data-toggle="collapse"
-                                           data-target="#classes-links"
-                   ></span>
+                                   <span class="fa fa-angle-down"></span>
                                </div>
-                               <ul class="links collapse in"
+                               <ul class="links collapse "
                                        id="classes-links"
                    >
                                        <li class="link">
@@ -716,7 +1119,16 @@
                                            <a href="../classes/AddGroupsAction.html" >AddGroupsAction</a>
                                        </li>
                                        <li class="link">
+                                           <a href="../classes/AddGroupsAction.html" >AddGroupsAction</a>
+                                       </li>
+                                       <li class="link">
                                            <a href="../classes/AddGroupsCompleteAction.html" >AddGroupsCompleteAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/AddGroupsCompleteAction.html" >AddGroupsCompleteAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/AddGroupsFailedAction.html" >AddGroupsFailedAction</a>
                                        </li>
                                        <li class="link">
                                            <a href="../classes/AddGroupsFailedAction.html" >AddGroupsFailedAction</a>
@@ -731,10 +1143,40 @@
                                            <a href="../classes/ApplicationCredential.html" >ApplicationCredential</a>
                                        </li>
                                        <li class="link">
+                                           <a href="../classes/BaseStorage.html" >BaseStorage</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/CalSuperMonth.html" >CalSuperMonth</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/ChildRetrieveAction.html" >ChildRetrieveAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/ChildRetrieveCompleteAction.html" >ChildRetrieveCompleteAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/ClearMessageAction.html" >ClearMessageAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/CurrentJobAction.html" >CurrentJobAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/CurrentSetAction.html" >CurrentSetAction</a>
+                                       </li>
+                                       <li class="link">
                                            <a href="../classes/CustomReuseStrategy.html" >CustomReuseStrategy</a>
                                        </li>
                                        <li class="link">
                                            <a href="../classes/Datablock.html" >Datablock</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/DatablockDeleteAction.html" >DatablockDeleteAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/DatablockDeleteCompleteAction.html" >DatablockDeleteCompleteAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/DatablockDeleteFailedAction.html" >DatablockDeleteFailedAction</a>
                                        </li>
                                        <li class="link">
                                            <a href="../classes/DatablocksAction.html" >DatablocksAction</a>
@@ -752,16 +1194,31 @@
                                            <a href="../classes/DatasetLifecycle.html" >DatasetLifecycle</a>
                                        </li>
                                        <li class="link">
+                                           <a href="../classes/DateWrapper.html" >DateWrapper</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/Day.html" >Day</a>
+                                       </li>
+                                       <li class="link">
                                            <a href="../classes/DerivedDataset.html"  data-type="entity-link" class="active" >DerivedDataset</a>
                                        </li>
                                        <li class="link">
+                                           <a href="../classes/FailedAction.html" >FailedAction</a>
+                                       </li>
+                                       <li class="link">
                                            <a href="../classes/FilterFailedAction.html" >FilterFailedAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/FilterValueAction.html" >FilterValueAction</a>
                                        </li>
                                        <li class="link">
                                            <a href="../classes/FireLoop.html" >FireLoop</a>
                                        </li>
                                        <li class="link">
                                            <a href="../classes/FireLoopRef.html" >FireLoopRef</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/FocusOnMonthAction.html" >FocusOnMonthAction</a>
                                        </li>
                                        <li class="link">
                                            <a href="../classes/IO.html" >IO</a>
@@ -827,13 +1284,43 @@
                                            <a href="../classes/MockLoopBackAuth.html" >MockLoopBackAuth</a>
                                        </li>
                                        <li class="link">
+                                           <a href="../classes/MockMatDialogData.html" >MockMatDialogData</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/MockMatDialogRef.html" >MockMatDialogRef</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/MockNotificationService.html" >MockNotificationService</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/MockProposalApi.html" >MockProposalApi</a>
+                                       </li>
+                                       <li class="link">
                                            <a href="../classes/MockRouter.html" >MockRouter</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/MockStore.html" >MockStore</a>
                                        </li>
                                        <li class="link">
                                            <a href="../classes/MockUserApi.html" >MockUserApi</a>
                                        </li>
                                        <li class="link">
                                            <a href="../classes/MockUserMsgService.html" >MockUserMsgService</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/Month.html" >Month</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/MultiDayRange.html" >MultiDayRange</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/MultiMonthRange.html" >MultiMonthRange</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/MultiWeekRange.html" >MultiWeekRange</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/MultiYearRange.html" >MultiYearRange</a>
                                        </li>
                                        <li class="link">
                                            <a href="../classes/OrigDatablock.html" >OrigDatablock</a>
@@ -849,6 +1336,27 @@
                                        </li>
                                        <li class="link">
                                            <a href="../classes/RawDataset.html" >RawDataset</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/RefocusToCurrentMonthAction.html" >RefocusToCurrentMonthAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/ResetStatusAction.html" >ResetStatusAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/ResetStatusCompleteAction.html" >ResetStatusCompleteAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/RestoreAction.html" >RestoreAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/ResyncTodayAction.html" >ResyncTodayAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/RetrieveAction.html" >RetrieveAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/RetrieveCompleteAction.html" >RetrieveCompleteAction</a>
                                        </li>
                                        <li class="link">
                                            <a href="../classes/RetrieveUserAction.html" >RetrieveUserAction</a>
@@ -869,13 +1377,13 @@
                                            <a href="../classes/Sample.html" >Sample</a>
                                        </li>
                                        <li class="link">
-                                           <a href="../classes/SearchAction.html" >SearchAction</a>
+                                           <a href="../classes/SaveAction.html" >SaveAction</a>
                                        </li>
                                        <li class="link">
-                                           <a href="../classes/SearchAction.html" >SearchAction</a>
+                                           <a href="../classes/SaveModeAction.html" >SaveModeAction</a>
                                        </li>
                                        <li class="link">
-                                           <a href="../classes/SearchCompleteAction.html" >SearchCompleteAction</a>
+                                           <a href="../classes/SaveSettingsAction.html" >SaveSettingsAction</a>
                                        </li>
                                        <li class="link">
                                            <a href="../classes/SearchCompleteAction.html" >SearchCompleteAction</a>
@@ -887,10 +1395,31 @@
                                            <a href="../classes/SearchIDAction.html" >SearchIDAction</a>
                                        </li>
                                        <li class="link">
+                                           <a href="../classes/SearchIDAction.html" >SearchIDAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/SearchIDCompleteAction.html" >SearchIDCompleteAction</a>
+                                       </li>
+                                       <li class="link">
                                            <a href="../classes/SearchIDCompleteAction.html" >SearchIDCompleteAction</a>
                                        </li>
                                        <li class="link">
                                            <a href="../classes/SearchIDFailedAction.html" >SearchIDFailedAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/SearchIDFailedAction.html" >SearchIDFailedAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/SetFocusYearAction.html" >SetFocusYearAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/SetSelectionModeAction.html" >SetSelectionModeAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/SetSelectionsAction.html" >SetSelectionsAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/ShowMessageAction.html" >ShowMessageAction</a>
                                        </li>
                                        <li class="link">
                                            <a href="../classes/SocketBrowser.html" >SocketBrowser</a>
@@ -899,16 +1428,61 @@
                                            <a href="../classes/SocketDriver.html" >SocketDriver</a>
                                        </li>
                                        <li class="link">
-                                           <a href="../classes/Storage.html" >Storage</a>
+                                           <a href="../classes/SortFailedAction.html" >SortFailedAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/SortUpdateAction.html" >SortUpdateAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/SortValueAction.html" >SortValueAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/StepFocusBackAction.html" >StepFocusBackAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/StepFocusForwardAction.html" >StepFocusForwardAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/SubmitAction.html" >SubmitAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/SubmitCompleteAction.html" >SubmitCompleteAction</a>
                                        </li>
                                        <li class="link">
                                            <a href="../classes/SynchTimes.html" >SynchTimes</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/TimeRange.html" >TimeRange</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/ToggleCalDispAction.html" >ToggleCalDispAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/ToggleCalModeAction.html" >ToggleCalModeAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/TotalSetsAction.html" >TotalSetsAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/UIStoreAction.html" >UIStoreAction</a>
                                        </li>
                                        <li class="link">
                                            <a href="../classes/UpdateFilterAction.html" >UpdateFilterAction</a>
                                        </li>
                                        <li class="link">
                                            <a href="../classes/UpdateFilterCompleteAction.html" >UpdateFilterCompleteAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/UpdateFocusMonthAction.html" >UpdateFocusMonthAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/UpdateSelectedAction.html" >UpdateSelectedAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/UpdateSelectionsAction.html" >UpdateSelectionsAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/UpdateSortCompleteAction.html" >UpdateSortCompleteAction</a>
                                        </li>
                                        <li class="link">
                                            <a href="../classes/User.html" >User</a>
@@ -919,18 +1493,24 @@
                                        <li class="link">
                                            <a href="../classes/UserIdentity.html" >UserIdentity</a>
                                        </li>
+                                       <li class="link">
+                                           <a href="../classes/Week.html" >Week</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/Year.html" >Year</a>
+                                       </li>
                                </ul>
                            </li>
                    
                            <li class="chapter">
-                               <div class="simple">
+                               <div class="simple menu-toggler" data-toggle="collapse"
+                                       data-target="#injectables-links"
+                   >
                                    <span class="fa fa-long-arrow-down"></span>
                                    <span>Injectables</span>
-                                   <span class="menu-toggler fa fa-angle-up" data-toggle="collapse"
-                                           data-target="#injectables-links"
-                   ></span>
+                                   <span class="fa fa-angle-down"></span>
                                </div>
-                               <ul class="links collapse in"
+                               <ul class="links collapse "
                                        id="injectables-links"
                    >
                                        <li class="link">
@@ -985,6 +1565,9 @@
                                            <a href="../injectables/JobApi.html" >JobApi</a>
                                        </li>
                                        <li class="link">
+                                           <a href="../injectables/JobsEffects.html" >JobsEffects</a>
+                                       </li>
+                                       <li class="link">
                                            <a href="../injectables/LoggerService.html" >LoggerService</a>
                                        </li>
                                        <li class="link">
@@ -1035,22 +1618,150 @@
                                        <li class="link">
                                            <a href="../injectables/UserIdentityApi.html" >UserIdentityApi</a>
                                        </li>
-                                       <li class="link">
-                                           <a href="../injectables/UserMsgService.html" >UserMsgService</a>
-                                       </li>
                                </ul>
                            </li>
                    
                    
                            <li class="chapter">
-                               <div class="simple">
+                               <div class="simple menu-toggler" data-toggle="collapse"
+                                       data-target="#interfaces-links"
+                   >
+                                   <span class="fa fa-info"></span>
+                                   <span>Interfaces</span>
+                                   <span class="fa fa-angle-down"></span>
+                               </div>
+                               <ul class="links collapse "
+                                       id="interfaces-links"
+                   >
+                                       <li class="link">
+                                           <a href="../interfaces/AccessGroupInterface.html" >AccessGroupInterface</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/AccessTokenInterface.html" >AccessTokenInterface</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/AccessUserInterface.html" >AccessUserInterface</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/AppState.html" >AppState</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/AppState.html" >AppState</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/ApplicationCredentialInterface.html" >ApplicationCredentialInterface</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/Breadcrumb.html" >Breadcrumb</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/CookieInterface.html" >CookieInterface</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/DashboardUIState.html" >DashboardUIState</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/DatablockInterface.html" >DatablockInterface</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/DatasetFilters.html" >DatasetFilters</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/DatasetInterface.html" >DatasetInterface</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/DatasetLifecycleInterface.html" >DatasetLifecycleInterface</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/DatasetState.html" >DatasetState</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/DatepickerState.html" >DatepickerState</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/DerivedDatasetInterface.html" >DerivedDatasetInterface</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/GeoPoint.html" >GeoPoint</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/IStringToBoolDict.html" >IStringToBoolDict</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/IStringToNumDict.html" >IStringToNumDict</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/JobInterface.html" >JobInterface</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/JobsState.html" >JobsState</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/LoopBackFilter.html" >LoopBackFilter</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/Message.html" >Message</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/Models.html" >Models</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/OrigDatablockInterface.html" >OrigDatablockInterface</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/PolicyInterface.html" >PolicyInterface</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/ProposalInterface.html" >ProposalInterface</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/RabbitMQInterface.html" >RabbitMQInterface</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/RawDatasetInterface.html" >RawDatasetInterface</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/SampleInterface.html" >SampleInterface</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/Settings.html" >Settings</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/StatFilter.html" >StatFilter</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/SynchTimesInterface.html" >SynchTimesInterface</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/TimerRangeSelectorState.html" >TimerRangeSelectorState</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/UserCredentialInterface.html" >UserCredentialInterface</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/UserIdentityInterface.html" >UserIdentityInterface</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/UserInterface.html" >UserInterface</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/UserState.html" >UserState</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/WeekdayNameObject.html" >WeekdayNameObject</a>
+                                       </li>
+                               </ul>
+                           </li>
+                   
+                           <li class="chapter">
+                               <div class="simple menu-toggler" data-toggle="collapse"
+                                       data-target="#pipes-links"
+                   >
                                    <span class="fa fa-plus"></span>
                                    <span>Pipes</span>
-                                   <span class="menu-toggler fa fa-angle-up" data-toggle="collapse"
-                                           data-target="#pipes-links"
-                   ></span>
+                                   <span class="fa fa-angle-down"></span>
                                </div>
-                               <ul class="links collapse in"
+                               <ul class="links collapse "
                                        id="pipes-links"
                    >
                                        <li class="link">
@@ -1062,9 +1773,34 @@
                                </ul>
                            </li>
                    
+                           <li class="chapter">
+                               <div class="simple menu-toggler" data-toggle="collapse"
+                                       data-target="#miscellaneous-links"
+                   >
+                                   <span class="fa fa-cubes"></span>
+                                   <span>Miscellaneous</span>
+                                   <span class="fa fa-angle-down"></span>
+                               </div>
+                               <ul class="links collapse "
+                                       id="miscellaneous-links"
+                   >
+                                       <li class="link">
+                                         <a href="../miscellaneous/enumerations.html" data-type="entity-link" >Enums</a>
+                                       </li>
+                                       <li class="link">
+                                         <a href="../miscellaneous/functions.html" data-type="entity-link" >Functions</a>
+                                       </li>
+                                       <li class="link">
+                                         <a href="../miscellaneous/typealiases.html" data-type="entity-link" >Type aliases</a>
+                                       </li>
+                                       <li class="link">
+                                         <a href="../miscellaneous/variables.html" data-type="entity-link" >Variables</a>
+                                       </li>
+                               </ul>
+                           </li>
                    
                            <li class="chapter">
-                               <a data-type="chapter-link" href="../miscellaneous.html" ><span class="fa fa-cubes"></span>Miscellaneous</a>
+                               <a data-type="chapter-link" href="../routes.html" ><span class="fa fa-code-fork"></span>Routes</a>
                            </li>
                    
                            <li class="chapter">
@@ -1090,6 +1826,9 @@
 
 
 
+
+
+
 <ol class="breadcrumb">
   <li>Classes</li>
   <li>DerivedDataset</li>
@@ -1097,15 +1836,17 @@
 
 <ul class="nav nav-tabs" role="tablist">
     <li class="active">
-        <a href="#infos" id="infos-tab" role="tab" data-toggle="tab">Infos</a>
+        <a href="#info" id="info-tab" role="tab" data-toggle="tab" data-link="info">Info</a>
     </li>
+
+
     <li>
         <a href="#source" role="tab" id="source-tab" data-toggle="tab" data-link="source">Source</a>
     </li>
 </ul>
 
 <div class="tab-content">
-    <div class="tab-pane fade active in" id="infos">
+    <div class="tab-pane fade active in" id="info">
         <p class="comment">
             <h3>File</h3>
         </p>
@@ -1119,8 +1860,141 @@
                 <h3>Implements</h3>
             </p>
             <p class="comment">
-                        <code><a href="../classes/DerivedDataset.html" target="_self" >DerivedDatasetInterface</a></code>
+                        <code><a href="../interfaces/DerivedDatasetInterface.html" target="_self" >DerivedDatasetInterface</a></code>
             </p>
+
+
+            <section>
+                <h3 id="index">Index</h3>
+                <table class="table table-sm table-bordered index-table">
+                    <tbody>
+                        <tr>
+                            <td class="col-md-4">
+                                <h6><b>Properties</b></h6>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <ul class="index-list">
+                                    <li>
+                                         <a href="#accessGroups">accessGroups</a>
+                                    </li>
+                                    <li>
+                                         <a href="#classification">classification</a>
+                                    </li>
+                                    <li>
+                                         <a href="#contactEmail">contactEmail</a>
+                                    </li>
+                                    <li>
+                                         <a href="#createdAt">createdAt</a>
+                                    </li>
+                                    <li>
+                                         <a href="#creationTime">creationTime</a>
+                                    </li>
+                                    <li>
+                                         <a href="#datablocks">datablocks</a>
+                                    </li>
+                                    <li>
+                                         <a href="#datasetlifecycle">datasetlifecycle</a>
+                                    </li>
+                                    <li>
+                                         <a href="#description">description</a>
+                                    </li>
+                                    <li>
+                                         <a href="#doi">doi</a>
+                                    </li>
+                                    <li>
+                                         <a href="#inputDatasets">inputDatasets</a>
+                                    </li>
+                                    <li>
+                                         <a href="#investigator">investigator</a>
+                                    </li>
+                                    <li>
+                                         <a href="#isPublished">isPublished</a>
+                                    </li>
+                                    <li>
+                                         <a href="#jobLogData">jobLogData</a>
+                                    </li>
+                                    <li>
+                                         <a href="#jobParameters">jobParameters</a>
+                                    </li>
+                                    <li>
+                                         <a href="#keywords">keywords</a>
+                                    </li>
+                                    <li>
+                                         <a href="#license">license</a>
+                                    </li>
+                                    <li>
+                                         <a href="#orcidOfOwner">orcidOfOwner</a>
+                                    </li>
+                                    <li>
+                                         <a href="#origdatablocks">origdatablocks</a>
+                                    </li>
+                                    <li>
+                                         <a href="#owner">owner</a>
+                                    </li>
+                                    <li>
+                                         <a href="#ownerEmail">ownerEmail</a>
+                                    </li>
+                                    <li>
+                                         <a href="#ownerGroup">ownerGroup</a>
+                                    </li>
+                                    <li>
+                                         <a href="#packedSize">packedSize</a>
+                                    </li>
+                                    <li>
+                                         <a href="#pid">pid</a>
+                                    </li>
+                                    <li>
+                                         <a href="#size">size</a>
+                                    </li>
+                                    <li>
+                                         <a href="#sourceFolder">sourceFolder</a>
+                                    </li>
+                                    <li>
+                                         <a href="#type">type</a>
+                                    </li>
+                                    <li>
+                                         <a href="#updatedAt">updatedAt</a>
+                                    </li>
+                                    <li>
+                                         <a href="#usedSoftware">usedSoftware</a>
+                                    </li>
+                                    <li>
+                                         <a href="#userTargetLocation">userTargetLocation</a>
+                                    </li>
+                                    <li>
+                                         <a href="#validationStatus">validationStatus</a>
+                                    </li>
+                                    <li>
+                                         <a href="#version">version</a>
+                                    </li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <h6><b>Methods</b></h6>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <ul class="index-list">
+                                    <li>
+                                        <span class="modifier">Public</span> <a href="#factory">factory</a>
+                                    </li>
+                                    <li>
+                                        <span class="modifier">Public</span> <a href="#getModelDefinition">getModelDefinition</a>
+                                    </li>
+                                    <li>
+                                        <span class="modifier">Public</span> <a href="#getModelName">getModelName</a>
+                                    </li>
+                                </ul>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
 
             <section>
                 <h3 id="constructor">Constructor</h3>
@@ -1128,15 +2002,44 @@
                         <tbody>
                             <tr>
                                 <td class="col-md-4">
-                                    <code>constructor(data: <a href="../classes/DerivedDataset.html">DerivedDatasetInterface</a>)</code>
+                                    <code>constructor(data?: <a href="../interfaces/DerivedDatasetInterface.html">DerivedDatasetInterface</a>)</code>
                                 </td>
                             </tr>
-                                <tr>
-                                    <td class="col-md-4">
-                                        <div class="io-line">Defined in <a href="" data-line="74" class="link-to-prism">src/app/shared/sdk/models/DerivedDataset.ts:74</a></div>
-                                    </td>
-                                </tr>
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <div class="io-line">Defined in <a href="" data-line="74" class="link-to-prism">src/app/shared/sdk/models/DerivedDataset.ts:74</a></div>
+                                        </td>
+                                    </tr>
             
+                            <tr>
+                                <td class="col-md-4">
+                                        <div>
+                                                <b>Parameters :</b>
+                                                <table class="params">
+                                                    <thead>
+                                                        <tr>
+                                                            <td>Name</td>
+                                                            <td>Type</td>
+                                                            <td>Optional</td>
+                                                            <td>Description</td>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                            <tr>
+                                                              <td>data</td>
+                                                              <td>
+                                                                        <code><a href="../interfaces/DerivedDatasetInterface.html" target="_self" >DerivedDatasetInterface</a></code>
+                                                              </td>
+                                                              <td>
+                                                                      true
+                                                              </td>
+                                                              <td></td>
+                                                            </tr>
+                                                    </tbody>
+                                                </table>
+                                        </div>
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
             </section>
@@ -1150,64 +2053,52 @@
                         <tbody>
                             <tr>
                                 <td class="col-md-4">
-                                    <b><span class="modifier">Static</span> getModelName</b>
+                                    <a name="factory"></a>
+                                    <span class="name"><b><span class="modifier">Public</span> factory</b><a href="#factory"><span class="fa fa-link"></span></a></span>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="col-md-4">
-                                        <span class="modifier-icon method fa fa-play export">
-                                            <span class="fa fa-export"></span>
-                                        </span>
-                                    <code>getModelName()</code>
+                                        <span class="modifier-icon fa fa-reset"></span>
+                                    <code>factory(data: <a href="../interfaces/DerivedDatasetInterface.html">DerivedDatasetInterface</a>)</code>
                                 </td>
                             </tr>
             
             
-                                <tr>
-                                    <td class="col-md-4">
-                                        <div class="io-line">Defined in <a href="" data-line="82" class="link-to-prism">src/app/shared/sdk/models/DerivedDataset.ts:82</a></div>
-                                    </td>
-                                </tr>
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <div class="io-line">Defined in <a href="" data-line="91" class="link-to-prism">src/app/shared/sdk/models/DerivedDataset.ts:91</a></div>
+                                        </td>
+                                    </tr>
             
                             <tr>
                                 <td class="col-md-4">
-                                        <div class="io-description"><p>The name of the model represented by this $resource,<br/>i.e. <code>DerivedDataset</code>.</p><br/></div>
             
                                         <div class="io-description">
-                                            <b>Returns : </b>    <code>void</code>
-            
+                                                <b>Parameters :</b>
+                                                <table class="params">
+                                                    <thead>
+                                                        <tr>
+                                                            <td>Name</td>
+                                                            <td>Type</td>
+                                                            <td>Optional</td>
+                                                            <td>Description</td>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                            <tr>
+                                                              <td>data</td>
+                                                              <td>
+                                                                      <code><a href="../interfaces/DerivedDatasetInterface.html" target="_self" >DerivedDatasetInterface</a></code>
+                                                              </td>
+                                                              <td>
+                                                              </td>
+                                                              <td></td>
+                                                            </tr>
+                                                    </tbody>
+                                                </table>
                                         </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <table class="table table-sm table-bordered">
-                        <tbody>
-                            <tr>
-                                <td class="col-md-4">
-                                    <b><span class="modifier">Static</span> factory</b>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="col-md-4">
-                                        <span class="modifier-icon method fa fa-play export">
-                                            <span class="fa fa-export"></span>
-                                        </span>
-                                    <code>factory(data: <a href="../classes/DerivedDataset.html">DerivedDatasetInterface</a>)</code>
-                                </td>
-                            </tr>
-            
-            
-                                <tr>
-                                    <td class="col-md-4">
-                                        <div class="io-line">Defined in <a href="" data-line="91" class="link-to-prism">src/app/shared/sdk/models/DerivedDataset.ts:91</a></div>
-                                    </td>
-                                </tr>
-            
-                            <tr>
-                                <td class="col-md-4">
-            
-                                        <div class="io-description">
+                                        <div>
                                         </div>
                                         <div class="io-description">
                                             <b>Returns : </b>    <code><a href="../classes/DerivedDataset.html" target="_self" >DerivedDataset</a></code>
@@ -1224,37 +2115,67 @@
                         <tbody>
                             <tr>
                                 <td class="col-md-4">
-                                    <b><span class="modifier">Static</span> getModelDefinition</b>
+                                    <a name="getModelDefinition"></a>
+                                    <span class="name"><b><span class="modifier">Public</span> getModelDefinition</b><a href="#getModelDefinition"><span class="fa fa-link"></span></a></span>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="col-md-4">
-                                        <span class="modifier-icon method fa fa-play export">
-                                            <span class="fa fa-export"></span>
-                                        </span>
+                                        <span class="modifier-icon fa fa-reset"></span>
                                     <code>getModelDefinition()</code>
                                 </td>
                             </tr>
             
             
-                                <tr>
-                                    <td class="col-md-4">
-                                        <div class="io-line">Defined in <a href="" data-line="101" class="link-to-prism">src/app/shared/sdk/models/DerivedDataset.ts:101</a></div>
-                                    </td>
-                                </tr>
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <div class="io-line">Defined in <a href="" data-line="101" class="link-to-prism">src/app/shared/sdk/models/DerivedDataset.ts:101</a></div>
+                                        </td>
+                                    </tr>
             
                             <tr>
                                 <td class="col-md-4">
             
                                         <div class="io-description">
-                                        </div>
-                                        <div class="io-description">
-                                            <b>Returns : </b>    <code>void</code>
+                                            <b>Returns : </b>    <code>{ name: string; plural: string; path: string; idName: string; properties: { &quot;investigator&quot;: { nam...</code>
             
                                         </div>
-                                            <div class="io-description">
-                                                
-                                            </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                            <tr>
+                                <td class="col-md-4">
+                                    <a name="getModelName"></a>
+                                    <span class="name"><b><span class="modifier">Public</span> getModelName</b><a href="#getModelName"><span class="fa fa-link"></span></a></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                        <span class="modifier-icon fa fa-reset"></span>
+                                    <code>getModelName()</code>
+                                </td>
+                            </tr>
+            
+            
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <div class="io-line">Defined in <a href="" data-line="82" class="link-to-prism">src/app/shared/sdk/models/DerivedDataset.ts:82</a></div>
+                                        </td>
+                                    </tr>
+            
+                            <tr>
+                                <td class="col-md-4">
+                                        <div class="io-description"><p>The name of the model represented by this $resource,
+            i.e. <code>DerivedDataset</code>.</p>
+            </div>
+            
+                                        <div class="io-description">
+                                            <b>Returns : </b>    <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+            
+                                        </div>
                                 </td>
                             </tr>
                         </tbody>
@@ -1271,624 +2192,906 @@
                         <tbody>
                             <tr>
                                 <td class="col-md-4">
-                                    <b> accessGroups</b>
+                                    <a name="accessGroups"></a>
+                                    <span class="name"><b> accessGroups</b><a href="#accessGroups"><span class="fa fa-link"></span></a></span>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="col-md-4">
-                                    <code>accessGroups:     <code>any</code>
-            </bcode>
+                                    <code>accessGroups:     <code>Array&lt;any&gt;</code>
+            </code>
                                 </td>
                             </tr>
                                 <tr>
                                     <td class="col-md-4">
-                                        <div class="io-line">Defined in <a href="" data-line="69" class="link-to-prism">src/app/shared/sdk/models/DerivedDataset.ts:69</a></div>
+                                        <i>Type : </i>    <code>Array&lt;any&gt;</code>
+            
                                     </td>
                                 </tr>
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <div class="io-line">Defined in <a href="" data-line="69" class="link-to-prism">src/app/shared/sdk/models/DerivedDataset.ts:69</a></div>
+                                        </td>
+                                    </tr>
+            
+            
                         </tbody>
                     </table>
                     <table class="table table-sm table-bordered">
                         <tbody>
                             <tr>
                                 <td class="col-md-4">
-                                    <b> classification</b>
+                                    <a name="classification"></a>
+                                    <span class="name"><b> classification</b><a href="#classification"><span class="fa fa-link"></span></a></span>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="col-md-4">
-                                    <code>classification:     <code>any</code>
-            </bcode>
+                                    <code>classification:     <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+            </code>
                                 </td>
                             </tr>
                                 <tr>
                                     <td class="col-md-4">
-                                        <div class="io-line">Defined in <a href="" data-line="63" class="link-to-prism">src/app/shared/sdk/models/DerivedDataset.ts:63</a></div>
+                                        <i>Type : </i>    <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+            
                                     </td>
                                 </tr>
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <div class="io-line">Defined in <a href="" data-line="63" class="link-to-prism">src/app/shared/sdk/models/DerivedDataset.ts:63</a></div>
+                                        </td>
+                                    </tr>
+            
+            
                         </tbody>
                     </table>
                     <table class="table table-sm table-bordered">
                         <tbody>
                             <tr>
                                 <td class="col-md-4">
-                                    <b> contactEmail</b>
+                                    <a name="contactEmail"></a>
+                                    <span class="name"><b> contactEmail</b><a href="#contactEmail"><span class="fa fa-link"></span></a></span>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="col-md-4">
-                                    <code>contactEmail:     <code>any</code>
-            </bcode>
+                                    <code>contactEmail:     <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+            </code>
                                 </td>
                             </tr>
                                 <tr>
                                     <td class="col-md-4">
-                                        <div class="io-line">Defined in <a href="" data-line="53" class="link-to-prism">src/app/shared/sdk/models/DerivedDataset.ts:53</a></div>
+                                        <i>Type : </i>    <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+            
                                     </td>
                                 </tr>
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <div class="io-line">Defined in <a href="" data-line="53" class="link-to-prism">src/app/shared/sdk/models/DerivedDataset.ts:53</a></div>
+                                        </td>
+                                    </tr>
+            
+            
                         </tbody>
                     </table>
                     <table class="table table-sm table-bordered">
                         <tbody>
                             <tr>
                                 <td class="col-md-4">
-                                    <b> createdAt</b>
+                                    <a name="createdAt"></a>
+                                    <span class="name"><b> createdAt</b><a href="#createdAt"><span class="fa fa-link"></span></a></span>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="col-md-4">
-                                    <code>createdAt:     <code>any</code>
-            </bcode>
+                                    <code>createdAt:     <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date" target="_blank" >Date</a></code>
+            </code>
                                 </td>
                             </tr>
                                 <tr>
                                     <td class="col-md-4">
-                                        <div class="io-line">Defined in <a href="" data-line="70" class="link-to-prism">src/app/shared/sdk/models/DerivedDataset.ts:70</a></div>
+                                        <i>Type : </i>    <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date" target="_blank" >Date</a></code>
+            
                                     </td>
                                 </tr>
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <div class="io-line">Defined in <a href="" data-line="70" class="link-to-prism">src/app/shared/sdk/models/DerivedDataset.ts:70</a></div>
+                                        </td>
+                                    </tr>
+            
+            
                         </tbody>
                     </table>
                     <table class="table table-sm table-bordered">
                         <tbody>
                             <tr>
                                 <td class="col-md-4">
-                                    <b> creationTime</b>
+                                    <a name="creationTime"></a>
+                                    <span class="name"><b> creationTime</b><a href="#creationTime"><span class="fa fa-link"></span></a></span>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="col-md-4">
-                                    <code>creationTime:     <code>any</code>
-            </bcode>
+                                    <code>creationTime:     <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date" target="_blank" >Date</a></code>
+            </code>
                                 </td>
                             </tr>
                                 <tr>
                                     <td class="col-md-4">
-                                        <div class="io-line">Defined in <a href="" data-line="57" class="link-to-prism">src/app/shared/sdk/models/DerivedDataset.ts:57</a></div>
+                                        <i>Type : </i>    <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date" target="_blank" >Date</a></code>
+            
                                     </td>
                                 </tr>
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <div class="io-line">Defined in <a href="" data-line="57" class="link-to-prism">src/app/shared/sdk/models/DerivedDataset.ts:57</a></div>
+                                        </td>
+                                    </tr>
+            
+            
                         </tbody>
                     </table>
                     <table class="table table-sm table-bordered">
                         <tbody>
                             <tr>
                                 <td class="col-md-4">
-                                    <b> datablocks</b>
+                                    <a name="datablocks"></a>
+                                    <span class="name"><b> datablocks</b><a href="#datablocks"><span class="fa fa-link"></span></a></span>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="col-md-4">
                                     <code>datablocks:     <code><a href="../classes/Datablock.html" target="_self" >Datablock[]</a></code>
-            </bcode>
+            </code>
                                 </td>
                             </tr>
                                 <tr>
                                     <td class="col-md-4">
-                                        <div class="io-line">Defined in <a href="" data-line="73" class="link-to-prism">src/app/shared/sdk/models/DerivedDataset.ts:73</a></div>
+                                        <i>Type : </i>    <code><a href="../classes/Datablock.html" target="_self" >Datablock[]</a></code>
+            
                                     </td>
                                 </tr>
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <div class="io-line">Defined in <a href="" data-line="73" class="link-to-prism">src/app/shared/sdk/models/DerivedDataset.ts:73</a></div>
+                                        </td>
+                                    </tr>
+            
+            
                         </tbody>
                     </table>
                     <table class="table table-sm table-bordered">
                         <tbody>
                             <tr>
                                 <td class="col-md-4">
-                                    <b> datasetlifecycle</b>
+                                    <a name="datasetlifecycle"></a>
+                                    <span class="name"><b> datasetlifecycle</b><a href="#datasetlifecycle"><span class="fa fa-link"></span></a></span>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="col-md-4">
                                     <code>datasetlifecycle:     <code><a href="../classes/DatasetLifecycle.html" target="_self" >DatasetLifecycle</a></code>
-            </bcode>
+            </code>
                                 </td>
                             </tr>
                                 <tr>
                                     <td class="col-md-4">
-                                        <div class="io-line">Defined in <a href="" data-line="72" class="link-to-prism">src/app/shared/sdk/models/DerivedDataset.ts:72</a></div>
+                                        <i>Type : </i>    <code><a href="../classes/DatasetLifecycle.html" target="_self" >DatasetLifecycle</a></code>
+            
                                     </td>
                                 </tr>
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <div class="io-line">Defined in <a href="" data-line="72" class="link-to-prism">src/app/shared/sdk/models/DerivedDataset.ts:72</a></div>
+                                        </td>
+                                    </tr>
+            
+            
                         </tbody>
                     </table>
                     <table class="table table-sm table-bordered">
                         <tbody>
                             <tr>
                                 <td class="col-md-4">
-                                    <b> description</b>
+                                    <a name="description"></a>
+                                    <span class="name"><b> description</b><a href="#description"><span class="fa fa-link"></span></a></span>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="col-md-4">
-                                    <code>description:     <code>any</code>
-            </bcode>
+                                    <code>description:     <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+            </code>
                                 </td>
                             </tr>
                                 <tr>
                                     <td class="col-md-4">
-                                        <div class="io-line">Defined in <a href="" data-line="61" class="link-to-prism">src/app/shared/sdk/models/DerivedDataset.ts:61</a></div>
+                                        <i>Type : </i>    <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+            
                                     </td>
                                 </tr>
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <div class="io-line">Defined in <a href="" data-line="61" class="link-to-prism">src/app/shared/sdk/models/DerivedDataset.ts:61</a></div>
+                                        </td>
+                                    </tr>
+            
+            
                         </tbody>
                     </table>
                     <table class="table table-sm table-bordered">
                         <tbody>
                             <tr>
                                 <td class="col-md-4">
-                                    <b> doi</b>
+                                    <a name="doi"></a>
+                                    <span class="name"><b> doi</b><a href="#doi"><span class="fa fa-link"></span></a></span>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="col-md-4">
-                                    <code>doi:     <code>any</code>
-            </bcode>
+                                    <code>doi:     <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+            </code>
                                 </td>
                             </tr>
                                 <tr>
                                     <td class="col-md-4">
-                                        <div class="io-line">Defined in <a href="" data-line="66" class="link-to-prism">src/app/shared/sdk/models/DerivedDataset.ts:66</a></div>
+                                        <i>Type : </i>    <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+            
                                     </td>
                                 </tr>
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <div class="io-line">Defined in <a href="" data-line="66" class="link-to-prism">src/app/shared/sdk/models/DerivedDataset.ts:66</a></div>
+                                        </td>
+                                    </tr>
+            
+            
                         </tbody>
                     </table>
                     <table class="table table-sm table-bordered">
                         <tbody>
                             <tr>
                                 <td class="col-md-4">
-                                    <b> inputDatasets</b>
+                                    <a name="inputDatasets"></a>
+                                    <span class="name"><b> inputDatasets</b><a href="#inputDatasets"><span class="fa fa-link"></span></a></span>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="col-md-4">
-                                    <code>inputDatasets:     <code>any</code>
-            </bcode>
+                                    <code>inputDatasets:     <code>Array&lt;any&gt;</code>
+            </code>
                                 </td>
                             </tr>
                                 <tr>
                                     <td class="col-md-4">
-                                        <div class="io-line">Defined in <a href="" data-line="45" class="link-to-prism">src/app/shared/sdk/models/DerivedDataset.ts:45</a></div>
+                                        <i>Type : </i>    <code>Array&lt;any&gt;</code>
+            
                                     </td>
                                 </tr>
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <div class="io-line">Defined in <a href="" data-line="45" class="link-to-prism">src/app/shared/sdk/models/DerivedDataset.ts:45</a></div>
+                                        </td>
+                                    </tr>
+            
+            
                         </tbody>
                     </table>
                     <table class="table table-sm table-bordered">
                         <tbody>
                             <tr>
                                 <td class="col-md-4">
-                                    <b> investigator</b>
+                                    <a name="investigator"></a>
+                                    <span class="name"><b> investigator</b><a href="#investigator"><span class="fa fa-link"></span></a></span>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="col-md-4">
-                                    <code>investigator:     <code>any</code>
-            </bcode>
+                                    <code>investigator:     <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+            </code>
                                 </td>
                             </tr>
                                 <tr>
                                     <td class="col-md-4">
-                                        <div class="io-line">Defined in <a href="" data-line="44" class="link-to-prism">src/app/shared/sdk/models/DerivedDataset.ts:44</a></div>
+                                        <i>Type : </i>    <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+            
                                     </td>
                                 </tr>
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <div class="io-line">Defined in <a href="" data-line="44" class="link-to-prism">src/app/shared/sdk/models/DerivedDataset.ts:44</a></div>
+                                        </td>
+                                    </tr>
+            
+            
                         </tbody>
                     </table>
                     <table class="table table-sm table-bordered">
                         <tbody>
                             <tr>
                                 <td class="col-md-4">
-                                    <b> isPublished</b>
+                                    <a name="isPublished"></a>
+                                    <span class="name"><b> isPublished</b><a href="#isPublished"><span class="fa fa-link"></span></a></span>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="col-md-4">
-                                    <code>isPublished:     <code>any</code>
-            </bcode>
+                                    <code>isPublished:     <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+            </code>
                                 </td>
                             </tr>
                                 <tr>
                                     <td class="col-md-4">
-                                        <div class="io-line">Defined in <a href="" data-line="67" class="link-to-prism">src/app/shared/sdk/models/DerivedDataset.ts:67</a></div>
+                                        <i>Type : </i>    <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+            
                                     </td>
                                 </tr>
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <div class="io-line">Defined in <a href="" data-line="67" class="link-to-prism">src/app/shared/sdk/models/DerivedDataset.ts:67</a></div>
+                                        </td>
+                                    </tr>
+            
+            
                         </tbody>
                     </table>
                     <table class="table table-sm table-bordered">
                         <tbody>
                             <tr>
                                 <td class="col-md-4">
-                                    <b> jobLogData</b>
+                                    <a name="jobLogData"></a>
+                                    <span class="name"><b> jobLogData</b><a href="#jobLogData"><span class="fa fa-link"></span></a></span>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="col-md-4">
-                                    <code>jobLogData:     <code>any</code>
-            </bcode>
+                                    <code>jobLogData:     <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+            </code>
                                 </td>
                             </tr>
                                 <tr>
                                     <td class="col-md-4">
-                                        <div class="io-line">Defined in <a href="" data-line="48" class="link-to-prism">src/app/shared/sdk/models/DerivedDataset.ts:48</a></div>
+                                        <i>Type : </i>    <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+            
                                     </td>
                                 </tr>
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <div class="io-line">Defined in <a href="" data-line="48" class="link-to-prism">src/app/shared/sdk/models/DerivedDataset.ts:48</a></div>
+                                        </td>
+                                    </tr>
+            
+            
                         </tbody>
                     </table>
                     <table class="table table-sm table-bordered">
                         <tbody>
                             <tr>
                                 <td class="col-md-4">
-                                    <b> jobParameters</b>
+                                    <a name="jobParameters"></a>
+                                    <span class="name"><b> jobParameters</b><a href="#jobParameters"><span class="fa fa-link"></span></a></span>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="col-md-4">
-                                    <code>jobParameters:     <code>any</code>
-            </bcode>
+                                    <code>jobParameters:     <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+            </code>
                                 </td>
                             </tr>
                                 <tr>
                                     <td class="col-md-4">
-                                        <div class="io-line">Defined in <a href="" data-line="47" class="link-to-prism">src/app/shared/sdk/models/DerivedDataset.ts:47</a></div>
+                                        <i>Type : </i>    <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+            
                                     </td>
                                 </tr>
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <div class="io-line">Defined in <a href="" data-line="47" class="link-to-prism">src/app/shared/sdk/models/DerivedDataset.ts:47</a></div>
+                                        </td>
+                                    </tr>
+            
+            
                         </tbody>
                     </table>
                     <table class="table table-sm table-bordered">
                         <tbody>
                             <tr>
                                 <td class="col-md-4">
-                                    <b> keywords</b>
+                                    <a name="keywords"></a>
+                                    <span class="name"><b> keywords</b><a href="#keywords"><span class="fa fa-link"></span></a></span>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="col-md-4">
-                                    <code>keywords:     <code>any</code>
-            </bcode>
+                                    <code>keywords:     <code>Array&lt;any&gt;</code>
+            </code>
                                 </td>
                             </tr>
                                 <tr>
                                     <td class="col-md-4">
-                                        <div class="io-line">Defined in <a href="" data-line="60" class="link-to-prism">src/app/shared/sdk/models/DerivedDataset.ts:60</a></div>
+                                        <i>Type : </i>    <code>Array&lt;any&gt;</code>
+            
                                     </td>
                                 </tr>
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <div class="io-line">Defined in <a href="" data-line="60" class="link-to-prism">src/app/shared/sdk/models/DerivedDataset.ts:60</a></div>
+                                        </td>
+                                    </tr>
+            
+            
                         </tbody>
                     </table>
                     <table class="table table-sm table-bordered">
                         <tbody>
                             <tr>
                                 <td class="col-md-4">
-                                    <b> license</b>
+                                    <a name="license"></a>
+                                    <span class="name"><b> license</b><a href="#license"><span class="fa fa-link"></span></a></span>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="col-md-4">
-                                    <code>license:     <code>any</code>
-            </bcode>
+                                    <code>license:     <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+            </code>
                                 </td>
                             </tr>
                                 <tr>
                                     <td class="col-md-4">
-                                        <div class="io-line">Defined in <a href="" data-line="64" class="link-to-prism">src/app/shared/sdk/models/DerivedDataset.ts:64</a></div>
+                                        <i>Type : </i>    <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+            
                                     </td>
                                 </tr>
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <div class="io-line">Defined in <a href="" data-line="64" class="link-to-prism">src/app/shared/sdk/models/DerivedDataset.ts:64</a></div>
+                                        </td>
+                                    </tr>
+            
+            
                         </tbody>
                     </table>
                     <table class="table table-sm table-bordered">
                         <tbody>
                             <tr>
                                 <td class="col-md-4">
-                                    <b> orcidOfOwner</b>
+                                    <a name="orcidOfOwner"></a>
+                                    <span class="name"><b> orcidOfOwner</b><a href="#orcidOfOwner"><span class="fa fa-link"></span></a></span>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="col-md-4">
-                                    <code>orcidOfOwner:     <code>any</code>
-            </bcode>
+                                    <code>orcidOfOwner:     <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+            </code>
                                 </td>
                             </tr>
                                 <tr>
                                     <td class="col-md-4">
-                                        <div class="io-line">Defined in <a href="" data-line="52" class="link-to-prism">src/app/shared/sdk/models/DerivedDataset.ts:52</a></div>
+                                        <i>Type : </i>    <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+            
                                     </td>
                                 </tr>
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <div class="io-line">Defined in <a href="" data-line="52" class="link-to-prism">src/app/shared/sdk/models/DerivedDataset.ts:52</a></div>
+                                        </td>
+                                    </tr>
+            
+            
                         </tbody>
                     </table>
                     <table class="table table-sm table-bordered">
                         <tbody>
                             <tr>
                                 <td class="col-md-4">
-                                    <b> origdatablocks</b>
+                                    <a name="origdatablocks"></a>
+                                    <span class="name"><b> origdatablocks</b><a href="#origdatablocks"><span class="fa fa-link"></span></a></span>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="col-md-4">
                                     <code>origdatablocks:     <code><a href="../classes/OrigDatablock.html" target="_self" >OrigDatablock[]</a></code>
-            </bcode>
+            </code>
                                 </td>
                             </tr>
                                 <tr>
                                     <td class="col-md-4">
-                                        <div class="io-line">Defined in <a href="" data-line="74" class="link-to-prism">src/app/shared/sdk/models/DerivedDataset.ts:74</a></div>
+                                        <i>Type : </i>    <code><a href="../classes/OrigDatablock.html" target="_self" >OrigDatablock[]</a></code>
+            
                                     </td>
                                 </tr>
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <div class="io-line">Defined in <a href="" data-line="74" class="link-to-prism">src/app/shared/sdk/models/DerivedDataset.ts:74</a></div>
+                                        </td>
+                                    </tr>
+            
+            
                         </tbody>
                     </table>
                     <table class="table table-sm table-bordered">
                         <tbody>
                             <tr>
                                 <td class="col-md-4">
-                                    <b> owner</b>
+                                    <a name="owner"></a>
+                                    <span class="name"><b> owner</b><a href="#owner"><span class="fa fa-link"></span></a></span>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="col-md-4">
-                                    <code>owner:     <code>any</code>
-            </bcode>
+                                    <code>owner:     <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+            </code>
                                 </td>
                             </tr>
                                 <tr>
                                     <td class="col-md-4">
-                                        <div class="io-line">Defined in <a href="" data-line="50" class="link-to-prism">src/app/shared/sdk/models/DerivedDataset.ts:50</a></div>
+                                        <i>Type : </i>    <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+            
                                     </td>
                                 </tr>
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <div class="io-line">Defined in <a href="" data-line="50" class="link-to-prism">src/app/shared/sdk/models/DerivedDataset.ts:50</a></div>
+                                        </td>
+                                    </tr>
+            
+            
                         </tbody>
                     </table>
                     <table class="table table-sm table-bordered">
                         <tbody>
                             <tr>
                                 <td class="col-md-4">
-                                    <b> ownerEmail</b>
+                                    <a name="ownerEmail"></a>
+                                    <span class="name"><b> ownerEmail</b><a href="#ownerEmail"><span class="fa fa-link"></span></a></span>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="col-md-4">
-                                    <code>ownerEmail:     <code>any</code>
-            </bcode>
+                                    <code>ownerEmail:     <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+            </code>
                                 </td>
                             </tr>
                                 <tr>
                                     <td class="col-md-4">
-                                        <div class="io-line">Defined in <a href="" data-line="51" class="link-to-prism">src/app/shared/sdk/models/DerivedDataset.ts:51</a></div>
+                                        <i>Type : </i>    <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+            
                                     </td>
                                 </tr>
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <div class="io-line">Defined in <a href="" data-line="51" class="link-to-prism">src/app/shared/sdk/models/DerivedDataset.ts:51</a></div>
+                                        </td>
+                                    </tr>
+            
+            
                         </tbody>
                     </table>
                     <table class="table table-sm table-bordered">
                         <tbody>
                             <tr>
                                 <td class="col-md-4">
-                                    <b> ownerGroup</b>
+                                    <a name="ownerGroup"></a>
+                                    <span class="name"><b> ownerGroup</b><a href="#ownerGroup"><span class="fa fa-link"></span></a></span>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="col-md-4">
-                                    <code>ownerGroup:     <code>any</code>
-            </bcode>
+                                    <code>ownerGroup:     <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+            </code>
                                 </td>
                             </tr>
                                 <tr>
                                     <td class="col-md-4">
-                                        <div class="io-line">Defined in <a href="" data-line="68" class="link-to-prism">src/app/shared/sdk/models/DerivedDataset.ts:68</a></div>
+                                        <i>Type : </i>    <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+            
                                     </td>
                                 </tr>
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <div class="io-line">Defined in <a href="" data-line="68" class="link-to-prism">src/app/shared/sdk/models/DerivedDataset.ts:68</a></div>
+                                        </td>
+                                    </tr>
+            
+            
                         </tbody>
                     </table>
                     <table class="table table-sm table-bordered">
                         <tbody>
                             <tr>
                                 <td class="col-md-4">
-                                    <b> packedSize</b>
+                                    <a name="packedSize"></a>
+                                    <span class="name"><b> packedSize</b><a href="#packedSize"><span class="fa fa-link"></span></a></span>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="col-md-4">
-                                    <code>packedSize:     <code>any</code>
-            </bcode>
+                                    <code>packedSize:     <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+            </code>
                                 </td>
                             </tr>
                                 <tr>
                                     <td class="col-md-4">
-                                        <div class="io-line">Defined in <a href="" data-line="56" class="link-to-prism">src/app/shared/sdk/models/DerivedDataset.ts:56</a></div>
+                                        <i>Type : </i>    <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+            
                                     </td>
                                 </tr>
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <div class="io-line">Defined in <a href="" data-line="56" class="link-to-prism">src/app/shared/sdk/models/DerivedDataset.ts:56</a></div>
+                                        </td>
+                                    </tr>
+            
+            
                         </tbody>
                     </table>
                     <table class="table table-sm table-bordered">
                         <tbody>
                             <tr>
                                 <td class="col-md-4">
-                                    <b> pid</b>
+                                    <a name="pid"></a>
+                                    <span class="name"><b> pid</b><a href="#pid"><span class="fa fa-link"></span></a></span>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="col-md-4">
-                                    <code>pid:     <code>any</code>
-            </bcode>
+                                    <code>pid:     <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+            </code>
                                 </td>
                             </tr>
                                 <tr>
                                     <td class="col-md-4">
-                                        <div class="io-line">Defined in <a href="" data-line="49" class="link-to-prism">src/app/shared/sdk/models/DerivedDataset.ts:49</a></div>
+                                        <i>Type : </i>    <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+            
                                     </td>
                                 </tr>
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <div class="io-line">Defined in <a href="" data-line="49" class="link-to-prism">src/app/shared/sdk/models/DerivedDataset.ts:49</a></div>
+                                        </td>
+                                    </tr>
+            
+            
                         </tbody>
                     </table>
                     <table class="table table-sm table-bordered">
                         <tbody>
                             <tr>
                                 <td class="col-md-4">
-                                    <b> size</b>
+                                    <a name="size"></a>
+                                    <span class="name"><b> size</b><a href="#size"><span class="fa fa-link"></span></a></span>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="col-md-4">
-                                    <code>size:     <code>any</code>
-            </bcode>
+                                    <code>size:     <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+            </code>
                                 </td>
                             </tr>
                                 <tr>
                                     <td class="col-md-4">
-                                        <div class="io-line">Defined in <a href="" data-line="55" class="link-to-prism">src/app/shared/sdk/models/DerivedDataset.ts:55</a></div>
+                                        <i>Type : </i>    <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+            
                                     </td>
                                 </tr>
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <div class="io-line">Defined in <a href="" data-line="55" class="link-to-prism">src/app/shared/sdk/models/DerivedDataset.ts:55</a></div>
+                                        </td>
+                                    </tr>
+            
+            
                         </tbody>
                     </table>
                     <table class="table table-sm table-bordered">
                         <tbody>
                             <tr>
                                 <td class="col-md-4">
-                                    <b> sourceFolder</b>
+                                    <a name="sourceFolder"></a>
+                                    <span class="name"><b> sourceFolder</b><a href="#sourceFolder"><span class="fa fa-link"></span></a></span>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="col-md-4">
-                                    <code>sourceFolder:     <code>any</code>
-            </bcode>
+                                    <code>sourceFolder:     <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+            </code>
                                 </td>
                             </tr>
                                 <tr>
                                     <td class="col-md-4">
-                                        <div class="io-line">Defined in <a href="" data-line="54" class="link-to-prism">src/app/shared/sdk/models/DerivedDataset.ts:54</a></div>
+                                        <i>Type : </i>    <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+            
                                     </td>
                                 </tr>
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <div class="io-line">Defined in <a href="" data-line="54" class="link-to-prism">src/app/shared/sdk/models/DerivedDataset.ts:54</a></div>
+                                        </td>
+                                    </tr>
+            
+            
                         </tbody>
                     </table>
                     <table class="table table-sm table-bordered">
                         <tbody>
                             <tr>
                                 <td class="col-md-4">
-                                    <b> type</b>
+                                    <a name="type"></a>
+                                    <span class="name"><b> type</b><a href="#type"><span class="fa fa-link"></span></a></span>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="col-md-4">
-                                    <code>type:     <code>any</code>
-            </bcode>
+                                    <code>type:     <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+            </code>
                                 </td>
                             </tr>
                                 <tr>
                                     <td class="col-md-4">
-                                        <div class="io-line">Defined in <a href="" data-line="58" class="link-to-prism">src/app/shared/sdk/models/DerivedDataset.ts:58</a></div>
+                                        <i>Type : </i>    <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+            
                                     </td>
                                 </tr>
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <div class="io-line">Defined in <a href="" data-line="58" class="link-to-prism">src/app/shared/sdk/models/DerivedDataset.ts:58</a></div>
+                                        </td>
+                                    </tr>
+            
+            
                         </tbody>
                     </table>
                     <table class="table table-sm table-bordered">
                         <tbody>
                             <tr>
                                 <td class="col-md-4">
-                                    <b> updatedAt</b>
+                                    <a name="updatedAt"></a>
+                                    <span class="name"><b> updatedAt</b><a href="#updatedAt"><span class="fa fa-link"></span></a></span>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="col-md-4">
-                                    <code>updatedAt:     <code>any</code>
-            </bcode>
+                                    <code>updatedAt:     <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date" target="_blank" >Date</a></code>
+            </code>
                                 </td>
                             </tr>
                                 <tr>
                                     <td class="col-md-4">
-                                        <div class="io-line">Defined in <a href="" data-line="71" class="link-to-prism">src/app/shared/sdk/models/DerivedDataset.ts:71</a></div>
+                                        <i>Type : </i>    <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date" target="_blank" >Date</a></code>
+            
                                     </td>
                                 </tr>
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <div class="io-line">Defined in <a href="" data-line="71" class="link-to-prism">src/app/shared/sdk/models/DerivedDataset.ts:71</a></div>
+                                        </td>
+                                    </tr>
+            
+            
                         </tbody>
                     </table>
                     <table class="table table-sm table-bordered">
                         <tbody>
                             <tr>
                                 <td class="col-md-4">
-                                    <b> usedSoftware</b>
+                                    <a name="usedSoftware"></a>
+                                    <span class="name"><b> usedSoftware</b><a href="#usedSoftware"><span class="fa fa-link"></span></a></span>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="col-md-4">
-                                    <code>usedSoftware:     <code>any</code>
-            </bcode>
+                                    <code>usedSoftware:     <code>Array&lt;any&gt;</code>
+            </code>
                                 </td>
                             </tr>
                                 <tr>
                                     <td class="col-md-4">
-                                        <div class="io-line">Defined in <a href="" data-line="46" class="link-to-prism">src/app/shared/sdk/models/DerivedDataset.ts:46</a></div>
+                                        <i>Type : </i>    <code>Array&lt;any&gt;</code>
+            
                                     </td>
                                 </tr>
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <div class="io-line">Defined in <a href="" data-line="46" class="link-to-prism">src/app/shared/sdk/models/DerivedDataset.ts:46</a></div>
+                                        </td>
+                                    </tr>
+            
+            
                         </tbody>
                     </table>
                     <table class="table table-sm table-bordered">
                         <tbody>
                             <tr>
                                 <td class="col-md-4">
-                                    <b> userTargetLocation</b>
+                                    <a name="userTargetLocation"></a>
+                                    <span class="name"><b> userTargetLocation</b><a href="#userTargetLocation"><span class="fa fa-link"></span></a></span>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="col-md-4">
-                                    <code>userTargetLocation:     <code>any</code>
-            </bcode>
+                                    <code>userTargetLocation:     <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+            </code>
                                 </td>
                             </tr>
                                 <tr>
                                     <td class="col-md-4">
-                                        <div class="io-line">Defined in <a href="" data-line="62" class="link-to-prism">src/app/shared/sdk/models/DerivedDataset.ts:62</a></div>
+                                        <i>Type : </i>    <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+            
                                     </td>
                                 </tr>
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <div class="io-line">Defined in <a href="" data-line="62" class="link-to-prism">src/app/shared/sdk/models/DerivedDataset.ts:62</a></div>
+                                        </td>
+                                    </tr>
+            
+            
                         </tbody>
                     </table>
                     <table class="table table-sm table-bordered">
                         <tbody>
                             <tr>
                                 <td class="col-md-4">
-                                    <b> validationStatus</b>
+                                    <a name="validationStatus"></a>
+                                    <span class="name"><b> validationStatus</b><a href="#validationStatus"><span class="fa fa-link"></span></a></span>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="col-md-4">
-                                    <code>validationStatus:     <code>any</code>
-            </bcode>
+                                    <code>validationStatus:     <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+            </code>
                                 </td>
                             </tr>
                                 <tr>
                                     <td class="col-md-4">
-                                        <div class="io-line">Defined in <a href="" data-line="59" class="link-to-prism">src/app/shared/sdk/models/DerivedDataset.ts:59</a></div>
+                                        <i>Type : </i>    <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+            
                                     </td>
                                 </tr>
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <div class="io-line">Defined in <a href="" data-line="59" class="link-to-prism">src/app/shared/sdk/models/DerivedDataset.ts:59</a></div>
+                                        </td>
+                                    </tr>
+            
+            
                         </tbody>
                     </table>
                     <table class="table table-sm table-bordered">
                         <tbody>
                             <tr>
                                 <td class="col-md-4">
-                                    <b> version</b>
+                                    <a name="version"></a>
+                                    <span class="name"><b> version</b><a href="#version"><span class="fa fa-link"></span></a></span>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="col-md-4">
-                                    <code>version:     <code>any</code>
-            </bcode>
+                                    <code>version:     <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+            </code>
                                 </td>
                             </tr>
                                 <tr>
                                     <td class="col-md-4">
-                                        <div class="io-line">Defined in <a href="" data-line="65" class="link-to-prism">src/app/shared/sdk/models/DerivedDataset.ts:65</a></div>
+                                        <i>Type : </i>    <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+            
                                     </td>
                                 </tr>
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <div class="io-line">Defined in <a href="" data-line="65" class="link-to-prism">src/app/shared/sdk/models/DerivedDataset.ts:65</a></div>
+                                        </td>
+                                    </tr>
+            
+            
                         </tbody>
                     </table>
             </section>
+
     </div>
+
+
     <div class="tab-pane fade tab-source-code" id="source">
         <pre class="line-numbers"><code class="language-typescript">import {
   DatasetLifecycle,
@@ -1898,68 +3101,68 @@
 
 declare var Object: any;
 export interface DerivedDatasetInterface {
-  &quot;investigator&quot;: any;
-  &quot;inputDatasets&quot;: any;
-  &quot;usedSoftware&quot;: any;
+  &quot;investigator&quot;: string;
+  &quot;inputDatasets&quot;: Array&lt;any&gt;;
+  &quot;usedSoftware&quot;: Array&lt;any&gt;;
   &quot;jobParameters&quot;?: any;
-  &quot;jobLogData&quot;?: any;
-  &quot;pid&quot;?: any;
-  &quot;owner&quot;: any;
-  &quot;ownerEmail&quot;?: any;
-  &quot;orcidOfOwner&quot;?: any;
-  &quot;contactEmail&quot;: any;
-  &quot;sourceFolder&quot;: any;
-  &quot;size&quot;?: any;
-  &quot;packedSize&quot;?: any;
-  &quot;creationTime&quot;: any;
-  &quot;type&quot;: any;
-  &quot;validationStatus&quot;?: any;
-  &quot;keywords&quot;?: any;
-  &quot;description&quot;?: any;
-  &quot;userTargetLocation&quot;?: any;
-  &quot;classification&quot;?: any;
-  &quot;license&quot;?: any;
-  &quot;version&quot;?: any;
-  &quot;doi&quot;?: any;
-  &quot;isPublished&quot;?: any;
-  &quot;ownerGroup&quot;: any;
-  &quot;accessGroups&quot;?: any;
-  &quot;createdAt&quot;?: any;
-  &quot;updatedAt&quot;?: any;
+  &quot;jobLogData&quot;?: string;
+  &quot;pid&quot;?: string;
+  &quot;owner&quot;: string;
+  &quot;ownerEmail&quot;?: string;
+  &quot;orcidOfOwner&quot;?: string;
+  &quot;contactEmail&quot;: string;
+  &quot;sourceFolder&quot;: string;
+  &quot;size&quot;?: number;
+  &quot;packedSize&quot;?: number;
+  &quot;creationTime&quot;: Date;
+  &quot;type&quot;: string;
+  &quot;validationStatus&quot;?: string;
+  &quot;keywords&quot;?: Array&lt;any&gt;;
+  &quot;description&quot;?: string;
+  &quot;userTargetLocation&quot;?: string;
+  &quot;classification&quot;?: string;
+  &quot;license&quot;?: string;
+  &quot;version&quot;?: string;
+  &quot;doi&quot;?: string;
+  &quot;isPublished&quot;?: boolean;
+  &quot;ownerGroup&quot;: string;
+  &quot;accessGroups&quot;?: Array&lt;any&gt;;
+  &quot;createdAt&quot;?: Date;
+  &quot;updatedAt&quot;?: Date;
   datasetlifecycle?: DatasetLifecycle;
   datablocks?: Datablock[];
   origdatablocks?: OrigDatablock[];
 }
 
 export class DerivedDataset implements DerivedDatasetInterface {
-  &quot;investigator&quot;: any;
-  &quot;inputDatasets&quot;: any;
-  &quot;usedSoftware&quot;: any;
+  &quot;investigator&quot;: string;
+  &quot;inputDatasets&quot;: Array&lt;any&gt;;
+  &quot;usedSoftware&quot;: Array&lt;any&gt;;
   &quot;jobParameters&quot;: any;
-  &quot;jobLogData&quot;: any;
-  &quot;pid&quot;: any;
-  &quot;owner&quot;: any;
-  &quot;ownerEmail&quot;: any;
-  &quot;orcidOfOwner&quot;: any;
-  &quot;contactEmail&quot;: any;
-  &quot;sourceFolder&quot;: any;
-  &quot;size&quot;: any;
-  &quot;packedSize&quot;: any;
-  &quot;creationTime&quot;: any;
-  &quot;type&quot;: any;
-  &quot;validationStatus&quot;: any;
-  &quot;keywords&quot;: any;
-  &quot;description&quot;: any;
-  &quot;userTargetLocation&quot;: any;
-  &quot;classification&quot;: any;
-  &quot;license&quot;: any;
-  &quot;version&quot;: any;
-  &quot;doi&quot;: any;
-  &quot;isPublished&quot;: any;
-  &quot;ownerGroup&quot;: any;
-  &quot;accessGroups&quot;: any;
-  &quot;createdAt&quot;: any;
-  &quot;updatedAt&quot;: any;
+  &quot;jobLogData&quot;: string;
+  &quot;pid&quot;: string;
+  &quot;owner&quot;: string;
+  &quot;ownerEmail&quot;: string;
+  &quot;orcidOfOwner&quot;: string;
+  &quot;contactEmail&quot;: string;
+  &quot;sourceFolder&quot;: string;
+  &quot;size&quot;: number;
+  &quot;packedSize&quot;: number;
+  &quot;creationTime&quot;: Date;
+  &quot;type&quot;: string;
+  &quot;validationStatus&quot;: string;
+  &quot;keywords&quot;: Array&lt;any&gt;;
+  &quot;description&quot;: string;
+  &quot;userTargetLocation&quot;: string;
+  &quot;classification&quot;: string;
+  &quot;license&quot;: string;
+  &quot;version&quot;: string;
+  &quot;doi&quot;: string;
+  &quot;isPublished&quot;: boolean;
+  &quot;ownerGroup&quot;: string;
+  &quot;accessGroups&quot;: Array&lt;any&gt;;
+  &quot;createdAt&quot;: Date;
+  &quot;updatedAt&quot;: Date;
   datasetlifecycle: DatasetLifecycle;
   datablocks: Datablock[];
   origdatablocks: OrigDatablock[];
@@ -1993,18 +3196,20 @@ export class DerivedDataset implements DerivedDatasetInterface {
     return {
       name: &#x27;DerivedDataset&#x27;,
       plural: &#x27;DerivedDatasets&#x27;,
+      path: &#x27;DerivedDatasets&#x27;,
+      idName: &#x27;pid&#x27;,
       properties: {
         &quot;investigator&quot;: {
           name: &#x27;investigator&#x27;,
-          type: &#x27;any&#x27;
+          type: &#x27;string&#x27;
         },
         &quot;inputDatasets&quot;: {
           name: &#x27;inputDatasets&#x27;,
-          type: &#x27;any&#x27;
+          type: &#x27;Array&amp;lt;any&amp;gt;&#x27;
         },
         &quot;usedSoftware&quot;: {
           name: &#x27;usedSoftware&#x27;,
-          type: &#x27;any&#x27;
+          type: &#x27;Array&amp;lt;any&amp;gt;&#x27;
         },
         &quot;jobParameters&quot;: {
           name: &#x27;jobParameters&#x27;,
@@ -2012,116 +3217,125 @@ export class DerivedDataset implements DerivedDatasetInterface {
         },
         &quot;jobLogData&quot;: {
           name: &#x27;jobLogData&#x27;,
-          type: &#x27;any&#x27;
+          type: &#x27;string&#x27;
         },
         &quot;pid&quot;: {
           name: &#x27;pid&#x27;,
-          type: &#x27;any&#x27;
+          type: &#x27;string&#x27;
         },
         &quot;owner&quot;: {
           name: &#x27;owner&#x27;,
-          type: &#x27;any&#x27;
+          type: &#x27;string&#x27;
         },
         &quot;ownerEmail&quot;: {
           name: &#x27;ownerEmail&#x27;,
-          type: &#x27;any&#x27;
+          type: &#x27;string&#x27;
         },
         &quot;orcidOfOwner&quot;: {
           name: &#x27;orcidOfOwner&#x27;,
-          type: &#x27;any&#x27;
+          type: &#x27;string&#x27;
         },
         &quot;contactEmail&quot;: {
           name: &#x27;contactEmail&#x27;,
-          type: &#x27;any&#x27;
+          type: &#x27;string&#x27;
         },
         &quot;sourceFolder&quot;: {
           name: &#x27;sourceFolder&#x27;,
-          type: &#x27;any&#x27;
+          type: &#x27;string&#x27;
         },
         &quot;size&quot;: {
           name: &#x27;size&#x27;,
-          type: &#x27;any&#x27;
+          type: &#x27;number&#x27;
         },
         &quot;packedSize&quot;: {
           name: &#x27;packedSize&#x27;,
-          type: &#x27;any&#x27;
+          type: &#x27;number&#x27;
         },
         &quot;creationTime&quot;: {
           name: &#x27;creationTime&#x27;,
-          type: &#x27;any&#x27;
+          type: &#x27;Date&#x27;
         },
         &quot;type&quot;: {
           name: &#x27;type&#x27;,
-          type: &#x27;any&#x27;
+          type: &#x27;string&#x27;
         },
         &quot;validationStatus&quot;: {
           name: &#x27;validationStatus&#x27;,
-          type: &#x27;any&#x27;
+          type: &#x27;string&#x27;
         },
         &quot;keywords&quot;: {
           name: &#x27;keywords&#x27;,
-          type: &#x27;any&#x27;
+          type: &#x27;Array&amp;lt;any&amp;gt;&#x27;
         },
         &quot;description&quot;: {
           name: &#x27;description&#x27;,
-          type: &#x27;any&#x27;
+          type: &#x27;string&#x27;
         },
         &quot;userTargetLocation&quot;: {
           name: &#x27;userTargetLocation&#x27;,
-          type: &#x27;any&#x27;
+          type: &#x27;string&#x27;
         },
         &quot;classification&quot;: {
           name: &#x27;classification&#x27;,
-          type: &#x27;any&#x27;
+          type: &#x27;string&#x27;
         },
         &quot;license&quot;: {
           name: &#x27;license&#x27;,
-          type: &#x27;any&#x27;
+          type: &#x27;string&#x27;
         },
         &quot;version&quot;: {
           name: &#x27;version&#x27;,
-          type: &#x27;any&#x27;
+          type: &#x27;string&#x27;
         },
         &quot;doi&quot;: {
           name: &#x27;doi&#x27;,
-          type: &#x27;any&#x27;
+          type: &#x27;string&#x27;
         },
         &quot;isPublished&quot;: {
           name: &#x27;isPublished&#x27;,
-          type: &#x27;any&#x27;
+          type: &#x27;boolean&#x27;
         },
         &quot;ownerGroup&quot;: {
           name: &#x27;ownerGroup&#x27;,
-          type: &#x27;any&#x27;
+          type: &#x27;string&#x27;
         },
         &quot;accessGroups&quot;: {
           name: &#x27;accessGroups&#x27;,
-          type: &#x27;any&#x27;
+          type: &#x27;Array&amp;lt;any&amp;gt;&#x27;
         },
         &quot;createdAt&quot;: {
           name: &#x27;createdAt&#x27;,
-          type: &#x27;any&#x27;
+          type: &#x27;Date&#x27;
         },
         &quot;updatedAt&quot;: {
           name: &#x27;updatedAt&#x27;,
-          type: &#x27;any&#x27;
+          type: &#x27;Date&#x27;
         },
       },
       relations: {
         datasetlifecycle: {
           name: &#x27;datasetlifecycle&#x27;,
           type: &#x27;DatasetLifecycle&#x27;,
-          model: &#x27;DatasetLifecycle&#x27;
+          model: &#x27;DatasetLifecycle&#x27;,
+          relationType: &#x27;hasOne&#x27;,
+                  keyFrom: &#x27;pid&#x27;,
+          keyTo: &#x27;derivedDatasetId&#x27;
         },
         datablocks: {
           name: &#x27;datablocks&#x27;,
           type: &#x27;Datablock[]&#x27;,
-          model: &#x27;Datablock&#x27;
+          model: &#x27;Datablock&#x27;,
+          relationType: &#x27;hasMany&#x27;,
+                  keyFrom: &#x27;pid&#x27;,
+          keyTo: &#x27;derivedDatasetId&#x27;
         },
         origdatablocks: {
           name: &#x27;origdatablocks&#x27;,
           type: &#x27;OrigDatablock[]&#x27;,
-          model: &#x27;OrigDatablock&#x27;
+          model: &#x27;OrigDatablock&#x27;,
+          relationType: &#x27;hasMany&#x27;,
+                  keyFrom: &#x27;pid&#x27;,
+          keyTo: &#x27;derivedDatasetId&#x27;
         },
       }
     }

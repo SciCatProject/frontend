@@ -22,51 +22,77 @@
                 <input type="text" placeholder="Type to search">
             </div>
             <nav>
-
+            
                 <ul class="list">
-
+            
                     <li class="title">
                         <a href="../index.html">catanie documentation</a>
                     </li>
-
+            
                     <li class="divider"></li>
-
-
+            
+            
                     <li class="chapter">
                         <a data-type="chapter-link" href="../index.html"><span class="fa fa-home"></span>Getting started</a>
                         <ul class="links">
                                 <li class="link">
-                                    <a href="../index.html" ><span class="fa fa-file-text-o"></span>README</a>
-                                </li>
-                                <li class="link">
-                                    <a
-
-                                         href="../overview.html"
-                                         href="../overview.html"
+                                    <a 
+                                        
+                                         href="../overview.html" 
+                                         href="../overview.html" 
                                         >
                                         <span class="fa fa-th"></span>Overview
                                     </a>
                                 </li>
+                                <li class="link">
+                                  <a href="../index.html" ><span class="fa fa-file-text-o"></span>README</a>
+                                </li>
+                                <li class="link">
+                                        <a href="../license.html"
+                                    >
+                                        <span class="fa fa-file-text-o"></span>LICENSE
+                                    </a>
+                                </li>
                         </ul>
                     </li>
-
-
+            
+            
                     <li class="chapter">
                         <a data-type="chapter-link" href="../modules.html" >
-                            <span class="fa fa-archive"></span>
-                            <span>Modules</span>
-                            <span class="menu-toggler fa fa-angle-up" data-toggle="collapse"
+                            <div class="menu-toggler linked" data-toggle="collapse"
                                     data-target="#xs-modules-links"
-                            ></span>
+                            >
+                                <span class="fa fa-archive"></span>
+                                <span class="link-name">Modules</span>
+                                <span class="fa fa-angle-down"></span>
+                            </div>
                         </a>
-                        <ul class="links collapse in"
+                        <ul class="links collapse "
                                 id="xs-modules-links"
                             >
                                 <li class="link">
                                     <a href="../modules/AppModule.html" >AppModule</a>
                                 </li>
                                 <li class="link">
+                                    <a href="../modules/AppRoutingModule.html" >AppRoutingModule</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../modules/BreadcrumbModule.html" >BreadcrumbModule</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../modules/ConfigFormModule.html" >ConfigFormModule</a>
+                                </li>
+                                <li class="link">
                                     <a href="../modules/DatasetsModule.html" >DatasetsModule</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../modules/DatePickerModule.html" >DatePickerModule</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../modules/DialogModule.html" >DialogModule</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../modules/ErrorPageModule.html" >ErrorPageModule</a>
                                 </li>
                                 <li class="link">
                                     <a href="../modules/SDKBrowserModule.html" >SDKBrowserModule</a>
@@ -79,16 +105,16 @@
                                 </li>
                         </ul>
                     </li>
-
+            
                     <li class="chapter">
-                        <div class="simple">
+                        <div class="simple menu-toggler" data-toggle="collapse"
+                                data-target="#xs-components-links"
+                            >
                             <span class="fa fa-cogs"></span>
                             <span>Components</span>
-                            <span class="menu-toggler fa fa-angle-up" data-toggle="collapse"
-                                    data-target="#xs-components-links"
-                                ></span>
+                            <span class="fa fa-angle-down"></span>
                         </div>
-                        <ul class="links collapse in"
+                        <ul class="links collapse "
                                 id="xs-components-links"
                             >
                                 <li class="link">
@@ -119,13 +145,22 @@
                                     <a href="../components/DatasetsFilterComponent.html" >DatasetsFilterComponent</a>
                                 </li>
                                 <li class="link">
-                                    <a href="../components/EndOfShiftComponent.html" >EndOfShiftComponent</a>
+                                    <a href="../components/DatePickerComponent.html" >DatePickerComponent</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../components/DialogComponent.html" >DialogComponent</a>
                                 </li>
                                 <li class="link">
                                     <a href="../components/ErrorPageComponent.html" >ErrorPageComponent</a>
                                 </li>
                                 <li class="link">
                                     <a href="../components/JobsComponent.html" >JobsComponent</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../components/JobsDetailComponent.html" >JobsDetailComponent</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../components/JobsTableComponent.html" >JobsTableComponent</a>
                                 </li>
                                 <li class="link">
                                     <a href="../components/LoginComponent.html" >LoginComponent</a>
@@ -141,17 +176,17 @@
                                 </li>
                         </ul>
                     </li>
-
-
+            
+            
                     <li class="chapter">
-                        <div class="simple">
+                        <div class="simple menu-toggler" data-toggle="collapse"
+                                data-target="#xs-classes-links"
+                            >
                             <span class="fa fa-file-code-o"></span>
                             <span>Classes</span>
-                            <span class="menu-toggler fa fa-angle-up" data-toggle="collapse"
-                                    data-target="#xs-classes-links"
-                                ></span>
+                            <span class="fa fa-angle-down"></span>
                         </div>
-                        <ul class="links collapse in"
+                        <ul class="links collapse "
                                 id="xs-classes-links"
                             >
                                 <li class="link">
@@ -182,7 +217,16 @@
                                     <a href="../classes/AddGroupsAction.html" >AddGroupsAction</a>
                                 </li>
                                 <li class="link">
+                                    <a href="../classes/AddGroupsAction.html" >AddGroupsAction</a>
+                                </li>
+                                <li class="link">
                                     <a href="../classes/AddGroupsCompleteAction.html" >AddGroupsCompleteAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/AddGroupsCompleteAction.html" >AddGroupsCompleteAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/AddGroupsFailedAction.html" >AddGroupsFailedAction</a>
                                 </li>
                                 <li class="link">
                                     <a href="../classes/AddGroupsFailedAction.html" >AddGroupsFailedAction</a>
@@ -197,10 +241,40 @@
                                     <a href="../classes/ApplicationCredential.html" >ApplicationCredential</a>
                                 </li>
                                 <li class="link">
+                                    <a href="../classes/BaseStorage.html" >BaseStorage</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/CalSuperMonth.html" >CalSuperMonth</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/ChildRetrieveAction.html" >ChildRetrieveAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/ChildRetrieveCompleteAction.html" >ChildRetrieveCompleteAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/ClearMessageAction.html" >ClearMessageAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/CurrentJobAction.html" >CurrentJobAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/CurrentSetAction.html" >CurrentSetAction</a>
+                                </li>
+                                <li class="link">
                                     <a href="../classes/CustomReuseStrategy.html" >CustomReuseStrategy</a>
                                 </li>
                                 <li class="link">
                                     <a href="../classes/Datablock.html" >Datablock</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/DatablockDeleteAction.html" >DatablockDeleteAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/DatablockDeleteCompleteAction.html" >DatablockDeleteCompleteAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/DatablockDeleteFailedAction.html" >DatablockDeleteFailedAction</a>
                                 </li>
                                 <li class="link">
                                     <a href="../classes/DatablocksAction.html" >DatablocksAction</a>
@@ -218,16 +292,31 @@
                                     <a href="../classes/DatasetLifecycle.html" >DatasetLifecycle</a>
                                 </li>
                                 <li class="link">
+                                    <a href="../classes/DateWrapper.html" >DateWrapper</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/Day.html" >Day</a>
+                                </li>
+                                <li class="link">
                                     <a href="../classes/DerivedDataset.html" >DerivedDataset</a>
                                 </li>
                                 <li class="link">
+                                    <a href="../classes/FailedAction.html" >FailedAction</a>
+                                </li>
+                                <li class="link">
                                     <a href="../classes/FilterFailedAction.html" >FilterFailedAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/FilterValueAction.html" >FilterValueAction</a>
                                 </li>
                                 <li class="link">
                                     <a href="../classes/FireLoop.html" >FireLoop</a>
                                 </li>
                                 <li class="link">
                                     <a href="../classes/FireLoopRef.html" >FireLoopRef</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/FocusOnMonthAction.html" >FocusOnMonthAction</a>
                                 </li>
                                 <li class="link">
                                     <a href="../classes/IO.html" >IO</a>
@@ -293,13 +382,43 @@
                                     <a href="../classes/MockLoopBackAuth.html" >MockLoopBackAuth</a>
                                 </li>
                                 <li class="link">
+                                    <a href="../classes/MockMatDialogData.html" >MockMatDialogData</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/MockMatDialogRef.html" >MockMatDialogRef</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/MockNotificationService.html" >MockNotificationService</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/MockProposalApi.html" >MockProposalApi</a>
+                                </li>
+                                <li class="link">
                                     <a href="../classes/MockRouter.html" >MockRouter</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/MockStore.html" >MockStore</a>
                                 </li>
                                 <li class="link">
                                     <a href="../classes/MockUserApi.html" >MockUserApi</a>
                                 </li>
                                 <li class="link">
                                     <a href="../classes/MockUserMsgService.html" >MockUserMsgService</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/Month.html" >Month</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/MultiDayRange.html" >MultiDayRange</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/MultiMonthRange.html" >MultiMonthRange</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/MultiWeekRange.html" >MultiWeekRange</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/MultiYearRange.html" >MultiYearRange</a>
                                 </li>
                                 <li class="link">
                                     <a href="../classes/OrigDatablock.html" >OrigDatablock</a>
@@ -315,6 +434,27 @@
                                 </li>
                                 <li class="link">
                                     <a href="../classes/RawDataset.html" >RawDataset</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/RefocusToCurrentMonthAction.html" >RefocusToCurrentMonthAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/ResetStatusAction.html" >ResetStatusAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/ResetStatusCompleteAction.html" >ResetStatusCompleteAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/RestoreAction.html" >RestoreAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/ResyncTodayAction.html" >ResyncTodayAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/RetrieveAction.html" >RetrieveAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/RetrieveCompleteAction.html" >RetrieveCompleteAction</a>
                                 </li>
                                 <li class="link">
                                     <a href="../classes/RetrieveUserAction.html" >RetrieveUserAction</a>
@@ -335,13 +475,13 @@
                                     <a href="../classes/Sample.html" >Sample</a>
                                 </li>
                                 <li class="link">
-                                    <a href="../classes/SearchAction.html" >SearchAction</a>
+                                    <a href="../classes/SaveAction.html" >SaveAction</a>
                                 </li>
                                 <li class="link">
-                                    <a href="../classes/SearchAction.html" >SearchAction</a>
+                                    <a href="../classes/SaveModeAction.html" >SaveModeAction</a>
                                 </li>
                                 <li class="link">
-                                    <a href="../classes/SearchCompleteAction.html" >SearchCompleteAction</a>
+                                    <a href="../classes/SaveSettingsAction.html" >SaveSettingsAction</a>
                                 </li>
                                 <li class="link">
                                     <a href="../classes/SearchCompleteAction.html" >SearchCompleteAction</a>
@@ -353,10 +493,31 @@
                                     <a href="../classes/SearchIDAction.html" >SearchIDAction</a>
                                 </li>
                                 <li class="link">
+                                    <a href="../classes/SearchIDAction.html" >SearchIDAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/SearchIDCompleteAction.html" >SearchIDCompleteAction</a>
+                                </li>
+                                <li class="link">
                                     <a href="../classes/SearchIDCompleteAction.html" >SearchIDCompleteAction</a>
                                 </li>
                                 <li class="link">
                                     <a href="../classes/SearchIDFailedAction.html" >SearchIDFailedAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/SearchIDFailedAction.html" >SearchIDFailedAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/SetFocusYearAction.html" >SetFocusYearAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/SetSelectionModeAction.html" >SetSelectionModeAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/SetSelectionsAction.html" >SetSelectionsAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/ShowMessageAction.html" >ShowMessageAction</a>
                                 </li>
                                 <li class="link">
                                     <a href="../classes/SocketBrowser.html" >SocketBrowser</a>
@@ -365,16 +526,61 @@
                                     <a href="../classes/SocketDriver.html" >SocketDriver</a>
                                 </li>
                                 <li class="link">
-                                    <a href="../classes/Storage.html" >Storage</a>
+                                    <a href="../classes/SortFailedAction.html" >SortFailedAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/SortUpdateAction.html" >SortUpdateAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/SortValueAction.html" >SortValueAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/StepFocusBackAction.html" >StepFocusBackAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/StepFocusForwardAction.html" >StepFocusForwardAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/SubmitAction.html" >SubmitAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/SubmitCompleteAction.html" >SubmitCompleteAction</a>
                                 </li>
                                 <li class="link">
                                     <a href="../classes/SynchTimes.html" >SynchTimes</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/TimeRange.html" >TimeRange</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/ToggleCalDispAction.html" >ToggleCalDispAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/ToggleCalModeAction.html" >ToggleCalModeAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/TotalSetsAction.html" >TotalSetsAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/UIStoreAction.html" >UIStoreAction</a>
                                 </li>
                                 <li class="link">
                                     <a href="../classes/UpdateFilterAction.html" >UpdateFilterAction</a>
                                 </li>
                                 <li class="link">
                                     <a href="../classes/UpdateFilterCompleteAction.html" >UpdateFilterCompleteAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/UpdateFocusMonthAction.html" >UpdateFocusMonthAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/UpdateSelectedAction.html" >UpdateSelectedAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/UpdateSelectionsAction.html" >UpdateSelectionsAction</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/UpdateSortCompleteAction.html" >UpdateSortCompleteAction</a>
                                 </li>
                                 <li class="link">
                                     <a href="../classes/User.html" >User</a>
@@ -385,18 +591,24 @@
                                 <li class="link">
                                     <a href="../classes/UserIdentity.html" >UserIdentity</a>
                                 </li>
+                                <li class="link">
+                                    <a href="../classes/Week.html" >Week</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/Year.html" >Year</a>
+                                </li>
                         </ul>
                     </li>
-
+            
                     <li class="chapter">
-                        <div class="simple">
+                        <div class="simple menu-toggler" data-toggle="collapse"
+                                data-target="#xs-injectables-links"
+                            >
                             <span class="fa fa-long-arrow-down"></span>
                             <span>Injectables</span>
-                            <span class="menu-toggler fa fa-angle-up" data-toggle="collapse"
-                                    data-target="#xs-injectables-links"
-                                ></span>
+                            <span class="fa fa-angle-down"></span>
                         </div>
-                        <ul class="links collapse in"
+                        <ul class="links collapse "
                                 id="xs-injectables-links"
                             >
                                 <li class="link">
@@ -451,6 +663,9 @@
                                     <a href="../injectables/JobApi.html" >JobApi</a>
                                 </li>
                                 <li class="link">
+                                    <a href="../injectables/JobsEffects.html" >JobsEffects</a>
+                                </li>
+                                <li class="link">
                                     <a href="../injectables/LoggerService.html" >LoggerService</a>
                                 </li>
                                 <li class="link">
@@ -501,22 +716,150 @@
                                 <li class="link">
                                     <a href="../injectables/UserIdentityApi.html" >UserIdentityApi</a>
                                 </li>
+                        </ul>
+                    </li>
+            
+            
+                    <li class="chapter">
+                        <div class="simple menu-toggler" data-toggle="collapse"
+                                data-target="#xs-interfaces-links"
+                            >
+                            <span class="fa fa-info"></span>
+                            <span>Interfaces</span>
+                            <span class="fa fa-angle-down"></span>
+                        </div>
+                        <ul class="links collapse "
+                                id="xs-interfaces-links"
+                            >
                                 <li class="link">
-                                    <a href="../injectables/UserMsgService.html" >UserMsgService</a>
+                                    <a href="../interfaces/AccessGroupInterface.html" >AccessGroupInterface</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/AccessTokenInterface.html" >AccessTokenInterface</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/AccessUserInterface.html" >AccessUserInterface</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/AppState.html" >AppState</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/AppState.html" >AppState</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/ApplicationCredentialInterface.html" >ApplicationCredentialInterface</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/Breadcrumb.html" >Breadcrumb</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/CookieInterface.html" >CookieInterface</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/DashboardUIState.html" >DashboardUIState</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/DatablockInterface.html" >DatablockInterface</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/DatasetFilters.html" >DatasetFilters</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/DatasetInterface.html" >DatasetInterface</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/DatasetLifecycleInterface.html" >DatasetLifecycleInterface</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/DatasetState.html" >DatasetState</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/DatepickerState.html" >DatepickerState</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/DerivedDatasetInterface.html" >DerivedDatasetInterface</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/GeoPoint.html" >GeoPoint</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/IStringToBoolDict.html" >IStringToBoolDict</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/IStringToNumDict.html" >IStringToNumDict</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/JobInterface.html" >JobInterface</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/JobsState.html" >JobsState</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/LoopBackFilter.html" >LoopBackFilter</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/Message.html" >Message</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/Models.html" >Models</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/OrigDatablockInterface.html" >OrigDatablockInterface</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/PolicyInterface.html" >PolicyInterface</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/ProposalInterface.html" >ProposalInterface</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/RabbitMQInterface.html" >RabbitMQInterface</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/RawDatasetInterface.html" >RawDatasetInterface</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/SampleInterface.html" >SampleInterface</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/Settings.html" >Settings</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/StatFilter.html" >StatFilter</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/SynchTimesInterface.html" >SynchTimesInterface</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/TimerRangeSelectorState.html" >TimerRangeSelectorState</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/UserCredentialInterface.html" >UserCredentialInterface</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/UserIdentityInterface.html" >UserIdentityInterface</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/UserInterface.html" >UserInterface</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/UserState.html" >UserState</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/WeekdayNameObject.html" >WeekdayNameObject</a>
                                 </li>
                         </ul>
                     </li>
-
-
+            
                     <li class="chapter">
-                        <div class="simple">
+                        <div class="simple menu-toggler" data-toggle="collapse"
+                                data-target="#xs-pipes-links"
+                            >
                             <span class="fa fa-plus"></span>
                             <span>Pipes</span>
-                            <span class="menu-toggler fa fa-angle-up" data-toggle="collapse"
-                                    data-target="#xs-pipes-links"
-                                ></span>
+                            <span class="fa fa-angle-down"></span>
                         </div>
-                        <ul class="links collapse in"
+                        <ul class="links collapse "
                                 id="xs-pipes-links"
                             >
                                 <li class="link">
@@ -527,25 +870,50 @@
                                 </li>
                         </ul>
                     </li>
-
-
+            
                     <li class="chapter">
-                        <a data-type="chapter-link" href="../miscellaneous.html" ><span class="fa fa-cubes"></span>Miscellaneous</a>
+                        <div class="simple menu-toggler" data-toggle="collapse"
+                                data-target="#xs-miscellaneous-links"
+                            >
+                            <span class="fa fa-cubes"></span>
+                            <span>Miscellaneous</span>
+                            <span class="fa fa-angle-down"></span>
+                        </div>
+                        <ul class="links collapse "
+                                id="xs-miscellaneous-links"
+                            >
+                                <li class="link">
+                                  <a href="../miscellaneous/enumerations.html" data-type="entity-link" >Enums</a>
+                                </li>
+                                <li class="link">
+                                  <a href="../miscellaneous/functions.html" data-type="entity-link" >Functions</a>
+                                </li>
+                                <li class="link">
+                                  <a href="../miscellaneous/typealiases.html" data-type="entity-link" >Type aliases</a>
+                                </li>
+                                <li class="link">
+                                  <a href="../miscellaneous/variables.html" data-type="entity-link" >Variables</a>
+                                </li>
+                        </ul>
                     </li>
-
+            
+                    <li class="chapter">
+                        <a data-type="chapter-link" href="../routes.html" ><span class="fa fa-code-fork"></span>Routes</a>
+                    </li>
+            
                     <li class="chapter">
                         <a data-type="chapter-link" href="../coverage.html" ><span class="fa fa-tasks"></span>Documentation coverage</a>
                     </li>
-
+            
                     <li class="divider"></li>
                     <li class="copyright">
                             Documentation generated using <a href="https://compodoc.github.io/website/" target="_blank">
                                         <img src="..//images/compodoc-vectorise.svg" class="img-responsive">
                             </a>
                     </li>
-
+            
                 </ul>
-
+            
             </nav>
         </div>
 
@@ -553,54 +921,80 @@
            <div class="row main">
                <div class="hidden-xs menu">
                    <nav>
-
+                   
                        <ul class="list">
-
+                   
                            <li class="title">
                                <a href="../index.html">catanie documentation</a>
                            </li>
-
+                   
                            <li class="divider"></li>
-
+                   
                                <div id="book-search-input" role="search">
                                    <input type="text" placeholder="Type to search">
                                </div>
-
+                   
                            <li class="chapter">
                                <a data-type="chapter-link" href="../index.html"><span class="fa fa-home"></span>Getting started</a>
                                <ul class="links">
                                        <li class="link">
-                                           <a href="../index.html" ><span class="fa fa-file-text-o"></span>README</a>
-                                       </li>
-                                       <li class="link">
-                                           <a
-
-                                                href="../overview.html"
-                                                href="../overview.html"
+                                           <a 
+                                               
+                                                href="../overview.html" 
+                                                href="../overview.html" 
                                                >
                                                <span class="fa fa-th"></span>Overview
                                            </a>
                                        </li>
+                                       <li class="link">
+                                         <a href="../index.html" ><span class="fa fa-file-text-o"></span>README</a>
+                                       </li>
+                                       <li class="link">
+                                               <a href="../license.html"
+                                           >
+                                               <span class="fa fa-file-text-o"></span>LICENSE
+                                           </a>
+                                       </li>
                                </ul>
                            </li>
-
-
+                   
+                   
                            <li class="chapter">
                                <a data-type="chapter-link" href="../modules.html" >
-                                   <span class="fa fa-archive"></span>
-                                   <span>Modules</span>
-                                   <span class="menu-toggler fa fa-angle-up" data-toggle="collapse"
+                                   <div class="menu-toggler linked" data-toggle="collapse"
                                            data-target="#modules-links"
-                                   ></span>
+                                   >
+                                       <span class="fa fa-archive"></span>
+                                       <span class="link-name">Modules</span>
+                                       <span class="fa fa-angle-down"></span>
+                                   </div>
                                </a>
-                               <ul class="links collapse in"
+                               <ul class="links collapse "
                                        id="modules-links"
                    >
                                        <li class="link">
                                            <a href="../modules/AppModule.html" >AppModule</a>
                                        </li>
                                        <li class="link">
+                                           <a href="../modules/AppRoutingModule.html" >AppRoutingModule</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../modules/BreadcrumbModule.html" >BreadcrumbModule</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../modules/ConfigFormModule.html" >ConfigFormModule</a>
+                                       </li>
+                                       <li class="link">
                                            <a href="../modules/DatasetsModule.html" >DatasetsModule</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../modules/DatePickerModule.html" >DatePickerModule</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../modules/DialogModule.html" >DialogModule</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../modules/ErrorPageModule.html" >ErrorPageModule</a>
                                        </li>
                                        <li class="link">
                                            <a href="../modules/SDKBrowserModule.html" >SDKBrowserModule</a>
@@ -613,16 +1007,16 @@
                                        </li>
                                </ul>
                            </li>
-
+                   
                            <li class="chapter">
-                               <div class="simple">
+                               <div class="simple menu-toggler" data-toggle="collapse"
+                                       data-target="#components-links"
+                   >
                                    <span class="fa fa-cogs"></span>
                                    <span>Components</span>
-                                   <span class="menu-toggler fa fa-angle-up" data-toggle="collapse"
-                                           data-target="#components-links"
-                   ></span>
+                                   <span class="fa fa-angle-down"></span>
                                </div>
-                               <ul class="links collapse in"
+                               <ul class="links collapse "
                                        id="components-links"
                    >
                                        <li class="link">
@@ -653,13 +1047,22 @@
                                            <a href="../components/DatasetsFilterComponent.html" >DatasetsFilterComponent</a>
                                        </li>
                                        <li class="link">
-                                           <a href="../components/EndOfShiftComponent.html" >EndOfShiftComponent</a>
+                                           <a href="../components/DatePickerComponent.html" >DatePickerComponent</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../components/DialogComponent.html" >DialogComponent</a>
                                        </li>
                                        <li class="link">
                                            <a href="../components/ErrorPageComponent.html" >ErrorPageComponent</a>
                                        </li>
                                        <li class="link">
                                            <a href="../components/JobsComponent.html" >JobsComponent</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../components/JobsDetailComponent.html" >JobsDetailComponent</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../components/JobsTableComponent.html" >JobsTableComponent</a>
                                        </li>
                                        <li class="link">
                                            <a href="../components/LoginComponent.html" >LoginComponent</a>
@@ -675,17 +1078,17 @@
                                        </li>
                                </ul>
                            </li>
-
-
+                   
+                   
                            <li class="chapter">
-                               <div class="simple">
+                               <div class="simple menu-toggler" data-toggle="collapse"
+                                       data-target="#classes-links"
+                   >
                                    <span class="fa fa-file-code-o"></span>
                                    <span>Classes</span>
-                                   <span class="menu-toggler fa fa-angle-up" data-toggle="collapse"
-                                           data-target="#classes-links"
-                   ></span>
+                                   <span class="fa fa-angle-down"></span>
                                </div>
-                               <ul class="links collapse in"
+                               <ul class="links collapse "
                                        id="classes-links"
                    >
                                        <li class="link">
@@ -716,7 +1119,16 @@
                                            <a href="../classes/AddGroupsAction.html" >AddGroupsAction</a>
                                        </li>
                                        <li class="link">
+                                           <a href="../classes/AddGroupsAction.html" >AddGroupsAction</a>
+                                       </li>
+                                       <li class="link">
                                            <a href="../classes/AddGroupsCompleteAction.html" >AddGroupsCompleteAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/AddGroupsCompleteAction.html" >AddGroupsCompleteAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/AddGroupsFailedAction.html" >AddGroupsFailedAction</a>
                                        </li>
                                        <li class="link">
                                            <a href="../classes/AddGroupsFailedAction.html" >AddGroupsFailedAction</a>
@@ -731,10 +1143,40 @@
                                            <a href="../classes/ApplicationCredential.html" >ApplicationCredential</a>
                                        </li>
                                        <li class="link">
+                                           <a href="../classes/BaseStorage.html" >BaseStorage</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/CalSuperMonth.html" >CalSuperMonth</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/ChildRetrieveAction.html" >ChildRetrieveAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/ChildRetrieveCompleteAction.html" >ChildRetrieveCompleteAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/ClearMessageAction.html" >ClearMessageAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/CurrentJobAction.html" >CurrentJobAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/CurrentSetAction.html" >CurrentSetAction</a>
+                                       </li>
+                                       <li class="link">
                                            <a href="../classes/CustomReuseStrategy.html" >CustomReuseStrategy</a>
                                        </li>
                                        <li class="link">
                                            <a href="../classes/Datablock.html" >Datablock</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/DatablockDeleteAction.html" >DatablockDeleteAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/DatablockDeleteCompleteAction.html" >DatablockDeleteCompleteAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/DatablockDeleteFailedAction.html" >DatablockDeleteFailedAction</a>
                                        </li>
                                        <li class="link">
                                            <a href="../classes/DatablocksAction.html" >DatablocksAction</a>
@@ -752,16 +1194,31 @@
                                            <a href="../classes/DatasetLifecycle.html" >DatasetLifecycle</a>
                                        </li>
                                        <li class="link">
+                                           <a href="../classes/DateWrapper.html" >DateWrapper</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/Day.html" >Day</a>
+                                       </li>
+                                       <li class="link">
                                            <a href="../classes/DerivedDataset.html" >DerivedDataset</a>
                                        </li>
                                        <li class="link">
+                                           <a href="../classes/FailedAction.html" >FailedAction</a>
+                                       </li>
+                                       <li class="link">
                                            <a href="../classes/FilterFailedAction.html" >FilterFailedAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/FilterValueAction.html" >FilterValueAction</a>
                                        </li>
                                        <li class="link">
                                            <a href="../classes/FireLoop.html" >FireLoop</a>
                                        </li>
                                        <li class="link">
                                            <a href="../classes/FireLoopRef.html" >FireLoopRef</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/FocusOnMonthAction.html" >FocusOnMonthAction</a>
                                        </li>
                                        <li class="link">
                                            <a href="../classes/IO.html" >IO</a>
@@ -827,13 +1284,43 @@
                                            <a href="../classes/MockLoopBackAuth.html" >MockLoopBackAuth</a>
                                        </li>
                                        <li class="link">
+                                           <a href="../classes/MockMatDialogData.html" >MockMatDialogData</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/MockMatDialogRef.html" >MockMatDialogRef</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/MockNotificationService.html" >MockNotificationService</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/MockProposalApi.html" >MockProposalApi</a>
+                                       </li>
+                                       <li class="link">
                                            <a href="../classes/MockRouter.html" >MockRouter</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/MockStore.html" >MockStore</a>
                                        </li>
                                        <li class="link">
                                            <a href="../classes/MockUserApi.html" >MockUserApi</a>
                                        </li>
                                        <li class="link">
                                            <a href="../classes/MockUserMsgService.html" >MockUserMsgService</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/Month.html" >Month</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/MultiDayRange.html" >MultiDayRange</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/MultiMonthRange.html" >MultiMonthRange</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/MultiWeekRange.html" >MultiWeekRange</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/MultiYearRange.html" >MultiYearRange</a>
                                        </li>
                                        <li class="link">
                                            <a href="../classes/OrigDatablock.html" >OrigDatablock</a>
@@ -849,6 +1336,27 @@
                                        </li>
                                        <li class="link">
                                            <a href="../classes/RawDataset.html" >RawDataset</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/RefocusToCurrentMonthAction.html" >RefocusToCurrentMonthAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/ResetStatusAction.html" >ResetStatusAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/ResetStatusCompleteAction.html" >ResetStatusCompleteAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/RestoreAction.html" >RestoreAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/ResyncTodayAction.html" >ResyncTodayAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/RetrieveAction.html" >RetrieveAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/RetrieveCompleteAction.html" >RetrieveCompleteAction</a>
                                        </li>
                                        <li class="link">
                                            <a href="../classes/RetrieveUserAction.html" >RetrieveUserAction</a>
@@ -869,13 +1377,13 @@
                                            <a href="../classes/Sample.html" >Sample</a>
                                        </li>
                                        <li class="link">
-                                           <a href="../classes/SearchAction.html" >SearchAction</a>
+                                           <a href="../classes/SaveAction.html" >SaveAction</a>
                                        </li>
                                        <li class="link">
-                                           <a href="../classes/SearchAction.html" >SearchAction</a>
+                                           <a href="../classes/SaveModeAction.html" >SaveModeAction</a>
                                        </li>
                                        <li class="link">
-                                           <a href="../classes/SearchCompleteAction.html" >SearchCompleteAction</a>
+                                           <a href="../classes/SaveSettingsAction.html" >SaveSettingsAction</a>
                                        </li>
                                        <li class="link">
                                            <a href="../classes/SearchCompleteAction.html" >SearchCompleteAction</a>
@@ -887,10 +1395,31 @@
                                            <a href="../classes/SearchIDAction.html" >SearchIDAction</a>
                                        </li>
                                        <li class="link">
+                                           <a href="../classes/SearchIDAction.html" >SearchIDAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/SearchIDCompleteAction.html" >SearchIDCompleteAction</a>
+                                       </li>
+                                       <li class="link">
                                            <a href="../classes/SearchIDCompleteAction.html" >SearchIDCompleteAction</a>
                                        </li>
                                        <li class="link">
                                            <a href="../classes/SearchIDFailedAction.html" >SearchIDFailedAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/SearchIDFailedAction.html" >SearchIDFailedAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/SetFocusYearAction.html" >SetFocusYearAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/SetSelectionModeAction.html" >SetSelectionModeAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/SetSelectionsAction.html" >SetSelectionsAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/ShowMessageAction.html" >ShowMessageAction</a>
                                        </li>
                                        <li class="link">
                                            <a href="../classes/SocketBrowser.html" >SocketBrowser</a>
@@ -899,16 +1428,61 @@
                                            <a href="../classes/SocketDriver.html" >SocketDriver</a>
                                        </li>
                                        <li class="link">
-                                           <a href="../classes/Storage.html" >Storage</a>
+                                           <a href="../classes/SortFailedAction.html" >SortFailedAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/SortUpdateAction.html" >SortUpdateAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/SortValueAction.html" >SortValueAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/StepFocusBackAction.html" >StepFocusBackAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/StepFocusForwardAction.html" >StepFocusForwardAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/SubmitAction.html" >SubmitAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/SubmitCompleteAction.html" >SubmitCompleteAction</a>
                                        </li>
                                        <li class="link">
                                            <a href="../classes/SynchTimes.html" >SynchTimes</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/TimeRange.html" >TimeRange</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/ToggleCalDispAction.html" >ToggleCalDispAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/ToggleCalModeAction.html" >ToggleCalModeAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/TotalSetsAction.html" >TotalSetsAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/UIStoreAction.html" >UIStoreAction</a>
                                        </li>
                                        <li class="link">
                                            <a href="../classes/UpdateFilterAction.html" >UpdateFilterAction</a>
                                        </li>
                                        <li class="link">
                                            <a href="../classes/UpdateFilterCompleteAction.html" >UpdateFilterCompleteAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/UpdateFocusMonthAction.html" >UpdateFocusMonthAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/UpdateSelectedAction.html" >UpdateSelectedAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/UpdateSelectionsAction.html" >UpdateSelectionsAction</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/UpdateSortCompleteAction.html" >UpdateSortCompleteAction</a>
                                        </li>
                                        <li class="link">
                                            <a href="../classes/User.html" >User</a>
@@ -919,18 +1493,24 @@
                                        <li class="link">
                                            <a href="../classes/UserIdentity.html" >UserIdentity</a>
                                        </li>
+                                       <li class="link">
+                                           <a href="../classes/Week.html" >Week</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/Year.html" >Year</a>
+                                       </li>
                                </ul>
                            </li>
-
+                   
                            <li class="chapter">
-                               <div class="simple">
+                               <div class="simple menu-toggler" data-toggle="collapse"
+                                       data-target="#injectables-links"
+                   >
                                    <span class="fa fa-long-arrow-down"></span>
                                    <span>Injectables</span>
-                                   <span class="menu-toggler fa fa-angle-up" data-toggle="collapse"
-                                           data-target="#injectables-links"
-                   ></span>
+                                   <span class="fa fa-angle-down"></span>
                                </div>
-                               <ul class="links collapse in"
+                               <ul class="links collapse "
                                        id="injectables-links"
                    >
                                        <li class="link">
@@ -985,6 +1565,9 @@
                                            <a href="../injectables/JobApi.html" >JobApi</a>
                                        </li>
                                        <li class="link">
+                                           <a href="../injectables/JobsEffects.html" >JobsEffects</a>
+                                       </li>
+                                       <li class="link">
                                            <a href="../injectables/LoggerService.html" >LoggerService</a>
                                        </li>
                                        <li class="link">
@@ -1035,22 +1618,150 @@
                                        <li class="link">
                                            <a href="../injectables/UserIdentityApi.html" >UserIdentityApi</a>
                                        </li>
+                               </ul>
+                           </li>
+                   
+                   
+                           <li class="chapter">
+                               <div class="simple menu-toggler" data-toggle="collapse"
+                                       data-target="#interfaces-links"
+                   >
+                                   <span class="fa fa-info"></span>
+                                   <span>Interfaces</span>
+                                   <span class="fa fa-angle-down"></span>
+                               </div>
+                               <ul class="links collapse "
+                                       id="interfaces-links"
+                   >
                                        <li class="link">
-                                           <a href="../injectables/UserMsgService.html" >UserMsgService</a>
+                                           <a href="../interfaces/AccessGroupInterface.html" >AccessGroupInterface</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/AccessTokenInterface.html" >AccessTokenInterface</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/AccessUserInterface.html" >AccessUserInterface</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/AppState.html" >AppState</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/AppState.html" >AppState</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/ApplicationCredentialInterface.html" >ApplicationCredentialInterface</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/Breadcrumb.html" >Breadcrumb</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/CookieInterface.html" >CookieInterface</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/DashboardUIState.html" >DashboardUIState</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/DatablockInterface.html" >DatablockInterface</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/DatasetFilters.html" >DatasetFilters</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/DatasetInterface.html" >DatasetInterface</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/DatasetLifecycleInterface.html" >DatasetLifecycleInterface</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/DatasetState.html" >DatasetState</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/DatepickerState.html" >DatepickerState</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/DerivedDatasetInterface.html" >DerivedDatasetInterface</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/GeoPoint.html" >GeoPoint</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/IStringToBoolDict.html" >IStringToBoolDict</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/IStringToNumDict.html" >IStringToNumDict</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/JobInterface.html" >JobInterface</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/JobsState.html" >JobsState</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/LoopBackFilter.html" >LoopBackFilter</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/Message.html" >Message</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/Models.html" >Models</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/OrigDatablockInterface.html" >OrigDatablockInterface</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/PolicyInterface.html" >PolicyInterface</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/ProposalInterface.html" >ProposalInterface</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/RabbitMQInterface.html" >RabbitMQInterface</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/RawDatasetInterface.html" >RawDatasetInterface</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/SampleInterface.html" >SampleInterface</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/Settings.html" >Settings</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/StatFilter.html" >StatFilter</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/SynchTimesInterface.html" >SynchTimesInterface</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/TimerRangeSelectorState.html" >TimerRangeSelectorState</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/UserCredentialInterface.html" >UserCredentialInterface</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/UserIdentityInterface.html" >UserIdentityInterface</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/UserInterface.html" >UserInterface</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/UserState.html" >UserState</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/WeekdayNameObject.html" >WeekdayNameObject</a>
                                        </li>
                                </ul>
                            </li>
-
-
+                   
                            <li class="chapter">
-                               <div class="simple">
+                               <div class="simple menu-toggler" data-toggle="collapse"
+                                       data-target="#pipes-links"
+                   >
                                    <span class="fa fa-plus"></span>
                                    <span>Pipes</span>
-                                   <span class="menu-toggler fa fa-angle-up" data-toggle="collapse"
-                                           data-target="#pipes-links"
-                   ></span>
+                                   <span class="fa fa-angle-down"></span>
                                </div>
-                               <ul class="links collapse in"
+                               <ul class="links collapse "
                                        id="pipes-links"
                    >
                                        <li class="link">
@@ -1061,29 +1772,56 @@
                                        </li>
                                </ul>
                            </li>
-
-
+                   
                            <li class="chapter">
-                               <a data-type="chapter-link" href="../miscellaneous.html" ><span class="fa fa-cubes"></span>Miscellaneous</a>
+                               <div class="simple menu-toggler" data-toggle="collapse"
+                                       data-target="#miscellaneous-links"
+                   >
+                                   <span class="fa fa-cubes"></span>
+                                   <span>Miscellaneous</span>
+                                   <span class="fa fa-angle-down"></span>
+                               </div>
+                               <ul class="links collapse "
+                                       id="miscellaneous-links"
+                   >
+                                       <li class="link">
+                                         <a href="../miscellaneous/enumerations.html" data-type="entity-link" >Enums</a>
+                                       </li>
+                                       <li class="link">
+                                         <a href="../miscellaneous/functions.html" data-type="entity-link" >Functions</a>
+                                       </li>
+                                       <li class="link">
+                                         <a href="../miscellaneous/typealiases.html" data-type="entity-link" >Type aliases</a>
+                                       </li>
+                                       <li class="link">
+                                         <a href="../miscellaneous/variables.html" data-type="entity-link" >Variables</a>
+                                       </li>
+                               </ul>
                            </li>
-
+                   
+                           <li class="chapter">
+                               <a data-type="chapter-link" href="../routes.html" ><span class="fa fa-code-fork"></span>Routes</a>
+                           </li>
+                   
                            <li class="chapter">
                                <a data-type="chapter-link" href="../coverage.html" ><span class="fa fa-tasks"></span>Documentation coverage</a>
                            </li>
-
+                   
                            <li class="divider"></li>
                            <li class="copyright">
                                    Documentation generated using <a href="https://compodoc.github.io/website/" target="_blank">
                                                <img src="..//images/compodoc-vectorise.svg" class="img-responsive">
                                    </a>
                            </li>
-
+                   
                        </ul>
-
+                   
                    </nav>
                </div>
                <div class="content component">
                    <div class="content-data">
+
+
 
 
 <ol class="breadcrumb">
@@ -1093,7 +1831,7 @@
 
 <ul class="nav nav-tabs" role="tablist">
     <li class="active">
-        <a href="#infos" id="infos-tab" role="tab" data-toggle="tab" data-link="infos">Infos</a>
+        <a href="#info" id="info-tab" role="tab" data-toggle="tab" data-link="info">Info</a>
     </li>
 
     <li>
@@ -1109,11 +1847,11 @@
 </ul>
 
 <div class="tab-content">
-    <div class="tab-pane fade active in" id="infos"><p class="comment">
+    <div class="tab-pane fade active in" id="info"><p class="comment">
     <h3>File</h3>
 </p>
 <p class="comment">
-    <code>src/app/shared/components/config-form/config-form.component.ts</code>
+    <code>src/app/shared/modules/config-form/config-form.component.ts</code>
 </p>
 
 
@@ -1122,7 +1860,7 @@
         <h3>Implements</h3>
     </p>
     <p class="comment">
-                <code><a href="https://angular.io/docs/ts/latest/api/core/index/OnInit-interface.html" target="_blank" >OnInit</a></code>
+                <code><a href="https://angular.io/docs/ts/latest/api/api/core/OnInit" target="_blank" >OnInit</a></code>
     </p>
 
 
@@ -1165,11 +1903,171 @@
 </section>
 
     <section>
+        <h3 id="index">Index</h3>
+        <table class="table table-sm table-bordered index-table">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                 <a href="#dsFormGroup">dsFormGroup</a>
+                            </li>
+                            <li>
+                                 <a href="#formConfig">formConfig</a>
+                            </li>
+                            <li>
+                                 <a href="#formData">formData</a>
+                            </li>
+                            <li>
+                                 <a href="#objData">objData</a>
+                            </li>
+                            <li>
+                                 <a href="#properties">properties</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                 <a href="#getTreeFromObject">getTreeFromObject</a>
+                            </li>
+                            <li>
+                                 <a href="#getType">getType</a>
+                            </li>
+                            <li>
+                                 <a href="#loadForm">loadForm</a>
+                            </li>
+                            <li>
+                                 <a href="#ngOnInit">ngOnInit</a>
+                            </li>
+                            <li>
+                                 <a href="#updateModel">updateModel</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Inputs</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#enabled">enabled</a>
+                            </li>
+                            <li>
+                                <a href="#source">source</a>
+                            </li>
+                            <li>
+                                <a href="#sourceType">sourceType</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Outputs</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#onSubmit">onSubmit</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <section>
+        <h3 id="constructor">Constructor</h3>
+            <table class="table table-sm table-bordered">
+                <tbody>
+                    <tr>
+                        <td class="col-md-4">
+                            <code>constructor(formBuilder: <a href="https://angular.io/docs/ts/latest/api/api/forms/FormBuilder" target="_blank">FormBuilder</a>, configService: <a href="../injectables/ConfigService.html">ConfigService</a>, store: Store<any>)</code>
+                        </td>
+                    </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="29" class="link-to-prism">src/app/shared/modules/config-form/config-form.component.ts:29</a></div>
+                                </td>
+                            </tr>
+    
+                    <tr>
+                        <td class="col-md-4">
+                                <div>
+                                        <b>Parameters :</b>
+                                        <table class="params">
+                                            <thead>
+                                                <tr>
+                                                    <td>Name</td>
+                                                    <td>Type</td>
+                                                    <td>Optional</td>
+                                                    <td>Description</td>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                    <tr>
+                                                      <td>formBuilder</td>
+                                                      <td>
+                                                                <code><a href="https://angular.io/docs/ts/latest/api/api/forms/FormBuilder" target="_blank" >FormBuilder</a></code>
+                                                      </td>
+                                                      <td>
+                                                      </td>
+                                                      <td></td>
+                                                    </tr>
+                                                    <tr>
+                                                      <td>configService</td>
+                                                      <td>
+                                                                <code><a href="../injectables/ConfigService.html" target="_self" >ConfigService</a></code>
+                                                      </td>
+                                                      <td>
+                                                      </td>
+                                                      <td></td>
+                                                    </tr>
+                                                    <tr>
+                                                      <td>store</td>
+                                                      <td>
+                                                                <code>Store&lt;any&gt;</code>
+                                                      </td>
+                                                      <td>
+                                                      </td>
+                                                      <td></td>
+                                                    </tr>
+                                            </tbody>
+                                        </table>
+                                </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+    </section>
+
+    <section>
         <h3 id="inputs">Inputs</h3>
             <table class="table table-sm table-bordered">
                 <tbody>
                     <tr>
                         <td class="col-md-2">
+                            <a name="enabled"></a>
                             <code>enabled</code>
                         </td>
                         <td class="col-md-10">
@@ -1178,93 +2076,80 @@
                             </p>
                         </td>
                     </tr>
-                        <tr>
-                            <td class="col-md-2" colspan="2">
-                                <div class="io-line">Defined in <a href="" data-line="30" class="link-to-prism">src/app/shared/components/config-form/config-form.component.ts:30</a></div>
-                            </td>
-                        </tr>
+                            <tr>
+                                <td class="col-md-2" colspan="2">
+                                    <div class="io-line">Defined in <a href="" data-line="21" class="link-to-prism">src/app/shared/modules/config-form/config-form.component.ts:21</a></div>
+                                </td>
+                            </tr>
                 </tbody>
             </table>
             <table class="table table-sm table-bordered">
                 <tbody>
                     <tr>
                         <td class="col-md-2">
-                            <code>service</code>
-                        </td>
-                        <td class="col-md-10">
-                              <p>
-                                <em>Type:</em>    <code>any</code>
-
-                              </p>
-                        </td>
-                    </tr>
-                        <tr>
-                            <td class="col-md-2" colspan="2">
-                                <div class="io-line">Defined in <a href="" data-line="29" class="link-to-prism">src/app/shared/components/config-form/config-form.component.ts:29</a></div>
-                            </td>
-                        </tr>
-                </tbody>
-            </table>
-            <table class="table table-sm table-bordered">
-                <tbody>
-                    <tr>
-                        <td class="col-md-2">
+                            <a name="source"></a>
                             <code>source</code>
                         </td>
                         <td class="col-md-10">
                               <p>
-                                <em>Type:</em>    <code>object</code>
+                                <em>Type:</em>    <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/object" target="_blank" >object</a></code>
 
                               </p>
                         </td>
                     </tr>
-                        <tr>
-                            <td class="col-md-2" colspan="2">
-                                <div class="io-line">Defined in <a href="" data-line="27" class="link-to-prism">src/app/shared/components/config-form/config-form.component.ts:27</a></div>
-                            </td>
-                        </tr>
+                            <tr>
+                                <td class="col-md-2" colspan="2">
+                                    <div class="io-line">Defined in <a href="" data-line="19" class="link-to-prism">src/app/shared/modules/config-form/config-form.component.ts:19</a></div>
+                                </td>
+                            </tr>
                 </tbody>
             </table>
             <table class="table table-sm table-bordered">
                 <tbody>
                     <tr>
                         <td class="col-md-2">
+                            <a name="sourceType"></a>
                             <code>sourceType</code>
                         </td>
                         <td class="col-md-10">
                         </td>
                     </tr>
-                        <tr>
-                            <td class="col-md-2" colspan="2">
-                                <div class="io-line">Defined in <a href="" data-line="28" class="link-to-prism">src/app/shared/components/config-form/config-form.component.ts:28</a></div>
-                            </td>
-                        </tr>
+                            <tr>
+                                <td class="col-md-2" colspan="2">
+                                    <div class="io-line">Defined in <a href="" data-line="20" class="link-to-prism">src/app/shared/modules/config-form/config-form.component.ts:20</a></div>
+                                </td>
+                            </tr>
                 </tbody>
             </table>
     </section>
 
-
     <section>
-        <h3 id="constructor">Constructor</h3>
+        <h3 id="outputs">Outputs</h3>
             <table class="table table-sm table-bordered">
                 <tbody>
                     <tr>
-                        <td class="col-md-4">
-                            <code>constructor(formBuilder: <a href="https://angular.io/docs/ts/latest/api/forms/index/FormBuilder-class.html" target="_blank">FormBuilder</a>, configService: any, store: Store<any>)</code>
+                        <td class="col-md-2">
+                            <a name="onSubmit"></a>
+                            <code>onSubmit</code>
+                        </td>
+                        <td class="col-md-10">
+                            <em><code>$event</code> type:</em>    <code>EventEmitter&lt;any&gt;</code>
+
                         </td>
                     </tr>
-                        <tr>
-                            <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="35" class="link-to-prism">src/app/shared/components/config-form/config-form.component.ts:35</a></div>
-                            </td>
-                        </tr>
-
+                            <tr>
+                                <td class="col-md-2" colspan="2">
+                                    <div class="io-line">Defined in <a href="" data-line="23" class="link-to-prism">src/app/shared/modules/config-form/config-form.component.ts:23</a></div>
+                                </td>
+                            </tr>
                 </tbody>
             </table>
     </section>
 
-    <section>
 
+
+    <section>
+        
             <h3 id="methods">
                 Methods
             </h3>
@@ -1272,7 +2157,206 @@
                 <tbody>
                     <tr>
                         <td class="col-md-4">
-                            <b> ngOnInit</b>
+                            <a name="getTreeFromObject"></a>
+                            <span class="name"><b> getTreeFromObject</b><a href="#getTreeFromObject"><span class="fa fa-link"></span></a></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+    <code>getTreeFromObject(object: )</code>
+                        </td>
+                    </tr>
+    
+    
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="111" class="link-to-prism">src/app/shared/modules/config-form/config-form.component.ts:111</a></div>
+                                </td>
+                            </tr>
+    
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-description"><p>Create a TreeNode structure from an supplied object.</p>
+    </div>
+    
+                                <div class="io-description">
+                                        <b>Parameters :</b>
+                                        <table class="params">
+                                            <thead>
+                                                <tr>
+                                                    <td>Name</td>
+                                                    <td>Type</td>
+                                                    <td>Optional</td>
+                                                    <td>Description</td>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                    <tr>
+                                                      <td>object</td>
+                                                      <td>
+                                                      </td>
+                                                      <td>
+                                                      </td>
+                                                      <td></td>
+                                                    </tr>
+                                            </tbody>
+                                        </table>
+                                </div>
+                                <div>
+                                </div>
+                                <div class="io-description">
+                                    <b>Returns : </b>    <code>{}</code>
+    
+                                </div>
+                                    <div class="io-description">
+                                        
+                                    </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <table class="table table-sm table-bordered">
+                <tbody>
+                    <tr>
+                        <td class="col-md-4">
+                            <a name="getType"></a>
+                            <span class="name"><b> getType</b><a href="#getType"><span class="fa fa-link"></span></a></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+    <code>getType(key: , value: )</code>
+                        </td>
+                    </tr>
+    
+    
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="164" class="link-to-prism">src/app/shared/modules/config-form/config-form.component.ts:164</a></div>
+                                </td>
+                            </tr>
+    
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-description"><p>Checks type against config and
+    fallback to type if not available</p>
+    </div>
+    
+                                <div class="io-description">
+                                        <b>Parameters :</b>
+                                        <table class="params">
+                                            <thead>
+                                                <tr>
+                                                    <td>Name</td>
+                                                    <td>Type</td>
+                                                    <td>Optional</td>
+                                                    <td>Description</td>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                    <tr>
+                                                      <td>key</td>
+                                                      <td>
+                                                      </td>
+                                                      <td>
+                                                      </td>
+                                                      <td></td>
+                                                    </tr>
+                                                    <tr>
+                                                      <td>value</td>
+                                                      <td>
+                                                      </td>
+                                                      <td>
+                                                      </td>
+                                                      <td></td>
+                                                    </tr>
+                                            </tbody>
+                                        </table>
+                                </div>
+                                <div>
+                                </div>
+                                <div class="io-description">
+                                    <b>Returns : </b>    <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+    
+                                </div>
+                                    <div class="io-description">
+                                        
+                                    </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <table class="table table-sm table-bordered">
+                <tbody>
+                    <tr>
+                        <td class="col-md-4">
+                            <a name="loadForm"></a>
+                            <span class="name"><b> loadForm</b><a href="#loadForm"><span class="fa fa-link"></span></a></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+    <code>loadForm(config: )</code>
+                        </td>
+                    </tr>
+    
+    
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="64" class="link-to-prism">src/app/shared/modules/config-form/config-form.component.ts:64</a></div>
+                                </td>
+                            </tr>
+    
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-description"><p>Load the properties of the form
+    based on config.
+    Also handles types when set up in the
+    properties json file</p>
+    </div>
+    
+                                <div class="io-description">
+                                        <b>Parameters :</b>
+                                        <table class="params">
+                                            <thead>
+                                                <tr>
+                                                    <td>Name</td>
+                                                    <td>Type</td>
+                                                    <td>Optional</td>
+                                                    <td>Description</td>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                    <tr>
+                                                      <td>config</td>
+                                                      <td>
+                                                      </td>
+                                                      <td>
+                                                      </td>
+                                                      <td></td>
+                                                    </tr>
+                                            </tbody>
+                                        </table>
+                                </div>
+                                <div>
+                                </div>
+                                <div class="io-description">
+                                    <b>Returns : </b>    <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+    
+                                </div>
+                                    <div class="io-description">
+                                        
+                                    </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <table class="table table-sm table-bordered">
+                <tbody>
+                    <tr>
+                        <td class="col-md-4">
+                            <a name="ngOnInit"></a>
+                            <span class="name"><b> ngOnInit</b><a href="#ngOnInit"><span class="fa fa-link"></span></a></span>
                         </td>
                     </tr>
                     <tr>
@@ -1280,20 +2364,20 @@
     <code>ngOnInit()</code>
                         </td>
                     </tr>
-
-
-                        <tr>
-                            <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="58" class="link-to-prism">src/app/shared/components/config-form/config-form.component.ts:58</a></div>
-                            </td>
-                        </tr>
-
+    
+    
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="35" class="link-to-prism">src/app/shared/modules/config-form/config-form.component.ts:35</a></div>
+                                </td>
+                            </tr>
+    
                     <tr>
                         <td class="col-md-4">
-
+    
                                 <div class="io-description">
-                                    <b>Returns : </b>    <code>void</code>
-
+                                    <b>Returns : </b>    <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+    
                                 </div>
                         </td>
                     </tr>
@@ -1303,186 +2387,60 @@
                 <tbody>
                     <tr>
                         <td class="col-md-4">
-                            <b> loadForm</b>
+                            <a name="updateModel"></a>
+                            <span class="name"><b> updateModel</b><a href="#updateModel"><span class="fa fa-link"></span></a></span>
                         </td>
                     </tr>
                     <tr>
                         <td class="col-md-4">
-    <code>loadForm(config: any)</code>
+    <code>updateModel(values: )</code>
                         </td>
                     </tr>
-
-
-                        <tr>
-                            <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="91" class="link-to-prism">src/app/shared/components/config-form/config-form.component.ts:91</a></div>
-                            </td>
-                        </tr>
-
+    
+    
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="152" class="link-to-prism">src/app/shared/modules/config-form/config-form.component.ts:152</a></div>
+                                </td>
+                            </tr>
+    
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-description"><p>Load the properties of the form<br/>based on config.<br/>Also handles types when set up in the<br/>properties json file</p><br/></div>
-
-                                <div class="io-description">
-                                </div>
-                                <div class="io-description">
-                                    <b>Returns : </b>    <code>void</code>
-
-                                </div>
-                                    <div class="io-description">
-
-                                    </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <table class="table table-sm table-bordered">
-                <tbody>
-                    <tr>
-                        <td class="col-md-4">
-                            <b> getTreeFromObject</b>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="col-md-4">
-    <code>getTreeFromObject(object: any)</code>
-                        </td>
-                    </tr>
-
-
-                        <tr>
-                            <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="133" class="link-to-prism">src/app/shared/components/config-form/config-form.component.ts:133</a></div>
-                            </td>
-                        </tr>
-
-                    <tr>
-                        <td class="col-md-4">
-                                <div class="io-description"><p>Create a TreeNode structure from an supplied object.</p><br/></div>
-
+                                <div class="io-description"><p>Run on submission of form
+    Deals with converting back to correct formats</p>
+    </div>
+    
                                 <div class="io-description">
                                         <b>Parameters :</b>
-                                        <ul class="jsdoc-params">
-                                                <li>
-                                                    <div>
-                                                        <b>object</b>
-                                                    </div>
-                                                    <div>
-
-                                                    </div>
-                                                </li>
-                                        </ul>
+                                        <table class="params">
+                                            <thead>
+                                                <tr>
+                                                    <td>Name</td>
+                                                    <td>Type</td>
+                                                    <td>Optional</td>
+                                                    <td>Description</td>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                    <tr>
+                                                      <td>values</td>
+                                                      <td>
+                                                      </td>
+                                                      <td>
+                                                      </td>
+                                                      <td></td>
+                                                    </tr>
+                                            </tbody>
+                                        </table>
+                                </div>
+                                <div>
                                 </div>
                                 <div class="io-description">
-                                    <b>Returns : </b>    <code>void</code>
-
+                                    <b>Returns : </b>    <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+    
                                 </div>
                                     <div class="io-description">
-
-                                    </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <table class="table table-sm table-bordered">
-                <tbody>
-                    <tr>
-                        <td class="col-md-4">
-                            <b> updateModel</b>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="col-md-4">
-    <code>updateModel(values: any)</code>
-                        </td>
-                    </tr>
-
-
-                        <tr>
-                            <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="174" class="link-to-prism">src/app/shared/components/config-form/config-form.component.ts:174</a></div>
-                            </td>
-                        </tr>
-
-                    <tr>
-                        <td class="col-md-4">
-                                <div class="io-description"><p>Run on submission of form<br/>Deals with converting back to correct formats</p><br/></div>
-
-                                <div class="io-description">
-                                        <b>Parameters :</b>
-                                        <ul class="jsdoc-params">
-                                                <li>
-                                                    <div>
-                                                        <b>values</b>
-                                                    </div>
-                                                    <div>
-
-                                                    </div>
-                                                </li>
-                                        </ul>
-                                </div>
-                                <div class="io-description">
-                                    <b>Returns : </b>    <code>void</code>
-
-                                </div>
-                                    <div class="io-description">
-
-                                    </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <table class="table table-sm table-bordered">
-                <tbody>
-                    <tr>
-                        <td class="col-md-4">
-                            <b> getType</b>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="col-md-4">
-    <code>getType(key: any, value: any)</code>
-                        </td>
-                    </tr>
-
-
-                        <tr>
-                            <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="202" class="link-to-prism">src/app/shared/components/config-form/config-form.component.ts:202</a></div>
-                            </td>
-                        </tr>
-
-                    <tr>
-                        <td class="col-md-4">
-                                <div class="io-description"><p>Checks type against config and<br/>fallback to type if not available</p><br/></div>
-
-                                <div class="io-description">
-                                        <b>Parameters :</b>
-                                        <ul class="jsdoc-params">
-                                                <li>
-                                                    <div>
-                                                        <b>key</b>
-                                                    </div>
-                                                    <div>
-
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div>
-                                                        <b>value</b>
-                                                    </div>
-                                                    <div>
-
-                                                    </div>
-                                                </li>
-                                        </ul>
-                                </div>
-                                <div class="io-description">
-                                    <b>Returns : </b>    <code>void</code>
-
-                                </div>
-                                    <div class="io-description">
-
+                                        
                                     </div>
                         </td>
                     </tr>
@@ -1491,7 +2449,7 @@
     </section>
 
     <section>
-
+        
             <h3 id="inputs">
                 Properties
             </h3>
@@ -1499,125 +2457,163 @@
                 <tbody>
                     <tr>
                         <td class="col-md-4">
-                            <b> dsFormGroup</b>
+                            <a name="dsFormGroup"></a>
+                            <span class="name"><b> dsFormGroup</b><a href="#dsFormGroup"><span class="fa fa-link"></span></a></span>
                         </td>
                     </tr>
                     <tr>
                         <td class="col-md-4">
-                            <code>dsFormGroup:     <code><a href="https://angular.io/docs/ts/latest/api/forms/index/FormGroup-class.html" target="_blank" >FormGroup</a></code>
-    </bcode>
+                            <code>dsFormGroup:     <code><a href="https://angular.io/docs/ts/latest/api/api/forms/FormGroup" target="_blank" >FormGroup</a></code>
+    </code>
                         </td>
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="31" class="link-to-prism">src/app/shared/components/config-form/config-form.component.ts:31</a></div>
+                                <i>Type : </i>    <code><a href="https://angular.io/docs/ts/latest/api/api/forms/FormGroup" target="_blank" >FormGroup</a></code>
+    
                             </td>
                         </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="25" class="link-to-prism">src/app/shared/modules/config-form/config-form.component.ts:25</a></div>
+                                </td>
+                            </tr>
+    
+    
                 </tbody>
             </table>
             <table class="table table-sm table-bordered">
                 <tbody>
                     <tr>
                         <td class="col-md-4">
-                            <b> formConfig</b>
+                            <a name="formConfig"></a>
+                            <span class="name"><b> formConfig</b><a href="#formConfig"><span class="fa fa-link"></span></a></span>
                         </td>
                     </tr>
                     <tr>
                         <td class="col-md-4">
-                            <code>formConfig:     <code>object</code>
-    </bcode>
+                            <code>formConfig:     <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/object" target="_blank" >object</a></code>
+    </code>
                         </td>
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="34" class="link-to-prism">src/app/shared/components/config-form/config-form.component.ts:34</a></div>
+                                <i>Type : </i>    <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/object" target="_blank" >object</a></code>
+    
                             </td>
                         </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="28" class="link-to-prism">src/app/shared/modules/config-form/config-form.component.ts:28</a></div>
+                                </td>
+                            </tr>
+    
+    
                 </tbody>
             </table>
             <table class="table table-sm table-bordered">
                 <tbody>
                     <tr>
                         <td class="col-md-4">
-                            <b> formData</b>
+                            <a name="formData"></a>
+                            <span class="name"><b> formData</b><a href="#formData"><span class="fa fa-link"></span></a></span>
                         </td>
                     </tr>
                     <tr>
                         <td class="col-md-4">
-                            <code>formData:     <code>object</code>
-    </bcode>
+                            <code>formData:     <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/object" target="_blank" >object</a></code>
+    </code>
                         </td>
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="33" class="link-to-prism">src/app/shared/components/config-form/config-form.component.ts:33</a></div>
+                                <i>Type : </i>    <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/object" target="_blank" >object</a></code>
+    
                             </td>
                         </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="27" class="link-to-prism">src/app/shared/modules/config-form/config-form.component.ts:27</a></div>
+                                </td>
+                            </tr>
+    
+    
                 </tbody>
             </table>
             <table class="table table-sm table-bordered">
                 <tbody>
                     <tr>
                         <td class="col-md-4">
-                            <b> objData</b>
+                            <a name="objData"></a>
+                            <span class="name"><b> objData</b><a href="#objData"><span class="fa fa-link"></span></a></span>
                         </td>
                     </tr>
                     <tr>
                         <td class="col-md-4">
-                            <code>objData:     <code>object</code>
-    </bcode>
+                            <code>objData:     <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/object" target="_blank" >object</a></code>
+    </code>
                         </td>
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="35" class="link-to-prism">src/app/shared/components/config-form/config-form.component.ts:35</a></div>
+                                <i>Type : </i>    <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/object" target="_blank" >object</a></code>
+    
                             </td>
                         </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="29" class="link-to-prism">src/app/shared/modules/config-form/config-form.component.ts:29</a></div>
+                                </td>
+                            </tr>
+    
+    
                 </tbody>
             </table>
             <table class="table table-sm table-bordered">
                 <tbody>
                     <tr>
                         <td class="col-md-4">
-                            <b> properties</b>
+                            <a name="properties"></a>
+                            <span class="name"><b> properties</b><a href="#properties"><span class="fa fa-link"></span></a></span>
                         </td>
                     </tr>
                     <tr>
                         <td class="col-md-4">
-                            <code>properties:     <code>object</code>
-    </bcode>
+                            <code>properties:     <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/object" target="_blank" >object</a></code>
+    </code>
                         </td>
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="32" class="link-to-prism">src/app/shared/components/config-form/config-form.component.ts:32</a></div>
+                                <i>Type : </i>    <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/object" target="_blank" >object</a></code>
+    
                             </td>
                         </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="26" class="link-to-prism">src/app/shared/modules/config-form/config-form.component.ts:26</a></div>
+                                </td>
+                            </tr>
+    
+    
                 </tbody>
             </table>
     </section>
+
 </div>
 
 
     <div class="tab-pane fade tab-source-code" id="source">
-        <pre class="line-numbers"><code class="language-typescript">import {Component, Input, OnInit} from &#x27;@angular/core&#x27;;
+        <pre class="line-numbers"><code class="language-typescript">import {Component, EventEmitter, Input, OnInit, Output} from &#x27;@angular/core&#x27;;
 import {
   FormBuilder,
-  FormControl,
-  FormGroup,
-  FormsModule,
-  ReactiveFormsModule,
-  Validators
+  FormGroup
 } from &#x27;@angular/forms&#x27;;
-
-import {ConfigService} from &#x27;shared/services/config.service&#x27;;
-import {BaseLoopBackApi} from &#x27;shared/sdk/services/core/base.service&#x27;;
-
-import {Store} from &quot;@ngrx/store&quot;;
-import {DatasetState, initialState} from &quot;state-management/state/dataset.store&quot;;
-import * as dsa from &quot;state-management/actions/datasets.actions&quot;;
-
+import {Store} from &#x27;@ngrx/store&#x27;;
 import {TreeNode} from &#x27;primeng/primeng&#x27;;
+import {BaseLoopBackApi} from &#x27;shared/sdk/services/core/base.service&#x27;;
+import {ConfigService} from &#x27;shared/services/config.service&#x27;;
+import {DatePipe} from &#x27;@angular/common&#x27;;
 
 @Component({
   selector : &#x27;config-form&#x27;,
@@ -1628,8 +2624,10 @@ export class ConfigFormComponent implements OnInit {
 
   @Input() source: object;
   @Input() sourceType;
-  @Input() service: BaseLoopBackApi &#x3D; null;
   @Input() enabled &#x3D; true;
+
+  @Output() onSubmit: EventEmitter&lt;any&gt; &#x3D; new EventEmitter();
+
   dsFormGroup: FormGroup;
   properties: object;
   formData: object;
@@ -1638,50 +2636,29 @@ export class ConfigFormComponent implements OnInit {
 
   constructor(private formBuilder: FormBuilder,
               private configService: ConfigService, private store: Store&lt;any&gt;) {
-    this.store.select(state &#x3D;&gt; state.root.datasets.currentSet).subscribe(dataset &#x3D;&gt; {
-        if(dataset &amp;&amp; Object.keys(dataset).length &gt; 0) {
-            this.source &#x3D; dataset;
-            if (this.sourceType &#x3D;&#x3D;&#x3D; &quot;RawDataset&quot;) {
-              this.configService.getConfigFile(this.sourceType)
-                  .subscribe(
-                      res &#x3D;&gt; {
-                        this.formConfig &#x3D; res;
-                        this.loadForm(res);
-                      },
-                      error &#x3D;&gt; { console.error(error);
-                       });
-            } else {
-                this.loadForm();
-            }
-        }
-    });
   }
 
   ngOnInit() {
     // TODO check if config exists, do not use if doesn&#x27;t (i.e. for normal
     // objects)
-    let configFile;
+    let configFile &#x3D; undefined;
     if (this.sourceType) {
-        configFile &#x3D; this.sourceType;
-    } else if (this.source.constructor.name !&#x3D;&#x3D; &#x27;Object&#x27;) {
-        configFile &#x3D; this.source.constructor.name;
-    } else if (this.service) {
-        configFile &#x3D; this.service.constructor.name.replace(&#x27;Api&#x27;, &#x27;&#x27;);
+      configFile &#x3D; this.sourceType;
+    } else if (this.source &amp;&amp; this.source.constructor.name !&#x3D;&#x3D; &#x27;Object&#x27;) {
+      configFile &#x3D; this.source.constructor.name;
     }
-    if(configFile) {
+    if (configFile) {
       this.configService.getConfigFile(configFile)
           .subscribe(
               res &#x3D;&gt; {
                 this.formConfig &#x3D; res;
                 this.loadForm(res);
               },
-              error &#x3D;&gt; { console.error(error);
-               });
+              error &#x3D;&gt; { console.error(error); });
     } else {
-        this.loadForm();
+      this.loadForm();
     }
   }
-
 
   /**
    * Load the properties of the form
@@ -1696,18 +2673,24 @@ export class ConfigFormComponent implements OnInit {
     this.formData &#x3D; Object.assign({}, this.source);
     for (const prop in this.formData) {
       if (prop &amp;&amp; this.formData.hasOwnProperty(prop)) {
-        let config;
         if (this.formConfig) {
           config &#x3D; this.formConfig[prop];
           if (config &amp;&amp; config[&#x27;type&#x27;] &#x3D;&#x3D;&#x3D; &#x27;Date&#x27;) {
-            this.formData[prop] &#x3D; new Date(this.source[prop]).toISOString();
-          }
+            const date &#x3D; new Date(this.source[prop]);
+            const datePipe &#x3D; new DatePipe(&#x27;en-US&#x27;);
+            const formattedDate &#x3D; datePipe.transform(date, &#x27;dd/MM/yyyy HH:mm&#x27;);
+            this.formData[prop] &#x3D; formattedDate;
+            }
+          if (config &amp;&amp; config[&#x27;type&#x27;] &#x3D;&#x3D;&#x3D; &#x27;number&#x27; &amp;&amp; config[&#x27;name&#x27;] &#x3D;&#x3D;&#x3D; &#x27;size&#x27;) {
+            this.formData[prop] &#x3D; (((this.source[prop] / 1024) / 1024) / 1024).toFixed(2);
+            }
           if (config &amp;&amp; &#x27;visible&#x27; in config &amp;&amp; config[&#x27;visible&#x27;] &#x3D;&#x3D;&#x3D; false) {
             delete this.formData[prop];
           }
-        }
-        if (prop &amp;&amp; this.getType(prop, this.source[prop]) &#x3D;&#x3D;&#x3D; &#x27;object&#x27;) {
-          this.objData[prop] &#x3D; &lt;TreeNode[]&gt; this.getTreeFromObject(this.source[prop]);
+          }
+        if (this.getType(prop, this.source[prop]) &#x3D;&#x3D;&#x3D; &#x27;object&#x27;) {
+          this.objData[prop] &#x3D;
+              &lt;TreeNode[]&gt;this.getTreeFromObject(this.source[prop]);
         } else if (this.getType(prop, this.source[prop]) &#x3D;&#x3D;&#x3D; &#x27;array&#x27;) {
           this.formData[prop] &#x3D; JSON.stringify(this.source[prop]);
         }
@@ -1725,47 +2708,46 @@ export class ConfigFormComponent implements OnInit {
     }
   }
 
-
- /**
-  * Create a TreeNode structure from an supplied object.
-  * @param {any} object
-  * @returns
-  * @memberof ConfigFormComponent
-  */
- getTreeFromObject(object) {
-  const paths &#x3D; [];
-  iterate(object, &#x27;&#x27;);
-  return paths;
-
   /**
-   * Single object iteration. Accumulates to an outer &#x27;paths&#x27; array.
-   * @param {any} obj
-   * @param {any} path
+   * Create a TreeNode structure from an supplied object.
+   * @param {any} object
    * @returns
+   * @memberof ConfigFormComponent
    */
-  function iterate(obj, path) {
-    for (const property in obj) {
-      if (obj.hasOwnProperty(property)) {
-        if (typeof obj[property] &#x3D;&#x3D;&#x3D; &#x27;object&#x27;) {
-          const kids &#x3D; [];
-          if(path) {
-            path.push({data: {name: property, value: &#x27;&#x27;}, children: kids});
-          } else {
-            paths.push({data: {name: property, value: &#x27;&#x27;}, children: kids});
-          }
-          iterate(obj[property], kids);
-        } else if (path !&#x3D;&#x3D; &#x27;&#x27;) {
-          path.push({data: {name: property, value: obj[property]}});
-        } else {
-          paths.push({data: {name: property, value: obj[property]}});
-        }
-      }
-    }
+  getTreeFromObject(object) {
+    const paths &#x3D; [];
+    iterate(object, &#x27;&#x27;);
     return paths;
+
+    /**
+     * Single object iteration. Accumulates to an outer &#x27;paths&#x27; array.
+     * @param {any} obj
+     * @param {any} path
+     * @returns
+     */
+    function iterate(obj, path) {
+      for (const property in obj) {
+        if (obj.hasOwnProperty(property)) {
+          if (typeof obj[property] &#x3D;&#x3D;&#x3D; &#x27;object&#x27;) {
+            const kids &#x3D; [];
+            if (path) {
+              path.push(
+                  {data : {name : property, value : &#x27;&#x27;}, children : kids});
+            } else {
+              paths.push(
+                  {data : {name : property, value : &#x27;&#x27;}, children : kids});
+            }
+            iterate(obj[property], kids);
+          } else if (path !&#x3D;&#x3D; &#x27;&#x27;) {
+            path.push({data : {name : property, value : obj[property]}});
+          } else {
+            paths.push({data : {name : property, value : obj[property]}});
+          }
+        }
+        }
+      return paths;
+    }
   }
-}
-
-
 
   /**
    * Run on submission of form
@@ -1774,24 +2756,8 @@ export class ConfigFormComponent implements OnInit {
    * @memberof ConfigFormComponent
    */
   updateModel(values) {
-    for (const prop in this.formConfig) {
-      if (this.formConfig[prop][&#x27;type&#x27;] &#x3D;&#x3D;&#x3D; &#x27;object&#x27; &amp;&amp;
-          values[prop].length &gt; 0) {
-        this.source[prop] &#x3D; JSON.parse(values[prop]);
-      } else if (this.formConfig[prop] &amp;&amp;
-                 (this.formConfig[prop][&#x27;visible&#x27;] !&#x3D;&#x3D; false)) {
-        this.source[prop] &#x3D; values[prop];
-      }
-    }
-    // TODO VALIDATE HERE or validate from a config file
-    // TODO inform user of errors returned from service
-    this.service
-        .replaceById(encodeURIComponent(this.source[&#x27;pid&#x27;]), this.source)
-        .subscribe(function(update) { console.log(update); },
-                   error &#x3D;&gt; console.log(error));
+    this.onSubmit.emit(values);
   }
-
-
 
   /**
    * Checks type against config and
@@ -1815,25 +2781,35 @@ export class ConfigFormComponent implements OnInit {
 
     <div class="tab-pane fade" id="templateData">
         <pre class="line-numbers"><code class="language-html">&lt;!--TODO add configuration and error/success message div--&gt;
-&lt;form #f&#x3D;&quot;ngForm&quot; [formGroup]&#x3D;&quot;dsFormGroup&quot; class&#x3D;&quot;ui equal width form&quot; (ngSubmit)&#x3D;&quot;updateModel(f.value)&quot; *ngIf&#x3D;&quot;formData&quot;&gt;
-    &lt;!--TODO handle different kinds of input and formats. I.e. dropdowns, checkboxes etc--&gt;
-    &lt;div class&#x3D;&quot;inline field entry&quot; *ngFor&#x3D;&quot;let d of formData | objKeys&quot;&gt;
-        &lt;label&gt;{{d.key | titleCase}}&lt;/label&gt;
-         &lt;div [ngSwitch]&#x3D;&quot;getType(d.key, d.value)&quot;&gt;
-             &lt;input ngui-datetime-picker *ngSwitchCase&#x3D;&quot;&#x27;Date&#x27;&quot; formControlName&#x3D;&quot;{{d.key}}&quot; placeholder&#x3D;&quot;&quot; [close-on-select]&#x3D;&quot;false&quot;&gt;
-             &lt;p-treeTable [value]&#x3D;&quot;objData[d.key]&quot; selectionMode&#x3D;&quot;single&quot; *ngSwitchCase&#x3D;&quot;&#x27;object&#x27;&quot;&gt;
-                &lt;p-column field&#x3D;&quot;name&quot; header&#x3D;&quot;Name&quot;&gt;&lt;/p-column&gt;
-                &lt;p-column field&#x3D;&quot;value&quot; header&#x3D;&quot;Value&quot;&gt;&lt;/p-column&gt;
-            &lt;/p-treeTable&gt;
-            &lt;!--&lt;textarea *ngSwitchCase&#x3D;&quot;&#x27;object&#x27;&quot; formControlName&#x3D;&quot;{{d.key}}&quot;&gt;&lt;/textarea&gt;--&gt;
-             &lt;input *ngSwitchDefault formControlName&#x3D;&quot;{{d.key}}&quot; placeholder&#x3D;&quot;&quot;&gt;
+&lt;mat-card&gt;
+    &lt;form #f&#x3D;&quot;ngForm&quot; [formGroup]&#x3D;&quot;dsFormGroup&quot; (ngSubmit)&#x3D;&quot;updateModel(f.value)&quot; *ngIf&#x3D;&quot;formData&quot;&gt;
+        &lt;!--TODO handle different kinds of input and formats. I.e. dropdowns, checkboxes etc--&gt;
+        &lt;div *ngFor&#x3D;&quot;let d of formData | objKeys&quot;&gt;
+            &lt;label&gt;{{d.key | titleCase}}&lt;/label&gt;
+            &lt;div [ngSwitch]&#x3D;&quot;getType(d.key, d.value)&quot;&gt;
+                &lt;input ngui-datetime-picker *ngSwitchCase&#x3D;&quot;&#x27;Date&#x27;&quot; formControlName&#x3D;&quot;{{d.key}}&quot; placeholder&#x3D;&quot;&quot; [close-on-select]&#x3D;&quot;false&quot;&gt;
+                &lt;p-treeTable [value]&#x3D;&quot;objData[d.key]&quot; selectionMode&#x3D;&quot;single&quot; *ngSwitchCase&#x3D;&quot;&#x27;object&#x27;&quot;&gt;
+                    &lt;p-column field&#x3D;&quot;name&quot; header&#x3D;&quot;Name&quot;&gt;&lt;/p-column&gt;
+                    &lt;p-column field&#x3D;&quot;value&quot; header&#x3D;&quot;Value&quot;&gt;&lt;/p-column&gt;
+                &lt;/p-treeTable&gt;
+                        &lt;mat-slide-toggle
+                        [color]&#x3D;&quot;color&quot;
+                        [checked]&#x3D;&quot;d.value&quot;
+                        formControlName&#x3D;&quot;{{d.key}}&quot;
+                        *ngSwitchCase&#x3D;&quot;&#x27;Boolean&#x27;&quot;
+                        &gt;
+                    &lt;/mat-slide-toggle&gt;
+                &lt;!--&lt;textarea *ngSwitchCase&#x3D;&quot;&#x27;object&#x27;&quot; formControlName&#x3D;&quot;{{d.key}}&quot;&gt;&lt;/textarea&gt;--&gt;
+                &lt;mat-form-field class&#x3D;&quot;example-full-width&quot; *ngSwitchDefault&gt;
+                    &lt;input matInput formControlName&#x3D;&quot;{{d.key}}&quot; placeholder&#x3D;&quot;&quot;&gt;
+                &lt;/mat-form-field&gt;
+            &lt;/div&gt;
         &lt;/div&gt;
-    &lt;/div&gt;
-    &lt;ng-container *ngIf&#x3D;&quot;enabled&quot;&gt;
-        &lt;button class&#x3D;&quot;ui button&quot;&gt;Update&lt;/button&gt;
-    &lt;/ng-container&gt;
-&lt;/form&gt;
-</code></pre>
+        &lt;ng-container *ngIf&#x3D;&quot;enabled&quot;&gt;
+            &lt;button mat-raised-button&gt;Update&lt;/button&gt;
+        &lt;/ng-container&gt;
+    &lt;/form&gt;
+&lt;/mat-card&gt;</code></pre>
     </div>
 
     <div class="tab-pane fade" id="tree">
@@ -1859,12 +2835,13 @@ export class ConfigFormComponent implements OnInit {
 <script src="../js/libs/htmlparser.js"></script>
 <script src="../js/libs/deep-iterator.js"></script>
 <script>
-        var COMPONENT_TEMPLATE = '<div><!--TODO add configuration and error/success message div--><form #f="ngForm" [formGroup]="dsFormGroup" class="ui equal width form" (ngSubmit)="updateModel(f.value)" *ngIf="formData">    <!--TODO handle different kinds of input and formats. I.e. dropdowns, checkboxes etc-->    <div class="inline field entry" *ngFor="let d of formData | objKeys">        <label>{{d.key | titleCase}}</label>         <div [ngSwitch]="getType(d.key, d.value)">             <input ngui-datetime-picker *ngSwitchCase="\'Date\'" formControlName="{{d.key}}" placeholder="" [close-on-select]="false">             <p-treeTable [value]="objData[d.key]" selectionMode="single" *ngSwitchCase="\'object\'">                <p-column field="name" header="Name"></p-column>                <p-column field="value" header="Value"></p-column>            </p-treeTable>            <!--<textarea *ngSwitchCase="\'object\'" formControlName="{{d.key}}"></textarea>-->             <input *ngSwitchDefault formControlName="{{d.key}}" placeholder="">        </div>    </div>    <ng-container *ngIf="enabled">        <button class="ui button">Update</button>    </ng-container></form></div>';
-    var COMPONENTS = [{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'BreadcrumbComponent', 'selector': 'breadcrumb'},{'name': 'ConfigFormComponent', 'selector': 'config-form'},{'name': 'DashboardComponent', 'selector': 'dashboard'},{'name': 'DatablocksComponent', 'selector': 'datablocks-table'},{'name': 'DatafilesComponent', 'selector': 'datafiles'},{'name': 'DatasetDetailComponent', 'selector': 'dataset-detail'},{'name': 'DatasetTableComponent', 'selector': 'dataset-table'},{'name': 'DatasetsFilterComponent', 'selector': 'datasets-filter'},{'name': 'EndOfShiftComponent', 'selector': 'app-end-of-shift'},{'name': 'ErrorPageComponent', 'selector': 'error-page'},{'name': 'JobsComponent', 'selector': 'app-jobs'},{'name': 'LoginComponent', 'selector': 'login-form'},{'name': 'SampleDataFormComponent', 'selector': 'app-sample-data-form'},{'name': 'UserDetailsComponent', 'selector': 'app-user-details'},{'name': 'UserSettingsComponent', 'selector': 'app-user-settings'}];
+        var COMPONENT_TEMPLATE = '<div><!--TODO add configuration and error/success message div--><mat-card>    <form #f="ngForm" [formGroup]="dsFormGroup" (ngSubmit)="updateModel(f.value)" *ngIf="formData">        <!--TODO handle different kinds of input and formats. I.e. dropdowns, checkboxes etc-->        <div *ngFor="let d of formData | objKeys">            <label>{{d.key | titleCase}}</label>            <div [ngSwitch]="getType(d.key, d.value)">                <input ngui-datetime-picker *ngSwitchCase="\'Date\'" formControlName="{{d.key}}" placeholder="" [close-on-select]="false">                <p-treeTable [value]="objData[d.key]" selectionMode="single" *ngSwitchCase="\'object\'">                    <p-column field="name" header="Name"></p-column>                    <p-column field="value" header="Value"></p-column>                </p-treeTable>                        <mat-slide-toggle                        [color]="color"                        [checked]="d.value"                        formControlName="{{d.key}}"                        *ngSwitchCase="\'Boolean\'"                        >                    </mat-slide-toggle>                <!--<textarea *ngSwitchCase="\'object\'" formControlName="{{d.key}}"></textarea>-->                <mat-form-field class="example-full-width" *ngSwitchDefault>                    <input matInput formControlName="{{d.key}}" placeholder="">                </mat-form-field>            </div>        </div>        <ng-container *ngIf="enabled">            <button mat-raised-button>Update</button>        </ng-container>    </form></mat-card></div>'
+    var COMPONENTS = [{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'BreadcrumbComponent', 'selector': 'breadcrumb'},{'name': 'ConfigFormComponent', 'selector': 'config-form'},{'name': 'DashboardComponent', 'selector': 'dashboard'},{'name': 'DatablocksComponent', 'selector': 'datablocks-table'},{'name': 'DatafilesComponent', 'selector': 'datafiles'},{'name': 'DatasetDetailComponent', 'selector': 'dataset-detail'},{'name': 'DatasetTableComponent', 'selector': 'dataset-table'},{'name': 'DatasetsFilterComponent', 'selector': 'datasets-filter'},{'name': 'DatePickerComponent', 'selector': 'datepicker'},{'name': 'DialogComponent', 'selector': 'app-dialog'},{'name': 'ErrorPageComponent', 'selector': 'error-page'},{'name': 'JobsComponent', 'selector': 'app-jobs'},{'name': 'JobsDetailComponent', 'selector': 'app-jobs-detail'},{'name': 'JobsTableComponent', 'selector': 'app-jobs'},{'name': 'LoginComponent', 'selector': 'login-form'},{'name': 'SampleDataFormComponent', 'selector': 'app-sample-data-form'},{'name': 'UserDetailsComponent', 'selector': 'app-user-details'},{'name': 'UserSettingsComponent', 'selector': 'app-user-settings'}];
     var DIRECTIVES = [];
     var ACTUAL_COMPONENT = {'name': 'ConfigFormComponent'};
 </script>
 <script src="../js/tree.js"></script>
+
 
 
 
