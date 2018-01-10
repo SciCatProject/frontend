@@ -114,7 +114,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
         .subscribe(combined => {
           this.filters = Object.assign({}, combined);
           const group = combined['ownerGroup'];
-          this.selectedGroup = group.toString();
+          this.selectedGroup = group !== undefined ? group.toString() : undefined;
           // TODO autoselect locations and dates as well
         this.store.select(selectors.ui.getMode).take(1).subscribe(currentMode => {
            combined['mode'] = currentMode;
