@@ -1,10 +1,11 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
 
 import {Datablock} from 'shared/sdk/models';
 import {RawDatasetApi} from 'shared/sdk/services';
 
 import {ActivatedRoute, NavigationExtras, Router} from '@angular/router';
 import {DatasetService} from '../dataset.service';
+import {MatTableDataSource, MatPaginator} from '@angular/material';
 
 @Component({
   selector: 'datablocks-table',
@@ -15,6 +16,8 @@ export class DatablocksComponent implements OnInit {
 
   @Input() datasetId: number;
   datablocks: Array<Datablock>;
+  dataSource: MatTableDataSource<any> | null;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
 
 
   constructor(private cds: DatasetService, private ds: RawDatasetApi, private router: Router, private route: ActivatedRoute) {
@@ -59,6 +62,7 @@ export class DatablocksComponent implements OnInit {
       console.log(datablocks);
       if (datablocks.length > 0) {
         self.datablocks = datablocks;
+        self.dataSource = new MatTableDataSource(this.datablocks);
       }
     });
   }

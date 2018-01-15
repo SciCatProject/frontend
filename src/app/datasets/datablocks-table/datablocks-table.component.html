@@ -1,8 +1,27 @@
 <div class="ui raised segment">
   <h4 class="ui header">Datablocks</h4>
-    <p-dataTable [value]="datablocks" (onRowSelect)="onSelect($event)">
-    <p-column field="id" header="ID"></p-column>
-    <p-column field="size" header="Size"></p-column>
-    <p-column field="datasetID" header="DatasetID"></p-column>
-</p-dataTable>
+  <div class="example-container mat-elevation-z8">
+    <mat-table #table [dataSource]="dataSource">
+  
+      <ng-container matColumnDef="name">
+        <mat-header-cell *matHeaderCellDef> ID </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.id}} </mat-cell>
+      </ng-container>
+  
+      <ng-container matColumnDef="path">
+        <mat-header-cell *matHeaderCellDef> Size </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.size}} </mat-cell>
+      </ng-container>
+  
+      <ng-container matColumnDef="size">
+        <mat-header-cell *matHeaderCellDef> Dataset ID </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.datasetID}} </mat-cell>
+      </ng-container>
+  
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    </mat-table>
+  </div>
+    
+  <mat-paginator [pageSize]="30" [pageSizeOptions]="[10,30, 50, 100]" [length]="files.length"></mat-paginator>
 </div>
