@@ -10,7 +10,7 @@
       <mat-autocomplete #beam="matAutocomplete">
         <mat-option (onSelectionChange)="locSelected(b)" *ngFor="let b of filteredBeams | async" [value]="b._id">
           <span>{{ b._id }}</span> |
-          <small>Results:kljchjkld</small>
+          <small>Results:{{b.count}}</small>
         </mat-option>
       </mat-autocomplete>
     </mat-form-field>

@@ -167,6 +167,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
       this.store.select(selectors.datasets.getFilterValues)
         .subscribe(values => {
           this.filterValues = Object.assign({}, values);
+          console.log(this.filterValues);
           if (this.filterValues) {
             if (this.filterValues['creationLocation'] !== null) {
               this.locations = this.filterValues['creationLocation']

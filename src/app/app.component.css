@@ -19,3 +19,9 @@ td {
 .example-spacer {
     flex: 1 1 auto;
   }
+
+  .example-container {
+    position: absolute;
+    min-height: 100% !important;
+    
+    } 

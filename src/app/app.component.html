@@ -1,14 +1,6 @@
 <!-- <div class="ui fixed menu"> -->
 <div [class.dark-theme]="(darkTheme$ | async)" [class.light-theme]="!(darkTheme$ | async)">
-    <mat-toolbar color="primary">
-        <mat-toolbar-row>
-            <i (click)="sidenavToggle()" class="sidenav-toggle fa fa-bars" aria-hidden="true"></i>       
-            <h3 class="app-title">  {{title}}</h3>
-            <span class="example-spacer"></span>
-        </mat-toolbar-row>
-    </mat-toolbar>
-            <mat-sidenav-container
-            class="example-container" (backdropClick)="sidenavToggle()">
+    <mat-sidenav-container (backdropClick)="sidenavToggle()" fullscreen>
         <mat-sidenav #sidenav (keydown.escape)="sidenavToggle()" mode="side">
             <mat-list>
                 <mat-list-item><a class="item" [routerLink]="['/datasets/']" [routerLinkActive]="['active']">Home</a></mat-list-item>
@@ -27,6 +19,13 @@
         </mat-sidenav>
         
         <mat-sidenav-content>
+                <mat-toolbar color="primary">
+                        <mat-toolbar-row>
+                            <i (click)="sidenavToggle()" class="sidenav-toggle fa fa-bars" aria-hidden="true"></i>       
+                            <h3 class="app-title">  {{title}}</h3>
+                            <span class="example-spacer"></span>
+                        </mat-toolbar-row>
+                    </mat-toolbar>
             <mat-card>
                 <breadcrumb></breadcrumb>
                 <br>
