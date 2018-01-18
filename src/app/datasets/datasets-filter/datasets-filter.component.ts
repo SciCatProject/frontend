@@ -1,11 +1,11 @@
 import 'rxjs/add/operator/take';
 import 'rxjs/add/observable/combineLatest';
-import {startWith} from 'rxjs/operators/startWith';
-import {map} from 'rxjs/operators/map';
+import { startWith } from 'rxjs/operators/startWith';
+import { map } from 'rxjs/operators/map';
 
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import {FormControl} from '@angular/forms';
+import { FormControl } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { AutoComplete, Tree } from 'primeng/primeng';
 import { createSelector, OutputSelector } from 'reselect';
@@ -71,17 +71,17 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
 
   constructor(private store: Store<any>, private route: ActivatedRoute,
     private router: Router) {
-      this.beamlineInput = new FormControl();
-      this.groupInput = new FormControl();
+    this.beamlineInput = new FormControl();
+    this.groupInput = new FormControl();
 
-    }
+  }
 
   filterBeams(beam: string) {
-    return this.filterValues.creationLocation.filter(b => b._id.toLowerCase().indexOf(beam.toLowerCase()) === 0);
+    return this.locations.filter(b => b._id.toLowerCase().indexOf(beam.toLowerCase()) === 0);
   }
 
   filterGroups(group: string) {
-    return this.filterValues.ownerGroup.filter(g => g._id.toLowerCase().indexOf(group.toLowerCase()) === 0);
+    return this.groups.filter(g => g._id.toLowerCase().indexOf(group.toLowerCase()) === 0);
   }
 
   /**
@@ -116,51 +116,12 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
           const group = combined['ownerGroup'];
           this.selectedGroup = group !== undefined ? group.toString() : undefined;
           // TODO autoselect locations and dates as well
-        this.store.select(selectors.ui.getMode).take(1).subscribe(currentMode => {
-           combined['mode'] = currentMode;
-           console.log(combined);
-            this.router.navigate(['/datasets'], { queryParams: {args: rison.encode(combined)} });
-        });
+          this.store.select(selectors.ui.getMode).take(1).subscribe(currentMode => {
+            combined['mode'] = currentMode;
+            console.log(combined);
+            this.router.navigate(['/datasets'], { queryParams: { args: rison.encode(combined) } });
+          });
         }));
-    //   const newParams = 'args' in params ? rison.decode(params['args']) : {};
-    //   delete newParams['mode'];
-    //   const activeFilters$ = this.store.select(selectors.datasets.getActiveFilters);
-    //   const mode$ = this.store.select(selectors.ui.getMode);
-    //   Observable.combineLatest(activeFilters$, mode$).takeLast(1).subscribe(combined => {
-    //     const filters = combined[0];
-    //     const mode = combined[1];
-    //     const f = utils.filter(filters, newParams);
-    //     // this.location = f['creationLocation']
-    //     //  ? { _id: filters['creationLocation'] }
-    //     //  : '';
-    //     const group = f['ownerGroup'];
-    //     if (group && group && Array.isArray(group) &&
-    //       group.length > 0) {
-    //       this.selectedGroups = group.map(x => { return { _id: x }; });
-    //     } else if (group && !Array.isArray(group)) {
-    //       this.selectedGroups = [{ '_id': group }];
-    //     } else {
-    //       this.selectedGroups = [];
-    //     }
-    //     if (utils.compareObj(f, newParams)) {
-    //       const encoded = rison.encode(newParams);
-    //       console.log(encoded);
-    //       this.router.navigate(
-    //         ['/datasets'],
-    //         { queryParams: {args: encoded}, replaceUrl: true });
-    //     } else if (params['mode'] !== mode) {
-    //       this.store.dispatch(new dsa.UpdateFilterAction(f));
-    //     }
-    //   });
-    // }));
-    // this.subscriptions.push(
-    //   this.store.select(selectors.datasets.getActiveFilters)
-    //     .subscribe(data => {
-    //       const args = 'args' in this.route.snapshot.queryParams ? rison.decode(this.route.snapshot.queryParams['args']) : {};
-    //       this.filters = Object.assign(args, data);
-    //       console.log(this.filters);
-    //       this.router.navigate(['/datasets'], { queryParams: {args: rison.encode(this.filters)} });
-    //     }));
     this.resultCount$ =
       this.store.select(selectors.datasets.getTotalSets);
     this.subscriptions.push(
@@ -169,7 +130,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
           this.filterValues = Object.assign({}, values);
           console.log(this.filterValues);
           if (this.filterValues) {
-            if (this.filterValues['creationLocation'] !== null) {
+            if (this.locations.length === 0 && this.filterValues['creationLocation'] !== null) {
               this.locations = this.filterValues['creationLocation']
                 ? this.filterValues['creationLocation']
                 : [];
@@ -177,15 +138,15 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
 
             if (this.groups.length === 0 &&
               this.filterValues['ownerGroup'] !== null) {
-              this.groups = this.filterValues['ownerGroup'];
+              this.groups = this.filterValues['ownerGroup'].slice();
             }
             if (this.filterValues.creationLocation) {
               this.filteredBeams = this.beamlineInput.valueChanges
-            .pipe(startWith(''), map(beam => beam ? this.filterBeams(beam) : this.filterValues.creationLocation.slice()));
+                .pipe(startWith(''), map(beam => beam ? this.filterBeams(beam) : this.filterValues.creationLocation.slice()));
             }
             if (this.filterValues.ownerGroup) {
-            this.filteredGroups = this.groupInput.valueChanges
-              .pipe(startWith(''), map(group => group ? this.filterGroups(group) : this.filterValues.ownerGroup.slice()));
+              this.filteredGroups = this.groupInput.valueChanges
+                .pipe(startWith(''), map(group => group ? this.filterGroups(group) : this.filterValues.ownerGroup.slice()));
             }
           }
         }));
@@ -248,8 +209,8 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     this.filters = dStore.initialDatasetState.activeFilters;
     this.dateSelections$.next([]);
     this.store.select(state => state.root.user.currentUserGroups)
-        .takeLast(1)
-        .subscribe(groups => { this.filters.ownerGroup = groups; });
+      .takeLast(1)
+      .subscribe(groups => { this.filters.ownerGroup = groups; });
     this.filters.ownerGroup = [];
     this.filterValues = dStore.initialDatasetState.filterValues;
     this.filterValues.text = '';

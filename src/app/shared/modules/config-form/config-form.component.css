@@ -1,6 +1,18 @@
+form {
+  display: table !important;
+  width: 80%;
+  color: darkslategrey;
+}
 
-form  {  display: table !important;  
-width: 80%;    }
-label { display: table-cell !important; }
-input { display: table-cell !important; width: 100% !important; }
-mat-form-field {width: 100% !important; }
+label {
+  display: table-cell !important;
+}
+
+input {
+  display: table-cell !important;
+  width: 100% !important;
+}
+
+mat-form-field {
+  width: 100% !important;
+}
