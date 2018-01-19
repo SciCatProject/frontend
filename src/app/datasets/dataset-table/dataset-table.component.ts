@@ -93,6 +93,20 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
     this.datasetCount$ = this.store.select(selectors.datasets.getTotalSets);
   }
 
+  getRowValue(row, col) {
+    const split = col.field.split('.');
+    if (split.length > 1) {
+      if (row[split[0]]) {
+        // TODO handle undefined and nesting > 1 layer
+        return row[split[0]][split[1]];
+      } else {
+        return 'Unknown';
+      }
+    } else {
+      return row[col.field];
+    }
+  }
+
   ngOnInit() {
 
     this.configSrv.getConfigFile('RawDataset').subscribe(conf => {
