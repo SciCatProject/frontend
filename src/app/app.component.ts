@@ -73,7 +73,7 @@ export class AppComponent implements OnDestroy, OnInit {
       .subscribe(current => {
         if (current.title !== undefined) {
           this.snackBar.open(current.title, undefined, {
-            duration: 50000,
+            duration: 10000,
           });
           this.store.dispatch(new ua.ClearMessageAction());
         }
