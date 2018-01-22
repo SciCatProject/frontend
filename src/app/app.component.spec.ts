@@ -7,8 +7,7 @@ import { rootReducer } from 'state-management/reducers/root.reducer';
 import { MatMenuModule, MatSnackBarModule} from '@angular/material';
 import { AppComponent } from './app.component';
 import { BreadcrumbComponent } from './shared/modules/breadcrumb/breadcrumb.component';
-// import {MockNotificationService, MockStore} from './shared/MockStubs';
-// import {NotificationsService} from 'angular2-notifications';
+import {MockStore} from './shared/MockStubs';
 
 /* tslint:disable:no-unused-variable */
 
