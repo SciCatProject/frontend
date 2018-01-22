@@ -184,8 +184,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
         ret => {
           if (ret && Array.isArray(ret)) {
             console.log(ret);
-            this.selectedSets = [];
-            console.log(this.selectedSets);
+            this.selection.clear();
           }
         },
         error => {
@@ -375,7 +374,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
    * @memberof DashboardComponent
    */
   archiveClickHandle(event) {
-    let dialogRef = this.dialog.open(DialogComponent, {
+    const dialogRef = this.dialog.open(DialogComponent, {
       width: 'auto',
       data: {title: 'Really archive?', question: ''}
     });
@@ -397,10 +396,9 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
    */
   retrieveClickHandle(event) {
     const destPath = '/archive/retrieve';
-    
-    let dialogRef = this.dialog.open(DialogComponent, {
+    const dialogRef = this.dialog.open(DialogComponent, {
       width: 'auto',
-      data: {title: "Really retrieve?", question: '', input: destPath}
+      data: {title: 'Really retrieve?', question: '', input: destPath}
     });
 
     dialogRef.afterClosed().subscribe(result => {

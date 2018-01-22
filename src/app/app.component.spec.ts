@@ -7,8 +7,8 @@ import { rootReducer } from 'state-management/reducers/root.reducer';
 import { MatMenuModule, MatSnackBarModule} from '@angular/material';
 import { AppComponent } from './app.component';
 import { BreadcrumbComponent } from './shared/modules/breadcrumb/breadcrumb.component';
-import {MockNotificationService, MockStore} from './shared/MockStubs';
-import {NotificationsService} from 'angular2-notifications';
+// import {MockNotificationService, MockStore} from './shared/MockStubs';
+// import {NotificationsService} from 'angular2-notifications';
 
 /* tslint:disable:no-unused-variable */
 
@@ -26,7 +26,7 @@ describe('AppComponent', () => {
     set: {
       providers: [
         // {provide : Router, useClass : MockRouter},
-        {provide : NotificationsService, useClass : MockNotificationService},
+        // {provide : NotificationsService, useClass : MockNotificationService},
         {provide : Store, useClass : MockStore},
       ]
     }
