@@ -154,7 +154,6 @@ export class DatasetEffects {
             if (fq['sortField']) {
               filter['order'] = fq['sortField'];
             }
-            console.log(filter);
             return this.rds.find(filter)
                 .switchMap(res => {
                   return Observable.of(new DatasetActions.SearchCompleteAction(res));

@@ -73,6 +73,8 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
 
   paranms = {};
 
+  filters = {};
+
   archiveable;
   retrievable;
 
@@ -117,20 +119,28 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
           }
         }
       }
-      console.log(this.displayedColumns);
     });
 
     this.loading$ = this.store.select(selectors.datasets.getLoading);
     this.limit$ = this.store.select(state => state.root.user.settings.datasetCount);
 
-    this.store.select(state => state.root.dashboardUI.mode).subscribe(mode => {
+    this.subscriptions.push(this.store.select(state => state.root.dashboardUI.mode).subscribe(mode => {
       this.mode = mode;
-      this.updateRowView(mode);
-    });
+      const self = this;
+      self.updateRowView(mode);
+        this.route.queryParams.take(1).subscribe(params => {
+          const f = 'args' in params ? rison.decode(params['args']) : {};
+          f['mode'] = mode;
+          self.router.navigate(['/datasets'], { queryParams: { args: rison.encode(f) } });
+        });
+    }));
 
     this.route.queryParams.subscribe(params => {
-      const f = utils.filter({ 'mode': '', 'skip': '' }, params);
+      const f = 'args' in params ? rison.decode(params['args']) : {};
+      // this.filters = Object.assign({}, params);
+      // const f = utils.filter({ 'mode': '', 'skip': '' }, params);
       this.mode = f['mode'] || 'view';
+      this.store.dispatch(new dua.SaveModeAction(this.mode));
       // this.setCurrentPage(f['skip']);
     });
 
@@ -146,10 +156,11 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
           this.datasets = data;
           this.dataSource = new MatTableDataSource(this.datasets);
           this.dataSource.sort = this.sort;
-          if (this.datasets && this.datasets.length > 0) {
+          // if (this.datasets && this.datasets.length > 0) {
             this.store.dispatch(new dua.SaveModeAction(this.mode));
-            this.updateRowView(this.mode);
-          }
+            console.log(this.mode);
+            // this.updateRowView(this.mode);
+          // }
           // this.onModeChange(undefined, this.mode);
         },
         error => {
@@ -231,8 +242,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
    * @memberof DatasetTableComponent
    */
   onRowSelect(event, row) {
-    console.log(event);
-    console.log(row);
     const pid = encodeURIComponent(row.pid);
     this.router.navigateByUrl(
       '/dataset/' + pid
@@ -241,10 +250,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
 
   onRowCheck(row) {
     this.selection.toggle(row);
-  }
-
-  onSort(event) {
-    console.log(event);
   }
 
   /**
@@ -286,7 +291,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
         }
         this.dataSource = new MatTableDataSource(activeSets);
       }
-      console.log(activeSets);
     } else {
       this.dataSource = new MatTableDataSource(this.datasets);
     }
@@ -324,7 +328,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
   onPage(event) {
     const index = this.paginator.pageIndex;
     const size = this.paginator.pageSize;
-    console.log(index, size);
     this.store
       .select(state => state.root.datasets.activeFilters)
       .take(1)
@@ -338,7 +341,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
         } else {
           filters['sortField'] = undefined;
         }
-        console.log(filters);
         // TODO reduce calls when not needed (i.e. no change)
         // if (f.first !== event.first || this.datasets.length === 0) {
         this.store.dispatch(new dsa.UpdateFilterAction(filters));
@@ -385,8 +387,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-      console.log(result);
       if (result) {
         this.archiveOrRetrieve(true);
       }

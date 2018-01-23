@@ -105,7 +105,6 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
       const newParams = 'args' in params ? rison.decode(params['args']) : this.filters;
       delete newParams['mode'];
       this.filters = Object.assign({}, newParams);
-      console.log(newParams);
       this.store.dispatch(new dsa.UpdateFilterAction(newParams));
     }));
 
@@ -118,7 +117,6 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
           // TODO autoselect locations and dates as well
           this.store.select(selectors.ui.getMode).take(1).subscribe(currentMode => {
             combined['mode'] = currentMode;
-            console.log(combined);
             this.router.navigate(['/datasets'], { queryParams: { args: rison.encode(combined) } });
           });
         }));
@@ -128,15 +126,12 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
       this.store.select(selectors.datasets.getFilterValues)
         .subscribe(values => {
           this.filterValues = Object.assign({}, values);
-          console.log(this.filterValues);
           if (this.filterValues) {
             if (this.locations.length === 0 && this.filterValues['creationLocation'] !== null) {
               this.locations = this.filterValues['creationLocation']
                 ? this.filterValues['creationLocation']
                 : [];
             }
-
-            console.log(this.filterValues);
 
             if (this.groups.length === 0 &&
               this.filterValues['ownerGroup'] !== null && Array.isArray(this.filterValues['ownerGroup'])) {
