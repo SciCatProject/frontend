@@ -20,6 +20,10 @@ td {
   flex: 1 1 auto;
 }
 
+.sidenav-toggle {
+  padding-right: 0.5%;
+}
+
 .example-container {
   /* position: absolute; */
   /* margin-left: 10%; */
@@ -32,4 +36,14 @@ td {
 
 .mat-dialog-container {
   background-color: mat-color($primary);
+}
+
+footer {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  padding: 1rem;
+  background-color: mat-color($accent, lighter, 0.5);
+  text-align: center;
 }
