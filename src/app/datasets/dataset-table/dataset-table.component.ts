@@ -28,11 +28,9 @@ import { last } from 'rxjs/operator/last';
 import { Observable } from 'rxjs/Observable';
 
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import {MatTableDataSource, MatPaginator} from '@angular/material';
+import {MatTableDataSource, MatPaginator, MatSort, MatDialog} from '@angular/material';
 import { AfterViewInit } from '@angular/core/src/metadata/lifecycle_hooks';
 import {SelectionModel} from '@angular/cdk/collections';
-
-import {MatDialog} from '@angular/material';
 
 import {DialogComponent} from 'shared/modules/dialog/dialog.component';
 import * as rison from 'rison';
@@ -45,16 +43,16 @@ import * as rison from 'rison';
 export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
   @Input() datasets = [];
   @Output() openDataset = new EventEmitter();
+
   @ViewChild('ds') dsTable: DataTable;
+  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+
   selectedSets: Array<RawDataset> = [];
-
   selection = new SelectionModel<Element>(true, []);
-
   datasetCount$;
   dataSource: MatTableDataSource<any> | null;
   displayedColumns = ['select'];
-
-  @ViewChild(MatPaginator) paginator: MatPaginator;
 
   modeButtons = ['Archive', 'View', 'Retrieve'];
 
@@ -146,6 +144,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
         data => {
           this.datasets = data;
           this.dataSource = new MatTableDataSource(this.datasets);
+          this.dataSource.sort = this.sort;
           if (this.datasets && this.datasets.length > 0) {
             this.store.dispatch(new dua.SaveModeAction(this.mode));
             this.updateRowView(this.mode);
@@ -215,6 +214,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
   }
 
 

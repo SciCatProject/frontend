@@ -2126,7 +2126,7 @@
     
                             <tr>
                                 <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="242" class="link-to-prism">src/app/datasets/datasets-filter/datasets-filter.component.ts:242</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="206" class="link-to-prism">src/app/datasets/datasets-filter/datasets-filter.component.ts:206</a></div>
                                 </td>
                             </tr>
     
@@ -2282,7 +2282,7 @@
     
                             <tr>
                                 <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="234" class="link-to-prism">src/app/datasets/datasets-filter/datasets-filter.component.ts:234</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="198" class="link-to-prism">src/app/datasets/datasets-filter/datasets-filter.component.ts:198</a></div>
                                 </td>
                             </tr>
     
@@ -2346,7 +2346,7 @@
     
                             <tr>
                                 <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="264" class="link-to-prism">src/app/datasets/datasets-filter/datasets-filter.component.ts:264</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="228" class="link-to-prism">src/app/datasets/datasets-filter/datasets-filter.component.ts:228</a></div>
                                 </td>
                             </tr>
     
@@ -2409,7 +2409,7 @@
     
                             <tr>
                                 <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="224" class="link-to-prism">src/app/datasets/datasets-filter/datasets-filter.component.ts:224</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="188" class="link-to-prism">src/app/datasets/datasets-filter/datasets-filter.component.ts:188</a></div>
                                 </td>
                             </tr>
     
@@ -2471,7 +2471,7 @@
     
                             <tr>
                                 <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="215" class="link-to-prism">src/app/datasets/datasets-filter/datasets-filter.component.ts:215</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="179" class="link-to-prism">src/app/datasets/datasets-filter/datasets-filter.component.ts:179</a></div>
                                 </td>
                             </tr>
     
@@ -2538,7 +2538,7 @@
     
                             <tr>
                                 <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="197" class="link-to-prism">src/app/datasets/datasets-filter/datasets-filter.component.ts:197</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="161" class="link-to-prism">src/app/datasets/datasets-filter/datasets-filter.component.ts:161</a></div>
                                 </td>
                             </tr>
     
@@ -3265,12 +3265,12 @@
     <div class="tab-pane fade tab-source-code" id="source">
         <pre class="line-numbers"><code class="language-typescript">import &#x27;rxjs/add/operator/take&#x27;;
 import &#x27;rxjs/add/observable/combineLatest&#x27;;
-import {startWith} from &#x27;rxjs/operators/startWith&#x27;;
-import {map} from &#x27;rxjs/operators/map&#x27;;
+import { startWith } from &#x27;rxjs/operators/startWith&#x27;;
+import { map } from &#x27;rxjs/operators/map&#x27;;
 
 import { Component, OnDestroy, OnInit, ViewChild } from &#x27;@angular/core&#x27;;
 import { ActivatedRoute, Router } from &#x27;@angular/router&#x27;;
-import {FormControl} from &#x27;@angular/forms&#x27;;
+import { FormControl } from &#x27;@angular/forms&#x27;;
 import { Store } from &#x27;@ngrx/store&#x27;;
 import { AutoComplete, Tree } from &#x27;primeng/primeng&#x27;;
 import { createSelector, OutputSelector } from &#x27;reselect&#x27;;
@@ -3336,17 +3336,17 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
 
   constructor(private store: Store&lt;any&gt;, private route: ActivatedRoute,
     private router: Router) {
-      this.beamlineInput &#x3D; new FormControl();
-      this.groupInput &#x3D; new FormControl();
+    this.beamlineInput &#x3D; new FormControl();
+    this.groupInput &#x3D; new FormControl();
 
-    }
+  }
 
   filterBeams(beam: string) {
-    return this.filterValues.creationLocation.filter(b &#x3D;&gt; b._id.toLowerCase().indexOf(beam.toLowerCase()) &#x3D;&#x3D;&#x3D; 0);
+    return this.locations.filter(b &#x3D;&gt; b._id.toLowerCase().indexOf(beam.toLowerCase()) &#x3D;&#x3D;&#x3D; 0);
   }
 
   filterGroups(group: string) {
-    return this.filterValues.ownerGroup.filter(g &#x3D;&gt; g._id.toLowerCase().indexOf(group.toLowerCase()) &#x3D;&#x3D;&#x3D; 0);
+    return this.groups.filter(g &#x3D;&gt; g._id.toLowerCase().indexOf(group.toLowerCase()) &#x3D;&#x3D;&#x3D; 0);
   }
 
   /**
@@ -3381,75 +3381,39 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
           const group &#x3D; combined[&#x27;ownerGroup&#x27;];
           this.selectedGroup &#x3D; group !&#x3D;&#x3D; undefined ? group.toString() : undefined;
           // TODO autoselect locations and dates as well
-        this.store.select(selectors.ui.getMode).take(1).subscribe(currentMode &#x3D;&gt; {
-           combined[&#x27;mode&#x27;] &#x3D; currentMode;
-           console.log(combined);
-            this.router.navigate([&#x27;/datasets&#x27;], { queryParams: {args: rison.encode(combined)} });
-        });
+          this.store.select(selectors.ui.getMode).take(1).subscribe(currentMode &#x3D;&gt; {
+            combined[&#x27;mode&#x27;] &#x3D; currentMode;
+            console.log(combined);
+            this.router.navigate([&#x27;/datasets&#x27;], { queryParams: { args: rison.encode(combined) } });
+          });
         }));
-    //   const newParams &#x3D; &#x27;args&#x27; in params ? rison.decode(params[&#x27;args&#x27;]) : {};
-    //   delete newParams[&#x27;mode&#x27;];
-    //   const activeFilters$ &#x3D; this.store.select(selectors.datasets.getActiveFilters);
-    //   const mode$ &#x3D; this.store.select(selectors.ui.getMode);
-    //   Observable.combineLatest(activeFilters$, mode$).takeLast(1).subscribe(combined &#x3D;&gt; {
-    //     const filters &#x3D; combined[0];
-    //     const mode &#x3D; combined[1];
-    //     const f &#x3D; utils.filter(filters, newParams);
-    //     // this.location &#x3D; f[&#x27;creationLocation&#x27;]
-    //     //  ? { _id: filters[&#x27;creationLocation&#x27;] }
-    //     //  : &#x27;&#x27;;
-    //     const group &#x3D; f[&#x27;ownerGroup&#x27;];
-    //     if (group &amp;&amp; group &amp;&amp; Array.isArray(group) &amp;&amp;
-    //       group.length &gt; 0) {
-    //       this.selectedGroups &#x3D; group.map(x &#x3D;&gt; { return { _id: x }; });
-    //     } else if (group &amp;&amp; !Array.isArray(group)) {
-    //       this.selectedGroups &#x3D; [{ &#x27;_id&#x27;: group }];
-    //     } else {
-    //       this.selectedGroups &#x3D; [];
-    //     }
-    //     if (utils.compareObj(f, newParams)) {
-    //       const encoded &#x3D; rison.encode(newParams);
-    //       console.log(encoded);
-    //       this.router.navigate(
-    //         [&#x27;/datasets&#x27;],
-    //         { queryParams: {args: encoded}, replaceUrl: true });
-    //     } else if (params[&#x27;mode&#x27;] !&#x3D;&#x3D; mode) {
-    //       this.store.dispatch(new dsa.UpdateFilterAction(f));
-    //     }
-    //   });
-    // }));
-    // this.subscriptions.push(
-    //   this.store.select(selectors.datasets.getActiveFilters)
-    //     .subscribe(data &#x3D;&gt; {
-    //       const args &#x3D; &#x27;args&#x27; in this.route.snapshot.queryParams ? rison.decode(this.route.snapshot.queryParams[&#x27;args&#x27;]) : {};
-    //       this.filters &#x3D; Object.assign(args, data);
-    //       console.log(this.filters);
-    //       this.router.navigate([&#x27;/datasets&#x27;], { queryParams: {args: rison.encode(this.filters)} });
-    //     }));
     this.resultCount$ &#x3D;
       this.store.select(selectors.datasets.getTotalSets);
     this.subscriptions.push(
       this.store.select(selectors.datasets.getFilterValues)
         .subscribe(values &#x3D;&gt; {
           this.filterValues &#x3D; Object.assign({}, values);
+          console.log(this.filterValues);
           if (this.filterValues) {
-            if (this.filterValues[&#x27;creationLocation&#x27;] !&#x3D;&#x3D; null) {
+            if (this.locations.length &#x3D;&#x3D;&#x3D; 0 &amp;&amp; this.filterValues[&#x27;creationLocation&#x27;] !&#x3D;&#x3D; null) {
               this.locations &#x3D; this.filterValues[&#x27;creationLocation&#x27;]
                 ? this.filterValues[&#x27;creationLocation&#x27;]
                 : [];
             }
 
+            console.log(this.filterValues);
+
             if (this.groups.length &#x3D;&#x3D;&#x3D; 0 &amp;&amp;
-              this.filterValues[&#x27;ownerGroup&#x27;] !&#x3D;&#x3D; null) {
-              this.groups &#x3D; this.filterValues[&#x27;ownerGroup&#x27;];
+              this.filterValues[&#x27;ownerGroup&#x27;] !&#x3D;&#x3D; null &amp;&amp; Array.isArray(this.filterValues[&#x27;ownerGroup&#x27;])) {
+              this.groups &#x3D; this.filterValues[&#x27;ownerGroup&#x27;].slice();
             }
             if (this.filterValues.creationLocation) {
               this.filteredBeams &#x3D; this.beamlineInput.valueChanges
-            .pipe(startWith(&#x27;&#x27;), map(beam &#x3D;&gt; beam ? this.filterBeams(beam) : this.filterValues.creationLocation.slice()));
+                .pipe(startWith(&#x27;&#x27;), map(beam &#x3D;&gt; beam ? this.filterBeams(beam) : this.filterValues.creationLocation.slice()));
             }
             if (this.filterValues.ownerGroup) {
-            this.filteredGroups &#x3D; this.groupInput.valueChanges
-              .pipe(startWith(&#x27;&#x27;), map(group &#x3D;&gt; group ? this.filterGroups(group) : this.filterValues.ownerGroup.slice()));
+              this.filteredGroups &#x3D; this.groupInput.valueChanges
+                .pipe(startWith(&#x27;&#x27;), map(group &#x3D;&gt; group ? this.filterGroups(group) : this.filterValues.ownerGroup.slice()));
             }
           }
         }));
@@ -3512,8 +3476,8 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     this.filters &#x3D; dStore.initialDatasetState.activeFilters;
     this.dateSelections$.next([]);
     this.store.select(state &#x3D;&gt; state.root.user.currentUserGroups)
-        .takeLast(1)
-        .subscribe(groups &#x3D;&gt; { this.filters.ownerGroup &#x3D; groups; });
+      .takeLast(1)
+      .subscribe(groups &#x3D;&gt; { this.filters.ownerGroup &#x3D; groups; });
     this.filters.ownerGroup &#x3D; [];
     this.filterValues &#x3D; dStore.initialDatasetState.filterValues;
     this.filterValues.text &#x3D; &#x27;&#x27;;
@@ -3535,7 +3499,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     </div>
 
     <div class="tab-pane fade" id="templateData">
-        <pre class="line-numbers"><code class="language-html">&lt;div class&#x3D;&quot;ui raised container&quot; *ngIf&#x3D;&quot;facets&quot;&gt;
+        <pre class="line-numbers"><code class="language-html">&lt;mat-card *ngIf&#x3D;&quot;facets&quot;&gt;
   &lt;h3&gt;
     &lt;u&gt;Filter Results&lt;/u&gt;
     &lt;h3&gt;Results: {{resultCount$ | async}}&lt;/h3&gt;
@@ -3545,9 +3509,9 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     &lt;mat-form-field class&#x3D;&quot;example-full-width&quot;&gt;
       &lt;input matInput [(ngModel)]&#x3D;&quot;selectedBeam&quot; placeholder&#x3D;&quot;Beamline&quot; aria-label&#x3D;&quot;Beamline&quot; [matAutocomplete]&#x3D;&quot;beam&quot; [formControl]&#x3D;&quot;beamlineInput&quot;&gt;
       &lt;mat-autocomplete #beam&#x3D;&quot;matAutocomplete&quot;&gt;
-        &lt;mat-option (onSelectionChange)&#x3D;&quot;locSelected(b)&quot; *ngFor&#x3D;&quot;let b of filteredBeams | async&quot; [value]&#x3D;&quot;b._id&quot;&gt;
+        &lt;mat-option class&#x3D;&quot;options&quot; (onSelectionChange)&#x3D;&quot;locSelected(b)&quot; *ngFor&#x3D;&quot;let b of filteredBeams | async&quot; [value]&#x3D;&quot;b._id&quot;&gt;
           &lt;span&gt;{{ b._id }}&lt;/span&gt; |
-          &lt;small&gt;Results:kljchjkld&lt;/small&gt;
+          &lt;small&gt;Results:{{b.count}}&lt;/small&gt;
         &lt;/mat-option&gt;
       &lt;/mat-autocomplete&gt;
     &lt;/mat-form-field&gt;
@@ -3557,8 +3521,8 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     &lt;mat-form-field class&#x3D;&quot;example-full-width&quot;&gt;
       &lt;input matInput name&#x3D;&quot;group&quot; [(ngModel)]&#x3D;&quot;selectedGroup&quot; (optionSelected)&#x3D;&quot;groupSelected&quot; placeholder&#x3D;&quot;Group&quot; aria-label&#x3D;&quot;Group&quot; [matAutocomplete]&#x3D;&quot;grp&quot; [formControl]&#x3D;&quot;groupInput&quot;&gt;
       &lt;mat-autocomplete #grp&#x3D;&quot;matAutocomplete&quot;&gt;
-        &lt;mat-option (onSelectionChange)&#x3D;&quot;groupSelected(g)&quot; *ngFor&#x3D;&quot;let g of filteredGroups | async&quot; [value]&#x3D;&quot;g._id&quot;&gt;
-          &lt;span&gt;{{ g._id }}&lt;/span&gt; |
+        &lt;mat-option class&#x3D;&quot;options&quot; (onSelectionChange)&#x3D;&quot;groupSelected(g)&quot; *ngFor&#x3D;&quot;let g of filteredGroups | async&quot; [value]&#x3D;&quot;g._id&quot;&gt;
+          &lt;span&gt;{{ g._id }}&lt;/span&gt; 
           &lt;small&gt;Results: {{g.count}}&lt;/small&gt;
         &lt;/mat-option&gt;
       &lt;/mat-autocomplete&gt;
@@ -3610,7 +3574,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     
   &lt;!-- &lt;/form&gt; --&gt;
   &lt;br&gt;
-&lt;/div&gt;
+  &lt;/mat-card&gt;
 </code></pre>
     </div>
 
@@ -3637,7 +3601,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
 <script src="../js/libs/htmlparser.js"></script>
 <script src="../js/libs/deep-iterator.js"></script>
 <script>
-        var COMPONENT_TEMPLATE = '<div><div class="ui raised container" *ngIf="facets">  <h3>    <u>Filter Results</u>    <h3>Results: {{resultCount$ | async}}</h3>  </h3>  <form class="example-form">    <mat-form-field class="example-full-width">      <input matInput [(ngModel)]="selectedBeam" placeholder="Beamline" aria-label="Beamline" [matAutocomplete]="beam" [formControl]="beamlineInput">      <mat-autocomplete #beam="matAutocomplete">        <mat-option (onSelectionChange)="locSelected(b)" *ngFor="let b of filteredBeams | async" [value]="b._id">          <span>{{ b._id }}</span> |          <small>Results:kljchjkld</small>        </mat-option>      </mat-autocomplete>    </mat-form-field>      <br />    <mat-form-field class="example-full-width">      <input matInput name="group" [(ngModel)]="selectedGroup" (optionSelected)="groupSelected" placeholder="Group" aria-label="Group" [matAutocomplete]="grp" [formControl]="groupInput">      <mat-autocomplete #grp="matAutocomplete">        <mat-option (onSelectionChange)="groupSelected(g)" *ngFor="let g of filteredGroups | async" [value]="g._id">          <span>{{ g._id }}</span> |          <small>Results: {{g.count}}</small>        </mat-option>      </mat-autocomplete>    </mat-form-field>    <br />    <div class="ui field">      <h3>Date Range</h3>      <datepicker [selections]="dateSelections$ | async" [datepickerSelector]="datepickerSelector" [datepickerSelectionMode]="dateSelectionMode" [placeholder]="\'Date Range\'" (selectionsChange)="updateDateRange($event)"></datepicker>    </div>    <br>    <!--<button type="submit" class="ui button">Filter</button>-->    <button class="ui button" (click)="clearFacets()">Clear</button>    </form>    <!-- <form class="ui form">    <h3>Results: {{resultCount$ | async}}</h3>    <div class="ui field">      <h3>Beamline</h3>        <p-autoComplete #loc placeholder="/SLS/..." [(ngModel)]="location" name="location" (onSelect)="locSelected($event)" [suggestions]="filteredLocations"          (completeMethod)="handleInputLocation($event)" [size]="30" field="_id" [minLength]="1" [dropdown]="false"          (ngModelChange)="textValueChanged($event, \'creationLocation\')" (onDropdownClick)="handleDropClick($event)" [minLength]="1"          [multiple]="false" forceSelection="true" [dropdown]="true">          <ng-template let-g pTemplate="g">            <div class="ui-helper-clearfix" style="border-bottom:1px solid #D5D5D5">              <div style="font-size:18px;float:left;margin:10px 10px 0 0">{{g._id}}</div>              <div style="font-size:18px;float:right;margin:10px 10px 0 0">{{g.count}}</div>            </div>          </ng-template>        </p-autoComplete>    </div>    <div class="ui field">      <h3>Group</h3>        <p-autoComplete #grp [(ngModel)]="selectedGroups" [multiple]="true"  placeholder="p15624" (onUnselect)="groupSelected($event)" (onSelect)="groupSelected($event)" name="group" field="_id" [suggestions]="filteredGroups"          (completeMethod)="handleInputOwner($event)" [size]="30" [minLength]="1" [dropdown]="false" (ngModelChange)="textValueChanged($event, \'groups\')"          (onDropdownClick)="handleDropClick($event)" [multiple]="false" [minLength]="1" forceSelection="true" [dropdown]="true">          <ng-template let-g pTemplate="g">            <div class="ui-helper-clearfix" style="border-bottom:1px solid #D5D5D5">              <div style="font-size:18px;float:left;margin:10px 10px 0 0">{{g._id}}</div>              <div style="font-size:18px;float:right;margin:10px 10px 0 0">{{g.count}}</div>            </div>          </ng-template>        </p-autoComplete>    </div> -->      <!-- </form> -->  <br></div></div>'
+        var COMPONENT_TEMPLATE = '<div><mat-card *ngIf="facets">  <h3>    <u>Filter Results</u>    <h3>Results: {{resultCount$ | async}}</h3>  </h3>  <form class="example-form">    <mat-form-field class="example-full-width">      <input matInput [(ngModel)]="selectedBeam" placeholder="Beamline" aria-label="Beamline" [matAutocomplete]="beam" [formControl]="beamlineInput">      <mat-autocomplete #beam="matAutocomplete">        <mat-option class="options" (onSelectionChange)="locSelected(b)" *ngFor="let b of filteredBeams | async" [value]="b._id">          <span>{{ b._id }}</span> |          <small>Results:{{b.count}}</small>        </mat-option>      </mat-autocomplete>    </mat-form-field>      <br />    <mat-form-field class="example-full-width">      <input matInput name="group" [(ngModel)]="selectedGroup" (optionSelected)="groupSelected" placeholder="Group" aria-label="Group" [matAutocomplete]="grp" [formControl]="groupInput">      <mat-autocomplete #grp="matAutocomplete">        <mat-option class="options" (onSelectionChange)="groupSelected(g)" *ngFor="let g of filteredGroups | async" [value]="g._id">          <span>{{ g._id }}</span>           <small>Results: {{g.count}}</small>        </mat-option>      </mat-autocomplete>    </mat-form-field>    <br />    <div class="ui field">      <h3>Date Range</h3>      <datepicker [selections]="dateSelections$ | async" [datepickerSelector]="datepickerSelector" [datepickerSelectionMode]="dateSelectionMode" [placeholder]="\'Date Range\'" (selectionsChange)="updateDateRange($event)"></datepicker>    </div>    <br>    <!--<button type="submit" class="ui button">Filter</button>-->    <button class="ui button" (click)="clearFacets()">Clear</button>    </form>    <!-- <form class="ui form">    <h3>Results: {{resultCount$ | async}}</h3>    <div class="ui field">      <h3>Beamline</h3>        <p-autoComplete #loc placeholder="/SLS/..." [(ngModel)]="location" name="location" (onSelect)="locSelected($event)" [suggestions]="filteredLocations"          (completeMethod)="handleInputLocation($event)" [size]="30" field="_id" [minLength]="1" [dropdown]="false"          (ngModelChange)="textValueChanged($event, \'creationLocation\')" (onDropdownClick)="handleDropClick($event)" [minLength]="1"          [multiple]="false" forceSelection="true" [dropdown]="true">          <ng-template let-g pTemplate="g">            <div class="ui-helper-clearfix" style="border-bottom:1px solid #D5D5D5">              <div style="font-size:18px;float:left;margin:10px 10px 0 0">{{g._id}}</div>              <div style="font-size:18px;float:right;margin:10px 10px 0 0">{{g.count}}</div>            </div>          </ng-template>        </p-autoComplete>    </div>    <div class="ui field">      <h3>Group</h3>        <p-autoComplete #grp [(ngModel)]="selectedGroups" [multiple]="true"  placeholder="p15624" (onUnselect)="groupSelected($event)" (onSelect)="groupSelected($event)" name="group" field="_id" [suggestions]="filteredGroups"          (completeMethod)="handleInputOwner($event)" [size]="30" [minLength]="1" [dropdown]="false" (ngModelChange)="textValueChanged($event, \'groups\')"          (onDropdownClick)="handleDropClick($event)" [multiple]="false" [minLength]="1" forceSelection="true" [dropdown]="true">          <ng-template let-g pTemplate="g">            <div class="ui-helper-clearfix" style="border-bottom:1px solid #D5D5D5">              <div style="font-size:18px;float:left;margin:10px 10px 0 0">{{g._id}}</div>              <div style="font-size:18px;float:right;margin:10px 10px 0 0">{{g.count}}</div>            </div>          </ng-template>        </p-autoComplete>    </div> -->      <!-- </form> -->  <br>  </mat-card></div>'
     var COMPONENTS = [{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'BreadcrumbComponent', 'selector': 'breadcrumb'},{'name': 'ConfigFormComponent', 'selector': 'config-form'},{'name': 'DashboardComponent', 'selector': 'dashboard'},{'name': 'DatablocksComponent', 'selector': 'datablocks-table'},{'name': 'DatafilesComponent', 'selector': 'datafiles'},{'name': 'DatasetDetailComponent', 'selector': 'dataset-detail'},{'name': 'DatasetTableComponent', 'selector': 'dataset-table'},{'name': 'DatasetsFilterComponent', 'selector': 'datasets-filter'},{'name': 'DatePickerComponent', 'selector': 'datepicker'},{'name': 'DialogComponent', 'selector': 'app-dialog'},{'name': 'ErrorPageComponent', 'selector': 'error-page'},{'name': 'JobsComponent', 'selector': 'app-jobs'},{'name': 'JobsDetailComponent', 'selector': 'app-jobs-detail'},{'name': 'JobsTableComponent', 'selector': 'app-jobs'},{'name': 'LoginComponent', 'selector': 'login-form'},{'name': 'SampleDataFormComponent', 'selector': 'app-sample-data-form'},{'name': 'UserDetailsComponent', 'selector': 'app-user-details'},{'name': 'UserSettingsComponent', 'selector': 'app-user-settings'}];
     var DIRECTIVES = [];
     var ACTUAL_COMPONENT = {'name': 'DatasetsFilterComponent'};

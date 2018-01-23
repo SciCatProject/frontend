@@ -2283,7 +2283,8 @@ export class DashboardComponent implements OnInit {
     </div>
 
     <div class="tab-pane fade" id="templateData">
-        <pre class="line-numbers"><code class="language-html">&lt;form (ngSubmit)&#x3D;&quot;textSearch(search.value)&quot; #searchForm&#x3D;&quot;ngForm&quot;&gt;
+        <pre class="line-numbers"><code class="language-html">&lt;mat-card&gt;
+&lt;form (ngSubmit)&#x3D;&quot;textSearch(search.value)&quot; #searchForm&#x3D;&quot;ngForm&quot;&gt;
     &lt;div style&#x3D;&quot;width:100%;&quot;&gt;
       &lt;mat-form-field class&#x3D;&quot;example-full-width&quot; style&#x3D;&quot;width:90%&quot;&gt;
     &lt;input matInput #search class&#x3D;&quot;dash-search&quot; placeholder&#x3D;&quot;Search...&quot; (keyUp)&#x3D;&quot;textSearch(search.value)&quot; [ngModel]&#x3D;&quot;searchText$ | async&quot; name&#x3D;&quot;search&quot;&gt;
@@ -2291,6 +2292,7 @@ export class DashboardComponent implements OnInit {
         &lt;button mat-raised-button color&#x3D;&quot;accent&quot; type&#x3D;&quot;submit&quot; (click)&#x3D;&quot;textSearch(search.value)&quot;&gt;&lt;i class&#x3D;&quot;fa fa-search&quot; aria-hidden&#x3D;&quot;true&quot;&gt;&lt;/i&gt;Search&lt;/button&gt;
     &lt;/div&gt;
 &lt;/form&gt;
+&lt;/mat-card&gt;
 &lt;br&gt;
 &lt;div class&#x3D;&quot;ui grid&quot;&gt;
   &lt;div class&#x3D;&quot;four wide column&quot;&gt;
@@ -2326,7 +2328,7 @@ export class DashboardComponent implements OnInit {
 <script src="../js/libs/htmlparser.js"></script>
 <script src="../js/libs/deep-iterator.js"></script>
 <script>
-        var COMPONENT_TEMPLATE = '<div><form (ngSubmit)="textSearch(search.value)" #searchForm="ngForm">    <div style="width:100%;">      <mat-form-field class="example-full-width" style="width:90%">    <input matInput #search class="dash-search" placeholder="Search..." (keyUp)="textSearch(search.value)" [ngModel]="searchText$ | async" name="search">  </mat-form-field>        <button mat-raised-button color="accent" type="submit" (click)="textSearch(search.value)"><i class="fa fa-search" aria-hidden="true"></i>Search</button>    </div></form><br><div class="ui grid">  <div class="four wide column">    <datasets-filter></datasets-filter>  </div>  <div class="twelve wide column">    <dataset-table></dataset-table>  </div></div></div>'
+        var COMPONENT_TEMPLATE = '<div><mat-card><form (ngSubmit)="textSearch(search.value)" #searchForm="ngForm">    <div style="width:100%;">      <mat-form-field class="example-full-width" style="width:90%">    <input matInput #search class="dash-search" placeholder="Search..." (keyUp)="textSearch(search.value)" [ngModel]="searchText$ | async" name="search">  </mat-form-field>        <button mat-raised-button color="accent" type="submit" (click)="textSearch(search.value)"><i class="fa fa-search" aria-hidden="true"></i>Search</button>    </div></form></mat-card><br><div class="ui grid">  <div class="four wide column">    <datasets-filter></datasets-filter>  </div>  <div class="twelve wide column">    <dataset-table></dataset-table>  </div></div></div>'
     var COMPONENTS = [{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'BreadcrumbComponent', 'selector': 'breadcrumb'},{'name': 'ConfigFormComponent', 'selector': 'config-form'},{'name': 'DashboardComponent', 'selector': 'dashboard'},{'name': 'DatablocksComponent', 'selector': 'datablocks-table'},{'name': 'DatafilesComponent', 'selector': 'datafiles'},{'name': 'DatasetDetailComponent', 'selector': 'dataset-detail'},{'name': 'DatasetTableComponent', 'selector': 'dataset-table'},{'name': 'DatasetsFilterComponent', 'selector': 'datasets-filter'},{'name': 'DatePickerComponent', 'selector': 'datepicker'},{'name': 'DialogComponent', 'selector': 'app-dialog'},{'name': 'ErrorPageComponent', 'selector': 'error-page'},{'name': 'JobsComponent', 'selector': 'app-jobs'},{'name': 'JobsDetailComponent', 'selector': 'app-jobs-detail'},{'name': 'JobsTableComponent', 'selector': 'app-jobs'},{'name': 'LoginComponent', 'selector': 'login-form'},{'name': 'SampleDataFormComponent', 'selector': 'app-sample-data-form'},{'name': 'UserDetailsComponent', 'selector': 'app-user-details'},{'name': 'UserSettingsComponent', 'selector': 'app-user-settings'}];
     var DIRECTIVES = [];
     var ACTUAL_COMPONENT = {'name': 'DashboardComponent'};

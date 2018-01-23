@@ -18,6 +18,7 @@
     </div>
 
     <div class="example-container mat-elevation-z8">
+      <mat-paginator [pageSize]="limit$ | async" [pageSizeOptions]="[10,30, 50, 100]" [length]="datasetCount$ | async" (page)="onPage(event)"></mat-paginator>
       <mat-table #table [dataSource]="dataSource" matSort>
 
           <!-- Checkbox Column -->
@@ -38,7 +39,7 @@
         
         <ng-container *ngFor="let col of cols">
           <ng-container matColumnDef="{{col.field}}">
-            <mat-header-cell *matHeaderCellDef> {{col.header}} </mat-header-cell>
+            <mat-header-cell *matHeaderCellDef mat-sort-header> {{col.header}} </mat-header-cell>
             
             <mat-cell *matCellDef="let row"> {{getRowValue(row, col)}} </mat-cell>
           </ng-container>  
