@@ -93,6 +93,20 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
     this.datasetCount$ = this.store.select(selectors.datasets.getTotalSets);
   }
 
+  getRowValue(row, col) {
+    const split = col.field.split('.');
+    if (split.length > 1) {
+      if (row[split[0]]) {
+        // TODO handle undefined and nesting > 1 layer
+        return row[split[0]][split[1]];
+      } else {
+        return 'Unknown';
+      }
+    } else {
+      return row[col.field];
+    }
+  }
+
   ngOnInit() {
 
     this.configSrv.getConfigFile('RawDataset').subscribe(conf => {
@@ -104,6 +118,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
           }
         }
       }
+      console.log(this.displayedColumns);
     });
 
     this.loading$ = this.store.select(selectors.datasets.getLoading);
@@ -169,8 +184,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
         ret => {
           if (ret && Array.isArray(ret)) {
             console.log(ret);
-            this.selectedSets = [];
-            console.log(this.selectedSets);
+            this.selection.clear();
           }
         },
         error => {
@@ -254,29 +268,23 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
   updateRowView(mode) {
     this.selectedSets = [];
     this.rowStyleMap = {};
-    if (this.datasets && this.datasets.length > 0) {
+    const activeSets = [];
+    if (this.datasets && this.datasets.length > 0 && (this.mode === 'archive' || this.mode === 'retrieve')) {
       for (let d = 0; d < this.datasets.length; d++) {
         const set = this.datasets[d];
-        let c = '';
         if (this.mode === 'archive' && set.datasetlifecycle
           && (this.archiveable.indexOf(set.datasetlifecycle.archiveStatusMessage) === -1 || set.size === 0)) {
-          c = 'disabled-row';
+          activeSets.push(set);
         } else if (this.mode === 'retrieve'
           && set.datasetlifecycle && this.retrievable.indexOf(set.datasetlifecycle.archiveStatusMessage) === -1) {
-          c = 'disabled-row';
-        } else {
-          c = '';
+          activeSets.push(set);
         }
-        this.rowStyleMap[set.pid] = c;
+        this.dataSource = new MatTableDataSource(activeSets);
       }
+      console.log(activeSets);
     } else {
-      this.store.dispatch(new dua.SaveModeAction(this.mode));
+      this.dataSource = new MatTableDataSource(this.datasets);
     }
-    // let currentParams = 'args' in this.route.snapshot.queryParams ? rison.decode(this.route.snapshot.queryParams['args']) : {};
-    // currentParams = Object.assign({}, currentParams, { 'mode': this.mode });
-    // this.router.navigate(['/datasets'], {
-    //   queryParams: {args: rison.encode(currentParams)}
-    // });
   }
 
   /**
@@ -366,7 +374,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
    * @memberof DashboardComponent
    */
   archiveClickHandle(event) {
-    let dialogRef = this.dialog.open(DialogComponent, {
+    const dialogRef = this.dialog.open(DialogComponent, {
       width: 'auto',
       data: {title: 'Really archive?', question: ''}
     });
@@ -388,10 +396,9 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
    */
   retrieveClickHandle(event) {
     const destPath = '/archive/retrieve';
-    
-    let dialogRef = this.dialog.open(DialogComponent, {
+    const dialogRef = this.dialog.open(DialogComponent, {
       width: 'auto',
-      data: {title: "Really retrieve?", question: '', input: destPath}
+      data: {title: 'Really retrieve?', question: '', input: destPath}
     });
 
     dialogRef.afterClosed().subscribe(result => {

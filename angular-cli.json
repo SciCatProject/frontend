@@ -19,9 +19,7 @@
         "prefix": "app",
         "styles": [
             "styles.css",
-            "theme.scss",
-            "../node_modules/primeng/resources/themes/omega/theme.css",
-            "../node_modules/primeng/resources/primeng.min.css"
+            "theme.scss"
         ],
         "scripts": [
             "../node_modules/hammerjs/hammer.min.js"

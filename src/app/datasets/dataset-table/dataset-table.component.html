@@ -40,7 +40,7 @@
           <ng-container matColumnDef="{{col.field}}">
             <mat-header-cell *matHeaderCellDef> {{col.header}} </mat-header-cell>
             
-            <mat-cell *matCellDef="let row"> {{row[col.field]}} </mat-cell>
+            <mat-cell *matCellDef="let row"> {{getRowValue(row, col)}} </mat-cell>
           </ng-container>  
         </ng-container>
         

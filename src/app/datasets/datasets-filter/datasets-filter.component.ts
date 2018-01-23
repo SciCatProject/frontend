@@ -136,8 +136,10 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
                 : [];
             }
 
+            console.log(this.filterValues);
+
             if (this.groups.length === 0 &&
-              this.filterValues['ownerGroup'] !== null) {
+              this.filterValues['ownerGroup'] !== null && Array.isArray(this.filterValues['ownerGroup'])) {
               this.groups = this.filterValues['ownerGroup'].slice();
             }
             if (this.filterValues.creationLocation) {
