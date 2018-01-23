@@ -18,8 +18,16 @@
     </div>
 
     <div class="example-container mat-elevation-z8">
+        
+
+<div class="ui segment" *ngIf="loading$ | async">
+    <p></p>
+    <div class="ui active inverted dimmer">
+      <div class="ui loader"></div>
+    </div>
+  </div>
       <mat-paginator [pageSize]="limit$ | async" [pageSizeOptions]="[10,30, 50, 100]" [length]="datasetCount$ | async" (page)="onPage(event)"></mat-paginator>
-      <mat-table #table [dataSource]="dataSource" matSort>
+      <mat-table #table [dataSource]="dataSource"  (matSortChange)="onPage($event)" matSort>
 
           <!-- Checkbox Column -->
     <ng-container matColumnDef="select">
@@ -50,6 +58,6 @@
         <mat-row (click)="onRowSelect($event, row)" *matRowDef="let row; columns: displayedColumns;"></mat-row>
       </mat-table>
 
-      <mat-paginator [pageSize]="limit$ | async" [pageSizeOptions]="[10,30, 50, 100]" [length]="datasetCount$ | async" (page)="onPage(event)"></mat-paginator>
+      <mat-paginator [pageSize]="limit$ | async" [pageSizeOptions]="[10,30, 50, 100]" [length]="datasetCount$ | async" (page)="onPage($event)"></mat-paginator>
     </div>
 </div>

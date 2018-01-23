@@ -89,6 +89,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
     this.archiveable = config.archiveable;
     this.retrievable = config.retrieveable;
     this.datasetCount$ = this.store.select(selectors.datasets.getTotalSets);
+    this.loading$ = this.store.select(selectors.datasets.getLoading);
   }
 
   getRowValue(row, col) {
@@ -242,6 +243,10 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
     this.selection.toggle(row);
   }
 
+  onSort(event) {
+    console.log(event);
+  }
+
   /**
    * Handle changing of view mode and disabling selected rows
    * @param event
@@ -319,6 +324,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
   onPage(event) {
     const index = this.paginator.pageIndex;
     const size = this.paginator.pageSize;
+    console.log(index, size);
     this.store
       .select(state => state.root.datasets.activeFilters)
       .take(1)
@@ -327,12 +333,11 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
         filters['skip'] = index * size;
         filters['initial'] = false;
         filters['limit'] = size;
-        // if (event.sortField) {
-          // const sortOrder = event.sortOrder === 1 ? 'ASC' : 'DESC';
-          // filters['sortField'] = event.sortField + ' ' + sortOrder;
-        // } else {
+        if (event && event.active && event.direction) {
+          filters['sortField'] = event.active + ' ' + event.direction;
+        } else {
           filters['sortField'] = undefined;
-        // }
+        }
         console.log(filters);
         // TODO reduce calls when not needed (i.e. no change)
         // if (f.first !== event.first || this.datasets.length === 0) {
