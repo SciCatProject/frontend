@@ -13,6 +13,7 @@ import { MatSnackBar } from '@angular/material';
 
 import { environment } from '../environments/environment';
 import * as selectors from 'state-management/selectors';
+import { ParamsService } from 'params.service';
 
 @Component({
   selector: 'app-root',
@@ -44,6 +45,7 @@ export class AppComponent implements OnDestroy, OnInit {
 
   constructor(private router: Router,
     public snackBar: MatSnackBar,
+    private params: ParamsService,
     // private _notif_service: NotificationsService,
     private store: Store<any>) {
     this.appVersion = appVersion;

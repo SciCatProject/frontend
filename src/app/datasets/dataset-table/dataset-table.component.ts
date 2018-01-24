@@ -73,6 +73,8 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
 
   paranms = {};
 
+  filters = {};
+
   archiveable;
   retrievable;
 
@@ -117,22 +119,16 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
           }
         }
       }
-      console.log(this.displayedColumns);
     });
 
     this.loading$ = this.store.select(selectors.datasets.getLoading);
     this.limit$ = this.store.select(state => state.root.user.settings.datasetCount);
 
-    this.store.select(state => state.root.dashboardUI.mode).subscribe(mode => {
+    this.subscriptions.push(this.store.select(state => state.root.dashboardUI.mode).subscribe(mode => {
       this.mode = mode;
       this.updateRowView(mode);
-    });
+    }));
 
-    this.route.queryParams.subscribe(params => {
-      const f = utils.filter({ 'mode': '', 'skip': '' }, params);
-      this.mode = f['mode'] || 'view';
-      // this.setCurrentPage(f['skip']);
-    });
 
 
     // NOTE: Typescript picks this key up as the property of the state, but it
@@ -146,11 +142,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
           this.datasets = data;
           this.dataSource = new MatTableDataSource(this.datasets);
           this.dataSource.sort = this.sort;
-          if (this.datasets && this.datasets.length > 0) {
-            this.store.dispatch(new dua.SaveModeAction(this.mode));
-            this.updateRowView(this.mode);
-          }
-          // this.onModeChange(undefined, this.mode);
+          this.updateRowView(this.mode);
         },
         error => {
           console.error(error);
@@ -231,8 +223,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
    * @memberof DatasetTableComponent
    */
   onRowSelect(event, row) {
-    console.log(event);
-    console.log(row);
     const pid = encodeURIComponent(row.pid);
     this.router.navigateByUrl(
       '/dataset/' + pid
@@ -243,18 +233,16 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
     this.selection.toggle(row);
   }
 
-  onSort(event) {
-    console.log(event);
-  }
-
   /**
    * Handle changing of view mode and disabling selected rows
    * @param event
    * @param mode
    */
   onModeChange(event, mode) {
-    this.mode = mode.toLowerCase();
-    this.store.dispatch(new dua.SaveModeAction(this.mode));
+    if (mode) {
+      this.mode = mode.toLowerCase();
+      this.store.dispatch(new dua.SaveModeAction(this.mode));
+    }
   }
 
   isAllSelected() {
@@ -286,7 +274,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
         }
         this.dataSource = new MatTableDataSource(activeSets);
       }
-      console.log(activeSets);
     } else {
       this.dataSource = new MatTableDataSource(this.datasets);
     }
@@ -297,7 +284,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
    * @param m
    */
   getModeButtonClasses(m) {
-    if (m.toLowerCase() === this.mode.toLowerCase()) {
+    if (m.toLowerCase() === this.mode) {
       return { positive: true };
     } else {
       return {};
@@ -324,7 +311,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
   onPage(event) {
     const index = this.paginator.pageIndex;
     const size = this.paginator.pageSize;
-    console.log(index, size);
     this.store
       .select(state => state.root.datasets.activeFilters)
       .take(1)
@@ -338,7 +324,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
         } else {
           filters['sortField'] = undefined;
         }
-        console.log(filters);
         // TODO reduce calls when not needed (i.e. no change)
         // if (f.first !== event.first || this.datasets.length === 0) {
         this.store.dispatch(new dsa.UpdateFilterAction(filters));
@@ -385,8 +370,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-      console.log(result);
       if (result) {
         this.archiveOrRetrieve(true);
       }

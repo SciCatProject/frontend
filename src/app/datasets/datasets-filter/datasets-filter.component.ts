@@ -101,46 +101,30 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
         (selectedDatasets: any): DatepickerState =>
           selectedDatasets['datepicker']);
 
-    this.subscriptions.push(this.route.queryParams.subscribe(params => {
-      const newParams = 'args' in params ? rison.decode(params['args']) : this.filters;
-      delete newParams['mode'];
-      this.filters = Object.assign({}, newParams);
-      console.log(newParams);
-      this.store.dispatch(new dsa.UpdateFilterAction(newParams));
-    }));
-
-    this.subscriptions.push(
-      this.store.select(selectors.datasets.getActiveFilters)
-        .subscribe(combined => {
-          this.filters = Object.assign({}, combined);
-          const group = combined['ownerGroup'];
-          this.selectedGroup = group !== undefined ? group.toString() : undefined;
-          // TODO autoselect locations and dates as well
-          this.store.select(selectors.ui.getMode).take(1).subscribe(currentMode => {
-            combined['mode'] = currentMode;
-            console.log(combined);
-            this.router.navigate(['/datasets'], { queryParams: { args: rison.encode(combined) } });
-          });
-        }));
     this.resultCount$ =
       this.store.select(selectors.datasets.getTotalSets);
+
+    this.store.select(selectors.datasets.getActiveFilters).subscribe(filters => {
+      if ('creationLocation' in filters) {
+        this.selectedBeam = filters['creationLocation'].toString();
+      }
+      if ('ownerGroup' in filters) {
+        this.selectedGroup = filters['ownerGroup'].toString();
+      }
+    });
+
     this.subscriptions.push(
       this.store.select(selectors.datasets.getFilterValues)
         .subscribe(values => {
           this.filterValues = Object.assign({}, values);
-          console.log(this.filterValues);
           if (this.filterValues) {
             if (this.locations.length === 0 && this.filterValues['creationLocation'] !== null) {
-              this.locations = this.filterValues['creationLocation']
-                ? this.filterValues['creationLocation']
-                : [];
+              this.locations = this.filterValues['creationLocation'] ? this.filterValues['creationLocation'].slice() : [];
             }
-
-            console.log(this.filterValues);
 
             if (this.groups.length === 0 &&
               this.filterValues['ownerGroup'] !== null && Array.isArray(this.filterValues['ownerGroup'])) {
-              this.groups = this.filterValues['ownerGroup'].slice();
+              this.groups = this.filterValues['ownerGroup'] ? this.filterValues['ownerGroup'].slice() : [];
             }
             if (this.filterValues.creationLocation) {
               this.filteredBeams = this.beamlineInput.valueChanges
@@ -214,6 +198,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
       .takeLast(1)
       .subscribe(groups => { this.filters.ownerGroup = groups; });
     this.filters.ownerGroup = [];
+    this.filters.creationLocation = [];
     this.filterValues = dStore.initialDatasetState.filterValues;
     this.filterValues.text = '';
     this.store.dispatch(new dsa.UpdateFilterAction(this.filters));

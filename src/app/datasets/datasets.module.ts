@@ -56,7 +56,6 @@ import {
   MatStepperModule,
   MatFormFieldModule,
 } from '@angular/material';
-import {CdkTableModule} from '@angular/cdk/table';
 import {
   DatePickerModule
 } from 'shared/modules/datepicker/datepicker.module';

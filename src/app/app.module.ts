@@ -13,10 +13,10 @@ import { AppRoutingModule } from 'app-routing/app-routing.module';
 import { routes } from 'app-routing/app-routing.module';
 import { DatasetService } from 'datasets/dataset.service';
 import { DatasetsModule } from 'datasets/datasets.module';
+import { ParamsService } from 'params.service';
 import { JobsComponent } from 'jobs/jobs.component';
 import { JobsTableComponent } from 'jobs/jobs-table/jobs-table.component';
 import { localStorageSync } from 'ngrx-store-localstorage';
-import { SimpleNotificationsModule } from 'angular2-notifications';
 
 import {
     AutoCompleteModule,
@@ -112,7 +112,6 @@ export function localStorageSyncWrapper(reducer: any) {
     DatasetsModule,
     UsersModule,
     SDKBrowserModule.forRoot(),
-    SimpleNotificationsModule.forRoot(),
     // StoreModule.forRoot({router: routerReducer, root: rootReducer}, {metaReducers: [localStorageSyncWrapper]}),
     StoreModule.forRoot({router: routerReducer, root: rootReducer}),
     RouterModule.forRoot(routes, { useHash: false }),
@@ -127,6 +126,7 @@ export function localStorageSyncWrapper(reducer: any) {
   providers : [
       AuthCheck,
       DatasetService,
+      ParamsService,
       UserApi,
     //      {provide: RouteReuseStrategy, useClass: CustomReuseStrategy}
   ],
