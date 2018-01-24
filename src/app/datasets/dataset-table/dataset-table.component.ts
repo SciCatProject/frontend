@@ -126,23 +126,9 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this.subscriptions.push(this.store.select(state => state.root.dashboardUI.mode).subscribe(mode => {
       this.mode = mode;
-      const self = this;
-      self.updateRowView(mode);
-        this.route.queryParams.take(1).subscribe(params => {
-          const f = 'args' in params ? rison.decode(params['args']) : {};
-          f['mode'] = mode;
-          self.router.navigate(['/datasets'], { queryParams: { args: rison.encode(f) } });
-        });
+      this.updateRowView(mode);
     }));
 
-    this.route.queryParams.subscribe(params => {
-      const f = 'args' in params ? rison.decode(params['args']) : {};
-      // this.filters = Object.assign({}, params);
-      // const f = utils.filter({ 'mode': '', 'skip': '' }, params);
-      this.mode = f['mode'] || 'view';
-      this.store.dispatch(new dua.SaveModeAction(this.mode));
-      // this.setCurrentPage(f['skip']);
-    });
 
 
     // NOTE: Typescript picks this key up as the property of the state, but it
@@ -156,12 +142,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
           this.datasets = data;
           this.dataSource = new MatTableDataSource(this.datasets);
           this.dataSource.sort = this.sort;
-          // if (this.datasets && this.datasets.length > 0) {
-            this.store.dispatch(new dua.SaveModeAction(this.mode));
-            console.log(this.mode);
-            // this.updateRowView(this.mode);
-          // }
-          // this.onModeChange(undefined, this.mode);
+          this.updateRowView(this.mode);
         },
         error => {
           console.error(error);

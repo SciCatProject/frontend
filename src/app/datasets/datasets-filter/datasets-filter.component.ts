@@ -101,25 +101,6 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
         (selectedDatasets: any): DatepickerState =>
           selectedDatasets['datepicker']);
 
-    this.subscriptions.push(this.route.queryParams.subscribe(params => {
-      const newParams = 'args' in params ? rison.decode(params['args']) : this.filters;
-      delete newParams['mode'];
-      this.filters = Object.assign({}, newParams);
-      this.store.dispatch(new dsa.UpdateFilterAction(newParams));
-    }));
-
-    this.subscriptions.push(
-      this.store.select(selectors.datasets.getActiveFilters)
-        .subscribe(combined => {
-          this.filters = Object.assign({}, combined);
-          const group = combined['ownerGroup'];
-          this.selectedGroup = group !== undefined ? group.toString() : undefined;
-          // TODO autoselect locations and dates as well
-          this.store.select(selectors.ui.getMode).take(1).subscribe(currentMode => {
-            combined['mode'] = currentMode;
-            this.router.navigate(['/datasets'], { queryParams: { args: rison.encode(combined) } });
-          });
-        }));
     this.resultCount$ =
       this.store.select(selectors.datasets.getTotalSets);
     this.subscriptions.push(
@@ -209,6 +190,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
       .takeLast(1)
       .subscribe(groups => { this.filters.ownerGroup = groups; });
     this.filters.ownerGroup = [];
+    this.filters.creationLocation = [];
     this.filterValues = dStore.initialDatasetState.filterValues;
     this.filterValues.text = '';
     this.store.dispatch(new dsa.UpdateFilterAction(this.filters));
