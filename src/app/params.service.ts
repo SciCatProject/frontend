@@ -22,7 +22,8 @@ export class ParamsService {
           const filters = Object.assign({}, newParams);
           this.store.dispatch(new dsa.UpdateFilterAction(filters));
         } catch (err) {
-          this.router.navigate(['/datasets']);
+          // this.router.navigate(['/datasets']);
+          // TODO handle malformed arguments
         }
 
       });
@@ -31,8 +32,9 @@ export class ParamsService {
         .subscribe(filters => {
         this.store.select(selectors.ui.getMode).take(1).subscribe(currentMode => {
           filters['mode'] = currentMode;
-          console.log(filters);
-          this.router.navigate(['/datasets'], { queryParams: { args: rison.encode(filters) } });
+          if (this.router.url.indexOf('datasets') !== -1) {
+            this.router.navigate(['/datasets'], { queryParams: { args: rison.encode(filters) } });
+          }
         });
       });
 
@@ -42,7 +44,9 @@ export class ParamsService {
           const newParams = 'args' in params ? rison.decode(params['args']) : dStore.initialDatasetState.activeFilters;
           newParams['mode'] = currentMode;
           console.log(newParams);
-          this.router.navigate(['/datasets'], { queryParams: { args: rison.encode(newParams) } });
+          if (this.router.url.indexOf('datasets') !== -1) {
+            this.router.navigate(['/datasets'], { queryParams: { args: rison.encode(newParams) } });
+          }
         });
       });
 
