@@ -10,6 +10,9 @@ import {
 } from '@angular/router';
 import 'rxjs/add/operator/filter';
 import { TitleCasePipe } from '../../pipes/index';
+import { Store } from '@ngrx/store';
+import * as rison from 'rison';
+import * as selectors from 'state-management/selectors';
 
 interface Breadcrumb {
   label: string;
@@ -38,7 +41,7 @@ export class BreadcrumbComponent implements OnInit {
   // partially based on: http://brianflove.com/2016/10/23/angular2-breadcrumb-using-router/
   breadcrumbs = Array<Breadcrumb>();
 
-  constructor(private route: ActivatedRoute, private router: Router) {
+  constructor(private store: Store<any>, private route: ActivatedRoute, private router: Router) {
 
   }
 
@@ -51,10 +54,10 @@ export class BreadcrumbComponent implements OnInit {
       this.breadcrumbs = [];
       const self = this;
       // let root: ActivatedRoute = this.route.root;
-      this.route.children.forEach(function(root) {
+      this.route.children.forEach(function (root) {
         const urls = root.snapshot.url;
-        urls.forEach(function(url) {
-           if (url.path !== 'datasets') {
+        urls.forEach(function (url) {
+          if (url.path !== 'datasets') {
             const bc: Breadcrumb = {
               label: self.sanitise(url.path),
               path: url.path,
@@ -96,9 +99,22 @@ export class BreadcrumbComponent implements OnInit {
     for (let i = 0; i < index; i++) {
       url += this.breadcrumbs[i].url;
     }
-    console.log(crumb);
     // this catches errors and redirects to the fallback, this could/should be set in the routing module?
-    this.router.navigateByUrl(url + crumb.url).catch(error => this.router.navigateByUrl(url + crumb.fallback));
+      if (crumb.fallback === '/datasets') {
+        console.log('DATASETS');
+        this.store.select(selectors.datasets.getActiveFilters).take(1)
+          .subscribe(filters => {
+            console.log(filters);
+            this.store.select(selectors.ui.getMode).take(1).subscribe(currentMode => {
+              filters['mode'] = currentMode;
+              console.log(currentMode);
+              this.router.navigate(['/datasets'], { queryParams: { args: rison.encode(filters) } });
+            });
+          });
+      } else {
+        this.router.navigateByUrl(url + crumb.url).catch(error => this.router.navigateByUrl(url + crumb.fallback));
+      }
+    // });
   }
 
 }
