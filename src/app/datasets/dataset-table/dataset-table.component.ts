@@ -239,8 +239,10 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
    * @param mode
    */
   onModeChange(event, mode) {
-    this.mode = mode.toLowerCase();
-    this.store.dispatch(new dua.SaveModeAction(this.mode));
+    if (mode) {
+      this.mode = mode.toLowerCase();
+      this.store.dispatch(new dua.SaveModeAction(this.mode));
+    }
   }
 
   isAllSelected() {
@@ -282,7 +284,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
    * @param m
    */
   getModeButtonClasses(m) {
-    if (m.toLowerCase() === this.mode.toLowerCase()) {
+    if (m.toLowerCase() === this.mode) {
       return { positive: true };
     } else {
       return {};

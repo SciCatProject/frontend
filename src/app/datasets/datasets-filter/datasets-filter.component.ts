@@ -119,12 +119,12 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
           this.filterValues = Object.assign({}, values);
           if (this.filterValues) {
             if (this.locations.length === 0 && this.filterValues['creationLocation'] !== null) {
-              this.locations = this.filterValues['creationLocation'].slice() || [];
+              this.locations = this.filterValues['creationLocation'] ? this.filterValues['creationLocation'].slice() : [];
             }
 
             if (this.groups.length === 0 &&
               this.filterValues['ownerGroup'] !== null && Array.isArray(this.filterValues['ownerGroup'])) {
-              this.groups = this.filterValues['ownerGroup'].slice() || [];
+              this.groups = this.filterValues['ownerGroup'] ? this.filterValues['ownerGroup'].slice() : [];
             }
             if (this.filterValues.creationLocation) {
               this.filteredBeams = this.beamlineInput.valueChanges

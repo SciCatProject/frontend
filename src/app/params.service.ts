@@ -38,10 +38,11 @@ export class ParamsService {
 
       this.store.select(selectors.ui.getMode)
         .subscribe(currentMode => {
-        this.route.queryParams.takeLast(1).subscribe(params => {
+        this.route.queryParams.take(1).subscribe(params => {
           const newParams = 'args' in params ? rison.decode(params['args']) : dStore.initialDatasetState.activeFilters;
           newParams['mode'] = currentMode;
-          // this.router.navigate(['/datasets'], { queryParams: { args: rison.encode(newParams) } });
+          console.log(newParams);
+          this.router.navigate(['/datasets'], { queryParams: { args: rison.encode(newParams) } });
         });
       });
 
