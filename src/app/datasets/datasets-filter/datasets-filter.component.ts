@@ -103,20 +103,28 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
 
     this.resultCount$ =
       this.store.select(selectors.datasets.getTotalSets);
+
+    this.store.select(selectors.datasets.getActiveFilters).subscribe(filters => {
+      if ('creationLocation' in filters) {
+        this.selectedBeam = filters['creationLocation'].toString();
+      }
+      if ('ownerGroup' in filters) {
+        this.selectedGroup = filters['ownerGroup'].toString();
+      }
+    });
+
     this.subscriptions.push(
       this.store.select(selectors.datasets.getFilterValues)
         .subscribe(values => {
           this.filterValues = Object.assign({}, values);
           if (this.filterValues) {
             if (this.locations.length === 0 && this.filterValues['creationLocation'] !== null) {
-              this.locations = this.filterValues['creationLocation']
-                ? this.filterValues['creationLocation']
-                : [];
+              this.locations = this.filterValues['creationLocation'].slice() || [];
             }
 
             if (this.groups.length === 0 &&
               this.filterValues['ownerGroup'] !== null && Array.isArray(this.filterValues['ownerGroup'])) {
-              this.groups = this.filterValues['ownerGroup'].slice();
+              this.groups = this.filterValues['ownerGroup'].slice() || [];
             }
             if (this.filterValues.creationLocation) {
               this.filteredBeams = this.beamlineInput.valueChanges
