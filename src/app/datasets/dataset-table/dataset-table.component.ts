@@ -28,17 +28,17 @@ import { last } from 'rxjs/operator/last';
 import { Observable } from 'rxjs/Observable';
 
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import {MatTableDataSource, MatPaginator, MatSort, MatDialog} from '@angular/material';
+import { MatTableDataSource, MatPaginator, MatSort, MatDialog } from '@angular/material';
 import { AfterViewInit } from '@angular/core/src/metadata/lifecycle_hooks';
-import {SelectionModel} from '@angular/cdk/collections';
+import { SelectionModel } from '@angular/cdk/collections';
 
-import {DialogComponent} from 'shared/modules/dialog/dialog.component';
+import { DialogComponent } from 'shared/modules/dialog/dialog.component';
 import * as rison from 'rison';
 
 @Component({
   selector: 'dataset-table',
   templateUrl: './dataset-table.component.html',
-  styleUrls: ['./dataset-table.component.css']
+  styleUrls: ['./dataset-table.component.scss']
 })
 export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
   @Input() datasets = [];
@@ -233,6 +233,28 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
     this.selection.toggle(row);
   }
 
+  calculateRowClasses(row) {
+    if (row.datasetlifecycle && this.mode === 'archive'
+      && (this.archiveable.indexOf(row.datasetlifecycle.archiveStatusMessage) !== -1) && row.size !== 0) {
+      return {
+        'row-archiveable': true
+      }
+    } else if (row.datasetlifecycle && this.mode === 'retrieve'
+      && this.retrievable.indexOf(row.datasetlifecycle.archiveStatusMessage) !== -1 && row.size !== 0) {
+      return {
+        'row-retrievable': true
+      }
+    } else if (row.size === 0) {
+      return {
+        'row-empty': true
+      }
+    } else {
+      return {
+        'row-generic': true
+      }
+    }
+  }
+
   /**
    * Handle changing of view mode and disabling selected rows
    * @param event
@@ -254,26 +276,30 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
   /** Selects all rows if they are not all selected; otherwise clear selection. */
   masterToggle() {
     this.isAllSelected() ?
-        this.selection.clear() :
-        this.dataSource.data.forEach(row => this.selection.select(row));
+      this.selection.clear() :
+      this.dataSource.data.forEach(row => this.selection.select(row));
   }
 
   updateRowView(mode) {
     this.selectedSets = [];
     this.rowStyleMap = {};
     const activeSets = [];
+    console.log(mode);
     if (this.datasets && this.datasets.length > 0 && (this.mode === 'archive' || this.mode === 'retrieve')) {
       for (let d = 0; d < this.datasets.length; d++) {
         const set = this.datasets[d];
-        if (this.mode === 'archive' && set.datasetlifecycle
-          && (this.archiveable.indexOf(set.datasetlifecycle.archiveStatusMessage) === -1 || set.size === 0)) {
+        const msg = set.datasetlifecycle.archiveStatusMessage;
+        console.log(msg, this.archiveable.indexOf(msg));
+        if (this.mode === 'archive'
+        && set.datasetlifecycle
+          && (this.archiveable.indexOf(set.datasetlifecycle.archiveStatusMessage) !== -1)) {
           activeSets.push(set);
         } else if (this.mode === 'retrieve'
-          && set.datasetlifecycle && this.retrievable.indexOf(set.datasetlifecycle.archiveStatusMessage) === -1) {
+          && set.datasetlifecycle && this.retrievable.indexOf(set.datasetlifecycle.archiveStatusMessage) !== -1) {
           activeSets.push(set);
         }
-        this.dataSource = new MatTableDataSource(activeSets);
       }
+      this.dataSource = new MatTableDataSource(activeSets);
     } else {
       this.dataSource = new MatTableDataSource(this.datasets);
     }
@@ -366,7 +392,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
   archiveClickHandle(event) {
     const dialogRef = this.dialog.open(DialogComponent, {
       width: 'auto',
-      data: {title: 'Really archive?', question: ''}
+      data: { title: 'Really archive?', question: '' }
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -386,7 +412,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
     const destPath = '/archive/retrieve';
     const dialogRef = this.dialog.open(DialogComponent, {
       width: 'auto',
-      data: {title: 'Really retrieve?', question: '', input: destPath}
+      data: { title: 'Really retrieve?', question: '', input: destPath }
     });
 
     dialogRef.afterClosed().subscribe(result => {
