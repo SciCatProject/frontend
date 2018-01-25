@@ -17,6 +17,7 @@ import { ParamsService } from 'params.service';
 import { JobsComponent } from 'jobs/jobs.component';
 import { JobsTableComponent } from 'jobs/jobs-table/jobs-table.component';
 import { localStorageSync } from 'ngrx-store-localstorage';
+import { AppConfigModule } from 'app-config.module';
 
 import {
     AutoCompleteModule,
@@ -119,7 +120,8 @@ export function localStorageSyncWrapper(reducer: any) {
       maxAge: 25 //  Retains last 25 states
     }),
     EffectsModule.forRoot([DatasetEffects, UserEffects, JobsEffects]),
-    StoreRouterConnectingModule
+    StoreRouterConnectingModule,
+    AppConfigModule,
   ],
   exports: [
   ],
