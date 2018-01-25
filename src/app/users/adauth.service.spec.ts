@@ -17,6 +17,6 @@ describe('ADAuthService', () => {
 
 
 // TODO update to call login method and test resuling URL
-  it('authURL should be equal to that set in the service', inject([ADAuthService], (service: ADAuthService) => {
-  }));
+//  it('authURL should be equal to that set in the service', inject([ADAuthService], (service: ADAuthService) => {
+//  }));
 });
