@@ -67,11 +67,6 @@ $ds-archive: mat-palette($mat-green, 600);
   background-color: mat-color($warn, 100, 0.2);
 }
 
-:host /deep/ .row-generic {
-  padding-bottom: 1%;
-  padding-top: 1%;
-}
-
 
 /*td {
     overflow: hidden;

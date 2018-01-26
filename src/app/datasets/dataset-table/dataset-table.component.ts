@@ -288,14 +288,13 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
     if (this.datasets && this.datasets.length > 0 && (this.mode === 'archive' || this.mode === 'retrieve')) {
       for (let d = 0; d < this.datasets.length; d++) {
         const set = this.datasets[d];
-        const msg = set.datasetlifecycle.archiveStatusMessage;
-        console.log(msg, this.archiveable.indexOf(msg));
+        const msg = (set.datasetlifecycle && set.datasetlifecycle.archiveStatusMessage) || '';
         if (this.mode === 'archive'
         && set.datasetlifecycle
-          && (this.archiveable.indexOf(set.datasetlifecycle.archiveStatusMessage) !== -1)) {
+          && (this.archiveable.indexOf(set.datasetlifecycle.archiveStatusMessage) !== -1) && set.size > 0) {
           activeSets.push(set);
         } else if (this.mode === 'retrieve'
-          && set.datasetlifecycle && this.retrievable.indexOf(set.datasetlifecycle.archiveStatusMessage) !== -1) {
+          && set.datasetlifecycle && this.retrievable.indexOf(set.datasetlifecycle.archiveStatusMessage) !== -1 && set.size > 0) {
           activeSets.push(set);
         }
       }
