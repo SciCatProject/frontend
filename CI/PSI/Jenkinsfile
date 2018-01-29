@@ -6,7 +6,7 @@ node {
 
 
        stage('Build Docker'){
-            sh 'ls /usr/bin'
+            sh 'curl -fsSLO https://get.docker.com/builds/Linux/x86_64/docker-${DOCKER_VERSION}.tgz && tar --strip-components=1 -xvzf docker-${DOCKER_VERSION}.tgz -C /usr/local/bin && chmod -R +x /usr/local/bin/docker'
             sh '/usr/bin/docker build -f CI/PSI/Dockerfile.test . -t catanie_test'
        }
        stage('Unit Test Catanie '){
