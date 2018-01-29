@@ -6,7 +6,7 @@ node {
 
 
        stage('Build Docker'){
-            sh '/usr/bin/docker build -f CI/PSI/Dockerfile.test . -t catanie_test'
+            sh 'docker build -f CI/PSI/Dockerfile.test . -t catanie_test'
        }
        stage('Unit Test Catanie '){
             sh 'docker run  --privileged -t catanie_test npm run -- ng test --watch false --single-run true --sourcemap false'
