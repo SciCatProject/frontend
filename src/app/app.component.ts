@@ -113,6 +113,7 @@ export class AppComponent implements OnDestroy, OnInit {
   }
 
   sidenavToggle() {
+    console.log('closing?');
     this.sidenav.opened ? this.sidenav.close() : this.sidenav.open();
   }
 }
