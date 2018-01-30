@@ -1,8 +1,23 @@
-<div class="ui raised segment">
-  <h4 class="ui header">Datablocks</h4>
-    <p-dataTable [value]="datablocks" (onRowSelect)="onSelect($event)">
-    <p-column field="id" header="ID"></p-column>
-    <p-column field="size" header="Size"></p-column>
-    <p-column field="datasetID" header="DatasetID"></p-column>
-</p-dataTable>
-</div>
+<div>
+    <h4>Datablocks</h4>
+    <mat-table #blockTable [dataSource]="blockSource">
+  
+      <ng-container matColumnDef="id">
+        <mat-header-cell *matHeaderCellDef> ID. </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.id}} </mat-cell>
+      </ng-container>
+  
+      <ng-container matColumnDef="size">
+        <mat-header-cell *matHeaderCellDef> Size </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.size}} </mat-cell>
+      </ng-container>
+  
+      <ng-container matColumnDef="files">
+        <mat-header-cell *matHeaderCellDef> Datafiles </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.dataFileList.length}} </mat-cell>
+      </ng-container>
+  
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row (click)="onSelect($event, row)" *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    </mat-table>
+  </div>
