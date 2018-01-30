@@ -34,7 +34,6 @@ export class UserEffects {
                   this.authSrv.setToken(res);
                   return this.userSrv.getCurrent().switchMap(
                       user => { this.authSrv.setUser(user);
-                      console.log(user);
                       res['user'] = user;
                       return Observable.of(new UserActions.LoginCompleteAction(res));
                       });
@@ -91,9 +90,9 @@ export class UserEffects {
           .debounceTime(300)
           .map(toPayload)
           .switchMap((payload) => {
-            return this.accessUserSrv.findById(payload)
+            return this.userIdentitySrv.findOne({'where': {'userId': payload}})
                 .switchMap(res => {
-                  return Observable.of(new UserActions.AddGroupsCompleteAction(res['memberOf']));
+                  return Observable.of(new UserActions.AddGroupsCompleteAction(res['profile']['accessGroups']));
                 })
                 .catch(err => {
                   console.error(err);
@@ -109,7 +108,6 @@ export class UserEffects {
           .switchMap((action) => {
             return this.accessUserSrv.findById(action)
                 .switchMap(res => {
-                  console.log(res);
                   return Observable.of(new UserActions.AccessUserEmailCompleteAction(res['email']));
                 })
                 .catch(err => {
@@ -153,7 +151,7 @@ export class UserEffects {
           });
 
   constructor(private action$: Actions, private store: Store<AppState>,
-              private accessUserSrv: lb.AccessUserApi,
+              private accessUserSrv: lb.AccessUserApi, private userIdentitySrv: lb.UserIdentityApi,
               private activeDirSrv: ADAuthService, private userSrv: lb.UserApi,
               private authSrv: lb.LoopBackAuth) {}
 }

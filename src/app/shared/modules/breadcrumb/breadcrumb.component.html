@@ -1,9 +1,9 @@
-<div class="ui breadcrumb">
+<div class="ui breadcrumb" *ngIf="breadcrumbs.length > 0">
   <!-- <a class="section" [routerLink]="['/datasets']">Home</a> -->
   <!-- <div class="divider"> / </div> -->
   <ng-container *ngFor="let breadcrumb of breadcrumbs; let i = index">
     <a  [ngClass]="{active: i === breadcrumbs.length - 1}" class="section" (click)="crumbClick(i, breadcrumb)">{{breadcrumb.label}}</a>
     <div class="divider"> / </div>
   </ng-container>
+  <hr>
 </div>
-<hr>

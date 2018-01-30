@@ -163,21 +163,21 @@ export class DatasetEffects {
                   return Observable.of(new DatasetActions.SearchFailedAction(err));
                 });
           });
-  @Effect()
-  protected getGroups$: Observable<Action> =
-      this.action$.ofType(DatasetActions.ADD_GROUPS)
-          .debounceTime(300)
-          .map(toPayload)
-          .switchMap(payload => {
-            return this.accessUserSrv.findById(payload)
-                .switchMap(res => {
-                  return Observable.of(new DatasetActions.AddGroupsCompleteAction(res['memberOf']));
-                })
-                .catch(err => {
-                  console.error(err);
-                  return Observable.of(new DatasetActions.AddGroupsFailedAction(err));
-                });
-          });
+  // @Effect()
+  // protected getGroups$: Observable<Action> =
+  //     this.action$.ofType(DatasetActions.ADD_GROUPS)
+  //         .debounceTime(300)
+  //         .map(toPayload)
+  //         .switchMap(payload => {
+  //           return this.userIdentitySrv.findOne({'where': {'userId': payload}})
+  //               .switchMap(res => {
+  //                 return Observable.of(new DatasetActions.AddGroupsCompleteAction(res['profile']['accessGroups']));
+  //               })
+  //               .catch(err => {
+  //                 console.error(err);
+  //                 return Observable.of(new DatasetActions.AddGroupsFailedAction(err));
+  //               });
+  //         });
 
   @Effect()
   protected deleteDatablocks$: Observable<Action> =
@@ -223,6 +223,7 @@ export class DatasetEffects {
   constructor(private action$: Actions, private store: Store<any>,
               private cds: DatasetService, private ds: lb.DatasetApi, private rds: lb.RawDatasetApi,
               private dls: lb.DatasetLifecycleApi, private dbs: lb.DatablockApi,
+              private userIdentitySrv: lb.UserIdentityApi,
               private accessUserSrv: lb.AccessUserApi) {}
   }
 
