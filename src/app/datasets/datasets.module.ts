@@ -60,6 +60,7 @@ import {
   DatePickerModule
 } from 'shared/modules/datepicker/datepicker.module';
 import {SharedCatanieModule} from 'shared/shared.module';
+import { SelectedListComponent } from 'datasets/selected-list/selected-list.component';
 
 @NgModule({
   imports : [
@@ -72,7 +73,7 @@ import {SharedCatanieModule} from 'shared/shared.module';
   ],
   declarations : [
     DashboardComponent, DatasetTableComponent, DatablocksComponent,
-    DatafilesComponent, DatasetsFilterComponent, DatasetDetailComponent
+    DatafilesComponent, DatasetsFilterComponent, DatasetDetailComponent, SelectedListComponent
   ],
   providers : [ DatasetService, ConfirmationService ],
   exports : [ DatasetTableComponent, DatasetsFilterComponent ]
