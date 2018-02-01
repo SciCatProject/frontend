@@ -40,7 +40,6 @@ export class LoginComponent implements OnInit {
     const self = this;
     this.store.select(selectors.users.getCurrentUser)
         .subscribe(result => {
-          console.log(result);
           if (result && result['username']) {
             self.router.navigateByUrl('/datasets');
             // self.router.navigateByUrl(decodeURIComponent(self.returnUrl));
