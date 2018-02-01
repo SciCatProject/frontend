@@ -1,6 +1,7 @@
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, Input, OnInit, ViewChild, AfterViewInit} from '@angular/core';
 import {OrigDatablock} from 'shared/sdk/models';
-
+import {Store} from '@ngrx/store';
+import {Observable} from 'rxjs/Observable';
 import {MatTableDataSource, MatPaginator} from '@angular/material';
 
 @Component({
@@ -8,11 +9,11 @@ import {MatTableDataSource, MatPaginator} from '@angular/material';
   templateUrl : './datafiles.component.html',
   styleUrls : [ './datafiles.component.css' ]
 })
-export class DatafilesComponent implements OnInit {
+export class DatafilesComponent implements OnInit, AfterViewInit {
 
   @Input() dataBlocks: Array<OrigDatablock>;
   count = 0;
-  files: Array < JSON >= [];
+  files: Array < JSON > = [];
   selectedDF;
   dsId: string;
   dataFiles: Array<any> = [];
@@ -22,13 +23,27 @@ export class DatafilesComponent implements OnInit {
   dataSource: MatTableDataSource<any> | null;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  constructor() {}
+  admin$: Observable<boolean>;
+
+  constructor(private store: Store<any>) {}
 
   ngOnInit() {
+    const currentUser$ = this.store.select(state => state.root.user.currentUser);
+    const adminUserNames = ['ingestor', 'archiveManager'];
+    const userIsAdmin = (user) => {
+      return (user['accountType'] === 'functional')  || (adminUserNames.indexOf(user.username) !== -1);
+    };
+    this.admin$ = currentUser$.map(userIsAdmin);
     if (this.dataBlocks) {
-      console.log(this.dataBlocks);
       this.getDatafiles(this.dataBlocks);
     }
+  }
+
+  ngAfterViewInit() {
+    if (this.dataSource) {
+      this.dataSource.paginator = this.paginator;
+    }
+    // this.dataSource.sort = this.sort;
   }
 
   /**
@@ -42,7 +57,6 @@ export class DatafilesComponent implements OnInit {
       self.count += block.dataFileList.length;
     });
     this.dataSource = new MatTableDataSource(this.files);
-    console.log(this.files);
   }
 
   /**
