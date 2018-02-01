@@ -67,7 +67,7 @@ import { SelectedListComponent } from 'datasets/selected-list/selected-list.comp
     MatCardModule, MatDialogModule, MatPaginatorModule, MatCheckboxModule, MatTableModule, MatFormFieldModule, MatAutocompleteModule,
     MatTabsModule, MatInputModule, MatButtonModule, MatSortModule, CommonModule, FormsModule, DialogModule, ReactiveFormsModule,
     SharedCatanieModule, DataTableModule, SharedModule, TabViewModule,
-    ConfirmDialogModule, TreeModule, TreeTableModule,
+    ConfirmDialogModule, TreeModule, TreeTableModule, MatListModule,
     DropdownModule, AutoCompleteModule,
     DatePickerModule
   ],

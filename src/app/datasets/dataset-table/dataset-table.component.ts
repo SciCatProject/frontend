@@ -43,6 +43,7 @@ import * as rison from 'rison';
 export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
   @Input() datasets = [];
   @Output() openDataset = new EventEmitter();
+  @Output() selectedSet = new EventEmitter<Array<any>>();
 
   @ViewChild('ds') dsTable: DataTable;
   @ViewChild(MatSort) sort: MatSort;
@@ -231,6 +232,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
 
   onRowCheck(row) {
     this.selection.toggle(row);
+    this.selectedSet.emit(this.selection.selected);
   }
 
   calculateRowClasses(row) {

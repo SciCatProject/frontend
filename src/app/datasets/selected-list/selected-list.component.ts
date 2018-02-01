@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
   selector: 'selected-dataset-list',
@@ -6,6 +6,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./selected-list.component.css']
 })
 export class SelectedListComponent implements OnInit {
+
+  @Input() datasets = [];
 
   constructor() { }
 

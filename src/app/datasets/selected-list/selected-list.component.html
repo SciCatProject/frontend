@@ -1,3 +1,16 @@
-<p>
-  selected-list works!
-</p>
+<mat-card class="example-card" *ngIf="datasets && datasets.length > 0">
+  <mat-card-header>
+    <div mat-card-avatar class="example-header-image"></div>
+    <mat-card-title>Selected Datasets:</mat-card-title>
+    <mat-card-subtitle>{{datasets.length}}</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <mat-list>
+      <mat-list-item *ngFor="let ds of datasets">
+        <h4 mat-line>{{ds.pid}}</h4>
+      </mat-list-item>
+      <mat-divider></mat-divider>
+    </mat-list>
+    
+  </mat-card-content>
+</mat-card>
