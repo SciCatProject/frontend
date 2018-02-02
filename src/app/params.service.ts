@@ -16,11 +16,13 @@ export class ParamsService {
     private router: Router) {
       this.route.queryParams.subscribe(params => {
         try {
-          const newParams = 'args' in params ? rison.decode(params['args']) : dStore.initialDatasetState.activeFilters;
-          const mode = newParams['mode'];
-          delete newParams['mode'];
-          const filters = Object.assign({}, newParams);
-          this.store.dispatch(new dsa.UpdateFilterAction(filters));
+          if (window.location.pathname.indexOf('datasets') !== -1) {
+            const newParams = 'args' in params ? rison.decode(params['args']) : dStore.initialDatasetState.activeFilters;
+            const mode = newParams['mode'];
+            delete newParams['mode'];
+            const filters = Object.assign({}, newParams);
+            this.store.dispatch(new dsa.UpdateFilterAction(filters));
+          }
         } catch (err) {
           // this.router.navigate(['/datasets']);
           // TODO handle malformed arguments
@@ -44,7 +46,7 @@ export class ParamsService {
           const newParams = 'args' in params ? rison.decode(params['args']) : dStore.initialDatasetState.activeFilters;
           newParams['mode'] = currentMode;
           console.log(newParams);
-          if (this.router.url.indexOf('datasets') !== -1) {
+          if (window.location.pathname.indexOf('datasets') !== -1) {
             this.router.navigate(['/datasets'], { queryParams: { args: rison.encode(newParams) } });
           }
         });

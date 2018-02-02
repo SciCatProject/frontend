@@ -1,9 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { Router, ActivatedRoute} from '@angular/router';
-import { RawDatasetApi, DatablockApi } from 'shared/sdk/services';
 
-import {DataTableModule} from 'primeng/primeng';
+import { MatTableModule} from '@angular/material';
 
 import {MockActivatedRoute, MockDatablockApi, MockDatasetApi, MockDatasetService, MockRouter} from 'shared/MockStubs';
 
@@ -17,7 +16,7 @@ describe('DatablocksComponent', () => {
 
   beforeEach(async(() => {
       TestBed.configureTestingModule({
-      imports: [ DataTableModule ],
+      imports: [ MatTableModule ],
       declarations: [ DatablocksComponent ]
     });
      TestBed.overrideComponent(DatablocksComponent, {
@@ -25,9 +24,6 @@ describe('DatablocksComponent', () => {
       providers: [
         { provide: ActivatedRoute, useClass: MockActivatedRoute },
         { provide: Router, useClass: MockRouter },
-        { provide: RawDatasetApi, useClass: MockDatasetApi },
-        { provide: DatablockApi, useClass: MockDatablockApi },
-        { provide : DatasetService, useClass: MockDatasetService }
       ]
     }
     });
