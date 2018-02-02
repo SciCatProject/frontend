@@ -1,7 +1,7 @@
 <!-- <div class="ui fixed menu"> -->
 <div [class.dark-theme]="(darkTheme$ | async)" [class.light-theme]="!(darkTheme$ | async)">
     <mat-sidenav-container (backdropClick)="sidenavToggle()" fullscreen>
-        <mat-sidenav #sidenav (keydown.escape)="sidenavToggle()" mode="side">
+        <mat-sidenav #sidenav (keydown.escape)="sidenavToggle()" mode="push" disableClose>
             <mat-list>
                 <mat-list-item><a class="item" [routerLink]="['/datasets/']" [routerLinkActive]="['active']">Home</a></mat-list-item>
                 <mat-list-item><a class="item" [routerLink]="['/sample-data/', 'add']" [routerLinkActive]="['active']">Sample Data Entry</a></mat-list-item>

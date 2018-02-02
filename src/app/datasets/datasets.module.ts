@@ -60,19 +60,20 @@ import {
   DatePickerModule
 } from 'shared/modules/datepicker/datepicker.module';
 import {SharedCatanieModule} from 'shared/shared.module';
+import { SelectedListComponent } from 'datasets/selected-list/selected-list.component';
 
 @NgModule({
   imports : [
     MatCardModule, MatDialogModule, MatPaginatorModule, MatCheckboxModule, MatTableModule, MatFormFieldModule, MatAutocompleteModule,
     MatTabsModule, MatInputModule, MatButtonModule, MatSortModule, CommonModule, FormsModule, DialogModule, ReactiveFormsModule,
     SharedCatanieModule, DataTableModule, SharedModule, TabViewModule,
-    ConfirmDialogModule, TreeModule, TreeTableModule,
+    ConfirmDialogModule, TreeModule, TreeTableModule, MatListModule,
     DropdownModule, AutoCompleteModule,
     DatePickerModule
   ],
   declarations : [
     DashboardComponent, DatasetTableComponent, DatablocksComponent,
-    DatafilesComponent, DatasetsFilterComponent, DatasetDetailComponent
+    DatafilesComponent, DatasetsFilterComponent, DatasetDetailComponent, SelectedListComponent
   ],
   providers : [ DatasetService, ConfirmationService ],
   exports : [ DatasetTableComponent, DatasetsFilterComponent ]

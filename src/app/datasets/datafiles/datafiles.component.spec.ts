@@ -5,6 +5,9 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { DatafilesComponent } from './datafiles.component';
 import { MatTableModule} from '@angular/material';
 
+import { Store, StoreModule } from '@ngrx/store';
+import { MockActivatedRoute, MockStore } from 'shared/MockStubs';
+
 describe('DatafilesComponent', () => {
   let component: DatafilesComponent;
   let fixture: ComponentFixture<DatafilesComponent>;
@@ -18,6 +21,7 @@ describe('DatafilesComponent', () => {
      TestBed.overrideComponent(DatafilesComponent, {
     set: {
       providers: [
+        {provide : Store, useClass : MockStore}
       ]
     }
     });

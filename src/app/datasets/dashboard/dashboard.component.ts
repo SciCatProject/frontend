@@ -20,7 +20,7 @@ export class DashboardComponent implements OnInit {
    * @type {Array<RawDataset>}
    * @memberof DashboardComponent
    */
-  datasets: Array<RawDataset> = [];
+  datasets: Array<any> = [];
   // rows: any[] = [];
 
   searchText$;
@@ -31,6 +31,10 @@ export class DashboardComponent implements OnInit {
     private store: Store<any>
   ) {
     this.datasets = [];
+  }
+
+  selectedSet(event) {
+    this.datasets = event;
   }
 
   /**
