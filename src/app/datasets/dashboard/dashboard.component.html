@@ -12,8 +12,9 @@
 <div class="ui grid">
   <div class="four wide column">
     <datasets-filter></datasets-filter>
+    <selected-dataset-list [datasets]="datasets"></selected-dataset-list>
   </div>
   <div class="twelve wide column">
-    <dataset-table></dataset-table>
+    <dataset-table (selectedSet)="selectedSet($event)"></dataset-table>
   </div>
 </div>
