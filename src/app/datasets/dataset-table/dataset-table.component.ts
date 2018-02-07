@@ -317,11 +317,12 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
    * @param m
    */
   getModeButtonClasses(m) {
+    const ret = {};
+    ret[m.toLowerCase()] = true;
     if (m.toLowerCase() === this.mode) {
-      return { positive: true };
-    } else {
-      return {};
+      ret['positive'] = true;
     }
+    return ret;
   }
 
   /**
