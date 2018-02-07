@@ -22,7 +22,8 @@ exports.config = {
         login: {
             user: 'ingestor',
             pwd: 'aman'
-        }
+        },
+        pid: '20.500.11935%2F0006c3e0-d1fa-440c-8ed0-431a9636f9bc'
     },
     directConnect: true,
     baseUrl: 'http://localhost:4200/',
