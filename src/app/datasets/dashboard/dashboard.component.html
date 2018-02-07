@@ -9,12 +9,12 @@
 </form>
 </mat-card>
 <br>
-<div class="ui grid">
-  <div class="four wide column">
+<div class="ui stackable grid">
+  <div class="four wide column computer only">
     <datasets-filter></datasets-filter>
     <selected-dataset-list [datasets]="datasets"></selected-dataset-list>
   </div>
-  <div class="twelve wide column">
+  <div class="sixteen wide mobile twelve wide computer column">
     <dataset-table (selectedSet)="selectedSet($event)"></dataset-table>
   </div>
 </div>
