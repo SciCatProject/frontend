@@ -35,7 +35,7 @@ export class ParamsService {
         .subscribe(filters => {
         this.store.select(selectors.ui.getMode).take(1).subscribe(currentMode => {
           filters['mode'] = currentMode;
-          if (this.router.url.indexOf('datasets') !== -1) {
+          if (window.location.pathname.indexOf('datasets') !== -1) {
             this.router.navigate(['/datasets'], { queryParams: { args: rison.encode(filters) } });
           }
         });
