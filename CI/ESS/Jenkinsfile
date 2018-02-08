@@ -9,7 +9,6 @@ node('docker') {
        }
        stage('Unit Test Catanie '){
             sh 'docker run  -t catanie_test npm run -- ng test --watch false --single-run true -v ./test:./test '
-                   }
        }
        stage('Build e2e'){
             sh 'docker build --file CI/ESS/Dockerfile.e2e . --tag e2e-catanie'
