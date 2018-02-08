@@ -13,9 +13,6 @@ node {
                     always {
                         junit './test/**/*.xml'
                     }
-                    failure {
-                        mail to: gareth.murphy@esss.se, subject: 'The Pipeline failed :('
-                    }
                    }
        }
        stage('Build e2e'){
