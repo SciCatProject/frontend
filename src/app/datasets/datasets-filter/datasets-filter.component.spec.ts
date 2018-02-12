@@ -44,4 +44,9 @@ describe('DatasetsFilterComponent', () => {
   });
 
   it('should be created', () => { expect(component).toBeTruthy(); });
+
+  it('should contain a date range field', () => {
+      const compiled = fixture.debugElement.nativeElement;
+      expect(compiled.querySelector('form').textContent).toContain('Date Range');
+  });
 });
