@@ -66,6 +66,10 @@ export function datasetsReducer(state = initialDatasetState, action: Action) {
       return Object.assign({}, state, {selectedSets: s});
     }
 
+    case dsa.SELECTED_DATABLOCKS_COMPLETE: {
+      return Object.assign({}, state, {selectedSets: action['payload']});
+    }
+
     case dsa.TOTAL_UPDATE: {
       const s = <number>action['payload'];
       return Object.assign({}, state, {totalSets: s});

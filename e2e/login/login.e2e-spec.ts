@@ -23,4 +23,8 @@ describe('catanie Login', function() {
   it('should login with correct credentials', () => {
     lp.login();
   });
+
+  it('should have three tabs for functional accounts', () => {
+
+  });
 });

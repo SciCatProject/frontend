@@ -199,6 +199,18 @@ export class DatasetEffects {
         });
 
   @Effect()
+  protected updateSelectedDatablocks$: Observable<Action> =
+  this.action$.ofType(DatasetActions.SELECTED_UPDATE)
+        .map(toPayload)
+        .switchMap(payload => {
+          const dataset = payload[payload.length - 1];
+          return this.dbs.findById(dataset.pid).switchMap(res => {
+            dataset['datablocks'] = res;
+            return Observable.of(new DatasetActions.UpdateSelectedDatablocksAction(payload));
+          })
+        });
+
+  @Effect()
   protected resetStatus$: Observable<Action> =
     this.action$.ofType(DatasetActions.RESET_STATUS)
       .map(toPayload)
