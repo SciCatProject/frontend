@@ -87,6 +87,7 @@ export class AppComponent implements OnDestroy, OnInit {
           if (!('realm' in current)) {
             this.store.dispatch(new dsa.AddGroupsAction(current.id));
             this.store.dispatch(new ua.AccessUserEmailAction(this.username));
+            // TODO handlod dataset loading
           }
         } else if (current && current['loggedOut']) {
           if (window.location.pathname.indexOf('login') === -1) {

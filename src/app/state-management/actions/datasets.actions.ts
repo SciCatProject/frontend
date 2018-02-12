@@ -36,6 +36,7 @@ export const RESET_STATUS = '[Dataset] Status Reset';
 export const RESET_STATUS_COMPLETE = '[Dataset] Status Reset Complete';
 export const SELECTED_UPDATE = '[Dataset]  Selected Datasets Update';
 export const SELECTED_DATABLOCKS_COMPLETE = '[Dataset] Selected Datablocks update complete';
+export const CURRENT_BLOCKS_COMPLETE = '[Datasets] Current set datablocks update complete';
 // export const FILTER_UPDATE_COMPLETE = '[Dataset]  Filter Update Complete';
 
 export const TOTAL_UPDATE = '[Dataset] Total Datasets Update';
@@ -152,6 +153,12 @@ export class CurrentSetAction implements Action {
   constructor(public payload: lb.RawDataset) { }
 }
 
+export class UpdateCurrentBlocksAction implements Action {
+  readonly type = CURRENT_BLOCKS_COMPLETE;
+
+  constructor(public payload: lb.RawDataset) { }
+}
+
 export class ResetStatusAction implements Action {
   readonly type = RESET_STATUS;
 
@@ -174,7 +181,7 @@ export type Actions =
   SearchCompleteAction | SearchFailedAction |
   UpdateFilterAction | UpdateFilterCompleteAction | FilterFailedAction |
   FilterValueAction | SearchIDAction | SearchIDCompleteAction |
-  SearchIDFailedAction | DatablocksAction | DatablocksCompleteAction |
+  SearchIDFailedAction | DatablocksAction | DatablocksCompleteAction | UpdateCurrentBlocksAction |
   DatablockDeleteAction | DatablockDeleteCompleteAction | DatablockDeleteFailedAction |
   DatablocksAction | AddGroupsAction | AddGroupsCompleteAction | UpdateSelectedDatablocksAction |
   AddGroupsFailedAction | UpdateSelectedAction | TotalSetsAction | ResetStatusAction | ResetStatusCompleteAction;

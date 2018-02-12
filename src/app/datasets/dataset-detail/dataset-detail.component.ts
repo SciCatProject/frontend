@@ -102,8 +102,16 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
         job.creationTime = new Date();
         job.type = 'reset';
         const fileObj = {};
+        const fileList = [];
         fileObj['pid'] = dataset['pid'];
-        fileObj['files'] = [];
+        if (dataset['datablocks']) {
+          for (const d in dataset['datablocks']) {
+            if (d) {
+              fileList.concat(d['dataFileList']);
+            }
+          }
+        }
+        fileObj['files'] = fileList;
         job.datasetList = [fileObj];
         console.log(job);
         this.store.dispatch(new ja.SubmitAction(job));

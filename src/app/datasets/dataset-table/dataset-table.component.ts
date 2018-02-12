@@ -444,15 +444,17 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
           this.selection.selected.map(set => {
             // if ('datablocks' in set && set['datablocks'].length > 0) {
             const fileObj = {};
+            const fileList = [];
             fileObj['pid'] = set['pid'];
-            fileObj['files'] = [];
+            if (set['datablocks']) {
+              for (const d in set['datablocks']) {
+                if (d) {
+                  fileList.concat(d['dataFileList']);
+                }
+              }
+            }
+            fileObj['files'] = fileList;
             backupFiles.push(fileObj);
-            //   set['datablocks'].map(file => {
-            //     const id = encodeURIComponent(set.pid);
-            //     backupFiles.push({[set['pid']] : file['dataFileList']}); });
-            // }
-            // Removing keys added by PrimeNG, no real need yet but could impact
-            // if written to DB
             delete set['$$index'];
           });
           if (backupFiles.length === 0) {
