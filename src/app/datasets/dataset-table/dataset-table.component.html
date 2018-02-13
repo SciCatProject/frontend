@@ -9,10 +9,10 @@
  
          </div>
          <div class="ui buttons dataset-action" *ngSwitchCase="'archive'">
-             <button class="ui button" (click)="archiveClickHandle($event)"><i class="upload icon"></i>Archive</button>
+             <button class="ui button archive-action-btn" (click)="archiveClickHandle($event)"><i class="upload icon"></i>Archive</button>
    </div>
          <div class="ui buttons dataset-action" *ngSwitchCase="'retrieve'">
-             <button class="ui button" (click)="retrieveClickHandle($event)"><i class="upload icon"></i>Retrieve</button>
+             <button class="ui button retrieve-action-btn" (click)="retrieveClickHandle($event)"><i class="upload icon"></i>Retrieve</button>
        </div>
      </div>
     </div>
@@ -26,8 +26,8 @@
       <div class="ui loader"></div>
     </div>
   </div>
-      <mat-paginator [pageSize]="limit$ | async" [pageSizeOptions]="[10,30, 50, 100]" [length]="datasetCount$ | async" (page)="onPage(event)"></mat-paginator>
-      <mat-table #table [dataSource]="dataSource"  (matSortChange)="onPage($event)" matSort>
+      <mat-paginator class='dataset-paginator' [pageSize]="limit$ | async" [pageSizeOptions]="[10,30, 50, 100]" [length]="datasetCount$ | async" (page)="onPage(event)"></mat-paginator>
+      <mat-table #table [dataSource]="dataSource" class='dataset-table' (matSortChange)="onPage($event)" matSort>
 
           <!-- Checkbox Column -->
     <ng-container matColumnDef="select">
@@ -58,6 +58,6 @@
         <mat-row class='row-generic' [ngClass]="calculateRowClasses(row)" (click)="onRowSelect($event, row)" *matRowDef="let row; columns: displayedColumns;"></mat-row>
       </mat-table>
 
-      <mat-paginator [pageSize]="limit$ | async" [pageSizeOptions]="[10,30, 50, 100]" [length]="datasetCount$ | async" (page)="onPage($event)"></mat-paginator>
+      <mat-paginator class='dataset-paginator' [pageSize]="limit$ | async" [pageSizeOptions]="[10,30, 50, 100]" [length]="datasetCount$ | async" (page)="onPage($event)"></mat-paginator>
     </div>
 </div>
