@@ -203,13 +203,16 @@ export class DatasetEffects {
     this.action$.ofType(DatasetActions.SELECTED_UPDATE)
       .map(toPayload)
       .switchMap(payload => {
-        const dataset = payload[payload.length - 1];
-        const datasetSearch = { where: { datasetId: dataset.pid } };
-        return this.dbs.find(datasetSearch).switchMap(res => {
-          dataset['datablocks'] = res;
-          console.log(res);
+        if (payload && payload.length > 0) {
+          const dataset = payload[payload.length - 1];
+          const datasetSearch = { where: { datasetId: dataset.pid } };
+          return this.dbs.find(datasetSearch).switchMap(res => {
+            dataset['datablocks'] = res;
+            return Observable.of(new DatasetActions.UpdateSelectedDatablocksAction(payload));
+          })
+        } else {
           return Observable.of(new DatasetActions.UpdateSelectedDatablocksAction(payload));
-        })
+        }
       });
 
   // @Effect()
