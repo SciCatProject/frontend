@@ -26,7 +26,7 @@ export class DatasetEffects {
         const id = payload;
         // TODO separate action for dataBlocks? or retrieve at once?
 
-        return this.rds.findById(encodeURIComponent(id))
+        return this.ds.findById(encodeURIComponent(id))
           .switchMap(res => {
             return Observable.of(new DatasetActions.SearchIDCompleteAction(res));
           })
@@ -54,7 +54,7 @@ export class DatasetEffects {
 
         // TODO separate action for dataBlocks? or retrieve at once?
 
-        return this.rds.findById(encodeURIComponent(id), blockFilter)
+        return this.ds.findById(encodeURIComponent(id), blockFilter)
           .switchMap(res => {
             return Observable.of(new DatasetActions.SearchIDCompleteAction(res));
           })
