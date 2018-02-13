@@ -10,7 +10,7 @@
       <mat-autocomplete #beam="matAutocomplete">
         <mat-option class="options" (onSelectionChange)="locSelected(b)" *ngFor="let b of filteredBeams | async" [value]="b._id">
           <span>{{ b._id }}</span> |
-          <small>Results:{{b.count}}</small>
+          <small>:{{b.count}}</small>
         </mat-option>
       </mat-autocomplete>
     </mat-form-field>
@@ -22,7 +22,7 @@
       <mat-autocomplete #grp="matAutocomplete">
         <mat-option class="options" (onSelectionChange)="groupSelected(g)" *ngFor="let g of filteredGroups | async" [value]="g._id">
           <span>{{ g._id }}</span> 
-          <small>Results: {{g.count}}</small>
+          <small>: {{g.count}}</small>
         </mat-option>
       </mat-autocomplete>
     </mat-form-field>
