@@ -107,6 +107,7 @@ export class AppComponent implements OnDestroy, OnInit {
 
   logout() {
     this.store.dispatch(new ua.LogoutAction());
+    this.router.navigate(['/login']);
   }
 
   login() {

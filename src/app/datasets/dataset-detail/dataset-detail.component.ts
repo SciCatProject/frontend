@@ -107,7 +107,7 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
         if (dataset['datablocks']) {
           for (const d in dataset['datablocks']) {
             if (d) {
-              fileList.concat(d['dataFileList']);
+              fileList.push(d['archiveId']);
             }
           }
         }

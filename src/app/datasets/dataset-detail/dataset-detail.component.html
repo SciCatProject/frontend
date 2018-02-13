@@ -13,9 +13,9 @@
   </mat-tab>
   <mat-tab label="Datafiles">
     <datafiles [dataBlocks]="origDatablocks$ | async"></datafiles>
-    <!-- <div *ngIf="origDatablocks$.length === 0">
+    <div *ngIf="origDatablocks$.length === 0">
       <h3>No datafiles linked to this dataset</h3>
-    </div> -->
+    </div>
   </mat-tab>
   <mat-tab label="Admin" *ngIf="(admin$ | async) as admin">
     <button (click)="resetDataset(dataset)" class="ui yellow button">Reset Status</button>

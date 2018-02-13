@@ -446,12 +446,22 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
             const fileObj = {};
             const fileList = [];
             fileObj['pid'] = set['pid'];
-            if (set['datablocks']) {
+            if (set['datablocks'] && !archive) {
               for (const d in set['datablocks']) {
                 if (d) {
-                  fileList.concat(d['dataFileList']);
+                  fileList.push(d['archiveId']);
                 }
               }
+            } else {
+              msg = {
+                type: 'error',
+                content:
+                  'Selected datasets have no datablocks associated with them',
+                title: 'Job not submitted'
+              };
+              this.store.dispatch(new ua.ShowMessageAction(msg));
+              this.selection.clear();
+              return;
             }
             fileObj['files'] = fileList;
             backupFiles.push(fileObj);
