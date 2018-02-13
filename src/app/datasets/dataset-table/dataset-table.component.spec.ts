@@ -54,4 +54,24 @@ describe('DatasetTableComponent', () => {
   it('should be created', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should contain mode switching buttons', () => {
+    const compiled = fixture.debugElement.nativeElement;
+    expect(compiled.querySelector('.archive')).toBeTruthy();
+    expect(compiled.querySelector('.archive').textContent).toContain('Archive');
+    expect(compiled.querySelector('.retrieve')).toBeTruthy();
+    expect(compiled.querySelector('.retrieve').textContent).toContain('Retrieve');
+    expect(compiled.querySelector('.view')).toBeTruthy();
+    expect(compiled.querySelector('.view').textContent).toContain('View');
+  });
+
+  it('should contain a material table', () => {
+    const compiled = fixture.debugElement.nativeElement;
+    expect(compiled.querySelector('.dataset-table')).toBeTruthy();
+  });
+
+  it('should contain 2 paginators', () => {
+    const compiled = fixture.debugElement.nativeElement;
+    expect(compiled.querySelectorAll('.dataset-paginator').length).toBe(2);
+  });
 });

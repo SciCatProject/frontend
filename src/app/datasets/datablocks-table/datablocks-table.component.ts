@@ -15,6 +15,7 @@ import {MatTableDataSource, MatPaginator} from '@angular/material';
 export class DatablocksComponent implements OnInit {
 
   @Input() datablocks: Array<Datablock>;
+  @Input() title = 'Datablocks';
 
   blockSource: MatTableDataSource<any> | null;
 
