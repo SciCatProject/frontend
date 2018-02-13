@@ -451,7 +451,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
                 console.log(d);
                 fileList.push(d['archiveId']);
               });
-            } else {
+            } else if (!archive) {
               msg = {
                 type: 'error',
                 content:
