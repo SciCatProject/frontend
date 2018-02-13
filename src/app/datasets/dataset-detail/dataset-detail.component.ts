@@ -85,6 +85,7 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
     console.log('Loading data for ' + datasetPID)
     this.clearCurrentSet(); // clear current dataset entirely from the cache
     this.loadDatasetWithDatablocks(datasetPID);
+    // this.store.dispatch(new dsa.CurrentSetAction(datasetPID));
   }
 
   resetDataset(dataset) {
@@ -102,8 +103,14 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
         job.creationTime = new Date();
         job.type = 'reset';
         const fileObj = {};
+        const fileList = [];
         fileObj['pid'] = dataset['pid'];
-        fileObj['files'] = [];
+        if (dataset['datablocks']) {
+          dataset['datablocks'].map(d => {
+            fileList.push(d['archiveId']);
+          });
+        }
+        fileObj['files'] = fileList;
         job.datasetList = [fileObj];
         console.log(job);
         this.store.dispatch(new ja.SubmitAction(job));

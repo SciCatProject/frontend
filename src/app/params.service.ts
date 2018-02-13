@@ -16,10 +16,12 @@ export class ParamsService {
     private router: Router) {
       this.route.queryParams.subscribe(params => {
         try {
-          if (window.location.pathname.indexOf('datasets') !== -1) {
+          console.log(window.location.pathname);
+          if (window.location.pathname.indexOf('datasets') !== -1 || window.location.pathname === '/') {
             const newParams = 'args' in params ? rison.decode(params['args']) : dStore.initialDatasetState.activeFilters;
             const mode = newParams['mode'];
             delete newParams['mode'];
+            // TODO could dispatch mode action here
             const filters = Object.assign({}, newParams);
             this.store.dispatch(new dsa.UpdateFilterAction(filters));
           }
@@ -34,18 +36,17 @@ export class ParamsService {
         .subscribe(filters => {
         this.store.select(selectors.ui.getMode).take(1).subscribe(currentMode => {
           filters['mode'] = currentMode;
-          if (this.router.url.indexOf('datasets') !== -1) {
+          if (window.location.pathname.indexOf('datasets') !== -1) {
             this.router.navigate(['/datasets'], { queryParams: { args: rison.encode(filters) } });
           }
         });
       });
 
-      this.store.select(selectors.ui.getMode)
+      this.store.select(selectors.ui.getMode).skip(1)
         .subscribe(currentMode => {
         this.route.queryParams.take(1).subscribe(params => {
           const newParams = 'args' in params ? rison.decode(params['args']) : dStore.initialDatasetState.activeFilters;
           newParams['mode'] = currentMode;
-          console.log(newParams);
           if (window.location.pathname.indexOf('datasets') !== -1) {
             this.router.navigate(['/datasets'], { queryParams: { args: rison.encode(newParams) } });
           }

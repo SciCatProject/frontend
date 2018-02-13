@@ -49,7 +49,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  selectedSets: Array<RawDataset> = [];
   selection = new SelectionModel<Element>(true, []);
   datasetCount$;
   dataSource: MatTableDataSource<any> | null;
@@ -122,7 +121,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
       }
     });
 
-    this.loading$ = this.store.select(selectors.datasets.getLoading);
     this.limit$ = this.store.select(state => state.root.user.settings.datasetCount);
 
     this.subscriptions.push(this.store.select(state => state.root.dashboardUI.mode).subscribe(mode => {
@@ -163,13 +161,14 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
         })
     );
 
-    this.subscriptions.push(
-      this.store
-        .select(selectors.datasets.getSelectedSets)
-        .subscribe(selected => {
-          this.selectedSets = selected;
-        })
-    );
+    // this.subscriptions.push(
+    //   this.store
+    //     .select(selectors.datasets.getSelectedSets)
+    //     .subscribe(selected => {
+    //       this.selection.clear();
+    //       this.selection.select(selected);
+    //     })
+    // );
 
     let msg = {};
     this.subscriptions.push(
@@ -232,7 +231,11 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
 
   onRowCheck(row) {
     this.selection.toggle(row);
-    this.selectedSet.emit(this.selection.selected);
+    this.store.dispatch({
+      type: dsa.SELECTED_UPDATE,
+      payload: this.selection.selected
+    });
+    // this.selectedSet.emit(this.selection.selected);
   }
 
   calculateRowClasses(row) {
@@ -280,19 +283,22 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
     this.isAllSelected() ?
       this.selection.clear() :
       this.dataSource.data.forEach(row => this.selection.select(row));
+    this.store.dispatch({
+      type: dsa.SELECTED_UPDATE,
+      payload: this.selection.selected
+    });
   }
 
   updateRowView(mode) {
-    this.selectedSets = [];
+    this.selection.clear();
     this.rowStyleMap = {};
     const activeSets = [];
-    console.log(mode);
     if (this.datasets && this.datasets.length > 0 && (this.mode === 'archive' || this.mode === 'retrieve')) {
       for (let d = 0; d < this.datasets.length; d++) {
         const set = this.datasets[d];
         const msg = (set.datasetlifecycle && set.datasetlifecycle.archiveStatusMessage) || '';
         if (this.mode === 'archive'
-        && set.datasetlifecycle
+          && set.datasetlifecycle
           && (this.archiveable.indexOf(set.datasetlifecycle.archiveStatusMessage) !== -1) && set.size > 0) {
           activeSets.push(set);
         } else if (this.mode === 'retrieve'
@@ -311,23 +317,12 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
    * @param m
    */
   getModeButtonClasses(m) {
+    const ret = {};
+    ret[m.toLowerCase()] = true;
     if (m.toLowerCase() === this.mode) {
-      return { positive: true };
-    } else {
-      return {};
+      ret['positive'] = true;
     }
-  }
-
-  /**
-   * Handles selection of checkboxes and retrieves datablocks
-   * @param {any} event
-   * @memberof DashboardComponent
-   */
-  onSelect(event) {
-    this.store.dispatch({
-      type: dsa.SELECTED_UPDATE,
-      payload: this.selectedSets
-    });
+    return ret;
   }
 
   /**
@@ -449,17 +444,38 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
           this.selection.selected.map(set => {
             // if ('datablocks' in set && set['datablocks'].length > 0) {
             const fileObj = {};
+            const fileList = [];
             fileObj['pid'] = set['pid'];
-            fileObj['files'] = [];
-            backupFiles.push(fileObj);
-            //   set['datablocks'].map(file => {
-            //     const id = encodeURIComponent(set.pid);
-            //     backupFiles.push({[set['pid']] : file['dataFileList']}); });
+            if (set['datablocks'] && !archive) {
+              set['datablocks'].map(d => {
+                fileList.push(d['archiveId']);
+              });
+            } // TODO datablock access is not available to normal users but should be added in retrieve jobs
+            //  else if (!archive) {
+            //   msg = {
+            //     type: 'error',
+            //     content:
+            //       'Selected datasets have no datablocks associated with them',
+            //     title: 'Job not submitted'
+            //   };
+            //   this.store.dispatch(new ua.ShowMessageAction(msg));
+            //   this.selection.clear();
+            //   this.store.dispatch({
+            //     type: dsa.SELECTED_UPDATE,
+            //     payload: this.selection.selected
+            //   });
+            //   return;
             // }
-            // Removing keys added by PrimeNG, no real need yet but could impact
-            // if written to DB
+            fileObj['files'] = fileList;
+            backupFiles.push(fileObj);
             delete set['$$index'];
           });
+          this.selection.clear();
+          this.store.dispatch({
+            type: dsa.SELECTED_UPDATE,
+            payload: this.selection.selected
+          });
+
           if (backupFiles.length === 0) {
             msg = {
               type: 'error',
@@ -468,7 +484,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
               title: 'Job not submitted'
             };
             this.store.dispatch(new ua.ShowMessageAction(msg));
-            this.selectedSets = [];
           } else if (!job.emailJobInitiator) {
             msg = {
               type: 'error',
@@ -477,7 +492,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
               title: 'Job not submitted'
             };
             this.store.dispatch(new ua.ShowMessageAction(msg));
-            this.selectedSets = [];
           } else {
             job.datasetList = backupFiles;
             job.type = archive ? 'archive' : 'retrieve';
@@ -504,6 +518,11 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
         content: ''
       };
       this.store.dispatch(new ua.ShowMessageAction(msg));
+      this.selection.clear();
+      this.store.dispatch({
+        type: dsa.SELECTED_UPDATE,
+        payload: this.selection.selected
+      });
     }
   }
 

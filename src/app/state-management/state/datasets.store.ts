@@ -22,6 +22,6 @@ export const initialDatasetState: DatasetState = {
     filterValues: {creationTime: {start: null, end: null}, creationLocation: [], ownerGroup: [], text: null},
     selectedSets: [],
     currentSet: undefined,
-    totalSets: 100,
+    totalSets: 0,
     datepicker: initialDatepickerState
 };

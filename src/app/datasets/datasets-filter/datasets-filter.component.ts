@@ -155,7 +155,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
         start: startDate,
         end: endDate
       };
-      this.store.dispatch(new dsa.UpdateFilterAction(this.filters));
+      // this.store.dispatch(new dsa.UpdateFilterAction(this.filters));
       this.dateSelections$.next(timeranges);
     }
   }

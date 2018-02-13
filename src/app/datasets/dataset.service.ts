@@ -12,6 +12,7 @@ import {
 } from 'shared/sdk/services';
 import {LoopBackAuth} from 'shared/sdk/services';
 import * as ua from 'state-management/actions/user.actions';
+import { DatablockApi } from 'shared/sdk';
 
 @Injectable()
 export class DatasetService {
@@ -71,7 +72,7 @@ export class DatasetService {
   userGroups = null;
 
   constructor(private rds: RawDatasetApi, private dlSrv: DatasetLifecycleApi,
-              private db: OrigDatablockApi, private acSrv: AccessUserApi,
+              private odb: OrigDatablockApi, private acSrv: AccessUserApi, private db: DatablockApi,
               private auth: LoopBackAuth, private store: Store<any>) {}
 
   /**
@@ -145,10 +146,13 @@ export class DatasetService {
 
    */
 
-  getDatasetBlocks(set) {
+  getDatasetBlocks(set, type = 'original') {
     const datasetSearch = {where : {datasetId : set.pid}};
-
-    this.db.find(datasetSearch)
+    let service: any = this.db;
+    if (type === 'original') {
+      service = this.odb;
+    }
+    service.find(datasetSearch)
         .subscribe(
             bl => {
               console.log(bl);
@@ -189,9 +193,14 @@ export class DatasetService {
 
    */
 
-  getBlockObservable(id): Observable<Array<any>> {
-    const datasetSearch = {where : {datasetId : id}};
+  getBlockObservable(set, type = 'original'): Observable<Array<any>> {
+    const datasetSearch = {where : {datasetId : set.pid}};
 
-    return this.db.find(datasetSearch);
+    let service: any = this.db;
+    if (type === 'original') {
+      service = this.odb;
+    }
+
+    return service.find(datasetSearch);
   }
 }

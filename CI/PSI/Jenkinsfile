@@ -1,6 +1,10 @@
-node {
+podTemplate(label: 'docker',
+  containers: [containerTemplate(name: 'docker', image: 'docker:1.11', ttyEnabled: true, command: 'cat')],
+  volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock')]
+  ) {
+node('docker') {
+    container('docker') {
        stage('Checkout'){
-
           checkout scm
        }
 
@@ -14,5 +18,7 @@ node {
        stage('e2e Test Catanie '){
             sh 'docker run  --privileged -t catanie_test ./node_modules/@angular/cli/bin/ng e2e -e qa'
        }
+    }
 
 }
+  }
