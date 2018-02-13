@@ -1,39 +1,43 @@
 import { Action } from '@ngrx/store';
 import { DatasetFilters } from 'datasets/datasets-filter/dataset-filters';
-import { AccessGroup, RawDataset, Datablock } from 'shared/sdk/models';
+import { RawDataset } from 'shared/sdk/models';
+import { Datablock } from 'shared/sdk/models';
 
-export const SEARCH_COMPLETE =           '[Dataset] Search Complete';
-export const SEARCH_FAILED =             '[Dataset] Search Failed';
+export const SEARCH_COMPLETE =              '[Dataset] Search Complete';
+export const SEARCH_FAILED =                '[Dataset] Search Failed';
 
-export const SEARCH_ID =                 '[Dataset] Search ID';
-export const SEARCH_ID_COMPLETE =        '[Dataset] Search ID Complete';
-export const SEARCH_ID_FAILED =          '[Dataset] Search ID Failed';
+export const SEARCH_ID =                    '[Dataset] Search ID';
+export const SEARCH_ID_COMPLETE =           '[Dataset] Search ID Complete';
+export const SEARCH_ID_FAILED =             '[Dataset] Search ID Failed';
 
-export const FILTER_UPDATE =             '[Dataset] Filter Update';
-export const FILTER_UPDATE_COMPLETE =    '[Dataset] Filter Update Complete';
-export const FILTER_VALUE_UPDATE =       '[Dataset] Filter Update';
-export const FILTER_FAILED =             '[Dataset] Filter Failed';
+export const FILTER_UPDATE =                '[Dataset] Filter Update';
+export const FILTER_UPDATE_COMPLETE =       '[Dataset] Filter Update Complete';
+export const FILTER_VALUE_UPDATE =          '[Dataset] Filter Update';
+export const FILTER_FAILED =                '[Dataset] Filter Failed';
 
-export const DATABLOCKS =                '[Dataset] Datablocks Update';
-export const DATABLOCKS_COMPLETE =       '[Dataset] Datablocks Update Complete';
-export const DATABLOCKS_FAILED =         '[Dataset] Datablocks Failed';
+export const DATABLOCKS =                   '[Dataset] Datablocks Update';
+export const DATABLOCKS_COMPLETE =          '[Dataset] Datablocks Update Complete';
+export const DATABLOCKS_FAILED =            '[Dataset] Datablocks Failed';
 
-export const DATABLOCK_DELETE =          '[Dataset] Datablock Delete';
-export const DATABLOCK_DELETE_COMPLETE = '[Dataset] Datablock Delete Complete';
-export const DATABLOCK_DELETE_FAILED =   '[Dataset] Datablock Delete Failed';
+export const DATABLOCK_DELETE =             '[Dataset] Datablock Delete';
+export const DATABLOCK_DELETE_COMPLETE =    '[Dataset] Datablock Delete Complete';
+export const DATABLOCK_DELETE_FAILED =      '[Dataset] Datablock Delete Failed';
 
-export const ADD_GROUPS =                '[User] Add Groups';
-export const ADD_GROUPS_COMPLETE =       '[User] Add Groups Complete';
-export const ADD_GROUPS_FAILED =         '[User] Add Groups Failed';
+export const ADD_GROUPS =                   '[User] Add Groups';
+export const ADD_GROUPS_COMPLETE =          '[User] Add Groups Complete';
+export const ADD_GROUPS_FAILED =            '[User] Add Groups Failed';
 
-export const RESET_STATUS =              '[Dataset] Status Reset';
-export const RESET_STATUS_COMPLETE =     '[Dataset] Status Reset Complete';
+export const RESET_STATUS =                 '[Dataset] Status Reset';
+export const RESET_STATUS_COMPLETE =        '[Dataset] Status Reset Complete';
 
-export const SELECT_CURRENT =            '[Dataset] Current set selected';
-export const SELECTED_UPDATE =           '[Dataset] Selected Datasets Update';
-export const COUNT_COMPLETE =            '[Dataset] Complete';
-export const LOAD =                      '[Dataset] Load';
-export const TOTAL_UPDATE =              '[Dataset] Total Datasets Update';
+export const LOAD =                         '[Dataset] Load';
+export const COUNT_COMPLETE =               '[Dataset] Complete';
+export const SELECT_CURRENT =               '[Dataset] Current set selected';
+export const SELECTED_UPDATE =              '[Dataset] Selected Datasets Update';
+export const SELECTED_DATABLOCKS_COMPLETE = '[Dataset] Selected Datablocks update complete';
+export const CURRENT_BLOCKS_COMPLETE =      '[Datasets] Current set datablocks update complete'; // Is this suppsed to be [Datasets], plural?
+export const TOTAL_UPDATE =                 '[Dataset] Total Datasets Update';
+// export const FILTER_UPDATE_COMPLETE = '[Dataset]  Filter Update Complete';
 
 export class SearchCompleteAction implements Action {
     readonly type = SEARCH_COMPLETE;
@@ -95,7 +99,7 @@ export class DatablocksFailedAction implements Action {
 }
 
 export class DatablockDeleteAction implements Action {
-    readonly type = DATABLOCK_DELETE;  
+    readonly type = DATABLOCK_DELETE;
     constructor(public payload: Datablock) {}
 }
 
@@ -127,8 +131,17 @@ export class UpdateSelectedAction implements Action {
     constructor(public payload: any) {}
 }
 
+export class UpdateSelectedDatablocksAction implements Action {
+    readonly type = SELECTED_DATABLOCKS_COMPLETE;
+    constructor(public payload: any) {}
+}
 export class CurrentSetAction implements Action {
     readonly type = SELECT_CURRENT;
+    constructor(public payload: RawDataset) {}
+}
+
+export class UpdateCurrentBlocksAction implements Action {
+    readonly type = CURRENT_BLOCKS_COMPLETE;
     constructor(public payload: RawDataset) {}
 }
 
@@ -148,10 +161,10 @@ export class TotalSetsAction implements Action {
 }
 
 export type Actions =
-        SearchCompleteAction | SearchFailedAction |
-        UpdateFilterAction | UpdateFilterCompleteAction | FilterFailedAction |
-        FilterValueAction | SearchIDAction | SearchIDCompleteAction |
-        SearchIDFailedAction | DatablocksAction | DatablocksCompleteAction |
-        DatablockDeleteAction | DatablockDeleteCompleteAction | DatablockDeleteFailedAction |
-        DatablocksAction | AddGroupsAction | AddGroupsCompleteAction |
-        AddGroupsFailedAction | UpdateSelectedAction | TotalSetsAction | ResetStatusAction | ResetStatusCompleteAction;
+    SearchCompleteAction | SearchFailedAction |
+    UpdateFilterAction | UpdateFilterCompleteAction | FilterFailedAction |
+    FilterValueAction | SearchIDAction | SearchIDCompleteAction |
+    SearchIDFailedAction | DatablocksAction | DatablocksCompleteAction | UpdateCurrentBlocksAction |
+    DatablockDeleteAction | DatablockDeleteCompleteAction | DatablockDeleteFailedAction |
+    DatablocksAction | AddGroupsAction | AddGroupsCompleteAction | UpdateSelectedDatablocksAction |
+    AddGroupsFailedAction | UpdateSelectedAction | TotalSetsAction | ResetStatusAction | ResetStatusCompleteAction;
