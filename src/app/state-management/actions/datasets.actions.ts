@@ -87,7 +87,6 @@ export class DatablocksAction implements Action {
 
 export class DatablocksCompleteAction implements Action {
     readonly type = DATABLOCKS_COMPLETE;
-    constructor() {}
 }
 
 export class DatablocksFailedAction implements Action {
@@ -102,12 +101,10 @@ export class DatablockDeleteAction implements Action {
 
 export class DatablockDeleteCompleteAction implements Action {
     readonly type = DATABLOCK_DELETE_COMPLETE;
-    constructor() {}
 }
 
 export class DatablockDeleteFailedAction implements Action {
     readonly type = DATABLOCK_DELETE_FAILED;
-    constructor() {}
 }
 
 export class AddGroupsAction implements Action {
