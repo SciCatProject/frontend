@@ -460,12 +460,22 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
               };
               this.store.dispatch(new ua.ShowMessageAction(msg));
               this.selection.clear();
+              this.store.dispatch({
+                type: dsa.SELECTED_UPDATE,
+                payload: this.selection.selected
+              });
               return;
             }
             fileObj['files'] = fileList;
             backupFiles.push(fileObj);
             delete set['$$index'];
           });
+          this.selection.clear();
+          this.store.dispatch({
+            type: dsa.SELECTED_UPDATE,
+            payload: this.selection.selected
+          });
+
           if (backupFiles.length === 0) {
             msg = {
               type: 'error',
@@ -474,7 +484,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
               title: 'Job not submitted'
             };
             this.store.dispatch(new ua.ShowMessageAction(msg));
-            this.selection.clear();
           } else if (!job.emailJobInitiator) {
             msg = {
               type: 'error',
@@ -483,7 +492,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
               title: 'Job not submitted'
             };
             this.store.dispatch(new ua.ShowMessageAction(msg));
-            this.selection.clear();
           } else {
             job.datasetList = backupFiles;
             job.type = archive ? 'archive' : 'retrieve';
@@ -501,7 +509,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
             }
             console.log(job);
             this.store.dispatch(new ja.SubmitAction(job));
-            this.selection.clear();
           }
         });
     } else {
@@ -512,6 +519,10 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
       };
       this.store.dispatch(new ua.ShowMessageAction(msg));
       this.selection.clear();
+      this.store.dispatch({
+        type: dsa.SELECTED_UPDATE,
+        payload: this.selection.selected
+      });
     }
   }
 

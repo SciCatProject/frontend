@@ -212,41 +212,41 @@ export class DatasetEffects {
         })
       });
 
-  @Effect()
-  protected updateCurrentSetDatablocks$: Observable<Action> =
-    this.action$.ofType(DatasetActions.SELECT_CURRENT)
-      .map(toPayload)
-      .switchMap(payload => {
-        if (payload) {
-          const dataset = payload;
-          const datasetSearch = { where: { datasetId: dataset.pid } };
-          return this.dbs.find(datasetSearch).switchMap(res => {
-            dataset['datablocks'] = res;
-            console.log(res);
-            return Observable.of(new DatasetActions.UpdateCurrentBlocksAction(payload));
-          })
-        } else {
-          return Observable.of(new DatasetActions.UpdateCurrentBlocksAction(undefined));
-        }
-      });
+  // @Effect()
+  // protected updateCurrentSetDatablocks$: Observable<Action> =
+  //   this.action$.ofType(DatasetActions.SELECT_CURRENT)
+  //     .map(toPayload)
+  //     .switchMap(payload => {
+  //       if (payload) {
+  //         const dataset = payload;
+  //         const datasetSearch = { where: { datasetId: dataset.pid } };
+  //         return this.dbs.find(datasetSearch).switchMap(res => {
+  //           dataset['datablocks'] = res;
+  //           console.log(res);
+  //           return Observable.of(new DatasetActions.UpdateCurrentBlocksAction(payload));
+  //         })
+  //       } else {
+  //         return Observable.of(new DatasetActions.UpdateCurrentBlocksAction(undefined));
+  //       }
+  //     });
 
-  @Effect()
-  protected updateCurrentSetOrigDatablocks$: Observable<Action> =
-    this.action$.ofType(DatasetActions.SELECT_CURRENT)
-      .map(toPayload)
-      .switchMap(payload => {
-        if (payload) {
-          const dataset = payload;
-          const datasetSearch = { where: { datasetId: dataset.pid } };
-          return this.odbs.find(datasetSearch).switchMap(res => {
-            dataset['origdatablocks'] = res;
-            console.log(res);
-            return Observable.of(new DatasetActions.UpdateCurrentBlocksAction(payload));
-          })
-        } else {
-          return Observable.of(new DatasetActions.UpdateCurrentBlocksAction(undefined));
-        }
-      });
+  // @Effect()
+  // protected updateCurrentSetOrigDatablocks$: Observable<Action> =
+  //   this.action$.ofType(DatasetActions.SELECT_CURRENT)
+  //     .map(toPayload)
+  //     .switchMap(payload => {
+  //       if (payload) {
+  //         const dataset = payload;
+  //         const datasetSearch = { where: { datasetId: dataset.pid } };
+  //         return this.odbs.find(datasetSearch).switchMap(res => {
+  //           dataset['origdatablocks'] = res;
+  //           console.log(res);
+  //           return Observable.of(new DatasetActions.UpdateCurrentBlocksAction(payload));
+  //         })
+  //       } else {
+  //         return Observable.of(new DatasetActions.UpdateCurrentBlocksAction(undefined));
+  //       }
+  //     });
 
   @Effect()
   protected resetStatus$: Observable<Action> =
