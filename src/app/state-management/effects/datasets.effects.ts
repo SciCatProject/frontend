@@ -231,6 +231,24 @@ export class DatasetEffects {
       });
 
   @Effect()
+  protected updateCurrentSetOrigDatablocks$: Observable<Action> =
+    this.action$.ofType(DatasetActions.SELECT_CURRENT)
+      .map(toPayload)
+      .switchMap(payload => {
+        if (payload) {
+          const dataset = payload;
+          const datasetSearch = { where: { datasetId: dataset.pid } };
+          return this.odbs.find(datasetSearch).switchMap(res => {
+            dataset['origdatablocks'] = res;
+            console.log(res);
+            return Observable.of(new DatasetActions.UpdateCurrentBlocksAction(payload));
+          })
+        } else {
+          return Observable.of(new DatasetActions.UpdateCurrentBlocksAction(undefined));
+        }
+      });
+
+  @Effect()
   protected resetStatus$: Observable<Action> =
     this.action$.ofType(DatasetActions.RESET_STATUS)
       .map(toPayload)
@@ -255,6 +273,7 @@ export class DatasetEffects {
   constructor(private action$: Actions, private store: Store<any>,
     private cds: DatasetService, private ds: lb.DatasetApi, private rds: lb.RawDatasetApi,
     private dls: lb.DatasetLifecycleApi, private dbs: lb.DatablockApi,
+    private odbs: lb.OrigDatablockApi,
     private userIdentitySrv: lb.UserIdentityApi,
     private accessUserSrv: lb.AccessUserApi) { }
 }
