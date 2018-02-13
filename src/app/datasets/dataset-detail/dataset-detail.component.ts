@@ -105,11 +105,9 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
         const fileList = [];
         fileObj['pid'] = dataset['pid'];
         if (dataset['datablocks']) {
-          for (const d in dataset['datablocks']) {
-            if (d) {
-              fileList.push(d['archiveId']);
-            }
-          }
+          dataset['datablocks'].map(d => {
+            fileList.push(d['archiveId']);
+          });
         }
         fileObj['files'] = fileList;
         job.datasetList = [fileObj];

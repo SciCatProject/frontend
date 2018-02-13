@@ -447,11 +447,10 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
             const fileList = [];
             fileObj['pid'] = set['pid'];
             if (set['datablocks'] && !archive) {
-              for (const d in set['datablocks']) {
-                if (d) {
-                  fileList.push(d['archiveId']);
-                }
-              }
+              set['datablocks'].map(d => {
+                console.log(d);
+                fileList.push(d['archiveId']);
+              });
             } else {
               msg = {
                 type: 'error',
