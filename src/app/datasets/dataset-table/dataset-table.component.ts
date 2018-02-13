@@ -501,6 +501,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
             }
             console.log(job);
             this.store.dispatch(new ja.SubmitAction(job));
+            this.selection.clear();
           }
         });
     } else {
