@@ -1,24 +1,24 @@
 import {Action} from '@ngrx/store';
 
-export const SAVE = 	 '[DashboardUI] Save';
+export const SAVE =      '[DashboardUI] Save';
 export const RESTORE =   '[DashboardUI] Restore';
 export const SAVE_MODE = '[Dashboard] Save Mode'; // Is this intentionally not DashboardUI?
 
 export class SaveAction implements Action {
-  	readonly type = SAVE;
-	constructor(public payload: any) {}
+    readonly type = SAVE;
+    constructor(public payload: any) {}
 }
 
 export class SaveModeAction implements Action {
-	readonly type = SAVE_MODE;
-  	constructor(public payload: string) {}
+    readonly type = SAVE_MODE;
+    constructor(public payload: string) {}
 }
 
 export class RestoreAction implements Action {
-	readonly type = RESTORE;
+    readonly type = RESTORE;
 }
 
 export type Actions 
-	= SaveAction
-	| SaveModeAction
-	| RestoreAction;
+    = SaveAction
+    | SaveModeAction
+    | RestoreAction;

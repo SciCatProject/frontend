@@ -25,66 +25,66 @@ export function datasetsReducer(state = initialDatasetState, action: Action) {
     if (action.type.indexOf('[DatePicker]') !== -1) {
         console.log('Action came in! ' + action.type);
 
-        // There must be a more appropriate way to deal with datepicker actions than this
-    	return {...state, datepicker: datepickerReducer(state.datepicker, action)};
-  	}
-
-  	if (action.type.indexOf('[Dataset]') !== -1) {
-		console.log('Action came in! ' + action.type);
+        // TODO: There must be a more appropriate way to deal with datepicker actions than this
+        return {...state, datepicker: datepickerReducer(state.datepicker, action)};
     }
 
-	switch (action.type) {
-    	case FILTER_UPDATE: {
-    	  	const f = action['payload'];
-    	  	const group = f['ownerGroup'];
-    	  	
-    	  	if (group && !Array.isArray(group) && group.length > 0) {
-				f['ownerGroup'] = [group];
-			}
-	
-			return {...state, activeFilters: f, loading: true, selectedSets: []};
-    	}
-	
-    	case SEARCH_COMPLETE: {
-    		const datasets = <RawDataset[]>action['payload'];
-    		return {...state, datasets, loading: false};
-    	}
-	
-    	case ADD_GROUPS_COMPLETE: {
-    	    const ownerGroup = action['payload'];
-    	  	const activeFilters = {...state.activeFilters, ownerGroup};
-    		return {...state, activeFilters, foo: 10};
-    	}
-	
-		case FILTER_VALUE_UPDATE:
-    	case FILTER_UPDATE_COMPLETE: {
-    		const filterValues = action['payload'];
-    		return {...state, filterValues};
-    	}
-		
-		case SELECT_CURRENT:
-		case CURRENT_BLOCKS_COMPLETE:
-    	case SEARCH_ID_COMPLETE: {
-    		const currentSet = <RawDataset>action['payload'];
-    		return {...state, currentSet};
-    	}
-		
-		case SELECTED_DATABLOCKS_COMPLETE:
-    	case SELECTED_UPDATE: {
-    		const selectedSets = <RawDataset[]>action['payload'];
-    		return {...state, selectedSets};
-    	}
-	
-    	case TOTAL_UPDATE: {
-    		const totalSets = <number>action['payload'];
-    		return {...state, totalSets};
-    	}
-	
-    	// TODO handle failed actions
-    	default: {
-    		return state;
-    	}
-	}
+    if (action.type.indexOf('[Dataset]') !== -1) {
+        console.log('Action came in! ' + action.type);
+    }
+
+    switch (action.type) {
+        case FILTER_UPDATE: {
+            const f = action['payload'];
+            const group = f['ownerGroup'];
+            
+            if (group && !Array.isArray(group) && group.length > 0) {
+                f['ownerGroup'] = [group];
+            }
+    
+            return {...state, activeFilters: f, loading: true, selectedSets: []};
+        }
+    
+        case SEARCH_COMPLETE: {
+            const datasets = <RawDataset[]>action['payload'];
+            return {...state, datasets, loading: false};
+        }
+    
+        case ADD_GROUPS_COMPLETE: {
+            const ownerGroup = action['payload'];
+            const activeFilters = {...state.activeFilters, ownerGroup};
+            return {...state, activeFilters, foo: 10};
+        }
+    
+        case FILTER_VALUE_UPDATE:
+        case FILTER_UPDATE_COMPLETE: {
+            const filterValues = action['payload'];
+            return {...state, filterValues};
+        }
+        
+        case SELECT_CURRENT:
+        case CURRENT_BLOCKS_COMPLETE:
+        case SEARCH_ID_COMPLETE: {
+            const currentSet = <RawDataset>action['payload'];
+            return {...state, currentSet};
+        }
+        
+        case SELECTED_DATABLOCKS_COMPLETE:
+        case SELECTED_UPDATE: {
+            const selectedSets = <RawDataset[]>action['payload'];
+            return {...state, selectedSets};
+        }
+    
+        case TOTAL_UPDATE: {
+            const totalSets = <number>action['payload'];
+            return {...state, totalSets};
+        }
+    
+        // TODO handle failed actions
+        default: {
+            return state;
+        }
+    }
 }
 
 export const getDatasets = (state: DatasetState) => state.datasets;
