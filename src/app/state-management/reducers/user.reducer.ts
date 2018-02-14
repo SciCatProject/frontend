@@ -1,78 +1,79 @@
-import {Action} from '@ngrx/store';
-import {initialUserState, UserState} from 'state-management/state/user.store';
-import * as ua from 'state-management/actions/user.actions';
+import { Action } from '@ngrx/store';
+import { initialUserState, UserState } from 'state-management/state/user.store';
+
+import {
+    SHOW_MESSAGE,
+    CLEAR_MESSAGE,
+    SAVE_SETTINGS,
+    
+    LOGIN, LOGIN_COMPLETE, LOGIN_FAILED,
+    RETRIEVE_USER_COMPLETE, RetrieveUserCompleteAction,
+
+    ACCESS_USER_EMAIL_COMPLETE,    
+    AD_LOGIN_COMPLETE,
+    LOGOUT_COMPLETE,
+    ADD_GROUPS_COMPLETE
+} from 'state-management/actions/user.actions';
 
 export function userReducer(state = initialUserState, action: Action): UserState {
-
-  if (action.type.indexOf('[User]') !== -1) {
-    console.log('Action came in! ' + action.type);
-  }
-  switch (action.type) {
-
-    case ua.LOGIN: {
-      return state;
+    if (action.type.indexOf('[User]') !== -1) {
+        console.log('Action came in! ' + action.type);
     }
 
-    case ua.RETRIEVE_USER_COMPLETE: {
-      // TODO check why susbcription does not receive this
-      const s = Object.assign({}, state, { currentUser: action['payload'] });
-      return s;
-    }
+    switch (action.type) {
+        case RETRIEVE_USER_COMPLETE: {
+            // TODO check why susbcription does not receive this
+            const currentUser = action['payload'];
+            return {...state, currentUser};
+        }
 
-    case ua.LOGIN_COMPLETE: {
-      const s = Object.assign({}, state, { currentUser: action['payload']['user'] });
-      return s;
-    }
+        case LOGIN_COMPLETE: {
+            const currentUser = action['payload']['user'];
+            return {...state, currentUser};
+        }
 
-    case ua.AD_LOGIN_COMPLETE: {
-        return state;
-    }
+        case ACCESS_USER_EMAIL_COMPLETE: {
+            // const c = state.currentUser;
+            // c['email'] = action['payload'];
+            return {...state, email: action['payload']};
+        }
 
-    case ua.ACCESS_USER_EMAIL_COMPLETE: {
-        // const c = state.currentUser;
-        // c['email'] = action['payload'];
-        return Object.assign({}, state, { email: action['payload'] });
-    }
+        case LOGIN_FAILED: {
+            const err = action['payload'];
+            return {...state, currentUser: err};
+        }
 
-    case ua.LOGIN_FAILED: {
-      const err = action['payload'];
-      const s = Object.assign({}, state, { currentUser: err });
+        case SHOW_MESSAGE: {
+            const message = action['payload'];
+            return {...state, message};
+        }
 
-      return s;
-    }
+        case CLEAR_MESSAGE: {
+            return {...state, message: initialUserState.message};
+        }
 
-    case ua.SHOW_MESSAGE: {
-      const m = action['payload'];
-      const s = Object.assign({}, state, {message: m});
-      return s;
-    }
+        case SAVE_SETTINGS: {
+            const settings = action['payload'];
+            return {...state, settings};
+        }
 
-    case ua.CLEAR_MESSAGE: {
-      return Object.assign({}, state, {message: initialUserState.message});
-    }
+        case LOGOUT_COMPLETE: {
+            const initialCurrentUser = {...initialUserState.currentUser, loggedOut: true};
+            return {...initialUserState, currentUser: initialCurrentUser};
+        }
 
-    case ua.SAVE_SETTINGS: {
-      return Object.assign({}, state, {settings: action['payload']});
-    }
+        case ADD_GROUPS_COMPLETE: {
+            const currentUserGroups = action['payload'];
+            return {...state, currentUserGroups};
+        }
 
-    case ua.LOGOUT_COMPLETE: {
-      const s = initialUserState;
-      s.currentUser['loggedOut'] = true;
-      return s;
+        case LOGIN:
+        case AD_LOGIN_COMPLETE:
+        case ACCESS_USER_EMAIL_COMPLETE:
+        default: {
+            return state;
+        }
     }
-
-    case ua.ADD_GROUPS_COMPLETE: {
-      return Object.assign({}, state, {currentUserGroups: action['payload']});
-    }
-
-    case ua.ACCESS_USER_EMAIL_COMPLETE: {
-        return state;
-    }
-
-    default: {
-      return state;
-    }
-  }
 }
 
 export const getEmail = (state: UserState) => state.email;
