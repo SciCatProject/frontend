@@ -1,7 +1,6 @@
 import { Action } from '@ngrx/store';
 import { DatasetFilters } from 'datasets/datasets-filter/dataset-filters';
-import { RawDataset } from 'shared/sdk/models';
-import { Datablock } from 'shared/sdk/models';
+import { RawDataset, AccessGroup, Datablock } from 'shared/sdk/models';
 
 export const SEARCH_COMPLETE =              '[Dataset] Search Complete';
 export const SEARCH_FAILED =                '[Dataset] Search Failed';
