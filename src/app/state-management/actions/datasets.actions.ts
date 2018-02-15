@@ -3,41 +3,43 @@ import { DatasetFilters } from 'datasets/datasets-filter/dataset-filters';
 import * as lb from 'shared/sdk/models';
 import { Datablock } from 'shared/sdk/models';
 
-export const LOAD = '[Dataset] Load';
+export const LOAD =                         '[Dataset] Load';
 
-export const SEARCH_COMPLETE = '[Dataset] Search Complete';
-export const SEARCH_FAILED = '[Dataset] Search Failed';
+export const SEARCH_COMPLETE =              '[Dataset] Search Complete';
+export const SEARCH_FAILED =                '[Dataset] Search Failed';
 
-export const COUNT_COMPLETE = '[Dataset]  Complete';
+export const COUNT_COMPLETE =               '[Dataset] Complete';
 
-export const SEARCH_ID = '[Dataset] Search ID';
-export const SEARCH_ID_COMPLETE = '[Dataset] Search ID Complete';
-export const SEARCH_ID_FAILED = '[Dataset] Search ID Failed';
+export const SEARCH_ID =                    '[Dataset] Search ID';
+export const SEARCH_ID_COMPLETE =           '[Dataset] Search ID Complete';
+export const SEARCH_ID_FAILED =             '[Dataset] Search ID Failed';
 
-export const FILTER_UPDATE = '[Dataset]  Filter Update';
-export const FILTER_UPDATE_COMPLETE = '[Dataset]  Filter Update Complete';
-export const FILTER_VALUE_UPDATE = '[Dataset]  Filter Update';
-export const FILTER_FAILED = '[Dataset]  Filter Failed';
+export const FILTER_UPDATE =                '[Dataset] Filter Update';
+export const FILTER_UPDATE_COMPLETE =       '[Dataset] Filter Update Complete';
+export const FILTER_VALUE_UPDATE =          '[Dataset] Filter Update';
+export const FILTER_FAILED =                '[Dataset] Filter Failed';
 
-export const DATABLOCKS = '[Dataset]  Datablocks Update';
-export const DATABLOCKS_COMPLETE = '[Dataset]  Datablocks Update Complete';
-export const DATABLOCKS_FAILED = '[Dataset]  Datablocks Failed';
+export const DATABLOCKS =                   '[Dataset] Datablocks Update';
+export const DATABLOCKS_COMPLETE =          '[Dataset] Datablocks Update Complete';
+export const DATABLOCKS_FAILED =            '[Dataset] Datablocks Failed';
 
-export const DATABLOCK_DELETE = '[Dataset]  Datablock Delete';
-export const DATABLOCK_DELETE_COMPLETE = '[Dataset] Datablock Delete Complete';
-export const DATABLOCK_DELETE_FAILED = '[Dataset]  Datablock Delete Failed';
+export const DATABLOCK_DELETE =             '[Dataset]  Datablock Delete';
+export const DATABLOCK_DELETE_COMPLETE =    '[Dataset] Datablock Delete Complete';
+export const DATABLOCK_DELETE_FAILED =      '[Dataset] Datablock Delete Failed';
 
-export const ADD_GROUPS = '[User] Add Groups';
-export const ADD_GROUPS_COMPLETE = '[User] Add Groups Complete';
-export const ADD_GROUPS_FAILED = '[User] Add Groups Failed';
+// Why are there [User] actions here?
 
-export const SELECT_CURRENT = '[Dataset] Current set selected';
-export const RESET_STATUS = '[Dataset] Status Reset';
-export const RESET_STATUS_COMPLETE = '[Dataset] Status Reset Complete';
-export const SELECTED_UPDATE = '[Dataset]  Selected Datasets Update';
+export const ADD_GROUPS =                   '[User] Add Groups';
+export const ADD_GROUPS_COMPLETE =          '[User] Add Groups Complete';
+export const ADD_GROUPS_FAILED =            '[User] Add Groups Failed';
+
+export const SELECT_CURRENT =               '[Dataset] Current set selected';
+export const RESET_STATUS =                 '[Dataset] Status Reset';
+export const RESET_STATUS_COMPLETE =        '[Dataset] Status Reset Complete';
+export const SELECTED_UPDATE =              '[Dataset] Selected Datasets Update';
 export const SELECTED_DATABLOCKS_COMPLETE = '[Dataset] Selected Datablocks update complete';
-export const CURRENT_BLOCKS_COMPLETE = '[Datasets] Current set datablocks update complete';
-// export const FILTER_UPDATE_COMPLETE = '[Dataset]  Filter Update Complete';
+export const CURRENT_BLOCKS_COMPLETE =      '[Datasets] Current set datablocks update complete'; // Is this intentionally Datasets?
+// export const FILTER_UPDATE_COMPLETE = '[Dataset] Filter Update Complete';
 
 export const TOTAL_UPDATE = '[Dataset] Total Datasets Update';
 
