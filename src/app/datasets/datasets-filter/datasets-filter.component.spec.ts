@@ -49,6 +49,11 @@ describe('DatasetsFilterComponent', () => {
 
   it('should be created', () => { expect(component).toBeTruthy(); });
 
+  it('should contain a total results header', () => {
+    const compiled = fixture.debugElement.nativeElement;
+    expect(compiled.querySelector('.results-count').textContent).toContain('Results');
+  });
+
   it('should contain a date range field', () => {
     const compiled = fixture.debugElement.nativeElement;
     expect(compiled.querySelector('form').textContent).toContain('Date Range');
@@ -57,16 +62,22 @@ describe('DatasetsFilterComponent', () => {
   it('should contain a beamline input', () => {
     const compiled = fixture.debugElement.nativeElement;
     const beamline = compiled.querySelector('.beamline-input');
-    console.log(beamline.childNodes);
-    expect(beamline.childNodes.length).toBeGreaterThanOrEqual(1);
-    expect(beamline.childNodes[0].attributes.getNamedItem('placeholder').textContent).toContain('Beamline');
+    expect(beamline).toBeTruthy();
+    expect(beamline.attributes.getNamedItem('placeholder').textContent).toContain('Beamline');
   });
 
   it('should contain a groups input', () => {
     const compiled = fixture.debugElement.nativeElement;
     const group = compiled.querySelector('.group-input');
-    expect(group.childNodes.length).toBeGreaterThanOrEqual(1);
-    expect(group.childNodes[0].attributes.getNamedItem('placeholder').textContent).toContain('Group');
+    expect(group).toBeTruthy();
+    expect(group.attributes.getNamedItem('placeholder').textContent).toContain('Group');
+  });
+
+  it('should contain a type input', () => {
+    const compiled = fixture.debugElement.nativeElement;
+    const type = compiled.querySelector('.type-input');
+    expect(type).toBeTruthy();
+    expect(type.attributes.getNamedItem('placeholder').textContent).toContain('Type');
   });
 
   it('should contain a clear button', () => {
