@@ -37,6 +37,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
 
   beamlineInput: FormControl;
   groupInput: FormControl;
+  typeInput: FormControl;
   filteredBeams: Observable<any[]>;
   filteredGroups: Observable<any[]>;
 
@@ -75,6 +76,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     private router: Router) {
     this.beamlineInput = new FormControl();
     this.groupInput = new FormControl();
+    this.typeInput = new FormControl();
 
   }
 

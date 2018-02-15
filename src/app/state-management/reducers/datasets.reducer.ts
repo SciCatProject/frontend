@@ -59,7 +59,7 @@ export function datasetsReducer(state = initialDatasetState, action: Action) {
         case FILTER_VALUE_UPDATE:
         case FILTER_UPDATE_COMPLETE: {
             const filterValues = action['payload'];
-            return {...state, filterValues};
+            return {...state, filterValues, loading: false};
         }
 
         case SELECT_CURRENT:

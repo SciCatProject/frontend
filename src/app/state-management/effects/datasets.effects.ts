@@ -121,7 +121,6 @@ export class DatasetEffects {
         } else if (match.length === 1) {
           filter = match[0];
         }
-      
 
         return this.ds.count(filter)
           .switchMap(res => {
