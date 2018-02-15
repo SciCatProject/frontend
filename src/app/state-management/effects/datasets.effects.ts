@@ -82,6 +82,8 @@ export class DatasetEffects {
         } else {
           delete fq['text'];
         }
+        delete fq['mode'];
+        console.log(fq);
         return this.ds
           .facet(fq)
           .switchMap(res => {
@@ -119,6 +121,7 @@ export class DatasetEffects {
         } else if (match.length === 1) {
           filter = match[0];
         }
+      
 
         return this.ds.count(filter)
           .switchMap(res => {
@@ -318,6 +321,9 @@ function handleFacetPayload(fq) {
     if (end) {
       match.push({ creationTime: { lte: end } });
     }
+  }
+  if (fq['type']) {
+    match.push({type: fq['type']});
   }
   /*  else if ((startDate && !endDate) || (!startDate && endDate)) {
      return Observable.of({

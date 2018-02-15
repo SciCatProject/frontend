@@ -7,7 +7,7 @@ import { rootReducer } from 'state-management/reducers/root.reducer';
 import { DatasetsFilterComponent } from 'datasets/datasets-filter/datasets-filter.component';
 import { MockStore, MockActivatedRoute, MockRouter } from '../../shared/MockStubs';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MatAutocompleteModule } from '@angular/material';
+import { MatAutocompleteModule, MatSelectModule } from '@angular/material';
 
 describe('DatasetsFilterComponent', () => {
   let component: DatasetsFilterComponent;
@@ -18,7 +18,7 @@ describe('DatasetsFilterComponent', () => {
       .configureTestingModule({
         schemas: [NO_ERRORS_SCHEMA],
         imports: [
-          TreeModule, MatAutocompleteModule, SharedModule, DataTableModule,
+          TreeModule, MatAutocompleteModule, SharedModule, DataTableModule, MatSelectModule,
           StoreModule.forRoot({ rootReducer })
         ],
         declarations: [DatasetsFilterComponent],

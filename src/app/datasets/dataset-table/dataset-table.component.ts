@@ -450,22 +450,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
               set['datablocks'].map(d => {
                 fileList.push(d['archiveId']);
               });
-            } // TODO datablock access is not available to normal users but should be added in retrieve jobs
-            //  else if (!archive) {
-            //   msg = {
-            //     type: 'error',
-            //     content:
-            //       'Selected datasets have no datablocks associated with them',
-            //     title: 'Job not submitted'
-            //   };
-            //   this.store.dispatch(new ua.ShowMessageAction(msg));
-            //   this.selection.clear();
-            //   this.store.dispatch({
-            //     type: dsa.SELECTED_UPDATE,
-            //     payload: this.selection.selected
-            //   });
-            //   return;
-            // }
+            }
             fileObj['files'] = fileList;
             backupFiles.push(fileObj);
             delete set['$$index'];

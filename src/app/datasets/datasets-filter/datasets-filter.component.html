@@ -24,9 +24,15 @@
         </mat-option>
       </mat-autocomplete>
     </mat-form-field>
-
     <br />
-
+    <mat-form-field class="example-full-width type-input">
+      <mat-select placeholder="Type" [(value)]="type" (selectionChange)="typeSelected(type)">
+        <mat-option>None</mat-option>
+        <mat-option value="raw">Raw</mat-option>
+        <mat-option value="derived">Derived</mat-option>
+        <mat-option value="base">Base</mat-option>
+      </mat-select>
+    </mat-form-field>
     <div class="ui field">
       <h3>Date Range</h3>
       <datepicker [selections]="dateSelections$ | async" [datepickerSelector]="datepickerSelector" [datepickerSelectionMode]="dateSelectionMode" [placeholder]="'Date Range'" (selectionsChange)="updateDateRange($event)"></datepicker>
