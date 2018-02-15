@@ -7,7 +7,9 @@ import { rootReducer } from 'state-management/reducers/root.reducer';
 import { DatasetsFilterComponent } from 'datasets/datasets-filter/datasets-filter.component';
 import { MockStore, MockActivatedRoute, MockRouter } from '../../shared/MockStubs';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MatAutocompleteModule, MatSelectModule } from '@angular/material';
+import { MatAutocompleteModule, MatSelectModule, MatFormFieldModule, MatInputModule } from '@angular/material';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('DatasetsFilterComponent', () => {
   let component: DatasetsFilterComponent;
@@ -18,7 +20,8 @@ describe('DatasetsFilterComponent', () => {
       .configureTestingModule({
         schemas: [NO_ERRORS_SCHEMA],
         imports: [
-          TreeModule, MatAutocompleteModule, SharedModule, DataTableModule, MatSelectModule,
+          TreeModule, MatAutocompleteModule, SharedModule, DataTableModule, MatSelectModule, MatFormFieldModule, MatInputModule,
+          FormsModule, ReactiveFormsModule, BrowserAnimationsModule,
           StoreModule.forRoot({ rootReducer })
         ],
         declarations: [DatasetsFilterComponent],
@@ -54,13 +57,16 @@ describe('DatasetsFilterComponent', () => {
   it('should contain a beamline input', () => {
     const compiled = fixture.debugElement.nativeElement;
     const beamline = compiled.querySelector('.beamline-input');
-    expect(beamline.childNodes[1].attributes.getNamedItem('placeholder').textContent).toContain('Beamline');
+    console.log(beamline.childNodes);
+    expect(beamline.childNodes.length).toBeGreaterThanOrEqual(1);
+    expect(beamline.childNodes[0].attributes.getNamedItem('placeholder').textContent).toContain('Beamline');
   });
 
   it('should contain a groups input', () => {
     const compiled = fixture.debugElement.nativeElement;
     const group = compiled.querySelector('.group-input');
-    expect(group.childNodes[1].attributes.getNamedItem('placeholder').textContent).toContain('Group');
+    expect(group.childNodes.length).toBeGreaterThanOrEqual(1);
+    expect(group.childNodes[0].attributes.getNamedItem('placeholder').textContent).toContain('Group');
   });
 
   it('should contain a clear button', () => {
