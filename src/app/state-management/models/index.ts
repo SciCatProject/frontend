@@ -8,8 +8,8 @@ export interface Settings {
 };
 
 export enum MessageType {
-	Success = 'success',
-	Error = 'error',
+  Success = 'success',
+  Error = 'error',
 };
 
 export class Message {
