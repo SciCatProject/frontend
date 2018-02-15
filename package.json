@@ -10,7 +10,7 @@
     "pree2e": "webdriver-manager update --standalone false --gecko false --versions.chrome=2.32",
     "e2e": "protractor",
     "compodoc": "./node_modules/.bin/compodoc -p src/tsconfig.json",
-    "lint": "./node_modules/tslint/bin/tslint --project . --force"
+    "lint": "./node_modules/tslint/bin/tslint --project tslint.json --force --fix"
   },
   "private": true,
   "dependencies": {

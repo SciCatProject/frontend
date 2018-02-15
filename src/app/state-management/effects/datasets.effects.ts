@@ -82,7 +82,7 @@ export class DatasetEffects {
         } else {
           delete fq['text'];
         }
-        return this.rds
+        return this.ds
           .facet(fq)
           .switchMap(res => {
             const filterValues = res['results'][0];
@@ -120,7 +120,7 @@ export class DatasetEffects {
           filter = match[0];
         }
 
-        return this.rds.count(filter)
+        return this.ds.count(filter)
           .switchMap(res => {
             return Observable.of(new DatasetActions.TotalSetsAction(res['count']));
           })
@@ -154,7 +154,7 @@ export class DatasetEffects {
         if (fq['sortField']) {
           filter['order'] = fq['sortField'];
         }
-        return this.rds.find(filter)
+        return this.ds.find(filter)
           .switchMap(res => {
             return Observable.of(new DatasetActions.SearchCompleteAction(res));
           })
@@ -195,7 +195,7 @@ export class DatasetEffects {
             type: 'error',
             title: 'Dataset Status Reset Failed'
           }));
-        })
+        });
       });
 
   @Effect()
@@ -209,7 +209,7 @@ export class DatasetEffects {
           return this.dbs.find(datasetSearch).switchMap(res => {
             dataset['datablocks'] = res;
             return Observable.of(new DatasetActions.UpdateSelectedDatablocksAction(payload));
-          })
+          });
         } else {
           return Observable.of(new DatasetActions.UpdateSelectedDatablocksAction(payload));
         }

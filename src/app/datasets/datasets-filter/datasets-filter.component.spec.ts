@@ -53,19 +53,19 @@ describe('DatasetsFilterComponent', () => {
 
   it('should contain a beamline input', () => {
     const compiled = fixture.debugElement.nativeElement;
-    const beamline = compiled.querySelector('.beamline-input')
+    const beamline = compiled.querySelector('.beamline-input');
     expect(beamline.childNodes[1].attributes.getNamedItem('placeholder').textContent).toContain('Beamline');
   });
 
   it('should contain a groups input', () => {
     const compiled = fixture.debugElement.nativeElement;
-    const group = compiled.querySelector('.group-input')
+    const group = compiled.querySelector('.group-input');
     expect(group.childNodes[1].attributes.getNamedItem('placeholder').textContent).toContain('Group');
   });
 
   it('should contain a clear button', () => {
     const compiled = fixture.debugElement.nativeElement;
-    const btn = compiled.querySelector('.clear-filters-btn')
+    const btn = compiled.querySelector('.clear-filters-btn');
     expect(btn.textContent).toContain('Clear');
   });
 });

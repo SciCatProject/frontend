@@ -243,20 +243,20 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
       && (this.archiveable.indexOf(row.datasetlifecycle.archiveStatusMessage) !== -1) && row.size !== 0) {
       return {
         'row-archiveable': true
-      }
+      };
     } else if (row.datasetlifecycle && this.mode === 'retrieve'
       && this.retrievable.indexOf(row.datasetlifecycle.archiveStatusMessage) !== -1 && row.size !== 0) {
       return {
         'row-retrievable': true
-      }
+      };
     } else if (row.size === 0) {
       return {
         'row-empty': true
-      }
+      };
     } else {
       return {
         'row-generic': true
-      }
+      };
     }
   }
 
