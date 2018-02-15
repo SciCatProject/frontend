@@ -34,7 +34,7 @@ export const COUNT_COMPLETE =               '[Dataset] Complete';
 export const SELECT_CURRENT =               '[Dataset] Current set selected';
 export const SELECTED_UPDATE =              '[Dataset] Selected Datasets Update';
 export const SELECTED_DATABLOCKS_COMPLETE = '[Dataset] Selected Datablocks update complete';
-export const CURRENT_BLOCKS_COMPLETE =      '[Datasets] Current set datablocks update complete'; // Is this suppsed to be [Datasets], plural?
+export const CURRENT_BLOCKS_COMPLETE =      '[Dataset] Current set datablocks update complete';
 export const TOTAL_UPDATE =                 '[Dataset] Total Datasets Update';
 // export const FILTER_UPDATE_COMPLETE = '[Dataset]  Filter Update Complete';
 
