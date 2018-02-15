@@ -13,6 +13,9 @@ import { Observable } from 'rxjs/Observable';
 import * as lb from 'shared/sdk/services';
 import * as DatasetActions from 'state-management/actions/datasets.actions';
 import * as UserActions from 'state-management/actions/user.actions';
+
+import { MessageType } from 'state-management/models';
+
 // import store state interface
 @Injectable()
 export class DatasetEffects {
@@ -192,7 +195,7 @@ export class DatasetEffects {
         }).catch(err => {
           return Observable.of(new UserActions.ShowMessageAction({
             content: 'Failed to delete datablock',
-            type: 'error',
+            type: MessageType.Error,
             title: 'Dataset Status Reset Failed'
           }));
         })
@@ -259,7 +262,7 @@ export class DatasetEffects {
         return this.ds.reset(encodeURIComponent(payload['id'])).switchMap(res => {
           return Observable.of(new UserActions.ShowMessageAction({
             content: '',
-            type: 'success',
+            type: MessageType.Success,
             title: 'Dataset Status Reset'
           }));
           // return Observable.of({type: DatasetActions.RESET_STATUS_COMPLETE, payload: res});
@@ -267,7 +270,7 @@ export class DatasetEffects {
           console.error(err);
           return Observable.of(new UserActions.ShowMessageAction({
             content: '',
-            type: 'error',
+            type: MessageType.Error,
             title: 'Dataset Status Reset Failed'
           }));
         });

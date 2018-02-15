@@ -1,12 +1,14 @@
-import {Component, OnInit} from '@angular/core';
-import {Store} from '@ngrx/store';
-import {UserApi} from 'shared/sdk/services';
+import { Component, OnInit } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { UserApi } from 'shared/sdk/services';
 import * as ua from 'state-management/actions/user.actions';
 import * as selectors from 'state-management/selectors';
+import { MessageType } from 'state-management/models';
+
 @Component({
-  selector : 'app-user-settings',
-  templateUrl : './user-settings.component.html',
-  styleUrls : [ './user-settings.component.css' ]
+  selector: 'app-user-settings',
+  templateUrl: './user-settings.component.html',
+  styleUrls: ['./user-settings.component.css']
 })
 export class UserSettingsComponent implements OnInit {
 
@@ -30,10 +32,11 @@ export class UserSettingsComponent implements OnInit {
     // values['darkTheme'] = (values['darkTheme'].toLowerCase() === 'true')
     this.store.dispatch(new ua.SaveSettingsAction(values));
     this.store.dispatch(new ua.ShowMessageAction({
-        content : 'Settings Saved Locally',
+        content: 'Settings Saved Locally',
         title: 'Settings Saved Locally',
-        timeout : 3,
-        class : 'ui positive message'
+        timeout: 3,
+        type: MessageType.Success,
+        class: 'ui positive message'
       }));
   }
 }

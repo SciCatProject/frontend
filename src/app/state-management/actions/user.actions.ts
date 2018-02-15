@@ -1,5 +1,5 @@
 import { Action } from '@ngrx/store';
-import { User, AccessGroup } from 'shared/sdk/models';
+import { MessageType, User, AccessGroup } from '../models';
 
 export const LOGIN =                      '[User] Login';
 export const LOGIN_COMPLETE =             '[User] Login Complete';
@@ -29,7 +29,7 @@ export const SAVE_SETTINGS =              '[User] Settings Save';
 
 export class LoginAction implements Action {
     readonly type = LOGIN;
-    constructor(public payload: any) {}
+    constructor(public payload: {username: string, password: string, rememberMe: boolean}) {}
 }
 
 export class ActiveDirLoginAction implements Action {
@@ -106,7 +106,9 @@ export class AccessUserEmailFailedAction implements Action {
 
 export class ShowMessageAction implements Action {
     readonly type = SHOW_MESSAGE;
-    constructor(public payload?: {}) {}
+    constructor(public payload: {content: string, type: MessageType, title?: string, timeout?: number, class?: string}) {
+        this.payload = {title: '', timeout: 0, class: '', ...payload};
+    }
 }
 
 export class ClearMessageAction implements Action {

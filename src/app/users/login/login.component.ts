@@ -1,62 +1,69 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, Validators} from '@angular/forms';
-import {Http} from '@angular/http';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Store} from '@ngrx/store';
 import * as ua from 'state-management/actions/user.actions';
 import * as selectors from 'state-management/selectors';
+import { MessageType } from 'state-management/models';
+
+interface LoginForm {
+  username: string;
+  password: string;
+  rememberMe: boolean;
+}
+
 /**
  * Component to handle user login. Allows for AD and
  * functional account login.
  * @export
  * @class LoginComponent
  */
-@Component({selector : 'login-form', templateUrl : './login.component.html'})
+@Component({selector: 'login-form', templateUrl: './login.component.html'})
 export class LoginComponent implements OnInit {
 
   returnUrl: string;
   postError = '';
 
   public loginForm = this.fb.group({
-    username : [ '', Validators.required ],
-    password : [ '', Validators.required ],
-    rememberMe : true
+    username: ['', Validators.required],
+    password: ['', Validators.required],
+    rememberMe: true
   });
 
   /**
    * Creates an instance of LoginComponent.
    * @param {FormBuilder} fb - generates model driven user login form
-   * @param {UserApi} us - user service for local accounts
-   * @param {ADAuthService} ad - custom active directory account service
    * @param {Router} router - handles page nav
    * @param {ActivatedRoute} route - access parameters in URL
-   * @param {Http} http - make requests
-   * @param {LoopBackAuth} auth - add logged in user to auth service
+   * @param {Store<any>} store
    * @memberof LoginComponent
    */
-  constructor(public fb: FormBuilder, private router: Router,
-              private route: ActivatedRoute, private store: Store<any>) {
+  constructor(
+    public fb: FormBuilder,
+    private router: Router,
+    private route: ActivatedRoute,
+    private store: Store<any>
+  ) {
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
-    const self = this;
     this.store.select(selectors.users.getCurrentUser)
-        .subscribe(result => {
-          if (result && result['username']) {
-            self.router.navigateByUrl('/datasets');
-            // self.router.navigateByUrl(decodeURIComponent(self.returnUrl));
-          } else if (result && result['errSrc']) {
-            self.store.dispatch(new ua.ShowMessageAction({
-                content :  result.message,
-                type : 'error',
-                title : 'Login Failed'
-              }));
-          } else if (!(result instanceof Object)) {
-            self.store.dispatch(new ua.ShowMessageAction({
-                content :  result,
-                type : 'error',
-                title : 'Login Failed'
-              }));
-          }
-        });
+    .subscribe(result => {
+      if (result && result['username']) {
+        this.router.navigateByUrl('/datasets');
+        // self.router.navigateByUrl(decodeURIComponent(self.returnUrl));
+      } else if (result && result['errSrc']) {
+        this.store.dispatch(new ua.ShowMessageAction({
+          content: result.message,
+          type: MessageType.Error,
+          title: 'Login Failed'
+        }));
+      } else if (!(result instanceof Object)) {
+        this.store.dispatch(new ua.ShowMessageAction({
+          content: result,
+          type: MessageType.Error,
+          title: 'Login Failed'
+        }));
+      }
+    });
   }
 
   ngOnInit() {}
@@ -68,7 +75,7 @@ export class LoginComponent implements OnInit {
    * @memberof LoginComponent
    */
   doADLogin(event) {
-    const self = this;
-    this.store.dispatch(new ua.LoginAction(self.loginForm.value));
+    const form: LoginForm = this.loginForm.value;
+    this.store.dispatch(new ua.LoginAction(form));
   }
 }

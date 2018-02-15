@@ -12,6 +12,7 @@ import {Observable} from 'rxjs/Observable';
 import * as lb from 'shared/sdk/services';
 import * as JobActions from 'state-management/actions/jobs.actions';
 import * as UserActions from 'state-management/actions/user.actions';
+import { MessageType } from 'state-management/models';
 
 // import store state interface
 
@@ -60,7 +61,7 @@ export class JobsEffects {
       .map(toPayload)
       .switchMap((res) => {
         const msg = {
-          type: 'success',
+          type: MessageType.Success,
           title: 'Job Created Successfully',
           content: ''
         };

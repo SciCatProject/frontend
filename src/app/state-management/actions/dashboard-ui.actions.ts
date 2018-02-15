@@ -11,7 +11,7 @@ export class SaveAction implements Action {
 
 export class SaveModeAction implements Action {
     readonly type = SAVE_MODE;
-    constructor(public payload?: any) {}
+    constructor(public payload: string) {}
 }
 
 export class RestoreAction implements Action {
