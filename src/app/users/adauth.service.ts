@@ -34,7 +34,7 @@ export class ADAuthService {
         const creds = 'username=' + username + '&password=' + password;
         const headers = new Headers();
         const url = LoopBackConfig.getPath() + this.config.externalAuthEndpoint;
-        headers.append('Content-Type', 'application/x-www-form-urlencoded');   
+        headers.append('Content-Type', 'application/x-www-form-urlencoded');
         return this.http.post(url, creds, {headers});
     }
 }

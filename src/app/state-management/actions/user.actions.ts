@@ -118,7 +118,7 @@ export class SaveSettingsAction implements Action {
     constructor(public payload: {}) {}
 }
 
-export type Actions = 
+export type Actions =
     LoginAction | LogoutCompleteAction | LoginFailedAction |
     LogoutAction | LogoutCompleteAction |
     RetrieveUserAction | RetrieveUserCompleteAction | RetrieveUserFailedAction |

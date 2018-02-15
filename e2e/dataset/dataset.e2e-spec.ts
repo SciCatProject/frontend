@@ -6,7 +6,7 @@ import { protractor } from 'protractor/built/ptor';
 describe('catanie Dataset Detail', function() {
   let lp: LoginPage;
   let page: DatasetDetailPage;
-  
+
   beforeAll(() => {
     lp = new LoginPage();
     lp.navigateTo().then(() => {
