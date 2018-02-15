@@ -1,5 +1,5 @@
 import { Action } from '@ngrx/store';
-import { MessageType, User, AccessGroup } from '../models';
+import { Message, MessageType, User, AccessGroup } from '../models';
 
 export const LOGIN =                      '[User] Login';
 export const LOGIN_COMPLETE =             '[User] Login Complete';
@@ -106,9 +106,7 @@ export class AccessUserEmailFailedAction implements Action {
 
 export class ShowMessageAction implements Action {
     readonly type = SHOW_MESSAGE;
-    constructor(public payload: {content: string, type: MessageType, title?: string, timeout?: number, class?: string}) {
-        this.payload = {title: '', timeout: 0, class: '', ...payload};
-    }
+    constructor(public payload: Message) {}
 }
 
 export class ClearMessageAction implements Action {
