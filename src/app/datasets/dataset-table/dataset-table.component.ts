@@ -110,7 +110,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngOnInit() {
 
-    this.configSrv.getConfigFile('RawDataset').subscribe(conf => {
+    this.configSrv.getConfigFile('Dataset').subscribe(conf => {
       if (conf) {
         for (const prop in conf) {
           if (prop in conf && 'table' in conf[prop]) {

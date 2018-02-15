@@ -6,7 +6,7 @@
 
   <form class="example-form">
     <mat-form-field class="example-full-width beamline-input">
-      <input matInput [(ngModel)]="selectedBeam" placeholder="Creation Location" aria-label="Beamline" [matAutocomplete]="beam" [formControl]="beamlineInput">
+      <input matInput [(ngModel)]="selectedBeam" placeholder="Source Folder" aria-label="Beamline" [matAutocomplete]="beam" [formControl]="beamlineInput">
       <mat-autocomplete #beam="matAutocomplete">
         <mat-option class="options" (onSelectionChange)="locSelected(b)" *ngFor="let b of filteredBeams | async" [value]="b._id">
           <span>{{ b._id }}</span> |
