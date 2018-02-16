@@ -4,8 +4,8 @@ export function filter(src, cmp) {
     const filters = Object.keys(src);
     const filtered = {};
     for (let f = 0; f < filters.length; f++) {
-        const filter = filters[f];
-        filtered[filter] = cmp[filter];
+        const filterVal = filters[f];
+        filtered[filterVal] = cmp[filterVal];
     }
     return filtered;
 }

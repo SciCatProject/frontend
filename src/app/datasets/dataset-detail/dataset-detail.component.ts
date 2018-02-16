@@ -29,7 +29,7 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
   datablocks$: Observable<Datablock[]>;
   admin$: Observable<boolean>;
 
-  constructor(private route: ActivatedRoute, private store: Store<any>) {};
+  constructor(private route: ActivatedRoute, private store: Store<any>) {}
 
   ngOnInit() {
     const currentUser$ = this.store.select(state => state.root.user.currentUser);
@@ -82,7 +82,7 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
   }
 
   private reloadDatasetWithDatablocks(datasetPID) {
-    console.log('Loading data for ' + datasetPID)
+    console.log('Loading data for ' + datasetPID);
     this.clearCurrentSet(); // clear current dataset entirely from the cache
     this.loadDatasetWithDatablocks(datasetPID);
     // this.store.dispatch(new dsa.CurrentSetAction(datasetPID));

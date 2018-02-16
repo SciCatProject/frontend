@@ -1,4 +1,4 @@
-const { version: appVersion } = require('../../package.json')
+const { version: appVersion } = require('../../package.json');
 import { MatSidenav } from '@angular/material/sidenav';
 import { Component, ViewEncapsulation, ViewChild, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';

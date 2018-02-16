@@ -9,7 +9,6 @@ export * from './DatasetLifecycle';
 export * from './Datablock';
 export * from './AccessUser';
 export * from './AccessGroup';
-export * from './SynchTimes';
 export * from './UserCredential';
 export * from './UserIdentity';
 export * from './ApplicationCredential';

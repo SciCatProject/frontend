@@ -37,6 +37,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
 
   beamlineInput: FormControl;
   groupInput: FormControl;
+  typeInput: FormControl;
   filteredBeams: Observable<any[]>;
   filteredGroups: Observable<any[]>;
 
@@ -64,6 +65,8 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   selectedGroups = [];
   // filteredGroups = [];
 
+  type = undefined;
+
   filters: any = dStore.initialDatasetState.activeFilters;
   filterValues;
 
@@ -73,6 +76,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     private router: Router) {
     this.beamlineInput = new FormControl();
     this.groupInput = new FormControl();
+    this.typeInput = new FormControl();
 
   }
 
@@ -116,7 +120,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.store.select(selectors.datasets.getFilterValues)
         .subscribe(values => {
-          this.filterValues = Object.assign({}, values);
+          this.filterValues = { ...values };
           if (this.filterValues) {
             if (this.locations.length === 0 && this.filterValues['creationLocation'] !== null) {
               this.locations = this.filterValues['creationLocation'] ? this.filterValues['creationLocation'].slice() : [];
@@ -181,6 +185,11 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
    */
   groupSelected(grp) {
     this.filters.ownerGroup.push(grp['_id']);
+    this.store.dispatch(new dsa.UpdateFilterAction(this.filters));
+  }
+
+  typeSelected(type) {
+    this.filters.type = type;
     this.store.dispatch(new dsa.UpdateFilterAction(this.filters));
   }
 

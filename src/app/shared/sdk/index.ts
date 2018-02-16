@@ -59,7 +59,6 @@ import { DatasetLifecycleApi } from './services/custom/DatasetLifecycle';
 import { DatablockApi } from './services/custom/Datablock';
 import { AccessUserApi } from './services/custom/AccessUser';
 import { AccessGroupApi } from './services/custom/AccessGroup';
-import { SynchTimesApi } from './services/custom/SynchTimes';
 import { UserCredentialApi } from './services/custom/UserCredential';
 import { UserIdentityApi } from './services/custom/UserIdentity';
 import { ApplicationCredentialApi } from './services/custom/ApplicationCredential';
@@ -108,7 +107,6 @@ export class SDKBrowserModule {
         DatablockApi,
         AccessUserApi,
         AccessGroupApi,
-        SynchTimesApi,
         UserCredentialApi,
         UserIdentityApi,
         ApplicationCredentialApi,

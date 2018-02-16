@@ -1,12 +1,14 @@
 <mat-card>
-<form (ngSubmit)="textSearch(search.value)" #searchForm="ngForm">
+  <form (ngSubmit)="textSearch(search.value)" #searchForm="ngForm">
     <div style="width:100%;">
       <mat-form-field class="example-full-width" style="width:90%">
-    <input matInput #search class="dash-search" placeholder="Search..." (keyUp)="textSearch(search.value)" [ngModel]="searchText$ | async" name="search">
-  </mat-form-field>
-        <button mat-raised-button color="accent" type="submit" (click)="textSearch(search.value)"><i class="fa fa-search" aria-hidden="true"></i>Search</button>
+        <input matInput #search class="dash-search" placeholder="Search..." (keyUp)="textSearch(search.value)" [ngModel]="searchText$ | async"
+          name="search">
+      </mat-form-field>
+      <button mat-raised-button color="accent" type="submit" (click)="textSearch(search.value)">
+        <i class="fa fa-search" aria-hidden="true"></i>Search</button>
     </div>
-</form>
+  </form>
 </mat-card>
 <br>
 <div class="ui stackable grid">

@@ -37,49 +37,49 @@ export function datasetsReducer(state = initialDatasetState, action: Action) {
         case FILTER_UPDATE: {
             const f = action['payload'];
             const group = f['ownerGroup'];
-            
+
             if (group && !Array.isArray(group) && group.length > 0) {
                 f['ownerGroup'] = [group];
             }
-    
+
             return {...state, activeFilters: f, loading: true, selectedSets: []};
         }
-    
+
         case SEARCH_COMPLETE: {
             const datasets = <RawDataset[]>action['payload'];
             return {...state, datasets, loading: false};
         }
-    
+
         case ADD_GROUPS_COMPLETE: {
             const ownerGroup = action['payload'];
             const activeFilters = {...state.activeFilters, ownerGroup};
             return {...state, activeFilters, foo: 10};
         }
-    
+
         case FILTER_VALUE_UPDATE:
         case FILTER_UPDATE_COMPLETE: {
             const filterValues = action['payload'];
-            return {...state, filterValues};
+            return {...state, filterValues, loading: false};
         }
-        
+
         case SELECT_CURRENT:
         case CURRENT_BLOCKS_COMPLETE:
         case SEARCH_ID_COMPLETE: {
             const currentSet = <RawDataset>action['payload'];
             return {...state, currentSet};
         }
-        
+
         case SELECTED_DATABLOCKS_COMPLETE:
         case SELECTED_UPDATE: {
             const selectedSets = <RawDataset[]>action['payload'];
             return {...state, selectedSets};
         }
-    
+
         case TOTAL_UPDATE: {
             const totalSets = <number>action['payload'];
             return {...state, totalSets};
         }
-    
+
         // TODO handle failed actions
         default: {
             return state;
