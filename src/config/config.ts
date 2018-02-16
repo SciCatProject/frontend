@@ -10,4 +10,4 @@ export const config  = {
       datasetRetrieved: 'Retrieved to target disk',
       datasetDeleted: 'Deleted from archive and disk'
   }
-}
+};

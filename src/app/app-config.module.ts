@@ -4,17 +4,17 @@ import { environment } from '../environments/environment';
 export const APP_CONFIG = new InjectionToken<AppConfig>('app.config');
 
 export class AppConfig {
-	externalAuthEndpoint: string;
+    externalAuthEndpoint: string;
 }
 
 export const APP_DI_CONFIG: AppConfig = {
-	externalAuthEndpoint: environment.externalAuthEndpoint,
+    externalAuthEndpoint: environment.externalAuthEndpoint,
 };
 
 @NgModule({
-	providers: [{
-		provide: APP_CONFIG,
-		useValue: APP_DI_CONFIG,
-	}]
+    providers: [{
+        provide: APP_CONFIG,
+        useValue: APP_DI_CONFIG,
+    }]
 })
 export class AppConfigModule {}

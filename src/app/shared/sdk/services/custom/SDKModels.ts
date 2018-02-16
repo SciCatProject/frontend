@@ -10,7 +10,6 @@ import { DatasetLifecycle } from '../../models/DatasetLifecycle';
 import { Datablock } from '../../models/Datablock';
 import { AccessUser } from '../../models/AccessUser';
 import { AccessGroup } from '../../models/AccessGroup';
-import { SynchTimes } from '../../models/SynchTimes';
 import { UserCredential } from '../../models/UserCredential';
 import { UserIdentity } from '../../models/UserIdentity';
 import { ApplicationCredential } from '../../models/ApplicationCredential';
@@ -35,7 +34,6 @@ export class SDKModels {
     Datablock: Datablock,
     AccessUser: AccessUser,
     AccessGroup: AccessGroup,
-    SynchTimes: SynchTimes,
     UserCredential: UserCredential,
     UserIdentity: UserIdentity,
     ApplicationCredential: ApplicationCredential,

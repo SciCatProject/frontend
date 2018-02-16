@@ -7,7 +7,9 @@ import { rootReducer } from 'state-management/reducers/root.reducer';
 import { DatasetsFilterComponent } from 'datasets/datasets-filter/datasets-filter.component';
 import { MockStore, MockActivatedRoute, MockRouter } from '../../shared/MockStubs';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MatAutocompleteModule } from '@angular/material';
+import { MatAutocompleteModule, MatSelectModule, MatFormFieldModule, MatInputModule } from '@angular/material';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('DatasetsFilterComponent', () => {
   let component: DatasetsFilterComponent;
@@ -18,7 +20,8 @@ describe('DatasetsFilterComponent', () => {
       .configureTestingModule({
         schemas: [NO_ERRORS_SCHEMA],
         imports: [
-          TreeModule, MatAutocompleteModule, SharedModule, DataTableModule,
+          TreeModule, MatAutocompleteModule, SharedModule, DataTableModule, MatSelectModule, MatFormFieldModule, MatInputModule,
+          FormsModule, ReactiveFormsModule, BrowserAnimationsModule,
           StoreModule.forRoot({ rootReducer })
         ],
         declarations: [DatasetsFilterComponent],
@@ -46,6 +49,11 @@ describe('DatasetsFilterComponent', () => {
 
   it('should be created', () => { expect(component).toBeTruthy(); });
 
+  it('should contain a total results header', () => {
+    const compiled = fixture.debugElement.nativeElement;
+    expect(compiled.querySelector('.results-count').textContent).toContain('Results');
+  });
+
   it('should contain a date range field', () => {
     const compiled = fixture.debugElement.nativeElement;
     expect(compiled.querySelector('form').textContent).toContain('Date Range');
@@ -53,19 +61,28 @@ describe('DatasetsFilterComponent', () => {
 
   it('should contain a beamline input', () => {
     const compiled = fixture.debugElement.nativeElement;
-    const beamline = compiled.querySelector('.beamline-input')
-    expect(beamline.childNodes[1].attributes.getNamedItem('placeholder').textContent).toContain('Beamline');
+    const beamline = compiled.querySelector('.beamline-input');
+    expect(beamline).toBeTruthy();
+    expect(beamline.attributes.getNamedItem('placeholder').textContent).toContain('Beamline');
   });
 
   it('should contain a groups input', () => {
     const compiled = fixture.debugElement.nativeElement;
-    const group = compiled.querySelector('.group-input')
-    expect(group.childNodes[1].attributes.getNamedItem('placeholder').textContent).toContain('Group');
+    const group = compiled.querySelector('.group-input');
+    expect(group).toBeTruthy();
+    expect(group.attributes.getNamedItem('placeholder').textContent).toContain('Group');
+  });
+
+  it('should contain a type input', () => {
+    const compiled = fixture.debugElement.nativeElement;
+    const type = compiled.querySelector('.type-input');
+    expect(type).toBeTruthy();
+    expect(type.attributes.getNamedItem('placeholder').textContent).toContain('Type');
   });
 
   it('should contain a clear button', () => {
     const compiled = fixture.debugElement.nativeElement;
-    const btn = compiled.querySelector('.clear-filters-btn')
+    const btn = compiled.querySelector('.clear-filters-btn');
     expect(btn.textContent).toContain('Clear');
   });
 });

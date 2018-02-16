@@ -14,7 +14,7 @@ import {
 } from 'state-management/actions/jobs.actions';
 
 export function jobsReducer(state = initialJobsState, action: Action): JobsState {
-    
+
     if (action.type.indexOf('[Jobs]') !== -1) {
         console.log('Action came in! ' + action.type);
     }

@@ -7,11 +7,11 @@ export const SAVE_MODE = '[Dashboard] Save Mode';
 export class SaveAction implements Action {
     readonly type = SAVE;
     constructor(public payload?: any) {}
-};
+}
 
 export class SaveModeAction implements Action {
     readonly type = SAVE_MODE;
-    constructor(public payload?: any) {}
+    constructor(public payload: string) {}
 }
 
 export class RestoreAction implements Action {

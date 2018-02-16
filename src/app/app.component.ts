@@ -1,4 +1,4 @@
-const { version: appVersion } = require('../../package.json')
+const { version: appVersion } = require('../../package.json');
 import { MatSidenav } from '@angular/material/sidenav';
 import { Component, ViewEncapsulation, ViewChild, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
@@ -73,9 +73,9 @@ export class AppComponent implements OnDestroy, OnInit {
 
     this.subscriptions.push(this.store.select(state => state.root.user.message)
       .subscribe(current => {
-        if (current.title !== undefined) {
-          this.snackBar.open(current.title, undefined, {
-            duration: 10000,
+        if (current.content !== undefined) {
+          this.snackBar.open(current.content, undefined, {
+            duration: current.duration,
           });
           this.store.dispatch(new ua.ClearMessageAction());
         }

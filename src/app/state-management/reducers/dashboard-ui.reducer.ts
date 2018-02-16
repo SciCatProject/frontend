@@ -11,7 +11,7 @@ export function dashboardUIReducer(state = initialDashboardUIState, action: Acti
     if (action.type.indexOf('[Dashboard]') !== -1) {
         console.log('Action came in! ' + action.type);
     }
-    
+
     switch (action.type) {
         /*
         This action replaces the whole state with the payload of the action. Is this intended?

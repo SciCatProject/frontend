@@ -13,6 +13,9 @@ import { Observable } from 'rxjs/Observable';
 import * as lb from 'shared/sdk/services';
 import * as DatasetActions from 'state-management/actions/datasets.actions';
 import * as UserActions from 'state-management/actions/user.actions';
+
+import { Message, MessageType } from 'state-management/models';
+
 // import store state interface
 @Injectable()
 export class DatasetEffects {
@@ -82,7 +85,9 @@ export class DatasetEffects {
         } else {
           delete fq['text'];
         }
-        return this.rds
+        delete fq['mode'];
+        console.log(fq);
+        return this.ds
           .facet(fq)
           .switchMap(res => {
             const filterValues = res['results'][0];
@@ -120,7 +125,7 @@ export class DatasetEffects {
           filter = match[0];
         }
 
-        return this.rds.count(filter)
+        return this.ds.count(filter)
           .switchMap(res => {
             return Observable.of(new DatasetActions.TotalSetsAction(res['count']));
           })
@@ -154,7 +159,7 @@ export class DatasetEffects {
         if (fq['sortField']) {
           filter['order'] = fq['sortField'];
         }
-        return this.rds.find(filter)
+        return this.ds.find(filter)
           .switchMap(res => {
             return Observable.of(new DatasetActions.SearchCompleteAction(res));
           })
@@ -190,12 +195,11 @@ export class DatasetEffects {
             type: DatasetActions.DATABLOCK_DELETE_COMPLETE
           });
         }).catch(err => {
-          return Observable.of(new UserActions.ShowMessageAction({
-            content: 'Failed to delete datablock',
-            type: 'error',
-            title: 'Dataset Status Reset Failed'
-          }));
-        })
+          const msg = new Message();
+          msg.content = 'Failed to delete datablock';
+          msg.type = MessageType.Error;
+          return Observable.of(new UserActions.ShowMessageAction(msg));
+        });
       });
 
   @Effect()
@@ -209,7 +213,7 @@ export class DatasetEffects {
           return this.dbs.find(datasetSearch).switchMap(res => {
             dataset['datablocks'] = res;
             return Observable.of(new DatasetActions.UpdateSelectedDatablocksAction(payload));
-          })
+          });
         } else {
           return Observable.of(new DatasetActions.UpdateSelectedDatablocksAction(payload));
         }
@@ -256,20 +260,17 @@ export class DatasetEffects {
     this.action$.ofType(DatasetActions.RESET_STATUS)
       .map(toPayload)
       .switchMap(payload => {
+        const msg = new Message();
         return this.ds.reset(encodeURIComponent(payload['id'])).switchMap(res => {
-          return Observable.of(new UserActions.ShowMessageAction({
-            content: '',
-            type: 'success',
-            title: 'Dataset Status Reset'
-          }));
+          msg.content = 'Dataset Status Reset';
+          msg.type = MessageType.Success;
+          return Observable.of(new UserActions.ShowMessageAction(msg));
           // return Observable.of({type: DatasetActions.RESET_STATUS_COMPLETE, payload: res});
         }).catch(err => {
           console.error(err);
-          return Observable.of(new UserActions.ShowMessageAction({
-            content: '',
-            type: 'error',
-            title: 'Dataset Status Reset Failed'
-          }));
+          msg.content = 'Dataset Status Reset Failed';
+          msg.type = MessageType.Error;
+          return Observable.of(new UserActions.ShowMessageAction(msg));
         });
       });
 
@@ -318,6 +319,9 @@ function handleFacetPayload(fq) {
     if (end) {
       match.push({ creationTime: { lte: end } });
     }
+  }
+  if (fq['type']) {
+    match.push({type: fq['type']});
   }
   /*  else if ((startDate && !endDate) || (!startDate && endDate)) {
      return Observable.of({

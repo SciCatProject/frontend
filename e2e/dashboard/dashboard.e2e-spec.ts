@@ -6,7 +6,7 @@ import { protractor } from 'protractor/built/ptor';
 describe('catanie Dashboard', function() {
   let lp: LoginPage;
   let page: DashboardPage;
-  
+
   beforeAll(() => {
     lp = new LoginPage();
     lp.navigateTo().then(() => {

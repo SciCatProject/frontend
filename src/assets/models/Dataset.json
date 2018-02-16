@@ -22,11 +22,21 @@
     "sourceFolder": {
         "name": "sourceFolder",
 	"label": "Source Folder",
-        "type": "string"
+        "type": "string",
+        "table": {
+            "header": "Source Folder",
+            "sortable": true,
+            "field": "sourceFolder"
+        }
     },
     "size": {
         "name": "size",
-        "type": "number"
+        "type": "number",
+        "table": {
+            "header": "Size (GB)",
+            "sortable": true,
+            "field": "size"
+        }
     },
     "packagedSize": {
         "name": "packagedSize",
@@ -34,12 +44,22 @@
     },
     "creationTime": {
         "name": "creationTime",
-        "type": "Date"
+        "type": "Date",
+        "table": {
+            "header": "Creation Time",
+            "sortable": true,
+            "field": "creationTime"
+        }
     },
     "type": {
         "name": "type",
         "type": "string",
-	"visible": false
+      	"visible": true,
+        "table": {
+            "header": "Type",
+            "sortable": true,
+            "field": "type"
+        }
     },
     "validationStatus": {
         "name": "validationStatus",
@@ -67,10 +87,32 @@
     },
     "ownerGroup": {
         "name": "ownerGroup",
-        "type": "string"
+        "type": "string",
+        "table": {
+            "header": "Group",
+            "sortable": true,
+            "field": "ownerGroup"
+        }
     },
     "accessGroups": {
         "name": "accessGroups",
         "type": "Array&lt;string&gt;"
+    },
+    "proposalId": {
+      "visible": false
+    },
+    "archiveStatus": {
+        "table": {
+            "header": "Archive Status",
+            "sortable": true,
+            "field": "datasetlifecycle.archiveStatusMessage"
+        }
+    },
+    "retrieveStatus": {
+        "table": {
+            "header": "Retrieve Status",
+            "sortable": true,
+            "field": "datasetlifecycle.retrieveStatusMessage"
+        }
     }
 }
