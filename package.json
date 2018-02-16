@@ -48,13 +48,11 @@
     "zone.js": "0.7.8"
   },
   "devDependencies": {
-    "@angular/core": "5.0.0",
-    "@angular-devkit/core": "^0.4.0",
-    "@angular/cli": "^1.6.8",
-    "@compodoc/compodoc": "1.0.4",
+    "@angular/cli": "1.6.8",
+    "@compodoc/compodoc": "^1.0.4",
     "@ngrx/store-devtools": "^4.1.1",
     "@types/jasmine": "2.6.3",
-    "@types/node": "8.0.50",
+    "@types/node": "^8.0.50",
     "@types/source-map-support": "^0.4.0",
     "@types/zone.js": "^0.5.12",
     "codelyzer": "~4.0.1",
@@ -80,7 +78,7 @@
     "source-map-support": "^0.5.0",
     "ts-node": "3.3.0",
     "tslint": "^5.8.0",
-    "typescript": "^2.4.2",
+    "typescript": "^2.5.0",
     "webpack": "3.8.1",
     "zone.js": "0.8.18"
   }
