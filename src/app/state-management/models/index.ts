@@ -15,7 +15,7 @@ export enum MessageType {
 export class Message {
   content: string;
   type: MessageType;
-  duration? = 10000;
+  duration ? = 10000;
 };
 
 export { User, AccessGroup, Job, RawDataset };
