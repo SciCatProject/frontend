@@ -4,7 +4,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {Store} from '@ngrx/store';
 import * as ua from 'state-management/actions/user.actions';
 import * as selectors from 'state-management/selectors';
-import { MessageType } from 'state-management/models';
+import { Message, MessageType } from 'state-management/models';
 
 interface LoginForm {
   username: string;
@@ -51,17 +51,15 @@ export class LoginComponent implements OnInit {
         this.router.navigateByUrl('/datasets');
         // self.router.navigateByUrl(decodeURIComponent(self.returnUrl));
       } else if (result && result['errSrc']) {
-        this.store.dispatch(new ua.ShowMessageAction({
-          content: result.message,
-          type: MessageType.Error,
-          title: 'Login Failed'
-        }));
+        const msg = new Message();
+        msg.content = result.message;
+        msg.type = MessageType.Error;
+        this.store.dispatch(new ua.ShowMessageAction(msg));
       } else if (!(result instanceof Object)) {
-        this.store.dispatch(new ua.ShowMessageAction({
-          content: result,
-          type: MessageType.Error,
-          title: 'Login Failed'
-        }));
+        const msg = new Message();
+        msg.content = result;
+        msg.type = MessageType.Error;
+        this.store.dispatch(new ua.ShowMessageAction(msg));
       }
     });
   }

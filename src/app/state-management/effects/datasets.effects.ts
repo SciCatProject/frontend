@@ -14,7 +14,7 @@ import * as lb from 'shared/sdk/services';
 import * as DatasetActions from 'state-management/actions/datasets.actions';
 import * as UserActions from 'state-management/actions/user.actions';
 
-import { MessageType } from 'state-management/models';
+import { Message, MessageType } from 'state-management/models';
 
 // import store state interface
 @Injectable()
@@ -193,11 +193,10 @@ export class DatasetEffects {
             type: DatasetActions.DATABLOCK_DELETE_COMPLETE
           });
         }).catch(err => {
-          return Observable.of(new UserActions.ShowMessageAction({
-            content: 'Failed to delete datablock',
-            type: MessageType.Error,
-            title: 'Dataset Status Reset Failed'
-          }));
+          const msg = new Message();
+          msg.content = 'Failed to delete datablock';
+          msg.type = MessageType.Error;
+          return Observable.of(new UserActions.ShowMessageAction(msg));
         })
       });
 
@@ -259,20 +258,17 @@ export class DatasetEffects {
     this.action$.ofType(DatasetActions.RESET_STATUS)
       .map(toPayload)
       .switchMap(payload => {
+        const msg = new Message();
         return this.ds.reset(encodeURIComponent(payload['id'])).switchMap(res => {
-          return Observable.of(new UserActions.ShowMessageAction({
-            content: '',
-            type: MessageType.Success,
-            title: 'Dataset Status Reset'
-          }));
+          msg.content = 'Dataset Status Reset';
+          msg.type = MessageType.Success;
+          return Observable.of(new UserActions.ShowMessageAction(msg));
           // return Observable.of({type: DatasetActions.RESET_STATUS_COMPLETE, payload: res});
         }).catch(err => {
           console.error(err);
-          return Observable.of(new UserActions.ShowMessageAction({
-            content: '',
-            type: MessageType.Error,
-            title: 'Dataset Status Reset Failed'
-          }));
+          msg.content = 'Dataset Status Reset Failed';
+          msg.type = MessageType.Error;
+          return Observable.of(new UserActions.ShowMessageAction(msg));
         });
       });
 

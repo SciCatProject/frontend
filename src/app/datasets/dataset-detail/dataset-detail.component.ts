@@ -77,7 +77,7 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
   // (not currently in use since we are clearing current dataset entirely)
   private ensureDatablocksForDatasetAreLoaded(dataset: RawDataset) {
     if (dataset && !('origdatablocks' in dataset)) {
-      this.loadDatasetWithDatablocks(dataset.pid);
+      // this.loadDatasetWithDatablocks(dataset.pid);
     }
   }
 
