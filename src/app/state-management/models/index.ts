@@ -15,11 +15,7 @@ export enum MessageType {
 export class Message {
   content: string;
   type: MessageType;
-  // These are only used very sporadically in the code.
-  // Maybe they're obsolete and should be removed?
-  title?: string = '';
-  timeout?: number = 0;
-  class?: string = '';
+  duration? = 10000;
 };
 
 export { User, AccessGroup, Job, RawDataset };

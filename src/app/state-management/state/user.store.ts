@@ -16,7 +16,7 @@ export const initialUserState: UserState = {
   currentUser: <User>{},
   currentUserGroups: [],
   email: undefined,
-  message: {'content': undefined, 'title': undefined, type: undefined},
+  message: {content: undefined, type: undefined, duration: 10000},
   settings: {
     'tapeCopies': 'one',
     'datasetCount': 30,
