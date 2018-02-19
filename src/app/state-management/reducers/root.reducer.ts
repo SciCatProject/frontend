@@ -7,6 +7,7 @@ import { DashboardUIState, initialDashboardUIState } from 'state-management/stat
 import { DatasetState, initialDatasetState } from 'state-management/state/datasets.store';
 import { initialJobsState, JobsState } from 'state-management/state/jobs.store';
 import { initialUserState, UserState } from 'state-management/state/user.store';
+import * as ua from 'state-management/actions/user.actions';
 
 // NOTE It IS ok to make up a state of other sub states
 export interface AppState {
@@ -22,16 +23,23 @@ export const initialState: AppState = {
     dashboardUI: initialDashboardUIState,
     jobs: initialJobsState
 };
-export function rootReducer(state: any, action: Action) {
-    return combineReducers({
-        user: userReducer,
-        datasets: datasetsReducer,
-        dashboardUI: dashboardUIReducer,
-        jobs: jobsReducer
-    })(state, action);
 
-}
-// console.log(AppState);
+
+const appReducer = combineReducers({
+    user: userReducer,
+    datasets: datasetsReducer,
+    dashboardUI: dashboardUIReducer,
+    jobs: jobsReducer
+ });
+
+export const rootReducer = ( state, action ) => {
+   if ( action.type === ua.LOGOUT ) {
+     state = undefined;
+   }
+
+   return appReducer(state, action);
+};
+
 export const getDatasetsState = (state: any) => state.root.datasets;
 
 // export const getDatasets = createSelector(getDatasetsState, datasetsReducer.getDatasets);

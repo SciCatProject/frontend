@@ -68,7 +68,7 @@ export class AppComponent implements OnDestroy, OnInit {
     localStorage.clear();
     if (window.location.pathname.indexOf('logout') !== -1) {
       this.logout();
-      this.router.navigate(['/login']);
+      // this.router.navigate(['/login']);
     }
 
     this.subscriptions.push(this.store.select(state => state.root.user.message)
@@ -89,11 +89,10 @@ export class AppComponent implements OnDestroy, OnInit {
             this.store.dispatch(new ua.AccessUserEmailAction(this.username));
             // TODO handle dataset loading
           }
-        } else if (current && current['loggedOut']) {
-          if (window.location.pathname.indexOf('login') === -1) {
-            window.location.replace('/login');
-          }
         } else {
+          if (window.location.pathname.indexOf('login') === -1) {
+            this.router.navigateByUrl('/login');
+          }
         }
       }));
     this.store.dispatch(new ua.RetrieveUserAction());
@@ -107,7 +106,6 @@ export class AppComponent implements OnDestroy, OnInit {
 
   logout() {
     this.store.dispatch(new ua.LogoutAction());
-    this.router.navigate(['/login']);
   }
 
   login() {

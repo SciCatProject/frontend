@@ -3,14 +3,14 @@
     <mat-sidenav-container (backdropClick)="sidenavToggle()" fullscreen>
         <mat-sidenav #sidenav (keydown.escape)="sidenavToggle()" mode="push" disableClose>
             <mat-list>
-                <mat-list-item><a class="item" [routerLink]="['/datasets/']" [routerLinkActive]="['active']">Home</a></mat-list-item>
-                <mat-list-item><a class="item" [routerLink]="['/sample-data/', 'add']" [routerLinkActive]="['active']">Sample Data Entry</a></mat-list-item>
-                <mat-list-item><a class="item" [routerLink]="['/user/','jobs']" [routerLinkActive]="['active']">Jobs</a></mat-list-item>
-                <mat-list-item><a class="item" [matMenuTriggerFor]="userMenu">{{ username }}</a></mat-list-item>
+                <mat-list-item><a class="item" (click)="sidenav.close()" [routerLink]="['/datasets/']" [routerLinkActive]="['active']">Home</a></mat-list-item>
+                <mat-list-item><a class="item" (click)="sidenav.close()" [routerLink]="['/sample-data/', 'add']" [routerLinkActive]="['active']">Sample Data Entry</a></mat-list-item>
+                <mat-list-item><a class="item" (click)="sidenav.close()" [routerLink]="['/user/','jobs']" [routerLinkActive]="['active']">Jobs</a></mat-list-item>
+                <mat-list-item><a class="item" (click)="sidenav.close()" [matMenuTriggerFor]="userMenu">{{ username }}</a></mat-list-item>
             </mat-list>
 
             
-            <mat-menu #userMenu="matMenu">
+            <mat-menu #userMenu="matMenu" (click)="sidenav.close()">
                 <a mat-menu-item [routerLinkActive]="['active']" [routerLink]="['/user/','details']">Details</a>
                 <a mat-menu-item [routerLinkActive]="['active']" [routerLink]="['/user/','settings']">Settings</a>
                 <a mat-menu-item (click)="logout()">Logout</a>
