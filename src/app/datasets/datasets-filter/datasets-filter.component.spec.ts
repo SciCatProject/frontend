@@ -61,9 +61,9 @@ describe('DatasetsFilterComponent', () => {
 
   it('should contain a beamline input', () => {
     const compiled = fixture.debugElement.nativeElement;
-    const beamline = compiled.querySelector('.beamline-input');
+    const beamline = compiled.querySelector('.location-input');
     expect(beamline).toBeTruthy();
-    expect(beamline.attributes.getNamedItem('placeholder').textContent).toContain('Beamline');
+    expect(beamline.attributes.getNamedItem('placeholder').textContent).toContain('Location');
   });
 
   it('should contain a groups input', () => {

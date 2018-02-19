@@ -79,9 +79,8 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
 
   }
 
-  filterLocations(beam: string) {
-    console.log(this.locations);
-    return this.locations.filter(b => b._id && b._id.toLowerCase().indexOf(beam.toLowerCase()) === 0);
+  filterLocations(loc: string) {
+    return this.locations.filter(b => b._id && b._id.toLowerCase().indexOf(loc.toLowerCase()) === 0);
   }
 
   filterGroups(group: string) {

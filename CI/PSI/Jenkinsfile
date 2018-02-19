@@ -8,7 +8,6 @@ node('docker') {
           checkout scm
        }
 
-
        stage('Build Docker'){
             sh 'docker build -f CI/PSI/Dockerfile.test -t catanie_test .'
        }
