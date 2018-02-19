@@ -35,10 +35,10 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   @ViewChild('loc') locField: AutoComplete;
   @ViewChild('grp') grpField: AutoComplete;
 
-  beamlineInput: FormControl;
+  locationInput: FormControl;
   groupInput: FormControl;
   typeInput: FormControl;
-  filteredBeams: Observable<any[]>;
+  filteredLocations: Observable<any[]>;
   filteredGroups: Observable<any[]>;
 
   datepickerSelector:
@@ -56,8 +56,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   location: {};
   selectedLocs = [];
   locations = [];
-  filteredLocations = [];
-  selectedBeam;
+  selectedLocation;
   selectedGroup;
 
   group: {};
@@ -74,18 +73,19 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
 
   constructor(private store: Store<any>, private route: ActivatedRoute,
     private router: Router) {
-    this.beamlineInput = new FormControl();
+    this.locationInput = new FormControl();
     this.groupInput = new FormControl();
     this.typeInput = new FormControl();
 
   }
 
-  filterBeams(beam: string) {
-    return this.locations.filter(b => b._id.toLowerCase().indexOf(beam.toLowerCase()) === 0);
+  filterLocations(beam: string) {
+    console.log(this.locations);
+    return this.locations.filter(b => b._id && b._id.toLowerCase().indexOf(beam.toLowerCase()) === 0);
   }
 
   filterGroups(group: string) {
-    return this.groups.filter(g => g._id.toLowerCase().indexOf(group.toLowerCase()) === 0);
+    return this.groups.filter(g => g._id && g._id.toLowerCase().indexOf(group.toLowerCase()) === 0);
   }
 
   /**
@@ -110,7 +110,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
 
     this.store.select(selectors.datasets.getActiveFilters).subscribe(filters => {
       if ('creationLocation' in filters) {
-        this.selectedBeam = filters['creationLocation'].toString();
+        this.selectedLocation = filters['creationLocation'].toString();
       }
       if ('ownerGroup' in filters) {
         this.selectedGroup = filters['ownerGroup'].toString();
@@ -131,8 +131,8 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
               this.groups = this.filterValues['ownerGroup'] ? this.filterValues['ownerGroup'].slice() : [];
             }
             if (this.filterValues.creationLocation) {
-              this.filteredBeams = this.beamlineInput.valueChanges
-                .pipe(startWith(''), map(beam => beam ? this.filterBeams(beam) : this.filterValues.creationLocation.slice()));
+              this.filteredLocations = this.locationInput.valueChanges
+                .pipe(startWith(''), map(loc => loc ? this.filterLocations(loc) : this.filterValues.creationLocation.slice()));
             }
             if (this.filterValues.ownerGroup) {
               this.filteredGroups = this.groupInput.valueChanges
@@ -198,7 +198,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
    */
   clearFacets() {
     this.selectedGroups = [];
-    this.beamlineInput.setValue('');
+    this.locationInput.setValue('');
     this.groupInput.setValue('');
     this.selectedGroup = '';
     this.filters = dStore.initialDatasetState.activeFilters;
