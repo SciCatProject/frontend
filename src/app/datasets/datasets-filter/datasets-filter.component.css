@@ -3,6 +3,6 @@
     width: 100%;
 }
 
-:host /deep/ .mat-autocomplete-panel {
+/* :host /deep/ .mat-autocomplete-panel {
     width: 150% !important;
-}
+} */
