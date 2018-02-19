@@ -6,7 +6,7 @@
                 <mat-list-item><a class="item" (click)="sidenav.close()" [routerLink]="['/datasets/']" [routerLinkActive]="['active']">Home</a></mat-list-item>
                 <mat-list-item><a class="item" (click)="sidenav.close()" [routerLink]="['/sample-data/', 'add']" [routerLinkActive]="['active']">Sample Data Entry</a></mat-list-item>
                 <mat-list-item><a class="item" (click)="sidenav.close()" [routerLink]="['/user/','jobs']" [routerLinkActive]="['active']">Jobs</a></mat-list-item>
-                <mat-list-item><a class="item" (click)="sidenav.close()" [matMenuTriggerFor]="userMenu">{{ username }}</a></mat-list-item>
+                <mat-list-item><a class="item" [matMenuTriggerFor]="userMenu">{{ username }}</a></mat-list-item>
             </mat-list>
 
             

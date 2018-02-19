@@ -89,7 +89,7 @@ export class AppComponent implements OnDestroy, OnInit {
             this.store.dispatch(new ua.AccessUserEmailAction(this.username));
             // TODO handle dataset loading
           }
-        } else {
+        } else if (current && current['loggedOut']) {
           if (window.location.pathname.indexOf('login') === -1) {
             this.router.navigateByUrl('/login');
           }

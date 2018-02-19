@@ -17,6 +17,7 @@ export class ParamsService {
       this.route.queryParams.subscribe(params => {
         try {
           console.log(window.location.pathname);
+          console.log(this.router.url);
           if (window.location.pathname.indexOf('datasets') !== -1 || window.location.pathname === '/') {
             const newParams = 'args' in params ? rison.decode(params['args']) : dStore.initialDatasetState.activeFilters;
             const mode = newParams['mode'];
