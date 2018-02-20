@@ -29,7 +29,7 @@ export function userReducer(state = initialUserState, action: Action): UserState
 
         case LOGIN_COMPLETE: {
             const currentUser = action['payload']['user'];
-            return {...state, currentUser};
+            return {...state, currentUser, loading: false};
         }
 
         case ACCESS_USER_EMAIL_COMPLETE: {
@@ -40,7 +40,7 @@ export function userReducer(state = initialUserState, action: Action): UserState
 
         case LOGIN_FAILED: {
             const err = action['payload'];
-            return {...state, currentUser: err};
+            return {...state, currentUser: err, loading: false};
         }
 
         case SHOW_MESSAGE: {
@@ -67,7 +67,9 @@ export function userReducer(state = initialUserState, action: Action): UserState
             return {...state, currentUserGroups};
         }
 
-        case LOGIN:
+        case LOGIN: {
+            return {...state, loading: true};
+        }
         case AD_LOGIN_COMPLETE:
         case ACCESS_USER_EMAIL_COMPLETE:
         default: {

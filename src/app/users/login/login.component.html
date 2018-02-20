@@ -12,5 +12,6 @@
     <label>Remember Me?</label>
   </div>
   <br><br>
-  <button type="submit" class="ui button login-btn" id="login-btn">Log in</button>
+
+  <button type="submit" [ngClass]="{'loading': loading$ | async}" class="ui button login-btn" id="login-btn">Log in</button>
 </form>

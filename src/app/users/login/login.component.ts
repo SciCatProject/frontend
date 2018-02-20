@@ -24,6 +24,8 @@ export class LoginComponent implements OnInit {
   returnUrl: string;
   postError = '';
 
+  loading$;
+
   public loginForm = this.fb.group({
     username: ['', Validators.required],
     password: ['', Validators.required],
@@ -45,6 +47,7 @@ export class LoginComponent implements OnInit {
     private store: Store<any>
   ) {
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+    this.loading$ = this.store.select(selectors.users.getLoading);
     this.store.select(selectors.users.getCurrentUser)
     .subscribe(result => {
       if (result && result['username']) {
