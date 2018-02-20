@@ -34,8 +34,7 @@ const appReducer = combineReducers({
 
 export const rootReducer = ( state, action ) => {
    if ( action.type === ua.LOGOUT_COMPLETE ) {
-     state = undefined;
-    //  window.location.reload();
+     state = undefined;;
    }
 
    return appReducer(state, action);
