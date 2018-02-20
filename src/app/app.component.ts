@@ -12,7 +12,7 @@ import { MatSnackBar } from '@angular/material';
 // import { NotificationsService } from 'angular2-notifications';
 
 import { environment } from '../environments/environment';
-import * as selectors from 'state-management/selectors'
+import * as selectors from 'state-management/selectors';
 
 @Component({
   selector: 'app-root',
