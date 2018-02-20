@@ -10,9 +10,9 @@
             </mat-list>
 
             
-            <mat-menu #userMenu="matMenu" (click)="sidenav.close()">
-                <a mat-menu-item [routerLinkActive]="['active']" [routerLink]="['/user/','details']">Details</a>
-                <a mat-menu-item [routerLinkActive]="['active']" [routerLink]="['/user/','settings']">Settings</a>
+            <mat-menu #userMenu="matMenu">
+                <a mat-menu-item (click)="sidenav.close()" [routerLinkActive]="['active']" [routerLink]="['/user/','details']">Details</a>
+                <a mat-menu-item (click)="sidenav.close()" [routerLinkActive]="['active']" [routerLink]="['/user/','settings']">Settings</a>
                 <a mat-menu-item (click)="logout()">Logout</a>
             </mat-menu>
 

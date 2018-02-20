@@ -87,8 +87,6 @@ export class AppComponent implements OnDestroy, OnInit {
             this.store.dispatch(new ua.AccessUserEmailAction(this.username));
             // TODO handle dataset loading
           }
-        } else {
-          this.router.navigateByUrl('/login');
         }
       }));
 
@@ -102,6 +100,7 @@ export class AppComponent implements OnDestroy, OnInit {
   }
 
   logout() {
+    this.sidenav.close();
     this.store.dispatch(new ua.LogoutAction());
   }
 
