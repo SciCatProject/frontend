@@ -1,5 +1,5 @@
 podTemplate(label: 'docker',
-  containers: [containerTemplate(name: 'docker', image: 'docker:1.11', ttyEnabled: true, command: 'cat')],
+  containers: [containerTemplate(name: 'docker', image: 'docker:18.02-git', ttyEnabled: true, command: 'cat')],
   volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock')]
   ) {
 node('docker') {
@@ -12,12 +12,13 @@ node('docker') {
             sh 'docker build -f CI/PSI/Dockerfile.test -t catanie_test .'
        }
        stage('Unit Test Catanie '){
-            sh 'docker run  --privileged -t catanie_test npm run -- ng test --watch false --single-run true --sourcemap false'
+            sh 'docker run  --privileged --network=host -t catanie_test npm run -- ng test --watch false --single-run true --sourcemap false'
        }
        stage('e2e Test Catanie '){
-            sh 'docker run  --privileged -t catanie_test ./node_modules/@angular/cli/bin/ng e2e -e qa'
+            sh 'docker run  --privileged --net=host -t catanie_test ./node_modules/@angular/cli/bin/ng e2e -e qa'
        }
     }
 
 }
   }
+
