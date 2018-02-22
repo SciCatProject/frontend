@@ -6,7 +6,7 @@ import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/debounceTime';
 
 import { Injectable } from '@angular/core';
-import { Actions, Effect, toPayload } from '@ngrx/effects';
+import { Actions, Effect } from '@ngrx/effects';
 import { Action, Store } from '@ngrx/store';
 import { DatasetService } from 'datasets/dataset.service';
 import { Observable } from 'rxjs/Observable';
@@ -24,7 +24,7 @@ export class DatasetEffects {
   protected getDataset$: Observable<Action> =
     this.action$.ofType(DatasetActions.SEARCH_ID)
       .debounceTime(300)
-      .map(toPayload)
+      .map((action: DatasetActions.SearchIDAction) => action.payload)
       .switchMap(payload => {
         const id = payload;
         // TODO separate action for dataBlocks? or retrieve at once?
@@ -43,7 +43,7 @@ export class DatasetEffects {
   protected getDatablocks$: Observable<Action> =
     this.action$.ofType(DatasetActions.DATABLOCKS)
       .debounceTime(300)
-      .map(toPayload)
+      .map((action: DatasetActions.DatablocksAction) => action.payload)
       .switchMap(payload => {
         const id = payload;
 
@@ -70,7 +70,7 @@ export class DatasetEffects {
   protected facet$: Observable<Action> =
     this.action$.ofType(DatasetActions.FILTER_UPDATE)
       .debounceTime(300)
-      .map(toPayload)
+      .map((action: DatasetActions.UpdateFilterAction) => action.payload)
       .switchMap(payload => {
         const fq = Object.assign({}, payload);
         let groups = fq['ownerGroup'];
@@ -113,7 +113,7 @@ export class DatasetEffects {
   protected facetDatasetCount$: Observable<Action> =
     this.action$.ofType(DatasetActions.FILTER_UPDATE)
       .debounceTime(300)
-      .map(toPayload)
+      .map((action: DatasetActions.UpdateFilterAction) => action.payload)
       .switchMap(payload => {
         const fq = Object.assign({}, payload);
         const match = handleFacetPayload(fq);
@@ -140,7 +140,7 @@ export class DatasetEffects {
   protected facetDatasets$: Observable<Action> =
     this.action$.ofType(DatasetActions.FILTER_UPDATE)
       .debounceTime(300)
-      .map(toPayload)
+      .map((action: DatasetActions.UpdateFilterAction) => action.payload)
       .switchMap(payload => {
         const fq = Object.assign({}, payload);
         const match = handleFacetPayload(fq);
@@ -187,7 +187,7 @@ export class DatasetEffects {
   @Effect()
   protected deleteDatablocks$: Observable<Action> =
     this.action$.ofType(DatasetActions.DATABLOCK_DELETE)
-      .map(toPayload)
+    .map((action: DatasetActions.DatablockDeleteAction) => action.payload)
       .switchMap(payload => {
         const block = payload;
         return this.dbs.deleteById(block['id']).switchMap(res => {
@@ -205,7 +205,7 @@ export class DatasetEffects {
   @Effect()
   protected updateSelectedDatablocks$: Observable<Action> =
     this.action$.ofType(DatasetActions.SELECTED_UPDATE)
-      .map(toPayload)
+    .map((action: DatasetActions.UpdateSelectedAction) => action.payload)
       .switchMap(payload => {
         if (payload && payload.length > 0) {
           const dataset = payload[payload.length - 1];
@@ -258,7 +258,7 @@ export class DatasetEffects {
   @Effect()
   protected resetStatus$: Observable<Action> =
     this.action$.ofType(DatasetActions.RESET_STATUS)
-      .map(toPayload)
+    .map((action: DatasetActions.ResetStatusAction) => action.payload)
       .switchMap(payload => {
         const msg = new Message();
         return this.ds.reset(encodeURIComponent(payload['id'])).switchMap(res => {

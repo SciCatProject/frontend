@@ -108,10 +108,10 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
       this.store.select(selectors.datasets.getTotalSets);
 
     this.store.select(selectors.datasets.getActiveFilters).subscribe(filters => {
-      if ('creationLocation' in filters) {
+      if ('creationLocation' in filters && filters.creationLocation !== undefined) {
         this.selectedLocation = filters['creationLocation'].toString();
       }
-      if ('ownerGroup' in filters) {
+      if ('ownerGroup' in filters && filters.ownerGroup !== undefined) {
         this.selectedGroup = filters['ownerGroup'].toString();
       }
     });

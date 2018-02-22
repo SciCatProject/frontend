@@ -1,22 +1,20 @@
 <!-- <div class="ui fixed menu"> -->
 <div [class.dark-theme]="(darkTheme$ | async)" [class.light-theme]="!(darkTheme$ | async)">
-  <mat-sidenav-container (backdropClick)="sidenavToggle()" fullscreen>
-    <mat-sidenav #sidenav (keydown.escape)="sidenavToggle()" mode="push" disableClose>
-      <mat-list>
-        <mat-list-item>
-          <a class="item" (click)="sidenav.close()" [routerLink]="['/datasets/']" [routerLinkActive]="['active']">Home</a>
-        </mat-list-item>
-        <mat-list-item>
-          <a class="item" (click)="sidenav.close()" [routerLink]="['/sample-data/', 'add']" [routerLinkActive]="['active']">Sample Data Entry</a>
-        </mat-list-item>
-        <mat-list-item>
-          <a class="item" (click)="sidenav.close()" [routerLink]="['/user/','jobs']" [routerLinkActive]="['active']">Jobs</a>
-        </mat-list-item>
-        <mat-list-item>
-          <a class="item user-menu" [matMenuTriggerFor]="userMenu">{{ username }}</a>
-        </mat-list-item>
-      </mat-list>
+    <mat-sidenav-container (backdropClick)="sidenavToggle()" fullscreen>
+        <mat-sidenav #sidenav (keydown.escape)="sidenavToggle()" mode="push" disableClose>
+            <mat-list>
+                <mat-list-item><a class="item" (click)="sidenav.close()" [routerLink]="['/datasets/']" [routerLinkActive]="['active']">Home</a></mat-list-item>
+                <mat-list-item><a class="item" (click)="sidenav.close()" [routerLink]="['/sample-data/', 'add']" [routerLinkActive]="['active']">Sample Data Entry</a></mat-list-item>
+                <mat-list-item><a class="item" (click)="sidenav.close()" [routerLink]="['/user/','jobs']" [routerLinkActive]="['active']">Jobs</a></mat-list-item>
+                <mat-list-item><a class="item user-menu" [matMenuTriggerFor]="userMenu">{{ username }}</a></mat-list-item>
+            </mat-list>
 
+            
+            <mat-menu #userMenu="matMenu">
+                <a mat-menu-item (click)="sidenav.close()" [routerLinkActive]="['active']" [routerLink]="['/user/','details']">Details</a>
+                <a mat-menu-item (click)="sidenav.close()" [routerLinkActive]="['active']" [routerLink]="['/user/','settings']">Settings</a>
+                <a mat-menu-item class="logout-link" (click)="logout()">Logout</a>
+            </mat-menu>
 
       <mat-menu #userMenu="matMenu">
         <a mat-menu-item (click)="sidenav.close()" [routerLinkActive]="['active']" [routerLink]="['/user/','details']">Details</a>
