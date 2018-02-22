@@ -16,67 +16,29 @@
                 <a mat-menu-item class="logout-link" (click)="logout()">Logout</a>
             </mat-menu>
 
-            <footer>{{appVersion}}</footer>
-            
-        </mat-sidenav>
-        
-        <mat-sidenav-content>
-                <mat-toolbar color="primary">
-                        <mat-toolbar-row>
-                            <i (click)="sidenavToggle()" class="sidenav-toggle fa fa-bars" aria-hidden="true"></i>       
-                            <h3 class="app-title">  {{title}}</h3>
-                            <span class="example-spacer"></span>
-                        </mat-toolbar-row>
-                    </mat-toolbar>
-                <breadcrumb></breadcrumb>
-                <br>
-                <router-outlet ></router-outlet>
-        </mat-sidenav-content>
-        </mat-sidenav-container>
-</div>
-<!-- 
-<mat-toolbar>
-      <a href="#" class="header item">
-        <img class="logo" src="favicon.ico">
-        {{title}}
-      </a>
-      <span class="example-spacer"></span>
-      <!-- <simple-notifications [options]="options"></simple-notifications> -->
-      <!-- <mat-menu> 
-          <ng-container *ngIf="username !== null; then accountTemplate else loginTemplate"></ng-container>
-          <ng-template #accountTemplate>
-            <a class="item" [routerLink]="['/datasets/']" [routerLinkActive]="['active']">Home</a>
-            <a class="item" [routerLink]="['/sample-data/', 'add']" [routerLinkActive]="['active']">Sample Data Entry</a>
-            <a class="item" [routerLink]="['/user/','jobs']" [routerLinkActive]="['active']">Jobs</a>
-            <div class="ui simple dropdown item">
-                <i class="dropdown icon"></i>
-                    {{ username }}
-                <div class="menu">
-                <div class="header">Account Actions</div>
-                <a class="item" [routerLinkActive]="['active']" [routerLink]="['/user/','details']">Details</a>
-                <a class="item" [routerLinkActive]="['active']" [routerLink]="['/user/','settings']">Settings</a>
-                <a class="item" (click)="logout()">Logout</a>
-                </div>
-            </div>
-            <div class="ui simple dropdown item">
-                <i class="dropdown icon"></i>
-                    About
-                <div class="menu">
-                <div class="header">{{title}}
-                </div>
-                <a class="item">Version: {{appVersion}}</a>
-                <a href="https://scicatproject.github.io/docs/" class="item">Help</a>
-                </div>
-            </div>
-          </ng-template>
-          <ng-template #loginTemplate>
-              <a class="active item" [routerLink]="['/','login']">Login</a>
-          </ng-template>
+      <mat-menu #userMenu="matMenu">
+        <a mat-menu-item (click)="sidenav.close()" [routerLinkActive]="['active']" [routerLink]="['/user/','details']">Details</a>
+        <a mat-menu-item (click)="sidenav.close()" [routerLinkActive]="['active']" [routerLink]="['/user/','settings']">Settings</a>
+        <a mat-menu-item class="logout-link" (click)="logout()">Logout</a>
       </mat-menu>
-     </div> 
-</mat-toolbar>
-<div id="content" class="ui dash-container">
-    
-</div>
 
- -->
+      <footer>{{appVersion}}</footer>
+
+    </mat-sidenav>
+
+    <mat-sidenav-content>
+      <mat-toolbar color="primary">
+        <mat-toolbar-row>
+          <i (click)="sidenavToggle()" class="sidenav-toggle fa fa-bars" aria-hidden="true"></i>
+          <h3 class="app-title"> {{title}}</h3>
+          <span class="example-spacer"></span>
+        </mat-toolbar-row>
+      </mat-toolbar>
+      <mat-card class="container">
+        <breadcrumb></breadcrumb>
+        <br>
+        <router-outlet></router-outlet>
+      </mat-card>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>
