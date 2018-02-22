@@ -114,9 +114,9 @@ export class UserEffects {
     this.action$.ofType(UserActions.ACCESS_USER_EMAIL)
       .debounceTime(300)
       .switchMap((action) => {
-        return this.accessUserSrv.findById(action)
+        return this.userIdentitySrv.findOne({ 'where': { 'userId': action['payload'] } })
           .switchMap(res => {
-            return Observable.of(new UserActions.AccessUserEmailCompleteAction(res['email']));
+            return Observable.of(new UserActions.AccessUserEmailCompleteAction(res['profile']['email']));
           })
           .catch(err => {
             console.error(err);
