@@ -33,7 +33,7 @@ describe('catanie Dataset Filters', function() {
 
   it('should have a prefilled groups input', () => {
     page.navigateTo(urlParams).then(() => {
-      expect(element(by.name('group')).getAttribute('value')).toContain('p11114');
+      expect(element(by.className('group-input')).getAttribute('value')).toContain('p11114');
     });
   });
 });
