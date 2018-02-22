@@ -112,9 +112,9 @@ export class UserEffects {
   @Effect()
   protected getEmail$: Observable<Action> =
     this.action$.ofType(UserActions.ACCESS_USER_EMAIL)
-      .debounceTime(300)
-      .switchMap((action) => {
-        return this.userIdentitySrv.findOne({ 'where': { 'userId': action['payload'] } })
+      .map((action: UserActions.AccessUserEmailAction) => action.payload)
+      .switchMap((payload) => {
+        return this.userIdentitySrv.findOne({ 'where': { 'userId': payload } })
           .switchMap(res => {
             return Observable.of(new UserActions.AccessUserEmailCompleteAction(res['profile']['email']));
           })
