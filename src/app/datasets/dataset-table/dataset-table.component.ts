@@ -431,10 +431,11 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
         .select(state => state.root.user)
         .take(1)
         .subscribe(user => {
-          job.jobParams['username'] = user['currentUser']['username'] || undefined;
           job.emailJobInitiator = user['email'];
-          if (!user['email']) {
-            job.emailJobInitiator = user['currentUser']['email'] || user['currentUser']['accessEmail'];
+          user = user['currentUser'];
+          job.jobParams['username'] = user['username'] || undefined;
+          if (!job.emailJobInitiator) {
+            job.emailJobInitiator = user['profile'] ? user['profile']['email'] : user['email'];
           }
           this.selection.selected.map(set => {
             // if ('datablocks' in set && set['datablocks'].length > 0) {
