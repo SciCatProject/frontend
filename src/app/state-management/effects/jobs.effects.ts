@@ -42,6 +42,7 @@ export class JobsEffects {
   @Effect()
   protected submit$: Observable<Action> =
     this.action$.ofType(JobActions.SUBMIT)
+      .map((action: JobActions.SubmitAction) => action.payload)
       .switchMap((job) => {
         return this.jobSrv.create(job)
           .switchMap(res => {
@@ -60,8 +61,7 @@ export class JobsEffects {
       .switchMap((res) => {
         const msg = {
           type: MessageType.Success,
-          title: 'Job Created Successfully',
-          content: ''
+          content: 'Job Created Successfully'
         };
         return Observable.of(new UserActions.ShowMessageAction(msg));
       });
