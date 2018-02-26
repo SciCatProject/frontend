@@ -86,10 +86,25 @@ export class DatasetEffects {
           delete fq['text'];
         }
         delete fq['mode'];
-        console.log(fq);
+        const facetObject = {
+          keywords: [{
+            $group: {
+              _id: "$keywords",
+              count: {
+                $sum: 1
+              }
+            }
+          }, {
+            $sort: {
+              count: -1,
+              _id: 1
+            }
+          }]
+        };
         return this.ds
-          .facet(fq)
+          .facet(fq, facetObject)
           .switchMap(res => {
+            console.log(res);
             const filterValues = res['results'][0];
 
             const groupsArr = filterValues['groups'] || filterValues['ownerGroup'];
@@ -187,7 +202,7 @@ export class DatasetEffects {
   @Effect()
   protected deleteDatablocks$: Observable<Action> =
     this.action$.ofType(DatasetActions.DATABLOCK_DELETE)
-    .map((action: DatasetActions.DatablockDeleteAction) => action.payload)
+      .map((action: DatasetActions.DatablockDeleteAction) => action.payload)
       .switchMap(payload => {
         const block = payload;
         return this.dbs.deleteById(block['id']).switchMap(res => {
@@ -205,7 +220,7 @@ export class DatasetEffects {
   @Effect()
   protected updateSelectedDatablocks$: Observable<Action> =
     this.action$.ofType(DatasetActions.SELECTED_UPDATE)
-    .map((action: DatasetActions.UpdateSelectedAction) => action.payload)
+      .map((action: DatasetActions.UpdateSelectedAction) => action.payload)
       .switchMap(payload => {
         if (payload && payload.length > 0) {
           const dataset = payload[payload.length - 1];
@@ -258,7 +273,7 @@ export class DatasetEffects {
   @Effect()
   protected resetStatus$: Observable<Action> =
     this.action$.ofType(DatasetActions.RESET_STATUS)
-    .map((action: DatasetActions.ResetStatusAction) => action.payload)
+      .map((action: DatasetActions.ResetStatusAction) => action.payload)
       .switchMap(payload => {
         const msg = new Message();
         return this.ds.reset(encodeURIComponent(payload['id'])).switchMap(res => {
@@ -321,7 +336,7 @@ function handleFacetPayload(fq) {
     }
   }
   if (fq['type']) {
-    match.push({type: fq['type']});
+    match.push({ type: fq['type'] });
   }
   /*  else if ((startDate && !endDate) || (!startDate && endDate)) {
      return Observable.of({

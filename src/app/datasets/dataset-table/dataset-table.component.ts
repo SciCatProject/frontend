@@ -400,7 +400,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
    * @memberof DashboardComponent
    */
   retrieveClickHandle(event) {
-    const destPath = '/archive/retrieve';
+    const destPath = 'Destination: /archive/retrieve';
     const dialogRef = this.dialog.open(DialogComponent, {
       width: 'auto',
       data: { title: 'Really retrieve?', question: '', input: destPath }
