@@ -18,7 +18,7 @@ import * as utils from 'shared/utils';
 import * as dsa from 'state-management/actions/datasets.actions';
 import * as dStore from 'state-management/state/datasets.store';
 import * as selectors from 'state-management/selectors';
-import { DatasetFilters } from 'datasets/datasets-filter/dataset-filters';
+import { DatasetFilters } from 'state-management/models';
 import { Observable } from 'rxjs/Observable';
 import * as rison from 'rison';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';

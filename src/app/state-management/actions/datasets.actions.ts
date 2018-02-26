@@ -1,5 +1,5 @@
 import { Action } from '@ngrx/store';
-import { DatasetFilters } from 'datasets/datasets-filter/dataset-filters';
+import { DatasetFilters } from 'state-management/models';
 import { RawDataset, AccessGroup, Datablock } from 'shared/sdk/models';
 
 export const SEARCH_COMPLETE =              '[Dataset] Search Complete';

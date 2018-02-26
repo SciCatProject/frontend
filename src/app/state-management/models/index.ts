@@ -18,4 +18,17 @@ export class Message {
   duration ? = 10000;
 };
 
+export interface DatasetFilters {
+  text: string;
+  ownerGroup: string[];
+  type: string;
+  creationTime: {'start': Date, 'end': Date};
+  creationLocation: string[];
+  skip: number;
+  initial: boolean;
+  keywords: string[];
+}
+
+
+
 export { User, AccessGroup, Job, RawDataset };
