@@ -86,23 +86,9 @@ export class DatasetEffects {
           delete fq['text'];
         }
         delete fq['mode'];
-        const facetObject = {
-          keywords: [{
-            $group: {
-              _id: '$keywords',
-              count: {
-                $sum: 1
-              }
-            }
-          }, {
-            $sort: {
-              count: -1,
-              _id: 1
-            }
-          }]
-        };
+        const facetObject = {"keywords":[{"$group":{"_id":"$keywords","count":{"$sum":1}}},{"$sort":{"count":-1,"_id":1}}]};
         return this.ds
-          .facet(fq, {})
+          .facet(fq, facetObject)
           .switchMap(res => {
             console.log(res);
             const filterValues = res['results'][0];
