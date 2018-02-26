@@ -23,6 +23,7 @@ import { Observable } from 'rxjs/Observable';
 import * as rison from 'rison';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { MultiDayRange } from 'shared/modules/datepicker/LocalizedDateTime/timeRanges';
+import { Dataset } from 'shared/sdk';
 
 
 @Component({
@@ -38,6 +39,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   locationInput: FormControl;
   groupInput: FormControl;
   typeInput: FormControl;
+  keywordInput: FormControl;
   filteredLocations: Observable<any[]>;
   filteredGroups: Observable<any[]>;
 
@@ -64,8 +66,11 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   selectedGroups = [];
   // filteredGroups = [];
 
+  keywords = [];
+
   type = undefined;
 
+  filterTemplate: DatasetFilters;
   filters: any = dStore.initialDatasetState.activeFilters;
   filterValues;
 
@@ -76,6 +81,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     this.locationInput = new FormControl();
     this.groupInput = new FormControl();
     this.typeInput = new FormControl();
+    this.keywordInput = new FormControl();
 
   }
 
@@ -92,6 +98,8 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
    * only use unique values
    */
   ngOnInit() {
+    
+    
     this.dateSelections$ = new BehaviorSubject<TimeRange[]>([]);
     const datasetsStoreSlicePath = ['root', 'datasets'];
     const datasetsSelector = createSelector((state: any): any => {
