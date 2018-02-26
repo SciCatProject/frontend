@@ -120,7 +120,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
         this.selectedLocation = filters['creationLocation'].toString();
       }
       if ('ownerGroup' in filters && filters.ownerGroup !== undefined) {
-        this.selectedGroup = filters['ownerGroup'].toString();
+        // this.selectedGroup = filters['ownerGroup'].toString();
       }
     });
 

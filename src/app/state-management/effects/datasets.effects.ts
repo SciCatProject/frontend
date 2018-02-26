@@ -89,7 +89,7 @@ export class DatasetEffects {
         const facetObject = {
           keywords: [{
             $group: {
-              _id: "$keywords",
+              _id: '$keywords',
               count: {
                 $sum: 1
               }
@@ -102,7 +102,7 @@ export class DatasetEffects {
           }]
         };
         return this.ds
-          .facet(fq, facetObject)
+          .facet(fq, {})
           .switchMap(res => {
             console.log(res);
             const filterValues = res['results'][0];
