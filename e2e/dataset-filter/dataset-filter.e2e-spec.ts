@@ -26,6 +26,7 @@ describe('catanie Dataset Filters', function() {
 
   it('should have a prefilled search box', () => {
     page.navigateTo(urlParams).then(() => {
+      browser.sleep(1000);
       expect(element(by.name('search')).getAttribute('value'))
           .toContain('house');
     });
@@ -33,6 +34,7 @@ describe('catanie Dataset Filters', function() {
 
   it('should have a prefilled groups input', () => {
     page.navigateTo(urlParams).then(() => {
+      browser.sleep(1000);
       expect(element(by.className('group-input')).getAttribute('value')).toContain('p11114');
     });
   });
