@@ -44,9 +44,17 @@
       </mat-select>
     </mat-form-field>
 
+    <br />
+
     <mat-form-field>
       <input matInput class="keyword-input" matInput placeholder="Keywords" [(value)]="keywords" name="keywords" (selectionChange)="keywordSelected(keywords)"
-        [formControl]="keywordInput">
+        [formControl]="keywordInput" [matAutocomplete]="kw">
+        <mat-autocomplete #kw="matAutocomplete">
+          <mat-option class="options" (onSelectionChange)="keywordSelected(g)" *ngFor="let g of filteredKeywords | async" [value]="g._id">
+            <span>{{ g._id || 'No Group' }}</span>
+            <small>: {{g.count}}</small>
+          </mat-option>
+        </mat-autocomplete>
     </mat-form-field>
 
     <br />

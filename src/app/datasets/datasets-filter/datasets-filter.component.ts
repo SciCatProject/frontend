@@ -35,6 +35,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   @ViewChild('datetree') dateTree: Tree;
   @ViewChild('loc') locField: AutoComplete;
   @ViewChild('grp') grpField: AutoComplete;
+  @ViewChild('kw') kwField: AutoComplete;
 
   locationInput: FormControl;
   groupInput: FormControl;
@@ -93,6 +94,10 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     return this.groups.filter(g => g._id && g._id.toLowerCase().indexOf(group.toLowerCase()) === 0);
   }
 
+  filterKeywords(kw: string) {
+    return this.keywords.filter(k => k._id && k._id.toLowerCase().indexOf(kw.toLowerCase()) === 0);
+  }
+
   /**
    * Load locations and ownergroups on start up and
    * only use unique values
@@ -132,11 +137,15 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
             if (this.locations.length === 0 && this.filterValues['creationLocation'] !== null) {
               this.locations = this.filterValues['creationLocation'] ? this.filterValues['creationLocation'].slice() : [];
             }
-
             if (this.groups.length === 0 &&
               this.filterValues['ownerGroup'] !== null && Array.isArray(this.filterValues['ownerGroup'])) {
               this.groups = this.filterValues['ownerGroup'] ? this.filterValues['ownerGroup'].slice() : [];
             }
+            if (this.keywords.length === 0 &&
+              this.filterValues['keywords'] !== null && Array.isArray(this.filterValues['keywords'])) {
+              this.keywords = this.filterValues['keywords'] ? this.filterValues['keywords'].slice() : [];
+            }
+
             if (this.filterValues.creationLocation) {
               this.filteredLocations = this.locationInput.valueChanges
                 .pipe(startWith(''), map(loc => loc ? this.filterLocations(loc) : this.filterValues.creationLocation.slice()));
@@ -195,6 +204,11 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     this.store.dispatch(new dsa.UpdateFilterAction(this.filters));
   }
 
+  keywordSelected(kw) {
+    this.filters.keywords.push(kw['_id']);
+    this.store.dispatch(new dsa.UpdateFilterAction(this.filters));
+  }
+
   typeSelected(type) {
     this.filters.type = type;
     this.store.dispatch(new dsa.UpdateFilterAction(this.filters));
@@ -215,6 +229,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
       .subscribe(groups => { this.filters.ownerGroup = groups; });
     this.filters.ownerGroup = [];
     this.filters.creationLocation = [];
+    this.filters.keywords = [];
     this.filterValues = dStore.initialDatasetState.filterValues;
     this.filterValues.text = '';
     this.store.dispatch(new dsa.UpdateFilterAction(this.filters));
