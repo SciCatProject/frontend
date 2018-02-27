@@ -43,6 +43,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   keywordInput: FormControl;
   filteredLocations: Observable<any[]>;
   filteredGroups: Observable<any[]>;
+  filteredKeywords: Observable<any[]>;
 
   datepickerSelector:
     OutputSelector<any, DatepickerState, (res: any) => DatepickerState>;
@@ -95,7 +96,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   }
 
   filterKeywords(kw: string) {
-    return this.keywords.filter(k => k._id && k._id.toLowerCase().indexOf(kw.toLowerCase()) === 0);
+    return this.keywords.filter(k => k._id && k._id.toString().toLowerCase().indexOf(kw.toString().toLowerCase()) === 0);
   }
 
   /**
@@ -125,7 +126,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
         this.selectedLocation = filters['creationLocation'].toString();
       }
       if ('ownerGroup' in filters && filters.ownerGroup !== undefined) {
-        // this.selectedGroup = filters['ownerGroup'].toString();
+        this.selectedGroup = filters['ownerGroup'].toString();
       }
     });
 
@@ -141,8 +142,14 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
               this.filterValues['ownerGroup'] !== null && Array.isArray(this.filterValues['ownerGroup'])) {
               this.groups = this.filterValues['ownerGroup'] ? this.filterValues['ownerGroup'].slice() : [];
             }
+            console.log(this.filterValues);
             if (this.keywords.length === 0 &&
               this.filterValues['keywords'] !== null && Array.isArray(this.filterValues['keywords'])) {
+              this.filterValues['keywords'].map((k) => {
+                if (k._id) {
+                  k._id = k._id.toString();
+                }
+              });
               this.keywords = this.filterValues['keywords'] ? this.filterValues['keywords'].slice() : [];
             }
 
@@ -153,6 +160,10 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
             if (this.filterValues.ownerGroup) {
               this.filteredGroups = this.groupInput.valueChanges
                 .pipe(startWith(''), map(group => group ? this.filterGroups(group) : this.filterValues.ownerGroup.slice()));
+            }
+            if (this.filterValues.keywords) {
+              this.filteredKeywords = this.keywordInput.valueChanges
+                .pipe(startWith(''), map(kw => kw ? this.filterKeywords(kw) : this.filterValues.keywords.slice()));
             }
           }
         }));
@@ -205,8 +216,11 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   }
 
   keywordSelected(kw) {
-    this.filters.keywords.push(kw['_id']);
-    this.store.dispatch(new dsa.UpdateFilterAction(this.filters));
+    if (kw) {
+      console.log(kw);
+      this.filters.keywords.push(kw['_id'].split(','));
+      this.store.dispatch(new dsa.UpdateFilterAction(this.filters));
+    }
   }
 
   typeSelected(type) {
@@ -221,6 +235,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     this.selectedGroups = [];
     this.locationInput.setValue('');
     this.groupInput.setValue('');
+    this.keywordInput.setValue('');
     this.selectedGroup = '';
     this.filters = dStore.initialDatasetState.activeFilters;
     this.dateSelections$.next([]);

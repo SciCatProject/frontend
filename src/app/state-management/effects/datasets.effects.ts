@@ -95,13 +95,15 @@ export class DatasetEffects {
 
             const groupsArr = filterValues['groups'] || filterValues['ownerGroup'];
             groupsArr.sort(stringSort);
-
+            const kwArr = filterValues['keywords'];
+            kwArr.sort(stringSort);
             const locationArr = filterValues['locations'] || filterValues['creationLocation'];
             locationArr.sort(stringSort);
             const fv = {};
             fv['ownerGroup'] = groupsArr;
             fv['creationLocation'] = locationArr;
             fv['years'] = filterValues['years'];
+            fv['keywords'] = kwArr;
             return Observable.of(new DatasetActions.UpdateFilterCompleteAction(fv));
           })
           .catch(err => {
