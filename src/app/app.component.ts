@@ -1,4 +1,4 @@
-const { version: appVersion } = require('../../package.json')
+const { version: appVersion } = require('../../package.json');
 import { MatSidenav } from '@angular/material/sidenav';
 import { Component, ViewEncapsulation, ViewChild, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
@@ -13,7 +13,6 @@ import { MatSnackBar } from '@angular/material';
 
 import { environment } from '../environments/environment';
 import * as selectors from 'state-management/selectors';
-import { ParamsService } from 'params.service';
 
 @Component({
   selector: 'app-root',
@@ -45,7 +44,6 @@ export class AppComponent implements OnDestroy, OnInit {
 
   constructor(private router: Router,
     public snackBar: MatSnackBar,
-    private params: ParamsService,
     // private _notif_service: NotificationsService,
     private store: Store<any>) {
     this.appVersion = appVersion;
@@ -68,14 +66,14 @@ export class AppComponent implements OnDestroy, OnInit {
     localStorage.clear();
     if (window.location.pathname.indexOf('logout') !== -1) {
       this.logout();
-      this.router.navigate(['/login']);
+      // this.router.navigate(['/login']);
     }
 
     this.subscriptions.push(this.store.select(state => state.root.user.message)
       .subscribe(current => {
-        if (current.title !== undefined) {
-          this.snackBar.open(current.title, undefined, {
-            duration: 10000,
+        if (current.content !== undefined) {
+          this.snackBar.open(current.content, undefined, {
+            duration: current.duration,
           });
           this.store.dispatch(new ua.ClearMessageAction());
         }
@@ -86,16 +84,12 @@ export class AppComponent implements OnDestroy, OnInit {
           this.username = current['username'].replace('ms-ad.', '');
           if (!('realm' in current)) {
             this.store.dispatch(new dsa.AddGroupsAction(current.id));
-            this.store.dispatch(new ua.AccessUserEmailAction(this.username));
+            this.store.dispatch(new ua.AccessUserEmailAction(current.id));
             // TODO handle dataset loading
           }
-        } else if (current && current['loggedOut']) {
-          if (window.location.pathname.indexOf('login') === -1) {
-            window.location.replace('/login');
-          }
-        } else {
         }
       }));
+
     this.store.dispatch(new ua.RetrieveUserAction());
   }
 
@@ -106,8 +100,8 @@ export class AppComponent implements OnDestroy, OnInit {
   }
 
   logout() {
+    this.sidenav.close();
     this.store.dispatch(new ua.LogoutAction());
-    this.router.navigate(['/login']);
   }
 
   login() {
@@ -115,7 +109,6 @@ export class AppComponent implements OnDestroy, OnInit {
   }
 
   sidenavToggle() {
-    console.log('closing?');
     this.sidenav.opened ? this.sidenav.close() : this.sidenav.open();
   }
 }

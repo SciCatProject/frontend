@@ -1,27 +1,33 @@
 <mat-card *ngIf="facets">
   <h3>
     <u>Filter Results</u>
-    <h3>Results: {{resultCount$ | async}}</h3>
+    <h3 class="results-count">Results: {{resultCount$ | async}}</h3>
   </h3>
 
+
   <form class="example-form">
-    <mat-form-field class="example-full-width beamline-input">
-      <input matInput [(ngModel)]="selectedBeam" placeholder="Beamline" aria-label="Beamline" [matAutocomplete]="beam" [formControl]="beamlineInput">
-      <mat-autocomplete #beam="matAutocomplete">
-        <mat-option class="options" (onSelectionChange)="locSelected(b)" *ngFor="let b of filteredBeams | async" [value]="b._id">
-          <span>{{ b._id }}</span> |
+
+    <!-- <div *ngFor="let d of filterTemplate | objKeys"> -->
+    <!-- <div [ngSwitch]="getType(d.key, d.value)"> -->
+    <mat-form-field>
+      <input class="location-input" matInput [(ngModel)]="selectedLocation" placeholder="Location" aria-label="Location" [matAutocomplete]="loc"
+        [formControl]="locationInput">
+      <mat-autocomplete #loc="matAutocomplete">
+        <mat-option class="options" (onSelectionChange)="locSelected(b)" *ngFor="let b of filteredLocations | async" [value]="b._id">
+          <span>{{ b._id || 'No Location' }}</span> |
           <small>:{{b.count}}</small>
         </mat-option>
       </mat-autocomplete>
     </mat-form-field>
-  
+
     <br />
 
-    <mat-form-field class="example-full-width group-input">
-      <input matInput name="group" [(ngModel)]="selectedGroup" (optionSelected)="groupSelected" placeholder="Group" aria-label="Group" [matAutocomplete]="grp" [formControl]="groupInput">
+    <mat-form-field>
+      <input class='group-input' matInput (ngModel)="selectedGroup" (optionSelected)="groupSelected" placeholder="Group" aria-label="Group"
+        [matAutocomplete]="grp" [formControl]="groupInput">
       <mat-autocomplete #grp="matAutocomplete">
         <mat-option class="options" (onSelectionChange)="groupSelected(g)" *ngFor="let g of filteredGroups | async" [value]="g._id">
-          <span>{{ g._id }}</span> 
+          <span>{{ g._id || 'No Group' }}</span>
           <small>: {{g.count}}</small>
         </mat-option>
       </mat-autocomplete>
@@ -29,48 +35,40 @@
 
     <br />
 
+    <mat-form-field>
+      <mat-select class="type-input" matInput placeholder="Type" [(value)]="type" name="type" (selectionChange)="typeSelected(type)">
+        <mat-option>All</mat-option>
+        <mat-option value="raw">Raw</mat-option>
+        <mat-option value="derived">Derived</mat-option>
+        <mat-option value="base">Base</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <br />
+
+    <mat-form-field>
+      <input matInput class="keyword-input" matInput placeholder="Keywords" (ngModel)="keywords" name="keywords" (selectionChange)="keywordSelected(keywords)"
+        [formControl]="keywordInput" [matAutocomplete]="kw">
+        <mat-autocomplete #kw="matAutocomplete">
+          <mat-option class="options" (onSelectionChange)="keywordSelected(g)" *ngFor="let g of filteredKeywords | async" [value]="g._id">
+            <span>{{ g._id || 'No Keywords' }}</span>
+            <small>: {{g.count}}</small>
+          </mat-option>
+        </mat-autocomplete>
+    </mat-form-field>
+
+    <br />
+
     <div class="ui field">
       <h3>Date Range</h3>
-      <datepicker [selections]="dateSelections$ | async" [datepickerSelector]="datepickerSelector" [datepickerSelectionMode]="dateSelectionMode" [placeholder]="'Date Range'" (selectionsChange)="updateDateRange($event)"></datepicker>
+      <datepicker [selections]="dateSelections$ | async" [datepickerSelector]="datepickerSelector" [datepickerSelectionMode]="dateSelectionMode"
+        [placeholder]="'Date Range'" (selectionsChange)="updateDateRange($event)"></datepicker>
     </div>
     <br>
-    <!--<button type="submit" class="ui button">Filter</button>-->
-    <button class="ui button clear-filters-btn" (click)="clearFacets()">Clear</button>
-  
-  </form>
-  
-
-  <!-- <form class="ui form">
-    <h3>Results: {{resultCount$ | async}}</h3>
-    <div class="ui field">
-
-      <h3>Beamline</h3>
-        <p-autoComplete #loc placeholder="/SLS/..." [(ngModel)]="location" name="location" (onSelect)="locSelected($event)" [suggestions]="filteredLocations"
-          (completeMethod)="handleInputLocation($event)" [size]="30" field="_id" [minLength]="1" [dropdown]="false"
-          (ngModelChange)="textValueChanged($event, 'creationLocation')" (onDropdownClick)="handleDropClick($event)" [minLength]="1"
-          [multiple]="false" forceSelection="true" [dropdown]="true">
-          <ng-template let-g pTemplate="g">
-            <div class="ui-helper-clearfix" style="border-bottom:1px solid #D5D5D5">
-              <div style="font-size:18px;float:left;margin:10px 10px 0 0">{{g._id}}</div>
-              <div style="font-size:18px;float:right;margin:10px 10px 0 0">{{g.count}}</div>
-            </div>
-          </ng-template>
-        </p-autoComplete>
-    </div>
-    <div class="ui field">
-      <h3>Group</h3>
-        <p-autoComplete #grp [(ngModel)]="selectedGroups" [multiple]="true"  placeholder="p15624" (onUnselect)="groupSelected($event)" (onSelect)="groupSelected($event)" name="group" field="_id" [suggestions]="filteredGroups"
-          (completeMethod)="handleInputOwner($event)" [size]="30" [minLength]="1" [dropdown]="false" (ngModelChange)="textValueChanged($event, 'groups')"
-          (onDropdownClick)="handleDropClick($event)" [multiple]="false" [minLength]="1" forceSelection="true" [dropdown]="true">
-          <ng-template let-g pTemplate="g">
-            <div class="ui-helper-clearfix" style="border-bottom:1px solid #D5D5D5">
-              <div style="font-size:18px;float:left;margin:10px 10px 0 0">{{g._id}}</div>
-              <div style="font-size:18px;float:right;margin:10px 10px 0 0">{{g.count}}</div>
-            </div>
-          </ng-template>
-        </p-autoComplete>
+    <!-- </div>
     </div> -->
-    
-  <!-- </form> -->
+    <button class="ui button clear-filters-btn" (click)="clearFacets()">Clear</button>
+
+  </form>
   <br>
-  </mat-card>
+</mat-card>

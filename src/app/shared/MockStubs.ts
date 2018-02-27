@@ -26,7 +26,7 @@ export class MockMatDialogRef {
 }
 
 export class MockMatDialogData {
-  
+
 }
 
 export class MockDatablockApi {

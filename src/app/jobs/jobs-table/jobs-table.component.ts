@@ -31,11 +31,11 @@ export class JobsTableComponent implements OnInit, OnDestroy, AfterViewInit {
   jobsCount = 1000;
   filters = {};
   totalJobNumber$: any;
-  
+
   dataSource: MatTableDataSource<any> | null;
   displayedColumns = [];
   @ViewChild(MatPaginator) paginator: MatPaginator;
-  
+
   constructor(public http: Http,
               private configSrv: ConfigService, private router: Router,
               private store: Store<any>) {
@@ -57,7 +57,7 @@ export class JobsTableComponent implements OnInit, OnDestroy, AfterViewInit {
     this.store.select(selectors.jobs.getFilters).subscribe(filters => {
       this.filters = Object.assign({}, filters);
     });
-    
+
     this.totalJobNumber$ = this.store.select(state => state.root.jobs.currentJobs.length);
 
     this.subscriptions.push(this.store.select(selectors.jobs.getJobs)

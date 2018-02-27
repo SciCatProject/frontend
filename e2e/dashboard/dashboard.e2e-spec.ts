@@ -6,7 +6,7 @@ import { protractor } from 'protractor/built/ptor';
 describe('catanie Dashboard', function() {
   let lp: LoginPage;
   let page: DashboardPage;
-  
+
   beforeAll(() => {
     lp = new LoginPage();
     lp.navigateTo().then(() => {
@@ -44,10 +44,15 @@ describe('catanie Dashboard', function() {
     expect(element(by.css('.button.archive')).getAttribute('class')).toMatch('positive');
   });
 
-  // it('should change active menu item', () => {
-  //   element(by.className('sidenav-toggle')).click();
-  //   const eos = element(by.partialLinkText('Sample'));
-  //   eos.click();
-  //   expect(eos.getAttribute('class')).toContain('active');
-  // });
+  it('should log out', () => {
+    element(by.className('sidenav-toggle')).click(); // TODO could disable animations while being tested
+    browser.sleep(1000);
+    element(by.className('user-menu')).click();
+    browser.sleep(1000);
+    element(by.className('logout-link')).click();
+    browser.sleep(2000);
+    expect(browser.getCurrentUrl()).toContain('login');
+  });
+
 });
+

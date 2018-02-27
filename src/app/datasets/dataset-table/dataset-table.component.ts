@@ -21,6 +21,7 @@ import * as dsa from 'state-management/actions/datasets.actions';
 import * as selectors from 'state-management/selectors';
 import * as ua from 'state-management/actions/user.actions';
 import * as ja from 'state-management/actions/jobs.actions';
+import { Message, MessageType } from 'state-management/models';
 import * as utils from 'shared/utils';
 
 import { config } from '../../../config/config';
@@ -110,7 +111,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngOnInit() {
 
-    this.configSrv.getConfigFile('RawDataset').subscribe(conf => {
+    this.configSrv.getConfigFile('Dataset').subscribe(conf => {
       if (conf) {
         for (const prop in conf) {
           if (prop in conf && 'table' in conf[prop]) {
@@ -170,7 +171,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
     //     })
     // );
 
-    let msg = {};
+    const msg = new Message();
     this.subscriptions.push(
       this.store.select(selectors.jobs.submitJob).subscribe(
         ret => {
@@ -181,11 +182,8 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
         },
         error => {
           console.log(error);
-          msg = {
-            type: 'error',
-            title: error.message,
-            content: 'Job not submitted'
-          };
+          msg.type = MessageType.Error;
+          msg.content = 'Job not Submitted';
           this.store.dispatch(new ua.ShowMessageAction(msg));
         }
       )
@@ -194,11 +192,8 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
     this.subscriptions.push(
       this.store.select(selectors.jobs.getError).subscribe(err => {
         if (err) {
-          msg = {
-            type: 'error',
-            title: err.message,
-            content: 'Job not submitted'
-          };
+          msg.type = MessageType.Error;
+          msg.content = err.message;
           this.store.dispatch(new ua.ShowMessageAction(msg));
         }
       })
@@ -243,20 +238,20 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
       && (this.archiveable.indexOf(row.datasetlifecycle.archiveStatusMessage) !== -1) && row.size !== 0) {
       return {
         'row-archiveable': true
-      }
+      };
     } else if (row.datasetlifecycle && this.mode === 'retrieve'
       && this.retrievable.indexOf(row.datasetlifecycle.archiveStatusMessage) !== -1 && row.size !== 0) {
       return {
         'row-retrievable': true
-      }
+      };
     } else if (row.size === 0) {
       return {
         'row-empty': true
-      }
+      };
     } else {
       return {
         'row-generic': true
-      }
+      };
     }
   }
 
@@ -405,7 +400,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
    * @memberof DashboardComponent
    */
   retrieveClickHandle(event) {
-    const destPath = '/archive/retrieve';
+    const destPath = 'Destination: /archive/retrieve';
     const dialogRef = this.dialog.open(DialogComponent, {
       width: 'auto',
       data: { title: 'Really retrieve?', question: '', input: destPath }
@@ -425,7 +420,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
    * @memberof DashboardComponent
    */
   archiveOrRetrieve(archive: boolean, destPath = '/archive/retrieve/') {
-    let msg = {};
+    const msg = new Message();
     if (this.selection.selected.length > 0) {
       this.dest = new Subject<string>();
       const job = new Job();
@@ -436,10 +431,11 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
         .select(state => state.root.user)
         .take(1)
         .subscribe(user => {
-          job.jobParams['username'] = user['currentUser']['username'] || undefined;
           job.emailJobInitiator = user['email'];
-          if (!user['email']) {
-            job.emailJobInitiator = user['currentUser']['email'] || user['currentUser']['accessEmail'];
+          user = user['currentUser'];
+          job.jobParams['username'] = user['username'] || undefined;
+          if (!job.emailJobInitiator) {
+            job.emailJobInitiator = user['profile'] ? user['profile']['email'] : user['email'];
           }
           this.selection.selected.map(set => {
             // if ('datablocks' in set && set['datablocks'].length > 0) {
@@ -450,22 +446,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
               set['datablocks'].map(d => {
                 fileList.push(d['archiveId']);
               });
-            } // TODO datablock access is not available to normal users but should be added in retrieve jobs
-            //  else if (!archive) {
-            //   msg = {
-            //     type: 'error',
-            //     content:
-            //       'Selected datasets have no datablocks associated with them',
-            //     title: 'Job not submitted'
-            //   };
-            //   this.store.dispatch(new ua.ShowMessageAction(msg));
-            //   this.selection.clear();
-            //   this.store.dispatch({
-            //     type: dsa.SELECTED_UPDATE,
-            //     payload: this.selection.selected
-            //   });
-            //   return;
-            // }
+            }
             fileObj['files'] = fileList;
             backupFiles.push(fileObj);
             delete set['$$index'];
@@ -477,20 +458,12 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
           });
 
           if (backupFiles.length === 0) {
-            msg = {
-              type: 'error',
-              content:
-                'Selected datasets have no datablocks associated with them',
-              title: 'Job not submitted'
-            };
+            msg.type = MessageType.Error;
+            msg.content = 'Selected datasets have no datablocks associated with them';
             this.store.dispatch(new ua.ShowMessageAction(msg));
           } else if (!job.emailJobInitiator) {
-            msg = {
-              type: 'error',
-              content:
-                'No email for this user could be found, the job will not be submitted',
-              title: 'Job not submitted'
-            };
+            msg.type = MessageType.Error;
+            msg.content = 'No email for this user could be found, the job will not be submitted';
             this.store.dispatch(new ua.ShowMessageAction(msg));
           } else {
             job.datasetList = backupFiles;
@@ -512,11 +485,8 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
           }
         });
     } else {
-      msg = {
-        type: 'error',
-        title: 'No Datasets selected',
-        content: ''
-      };
+      msg.type = MessageType.Error;
+      msg.content = 'No datasets selected';
       this.store.dispatch(new ua.ShowMessageAction(msg));
       this.selection.clear();
       this.store.dispatch({

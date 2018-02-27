@@ -55,6 +55,7 @@ import {
   MatTooltipModule,
   MatStepperModule,
   MatFormFieldModule,
+  MatOptionModule,
 } from '@angular/material';
 import {
   DatePickerModule
@@ -66,7 +67,7 @@ import { SelectedListComponent } from 'datasets/selected-list/selected-list.comp
   imports : [
     MatCardModule, MatDialogModule, MatPaginatorModule, MatCheckboxModule, MatTableModule, MatFormFieldModule, MatAutocompleteModule,
     MatTabsModule, MatInputModule, MatButtonModule, MatSortModule, CommonModule, FormsModule, DialogModule, ReactiveFormsModule,
-    SharedCatanieModule, DataTableModule, SharedModule, TabViewModule,
+    SharedCatanieModule, DataTableModule, SharedModule, TabViewModule, MatSelectModule, MatOptionModule,
     ConfirmDialogModule, TreeModule, TreeTableModule, MatListModule,
     DropdownModule, AutoCompleteModule,
     DatePickerModule

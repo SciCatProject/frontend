@@ -1,6 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {Store} from '@ngrx/store';
+import {Store, select} from '@ngrx/store';
 import {OrigDatablock, Datablock, RawDataset, Job} from 'shared/sdk/models';
 import * as dsa from 'state-management/actions/datasets.actions';
 import * as ja from 'state-management/actions/jobs.actions';
@@ -9,6 +9,7 @@ import * as selectors from 'state-management/selectors';
 import {config} from '../../../config/config';
 import {Observable} from 'rxjs/Observable';
 import {Subscription} from 'rxjs/Subscription';
+import { Message, MessageType } from 'state-management/models';
 import 'rxjs/add/operator/distinctUntilChanged';
 /**
  * Component to show details for a dataset, using the
@@ -29,7 +30,7 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
   datablocks$: Observable<Datablock[]>;
   admin$: Observable<boolean>;
 
-  constructor(private route: ActivatedRoute, private store: Store<any>) {};
+  constructor(private route: ActivatedRoute, private store: Store<any>) {}
 
   ngOnInit() {
     const currentUser$ = this.store.select(state => state.root.user.currentUser);
@@ -59,6 +60,33 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
       return (dataset && ('datablocks' in dataset)) ? dataset.datablocks : [];
     });
 
+    const msg = new Message();
+    this.subscriptions.push(
+      this.store.select(selectors.jobs.submitJob).subscribe(
+        ret => {
+          if (ret && Array.isArray(ret)) {
+            console.log(ret);
+          }
+        },
+        error => {
+          console.log(error);
+          msg.type = MessageType.Error;
+          msg.content = 'Job not Submitted';
+          this.store.dispatch(new ua.ShowMessageAction(msg));
+        }
+      )
+    );
+
+    this.subscriptions.push(
+      this.store.select(selectors.jobs.getError).subscribe(err => {
+        if (err) {
+          msg.type = MessageType.Error;
+          msg.content = err.message;
+          this.store.dispatch(new ua.ShowMessageAction(msg));
+        }
+      })
+    );
+
     // if we weren't clearing the cache and the current set's datablocks
     //   may not have been loaded, we would want to make sure that we load them:
     // this.subscriptions.push(this.dataset$.subscribe(this.ensureDatablocksForDatasetAreLoaded));
@@ -77,12 +105,12 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
   // (not currently in use since we are clearing current dataset entirely)
   private ensureDatablocksForDatasetAreLoaded(dataset: RawDataset) {
     if (dataset && !('origdatablocks' in dataset)) {
-      this.loadDatasetWithDatablocks(dataset.pid);
+      // this.loadDatasetWithDatablocks(dataset.pid);
     }
   }
 
   private reloadDatasetWithDatablocks(datasetPID) {
-    console.log('Loading data for ' + datasetPID)
+    console.log('Loading data for ' + datasetPID);
     this.clearCurrentSet(); // clear current dataset entirely from the cache
     this.loadDatasetWithDatablocks(datasetPID);
     // this.store.dispatch(new dsa.CurrentSetAction(datasetPID));
@@ -93,12 +121,13 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
       .select(state => state.root.user)
       .take(1)
       .subscribe(user => {
+        user = user['currentUser'];
         const job = new Job();
-        job.jobParams = {};
-        job.jobParams['username'] = user['currentUser']['username'] || undefined;
         job.emailJobInitiator = user['email'];
-        if (!user['email']) {
-          job.emailJobInitiator = user['currentUser']['email'] || user['currentUser']['accessEmail'];
+        job.jobParams = {};
+        job.jobParams['username'] = user['username'] || undefined;
+        if (!job.emailJobInitiator) {
+          job.emailJobInitiator = user['profile'] ? user['profile']['email'] : user['email'];
         }
         job.creationTime = new Date();
         job.type = 'reset';

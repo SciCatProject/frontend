@@ -662,6 +662,36 @@ export class DerivedDatasetApi extends BaseLoopBackApi {
   }
 
   /**
+   * Search for numbers associated with dataset properties. I.e. How many datasets in Group A. Default returns: Creation Location, Owner Groups and Creation Time
+   *
+   * @param {object} data Request data.
+   *
+   *  - `fields` – `{object}` - Define the fields to search by, these will be mapped to the Dataset object and ensure the fields exist. There is also support for a `text` search to look for keywords. Can be undefined.
+   *
+   *  - `facets` – `{object}` - This should follow the Mongo Facet syntax (https://docs.mongodb.com/manual/reference/operator/aggregation/facet/). Can be undefined and uses defaults explained in description of route.
+   *
+   * @returns {object} An empty reference that will be
+   *   populated with the actual data once the response is returned
+   *   from the server.
+   *
+   * Data properties:
+   *
+   *  - `results` – `{Object}` - 
+   */
+  public facet(fields: any = {}, facets: any = {}, customHeaders?: Function): Observable<any> {
+    let _method: string = "POST";
+    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
+    "/DerivedDatasets/facet";
+    let _routeParams: any = {};
+    let _postBody: any = {};
+    let _urlParams: any = {};
+    if (typeof fields !== 'undefined' && fields !== null) _urlParams.fields = fields;
+    if (typeof facets !== 'undefined' && facets !== null) _urlParams.facets = facets;
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    return result;
+  }
+
+  /**
    * Creates a new instance in datasetlifecycle of this model.
    *
    * @param {any} id DerivedDataset id

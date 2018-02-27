@@ -5,6 +5,7 @@ import { RawDataset } from 'shared/sdk/models';
 import * as dsa from 'state-management/actions/datasets.actions';
 import * as ds from 'state-management/selectors/datasets.selectors';
 import * as selectors from 'state-management/selectors';
+import { ParamsService } from 'params.service';
 
 @Component({
   selector: 'dashboard',
@@ -28,7 +29,8 @@ export class DashboardComponent implements OnInit {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private store: Store<any>
+    private store: Store<any>,
+    private params: ParamsService,
   ) {
     this.datasets = [];
   }

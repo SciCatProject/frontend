@@ -21,4 +21,4 @@ export class LoginPage {
     browser.sleep(5000);
     expect(browser.getCurrentUrl()).toContain('/datasets');
   }
-};
+}

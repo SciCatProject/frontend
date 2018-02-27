@@ -1,3 +1,5 @@
+/*global Week, Month, Year*/
+
 import {getDefaultLocale, getFirstDayOfWeekIdx} from './localeInfo';
 import DateWrapper from './DateWrapper';
 import TimeRange from './TimeRange';
@@ -136,7 +138,7 @@ class MultiDayRange extends TimeRange {
     return this.lastDay.isTemporallyEqualTo(this.firstDay);
   }
 
-  get days(): Day[]{
+  get days(): Day[] {
     const daysArr = [];
     let day = this.firstDay;
     const lastDay = this.lastDay;
