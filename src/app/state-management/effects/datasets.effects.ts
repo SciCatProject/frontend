@@ -95,7 +95,7 @@ export class DatasetEffects {
 
             const groupsArr = filterValues['groups'] || filterValues['ownerGroup'];
             groupsArr.sort(stringSort);
-            const kwArr = filterValues['keywords'];
+            const kwArr = filterValues['keywords'] || [];
             kwArr.sort(stringSort);
             const locationArr = filterValues['locations'] || filterValues['creationLocation'];
             locationArr.sort(stringSort);
