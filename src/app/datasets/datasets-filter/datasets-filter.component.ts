@@ -62,6 +62,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   locations = [];
   selectedLocation;
   selectedGroup;
+  selectedKeywords;
 
   group: {};
   groups = [];
@@ -104,8 +105,6 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
    * only use unique values
    */
   ngOnInit() {
-    
-    
     this.dateSelections$ = new BehaviorSubject<TimeRange[]>([]);
     const datasetsStoreSlicePath = ['root', 'datasets'];
     const datasetsSelector = createSelector((state: any): any => {
@@ -124,9 +123,15 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     this.store.select(selectors.datasets.getActiveFilters).subscribe(filters => {
       if ('creationLocation' in filters && filters.creationLocation !== undefined) {
         this.selectedLocation = filters['creationLocation'].toString();
+        this.locationInput.setValue(this.selectedLocation);
       }
       if ('ownerGroup' in filters && filters.ownerGroup !== undefined) {
         this.selectedGroup = filters['ownerGroup'].toString();
+        this.groupInput.setValue(this.selectedGroup);
+      }
+      if ('keywords' in filters && filters.keywords !== undefined) {
+        this.selectedKeywords = filters['keywords'].toString();
+        this.keywordInput.setValue(this.selectedKeywords);
       }
     });
 
