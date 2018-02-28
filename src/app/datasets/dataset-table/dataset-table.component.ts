@@ -403,12 +403,12 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
     const destPath = '/archive/retrieve';
     const dialogRef = this.dialog.open(DialogComponent, {
       width: 'auto',
-      data: { title: 'Really retrieve?', question: '', input: destPath }
+      data: { title: 'Really retrieve?', question: '', input: 'Destination: ' + destPath }
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.archiveOrRetrieve(false, result.input);
+        this.archiveOrRetrieve(false, destPath);
       }
     });
   }
