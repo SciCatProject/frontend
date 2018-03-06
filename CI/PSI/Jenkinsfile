@@ -1,6 +1,6 @@
 podTemplate(label: 'docker',
  containers: [containerTemplate(name: 'docker', image: 'docker:18.02-git', ttyEnabled: true, command: 'cat'),
-  containerTemplate(name: 'node', image: 'node:alpine', ttyEnabled: true, command: 'cat'),
+  containerTemplate(name: 'node', image: 'node:9.7.1', ttyEnabled: true, command: 'cat'),
   containerTemplate(name: 'helm', image: 'encima/helm-kubectl-git', ttyEnabled: true, command: 'cat')
  ],
  volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock')]
