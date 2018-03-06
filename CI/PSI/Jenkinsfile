@@ -1,5 +1,5 @@
 podTemplate(label: 'docker',
-  containers: [containerTemplate(name: 'docker', image: 'docker:18.02-git', ttyEnabled: true, command: 'cat')],
+  containers: [containerTemplate(name: 'docker', image: 'docker:18.02-git', ttyEnabled: true, command: 'cat'), containerTemplate(name: 'helm', image: 'encima/helm-kubectl-git', ttyEnabled: true, command: 'cat')],
   volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock')]
   ) {
 node('docker') {
@@ -17,8 +17,26 @@ node('docker') {
        stage('e2e Test Catanie '){
             sh 'docker run  --privileged --net=host -t catanie_test ./node_modules/@angular/cli/bin/ng e2e -e qa'
        }
+       stage('Build release') {
+          withCredentials([usernamePassword(credentialsId: 'dockerpsi', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+          sh "docker login registry.psi.ch:5000 -u $USERNAME -p $PASSWORD"
+          def tag = sh(script: 'git rev-parse HEAD', returnStdout: true)
+          sh "docker build . -t registry.psi.ch:5000/jenkins/catanie:$tag"
+          sh "docker push registry.psi.ch:5000/jenkins/catanie:$tag"
+          }
+      }
     }
-
+container('helm') {
+   stage('Release') {
+    def workspace = pwd()
+    sh "export KUBECONFIG=${workspace}@catamel-psisecrets/server/kubernetes/admin.conf"
+    sh 'kubectl version'
+    sh 'helm version'
+    // sh 'helm del --purge dacat-api-server-development'
+    def tag = sh(script: 'git rev-parse HEAD', returnStdout: true)
+    sh "helm upgrade -i catanie-development catamel-psiconfig/server/kubernetes/helm/dacat-gui --namespace=development --set image.tag=$tag"
+   }
+  }
 }
   }
 
