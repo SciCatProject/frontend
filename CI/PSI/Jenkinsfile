@@ -26,8 +26,8 @@ podTemplate(label: 'docker',
     withCredentials([usernamePassword(credentialsId: 'dockerpsi', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
      sh "docker login registry.psi.ch:5000 -u $USERNAME -p $PASSWORD"
      def tag = sh(script: 'git rev-parse HEAD', returnStdout: true)
-     sh "docker build --build-arg env=development . -t registry.psi.ch:5000/jenkins/catanie:$tag"
-     sh "docker push registry.psi.ch:5000/jenkins/catanie:$tag"
+     sh "docker build --build-arg env=development . -t registry.psi.ch:5000/egli/catanie:$tag"
+     sh "docker push registry.psi.ch:5000/egli/catanie:$tag"
     }
    }
   }
