@@ -7,7 +7,6 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormControl } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { AutoComplete, Tree } from 'primeng/primeng';
 import { createSelector, OutputSelector } from 'reselect';
 import {
   DatepickerState,
@@ -32,10 +31,6 @@ import { Dataset } from 'shared/sdk';
   styleUrls: ['./datasets-filter.component.css']
 })
 export class DatasetsFilterComponent implements OnInit, OnDestroy {
-  @ViewChild('datetree') dateTree: Tree;
-  @ViewChild('loc') locField: AutoComplete;
-  @ViewChild('grp') grpField: AutoComplete;
-  @ViewChild('kw') kwField: AutoComplete;
 
   locationInput: FormControl;
   groupInput: FormControl;
@@ -211,9 +206,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Handle clicking of available groups (contains ANOTHER primeng hack to wait
-   * for array to be cleared
-   * since this is called before that happens)
+   * Handle clicking of available groups
    */
   groupSelected(grp) {
     this.filters.ownerGroup.push(grp['_id']);

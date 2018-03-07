@@ -5,7 +5,6 @@ import {DatafilesComponent} from '../datasets/datafiles/datafiles.component';
 import {DatablocksComponent} from '../datasets/datablocks-table/datablocks-table.component';
 import {DatasetDetailComponent} from '../datasets/dataset-detail/dataset-detail.component';
 import {LoginComponent} from '../users/login/login.component';
-import {JobsComponent} from '../jobs/jobs.component';
 import {JobsTableComponent} from '../jobs/jobs-table/jobs-table.component';
 import {JobsDetailComponent} from '../jobs/jobs-detail/jobs-detail.component';
 import {AppComponent} from '../app.component';
@@ -30,7 +29,6 @@ export const routes: Routes = [
   { path: 'user/details', component: UserDetailsComponent, canActivate: [AuthCheck] },
   { path: 'user/jobs', component: JobsTableComponent, canActivate: [AuthCheck] },
   { path: 'user/job/:id', component: JobsDetailComponent, canActivate: [AuthCheck] },
-  { path: 'user/oldjobs', component: JobsComponent, canActivate: [AuthCheck] },
   { path: 'sample-data/add', component: SampleDataFormComponent, canActivate: [AuthCheck] },
   { path: 'error', component: ErrorPageComponent, data: {message: 'Location Not Found', 'breadcrumb': 'Error'} }
 ];

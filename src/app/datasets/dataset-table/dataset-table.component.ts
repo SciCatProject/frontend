@@ -11,7 +11,6 @@ import {
 import { Http } from '@angular/http';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { ConfirmationService, DataTable } from 'primeng/primeng';
 import { Subject } from 'rxjs/Subject';
 import { Job, RawDataset } from 'shared/sdk/models';
 import { UserApi } from 'shared/sdk/services';
@@ -47,7 +46,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
   @Output() openDataset = new EventEmitter();
   @Output() selectedSet = new EventEmitter<Array<any>>();
 
-  @ViewChild('ds') dsTable: DataTable;
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
@@ -86,7 +84,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
     private router: Router,
     private configSrv: ConfigService,
     private route: ActivatedRoute,
-    private confirmationService: ConfirmationService,
     private store: Store<any>,
     public dialog: MatDialog
   ) {
@@ -105,7 +102,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
       const datePipe = new DatePipe('en-US');
       const formattedDate = datePipe.transform(date, 'dd/MM/yyyy HH:mm');
       return formattedDate;
-    };
+    }
 
     if (field === 'size') {
       return filesize(value || 0);

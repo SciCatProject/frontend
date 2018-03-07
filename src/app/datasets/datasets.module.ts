@@ -11,18 +11,6 @@ import {
   DatasetTableComponent
 } from 'datasets/index';
 import {
-  AutoCompleteModule,
-  ConfirmationService,
-  ConfirmDialogModule,
-  DataTableModule,
-  DialogModule,
-  DropdownModule,
-  SharedModule,
-  TabViewModule,
-  TreeModule,
-  TreeTableModule
-} from 'primeng/primeng';
-import {
   MatAutocompleteModule,
   MatButtonModule,
   MatButtonToggleModule,
@@ -66,17 +54,16 @@ import { SelectedListComponent } from 'datasets/selected-list/selected-list.comp
 @NgModule({
   imports : [
     MatCardModule, MatDialogModule, MatPaginatorModule, MatCheckboxModule, MatTableModule, MatFormFieldModule, MatAutocompleteModule,
-    MatTabsModule, MatInputModule, MatButtonModule, MatSortModule, CommonModule, FormsModule, DialogModule, ReactiveFormsModule,
-    SharedCatanieModule, DataTableModule, SharedModule, TabViewModule, MatSelectModule, MatOptionModule,
-    ConfirmDialogModule, TreeModule, TreeTableModule, MatListModule,
-    DropdownModule, AutoCompleteModule,
+    MatTabsModule, MatInputModule, MatButtonModule, MatSortModule, CommonModule, FormsModule, ReactiveFormsModule,
+    SharedCatanieModule, MatSelectModule, MatOptionModule,
+    MatListModule,
     DatePickerModule
   ],
   declarations : [
     DashboardComponent, DatasetTableComponent, DatablocksComponent,
     DatafilesComponent, DatasetsFilterComponent, DatasetDetailComponent, SelectedListComponent
   ],
-  providers : [ DatasetService, ConfirmationService ],
+  providers : [ DatasetService ],
   exports : [ DatasetTableComponent, DatasetsFilterComponent ]
 })
 export class DatasetsModule {

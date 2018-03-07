@@ -2,7 +2,6 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { Store, StoreModule } from '@ngrx/store';
-import { AutoCompleteModule, DataTableModule, SharedModule, TreeModule } from 'primeng/primeng';
 import { rootReducer } from 'state-management/reducers/root.reducer';
 import { DatasetsFilterComponent } from 'datasets/datasets-filter/datasets-filter.component';
 import { MockStore, MockActivatedRoute, MockRouter } from '../../shared/MockStubs';
@@ -20,7 +19,7 @@ describe('DatasetsFilterComponent', () => {
       .configureTestingModule({
         schemas: [NO_ERRORS_SCHEMA],
         imports: [
-          TreeModule, MatAutocompleteModule, SharedModule, DataTableModule, MatSelectModule, MatFormFieldModule, MatInputModule,
+          MatAutocompleteModule, MatSelectModule, MatFormFieldModule, MatInputModule,
           FormsModule, ReactiveFormsModule, BrowserAnimationsModule,
           StoreModule.forRoot({ rootReducer })
         ],

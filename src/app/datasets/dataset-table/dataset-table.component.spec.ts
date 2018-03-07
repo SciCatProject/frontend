@@ -3,7 +3,6 @@ import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {Http} from '@angular/http';
 import {ActivatedRoute, Router} from '@angular/router';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {ConfirmationService, DataTableModule, SharedModule, TreeTableModule} from 'primeng/primeng';
 import {MatTableModule, MatDialogModule} from '@angular/material';
 import {DatasetTableComponent} from './dataset-table.component';
 import {Store, StoreModule} from '@ngrx/store';
@@ -26,7 +25,7 @@ describe('DatasetTableComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
-      imports: [MatTableModule, MatDialogModule, TreeTableModule, FormsModule, ReactiveFormsModule, StoreModule.forRoot({})],
+      imports: [MatTableModule, MatDialogModule, FormsModule, ReactiveFormsModule, StoreModule.forRoot({})],
       declarations: [DatasetTableComponent]
     });
     TestBed.overrideComponent(DatasetTableComponent, {
@@ -37,7 +36,6 @@ describe('DatasetTableComponent', () => {
           {provide: Router, useClass: MockRouter},
           {provide: ActivatedRoute, useClass: MockActivatedRoute},
           {provide: ConfigService, useClass: MockConfigService},
-          {provide: ConfirmationService, useClass: ConfirmationService},
           {provide: Store, useClass: MockStore}
         ]
       }

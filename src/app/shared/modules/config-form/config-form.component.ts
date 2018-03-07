@@ -4,10 +4,10 @@ import {
   FormGroup
 } from '@angular/forms';
 import {Store} from '@ngrx/store';
-import {TreeNode} from 'primeng/primeng';
 import {BaseLoopBackApi} from 'shared/sdk/services/core/base.service';
 import {ConfigService} from 'shared/services/config.service';
 import {DatePipe} from '@angular/common';
+import {MatExpansionModule} from '@angular/material/expansion';
 
 @Component({
   selector : 'config-form',
@@ -84,7 +84,7 @@ export class ConfigFormComponent implements OnInit {
           }
         if (this.getType(prop, this.source[prop]) === 'object') {
           this.objData[prop] =
-              <TreeNode[]>this.getTreeFromObject(this.source[prop]);
+              <Object[]>this.getTreeFromObject(this.source[prop]);
         } else if (this.getType(prop, this.source[prop]) === 'array') {
           this.formData[prop] = JSON.stringify(this.source[prop]);
         }
