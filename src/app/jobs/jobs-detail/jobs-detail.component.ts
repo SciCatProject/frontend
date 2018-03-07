@@ -18,7 +18,7 @@ export class JobsDetailComponent implements OnInit, OnDestroy {
 
   constructor(private route: ActivatedRoute,
               private store: Store<any>) {
-  };
+  }
 
 
   ngOnInit() {

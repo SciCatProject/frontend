@@ -26,7 +26,7 @@ export class MockMatDialogRef {
 }
 
 export class MockMatDialogData {
-  
+
 }
 
 export class MockDatablockApi {
@@ -80,6 +80,8 @@ export class MockConfigService {
   }
 
 export class MockJobHandlerService {}
+
+export class MockParamsService {}
 
 export class MockDatasetService {
   datasetChange: Subject<string> = new Subject<string>();

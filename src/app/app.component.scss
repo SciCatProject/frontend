@@ -1,0 +1,55 @@
+@import '../theme.scss';
+.ui#content {
+  padding-top: 75px;
+}
+
+td {
+  overflow: hidden;
+}
+
+.dash-container {
+  width: 90%;
+  margin-left: 5%;
+}
+
+.container {
+  margin: 0 1%;
+  min-width: 98%;
+  min-height: 100%;
+}
+
+.app-title {
+  margin-left: 2%;
+}
+
+.example-spacer {
+  flex: 1 1 auto;
+}
+
+.sidenav-toggle {
+  padding-right: 0.5%;
+}
+
+.example-container {
+  /* position: absolute; */
+  /* margin-left: 10%; */
+  /* min-height: 100% !important; */
+}
+
+.mat-snack-bar-container {
+  background-color: mat-color($primary);
+}
+
+.mat-dialog-container {
+  background-color: mat-color($primary);
+}
+
+footer {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  padding: 1rem;
+  background-color: mat-color($accent, lighter, 0.5);
+  text-align: center;
+}

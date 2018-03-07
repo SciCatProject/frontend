@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject } from '@angular/core';
 import {
     Http,
     Response,
@@ -6,8 +6,7 @@ import {
 } from '@angular/http';
 import { LoopBackConfig } from 'shared/sdk/lb.config';
 import {Observable} from 'rxjs/Rx';
-
-
+import { APP_CONFIG, AppConfig } from '../app-config.module';
 
 /**
  * Handles log in requests for AD and Functional users
@@ -17,9 +16,10 @@ import {Observable} from 'rxjs/Rx';
 @Injectable()
 export class ADAuthService {
 
-    constructor(public http: Http) {
-    }
-
+    constructor(
+        public http: Http,
+        @Inject(APP_CONFIG) private config: AppConfig
+    ) {}
 
     /**
      * Logs a user in using either AD
@@ -31,14 +31,10 @@ export class ADAuthService {
      * @memberof ADAuthService
      */
     login(username: string, password: string): Observable<Response> {
-        // TODO build loopback User from AD info?
-        const _creds = 'username=' + username + '&password=' + password;
-        const _headers = new Headers();
-        const _url: string = LoopBackConfig.getPath() + '/auth/msad';
-        _headers.append('Content-Type', 'application/x-www-form-urlencoded');
-        return this.http.post(
-            _url, _creds, {headers: _headers});
+        const creds = 'username=' + username + '&password=' + password;
+        const headers = new Headers();
+        const url = LoopBackConfig.getPath() + this.config.externalAuthEndpoint;
+        headers.append('Content-Type', 'application/x-www-form-urlencoded');
+        return this.http.post(url, creds, {headers});
     }
-
-
 }

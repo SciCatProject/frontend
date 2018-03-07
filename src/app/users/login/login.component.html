@@ -1,9 +1,14 @@
+<div style="width:81em; float:left;">
+<div style="width:26em; float:left;">
 <form [formGroup]="loginForm" (ngSubmit)="doADLogin($event)" class="ui form">
-  <div class="field">
+    <div>
+      <img src="assets/images/esslogo.png" style="width:26em; height:13em;">
+    </div>
+  <div class="field" >
     <label for="emailInput">Username:</label>
     <input id="emailInput" formControlName="username" class="form-control" type="text" placeholder="Username">
   </div>
-  <div class="field">
+  <div class="field" >
     <label for="pwdInput">Password:</label>
     <input id="pwdInput" formControlName="password" type="password" class="form-control" placeholder="Password">
   </div>
@@ -12,5 +17,11 @@
     <label>Remember Me?</label>
   </div>
   <br><br>
-  <button type="submit" class="ui button login-btn" id="login-btn">Log in</button>
+
+  <button type="submit" [ngClass]="{'loading': loading$ | async}" class="ui button login-btn" id="login-btn">Log in</button>
 </form>
+</div>
+<div>
+  <img src="assets/images/ess-site.jpg"  style="width:45em; height:32em; float:right;">
+  </div>
+</div>

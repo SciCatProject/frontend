@@ -42,10 +42,10 @@ const setSelections = (state: DatepickerState, timeranges: TimeRange[]) => {
   }
   newState.selections.activeSelectedRangeIdx = Math.max(0, newState.selections.selectedRanges.length - 1);
   return newState;
-}
+};
 
 const updateSelections = (state: DatepickerState, clickedDay: Day) => {
-  console.log({state, clickedDay})
+  console.log({state, clickedDay});
   const newState = Object.assign({}, state);
   newState.selections = Object.assign({}, newState.selections);
   newState.selections.selectedRanges = [].concat(newState.selections.selectedRanges);
@@ -79,7 +79,7 @@ const updateSelections = (state: DatepickerState, clickedDay: Day) => {
       break;
   }
   newState.selections.selectedRanges[asri] = newActiveSelectedRange;
-  console.log({newActiveSelectedRange, selectedRanges: newState.selections.selectedRanges})
+  console.log({newActiveSelectedRange, selectedRanges: newState.selections.selectedRanges});
   return newState;
 };
 

@@ -1,17 +1,22 @@
-<form (ngSubmit)="textSearch(search.value)" #searchForm="ngForm">
+<mat-card>
+  <form (ngSubmit)="textSearch(search.value)" #searchForm="ngForm">
     <div style="width:100%;">
       <mat-form-field class="example-full-width" style="width:90%">
-    <input matInput #search class="dash-search" placeholder="Search..." (keyUp)="textSearch(search.value)" [ngModel]="searchText$ | async" name="search">
-  </mat-form-field>
-        <button mat-raised-button color="accent" type="submit" (click)="textSearch(search.value)"><i class="fa fa-search" aria-hidden="true"></i>Search</button>
+        <input matInput #search class="dash-search" placeholder="Search..." (keyUp)="textSearch(search.value)" [ngModel]="searchText$ | async"
+          name="search">
+      </mat-form-field>
+      <button mat-raised-button color="accent" type="submit" (click)="textSearch(search.value)">
+        <i class="fa fa-search" aria-hidden="true"></i>Search</button>
     </div>
-</form>
+  </form>
+</mat-card>
 <br>
-<div class="ui grid">
-  <div class="four wide column">
+<div class="ui stackable grid">
+  <div class="four wide column computer only">
     <datasets-filter></datasets-filter>
+    <selected-dataset-list [datasets]="datasets"></selected-dataset-list>
   </div>
-  <div class="twelve wide column">
-    <dataset-table></dataset-table>
+  <div class="sixteen wide mobile twelve wide computer column">
+    <dataset-table (selectedSet)="selectedSet($event)"></dataset-table>
   </div>
 </div>

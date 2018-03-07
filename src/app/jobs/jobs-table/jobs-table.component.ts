@@ -3,7 +3,6 @@ import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import {Store} from '@ngrx/store';
 import {Router} from '@angular/router';
 import * as JobActions from 'state-management/actions/jobs.actions';
-import {DataTable} from 'primeng/primeng';
 import {Http} from '@angular/http';
 import {Job} from 'shared/sdk/models';
 import {ConfigService} from 'shared/services/config.service';
@@ -12,7 +11,7 @@ import {MatTableDataSource, MatPaginator} from '@angular/material';
 import { AfterViewInit } from '@angular/core/src/metadata/lifecycle_hooks';
 
 @Component({
-  selector: 'app-jobs',
+  selector: 'jobs-table',
   templateUrl: './jobs-table.component.html',
   styleUrls: ['./jobs-table.component.css']
 })
@@ -20,7 +19,6 @@ export class JobsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 
   @Input() jobs;
   @Input() jobs2;
-  @ViewChild('js') jobsTable: DataTable;
 
   cols = [ ];
   loading$: any = false;
@@ -31,11 +29,11 @@ export class JobsTableComponent implements OnInit, OnDestroy, AfterViewInit {
   jobsCount = 1000;
   filters = {};
   totalJobNumber$: any;
-  
+
   dataSource: MatTableDataSource<any> | null;
   displayedColumns = [];
   @ViewChild(MatPaginator) paginator: MatPaginator;
-  
+
   constructor(public http: Http,
               private configSrv: ConfigService, private router: Router,
               private store: Store<any>) {
@@ -57,7 +55,7 @@ export class JobsTableComponent implements OnInit, OnDestroy, AfterViewInit {
     this.store.select(selectors.jobs.getFilters).subscribe(filters => {
       this.filters = Object.assign({}, filters);
     });
-    
+
     this.totalJobNumber$ = this.store.select(state => state.root.jobs.currentJobs.length);
 
     this.subscriptions.push(this.store.select(selectors.jobs.getJobs)
@@ -103,9 +101,9 @@ export class JobsTableComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
 
-  setCurrentPage(n: number) {
-    this.jobsTable.onPageChange({'first': n, 'rows': this.jobsTable.rows});
-  }
+  // setCurrentPage(n: number) {
+  //   this.jobsTable.onPageChange({'first': n, 'rows': this.jobsTable.rows});
+  // }
 
   getFormat(key, value, ds) {
     if (key === 'creationTime') {

@@ -1,5 +1,5 @@
 
-node {
+node('docker') {
        stage('Checkout'){
 
           checkout scm
@@ -9,26 +9,5 @@ node {
        }
        stage('Unit Test Catanie '){
             sh 'docker run  -t catanie_test npm run -- ng test --watch false --single-run true -v ./test:./test '
-                   post {
-                    always {
-                        junit './test/**/*.xml'
-                    }
-                    failure {
-                        mail to: gareth.murphy@esss.se, subject: 'The Pipeline failed :('
-                    }
-                   }
        }
-       stage('Build e2e'){
-            sh 'docker build --file CI/ESS/Dockerfile.e2e . --tag e2e-catanie'
-       }
-       stage('e2e Test Catanie '){
-            sh 'docker run  -t  e2e-catanie '
-                            post {
-                    always {
-                        junit './test/**/*.xml'
-                    }
-                   }
-       }
-
-
 }

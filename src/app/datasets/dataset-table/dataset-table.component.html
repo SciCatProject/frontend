@@ -9,16 +9,25 @@
  
          </div>
          <div class="ui buttons dataset-action" *ngSwitchCase="'archive'">
-             <button class="ui button" (click)="archiveClickHandle($event)"><i class="upload icon"></i>Archive</button>
+             <button class="ui button archive-action-btn" (click)="archiveClickHandle($event)"><i class="upload icon"></i>Archive</button>
    </div>
          <div class="ui buttons dataset-action" *ngSwitchCase="'retrieve'">
-             <button class="ui button" (click)="retrieveClickHandle($event)"><i class="upload icon"></i>Retrieve</button>
+             <button class="ui button retrieve-action-btn" (click)="retrieveClickHandle($event)"><i class="upload icon"></i>Retrieve</button>
        </div>
      </div>
     </div>
 
     <div class="example-container mat-elevation-z8">
-      <mat-table #table [dataSource]="dataSource" matSort>
+        
+
+<div class="ui segment" *ngIf="loading$ | async">
+    <p></p>
+    <div class="ui active inverted dimmer">
+      <div class="ui loader"></div>
+    </div>
+  </div>
+      <mat-paginator class='dataset-paginator' [pageSize]="limit$ | async" [pageSizeOptions]="[10,30, 50, 100]" [length]="datasetCount$ | async" (page)="onPage(event)"></mat-paginator>
+      <mat-table #table [dataSource]="dataSource" class='dataset-table' (matSortChange)="onPage($event)" matSort>
 
           <!-- Checkbox Column -->
     <ng-container matColumnDef="select">
@@ -38,17 +47,17 @@
         
         <ng-container *ngFor="let col of cols">
           <ng-container matColumnDef="{{col.field}}">
-            <mat-header-cell *matHeaderCellDef> {{col.header}} </mat-header-cell>
+            <mat-header-cell *matHeaderCellDef mat-sort-header> {{col.header}} </mat-header-cell>
             
-            <mat-cell *matCellDef="let row"> {{row[col.field]}} </mat-cell>
+            <mat-cell *matCellDef="let row"> {{getRowValue(row, col)}} </mat-cell>
           </ng-container>  
         </ng-container>
         
     
-        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-        <mat-row (click)="onRowSelect($event, row)" *matRowDef="let row; columns: displayedColumns;"></mat-row>
+        <mat-header-row class='datasets-header' *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row class='row-generic' [ngClass]="calculateRowClasses(row)" (click)="onRowSelect($event, row)" *matRowDef="let row; columns: displayedColumns;"></mat-row>
       </mat-table>
 
-      <mat-paginator [pageSize]="limit$ | async" [pageSizeOptions]="[10,30, 50, 100]" [length]="datasetCount$ | async" (page)="onPage(event)"></mat-paginator>
+      <mat-paginator class='dataset-paginator' [pageSize]="limit$ | async" [pageSizeOptions]="[10,30, 50, 100]" [length]="datasetCount$ | async" (page)="onPage($event)"></mat-paginator>
     </div>
 </div>

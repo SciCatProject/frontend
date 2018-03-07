@@ -133,14 +133,14 @@
         "table": {
             "header": "Archive Status",
             "sortable": true,
-            "field": "archiveStatus"
+            "field": "datasetlifecycle.archiveStatusMessage"
         }
     },
     "retrieveStatus": {
         "table": {
             "header": "Retrieve Status",
             "sortable": true,
-            "field": "retrieveStatus"
+            "field": "datasetlifecycle.retrieveStatusMessage"
         }
     },
     "datasetlifecycle": {

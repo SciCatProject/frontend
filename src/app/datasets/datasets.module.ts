@@ -11,18 +11,6 @@ import {
   DatasetTableComponent
 } from 'datasets/index';
 import {
-  AutoCompleteModule,
-  ConfirmationService,
-  ConfirmDialogModule,
-  DataTableModule,
-  DialogModule,
-  DropdownModule,
-  SharedModule,
-  TabViewModule,
-  TreeModule,
-  TreeTableModule
-} from 'primeng/primeng';
-import {
   MatAutocompleteModule,
   MatButtonModule,
   MatButtonToggleModule,
@@ -55,27 +43,27 @@ import {
   MatTooltipModule,
   MatStepperModule,
   MatFormFieldModule,
+  MatOptionModule,
 } from '@angular/material';
-import {CdkTableModule} from '@angular/cdk/table';
 import {
   DatePickerModule
 } from 'shared/modules/datepicker/datepicker.module';
 import {SharedCatanieModule} from 'shared/shared.module';
+import { SelectedListComponent } from 'datasets/selected-list/selected-list.component';
 
 @NgModule({
   imports : [
     MatCardModule, MatDialogModule, MatPaginatorModule, MatCheckboxModule, MatTableModule, MatFormFieldModule, MatAutocompleteModule,
-    MatTabsModule, MatInputModule, MatButtonModule, CommonModule, FormsModule, DialogModule, ReactiveFormsModule,
-    SharedCatanieModule, DataTableModule, SharedModule, TabViewModule,
-    ConfirmDialogModule, TreeModule, TreeTableModule,
-    DropdownModule, AutoCompleteModule,
+    MatTabsModule, MatInputModule, MatButtonModule, MatSortModule, CommonModule, FormsModule, ReactiveFormsModule,
+    SharedCatanieModule, MatSelectModule, MatOptionModule,
+    MatListModule,
     DatePickerModule
   ],
   declarations : [
     DashboardComponent, DatasetTableComponent, DatablocksComponent,
-    DatafilesComponent, DatasetsFilterComponent, DatasetDetailComponent
+    DatafilesComponent, DatasetsFilterComponent, DatasetDetailComponent, SelectedListComponent
   ],
-  providers : [ DatasetService, ConfirmationService ],
+  providers : [ DatasetService ],
   exports : [ DatasetTableComponent, DatasetsFilterComponent ]
 })
 export class DatasetsModule {

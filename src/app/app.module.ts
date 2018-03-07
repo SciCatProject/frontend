@@ -13,20 +13,10 @@ import { AppRoutingModule } from 'app-routing/app-routing.module';
 import { routes } from 'app-routing/app-routing.module';
 import { DatasetService } from 'datasets/dataset.service';
 import { DatasetsModule } from 'datasets/datasets.module';
+import { ParamsService } from 'params.service';
 import { JobsTableComponent } from 'jobs/jobs-table/jobs-table.component';
 import { localStorageSync } from 'ngrx-store-localstorage';
-import { SimpleNotificationsModule } from 'angular2-notifications';
-
-import {
-    AutoCompleteModule,
-    CheckboxModule,
-    DataTableModule,
-    DropdownModule,
-    SharedModule,
-    TabViewModule,
-    TreeModule,
-    TreeTableModule,
-} from 'primeng/primeng';
+import { AppConfigModule } from 'app-config.module';
 import { SampleDataFormComponent } from 'sample-data-form/sample-data-form.component';
 import { SDKBrowserModule } from 'shared/sdk/index';
 import { UserApi } from 'shared/sdk/services';
@@ -100,17 +90,14 @@ export function localStorageSyncWrapper(reducer: any) {
     MatPaginatorModule,
     BrowserModule,
     FormsModule,
-    CheckboxModule,
     ReactiveFormsModule,
     AppRoutingModule,
     HttpModule,
-    DataTableModule, SharedModule, TreeModule, TabViewModule, AutoCompleteModule, DropdownModule,
-    BrowserAnimationsModule, TreeTableModule, SharedCatanieModule,
+    BrowserAnimationsModule, SharedCatanieModule,
     NguiDatetimePickerModule,
     DatasetsModule,
     UsersModule,
     SDKBrowserModule.forRoot(),
-    SimpleNotificationsModule.forRoot(),
     // StoreModule.forRoot({router: routerReducer, root: rootReducer}, {metaReducers: [localStorageSyncWrapper]}),
     StoreModule.forRoot({router: routerReducer, root: rootReducer}),
     RouterModule.forRoot(routes, { useHash: false }),
@@ -118,13 +105,15 @@ export function localStorageSyncWrapper(reducer: any) {
       maxAge: 25 //  Retains last 25 states
     }),
     EffectsModule.forRoot([DatasetEffects, UserEffects, JobsEffects]),
-    StoreRouterConnectingModule
+    StoreRouterConnectingModule,
+    AppConfigModule,
   ],
   exports: [
   ],
   providers : [
       AuthCheck,
       DatasetService,
+      ParamsService,
       UserApi,
     //      {provide: RouteReuseStrategy, useClass: CustomReuseStrategy}
   ],

@@ -4,6 +4,7 @@ EXPOSE 80
 RUN mkdir /catamel
 WORKDIR /catamel
 
+
 COPY package.json .
 RUN npm i
 

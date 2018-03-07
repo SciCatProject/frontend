@@ -1,79 +1,82 @@
 {
-    "project": {
-        "version": "1.0.0-beta.30",
-        "name": "catanie"
-    },
-    "apps": [{
-        "root": "src",
-        "outDir": "dist",
-        "assets": [
-            "assets",
-            "favicon.ico",
-            "app/loopback_form"
-        ],
-        "index": "index.html",
-        "main": "main.ts",
-        "polyfills": "polyfills.ts",
-        "test": "test.ts",
-        "tsconfig": "tsconfig.json",
-        "prefix": "app",
-        "styles": [
-            "styles.css",
-            "theme.scss",
-            "../node_modules/primeng/resources/themes/omega/theme.css",
-            "../node_modules/primeng/resources/primeng.min.css"
-        ],
-        "scripts": [
-            "../node_modules/hammerjs/hammer.min.js"
-        ],
-        "environmentSource": "environments/environment.ts",
-        "environments": {
-            "dev": "environments/environment.ts",
-            "max4demo": "environments/environment.max4demo.ts",
-            "development": "environments/environment.development.ts",
-            "production": "environments/environment.prod.ts",
-            "staging": "environments/environment.staging.ts",
-            "qa": "environments/environment.qa.ts",
-            "docker": "environments/environment.docker.ts"
-        }
-    }],
-    "e2e": {
-        "protractor": {
-            "config": "./protractor.conf.js"
-        }
-    },
-    "lint": [{
-            "files": "src/**/*.ts",
-            "project": "src/tsconfig.json"
-        },
-        {
-            "files": "e2e/**/*.ts",
-            "project": "e2e/tsconfig.json"
-        }
+  "project": {
+    "version": "1.0.0-beta.30",
+    "name": "catanie"
+  },
+  "apps": [{
+    "root": "src",
+    "outDir": "dist",
+    "assets": [
+      "assets",
+      "favicon.ico",
+      "app/loopback_form"
     ],
-    "test": {
-        "karma": {
-            "config": "./karma.conf.js"
-        }
+    "index": "index.html",
+    "main": "main.ts",
+    "polyfills": "polyfills.ts",
+    "test": "test.ts",
+    "tsconfig": "tsconfig.json",
+    "prefix": "app",
+    "styles": [
+      "styles.css",
+      "theme.scss"
+    ],
+    "stylePreprocessorOptions": {
+      "includePaths": [
+        "../node_modules"
+      ]
     },
-    "defaults": {
-        "serve": {
-            "port": 4200,
-            "host": "0.0.0.0"
-        },
-        "styleExt": "css",
-        "prefixInterfaces": false,
-        "inline": {
-            "style": false,
-            "template": false
-        },
-        "spec": {
-            "class": false,
-            "component": true,
-            "directive": true,
-            "module": false,
-            "pipe": true,
-            "service": true
-        }
+    "scripts": [
+      "../node_modules/hammerjs/hammer.min.js"
+    ],
+    "environmentSource": "environments/environment.ts",
+    "environments": {
+      "dev": "environments/environment.ts",
+      "maxiv-prod": "environments/environment.maxiv.prod.ts",
+      "development": "environments/environment.development.ts",
+      "production": "environments/environment.prod.ts",
+      "staging": "environments/environment.staging.ts",
+      "qa": "environments/environment.qa.ts",
+      "docker": "environments/environment.docker.ts"
     }
+  }],
+  "e2e": {
+    "protractor": {
+      "config": "./protractor.conf.js"
+    }
+  },
+  "lint": [{
+      "files": "src/**/*.ts",
+      "project": "src/tsconfig.json"
+    },
+    {
+      "files": "e2e/**/*.ts",
+      "project": "e2e/tsconfig.json"
+    }
+  ],
+  "test": {
+    "karma": {
+      "config": "./karma.conf.js"
+    }
+  },
+  "defaults": {
+    "serve": {
+      "port": 4200,
+      "host": "0.0.0.0"
+    },
+    "styleExt": "css",
+    "prefixInterfaces": false,
+    "inline": {
+      "style": false,
+      "template": false
+    },
+    "spec": {
+      "class": false,
+      "component": true,
+      "directive": true,
+      "module": false,
+      "pipe": true,
+      "service": true
+    }
+  }
 }

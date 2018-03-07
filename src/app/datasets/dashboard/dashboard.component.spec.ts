@@ -6,12 +6,11 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {Store, StoreModule} from '@ngrx/store';
 import {DatasetTableComponent} from 'datasets/dataset-table/dataset-table.component';
 import {DatasetsFilterComponent} from 'datasets/datasets-filter/datasets-filter.component';
-import {ConfirmationService} from 'primeng/primeng';
 import {UserApi} from 'shared/sdk/services';
 import {ConfigService} from 'shared/services/config.service';
 import {rootReducer} from 'state-management/reducers/root.reducer';
 import { MatAutocompleteModule, MatTableModule, MatDialogModule} from '@angular/material';
-
+import { ParamsService } from 'params.service';
 import {
   MockActivatedRoute,
   MockConfigService,
@@ -19,6 +18,7 @@ import {
   MockRouter,
   MockStore,
   MockUserApi,
+  MockParamsService
 } from '../../shared/MockStubs';
 import {DashboardComponent} from './dashboard.component';
 
@@ -42,11 +42,11 @@ describe('DashboardComponent', () => {
         providers: [
           {provide: ActivatedRoute, useClass: MockActivatedRoute},
           {provide: Router, useClass: MockRouter},
+          {provide: ParamsService, useClass : MockParamsService},
           {provide: Store, useClass: MockStore},
           {provide: UserApi, useClass: MockUserApi},
           {provide: Http, useClass: MockHttp},
-          {provide: ConfigService, useClass: MockConfigService},
-          {provide: ConfirmationService, useClass: ConfirmationService},
+          {provide: ConfigService, useClass: MockConfigService}
         ]
       }
     });

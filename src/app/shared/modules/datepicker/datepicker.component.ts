@@ -178,7 +178,7 @@ export class DatePickerComponent implements OnInit, OnDestroy {
 
     // auto-resync today at start of each day (assuming that user is not changing system time/timezone)
     const self = this;
-    const resyncAfterTimeout = (today: Day) : void => {
+    const resyncAfterTimeout = (today: Day): void => {
       const timeLeftToday = 1 + today.nextDay.startTime - new Date().getTime();
       // ('starting next day in about ' + timeLeftToday + ' milliseconds'); // TODO: remove
       setTimeout(() => {

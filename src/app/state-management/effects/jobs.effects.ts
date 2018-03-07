@@ -6,12 +6,13 @@ import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/debounceTime';
 
 import {Injectable} from '@angular/core';
-import {Actions, Effect, toPayload} from '@ngrx/effects';
+import {Actions, Effect} from '@ngrx/effects';
 import {Action, Store} from '@ngrx/store';
 import {Observable} from 'rxjs/Observable';
 import * as lb from 'shared/sdk/services';
 import * as JobActions from 'state-management/actions/jobs.actions';
 import * as UserActions from 'state-management/actions/user.actions';
+import { MessageType } from 'state-management/models';
 
 // import store state interface
 
@@ -23,7 +24,7 @@ export class JobsEffects {
   protected getJob$: Observable<Action> =
     this.action$.ofType(JobActions.SEARCH_ID)
       .debounceTime(300)
-      .map(toPayload)
+      .map((action: JobActions.SearchIDAction) => action.payload)
       .switchMap(payload => {
         const id = payload;
         // TODO separate action for dataBlocks? or retrieve at once?
@@ -41,7 +42,7 @@ export class JobsEffects {
   @Effect()
   protected submit$: Observable<Action> =
     this.action$.ofType(JobActions.SUBMIT)
-      .map(toPayload)
+      .map((action: JobActions.SubmitAction) => action.payload)
       .switchMap((job) => {
         return this.jobSrv.create(job)
           .switchMap(res => {
@@ -57,12 +58,10 @@ export class JobsEffects {
   @Effect()
   protected submitMessage$: Observable<Action> =
     this.action$.ofType(JobActions.SUBMIT_COMPLETE)
-      .map(toPayload)
       .switchMap((res) => {
         const msg = {
-          type: 'success',
-          title: 'Job Created Successfully',
-          content: ''
+          type: MessageType.Success,
+          content: 'Job Created Successfully'
         };
         return Observable.of(new UserActions.ShowMessageAction(msg));
       });
@@ -70,9 +69,8 @@ export class JobsEffects {
   @Effect()
   protected childRetrieve$: Observable<Action> =
     this.action$.ofType(JobActions.CHILD_RETRIEVE)
-      .map(toPayload)
-      .switchMap((node) => {
-        console.log(node);
+      .switchMap((pl) => {
+        const node = pl['payload'];
         node.children = [];
         if (node.data.datasetList.length > 0) {
           node.data.datasetList.map(ds => {
@@ -110,7 +108,7 @@ export class JobsEffects {
   protected get_updated_sort$: Observable<Action> =
     this.action$.ofType(JobActions.SORT_UPDATE)
       .debounceTime(300)
-      .map(toPayload)
+      .map((action: JobActions.SortUpdateAction) => action.payload)
       .switchMap(payload => {
         const fq = payload;
         const filter = {};
