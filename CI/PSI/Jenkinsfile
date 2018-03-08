@@ -15,7 +15,7 @@ podTemplate(label: 'docker',
     sh 'npm run -- ng test --watch false --single-run true --sourcemap false'
    }
    stage('e2e Test Catanie ') {
-    sh './node_modules/@angular/cli/bin/ng e2e -e development'
+    sh './node_modules/@angular/cli/bin/ng e2e -e qa'
    }
    stage('build') {
     sh "./node_modules/@angular/cli/bin/ng build --environment development -op dist/development"
