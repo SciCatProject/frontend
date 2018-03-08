@@ -1,8 +1,11 @@
-FROM smebberson/alpine-nginx-nodejs
+FROM node:9
 EXPOSE 80
 
-RUN mkdir /catamel
-WORKDIR /catamel
+RUN apt-get update && apt-get install -y nginx
+
+RUN mkdir /usr/html
+RUN mkdir /catanie
+WORKDIR /catanie
 
 
 COPY package.json .
@@ -15,11 +18,6 @@ ARG APP_PROD='true'
 ARG LB_BASE_URL='http://localhost/api'
 ARG LB_API_VERSION=''
 
-RUN echo "export const environment = { \
-  production: $APP_PROD, \
-  lbBaseURL: '$LB_BASE_URL', \
-  lbApiVersion: '$LB_API_VERSION' \
-};" > src/environments/environment.docker.ts
 
-RUN ./node_modules/@angular/cli/bin/ng build --environment=docker
+RUN ./node_modules/@angular/cli/bin/ng build --environment=dev
 RUN mv dist/* /usr/html
