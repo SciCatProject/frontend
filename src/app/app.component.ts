@@ -87,6 +87,8 @@ export class AppComponent implements OnDestroy, OnInit {
             this.store.dispatch(new ua.AccessUserEmailAction(current.id));
             // TODO handle dataset loading
           }
+        } else {
+          this.username = null;
         }
       }));
 

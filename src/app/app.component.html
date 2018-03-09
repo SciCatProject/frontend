@@ -1,7 +1,7 @@
 <!-- <div class="ui fixed menu"> -->
 <div [class.dark-theme]="(darkTheme$ | async)" [class.light-theme]="!(darkTheme$ | async)">
     <mat-sidenav-container (backdropClick)="sidenavToggle()" fullscreen>
-        <mat-sidenav #sidenav (keydown.escape)="sidenavToggle()" mode="push" disableClose>
+        <mat-sidenav  #sidenav (keydown.escape)="sidenavToggle()" mode="push" disableClose>
             <mat-list>
                 <mat-list-item><a class="item" (click)="sidenav.close()" [routerLink]="['/datasets/']" [routerLinkActive]="['active']">Home</a></mat-list-item>
                 <mat-list-item><a class="item" (click)="sidenav.close()" [routerLink]="['/sample-data/', 'add']" [routerLinkActive]="['active']">Sample Data Entry</a></mat-list-item>
@@ -29,7 +29,9 @@
     <mat-sidenav-content>
       <mat-toolbar color="primary">
         <mat-toolbar-row>
-          <i (click)="sidenavToggle()" class="sidenav-toggle fa fa-bars" aria-hidden="true"></i>
+          <ng-container *ngIf="username">
+            <i (click)="sidenavToggle()"  class="sidenav-toggle fa fa-bars" aria-hidden="true"></i>
+        </ng-container>
           <h3 class="app-title"> {{title}}</h3>
           <span class="example-spacer"></span>
         </mat-toolbar-row>
