@@ -1,6 +1,6 @@
 podTemplate(label: 'docker',
  containers: [containerTemplate(name: 'docker', image: 'docker:18.02-git', ttyEnabled: true, command: 'cat'),
-  containerTemplate(name: 'node', image: 'adelantos/node-chromium', ttyEnabled: true, command: 'cat'),
+  containerTemplate(name: 'node', image: 'encima/node-chromium-browser', ttyEnabled: true, command: 'cat'),
   containerTemplate(name: 'helm', image: 'encima/helm-kubectl-git', ttyEnabled: true, command: 'cat')
  ],
  volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock')]
@@ -9,7 +9,6 @@ podTemplate(label: 'docker',
   container('node') {
    stage('Checkout') {
     checkout scm
-    sh "npm install -g --upgrade npm"
     sh "npm ci"
    }
    stage('Unit Test Catanie ') {
