@@ -9,7 +9,8 @@ podTemplate(label: 'docker',
   container('node') {
    stage('Checkout') {
     checkout scm
-    sh "npm install"
+    sh "npm install -g --upgrade npm"
+    sh "npm ci"
    }
    stage('Unit Test Catanie ') {
     sh 'npm run -- ng test --watch false --single-run true --sourcemap false'
