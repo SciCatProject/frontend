@@ -1,12 +1,12 @@
 <!-- <div class="ui fixed menu"> -->
 <div [class.dark-theme]="(darkTheme$ | async)" [class.light-theme]="!(darkTheme$ | async)">
     <mat-sidenav-container (backdropClick)="sidenavToggle()" fullscreen>
-        <mat-sidenav  #sidenav (keydown.escape)="sidenavToggle()" mode="push" disableClose>
+        <mat-sidenav  #sidenav (keydown.escape)="sidenavToggle()" mode="over" disableClose>
             <mat-list>
                 <mat-list-item><a class="item" (click)="sidenav.close()" [routerLink]="['/datasets/']" [routerLinkActive]="['active']">Home</a></mat-list-item>
                 <mat-list-item><a class="item" (click)="sidenav.close()" [routerLink]="['/sample-data/', 'add']" [routerLinkActive]="['active']">Sample Data Entry</a></mat-list-item>
                 <mat-list-item><a class="item" (click)="sidenav.close()" [routerLink]="['/user/','jobs']" [routerLinkActive]="['active']">Jobs</a></mat-list-item>
-                <mat-list-item><a class="item user-menu" [matMenuTriggerFor]="userMenu">{{ username }}</a></mat-list-item>
+                <mat-list-item><a class="item user-menu" [matMenuTriggerFor]="userMenu">{{ username }} <i class="fa fa-angle-down"></i></a></mat-list-item>
             </mat-list>
 
             
