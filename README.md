@@ -1,5 +1,11 @@
 # Catanie
 
+## Summary
+
+An Angular (2+) based application that uses ngrx to communicate with the SciCat API and provide a searchable interface for datasets,
+as well as the option to carry out actions (i.e. archiving) and acts as a place to reference datasets used in publications.
+See documentation at [scicatproject](https://scicatproject.github.io/)
+
 ## ISSUES
 
 Angular cli is currently unable to respond to hosts that do not match. See [here](https://github.com/angular/angular-cli/issues/6070) for explanation about webpack changes but will break a dev docker build (should not affect production as we would not use ng serve). Unsure if you can hardcode a docker IP (probably not a great idea).
