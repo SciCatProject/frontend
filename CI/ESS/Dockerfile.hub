@@ -8,16 +8,16 @@ RUN mkdir /catanie
 WORKDIR /catanie
 
 
-COPY package.json .
+COPY ../../package.json .
 RUN npm i
 
-COPY src src
-COPY angular-cli.json .
+COPY ../../src src
+COPY ../../angular-cli.json .
 
 ARG APP_PROD='true'
 ARG LB_BASE_URL='http://localhost/api'
 ARG LB_API_VERSION=''
 
 
-RUN ./node_modules/@angular/cli/bin/ng build --environment=dev
+RUN npx ng build --environment=dev
 RUN mv dist/* /usr/html
