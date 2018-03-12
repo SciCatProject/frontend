@@ -5,9 +5,7 @@ podTemplate(label: 'docker',
  ],
  volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock')]
 ) {
- node('docker') {
-  try {
-    def notifySlack(String buildStatus = 'STARTED') {
+     def notifySlack(String buildStatus = 'STARTED') {
   // Build status of null means success.
   buildStatus = buildStatus ?: 'SUCCESS'
 
@@ -27,6 +25,8 @@ podTemplate(label: 'docker',
 
   slackSend color: color, message: msg
  }
+ node('docker') {
+  try {
    notifySlack()
    container('node') {
     stage('Checkout') {
