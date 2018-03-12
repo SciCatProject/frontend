@@ -26,6 +26,7 @@ exports.config = {
         pid: '20.500.11935%2F0006c3e0-d1fa-440c-8ed0-431a9636f9bc'
     },
     directConnect: true,
+    getPageTimeout: 15000,
     baseUrl: 'http://localhost:4200/',
     framework: 'jasmine',
     jasmineNodeOpts: {
