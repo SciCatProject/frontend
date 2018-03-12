@@ -5,35 +5,57 @@ podTemplate(label: 'docker',
  ],
  volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock')]
 ) {
- node('docker') {
-  container('node') {
-   stage('Checkout') {
-    checkout scm
-    sh 'npm install --upgrade -g npm'
-    sh "npm ci"
-   }
-   stage('Unit Test Catanie ') {
-    sh 'npm run -- ng test --watch false --single-run true --sourcemap false'
-   }
-   stage('e2e Test Catanie ') {
-    sh './node_modules/@angular/cli/bin/ng e2e -e qa'
-   }
-   stage('build') {
-    sh "./node_modules/@angular/cli/bin/ng build --environment development -op dist/development"
-   }
+   def notifySlack(String buildStatus = 'STARTED') {
+  // Build status of null means success.
+  buildStatus = buildStatus ? : 'SUCCESS'
+
+  def color
+
+  if (buildStatus == 'STARTED') {
+   color = '#D4DADF'
+  } else if (buildStatus == 'SUCCESS') {
+   color = '#BDFFC3'
+  } else if (buildStatus == 'UNSTABLE') {
+   color = '#FFFE89'
+  } else {
+   color = '#FF9FA1'
   }
-  container('docker') {
-   stage('Build release') {
-    withCredentials([usernamePassword(credentialsId: 'dockerpsi', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-     sh "docker login registry.psi.ch:5000 -u $USERNAME -p $PASSWORD"
-     def tag = sh(script: 'git rev-parse HEAD', returnStdout: true)
-     sh "docker build --build-arg env=development . -t registry.psi.ch:5000/egli/catanie:$tag"
-     sh "docker push registry.psi.ch:5000/egli/catanie:$tag"
+
+  def msg = "${buildStatus}: `${env.JOB_NAME}` #${env.BUILD_NUMBER}:\n${env.BUILD_URL}"
+
+  slackSend color: color, message: msg
+ }
+ node('docker') {
+  try {
+   notifySlack()
+   container('node') {
+    stage('Checkout') {
+     checkout scm
+     sh 'npm install --upgrade -g npm'
+     sh "npm ci"
+    }
+    stage('Unit Test Catanie ') {
+     sh 'npm run -- ng test --watch false --single-run true --sourcemap false'
+    }
+    stage('e2e Test Catanie ') {
+     sh './node_modules/@angular/cli/bin/ng e2e -e qa'
+    }
+    stage('build') {
+     sh "./node_modules/@angular/cli/bin/ng build --environment development -op dist/development"
     }
    }
-  }
-  container('helm') {
-   stage('Release') {
+   container('docker') {
+    stage('Build release') {
+     withCredentials([usernamePassword(credentialsId: 'dockerpsi', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+      sh "docker login registry.psi.ch:5000 -u $USERNAME -p $PASSWORD"
+      def tag = sh(script: 'git rev-parse HEAD', returnStdout: true)
+      sh "docker build --build-arg env=development . -t registry.psi.ch:5000/egli/catanie:$tag"
+      sh "docker push registry.psi.ch:5000/egli/catanie:$tag"
+     }
+    }
+   }
+   container('helm') {
+    stage('Release') {
      withCredentials([usernamePassword(credentialsId: 'git', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
       sh "git clone https://$USERNAME:$PASSWORD@git.psi.ch/MELANIE/catamel-psiconfig.git"
       sh "export KUBECONFIG=${workspace}@catamel-psisecrets/server/kubernetes/admin.conf"
@@ -42,9 +64,15 @@ podTemplate(label: 'docker',
       sh 'helm version'
       def tag = sh(script: 'git rev-parse HEAD', returnStdout: true)
       sh "helm upgrade -i catanie-development catamel-psiconfig/server/kubernetes/helm/dacat-gui --namespace=development --set image.tag=$tag"
-      slackSend color: 'good', message: "${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>) Completed without errors"
      }
+    }
    }
+  } catch (e) {
+   currentBuild.result = 'FAILURE'
+   throw e
+  } finally {
+   notifySlack(currentBuild.result)
   }
  }
+
 }
