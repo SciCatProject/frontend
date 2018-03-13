@@ -24,6 +24,10 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { MultiDayRange } from 'shared/modules/datepicker/LocalizedDateTime/timeRanges';
 import { Dataset } from 'shared/sdk';
 
+export interface MatDatePickerRangeValue<D> {
+  begin: D | null;
+  end: D | null;
+}
 
 @Component({
   selector: 'datasets-filter',
