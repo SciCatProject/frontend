@@ -1,6 +1,11 @@
 {
     "pid": {
         "name": "pid",
+        "table": {
+            "header": "PID",
+            "sortable": true,
+            "field": "pid"
+        },
 	"label": "PID",
         "type": "string"
     },
@@ -99,7 +104,12 @@
         "type": "Array&lt;string&gt;"
     },
     "proposalId": {
-      "visible": false
+      "visible": true,
+        "table": {
+            "header": "Proposal Id",
+            "sortable": true,
+            "field": "proposalId"
+        }
     },
     "archiveStatus": {
         "table": {
