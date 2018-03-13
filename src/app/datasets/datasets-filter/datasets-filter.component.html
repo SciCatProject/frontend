@@ -59,11 +59,18 @@
 
     <br />
 
-    <div class="ui field">
-      <h3>Date Range</h3>
-      <datepicker [selections]="dateSelections$ | async" [datepickerSelector]="datepickerSelector" [datepickerSelectionMode]="dateSelectionMode"
-        [placeholder]="'Date Range'" (selectionsChange)="updateDateRange($event)"></datepicker>
-    </div>
+    <!-- <div class="ui field">
+      <h3>Date Range</h3> -->
+      <mat-form-field>
+        <input matInput [matDatepicker]="resultPicker">
+        <mat-datepicker
+            #resultPicker
+            [rangeMode]="true">
+        </mat-datepicker>
+        </mat-form-field>
+      <!-- <datepicker [selections]="dateSelections$ | async" [datepickerSelector]="datepickerSelector" [datepickerSelectionMode]="dateSelectionMode"
+        [placeholder]="'Date Range'" (selectionsChange)="updateDateRange($event)"></datepicker> -->
+    <!-- </div> -->
     <br>
     <!-- </div>
     </div> -->
