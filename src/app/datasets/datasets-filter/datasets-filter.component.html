@@ -61,13 +61,14 @@
 
     <!-- <div class="ui field">
       <h3>Date Range</h3> -->
-      <mat-form-field>
-        <input matInput [matDatepicker]="resultPicker">
-        <mat-datepicker
-            #resultPicker
-            [rangeMode]="true">
-        </mat-datepicker>
-        </mat-form-field>
+      <mat-form-field class="example-full-width">
+  <input matInput [matDatepicker]="picker" placeholder="Choose a date" [(ngModel)]="dateRange" name="range-picker" (dateChange)="dateChanged($event)">
+  <mat-datepicker-toggle matSuffix [for]="picker">
+    <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+  </mat-datepicker-toggle>
+  <mat-datepicker #picker [rangeMode]="true"></mat-datepicker>
+</mat-form-field>
+
       <!-- <datepicker [selections]="dateSelections$ | async" [datepickerSelector]="datepickerSelector" [datepickerSelectionMode]="dateSelectionMode"
         [placeholder]="'Date Range'" (selectionsChange)="updateDateRange($event)"></datepicker> -->
     <!-- </div> -->

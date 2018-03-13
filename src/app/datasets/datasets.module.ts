@@ -52,7 +52,7 @@ import { MatDatepickerModule } from 'saturn-datepicker';
   imports : [
     MatCardModule, MatDialogModule, MatPaginatorModule, MatCheckboxModule, MatTableModule, MatFormFieldModule, MatAutocompleteModule,
     MatTabsModule, MatInputModule, MatButtonModule, MatSortModule, CommonModule, FormsModule, ReactiveFormsModule,
-    SharedCatanieModule, MatSelectModule, MatOptionModule,
+    SharedCatanieModule, MatSelectModule, MatOptionModule, MatNativeDateModule, MatIconModule,
     MatListModule, MatDatepickerModule,
   ],
   declarations : [
