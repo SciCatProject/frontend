@@ -3,7 +3,7 @@
     <div style="width:100%;">
       <mat-form-field class="example-full-width" style="width:90%">
         <input matInput #search class="dash-search" placeholder="Search..." (keyUp)="textSearch(search.value)" [ngModel]="searchText$ | async"
-          name="search">
+          name="search"  matTooltip='Spaces will separate search terms, Double quotes will look for exact matches and the - will ignore terms. E.g. "Coffee shop" kettle -store' [matTooltipPosition]="tooltipPos">
       </mat-form-field>
       <button mat-raised-button color="accent" type="submit" (click)="textSearch(search.value)">
         <i class="fa fa-search" aria-hidden="true"></i>Search</button>

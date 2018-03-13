@@ -53,7 +53,7 @@ import { MatDatepickerModule } from 'saturn-datepicker';
     MatCardModule, MatDialogModule, MatPaginatorModule, MatCheckboxModule, MatTableModule, MatFormFieldModule, MatAutocompleteModule,
     MatTabsModule, MatInputModule, MatButtonModule, MatSortModule, CommonModule, FormsModule, ReactiveFormsModule,
     SharedCatanieModule, MatSelectModule, MatOptionModule, MatNativeDateModule, MatIconModule,
-    MatListModule, MatDatepickerModule,
+    MatListModule, MatDatepickerModule, MatTooltipModule
   ],
   declarations : [
     DashboardComponent, DatasetTableComponent, DatablocksComponent,

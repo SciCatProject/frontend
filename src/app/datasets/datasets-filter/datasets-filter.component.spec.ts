@@ -55,7 +55,9 @@ describe('DatasetsFilterComponent', () => {
 
   it('should contain a date range field', () => {
     const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('form').textContent).toContain('Date Range');
+    const beamline = compiled.querySelector('.date-input');
+    expect(beamline).toBeTruthy();
+    expect(beamline.attributes.getNamedItem('placeholder').textContent).toContain('Select a date range');
   });
 
   it('should contain a beamline input', () => {
