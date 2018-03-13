@@ -17,7 +17,7 @@ import {
   MatCardModule,
   MatCheckboxModule,
   MatChipsModule,
-  MatDatepickerModule,
+  // MatDatepickerModule,
   MatDialogModule,
   MatExpansionModule,
   MatGridListModule,
@@ -45,19 +45,15 @@ import {
   MatFormFieldModule,
   MatOptionModule,
 } from '@angular/material';
-import {
-  DatePickerModule
-} from 'shared/modules/datepicker/datepicker.module';
 import {SharedCatanieModule} from 'shared/shared.module';
 import { SelectedListComponent } from 'datasets/selected-list/selected-list.component';
-
+import { MatDatepickerModule } from 'saturn-datepicker';
 @NgModule({
   imports : [
     MatCardModule, MatDialogModule, MatPaginatorModule, MatCheckboxModule, MatTableModule, MatFormFieldModule, MatAutocompleteModule,
     MatTabsModule, MatInputModule, MatButtonModule, MatSortModule, CommonModule, FormsModule, ReactiveFormsModule,
     SharedCatanieModule, MatSelectModule, MatOptionModule,
-    MatListModule,
-    DatePickerModule
+    MatListModule, MatDatepickerModule,
   ],
   declarations : [
     DashboardComponent, DatasetTableComponent, DatablocksComponent,
