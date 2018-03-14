@@ -23,7 +23,8 @@ describe('catanie Dashboard', function() {
   });
 
   it('should have an active home menu item', () => {
-    element(by.className('sidenav-toggle')).click();
+    browser.sleep(1000);
+    element(by.css('.sidenav-toggle')).click();
     browser.sleep(1000);
     expect(element(by.css('.item.active')).getText()).toContain('Home');
     browser.actions().sendKeys(protractor.Key.ESCAPE); // close nav drawer
@@ -35,7 +36,13 @@ describe('catanie Dashboard', function() {
   });
 
   it('should display a toggleable archive/retrieve view and change mode', () => {
-    element(by.css('.mat-drawer-backdrop')).click(); // ensure sidenav is closed
+    const backdrop = element(by.css('.mat-drawer-backdrop'));
+    backdrop.isPresent().then((p) => {
+      if (p) {
+        backdrop.click();
+      }
+    });
+     // ensure sidenav is closed
     browser.sleep(1000);
     expect(element(by.className('mode-container')).isDisplayed()).toBeTruthy();
     expect(element(by.css('.button.view')).getAttribute('class')).toMatch('positive');
@@ -45,7 +52,7 @@ describe('catanie Dashboard', function() {
   });
 
   it('should log out', () => {
-    element(by.className('sidenav-toggle')).click(); // TODO could disable animations while being tested
+    element(by.css('.sidenav-toggle')).click(); // TODO could disable animations while being tested
     browser.sleep(1000);
     element(by.className('user-menu')).click();
     browser.sleep(1000);

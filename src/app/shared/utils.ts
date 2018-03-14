@@ -24,3 +24,29 @@ export function compareObj(source, comp) {
     }
     return false;
   }
+
+export function mergeFacetObj(source: Array<any>, incoming: Array<any>) {
+  if (source.length === 0) {
+    return incoming;
+  } else {
+    let merged = source,
+        cmp = incoming;
+    if (incoming.length > source.length) {
+      merged = incoming, cmp = source;
+    }
+    merged.forEach(m => {
+      let found = false;
+      cmp.forEach((c, ind, a) => {
+        if (m._id === c._id) {
+          m.count = c.count;
+          found = true;
+          a.slice(ind, 1);
+        }
+      });
+      if (!found) {
+        m.count = 0;
+      }
+    });
+    return merged;
+  }
+}

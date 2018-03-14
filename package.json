@@ -1,6 +1,6 @@
 {
   "name": "catanie",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "license": "GPL-3.0",
   "angular-cli": {},
   "scripts": {
@@ -36,16 +36,18 @@
     "@types/rison": "0.0.6",
     "@types/socket.io-client": "1.4.31",
     "core-js": "2.5.1",
+    "filesize": "^3.6.0",
     "hammerjs": "^2.0.8",
     "json-format": "^1.0.1",
     "karma-coverage-istanbul-reporter": "^1.3.0",
-    "primeng": "^5.2.0",
-    "rison": "github:nanonid/rison#master",
+    "ng-treetable": "1.3.3",
+    "npm": "^5.7.1",
+    "rison": "github:nanonid/rison",
     "rxjs": "5.5.2",
+    "saturn-datepicker": "0.0.2",
     "socket.io-client": "2.0.4",
     "ts-helpers": "1.1.2",
-    "uglify-js": "3.1.8",
-    "zone.js": "0.7.8"
+    "uglify-js": "3.1.8"
   },
   "devDependencies": {
     "@angular-devkit/core": "^0.4.0",

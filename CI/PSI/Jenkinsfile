@@ -1,24 +1,77 @@
-podTemplate(label: 'docker',
-  containers: [containerTemplate(name: 'docker', image: 'docker:18.02-git', ttyEnabled: true, command: 'cat')],
-  volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock')]
-  ) {
-node('docker') {
-    container('docker') {
-       stage('Checkout'){
-          checkout scm
-       }
+def notifySlack(String buildStatus = 'STARTED') {
+  // Build status of null means success.
+  buildStatus = buildStatus ?: 'SUCCESS'
 
-       stage('Build Docker'){
-            sh 'docker build -f CI/PSI/Dockerfile.test -t catanie_test .'
-       }
-       stage('Unit Test Catanie '){
-            sh 'docker run  --privileged --network=host -t catanie_test npm run -- ng test --watch false --single-run true --sourcemap false'
-       }
-       stage('e2e Test Catanie '){
-            sh 'docker run  --privileged --net=host -t catanie_test ./node_modules/@angular/cli/bin/ng e2e -e qa'
-       }
-    }
+  def color
 
-}
+  if (buildStatus == 'STARTED') {
+   color = '#D4DADF'
+  } else if (buildStatus == 'SUCCESS') {
+   color = '#BDFFC3'
+  } else if (buildStatus == 'UNSTABLE') {
+   color = '#FFFE89'
+  } else {
+   color = '#FF9FA1'
   }
 
+  def msg = "${buildStatus}: `${env.JOB_NAME}` #${env.BUILD_NUMBER}:\n${env.BUILD_URL}"
+
+  slackSend color: color, message: msg
+}
+podTemplate(label: 'docker',
+ containers: [containerTemplate(name: 'docker', image: 'docker:18.02-git', ttyEnabled: true, command: 'cat'),
+  containerTemplate(name: 'node', image: 'weltn24/up-docker-node-chrome-headless', ttyEnabled: true, command: 'cat'),
+  containerTemplate(name: 'helm', image: 'encima/helm-kubectl-git', ttyEnabled: true, command: 'cat')
+ ],
+ volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock')]
+) {
+ node('docker') {
+  try {
+   notifySlack()
+   container('node') {
+    stage('Checkout') {
+     checkout scm
+     sh 'npm install --upgrade -g npm'
+     sh "npm ci"
+    }
+    stage('Unit Test Catanie ') {
+     sh 'npm run -- ng test --watch false --single-run true --sourcemap false'
+    }
+    stage('e2e Test Catanie ') {
+     sh './node_modules/@angular/cli/bin/ng e2e -e qa'
+    }
+    stage('build') {
+     sh "./node_modules/@angular/cli/bin/ng build --environment development -op dist/development"
+    }
+   }
+   container('docker') {
+    stage('Build release') {
+     withCredentials([usernamePassword(credentialsId: 'dockerpsi', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+      sh "docker login registry.psi.ch:5000 -u $USERNAME -p $PASSWORD"
+      def tag = sh(script: 'git rev-parse HEAD', returnStdout: true)
+      sh "docker build --build-arg env=development . -t registry.psi.ch:5000/egli/catanie:$tag"
+      sh "docker push registry.psi.ch:5000/egli/catanie:$tag"
+     }
+    }
+   }
+   container('helm') {
+    stage('Release') {
+     withCredentials([usernamePassword(credentialsId: 'git', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+      sh "git clone https://$USERNAME:$PASSWORD@git.psi.ch/MELANIE/catamel-psiconfig.git"
+      sh "export KUBECONFIG=${workspace}@catamel-psisecrets/server/kubernetes/admin.conf"
+      def workspace = pwd()
+      sh 'kubectl version'
+      sh 'helm version'
+      def tag = sh(script: 'git rev-parse HEAD', returnStdout: true)
+      sh "helm upgrade -i catanie-development catamel-psiconfig/server/kubernetes/helm/dacat-gui --namespace=development --set image.tag=$tag"
+     }
+    }
+   }
+  } catch (e) {
+   currentBuild.result = 'FAILURE'
+   throw e
+  } finally {
+   notifySlack(currentBuild.result)
+  }
+ }
+}

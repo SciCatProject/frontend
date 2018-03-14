@@ -14,21 +14,9 @@ import { routes } from 'app-routing/app-routing.module';
 import { DatasetService } from 'datasets/dataset.service';
 import { DatasetsModule } from 'datasets/datasets.module';
 import { ParamsService } from 'params.service';
-import { JobsComponent } from 'jobs/jobs.component';
 import { JobsTableComponent } from 'jobs/jobs-table/jobs-table.component';
 import { localStorageSync } from 'ngrx-store-localstorage';
 import { AppConfigModule } from 'app-config.module';
-
-import {
-    AutoCompleteModule,
-    CheckboxModule,
-    DataTableModule,
-    DropdownModule,
-    SharedModule,
-    TabViewModule,
-    TreeModule,
-    TreeTableModule,
-} from 'primeng/primeng';
 import { SampleDataFormComponent } from 'sample-data-form/sample-data-form.component';
 import { SDKBrowserModule } from 'shared/sdk/index';
 import { UserApi } from 'shared/sdk/services';
@@ -86,7 +74,6 @@ export function localStorageSyncWrapper(reducer: any) {
 @NgModule({
   declarations : [
     AppComponent,
-    JobsComponent,
     JobsTableComponent,
     SampleDataFormComponent,
     JobsDetailComponent
@@ -103,12 +90,10 @@ export function localStorageSyncWrapper(reducer: any) {
     MatPaginatorModule,
     BrowserModule,
     FormsModule,
-    CheckboxModule,
     ReactiveFormsModule,
     AppRoutingModule,
     HttpModule,
-    DataTableModule, SharedModule, TreeModule, TabViewModule, AutoCompleteModule, DropdownModule,
-    BrowserAnimationsModule, TreeTableModule, SharedCatanieModule,
+    BrowserAnimationsModule, SharedCatanieModule,
     NguiDatetimePickerModule,
     DatasetsModule,
     UsersModule,

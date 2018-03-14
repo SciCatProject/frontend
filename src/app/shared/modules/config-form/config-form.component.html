@@ -6,16 +6,16 @@
             <label>{{d.key | titleCase}}</label>
             <div [ngSwitch]="getType(d.key, d.value)">
                 <input ngui-datetime-picker *ngSwitchCase="'Date'" formControlName="{{d.key}}" placeholder="" [close-on-select]="false">
-                <p-treeTable [value]="objData[d.key]" selectionMode="single" *ngSwitchCase="'object'">
-                    <p-column field="name" header="Name"></p-column>
-                    <p-column field="value" header="Value"></p-column>
-                </p-treeTable>
-                        <mat-slide-toggle
-                        [color]="color"
-                        [checked]="d.value"
-                        formControlName="{{d.key}}"
-                        *ngSwitchCase="'Boolean'"
-                        >
+                <ay-treeTable [value]="objData[d.key]" selectionMode="single" *ngSwitchCase="'object'">
+                    <ay-column field="name" header="Name"></ay-column>
+                    <ay-column field="value" header="Value"></ay-column>
+                </ay-treeTable>
+                <mat-slide-toggle
+                    [color]="color"
+                    [checked]="d.value"
+                    formControlName="{{d.key}}"
+                    *ngSwitchCase="'Boolean'"
+                >
                     </mat-slide-toggle>
                 <!--<textarea *ngSwitchCase="'object'" formControlName="{{d.key}}"></textarea>-->
                 <mat-form-field class="example-full-width" *ngSwitchDefault>

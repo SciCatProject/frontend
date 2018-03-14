@@ -11,25 +11,13 @@ import {
   DatasetTableComponent
 } from 'datasets/index';
 import {
-  AutoCompleteModule,
-  ConfirmationService,
-  ConfirmDialogModule,
-  DataTableModule,
-  DialogModule,
-  DropdownModule,
-  SharedModule,
-  TabViewModule,
-  TreeModule,
-  TreeTableModule
-} from 'primeng/primeng';
-import {
   MatAutocompleteModule,
   MatButtonModule,
   MatButtonToggleModule,
   MatCardModule,
   MatCheckboxModule,
   MatChipsModule,
-  MatDatepickerModule,
+  // MatDatepickerModule,
   MatDialogModule,
   MatExpansionModule,
   MatGridListModule,
@@ -57,26 +45,21 @@ import {
   MatFormFieldModule,
   MatOptionModule,
 } from '@angular/material';
-import {
-  DatePickerModule
-} from 'shared/modules/datepicker/datepicker.module';
 import {SharedCatanieModule} from 'shared/shared.module';
 import { SelectedListComponent } from 'datasets/selected-list/selected-list.component';
-
+import { MatDatepickerModule } from 'saturn-datepicker';
 @NgModule({
   imports : [
     MatCardModule, MatDialogModule, MatPaginatorModule, MatCheckboxModule, MatTableModule, MatFormFieldModule, MatAutocompleteModule,
-    MatTabsModule, MatInputModule, MatButtonModule, MatSortModule, CommonModule, FormsModule, DialogModule, ReactiveFormsModule,
-    SharedCatanieModule, DataTableModule, SharedModule, TabViewModule, MatSelectModule, MatOptionModule,
-    ConfirmDialogModule, TreeModule, TreeTableModule, MatListModule,
-    DropdownModule, AutoCompleteModule,
-    DatePickerModule
+    MatTabsModule, MatInputModule, MatButtonModule, MatSortModule, CommonModule, FormsModule, ReactiveFormsModule,
+    SharedCatanieModule, MatSelectModule, MatOptionModule, MatNativeDateModule, MatIconModule,
+    MatListModule, MatDatepickerModule, MatTooltipModule
   ],
   declarations : [
     DashboardComponent, DatasetTableComponent, DatablocksComponent,
     DatafilesComponent, DatasetsFilterComponent, DatasetDetailComponent, SelectedListComponent
   ],
-  providers : [ DatasetService, ConfirmationService ],
+  providers : [ DatasetService ],
   exports : [ DatasetTableComponent, DatasetsFilterComponent ]
 })
 export class DatasetsModule {

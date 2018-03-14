@@ -1,7 +1,6 @@
 import { LoginPage } from './login.po';
-import { browser } from 'protractor';
-
-describe('catanie Login', function() {
+import { browser, element, by } from 'protractor';
+describe('catanie Login', function () {
   let lp: LoginPage;
 
   beforeAll(() => {
@@ -9,6 +8,13 @@ describe('catanie Login', function() {
     browser.get('/logout');
     browser.sleep(2000);
     lp.navigateTo();
+  });
+
+  it('should not have hamburger menu visible', () => {
+    // element.all(by.css('.sidenav-toggle')).then(function (items) {
+    //   expect(items.length).toBe(0);
+    // });
+    expect(element(by.css('.sidenav-toggle')).isPresent()).toBeFalsy();
   });
 
   it('should route to login automatically', () => {
@@ -22,6 +28,10 @@ describe('catanie Login', function() {
 
   it('should login with correct credentials', () => {
     lp.login();
+  });
+
+  it('should have hamburger menu visible after login', () => {
+    expect(element(by.css('.sidenav-toggle')).isPresent()).toBeTruthy();
   });
 
   it('should have three tabs for functional accounts', () => {

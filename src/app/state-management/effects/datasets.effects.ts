@@ -90,7 +90,6 @@ export class DatasetEffects {
         return this.ds
           .facet(fq, facetObject)
           .switchMap(res => {
-            console.log(res);
             const filterValues = res['results'][0];
 
             const groupsArr = filterValues['groups'] || filterValues['ownerGroup'];

@@ -11,7 +11,6 @@ import {
 import { Http } from '@angular/http';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { ConfirmationService, DataTable } from 'primeng/primeng';
 import { Subject } from 'rxjs/Subject';
 import { Job, RawDataset } from 'shared/sdk/models';
 import { UserApi } from 'shared/sdk/services';
@@ -35,6 +34,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 
 import { DialogComponent } from 'shared/modules/dialog/dialog.component';
 import * as rison from 'rison';
+import * as filesize from 'filesize';
 
 @Component({
   selector: 'dataset-table',
@@ -46,7 +46,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
   @Output() openDataset = new EventEmitter();
   @Output() selectedSet = new EventEmitter<Array<any>>();
 
-  @ViewChild('ds') dsTable: DataTable;
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
@@ -85,7 +84,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
     private router: Router,
     private configSrv: ConfigService,
     private route: ActivatedRoute,
-    private confirmationService: ConfirmationService,
     private store: Store<any>,
     public dialog: MatDialog
   ) {
@@ -96,17 +94,30 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   getRowValue(row, col) {
-    const split = col.field.split('.');
+    const field = col.field;
+    const value = row[field];
+
+    if (field === 'creationTime') {
+      const date = new Date(value);
+      const datePipe = new DatePipe('en-US');
+      const formattedDate = datePipe.transform(date, 'dd/MM/yyyy HH:mm');
+      return formattedDate;
+    }
+
+    if (field === 'size') {
+      return filesize(value || 0);
+    }
+
+    const split = field.split('.');
     if (split.length > 1) {
       if (row[split[0]]) {
         // TODO handle undefined and nesting > 1 layer
         return row[split[0]][split[1]];
-      } else {
-        return 'Unknown';
       }
-    } else {
-      return row[col.field];
+      return 'Unknown';
     }
+    
+    return value;
   }
 
   ngOnInit() {
