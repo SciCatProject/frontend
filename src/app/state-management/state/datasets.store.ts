@@ -1,6 +1,5 @@
 import * as lb from 'shared/sdk/models';
 import { DatasetFilters } from 'state-management/models';
-import {DatepickerState, initialDatepickerState} from 'shared/modules/datepicker/datepicker.store';
 
 // NOTE It IS ok to make up a state of other sub states
 export interface DatasetState {
@@ -11,7 +10,6 @@ export interface DatasetState {
     currentSet: lb.RawDataset;
     selectedSets: lb.RawDataset[];
     totalSets: number;
-    datepicker: DatepickerState;
 }
 
 export const initialDatasetState: DatasetState = {
@@ -22,6 +20,5 @@ export const initialDatasetState: DatasetState = {
     filterValues: {creationTime: {start: null, end: null}, creationLocation: [], ownerGroup: [], text: null, type: null, keywords: []},
     selectedSets: [],
     currentSet: undefined,
-    totalSets: 0,
-    datepicker: initialDatepickerState
+    totalSets: 0
 };

@@ -46,7 +46,7 @@
 
     <br />
 
-    <mat-form-field>
+    <!-- <mat-form-field>
       <input matInput class="keyword-input" matInput placeholder="Keywords" (ngModel)="keywords" name="keywords" (selectionChange)="keywordSelected(keywords)"
         [formControl]="keywordInput" [matAutocomplete]="kw">
         <mat-autocomplete #kw="matAutocomplete">
@@ -55,15 +55,24 @@
             <small>: {{g.count}}</small>
           </mat-option>
         </mat-autocomplete>
-    </mat-form-field>
+    </mat-form-field> -->
 
     <br />
 
-    <div class="ui field">
-      <h3>Date Range</h3>
-      <datepicker [selections]="dateSelections$ | async" [datepickerSelector]="datepickerSelector" [datepickerSelectionMode]="dateSelectionMode"
-        [placeholder]="'Date Range'" (selectionsChange)="updateDateRange($event)"></datepicker>
-    </div>
+    <!-- <div class="ui field">
+      <h3>Date Range</h3> -->
+    <mat-form-field>
+      <input matInput class="date-input" [matDatepicker]="picker" placeholder="Select a date range" [(ngModel)]="dateRange" name="range-picker"
+        (dateChange)="dateChanged($event)">
+      <mat-datepicker-toggle matSuffix [for]="picker">
+        <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+      </mat-datepicker-toggle>
+      <mat-datepicker #picker [rangeMode]="true"></mat-datepicker>
+    </mat-form-field>
+
+    <!-- <datepicker [selections]="dateSelections$ | async" [datepickerSelector]="datepickerSelector" [datepickerSelectionMode]="dateSelectionMode"
+        [placeholder]="'Date Range'" (selectionsChange)="updateDateRange($event)"></datepicker> -->
+    <!-- </div> -->
     <br>
     <!-- </div>
     </div> -->

@@ -18,17 +18,8 @@ import {
 } from 'state-management/actions/datasets.actions';
 
 import { DatasetState, initialDatasetState } from 'state-management/state/datasets.store';
-import { DatepickerState } from 'shared/modules/datepicker/datepicker.store';
-import { datepickerReducer } from 'shared/modules/datepicker/datepicker.reducer';
 
 export function datasetsReducer(state = initialDatasetState, action: Action) {
-    if (action.type.indexOf('[DatePicker]') !== -1) {
-        console.log('Action came in! ' + action.type);
-
-        // TODO: There must be a more appropriate way to deal with datepicker actions than this
-        return {...state, datepicker: datepickerReducer(state.datepicker, action)};
-    }
-
     if (action.type.indexOf('[Dataset]') !== -1) {
         console.log('Action came in! ' + action.type);
     }
