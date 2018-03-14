@@ -87,6 +87,7 @@ export class DatasetEffects {
         }
         delete fq['mode'];
         const facetObject = {'keywords': [{'$group': {'_id': '$keywords', 'count': {'$sum': 1}}}, {'$sort': {'count': -1, '_id': 1}}]};
+        console.log(fq);
         return this.ds
           .facet(fq, facetObject)
           .switchMap(res => {
@@ -161,6 +162,7 @@ export class DatasetEffects {
         if (fq['sortField']) {
           filter['order'] = fq['sortField'];
         }
+        console.log(filter);
         return this.ds.find(filter)
           .switchMap(res => {
             return Observable.of(new DatasetActions.SearchCompleteAction(res));

@@ -61,7 +61,6 @@ export class ParamsService {
     delete newParams['mode'];
     // TODO could dispatch mode action here
     const filters = Object.assign({}, newParams);
-    console.log(filters);
     this.store.dispatch(new dsa.UpdateFilterAction(filters));
   }
 
