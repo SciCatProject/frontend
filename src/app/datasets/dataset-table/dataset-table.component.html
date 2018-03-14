@@ -27,7 +27,7 @@
     </div>
   </div>
       <mat-paginator class='dataset-paginator' [pageSize]="limit$ | async" [pageSizeOptions]="[10,30, 50, 100]" [length]="datasetCount$ | async" (page)="onPage(event)"></mat-paginator>
-      <mat-table #table [dataSource]="dataSource" class='dataset-table' (matSortChange)="onPage($event)" matSort>
+      <mat-table #table [dataSource]="dataSource" class='dataset-table' (matSortChange)="onPage($event)" matSort matSortActive="creationTime" matSortDirection="desc">
 
           <!-- Checkbox Column -->
     <ng-container matColumnDef="select">
