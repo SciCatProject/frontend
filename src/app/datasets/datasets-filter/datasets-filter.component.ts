@@ -104,17 +104,6 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
    * only use unique values
    */
   ngOnInit() {
-    // this.dateSelections$ = new BehaviorSubject<TimeRange[]>([]);
-    // const datasetsStoreSlicePath = ['root', 'datasets'];
-    // const datasetsSelector = createSelector((state: any): any => {
-    //   return datasetsStoreSlicePath.reduce(
-    //     (obj: any, sliceKey: any) => obj[sliceKey], state);
-    // }, (selectedDatasets: any): any => selectedDatasets);
-
-    // this.datepickerSelector =
-    //   createSelector(datasetsSelector,
-    //     (selectedDatasets: any): DatepickerState =>
-    //       selectedDatasets['datepicker']);
 
     this.resultCount$ =
       this.store.select(selectors.datasets.getTotalSets);
@@ -149,7 +138,6 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
               this.filterValues['ownerGroup'] !== null && Array.isArray(this.filterValues['ownerGroup'])) {
               this.groups = this.filterValues['ownerGroup'] ? this.filterValues['ownerGroup'].slice() : [];
             }
-            console.log(this.filterValues);
             if (this.keywords.length === 0 &&
               this.filterValues['keywords'] !== null && Array.isArray(this.filterValues['keywords'])) {
               this.filterValues['keywords'].map((k) => {
@@ -162,15 +150,15 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
 
             if (this.filterValues.creationLocation) {
               this.filteredLocations = this.locationInput.valueChanges
-                .pipe(startWith(''), map(loc => loc ? this.filterLocations(loc) : this.filterValues.creationLocation.slice()));
+                .pipe(startWith(''), map(loc => loc ? this.filterLocations(loc) : this.locations.slice()));
             }
             if (this.filterValues.ownerGroup) {
               this.filteredGroups = this.groupInput.valueChanges
-                .pipe(startWith(''), map(group => group ? this.filterGroups(group) : this.filterValues.ownerGroup.slice()));
+                .pipe(startWith(''), map(group => group ? this.filterGroups(group) : this.groups.slice()));
             }
             if (this.filterValues.keywords) {
               this.filteredKeywords = this.keywordInput.valueChanges
-                .pipe(startWith(''), map(kw => kw ? this.filterKeywords(kw) : this.filterValues.keywords.slice()));
+                .pipe(startWith(''), map(kw => kw ? this.filterKeywords(kw) : this.keywords.slice()));
             }
           }
         }));
