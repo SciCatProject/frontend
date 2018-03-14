@@ -9,11 +9,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormControl } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { createSelector, OutputSelector } from 'reselect';
-import {
-  DatepickerState,
-  SelectionModes
-} from 'shared/modules/datepicker/datepicker.store';
-import TimeRange from 'shared/modules/datepicker/LocalizedDateTime/TimeRange';
+
 import * as utils from 'shared/utils';
 import * as dsa from 'state-management/actions/datasets.actions';
 import * as dStore from 'state-management/state/datasets.store';
@@ -22,7 +18,6 @@ import { DatasetFilters } from 'state-management/models';
 import { Observable } from 'rxjs/Observable';
 import * as rison from 'rison';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { MultiDayRange } from 'shared/modules/datepicker/LocalizedDateTime/timeRanges';
 import { Dataset } from 'shared/sdk';
 import { MatDatepicker } from 'saturn-datepicker';
 
