@@ -10,6 +10,7 @@ import {config} from '../../../config/config';
 import {Observable} from 'rxjs/Observable';
 import {Subscription} from 'rxjs/Subscription';
 import { Message, MessageType } from 'state-management/models';
+import { Angular5Csv } from 'angular5-csv/Angular5-csv';
 import 'rxjs/add/operator/distinctUntilChanged';
 /**
  * Component to show details for a dataset, using the
@@ -90,6 +91,21 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
     // if we weren't clearing the cache and the current set's datablocks
     //   may not have been loaded, we would want to make sure that we load them:
     // this.subscriptions.push(this.dataset$.subscribe(this.ensureDatablocksForDatasetAreLoaded));
+  }
+
+  onExportClick() {
+    this.dataset$.take(1).subscribe(ds => {
+      const options = {
+        fieldSeparator: ',',
+        quoteStrings: '"',
+        decimalseparator: '.',
+        showLabels: true,
+        showTitle: false,
+        useBom: true,
+        headers: Object.keys(ds)
+      };
+      const ts = new Angular5Csv([ds], 'Dataset_' + ds.pid, options);
+    });
   }
 
   ngOnDestroy() {
