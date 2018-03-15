@@ -251,7 +251,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
         quoteStrings: '"',
         decimalseparator: '.',
         showLabels: true,
-        showTitle: true,
+        showTitle: false,
         useBom: true,
         headers: Object.keys(this.datasets[0])
       };
