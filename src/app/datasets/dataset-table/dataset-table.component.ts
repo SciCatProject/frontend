@@ -21,6 +21,7 @@ import * as selectors from 'state-management/selectors';
 import * as ua from 'state-management/actions/user.actions';
 import * as ja from 'state-management/actions/jobs.actions';
 import { Message, MessageType } from 'state-management/models';
+import { Angular5Csv } from 'angular5-csv/Angular5-csv';
 import * as utils from 'shared/utils';
 
 import { config } from '../../../config/config';
@@ -116,7 +117,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
       }
       return 'Unknown';
     }
-    
     return value;
   }
 
@@ -242,6 +242,19 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
       payload: this.selection.selected
     });
     // this.selectedSet.emit(this.selection.selected);
+  }
+
+  onExportClick() {
+    const options = {
+      fieldSeparator: ',',
+      quoteStrings: '"',
+      decimalseparator: '.',
+      showLabels: true,
+      showTitle: true,
+      useBom: true,
+      headers: Object.keys(this.datasets[0])
+    };
+    const ts = new Angular5Csv(this.datasets, 'Datasets ' + this.paginator.pageIndex + 1, options);
   }
 
   calculateRowClasses(row) {

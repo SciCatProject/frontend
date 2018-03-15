@@ -26,6 +26,7 @@
       <div class="ui loader"></div>
     </div>
   </div>
+  <button mat-button (click)="onExportClick()" color="primary">Export Page to CSV</button>
       <mat-paginator class='dataset-paginator' [pageSize]="limit$ | async" [pageSizeOptions]="[10,30, 50, 100]" [length]="datasetCount$ | async" (page)="onPage(event)"></mat-paginator>
       <mat-table #table [dataSource]="dataSource" class='dataset-table' (matSortChange)="onPage($event)" matSort matSortActive="creationTime" matSortDirection="desc">
 
