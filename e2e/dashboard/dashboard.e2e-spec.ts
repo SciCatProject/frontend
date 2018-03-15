@@ -2,6 +2,7 @@ import { LoginPage } from '../login/login.po';
 import { DashboardPage } from './dashboard.po';
 import { browser, element, by} from 'protractor';
 import { protractor } from 'protractor/built/ptor';
+import * as fs from 'fs';
 
 describe('catanie Dashboard', function() {
   let lp: LoginPage;
@@ -18,6 +19,10 @@ describe('catanie Dashboard', function() {
     });
   });
 
+  beforeEach(() => {
+    
+  });
+
   it('should be on correct page', () => {
     expect(browser.getCurrentUrl()).toContain('datasets');
   });
@@ -29,13 +34,6 @@ describe('catanie Dashboard', function() {
     expect(element(by.css('.item.active')).getText()).toContain('Home');
     browser.actions().sendKeys(protractor.Key.ESCAPE); // close nav drawer
     browser.sleep(1000);
-  });
-
-  it('should display a table of datasets', () => {
-    expect(element(by.className('mat-table')).isDisplayed()).toBeTruthy();
-  });
-
-  it('should display a toggleable archive/retrieve view and change mode', () => {
     const backdrop = element(by.css('.mat-drawer-backdrop'));
     backdrop.isPresent().then((p) => {
       if (p) {
@@ -44,11 +42,31 @@ describe('catanie Dashboard', function() {
     });
      // ensure sidenav is closed
     browser.sleep(1000);
+  });
+
+  it('should display a table of datasets', () => {
+    expect(element(by.className('mat-table')).isDisplayed()).toBeTruthy();
+  });
+
+  it('should display a toggleable archive/retrieve view and change mode', () => {
     expect(element(by.className('mode-container')).isDisplayed()).toBeTruthy();
     expect(element(by.css('.button.view')).getAttribute('class')).toMatch('positive');
     element(by.css('.button.archive')).click();
     expect(browser.getCurrentUrl()).toContain('archive');
     expect(element(by.css('.button.archive')).getAttribute('class')).toMatch('positive');
+  });
+
+  it('should download a csv of datasets', () => {
+    browser.sleep(2000);
+    const btn = element(by.css('.export-csv'));
+    const filename = './e2e/Datasets_01.csv';
+    expect(btn).toBeTruthy();
+    btn.click();
+    browser.driver.wait(function() {
+      return fs.existsSync(filename);
+    }, 30000).then(function() {
+        expect(fs.existsSync(filename)).toBeTruthy();
+    });
   });
 
   it('should log out', () => {

@@ -13,8 +13,16 @@ exports.config = {
         'browserName': 'chrome',
         // chromeDriver: '../node_modules/protractor/node_modules/webdriver-manager/selenium/chromedriver_2.30',
         chromeOptions: {
-            args: ["--headless", "--disable-gpu", "--no-sandbox"]
-        //    args: ["--window-size=800x600"]
+            args: ["--headless", "--disable-gpu", "--no-sandbox"],
+            // args: ["--window-size=800x600"],
+            prefs: {
+                download: {
+                    prompt_for_download: false,
+                    dirctory_upgrade: true,
+                    default_directory: './e2e/'
+                }
+            }
+           
         }
 
     },
