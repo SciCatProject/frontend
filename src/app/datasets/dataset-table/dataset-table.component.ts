@@ -245,16 +245,23 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   onExportClick() {
-    const options = {
-      fieldSeparator: ',',
-      quoteStrings: '"',
-      decimalseparator: '.',
-      showLabels: true,
-      showTitle: true,
-      useBom: true,
-      headers: Object.keys(this.datasets[0])
-    };
-    const ts = new Angular5Csv(this.datasets, 'Datasets ' + this.paginator.pageIndex + 1, options);
+    if (this.datasets.length > 0) {
+      const options = {
+        fieldSeparator: ',',
+        quoteStrings: '"',
+        decimalseparator: '.',
+        showLabels: true,
+        showTitle: true,
+        useBom: true,
+        headers: Object.keys(this.datasets[0])
+      };
+      const ts = new Angular5Csv(this.datasets, 'Datasets ' + this.paginator.pageIndex + 1, options);
+    } else {
+      const msg = new Message();
+      msg.content = 'No Datasets Loaded';
+      msg.type = MessageType.Error;
+      this.store.dispatch(new ua.ShowMessageAction(msg));
+    }
   }
 
   calculateRowClasses(row) {
