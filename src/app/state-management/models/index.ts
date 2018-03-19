@@ -1,4 +1,5 @@
-import { User, AccessGroup, Job, RawDataset } from 'shared/sdk/models';
+import { User, AccessGroup, Job, RawDataset, Proposal } from 'shared/sdk/models';
+export { User, AccessGroup, Job, RawDataset, Proposal };
 
 export interface Settings {
   tapeCopies: string;
@@ -27,8 +28,4 @@ export interface DatasetFilters {
   skip: number;
   initial: boolean;
   keywords: string[];
-}
-
-
-
-export { User, AccessGroup, Job, RawDataset };
+};
