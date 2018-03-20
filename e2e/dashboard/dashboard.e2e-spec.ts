@@ -20,7 +20,6 @@ describe('catanie Dashboard', function() {
   });
 
   beforeEach(() => {
-    
   });
 
   it('should be on correct page', () => {
