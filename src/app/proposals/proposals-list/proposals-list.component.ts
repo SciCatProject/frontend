@@ -10,14 +10,14 @@ import { Proposal } from 'state-management/models';
 @Component({
 	selector: 'proposals-list',
 	templateUrl: 'proposals-list.component.html',
-	styleUrls: ['./proposals-list.component.css']
+	styleUrls: ['proposals-list.component.css']
 })
 export class ProposalsListComponent {
 	proposals$: Observable<Proposal[]>;
 
 	constructor(private store: Store<AppState>) {
 		this.proposals$ = store.pipe(
-			select((appState: AppState) => appState.proposals),
+			select('proposals'),
 			select((propState: ProposalState) => propState.list)
 		);
 	}
