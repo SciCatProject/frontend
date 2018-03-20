@@ -18,8 +18,8 @@ import {UserDetailsComponent} from '../users/user-details/user-details.component
 
 import {SampleDataFormComponent} from '../sample-data-form/sample-data-form.component';
 
-import {ProposalsListComponent} from '../proposals/proposals-list/proposals-list.component';
-import {ProposalDetailComponent} from '../proposals/proposal-detail/proposal-detail.component';
+import {ListProposalsPageComponent} from '../proposals/containers/list-proposals-page/list-proposals-page.component';
+import {ViewProposalPageComponent} from '../proposals/containers/view-proposal-page/view-proposal-page.component';
 
 import {AuthCheck} from '../AuthCheck';
 
@@ -34,8 +34,8 @@ export const routes: Routes = [
   { path: 'dataset/:id/datablocks', component: DatablocksComponent, canActivate: [AuthCheck] },
   { path: 'dataset/:id/datafiles', component: DatafilesComponent, canActivate: [AuthCheck] },
   
-  { path: 'proposals', component: ProposalsListComponent, canActivate: [AuthCheck] },
-  { path: 'proposals/:id', component: ProposalDetailComponent, canActivate: [AuthCheck] }
+  { path: 'proposals', component: ListProposalsPageComponent, canActivate: [AuthCheck] },
+  { path: 'proposals/:id', component: ViewProposalPageComponent, canActivate: [AuthCheck] },
 
   { path: 'user', component: UserDetailsComponent, canActivate: [AuthCheck] },
   { path: 'user/settings', component: UserSettingsComponent, canActivate: [AuthCheck] },
