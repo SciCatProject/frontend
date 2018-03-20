@@ -9,11 +9,11 @@ import { Proposal } from 'state-management/models';
 import { getProposalList } from 'state-management/selectors/proposals.selectors';
 
 @Component({
-	selector: 'proposals-list',
-	templateUrl: 'proposals-list.component.html',
-	styleUrls: ['proposals-list.component.css']
+	selector: 'list-proposals-page',
+	templateUrl: 'list-proposals-page.component.html',
+	styleUrls: ['list-proposals-page.component.css']
 })
-export class ProposalsListComponent {
+export class ListProposalsPageComponent {
 	proposals$: Observable<Proposal[]>;
 
 	constructor(private store: Store<AppState>) {

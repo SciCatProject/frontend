@@ -1,3 +1,2 @@
-<mat-card>
-	<p>Nothing to see, move on!</p>
-</mat-card>
+<proposal-detail *ngIf="proposal$ | async" [proposal]="proposal$ | async">
+</proposal-detail>
