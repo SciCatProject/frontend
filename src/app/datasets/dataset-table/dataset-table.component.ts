@@ -247,28 +247,28 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
   onExportClick() {
     if (this.datasets.length > 0) {
       // loop over all objects and find all keys
-      var allKeys = []
+      const allKeys = [];
       this.datasets.map(function(obj) {
-        var ks = Object.keys(obj)
+        const ks = Object.keys(obj);
         ks.map(function(k) {
           if (allKeys.indexOf(k) < 0) {
-            allKeys.push(k)
+            allKeys.push(k);
           }
         })
       })
 
 
       // create "rectangular" dataset representation
-      var output = this.datasets.map(function(obj) {
-        var row = []
+      const output = this.datasets.map(function(obj) {
+        const row = [];
         allKeys.map(function(col) {
           if (col in obj) {
-            row[col] = JSON.stringify(obj[col])
+            row[col] = JSON.stringify(obj[col]);
           } else {
-            row[col] = ''
+            row[col] = '';
           }
         })
-        return row
+        return row;
       });
 
       const options = {
