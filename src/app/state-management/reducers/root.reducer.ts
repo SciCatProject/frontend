@@ -10,7 +10,7 @@ import { DashboardUIState, initialDashboardUIState } from 'state-management/stat
 import { DatasetState, initialDatasetState } from 'state-management/state/datasets.store';
 import { initialJobsState, JobsState } from 'state-management/state/jobs.store';
 import { initialUserState, UserState } from 'state-management/state/user.store';
-import { initialProposalState, ProposalState } from 'state-management/state/proposal.store';
+import { initialProposalsState, ProposalsState } from 'state-management/state/proposals.store';
 
 import * as ua from 'state-management/actions/user.actions';
 
@@ -19,7 +19,7 @@ export interface AppState {
     user: UserState;
     dashboardUI: DashboardUIState;
     jobs: JobsState;
-    proposal: ProposalState;
+    proposal: ProposalsState;
 }
 
 export const initialState: AppState = {
@@ -27,7 +27,7 @@ export const initialState: AppState = {
     user: initialUserState,
     dashboardUI: initialDashboardUIState,
     jobs: initialJobsState,
-    proposal: initialProposalState,
+    proposal: initialProposalsState,
 };
 
 const appReducer = combineReducers({

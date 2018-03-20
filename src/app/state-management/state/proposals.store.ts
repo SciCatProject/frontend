@@ -1,10 +1,11 @@
 import { Proposal } from '../models';
 
-export interface ProposalState {
+export interface ProposalsState {
 	list: Proposal[];
+	selectedId: string,
 };
 
-export const initialProposalState: ProposalState = {
+export const initialProposalsState: ProposalsState = {
 	list: [
 		new Proposal({
 			proposalId: '123456789',
@@ -21,4 +22,5 @@ export const initialProposalState: ProposalState = {
 			ownerGroup: '34234234-group'
 		})
 	],
+	selectedId: null,
 };
