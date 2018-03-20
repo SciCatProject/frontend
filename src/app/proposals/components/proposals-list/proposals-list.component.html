@@ -2,7 +2,7 @@
 	<mat-list>
 		<!-- <h3 mat-subheader>Proposals</h3> -->
 		<mat-list-item
-		*ngFor="let proposal of proposals$ | async"
+		*ngFor="let proposal of proposals"
 		[routerLink]="['/proposals/', proposal.proposalId]"
 		>
 			<h4 mat-line>{{proposal.title}}</h4>

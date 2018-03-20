@@ -1,3 +1,14 @@
-<mat-card>
-	<p>Nothing to see, move on!</p>
-</mat-card>
+<mat-tab-group>
+	<mat-tab label="General" class="mat-padding">
+		<div class="tab-content">
+			<h4>{{proposal.title}}</h4>
+			<p>{{proposal.abstract}}</p>
+		</div>
+	</mat-tab>
+	
+	<mat-tab label="Datasets" class="mat-padding">
+		<div class="tab-content">
+			List of datasets...
+		</div>
+	</mat-tab>
+</mat-tab-group>
