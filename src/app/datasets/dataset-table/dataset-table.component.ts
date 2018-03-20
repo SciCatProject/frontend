@@ -246,6 +246,31 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
 
   onExportClick() {
     if (this.datasets.length > 0) {
+      // loop over all objects and find all keys
+      var allKeys = []
+      this.datasets.map(function(obj) {
+        var ks = Object.keys(obj)
+        ks.map(function(k) {
+          if (allKeys.indexOf(k) < 0) {
+            allKeys.push(k)
+          }
+        })
+      })
+
+
+      // create "rectangular" dataset representation
+      var output = this.datasets.map(function(obj) {
+        var row = []
+        allKeys.map(function(col) {
+          if (col in obj) {
+            row[col] = JSON.stringify(obj[col])
+          } else {
+            row[col] = ''
+          }
+        })
+        return row
+      });
+
       const options = {
         fieldSeparator: ',',
         quoteStrings: '"',
@@ -253,9 +278,11 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
         showLabels: true,
         showTitle: false,
         useBom: true,
-        headers: Object.keys(this.datasets[0])
+        headers: allKeys
       };
-      const ts = new Angular5Csv(this.datasets, 'Datasets ' + this.paginator.pageIndex + 1, options);
+
+
+      const ts = new Angular5Csv(output, 'Datasets ' + this.paginator.pageIndex + 1, options);
     } else {
       const msg = new Message();
       msg.content = 'No Datasets Loaded';
@@ -571,5 +598,3 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 }
-
-

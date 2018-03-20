@@ -31,13 +31,13 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
   datablocks$: Observable<Datablock[]>;
   admin$: Observable<boolean>;
 
-  constructor(private route: ActivatedRoute, private store: Store<any>) {}
+  constructor(private route: ActivatedRoute, private store: Store<any>) { }
 
   ngOnInit() {
     const currentUser$ = this.store.select(state => state.root.user.currentUser);
     const adminUserNames = ['ingestor', 'archiveManager'];
     const userIsAdmin = (user) => {
-      return (user['accountType'] === 'functional')  || (adminUserNames.indexOf(user.username) !== -1);
+      return (user['accountType'] === 'functional') || (adminUserNames.indexOf(user.username) !== -1);
     };
     this.admin$ = currentUser$.map(userIsAdmin);
 
@@ -95,6 +95,7 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
 
   onExportClick() {
     this.dataset$.take(1).subscribe(ds => {
+
       const options = {
         fieldSeparator: ',',
         quoteStrings: '"',
@@ -104,7 +105,11 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
         useBom: true,
         headers: Object.keys(ds)
       };
-      const ts = new Angular5Csv([ds], 'Dataset_' + ds.pid, options);
+      var newDs = {}
+      for (var key in ds) {
+        newDs[key] = JSON.stringify(ds[key])
+      }
+      const ts = new Angular5Csv([newDs], 'Dataset_' + ds.pid, options);
     });
   }
 
@@ -133,7 +138,7 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
   }
 
   resetDataset(dataset) {
-      this.store
+    this.store
       .select(state => state.root.user)
       .take(1)
       .subscribe(user => {
@@ -160,5 +165,5 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
         console.log(job);
         this.store.dispatch(new ja.SubmitAction(job));
       });
-    }
+  }
 }
