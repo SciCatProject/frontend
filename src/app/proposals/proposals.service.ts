@@ -5,7 +5,7 @@ import { ProposalApi } from 'shared/sdk/services';
 import { Proposal } from 'shared/sdk/models';
 
 @Injectable()
-export default class ProposalService {
+export class ProposalsService {
 	constructor(private proposalApi: ProposalApi) {}
 
 	getProposals(): Observable<Proposal[]> {

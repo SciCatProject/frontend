@@ -25,6 +25,11 @@ export class GetProposalsFailedAction implements Action {
     type = GET_PROPOSALS_FAILED;
 }
 
+export type GetProposalsOutcomeAction =
+	GetProposalsCompleteAction |
+	GetProposalsFailedAction;
+
 export type ProposalsAction = 
     SelectProposalAction |
-    GetProposalsAction | GetProposalsCompleteAction | GetProposalsFailedAction;
+    GetProposalsAction | GetProposalsOutcomeAction;
+    
