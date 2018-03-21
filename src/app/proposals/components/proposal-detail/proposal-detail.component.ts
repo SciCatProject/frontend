@@ -5,8 +5,6 @@ import { Store, select } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 
 import { Proposal } from 'state-management/models';
-/*import { AppState } from 'state-management/state/app.store';
-import { ProposalState } from 'state-management/state/proposal.store';*/
 
 @Component({
 	selector: 'proposal-detail',
