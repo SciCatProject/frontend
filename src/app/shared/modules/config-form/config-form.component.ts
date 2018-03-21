@@ -76,7 +76,7 @@ export class ConfigFormComponent implements OnInit {
             this.formData[prop] = formattedDate;
             }
           if (config && config['type'] === 'number' && config['name'] === 'size') {
-            this.formData[prop] = (((this.source[prop] / 1024) / 1024) / 1024).toFixed(2);
+            this.formData[prop] = (((this.source[prop] / 1024) / 1024) / 1024).toFixed(10);
             }
           if (config && 'visible' in config && config['visible'] === false) {
             delete this.formData[prop];

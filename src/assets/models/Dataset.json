@@ -38,7 +38,7 @@
         "name": "size",
         "type": "number",
         "table": {
-            "header": "Size (GB)",
+            "header": "Size",
             "sortable": true,
             "field": "size"
         }
