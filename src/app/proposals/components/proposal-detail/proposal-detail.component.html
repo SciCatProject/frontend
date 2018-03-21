@@ -1,8 +1,34 @@
 <mat-tab-group>
 	<mat-tab label="General" class="mat-padding">
 		<div class="tab-content">
-			<h4>{{proposal.title}}</h4>
-			<p>{{proposal.abstract}}</p>
+			<table>
+				<tr>
+					<th>Title</th>
+					<td>{{proposal.title}}
+				</tr>
+				<tr>
+					<th>Main proposer</th> 
+					<td>
+						<a href="mailto:{{mainProposer.email}}">{{mainProposer.name}}</a>
+					</td>
+				</tr>
+				<tr *ngIf="principalInvestigator.isPresent">
+					<th>Principal investigator</th> 
+					
+					<td *ngIf="principalInvestigator.email; else withoutEmail">
+						<a href="mailto:{{principalInvestigator.email}}">{{principalInvestigator.name}}</a>
+					</td>
+					<ng-template #withoutEmail>
+						<td>
+							{{principalInvestigator.name}}
+						</td>
+					</ng-template>
+				</tr>
+				<tr>
+					<th>Abstract</th>
+					<td>{{proposal.abstract}}</td>
+				</tr>
+			</table>
 		</div>
 	</mat-tab>
 	

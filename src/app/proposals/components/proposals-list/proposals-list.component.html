@@ -1,4 +1,4 @@
-<mat-nav-list>
+<mat-nav-list *ngIf="proposals.length > 0">
     <mat-list>
         <!-- <h3 mat-subheader>Proposals</h3> -->
         <mat-list-item
@@ -10,3 +10,6 @@
         </mat-list-item>
     </mat-list>
 </mat-nav-list>
+<div *ngIf="proposals.length === 0">
+    {{ hasFetched ? "No proposals." : "Loading..." }}
+</div>
