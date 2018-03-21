@@ -7,10 +7,10 @@ import { map, mergeMap, take, catchError } from 'rxjs/operators';
 import { ProposalsService } from 'proposals/proposals.service';
 
 import {
-	GetProposalsOutcomeAction,
-	GetProposalsAction, GET_PROPOSALS,
-	GetProposalsCompleteAction, GET_PROPOSALS_COMPLETE,
-	GetProposalsFailedAction, GET_PROPOSALS_FAILED,
+	FetchProposalsOutcomeAction,
+	FetchProposalsAction, FETCH_PROPOSALS,
+	FetchProposalsCompleteAction, FETCH_PROPOSALS_COMPLETE,
+	FetchProposalsFailedAction, FETCH_PROPOSALS_FAILED,
 } from '../actions/proposals.actions';
 
 import {
@@ -21,13 +21,13 @@ import { Proposal } from '../models';
 
 @Injectable()
 export class ProposalsEffects {
-	@Effect() getProposals$: Observable<GetProposalsOutcomeAction> = this.actions$.pipe(
-		ofType(GET_PROPOSALS),
+	@Effect() getProposals$: Observable<FetchProposalsOutcomeAction> = this.actions$.pipe(
+		ofType(FETCH_PROPOSALS),
 		take(1),
 		mergeMap(action => 
 			this.proposalsService.getProposals().pipe(
-				map(proposals => new GetProposalsCompleteAction(proposals)),
-				catchError(() => Observable.of(new GetProposalsFailedAction()))
+				map(proposals => new FetchProposalsCompleteAction(proposals)),
+				catchError(() => Observable.of(new FetchProposalsFailedAction()))
 			)
 		)
 	);

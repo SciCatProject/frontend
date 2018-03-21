@@ -7,7 +7,7 @@ import { ProposalsState } from 'state-management/state/proposals.store';
 
 import { Proposal } from 'state-management/models';
 import { getProposalList } from 'state-management/selectors/proposals.selectors';
-import { GetProposalsAction } from 'state-management/actions/proposals.actions';
+import { FetchProposalsAction } from 'state-management/actions/proposals.actions';
 
 @Component({
     selector: 'list-proposals-page',
@@ -21,6 +21,6 @@ export class ListProposalsPageComponent implements OnInit {
 
     ngOnInit() {
         this.proposals$ = this.store.pipe(select(getProposalList));
-        this.store.dispatch(new GetProposalsAction());
+        this.store.dispatch(new FetchProposalsAction());
     }
 };

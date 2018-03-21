@@ -8,7 +8,7 @@ import { Observable } from 'rxjs/Observable';
 import { map } from 'rxjs/operators';
 
 import { AppState } from 'state-management/state/app.store';
-import { GetProposalsAction, SelectProposalAction } from 'state-management/actions/proposals.actions';
+import { FetchProposalsAction, SelectProposalAction } from 'state-management/actions/proposals.actions';
 import { Proposal } from 'state-management/models';
 import { getSelectedProposal } from 'state-management/selectors/proposals.selectors';
 
@@ -29,7 +29,7 @@ export class ViewProposalPageComponent implements OnInit, OnDestroy {
             .subscribe(this.store);
 
         this.proposal$ = this.store.pipe(select(getSelectedProposal));
-        this.store.dispatch(new GetProposalsAction());
+        this.store.dispatch(new FetchProposalsAction());
     }
 
     ngOnDestroy() {

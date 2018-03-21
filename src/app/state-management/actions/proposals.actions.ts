@@ -3,33 +3,32 @@ import { Proposal } from '../models';
 
 export const SELECT_PROPOSAL			= '[Proposals] Select Proposal';
 
-export const GET_PROPOSALS    			= '[Proposals] Get Proposals';
-export const GET_PROPOSALS_COMPLETE    	= '[Proposals] Get Proposals Complete';
-export const GET_PROPOSALS_FAILED		= '[Proposals] Get Proposals Failed'
+export const FETCH_PROPOSALS    		= '[Proposals] Get Proposals';
+export const FETCH_PROPOSALS_COMPLETE 	= '[Proposals] Get Proposals Complete';
+export const FETCH_PROPOSALS_FAILED		= '[Proposals] Get Proposals Failed'
 
 export class SelectProposalAction implements Action {
     type = SELECT_PROPOSAL;
     constructor(readonly proposalId: string) {}
 }
 
-export class GetProposalsAction implements Action {
-    type = GET_PROPOSALS;
+export class FetchProposalsAction implements Action {
+    type = FETCH_PROPOSALS;
 }
 
-export class GetProposalsCompleteAction implements Action {
-    type = GET_PROPOSALS_COMPLETE;
+export class FetchProposalsCompleteAction implements Action {
+    type = FETCH_PROPOSALS_COMPLETE;
     constructor(readonly proposals: Proposal[]) {}
 }
 
-export class GetProposalsFailedAction implements Action {
-    type = GET_PROPOSALS_FAILED;
+export class FetchProposalsFailedAction implements Action {
+    type = FETCH_PROPOSALS_FAILED;
 }
 
-export type GetProposalsOutcomeAction =
-	GetProposalsCompleteAction |
-	GetProposalsFailedAction;
+export type FetchProposalsOutcomeAction =
+	FetchProposalsCompleteAction |
+	FetchProposalsFailedAction;
 
 export type ProposalsAction = 
     SelectProposalAction |
-    GetProposalsAction | GetProposalsOutcomeAction;
-    
+    FetchProposalsAction | FetchProposalsOutcomeAction;
