@@ -10,6 +10,7 @@ import {config} from '../../../config/config';
 import {Observable} from 'rxjs/Observable';
 import {Subscription} from 'rxjs/Subscription';
 import { Message, MessageType } from 'state-management/models';
+import { Angular5Csv } from 'angular5-csv/Angular5-csv';
 import 'rxjs/add/operator/distinctUntilChanged';
 /**
  * Component to show details for a dataset, using the
@@ -30,13 +31,13 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
   datablocks$: Observable<Datablock[]>;
   admin$: Observable<boolean>;
 
-  constructor(private route: ActivatedRoute, private store: Store<any>) {}
+  constructor(private route: ActivatedRoute, private store: Store<any>) { }
 
   ngOnInit() {
     const currentUser$ = this.store.select(state => state.root.user.currentUser);
     const adminUserNames = ['ingestor', 'archiveManager'];
     const userIsAdmin = (user) => {
-      return (user['accountType'] === 'functional')  || (adminUserNames.indexOf(user.username) !== -1);
+      return (user['accountType'] === 'functional') || (adminUserNames.indexOf(user.username) !== -1);
     };
     this.admin$ = currentUser$.map(userIsAdmin);
 
@@ -92,6 +93,26 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
     // this.subscriptions.push(this.dataset$.subscribe(this.ensureDatablocksForDatasetAreLoaded));
   }
 
+  onExportClick() {
+    this.dataset$.take(1).subscribe(ds => {
+
+      const options = {
+        fieldSeparator: ',',
+        quoteStrings: '"',
+        decimalseparator: '.',
+        showLabels: true,
+        showTitle: false,
+        useBom: true,
+        headers: Object.keys(ds)
+      };
+      var newDs = {}
+      for (var key in ds) {
+        newDs[key] = JSON.stringify(ds[key])
+      }
+      const ts = new Angular5Csv([newDs], 'Dataset_' + ds.pid, options);
+    });
+  }
+
   ngOnDestroy() {
     this.subscriptions.forEach(subscription => subscription.unsubscribe());
   }
@@ -117,7 +138,7 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
   }
 
   resetDataset(dataset) {
-      this.store
+    this.store
       .select(state => state.root.user)
       .take(1)
       .subscribe(user => {
@@ -144,5 +165,5 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
         console.log(job);
         this.store.dispatch(new ja.SubmitAction(job));
       });
-    }
+  }
 }

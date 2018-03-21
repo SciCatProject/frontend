@@ -41,3 +41,5 @@ testem.log
 Thumbs.db
 
 test-results.xml
+
+e2e/Datasets_01.csv
