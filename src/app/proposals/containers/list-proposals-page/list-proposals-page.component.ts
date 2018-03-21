@@ -10,17 +10,17 @@ import { getProposalList } from 'state-management/selectors/proposals.selectors'
 import { GetProposalsAction } from 'state-management/actions/proposals.actions';
 
 @Component({
-	selector: 'list-proposals-page',
-	templateUrl: 'list-proposals-page.component.html',
-	styleUrls: ['list-proposals-page.component.css']
+    selector: 'list-proposals-page',
+    templateUrl: 'list-proposals-page.component.html',
+    styleUrls: ['list-proposals-page.component.css']
 })
 export class ListProposalsPageComponent implements OnInit {
-	proposals$: Observable<Proposal[]>;
+    proposals$: Observable<Proposal[]>;
 
-	constructor(private store: Store<AppState>) {}
+    constructor(private store: Store<AppState>) {}
 
-	ngOnInit() {
-		this.proposals$ = this.store.pipe(select(getProposalList));
-		this.store.dispatch(new GetProposalsAction());
-	}
+    ngOnInit() {
+        this.proposals$ = this.store.pipe(select(getProposalList));
+        this.store.dispatch(new GetProposalsAction());
+    }
 };

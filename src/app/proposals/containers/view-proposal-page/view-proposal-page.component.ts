@@ -13,26 +13,26 @@ import { Proposal } from 'state-management/models';
 import { getSelectedProposal } from 'state-management/selectors/proposals.selectors';
 
 @Component({
-	selector: 'view-proposal-page',
-	templateUrl: 'view-proposal-page.component.html',
-	styleUrls: ['view-proposal-page.component.css']
+    selector: 'view-proposal-page',
+    templateUrl: 'view-proposal-page.component.html',
+    styleUrls: ['view-proposal-page.component.css']
 })
 export class ViewProposalPageComponent implements OnInit, OnDestroy {
-	subscription: Subscription;
-	proposal$: Observable<Proposal>;
+    subscription: Subscription;
+    proposal$: Observable<Proposal>;
 
-	constructor(private store: Store<AppState>, private route: ActivatedRoute) {}
+    constructor(private store: Store<AppState>, private route: ActivatedRoute) {}
 
-	ngOnInit() {
-		this.subscription = this.route.params
-			.pipe(map(params => new SelectProposalAction(params.id)))
-			.subscribe(this.store);
+    ngOnInit() {
+        this.subscription = this.route.params
+            .pipe(map(params => new SelectProposalAction(params.id)))
+            .subscribe(this.store);
 
-		this.proposal$ = this.store.pipe(select(getSelectedProposal));
-		this.store.dispatch(new GetProposalsAction());
-	}
+        this.proposal$ = this.store.pipe(select(getSelectedProposal));
+        this.store.dispatch(new GetProposalsAction());
+    }
 
-	ngOnDestroy() {
-		this.subscription.unsubscribe();
-	}
+    ngOnDestroy() {
+        this.subscription.unsubscribe();
+    }
 };
