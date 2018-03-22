@@ -19,7 +19,7 @@ interface Proposer {
 })
 export class ProposalDetailComponent implements OnInit {
 	@Input() proposal: Proposal;	
-	private mainProposer: Proposer; // kolla private
+	private mainProposer: Proposer;
 	private principalInvestigator: Proposer;
 
 	ngOnInit() {
