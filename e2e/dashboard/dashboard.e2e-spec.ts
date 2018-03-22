@@ -22,11 +22,11 @@ describe('catanie Dashboard', function() {
     expect(browser.getCurrentUrl()).toContain('datasets');
   });
 
-  it('should have an active home menu item', () => {
+  it('should have an active datasets menu item', () => {
     browser.sleep(1000);
     element(by.css('.sidenav-toggle')).click();
     browser.sleep(1000);
-    expect(element(by.css('.item.active')).getText()).toContain('Home');
+    expect(element(by.css('.item.active')).getText()).toContain('Datasets');
     browser.actions().sendKeys(protractor.Key.ESCAPE); // close nav drawer
     browser.sleep(1000);
   });
