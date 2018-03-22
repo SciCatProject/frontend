@@ -19,7 +19,6 @@ export interface AppState {
     user: UserState;
     dashboardUI: DashboardUIState;
     jobs: JobsState;
-    proposal: ProposalsState;
 }
 
 export const initialState: AppState = {
@@ -27,7 +26,6 @@ export const initialState: AppState = {
     user: initialUserState,
     dashboardUI: initialDashboardUIState,
     jobs: initialJobsState,
-    proposal: initialProposalsState,
 };
 
 const appReducer = combineReducers({
@@ -35,7 +33,6 @@ const appReducer = combineReducers({
     datasets: datasetsReducer,
     dashboardUI: dashboardUIReducer,
     jobs: jobsReducer,
-    proposal: proposalsReducer, // NEcessary?
  });
 
 export const rootReducer = (state, action) => {
