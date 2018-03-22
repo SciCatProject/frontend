@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Effect, Actions, ofType } from '@ngrx/effects';
+import { Effect, Actions, ofType } from '@ngrx/effects';
 
 import { Observable } from 'rxjs/Observable';
 import { map, mergeMap, take, catchError } from 'rxjs/operators';
