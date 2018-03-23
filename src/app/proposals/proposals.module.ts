@@ -21,27 +21,27 @@ import { proposalsReducer } from '../state-management/reducers/proposals.reducer
 import { ProposalsEffects } from '../state-management/effects/proposals.effects';
 
 @NgModule({
-	imports: [
-		CommonModule,
-		RouterModule,
+    imports: [
+        CommonModule,
+        RouterModule,
 
-		StoreModule.forFeature('proposals', proposalsReducer),
-		EffectsModule.forFeature([ProposalsEffects]),
+        StoreModule.forFeature('proposals', proposalsReducer),
+        EffectsModule.forFeature([ProposalsEffects]),
 
-		MatListModule,
-		MatCardModule,
-		MatTabsModule,
-	],
-	declarations: [
-		ListProposalsPageComponent,
-		ViewProposalPageComponent,
+        MatListModule,
+        MatCardModule,
+        MatTabsModule
+    ],
+    declarations: [
+        ListProposalsPageComponent,
+        ViewProposalPageComponent,
 
-		ProposalsListComponent,
-		ProposalDetailComponent,
-	],
-	providers: [
-		ProposalsService,
-	]
+        ProposalsListComponent,
+        ProposalDetailComponent,
+    ],
+    providers: [
+        ProposalsService,
+    ]
 })
 export class ProposalsModule {
 };

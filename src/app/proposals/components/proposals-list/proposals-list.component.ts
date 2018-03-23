@@ -8,4 +8,5 @@ import { Proposal } from 'state-management/models';
 })
 export class ProposalsListComponent {
     @Input() proposals: Proposal[];
-};
+}
+

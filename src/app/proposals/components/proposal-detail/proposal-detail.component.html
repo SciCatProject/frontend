@@ -1,6 +1,6 @@
 <mat-tab-group>
 	<mat-tab label="General">
-		<div class="tab-content">
+		<div *ngIf="proposal" class="tab-content">
 			<table>
 				<tr>
 					<th>Title</th>
@@ -12,7 +12,7 @@
 						<a href="mailto:{{mainProposer.email}}">{{mainProposer.name}}</a>
 					</td>
 				</tr>
-				<tr *ngIf="principalInvestigator.isPresent">
+				<tr *ngIf="principalInvestigator && principalInvestigator.isPresent">
 					<th>Principal investigator</th> 
 					
 					<td *ngIf="principalInvestigator.email; else withoutEmail">
