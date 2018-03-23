@@ -14,6 +14,7 @@ import { ParamsService } from 'params.service';
 })
 export class DashboardComponent implements OnInit {
   apiEndpoint: string;
+  tooltipPos = 'below';
 
   /**
    * Datasets retrieved from catalogue that match a user's search terms.

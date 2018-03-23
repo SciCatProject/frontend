@@ -1,4 +1,5 @@
 import 'rxjs/add/operator/take';
+import 'rxjs/add/operator/takeLast';
 import 'rxjs/add/observable/combineLatest';
 import { startWith } from 'rxjs/operators/startWith';
 import { map } from 'rxjs/operators/map';
@@ -8,11 +9,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormControl } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { createSelector, OutputSelector } from 'reselect';
-import {
-  DatepickerState,
-  SelectionModes
-} from 'shared/modules/datepicker/datepicker.store';
-import TimeRange from 'shared/modules/datepicker/LocalizedDateTime/TimeRange';
+
 import * as utils from 'shared/utils';
 import * as dsa from 'state-management/actions/datasets.actions';
 import * as dStore from 'state-management/state/datasets.store';
@@ -21,9 +18,13 @@ import { DatasetFilters } from 'state-management/models';
 import { Observable } from 'rxjs/Observable';
 import * as rison from 'rison';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { MultiDayRange } from 'shared/modules/datepicker/LocalizedDateTime/timeRanges';
 import { Dataset } from 'shared/sdk';
+import { MatDatepicker } from 'saturn-datepicker';
 
+export interface MatDatePickerRangeValue<D> {
+  start: D | null;
+  end: D | null;
+}
 
 @Component({
   selector: 'datasets-filter',
@@ -36,15 +37,13 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   groupInput: FormControl;
   typeInput: FormControl;
   keywordInput: FormControl;
+
   filteredLocations: Observable<any[]>;
   filteredGroups: Observable<any[]>;
   filteredKeywords: Observable<any[]>;
 
-  datepickerSelector:
-    OutputSelector<any, DatepickerState, (res: any) => DatepickerState>;
-  dateSelectionMode = SelectionModes.range;
+  dateRange: MatDatePickerRangeValue<Date> = {start: null, end: null};
 
-  dateSelections$: BehaviorSubject<TimeRange[]>;
 
   // @Input() datasets: Array<any> = [];
   facets: Array<any> = [];
@@ -100,17 +99,6 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
    * only use unique values
    */
   ngOnInit() {
-    this.dateSelections$ = new BehaviorSubject<TimeRange[]>([]);
-    const datasetsStoreSlicePath = ['root', 'datasets'];
-    const datasetsSelector = createSelector((state: any): any => {
-      return datasetsStoreSlicePath.reduce(
-        (obj: any, sliceKey: any) => obj[sliceKey], state);
-    }, (selectedDatasets: any): any => selectedDatasets);
-
-    this.datepickerSelector =
-      createSelector(datasetsSelector,
-        (selectedDatasets: any): DatepickerState =>
-          selectedDatasets['datepicker']);
 
     this.resultCount$ =
       this.store.select(selectors.datasets.getTotalSets);
@@ -128,6 +116,9 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
         this.selectedKeywords = filters['keywords'].toString();
         this.keywordInput.setValue(this.selectedKeywords);
       }
+      if ('creationTime' in filters && filters.creationTime !== undefined) {
+        this.dateRange = filters.creationTime;
+      }
     });
 
     this.subscriptions.push(
@@ -142,7 +133,6 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
               this.filterValues['ownerGroup'] !== null && Array.isArray(this.filterValues['ownerGroup'])) {
               this.groups = this.filterValues['ownerGroup'] ? this.filterValues['ownerGroup'].slice() : [];
             }
-            console.log(this.filterValues);
             if (this.keywords.length === 0 &&
               this.filterValues['keywords'] !== null && Array.isArray(this.filterValues['keywords'])) {
               this.filterValues['keywords'].map((k) => {
@@ -155,41 +145,20 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
 
             if (this.filterValues.creationLocation) {
               this.filteredLocations = this.locationInput.valueChanges
-                .pipe(startWith(''), map(loc => loc ? this.filterLocations(loc) : this.filterValues.creationLocation.slice()));
+                .pipe(startWith(''), map(loc => loc ? this.filterLocations(loc) : this.locations.slice()));
             }
             if (this.filterValues.ownerGroup) {
               this.filteredGroups = this.groupInput.valueChanges
-                .pipe(startWith(''), map(group => group ? this.filterGroups(group) : this.filterValues.ownerGroup.slice()));
+                .pipe(startWith(''), map(group => group ? this.filterGroups(group) : this.groups.slice()));
             }
             if (this.filterValues.keywords) {
               this.filteredKeywords = this.keywordInput.valueChanges
-                .pipe(startWith(''), map(kw => kw ? this.filterKeywords(kw) : this.filterValues.keywords.slice()));
+                .pipe(startWith(''), map(kw => kw ? this.filterKeywords(kw) : this.keywords.slice()));
             }
           }
         }));
   }
 
-  /**
-   *
-   * @param timeranges
-   */
-  updateDateRange(timeranges: TimeRange[]) {
-    let startDate: Date = null;
-    let endDate: Date = null;
-    const selectedRange: TimeRange = timeranges[0];
-    if (selectedRange) {
-      startDate = selectedRange.datePair[0];
-      endDate = selectedRange.datePair[1];
-    }
-    if (startDate !== null && endDate !== null) {
-      this.filters.creationTime = {
-        start: startDate,
-        end: endDate
-      };
-      // this.store.dispatch(new dsa.UpdateFilterAction(this.filters));
-      this.dateSelections$.next(timeranges);
-    }
-  }
 
   ngOnDestroy() {
     for (let i = 0; i < this.subscriptions.length; i++) {
@@ -226,6 +195,11 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     this.store.dispatch(new dsa.UpdateFilterAction(this.filters));
   }
 
+  dateChanged(event) {
+    this.filters.creationTime = this.dateRange;
+    this.store.dispatch(new dsa.UpdateFilterAction(this.filters));
+  }
+
   /**
    * Clear the filters and reset the user groups (when not a functional account)
    */
@@ -234,9 +208,10 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     this.locationInput.setValue('');
     this.groupInput.setValue('');
     this.keywordInput.setValue('');
+    this.typeInput.setValue('');
     this.selectedGroup = '';
     this.filters = dStore.initialDatasetState.activeFilters;
-    this.dateSelections$.next([]);
+    this.dateRange = {start: null, end: null};
     this.store.select(state => state.root.user.currentUserGroups)
       .takeLast(1)
       .subscribe(groups => { this.filters.ownerGroup = groups; });
@@ -245,6 +220,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     this.filters.keywords = [];
     this.filterValues = dStore.initialDatasetState.filterValues;
     this.filterValues.text = '';
+    this.filters.creationTime = {'start': null, 'end': null};
     this.store.dispatch(new dsa.UpdateFilterAction(this.filters));
   }
 

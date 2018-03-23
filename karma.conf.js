@@ -57,9 +57,9 @@ module.exports = function (config) {
     logLevel: config.LOG_DEBUG,
     autoWatch: true,
     browsers: ['ChromeHeadless'],
-    singleRun: false,
-    captureTimeout: 60000, // it was already there
-    browserDisconnectTimeout : 10000,
+    singleRun: true,
+    captureTimeout: 100000, 
+    browserDisconnectTimeout : 20000,
     browserDisconnectTolerance : 1,
     browserNoActivityTimeout : 60000
   });

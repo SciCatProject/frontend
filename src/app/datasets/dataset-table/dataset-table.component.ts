@@ -21,6 +21,7 @@ import * as selectors from 'state-management/selectors';
 import * as ua from 'state-management/actions/user.actions';
 import * as ja from 'state-management/actions/jobs.actions';
 import { Message, MessageType } from 'state-management/models';
+import { Angular5Csv } from 'angular5-csv/Angular5-csv';
 import * as utils from 'shared/utils';
 
 import { config } from '../../../config/config';
@@ -116,7 +117,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
       }
       return 'Unknown';
     }
-    
     return value;
   }
 
@@ -242,6 +242,53 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
       payload: this.selection.selected
     });
     // this.selectedSet.emit(this.selection.selected);
+  }
+
+  onExportClick() {
+    if (this.datasets.length > 0) {
+      // loop over all objects and find all keys
+      const allKeys = [];
+      this.datasets.map(function (obj) {
+        const ks = Object.keys(obj);
+        ks.map(function (k) {
+          if (allKeys.indexOf(k) < 0) {
+            allKeys.push(k);
+          }
+        });
+      });
+
+
+      // create "rectangular" dataset representation
+      const output = this.datasets.map(function (obj) {
+        const row = [];
+        allKeys.map(function (col) {
+          if (col in obj) {
+            row[col] = JSON.stringify(obj[col]);
+          } else {
+            row[col] = '';
+          }
+        });
+        return row;
+      });
+
+      const options = {
+        fieldSeparator: ',',
+        quoteStrings: '"',
+        decimalseparator: '.',
+        showLabels: true,
+        showTitle: false,
+        useBom: true,
+        headers: allKeys
+      };
+
+
+      const ts = new Angular5Csv(output, 'Datasets ' + this.paginator.pageIndex + 1, options);
+    } else {
+      const msg = new Message();
+      msg.content = 'No Datasets Loaded';
+      msg.type = MessageType.Error;
+      this.store.dispatch(new ua.ShowMessageAction(msg));
+    }
   }
 
   calculateRowClasses(row) {
@@ -551,5 +598,3 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 }
-
-
