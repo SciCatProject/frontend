@@ -15,6 +15,7 @@ import * as DatasetActions from 'state-management/actions/datasets.actions';
 import * as UserActions from 'state-management/actions/user.actions';
 
 import { Message, MessageType } from 'state-management/models';
+import { filter } from 'rxjs/operators';
 
 // import store state interface
 @Injectable()
@@ -86,13 +87,14 @@ export class DatasetEffects {
           delete fq['text'];
         }
         delete fq['mode'];
-        const facetObject = {'keywords': [{'$group': {'_id': '$keywords', 'count': {'$sum': 1}}}, {'$sort': {'count': -1, '_id': 1}}]};
+
+        // const facetObject = {'keywords': [{'$group': {'_id': '$keywords', 'count': {'$sum': 1}}}, {'$sort': {'count': -1, '_id': 1}}]};
         console.log(fq);
         return this.ds
-          .facet(fq, facetObject)
+          .facet(fq, undefined)
           .switchMap(res => {
             const filterValues = res['results'][0];
-
+            console.log(filterValues);
             const groupsArr = filterValues['groups'] || filterValues['ownerGroup'];
             groupsArr.sort(stringSort);
             const kwArr = filterValues['keywords'] || [];

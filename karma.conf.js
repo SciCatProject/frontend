@@ -58,8 +58,8 @@ module.exports = function (config) {
     autoWatch: true,
     browsers: ['ChromeHeadless'],
     singleRun: true,
-    captureTimeout: 60000, 
-    browserDisconnectTimeout : 10000,
+    captureTimeout: 100000, 
+    browserDisconnectTimeout : 20000,
     browserDisconnectTolerance : 1,
     browserNoActivityTimeout : 60000
   });

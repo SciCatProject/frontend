@@ -13,8 +13,16 @@ exports.config = {
         'browserName': 'chrome',
         // chromeDriver: '../node_modules/protractor/node_modules/webdriver-manager/selenium/chromedriver_2.30',
         chromeOptions: {
-            args: ["--headless", "--disable-gpu", "--no-sandbox"]
-        //    args: ["--window-size=800x600"]
+            args: ["user-agent=Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36", "--headless", "--disable-gpu", "--no-sandbox"],
+            // args: ["--window-size=800x600"],
+            prefs: {
+                download: {
+                    prompt_for_download: false,
+                    dirctory_upgrade: true,
+                    default_directory: './e2e/'
+                }
+            }
+           
         }
 
     },
