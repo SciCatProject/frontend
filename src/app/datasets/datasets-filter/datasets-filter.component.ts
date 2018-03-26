@@ -171,8 +171,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
 
   keywordSelected(kw) {
     if (kw) {
-      console.log(kw);
-      this.filters.keywords.push(kw['_id'].split(','));
+      this.filters.keywords.push(kw['_id']);
       this.store.dispatch(new dsa.UpdateFilterAction(this.filters));
     }
   }
