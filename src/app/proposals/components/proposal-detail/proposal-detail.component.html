@@ -1,0 +1,46 @@
+<mat-tab-group>
+	<mat-tab label="General">
+		<div *ngIf="proposal" class="tab-content">
+			<table>
+				<tr>
+					<th>Title</th>
+					<td>{{proposal.title}}
+				</tr>
+				<tr>
+					<th>Main proposer</th> 
+					<td>
+						<a href="mailto:{{mainProposer.email}}">{{mainProposer.name}}</a>
+					</td>
+				</tr>
+				<tr *ngIf="principalInvestigator && principalInvestigator.isPresent">
+					<th>Principal investigator</th> 
+					
+					<td *ngIf="principalInvestigator.email; else withoutEmail">
+						<a href="mailto:{{principalInvestigator.email}}">{{principalInvestigator.name}}</a>
+					</td>
+					<ng-template #withoutEmail>
+						<td>
+							{{principalInvestigator.name}}
+						</td>
+					</ng-template>
+				</tr>
+				<tr>
+					<th>Abstract</th>
+					<td>{{proposal.abstract}}</td>
+				</tr>
+			</table>
+		</div>
+	</mat-tab>
+	
+	<mat-tab label="Datasets" disabled>
+		<div class="tab-content">
+			List of datasets...
+		</div>
+	</mat-tab>
+
+	<mat-tab label="Instruments" disabled>
+		<div class="tab-content">
+			Information on instruments.
+		</div>
+	</mat-tab>
+</mat-tab-group>

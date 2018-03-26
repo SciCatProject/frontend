@@ -9,8 +9,7 @@ import { routerReducer, StoreRouterConnectingModule } from '@ngrx/router-store';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { NguiDatetimePickerModule } from '@ngui/datetime-picker';
-import { AppRoutingModule } from 'app-routing/app-routing.module';
-import { routes } from 'app-routing/app-routing.module';
+import { AppRoutingModule, routes } from 'app-routing/app-routing.module';
 import { DatasetService } from 'datasets/dataset.service';
 import { DatasetsModule } from 'datasets/datasets.module';
 import { ParamsService } from 'params.service';
@@ -26,6 +25,8 @@ import { UserEffects } from 'state-management/effects/user.effects';
 import { JobsEffects } from 'state-management/effects/jobs.effects';
 import { rootReducer } from 'state-management/reducers/root.reducer';
 import { UsersModule } from 'users/users.module';
+import { ProposalsModule } from 'proposals/proposals.module';
+
 import {
   MatAutocompleteModule,
   MatButtonModule,
@@ -60,6 +61,7 @@ import {
   MatStepperModule,
   MatFormFieldModule,
 } from '@angular/material';
+
 import {CdkTableModule} from '@angular/cdk/table';
 import { AppComponent } from './app.component';
 import { AuthCheck } from './AuthCheck';
@@ -76,7 +78,7 @@ export function localStorageSyncWrapper(reducer: any) {
     AppComponent,
     JobsTableComponent,
     SampleDataFormComponent,
-    JobsDetailComponent
+    JobsDetailComponent,
   ],
   imports : [
     MatToolbarModule,
@@ -95,8 +97,12 @@ export function localStorageSyncWrapper(reducer: any) {
     HttpModule,
     BrowserAnimationsModule, SharedCatanieModule,
     NguiDatetimePickerModule,
+    
     DatasetsModule,
     UsersModule,
+    ProposalsModule,
+    AppConfigModule,
+
     SDKBrowserModule.forRoot(),
     // StoreModule.forRoot({router: routerReducer, root: rootReducer}, {metaReducers: [localStorageSyncWrapper]}),
     StoreModule.forRoot({router: routerReducer, root: rootReducer}),
@@ -106,7 +112,6 @@ export function localStorageSyncWrapper(reducer: any) {
     }),
     EffectsModule.forRoot([DatasetEffects, UserEffects, JobsEffects]),
     StoreRouterConnectingModule,
-    AppConfigModule,
   ],
   exports: [
   ],
