@@ -163,6 +163,7 @@ export class DatasetEffects {
         console.log(filter);
         return this.ds.find(filter)
           .switchMap(res => {
+            console.log(res);
             return Observable.of(new DatasetActions.SearchCompleteAction(res));
           })
           .catch(err => {

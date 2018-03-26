@@ -1,18 +1,18 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import {
   FormBuilder,
   FormGroup
 } from '@angular/forms';
-import {Store} from '@ngrx/store';
-import {BaseLoopBackApi} from 'shared/sdk/services/core/base.service';
-import {ConfigService} from 'shared/services/config.service';
-import {DatePipe} from '@angular/common';
-import {MatExpansionModule} from '@angular/material/expansion';
+import { Store } from '@ngrx/store';
+import { BaseLoopBackApi } from 'shared/sdk/services/core/base.service';
+import { ConfigService } from 'shared/services/config.service';
+import { DatePipe } from '@angular/common';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 @Component({
-  selector : 'config-form',
-  templateUrl : './config-form.component.html',
-  styleUrls : [ './config-form.component.css' ]
+  selector: 'config-form',
+  templateUrl: './config-form.component.html',
+  styleUrls: ['./config-form.component.css']
 })
 export class ConfigFormComponent implements OnInit {
 
@@ -29,7 +29,7 @@ export class ConfigFormComponent implements OnInit {
   objData: object = {};
 
   constructor(private formBuilder: FormBuilder,
-              private configService: ConfigService, private store: Store<any>) {
+    private configService: ConfigService, private store: Store<any>) {
   }
 
   ngOnInit() {
@@ -43,12 +43,12 @@ export class ConfigFormComponent implements OnInit {
     }
     if (configFile) {
       this.configService.getConfigFile(configFile)
-          .subscribe(
-              res => {
-                this.formConfig = res;
-                this.loadForm(res);
-              },
-              error => { console.error(error); });
+        .subscribe(
+          res => {
+            this.formConfig = res;
+            this.loadForm(res);
+          },
+          error => { console.error(error); });
     } else {
       this.loadForm();
     }
@@ -74,17 +74,17 @@ export class ConfigFormComponent implements OnInit {
             const datePipe = new DatePipe('en-US');
             const formattedDate = datePipe.transform(date, 'dd/MM/yyyy HH:mm');
             this.formData[prop] = formattedDate;
-            }
+          }
           if (config && config['type'] === 'number' && config['name'] === 'size') {
-            this.formData[prop] = (((this.source[prop] / 1024) / 1024) / 1024).toFixed(2);
-            }
+            this.formData[prop] = (((this.source[prop] / 1024) / 1024) / 1024).toFixed(10) + ' GB';
+          }
           if (config && 'visible' in config && config['visible'] === false) {
             delete this.formData[prop];
           }
-          }
+        }
         if (this.getType(prop, this.source[prop]) === 'object') {
           this.objData[prop] =
-              <Object[]>this.getTreeFromObject(this.source[prop]);
+            <Object[]>this.getTreeFromObject(this.source[prop]);
         } else if (this.getType(prop, this.source[prop]) === 'array') {
           this.formData[prop] = JSON.stringify(this.source[prop]);
         }
@@ -126,19 +126,19 @@ export class ConfigFormComponent implements OnInit {
             const kids = [];
             if (path) {
               path.push(
-                  {data : {name : property, value : ''}, children : kids});
+                { data: { name: property, value: '' }, children: kids });
             } else {
               paths.push(
-                  {data : {name : property, value : ''}, children : kids});
+                { data: { name: property, value: '' }, children: kids });
             }
             iterate(obj[property], kids);
           } else if (path !== '') {
-            path.push({data : {name : property, value : obj[property]}});
+            path.push({ data: { name: property, value: obj[property] } });
           } else {
-            paths.push({data : {name : property, value : obj[property]}});
+            paths.push({ data: { name: property, value: obj[property] } });
           }
         }
-        }
+      }
       return paths;
     }
   }
@@ -163,10 +163,10 @@ export class ConfigFormComponent implements OnInit {
    */
   getType(key, value) {
     if (this.formConfig && key in this.formConfig &&
-        this.formConfig[key]['type']) {
+      this.formConfig[key]['type']) {
       return this.formConfig[key]['type'];
     } else {
-      return typeof(value);
+      return typeof (value);
     }
   }
 }
