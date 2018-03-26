@@ -249,9 +249,9 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
     if (this.datasets.length > 0) {
       // loop over all objects and find all keys
       const allKeys = [];
-      this.datasets.map(function (obj) {
+      this.datasets.forEach(obj => {
         const ks = Object.keys(obj);
-        ks.map(function (k) {
+        ks.forEach(k => {
           if (allKeys.indexOf(k) < 0) {
             allKeys.push(k);
           }
@@ -262,7 +262,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
       // create "rectangular" dataset representation
       const output = this.datasets.map(function (obj) {
         const row = [];
-        allKeys.map(function (col) {
+        allKeys.forEach(col => {
           if (col in obj) {
             row[col] = JSON.stringify(obj[col]);
           } else {
@@ -496,13 +496,13 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
           if (!job.emailJobInitiator) {
             job.emailJobInitiator = user['profile'] ? user['profile']['email'] : user['email'];
           }
-          this.selection.selected.map(set => {
+          this.selection.selected.forEach(set => {
             // if ('datablocks' in set && set['datablocks'].length > 0) {
             const fileObj = {};
             const fileList = [];
             fileObj['pid'] = set['pid'];
             if (set['datablocks'] && !archive) {
-              set['datablocks'].map(d => {
+              set['datablocks'].forEach(d => {
                 fileList.push(d['archiveId']);
               });
             }

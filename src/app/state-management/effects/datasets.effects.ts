@@ -241,7 +241,7 @@ function handleFacetPayload(fq) {
   delete f['initial'];
   delete f['sortField'];
 
-  Object.keys(f).map(function (key) {
+  Object.keys(f).forEach(key => {
     let facet = f[key];
     if (facet && (facet !== null && facet.length > 0)) {
       switch (key) {

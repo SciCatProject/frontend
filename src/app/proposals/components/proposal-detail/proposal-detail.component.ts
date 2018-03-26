@@ -25,7 +25,7 @@ export class ProposalDetailComponent implements OnInit {
     ngOnInit() {
         if (this.proposal) {
             // Set up fallback values for main proposer
-            const { firstname, lastname } = this.proposal || null;
+            const { firstname, lastname } = this.proposal;
             const mpName = firstname && lastname
                 ? `${firstname} ${lastname}`
                 : this.proposal.email; // Email is mandatory so we can rely on it being present.

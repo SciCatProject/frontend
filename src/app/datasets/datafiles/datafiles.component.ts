@@ -52,7 +52,7 @@ export class DatafilesComponent implements OnInit, AfterViewInit {
    */
   getDatafiles(datablocks: Array<OrigDatablock>) {
     const self = this;
-    datablocks.map(function(block) {
+    datablocks.forEach(block => {
       self.files = self.files.concat(block.dataFileList);
       self.count += block.dataFileList.length;
     });
