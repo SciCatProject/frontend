@@ -109,13 +109,14 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
       return filesize(value || 0);
     }
 
-    const split = field.split('.');
-    if (split.length > 1) {
-      if (row[split[0]]) {
-        // TODO handle undefined and nesting > 1 layer
-        return row[split[0]][split[1]];
-      }
-      return 'Unknown';
+    if (field === 'datasetlifecycle.archiveStatusMessage') {
+      const val = row.datasetlifecycle ? row.datasetlifecycle.archiveStatusMessage : '';
+      return config.datasetStatusMessages[val] || val;
+    }
+
+    if (field === 'datasetlifecycle.retrieveStatusMessage') {
+      const val = row.datasetlifecycle ? row.datasetlifecycle.retrieveStatusMessage : '';
+      return config.datasetStatusMessages[val] || val;
     }
     return value;
   }
@@ -565,36 +566,5 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
     this.dest.complete();
     this.dest.unsubscribe();
     this.dest = null;
-  }
-
-  /**
- * Checks type against config and
- * fallback to type if not available
- * @param {any} key
- * @param {any} value
- * @returns
- * @memberof ConfigFormComponent
- */
-  getFormat(key, value, ds) {
-    if (key === 'creationTime') {
-      const date = new Date(value);
-      const datePipe = new DatePipe('en-US');
-      const formattedDate = datePipe.transform(date, 'dd/MM/yyyy HH:mm');
-      return formattedDate;
-    } else if (
-      (key === 'archiveStatus' || key === 'retrieveStatus') &&
-      ds['datasetlifecycle']
-    ) {
-      return ds['datasetlifecycle'][key + 'Message'];
-    } else if ((key === 'archiveStatus' || key === 'retrieveStatus') &&
-      !ds['datasetlifecycle']) {
-      return 'Unknown';
-    } else if (key === 'size') {
-      return (ds[key] / 1024 / 1024 / 1024).toFixed(2);
-    } else if (key in ds) {
-      return value;
-    } else {
-      return key;
-    }
   }
 }
