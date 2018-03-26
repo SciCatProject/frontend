@@ -80,18 +80,15 @@ export class DatasetEffects {
             .take(1)
             .subscribe(user => { groups = user; });
         }
-        //              console.log(fq);
         if (fq['text']) {
           fq['text'] = { '$search': '"' + fq['text'] + '"', '$language': 'none' };
         } else {
           delete fq['text'];
         }
         delete fq['mode'];
-
-        // const facetObject = {'keywords': [{'$group': {'_id': '$keywords', 'count': {'$sum': 1}}}, {'$sort': {'count': -1, '_id': 1}}]};
-        console.log(fq);
+        const facetObject = [{name: 'keywords', type: 'text', preConditions: {$unwind: '$keywords'} }];
         return this.ds
-          .facet(fq, undefined)
+          .facet(fq, facetObject)
           .switchMap(res => {
             const filterValues = res['results'][0];
             console.log(filterValues);
