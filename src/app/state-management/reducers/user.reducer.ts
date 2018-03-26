@@ -71,7 +71,6 @@ export function userReducer(state = initialUserState, action: Action): UserState
             return {...state, loading: true};
         }
         case AD_LOGIN_COMPLETE:
-        case ACCESS_USER_EMAIL_COMPLETE:
         default: {
             return state;
         }
