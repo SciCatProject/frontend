@@ -21,6 +21,7 @@ import * as selectors from 'state-management/selectors';
 import * as ua from 'state-management/actions/user.actions';
 import * as ja from 'state-management/actions/jobs.actions';
 import { Message, MessageType } from 'state-management/models';
+import { Angular5Csv } from 'angular5-csv/Angular5-csv';
 import * as utils from 'shared/utils';
 
 import { config } from '../../../config/config';
@@ -108,15 +109,15 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
       return filesize(value || 0);
     }
 
-    const split = field.split('.');
-    if (split.length > 1) {
-      if (row[split[0]]) {
-        // TODO handle undefined and nesting > 1 layer
-        return row[split[0]][split[1]];
-      }
-      return 'Unknown';
+    if (field === 'datasetlifecycle.archiveStatusMessage') {
+      const val = row.datasetlifecycle ? row.datasetlifecycle.archiveStatusMessage : '';
+      return config.datasetStatusMessages[val] || val;
     }
-    
+
+    if (field === 'datasetlifecycle.retrieveStatusMessage') {
+      const val = row.datasetlifecycle ? row.datasetlifecycle.retrieveStatusMessage : '';
+      return config.datasetStatusMessages[val] || val;
+    }
     return value;
   }
 
@@ -242,6 +243,53 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
       payload: this.selection.selected
     });
     // this.selectedSet.emit(this.selection.selected);
+  }
+
+  onExportClick() {
+    if (this.datasets.length > 0) {
+      // loop over all objects and find all keys
+      const allKeys = [];
+      this.datasets.map(function (obj) {
+        const ks = Object.keys(obj);
+        ks.map(function (k) {
+          if (allKeys.indexOf(k) < 0) {
+            allKeys.push(k);
+          }
+        });
+      });
+
+
+      // create "rectangular" dataset representation
+      const output = this.datasets.map(function (obj) {
+        const row = [];
+        allKeys.map(function (col) {
+          if (col in obj) {
+            row[col] = JSON.stringify(obj[col]);
+          } else {
+            row[col] = '';
+          }
+        });
+        return row;
+      });
+
+      const options = {
+        fieldSeparator: ',',
+        quoteStrings: '"',
+        decimalseparator: '.',
+        showLabels: true,
+        showTitle: false,
+        useBom: true,
+        headers: allKeys
+      };
+
+
+      const ts = new Angular5Csv(output, 'Datasets ' + this.paginator.pageIndex + 1, options);
+    } else {
+      const msg = new Message();
+      msg.content = 'No Datasets Loaded';
+      msg.type = MessageType.Error;
+      this.store.dispatch(new ua.ShowMessageAction(msg));
+    }
   }
 
   calculateRowClasses(row) {
@@ -519,37 +567,4 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
     this.dest.unsubscribe();
     this.dest = null;
   }
-
-  /**
- * Checks type against config and
- * fallback to type if not available
- * @param {any} key
- * @param {any} value
- * @returns
- * @memberof ConfigFormComponent
- */
-  getFormat(key, value, ds) {
-    if (key === 'creationTime') {
-      const date = new Date(value);
-      const datePipe = new DatePipe('en-US');
-      const formattedDate = datePipe.transform(date, 'dd/MM/yyyy HH:mm');
-      return formattedDate;
-    } else if (
-      (key === 'archiveStatus' || key === 'retrieveStatus') &&
-      ds['datasetlifecycle']
-    ) {
-      return ds['datasetlifecycle'][key + 'Message'];
-    } else if ((key === 'archiveStatus' || key === 'retrieveStatus') &&
-      !ds['datasetlifecycle']) {
-      return 'Unknown';
-    } else if (key === 'size') {
-      return (ds[key] / 1024 / 1024 / 1024).toFixed(2);
-    } else if (key in ds) {
-      return value;
-    } else {
-      return key;
-    }
-  }
 }
-
-

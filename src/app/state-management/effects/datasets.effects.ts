@@ -15,6 +15,7 @@ import * as DatasetActions from 'state-management/actions/datasets.actions';
 import * as UserActions from 'state-management/actions/user.actions';
 
 import { Message, MessageType } from 'state-management/models';
+import { filter } from 'rxjs/operators';
 
 // import store state interface
 @Injectable()
@@ -79,19 +80,17 @@ export class DatasetEffects {
             .take(1)
             .subscribe(user => { groups = user; });
         }
-        //              console.log(fq);
         if (fq['text']) {
           fq['text'] = { '$search': '"' + fq['text'] + '"', '$language': 'none' };
         } else {
           delete fq['text'];
         }
         delete fq['mode'];
-        const facetObject = {'keywords': [{'$group': {'_id': '$keywords', 'count': {'$sum': 1}}}, {'$sort': {'count': -1, '_id': 1}}]};
+        const facetObject = [{ name: 'keywords', type: 'text', preConditions: { $unwind: '$keywords' } }];
         return this.ds
           .facet(fq, facetObject)
           .switchMap(res => {
             const filterValues = res['results'][0];
-
             const groupsArr = filterValues['groups'] || filterValues['ownerGroup'];
             groupsArr.sort(stringSort);
             const kwArr = filterValues['keywords'] || [];
@@ -161,8 +160,10 @@ export class DatasetEffects {
         if (fq['sortField']) {
           filter['order'] = fq['sortField'];
         }
+        console.log(filter);
         return this.ds.find(filter)
           .switchMap(res => {
+            console.log(res);
             return Observable.of(new DatasetActions.SearchCompleteAction(res));
           })
           .catch(err => {
@@ -170,21 +171,6 @@ export class DatasetEffects {
             return Observable.of(new DatasetActions.SearchFailedAction(err));
           });
       });
-  // @Effect()
-  // protected getGroups$: Observable<Action> =
-  //     this.action$.ofType(DatasetActions.ADD_GROUPS)
-  //         .debounceTime(300)
-  //         .map(toPayload)
-  //         .switchMap(payload => {
-  //           return this.userIdentitySrv.findOne({'where': {'userId': payload}})
-  //               .switchMap(res => {
-  //                 return Observable.of(new DatasetActions.AddGroupsCompleteAction(res['profile']['accessGroups']));
-  //               })
-  //               .catch(err => {
-  //                 console.error(err);
-  //                 return Observable.of(new DatasetActions.AddGroupsFailedAction(err));
-  //               });
-  //         });
 
   @Effect()
   protected deleteDatablocks$: Observable<Action> =
@@ -221,42 +207,6 @@ export class DatasetEffects {
         }
       });
 
-  // @Effect()
-  // protected updateCurrentSetDatablocks$: Observable<Action> =
-  //   this.action$.ofType(DatasetActions.SELECT_CURRENT)
-  //     .map(toPayload)
-  //     .switchMap(payload => {
-  //       if (payload) {
-  //         const dataset = payload;
-  //         const datasetSearch = { where: { datasetId: dataset.pid } };
-  //         return this.dbs.find(datasetSearch).switchMap(res => {
-  //           dataset['datablocks'] = res;
-  //           console.log(res);
-  //           return Observable.of(new DatasetActions.UpdateCurrentBlocksAction(payload));
-  //         })
-  //       } else {
-  //         return Observable.of(new DatasetActions.UpdateCurrentBlocksAction(undefined));
-  //       }
-  //     });
-
-  // @Effect()
-  // protected updateCurrentSetOrigDatablocks$: Observable<Action> =
-  //   this.action$.ofType(DatasetActions.SELECT_CURRENT)
-  //     .map(toPayload)
-  //     .switchMap(payload => {
-  //       if (payload) {
-  //         const dataset = payload;
-  //         const datasetSearch = { where: { datasetId: dataset.pid } };
-  //         return this.odbs.find(datasetSearch).switchMap(res => {
-  //           dataset['origdatablocks'] = res;
-  //           console.log(res);
-  //           return Observable.of(new DatasetActions.UpdateCurrentBlocksAction(payload));
-  //         })
-  //       } else {
-  //         return Observable.of(new DatasetActions.UpdateCurrentBlocksAction(undefined));
-  //       }
-  //     });
-
   @Effect()
   protected resetStatus$: Observable<Action> =
     this.action$.ofType(DatasetActions.RESET_STATUS)
@@ -285,55 +235,55 @@ export class DatasetEffects {
 }
 
 function handleFacetPayload(fq) {
-  let ownerGroup = fq['ownerGroup'];
-  const text = fq['text'], creationLocation = fq['creationLocation'];
-
-  // TODO access state from here?
-
   const match = [];
-  if (ownerGroup) {
-    if (ownerGroup.length > 0 && ownerGroup.constructor !== Array &&
-      typeof ownerGroup[0] === 'object') {
-      const groupsArray = [];
-      console.log('Converting object');
-      const keys = Object.keys(ownerGroup[0]);
+  const f = Object.assign({}, fq);
+  delete f['mode'];
+  delete f['initial'];
+  delete f['sortField'];
 
-      for (let i = 0; i < keys.length; i++) {
-        groupsArray.push(ownerGroup[0][keys[i]]);
+  Object.keys(f).map(function (key) {
+    let facet = f[key];
+    if (facet && (facet !== null && facet.length > 0)) {
+      switch (key) {
+        case 'ownerGroup':
+          if (facet.length > 0 && facet.constructor !== Array &&
+            typeof facet[0] === 'object') {
+            const groupsArray = [];
+            const keys = Object.keys(facet[0]);
+
+            for (let i = 0; i < keys.length; i++) {
+              groupsArray.push(facet[0][keys[i]]);
+            }
+
+            facet = groupsArray;
+          }
+          if (facet.length > 0) {
+            match.push({ ownerGroup: { inq: facet } });
+          }
+          break;
+        case 'text':
+          match.push({ '$text': { 'search': '"' + facet + '"', 'language': 'none' } });
+          break;
+        case 'creationTime':
+          const start = facet['start'] || undefined;
+          const end = facet['end'] || undefined;
+          if (start && end) {
+            match.push({ creationTime: { gte: start } });
+            match.push({ creationTime: { lte: end } });
+          }
+          break;
+        case 'creationLocation':
+          match.push({ creationLocation: { inq: facet } });
+          break;
+        default:
+          // TODO add default case
+          const obj = {};
+          obj[key] = {inq: facet};
+          match.push(obj);
+          break;
       }
-
-      ownerGroup = groupsArray;
     }
-    if (ownerGroup.length > 0) {
-      match.push({ ownerGroup: { inq: ownerGroup } });
-    }
-  }
-
-  if (creationLocation && creationLocation.length > 0) {
-    match.push({ creationLocation: { inq: creationLocation } });
-  }
-  if (fq['creationTime']) {
-    const start = fq['creationTime']['start'] || undefined;
-    const end = fq['creationTime']['end'] || undefined;
-    if (start) {
-      match.push({ creationTime: { gte: start } });
-    }
-    if (end) {
-      match.push({ creationTime: { lte: end } });
-    }
-  }
-  if (fq['type']) {
-    match.push({ type: fq['type'] });
-  }
-  /*  else if ((startDate && !endDate) || (!startDate && endDate)) {
-     return Observable.of({
-       type : DatasetActions.SEARCH_FAILED,
-       payload : {message : 'Start and End Date must be specified'}
-     });
-     }*/
-  if (text) {
-    match.push({ '$text': { 'search': '"' + text + '"', 'language': 'none' } });
-  }
+  });
   return match;
 }
 

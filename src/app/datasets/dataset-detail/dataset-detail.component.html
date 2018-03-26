@@ -29,6 +29,11 @@
       </ul>
     </ng-container>
   </mat-tab>
+  <mat-tab disabled>
+    <ng-template mat-tab-label>
+      <button mat-button class="export-btn" (click)="onExportClick()">Export to CSV</button>
+    </ng-template>
+  </mat-tab>
 </mat-tab-group>
 
 
