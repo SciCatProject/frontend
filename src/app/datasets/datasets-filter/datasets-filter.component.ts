@@ -126,20 +126,8 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
         .subscribe(values => {
           this.filterValues = { ...values };
           if (this.filterValues) {
-            if (this.locations.length === 0 && this.filterValues['creationLocation'] !== null) {
               this.locations = this.filterValues['creationLocation'] ? this.filterValues['creationLocation'].slice() : [];
-            }
-            if (this.groups.length === 0 &&
-              this.filterValues['ownerGroup'] !== null && Array.isArray(this.filterValues['ownerGroup'])) {
               this.groups = this.filterValues['ownerGroup'] ? this.filterValues['ownerGroup'].slice() : [];
-            }
-            if (this.keywords.length === 0 &&
-              this.filterValues['keywords'] !== null && Array.isArray(this.filterValues['keywords'])) {
-              this.filterValues['keywords'].map((k) => {
-                if (k._id) {
-                  k._id = k._id.toString();
-                }
-              });
               this.keywords = this.filterValues['keywords'] ? this.filterValues['keywords'].slice() : [];
             }
 
@@ -155,7 +143,6 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
               this.filteredKeywords = this.keywordInput.valueChanges
                 .pipe(startWith(''), map(kw => kw ? this.filterKeywords(kw) : this.keywords.slice()));
             }
-          }
         }));
   }
 
@@ -184,8 +171,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
 
   keywordSelected(kw) {
     if (kw) {
-      console.log(kw);
-      this.filters.keywords.push(kw['_id'].split(','));
+      this.filters.keywords.push(kw['_id']);
       this.store.dispatch(new dsa.UpdateFilterAction(this.filters));
     }
   }
