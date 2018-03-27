@@ -2,6 +2,7 @@
 import {
   DatasetLifecycle,
   Datablock,
+  DatasetAttachment,
   OrigDatablock
 } from '../index';
 
@@ -34,6 +35,7 @@ export interface DatasetInterface {
   "updatedAt"?: Date;
   datasetlifecycle?: DatasetLifecycle;
   datablocks?: Datablock[];
+  datasetattachments?: DatasetAttachment[];
   origdatablocks?: OrigDatablock[];
 }
 
@@ -65,6 +67,7 @@ export class Dataset implements DatasetInterface {
   "updatedAt": Date;
   datasetlifecycle: DatasetLifecycle;
   datablocks: Datablock[];
+  datasetattachments: DatasetAttachment[];
   origdatablocks: OrigDatablock[];
   constructor(data?: DatasetInterface) {
     Object.assign(this, data);
@@ -213,6 +216,14 @@ export class Dataset implements DatasetInterface {
           name: 'datablocks',
           type: 'Datablock[]',
           model: 'Datablock',
+          relationType: 'hasMany',
+                  keyFrom: 'pid',
+          keyTo: 'datasetId'
+        },
+        datasetattachments: {
+          name: 'datasetattachments',
+          type: 'DatasetAttachment[]',
+          model: 'DatasetAttachment',
           relationType: 'hasMany',
                   keyFrom: 'pid',
           keyTo: 'datasetId'

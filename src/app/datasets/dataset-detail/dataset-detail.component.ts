@@ -58,6 +58,11 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
       return (dataset && ('origdatablocks' in dataset)) ? dataset.origdatablocks : [];
     });
 
+    this.datasetAttachments$ = this.dataset$.map((dataset: RawDataset) => {
+      return (dataset && ('datasetattachments' in dataset)) ? dataset.datasetattachments : [];
+    });
+
+
     this.datablocks$ = this.dataset$.map((dataset: RawDataset) => {
       return (dataset && ('datablocks' in dataset)) ? dataset.datablocks : [];
     });

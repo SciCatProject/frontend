@@ -5,18 +5,22 @@ import {
 
 declare var Object: any;
 export interface DatasetAttachmentInterface {
-  "dataset_id": string;
   "thumbnail": string;
   "creationTime"?: Date;
   "id"?: any;
+  "datasetId"?: string;
+  "rawDatasetId"?: string;
+  "derivedDatasetId"?: string;
   dataset?: Dataset;
 }
 
 export class DatasetAttachment implements DatasetAttachmentInterface {
-  "dataset_id": string;
   "thumbnail": string;
   "creationTime": Date;
   "id": any;
+  "datasetId": string;
+  "rawDatasetId": string;
+  "derivedDatasetId": string;
   dataset: Dataset;
   constructor(data?: DatasetAttachmentInterface) {
     Object.assign(this, data);
@@ -51,10 +55,6 @@ export class DatasetAttachment implements DatasetAttachmentInterface {
       path: 'DatasetAttachments',
       idName: 'id',
       properties: {
-        "dataset_id": {
-          name: 'dataset_id',
-          type: 'string'
-        },
         "thumbnail": {
           name: 'thumbnail',
           type: 'string',
@@ -68,6 +68,18 @@ export class DatasetAttachment implements DatasetAttachmentInterface {
           name: 'id',
           type: 'any'
         },
+        "datasetId": {
+          name: 'datasetId',
+          type: 'string'
+        },
+        "rawDatasetId": {
+          name: 'rawDatasetId',
+          type: 'string'
+        },
+        "derivedDatasetId": {
+          name: 'derivedDatasetId',
+          type: 'string'
+        },
       },
       relations: {
         dataset: {
@@ -75,7 +87,7 @@ export class DatasetAttachment implements DatasetAttachmentInterface {
           type: 'Dataset',
           model: 'Dataset',
           relationType: 'belongsTo',
-                  keyFrom: 'dataset_id',
+                  keyFrom: 'datasetId',
           keyTo: 'pid'
         },
       }

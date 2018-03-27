@@ -18,10 +18,11 @@
     </div>
   </mat-tab>
   <mat-tab label="DatasetAttachments">
-    <datafiles [dataBlocks]="datasetAttachments$ | async"></datafiles>
-    <div *ngIf="datasetAttachments$.length === 0">
-      <h3>No attachments linked to this dataset</h3>
-    </div>
+      <h3>DatasetAttachments</h3>
+    <ng-container *ngIf="(datasetattachments$ | async) as datasetattachments">
+      <h3>iif it exists</h3>
+	  <img src="(datasetattachment$ | async)">
+    </ng-container>
   </mat-tab>
   <mat-tab label="Admin" *ngIf="(admin$ | async) as admin">
     <button (click)="resetDataset(dataset)" class="ui yellow button">Reset Status</button>

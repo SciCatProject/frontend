@@ -4,6 +4,7 @@ import {
   Proposal,
   DatasetLifecycle,
   Datablock,
+  DatasetAttachment,
   OrigDatablock
 } from '../index';
 
@@ -45,6 +46,7 @@ export interface RawDatasetInterface {
   proposal?: Proposal;
   datasetlifecycle?: DatasetLifecycle;
   datablocks?: Datablock[];
+  datasetattachments?: DatasetAttachment[];
   origdatablocks?: OrigDatablock[];
 }
 
@@ -85,6 +87,7 @@ export class RawDataset implements RawDatasetInterface {
   proposal: Proposal;
   datasetlifecycle: DatasetLifecycle;
   datablocks: Datablock[];
+  datasetattachments: DatasetAttachment[];
   origdatablocks: OrigDatablock[];
   constructor(data?: RawDatasetInterface) {
     Object.assign(this, data);
@@ -277,6 +280,14 @@ export class RawDataset implements RawDatasetInterface {
           name: 'datablocks',
           type: 'Datablock[]',
           model: 'Datablock',
+          relationType: 'hasMany',
+                  keyFrom: 'pid',
+          keyTo: 'rawDatasetId'
+        },
+        datasetattachments: {
+          name: 'datasetattachments',
+          type: 'DatasetAttachment[]',
+          model: 'DatasetAttachment',
           relationType: 'hasMany',
                   keyFrom: 'pid',
           keyTo: 'rawDatasetId'
