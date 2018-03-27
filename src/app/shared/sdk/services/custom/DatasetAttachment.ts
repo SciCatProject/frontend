@@ -10,19 +10,19 @@ import { JSONSearchParams } from '../core/search.params';
 import { ErrorHandler } from '../core/error.service';
 import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Rx';
-import { RabbitMQ } from '../../models/RabbitMQ';
+import { DatasetAttachment } from '../../models/DatasetAttachment';
 import { SocketConnection } from '../../sockets/socket.connections';
 
 
 /**
- * Api services for the `RabbitMQ` model.
+ * Api services for the `DatasetAttachment` model.
  *
  * **Details**
  *
- * Provide access to RabbitMQ server stats and queues.
+ * Contains a thumbnail preview in base64 encoded png format for a given dataset
  */
 @Injectable()
-export class RabbitMQApi extends BaseLoopBackApi {
+export class DatasetAttachmentApi extends BaseLoopBackApi {
 
   constructor(
     @Inject(Http) protected http: Http,
@@ -36,7 +36,11 @@ export class RabbitMQApi extends BaseLoopBackApi {
   }
 
   /**
-   * Get an status overview of the connected rabbitmq server
+   * Patch an existing model instance or insert a new one into the data source.
+   *
+   * @param {object} data Request data.
+   *
+   *  - `data` – `{object}` - Model instance data
    *
    * @returns {object} An empty reference that will be
    *   populated with the actual data once the response is returned
@@ -44,22 +48,30 @@ export class RabbitMQApi extends BaseLoopBackApi {
    *
    * <em>
    * (The remote method definition does not provide any description.
-   * This usually means the response is a `RabbitMQ` object.)
+   * This usually means the response is a `DatasetAttachment` object.)
    * </em>
    */
-  public status(customHeaders?: Function): Observable<any> {
-    let _method: string = "GET";
+  public patchOrCreate(data: any = {}, customHeaders?: Function): Observable<any> {
+    let _method: string = "PATCH";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/RabbitMQ/status";
+    "/DatasetAttachments";
     let _routeParams: any = {};
-    let _postBody: any = {};
+    let _postBody: any = {
+      data: data
+    };
     let _urlParams: any = {};
     let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
     return result;
   }
 
   /**
-   * Get queues of connected rabbitmq server
+   * Patch attributes for a model instance and persist it into the data source.
+   *
+   * @param {any} id DatasetAttachment id
+   *
+   * @param {object} data Request data.
+   *
+   *  - `data` – `{object}` - An object of model property name/value pairs
    *
    * @returns {object} An empty reference that will be
    *   populated with the actual data once the response is returned
@@ -67,15 +79,19 @@ export class RabbitMQApi extends BaseLoopBackApi {
    *
    * <em>
    * (The remote method definition does not provide any description.
-   * This usually means the response is a `RabbitMQ` object.)
+   * This usually means the response is a `DatasetAttachment` object.)
    * </em>
    */
-  public queues(customHeaders?: Function): Observable<any> {
-    let _method: string = "GET";
+  public patchAttributes(id: any, data: any = {}, customHeaders?: Function): Observable<any> {
+    let _method: string = "PATCH";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/RabbitMQ/queues";
-    let _routeParams: any = {};
-    let _postBody: any = {};
+    "/DatasetAttachments/:id";
+    let _routeParams: any = {
+      id: id
+    };
+    let _postBody: any = {
+      data: data
+    };
     let _urlParams: any = {};
     let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
     return result;
@@ -83,9 +99,9 @@ export class RabbitMQApi extends BaseLoopBackApi {
 
   /**
    * The name of the model represented by this $resource,
-   * i.e. `RabbitMQ`.
+   * i.e. `DatasetAttachment`.
    */
   public getModelName() {
-    return "RabbitMQ";
+    return "DatasetAttachment";
   }
 }

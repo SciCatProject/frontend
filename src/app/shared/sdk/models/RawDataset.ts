@@ -35,6 +35,8 @@ export interface RawDatasetInterface {
   "isPublished"?: boolean;
   "ownerGroup": string;
   "accessGroups"?: Array<any>;
+  "createdBy"?: string;
+  "updatedBy"?: string;
   "createdAt"?: Date;
   "updatedAt"?: Date;
   "sampleId"?: string;
@@ -73,6 +75,8 @@ export class RawDataset implements RawDatasetInterface {
   "isPublished": boolean;
   "ownerGroup": string;
   "accessGroups": Array<any>;
+  "createdBy": string;
+  "updatedBy": string;
   "createdAt": Date;
   "updatedAt": Date;
   "sampleId": string;
@@ -218,6 +222,14 @@ export class RawDataset implements RawDatasetInterface {
         "accessGroups": {
           name: 'accessGroups',
           type: 'Array&lt;any&gt;'
+        },
+        "createdBy": {
+          name: 'createdBy',
+          type: 'string'
+        },
+        "updatedBy": {
+          name: 'updatedBy',
+          type: 'string'
         },
         "createdAt": {
           name: 'createdAt',

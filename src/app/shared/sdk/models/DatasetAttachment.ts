@@ -1,30 +1,30 @@
 /* tslint:disable */
 
 declare var Object: any;
-export interface RabbitMQInterface {
-  "id"?: number;
+export interface DatasetAttachmentInterface {
+  "id"?: any;
 }
 
-export class RabbitMQ implements RabbitMQInterface {
-  "id": number;
-  constructor(data?: RabbitMQInterface) {
+export class DatasetAttachment implements DatasetAttachmentInterface {
+  "id": any;
+  constructor(data?: DatasetAttachmentInterface) {
     Object.assign(this, data);
   }
   /**
    * The name of the model represented by this $resource,
-   * i.e. `RabbitMQ`.
+   * i.e. `DatasetAttachment`.
    */
   public static getModelName() {
-    return "RabbitMQ";
+    return "DatasetAttachment";
   }
   /**
   * @method factory
   * @author Jonathan Casarrubias
   * @license MIT
-  * This method creates an instance of RabbitMQ for dynamic purposes.
+  * This method creates an instance of DatasetAttachment for dynamic purposes.
   **/
-  public static factory(data: RabbitMQInterface): RabbitMQ{
-    return new RabbitMQ(data);
+  public static factory(data: DatasetAttachmentInterface): DatasetAttachment{
+    return new DatasetAttachment(data);
   }
   /**
   * @method getModelDefinition
@@ -35,14 +35,14 @@ export class RabbitMQ implements RabbitMQInterface {
   **/
   public static getModelDefinition() {
     return {
-      name: 'RabbitMQ',
-      plural: 'RabbitMQ',
-      path: 'RabbitMQ',
+      name: 'DatasetAttachment',
+      plural: 'DatasetAttachments',
+      path: 'DatasetAttachments',
       idName: 'id',
       properties: {
         "id": {
           name: 'id',
-          type: 'number'
+          type: 'any'
         },
       },
       relations: {

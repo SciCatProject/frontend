@@ -19,6 +19,10 @@ import { OrigDatablock } from '../../models/OrigDatablock';
 
 /**
  * Api services for the `DerivedDataset` model.
+ *
+ * **Details**
+ *
+ * Contains the information for datasets which are the result of an analysis step, typically based on raw datasets or other derived datasets as input. Derived datasets are typically added by the researcher pursuing the specific analysis. This schema inherits the fields from the generic Dataset collection and adds specific fields as defined below.
  */
 @Injectable()
 export class DerivedDatasetApi extends BaseLoopBackApi {
@@ -635,6 +639,35 @@ export class DerivedDatasetApi extends BaseLoopBackApi {
   }
 
   /**
+   * Check if data is valid according to a schema
+   *
+   * @param {object} data Request data.
+   *
+   * This method expects a subset of model properties as request parameters.
+   *
+   * @returns {object} An empty reference that will be
+   *   populated with the actual data once the response is returned
+   *   from the server.
+   *
+   * <em>
+   * (The remote method definition does not provide any description.
+   * This usually means the response is a `DerivedDataset` object.)
+   * </em>
+   */
+  public isValid(ownableItem: any = {}, customHeaders?: Function): Observable<any> {
+    let _method: string = "POST";
+    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
+    "/DerivedDatasets/isValid";
+    let _routeParams: any = {};
+    let _postBody: any = {
+      ownableItem: ownableItem
+    };
+    let _urlParams: any = {};
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    return result;
+  }
+
+  /**
    * Delete datablocks of dataset and reset status message
    *
    * @param {object} data Request data.
@@ -668,7 +701,7 @@ export class DerivedDatasetApi extends BaseLoopBackApi {
    *
    *  - `fields` – `{object}` - Define the fields to search by, these will be mapped to the Dataset object and ensure the fields exist. There is also support for a `text` search to look for keywords. Can be undefined.
    *
-   *  - `facets` – `{object}` - This should follow the Mongo Facet syntax (https://docs.mongodb.com/manual/reference/operator/aggregation/facet/). Can be undefined and uses defaults explained in description of route.
+   *  - `facets` – `{any}` - This should be an array of objects with the structure: {name: key in mongo (without $ prefix), type: date|text|etc, preConditions: object to include in the query (i.e. unwind)}
    *
    * @returns {object} An empty reference that will be
    *   populated with the actual data once the response is returned

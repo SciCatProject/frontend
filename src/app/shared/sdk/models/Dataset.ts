@@ -28,6 +28,8 @@ export interface DatasetInterface {
   "isPublished"?: boolean;
   "ownerGroup": string;
   "accessGroups"?: Array<any>;
+  "createdBy"?: string;
+  "updatedBy"?: string;
   "createdAt"?: Date;
   "updatedAt"?: Date;
   datasetlifecycle?: DatasetLifecycle;
@@ -57,6 +59,8 @@ export class Dataset implements DatasetInterface {
   "isPublished": boolean;
   "ownerGroup": string;
   "accessGroups": Array<any>;
+  "createdBy": string;
+  "updatedBy": string;
   "createdAt": Date;
   "updatedAt": Date;
   datasetlifecycle: DatasetLifecycle;
@@ -178,6 +182,14 @@ export class Dataset implements DatasetInterface {
         "accessGroups": {
           name: 'accessGroups',
           type: 'Array&lt;any&gt;'
+        },
+        "createdBy": {
+          name: 'createdBy',
+          type: 'string'
+        },
+        "updatedBy": {
+          name: 'updatedBy',
+          type: 'string'
         },
         "createdAt": {
           name: 'createdAt',
