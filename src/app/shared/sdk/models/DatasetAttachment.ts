@@ -1,4 +1,7 @@
 /* tslint:disable */
+import {
+  Dataset
+} from '../index';
 
 declare var Object: any;
 export interface DatasetAttachmentInterface {
@@ -6,6 +9,7 @@ export interface DatasetAttachmentInterface {
   "thumbnail": string;
   "creationTime"?: Date;
   "id"?: any;
+  dataset?: Dataset;
 }
 
 export class DatasetAttachment implements DatasetAttachmentInterface {
@@ -13,6 +17,7 @@ export class DatasetAttachment implements DatasetAttachmentInterface {
   "thumbnail": string;
   "creationTime": Date;
   "id": any;
+  dataset: Dataset;
   constructor(data?: DatasetAttachmentInterface) {
     Object.assign(this, data);
   }
@@ -65,6 +70,14 @@ export class DatasetAttachment implements DatasetAttachmentInterface {
         },
       },
       relations: {
+        dataset: {
+          name: 'dataset',
+          type: 'Dataset',
+          model: 'Dataset',
+          relationType: 'belongsTo',
+                  keyFrom: 'dataset_id',
+          keyTo: 'pid'
+        },
       }
     }
   }

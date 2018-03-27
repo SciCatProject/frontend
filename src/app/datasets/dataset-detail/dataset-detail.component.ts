@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {Store, select} from '@ngrx/store';
-import {OrigDatablock, Datablock, RawDataset, Job} from 'shared/sdk/models';
+import {OrigDatablock,DatasetAttachment, Datablock, RawDataset, Job} from 'shared/sdk/models';
 import * as dsa from 'state-management/actions/datasets.actions';
 import * as ja from 'state-management/actions/jobs.actions';
 import * as ua from 'state-management/actions/user.actions';
@@ -28,6 +28,7 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
   dataset$: Observable<RawDataset>;
   origDatablocks$: Observable<OrigDatablock[]>;
+  datasetAttachments$: Observable<DatasetAttachment[]>;
   datablocks$: Observable<Datablock[]>;
   admin$: Observable<boolean>;
 
