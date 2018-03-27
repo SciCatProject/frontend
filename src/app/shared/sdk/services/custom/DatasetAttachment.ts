@@ -19,7 +19,7 @@ import { SocketConnection } from '../../sockets/socket.connections';
  *
  * **Details**
  *
- * Contains a thumbnail preview in base64 encoded png format for a given dataset
+ * Small less than 16 MB attchments for datasets, envisaged for png/jpeg previews
  */
 @Injectable()
 export class DatasetAttachmentApi extends BaseLoopBackApi {

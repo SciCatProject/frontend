@@ -2,10 +2,16 @@
 
 declare var Object: any;
 export interface DatasetAttachmentInterface {
+  "dataset_id": string;
+  "thumbnail": string;
+  "creationTime"?: Date;
   "id"?: any;
 }
 
 export class DatasetAttachment implements DatasetAttachmentInterface {
+  "dataset_id": string;
+  "thumbnail": string;
+  "creationTime": Date;
   "id": any;
   constructor(data?: DatasetAttachmentInterface) {
     Object.assign(this, data);
@@ -40,6 +46,19 @@ export class DatasetAttachment implements DatasetAttachmentInterface {
       path: 'DatasetAttachments',
       idName: 'id',
       properties: {
+        "dataset_id": {
+          name: 'dataset_id',
+          type: 'string'
+        },
+        "thumbnail": {
+          name: 'thumbnail',
+          type: 'string',
+          default: 'retrieve'
+        },
+        "creationTime": {
+          name: 'creationTime',
+          type: 'Date'
+        },
         "id": {
           name: 'id',
           type: 'any'
