@@ -275,10 +275,13 @@ function handleFacetPayload(fq) {
         case 'creationLocation':
           match.push({ creationLocation: { inq: facet } });
           break;
+        case 'type':
+          match.push({'type': facet});
+          break;
         default:
-          // TODO add default case
+          // TODO handle default case for array and text types in Mongo (defaults to array)
           const obj = {};
-          obj[key] = {inq: facet};
+          obj[key] = {'inq': facet};
           match.push(obj);
           break;
       }
