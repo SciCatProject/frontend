@@ -88,6 +88,7 @@ export class DatasetEffects {
           .facet(JSON.stringify(fq), facetObject)
           .switchMap(res => {
             const filterValues = res['results'][0];
+            console.log(filterValues);
             const groupsArr = filterValues['groups'] || filterValues['ownerGroup'];
             groupsArr.sort(stringSort);
             const kwArr = filterValues['keywords'] || [];
