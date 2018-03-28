@@ -73,24 +73,22 @@ export class DatasetEffects {
       .debounceTime(300)
       .map((action: DatasetActions.UpdateFilterAction) => action.payload)
       .switchMap(payload => {
-        const fq = Object.assign({}, payload);
+        const fq = handleFacetPayload(payload, false);
         let groups = fq['ownerGroup'];
         if (!groups || groups.length === 0) {
           this.store.select(state => state.root.user.currentUserGroups)
             .take(1)
-            .subscribe(user => { groups = user; });
+            .subscribe(user => {
+                groups = user;
+          });
         }
-        if (fq['text']) {
-          fq['text'] = { '$search': '"' + fq['text'] + '"', '$language': 'none' };
-        } else {
-          delete fq['text'];
-        }
-        delete fq['mode'];
         const facetObject = [{ name: 'keywords', type: 'text', preConditions: { $unwind: '$keywords' } }];
+        console.log(fq);
         return this.ds
-          .facet(fq, facetObject)
+          .facet(JSON.stringify(fq), facetObject)
           .switchMap(res => {
             const filterValues = res['results'][0];
+            console.log(filterValues);
             const groupsArr = filterValues['groups'] || filterValues['ownerGroup'];
             groupsArr.sort(stringSort);
             const kwArr = filterValues['keywords'] || [];
@@ -117,7 +115,7 @@ export class DatasetEffects {
       .map((action: DatasetActions.UpdateFilterAction) => action.payload)
       .switchMap(payload => {
         const fq = Object.assign({}, payload);
-        const match = handleFacetPayload(fq);
+        const match = handleFacetPayload(fq, true);
         let filter = {};
         if (match.length > 1) {
           filter = {};
@@ -144,7 +142,7 @@ export class DatasetEffects {
       .map((action: DatasetActions.UpdateFilterAction) => action.payload)
       .switchMap(payload => {
         const fq = Object.assign({}, payload);
-        const match = handleFacetPayload(fq);
+        const match = handleFacetPayload(fq, true);
         const filter = {};
         if (match.length > 1) {
           filter['where'] = {};
@@ -234,16 +232,22 @@ export class DatasetEffects {
     private accessUserSrv: lb.AccessUserApi) { }
 }
 
-function handleFacetPayload(fq) {
-  const match = [];
+/**
+ * Create a filter query to be handled by loopback for datasets and facets
+ * @param fq The fields to construct the query from
+ * @param loopback If using Loopback or mongo syntax. Check the docs for differences but mainly on array vs object structure
+ */
+function handleFacetPayload(fq, loopback = false) {
+  const match: any = loopback ? [] : {};
   const f = Object.assign({}, fq);
   delete f['mode'];
   delete f['initial'];
   delete f['sortField'];
+  delete f['skip'];
 
   Object.keys(f).forEach(key => {
     let facet = f[key];
-    if (facet && (facet !== null && facet.length > 0)) {
+    if (facet) {
       switch (key) {
         case 'ownerGroup':
           if (facet.length > 0 && facet.constructor !== Array &&
@@ -258,28 +262,44 @@ function handleFacetPayload(fq) {
             facet = groupsArray;
           }
           if (facet.length > 0) {
-            match.push({ ownerGroup: { inq: facet } });
+            if (loopback) {
+              match.push({ ownerGroup: { inq: facet } });
+            } else {
+              match[key] = { $in: facet };
+            }
           }
           break;
         case 'text':
-          match.push({ '$text': { 'search': '"' + facet + '"', 'language': 'none' } });
+          match['$text'] = { 'search': '"' + facet + '"', 'language': 'none' };
           break;
         case 'creationTime':
-          const start = facet['start'] || undefined;
+          const start = facet['begin'] || undefined;
           const end = facet['end'] || undefined;
           if (start && end) {
-            match.push({ creationTime: { gte: start } });
-            match.push({ creationTime: { lte: end } });
+            if (loopback) {
+              match.push({ creationTime: {gte: start} });
+              match.push({ creationTime: {lte: end} });
+            } else {
+              match['creationTime'] = { $gte: start, $lte: end };
+            }
           }
           break;
-        case 'creationLocation':
-          match.push({ creationLocation: { inq: facet } });
+        case 'type':
+          if (loopback) {
+            match.push({'type': facet});
+          } else {
+            match['type'] = facet;
+          }
           break;
         default:
-          // TODO add default case
+          // TODO handle default case for array and text types in Mongo (defaults to array)
           const obj = {};
-          obj[key] = {inq: facet};
-          match.push(obj);
+          if (loopback && facet.length > 0) {
+            obj[key] = {inq: facet};
+            match.push(obj);
+          } else if(facet.length > 0) {
+            match[key] = {'$in': facet};
+          }
           break;
       }
     }
