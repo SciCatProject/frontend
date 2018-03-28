@@ -82,23 +82,24 @@ export class DatasetEffects {
                 groups = user;
           });
         }
-        const facetObject = [{ name: 'keywords', type: 'text', preConditions: { $unwind: '$keywords' } }];
-        console.log(fq);
+        const facetObject = [{ name: 'keywords', type: 'text', preConditions: { $unwind: '$keywords' } }, { name: 'type', type: 'text'}];
         return this.ds
           .facet(JSON.stringify(fq), facetObject)
           .switchMap(res => {
             const filterValues = res['results'][0];
-            console.log(filterValues);
             const groupsArr = filterValues['groups'] || filterValues['ownerGroup'];
             groupsArr.sort(stringSort);
             const kwArr = filterValues['keywords'] || [];
             kwArr.sort(stringSort);
+            const typeArr = filterValues['type'] || [];
+            typeArr.sort(stringSort);
             const locationArr = filterValues['locations'] || filterValues['creationLocation'];
             locationArr.sort(stringSort);
             const fv = {};
             fv['ownerGroup'] = groupsArr;
             fv['creationLocation'] = locationArr;
             fv['years'] = filterValues['years'];
+            fv['type'] = typeArr;
             fv['keywords'] = kwArr;
             return Observable.of(new DatasetActions.UpdateFilterCompleteAction(fv));
           })
@@ -158,7 +159,6 @@ export class DatasetEffects {
         if (fq['sortField']) {
           filter['order'] = fq['sortField'];
         }
-        console.log(filter);
         return this.ds.find(filter)
           .switchMap(res => {
             console.log(res);
