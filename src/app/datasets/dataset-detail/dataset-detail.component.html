@@ -17,9 +17,9 @@
       <h3>No datafiles linked to this dataset</h3>
     </div>
   </mat-tab>
-  <mat-tab *ngIf="dataset.datasetattachments && dataset.datasetattachments.length > 0" label="DatasetAttachments">
+  <mat-tab *ngIf="(dAttachment$ | async) as attachments" label="DatasetAttachments">
       <h3>DatasetAttachments</h3>
-      <ng-container *ngFor="let da of dataset.datasetattachments">
+      <ng-container *ngFor="let da of attachments">
         <img src="{{da.thumbnail}}">
       </ng-container>
   </mat-tab>
