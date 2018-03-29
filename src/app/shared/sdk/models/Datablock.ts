@@ -14,6 +14,8 @@ export interface DatablockInterface {
   "dataFileList": Array<any>;
   "ownerGroup": string;
   "accessGroups"?: Array<any>;
+  "createdBy"?: string;
+  "updatedBy"?: string;
   "datasetId"?: string;
   "rawDatasetId"?: string;
   "derivedDatasetId"?: string;
@@ -32,6 +34,8 @@ export class Datablock implements DatablockInterface {
   "dataFileList": Array<any>;
   "ownerGroup": string;
   "accessGroups": Array<any>;
+  "createdBy": string;
+  "updatedBy": string;
   "datasetId": string;
   "rawDatasetId": string;
   "derivedDatasetId": string;
@@ -106,6 +110,14 @@ export class Datablock implements DatablockInterface {
         "accessGroups": {
           name: 'accessGroups',
           type: 'Array&lt;any&gt;'
+        },
+        "createdBy": {
+          name: 'createdBy',
+          type: 'string'
+        },
+        "updatedBy": {
+          name: 'updatedBy',
+          type: 'string'
         },
         "datasetId": {
           name: 'datasetId',

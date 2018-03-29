@@ -20,6 +20,8 @@ export interface DatasetLifecycleInterface {
   "dateOfPublishing"?: Date;
   "ownerGroup": string;
   "accessGroups"?: Array<any>;
+  "createdBy"?: string;
+  "updatedBy"?: string;
   "datasetId"?: string;
   "rawDatasetId"?: string;
   "derivedDatasetId"?: string;
@@ -44,6 +46,8 @@ export class DatasetLifecycle implements DatasetLifecycleInterface {
   "dateOfPublishing": Date;
   "ownerGroup": string;
   "accessGroups": Array<any>;
+  "createdBy": string;
+  "updatedBy": string;
   "datasetId": string;
   "rawDatasetId": string;
   "derivedDatasetId": string;
@@ -142,6 +146,14 @@ export class DatasetLifecycle implements DatasetLifecycleInterface {
         "accessGroups": {
           name: 'accessGroups',
           type: 'Array&lt;any&gt;'
+        },
+        "createdBy": {
+          name: 'createdBy',
+          type: 'string'
+        },
+        "updatedBy": {
+          name: 'updatedBy',
+          type: 'string'
         },
         "datasetId": {
           name: 'datasetId',

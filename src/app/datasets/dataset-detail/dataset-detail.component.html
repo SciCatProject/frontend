@@ -17,6 +17,12 @@
       <h3>No datafiles linked to this dataset</h3>
     </div>
   </mat-tab>
+  <mat-tab *ngIf="(dAttachment$ | async) as attachments" label="DatasetAttachments">
+      <h3>DatasetAttachments</h3>
+      <ng-container *ngFor="let da of attachments">
+        <img src="{{da.thumbnail}}">
+      </ng-container>
+  </mat-tab>
   <mat-tab label="Admin" *ngIf="(admin$ | async) as admin">
     <button (click)="resetDataset(dataset)" class="ui yellow button">Reset Status</button>
     <ng-container *ngIf="(datablocks$ | async) as datablocks">

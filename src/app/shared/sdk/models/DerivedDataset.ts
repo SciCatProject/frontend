@@ -2,6 +2,7 @@
 import {
   DatasetLifecycle,
   Datablock,
+  DatasetAttachment,
   OrigDatablock
 } from '../index';
 
@@ -33,10 +34,13 @@ export interface DerivedDatasetInterface {
   "isPublished"?: boolean;
   "ownerGroup": string;
   "accessGroups"?: Array<any>;
+  "createdBy"?: string;
+  "updatedBy"?: string;
   "createdAt"?: Date;
   "updatedAt"?: Date;
   datasetlifecycle?: DatasetLifecycle;
   datablocks?: Datablock[];
+  datasetattachments?: DatasetAttachment[];
   origdatablocks?: OrigDatablock[];
 }
 
@@ -67,10 +71,13 @@ export class DerivedDataset implements DerivedDatasetInterface {
   "isPublished": boolean;
   "ownerGroup": string;
   "accessGroups": Array<any>;
+  "createdBy": string;
+  "updatedBy": string;
   "createdAt": Date;
   "updatedAt": Date;
   datasetlifecycle: DatasetLifecycle;
   datablocks: Datablock[];
+  datasetattachments: DatasetAttachment[];
   origdatablocks: OrigDatablock[];
   constructor(data?: DerivedDatasetInterface) {
     Object.assign(this, data);
@@ -209,6 +216,14 @@ export class DerivedDataset implements DerivedDatasetInterface {
           name: 'accessGroups',
           type: 'Array&lt;any&gt;'
         },
+        "createdBy": {
+          name: 'createdBy',
+          type: 'string'
+        },
+        "updatedBy": {
+          name: 'updatedBy',
+          type: 'string'
+        },
         "createdAt": {
           name: 'createdAt',
           type: 'Date'
@@ -231,6 +246,14 @@ export class DerivedDataset implements DerivedDatasetInterface {
           name: 'datablocks',
           type: 'Datablock[]',
           model: 'Datablock',
+          relationType: 'hasMany',
+                  keyFrom: 'pid',
+          keyTo: 'derivedDatasetId'
+        },
+        datasetattachments: {
+          name: 'datasetattachments',
+          type: 'DatasetAttachment[]',
+          model: 'DatasetAttachment',
           relationType: 'hasMany',
                   keyFrom: 'pid',
           keyTo: 'derivedDatasetId'

@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {Store, select} from '@ngrx/store';
-import {OrigDatablock, Datablock, RawDataset, Job} from 'shared/sdk/models';
+import {OrigDatablock, Dataset, DatasetAttachment, Datablock, RawDataset, Job} from 'shared/sdk/models';
 import * as dsa from 'state-management/actions/datasets.actions';
 import * as ja from 'state-management/actions/jobs.actions';
 import * as ua from 'state-management/actions/user.actions';
@@ -26,9 +26,10 @@ import 'rxjs/add/operator/distinctUntilChanged';
 })
 export class DatasetDetailComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
-  dataset$: Observable<RawDataset>;
+  dataset$: Observable<Dataset>;
   origDatablocks$: Observable<OrigDatablock[]>;
   datablocks$: Observable<Datablock[]>;
+  dAttachment$: Observable<DatasetAttachment[]>;
   admin$: Observable<boolean>;
 
   constructor(private route: ActivatedRoute, private store: Store<any>) { }
@@ -49,13 +50,20 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
         this.reloadDatasetWithDatablocks(params.id);
       }));
 
-    this.dataset$ = currentSet$.distinctUntilChanged().filter((dataset: RawDataset) => {
+    this.dataset$ = currentSet$.distinctUntilChanged().filter((dataset: Dataset) => {
       return dataset && (Object.keys(dataset).length > 0);
     });
 
-    this.origDatablocks$ = this.dataset$.map((dataset: RawDataset) => {
-      return (dataset && ('origdatablocks' in dataset)) ? dataset.origdatablocks : [];
+    this.origDatablocks$ = this.dataset$.map((dataset: Dataset) => {
+      return (dataset && ('origdatablocks' in dataset)) ? dataset.origdatablocks : undefined;
     });
+
+    this.dAttachment$ = this.dataset$.map((dataset: Dataset) => {
+      return (dataset && ('datasetattachments' in dataset) && 
+              dataset.datasetattachments.length > 0) ? dataset.datasetattachments : undefined;
+    });
+
+
 
     this.datablocks$ = this.dataset$.map((dataset: RawDataset) => {
       return (dataset && ('datablocks' in dataset)) ? dataset.datablocks : [];

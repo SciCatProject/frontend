@@ -10,19 +10,20 @@ import { JSONSearchParams } from '../core/search.params';
 import { ErrorHandler } from '../core/error.service';
 import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Rx';
-import { Job } from '../../models/Job';
+import { DatasetAttachment } from '../../models/DatasetAttachment';
 import { SocketConnection } from '../../sockets/socket.connections';
+import { Dataset } from '../../models/Dataset';
 
 
 /**
- * Api services for the `Job` model.
+ * Api services for the `DatasetAttachment` model.
  *
  * **Details**
  *
- * This collection keeps information about jobs to be excuted in external systems. In particular it keeps information about the jobs submitted for archiving or retrieving datasets stored inside an archive system. It can also be used to keep track of analysis jobs e.g. for automated analysis workflows.
+ * Small less than 16 MB attchments for datasets, envisaged for png/jpeg previews
  */
 @Injectable()
-export class JobApi extends BaseLoopBackApi {
+export class DatasetAttachmentApi extends BaseLoopBackApi {
 
   constructor(
     @Inject(Http) protected http: Http,
@@ -33,6 +34,36 @@ export class JobApi extends BaseLoopBackApi {
     @Optional() @Inject(ErrorHandler) protected errorHandler: ErrorHandler
   ) {
     super(http,  connection,  models, auth, searchParams, errorHandler);
+  }
+
+  /**
+   * Fetches belongsTo relation dataset.
+   *
+   * @param {any} id DatasetAttachment id
+   *
+   * @param {boolean} refresh 
+   *
+   * @returns {object} An empty reference that will be
+   *   populated with the actual data once the response is returned
+   *   from the server.
+   *
+   * <em>
+   * (The remote method definition does not provide any description.
+   * This usually means the response is a `DatasetAttachment` object.)
+   * </em>
+   */
+  public getDataset(id: any, refresh: any = {}, customHeaders?: Function): Observable<any> {
+    let _method: string = "GET";
+    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
+    "/DatasetAttachments/:id/dataset";
+    let _routeParams: any = {
+      id: id
+    };
+    let _postBody: any = {};
+    let _urlParams: any = {};
+    if (typeof refresh !== 'undefined' && refresh !== null) _urlParams.refresh = refresh;
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    return result;
   }
 
   /**
@@ -48,13 +79,13 @@ export class JobApi extends BaseLoopBackApi {
    *
    * <em>
    * (The remote method definition does not provide any description.
-   * This usually means the response is a `Job` object.)
+   * This usually means the response is a `DatasetAttachment` object.)
    * </em>
    */
   public patchOrCreate(data: any = {}, customHeaders?: Function): Observable<any> {
-    let _method: string = "PUT";
+    let _method: string = "PATCH";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/Jobs";
+    "/DatasetAttachments";
     let _routeParams: any = {};
     let _postBody: any = {
       data: data
@@ -67,7 +98,7 @@ export class JobApi extends BaseLoopBackApi {
   /**
    * Patch attributes for a model instance and persist it into the data source.
    *
-   * @param {any} id Job id
+   * @param {any} id DatasetAttachment id
    *
    * @param {object} data Request data.
    *
@@ -79,13 +110,13 @@ export class JobApi extends BaseLoopBackApi {
    *
    * <em>
    * (The remote method definition does not provide any description.
-   * This usually means the response is a `Job` object.)
+   * This usually means the response is a `DatasetAttachment` object.)
    * </em>
    */
   public patchAttributes(id: any, data: any = {}, customHeaders?: Function): Observable<any> {
-    let _method: string = "PUT";
+    let _method: string = "PATCH";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/Jobs/:id";
+    "/DatasetAttachments/:id";
     let _routeParams: any = {
       id: id
     };
@@ -99,9 +130,9 @@ export class JobApi extends BaseLoopBackApi {
 
   /**
    * The name of the model represented by this $resource,
-   * i.e. `Job`.
+   * i.e. `DatasetAttachment`.
    */
   public getModelName() {
-    return "Job";
+    return "DatasetAttachment";
   }
 }
