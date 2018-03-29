@@ -55,11 +55,6 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   keywords = [];
   types = [];
 
-  selectedLocation;
-  selectedGroup;
-  selectedKeywords;
-  selectedType;
-
   filterTemplate: DatasetFilters;
   filters: any = dStore.initialDatasetState.activeFilters;
   filterValues;
@@ -103,16 +98,20 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
 
     this.store.select(selectors.datasets.getActiveFilters).subscribe(filters => {
       if ('creationLocation' in filters && filters.creationLocation !== undefined) {
-        this.selectedLocation = filters['creationLocation'].toString();
-        this.locationInput.setValue(this.selectedLocation);
+        const l = filters['creationLocation'].toString();
+        this.locationInput.setValue(l);
       }
       if ('ownerGroup' in filters && filters.ownerGroup !== undefined) {
-        this.selectedGroup = filters['ownerGroup'].toString();
-        this.groupInput.setValue(this.selectedGroup);
+        const g = filters['ownerGroup'].toString();
+        this.groupInput.setValue(g);
       }
       if ('keywords' in filters && filters.keywords !== undefined) {
-        this.selectedKeywords = filters['keywords'].toString();
-        this.keywordInput.setValue(this.selectedKeywords);
+        const k = filters['keywords'].toString();
+        this.keywordInput.setValue(k);
+      }
+      if ('type' in filters && filters.type !== undefined) {
+        const t = filters['type'].toString();
+        this.typeInput.setValue(t);
       }
       if ('creationTime' in filters && filters.creationTime !== undefined) {
         this.dateRange = filters.creationTime;
@@ -197,7 +196,6 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     this.groupInput.setValue('');
     this.keywordInput.setValue('');
     this.typeInput.setValue('');
-    this.selectedGroup = '';
     this.filters = dStore.initialDatasetState.activeFilters;
     this.dateRange = {start: null, end: null};
     this.store.select(state => state.root.user.currentUserGroups)
