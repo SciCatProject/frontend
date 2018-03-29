@@ -97,19 +97,19 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
       this.store.select(selectors.datasets.getTotalSets);
 
     this.store.select(selectors.datasets.getActiveFilters).subscribe(filters => {
-      if ('creationLocation' in filters && filters.creationLocation !== undefined) {
+      if ('creationLocation' in filters && filters.creationLocation) {
         const l = filters['creationLocation'].toString();
         this.locationInput.setValue(l);
       }
-      if ('ownerGroup' in filters && filters.ownerGroup !== undefined) {
+      if ('ownerGroup' in filters && filters.ownerGroup) {
         const g = filters['ownerGroup'].toString();
         this.groupInput.setValue(g);
       }
-      if ('keywords' in filters && filters.keywords !== undefined) {
+      if ('keywords' in filters && filters.keywords) {
         const k = filters['keywords'].toString();
         this.keywordInput.setValue(k);
       }
-      if ('type' in filters && filters.type !== undefined) {
+      if ('type' in filters && filters.type) {
         const t = filters['type'].toString();
         this.typeInput.setValue(t);
       }
