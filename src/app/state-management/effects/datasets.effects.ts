@@ -61,6 +61,7 @@ export class DatasetEffects {
 
         return this.ds.findById(encodeURIComponent(id), blockFilter)
           .switchMap(res => {
+            console.log(res);
             return Observable.of(new DatasetActions.SearchIDCompleteAction(res));
           })
           .catch(err => {
