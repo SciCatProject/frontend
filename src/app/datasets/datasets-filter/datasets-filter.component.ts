@@ -41,6 +41,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   filteredLocations: Observable<any[]>;
   filteredGroups: Observable<any[]>;
   filteredKeywords: Observable<any[]>;
+  filteredTypes: Observable<any[]>;
 
   dateRange: MatDatePickerRangeValue<Date> = {start: null, end: null};
 
@@ -49,23 +50,15 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   facets: Array<any> = [];
   resultCount$;
 
-  dateFacet = [];
-
-  location: {};
-  selectedLocs = [];
   locations = [];
+  groups = [];
+  keywords = [];
+  types = [];
+
   selectedLocation;
   selectedGroup;
   selectedKeywords;
-
-  group: {};
-  groups = [];
-  selectedGroups = [];
-  // filteredGroups = [];
-
-  keywords = [];
-
-  type = undefined;
+  selectedType;
 
   filterTemplate: DatasetFilters;
   filters: any = dStore.initialDatasetState.activeFilters;
@@ -92,6 +85,11 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
 
   filterKeywords(kw: string) {
     return this.keywords.filter(k => k._id && k._id.toString().toLowerCase().indexOf(kw.toString().toLowerCase()) === 0);
+  }
+
+  filterTypes(t: string) {
+    console.log(t);
+    return this.types.filter(k => k._id && k._id.toString().toLowerCase().indexOf(t.toString().toLowerCase()) === 0);
   }
 
   /**
@@ -129,6 +127,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
               this.locations = this.filterValues['creationLocation'] ? this.filterValues['creationLocation'].slice() : [];
               this.groups = this.filterValues['ownerGroup'] ? this.filterValues['ownerGroup'].slice() : [];
               this.keywords = this.filterValues['keywords'] ? this.filterValues['keywords'].slice() : [];
+              this.types = this.filterValues['type'] ? this.filterValues['type'].slice() : [];
             }
 
             if (this.filterValues.creationLocation) {
@@ -142,6 +141,10 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
             if (this.filterValues.keywords) {
               this.filteredKeywords = this.keywordInput.valueChanges
                 .pipe(startWith(''), map(kw => kw ? this.filterKeywords(kw) : this.keywords.slice()));
+            }
+            if (this.filterValues.type) {
+              this.filteredTypes = this.typeInput.valueChanges
+                .pipe(startWith(''), map(t => t ? this.filterTypes(t) : this.types.slice()));
             }
         }));
   }
@@ -157,7 +160,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
    * Handle clicking of available locations
    */
   locSelected(loc) {
-    this.filters.creationLocation.push(loc['_id']);
+    this.filters.creationLocation.push(loc);
     this.store.dispatch(new dsa.UpdateFilterAction(this.filters));
   }
 
@@ -165,13 +168,13 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
    * Handle clicking of available groups
    */
   groupSelected(grp) {
-    this.filters.ownerGroup.push(grp['_id']);
+    this.filters.ownerGroup.push(grp);
     this.store.dispatch(new dsa.UpdateFilterAction(this.filters));
   }
 
   keywordSelected(kw) {
     if (kw) {
-      this.filters.keywords.push(kw['_id']);
+      this.filters.keywords.push(kw);
       this.store.dispatch(new dsa.UpdateFilterAction(this.filters));
     }
   }
@@ -190,7 +193,6 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
    * Clear the filters and reset the user groups (when not a functional account)
    */
   clearFacets() {
-    this.selectedGroups = [];
     this.locationInput.setValue('');
     this.groupInput.setValue('');
     this.keywordInput.setValue('');
