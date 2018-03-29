@@ -55,12 +55,12 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
     });
 
     this.origDatablocks$ = this.dataset$.map((dataset: Dataset) => {
-      return (dataset && ('origdatablocks' in dataset)) ? dataset.origdatablocks : [];
+      return (dataset && ('origdatablocks' in dataset)) ? dataset.origdatablocks : undefined;
     });
 
     this.dAttachment$ = this.dataset$.map((dataset: Dataset) => {
-      console.log(dataset);
-      return dataset.datasetattachments;
+      return (dataset && ('datasetattachments' in dataset) && 
+              dataset.datasetattachments.length > 0) ? dataset.datasetattachments : undefined;
     });
 
 
