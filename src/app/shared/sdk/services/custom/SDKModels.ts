@@ -15,8 +15,8 @@ import { UserIdentity } from '../../models/UserIdentity';
 import { ApplicationCredential } from '../../models/ApplicationCredential';
 import { Policy } from '../../models/Policy';
 import { Job } from '../../models/Job';
+import { DatasetAttachment } from '../../models/DatasetAttachment';
 import { OrigDatablock } from '../../models/OrigDatablock';
-import { RabbitMQ } from '../../models/RabbitMQ';
 
 export interface Models { [name: string]: any }
 
@@ -39,8 +39,8 @@ export class SDKModels {
     ApplicationCredential: ApplicationCredential,
     Policy: Policy,
     Job: Job,
+    DatasetAttachment: DatasetAttachment,
     OrigDatablock: OrigDatablock,
-    RabbitMQ: RabbitMQ,
     
   };
 

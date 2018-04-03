@@ -10,6 +10,8 @@ export interface SampleInterface {
   "attachments"?: Array<any>;
   "ownerGroup": string;
   "accessGroups"?: Array<any>;
+  "createdBy"?: string;
+  "updatedBy"?: string;
   "updatedAt"?: Date;
 }
 
@@ -22,6 +24,8 @@ export class Sample implements SampleInterface {
   "attachments": Array<any>;
   "ownerGroup": string;
   "accessGroups": Array<any>;
+  "createdBy": string;
+  "updatedBy": string;
   "updatedAt": Date;
   constructor(data?: SampleInterface) {
     Object.assign(this, data);
@@ -87,6 +91,14 @@ export class Sample implements SampleInterface {
         "accessGroups": {
           name: 'accessGroups',
           type: 'Array&lt;any&gt;'
+        },
+        "createdBy": {
+          name: 'createdBy',
+          type: 'string'
+        },
+        "updatedBy": {
+          name: 'updatedBy',
+          type: 'string'
         },
         "updatedAt": {
           name: 'updatedAt',

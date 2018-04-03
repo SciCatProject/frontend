@@ -5,7 +5,7 @@ export KUBECONFIG=~/dev/psi/catamel-psisecrets/server/kubernetes/admin.conf
 
 envarray=(development qa production)
 
-kubectl config use-context admin@kubernetes
+kubectl config use-context kubernetes-admin@kubernetes
 
 for ((i=0;i<${#envarray[@]};i++)); do 
    cd $DACATHOME/catanie 

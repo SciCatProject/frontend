@@ -1,0 +1,12 @@
+.tab-content {
+	padding: 1.5em;
+}
+
+td, th {
+	padding: 0.5em;
+}
+
+th {
+	text-align: left;
+	vertical-align: top;
+}

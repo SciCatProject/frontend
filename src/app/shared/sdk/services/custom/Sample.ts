@@ -16,6 +16,10 @@ import { SocketConnection } from '../../sockets/socket.connections';
 
 /**
  * Api services for the `Sample` model.
+ *
+ * **Details**
+ *
+ * Models describing the characteristics of the samples to be investigated. Raw datasets should be linked to such sample definitions.
  */
 @Injectable()
 export class SampleApi extends BaseLoopBackApi {
@@ -87,6 +91,35 @@ export class SampleApi extends BaseLoopBackApi {
     };
     let _postBody: any = {
       data: data
+    };
+    let _urlParams: any = {};
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    return result;
+  }
+
+  /**
+   * Check if data is valid according to a schema
+   *
+   * @param {object} data Request data.
+   *
+   * This method expects a subset of model properties as request parameters.
+   *
+   * @returns {object} An empty reference that will be
+   *   populated with the actual data once the response is returned
+   *   from the server.
+   *
+   * <em>
+   * (The remote method definition does not provide any description.
+   * This usually means the response is a `Sample` object.)
+   * </em>
+   */
+  public isValid(ownableItem: any = {}, customHeaders?: Function): Observable<any> {
+    let _method: string = "POST";
+    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
+    "/Samples/isValid";
+    let _routeParams: any = {};
+    let _postBody: any = {
+      ownableItem: ownableItem
     };
     let _urlParams: any = {};
     let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);

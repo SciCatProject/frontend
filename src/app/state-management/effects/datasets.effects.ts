@@ -52,6 +52,7 @@ export class DatasetEffects {
           include: [
             { relation: 'origdatablocks' },
             { relation: 'datablocks' },
+            { relation: 'datasetattachments' },
             { relation: 'datasetlifecycle' }
           ]
         };
@@ -60,6 +61,7 @@ export class DatasetEffects {
 
         return this.ds.findById(encodeURIComponent(id), blockFilter)
           .switchMap(res => {
+            console.log(res);
             return Observable.of(new DatasetActions.SearchIDCompleteAction(res));
           })
           .catch(err => {
@@ -73,38 +75,33 @@ export class DatasetEffects {
       .debounceTime(300)
       .map((action: DatasetActions.UpdateFilterAction) => action.payload)
       .switchMap(payload => {
-        const fq = Object.assign({}, payload);
+        const fq = handleFacetPayload(payload, false);
         let groups = fq['ownerGroup'];
         if (!groups || groups.length === 0) {
           this.store.select(state => state.root.user.currentUserGroups)
             .take(1)
-            .subscribe(user => { groups = user; });
+            .subscribe(user => {
+                groups = user;
+          });
         }
-        //              console.log(fq);
-        if (fq['text']) {
-          fq['text'] = { '$search': '"' + fq['text'] + '"', '$language': 'none' };
-        } else {
-          delete fq['text'];
-        }
-        delete fq['mode'];
-
-        // const facetObject = {'keywords': [{'$group': {'_id': '$keywords', 'count': {'$sum': 1}}}, {'$sort': {'count': -1, '_id': 1}}]};
-        console.log(fq);
+        const facetObject = [{ name: 'keywords', type: 'text', preConditions: { $unwind: '$keywords' } }, { name: 'type', type: 'text'}];
         return this.ds
-          .facet(fq, undefined)
+          .facet(JSON.stringify(fq), facetObject)
           .switchMap(res => {
             const filterValues = res['results'][0];
-            console.log(filterValues);
             const groupsArr = filterValues['groups'] || filterValues['ownerGroup'];
             groupsArr.sort(stringSort);
             const kwArr = filterValues['keywords'] || [];
             kwArr.sort(stringSort);
+            const typeArr = filterValues['type'] || [];
+            typeArr.sort(stringSort);
             const locationArr = filterValues['locations'] || filterValues['creationLocation'];
             locationArr.sort(stringSort);
             const fv = {};
             fv['ownerGroup'] = groupsArr;
             fv['creationLocation'] = locationArr;
             fv['years'] = filterValues['years'];
+            fv['type'] = typeArr;
             fv['keywords'] = kwArr;
             return Observable.of(new DatasetActions.UpdateFilterCompleteAction(fv));
           })
@@ -121,7 +118,7 @@ export class DatasetEffects {
       .map((action: DatasetActions.UpdateFilterAction) => action.payload)
       .switchMap(payload => {
         const fq = Object.assign({}, payload);
-        const match = handleFacetPayload(fq);
+        const match = handleFacetPayload(fq, true);
         let filter = {};
         if (match.length > 1) {
           filter = {};
@@ -148,7 +145,7 @@ export class DatasetEffects {
       .map((action: DatasetActions.UpdateFilterAction) => action.payload)
       .switchMap(payload => {
         const fq = Object.assign({}, payload);
-        const match = handleFacetPayload(fq);
+        const match = handleFacetPayload(fq, true);
         const filter = {};
         if (match.length > 1) {
           filter['where'] = {};
@@ -164,9 +161,9 @@ export class DatasetEffects {
         if (fq['sortField']) {
           filter['order'] = fq['sortField'];
         }
-        console.log(filter);
         return this.ds.find(filter)
           .switchMap(res => {
+            console.log(res);
             return Observable.of(new DatasetActions.SearchCompleteAction(res));
           })
           .catch(err => {
@@ -174,21 +171,6 @@ export class DatasetEffects {
             return Observable.of(new DatasetActions.SearchFailedAction(err));
           });
       });
-  // @Effect()
-  // protected getGroups$: Observable<Action> =
-  //     this.action$.ofType(DatasetActions.ADD_GROUPS)
-  //         .debounceTime(300)
-  //         .map(toPayload)
-  //         .switchMap(payload => {
-  //           return this.userIdentitySrv.findOne({'where': {'userId': payload}})
-  //               .switchMap(res => {
-  //                 return Observable.of(new DatasetActions.AddGroupsCompleteAction(res['profile']['accessGroups']));
-  //               })
-  //               .catch(err => {
-  //                 console.error(err);
-  //                 return Observable.of(new DatasetActions.AddGroupsFailedAction(err));
-  //               });
-  //         });
 
   @Effect()
   protected deleteDatablocks$: Observable<Action> =
@@ -225,42 +207,6 @@ export class DatasetEffects {
         }
       });
 
-  // @Effect()
-  // protected updateCurrentSetDatablocks$: Observable<Action> =
-  //   this.action$.ofType(DatasetActions.SELECT_CURRENT)
-  //     .map(toPayload)
-  //     .switchMap(payload => {
-  //       if (payload) {
-  //         const dataset = payload;
-  //         const datasetSearch = { where: { datasetId: dataset.pid } };
-  //         return this.dbs.find(datasetSearch).switchMap(res => {
-  //           dataset['datablocks'] = res;
-  //           console.log(res);
-  //           return Observable.of(new DatasetActions.UpdateCurrentBlocksAction(payload));
-  //         })
-  //       } else {
-  //         return Observable.of(new DatasetActions.UpdateCurrentBlocksAction(undefined));
-  //       }
-  //     });
-
-  // @Effect()
-  // protected updateCurrentSetOrigDatablocks$: Observable<Action> =
-  //   this.action$.ofType(DatasetActions.SELECT_CURRENT)
-  //     .map(toPayload)
-  //     .switchMap(payload => {
-  //       if (payload) {
-  //         const dataset = payload;
-  //         const datasetSearch = { where: { datasetId: dataset.pid } };
-  //         return this.odbs.find(datasetSearch).switchMap(res => {
-  //           dataset['origdatablocks'] = res;
-  //           console.log(res);
-  //           return Observable.of(new DatasetActions.UpdateCurrentBlocksAction(payload));
-  //         })
-  //       } else {
-  //         return Observable.of(new DatasetActions.UpdateCurrentBlocksAction(undefined));
-  //       }
-  //     });
-
   @Effect()
   protected resetStatus$: Observable<Action> =
     this.action$.ofType(DatasetActions.RESET_STATUS)
@@ -288,56 +234,78 @@ export class DatasetEffects {
     private accessUserSrv: lb.AccessUserApi) { }
 }
 
-function handleFacetPayload(fq) {
-  let ownerGroup = fq['ownerGroup'];
-  const text = fq['text'], creationLocation = fq['creationLocation'];
+/**
+ * Create a filter query to be handled by loopback for datasets and facets
+ * @param fq The fields to construct the query from
+ * @param loopback If using Loopback or mongo syntax. Check the docs for differences but mainly on array vs object structure
+ */
+function handleFacetPayload(fq, loopback = false) {
+  const match: any = loopback ? [] : {};
+  const f = Object.assign({}, fq);
+  delete f['mode'];
+  delete f['initial'];
+  delete f['sortField'];
+  delete f['skip'];
 
-  // TODO access state from here?
+  Object.keys(f).forEach(key => {
+    let facet = f[key];
+    if (facet) {
+      switch (key) {
+        case 'ownerGroup':
+          if (facet.length > 0 && facet.constructor !== Array &&
+            typeof facet[0] === 'object') {
+            const groupsArray = [];
+            const keys = Object.keys(facet[0]);
 
-  const match = [];
-  if (ownerGroup) {
-    if (ownerGroup.length > 0 && ownerGroup.constructor !== Array &&
-      typeof ownerGroup[0] === 'object') {
-      const groupsArray = [];
-      console.log('Converting object');
-      const keys = Object.keys(ownerGroup[0]);
+            for (let i = 0; i < keys.length; i++) {
+              groupsArray.push(facet[0][keys[i]]);
+            }
 
-      for (let i = 0; i < keys.length; i++) {
-        groupsArray.push(ownerGroup[0][keys[i]]);
+            facet = groupsArray;
+          }
+          if (facet.length > 0) {
+            if (loopback) {
+              match.push({ ownerGroup: { inq: facet } });
+            } else {
+              match[key] = { $in: facet };
+            }
+          }
+          break;
+        case 'text':
+          match['$text'] = { 'search': '"' + facet + '"', 'language': 'none' };
+          break;
+        case 'creationTime':
+          const start = facet['begin'] || undefined;
+          const end = facet['end'] || undefined;
+          if (start && end) {
+            if (loopback) {
+              match.push({ creationTime: {gte: start} });
+              match.push({ creationTime: {lte: end} });
+            } else {
+              match['creationTime'] = { $gte: start, $lte: end };
+            }
+          }
+          break;
+        case 'type':
+          if (loopback) {
+            match.push({'type': facet});
+          } else {
+            match['type'] = facet;
+          }
+          break;
+        default:
+          // TODO handle default case for array and text types in Mongo (defaults to array)
+          const obj = {};
+          if (loopback && facet.length > 0) {
+            obj[key] = {inq: facet};
+            match.push(obj);
+          } else if(facet.length > 0) {
+            match[key] = {'$in': facet};
+          }
+          break;
       }
-
-      ownerGroup = groupsArray;
     }
-    if (ownerGroup.length > 0) {
-      match.push({ ownerGroup: { inq: ownerGroup } });
-    }
-  }
-
-  if (creationLocation && creationLocation.length > 0) {
-    match.push({ creationLocation: { inq: creationLocation } });
-  }
-  if (fq['creationTime']) {
-    const start = fq['creationTime']['start'] || undefined;
-    const end = fq['creationTime']['end'] || undefined;
-    if (start) {
-      match.push({ creationTime: { gte: start } });
-    }
-    if (end) {
-      match.push({ creationTime: { lte: end } });
-    }
-  }
-  if (fq['type']) {
-    match.push({ type: fq['type'] });
-  }
-  /*  else if ((startDate && !endDate) || (!startDate && endDate)) {
-     return Observable.of({
-       type : DatasetActions.SEARCH_FAILED,
-       payload : {message : 'Start and End Date must be specified'}
-     });
-     }*/
-  if (text) {
-    match.push({ '$text': { 'search': '"' + text + '"', 'language': 'none' } });
-  }
+  });
   return match;
 }
 
