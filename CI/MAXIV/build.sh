@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 
 cp CI/MAXIV/favicon.ico src
-node_modules/.bin/ng build
+./node_modules/@angular/cli/bin/ng build --env=maxiv-prod
