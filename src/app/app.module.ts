@@ -26,6 +26,8 @@ import { JobsEffects } from 'state-management/effects/jobs.effects';
 import { rootReducer } from 'state-management/reducers/root.reducer';
 import { UsersModule } from 'users/users.module';
 import { ProposalsModule } from 'proposals/proposals.module';
+import { FileHelpersModule } from 'ngx-file-helpers';
+
 
 import {
   MatAutocompleteModule,
@@ -91,6 +93,7 @@ export function localStorageSyncWrapper(reducer: any) {
     MatTableModule,
     MatPaginatorModule,
     BrowserModule,
+    FileHelpersModule,
     FormsModule,
     ReactiveFormsModule,
     AppRoutingModule,
