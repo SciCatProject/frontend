@@ -17,58 +17,39 @@ import { DatablockApi } from 'shared/sdk';
 @Injectable()
 export class DatasetService {
   limit = 1000;
-
   loading = false;
-
   selected: RawDataset = null;
-
   datasets: Array<RawDataset> = [];
-
   datasetChange: Subject<string> = new Subject<string>();
-
   facetSubject = new BehaviorSubject<object>({});
-
+  
   detailFilter = {
     limit : this.limit,
-
     include :
         [ {relation : 'origdatablocks'}, {relation : 'datasetlifecycle'} ]
   };
-
+  
   filter = {
     limit : this.limit,
-
     include : [ {relation : 'datasetlifecycle'} ]
   };
 
   nullLifecycle = {
     archiveRetentionTime : 'unknown',
-
     archiveStatusMessage : 'unknown',
-
     dateOfLastMessage : 'unknown',
-
     doi : 'unknown',
-
     exportedTo : 'unknown',
-
     id : null,
-
     isExported : 'unknown',
-
     isOnDisk : 'unknown',
-
     isOnTape : 'unknown',
-
     isPublished : 'unknown',
-
     publishingDate : 'unknown',
-
     retrieveStatusMessage : 'unknown'
   };
 
   userID;
-
   userGroups = null;
 
   constructor(private rds: RawDatasetApi, private dlSrv: DatasetLifecycleApi,
@@ -76,74 +57,47 @@ export class DatasetService {
               private auth: LoopBackAuth, private store: Store<any>) {}
 
   /**
-
-
-
    * Search datasets with search terms,
-
-
-
    * defaults to just limiting search size.
-
-
-
    * @param {any} [terms={limit: this.limit}]
-
-
-
    * @memberof DatasetService
-
-
-
    */
 
   searchDatasets(terms: object = this.filter) {
     this.loading = true;
-
     const filter = Object.assign(terms, this.filter);
 
     this.rds.find(filter).subscribe(
         ret => {
           this.loading = false;
-
           this.datasets = <Array<RawDataset>>ret;
 
           if (this.datasets.length > 0) {
             // this.updateStatus(0, 10);
-
             this.datasetChange.next('reload');
           }
         },
         error => { console.error(error); }, () => {});
   }
 
-  getDataset(id: string) { return this.rds.findById(id, this.detailFilter); }
+  getDataset(id: string) {
+    return this.rds.findById(id, this.detailFilter);
+  }
 
   getUserGroups(userID: String): Observable<any> {
     return this.acSrv.findById(userID);
-
     // TODO this should be in a different service? Maybe called when the user
     // logs in
   }
 
   searchDatasetsObservable(terms: object = this.filter) {
     const filter = Object.assign(terms, this.filter);
-
     return this.rds.find(filter);
   }
 
   /**
-
-
-
    * Load blocks based on dataset ID
-
-
-
    * @param set
-
-
-
    */
 
   getDatasetBlocks(set, type = 'original') {
@@ -156,7 +110,6 @@ export class DatasetService {
         .subscribe(
             bl => {
               console.log(bl);
-
               set['datablocks'] = <Array<OrigDatablock>>bl;
             },
             error => {
@@ -172,25 +125,10 @@ export class DatasetService {
   }
 
   /**
-
-
-
    * Returns observable to sub to
-
-
-
    * of datablock retrieval
-
-
-
    * @param id
-
-
-
    * @returns {Observable<T[]>}
-
-
-
    */
 
   getBlockObservable(set, type = 'original'): Observable<Array<any>> {
