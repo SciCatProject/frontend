@@ -12,9 +12,6 @@ import {AppState} from "../../../state-management/state/app.store";
 import {ActivatedRoute} from "@angular/router";
 import * as selectors from "../../../state-management/selectors";
 import {ConfigService} from "../../../shared/services/config.service";
-import {DatePipe} from "@angular/common";
-import {config} from "../../../../config/config";
-import * as filesize from 'filesize';
 
 
 interface Proposer {
@@ -26,7 +23,7 @@ interface Proposer {
 @Component({
     selector: 'proposal-detail',
     templateUrl: 'proposal-detail.component.html',
-    styleUrls: ['proposal-detail.component.css']
+    styleUrls: ['proposal-detail.component.scss']
 })
 export class ProposalDetailComponent implements OnInit {
     @Input() proposal: Proposal;
@@ -35,8 +32,6 @@ export class ProposalDetailComponent implements OnInit {
     @Input() datasets: Dataset[];
   @Input() dataSource: MatTableDataSource<any> | null;
   displayedColumns = ['pid', 'sourceFolder', 'size', 'creationTime', 'type', 'owner', 'ownerEmail',  'creationLocation',  'dataFormat', 'version'];
-  cols = [];
-  displayedColumns2 = [];
 
 
   constructor(
@@ -45,19 +40,6 @@ export class ProposalDetailComponent implements OnInit {
   ) {}
 
     ngOnInit() {
-
-      this.configSrv.getConfigFile('Dataset').subscribe(conf => {
-        if (conf) {
-          for (const prop in conf) {
-            if (prop in conf && 'table' in conf[prop]) {
-              this.cols.push(conf[prop]['table']);
-              this.displayedColumns2.push(conf[prop]['table']['field']);
-            }
-          }
-        }
-      });
-
-
         if (this.proposal) {
             // Set up fallback values for main proposer
             const { firstname, lastname } = this.proposal;
@@ -93,33 +75,6 @@ export class ProposalDetailComponent implements OnInit {
             });
         }
     }
-
-  getRowValue(row, col) {
-    const field = col.field;
-    const value = row[field];
-
-    if (field === 'createdAt') {
-      const date = new Date(value);
-      const datePipe = new DatePipe('en-US');
-      const formattedDate = datePipe.transform(date, 'dd/MM/yyyy HH:mm');
-      return formattedDate;
-    }
-
-    if (field === 'size') {
-      return filesize(value || 0);
-    }
-
-    if (field === 'datasetlifecycle.archiveStatusMessage') {
-      const val = row.datasetlifecycle ? row.datasetlifecycle.archiveStatusMessage : '';
-      return config.datasetStatusMessages[val] || val;
-    }
-
-    if (field === 'datasetlifecycle.retrieveStatusMessage') {
-      const val = row.datasetlifecycle ? row.datasetlifecycle.retrieveStatusMessage : '';
-      return config.datasetStatusMessages[val] || val;
-    }
-    return value;
-  }
 
   calculateRowClasses(row) {
     if (row.size === 0) {

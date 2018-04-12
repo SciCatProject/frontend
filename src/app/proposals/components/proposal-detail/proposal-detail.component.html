@@ -79,18 +79,6 @@
         <mat-header-row  class='datasets-header' *matHeaderRowDef="displayedColumns"></mat-header-row>
         <mat-row class='row-generic' [ngClass]="calculateRowClasses(row)" *matRowDef="let row; columns: displayedColumns;"></mat-row>
       </mat-table>
-
-      <mat-table #table [dataSource]="dataSource" class='dataset-table'>
-        <ng-container *ngFor="let col of cols">
-          <ng-container matColumnDef="{{col.field}}">
-            <mat-header-cell *matHeaderCellDef> {{col.header}} </mat-header-cell>
-
-            <mat-cell *matCellDef="let row"> {{getRowValue(row, col)}} </mat-cell>
-          </ng-container>
-        </ng-container>
-        <mat-header-row class='datasets-header' *matHeaderRowDef="displayedColumns2"></mat-header-row>
-        <mat-row class='row-generic' [ngClass]="calculateRowClasses(row)" *matRowDef="let row; columns: displayedColumns2;"></mat-row>
-        </mat-table>
       </div>
 	</mat-tab>
 
