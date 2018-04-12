@@ -34,6 +34,7 @@
 
 	<mat-tab label="Datasets">
 		<div class="tab-content">
+      <div class="ui segment">
       <mat-table #table [dataSource]="dataSource" class='dataset-table'>
         <ng-container matColumnDef="pid">
           <mat-header-cell *matHeaderCellDef> PID </mat-header-cell>
@@ -79,6 +80,7 @@
         <mat-header-row  class='datasets-header' *matHeaderRowDef="displayedColumns"></mat-header-row>
         <mat-row class='row-generic' [ngClass]="calculateRowClasses(row)" *matRowDef="let row; columns: displayedColumns;"></mat-row>
       </mat-table>
+      </div>
       </div>
 	</mat-tab>
 
