@@ -34,7 +34,7 @@ export class ProposalDetailComponent implements OnInit {
     private principalInvestigator: Proposer;
     @Input() datasets: Dataset[];
   @Input() dataSource: MatTableDataSource<any> | null;
-  displayedColumns = ['pid', 'owner', 'ownerEmail', 'createdAt', 'creationLocation', 'sourceFolder', 'size', 'type', 'dataFormat', 'version'];
+  displayedColumns = ['pid', 'sourceFolder', 'size', 'creationTime', 'type', 'owner', 'ownerEmail',  'creationLocation',  'dataFormat', 'version'];
   cols = [];
   displayedColumns2 = [];
 

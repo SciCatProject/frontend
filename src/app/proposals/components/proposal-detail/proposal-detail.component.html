@@ -39,6 +39,18 @@
           <mat-header-cell *matHeaderCellDef> PID </mat-header-cell>
           <mat-cell *matCellDef="let element"> {{element.pid}} </mat-cell>
         </ng-container>
+        <ng-container matColumnDef="sourceFolder">
+          <mat-header-cell *matHeaderCellDef> Source Folder  </mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{element.sourceFolder}} </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="size">
+          <mat-header-cell *matHeaderCellDef> Size  </mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{element.size}} </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="creationTime">
+          <mat-header-cell *matHeaderCellDef> Creation Time </mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{element.creationTime}} </mat-cell>
+        </ng-container>
         <ng-container matColumnDef="owner">
           <mat-header-cell *matHeaderCellDef> Owner </mat-header-cell>
           <mat-cell *matCellDef="let element"> {{element.owner}} </mat-cell>
@@ -47,21 +59,9 @@
           <mat-header-cell *matHeaderCellDef> Owner email </mat-header-cell>
           <mat-cell *matCellDef="let element"> {{element.ownerEmail}} </mat-cell>
         </ng-container>
-        <ng-container matColumnDef="createdAt">
-          <mat-header-cell *matHeaderCellDef> Created </mat-header-cell>
-          <mat-cell *matCellDef="let element"> {{element.createdAt}} </mat-cell>
-        </ng-container>
         <ng-container matColumnDef="creationLocation">
           <mat-header-cell *matHeaderCellDef> Location </mat-header-cell>
           <mat-cell *matCellDef="let element"> {{element.creationLocation}} </mat-cell>
-        </ng-container>
-        <ng-container matColumnDef="sourceFolder">
-          <mat-header-cell *matHeaderCellDef> Source Folder  </mat-header-cell>
-          <mat-cell *matCellDef="let element"> {{element.sourceFolder}} </mat-cell>
-        </ng-container>
-        <ng-container matColumnDef="size">
-          <mat-header-cell *matHeaderCellDef> Size  </mat-header-cell>
-          <mat-cell *matCellDef="let element"> {{element.size}} </mat-cell>
         </ng-container>
         <ng-container matColumnDef="type">
           <mat-header-cell *matHeaderCellDef> Type  </mat-header-cell>
@@ -77,7 +77,7 @@
         </ng-container>
 
         <mat-header-row  class='datasets-header' *matHeaderRowDef="displayedColumns"></mat-header-row>
-        <mat-row class='row-generic' *matRowDef="let row; columns: displayedColumns;"></mat-row>
+        <mat-row class='row-generic' [ngClass]="calculateRowClasses(row)" *matRowDef="let row; columns: displayedColumns;"></mat-row>
       </mat-table>
 
       <mat-table #table [dataSource]="dataSource" class='dataset-table'>
