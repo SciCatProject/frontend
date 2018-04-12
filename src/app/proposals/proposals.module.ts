@@ -2,9 +2,9 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
-import { MatListModule } from '@angular/material/list';
+/*import { MatListModule } from '@angular/material/list';
 import { MatCardModule } from '@angular/material/card';
-import { MatTabsModule } from '@angular/material/tabs';
+import { MatTabsModule } from '@angular/material/tabs';*/
 
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
@@ -20,6 +20,43 @@ import { ProposalsService } from './proposals.service';
 import { proposalsReducer } from '../state-management/reducers/proposals.reducer';
 import { ProposalsEffects } from '../state-management/effects/proposals.effects';
 
+import { DatasetService } from '../datasets/dataset.service';
+import {
+  MatAutocompleteModule,
+  MatButtonModule,
+  MatButtonToggleModule,
+  MatCardModule,
+  MatCheckboxModule,
+  MatChipsModule,
+  // MatDatepickerModule,
+  MatDialogModule,
+  MatExpansionModule,
+  MatGridListModule,
+  MatIconModule,
+  MatInputModule,
+  MatListModule,
+  MatMenuModule,
+  MatNativeDateModule,
+  MatPaginatorModule,
+  MatProgressBarModule,
+  MatProgressSpinnerModule,
+  MatRadioModule,
+  MatRippleModule,
+  MatSelectModule,
+  MatSidenavModule,
+  MatSliderModule,
+  MatSlideToggleModule,
+  MatSnackBarModule,
+  MatSortModule,
+  MatTableModule,
+  MatTabsModule,
+  MatToolbarModule,
+  MatTooltipModule,
+  MatStepperModule,
+  MatFormFieldModule,
+  MatOptionModule,
+} from '@angular/material';
+
 @NgModule({
     imports: [
         CommonModule,
@@ -30,7 +67,9 @@ import { ProposalsEffects } from '../state-management/effects/proposals.effects'
 
         MatListModule,
         MatCardModule,
-        MatTabsModule
+        MatTabsModule,
+        MatTableModule,
+
     ],
     declarations: [
         ListProposalsPageComponent,
@@ -38,9 +77,12 @@ import { ProposalsEffects } from '../state-management/effects/proposals.effects'
 
         ProposalsListComponent,
         ProposalDetailComponent,
+
+
     ],
     providers: [
         ProposalsService,
+        DatasetService,
     ]
 })
 export class ProposalsModule {

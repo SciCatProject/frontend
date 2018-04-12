@@ -7,14 +7,14 @@
 					<td>{{proposal.title}}
 				</tr>
 				<tr>
-					<th>Main proposer</th> 
+					<th>Main proposer</th>
 					<td>
 						<a href="mailto:{{mainProposer.email}}">{{mainProposer.name}}</a>
 					</td>
 				</tr>
 				<tr *ngIf="principalInvestigator && principalInvestigator.isPresent">
-					<th>Principal investigator</th> 
-					
+					<th>Principal investigator</th>
+
 					<td *ngIf="principalInvestigator.email; else withoutEmail">
 						<a href="mailto:{{principalInvestigator.email}}">{{principalInvestigator.name}}</a>
 					</td>
@@ -31,11 +31,67 @@
 			</table>
 		</div>
 	</mat-tab>
-	
-	<mat-tab label="Datasets" disabled>
+
+	<mat-tab label="Datasets">
 		<div class="tab-content">
-			List of datasets...
-		</div>
+      <mat-table #table [dataSource]="dataSource" class='dataset-table'>
+        <ng-container matColumnDef="pid">
+          <mat-header-cell *matHeaderCellDef> PID </mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{element.pid}} </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="owner">
+          <mat-header-cell *matHeaderCellDef> Owner </mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{element.owner}} </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="ownerEmail">
+          <mat-header-cell *matHeaderCellDef> Owner email </mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{element.ownerEmail}} </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="createdAt">
+          <mat-header-cell *matHeaderCellDef> Created </mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{element.createdAt}} </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="creationLocation">
+          <mat-header-cell *matHeaderCellDef> Location </mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{element.creationLocation}} </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="sourceFolder">
+          <mat-header-cell *matHeaderCellDef> Source Folder  </mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{element.sourceFolder}} </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="size">
+          <mat-header-cell *matHeaderCellDef> Size  </mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{element.size}} </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="type">
+          <mat-header-cell *matHeaderCellDef> Type  </mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{element.type}} </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="dataFormat">
+          <mat-header-cell *matHeaderCellDef> Data Format  </mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{element.dataFormat}} </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="version">
+          <mat-header-cell *matHeaderCellDef> Version  </mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{element.version}} </mat-cell>
+        </ng-container>
+
+        <mat-header-row  class='datasets-header' *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row class='row-generic' *matRowDef="let row; columns: displayedColumns;"></mat-row>
+      </mat-table>
+
+      <mat-table #table [dataSource]="dataSource" class='dataset-table'>
+        <ng-container *ngFor="let col of cols">
+          <ng-container matColumnDef="{{col.field}}">
+            <mat-header-cell *matHeaderCellDef> {{col.header}} </mat-header-cell>
+
+            <mat-cell *matCellDef="let row"> {{getRowValue(row, col)}} </mat-cell>
+          </ng-container>
+        </ng-container>
+        <mat-header-row class='datasets-header' *matHeaderRowDef="displayedColumns2"></mat-header-row>
+        <mat-row class='row-generic' [ngClass]="calculateRowClasses(row)" *matRowDef="let row; columns: displayedColumns2;"></mat-row>
+        </mat-table>
+      </div>
 	</mat-tab>
 
 	<mat-tab label="Instruments" disabled>
