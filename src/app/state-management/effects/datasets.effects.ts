@@ -272,7 +272,11 @@ function handleFacetPayload(fq, loopback = false) {
           }
           break;
         case 'text':
-          match['$text'] = { 'search': '"' + facet + '"', 'language': 'none' };
+          if (loopback) {
+            match.push({ '$text': { 'search': '"' + facet + '"', 'language': 'none' } });
+          } else {
+            match['$text'] = facet;
+          }
           break;
         case 'creationTime':
           const start = facet['begin'] || undefined;
@@ -306,6 +310,7 @@ function handleFacetPayload(fq, loopback = false) {
       }
     }
   });
+  //console.log("Resulting match expression:",match)
   return match;
 }
 
