@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {Store, select} from '@ngrx/store';
-import {OrigDatablock, Dataset, DatasetAttachment, Datablock, RawDataset, Job} from 'shared/sdk/models';
+import {OrigDatablock, Dataset, DatasetAttachment, Datablock, Job} from 'shared/sdk/models';
 import * as dsa from 'state-management/actions/datasets.actions';
 import * as ja from 'state-management/actions/jobs.actions';
 import * as ua from 'state-management/actions/user.actions';
@@ -59,13 +59,13 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
     });
 
     this.dAttachment$ = this.dataset$.map((dataset: Dataset) => {
-      return (dataset && ('datasetattachments' in dataset) && 
+      return (dataset && ('datasetattachments' in dataset) &&
               dataset.datasetattachments.length > 0) ? dataset.datasetattachments : undefined;
     });
 
 
 
-    this.datablocks$ = this.dataset$.map((dataset: RawDataset) => {
+    this.datablocks$ = this.dataset$.map((dataset: Dataset) => {
       return (dataset && ('datablocks' in dataset)) ? dataset.datablocks : [];
     });
 
@@ -132,7 +132,7 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
     this.store.dispatch(new dsa.DatablocksAction(datasetPID));
   }
   // (not currently in use since we are clearing current dataset entirely)
-  private ensureDatablocksForDatasetAreLoaded(dataset: RawDataset) {
+  private ensureDatablocksForDatasetAreLoaded(dataset: Dataset) {
     if (dataset && !('origdatablocks' in dataset)) {
       // this.loadDatasetWithDatablocks(dataset.pid);
     }

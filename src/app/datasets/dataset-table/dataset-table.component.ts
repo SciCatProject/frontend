@@ -12,7 +12,7 @@ import { Http } from '@angular/http';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Subject } from 'rxjs/Subject';
-import { Job, RawDataset } from 'shared/sdk/models';
+import { Job, Dataset } from 'shared/sdk/models';
 import { UserApi } from 'shared/sdk/services';
 import { ConfigService } from 'shared/services/config.service';
 import * as dua from 'state-management/actions/dashboard-ui.actions';

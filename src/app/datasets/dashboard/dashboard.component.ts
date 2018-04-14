@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { RawDataset } from 'shared/sdk/models';
+import { Dataset } from 'shared/sdk/models';
 import * as dsa from 'state-management/actions/datasets.actions';
 import * as ds from 'state-management/selectors/datasets.selectors';
 import * as selectors from 'state-management/selectors';
@@ -19,7 +19,7 @@ export class DashboardComponent implements OnInit {
   /**
    * Datasets retrieved from catalogue that match a user's search terms.
    *
-   * @type {Array<RawDataset>}
+   * @type {Array<Dataset>}
    * @memberof DashboardComponent
    */
   datasets: Array<any> = [];

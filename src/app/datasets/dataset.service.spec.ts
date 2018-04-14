@@ -4,7 +4,7 @@ import {TestBed, inject} from '@angular/core/testing';
 import { Store, StoreModule } from '@ngrx/store';
 import {DatasetService} from './dataset.service';
 
-import {RawDatasetApi, DatasetLifecycleApi, DatablockApi} from 'shared/sdk/services';
+import {DatasetApi, DatasetLifecycleApi, DatablockApi} from 'shared/sdk/services';
 import {MockDatablockApi, MockDatasetApi, MockDatasetLifecycleApi} from 'shared/MockStubs';
 
 describe('DatasetService', () => {
@@ -17,7 +17,7 @@ describe('DatasetService', () => {
         }
         ,
         {
-          provide: RawDatasetApi, useClass: MockDatasetApi
+          provide: DatasetApi, useClass: MockDatasetApi
         },
         {
           provide: DatasetLifecycleApi, useClass: MockDatasetLifecycleApi

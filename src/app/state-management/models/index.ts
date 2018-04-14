@@ -1,5 +1,5 @@
-import { User, AccessGroup, Job, RawDataset, Proposal } from 'shared/sdk/models';
-export { User, AccessGroup, Job, RawDataset, Proposal };
+import { User, AccessGroup, Job, Dataset, Proposal } from 'shared/sdk/models';
+export { User, AccessGroup, Job, Dataset, Proposal };
 
 export interface Settings {
   tapeCopies: string;

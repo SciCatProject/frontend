@@ -1,5 +1,5 @@
 import { Action } from '@ngrx/store';
-import { RawDataset } from 'shared/sdk/models';
+import { Dataset } from 'shared/sdk/models';
 
 import {
     FILTER_UPDATE,
@@ -37,7 +37,7 @@ export function datasetsReducer(state = initialDatasetState, action: Action) {
         }
 
         case SEARCH_COMPLETE: {
-            const datasets = <RawDataset[]>action['payload'];
+            const datasets = <Dataset[]>action['payload'];
             return {...state, datasets, loading: false};
         }
 
@@ -56,13 +56,13 @@ export function datasetsReducer(state = initialDatasetState, action: Action) {
         case SELECT_CURRENT:
         case CURRENT_BLOCKS_COMPLETE:
         case SEARCH_ID_COMPLETE: {
-            const currentSet = <RawDataset>action['payload'];
+            const currentSet = <Dataset>action['payload'];
             return {...state, currentSet};
         }
 
         case SELECTED_DATABLOCKS_COMPLETE:
         case SELECTED_UPDATE: {
-            const selectedSets = <RawDataset[]>action['payload'];
+            const selectedSets = <Dataset[]>action['payload'];
             return {...state, selectedSets};
         }
 

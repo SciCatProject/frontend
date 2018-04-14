@@ -3,12 +3,12 @@ import {Store} from '@ngrx/store';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {Observable} from 'rxjs/Observable';
 import {Subject} from 'rxjs/Subject';
-import {OrigDatablock, RawDataset} from 'shared/sdk/models';
+import {OrigDatablock, Dataset} from 'shared/sdk/models';
 import {
   AccessUserApi,
   DatasetLifecycleApi,
   OrigDatablockApi,
-  RawDatasetApi
+  DatasetApi
 } from 'shared/sdk/services';
 import {LoopBackAuth} from 'shared/sdk/services';
 import * as ua from 'state-management/actions/user.actions';
@@ -18,8 +18,8 @@ import { DatablockApi } from 'shared/sdk';
 export class DatasetService {
   limit = 1000;
   loading = false;
-  selected: RawDataset = null;
-  datasets: Array<RawDataset> = [];
+  selected: Dataset = null;
+  datasets: Array<Dataset> = [];
   datasetChange: Subject<string> = new Subject<string>();
   facetSubject = new BehaviorSubject<object>({});
   
@@ -52,7 +52,7 @@ export class DatasetService {
   userID;
   userGroups = null;
 
-  constructor(private rds: RawDatasetApi, private dlSrv: DatasetLifecycleApi,
+  constructor(private rds: DatasetApi, private dlSrv: DatasetLifecycleApi,
               private odb: OrigDatablockApi, private acSrv: AccessUserApi, private db: DatablockApi,
               private auth: LoopBackAuth, private store: Store<any>) {}
 
@@ -70,7 +70,7 @@ export class DatasetService {
     this.rds.find(filter).subscribe(
         ret => {
           this.loading = false;
-          this.datasets = <Array<RawDataset>>ret;
+          this.datasets = <Array<Dataset>>ret;
 
           if (this.datasets.length > 0) {
             // this.updateStatus(0, 10);

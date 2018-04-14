@@ -227,7 +227,7 @@ export class DatasetEffects {
       });
 
   constructor(private action$: Actions, private store: Store<any>,
-    private cds: DatasetService, private ds: lb.DatasetApi, private rds: lb.RawDatasetApi,
+    private cds: DatasetService, private ds: lb.DatasetApi, private rds: lb.DatasetApi,
     private dls: lb.DatasetLifecycleApi, private dbs: lb.DatablockApi,
     private odbs: lb.OrigDatablockApi,
     private userIdentitySrv: lb.UserIdentityApi,

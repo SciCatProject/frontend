@@ -1,6 +1,6 @@
 import { Action } from '@ngrx/store';
 import { DatasetFilters } from 'state-management/models';
-import { RawDataset, AccessGroup, Datablock } from 'shared/sdk/models';
+import { Dataset, AccessGroup, Datablock } from 'shared/sdk/models';
 
 export const SEARCH_COMPLETE =              '[Dataset] Search Complete';
 export const SEARCH_FAILED =                '[Dataset] Search Failed';
@@ -136,12 +136,12 @@ export class UpdateSelectedDatablocksAction implements Action {
 }
 export class CurrentSetAction implements Action {
     readonly type = SELECT_CURRENT;
-    constructor(public payload: RawDataset) {}
+    constructor(public payload: Dataset) {}
 }
 
 export class UpdateCurrentBlocksAction implements Action {
     readonly type = CURRENT_BLOCKS_COMPLETE;
-    constructor(public payload: RawDataset) {}
+    constructor(public payload: Dataset) {}
 }
 
 export class ResetStatusAction implements Action {

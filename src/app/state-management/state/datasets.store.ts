@@ -3,12 +3,12 @@ import { DatasetFilters } from 'state-management/models';
 
 // NOTE It IS ok to make up a state of other sub states
 export interface DatasetState {
-    datasets: lb.RawDataset[];
+    datasets: lb.Dataset[];
     loading: boolean;
     activeFilters: DatasetFilters;
     filterValues: object;
-    currentSet: lb.RawDataset;
-    selectedSets: lb.RawDataset[];
+    currentSet: lb.Dataset;
+    selectedSets: lb.Dataset[];
     totalSets: number;
 }
 
