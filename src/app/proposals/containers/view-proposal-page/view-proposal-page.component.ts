@@ -16,8 +16,13 @@ import { getSelectedProposal, getSelectedProposalDatasets } from 'state-manageme
 
 @Component({
     selector: 'view-proposal-page',
-    templateUrl: 'view-proposal-page.component.html',
-    styleUrls: ['view-proposal-page.component.css']
+    template: `
+        <proposal-detail
+            *ngIf="proposal$ | async"
+            [proposal]="proposal$ | async"
+            [datasets]="datasets$ | async">
+        </proposal-detail>
+    `
 })
 export class ViewProposalPageComponent implements OnInit, OnDestroy {
     private subscription: Subscription;

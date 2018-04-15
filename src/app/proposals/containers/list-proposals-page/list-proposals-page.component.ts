@@ -15,8 +15,10 @@ import { FetchProposalsAction, SelectProposalAction } from 'state-management/act
 
 @Component({
     selector: 'list-proposals-page',
-    templateUrl: 'list-proposals-page.component.html',
-    styleUrls: ['list-proposals-page.component.css']
+    template: `
+        <proposals-list [proposals]="proposals$ | async">
+        </proposals-list>
+    `
 })
 export class ListProposalsPageComponent implements OnInit, OnDestroy {
     private subscription: Subscription;
