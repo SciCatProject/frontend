@@ -7,7 +7,7 @@ import { ProposalsState } from 'state-management/state/proposals.store';
 
 import { Proposal } from 'state-management/models';
 import { getProposalList } from 'state-management/selectors/proposals.selectors';
-import { FetchProposalsAction } from 'state-management/actions/proposals.actions';
+import { FetchProposalsAction, SelectProposalAction } from 'state-management/actions/proposals.actions';
 
 @Component({
     selector: 'list-proposals-page',

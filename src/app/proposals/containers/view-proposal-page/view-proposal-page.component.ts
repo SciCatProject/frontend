@@ -5,7 +5,7 @@ import { Store, select } from '@ngrx/store';
 
 import { Subscription } from 'rxjs/Subscription';
 import { Observable } from 'rxjs/Observable';
-import { map, flatMap } from 'rxjs/operators';
+import { map, filter, flatMap } from 'rxjs/operators';
 
 import { FetchProposalsAction, SelectProposalAction, FetchProposalAction } from 'state-management/actions/proposals.actions';
 import { FetchDatasetsForProposalAction } from 'state-management/actions/datasets.actions';
@@ -20,10 +20,7 @@ import { getSelectedProposal, getSelectedProposalDatasets } from 'state-manageme
     styleUrls: ['view-proposal-page.component.css']
 })
 export class ViewProposalPageComponent implements OnInit, OnDestroy {
-    private fetchProposalSub: Subscription;
-    private fetchDatasetsSub: Subscription;
-    private selectProposalSub: Subscription;
-
+    private subscription: Subscription;
     private proposalId$: Observable<string>;
     private proposal$: Observable<Proposal>;
     private datasets$: Observable<Dataset[]>;
@@ -35,18 +32,19 @@ export class ViewProposalPageComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.proposalId$ = this.route.params
-            .pipe(map(params => params.id));
+            .pipe(
+                map(params => params.id),
+                filter(id => id != null)
+            );
 
-        this.fetchProposalSub = this.proposalId$
-            .pipe(map(id => new FetchProposalAction(id)))
-            .subscribe(this.store);
-
-        this.fetchDatasetsSub = this.proposalId$
-            .pipe(map(id => new FetchDatasetsForProposalAction(id)))
-            .subscribe(this.store);
-
-        this.selectProposalSub = this.proposalId$
-            .pipe(map(id => new SelectProposalAction(id)))
+        this.subscription = this.proposalId$
+            .pipe(
+                flatMap(id => [
+                    new FetchProposalAction(id),
+                    new FetchDatasetsForProposalAction(id),
+                    new SelectProposalAction(id)
+                ])
+            )
             .subscribe(this.store);
             
         this.proposal$ = this.store.pipe(select(getSelectedProposal));
@@ -54,8 +52,6 @@ export class ViewProposalPageComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
-        this.fetchProposalSub.unsubscribe();
-        this.fetchDatasetsSub.unsubscribe();
-        this.selectProposalSub.unsubscribe();
+        this.subscription.unsubscribe();
     }
 };
