@@ -9,6 +9,11 @@ const getProposals = createSelector(
 	state => state.proposals
 );
 
+export const getHasFetched = createSelector(
+	getProposalsState,
+	state => state.hasFetched
+);
+
 export const getProposalList = createSelector(
 	getProposals,
 	proposals => Object.keys(proposals).map(id => proposals[id])

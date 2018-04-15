@@ -1,12 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Store, select } from '@ngrx/store';
+
 import { Observable } from 'rxjs/Observable';
+import { Subscription } from 'rxjs/Subscription';
+import { distinctUntilChanged } from 'rxjs/operators/distinctUntilChanged';
+import { map } from 'rxjs/operators/map';
 
 import { AppState } from 'state-management/state/app.store';
 import { ProposalsState } from 'state-management/state/proposals.store';
 
 import { Proposal } from 'state-management/models';
-import { getProposalList } from 'state-management/selectors/proposals.selectors';
+import { getProposalList, getHasFetched } from 'state-management/selectors/proposals.selectors';
 import { FetchProposalsAction, SelectProposalAction } from 'state-management/actions/proposals.actions';
 
 @Component({
@@ -14,13 +18,25 @@ import { FetchProposalsAction, SelectProposalAction } from 'state-management/act
     templateUrl: 'list-proposals-page.component.html',
     styleUrls: ['list-proposals-page.component.css']
 })
-export class ListProposalsPageComponent implements OnInit {
-    proposals$: Observable<Proposal[]>;
+export class ListProposalsPageComponent implements OnInit, OnDestroy {
+    private subscription: Subscription;
+    private proposals$: Observable<Proposal[]>;
+    private hasFetched$: Observable<boolean>;
 
     constructor(private store: Store<AppState>) {}
 
     ngOnInit() {
         this.proposals$ = this.store.pipe(select(getProposalList));
-        this.store.dispatch(new FetchProposalsAction());
+        this.hasFetched$ = this.store.pipe(select(getHasFetched));
+
+        this.subscription = this.hasFetched$.pipe(
+            distinctUntilChanged(),
+            map(() => new FetchProposalsAction())
+        )
+        .subscribe(this.store);
+    }
+
+    ngOnDestroy() {
+        this.subscription.unsubscribe();
     }
 };
