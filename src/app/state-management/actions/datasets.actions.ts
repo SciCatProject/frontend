@@ -38,6 +38,8 @@ export const CURRENT_BLOCKS_COMPLETE =      '[Dataset] Current set datablocks up
 export const TOTAL_UPDATE =                 '[Dataset] Total Datasets Update';
 // export const FILTER_UPDATE_COMPLETE = '[Dataset]  Filter Update Complete';
 
+export const FETCH_DATASETS_FOR_PROPOSAL =  '[Dataset] Fetch Datasets for Proposal';
+
 export class SearchCompleteAction implements Action {
     readonly type = SEARCH_COMPLETE;
     constructor(public payload: {}[]) {}
@@ -159,6 +161,11 @@ export class TotalSetsAction implements Action {
     constructor(public payload: number) {}
 }
 
+export class FetchDatasetsForProposalAction implements Action {
+    readonly type = FETCH_DATASETS_FOR_PROPOSAL;
+    constructor(public proposalId: string) {}
+}
+
 export type Actions =
     SearchCompleteAction | SearchFailedAction |
     UpdateFilterAction | UpdateFilterCompleteAction | FilterFailedAction |
@@ -166,4 +173,5 @@ export type Actions =
     SearchIDFailedAction | DatablocksAction | DatablocksCompleteAction | UpdateCurrentBlocksAction |
     DatablockDeleteAction | DatablockDeleteCompleteAction | DatablockDeleteFailedAction |
     DatablocksAction | AddGroupsAction | AddGroupsCompleteAction | UpdateSelectedDatablocksAction |
-    AddGroupsFailedAction | UpdateSelectedAction | TotalSetsAction | ResetStatusAction | ResetStatusCompleteAction;
+    AddGroupsFailedAction | UpdateSelectedAction | TotalSetsAction | ResetStatusAction | ResetStatusCompleteAction |
+    FetchDatasetsForProposalAction;
