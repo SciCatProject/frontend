@@ -14,11 +14,6 @@ export function proposalsReducer(
     state: ProposalsState = initialProposalsState,
     action: ProposalsAction | LogoutCompleteAction
 ): ProposalsState {
-
-    if (action.type.indexOf('oposal') !== -1) {
-        debugger;
-    }
-
     switch (action.type) {
         case SELECT_PROPOSAL:
             const selectedId = (action as SelectProposalAction).proposalId;
