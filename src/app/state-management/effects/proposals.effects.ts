@@ -11,23 +11,33 @@ import {
 	FetchProposalsAction, FETCH_PROPOSALS,
 	FetchProposalsCompleteAction, FETCH_PROPOSALS_COMPLETE,
 	FetchProposalsFailedAction, FETCH_PROPOSALS_FAILED,
-} from '../actions/proposals.actions';
 
-import {
-	LoginCompleteAction, LOGIN_COMPLETE
-} from '../actions/user.actions';
+	FetchProposalOutcomeAction,
+	FetchProposalAction, FETCH_PROPOSAL,
+	FetchProposalCompleteAction, FETCH_PROPOSAL_COMPLETE,
+	FetchProposalFailedAction, FETCH_PROPOSAL_FAILED,
+} from '../actions/proposals.actions';
 
 import { Proposal } from '../models';
 
 @Injectable()
 export class ProposalsEffects {
 	@Effect() getProposals$: Observable<FetchProposalsOutcomeAction> = this.actions$.pipe(
-		ofType(FETCH_PROPOSALS),
-		take(1),
+		ofType<FetchProposalsAction>(FETCH_PROPOSALS),
 		mergeMap(action => 
 			this.proposalsService.getProposals().pipe(
 				map(proposals => new FetchProposalsCompleteAction(proposals)),
 				catchError(() => Observable.of(new FetchProposalsFailedAction()))
+			)
+		)
+	);
+
+	@Effect() getProposal$: Observable<FetchProposalOutcomeAction> = this.actions$.pipe(
+		ofType<FetchProposalAction>(FETCH_PROPOSAL),
+		mergeMap(action => 
+			this.proposalsService.getProposal(action.proposalId).pipe(
+				map(proposal => new FetchProposalCompleteAction(proposal)),
+				catchError(() => Observable.of(new FetchProposalFailedAction()))
 			)
 		)
 	);

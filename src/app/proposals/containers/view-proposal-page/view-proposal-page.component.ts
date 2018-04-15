@@ -5,9 +5,9 @@ import { Store, select } from '@ngrx/store';
 
 import { Subscription } from 'rxjs/Subscription';
 import { Observable } from 'rxjs/Observable';
-import { map } from 'rxjs/operators';
+import { map, flatMap } from 'rxjs/operators';
 
-import { FetchProposalsAction, SelectProposalAction } from 'state-management/actions/proposals.actions';
+import { FetchProposalsAction, SelectProposalAction, FetchProposalAction } from 'state-management/actions/proposals.actions';
 import { FetchDatasetsForProposalAction } from 'state-management/actions/datasets.actions';
 
 import { AppState } from 'state-management/state/app.store';
@@ -20,18 +20,26 @@ import { getSelectedProposal, getSelectedProposalDatasets } from 'state-manageme
     styleUrls: ['view-proposal-page.component.css']
 })
 export class ViewProposalPageComponent implements OnInit, OnDestroy {
-    fetchDatasetsSub: Subscription;
-    selectProposalSub: Subscription;
+    private fetchProposalSub: Subscription;
+    private fetchDatasetsSub: Subscription;
+    private selectProposalSub: Subscription;
 
-    proposalId$: Observable<string>;
-    proposal$: Observable<Proposal>;
-    datasets$: Observable<Dataset[]>;
+    private proposalId$: Observable<string>;
+    private proposal$: Observable<Proposal>;
+    private datasets$: Observable<Dataset[]>;
 
-    constructor(private store: Store<AppState>, private route: ActivatedRoute) {}
+    constructor(
+        private store: Store<AppState>,
+        private route: ActivatedRoute
+    ) {}
 
     ngOnInit() {
         this.proposalId$ = this.route.params
             .pipe(map(params => params.id));
+
+        this.fetchProposalSub = this.proposalId$
+            .pipe(map(id => new FetchProposalAction(id)))
+            .subscribe(this.store);
 
         this.fetchDatasetsSub = this.proposalId$
             .pipe(map(id => new FetchDatasetsForProposalAction(id)))
@@ -43,11 +51,10 @@ export class ViewProposalPageComponent implements OnInit, OnDestroy {
             
         this.proposal$ = this.store.pipe(select(getSelectedProposal));
         this.datasets$ = this.store.pipe(select(getSelectedProposalDatasets));
-
-        this.store.dispatch(new FetchProposalsAction());
     }
 
     ngOnDestroy() {
+        this.fetchProposalSub.unsubscribe();
         this.fetchDatasetsSub.unsubscribe();
         this.selectProposalSub.unsubscribe();
     }

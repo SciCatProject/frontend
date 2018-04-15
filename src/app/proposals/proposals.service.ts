@@ -11,4 +11,8 @@ export class ProposalsService {
 	getProposals(): Observable<Proposal[]> {
 		return this.proposalApi.find();
 	}
+
+	getProposal(proposalId: string): Observable<Proposal> {
+		return this.proposalApi.findOne({where: {proposalId}});
+	}
 }

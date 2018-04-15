@@ -1,13 +1,13 @@
 import { Proposal } from '../models';
 
 export interface ProposalsState {
-	list: Proposal[];
+	proposals: {[proposalId: string]: Proposal};
 	hasFetched: boolean,
 	selectedId: string,
 };
 
 export const initialProposalsState: ProposalsState = {
-	list: [],
+	proposals: {},
 	hasFetched: false,
 	selectedId: null,
 };
