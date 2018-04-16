@@ -54,7 +54,7 @@ export class FetchDatasetsForProposalAction implements Action {
 
 export class FetchDatasetsForProposalCompleteAction implements Action {
     type = FETCH_DATASETS_FOR_PROPOSAL_COMPLETE;
-    constructor(readonly datasets: Dataset[] = []) {};
+    constructor(readonly datasets: Dataset[]) {};
 }
 
 export class FetchDatasetsForProposalFailedAction implements Action {
