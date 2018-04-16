@@ -6,6 +6,7 @@ import {
     SelectProposalAction, SELECT_PROPOSAL,
     FetchProposalsCompleteAction, FETCH_PROPOSALS_COMPLETE,
     FetchProposalCompleteAction, FETCH_PROPOSAL_COMPLETE,
+    FetchDatasetsForProposalCompleteAction, FETCH_DATASETS_FOR_PROPOSAL_COMPLETE,
 } from '../actions/proposals.actions';
 
 import { LogoutCompleteAction, LOGOUT_COMPLETE } from '../actions/user.actions';
@@ -31,9 +32,16 @@ export function proposalsReducer(
             const proposals = {...state.proposals, [proposal.proposalId]: proposal};
             return {...state, proposals};
         }
+        case FETCH_DATASETS_FOR_PROPOSAL_COMPLETE: {
+            const list = (action as FetchDatasetsForProposalCompleteAction).datasets;
+            const datasets = list.reduce((datasets, dataset) => 
+                ({...datasets, [dataset.pid]: dataset})
+            , {});
+            return {...state, datasets};
+        }
         case LOGOUT_COMPLETE:
             return {...initialProposalsState};
-
+            
         default:
             return state;
     }

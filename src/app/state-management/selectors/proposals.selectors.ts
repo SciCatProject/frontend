@@ -1,12 +1,22 @@
 import { createSelector, createFeatureSelector } from '@ngrx/store';
 import { ProposalsState } from '../state/proposals.store';
-import { getDatasets } from './datasets.selectors';
+//import { getDatasets } from './datasets.selectors';
 
 const getProposalsState = createFeatureSelector<ProposalsState>('proposals');
 
 const getProposals = createSelector(
 	getProposalsState,
 	state => state.proposals
+);
+
+const getDatasets = createSelector(
+	getProposalsState,
+	state => state.datasets
+);
+
+const getDatasetList = createSelector(
+	getDatasets,
+	datasets => Object.keys(datasets).map(id => datasets[id])
 );
 
 export const getHasFetched = createSelector(
@@ -31,7 +41,7 @@ export const getSelectedProposal = createSelector(
 );
 
 export const getSelectedProposalDatasets = createSelector(
-	getDatasets,
+	getDatasetList,
 	getSelectedProposalId,
 	(datasets, proposalId) => datasets.filter(dataset => dataset.proposalId === proposalId)
 );

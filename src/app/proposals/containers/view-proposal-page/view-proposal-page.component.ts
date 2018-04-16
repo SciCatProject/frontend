@@ -7,12 +7,20 @@ import { Subscription } from 'rxjs/Subscription';
 import { Observable } from 'rxjs/Observable';
 import { map, filter, flatMap } from 'rxjs/operators';
 
-import { FetchProposalsAction, SelectProposalAction, FetchProposalAction } from 'state-management/actions/proposals.actions';
-import { FetchDatasetsForProposalAction } from 'state-management/actions/datasets.actions';
+import {
+    SelectProposalAction,
+    FetchProposalsAction,
+    FetchProposalAction,
+    FetchDatasetsForProposalAction
+} from 'state-management/actions/proposals.actions';
+
+import {
+    getSelectedProposal,
+    getSelectedProposalDatasets
+} from 'state-management/selectors/proposals.selectors';
 
 import { AppState } from 'state-management/state/app.store';
 import { Dataset, Proposal } from 'state-management/models';
-import { getSelectedProposal, getSelectedProposalDatasets } from 'state-management/selectors/proposals.selectors';
 
 @Component({
     selector: 'view-proposal-page',

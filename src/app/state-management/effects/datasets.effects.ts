@@ -226,6 +226,7 @@ export class DatasetEffects {
         });
       });
 
+      /*
   @Effect()
   protected fetchDatasetsForProposal$: Observable<Action> =
     this.action$.ofType(DatasetActions.FETCH_DATASETS_FOR_PROPOSAL)
@@ -235,7 +236,7 @@ export class DatasetEffects {
         .map(datasets =>
           new DatasetActions.SearchCompleteAction(datasets)
         )
-      );
+      );*/
 
   constructor(private action$: Actions, private store: Store<any>,
     private cds: DatasetService, private ds: lb.DatasetApi, private rds: lb.RawDatasetApi,
