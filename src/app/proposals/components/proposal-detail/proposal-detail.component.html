@@ -76,9 +76,9 @@
             <mat-header-cell *matHeaderCellDef>Version</mat-header-cell>
             <mat-cell *matCellDef="let element">{{element.version}}</mat-cell>
           </ng-container>
-
-          <mat-header-row  class='datasets-header' *matHeaderRowDef="displayedColumns"></mat-header-row>
-          <mat-row class='row-generic' [ngClass]="calculateRowClasses(row)" *matRowDef="let row; columns: displayedColumns;"></mat-row>
+          
+          <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
         </mat-table>
       </div>
     </div>

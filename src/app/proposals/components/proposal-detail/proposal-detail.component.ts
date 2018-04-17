@@ -1,13 +1,9 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { MatTableModule } from '@angular/material';
+import { select, Store } from "@ngrx/store";
+import { Observable } from 'rxjs/observable';
 
-import { Proposal } from 'state-management/models';
-import {Dataset, OrigDatablock} from "../../../shared/sdk/models";
-import {MatTableDataSource} from "@angular/material";
-import {DatasetService} from "../../../datasets/dataset.service";
-import {Observable} from "rxjs/Rx";
-import {MatTableModule} from '@angular/material';
-import {select, Store} from "@ngrx/store";
-
+import { Proposal, Dataset } from 'state-management/models';
 import { getSelectedProposalDatasets } from 'state-management/selectors/proposals.selectors';
 
 interface Proposer {
@@ -28,20 +24,22 @@ export class ProposalDetailComponent implements OnInit {
     private mainProposer: Proposer;
     private principalInvestigator: Proposer;
     
-    private displayedColumns = [
+    private displayedColumns: string[] = [
         'pid',
         'sourceFolder',
         'size',
         'creationTime',
-      //  'type',
+     // 'type',
         'owner',
-      //  'ownerEmail',
+     // 'ownerEmail',
         'creationLocation',
-      //  'dataFormat',
-      //  'version'
+     // 'dataFormat',
+     // 'version'
     ];
 
     ngOnInit() {
+        if (this.proposal == null) return;
+
         // Set up fallback values for main proposer
         const { firstname, lastname } = this.proposal;
         const mpName = firstname && lastname
