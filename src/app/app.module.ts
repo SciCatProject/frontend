@@ -28,6 +28,9 @@ import { UsersModule } from 'users/users.module';
 import { ProposalsModule } from 'proposals/proposals.module';
 import { FileHelpersModule } from 'ngx-file-helpers';
 
+import { FilePickerDemoComponent } from './datasets/file-picker-demo/file-picker-demo.component';
+import { FileDropzoneDemoComponent } from './datasets/file-dropzone-demo/file-dropzone-demo.component';
+
 
 import {
   MatAutocompleteModule,
@@ -78,6 +81,7 @@ export function localStorageSyncWrapper(reducer: any) {
 @NgModule({
   declarations : [
     AppComponent,
+	FilePickerDemoComponent, FileDropzoneDemoComponent,
     JobsTableComponent,
     SampleDataFormComponent,
     JobsDetailComponent,
