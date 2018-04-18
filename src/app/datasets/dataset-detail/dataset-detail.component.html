@@ -16,6 +16,22 @@
     <div *ngIf="origDatablocks$.length === 0">
       <h3>No datafiles linked to this dataset</h3>
     </div>
+
+<button
+  type="button"
+  ngxFilePicker
+  accept="image/*"
+  multiple
+  (filePick)="file = $event">
+  Browse
+</button>
+
+<div style="height:100px; width:100px;background-color:lightblue"
+  ngxFileDropzone
+  (fileDrop)="file = $event">
+  Drop a file in this zone.
+</div>
+~               
   </mat-tab>
   <mat-tab *ngIf="(dAttachment$ | async) as attachments" label="DatasetAttachments">
       <h3>DatasetAttachments</h3>
