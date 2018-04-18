@@ -33,6 +33,9 @@ export interface DatasetInterface {
   "updatedBy"?: string;
   "createdAt"?: Date;
   "updatedAt"?: Date;
+  "proposalId"?: string;
+  "dataFormat"?: string;
+  "creationLocation"?: string;
   datasetlifecycle?: DatasetLifecycle;
   datablocks?: Datablock[];
   datasetattachments?: DatasetAttachment[];
@@ -65,6 +68,9 @@ export class Dataset implements DatasetInterface {
   "updatedBy": string;
   "createdAt": Date;
   "updatedAt": Date;
+  "proposalId": string;
+  "dataFormat": string;
+  "creationLocation": string;
   datasetlifecycle: DatasetLifecycle;
   datablocks: Datablock[];
   datasetattachments: DatasetAttachment[];
@@ -202,6 +208,19 @@ export class Dataset implements DatasetInterface {
           name: 'updatedAt',
           type: 'Date'
         },
+        "proposalId": {
+          name: 'proposalId',
+          type: 'string'
+        },
+        "dataFormat": {
+          name: 'dataFormat',
+          type: 'string'
+        },
+        "creationLocation": {
+          name: 'creationLocation',
+          type: 'string'
+        },
+
       },
       relations: {
         datasetlifecycle: {

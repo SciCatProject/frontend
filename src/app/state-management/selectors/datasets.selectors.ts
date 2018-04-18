@@ -1,4 +1,4 @@
-import {createSelector, Store} from '@ngrx/store';
+import { Dataset } from 'state-management/models';
 
 export const getFilterValues = (state: any) => state.root.datasets.filterValues;
 export const getActiveFilters = (state: any) => state.root.datasets.activeFilters;

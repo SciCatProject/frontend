@@ -226,6 +226,18 @@ export class DatasetEffects {
         });
       });
 
+      /*
+  @Effect()
+  protected fetchDatasetsForProposal$: Observable<Action> =
+    this.action$.ofType(DatasetActions.FETCH_DATASETS_FOR_PROPOSAL)
+      .map((action: DatasetActions.FetchDatasetsForProposalAction) => action.proposalId)
+      .switchMap(proposalId => this.cds
+        .searchDatasetsObservable({where: {proposalId}})
+        .map(datasets =>
+          new DatasetActions.SearchCompleteAction(datasets)
+        )
+      );*/
+
   constructor(private action$: Actions, private store: Store<any>,
     private cds: DatasetService, private ds: lb.DatasetApi, private rds: lb.DatasetApi,
     private dls: lb.DatasetLifecycleApi, private dbs: lb.DatablockApi,

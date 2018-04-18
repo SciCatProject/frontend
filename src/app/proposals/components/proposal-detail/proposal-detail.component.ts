@@ -1,10 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { MatTableModule } from '@angular/material';
+import { select, Store } from "@ngrx/store";
+import { Observable } from 'rxjs/observable';
 
-import { Store, select } from '@ngrx/store';
-import { Observable } from 'rxjs/Observable';
-
-import { Proposal } from 'state-management/models';
+import { Proposal, Dataset } from 'state-management/models';
+import { getSelectedProposalDatasets } from 'state-management/selectors/proposals.selectors';
 
 interface Proposer {
     name: string;
@@ -15,37 +15,56 @@ interface Proposer {
 @Component({
     selector: 'proposal-detail',
     templateUrl: 'proposal-detail.component.html',
-    styleUrls: ['proposal-detail.component.css']
+    styleUrls: ['proposal-detail.component.scss']
 })
 export class ProposalDetailComponent implements OnInit {
     @Input() proposal: Proposal;
+    @Input() datasets: Dataset[];
+
     private mainProposer: Proposer;
     private principalInvestigator: Proposer;
+    
+    private displayedColumns: string[] = [
+        'pid',
+        'sourceFolder',
+        'size',
+        'creationTime',
+     // 'type',
+        'owner',
+     // 'ownerEmail',
+        'creationLocation',
+     // 'dataFormat',
+     // 'version'
+    ];
 
     ngOnInit() {
-        if (this.proposal) {
-            // Set up fallback values for main proposer
-            const { firstname, lastname } = this.proposal;
-            const mpName = firstname && lastname
-                ? `${firstname} ${lastname}`
-                : this.proposal.email; // Email is mandatory so we can rely on it being present.
+        if (this.proposal == null) return;
 
-            this.mainProposer = {
-                name: mpName,
-                email: this.proposal.email,
-                isPresent: true
-            };
+        // Set up fallback values for main proposer
+        const { firstname, lastname } = this.proposal;
+        const mpName = firstname && lastname
+            ? `${firstname} ${lastname}`
+            : this.proposal.email; // Email is mandatory so we can rely on it being present.
 
-            // Set up fallback values for principalInvestigator
-            const { pi_firstname, pi_lastname } = this.proposal;
-            const piFullName = pi_firstname && pi_lastname ? `${pi_firstname} ${pi_lastname}` : null;
-            const piEmail = this.proposal.pi_email || null;
+        this.mainProposer = {
+            name: mpName,
+            email: this.proposal.email,
+            isPresent: true
+        };
 
-            this.principalInvestigator = {
-                name: piFullName || piEmail,
-                email: piEmail,
-                isPresent: piFullName !== null || piEmail !== null
-            };
-        }
+        // Set up fallback values for principalInvestigator
+        const { pi_firstname, pi_lastname } = this.proposal;
+        const piFullName = pi_firstname && pi_lastname ? `${pi_firstname} ${pi_lastname}` : null;
+        const piEmail = this.proposal.pi_email || null;
+
+        this.principalInvestigator = {
+            name: piFullName || piEmail,
+            email: piEmail,
+            isPresent: piFullName !== null || piEmail !== null
+        };
+    }
+
+    calculateRowClasses(row: Dataset) {
+        return row.size === 0 ? {'row-empty': true} : {'row-generic': true};
     }
 }
