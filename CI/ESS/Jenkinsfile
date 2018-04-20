@@ -5,6 +5,11 @@ node('docker') {
        }
        stage('Build Docker'){
             sh 'docker build --file CI/ESS/Dockerfile.test . --tag catanie_test'
+			IMAGE_ID = sh (
+				script: 'git rev-parse HEAD',
+				returnStdout: true
+			).trim()
+			echo "Git image id : ${IMAGE_ID}"
        }
        stage('Unit Test Catanie '){
             sh 'docker run  -t catanie_test npm run -- ng test --watch false --single-run true -v ./test:./test '
