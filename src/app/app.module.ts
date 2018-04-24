@@ -81,7 +81,6 @@ export function localStorageSyncWrapper(reducer: any) {
 @NgModule({
   declarations : [
     AppComponent,
-	FilePickerDemoComponent, FileDropzoneDemoComponent,
     JobsTableComponent,
     SampleDataFormComponent,
     JobsDetailComponent,
@@ -97,14 +96,13 @@ export function localStorageSyncWrapper(reducer: any) {
     MatTableModule,
     MatPaginatorModule,
     BrowserModule,
-    FileHelpersModule,
     FormsModule,
     ReactiveFormsModule,
     AppRoutingModule,
     HttpModule,
     BrowserAnimationsModule, SharedCatanieModule,
     NguiDatetimePickerModule,
-    
+
     DatasetsModule,
     UsersModule,
     ProposalsModule,

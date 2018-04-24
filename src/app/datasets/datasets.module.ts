@@ -1,6 +1,13 @@
 import {CommonModule} from '@angular/common';
 import {NgModule} from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import { FileHelpersModule } from 'ngx-file-helpers';
+
+import { ReadModePipe } from './read-mode.pipe';
+
+import { FilePickerDemoComponent } from './file-picker-demo/file-picker-demo.component';
+import { FileDropzoneDemoComponent } from './file-dropzone-demo/file-dropzone-demo.component';
+
 import {
   DashboardComponent,
   DatablocksComponent,
@@ -53,9 +60,11 @@ import { MatDatepickerModule } from 'saturn-datepicker';
     MatCardModule, MatDialogModule, MatPaginatorModule, MatCheckboxModule, MatTableModule, MatFormFieldModule, MatAutocompleteModule,
     MatTabsModule, MatInputModule, MatButtonModule, MatSortModule, CommonModule, FormsModule, ReactiveFormsModule,
     SharedCatanieModule, MatSelectModule, MatOptionModule, MatNativeDateModule, MatIconModule,
+    FileHelpersModule,
     MatListModule, MatDatepickerModule, MatTooltipModule
   ],
   declarations : [
+    FilePickerDemoComponent, FileDropzoneDemoComponent,
     DashboardComponent, DatasetTableComponent, DatablocksComponent,
     DatafilesComponent, DatasetsFilterComponent, DatasetDetailComponent, SelectedListComponent
   ],
