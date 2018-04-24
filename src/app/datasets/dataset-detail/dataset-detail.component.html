@@ -19,12 +19,6 @@
 
     <app-file-picker-demo></app-file-picker-demo>
 
-<div style="height:100px; width:100px;background-color:lightblue"
-  ngxFileDropzone
-  (fileDrop)="file = $event">
-  Drop a file in this zone.
-</div>
-~               
   </mat-tab>
   <mat-tab *ngIf="(dAttachment$ | async) as attachments" label="DatasetAttachments">
       <h3>DatasetAttachments</h3>

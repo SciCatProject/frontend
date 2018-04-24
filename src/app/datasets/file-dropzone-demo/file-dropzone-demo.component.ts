@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 
 import { ReadFile, ReadMode } from 'ngx-file-helpers';
+import {  ReadModePipe} from 'shared/pipes/index';
 
 @Component({
   selector: 'app-file-dropzone-demo',
@@ -11,7 +12,7 @@ export class FileDropzoneDemoComponent {
   public readMode = ReadMode.dataURL;
   public isHover: boolean;
   public files: Array<ReadFile> = [];
-  
+
   addFile(file: ReadFile) {
     this.files.push(file);
   }
