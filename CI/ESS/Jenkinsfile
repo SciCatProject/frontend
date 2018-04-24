@@ -19,7 +19,7 @@ node('docker') {
             sh 'docker build --file CI/ESS/Dockerfile.test . --tag catanie_test -t catanie:${IMAGE_ID}dev' 
 
           
-			sh 'docker login -u essdmscdm -p $DOCKERHUBESS '
+			sh 'docker login -u essdmscdm -p $docker_password '
 			sh 'docker push catanie:${IMAGE_ID}dev '
 			
        }
