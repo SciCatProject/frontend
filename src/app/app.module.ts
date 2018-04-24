@@ -27,7 +27,6 @@ import { rootReducer } from 'state-management/reducers/root.reducer';
 import { UsersModule } from 'users/users.module';
 import { ProposalsModule } from 'proposals/proposals.module';
 import { FileHelpersModule } from 'ngx-file-helpers';
-import {ReadModePipe} from 'datasets/read-mode.pipe'
 
 import { FilePickerDemoComponent } from './datasets/file-picker-demo/file-picker-demo.component';
 import { FileDropzoneDemoComponent } from './datasets/file-dropzone-demo/file-dropzone-demo.component';

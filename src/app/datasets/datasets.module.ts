@@ -3,7 +3,6 @@ import {NgModule} from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { FileHelpersModule } from 'ngx-file-helpers';
 
-import { ReadModePipe } from './read-mode.pipe';
 
 import { FilePickerDemoComponent } from './file-picker-demo/file-picker-demo.component';
 import { FileDropzoneDemoComponent } from './file-dropzone-demo/file-dropzone-demo.component';
