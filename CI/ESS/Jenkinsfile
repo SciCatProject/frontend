@@ -5,9 +5,9 @@ node('docker') {
        }
        stage('Build Docker'){
                  withCredentials([
-            string(
+            usernamePassword(
               credentialsId: 'dockerhubess',
-              variable: 'DOCKERHUBESS'
+              passwordVariable: 'DOCKERHUBESS'
             )
           ])
           {
