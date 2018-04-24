@@ -4,19 +4,20 @@ node('docker') {
           checkout scm
        }
        stage('Build Docker'){
-                 withCredentials([
-            usernamePassword(
-              credentialsId: 'dockerhubess',
-              passwordVariable: 'DOCKERHUBESS'
-            )
-          ])
-          {
+
 			IMAGE_ID = sh (
 				script: 'git rev-parse HEAD',
 				returnStdout: true
 			).trim()
 			echo "Git image id : ${IMAGE_ID}"
             sh 'docker build --file CI/ESS/Dockerfile.test . --tag catanie_test -t catanie:${IMAGE_ID}dev' 
+            withCredentials([
+            usernamePassword(
+              credentialsId: 'dockerhubess',
+              passwordVariable: 'DOCKERHUBESS'
+            )
+          ])
+          {
 			sh 'docker login -u essdmscdm -p $DOCKERHUBESS '
 			sh 'docker push catanie:${IMAGE_ID}dev '
 			}
