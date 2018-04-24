@@ -1,21 +1,17 @@
 node('docker') {
-       stage('Checkout'){
-
-          checkout scm
-       }
-       stage('Build Docker'){
-            withCredentials([ usernamePassword(credentialsId: 'dockerhubess',usernameVariable: 'docker_user',
-              passwordVariable: 'docker_password'
-            )
-          ]) {
-			sh 'docker login -u essdmscdm -p $docker_password '
-			def IMAGE_ID = sh (	script: 'git rev-parse HEAD',returnStdout: true).trim()
-            sh "docker build --file CI/ESS/Dockerfile.test . --tag dacat/catanie:latest -t dacat/catanie:${IMAGE_ID}dev" 
-			echo "Git image id : ${IMAGE_ID}"
-			sh "docker push dacat/catanie:${IMAGE_ID}dev"
-			}
-       }
-       stage('Unit Test Catanie '){
-            sh 'docker run  -t dacat/catanie:latest npm run -- ng test --watch false --single-run true -v ./test:./test '
-       }
+  stage('Checkout'){
+    checkout scm
+  }
+  stage('Build Docker'){
+    withCredentials([ usernamePassword(credentialsId: 'dockerhubess',usernameVariable: 'docker_user',passwordVariable: 'docker_password' )]) {
+	sh 'docker login -u essdmscdm -p $docker_password '
+	def IMAGE_ID = sh (	script: 'git rev-parse HEAD',returnStdout: true).trim()
+    sh "docker build --file CI/ESS/Dockerfile.test . --tag dacat/catanie:latest -t dacat/catanie:${IMAGE_ID}dev" 
+	echo "Git image id : ${IMAGE_ID}"
+	sh "docker push dacat/catanie:${IMAGE_ID}dev"
+	}
+  }
+  stage('Unit Test Catanie '){
+    sh 'docker run  -t dacat/catanie:latest npm run -- ng test --watch false --single-run true -v ./test:./test '
+  }
 }
