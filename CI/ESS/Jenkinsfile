@@ -8,16 +8,11 @@ node('docker') {
               passwordVariable: 'docker_password'
             )
           ]) {
-			def IMAGE_ID = sh (
-				script: 'git rev-parse HEAD',
-				returnStdout: true
-			).trim()
-			echo "Git image id : ${IMAGE_ID}"
-            sh 'docker build --file CI/ESS/Dockerfile.test . --tag dacat/catanie:latest -t dacat/catanie:${IMAGE_ID}dev' 
-
-
 			sh 'docker login -u essdmscdm -p $docker_password '
-			sh 'docker push dacat/catanie:${IMAGE_ID}dev '
+			def IMAGE_ID = sh (	script: 'git rev-parse HEAD',returnStdout: true).trim()
+            sh "docker build --file CI/ESS/Dockerfile.test . --tag dacat/catanie:latest -t dacat/catanie:${IMAGE_ID}dev" 
+			echo "Git image id : ${IMAGE_ID}"
+			sh "docker push dacat/catanie:${IMAGE_ID}dev"
 			}
        }
        stage('Unit Test Catanie '){
