@@ -14,7 +14,8 @@ node('docker') {
             withCredentials([
             usernamePassword(
               credentialsId: 'dockerhubess',
-              passwordVariable: 'DOCKERHUBESS'
+              userVariable: 'docker_user'
+              passwordVariable: 'docker_password'
             )
           ])
           {
