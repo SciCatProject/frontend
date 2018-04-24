@@ -5,7 +5,7 @@ import { ReadMode } from 'ngx-file-helpers';
 @Pipe({
   name: 'readMode'
 })
-export class ReadModePipe implements PipeTransform {
+class ReadModePipe implements PipeTransform {
   transform(value: any, args?: any): any {
     switch (value) {
       case ReadMode.arrayBuffer:
@@ -18,4 +18,10 @@ export class ReadModePipe implements PipeTransform {
         return 'Text';
     }
   }
+}
+
+
+export class ReadModePipe {
+
+
 }
