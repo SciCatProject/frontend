@@ -4,6 +4,13 @@ node('docker') {
           checkout scm
        }
        stage('Build Docker'){
+                 withCredentials([
+            string(
+              credentialsId: 'dockerhubess',
+              variable: 'DOCKERHUBESS'
+            )
+          ])
+          {
 			IMAGE_ID = sh (
 				script: 'git rev-parse HEAD',
 				returnStdout: true
@@ -12,6 +19,7 @@ node('docker') {
             sh 'docker build --file CI/ESS/Dockerfile.test . --tag catanie_test -t catanie:${IMAGE_ID}dev' 
 			sh 'docker login -u essdmscdm -p $dockerhubess '
 			sh 'docker push catanie:${IMAGE_ID}dev '
+			}
        }
        stage('Unit Test Catanie '){
             sh 'docker run  -t catanie_test npm run -- ng test --watch false --single-run true -v ./test:./test '
