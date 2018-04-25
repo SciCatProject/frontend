@@ -3,17 +3,21 @@ import {OrigDatablock} from 'shared/sdk/models';
 import {Store} from '@ngrx/store';
 import {Observable} from 'rxjs/Observable';
 import {MatTableDataSource, MatPaginator} from '@angular/material';
+import {environment} from '../../../environments/environment';
+
 
 @Component({
-  selector : 'datafiles',
-  templateUrl : './datafiles.component.html',
-  styleUrls : [ './datafiles.component.css' ]
+  selector: 'datafiles',
+  templateUrl: './datafiles.component.html',
+  styleUrls: ['./datafiles.component.css']
 })
 export class DatafilesComponent implements OnInit, AfterViewInit {
 
   @Input() dataBlocks: Array<OrigDatablock>;
+ // url_prefix = "http://localhost:8889";
+  url_prefix =  environment.fileserverBaseURL;
   count = 0;
-  files: Array < JSON > = [];
+  files: Array<JSON> = [];
   selectedDF;
   dsId: string;
   dataFiles: Array<any> = [];
@@ -25,13 +29,14 @@ export class DatafilesComponent implements OnInit, AfterViewInit {
 
   admin$: Observable<boolean>;
 
-  constructor(private store: Store<any>) {}
+  constructor(private store: Store<any>) {
+  }
 
   ngOnInit() {
     const currentUser$ = this.store.select(state => state.root.user.currentUser);
     const adminUserNames = ['ingestor', 'archiveManager'];
     const userIsAdmin = (user) => {
-      return (user['accountType'] === 'functional')  || (adminUserNames.indexOf(user.username) !== -1);
+      return (user['accountType'] === 'functional') || (adminUserNames.indexOf(user.username) !== -1);
     };
     this.admin$ = currentUser$.map(userIsAdmin);
     if (this.dataBlocks) {
