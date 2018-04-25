@@ -1,32 +1,22 @@
-FROM node:9
-EXPOSE 80
-ENV http_proxy "http://192.168.1.1:8123"
-ENV https_proxy $http_proxy
-ENV no_proxy "localhost, 127.0.0.1"
+FROM nginx 
 
-RUN apt-get update && apt-get install -y git 
-RUN npm config set proxy http://192.168.1.1:8123/
-RUN npm config set https-proxy http://192.168.1.1:8123/
-RUN npm config set registry http://registry.npmjs.org/
-RUN npm config set strict-ssl false
+RUN apt-get update && apt-get install -y apt-transport-https lsb-release curl gnupg2 git
 
-RUN apt-get update && apt-get install -y nginx
+RUN curl -sL https://deb.nodesource.com/setup_9.x |  bash -
 
-RUN mkdir /usr/html
-RUN mkdir /catanie
+RUN apt-get install -y nodejs
+
+
+
+ARG env=dev
 WORKDIR /catanie
+COPY package.json  /catanie
 
+RUN npm install
+COPY . /catanie/
+RUN npx ng build --environment=${env}
+RUN ls dist
+COPY scripts/nginx.conf /etc/nginx/nginx.conf
+RUN cp -r  dist/* /usr/share/nginx/html/
 
-COPY package.json .
-RUN npm i
-
-COPY src src
-COPY angular-cli.json .
-
-ARG APP_PROD='true'
-ARG LB_BASE_URL='http://localhost/api'
-ARG LB_API_VERSION=''
-
-
-RUN npx ng build --environment=dmscprod
-RUN mv dist/* /usr/html
+EXPOSE 80
