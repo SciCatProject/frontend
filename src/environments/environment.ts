@@ -6,5 +6,6 @@
 export const environment = {
   production: false,
   lbBaseURL: 'http://127.0.0.1:3000',
+  fileserverBaseURL: 'http://localhost:8889',
   externalAuthEndpoint: '/auth/msad',
 };
