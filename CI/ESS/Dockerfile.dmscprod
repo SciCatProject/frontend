@@ -3,11 +3,11 @@ ENV http_proxy "http://192.168.1.1:8123"
 ENV https_proxy $http_proxy
 ENV no_proxy "localhost, 127.0.0.1"
 
-RUN apt-get update && apt-get install -y apt-transport-https lsb-release curl
+RUN apt-get update && apt-get install -y apt-transport-https lsb-release curl gnupg2 git
 
 RUN curl -sL https://deb.nodesource.com/setup_9.x |  bash -
 
-RUN apt-get install nodejs
+RUN apt-get install -y nodejs
 
 
 RUN npm config set proxy  $http_proxy
@@ -16,8 +16,14 @@ RUN npm config set registry http://registry.npmjs.org/
 RUN npm config set strict-ssl false
 
 ARG env=dmscprod
+WORKDIR /catanie
+COPY package.json  /catanie
+
+RUN npm install
+COPY . /catanie/
 RUN npx ng build --environment=${env}
+RUN ls dist
 COPY scripts/nginx.conf /etc/nginx/nginx.conf
-COPY dist/${env} /usr/share/nginx/html  
+RUN cp -r dist/* /usr/share/nginx/html
 
 EXPOSE 80
