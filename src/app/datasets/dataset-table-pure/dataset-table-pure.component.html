@@ -1,0 +1,82 @@
+<div>
+  <!--
+  <mat-table
+    #table
+    [dataSource]="datasets"
+    class='dataset-table'
+    (matSortChange)="onPage($event)"
+    matSort matSortActive="creationTime"
+    matSortDirection="desc">-->
+
+  <mat-table
+    [dataSource]="datasets">
+
+    <!-- Column Definitions -->
+    <ng-container matColumnDef="select">
+      <mat-header-cell *matHeaderCellDef>
+        <mat-checkbox
+          [checked]="allAreSelected()"
+          (change)="handleSelectAll($event)">
+        </mat-checkbox>
+      </mat-header-cell>
+      <mat-cell *matCellDef="let row">
+        <mat-checkbox
+          [checked]="isChecked(row)"
+          (change)="handleSelect($event, row)"
+          (click)="$event.stopPropagation()">
+        </mat-checkbox>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="pid">
+      <mat-header-cell *matHeaderCellDef>PID</mat-header-cell>
+      <mat-cell *matCellDef="let dataset">{{dataset.pid}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="sourceFolder">
+      <mat-header-cell *matHeaderCellDef>Source Folder</mat-header-cell>
+      <mat-cell *matCellDef="let dataset">{{dataset.sourceFolder}}</mat-cell>  
+    </ng-container>
+
+    <ng-container matColumnDef="size">
+      <mat-header-cell *matHeaderCellDef>Size</mat-header-cell>
+      <mat-cell *matCellDef="let dataset">
+        {{getFormattedSize(dataset.size)}}
+      </mat-cell>  
+    </ng-container>
+
+    <ng-container matColumnDef="creationTime">
+      <mat-header-cell *matHeaderCellDef>Source Folder</mat-header-cell>
+      <mat-cell *matCellDef="let dataset">
+        {{dataset.creationTime | date: 'dd/MM/yyyy HH:mm'}}
+      </mat-cell>  
+    </ng-container>
+
+    <ng-container matColumnDef="type">
+      <mat-header-cell *matHeaderCellDef>Type</mat-header-cell>
+      <mat-cell *matCellDef="let dataset">{{dataset.type}}</mat-cell>  
+    </ng-container>
+      
+    <ng-container matColumnDef="proposalId">
+      <mat-header-cell *matHeaderCellDef>Proposal</mat-header-cell>
+      <mat-cell *matCellDef="let dataset">{{dataset.proposalId}}</mat-cell>  
+    </ng-container>      
+    <!-- End of Column Definitions -->
+
+    <mat-header-row class='datasets-header' *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row
+      class='row-generic'
+      *matRowDef="let dataset; columns: displayedColumns;"
+      (click)="handleClick(dataset)"
+      [ngClass]="getRowClass(dataset)">
+    </mat-row>
+  </mat-table>
+
+  <mat-paginator
+    class="dataset-paginator"
+    [pageSize]="30"
+    [pageIndex]="currentPage"
+    [length]="totalNumber"
+    (page)="handlePageChange($event)">
+  </mat-paginator>
+</div>

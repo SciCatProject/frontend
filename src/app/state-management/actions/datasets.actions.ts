@@ -38,6 +38,11 @@ export const CURRENT_BLOCKS_COMPLETE =      '[Dataset] Current set datablocks up
 export const TOTAL_UPDATE =                 '[Dataset] Total Datasets Update';
 // export const FILTER_UPDATE_COMPLETE = '[Dataset]  Filter Update Complete';
 
+export const SELECT_DATASET =               '[Dataset 2] Select Dataset';
+export const DESELECT_DATASET =             '[Dataset 2] Deselect Dataset';
+
+export const EXPORT_TO_CSV =                '[Dataset 2] Export to CSV';
+
 export class SearchCompleteAction implements Action {
     readonly type = SEARCH_COMPLETE;
     constructor(public payload: {}[]) {}
@@ -159,6 +164,20 @@ export class TotalSetsAction implements Action {
     constructor(public payload: number) {}
 }
 
+export class SelectDatasetAction implements Action {
+    readonly type = SELECT_DATASET;
+    constructor(readonly dataset: Dataset) {}
+}
+
+export class DeselectDatasetAction implements Action {
+    readonly type = DESELECT_DATASET;
+    constructor(readonly dataset: Dataset) {}
+}
+
+export class ExportToCsvAction implements Action {
+    readonly type = EXPORT_TO_CSV;
+}
+
 export type Actions =
     SearchCompleteAction | SearchFailedAction |
     UpdateFilterAction | UpdateFilterCompleteAction | FilterFailedAction |
@@ -166,4 +185,7 @@ export type Actions =
     SearchIDFailedAction | DatablocksAction | DatablocksCompleteAction | UpdateCurrentBlocksAction |
     DatablockDeleteAction | DatablockDeleteCompleteAction | DatablockDeleteFailedAction |
     DatablocksAction | AddGroupsAction | AddGroupsCompleteAction | UpdateSelectedDatablocksAction |
-    AddGroupsFailedAction | UpdateSelectedAction | TotalSetsAction | ResetStatusAction | ResetStatusCompleteAction;
+    AddGroupsFailedAction | UpdateSelectedAction | TotalSetsAction | ResetStatusAction | ResetStatusCompleteAction |
+    SelectDatasetAction | DeselectDatasetAction |
+    ExportToCsvAction;
+    

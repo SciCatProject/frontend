@@ -1,15 +1,18 @@
-import * as lb from 'shared/sdk/models';
-import { DatasetFilters } from 'state-management/models';
+import { DatasetFilters, Dataset } from 'state-management/models';
 
 // NOTE It IS ok to make up a state of other sub states
 export interface DatasetState {
-    datasets: lb.Dataset[];
+    datasets: Dataset[];
     loading: boolean;
     activeFilters: DatasetFilters;
     filterValues: object;
-    currentSet: lb.Dataset;
-    selectedSets: lb.Dataset[];
+    currentSet: Dataset;
+    selectedSets: Dataset[];
     totalSets: number;
+
+    selectedSets2: Dataset[];
+    currentPage2: number;
+    itemsPerPage2: number;
 }
 
 export const initialDatasetState: DatasetState = {
@@ -20,5 +23,9 @@ export const initialDatasetState: DatasetState = {
     filterValues: {creationTime: {start: null, end: null}, creationLocation: [], ownerGroup: [], text: null, type: null, keywords: []},
     selectedSets: [],
     currentSet: undefined,
-    totalSets: 0
+    totalSets: 0,
+
+    selectedSets2: [],
+    currentPage2: 0,
+    itemsPerPage2: 30,
 };

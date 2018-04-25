@@ -15,6 +15,11 @@ import {
     SELECTED_DATABLOCKS_COMPLETE,
     SEARCH_COMPLETE,
     ADD_GROUPS_COMPLETE,
+
+    SELECT_DATASET,
+    SelectDatasetAction,
+    DeselectDatasetAction,
+    DESELECT_DATASET,
 } from 'state-management/actions/datasets.actions';
 
 import { DatasetState, initialDatasetState } from 'state-management/state/datasets.store';
@@ -69,6 +74,18 @@ export function datasetsReducer(state = initialDatasetState, action: Action) {
         case TOTAL_UPDATE: {
             const totalSets = <number>action['payload'];
             return {...state, totalSets};
+        }
+
+        case SELECT_DATASET: {
+            const dataset = (action as SelectDatasetAction).dataset;
+            const selectedSets2 = state.selectedSets2.concat(dataset);
+            return {...state, selectedSets2};
+        }
+
+        case DESELECT_DATASET: {
+            const dataset = (action as DeselectDatasetAction).dataset;
+            const selectedSets2 = state.selectedSets2.filter(selectedSet => selectedSet.pid !== dataset.pid);
+            return {...state, selectedSets2};
         }
 
         // TODO handle failed actions

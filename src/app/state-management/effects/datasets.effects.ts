@@ -1,4 +1,3 @@
-// import all rxjs operators that are needed
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/switchMap';
@@ -6,8 +5,8 @@ import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/debounceTime';
 
 import { Injectable } from '@angular/core';
-import { Actions, Effect } from '@ngrx/effects';
-import { Action, Store } from '@ngrx/store';
+import { Actions, Effect, ofType } from '@ngrx/effects';
+import { Action, Store, select } from '@ngrx/store';
 import { DatasetService } from 'datasets/dataset.service';
 import { Observable } from 'rxjs/Observable';
 import * as lb from 'shared/sdk/services';
@@ -15,11 +14,32 @@ import * as DatasetActions from 'state-management/actions/datasets.actions';
 import * as UserActions from 'state-management/actions/user.actions';
 
 import { Message, MessageType } from 'state-management/models';
-import { filter } from 'rxjs/operators';
+import { filter, tap, mergeMap, map } from 'rxjs/operators';
+import { getRectangularRepresentation } from '../selectors/datasets.selectors';
+import { takeLast } from 'rxjs/operator/takeLast';
+import { Angular5Csv } from 'angular5-csv/Angular5-csv';
 
-// import store state interface
 @Injectable()
 export class DatasetEffects {
+
+  @Effect({dispatch: false})
+  protected exportToCsv$: Observable<Action> = this.action$.pipe(
+    ofType(DatasetActions.EXPORT_TO_CSV),
+    mergeMap(() => this.store.pipe(select(getRectangularRepresentation))),
+    tap((rect: any) => {
+      const options = {
+        fieldSeparator: ',',
+        quoteStrings: '"',
+        decimalseparator: '.',
+        showLabels: true,
+        showTitle: false,
+        useBom: true,
+        headers: Object.keys(rect[0])
+      };
+
+      const ts = new Angular5Csv(rect, 'Datasets', options);
+    })
+  );
 
   @Effect()
   protected getDataset$: Observable<Action> =

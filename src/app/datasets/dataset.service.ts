@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {Store} from '@ngrx/store';
+import {Store, select} from '@ngrx/store';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {Observable} from 'rxjs/Observable';
 import {Subject} from 'rxjs/Subject';
@@ -13,6 +13,7 @@ import {
 import {LoopBackAuth} from 'shared/sdk/services';
 import * as ua from 'state-management/actions/user.actions';
 import { DatablockApi } from 'shared/sdk';
+import { getRectangularRepresentation } from 'state-management/selectors/datasets.selectors';
 
 @Injectable()
 export class DatasetService {

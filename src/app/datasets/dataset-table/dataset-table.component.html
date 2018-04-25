@@ -1,64 +1,43 @@
 <div>
-    <div class="mode-container">
-        <div class="ui buttons">
-            <button class='ui button' [ngClass]="getModeButtonClasses(m)" *ngFor="let m of modeButtons" (click)="onModeChange($event, m)" >{{m}}</button>
-        </div>
-        <div [ngSwitch]="mode">
-          <!--*ngIf="selectedSets.length > 0">-->
-         <div class="ui buttons dataset-action" *ngSwitchDefault>
- 
-         </div>
-         <div class="ui buttons dataset-action" *ngSwitchCase="'archive'">
-             <button class="ui button archive-action-btn" (click)="archiveClickHandle($event)"><i class="upload icon"></i>Archive</button>
-   </div>
-         <div class="ui buttons dataset-action" *ngSwitchCase="'retrieve'">
-             <button class="ui button retrieve-action-btn" (click)="retrieveClickHandle($event)"><i class="upload icon"></i>Retrieve</button>
-       </div>
-     </div>
+  <div class="mode-container">
+    <div class="ui buttons">
+      <button class='ui button' [ngClass]="getModeButtonClasses(m)" *ngFor="let m of modeButtons" (click)="onModeChange($event, m)">{{m}}</button>
     </div>
+    <div [ngSwitch]="mode">
+      <!--*ngIf="selectedSets.length > 0">-->
+      <div class="ui buttons dataset-action" *ngSwitchDefault>
 
-    <div class="example-container mat-elevation-z8">
-        
-
-<div class="ui segment" *ngIf="loading$ | async">
-    <p></p>
-    <div class="ui active inverted dimmer">
-      <div class="ui loader"></div>
+      </div>
+      <div class="ui buttons dataset-action" *ngSwitchCase="'archive'">
+        <button class="ui button archive-action-btn" (click)="archiveClickHandle($event)">
+          <i class="upload icon"></i>Archive</button>
+      </div>
+      <div class="ui buttons dataset-action" *ngSwitchCase="'retrieve'">
+        <button class="ui button retrieve-action-btn" (click)="retrieveClickHandle($event)">
+          <i class="upload icon"></i>Retrieve</button>
+      </div>
     </div>
   </div>
-  <button *ngIf="datasets && !(loading$ | async)" class='export-csv' mat-button (click)="onExportClick()" color="primary">Export Page to CSV</button>
-      <mat-paginator class='dataset-paginator' [pageSize]="limit$ | async" [pageSizeOptions]="[10,30, 50, 100]" [length]="datasetCount$ | async" (page)="onPage(event)"></mat-paginator>
-      <mat-table #table [dataSource]="dataSource" class='dataset-table' (matSortChange)="onPage($event)" matSort matSortActive="creationTime" matSortDirection="desc">
 
-          <!-- Checkbox Column -->
-    <ng-container matColumnDef="select">
-        <mat-header-cell *matHeaderCellDef>
-          <mat-checkbox (change)="$event ? masterToggle() : null"
-                       [checked]="isAllSelected()"
-                       [indeterminate]="selection.hasValue() && !isAllSelected()">
-          </mat-checkbox>
-        </mat-header-cell>
-        <mat-cell *matCellDef="let row">
-          <mat-checkbox (click)="$event.stopPropagation()"
-                       (change)="onRowCheck(row)"
-                       [checked]="selection.isSelected(row)">
-          </mat-checkbox>
-        </mat-cell>
-      </ng-container>
-        
-        <ng-container *ngFor="let col of cols">
-          <ng-container matColumnDef="{{col.field}}">
-            <mat-header-cell *matHeaderCellDef mat-sort-header> {{col.header}} </mat-header-cell>
-            
-            <mat-cell *matCellDef="let row"> {{getRowValue(row, col)}} </mat-cell>
-          </ng-container>  
-        </ng-container>
-        
-    
-        <mat-header-row class='datasets-header' *matHeaderRowDef="displayedColumns"></mat-header-row>
-        <mat-row class='row-generic' [ngClass]="calculateRowClasses(row)" (click)="onRowSelect($event, row)" *matRowDef="let row; columns: displayedColumns;"></mat-row>
-      </mat-table>
-
-      <mat-paginator class='dataset-paginator' [pageSize]="limit$ | async" [pageSizeOptions]="[10,30, 50, 100]" [length]="datasetCount$ | async" (page)="onPage($event)"></mat-paginator>
+  <div class="example-container mat-elevation-z8">
+    <div class="ui segment" *ngIf="loading$ | async">
+      <p></p>
+      <div class="ui active inverted dimmer">
+        <div class="ui loader"></div>
+      </div>
     </div>
+    <button *ngIf="datasets && !(loading$ | async)" class='export-csv' mat-button (click)="onExportClick()" color="primary">Export Page to CSV</button>
+  </div>
+
+  <dataset-table-pure
+    [datasets]="datasets$ | async"
+    [selectedSets]="selectedSets$ | async"
+    [totalNumber]="datasetCount$ | async"
+    [currentPage]="currentPage$ | async"
+    [rowClassifier]="pureRowClassifier"
+    (onClick)="pureOnClick($event)"
+    (onSelect)="pureOnSelect($event)"
+    (onDeselect)="pureOnDeselect($event)"
+    (onPageChange)="pureOnPageChange($event)">
+  </dataset-table-pure>
 </div>
