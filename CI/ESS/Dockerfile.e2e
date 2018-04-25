@@ -2,6 +2,8 @@ FROM node:stretch
 
 ENV http_proxy  http://192.168.1.1:8123/
 ENV https_proxy  ${http_proxy}
+
+
 RUN apt-get update && \
     DEBIAN_FRONTEND="noninteractive" \
     apt-get install -y --no-install-recommends \
@@ -35,6 +37,8 @@ COPY CI/ESS/rune2e.sh /entrypoint.sh
 
 
 COPY CI/ESS/protractor.conf.js /project/catanie/
+
+RUN ls
 
 CMD /entrypoint.sh
 
