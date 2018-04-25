@@ -1,0 +1,17 @@
+FROM nginx 
+ENV http_proxy "http://192.168.1.1:8123"
+ENV https_proxy $http_proxy
+ENV no_proxy "localhost, 127.0.0.1"
+
+
+RUN npm config set proxy  $http_proxy
+RUN npm config set https-proxy  $http_proxy
+RUN npm config set registry http://registry.npmjs.org/
+RUN npm config set strict-ssl false
+
+ARG env=dmscprod
+RUN npx ng build --environment=${env}
+COPY scripts/nginx.conf /etc/nginx/nginx.conf
+COPY dist/${env} /usr/share/nginx/html  
+
+EXPOSE 80
