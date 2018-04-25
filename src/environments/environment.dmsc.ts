@@ -5,6 +5,6 @@
 
 export const environment = {
   production: false,
-  lbBaseURL: 'http://kubetest02.dm.esss.dk:32222',
+  lbBaseURL: 'https://kubetest02.dm.esss.dk:32223',
   externalAuthEndpoint: '/auth/msad'
 };
