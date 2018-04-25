@@ -70,7 +70,9 @@ export class FilePickerDemoComponent implements OnInit, OnDestroy {
       "derivedDatasetId": "string"
     };
 
-    return this.daSrv.create(creds); //.then(function(body)=> {console.log(body);});
+    return this.daSrv.create(creds)
+      .switchMap(res => { console.log(res); return Observable.of<any>([]); })
+      .catch((e) => { console.log(e);return Observable.of<any>([]);}); //.then(function(body)=> {console.log(body);});
 
   }
 
