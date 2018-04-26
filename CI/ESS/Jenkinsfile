@@ -15,6 +15,7 @@ node('docker') {
     }
   }
   stage('Unit Test Catanie '){
-    #sh 'docker run  -t dacat/catanie:latest npm run -- ng test --watch false --single-run true -v ./test:./test '
+    // unit tests require mongodb container
+    //sh 'docker run  -t dacat/catanie:latest npm run -- ng test --watch false --single-run true -v ./test:./test '
   }
 }
