@@ -39,6 +39,7 @@ import { take } from 'rxjs/operator/take';
 import { PageChangeEvent, SortChangeEvent } from '../dataset-table-pure/dataset-table-pure.component';
 
 import * as rison from 'rison';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'dataset-table',
@@ -55,24 +56,21 @@ export class DatasetTableComponent implements OnInit {
   private currentPage$: Observable<number>;
   private mode$: Observable<string>;
 
+  // compatibility analogs of observables
+  private mode: string = 'view';
+  private selectedSets: Dataset[] = [];
+
   private modes: string[] = ['archive', 'view', 'retrieve'];
 
   selection = new SelectionModel<Element>(true, []);
   datasetCount$;
   dataSource: MatTableDataSource<any> | null;
 
-  cols = [];
-  loading$: any = false;
-  limit$: any = 10;
+  private loading$: Observable<boolean>;
+  private limit$: Observable<number>;
 
-  mode = 'view';
-
-  aremaOptions = 'archiveretrieve';
-
-  retrieveDisplay = false;
-  dest = new Subject<string>();
-
-  subscriptions = [];
+  private submitJobSubscription: Subscription;
+  private jobErrorSubscription: Subscription;
 
   constructor(
     private router: Router,
@@ -92,6 +90,8 @@ export class DatasetTableComponent implements OnInit {
     this.limit$ = this.store.select(state => state.root.user.settings.datasetCount);
 
     this.mode$ = this.store.pipe(select(getViewMode));
+    
+  
     this.mode$.subscribe(mode => this.mode = mode);
 
     // Use activated route here somehow
@@ -101,8 +101,7 @@ export class DatasetTableComponent implements OnInit {
       this.updateRowView(mode);
     })*/
 
-    const msg = new Message();
-    this.subscriptions.push(
+    this.submitJobSubscription = 
       this.store.select(selectors.jobs.submitJob).subscribe(
         ret => {
           if (ret && Array.isArray(ret)) {
@@ -111,23 +110,22 @@ export class DatasetTableComponent implements OnInit {
           }
         },
         error => {
-          console.log(error);
-          msg.type = MessageType.Error;
-          msg.content = 'Job not Submitted';
-          this.store.dispatch(new ua.ShowMessageAction(msg));
+          this.store.dispatch(new ua.ShowMessageAction({
+            type: MessageType.Error,
+            content: 'Job not Submitted'
+          }));
         }
-      )
-    );
-
-    this.subscriptions.push(
+      );
+    
+    this.jobErrorSubscription = 
       this.store.select(selectors.jobs.getError).subscribe(err => {
         if (err) {
-          msg.type = MessageType.Error;
-          msg.content = err.message;
-          this.store.dispatch(new ua.ShowMessageAction(msg));
+          this.store.dispatch(new ua.ShowMessageAction({
+            type: MessageType.Error,
+            content: err.message,
+          }));
         }
-      })
-    );
+      });
   }
 
   onExportClick(): void {
@@ -229,7 +227,6 @@ export class DatasetTableComponent implements OnInit {
   archiveOrRetrieve(archive: boolean, destPath = '/archive/retrieve/') {
     const msg = new Message();
     if (this.selection.selected.length > 0) {
-      this.dest = new Subject<string>();
       const job = new Job();
       job.jobParams = {};
       job.creationTime = new Date();
