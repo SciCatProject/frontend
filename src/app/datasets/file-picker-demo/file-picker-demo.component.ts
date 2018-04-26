@@ -52,7 +52,7 @@ export class FilePickerDemoComponent implements OnInit, OnDestroy {
   private filePicker;
 
   onReadStart(fileCount: number) {
-    this.status = `Reading ${fileCount} file(s)...`;
+    this.status = `Now reading ${fileCount} file(s)...`;
   }
 
   onFilePicked(file: ReadFile) {
