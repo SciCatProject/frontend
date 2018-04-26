@@ -9,6 +9,8 @@ node('docker') {
       sh "docker build --file CI/ESS/Dockerfile.dmscprod  . --tag dacat/catanie:latest -t dacat/catanie:${IMAGE_ID}dmscprod" 
       echo "Git image id : ${IMAGE_ID}"
       sh "docker push dacat/catanie:${IMAGE_ID}dmscprod"
+      sh "docker build --file CI/ESS/Dockerfile.dmscdev  .  -t dacat/catanie:${IMAGE_ID}dmscdev --build-arg env=dmscdev" 
+      sh "docker push dacat/catanie:${IMAGE_ID}dmscdev"
       sh "docker build --file CI/ESS/Dockerfile.hub  . --tag dacat/catanie:latest -t dacat/catanie:${IMAGE_ID}dev" 
       sh "docker push dacat/catanie:${IMAGE_ID}dev"
       sh "docker push dacat/catanie:latest"
