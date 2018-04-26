@@ -32,6 +32,7 @@
     "environmentSource": "environments/environment.ts",
     "environments": {
       "dev": "environments/environment.ts",
+      "dmscdev": "environments/environment.dmscdev.ts",
       "dmsc": "environments/environment.dmsc.ts",
       "ess": "environments/environment.ess.ts",
       "dmscprod": "environments/environment.dmscprod.ts",
