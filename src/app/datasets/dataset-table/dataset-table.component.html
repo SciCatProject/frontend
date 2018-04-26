@@ -1,7 +1,9 @@
 <div>
   <div class="mode-container">
     <div class="ui buttons">
-      <button class='ui button' [ngClass]="getModeButtonClasses(m)" *ngFor="let m of modeButtons" (click)="onModeChange($event, m)">{{m}}</button>
+      <button class='ui button' [ngClass]="getModeButtonClasses(mode)" *ngFor="let mode of modes" (click)="onModeChange($event, mode)">
+        {{mode}}
+      </button>
     </div>
     <div [ngSwitch]="mode">
       <!--*ngIf="selectedSets.length > 0">-->
@@ -38,6 +40,7 @@
     (onClick)="pureOnClick($event)"
     (onSelect)="pureOnSelect($event)"
     (onDeselect)="pureOnDeselect($event)"
-    (onPageChange)="pureOnPageChange($event)">
+    (onPageChange)="pureOnPageChange($event)"
+    (onSortChange)="pureOnSortChange($event)">
   </dataset-table-pure>
 </div>

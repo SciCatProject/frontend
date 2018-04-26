@@ -1,6 +1,5 @@
 import { DatasetFilters, Dataset } from 'state-management/models';
 
-// NOTE It IS ok to make up a state of other sub states
 export interface DatasetState {
     datasets: Dataset[];
     loading: boolean;
@@ -10,6 +9,7 @@ export interface DatasetState {
     selectedSets: Dataset[];
     totalSets: number;
 
+    mode: string;
     selectedSets2: Dataset[];
     currentPage2: number;
     itemsPerPage2: number;
@@ -25,7 +25,28 @@ export const initialDatasetState: DatasetState = {
     currentSet: undefined,
     totalSets: 0,
 
+    mode: 'view',
     selectedSets2: [],
     currentPage2: 0,
     itemsPerPage2: 30,
 };
+
+/* Salvaged from obsolete Dashboard UI state:
+
+export interface DashboardUIState {
+    dsTable: Array<Dataset>;
+    groupText: any;
+    dateChoice: any;
+    mode: string;
+    darkTheme: boolean;
+}
+
+export const initialDashboardUIState: DashboardUIState = {
+    dsTable: [],
+    groupText: undefined,
+    dateChoice: [],
+    mode: 'view',
+    darkTheme: true
+};
+
+*/

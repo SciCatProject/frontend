@@ -21,12 +21,11 @@ import { DialogComponent } from 'shared/modules/dialog/dialog.component';
 import * as utils from 'shared/utils';
 import { config } from '../../../config/config';
 
-import * as dua from 'state-management/actions/dashboard-ui.actions';
 import * as dsa from 'state-management/actions/datasets.actions';
 import * as selectors from 'state-management/selectors';
 import * as ua from 'state-management/actions/user.actions';
 import * as ja from 'state-management/actions/jobs.actions';
-import { getDatasets2, getSelectedSets2, getCurrentPage2 } from 'state-management/selectors/datasets.selectors';
+import { getDatasets2, getSelectedDatasets, getPage, getViewMode } from 'state-management/selectors/datasets.selectors';
 import { Message, MessageType } from 'state-management/models';
 
 import { Angular5Csv } from 'angular5-csv/Angular5-csv';
@@ -37,8 +36,9 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { startWith } from 'rxjs/operator/startWith';
 import { take } from 'rxjs/operator/take';
 
+import { PageChangeEvent, SortChangeEvent } from '../dataset-table-pure/dataset-table-pure.component';
+
 import * as rison from 'rison';
-import * as filesize from 'filesize';
 
 @Component({
   selector: 'dataset-table',
@@ -46,19 +46,20 @@ import * as filesize from 'filesize';
   styleUrls: ['./dataset-table.component.scss']
 })
 export class DatasetTableComponent implements OnInit {
-  @Input() datasets = [];
-  @Output() openDataset = new EventEmitter();
-  @Output() selectedSet = new EventEmitter<Array<any>>();
+  @Input() private datasets = [];
+  @Output() private openDataset = new EventEmitter();
+  @Output() private selectedSet = new EventEmitter<Array<any>>();
 
-  @ViewChild(MatSort) sort: MatSort;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  private datasets$: Observable<Dataset[]>;
+  private selectedSets$: Observable<Dataset[]>;
+  private currentPage$: Observable<number>;
+  private mode$: Observable<string>;
+
+  private modes: string[] = ['archive', 'view', 'retrieve'];
 
   selection = new SelectionModel<Element>(true, []);
   datasetCount$;
   dataSource: MatTableDataSource<any> | null;
-  displayedColumns = ['select'];
-
-  modeButtons = ['Archive', 'View', 'Retrieve'];
 
   cols = [];
   loading$: any = false;
@@ -73,23 +74,6 @@ export class DatasetTableComponent implements OnInit {
 
   subscriptions = [];
 
-  rowStyleMap = {};
-
-  paranms = {};
-
-  filters = {};
-
-  archiveable;
-  retrievable;
-
-  // Refactored
-  datasets$: Observable<Dataset[]>;
-  selectedSets$: Observable<Dataset[]>;
-  currentPage$: Observable<number>;
-  
-  // Remove later....
-  debugString: string = '';
-
   constructor(
     private router: Router,
     private configSrv: ConfigService,
@@ -97,24 +81,25 @@ export class DatasetTableComponent implements OnInit {
     private store: Store<any>,
     public dialog: MatDialog,
   ) {
-    this.archiveable = config.archiveable;
-    this.retrievable = config.retrieveable;
     this.datasetCount$ = this.store.select(selectors.datasets.getTotalSets);
     this.loading$ = this.store.select(selectors.datasets.getLoading);
   }
 
   ngOnInit() {
     this.datasets$ = this.store.pipe(select(getDatasets2));
-    this.selectedSets$ = this.store.pipe(select(getSelectedSets2));
-    this.currentPage$ = this.store.pipe(select(getCurrentPage2));
+    this.selectedSets$ = this.store.pipe(select(getSelectedDatasets));
+    this.currentPage$ = this.store.pipe(select(getPage));
     this.limit$ = this.store.select(state => state.root.user.settings.datasetCount);
+
+    this.mode$ = this.store.pipe(select(getViewMode));
+    this.mode$.subscribe(mode => this.mode = mode);
 
     // Use activated route here somehow
 
-    this.subscriptions.push(this.store.select(state => state.root.dashboardUI.mode).subscribe(mode => {
+    /*this.store.select(state => state.root.dashboardUI.mode).subscribe(mode => {
       this.mode = mode;
       this.updateRowView(mode);
-    }));
+    })*/
 
     const msg = new Message();
     this.subscriptions.push(
@@ -145,7 +130,7 @@ export class DatasetTableComponent implements OnInit {
     );
   }
 
-  onExportClick() {
+  onExportClick(): void {
     this.store.dispatch(new dsa.ExportToCsvAction());
   }
 
@@ -154,28 +139,29 @@ export class DatasetTableComponent implements OnInit {
    * @param event
    * @param mode
    */
-  onModeChange(event, mode) {
-    if (mode) {
-      this.mode = mode.toLowerCase();
-      this.store.dispatch(new dua.SaveModeAction(this.mode));
-    }
+  onModeChange(event, mode: string): void {
+    this.store.dispatch(new dsa.SetViewModeAction(mode));
   }
 
-  updateRowView(mode) {
-    this.selection.clear();
-    this.rowStyleMap = {};
+  updateRowView(mode: string): void {
+    this.store.dispatch(new dsa.ClearSelectionAction());
+
     const activeSets = [];
+
+
+    // If in "special" mode...
     if (this.datasets && this.datasets.length > 0 && (this.mode === 'archive' || this.mode === 'retrieve')) {
       for (let d = 0; d < this.datasets.length; d++) {
         const set = this.datasets[d];
         const msg = (set.datasetlifecycle && set.datasetlifecycle.archiveStatusMessage) || '';
-        if (this.mode === 'archive'
-          && set.datasetlifecycle
-          && (this.archiveable.indexOf(set.datasetlifecycle.archiveStatusMessage) !== -1) && set.size > 0) {
-          activeSets.push(set);
-        } else if (this.mode === 'retrieve'
-          && set.datasetlifecycle && this.retrievable.indexOf(set.datasetlifecycle.archiveStatusMessage) !== -1 && set.size > 0) {
-          activeSets.push(set);
+        if (this.mode === 'archive') {
+          if (set.datasetlifecycle && (config.archiveable.indexOf(set.datasetlifecycle.archiveStatusMessage) !== -1) && set.size > 0) {
+            activeSets.push(set);
+          }
+        } else if (this.mode === 'retrieve') {
+          if (set.datasetlifecycle && config.retrieveable.indexOf(set.datasetlifecycle.archiveStatusMessage) !== -1 && set.size > 0) {
+            activeSets.push(set);
+          }
         }
       }
       this.dataSource = new MatTableDataSource(activeSets);
@@ -186,34 +172,13 @@ export class DatasetTableComponent implements OnInit {
 
   /**
    * Return the classes for the view buttons based on what is selected
-   * @param m
+   * @param mode
    */
-  getModeButtonClasses(m) {
-    const ret = {};
-    ret[m.toLowerCase()] = true;
-    if (m.toLowerCase() === this.mode) {
-      ret['positive'] = true;
-    }
-    return ret;
-  }
-
-  /**
-   * Options set based on selected datasets
-   * This is used to determine which template to display for
-   * archive or retrieval or both
-   * @param set
-   * @returns {string}
-   */
-  setOptions(set) {
-    let options = '';
-    const dl = set['datasetlifecycle'];
-    if (dl && dl['isOnDisk']) {
-      options += 'archive';
-    }
-    if (dl && (dl['isOnTape'] || dl['isOnDisk'])) {
-      options += 'retrieve';
-    }
-    return options;
+  getModeButtonClasses(mode) {
+    return {
+      [mode]: true,
+      positive: this.mode === mode
+    };
   }
 
   /**
@@ -351,35 +316,21 @@ export class DatasetTableComponent implements OnInit {
     this.store.dispatch(new dsa.DeselectDatasetAction(dataset));
   }
 
-  pureOnPageChange(event) {
-    const index = event.pageIndex;
-    const size = event.pageSize;
-    this.store
-      .select(state => state.root.datasets.activeFilters)
-      .take(1)
-      .subscribe(f => {
-        const filters = Object.assign({}, f);
-        filters['skip'] = index * size;
-        filters['initial'] = false;
-        filters['limit'] = size;
-        /*if (event && event.active && event.direction) {
-          filters['sortField'] = event.active + ' ' + event.direction;
-        } else {
-          filters['sortField'] = undefined;
-        }*/
-        // TODO reduce calls when not needed (i.e. no change)
-        // if (f.first !== event.first || this.datasets.length === 0) {
-        this.store.dispatch(new dsa.UpdateFilterAction(filters));
-        // }
-      });
+  pureOnPageChange(event: PageChangeEvent) {
+    this.store.dispatch(new dsa.GoToPageAction(event.pageIndex));
+  }
+
+  pureOnSortChange(event: SortChangeEvent) {
+    const {active: column, direction} = event;
+    this.store.dispatch(new dsa.SortByColumnAction(column, direction));
   }
 
   pureRowClassifier(row: Dataset): string {
     if (row.datasetlifecycle && this.mode === 'archive'
-      && (this.archiveable.indexOf(row.datasetlifecycle.archiveStatusMessage) !== -1) && row.size !== 0) {
+      && (config.archiveable.indexOf(row.datasetlifecycle.archiveStatusMessage) !== -1) && row.size !== 0) {
       return 'row-archiveable';
     } else if (row.datasetlifecycle && this.mode === 'retrieve'
-      && this.retrievable.indexOf(row.datasetlifecycle.archiveStatusMessage) !== -1 && row.size !== 0) {
+      && config.retrieveable.indexOf(row.datasetlifecycle.archiveStatusMessage) !== -1 && row.size !== 0) {
       return 'row-retrievable';
     } else if (row.size === 0) {
       return 'row-empty';
@@ -388,3 +339,30 @@ export class DatasetTableComponent implements OnInit {
     }
   }
 }
+
+
+
+
+
+
+/* Obsolete? */
+/*
+/**
+ * Options set based on selected datasets
+ * This is used to determine which template to display for
+ * archive or retrieval or both
+ * @param set
+ * @returns {string}
+ * /
+setOptions(set) {
+  let options = '';
+  const dl = set['datasetlifecycle'];
+  if (dl && dl['isOnDisk']) {
+    options += 'archive';
+  }
+  if (dl && (dl['isOnTape'] || dl['isOnDisk'])) {
+    options += 'retrieve';
+  }
+  return options;
+}
+*/

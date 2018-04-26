@@ -3,21 +3,22 @@ import { Dataset } from 'state-management/models';
 import { createSelector, createFeatureSelector } from '@ngrx/store';
 import { DatasetState } from '../state/datasets.store'
 
-const getDatasetState = createFeatureSelector<DatasetState>('datasets');
 
-/* Improved selectors are temporarily suffixed with 2 */
+/* Improved, createSelector-based selectors are temporarily suffixed with 2 */
+
+const getDatasetState = createFeatureSelector<DatasetState>('datasets');
 
 export const getDatasets2 = createSelector(
     getDatasetState,
     state => state.datasets
 );
 
-export const getSelectedSets2 = createSelector(
+export const getSelectedDatasets = createSelector(
     getDatasetState,
     state => state.selectedSets2
 )
 
-export const getCurrentPage2 = createSelector(
+export const getPage = createSelector(
     getDatasetState,
     state => state.currentPage2
 );
@@ -40,7 +41,12 @@ export const getRectangularRepresentation = createSelector(
             )*/
             .map(dataset => ({...empty, ...dataset}));
     }
-)
+);
+
+export const getViewMode = createSelector(
+    getDatasetState,
+    state => state.mode
+);
 
 export const getFilterValues = (state: any) => state.root.datasets.filterValues;
 export const getActiveFilters = (state: any) => state.root.datasets.activeFilters;

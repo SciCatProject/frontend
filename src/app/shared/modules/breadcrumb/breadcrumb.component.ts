@@ -10,9 +10,11 @@ import {
 } from '@angular/router';
 import 'rxjs/add/operator/filter';
 import { TitleCasePipe } from '../../pipes/index';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import * as rison from 'rison';
 import * as selectors from 'state-management/selectors';
+
+import { getViewMode } from 'state-management/selectors/datasets.selectors';
 
 interface Breadcrumb {
   label: string;
@@ -105,7 +107,7 @@ export class BreadcrumbComponent implements OnInit {
         this.store.select(selectors.datasets.getActiveFilters).take(1)
           .subscribe(filters => {
             console.log(filters);
-            this.store.select(selectors.ui.getMode).take(1).subscribe(currentMode => {
+            this.store.pipe(select(getViewMode)).take(1).subscribe(currentMode => {
               filters['mode'] = currentMode;
               console.log(currentMode);
               this.router.navigate(['/datasets'], { queryParams: { args: rison.encode(filters) } });

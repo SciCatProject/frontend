@@ -40,8 +40,13 @@ export const TOTAL_UPDATE =                 '[Dataset] Total Datasets Update';
 
 export const SELECT_DATASET =               '[Dataset 2] Select Dataset';
 export const DESELECT_DATASET =             '[Dataset 2] Deselect Dataset';
+export const CLEAR_SELECTION =              '[Dataset 2] Clear Selection';
 
 export const EXPORT_TO_CSV =                '[Dataset 2] Export to CSV';
+export const SET_VIEW_MODE =                '[Dataset 2] Set View Mode';
+
+export const GO_TO_PAGE =                   '[Dataset 2] Go to Page';
+export const SORT_BY_COLUMN =               '[Dataset 2] Sort by Column';
 
 export class SearchCompleteAction implements Action {
     readonly type = SEARCH_COMPLETE;
@@ -174,8 +179,27 @@ export class DeselectDatasetAction implements Action {
     constructor(readonly dataset: Dataset) {}
 }
 
+export class ClearSelectionAction implements Action {
+    readonly type = CLEAR_SELECTION;
+}
+
 export class ExportToCsvAction implements Action {
     readonly type = EXPORT_TO_CSV;
+}
+
+export class GoToPageAction implements Action {
+    readonly type = GO_TO_PAGE;
+    constructor(readonly page: number) {}
+}
+
+export class SortByColumnAction implements Action {
+    readonly type = SORT_BY_COLUMN;
+    constructor(readonly column: string, readonly direction: string) {}
+}
+
+export class SetViewModeAction implements Action {
+    readonly type = SET_VIEW_MODE;
+    constructor(readonly mode: string) {}
 }
 
 export type Actions =
@@ -187,5 +211,5 @@ export type Actions =
     DatablocksAction | AddGroupsAction | AddGroupsCompleteAction | UpdateSelectedDatablocksAction |
     AddGroupsFailedAction | UpdateSelectedAction | TotalSetsAction | ResetStatusAction | ResetStatusCompleteAction |
     SelectDatasetAction | DeselectDatasetAction |
-    ExportToCsvAction;
+    ExportToCsvAction | GoToPageAction | SortByColumnAction | SetViewModeAction;
     

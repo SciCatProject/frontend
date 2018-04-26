@@ -9,7 +9,9 @@
     matSortDirection="desc">-->
 
   <mat-table
-    [dataSource]="datasets">
+    [dataSource]="datasets"
+    class="dataset-table"
+    matSort (matSortChange)="handleSortChange($event)">
 
     <!-- Column Definitions -->
     <ng-container matColumnDef="select">
@@ -39,14 +41,14 @@
     </ng-container>
 
     <ng-container matColumnDef="size">
-      <mat-header-cell *matHeaderCellDef>Size</mat-header-cell>
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Size</mat-header-cell>
       <mat-cell *matCellDef="let dataset">
         {{getFormattedSize(dataset.size)}}
       </mat-cell>  
     </ng-container>
 
     <ng-container matColumnDef="creationTime">
-      <mat-header-cell *matHeaderCellDef>Source Folder</mat-header-cell>
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Creation Time</mat-header-cell>
       <mat-cell *matCellDef="let dataset">
         {{dataset.creationTime | date: 'dd/MM/yyyy HH:mm'}}
       </mat-cell>  

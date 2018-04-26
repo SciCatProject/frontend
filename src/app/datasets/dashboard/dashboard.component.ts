@@ -1,10 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
+import { Observable } from 'rxjs/Observable';
+
 import { Dataset } from 'shared/sdk/models';
+
 import * as dsa from 'state-management/actions/datasets.actions';
 import * as ds from 'state-management/selectors/datasets.selectors';
 import * as selectors from 'state-management/selectors';
+
 import { ParamsService } from 'params.service';
 
 @Component({
@@ -22,10 +26,9 @@ export class DashboardComponent implements OnInit {
    * @type {Array<Dataset>}
    * @memberof DashboardComponent
    */
-  datasets: Array<any> = [];
-  // rows: any[] = [];
-
+  
   searchText$;
+  private selectedDatasets$: Observable<Dataset[]>;
 
   constructor(
     private router: Router,
@@ -33,11 +36,7 @@ export class DashboardComponent implements OnInit {
     private store: Store<any>,
     private params: ParamsService,
   ) {
-    this.datasets = [];
-  }
-
-  selectedSet(event) {
-    this.datasets = event;
+    this.selectedDatasets$ = this.store.pipe(select(ds.getSelectedDatasets));
   }
 
   /**
