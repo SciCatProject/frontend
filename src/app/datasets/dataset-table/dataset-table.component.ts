@@ -157,7 +157,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
    * Return the classes for the view buttons based on what is selected
    * @param mode
    */
-  getModeButtonClasses(mode) {
+  getModeButtonClasses(mode): {[cls: string]: boolean} {
     return {
       [mode]: true,
       positive: this.mode === mode
@@ -170,7 +170,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
    * @param {any} event - click handler (not currently used)
    * @memberof DashboardComponent
    */
-  archiveClickHandle(event) {
+  archiveClickHandle(event): void {
     const dialogRef = this.dialog.open(DialogComponent, {
       width: 'auto',
       data: { title: 'Really archive?', question: '' }
@@ -189,7 +189,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
    * @param {any} event - click handler (not currently used)
    * @memberof DashboardComponent
    */
-  retrieveClickHandle(event) {
+  retrieveClickHandle(event): void {
     const destPath = '/archive/retrieve';
     const dialogRef = this.dialog.open(DialogComponent, {
       width: 'auto',
@@ -209,7 +209,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
    * action performed
    * @memberof DashboardComponent
    */
-  archiveOrRetrieve(archive: boolean, destPath = '/archive/retrieve/') {
+  archiveOrRetrieve(archive: boolean, destPath = '/archive/retrieve/'): void {
     const msg = new Message();
     if (this.selectedSets.length > 0) {
       const job = new Job();
@@ -278,24 +278,24 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     }
   }
 
-  onClick(dataset: Dataset) {
+  onClick(dataset: Dataset): void {
     const pid = encodeURIComponent(dataset.pid);
     this.router.navigateByUrl('/dataset/' + pid);
   }
 
-  onSelect(dataset: Dataset) {
+  onSelect(dataset: Dataset): void {
     this.store.dispatch(new dsa.SelectDatasetAction(dataset));
   }
 
-  onDeselect(dataset: Dataset) {
+  onDeselect(dataset: Dataset): void {
     this.store.dispatch(new dsa.DeselectDatasetAction(dataset));
   }
 
-  onPageChange(event: PageChangeEvent) {
+  onPageChange(event: PageChangeEvent): void {
     this.store.dispatch(new dsa.GoToPageAction(event.pageIndex));
   }
 
-  onSortChange(event: SortChangeEvent) {
+  onSortChange(event: SortChangeEvent): void {
     const {active: column, direction} = event;
     this.store.dispatch(new dsa.SortByColumnAction(column, direction));
   }
