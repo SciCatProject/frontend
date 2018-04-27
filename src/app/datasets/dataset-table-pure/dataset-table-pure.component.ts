@@ -1,5 +1,4 @@
-import { Component, Input, OnInit, Output, EventEmitter, ViewChild } from '@angular/core';
-import { DatePipe } from '@angular/common';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { MatCheckboxChange, MatSort } from '@angular/material';
 
 import { Dataset } from 'state-management/models';

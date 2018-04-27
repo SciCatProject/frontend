@@ -1,8 +1,7 @@
-import { Dataset } from 'state-management/models';
+import { Dataset, DatasetFilters } from 'state-management/models';
 
 import { createSelector, createFeatureSelector } from '@ngrx/store';
 import { DatasetState } from '../state/datasets.store'
-
 
 /* Improved, createSelector-based selectors are temporarily suffixed with 2 */
 
@@ -22,6 +21,10 @@ export const getPage = createSelector(
     getDatasetState,
     state => state.currentPage2
 );
+
+/*
+TODO: create selector to derive filter object from state
+*/
 
 export const getRectangularRepresentation = createSelector(
     getDatasets2,

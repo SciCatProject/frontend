@@ -1,12 +1,11 @@
 <div>
-  <!--
-  <mat-table
-    #table
-    [dataSource]="datasets"
-    class='dataset-table'
-    (matSortChange)="onPage($event)"
-    matSort matSortActive="creationTime"
-    matSortDirection="desc">-->
+  <mat-paginator
+    class="dataset-paginator"
+    [pageSize]="30"
+    [pageIndex]="currentPage"
+    [length]="totalNumber"
+    (page)="handlePageChange($event)">
+  </mat-paginator>
 
   <mat-table
     [dataSource]="datasets"

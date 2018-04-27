@@ -63,18 +63,8 @@ describe('DatasetTableComponent', () => {
     expect(compiled.querySelector('.view').textContent).toContain('View');
   });
 
-  it('should contain a material table', () => {
-    const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('.dataset-table')).toBeTruthy();
-  });
-
   it('should contain an export button', () => {
     const compiled = fixture.debugElement.nativeElement;
     expect(compiled.querySelectorAll('.export-csv')).toBeTruthy();
-  });
-
-  it('should contain 2 paginators', () => {
-    const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelectorAll('.dataset-paginator').length).toBe(2);
   });
 });

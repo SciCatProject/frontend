@@ -28,4 +28,5 @@ export interface DatasetFilters {
   skip: number;
   initial: boolean;
   keywords: string[];
+  sortField: string;
 };

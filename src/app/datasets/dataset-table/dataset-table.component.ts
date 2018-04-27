@@ -6,6 +6,7 @@ import {
   OnInit,
   Output,
   ViewChild,
+  OnDestroy,
 } from '@angular/core';
 
 import { Router, ActivatedRoute, Data } from '@angular/router';
@@ -40,13 +41,14 @@ import { PageChangeEvent, SortChangeEvent } from '../dataset-table-pure/dataset-
 
 import * as rison from 'rison';
 import { Subscription } from 'rxjs';
+import { ViewMode } from 'state-management/state/datasets.store';
 
 @Component({
   selector: 'dataset-table',
   templateUrl: './dataset-table.component.html',
   styleUrls: ['./dataset-table.component.scss']
 })
-export class DatasetTableComponent implements OnInit {
+export class DatasetTableComponent implements OnInit, OnDestroy {
   @Input() private datasets = [];
   @Output() private openDataset = new EventEmitter();
   @Output() private selectedSet = new EventEmitter<Array<any>>();
@@ -55,20 +57,19 @@ export class DatasetTableComponent implements OnInit {
   private selectedSets$: Observable<Dataset[]>;
   private currentPage$: Observable<number>;
   private mode$: Observable<string>;
+  private datasetCount$: Observable<number>;
 
   // compatibility analogs of observables
-  private mode: string = 'view';
+  private mode: ViewMode = 'view';
   private selectedSets: Dataset[] = [];
 
   private modes: string[] = ['archive', 'view', 'retrieve'];
 
-  selection = new SelectionModel<Element>(true, []);
-  datasetCount$;
-  dataSource: MatTableDataSource<any> | null;
-
   private loading$: Observable<boolean>;
   private limit$: Observable<number>;
 
+  private modeSubscription: Subscription;
+  private selectedSetsSubscription: Subscription;
   private submitJobSubscription: Subscription;
   private jobErrorSubscription: Subscription;
 
@@ -88,14 +89,18 @@ export class DatasetTableComponent implements OnInit {
     this.selectedSets$ = this.store.pipe(select(getSelectedDatasets));
     this.currentPage$ = this.store.pipe(select(getPage));
     this.limit$ = this.store.select(state => state.root.user.settings.datasetCount);
-
     this.mode$ = this.store.pipe(select(getViewMode));
     
-  
-    this.mode$.subscribe(mode => this.mode = mode);
+    // Store concrete values of observables for compatibility
+    this.modeSubscription = this.mode$.subscribe((mode: ViewMode) => {
+      this.mode = mode;
+    });
+
+    this.selectedSetsSubscription = this.selectedSets$.subscribe(selectedSets => 
+      this.selectedSets = selectedSets
+    );
 
     // Use activated route here somehow
-
     /*this.store.select(state => state.root.dashboardUI.mode).subscribe(mode => {
       this.mode = mode;
       this.updateRowView(mode);
@@ -106,7 +111,7 @@ export class DatasetTableComponent implements OnInit {
         ret => {
           if (ret && Array.isArray(ret)) {
             console.log(ret);
-            this.selection.clear();
+            this.store.dispatch(new dsa.ClearSelectionAction());
           }
         },
         error => {
@@ -128,6 +133,13 @@ export class DatasetTableComponent implements OnInit {
       });
   }
 
+  ngOnDestroy() {
+    this.modeSubscription.unsubscribe();
+    this.selectedSetsSubscription.unsubscribe();
+    this.submitJobSubscription.unsubscribe();
+    this.jobErrorSubscription.unsubscribe();
+  }
+
   onExportClick(): void {
     this.store.dispatch(new dsa.ExportToCsvAction());
   }
@@ -139,33 +151,6 @@ export class DatasetTableComponent implements OnInit {
    */
   onModeChange(event, mode: string): void {
     this.store.dispatch(new dsa.SetViewModeAction(mode));
-  }
-
-  updateRowView(mode: string): void {
-    this.store.dispatch(new dsa.ClearSelectionAction());
-
-    const activeSets = [];
-
-
-    // If in "special" mode...
-    if (this.datasets && this.datasets.length > 0 && (this.mode === 'archive' || this.mode === 'retrieve')) {
-      for (let d = 0; d < this.datasets.length; d++) {
-        const set = this.datasets[d];
-        const msg = (set.datasetlifecycle && set.datasetlifecycle.archiveStatusMessage) || '';
-        if (this.mode === 'archive') {
-          if (set.datasetlifecycle && (config.archiveable.indexOf(set.datasetlifecycle.archiveStatusMessage) !== -1) && set.size > 0) {
-            activeSets.push(set);
-          }
-        } else if (this.mode === 'retrieve') {
-          if (set.datasetlifecycle && config.retrieveable.indexOf(set.datasetlifecycle.archiveStatusMessage) !== -1 && set.size > 0) {
-            activeSets.push(set);
-          }
-        }
-      }
-      this.dataSource = new MatTableDataSource(activeSets);
-    } else {
-      this.dataSource = new MatTableDataSource(this.datasets);
-    }
   }
 
   /**
@@ -226,7 +211,7 @@ export class DatasetTableComponent implements OnInit {
    */
   archiveOrRetrieve(archive: boolean, destPath = '/archive/retrieve/') {
     const msg = new Message();
-    if (this.selection.selected.length > 0) {
+    if (this.selectedSets.length > 0) {
       const job = new Job();
       job.jobParams = {};
       job.creationTime = new Date();
@@ -241,7 +226,7 @@ export class DatasetTableComponent implements OnInit {
           if (!job.emailJobInitiator) {
             job.emailJobInitiator = user['profile'] ? user['profile']['email'] : user['email'];
           }
-          this.selection.selected.forEach(set => {
+          this.selectedSets.forEach(set => {
             // if ('datablocks' in set && set['datablocks'].length > 0) {
             const fileObj = {};
             const fileList = [];
@@ -255,11 +240,8 @@ export class DatasetTableComponent implements OnInit {
             backupFiles.push(fileObj);
             delete set['$$index'];
           });
-          this.selection.clear();
-          this.store.dispatch({
-            type: dsa.SELECTED_UPDATE,
-            payload: this.selection.selected
-          });
+          
+          this.store.dispatch(new dsa.ClearSelectionAction());
 
           if (backupFiles.length === 0) {
             msg.type = MessageType.Error;
@@ -292,37 +274,33 @@ export class DatasetTableComponent implements OnInit {
       msg.type = MessageType.Error;
       msg.content = 'No datasets selected';
       this.store.dispatch(new ua.ShowMessageAction(msg));
-      this.selection.clear();
-      this.store.dispatch({
-        type: dsa.SELECTED_UPDATE,
-        payload: this.selection.selected
-      });
+      this.store.dispatch(new dsa.ClearSelectionAction());
     }
   }
 
-  pureOnClick(dataset: Dataset) {
+  onClick(dataset: Dataset) {
     const pid = encodeURIComponent(dataset.pid);
     this.router.navigateByUrl('/dataset/' + pid);
   }
 
-  pureOnSelect(dataset: Dataset) {
+  onSelect(dataset: Dataset) {
     this.store.dispatch(new dsa.SelectDatasetAction(dataset));
   }
 
-  pureOnDeselect(dataset: Dataset) {
+  onDeselect(dataset: Dataset) {
     this.store.dispatch(new dsa.DeselectDatasetAction(dataset));
   }
 
-  pureOnPageChange(event: PageChangeEvent) {
+  onPageChange(event: PageChangeEvent) {
     this.store.dispatch(new dsa.GoToPageAction(event.pageIndex));
   }
 
-  pureOnSortChange(event: SortChangeEvent) {
+  onSortChange(event: SortChangeEvent) {
     const {active: column, direction} = event;
     this.store.dispatch(new dsa.SortByColumnAction(column, direction));
   }
 
-  pureRowClassifier(row: Dataset): string {
+  rowClassifier(row: Dataset): string {
     if (row.datasetlifecycle && this.mode === 'archive'
       && (config.archiveable.indexOf(row.datasetlifecycle.archiveStatusMessage) !== -1) && row.size !== 0) {
       return 'row-archiveable';
@@ -342,7 +320,7 @@ export class DatasetTableComponent implements OnInit {
 
 
 
-/* Obsolete? */
+/* Obsolete and/or "pensioned" methods
 /*
 /**
  * Options set based on selected datasets
@@ -363,3 +341,34 @@ setOptions(set) {
   return options;
 }
 */
+
+  /*
+  As far as I can see, this approach is limited and not useful with larger numbers of datasets. This
+  should be done on query level instead, releiving the GUI significantly of having to deal with that
+  logic.
+  
+  updateRowView(mode: string): void {
+    this.store.dispatch(new dsa.ClearSelectionAction());
+
+    const activeSets = [];
+
+    if (this.datasets && this.datasets.length > 0 && (this.mode === 'archive' || this.mode === 'retrieve')) {
+      for (let d = 0; d < this.datasets.length; d++) {
+        const set = this.datasets[d];
+        const msg = (set.datasetlifecycle && set.datasetlifecycle.archiveStatusMessage) || '';
+        if (this.mode === 'archive') {
+          if (set.datasetlifecycle && (config.archiveable.indexOf(set.datasetlifecycle.archiveStatusMessage) !== -1) && set.size > 0) {
+            activeSets.push(set);
+          }
+        } else if (this.mode === 'retrieve') {
+          if (set.datasetlifecycle && config.retrieveable.indexOf(set.datasetlifecycle.archiveStatusMessage) !== -1 && set.size > 0) {
+            activeSets.push(set);
+          }
+        }
+      }
+      this.dataSource = new MatTableDataSource(activeSets);
+    } else {
+      this.dataSource = new MatTableDataSource(this.datasets);
+    }
+  }
+  */

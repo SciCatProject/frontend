@@ -38,15 +38,15 @@ export const CURRENT_BLOCKS_COMPLETE =      '[Dataset] Current set datablocks up
 export const TOTAL_UPDATE =                 '[Dataset] Total Datasets Update';
 // export const FILTER_UPDATE_COMPLETE = '[Dataset]  Filter Update Complete';
 
-export const SELECT_DATASET =               '[Dataset 2] Select Dataset';
-export const DESELECT_DATASET =             '[Dataset 2] Deselect Dataset';
-export const CLEAR_SELECTION =              '[Dataset 2] Clear Selection';
+export const SELECT_DATASET =               '[Dataset] Select Dataset';
+export const DESELECT_DATASET =             '[Dataset] Deselect Dataset';
+export const CLEAR_SELECTION =              '[Dataset] Clear Selection';
 
-export const EXPORT_TO_CSV =                '[Dataset 2] Export to CSV';
-export const SET_VIEW_MODE =                '[Dataset 2] Set View Mode';
+export const EXPORT_TO_CSV =                '[Dataset] Export to CSV';
+export const SET_VIEW_MODE =                '[Dataset] Set View Mode';
 
-export const GO_TO_PAGE =                   '[Dataset 2] Go to Page';
-export const SORT_BY_COLUMN =               '[Dataset 2] Sort by Column';
+export const GO_TO_PAGE =                   '[Dataset] Go to Page';
+export const SORT_BY_COLUMN =               '[Dataset] Sort by Column';
 
 export class SearchCompleteAction implements Action {
     readonly type = SEARCH_COMPLETE;

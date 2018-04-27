@@ -1,15 +1,17 @@
 import { DatasetFilters, Dataset } from 'state-management/models';
 
+export type ViewMode = 'view' | 'archive' | 'retrieve';
+
 export interface DatasetState {
     datasets: Dataset[];
     loading: boolean;
-    activeFilters: DatasetFilters;
-    filterValues: object;
+    activeFilters: DatasetFilters; 
+    filterValues: object; // Change to DatasetFilters, modify type with optional fields if needed
     currentSet: Dataset;
     selectedSets: Dataset[];
     totalSets: number;
 
-    mode: string;
+    mode: ViewMode;
     selectedSets2: Dataset[];
     currentPage2: number;
     itemsPerPage2: number;
@@ -18,9 +20,25 @@ export interface DatasetState {
 export const initialDatasetState: DatasetState = {
     datasets: [],
     loading: false,
-    activeFilters: <DatasetFilters>{ text: null, creationTime: null, type: null,
-      creationLocation: [], ownerGroup: [], skip: 0, initial: true, sortField: 'creationTime desc', keywords: []},
-    filterValues: {creationTime: {start: null, end: null}, creationLocation: [], ownerGroup: [], text: null, type: null, keywords: []},
+    activeFilters: {
+        text: null,
+        creationTime: null,
+        type: null,
+        creationLocation: [],
+        ownerGroup: [],
+        skip: 0,
+        initial: true,
+        sortField: 'creationTime desc',
+        keywords: []
+    },
+    filterValues: {
+        creationTime: {start: null, end: null},
+        creationLocation: [],
+        ownerGroup: [],
+        text: null,
+        type: null,
+        keywords: []
+    },
     selectedSets: [],
     currentSet: undefined,
     totalSets: 0,

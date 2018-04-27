@@ -52,7 +52,11 @@ export function datasetsReducer(state = initialDatasetState, action: Action) {
             const page = (action as GoToPageAction).page;
             const skip = page * state.itemsPerPage2;
             const activeFilters = {...state.activeFilters, skip};
-            return {...state, activeFilters};
+            return {
+                ...state,
+                activeFilters,
+                currentPage2: page
+            };
         }
 
         case SORT_BY_COLUMN: {

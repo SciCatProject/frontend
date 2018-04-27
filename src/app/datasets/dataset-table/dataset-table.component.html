@@ -28,7 +28,9 @@
         <div class="ui loader"></div>
       </div>
     </div>
-    <button *ngIf="datasets && !(loading$ | async)" class='export-csv' mat-button (click)="onExportClick()" color="primary">Export Page to CSV</button>
+    <button *ngIf="datasets && !(loading$ | async)" class='export-csv' mat-button (click)="onExportClick()" color="primary">
+      Export Page to CSV
+    </button>
   </div>
 
   <dataset-table-pure
@@ -37,10 +39,10 @@
     [totalNumber]="datasetCount$ | async"
     [currentPage]="currentPage$ | async"
     [rowClassifier]="pureRowClassifier"
-    (onClick)="pureOnClick($event)"
-    (onSelect)="pureOnSelect($event)"
-    (onDeselect)="pureOnDeselect($event)"
-    (onPageChange)="pureOnPageChange($event)"
-    (onSortChange)="pureOnSortChange($event)">
+    (onClick)="onClick($event)"
+    (onSelect)="onSelect($event)"
+    (onDeselect)="onDeselect($event)"
+    (onPageChange)="onPageChange($event)"
+    (onSortChange)="onSortChange($event)">
   </dataset-table-pure>
 </div>
