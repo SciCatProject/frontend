@@ -26,6 +26,8 @@ import {ReadModePipe} from 'shared/pipes/index';
 })
 export class FilePickerDemoComponent implements OnInit, OnDestroy {
   dataset$: Observable<Dataset>;
+  dataset: any;
+  subscriptions= [];
 
 
   constructor(
@@ -38,9 +40,12 @@ export class FilePickerDemoComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     const currentSet$ = this.store.select(state => state.root.datasets.currentSet);
-    this.dataset$ = currentSet$.distinctUntilChanged().filter((dataset: Dataset) => {
+    this.dataset$ = currentSet$.filter((dataset: Dataset) => {
       return dataset && (Object.keys(dataset).length > 0);
     });
+    this.dataset$.subscribe((dataset)=>{this.dataset = dataset;});
+
+
   }
 
 
@@ -61,20 +66,21 @@ export class FilePickerDemoComponent implements OnInit, OnDestroy {
 
   onReadEnd(fileCount: number) {
     this.status = `Read ${fileCount} file(s) on ${new Date().toLocaleTimeString()}.`;
-    console.log("on readend", this.picked)
-    const creds = {
-      "thumbnail": this.picked._content;
-      "creationTime": "2018-04-23T09:23:46.853Z",
-      "datasetId": "10.17199/02a8fe6c-f830-4010-86f0-667b7fe41c4c",
-      "rawDatasetId": "string",
-      "derivedDatasetId": "string"
-    };
-
-
-    return this.daSrv.create(creds).subscribe((res) => {console.log(res);
-    this.filePicker.reset();
-    } );
-
+    console.log('on readend', this.picked);
+    console.log('on readend', this.dataset);
+    if (fileCount > 0) {
+      const creds = {
+        'thumbnail': this.picked.content,
+        'creationTime': '2018-04-23T09:23:46.853Z',
+        'datasetId': this.dataset.pid,
+        'rawDatasetId': 'string',
+        'derivedDatasetId': 'string'
+      };
+      return this.daSrv.create(creds).subscribe((res) => {
+        console.log(res);
+        this.filePicker.reset();
+      });
+    }
   }
 
   ngOnDestroy() {
