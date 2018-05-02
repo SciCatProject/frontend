@@ -396,7 +396,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
         filters['initial'] = false;
         filters['limit'] = size;
         if (event && event.active && event.direction) {
-          filters['sortField'] = event.active + ' ' + event.direction;
+          filters['sortField'] = event.active + ':' + event.direction;
         } else {
           filters['sortField'] = undefined;
         }

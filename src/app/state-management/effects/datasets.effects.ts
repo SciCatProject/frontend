@@ -75,35 +75,55 @@ export class DatasetEffects {
       .debounceTime(300)
       .map((action: DatasetActions.UpdateFilterAction) => action.payload)
       .switchMap(payload => {
-        const fq = handleFacetPayload(payload, false);
-        let groups = fq['ownerGroup'];
-        if (!groups || groups.length === 0) {
-          this.store.select(state => state.root.user.currentUserGroups)
-            .take(1)
-            .subscribe(user => {
-                groups = user;
-          });
-        }
-        const facetObject = [{ name: 'keywords', type: 'text', preConditions: { $unwind: '$keywords' } }, { name: 'type', type: 'text'}];
+          console.log("========== Facet call: Payload:",payload)
+          // TODO is handleFacetPayload obsolete ?
+        // const fq = handleFacetPayload(payload, false);
+        // TODO can we avoid these fields in the first place ?
+        const fq={}
+        // remove fields not relevant for facet filters
+        Object.keys(payload).forEach(key => {
+           if (['mode','initial','sortField','skip'].indexOf(key)>=0)return
+           if (payload[key] === null) return
+           if (typeof payload[key] === 'undefined' || payload[key].length == 0) return
+           fq[key]=payload[key]
+        })
+        console.log("=== Facet call: effective filter expression:",fq)
+// TODO The following group handling is probably obsolete
+        // let groups = fq['ownerGroup'];
+        // if (!groups || groups.length === 0) {
+        //   this.store.select(state => state.root.user.currentUserGroups)
+        //     .take(1)
+        //     .subscribe(user => {
+        //         groups = user;
+        //   });
+        // }
+        const facetObject = [  "type", "creationTime", "creationLocation", "ownerGroup","keywords"];
         return this.ds
-          .facet(JSON.stringify(fq), facetObject)
+          .fullfacet(JSON.stringify(fq), facetObject)
           .switchMap(res => {
-            const filterValues = res['results'][0];
-            const groupsArr = filterValues['groups'] || filterValues['ownerGroup'];
-            groupsArr.sort(stringSort);
-            const kwArr = filterValues['keywords'] || [];
-            kwArr.sort(stringSort);
-            const typeArr = filterValues['type'] || [];
-            typeArr.sort(stringSort);
-            const locationArr = filterValues['locations'] || filterValues['creationLocation'];
-            locationArr.sort(stringSort);
-            const fv = {};
-            fv['ownerGroup'] = groupsArr;
-            fv['creationLocation'] = locationArr;
-            fv['years'] = filterValues['years'];
-            fv['type'] = typeArr;
-            fv['keywords'] = kwArr;
-            return Observable.of(new DatasetActions.UpdateFilterCompleteAction(fv));
+            const filterValues = res[0];
+            //console.log("========== Facet call: resulting Filtervalues",filterValues)
+            // TODO can I remove all the sorting stuff here ?
+            // TODO why 2 different names ?
+            // TODO why each value treated explicitly hardwired here ?
+            // const groupsArr = filterValues['groups'] || filterValues['ownerGroup'];
+            // groupsArr.sort(stringSort);
+            // const kwArr = filterValues['keywords'] || [];
+            // kwArr.sort(stringSort);
+            // const typeArr = filterValues['type'] || [];
+            // typeArr.sort(stringSort);
+            // // TODO why 2 different names ?
+            // const locationArr = filterValues['locations'] || filterValues['creationLocation'];
+            // locationArr.sort(stringSort);
+            // const fv = {};
+            // fv['ownerGroup'] = groupsArr;
+            // fv['creationLocation'] = locationArr;
+            // // TODO Return the right information for dates:  {"_id": { "year": 2011, "month": 9, day": 14 },"count": 2 }
+            // // fv['years'] = filterValues['years'];
+            // fv['type'] = typeArr;
+            // fv['keywords'] = kwArr;
+            console.log(" ========== Facet call Resulting fv array:",filterValues)
+            return Observable.of(new DatasetActions.UpdateFilterCompleteAction(filterValues));
           })
           .catch(err => {
             console.log(err);
@@ -112,64 +132,36 @@ export class DatasetEffects {
       });
 
   @Effect()
-  protected facetDatasetCount$: Observable<Action> =
-    this.action$.ofType(DatasetActions.FILTER_UPDATE)
-      .debounceTime(300)
-      .map((action: DatasetActions.UpdateFilterAction) => action.payload)
-      .switchMap(payload => {
-        const fq = Object.assign({}, payload);
-        const match = handleFacetPayload(fq, true);
-        let filter = {};
-        if (match.length > 1) {
-          filter = {};
-          filter['and'] = match;
-        } else if (match.length === 1) {
-          filter = match[0];
-        }
-
-        return this.ds.count(filter)
-          .switchMap(res => {
-            return Observable.of(new DatasetActions.TotalSetsAction(res['count']));
-          })
-          .catch(err => {
-            console.log(err);
-            return Observable.of(new DatasetActions.SearchFailedAction(err));
-          });
-
-      });
-
-  @Effect()
   protected facetDatasets$: Observable<Action> =
     this.action$.ofType(DatasetActions.FILTER_UPDATE)
       .debounceTime(300)
       .map((action: DatasetActions.UpdateFilterAction) => action.payload)
       .switchMap(payload => {
-        const fq = Object.assign({}, payload);
-        const match = handleFacetPayload(fq, true);
-        const filter = {};
-        if (match.length > 1) {
-          filter['where'] = {};
-
-          filter['where']['and'] = match;
-        } else if (match.length === 1) {
-          filter['where'] = match[0];
-        }
-
-        filter['limit'] = fq['limit'] ? fq['limit'] : 30;
-        filter['skip'] = fq['skip'] ? fq['skip'] : 0;
-        filter['include'] = [{ relation: 'datasetlifecycle' }];
-        if (fq['sortField']) {
-          filter['order'] = fq['sortField'];
-        }
-        return this.ds.find(filter)
-          .switchMap(res => {
-            console.log(res);
-            return Observable.of(new DatasetActions.SearchCompleteAction(res));
+          const limits= {};
+          limits['limit'] = payload['limit'] ? payload['limit'] : 30;
+          limits['skip'] = payload['skip'] ? payload['skip'] : 0;
+          limits['order'] = payload['sortField'] ? payload['sortField'] : "creationTime:desc";
+          // remove fields not relevant for facet filters
+          // TODO understand what defines the structure of the payload. May be define a better payload structure from beginning, which separates filter conditions and skip parameters etc
+          // TODO IMPORTANT Understand why "limit" is not part of Payload
+          // TODO What is the meaning of "initial"
+          const fq={}
+          Object.keys(payload).forEach(key => {
+             if (['mode','initial','sortField','skip'].indexOf(key)>=0)return
+             if (payload[key] === null) return
+             if (typeof payload[key] === 'undefined' || payload[key].length == 0) return
+             fq[key]=payload[key]
           })
-          .catch(err => {
-            console.log(err);
-            return Observable.of(new DatasetActions.SearchFailedAction(err));
-          });
+          console.log("==== Dataset call with input fq,limits:",fq,limits)
+          return this.ds.fullquery(fq,limits)
+              .switchMap(res => {
+                console.log("==== Dataset call result:",res);
+                return Observable.of(new DatasetActions.SearchCompleteAction(res));
+              })
+              .catch(err => {
+                console.log(err);
+                return Observable.of(new DatasetActions.SearchFailedAction(err));
+           });
       });
 
   @Effect()
@@ -251,80 +243,85 @@ export class DatasetEffects {
  * @param fq The fields to construct the query from
  * @param loopback If using Loopback or mongo syntax. Check the docs for differences but mainly on array vs object structure
  */
-function handleFacetPayload(fq, loopback = false) {
-  const match: any = loopback ? [] : {};
-  const f = Object.assign({}, fq);
-  delete f['mode'];
-  delete f['initial'];
-  delete f['sortField'];
-  delete f['skip'];
-
-  Object.keys(f).forEach(key => {
-    let facet = f[key];
-    if (facet) {
-      switch (key) {
-        case 'ownerGroup':
-          if (facet.length > 0 && facet.constructor !== Array &&
-            typeof facet[0] === 'object') {
-            const groupsArray = [];
-            const keys = Object.keys(facet[0]);
-
-            for (let i = 0; i < keys.length; i++) {
-              groupsArray.push(facet[0][keys[i]]);
-            }
-
-            facet = groupsArray;
-          }
-          if (facet.length > 0) {
-            if (loopback) {
-              match.push({ ownerGroup: { inq: facet } });
-            } else {
-              match[key] = { $in: facet };
-            }
-          }
-          break;
-        case 'text':
-          if (loopback) {
-            match.push({ '$text': { 'search': '"' + facet + '"', 'language': 'none' } });
-          } else {
-            match['$text'] = facet;
-          }
-          break;
-        case 'creationTime':
-          const start = facet['begin'] || undefined;
-          const end = facet['end'] || undefined;
-          if (start && end) {
-            if (loopback) {
-              match.push({ creationTime: {gte: start} });
-              match.push({ creationTime: {lte: end} });
-            } else {
-              match['creationTime'] = { $gte: start, $lte: end };
-            }
-          }
-          break;
-        case 'type':
-          if (loopback) {
-            match.push({'type': facet});
-          } else {
-            match['type'] = facet;
-          }
-          break;
-        default:
-          // TODO handle default case for array and text types in Mongo (defaults to array)
-          const obj = {};
-          if (loopback && facet.length > 0) {
-            obj[key] = {inq: facet};
-            match.push(obj);
-          } else if(facet.length > 0) {
-            match[key] = {'$in': facet};
-          }
-          break;
-      }
-    }
-  });
-  //console.log("Resulting match expression:",match)
-  return match;
-}
+// function handleFacetPayload(fq, loopback = false) {
+//   const match: any = loopback ? [] : {};
+//   const f = Object.assign({}, fq);
+//   delete f['mode'];
+//   delete f['initial'];
+//   delete f['sortField'];
+//   delete f['skip'];
+//
+// console.log(" ==== handlefacetpayload: fq at start:",f)
+//   Object.keys(f).forEach(key => {
+//     let facet = f[key];
+//     //console.log("key,facet:",key,facet)
+//     if (facet) {
+//       switch (key) {
+//         case 'ownerGroup':
+//           if (facet.length > 0 && facet.constructor !== Array &&
+//             typeof facet[0] === 'object') {
+//             const groupsArray = [];
+//             const keys = Object.keys(facet[0]);
+//
+//             for (let i = 0; i < keys.length; i++) {
+//               groupsArray.push(facet[0][keys[i]]);
+//             }
+//
+//             facet = groupsArray;
+//           }
+//           if (facet.length > 0) {
+//             if (loopback) {
+//               match.push({ ownerGroup: { inq: facet } });
+//             } else {
+//               match[key] = facet;
+//             }
+//           }
+//           break;
+//         case 'text':
+//           if (loopback) {
+//             match.push({ '$text': { 'search': '"' + facet + '"', 'language': 'none' } });
+//           } else {
+//             match[key] = facet;
+//           }
+//           break;
+//         case 'creationTime':
+//           const start = facet['begin'] || undefined;
+//           const end = facet['end'] || undefined;
+//           if (start && end) {
+//             if (loopback) {
+//               match.push({ creationTime: {gte: start} });
+//               match.push({ creationTime: {lte: end} });
+//             } else {
+//               match['creationTime'] = { start: start, end: end };
+//             }
+//           }
+//           break;
+//         case 'type':
+//           if (loopback) {
+//             match.push({'type': facet});
+//           } else {
+//               // TODO how to distinguish fields with single allowed values and multiple
+//               // do I need the array construct as above for ownerGroup to return an array ?
+//               // or should I change the syntax if arrray has only one field from $in syntax ?
+//             match['type'] = [facet];
+//           }
+//           break;
+//         default:
+//           // TODO handle default case for array and text types in Mongo (defaults to array)
+//           const obj = {};
+//           if (loopback && facet.length > 0) {
+//             obj[key] = {inq: facet};
+//             match.push(obj);
+//           } else if(facet.length > 0) {
+//             match[key] = facet;
+//           }
+//           break;
+//       }
+//     }
+//   });
+//   console.log("=== handlefacetpayload Resulting match expression:",match)
+//   return match;
+// }
 
 
 function stringSort(a, b) {

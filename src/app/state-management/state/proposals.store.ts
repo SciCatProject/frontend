@@ -1,8 +1,8 @@
-import { Proposal, Dataset } from '../models';
+import { Proposal, Dataset, RawDataset } from '../models';
 
 export interface ProposalsState {
 	proposals: {[proposalId: string]: Proposal};
-	datasets: {[datasetId: string]: Dataset};
+	datasets: {[datasetId: string]: RawDataset};
 	hasFetched: boolean,
 	selectedId: string,
 };

@@ -107,6 +107,8 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
       }
       if ('keywords' in filters && filters.keywords) {
         const k = filters['keywords'].toString();
+        // // TODO: get rid of client side filtering
+        //console.log("=============== Filters,k:",filters,k)
         this.keywordInput.setValue(k);
       }
       if ('type' in filters && filters.type) {
@@ -123,6 +125,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
         .subscribe(values => {
           this.filterValues = { ...values };
           if (this.filterValues) {
+              //console.log("Filtervalues 2:",this.filterValues)
               this.locations = this.filterValues['creationLocation'] ? this.filterValues['creationLocation'].slice() : [];
               this.groups = this.filterValues['ownerGroup'] ? this.filterValues['ownerGroup'].slice() : [];
               this.keywords = this.filterValues['keywords'] ? this.filterValues['keywords'].slice() : [];
@@ -167,12 +170,14 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
    * Handle clicking of available groups
    */
   groupSelected(grp) {
+      console.log("==== grp inside groupSelected:",grp)
     this.filters.ownerGroup.push(grp);
     this.store.dispatch(new dsa.UpdateFilterAction(this.filters));
   }
 
   keywordSelected(kw) {
     if (kw) {
+        console.log("==== kw inside kewordSelected:",kw)
       this.filters.keywords.push(kw);
       this.store.dispatch(new dsa.UpdateFilterAction(this.filters));
     }
@@ -197,16 +202,18 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     this.keywordInput.setValue('');
     this.typeInput.setValue('');
     this.filters = dStore.initialDatasetState.activeFilters;
-    this.dateRange = {start: null, end: null};
-    this.store.select(state => state.root.user.currentUserGroups)
-      .takeLast(1)
-      .subscribe(groups => { this.filters.ownerGroup = groups; });
+    this.dateRange = null;
+    // TODO Remove this obolete part
+    // this.store.select(state => state.root.user.currentUserGroups)
+    //   .takeLast(1)
+    //   .subscribe(groups => { this.filters.ownerGroup = groups; });
+    // TODO: what is filtervalues and what filters ?
     this.filters.ownerGroup = [];
     this.filters.creationLocation = [];
     this.filters.keywords = [];
     this.filterValues = dStore.initialDatasetState.filterValues;
-    this.filterValues.text = '';
-    this.filters.creationTime = {'start': null, 'end': null};
+    //this.filterValues.text = '';
+    this.filters.creationTime = null // {'start': null, 'end': null};
     this.store.dispatch(new dsa.UpdateFilterAction(this.filters));
   }
 

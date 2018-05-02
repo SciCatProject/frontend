@@ -8,6 +8,6 @@ export const getDatasets = (state: any) => state.root.datasets.datasets;
 export const getSelectedSets = (state: any) => state.root.datasets.selectedSets;
 
 export const getLoading = (state: any) => state.root.datasets.loading;
-export const getTotalSets = (state: any) => state.root.datasets.totalSets;
+export const getTotalSets = (state: any) => state.root.datasets.filterValues['all'][0].totalSets;
 
 export const getCurrentSet = (state: any) => state.root.datasets.currentSet;
