@@ -16,6 +16,7 @@ import * as UserActions from 'state-management/actions/user.actions';
 
 import { Message, MessageType } from 'state-management/models';
 import { filter } from 'rxjs/operators';
+import { config } from '../../../config/config';
 
 // import store state interface
 @Injectable()
@@ -82,7 +83,7 @@ export class DatasetEffects {
         const fq={}
         // remove fields not relevant for facet filters
         Object.keys(payload).forEach(key => {
-           if (['mode','initial','sortField','skip'].indexOf(key)>=0)return
+           if (['mode','initial','sortField','skip','limit'].indexOf(key)>=0)return
            if (payload[key] === null) return
            if (typeof payload[key] === 'undefined' || payload[key].length == 0) return
            fq[key]=payload[key]
@@ -137,6 +138,7 @@ export class DatasetEffects {
       .debounceTime(300)
       .map((action: DatasetActions.UpdateFilterAction) => action.payload)
       .switchMap(payload => {
+                    console.log("========== Dataset call: Payload:",payload)
           const limits= {};
           limits['limit'] = payload['limit'] ? payload['limit'] : 30;
           limits['skip'] = payload['skip'] ? payload['skip'] : 0;
@@ -147,10 +149,19 @@ export class DatasetEffects {
           // TODO What is the meaning of "initial"
           const fq={}
           Object.keys(payload).forEach(key => {
-             if (['mode','initial','sortField','skip'].indexOf(key)>=0)return
+             // console.log("======key,payload[key]",key,payload[key])
+             if (['initial','sortField','skip','limit'].indexOf(key)>=0)return
              if (payload[key] === null) return
              if (typeof payload[key] === 'undefined' || payload[key].length == 0) return
-             fq[key]=payload[key]
+             if (key === 'mode'){
+                 if (payload['mode']==='archive'){
+                     fq['archiveStatusMessage']=config.archiveable
+                 } else if (payload['mode']==='retrieve'){
+                     fq['archiveStatusMessage']=config.retrieveable
+                 }
+             } else {
+                 fq[key]=payload[key]
+             }
           })
           console.log("==== Dataset call with input fq,limits:",fq,limits)
           return this.ds.fullquery(fq,limits)
