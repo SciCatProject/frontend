@@ -49,7 +49,7 @@ import { ViewMode } from 'state-management/state/datasets.store';
   styleUrls: ['./dataset-table.component.scss']
 })
 export class DatasetTableComponent implements OnInit, OnDestroy {
-  @Input() private datasets = [];
+  @Input() public datasets = [];
   @Output() private openDataset = new EventEmitter();
   @Output() private selectedSet = new EventEmitter<Array<any>>();
 

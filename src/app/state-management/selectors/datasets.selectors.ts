@@ -15,7 +15,7 @@ export const getDatasets2 = createSelector(
 export const getSelectedDatasets = createSelector(
     getDatasetState,
     state => state.selectedSets2
-)
+);
 
 export const getPage = createSelector(
     getDatasetState,
@@ -31,9 +31,11 @@ export const getRectangularRepresentation = createSelector(
     datasets => {
         const merged = datasets
             .reduce((result, current) => ({...result, ...current}));
+
         const empty = Object
             .keys(merged)
             .reduce((empty, key) => ({[key]: '', ...empty}), {});
+            
         return datasets
             /*.map(dataset => Object -- Isn't this part taken care of by the CSV library?
                 .keys(dataset)

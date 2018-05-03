@@ -115,6 +115,7 @@ export class MockStore {
   public dispatch(obj) {}
 
   public select(obj) { return Observable.of([]); }
+  public pipe(obj) { return Observable.of(null); }
 }
 
 

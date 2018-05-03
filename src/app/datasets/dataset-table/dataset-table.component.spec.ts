@@ -16,6 +16,7 @@ import {
   MockUserApi
 } from 'shared/MockStubs';
 import {UserApi} from 'shared/sdk/services';
+import { rootReducer } from 'state-management/reducers/root.reducer';
 
 
 describe('DatasetTableComponent', () => {
@@ -25,7 +26,7 @@ describe('DatasetTableComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
-      imports: [MatTableModule, MatDialogModule, FormsModule, ReactiveFormsModule, StoreModule.forRoot({})],
+      imports: [MatTableModule, MatDialogModule, FormsModule, ReactiveFormsModule, StoreModule.forRoot(rootReducer)],
       declarations: [DatasetTableComponent]
     });
     TestBed.overrideComponent(DatasetTableComponent, {
@@ -65,6 +66,7 @@ describe('DatasetTableComponent', () => {
 
   it('should contain an export button', () => {
     const compiled = fixture.debugElement.nativeElement;
+    console.log(compiled);
     expect(compiled.querySelectorAll('.export-csv')).toBeTruthy();
   });
 });

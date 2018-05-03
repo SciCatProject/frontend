@@ -17,8 +17,7 @@ import {
 } from 'shared/MockStubs';
 import {UserApi} from 'shared/sdk/services';
 
-
-describe('DatasetTableComponent', () => {
+describe('DatasetTablePureComponent', () => {
   let component: DatasetTablePureComponent;
   let fixture: ComponentFixture<DatasetTablePureComponent>;
 
@@ -28,6 +27,7 @@ describe('DatasetTableComponent', () => {
       imports: [MatTableModule, FormsModule, ReactiveFormsModule],
       declarations: [DatasetTablePureComponent]
     });
+    
     TestBed.overrideComponent(DatasetTablePureComponent, {
       set: {
         providers: [
@@ -45,7 +45,7 @@ describe('DatasetTableComponent', () => {
   });
 
   it('should be created', () => {
-    expect(component).toBeTruthy();
+    expect(component).toBeDefined();
   });
 
   it('should contain a material table', () => {

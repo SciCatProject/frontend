@@ -22,10 +22,10 @@ export interface SortChangeEvent {
   styleUrls: ['./dataset-table-pure.component.scss']
 })
 export class DatasetTablePureComponent {
-  @Input() private datasets: Dataset[];
-  @Input() private selectedSets: Dataset[];
-  @Input() private totalNumber: number;
-  @Input() private currentPage: number;
+  @Input() private datasets: Dataset[] = [];
+  @Input() private selectedSets: Dataset[] = [];
+  @Input() private totalNumber: number = 0;
+  @Input() private currentPage: number = 0;
   @Input() private showSelect: boolean = false;
   @Input() private rowClassifier?: (dataset: Dataset) => string;
 

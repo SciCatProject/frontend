@@ -2,7 +2,7 @@
   <div class="mode-container">
     <div class="ui buttons">
       <button class='ui button' [ngClass]="getModeButtonClasses(mode)" *ngFor="let mode of modes" (click)="onModeChange($event, mode)">
-        {{mode}}
+        {{mode | titlecase}}
       </button>
     </div>
     <div [ngSwitch]="mode">
