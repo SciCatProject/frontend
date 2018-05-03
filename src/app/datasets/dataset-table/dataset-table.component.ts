@@ -68,6 +68,8 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   private loading$: Observable<boolean>;
   private limit$: Observable<number>;
 
+  // These should be made part of the NgRX state management
+  // and eventually be removed.
   private modeSubscription: Subscription;
   private selectedSetsSubscription: Subscription;
   private submitJobSubscription: Subscription;
