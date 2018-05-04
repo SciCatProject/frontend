@@ -16,8 +16,8 @@ export const initialDatasetState: DatasetState = {
     datasets: [],
     loading: false,
     activeFilters: <DatasetFilters>{ text: null, creationTime: null, type: null,
-      creationLocation: [], ownerGroup: [], skip: 0, initial: true, sortField: 'creationTime desc', keywords: []},
-    filterValues: {creationTime: {start: null, end: null}, creationLocation: [], ownerGroup: [], text: null, type: null, keywords: []},
+      creationLocation: [], ownerGroup: [], skip: 0, initial: true, sortField: "creationTime:desc", keywords: []},
+    filterValues: {creationTime: null, creationLocation: [], ownerGroup: [], text: null, type: null, keywords: [], all:[{totalSets:0}]},
     selectedSets: [],
     currentSet: undefined,
     totalSets: 0

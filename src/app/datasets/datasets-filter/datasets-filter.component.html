@@ -52,7 +52,7 @@
       <input matInput class="keyword-input" matInput placeholder="Keywords" (ngModel)="selectedKeywords" name="keywords" (selectionChange)="keywordSelected(keywords)"
         [formControl]="keywordInput" [matAutocomplete]="kw">
         <mat-autocomplete #kw="matAutocomplete">
-          <mat-option class="options" (onSelectionChange)="keywordSelected(g)" *ngFor="let g of filteredKeywords | async" [value]="g._id">
+          <mat-option class="options" (onSelectionChange)="keywordSelected(g._id)" *ngFor="let g of filteredKeywords | async" [value]="g._id">
             <span>{{ g._id || 'No Keywords' }}</span>
             <small>: {{g.count}}</small>
           </mat-option>
