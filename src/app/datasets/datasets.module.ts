@@ -5,7 +5,7 @@ import { FileHelpersModule } from 'ngx-file-helpers';
 
 
 import { FilePickerDemoComponent } from './file-picker-demo/file-picker-demo.component';
-import { FileDropzoneDemoComponent } from './file-dropzone-demo/file-dropzone-demo.component';
+import { FileDropzoneComponent } from './file-dropzone/file-dropzone.component';
 
 import {
   DashboardComponent,
@@ -63,7 +63,7 @@ import { MatDatepickerModule } from 'saturn-datepicker';
     MatListModule, MatDatepickerModule, MatTooltipModule
   ],
   declarations : [
-    FilePickerDemoComponent, FileDropzoneDemoComponent,
+    FilePickerDemoComponent, FileDropzoneComponent,
     DashboardComponent, DatasetTableComponent, DatablocksComponent,
     DatafilesComponent, DatasetsFilterComponent, DatasetDetailComponent, SelectedListComponent
   ],
