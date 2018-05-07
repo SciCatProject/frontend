@@ -127,7 +127,7 @@ export class JobsEffects {
 
 
   constructor(private action$: Actions, private store: Store<any>,
-              private jobSrv: lb.JobApi, private dsSrv: lb.RawDatasetApi) {
+              private jobSrv: lb.JobApi, private dsSrv: lb.DatasetApi) {
   }
 
 

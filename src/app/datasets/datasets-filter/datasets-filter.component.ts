@@ -26,6 +26,8 @@ export interface MatDatePickerRangeValue<D> {
   end: D | null;
 }
 
+ // TODO: get rid of client side filtering
+
 @Component({
   selector: 'datasets-filter',
   templateUrl: './datasets-filter.component.html',
@@ -197,16 +199,13 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     this.keywordInput.setValue('');
     this.typeInput.setValue('');
     this.filters = dStore.initialDatasetState.activeFilters;
-    this.dateRange = {start: null, end: null};
-    this.store.select(state => state.root.user.currentUserGroups)
-      .takeLast(1)
-      .subscribe(groups => { this.filters.ownerGroup = groups; });
+    this.dateRange = null;
     this.filters.ownerGroup = [];
     this.filters.creationLocation = [];
     this.filters.keywords = [];
     this.filterValues = dStore.initialDatasetState.filterValues;
-    this.filterValues.text = '';
-    this.filters.creationTime = {'start': null, 'end': null};
+    //this.filterValues.text = '';
+    this.filters.creationTime = null;
     this.store.dispatch(new dsa.UpdateFilterAction(this.filters));
   }
 

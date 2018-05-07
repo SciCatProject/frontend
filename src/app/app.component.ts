@@ -83,7 +83,7 @@ export class AppComponent implements OnDestroy, OnInit {
         if (current && current['username']) {
           this.username = current['username'].replace('ms-ad.', '');
           if (!('realm' in current)) {
-            this.store.dispatch(new dsa.AddGroupsAction(current.id));
+            //this.store.dispatch(new dsa.AddGroupsAction(current.id));
             this.store.dispatch(new ua.AccessUserEmailAction(current.id));
             // TODO handle dataset loading
           }

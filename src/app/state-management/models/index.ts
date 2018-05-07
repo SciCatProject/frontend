@@ -1,5 +1,5 @@
-import { User, AccessGroup, Job, RawDataset, Proposal } from 'shared/sdk/models';
-export { User, AccessGroup, Job, RawDataset, Proposal };
+import { User, AccessGroup, Job, Dataset, RawDataset, Proposal } from 'shared/sdk/models';
+export { User, AccessGroup, Job, Dataset, RawDataset, Proposal };
 
 export interface Settings {
   tapeCopies: string;
@@ -28,4 +28,5 @@ export interface DatasetFilters {
   skip: number;
   initial: boolean;
   keywords: string[];
+  sortField: Object
 };

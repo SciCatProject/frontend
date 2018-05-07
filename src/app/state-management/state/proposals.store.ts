@@ -1,13 +1,15 @@
-import { Proposal } from '../models';
+import { Proposal, Dataset, RawDataset } from '../models';
 
 export interface ProposalsState {
-	list: Proposal[];
+	proposals: {[proposalId: string]: Proposal};
+	datasets: {[datasetId: string]: RawDataset};
 	hasFetched: boolean,
 	selectedId: string,
 };
 
 export const initialProposalsState: ProposalsState = {
-	list: [],
+	proposals: {},
+	datasets: {},
 	hasFetched: false,
 	selectedId: null,
 };

@@ -9,7 +9,7 @@
 
 <mat-tab-group *ngIf="(dataset$ | async) as dataset">
   <mat-tab label="Details">
-      <config-form [source]="dataset" [sourceType]="'RawDataset'"></config-form>
+      <config-form [source]="dataset" [sourceType]="'Dataset'"></config-form>
   </mat-tab>
   <mat-tab label="Datafiles">
     <datafiles [dataBlocks]="origDatablocks$ | async"></datafiles>

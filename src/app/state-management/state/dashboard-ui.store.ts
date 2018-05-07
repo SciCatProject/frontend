@@ -1,8 +1,8 @@
-import {RawDataset} from 'shared/sdk/models';
+import {Dataset} from 'shared/sdk/models';
 
 // NOTE It IS ok to make up a state of other sub states
 export interface DashboardUIState {
-    dsTable: Array<RawDataset>;
+    dsTable: Array<Dataset>;
     groupText: any;
     dateChoice: any;
     mode: string;

@@ -1,39 +1,33 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { ProposalDetailComponent } from './proposal-detail.component';
-import {Http} from '@angular/http';
-import {ActivatedRoute, Router, RouterModule} from '@angular/router';
+import { MatListModule, MatTableModule, MatTabsModule, MatCellDef, MatHeaderCellDef, MatColumnDef, MatHeaderCell, MatCell, MatTable, MatHeaderRowDef, MatRowDef, MatHeaderRow, MatRow, MatTableDataSource } from '@angular/material';
+import { Router } from '@angular/router';
 import {
   MockActivatedRoute,
   MockConfigService,
-  MockHttp,
   MockRouter,
   MockStore,
   MockUserApi
 } from 'shared/MockStubs';
-import { RouterTestingModule } from '@angular/router/testing';
-import {Store, StoreModule} from '@ngrx/store';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import {MatTabsModule} from '@angular/material';
 
-describe('ProposalDetailComponent', () => {
+import { ProposalDetailComponent } from './proposal-detail.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+describe('ProposalsDetailComponent', () => {
   let component: ProposalDetailComponent;
   let fixture: ComponentFixture<ProposalDetailComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      schemas : [ NO_ERRORS_SCHEMA ],
-      declarations: [ ProposalDetailComponent ],
-      imports: [ StoreModule.forRoot({}), MatTabsModule, RouterTestingModule, BrowserAnimationsModule]
-    })
-    TestBed.overrideComponent(ProposalDetailComponent, {
-      set: {
-        providers: [
-          {provide: Http, useClass: MockHttp},
-          {provide: Store, useClass: MockStore}
-        ]
-      }
+      schemas: [NO_ERRORS_SCHEMA],
+      declarations: [ProposalDetailComponent],
+      imports: [
+        MatTableModule,
+        MatTabsModule,
+        BrowserAnimationsModule,
+      ]
     });
+
     TestBed.compileComponents();
   }));
 
@@ -46,4 +40,8 @@ describe('ProposalDetailComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  // TODO:
+  // - test all combinations of email/name presence
+  // - test with datasets
 });
