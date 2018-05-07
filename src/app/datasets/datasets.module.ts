@@ -4,7 +4,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { FileHelpersModule } from 'ngx-file-helpers';
 
 
-import { FilePickerDemoComponent } from './file-picker-demo/file-picker-demo.component';
+import { FilePickerComponent } from './file-picker/file-picker.component';
 import { FileDropzoneComponent } from './file-dropzone/file-dropzone.component';
 
 import {
@@ -63,7 +63,7 @@ import { MatDatepickerModule } from 'saturn-datepicker';
     MatListModule, MatDatepickerModule, MatTooltipModule
   ],
   declarations : [
-    FilePickerDemoComponent, FileDropzoneComponent,
+    FilePickerComponent, FileDropzoneComponent,
     DashboardComponent, DatasetTableComponent, DatablocksComponent,
     DatafilesComponent, DatasetsFilterComponent, DatasetDetailComponent, SelectedListComponent
   ],

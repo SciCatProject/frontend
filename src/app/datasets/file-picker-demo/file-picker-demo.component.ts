@@ -20,11 +20,11 @@ import {ReadModePipe} from 'shared/pipes/index';
 
 
 @Component({
-  selector: 'app-file-picker-demo',
-  templateUrl: './file-picker-demo.component.html',
-  styleUrls: ['./file-picker-demo.component.css']
+  selector: 'app-file-picker',
+  templateUrl: './file-picker.component.html',
+  styleUrls: ['./file-picker.component.css']
 })
-export class FilePickerDemoComponent implements OnInit, OnDestroy {
+export class FilePickerComponent implements OnInit, OnDestroy {
   dataset$: Observable<Dataset>;
   dataset: any;
   subscriptions= [];

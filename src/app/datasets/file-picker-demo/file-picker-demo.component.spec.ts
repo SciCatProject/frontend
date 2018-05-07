@@ -9,27 +9,27 @@ import { MockActivatedRoute, MockStore } from 'shared/MockStubs';
 import { ObjKeysPipe, TitleCasePipe } from 'shared/pipes/index';
 import { rootReducer } from 'state-management/reducers/root.reducer';
 import { MatTableModule} from '@angular/material';
-import { FilePickerDemoComponent  } from './file-picker-demo.component';
+import { FilePickerComponent  } from './file-picker.component';
 import {APP_CONFIG, AppConfig} from '../../app-config.module';
 import * as lb from 'shared/sdk/services';
 
 let mockConfig = {};
 
 
-describe('FilePickerDemoComponent', () => {
-  let component: FilePickerDemoComponent ;
-  let fixture: ComponentFixture<FilePickerDemoComponent>;
+describe('FilePickerComponent', () => {
+  let component: FilePickerComponent ;
+  let fixture: ComponentFixture<FilePickerComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       schemas : [ NO_ERRORS_SCHEMA ],
       imports : [ ReactiveFormsModule, MatTableModule, StoreModule.forRoot({rootReducer}) ],
       declarations : [
-        FilePickerDemoComponent, DatafilesComponent, ConfigFormComponent,
+        FilePickerComponent, DatafilesComponent, ConfigFormComponent,
         ObjKeysPipe, TitleCasePipe
       ]
     });
-    TestBed.overrideComponent(FilePickerDemoComponent, {
+    TestBed.overrideComponent(FilePickerComponent, {
       set : {
         providers : [
           {provide : ActivatedRoute, useClass : MockActivatedRoute},
@@ -43,7 +43,7 @@ describe('FilePickerDemoComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(FilePickerDemoComponent);
+    fixture = TestBed.createComponent(FilePickerComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

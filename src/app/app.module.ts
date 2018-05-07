@@ -28,7 +28,7 @@ import { UsersModule } from 'users/users.module';
 import { ProposalsModule } from 'proposals/proposals.module';
 import { FileHelpersModule } from 'ngx-file-helpers';
 
-import { FilePickerDemoComponent } from './datasets/file-picker-demo/file-picker-demo.component';
+import { FilePickerComponent } from './datasets/file-picker/file-picker.component';
 import { FileDropzoneComponent } from './datasets/file-dropzone/file-dropzone.component';
 
 
