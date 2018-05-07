@@ -31,7 +31,6 @@ export class FilePickerDemoComponent implements OnInit, OnDestroy {
 
 
   constructor(
-    public http: Http,
     @Inject(APP_CONFIG) private config: AppConfig,
     private daSrv: lb.DatasetAttachmentApi,
     private store: Store<any>
