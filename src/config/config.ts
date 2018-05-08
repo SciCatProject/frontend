@@ -1,5 +1,5 @@
 export const config = {
-  archiveable: ['100: Dataset created', 'datasetCreated', 'dataserOnDisk', 'datasetRetrieved'],
+  archiveable: ['datasetCreated', 'scheduleArchiveJobFailed'],
   retrieveable: ['datasetOnDiskAndTape', 'datasetOnTape', 'datasetOnArchiveDisk'],
   datasetStatusMessages: {
     datasetCreated: 'Dataset created',

@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MatTableModule } from '@angular/material';
 import { select, Store } from "@ngrx/store";
-import { Observable } from 'rxjs/observable';
+import { Observable } from 'rxjs/Observable';
 
 import { Proposal, Dataset } from 'state-management/models';
 import { getSelectedProposalDatasets } from 'state-management/selectors/proposals.selectors';
@@ -23,7 +23,7 @@ export class ProposalDetailComponent implements OnInit {
 
     private mainProposer: Proposer;
     private principalInvestigator: Proposer;
-    
+
     private displayedColumns: string[] = [
         'pid',
         'sourceFolder',

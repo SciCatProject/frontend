@@ -157,7 +157,58 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
 
   /**
    * Return the classes for the view buttons based on what is selected
-   * @param mode
+   * @param m
+   */
+  getModeButtonClasses(m) {
+    const ret = {};
+    ret[m.toLowerCase()] = true;
+    if (m.toLowerCase() === this.mode) {
+      ret['positive'] = true;
+    }
+    return ret;
+  }
+
+  /**
+   * Retrieves all datasets each time a new page
+   * is selected in the table
+   * @param event
+   */
+  onPage(event) {
+    const index = this.paginator.pageIndex;
+    const size = this.paginator.pageSize;
+    this.store
+      .select(state => state.root.datasets.activeFilters)
+      .take(1)
+      .subscribe(f => {
+        const filters = Object.assign({}, f);
+        filters['skip'] = index * size;
+        filters['initial'] = false;
+        filters['limit'] = size;
+        if (event && event.active && event.direction) {
+          filters['sortField'] = event.active + ':' + event.direction;
+        } else {
+          filters['sortField'] = undefined;
+        }
+        // TODO reduce calls when not needed (i.e. no change)
+        // if (f.first !== event.first || this.datasets.length === 0) {
+        this.store.dispatch(new dsa.UpdateFilterAction(filters));
+        // }
+      });
+  }
+
+  // NOTE: this does not set the page number for the table, there is a
+  // `paginate` method but
+  // this takes no arguments and requires changing protected vars
+  setCurrentPage(n: number) {
+    // this.dsTable.onPageChange({ first: n, rows: this.dsTable.rows });
+  }
+
+  /**
+   * Options set based on selected datasets
+   * This is used to determine which template to display for
+   * archive or retrieval or both
+   * @param set
+   * @returns {string}
    */
   getModeButtonClasses(mode): {[cls: string]: boolean} {
     return {
