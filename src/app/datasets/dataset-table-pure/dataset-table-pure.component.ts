@@ -4,6 +4,7 @@ import { MatCheckboxChange, MatSort } from '@angular/material';
 import { Dataset } from 'state-management/models';
 
 import * as filesize from 'filesize';
+import { DatasetLifecycle } from 'shared/sdk';
 
 export interface PageChangeEvent {
   pageIndex: number;
@@ -43,10 +44,22 @@ export class DatasetTablePureComponent {
     'creationTime',
     'type',
     'proposalId',
+    'archiveStatus',
+    'retrieveStatus'
   ];
 
   private getFormattedSize(size): string {
     return size ? filesize(size) : 'n/a';
+  }
+
+  private getArchiveStatus(dataset: Dataset) {
+    const lc = dataset.datasetlifecycle;
+    return lc ? lc.archiveStatusMessage : 'n/a';
+  }
+
+  private getRetrieveStatus(dataset: Dataset) {
+    const lc = dataset.datasetlifecycle;
+    return lc ? lc.retrieveStatusMessage : 'n/a';
   }
 
   private getRowClass(dataset): {[key: string]: boolean} {

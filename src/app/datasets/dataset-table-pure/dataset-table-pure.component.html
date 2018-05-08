@@ -61,7 +61,18 @@
     <ng-container matColumnDef="proposalId">
       <mat-header-cell *matHeaderCellDef>Proposal</mat-header-cell>
       <mat-cell *matCellDef="let dataset">{{dataset.proposalId}}</mat-cell>  
-    </ng-container>      
+    </ng-container>
+
+    <ng-container matColumnDef="archiveStatus">
+      <mat-header-cell *matHeaderCellDef>Archive Status</mat-header-cell>
+      <mat-cell *matCellDef="let dataset">{{getArchiveStatus(dataset)}}</mat-cell>  
+    </ng-container>
+
+    <ng-container matColumnDef="retrieveStatus">
+      <mat-header-cell *matHeaderCellDef>Retrieve Status</mat-header-cell>
+      <mat-cell *matCellDef="let dataset">{{getRetrieveStatus(dataset)}}</mat-cell>  
+    </ng-container>
+
     <!-- End of Column Definitions -->
 
     <mat-header-row class='datasets-header' *matHeaderRowDef="displayedColumns"></mat-header-row>
