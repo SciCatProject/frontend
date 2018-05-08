@@ -61,7 +61,7 @@ export function datasetsReducer(state = initialDatasetState, action: Action) {
 
         case SORT_BY_COLUMN: {
             const {column, direction} = action as SortByColumnAction;
-            const sortField = column + ' ' + direction;
+            const sortField = column + ':' + direction;
             const activeFilters = {...state.activeFilters, sortField};
             return {...state, activeFilters};
         }

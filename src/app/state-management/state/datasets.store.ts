@@ -28,7 +28,7 @@ export const initialDatasetState: DatasetState = {
         ownerGroup: [],
         skip: 0,
         initial: true,
-        sortField: 'creationTime desc',
+        sortField: 'creationTime:desc',
         keywords: []
     },
     filterValues: {
