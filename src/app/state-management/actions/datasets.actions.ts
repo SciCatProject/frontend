@@ -38,6 +38,16 @@ export const CURRENT_BLOCKS_COMPLETE =      '[Dataset] Current set datablocks up
 export const TOTAL_UPDATE =                 '[Dataset] Total Datasets Update';
 // export const FILTER_UPDATE_COMPLETE = '[Dataset]  Filter Update Complete';
 
+export const SELECT_DATASET =               '[Dataset] Select Dataset';
+export const DESELECT_DATASET =             '[Dataset] Deselect Dataset';
+export const CLEAR_SELECTION =              '[Dataset] Clear Selection';
+
+export const EXPORT_TO_CSV =                '[Dataset] Export to CSV';
+export const SET_VIEW_MODE =                '[Dataset] Set View Mode';
+
+export const GO_TO_PAGE =                   '[Dataset] Go to Page';
+export const SORT_BY_COLUMN =               '[Dataset] Sort by Column';
+
 export class SearchCompleteAction implements Action {
     readonly type = SEARCH_COMPLETE;
     constructor(public payload: {}[]) {}
@@ -159,6 +169,39 @@ export class TotalSetsAction implements Action {
     constructor(public payload: number) {}
 }
 
+export class SelectDatasetAction implements Action {
+    readonly type = SELECT_DATASET;
+    constructor(readonly dataset: Dataset) {}
+}
+
+export class DeselectDatasetAction implements Action {
+    readonly type = DESELECT_DATASET;
+    constructor(readonly dataset: Dataset) {}
+}
+
+export class ClearSelectionAction implements Action {
+    readonly type = CLEAR_SELECTION;
+}
+
+export class ExportToCsvAction implements Action {
+    readonly type = EXPORT_TO_CSV;
+}
+
+export class GoToPageAction implements Action {
+    readonly type = GO_TO_PAGE;
+    constructor(readonly page: number) {}
+}
+
+export class SortByColumnAction implements Action {
+    readonly type = SORT_BY_COLUMN;
+    constructor(readonly column: string, readonly direction: string) {}
+}
+
+export class SetViewModeAction implements Action {
+    readonly type = SET_VIEW_MODE;
+    constructor(readonly mode: string) {}
+}
+
 export type Actions =
     SearchCompleteAction | SearchFailedAction |
     UpdateFilterAction | UpdateFilterCompleteAction | FilterFailedAction |
@@ -166,4 +209,7 @@ export type Actions =
     SearchIDFailedAction | DatablocksAction | DatablocksCompleteAction | UpdateCurrentBlocksAction |
     DatablockDeleteAction | DatablockDeleteCompleteAction | DatablockDeleteFailedAction |
     DatablocksAction | AddGroupsAction | AddGroupsCompleteAction | UpdateSelectedDatablocksAction |
-    AddGroupsFailedAction | UpdateSelectedAction | TotalSetsAction | ResetStatusAction | ResetStatusCompleteAction;
+    AddGroupsFailedAction | UpdateSelectedAction | TotalSetsAction | ResetStatusAction | ResetStatusCompleteAction |
+    SelectDatasetAction | DeselectDatasetAction |
+    ExportToCsvAction | GoToPageAction | SortByColumnAction | SetViewModeAction;
+    

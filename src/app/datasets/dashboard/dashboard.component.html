@@ -14,9 +14,9 @@
 <div class="ui stackable grid">
   <div class="four wide column computer only">
     <datasets-filter></datasets-filter>
-    <selected-dataset-list [datasets]="datasets"></selected-dataset-list>
+    <selected-dataset-list [datasets]="selectedDatasets$ | async"></selected-dataset-list>
   </div>
   <div class="sixteen wide mobile twelve wide computer column">
-    <dataset-table (selectedSet)="selectedSet($event)"></dataset-table>
+    <dataset-table></dataset-table>
   </div>
 </div>

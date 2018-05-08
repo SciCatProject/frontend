@@ -2,6 +2,10 @@
 
 $ds-archive: mat-palette($mat-green, 600);
 
+mat-cell, .mat-header-cell {
+  overflow: visible;
+}
+
 /*Columns are dynamically injected, so this /deep/ ensures it is reflected onto the selector  */
 :host /deep/ .ds-check {
   width: 25px !important;
@@ -62,8 +66,3 @@ $ds-archive: mat-palette($mat-green, 600);
 :host /deep/ .row-empty {
   background-color: mat-color($warn, 100, 0.2);
 }
-
-
-/*td {
-    overflow: hidden;
-}*/
