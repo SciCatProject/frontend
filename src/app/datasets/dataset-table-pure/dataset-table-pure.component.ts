@@ -76,7 +76,7 @@ export class DatasetTablePureComponent {
   }
 
   private allAreSelected(): boolean {
-    return this.selectedSets.length === this.datasets.length;
+    return this.datasets.length > 0 && this.selectedSets.length === this.datasets.length;
   }
 
   private handleClick(dataset): void {
