@@ -26,6 +26,11 @@ import { JobsEffects } from 'state-management/effects/jobs.effects';
 import { rootReducer } from 'state-management/reducers/root.reducer';
 import { UsersModule } from 'users/users.module';
 import { ProposalsModule } from 'proposals/proposals.module';
+import { FileHelpersModule } from 'ngx-file-helpers';
+
+import { FilePickerComponent } from './datasets/file-picker/file-picker.component';
+import { FileDropzoneComponent } from './datasets/file-dropzone/file-dropzone.component';
+
 
 import {
   MatAutocompleteModule,
@@ -97,7 +102,7 @@ export function localStorageSyncWrapper(reducer: any) {
     HttpModule,
     BrowserAnimationsModule, SharedCatanieModule,
     NguiDatetimePickerModule,
-    
+
     DatasetsModule,
     UsersModule,
     ProposalsModule,

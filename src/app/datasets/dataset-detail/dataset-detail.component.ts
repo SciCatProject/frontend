@@ -36,7 +36,7 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     const currentUser$ = this.store.select(state => state.root.user.currentUser);
-    const adminUserNames = ['ingestor', 'archiveManager'];
+   const adminUserNames = ['ingestor', 'archiveManager'];
     const userIsAdmin = (user) => {
       return (user['accountType'] === 'functional') || (adminUserNames.indexOf(user.username) !== -1);
     };

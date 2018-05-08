@@ -1,6 +1,12 @@
 import {CommonModule} from '@angular/common';
 import {NgModule} from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import { FileHelpersModule } from 'ngx-file-helpers';
+
+
+import { FilePickerComponent } from './file-picker/file-picker.component';
+import { FileDropzoneComponent } from './file-dropzone/file-dropzone.component';
+
 import {
   DashboardComponent,
   DatablocksComponent,
@@ -59,11 +65,11 @@ import { datasetsReducer } from 'state-management/reducers/datasets.reducer';
     MatTabsModule, MatInputModule, MatButtonModule, MatSortModule, CommonModule, FormsModule, ReactiveFormsModule,
     SharedCatanieModule, MatSelectModule, MatOptionModule, MatNativeDateModule, MatIconModule,
     MatListModule, MatDatepickerModule, MatTooltipModule,
-
     StoreModule.forFeature('datasets', datasetsReducer),
-
+    FileHelpersModule
   ],
   declarations : [
+    FilePickerComponent, FileDropzoneComponent,
     DashboardComponent, DatasetTableComponent, DatablocksComponent,
     DatafilesComponent, DatasetsFilterComponent, DatasetDetailComponent, SelectedListComponent,
     DatasetTablePureComponent,

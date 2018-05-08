@@ -75,6 +75,9 @@ export class ConfigFormComponent implements OnInit {
             const formattedDate = datePipe.transform(date, 'dd/MM/yyyy HH:mm');
             this.formData[prop] = formattedDate;
           }
+          if (config && config['name'] === 'dataFileList.path') {
+            this.formData[prop] = '<a href='+this.source[prop]+'>'+this.source[prop]+'</a>';
+          }
           if (config && config['type'] === 'number' && config['name'] === 'size') {
             this.formData[prop] = (((this.source[prop] / 1024) / 1024) / 1024).toFixed(10) + ' GB';
           }

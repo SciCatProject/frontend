@@ -16,6 +16,9 @@
     <div *ngIf="origDatablocks$.length === 0">
       <h3>No datafiles linked to this dataset</h3>
     </div>
+
+    <app-file-picker></app-file-picker>
+
   </mat-tab>
   <mat-tab *ngIf="(dAttachment$ | async) as attachments" label="DatasetAttachments">
       <h3>DatasetAttachments</h3>

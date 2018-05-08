@@ -5,6 +5,7 @@
 
 export const environment = {
   production: false,
-  lbBaseURL: 'http://catamelservice.esss.dk:30003',
+    lbBaseURL: 'https://scicatapi.esss.dk',
+	  fileserverBaseURL: 'https://scicatfileserver.esss.dk',
   externalAuthEndpoint: '/auth/msad'
 };
