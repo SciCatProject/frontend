@@ -92,13 +92,13 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     this.currentPage$ = this.store.pipe(select(getPage));
     this.limit$ = this.store.select(state => state.root.user.settings.datasetCount);
     this.mode$ = this.store.pipe(select(getViewMode));
-    
+
     // Store concrete values of observables for compatibility
     this.modeSubscription = this.mode$.subscribe((mode: ViewMode) => {
       this.mode = mode;
     });
 
-    this.selectedSetsSubscription = this.selectedSets$.subscribe(selectedSets => 
+    this.selectedSetsSubscription = this.selectedSets$.subscribe(selectedSets =>
       this.selectedSets = selectedSets
     );
 
@@ -108,7 +108,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
       this.updateRowView(mode);
     })*/
 
-    this.submitJobSubscription = 
+    this.submitJobSubscription =
       this.store.select(selectors.jobs.submitJob).subscribe(
         ret => {
           if (ret && Array.isArray(ret)) {
@@ -123,8 +123,8 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
           }));
         }
       );
-    
-    this.jobErrorSubscription = 
+
+    this.jobErrorSubscription =
       this.store.select(selectors.jobs.getError).subscribe(err => {
         if (err) {
           this.store.dispatch(new ua.ShowMessageAction({
@@ -157,58 +157,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
 
   /**
    * Return the classes for the view buttons based on what is selected
-   * @param m
-   */
-  getModeButtonClasses(m) {
-    const ret = {};
-    ret[m.toLowerCase()] = true;
-    if (m.toLowerCase() === this.mode) {
-      ret['positive'] = true;
-    }
-    return ret;
-  }
-
-  /**
-   * Retrieves all datasets each time a new page
-   * is selected in the table
-   * @param event
-   */
-  onPage(event) {
-    const index = this.paginator.pageIndex;
-    const size = this.paginator.pageSize;
-    this.store
-      .select(state => state.root.datasets.activeFilters)
-      .take(1)
-      .subscribe(f => {
-        const filters = Object.assign({}, f);
-        filters['skip'] = index * size;
-        filters['initial'] = false;
-        filters['limit'] = size;
-        if (event && event.active && event.direction) {
-          filters['sortField'] = event.active + ':' + event.direction;
-        } else {
-          filters['sortField'] = undefined;
-        }
-        // TODO reduce calls when not needed (i.e. no change)
-        // if (f.first !== event.first || this.datasets.length === 0) {
-        this.store.dispatch(new dsa.UpdateFilterAction(filters));
-        // }
-      });
-  }
-
-  // NOTE: this does not set the page number for the table, there is a
-  // `paginate` method but
-  // this takes no arguments and requires changing protected vars
-  setCurrentPage(n: number) {
-    // this.dsTable.onPageChange({ first: n, rows: this.dsTable.rows });
-  }
-
-  /**
-   * Options set based on selected datasets
-   * This is used to determine which template to display for
-   * archive or retrieval or both
-   * @param set
-   * @returns {string}
+   * @param mode
    */
   getModeButtonClasses(mode): {[cls: string]: boolean} {
     return {
@@ -293,7 +242,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
             backupFiles.push(fileObj);
             delete set['$$index'];
           });
-          
+
           this.store.dispatch(new dsa.ClearSelectionAction());
 
           if (backupFiles.length === 0) {
@@ -399,7 +348,7 @@ setOptions(set) {
   As far as I can see, this approach is limited and not useful with larger numbers of datasets. This
   should be done on query level instead, releiving the GUI significantly of having to deal with that
   logic.
-  
+
   updateRowView(mode: string): void {
     this.store.dispatch(new dsa.ClearSelectionAction());
 

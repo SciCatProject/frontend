@@ -18,6 +18,7 @@ import { filter, tap, mergeMap, map } from 'rxjs/operators';
 import { getRectangularRepresentation } from '../selectors/datasets.selectors';
 import { takeLast } from 'rxjs/operator/takeLast';
 import { Angular5Csv } from 'angular5-csv/Angular5-csv';
+import { config } from '../../../config/config';
 
 @Injectable()
 export class DatasetEffects {
