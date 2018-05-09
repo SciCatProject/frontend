@@ -3,14 +3,15 @@
 $ds-archive: mat-palette($mat-green, 600);
 
 mat-cell, .mat-header-cell {
-  overflow: visible;
+  word-wrap: break-word;
+  white-space: normal;
 }
 
 /*Columns are dynamically injected, so this /deep/ ensures it is reflected onto the selector  */
-/* Is this needed anymore? Seems to work fine without */
-
+/* ^-- Is this needed anymore? Seems to work fine without */ 
 
 .mat-column-select {
+  overflow: visible; /* Needed to prevent offsetting of the checkbox when clicking */
   flex-grow: 0;
   padding-right: 2em;
 }
@@ -33,17 +34,10 @@ mat-cell, .mat-header-cell {
   text-align: left !important;
 }
 
-
 /*:host /deep/*/ .buttons {
   display: inline-block;
   /* padding: 50px; */
 }
-
-/*:host /deep/*/ .ui-selection-column {
-  width: 30px !important;
-  /* padding: 50px; */
-}
-
 
 /*:host /deep/*/ .disabled-row {
     pointer-events: none;
