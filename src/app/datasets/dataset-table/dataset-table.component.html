@@ -1,14 +1,14 @@
 <div>
-  <div class="mode-and-count-container">
+  <div class="mode-container">
     <mat-button-toggle-group [value]="mode">
       <mat-button-toggle *ngFor="let aMode of modes" (click)="onModeChange($event, aMode)" [value]="aMode">
         {{aMode | titlecase}}
       </mat-button-toggle>
     </mat-button-toggle-group>
+  </div>
 
-    <span class="dataset-count">
-        {{ datasetCount$ | async }} datasets.
-    </span>
+  <div class="dataset-count">
+      {{ datasetCount$ | async }} datasets.
   </div>
 
   <div *ngIf="datasets && !(loading$ | async)" class="action-container">
