@@ -50,17 +50,17 @@ export class DatasetTablePureComponent {
   ];
 
   private getFormattedSize(size): string {
-    return size ? filesize(size) : 'n/a';
+    return size ? filesize(size) : '';
   }
 
   private getArchiveStatus(dataset: Dataset) {
     const lc = dataset.datasetlifecycle;
-    return lc ? lc.archiveStatusMessage : 'n/a';
+    return lc ? lc.archiveStatusMessage : '';
   }
 
   private getRetrieveStatus(dataset: Dataset) {
     const lc = dataset.datasetlifecycle;
-    return lc ? lc.retrieveStatusMessage : 'n/a';
+    return lc ? lc.retrieveStatusMessage : '';
   }
 
   private getRowClass(dataset): {[key: string]: boolean} {
