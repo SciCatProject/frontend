@@ -1,23 +1,23 @@
 <div>
-  <div style="float: left" class="mode-container">
+  <div class="mode-and-count-container">
     <mat-button-toggle-group [value]="mode">
       <mat-button-toggle *ngFor="let aMode of modes" (click)="onModeChange($event, aMode)" [value]="aMode">
         {{aMode | titlecase}}
       </mat-button-toggle>
     </mat-button-toggle-group>
 
-    <span style="padding-left: 1em">
+    <span class="dataset-count">
         {{ datasetCount$ | async }} datasets.
     </span>
   </div>
 
-  <div *ngIf="datasets && !(loading$ | async)" style="float: right" class="action-container">
+  <div *ngIf="datasets && !(loading$ | async)" class="action-container">
     <button mat-button [disabled]="isEmptySelection$ | async" *ngIf="mode === 'archive'" mat-button class="ui button archive-action-btn" (click)="archiveClickHandle($event)" color="primary">
       <i class="archive icon"></i>
       Archive
     </button>
       
-    <button mat-button [disabled]="isEmptySelection$ | async" *ngIf="mode === 'retrieve'" class="ui button retrieve-action-btn" (click)="retrieveClickHandle($event)" color="primary">
+    <button mat-button [disabled]="isEmptySelection$ | async" *ngIf="mode === 'retrieve'"class="ui button retrieve-action-btn" (click)="retrieveClickHandle($event)" color="primary">
       <i class="upload icon"></i>
       Retrieve
     </button>
