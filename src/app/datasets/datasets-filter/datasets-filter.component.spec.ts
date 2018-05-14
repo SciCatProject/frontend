@@ -48,11 +48,6 @@ describe('DatasetsFilterComponent', () => {
 
   it('should be created', () => { expect(component).toBeTruthy(); });
 
-  it('should contain a total results header', () => {
-    const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('.results-count').textContent).toContain('Results');
-  });
-
   it('should contain a date range field', () => {
     const compiled = fixture.debugElement.nativeElement;
     const beamline = compiled.querySelector('.date-input');
