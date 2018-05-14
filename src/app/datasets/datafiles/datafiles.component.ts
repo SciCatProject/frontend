@@ -14,8 +14,7 @@ import {environment} from '../../../environments/environment';
 export class DatafilesComponent implements OnInit, AfterViewInit {
 
   @Input() dataBlocks: Array<OrigDatablock>;
- // url_prefix = "http://localhost:8889";
-  url_prefix =  environment.fileserverBaseURL;
+  url_prefix = environment['fileserverBaseURL'];
   count = 0;
   files: Array<JSON> = [];
   selectedDF;
