@@ -63,6 +63,11 @@
       <mat-cell *matCellDef="let dataset">{{dataset.proposalId}}</mat-cell>  
     </ng-container>
 
+    <ng-container matColumnDef="ownerGroup">
+      <mat-header-cell *matHeaderCellDef>Group</mat-header-cell>
+      <mat-cell *matCellDef="let dataset">{{dataset.ownerGroup}}</mat-cell>  
+    </ng-container>  
+
     <ng-container matColumnDef="archiveStatus">
       <mat-header-cell *matHeaderCellDef>Archive Status</mat-header-cell>
       <mat-cell *matCellDef="let dataset">{{getArchiveStatus(dataset)}}</mat-cell>  

@@ -8,12 +8,12 @@
   </div>
 
   <div *ngIf="datasets && !(loading$ | async)" style="float: right" class="action-container">
-    <button mat-button *ngIf="mode === 'archive'" mat-button class="ui button archive-action-btn" (click)="archiveClickHandle($event)" color="primary">
+    <button mat-button [disabled]="isEmptySelection$ | async" *ngIf="mode === 'archive'" mat-button class="ui button archive-action-btn" (click)="archiveClickHandle($event)" color="primary">
       <i class="archive icon"></i>
       Archive
     </button>
       
-    <button mat-button *ngIf="mode === 'retrieve'" class="ui button retrieve-action-btn" (click)="retrieveClickHandle($event)" color="primary">
+    <button mat-button [disabled]="isEmptySelection$ | async" *ngIf="mode === 'retrieve'" class="ui button retrieve-action-btn" (click)="retrieveClickHandle($event)" color="primary">
       <i class="upload icon"></i>
       Retrieve
     </button>

@@ -17,6 +17,11 @@ export const getSelectedDatasets = createSelector(
     state => state.selectedSets2
 );
 
+export const isEmptySelection = createSelector(
+    getSelectedDatasets,
+    sets => sets.length === 0
+);
+
 export const getPage = createSelector(
     getDatasetState,
     state => state.currentPage2

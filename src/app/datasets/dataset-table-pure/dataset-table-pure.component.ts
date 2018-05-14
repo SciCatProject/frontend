@@ -44,6 +44,7 @@ export class DatasetTablePureComponent {
     'creationTime',
     'type',
     'proposalId',
+    'ownerGroup',
     'archiveStatus',
     'retrieveStatus'
   ];
