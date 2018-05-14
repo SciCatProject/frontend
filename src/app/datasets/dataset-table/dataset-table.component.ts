@@ -61,7 +61,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   private isEmptySelection$: Observable<boolean>;
 
   // compatibility analogs of observables
-  private mode: ViewMode = 'view';
+  private currentMode: ViewMode = 'view';
   private selectedSets: Dataset[] = [];
 
   private modes: string[] = ['view', 'archive', 'retrieve'];
@@ -97,7 +97,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
 
     // Store concrete values of observables for compatibility
     this.modeSubscription = this.mode$.subscribe((mode: ViewMode) => {
-      this.mode = mode;
+      this.currentMode = mode;
     });
 
     this.selectedSetsSubscription = this.selectedSets$.subscribe(selectedSets =>
@@ -294,10 +294,10 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   }
 
   rowClassifier(row: Dataset): string {
-    if (row.datasetlifecycle && this.mode === 'archive'
+    if (row.datasetlifecycle && this.currentMode === 'archive'
       && (config.archiveable.indexOf(row.datasetlifecycle.archiveStatusMessage) !== -1) && row.size !== 0) {
       return 'row-archiveable';
-    } else if (row.datasetlifecycle && this.mode === 'retrieve'
+    } else if (row.datasetlifecycle && this.currentMode === 'retrieve'
       && config.retrieveable.indexOf(row.datasetlifecycle.archiveStatusMessage) !== -1 && row.size !== 0) {
       return 'row-retrievable';
     } else if (row.size === 0) {
@@ -307,10 +307,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     }
   }
 }
-
-
-
-
 
 
 /* Obsolete and/or "pensioned" methods
@@ -334,34 +330,3 @@ setOptions(set) {
   return options;
 }
 */
-
-  /*
-  As far as I can see, this approach is limited and not useful with larger numbers of datasets. This
-  should be done on query level instead, releiving the GUI significantly of having to deal with that
-  logic.
-
-  updateRowView(mode: string): void {
-    this.store.dispatch(new dsa.ClearSelectionAction());
-
-    const activeSets = [];
-
-    if (this.datasets && this.datasets.length > 0 && (this.mode === 'archive' || this.mode === 'retrieve')) {
-      for (let d = 0; d < this.datasets.length; d++) {
-        const set = this.datasets[d];
-        const msg = (set.datasetlifecycle && set.datasetlifecycle.archiveStatusMessage) || '';
-        if (this.mode === 'archive') {
-          if (set.datasetlifecycle && (config.archiveable.indexOf(set.datasetlifecycle.archiveStatusMessage) !== -1) && set.size > 0) {
-            activeSets.push(set);
-          }
-        } else if (this.mode === 'retrieve') {
-          if (set.datasetlifecycle && config.retrieveable.indexOf(set.datasetlifecycle.archiveStatusMessage) !== -1 && set.size > 0) {
-            activeSets.push(set);
-          }
-        }
-      }
-      this.dataSource = new MatTableDataSource(activeSets);
-    } else {
-      this.dataSource = new MatTableDataSource(this.datasets);
-    }
-  }
-  */

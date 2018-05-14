@@ -1,8 +1,8 @@
 <div>
   <div class="mode-container">
-    <mat-button-toggle-group [value]="mode">
-      <mat-button-toggle *ngFor="let aMode of modes" (click)="onModeChange($event, aMode)" [value]="aMode">
-        {{aMode | titlecase}}
+    <mat-button-toggle-group [value]="currentMode">
+      <mat-button-toggle *ngFor="let mode of modes" (click)="onModeChange($event, mode)" [value]="mode" [ngClass]="mode">
+        {{mode | titlecase}}
       </mat-button-toggle>
     </mat-button-toggle-group>
   </div>
