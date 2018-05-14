@@ -1,37 +1,30 @@
 <div>
-  <div class="mode-container">
-    <div class="ui buttons">
-      <button class='ui button' [ngClass]="getModeButtonClasses(mode)" *ngFor="let mode of modes" (click)="onModeChange($event, mode)">
-        {{mode | titlecase}}
-      </button>
-    </div>
-    <div [ngSwitch]="mode">
-      <!--*ngIf="selectedSets.length > 0">-->
-      <div class="ui buttons dataset-action" *ngSwitchDefault>
-
-      </div>
-      <div class="ui buttons dataset-action" *ngSwitchCase="'archive'">
-        <button class="ui button archive-action-btn" (click)="archiveClickHandle($event)">
-          <i class="upload icon"></i>Archive</button>
-      </div>
-      <div class="ui buttons dataset-action" *ngSwitchCase="'retrieve'">
-        <button class="ui button retrieve-action-btn" (click)="retrieveClickHandle($event)">
-          <i class="upload icon"></i>Retrieve</button>
-      </div>
-    </div>
+  <div style="float: left" class="mode-container">
+    <mat-button-toggle-group [value]="mode">
+      <mat-button-toggle *ngFor="let aMode of modes" (click)="onModeChange($event, aMode)" [value]="aMode">
+        {{aMode | titlecase}}
+      </mat-button-toggle>
+    </mat-button-toggle-group>
   </div>
 
-  <div class="example-container mat-elevation-z8">
-    <div class="ui segment" *ngIf="loading$ | async">
-      <p></p>
-      <div class="ui active inverted dimmer">
-        <div class="ui loader"></div>
-      </div>
-    </div>
-    <button *ngIf="datasets && !(loading$ | async)" class='export-csv' mat-button (click)="onExportClick()" color="primary">
+  <div *ngIf="datasets && !(loading$ | async)" style="float: right" class="action-container">
+    <button mat-button *ngIf="mode === 'archive'" mat-button class="ui button archive-action-btn" (click)="archiveClickHandle($event)" color="primary">
+      <i class="archive icon"></i>
+      Archive
+    </button>
+      
+    <button mat-button *ngIf="mode === 'retrieve'" class="ui button retrieve-action-btn" (click)="retrieveClickHandle($event)" color="primary">
+      <i class="upload icon"></i>
+      Retrieve
+    </button>
+
+    <button mat-button class='ui button export-csv' mat-button (click)="onExportClick()" color="primary">
+      <i class="table icon"></i>
       Export Page to CSV
     </button>
   </div>
+
+  <div style="clear: both"></div>
 
   <dataset-table-pure
     [datasets]="datasets$ | async"

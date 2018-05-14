@@ -63,7 +63,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   private mode: ViewMode = 'view';
   private selectedSets: Dataset[] = [];
 
-  private modes: string[] = ['archive', 'view', 'retrieve'];
+  private modes: string[] = ['view', 'archive', 'retrieve'];
 
   private loading$: Observable<boolean>;
   private limit$: Observable<number>;
@@ -153,17 +153,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
    */
   onModeChange(event, mode: string): void {
     this.store.dispatch(new dsa.SetViewModeAction(mode));
-  }
-
-  /**
-   * Return the classes for the view buttons based on what is selected
-   * @param mode
-   */
-  getModeButtonClasses(mode): {[cls: string]: boolean} {
-    return {
-      [mode]: true,
-      positive: this.mode === mode
-    };
   }
 
   /**
