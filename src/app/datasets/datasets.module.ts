@@ -20,7 +20,6 @@ import {
 import {
   MatAutocompleteModule,
   MatButtonModule,
-  MatButtonToggleModule,
   MatCardModule,
   MatCheckboxModule,
   MatChipsModule,
@@ -52,6 +51,9 @@ import {
   MatFormFieldModule,
   MatOptionModule,
 } from '@angular/material';
+
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+
 import {SharedCatanieModule} from 'shared/shared.module';
 import { SelectedListComponent } from 'datasets/selected-list/selected-list.component';
 import { MatDatepickerModule } from 'saturn-datepicker';
@@ -64,7 +66,7 @@ import { datasetsReducer } from 'state-management/reducers/datasets.reducer';
     MatCardModule, MatDialogModule, MatPaginatorModule, MatCheckboxModule, MatTableModule, MatFormFieldModule, MatAutocompleteModule,
     MatTabsModule, MatInputModule, MatButtonModule, MatSortModule, CommonModule, FormsModule, ReactiveFormsModule,
     SharedCatanieModule, MatSelectModule, MatOptionModule, MatNativeDateModule, MatIconModule,
-    MatListModule, MatDatepickerModule, MatTooltipModule,
+    MatListModule, MatDatepickerModule, MatTooltipModule, MatButtonToggleModule, MatProgressSpinnerModule,
     StoreModule.forFeature('datasets', datasetsReducer),
     FileHelpersModule
   ],

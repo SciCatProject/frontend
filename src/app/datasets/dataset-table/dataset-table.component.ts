@@ -26,7 +26,7 @@ import * as dsa from 'state-management/actions/datasets.actions';
 import * as selectors from 'state-management/selectors';
 import * as ua from 'state-management/actions/user.actions';
 import * as ja from 'state-management/actions/jobs.actions';
-import { getDatasets2, getSelectedDatasets, getPage, getViewMode } from 'state-management/selectors/datasets.selectors';
+import { getDatasets2, getSelectedDatasets, getPage, getViewMode, isEmptySelection } from 'state-management/selectors/datasets.selectors';
 import { Message, MessageType } from 'state-management/models';
 
 import { Angular5Csv } from 'angular5-csv/Angular5-csv';
@@ -58,12 +58,13 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   private currentPage$: Observable<number>;
   private mode$: Observable<string>;
   private datasetCount$: Observable<number>;
+  private isEmptySelection$: Observable<boolean>;
 
   // compatibility analogs of observables
-  private mode: ViewMode = 'view';
+  private currentMode: ViewMode = 'view';
   private selectedSets: Dataset[] = [];
 
-  private modes: string[] = ['archive', 'view', 'retrieve'];
+  private modes: string[] = ['view', 'archive', 'retrieve'];
 
   private loading$: Observable<boolean>;
   private limit$: Observable<number>;
@@ -92,10 +93,11 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     this.currentPage$ = this.store.pipe(select(getPage));
     this.limit$ = this.store.select(state => state.root.user.settings.datasetCount);
     this.mode$ = this.store.pipe(select(getViewMode));
+    this.isEmptySelection$ = this.store.pipe(select(isEmptySelection));
 
     // Store concrete values of observables for compatibility
     this.modeSubscription = this.mode$.subscribe((mode: ViewMode) => {
-      this.mode = mode;
+      this.currentMode = mode;
     });
 
     this.selectedSetsSubscription = this.selectedSets$.subscribe(selectedSets =>
@@ -153,17 +155,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
    */
   onModeChange(event, mode: string): void {
     this.store.dispatch(new dsa.SetViewModeAction(mode));
-  }
-
-  /**
-   * Return the classes for the view buttons based on what is selected
-   * @param mode
-   */
-  getModeButtonClasses(mode): {[cls: string]: boolean} {
-    return {
-      [mode]: true,
-      positive: this.mode === mode
-    };
   }
 
   /**
@@ -303,10 +294,10 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   }
 
   rowClassifier(row: Dataset): string {
-    if (row.datasetlifecycle && this.mode === 'archive'
+    if (row.datasetlifecycle && this.currentMode === 'archive'
       && (config.archiveable.indexOf(row.datasetlifecycle.archiveStatusMessage) !== -1) && row.size !== 0) {
       return 'row-archiveable';
-    } else if (row.datasetlifecycle && this.mode === 'retrieve'
+    } else if (row.datasetlifecycle && this.currentMode === 'retrieve'
       && config.retrieveable.indexOf(row.datasetlifecycle.archiveStatusMessage) !== -1 && row.size !== 0) {
       return 'row-retrievable';
     } else if (row.size === 0) {
@@ -316,10 +307,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     }
   }
 }
-
-
-
-
 
 
 /* Obsolete and/or "pensioned" methods
@@ -343,34 +330,3 @@ setOptions(set) {
   return options;
 }
 */
-
-  /*
-  As far as I can see, this approach is limited and not useful with larger numbers of datasets. This
-  should be done on query level instead, releiving the GUI significantly of having to deal with that
-  logic.
-
-  updateRowView(mode: string): void {
-    this.store.dispatch(new dsa.ClearSelectionAction());
-
-    const activeSets = [];
-
-    if (this.datasets && this.datasets.length > 0 && (this.mode === 'archive' || this.mode === 'retrieve')) {
-      for (let d = 0; d < this.datasets.length; d++) {
-        const set = this.datasets[d];
-        const msg = (set.datasetlifecycle && set.datasetlifecycle.archiveStatusMessage) || '';
-        if (this.mode === 'archive') {
-          if (set.datasetlifecycle && (config.archiveable.indexOf(set.datasetlifecycle.archiveStatusMessage) !== -1) && set.size > 0) {
-            activeSets.push(set);
-          }
-        } else if (this.mode === 'retrieve') {
-          if (set.datasetlifecycle && config.retrieveable.indexOf(set.datasetlifecycle.archiveStatusMessage) !== -1 && set.size > 0) {
-            activeSets.push(set);
-          }
-        }
-      }
-      this.dataSource = new MatTableDataSource(activeSets);
-    } else {
-      this.dataSource = new MatTableDataSource(this.datasets);
-    }
-  }
-  */

@@ -49,10 +49,8 @@ describe('catanie Dashboard', function() {
 
   it('should display a toggleable archive/retrieve view and change mode', () => {
     expect(element(by.className('mode-container')).isDisplayed()).toBeTruthy();
-    expect(element(by.css('.button.view')).getAttribute('class')).toMatch('positive');
-    element(by.css('.button.archive')).click();
-    expect(browser.getCurrentUrl()).toContain('archive');
-    expect(element(by.css('.button.archive')).getAttribute('class')).toMatch('positive');
+    element(by.css('.mat-button-toggle.archive')).click();
+    expect(browser.getCurrentUrl()).toContain('mode:archive');
   });
 
   it('should download a csv of datasets', () => {
