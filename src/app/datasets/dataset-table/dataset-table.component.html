@@ -5,6 +5,10 @@
         {{aMode | titlecase}}
       </mat-button-toggle>
     </mat-button-toggle-group>
+
+    <span style="padding-left: 1em">
+        {{ datasetCount$ | async }} datasets.
+    </span>
   </div>
 
   <div *ngIf="datasets && !(loading$ | async)" style="float: right" class="action-container">
