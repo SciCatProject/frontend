@@ -3,9 +3,10 @@ import {NgModule} from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { FileHelpersModule } from 'ngx-file-helpers';
 
-
 import { FilePickerComponent } from './file-picker/file-picker.component';
 import { FileDropzoneComponent } from './file-dropzone/file-dropzone.component';
+
+import { AppConfigModule } from 'app-config.module';
 
 import {
   DashboardComponent,
@@ -54,7 +55,8 @@ import {
 
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 
-import {SharedCatanieModule} from 'shared/shared.module';
+import { SharedCatanieModule } from 'shared/shared.module';
+
 import { SelectedListComponent } from 'datasets/selected-list/selected-list.component';
 import { MatDatepickerModule } from 'saturn-datepicker';
 import { DatasetTablePureComponent } from './dataset-table-pure/dataset-table-pure.component';
@@ -68,7 +70,7 @@ import { datasetsReducer } from 'state-management/reducers/datasets.reducer';
     SharedCatanieModule, MatSelectModule, MatOptionModule, MatNativeDateModule, MatIconModule,
     MatListModule, MatDatepickerModule, MatTooltipModule, MatButtonToggleModule, MatProgressSpinnerModule,
     StoreModule.forFeature('datasets', datasetsReducer),
-    FileHelpersModule
+    FileHelpersModule, AppConfigModule
   ],
   declarations : [
     FilePickerComponent, FileDropzoneComponent,
