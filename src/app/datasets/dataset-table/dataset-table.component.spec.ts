@@ -17,6 +17,7 @@ import {
 } from 'shared/MockStubs';
 import {UserApi} from 'shared/sdk/services';
 import { rootReducer } from 'state-management/reducers/root.reducer';
+import { AppConfigModule } from 'app-config.module';
 
 
 describe('DatasetTableComponent', () => {
@@ -26,7 +27,7 @@ describe('DatasetTableComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
-      imports: [MatTableModule, MatDialogModule, FormsModule, ReactiveFormsModule, StoreModule.forRoot(rootReducer)],
+      imports: [MatTableModule, MatDialogModule, FormsModule, ReactiveFormsModule, StoreModule.forRoot(rootReducer), AppConfigModule],
       declarations: [DatasetTableComponent]
     });
     TestBed.overrideComponent(DatasetTableComponent, {

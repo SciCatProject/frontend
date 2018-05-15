@@ -23,12 +23,13 @@ export interface SortChangeEvent {
   styleUrls: ['./dataset-table-pure.component.scss']
 })
 export class DatasetTablePureComponent {
-  @Input() private datasets: Dataset[] = [];
-  @Input() private selectedSets: Dataset[] = [];
-  @Input() private totalNumber: number = 0;
-  @Input() private currentPage: number = 0;
-  @Input() private showSelect: boolean = false;
-  @Input() private rowClassifier?: (dataset: Dataset) => string;
+  @Input() public datasets: Dataset[] = [];
+  @Input() public selectedSets: Dataset[] = [];
+  @Input() public totalNumber: number = 0;
+  @Input() public currentPage: number = 0;
+  @Input() public showSelect: boolean = false;
+  @Input() public rowClassifier?: (dataset: Dataset) => string;
+  @Input() public disabledColumns: string[] = [];
 
   @Output() private onClick: EventEmitter<Dataset> = new EventEmitter();
   @Output() private onSelect: EventEmitter<Dataset> = new EventEmitter();
@@ -48,6 +49,10 @@ export class DatasetTablePureComponent {
     'archiveStatus',
     'retrieveStatus'
   ];
+
+  private getDisplayedColumns(): string[] {
+    return this.displayedColumns.filter(column => this.disabledColumns.indexOf(column) === -1);
+  }
 
   private getFormattedSize(size): string {
     return size ? filesize(size) : '';

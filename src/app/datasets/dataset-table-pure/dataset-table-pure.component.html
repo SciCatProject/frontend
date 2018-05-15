@@ -80,10 +80,10 @@
 
     <!-- End of Column Definitions -->
 
-    <mat-header-row class='datasets-header' *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-header-row class='datasets-header' *matHeaderRowDef="getDisplayedColumns()"></mat-header-row>
     <mat-row
       class='row-generic'
-      *matRowDef="let dataset; columns: displayedColumns;"
+      *matRowDef="let dataset; columns: getDisplayedColumns()"
       (click)="handleClick(dataset)"
       [ngClass]="getRowClass(dataset)">
     </mat-row>

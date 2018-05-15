@@ -7,6 +7,7 @@ import {
   Output,
   ViewChild,
   OnDestroy,
+  Inject,
 } from '@angular/core';
 
 import { Router, ActivatedRoute, Data } from '@angular/router';
@@ -42,6 +43,7 @@ import { PageChangeEvent, SortChangeEvent } from '../dataset-table-pure/dataset-
 import * as rison from 'rison';
 import { Subscription } from 'rxjs';
 import { ViewMode } from 'state-management/state/datasets.store';
+import { APP_CONFIG, AppConfig } from 'app-config.module';
 
 @Component({
   selector: 'dataset-table',
@@ -76,15 +78,19 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   private submitJobSubscription: Subscription;
   private jobErrorSubscription: Subscription;
 
+  private disabledColumns: string[] = [];
+
   constructor(
     private router: Router,
     private configSrv: ConfigService,
     private route: ActivatedRoute,
     private store: Store<any>,
     public dialog: MatDialog,
+    @Inject(APP_CONFIG) private appConfig: AppConfig
   ) {
     this.datasetCount$ = this.store.select(selectors.datasets.getTotalSets);
     this.loading$ = this.store.select(selectors.datasets.getLoading);
+    this.disabledColumns = appConfig.disabledDatasetColumns;
   }
 
   ngOnInit() {
