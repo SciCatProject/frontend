@@ -7,7 +7,8 @@ import { DatasetState, initialDatasetState } from 'state-management/state/datase
 describe('DatasetsReducer', () => {
   describe('undefined action', () => {
     it('should return the default state', () => {
-      const action = new fromActions.SearchCompleteAction();
+	  const payload = [new Dataset()];
+      const action = new fromActions.SearchCompleteAction(payload);
       const state = fromDatasets.datasetsReducer(initialDatasetState, action);
 
 	  expect(state.loading).toEqual(true);
