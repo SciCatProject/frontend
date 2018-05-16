@@ -5,13 +5,13 @@ import { Dataset } from 'shared/sdk/models';
 import { DatasetState, initialDatasetState } from 'state-management/state/datasets.store';
 
 describe('DatasetsReducer', () => {
-  describe('undefined action', () => {
-    it('should return the default state', () => {
+  describe('search complete action', () => {
+    it('should return the state loading', () => {
 	  const payload = [new Dataset()];
       const action = new fromActions.SearchCompleteAction(payload);
       const state = fromDatasets.datasetsReducer(initialDatasetState, action);
 
-	  expect(state.loading).toEqual(true);
+	  expect(state.loading).toEqual(false);
 
     });
   });
