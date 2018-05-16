@@ -21,7 +21,7 @@ describe('DatasetsReducer', () => {
   // for readability in the terminal
 
 
-  describe('search complete action', () => {
+  describe('filter value action', () => {
     it('should return the state loading', () => {
 	  const payload = [new Dataset()];
       const action = new fromActions.FilterValueAction(payload);
