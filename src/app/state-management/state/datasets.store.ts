@@ -4,7 +4,10 @@ export type ViewMode = 'view' | 'archive' | 'retrieve';
 
 export interface DatasetState {
     datasets: Dataset[];
-    loading: boolean;
+    
+    datasetsLoading: boolean;
+    filtersLoading: boolean;
+    
     activeFilters: DatasetFilters; 
     filterValues: object; // Change to DatasetFilters, modify type with optional fields if needed
     currentSet: Dataset;
@@ -14,12 +17,14 @@ export interface DatasetState {
     mode: ViewMode;
     selectedSets2: Dataset[];
     currentPage2: number;
-    itemsPerPage2: number;
 }
 
 export const initialDatasetState: DatasetState = {
     datasets: [],
-    loading: false,
+    
+    datasetsLoading: false,
+    filtersLoading: false,
+    
     activeFilters: {
         text: null,
         creationTime: null,
@@ -27,6 +32,7 @@ export const initialDatasetState: DatasetState = {
         creationLocation: [],
         ownerGroup: [],
         skip: 0,
+        limit: 30,
         initial: true,
         sortField: 'creationTime:desc',
         keywords: []
@@ -46,7 +52,6 @@ export const initialDatasetState: DatasetState = {
     mode: 'view',
     selectedSets2: [],
     currentPage2: 0,
-    itemsPerPage2: 30,
 };
 
 /* Salvaged from obsolete Dashboard UI state:
