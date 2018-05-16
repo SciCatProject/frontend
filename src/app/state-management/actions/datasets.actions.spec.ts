@@ -1,4 +1,5 @@
 import { Dataset, AccessGroup, Datablock } from 'shared/sdk/models';
+import { ViewMode } from '../state/datasets.store';
 
 import {SearchCompleteAction, SEARCH_COMPLETE } from './datasets.actions'; 
 import {SearchFailedAction, SEARCH_FAILED } from './datasets.actions'; 
@@ -29,7 +30,6 @@ import {SelectDatasetAction, SELECT_DATASET } from './datasets.actions';
 import {DeselectDatasetAction, DESELECT_DATASET } from './datasets.actions'; 
 import {ClearSelectionAction, CLEAR_SELECTION } from './datasets.actions'; 
 import {ExportToCsvAction, EXPORT_TO_CSV } from './datasets.actions'; 
-import {GoToPageAction, GO_TO_PAGE } from './datasets.actions'; 
 import {SortByColumnAction, SORT_BY_COLUMN } from './datasets.actions'; 
 import {SetViewModeAction, SET_VIEW_MODE } from './datasets.actions'; 
 
@@ -294,14 +294,6 @@ describe('ExportToCsvAction', () => {
 });
 
 
-describe('GoToPageAction', () => { 
-	it('should create an action', () => { 
-		const page = 3;
-		const action = new GoToPageAction(page); 
-		expect({ ...action }).toEqual({ type: GO_TO_PAGE,  page }); 
-	}); 
-});
-
 
 describe('SortByColumnAction', () => { 
 	it('should create an action', () => { 
@@ -315,7 +307,7 @@ describe('SortByColumnAction', () => {
 
 describe('SetViewModeAction', () => { 
 	it('should create an action', () => { 
-		const mode = "setviewmodestring";
+		const mode = 'view';
 		const action = new SetViewModeAction(mode); 
 		expect({ ...action }).toEqual({ type: SET_VIEW_MODE,  mode }); 
 	}); 
