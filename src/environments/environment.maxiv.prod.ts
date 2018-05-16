@@ -1,5 +1,6 @@
 export const environment = {
   production: true,
   lbBaseURL: 'http://scicat.maxiv.lu.se',
-  externalAuthEndpoint: '/auth/msad'
+  externalAuthEndpoint: '/auth/msad',
+  disabledDatasetColumns: ['archiveStatus', 'retrieveStatus', 'ownerGroup']
 };

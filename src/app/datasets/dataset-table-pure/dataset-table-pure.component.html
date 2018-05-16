@@ -1,15 +1,16 @@
 <div>
   <mat-paginator
     class="dataset-paginator"
-    [pageSize]="30"
+    [pageSizeOptions]="pageSizeOptions"
     [pageIndex]="currentPage"
+    [pageSize]="datasetsPerPage"
     [length]="totalNumber"
     (page)="handlePageChange($event)">
   </mat-paginator>
 
   <mat-table
     [dataSource]="datasets"
-    class="dataset-table"
+    class="dataset-table mat-elevation-z8"
     matSort (matSortChange)="handleSortChange($event)">
 
     <!-- Column Definitions -->
@@ -61,13 +62,29 @@
     <ng-container matColumnDef="proposalId">
       <mat-header-cell *matHeaderCellDef>Proposal</mat-header-cell>
       <mat-cell *matCellDef="let dataset">{{dataset.proposalId}}</mat-cell>  
-    </ng-container>      
+    </ng-container>
+
+    <ng-container matColumnDef="ownerGroup">
+      <mat-header-cell *matHeaderCellDef>Group</mat-header-cell>
+      <mat-cell *matCellDef="let dataset">{{dataset.ownerGroup}}</mat-cell>  
+    </ng-container>  
+
+    <ng-container matColumnDef="archiveStatus">
+      <mat-header-cell *matHeaderCellDef>Archive Status</mat-header-cell>
+      <mat-cell *matCellDef="let dataset">{{getArchiveStatus(dataset)}}</mat-cell>  
+    </ng-container>
+
+    <ng-container matColumnDef="retrieveStatus">
+      <mat-header-cell *matHeaderCellDef>Retrieve Status</mat-header-cell>
+      <mat-cell *matCellDef="let dataset">{{getRetrieveStatus(dataset)}}</mat-cell>  
+    </ng-container>
+
     <!-- End of Column Definitions -->
 
-    <mat-header-row class='datasets-header' *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-header-row class='datasets-header' *matHeaderRowDef="getDisplayedColumns()"></mat-header-row>
     <mat-row
       class='row-generic'
-      *matRowDef="let dataset; columns: displayedColumns;"
+      *matRowDef="let dataset; columns: getDisplayedColumns()"
       (click)="handleClick(dataset)"
       [ngClass]="getRowClass(dataset)">
     </mat-row>
@@ -75,8 +92,9 @@
 
   <mat-paginator
     class="dataset-paginator"
-    [pageSize]="30"
+    [pageSizeOptions]="pageSizeOptions"
     [pageIndex]="currentPage"
+    [pageSize]="datasetsPerPage"
     [length]="totalNumber"
     (page)="handlePageChange($event)">
   </mat-paginator>

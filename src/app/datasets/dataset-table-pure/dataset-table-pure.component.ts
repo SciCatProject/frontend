@@ -4,6 +4,7 @@ import { MatCheckboxChange, MatSort } from '@angular/material';
 import { Dataset } from 'state-management/models';
 
 import * as filesize from 'filesize';
+import { DatasetLifecycle } from 'shared/sdk';
 
 export interface PageChangeEvent {
   pageIndex: number;
@@ -22,12 +23,14 @@ export interface SortChangeEvent {
   styleUrls: ['./dataset-table-pure.component.scss']
 })
 export class DatasetTablePureComponent {
-  @Input() private datasets: Dataset[] = [];
-  @Input() private selectedSets: Dataset[] = [];
-  @Input() private totalNumber: number = 0;
-  @Input() private currentPage: number = 0;
-  @Input() private showSelect: boolean = false;
-  @Input() private rowClassifier?: (dataset: Dataset) => string;
+  @Input() public datasets: Dataset[] = [];
+  @Input() public selectedSets: Dataset[] = [];
+  @Input() public totalNumber: number = 0;
+  @Input() public currentPage: number = 0;
+  @Input() public datasetsPerPage: number = 30;
+  @Input() public showSelect: boolean = false;
+  @Input() public rowClassifier?: (dataset: Dataset) => string;
+  @Input() public disabledColumns: string[] = [];
 
   @Output() private onClick: EventEmitter<Dataset> = new EventEmitter();
   @Output() private onSelect: EventEmitter<Dataset> = new EventEmitter();
@@ -35,6 +38,7 @@ export class DatasetTablePureComponent {
   @Output() private onPageChange: EventEmitter<PageChangeEvent> = new EventEmitter();
   @Output() private onSortChange: EventEmitter<SortChangeEvent> = new EventEmitter();
 
+  private pageSizeOptions: number[] = [30, 1000];
   private displayedColumns: string[] = [
     'select',
     'pid',
@@ -43,10 +47,27 @@ export class DatasetTablePureComponent {
     'creationTime',
     'type',
     'proposalId',
+    'ownerGroup',
+    'archiveStatus',
+    'retrieveStatus'
   ];
 
+  private getDisplayedColumns(): string[] {
+    return this.displayedColumns.filter(column => this.disabledColumns.indexOf(column) === -1);
+  }
+
   private getFormattedSize(size): string {
-    return size ? filesize(size) : 'n/a';
+    return size ? filesize(size) : '';
+  }
+
+  private getArchiveStatus(dataset: Dataset) {
+    const lc = dataset.datasetlifecycle;
+    return lc ? lc.archiveStatusMessage : '';
+  }
+
+  private getRetrieveStatus(dataset: Dataset) {
+    const lc = dataset.datasetlifecycle;
+    return lc ? lc.retrieveStatusMessage : '';
   }
 
   private getRowClass(dataset): {[key: string]: boolean} {
@@ -63,7 +84,7 @@ export class DatasetTablePureComponent {
   }
 
   private allAreSelected(): boolean {
-    return this.selectedSets.length === this.datasets.length;
+    return this.datasets.length > 0 && this.selectedSets.length === this.datasets.length;
   }
 
   private handleClick(dataset): void {

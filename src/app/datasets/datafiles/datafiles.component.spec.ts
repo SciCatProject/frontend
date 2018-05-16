@@ -7,6 +7,7 @@ import { MatTableModule} from '@angular/material';
 
 import { Store, StoreModule } from '@ngrx/store';
 import { MockActivatedRoute, MockStore } from 'shared/MockStubs';
+import { AppConfigModule } from 'app-config.module';
 
 describe('DatafilesComponent', () => {
   let component: DatafilesComponent;
@@ -14,8 +15,8 @@ describe('DatafilesComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      schemas : [ NO_ERRORS_SCHEMA ],
-      imports: [ReactiveFormsModule, MatTableModule],
+      schemas: [ NO_ERRORS_SCHEMA ],
+      imports: [ ReactiveFormsModule, MatTableModule, AppConfigModule ],
       declarations: [ DatafilesComponent ]
     });
      TestBed.overrideComponent(DatafilesComponent, {

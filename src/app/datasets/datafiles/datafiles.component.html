@@ -17,7 +17,14 @@
 
         <ng-container matColumnDef="name">
           <mat-header-cell *matHeaderCellDef> Path.</mat-header-cell>
-          <mat-cell *matCellDef="let element"><a href="{{url_prefix}}{{element.path}}">{{element.path}} </a></mat-cell>
+          <mat-cell *matCellDef="let element">
+            <a *ngIf="urlPrefix; else noLink" href="{{urlPrefix}}{{element.path}}">
+              {{element.path}}
+            </a>
+            <ng-template #noLink>
+              {{element.path}}
+            </ng-template>
+          </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="path">

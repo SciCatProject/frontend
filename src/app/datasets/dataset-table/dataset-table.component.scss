@@ -3,43 +3,30 @@
 $ds-archive: mat-palette($mat-green, 600);
 
 /*Columns are dynamically injected, so this /deep/ ensures it is reflected onto the selector  */
-:host /deep/ .ds-check {
-  width: 25px !important;
+
+.dataset-table .mode-container {
+  padding-left: 1em;
+  float: left;
 }
 
-:host /deep/ .mode-container {
-  padding-left: 30px;
-  text-align: center ;
+.dataset-table .action-container {
+  float: right;
 }
 
-:host /deep/ .center-align {
-  text-align: center;
+.dataset-table .action-container.hidden {
+  visibility: hidden;
 }
 
-:host /deep/ .left-align {
-  width: 100%;
-  text-align: left !important;
-}
-
-
-:host /deep/ .buttons {
-  display: inline-block;
-  /* padding: 50px; */
-}
-
-:host /deep/ .ui-selection-column {
-  width: 30px !important;
-  /* padding: 50px; */
-}
-
+.dataset-table .raised {
+  position: relative;
+  float: left;
+  transform: translateY(50%);
+  margin-left: 1em; 
+}  
 
 :host /deep/ .disabled-row {
     pointer-events: none;
     opacity: 0.2 !important;
-}
-
-:host /deep/ table thead tr th p-dtcheckbox {
-  visibility:hidden;
 }
 
 :host /deep/ .mat-row:hover {
@@ -62,8 +49,3 @@ $ds-archive: mat-palette($mat-green, 600);
 :host /deep/ .row-empty {
   background-color: mat-color($warn, 100, 0.2);
 }
-
-
-/*td {
-    overflow: hidden;
-}*/

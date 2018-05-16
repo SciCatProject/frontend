@@ -3,66 +3,68 @@
 $ds-archive: mat-palette($mat-green, 600);
 
 mat-cell, .mat-header-cell {
-  overflow: visible;
+  word-wrap: break-word;
+  white-space: normal;
 }
 
 /*Columns are dynamically injected, so this /deep/ ensures it is reflected onto the selector  */
-:host /deep/ .ds-check {
-  width: 25px !important;
+/* ^-- Is this needed anymore? Seems to work fine without */ 
+
+.mat-column-select {
+  overflow: visible; /* Needed to prevent offsetting of the checkbox when clicking */
+  flex-grow: 0;
+  padding-right: 2em;
 }
 
-:host /deep/ .mode-container {
+.mat-column-size, .mat-column-type {
+  flex-grow: 0.5;
+}
+
+/*:host /deep/*/ .mode-container {
   padding-left: 30px;
   text-align: center ;
 }
 
-:host /deep/ .center-align {
+/*:host /deep/*/ .center-align {
   text-align: center;
 }
 
-:host /deep/ .left-align {
+/*:host /deep/*/ .left-align {
   width: 100%;
   text-align: left !important;
 }
 
-
-:host /deep/ .buttons {
+/*:host /deep/*/ .buttons {
   display: inline-block;
   /* padding: 50px; */
 }
 
-:host /deep/ .ui-selection-column {
-  width: 30px !important;
-  /* padding: 50px; */
-}
-
-
-:host /deep/ .disabled-row {
+/*:host /deep/*/ .disabled-row {
     pointer-events: none;
     opacity: 0.2 !important;
 }
 
-:host /deep/ table thead tr th p-dtcheckbox {
+/*:host /deep/*/ table thead tr th p-dtcheckbox {
   visibility:hidden;
 }
 
-:host /deep/ .mat-row:hover {
+/*:host /deep/*/ .mat-row:hover {
   background-color: rgba(32, 32, 216, 0.3);
   cursor: pointer;
 }
 
-:host /deep/ .datasets-header {
+/*:host /deep/*/ .datasets-header {
   background-color: mat-color($primary);
 }
 
-:host /deep/ .row-archiveable {
+/*:host /deep/*/ .row-archiveable {
   background-color: mat-color($ds-archive, 500, 0.2);
 }
 
-:host /deep/ .row-retrievable {
+/*:host /deep/*/ .row-retrievable {
   background-color: mat-color($ds-archive, 500, 0.2);
 }
 
-:host /deep/ .row-empty {
+/*:host /deep/*/ .row-empty {
   background-color: mat-color($warn, 100, 0.2);
 }
