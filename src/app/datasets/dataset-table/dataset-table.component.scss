@@ -4,16 +4,16 @@ $ds-archive: mat-palette($mat-green, 600);
 
 /*Columns are dynamically injected, so this /deep/ ensures it is reflected onto the selector  */
 
-.mode-container {
+.dataset-table .mode-container {
   padding-left: 1em;
   float: left;
 }
 
-.action-container {
+.dataset-table .action-container {
   float: right;
 }
 
-.dataset-count {
+.dataset-table .raised {
   position: relative;
   float: left;
   transform: translateY(50%);

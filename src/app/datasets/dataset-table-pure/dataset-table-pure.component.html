@@ -1,8 +1,9 @@
 <div>
   <mat-paginator
     class="dataset-paginator"
-    [pageSize]="30"
+    [pageSizeOptions]="pageSizeOptions"
     [pageIndex]="currentPage"
+    [pageSize]="datasetsPerPage"
     [length]="totalNumber"
     (page)="handlePageChange($event)">
   </mat-paginator>
@@ -91,8 +92,9 @@
 
   <mat-paginator
     class="dataset-paginator"
-    [pageSize]="30"
+    [pageSizeOptions]="pageSizeOptions"
     [pageIndex]="currentPage"
+    [pageSize]="datasetsPerPage"
     [length]="totalNumber"
     (page)="handlePageChange($event)">
   </mat-paginator>

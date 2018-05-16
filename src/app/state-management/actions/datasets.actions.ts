@@ -45,7 +45,7 @@ export const CLEAR_SELECTION =              '[Dataset] Clear Selection';
 export const EXPORT_TO_CSV =                '[Dataset] Export to CSV';
 export const SET_VIEW_MODE =                '[Dataset] Set View Mode';
 
-export const GO_TO_PAGE =                   '[Dataset] Go to Page';
+export const CHANGE_PAGE =                  '[Dataset] Change Page';
 export const SORT_BY_COLUMN =               '[Dataset] Sort by Column';
 
 export class SearchCompleteAction implements Action {
@@ -187,9 +187,9 @@ export class ExportToCsvAction implements Action {
     readonly type = EXPORT_TO_CSV;
 }
 
-export class GoToPageAction implements Action {
-    readonly type = GO_TO_PAGE;
-    constructor(readonly page: number) {}
+export class ChangePageAction implements Action {
+    readonly type = CHANGE_PAGE;
+    constructor(readonly page: number, readonly limit: number) {}
 }
 
 export class SortByColumnAction implements Action {
@@ -211,5 +211,5 @@ export type Actions =
     DatablocksAction | AddGroupsAction | AddGroupsCompleteAction | UpdateSelectedDatablocksAction |
     AddGroupsFailedAction | UpdateSelectedAction | TotalSetsAction | ResetStatusAction | ResetStatusCompleteAction |
     SelectDatasetAction | DeselectDatasetAction |
-    ExportToCsvAction | GoToPageAction | SortByColumnAction | SetViewModeAction;
+    ExportToCsvAction | ChangePageAction | SortByColumnAction | SetViewModeAction;
     

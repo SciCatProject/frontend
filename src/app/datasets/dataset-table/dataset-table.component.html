@@ -1,4 +1,4 @@
-<div>
+<div class="dataset-table">
   <div class="mode-container">
     <mat-button-toggle-group [value]="currentMode">
       <mat-button-toggle *ngFor="let mode of modes" (click)="onModeChange($event, mode)" [value]="mode" [ngClass]="mode">
@@ -7,8 +7,12 @@
     </mat-button-toggle-group>
   </div>
 
-  <div class="dataset-count">
+  <div class="raised">
       {{ datasetCount$ | async }} datasets.
+  </div>
+
+  <div *ngIf="loading$ | async" class="raised">
+    <mat-spinner diameter="20"></mat-spinner>
   </div>
 
   <div *ngIf="datasets && !(loading$ | async)" class="action-container">
@@ -35,6 +39,7 @@
     [selectedSets]="selectedSets$ | async"
     [totalNumber]="datasetCount$ | async"
     [currentPage]="currentPage$ | async"
+    [datasetsPerPage]="datasetsPerPage$ | async"
     [rowClassifier]="rowClassifier"
     [disabledColumns]="disabledColumns"
     (onClick)="onClick($event)"

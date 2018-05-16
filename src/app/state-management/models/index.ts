@@ -26,6 +26,7 @@ export interface DatasetFilters {
   creationTime: {'start': Date, 'end': Date};
   creationLocation: string[];
   skip: number;
+  limit: number;
   initial: boolean;
   keywords: string[];
   sortField: Object

@@ -27,6 +27,7 @@ export class DatasetTablePureComponent {
   @Input() public selectedSets: Dataset[] = [];
   @Input() public totalNumber: number = 0;
   @Input() public currentPage: number = 0;
+  @Input() public datasetsPerPage: number = 30;
   @Input() public showSelect: boolean = false;
   @Input() public rowClassifier?: (dataset: Dataset) => string;
   @Input() public disabledColumns: string[] = [];
@@ -37,6 +38,7 @@ export class DatasetTablePureComponent {
   @Output() private onPageChange: EventEmitter<PageChangeEvent> = new EventEmitter();
   @Output() private onSortChange: EventEmitter<SortChangeEvent> = new EventEmitter();
 
+  private pageSizeOptions: number[] = [30, 1000];
   private displayedColumns: string[] = [
     'select',
     'pid',

@@ -14,7 +14,6 @@ export interface DatasetState {
     mode: ViewMode;
     selectedSets2: Dataset[];
     currentPage2: number;
-    itemsPerPage2: number;
 }
 
 export const initialDatasetState: DatasetState = {
@@ -27,6 +26,7 @@ export const initialDatasetState: DatasetState = {
         creationLocation: [],
         ownerGroup: [],
         skip: 0,
+        limit: 30,
         initial: true,
         sortField: 'creationTime:desc',
         keywords: []
@@ -46,7 +46,6 @@ export const initialDatasetState: DatasetState = {
     mode: 'view',
     selectedSets2: [],
     currentPage2: 0,
-    itemsPerPage2: 30,
 };
 
 /* Salvaged from obsolete Dashboard UI state:

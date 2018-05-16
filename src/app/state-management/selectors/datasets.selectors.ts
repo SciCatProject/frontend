@@ -27,6 +27,11 @@ export const getPage = createSelector(
     state => state.currentPage2
 );
 
+export const getDatasetsPerPage = createSelector(
+    getDatasetState,
+    state => state.activeFilters.limit
+);
+
 /*
 TODO: create selector to derive filter object from state
 */

@@ -20,8 +20,8 @@ import {
     SelectDatasetAction,
     DeselectDatasetAction,
     DESELECT_DATASET,
-    GO_TO_PAGE,
-    GoToPageAction,
+    CHANGE_PAGE,
+    ChangePageAction,
     SORT_BY_COLUMN,
     SortByColumnAction,
     CLEAR_SELECTION,
@@ -48,13 +48,14 @@ export function datasetsReducer(state = initialDatasetState, action: Action) {
             return {...state, activeFilters: f, loading: true, selectedSets: []};
         }
 
-        case GO_TO_PAGE: {
-            const page = (action as GoToPageAction).page;
-            const skip = page * state.itemsPerPage2;
-            const activeFilters = {...state.activeFilters, skip};
+        case CHANGE_PAGE: {
+            const {page, limit} = (action as ChangePageAction);
+            const skip = page * limit;
+            const activeFilters = {...state.activeFilters, skip, limit};
             return {
                 ...state,
                 activeFilters,
+                itemsPerPage2: limit,
                 currentPage2: page
             };
         }

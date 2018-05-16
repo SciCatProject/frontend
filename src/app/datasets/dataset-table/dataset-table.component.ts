@@ -27,7 +27,7 @@ import * as dsa from 'state-management/actions/datasets.actions';
 import * as selectors from 'state-management/selectors';
 import * as ua from 'state-management/actions/user.actions';
 import * as ja from 'state-management/actions/jobs.actions';
-import { getDatasets2, getSelectedDatasets, getPage, getViewMode, isEmptySelection } from 'state-management/selectors/datasets.selectors';
+import { getDatasets2, getSelectedDatasets, getPage, getViewMode, isEmptySelection, getDatasetsPerPage } from 'state-management/selectors/datasets.selectors';
 import { Message, MessageType } from 'state-management/models';
 
 import { Angular5Csv } from 'angular5-csv/Angular5-csv';
@@ -58,6 +58,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   private datasets$: Observable<Dataset[]>;
   private selectedSets$: Observable<Dataset[]>;
   private currentPage$: Observable<number>;
+  private datasetsPerPage$: Observable<number>;
   private mode$: Observable<string>;
   private datasetCount$: Observable<number>;
   private isEmptySelection$: Observable<boolean>;
@@ -97,6 +98,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     this.datasets$ = this.store.pipe(select(getDatasets2));
     this.selectedSets$ = this.store.pipe(select(getSelectedDatasets));
     this.currentPage$ = this.store.pipe(select(getPage));
+    this.datasetsPerPage$ = this.store.pipe(select(getDatasetsPerPage));
     this.limit$ = this.store.select(state => state.root.user.settings.datasetCount);
     this.mode$ = this.store.pipe(select(getViewMode));
     this.isEmptySelection$ = this.store.pipe(select(isEmptySelection));
@@ -291,7 +293,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   }
 
   onPageChange(event: PageChangeEvent): void {
-    this.store.dispatch(new dsa.GoToPageAction(event.pageIndex));
+    this.store.dispatch(new dsa.ChangePageAction(event.pageIndex, event.pageSize));
   }
 
   onSortChange(event: SortChangeEvent): void {
