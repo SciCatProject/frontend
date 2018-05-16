@@ -15,7 +15,7 @@
     <mat-spinner diameter="20"></mat-spinner>
   </div>
 
-  <div *ngIf="datasets && !(loading$ | async)" class="action-container">
+  <div class="action-container" [class.hidden]="loading$ | async">
     <button mat-button [disabled]="isEmptySelection$ | async" *ngIf="currentMode === 'archive'" mat-button class="ui button archive-action-btn" (click)="archiveClickHandle($event)" color="primary">
       <i class="archive icon"></i>
       Archive

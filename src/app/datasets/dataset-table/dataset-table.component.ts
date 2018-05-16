@@ -27,7 +27,7 @@ import * as dsa from 'state-management/actions/datasets.actions';
 import * as selectors from 'state-management/selectors';
 import * as ua from 'state-management/actions/user.actions';
 import * as ja from 'state-management/actions/jobs.actions';
-import { getDatasets2, getSelectedDatasets, getPage, getViewMode, isEmptySelection, getDatasetsPerPage } from 'state-management/selectors/datasets.selectors';
+import { getDatasets2, getSelectedDatasets, getPage, getViewMode, isEmptySelection, getDatasetsPerPage, getIsLoading } from 'state-management/selectors/datasets.selectors';
 import { Message, MessageType } from 'state-management/models';
 
 import { Angular5Csv } from 'angular5-csv/Angular5-csv';
@@ -70,7 +70,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   private modes: string[] = ['view', 'archive', 'retrieve'];
 
   private loading$: Observable<boolean>;
-  private limit$: Observable<number>;
 
   // These should be made part of the NgRX state management
   // and eventually be removed.
@@ -90,7 +89,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     @Inject(APP_CONFIG) private appConfig: AppConfig
   ) {
     this.datasetCount$ = this.store.select(selectors.datasets.getTotalSets);
-    this.loading$ = this.store.select(selectors.datasets.getLoading);
+    this.loading$ = this.store.pipe(select(getIsLoading));
     this.disabledColumns = appConfig.disabledDatasetColumns;
   }
 
@@ -99,7 +98,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     this.selectedSets$ = this.store.pipe(select(getSelectedDatasets));
     this.currentPage$ = this.store.pipe(select(getPage));
     this.datasetsPerPage$ = this.store.pipe(select(getDatasetsPerPage));
-    this.limit$ = this.store.select(state => state.root.user.settings.datasetCount);
     this.mode$ = this.store.pipe(select(getViewMode));
     this.isEmptySelection$ = this.store.pipe(select(isEmptySelection));
 
@@ -161,7 +159,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
    * @param event
    * @param mode
    */
-  onModeChange(event, mode: string): void {
+  onModeChange(event, mode: ViewMode): void {
     this.store.dispatch(new dsa.SetViewModeAction(mode));
   }
 

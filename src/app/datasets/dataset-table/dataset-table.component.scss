@@ -13,6 +13,10 @@ $ds-archive: mat-palette($mat-green, 600);
   float: right;
 }
 
+.dataset-table .action-container.hidden {
+  visibility: hidden;
+}
+
 .dataset-table .raised {
   position: relative;
   float: left;

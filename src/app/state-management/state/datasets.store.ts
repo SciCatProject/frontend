@@ -4,7 +4,10 @@ export type ViewMode = 'view' | 'archive' | 'retrieve';
 
 export interface DatasetState {
     datasets: Dataset[];
-    loading: boolean;
+    
+    datasetsLoading: boolean;
+    filtersLoading: boolean;
+    
     activeFilters: DatasetFilters; 
     filterValues: object; // Change to DatasetFilters, modify type with optional fields if needed
     currentSet: Dataset;
@@ -18,7 +21,10 @@ export interface DatasetState {
 
 export const initialDatasetState: DatasetState = {
     datasets: [],
-    loading: false,
+    
+    datasetsLoading: false,
+    filtersLoading: false,
+    
     activeFilters: {
         text: null,
         creationTime: null,

@@ -1,6 +1,7 @@
 import { Action } from '@ngrx/store';
 import { DatasetFilters } from 'state-management/models';
 import { Dataset, AccessGroup, Datablock } from 'shared/sdk/models';
+import { ViewMode } from '../state/datasets.store';
 
 export const SEARCH_COMPLETE =              '[Dataset] Search Complete';
 export const SEARCH_FAILED =                '[Dataset] Search Failed';
@@ -199,7 +200,7 @@ export class SortByColumnAction implements Action {
 
 export class SetViewModeAction implements Action {
     readonly type = SET_VIEW_MODE;
-    constructor(readonly mode: string) {}
+    constructor(readonly mode: ViewMode) {}
 }
 
 export type Actions =
