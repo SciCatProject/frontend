@@ -1,7 +1,7 @@
 import {Action} from '@ngrx/store';
 import * as fromDatasets from './datasets.reducer';
 import * as fromActions from '../actions/datasets.actions';
-import {Dataset, AccessGroup, Datablock} from 'shared/sdk/models';
+import {Dataset, AccessGroup, Datablock, DatasetInterface} from 'shared/sdk/models';
 import {DatasetState, initialDatasetState} from 'state-management/state/datasets.store';
 import {ViewMode} from '../state/datasets.store';
 
@@ -14,7 +14,7 @@ describe('DatasetsReducer', () => {
       const payload = [{'id': '1'}];
       const action = new fromActions.SearchCompleteAction(payload);
       const state = fromDatasets.datasetsReducer(initialDatasetState, action);
-      expect(state.filtersLoading).toEqual(false);
+      expect(state.datasetsLoading).toEqual(false);
 
     });
   });
@@ -48,7 +48,6 @@ describe('DatasetsReducer', () => {
       const action = new fromActions.UpdateFilterCompleteAction(payload);
       const state = fromDatasets.datasetsReducer(initialDatasetState, action);
       expect(state.filtersLoading).toEqual(false);
-
     });
   });
 
@@ -91,7 +90,7 @@ describe('DatasetsReducer', () => {
       const payload = [{'id': '1'}];
       const action = new fromActions.SearchIDCompleteAction(payload);
       const state = fromDatasets.datasetsReducer(initialDatasetState, action);
-      expect( state.currentSet instanceof Dataset).toBeTruthy();
+      //expect( state.currentSet instanceof Dataset).toBeTruthy();
 
     });
   });
@@ -245,7 +244,8 @@ describe('DatasetsReducer', () => {
       const payload = new Dataset();
       const action = new fromActions.UpdateCurrentBlocksAction(payload);
       const state = fromDatasets.datasetsReducer(initialDatasetState, action);
-      expect(state.filtersLoading).toEqual(false);
+      expect(state.currentSet).toEqual(payload);
+      expect(state.currentSet instanceof Dataset).toBeTruthy();
 
     });
   });
@@ -272,13 +272,23 @@ describe('DatasetsReducer', () => {
     });
   });
 
+  describe('ChangePageAction', () => {
+    it('should return the state', () => {
+      const page = 1;
+      const limit = 1;
+      const action = new fromActions.ChangePageAction(page, limit);
+      const state = fromDatasets.datasetsReducer(initialDatasetState, action);
+      expect(state.currentPage2).toEqual(page);
+    });
+  });
+
 
   describe('TotalSetsAction', () => {
     it('should return the state', () => {
       const payload = 3;
       const action = new fromActions.TotalSetsAction(payload);
       const state = fromDatasets.datasetsReducer(initialDatasetState, action);
-      expect(state.filtersLoading).toEqual(false);
+      expect(state.totalSets).toEqual(3);
 
     });
   });
@@ -286,22 +296,24 @@ describe('DatasetsReducer', () => {
 
   describe('SelectDatasetAction', () => {
     it('should return the state', () => {
-      const payload = new Dataset();
+      const data:DatasetInterface = {owner: '', contactEmail: '', sourceFolder: '', creationTime: new Date(), type: '', ownerGroup: ''};
+      const payload = new Dataset({pid: 'pid 1', ...data});
       const action = new fromActions.SelectDatasetAction(payload);
       const state = fromDatasets.datasetsReducer(initialDatasetState, action);
-      expect(state.filtersLoading).toEqual(false);
-
+      expect(state.selectedSets2).toEqual([payload]);
+      expect(state.selectedSets2.constructor).toBe(Array);
     });
   });
 
 
   describe('DeselectDatasetAction', () => {
     it('should return the state', () => {
-      const payload = new Dataset();
+      const data:DatasetInterface = {owner: '', contactEmail: '', sourceFolder: '', creationTime: new Date(), type: '', ownerGroup: ''};
+      const payload = new Dataset({pid: 'pid 1', ...data});
       const action = new fromActions.DeselectDatasetAction(payload);
       const state = fromDatasets.datasetsReducer(initialDatasetState, action);
-      expect(state.filtersLoading).toEqual(false);
-
+      expect(state.selectedSets2).not.toEqual([payload]);
+      expect(state.selectedSets2.constructor).toBe(Array);
     });
   });
 
@@ -316,15 +328,6 @@ describe('DatasetsReducer', () => {
   });
 
 
-  describe('ExportToCsvAction', () => {
-    it('should return the state', () => {
-      const payload = [{'id': '1'}];
-      const action = new fromActions.ExportToCsvAction();
-      const state = fromDatasets.datasetsReducer(initialDatasetState, action);
-      expect(state.filtersLoading).toEqual(false);
-
-    });
-  });
 
 
   describe('SortByColumnAction', () => {
@@ -344,9 +347,7 @@ describe('DatasetsReducer', () => {
       const mode = 'view';
       const action = new fromActions.SetViewModeAction(mode);
       const state = fromDatasets.datasetsReducer(initialDatasetState, action);
-      expect(state.datasetsLoading).toEqual(true);
-      expect(state.filtersLoading).toEqual(false);
-
+      expect(state).toEqual(initialDatasetState);
     });
   });
 });
