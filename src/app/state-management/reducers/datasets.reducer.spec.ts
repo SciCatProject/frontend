@@ -11,24 +11,20 @@ describe('DatasetsReducer', () => {
 	  const payload = [new Dataset()];
       const action = new fromActions.SearchCompleteAction(payload);
       const state = fromDatasets.datasetsReducer(initialDatasetState, action);
-	  expect(state.loading).toEqual(false);
+	  expect(state.datasetsLoading).toEqual(false);
     });
   });
-  
 
-
-  // I nest all tests under the reducer's name 
-  // for readability in the terminal
-
+  // group tests under the reducer's name
 
   describe('filter value action', () => {
     it('should return the state loading', () => {
-	  const payload = [new Dataset()];
+	  const payload = [{'check':'2'}];
       const action = new fromActions.FilterValueAction(payload);
       const state = fromDatasets.datasetsReducer(initialDatasetState, action);
-	  expect(state.loading).toEqual(true);
+	  expect(state.filtersLoading).toEqual(false);
     });
   });
-  
+
 
 });
