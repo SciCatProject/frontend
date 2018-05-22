@@ -23,12 +23,6 @@
           <a class="item user-menu" [matMenuTriggerFor]="userMenu">{{ username }} <i class="fa fa-angle-down"></i></a>
         </mat-list-item>
       </mat-list>
-      
-      <mat-menu #userMenu="matMenu">
-        <a mat-menu-item (click)="sidenav.close()" [routerLinkActive]="['active']" [routerLink]="['/user/','details']">Details</a>
-        <a mat-menu-item (click)="sidenav.close()" [routerLinkActive]="['active']" [routerLink]="['/user/','settings']">Settings</a>
-        <a mat-menu-item class="logout-link" (click)="logout()">Logout</a>
-      </mat-menu>
 
       <mat-menu #userMenu="matMenu">
         <a mat-menu-item (click)="sidenav.close()" [routerLinkActive]="['active']" [routerLink]="['/user/','details']">Details</a>

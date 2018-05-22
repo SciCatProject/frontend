@@ -7,6 +7,7 @@ import {
   Output,
   ViewChild,
   OnDestroy,
+  Inject,
 } from '@angular/core';
 
 import { Router, ActivatedRoute, Data } from '@angular/router';
@@ -26,7 +27,7 @@ import * as dsa from 'state-management/actions/datasets.actions';
 import * as selectors from 'state-management/selectors';
 import * as ua from 'state-management/actions/user.actions';
 import * as ja from 'state-management/actions/jobs.actions';
-import { getDatasets2, getSelectedDatasets, getPage, getViewMode } from 'state-management/selectors/datasets.selectors';
+import { getDatasets2, getSelectedDatasets, getPage, getViewMode, isEmptySelection, getDatasetsPerPage, getIsLoading } from 'state-management/selectors/datasets.selectors';
 import { Message, MessageType } from 'state-management/models';
 
 import { Angular5Csv } from 'angular5-csv/Angular5-csv';
@@ -42,6 +43,7 @@ import { PageChangeEvent, SortChangeEvent } from '../dataset-table-pure/dataset-
 import * as rison from 'rison';
 import { Subscription } from 'rxjs';
 import { ViewMode } from 'state-management/state/datasets.store';
+import { APP_CONFIG, AppConfig } from 'app-config.module';
 
 @Component({
   selector: 'dataset-table',
@@ -56,17 +58,18 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   private datasets$: Observable<Dataset[]>;
   private selectedSets$: Observable<Dataset[]>;
   private currentPage$: Observable<number>;
+  private datasetsPerPage$: Observable<number>;
   private mode$: Observable<string>;
   private datasetCount$: Observable<number>;
+  private isEmptySelection$: Observable<boolean>;
 
   // compatibility analogs of observables
-  private mode: ViewMode = 'view';
+  private currentMode: ViewMode = 'view';
   private selectedSets: Dataset[] = [];
 
-  private modes: string[] = ['archive', 'view', 'retrieve'];
+  private modes: string[] = ['view', 'archive', 'retrieve'];
 
   private loading$: Observable<boolean>;
-  private limit$: Observable<number>;
 
   // These should be made part of the NgRX state management
   // and eventually be removed.
@@ -75,27 +78,32 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   private submitJobSubscription: Subscription;
   private jobErrorSubscription: Subscription;
 
+  private disabledColumns: string[] = [];
+
   constructor(
     private router: Router,
     private configSrv: ConfigService,
     private route: ActivatedRoute,
     private store: Store<any>,
     public dialog: MatDialog,
+    @Inject(APP_CONFIG) private appConfig: AppConfig
   ) {
     this.datasetCount$ = this.store.select(selectors.datasets.getTotalSets);
-    this.loading$ = this.store.select(selectors.datasets.getLoading);
+    this.loading$ = this.store.pipe(select(getIsLoading));
+    this.disabledColumns = appConfig.disabledDatasetColumns;
   }
 
   ngOnInit() {
     this.datasets$ = this.store.pipe(select(getDatasets2));
     this.selectedSets$ = this.store.pipe(select(getSelectedDatasets));
     this.currentPage$ = this.store.pipe(select(getPage));
-    this.limit$ = this.store.select(state => state.root.user.settings.datasetCount);
+    this.datasetsPerPage$ = this.store.pipe(select(getDatasetsPerPage));
     this.mode$ = this.store.pipe(select(getViewMode));
+    this.isEmptySelection$ = this.store.pipe(select(isEmptySelection));
 
     // Store concrete values of observables for compatibility
     this.modeSubscription = this.mode$.subscribe((mode: ViewMode) => {
-      this.mode = mode;
+      this.currentMode = mode;
     });
 
     this.selectedSetsSubscription = this.selectedSets$.subscribe(selectedSets =>
@@ -151,19 +159,8 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
    * @param event
    * @param mode
    */
-  onModeChange(event, mode: string): void {
+  onModeChange(event, mode: ViewMode): void {
     this.store.dispatch(new dsa.SetViewModeAction(mode));
-  }
-
-  /**
-   * Return the classes for the view buttons based on what is selected
-   * @param mode
-   */
-  getModeButtonClasses(mode): {[cls: string]: boolean} {
-    return {
-      [mode]: true,
-      positive: this.mode === mode
-    };
   }
 
   /**
@@ -294,7 +291,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   }
 
   onPageChange(event: PageChangeEvent): void {
-    this.store.dispatch(new dsa.GoToPageAction(event.pageIndex));
+    this.store.dispatch(new dsa.ChangePageAction(event.pageIndex, event.pageSize));
   }
 
   onSortChange(event: SortChangeEvent): void {
@@ -303,10 +300,10 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   }
 
   rowClassifier(row: Dataset): string {
-    if (row.datasetlifecycle && this.mode === 'archive'
+    if (row.datasetlifecycle && this.currentMode === 'archive'
       && (config.archiveable.indexOf(row.datasetlifecycle.archiveStatusMessage) !== -1) && row.size !== 0) {
       return 'row-archiveable';
-    } else if (row.datasetlifecycle && this.mode === 'retrieve'
+    } else if (row.datasetlifecycle && this.currentMode === 'retrieve'
       && config.retrieveable.indexOf(row.datasetlifecycle.archiveStatusMessage) !== -1 && row.size !== 0) {
       return 'row-retrievable';
     } else if (row.size === 0) {
@@ -316,10 +313,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     }
   }
 }
-
-
-
-
 
 
 /* Obsolete and/or "pensioned" methods
@@ -343,34 +336,3 @@ setOptions(set) {
   return options;
 }
 */
-
-  /*
-  As far as I can see, this approach is limited and not useful with larger numbers of datasets. This
-  should be done on query level instead, releiving the GUI significantly of having to deal with that
-  logic.
-
-  updateRowView(mode: string): void {
-    this.store.dispatch(new dsa.ClearSelectionAction());
-
-    const activeSets = [];
-
-    if (this.datasets && this.datasets.length > 0 && (this.mode === 'archive' || this.mode === 'retrieve')) {
-      for (let d = 0; d < this.datasets.length; d++) {
-        const set = this.datasets[d];
-        const msg = (set.datasetlifecycle && set.datasetlifecycle.archiveStatusMessage) || '';
-        if (this.mode === 'archive') {
-          if (set.datasetlifecycle && (config.archiveable.indexOf(set.datasetlifecycle.archiveStatusMessage) !== -1) && set.size > 0) {
-            activeSets.push(set);
-          }
-        } else if (this.mode === 'retrieve') {
-          if (set.datasetlifecycle && config.retrieveable.indexOf(set.datasetlifecycle.archiveStatusMessage) !== -1 && set.size > 0) {
-            activeSets.push(set);
-          }
-        }
-      }
-      this.dataSource = new MatTableDataSource(activeSets);
-    } else {
-      this.dataSource = new MatTableDataSource(this.datasets);
-    }
-  }
-  */

@@ -20,8 +20,8 @@ import {
     SelectDatasetAction,
     DeselectDatasetAction,
     DESELECT_DATASET,
-    GO_TO_PAGE,
-    GoToPageAction,
+    CHANGE_PAGE,
+    ChangePageAction,
     SORT_BY_COLUMN,
     SortByColumnAction,
     CLEAR_SELECTION,
@@ -31,7 +31,7 @@ import {
 
 import { DatasetState, initialDatasetState } from 'state-management/state/datasets.store';
 
-export function datasetsReducer(state = initialDatasetState, action: Action) {
+export function datasetsReducer(state: DatasetState = initialDatasetState, action: Action): DatasetState {
     if (action.type.indexOf('[Dataset]') !== -1) {
         console.log('Action came in! ' + action.type);
     }
@@ -45,15 +45,16 @@ export function datasetsReducer(state = initialDatasetState, action: Action) {
                 f['ownerGroup'] = [group];
             }
 
-            return {...state, activeFilters: f, loading: true, selectedSets: []};
+            return {...state, activeFilters: f, datasetsLoading: true, selectedSets: []};
         }
 
-        case GO_TO_PAGE: {
-            const page = (action as GoToPageAction).page;
-            const skip = page * state.itemsPerPage2;
-            const activeFilters = {...state.activeFilters, skip};
+        case CHANGE_PAGE: {
+            const {page, limit} = (action as ChangePageAction);
+            const skip = page * limit;
+            const activeFilters = {...state.activeFilters, skip, limit};
             return {
                 ...state,
+                datasetsLoading: true,
                 activeFilters,
                 currentPage2: page
             };
@@ -63,29 +64,35 @@ export function datasetsReducer(state = initialDatasetState, action: Action) {
             const {column, direction} = action as SortByColumnAction;
             const sortField = column + ':' + direction;
             const activeFilters = {...state.activeFilters, sortField};
-            return {...state, activeFilters};
+            return {...state, activeFilters, datasetsLoading: true};
         }
 
         case SET_VIEW_MODE: {
             const {mode} = action as SetViewModeAction;
-            return {...state, mode};
+            if (state.mode === mode) {
+                return state;
+            } else {
+                return {...state, mode, datasetsLoading: true, filtersLoading: true};
+            }
         }
 
         case SEARCH_COMPLETE: {
             const datasets = <Dataset[]>action['payload'];
-            return {...state, datasets, loading: false};
+            return {...state, datasets, datasetsLoading: false};
         }
 
         case ADD_GROUPS_COMPLETE: {
             const ownerGroup = action['payload'];
             const activeFilters = {...state.activeFilters, ownerGroup};
-            return {...state, activeFilters, foo: 10};
+            return {...state, activeFilters};
         }
 
-        case FILTER_VALUE_UPDATE:
+        case FILTER_VALUE_UPDATE: {
+            return {...state, filtersLoading: true};
+        }
         case FILTER_UPDATE_COMPLETE: {
             const filterValues = action['payload'];
-            return {...state, filterValues, loading: false};
+            return {...state, filterValues, filtersLoading: false};
         }
 
         case SELECT_CURRENT:

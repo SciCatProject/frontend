@@ -1,10 +1,9 @@
-import {Component, Input, OnInit, ViewChild, AfterViewInit} from '@angular/core';
+import {Component, Input, OnInit, ViewChild, AfterViewInit, Inject} from '@angular/core';
 import {OrigDatablock} from 'shared/sdk/models';
 import {Store} from '@ngrx/store';
 import {Observable} from 'rxjs/Observable';
 import {MatTableDataSource, MatPaginator} from '@angular/material';
-import {environment} from '../../../environments/environment';
-
+import { APP_CONFIG, AppConfig } from 'app-config.module';
 
 @Component({
   selector: 'datafiles',
@@ -14,9 +13,9 @@ import {environment} from '../../../environments/environment';
 export class DatafilesComponent implements OnInit, AfterViewInit {
 
   @Input() dataBlocks: Array<OrigDatablock>;
- // url_prefix = "http://localhost:8889";
-  url_prefix =  environment.fileserverBaseURL;
-  count = 0;
+  
+  urlPrefix: string;
+  count: number = 0;
   files: Array<JSON> = [];
   selectedDF;
   dsId: string;
@@ -29,7 +28,11 @@ export class DatafilesComponent implements OnInit, AfterViewInit {
 
   admin$: Observable<boolean>;
 
-  constructor(private store: Store<any>) {
+  constructor(
+    private store: Store<any>,
+    @Inject(APP_CONFIG) private appConfig: AppConfig,
+  ) {
+    this.urlPrefix = appConfig.fileserverBaseURL;
   }
 
   ngOnInit() {

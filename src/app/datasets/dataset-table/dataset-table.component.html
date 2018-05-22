@@ -1,44 +1,47 @@
-<div>
+<div class="dataset-table">
   <div class="mode-container">
-    <div class="ui buttons">
-      <button class='ui button' [ngClass]="getModeButtonClasses(mode)" *ngFor="let mode of modes" (click)="onModeChange($event, mode)">
+    <mat-button-toggle-group [value]="currentMode">
+      <mat-button-toggle *ngFor="let mode of modes" (click)="onModeChange($event, mode)" [value]="mode" [ngClass]="mode">
         {{mode | titlecase}}
-      </button>
-    </div>
-    <div [ngSwitch]="mode">
-      <!--*ngIf="selectedSets.length > 0">-->
-      <div class="ui buttons dataset-action" *ngSwitchDefault>
-
-      </div>
-      <div class="ui buttons dataset-action" *ngSwitchCase="'archive'">
-        <button class="ui button archive-action-btn" (click)="archiveClickHandle($event)">
-          <i class="upload icon"></i>Archive</button>
-      </div>
-      <div class="ui buttons dataset-action" *ngSwitchCase="'retrieve'">
-        <button class="ui button retrieve-action-btn" (click)="retrieveClickHandle($event)">
-          <i class="upload icon"></i>Retrieve</button>
-      </div>
-    </div>
+      </mat-button-toggle>
+    </mat-button-toggle-group>
   </div>
 
-  <div class="example-container mat-elevation-z8">
-    <div class="ui segment" *ngIf="loading$ | async">
-      <p></p>
-      <div class="ui active inverted dimmer">
-        <div class="ui loader"></div>
-      </div>
-    </div>
-    <button *ngIf="datasets && !(loading$ | async)" class='export-csv' mat-button (click)="onExportClick()" color="primary">
+  <div class="raised">
+      {{ datasetCount$ | async }} datasets.
+  </div>
+
+  <div *ngIf="loading$ | async" class="raised">
+    <mat-spinner diameter="20"></mat-spinner>
+  </div>
+
+  <div class="action-container" [class.hidden]="loading$ | async">
+    <button mat-button [disabled]="isEmptySelection$ | async" *ngIf="currentMode === 'archive'" mat-button class="ui button archive-action-btn" (click)="archiveClickHandle($event)" color="primary">
+      <i class="archive icon"></i>
+      Archive
+    </button>
+      
+    <button mat-button [disabled]="isEmptySelection$ | async" *ngIf="currentMode === 'retrieve'"class="ui button retrieve-action-btn" (click)="retrieveClickHandle($event)" color="primary">
+      <i class="upload icon"></i>
+      Retrieve
+    </button>
+
+    <button mat-button class='ui button export-csv' mat-button (click)="onExportClick()" color="primary">
+      <i class="table icon"></i>
       Export Page to CSV
     </button>
   </div>
+
+  <div style="clear: both"></div>
 
   <dataset-table-pure
     [datasets]="datasets$ | async"
     [selectedSets]="selectedSets$ | async"
     [totalNumber]="datasetCount$ | async"
     [currentPage]="currentPage$ | async"
+    [datasetsPerPage]="datasetsPerPage$ | async"
     [rowClassifier]="rowClassifier"
+    [disabledColumns]="disabledColumns"
     (onClick)="onClick($event)"
     (onSelect)="onSelect($event)"
     (onDeselect)="onDeselect($event)"

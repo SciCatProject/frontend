@@ -17,9 +17,19 @@ export const getSelectedDatasets = createSelector(
     state => state.selectedSets2
 );
 
+export const isEmptySelection = createSelector(
+    getSelectedDatasets,
+    sets => sets.length === 0
+);
+
 export const getPage = createSelector(
     getDatasetState,
     state => state.currentPage2
+);
+
+export const getDatasetsPerPage = createSelector(
+    getDatasetState,
+    state => state.activeFilters.limit
 );
 
 /*
@@ -53,6 +63,11 @@ export const getViewMode = createSelector(
     state => state.mode
 );
 
+export const getIsLoading = createSelector(
+    getDatasetState,
+    state => state.datasetsLoading || state.filtersLoading
+);
+
 export const getFilterValues = (state: any) => state.root.datasets.filterValues;
 export const getActiveFilters = (state: any) => state.root.datasets.activeFilters;
 export const getText = (state: any) => state.root.datasets.activeFilters.text;
@@ -60,7 +75,6 @@ export const getText = (state: any) => state.root.datasets.activeFilters.text;
 export const getDatasets = (state: any) => state.root.datasets.datasets;
 export const getSelectedSets = (state: any) => state.root.datasets.selectedSets;
 
-export const getLoading = (state: any) => state.root.datasets.loading;
 export const getTotalSets = (state: any) => {
   if ('all' in state.root.datasets.filterValues &&
     state.root.datasets.filterValues['all'].length > 0) {
