@@ -1,6 +1,9 @@
 import { User, AccessGroup, Job, Dataset, RawDataset, Proposal } from 'shared/sdk/models';
 export { User, AccessGroup, Job, Dataset, RawDataset, Proposal };
 
+import { DatasetInterface } from 'shared/sdk';
+export { DatasetInterface };
+
 export interface Settings {
   tapeCopies: string;
   datasetCount: number;
