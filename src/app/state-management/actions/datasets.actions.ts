@@ -1,7 +1,7 @@
 import { Action } from '@ngrx/store';
 import { DatasetFilters } from 'state-management/models';
 import { Dataset, AccessGroup, Datablock } from 'shared/sdk/models';
-import { ViewMode } from '../state/datasets.store';
+import { ViewMode, FacetCounts } from '../state/datasets.store';
 
 export const SEARCH_COMPLETE =              '[Dataset] Search Complete';
 export const SEARCH_FAILED =                '[Dataset] Search Failed';
@@ -46,8 +46,29 @@ export const CLEAR_SELECTION =              '[Dataset] Clear Selection';
 export const EXPORT_TO_CSV =                '[Dataset] Export to CSV';
 export const SET_VIEW_MODE =                '[Dataset] Set View Mode';
 
+export const FETCH_DATASETS =               '[Dataset] Fetch Datasets';
+export const FETCH_DATASETS_COMPLETE =      '[Dataset] Fetch Datasets Complete';
+export const FETCH_DATASETS_FAILED =        '[Dataset] Fetch Datasets Failed';
+
+export const FETCH_FACET_COUNTS =           '[Dataset] Fetch Facet Counts';
+export const FETCH_FACET_COUNTS_COMPLETE =  '[Dataset] Fetch Facet Counts Complete';
+export const FETCH_FACET_COUNTS_FAILED =    '[Dataset] Fetch Facet Counts Failed';
+
 export const CHANGE_PAGE =                  '[Dataset] Change Page';
 export const SORT_BY_COLUMN =               '[Dataset] Sort by Column';
+export const SET_SEARCH_TERMS =             '[Dataset] Set Search Terms';
+
+export const ADD_LOCATION_FILTER =          '[Dataset] Add Location Filter';
+export const REMOVE_LOCATION_FILTER =       '[Dataset] Remove Location Filter';
+
+export const ADD_GROUP_FILTER =             '[Dataset] Add Group Filter';
+export const REMOVE_GROUP_FILTER =          '[Dataset] Remove Group Filter';
+
+export const ADD_KEYWORD_FILTER =           '[Dataset] Add Keyword Filter';
+export const REMOVE_KEYWORD_FILTER =        '[Dataset] Remove Keyword Filter';
+
+export const SET_TYPE_FILTER =              '[Dataset] Set Type Filter';
+export const CLEAR_FACETS =                 '[Dataset] Clear Facets';
 
 export class SearchCompleteAction implements Action {
     readonly type = SEARCH_COMPLETE;
@@ -203,6 +224,74 @@ export class SetViewModeAction implements Action {
     constructor(readonly mode: ViewMode) {}
 }
 
+export class SetSearchTermsAction implements Action {
+    readonly type = SET_SEARCH_TERMS;
+    constructor(readonly terms: string) {}
+}
+
+export class AddLocationFilterAction implements Action {
+    readonly type = ADD_LOCATION_FILTER;
+    constructor(readonly location: string) {}
+}
+
+export class RemoveLocationFilterAction implements Action {
+    readonly type = REMOVE_LOCATION_FILTER;
+    constructor(readonly location: string) {}
+}
+
+export class AddGroupFilterAction implements Action {
+    readonly type = ADD_GROUP_FILTER;
+    constructor(readonly group: string) {}
+}
+
+export class RemoveGroupFilterAction implements Action {
+    readonly type = REMOVE_GROUP_FILTER;
+    constructor(readonly group: string) {}
+}
+
+export class AddKeywordFilterAction implements Action {
+    readonly type = ADD_KEYWORD_FILTER;
+    constructor(readonly keyword: string) {}
+}
+
+export class RemoveKeywordFilterAction implements Action {
+    readonly type = REMOVE_KEYWORD_FILTER;
+    constructor(readonly keyword: string) {}
+}
+
+export class SetTypeFilterAction implements Action {
+    readonly type = SET_TYPE_FILTER;
+    constructor(readonly datasetType: string) {}
+}
+
+export class ClearFacetsAction implements Action {
+    readonly type = CLEAR_FACETS;
+}
+
+export class FetchDatasetsAction implements Action {
+    readonly type = FETCH_DATASETS;
+}
+
+export class FetchDatasetsActionComplete implements Action {
+    readonly type = FETCH_DATASETS_COMPLETE;
+    constructor(readonly datasets: Dataset[]) {}
+}
+export class FetchDatasetsActionFailed implements Action {
+    readonly type = FETCH_DATASETS_FAILED;
+}
+
+export class FetchFacetCounts implements Action {
+    readonly type = FETCH_FACET_COUNTS;
+}
+
+export class FetchFacetCountsComplete implements Action {
+    readonly type = FETCH_FACET_COUNTS_COMPLETE;
+    constructor(readonly facetCounts: FacetCounts, readonly allCounts: number) {}
+}
+export class FetchFacetCountsFailed implements Action {
+    readonly type = FETCH_FACET_COUNTS_FAILED;
+}
+
 export type Actions =
     SearchCompleteAction | SearchFailedAction |
     UpdateFilterAction | UpdateFilterCompleteAction | FilterFailedAction |
@@ -212,5 +301,8 @@ export type Actions =
     DatablocksAction | AddGroupsAction | AddGroupsCompleteAction | UpdateSelectedDatablocksAction |
     AddGroupsFailedAction | UpdateSelectedAction | TotalSetsAction | ResetStatusAction | ResetStatusCompleteAction |
     SelectDatasetAction | DeselectDatasetAction |
-    ExportToCsvAction | ChangePageAction | SortByColumnAction | SetViewModeAction;
+    ExportToCsvAction | ChangePageAction | SortByColumnAction | SetViewModeAction |
+    
+    // New filtering actions
+    SetSearchTermsAction | ClearFacetsAction;
     

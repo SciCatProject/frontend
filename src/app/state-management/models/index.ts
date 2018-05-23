@@ -32,5 +32,5 @@ export interface DatasetFilters {
   limit: number;
   initial: boolean;
   keywords: string[];
-  sortField: Object
+  sortField: string
 };

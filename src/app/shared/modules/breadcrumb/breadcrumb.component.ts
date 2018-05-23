@@ -104,7 +104,7 @@ export class BreadcrumbComponent implements OnInit {
     // this catches errors and redirects to the fallback, this could/should be set in the routing module?
       if (crumb.fallback === '/datasets') {
         console.log('DATASETS');
-        this.store.select(selectors.datasets.getActiveFilters).take(1)
+        this.store.select(selectors.datasets.getFilters).take(1)
           .subscribe(filters => {
             console.log(filters);
             this.store.pipe(select(getViewMode)).take(1).subscribe(currentMode => {

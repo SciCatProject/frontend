@@ -31,7 +31,7 @@ export class ParamsService {
 
     // this.route.queryParams.take(1).subscribe(p => this.handleParams(p));
 
-    this.store.select(selectors.datasets.getActiveFilters)
+    this.store.select(selectors.datasets.getFilters)
       .subscribe(filters => {
         if (filters) {
           this.store.pipe(select(getViewMode)).take(1).subscribe(currentMode => {
@@ -47,7 +47,7 @@ export class ParamsService {
       .subscribe(currentMode => {
         if (currentMode) {
           this.route.queryParams.take(1).subscribe(params => {
-            const newParams = 'args' in params ? rison.decode(params['args']) : dStore.initialDatasetState.activeFilters;
+            const newParams = 'args' in params ? rison.decode(params['args']) : dStore.initialDatasetState.filters;
             newParams['mode'] = currentMode;
             if (window.location.pathname.indexOf('datasets') !== -1) {
               this.router.navigate(['/datasets'], { queryParams: { args: rison.encode(newParams) } });
@@ -59,7 +59,7 @@ export class ParamsService {
   }
 
   handleParams(params) {
-    const newParams = 'args' in params ? rison.decode(params['args']) : dStore.initialDatasetState.activeFilters;
+    const newParams = 'args' in params ? rison.decode(params['args']) : dStore.initialDatasetState.filters;
     const mode = newParams['mode'];
     delete newParams['mode'];
     // TODO could dispatch mode action here

@@ -23,7 +23,6 @@ import {
   MatButtonModule,
   MatCardModule,
   MatCheckboxModule,
-  MatChipsModule,
   // MatDatepickerModule,
   MatDialogModule,
   MatExpansionModule,
@@ -53,7 +52,10 @@ import {
   MatOptionModule,
 } from '@angular/material';
 
+
+
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatChipsModule } from '@angular/material/chips';
 
 import { SharedCatanieModule } from 'shared/shared.module';
 
@@ -68,7 +70,7 @@ import { datasetsReducer } from 'state-management/reducers/datasets.reducer';
     MatCardModule, MatDialogModule, MatPaginatorModule, MatCheckboxModule, MatTableModule, MatFormFieldModule, MatAutocompleteModule,
     MatTabsModule, MatInputModule, MatButtonModule, MatSortModule, CommonModule, FormsModule, ReactiveFormsModule,
     SharedCatanieModule, MatSelectModule, MatOptionModule, MatNativeDateModule, MatIconModule,
-    MatListModule, MatDatepickerModule, MatTooltipModule, MatButtonToggleModule, MatProgressSpinnerModule,
+    MatListModule, MatDatepickerModule, MatTooltipModule, MatButtonToggleModule, MatProgressSpinnerModule, MatChipsModule,
     StoreModule.forFeature('datasets', datasetsReducer),
     FileHelpersModule, AppConfigModule
   ],

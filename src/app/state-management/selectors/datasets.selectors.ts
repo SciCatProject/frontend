@@ -3,18 +3,16 @@ import { Dataset, DatasetFilters } from 'state-management/models';
 import { createSelector, createFeatureSelector } from '@ngrx/store';
 import { DatasetState } from '../state/datasets.store'
 
-/* Improved, createSelector-based selectors are temporarily suffixed with 2 */
-
 const getDatasetState = createFeatureSelector<DatasetState>('datasets');
 
-export const getDatasets2 = createSelector(
+export const getDatasets = createSelector(
     getDatasetState,
     state => state.datasets
 );
 
 export const getSelectedDatasets = createSelector(
     getDatasetState,
-    state => state.selectedSets2
+    state => state.selectedSets
 );
 
 export const isEmptySelection = createSelector(
@@ -24,20 +22,19 @@ export const isEmptySelection = createSelector(
 
 export const getPage = createSelector(
     getDatasetState,
-    state => state.currentPage2
+    state => {
+        const {skip, limit} = state.filters;
+        return skip / limit;
+    }
 );
 
 export const getDatasetsPerPage = createSelector(
     getDatasetState,
-    state => state.activeFilters.limit
+    state => state.filters.limit
 );
 
-/*
-TODO: create selector to derive filter object from state
-*/
-
 export const getRectangularRepresentation = createSelector(
-    getDatasets2,
+    getDatasets,
     datasets => {
         const merged = datasets
             .reduce((result, current) => ({...result, ...current}));
@@ -65,22 +62,70 @@ export const getViewMode = createSelector(
 
 export const getIsLoading = createSelector(
     getDatasetState,
-    state => state.datasetsLoading || state.filtersLoading
+    state => state.datasetsLoading || state.facetCountsLoading
 );
 
-export const getFilterValues = (state: any) => state.root.datasets.filterValues;
-export const getActiveFilters = (state: any) => state.root.datasets.activeFilters;
-export const getText = (state: any) => state.root.datasets.activeFilters.text;
+export const getTotalSets = createSelector(
+    getDatasetState,
+    state => state.totalCount
+);
 
-export const getDatasets = (state: any) => state.root.datasets.datasets;
-export const getSelectedSets = (state: any) => state.root.datasets.selectedSets;
+export const getFilters = createSelector(
+    getDatasetState,
+    state => state.filters
+);
 
-export const getTotalSets = (state: any) => {
-  if ('all' in state.root.datasets.filterValues &&
-    state.root.datasets.filterValues['all'].length > 0) {
-    return state.root.datasets.filterValues['all'][0].totalSets;
-  } else {
-    return 0
-  }
-}
-export const getCurrentSet = (state: any) => state.root.datasets.currentSet;
+export const getSearchTerms = createSelector(
+    getFilters,
+    filters => filters.text
+);
+
+export const getLocationFilter = createSelector(
+    getFilters,
+    filters => filters.creationLocation
+);
+
+export const getGroupFilter = createSelector(
+    getFilters,
+    filters => filters.ownerGroup
+);
+
+export const getTypeFilter = createSelector(
+    getFilters,
+    filters => filters.type
+);
+
+export const getKeywordsFilter = createSelector(
+    getFilters,
+    filters => filters.keywords
+);
+
+const getFacetCounts = createSelector(
+    getDatasetState,
+    state => state.facetCounts || {}
+);
+
+export const getLocationFacetCounts = createSelector(
+    getFacetCounts,
+    counts => counts.creationLocation || []
+);
+
+export const getGroupFacetCounts = createSelector(
+    getFacetCounts,
+    counts => counts.ownerGroup || []
+);
+
+export const getTypeFacetCounts = createSelector(
+    getFacetCounts,
+    counts => counts.type
+);
+
+export const getKeywordFacetCounts = createSelector(
+    getFacetCounts,
+    counts => counts.keyword
+);
+
+export const getCreationTimeFacetCounts = createSelector(
+    getFacetCounts,
+    counts => counts.creationTime || []
+);

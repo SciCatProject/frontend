@@ -7,7 +7,7 @@ import { map } from 'rxjs/operators/map';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormControl } from '@angular/forms';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { createSelector, OutputSelector } from 'reselect';
 
 import * as utils from 'shared/utils';
@@ -20,6 +20,9 @@ import * as rison from 'rison';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Dataset } from 'shared/sdk';
 import { MatDatepicker } from 'saturn-datepicker';
+
+import { FacetCount } from 'state-management/state/datasets.store';
+import { getLocationFacetCounts, getGroupFacetCounts, getTypeFacetCounts, getKeywordFacetCounts, getLocationFilter, getTypeFilter, getKeywordsFilter, getGroupFilter, getFilters } from 'state-management/selectors/datasets.selectors';
 
 export interface MatDatePickerRangeValue<D> {
   start: D | null;
@@ -50,7 +53,6 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
 
   // @Input() datasets: Array<any> = [];
   facets: Array<any> = [];
-  resultCount$;
 
   locations = [];
   groups = [];
@@ -58,20 +60,35 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   types = [];
 
   filterTemplate: DatasetFilters;
-  filters: any = dStore.initialDatasetState.activeFilters;
+  filters: any = dStore.initialDatasetState.filters;
   filterValues;
 
   subscriptions = [];
 
-  constructor(private store: Store<any>, private route: ActivatedRoute,
-    private router: Router) {
+  filters$;
+
+  private locationFacetCounts$: Observable<FacetCount[]>;
+  private groupFacetCounts$: Observable<FacetCount[]>;
+  private typeFacetCounts$: Observable<FacetCount[]>;
+  private keywordFacetCounts$: Observable<FacetCount[]>;
+
+  private locationFilter$: Observable<string[]>;
+  private groupFilter$: Observable<string[]>;
+  private typeFilter$: Observable<string>;
+  private keywordsFilter$: Observable<string[]>;
+
+  constructor(
+    private store: Store<any>, 
+    private route: ActivatedRoute,
+    private router: Router
+  ) {
     this.locationInput = new FormControl();
     this.groupInput = new FormControl();
     this.typeInput = new FormControl();
     this.keywordInput = new FormControl();
-
   }
 
+  /*
   filterLocations(loc: string) {
     return this.locations.filter(b => b._id && b._id.toLowerCase().indexOf(loc.toLowerCase()) === 0);
   }
@@ -88,17 +105,27 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     console.log(t);
     return this.types.filter(k => k._id && k._id.toString().toLowerCase().indexOf(t.toString().toLowerCase()) === 0);
   }
+  */
 
   /**
    * Load locations and ownergroups on start up and
    * only use unique values
    */
   ngOnInit() {
+    this.filters$ = this.store.pipe(select(getFilters));
 
-    this.resultCount$ =
-      this.store.select(selectors.datasets.getTotalSets);
+    this.locationFilter$ = this.store.pipe(select(getLocationFilter));
+    this.typeFilter$ = this.store.pipe(select(getTypeFilter));
+    this.keywordsFilter$ = this.store.pipe(select(getKeywordsFilter));
+    this.groupFilter$ = this.store.pipe(select(getGroupFilter));
 
-    this.store.select(selectors.datasets.getActiveFilters).subscribe(filters => {
+    this.locationFacetCounts$ = this.store.pipe(select(getLocationFacetCounts));
+    this.groupFacetCounts$ = this.store.pipe(select(getGroupFacetCounts));
+    this.typeFacetCounts$ = this.store.pipe(select(getTypeFacetCounts));
+    this.keywordFacetCounts$ = this.store.pipe(select(getKeywordFacetCounts));
+
+    /*
+    this.store.select(selectors.datasets.getFilters).subscribe(filters => {
       if ('creationLocation' in filters && filters.creationLocation) {
         const l = filters['creationLocation'].toString();
         this.locationInput.setValue(l);
@@ -119,9 +146,11 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
         this.dateRange = filters.creationTime;
       }
     });
+    */
 
+    /*
     this.subscriptions.push(
-      this.store.select(selectors.datasets.getFilterValues)
+      this.store.select(selectors.datasets.getFilters)
         .subscribe(values => {
           this.filterValues = { ...values };
           if (this.filterValues) {
@@ -148,6 +177,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
                 .pipe(startWith(''), map(t => t ? this.filterTypes(t) : this.types.slice()));
             }
         }));
+    */
   }
 
 
@@ -157,56 +187,40 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     }
   }
 
-  /**
-   * Handle clicking of available locations
-   */
-  locSelected(loc) {
-    this.filters.creationLocation.push(loc);
-    this.store.dispatch(new dsa.UpdateFilterAction(this.filters));
+  locationSelected(location: string | null) {
+    this.store.dispatch(new dsa.AddLocationFilterAction(location || ''));
   }
 
-  /**
-   * Handle clicking of available groups
-   */
-  groupSelected(grp) {
-    this.filters.ownerGroup.push(grp);
-    this.store.dispatch(new dsa.UpdateFilterAction(this.filters));
+  locationRemoved(location: string) {
+    this.store.dispatch(new dsa.RemoveLocationFilterAction(location));
   }
 
-  keywordSelected(kw) {
-    if (kw) {
-      this.filters.keywords.push(kw);
-      this.store.dispatch(new dsa.UpdateFilterAction(this.filters));
-    }
+  groupSelected(group: string) {
+    this.store.dispatch(new dsa.AddGroupFilterAction(group));
   }
 
-  typeSelected(type) {
-    this.filters.type = type;
-    this.store.dispatch(new dsa.UpdateFilterAction(this.filters));
+  groupRemoved(group: string) {
+    this.store.dispatch(new dsa.RemoveGroupFilterAction(group));
+  }
+
+  keywordSelected(keyword: string) {
+    this.store.dispatch(new dsa.AddKeywordFilterAction(keyword));
+  }
+
+  typeSelected(type: string) {
+    this.store.dispatch(new dsa.SetTypeFilterAction(type));
   }
 
   dateChanged(event) {
-    this.filters.creationTime = this.dateRange;
-    this.store.dispatch(new dsa.UpdateFilterAction(this.filters));
+    // TODO
+    // this.store.dispatch(new dsa.UpdateFilterAction(this.filters));
   }
 
   /**
    * Clear the filters and reset the user groups (when not a functional account)
    */
   clearFacets() {
-    this.locationInput.setValue('');
-    this.groupInput.setValue('');
-    this.keywordInput.setValue('');
-    this.typeInput.setValue('');
-    this.filters = dStore.initialDatasetState.activeFilters;
-    this.dateRange = null;
-    this.filters.ownerGroup = [];
-    this.filters.creationLocation = [];
-    this.filters.keywords = [];
-    this.filterValues = dStore.initialDatasetState.filterValues;
-    //this.filterValues.text = '';
-    this.filters.creationTime = null;
-    this.store.dispatch(new dsa.UpdateFilterAction(this.filters));
+    this.store.dispatch(new dsa.ClearFacetsAction());
   }
 
   /**

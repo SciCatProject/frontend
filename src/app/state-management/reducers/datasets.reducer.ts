@@ -27,6 +27,29 @@ import {
     CLEAR_SELECTION,
     SetViewModeAction,
     SET_VIEW_MODE,
+    CLEAR_FACETS,
+    FETCH_DATASETS_COMPLETE,
+    FetchDatasetsActionComplete,
+    FETCH_FACET_COUNTS_COMPLETE,
+    FetchFacetCountsComplete,
+    ADD_LOCATION_FILTER,
+    AddLocationFilterAction,
+    RemoveLocationFilterAction,
+    REMOVE_LOCATION_FILTER,
+    ADD_GROUP_FILTER,
+    AddGroupFilterAction,
+    SET_TYPE_FILTER,
+    ADD_KEYWORD_FILTER,
+    AddKeywordFilterAction,
+    SetTypeFilterAction,
+    REMOVE_GROUP_FILTER,
+    RemoveGroupFilterAction,
+    REMOVE_KEYWORD_FILTER,
+    RemoveKeywordFilterAction,
+    SetSearchTermsAction,
+    SET_SEARCH_TERMS,
+    FETCH_DATASETS,
+    FETCH_FACET_COUNTS,
 } from 'state-management/actions/datasets.actions';
 
 import { DatasetState, initialDatasetState } from 'state-management/state/datasets.store';
@@ -37,6 +60,24 @@ export function datasetsReducer(state: DatasetState = initialDatasetState, actio
     }
 
     switch (action.type) {
+        case FETCH_DATASETS: {
+            return {...state, datasetsLoading: true};
+        }
+
+        case FETCH_DATASETS_COMPLETE: {
+            const datasets = (action as FetchDatasetsActionComplete).datasets;
+            return {...state, datasets, datasetsLoading: false};
+        }
+
+        case FETCH_FACET_COUNTS: {
+            return {...state, facetCountsLoading: true};
+        }
+
+        case FETCH_FACET_COUNTS_COMPLETE: {
+            const {facetCounts, allCounts} = action as FetchFacetCountsComplete;
+            return {...state, facetCounts, totalCount: allCounts, facetCountsLoading: false};
+        }
+
         case FILTER_UPDATE: {
             const f = action['payload'];
             const group = f['ownerGroup'];
@@ -45,26 +86,96 @@ export function datasetsReducer(state: DatasetState = initialDatasetState, actio
                 f['ownerGroup'] = [group];
             }
 
-            return {...state, activeFilters: f, datasetsLoading: true, selectedSets: []};
+            return {...state, filters: f, datasetsLoading: true, selectedSets: []};
+        }
+
+        case SET_SEARCH_TERMS: {
+            const {terms} = (action as SetSearchTermsAction);
+            const filters = {...state.filters, text: terms};
+            return {...state, filters};
+        }
+
+        case ADD_LOCATION_FILTER: {
+            const {location} = action as AddLocationFilterAction;
+            const creationLocation = state
+                    .filters
+                    .creationLocation
+                    .concat(location)
+                    .filter((val, i, self) => self.indexOf(val) === i); // Unique
+            const filters = {...state.filters, creationLocation};
+            return {...state, filters};
+        }
+
+        case REMOVE_LOCATION_FILTER: {
+            const {location} = action as RemoveLocationFilterAction;
+            const creationLocation = state.filters.creationLocation.filter(_ => _ !== location);
+            const filters = {...state.filters, creationLocation};
+            return {...state, filters};
+        }
+        
+        case ADD_GROUP_FILTER: {
+            const {group} = action as AddGroupFilterAction;
+            const ownerGroup = state
+                .filters
+                .ownerGroup
+                .concat(group)
+                .filter((val, i, self) => self.indexOf(val) === i); // Unique
+            const filters = {...state.filters, ownerGroup};
+            return {...state, filters};
+        }
+
+        case REMOVE_GROUP_FILTER: {   
+            const {group} = action as RemoveGroupFilterAction;
+            const ownerGroup = state.filters.ownerGroup.filter(_ => _ !== group);
+            const filters = {...state.filters, ownerGroup};
+            return {...state, filters};
+        }
+        
+        case SET_TYPE_FILTER: {
+            const {datasetType} = action as SetTypeFilterAction;
+            const filters = {...state.filters, type: datasetType};
+            return {...state, filters};
+        }
+        
+        case ADD_KEYWORD_FILTER: {
+            const {keyword} = action as AddKeywordFilterAction;
+            const keywords = state
+                .filters
+                .keywords
+                .concat(keyword)
+                .filter((val, i, self) => self.indexOf(val) === i); // Unique
+            const filters = {...state.filters, keywords};
+            return {...state, filters};
+        }
+
+        case REMOVE_KEYWORD_FILTER: {   
+            const {keyword} = action as RemoveKeywordFilterAction;
+            const keywords = state.filters.keywords.filter(_ => _ !== keyword);
+            const filters = {...state.filters, keywords};
+            return {...state, filters};
+        }
+
+        case CLEAR_FACETS: {
+            const filters = {...initialDatasetState.filters};
+            return {...state, filters};
         }
 
         case CHANGE_PAGE: {
             const {page, limit} = (action as ChangePageAction);
             const skip = page * limit;
-            const activeFilters = {...state.activeFilters, skip, limit};
+            const filters = {...state.filters, skip, limit};
             return {
                 ...state,
                 datasetsLoading: true,
-                activeFilters,
-                currentPage2: page
+                filters
             };
         }
 
         case SORT_BY_COLUMN: {
             const {column, direction} = action as SortByColumnAction;
-            const sortField = column + ':' + direction;
-            const activeFilters = {...state.activeFilters, sortField};
-            return {...state, activeFilters, datasetsLoading: true};
+            const sortField = column + (direction ? ':' + direction : '');
+            const filters = {...state.filters, sortField};
+            return {...state, filters, datasetsLoading: true};
         }
 
         case SET_VIEW_MODE: {
@@ -72,7 +183,7 @@ export function datasetsReducer(state: DatasetState = initialDatasetState, actio
             if (state.mode === mode) {
                 return state;
             } else {
-                return {...state, mode, datasetsLoading: true, filtersLoading: true};
+                return {...state, mode, datasetsLoading: true, facetCountsLoading: true};
             }
         }
 
@@ -83,16 +194,16 @@ export function datasetsReducer(state: DatasetState = initialDatasetState, actio
 
         case ADD_GROUPS_COMPLETE: {
             const ownerGroup = action['payload'];
-            const activeFilters = {...state.activeFilters, ownerGroup};
-            return {...state, activeFilters};
+            const filters = {...state.filters, ownerGroup};
+            return {...state, filters};
         }
 
         case FILTER_VALUE_UPDATE: {
-            return {...state, filtersLoading: true};
+            return {...state, facetCountsLoading: true};
         }
         case FILTER_UPDATE_COMPLETE: {
-            const filterValues = action['payload'];
-            return {...state, filterValues, filtersLoading: false};
+            const filters = action['payload'];
+            return {...state, filters, facetCountsLoading: false};
         }
 
         case SELECT_CURRENT:
@@ -108,25 +219,20 @@ export function datasetsReducer(state: DatasetState = initialDatasetState, actio
             return {...state, selectedSets};
         }
 
-        case TOTAL_UPDATE: {
-            const totalSets = <number>action['payload'];
-            return {...state, totalSets};
-        }
-
         case SELECT_DATASET: {
             const dataset = (action as SelectDatasetAction).dataset;
-            const selectedSets2 = state.selectedSets2.concat(dataset);
-            return {...state, selectedSets2};
+            const selectedSets = state.selectedSets.concat(dataset);
+            return {...state, selectedSets};
         }
 
         case DESELECT_DATASET: {
             const dataset = (action as DeselectDatasetAction).dataset;
-            const selectedSets2 = state.selectedSets2.filter(selectedSet => selectedSet.pid !== dataset.pid);
-            return {...state, selectedSets2};
+            const selectedSets = state.selectedSets.filter(selectedSet => selectedSet.pid !== dataset.pid);
+            return {...state, selectedSets};
         }
 
         case CLEAR_SELECTION: {
-            return {...state, selectedSets2: []};
+            return {...state, selectedSets: []};
         }
 
         // TODO handle failed actions
@@ -135,8 +241,3 @@ export function datasetsReducer(state: DatasetState = initialDatasetState, actio
         }
     }
 }
-
-export const getDatasets = (state: DatasetState) => state.datasets;
-export const getActiveFilters = (state: DatasetState) => state.activeFilters;
-export const getFilterValues = (state: DatasetState) => state.filterValues;
-export const getCurrentSet = (state: DatasetState) => state.currentSet;

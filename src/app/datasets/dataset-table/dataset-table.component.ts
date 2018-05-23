@@ -24,37 +24,34 @@ import * as utils from 'shared/utils';
 import { config } from '../../../config/config';
 
 import * as dsa from 'state-management/actions/datasets.actions';
-import * as selectors from 'state-management/selectors';
 import * as ua from 'state-management/actions/user.actions';
 import * as ja from 'state-management/actions/jobs.actions';
-import { getDatasets2, getSelectedDatasets, getPage, getViewMode, isEmptySelection, getDatasetsPerPage, getIsLoading } from 'state-management/selectors/datasets.selectors';
-import { Message, MessageType } from 'state-management/models';
+import { getDatasets, getSelectedDatasets, getPage, getViewMode, isEmptySelection, getDatasetsPerPage, getIsLoading, getTotalSets, getFilters } from 'state-management/selectors/datasets.selectors';
+import { Message, MessageType, DatasetFilters } from 'state-management/models';
+import * as jobSelectors from 'state-management/selectors/jobs.selectors';
 
 import { Angular5Csv } from 'angular5-csv/Angular5-csv';
 
 import { last } from 'rxjs/operator/last';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { startWith } from 'rxjs/operator/startWith';
+import { startWith } from 'rxjs/operators/startWith';
 import { take } from 'rxjs/operator/take';
 
 import { PageChangeEvent, SortChangeEvent } from '../dataset-table-pure/dataset-table-pure.component';
 
 import * as rison from 'rison';
 import { Subscription } from 'rxjs';
-import { ViewMode } from 'state-management/state/datasets.store';
 import { APP_CONFIG, AppConfig } from 'app-config.module';
+import { ViewMode } from 'state-management/state/datasets.store';
+import { distinctUntilChanged } from 'rxjs/operators/distinctUntilChanged';
 
 @Component({
   selector: 'dataset-table',
-  templateUrl: './dataset-table.component.html',
-  styleUrls: ['./dataset-table.component.scss']
+  templateUrl: 'dataset-table.component.html',
+  styleUrls: ['dataset-table.component.scss']
 })
 export class DatasetTableComponent implements OnInit, OnDestroy {
-  @Input() public datasets = [];
-  @Output() private openDataset = new EventEmitter();
-  @Output() private selectedSet = new EventEmitter<Array<any>>();
-
   private datasets$: Observable<Dataset[]>;
   private selectedSets$: Observable<Dataset[]>;
   private currentPage$: Observable<number>;
@@ -62,15 +59,17 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   private mode$: Observable<string>;
   private datasetCount$: Observable<number>;
   private isEmptySelection$: Observable<boolean>;
+  private filters$: Observable<DatasetFilters>;
 
   // compatibility analogs of observables
-  private currentMode: ViewMode = 'view';
+  private currentMode: string = 'view';
   private selectedSets: Dataset[] = [];
 
   private modes: string[] = ['view', 'archive', 'retrieve'];
 
   private loading$: Observable<boolean>;
 
+  private filtersSubscription: Subscription;
   // These should be made part of the NgRX state management
   // and eventually be removed.
   private modeSubscription: Subscription;
@@ -88,18 +87,24 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     public dialog: MatDialog,
     @Inject(APP_CONFIG) private appConfig: AppConfig
   ) {
-    this.datasetCount$ = this.store.select(selectors.datasets.getTotalSets);
-    this.loading$ = this.store.pipe(select(getIsLoading));
     this.disabledColumns = appConfig.disabledDatasetColumns;
   }
 
   ngOnInit() {
-    this.datasets$ = this.store.pipe(select(getDatasets2));
+    this.datasets$ = this.store.pipe(select(getDatasets));
     this.selectedSets$ = this.store.pipe(select(getSelectedDatasets));
     this.currentPage$ = this.store.pipe(select(getPage));
     this.datasetsPerPage$ = this.store.pipe(select(getDatasetsPerPage));
     this.mode$ = this.store.pipe(select(getViewMode));
     this.isEmptySelection$ = this.store.pipe(select(isEmptySelection));
+    this.datasetCount$ = this.store.select(getTotalSets);
+    this.loading$ = this.store.pipe(select(getIsLoading));
+    this.filters$ = this.store.pipe(select(getFilters));
+
+    this.filtersSubscription = this.filters$.subscribe(() => {
+      this.store.dispatch(new dsa.FetchDatasetsAction());
+      this.store.dispatch(new dsa.FetchFacetCounts());
+    });
 
     // Store concrete values of observables for compatibility
     this.modeSubscription = this.mode$.subscribe((mode: ViewMode) => {
@@ -110,14 +115,8 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
       this.selectedSets = selectedSets
     );
 
-    // Use activated route here somehow
-    /*this.store.select(state => state.root.dashboardUI.mode).subscribe(mode => {
-      this.mode = mode;
-      this.updateRowView(mode);
-    })*/
-
     this.submitJobSubscription =
-      this.store.select(selectors.jobs.submitJob).subscribe(
+      this.store.select(jobSelectors.submitJob).subscribe(
         ret => {
           if (ret && Array.isArray(ret)) {
             console.log(ret);
@@ -133,7 +132,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
       );
 
     this.jobErrorSubscription =
-      this.store.select(selectors.jobs.getError).subscribe(err => {
+      this.store.select(jobSelectors.getError).subscribe(err => {
         if (err) {
           this.store.dispatch(new ua.ShowMessageAction({
             type: MessageType.Error,

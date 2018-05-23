@@ -13,15 +13,79 @@ import * as lb from 'shared/sdk/services';
 import * as DatasetActions from 'state-management/actions/datasets.actions';
 import * as UserActions from 'state-management/actions/user.actions';
 
-import { Message, MessageType } from 'state-management/models';
-import { filter, tap, mergeMap, map } from 'rxjs/operators';
-import { getRectangularRepresentation } from '../selectors/datasets.selectors';
+import { Dataset,Message, MessageType, DatasetFilters } from 'state-management/models';
+import { getRectangularRepresentation, getFilters } from '../selectors/datasets.selectors';
 import { takeLast } from 'rxjs/operator/takeLast';
 import { Angular5Csv } from 'angular5-csv/Angular5-csv';
 import { config } from '../../../config/config';
+import { switchMap } from 'rxjs/operators/switchMap';
+
+import { map } from 'rxjs/operators/map';
+import { withLatestFrom } from 'rxjs/operators/withLatestFrom';
+import { catchError } from 'rxjs/operators/catchError';
+import { mergeMap } from 'rxjs/operators/mergeMap';
+import { tap } from 'rxjs/operators/tap';
+import { first } from 'rxjs/operators/first';
+
+// Returns copy with null/undefined values and empty arrays removed
+function restrictFilter(filter) {
+  return Object.keys(filter).reduce((obj, key) => {
+    const val = filter[key];
+    if (val == null || Array.isArray(val) && val.length === 0) {
+      return obj;
+    } else {
+      return {...obj, [key]: val}
+    }
+  }, {});
+}
 
 @Injectable()
 export class DatasetEffects {
+
+  @Effect()
+  private fetchDatasets$: Observable<Action> = this.action$.pipe(
+    ofType(DatasetActions.FETCH_DATASETS),
+    withLatestFrom(this.store.pipe(select(getFilters))),
+    map(([action, filter]) => filter),
+    mergeMap((filter) => {
+      const {skip, limit, sortField, ...theRest} = filter;
+      const limits = {skip, limit, sortField};
+      const query = restrictFilter(theRest);
+
+      // ???
+      delete query['mode'];
+      delete query['initial'];
+
+      return this.ds.fullquery(query, limits);
+    }),
+    map(datasets => new DatasetActions.FetchDatasetsActionComplete(datasets as Dataset[])),
+    catchError(() => Observable.of(new DatasetActions.FetchDatasetsActionFailed()))
+  );
+
+  @Effect()
+  private fetchFacetCounts$: Observable<Action> = this.action$.pipe(
+    ofType(DatasetActions.FETCH_FACET_COUNTS),
+    withLatestFrom(this.store.pipe(select(getFilters))),
+    map(([action, filter]) => filter),
+    mergeMap(filter => {
+      const fields = ['type', 'creationTime', 'creationLocation', 'ownerGroup', 'keywords'];
+      const query = fields.reduce((obj, key) => {
+        const val = filter[key];
+        if (val == null || Array.isArray(val) && val.length === 0) {
+          return obj;
+        } else {
+          return {...obj, [key]: val}
+        }
+      }, {});
+      const json = JSON.stringify(query);
+      return this.ds.fullfacet(json, fields);
+    }),
+    map(res => {
+      const {all, ...facetCounts} = res[0];
+      const allCounts = all ? all[0].totalSets : 0;
+      return new DatasetActions.FetchFacetCountsComplete(facetCounts, allCounts);
+    })
+  );
 
   @Effect({dispatch: false})
   protected exportToCsv$: Observable<Action> = this.action$.pipe(
@@ -90,6 +154,7 @@ export class DatasetEffects {
           });
       });
 
+      /*
   @Effect()
   protected facet$: Observable<Action> =
     this.action$.ofType(DatasetActions.FILTER_UPDATE)
@@ -115,8 +180,9 @@ export class DatasetEffects {
             console.log(err);
             return Observable.of(new DatasetActions.FilterFailedAction(err));
           });
-      });
+      });*/
 
+  /*
   @Effect()
   protected facetDatasets$: Observable<Action> =
     this.action$.ofType(DatasetActions.FILTER_UPDATE)
@@ -155,6 +221,7 @@ export class DatasetEffects {
                 return Observable.of(new DatasetActions.SearchFailedAction(err));
            });
       });
+      */
 
   @Effect()
   protected deleteDatablocks$: Observable<Action> =
@@ -210,12 +277,15 @@ export class DatasetEffects {
         });
       });
 
-  constructor(private action$: Actions, private store: Store<any>,
-    private cds: DatasetService, private ds: lb.DatasetApi, private rds: lb.DatasetApi,
-    private dls: lb.DatasetLifecycleApi, private dbs: lb.DatablockApi,
-    private odbs: lb.OrigDatablockApi,
-    private userIdentitySrv: lb.UserIdentityApi,
-    private accessUserSrv: lb.AccessUserApi) { }
+  constructor(
+    private action$: Actions,
+    private store: Store<any>,
+    private ds: lb.DatasetApi,
+    private rds: lb.DatasetApi,
+    private dls: lb.DatasetLifecycleApi,
+    private dbs: lb.DatablockApi,
+    private odbs: lb.OrigDatablockApi
+  ) {}
 }
 
 function stringSort(a, b) {

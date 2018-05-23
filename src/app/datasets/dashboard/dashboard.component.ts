@@ -10,6 +10,7 @@ import * as ds from 'state-management/selectors/datasets.selectors';
 import * as selectors from 'state-management/selectors';
 
 import { ParamsService } from 'params.service';
+import { distinctUntilChanged } from 'rxjs/operators/distinctUntilChanged';
 
 @Component({
   selector: 'dashboard',
@@ -17,17 +18,7 @@ import { ParamsService } from 'params.service';
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
-  apiEndpoint: string;
-  tooltipPos = 'below';
-
-  /**
-   * Datasets retrieved from catalogue that match a user's search terms.
-   *
-   * @type {Array<Dataset>}
-   * @memberof DashboardComponent
-   */
-  
-  searchText$;
+  private searchText$: Observable<string>;
   private selectedDatasets$: Observable<Dataset[]>;
 
   constructor(
@@ -45,22 +36,16 @@ export class DashboardComponent implements OnInit {
    *
    */
   ngOnInit() {
-    this.searchText$ = this.store.select(ds.getText);
+    this.searchText$ = this.store.select(ds.getSearchTerms);
   }
 
   /**
    * Handles free text search.
    * Need to determine best way to search mongo fields
-   * @param {any} customTerm - free text search term@memberof DashboardComponent
+   * @param {any} customTerm - free text search term
+   * @memberof DashboardComponent
    */
   textSearch(terms) {
-    this.store
-      .select(state => state.root.datasets.activeFilters)
-      .take(1)
-      .subscribe(values => {
-        const filters = Object.assign({}, values);
-        filters['text'] = terms;
-        this.store.dispatch(new dsa.UpdateFilterAction(filters));
-      });
+    this.store.dispatch(new dsa.SetSearchTermsAction(terms));
   }
 }
