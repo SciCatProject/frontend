@@ -69,7 +69,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
 
   private loading$: Observable<boolean>;
 
-  private filtersSubscription: Subscription;
   // These should be made part of the NgRX state management
   // and eventually be removed.
   private modeSubscription: Subscription;
@@ -100,11 +99,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     this.datasetCount$ = this.store.select(getTotalSets);
     this.loading$ = this.store.pipe(select(getIsLoading));
     this.filters$ = this.store.pipe(select(getFilters));
-
-    this.filtersSubscription = this.filters$.subscribe(() => {
-      this.store.dispatch(new dsa.FetchDatasetsAction());
-      this.store.dispatch(new dsa.FetchFacetCounts());
-    });
 
     // Store concrete values of observables for compatibility
     this.modeSubscription = this.mode$.subscribe((mode: ViewMode) => {

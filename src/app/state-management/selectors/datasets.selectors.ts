@@ -76,8 +76,8 @@ export const getFilters = createSelector(
 );
 
 export const getSearchTerms = createSelector(
-    getFilters,
-    filters => filters.text
+    getDatasetState,
+    state => state.searchTerms
 );
 
 export const getLocationFilter = createSelector(

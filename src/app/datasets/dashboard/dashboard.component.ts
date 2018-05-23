@@ -1,51 +1,55 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Store, select } from '@ngrx/store';
+
+import { Subscription, Subject } from 'rxjs';
 import { Observable } from 'rxjs/Observable';
+import { debounceTime } from 'rxjs/operators/debounceTime';
 
-import { Dataset } from 'shared/sdk/models';
+import { Store, select } from '@ngrx/store';
 
-import * as dsa from 'state-management/actions/datasets.actions';
-import * as ds from 'state-management/selectors/datasets.selectors';
-import * as selectors from 'state-management/selectors';
+import { Dataset, DatasetFilters } from 'state-management/models';
 
-import { ParamsService } from 'params.service';
-import { distinctUntilChanged } from 'rxjs/operators/distinctUntilChanged';
+import {
+  SetSearchTermsAction,
+  FetchFacetCountsAction,
+  FetchDatasetsAction,
+  SetTextFilterAction,
+} from 'state-management/actions/datasets.actions';
+
+import {
+  getSelectedDatasets,
+  getSearchTerms,
+  getFilters
+} from 'state-management/selectors/datasets.selectors';
 
 @Component({
   selector: 'dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })
-export class DashboardComponent implements OnInit {
-  private searchText$: Observable<string>;
-  private selectedDatasets$: Observable<Dataset[]>;
+export class DashboardComponent implements OnDestroy
+{
+  constructor(private store: Store<any>) {}
 
-  constructor(
-    private router: Router,
-    private route: ActivatedRoute,
-    private store: Store<any>,
-    private params: ParamsService,
-  ) {
-    this.selectedDatasets$ = this.store.pipe(select(ds.getSelectedDatasets));
+  private filters$ = this.store.pipe(select(getFilters));
+  private selectedDatasets$ = this.store.pipe(select(getSelectedDatasets));
+  private searchTerms$ = this.store.pipe(select(getSearchTerms));
+
+  private filterSubscription = this.filters$.subscribe(() => {
+    this.store.dispatch(new FetchDatasetsAction());
+    this.store.dispatch(new FetchFacetCountsAction());
+  });
+
+  private searchTermSubscription = this.searchTerms$.pipe(debounceTime(500)).subscribe(terms => {
+    this.store.dispatch(new SetTextFilterAction(terms));
+  });
+
+  ngOnDestroy() {
+    this.filterSubscription.unsubscribe();
+    this.searchTermSubscription.unsubscribe();
   }
 
-  /**
-   * On loading of the dashboard, initiate a search
-   * using the filters in the state
-   *
-   */
-  ngOnInit() {
-    this.searchText$ = this.store.select(ds.getSearchTerms);
-  }
-
-  /**
-   * Handles free text search.
-   * Need to determine best way to search mongo fields
-   * @param {any} customTerm - free text search term
-   * @memberof DashboardComponent
-   */
-  textSearch(terms) {
-    this.store.dispatch(new dsa.SetSearchTermsAction(terms));
+  textSearch(terms: string) {
+    this.store.dispatch(new SetSearchTermsAction(terms));
   }
 }

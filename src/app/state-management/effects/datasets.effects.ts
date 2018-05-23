@@ -28,10 +28,15 @@ import { tap } from 'rxjs/operators/tap';
 import { first } from 'rxjs/operators/first';
 
 // Returns copy with null/undefined values and empty arrays removed
-function restrictFilter(filter) {
-  return Object.keys(filter).reduce((obj, key) => {
+function restrictFilter(filter: object, allowedKeys?: string[]) {
+  const keys = allowedKeys || Object.keys(filter);
+  return keys.reduce((obj, key) => {
     const val = filter[key];
-    if (val == null || Array.isArray(val) && val.length === 0) {
+    if (
+      val == null ||
+      typeof val === 'string' && val.length === 0 ||
+      Array.isArray(val) && val.length === 0
+    ) {
       return obj;
     } else {
       return {...obj, [key]: val}
@@ -56,10 +61,11 @@ export class DatasetEffects {
       delete query['mode'];
       delete query['initial'];
 
-      return this.ds.fullquery(query, limits);
+      return this.ds.fullquery(query, limits).pipe(
+        map(datasets => new DatasetActions.FetchDatasetsCompleteAction(datasets as Dataset[])),
+        catchError(() => Observable.of(new DatasetActions.FetchDatasetsFailedAction()))    
+      )
     }),
-    map(datasets => new DatasetActions.FetchDatasetsActionComplete(datasets as Dataset[])),
-    catchError(() => Observable.of(new DatasetActions.FetchDatasetsActionFailed()))
   );
 
   @Effect()
@@ -68,23 +74,18 @@ export class DatasetEffects {
     withLatestFrom(this.store.pipe(select(getFilters))),
     map(([action, filter]) => filter),
     mergeMap(filter => {
-      const fields = ['type', 'creationTime', 'creationLocation', 'ownerGroup', 'keywords'];
-      const query = fields.reduce((obj, key) => {
-        const val = filter[key];
-        if (val == null || Array.isArray(val) && val.length === 0) {
-          return obj;
-        } else {
-          return {...obj, [key]: val}
-        }
-      }, {});
+      const fields = ['type', 'creationTime', 'creationLocation', 'ownerGroup', 'keywords', 'text'];
+      const query = restrictFilter(filter, fields);
       const json = JSON.stringify(query);
-      return this.ds.fullfacet(json, fields);
+      return this.ds.fullfacet(json, fields).pipe(
+        map(res => {
+          const {all, ...facetCounts} = res[0];
+          const allCounts = all ? all[0].totalSets : 0;
+          return new DatasetActions.FetchFacetCountsCompleteAction(facetCounts, allCounts);
+        }),
+        catchError(() => Observable.of(new DatasetActions.FetchFacetCountsFailedAction()))
+      );
     }),
-    map(res => {
-      const {all, ...facetCounts} = res[0];
-      const allCounts = all ? all[0].totalSets : 0;
-      return new DatasetActions.FetchFacetCountsComplete(facetCounts, allCounts);
-    })
   );
 
   @Effect({dispatch: false})
@@ -116,9 +117,7 @@ export class DatasetEffects {
         // TODO separate action for dataBlocks? or retrieve at once?
 
         return this.ds.findById(encodeURIComponent(id))
-          .switchMap(res => {
-            return Observable.of(new DatasetActions.SearchIDCompleteAction(res));
-          })
+          .map(res => new DatasetActions.SearchIDCompleteAction(res))
           .catch(err => {
             console.log(err);
             return Observable.of(new DatasetActions.SearchIDFailedAction(err));

@@ -68,6 +68,8 @@ export const ADD_KEYWORD_FILTER =           '[Dataset] Add Keyword Filter';
 export const REMOVE_KEYWORD_FILTER =        '[Dataset] Remove Keyword Filter';
 
 export const SET_TYPE_FILTER =              '[Dataset] Set Type Filter';
+export const SET_TEXT_FILTER =              '[Dataset] Set Text Filter';
+
 export const CLEAR_FACETS =                 '[Dataset] Clear Facets';
 
 export class SearchCompleteAction implements Action {
@@ -264,6 +266,11 @@ export class SetTypeFilterAction implements Action {
     constructor(readonly datasetType: string) {}
 }
 
+export class SetTextFilterAction implements Action {
+    readonly type = SET_TEXT_FILTER;
+    constructor(readonly text: string) {}
+}
+
 export class ClearFacetsAction implements Action {
     readonly type = CLEAR_FACETS;
 }
@@ -272,23 +279,23 @@ export class FetchDatasetsAction implements Action {
     readonly type = FETCH_DATASETS;
 }
 
-export class FetchDatasetsActionComplete implements Action {
+export class FetchDatasetsCompleteAction implements Action {
     readonly type = FETCH_DATASETS_COMPLETE;
     constructor(readonly datasets: Dataset[]) {}
 }
-export class FetchDatasetsActionFailed implements Action {
+export class FetchDatasetsFailedAction implements Action {
     readonly type = FETCH_DATASETS_FAILED;
 }
 
-export class FetchFacetCounts implements Action {
+export class FetchFacetCountsAction implements Action {
     readonly type = FETCH_FACET_COUNTS;
 }
 
-export class FetchFacetCountsComplete implements Action {
+export class FetchFacetCountsCompleteAction implements Action {
     readonly type = FETCH_FACET_COUNTS_COMPLETE;
     constructor(readonly facetCounts: FacetCounts, readonly allCounts: number) {}
 }
-export class FetchFacetCountsFailed implements Action {
+export class FetchFacetCountsFailedAction implements Action {
     readonly type = FETCH_FACET_COUNTS_FAILED;
 }
 

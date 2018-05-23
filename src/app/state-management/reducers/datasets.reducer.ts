@@ -29,9 +29,7 @@ import {
     SET_VIEW_MODE,
     CLEAR_FACETS,
     FETCH_DATASETS_COMPLETE,
-    FetchDatasetsActionComplete,
     FETCH_FACET_COUNTS_COMPLETE,
-    FetchFacetCountsComplete,
     ADD_LOCATION_FILTER,
     AddLocationFilterAction,
     RemoveLocationFilterAction,
@@ -50,6 +48,12 @@ import {
     SET_SEARCH_TERMS,
     FETCH_DATASETS,
     FETCH_FACET_COUNTS,
+    SetTextFilterAction,
+    SET_TEXT_FILTER,
+    FetchDatasetsCompleteAction,
+    FetchFacetCountsCompleteAction,
+    FETCH_FACET_COUNTS_FAILED,
+    FETCH_DATASETS_FAILED,
 } from 'state-management/actions/datasets.actions';
 
 import { DatasetState, initialDatasetState } from 'state-management/state/datasets.store';
@@ -65,8 +69,12 @@ export function datasetsReducer(state: DatasetState = initialDatasetState, actio
         }
 
         case FETCH_DATASETS_COMPLETE: {
-            const datasets = (action as FetchDatasetsActionComplete).datasets;
+            const datasets = (action as FetchDatasetsCompleteAction).datasets;
             return {...state, datasets, datasetsLoading: false};
+        }
+
+        case FETCH_DATASETS_FAILED: {
+            return {...state, datasetsLoading: false};
         }
 
         case FETCH_FACET_COUNTS: {
@@ -74,8 +82,12 @@ export function datasetsReducer(state: DatasetState = initialDatasetState, actio
         }
 
         case FETCH_FACET_COUNTS_COMPLETE: {
-            const {facetCounts, allCounts} = action as FetchFacetCountsComplete;
+            const {facetCounts, allCounts} = action as FetchFacetCountsCompleteAction;
             return {...state, facetCounts, totalCount: allCounts, facetCountsLoading: false};
+        }
+
+        case FETCH_FACET_COUNTS_FAILED: {
+            return {...state, facetCountsLoading: false};
         }
 
         case FILTER_UPDATE: {
@@ -91,8 +103,7 @@ export function datasetsReducer(state: DatasetState = initialDatasetState, actio
 
         case SET_SEARCH_TERMS: {
             const {terms} = (action as SetSearchTermsAction);
-            const filters = {...state.filters, text: terms};
-            return {...state, filters};
+            return {...state, searchTerms: terms};
         }
 
         case ADD_LOCATION_FILTER: {
@@ -102,14 +113,14 @@ export function datasetsReducer(state: DatasetState = initialDatasetState, actio
                     .creationLocation
                     .concat(location)
                     .filter((val, i, self) => self.indexOf(val) === i); // Unique
-            const filters = {...state.filters, creationLocation};
+            const filters = {...state.filters, creationLocation, skip: 0};
             return {...state, filters};
         }
 
         case REMOVE_LOCATION_FILTER: {
             const {location} = action as RemoveLocationFilterAction;
             const creationLocation = state.filters.creationLocation.filter(_ => _ !== location);
-            const filters = {...state.filters, creationLocation};
+            const filters = {...state.filters, creationLocation, skip: 0};
             return {...state, filters};
         }
         
@@ -120,20 +131,26 @@ export function datasetsReducer(state: DatasetState = initialDatasetState, actio
                 .ownerGroup
                 .concat(group)
                 .filter((val, i, self) => self.indexOf(val) === i); // Unique
-            const filters = {...state.filters, ownerGroup};
+            const filters = {...state.filters, ownerGroup, skip: 0};
             return {...state, filters};
         }
 
         case REMOVE_GROUP_FILTER: {   
             const {group} = action as RemoveGroupFilterAction;
             const ownerGroup = state.filters.ownerGroup.filter(_ => _ !== group);
-            const filters = {...state.filters, ownerGroup};
+            const filters = {...state.filters, ownerGroup, skip: 0};
             return {...state, filters};
         }
         
         case SET_TYPE_FILTER: {
             const {datasetType} = action as SetTypeFilterAction;
-            const filters = {...state.filters, type: datasetType};
+            const filters = {...state.filters, type: datasetType, skip: 0};
+            return {...state, filters};
+        }
+
+        case SET_TEXT_FILTER: {
+            const {text} = action as SetTextFilterAction;
+            const filters = {...state.filters, text, skip: 0};
             return {...state, filters};
         }
         
@@ -144,19 +161,19 @@ export function datasetsReducer(state: DatasetState = initialDatasetState, actio
                 .keywords
                 .concat(keyword)
                 .filter((val, i, self) => self.indexOf(val) === i); // Unique
-            const filters = {...state.filters, keywords};
+            const filters = {...state.filters, keywords, skip: 0};
             return {...state, filters};
         }
 
         case REMOVE_KEYWORD_FILTER: {   
             const {keyword} = action as RemoveKeywordFilterAction;
             const keywords = state.filters.keywords.filter(_ => _ !== keyword);
-            const filters = {...state.filters, keywords};
+            const filters = {...state.filters, keywords, skip: 0};
             return {...state, filters};
         }
 
         case CLEAR_FACETS: {
-            const filters = {...initialDatasetState.filters};
+            const filters = {...initialDatasetState.filters, skip: 0};
             return {...state, filters};
         }
 
@@ -174,7 +191,7 @@ export function datasetsReducer(state: DatasetState = initialDatasetState, actio
         case SORT_BY_COLUMN: {
             const {column, direction} = action as SortByColumnAction;
             const sortField = column + (direction ? ':' + direction : '');
-            const filters = {...state.filters, sortField};
+            const filters = {...state.filters, sortField, skip: 0};
             return {...state, filters, datasetsLoading: true};
         }
 
