@@ -29,18 +29,15 @@ import { first } from 'rxjs/operators/first';
 
 // Returns copy with null/undefined values and empty arrays removed
 function restrictFilter(filter: object, allowedKeys?: string[]) {
+  function isNully(value: any) {
+    const hasLength = typeof value === 'string' || Array.isArray(value);
+    return value == null || hasLength && value.length === 0;
+  }
+
   const keys = allowedKeys || Object.keys(filter);
   return keys.reduce((obj, key) => {
     const val = filter[key];
-    if (
-      val == null ||
-      typeof val === 'string' && val.length === 0 ||
-      Array.isArray(val) && val.length === 0
-    ) {
-      return obj;
-    } else {
-      return {...obj, [key]: val}
-    }
+    return isNully(val) ? obj : {...obj, [key]: val};
   }, {});
 }
 
@@ -54,7 +51,7 @@ export class DatasetEffects {
     map(([action, filter]) => filter),
     mergeMap((filter) => {
       const {skip, limit, sortField, ...theRest} = filter;
-      const limits = {skip, limit, sortField};
+      const limits = {skip, limit, order: sortField};
       const query = restrictFilter(theRest);
 
       // ???
@@ -74,7 +71,7 @@ export class DatasetEffects {
     withLatestFrom(this.store.pipe(select(getFilters))),
     map(([action, filter]) => filter),
     mergeMap(filter => {
-      const fields = ['type', 'creationTime', 'creationLocation', 'ownerGroup', 'keywords', 'text'];
+      const fields = ['type', 'creationTime', 'creationLocation', 'ownerGroup', 'keywords'];
       const query = restrictFilter(filter, fields);
       const json = JSON.stringify(query);
       return this.ds.fullfacet(json, fields).pipe(
