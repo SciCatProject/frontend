@@ -7,6 +7,8 @@ import { debounceTime } from 'rxjs/operators/debounceTime';
 
 import { Store, select } from '@ngrx/store';
 
+import * as rison from 'rison';
+
 import { Dataset, DatasetFilters } from 'state-management/models';
 
 import {
@@ -24,20 +26,21 @@ import {
 
 @Component({
   selector: 'dashboard',
-  templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.css']
+  templateUrl: 'dashboard.component.html',
+  styleUrls: ['dashboard.component.css']
 })
 export class DashboardComponent implements OnDestroy
 {
-  constructor(private store: Store<any>) {}
+  constructor(private store: Store<any>, private router: Router) {}
 
   private filters$ = this.store.pipe(select(getFilters));
   private selectedDatasets$ = this.store.pipe(select(getSelectedDatasets));
   private searchTerms$ = this.store.pipe(select(getSearchTerms));
 
-  private filterSubscription = this.filters$.subscribe(() => {
+  private filterSubscription = this.filters$.subscribe(filters => {
     this.store.dispatch(new FetchDatasetsAction());
     this.store.dispatch(new FetchFacetCountsAction());
+    this.router.navigate(['/datasets'], {queryParams: {args: rison.encode(filters)}});
   });
 
   private searchTermSubscription = this.searchTerms$.pipe(debounceTime(500)).subscribe(terms => {
