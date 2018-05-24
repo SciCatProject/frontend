@@ -45,7 +45,7 @@ function restrictFilter(filter: object, allowedKeys?: string[]) {
 export class DatasetEffects {
 
   @Effect()
-  private fetchDatasets$: Observable<Action> = this.action$.pipe(
+  private fetchDatasets$: Observable<Action> = this.actions$.pipe(
     ofType(DatasetActions.FETCH_DATASETS),
     withLatestFrom(this.store.pipe(select(getFullqueryParams))),
     map(([action, params]) => params),
@@ -58,7 +58,7 @@ export class DatasetEffects {
   );
 
   @Effect()
-  private fetchFacetCounts$: Observable<Action> = this.action$.pipe(
+  private fetchFacetCounts$: Observable<Action> = this.actions$.pipe(
     ofType(DatasetActions.FETCH_FACET_COUNTS),
     withLatestFrom(this.store.pipe(select(getFullfacetsParams))),
     map(([action, params]) => params),
@@ -75,7 +75,7 @@ export class DatasetEffects {
   );
 
   @Effect({dispatch: false})
-  protected exportToCsv$: Observable<Action> = this.action$.pipe(
+  protected exportToCsv$: Observable<Action> = this.actions$.pipe(
     ofType(DatasetActions.EXPORT_TO_CSV),
     mergeMap(() => this.store.pipe(select(getRectangularRepresentation))),
     tap((rect: any) => {
@@ -95,7 +95,7 @@ export class DatasetEffects {
 
   @Effect()
   protected getDataset$: Observable<Action> =
-    this.action$.ofType(DatasetActions.SEARCH_ID)
+    this.actions$.ofType(DatasetActions.SEARCH_ID)
       .debounceTime(300)
       .map((action: DatasetActions.SearchIDAction) => action.payload)
       .switchMap(payload => {
@@ -112,7 +112,7 @@ export class DatasetEffects {
 
   @Effect()
   protected getDatablocks$: Observable<Action> =
-    this.action$.ofType(DatasetActions.DATABLOCKS)
+    this.actions$.ofType(DatasetActions.DATABLOCKS)
       .debounceTime(300)
       .map((action: DatasetActions.DatablocksAction) => action.payload)
       .switchMap(payload => {
@@ -210,7 +210,7 @@ export class DatasetEffects {
 
   @Effect()
   protected deleteDatablocks$: Observable<Action> =
-    this.action$.ofType(DatasetActions.DATABLOCK_DELETE)
+    this.actions$.ofType(DatasetActions.DATABLOCK_DELETE)
       .map((action: DatasetActions.DatablockDeleteAction) => action.payload)
       .switchMap(payload => {
         const block = payload;
@@ -228,7 +228,7 @@ export class DatasetEffects {
 
   @Effect()
   protected updateSelectedDatablocks$: Observable<Action> =
-    this.action$.ofType(DatasetActions.SELECTED_UPDATE)
+    this.actions$.ofType(DatasetActions.SELECTED_UPDATE)
       .map((action: DatasetActions.UpdateSelectedAction) => action.payload)
       .switchMap(payload => {
         if (payload && payload.length > 0) {
@@ -245,7 +245,7 @@ export class DatasetEffects {
 
   @Effect()
   protected resetStatus$: Observable<Action> =
-    this.action$.ofType(DatasetActions.RESET_STATUS)
+    this.actions$.ofType(DatasetActions.RESET_STATUS)
       .map((action: DatasetActions.ResetStatusAction) => action.payload)
       .switchMap(payload => {
         const msg = new Message();
@@ -263,7 +263,7 @@ export class DatasetEffects {
       });
 
   constructor(
-    private action$: Actions,
+    private actions$: Actions,
     private store: Store<any>,
     private ds: lb.DatasetApi,
     private rds: lb.DatasetApi,
