@@ -27,7 +27,7 @@ import { mergeMap } from 'rxjs/operators/mergeMap';
 import { tap } from 'rxjs/operators/tap';
 import { first } from 'rxjs/operators/first';
 
-// Returns copy with null/undefined values and empty arrays removed
+// Returns copy with null/undefined values and empty arrays/strings removed
 function restrictFilter(filter: object, allowedKeys?: string[]) {
   function isNully(value: any) {
     const hasLength = typeof value === 'string' || Array.isArray(value);
