@@ -60,15 +60,12 @@ export const getViewMode = createSelector(
     state => state.mode
 );
 
-export const getIsLoading = createSelector(
-    getDatasetState,
-    state => state.datasetsLoading || state.facetCountsLoading
-);
-
 export const getTotalSets = createSelector(
     getDatasetState,
     state => state.totalCount
 );
+
+// === Filters ===
 
 export const getFilters = createSelector(
     getDatasetState,
@@ -78,6 +75,12 @@ export const getFilters = createSelector(
 export const getSearchTerms = createSelector(
     getDatasetState,
     state => state.searchTerms
+);
+
+export const getSearchCaughtUp = createSelector(
+    getSearchTerms,
+    getFilters,
+    (searchTerms, filters) => searchTerms === filters.text
 );
 
 export const getLocationFilter = createSelector(
@@ -99,6 +102,8 @@ export const getKeywordsFilter = createSelector(
     getFilters,
     filters => filters.keywords
 );
+
+// === Facet Counts ===
 
 const getFacetCounts = createSelector(
     getDatasetState,
@@ -168,4 +173,12 @@ export const getFullfacetsParams = createSelector(
         const query = restrictFilter(filter, fields);
         return {query, fields};
     }
+);
+
+// === Misc. ===
+
+export const getIsLoading = createSelector(
+    getDatasetState,
+    getSearchCaughtUp,
+    (state, caughtUp) => state.datasetsLoading || state.facetCountsLoading || !caughtUp
 );
