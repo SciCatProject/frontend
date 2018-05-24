@@ -129,3 +129,43 @@ export const getCreationTimeFacetCounts = createSelector(
     getFacetCounts,
     counts => counts.creationTime || []
 );
+
+// === Querying ===
+
+// Returns copy with null/undefined values and empty arrays removed
+function restrictFilter(filter: object, allowedKeys?: string[]) {
+    function isNully(value: any) {
+      const hasLength = typeof value === 'string' || Array.isArray(value);
+      return value == null || hasLength && value.length === 0;
+    }
+  
+    const keys = allowedKeys || Object.keys(filter);
+    return keys.reduce((obj, key) => {
+      const val = filter[key];
+      return isNully(val) ? obj : {...obj, [key]: val};
+    }, {});
+}  
+
+export const getFullqueryParams = createSelector(
+    getFilters,
+    filter => {
+        const {skip, limit, sortField, ...theRest} = filter;
+        const limits = {skip, limit, order: sortField};
+        const query = restrictFilter(theRest);
+  
+        // ???
+        delete query['mode'];
+        delete query['initial'];
+  
+        return {query, limits};
+    }
+);
+  
+export const getFullfacetsParams = createSelector(
+    getFilters,
+    filter => {
+        const fields = ['type', 'creationTime', 'creationLocation', 'ownerGroup', 'keywords'];
+        const query = restrictFilter(filter, fields);
+        return {query, fields};
+    }
+);

@@ -14,7 +14,7 @@ import * as DatasetActions from 'state-management/actions/datasets.actions';
 import * as UserActions from 'state-management/actions/user.actions';
 
 import { Dataset,Message, MessageType, DatasetFilters } from 'state-management/models';
-import { getRectangularRepresentation, getFilters } from '../selectors/datasets.selectors';
+import { getRectangularRepresentation, getFilters, getFullqueryParams, getFullfacetsParams } from '../selectors/datasets.selectors';
 import { takeLast } from 'rxjs/operator/takeLast';
 import { Angular5Csv } from 'angular5-csv/Angular5-csv';
 import { config } from '../../../config/config';
@@ -47,42 +47,31 @@ export class DatasetEffects {
   @Effect()
   private fetchDatasets$: Observable<Action> = this.action$.pipe(
     ofType(DatasetActions.FETCH_DATASETS),
-    withLatestFrom(this.store.pipe(select(getFilters))),
-    map(([action, filter]) => filter),
-    mergeMap((filter) => {
-      const {skip, limit, sortField, ...theRest} = filter;
-      const limits = {skip, limit, order: sortField};
-      const query = restrictFilter(theRest);
-
-      // ???
-      delete query['mode'];
-      delete query['initial'];
-
-      return this.ds.fullquery(query, limits).pipe(
+    withLatestFrom(this.store.pipe(select(getFullqueryParams))),
+    map(([action, params]) => params),
+    mergeMap(({query, limits}) =>
+    this.ds.fullquery(query, limits).pipe(
         map(datasets => new DatasetActions.FetchDatasetsCompleteAction(datasets as Dataset[])),
         catchError(() => Observable.of(new DatasetActions.FetchDatasetsFailedAction()))    
       )
-    }),
+    ),
   );
 
   @Effect()
   private fetchFacetCounts$: Observable<Action> = this.action$.pipe(
     ofType(DatasetActions.FETCH_FACET_COUNTS),
-    withLatestFrom(this.store.pipe(select(getFilters))),
-    map(([action, filter]) => filter),
-    mergeMap(filter => {
-      const fields = ['type', 'creationTime', 'creationLocation', 'ownerGroup', 'keywords'];
-      const query = restrictFilter(filter, fields);
-      const json = JSON.stringify(query);
-      return this.ds.fullfacet(json, fields).pipe(
+    withLatestFrom(this.store.pipe(select(getFullfacetsParams))),
+    map(([action, params]) => params),
+    mergeMap(({query, fields}) =>
+      this.ds.fullfacet(query, fields).pipe(
         map(res => {
           const {all, ...facetCounts} = res[0];
           const allCounts = all ? all[0].totalSets : 0;
           return new DatasetActions.FetchFacetCountsCompleteAction(facetCounts, allCounts);
         }),
         catchError(() => Observable.of(new DatasetActions.FetchFacetCountsFailedAction()))
-      );
-    }),
+      )
+    ),
   );
 
   @Effect({dispatch: false})

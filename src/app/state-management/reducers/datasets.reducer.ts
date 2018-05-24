@@ -54,6 +54,8 @@ import {
     FetchFacetCountsCompleteAction,
     FETCH_FACET_COUNTS_FAILED,
     FETCH_DATASETS_FAILED,
+    SET_DATE_RANGE,
+    SetDateRangeFilterAction,
 } from 'state-management/actions/datasets.actions';
 
 import { DatasetState, initialDatasetState } from 'state-management/state/datasets.store';
@@ -112,7 +114,7 @@ export function datasetsReducer(state: DatasetState = initialDatasetState, actio
                     .filters
                     .creationLocation
                     .concat(location)
-                    .filter((val, i, self) => self.indexOf(val) === i); // Unique
+                    .filter((val, i, self) => self.indexOf(val) === i) // Unique
             const filters = {...state.filters, creationLocation, skip: 0};
             return {...state, filters};
         }
@@ -162,6 +164,13 @@ export function datasetsReducer(state: DatasetState = initialDatasetState, actio
                 .concat(keyword)
                 .filter((val, i, self) => self.indexOf(val) === i); // Unique
             const filters = {...state.filters, keywords, skip: 0};
+            return {...state, filters};
+        }
+
+        case SET_DATE_RANGE: {
+            const {begin, end} = action as SetDateRangeFilterAction;
+            const creationTime = {begin, end};
+            const filters = {...state.filters, creationTime};
             return {...state, filters};
         }
 

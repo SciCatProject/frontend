@@ -1,4 +1,4 @@
-<mat-card *ngIf="facets">
+<mat-card>
   <form class="example-form">
     <mat-form-field>
       <mat-chip-list #locationChipList>
@@ -7,14 +7,13 @@
           <mat-icon matChipRemove>cancel</mat-icon>
         </mat-chip>
 
-        <input class="location-input" [matChipInputFor]="locationChipList" placeholder="Location" aria-label="Location" [matAutocomplete]="loc"
-        [formControl]="locationInput">
+        <input class="location-input" [matChipInputFor]="locationChipList" placeholder="Location" aria-label="Location" [matAutocomplete]="loc">
       </mat-chip-list>
 
       <mat-autocomplete #loc="matAutocomplete">
-        <mat-option class="options" (onSelectionChange)="locationSelected(b._id)" *ngFor="let b of locationFacetCounts$ | async">
-          <span>{{ b._id || 'No Location' }} | </span>
-          <small>{{ b.count }}</small>
+        <mat-option class="options" (onSelectionChange)="locationSelected(fc._id)" *ngFor="let fc of locationFacetCounts$ | async">
+          <span>{{ getFacetId(fc, 'No Location') }} | </span>
+          <small>{{ getFacetCount(fc) }}</small>
         </mat-option>
       </mat-autocomplete>
     </mat-form-field>
@@ -28,14 +27,13 @@
           <mat-icon matChipRemove>cancel</mat-icon>
         </mat-chip>
 
-        <input class="group-input" [matChipInputFor]="groupChipList" placeholder="Group" aria-label="Group" [matAutocomplete]="grp"
-        [formControl]="groupInput">
+        <input class="group-input" [matChipInputFor]="groupChipList" placeholder="Group" aria-label="Group" [matAutocomplete]="grp">
       </mat-chip-list>
 
       <mat-autocomplete #grp="matAutocomplete">
-        <mat-option class="options" (onSelectionChange)="groupSelected(b._id)" *ngFor="let b of groupFacetCounts$ | async" [value]="b._id">
-          <span>{{ b._id || 'No Group' }}</span> |
-          <small>:{{ b.count }}</small>
+        <mat-option class="options" (onSelectionChange)="groupSelected(fc._id)" *ngFor="let fc of groupFacetCounts$ | async">
+          <span>{{ getFacetId(fc, 'No Group') }}</span> |
+          <small>{{ getFacetCount(fc) }}</small>
         </mat-option>
       </mat-autocomplete>
     </mat-form-field>
@@ -43,12 +41,11 @@
     <br>
     
     <mat-form-field>
-      <input class="type-input" matInput [value]="typeFilter$ | async" placeholder="Type" name="types"
-        [formControl]="typeInput" [matAutocomplete]="type">
+      <input class="type-input" matInput [value]="typeFilter$ | async" placeholder="Type" name="types" [matAutocomplete]="type">
         <mat-autocomplete #type="matAutocomplete">
-          <mat-option class="options" (onSelectionChange)="typeSelected(g._id)" *ngFor="let g of typeFacetCounts$ | async" [value]="g._id">
-            <span>{{ g._id || 'No Type' }}</span>
-            <small>: {{ g.count }}</small>
+          <mat-option class="options" (onSelectionChange)="typeSelected(fc._id)" *ngFor="let fc of typeFacetCounts$ | async" [value]="getFacetId(fc)">
+            <span>{{ getFacetId(fc, 'No Type') }}</span>
+            <small>: {{ getFacetCount(fc) }}</small>
           </mat-option>
         </mat-autocomplete>
     </mat-form-field>
@@ -56,12 +53,11 @@
     <br />
 
     <mat-form-field>
-      <input matInput class="keyword-input" matInput placeholder="Keywords" [ngModel]="selectedKeywords$ | async" name="keywords" (selectionChange)="keywordSelected(keywords)"
-        [formControl]="keywordInput" [matAutocomplete]="kw">
+      <input matInput class="keyword-input" matInput placeholder="Keywords" [ngModel]="selectedKeywords$ | async" name="keywords" (selectionChange)="keywordSelected(keywords)" [matAutocomplete]="kw">
         <mat-autocomplete #kw="matAutocomplete">
           <mat-option class="options" (onSelectionChange)="keywordSelected(g._id)" *ngFor="let g of keywordFacetCounts$ | async" [value]="g._id">
-            <span>{{ g._id || 'No Keywords' }}</span>
-            <small>: {{ g.count }}</small>
+            <span>{{ getFacetId(g, 'No Keywords') }}</span>
+            <small>: {{ getFacetCount(g) }}</small>
           </mat-option>
         </mat-autocomplete>
     </mat-form-field>
@@ -69,8 +65,14 @@
     <br />
 
     <mat-form-field>
-      <input matInput class="date-input" [matDatepicker]="picker" placeholder="Select a date range" [(ngModel)]="dateRange" name="range-picker"
-        (dateChange)="dateChanged($event)">
+      <input
+        matInput
+        class="date-input"
+        placeholder="Select a date range"
+        name="range-picker"
+        [matDatepicker]="picker"
+        (dateChange)="dateChanged($event)"
+      >
       <mat-datepicker-toggle matSuffix [for]="picker">
         <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
       </mat-datepicker-toggle>
@@ -86,9 +88,7 @@
     <button class="ui button clear-filters-btn" (click)="clearFacets()">Clear</button>
 
   </form>
-  <!--
   <pre>
-    {{ filters$ | async | json }}
+    {{ filter$ | async | json }}
   </pre>
-  -->
 </mat-card>

@@ -2,7 +2,7 @@ import { DatasetFilters, Dataset } from 'state-management/models';
 
 export type ViewMode = 'view' | 'archive' | 'retrieve';
 
-type DateTriple = {year: number, month: number, day: number};
+export type DateTriple = {year: number, month: number, day: number};
 
 export type FacetCount = {
     _id?: string | DateTriple;
