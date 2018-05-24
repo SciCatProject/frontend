@@ -74,7 +74,7 @@ export const getFilters = createSelector(
 
 export const getTextFilter = createSelector(
     getFilters,
-    filters => filters.text
+    filters => filters.text || ''
 );
 
 export const getLocationFilter = createSelector(
