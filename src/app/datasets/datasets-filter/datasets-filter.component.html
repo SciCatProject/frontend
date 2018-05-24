@@ -47,10 +47,10 @@
           <mat-icon matChipRemove>cancel</mat-icon>
         </mat-chip>
 
-        <input class="type-input" [matChipInputFor]="typeChipList" placeholder="Type" aria-label="Type" [matAutocomplete]="grp">
+        <input class="type-input" [matChipInputFor]="typeChipList" placeholder="Type" aria-label="Type" [matAutocomplete]="type">
       </mat-chip-list>
 
-      <mat-autocomplete #grp="matAutocomplete">
+      <mat-autocomplete #type="matAutocomplete">
         <mat-option class="options" (onSelectionChange)="typeSelected(fc._id)" *ngFor="let fc of typeFacetCounts$ | async">
           <span>{{ getFacetId(fc, 'No Type') }}</span> |
           <small>{{ getFacetCount(fc) }}</small>
