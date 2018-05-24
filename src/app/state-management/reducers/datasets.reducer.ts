@@ -196,7 +196,8 @@ export function datasetsReducer(state: DatasetState = initialDatasetState, actio
         }
 
         case CLEAR_FACETS: {
-            const filters = {...initialDatasetState.filters, skip: 0};
+            const limit = state.filters.limit; // Save limit
+            const filters = {...initialDatasetState.filters, skip: 0, limit};
             return {...state, filters, searchTerms: ''};
         }
 
