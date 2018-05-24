@@ -14,6 +14,7 @@ import {
   getTypeFilter,
   getKeywordsFilter,
   getGroupFilter,
+  getCreationTimeFilter,
 } from 'state-management/selectors/datasets.selectors';
 
 import {
@@ -50,6 +51,7 @@ export class DatasetsFilterComponent {
   private groupFilter$ = this.store.pipe(select(getGroupFilter));
   private typeFilter$ = this.store.pipe(select(getTypeFilter));
   private keywordsFilter$ = this.store.pipe(select(getKeywordsFilter));
+  private creationTimeFilter$ = this.store.pipe(select(getCreationTimeFilter));
 
   constructor(private store: Store<any>) {}
 

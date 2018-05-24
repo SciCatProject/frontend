@@ -72,15 +72,9 @@ export const getFilters = createSelector(
     state => state.filters
 );
 
-export const getSearchTerms = createSelector(
-    getDatasetState,
-    state => state.searchTerms
-);
-
-export const getSearchCaughtUp = createSelector(
-    getSearchTerms,
+export const getTextFilter = createSelector(
     getFilters,
-    (searchTerms, filters) => searchTerms === filters.text
+    filters => filters.text
 );
 
 export const getLocationFilter = createSelector(
@@ -101,6 +95,11 @@ export const getTypeFilter = createSelector(
 export const getKeywordsFilter = createSelector(
     getFilters,
     filters => filters.keywords
+);
+
+export const getCreationTimeFilter = createSelector(
+    getFilters,
+    filters => filters.creationTime
 );
 
 // === Facet Counts ===
@@ -176,6 +175,17 @@ export const getFullfacetsParams = createSelector(
 );
 
 // === Misc. ===
+
+export const getSearchTerms = createSelector(
+    getDatasetState,
+    state => state.searchTerms
+);
+
+export const getSearchCaughtUp = createSelector(
+    getSearchTerms,
+    getTextFilter,
+    (terms, text) => terms === text
+);
 
 export const getIsLoading = createSelector(
     getDatasetState,

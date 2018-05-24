@@ -197,7 +197,7 @@ export function datasetsReducer(state: DatasetState = initialDatasetState, actio
 
         case CLEAR_FACETS: {
             const filters = {...initialDatasetState.filters, skip: 0};
-            return {...state, filters};
+            return {...state, filters, searchTerms: ''};
         }
 
         case CHANGE_PAGE: {

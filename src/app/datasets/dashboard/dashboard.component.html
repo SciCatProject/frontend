@@ -5,7 +5,7 @@
         matInput
         type="text"
         name="search"
-        [ngModel]="searchText$ | async"
+        [ngModel]="searchTerms$ | async"
         (ngModelChange)="textSearch($event)"
         
         class="dash-search"

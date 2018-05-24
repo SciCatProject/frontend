@@ -6,7 +6,6 @@
           {{ location || 'No Location' }}
           <mat-icon matChipRemove>cancel</mat-icon>
         </mat-chip>
-
         <input class="location-input" [matChipInputFor]="locationChipList" placeholder="Location" aria-label="Location" [matAutocomplete]="loc">
       </mat-chip-list>
 
@@ -26,7 +25,6 @@
           {{ group }}
           <mat-icon matChipRemove>cancel</mat-icon>
         </mat-chip>
-
         <input class="group-input" [matChipInputFor]="groupChipList" placeholder="Group" aria-label="Group" [matAutocomplete]="grp">
       </mat-chip-list>
 
@@ -46,7 +44,6 @@
           {{ type }}
           <mat-icon matChipRemove>cancel</mat-icon>
         </mat-chip>
-
         <input class="type-input" [matChipInputFor]="typeChipList" placeholder="Type" aria-label="Type" [matAutocomplete]="type">
       </mat-chip-list>
 
@@ -58,7 +55,7 @@
       </mat-autocomplete>
     </mat-form-field>
 
-    <br />
+    <br>
 
     <mat-form-field>
       <input matInput class="keyword-input" matInput placeholder="Keywords" [ngModel]="selectedKeywords$ | async" name="keywords" (selectionChange)="keywordSelected(keywords)" [matAutocomplete]="kw">
@@ -70,7 +67,7 @@
         </mat-autocomplete>
     </mat-form-field>
 
-    <br />
+    <br>
 
     <mat-form-field>
       <input
@@ -79,6 +76,7 @@
         placeholder="Select a date range"
         name="range-picker"
         [matDatepicker]="picker"
+        [value]="creationTimeFilter$ | async"
         (dateChange)="dateChanged($event)"
       >
       <mat-datepicker-toggle matSuffix [for]="picker">
@@ -87,12 +85,8 @@
       <mat-datepicker #picker [rangeMode]="true"></mat-datepicker>
     </mat-form-field>
 
-    <!-- <datepicker [selections]="dateSelections$ | async" [datepickerSelector]="datepickerSelector" [datepickerSelectionMode]="dateSelectionMode"
-        [placeholder]="'Date Range'" (selectionsChange)="updateDateRange($event)"></datepicker> -->
-    <!-- </div> -->
     <br>
-    <!-- </div>
-    </div> -->
+
     <button class="ui button clear-filters-btn" (click)="clearFacets()">Clear</button>
   </form>
 </mat-card>
