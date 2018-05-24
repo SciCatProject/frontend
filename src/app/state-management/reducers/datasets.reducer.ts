@@ -262,8 +262,13 @@ export function datasetsReducer(state: DatasetState = initialDatasetState, actio
 
         case SELECT_DATASET: {
             const dataset = (action as SelectDatasetAction).dataset;
-            const selectedSets = state.selectedSets.concat(dataset);
-            return {...state, selectedSets};
+            const alreadySelected = state.selectedSets.find(existing => dataset.pid === existing.pid);
+            if (alreadySelected) {
+                return state;
+            } else {
+                const selectedSets = state.selectedSets.concat(dataset);
+                return {...state, selectedSets};
+            }
         }
 
         case DESELECT_DATASET: {
@@ -276,8 +281,8 @@ export function datasetsReducer(state: DatasetState = initialDatasetState, actio
             return {...state, selectedSets: []};
         }
 
-        // TODO handle failed actions
         default: {
+            console.warn(`Unhandled action ${action.type}`);
             return state;
         }
     }
