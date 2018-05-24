@@ -31,6 +31,7 @@ export class ParamsService {
 
     // this.route.queryParams.take(1).subscribe(p => this.handleParams(p));
 
+    /*
     this.store.select(selectors.datasets.getFilters)
       .subscribe(filters => {
         if (filters) {
@@ -42,6 +43,7 @@ export class ParamsService {
           });
         }
       });
+      */
 
     this.store.pipe(select(getViewMode))
       .subscribe(currentMode => {
