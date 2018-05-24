@@ -50,7 +50,7 @@ export class DatasetEffects {
     withLatestFrom(this.store.pipe(select(getFullqueryParams))),
     map(([action, params]) => params),
     mergeMap(({query, limits}) =>
-    this.ds.fullquery(query, limits).pipe(
+      this.ds.fullquery(query, limits).pipe(
         map(datasets => new DatasetActions.FetchDatasetsCompleteAction(datasets as Dataset[])),
         catchError(() => Observable.of(new DatasetActions.FetchDatasetsFailedAction()))    
       )
