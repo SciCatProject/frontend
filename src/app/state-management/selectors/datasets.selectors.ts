@@ -161,7 +161,10 @@ export const getFullqueryParams = createSelector(
         delete query['mode'];
         delete query['initial'];
   
-        return {query, limits};
+        return {
+            query: JSON.stringify(query),
+            limits
+        };
     }
 );
   
