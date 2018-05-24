@@ -36,10 +36,8 @@ import {
     REMOVE_LOCATION_FILTER,
     ADD_GROUP_FILTER,
     AddGroupFilterAction,
-    SET_TYPE_FILTER,
     ADD_KEYWORD_FILTER,
     AddKeywordFilterAction,
-    SetTypeFilterAction,
     REMOVE_GROUP_FILTER,
     RemoveGroupFilterAction,
     REMOVE_KEYWORD_FILTER,
@@ -56,6 +54,10 @@ import {
     FETCH_DATASETS_FAILED,
     SET_DATE_RANGE,
     SetDateRangeFilterAction,
+    REMOVE_TYPE_FILTER,
+    RemoveTypeFilterAction,
+    AddTypeFilterAction,
+    ADD_TYPE_FILTER,
 } from 'state-management/actions/datasets.actions';
 
 import { DatasetState, initialDatasetState } from 'state-management/state/datasets.store';
@@ -144,10 +146,22 @@ export function datasetsReducer(state: DatasetState = initialDatasetState, actio
             return {...state, filters};
         }
         
-        case SET_TYPE_FILTER: {
-            const {datasetType} = action as SetTypeFilterAction;
-            const filters = {...state.filters, type: datasetType, skip: 0};
+        case ADD_TYPE_FILTER: {
+            const {datasetType} = action as AddTypeFilterAction;
+            const type = state
+                .filters
+                .type
+                .concat(datasetType)
+                .filter((val, i, self) => self.indexOf(val) === i); // Unique
+            const filters = {...state.filters, type, skip: 0};
             return {...state, filters};
+        }
+
+        case REMOVE_TYPE_FILTER: {
+            const {datasetType} = action as RemoveTypeFilterAction;
+            const type = state.filters.type.filter(_ => _ !== datasetType);
+            const filters = {...state.filters, type, skip: 0};
+            return {...state, filters};           
         }
 
         case SET_TEXT_FILTER: {

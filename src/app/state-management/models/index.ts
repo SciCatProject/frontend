@@ -25,7 +25,7 @@ export class Message {
 export interface DatasetFilters {
   text: string;
   ownerGroup: string[];
-  type: string;
+  type: string[];
   creationTime: {begin: Date, end: Date};
   creationLocation: string[];
   skip: number;

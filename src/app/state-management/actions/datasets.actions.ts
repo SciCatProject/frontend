@@ -67,7 +67,9 @@ export const REMOVE_GROUP_FILTER =          '[Dataset] Remove Group Filter';
 export const ADD_KEYWORD_FILTER =           '[Dataset] Add Keyword Filter';
 export const REMOVE_KEYWORD_FILTER =        '[Dataset] Remove Keyword Filter';
 
-export const SET_TYPE_FILTER =              '[Dataset] Set Type Filter';
+export const ADD_TYPE_FILTER =              '[Dataset] Add Type Filter';
+export const REMOVE_TYPE_FILTER =           '[Dataset] Remove Type Filter';
+
 export const SET_TEXT_FILTER =              '[Dataset] Set Text Filter';
 export const SET_DATE_RANGE =               '[Dataset] Set Date Range Filter';
 
@@ -262,8 +264,13 @@ export class RemoveKeywordFilterAction implements Action {
     constructor(readonly keyword: string) {}
 }
 
-export class SetTypeFilterAction implements Action {
-    readonly type = SET_TYPE_FILTER;
+export class AddTypeFilterAction implements Action {
+    readonly type = ADD_TYPE_FILTER;
+    constructor(readonly datasetType: string) {}
+}
+
+export class RemoveTypeFilterAction implements Action {
+    readonly type = REMOVE_TYPE_FILTER;
     constructor(readonly datasetType: string) {}
 }
 

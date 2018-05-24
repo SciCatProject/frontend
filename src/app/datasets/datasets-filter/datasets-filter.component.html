@@ -41,13 +41,21 @@
     <br>
     
     <mat-form-field>
-      <input class="type-input" matInput [value]="typeFilter$ | async" placeholder="Type" name="types" [matAutocomplete]="type">
-        <mat-autocomplete #type="matAutocomplete">
-          <mat-option class="options" (onSelectionChange)="typeSelected(fc._id)" *ngFor="let fc of typeFacetCounts$ | async" [value]="getFacetId(fc)">
-            <span>{{ getFacetId(fc, 'No Type') }}</span>
-            <small>: {{ getFacetCount(fc) }}</small>
-          </mat-option>
-        </mat-autocomplete>
+      <mat-chip-list #typeChipList>
+        <mat-chip *ngFor="let type of typeFilter$ | async" [removable]="true" (removed)="typeRemoved(type)">
+          {{ type }}
+          <mat-icon matChipRemove>cancel</mat-icon>
+        </mat-chip>
+
+        <input class="type-input" [matChipInputFor]="typeChipList" placeholder="Type" aria-label="Type" [matAutocomplete]="grp">
+      </mat-chip-list>
+
+      <mat-autocomplete #grp="matAutocomplete">
+        <mat-option class="options" (onSelectionChange)="typeSelected(fc._id)" *ngFor="let fc of typeFacetCounts$ | async">
+          <span>{{ getFacetId(fc, 'No Type') }}</span> |
+          <small>{{ getFacetCount(fc) }}</small>
+        </mat-option>
+      </mat-autocomplete>
     </mat-form-field>
 
     <br />

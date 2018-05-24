@@ -22,7 +22,9 @@ import {
   AddGroupFilterAction,
   RemoveGroupFilterAction,
   AddKeywordFilterAction,
-  SetTypeFilterAction,
+  RemoveKeywordFilterAction,
+  AddTypeFilterAction,
+  RemoveTypeFilterAction,
   ClearFacetsAction,
   SetDateRangeFilterAction
 } from 'state-management/actions/datasets.actions';
@@ -80,8 +82,16 @@ export class DatasetsFilterComponent {
     this.store.dispatch(new AddKeywordFilterAction(keyword));
   }
 
+  keywordRemoved(keyword: string) {
+    this.store.dispatch(new RemoveKeywordFilterAction(keyword));
+  }
+
   typeSelected(type: string) {
-    this.store.dispatch(new SetTypeFilterAction(type));
+    this.store.dispatch(new AddTypeFilterAction(type));
+  }
+
+  typeRemoved(type: string) {
+    this.store.dispatch(new RemoveTypeFilterAction(type));
   }
 
   dateChanged(event: MatDatepickerInputEvent<DateRange>) {

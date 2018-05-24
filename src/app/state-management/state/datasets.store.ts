@@ -45,7 +45,7 @@ export const initialDatasetState: DatasetState = {
     filters: {
         text: null,
         creationTime: null,
-        type: null,
+        type: [],
         creationLocation: [],
         ownerGroup: [],
         skip: 0,
