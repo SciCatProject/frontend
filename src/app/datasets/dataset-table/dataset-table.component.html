@@ -7,8 +7,8 @@
     </mat-button-toggle-group>
   </div>
 
-  <div class="raised">
-      {{ datasetCount$ | async }} datasets.
+  <div *ngIf="datasetCount$ | async; let count" class="raised">
+      {{ count }} dataset{{ count === 1 ? '' : 's' }}.
   </div>
 
   <div *ngIf="loading$ | async" class="raised">
