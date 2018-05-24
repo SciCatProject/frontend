@@ -10,7 +10,7 @@
       </mat-chip-list>
 
       <mat-autocomplete #loc="matAutocomplete">
-        <mat-option class="options" (onSelectionChange)="locationSelected(fc._id)" *ngFor="let fc of locationFacetCounts$ | async">
+        <mat-option class="options" (onSelectionChange)="locationSelected(getFacetId(fc))" *ngFor="let fc of locationFacetCounts$ | async">
           <span>{{ getFacetId(fc, 'No Location') }} | </span>
           <small>{{ getFacetCount(fc) }}</small>
         </mat-option>
@@ -29,7 +29,7 @@
       </mat-chip-list>
 
       <mat-autocomplete #grp="matAutocomplete">
-        <mat-option class="options" (onSelectionChange)="groupSelected(fc._id)" *ngFor="let fc of groupFacetCounts$ | async">
+        <mat-option class="options" (onSelectionChange)="groupSelected(getFacetId(fc))" *ngFor="let fc of groupFacetCounts$ | async">
           <span>{{ getFacetId(fc, 'No Group') }}</span> |
           <small>{{ getFacetCount(fc) }}</small>
         </mat-option>
@@ -48,7 +48,7 @@
       </mat-chip-list>
 
       <mat-autocomplete #type="matAutocomplete">
-        <mat-option class="options" (onSelectionChange)="typeSelected(fc._id)" *ngFor="let fc of typeFacetCounts$ | async">
+        <mat-option class="options" (onSelectionChange)="typeSelected(getFacetId(fc))" *ngFor="let fc of typeFacetCounts$ | async">
           <span>{{ getFacetId(fc, 'No Type') }}</span> |
           <small>{{ getFacetCount(fc) }}</small>
         </mat-option>
@@ -60,7 +60,7 @@
     <mat-form-field>
       <input matInput class="keyword-input" matInput placeholder="Keywords" [ngModel]="selectedKeywords$ | async" name="keywords" (selectionChange)="keywordSelected(keywords)" [matAutocomplete]="kw">
         <mat-autocomplete #kw="matAutocomplete">
-          <mat-option class="options" (onSelectionChange)="keywordSelected(g._id)" *ngFor="let g of keywordFacetCounts$ | async" [value]="g._id">
+          <mat-option class="options" (onSelectionChange)="keywordSelected(getFacetId(fc))" *ngFor="let fc of keywordFacetCounts$ | async">
             <span>{{ getFacetId(g, 'No Keywords') }}</span>
             <small>: {{ getFacetCount(g) }}</small>
           </mat-option>
