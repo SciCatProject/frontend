@@ -36,6 +36,7 @@ import { tap } from 'rxjs/operators/tap';
 import { debounceTime } from 'rxjs/operators/debounceTime';
 import { distinctUntilChanged } from 'rxjs/operators/distinctUntilChanged';
 import { combineLatest } from 'rxjs/operators/combineLatest';
+import { skipWhile } from 'rxjs/operators/skipWhile';
 
 @Component({
   selector: 'dashboard',
@@ -73,10 +74,12 @@ export class DashboardComponent implements OnDestroy
     map(params => params.args as string),
     take(1),
     map(args => args ? rison.decode<DatasetFilters>(args) : {}),
-    map(filters => new PrefillFiltersAction(filters)),
-  ).subscribe(this.store);
+  ).subscribe(filters =>
+    this.store.dispatch(new PrefillFiltersAction(filters))
+  );
   
   private searchTermSubscription = this.searchTerms$.pipe(
+    skipWhile(terms => terms === ''),
     debounceTime(500),
     distinctUntilChanged(),
   ).subscribe(terms => {

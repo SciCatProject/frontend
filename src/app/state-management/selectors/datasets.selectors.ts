@@ -2,6 +2,7 @@ import { Dataset, DatasetFilters } from 'state-management/models';
 
 import { createSelector, createFeatureSelector } from '@ngrx/store';
 import { DatasetState } from '../state/datasets.store'
+import { config } from '../../../config/config';
 
 const getDatasetState = createFeatureSelector<DatasetState>('datasets');
 
@@ -153,12 +154,19 @@ function restrictFilter(filter: object, allowedKeys?: string[]) {
 export const getFullqueryParams = createSelector(
     getFilters,
     filter => {
-        const {skip, limit, sortField, ...theRest} = filter;
+        const {skip, limit, sortField, mode, ...theRest} = filter;
         const limits = {skip, limit, order: sortField};
         const query = restrictFilter(theRest);
   
+        // Archiving handling
+        if (mode !== 'view') {
+            query['archiveStatusMessage'] = {
+                archive: config.archiveable,
+                retrieve: config.retrieveable,
+            }[mode];
+        }
+        
         // ???
-        delete query['mode'];
         delete query['initial'];
   
         return {
@@ -171,7 +179,7 @@ export const getFullqueryParams = createSelector(
 export const getFullfacetsParams = createSelector(
     getFilters,
     filter => {
-        const fields = ['type', 'creationTime', 'creationLocation', 'ownerGroup', 'keywords'];
+        const fields = ['type', 'creationTime', 'creationLocation', 'ownerGroup', 'keywords', 'archiveStatusMessage'];
         const query = restrictFilter(filter, fields);
         return {query, fields};
     }

@@ -1,7 +1,7 @@
 import { Action } from '@ngrx/store';
-import { DatasetFilters } from 'state-management/models';
+import { DatasetFilters, ViewMode } from 'state-management/models';
 import { Dataset, AccessGroup, Datablock } from 'shared/sdk/models';
-import { ViewMode, FacetCounts } from '../state/datasets.store';
+import { FacetCounts } from '../state/datasets.store';
 
 export const SEARCH_COMPLETE =              '[Dataset] Search Complete';
 export const SEARCH_FAILED =                '[Dataset] Search Failed';
