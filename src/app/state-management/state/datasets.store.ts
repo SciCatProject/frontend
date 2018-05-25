@@ -53,6 +53,3 @@ export const initialDatasetState: DatasetState = {
         keywords: []
     },
 };
-
-// {"mode":"view","text":"","creationTime":null,"type":[],"creationLocation":[],"ownerGroup":[],"skip":0,"limit":30,"initial":true,"sortField":"creationTime:desc","keywords":[]}
-// {"mode":"view","text":"bio","creationTime":null,"type":[],"creationLocation":[],"ownerGroup":[],"skip":0,"limit":30,"initial":true,"sortField":"creationTime:desc","keywords":[]}
