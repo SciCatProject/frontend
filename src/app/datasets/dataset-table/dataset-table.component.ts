@@ -27,7 +27,7 @@ import * as dsa from 'state-management/actions/datasets.actions';
 import * as ua from 'state-management/actions/user.actions';
 import * as ja from 'state-management/actions/jobs.actions';
 import { getDatasets, getSelectedDatasets, getPage, getViewMode, isEmptySelection, getDatasetsPerPage, getIsLoading, getTotalSets, getFilters } from 'state-management/selectors/datasets.selectors';
-import { Message, MessageType, DatasetFilters } from 'state-management/models';
+import { Message, MessageType, DatasetFilters, ViewMode } from 'state-management/models';
 import * as jobSelectors from 'state-management/selectors/jobs.selectors';
 
 import { Angular5Csv } from 'angular5-csv/Angular5-csv';
@@ -43,7 +43,6 @@ import { PageChangeEvent, SortChangeEvent } from '../dataset-table-pure/dataset-
 import * as rison from 'rison';
 import { Subscription } from 'rxjs';
 import { APP_CONFIG, AppConfig } from 'app-config.module';
-import { ViewMode } from 'state-management/state/datasets.store';
 import { distinctUntilChanged } from 'rxjs/operators/distinctUntilChanged';
 
 @Component({

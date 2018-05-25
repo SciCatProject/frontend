@@ -233,7 +233,7 @@ export function datasetsReducer(state: DatasetState = initialDatasetState, actio
         case SET_VIEW_MODE: {
             const {mode} = action as SetViewModeAction;
             const filters = {...state.filters, mode};
-            return {...state, filters, datasetsLoading: true, facetCountsLoading: true};
+            return {...state, filters};
         }
 
         case SEARCH_COMPLETE: {
