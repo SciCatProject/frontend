@@ -1,7 +1,5 @@
 import { DatasetFilters, Dataset } from 'state-management/models';
 
-export type ViewMode = 'view' | 'archive' | 'retrieve';
-
 export type DateTriple = {year: number, month: number, day: number};
 
 export type FacetCount = {
@@ -22,10 +20,9 @@ export interface DatasetState {
 
     datasetsLoading: boolean;
     facetCountsLoading: boolean;
+    hasPrefilledFilters: boolean;
 
     searchTerms: string;
-    mode: ViewMode;
-
     filters: DatasetFilters; 
 }
 
@@ -38,12 +35,13 @@ export const initialDatasetState: DatasetState = {
 
     datasetsLoading: true,
     facetCountsLoading: true,
+    hasPrefilledFilters: false,
 
     searchTerms: '',
-    mode: 'view',
     
     filters: {
-        text: null,
+        mode: 'view',
+        text: '',
         creationTime: null,
         type: [],
         creationLocation: [],
@@ -55,3 +53,6 @@ export const initialDatasetState: DatasetState = {
         keywords: []
     },
 };
+
+// {"mode":"view","text":"","creationTime":null,"type":[],"creationLocation":[],"ownerGroup":[],"skip":0,"limit":30,"initial":true,"sortField":"creationTime:desc","keywords":[]}
+// {"mode":"view","text":"bio","creationTime":null,"type":[],"creationLocation":[],"ownerGroup":[],"skip":0,"limit":30,"initial":true,"sortField":"creationTime:desc","keywords":[]}

@@ -113,7 +113,7 @@ export function datasetsReducer(state: DatasetState = initialDatasetState, actio
             const {values} = (action as PrefillFiltersAction);
             const filters = {...state.filters, ...values};
             const searchTerms = filters.text || '';
-            return {...state, searchTerms, filters};
+            return {...state, searchTerms, filters, hasPrefilledFilters: true};
         }
 
         case SET_SEARCH_TERMS: {
@@ -232,11 +232,8 @@ export function datasetsReducer(state: DatasetState = initialDatasetState, actio
 
         case SET_VIEW_MODE: {
             const {mode} = action as SetViewModeAction;
-            if (state.mode === mode) {
-                return state;
-            } else {
-                return {...state, mode, datasetsLoading: true, facetCountsLoading: true};
-            }
+            const filters = {...state.filters, mode};
+            return {...state, filters, datasetsLoading: true, facetCountsLoading: true};
         }
 
         case SEARCH_COMPLETE: {

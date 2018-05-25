@@ -22,6 +22,8 @@ export class Message {
   duration ? = 10000;
 };
 
+export type ViewMode = 'view' | 'archive' | 'retrieve';
+
 export interface DatasetFilters {
   text: string;
   ownerGroup: string[];
@@ -32,5 +34,6 @@ export interface DatasetFilters {
   limit: number;
   initial: boolean;
   keywords: string[];
-  sortField: string
+  sortField: string,
+  mode: ViewMode,
 };

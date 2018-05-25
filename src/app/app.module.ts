@@ -12,7 +12,6 @@ import { NguiDatetimePickerModule } from '@ngui/datetime-picker';
 import { AppRoutingModule, routes } from 'app-routing/app-routing.module';
 import { DatasetService } from 'datasets/dataset.service';
 import { DatasetsModule } from 'datasets/datasets.module';
-import { ParamsService } from 'params.service';
 import { JobsTableComponent } from 'jobs/jobs-table/jobs-table.component';
 import { localStorageSync } from 'ngrx-store-localstorage';
 import { AppConfigModule } from 'app-config.module';
@@ -123,7 +122,6 @@ export function localStorageSyncWrapper(reducer: any) {
   providers : [
       AuthCheck,
       DatasetService,
-      ParamsService,
       UserApi,
     //      {provide: RouteReuseStrategy, useClass: CustomReuseStrategy}
   ],

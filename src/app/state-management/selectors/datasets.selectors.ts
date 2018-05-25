@@ -55,11 +55,6 @@ export const getRectangularRepresentation = createSelector(
     }
 );
 
-export const getViewMode = createSelector(
-    getDatasetState,
-    state => state.mode
-);
-
 export const getTotalSets = createSelector(
     getDatasetState,
     state => state.totalCount
@@ -100,6 +95,11 @@ export const getKeywordsFilter = createSelector(
 export const getCreationTimeFilter = createSelector(
     getFilters,
     filters => filters.creationTime
+);
+
+export const getViewMode = createSelector(
+    getFilters,
+    state => state.mode
 );
 
 // === Facet Counts ===
@@ -194,4 +194,9 @@ export const getIsLoading = createSelector(
     getDatasetState,
     getSearchCaughtUp,
     (state, caughtUp) => state.datasetsLoading || state.facetCountsLoading || !caughtUp
+);
+
+export const getHasPrefilledFilters = createSelector(
+    getDatasetState,
+    state => state.hasPrefilledFilters
 );

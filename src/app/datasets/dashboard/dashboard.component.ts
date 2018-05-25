@@ -7,6 +7,7 @@ import { Observable } from 'rxjs/Observable';
 import { Store, select } from '@ngrx/store';
 
 import * as rison from 'rison';
+import * as deepEqual from 'deep-equal';
 
 import { Dataset, DatasetFilters } from 'state-management/models';
 
@@ -23,7 +24,8 @@ import {
   getSelectedDatasets,
   getSearchTerms,
   getFilters,
-  getTextFilter
+  getTextFilter,
+  getHasPrefilledFilters
 } from 'state-management/selectors/datasets.selectors';
 
 import { filter } from 'rxjs/operators/filter';
@@ -31,8 +33,9 @@ import { pluck } from 'rxjs/operators/pluck';
 import { map } from 'rxjs/operators/map';
 import { take } from 'rxjs/operators/take';
 import { tap } from 'rxjs/operators/tap';
-import { withLatestFrom } from 'rxjs/operators/withLatestFrom';
 import { debounceTime } from 'rxjs/operators/debounceTime';
+import { distinctUntilChanged } from 'rxjs/operators/distinctUntilChanged';
+import { combineLatest } from 'rxjs/operators/combineLatest';
 
 @Component({
   selector: 'dashboard',
@@ -50,8 +53,17 @@ export class DashboardComponent implements OnDestroy
   private filters$ = this.store.pipe(select(getFilters));
   private selectedDatasets$ = this.store.pipe(select(getSelectedDatasets));
   private searchTerms$ = this.store.pipe(select(getSearchTerms));
+  
+  private readyToFetch$ = this.store.pipe(
+    select(getHasPrefilledFilters),
+    filter(has => has)
+  );
 
-  private writeRouteSubscription = this.filters$.subscribe(filters => {
+  private writeRouteSubscription = this.filters$.pipe(
+    combineLatest(this.readyToFetch$),
+    map(([filters, _]) => filters),
+    distinctUntilChanged(deepEqual)
+  ).subscribe(filters => {
     this.store.dispatch(new FetchDatasetsAction());
     this.store.dispatch(new FetchFacetCountsAction());
     this.router.navigate(['/datasets'], {queryParams: {args: rison.encode(filters)}});
@@ -64,13 +76,9 @@ export class DashboardComponent implements OnDestroy
     map(filters => new PrefillFiltersAction(filters)),
   ).subscribe(this.store);
   
-  // Need to deal with `mode` as well
-
   private searchTermSubscription = this.searchTerms$.pipe(
     debounceTime(500),
-    withLatestFrom(this.store.pipe(select(getTextFilter))),
-    filter(([terms, filter]) => terms !== filter),
-    map(([terms, filter]) => terms)
+    distinctUntilChanged(),
   ).subscribe(terms => {
     this.store.dispatch(new SetTextFilterAction(terms));
   });
