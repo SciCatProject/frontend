@@ -58,6 +58,8 @@ import {
     RemoveTypeFilterAction,
     AddTypeFilterAction,
     ADD_TYPE_FILTER,
+    PREFILL_FILTERS,
+    PrefillFiltersAction,
 } from 'state-management/actions/datasets.actions';
 
 import { DatasetState, initialDatasetState } from 'state-management/state/datasets.store';
@@ -102,7 +104,16 @@ export function datasetsReducer(state: DatasetState = initialDatasetState, actio
                 f['ownerGroup'] = [group];
             }
 
-            return {...state, filters: f, datasetsLoading: true, selectedSets: []};
+            const filters = {...state.filters, ...f};
+            alert(JSON.stringify(filters));
+            return {...state, filters, datasetsLoading: true, selectedSets: []};
+        }
+
+        case PREFILL_FILTERS: {
+            const {values} = (action as PrefillFiltersAction);
+            const filters = {...state.filters, ...values};
+            const searchTerms = filters.text || '';
+            return {...state, searchTerms, filters};
         }
 
         case SET_SEARCH_TERMS: {
@@ -282,7 +293,6 @@ export function datasetsReducer(state: DatasetState = initialDatasetState, actio
         }
 
         default: {
-            console.warn(`Unhandled action ${action.type}`);
             return state;
         }
     }

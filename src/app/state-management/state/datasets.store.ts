@@ -22,7 +22,7 @@ export interface DatasetState {
 
     datasetsLoading: boolean;
     facetCountsLoading: boolean;
-    
+
     searchTerms: string;
     mode: ViewMode;
 
@@ -38,7 +38,7 @@ export const initialDatasetState: DatasetState = {
 
     datasetsLoading: true,
     facetCountsLoading: true,
-    
+
     searchTerms: '',
     mode: 'view',
     

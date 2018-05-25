@@ -1,9 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 
 import { Subscription, Subject } from 'rxjs';
 import { Observable } from 'rxjs/Observable';
-import { debounceTime } from 'rxjs/operators/debounceTime';
 
 import { Store, select } from '@ngrx/store';
 
@@ -16,13 +15,24 @@ import {
   FetchFacetCountsAction,
   FetchDatasetsAction,
   SetTextFilterAction,
+  UpdateFilterAction,
+  PrefillFiltersAction,
 } from 'state-management/actions/datasets.actions';
 
 import {
   getSelectedDatasets,
   getSearchTerms,
-  getFilters
+  getFilters,
+  getTextFilter
 } from 'state-management/selectors/datasets.selectors';
+
+import { filter } from 'rxjs/operators/filter';
+import { pluck } from 'rxjs/operators/pluck';
+import { map } from 'rxjs/operators/map';
+import { take } from 'rxjs/operators/take';
+import { tap } from 'rxjs/operators/tap';
+import { withLatestFrom } from 'rxjs/operators/withLatestFrom';
+import { debounceTime } from 'rxjs/operators/debounceTime';
 
 @Component({
   selector: 'dashboard',
@@ -31,24 +41,43 @@ import {
 })
 export class DashboardComponent implements OnDestroy
 {
-  constructor(private store: Store<any>, private router: Router) {}
+  constructor(
+    private store: Store<any>,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {}
 
   private filters$ = this.store.pipe(select(getFilters));
   private selectedDatasets$ = this.store.pipe(select(getSelectedDatasets));
   private searchTerms$ = this.store.pipe(select(getSearchTerms));
 
-  private filterSubscription = this.filters$.subscribe(filters => {
+  private writeRouteSubscription = this.filters$.subscribe(filters => {
     this.store.dispatch(new FetchDatasetsAction());
     this.store.dispatch(new FetchFacetCountsAction());
     this.router.navigate(['/datasets'], {queryParams: {args: rison.encode(filters)}});
   });
 
-  private searchTermSubscription = this.searchTerms$.pipe(debounceTime(500)).subscribe(terms => {
+  private readRouteSubscription = this.route.queryParams.pipe(
+    map(params => params.args as string),
+    take(1),
+    map(args => args ? rison.decode<DatasetFilters>(args) : {}),
+    map(filters => new PrefillFiltersAction(filters)),
+  ).subscribe(this.store);
+  
+  // Need to deal with `mode` as well
+
+  private searchTermSubscription = this.searchTerms$.pipe(
+    debounceTime(500),
+    withLatestFrom(this.store.pipe(select(getTextFilter))),
+    filter(([terms, filter]) => terms !== filter),
+    map(([terms, filter]) => terms)
+  ).subscribe(terms => {
     this.store.dispatch(new SetTextFilterAction(terms));
   });
 
   ngOnDestroy() {
-    this.filterSubscription.unsubscribe();
+    this.writeRouteSubscription.unsubscribe();
+    this.readRouteSubscription.unsubscribe();
     this.searchTermSubscription.unsubscribe();
   }
 

@@ -73,6 +73,7 @@ export const REMOVE_TYPE_FILTER =           '[Dataset] Remove Type Filter';
 export const SET_TEXT_FILTER =              '[Dataset] Set Text Filter';
 export const SET_DATE_RANGE =               '[Dataset] Set Date Range Filter';
 
+export const PREFILL_FILTERS =              '[Dataset] Prefill Filter';
 export const CLEAR_FACETS =                 '[Dataset] Clear Facets';
 
 export class SearchCompleteAction implements Action {
@@ -282,6 +283,11 @@ export class SetTextFilterAction implements Action {
 export class SetDateRangeFilterAction implements Action {
     readonly type = SET_DATE_RANGE;
     constructor(readonly begin: Date, readonly end: Date) {}
+}
+
+export class PrefillFiltersAction implements Action {
+    readonly type = PREFILL_FILTERS;
+    constructor(readonly values: Partial<DatasetFilters>) {}
 }
 
 export class ClearFacetsAction implements Action {
