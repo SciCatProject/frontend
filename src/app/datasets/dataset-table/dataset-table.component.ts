@@ -36,7 +36,6 @@ import { last } from 'rxjs/operator/last';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { startWith } from 'rxjs/operators/startWith';
-import { take } from 'rxjs/operator/take';
 
 import { PageChangeEvent, SortChangeEvent } from '../dataset-table-pure/dataset-table-pure.component';
 
@@ -44,6 +43,9 @@ import * as rison from 'rison';
 import { Subscription } from 'rxjs';
 import { APP_CONFIG, AppConfig } from 'app-config.module';
 import { distinctUntilChanged } from 'rxjs/operators/distinctUntilChanged';
+
+// Needed for compatibility with non-piped RxJS operators
+import 'rxjs/add/operator/take';
 
 @Component({
   selector: 'dataset-table',
