@@ -12,6 +12,8 @@ import {Subscription} from 'rxjs/Subscription';
 import { Message, MessageType } from 'state-management/models';
 import { Angular5Csv } from 'angular5-csv/Angular5-csv';
 import 'rxjs/add/operator/distinctUntilChanged';
+import 'rxjs/add/operator/take';
+
 /**
  * Component to show details for a dataset, using the
  * form compoennt
