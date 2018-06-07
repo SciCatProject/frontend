@@ -7,8 +7,10 @@
     </mat-button-toggle-group>
   </div>
 
-  <div *ngIf="datasetCount$ | async; let count" class="raised">
-      {{ count }} dataset{{ count === 1 ? '' : 's' }}.
+  <div class="raised" [ngPlural]="datasetCount$ | async">
+    <ng-template ngPluralCase="=0">No datasets.</ng-template>
+    <ng-template ngPluralCase="=1">1 dataset.</ng-template>
+    <ng-template ngPluralCase="other">{{ datasetCount$ | async }} datasets.</ng-template>
   </div>
 
   <div *ngIf="loading$ | async" class="raised">

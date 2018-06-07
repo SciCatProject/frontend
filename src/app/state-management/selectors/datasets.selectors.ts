@@ -179,9 +179,10 @@ export const getFullqueryParams = createSelector(
 export const getFullfacetsParams = createSelector(
     getFilters,
     filter => {
-        const fields = ['type', 'creationTime', 'creationLocation', 'ownerGroup', 'keywords', 'archiveStatusMessage'];
-        const query = restrictFilter(filter, fields);
-        return {query, fields};
+        const keys = ['type', 'text', 'creationTime', 'creationLocation', 'ownerGroup', 'keywords']; //, 'archiveStatusMessage'];
+        const fields = restrictFilter(filter, keys);
+        const facets = keys.filter(facet => facet !== 'text'); // Why shouldn't 'text' be included among the facets?
+        return {fields, facets};
     }
 );
 

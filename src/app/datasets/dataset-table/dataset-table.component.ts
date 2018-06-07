@@ -53,22 +53,21 @@ import 'rxjs/add/operator/take';
   styleUrls: ['dataset-table.component.scss']
 })
 export class DatasetTableComponent implements OnInit, OnDestroy {
-  private datasets$: Observable<Dataset[]>;
-  private selectedSets$: Observable<Dataset[]>;
-  private currentPage$: Observable<number>;
-  private datasetsPerPage$: Observable<number>;
-  private mode$: Observable<string>;
-  private datasetCount$: Observable<number>;
-  private isEmptySelection$: Observable<boolean>;
-  private filters$: Observable<DatasetFilters>;
+  private datasets$ = this.store.pipe(select(getDatasets));
+  private selectedSets$ = this.store.pipe(select(getSelectedDatasets));
+  private currentPage$ = this.store.pipe(select(getPage));
+  private datasetsPerPage$ = this.store.pipe(select(getDatasetsPerPage));
+  private mode$ = this.store.pipe(select(getViewMode));
+  private isEmptySelection$ = this.store.pipe(select(isEmptySelection));
+  private datasetCount$ = this.store.select(getTotalSets);
+  private loading$ = this.store.pipe(select(getIsLoading));
+  private filters$ = this.store.pipe(select(getFilters));
 
   // compatibility analogs of observables
   private currentMode: string = 'view';
   private selectedSets: Dataset[] = [];
 
   private modes: string[] = ['view', 'archive', 'retrieve'];
-
-  private loading$: Observable<boolean>;
 
   // These should be made part of the NgRX state management
   // and eventually be removed.
@@ -91,16 +90,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.datasets$ = this.store.pipe(select(getDatasets));
-    this.selectedSets$ = this.store.pipe(select(getSelectedDatasets));
-    this.currentPage$ = this.store.pipe(select(getPage));
-    this.datasetsPerPage$ = this.store.pipe(select(getDatasetsPerPage));
-    this.mode$ = this.store.pipe(select(getViewMode));
-    this.isEmptySelection$ = this.store.pipe(select(isEmptySelection));
-    this.datasetCount$ = this.store.select(getTotalSets);
-    this.loading$ = this.store.pipe(select(getIsLoading));
-    this.filters$ = this.store.pipe(select(getFilters));
-
     // Store concrete values of observables for compatibility
     this.modeSubscription = this.mode$.subscribe((mode: ViewMode) => {
       this.currentMode = mode;
@@ -307,7 +296,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     }
   }
 }
-
 
 /* Obsolete and/or "pensioned" methods
 /*

@@ -282,7 +282,7 @@ export class SetTextFilterAction implements Action {
 
 export class SetDateRangeFilterAction implements Action {
     readonly type = SET_DATE_RANGE;
-    constructor(readonly begin: Date, readonly end: Date) {}
+    constructor(readonly begin: string, readonly end: string) {}
 }
 
 export class PrefillFiltersAction implements Action {
@@ -302,6 +302,7 @@ export class FetchDatasetsCompleteAction implements Action {
     readonly type = FETCH_DATASETS_COMPLETE;
     constructor(readonly datasets: Dataset[]) {}
 }
+
 export class FetchDatasetsFailedAction implements Action {
     readonly type = FETCH_DATASETS_FAILED;
 }

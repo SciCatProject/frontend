@@ -28,7 +28,7 @@ export interface DatasetFilters {
   text: string;
   ownerGroup: string[];
   type: string[];
-  creationTime: {begin: Date, end: Date};
+  creationTime: {begin: string, end: string};
   creationLocation: string[];
   skip: number;
   limit: number;

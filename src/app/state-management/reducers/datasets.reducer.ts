@@ -194,7 +194,8 @@ export function datasetsReducer(state: DatasetState = initialDatasetState, actio
 
         case SET_DATE_RANGE: {
             const {begin, end} = action as SetDateRangeFilterAction;
-            const creationTime = {begin, end};
+            const oldTime = state.filters.creationTime;
+            const creationTime = {...oldTime, begin, end};
             const filters = {...state.filters, creationTime};
             return {...state, filters};
         }

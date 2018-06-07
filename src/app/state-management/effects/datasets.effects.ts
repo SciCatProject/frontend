@@ -56,10 +56,14 @@ export class DatasetEffects {
     private datablockApi: DatablockApi,
   ) {}
   
+  private fullqueryParams$ = this.store.pipe(select(getFullqueryParams));
+  private fullfacetParams$ = this.store.pipe(select(getFullfacetsParams));
+  private rectangularRepresentation$ = this.store.pipe(select(getRectangularRepresentation));
+
   @Effect()
   private fetchDatasets$: Observable<Action> = this.actions$.pipe(
     ofType(DatasetActions.FETCH_DATASETS),
-    withLatestFrom(this.store.pipe(select(getFullqueryParams))),
+    withLatestFrom(this.fullqueryParams$),
     map(([action, params]) => params),
     mergeMap(({query, limits}) =>
       this.datasetApi.fullquery(query, limits).pipe(
@@ -72,24 +76,24 @@ export class DatasetEffects {
   @Effect()
   private fetchFacetCounts$: Observable<Action> = this.actions$.pipe(
     ofType(DatasetActions.FETCH_FACET_COUNTS),
-    withLatestFrom(this.store.pipe(select(getFullfacetsParams))),
+    withLatestFrom(this.fullfacetParams$),
     map(([action, params]) => params),
-    mergeMap(({query, fields}) =>
-      this.datasetApi.fullfacet(query, fields).pipe(
+    mergeMap(({fields, facets}) => {
+      return this.datasetApi.fullfacet(fields, facets).pipe(
         map(res => {
           const {all, ...facetCounts} = res[0];
-          const allCounts = all ? all[0].totalSets : 0;
+          const allCounts = all && all.length > 0 ? all[0].totalSets : 0;
           return new DatasetActions.FetchFacetCountsCompleteAction(facetCounts, allCounts);
         }),
         catchError(() => Observable.of(new DatasetActions.FetchFacetCountsFailedAction()))
       )
-    ),
+    }),
   );
 
   @Effect({dispatch: false})
   protected exportToCsv$: Observable<Action> = this.actions$.pipe(
     ofType(DatasetActions.EXPORT_TO_CSV),
-    mergeMap(() => this.store.pipe(select(getRectangularRepresentation))),
+    mergeMap(() => this.rectangularRepresentation$),
     tap((rect: any) => {
       const options = {
         fieldSeparator: ',',

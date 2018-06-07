@@ -30,6 +30,7 @@ import {
   SetDateRangeFilterAction
 } from 'state-management/actions/datasets.actions';
 import { MatDatepickerInputEvent } from '@angular/material';
+import { filter } from 'rxjs/operators';
 
 type DateRange = {
   begin: Date;
@@ -51,6 +52,7 @@ export class DatasetsFilterComponent {
   private groupFilter$ = this.store.pipe(select(getGroupFilter));
   private typeFilter$ = this.store.pipe(select(getTypeFilter));
   private keywordsFilter$ = this.store.pipe(select(getKeywordsFilter));
+  
   private creationTimeFilter$ = this.store.pipe(select(getCreationTimeFilter));
 
   constructor(private store: Store<any>) {}
@@ -98,7 +100,7 @@ export class DatasetsFilterComponent {
 
   dateChanged(event: MatDatepickerInputEvent<DateRange>) {
     const {begin, end} = event.value;
-    this.store.dispatch(new SetDateRangeFilterAction(begin, end));
+    this.store.dispatch(new SetDateRangeFilterAction(begin.toISOString(), end.toISOString()));
   }
 
   clearFacets() {
