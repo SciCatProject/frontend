@@ -6,7 +6,7 @@
           {{ location || 'No Location' }}
           <mat-icon matChipRemove>cancel</mat-icon>
         </mat-chip>
-        <input class="location-input" [matChipInputFor]="locationChipList" placeholder="Location" aria-label="Location" [matAutocomplete]="loc">
+        <input matInput class="location-input" [matChipInputFor]="locationChipList" placeholder="Location" aria-label="Location" [matAutocomplete]="loc">
       </mat-chip-list>
 
       <mat-autocomplete #loc="matAutocomplete">
@@ -25,7 +25,7 @@
           {{ group }}
           <mat-icon matChipRemove>cancel</mat-icon>
         </mat-chip>
-        <input class="group-input" [matChipInputFor]="groupChipList" placeholder="Group" aria-label="Group" [matAutocomplete]="grp">
+        <input matInput class="group-input" [matChipInputFor]="groupChipList" placeholder="Group" aria-label="Group" [matAutocomplete]="grp">
       </mat-chip-list>
 
       <mat-autocomplete #grp="matAutocomplete">
@@ -44,7 +44,7 @@
           {{ type }}
           <mat-icon matChipRemove>cancel</mat-icon>
         </mat-chip>
-        <input class="type-input" [matChipInputFor]="typeChipList" placeholder="Type" aria-label="Type" [matAutocomplete]="type">
+        <input matInput class="type-input" [matChipInputFor]="typeChipList" placeholder="Type" aria-label="Type" [matAutocomplete]="type">
       </mat-chip-list>
 
       <mat-autocomplete #type="matAutocomplete">
