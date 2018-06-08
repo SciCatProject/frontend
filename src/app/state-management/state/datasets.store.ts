@@ -48,7 +48,6 @@ export const initialDatasetState: DatasetState = {
         ownerGroup: [],
         skip: 0,
         limit: 30,
-        initial: true,
         sortField: 'creationTime:desc',
         keywords: []
     },

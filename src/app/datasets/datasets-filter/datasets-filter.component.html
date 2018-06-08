@@ -20,7 +20,7 @@
     <br>
 
     <mat-form-field>
-      <mat-chip-list #groupChipList>
+      <mat-chip-list #groupChipList class="group-chips">
         <mat-chip *ngFor="let group of groupFilter$ | async" [removable]="true" (removed)="groupRemoved(group)">{{
           group
           }}<mat-icon matChipRemove>cancel</mat-icon>

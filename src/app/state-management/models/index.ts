@@ -32,7 +32,6 @@ export interface DatasetFilters {
   creationLocation: string[];
   skip: number;
   limit: number;
-  initial: boolean;
   keywords: string[];
   sortField: string,
   mode: ViewMode,

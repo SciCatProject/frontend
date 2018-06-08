@@ -166,9 +166,6 @@ export const getFullqueryParams = createSelector(
             }[mode];
         }
         
-        // ???
-        delete query['initial'];
-  
         return {
             query: JSON.stringify(query),
             limits
