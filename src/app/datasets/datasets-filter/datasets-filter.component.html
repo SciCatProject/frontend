@@ -2,9 +2,9 @@
   <form class="example-form">
     <mat-form-field>
       <mat-chip-list #locationChipList>
-        <mat-chip *ngFor="let location of locationFilter$ | async" [removable]="true" (removed)="locationRemoved(location)">
-          {{ location || 'No Location' }}
-          <mat-icon matChipRemove>cancel</mat-icon>
+        <mat-chip *ngFor="let location of locationFilter$ | async" [removable]="true" (removed)="locationRemoved(location)">{{
+          location || 'No Location'
+          }} <mat-icon matChipRemove>cancel</mat-icon>
         </mat-chip>
         <input matInput class="location-input" [matChipInputFor]="locationChipList" placeholder="Location" aria-label="Location" [matAutocomplete]="loc">
       </mat-chip-list>
@@ -21,9 +21,9 @@
 
     <mat-form-field>
       <mat-chip-list #groupChipList>
-        <mat-chip *ngFor="let group of groupFilter$ | async" [removable]="true" (removed)="groupRemoved(group)">
-          {{ group }}
-          <mat-icon matChipRemove>cancel</mat-icon>
+        <mat-chip *ngFor="let group of groupFilter$ | async" [removable]="true" (removed)="groupRemoved(group)">{{
+          group
+          }}<mat-icon matChipRemove>cancel</mat-icon>
         </mat-chip>
         <input matInput class="group-input" [matChipInputFor]="groupChipList" placeholder="Group" aria-label="Group" [matAutocomplete]="grp">
       </mat-chip-list>
@@ -40,9 +40,9 @@
     
     <mat-form-field>
       <mat-chip-list #typeChipList>
-        <mat-chip *ngFor="let type of typeFilter$ | async" [removable]="true" (removed)="typeRemoved(type)">
-          {{ type }}
-          <mat-icon matChipRemove>cancel</mat-icon>
+        <mat-chip *ngFor="let type of typeFilter$ | async" [removable]="true" (removed)="typeRemoved(type)">{{
+          type
+          }}<mat-icon matChipRemove>cancel</mat-icon>
         </mat-chip>
         <input matInput class="type-input" [matChipInputFor]="typeChipList" placeholder="Type" aria-label="Type" [matAutocomplete]="type">
       </mat-chip-list>
