@@ -1,32 +1,99 @@
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/switchMap';
-import 'rxjs/add/observable/of';
-import 'rxjs/add/operator/debounceTime';
-
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { Action, Store, select } from '@ngrx/store';
-import { DatasetService } from 'datasets/dataset.service';
-import { Observable } from 'rxjs/Observable';
-import * as lb from 'shared/sdk/services';
+
+import { Angular5Csv } from 'angular5-csv/Angular5-csv';
+
+import { DatasetApi, DatablockApi } from 'shared/sdk/services';
+
 import * as DatasetActions from 'state-management/actions/datasets.actions';
 import * as UserActions from 'state-management/actions/user.actions';
 
-import { Message, MessageType } from 'state-management/models';
-import { filter, tap, mergeMap, map } from 'rxjs/operators';
-import { getRectangularRepresentation } from '../selectors/datasets.selectors';
-import { takeLast } from 'rxjs/operator/takeLast';
-import { Angular5Csv } from 'angular5-csv/Angular5-csv';
+import {
+  Dataset,
+  Message,
+  MessageType,
+  DatasetFilters
+} from 'state-management/models';
+
+import {
+  getRectangularRepresentation,
+  getFilters,
+  getFullqueryParams,
+  getFullfacetsParams
+} from '../selectors/datasets.selectors';
+
 import { config } from '../../../config/config';
+
+import { map } from 'rxjs/operators/map';
+import { withLatestFrom } from 'rxjs/operators/withLatestFrom';
+import { catchError } from 'rxjs/operators/catchError';
+import { mergeMap } from 'rxjs/operators/mergeMap';
+import { tap } from 'rxjs/operators/tap';
+
+// Returns copy with null/undefined values and empty arrays/strings removed
+function restrictFilter(filter: object, allowedKeys?: string[]) {
+  function isNully(value: any) {
+    const hasLength = typeof value === 'string' || Array.isArray(value);
+    return value == null || hasLength && value.length === 0;
+  }
+
+  const keys = allowedKeys || Object.keys(filter);
+  return keys.reduce((obj, key) => {
+    const val = filter[key];
+    return isNully(val) ? obj : {...obj, [key]: val};
+  }, {});
+}
 
 @Injectable()
 export class DatasetEffects {
+  constructor(
+    private actions$: Actions,
+    private store: Store<any>,
+    private datasetApi: DatasetApi,
+    private datablockApi: DatablockApi,
+  ) {}
+  
+  private fullqueryParams$ = this.store.pipe(select(getFullqueryParams));
+  private fullfacetParams$ = this.store.pipe(select(getFullfacetsParams));
+  private rectangularRepresentation$ = this.store.pipe(select(getRectangularRepresentation));
+
+  @Effect()
+  private fetchDatasets$: Observable<Action> = this.actions$.pipe(
+    ofType(DatasetActions.FETCH_DATASETS),
+    withLatestFrom(this.fullqueryParams$),
+    map(([action, params]) => params),
+    mergeMap(({query, limits}) =>
+      this.datasetApi.fullquery(query, limits).pipe(
+        map(datasets => new DatasetActions.FetchDatasetsCompleteAction(datasets as Dataset[])),
+        catchError(() => Observable.of(new DatasetActions.FetchDatasetsFailedAction()))    
+      )
+    ),
+  );
+
+  @Effect()
+  private fetchFacetCounts$: Observable<Action> = this.actions$.pipe(
+    ofType(DatasetActions.FETCH_FACET_COUNTS),
+    withLatestFrom(this.fullfacetParams$),
+    map(([action, params]) => params),
+    mergeMap(({fields, facets}) => {
+      return this.datasetApi.fullfacet(fields, facets).pipe(
+        map(res => {
+          const {all, ...facetCounts} = res[0];
+          const allCounts = all && all.length > 0 ? all[0].totalSets : 0;
+          return new DatasetActions.FetchFacetCountsCompleteAction(facetCounts, allCounts);
+        }),
+        catchError(() => Observable.of(new DatasetActions.FetchFacetCountsFailedAction()))
+      )
+    }),
+  );
 
   @Effect({dispatch: false})
-  protected exportToCsv$: Observable<Action> = this.action$.pipe(
+  protected exportToCsv$: Observable<Action> = this.actions$.pipe(
     ofType(DatasetActions.EXPORT_TO_CSV),
-    mergeMap(() => this.store.pipe(select(getRectangularRepresentation))),
+    mergeMap(() => this.rectangularRepresentation$),
     tap((rect: any) => {
       const options = {
         fieldSeparator: ',',
@@ -44,17 +111,15 @@ export class DatasetEffects {
 
   @Effect()
   protected getDataset$: Observable<Action> =
-    this.action$.ofType(DatasetActions.SEARCH_ID)
+    this.actions$.ofType(DatasetActions.SEARCH_ID)
       .debounceTime(300)
       .map((action: DatasetActions.SearchIDAction) => action.payload)
       .switchMap(payload => {
         const id = payload;
         // TODO separate action for dataBlocks? or retrieve at once?
 
-        return this.ds.findById(encodeURIComponent(id))
-          .switchMap(res => {
-            return Observable.of(new DatasetActions.SearchIDCompleteAction(res));
-          })
+        return this.datasetApi.findById(encodeURIComponent(id))
+          .map(res => new DatasetActions.SearchIDCompleteAction(res))
           .catch(err => {
             console.log(err);
             return Observable.of(new DatasetActions.SearchIDFailedAction(err));
@@ -63,7 +128,7 @@ export class DatasetEffects {
 
   @Effect()
   protected getDatablocks$: Observable<Action> =
-    this.action$.ofType(DatasetActions.DATABLOCKS)
+    this.actions$.ofType(DatasetActions.DATABLOCKS)
       .debounceTime(300)
       .map((action: DatasetActions.DatablocksAction) => action.payload)
       .switchMap(payload => {
@@ -80,7 +145,7 @@ export class DatasetEffects {
 
         // TODO separate action for dataBlocks? or retrieve at once?
 
-        return this.ds.findById(encodeURIComponent(id), blockFilter)
+        return this.datasetApi.findById(encodeURIComponent(id), blockFilter)
           .switchMap(res => {
             //console.log(res);
             return Observable.of(new DatasetActions.SearchIDCompleteAction(res));
@@ -90,6 +155,7 @@ export class DatasetEffects {
           });
       });
 
+      /*
   @Effect()
   protected facet$: Observable<Action> =
     this.action$.ofType(DatasetActions.FILTER_UPDATE)
@@ -115,8 +181,9 @@ export class DatasetEffects {
             console.log(err);
             return Observable.of(new DatasetActions.FilterFailedAction(err));
           });
-      });
+      });*/
 
+  /*
   @Effect()
   protected facetDatasets$: Observable<Action> =
     this.action$.ofType(DatasetActions.FILTER_UPDATE)
@@ -155,14 +222,15 @@ export class DatasetEffects {
                 return Observable.of(new DatasetActions.SearchFailedAction(err));
            });
       });
+      */
 
   @Effect()
   protected deleteDatablocks$: Observable<Action> =
-    this.action$.ofType(DatasetActions.DATABLOCK_DELETE)
+    this.actions$.ofType(DatasetActions.DATABLOCK_DELETE)
       .map((action: DatasetActions.DatablockDeleteAction) => action.payload)
       .switchMap(payload => {
         const block = payload;
-        return this.dbs.deleteById(block['id']).switchMap(res => {
+        return this.datablockApi.deleteById(block['id']).switchMap(res => {
           return Observable.of({
             type: DatasetActions.DATABLOCK_DELETE_COMPLETE
           });
@@ -176,13 +244,13 @@ export class DatasetEffects {
 
   @Effect()
   protected updateSelectedDatablocks$: Observable<Action> =
-    this.action$.ofType(DatasetActions.SELECTED_UPDATE)
+    this.actions$.ofType(DatasetActions.SELECTED_UPDATE)
       .map((action: DatasetActions.UpdateSelectedAction) => action.payload)
       .switchMap(payload => {
         if (payload && payload.length > 0) {
           const dataset = payload[payload.length - 1];
           const datasetSearch = { where: { datasetId: dataset.pid } };
-          return this.dbs.find(datasetSearch).switchMap(res => {
+          return this.datablockApi.find(datasetSearch).switchMap(res => {
             dataset['datablocks'] = res;
             return Observable.of(new DatasetActions.UpdateSelectedDatablocksAction(payload));
           });
@@ -193,11 +261,11 @@ export class DatasetEffects {
 
   @Effect()
   protected resetStatus$: Observable<Action> =
-    this.action$.ofType(DatasetActions.RESET_STATUS)
+    this.actions$.ofType(DatasetActions.RESET_STATUS)
       .map((action: DatasetActions.ResetStatusAction) => action.payload)
       .switchMap(payload => {
         const msg = new Message();
-        return this.ds.reset(encodeURIComponent(payload['id'])).switchMap(res => {
+        return this.datasetApi.reset(encodeURIComponent(payload['id'])).switchMap(res => {
           msg.content = 'Dataset Status Reset';
           msg.type = MessageType.Success;
           return Observable.of(new UserActions.ShowMessageAction(msg));
@@ -210,12 +278,6 @@ export class DatasetEffects {
         });
       });
 
-  constructor(private action$: Actions, private store: Store<any>,
-    private cds: DatasetService, private ds: lb.DatasetApi, private rds: lb.DatasetApi,
-    private dls: lb.DatasetLifecycleApi, private dbs: lb.DatablockApi,
-    private odbs: lb.OrigDatablockApi,
-    private userIdentitySrv: lb.UserIdentityApi,
-    private accessUserSrv: lb.AccessUserApi) { }
 }
 
 function stringSort(a, b) {

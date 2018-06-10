@@ -22,15 +22,17 @@ export class Message {
   duration ? = 10000;
 };
 
+export type ViewMode = 'view' | 'archive' | 'retrieve';
+
 export interface DatasetFilters {
   text: string;
   ownerGroup: string[];
-  type: string;
-  creationTime: {'start': Date, 'end': Date};
+  type: string[];
+  creationTime: {begin: string, end: string};
   creationLocation: string[];
   skip: number;
   limit: number;
-  initial: boolean;
   keywords: string[];
-  sortField: Object
+  sortField: string,
+  mode: ViewMode,
 };

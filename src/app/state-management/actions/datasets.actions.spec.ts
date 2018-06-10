@@ -1,5 +1,4 @@
 import { Dataset, AccessGroup, Datablock } from 'shared/sdk/models';
-import { ViewMode } from '../state/datasets.store';
 
 import {SearchCompleteAction, SEARCH_COMPLETE } from './datasets.actions'; 
 import {SearchFailedAction, SEARCH_FAILED } from './datasets.actions'; 

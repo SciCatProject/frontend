@@ -1,7 +1,7 @@
 import { Action } from '@ngrx/store';
-import { DatasetFilters } from 'state-management/models';
+import { DatasetFilters, ViewMode } from 'state-management/models';
 import { Dataset, AccessGroup, Datablock } from 'shared/sdk/models';
-import { ViewMode } from '../state/datasets.store';
+import { FacetCounts } from '../state/datasets.store';
 
 export const SEARCH_COMPLETE =              '[Dataset] Search Complete';
 export const SEARCH_FAILED =                '[Dataset] Search Failed';
@@ -46,8 +46,35 @@ export const CLEAR_SELECTION =              '[Dataset] Clear Selection';
 export const EXPORT_TO_CSV =                '[Dataset] Export to CSV';
 export const SET_VIEW_MODE =                '[Dataset] Set View Mode';
 
+export const FETCH_DATASETS =               '[Dataset] Fetch Datasets';
+export const FETCH_DATASETS_COMPLETE =      '[Dataset] Fetch Datasets Complete';
+export const FETCH_DATASETS_FAILED =        '[Dataset] Fetch Datasets Failed';
+
+export const FETCH_FACET_COUNTS =           '[Dataset] Fetch Facet Counts';
+export const FETCH_FACET_COUNTS_COMPLETE =  '[Dataset] Fetch Facet Counts Complete';
+export const FETCH_FACET_COUNTS_FAILED =    '[Dataset] Fetch Facet Counts Failed';
+
 export const CHANGE_PAGE =                  '[Dataset] Change Page';
 export const SORT_BY_COLUMN =               '[Dataset] Sort by Column';
+export const SET_SEARCH_TERMS =             '[Dataset] Set Search Terms';
+
+export const ADD_LOCATION_FILTER =          '[Dataset] Add Location Filter';
+export const REMOVE_LOCATION_FILTER =       '[Dataset] Remove Location Filter';
+
+export const ADD_GROUP_FILTER =             '[Dataset] Add Group Filter';
+export const REMOVE_GROUP_FILTER =          '[Dataset] Remove Group Filter';
+
+export const ADD_KEYWORD_FILTER =           '[Dataset] Add Keyword Filter';
+export const REMOVE_KEYWORD_FILTER =        '[Dataset] Remove Keyword Filter';
+
+export const ADD_TYPE_FILTER =              '[Dataset] Add Type Filter';
+export const REMOVE_TYPE_FILTER =           '[Dataset] Remove Type Filter';
+
+export const SET_TEXT_FILTER =              '[Dataset] Set Text Filter';
+export const SET_DATE_RANGE =               '[Dataset] Set Date Range Filter';
+
+export const PREFILL_FILTERS =              '[Dataset] Prefill Filter';
+export const CLEAR_FACETS =                 '[Dataset] Clear Facets';
 
 export class SearchCompleteAction implements Action {
     readonly type = SEARCH_COMPLETE;
@@ -203,6 +230,95 @@ export class SetViewModeAction implements Action {
     constructor(readonly mode: ViewMode) {}
 }
 
+export class SetSearchTermsAction implements Action {
+    readonly type = SET_SEARCH_TERMS;
+    constructor(readonly terms: string) {}
+}
+
+export class AddLocationFilterAction implements Action {
+    readonly type = ADD_LOCATION_FILTER;
+    constructor(readonly location: string) {}
+}
+
+export class RemoveLocationFilterAction implements Action {
+    readonly type = REMOVE_LOCATION_FILTER;
+    constructor(readonly location: string) {}
+}
+
+export class AddGroupFilterAction implements Action {
+    readonly type = ADD_GROUP_FILTER;
+    constructor(readonly group: string) {}
+}
+
+export class RemoveGroupFilterAction implements Action {
+    readonly type = REMOVE_GROUP_FILTER;
+    constructor(readonly group: string) {}
+}
+
+export class AddKeywordFilterAction implements Action {
+    readonly type = ADD_KEYWORD_FILTER;
+    constructor(readonly keyword: string) {}
+}
+
+export class RemoveKeywordFilterAction implements Action {
+    readonly type = REMOVE_KEYWORD_FILTER;
+    constructor(readonly keyword: string) {}
+}
+
+export class AddTypeFilterAction implements Action {
+    readonly type = ADD_TYPE_FILTER;
+    constructor(readonly datasetType: string) {}
+}
+
+export class RemoveTypeFilterAction implements Action {
+    readonly type = REMOVE_TYPE_FILTER;
+    constructor(readonly datasetType: string) {}
+}
+
+export class SetTextFilterAction implements Action {
+    readonly type = SET_TEXT_FILTER;
+    constructor(readonly text: string) {}
+}
+
+export class SetDateRangeFilterAction implements Action {
+    readonly type = SET_DATE_RANGE;
+    constructor(readonly begin: string, readonly end: string) {}
+}
+
+export class PrefillFiltersAction implements Action {
+    readonly type = PREFILL_FILTERS;
+    constructor(readonly values: Partial<DatasetFilters>) {}
+}
+
+export class ClearFacetsAction implements Action {
+    readonly type = CLEAR_FACETS;
+}
+
+export class FetchDatasetsAction implements Action {
+    readonly type = FETCH_DATASETS;
+}
+
+export class FetchDatasetsCompleteAction implements Action {
+    readonly type = FETCH_DATASETS_COMPLETE;
+    constructor(readonly datasets: Dataset[]) {}
+}
+
+export class FetchDatasetsFailedAction implements Action {
+    readonly type = FETCH_DATASETS_FAILED;
+}
+
+export class FetchFacetCountsAction implements Action {
+    readonly type = FETCH_FACET_COUNTS;
+}
+
+export class FetchFacetCountsCompleteAction implements Action {
+    readonly type = FETCH_FACET_COUNTS_COMPLETE;
+    constructor(readonly facetCounts: FacetCounts, readonly allCounts: number) {}
+}
+export class FetchFacetCountsFailedAction implements Action {
+    readonly type = FETCH_FACET_COUNTS_FAILED;
+}
+
 export type Actions =
     SearchCompleteAction | SearchFailedAction |
     UpdateFilterAction | UpdateFilterCompleteAction | FilterFailedAction |
@@ -212,5 +328,8 @@ export type Actions =
     DatablocksAction | AddGroupsAction | AddGroupsCompleteAction | UpdateSelectedDatablocksAction |
     AddGroupsFailedAction | UpdateSelectedAction | TotalSetsAction | ResetStatusAction | ResetStatusCompleteAction |
     SelectDatasetAction | DeselectDatasetAction |
-    ExportToCsvAction | ChangePageAction | SortByColumnAction | SetViewModeAction;
+    ExportToCsvAction | ChangePageAction | SortByColumnAction | SetViewModeAction |
+    
+    // New filtering actions
+    SetSearchTermsAction | ClearFacetsAction;
     
