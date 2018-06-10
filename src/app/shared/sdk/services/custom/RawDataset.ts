@@ -940,7 +940,7 @@ export class RawDatasetApi extends BaseLoopBackApi {
   }
 
   /**
-   * Delete datablocks of dataset and reset status message
+   * Delete datablocks of dataset and reset status message. Warning: to be oboleted, use reset call for DatasetLifecycle instead
    *
    * @param {object} data Request data.
    *

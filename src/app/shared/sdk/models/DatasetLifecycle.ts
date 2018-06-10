@@ -8,6 +8,8 @@ export interface DatasetLifecycleInterface {
   "id": string;
   "isOnDisk"?: boolean;
   "isOnTape"?: boolean;
+  "archivable"?: boolean;
+  "retrievable"?: boolean;
   "archiveStatusMessage"?: string;
   "retrieveStatusMessage"?: string;
   "lastUpdateMessage"?: string;
@@ -34,6 +36,8 @@ export class DatasetLifecycle implements DatasetLifecycleInterface {
   "id": string;
   "isOnDisk": boolean;
   "isOnTape": boolean;
+  "archivable": boolean;
+  "retrievable": boolean;
   "archiveStatusMessage": string;
   "retrieveStatusMessage": string;
   "lastUpdateMessage": string;
@@ -97,6 +101,14 @@ export class DatasetLifecycle implements DatasetLifecycleInterface {
         },
         "isOnTape": {
           name: 'isOnTape',
+          type: 'boolean'
+        },
+        "archivable": {
+          name: 'archivable',
+          type: 'boolean'
+        },
+        "retrievable": {
+          name: 'retrievable',
           type: 'boolean'
         },
         "archiveStatusMessage": {

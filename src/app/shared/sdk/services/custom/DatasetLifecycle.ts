@@ -158,6 +158,34 @@ export class DatasetLifecycleApi extends BaseLoopBackApi {
   }
 
   /**
+   * Delete datablocks of dataset and reset status message.
+   *
+   * @param {object} data Request data.
+   *
+   *  - `datasetId` – `{string}` - 
+   *
+   * @returns {object} An empty reference that will be
+   *   populated with the actual data once the response is returned
+   *   from the server.
+   *
+   * <em>
+   * (The remote method definition does not provide any description.
+   * This usually means the response is a `DatasetLifecycle` object.)
+   * </em>
+   */
+  public reset(datasetId: any = {}, customHeaders?: Function): Observable<any> {
+    let _method: string = "PUT";
+    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
+    "/DatasetLifecycles/resetArchiveStatus";
+    let _routeParams: any = {};
+    let _postBody: any = {};
+    let _urlParams: any = {};
+    if (typeof datasetId !== 'undefined' && datasetId !== null) _urlParams.datasetId = datasetId;
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    return result;
+  }
+
+  /**
    * The name of the model represented by this $resource,
    * i.e. `DatasetLifecycle`.
    */
