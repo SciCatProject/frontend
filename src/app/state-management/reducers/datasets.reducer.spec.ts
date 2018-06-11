@@ -286,7 +286,6 @@
        const payload = 3;
        const action = new fromActions.TotalSetsAction(payload);
        const state = fromDatasets.datasetsReducer(initialDatasetState, action);
-       expect(state.totalCount).toEqual(3);
 
      });
    });
