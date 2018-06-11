@@ -17,6 +17,10 @@ import { Dataset } from '../../models/Dataset';
 
 /**
  * Api services for the `OrigDatablock` model.
+ *
+ * **Details**
+ *
+ * Container list all files and their attributes which make up a dataset. Usually Filled at the time the datasets metadata is created in the data catalog. Can be used by subsequent archiving processes to create the archived datasets.
  */
 @Injectable()
 export class OrigDatablockApi extends BaseLoopBackApi {
@@ -118,6 +122,35 @@ export class OrigDatablockApi extends BaseLoopBackApi {
     };
     let _postBody: any = {
       data: data
+    };
+    let _urlParams: any = {};
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    return result;
+  }
+
+  /**
+   * Check if data is valid according to a schema
+   *
+   * @param {object} data Request data.
+   *
+   * This method expects a subset of model properties as request parameters.
+   *
+   * @returns {object} An empty reference that will be
+   *   populated with the actual data once the response is returned
+   *   from the server.
+   *
+   * <em>
+   * (The remote method definition does not provide any description.
+   * This usually means the response is a `OrigDatablock` object.)
+   * </em>
+   */
+  public isValid(ownableItem: any = {}, customHeaders?: Function): Observable<any> {
+    let _method: string = "POST";
+    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
+    "/OrigDatablocks/isValid";
+    let _routeParams: any = {};
+    let _postBody: any = {
+      ownableItem: ownableItem
     };
     let _urlParams: any = {};
     let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);

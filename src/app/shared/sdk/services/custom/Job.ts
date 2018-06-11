@@ -16,6 +16,10 @@ import { SocketConnection } from '../../sockets/socket.connections';
 
 /**
  * Api services for the `Job` model.
+ *
+ * **Details**
+ *
+ * This collection keeps information about jobs to be excuted in external systems. In particular it keeps information about the jobs submitted for archiving or retrieving datasets stored inside an archive system. It can also be used to keep track of analysis jobs e.g. for automated analysis workflows.
  */
 @Injectable()
 export class JobApi extends BaseLoopBackApi {

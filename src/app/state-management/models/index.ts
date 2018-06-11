@@ -1,5 +1,8 @@
-import { User, AccessGroup, Job, RawDataset, Proposal } from 'shared/sdk/models';
-export { User, AccessGroup, Job, RawDataset, Proposal };
+import { User, AccessGroup, Job, Dataset, RawDataset, Proposal } from 'shared/sdk/models';
+export { User, AccessGroup, Job, Dataset, RawDataset, Proposal };
+
+import { DatasetInterface } from 'shared/sdk';
+export { DatasetInterface };
 
 export interface Settings {
   tapeCopies: string;
@@ -19,13 +22,17 @@ export class Message {
   duration ? = 10000;
 };
 
+export type ViewMode = 'view' | 'archive' | 'retrieve';
+
 export interface DatasetFilters {
   text: string;
   ownerGroup: string[];
-  type: string;
-  creationTime: {'start': Date, 'end': Date};
+  type: string[];
+  creationTime: {begin: string, end: string};
   creationLocation: string[];
   skip: number;
-  initial: boolean;
+  limit: number;
   keywords: string[];
+  sortField: string,
+  mode: ViewMode,
 };

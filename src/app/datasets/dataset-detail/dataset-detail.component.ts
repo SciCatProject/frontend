@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {Store, select} from '@ngrx/store';
-import {OrigDatablock, Datablock, RawDataset, Job} from 'shared/sdk/models';
+import {OrigDatablock, Dataset, DatasetAttachment, Datablock, Job} from 'shared/sdk/models';
 import * as dsa from 'state-management/actions/datasets.actions';
 import * as ja from 'state-management/actions/jobs.actions';
 import * as ua from 'state-management/actions/user.actions';
@@ -12,6 +12,8 @@ import {Subscription} from 'rxjs/Subscription';
 import { Message, MessageType } from 'state-management/models';
 import { Angular5Csv } from 'angular5-csv/Angular5-csv';
 import 'rxjs/add/operator/distinctUntilChanged';
+import 'rxjs/add/operator/take';
+
 /**
  * Component to show details for a dataset, using the
  * form compoennt
@@ -26,16 +28,17 @@ import 'rxjs/add/operator/distinctUntilChanged';
 })
 export class DatasetDetailComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
-  dataset$: Observable<RawDataset>;
+  dataset$: Observable<Dataset>;
   origDatablocks$: Observable<OrigDatablock[]>;
   datablocks$: Observable<Datablock[]>;
+  dAttachment$: Observable<DatasetAttachment[]>;
   admin$: Observable<boolean>;
 
   constructor(private route: ActivatedRoute, private store: Store<any>) { }
 
   ngOnInit() {
     const currentUser$ = this.store.select(state => state.root.user.currentUser);
-    const adminUserNames = ['ingestor', 'archiveManager'];
+   const adminUserNames = ['ingestor', 'archiveManager'];
     const userIsAdmin = (user) => {
       return (user['accountType'] === 'functional') || (adminUserNames.indexOf(user.username) !== -1);
     };
@@ -49,15 +52,22 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
         this.reloadDatasetWithDatablocks(params.id);
       }));
 
-    this.dataset$ = currentSet$.distinctUntilChanged().filter((dataset: RawDataset) => {
+    this.dataset$ = currentSet$.distinctUntilChanged().filter((dataset: Dataset) => {
       return dataset && (Object.keys(dataset).length > 0);
     });
 
-    this.origDatablocks$ = this.dataset$.map((dataset: RawDataset) => {
-      return (dataset && ('origdatablocks' in dataset)) ? dataset.origdatablocks : [];
+    this.origDatablocks$ = this.dataset$.map((dataset: Dataset) => {
+      return (dataset && ('origdatablocks' in dataset)) ? dataset.origdatablocks : undefined;
     });
 
-    this.datablocks$ = this.dataset$.map((dataset: RawDataset) => {
+    this.dAttachment$ = this.dataset$.map((dataset: Dataset) => {
+      return (dataset && ('datasetattachments' in dataset) &&
+              dataset.datasetattachments.length > 0) ? dataset.datasetattachments : undefined;
+    });
+
+
+
+    this.datablocks$ = this.dataset$.map((dataset: Dataset) => {
       return (dataset && ('datablocks' in dataset)) ? dataset.datablocks : [];
     });
 
@@ -124,7 +134,7 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
     this.store.dispatch(new dsa.DatablocksAction(datasetPID));
   }
   // (not currently in use since we are clearing current dataset entirely)
-  private ensureDatablocksForDatasetAreLoaded(dataset: RawDataset) {
+  private ensureDatablocksForDatasetAreLoaded(dataset: Dataset) {
     if (dataset && !('origdatablocks' in dataset)) {
       // this.loadDatasetWithDatablocks(dataset.pid);
     }

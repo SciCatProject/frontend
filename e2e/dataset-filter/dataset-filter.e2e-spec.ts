@@ -6,9 +6,7 @@ import {LoginPage} from '../login/login.po';
 describe('catanie Dataset Filters', function() {
   let lp: LoginPage;
   let page: DashboardPage;
-  const urlParams =
-      '/datasets?args=(creationLocation:!(),creationTime:(end:!n,start:!n),' +
-  'initial:!t,mode:view,ownerGroup:!(p11114),skip:0,sortField:!n,text:house)';
+  const urlParams = '/datasets?args=(creationLocation:!(),creationTime:(end:!n,start:!n),keywords:!(),limit:30,mode:view,ownerGroup:!(p11114),skip:0,sortField:!n,text:house,type:!())';
 
   beforeAll(() => {
     lp = new LoginPage();
@@ -35,7 +33,7 @@ describe('catanie Dataset Filters', function() {
   it('should have a prefilled groups input', () => {
     page.navigateTo(urlParams).then(() => {
       browser.sleep(1000);
-      expect(element(by.className('group-input')).getAttribute('value')).toContain('p11114');
+      expect(element(by.cssContainingText('.mat-chip', 'p11114')).isPresent()).toBeTruthy();
     });
   });
 });

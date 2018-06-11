@@ -17,6 +17,10 @@ import { Dataset } from '../../models/Dataset';
 
 /**
  * Api services for the `Datablock` model.
+ *
+ * **Details**
+ *
+ * When archiving a dataset all files contained in the dataset are listed here together with their checksum information. Several datablocks can be created if the file listing is too long for a single datablock. This partitioning decision is done by the archiving system to allow for chunks of datablocks with managable sizes. E.g a dataset consisting of 10 TB of data could be split into 10 datablocks of about 1 TB each. The upper limit set by the data catalog system itself is given by the fact that documents must be smaller than 16 MB, which typically allows for datasets of about 100000 files.
  */
 @Injectable()
 export class DatablockApi extends BaseLoopBackApi {
@@ -118,6 +122,35 @@ export class DatablockApi extends BaseLoopBackApi {
     };
     let _postBody: any = {
       data: data
+    };
+    let _urlParams: any = {};
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    return result;
+  }
+
+  /**
+   * Check if data is valid according to a schema
+   *
+   * @param {object} data Request data.
+   *
+   * This method expects a subset of model properties as request parameters.
+   *
+   * @returns {object} An empty reference that will be
+   *   populated with the actual data once the response is returned
+   *   from the server.
+   *
+   * <em>
+   * (The remote method definition does not provide any description.
+   * This usually means the response is a `Datablock` object.)
+   * </em>
+   */
+  public isValid(ownableItem: any = {}, customHeaders?: Function): Observable<any> {
+    let _method: string = "POST";
+    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
+    "/Datablocks/isValid";
+    let _routeParams: any = {};
+    let _postBody: any = {
+      ownableItem: ownableItem
     };
     let _urlParams: any = {};
     let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);

@@ -1,39 +1,125 @@
-// import all rxjs operators that are needed
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/switchMap';
-import 'rxjs/add/observable/of';
-import 'rxjs/add/operator/debounceTime';
-
 import { Injectable } from '@angular/core';
-import { Actions, Effect } from '@ngrx/effects';
-import { Action, Store } from '@ngrx/store';
-import { DatasetService } from 'datasets/dataset.service';
 import { Observable } from 'rxjs/Observable';
-import * as lb from 'shared/sdk/services';
+
+import { Actions, Effect, ofType } from '@ngrx/effects';
+import { Action, Store, select } from '@ngrx/store';
+
+import { Angular5Csv } from 'angular5-csv/Angular5-csv';
+
+import { DatasetApi, DatablockApi } from 'shared/sdk/services';
+
 import * as DatasetActions from 'state-management/actions/datasets.actions';
 import * as UserActions from 'state-management/actions/user.actions';
 
-import { Message, MessageType } from 'state-management/models';
-import { filter } from 'rxjs/operators';
+import {
+  Dataset,
+  Message,
+  MessageType,
+  DatasetFilters
+} from 'state-management/models';
 
-// import store state interface
+import {
+  getRectangularRepresentation,
+  getFilters,
+  getFullqueryParams,
+  getFullfacetsParams
+} from '../selectors/datasets.selectors';
+
+import { config } from '../../../config/config';
+
+import { map } from 'rxjs/operators/map';
+import { withLatestFrom } from 'rxjs/operators/withLatestFrom';
+import { catchError } from 'rxjs/operators/catchError';
+import { mergeMap } from 'rxjs/operators/mergeMap';
+import { tap } from 'rxjs/operators/tap';
+
+// Returns copy with null/undefined values and empty arrays/strings removed
+function restrictFilter(filter: object, allowedKeys?: string[]) {
+  function isNully(value: any) {
+    const hasLength = typeof value === 'string' || Array.isArray(value);
+    return value == null || hasLength && value.length === 0;
+  }
+
+  const keys = allowedKeys || Object.keys(filter);
+  return keys.reduce((obj, key) => {
+    const val = filter[key];
+    return isNully(val) ? obj : {...obj, [key]: val};
+  }, {});
+}
+
 @Injectable()
 export class DatasetEffects {
+  constructor(
+    private actions$: Actions,
+    private store: Store<any>,
+    private datasetApi: DatasetApi,
+    private datablockApi: DatablockApi,
+  ) {}
+  
+  private fullqueryParams$ = this.store.pipe(select(getFullqueryParams));
+  private fullfacetParams$ = this.store.pipe(select(getFullfacetsParams));
+  private rectangularRepresentation$ = this.store.pipe(select(getRectangularRepresentation));
+
+  @Effect()
+  private fetchDatasets$: Observable<Action> = this.actions$.pipe(
+    ofType(DatasetActions.FETCH_DATASETS),
+    withLatestFrom(this.fullqueryParams$),
+    map(([action, params]) => params),
+    mergeMap(({query, limits}) =>
+      this.datasetApi.fullquery(query, limits).pipe(
+        map(datasets => new DatasetActions.FetchDatasetsCompleteAction(datasets as Dataset[])),
+        catchError(() => Observable.of(new DatasetActions.FetchDatasetsFailedAction()))    
+      )
+    ),
+  );
+
+  @Effect()
+  private fetchFacetCounts$: Observable<Action> = this.actions$.pipe(
+    ofType(DatasetActions.FETCH_FACET_COUNTS),
+    withLatestFrom(this.fullfacetParams$),
+    map(([action, params]) => params),
+    mergeMap(({fields, facets}) => {
+      return this.datasetApi.fullfacet(fields, facets).pipe(
+        map(res => {
+          const {all, ...facetCounts} = res[0];
+          const allCounts = all && all.length > 0 ? all[0].totalSets : 0;
+          return new DatasetActions.FetchFacetCountsCompleteAction(facetCounts, allCounts);
+        }),
+        catchError(() => Observable.of(new DatasetActions.FetchFacetCountsFailedAction()))
+      )
+    }),
+  );
+
+  @Effect({dispatch: false})
+  protected exportToCsv$: Observable<Action> = this.actions$.pipe(
+    ofType(DatasetActions.EXPORT_TO_CSV),
+    mergeMap(() => this.rectangularRepresentation$),
+    tap((rect: any) => {
+      const options = {
+        fieldSeparator: ',',
+        quoteStrings: '"',
+        decimalseparator: '.',
+        showLabels: true,
+        showTitle: false,
+        useBom: true,
+        headers: Object.keys(rect[0])
+      };
+
+      const ts = new Angular5Csv(rect, 'Datasets', options);
+    })
+  );
 
   @Effect()
   protected getDataset$: Observable<Action> =
-    this.action$.ofType(DatasetActions.SEARCH_ID)
+    this.actions$.ofType(DatasetActions.SEARCH_ID)
       .debounceTime(300)
       .map((action: DatasetActions.SearchIDAction) => action.payload)
       .switchMap(payload => {
         const id = payload;
         // TODO separate action for dataBlocks? or retrieve at once?
 
-        return this.ds.findById(encodeURIComponent(id))
-          .switchMap(res => {
-            return Observable.of(new DatasetActions.SearchIDCompleteAction(res));
-          })
+        return this.datasetApi.findById(encodeURIComponent(id))
+          .map(res => new DatasetActions.SearchIDCompleteAction(res))
           .catch(err => {
             console.log(err);
             return Observable.of(new DatasetActions.SearchIDFailedAction(err));
@@ -42,7 +128,7 @@ export class DatasetEffects {
 
   @Effect()
   protected getDatablocks$: Observable<Action> =
-    this.action$.ofType(DatasetActions.DATABLOCKS)
+    this.actions$.ofType(DatasetActions.DATABLOCKS)
       .debounceTime(300)
       .map((action: DatasetActions.DatablocksAction) => action.payload)
       .switchMap(payload => {
@@ -52,14 +138,16 @@ export class DatasetEffects {
           include: [
             { relation: 'origdatablocks' },
             { relation: 'datablocks' },
+            { relation: 'datasetattachments' },
             { relation: 'datasetlifecycle' }
           ]
         };
 
         // TODO separate action for dataBlocks? or retrieve at once?
 
-        return this.ds.findById(encodeURIComponent(id), blockFilter)
+        return this.datasetApi.findById(encodeURIComponent(id), blockFilter)
           .switchMap(res => {
+            //console.log(res);
             return Observable.of(new DatasetActions.SearchIDCompleteAction(res));
           })
           .catch(err => {
@@ -67,118 +155,82 @@ export class DatasetEffects {
           });
       });
 
+      /*
   @Effect()
   protected facet$: Observable<Action> =
     this.action$.ofType(DatasetActions.FILTER_UPDATE)
       .debounceTime(300)
       .map((action: DatasetActions.UpdateFilterAction) => action.payload)
       .switchMap(payload => {
-        const fq = Object.assign({}, payload);
-        let groups = fq['ownerGroup'];
-        if (!groups || groups.length === 0) {
-          this.store.select(state => state.root.user.currentUserGroups)
-            .take(1)
-            .subscribe(user => { groups = user; });
-        }
-        if (fq['text']) {
-          fq['text'] = { '$search': '"' + fq['text'] + '"', '$language': 'none' };
-        } else {
-          delete fq['text'];
-        }
-        delete fq['mode'];
-        const facetObject = [{ name: 'keywords', type: 'text', preConditions: { $unwind: '$keywords' } }];
+        const fq={}
+        // remove fields not relevant for facet filters
+        Object.keys(payload).forEach(key => {
+           if (['mode','initial','sortField','skip','limit'].indexOf(key)>=0)return
+           if (payload[key] === null) return
+           if (typeof payload[key] === 'undefined' || payload[key].length == 0) return
+           fq[key]=payload[key]
+        })
+        const facetObject = [  "type", "creationTime", "creationLocation", "ownerGroup","keywords"];
         return this.ds
-          .facet(fq, facetObject)
+          .fullfacet(JSON.stringify(fq), facetObject)
           .switchMap(res => {
-            const filterValues = res['results'][0];
-            const groupsArr = filterValues['groups'] || filterValues['ownerGroup'];
-            groupsArr.sort(stringSort);
-            const kwArr = filterValues['keywords'] || [];
-            kwArr.sort(stringSort);
-            const locationArr = filterValues['locations'] || filterValues['creationLocation'];
-            locationArr.sort(stringSort);
-            const fv = {};
-            fv['ownerGroup'] = groupsArr;
-            fv['creationLocation'] = locationArr;
-            fv['years'] = filterValues['years'];
-            fv['keywords'] = kwArr;
-            return Observable.of(new DatasetActions.UpdateFilterCompleteAction(fv));
+            const filterValues = res[0];
+            return Observable.of(new DatasetActions.UpdateFilterCompleteAction(filterValues));
           })
           .catch(err => {
             console.log(err);
             return Observable.of(new DatasetActions.FilterFailedAction(err));
           });
-      });
+      });*/
 
-  @Effect()
-  protected facetDatasetCount$: Observable<Action> =
-    this.action$.ofType(DatasetActions.FILTER_UPDATE)
-      .debounceTime(300)
-      .map((action: DatasetActions.UpdateFilterAction) => action.payload)
-      .switchMap(payload => {
-        const fq = Object.assign({}, payload);
-        const match = handleFacetPayload(fq);
-        let filter = {};
-        if (match.length > 1) {
-          filter = {};
-          filter['and'] = match;
-        } else if (match.length === 1) {
-          filter = match[0];
-        }
-
-        return this.ds.count(filter)
-          .switchMap(res => {
-            return Observable.of(new DatasetActions.TotalSetsAction(res['count']));
-          })
-          .catch(err => {
-            console.log(err);
-            return Observable.of(new DatasetActions.SearchFailedAction(err));
-          });
-
-      });
-
+  /*
   @Effect()
   protected facetDatasets$: Observable<Action> =
     this.action$.ofType(DatasetActions.FILTER_UPDATE)
       .debounceTime(300)
       .map((action: DatasetActions.UpdateFilterAction) => action.payload)
       .switchMap(payload => {
-        const fq = Object.assign({}, payload);
-        const match = handleFacetPayload(fq);
-        const filter = {};
-        if (match.length > 1) {
-          filter['where'] = {};
-
-          filter['where']['and'] = match;
-        } else if (match.length === 1) {
-          filter['where'] = match[0];
-        }
-
-        filter['limit'] = fq['limit'] ? fq['limit'] : 30;
-        filter['skip'] = fq['skip'] ? fq['skip'] : 0;
-        filter['include'] = [{ relation: 'datasetlifecycle' }];
-        if (fq['sortField']) {
-          filter['order'] = fq['sortField'];
-        }
-        console.log(filter);
-        return this.ds.find(filter)
-          .switchMap(res => {
-            console.log(res);
-            return Observable.of(new DatasetActions.SearchCompleteAction(res));
+          const limits= {};
+          limits['limit'] = payload['limit'] ? payload['limit'] : 30;
+          limits['skip'] = payload['skip'] ? payload['skip'] : 0;
+          limits['order'] = payload['sortField'] ? payload['sortField'] : "creationTime:desc";
+          // remove fields not relevant for facet filters
+          // TODO understand what defines the structure of the payload.
+          // TODO What is the meaning of "initial"
+          const fq={}
+          Object.keys(payload).forEach(key => {
+             // console.log("======key,payload[key]",key,payload[key])
+             if (['initial','sortField','skip','limit'].indexOf(key)>=0)return
+             if (payload[key] === null) return
+             if (typeof payload[key] === 'undefined' || payload[key].length == 0) return
+             if (key === 'mode'){
+                 if (payload['mode']==='archive'){
+                     fq['archiveStatusMessage']=config.archiveable
+                 } else if (payload['mode']==='retrieve'){
+                     fq['archiveStatusMessage']=config.retrieveable
+                 }
+             } else {
+                 fq[key]=payload[key]
+             }
           })
-          .catch(err => {
-            console.log(err);
-            return Observable.of(new DatasetActions.SearchFailedAction(err));
-          });
+          return this.ds.fullquery(fq,limits)
+              .switchMap(res => {
+                return Observable.of(new DatasetActions.SearchCompleteAction(res));
+              })
+              .catch(err => {
+                console.log(err);
+                return Observable.of(new DatasetActions.SearchFailedAction(err));
+           });
       });
+      */
 
   @Effect()
   protected deleteDatablocks$: Observable<Action> =
-    this.action$.ofType(DatasetActions.DATABLOCK_DELETE)
+    this.actions$.ofType(DatasetActions.DATABLOCK_DELETE)
       .map((action: DatasetActions.DatablockDeleteAction) => action.payload)
       .switchMap(payload => {
         const block = payload;
-        return this.dbs.deleteById(block['id']).switchMap(res => {
+        return this.datablockApi.deleteById(block['id']).switchMap(res => {
           return Observable.of({
             type: DatasetActions.DATABLOCK_DELETE_COMPLETE
           });
@@ -192,13 +244,13 @@ export class DatasetEffects {
 
   @Effect()
   protected updateSelectedDatablocks$: Observable<Action> =
-    this.action$.ofType(DatasetActions.SELECTED_UPDATE)
+    this.actions$.ofType(DatasetActions.SELECTED_UPDATE)
       .map((action: DatasetActions.UpdateSelectedAction) => action.payload)
       .switchMap(payload => {
         if (payload && payload.length > 0) {
           const dataset = payload[payload.length - 1];
           const datasetSearch = { where: { datasetId: dataset.pid } };
-          return this.dbs.find(datasetSearch).switchMap(res => {
+          return this.datablockApi.find(datasetSearch).switchMap(res => {
             dataset['datablocks'] = res;
             return Observable.of(new DatasetActions.UpdateSelectedDatablocksAction(payload));
           });
@@ -209,11 +261,11 @@ export class DatasetEffects {
 
   @Effect()
   protected resetStatus$: Observable<Action> =
-    this.action$.ofType(DatasetActions.RESET_STATUS)
+    this.actions$.ofType(DatasetActions.RESET_STATUS)
       .map((action: DatasetActions.ResetStatusAction) => action.payload)
       .switchMap(payload => {
         const msg = new Message();
-        return this.ds.reset(encodeURIComponent(payload['id'])).switchMap(res => {
+        return this.datasetApi.reset(encodeURIComponent(payload['id'])).switchMap(res => {
           msg.content = 'Dataset Status Reset';
           msg.type = MessageType.Success;
           return Observable.of(new UserActions.ShowMessageAction(msg));
@@ -226,67 +278,7 @@ export class DatasetEffects {
         });
       });
 
-  constructor(private action$: Actions, private store: Store<any>,
-    private cds: DatasetService, private ds: lb.DatasetApi, private rds: lb.RawDatasetApi,
-    private dls: lb.DatasetLifecycleApi, private dbs: lb.DatablockApi,
-    private odbs: lb.OrigDatablockApi,
-    private userIdentitySrv: lb.UserIdentityApi,
-    private accessUserSrv: lb.AccessUserApi) { }
 }
-
-function handleFacetPayload(fq) {
-  const match = [];
-  const f = Object.assign({}, fq);
-  delete f['mode'];
-  delete f['initial'];
-  delete f['sortField'];
-
-  Object.keys(f).forEach(key => {
-    let facet = f[key];
-    if (facet && (facet !== null && facet.length > 0)) {
-      switch (key) {
-        case 'ownerGroup':
-          if (facet.length > 0 && facet.constructor !== Array &&
-            typeof facet[0] === 'object') {
-            const groupsArray = [];
-            const keys = Object.keys(facet[0]);
-
-            for (let i = 0; i < keys.length; i++) {
-              groupsArray.push(facet[0][keys[i]]);
-            }
-
-            facet = groupsArray;
-          }
-          if (facet.length > 0) {
-            match.push({ ownerGroup: { inq: facet } });
-          }
-          break;
-        case 'text':
-          match.push({ '$text': { 'search': '"' + facet + '"', 'language': 'none' } });
-          break;
-        case 'creationTime':
-          const start = facet['start'] || undefined;
-          const end = facet['end'] || undefined;
-          if (start && end) {
-            match.push({ creationTime: { gte: start } });
-            match.push({ creationTime: { lte: end } });
-          }
-          break;
-        case 'creationLocation':
-          match.push({ creationLocation: { inq: facet } });
-          break;
-        default:
-          // TODO add default case
-          const obj = {};
-          obj[key] = {inq: facet};
-          match.push(obj);
-          break;
-      }
-    }
-  });
-  return match;
-}
-
 
 function stringSort(a, b) {
   const val_a = a._id,

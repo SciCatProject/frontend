@@ -4,6 +4,7 @@ import {
   Proposal,
   DatasetLifecycle,
   Datablock,
+  DatasetAttachment,
   OrigDatablock
 } from '../index';
 
@@ -35,6 +36,8 @@ export interface RawDatasetInterface {
   "isPublished"?: boolean;
   "ownerGroup": string;
   "accessGroups"?: Array<any>;
+  "createdBy"?: string;
+  "updatedBy"?: string;
   "createdAt"?: Date;
   "updatedAt"?: Date;
   "sampleId"?: string;
@@ -43,6 +46,7 @@ export interface RawDatasetInterface {
   proposal?: Proposal;
   datasetlifecycle?: DatasetLifecycle;
   datablocks?: Datablock[];
+  datasetattachments?: DatasetAttachment[];
   origdatablocks?: OrigDatablock[];
 }
 
@@ -73,6 +77,8 @@ export class RawDataset implements RawDatasetInterface {
   "isPublished": boolean;
   "ownerGroup": string;
   "accessGroups": Array<any>;
+  "createdBy": string;
+  "updatedBy": string;
   "createdAt": Date;
   "updatedAt": Date;
   "sampleId": string;
@@ -81,6 +87,7 @@ export class RawDataset implements RawDatasetInterface {
   proposal: Proposal;
   datasetlifecycle: DatasetLifecycle;
   datablocks: Datablock[];
+  datasetattachments: DatasetAttachment[];
   origdatablocks: OrigDatablock[];
   constructor(data?: RawDatasetInterface) {
     Object.assign(this, data);
@@ -219,6 +226,14 @@ export class RawDataset implements RawDatasetInterface {
           name: 'accessGroups',
           type: 'Array&lt;any&gt;'
         },
+        "createdBy": {
+          name: 'createdBy',
+          type: 'string'
+        },
+        "updatedBy": {
+          name: 'updatedBy',
+          type: 'string'
+        },
         "createdAt": {
           name: 'createdAt',
           type: 'Date'
@@ -265,6 +280,14 @@ export class RawDataset implements RawDatasetInterface {
           name: 'datablocks',
           type: 'Datablock[]',
           model: 'Datablock',
+          relationType: 'hasMany',
+                  keyFrom: 'pid',
+          keyTo: 'rawDatasetId'
+        },
+        datasetattachments: {
+          name: 'datasetattachments',
+          type: 'DatasetAttachment[]',
+          model: 'DatasetAttachment',
           relationType: 'hasMany',
                   keyFrom: 'pid',
           keyTo: 'rawDatasetId'

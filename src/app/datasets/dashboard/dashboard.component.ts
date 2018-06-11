@@ -1,67 +1,98 @@
-import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-import { Store } from '@ngrx/store';
-import { RawDataset } from 'shared/sdk/models';
-import * as dsa from 'state-management/actions/datasets.actions';
-import * as ds from 'state-management/selectors/datasets.selectors';
-import * as selectors from 'state-management/selectors';
-import { ParamsService } from 'params.service';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
+
+import { Subscription, Subject } from 'rxjs';
+import { Observable } from 'rxjs/Observable';
+
+import { Store, select } from '@ngrx/store';
+
+import * as rison from 'rison';
+import * as deepEqual from 'deep-equal';
+
+import { Dataset, DatasetFilters } from 'state-management/models';
+
+import {
+  SetSearchTermsAction,
+  FetchFacetCountsAction,
+  FetchDatasetsAction,
+  SetTextFilterAction,
+  UpdateFilterAction,
+  PrefillFiltersAction,
+} from 'state-management/actions/datasets.actions';
+
+import {
+  getSelectedDatasets,
+  getSearchTerms,
+  getFilters,
+  getTextFilter,
+  getHasPrefilledFilters
+} from 'state-management/selectors/datasets.selectors';
+
+import { filter } from 'rxjs/operators/filter';
+import { pluck } from 'rxjs/operators/pluck';
+import { map } from 'rxjs/operators/map';
+import { take } from 'rxjs/operators/take';
+import { tap } from 'rxjs/operators/tap';
+import { debounceTime } from 'rxjs/operators/debounceTime';
+import { distinctUntilChanged } from 'rxjs/operators/distinctUntilChanged';
+import { combineLatest } from 'rxjs/operators/combineLatest';
+import { skipWhile } from 'rxjs/operators/skipWhile';
 
 @Component({
   selector: 'dashboard',
-  templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.css']
+  templateUrl: 'dashboard.component.html',
+  styleUrls: ['dashboard.component.css']
 })
-export class DashboardComponent implements OnInit {
-  apiEndpoint: string;
-  tooltipPos = 'below';
-
-  /**
-   * Datasets retrieved from catalogue that match a user's search terms.
-   *
-   * @type {Array<RawDataset>}
-   * @memberof DashboardComponent
-   */
-  datasets: Array<any> = [];
-  // rows: any[] = [];
-
-  searchText$;
-
+export class DashboardComponent implements OnDestroy
+{
   constructor(
-    private router: Router,
-    private route: ActivatedRoute,
     private store: Store<any>,
-    private params: ParamsService,
-  ) {
-    this.datasets = [];
+    private router: Router,
+    private route: ActivatedRoute
+  ) {}
+
+  private filters$ = this.store.pipe(select(getFilters));
+  private selectedDatasets$ = this.store.pipe(select(getSelectedDatasets));
+  private searchTerms$ = this.store.pipe(select(getSearchTerms));
+  
+  private readyToFetch$ = this.store.pipe(
+    select(getHasPrefilledFilters),
+    filter(has => has)
+  );
+
+  private writeRouteSubscription = this.filters$.pipe(
+    combineLatest(this.readyToFetch$),
+    map(([filters, _]) => filters),
+    distinctUntilChanged(deepEqual)
+  ).subscribe(filters => {
+    this.store.dispatch(new FetchDatasetsAction());
+    this.store.dispatch(new FetchFacetCountsAction());
+    this.router.navigate(['/datasets'], {queryParams: {args: rison.encode(filters)}});
+  });
+
+  private readRouteSubscription = this.route.queryParams.pipe(
+    map(params => params.args as string),
+    take(1),
+    map(args => args ? rison.decode<DatasetFilters>(args) : {}),
+  ).subscribe(filters =>
+    this.store.dispatch(new PrefillFiltersAction(filters))
+  );
+  
+  private searchTermSubscription = this.searchTerms$.pipe(
+    skipWhile(terms => terms === ''),
+    debounceTime(500),
+    distinctUntilChanged(),
+  ).subscribe(terms => {
+    this.store.dispatch(new SetTextFilterAction(terms));
+  });
+
+  ngOnDestroy() {
+    this.writeRouteSubscription.unsubscribe();
+    this.readRouteSubscription.unsubscribe();
+    this.searchTermSubscription.unsubscribe();
   }
 
-  selectedSet(event) {
-    this.datasets = event;
-  }
-
-  /**
-   * On loading of the dashboard, initiate a search
-   * using the filters in the state
-   *
-   */
-  ngOnInit() {
-    this.searchText$ = this.store.select(ds.getText);
-  }
-
-  /**
-   * Handles free text search.
-   * Need to determine best way to search mongo fields
-   * @param {any} customTerm - free text search term@memberof DashboardComponent
-   */
-  textSearch(terms) {
-    this.store
-      .select(state => state.root.datasets.activeFilters)
-      .take(1)
-      .subscribe(values => {
-        const filters = Object.assign({}, values);
-        filters['text'] = terms;
-        this.store.dispatch(new dsa.UpdateFilterAction(filters));
-      });
+  textSearch(terms: string) {
+    this.store.dispatch(new SetSearchTermsAction(terms));
   }
 }

@@ -5,31 +5,63 @@ import { Store, select } from '@ngrx/store';
 
 import { Subscription } from 'rxjs/Subscription';
 import { Observable } from 'rxjs/Observable';
-import { map } from 'rxjs/operators';
+import { map, filter, flatMap } from 'rxjs/operators';
+
+import {
+    SelectProposalAction,
+    FetchProposalsAction,
+    FetchProposalAction,
+    FetchDatasetsForProposalAction
+} from 'state-management/actions/proposals.actions';
+
+import {
+    getSelectedProposal,
+    getSelectedProposalDatasets
+} from 'state-management/selectors/proposals.selectors';
 
 import { AppState } from 'state-management/state/app.store';
-import { FetchProposalsAction, SelectProposalAction } from 'state-management/actions/proposals.actions';
-import { Proposal } from 'state-management/models';
-import { getSelectedProposal } from 'state-management/selectors/proposals.selectors';
+import { Dataset, Proposal } from 'state-management/models';
 
 @Component({
     selector: 'view-proposal-page',
-    templateUrl: 'view-proposal-page.component.html',
-    styleUrls: ['view-proposal-page.component.css']
+    template: `
+        <proposal-detail
+            *ngIf="proposal$ | async"
+            [proposal]="proposal$ | async"
+            [datasets]="datasets$ | async">
+        </proposal-detail>
+    `
 })
 export class ViewProposalPageComponent implements OnInit, OnDestroy {
-    subscription: Subscription;
-    proposal$: Observable<Proposal>;
+    private subscription: Subscription;
+    private proposalId$: Observable<string>;
+    private proposal$: Observable<Proposal>;
+    private datasets$: Observable<Dataset[]>;
 
-    constructor(private store: Store<AppState>, private route: ActivatedRoute) {}
+    constructor(
+        private store: Store<AppState>,
+        private route: ActivatedRoute
+    ) {}
 
     ngOnInit() {
-        this.subscription = this.route.params
-            .pipe(map(params => new SelectProposalAction(params.id)))
-            .subscribe(this.store);
+        this.proposalId$ = this.route.params
+            .pipe(
+                map(params => params.id),
+                filter(id => id != null)
+            );
 
+        this.subscription = this.proposalId$
+            .pipe(
+                flatMap(id => [
+                    new FetchProposalAction(id),
+                    new FetchDatasetsForProposalAction(id),
+                    new SelectProposalAction(id)
+                ])
+            )
+            .subscribe(this.store);
+            
         this.proposal$ = this.store.pipe(select(getSelectedProposal));
-        this.store.dispatch(new FetchProposalsAction());
+        this.datasets$ = this.store.pipe(select(getSelectedProposalDatasets));
     }
 
     ngOnDestroy() {

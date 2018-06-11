@@ -8,6 +8,8 @@ export interface DatasetLifecycleInterface {
   "id": string;
   "isOnDisk"?: boolean;
   "isOnTape"?: boolean;
+  "archivable"?: boolean;
+  "retrievable"?: boolean;
   "archiveStatusMessage"?: string;
   "retrieveStatusMessage"?: string;
   "lastUpdateMessage"?: string;
@@ -20,6 +22,8 @@ export interface DatasetLifecycleInterface {
   "dateOfPublishing"?: Date;
   "ownerGroup": string;
   "accessGroups"?: Array<any>;
+  "createdBy"?: string;
+  "updatedBy"?: string;
   "datasetId"?: string;
   "rawDatasetId"?: string;
   "derivedDatasetId"?: string;
@@ -32,6 +36,8 @@ export class DatasetLifecycle implements DatasetLifecycleInterface {
   "id": string;
   "isOnDisk": boolean;
   "isOnTape": boolean;
+  "archivable": boolean;
+  "retrievable": boolean;
   "archiveStatusMessage": string;
   "retrieveStatusMessage": string;
   "lastUpdateMessage": string;
@@ -44,6 +50,8 @@ export class DatasetLifecycle implements DatasetLifecycleInterface {
   "dateOfPublishing": Date;
   "ownerGroup": string;
   "accessGroups": Array<any>;
+  "createdBy": string;
+  "updatedBy": string;
   "datasetId": string;
   "rawDatasetId": string;
   "derivedDatasetId": string;
@@ -95,6 +103,14 @@ export class DatasetLifecycle implements DatasetLifecycleInterface {
           name: 'isOnTape',
           type: 'boolean'
         },
+        "archivable": {
+          name: 'archivable',
+          type: 'boolean'
+        },
+        "retrievable": {
+          name: 'retrievable',
+          type: 'boolean'
+        },
         "archiveStatusMessage": {
           name: 'archiveStatusMessage',
           type: 'string'
@@ -142,6 +158,14 @@ export class DatasetLifecycle implements DatasetLifecycleInterface {
         "accessGroups": {
           name: 'accessGroups',
           type: 'Array&lt;any&gt;'
+        },
+        "createdBy": {
+          name: 'createdBy',
+          type: 'string'
+        },
+        "updatedBy": {
+          name: 'updatedBy',
+          type: 'string'
         },
         "datasetId": {
           name: 'datasetId',

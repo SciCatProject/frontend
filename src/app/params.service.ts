@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
@@ -10,6 +10,9 @@ import * as dsa from 'state-management/actions/datasets.actions';
 import * as dStore from 'state-management/state/datasets.store';
 import { ActivatedRoute, Router } from '@angular/router';
 import 'rxjs/add/operator/skip';
+
+import { getViewMode } from 'state-management/selectors/datasets.selectors';
+
 @Injectable()
 export class ParamsService {
   constructor(private store: Store<any>, private route: ActivatedRoute,
@@ -28,10 +31,11 @@ export class ParamsService {
 
     // this.route.queryParams.take(1).subscribe(p => this.handleParams(p));
 
-    this.store.select(selectors.datasets.getActiveFilters)
+    /*
+    this.store.select(selectors.datasets.getFilters)
       .subscribe(filters => {
         if (filters) {
-          this.store.select(selectors.ui.getMode).take(1).subscribe(currentMode => {
+          this.store.pipe(select(getViewMode)).take(1).subscribe(currentMode => {
             filters['mode'] = currentMode;
             if (window.location.pathname.indexOf('datasets') !== -1) {
               this.router.navigate(['/datasets'], { queryParams: { args: rison.encode(filters) } });
@@ -39,12 +43,13 @@ export class ParamsService {
           });
         }
       });
+      */
 
-    this.store.select(selectors.ui.getMode)
+    this.store.pipe(select(getViewMode))
       .subscribe(currentMode => {
         if (currentMode) {
           this.route.queryParams.take(1).subscribe(params => {
-            const newParams = 'args' in params ? rison.decode(params['args']) : dStore.initialDatasetState.activeFilters;
+            const newParams = 'args' in params ? rison.decode(params['args']) : dStore.initialDatasetState.filters;
             newParams['mode'] = currentMode;
             if (window.location.pathname.indexOf('datasets') !== -1) {
               this.router.navigate(['/datasets'], { queryParams: { args: rison.encode(newParams) } });
@@ -56,7 +61,7 @@ export class ParamsService {
   }
 
   handleParams(params) {
-    const newParams = 'args' in params ? rison.decode(params['args']) : dStore.initialDatasetState.activeFilters;
+    const newParams = 'args' in params ? rison.decode(params['args']) : dStore.initialDatasetState.filters;
     const mode = newParams['mode'];
     delete newParams['mode'];
     // TODO could dispatch mode action here

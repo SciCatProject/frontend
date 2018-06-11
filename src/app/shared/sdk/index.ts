@@ -64,8 +64,8 @@ import { UserIdentityApi } from './services/custom/UserIdentity';
 import { ApplicationCredentialApi } from './services/custom/ApplicationCredential';
 import { PolicyApi } from './services/custom/Policy';
 import { JobApi } from './services/custom/Job';
+import { DatasetAttachmentApi } from './services/custom/DatasetAttachment';
 import { OrigDatablockApi } from './services/custom/OrigDatablock';
-import { RabbitMQApi } from './services/custom/RabbitMQ';
 /**
 * @module SDKBrowserModule
 * @description
@@ -112,8 +112,8 @@ export class SDKBrowserModule {
         ApplicationCredentialApi,
         PolicyApi,
         JobApi,
+        DatasetAttachmentApi,
         OrigDatablockApi,
-        RabbitMQApi,
         internalStorageProvider,
         { provide: SDKStorage, useClass: StorageBrowser },
         { provide: SocketDriver, useClass: SocketBrowser }

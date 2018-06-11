@@ -17,6 +17,10 @@ import { Dataset } from '../../models/Dataset';
 
 /**
  * Api services for the `DatasetLifecycle` model.
+ *
+ * **Details**
+ *
+ * For each dataset there exists exactly one dataset lifecycle document which describes the current status of the dataset during its lifetime with respect to the storage handling systems
  */
 @Injectable()
 export class DatasetLifecycleApi extends BaseLoopBackApi {
@@ -120,6 +124,63 @@ export class DatasetLifecycleApi extends BaseLoopBackApi {
       data: data
     };
     let _urlParams: any = {};
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    return result;
+  }
+
+  /**
+   * Check if data is valid according to a schema
+   *
+   * @param {object} data Request data.
+   *
+   * This method expects a subset of model properties as request parameters.
+   *
+   * @returns {object} An empty reference that will be
+   *   populated with the actual data once the response is returned
+   *   from the server.
+   *
+   * <em>
+   * (The remote method definition does not provide any description.
+   * This usually means the response is a `DatasetLifecycle` object.)
+   * </em>
+   */
+  public isValid(ownableItem: any = {}, customHeaders?: Function): Observable<any> {
+    let _method: string = "POST";
+    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
+    "/DatasetLifecycles/isValid";
+    let _routeParams: any = {};
+    let _postBody: any = {
+      ownableItem: ownableItem
+    };
+    let _urlParams: any = {};
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    return result;
+  }
+
+  /**
+   * Delete datablocks of dataset and reset status message.
+   *
+   * @param {object} data Request data.
+   *
+   *  - `datasetId` – `{string}` - 
+   *
+   * @returns {object} An empty reference that will be
+   *   populated with the actual data once the response is returned
+   *   from the server.
+   *
+   * <em>
+   * (The remote method definition does not provide any description.
+   * This usually means the response is a `DatasetLifecycle` object.)
+   * </em>
+   */
+  public reset(datasetId: any = {}, customHeaders?: Function): Observable<any> {
+    let _method: string = "PUT";
+    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
+    "/DatasetLifecycles/resetArchiveStatus";
+    let _routeParams: any = {};
+    let _postBody: any = {};
+    let _urlParams: any = {};
+    if (typeof datasetId !== 'undefined' && datasetId !== null) _urlParams.datasetId = datasetId;
     let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
     return result;
   }

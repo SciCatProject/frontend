@@ -1,0 +1,70 @@
+@import '../../../theme.scss';
+
+$ds-archive: mat-palette($mat-green, 600);
+
+mat-cell, .mat-header-cell {
+  word-wrap: break-word;
+  white-space: normal;
+}
+
+/*Columns are dynamically injected, so this /deep/ ensures it is reflected onto the selector  */
+/* ^-- Is this needed anymore? Seems to work fine without */ 
+
+.mat-column-select {
+  overflow: visible; /* Needed to prevent offsetting of the checkbox when clicking */
+  flex-grow: 0;
+  padding-right: 2em;
+}
+
+.mat-column-size, .mat-column-type {
+  flex-grow: 0.5;
+}
+
+/*:host /deep/*/ .mode-container {
+  padding-left: 30px;
+  text-align: center ;
+}
+
+/*:host /deep/*/ .center-align {
+  text-align: center;
+}
+
+/*:host /deep/*/ .left-align {
+  width: 100%;
+  text-align: left !important;
+}
+
+/*:host /deep/*/ .buttons {
+  display: inline-block;
+  /* padding: 50px; */
+}
+
+/*:host /deep/*/ .disabled-row {
+    pointer-events: none;
+    opacity: 0.2 !important;
+}
+
+/*:host /deep/*/ table thead tr th p-dtcheckbox {
+  visibility:hidden;
+}
+
+/*:host /deep/*/ .mat-row:hover {
+  background-color: rgba(32, 32, 216, 0.3);
+  cursor: pointer;
+}
+
+/*:host /deep/*/ .datasets-header {
+  background-color: mat-color($primary);
+}
+
+/*:host /deep/*/ .row-archiveable {
+  background-color: mat-color($ds-archive, 500, 0.2);
+}
+
+/*:host /deep/*/ .row-retrievable {
+  background-color: mat-color($ds-archive, 500, 0.2);
+}
+
+/*:host /deep/*/ .row-empty {
+  background-color: mat-color($warn, 100, 0.2);
+}

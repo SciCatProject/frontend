@@ -12,7 +12,6 @@ import { NguiDatetimePickerModule } from '@ngui/datetime-picker';
 import { AppRoutingModule, routes } from 'app-routing/app-routing.module';
 import { DatasetService } from 'datasets/dataset.service';
 import { DatasetsModule } from 'datasets/datasets.module';
-import { ParamsService } from 'params.service';
 import { JobsTableComponent } from 'jobs/jobs-table/jobs-table.component';
 import { localStorageSync } from 'ngrx-store-localstorage';
 import { AppConfigModule } from 'app-config.module';
@@ -26,6 +25,11 @@ import { JobsEffects } from 'state-management/effects/jobs.effects';
 import { rootReducer } from 'state-management/reducers/root.reducer';
 import { UsersModule } from 'users/users.module';
 import { ProposalsModule } from 'proposals/proposals.module';
+import { FileHelpersModule } from 'ngx-file-helpers';
+
+import { FilePickerComponent } from './datasets/file-picker/file-picker.component';
+import { FileDropzoneComponent } from './datasets/file-dropzone/file-dropzone.component';
+
 
 import {
   MatAutocompleteModule,
@@ -97,7 +101,7 @@ export function localStorageSyncWrapper(reducer: any) {
     HttpModule,
     BrowserAnimationsModule, SharedCatanieModule,
     NguiDatetimePickerModule,
-    
+
     DatasetsModule,
     UsersModule,
     ProposalsModule,
@@ -118,7 +122,6 @@ export function localStorageSyncWrapper(reducer: any) {
   providers : [
       AuthCheck,
       DatasetService,
-      ParamsService,
       UserApi,
     //      {provide: RouteReuseStrategy, useClass: CustomReuseStrategy}
   ],

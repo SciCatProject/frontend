@@ -16,6 +16,8 @@ import {
   MockUserApi
 } from 'shared/MockStubs';
 import {UserApi} from 'shared/sdk/services';
+import { rootReducer } from 'state-management/reducers/root.reducer';
+import { AppConfigModule } from 'app-config.module';
 
 
 describe('DatasetTableComponent', () => {
@@ -25,7 +27,7 @@ describe('DatasetTableComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
-      imports: [MatTableModule, MatDialogModule, FormsModule, ReactiveFormsModule, StoreModule.forRoot({})],
+      imports: [MatTableModule, MatDialogModule, FormsModule, ReactiveFormsModule, StoreModule.forRoot(rootReducer), AppConfigModule],
       declarations: [DatasetTableComponent]
     });
     TestBed.overrideComponent(DatasetTableComponent, {
@@ -63,18 +65,9 @@ describe('DatasetTableComponent', () => {
     expect(compiled.querySelector('.view').textContent).toContain('View');
   });
 
-  it('should contain a material table', () => {
-    const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('.dataset-table')).toBeTruthy();
-  });
-
   it('should contain an export button', () => {
     const compiled = fixture.debugElement.nativeElement;
+    console.log(compiled);
     expect(compiled.querySelectorAll('.export-csv')).toBeTruthy();
-  });
-
-  it('should contain 2 paginators', () => {
-    const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelectorAll('.dataset-paginator').length).toBe(2);
   });
 });

@@ -1,24 +1,54 @@
-import * as lb from 'shared/sdk/models';
-import { DatasetFilters } from 'state-management/models';
+import { DatasetFilters, Dataset } from 'state-management/models';
 
-// NOTE It IS ok to make up a state of other sub states
+export type DateTriple = {year: number, month: number, day: number};
+
+export type FacetCount = {
+    _id?: string | DateTriple;
+    count: number;
+};
+
+export type FacetCounts = {
+    [field: string]: FacetCount[],
+};
+
 export interface DatasetState {
-    datasets: lb.RawDataset[];
-    loading: boolean;
-    activeFilters: DatasetFilters;
-    filterValues: object;
-    currentSet: lb.RawDataset;
-    selectedSets: lb.RawDataset[];
-    totalSets: number;
+    datasets: Dataset[];
+    selectedSets: Dataset[];
+    currentSet: Dataset;
+    facetCounts: FacetCounts;
+    totalCount: number;
+
+    datasetsLoading: boolean;
+    facetCountsLoading: boolean;
+    hasPrefilledFilters: boolean;
+
+    searchTerms: string;
+    filters: DatasetFilters; 
 }
 
 export const initialDatasetState: DatasetState = {
     datasets: [],
-    loading: false,
-    activeFilters: <DatasetFilters>{ text: null, creationTime: null, type: null,
-      creationLocation: [], ownerGroup: [], skip: 0, initial: true, sortField: 'creationTime desc', keywords: []},
-    filterValues: {creationTime: {start: null, end: null}, creationLocation: [], ownerGroup: [], text: null, type: null, keywords: []},
     selectedSets: [],
-    currentSet: undefined,
-    totalSets: 0
+    currentSet: null,
+    facetCounts: {},
+    totalCount: 0,
+
+    datasetsLoading: true,
+    facetCountsLoading: true,
+    hasPrefilledFilters: false,
+
+    searchTerms: '',
+    
+    filters: {
+        mode: 'view',
+        text: '',
+        creationTime: null,
+        type: [],
+        creationLocation: [],
+        ownerGroup: [],
+        skip: 0,
+        limit: 30,
+        sortField: 'creationTime:desc',
+        keywords: []
+    },
 };

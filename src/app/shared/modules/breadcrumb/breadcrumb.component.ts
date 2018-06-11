@@ -10,9 +10,13 @@ import {
 } from '@angular/router';
 import 'rxjs/add/operator/filter';
 import { TitleCasePipe } from '../../pipes/index';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import * as rison from 'rison';
 import * as selectors from 'state-management/selectors';
+
+import { getViewMode, getFilters } from 'state-management/selectors/datasets.selectors';
+import { AppState } from 'state-management/state/app.store';
+import { take } from 'rxjs/operators/take';
 
 interface Breadcrumb {
   label: string;
@@ -41,7 +45,7 @@ export class BreadcrumbComponent implements OnInit {
   // partially based on: http://brianflove.com/2016/10/23/angular2-breadcrumb-using-router/
   breadcrumbs = Array<Breadcrumb>();
 
-  constructor(private store: Store<any>, private route: ActivatedRoute, private router: Router) {
+  constructor(private store: Store<AppState>, private route: ActivatedRoute, private router: Router) {
 
   }
 
@@ -101,11 +105,15 @@ export class BreadcrumbComponent implements OnInit {
     }
     // this catches errors and redirects to the fallback, this could/should be set in the routing module?
       if (crumb.fallback === '/datasets') {
-        console.log('DATASETS');
-        this.store.select(selectors.datasets.getActiveFilters).take(1)
-          .subscribe(filters => {
+        this.store.pipe(
+          select(getFilters),
+          take(1)
+        ).subscribe(filters => {
             console.log(filters);
-            this.store.select(selectors.ui.getMode).take(1).subscribe(currentMode => {
+            this.store.pipe(
+              select(getViewMode),
+              take(1)
+            ).subscribe(currentMode => {
               filters['mode'] = currentMode;
               console.log(currentMode);
               this.router.navigate(['/datasets'], { queryParams: { args: rison.encode(filters) } });

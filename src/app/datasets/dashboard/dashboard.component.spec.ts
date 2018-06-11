@@ -21,6 +21,7 @@ import {
   MockParamsService
 } from '../../shared/MockStubs';
 import {DashboardComponent} from './dashboard.component';
+import { DatasetTablePureComponent } from '../dataset-table-pure/dataset-table-pure.component';
 
 /* tslint:disable:no-unused-variable */
 describe('DashboardComponent', () => {
@@ -30,11 +31,16 @@ describe('DashboardComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
-      imports: [MatAutocompleteModule, MatTableModule, MatDialogModule,
-        FormsModule, ReactiveFormsModule, StoreModule.forRoot({rootReducer})
+      imports: [
+        MatAutocompleteModule,
+        MatTableModule,
+        MatDialogModule,
+        FormsModule,
+        ReactiveFormsModule,
+        StoreModule.forRoot({rootReducer})
       ],
       declarations: [
-        DashboardComponent, DatasetsFilterComponent, DatasetTableComponent
+        DashboardComponent,
       ]
     });
     TestBed.overrideComponent(DashboardComponent, {
@@ -42,7 +48,7 @@ describe('DashboardComponent', () => {
         providers: [
           {provide: ActivatedRoute, useClass: MockActivatedRoute},
           {provide: Router, useClass: MockRouter},
-          {provide: ParamsService, useClass : MockParamsService},
+          {provide: ParamsService, useClass: MockParamsService},
           {provide: Store, useClass: MockStore},
           {provide: UserApi, useClass: MockUserApi},
           {provide: Http, useClass: MockHttp},

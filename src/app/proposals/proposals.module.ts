@@ -2,10 +2,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
-import { MatListModule } from '@angular/material/list';
-import { MatCardModule } from '@angular/material/card';
-import { MatTabsModule } from '@angular/material/tabs';
-
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 
@@ -16,9 +12,17 @@ import { ListProposalsPageComponent } from './containers/list-proposals-page/lis
 import { ViewProposalPageComponent } from './containers/view-proposal-page/view-proposal-page.component';
 
 import { ProposalsService } from './proposals.service';
+import { DatasetService } from '../datasets/dataset.service';
 
 import { proposalsReducer } from '../state-management/reducers/proposals.reducer';
 import { ProposalsEffects } from '../state-management/effects/proposals.effects';
+
+import {
+  MatListModule,
+  MatTableModule,
+  MatTabsModule,
+  MatCardModule,
+} from '@angular/material';
 
 @NgModule({
     imports: [
@@ -30,7 +34,8 @@ import { ProposalsEffects } from '../state-management/effects/proposals.effects'
 
         MatListModule,
         MatCardModule,
-        MatTabsModule
+        MatTabsModule,
+        MatTableModule,
     ],
     declarations: [
         ListProposalsPageComponent,
@@ -41,6 +46,7 @@ import { ProposalsEffects } from '../state-management/effects/proposals.effects'
     ],
     providers: [
         ProposalsService,
+        DatasetService,
     ]
 })
 export class ProposalsModule {

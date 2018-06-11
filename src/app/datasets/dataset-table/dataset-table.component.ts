@@ -6,312 +6,135 @@ import {
   OnInit,
   Output,
   ViewChild,
-  OnDestroy
+  OnDestroy,
+  Inject,
 } from '@angular/core';
-import { Http } from '@angular/http';
-import { Router, ActivatedRoute } from '@angular/router';
-import { Store } from '@ngrx/store';
-import { Subject } from 'rxjs/Subject';
-import { Job, RawDataset } from 'shared/sdk/models';
-import { UserApi } from 'shared/sdk/services';
-import { ConfigService } from 'shared/services/config.service';
-import * as dua from 'state-management/actions/dashboard-ui.actions';
-import * as dsa from 'state-management/actions/datasets.actions';
-import * as selectors from 'state-management/selectors';
-import * as ua from 'state-management/actions/user.actions';
-import * as ja from 'state-management/actions/jobs.actions';
-import { Message, MessageType } from 'state-management/models';
-import { Angular5Csv } from 'angular5-csv/Angular5-csv';
-import * as utils from 'shared/utils';
 
-import { config } from '../../../config/config';
-import { last } from 'rxjs/operator/last';
-import { Observable } from 'rxjs/Observable';
-
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Router, ActivatedRoute, Data } from '@angular/router';
+import { Store, select } from '@ngrx/store';
 import { MatTableDataSource, MatPaginator, MatSort, MatDialog } from '@angular/material';
-import { AfterViewInit } from '@angular/core/src/metadata/lifecycle_hooks';
 import { SelectionModel } from '@angular/cdk/collections';
 
+import { Subject } from 'rxjs/Subject';
+
+import { Job, Dataset } from 'shared/sdk/models';
+import { ConfigService } from 'shared/services/config.service';
 import { DialogComponent } from 'shared/modules/dialog/dialog.component';
+import * as utils from 'shared/utils';
+import { config } from '../../../config/config';
+
+import * as dsa from 'state-management/actions/datasets.actions';
+import * as ua from 'state-management/actions/user.actions';
+import * as ja from 'state-management/actions/jobs.actions';
+import { getDatasets, getSelectedDatasets, getPage, getViewMode, isEmptySelection, getDatasetsPerPage, getIsLoading, getTotalSets, getFilters } from 'state-management/selectors/datasets.selectors';
+import { Message, MessageType, DatasetFilters, ViewMode } from 'state-management/models';
+import * as jobSelectors from 'state-management/selectors/jobs.selectors';
+
+import { Angular5Csv } from 'angular5-csv/Angular5-csv';
+
+import { last } from 'rxjs/operator/last';
+import { Observable } from 'rxjs/Observable';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { startWith } from 'rxjs/operators/startWith';
+
+import { PageChangeEvent, SortChangeEvent } from '../dataset-table-pure/dataset-table-pure.component';
+
 import * as rison from 'rison';
-import * as filesize from 'filesize';
+import { Subscription } from 'rxjs';
+import { APP_CONFIG, AppConfig } from 'app-config.module';
+import { distinctUntilChanged } from 'rxjs/operators/distinctUntilChanged';
+
+// Needed for compatibility with non-piped RxJS operators
+import 'rxjs/add/operator/take';
 
 @Component({
   selector: 'dataset-table',
-  templateUrl: './dataset-table.component.html',
-  styleUrls: ['./dataset-table.component.scss']
+  templateUrl: 'dataset-table.component.html',
+  styleUrls: ['dataset-table.component.scss']
 })
-export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
-  @Input() datasets = [];
-  @Output() openDataset = new EventEmitter();
-  @Output() selectedSet = new EventEmitter<Array<any>>();
+export class DatasetTableComponent implements OnInit, OnDestroy {
+  private datasets$ = this.store.pipe(select(getDatasets));
+  private selectedSets$ = this.store.pipe(select(getSelectedDatasets));
+  private currentPage$ = this.store.pipe(select(getPage));
+  private datasetsPerPage$ = this.store.pipe(select(getDatasetsPerPage));
+  private mode$ = this.store.pipe(select(getViewMode));
+  private isEmptySelection$ = this.store.pipe(select(isEmptySelection));
+  private datasetCount$ = this.store.select(getTotalSets);
+  private loading$ = this.store.pipe(select(getIsLoading));
+  private filters$ = this.store.pipe(select(getFilters));
 
-  @ViewChild(MatSort) sort: MatSort;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  // compatibility analogs of observables
+  private currentMode: string = 'view';
+  private selectedSets: Dataset[] = [];
 
-  selection = new SelectionModel<Element>(true, []);
-  datasetCount$;
-  dataSource: MatTableDataSource<any> | null;
-  displayedColumns = ['select'];
+  private modes: string[] = ['view', 'archive', 'retrieve'];
 
-  modeButtons = ['Archive', 'View', 'Retrieve'];
+  // These should be made part of the NgRX state management
+  // and eventually be removed.
+  private modeSubscription: Subscription;
+  private selectedSetsSubscription: Subscription;
+  private submitJobSubscription: Subscription;
+  private jobErrorSubscription: Subscription;
 
-  cols = [];
-  loading$: any = false;
-  limit$: any = 10;
-
-  mode = 'view';
-
-  aremaOptions = 'archiveretrieve';
-
-  retrieveDisplay = false;
-  dest = new Subject<string>();
-
-  subscriptions = [];
-
-  rowStyleMap = {};
-
-  paranms = {};
-
-  filters = {};
-
-  archiveable;
-  retrievable;
+  private disabledColumns: string[] = [];
 
   constructor(
-    public http: Http,
-    private us: UserApi,
     private router: Router,
     private configSrv: ConfigService,
     private route: ActivatedRoute,
     private store: Store<any>,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    @Inject(APP_CONFIG) private appConfig: AppConfig
   ) {
-    this.archiveable = config.archiveable;
-    this.retrievable = config.retrieveable;
-    this.datasetCount$ = this.store.select(selectors.datasets.getTotalSets);
-    this.loading$ = this.store.select(selectors.datasets.getLoading);
-  }
-
-  getRowValue(row, col) {
-    const field = col.field;
-    const value = row[field];
-
-    if (field === 'creationTime') {
-      const date = new Date(value);
-      const datePipe = new DatePipe('en-US');
-      const formattedDate = datePipe.transform(date, 'dd/MM/yyyy HH:mm');
-      return formattedDate;
-    }
-
-    if (field === 'size') {
-      return filesize(value || 0);
-    }
-
-    if (field === 'datasetlifecycle.archiveStatusMessage') {
-      const val = row.datasetlifecycle ? row.datasetlifecycle.archiveStatusMessage : '';
-      return config.datasetStatusMessages[val] || val;
-    }
-
-    if (field === 'datasetlifecycle.retrieveStatusMessage') {
-      const val = row.datasetlifecycle ? row.datasetlifecycle.retrieveStatusMessage : '';
-      return config.datasetStatusMessages[val] || val;
-    }
-    return value;
+    this.disabledColumns = appConfig.disabledDatasetColumns;
   }
 
   ngOnInit() {
-
-    this.configSrv.getConfigFile('Dataset').subscribe(conf => {
-      if (conf) {
-        for (const prop in conf) {
-          if (prop in conf && 'table' in conf[prop]) {
-            this.cols.push(conf[prop]['table']);
-            this.displayedColumns.push(conf[prop]['table']['field']);
-          }
-        }
-      }
+    // Store concrete values of observables for compatibility
+    this.modeSubscription = this.mode$.subscribe((mode: ViewMode) => {
+      this.currentMode = mode;
     });
 
-    this.limit$ = this.store.select(state => state.root.user.settings.datasetCount);
-
-    this.subscriptions.push(this.store.select(state => state.root.dashboardUI.mode).subscribe(mode => {
-      this.mode = mode;
-      this.updateRowView(mode);
-    }));
-
-
-
-    // NOTE: Typescript picks this key up as the property of the state, but it
-    // actually links to the reducer key in app module
-    // This could also be subscribed to as an async value but then loading
-    // becomes an issue
-
-    this.subscriptions.push(
-      this.store.select(selectors.datasets.getDatasets).subscribe(
-        data => {
-          this.datasets = data;
-          this.dataSource = new MatTableDataSource(this.datasets);
-          this.dataSource.sort = this.sort;
-          this.updateRowView(this.mode);
-        },
-        error => {
-          console.error(error);
-        }
-      )
+    this.selectedSetsSubscription = this.selectedSets$.subscribe(selectedSets =>
+      this.selectedSets = selectedSets
     );
 
-    this.subscriptions.push(
-      this.store
-        .select(selectors.datasets.getActiveFilters)
-        .subscribe(filters => {
-          // if (filters.skip !== this.dsTable.first) {
-          setTimeout(() => {
-            this.setCurrentPage(filters.skip);
-          }, 1000);
-          // }
-        })
-    );
-
-    // this.subscriptions.push(
-    //   this.store
-    //     .select(selectors.datasets.getSelectedSets)
-    //     .subscribe(selected => {
-    //       this.selection.clear();
-    //       this.selection.select(selected);
-    //     })
-    // );
-
-    const msg = new Message();
-    this.subscriptions.push(
-      this.store.select(selectors.jobs.submitJob).subscribe(
+    this.submitJobSubscription =
+      this.store.select(jobSelectors.submitJob).subscribe(
         ret => {
           if (ret && Array.isArray(ret)) {
             console.log(ret);
-            this.selection.clear();
+            this.store.dispatch(new dsa.ClearSelectionAction());
           }
         },
         error => {
-          console.log(error);
-          msg.type = MessageType.Error;
-          msg.content = 'Job not Submitted';
-          this.store.dispatch(new ua.ShowMessageAction(msg));
+          this.store.dispatch(new ua.ShowMessageAction({
+            type: MessageType.Error,
+            content: 'Job not Submitted'
+          }));
         }
-      )
-    );
+      );
 
-    this.subscriptions.push(
-      this.store.select(selectors.jobs.getError).subscribe(err => {
+    this.jobErrorSubscription =
+      this.store.select(jobSelectors.getError).subscribe(err => {
         if (err) {
-          msg.type = MessageType.Error;
-          msg.content = err.message;
-          this.store.dispatch(new ua.ShowMessageAction(msg));
+          this.store.dispatch(new ua.ShowMessageAction({
+            type: MessageType.Error,
+            content: err.message,
+          }));
         }
-      })
-    );
+      });
   }
-
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
-  }
-
 
   ngOnDestroy() {
-    for (let i = 0; i < this.subscriptions.length; i++) {
-      this.subscriptions[i].unsubscribe();
-    }
-  }
-  /**
-   * Navigate to dataset detail page
-   * on a row click
-   * @param {any} event
-   * @memberof DatasetTableComponent
-   */
-  onRowSelect(event, row) {
-    const pid = encodeURIComponent(row.pid);
-    this.router.navigateByUrl(
-      '/dataset/' + pid
-    );
+    this.modeSubscription.unsubscribe();
+    this.selectedSetsSubscription.unsubscribe();
+    this.submitJobSubscription.unsubscribe();
+    this.jobErrorSubscription.unsubscribe();
   }
 
-  onRowCheck(row) {
-    this.selection.toggle(row);
-    this.store.dispatch({
-      type: dsa.SELECTED_UPDATE,
-      payload: this.selection.selected
-    });
-    // this.selectedSet.emit(this.selection.selected);
-  }
-
-  onExportClick() {
-    if (this.datasets.length > 0) {
-      // loop over all objects and find all keys
-      const allKeys = [];
-      this.datasets.forEach(obj => {
-        const ks = Object.keys(obj);
-        ks.forEach(k => {
-          if (allKeys.indexOf(k) < 0) {
-            allKeys.push(k);
-          }
-        });
-      });
-
-
-      // create "rectangular" dataset representation
-      const output = this.datasets.map(function (obj) {
-        const row = [];
-        allKeys.forEach(col => {
-          if (col in obj) {
-            row[col] = JSON.stringify(obj[col]);
-          } else {
-            row[col] = '';
-          }
-        });
-        return row;
-      });
-
-      const options = {
-        fieldSeparator: ',',
-        quoteStrings: '"',
-        decimalseparator: '.',
-        showLabels: true,
-        showTitle: false,
-        useBom: true,
-        headers: allKeys
-      };
-
-
-      const ts = new Angular5Csv(output, 'Datasets ' + this.paginator.pageIndex + 1, options);
-    } else {
-      const msg = new Message();
-      msg.content = 'No Datasets Loaded';
-      msg.type = MessageType.Error;
-      this.store.dispatch(new ua.ShowMessageAction(msg));
-    }
-  }
-
-  calculateRowClasses(row) {
-    if (row.datasetlifecycle && this.mode === 'archive'
-      && (this.archiveable.indexOf(row.datasetlifecycle.archiveStatusMessage) !== -1) && row.size !== 0) {
-      return {
-        'row-archiveable': true
-      };
-    } else if (row.datasetlifecycle && this.mode === 'retrieve'
-      && this.retrievable.indexOf(row.datasetlifecycle.archiveStatusMessage) !== -1 && row.size !== 0) {
-      return {
-        'row-retrievable': true
-      };
-    } else if (row.size === 0) {
-      return {
-        'row-empty': true
-      };
-    } else {
-      return {
-        'row-generic': true
-      };
-    }
+  onExportClick(): void {
+    this.store.dispatch(new dsa.ExportToCsvAction());
   }
 
   /**
@@ -319,118 +142,8 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
    * @param event
    * @param mode
    */
-  onModeChange(event, mode) {
-    if (mode) {
-      this.mode = mode.toLowerCase();
-      this.store.dispatch(new dua.SaveModeAction(this.mode));
-    }
-  }
-
-  isAllSelected() {
-    const numSelected = this.selection.selected.length;
-    const numRows = this.dataSource.data.length;
-    return numSelected === numRows;
-  }
-
-  /** Selects all rows if they are not all selected; otherwise clear selection. */
-  masterToggle() {
-    this.isAllSelected() ?
-      this.selection.clear() :
-      this.dataSource.data.forEach(row => this.selection.select(row));
-    this.store.dispatch({
-      type: dsa.SELECTED_UPDATE,
-      payload: this.selection.selected
-    });
-  }
-
-  updateRowView(mode) {
-    this.selection.clear();
-    this.rowStyleMap = {};
-    const activeSets = [];
-    if (this.datasets && this.datasets.length > 0 && (this.mode === 'archive' || this.mode === 'retrieve')) {
-      for (let d = 0; d < this.datasets.length; d++) {
-        const set = this.datasets[d];
-        const msg = (set.datasetlifecycle && set.datasetlifecycle.archiveStatusMessage) || '';
-        if (this.mode === 'archive'
-          && set.datasetlifecycle
-          && (this.archiveable.indexOf(set.datasetlifecycle.archiveStatusMessage) !== -1) && set.size > 0) {
-          activeSets.push(set);
-        } else if (this.mode === 'retrieve'
-          && set.datasetlifecycle && this.retrievable.indexOf(set.datasetlifecycle.archiveStatusMessage) !== -1 && set.size > 0) {
-          activeSets.push(set);
-        }
-      }
-      this.dataSource = new MatTableDataSource(activeSets);
-    } else {
-      this.dataSource = new MatTableDataSource(this.datasets);
-    }
-  }
-
-  /**
-   * Return the classes for the view buttons based on what is selected
-   * @param m
-   */
-  getModeButtonClasses(m) {
-    const ret = {};
-    ret[m.toLowerCase()] = true;
-    if (m.toLowerCase() === this.mode) {
-      ret['positive'] = true;
-    }
-    return ret;
-  }
-
-  /**
-   * Retrieves all datasets each time a new page
-   * is selected in the table
-   * @param event
-   */
-  onPage(event) {
-    const index = this.paginator.pageIndex;
-    const size = this.paginator.pageSize;
-    this.store
-      .select(state => state.root.datasets.activeFilters)
-      .take(1)
-      .subscribe(f => {
-        const filters = Object.assign({}, f);
-        filters['skip'] = index * size;
-        filters['initial'] = false;
-        filters['limit'] = size;
-        if (event && event.active && event.direction) {
-          filters['sortField'] = event.active + ' ' + event.direction;
-        } else {
-          filters['sortField'] = undefined;
-        }
-        // TODO reduce calls when not needed (i.e. no change)
-        // if (f.first !== event.first || this.datasets.length === 0) {
-        this.store.dispatch(new dsa.UpdateFilterAction(filters));
-        // }
-      });
-  }
-
-  // NOTE: this does not set the page number for the table, there is a
-  // `paginate` method but
-  // this takes no arguments and requires changing protected vars
-  setCurrentPage(n: number) {
-    // this.dsTable.onPageChange({ first: n, rows: this.dsTable.rows });
-  }
-
-  /**
-   * Options set based on selected datasets
-   * This is used to determine which template to display for
-   * archive or retrieval or both
-   * @param set
-   * @returns {string}
-   */
-  setOptions(set) {
-    let options = '';
-    const dl = set['datasetlifecycle'];
-    if (dl && dl['isOnDisk']) {
-      options += 'archive';
-    }
-    if (dl && (dl['isOnTape'] || dl['isOnDisk'])) {
-      options += 'retrieve';
-    }
-    return options;
+  onModeChange(event, mode: ViewMode): void {
+    this.store.dispatch(new dsa.SetViewModeAction(mode));
   }
 
   /**
@@ -439,7 +152,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
    * @param {any} event - click handler (not currently used)
    * @memberof DashboardComponent
    */
-  archiveClickHandle(event) {
+  archiveClickHandle(event): void {
     const dialogRef = this.dialog.open(DialogComponent, {
       width: 'auto',
       data: { title: 'Really archive?', question: '' }
@@ -458,7 +171,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
    * @param {any} event - click handler (not currently used)
    * @memberof DashboardComponent
    */
-  retrieveClickHandle(event) {
+  retrieveClickHandle(event): void {
     const destPath = '/archive/retrieve';
     const dialogRef = this.dialog.open(DialogComponent, {
       width: 'auto',
@@ -478,10 +191,9 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
    * action performed
    * @memberof DashboardComponent
    */
-  archiveOrRetrieve(archive: boolean, destPath = '/archive/retrieve/') {
+  archiveOrRetrieve(archive: boolean, destPath = '/archive/retrieve/'): void {
     const msg = new Message();
-    if (this.selection.selected.length > 0) {
-      this.dest = new Subject<string>();
+    if (this.selectedSets.length > 0) {
       const job = new Job();
       job.jobParams = {};
       job.creationTime = new Date();
@@ -496,7 +208,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
           if (!job.emailJobInitiator) {
             job.emailJobInitiator = user['profile'] ? user['profile']['email'] : user['email'];
           }
-          this.selection.selected.forEach(set => {
+          this.selectedSets.forEach(set => {
             // if ('datablocks' in set && set['datablocks'].length > 0) {
             const fileObj = {};
             const fileList = [];
@@ -510,11 +222,8 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
             backupFiles.push(fileObj);
             delete set['$$index'];
           });
-          this.selection.clear();
-          this.store.dispatch({
-            type: dsa.SELECTED_UPDATE,
-            payload: this.selection.selected
-          });
+
+          this.store.dispatch(new dsa.ClearSelectionAction());
 
           if (backupFiles.length === 0) {
             msg.type = MessageType.Error;
@@ -547,24 +256,65 @@ export class DatasetTableComponent implements OnInit, OnDestroy, AfterViewInit {
       msg.type = MessageType.Error;
       msg.content = 'No datasets selected';
       this.store.dispatch(new ua.ShowMessageAction(msg));
-      this.selection.clear();
-      this.store.dispatch({
-        type: dsa.SELECTED_UPDATE,
-        payload: this.selection.selected
-      });
+      this.store.dispatch(new dsa.ClearSelectionAction());
     }
   }
 
-  /**
-   * Handles submission of form and subscription
-   * of submitted value
-   * @param form
-   */
-  onDestSubmit(form) {
-    // TODO maybe wipe the value when submitted?
-    this.dest.next(form.value['dest']);
-    this.dest.complete();
-    this.dest.unsubscribe();
-    this.dest = null;
+  onClick(dataset: Dataset): void {
+    const pid = encodeURIComponent(dataset.pid);
+    this.router.navigateByUrl('/dataset/' + pid);
+  }
+
+  onSelect(dataset: Dataset): void {
+    this.store.dispatch(new dsa.SelectDatasetAction(dataset));
+  }
+
+  onDeselect(dataset: Dataset): void {
+    this.store.dispatch(new dsa.DeselectDatasetAction(dataset));
+  }
+
+  onPageChange(event: PageChangeEvent): void {
+    this.store.dispatch(new dsa.ChangePageAction(event.pageIndex, event.pageSize));
+  }
+
+  onSortChange(event: SortChangeEvent): void {
+    const {active: column, direction} = event;
+    this.store.dispatch(new dsa.SortByColumnAction(column, direction));
+  }
+
+  rowClassifier(row: Dataset): string {
+    if (row.datasetlifecycle && this.currentMode === 'archive'
+      && (config.archiveable.indexOf(row.datasetlifecycle.archiveStatusMessage) !== -1) && row.size !== 0) {
+      return 'row-archiveable';
+    } else if (row.datasetlifecycle && this.currentMode === 'retrieve'
+      && config.retrieveable.indexOf(row.datasetlifecycle.archiveStatusMessage) !== -1 && row.size !== 0) {
+      return 'row-retrievable';
+    } else if (row.size === 0) {
+      return 'row-empty';
+    } else {
+      return 'row-generic';
+    }
   }
 }
+
+/* Obsolete and/or "pensioned" methods
+/*
+/**
+ * Options set based on selected datasets
+ * This is used to determine which template to display for
+ * archive or retrieval or both
+ * @param set
+ * @returns {string}
+ * /
+setOptions(set) {
+  let options = '';
+  const dl = set['datasetlifecycle'];
+  if (dl && dl['isOnDisk']) {
+    options += 'archive';
+  }
+  if (dl && (dl['isOnTape'] || dl['isOnDisk'])) {
+    options += 'retrieve';
+  }
+  return options;
+}
+*/

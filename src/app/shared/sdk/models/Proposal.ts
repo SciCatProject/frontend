@@ -14,6 +14,8 @@ export interface ProposalInterface {
   "attachments"?: Array<any>;
   "ownerGroup": string;
   "accessGroups"?: Array<any>;
+  "createdBy"?: string;
+  "updatedBy"?: string;
   "createdAt"?: Date;
   "updatedAt"?: Date;
   "MeasurementPeriodList"?: Array<any>;
@@ -33,6 +35,8 @@ export class Proposal implements ProposalInterface {
   "attachments": Array<any>;
   "ownerGroup": string;
   "accessGroups": Array<any>;
+  "createdBy": string;
+  "updatedBy": string;
   "createdAt": Date;
   "updatedAt": Date;
   "MeasurementPeriodList": Array<any>;
@@ -117,6 +121,14 @@ export class Proposal implements ProposalInterface {
         "accessGroups": {
           name: 'accessGroups',
           type: 'Array&lt;any&gt;'
+        },
+        "createdBy": {
+          name: 'createdBy',
+          type: 'string'
+        },
+        "updatedBy": {
+          name: 'updatedBy',
+          type: 'string'
         },
         "createdAt": {
           name: 'createdAt',
