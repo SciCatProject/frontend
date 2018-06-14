@@ -231,9 +231,7 @@ export class DatasetEffects {
       .switchMap(payload => {
         const block = payload;
         return this.datablockApi.deleteById(block['id']).switchMap(res => {
-          return Observable.of({
-            type: DatasetActions.DATABLOCK_DELETE_COMPLETE
-          });
+          return Observable.of( new DatasetActions.DatablockDeleteCompleteAction());
         }).catch(err => {
           const msg = new Message();
           msg.content = 'Failed to delete datablock';

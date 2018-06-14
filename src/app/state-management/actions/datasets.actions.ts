@@ -76,35 +76,12 @@ export const SET_DATE_RANGE =               '[Dataset] Set Date Range Filter';
 export const PREFILL_FILTERS =              '[Dataset] Prefill Filter';
 export const CLEAR_FACETS =                 '[Dataset] Clear Facets';
 
-export class SearchCompleteAction implements Action {
-    readonly type = SEARCH_COMPLETE;
-    constructor(public payload: {}[]) {}
-}
-
-export class SearchFailedAction implements Action {
-    readonly type = SEARCH_FAILED;
-    constructor(public payload: any) {}
-}
 
 export class UpdateFilterAction implements Action {
     readonly type = FILTER_UPDATE;
     constructor(public payload: any) {}
 }
 
-export class UpdateFilterCompleteAction implements Action {
-    readonly type = FILTER_UPDATE_COMPLETE;
-    constructor(public payload: any) {}
-}
-
-export class FilterFailedAction implements Action {
-    readonly type = FILTER_FAILED;
-    constructor(public payload: any) {}
-}
-
-export class FilterValueAction implements Action {
-    readonly type = FILTER_VALUE_UPDATE;
-    constructor(public payload?: any) {}
-}
 
 export class SearchIDAction implements Action {
     readonly type = SEARCH_ID;
@@ -126,10 +103,6 @@ export class DatablocksAction implements Action {
     constructor(public payload: string) {}
 }
 
-export class DatablocksCompleteAction implements Action {
-    readonly type = DATABLOCKS_COMPLETE;
-}
-
 export class DatablocksFailedAction implements Action {
     readonly type = DATABLOCKS_FAILED;
     constructor(public payload: any) {}
@@ -144,23 +117,10 @@ export class DatablockDeleteCompleteAction implements Action {
     readonly type = DATABLOCK_DELETE_COMPLETE;
 }
 
-export class DatablockDeleteFailedAction implements Action {
-    readonly type = DATABLOCK_DELETE_FAILED;
-}
 
 export class AddGroupsAction implements Action {
     readonly type = ADD_GROUPS;
     constructor(public payload: string) {}
-}
-
-export class AddGroupsCompleteAction implements Action {
-    readonly type = ADD_GROUPS_COMPLETE;
-    constructor(public payload: AccessGroup[]) {}
-}
-
-export class AddGroupsFailedAction implements Action {
-    readonly type = ADD_GROUPS_FAILED;
-    constructor(public payload: any) {}
 }
 
 export class UpdateSelectedAction implements Action {
@@ -177,24 +137,9 @@ export class CurrentSetAction implements Action {
     constructor(public payload: Dataset) {}
 }
 
-export class UpdateCurrentBlocksAction implements Action {
-    readonly type = CURRENT_BLOCKS_COMPLETE;
-    constructor(public payload: Dataset) {}
-}
-
 export class ResetStatusAction implements Action {
     readonly type = RESET_STATUS;
     constructor(public payload: any) {}
-}
-
-export class ResetStatusCompleteAction implements Action {
-    readonly type = RESET_STATUS_COMPLETE;
-    constructor(public payload: any) {}
-}
-
-export class TotalSetsAction implements Action {
-    readonly type = TOTAL_UPDATE;
-    constructor(public payload: number) {}
 }
 
 export class SelectDatasetAction implements Action {
@@ -320,13 +265,12 @@ export class FetchFacetCountsFailedAction implements Action {
 }
 
 export type Actions =
-    SearchCompleteAction | SearchFailedAction |
-    UpdateFilterAction | UpdateFilterCompleteAction | FilterFailedAction |
-    FilterValueAction | SearchIDAction | SearchIDCompleteAction |
-    SearchIDFailedAction | DatablocksAction | DatablocksCompleteAction | UpdateCurrentBlocksAction |
-    DatablockDeleteAction | DatablockDeleteCompleteAction | DatablockDeleteFailedAction |
-    DatablocksAction | AddGroupsAction | AddGroupsCompleteAction | UpdateSelectedDatablocksAction |
-    AddGroupsFailedAction | UpdateSelectedAction | TotalSetsAction | ResetStatusAction | ResetStatusCompleteAction |
+    UpdateFilterAction | 
+    SearchIDAction | SearchIDCompleteAction |
+    SearchIDFailedAction | DatablocksAction |
+    DatablockDeleteAction | DatablockDeleteCompleteAction |
+    DatablocksAction | AddGroupsAction | UpdateSelectedDatablocksAction |
+    UpdateSelectedAction | ResetStatusAction |
     SelectDatasetAction | DeselectDatasetAction |
     ExportToCsvAction | ChangePageAction | SortByColumnAction | SetViewModeAction |
     

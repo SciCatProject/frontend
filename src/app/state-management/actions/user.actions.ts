@@ -74,11 +74,6 @@ export class RetrieveUserFailedAction implements Action {
     constructor(public payload?: any) {}
 }
 
-export class AddGroupsAction implements Action {
-    readonly type = ADD_GROUPS;
-    constructor(public payload: User) {}
-}
-
 export class AddGroupsCompleteAction implements Action {
     readonly type = ADD_GROUPS_COMPLETE;
     constructor(public payload: AccessGroup[]) {}
