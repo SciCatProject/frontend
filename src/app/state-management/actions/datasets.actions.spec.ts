@@ -1,30 +1,30 @@
 import { Dataset, AccessGroup, Datablock } from 'shared/sdk/models';
 
-import {SearchCompleteAction, SEARCH_COMPLETE } from './datasets.actions'; 
-import {SearchFailedAction, SEARCH_FAILED } from './datasets.actions'; 
+import {SEARCH_COMPLETE } from './datasets.actions'; 
+import {SEARCH_FAILED } from './datasets.actions'; 
 import {UpdateFilterAction, FILTER_UPDATE } from './datasets.actions'; 
-import {UpdateFilterCompleteAction, FILTER_UPDATE_COMPLETE } from './datasets.actions'; 
-import {FilterFailedAction, FILTER_FAILED } from './datasets.actions'; 
-import {FilterValueAction, FILTER_VALUE_UPDATE } from './datasets.actions'; 
+import {FILTER_UPDATE_COMPLETE } from './datasets.actions'; 
+import {FILTER_FAILED } from './datasets.actions'; 
+import {FILTER_VALUE_UPDATE } from './datasets.actions'; 
 import {SearchIDAction, SEARCH_ID } from './datasets.actions'; 
 import {SearchIDCompleteAction, SEARCH_ID_COMPLETE } from './datasets.actions'; 
 import {SearchIDFailedAction, SEARCH_ID_FAILED } from './datasets.actions'; 
 import {DatablocksAction, DATABLOCKS } from './datasets.actions'; 
-import {DatablocksCompleteAction, DATABLOCKS_COMPLETE } from './datasets.actions'; 
+import {DATABLOCKS_COMPLETE } from './datasets.actions'; 
 import {DatablocksFailedAction, DATABLOCKS_FAILED } from './datasets.actions'; 
 import {DatablockDeleteAction, DATABLOCK_DELETE } from './datasets.actions'; 
 import {DatablockDeleteCompleteAction, DATABLOCK_DELETE_COMPLETE } from './datasets.actions'; 
-import {DatablockDeleteFailedAction, DATABLOCK_DELETE_FAILED } from './datasets.actions'; 
+import {DATABLOCK_DELETE_FAILED } from './datasets.actions'; 
 import {AddGroupsAction, ADD_GROUPS } from './datasets.actions'; 
-import {AddGroupsCompleteAction, ADD_GROUPS_COMPLETE } from './datasets.actions'; 
-import {AddGroupsFailedAction, ADD_GROUPS_FAILED } from './datasets.actions'; 
+import {ADD_GROUPS_COMPLETE } from './datasets.actions'; 
+import {ADD_GROUPS_FAILED } from './datasets.actions'; 
 import {UpdateSelectedAction, SELECTED_UPDATE } from './datasets.actions'; 
 import {UpdateSelectedDatablocksAction, SELECTED_DATABLOCKS_COMPLETE } from './datasets.actions'; 
 import {CurrentSetAction, SELECT_CURRENT } from './datasets.actions'; 
-import {UpdateCurrentBlocksAction, CURRENT_BLOCKS_COMPLETE } from './datasets.actions'; 
+import {CURRENT_BLOCKS_COMPLETE } from './datasets.actions'; 
 import {ResetStatusAction, RESET_STATUS } from './datasets.actions'; 
-import {ResetStatusCompleteAction, RESET_STATUS_COMPLETE } from './datasets.actions'; 
-import {TotalSetsAction, TOTAL_UPDATE } from './datasets.actions'; 
+import {RESET_STATUS_COMPLETE } from './datasets.actions'; 
+import {TOTAL_UPDATE } from './datasets.actions'; 
 import {SelectDatasetAction, SELECT_DATASET } from './datasets.actions'; 
 import {DeselectDatasetAction, DESELECT_DATASET } from './datasets.actions'; 
 import {ClearSelectionAction, CLEAR_SELECTION } from './datasets.actions'; 
@@ -33,56 +33,12 @@ import {SortByColumnAction, SORT_BY_COLUMN } from './datasets.actions';
 import {SetViewModeAction, SET_VIEW_MODE } from './datasets.actions'; 
 
 
-describe('SearchCompleteAction', () => { 
-	it('should create an action', () => { 
-		const payload = [{id:1}]; 
-		const action = new SearchCompleteAction(payload); 
-		expect({ ...action }).toEqual({ type: SEARCH_COMPLETE,  payload }); 
-	}); 
-});
-
-
-describe('SearchFailedAction', () => { 
-	it('should create an action', () => { 
-		const payload = [{id:1}]; 
-		const action = new SearchFailedAction(payload); 
-		expect({ ...action }).toEqual({ type: SEARCH_FAILED,  payload }); 
-	}); 
-});
-
 
 describe('UpdateFilterAction', () => { 
 	it('should create an action', () => { 
 		const payload = [{id:1}]; 
 		const action = new UpdateFilterAction(payload); 
 		expect({ ...action }).toEqual({ type: FILTER_UPDATE,  payload }); 
-	}); 
-});
-
-
-describe('UpdateFilterCompleteAction', () => { 
-	it('should create an action', () => { 
-		const payload = [{id:1}]; 
-		const action = new UpdateFilterCompleteAction(payload); 
-		expect({ ...action }).toEqual({ type: FILTER_UPDATE_COMPLETE,  payload }); 
-	}); 
-});
-
-
-describe('FilterFailedAction', () => { 
-	it('should create an action', () => { 
-		const payload = [{id:1}]; 
-		const action = new FilterFailedAction(payload); 
-		expect({ ...action }).toEqual({ type: FILTER_FAILED,  payload }); 
-	}); 
-});
-
-
-describe('FilterValueAction', () => { 
-	it('should create an action', () => { 
-		const payload = [{id:1}]; 
-		const action = new FilterValueAction(payload); 
-		expect({ ...action }).toEqual({ type: FILTER_VALUE_UPDATE,  payload }); 
 	}); 
 });
 
@@ -122,15 +78,6 @@ describe('DatablocksAction', () => {
 	}); 
 });
 
-
-describe('DatablocksCompleteAction', () => { 
-	it('should create an action', () => { 
-		const action = new DatablocksCompleteAction(); 
-		expect({ ...action }).toEqual({ type: DATABLOCKS_COMPLETE  }); 
-	}); 
-});
-
-
 describe('DatablocksFailedAction', () => { 
 	it('should create an action', () => { 
 		const payload = [{id:1}]; 
@@ -157,16 +104,6 @@ describe('DatablockDeleteCompleteAction', () => {
 	}); 
 });
 
-
-describe('DatablockDeleteFailedAction', () => { 
-	it('should create an action', () => { 
-		
-		const action = new DatablockDeleteFailedAction(); 
-		expect({ ...action }).toEqual({ type: DATABLOCK_DELETE_FAILED  }); 
-	}); 
-});
-
-
 describe('AddGroupsAction', () => { 
 	it('should create an action', () => { 
 		const payload = "groupstring";
@@ -174,25 +111,6 @@ describe('AddGroupsAction', () => {
 		expect({ ...action }).toEqual({ type: ADD_GROUPS,  payload }); 
 	}); 
 });
-
-
-describe('AddGroupsCompleteAction', () => { 
-	it('should create an action', () => { 
-		const payload =[ new AccessGroup()];
-		const action = new AddGroupsCompleteAction(payload); 
-		expect({ ...action }).toEqual({ type: ADD_GROUPS_COMPLETE,  payload }); 
-	}); 
-});
-
-
-describe('AddGroupsFailedAction', () => { 
-	it('should create an action', () => { 
-		const payload = [{id:1}]; 
-		const action = new AddGroupsFailedAction(payload); 
-		expect({ ...action }).toEqual({ type: ADD_GROUPS_FAILED,  payload }); 
-	}); 
-});
-
 
 describe('UpdateSelectedAction', () => { 
 	it('should create an action', () => { 
@@ -220,39 +138,11 @@ describe('CurrentSetAction', () => {
 	}); 
 });
 
-
-describe('UpdateCurrentBlocksAction', () => { 
-	it('should create an action', () => { 
-		const payload = new Dataset();
-		const action = new UpdateCurrentBlocksAction(payload); 
-		expect({ ...action }).toEqual({ type: CURRENT_BLOCKS_COMPLETE,  payload }); 
-	}); 
-});
-
-
 describe('ResetStatusAction', () => { 
 	it('should create an action', () => { 
 		const payload = [{id:1}]; 
 		const action = new ResetStatusAction(payload); 
 		expect({ ...action }).toEqual({ type: RESET_STATUS,  payload }); 
-	}); 
-});
-
-
-describe('ResetStatusCompleteAction', () => { 
-	it('should create an action', () => { 
-		const payload = [{id:1}]; 
-		const action = new ResetStatusCompleteAction(payload); 
-		expect({ ...action }).toEqual({ type: RESET_STATUS_COMPLETE,  payload }); 
-	}); 
-});
-
-
-describe('TotalSetsAction', () => { 
-	it('should create an action', () => { 
-		const payload = 6;
-		const action = new TotalSetsAction(payload); 
-		expect({ ...action }).toEqual({ type: TOTAL_UPDATE,  payload }); 
 	}); 
 });
 

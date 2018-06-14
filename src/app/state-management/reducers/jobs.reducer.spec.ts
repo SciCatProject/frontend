@@ -27,13 +27,6 @@ describe('DatasetsReducer', () => {
         expect(state.ui).toEqual(ui);
     })
 
-    it('should set ui', () => {
-        const ui =  [];
-        const action = new jobsActions.UIStoreAction(ui);
-        const state = jobsReducer(initialJobsState, action);
-        expect(state.ui).toEqual(ui);
-    })
-
     it('should set jobSubmission to an empty array', () => {
         const action = new jobsActions.SubmitCompleteAction();
         const state = jobsReducer(initialJobsState, action);

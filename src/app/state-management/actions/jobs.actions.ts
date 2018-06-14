@@ -28,16 +28,6 @@ export class SubmitAction implements Action {
     constructor(public payload?: any) {}
 }
 
-export class RetrieveAction implements Action {
-    readonly type = RETRIEVE;
-    constructor(public payload?: any) {}
-}
-
-export class UIStoreAction implements Action {
-    readonly type = UI_STORE;
-    constructor(public payload?: any) {}
-}
-
 export class SubmitCompleteAction implements Action {
     readonly type = SUBMIT_COMPLETE;
     constructor(public payload?: any) {}
@@ -88,30 +78,13 @@ export class SortUpdateAction implements Action {
     constructor(public payload: any) {}
 }
 
-export class UpdateSortCompleteAction implements Action {
-    readonly type = SORT_UPDATE_COMPLETE;
-    constructor(public payload: Job) {}
-}
-
-export class SortFailedAction implements Action {
-    readonly type = SORT_FAILED;
-}
-
-export class SortValueAction implements Action {
-    readonly type = SORT_VALUE_UPDATE;
-    constructor(public payload?: any) {}
-}
 
 export type Actions =
     SortUpdateAction |
-    UpdateSortCompleteAction |
-    SortFailedAction |
-    SortValueAction |
     CurrentJobAction |
     SubmitAction |
     FailedAction |
     SubmitCompleteAction |
     SearchIDAction | SearchIDCompleteAction |
     SearchIDFailedAction |
-    RetrieveAction |
     RetrieveCompleteAction;
