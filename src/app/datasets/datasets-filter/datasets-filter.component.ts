@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 
 import { Observable } from 'rxjs/Observable';
-import { MatDatepicker } from 'saturn-datepicker';
+import { SatDatepicker } from 'saturn-datepicker';
 
 import { FacetCount } from 'state-management/state/datasets.store';
 import {

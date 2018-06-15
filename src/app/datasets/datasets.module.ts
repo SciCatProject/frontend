@@ -60,7 +60,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { SharedCatanieModule } from 'shared/shared.module';
 
 import { SelectedListComponent } from 'datasets/selected-list/selected-list.component';
-import { MatDatepickerModule } from 'saturn-datepicker';
+import { SatDatepickerModule } from 'saturn-datepicker';
 import { DatasetTablePureComponent } from './dataset-table-pure/dataset-table-pure.component';
 import { StoreModule } from '@ngrx/store';
 import { datasetsReducer } from 'state-management/reducers/datasets.reducer';
@@ -70,7 +70,7 @@ import { datasetsReducer } from 'state-management/reducers/datasets.reducer';
     MatCardModule, MatDialogModule, MatPaginatorModule, MatCheckboxModule, MatTableModule, MatFormFieldModule, MatAutocompleteModule,
     MatTabsModule, MatInputModule, MatButtonModule, MatSortModule, CommonModule, FormsModule, ReactiveFormsModule,
     SharedCatanieModule, MatSelectModule, MatOptionModule, MatNativeDateModule, MatIconModule,
-    MatListModule, MatDatepickerModule, MatTooltipModule, MatButtonToggleModule, MatProgressSpinnerModule, MatChipsModule,
+    MatListModule, SatDatepickerModule, MatTooltipModule, MatButtonToggleModule, MatProgressSpinnerModule, MatChipsModule,
     StoreModule.forFeature('datasets', datasetsReducer),
     FileHelpersModule, AppConfigModule
   ],
