@@ -1,9 +1,9 @@
 import { Injectable, Inject } from '@angular/core';
 import {
-    Http,
-    Response,
-    Headers
-} from '@angular/http';
+    HttpClient,
+    HttpResponse,
+    HttpHeaders
+} from '@angular/common/http';
 import { LoopBackConfig } from 'shared/sdk/lb.config';
 import {Observable} from 'rxjs/Rx';
 import { APP_CONFIG, AppConfig } from '../app-config.module';
@@ -17,7 +17,7 @@ import { APP_CONFIG, AppConfig } from '../app-config.module';
 export class ADAuthService {
 
     constructor(
-        public http: Http,
+        public http: HttpClient,
         @Inject(APP_CONFIG) private config: AppConfig
     ) {}
 
@@ -30,9 +30,9 @@ export class ADAuthService {
      * @returns {Observable<Response>}
      * @memberof ADAuthService
      */
-    login(username: string, password: string): Observable<Response> {
+    login(username: string, password: string): Observable<HttpResponse<any>> {
         const creds = 'username=' + username + '&password=' + password;
-        const headers = new Headers();
+        const headers = new HttpHeaders();
         const url = LoopBackConfig.getPath() + this.config.externalAuthEndpoint;
         headers.append('Content-Type', 'application/x-www-form-urlencoded');
         return this.http.post(url, creds, {headers});
