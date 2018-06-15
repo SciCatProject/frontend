@@ -37,10 +37,6 @@ export class ActiveDirLoginAction implements Action {
     constructor(public payload: any) {}
 }
 
-export class ActiveDirLoginCompleteAction implements Action {
-    readonly type = AD_LOGIN_COMPLETE;
-    constructor(public payload: any) {}
-}
 
 export class LoginCompleteAction implements Action {
     readonly type = LOGIN_COMPLETE;
@@ -72,16 +68,6 @@ export class RetrieveUserCompleteAction implements Action {
 export class RetrieveUserFailedAction implements Action {
     readonly type = RETRIEVE_USER_FAILED;
     constructor(public payload?: any) {}
-}
-
-export class AddGroupsCompleteAction implements Action {
-    readonly type = ADD_GROUPS_COMPLETE;
-    constructor(public payload: AccessGroup[]) {}
-}
-
-export class AddGroupsFailedAction implements Action {
-    readonly type = ADD_GROUPS_FAILED;
-    constructor(public payload: any) {}
 }
 
 export class AccessUserEmailAction implements Action {
@@ -117,9 +103,9 @@ export type Actions =
     LoginAction | LogoutCompleteAction | LoginFailedAction |
     LogoutAction | LogoutCompleteAction |
     RetrieveUserAction | RetrieveUserCompleteAction | RetrieveUserFailedAction |
-    ActiveDirLoginAction | ActiveDirLoginCompleteAction |
+    ActiveDirLoginAction | 
     AccessUserEmailAction | AccessUserEmailCompleteAction | AccessUserEmailFailedAction |
     ShowMessageAction |
     ClearMessageAction |
     SaveSettingsAction;
-    // AddGroupsAction | AddGroupsCompleteAction | AddGroupsFailedAction
+    // AddGroupsAction

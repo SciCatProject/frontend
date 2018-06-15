@@ -1,7 +1,7 @@
 import { Message, MessageType, User, AccessGroup } from '../models';
 import {LoginAction, LOGIN } from './user.actions'; 
 import {ActiveDirLoginAction, AD_LOGIN } from './user.actions'; 
-import {ActiveDirLoginCompleteAction, AD_LOGIN_COMPLETE } from './user.actions'; 
+import {AD_LOGIN_COMPLETE } from './user.actions'; 
 import {LoginCompleteAction, LOGIN_COMPLETE } from './user.actions'; 
 import {LoginFailedAction, LOGIN_FAILED } from './user.actions'; 
 import {LogoutAction, LOGOUT } from './user.actions'; 
@@ -10,8 +10,8 @@ import {RetrieveUserAction, RETRIEVE_USER } from './user.actions';
 import {RetrieveUserCompleteAction, RETRIEVE_USER_COMPLETE } from './user.actions'; 
 import {RetrieveUserFailedAction, RETRIEVE_USER_FAILED } from './user.actions'; 
 import {ADD_GROUPS } from './user.actions'; 
-import {AddGroupsCompleteAction, ADD_GROUPS_COMPLETE } from './user.actions'; 
-import {AddGroupsFailedAction, ADD_GROUPS_FAILED } from './user.actions'; 
+import {ADD_GROUPS_COMPLETE } from './user.actions'; 
+import {ADD_GROUPS_FAILED } from './user.actions'; 
 import {AccessUserEmailAction, ACCESS_USER_EMAIL } from './user.actions'; 
 import {AccessUserEmailCompleteAction, ACCESS_USER_EMAIL_COMPLETE } from './user.actions'; 
 import {AccessUserEmailFailedAction, ACCESS_USER_EMAIL_FAILED } from './user.actions'; 
@@ -36,15 +36,6 @@ describe('ActiveDirLoginAction', () => {
 		const payload = [{id:1}]; 
 		const action = new ActiveDirLoginAction(payload); 
 		expect({ ...action }).toEqual({ type: AD_LOGIN,  payload }); 
-	}); 
-});
-
-
-describe('ActiveDirLoginCompleteAction', () => { 
-	it('should create an action', () => { 
-		const payload = [{id:1}]; 
-		const action = new ActiveDirLoginCompleteAction(payload); 
-		expect({ ...action }).toEqual({ type: AD_LOGIN_COMPLETE,  payload }); 
 	}); 
 });
 
@@ -110,24 +101,6 @@ describe('RetrieveUserFailedAction', () => {
 		expect({ ...action }).toEqual({ type: RETRIEVE_USER_FAILED,  payload }); 
 	}); 
 });
-
-describe('AddGroupsCompleteAction', () => { 
-	it('should create an action', () => { 
-		const payload = [new AccessGroup()]; 
-		const action = new AddGroupsCompleteAction(payload); 
-		expect({ ...action }).toEqual({ type: ADD_GROUPS_COMPLETE,  payload }); 
-	}); 
-});
-
-
-describe('AddGroupsFailedAction', () => { 
-	it('should create an action', () => { 
-		const payload = [{id:1}]; 
-		const action = new AddGroupsFailedAction(payload); 
-		expect({ ...action }).toEqual({ type: ADD_GROUPS_FAILED,  payload }); 
-	}); 
-});
-
 
 describe('AccessUserEmailAction', () => { 
 	it('should create an action', () => { 

@@ -99,22 +99,6 @@ describe('DatasetsReducer', () => {
         expect(state.settings).toEqual(setting);
     })
 
-    it('should set currentUserGroups', () => {
-        const data = {
-            "description": '',
-            "member": [],
-            "memberOf": [],
-        }
-        const current = [
-            new AccessGroup({...data, sAMAccountName: 'sAMAccountName 1'}), 
-            new AccessGroup({...data, sAMAccountName: 'sAMAccountName 2'}),
-            new AccessGroup({...data, sAMAccountName: 'sAMAccountName 3'})
-        ];
-        const action = new userActions.AddGroupsCompleteAction(current);
-        const state = userReducer(initialUserState, action);
-        expect(state.currentUserGroups.length).toEqual(current.length)
-    })
-
     it('should set loading to false after login complete', () => {
         const info = {
             username: '',

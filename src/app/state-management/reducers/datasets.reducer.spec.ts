@@ -280,48 +280,6 @@ describe('DatasetsReducer', () => {
         expect(state.filters.sortField).toEqual(filter.sortField);
     })
 
-    it('should set selectedSets ', () => {
-        const data: DatasetInterface = {
-            owner: '',
-            contactEmail: '',
-            sourceFolder: '',
-            creationTime: new Date(),
-            type: '',
-            ownerGroup: '',
-        };
-
-        const datasets = [
-            new Dataset({ pid: 'pid 1', ...data }),
-            new Dataset({ pid: 'pid 2', ...data }),
-            new Dataset({ pid: 'pid 3', ...data })
-        ];
-        const action = new fromActions.UpdateSelectedAction(datasets);
-        const state = fromDatasets.datasetsReducer(initialDatasetState, action);
-        const sets = Object.keys(state.selectedSets);
-        expect(sets.length).toEqual(3);
-    })
-
-    it('should set selectedSets ', () => {
-        const data: DatasetInterface = {
-            owner: '',
-            contactEmail: '',
-            sourceFolder: '',
-            creationTime: new Date(),
-            type: '',
-            ownerGroup: '',
-        };
-
-        const datasets = [
-            new Dataset({ pid: 'pid 1', ...data }),
-            new Dataset({ pid: 'pid 2', ...data }),
-            new Dataset({ pid: 'pid 3', ...data })
-        ];
-        const action = new fromActions.UpdateSelectedDatablocksAction(datasets);
-        const state = fromDatasets.datasetsReducer(initialDatasetState, action);
-        const sets = Object.keys(state.selectedSets);
-        expect(sets.length).toEqual(3);
-    })
-
 
     it('should set currentSet ', () => {
         const data: DatasetInterface = {

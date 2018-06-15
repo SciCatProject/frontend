@@ -110,23 +110,6 @@ export class DatasetEffects {
   );
 
   @Effect()
-  protected getDataset$: Observable<Action> =
-    this.actions$.ofType(DatasetActions.SEARCH_ID)
-      .debounceTime(300)
-      .map((action: DatasetActions.SearchIDAction) => action.payload)
-      .switchMap(payload => {
-        const id = payload;
-        // TODO separate action for dataBlocks? or retrieve at once?
-
-        return this.datasetApi.findById(encodeURIComponent(id))
-          .map(res => new DatasetActions.SearchIDCompleteAction(res))
-          .catch(err => {
-            console.log(err);
-            return Observable.of(new DatasetActions.SearchIDFailedAction(err));
-          });
-      });
-
-  @Effect()
   protected getDatablocks$: Observable<Action> =
     this.actions$.ofType(DatasetActions.DATABLOCKS)
       .debounceTime(300)
@@ -224,57 +207,6 @@ export class DatasetEffects {
       });
       */
 
-  @Effect()
-  protected deleteDatablocks$: Observable<Action> =
-    this.actions$.ofType(DatasetActions.DATABLOCK_DELETE)
-      .map((action: DatasetActions.DatablockDeleteAction) => action.payload)
-      .switchMap(payload => {
-        const block = payload;
-        return this.datablockApi.deleteById(block['id']).switchMap(res => {
-          return Observable.of( new DatasetActions.DatablockDeleteCompleteAction());
-        }).catch(err => {
-          const msg = new Message();
-          msg.content = 'Failed to delete datablock';
-          msg.type = MessageType.Error;
-          return Observable.of(new UserActions.ShowMessageAction(msg));
-        });
-      });
-
-  @Effect()
-  protected updateSelectedDatablocks$: Observable<Action> =
-    this.actions$.ofType(DatasetActions.SELECTED_UPDATE)
-      .map((action: DatasetActions.UpdateSelectedAction) => action.payload)
-      .switchMap(payload => {
-        if (payload && payload.length > 0) {
-          const dataset = payload[payload.length - 1];
-          const datasetSearch = { where: { datasetId: dataset.pid } };
-          return this.datablockApi.find(datasetSearch).switchMap(res => {
-            dataset['datablocks'] = res;
-            return Observable.of(new DatasetActions.UpdateSelectedDatablocksAction(payload));
-          });
-        } else {
-          return Observable.of(new DatasetActions.UpdateSelectedDatablocksAction(payload));
-        }
-      });
-
-  @Effect()
-  protected resetStatus$: Observable<Action> =
-    this.actions$.ofType(DatasetActions.RESET_STATUS)
-      .map((action: DatasetActions.ResetStatusAction) => action.payload)
-      .switchMap(payload => {
-        const msg = new Message();
-        return this.datasetApi.reset(encodeURIComponent(payload['id'])).switchMap(res => {
-          msg.content = 'Dataset Status Reset';
-          msg.type = MessageType.Success;
-          return Observable.of(new UserActions.ShowMessageAction(msg));
-          // return Observable.of({type: DatasetActions.RESET_STATUS_COMPLETE, payload: res});
-        }).catch(err => {
-          console.error(err);
-          msg.content = 'Dataset Status Reset Failed';
-          msg.type = MessageType.Error;
-          return Observable.of(new UserActions.ShowMessageAction(msg));
-        });
-      });
 
 }
 
