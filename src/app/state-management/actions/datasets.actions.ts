@@ -2,6 +2,7 @@ import { Action } from '@ngrx/store';
 import { DatasetFilters, ViewMode } from 'state-management/models';
 import { Dataset, AccessGroup, Datablock } from 'shared/sdk/models';
 import { FacetCounts } from '../state/datasets.store';
+import { error } from 'selenium-webdriver';
 
 export const SEARCH_COMPLETE =              '[Dataset] Search Complete';
 export const SEARCH_FAILED =                '[Dataset] Search Failed';
@@ -77,15 +78,9 @@ export const PREFILL_FILTERS =              '[Dataset] Prefill Filter';
 export const CLEAR_FACETS =                 '[Dataset] Clear Facets';
 
 
-export class UpdateFilterAction implements Action {
+export class UpdateFilterAction implements Action { 
     readonly type = FILTER_UPDATE;
     constructor(public payload: any) {}
-}
-
-
-export class SearchIDAction implements Action {
-    readonly type = SEARCH_ID;
-    constructor(public payload: string) {}
 }
 
 export class SearchIDCompleteAction implements Action {
@@ -93,53 +88,19 @@ export class SearchIDCompleteAction implements Action {
     constructor(public payload: {}) {}
 }
 
-export class SearchIDFailedAction implements Action {
-    readonly type = SEARCH_ID_FAILED;
-    constructor(public payload: any) {}
-}
-
 export class DatablocksAction implements Action {
     readonly type = DATABLOCKS;
     constructor(public payload: string) {}
 }
 
-export class DatablocksFailedAction implements Action {
+export class DatablocksFailedAction implements Action { 
     readonly type = DATABLOCKS_FAILED;
     constructor(public payload: any) {}
 }
 
-export class DatablockDeleteAction implements Action {
-    readonly type = DATABLOCK_DELETE;
-    constructor(public payload: Datablock) {}
-}
-
-export class DatablockDeleteCompleteAction implements Action {
-    readonly type = DATABLOCK_DELETE_COMPLETE;
-}
-
-
-export class AddGroupsAction implements Action {
-    readonly type = ADD_GROUPS;
-    constructor(public payload: string) {}
-}
-
-export class UpdateSelectedAction implements Action {
-    readonly type = SELECTED_UPDATE;
-    constructor(public payload: any) {}
-}
-
-export class UpdateSelectedDatablocksAction implements Action {
-    readonly type = SELECTED_DATABLOCKS_COMPLETE;
-    constructor(public payload: any) {}
-}
 export class CurrentSetAction implements Action {
     readonly type = SELECT_CURRENT;
     constructor(public payload: Dataset) {}
-}
-
-export class ResetStatusAction implements Action {
-    readonly type = RESET_STATUS;
-    constructor(public payload: any) {}
 }
 
 export class SelectDatasetAction implements Action {
@@ -266,11 +227,9 @@ export class FetchFacetCountsFailedAction implements Action {
 
 export type Actions =
     UpdateFilterAction | 
-    SearchIDAction | SearchIDCompleteAction |
-    SearchIDFailedAction | DatablocksAction |
-    DatablockDeleteAction | DatablockDeleteCompleteAction |
-    DatablocksAction | AddGroupsAction | UpdateSelectedDatablocksAction |
-    UpdateSelectedAction | ResetStatusAction |
+    SearchIDCompleteAction |
+    DatablocksAction |
+    DatablocksAction |
     SelectDatasetAction | DeselectDatasetAction |
     ExportToCsvAction | ChangePageAction | SortByColumnAction | SetViewModeAction |
     

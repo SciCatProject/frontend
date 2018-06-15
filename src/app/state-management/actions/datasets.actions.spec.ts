@@ -6,23 +6,23 @@ import {UpdateFilterAction, FILTER_UPDATE } from './datasets.actions';
 import {FILTER_UPDATE_COMPLETE } from './datasets.actions'; 
 import {FILTER_FAILED } from './datasets.actions'; 
 import {FILTER_VALUE_UPDATE } from './datasets.actions'; 
-import {SearchIDAction, SEARCH_ID } from './datasets.actions'; 
+import {SEARCH_ID } from './datasets.actions'; 
 import {SearchIDCompleteAction, SEARCH_ID_COMPLETE } from './datasets.actions'; 
-import {SearchIDFailedAction, SEARCH_ID_FAILED } from './datasets.actions'; 
+import {SEARCH_ID_FAILED } from './datasets.actions'; 
 import {DatablocksAction, DATABLOCKS } from './datasets.actions'; 
 import {DATABLOCKS_COMPLETE } from './datasets.actions'; 
 import {DatablocksFailedAction, DATABLOCKS_FAILED } from './datasets.actions'; 
-import {DatablockDeleteAction, DATABLOCK_DELETE } from './datasets.actions'; 
-import {DatablockDeleteCompleteAction, DATABLOCK_DELETE_COMPLETE } from './datasets.actions'; 
+import {DATABLOCK_DELETE } from './datasets.actions'; 
+import {DATABLOCK_DELETE_COMPLETE } from './datasets.actions'; 
 import {DATABLOCK_DELETE_FAILED } from './datasets.actions'; 
-import {AddGroupsAction, ADD_GROUPS } from './datasets.actions'; 
+import {ADD_GROUPS } from './datasets.actions'; 
 import {ADD_GROUPS_COMPLETE } from './datasets.actions'; 
 import {ADD_GROUPS_FAILED } from './datasets.actions'; 
-import {UpdateSelectedAction, SELECTED_UPDATE } from './datasets.actions'; 
-import {UpdateSelectedDatablocksAction, SELECTED_DATABLOCKS_COMPLETE } from './datasets.actions'; 
+import {SELECTED_UPDATE } from './datasets.actions'; 
+import {SELECTED_DATABLOCKS_COMPLETE } from './datasets.actions'; 
 import {CurrentSetAction, SELECT_CURRENT } from './datasets.actions'; 
 import {CURRENT_BLOCKS_COMPLETE } from './datasets.actions'; 
-import {ResetStatusAction, RESET_STATUS } from './datasets.actions'; 
+import {RESET_STATUS } from './datasets.actions'; 
 import {RESET_STATUS_COMPLETE } from './datasets.actions'; 
 import {TOTAL_UPDATE } from './datasets.actions'; 
 import {SelectDatasetAction, SELECT_DATASET } from './datasets.actions'; 
@@ -43,29 +43,11 @@ describe('UpdateFilterAction', () => {
 });
 
 
-describe('SearchIDAction', () => { 
-	it('should create an action', () => { 
-		const payload = "idstring"; 
-		const action = new SearchIDAction(payload); 
-		expect({ ...action }).toEqual({ type: SEARCH_ID,  payload }); 
-	}); 
-});
-
-
 describe('SearchIDCompleteAction', () => { 
 	it('should create an action', () => { 
 		const payload = [{id:1}]; 
 		const action = new SearchIDCompleteAction(payload); 
 		expect({ ...action }).toEqual({ type: SEARCH_ID_COMPLETE,  payload }); 
-	}); 
-});
-
-
-describe('SearchIDFailedAction', () => { 
-	it('should create an action', () => { 
-		const payload = [{id:1}]; 
-		const action = new SearchIDFailedAction(payload); 
-		expect({ ...action }).toEqual({ type: SEARCH_ID_FAILED,  payload }); 
 	}); 
 });
 
@@ -87,49 +69,6 @@ describe('DatablocksFailedAction', () => {
 });
 
 
-describe('DatablockDeleteAction', () => { 
-	it('should create an action', () => { 
-		const payload = new Datablock();
-		const action = new DatablockDeleteAction(payload); 
-		expect({ ...action }).toEqual({ type: DATABLOCK_DELETE,  payload }); 
-	}); 
-});
-
-
-describe('DatablockDeleteCompleteAction', () => { 
-	it('should create an action', () => { 
-
-		const action = new DatablockDeleteCompleteAction(); 
-		expect({ ...action }).toEqual({ type: DATABLOCK_DELETE_COMPLETE  }); 
-	}); 
-});
-
-describe('AddGroupsAction', () => { 
-	it('should create an action', () => { 
-		const payload = "groupstring";
-		const action = new AddGroupsAction(payload); 
-		expect({ ...action }).toEqual({ type: ADD_GROUPS,  payload }); 
-	}); 
-});
-
-describe('UpdateSelectedAction', () => { 
-	it('should create an action', () => { 
-		const payload = [{id:1}]; 
-		const action = new UpdateSelectedAction(payload); 
-		expect({ ...action }).toEqual({ type: SELECTED_UPDATE,  payload }); 
-	}); 
-});
-
-
-describe('UpdateSelectedDatablocksAction', () => { 
-	it('should create an action', () => { 
-		const payload = [{id:1}]; 
-		const action = new UpdateSelectedDatablocksAction(payload); 
-		expect({ ...action }).toEqual({ type: SELECTED_DATABLOCKS_COMPLETE,  payload }); 
-	}); 
-});
-
-
 describe('CurrentSetAction', () => { 
 	it('should create an action', () => { 
 		const payload = new Dataset();
@@ -137,15 +76,6 @@ describe('CurrentSetAction', () => {
 		expect({ ...action }).toEqual({ type: SELECT_CURRENT,  payload }); 
 	}); 
 });
-
-describe('ResetStatusAction', () => { 
-	it('should create an action', () => { 
-		const payload = [{id:1}]; 
-		const action = new ResetStatusAction(payload); 
-		expect({ ...action }).toEqual({ type: RESET_STATUS,  payload }); 
-	}); 
-});
-
 
 describe('SelectDatasetAction', () => { 
 	it('should create an action', () => { 

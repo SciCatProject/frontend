@@ -94,22 +94,6 @@ export class UserEffects {
       );
 
   @Effect()
-  protected getGroups$: Observable<Action> =
-    this.action$.ofType(DatasetActions.ADD_GROUPS)
-      .debounceTime(300)
-      .map((action: DatasetActions.AddGroupsAction) => action.payload)
-      .switchMap((payload) => {
-        return this.userIdentitySrv.findOne({ 'where': { 'userId': payload } })
-          .switchMap(res => {
-            return Observable.of(new UserActions.AddGroupsCompleteAction(res['profile']['accessGroups']));
-          })
-          .catch(err => {
-            console.error(err);
-            return Observable.of(new UserActions.AddGroupsFailedAction(err));
-          });
-      });
-
-  @Effect()
   protected getEmail$: Observable<Action> =
     this.action$.ofType(UserActions.ACCESS_USER_EMAIL)
       .map((action: UserActions.AccessUserEmailAction) => action.payload)
