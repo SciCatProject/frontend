@@ -24,14 +24,14 @@ export class JobsEffects {
   protected getJob$: Observable<Action> =
     this.action$.ofType(JobActions.SEARCH_ID)
       .debounceTime(300)
-      .map((action: JobActions.SearchIDAction) => action.payload)
-      .switchMap(payload => {
-        const id = payload;
+      .map((action: JobActions.SearchIDAction) => action.id)
+      .switchMap(id => {
+        const idstring = id;
         // TODO separate action for dataBlocks? or retrieve at once?
 
-        return this.jobSrv.findById(encodeURIComponent(id))
-          .switchMap(res => {
-            return Observable.of(new JobActions.SearchIDCompleteAction(res));
+        return this.jobSrv.findById(encodeURIComponent(idstring))
+          .switchMap(jobset => {
+            return Observable.of(new JobActions.SearchIDCompleteAction(jobset));
           })
           .catch(err => {
             console.log(err);
@@ -42,7 +42,7 @@ export class JobsEffects {
   @Effect()
   protected submit$: Observable<Action> =
     this.action$.ofType(JobActions.SUBMIT)
-      .map((action: JobActions.SubmitAction) => action.payload)
+      .map((action: JobActions.SubmitAction) => action.job)
       .switchMap((job) => {
         return this.jobSrv.create(job)
           .switchMap(res => {
@@ -108,16 +108,14 @@ export class JobsEffects {
   protected get_updated_sort$: Observable<Action> =
     this.action$.ofType(JobActions.SORT_UPDATE)
       .debounceTime(300)
-      .map((action: JobActions.SortUpdateAction) => action.payload)
-      .switchMap(payload => {
-        const fq = payload;
+      .switchMap((action: JobActions.SortUpdateAction) => {
         const filter = {};
-        filter['skip'] = fq['skip'] ? fq['skip'] : 0;
-        filter['limit'] = fq['limit'] ? fq['limit'] : 50;
+        filter['skip'] = action.skip;
+        filter['limit'] = action.limit
         filter['order'] = 'creationTime DESC';
         return this.jobSrv.find(filter)
-          .switchMap(res => {
-            return Observable.of(new JobActions.RetrieveCompleteAction(res));
+          .switchMap(jobsets => {
+            return Observable.of(new JobActions.RetrieveCompleteAction(jobsets));
           });
       })
       .catch(err => {

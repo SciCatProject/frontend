@@ -45,35 +45,35 @@ describe('UpdateFilterAction', () => {
 
 describe('SearchIDCompleteAction', () => { 
 	it('should create an action', () => { 
-		const payload = [{id:1}]; 
-		const action = new SearchIDCompleteAction(payload); 
-		expect({ ...action }).toEqual({ type: SEARCH_ID_COMPLETE,  payload }); 
+		const dataset = [{id:1}]; 
+		const action = new SearchIDCompleteAction(dataset); 
+		expect({ ...action }).toEqual({ type: SEARCH_ID_COMPLETE,  dataset }); 
 	}); 
 });
 
 
 describe('DatablocksAction', () => { 
 	it('should create an action', () => { 
-		const payload = "idstring";
-		const action = new DatablocksAction(payload); 
-		expect({ ...action }).toEqual({ type: DATABLOCKS,  payload }); 
+		const id = "idstring";
+		const action = new DatablocksAction(id); 
+		expect({ ...action }).toEqual({ type: DATABLOCKS,  id }); 
 	}); 
 });
 
 describe('DatablocksFailedAction', () => { 
 	it('should create an action', () => { 
-		const payload = [{id:1}]; 
-		const action = new DatablocksFailedAction(payload); 
-		expect({ ...action }).toEqual({ type: DATABLOCKS_FAILED,  payload }); 
+		const error = new Error;
+		const action = new DatablocksFailedAction(error); 
+		expect({ ...action }).toEqual({ type: DATABLOCKS_FAILED,  error }); 
 	}); 
 });
 
 
 describe('CurrentSetAction', () => { 
 	it('should create an action', () => { 
-		const payload = new Dataset();
-		const action = new CurrentSetAction(payload); 
-		expect({ ...action }).toEqual({ type: SELECT_CURRENT,  payload }); 
+		const dataset = new Dataset();
+		const action = new CurrentSetAction(dataset); 
+		expect({ ...action }).toEqual({ type: SELECT_CURRENT,  dataset }); 
 	}); 
 });
 

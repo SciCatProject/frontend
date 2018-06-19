@@ -7,7 +7,7 @@ export interface JobsState {
     totalJobNumber: number;
     ui: any;
     loading: boolean;
-    error: string;
+    error: Error;
 }
 
 export const initialJobsState: JobsState = {

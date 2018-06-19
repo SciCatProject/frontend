@@ -259,7 +259,7 @@ export function datasetsReducer(state: DatasetState = initialDatasetState, actio
         case SELECT_CURRENT:
         case CURRENT_BLOCKS_COMPLETE:
         case SEARCH_ID_COMPLETE: {
-            const currentSet = <Dataset>action['payload'];
+            const currentSet = <Dataset>action['dataset'];
             return {...state, currentSet};
         }
 

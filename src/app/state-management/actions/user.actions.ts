@@ -1,5 +1,5 @@
 import { Action } from '@ngrx/store';
-import { Message, MessageType, User, AccessGroup } from '../models';
+import { Message, MessageType, User, AccessGroup, Settings } from '../models';
 
 export const LOGIN =                      '[User] Login';
 export const LOGIN_COMPLETE =             '[User] Login Complete';
@@ -27,25 +27,26 @@ export const SHOW_MESSAGE =               '[User] Message Show';
 export const CLEAR_MESSAGE =              '[User] Message Clear';
 export const SAVE_SETTINGS =              '[User] Settings Save';
 
+
 export class LoginAction implements Action {
     readonly type = LOGIN;
-    constructor(public payload: {username: string, password: string, rememberMe: boolean}) {}
+    constructor(public form: {username: string, password: string, rememberMe: boolean}) {}
 }
 
 export class ActiveDirLoginAction implements Action {
     readonly type = AD_LOGIN;
-    constructor(public payload: any) {}
+    constructor(public form: {username:string, password:string, rememberMe:boolean}) {}
 }
 
 
 export class LoginCompleteAction implements Action {
     readonly type = LOGIN_COMPLETE;
-    constructor(public payload: any) {}
+    constructor(public user: User) {}
 }
 
 export class LoginFailedAction implements Action {
     readonly type = LOGIN_FAILED;
-    constructor(public payload?: any) {}
+    constructor(readonly message: string, readonly errSrc: string ) {}
 }
 
 export class LogoutAction implements Action {
@@ -62,32 +63,32 @@ export class RetrieveUserAction implements Action {
 
 export class RetrieveUserCompleteAction implements Action {
     readonly type = RETRIEVE_USER_COMPLETE;
-    constructor(public payload?: any) {}
+    constructor(readonly user: User) {}
 }
 
 export class RetrieveUserFailedAction implements Action {
     readonly type = RETRIEVE_USER_FAILED;
-    constructor(public payload?: any) {}
+    constructor(readonly error: Error) {}
 }
 
 export class AccessUserEmailAction implements Action {
     readonly type = ACCESS_USER_EMAIL;
-    constructor(public payload: string) {}
+    constructor(readonly userId: string) {}
 }
 
 export class AccessUserEmailCompleteAction implements Action {
     readonly type = ACCESS_USER_EMAIL_COMPLETE;
-    constructor(public payload: string) {}
+    constructor(readonly email: string) {}
 }
 
 export class AccessUserEmailFailedAction implements Action {
     readonly type = ACCESS_USER_EMAIL_FAILED;
-    constructor(public payload?: {}) {}
+    constructor(readonly error: Error) {}
 }
 
 export class ShowMessageAction implements Action {
     readonly type = SHOW_MESSAGE;
-    constructor(public payload: Message) {}
+    constructor(readonly message: Message) {}
 }
 
 export class ClearMessageAction implements Action {
@@ -96,7 +97,7 @@ export class ClearMessageAction implements Action {
 
 export class SaveSettingsAction implements Action {
     readonly type = SAVE_SETTINGS;
-    constructor(public payload: {}) {}
+    constructor(readonly values: Settings) {}
 }
 
 export type Actions =

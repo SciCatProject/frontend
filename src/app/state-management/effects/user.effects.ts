@@ -17,6 +17,7 @@ import { AppState } from 'state-management/state/app.store';
 import { ADAuthService } from 'users/adauth.service';
 import { Router } from '@angular/router';
 import { tap } from 'rxjs/operators';
+import { User } from '../models';
 
 @Injectable()
 export class UserEffects {
@@ -25,7 +26,7 @@ export class UserEffects {
   protected loginActiveDirectory$: Observable<Action> =
     this.action$.ofType(UserActions.AD_LOGIN)
       .debounceTime(300)
-      .map((action: UserActions.ActiveDirLoginAction) => action.payload)
+      .map((action: UserActions.ActiveDirLoginAction) => action.form)
       .switchMap((form) => {
         return this.activeDirSrv.login(form['username'], form['password'])
           .switchMap(result => {
@@ -35,7 +36,7 @@ export class UserEffects {
             // result['user'] = self.loginForm.get('username').value;
             this.authSrv.setToken(res);
             return this.userSrv.getCurrent().switchMap(
-              user => {
+              (user) => {
                 this.authSrv.setUser(user);
                 res['user'] = user;
                 return Observable.of(new UserActions.LoginCompleteAction(res));
@@ -43,8 +44,7 @@ export class UserEffects {
 
           })
           .catch(err => {
-            const error = { 'message': err.json(), 'errSrc': 'AD' };
-            return Observable.of(new UserActions.LoginFailedAction(error));
+            return Observable.of(new UserActions.LoginFailedAction(err.json(), 'AD'));
           });
       });
 
@@ -52,19 +52,18 @@ export class UserEffects {
   protected login$: Observable<Action> =
     this.action$.ofType(UserActions.LOGIN)
       .debounceTime(300)
-      .map((action: UserActions.LoginAction) => action.payload)
+      .map((action: UserActions.LoginAction) => action.form)
       .switchMap((form) => {
         return this.userSrv.login(form)
           .switchMap(res => {
-            res['user']['accountType'] = 'functional';
-            console.log(res);
-            return Observable.of(new UserActions.LoginCompleteAction(res));
+            const user: User = res['user'];
+            const isFunctional = res['accountType'] === 'functional';
+            return Observable.of(new UserActions.LoginCompleteAction(user));
           })
           .catch(err => {
             console.log(err);
             if (typeof (err) === 'string') {
-              const error = { 'message': err, 'errSrc': 'AD' };
-              return Observable.of(new UserActions.LoginFailedAction(error));
+              return Observable.of(new UserActions.LoginFailedAction(err, 'AD'));
             } else {
               err['errSrc'] = 'functional';
               return Observable.of(new UserActions.ActiveDirLoginAction(form));
@@ -96,9 +95,9 @@ export class UserEffects {
   @Effect()
   protected getEmail$: Observable<Action> =
     this.action$.ofType(UserActions.ACCESS_USER_EMAIL)
-      .map((action: UserActions.AccessUserEmailAction) => action.payload)
-      .switchMap((payload) => {
-        return this.userIdentitySrv.findOne({ 'where': { 'userId': payload } })
+      .map((action: UserActions.AccessUserEmailAction) => action.userId)
+      .switchMap((userId) => {
+        return this.userIdentitySrv.findOne({ 'where': { 'userId': userId } })
           .switchMap(res => {
             return Observable.of(new UserActions.AccessUserEmailCompleteAction(res['profile']['email']));
           })
