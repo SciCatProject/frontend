@@ -12,7 +12,8 @@ import {
     ACCESS_USER_EMAIL_COMPLETE,
     AD_LOGIN_COMPLETE,
     LOGOUT_COMPLETE,
-    ADD_GROUPS_COMPLETE
+    ADD_GROUPS_COMPLETE,
+    LoginCompleteAction
 } from 'state-management/actions/user.actions';
 
 export function userReducer(state = initialUserState, action: Action): UserState {
@@ -28,7 +29,7 @@ export function userReducer(state = initialUserState, action: Action): UserState
         }
 
         case LOGIN_COMPLETE: {
-            const currentUser = action['payload']['username'];
+            const currentUser = (action as LoginCompleteAction).user;
             return {...state, currentUser, loading: false};
         }
 

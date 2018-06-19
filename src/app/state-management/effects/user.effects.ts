@@ -17,6 +17,7 @@ import { AppState } from 'state-management/state/app.store';
 import { ADAuthService } from 'users/adauth.service';
 import { Router } from '@angular/router';
 import { tap } from 'rxjs/operators';
+import { User } from '../models';
 
 @Injectable()
 export class UserEffects {
@@ -55,9 +56,9 @@ export class UserEffects {
       .switchMap((form) => {
         return this.userSrv.login(form)
           .switchMap(res => {
-            res['user']['accountType'] = 'functional';
-            console.log(res);
-            return Observable.of(new UserActions.LoginCompleteAction(res));
+            const user: User = res['user'];
+            const isFunctional = res['accountType'] === 'functional';
+            return Observable.of(new UserActions.LoginCompleteAction(user));
           })
           .catch(err => {
             console.log(err);

@@ -42,9 +42,9 @@ describe('ActiveDirLoginAction', () => {
 
 describe('LoginCompleteAction', () => { 
 	it('should create an action', () => { 
-		const payload = {username: new User, id:'', rememberMe:true}; 
-		const action = new LoginCompleteAction(payload); 
-		expect({ ...action }).toEqual({ type: LOGIN_COMPLETE,  payload }); 
+		const user: User = new User({username: '', email: ''});
+		const action = new LoginCompleteAction(user); 
+		expect({ ...action }).toEqual({ type: LOGIN_COMPLETE, user }); 
 	}); 
 });
 

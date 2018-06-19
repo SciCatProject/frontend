@@ -4,7 +4,7 @@ import * as userActions from '../actions/user.actions';
 import { User, MessageType, Message, Settings, AccessGroup } from '../models';
 import { initialDatasetState } from '../state/datasets.store';
 
-describe('DatasetsReducer', () => {
+describe('UserReducer', () => {
 
     it('should set currentUser', () => {
         const user: User = {
@@ -21,28 +21,23 @@ describe('DatasetsReducer', () => {
         const action = new userActions.RetrieveUserCompleteAction(user);
         const state = userReducer(initialUserState, action);
         expect(state.currentUser).toEqual(user);
-    })
+    });
     
     it('should set loading to false after login complete', () => {
-        const user = {
-            username: new User,
-            id: '',
-            rememberMe: true,
+        const user: User = {
+            "realm": '',
+            "username": '',
+            "email": '',
+            "emailVerified": true,
+            "id": '',
+            "password": '',
+            accessTokens: [],
+            identities: [],
+            credentials: []
         };
         const action = new userActions.LoginCompleteAction(user);
         const state = userReducer(initialUserState, action);
         expect(state.loading).toEqual(false);
-    })
-
-    it('should set currentUser', () => {
-        const user= {
-            username: new User,
-            id: '',
-            rememberMe: true,
-        };
-        const action = new userActions.LoginCompleteAction(user);
-        const state = userReducer(initialUserState, action);
-        expect(state.currentUser).toEqual(user.username);
     })
 
     it('should set email', () => {
@@ -89,7 +84,7 @@ describe('DatasetsReducer', () => {
         expect(state.settings).toEqual(setting);
     })
 
-    it('should set loading to false after login complete', () => {
+    it('should set loading to true after login', () => {
         const info = {
             username: '',
             password: '',
