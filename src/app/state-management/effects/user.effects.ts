@@ -16,7 +16,8 @@ import * as UserActions from 'state-management/actions/user.actions';
 import { AppState } from 'state-management/state/app.store';
 import { ADAuthService } from 'users/adauth.service';
 import { Router } from '@angular/router';
-import { tap } from 'rxjs/operators';
+import { tap, map, switchMap, filter } from 'rxjs/operators';
+import { MessageType } from '../models';
 
 @Injectable()
 export class UserEffects {
@@ -74,24 +75,29 @@ export class UserEffects {
       });
 
   @Effect()
-  protected logout$: Observable<Action> =
-    this.action$.ofType(UserActions.LOGOUT)
-      .debounceTime(300)
-      .switchMap((payload) => {
-        if (this.userSrv.isAuthenticated()) {
-          return this.userSrv.logout().switchMap(res => {
-            return Observable.of(new UserActions.LogoutCompleteAction());
-          });
-        } else {
-          return Observable.of(new UserActions.LogoutCompleteAction());
-        }
-      });
+  protected loginFailed$ = this.action$.pipe(
+    ofType(UserActions.LOGIN_FAILED),
+    map((action: UserActions.LoginFailedAction) =>
+      new UserActions.ShowMessageAction({
+        content: JSON.stringify(action.payload),
+        type: MessageType.Error
+      })
+    )
+  );
 
-      @Effect({ dispatch: false })
-      navigate$ = this.action$.pipe(
-        ofType(UserActions.LOGOUT_COMPLETE),
-        tap(() => this.router.navigate(['/login']))
-      );
+  @Effect()
+  protected $logout = this.action$.pipe(
+    ofType(UserActions.LOGOUT),
+    filter(() => this.userSrv.isAuthenticated()),
+    switchMap(() => this.userSrv.logout()),
+    map(() => new UserActions.LogoutCompleteAction()),
+  );
+
+  @Effect({ dispatch: false })
+  protected navigate$ = this.action$.pipe(
+    ofType(UserActions.LOGOUT_COMPLETE),
+    tap(() => this.router.navigate(['/login']))
+  );
 
   @Effect()
   protected getEmail$: Observable<Action> =
