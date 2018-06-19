@@ -10,7 +10,7 @@ export const getCurrentUser = createSelector(
 
 export const getIsLoggedIn = createSelector(
     getCurrentUser,
-    user => user !== null
+    user => user != null
 );
 
 const getCurrentUserName = createSelector(
@@ -31,9 +31,9 @@ export const getIsAdmin = createSelector(
         type && type === 'functional'
 )
 
-export const getIsLoading = createSelector(
+export const getIsLoggingIn = createSelector(
     getUserState,
-    state => state.loading
+    state => state.isLoggingIn
 );
 
 export const getState = (state: any) => state.root.user;

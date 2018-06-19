@@ -8,7 +8,7 @@ import { Message, MessageType } from 'state-management/models';
 import { getCurrentUser } from 'state-management/reducers/user.reducer';
 import { Subscription } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
-import { getIsLoading, getIsLoggedIn } from 'state-management/selectors/users.selectors';
+import { getIsLoggedIn, getIsLoggingIn } from 'state-management/selectors/users.selectors';
 
 interface LoginForm {
   username: string;
@@ -34,7 +34,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     rememberMe: true
   });
 
-  private loading$ = this.store.pipe(select(getIsLoading));
+  private loading$ = this.store.pipe(select(getIsLoggingIn));
   private hasUser$ = this.store.pipe(select(getIsLoggedIn), filter(is => is));
   
   private proceedSubscription: Subscription = null;
@@ -77,10 +77,9 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.proceedSubscription = this.hasUser$.subscribe(u => {
-      alert('Navigating! ' + JSON.stringify(u));
-      this.router.navigate(['datasets']);
-    });
+    this.proceedSubscription = this.hasUser$.subscribe(() =>
+      this.router.navigate(['datasets'])
+    );
   }
 
   ngOnDestroy() {
