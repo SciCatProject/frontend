@@ -71,7 +71,7 @@ describe('DatasetsReducer', () => {
         expect(state.message).toEqual(message);
     })
 
-    it('should set message', () => {
+    it('should clear message', () => {
         const action = new userActions.ClearMessageAction();
         const state = userReducer(initialUserState, action);
         expect(state.message).toEqual(initialUserState.message);

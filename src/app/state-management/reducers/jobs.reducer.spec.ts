@@ -38,7 +38,7 @@ describe('DatasetsReducer', () => {
         const error = new Error;
         const action = new jobsActions.FailedAction(error);
         const state = jobsReducer(initialJobsState, action);
-        expect(state.error).toEqual(error.toString());
+        expect(state.error).toEqual(error);
     })
 
     it('should set loading to false after sort retrieve complete', () => {

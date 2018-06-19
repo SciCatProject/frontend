@@ -11,6 +11,7 @@ import {
     CHILD_RETRIEVE_COMPLETE,
     SELECT_CURRENT,
     SEARCH_ID_COMPLETE,
+    SortUpdateAction,
 } from 'state-management/actions/jobs.actions';
 
 export function jobsReducer(state = initialJobsState, action: Action): JobsState {
@@ -21,8 +22,8 @@ export function jobsReducer(state = initialJobsState, action: Action): JobsState
 
     switch (action.type) {
         case SORT_UPDATE: {
-            const filters = action['payload'];
-
+            const {skip, limit} = action as SortUpdateAction;
+            const filters = {skip, limit};
             // TODO: There is no field in the store called selectedSets
             return {...state, filters, loading: true/*, selectedSets: [] */};
         }
@@ -40,12 +41,12 @@ export function jobsReducer(state = initialJobsState, action: Action): JobsState
         }
 
         case FAILED: {
-            const error = action['payload'];
+            const error = action['error'];
             return {...state, error, jobSubmission: []};
         }
 
         case RETRIEVE_COMPLETE: {
-            const currentJobs = action['payload'];
+            const currentJobs = action['jobsets'];
             return {...state, loading: false, currentJobs};
         }
 

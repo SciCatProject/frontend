@@ -73,7 +73,7 @@ export class CurrentJobAction implements Action {
     constructor(readonly job: Job) {}
 }
 
-export class SortUpdateAction implements Action { //Vad är fq?
+export class SortUpdateAction implements Action {
     readonly type = SORT_UPDATE;
     constructor(readonly skip: number, readonly limit: number) {}
 }

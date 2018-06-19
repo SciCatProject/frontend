@@ -1,4 +1,4 @@
-import { Message, MessageType, User, AccessGroup } from '../models';
+import { Message, MessageType, User, AccessGroup, Settings } from '../models';
 import {LoginAction, LOGIN } from './user.actions'; 
 import {ActiveDirLoginAction, AD_LOGIN } from './user.actions'; 
 import {AD_LOGIN_COMPLETE } from './user.actions'; 
@@ -149,7 +149,12 @@ describe('ClearMessageAction', () => {
 
 describe('SaveSettingsAction', () => { 
 	it('should create an action', () => { 
-		const values = [{id:1}]; 
+		const values: Settings ={
+            tapeCopies: '',
+            datasetCount: 0,
+            jobCount: 0,
+            darkTheme: false
+          };
 		const action = new SaveSettingsAction(values); 
 		expect({ ...action }).toEqual({ type: SAVE_SETTINGS,  values }); 
 	}); 

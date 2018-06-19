@@ -23,19 +23,19 @@ export function userReducer(state = initialUserState, action: Action): UserState
     switch (action.type) {
         case RETRIEVE_USER_COMPLETE: {
             // TODO check why susbcription does not receive this
-            const currentUser = action['payload'];
+            const currentUser = action['user'];
             return {...state, currentUser};
         }
 
         case LOGIN_COMPLETE: {
-            const currentUser = action['payload']['user'];
+            const currentUser = action['payload']['username'];
             return {...state, currentUser, loading: false};
         }
 
         case ACCESS_USER_EMAIL_COMPLETE: {
             // const c = state.currentUser;
             // c['email'] = action['payload'];
-            return {...state, email: action['payload']};
+            return {...state, email: action['email']};
         }
 
         case LOGIN_FAILED: {
@@ -44,7 +44,7 @@ export function userReducer(state = initialUserState, action: Action): UserState
         }
 
         case SHOW_MESSAGE: {
-            const message = action['payload'];
+            const message = action['message'];
             return {...state, message};
         }
 
@@ -53,7 +53,7 @@ export function userReducer(state = initialUserState, action: Action): UserState
         }
 
         case SAVE_SETTINGS: {
-            const settings = action['payload'];
+            const settings = action['values'];
             return {...state, settings};
         }
 
