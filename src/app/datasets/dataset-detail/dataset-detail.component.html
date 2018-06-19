@@ -9,35 +9,37 @@
 
 <mat-tab-group *ngIf="(dataset$ | async) as dataset">
   <mat-tab label="Details">
-      <config-form [source]="dataset" [sourceType]="'Dataset'"></config-form>
+    <config-form [source]="dataset" [sourceType]="'Dataset'"></config-form>
   </mat-tab>
+  
   <mat-tab label="Datafiles">
     <datafiles [dataBlocks]="origDatablocks$ | async"></datafiles>
-    <div *ngIf="origDatablocks$.length === 0">
+    <div *ngIf="(origDatablocks$ | async).length === 0">
       <h3>No datafiles linked to this dataset</h3>
     </div>
-
     <app-file-picker></app-file-picker>
-
   </mat-tab>
-  <mat-tab *ngIf="(dAttachment$ | async) as attachments" label="DatasetAttachments">
-      <h3>DatasetAttachments</h3>
-      <ng-container *ngFor="let da of attachments">
-        <img src="{{da.thumbnail}}">
-      </ng-container>
+  
+  <mat-tab *ngIf="(attachments$ | async) as attachments" label="Attachments">
+    <h3>Attachments</h3>
+    <ng-container *ngFor="let da of attachments">
+      <img src="{{da.thumbnail}}">
+    </ng-container>
   </mat-tab>
-  <mat-tab label="Admin" *ngIf="(admin$ | async) as admin">
+  
+  <mat-tab label="Admin" *ngIf="isAdmin$ | async">
     <button (click)="resetDataset(dataset)" class="ui yellow button">Reset Status</button>
     <ng-container *ngIf="(datablocks$ | async) as datablocks">
       <h3>Datablocks: {{datablocks.length}}</h3>
       <ul *ngFor="let block of datablocks">
         <li>{{block.id}}</li>
-          <ul>
-              <li>{{block.archiveId}}</li>
-          </ul>
+        <ul>
+          <li>{{block.archiveId}}</li>
+        </ul>
       </ul>
     </ng-container>
   </mat-tab>
+  
   <mat-tab disabled>
     <ng-template mat-tab-label>
       <button mat-button class="export-btn" (click)="onExportClick()">Export to CSV</button>
