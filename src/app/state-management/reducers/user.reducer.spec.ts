@@ -23,7 +23,7 @@ describe('DatasetsReducer', () => {
         expect(state.currentUser).toEqual(user);
     })
 
-    it('should set loading to false after login complete', () => {
+    it('should set isLoggingIn to false after login complete', () => {
         const user: User = {
             "realm": '',
             "username": '',
@@ -37,7 +37,7 @@ describe('DatasetsReducer', () => {
         };
         const action = new userActions.LoginCompleteAction(user);
         const state = userReducer(initialUserState, action);
-        expect(state.loading).toEqual(false);
+        expect(state.isLoggingIn).toEqual(false);
     })
 
     it('should set currentUser', () => {
@@ -64,10 +64,10 @@ describe('DatasetsReducer', () => {
         expect(state.email).toEqual(email);
     })
 
-    it('should set loading to false after login failed complete', () => {
+    it('should set isLoggingIn to false after login failed complete', () => {
         const action = new userActions.LoginFailedAction();
         const state = userReducer(initialUserState, action);
-        expect(state.loading).toEqual(false);
+        expect(state.isLoggingIn).toEqual(false);
     })
     
     it('should set message', () => {
@@ -99,7 +99,7 @@ describe('DatasetsReducer', () => {
         expect(state.settings).toEqual(setting);
     })
 
-    it('should set loading to false after login complete', () => {
+    it('should set isLoggingIn to false after login complete', () => {
         const info = {
             username: '',
             password: '',
@@ -107,6 +107,6 @@ describe('DatasetsReducer', () => {
         }
         const action = new userActions.LoginAction(info);
         const state = userReducer(initialUserState, action);
-        expect(state.loading).toEqual(true);
+        expect(state.isLoggingIn).toEqual(true);
     })
 })
