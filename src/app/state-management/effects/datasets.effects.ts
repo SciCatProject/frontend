@@ -113,9 +113,9 @@ export class DatasetEffects {
   protected getDatablocks$: Observable<Action> =
     this.actions$.ofType(DatasetActions.DATABLOCKS)
       .debounceTime(300)
-      .map((action: DatasetActions.DatablocksAction) => action.payload)
-      .switchMap(payload => {
-        const id = payload;
+      .map((action: DatasetActions.DatablocksAction) => action.id)
+      .switchMap(id => {
+        const idstring = id;
 
         const blockFilter = {
           include: [
@@ -129,9 +129,9 @@ export class DatasetEffects {
         // TODO separate action for dataBlocks? or retrieve at once?
 
         return this.datasetApi.findById(encodeURIComponent(id), blockFilter)
-          .switchMap(res => {
+          .switchMap(dataset => {
             //console.log(res);
-            return Observable.of(new DatasetActions.SearchIDCompleteAction(res));
+            return Observable.of(new DatasetActions.SearchIDCompleteAction(dataset));
           })
           .catch(err => {
             return Observable.of(new DatasetActions.DatablocksFailedAction(err));

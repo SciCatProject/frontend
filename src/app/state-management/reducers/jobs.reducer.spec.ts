@@ -8,14 +8,14 @@ describe('DatasetsReducer', () => {
 
     it('should set loading to true after sort update complete', () => {
         const filter = {'skip': 0, 'limit': 50}
-        const action = new jobsActions.SortUpdateAction(filter);
+        const action = new jobsActions.SortUpdateAction(filter.skip, filter.limit);
         const state = jobsReducer(initialJobsState, action);
         expect(state.loading).toEqual(true);
     })
 
     it('should set filters', () => {
         const filter = {'skip': 0, 'limit': 50}
-        const action = new jobsActions.SortUpdateAction(filter);
+        const action = new jobsActions.SortUpdateAction(filter.skip, filter.limit);
         const state = jobsReducer(initialJobsState, action);
         expect(state.filters).toEqual(filter);
     })
@@ -28,20 +28,23 @@ describe('DatasetsReducer', () => {
     })
 
     it('should set jobSubmission to an empty array', () => {
-        const action = new jobsActions.SubmitCompleteAction();
+        const job = new Job()
+        const action = new jobsActions.SubmitCompleteAction(job);
         const state = jobsReducer(initialJobsState, action);
         expect(state.jobSubmission.length).toEqual(0);
     })
 
     it('should set error', () => {
-        const error = '1';
+        const error = new Error;
         const action = new jobsActions.FailedAction(error);
         const state = jobsReducer(initialJobsState, action);
-        expect(state.error).toEqual(error);
+        expect(state.error).toEqual(error.toString());
     })
 
     it('should set loading to false after sort retrieve complete', () => {
-        const action = new jobsActions.RetrieveCompleteAction();
+        const jobset = {};
+        const jobsets = [jobset]
+        const action = new jobsActions.RetrieveCompleteAction(jobsets);
         const state = jobsReducer(initialJobsState, action);
         expect(state.loading).toEqual(false);
     })

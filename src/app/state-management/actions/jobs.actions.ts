@@ -25,57 +25,57 @@ export const SORT_UPDATE_COMPLETE =    '[Jobs] Sort Update Complete';
 
 export class SubmitAction implements Action {
     readonly type = SUBMIT;
-    constructor(public payload?: any) {}
+    constructor(readonly job: Job) {}
 }
 
 export class SubmitCompleteAction implements Action {
     readonly type = SUBMIT_COMPLETE;
-    constructor(public payload?: any) {}
+    constructor(readonly job: Job) {}
 }
 
 export class FailedAction implements Action {
     readonly type = FAILED;
-    constructor(public payload?: any) {}
+    constructor(readonly error: Error) {}
 }
 
 export class RetrieveCompleteAction implements Action {
     readonly type = RETRIEVE_COMPLETE;
-    constructor(public payload?: any) {}
+    constructor(readonly jobsets: {}[]) {}
 }
 
-export class ChildRetrieveAction implements Action {
+export class ChildRetrieveAction implements Action { //Vad innebär event.node?
     readonly type = CHILD_RETRIEVE;
     constructor(public payload?: any) {}
 }
 
-export class ChildRetrieveCompleteAction implements Action {
+export class ChildRetrieveCompleteAction implements Action { //Vad innebär node.children?
     readonly type = CHILD_RETRIEVE_COMPLETE;
     constructor(public payload?: any) {}
 }
 
 export class SearchIDAction implements Action {
     readonly type = SEARCH_ID;
-    constructor(public payload: string) {}
+    constructor(readonly id: string) {}
 }
 
 export class SearchIDCompleteAction implements Action {
     readonly type = SEARCH_ID_COMPLETE;
-    constructor(public payload: {}) {}
+    constructor(readonly jobset: {}) {}
 }
 
 export class SearchIDFailedAction implements Action {
     readonly type = SEARCH_ID_FAILED;
-    constructor(public payload: any) {}
+    constructor(readonly error: Error) {}
 }
 
 export class CurrentJobAction implements Action {
     readonly type = SELECT_CURRENT;
-    constructor(public payload: Job) {}
+    constructor(readonly job: Job) {}
 }
 
-export class SortUpdateAction implements Action {
+export class SortUpdateAction implements Action { //Vad är fq?
     readonly type = SORT_UPDATE;
-    constructor(public payload: any) {}
+    constructor(readonly skip: number, readonly limit: number) {}
 }
 
 

@@ -22,18 +22,12 @@ describe('DatasetsReducer', () => {
         const state = userReducer(initialUserState, action);
         expect(state.currentUser).toEqual(user);
     })
-
+    
     it('should set loading to false after login complete', () => {
-        const user: User = {
-            "realm": '',
-            "username": '',
-            "email": '',
-            "emailVerified": true,
-            "id": '',
-            "password": '',
-            accessTokens: [],
-            identities: [],
-            credentials: []
+        const user = {
+            username: new User,
+            id: '',
+            rememberMe: true,
         };
         const action = new userActions.LoginCompleteAction(user);
         const state = userReducer(initialUserState, action);
@@ -41,20 +35,14 @@ describe('DatasetsReducer', () => {
     })
 
     it('should set currentUser', () => {
-        const user: User = {
-            "realm": '',
-            "username": '',
-            "email": '',
-            "emailVerified": true,
-            "id": '',
-            "password": '',
-            accessTokens: [],
-            identities: [],
-            credentials: []
+        const user= {
+            username: new User,
+            id: '',
+            rememberMe: true,
         };
-        const action = new userActions.LoginCompleteAction({user: user});
+        const action = new userActions.LoginCompleteAction(user);
         const state = userReducer(initialUserState, action);
-        expect(state.currentUser).toEqual(user);
+        expect(state.currentUser).toEqual(user.username);
     })
 
     it('should set email', () => {
@@ -65,7 +53,9 @@ describe('DatasetsReducer', () => {
     })
 
     it('should set loading to false after login failed complete', () => {
-        const action = new userActions.LoginFailedAction();
+        const message ='';
+        const errSrc = '';
+        const action = new userActions.LoginFailedAction(message, errSrc);
         const state = userReducer(initialUserState, action);
         expect(state.loading).toEqual(false);
     })

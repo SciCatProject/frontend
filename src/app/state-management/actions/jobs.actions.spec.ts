@@ -19,35 +19,35 @@ import {SORT_VALUE_UPDATE } from './jobs.actions';
 
 describe('SubmitAction', () => { 
 	it('should create an action', () => { 
-		const payload = [{id:1}]; 
-		const action = new SubmitAction(payload); 
-		expect({ ...action }).toEqual({ type: SUBMIT,  payload }); 
+		const job = new Job();
+		const action = new SubmitAction(job); 
+		expect({ ...action }).toEqual({ type: SUBMIT,  job }); 
 	}); 
 });
 
 describe('SubmitCompleteAction', () => { 
 	it('should create an action', () => { 
-		const payload = [{id:1}]; 
-		const action = new SubmitCompleteAction(payload); 
-		expect({ ...action }).toEqual({ type: SUBMIT_COMPLETE,  payload }); 
+		const job = new Job();
+		const action = new SubmitCompleteAction(job); 
+		expect({ ...action }).toEqual({ type: SUBMIT_COMPLETE,  job }); 
 	}); 
 });
 
 
 describe('FailedAction', () => { 
 	it('should create an action', () => { 
-		const payload = [{id:1}]; 
-		const action = new FailedAction(payload); 
-		expect({ ...action }).toEqual({ type: FAILED,  payload }); 
+		const error = new Error; 
+		const action = new FailedAction(error); 
+		expect({ ...action }).toEqual({ type: FAILED,  error }); 
 	}); 
 });
 
 
 describe('RetrieveCompleteAction', () => { 
 	it('should create an action', () => { 
-		const payload = [{id:1}]; 
-		const action = new RetrieveCompleteAction(payload); 
-		expect({ ...action }).toEqual({ type: RETRIEVE_COMPLETE,  payload }); 
+		const jobsets = [{id:1}]; 
+		const action = new RetrieveCompleteAction(jobsets); 
+		expect({ ...action }).toEqual({ type: RETRIEVE_COMPLETE,  jobsets }); 
 	}); 
 });
 
@@ -72,45 +72,46 @@ describe('ChildRetrieveCompleteAction', () => {
 
 describe('SearchIDAction', () => { 
 	it('should create an action', () => { 
-		const payload = "expectedstring";
-		const action = new SearchIDAction(payload); 
-		expect({ ...action }).toEqual({ type: SEARCH_ID,  payload }); 
+		const id = "expectedstring";
+		const action = new SearchIDAction(id); 
+		expect({ ...action }).toEqual({ type: SEARCH_ID,  id }); 
 	}); 
 });
 
 
 describe('SearchIDCompleteAction', () => { 
 	it('should create an action', () => { 
-		const payload = [{id:1}]; 
-		const action = new SearchIDCompleteAction(payload); 
-		expect({ ...action }).toEqual({ type: SEARCH_ID_COMPLETE,  payload }); 
+		const jobset = [{id:1}]; 
+		const action = new SearchIDCompleteAction(jobset); 
+		expect({ ...action }).toEqual({ type: SEARCH_ID_COMPLETE,  jobset }); 
 	}); 
 });
 
 
 describe('SearchIDFailedAction', () => { 
 	it('should create an action', () => { 
-		const payload = [{id:1}]; 
-		const action = new SearchIDFailedAction(payload); 
-		expect({ ...action }).toEqual({ type: SEARCH_ID_FAILED,  payload }); 
+		const error = new Error; 
+		const action = new SearchIDFailedAction(error); 
+		expect({ ...action }).toEqual({ type: SEARCH_ID_FAILED,  error }); 
 	}); 
 });
 
 
 describe('CurrentJobAction', () => { 
 	it('should create an action', () => { 
-		const payload = new Job();
-		const action = new CurrentJobAction(payload); 
-		expect({ ...action }).toEqual({ type: SELECT_CURRENT,  payload }); 
+		const job = new Job();
+		const action = new CurrentJobAction(job); 
+		expect({ ...action }).toEqual({ type: SELECT_CURRENT,  job }); 
 	}); 
 });
 
 
 describe('SortUpdateAction', () => { 
 	it('should create an action', () => { 
-		const payload = [{id:1}]; 
-		const action = new SortUpdateAction(payload); 
-		expect({ ...action }).toEqual({ type: SORT_UPDATE,  payload }); 
+		const limit = 0;
+		const skip = 0;
+		const action = new SortUpdateAction(skip, limit); 
+		expect({ ...action }).toEqual({ type: SORT_UPDATE,  skip, limit }); 
 	}); 
 });
 
