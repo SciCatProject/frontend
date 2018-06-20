@@ -10,7 +10,6 @@ import {RetrieveUserAction, RETRIEVE_USER } from './user.actions';
 import {RetrieveUserCompleteAction, RETRIEVE_USER_COMPLETE } from './user.actions'; 
 import {RetrieveUserFailedAction, RETRIEVE_USER_FAILED } from './user.actions'; 
 import {ADD_GROUPS } from './user.actions'; 
-import {ADD_GROUPS_COMPLETE } from './user.actions'; 
 import {ADD_GROUPS_FAILED } from './user.actions'; 
 import {AccessUserEmailAction, ACCESS_USER_EMAIL } from './user.actions'; 
 import {AccessUserEmailCompleteAction, ACCESS_USER_EMAIL_COMPLETE } from './user.actions'; 

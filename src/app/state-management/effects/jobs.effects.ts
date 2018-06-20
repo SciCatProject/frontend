@@ -12,7 +12,7 @@ import {Observable} from 'rxjs/Observable';
 import * as lb from 'shared/sdk/services';
 import * as JobActions from 'state-management/actions/jobs.actions';
 import * as UserActions from 'state-management/actions/user.actions';
-import { MessageType } from 'state-management/models';
+import { MessageType, Job } from 'state-management/models';
 
 // import store state interface
 
@@ -114,7 +114,7 @@ export class JobsEffects {
         filter['limit'] = action.limit
         filter['order'] = 'creationTime DESC';
         return this.jobSrv.find(filter)
-          .switchMap(jobsets => {
+          .switchMap((jobsets: Job[]) => {
             return Observable.of(new JobActions.RetrieveCompleteAction(jobsets));
           });
       })

@@ -42,7 +42,7 @@ describe('DatasetsReducer', () => {
     })
 
     it('should set loading to false after sort retrieve complete', () => {
-        const jobset = {};
+        const jobset = new Job;
         const jobsets = [jobset]
         const action = new jobsActions.RetrieveCompleteAction(jobsets);
         const state = jobsReducer(initialJobsState, action);
