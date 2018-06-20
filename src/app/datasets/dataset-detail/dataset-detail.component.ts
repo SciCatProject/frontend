@@ -14,6 +14,7 @@ import 'rxjs/add/operator/take';
 import { getIsAdmin } from 'state-management/selectors/users.selectors';
 import { getCurrentDataset, getCurrentDatablocks, getCurrentAttachments, getCurrentOrigDatablocks } from 'state-management/selectors/datasets.selectors';
 import { pluck, map } from 'rxjs/operators';
+import * as filesize from 'filesize';
 
 /**
  * Component to show details for a dataset, using the
@@ -25,7 +26,7 @@ import { pluck, map } from 'rxjs/operators';
 @Component({
   selector: 'dataset-detail',
   templateUrl: './dataset-detail.component.html',
-  styleUrls: ['./dataset-detail.component.css']
+  styleUrls: ['./dataset-detail.component.scss']
 })
 export class DatasetDetailComponent implements OnInit, OnDestroy {  
   private subscriptions: Subscription[] = [];
@@ -77,6 +78,10 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.routeSubscription.unsubscribe();
+  }
+
+  getFilesize(size: number): string {
+    return filesize(size || 0);
   }
 
   onExportClick() {
