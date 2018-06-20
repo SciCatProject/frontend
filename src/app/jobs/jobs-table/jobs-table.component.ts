@@ -3,7 +3,7 @@ import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import {Store} from '@ngrx/store';
 import {Router} from '@angular/router';
 import * as JobActions from 'state-management/actions/jobs.actions';
-import {Http} from '@angular/http';
+import {HttpClient} from '@angular/common/http';
 import {Job} from 'shared/sdk/models';
 import {ConfigService} from 'shared/services/config.service';
 import * as selectors from 'state-management/selectors';
@@ -34,7 +34,7 @@ export class JobsTableComponent implements OnInit, OnDestroy, AfterViewInit {
   displayedColumns = [];
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  constructor(public http: Http,
+  constructor(public http: HttpClient,
               private configSrv: ConfigService, private router: Router,
               private store: Store<any>) {
     this.configSrv.getConfigFile('Job').subscribe(conf => {

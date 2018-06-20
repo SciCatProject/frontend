@@ -1,6 +1,6 @@
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
-import {Http} from '@angular/http';
+import {HttpClient} from '@angular/common/http';
 import {ActivatedRoute, Router} from '@angular/router';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatTableModule, MatDialogModule} from '@angular/material';
@@ -27,7 +27,7 @@ describe('DatasetTablePureComponent', () => {
       imports: [MatTableModule, FormsModule, ReactiveFormsModule],
       declarations: [DatasetTablePureComponent]
     });
-    
+
     TestBed.overrideComponent(DatasetTablePureComponent, {
       set: {
         providers: [

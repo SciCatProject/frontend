@@ -1,5 +1,5 @@
 import { TestBed, inject } from '@angular/core/testing';
-import { Http } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 import { ADAuthService } from './adauth.service';
 
 
@@ -10,7 +10,7 @@ describe('ADAuthService', () => {
     TestBed.configureTestingModule({
       providers: [
         ADAuthService,
-        {provide: Http, useClass: MockHttp}
+        {provide: HttpClient, useClass: MockHttp}
       ]
     });
   });
