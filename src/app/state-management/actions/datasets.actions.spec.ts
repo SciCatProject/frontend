@@ -1,9 +1,7 @@
 import { Dataset, AccessGroup, Datablock } from 'shared/sdk/models';
 
-import {SEARCH_COMPLETE } from './datasets.actions'; 
 import {SEARCH_FAILED } from './datasets.actions'; 
 import {UpdateFilterAction, FILTER_UPDATE } from './datasets.actions'; 
-import {FILTER_UPDATE_COMPLETE } from './datasets.actions'; 
 import {FILTER_FAILED } from './datasets.actions'; 
 import {FILTER_VALUE_UPDATE } from './datasets.actions'; 
 import {SEARCH_ID } from './datasets.actions'; 
@@ -16,10 +14,7 @@ import {DATABLOCK_DELETE } from './datasets.actions';
 import {DATABLOCK_DELETE_COMPLETE } from './datasets.actions'; 
 import {DATABLOCK_DELETE_FAILED } from './datasets.actions'; 
 import {ADD_GROUPS } from './datasets.actions'; 
-import {ADD_GROUPS_COMPLETE } from './datasets.actions'; 
 import {ADD_GROUPS_FAILED } from './datasets.actions'; 
-import {SELECTED_UPDATE } from './datasets.actions'; 
-import {SELECTED_DATABLOCKS_COMPLETE } from './datasets.actions'; 
 import {CurrentSetAction, SELECT_CURRENT } from './datasets.actions'; 
 import {CURRENT_BLOCKS_COMPLETE } from './datasets.actions'; 
 import {RESET_STATUS } from './datasets.actions'; 

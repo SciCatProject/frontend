@@ -40,7 +40,7 @@ export class FailedAction implements Action {
 
 export class RetrieveCompleteAction implements Action {
     readonly type = RETRIEVE_COMPLETE;
-    constructor(readonly jobsets: {}[]) {}
+    constructor(readonly jobsets: Job[]) {}
 }
 
 export class ChildRetrieveAction implements Action { //Vad innebär event.node?
