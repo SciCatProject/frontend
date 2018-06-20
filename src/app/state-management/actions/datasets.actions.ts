@@ -78,29 +78,29 @@ export const PREFILL_FILTERS =              '[Dataset] Prefill Filter';
 export const CLEAR_FACETS =                 '[Dataset] Clear Facets';
 
 
-export class UpdateFilterAction implements Action { 
+export class UpdateFilterAction implements Action { //Inte gjord då den eventuellt ska tas bort
     readonly type = FILTER_UPDATE;
-    constructor(public payload: any) {}
+    constructor(public payload: {}) {}
 }
 
 export class SearchIDCompleteAction implements Action {
     readonly type = SEARCH_ID_COMPLETE;
-    constructor(public payload: {}) {}
+    constructor(readonly dataset: {}) {}
 }
 
 export class DatablocksAction implements Action {
     readonly type = DATABLOCKS;
-    constructor(public payload: string) {}
+    constructor(readonly id: string) {}
 }
 
-export class DatablocksFailedAction implements Action { 
+export class DatablocksFailedAction implements Action {
     readonly type = DATABLOCKS_FAILED;
-    constructor(public payload: any) {}
+    constructor(readonly error: Error) {}
 }
 
 export class CurrentSetAction implements Action {
     readonly type = SELECT_CURRENT;
-    constructor(public payload: Dataset) {}
+    constructor(readonly dataset: Dataset) {}
 }
 
 export class SelectDatasetAction implements Action {

@@ -70,7 +70,7 @@ export class JobsTableComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.store.dispatch(new JobActions.SortUpdateAction(this.filters));
+    this.store.dispatch(new JobActions.SortUpdateAction(this.filters['skip'], this.filters['limit']));
   }
 
   ngOnDestroy() {
@@ -97,7 +97,7 @@ export class JobsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 
   onPage(event) {
     this.filters['skip'] = this.paginator.pageIndex * this.paginator.pageSize;
-    this.store.dispatch(new JobActions.SortUpdateAction(this.filters));
+    this.store.dispatch(new JobActions.SortUpdateAction(this.filters['skip'], this.filters['limit']));
   }
 
 

@@ -1,4 +1,4 @@
-import { Message, MessageType, User, AccessGroup } from '../models';
+import { Message, MessageType, User, AccessGroup, Settings } from '../models';
 import {LoginAction, LOGIN } from './user.actions'; 
 import {ActiveDirLoginAction, AD_LOGIN } from './user.actions'; 
 import {AD_LOGIN_COMPLETE } from './user.actions'; 
@@ -22,38 +22,39 @@ import {SaveSettingsAction, SAVE_SETTINGS } from './user.actions';
 
 describe('LoginAction', () => { 
 	it('should create an action', () => { 
-		const payload ={"username" : "user",
+		const form ={"username" : "user",
 		"password" : "user",
 		"rememberMe" : true};
-		const action = new LoginAction(payload); 
-		expect({ ...action }).toEqual({ type: LOGIN,  payload }); 
+		const action = new LoginAction(form); 
+		expect({ ...action }).toEqual({ type: LOGIN,  form }); 
 	}); 
 });
 
 
 describe('ActiveDirLoginAction', () => { 
 	it('should create an action', () => { 
-		const payload = [{id:1}]; 
-		const action = new ActiveDirLoginAction(payload); 
-		expect({ ...action }).toEqual({ type: AD_LOGIN,  payload }); 
+		const form = {username:'', password:'', rememberMe:true}; 
+		const action = new ActiveDirLoginAction(form); 
+		expect({ ...action }).toEqual({ type: AD_LOGIN,  form }); 
 	}); 
 });
 
 
 describe('LoginCompleteAction', () => { 
 	it('should create an action', () => { 
-		const payload = [{id:1}]; 
-		const action = new LoginCompleteAction(payload); 
-		expect({ ...action }).toEqual({ type: LOGIN_COMPLETE,  payload }); 
+		const user: User = new User({username: '', email: ''});
+		const action = new LoginCompleteAction(user); 
+		expect({ ...action }).toEqual({ type: LOGIN_COMPLETE, user }); 
 	}); 
 });
 
 
 describe('LoginFailedAction', () => { 
 	it('should create an action', () => { 
-		const payload = [{id:1}]; 
-		const action = new LoginFailedAction(payload); 
-		expect({ ...action }).toEqual({ type: LOGIN_FAILED,  payload }); 
+		const message = '';
+		const errSrc = '';
+		const action = new LoginFailedAction(message, errSrc); 
+		expect({ ...action }).toEqual({ type: LOGIN_FAILED,  message, errSrc }); 
 	}); 
 });
 
@@ -87,53 +88,53 @@ describe('RetrieveUserAction', () => {
 
 describe('RetrieveUserCompleteAction', () => { 
 	it('should create an action', () => { 
-		const payload = [{id:1}]; 
-		const action = new RetrieveUserCompleteAction(payload); 
-		expect({ ...action }).toEqual({ type: RETRIEVE_USER_COMPLETE,  payload }); 
+		const user = new User(); 
+		const action = new RetrieveUserCompleteAction(user); 
+		expect({ ...action }).toEqual({ type: RETRIEVE_USER_COMPLETE,  user }); 
 	}); 
 });
 
 
 describe('RetrieveUserFailedAction', () => { 
 	it('should create an action', () => { 
-		const payload = [{id:1}]; 
-		const action = new RetrieveUserFailedAction(payload); 
-		expect({ ...action }).toEqual({ type: RETRIEVE_USER_FAILED,  payload }); 
+		const error = new Error; 
+		const action = new RetrieveUserFailedAction(error); 
+		expect({ ...action }).toEqual({ type: RETRIEVE_USER_FAILED,  error }); 
 	}); 
 });
 
 describe('AccessUserEmailAction', () => { 
 	it('should create an action', () => { 
-		const payload = "emailstring"; 
-		const action = new AccessUserEmailAction(payload); 
-		expect({ ...action }).toEqual({ type: ACCESS_USER_EMAIL,  payload }); 
+		const userId = "emailstring"; 
+		const action = new AccessUserEmailAction(userId); 
+		expect({ ...action }).toEqual({ type: ACCESS_USER_EMAIL,  userId }); 
 	}); 
 });
 
 
 describe('AccessUserEmailCompleteAction', () => { 
 	it('should create an action', () => { 
-		const payload = "emailstring"; 
-		const action = new AccessUserEmailCompleteAction(payload); 
-		expect({ ...action }).toEqual({ type: ACCESS_USER_EMAIL_COMPLETE,  payload }); 
+		const email = "emailstring"; 
+		const action = new AccessUserEmailCompleteAction(email); 
+		expect({ ...action }).toEqual({ type: ACCESS_USER_EMAIL_COMPLETE,  email }); 
 	}); 
 });
 
 
 describe('AccessUserEmailFailedAction', () => { 
 	it('should create an action', () => { 
-		const payload = [{id:1}]; 
-		const action = new AccessUserEmailFailedAction(payload); 
-		expect({ ...action }).toEqual({ type: ACCESS_USER_EMAIL_FAILED,  payload }); 
+		const error = new Error;
+		const action = new AccessUserEmailFailedAction(error); 
+		expect({ ...action }).toEqual({ type: ACCESS_USER_EMAIL_FAILED,  error }); 
 	}); 
 });
 
 
 describe('ShowMessageAction', () => { 
 	it('should create an action', () => { 
-		const payload = new Message(); 
-		const action = new ShowMessageAction(payload); 
-		expect({ ...action }).toEqual({ type: SHOW_MESSAGE,  payload }); 
+		const message = new Message(); 
+		const action = new ShowMessageAction(message); 
+		expect({ ...action }).toEqual({ type: SHOW_MESSAGE,  message }); 
 	}); 
 });
 
@@ -148,8 +149,13 @@ describe('ClearMessageAction', () => {
 
 describe('SaveSettingsAction', () => { 
 	it('should create an action', () => { 
-		const payload = [{id:1}]; 
-		const action = new SaveSettingsAction(payload); 
-		expect({ ...action }).toEqual({ type: SAVE_SETTINGS,  payload }); 
+		const values: Settings ={
+            tapeCopies: '',
+            datasetCount: 0,
+            jobCount: 0,
+            darkTheme: false
+          };
+		const action = new SaveSettingsAction(values); 
+		expect({ ...action }).toEqual({ type: SAVE_SETTINGS,  values }); 
 	}); 
 });
