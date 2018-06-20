@@ -129,7 +129,7 @@ export class DatasetEffects {
         // TODO separate action for dataBlocks? or retrieve at once?
 
         return this.datasetApi.findById(encodeURIComponent(id), blockFilter)
-          .switchMap(dataset => {
+          .switchMap((dataset: Dataset) => {
             //console.log(res);
             return Observable.of(new DatasetActions.SearchIDCompleteAction(dataset));
           })

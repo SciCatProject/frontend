@@ -62,7 +62,7 @@ export function jobsReducer(state = initialJobsState, action: Action): JobsState
 
         // TODO: There is no field in the store called currentSet
         case SEARCH_ID_COMPLETE: {
-            const d = <Job>(action as SearchIDCompleteAction).jobset;
+            const d = (action as SearchIDCompleteAction).jobset;
             return Object.assign({}, state, { currentSet: d, loading: false });
         }
 

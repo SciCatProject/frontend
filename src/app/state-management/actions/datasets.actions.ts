@@ -80,7 +80,7 @@ export class UpdateFilterAction implements Action { //Inte gjord då den eventue
 
 export class SearchIDCompleteAction implements Action {
     readonly type = SEARCH_ID_COMPLETE;
-    constructor(readonly dataset: {}) {}
+    constructor(readonly dataset: Dataset) {}
 }
 
 export class DatablocksAction implements Action {

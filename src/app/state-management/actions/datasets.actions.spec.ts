@@ -40,7 +40,7 @@ describe('UpdateFilterAction', () => {
 
 describe('SearchIDCompleteAction', () => { 
 	it('should create an action', () => { 
-		const dataset = [{id:1}]; 
+		const dataset = new Dataset; 
 		const action = new SearchIDCompleteAction(dataset); 
 		expect({ ...action }).toEqual({ type: SEARCH_ID_COMPLETE,  dataset }); 
 	}); 
