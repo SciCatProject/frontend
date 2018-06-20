@@ -37,7 +37,7 @@ describe('UserReducer', () => {
         };
         const action = new userActions.LoginCompleteAction(user);
         const state = userReducer(initialUserState, action);
-        expect(state.loading).toEqual(false);
+        expect(state.isLoggingIn).toEqual(false);
     })
 
     it('should set email', () => {
@@ -47,12 +47,10 @@ describe('UserReducer', () => {
         expect(state.email).toEqual(email);
     })
 
-    it('should set loading to false after login failed complete', () => {
-        const message ='';
-        const errSrc = '';
-        const action = new userActions.LoginFailedAction(message, errSrc);
+    it('should set isLoggingIn to false after login failed complete', () => {
+        const action = new userActions.LoginFailedAction('', '');
         const state = userReducer(initialUserState, action);
-        expect(state.loading).toEqual(false);
+        expect(state.isLoggingIn).toEqual(false);
     })
     
     it('should set message', () => {
@@ -84,7 +82,7 @@ describe('UserReducer', () => {
         expect(state.settings).toEqual(setting);
     })
 
-    it('should set loading to true after login', () => {
+    it('should set isLoggingIn to false after login complete', () => {
         const info = {
             username: '',
             password: '',
@@ -92,6 +90,6 @@ describe('UserReducer', () => {
         }
         const action = new userActions.LoginAction(info);
         const state = userReducer(initialUserState, action);
-        expect(state.loading).toEqual(true);
+        expect(state.isLoggingIn).toEqual(true);
     })
-})
+});

@@ -1,10 +1,14 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, OnDestroy} from '@angular/core';
 import {FormBuilder, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
-import {Store} from '@ngrx/store';
+import {Store, select} from '@ngrx/store';
 import * as ua from 'state-management/actions/user.actions';
 import * as selectors from 'state-management/selectors';
 import { Message, MessageType } from 'state-management/models';
+import { getCurrentUser } from 'state-management/reducers/user.reducer';
+import { Subscription } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
+import { getIsLoggedIn, getIsLoggingIn } from 'state-management/selectors/users.selectors';
 
 interface LoginForm {
   username: string;
@@ -19,18 +23,21 @@ interface LoginForm {
  * @class LoginComponent
  */
 @Component({selector: 'login-form', templateUrl: './login.component.html'})
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
 
-  returnUrl: string;
-  postError = '';
-
-  loading$;
+  //returnUrl: string;
+  //postError = '';
 
   public loginForm = this.fb.group({
     username: ['', Validators.required],
     password: ['', Validators.required],
     rememberMe: true
   });
+
+  private loading$ = this.store.pipe(select(getIsLoggingIn));
+  private hasUser$ = this.store.pipe(select(getIsLoggedIn), filter(is => is));
+  
+  private proceedSubscription: Subscription = null;
 
   /**
    * Creates an instance of LoginComponent.
@@ -46,9 +53,9 @@ export class LoginComponent implements OnInit {
     private route: ActivatedRoute,
     private store: Store<any>
   ) {
-    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
-    this.loading$ = this.store.select(selectors.users.getLoading);
-    this.store.select(selectors.users.getCurrentUser)
+    //this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+    
+    /*this.store.select(selectors.users.getCurrentUser)
     .subscribe(result => {
       console.log(result);
       if (result && result['username']) {
@@ -56,7 +63,7 @@ export class LoginComponent implements OnInit {
         // self.router.navigateByUrl(decodeURIComponent(self.returnUrl));
       } else if (result && result['errSrc']) {
         const msg = new Message();
-        msg.content = result.message;
+        msg.content = 'Prob: ' + JSON.stringify(result['message']);
         msg.type = MessageType.Error;
         this.store.dispatch(new ua.ShowMessageAction(msg));
       } else if (!(result instanceof Object)) {
@@ -66,9 +73,18 @@ export class LoginComponent implements OnInit {
         this.store.dispatch(new ua.ShowMessageAction(msg));
       }
     });
+    */
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.proceedSubscription = this.hasUser$.subscribe(() =>
+      this.router.navigate(['datasets'])
+    );
+  }
+
+  ngOnDestroy() {
+    this.proceedSubscription.unsubscribe();
+  }
 
   /**
    * Default to an Active directory login attempt initially. Fallback to `local`
