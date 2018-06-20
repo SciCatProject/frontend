@@ -29,9 +29,18 @@ export class UserEffects {
       .switchMap((form) => {
         return this.activeDirSrv.login(form['username'], form['password'])
           .switchMap(result => {
-            const res = result.json();
-            res['rememberMe'] = true;
-            res['id'] = res['access_token'];
+            //const res2 = result;
+            //res2['rememberMe'] = true;
+            //res2['id'] = res['access_token'];
+            const res={
+              'id':result['access_token'],
+              'rememberMe':true,
+              'user':'u1',
+              'scopes':'u1',
+              'created':  null,
+              'userId':  null,
+              'ttl':86400
+            }
             // result['user'] = self.loginForm.get('username').value;
             this.authSrv.setToken(res);
             return this.userSrv.getCurrent().switchMap(

@@ -13,6 +13,12 @@ import { APP_CONFIG, AppConfig } from '../app-config.module';
  * @export
  * @class ADAuthService
  */
+
+export interface access_token {
+  access_token: string;
+}
+
+
 @Injectable()
 export class ADAuthService {
 
@@ -30,11 +36,11 @@ export class ADAuthService {
      * @returns {Observable<Response>}
      * @memberof ADAuthService
      */
-    login(username: string, password: string): Observable<HttpResponse<any>> {
+    login(username: string, password: string): Observable<HttpResponse<access_token>> {
         const creds = 'username=' + username + '&password=' + password;
         const headers = new HttpHeaders();
         const url = LoopBackConfig.getPath() + this.config.externalAuthEndpoint;
         headers.append('Content-Type', 'application/x-www-form-urlencoded');
-        return this.http.post(url, creds, {headers});
+        return this.http.post<access_token>(url, creds,   { observe: 'response' });
     }
 }
