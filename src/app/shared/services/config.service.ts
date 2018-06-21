@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {Http} from '@angular/http';
+import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs/Observable';
 
 
@@ -15,7 +15,7 @@ export class ConfigService {
   url = 'assets/models/';
   // public activeConfig: ReplaySubject<any> = new ReplaySubject(1);
 
-  constructor(private http: Http) {}
+  constructor(private http: HttpClient) {}
   /**
    * return a json file for the matching file
    * or an error if not found
@@ -25,11 +25,11 @@ export class ConfigService {
    */
   getConfigFile(filename): Observable<any> {
     return Observable.create(observer => {
-      this.http.get(this.url + filename + '.json')
+      this.http.get(this.url + filename + '.json', { observe: 'response' })
           .subscribe(
               res => {
                 if (res['status'] === 200) {
-                  observer.next(res.json());
+                  observer.next(res);
                   observer.complete();
                 } else {
                   console.log('not found');
