@@ -26,10 +26,12 @@ import {rootReducer} from 'state-management/reducers/root.reducer';
 import {UsersModule} from 'users/users.module';
 import {ProposalsModule} from 'proposals/proposals.module';
 import {FileHelpersModule} from 'ngx-file-helpers';
+import { SatNativeDateModule, SatDatepickerModule } from 'saturn-datepicker';
+
+
 
 import {FilePickerComponent} from './datasets/file-picker/file-picker.component';
 import {FileDropzoneComponent} from './datasets/file-dropzone/file-dropzone.component';
-import {DateAdapter} from '@angular/material';
 
 
 import {
@@ -39,7 +41,6 @@ import {
   MatCardModule,
   MatCheckboxModule,
   MatChipsModule,
-  MatDatepickerModule,
   MatDialogModule,
   MatExpansionModule,
   MatGridListModule,
@@ -47,6 +48,7 @@ import {
   MatInputModule,
   MatListModule,
   MatMenuModule,
+  MatDatepickerModule,
   MatNativeDateModule,
   MatPaginatorModule,
   MatProgressBarModule,
@@ -94,6 +96,7 @@ export function localStorageSyncWrapper(reducer: any) {
     MatIconModule,
     MatListModule,
     MatMenuModule,
+    MatDatepickerModule,
     MatNativeDateModule,
     MatPaginatorModule,
     MatSidenavModule,
@@ -102,6 +105,8 @@ export function localStorageSyncWrapper(reducer: any) {
     MatToolbarModule,
     NguiDatetimePickerModule,
     ReactiveFormsModule,
+    SatNativeDateModule,
+    SatDatepickerModule,
 
     DatasetsModule,
     UsersModule,
@@ -118,7 +123,9 @@ export function localStorageSyncWrapper(reducer: any) {
     EffectsModule.forRoot([DatasetEffects, UserEffects, JobsEffects]),
     StoreRouterConnectingModule,
   ],
-  exports: [],
+  exports: [
+    MatNativeDateModule,
+  ],
   providers: [
     AuthCheck,
     DatasetService,
