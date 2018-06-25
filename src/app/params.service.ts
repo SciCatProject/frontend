@@ -12,6 +12,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import 'rxjs/add/operator/skip';
 
 import { getViewMode } from 'state-management/selectors/datasets.selectors';
+import { take } from 'rxjs/operators';
 
 @Injectable()
 export class ParamsService {
@@ -48,7 +49,7 @@ export class ParamsService {
     this.store.pipe(select(getViewMode))
       .subscribe(currentMode => {
         if (currentMode) {
-          this.route.queryParams.take(1).subscribe(params => {
+          this.route.queryParams.pipe(take(1)).subscribe(params => {
             const newParams = 'args' in params ? rison.decode(params['args']) : dStore.initialDatasetState.filters;
             newParams['mode'] = currentMode;
             if (window.location.pathname.indexOf('datasets') !== -1) {
