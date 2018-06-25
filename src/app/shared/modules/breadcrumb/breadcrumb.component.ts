@@ -8,7 +8,6 @@ import {
   NavigationEnd,
   Params
 } from '@angular/router';
-import 'rxjs/add/operator/filter';
 import { TitleCasePipe } from '../../pipes/index';
 import { Store, select } from '@ngrx/store';
 import * as rison from 'rison';
@@ -16,7 +15,7 @@ import * as selectors from 'state-management/selectors';
 
 import { getViewMode, getFilters } from 'state-management/selectors/datasets.selectors';
 import { AppState } from 'state-management/state/app.store';
-import { take } from 'rxjs/operators/take';
+import { take, filter } from 'rxjs/operators';
 
 interface Breadcrumb {
   label: string;
@@ -53,7 +52,7 @@ export class BreadcrumbComponent implements OnInit {
     // const ROUTE_DATA_BREADCRUMB = 'breadcrumb';
 
     // TODO handle query params
-    this.router.events.filter(event => event instanceof NavigationEnd).subscribe(event => {
+    this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe(event => {
       // set breadcrumbs
       this.breadcrumbs = [];
       const self = this;

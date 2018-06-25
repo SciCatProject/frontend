@@ -14,6 +14,7 @@ import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 import { SocketConnection } from '../../sockets/socket.connections';
+import { catchError, map } from 'rxjs/operators';
 // Making Sure EventSource Type is available to avoid compilation issues.
 declare var EventSource: any;
 /**
@@ -127,9 +128,9 @@ export abstract class BaseLoopBackApi {
           withCredentials: LoopBackConfig.getRequestOptionsCredentials()
         })
       );
-      return this.http.request(request)
-        .map((res: any) => (res.text() != "" ? res.json() : {}))
-        .catch((e) => this.errorHandler.handleError(e));
+      return this.http.request(request).pipe(
+        map((res: any) => (res.text() != "" ? res.json() : {})),
+        catchError((e) => this.errorHandler.handleError(e)));
     }
   }
   /**
@@ -180,8 +181,8 @@ export abstract class BaseLoopBackApi {
       LoopBackConfig.getPath(),
       LoopBackConfig.getApiVersion(),
       this.model.getModelDefinition().path
-    ].join('/'), undefined, undefined, { data }, true)
-    .map((datum: T[]) => datum.map((data: T) => this.model.factory(data)));
+    ].join('/'), undefined, undefined, { data }, true).pipe(
+    map((datum: T[]) => datum.map((data: T) => this.model.factory(data))));
   }
   /**
    * @method createMany
@@ -197,8 +198,8 @@ export abstract class BaseLoopBackApi {
       LoopBackConfig.getPath(),
       LoopBackConfig.getApiVersion(),
       this.model.getModelDefinition().path
-    ].join('/'), undefined, undefined, { data }, null, customHeaders)
-    .map((datum: T[]) => datum.map((data: T) => this.model.factory(data)));
+    ].join('/'), undefined, undefined, { data }, null, customHeaders).pipe(
+    map((datum: T[]) => datum.map((data: T) => this.model.factory(data))));
   }
   /**
    * @method onCreateMany
@@ -214,8 +215,8 @@ export abstract class BaseLoopBackApi {
       LoopBackConfig.getPath(),
       LoopBackConfig.getApiVersion(),
       this.model.getModelDefinition().path
-    ].join('/'), undefined, undefined, { data }, true)
-    .map((datum: T[]) => datum.map((data: T) => this.model.factory(data)));
+    ].join('/'), undefined, undefined, { data }, true).pipe(
+      map((datum: T[]) => datum.map((data: T) => this.model.factory(data))));
   }
   /**
    * @method findById
@@ -234,8 +235,8 @@ export abstract class BaseLoopBackApi {
       LoopBackConfig.getApiVersion(),
       this.model.getModelDefinition().path,
       ':id'
-    ].join('/'), { id }, _urlParams, undefined, null, customHeaders)
-    .map((data: T) => this.model.factory(data));
+    ].join('/'), { id }, _urlParams, undefined, null, customHeaders).pipe(
+    map((data: T) => this.model.factory(data)));
   }
   /**
    * @method find
@@ -250,8 +251,8 @@ export abstract class BaseLoopBackApi {
       LoopBackConfig.getPath(),
       LoopBackConfig.getApiVersion(),
       this.model.getModelDefinition().path
-    ].join('/'), undefined, { filter }, undefined, null, customHeaders)
-    .map((datum: T[]) => datum.map((data: T) => this.model.factory(data)));
+    ].join('/'), undefined, { filter }, undefined, null, customHeaders).pipe(
+    map((datum: T[]) => datum.map((data: T) => this.model.factory(data))));
   }
   /**
    * @method exists
@@ -283,8 +284,8 @@ export abstract class BaseLoopBackApi {
       LoopBackConfig.getApiVersion(),
       this.model.getModelDefinition().path,
       'findOne'
-    ].join('/'), undefined, { filter }, undefined, null, customHeaders)
-    .map((data: T) => this.model.factory(data));
+    ].join('/'), undefined, { filter }, undefined, null, customHeaders).pipe(
+    map((data: T) => this.model.factory(data)));
   }
   /**
    * @method updateAll
@@ -336,8 +337,8 @@ export abstract class BaseLoopBackApi {
       LoopBackConfig.getApiVersion(),
       this.model.getModelDefinition().path,
       ':id'
-    ].join('/'), { id }, undefined, undefined, null, customHeaders)
-    .map((data: T) => this.model.factory(data));
+    ].join('/'), { id }, undefined, undefined, null, customHeaders).pipe(
+    map((data: T) => this.model.factory(data)));
   }
   /**
    * @method onDeleteById
@@ -387,8 +388,8 @@ export abstract class BaseLoopBackApi {
       LoopBackConfig.getApiVersion(),
       this.model.getModelDefinition().path,
       ':id'
-    ].join('/'), { id }, undefined, { data }, null, customHeaders)
-    .map((data: T) => this.model.factory(data));
+    ].join('/'), { id }, undefined, { data }, null, customHeaders).pipe(
+    map((data: T) => this.model.factory(data)));
   }
   /**
    * @method onUpdateAttributes
@@ -419,8 +420,8 @@ export abstract class BaseLoopBackApi {
       LoopBackConfig.getPath(),
       LoopBackConfig.getApiVersion(),
       this.model.getModelDefinition().path,
-    ].join('/'), undefined, undefined, { data }, null, customHeaders)
-    .map((data: T) => this.model.factory(data));
+    ].join('/'), undefined, undefined, { data }, null, customHeaders).pipe(
+    map((data: T) => this.model.factory(data)));
   }
   /**
    * @method onUpsert
@@ -450,8 +451,8 @@ export abstract class BaseLoopBackApi {
       LoopBackConfig.getPath(),
       LoopBackConfig.getApiVersion(),
       this.model.getModelDefinition().path,
-    ].join('/'), undefined, undefined, { data }, null, customHeaders)
-    .map((data: T) => this.model.factory(data));
+    ].join('/'), undefined, undefined, { data }, null, customHeaders).pipe(
+    map((data: T) => this.model.factory(data)));
   }
   /**
    * @method onUpsertPatch
@@ -484,8 +485,8 @@ export abstract class BaseLoopBackApi {
       LoopBackConfig.getApiVersion(),
       this.model.getModelDefinition().path,
       'upsertWithWhere'
-    ].join('/'), undefined, _urlParams, { data }, null, customHeaders)
-    .map((data: T) => this.model.factory(data));
+    ].join('/'), undefined, _urlParams, { data }, null, customHeaders).pipe(
+    map((data: T) => this.model.factory(data)));
   }
   /**
    * @method onUpsertWithWhere
@@ -519,8 +520,8 @@ export abstract class BaseLoopBackApi {
       LoopBackConfig.getApiVersion(),
       this.model.getModelDefinition().path,
       'replaceOrCreate'
-    ].join('/'), undefined, undefined, { data }, null, customHeaders)
-    .map((data: T) => this.model.factory(data));
+    ].join('/'), undefined, undefined, { data }, null, customHeaders).pipe(
+    map((data: T) => this.model.factory(data)));
   }
   /**
    * @method onReplaceOrCreate
@@ -552,8 +553,8 @@ export abstract class BaseLoopBackApi {
       LoopBackConfig.getApiVersion(),
       this.model.getModelDefinition().path,
       ':id', 'replace'
-    ].join('/'), { id }, undefined, { data }, null, customHeaders)
-    .map((data: T) => this.model.factory(data));
+    ].join('/'), { id }, undefined, { data }, null, customHeaders).pipe(
+    map((data: T) => this.model.factory(data)));
   }
   /**
    * @method onReplaceById
