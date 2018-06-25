@@ -13,7 +13,7 @@ import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/take';
 import { getIsAdmin } from 'state-management/selectors/users.selectors';
 import { getCurrentDataset, getCurrentDatablocks, getCurrentAttachments, getCurrentOrigDatablocks } from 'state-management/selectors/datasets.selectors';
-import { pluck, map } from 'rxjs/operators';
+import { pluck, map, take } from 'rxjs/operators';
 
 /**
  * Component to show details for a dataset, using the
@@ -80,7 +80,7 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
   }
 
   onExportClick() {
-    this.dataset$.take(1).subscribe(ds => {
+    this.dataset$.pipe(take(1)).subscribe(ds => {
 
       const options = {
         fieldSeparator: ',',
@@ -100,9 +100,9 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
   }
 
   resetDataset(dataset) {
-    this.store
-      .select(state => state.root.user)
-      .take(1)
+    this.store.pipe(
+      select(state => state.root.user),
+      take(1))
       .subscribe(user => {
         user = user['currentUser'];
         const job = new Job();

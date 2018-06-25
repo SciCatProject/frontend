@@ -40,9 +40,10 @@ import { startWith } from 'rxjs/operators/startWith';
 import { PageChangeEvent, SortChangeEvent } from '../dataset-table-pure/dataset-table-pure.component';
 
 import * as rison from 'rison';
-import { Subscription } from 'rxjs';
+import { Subscription, operators } from 'rxjs';
 import { APP_CONFIG, AppConfig } from 'app-config.module';
 import { distinctUntilChanged } from 'rxjs/operators/distinctUntilChanged';
+import {take} from 'rxjs/operators';
 
 // Needed for compatibility with non-piped RxJS operators
 import 'rxjs/add/operator/take';
@@ -198,9 +199,9 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
       job.jobParams = {};
       job.creationTime = new Date();
       const backupFiles = [];
-      this.store
-        .select(state => state.root.user)
-        .take(1)
+      this.store.pipe(
+        select(state => state.root.user),
+        take(1))
         .subscribe(user => {
           job.emailJobInitiator = user['email'];
           user = user['currentUser'];
@@ -236,9 +237,9 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
           } else {
             job.datasetList = backupFiles;
             job.type = archive ? 'archive' : 'retrieve';
-            this.store
-              .select(state => state.root.user.settings.tapeCopies)
-              .take(1)
+            this.store.pipe(
+              select(state => state.root.user.settings.tapeCopies),
+              take(1))
               .subscribe(copies => {
                 job.jobParams['tapeCopies'] = copies;
               });

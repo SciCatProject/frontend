@@ -15,6 +15,7 @@ import {APP_CONFIG, AppConfig} from '../../app-config.module';
 import * as lb from 'shared/sdk/services';
 
 import {FilePickerDirective, ReadFile, ReadMode} from 'ngx-file-helpers';
+import {filter} from 'rxjs/operators';
 
 import {ReadModePipe} from 'shared/pipes/index';
 
@@ -38,10 +39,10 @@ export class FilePickerComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    const currentSet$ = this.store.select(state => state.root.datasets.currentSet);
-    this.dataset$ = currentSet$.filter((dataset: Dataset) => {
+    const currentSet$ = this.store.pipe(select(state => state.root.datasets.currentSet));
+    this.dataset$ = currentSet$.pipe(filter((dataset: Dataset) => {
       return dataset && (Object.keys(dataset).length > 0);
-    });
+    }));
     this.dataset$.subscribe((dataset)=>{this.dataset = dataset;});
 
 
