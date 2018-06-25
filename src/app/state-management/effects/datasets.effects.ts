@@ -27,11 +27,7 @@ import {
 
 import { config } from '../../../config/config';
 
-import { map } from 'rxjs/operators/map';
-import { withLatestFrom } from 'rxjs/operators/withLatestFrom';
-import { catchError } from 'rxjs/operators/catchError';
-import { mergeMap } from 'rxjs/operators/mergeMap';
-import { tap } from 'rxjs/operators/tap';
+import { map, switchMap, tap, mergeMap, catchError, withLatestFrom } from 'rxjs/operators';
 
 // Returns copy with null/undefined values and empty arrays/strings removed
 function restrictFilter(filter: object, allowedKeys?: string[]) {
@@ -111,12 +107,10 @@ export class DatasetEffects {
 
   @Effect()
   protected getDatablocks$: Observable<Action> =
-    this.actions$.ofType(DatasetActions.DATABLOCKS)
-      .debounceTime(300)
-      .map((action: DatasetActions.DatablocksAction) => action.id)
-      .switchMap(id => {
-        const idstring = id;
-
+    this.actions$.pipe(
+      ofType(DatasetActions.DATABLOCKS),
+      map((action: DatasetActions.DatablocksAction) => action.id),
+      switchMap(id => {
         const blockFilter = {
           include: [
             { relation: 'origdatablocks' },
@@ -136,7 +130,7 @@ export class DatasetEffects {
           .catch(err => {
             return Observable.of(new DatasetActions.DatablocksFailedAction(err));
           });
-      });
+      }));
 
       /*
   @Effect()
