@@ -1,32 +1,16 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { Action, Store, select } from '@ngrx/store';
-
 import { Angular5Csv } from 'angular5-csv/Angular5-csv';
-
 import { DatasetApi, DatablockApi } from 'shared/sdk/services';
-
 import * as DatasetActions from 'state-management/actions/datasets.actions';
-import * as UserActions from 'state-management/actions/user.actions';
-
-import {
-  Dataset,
-  Message,
-  MessageType,
-  DatasetFilters
-} from 'state-management/models';
-
+import {Dataset} from 'state-management/models';
 import {
   getRectangularRepresentation,
-  getFilters,
   getFullqueryParams,
   getFullfacetsParams
 } from '../selectors/datasets.selectors';
-
-import { config } from '../../../config/config';
-
 import { map, switchMap, tap, mergeMap, catchError, withLatestFrom } from 'rxjs/operators';
 
 // Returns copy with null/undefined values and empty arrays/strings removed

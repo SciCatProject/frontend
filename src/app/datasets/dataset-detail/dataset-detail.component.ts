@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {Store, select} from '@ngrx/store';
-import {Dataset, Job, OrigDatablock} from 'shared/sdk/models';
+import {Job} from 'shared/sdk/models';
 import * as dsa from 'state-management/actions/datasets.actions';
 import * as ja from 'state-management/actions/jobs.actions';
 import * as ua from 'state-management/actions/user.actions';
@@ -11,7 +11,7 @@ import { Message, MessageType } from 'state-management/models';
 import { Angular5Csv } from 'angular5-csv/Angular5-csv';
 import { getIsAdmin } from 'state-management/selectors/users.selectors';
 import { getCurrentDataset, getCurrentDatablocks, getCurrentAttachments, getCurrentOrigDatablocks } from 'state-management/selectors/datasets.selectors';
-import { pluck, map, take } from 'rxjs/operators';
+import { pluck, take } from 'rxjs/operators';
 
 /**
  * Component to show details for a dataset, using the

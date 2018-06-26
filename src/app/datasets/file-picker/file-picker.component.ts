@@ -1,23 +1,13 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ViewChild} from '@angular/core';
-import {Injectable, Inject} from '@angular/core';
+import {Inject} from '@angular/core';
 import {Store, select} from '@ngrx/store';
-import {
-  Http,
-  Response,
-  Headers
-} from '@angular/http';
-import {LoopBackConfig} from 'shared/sdk/lb.config';
 import {Observable} from 'rxjs/Rx';
-import {OrigDatablock, Dataset, DatasetAttachment, Datablock, RawDataset, Job} from 'shared/sdk/models';
+import {Dataset} from 'shared/sdk/models';
 import {APP_CONFIG, AppConfig} from '../../app-config.module';
-
 import * as lb from 'shared/sdk/services';
-
 import {FilePickerDirective, ReadFile, ReadMode} from 'ngx-file-helpers';
 import {filter} from 'rxjs/operators';
-
-import {ReadModePipe} from 'shared/pipes/index';
 
 
 @Component({
