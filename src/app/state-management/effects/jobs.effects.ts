@@ -1,18 +1,14 @@
 // import all rxjs operators that are needed
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/switchMap';
-import 'rxjs/add/observable/of';
-import 'rxjs/add/operator/debounceTime';
 
 import {Injectable} from '@angular/core';
-import {Actions, Effect} from '@ngrx/effects';
+import {Actions, Effect, ofType} from '@ngrx/effects';
 import {Action, Store} from '@ngrx/store';
-import {Observable} from 'rxjs/Observable';
+import {Observable} from 'rxjs';
 import * as lb from 'shared/sdk/services';
 import * as JobActions from 'state-management/actions/jobs.actions';
 import * as UserActions from 'state-management/actions/user.actions';
 import { MessageType, Job } from 'state-management/models';
+import {map,  switchMap, catchError } from 'rxjs/operators';
 
 // import store state interface
 
@@ -22,60 +18,52 @@ export class JobsEffects {
 
   @Effect()
   protected getJob$: Observable<Action> =
-    this.action$.ofType(JobActions.SEARCH_ID)
-      .debounceTime(300)
-      .map((action: JobActions.SearchIDAction) => action.id)
-      .switchMap(id => {
-        const idstring = id;
-        // TODO separate action for dataBlocks? or retrieve at once?
-
-        return this.jobSrv.findById(encodeURIComponent(idstring))
-          .switchMap(jobset => {
-            return Observable.of(new JobActions.SearchIDCompleteAction(jobset));
-          })
-          .catch(err => {
-            console.log(err);
-            return Observable.of(new JobActions.SearchIDFailedAction(err));
-          });
-      });
+    this.action$.pipe(
+      ofType(JobActions.SEARCH_ID),
+      map((action: JobActions.SearchIDAction) => action.id),
+      switchMap(id => this.jobSrv.findById(encodeURIComponent(id)).pipe(
+        map(jobset => new JobActions.SearchIDCompleteAction(jobset)),
+        catchError(err => Observable.of(new JobActions.SearchIDFailedAction(err)))
+      )
+    )
+  );
 
   @Effect()
   protected submit$: Observable<Action> =
-    this.action$.ofType(JobActions.SUBMIT)
-      .map((action: JobActions.SubmitAction) => action.job)
-      .switchMap((job) => {
-        return this.jobSrv.create(job)
-          .switchMap(res => {
-            console.log(res);
-            return Observable.of(new JobActions.SubmitCompleteAction(res));
-          });
-      })
-      .catch(err => {
-        console.log(err);
-        return Observable.of(new JobActions.FailedAction(err));
-      });
+    this.action$.pipe(
+      ofType(JobActions.SUBMIT),
+      map((action: JobActions.SubmitAction) => action.job),
+      switchMap((job) => {
+        return this.jobSrv.create(job).pipe(
+          map(res =>new JobActions.SubmitCompleteAction(res))
+        );
+      }),
+      catchError(err => Observable.of(new JobActions.FailedAction(err))
+      ));
 
   @Effect()
   protected submitMessage$: Observable<Action> =
-    this.action$.ofType(JobActions.SUBMIT_COMPLETE)
-      .switchMap((res) => {
+    this.action$.pipe(
+      ofType(JobActions.SUBMIT_COMPLETE),
+      switchMap((res) => {
         const msg = {
           type: MessageType.Success,
           content: 'Job Created Successfully'
         };
         return Observable.of(new UserActions.ShowMessageAction(msg));
-      });
+      }));
 
   @Effect()
   protected childRetrieve$: Observable<Action> =
-    this.action$.ofType(JobActions.CHILD_RETRIEVE)
-      .switchMap((pl) => {
+    this.action$.pipe(
+      ofType(JobActions.CHILD_RETRIEVE),
+      switchMap((pl) => {
         const node = pl['payload'];
         node.children = [];
         if (node.data.datasetList.length > 0) {
           node.data.datasetList.map(ds => {
             if (ds.pid && ds.pid.length > 0) {
-              this.dsSrv
+              this.dsSrv // Hur gör man här?
                 .findById(encodeURIComponent(ds.pid),
                   {'include': 'datasetlifecycle'})
                 .subscribe(dataset => {
@@ -98,30 +86,27 @@ export class JobsEffects {
             {'data': {'type': 'No datasets could be found'}});
         }
         return Observable.of(new JobActions.ChildRetrieveCompleteAction(node.children));
-      })
-      .catch(err => {
+      }),
+      catchError(err => {
         console.log(err);
         return Observable.of(new JobActions.FailedAction(err));
-      });
+      }));
 
   @Effect()
   protected get_updated_sort$: Observable<Action> =
-    this.action$.ofType(JobActions.SORT_UPDATE)
-      .debounceTime(300)
-      .switchMap((action: JobActions.SortUpdateAction) => {
+    this.action$.pipe(
+      ofType(JobActions.SORT_UPDATE),
+      switchMap((action: JobActions.SortUpdateAction) => {
         const filter = {};
         filter['skip'] = action.skip;
         filter['limit'] = action.limit
         filter['order'] = 'creationTime DESC';
-        return this.jobSrv.find(filter)
-          .switchMap((jobsets: Job[]) => {
-            return Observable.of(new JobActions.RetrieveCompleteAction(jobsets));
-          });
-      })
-      .catch(err => {
-        console.log(err);
-        return Observable.of(new JobActions.FailedAction(err));
-      });
+        return this.jobSrv.find(filter).pipe(
+          map((jobsets: Job[]) => new JobActions.RetrieveCompleteAction(jobsets))
+        );
+      }),
+      catchError(err => Observable.of(new JobActions.FailedAction(err)))
+    );
 
 
   constructor(private action$: Actions, private store: Store<any>,
