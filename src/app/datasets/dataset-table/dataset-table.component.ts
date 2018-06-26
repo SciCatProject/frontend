@@ -5,7 +5,7 @@ import {
   OnDestroy,
   Inject,
 } from '@angular/core';
-import { Router, ActivatedRoute, Data } from '@angular/router';
+import { Router, ActivatedRoute} from '@angular/router';
 import { Store, select } from '@ngrx/store';
 import {MatDialog } from '@angular/material';
 import { Job, Dataset } from 'shared/sdk/models';
@@ -16,10 +16,10 @@ import * as dsa from 'state-management/actions/datasets.actions';
 import * as ua from 'state-management/actions/user.actions';
 import * as ja from 'state-management/actions/jobs.actions';
 import { getDatasets, getSelectedDatasets, getPage, getViewMode, isEmptySelection, getDatasetsPerPage, getIsLoading, getTotalSets, getFilters } from 'state-management/selectors/datasets.selectors';
-import { Message, MessageType, DatasetFilters, ViewMode } from 'state-management/models';
+import { Message, MessageType, ViewMode } from 'state-management/models';
 import * as jobSelectors from 'state-management/selectors/jobs.selectors';
 import { PageChangeEvent, SortChangeEvent } from '../dataset-table-pure/dataset-table-pure.component';
-import { Subscription, operators } from 'rxjs';
+import { Subscription} from 'rxjs';
 import { APP_CONFIG, AppConfig } from 'app-config.module';
 import {take} from 'rxjs/operators';
 
