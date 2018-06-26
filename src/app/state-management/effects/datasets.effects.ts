@@ -1,37 +1,17 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-
+import { Observable } from 'rxjs';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { Action, Store, select } from '@ngrx/store';
-
 import { Angular5Csv } from 'angular5-csv/Angular5-csv';
-
 import { DatasetApi, DatablockApi } from 'shared/sdk/services';
-
 import * as DatasetActions from 'state-management/actions/datasets.actions';
-import * as UserActions from 'state-management/actions/user.actions';
-
-import {
-  Dataset,
-  Message,
-  MessageType,
-  DatasetFilters
-} from 'state-management/models';
-
+import {Dataset} from 'state-management/models';
 import {
   getRectangularRepresentation,
-  getFilters,
   getFullqueryParams,
   getFullfacetsParams
 } from '../selectors/datasets.selectors';
-
-import { config } from '../../../config/config';
-
-import { map } from 'rxjs/operators/map';
-import { withLatestFrom } from 'rxjs/operators/withLatestFrom';
-import { catchError } from 'rxjs/operators/catchError';
-import { mergeMap } from 'rxjs/operators/mergeMap';
-import { tap } from 'rxjs/operators/tap';
+import { map, switchMap, tap, mergeMap, catchError, withLatestFrom } from 'rxjs/operators';
 
 // Returns copy with null/undefined values and empty arrays/strings removed
 function restrictFilter(filter: object, allowedKeys?: string[]) {
@@ -111,12 +91,10 @@ export class DatasetEffects {
 
   @Effect()
   protected getDatablocks$: Observable<Action> =
-    this.actions$.ofType(DatasetActions.DATABLOCKS)
-      .debounceTime(300)
-      .map((action: DatasetActions.DatablocksAction) => action.id)
-      .switchMap(id => {
-        const idstring = id;
-
+    this.actions$.pipe(
+      ofType(DatasetActions.DATABLOCKS),
+      map((action: DatasetActions.DatablocksAction) => action.id),
+      switchMap(id => {
         const blockFilter = {
           include: [
             { relation: 'origdatablocks' },
@@ -136,7 +114,7 @@ export class DatasetEffects {
           .catch(err => {
             return Observable.of(new DatasetActions.DatablocksFailedAction(err));
           });
-      });
+      }));
 
       /*
   @Effect()
