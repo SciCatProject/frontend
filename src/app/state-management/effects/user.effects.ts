@@ -3,7 +3,7 @@
 import { Injectable } from '@angular/core';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { Action, Store } from '@ngrx/store';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import * as lb from 'shared/sdk/services';
 import * as UserActions from 'state-management/actions/user.actions';
 // import store state interface
