@@ -9,8 +9,6 @@ import * as selectors from 'state-management/selectors';
 import {Subscription} from 'rxjs/Subscription';
 import { Message, MessageType } from 'state-management/models';
 import { Angular5Csv } from 'angular5-csv/Angular5-csv';
-import 'rxjs/add/operator/distinctUntilChanged';
-import 'rxjs/add/operator/take';
 import { getIsAdmin } from 'state-management/selectors/users.selectors';
 import { getCurrentDataset, getCurrentDatablocks, getCurrentAttachments, getCurrentOrigDatablocks } from 'state-management/selectors/datasets.selectors';
 import { pluck, map, take } from 'rxjs/operators';

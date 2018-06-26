@@ -9,7 +9,6 @@ import * as selectors from 'state-management/selectors';
 import * as dsa from 'state-management/actions/datasets.actions';
 import * as dStore from 'state-management/state/datasets.store';
 import { ActivatedRoute, Router } from '@angular/router';
-import 'rxjs/add/operator/skip';
 
 import { getViewMode } from 'state-management/selectors/datasets.selectors';
 import { take } from 'rxjs/operators';

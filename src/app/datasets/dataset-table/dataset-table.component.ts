@@ -46,7 +46,6 @@ import { distinctUntilChanged } from 'rxjs/operators/distinctUntilChanged';
 import {take} from 'rxjs/operators';
 
 // Needed for compatibility with non-piped RxJS operators
-import 'rxjs/add/operator/take';
 
 @Component({
   selector: 'dataset-table',

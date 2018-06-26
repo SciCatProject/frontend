@@ -1,5 +1,4 @@
 /* tslint:disable */
-import 'rxjs/add/observable/merge';
 import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Observable';
 import { LoopBackFilter, StatFilter } from './index';
