@@ -16,7 +16,7 @@ export const APP_DI_CONFIG: AppConfig = {
     fileserverBaseURL: environment['fileserverBaseURL'] || null,
     production: environment.production,
     disabledDatasetColumns: environment['disabledDatasetColumns'] || [],
-    archive_workflow_enabled: environment['archive_workflow_enabled'] || true
+    archive_workflow_enabled: environment['archive_workflow_enabled']
 };
 
 @NgModule({
