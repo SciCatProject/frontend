@@ -9,4 +9,5 @@ export const environment = {
   fileserverBaseURL: 'http://127.0.0.1:8889',
   externalAuthEndpoint: '/auth/msad',
   archive_workflow_disabled: true,
+  disabledDatasetColumns: ['archiveStatus', 'retrieveStatus'],
 };
