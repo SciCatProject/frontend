@@ -1,5 +1,3 @@
-import { Dataset, DatasetFilters } from 'state-management/models';
-
 import { createSelector, createFeatureSelector } from '@ngrx/store';
 import { DatasetState } from '../state/datasets.store'
 import { config } from '../../../config/config';

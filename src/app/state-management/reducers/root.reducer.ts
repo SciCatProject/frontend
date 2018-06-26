@@ -1,15 +1,10 @@
-import { Action, combineReducers } from '@ngrx/store';
-
+import {combineReducers } from '@ngrx/store';
 import { datasetsReducer } from 'state-management/reducers/datasets.reducer';
 import { jobsReducer } from 'state-management/reducers/jobs.reducer';
 import { userReducer } from 'state-management/reducers/user.reducer';
-import { proposalsReducer } from 'state-management/reducers/proposals.reducer';
-
 import { DatasetState, initialDatasetState } from 'state-management/state/datasets.store';
 import { initialJobsState, JobsState } from 'state-management/state/jobs.store';
 import { initialUserState, UserState } from 'state-management/state/user.store';
-import { initialProposalsState, ProposalsState } from 'state-management/state/proposals.store';
-
 import * as ua from 'state-management/actions/user.actions';
 
 export interface AppState {

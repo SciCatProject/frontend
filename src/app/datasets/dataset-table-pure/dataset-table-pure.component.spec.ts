@@ -1,21 +1,10 @@
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
-import {Http} from '@angular/http';
-import {ActivatedRoute, Router} from '@angular/router';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {MatTableModule, MatDialogModule} from '@angular/material';
+import {MatTableModule} from '@angular/material';
 import {DatasetTablePureComponent} from './dataset-table-pure.component';
-import {Store, StoreModule} from '@ngrx/store';
 import {ConfigService} from 'shared/services/config.service';
-import {
-  MockActivatedRoute,
-  MockConfigService,
-  MockHttp,
-  MockRouter,
-  MockStore,
-  MockUserApi
-} from 'shared/MockStubs';
-import {UserApi} from 'shared/sdk/services';
+import { MockConfigService} from 'shared/MockStubs';
 
 describe('DatasetTablePureComponent', () => {
   let component: DatasetTablePureComponent;

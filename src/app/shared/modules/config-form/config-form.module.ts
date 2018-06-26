@@ -7,36 +7,11 @@ import { TitleCasePipe } from 'shared/pipes/title-case.pipe';
 import { ConfigFormComponent } from './config-form.component';
 import {TreeTableModule} from 'ng-treetable';
 import {
-  MatAutocompleteModule,
   MatButtonModule,
-  MatButtonToggleModule,
   MatCardModule,
-  MatCheckboxModule,
-  MatChipsModule,
-  MatDatepickerModule,
-  MatDialogModule,
-  MatGridListModule,
-  MatIconModule,
   MatInputModule,
-  MatListModule,
-  MatMenuModule,
-  MatNativeDateModule,
-  MatPaginatorModule,
-  MatProgressBarModule,
-  MatProgressSpinnerModule,
-  MatRadioModule,
-  MatRippleModule,
   MatSelectModule,
-  MatSidenavModule,
-  MatSliderModule,
   MatSlideToggleModule,
-  MatSnackBarModule,
-  MatSortModule,
-  MatTableModule,
-  MatTabsModule,
-  MatToolbarModule,
-  MatTooltipModule,
-  MatStepperModule,
 } from '@angular/material';
 
 @NgModule({

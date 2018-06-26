@@ -1,7 +1,7 @@
 import { proposalsReducer } from './proposals.reducer';
 import { initialProposalsState } from '../state/proposals.store';
 import * as proposalsActions from '../actions/proposals.actions';
-import { Proposal, Dataset, DatasetInterface } from '../models';
+import { Dataset, DatasetInterface } from '../models';
 
 describe('ProposalsReducer', () => {
 	

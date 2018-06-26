@@ -1,6 +1,4 @@
 import { Action } from '@ngrx/store';
-import { Job } from 'shared/sdk/models';
-
 import { initialJobsState, JobsState } from 'state-management/state/jobs.store';
 import {
     SORT_UPDATE,

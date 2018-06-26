@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { MatCheckboxChange, MatSort } from '@angular/material';
+import { MatCheckboxChange } from '@angular/material';
 import { Dataset } from 'state-management/models';
 import * as filesize from 'filesize';
 

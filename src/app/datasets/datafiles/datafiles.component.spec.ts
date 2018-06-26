@@ -1,12 +1,10 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
-
 import { DatafilesComponent } from './datafiles.component';
 import { MatTableModule} from '@angular/material';
-
-import { Store, StoreModule } from '@ngrx/store';
-import { MockActivatedRoute, MockStore } from 'shared/MockStubs';
+import { Store} from '@ngrx/store';
+import { MockStore } from 'shared/MockStubs';
 import { AppConfigModule } from 'app-config.module';
 
 describe('DatafilesComponent', () => {

@@ -1,11 +1,8 @@
 import { Action } from '@ngrx/store';
-import { Dataset } from 'shared/sdk/models';
-
 import {
     FILTER_UPDATE,
 
     SELECT_CURRENT,
-    TOTAL_UPDATE,
     FILTER_VALUE_UPDATE,
 
     CURRENT_BLOCKS_COMPLETE,

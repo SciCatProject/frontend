@@ -1,10 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { MatTableModule } from '@angular/material';
-import { select, Store } from "@ngrx/store";
-import { Observable } from 'rxjs/Observable';
-
 import { Proposal, Dataset } from 'state-management/models';
-import { getSelectedProposalDatasets } from 'state-management/selectors/proposals.selectors';
 
 interface Proposer {
     name: string;

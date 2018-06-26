@@ -2,7 +2,6 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import * as JobActions from 'state-management/actions/jobs.actions';
 import {Job} from 'shared/sdk/models';
 import {Store} from '@ngrx/store';
-import * as jSelectors from 'state-management/selectors/jobs.selectors';
 import {ActivatedRoute} from '@angular/router';
 import * as selectors from 'state-management/selectors';
 

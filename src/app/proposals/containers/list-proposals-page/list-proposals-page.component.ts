@@ -1,17 +1,12 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Store, select } from '@ngrx/store';
-
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
-import { distinctUntilChanged } from 'rxjs/operators/distinctUntilChanged';
-import { map } from 'rxjs/operators/map';
-
+import { distinctUntilChanged, map } from 'rxjs/operators';
 import { AppState } from 'state-management/state/app.store';
-import { ProposalsState } from 'state-management/state/proposals.store';
-
 import { Proposal } from 'state-management/models';
 import { getProposalList, getHasFetched } from 'state-management/selectors/proposals.selectors';
-import { FetchProposalsAction, SelectProposalAction } from 'state-management/actions/proposals.actions';
+import { FetchProposalsAction } from 'state-management/actions/proposals.actions';
 
 @Component({
     selector: 'list-proposals-page',

@@ -1,7 +1,5 @@
 import {Job} from 'shared/sdk/models';
 import {SubmitAction, SUBMIT } from './jobs.actions'; 
-import {RETRIEVE } from './jobs.actions'; 
-import {UI_STORE } from './jobs.actions'; 
 import {SubmitCompleteAction, SUBMIT_COMPLETE } from './jobs.actions'; 
 import {FailedAction, FAILED } from './jobs.actions'; 
 import {RetrieveCompleteAction, RETRIEVE_COMPLETE } from './jobs.actions'; 
@@ -12,9 +10,6 @@ import {SearchIDCompleteAction, SEARCH_ID_COMPLETE } from './jobs.actions';
 import {SearchIDFailedAction, SEARCH_ID_FAILED } from './jobs.actions'; 
 import {CurrentJobAction, SELECT_CURRENT } from './jobs.actions'; 
 import {SortUpdateAction, SORT_UPDATE } from './jobs.actions'; 
-import {SORT_UPDATE_COMPLETE } from './jobs.actions'; 
-import {SORT_FAILED } from './jobs.actions'; 
-import {SORT_VALUE_UPDATE } from './jobs.actions'; 
 
 
 describe('SubmitAction', () => { 

@@ -1,7 +1,5 @@
 import { Component } from '@angular/core';
-
 import { ReadFile, ReadMode } from 'ngx-file-helpers';
-import {  ReadModePipe} from 'shared/pipes/index';
 
 @Component({
   selector: 'app-file-dropzone',

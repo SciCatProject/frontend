@@ -10,7 +10,7 @@ import { ObjKeysPipe, TitleCasePipe } from 'shared/pipes/index';
 import { rootReducer } from 'state-management/reducers/root.reducer';
 import { MatTableModule} from '@angular/material';
 import { FileDropzoneComponent  } from './file-dropzone.component';
-import {APP_CONFIG, AppConfig} from '../../app-config.module';
+import {APP_CONFIG} from '../../app-config.module';
 import * as lb from 'shared/sdk/services';
 
 let mockConfig = {};

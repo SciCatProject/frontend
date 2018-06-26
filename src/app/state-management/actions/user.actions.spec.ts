@@ -1,16 +1,13 @@
-import { Message, MessageType, User, AccessGroup, Settings } from '../models';
+import { Message, User, Settings } from '../models';
 import {LoginAction, LOGIN } from './user.actions'; 
 import {ActiveDirLoginAction, AD_LOGIN } from './user.actions'; 
-import {AD_LOGIN_COMPLETE } from './user.actions'; 
 import {LoginCompleteAction, LOGIN_COMPLETE } from './user.actions'; 
 import {LoginFailedAction, LOGIN_FAILED } from './user.actions'; 
 import {LogoutAction, LOGOUT } from './user.actions'; 
 import {LogoutCompleteAction, LOGOUT_COMPLETE } from './user.actions'; 
 import {RetrieveUserAction, RETRIEVE_USER } from './user.actions'; 
 import {RetrieveUserCompleteAction, RETRIEVE_USER_COMPLETE } from './user.actions'; 
-import {RetrieveUserFailedAction, RETRIEVE_USER_FAILED } from './user.actions'; 
-import {ADD_GROUPS } from './user.actions'; 
-import {ADD_GROUPS_FAILED } from './user.actions'; 
+import {RetrieveUserFailedAction, RETRIEVE_USER_FAILED } from './user.actions';  
 import {AccessUserEmailAction, ACCESS_USER_EMAIL } from './user.actions'; 
 import {AccessUserEmailCompleteAction, ACCESS_USER_EMAIL_COMPLETE } from './user.actions'; 
 import {AccessUserEmailFailedAction, ACCESS_USER_EMAIL_FAILED } from './user.actions'; 
