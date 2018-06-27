@@ -55,8 +55,8 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   private jobErrorSubscription: Subscription;
 
   private disabledColumns: string[] = [];
-  private archive_workflow_enabled: boolean = false;
-
+  private archiveWorkflowEnabled: boolean = false;
+  
   constructor(
     private router: Router,
     private configSrv: ConfigService,
@@ -66,7 +66,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     @Inject(APP_CONFIG) private appConfig: AppConfig
   ) {
     this.disabledColumns = appConfig.disabledDatasetColumns;
-    this.archive_workflow_enabled = appConfig.archive_workflow_enabled;
+    this.archiveWorkflowEnabled = appConfig.archiveWorkflowEnabled;
   }
 
   ngOnInit() {

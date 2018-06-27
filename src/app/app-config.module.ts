@@ -8,7 +8,7 @@ export class AppConfig {
     fileserverBaseURL: string;
     production: boolean;
     disabledDatasetColumns: string[];
-    archive_workflow_enabled: boolean;
+    archiveWorkflowEnabled: boolean;
 }
 
 export const APP_DI_CONFIG: AppConfig = {
@@ -16,7 +16,7 @@ export const APP_DI_CONFIG: AppConfig = {
     fileserverBaseURL: environment['fileserverBaseURL'] || null,
     production: environment.production,
     disabledDatasetColumns: environment['disabledDatasetColumns'] || [],
-    archive_workflow_enabled: environment['archive_workflow_enabled'] || null
+    archiveWorkflowEnabled: environment['archiveWorkflowEnabled'] || null
 };
 
 @NgModule({

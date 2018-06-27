@@ -8,6 +8,6 @@ export const environment = {
   lbBaseURL: 'https://kubetest02.dm.esss.dk:32223',
   fileserverBaseURL: 'https://kubetest04.dm.esss.dk:32223',
   externalAuthEndpoint: '/auth/msad',
-  archive_workflow_enabled: false,
+  archiveWorkflowEnabled: false,
   disabledDatasetColumns: ['archiveStatus', 'retrieveStatus' ]
 };
