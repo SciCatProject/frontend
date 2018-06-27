@@ -12,6 +12,7 @@ import { Angular5Csv } from 'angular5-csv/Angular5-csv';
 import { getIsAdmin } from 'state-management/selectors/users.selectors';
 import { getCurrentDataset, getCurrentDatablocks, getCurrentAttachments, getCurrentOrigDatablocks } from 'state-management/selectors/datasets.selectors';
 import { pluck, take } from 'rxjs/operators';
+import * as filesize from 'filesize';
 
 /**
  * Component to show details for a dataset, using the
@@ -23,7 +24,7 @@ import { pluck, take } from 'rxjs/operators';
 @Component({
   selector: 'dataset-detail',
   templateUrl: './dataset-detail.component.html',
-  styleUrls: ['./dataset-detail.component.css']
+  styleUrls: ['./dataset-detail.component.scss']
 })
 export class DatasetDetailComponent implements OnInit, OnDestroy {  
   private subscriptions: Subscription[] = [];
@@ -47,7 +48,7 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
   ngOnInit() {
     const msg = new Message();
     this.subscriptions.push(
-      this.store.select(selectors.jobs.submitJob).subscribe(
+      this.store.pipe(select(selectors.jobs.submitJob)).subscribe(
         ret => {
           if (ret && Array.isArray(ret)) {
             console.log(ret);
@@ -63,7 +64,7 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
     );
 
     this.subscriptions.push(
-      this.store.select(selectors.jobs.getError).subscribe(err => {
+      this.store.pipe(select(selectors.jobs.getError)).subscribe(err => {
         if (err) {
           msg.type = MessageType.Error;
           msg.content = err.message;
@@ -75,6 +76,10 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.routeSubscription.unsubscribe();
+  }
+
+  getFilesize(size: number): string {
+    return filesize(size || 0);
   }
 
   onExportClick() {
