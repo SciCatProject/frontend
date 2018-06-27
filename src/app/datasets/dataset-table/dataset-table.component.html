@@ -1,4 +1,5 @@
 <div class="dataset-table">
+  <ng-container *ngIf="archiveWorkflowEnabled">
   <div class="mode-container">
     <mat-button-toggle-group [value]="currentMode">
       <mat-button-toggle *ngFor="let mode of modes" (click)="onModeChange($event, mode)" [value]="mode" [ngClass]="mode">
@@ -12,6 +13,7 @@
     <ng-template ngPluralCase="=1">1 dataset.</ng-template>
     <ng-template ngPluralCase="other">{{ datasetCount$ | async }} datasets.</ng-template>
   </div>
+  </ng-container>
 
   <div *ngIf="loading$ | async" class="raised">
     <mat-spinner diameter="20"></mat-spinner>
@@ -22,7 +24,7 @@
       <i class="archive icon"></i>
       Archive
     </button>
-      
+
     <button mat-button [disabled]="isEmptySelection$ | async" *ngIf="currentMode === 'retrieve'"class="ui button retrieve-action-btn" (click)="retrieveClickHandle($event)" color="primary">
       <i class="upload icon"></i>
       Retrieve
