@@ -106,15 +106,12 @@ export class DatasetEffects {
 
         // TODO separate action for dataBlocks? or retrieve at once?
 
-        return this.datasetApi.findById(encodeURIComponent(id), blockFilter)
-          .switchMap((dataset: Dataset) => {
-            //console.log(res);
-            return Observable.of(new DatasetActions.SearchIDCompleteAction(dataset));
-          })
-          .catch(err => {
-            return Observable.of(new DatasetActions.DatablocksFailedAction(err));
-          });
-      }));
+        return this.datasetApi.findById(encodeURIComponent(id), blockFilter).pipe(
+          map((dataset: Dataset) => new DatasetActions.SearchIDCompleteAction(dataset)),
+          catchError(err => Observable.of(new DatasetActions.DatablocksFailedAction(err)))
+        );
+      })
+    );
 
       /*
   @Effect()

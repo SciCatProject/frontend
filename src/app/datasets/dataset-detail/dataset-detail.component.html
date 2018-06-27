@@ -6,10 +6,80 @@
   </ul>
 </div>-->
 
-
-<mat-tab-group *ngIf="(dataset$ | async) as dataset">
+<mat-tab-group *ngIf="(dataset$ | async) as dataset" class="dataset-detail">
   <mat-tab label="Details">
-    <config-form [source]="dataset" [sourceType]="'Dataset'"></config-form>
+    <!--<config-form [source]="dataset" [sourceType]="'Dataset'"></config-form>-->
+    <div class="details">
+      <table>
+        <tr>
+          <th>PID</th>
+          <td>{{ dataset.pid }}</td>
+        </tr>
+        <tr *ngIf="dataset.owner as value">
+          <th>Owner</th>
+          <td>{{ value }}</td>
+        </tr>
+        <tr *ngIf="dataset.contactEmail as value">
+          <th>Contact Email</th>
+          <td>{{ value }}</td>
+        </tr>
+        <tr *ngIf="dataset.sourceFolder as value">
+          <th>Source Folder</th>
+          <td>{{ value }}</td>
+        </tr>
+        <!--
+        <tr *ngIf="dataset.sourceFolder as value">
+          <th>Source Folder</th>
+          <mat-form-field class="example-full-width">
+            <input matInput placeholder="Source Folder" [value]="value">
+          </mat-form-field>
+        </tr>
+        -->
+        <tr *ngIf="dataset.size as value">
+          <th>Size</th>
+          <td>{{ getFilesize(value) }}</td>
+        </tr>
+        <tr *ngIf="dataset.creationTime as value">
+            <th>Creation Time</th>
+          <td>{{ value | date }}</td>
+        </tr>
+        <tr *ngIf="dataset.type as value">
+            <th>Type</th>
+          <td>{{ value }}</td>
+        </tr>
+        <tr *ngIf="dataset.version as value">
+            <th>Version</th>
+          <td>{{ value }}</td>
+        </tr>
+        <tr *ngIf="dataset.ownerGroup as value">
+          <th>Owner Group</th>
+          <td>{{ value }}</td>
+        </tr>
+        <!--
+        <tr>
+          <th>Created at</th>
+          <td>{{ dataset.createdAt | date }}</td>
+        </tr>
+        <tr>
+          <th>Updated at</th>
+          <td>{{ dataset.updatedAt | date }}</td>
+        </tr>
+        -->
+        <tr *ngIf="dataset.principalInvestigator as value">
+          <th>Principal Investigator</th>
+          <td>{{ value }}</td>
+        </tr>
+        <tr *ngIf="dataset.creationLocation as value">
+          <th>Creation Location</th>
+          <td>{{ value }}</td>
+        </tr>  
+      </table>
+
+      <div *ngIf="dataset.scientificMetadata as value">
+        <h3>Scientific Metadata</h3>
+        <pre>{{ value | json }}</pre>
+      </div>
+    </div>
   </mat-tab>
   
   <mat-tab label="Datafiles">
