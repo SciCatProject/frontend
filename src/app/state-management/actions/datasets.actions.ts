@@ -4,22 +4,29 @@ import { Dataset} from 'shared/sdk/models';
 import { FacetCounts } from '../state/datasets.store';
 
 export const SEARCH_FAILED =                '[Dataset] Search Failed';
+
 export const SEARCH_ID =                    '[Dataset] Search ID';
 export const SEARCH_ID_COMPLETE =           '[Dataset] Search ID Complete';
 export const SEARCH_ID_FAILED =             '[Dataset] Search ID Failed';
+
 export const FILTER_UPDATE =                '[Dataset] Filter Update';
 export const FILTER_VALUE_UPDATE =          '[Dataset] Filter Update';
 export const FILTER_FAILED =                '[Dataset] Filter Failed';
+
 export const DATABLOCKS =                   '[Dataset] Datablocks Update';
 export const DATABLOCKS_COMPLETE =          '[Dataset] Datablocks Update Complete';
 export const DATABLOCKS_FAILED =            '[Dataset] Datablocks Failed';
+
 export const DATABLOCK_DELETE =             '[Dataset] Datablock Delete';
 export const DATABLOCK_DELETE_COMPLETE =    '[Dataset] Datablock Delete Complete';
 export const DATABLOCK_DELETE_FAILED =      '[Dataset] Datablock Delete Failed';
+
 export const ADD_GROUPS =                   '[User] Add Groups';
 export const ADD_GROUPS_FAILED =            '[User] Add Groups Failed';
+
 export const RESET_STATUS =                 '[Dataset] Status Reset';
 export const RESET_STATUS_COMPLETE =        '[Dataset] Status Reset Complete';
+
 export const LOAD =                         '[Dataset] Load';
 export const COUNT_COMPLETE =               '[Dataset] Complete';
 export const SELECT_CURRENT =               '[Dataset] Current set selected';
@@ -31,25 +38,34 @@ export const DESELECT_DATASET =             '[Dataset] Deselect Dataset';
 export const CLEAR_SELECTION =              '[Dataset] Clear Selection';
 export const EXPORT_TO_CSV =                '[Dataset] Export to CSV';
 export const SET_VIEW_MODE =                '[Dataset] Set View Mode';
+
 export const FETCH_DATASETS =               '[Dataset] Fetch Datasets';
 export const FETCH_DATASETS_COMPLETE =      '[Dataset] Fetch Datasets Complete';
 export const FETCH_DATASETS_FAILED =        '[Dataset] Fetch Datasets Failed';
+
 export const FETCH_FACET_COUNTS =           '[Dataset] Fetch Facet Counts';
 export const FETCH_FACET_COUNTS_COMPLETE =  '[Dataset] Fetch Facet Counts Complete';
 export const FETCH_FACET_COUNTS_FAILED =    '[Dataset] Fetch Facet Counts Failed';
+
 export const CHANGE_PAGE =                  '[Dataset] Change Page';
 export const SORT_BY_COLUMN =               '[Dataset] Sort by Column';
 export const SET_SEARCH_TERMS =             '[Dataset] Set Search Terms';
+
 export const ADD_LOCATION_FILTER =          '[Dataset] Add Location Filter';
 export const REMOVE_LOCATION_FILTER =       '[Dataset] Remove Location Filter';
+
 export const ADD_GROUP_FILTER =             '[Dataset] Add Group Filter';
 export const REMOVE_GROUP_FILTER =          '[Dataset] Remove Group Filter';
+
 export const ADD_KEYWORD_FILTER =           '[Dataset] Add Keyword Filter';
 export const REMOVE_KEYWORD_FILTER =        '[Dataset] Remove Keyword Filter';
+
 export const ADD_TYPE_FILTER =              '[Dataset] Add Type Filter';
 export const REMOVE_TYPE_FILTER =           '[Dataset] Remove Type Filter';
+
 export const SET_TEXT_FILTER =              '[Dataset] Set Text Filter';
 export const SET_DATE_RANGE =               '[Dataset] Set Date Range Filter';
+
 export const PREFILL_FILTERS =              '[Dataset] Prefill Filter';
 export const CLEAR_FACETS =                 '[Dataset] Clear Facets';
 
