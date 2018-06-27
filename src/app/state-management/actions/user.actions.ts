@@ -16,7 +16,6 @@ export const RETRIEVE_USER_COMPLETE =     '[User] Retrieve User Complete';
 export const RETRIEVE_USER_FAILED =       '[User] Retrieve User Failed';
 
 export const ADD_GROUPS =                 '[User] Add Groups';
-export const ADD_GROUPS_COMPLETE =        '[User] Add Groups Complete';
 export const ADD_GROUPS_FAILED =          '[User] Add Groups Failed';
 
 export const ACCESS_USER_EMAIL =          '[User] Access User Email';

@@ -4,7 +4,6 @@ import { Dataset, AccessGroup, Datablock } from 'shared/sdk/models';
 import { FacetCounts } from '../state/datasets.store';
 import { error } from 'selenium-webdriver';
 
-export const SEARCH_COMPLETE =              '[Dataset] Search Complete';
 export const SEARCH_FAILED =                '[Dataset] Search Failed';
 
 export const SEARCH_ID =                    '[Dataset] Search ID';
@@ -12,7 +11,6 @@ export const SEARCH_ID_COMPLETE =           '[Dataset] Search ID Complete';
 export const SEARCH_ID_FAILED =             '[Dataset] Search ID Failed';
 
 export const FILTER_UPDATE =                '[Dataset] Filter Update';
-export const FILTER_UPDATE_COMPLETE =       '[Dataset] Filter Update Complete';
 export const FILTER_VALUE_UPDATE =          '[Dataset] Filter Update';
 export const FILTER_FAILED =                '[Dataset] Filter Failed';
 
@@ -25,7 +23,6 @@ export const DATABLOCK_DELETE_COMPLETE =    '[Dataset] Datablock Delete Complete
 export const DATABLOCK_DELETE_FAILED =      '[Dataset] Datablock Delete Failed';
 
 export const ADD_GROUPS =                   '[User] Add Groups';
-export const ADD_GROUPS_COMPLETE =          '[User] Add Groups Complete';
 export const ADD_GROUPS_FAILED =            '[User] Add Groups Failed';
 
 export const RESET_STATUS =                 '[Dataset] Status Reset';
@@ -34,8 +31,6 @@ export const RESET_STATUS_COMPLETE =        '[Dataset] Status Reset Complete';
 export const LOAD =                         '[Dataset] Load';
 export const COUNT_COMPLETE =               '[Dataset] Complete';
 export const SELECT_CURRENT =               '[Dataset] Current set selected';
-export const SELECTED_UPDATE =              '[Dataset] Selected Datasets Update';
-export const SELECTED_DATABLOCKS_COMPLETE = '[Dataset] Selected Datablocks update complete';
 export const CURRENT_BLOCKS_COMPLETE =      '[Dataset] Current set datablocks update complete';
 export const TOTAL_UPDATE =                 '[Dataset] Total Datasets Update';
 // export const FILTER_UPDATE_COMPLETE = '[Dataset]  Filter Update Complete';
@@ -85,7 +80,7 @@ export class UpdateFilterAction implements Action { //Inte gjord då den eventue
 
 export class SearchIDCompleteAction implements Action {
     readonly type = SEARCH_ID_COMPLETE;
-    constructor(readonly dataset: {}) {}
+    constructor(readonly dataset: Dataset) {}
 }
 
 export class DatablocksAction implements Action {

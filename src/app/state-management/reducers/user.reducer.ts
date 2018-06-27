@@ -12,8 +12,11 @@ import {
     ACCESS_USER_EMAIL_COMPLETE,
     AD_LOGIN_COMPLETE,
     LOGOUT_COMPLETE,
-    ADD_GROUPS_COMPLETE,
-    LoginCompleteAction
+    LoginCompleteAction,
+    AccessUserEmailCompleteAction,
+    LoginFailedAction,
+    ShowMessageAction,
+    SaveSettingsAction
 } from 'state-management/actions/user.actions';
 
 export function userReducer(state = initialUserState, action: Action): UserState {
@@ -24,7 +27,7 @@ export function userReducer(state = initialUserState, action: Action): UserState
     switch (action.type) {
         case RETRIEVE_USER_COMPLETE: {
             // TODO check why susbcription does not receive this
-            const currentUser = action['user'];
+            const currentUser = (action as RetrieveUserCompleteAction).user;
             return {...state, currentUser};
         }
 
@@ -36,16 +39,15 @@ export function userReducer(state = initialUserState, action: Action): UserState
         case ACCESS_USER_EMAIL_COMPLETE: {
             // const c = state.currentUser;
             // c['email'] = action['payload'];
-            return {...state, email: action['email']};
+            return {...state, email: (action as AccessUserEmailCompleteAction).email};
         }
 
         case LOGIN_FAILED: {
-            const err = action['payload'];
-            return {...state, currentUser: err, isLoggingIn: false};
+            return {...state, isLoggingIn: false};
         }
 
         case SHOW_MESSAGE: {
-            const message = action['message'];
+            const message = (action as ShowMessageAction).message;
             return {...state, message};
         }
 
@@ -54,17 +56,12 @@ export function userReducer(state = initialUserState, action: Action): UserState
         }
 
         case SAVE_SETTINGS: {
-            const settings = action['values'];
+            const settings = (action as SaveSettingsAction).values;
             return {...state, settings};
         }
 
         case LOGOUT_COMPLETE: {
             return {...initialUserState, currentUser: null};
-        }
-
-        case ADD_GROUPS_COMPLETE: {
-            const currentUserGroups = action['payload'];
-            return {...state, currentUserGroups};
         }
 
         case LOGIN: {
