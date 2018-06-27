@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {Store, select} from '@ngrx/store';
-import {Dataset, Job, OrigDatablock} from 'shared/sdk/models';
+import {Job} from 'shared/sdk/models';
 import * as dsa from 'state-management/actions/datasets.actions';
 import * as ja from 'state-management/actions/jobs.actions';
 import * as ua from 'state-management/actions/user.actions';
@@ -9,11 +9,9 @@ import * as selectors from 'state-management/selectors';
 import {Subscription} from 'rxjs/Subscription';
 import { Message, MessageType } from 'state-management/models';
 import { Angular5Csv } from 'angular5-csv/Angular5-csv';
-import 'rxjs/add/operator/distinctUntilChanged';
-import 'rxjs/add/operator/take';
 import { getIsAdmin } from 'state-management/selectors/users.selectors';
 import { getCurrentDataset, getCurrentDatablocks, getCurrentAttachments, getCurrentOrigDatablocks } from 'state-management/selectors/datasets.selectors';
-import { pluck, map } from 'rxjs/operators';
+import { pluck, take } from 'rxjs/operators';
 import * as filesize from 'filesize';
 
 /**
@@ -50,7 +48,7 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
   ngOnInit() {
     const msg = new Message();
     this.subscriptions.push(
-      this.store.select(selectors.jobs.submitJob).subscribe(
+      this.store.pipe(select(selectors.jobs.submitJob)).subscribe(
         ret => {
           if (ret && Array.isArray(ret)) {
             console.log(ret);
@@ -66,7 +64,7 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
     );
 
     this.subscriptions.push(
-      this.store.select(selectors.jobs.getError).subscribe(err => {
+      this.store.pipe(select(selectors.jobs.getError)).subscribe(err => {
         if (err) {
           msg.type = MessageType.Error;
           msg.content = err.message;
@@ -85,7 +83,7 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
   }
 
   onExportClick() {
-    this.dataset$.take(1).subscribe(ds => {
+    this.dataset$.pipe(take(1)).subscribe(ds => {
 
       const options = {
         fieldSeparator: ',',
@@ -105,9 +103,9 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
   }
 
   resetDataset(dataset) {
-    this.store
-      .select(state => state.root.user)
-      .take(1)
+    this.store.pipe(
+      select(state => state.root.user),
+      take(1))
       .subscribe(user => {
         user = user['currentUser'];
         const job = new Job();

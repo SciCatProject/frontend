@@ -24,9 +24,17 @@
           <td>{{ value }}</td>
         </tr>
         <tr *ngIf="dataset.sourceFolder as value">
-            <th>Source Folder</th>
+          <th>Source Folder</th>
           <td>{{ value }}</td>
         </tr>
+        <!--
+        <tr *ngIf="dataset.sourceFolder as value">
+          <th>Source Folder</th>
+          <mat-form-field class="example-full-width">
+            <input matInput placeholder="Source Folder" [value]="value">
+          </mat-form-field>
+        </tr>
+        -->
         <tr *ngIf="dataset.size as value">
           <th>Size</th>
           <td>{{ getFilesize(value) }}</td>
