@@ -1,25 +1,9 @@
-import { Dataset, AccessGroup, Datablock } from 'shared/sdk/models';
-
-import {SEARCH_FAILED } from './datasets.actions'; 
+import { Dataset} from 'shared/sdk/models';
 import {UpdateFilterAction, FILTER_UPDATE } from './datasets.actions'; 
-import {FILTER_FAILED } from './datasets.actions'; 
-import {FILTER_VALUE_UPDATE } from './datasets.actions'; 
-import {SEARCH_ID } from './datasets.actions'; 
 import {SearchIDCompleteAction, SEARCH_ID_COMPLETE } from './datasets.actions'; 
-import {SEARCH_ID_FAILED } from './datasets.actions'; 
 import {DatablocksAction, DATABLOCKS } from './datasets.actions'; 
-import {DATABLOCKS_COMPLETE } from './datasets.actions'; 
-import {DatablocksFailedAction, DATABLOCKS_FAILED } from './datasets.actions'; 
-import {DATABLOCK_DELETE } from './datasets.actions'; 
-import {DATABLOCK_DELETE_COMPLETE } from './datasets.actions'; 
-import {DATABLOCK_DELETE_FAILED } from './datasets.actions'; 
-import {ADD_GROUPS } from './datasets.actions'; 
-import {ADD_GROUPS_FAILED } from './datasets.actions'; 
+import {DatablocksFailedAction, DATABLOCKS_FAILED } from './datasets.actions';  
 import {CurrentSetAction, SELECT_CURRENT } from './datasets.actions'; 
-import {CURRENT_BLOCKS_COMPLETE } from './datasets.actions'; 
-import {RESET_STATUS } from './datasets.actions'; 
-import {RESET_STATUS_COMPLETE } from './datasets.actions'; 
-import {TOTAL_UPDATE } from './datasets.actions'; 
 import {SelectDatasetAction, SELECT_DATASET } from './datasets.actions'; 
 import {DeselectDatasetAction, DESELECT_DATASET } from './datasets.actions'; 
 import {ClearSelectionAction, CLEAR_SELECTION } from './datasets.actions'; 

@@ -1,8 +1,7 @@
 import { jobsReducer } from './jobs.reducer';
-import { initialJobsState, JobsState} from '../state/jobs.store';
+import { initialJobsState} from '../state/jobs.store';
 import * as jobsActions from '../actions/jobs.actions';
 import {Job } from '../models';
-import { JobInterface } from 'shared/sdk';
 
 describe('DatasetsReducer', () => {
 

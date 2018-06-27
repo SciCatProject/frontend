@@ -1,22 +1,18 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
-
-import { Subscription, Subject } from 'rxjs';
-import { Observable } from 'rxjs/Observable';
+import { Component, OnDestroy } from '@angular/core';
+import { Router, ActivatedRoute,} from '@angular/router';
 
 import { Store, select } from '@ngrx/store';
 
 import * as rison from 'rison';
 import * as deepEqual from 'deep-equal';
 
-import { Dataset, DatasetFilters } from 'state-management/models';
+import { DatasetFilters } from 'state-management/models';
 
 import {
   SetSearchTermsAction,
   FetchFacetCountsAction,
   FetchDatasetsAction,
   SetTextFilterAction,
-  UpdateFilterAction,
   PrefillFiltersAction,
 } from 'state-management/actions/datasets.actions';
 
@@ -24,19 +20,9 @@ import {
   getSelectedDatasets,
   getSearchTerms,
   getFilters,
-  getTextFilter,
   getHasPrefilledFilters
 } from 'state-management/selectors/datasets.selectors';
-
-import { filter } from 'rxjs/operators/filter';
-import { pluck } from 'rxjs/operators/pluck';
-import { map } from 'rxjs/operators/map';
-import { take } from 'rxjs/operators/take';
-import { tap } from 'rxjs/operators/tap';
-import { debounceTime } from 'rxjs/operators/debounceTime';
-import { distinctUntilChanged } from 'rxjs/operators/distinctUntilChanged';
-import { combineLatest } from 'rxjs/operators/combineLatest';
-import { skipWhile } from 'rxjs/operators/skipWhile';
+import { filter, map, take, debounceTime, distinctUntilChanged, combineLatest, skipWhile } from 'rxjs/operators';
 
 @Component({
   selector: 'dashboard',

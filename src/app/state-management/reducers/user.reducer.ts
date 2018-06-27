@@ -5,16 +5,13 @@ import {
     SHOW_MESSAGE,
     CLEAR_MESSAGE,
     SAVE_SETTINGS,
-
     LOGIN, LOGIN_COMPLETE, LOGIN_FAILED,
     RETRIEVE_USER_COMPLETE, RetrieveUserCompleteAction,
-
     ACCESS_USER_EMAIL_COMPLETE,
     AD_LOGIN_COMPLETE,
     LOGOUT_COMPLETE,
     LoginCompleteAction,
     AccessUserEmailCompleteAction,
-    LoginFailedAction,
     ShowMessageAction,
     SaveSettingsAction
 } from 'state-management/actions/user.actions';

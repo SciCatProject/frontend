@@ -1,5 +1,5 @@
 import { Action } from '@ngrx/store';
-import { Message, MessageType, User, AccessGroup, Settings } from '../models';
+import { Message,  User,  Settings } from '../models';
 
 export const LOGIN =                      '[User] Login';
 export const LOGIN_COMPLETE =             '[User] Login Complete';

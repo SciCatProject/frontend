@@ -1,10 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
-
 import {Datablock} from 'shared/sdk/models';
-import {DatasetApi} from 'shared/sdk/services';
-
-import {ActivatedRoute, NavigationExtras, Router} from '@angular/router';
-import {MatTableDataSource, MatPaginator} from '@angular/material';
+import {ActivatedRoute,Router} from '@angular/router';
+import {MatTableDataSource} from '@angular/material';
 
 
 @Component({

@@ -4,11 +4,10 @@ import { Router, ActivatedRoute} from '@angular/router';
 
 import { MatTableModule} from '@angular/material';
 
-import {MockActivatedRoute, MockDatablockApi, MockDatasetApi, MockDatasetService, MockRouter} from 'shared/MockStubs';
+import {MockActivatedRoute, MockRouter} from 'shared/MockStubs';
 
 import { DatablocksComponent } from './datablocks-table.component';
 
-import { DatasetService } from 'datasets/dataset.service';
 
 describe('DatablocksComponent', () => {
   let component: DatablocksComponent;

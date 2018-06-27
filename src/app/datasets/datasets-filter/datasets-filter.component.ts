@@ -1,9 +1,5 @@
 import { Component } from '@angular/core';
 import { Store, select } from '@ngrx/store';
-
-import { Observable } from 'rxjs/Observable';
-import { MatDatepicker } from 'saturn-datepicker';
-
 import { FacetCount } from 'state-management/state/datasets.store';
 import {
   getLocationFacetCounts,
@@ -30,7 +26,6 @@ import {
   SetDateRangeFilterAction
 } from 'state-management/actions/datasets.actions';
 import { MatDatepickerInputEvent } from '@angular/material';
-import { filter } from 'rxjs/operators';
 
 type DateRange = {
   begin: Date;

@@ -2,12 +2,9 @@ import {CommonModule} from '@angular/common';
 import {NgModule} from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { FileHelpersModule } from 'ngx-file-helpers';
-
 import { FilePickerComponent } from './file-picker/file-picker.component';
 import { FileDropzoneComponent } from './file-dropzone/file-dropzone.component';
-
 import { AppConfigModule } from 'app-config.module';
-
 import {
   DashboardComponent,
   DatablocksComponent,
@@ -25,40 +22,23 @@ import {
   MatCheckboxModule,
   // MatDatepickerModule,
   MatDialogModule,
-  MatExpansionModule,
-  MatGridListModule,
   MatIconModule,
   MatInputModule,
   MatListModule,
-  MatMenuModule,
   MatNativeDateModule,
   MatPaginatorModule,
-  MatProgressBarModule,
   MatProgressSpinnerModule,
-  MatRadioModule,
-  MatRippleModule,
   MatSelectModule,
-  MatSidenavModule,
-  MatSliderModule,
-  MatSlideToggleModule,
-  MatSnackBarModule,
   MatSortModule,
   MatTableModule,
   MatTabsModule,
-  MatToolbarModule,
   MatTooltipModule,
-  MatStepperModule,
   MatFormFieldModule,
   MatOptionModule,
 } from '@angular/material';
-
-
-
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatChipsModule } from '@angular/material/chips';
-
 import { SharedCatanieModule } from 'shared/shared.module';
-
 import { SelectedListComponent } from 'datasets/selected-list/selected-list.component';
 import { MatDatepickerModule } from 'saturn-datepicker';
 import { DatasetTablePureComponent } from './dataset-table-pure/dataset-table-pure.component';

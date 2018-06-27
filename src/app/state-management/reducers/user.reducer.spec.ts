@@ -1,8 +1,7 @@
 import { userReducer } from './user.reducer';
 import { initialUserState, UserState} from '../state/user.store';
 import * as userActions from '../actions/user.actions';
-import { User, MessageType, Message, Settings, AccessGroup } from '../models';
-import { initialDatasetState } from '../state/datasets.store';
+import { User, MessageType, Message, Settings } from '../models';
 
 describe('UserReducer', () => {
 

@@ -1,9 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
+import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 import {
   MatDialogModule,
-  MatInputModule,
-  MatButtonModule,
   MatFormFieldModule
   } from '@angular/material';
 import {CommonModule} from '@angular/common';

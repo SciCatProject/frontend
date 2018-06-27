@@ -3,11 +3,8 @@ import {FormBuilder, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Store, select} from '@ngrx/store';
 import * as ua from 'state-management/actions/user.actions';
-import * as selectors from 'state-management/selectors';
-import { Message, MessageType } from 'state-management/models';
-import { getCurrentUser } from 'state-management/reducers/user.reducer';
 import { Subscription } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
+import { filter} from 'rxjs/operators';
 import { getIsLoggedIn, getIsLoggingIn } from 'state-management/selectors/users.selectors';
 
 interface LoginForm {

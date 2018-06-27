@@ -4,14 +4,7 @@ import { ProposalsListComponent } from './proposals-list.component';
 import { MatListModule } from '@angular/material';
 import { RouterTestingModule } from '@angular/router/testing';
 import { Router } from '@angular/router';
-import {
-  MockActivatedRoute,
-  MockConfigService,
-  MockHttp,
-  MockRouter,
-  MockStore,
-  MockUserApi
-} from 'shared/MockStubs';
+import {  MockRouter} from 'shared/MockStubs';
 
 describe('ProposalsListComponent', () => {
   let component: ProposalsListComponent;

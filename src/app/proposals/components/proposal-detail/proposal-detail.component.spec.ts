@@ -1,15 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { MatListModule, MatTableModule, MatTabsModule, MatCellDef, MatHeaderCellDef, MatColumnDef, MatHeaderCell, MatCell, MatTable, MatHeaderRowDef, MatRowDef, MatHeaderRow, MatRow, MatTableDataSource } from '@angular/material';
-import { Router } from '@angular/router';
-import {
-  MockActivatedRoute,
-  MockConfigService,
-  MockRouter,
-  MockStore,
-  MockUserApi
-} from 'shared/MockStubs';
-
+import { MatTableModule, MatTabsModule } from '@angular/material';
 import { ProposalDetailComponent } from './proposal-detail.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
