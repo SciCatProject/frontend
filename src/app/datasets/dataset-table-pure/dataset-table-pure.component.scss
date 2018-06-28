@@ -49,7 +49,7 @@ mat-cell, .mat-header-cell {
 }
 
 /*:host /deep/*/ .mat-row:hover {
-  background-color: rgba(32, 32, 216, 0.3);
+  background-color: mat-color($accent, lighter);
   cursor: pointer;
 }
 
