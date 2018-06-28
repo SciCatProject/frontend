@@ -1,5 +1,5 @@
 <div class="dataset-table">
-  <div class="mode-container" *ngIf="false">
+  <div class="mode-container" *ngIf="archiveWorkflowEnabled">
     <mat-button-toggle-group [value]="currentMode">
       <mat-button-toggle *ngFor="let mode of modes" (click)="onModeChange($event, mode)" [value]="mode" [ngClass]="mode">
         {{mode | titlecase}}
