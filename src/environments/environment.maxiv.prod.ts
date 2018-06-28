@@ -3,5 +3,5 @@ export const environment = {
   lbBaseURL: 'http://scicat.maxiv.lu.se',
   externalAuthEndpoint: '/auth/msad',
   archiveWorkflowEnabled: false,
-  disabledDatasetColumns: ['archiveStatus', 'retrieveStatus', 'ownerGroup']
+  disabledDatasetColumns: ['select', 'archiveStatus', 'retrieveStatus', 'ownerGroup']
 };
