@@ -1,5 +1,5 @@
 <div class="dataset-table">
-  <div class="mode-container">
+  <div class="mode-container" *ngIf="archiveWorkflowEnabled">
     <mat-button-toggle-group [value]="currentMode">
       <mat-button-toggle *ngFor="let mode of modes" (click)="onModeChange($event, mode)" [value]="mode" [ngClass]="mode">
         {{mode | titlecase}}
@@ -22,7 +22,7 @@
       <i class="archive icon"></i>
       Archive
     </button>
-      
+
     <button mat-button [disabled]="isEmptySelection$ | async" *ngIf="currentMode === 'retrieve'"class="ui button retrieve-action-btn" (click)="retrieveClickHandle($event)" color="primary">
       <i class="upload icon"></i>
       Retrieve
@@ -42,7 +42,6 @@
     [totalNumber]="datasetCount$ | async"
     [currentPage]="currentPage$ | async"
     [datasetsPerPage]="datasetsPerPage$ | async"
-    [rowClassifier]="rowClassifier"
     [disabledColumns]="disabledColumns"
     (onClick)="onClick($event)"
     (onSelect)="onSelect($event)"

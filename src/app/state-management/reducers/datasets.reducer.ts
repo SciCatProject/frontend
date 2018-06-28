@@ -1,20 +1,12 @@
 import { Action } from '@ngrx/store';
-import { Dataset } from 'shared/sdk/models';
-
 import {
     FILTER_UPDATE,
-    FILTER_UPDATE_COMPLETE,
 
     SELECT_CURRENT,
-    SELECTED_UPDATE,
-    TOTAL_UPDATE,
     FILTER_VALUE_UPDATE,
 
     CURRENT_BLOCKS_COMPLETE,
     SEARCH_ID_COMPLETE,
-    SELECTED_DATABLOCKS_COMPLETE,
-    SEARCH_COMPLETE,
-    ADD_GROUPS_COMPLETE,
 
     SELECT_DATASET,
     SelectDatasetAction,
@@ -60,6 +52,7 @@ import {
     ADD_TYPE_FILTER,
     PREFILL_FILTERS,
     PrefillFiltersAction,
+    SearchIDCompleteAction,
 } from 'state-management/actions/datasets.actions';
 
 import { DatasetState, initialDatasetState } from 'state-management/state/datasets.store';
@@ -96,7 +89,7 @@ export function datasetsReducer(state: DatasetState = initialDatasetState, actio
             return {...state, facetCountsLoading: false};
         }
 
-        case FILTER_UPDATE: {
+        case FILTER_UPDATE: { 
             const f = action['payload'];
             const group = f['ownerGroup'];
 
@@ -237,36 +230,15 @@ export function datasetsReducer(state: DatasetState = initialDatasetState, actio
             return {...state, filters};
         }
 
-        case SEARCH_COMPLETE: {
-            const datasets = <Dataset[]>action['payload'];
-            return {...state, datasets, datasetsLoading: false};
-        }
-
-        case ADD_GROUPS_COMPLETE: {
-            const ownerGroup = action['payload'];
-            const filters = {...state.filters, ownerGroup};
-            return {...state, filters};
-        }
-
         case FILTER_VALUE_UPDATE: {
             return {...state, facetCountsLoading: true};
-        }
-        case FILTER_UPDATE_COMPLETE: {
-            const filters = action['payload'];
-            return {...state, filters, facetCountsLoading: false};
         }
 
         case SELECT_CURRENT:
         case CURRENT_BLOCKS_COMPLETE:
         case SEARCH_ID_COMPLETE: {
-            const currentSet = <Dataset>action['payload'];
+            const currentSet = (action as SearchIDCompleteAction).dataset;
             return {...state, currentSet};
-        }
-
-        case SELECTED_DATABLOCKS_COMPLETE:
-        case SELECTED_UPDATE: {
-            const selectedSets = <Dataset[]>action['payload'];
-            return {...state, selectedSets};
         }
 
         case SELECT_DATASET: {

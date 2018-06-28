@@ -1,10 +1,8 @@
 import { Action } from '@ngrx/store';
 import { DatasetFilters, ViewMode } from 'state-management/models';
-import { Dataset, AccessGroup, Datablock } from 'shared/sdk/models';
+import { Dataset} from 'shared/sdk/models';
 import { FacetCounts } from '../state/datasets.store';
-import { error } from 'selenium-webdriver';
 
-export const SEARCH_COMPLETE =              '[Dataset] Search Complete';
 export const SEARCH_FAILED =                '[Dataset] Search Failed';
 
 export const SEARCH_ID =                    '[Dataset] Search ID';
@@ -12,7 +10,6 @@ export const SEARCH_ID_COMPLETE =           '[Dataset] Search ID Complete';
 export const SEARCH_ID_FAILED =             '[Dataset] Search ID Failed';
 
 export const FILTER_UPDATE =                '[Dataset] Filter Update';
-export const FILTER_UPDATE_COMPLETE =       '[Dataset] Filter Update Complete';
 export const FILTER_VALUE_UPDATE =          '[Dataset] Filter Update';
 export const FILTER_FAILED =                '[Dataset] Filter Failed';
 
@@ -25,7 +22,6 @@ export const DATABLOCK_DELETE_COMPLETE =    '[Dataset] Datablock Delete Complete
 export const DATABLOCK_DELETE_FAILED =      '[Dataset] Datablock Delete Failed';
 
 export const ADD_GROUPS =                   '[User] Add Groups';
-export const ADD_GROUPS_COMPLETE =          '[User] Add Groups Complete';
 export const ADD_GROUPS_FAILED =            '[User] Add Groups Failed';
 
 export const RESET_STATUS =                 '[Dataset] Status Reset';
@@ -34,16 +30,12 @@ export const RESET_STATUS_COMPLETE =        '[Dataset] Status Reset Complete';
 export const LOAD =                         '[Dataset] Load';
 export const COUNT_COMPLETE =               '[Dataset] Complete';
 export const SELECT_CURRENT =               '[Dataset] Current set selected';
-export const SELECTED_UPDATE =              '[Dataset] Selected Datasets Update';
-export const SELECTED_DATABLOCKS_COMPLETE = '[Dataset] Selected Datablocks update complete';
 export const CURRENT_BLOCKS_COMPLETE =      '[Dataset] Current set datablocks update complete';
 export const TOTAL_UPDATE =                 '[Dataset] Total Datasets Update';
 // export const FILTER_UPDATE_COMPLETE = '[Dataset]  Filter Update Complete';
-
 export const SELECT_DATASET =               '[Dataset] Select Dataset';
 export const DESELECT_DATASET =             '[Dataset] Deselect Dataset';
 export const CLEAR_SELECTION =              '[Dataset] Clear Selection';
-
 export const EXPORT_TO_CSV =                '[Dataset] Export to CSV';
 export const SET_VIEW_MODE =                '[Dataset] Set View Mode';
 
@@ -78,29 +70,29 @@ export const PREFILL_FILTERS =              '[Dataset] Prefill Filter';
 export const CLEAR_FACETS =                 '[Dataset] Clear Facets';
 
 
-export class UpdateFilterAction implements Action { 
+export class UpdateFilterAction implements Action { //Inte gjord då den eventuellt ska tas bort
     readonly type = FILTER_UPDATE;
-    constructor(public payload: any) {}
+    constructor(public payload: {}) {}
 }
 
 export class SearchIDCompleteAction implements Action {
     readonly type = SEARCH_ID_COMPLETE;
-    constructor(public payload: {}) {}
+    constructor(readonly dataset: Dataset) {}
 }
 
 export class DatablocksAction implements Action {
     readonly type = DATABLOCKS;
-    constructor(public payload: string) {}
+    constructor(readonly id: string) {}
 }
 
-export class DatablocksFailedAction implements Action { 
+export class DatablocksFailedAction implements Action {
     readonly type = DATABLOCKS_FAILED;
-    constructor(public payload: any) {}
+    constructor(readonly error: Error) {}
 }
 
 export class CurrentSetAction implements Action {
     readonly type = SELECT_CURRENT;
-    constructor(public payload: Dataset) {}
+    constructor(readonly dataset: Dataset) {}
 }
 
 export class SelectDatasetAction implements Action {

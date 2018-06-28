@@ -30,7 +30,6 @@ import {
   SetDateRangeFilterAction
 } from 'state-management/actions/datasets.actions';
 import { MatDatepickerInputEvent } from '@angular/material';
-import { filter } from 'rxjs/operators';
 
 type DateRange = {
   begin: Date;

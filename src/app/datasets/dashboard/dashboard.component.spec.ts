@@ -4,8 +4,6 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HttpClient} from '@angular/common/http';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Store, StoreModule} from '@ngrx/store';
-import {DatasetTableComponent} from 'datasets/dataset-table/dataset-table.component';
-import {DatasetsFilterComponent} from 'datasets/datasets-filter/datasets-filter.component';
 import {UserApi} from 'shared/sdk/services';
 import {ConfigService} from 'shared/services/config.service';
 import {rootReducer} from 'state-management/reducers/root.reducer';
@@ -21,7 +19,6 @@ import {
   MockParamsService
 } from '../../shared/MockStubs';
 import {DashboardComponent} from './dashboard.component';
-import { DatasetTablePureComponent } from '../dataset-table-pure/dataset-table-pure.component';
 
 /* tslint:disable:no-unused-variable */
 describe('DashboardComponent', () => {

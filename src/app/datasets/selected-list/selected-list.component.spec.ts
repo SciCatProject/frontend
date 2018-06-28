@@ -3,7 +3,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { SelectedListComponent } from './selected-list.component';
 import { MatCardModule, MatListModule } from '@angular/material';
 
-import {Store, StoreModule} from '@ngrx/store';
+import {Store} from '@ngrx/store';
 import { MockStore} from 'shared/MockStubs';
 
 describe('SelectedListComponent', () => {

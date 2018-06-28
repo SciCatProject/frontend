@@ -1,10 +1,28 @@
-import { Dataset, DatasetFilters } from 'state-management/models';
-
 import { createSelector, createFeatureSelector } from '@ngrx/store';
 import { DatasetState } from '../state/datasets.store'
 import { config } from '../../../config/config';
 
 const getDatasetState = createFeatureSelector<DatasetState>('datasets');
+
+export const getCurrentDataset = createSelector(
+    getDatasetState,
+    state => state.currentSet
+);
+
+export const getCurrentOrigDatablocks = createSelector(
+    getCurrentDataset,
+    dataset => dataset.origdatablocks
+);
+
+export const getCurrentAttachments = createSelector(
+    getCurrentDataset,
+    dataset => dataset.datasetattachments
+);
+
+export const getCurrentDatablocks = createSelector(
+    getCurrentDataset,
+    dataset => dataset.datablocks
+);
 
 export const getDatasets = createSelector(
     getDatasetState,

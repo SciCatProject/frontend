@@ -1,0 +1,6 @@
+@import 'src/theme.scss';
+
+/* Why does this need to be specifically defined? */
+.breadcrumb a {
+    color: mat-color($primary);
+}

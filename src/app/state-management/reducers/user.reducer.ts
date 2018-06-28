@@ -5,14 +5,15 @@ import {
     SHOW_MESSAGE,
     CLEAR_MESSAGE,
     SAVE_SETTINGS,
-
     LOGIN, LOGIN_COMPLETE, LOGIN_FAILED,
     RETRIEVE_USER_COMPLETE, RetrieveUserCompleteAction,
-
     ACCESS_USER_EMAIL_COMPLETE,
     AD_LOGIN_COMPLETE,
     LOGOUT_COMPLETE,
-    ADD_GROUPS_COMPLETE
+    LoginCompleteAction,
+    AccessUserEmailCompleteAction,
+    ShowMessageAction,
+    SaveSettingsAction
 } from 'state-management/actions/user.actions';
 
 export function userReducer(state = initialUserState, action: Action): UserState {
@@ -23,28 +24,27 @@ export function userReducer(state = initialUserState, action: Action): UserState
     switch (action.type) {
         case RETRIEVE_USER_COMPLETE: {
             // TODO check why susbcription does not receive this
-            const currentUser = action['payload'];
+            const currentUser = (action as RetrieveUserCompleteAction).user;
             return {...state, currentUser};
         }
 
         case LOGIN_COMPLETE: {
-            const currentUser = action['payload']['user'];
-            return {...state, currentUser, loading: false};
+            const currentUser = (action as LoginCompleteAction).user;
+            return {...state, currentUser, isLoggingIn: false};
         }
 
         case ACCESS_USER_EMAIL_COMPLETE: {
             // const c = state.currentUser;
             // c['email'] = action['payload'];
-            return {...state, email: action['payload']};
+            return {...state, email: (action as AccessUserEmailCompleteAction).email};
         }
 
         case LOGIN_FAILED: {
-            const err = action['payload'];
-            return {...state, currentUser: err, loading: false};
+            return {...state, isLoggingIn: false};
         }
 
         case SHOW_MESSAGE: {
-            const message = action['payload'];
+            const message = (action as ShowMessageAction).message;
             return {...state, message};
         }
 
@@ -53,22 +53,16 @@ export function userReducer(state = initialUserState, action: Action): UserState
         }
 
         case SAVE_SETTINGS: {
-            const settings = action['payload'];
+            const settings = (action as SaveSettingsAction).values;
             return {...state, settings};
         }
 
         case LOGOUT_COMPLETE: {
-            const initialCurrentUser = {...initialUserState.currentUser, loggedOut: true};
-            return {...initialUserState, currentUser: initialCurrentUser};
-        }
-
-        case ADD_GROUPS_COMPLETE: {
-            const currentUserGroups = action['payload'];
-            return {...state, currentUserGroups};
+            return {...initialUserState, currentUser: null};
         }
 
         case LOGIN: {
-            return {...state, loading: true};
+            return {...state, isLoggingIn: true};
         }
         case AD_LOGIN_COMPLETE:
         default: {

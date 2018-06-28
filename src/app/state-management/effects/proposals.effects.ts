@@ -1,11 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Effect, Actions, ofType } from '@ngrx/effects';
-
-import { Observable } from 'rxjs/Observable';
-import { map, mergeMap, take, catchError } from 'rxjs/operators';
-
+import { Observable } from 'rxjs';
+import { map, mergeMap, catchError } from 'rxjs/operators';
 import { ProposalsService } from 'proposals/proposals.service';
-
 import {
 	FetchProposalsOutcomeAction,
 	FetchProposalsAction, FETCH_PROPOSALS,
@@ -23,7 +20,6 @@ import {
 	FetchDatasetsForProposalFailedAction,
 } from '../actions/proposals.actions';
 
-import { Proposal } from '../models';
 
 @Injectable()
 export class ProposalsEffects {

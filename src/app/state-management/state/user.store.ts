@@ -6,7 +6,7 @@ import {
 // NOTE It IS ok to make up a state of other sub states
 export interface UserState {
   currentUser: User;
-  loading: Boolean;
+  isLoggingIn: boolean;
   currentUserGroups: AccessGroup[];
   email: string;
   message: Message;
@@ -14,10 +14,10 @@ export interface UserState {
 }
 
 export const initialUserState: UserState = {
-  currentUser: <User>{},
+  currentUser: null,
   currentUserGroups: [],
   email: undefined,
-  loading: false,
+  isLoggingIn: false,
   message: {content: undefined, type: undefined, duration: 10000},
   settings: {
     'tapeCopies': 'one',

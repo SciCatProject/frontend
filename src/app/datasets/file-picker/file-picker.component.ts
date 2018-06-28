@@ -1,22 +1,13 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ViewChild} from '@angular/core';
-import {Injectable, Inject} from '@angular/core';
+import {Inject} from '@angular/core';
 import {Store, select} from '@ngrx/store';
-import {
-  Http,
-  Response,
-  Headers
-} from '@angular/http';
-import {LoopBackConfig} from 'shared/sdk/lb.config';
 import {Observable} from 'rxjs/Rx';
-import {OrigDatablock, Dataset, DatasetAttachment, Datablock, RawDataset, Job} from 'shared/sdk/models';
+import {Dataset} from 'shared/sdk/models';
 import {APP_CONFIG, AppConfig} from '../../app-config.module';
-
 import * as lb from 'shared/sdk/services';
-
 import {FilePickerDirective, ReadFile, ReadMode} from 'ngx-file-helpers';
-
-import {ReadModePipe} from 'shared/pipes/index';
+import {filter} from 'rxjs/operators';
 
 
 @Component({
@@ -38,10 +29,10 @@ export class FilePickerComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    const currentSet$ = this.store.select(state => state.root.datasets.currentSet);
-    this.dataset$ = currentSet$.filter((dataset: Dataset) => {
+    const currentSet$ = this.store.pipe(select(state => state.root.datasets.currentSet));
+    this.dataset$ = currentSet$.pipe(filter((dataset: Dataset) => {
       return dataset && (Object.keys(dataset).length > 0);
-    });
+    }));
     this.dataset$.subscribe((dataset)=>{this.dataset = dataset;});
 
 

@@ -1,6 +1,5 @@
-import { Action, ActionReducer } from '@ngrx/store';
-import { ProposalsState, initialProposalsState } from '../state/proposals.store';
 
+import { ProposalsState, initialProposalsState } from '../state/proposals.store';
 import {
     ProposalsAction,
     SelectProposalAction, SELECT_PROPOSAL,
@@ -8,7 +7,6 @@ import {
     FetchProposalCompleteAction, FETCH_PROPOSAL_COMPLETE,
     FetchDatasetsForProposalCompleteAction, FETCH_DATASETS_FOR_PROPOSAL_COMPLETE,
 } from '../actions/proposals.actions';
-
 import { LogoutCompleteAction, LOGOUT_COMPLETE } from '../actions/user.actions';
 
 export function proposalsReducer(

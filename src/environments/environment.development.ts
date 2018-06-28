@@ -6,5 +6,6 @@
 export const environment = {
   production: false,
   lbBaseURL: 'https://dacat-development.psi.ch',
+  archiveWorkflowEnabled: true,
   externalAuthEndpoint: '/auth/msad'
 };

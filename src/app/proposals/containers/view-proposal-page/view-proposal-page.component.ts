@@ -1,24 +1,18 @@
-import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-
 import { Store, select } from '@ngrx/store';
-
 import { Subscription } from 'rxjs/Subscription';
 import { Observable } from 'rxjs/Observable';
 import { map, filter, flatMap } from 'rxjs/operators';
-
 import {
     SelectProposalAction,
-    FetchProposalsAction,
     FetchProposalAction,
     FetchDatasetsForProposalAction
 } from 'state-management/actions/proposals.actions';
-
 import {
     getSelectedProposal,
     getSelectedProposalDatasets
 } from 'state-management/selectors/proposals.selectors';
-
 import { AppState } from 'state-management/state/app.store';
 import { Dataset, Proposal } from 'state-management/models';
 

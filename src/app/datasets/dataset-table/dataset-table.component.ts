@@ -1,51 +1,29 @@
-import { DatePipe } from '@angular/common';
+
 import {
   Component,
-  EventEmitter,
-  Input,
   OnInit,
-  Output,
-  ViewChild,
   OnDestroy,
   Inject,
 } from '@angular/core';
-
-import { Router, ActivatedRoute, Data } from '@angular/router';
+import { Router, ActivatedRoute} from '@angular/router';
 import { Store, select } from '@ngrx/store';
-import { MatTableDataSource, MatPaginator, MatSort, MatDialog } from '@angular/material';
-import { SelectionModel } from '@angular/cdk/collections';
-
-import { Subject } from 'rxjs/Subject';
-
+import {MatDialog } from '@angular/material';
 import { Job, Dataset } from 'shared/sdk/models';
 import { ConfigService } from 'shared/services/config.service';
 import { DialogComponent } from 'shared/modules/dialog/dialog.component';
-import * as utils from 'shared/utils';
 import { config } from '../../../config/config';
-
 import * as dsa from 'state-management/actions/datasets.actions';
 import * as ua from 'state-management/actions/user.actions';
 import * as ja from 'state-management/actions/jobs.actions';
 import { getDatasets, getSelectedDatasets, getPage, getViewMode, isEmptySelection, getDatasetsPerPage, getIsLoading, getTotalSets, getFilters } from 'state-management/selectors/datasets.selectors';
-import { Message, MessageType, DatasetFilters, ViewMode } from 'state-management/models';
+import { Message, MessageType, ViewMode } from 'state-management/models';
 import * as jobSelectors from 'state-management/selectors/jobs.selectors';
-
-import { Angular5Csv } from 'angular5-csv/Angular5-csv';
-
-import { last } from 'rxjs/operator/last';
-import { Observable } from 'rxjs/Observable';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { startWith } from 'rxjs/operators/startWith';
-
 import { PageChangeEvent, SortChangeEvent } from '../dataset-table-pure/dataset-table-pure.component';
-
-import * as rison from 'rison';
-import { Subscription } from 'rxjs';
+import { Subscription} from 'rxjs';
 import { APP_CONFIG, AppConfig } from 'app-config.module';
-import { distinctUntilChanged } from 'rxjs/operators/distinctUntilChanged';
+import {take} from 'rxjs/operators';
 
 // Needed for compatibility with non-piped RxJS operators
-import 'rxjs/add/operator/take';
 
 @Component({
   selector: 'dataset-table',
@@ -77,7 +55,8 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   private jobErrorSubscription: Subscription;
 
   private disabledColumns: string[] = [];
-
+  private archiveWorkflowEnabled: boolean = false;
+  
   constructor(
     private router: Router,
     private configSrv: ConfigService,
@@ -87,6 +66,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     @Inject(APP_CONFIG) private appConfig: AppConfig
   ) {
     this.disabledColumns = appConfig.disabledDatasetColumns;
+    this.archiveWorkflowEnabled = appConfig.archiveWorkflowEnabled;
   }
 
   ngOnInit() {
@@ -198,9 +178,9 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
       job.jobParams = {};
       job.creationTime = new Date();
       const backupFiles = [];
-      this.store
-        .select(state => state.root.user)
-        .take(1)
+      this.store.pipe(
+        select(state => state.root.user),
+        take(1))
         .subscribe(user => {
           job.emailJobInitiator = user['email'];
           user = user['currentUser'];
@@ -236,9 +216,9 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
           } else {
             job.datasetList = backupFiles;
             job.type = archive ? 'archive' : 'retrieve';
-            this.store
-              .select(state => state.root.user.settings.tapeCopies)
-              .take(1)
+            this.store.pipe(
+              select(state => state.root.user.settings.tapeCopies),
+              take(1))
               .subscribe(copies => {
                 job.jobParams['tapeCopies'] = copies;
               });
@@ -281,40 +261,4 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     const {active: column, direction} = event;
     this.store.dispatch(new dsa.SortByColumnAction(column, direction));
   }
-
-  rowClassifier(row: Dataset): string {
-    if (row.datasetlifecycle && this.currentMode === 'archive'
-      && (config.archiveable.indexOf(row.datasetlifecycle.archiveStatusMessage) !== -1) && row.size !== 0) {
-      return 'row-archiveable';
-    } else if (row.datasetlifecycle && this.currentMode === 'retrieve'
-      && config.retrieveable.indexOf(row.datasetlifecycle.archiveStatusMessage) !== -1 && row.size !== 0) {
-      return 'row-retrievable';
-    } else if (row.size === 0) {
-      return 'row-empty';
-    } else {
-      return 'row-generic';
-    }
-  }
 }
-
-/* Obsolete and/or "pensioned" methods
-/*
-/**
- * Options set based on selected datasets
- * This is used to determine which template to display for
- * archive or retrieval or both
- * @param set
- * @returns {string}
- * /
-setOptions(set) {
-  let options = '';
-  const dl = set['datasetlifecycle'];
-  if (dl && dl['isOnDisk']) {
-    options += 'archive';
-  }
-  if (dl && (dl['isOnTape'] || dl['isOnDisk'])) {
-    options += 'retrieve';
-  }
-  return options;
-}
-*/

@@ -3,7 +3,7 @@ import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {HttpClient} from '@angular/common/http';
 import {Router} from '@angular/router';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import { MatTableModule, MatPaginatorModule } from '@angular/material';
+import { MatTableModule} from '@angular/material';
 import {JobsTableComponent} from './jobs-table.component';
 import {Store, StoreModule} from '@ngrx/store';
 import {ConfigService} from 'shared/services/config.service';
