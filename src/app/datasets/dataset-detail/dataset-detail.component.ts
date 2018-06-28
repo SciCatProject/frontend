@@ -12,7 +12,6 @@ import { Angular5Csv } from 'angular5-csv/Angular5-csv';
 import { getIsAdmin } from 'state-management/selectors/users.selectors';
 import { getCurrentDataset, getCurrentDatablocks, getCurrentAttachments, getCurrentOrigDatablocks } from 'state-management/selectors/datasets.selectors';
 import { pluck, take } from 'rxjs/operators';
-import * as filesize from 'filesize';
 
 /**
  * Component to show details for a dataset, using the
@@ -76,10 +75,6 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.routeSubscription.unsubscribe();
-  }
-
-  getFilesize(size: number): string {
-    return filesize(size || 0);
   }
 
   onExportClick() {

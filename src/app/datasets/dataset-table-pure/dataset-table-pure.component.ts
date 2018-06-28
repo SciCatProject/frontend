@@ -1,7 +1,6 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { MatCheckboxChange } from '@angular/material';
 import { Dataset } from 'state-management/models';
-import * as filesize from 'filesize';
 
 export interface PageChangeEvent {
   pageIndex: number;
@@ -51,10 +50,6 @@ export class DatasetTablePureComponent {
 
   private getDisplayedColumns(): string[] {
     return this.displayedColumns.filter(column => this.disabledColumns.indexOf(column) === -1);
-  }
-
-  private getFormattedSize(size): string {
-    return size ? filesize(size) : '';
   }
 
   private getArchiveStatus(dataset: Dataset) {

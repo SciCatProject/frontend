@@ -5,6 +5,7 @@ import {MatTableModule} from '@angular/material';
 import {DatasetTablePureComponent} from './dataset-table-pure.component';
 import {ConfigService} from 'shared/services/config.service';
 import { MockConfigService} from 'shared/MockStubs';
+import { FileSizePipe } from '../filesize.pipe';
 
 describe('DatasetTablePureComponent', () => {
   let component: DatasetTablePureComponent;
@@ -14,7 +15,7 @@ describe('DatasetTablePureComponent', () => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
       imports: [MatTableModule, FormsModule, ReactiveFormsModule],
-      declarations: [DatasetTablePureComponent]
+      declarations: [DatasetTablePureComponent, FileSizePipe]
     });
     
     TestBed.overrideComponent(DatasetTablePureComponent, {
