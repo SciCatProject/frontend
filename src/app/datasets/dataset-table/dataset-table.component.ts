@@ -261,40 +261,4 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     const {active: column, direction} = event;
     this.store.dispatch(new dsa.SortByColumnAction(column, direction));
   }
-
-  rowClassifier(row: Dataset): string {
-    if (row.datasetlifecycle && this.currentMode === 'archive'
-      && (config.archiveable.indexOf(row.datasetlifecycle.archiveStatusMessage) !== -1) && row.size !== 0) {
-      return 'row-archiveable';
-    } else if (row.datasetlifecycle && this.currentMode === 'retrieve'
-      && config.retrieveable.indexOf(row.datasetlifecycle.archiveStatusMessage) !== -1 && row.size !== 0) {
-      return 'row-retrievable';
-    } else if (row.size === 0) {
-      return 'row-empty';
-    } else {
-      return 'row-generic';
-    }
-  }
 }
-
-/* Obsolete and/or "pensioned" methods
-/*
-/**
- * Options set based on selected datasets
- * This is used to determine which template to display for
- * archive or retrieval or both
- * @param set
- * @returns {string}
- * /
-setOptions(set) {
-  let options = '';
-  const dl = set['datasetlifecycle'];
-  if (dl && dl['isOnDisk']) {
-    options += 'archive';
-  }
-  if (dl && (dl['isOnTape'] || dl['isOnDisk'])) {
-    options += 'retrieve';
-  }
-  return options;
-}
-*/

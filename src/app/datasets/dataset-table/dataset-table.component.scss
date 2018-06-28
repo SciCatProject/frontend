@@ -37,15 +37,3 @@ $ds-archive: mat-palette($mat-green, 600);
 :host /deep/ .datasets-header {
   background-color: mat-color($primary);
 }
-
-:host /deep/ .row-archiveable {
-  background-color: mat-color($ds-archive, 500, 0.2);
-}
-
-:host /deep/ .row-retrievable {
-  background-color: mat-color($ds-archive, 500, 0.2);
-}
-
-:host /deep/ .row-empty {
-  background-color: mat-color($warn, 100, 0.2);
-}
