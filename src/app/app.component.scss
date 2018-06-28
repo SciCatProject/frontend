@@ -1,4 +1,9 @@
-@import '../theme.scss';
+@import 'src/theme.scss';
+
+a {
+  color: mat-color($primary);
+}
+
 .ui#content {
   padding-top: 75px;
 }
