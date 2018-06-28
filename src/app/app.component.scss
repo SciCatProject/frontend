@@ -1,4 +1,13 @@
-@import '../theme.scss';
+@import 'src/theme.scss';
+
+a {
+  color: mat-color($primary);
+}
+
+a:hover {
+  color: mat-color($accent);
+}
+
 .ui#content {
   padding-top: 75px;
 }
