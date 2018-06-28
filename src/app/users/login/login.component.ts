@@ -19,7 +19,11 @@ interface LoginForm {
  * @export
  * @class LoginComponent
  */
-@Component({selector: 'login-form', templateUrl: './login.component.html'})
+@Component({
+  selector: 'login-form',
+  templateUrl: './login.component.html',
+  styleUrls: ['login.component.css']
+})
 export class LoginComponent implements OnInit, OnDestroy {
 
   //returnUrl: string;

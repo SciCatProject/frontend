@@ -37,3 +37,7 @@ $ds-archive: mat-palette($mat-green, 600);
 :host /deep/ .datasets-header {
   background-color: mat-color($primary);
 }
+
+:host /deep/ .mat-paginator {
+  background-color: unset !important;
+}
