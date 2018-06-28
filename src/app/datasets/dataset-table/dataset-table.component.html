@@ -1,6 +1,5 @@
 <div class="dataset-table">
-  <ng-container *ngIf="archiveWorkflowEnabled">
-  <div class="mode-container">
+  <div class="mode-container" *ngIf="false">
     <mat-button-toggle-group [value]="currentMode">
       <mat-button-toggle *ngFor="let mode of modes" (click)="onModeChange($event, mode)" [value]="mode" [ngClass]="mode">
         {{mode | titlecase}}
@@ -13,7 +12,6 @@
     <ng-template ngPluralCase="=1">1 dataset.</ng-template>
     <ng-template ngPluralCase="other">{{ datasetCount$ | async }} datasets.</ng-template>
   </div>
-  </ng-container>
 
   <div *ngIf="loading$ | async" class="raised">
     <mat-spinner diameter="20"></mat-spinner>
