@@ -37,7 +37,7 @@
         -->
         <tr *ngIf="dataset.size as value">
           <th>Size</th>
-          <td>{{ getFilesize(value) }}</td>
+          <td>{{ value | filesize }}</td>
         </tr>
         <tr *ngIf="dataset.creationTime as value">
             <th>Creation Time</th>

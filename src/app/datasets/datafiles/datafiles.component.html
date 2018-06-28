@@ -28,13 +28,13 @@
         </ng-container>
 
         <ng-container matColumnDef="path">
-          <mat-header-cell *matHeaderCellDef> Time</mat-header-cell>
-          <mat-cell *matCellDef="let element"> {{element.time}}</mat-cell>
+          <mat-header-cell *matHeaderCellDef>Time</mat-header-cell>
+          <mat-cell *matCellDef="let element">{{element.time}}</mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="size">
-          <mat-header-cell *matHeaderCellDef> Size</mat-header-cell>
-          <mat-cell *matCellDef="let element"> {{element.size}}</mat-cell>
+          <mat-header-cell *matHeaderCellDef>Size</mat-header-cell>
+          <mat-cell *matCellDef="let element">{{element.size | filesize}}</mat-cell>
         </ng-container>
 
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
@@ -42,8 +42,6 @@
       </mat-table>
     </div>
 
-
     <mat-paginator [pageSize]="30" [pageSizeOptions]="[10,30, 50, 100]" [length]="count"></mat-paginator>
-
   </div>
 </mat-card>
