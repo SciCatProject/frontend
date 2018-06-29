@@ -6,6 +6,7 @@ import { MatTableModule} from '@angular/material';
 import { Store} from '@ngrx/store';
 import { MockStore } from 'shared/MockStubs';
 import { AppConfigModule } from 'app-config.module';
+import { FileSizePipe } from '../filesize.pipe';
 
 describe('DatafilesComponent', () => {
   let component: DatafilesComponent;
@@ -15,7 +16,7 @@ describe('DatafilesComponent', () => {
     TestBed.configureTestingModule({
       schemas: [ NO_ERRORS_SCHEMA ],
       imports: [ ReactiveFormsModule, MatTableModule, AppConfigModule ],
-      declarations: [ DatafilesComponent ]
+      declarations: [ DatafilesComponent, FileSizePipe ]
     });
      TestBed.overrideComponent(DatafilesComponent, {
     set: {
