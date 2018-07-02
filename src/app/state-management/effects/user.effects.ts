@@ -10,7 +10,8 @@ import * as UserActions from 'state-management/actions/user.actions';
 import {AppState} from 'state-management/state/app.store';
 import {ADAuthService} from 'users/adauth.service';
 import {Router} from '@angular/router';
-import {of, tap, map, switchMap, filter, catchError} from 'rxjs/operators';
+import { tap, map, switchMap, filter, catchError} from 'rxjs/operators';
+import { of} from 'rxjs';
 import {MessageType} from '../models';
 import {User} from '../models';
 
@@ -26,6 +27,7 @@ export class UserEffects {
         return this.activeDirSrv.login(form['username'], form['password']).pipe(
           switchMap(result => {
             const res2 = result;
+            console.log(result);
             const res = {
               'id': result['access_token'],
               'rememberMe': true,
@@ -43,11 +45,11 @@ export class UserEffects {
               (user) => {
                 this.authSrv.setUser(user);
                 res['user'] = user;
-                return Observable.of(new UserActions.LoginCompleteAction(user));
+                return of(new UserActions.LoginCompleteAction(user));
               });
 
           }),
-          catchError(err => Observable.of(new UserActions.LoginFailedAction(err.json(), 'AD'))
+          catchError(err => of(new UserActions.LoginFailedAction(err.json(), 'AD'))
           ));
       }));
 
@@ -61,14 +63,14 @@ export class UserEffects {
           switchMap(res => {
             const user: User = res['user'];
             const isFunctional = res['accountType'] === 'functional';
-            return Observable.of(new UserActions.LoginCompleteAction(user));
+            return of(new UserActions.LoginCompleteAction(user));
           }),
           catchError(err => {
             if (typeof (err) === 'string') {
-              return Observable.of(new UserActions.LoginFailedAction(err, 'AD'));
+              return of(new UserActions.LoginFailedAction(err, 'AD'));
             } else {
               err['errSrc'] = 'functional';
-              return Observable.of(new UserActions.ActiveDirLoginAction(form));
+              return of(new UserActions.ActiveDirLoginAction(form));
             }
 
           }));
@@ -107,7 +109,7 @@ export class UserEffects {
       switchMap((userId) => {
         return this.userIdentitySrv.findOne({'where': {'userId': userId}}).pipe(
           map(res => new UserActions.AccessUserEmailCompleteAction(res['profile']['email'])),
-          catchError(err => Observable.of(new UserActions.AccessUserEmailFailedAction(err)))
+          catchError(err => of(new UserActions.AccessUserEmailFailedAction(err)))
         );
       }));
 
@@ -117,12 +119,12 @@ export class UserEffects {
       ofType(UserActions.RETRIEVE_USER),
       switchMap(payload => {
         if (!this.userSrv.isAuthenticated()) {
-          return Observable.of(new UserActions.RetrieveUserFailedAction(new Error('No user is logged in')));
+          return of(new UserActions.RetrieveUserFailedAction(new Error('No user is logged in')));
         }
 
         return this.userSrv.getCurrent().pipe(
           map(res => new UserActions.RetrieveUserCompleteAction(res)),
-          catchError(err => Observable.of(new UserActions.RetrieveUserFailedAction(err)))
+          catchError(err => of(new UserActions.RetrieveUserFailedAction(err)))
         );
       }));
 
@@ -133,7 +135,7 @@ export class UserEffects {
       switchMap(payload => {
         return this.userSrv.getCurrent().pipe(
           map(res => new UserActions.RetrieveUserCompleteAction(res)),
-          catchError(err => Observable.of(new UserActions.RetrieveUserFailedAction(err)))
+          catchError(err => of(new UserActions.RetrieveUserFailedAction(err)))
           // Most likely because the user is logged out so not
           // authorised to make a call
         );

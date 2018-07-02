@@ -2,8 +2,9 @@ import {Component, Input, OnInit, ViewChild, AfterViewInit, Inject} from '@angul
 import {OrigDatablock} from 'shared/sdk/models';
 import {Store} from '@ngrx/store';
 import {Observable} from 'rxjs/Observable';
+import {map} from 'rxjs/operators';
 import {MatTableDataSource, MatPaginator} from '@angular/material';
-import { APP_CONFIG, AppConfig } from 'app-config.module';
+import {APP_CONFIG, AppConfig} from 'app-config.module';
 
 @Component({
   selector: 'datafiles',
@@ -13,7 +14,7 @@ import { APP_CONFIG, AppConfig } from 'app-config.module';
 export class DatafilesComponent implements OnInit, AfterViewInit {
 
   @Input() dataBlocks: Array<OrigDatablock>;
-  
+
   urlPrefix: string;
   count: number = 0;
   files: Array<JSON> = [];

@@ -11,7 +11,7 @@ import { Message, MessageType } from 'state-management/models';
 import { Angular5Csv } from 'angular5-csv/Angular5-csv';
 import { getIsAdmin } from 'state-management/selectors/users.selectors';
 import { getCurrentDataset, getCurrentDatablocks, getCurrentAttachments, getCurrentOrigDatablocks } from 'state-management/selectors/datasets.selectors';
-import { pluck, take } from 'rxjs/operators';
+import { map, pluck, take } from 'rxjs/operators';
 import * as filesize from 'filesize';
 
 /**
@@ -26,7 +26,7 @@ import * as filesize from 'filesize';
   templateUrl: './dataset-detail.component.html',
   styleUrls: ['./dataset-detail.component.scss']
 })
-export class DatasetDetailComponent implements OnInit, OnDestroy {  
+export class DatasetDetailComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
   private routeSubscription = this.route.params
     .pipe(pluck('id'))
@@ -34,7 +34,7 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
 
   private origDatablocks$ = this.store.pipe(select(getCurrentOrigDatablocks));
   private datablocks$ = this.store.pipe(select(getCurrentDatablocks));
-  
+
   private attachments$ = this.store.pipe(select(getCurrentAttachments));
 
   private isAdmin$ = this.store.pipe(select(getIsAdmin));
