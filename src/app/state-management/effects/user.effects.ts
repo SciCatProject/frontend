@@ -27,7 +27,7 @@ export class UserEffects {
         return this.activeDirSrv.login(form['username'], form['password']).pipe(
           switchMap(result => {
             const res2 = result;
-            console.log(result);
+            console.log('gcm', result);
             const res = {
               'id': result['access_token'],
               'rememberMe': true,
