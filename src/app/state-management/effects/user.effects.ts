@@ -10,8 +10,8 @@ import * as UserActions from 'state-management/actions/user.actions';
 import {AppState} from 'state-management/state/app.store';
 import {ADAuthService} from 'users/adauth.service';
 import {Router} from '@angular/router';
-import { tap, map, switchMap, filter, catchError} from 'rxjs/operators';
-import { of} from 'rxjs';
+import {tap, map, switchMap, filter, catchError} from 'rxjs/operators';
+import {of} from 'rxjs';
 import {MessageType} from '../models';
 import {User} from '../models';
 
