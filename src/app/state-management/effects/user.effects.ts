@@ -1,49 +1,49 @@
 // import all rxjs operators that are needed
 
-import { Injectable } from '@angular/core';
-import { Actions, Effect, ofType } from '@ngrx/effects';
-import { Action, Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import {Injectable} from '@angular/core';
+import {Actions, Effect, ofType} from '@ngrx/effects';
+import {Action, Store} from '@ngrx/store';
+import {Observable} from 'rxjs';
 import * as lb from 'shared/sdk/services';
 import * as UserActions from 'state-management/actions/user.actions';
 // import store state interface
-import { AppState } from 'state-management/state/app.store';
-import { ADAuthService } from 'users/adauth.service';
-import { Router } from '@angular/router';
-import { tap, map, switchMap, filter, catchError } from 'rxjs/operators';
-import { MessageType } from '../models';
-import { User } from '../models';
+import {AppState} from 'state-management/state/app.store';
+import {ADAuthService} from 'users/adauth.service';
+import {Router} from '@angular/router';
+import {tap, map, switchMap, filter, catchError} from 'rxjs/operators';
+import {MessageType} from '../models';
+import {User} from '../models';
 
 @Injectable()
 export class UserEffects {
 
   @Effect()
   protected loginActiveDirectory$: Observable<Action> =
-    this.action$.ofType(UserActions.AD_LOGIN)
-      .debounceTime(300)
-      .map((action: UserActions.ActiveDirLoginAction) => action.payload)
-      .switchMap((form) => {
-        return this.activeDirSrv.login(form['username'], form['password'])
-          .switchMap(result => {
-            //const res2 = result;
-            //res2['rememberMe'] = true;
-            //res2['id'] = res['access_token'];
-            const res={
-              'id':result['access_token'],
-              'rememberMe':true,
-              'user':'u1',
-              'scopes':'u1',
-              'created':  null,
-              'userId':  null,
-              'ttl':86400
+    this.action$.pipe(
+      ofType(UserActions.AD_LOGIN),
+      map((action: UserActions.ActiveDirLoginAction) => action.form),
+      switchMap((form) => {
+        return this.activeDirSrv.login(form['username'], form['password']).pipe(
+          switchMap(result => {
+            const res2 = result;
+            const res = {
+              'id': result['access_token'],
+              'rememberMe': true,
+              'user': 'u1',
+              'scopes': 'u1',
+              'created': null,
+              'userId': null,
+              'ttl': 86400
             }
+
+
             // result['user'] = self.loginForm.get('username').value;
             this.authSrv.setToken(res);
             return this.userSrv.getCurrent().switchMap(
               (user) => {
                 this.authSrv.setUser(user);
                 res['user'] = user;
-                return Observable.of(new UserActions.LoginCompleteAction(res));
+                return Observable.of(new UserActions.LoginCompleteAction(user));
               });
 
           }),
@@ -93,7 +93,7 @@ export class UserEffects {
     map(() => new UserActions.LogoutCompleteAction()),
   );
 
-  @Effect({ dispatch: false })
+  @Effect({dispatch: false})
   protected navigate$ = this.action$.pipe(
     ofType(UserActions.LOGOUT_COMPLETE),
     tap(() => this.router.navigate(['/login']))
@@ -105,7 +105,7 @@ export class UserEffects {
       ofType(UserActions.ACCESS_USER_EMAIL),
       map((action: UserActions.AccessUserEmailAction) => action.userId),
       switchMap((userId) => {
-        return this.userIdentitySrv.findOne({ 'where': { 'userId': userId } }).pipe(
+        return this.userIdentitySrv.findOne({'where': {'userId': userId}}).pipe(
           map(res => new UserActions.AccessUserEmailCompleteAction(res['profile']['email'])),
           catchError(err => Observable.of(new UserActions.AccessUserEmailFailedAction(err)))
         );
@@ -134,14 +134,15 @@ export class UserEffects {
         return this.userSrv.getCurrent().pipe(
           map(res => new UserActions.RetrieveUserCompleteAction(res)),
           catchError(err => Observable.of(new UserActions.RetrieveUserFailedAction(err)))
-            // Most likely because the user is logged out so not
-            // authorised to make a call  
+          // Most likely because the user is logged out so not
+          // authorised to make a call
         );
       }));
 
   constructor(private action$: Actions, private store: Store<AppState>,
-    private router: Router,
-    private accessUserSrv: lb.AccessUserApi, private userIdentitySrv: lb.UserIdentityApi,
-    private activeDirSrv: ADAuthService, private userSrv: lb.UserApi,
-    private authSrv: lb.LoopBackAuth) { }
+              private router: Router,
+              private accessUserSrv: lb.AccessUserApi, private userIdentitySrv: lb.UserIdentityApi,
+              private activeDirSrv: ADAuthService, private userSrv: lb.UserApi,
+              private authSrv: lb.LoopBackAuth) {
+  }
 }
