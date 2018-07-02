@@ -49,7 +49,7 @@ export class UserEffects {
               });
 
           }),
-          catchError(err => of(new UserActions.LoginFailedAction(err.json(), 'AD'))
+          catchError(err => of(new UserActions.LoginFailedAction(err, 'AD'))
           ));
       }));
 
