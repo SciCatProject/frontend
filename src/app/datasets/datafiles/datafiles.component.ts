@@ -42,7 +42,7 @@ export class DatafilesComponent implements OnInit, AfterViewInit {
     const userIsAdmin = (user) => {
       return (user['accountType'] === 'functional') || (adminUserNames.indexOf(user.username) !== -1);
     };
-    this.admin$ = currentUser$.map(userIsAdmin);
+    this.admin$ = currentUser$.pipe(map(userIsAdmin));
     if (this.dataBlocks) {
       this.getDatafiles(this.dataBlocks);
     }
