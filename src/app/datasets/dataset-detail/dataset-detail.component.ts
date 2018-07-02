@@ -78,10 +78,6 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
     this.routeSubscription.unsubscribe();
   }
 
-  getFilesize(size: number): string {
-    return filesize(size || 0);
-  }
-
   onExportClick() {
     this.dataset$.pipe(take(1)).subscribe(ds => {
 

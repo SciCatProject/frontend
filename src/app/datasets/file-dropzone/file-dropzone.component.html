@@ -6,7 +6,7 @@
   <span class="mat-title" *ngIf="files.length">Dropped files</span>
   <ul>
     <li *ngFor="let file of files">
-      {{file.name}} ({{file.size}} bytes) read using {{readMode  }}
+      {{file.name}} ({{file.size | filesize}}) read using {{readMode  }}
       <pre>{{file.content}}</pre>
     </li>
   </ul>

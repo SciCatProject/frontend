@@ -12,6 +12,7 @@ import { MatTableModule} from '@angular/material';
 import { FileDropzoneComponent  } from './file-dropzone.component';
 import {APP_CONFIG} from '../../app-config.module';
 import * as lb from 'shared/sdk/services';
+import { FileSizePipe } from '../filesize.pipe';
 
 let mockConfig = {};
 
@@ -26,7 +27,7 @@ describe('FileDropzoneComponent', () => {
       imports : [ ReactiveFormsModule, MatTableModule, StoreModule.forRoot({rootReducer}) ],
       declarations : [
         FileDropzoneComponent, DatafilesComponent, ConfigFormComponent,
-        ObjKeysPipe, TitleCasePipe
+        ObjKeysPipe, TitleCasePipe, FileSizePipe
       ]
     });
     TestBed.overrideComponent(FileDropzoneComponent, {

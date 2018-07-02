@@ -10,6 +10,7 @@ import { ObjKeysPipe, TitleCasePipe } from 'shared/pipes/index';
 import { rootReducer } from 'state-management/reducers/root.reducer';
 import { MatTableModule} from '@angular/material';
 import { DatasetDetailComponent } from './dataset-detail.component';
+import { FileSizePipe } from '../filesize.pipe';
 
 
 
@@ -23,7 +24,7 @@ describe('DatasetDetailComponent', () => {
       imports : [ ReactiveFormsModule, MatTableModule, StoreModule.forRoot({rootReducer}) ],
       declarations : [
         DatasetDetailComponent, DatafilesComponent, ConfigFormComponent,
-        ObjKeysPipe, TitleCasePipe
+        ObjKeysPipe, TitleCasePipe, FileSizePipe
       ]
     });
     TestBed.overrideComponent(DatasetDetailComponent, {

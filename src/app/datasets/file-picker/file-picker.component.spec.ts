@@ -12,6 +12,7 @@ import { MatTableModule} from '@angular/material';
 import { FilePickerComponent  } from './file-picker.component';
 import {APP_CONFIG} from '../../app-config.module';
 import * as lb from 'shared/sdk/services';
+import { FileSizePipe } from '../filesize.pipe';
 
 let mockConfig = {};
 
@@ -26,7 +27,7 @@ describe('FilePickerComponent', () => {
       imports : [ ReactiveFormsModule, MatTableModule, StoreModule.forRoot({rootReducer}) ],
       declarations : [
         FilePickerComponent, DatafilesComponent, ConfigFormComponent,
-        ObjKeysPipe, TitleCasePipe
+        ObjKeysPipe, TitleCasePipe, FileSizePipe
       ]
     });
     TestBed.overrideComponent(FilePickerComponent, {

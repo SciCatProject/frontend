@@ -43,7 +43,7 @@
     <ng-container matColumnDef="size">
       <mat-header-cell *matHeaderCellDef mat-sort-header>Size</mat-header-cell>
       <mat-cell *matCellDef="let dataset">
-        {{getFormattedSize(dataset.size)}}
+        {{dataset.size | filesize}}
       </mat-cell>  
     </ng-container>
 
