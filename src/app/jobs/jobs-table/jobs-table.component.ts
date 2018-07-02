@@ -9,6 +9,7 @@ import {ConfigService} from 'shared/services/config.service';
 import * as selectors from 'state-management/selectors';
 import {MatTableDataSource, MatPaginator} from '@angular/material';
 import { AfterViewInit } from '@angular/core/src/metadata/lifecycle_hooks';
+import { takeLast } from 'rxjs/operators';
 
 @Component({
   selector: 'jobs-table',
@@ -88,7 +89,7 @@ export class JobsTableComponent implements OnInit, OnDestroy, AfterViewInit {
   nodeExpand(event) {
     this.store.dispatch(new JobActions.ChildRetrieveAction(event.node));
     event.node.children = [];
-    this.store.select(state => state.root.jobs.ui).takeLast(1).subscribe(jobs => {
+    this.store.select(state => state.root.jobs.ui).pipe(takeLast(1)).subscribe(jobs => {
       console.log(jobs);
       event.node.children = jobs;
     });

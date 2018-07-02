@@ -3,7 +3,7 @@
 import {Injectable} from '@angular/core';
 import {Actions, Effect, ofType} from '@ngrx/effects';
 import {Action, Store} from '@ngrx/store';
-import {Observable} from 'rxjs';
+import {Observable, of} from 'rxjs';
 import * as lb from 'shared/sdk/services';
 import * as UserActions from 'state-management/actions/user.actions';
 // import store state interface
@@ -11,7 +11,6 @@ import {AppState} from 'state-management/state/app.store';
 import {ADAuthService} from 'users/adauth.service';
 import {Router} from '@angular/router';
 import {tap, map, switchMap, filter, catchError} from 'rxjs/operators';
-import {of} from 'rxjs';
 import {MessageType} from '../models';
 import {User} from '../models';
 
@@ -41,12 +40,12 @@ export class UserEffects {
 
             // result['user'] = self.loginForm.get('username').value;
             this.authSrv.setToken(res);
-            return this.userSrv.getCurrent().switchMap(
+            return this.userSrv.getCurrent().pipe(switchMap(
               (user) => {
                 this.authSrv.setUser(user);
                 res['user'] = user;
                 return of(new UserActions.LoginCompleteAction(user));
-              });
+              }));
 
           }),
           catchError(err => of(new UserActions.LoginFailedAction(err, 'AD'))

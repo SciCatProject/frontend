@@ -1,7 +1,7 @@
 import {Component, Input, OnInit, ViewChild, AfterViewInit, Inject} from '@angular/core';
 import {OrigDatablock} from 'shared/sdk/models';
 import {Store} from '@ngrx/store';
-import {Observable} from 'rxjs/Observable';
+import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {MatTableDataSource, MatPaginator} from '@angular/material';
 import {APP_CONFIG, AppConfig} from 'app-config.module';

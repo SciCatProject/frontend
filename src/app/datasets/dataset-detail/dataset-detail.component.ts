@@ -6,7 +6,7 @@ import * as dsa from 'state-management/actions/datasets.actions';
 import * as ja from 'state-management/actions/jobs.actions';
 import * as ua from 'state-management/actions/user.actions';
 import * as selectors from 'state-management/selectors';
-import {Subscription} from 'rxjs/Subscription';
+import {Subscription} from 'rxjs';
 import { Message, MessageType } from 'state-management/models';
 import { Angular5Csv } from 'angular5-csv/Angular5-csv';
 import { getIsAdmin } from 'state-management/selectors/users.selectors';

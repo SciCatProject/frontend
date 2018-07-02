@@ -1,6 +1,7 @@
+
+import {throwError as observableThrowError, Observable} from 'rxjs';
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {Observable} from 'rxjs/Observable';
 
 
 /**
@@ -33,13 +34,13 @@ export class ConfigService {
                   observer.complete();
                 } else {
                   console.log('not found');
-                  Observable.throw(new Error('No config file found'));
+                  observableThrowError(new Error('No config file found'));
                 }
               },
               error => {
                 // observer.next(error);
                 // observer.complete();
-                Observable.throw(new Error('No config file found'));
+                observableThrowError(new Error('No config file found'));
               });
     });
   }

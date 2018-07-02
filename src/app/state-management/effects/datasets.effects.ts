@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { of } from 'rxjs';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { Action, Store, select } from '@ngrx/store';
 import { Angular5Csv } from 'angular5-csv/Angular5-csv';
@@ -35,7 +36,7 @@ export class DatasetEffects {
     private datasetApi: DatasetApi,
     private datablockApi: DatablockApi,
   ) {}
-  
+
   private fullqueryParams$ = this.store.pipe(select(getFullqueryParams));
   private fullfacetParams$ = this.store.pipe(select(getFullfacetsParams));
   private rectangularRepresentation$ = this.store.pipe(select(getRectangularRepresentation));
@@ -48,7 +49,7 @@ export class DatasetEffects {
     mergeMap(({query, limits}) =>
       this.datasetApi.fullquery(query, limits).pipe(
         map(datasets => new DatasetActions.FetchDatasetsCompleteAction(datasets as Dataset[])),
-        catchError(() => Observable.of(new DatasetActions.FetchDatasetsFailedAction()))    
+        catchError(() => of(new DatasetActions.FetchDatasetsFailedAction()))
       )
     ),
   );
@@ -65,7 +66,7 @@ export class DatasetEffects {
           const allCounts = all && all.length > 0 ? all[0].totalSets : 0;
           return new DatasetActions.FetchFacetCountsCompleteAction(facetCounts, allCounts);
         }),
-        catchError(() => Observable.of(new DatasetActions.FetchFacetCountsFailedAction()))
+        catchError(() => of(new DatasetActions.FetchFacetCountsFailedAction()))
       )
     }),
   );
@@ -108,7 +109,7 @@ export class DatasetEffects {
 
         return this.datasetApi.findById(encodeURIComponent(id), blockFilter).pipe(
           map((dataset: Dataset) => new DatasetActions.SearchIDCompleteAction(dataset)),
-          catchError(err => Observable.of(new DatasetActions.DatablocksFailedAction(err)))
+          catchError(err => of(new DatasetActions.DatablocksFailedAction(err)))
         );
       })
     );
@@ -133,11 +134,11 @@ export class DatasetEffects {
           .fullfacet(JSON.stringify(fq), facetObject)
           .switchMap(res => {
             const filterValues = res[0];
-            return Observable.of(new DatasetActions.UpdateFilterCompleteAction(filterValues));
+            return of(new DatasetActions.UpdateFilterCompleteAction(filterValues));
           })
           .catch(err => {
             console.log(err);
-            return Observable.of(new DatasetActions.FilterFailedAction(err));
+            return of(new DatasetActions.FilterFailedAction(err));
           });
       });*/
 
@@ -173,11 +174,11 @@ export class DatasetEffects {
           })
           return this.ds.fullquery(fq,limits)
               .switchMap(res => {
-                return Observable.of(new DatasetActions.SearchCompleteAction(res));
+                return of(new DatasetActions.SearchCompleteAction(res));
               })
               .catch(err => {
                 console.log(err);
-                return Observable.of(new DatasetActions.SearchFailedAction(err));
+                return of(new DatasetActions.SearchFailedAction(err));
            });
       });
       */

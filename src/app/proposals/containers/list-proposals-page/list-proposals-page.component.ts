@@ -1,7 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Store, select } from '@ngrx/store';
-import { Observable } from 'rxjs/Observable';
-import { Subscription } from 'rxjs/Subscription';
+import { Observable ,  Subscription } from 'rxjs';
 import { distinctUntilChanged, map } from 'rxjs/operators';
 import { AppState } from 'state-management/state/app.store';
 import { Proposal } from 'state-management/models';
