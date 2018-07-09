@@ -10,6 +10,7 @@ import {ADAuthService} from './adauth.service';
 import {SharedCatanieModule} from 'shared/shared.module';
 import { StoreModule } from '@ngrx/store';
 import { userReducer } from 'state-management/reducers/user.reducer';
+import { MatCardModule, MatCheckboxModule } from '@angular/material';
 
 @NgModule({
   imports: [
@@ -17,12 +18,14 @@ import { userReducer } from 'state-management/reducers/user.reducer';
     FormsModule,
     SharedCatanieModule,
     ReactiveFormsModule,
+    MatCardModule,
+    MatCheckboxModule,
     StoreModule.forFeature('users', userReducer),
   ],
   declarations: [
     LoginComponent,
     UserDetailsComponent,
-    UserSettingsComponent
+    UserSettingsComponent,
   ],
   providers: [ADAuthService]
 })

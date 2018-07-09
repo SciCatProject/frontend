@@ -7,6 +7,7 @@ import { MatTableModule} from '@angular/material';
 import {MockActivatedRoute, MockRouter} from 'shared/MockStubs';
 
 import { DatablocksComponent } from './datablocks-table.component';
+import { FileSizePipe } from '../filesize.pipe';
 
 
 describe('DatablocksComponent', () => {
@@ -16,7 +17,7 @@ describe('DatablocksComponent', () => {
   beforeEach(async(() => {
       TestBed.configureTestingModule({
       imports: [ MatTableModule ],
-      declarations: [ DatablocksComponent ]
+      declarations: [ DatablocksComponent, FileSizePipe ]
     });
      TestBed.overrideComponent(DatablocksComponent, {
     set: {
