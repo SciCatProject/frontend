@@ -77,7 +77,7 @@ describe('DatasetsFilterComponent', () => {
 
   it('should contain a clear button', () => {
     const compiled = fixture.debugElement.nativeElement;
-    const btn = compiled.querySelector('.clear-filters-btn');
+    const btn = compiled.querySelector('.clear-button');
     expect(btn.textContent).toContain('Clear');
   });
 });
