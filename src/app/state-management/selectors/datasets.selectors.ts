@@ -1,5 +1,5 @@
 import { createSelector, createFeatureSelector } from '@ngrx/store';
-import { DatasetState } from '../state/datasets.store'
+import { DatasetState, initialDatasetState } from '../state/datasets.store'
 import { config } from '../../../config/config';
 
 const getDatasetState = createFeatureSelector<DatasetState>('datasets');
@@ -119,6 +119,20 @@ export const getCreationTimeFilter = createSelector(
 export const getViewMode = createSelector(
     getFilters,
     state => state.mode
+);
+
+export const getHasAppliedFilters = createSelector(
+    getFilters,
+    filters =>
+        filters.text !== '' ||
+        filters.creationLocation.length > 0 ||
+        filters.ownerGroup.length > 0 ||
+        filters.type.length > 0 ||
+        filters.keywords.length > 0 ||
+        filters.creationTime && (
+            filters.creationTime.begin !== null ||
+            filters.creationTime.end !== null
+        )
 );
 
 // === Facet Counts ===

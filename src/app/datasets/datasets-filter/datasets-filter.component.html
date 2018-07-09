@@ -1,5 +1,13 @@
 <mat-card>
   <form class="example-form">
+    <div class="top-container">
+      <span class="title">Filter Results</span>
+      <button [disabled]="!(hasAppliedFilters$ | async)" mat-button class="clear-button" color="primary" (click)="clearFacets()">
+        <mat-icon>clear_all</mat-icon> Clear
+      </button>
+      <div style="clear: both"></div>
+    </div>
+
     <mat-form-field>
       <input matInput class="search-input" placeholder="Text Search" aria-label="Text Search"
       [ngModel]="searchTerms$ | async"
@@ -85,6 +93,5 @@
       <mat-datepicker #picker [rangeMode]="true"></mat-datepicker>
     </mat-form-field>
 
-    <button class="ui button clear-filters-btn" (click)="clearFacets()">Clear</button>
   </form>
 </mat-card>

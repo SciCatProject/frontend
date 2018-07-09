@@ -12,6 +12,7 @@ import {
   getGroupFilter,
   getCreationTimeFilter,
   getSearchTerms,
+  getHasAppliedFilters,
 } from 'state-management/selectors/datasets.selectors';
 
 import {
@@ -53,6 +54,8 @@ export class DatasetsFilterComponent {
   private typeFilter$ = this.store.pipe(select(getTypeFilter));
   private keywordsFilter$ = this.store.pipe(select(getKeywordsFilter));
   private creationTimeFilter$ = this.store.pipe(select(getCreationTimeFilter));
+
+  private hasAppliedFilters$ = this.store.pipe(select(getHasAppliedFilters));
 
   private searchTermSubscription = this.searchTerms$.pipe(
     skipWhile(terms => terms === ''),
