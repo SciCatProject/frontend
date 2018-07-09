@@ -1,5 +1,5 @@
 import { createSelector, createFeatureSelector } from '@ngrx/store';
-import { DatasetState, initialDatasetState } from '../state/datasets.store'
+import { DatasetState } from '../state/datasets.store'
 import { config } from '../../../config/config';
 
 const getDatasetState = createFeatureSelector<DatasetState>('datasets');
