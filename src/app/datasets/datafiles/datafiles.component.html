@@ -1,47 +1,41 @@
-<mat-card label="Datablocks" *ngIf="(admin$ | async) as admin">
-  <h4>Orig Datablocks</h4>
-  <datablocks-table [datablocks]="dataBlocks"></datablocks-table>
+<h4>Orig Datablocks</h4>
+<datablocks-table [datablocks]="dataBlocks"></datablocks-table>
 
+<h4>Datafiles</h4>
+<h5>Count: {{count}}</h5>
+<div *ngIf="dataBlocks && dataBlocks.length > 0">
+  <div class="example-container mat-elevation-z8">
+    <mat-table #table [dataSource]="dataSource">
 
-</mat-card>
+      <!--- Note that these columns can be defined in any order.
+            The actual rendered columns are set as a property on the row definition" -->
 
-<mat-card>
-  <h4>Datafiles</h4>
-  <h5>Count: {{count}}</h5>
-  <div *ngIf="dataBlocks && dataBlocks.length > 0">
-    <div class="example-container mat-elevation-z8">
-      <mat-table #table [dataSource]="dataSource">
+      <ng-container matColumnDef="name">
+        <mat-header-cell *matHeaderCellDef> Path.</mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          <a *ngIf="urlPrefix; else noLink" href="{{urlPrefix}}{{element.path}}">
+            {{element.path}}
+          </a>
+          <ng-template #noLink>
+            {{element.path}}
+          </ng-template>
+        </mat-cell>
+      </ng-container>
 
-        <!--- Note that these columns can be defined in any order.
-              The actual rendered columns are set as a property on the row definition" -->
+      <ng-container matColumnDef="path">
+        <mat-header-cell *matHeaderCellDef>Time</mat-header-cell>
+        <mat-cell *matCellDef="let element">{{element.time}}</mat-cell>
+      </ng-container>
 
-        <ng-container matColumnDef="name">
-          <mat-header-cell *matHeaderCellDef> Path.</mat-header-cell>
-          <mat-cell *matCellDef="let element">
-            <a *ngIf="urlPrefix; else noLink" href="{{urlPrefix}}{{element.path}}">
-              {{element.path}}
-            </a>
-            <ng-template #noLink>
-              {{element.path}}
-            </ng-template>
-          </mat-cell>
-        </ng-container>
+      <ng-container matColumnDef="size">
+        <mat-header-cell *matHeaderCellDef>Size</mat-header-cell>
+        <mat-cell *matCellDef="let element">{{element.size | filesize}}</mat-cell>
+      </ng-container>
 
-        <ng-container matColumnDef="path">
-          <mat-header-cell *matHeaderCellDef>Time</mat-header-cell>
-          <mat-cell *matCellDef="let element">{{element.time}}</mat-cell>
-        </ng-container>
-
-        <ng-container matColumnDef="size">
-          <mat-header-cell *matHeaderCellDef>Size</mat-header-cell>
-          <mat-cell *matCellDef="let element">{{element.size | filesize}}</mat-cell>
-        </ng-container>
-
-        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-      </mat-table>
-    </div>
-
-    <mat-paginator [pageSize]="30" [pageSizeOptions]="[10,30, 50, 100]" [length]="count"></mat-paginator>
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    </mat-table>
   </div>
-</mat-card>
+
+  <mat-paginator [pageSize]="30" [pageSizeOptions]="[10,30, 50, 100]" [length]="count"></mat-paginator>
+</div>
