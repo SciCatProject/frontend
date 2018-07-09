@@ -1,6 +1,14 @@
 <mat-card>
   <form class="example-form">
     <mat-form-field>
+      <input matInput class="search-input" placeholder="Text Search" aria-label="Text Search"
+      [ngModel]="searchTerms$ | async"
+      (ngModelChange)="textSearchChanged($event)"
+      name="search"
+      >
+    </mat-form-field>
+
+    <mat-form-field>
       <mat-chip-list #locationChipList>
         <mat-chip *ngFor="let location of locationFilter$ | async" [removable]="true" (removed)="locationRemoved(location)">{{
           location || 'No Location'
@@ -16,8 +24,6 @@
         </mat-option>
       </mat-autocomplete>
     </mat-form-field>
-
-    <br>
 
     <mat-form-field>
       <mat-chip-list #groupChipList>
@@ -35,8 +41,6 @@
         </mat-option>
       </mat-autocomplete>
     </mat-form-field>
-
-    <br>
     
     <mat-form-field>
       <mat-chip-list #typeChipList>
@@ -55,8 +59,6 @@
       </mat-autocomplete>
     </mat-form-field>
 
-    <br>
-
     <mat-form-field>
       <input matInput class="keyword-input" matInput placeholder="Keywords" [ngModel]="selectedKeywords$ | async" name="keywords" (selectionChange)="keywordSelected(keywords)" [matAutocomplete]="kw">
       <mat-autocomplete #kw="matAutocomplete">
@@ -66,8 +68,6 @@
         </mat-option>
       </mat-autocomplete>
     </mat-form-field>
-
-    <br>
 
     <mat-form-field>
       <input
@@ -84,8 +84,6 @@
       </mat-datepicker-toggle>
       <mat-datepicker #picker [rangeMode]="true"></mat-datepicker>
     </mat-form-field>
-
-    <br>
 
     <button class="ui button clear-filters-btn" (click)="clearFacets()">Clear</button>
   </form>

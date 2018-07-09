@@ -1,20 +1,3 @@
-<mat-card>
-  <form>
-    <mat-form-field style="width: 100%">
-      <input
-        matInput
-        type="text"
-        name="search"
-        [ngModel]="searchTerms$ | async"
-        (ngModelChange)="textSearch($event)"
-        
-        class="dash-search"
-        placeholder="Search..."
-      >
-    </mat-form-field>
-  </form>
-</mat-card>
-<br>
 <div class="ui stackable grid">
   <div class="four wide column computer only">
     <datasets-filter></datasets-filter>
