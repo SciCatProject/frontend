@@ -11,6 +11,8 @@ import {
   getKeywordsFilter,
   getGroupFilter,
   getCreationTimeFilter,
+  getSearchTerms,
+  getHasAppliedFilters,
 } from 'state-management/selectors/datasets.selectors';
 
 import {
@@ -23,9 +25,12 @@ import {
   AddTypeFilterAction,
   RemoveTypeFilterAction,
   ClearFacetsAction,
-  SetDateRangeFilterAction
+  SetDateRangeFilterAction,
+  SetSearchTermsAction,
+  SetTextFilterAction
 } from 'state-management/actions/datasets.actions';
 import { MatDatepickerInputEvent } from '@angular/material';
+import { skipWhile, distinctUntilChanged, debounceTime } from 'rxjs/operators';
 
 type DateRange = {
   begin: Date;
@@ -43,12 +48,22 @@ export class DatasetsFilterComponent {
   private typeFacetCounts$ = this.store.pipe(select(getTypeFacetCounts));
   private keywordFacetCounts$ = this.store.pipe(select(getKeywordFacetCounts));
 
+  private searchTerms$ = this.store.pipe(select(getSearchTerms));
   private locationFilter$ = this.store.pipe(select(getLocationFilter));
   private groupFilter$ = this.store.pipe(select(getGroupFilter));
   private typeFilter$ = this.store.pipe(select(getTypeFilter));
   private keywordsFilter$ = this.store.pipe(select(getKeywordsFilter));
-  
   private creationTimeFilter$ = this.store.pipe(select(getCreationTimeFilter));
+
+  private hasAppliedFilters$ = this.store.pipe(select(getHasAppliedFilters));
+
+  private searchTermSubscription = this.searchTerms$.pipe(
+    skipWhile(terms => terms === ''),
+    debounceTime(500),
+    distinctUntilChanged(),
+  ).subscribe(terms => {
+    this.store.dispatch(new SetTextFilterAction(terms));
+  });
 
   constructor(private store: Store<any>) {}
 
@@ -59,6 +74,10 @@ export class DatasetsFilterComponent {
 
   getFacetCount(facetCount: FacetCount): number {
     return facetCount.count;
+  }
+
+  textSearchChanged(terms: string) {
+    this.store.dispatch(new SetSearchTermsAction(terms));
   }
 
   locationSelected(location: string | null) {
