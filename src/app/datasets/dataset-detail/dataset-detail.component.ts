@@ -7,12 +7,16 @@ import * as ja from 'state-management/actions/jobs.actions';
 import * as ua from 'state-management/actions/user.actions';
 import * as selectors from 'state-management/selectors';
 import {Subscription} from 'rxjs';
-import { Message, MessageType } from 'state-management/models';
-import { Angular5Csv } from 'angular5-csv/Angular5-csv';
-import { getIsAdmin } from 'state-management/selectors/users.selectors';
-import { getCurrentDataset, getCurrentDatablocks, getCurrentAttachments, getCurrentOrigDatablocks } from 'state-management/selectors/datasets.selectors';
-import { map, pluck, take } from 'rxjs/operators';
-import * as filesize from 'filesize';
+import {Message, MessageType} from 'state-management/models';
+import {Angular5Csv} from 'angular5-csv/Angular5-csv';
+import {getIsAdmin} from 'state-management/selectors/users.selectors';
+import {
+  getCurrentDataset,
+  getCurrentDatablocks,
+  getCurrentAttachments,
+  getCurrentOrigDatablocks
+} from 'state-management/selectors/datasets.selectors';
+import {map, pluck, take} from 'rxjs/operators';
 
 /**
  * Component to show details for a dataset, using the
@@ -43,7 +47,8 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private store: Store<any>
-  ) {}
+  ) {
+  }
 
   ngOnInit() {
     const msg = new Message();
@@ -117,9 +122,9 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
         const fileList = [];
         fileObj['pid'] = dataset['pid'];
         if (dataset['datablocks']) {
-          dataset['datablocks'].map(d => {
+          dataset['datablocks'].pipe(map(d => {
             fileList.push(d['archiveId']);
-          });
+          }));
         }
         fileObj['files'] = fileList;
         job.datasetList = [fileObj];

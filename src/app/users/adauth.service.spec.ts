@@ -1,6 +1,6 @@
-import { TestBed, inject } from '@angular/core/testing';
-import { HttpClient } from '@angular/common/http';
-import { ADAuthService } from './adauth.service';
+import {TestBed} from '@angular/core/testing';
+import {HttpClient} from '@angular/common/http';
+import {ADAuthService} from './adauth.service';
 
 
 import {MockHttp} from '../shared/MockStubs';

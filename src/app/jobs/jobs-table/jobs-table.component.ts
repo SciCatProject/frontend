@@ -40,7 +40,7 @@ export class JobsTableComponent implements OnInit, OnDestroy, AfterViewInit {
               private store: Store<any>) {
     this.configSrv.getConfigFile('Job').subscribe(conf => {
       for (const prop in conf) {
-        if (prop in conf && conf[prop].indexOf('table') ) {
+        if (prop in conf  ) {
           this.cols.push(conf[prop]['table']);
           this.displayedColumns.push(conf[prop]['table']['field']);
         }
