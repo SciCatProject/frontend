@@ -1,5 +1,4 @@
 import {Observable} from 'rxjs';
-import {from} from 'rxjs';
 import {of} from 'rxjs';
 import {Subject} from 'rxjs';
 
