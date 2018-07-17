@@ -7,7 +7,6 @@ import { Subscription } from 'rxjs';
 import { filter} from 'rxjs/operators';
 import { getIsLoggedIn, getIsLoggingIn } from 'state-management/selectors/users.selectors';
 
-import {MatGridListModule, MatCardModule} from '@angular/material';
 
 interface LoginForm {
   username: string;
