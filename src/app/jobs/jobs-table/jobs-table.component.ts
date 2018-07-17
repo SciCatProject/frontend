@@ -1,6 +1,6 @@
 import {DatePipe} from '@angular/common';
 import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import {Store} from '@ngrx/store';
+import {Store, select} from '@ngrx/store';
 import {Router} from '@angular/router';
 import * as JobActions from 'state-management/actions/jobs.actions';
 import {HttpClient} from '@angular/common/http';
@@ -17,11 +17,18 @@ import { takeLast } from 'rxjs/operators';
   styleUrls: ['./jobs-table.component.css']
 })
 export class JobsTableComponent implements OnInit, OnDestroy, AfterViewInit {
+  jobs$ = this.store.pipe(select(selectors.jobs.getJobs));
 
-  @Input() jobs;
-  @Input() jobs2;
+  cols = [
+    'emailJobInitiator',
+    'type',
+    'creationTime',
+    'executionTime',
+    'jobParams',
+    'jobStatusMessage',
+    'datasetList'
+  ];
 
-  cols = [ ];
   loading$: any = false;
   limit: any = 50;
 
@@ -31,21 +38,21 @@ export class JobsTableComponent implements OnInit, OnDestroy, AfterViewInit {
   filters = {};
   totalJobNumber$: any;
 
-  dataSource: MatTableDataSource<any> | null;
-  displayedColumns = [];
+  displayedColumns = this.cols.concat();
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   constructor(public http: HttpClient,
               private configSrv: ConfigService, private router: Router,
               private store: Store<any>) {
-    this.configSrv.getConfigFile('Job').subscribe(conf => {
+    /*this.configSrv.getConfigFile('Job').subscribe(conf => {
+
       for (const prop in conf) {
         if (prop in conf  ) {
           this.cols.push(conf[prop]['table']);
           this.displayedColumns.push(conf[prop]['table']['field']);
         }
       }
-    });
+    });*/
   }
 
   ngOnInit() {
@@ -58,16 +65,6 @@ export class JobsTableComponent implements OnInit, OnDestroy, AfterViewInit {
     });
 
     this.totalJobNumber$ = this.store.select(state => state.root.jobs.currentJobs.length);
-
-    this.subscriptions.push(this.store.select(selectors.jobs.getJobs)
-      .subscribe(selected => {
-        if (selected.length > 0) {
-          this.jobs = selected.slice();
-          this.dataSource = new MatTableDataSource(this.jobs);
-          console.log(this.jobs);
-        }
-      }));
-
   }
 
   ngAfterViewInit() {
@@ -79,7 +76,6 @@ export class JobsTableComponent implements OnInit, OnDestroy, AfterViewInit {
       this.subscriptions[i].unsubscribe();
     }
   }
-
 
   onRowSelect(event, job) {
     this.store.dispatch(new JobActions.CurrentJobAction(job));
