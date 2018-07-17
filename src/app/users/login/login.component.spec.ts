@@ -7,7 +7,7 @@ import {LoopBackAuth} from 'shared/sdk/services';
 
 import {ADAuthService} from '../adauth.service';
 import {LoginComponent} from './login.component';
-import {MatCheckboxModule, MatCardModule} from '@angular/material';
+import {MatCheckboxModule, MatCardModule, MatGridListModule} from '@angular/material';
 
 /* tslint:disable:no-unused-variable */
 describe('LoginComponent', () => {
@@ -31,7 +31,7 @@ describe('LoginComponent', () => {
       }
     });
     TestBed.configureTestingModule({
-      imports: [ReactiveFormsModule, StoreModule.forRoot({}), MatCheckboxModule, MatCardModule],
+      imports: [ReactiveFormsModule, StoreModule.forRoot({}), MatCheckboxModule, MatCardModule, MatGridListModule],
       declarations: [LoginComponent]
     });
     TestBed.compileComponents();
