@@ -9,7 +9,7 @@
 
     <ng-container matColumnDef="size">
       <mat-header-cell *matHeaderCellDef> Size </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.size}} </mat-cell>
+      <mat-cell *matCellDef="let element"> {{element.size | filesize}} </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="files">

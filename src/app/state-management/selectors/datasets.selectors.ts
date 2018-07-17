@@ -121,6 +121,20 @@ export const getViewMode = createSelector(
     state => state.mode
 );
 
+export const getHasAppliedFilters = createSelector(
+    getFilters,
+    filters =>
+        filters.text !== '' ||
+        filters.creationLocation.length > 0 ||
+        filters.ownerGroup.length > 0 ||
+        filters.type.length > 0 ||
+        filters.keywords.length > 0 ||
+        filters.creationTime && (
+            filters.creationTime.begin !== null ||
+            filters.creationTime.end !== null
+        )
+);
+
 // === Facet Counts ===
 
 const getFacetCounts = createSelector(

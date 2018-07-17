@@ -36,6 +36,22 @@
 .mat-calendar-cell-semi-selected {
   background-color: #e8eaf6; }
 
-/* :host /deep/ .mat-autocomplete-panel {
-    width: 150% !important;
-} */
+.mat-card-actions button {
+  text-transform: uppercase;
+}
+
+.top-container {
+  font-size: 1.25em;
+  font-weight: 425;
+  margin-bottom: 0.5em;
+  position: relative;
+}
+
+.clear-button {
+  float: right;
+  transform: translateY(-25%);
+}
+
+.title {
+  float: left;
+}
