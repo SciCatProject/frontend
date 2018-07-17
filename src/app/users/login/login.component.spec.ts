@@ -7,7 +7,7 @@ import {LoopBackAuth} from 'shared/sdk/services';
 
 import {ADAuthService} from '../adauth.service';
 import {LoginComponent} from './login.component';
-import { MatCheckboxModule, MatCardModule } from '@angular/material';
+import {MatCheckboxModule, MatCardModule} from '@angular/material';
 
 /* tslint:disable:no-unused-variable */
 describe('LoginComponent', () => {
@@ -18,21 +18,21 @@ describe('LoginComponent', () => {
 
 
   beforeEach(async(() => {
-     TestBed.overrideComponent(LoginComponent, {
-    set: {
-      // These should sync up with what is in the constructor, they do NOT need to be provided in the config for the testing module
-      providers: [
-        { provide: ADAuthService, useClass: MockAuthService },
-        { provide: LoopBackAuth, useClass: MockLoopBackAuth },
-        { provide: ActivatedRoute, useClass: MockActivatedRoute },
-        { provide: Router, useClass: MockRouter },
-        { provide: Store, useClass: MockStore },
-      ]
-    }
+    TestBed.overrideComponent(LoginComponent, {
+      set: {
+        // These should sync up with what is in the constructor, they do NOT need to be provided in the config for the testing module
+        providers: [
+          {provide: ADAuthService, useClass: MockAuthService},
+          {provide: LoopBackAuth, useClass: MockLoopBackAuth},
+          {provide: ActivatedRoute, useClass: MockActivatedRoute},
+          {provide: Router, useClass: MockRouter},
+          {provide: Store, useClass: MockStore},
+        ]
+      }
     });
     TestBed.configureTestingModule({
-      imports: [ ReactiveFormsModule, StoreModule.forRoot({}), MatCheckboxModule, MatCardModule ],
-      declarations: [ LoginComponent ]
+      imports: [ReactiveFormsModule, StoreModule.forRoot({}), MatCheckboxModule, MatCardModule],
+      declarations: [LoginComponent]
     });
     TestBed.compileComponents();
   }));
@@ -45,14 +45,14 @@ describe('LoginComponent', () => {
     // el = de.nativeElement;
   });
 
-    it('should create component', () => {
-      expect(component).toBeTruthy();
-    });
+  it('should create component', () => {
+    expect(component).toBeTruthy();
+  });
 
 
   it('should contain username and password fields', () => {
-      const compiled = fixture.debugElement.nativeElement;
-      expect(compiled.querySelector('form').textContent).toContain('Username');
-      expect(compiled.querySelector('form').textContent).toContain('Password');
+    const compiled = fixture.debugElement.nativeElement;
+    expect(compiled.querySelector('form').textContent).toContain('Username');
+    expect(compiled.querySelector('form').textContent).toContain('Password');
   });
 });

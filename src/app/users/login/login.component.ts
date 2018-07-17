@@ -7,6 +7,8 @@ import { Subscription } from 'rxjs';
 import { filter} from 'rxjs/operators';
 import { getIsLoggedIn, getIsLoggingIn } from 'state-management/selectors/users.selectors';
 
+import {MatGridListModule, MatCardModule} from '@angular/material';
+
 interface LoginForm {
   username: string;
   password: string;
@@ -37,7 +39,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   private loading$ = this.store.pipe(select(getIsLoggingIn));
   private hasUser$ = this.store.pipe(select(getIsLoggedIn), filter(is => is));
-  
+
   private proceedSubscription: Subscription = null;
 
   /**
@@ -55,7 +57,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     private store: Store<any>
   ) {
     //this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
-    
+
     /*this.store.select(selectors.users.getCurrentUser)
     .subscribe(result => {
       console.log(result);
