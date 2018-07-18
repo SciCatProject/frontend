@@ -42,6 +42,7 @@ import { SharedCatanieModule } from 'shared/shared.module';
 import { SelectedListComponent } from 'datasets/selected-list/selected-list.component';
 import { MatDatepickerModule } from 'saturn-datepicker';
 import { DatasetTablePureComponent } from './dataset-table-pure/dataset-table-pure.component';
+import { DatasetBatchComponent } from './dataset-batch/dataset-batch.component';
 import { StoreModule } from '@ngrx/store';
 import { datasetsReducer } from 'state-management/reducers/datasets.reducer';
 import { FileSizePipe } from './filesize.pipe';
@@ -59,7 +60,7 @@ import { FileSizePipe } from './filesize.pipe';
     FilePickerComponent, FileDropzoneComponent,
     DashboardComponent, DatasetTableComponent, DatablocksComponent,
     DatafilesComponent, DatasetsFilterComponent, DatasetDetailComponent, SelectedListComponent,
-    DatasetTablePureComponent, FileSizePipe
+    DatasetTablePureComponent, FileSizePipe, DatasetBatchComponent
   ],
   providers : [ DatasetService ],
   exports : [ DatasetTableComponent, DatasetsFilterComponent ]
