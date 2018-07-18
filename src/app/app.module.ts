@@ -95,6 +95,7 @@ export function localStorageSyncWrapper(reducer: any) {
     MatCardModule,
     MatIconModule,
     MatListModule,
+    MatGridListModule,
     MatMenuModule,
     MatDatepickerModule,
     MatNativeDateModule,
