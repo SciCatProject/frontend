@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Effect, Actions, ofType } from '@ngrx/effects';
 import { Observable } from 'rxjs';
+import { of } from 'rxjs';
 import { map, mergeMap, catchError } from 'rxjs/operators';
 import { ProposalsService } from 'proposals/proposals.service';
 import {
@@ -13,7 +14,7 @@ import {
 	FetchProposalAction, FETCH_PROPOSAL,
 	FetchProposalCompleteAction,
 	FetchProposalFailedAction,
-	
+
 	FetchDatasetsForProposalOutcomeAction,
 	FetchDatasetsForProposalAction, FETCH_DATASETS_FOR_PROPOSAL,
 	FetchDatasetsForProposalCompleteAction,
@@ -25,20 +26,20 @@ import {
 export class ProposalsEffects {
 	@Effect() getProposals$: Observable<FetchProposalsOutcomeAction> = this.actions$.pipe(
 		ofType<FetchProposalsAction>(FETCH_PROPOSALS),
-		mergeMap(action => 
+		mergeMap(action =>
 			this.proposalsService.getProposals().pipe(
 				map(proposals => new FetchProposalsCompleteAction(proposals)),
-				catchError(() => Observable.of(new FetchProposalsFailedAction()))
+				catchError(() => of(new FetchProposalsFailedAction()))
 			)
 		)
 	);
 
 	@Effect() getProposal$: Observable<FetchProposalOutcomeAction> = this.actions$.pipe(
 		ofType<FetchProposalAction>(FETCH_PROPOSAL),
-		mergeMap(action => 
+		mergeMap(action =>
 			this.proposalsService.getProposal(action.proposalId).pipe(
 				map(proposal => new FetchProposalCompleteAction(proposal)),
-				catchError(() => Observable.of(new FetchProposalFailedAction()))
+				catchError(() => of(new FetchProposalFailedAction()))
 			)
 		)
 	);
@@ -48,7 +49,7 @@ export class ProposalsEffects {
 		mergeMap(action =>
 			this.proposalsService.getDatasetsForProposal(action.proposalId).pipe(
 				map(datasets => new FetchDatasetsForProposalCompleteAction(datasets)),
-				catchError(() => Observable.of(new FetchDatasetsForProposalFailedAction()))
+				catchError(() => of(new FetchDatasetsForProposalFailedAction()))
 			)
 		)
 	);

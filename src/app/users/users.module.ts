@@ -8,9 +8,9 @@ import {UserSettingsComponent} from 'users/user-settings/user-settings.component
 import {ADAuthService} from './adauth.service';
 
 import {SharedCatanieModule} from 'shared/shared.module';
-import { StoreModule } from '@ngrx/store';
-import { userReducer } from 'state-management/reducers/user.reducer';
-import { MatCardModule, MatCheckboxModule } from '@angular/material';
+import {StoreModule} from '@ngrx/store';
+import {userReducer} from 'state-management/reducers/user.reducer';
+import {MatCardModule, MatCheckboxModule, MatGridListModule} from '@angular/material';
 
 @NgModule({
   imports: [
@@ -20,6 +20,7 @@ import { MatCardModule, MatCheckboxModule } from '@angular/material';
     ReactiveFormsModule,
     MatCardModule,
     MatCheckboxModule,
+    MatGridListModule,
     StoreModule.forFeature('users', userReducer),
   ],
   declarations: [
@@ -29,4 +30,5 @@ import { MatCardModule, MatCheckboxModule } from '@angular/material';
   ],
   providers: [ADAuthService]
 })
-export class UsersModule { }
+export class UsersModule {
+}

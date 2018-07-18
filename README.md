@@ -1,4 +1,5 @@
-# Catanie
+# Catanie SciCat Client
+
 
 ## Summary
 

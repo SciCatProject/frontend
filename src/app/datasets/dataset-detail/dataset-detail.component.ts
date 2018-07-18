@@ -6,12 +6,17 @@ import * as dsa from 'state-management/actions/datasets.actions';
 import * as ja from 'state-management/actions/jobs.actions';
 import * as ua from 'state-management/actions/user.actions';
 import * as selectors from 'state-management/selectors';
-import {Subscription} from 'rxjs/Subscription';
-import { Message, MessageType } from 'state-management/models';
-import { Angular5Csv } from 'angular5-csv/Angular5-csv';
-import { getIsAdmin } from 'state-management/selectors/users.selectors';
-import { getCurrentDataset, getCurrentDatablocks, getCurrentAttachments, getCurrentOrigDatablocks } from 'state-management/selectors/datasets.selectors';
-import { pluck, take } from 'rxjs/operators';
+import {Subscription} from 'rxjs';
+import {Message, MessageType} from 'state-management/models';
+import {Angular5Csv} from 'angular5-csv/Angular5-csv';
+import {getIsAdmin} from 'state-management/selectors/users.selectors';
+import {
+  getCurrentDataset,
+  getCurrentDatablocks,
+  getCurrentAttachments,
+  getCurrentOrigDatablocks
+} from 'state-management/selectors/datasets.selectors';
+import {map, pluck, take} from 'rxjs/operators';
 
 /**
  * Component to show details for a dataset, using the
@@ -25,7 +30,7 @@ import { pluck, take } from 'rxjs/operators';
   templateUrl: './dataset-detail.component.html',
   styleUrls: ['./dataset-detail.component.scss']
 })
-export class DatasetDetailComponent implements OnInit, OnDestroy {  
+export class DatasetDetailComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
   private routeSubscription = this.route.params
     .pipe(pluck('id'))
@@ -33,7 +38,7 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
 
   private origDatablocks$ = this.store.pipe(select(getCurrentOrigDatablocks));
   private datablocks$ = this.store.pipe(select(getCurrentDatablocks));
-  
+
   private attachments$ = this.store.pipe(select(getCurrentAttachments));
 
   private isAdmin$ = this.store.pipe(select(getIsAdmin));
@@ -42,7 +47,8 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private store: Store<any>
-  ) {}
+  ) {
+  }
 
   ngOnInit() {
     const msg = new Message();
@@ -116,9 +122,9 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
         const fileList = [];
         fileObj['pid'] = dataset['pid'];
         if (dataset['datablocks']) {
-          dataset['datablocks'].map(d => {
+          dataset['datablocks'].pipe(map(d => {
             fileList.push(d['archiveId']);
-          });
+          }));
         }
         fileObj['files'] = fileList;
         job.datasetList = [fileObj];

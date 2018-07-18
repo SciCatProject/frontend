@@ -1,14 +1,15 @@
 import {DatePipe} from '@angular/common';
-import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import {Store} from '@ngrx/store';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Store, select} from '@ngrx/store';
 import {Router} from '@angular/router';
 import * as JobActions from 'state-management/actions/jobs.actions';
-import {Http} from '@angular/http';
+import {HttpClient} from '@angular/common/http';
 import {Job} from 'shared/sdk/models';
 import {ConfigService} from 'shared/services/config.service';
 import * as selectors from 'state-management/selectors';
-import {MatTableDataSource, MatPaginator} from '@angular/material';
-import { AfterViewInit } from '@angular/core/src/metadata/lifecycle_hooks';
+import {MatPaginator} from '@angular/material';
+import {AfterViewInit} from '@angular/core/src/metadata/lifecycle_hooks';
+import {takeLast} from 'rxjs/operators';
 
 @Component({
   selector: 'jobs-table',
@@ -16,11 +17,18 @@ import { AfterViewInit } from '@angular/core/src/metadata/lifecycle_hooks';
   styleUrls: ['./jobs-table.component.css']
 })
 export class JobsTableComponent implements OnInit, OnDestroy, AfterViewInit {
+  jobs$ = this.store.pipe(select(selectors.jobs.getJobs));
 
-  @Input() jobs;
-  @Input() jobs2;
+  cols = [
+    'emailJobInitiator',
+    'type',
+    'creationTime',
+    'executionTime',
+    'jobParams',
+    'jobStatusMessage',
+    'datasetList'
+  ];
 
-  cols = [ ];
   loading$: any = false;
   limit: any = 50;
 
@@ -30,21 +38,21 @@ export class JobsTableComponent implements OnInit, OnDestroy, AfterViewInit {
   filters = {};
   totalJobNumber$: any;
 
-  dataSource: MatTableDataSource<any> | null;
-  displayedColumns = [];
+  displayedColumns = this.cols.concat();
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  constructor(public http: Http,
+  constructor(public http: HttpClient,
               private configSrv: ConfigService, private router: Router,
               private store: Store<any>) {
-    this.configSrv.getConfigFile('Job').subscribe(conf => {
+    /*this.configSrv.getConfigFile('Job').subscribe(conf => {
+
       for (const prop in conf) {
-        if (prop in conf && 'table' in conf[prop]) {
+        if (prop in conf  ) {
           this.cols.push(conf[prop]['table']);
           this.displayedColumns.push(conf[prop]['table']['field']);
         }
       }
-    });
+    });*/
   }
 
   ngOnInit() {
@@ -57,16 +65,6 @@ export class JobsTableComponent implements OnInit, OnDestroy, AfterViewInit {
     });
 
     this.totalJobNumber$ = this.store.select(state => state.root.jobs.currentJobs.length);
-
-    this.subscriptions.push(this.store.select(selectors.jobs.getJobs)
-      .subscribe(selected => {
-        if (selected.length > 0) {
-          this.jobs = selected.slice();
-          this.dataSource = new MatTableDataSource(this.jobs);
-          console.log(this.jobs);
-        }
-      }));
-
   }
 
   ngAfterViewInit() {
@@ -79,7 +77,6 @@ export class JobsTableComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-
   onRowSelect(event, job) {
     this.store.dispatch(new JobActions.CurrentJobAction(job));
     this.router.navigateByUrl('/user/job/' + encodeURIComponent(job.id));
@@ -88,7 +85,7 @@ export class JobsTableComponent implements OnInit, OnDestroy, AfterViewInit {
   nodeExpand(event) {
     this.store.dispatch(new JobActions.ChildRetrieveAction(event.node));
     event.node.children = [];
-    this.store.select(state => state.root.jobs.ui).takeLast(1).subscribe(jobs => {
+    this.store.select(state => state.root.jobs.ui).pipe(takeLast(1)).subscribe(jobs => {
       console.log(jobs);
       event.node.children = jobs;
     });

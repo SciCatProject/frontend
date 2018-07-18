@@ -1,6 +1,6 @@
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
-import {Http} from '@angular/http';
+import {HttpClient} from '@angular/common/http';
 import {ActivatedRoute, Router} from '@angular/router';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatTableModule, MatDialogModule} from '@angular/material';
@@ -34,7 +34,7 @@ describe('DatasetTableComponent', () => {
       set: {
         providers: [
           {provide: UserApi, useClass: MockUserApi},
-          {provide: Http, useClass: MockHttp},
+          {provide: HttpClient, useClass: MockHttp},
           {provide: Router, useClass: MockRouter},
           {provide: ActivatedRoute, useClass: MockActivatedRoute},
           {provide: ConfigService, useClass: MockConfigService},
