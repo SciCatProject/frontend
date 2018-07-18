@@ -22,7 +22,7 @@ COPY package.json  /catanie
 RUN npm install
 COPY . /catanie/
 RUN ./CI/ESS/copyimages.sh
-RUN npx ng build
+RUN npx ng build --configuration=${env}
 COPY scripts/nginx.conf /etc/nginx/nginx.conf
 RUN cp -r dist/* /usr/share/nginx/html
 
