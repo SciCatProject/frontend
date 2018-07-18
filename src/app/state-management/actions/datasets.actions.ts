@@ -69,8 +69,9 @@ export const SET_DATE_RANGE =               '[Dataset] Set Date Range Filter';
 export const PREFILL_FILTERS =              '[Dataset] Prefill Filter';
 export const CLEAR_FACETS =                 '[Dataset] Clear Facets';
 
+export const ADD_TO_BATCH =                 '[Dataset] Add to Batch';
 
-export class UpdateFilterAction implements Action { //Inte gjord då den eventuellt ska tas bort
+export class UpdateFilterAction implements Action { // Inte gjord då den eventuellt ska tas bort
     readonly type = FILTER_UPDATE;
     constructor(public payload: {}) {}
 }
@@ -217,14 +218,16 @@ export class FetchFacetCountsFailedAction implements Action {
     readonly type = FETCH_FACET_COUNTS_FAILED;
 }
 
+export class AddToBatch implements Action {
+    readonly type = ADD_TO_BATCH;
+}
+
 export type Actions =
-    UpdateFilterAction | 
+    UpdateFilterAction |
     SearchIDCompleteAction |
     DatablocksAction |
     DatablocksAction |
     SelectDatasetAction | DeselectDatasetAction |
     ExportToCsvAction | ChangePageAction | SortByColumnAction | SetViewModeAction |
-    
-    // New filtering actions
-    SetSearchTermsAction | ClearFacetsAction;
-    
+    SetSearchTermsAction | ClearFacetsAction |
+    AddToBatch;

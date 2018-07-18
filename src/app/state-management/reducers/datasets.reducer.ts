@@ -53,6 +53,7 @@ import {
     PREFILL_FILTERS,
     PrefillFiltersAction,
     SearchIDCompleteAction,
+    ADD_TO_BATCH,
 } from 'state-management/actions/datasets.actions';
 
 import { DatasetState, initialDatasetState } from 'state-management/state/datasets.store';
@@ -89,7 +90,7 @@ export function datasetsReducer(state: DatasetState = initialDatasetState, actio
             return {...state, facetCountsLoading: false};
         }
 
-        case FILTER_UPDATE: { 
+        case FILTER_UPDATE: {
             const f = action['payload'];
             const group = f['ownerGroup'];
 
@@ -120,7 +121,7 @@ export function datasetsReducer(state: DatasetState = initialDatasetState, actio
                     .filters
                     .creationLocation
                     .concat(location)
-                    .filter((val, i, self) => self.indexOf(val) === i) // Unique
+                    .filter((val, i, self) => self.indexOf(val) === i); // Unique
             const filters = {...state.filters, creationLocation, skip: 0};
             return {...state, filters};
         }
@@ -131,7 +132,7 @@ export function datasetsReducer(state: DatasetState = initialDatasetState, actio
             const filters = {...state.filters, creationLocation, skip: 0};
             return {...state, filters};
         }
-        
+
         case ADD_GROUP_FILTER: {
             const {group} = action as AddGroupFilterAction;
             const ownerGroup = state
@@ -143,13 +144,13 @@ export function datasetsReducer(state: DatasetState = initialDatasetState, actio
             return {...state, filters};
         }
 
-        case REMOVE_GROUP_FILTER: {   
+        case REMOVE_GROUP_FILTER: {
             const {group} = action as RemoveGroupFilterAction;
             const ownerGroup = state.filters.ownerGroup.filter(_ => _ !== group);
             const filters = {...state.filters, ownerGroup, skip: 0};
             return {...state, filters};
         }
-        
+
         case ADD_TYPE_FILTER: {
             const {datasetType} = action as AddTypeFilterAction;
             const type = state
@@ -165,7 +166,7 @@ export function datasetsReducer(state: DatasetState = initialDatasetState, actio
             const {datasetType} = action as RemoveTypeFilterAction;
             const type = state.filters.type.filter(_ => _ !== datasetType);
             const filters = {...state.filters, type, skip: 0};
-            return {...state, filters};           
+            return {...state, filters};
         }
 
         case SET_TEXT_FILTER: {
@@ -173,7 +174,7 @@ export function datasetsReducer(state: DatasetState = initialDatasetState, actio
             const filters = {...state.filters, text, skip: 0};
             return {...state, filters};
         }
-        
+
         case ADD_KEYWORD_FILTER: {
             const {keyword} = action as AddKeywordFilterAction;
             const keywords = state
@@ -193,7 +194,7 @@ export function datasetsReducer(state: DatasetState = initialDatasetState, actio
             return {...state, filters};
         }
 
-        case REMOVE_KEYWORD_FILTER: {   
+        case REMOVE_KEYWORD_FILTER: {
             const {keyword} = action as RemoveKeywordFilterAction;
             const keywords = state.filters.keywords.filter(_ => _ !== keyword);
             const filters = {...state.filters, keywords, skip: 0};
@@ -261,6 +262,10 @@ export function datasetsReducer(state: DatasetState = initialDatasetState, actio
         case CLEAR_SELECTION: {
             return {...state, selectedSets: []};
         }
+
+        case ADD_TO_BATCH:
+            const batch = [...state.batch, ...state.selectedSets];
+            return {...state, batch};
 
         default: {
             return state;
