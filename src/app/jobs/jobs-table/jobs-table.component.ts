@@ -1,5 +1,5 @@
 import {DatePipe} from '@angular/common';
-import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {Store, select} from '@ngrx/store';
 import {Router} from '@angular/router';
 import * as JobActions from 'state-management/actions/jobs.actions';
@@ -7,9 +7,9 @@ import {HttpClient} from '@angular/common/http';
 import {Job} from 'shared/sdk/models';
 import {ConfigService} from 'shared/services/config.service';
 import * as selectors from 'state-management/selectors';
-import {MatTableDataSource, MatPaginator} from '@angular/material';
-import { AfterViewInit } from '@angular/core/src/metadata/lifecycle_hooks';
-import { takeLast } from 'rxjs/operators';
+import {MatPaginator} from '@angular/material';
+import {AfterViewInit} from '@angular/core/src/metadata/lifecycle_hooks';
+import {takeLast} from 'rxjs/operators';
 
 @Component({
   selector: 'jobs-table',
