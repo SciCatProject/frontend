@@ -4,6 +4,7 @@ import {Injectable} from '@angular/core';
 import {Actions, Effect, ofType} from '@ngrx/effects';
 import {Action, Store} from '@ngrx/store';
 import {Observable} from 'rxjs';
+import {of} from 'rxjs';
 import * as lb from 'shared/sdk/services';
 import * as JobActions from 'state-management/actions/jobs.actions';
 import * as UserActions from 'state-management/actions/user.actions';
@@ -23,7 +24,7 @@ export class JobsEffects {
       map((action: JobActions.SearchIDAction) => action.id),
       switchMap(id => this.jobSrv.findById(encodeURIComponent(id)).pipe(
         map(jobset => new JobActions.SearchIDCompleteAction(jobset)),
-        catchError(err => Observable.of(new JobActions.SearchIDFailedAction(err)))
+        catchError(err => of(new JobActions.SearchIDFailedAction(err)))
       )
     )
   );
@@ -38,7 +39,7 @@ export class JobsEffects {
           map(res =>new JobActions.SubmitCompleteAction(res))
         );
       }),
-      catchError(err => Observable.of(new JobActions.FailedAction(err))
+      catchError(err => of(new JobActions.FailedAction(err))
       ));
 
   @Effect()
@@ -50,7 +51,7 @@ export class JobsEffects {
           type: MessageType.Success,
           content: 'Job Created Successfully'
         };
-        return Observable.of(new UserActions.ShowMessageAction(msg));
+        return of(new UserActions.ShowMessageAction(msg));
       }));
 
   @Effect()
@@ -85,11 +86,11 @@ export class JobsEffects {
           node.children.push(
             {'data': {'type': 'No datasets could be found'}});
         }
-        return Observable.of(new JobActions.ChildRetrieveCompleteAction(node.children));
+        return of(new JobActions.ChildRetrieveCompleteAction(node.children));
       }),
       catchError(err => {
         console.log(err);
-        return Observable.of(new JobActions.FailedAction(err));
+        return of(new JobActions.FailedAction(err));
       }));
 
   @Effect()
@@ -105,7 +106,7 @@ export class JobsEffects {
           map((jobsets: Job[]) => new JobActions.RetrieveCompleteAction(jobsets))
         );
       }),
-      catchError(err => Observable.of(new JobActions.FailedAction(err)))
+      catchError(err => of(new JobActions.FailedAction(err)))
     );
 
 

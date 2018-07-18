@@ -17,7 +17,7 @@ describe('DatasetTablePureComponent', () => {
       imports: [MatTableModule, FormsModule, ReactiveFormsModule],
       declarations: [DatasetTablePureComponent, FileSizePipe]
     });
-    
+
     TestBed.overrideComponent(DatasetTablePureComponent, {
       set: {
         providers: [

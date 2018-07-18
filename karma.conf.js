@@ -4,23 +4,23 @@
 module.exports = function (config) {
   config.set({
     basePath: '',
-    frameworks: ['jasmine', '@angular/cli'],
+    frameworks: ['jasmine', '@angular-devkit/build-angular'],
     plugins: [
       require('karma-jasmine'),
       require('karma-chrome-launcher'),
       require('karma-coverage-istanbul-reporter'),
-      require('@angular/cli/plugins/karma'),
+      require('@angular-devkit/build-angular/plugins/karma'),
       require('karma-jasmine-html-reporter'),
       require('karma-coverage-istanbul-reporter'),
       require('karma-scss-preprocessor')
     ],
     files: [
-      { pattern: './src/test.ts', watched: false },
+      
       { pattern: './src/theme.scss', watched: true,  included: true, served: true },
       { pattern: './src/app/app.component.scss', watched: true,  included: true, served: true }
     ],
     preprocessors: {
-      './src/test.ts': ['@angular/cli'],
+      
       './src/theme.scss': ['scss'],
       './src/app/app.component.scss': ['scss']
     },
@@ -28,15 +28,12 @@ module.exports = function (config) {
       'text/x-typescript': ['ts','tsx']
     },
     remapIstanbulReporter: {
-      reports: {
+      dir: require('path').join(__dirname, 'coverage'), reports: {
         html: 'coverage',
         lcovonly: './coverage/coverage.lcov'
       }
     },
-    angularCli: {
-      config: './angular-cli.json',
-      environment: 'dev'
-    },
+    
     customLaunchers: {
       ChromeHeadless: {
         base: 'Chrome',

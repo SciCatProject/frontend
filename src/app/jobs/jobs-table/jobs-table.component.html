@@ -1,13 +1,54 @@
 <div class="example-container mat-elevation-z8">
-  <mat-table #table [dataSource]="dataSource">
-    <ng-container *ngFor="let col of cols">
-      <ng-container matColumnDef="{{col.field}}">
-        <mat-header-cell *matHeaderCellDef> {{col.header}} </mat-header-cell>
-        <mat-cell *matCellDef="let row"> {{row[col.field]}} </mat-cell>
-      </ng-container>  
+  <mat-table #table [dataSource]="jobs$ | async">
+    <ng-container matColumnDef="emailJobInitiator">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Initiator</mat-header-cell>
+      <mat-cell *matCellDef="let dataset">
+        {{dataset.emailJobInitiator}}
+      </mat-cell>  
     </ng-container>
     
-
+    <ng-container matColumnDef="type">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Type</mat-header-cell>
+      <mat-cell *matCellDef="let dataset">
+        {{dataset.type}}
+      </mat-cell>  
+    </ng-container>
+    
+    <ng-container matColumnDef="creationTime">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Created at</mat-header-cell>
+      <mat-cell *matCellDef="let dataset">
+        {{dataset.creationTime | date }}
+      </mat-cell>  
+    </ng-container>
+    
+    <ng-container matColumnDef="executionTime">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Executed at</mat-header-cell>
+      <mat-cell *matCellDef="let dataset">
+        {{dataset.executionTime}}
+      </mat-cell>  
+    </ng-container>
+    
+    <ng-container matColumnDef="jobParams">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Params</mat-header-cell>
+      <mat-cell *matCellDef="let dataset">
+        {{dataset.jobParams}}
+      </mat-cell>  
+    </ng-container>
+    
+    <ng-container matColumnDef="jobStatusMessage">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Status Message</mat-header-cell>
+      <mat-cell *matCellDef="let dataset">
+        {{dataset.jobStatusMessage}}
+      </mat-cell>  
+    </ng-container>
+    
+    <ng-container matColumnDef="datasetList">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Datasets</mat-header-cell>
+      <mat-cell *matCellDef="let dataset">
+        {{dataset.datasetList | json}}
+      </mat-cell>  
+    </ng-container>
+  
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
     <mat-row (click)="onRowSelect($event, row)" *matRowDef="let row; columns: displayedColumns;"></mat-row>
   </mat-table>

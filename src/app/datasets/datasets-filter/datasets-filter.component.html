@@ -83,14 +83,14 @@
         class="date-input"
         placeholder="Select a date range"
         name="range-picker"
-        [matDatepicker]="picker"
+        [satDatepicker]="picker"
         [value]="creationTimeFilter$ | async"
         (dateChange)="dateChanged($event)"
       >
-      <mat-datepicker-toggle matSuffix [for]="picker">
+      <sat-datepicker-toggle matSuffix [for]="picker">
         <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
-      </mat-datepicker-toggle>
-      <mat-datepicker #picker [rangeMode]="true"></mat-datepicker>
+      </sat-datepicker-toggle>
+      <sat-datepicker #picker [rangeMode]="true"></sat-datepicker>
     </mat-form-field>
 
   </form>
