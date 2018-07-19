@@ -1,6 +1,9 @@
 # Catanie SciCat Client
 
 
+![scicat-logo](https://github.com/SciCatProject/catanie/blob/develop/src/assets/images/esslogo.png)
+
+
 ## Summary
 
 An Angular (2+) based application that uses ngrx to communicate with the SciCat API and provide a searchable interface for datasets,
