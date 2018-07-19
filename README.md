@@ -3,6 +3,8 @@
 
 ![scicat-logo](https://github.com/SciCatProject/catanie/blob/develop/src/assets/images/esslogo.png)
 
+[![Build Status](https://travis-ci.org/SciCatProject/catanie.svg?branch=develop)](https://travis-ci.org/SciCatProject/catanie)
+
 
 ## Summary
 
