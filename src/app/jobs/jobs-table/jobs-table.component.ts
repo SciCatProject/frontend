@@ -1,5 +1,5 @@
 import {DatePipe} from '@angular/common';
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild, EventEmitter} from '@angular/core';
 import {Store, select} from '@ngrx/store';
 import {Router} from '@angular/router';
 import * as JobActions from 'state-management/actions/jobs.actions';
@@ -37,6 +37,7 @@ export class JobsTableComponent implements OnInit, OnDestroy, AfterViewInit {
   jobsCount = 1000;
   filters = {};
   totalJobNumber$: any;
+  event : any;
 
   displayedColumns = this.cols.concat();
   @ViewChild(MatPaginator) paginator: MatPaginator;
