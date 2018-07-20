@@ -34,7 +34,7 @@ export class DatasetTablePureComponent {
   @Output() private onPageChange: EventEmitter<PageChangeEvent> = new EventEmitter();
   @Output() private onSortChange: EventEmitter<SortChangeEvent> = new EventEmitter();
 
-  private pageSizeOptions: number[] = [30, 1000];
+  pageSizeOptions: number[] = [30, 1000];
   private displayedColumns: string[] = [
     'select',
     'pid',
@@ -48,7 +48,7 @@ export class DatasetTablePureComponent {
     'retrieveStatus'
   ];
 
-  private getDisplayedColumns(): string[] {
+  getDisplayedColumns(): string[] {
     return this.displayedColumns.filter(column => this.disabledColumns.indexOf(column) === -1);
   }
 
@@ -95,11 +95,11 @@ export class DatasetTablePureComponent {
     this.datasets.forEach(dataset => this.handleSelect(event, dataset));
   }
 
-  private handlePageChange(event: PageChangeEvent): void {
+  handlePageChange(event: PageChangeEvent): void {
     this.onPageChange.emit(event);
   }
 
-  private handleSortChange(event: SortChangeEvent): void {
+  handleSortChange(event: SortChangeEvent): void {
     this.onSortChange.emit(event);
   }
 }

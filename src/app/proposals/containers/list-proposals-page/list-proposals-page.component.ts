@@ -16,7 +16,7 @@ import { FetchProposalsAction } from 'state-management/actions/proposals.actions
 })
 export class ListProposalsPageComponent implements OnInit, OnDestroy {
     private subscription: Subscription;
-    private proposals$: Observable<Proposal[]>;
+    proposals$: Observable<Proposal[]>;
     private hasFetched$: Observable<boolean>;
 
     constructor(private store: Store<AppState>) {}

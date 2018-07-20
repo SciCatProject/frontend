@@ -8,5 +8,5 @@ import { Dataset } from 'shared/sdk';
 })
 
 export class SelectedListComponent {
-  @Input() private datasets: Dataset[] = [];
+  @Input() datasets: Dataset[] = [];
 }
