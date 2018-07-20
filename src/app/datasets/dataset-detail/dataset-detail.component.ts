@@ -42,7 +42,7 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
   private attachments$ = this.store.pipe(select(getCurrentAttachments));
 
   private isAdmin$ = this.store.pipe(select(getIsAdmin));
-  private dataset$ = this.store.pipe(select(getCurrentDataset));
+  dataset$ = this.store.pipe(select(getCurrentDataset));
 
   constructor(
     private route: ActivatedRoute,

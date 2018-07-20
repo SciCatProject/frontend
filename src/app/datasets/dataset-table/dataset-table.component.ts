@@ -1,4 +1,3 @@
-
 import {
   Component,
   OnInit,
@@ -31,18 +30,18 @@ import {take} from 'rxjs/operators';
   styleUrls: ['dataset-table.component.scss']
 })
 export class DatasetTableComponent implements OnInit, OnDestroy {
-  private datasets$ = this.store.pipe(select(getDatasets));
-  private selectedSets$ = this.store.pipe(select(getSelectedDatasets));
-  private currentPage$ = this.store.pipe(select(getPage));
-  private datasetsPerPage$ = this.store.pipe(select(getDatasetsPerPage));
+  datasets$ = this.store.pipe(select(getDatasets));
+  selectedSets$ = this.store.pipe(select(getSelectedDatasets));
+  currentPage$ = this.store.pipe(select(getPage));
+  datasetsPerPage$ = this.store.pipe(select(getDatasetsPerPage));
   private mode$ = this.store.pipe(select(getViewMode));
   private isEmptySelection$ = this.store.pipe(select(isEmptySelection));
-  private datasetCount$ = this.store.select(getTotalSets);
-  private loading$ = this.store.pipe(select(getIsLoading));
+  datasetCount$ = this.store.select(getTotalSets);
+  loading$ = this.store.pipe(select(getIsLoading));
   private filters$ = this.store.pipe(select(getFilters));
 
   // compatibility analogs of observables
-  private currentMode: string = 'view';
+  currentMode: string = 'view';
   private selectedSets: Dataset[] = [];
 
   private modes: string[] = ['view', 'archive', 'retrieve'];
@@ -54,9 +53,9 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   private submitJobSubscription: Subscription;
   private jobErrorSubscription: Subscription;
 
-  private disabledColumns: string[] = [];
-  private archiveWorkflowEnabled: boolean = false;
-  
+  disabledColumns: string[] = [];
+  archiveWorkflowEnabled: boolean = false;
+
   constructor(
     private router: Router,
     private configSrv: ConfigService,
