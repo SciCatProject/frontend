@@ -2,29 +2,32 @@
 
 declare var Object: any;
 export interface PolicyInterface {
-  "availability"?: string;
-  "tapeRetentionTime"?: number;
+  "manager": Array<string>;
+  "tapeRedundancy"?: string;
+  "autoArchive"?: boolean;
   "autoArchiveDelay"?: number;
+  "archiveEmailNotification"?: boolean;
+  "archiveEmailsToBeNotified"?: Array<string>;
+  "retrieveEmailNotification"?: boolean;
+  "retrieveEmailsToBeNotified"?: Array<string>;
   "ownerGroup": string;
   "accessGroups"?: Array<any>;
-  "createdBy"?: string;
-  "updatedBy"?: string;
-  "id"?: any;
-  "createdAt"?: Date;
-  "updatedAt"?: Date;
+  "id": any;
 }
 
 export class Policy implements PolicyInterface {
-  "availability": string;
-  "tapeRetentionTime": number;
+  "manager": Array<string>;
+  "tapeRedundancy": string;
+  "autoArchive": boolean;
   "autoArchiveDelay": number;
+  "archiveEmailNotification": boolean;
+  "archiveEmailsToBeNotified": Array<string>;
+  "retrieveEmailNotification": boolean;
+  "retrieveEmailsToBeNotified": Array<string>;
   "ownerGroup": string;
-  "accessGroups": Array<any>;
-  "createdBy": string;
-  "updatedBy": string;
+  "accessGroups"?: Array<any>;
   "id": any;
-  "createdAt": Date;
-  "updatedAt": Date;
+
   constructor(data?: PolicyInterface) {
     Object.assign(this, data);
   }
@@ -58,6 +61,10 @@ export class Policy implements PolicyInterface {
       path: 'Policies',
       idName: 'id',
       properties: {
+        "manager": {
+          name: 'manager',
+          type: '[string]',
+        },
         "availability": {
           name: 'availability',
           type: 'string',

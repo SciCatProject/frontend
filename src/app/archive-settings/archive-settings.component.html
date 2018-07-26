@@ -1,0 +1,92 @@
+<div class="archive-settings">
+</div>
+
+<div>
+  <mat-paginator
+    class="policy-paginator"
+    [pageSizeOptions]="pageSizeOptions"
+    [pageIndex]="currentPage"
+    [pageSize]="policiesPerPage"
+    [length]="totalNumber"
+    (page)="handlePageChange($event)">
+  </mat-paginator>
+
+  <mat-table
+    pol="policies$ | async"
+    [dataSource]="pol"
+    class="policy-table mat-elevation-z8"
+    matSort (matSortChange)="handleSortChange($event)">
+
+    <!-- Column Definitions -->
+    <ng-container matColumnDef="select">
+      <mat-header-cell *matHeaderCellDef>
+        <!--<mat-checkbox
+          [checked]="allAreSelected()"
+          (change)="handleSelectAll($event)">
+        </mat-checkbox>-->
+      </mat-header-cell>
+      <mat-cell *matCellDef="let row">
+        <mat-checkbox
+
+          (change)="handleSelect($event, row)"
+          (click)="$event.stopPropagation()">
+        </mat-checkbox>
+      </mat-cell>
+    </ng-container>
+
+
+
+    <ng-container matColumnDef="notification email">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>notification email</mat-header-cell>
+      <mat-cell *matCellDef="let policy">
+        {{policy.archiveEmailNotification }}
+      </mat-cell>
+    </ng-container>
+
+
+    <ng-container matColumnDef="manager">
+      <mat-header-cell *matHeaderCellDef>manager</mat-header-cell>
+      <mat-cell *matCellDef="let policy">{{policy.manager}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="number of copies on tape">
+      <mat-header-cell *matHeaderCellDef>number of copies on tape</mat-header-cell>
+      <mat-cell *matCellDef="let policy">{{policy.tapeRedundancy}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="archive delay">
+      <mat-header-cell *matHeaderCellDef>Archive Delay</mat-header-cell>
+      <mat-cell *matCellDef="let policy">{{policy.autoArchiveDelay}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="ownerGroup">
+      <mat-header-cell *matHeaderCellDef>group</mat-header-cell>
+      <mat-cell *matCellDef="let policy">{{policy.ownerGroup}}</mat-cell>
+    </ng-container>
+
+
+    <ng-container matColumnDef="auto archive">
+      <mat-header-cell *matHeaderCellDef>auto archive</mat-header-cell>
+      <mat-cell *matCellDef="let policy">{{policy.autoArchive}}</mat-cell>
+    </ng-container>
+
+    <!-- End of Column Definitions -->
+
+    <mat-header-row class='policies-header' *matHeaderRowDef="getDisplayedColumns()"></mat-header-row>
+    <mat-row
+      class='row-generic'
+      *matRowDef="let policy; columns: getDisplayedColumns()"
+      (click)="handleClick(policy)"
+    >
+    </mat-row>
+  </mat-table>
+
+  <mat-paginator
+    class="policy-paginator"
+    [pageSizeOptions]="pageSizeOptions"
+    [pageIndex]="currentPage"
+    [pageSize]="policiesPerPage"
+    [length]="totalNumber"
+    (page)="handlePageChange($event)">
+  </mat-paginator>
+</div>

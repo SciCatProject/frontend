@@ -25,6 +25,7 @@ import { JobsEffects } from 'state-management/effects/jobs.effects';
 import { rootReducer } from 'state-management/reducers/root.reducer';
 import { UsersModule } from 'users/users.module';
 import { ProposalsModule } from 'proposals/proposals.module';
+import { ArchiveSettingsModule} from 'archive-settings/archive-settings.module'
 import { FileHelpersModule } from 'ngx-file-helpers';
 
 import { FilePickerComponent } from './datasets/file-picker/file-picker.component';
@@ -70,7 +71,7 @@ import {CdkTableModule} from '@angular/cdk/table';
 import { AppComponent } from './app.component';
 import { AuthCheck } from './AuthCheck';
 import { JobsDetailComponent } from './jobs/jobs-detail/jobs-detail.component';
-import {ArchiveSettingsComponent} from 'archive-settings/archive-settings.component';
+//import {ArchiveSettingsComponent} from 'archive-settings/archive-settings.component';
 
 
 export function localStorageSyncWrapper(reducer: any) {
@@ -82,8 +83,8 @@ export function localStorageSyncWrapper(reducer: any) {
     AppComponent,
     JobsTableComponent,
     SampleDataFormComponent,
-    JobsDetailComponent,
-    ArchiveSettingsComponent
+    JobsDetailComponent
+    //ArchiveSettingsComponent
 
   ],
   imports : [
@@ -107,6 +108,7 @@ export function localStorageSyncWrapper(reducer: any) {
     DatasetsModule,
     UsersModule,
     ProposalsModule,
+    ArchiveSettingsModule,
     AppConfigModule,
 
     SDKBrowserModule.forRoot(),
