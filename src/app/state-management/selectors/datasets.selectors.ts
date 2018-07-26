@@ -238,3 +238,8 @@ export const getHasPrefilledFilters = createSelector(
     getDatasetState,
     state => state.hasPrefilledFilters
 );
+
+export const getDatasetsInBatch = createSelector(
+    getDatasetState,
+    state => state.batch
+);

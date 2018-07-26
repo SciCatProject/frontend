@@ -1,1 +1,33 @@
-<mat-card>Hello</mat-card>
+<mat-card *ngIf="nonEmpty$ | async">
+    <div class="title">Batch Actions</div>
+
+    <mat-card-content>
+        <div class="count" [ngPlural]="batchSize$ | async">
+            <ng-template ngPluralCase="=0">No datasets.</ng-template>
+            <ng-template ngPluralCase="=1">1 dataset.</ng-template>
+            <ng-template ngPluralCase="other">{{ batchSize$ | async }} datasets.</ng-template>
+        </div>
+    </mat-card-content>
+        
+    <mat-card-footer>
+        <button mat-button class="button" color="primary">
+            <i class="cloud upload icon"></i>
+            Publish
+        </button>
+
+        <button mat-button class="button" color="primary">
+            <i class="table icon"></i>
+            Export to CSV
+        </button>
+
+        <button mat-button class="button" color="primary">
+            <i class="archive icon"></i>
+            Archive
+        </button>
+    
+        <button mat-button class="button" color="primary">
+            <i class="archive icon"></i>
+            Retrieve
+        </button>
+    </mat-card-footer>
+</mat-card>

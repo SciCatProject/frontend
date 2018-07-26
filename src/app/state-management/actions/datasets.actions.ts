@@ -218,7 +218,7 @@ export class FetchFacetCountsFailedAction implements Action {
     readonly type = FETCH_FACET_COUNTS_FAILED;
 }
 
-export class AddToBatch implements Action {
+export class AddToBatchAction implements Action {
     readonly type = ADD_TO_BATCH;
 }
 
@@ -230,4 +230,4 @@ export type Actions =
     SelectDatasetAction | DeselectDatasetAction |
     ExportToCsvAction | ChangePageAction | SortByColumnAction | SetViewModeAction |
     SetSearchTermsAction | ClearFacetsAction |
-    AddToBatch;
+    AddToBatchAction;

@@ -35,10 +35,7 @@
       <mat-cell *matCellDef="let dataset">{{dataset.pid}}</mat-cell>
     </ng-container>
 
-    <ng-container matColumnDef="sourceFolder">
-      <mat-header-cell *matHeaderCellDef>Source Folder</mat-header-cell>
-      <mat-cell *matCellDef="let dataset">{{dataset.sourceFolder}}</mat-cell>  
-    </ng-container>
+    <dataset-table-pure-column></dataset-table-pure-column>
 
     <ng-container matColumnDef="size">
       <mat-header-cell *matHeaderCellDef mat-sort-header>Size</mat-header-cell>

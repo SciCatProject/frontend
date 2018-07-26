@@ -14,6 +14,25 @@ export interface SortChangeEvent {
 }
 
 @Component({
+  selector: 'dataset-table-pure-column',
+  template: `
+  <ng-container matColumnDef="sourceFolder">
+    <mat-header-cell *matHeaderCellDef>Source Folder</mat-header-cell>
+    <mat-cell *matCellDef="let dataset">{{dataset.sourceFolder}}</mat-cell>
+  </ng-container>
+  `
+})
+export class DatasetTablePureColumnComponent {
+  @Input() public key: string;
+  @Input() public title: string;
+}
+
+
+
+
+
+
+@Component({
   selector: 'dataset-table-pure',
   templateUrl: './dataset-table-pure.component.html',
   styleUrls: ['./dataset-table-pure.component.scss']

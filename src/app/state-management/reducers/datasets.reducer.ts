@@ -54,6 +54,7 @@ import {
     PrefillFiltersAction,
     SearchIDCompleteAction,
     ADD_TO_BATCH,
+    AddToBatchAction,
 } from 'state-management/actions/datasets.actions';
 
 import { DatasetState, initialDatasetState } from 'state-management/state/datasets.store';
@@ -263,10 +264,12 @@ export function datasetsReducer(state: DatasetState = initialDatasetState, actio
             return {...state, selectedSets: []};
         }
 
-        case ADD_TO_BATCH:
-            const batch = [...state.batch, ...state.selectedSets];
+        case ADD_TO_BATCH: {
+            const batchedPids = state.batch.map(dataset => dataset.pid);
+            const addition = state.selectedSets.filter(dataset => batchedPids.indexOf(dataset.pid) === -1);
+            const batch = [...state.batch, ...addition];
             return {...state, batch};
-
+        }
         default: {
             return state;
         }

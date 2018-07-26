@@ -261,4 +261,9 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     const {active: column, direction} = event;
     this.store.dispatch(new dsa.SortByColumnAction(column, direction));
   }
+
+  onAddToBatch(): void {
+    this.store.dispatch(new dsa.AddToBatchAction());
+    this.store.dispatch(new dsa.ClearSelectionAction());
+  }
 }
