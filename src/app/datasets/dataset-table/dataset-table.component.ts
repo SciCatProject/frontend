@@ -46,6 +46,7 @@ import { distinctUntilChanged } from 'rxjs/operators/distinctUntilChanged';
 
 // Needed for compatibility with non-piped RxJS operators
 import 'rxjs/add/operator/take';
+import { map } from 'rxjs/operators/map';
 
 @Component({
   selector: 'dataset-table',
@@ -54,7 +55,10 @@ import 'rxjs/add/operator/take';
 })
 export class DatasetTableComponent implements OnInit, OnDestroy {
   private datasets$ = this.store.pipe(select(getDatasets));
+  
   private selectedSets$ = this.store.pipe(select(getSelectedDatasets));
+  private selectedPids$ = this.selectedSets$.pipe(map(sets => sets.map(set => set.pid)));
+  
   private currentPage$ = this.store.pipe(select(getPage));
   private datasetsPerPage$ = this.store.pipe(select(getDatasetsPerPage));
   private mode$ = this.store.pipe(select(getViewMode));
@@ -67,7 +71,8 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   private currentMode: string = 'view';
   private selectedSets: Dataset[] = [];
 
-  private modes: string[] = ['view', 'archive', 'retrieve'];
+  private modes = ['view', 'archive', 'retrieve'];
+
 
   // These should be made part of the NgRX state management
   // and eventually be removed.
@@ -76,17 +81,28 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   private submitJobSubscription: Subscription;
   private jobErrorSubscription: Subscription;
 
-  private disabledColumns: string[] = [];
+  private visibleColumns: string[] = [];
+  private readonly defaultColumns: string[] = [
+    'select',
+    'pid',
+    'sourceFolder',
+    'size',
+    'creationTime',
+    'type',
+    'proposalId',
+    'ownerGroup',
+    'archiveStatus',
+    'retrieveStatus'
+  ];
 
   constructor(
     private router: Router,
-    private configSrv: ConfigService,
-    private route: ActivatedRoute,
     private store: Store<any>,
     public dialog: MatDialog,
     @Inject(APP_CONFIG) private appConfig: AppConfig
   ) {
-    this.disabledColumns = appConfig.disabledDatasetColumns;
+    // TODO: filter disabled ones
+    this.visibleColumns = this.defaultColumns;
   }
 
   ngOnInit() {
@@ -281,40 +297,4 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     const {active: column, direction} = event;
     this.store.dispatch(new dsa.SortByColumnAction(column, direction));
   }
-
-  rowClassifier(row: Dataset): string {
-    if (row.datasetlifecycle && this.currentMode === 'archive'
-      && (config.archiveable.indexOf(row.datasetlifecycle.archiveStatusMessage) !== -1) && row.size !== 0) {
-      return 'row-archiveable';
-    } else if (row.datasetlifecycle && this.currentMode === 'retrieve'
-      && config.retrieveable.indexOf(row.datasetlifecycle.archiveStatusMessage) !== -1 && row.size !== 0) {
-      return 'row-retrievable';
-    } else if (row.size === 0) {
-      return 'row-empty';
-    } else {
-      return 'row-generic';
-    }
-  }
 }
-
-/* Obsolete and/or "pensioned" methods
-/*
-/**
- * Options set based on selected datasets
- * This is used to determine which template to display for
- * archive or retrieval or both
- * @param set
- * @returns {string}
- * /
-setOptions(set) {
-  let options = '';
-  const dl = set['datasetlifecycle'];
-  if (dl && dl['isOnDisk']) {
-    options += 'archive';
-  }
-  if (dl && (dl['isOnTape'] || dl['isOnDisk'])) {
-    options += 'retrieve';
-  }
-  return options;
-}
-*/
