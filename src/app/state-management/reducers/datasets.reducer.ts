@@ -53,6 +53,7 @@ import {
     PREFILL_FILTERS,
     PrefillFiltersAction,
     SearchIDCompleteAction,
+    SELECT_ALL_DATASETS,
 } from 'state-management/actions/datasets.actions';
 
 import { DatasetState, initialDatasetState } from 'state-management/state/datasets.store';
@@ -256,6 +257,10 @@ export function datasetsReducer(state: DatasetState = initialDatasetState, actio
             const dataset = (action as DeselectDatasetAction).dataset;
             const selectedSets = state.selectedSets.filter(selectedSet => selectedSet.pid !== dataset.pid);
             return {...state, selectedSets};
+        }
+
+        case SELECT_ALL_DATASETS: {
+            return {...state, selectedSets: [...state.datasets]};
         }
 
         case CLEAR_SELECTION: {

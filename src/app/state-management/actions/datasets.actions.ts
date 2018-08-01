@@ -38,9 +38,8 @@ export const SELECT_DATASET =               '[Dataset] Select Dataset';
 export const DESELECT_DATASET =             '[Dataset] Deselect Dataset';
 
 export const SELECT_ALL_DATASETS =          '[Dataset] Select all Datasets';
-export const DESELECT_ALL_DATASETS =        '[Dataset] Deelect all Datasets';
-
 export const CLEAR_SELECTION =              '[Dataset] Clear Selection';
+
 export const EXPORT_TO_CSV =                '[Dataset] Export to CSV';
 export const SET_VIEW_MODE =                '[Dataset] Set View Mode';
 
@@ -112,10 +111,6 @@ export class DeselectDatasetAction implements Action {
 
 export class SelectAllDatasetsAction implements Action {
     readonly type = SELECT_ALL_DATASETS;
-}
-
-export class DeselectAllDatasetsAction implements Action {
-    readonly type = DESELECT_ALL_DATASETS;
 }
 
 export class ClearSelectionAction implements Action {
@@ -235,8 +230,7 @@ export type Actions =
     SearchIDCompleteAction |
     DatablocksAction |
     DatablocksAction |
-    SelectDatasetAction | DeselectDatasetAction |
-    SelectAllDatasetsAction | DeselectAllDatasetsAction |
+    SelectDatasetAction | DeselectDatasetAction | SelectAllDatasetsAction |
     ExportToCsvAction | ChangePageAction | SortByColumnAction | SetViewModeAction |
     
     // New filtering actions
