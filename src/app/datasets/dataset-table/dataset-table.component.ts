@@ -22,18 +22,19 @@ import { Subscription} from 'rxjs';
 import { APP_CONFIG, AppConfig } from 'app-config.module';
 import {take} from 'rxjs/operators';
 
-// Needed for compatibility with non-piped RxJS operators
-
 @Component({
   selector: 'dataset-table',
   templateUrl: 'dataset-table.component.html',
   styleUrls: ['dataset-table.component.scss']
 })
 export class DatasetTableComponent implements OnInit, OnDestroy {
-  datasets$ = this.store.pipe(select(getDatasets));
-  selectedSets$ = this.store.pipe(select(getSelectedDatasets));
-  currentPage$ = this.store.pipe(select(getPage));
-  datasetsPerPage$ = this.store.pipe(select(getDatasetsPerPage));
+  private datasets$ = this.store.pipe(select(getDatasets));
+  
+  private selectedSets$ = this.store.pipe(select(getSelectedDatasets));
+  private selectedPids$ = this.selectedSets$.pipe(map(sets => sets.map(set => set.pid)));
+  
+  private currentPage$ = this.store.pipe(select(getPage));
+  private datasetsPerPage$ = this.store.pipe(select(getDatasetsPerPage));
   private mode$ = this.store.pipe(select(getViewMode));
   private isEmptySelection$ = this.store.pipe(select(isEmptySelection));
   datasetCount$ = this.store.select(getTotalSets);
@@ -44,7 +45,8 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   currentMode: string = 'view';
   private selectedSets: Dataset[] = [];
 
-  private modes: string[] = ['view', 'archive', 'retrieve'];
+  private modes = ['view', 'archive', 'retrieve'];
+
 
   // These should be made part of the NgRX state management
   // and eventually be removed.
@@ -53,19 +55,28 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   private submitJobSubscription: Subscription;
   private jobErrorSubscription: Subscription;
 
-  disabledColumns: string[] = [];
-  archiveWorkflowEnabled: boolean = false;
+  private visibleColumns: string[] = [];
+  private readonly defaultColumns: string[] = [
+    'select',
+    'pid',
+    'sourceFolder',
+    'size',
+    'creationTime',
+    'type',
+    'proposalId',
+    'ownerGroup',
+    'archiveStatus',
+    'retrieveStatus'
+  ];
 
   constructor(
     private router: Router,
-    private configSrv: ConfigService,
-    private route: ActivatedRoute,
     private store: Store<any>,
     public dialog: MatDialog,
     @Inject(APP_CONFIG) private appConfig: AppConfig
   ) {
-    this.disabledColumns = appConfig.disabledDatasetColumns;
-    this.archiveWorkflowEnabled = appConfig.archiveWorkflowEnabled;
+    // TODO: filter disabled ones
+    this.visibleColumns = this.defaultColumns;
   }
 
   ngOnInit() {
