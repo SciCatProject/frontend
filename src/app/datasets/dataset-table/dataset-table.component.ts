@@ -6,7 +6,7 @@ import {
 } from '@angular/core';
 import { Router, ActivatedRoute} from '@angular/router';
 import { Store, select } from '@ngrx/store';
-import {MatDialog } from '@angular/material';
+import {MatDialog, MatCheckboxChange } from '@angular/material';
 import { Job, Dataset } from 'shared/sdk/models';
 import { ConfigService } from 'shared/services/config.service';
 import { DialogComponent } from 'shared/modules/dialog/dialog.component';
@@ -18,9 +18,10 @@ import { getDatasets, getSelectedDatasets, getPage, getViewMode, isEmptySelectio
 import { Message, MessageType, ViewMode } from 'state-management/models';
 import * as jobSelectors from 'state-management/selectors/jobs.selectors';
 import { PageChangeEvent, SortChangeEvent } from '../dataset-table-pure/dataset-table-pure.component';
-import { Subscription} from 'rxjs';
 import { APP_CONFIG, AppConfig } from 'app-config.module';
-import {take} from 'rxjs/operators';
+
+import { Subscription, combineLatest, Observable, Subject } from 'rxjs';
+import { take, map } from 'rxjs/operators';
 
 @Component({
   selector: 'dataset-table',
@@ -28,10 +29,29 @@ import {take} from 'rxjs/operators';
   styleUrls: ['dataset-table.component.scss']
 })
 export class DatasetTableComponent implements OnInit, OnDestroy {
-  private datasets$ = this.store.pipe(select(getDatasets));
-  
   private selectedSets$ = this.store.pipe(select(getSelectedDatasets));
-  private selectedPids$ = this.selectedSets$.pipe(map(sets => sets.map(set => set.pid)));
+  private datasets$ = this.store.pipe(select(getDatasets));
+
+  private rows$ = combineLatest(
+    this.datasets$,
+    this.selectedSets$,
+    (datasets, selectedSets) => {
+      const pids = selectedSets.map(set => set.pid);
+      return datasets.map(dataset => {
+        const isSelected = pids.indexOf(dataset.pid) !== -1;
+        return {dataset, isSelected};
+      });
+    }
+  );
+
+  private allAreSeleted$ = this.rows$.pipe(
+    map(rows => rows.length && null == rows.find(row => row.isSelected === false))
+  );
+
+  private selectedPids: string[] = [];
+  private selectedSetsSub = this.selectedSets$.subscribe(datasets => {
+    this.selectedPids = datasets.map(dataset => dataset.pid);
+  });
   
   private currentPage$ = this.store.pipe(select(getPage));
   private datasetsPerPage$ = this.store.pipe(select(getDatasetsPerPage));
@@ -55,7 +75,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   private submitJobSubscription: Subscription;
   private jobErrorSubscription: Subscription;
 
-  private visibleColumns: string[] = [];
   private readonly defaultColumns: string[] = [
     'select',
     'pid',
@@ -69,14 +88,16 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     'retrieveStatus'
   ];
 
+  private visibleColumns = this.defaultColumns.filter(
+    column => this.appConfig.disabledDatasetColumns.indexOf(column) === -1
+  );
+
   constructor(
     private router: Router,
     private store: Store<any>,
     public dialog: MatDialog,
     @Inject(APP_CONFIG) private appConfig: AppConfig
   ) {
-    // TODO: filter disabled ones
-    this.visibleColumns = this.defaultColumns;
   }
 
   ngOnInit() {
@@ -255,12 +276,24 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     this.router.navigateByUrl('/dataset/' + pid);
   }
 
-  onSelect(dataset: Dataset): void {
-    this.store.dispatch(new dsa.SelectDatasetAction(dataset));
+  isSelected(dataset: Dataset): boolean {
+    return this.selectedPids.indexOf(dataset.pid) !== -1;
   }
 
-  onDeselect(dataset: Dataset): void {
-    this.store.dispatch(new dsa.DeselectDatasetAction(dataset));
+  onSelect(event: MatCheckboxChange, dataset: Dataset): void {
+    if (event.checked) {
+      this.store.dispatch(new dsa.SelectDatasetAction(dataset));
+    } else {
+      this.store.dispatch(new dsa.DeselectDatasetAction(dataset));
+    }
+  }
+
+  onSelectAll(checked: boolean) {
+    if (checked) {
+      this.store.dispatch(new dsa.SelectAllDatasetsAction());
+    } else {
+      this.store.dispatch(new dsa.ClearSelectionAction());
+    }
   }
 
   onPageChange(event: PageChangeEvent): void {
