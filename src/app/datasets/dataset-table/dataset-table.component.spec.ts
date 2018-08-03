@@ -18,6 +18,7 @@ import {
 import {UserApi} from 'shared/sdk/services';
 import { rootReducer } from 'state-management/reducers/root.reducer';
 import { AppConfigModule } from 'app-config.module';
+import { FileSizePipe } from '../filesize.pipe';
 
 
 describe('DatasetTableComponent', () => {
@@ -28,7 +29,7 @@ describe('DatasetTableComponent', () => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
       imports: [MatTableModule, MatDialogModule, FormsModule, ReactiveFormsModule, StoreModule.forRoot(rootReducer), AppConfigModule],
-      declarations: [DatasetTableComponent]
+      declarations: [DatasetTableComponent, FileSizePipe]
     });
     TestBed.overrideComponent(DatasetTableComponent, {
       set: {
@@ -59,15 +60,14 @@ describe('DatasetTableComponent', () => {
     const compiled = fixture.debugElement.nativeElement;
     expect(compiled.querySelector('.archive')).toBeTruthy();
     expect(compiled.querySelector('.archive').textContent).toContain('Archive');
-    expect(compiled.querySelector('.retrieve')).toBeTruthy();
-    expect(compiled.querySelector('.retrieve').textContent).toContain('Retrieve');
+    expect(compiled.querySelector('.retriev')).toBeTruthy();
+    expect(compiled.querySelector('.retriev').textContent).toContain('Retrieve');
     expect(compiled.querySelector('.view')).toBeTruthy();
     expect(compiled.querySelector('.view').textContent).toContain('View');
   });
 
   it('should contain an export button', () => {
     const compiled = fixture.debugElement.nativeElement;
-    console.log(compiled);
     expect(compiled.querySelectorAll('.export-csv')).toBeTruthy();
   });
 });

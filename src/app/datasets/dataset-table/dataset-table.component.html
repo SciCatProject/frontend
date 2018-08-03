@@ -1,3 +1,4 @@
+
 <div class="dataset-table">
   <div class="mode-container" *ngIf="archiveWorkflowEnabled">
     <mat-button-toggle-group [value]="currentMode">
@@ -18,7 +19,7 @@
   </div>
 
   <div class="action-container" [class.hidden]="loading$ | async">
-    <button mat-button [disabled]="isEmptySelection$ | async" *ngIf="currentMode === 'archive'" mat-button class="ui button archive-action-btn" (click)="archiveClickHandle($event)" color="primary">
+    <button name="asdasdsa" mat-button [disabled]="isEmptySelection$ | async" *ngIf="currentMode === 'archive'" mat-button class="ui button archive-action-btn" (click)="archiveClickHandle($event)" color="primary">
       <i class="archive icon"></i>
       Archive
     </button>

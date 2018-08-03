@@ -1,27 +1,56 @@
-import {
-  Component,
-  OnInit,
-  OnDestroy,
-  Inject,
-} from '@angular/core';
-import { Router, ActivatedRoute} from '@angular/router';
+import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
+import { Router } from '@angular/router';
+import { MatDialog, MatCheckboxChange } from '@angular/material';
+
 import { Store, select } from '@ngrx/store';
-import {MatDialog, MatCheckboxChange } from '@angular/material';
-import { Job, Dataset } from 'shared/sdk/models';
-import { ConfigService } from 'shared/services/config.service';
+
+import { Subscription, combineLatest } from 'rxjs';
+import { take, map, pluck } from 'rxjs/operators';
+
 import { DialogComponent } from 'shared/modules/dialog/dialog.component';
-import { config } from '../../../config/config';
-import * as dsa from 'state-management/actions/datasets.actions';
+
+import {
+  ExportToCsvAction,
+  SelectDatasetAction,
+  DeselectDatasetAction,
+  SelectAllDatasetsAction,
+  ClearSelectionAction,
+  ChangePageAction,
+  SortByColumnAction,
+  SetViewModeAction
+} from 'state-management/actions/datasets.actions';
+
 import * as ua from 'state-management/actions/user.actions';
 import * as ja from 'state-management/actions/jobs.actions';
-import { getDatasets, getSelectedDatasets, getPage, getViewMode, isEmptySelection, getDatasetsPerPage, getIsLoading, getTotalSets, getFilters } from 'state-management/selectors/datasets.selectors';
-import { Message, MessageType, ViewMode } from 'state-management/models';
-import * as jobSelectors from 'state-management/selectors/jobs.selectors';
-import { PageChangeEvent, SortChangeEvent } from '../dataset-table-pure/dataset-table-pure.component';
-import { APP_CONFIG, AppConfig } from 'app-config.module';
 
-import { Subscription, combineLatest, Observable, Subject } from 'rxjs';
-import { take, map } from 'rxjs/operators';
+import {
+  getDatasets,
+  getSelectedDatasets,
+  getPage,
+  getViewMode,
+  isEmptySelection,
+  getDatasetsPerPage,
+  getIsLoading,
+  getTotalSets,
+  getFilters
+} from 'state-management/selectors/datasets.selectors';
+
+import * as jobSelectors from 'state-management/selectors/jobs.selectors';
+
+import { Job, Dataset, Message, MessageType, ViewMode } from 'state-management/models';
+import { APP_CONFIG, AppConfig } from 'app-config.module';
+import { datasets } from 'state-management/selectors';
+
+export interface PageChangeEvent {
+  pageIndex: number;
+  pageSize: number;
+  length: number;
+}
+
+export interface SortChangeEvent {
+  active: keyof Dataset;
+  direction: 'asc' | 'desc' | '';
+}
 
 @Component({
   selector: 'dataset-table',
@@ -32,24 +61,17 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   private selectedSets$ = this.store.pipe(select(getSelectedDatasets));
   private datasets$ = this.store.pipe(select(getDatasets));
 
-  private rows$ = combineLatest(
+  private allAreSeleted$ = combineLatest(
     this.datasets$,
     this.selectedSets$,
-    (datasets, selectedSets) => {
-      const pids = selectedSets.map(set => set.pid);
-      return datasets.map(dataset => {
-        const isSelected = pids.indexOf(dataset.pid) !== -1;
-        return {dataset, isSelected};
-      });
+    (datasets, selected) => {
+      const pids = selected.map(set => set.pid);
+      return datasets.length && datasets.find(dataset => pids.indexOf(dataset.pid) === -1) == null;
     }
   );
 
-  private allAreSeleted$ = this.rows$.pipe(
-    map(rows => rows.length && null == rows.find(row => row.isSelected === false))
-  );
-
   private selectedPids: string[] = [];
-  private selectedSetsSub = this.selectedSets$.subscribe(datasets => {
+  private selectedPidsSubscription = this.selectedSets$.subscribe(datasets => {
     this.selectedPids = datasets.map(dataset => dataset.pid);
   });
   
@@ -57,12 +79,12 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   private datasetsPerPage$ = this.store.pipe(select(getDatasetsPerPage));
   private mode$ = this.store.pipe(select(getViewMode));
   private isEmptySelection$ = this.store.pipe(select(isEmptySelection));
-  datasetCount$ = this.store.select(getTotalSets);
-  loading$ = this.store.pipe(select(getIsLoading));
+  private datasetCount$ = this.store.select(getTotalSets);
+  private loading$ = this.store.pipe(select(getIsLoading));
   private filters$ = this.store.pipe(select(getFilters));
 
   // compatibility analogs of observables
-  currentMode: string = 'view';
+  private currentMode: string = 'view';
   private selectedSets: Dataset[] = [];
 
   private modes = ['view', 'archive', 'retrieve'];
@@ -115,7 +137,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
         ret => {
           if (ret && Array.isArray(ret)) {
             console.log(ret);
-            this.store.dispatch(new dsa.ClearSelectionAction());
+            this.store.dispatch(new ClearSelectionAction());
           }
         },
         error => {
@@ -142,10 +164,11 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     this.selectedSetsSubscription.unsubscribe();
     this.submitJobSubscription.unsubscribe();
     this.jobErrorSubscription.unsubscribe();
+    this.selectedPidsSubscription.unsubscribe();
   }
 
   onExportClick(): void {
-    this.store.dispatch(new dsa.ExportToCsvAction());
+    this.store.dispatch(new ExportToCsvAction());
   }
 
   /**
@@ -154,7 +177,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
    * @param mode
    */
   onModeChange(event, mode: ViewMode): void {
-    this.store.dispatch(new dsa.SetViewModeAction(mode));
+    this.store.dispatch(new SetViewModeAction(mode));
   }
 
   /**
@@ -234,7 +257,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
             delete set['$$index'];
           });
 
-          this.store.dispatch(new dsa.ClearSelectionAction());
+          this.store.dispatch(new ClearSelectionAction());
 
           if (backupFiles.length === 0) {
             msg.type = MessageType.Error;
@@ -267,7 +290,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
       msg.type = MessageType.Error;
       msg.content = 'No datasets selected';
       this.store.dispatch(new ua.ShowMessageAction(msg));
-      this.store.dispatch(new dsa.ClearSelectionAction());
+      this.store.dispatch(new ClearSelectionAction());
     }
   }
 
@@ -282,26 +305,26 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
 
   onSelect(event: MatCheckboxChange, dataset: Dataset): void {
     if (event.checked) {
-      this.store.dispatch(new dsa.SelectDatasetAction(dataset));
+      this.store.dispatch(new SelectDatasetAction(dataset));
     } else {
-      this.store.dispatch(new dsa.DeselectDatasetAction(dataset));
+      this.store.dispatch(new DeselectDatasetAction(dataset));
     }
   }
 
   onSelectAll(checked: boolean) {
     if (checked) {
-      this.store.dispatch(new dsa.SelectAllDatasetsAction());
+      this.store.dispatch(new SelectAllDatasetsAction());
     } else {
-      this.store.dispatch(new dsa.ClearSelectionAction());
+      this.store.dispatch(new ClearSelectionAction());
     }
   }
 
   onPageChange(event: PageChangeEvent): void {
-    this.store.dispatch(new dsa.ChangePageAction(event.pageIndex, event.pageSize));
+    this.store.dispatch(new ChangePageAction(event.pageIndex, event.pageSize));
   }
 
   onSortChange(event: SortChangeEvent): void {
     const {active: column, direction} = event;
-    this.store.dispatch(new dsa.SortByColumnAction(column, direction));
+    this.store.dispatch(new SortByColumnAction(column, direction));
   }
 }
