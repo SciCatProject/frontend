@@ -7,9 +7,8 @@ import {MatTableModule, MatDialogModule} from '@angular/material';
 import {DatasetTableComponent} from './dataset-table.component';
 import {Store, StoreModule} from '@ngrx/store';
 import {ConfigService} from 'shared/services/config.service';
+
 import {
-  MockActivatedRoute,
-  MockConfigService,
   MockHttp,
   MockRouter,
   MockStore,
@@ -17,7 +16,7 @@ import {
 } from 'shared/MockStubs';
 import {UserApi} from 'shared/sdk/services';
 import { rootReducer } from 'state-management/reducers/root.reducer';
-import { AppConfigModule } from 'app-config.module';
+import { AppConfigModule, AppConfig } from 'app-config.module';
 import { FileSizePipe } from '../filesize.pipe';
 
 
@@ -28,18 +27,19 @@ describe('DatasetTableComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
-      imports: [MatTableModule, MatDialogModule, FormsModule, ReactiveFormsModule, StoreModule.forRoot(rootReducer), AppConfigModule],
+      imports: [MatTableModule, MatDialogModule, ReactiveFormsModule, StoreModule.forRoot(rootReducer), AppConfigModule],
       declarations: [DatasetTableComponent, FileSizePipe]
     });
     TestBed.overrideComponent(DatasetTableComponent, {
       set: {
         providers: [
-          {provide: UserApi, useClass: MockUserApi},
           {provide: HttpClient, useClass: MockHttp},
           {provide: Router, useClass: MockRouter},
-          {provide: ActivatedRoute, useClass: MockActivatedRoute},
-          {provide: ConfigService, useClass: MockConfigService},
-          {provide: Store, useClass: MockStore}
+          {provide: Store, useClass: MockStore},
+          {provide: AppConfig, useValue: {
+            disabledDatasetColumns: [],
+            archiveWorkflowEnabled: true,
+          }}
         ]
       }
     });
@@ -60,8 +60,8 @@ describe('DatasetTableComponent', () => {
     const compiled = fixture.debugElement.nativeElement;
     expect(compiled.querySelector('.archive')).toBeTruthy();
     expect(compiled.querySelector('.archive').textContent).toContain('Archive');
-    expect(compiled.querySelector('.retriev')).toBeTruthy();
-    expect(compiled.querySelector('.retriev').textContent).toContain('Retrieve');
+    expect(compiled.querySelector('.retrieve')).toBeTruthy();
+    expect(compiled.querySelector('.retrieve').textContent).toContain('Retrieve');
     expect(compiled.querySelector('.view')).toBeTruthy();
     expect(compiled.querySelector('.view').textContent).toContain('View');
   });
