@@ -5,7 +5,7 @@ import { MatDialog, MatCheckboxChange } from '@angular/material';
 import { Store, select } from '@ngrx/store';
 
 import { Subscription, combineLatest } from 'rxjs';
-import { take, map, pluck } from 'rxjs/operators';
+import { take } from 'rxjs/operators';
 
 import { DialogComponent } from 'shared/modules/dialog/dialog.component';
 
@@ -39,7 +39,6 @@ import * as jobSelectors from 'state-management/selectors/jobs.selectors';
 
 import { Job, Dataset, Message, MessageType, ViewMode } from 'state-management/models';
 import { APP_CONFIG, AppConfig } from 'app-config.module';
-import { datasets } from 'state-management/selectors';
 
 export interface PageChangeEvent {
   pageIndex: number;
@@ -89,7 +88,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
 
   private modes = ['view', 'archive', 'retrieve'];
 
-
   // These should be made part of the NgRX state management
   // and eventually be removed.
   private modeSubscription: Subscription;
@@ -113,6 +111,8 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   private visibleColumns = this.defaultColumns.filter(
     column => this.appConfig.disabledDatasetColumns.indexOf(column) === -1
   );
+
+  private archiveWorkflowEnabled = this.appConfig.archiveWorkflowEnabled;
 
   constructor(
     private router: Router,
@@ -311,8 +311,8 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     }
   }
 
-  onSelectAll(checked: boolean) {
-    if (checked) {
+  onSelectAll(event: MatCheckboxChange) {
+    if (event.checked) {
       this.store.dispatch(new SelectAllDatasetsAction());
     } else {
       this.store.dispatch(new ClearSelectionAction());

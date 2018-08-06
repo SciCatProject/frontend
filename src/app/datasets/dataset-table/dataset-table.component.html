@@ -54,8 +54,8 @@
     <ng-container matColumnDef="select">
       <mat-header-cell *matHeaderCellDef>
         <mat-checkbox
-          [ngModel]="allAreSeleted$ | async"
-          (ngModelChange)="onSelectAll($event)">
+          [checked]="allAreSeleted$ | async"
+          (change)="onSelectAll($event)">
         </mat-checkbox>
       </mat-header-cell>
 
