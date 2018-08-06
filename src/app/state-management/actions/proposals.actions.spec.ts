@@ -67,8 +67,7 @@ describe('FetchProposalCompleteAction', () => {
 
 describe('FetchProposalFailedAction', () => { 
 	it('should create an action', () => { 
-		const payload = [{id:1}]; 
-		const action = new FetchProposalFailedAction(); 
+		const action = new FetchProposalFailedAction();
 		expect({ ...action }).toEqual({ type: FETCH_PROPOSAL_FAILED  }); 
 	}); 
 });
