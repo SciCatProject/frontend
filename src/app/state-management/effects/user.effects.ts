@@ -59,7 +59,6 @@ export class UserEffects {
         return this.userSrv.login(form).pipe(
           switchMap(res => {
             const user: User = res['user'];
-            const isFunctional = res['accountType'] === 'functional';
             return of(new UserActions.LoginCompleteAction(user));
           }),
           catchError(err => {
