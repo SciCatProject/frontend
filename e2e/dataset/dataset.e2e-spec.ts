@@ -1,7 +1,3 @@
-import { LoginPage } from '../login/login.po';
-import { DatasetDetailPage } from './dataset.po';
-import { browser, element, by} from 'protractor';
-import { protractor } from 'protractor/built/ptor';
 
 describe('catanie Dataset Detail', function() {
   //let lp: LoginPage;
