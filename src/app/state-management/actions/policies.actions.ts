@@ -5,7 +5,7 @@ import { Policy } from 'shared/sdk/models';
 export const LOAD = '[Policy] Load';
 export const COUNT_COMPLETE = '[Policy] Complete';
 export const SELECT_CURRENT = '[Policy] Current set selected';
-export const TOTAL_UPDATE = '[Policy] Total Policys Update';
+export const TOTAL_UPDATE = '[Policy] Total Policies Update';
 
 export const SELECT_POLICY = '[Policy] Select Policy';
 export const DESELECT_POLICY = '[Policy] Deselect Policy';
@@ -39,7 +39,7 @@ export class FetchPoliciesAction implements Action {
 }
 
 export class FetchPoliciesCompleteAction implements Action {
-  type = FETCH_POLICIES_COMPLETE;
+  readonly type = FETCH_POLICIES_COMPLETE;
   constructor(readonly policies: Policy[]) { }
 }
 

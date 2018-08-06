@@ -23,9 +23,13 @@ import {
 
 } from 'state-management/actions/policies.actions';
 //import * as selectors from 'state-management/selectors';
-import { getPolicies } from 'state-management/selectors/policies.selectors';
+import { getPolicies, getPolicyState } from 'state-management/selectors/policies.selectors';
 import { MatTableDataSource, MatPaginator } from '@angular/material';
-//import { getPolicies } from './policies.service';
+import { PoliciesService } from '../policies.service';
+import { ConfigFormComponent } from 'shared/modules/config-form/config-form.component';
+import { DialogComponent } from 'shared/modules/dialog/dialog.component';
+import { EditDialogComponent } from '../edit-dialog/edit-dialog.component';
+import { MatDialog, MatDialogConfig } from '@angular/material';
 
 export interface PageChangeEvent {
   pageIndex: number;
@@ -49,28 +53,32 @@ export interface SortChangeEvent {
 export class ArchiveSettingsComponent implements OnInit {
 
   private policies$ = this.store.pipe(select(getPolicies));
+  private policyState$ = this.store.pipe(select(getPolicyState));
+  private policies: Policy[] = [];
 
   constructor(
-    private store: Store<any>,
+    private store: Store<Policy>,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    public dialog: EditDialogComponent,
+    private policiesService: PoliciesService,
   ) { }
-  //@Input() policies: Policy[];
+
   subscriptions = [];
   dataSource: MatTableDataSource<any> | null;
 
-  //public policies: Policy[] = [];
 
-  @Input() public selectedSets: Policy[] = [];
+
+  @Input() public selectedPolicies: Policy[] = [];
   @Input() public totalNumber: number = 0;
   @Input() public currentPage: number = 0;
-  //@Input() public datasetsPerPage: number = 30;
+
   @Input() public showSelect: boolean = false;
-  //@Input() public rowClassifier?: (dataset: Policy) => string;
+
   @Input() public disabledColumns: string[] = [];
 
   @Output() private onClick: EventEmitter<Policy> = new EventEmitter();
-  @Output() private onSelect: EventEmitter<Policy> = new EventEmitter();
+  //@Output() private onSelect: EventEmitter<Policy> = new EventEmitter();
   @Output() private onDeselect: EventEmitter<Policy> = new EventEmitter();
   @Output() private onSortChange: EventEmitter<SortChangeEvent> = new EventEmitter();
 
@@ -85,44 +93,57 @@ export class ArchiveSettingsComponent implements OnInit {
     'notification email'
   ];
 
+  editFields = {
+    'select': "",
+    'manager': "",
+    'ownerGroup': "",
+    'auto archive': "",
+    'archive delay': "",
+    'number of copies on tape': "",
+    'notification email': ""
+  };
+
+
+
+
+  private editEnabled = true;
+
   ngOnInit() {
-    console.log("here! ngOnInit");
+    //var policyState$ = this.store.pipe(select(getPolicyState));
+    //console.log("policyState$: ", policyState$);
+    this.store.dispatch(new FetchPoliciesAction());
+    console.log("policyState$:", this.policyState$);
 
-    //this.dataSource = new MatTableDataSource(this.policies$);
+    this.policiesService.getPolicies()
+      .subscribe(data => {
+        this.policies = data as Policy[];
 
-  /*  this.store.pipe(select(getPolicies)).subscribe(arr => {
-          console.log("fromStore.getAllPol: " + arr);
-          this.policies = arr;
+      })
 
-          this.dataSource = new MatTableDataSource(
-            this.policies
-          );
 
-        });*/
 
-    //this.store.dispatch(new FetchPoliciesAction());
-    //this.store.dispatch(new FetchPoliciesCompleteAction(this.policies));
-    console.log("policies:", this.policies$);
-    //this.policies = this.policies$;
-
-    //this.policies = this.policies$.data;
-    //
-
-/*    this.store.select(getPolicies);
-    console.log("selectors: ", getPolicies);
-    //console.log("selectors: ", this.policies["manager"]);
-    //this.dataSource = new MatTableDataSource(this.policies);
-    this.subscriptions.push(this.store.select(getPolicies)
-      .subscribe(selected => {
-
-        this.policies = selected.slice();
-        //this.dataSource = new MatTableDataSource(this.policies);
-        //console.log("here2:", this.policies);
-
-      }));
-*/
 
   };
+
+  private openDialog() {
+  /*  const dialogRef = this.dialog.open(DialogComponent, {
+      width: 'auto',
+      data: { title: 'Edit Archive Policy', question: '' }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+
+      }
+       //this.dialog.onClose.emit(result);
+    });*/
+
+  }
+
+  private onClose() {
+
+  }
+
 
   private getDisplayedColumns(): string[] {
 
@@ -136,21 +157,32 @@ export class ArchiveSettingsComponent implements OnInit {
 
   private handleSelect(event: MatCheckboxChange, policy: Policy): void {
     if (event.checked) {
-      this.onSelect.emit(policy);
+      this.onSelect(policy);
     } else {
       this.onDeselect.emit(policy);
     }
   }
 
-  /*private handleSelectAll(event: MatCheckboxChange): void {
-    this.policies$.forEach(policy => this.handleSelect(event, policy));
-  }*/
+  private isChecked(policy): boolean {
+    return !!this.selectedPolicies.find(selectedPolicy => selectedPolicy.id === policy.id);
+  }
+
+  private allAreSelected(): boolean {
+    return this.policies.length > 0 && this.selectedPolicies.length === this.policies.length;
+  }
+
+  private handleSelectAll(event: MatCheckboxChange): void {
+    this.policies.forEach(policy => this.handleSelect(event, policy));
+  }
 
   private handleSortChange(event: SortChangeEvent): void {
-    console.log("on click");
-    this.store.dispatch(new FetchPoliciesAction());
-    console.log("here2:", this.policies$);
-    //this.store.dispatch(new FetchPoliciesCompleteAction(this.policies));
     this.onSortChange.emit(event);
+    this.openDialog();
+  }
+
+  onSelect(policy: Policy): void {
+    //to do
+    // write action for select/ deselect
+    //  this.store.dispatch(new dsa.SelectDatasetAction(dataset));
   }
 }

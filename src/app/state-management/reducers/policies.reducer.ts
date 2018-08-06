@@ -26,11 +26,10 @@ export function policiesReducer(
 
     switch (action.type) {
         case FETCH_POLICIES: {
-          console.log('aaAction came in! ' + state);
             return {...state, policiesLoading: true};
         }
 
-        case FETCH_POLICIES_COMPLETE: { 
+        case FETCH_POLICIES_COMPLETE: {
             const policies = (action as FetchPoliciesCompleteAction).policies;
             return {...state, policies, policiesLoading: false};
         }
@@ -67,9 +66,9 @@ export function policiesReducer(
             return {...state, selectedPolicies};
         }
 
-        case CLEAR_SELECTION: {
+      /*  case CLEAR_SELECTION: {
             return {...state, selectedPolicies: []};
-        }
+        }*/
 
         default: {
             return state;

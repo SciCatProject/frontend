@@ -21,7 +21,7 @@ import {SampleDataFormComponent} from '../sample-data-form/sample-data-form.comp
 import {ListProposalsPageComponent} from '../proposals/containers/list-proposals-page/list-proposals-page.component';
 import {ViewProposalPageComponent} from '../proposals/containers/view-proposal-page/view-proposal-page.component';
 
-import {ArchiveSettingsComponent} from '../archive-settings/archive-settings.component';
+import {ArchiveSettingsComponent} from '../policies/archive-settings/archive-settings.component';
 
 import {AuthCheck} from '../AuthCheck';
 
@@ -29,13 +29,13 @@ export const routes: Routes = [
   { path: '', redirectTo: '/datasets', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
   { path: 'logout', component: AppComponent, canActivate: [AuthCheck] },
-  
+
   { path: 'dataset', redirectTo: '/datasets', pathMatch: 'full' },
   { path: 'datasets',  component: DashboardComponent, canActivate: [AuthCheck], },
   { path: 'dataset/:id', component: DatasetDetailComponent, canActivate: [AuthCheck] },
   { path: 'dataset/:id/datablocks', component: DatablocksComponent, canActivate: [AuthCheck] },
   { path: 'dataset/:id/datafiles', component: DatafilesComponent, canActivate: [AuthCheck] },
-  
+
   { path: 'proposals', component: ListProposalsPageComponent, canActivate: [AuthCheck] },
   { path: 'proposals/:id', component: ViewProposalPageComponent, canActivate: [AuthCheck] },
 
@@ -46,7 +46,7 @@ export const routes: Routes = [
   { path: 'user/details', component: UserDetailsComponent, canActivate: [AuthCheck] },
   { path: 'user/jobs', component: JobsTableComponent, canActivate: [AuthCheck] },
   { path: 'user/job/:id', component: JobsDetailComponent, canActivate: [AuthCheck] },
-  
+
   { path: 'sample-data/add', component: SampleDataFormComponent, canActivate: [AuthCheck] },
   { path: 'error', component: ErrorPageComponent, data: {message: 'Location Not Found', 'breadcrumb': 'Error'} }
 ];
@@ -57,9 +57,3 @@ export const routes: Routes = [
 })
 export class AppRoutingModule {
 }
-
-
-
-
-
-

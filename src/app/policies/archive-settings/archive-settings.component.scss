@@ -1,4 +1,4 @@
-@import '../../theme.scss';
+@import '../../../theme.scss';
 
 $ds-archive: mat-palette($mat-green, 600);
 
@@ -53,16 +53,8 @@ mat-cell, .mat-header-cell {
   cursor: pointer;
 }
 
-/*:host /deep/*/ .datasets-header {
+/*:host /deep/*/ .archive-settings-header {
   background-color: mat-color($primary);
-}
-
-/*:host /deep/*/ .row-archiveable {
-  background-color: mat-color($ds-archive, 500, 0.2);
-}
-
-/*:host /deep/*/ .row-retrievable {
-  background-color: mat-color($ds-archive, 500, 0.2);
 }
 
 /*:host /deep/*/ .row-empty {

@@ -22,10 +22,11 @@ import { SharedCatanieModule } from 'shared/shared.module';
 import { DatasetEffects } from 'state-management/effects/datasets.effects';
 import { UserEffects } from 'state-management/effects/user.effects';
 import { JobsEffects } from 'state-management/effects/jobs.effects';
+import { PoliciesEffects } from 'state-management/effects/policies.effects';
 import { rootReducer } from 'state-management/reducers/root.reducer';
 import { UsersModule } from 'users/users.module';
 import { ProposalsModule } from 'proposals/proposals.module';
-import { ArchiveSettingsModule} from 'archive-settings/archive-settings.module'
+import { PoliciesModule} from 'policies/policies.module'
 import { FileHelpersModule } from 'ngx-file-helpers';
 
 import { FilePickerComponent } from './datasets/file-picker/file-picker.component';
@@ -108,7 +109,7 @@ export function localStorageSyncWrapper(reducer: any) {
     DatasetsModule,
     UsersModule,
     ProposalsModule,
-    ArchiveSettingsModule,
+    PoliciesModule,
     AppConfigModule,
 
     SDKBrowserModule.forRoot(),
@@ -118,7 +119,7 @@ export function localStorageSyncWrapper(reducer: any) {
     StoreDevtoolsModule.instrument({
       maxAge: 25 //  Retains last 25 states
     }),
-    EffectsModule.forRoot([DatasetEffects, UserEffects, JobsEffects]),
+    EffectsModule.forRoot([DatasetEffects, UserEffects, JobsEffects, PoliciesEffects]),
     StoreRouterConnectingModule,
   ],
   exports: [

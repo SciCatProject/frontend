@@ -1,8 +1,9 @@
 import { createSelector, createFeatureSelector } from '@ngrx/store';
 import { PolicyState } from '../state/policies.store'
-import { config } from '../../../config/config';
 
-const getPolicyState = createFeatureSelector<PolicyState>('policies');
+export const getPolicyState = createFeatureSelector<PolicyState>('policies');
+
+  //const getPolicyState = createFeatureSelector<PolicyState>('policies');
 
 export const getCurrentPolicy = createSelector(
     getPolicyState,

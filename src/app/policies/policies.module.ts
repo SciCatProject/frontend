@@ -1,7 +1,9 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ArchiveSettingsComponent} from 'archive-settings/archive-settings.component'
+import { ArchiveSettingsComponent} from './archive-settings/archive-settings.component'
+//import { ConfigFormModule } from 'shared/modules/config-form/config-form.module'
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import { PoliciesService } from './policies.service';
 import {
   MatAutocompleteModule,
   MatButtonModule,
@@ -30,7 +32,8 @@ import { SharedCatanieModule } from 'shared/shared.module';
 import { MatDatepickerModule } from 'saturn-datepicker';
 
 import { StoreModule } from '@ngrx/store';
-import { datasetsReducer } from 'state-management/reducers/datasets.reducer';
+import { policiesReducer } from 'state-management/reducers/policies.reducer';
+
 
 
 @NgModule({
@@ -38,10 +41,16 @@ import { datasetsReducer } from 'state-management/reducers/datasets.reducer';
     CommonModule, MatCardModule, MatDialogModule, MatPaginatorModule, MatCheckboxModule, MatTableModule, MatFormFieldModule, MatAutocompleteModule,
     MatTabsModule, MatInputModule, MatButtonModule, MatSortModule, CommonModule, FormsModule, ReactiveFormsModule,
     SharedCatanieModule, MatSelectModule, MatOptionModule, MatNativeDateModule, MatIconModule,
-    MatListModule, MatDatepickerModule, MatTooltipModule, MatButtonToggleModule, MatProgressSpinnerModule, MatChipsModule
+    MatListModule, MatDatepickerModule, MatTooltipModule, MatButtonToggleModule, MatProgressSpinnerModule, MatChipsModule,
+      StoreModule.forFeature('policies', policiesReducer),
 
   ],
   declarations: [ArchiveSettingsComponent],
-  exports: [ArchiveSettingsComponent]
+  providers : [ PoliciesService ],
+  exports: [ArchiveSettingsComponent],
+  //entryComponents: [ConfigFormModule]
 })
-export class ArchiveSettingsModule { }
+export class PoliciesModule {
+
+
+}

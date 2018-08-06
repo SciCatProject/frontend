@@ -2,34 +2,32 @@
 </div>
 
 <div>
-  <mat-paginator
-    class="policy-paginator"
-    [pageSizeOptions]="pageSizeOptions"
-    [pageIndex]="currentPage"
-    [pageSize]="policiesPerPage"
-    [length]="totalNumber"
-    (page)="handlePageChange($event)">
+  <!--<pre>{{ policyState$ | async | json }}</pre>-->
+  <div class="button-group" layout="row" layout-align="end end">
+    <ng-container *ngIf="editEnabled">
+      <button mat-raised-button mat-button (click)="onEditClick()" color="primary">Edit Selection
+    </button>
+    </ng-container>
+  </div>
+  <!--<div class="editForm">
+    <ng-container>
+      <config-form [source]="editFields" [enabled]="true"></config-form>
+    </ng-container>
+  </div>-->
+
+  <mat-paginator class="policy-paginator" [pageSizeOptions]="pageSizeOptions" [pageIndex]="currentPage" [pageSize]="policiesPerPage" [length]="totalNumber" (page)="handlePageChange($event)">
   </mat-paginator>
 
-  <mat-table
-    pol="policies$ | async"
-    [dataSource]="pol"
-    class="policy-table mat-elevation-z8"
-    matSort (matSortChange)="handleSortChange($event)">
+  <mat-table [dataSource]="policies$ | async" class="policy-table mat-elevation-z8" matSort (matSortChange)="handleSortChange($event)">
 
     <!-- Column Definitions -->
     <ng-container matColumnDef="select">
       <mat-header-cell *matHeaderCellDef>
-        <!--<mat-checkbox
-          [checked]="allAreSelected()"
-          (change)="handleSelectAll($event)">
-        </mat-checkbox>-->
+        <<mat-checkbox [checked]="allAreSelected()" (change)="handleSelectAll($event)">
+          </mat-checkbox>
       </mat-header-cell>
       <mat-cell *matCellDef="let row">
-        <mat-checkbox
-
-          (change)="handleSelect($event, row)"
-          (click)="$event.stopPropagation()">
+        <mat-checkbox [checked]="isChecked(row)" (change)="handleSelect($event, row)" (click)="$event.stopPropagation()">
         </mat-checkbox>
       </mat-cell>
     </ng-container>
@@ -73,20 +71,17 @@
     <!-- End of Column Definitions -->
 
     <mat-header-row class='policies-header' *matHeaderRowDef="getDisplayedColumns()"></mat-header-row>
-    <mat-row
-      class='row-generic'
-      *matRowDef="let policy; columns: getDisplayedColumns()"
-      (click)="handleClick(policy)"
-    >
+    <mat-row class='row-generic' *matRowDef="let policy; columns: getDisplayedColumns()" (click)="handleClick(policy)">
     </mat-row>
   </mat-table>
 
-  <mat-paginator
-    class="policy-paginator"
-    [pageSizeOptions]="pageSizeOptions"
-    [pageIndex]="currentPage"
-    [pageSize]="policiesPerPage"
-    [length]="totalNumber"
-    (page)="handlePageChange($event)">
+  <mat-paginator class="policy-paginator" [pageSizeOptions]="pageSizeOptions" [pageIndex]="currentPage" [pageSize]="policiesPerPage" [length]="totalNumber" (page)="handlePageChange($event)">
   </mat-paginator>
+</div>
+
+<div class="edit">
+  <ng-container *ngIf="sample">
+    <h1>Metadata Entry Form</h1>
+    <config-form [source]="sample" [enabled]="true"></config-form>
+  </ng-container>
 </div>

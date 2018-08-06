@@ -12,6 +12,9 @@ export class PoliciesService {
 	) {}
 
 	getPolicies(): Observable<Policy[]> {
+
+		var ret = this.policyApi.find();
+		console.log("ret: ", ret);
 		return this.policyApi.find();
 	}
 

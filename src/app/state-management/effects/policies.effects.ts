@@ -4,7 +4,7 @@ import { Actions, Effect, ofType } from '@ngrx/effects';
 import { Action, Store, select } from '@ngrx/store';
 import { Angular5Csv } from 'angular5-csv/Angular5-csv';
 import { PolicyApi } from 'shared/sdk/services';
-import { PoliciesService } from 'archive-settings/policies.service';
+import { PoliciesService } from 'policies/policies.service';
 import { Policy } from 'state-management/models';
 import {
   FetchPoliciesOutcomeAction,
@@ -18,23 +18,29 @@ import { map, switchMap, tap, mergeMap, catchError, withLatestFrom } from 'rxjs/
 export class PoliciesEffects {
   constructor(
     private actions$: Actions,
-    private store: Store<Policy>,
+    private store: Store<any>,
     private policyApi: PolicyApi,
     private policiesService: PoliciesService
   ) { }
 
-  @Effect()
-  fetchPolicies$: Observable<Action> =
-    this.actions$.pipe(
-      ofType(FETCH_POLICIES),
-      switchMap((action) =>
-        this.policiesService.getPolicies().pipe(
-          map(policies => new FetchPoliciesCompleteAction(policies)),
-          catchError(err => Observable.of(new FetchPoliciesFailedAction()))
+/*  @Effect()
+  fetchPolicies$: Observable<Action> = this.actions$
+    .do((action) => console.log("Received!!!!!!! "))
+    .filter((action) => action.type === PoliciesActions.FETCH_POLICIES)
+*/
+
+   @Effect()
+    fetchPolicies$: Observable<Action> =
+      this.actions$.pipe(
+        ofType(FETCH_POLICIES),
+        switchMap((action) =>
+          this.policiesService.getPolicies().pipe(
+            map(policies => new FetchPoliciesCompleteAction(policies)),
+            catchError(err => Observable.of(new FetchPoliciesFailedAction()))
 
 
 
+          )
         )
-      )
-    );
+      );
 }

@@ -2,32 +2,39 @@
 
 declare var Object: any;
 export interface PolicyInterface {
-  "manager": Array<string>;
+  "manager"?: Array<any>;
   "tapeRedundancy"?: string;
   "autoArchive"?: boolean;
   "autoArchiveDelay"?: number;
   "archiveEmailNotification"?: boolean;
-  "archiveEmailsToBeNotified"?: Array<string>;
+  "archiveEmailsToBeNotified"?: Array<any>;
   "retrieveEmailNotification"?: boolean;
-  "retrieveEmailsToBeNotified"?: Array<string>;
+  "retrieveEmailsToBeNotified"?: Array<any>;
   "ownerGroup": string;
   "accessGroups"?: Array<any>;
-  "id": any;
+  "createdBy"?: string;
+  "updatedBy"?: string;
+  "id"?: any;
+  "createdAt"?: Date;
+  "updatedAt"?: Date;
 }
 
 export class Policy implements PolicyInterface {
-  "manager": Array<string>;
+  "manager": Array<any>;
   "tapeRedundancy": string;
   "autoArchive": boolean;
   "autoArchiveDelay": number;
   "archiveEmailNotification": boolean;
-  "archiveEmailsToBeNotified": Array<string>;
+  "archiveEmailsToBeNotified": Array<any>;
   "retrieveEmailNotification": boolean;
-  "retrieveEmailsToBeNotified": Array<string>;
+  "retrieveEmailsToBeNotified": Array<any>;
   "ownerGroup": string;
-  "accessGroups"?: Array<any>;
+  "accessGroups": Array<any>;
+  "createdBy": string;
+  "updatedBy": string;
   "id": any;
-
+  "createdAt": Date;
+  "updatedAt": Date;
   constructor(data?: PolicyInterface) {
     Object.assign(this, data);
   }
@@ -63,22 +70,39 @@ export class Policy implements PolicyInterface {
       properties: {
         "manager": {
           name: 'manager',
-          type: '[string]',
+          type: 'Array&lt;any&gt;'
         },
-        "availability": {
-          name: 'availability',
+        "tapeRedundancy": {
+          name: 'tapeRedundancy',
           type: 'string',
           default: 'low'
         },
-        "tapeRetentionTime": {
-          name: 'tapeRetentionTime',
-          type: 'number',
-          default: 10
+        "autoArchive": {
+          name: 'autoArchive',
+          type: 'boolean'
         },
         "autoArchiveDelay": {
           name: 'autoArchiveDelay',
           type: 'number',
           default: 7
+        },
+        "archiveEmailNotification": {
+          name: 'archiveEmailNotification',
+          type: 'boolean',
+          default: false
+        },
+        "archiveEmailsToBeNotified": {
+          name: 'archiveEmailsToBeNotified',
+          type: 'Array&lt;any&gt;'
+        },
+        "retrieveEmailNotification": {
+          name: 'retrieveEmailNotification',
+          type: 'boolean',
+          default: false
+        },
+        "retrieveEmailsToBeNotified": {
+          name: 'retrieveEmailsToBeNotified',
+          type: 'Array&lt;any&gt;'
         },
         "ownerGroup": {
           name: 'ownerGroup',
