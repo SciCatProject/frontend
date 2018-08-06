@@ -14,19 +14,6 @@ import {
 } from '../selectors/datasets.selectors';
 import { map, switchMap, tap, mergeMap, catchError, withLatestFrom } from 'rxjs/operators';
 
-// Returns copy with null/undefined values and empty arrays/strings removed
-function restrictFilter(filter: object, allowedKeys?: string[]) {
-  function isNully(value: any) {
-    const hasLength = typeof value === 'string' || Array.isArray(value);
-    return value == null || hasLength && value.length === 0;
-  }
-
-  const keys = allowedKeys || Object.keys(filter);
-  return keys.reduce((obj, key) => {
-    const val = filter[key];
-    return isNully(val) ? obj : {...obj, [key]: val};
-  }, {});
-}
 
 @Injectable()
 export class DatasetEffects {
@@ -186,14 +173,4 @@ export class DatasetEffects {
 
 }
 
-function stringSort(a, b) {
-  const val_a = a._id,
-    val_b = b._id;
-  if (val_a < val_b) {
-    return -1;
-  }
-  if (val_a > val_b) {
-    return 1;
-  }
-  return 0;
-}
+
