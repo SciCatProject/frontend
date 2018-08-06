@@ -1,17 +1,16 @@
-const { version: appVersion } = require('../../package.json');
-import { MatSidenav } from '@angular/material/sidenav';
-import { Component, ViewEncapsulation, ViewChild, OnDestroy, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { Store } from '@ngrx/store';
-import { LoopBackConfig } from 'shared/sdk';
-import { UserApi } from 'shared/sdk/services';
-import * as dsa from 'state-management/actions/datasets.actions';
+const {version: appVersion} = require('../../package.json');
+import {MatSidenav} from '@angular/material/sidenav';
+import {Component, ViewEncapsulation, ViewChild, OnDestroy, OnInit} from '@angular/core';
+import {Router} from '@angular/router';
+import {Store} from '@ngrx/store';
+import {LoopBackConfig} from 'shared/sdk';
+import {UserApi} from 'shared/sdk/services';
 import * as ua from 'state-management/actions/user.actions';
-import { MatSnackBar } from '@angular/material';
+import {MatSnackBar} from '@angular/material';
 
 // import { NotificationsService } from 'angular2-notifications';
 
-import { environment } from '../environments/environment';
+import {environment} from '../environments/environment';
 import * as selectors from 'state-management/selectors';
 
 @Component({
@@ -43,9 +42,9 @@ export class AppComponent implements OnDestroy, OnInit {
   };
 
   constructor(private router: Router,
-    public snackBar: MatSnackBar,
-    // private _notif_service: NotificationsService,
-    private store: Store<any>) {
+              public snackBar: MatSnackBar,
+              // private _notif_service: NotificationsService,
+              private store: Store<any>) {
     this.appVersion = appVersion;
     this.darkTheme$ = this.store.select(selectors.users.getTheme);
   }

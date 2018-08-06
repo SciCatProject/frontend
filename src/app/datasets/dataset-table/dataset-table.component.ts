@@ -4,22 +4,31 @@ import {
   OnDestroy,
   Inject,
 } from '@angular/core';
-import { Router, ActivatedRoute} from '@angular/router';
-import { Store, select } from '@ngrx/store';
-import {MatDialog } from '@angular/material';
-import { Job, Dataset } from 'shared/sdk/models';
-import { ConfigService } from 'shared/services/config.service';
-import { DialogComponent } from 'shared/modules/dialog/dialog.component';
-import { config } from '../../../config/config';
+import {Router, ActivatedRoute} from '@angular/router';
+import {Store, select} from '@ngrx/store';
+import {MatDialog} from '@angular/material';
+import {Job, Dataset} from 'shared/sdk/models';
+import {ConfigService} from 'shared/services/config.service';
+import {DialogComponent} from 'shared/modules/dialog/dialog.component';
 import * as dsa from 'state-management/actions/datasets.actions';
 import * as ua from 'state-management/actions/user.actions';
 import * as ja from 'state-management/actions/jobs.actions';
-import { getDatasets, getSelectedDatasets, getPage, getViewMode, isEmptySelection, getDatasetsPerPage, getIsLoading, getTotalSets, getFilters } from 'state-management/selectors/datasets.selectors';
-import { Message, MessageType, ViewMode } from 'state-management/models';
+import {
+  getDatasets,
+  getSelectedDatasets,
+  getPage,
+  getViewMode,
+  isEmptySelection,
+  getDatasetsPerPage,
+  getIsLoading,
+  getTotalSets,
+  getFilters
+} from 'state-management/selectors/datasets.selectors';
+import {Message, MessageType, ViewMode} from 'state-management/models';
 import * as jobSelectors from 'state-management/selectors/jobs.selectors';
-import { PageChangeEvent, SortChangeEvent } from '../dataset-table-pure/dataset-table-pure.component';
-import { Subscription} from 'rxjs';
-import { APP_CONFIG, AppConfig } from 'app-config.module';
+import {PageChangeEvent, SortChangeEvent} from '../dataset-table-pure/dataset-table-pure.component';
+import {Subscription} from 'rxjs';
+import {APP_CONFIG, AppConfig} from 'app-config.module';
 import {take} from 'rxjs/operators';
 
 // Needed for compatibility with non-piped RxJS operators
@@ -134,7 +143,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   archiveClickHandle(event): void {
     const dialogRef = this.dialog.open(DialogComponent, {
       width: 'auto',
-      data: { title: 'Really archive?', question: '' }
+      data: {title: 'Really archive?', question: ''}
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -154,7 +163,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     const destPath = '/archive/retrieve';
     const dialogRef = this.dialog.open(DialogComponent, {
       width: 'auto',
-      data: { title: 'Really retrieve?', question: '', input: 'Destination: ' + destPath }
+      data: {title: 'Really retrieve?', question: '', input: 'Destination: ' + destPath}
     });
 
     dialogRef.afterClosed().subscribe(result => {
