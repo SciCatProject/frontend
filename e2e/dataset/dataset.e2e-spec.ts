@@ -4,8 +4,8 @@ import { browser, element, by} from 'protractor';
 import { protractor } from 'protractor/built/ptor';
 
 describe('catanie Dataset Detail', function() {
-  let lp: LoginPage;
-  let page: DatasetDetailPage;
+  //let lp: LoginPage;
+  //let page: DatasetDetailPage;
 
   // beforeAll(() => {
   //   lp = new LoginPage();
