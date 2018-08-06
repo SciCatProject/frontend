@@ -29,14 +29,9 @@ import { SatNativeDateModule, SatDatepickerModule } from 'saturn-datepicker';
 
 
 
-import {FilePickerComponent} from './datasets/file-picker/file-picker.component';
-import {FileDropzoneComponent} from './datasets/file-dropzone/file-dropzone.component';
 
 
 import {
-  MatAutocompleteModule,
-  MatButtonModule,
-  MatButtonToggleModule,
   MatCardModule,
   MatGridListModule,
   MatIconModule,
