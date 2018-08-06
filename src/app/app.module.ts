@@ -35,20 +35,17 @@ import {
   MatCardModule,
   MatGridListModule,
   MatIconModule,
-  MatInputModule,
   MatListModule,
   MatMenuModule,
   MatDatepickerModule,
   MatNativeDateModule,
   MatPaginatorModule,
-  MatRippleModule,
   MatSidenavModule,
   MatSnackBarModule,
   MatTableModule,
   MatToolbarModule,
 } from '@angular/material';
 
-import {CdkTableModule} from '@angular/cdk/table';
 import {AppComponent} from './app.component';
 import {AuthCheck} from './AuthCheck';
 import {JobsDetailComponent} from './jobs/jobs-detail/jobs-detail.component';
