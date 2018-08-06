@@ -38,7 +38,6 @@ import {
   MatButtonModule,
   MatButtonToggleModule,
   MatCardModule,
-  MatChipsModule,
   MatGridListModule,
   MatIconModule,
   MatInputModule,
@@ -48,17 +47,10 @@ import {
   MatNativeDateModule,
   MatPaginatorModule,
   MatRippleModule,
-  MatSelectModule,
   MatSidenavModule,
-  MatSliderModule,
-  MatSlideToggleModule,
   MatSnackBarModule,
-  MatSortModule,
   MatTableModule,
-  MatTabsModule,
   MatToolbarModule,
-  MatStepperModule,
-  MatFormFieldModule,
 } from '@angular/material';
 
 import {CdkTableModule} from '@angular/cdk/table';
