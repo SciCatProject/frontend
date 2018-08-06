@@ -10,7 +10,6 @@ import {MatDialog } from '@angular/material';
 import { Job, Dataset } from 'shared/sdk/models';
 import { ConfigService } from 'shared/services/config.service';
 import { DialogComponent } from 'shared/modules/dialog/dialog.component';
-import { config } from '../../../config/config';
 import * as dsa from 'state-management/actions/datasets.actions';
 import * as ua from 'state-management/actions/user.actions';
 import * as ja from 'state-management/actions/jobs.actions';
