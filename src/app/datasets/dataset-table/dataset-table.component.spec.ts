@@ -1,24 +1,20 @@
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {HttpClient} from '@angular/common/http';
-import {ActivatedRoute, Router} from '@angular/router';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {Router} from '@angular/router';
 import {MatTableModule, MatDialogModule} from '@angular/material';
 import {DatasetTableComponent} from './dataset-table.component';
-import {Store, StoreModule} from '@ngrx/store';
-import {ConfigService} from 'shared/services/config.service';
+import {StoreModule, combineReducers} from '@ngrx/store';
 
 import {
   MockHttp,
   MockRouter,
-  MockStore,
-  MockUserApi
 } from 'shared/MockStubs';
-import {UserApi} from 'shared/sdk/services';
-import { rootReducer } from 'state-management/reducers/root.reducer';
-import { AppConfigModule, AppConfig } from 'app-config.module';
-import { FileSizePipe } from '../filesize.pipe';
 
+import { AppConfigModule, AppConfig, APP_CONFIG } from 'app-config.module';
+import { FileSizePipe } from '../filesize.pipe';
+import { datasetsReducer } from 'state-management/reducers/datasets.reducer';
+import { jobsReducer } from 'state-management/reducers/jobs.reducer';
 
 describe('DatasetTableComponent', () => {
   let component: DatasetTableComponent;
@@ -27,7 +23,17 @@ describe('DatasetTableComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
-      imports: [MatTableModule, MatDialogModule, ReactiveFormsModule, StoreModule.forRoot(rootReducer), AppConfigModule],
+      imports: [
+        MatTableModule,
+        MatDialogModule,
+        StoreModule.forRoot({
+          datasets: datasetsReducer,
+          root: combineReducers({
+            jobs: jobsReducer,
+          })
+        }),
+        AppConfigModule
+      ],
       declarations: [DatasetTableComponent, FileSizePipe]
     });
     TestBed.overrideComponent(DatasetTableComponent, {
@@ -35,8 +41,7 @@ describe('DatasetTableComponent', () => {
         providers: [
           {provide: HttpClient, useClass: MockHttp},
           {provide: Router, useClass: MockRouter},
-          {provide: Store, useClass: MockStore},
-          {provide: AppConfig, useValue: {
+          {provide: APP_CONFIG, useValue: {
             disabledDatasetColumns: [],
             archiveWorkflowEnabled: true,
           }}
