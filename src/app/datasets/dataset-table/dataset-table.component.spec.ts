@@ -11,7 +11,7 @@ import {
   MockRouter,
 } from 'shared/MockStubs';
 
-import { AppConfigModule, AppConfig, APP_CONFIG } from 'app-config.module';
+import { AppConfigModule,  APP_CONFIG } from 'app-config.module';
 import { FileSizePipe } from '../filesize.pipe';
 import { datasetsReducer } from 'state-management/reducers/datasets.reducer';
 import { jobsReducer } from 'state-management/reducers/jobs.reducer';
