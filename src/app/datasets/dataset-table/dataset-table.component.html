@@ -8,11 +8,13 @@
     </mat-button-toggle-group>
   </div>
 
-  <div class="raised" [ngPlural]="datasetCount$ | async">
-    <ng-template ngPluralCase="=0">No datasets.</ng-template>
-    <ng-template ngPluralCase="=1">1 dataset.</ng-template>
-    <ng-template ngPluralCase="other">{{ datasetCount$ | async }} datasets.</ng-template>
-  </div>
+  <ng-template *ngIf="datasetCount$ | async as count">
+    <div class="raised" [ngPlural]="count">
+      <ng-template ngPluralCase="=0">No datasets.</ng-template>
+      <ng-template ngPluralCase="=1">1 dataset.</ng-template>
+      <ng-template ngPluralCase="other">{{ count }} datasets.</ng-template>
+    </div>
+  </ng-template>
 
   <div *ngIf="loading$ | async" class="raised">
     <mat-spinner diameter="20"></mat-spinner>

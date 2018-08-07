@@ -82,16 +82,21 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   private loading$ = this.store.pipe(select(getIsLoading));
   private filters$ = this.store.pipe(select(getFilters));
 
-  // compatibility analogs of observables
-  private currentMode: string = 'view';
-  private selectedSets: Dataset[] = [];
-
   private modes = ['view', 'archive', 'retrieve'];
+
+  // compatibility analogs of observables
+  private selectedSets: Dataset[] = [];
+  private selectedSetsSubscription = this.selectedSets$.subscribe(selectedSets =>
+    this.selectedSets = selectedSets
+  );
+
+  private currentMode: string = 'view';
+  private modeSubscription = this.mode$.subscribe((mode: ViewMode) => {
+    this.currentMode = mode;
+  });
 
   // These should be made part of the NgRX state management
   // and eventually be removed.
-  private modeSubscription: Subscription;
-  private selectedSetsSubscription: Subscription;
   private submitJobSubscription: Subscription;
   private jobErrorSubscription: Subscription;
 
@@ -123,15 +128,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    // Store concrete values of observables for compatibility
-    this.modeSubscription = this.mode$.subscribe((mode: ViewMode) => {
-      this.currentMode = mode;
-    });
-
-    this.selectedSetsSubscription = this.selectedSets$.subscribe(selectedSets =>
-      this.selectedSets = selectedSets
-    );
-
     this.submitJobSubscription =
       this.store.select(jobSelectors.submitJob).subscribe(
         ret => {
