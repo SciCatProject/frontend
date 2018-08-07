@@ -1,13 +1,13 @@
-import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
-import { Router } from '@angular/router';
-import { MatDialog, MatCheckboxChange } from '@angular/material';
+import {Component, OnInit, OnDestroy, Inject} from '@angular/core';
+import {Router} from '@angular/router';
+import {MatDialog, MatCheckboxChange} from '@angular/material';
 
-import { Store, select } from '@ngrx/store';
+import {Store, select} from '@ngrx/store';
 
-import { Subscription, combineLatest } from 'rxjs';
-import { take } from 'rxjs/operators';
+import {Subscription, combineLatest} from 'rxjs';
+import {take} from 'rxjs/operators';
 
-import { DialogComponent } from 'shared/modules/dialog/dialog.component';
+import {DialogComponent} from 'shared/modules/dialog/dialog.component';
 
 import {
   ExportToCsvAction,
@@ -185,7 +185,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   archiveClickHandle(event): void {
     const dialogRef = this.dialog.open(DialogComponent, {
       width: 'auto',
-      data: { title: 'Really archive?', question: '' }
+      data: {title: 'Really archive?', question: ''}
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -205,7 +205,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     const destPath = '/archive/retrieve';
     const dialogRef = this.dialog.open(DialogComponent, {
       width: 'auto',
-      data: { title: 'Really retrieve?', question: '', input: 'Destination: ' + destPath }
+      data: {title: 'Really retrieve?', question: '', input: 'Destination: ' + destPath}
     });
 
     dialogRef.afterClosed().subscribe(result => {

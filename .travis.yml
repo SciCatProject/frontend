@@ -21,4 +21,9 @@ before_script:
 - npm install
 - npx ng build
 
-script: npm test
+scripts: 
+- npm install codecov -g
+- npm test
+
+after_success:
+  - codecov

@@ -8,8 +8,8 @@ import {of} from 'rxjs';
 import * as lb from 'shared/sdk/services';
 import * as JobActions from 'state-management/actions/jobs.actions';
 import * as UserActions from 'state-management/actions/user.actions';
-import { MessageType, Job } from 'state-management/models';
-import {map,  switchMap, catchError } from 'rxjs/operators';
+import {MessageType, Job} from 'state-management/models';
+import {map, switchMap, catchError} from 'rxjs/operators';
 
 // import store state interface
 
@@ -25,9 +25,9 @@ export class JobsEffects {
       switchMap(id => this.jobSrv.findById(encodeURIComponent(id)).pipe(
         map(jobset => new JobActions.SearchIDCompleteAction(jobset)),
         catchError(err => of(new JobActions.SearchIDFailedAction(err)))
+        )
       )
-    )
-  );
+    );
 
   @Effect()
   protected submit$: Observable<Action> =
@@ -36,7 +36,7 @@ export class JobsEffects {
       map((action: JobActions.SubmitAction) => action.job),
       switchMap((job) => {
         return this.jobSrv.create(job).pipe(
-          map(res =>new JobActions.SubmitCompleteAction(res))
+          map(res => new JobActions.SubmitCompleteAction(res))
         );
       }),
       catchError(err => of(new JobActions.FailedAction(err))
@@ -118,14 +118,3 @@ export class JobsEffects {
 }
 
 
-function stringSort(a, b) {
-  const val_a = a._id,
-    val_b = b._id;
-  if (val_a < val_b) {
-    return -1;
-  }
-  if (val_a > val_b) {
-    return 1;
-  }
-  return 0;
-}
