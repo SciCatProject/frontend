@@ -1,3 +1,4 @@
+
 <div class="dataset-table">
   <div class="mode-container" *ngIf="archiveWorkflowEnabled">
     <mat-button-toggle-group [value]="currentMode">
@@ -7,18 +8,20 @@
     </mat-button-toggle-group>
   </div>
 
-  <div class="raised" [ngPlural]="datasetCount$ | async">
-    <ng-template ngPluralCase="=0">No datasets.</ng-template>
-    <ng-template ngPluralCase="=1">1 dataset.</ng-template>
-    <ng-template ngPluralCase="other">{{ datasetCount$ | async }} datasets.</ng-template>
-  </div>
+  <ng-template *ngIf="datasetCount$ | async as count">
+    <div class="raised" [ngPlural]="count">
+      <ng-template ngPluralCase="=0">No datasets.</ng-template>
+      <ng-template ngPluralCase="=1">1 dataset.</ng-template>
+      <ng-template ngPluralCase="other">{{ count }} datasets.</ng-template>
+    </div>
+  </ng-template>
 
   <div *ngIf="loading$ | async" class="raised">
     <mat-spinner diameter="20"></mat-spinner>
   </div>
 
   <div class="action-container" [class.hidden]="loading$ | async">
-    <button mat-button [disabled]="isEmptySelection$ | async" *ngIf="currentMode === 'archive'" mat-button class="ui button archive-action-btn" (click)="archiveClickHandle($event)" color="primary">
+    <button name="asdasdsa" mat-button [disabled]="isEmptySelection$ | async" *ngIf="currentMode === 'archive'" mat-button class="ui button archive-action-btn" (click)="archiveClickHandle($event)" color="primary">
       <i class="archive icon"></i>
       Archive
     </button>
@@ -35,18 +38,100 @@
   </div>
 
   <div style="clear: both"></div>
+    
+  <mat-paginator
+    [pageSizeOptions]="[30, 1000]"
+    [pageIndex]="currentPage$ | async"
+    [length]="datasetCount$ | async"
+    [pageSize]="datasetsPerPage$ | async"
+    (page)="onPageChange($event)">
+  </mat-paginator>
 
-  <dataset-table-pure
-    [datasets]="datasets$ | async"
-    [selectedSets]="selectedSets$ | async"
-    [totalNumber]="datasetCount$ | async"
-    [currentPage]="currentPage$ | async"
-    [datasetsPerPage]="datasetsPerPage$ | async"
-    [disabledColumns]="disabledColumns"
-    (onClick)="onClick($event)"
-    (onSelect)="onSelect($event)"
-    (onDeselect)="onDeselect($event)"
-    (onPageChange)="onPageChange($event)"
-    (onSortChange)="onSortChange($event)">
-  </dataset-table-pure>
+  <mat-table
+    [dataSource]="datasets$"
+    class="dataset-table mat-elevation-z2"
+    matSort (matSortChange)="onSortChange($event)">
+
+    <!-- Column Definitions -->
+    <ng-container matColumnDef="select">
+      <mat-header-cell *matHeaderCellDef>
+        <mat-checkbox
+          [checked]="allAreSeleted$ | async"
+          (change)="onSelectAll($event)">
+        </mat-checkbox>
+      </mat-header-cell>
+
+      <mat-cell *matCellDef="let dataset">
+        <mat-checkbox
+          [checked]="isSelected(dataset)"
+          (change)="onSelect($event, dataset)"
+          (click)="$event.stopPropagation()">
+        </mat-checkbox>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="pid">
+      <mat-header-cell *matHeaderCellDef>PID</mat-header-cell>
+      <mat-cell *matCellDef="let dataset">{{dataset.pid}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="sourceFolder">
+      <mat-header-cell *matHeaderCellDef>Source Folder</mat-header-cell>
+      <mat-cell *matCellDef="let dataset">{{dataset.sourceFolder}}</mat-cell>  
+    </ng-container>
+
+    <ng-container matColumnDef="size">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Size</mat-header-cell>
+      <mat-cell *matCellDef="let dataset">
+        {{dataset.size | filesize}}
+      </mat-cell>  
+    </ng-container>
+
+    <ng-container matColumnDef="creationTime">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Creation Time</mat-header-cell>
+      <mat-cell *matCellDef="let dataset">
+        {{dataset.creationTime | date: 'dd/MM/yyyy HH:mm'}}
+      </mat-cell>  
+    </ng-container>
+
+    <ng-container matColumnDef="type">
+      <mat-header-cell *matHeaderCellDef>Type</mat-header-cell>
+      <mat-cell *matCellDef="let dataset">{{dataset.type}}</mat-cell>  
+    </ng-container>
+      
+    <ng-container matColumnDef="proposalId">
+      <mat-header-cell *matHeaderCellDef>Proposal</mat-header-cell>
+      <mat-cell *matCellDef="let dataset">{{dataset.proposalId}}</mat-cell>  
+    </ng-container>
+
+    <ng-container matColumnDef="ownerGroup">
+      <mat-header-cell *matHeaderCellDef>Group</mat-header-cell>
+      <mat-cell *matCellDef="let dataset">{{dataset.ownerGroup}}</mat-cell>  
+    </ng-container>  
+
+    <ng-container matColumnDef="archiveStatus">
+      <mat-header-cell *matHeaderCellDef>Archive Status</mat-header-cell>
+      <mat-cell *matCellDef="let dataset">
+        {{ (dataset.datasetlifecycle || {}).archiveStatusMessage }}
+      </mat-cell>  
+    </ng-container>
+
+    <ng-container matColumnDef="retrieveStatus">
+      <mat-header-cell *matHeaderCellDef>Retrieve Status</mat-header-cell>
+      <mat-cell *matCellDef="let dataset">
+        {{ (dataset.datasetlifecycle || {}).retrieveStatusMessage }}
+      </mat-cell> 
+    </ng-container>
+
+    <!-- End of Column Definitions -->
+
+    <mat-header-row class='datasets-header' *matHeaderRowDef="visibleColumns">
+    </mat-header-row>
+    
+    <mat-row
+      class='row-generic'
+      *matRowDef="let dataset; columns: visibleColumns"
+      (click)="onClick(dataset)">
+    </mat-row>
+  </mat-table>
 </div>

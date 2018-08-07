@@ -1,9 +1,5 @@
 @import '../../../theme.scss';
 
-$ds-archive: mat-palette($mat-green, 600);
-
-/*Columns are dynamically injected, so this /deep/ ensures it is reflected onto the selector  */
-
 .dataset-table .mode-container {
   padding-left: 1em;
   float: left;
@@ -24,18 +20,26 @@ $ds-archive: mat-palette($mat-green, 600);
   margin-left: 1em; 
 }  
 
+.mat-column-select {
+  overflow: visible; /* Needed to prevent offsetting of the checkbox when clicking */
+  flex-grow: 0;
+  padding-right: 2em;
+}
+
+/* Columns with narrow content */
+.mat-column-size,
+.mat-column-type {
+  flex-grow: 0.5;
+}
+
 :host /deep/ .disabled-row {
     pointer-events: none;
     opacity: 0.2 !important;
 }
 
 :host /deep/ .mat-row:hover {
-  background-color: rgba(32, 32, 216, 0.3);
+  background-color: rgba(0, 0, 0, 0.1);
   cursor: pointer;
-}
-
-:host /deep/ .datasets-header {
-  background-color: mat-color($primary);
 }
 
 :host /deep/ .mat-paginator {
