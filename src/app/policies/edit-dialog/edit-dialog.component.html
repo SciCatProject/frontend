@@ -1,4 +1,4 @@
-<h1 mat-dialog-title>{{data.title}}</h1>
+<!--<h1 mat-dialog-title>{{data.title}}</h1>
 <div mat-dialog-content>
   <p>{{data.question}}</p>
   <mat-form-field *ngIf="data.input">
@@ -8,4 +8,35 @@
 <div mat-dialog-actions>
   <button mat-button [mat-dialog-close]="data" tabindex="2">Ok</button>
   <button mat-button (click)="onNoClick()" tabindex="-1">No Thanks</button>
-</div>
+</div>-->
+
+<h1 mat-dialog-title align="center">Edit Archive Settings</h1>
+<h2 mat-dialog-title align="left">Groups {{ownerGroup}}</h2>
+
+
+<mat-dialog-content [formGroup]="form">
+
+    <mat-form-field>
+        <input matInput
+                placeholder="ownerGroup"
+               formControlName="ownerGroup">
+    </mat-form-field>
+    <mat-select placeholder="Select archiveDelay"
+    formControlName="archiveDelay">
+
+    <mat-option value="1">
+        1</mat-option>
+    <mat-option value="2">
+        2</mat-option>
+    <mat-option value="7">
+        7</mat-option>
+
+</mat-select>
+      ....
+
+</mat-dialog-content>
+
+<mat-dialog-actions>
+    <button class="mat-raised-button"(click)="close()">Close</button>
+    <button class="mat-raised-button mat-primary"(click)="save()">Save</button>
+</mat-dialog-actions>

@@ -55,7 +55,7 @@ export type FetchPoliciesOutcomeAction =
 
 export type PoliciesActions =
   SelectPolicyAction | DeselectPolicyAction | FetchPoliciesAction |
-  FetchPoliciesCompleteAction | FetchPoliciesFailedAction | FetchPoliciesOutcomeAction
+  FetchPoliciesCompleteAction | FetchPoliciesFailedAction | FetchPoliciesOutcomeAction | ClearSelectionAction
 
 
   // New filtering actions

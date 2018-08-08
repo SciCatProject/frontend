@@ -72,7 +72,6 @@ import {CdkTableModule} from '@angular/cdk/table';
 import { AppComponent } from './app.component';
 import { AuthCheck } from './AuthCheck';
 import { JobsDetailComponent } from './jobs/jobs-detail/jobs-detail.component';
-//import {ArchiveSettingsComponent} from 'archive-settings/archive-settings.component';
 
 
 export function localStorageSyncWrapper(reducer: any) {
@@ -85,8 +84,7 @@ export function localStorageSyncWrapper(reducer: any) {
     JobsTableComponent,
     SampleDataFormComponent,
     JobsDetailComponent
-    //ArchiveSettingsComponent
-
+    
   ],
   imports : [
     MatToolbarModule,

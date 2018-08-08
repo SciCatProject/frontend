@@ -4,6 +4,7 @@ import { ArchiveSettingsComponent} from './archive-settings/archive-settings.com
 //import { ConfigFormModule } from 'shared/modules/config-form/config-form.module'
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { PoliciesService } from './policies.service';
+import { EditDialogComponent } from './edit-dialog/edit-dialog.component';
 import {
   MatAutocompleteModule,
   MatButtonModule,
@@ -36,19 +37,20 @@ import { policiesReducer } from 'state-management/reducers/policies.reducer';
 
 
 
+
 @NgModule({
   imports: [
-    CommonModule, MatCardModule, MatDialogModule, MatPaginatorModule, MatCheckboxModule, MatTableModule, MatFormFieldModule, MatAutocompleteModule,
+    CommonModule, MatCardModule, MatPaginatorModule, MatCheckboxModule, MatTableModule, MatFormFieldModule, MatAutocompleteModule,
     MatTabsModule, MatInputModule, MatButtonModule, MatSortModule, CommonModule, FormsModule, ReactiveFormsModule,
     SharedCatanieModule, MatSelectModule, MatOptionModule, MatNativeDateModule, MatIconModule,
     MatListModule, MatDatepickerModule, MatTooltipModule, MatButtonToggleModule, MatProgressSpinnerModule, MatChipsModule,
-      StoreModule.forFeature('policies', policiesReducer),
+      StoreModule.forFeature('policies', policiesReducer), MatDialogModule,
 
   ],
-  declarations: [ArchiveSettingsComponent],
+  declarations: [ArchiveSettingsComponent, EditDialogComponent],
   providers : [ PoliciesService ],
   exports: [ArchiveSettingsComponent],
-  //entryComponents: [ConfigFormModule]
+  entryComponents: [EditDialogComponent]
 })
 export class PoliciesModule {
 

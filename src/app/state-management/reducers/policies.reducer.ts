@@ -34,14 +34,6 @@ export function policiesReducer(
             return {...state, policies, policiesLoading: false};
         }
 
-      /*  case FETCH_POLICIES_COMPLETE: {
-            const list = (action as FetchPoliciesCompleteAction).policies;
-            const policies = list.reduce((policies, policy) =>
-                ({...policies, [policy.id]: policy})
-            , {});
-            return {...state, policies, hasFetched: true};
-        }*/
-
 
         case FETCH_POLICIES_FAILED: {
             return {...state, policiesLoading: false};
@@ -66,9 +58,9 @@ export function policiesReducer(
             return {...state, selectedPolicies};
         }
 
-      /*  case CLEAR_SELECTION: {
+        case CLEAR_SELECTION: {
             return {...state, selectedPolicies: []};
-        }*/
+        }
 
         default: {
             return state;

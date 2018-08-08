@@ -23,11 +23,11 @@ import {
 
 } from 'state-management/actions/policies.actions';
 //import * as selectors from 'state-management/selectors';
-import { getPolicies, getPolicyState } from 'state-management/selectors/policies.selectors';
+import { getPolicies, getPolicyState, getSelectedPolicies } from 'state-management/selectors/policies.selectors';
 import { MatTableDataSource, MatPaginator } from '@angular/material';
 import { PoliciesService } from '../policies.service';
 import { ConfigFormComponent } from 'shared/modules/config-form/config-form.component';
-import { DialogComponent } from 'shared/modules/dialog/dialog.component';
+//import { DialogComponent } from 'shared/modules/dialog/dialog.component';
 import { EditDialogComponent } from '../edit-dialog/edit-dialog.component';
 import { MatDialog, MatDialogConfig } from '@angular/material';
 
@@ -54,14 +54,16 @@ export class ArchiveSettingsComponent implements OnInit {
 
   private policies$ = this.store.pipe(select(getPolicies));
   private policyState$ = this.store.pipe(select(getPolicyState));
+  private selectedPolicies$ = this.store.pipe(select(getSelectedPolicies));
+  public selectedPolicies: Policy[] = [];
   private policies: Policy[] = [];
 
   constructor(
     private store: Store<Policy>,
     private router: Router,
     private route: ActivatedRoute,
-    public dialog: EditDialogComponent,
     private policiesService: PoliciesService,
+    public dialog: MatDialog,
   ) { }
 
   subscriptions = [];
@@ -69,7 +71,6 @@ export class ArchiveSettingsComponent implements OnInit {
 
 
 
-  @Input() public selectedPolicies: Policy[] = [];
   @Input() public totalNumber: number = 0;
   @Input() public currentPage: number = 0;
 
@@ -120,12 +121,42 @@ export class ArchiveSettingsComponent implements OnInit {
 
       })
 
+  /*  this.store
+      .select(getSelectedPolicies)
+      .subscribe(data => {
+        this.selectedPolicies = data as Policy[];
+      });*/
+
+      this.store.pipe(select(getSelectedPolicies))
+        .subscribe(data => {
+              this.selectedPolicies = data as Policy[];
+
+        });
+
 
 
 
   };
 
   private openDialog() {
+
+    console.log("selected: ", this.selectedPolicies);
+
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.panelClass;
+    dialogConfig.direction = "rtl";
+
+    dialogConfig.data = this.policies;
+
+    const dialogRef = this.dialog.open(EditDialogComponent, dialogConfig);
+
+    dialogRef.afterClosed().subscribe(
+      val => console.log("Dialog output:", val)
+    );
+  }
   /*  const dialogRef = this.dialog.open(DialogComponent, {
       width: 'auto',
       data: { title: 'Edit Archive Policy', question: '' }
@@ -138,7 +169,7 @@ export class ArchiveSettingsComponent implements OnInit {
        //this.dialog.onClose.emit(result);
     });*/
 
-  }
+  //}
 
   private onClose() {
 
@@ -177,7 +208,6 @@ export class ArchiveSettingsComponent implements OnInit {
 
   private handleSortChange(event: SortChangeEvent): void {
     this.onSortChange.emit(event);
-    this.openDialog();
   }
 
   onSelect(policy: Policy): void {
@@ -185,4 +215,8 @@ export class ArchiveSettingsComponent implements OnInit {
     // write action for select/ deselect
     //  this.store.dispatch(new dsa.SelectDatasetAction(dataset));
   }
+  private onEditClick() {
+    this.openDialog();
+  }
+
 }
