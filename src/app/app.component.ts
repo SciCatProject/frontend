@@ -53,7 +53,7 @@ export class AppComponent implements OnDestroy, OnInit {
     this.appVersion = appVersion;
     this.darkTheme$ = this.store.select(selectors.users.getTheme);
     const facility = this.appConfig.facility;
-    let status = 'testing';
+    let status = 'test';
     if (this.appConfig.production === true) {
       status = '';
     }
