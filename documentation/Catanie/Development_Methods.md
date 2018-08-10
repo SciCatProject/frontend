@@ -106,7 +106,7 @@ git flow init (accept all prompts)
 #feature
 git flow feature start NAME
 # commits etc
-git push origin feature/NAME # open merge request on Gitlab here
+git push origin feature/NAME # open merge request on Github here
 
 #release
 git flow release start vVERSION_NUMBER
