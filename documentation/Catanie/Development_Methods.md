@@ -7,7 +7,7 @@ Currently, this project is being developed by following a variation of the [git 
 In summary, the following branches should exist and be in the following states:  
 1. `master` - always ready to deploy \(manual/time delayed integrations from the `develop` branch\)  
 2. `develop` - merge hotfixes and features into this \(this should map to a corresponding development environment on your system\)  
-3. `hotfix/<bug_name` - forks from master to fix a known issue \(this issue should be documented in the repository and a branch can be created from within Gitlab  
+3. `hotfix/<bug_name` - forks from master to fix a known issue \(this issue should be documented in the repository and a branch can be created from within Github  
 4. `feature/<feature_name>` - forks from master to a feature branch, explained [here](https://gitlab.psi.ch/help/workflow/workflow.md)
 
 ### Releases
@@ -41,9 +41,9 @@ git branch -D release/0.1.1
 
 ## Collaborators and Code Review
 
-**All **those involved with development on a project should follow this process exactly. This would mean no committing directly to the master or develop branches and \(unless absolutely necessary\) merge requests should be opened in Gitlab and assigned to anyone that is not yourself.
+**All **those involved with development on a project should follow this process exactly. This would mean no committing directly to the master or develop branches and \(unless absolutely necessary\) pull requests should be opened in Github and assigned to anyone that is not yourself.
 
-When your branch has been pushed up to the origin \([https://gitlab.psi.ch](https://gitlab.psi.ch)\), then please open a merge request with your branch name as the source and the `develop` as the target. You can then assign the merge request to somone else within your development team. If you do not know who that is then please assign it to someone working at PSI.
+When your branch has been pushed up to the origin \([https://github.com](https://github.com\), then please open a pull request with your branch name as the source and the `develop` as the target. You can then assign the pull request to somone else within your development team. If you do not know who that is then please assign it to someone working at PSI.
 
 **NOTE** When a new branch is opened it **must** be opened from the `develop` branch. Merge requests opened from other branches will not be accepted.
 
@@ -106,7 +106,7 @@ git flow init (accept all prompts)
 #feature
 git flow feature start NAME
 # commits etc
-git push origin feature/NAME # open merge request on Gitlab here
+git push origin feature/NAME # open merge request on Github here
 
 #release
 git flow release start vVERSION_NUMBER
