@@ -41,9 +41,9 @@ git branch -D release/0.1.1
 
 ## Collaborators and Code Review
 
-**All **those involved with development on a project should follow this process exactly. This would mean no committing directly to the master or develop branches and \(unless absolutely necessary\) merge requests should be opened in Gitlab and assigned to anyone that is not yourself.
+**All **those involved with development on a project should follow this process exactly. This would mean no committing directly to the master or develop branches and \(unless absolutely necessary\) pull requests should be opened in Github and assigned to anyone that is not yourself.
 
-When your branch has been pushed up to the origin \([https://gitlab.psi.ch](https://gitlab.psi.ch)\), then please open a merge request with your branch name as the source and the `develop` as the target. You can then assign the merge request to somone else within your development team. If you do not know who that is then please assign it to someone working at PSI.
+When your branch has been pushed up to the origin \([https://github.com](https://github.com\), then please open a pull request with your branch name as the source and the `develop` as the target. You can then assign the pull request to somone else within your development team. If you do not know who that is then please assign it to someone working at PSI.
 
 **NOTE** When a new branch is opened it **must** be opened from the `develop` branch. Merge requests opened from other branches will not be accepted.
 
