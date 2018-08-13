@@ -39,9 +39,8 @@ As of Chrome 59, a [headless](https://developers.google.com/web/updates/2017/04/
 
 # E2E ([Protractor](http://www.protractortest.org/#/))
 
-NOTE: Protractor does not support versions of Node beyond 7 because the v8 API made breaking changes.
 
-You can run with `npm run e2e` or `protractor` but **YOU MUST** specify the environment as well `--environment=qa`
+You can run with `npm run e2e` or `ng e2e` 
 
 Useful Links
 
