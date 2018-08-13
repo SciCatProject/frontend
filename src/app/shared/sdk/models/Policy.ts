@@ -4,7 +4,7 @@ declare var Object: any;
 export interface PolicyInterface {
   "manager"?: Array<any>;
   "tapeRedundancy"?: string;
-  "tapeRetentionTime"?: number;
+  "autoArchive"?: boolean;
   "autoArchiveDelay"?: number;
   "archiveEmailNotification"?: boolean;
   "archiveEmailsToBeNotified"?: Array<any>;
@@ -22,7 +22,7 @@ export interface PolicyInterface {
 export class Policy implements PolicyInterface {
   "manager": Array<any>;
   "tapeRedundancy": string;
-  "tapeRetentionTime": number;
+  "autoArchive": boolean;
   "autoArchiveDelay": number;
   "archiveEmailNotification": boolean;
   "archiveEmailsToBeNotified": Array<any>;
@@ -77,10 +77,9 @@ export class Policy implements PolicyInterface {
           type: 'string',
           default: 'low'
         },
-        "tapeRetentionTime": {
-          name: 'tapeRetentionTime',
-          type: 'number',
-          default: 10
+        "autoArchive": {
+          name: 'autoArchive',
+          type: 'boolean'
         },
         "autoArchiveDelay": {
           name: 'autoArchiveDelay',

@@ -1,7 +1,4 @@
 /* tslint:disable */
-import {
-  Dataset
-} from '../index';
 
 declare var Object: any;
 export interface PublishedDataInterface {
@@ -13,11 +10,9 @@ export interface PublishedDataInterface {
   "title": string;
   "url": string;
   "pidArray": Array<any>;
-  "author": Array<any>;
+  "authors": Array<any>;
   "doiRegisteredSuccessfullyTime"?: Date;
   "id"?: any;
-  "datasetId"?: string;
-  dataset?: Dataset;
 }
 
 export class PublishedData implements PublishedDataInterface {
@@ -29,11 +24,9 @@ export class PublishedData implements PublishedDataInterface {
   "title": string;
   "url": string;
   "pidArray": Array<any>;
-  "author": Array<any>;
+  "authors": Array<any>;
   "doiRegisteredSuccessfullyTime": Date;
   "id": any;
-  "datasetId": string;
-  dataset: Dataset;
   constructor(data?: PublishedDataInterface) {
     Object.assign(this, data);
   }
@@ -85,8 +78,7 @@ export class PublishedData implements PublishedDataInterface {
         },
         "publicationYear": {
           name: 'publicationYear',
-          type: 'number',
-          default: 2018
+          type: 'number'
         },
         "title": {
           name: 'title',
@@ -98,13 +90,11 @@ export class PublishedData implements PublishedDataInterface {
         },
         "pidArray": {
           name: 'pidArray',
-          type: 'Array&lt;any&gt;',
-          default: <any>[]
+          type: 'Array&lt;any&gt;'
         },
-        "author": {
-          name: 'author',
-          type: 'Array&lt;any&gt;',
-          default: <any>[]
+        "authors": {
+          name: 'authors',
+          type: 'Array&lt;any&gt;'
         },
         "doiRegisteredSuccessfullyTime": {
           name: 'doiRegisteredSuccessfullyTime',
@@ -114,20 +104,8 @@ export class PublishedData implements PublishedDataInterface {
           name: 'id',
           type: 'any'
         },
-        "datasetId": {
-          name: 'datasetId',
-          type: 'string'
-        },
       },
       relations: {
-        dataset: {
-          name: 'dataset',
-          type: 'Dataset',
-          model: 'Dataset',
-          relationType: 'belongsTo',
-                  keyFrom: 'datasetId',
-          keyTo: 'pid'
-        },
       }
     }
   }
