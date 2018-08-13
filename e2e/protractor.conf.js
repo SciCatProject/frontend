@@ -7,23 +7,10 @@ var SpecReporter = require('jasmine-spec-reporter').SpecReporter;
 exports.config = {
     allScriptsTimeout: 15000,
     specs: [
-      './e2e/**/*.e2e-spec.ts'
+      './**/*.e2e-spec.ts'
     ],
     capabilities: {
         'browserName': 'chrome',
-        // chromeDriver: '../node_modules/protractor/node_modules/webdriver-manager/selenium/chromedriver_2.30',
-        chromeOptions: {
-            args: ["user-agent=Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36", "--headless", "--disable-gpu", "--no-sandbox"],
-            // args: ["--window-size=800x600"],
-            prefs: {
-                download: {
-                    prompt_for_download: false,
-                    dirctory_upgrade: true,
-                    default_directory: './e2e/'
-                }
-            }
-           
-        }
 
     },
     params: {
@@ -42,13 +29,10 @@ exports.config = {
         defaultTimeoutInterval: 30000,
         print: function () {}
     },
-    useAllAngular2AppRoots: true,
-    beforeLaunch: function () {
+    onPrepare () {
         require('ts-node').register({
-            project: 'e2e'
-        });
-    },
-    onPrepare: function () {
+            project: 'e2e/tsconfig.e2e.json'
+      });
       jasmine.getEnv().addReporter(new SpecReporter());
     }
 };
