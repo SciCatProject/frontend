@@ -2,7 +2,7 @@ import {NgModule} from '@angular/core';
 import {RouterModule} from '@angular/router';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
-import {BrowserModule} from '@angular/platform-browser';
+import {BrowserModule, Title} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {EffectsModule} from '@ngrx/effects';
 import {routerReducer, StoreRouterConnectingModule} from '@ngrx/router-store';
@@ -25,18 +25,17 @@ import {JobsEffects} from 'state-management/effects/jobs.effects';
 import {rootReducer} from 'state-management/reducers/root.reducer';
 import {UsersModule} from 'users/users.module';
 import {ProposalsModule} from 'proposals/proposals.module';
-import { SatNativeDateModule, SatDatepickerModule } from 'saturn-datepicker';
 import { PoliciesModule} from 'policies/policies.module'
-
+import {SatDatepickerModule, SatNativeDateModule} from 'saturn-datepicker';
 
 
 import {
   MatCardModule,
+  MatDatepickerModule,
   MatGridListModule,
   MatIconModule,
   MatListModule,
   MatMenuModule,
-  MatDatepickerModule,
   MatNativeDateModule,
   MatPaginatorModule,
   MatSidenavModule,
@@ -107,6 +106,7 @@ export function localStorageSyncWrapper(reducer: any) {
     AuthCheck,
     DatasetService,
     UserApi,
+    Title,
     MatNativeDateModule,
     //      {provide: RouteReuseStrategy, useClass: CustomReuseStrategy}
   ],

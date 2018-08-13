@@ -9,5 +9,6 @@ export const environment = {
   fileserverBaseURL: 'https://scicat03.esss.lu.se:32223',
   externalAuthEndpoint: '/auth/msad',
   archiveWorkflowEnabled: false,
-  disabledDatasetColumns: ['archiveStatus', 'retrieveStatus' ]
+  disabledDatasetColumns: ['archiveStatus', 'retrieveStatus' ],
+  facility: 'ESS'
 };
