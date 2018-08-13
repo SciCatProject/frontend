@@ -25,51 +25,27 @@ import {JobsEffects} from 'state-management/effects/jobs.effects';
 import {rootReducer} from 'state-management/reducers/root.reducer';
 import {UsersModule} from 'users/users.module';
 import {ProposalsModule} from 'proposals/proposals.module';
-import {FileHelpersModule} from 'ngx-file-helpers';
 import { SatNativeDateModule, SatDatepickerModule } from 'saturn-datepicker';
 
 
 
-import {FilePickerComponent} from './datasets/file-picker/file-picker.component';
-import {FileDropzoneComponent} from './datasets/file-dropzone/file-dropzone.component';
 
 
 import {
-  MatAutocompleteModule,
-  MatButtonModule,
-  MatButtonToggleModule,
   MatCardModule,
-  MatCheckboxModule,
-  MatChipsModule,
-  MatDialogModule,
-  MatExpansionModule,
   MatGridListModule,
   MatIconModule,
-  MatInputModule,
   MatListModule,
   MatMenuModule,
   MatDatepickerModule,
   MatNativeDateModule,
   MatPaginatorModule,
-  MatProgressBarModule,
-  MatProgressSpinnerModule,
-  MatRadioModule,
-  MatRippleModule,
-  MatSelectModule,
   MatSidenavModule,
-  MatSliderModule,
-  MatSlideToggleModule,
   MatSnackBarModule,
-  MatSortModule,
   MatTableModule,
-  MatTabsModule,
   MatToolbarModule,
-  MatTooltipModule,
-  MatStepperModule,
-  MatFormFieldModule,
 } from '@angular/material';
 
-import {CdkTableModule} from '@angular/cdk/table';
 import {AppComponent} from './app.component';
 import {AuthCheck} from './AuthCheck';
 import {JobsDetailComponent} from './jobs/jobs-detail/jobs-detail.component';

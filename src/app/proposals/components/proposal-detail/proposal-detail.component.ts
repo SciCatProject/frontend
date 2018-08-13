@@ -19,7 +19,7 @@ export class ProposalDetailComponent implements OnInit {
     private mainProposer: Proposer;
     private principalInvestigator: Proposer;
 
-    private displayedColumns: string[] = [
+    displayedColumns: string[] = [
         'pid',
         'sourceFolder',
         'size',

@@ -355,7 +355,6 @@ describe('DatasetsReducer', () => {
 
     describe('ClearSelectionAction', () => {
         it('should set selectedSets to an empty array', () => {
-            const payload = [{ 'id': '1' }];
             const action = new fromActions.ClearSelectionAction();
             const state = fromDatasets.datasetsReducer(initialDatasetState, action);
             expect(state.selectedSets).toEqual([]);

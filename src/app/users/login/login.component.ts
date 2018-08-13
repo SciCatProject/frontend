@@ -36,7 +36,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     rememberMe: true
   });
 
-  private loading$ = this.store.pipe(select(getIsLoggingIn));
+  loading$ = this.store.pipe(select(getIsLoggingIn));
   private hasUser$ = this.store.pipe(select(getIsLoggedIn), filter(is => is));
 
   private proceedSubscription: Subscription = null;

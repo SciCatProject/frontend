@@ -37,6 +37,7 @@ export class JobsTableComponent implements OnInit, OnDestroy, AfterViewInit {
   jobsCount = 1000;
   filters = {};
   totalJobNumber$: any;
+  event: any;
 
   displayedColumns = this.cols.concat();
   @ViewChild(MatPaginator) paginator: MatPaginator;

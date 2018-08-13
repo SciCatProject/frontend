@@ -41,7 +41,6 @@ import { MatChipsModule } from '@angular/material/chips';
 import { SharedCatanieModule } from 'shared/shared.module';
 import { SelectedListComponent } from 'datasets/selected-list/selected-list.component';
 import { SatDatepickerModule } from 'saturn-datepicker';
-import { DatasetTablePureComponent, DatasetTablePureColumnComponent } from './dataset-table-pure/dataset-table-pure.component';
 import { DatasetBatchComponent } from './dataset-batch/dataset-batch.component';
 import { StoreModule } from '@ngrx/store';
 import { datasetsReducer } from 'state-management/reducers/datasets.reducer';
@@ -60,7 +59,7 @@ import { FileSizePipe } from './filesize.pipe';
     FilePickerComponent, FileDropzoneComponent,
     DashboardComponent, DatasetTableComponent, DatablocksComponent,
     DatafilesComponent, DatasetsFilterComponent, DatasetDetailComponent, SelectedListComponent,
-    DatasetTablePureComponent, DatasetTablePureColumnComponent, FileSizePipe, DatasetBatchComponent
+    FileSizePipe, DatasetBatchComponent
   ],
   providers : [ DatasetService ],
   exports : [ DatasetTableComponent, DatasetsFilterComponent ]
