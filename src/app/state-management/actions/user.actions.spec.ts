@@ -66,8 +66,7 @@ describe('LogoutAction', () => {
 
 describe('LogoutCompleteAction', () => { 
 	it('should create an action', () => { 
-		const payload = [{id:1}]; 
-		const action = new LogoutCompleteAction(); 
+		const action = new LogoutCompleteAction();
 		expect({ ...action }).toEqual({ type: LOGOUT_COMPLETE}); 
 	}); 
 });
@@ -75,8 +74,7 @@ describe('LogoutCompleteAction', () => {
 
 describe('RetrieveUserAction', () => { 
 	it('should create an action', () => { 
-		const payload = [{id:1}]; 
-		const action = new RetrieveUserAction(); 
+		const action = new RetrieveUserAction();
 		expect({ ...action }).toEqual({ type: RETRIEVE_USER}); 
 	}); 
 });

@@ -30,7 +30,7 @@ const appReducer = combineReducers({
     policies: policiesReducer
  });
 
-export const rootReducer = (state, action) => {
+export function rootReducer  (state, action)  {
     if (action.type === ua.LOGOUT_COMPLETE) {
         state = undefined;
     }

@@ -1,25 +1,42 @@
-import {Observable} from 'rxjs/Rx';
-import {Subject} from 'rxjs/Subject';
+import {Observable} from 'rxjs';
+import {of} from 'rxjs';
+import {Subject} from 'rxjs';
 
 export class MockUserApi {
-  getCurrentId() { return 123; }
-
-  getCurrent() { return Observable.from([ {'username' : 'admin'} ]); }
-
-  getCurrentToken() { return {'user' : {'username' : 'admin'}}; }
-
-  getCachedCurrent() { return {'username' : 'admin'}; }
+  getCurrentId() {
+    return 123;
   }
+
+  getCurrent() {
+    return (of([{'username': 'admin'}]));
+  }
+
+  getCurrentToken() {
+    return {'user': {'username': 'admin'}};
+  }
+
+  getCachedCurrent() {
+    return {'username': 'admin'};
+  }
+}
 
 export class MockDatasetApi {
-  getDatasets() { return Observable.from([]); }
-
-  getDatablocks() { return Observable.from([]); }
-
-  find() { return Observable.from([]); }
-
-  findById() { return Observable.from([]); }
+  getDatasets() {
+    return (of([]));
   }
+
+  getDatablocks() {
+    return (of([]));
+  }
+
+  find() {
+    return (of([]));
+  }
+
+  findById() {
+    return (of([]));
+  }
+}
 
 export class MockMatDialogRef {
 
@@ -30,97 +47,136 @@ export class MockMatDialogData {
 }
 
 export class MockDatablockApi {
-  getDatafiles() { return Observable.from([]); }
+  getDatafiles() {
+    return (of([]));
   }
+}
 
-export class MockDatasetLifecycleApi {}
+export class MockDatasetLifecycleApi {
+}
 
-export class MockAuthService {}
+export class MockAuthService {
+}
 
 export class MockLoopBackAuth {
 
   user = {};
 
-  getUser() { return Observable.from([ {'username' : 'admin'} ]); }
-
-  setUser(user) { this.user = user; }
+  getUser() {
+    return (of([{'username': 'admin'}]));
   }
 
-export class MockLocation {}
+  setUser(user) {
+    this.user = user;
+  }
+}
+
+export class MockLocation {
+}
 
 export class MockActivatedRoute {
   // stub detail goes here
-  snapshot = {queryParams : {returnUrl : '/'}};
-  params = Observable.from([ {'id' : 1} ]);
-  queryParams = Observable.from([ {'limit' : 10} ]);
+  snapshot = {queryParams: {returnUrl: '/'}};
+  params = (of([{'id': 1}]));
+  queryParams = (of([{'limit': 10}]));
 }
 
 export class MockRouter {
-  navigate = function(url, params) {};
-  // jasmine.createSpy('navigate');
-  navigateByUrl(url: string) { return url; }
-  }
+  navigate = function (url, params) {
+  };
 
-export class MockHttp {}
+  // jasmine.createSpy('navigate');
+  navigateByUrl(url: string) {
+    return url;
+  }
+}
+
+export class MockHttp {
+}
 
 export class MockJobApi {
 
   find() {
-    return Observable.from([ [ {
-      creationTime : '2017-06-19T08:38:14.671Z',
-      emailJobInitiator : 'test.user@psi.ch',
-      id : '59478d76d7bbe2dd2e619cb6',
-      type : 'retrieve'
-    } ] ]);
+    return (of([[{
+      creationTime: '2017-06-19T08:38:14.671Z',
+      emailJobInitiator: 'test.user@psi.ch',
+      id: '59478d76d7bbe2dd2e619cb6',
+      type: 'retrieve'
+    }]]));
   }
-  }
+}
 
 export class MockConfigService {
-  getConfigFile() { return Observable.from([ undefined ]); }
+  getConfigFile() {
+    return (of([undefined]));
   }
+}
 
-export class MockJobHandlerService {}
+export class MockJobHandlerService {
+}
 
-export class MockParamsService {}
+export class MockParamsService {
+}
 
 export class MockDatasetService {
   datasetChange: Subject<string> = new Subject<string>();
 
   // TODO hold datasets and return array of samples
-  searchDatasets() { return null; }
-
-  searchDatasetsObservable() { return Observable.from([]); }
-
-  getBlockObservable() { return Observable.from([]); }
+  searchDatasets() {
+    return null;
   }
+
+  searchDatasetsObservable() {
+    return (of([]));
+  }
+
+  getBlockObservable() {
+    return (of([]));
+  }
+}
 
 export class MockProposalApi {
 
   // TODO hold datasets and return array of samples
-  find(filter?: any) { return Observable.from([]); }
+  find(filter?: any) {
+    return (of([]));
   }
+}
 
 export class MockUserMsgService {
 
   private subject = new Subject<any>();
 
-  getMessage(): Observable<any> { return this.subject.asObservable(); }
-
-  sendMessage(message: object, delay = 0) {}
-
-  clearMessage() {}
+  getMessage(): Observable<any> {
+    return this.subject.asObservable();
   }
 
-export class MockStore {
-  public dispatch(obj) {}
+  sendMessage(message: object, delay = 0) {
+  }
 
-  public select(obj) { return Observable.of([]); }
-  public pipe(obj) { return Observable.of(null); }
+  clearMessage() {
+  }
+}
+
+export class MockStore {
+  public dispatch(obj) {
+  }
+
+  public select(obj) {
+    return of([]);
+  }
+
+  public pipe(obj) {
+    return of(null);
+  }
 }
 
 
 export class MockNotificationService {
-  public dispatch(obj) {}
+  public dispatch(obj) {
+  }
 
-  public select(obj) { return Observable.of([]); }
+  public select(obj) {
+    return of([]);
+  }
 }

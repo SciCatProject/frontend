@@ -1,5 +1,5 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
-import {HttpModule} from '@angular/http';
+import {HttpClientModule} from '@angular/common/http';
 import {RouterTestingModule} from '@angular/router/testing';
 import {MockStore} from 'shared/MockStubs';
 import {BreadcrumbComponent} from './breadcrumb.component';
@@ -12,7 +12,7 @@ describe('BreadcrumbComponent', () => {
   beforeEach(async(() => {
     TestBed
         .configureTestingModule({
-          imports : [ RouterTestingModule, HttpModule ],
+          imports : [ RouterTestingModule, HttpClientModule ],
           declarations : [ BreadcrumbComponent ],
           providers : [
             {provide : Store, useClass : MockStore},

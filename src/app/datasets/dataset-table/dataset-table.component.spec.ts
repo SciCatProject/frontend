@@ -1,24 +1,20 @@
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
-import {Http} from '@angular/http';
-import {ActivatedRoute, Router} from '@angular/router';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {HttpClient} from '@angular/common/http';
+import {Router} from '@angular/router';
 import {MatTableModule, MatDialogModule} from '@angular/material';
 import {DatasetTableComponent} from './dataset-table.component';
-import {Store, StoreModule} from '@ngrx/store';
-import {ConfigService} from 'shared/services/config.service';
+import {StoreModule, combineReducers} from '@ngrx/store';
+
 import {
-  MockActivatedRoute,
-  MockConfigService,
   MockHttp,
   MockRouter,
-  MockStore,
-  MockUserApi
 } from 'shared/MockStubs';
-import {UserApi} from 'shared/sdk/services';
-import { rootReducer } from 'state-management/reducers/root.reducer';
-import { AppConfigModule } from 'app-config.module';
 
+import { AppConfigModule,  APP_CONFIG } from 'app-config.module';
+import { FileSizePipe } from '../filesize.pipe';
+import { datasetsReducer } from 'state-management/reducers/datasets.reducer';
+import { jobsReducer } from 'state-management/reducers/jobs.reducer';
 
 describe('DatasetTableComponent', () => {
   let component: DatasetTableComponent;
@@ -27,18 +23,28 @@ describe('DatasetTableComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
-      imports: [MatTableModule, MatDialogModule, FormsModule, ReactiveFormsModule, StoreModule.forRoot(rootReducer), AppConfigModule],
-      declarations: [DatasetTableComponent]
+      imports: [
+        MatTableModule,
+        MatDialogModule,
+        StoreModule.forRoot({
+          datasets: datasetsReducer,
+          root: combineReducers({
+            jobs: jobsReducer,
+          })
+        }),
+        AppConfigModule
+      ],
+      declarations: [DatasetTableComponent, FileSizePipe]
     });
     TestBed.overrideComponent(DatasetTableComponent, {
       set: {
         providers: [
-          {provide: UserApi, useClass: MockUserApi},
-          {provide: Http, useClass: MockHttp},
+          {provide: HttpClient, useClass: MockHttp},
           {provide: Router, useClass: MockRouter},
-          {provide: ActivatedRoute, useClass: MockActivatedRoute},
-          {provide: ConfigService, useClass: MockConfigService},
-          {provide: Store, useClass: MockStore}
+          {provide: APP_CONFIG, useValue: {
+            disabledDatasetColumns: [],
+            archiveWorkflowEnabled: true,
+          }}
         ]
       }
     });
@@ -67,7 +73,6 @@ describe('DatasetTableComponent', () => {
 
   it('should contain an export button', () => {
     const compiled = fixture.debugElement.nativeElement;
-    console.log(compiled);
     expect(compiled.querySelectorAll('.export-csv')).toBeTruthy();
   });
 });

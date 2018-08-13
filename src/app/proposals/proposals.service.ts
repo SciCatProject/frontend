@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 
 import { ProposalApi, DatasetApi } from 'shared/sdk/services';
 import { Proposal, Dataset } from 'shared/sdk/models';

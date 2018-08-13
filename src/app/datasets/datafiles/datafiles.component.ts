@@ -1,9 +1,10 @@
 import {Component, Input, OnInit, ViewChild, AfterViewInit, Inject} from '@angular/core';
 import {OrigDatablock} from 'shared/sdk/models';
 import {Store} from '@ngrx/store';
-import {Observable} from 'rxjs/Observable';
+import {Observable} from 'rxjs';
+import {map} from 'rxjs/operators';
 import {MatTableDataSource, MatPaginator} from '@angular/material';
-import { APP_CONFIG, AppConfig } from 'app-config.module';
+import {APP_CONFIG, AppConfig} from 'app-config.module';
 
 @Component({
   selector: 'datafiles',
@@ -13,7 +14,7 @@ import { APP_CONFIG, AppConfig } from 'app-config.module';
 export class DatafilesComponent implements OnInit, AfterViewInit {
 
   @Input() dataBlocks: Array<OrigDatablock>;
-  
+
   urlPrefix: string;
   count: number = 0;
   files: Array<JSON> = [];
@@ -41,7 +42,7 @@ export class DatafilesComponent implements OnInit, AfterViewInit {
     const userIsAdmin = (user) => {
       return (user['accountType'] === 'functional') || (adminUserNames.indexOf(user.username) !== -1);
     };
-    this.admin$ = currentUser$.map(userIsAdmin);
+    this.admin$ = currentUser$.pipe(map(userIsAdmin));
     if (this.dataBlocks) {
       this.getDatafiles(this.dataBlocks);
     }

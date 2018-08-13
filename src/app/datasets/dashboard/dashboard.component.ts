@@ -38,9 +38,9 @@ export class DashboardComponent implements OnDestroy
   ) {}
 
   private filters$ = this.store.pipe(select(getFilters));
-  private selectedDatasets$ = this.store.pipe(select(getSelectedDatasets));
+  selectedDatasets$ = this.store.pipe(select(getSelectedDatasets));
   private searchTerms$ = this.store.pipe(select(getSearchTerms));
-  
+
   private readyToFetch$ = this.store.pipe(
     select(getHasPrefilledFilters),
     filter(has => has)
@@ -63,7 +63,7 @@ export class DashboardComponent implements OnDestroy
   ).subscribe(filters =>
     this.store.dispatch(new PrefillFiltersAction(filters))
   );
-  
+
   private searchTermSubscription = this.searchTerms$.pipe(
     skipWhile(terms => terms === ''),
     debounceTime(500),

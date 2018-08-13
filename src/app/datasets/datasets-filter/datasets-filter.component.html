@@ -49,7 +49,7 @@
         </mat-option>
       </mat-autocomplete>
     </mat-form-field>
-    
+
     <mat-form-field>
       <mat-chip-list #typeChipList>
         <mat-chip *ngFor="let type of typeFilter$ | async" [removable]="true" (removed)="typeRemoved(type)">{{
@@ -68,7 +68,7 @@
     </mat-form-field>
 
     <mat-form-field>
-      <input matInput class="keyword-input" matInput placeholder="Keywords" [ngModel]="selectedKeywords$ | async" name="keywords" (selectionChange)="keywordSelected(keywords)" [matAutocomplete]="kw">
+      <input matInput class="keyword-input" matInput placeholder="Keywords"   [matAutocomplete]="kw">
       <mat-autocomplete #kw="matAutocomplete">
         <mat-option class="options" (onSelectionChange)="keywordSelected(getFacetId(fc))" *ngFor="let fc of keywordFacetCounts$ | async">
           <span>{{ getFacetId(g, 'No Keywords') }}</span>
@@ -83,14 +83,14 @@
         class="date-input"
         placeholder="Select a date range"
         name="range-picker"
-        [matDatepicker]="picker"
+        [satDatepicker]="picker"
         [value]="creationTimeFilter$ | async"
         (dateChange)="dateChanged($event)"
       >
-      <mat-datepicker-toggle matSuffix [for]="picker">
+      <sat-datepicker-toggle matSuffix [for]="picker">
         <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
-      </mat-datepicker-toggle>
-      <mat-datepicker #picker [rangeMode]="true"></mat-datepicker>
+      </sat-datepicker-toggle>
+      <sat-datepicker #picker [rangeMode]="true"></sat-datepicker>
     </mat-form-field>
 
   </form>

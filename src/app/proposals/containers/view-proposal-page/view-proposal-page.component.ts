@@ -1,8 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Store, select } from '@ngrx/store';
-import { Subscription } from 'rxjs/Subscription';
-import { Observable } from 'rxjs/Observable';
+import { Subscription ,  Observable } from 'rxjs';
 import { map, filter, flatMap } from 'rxjs/operators';
 import {
     SelectProposalAction,
@@ -29,7 +28,7 @@ import { Dataset, Proposal } from 'state-management/models';
 export class ViewProposalPageComponent implements OnInit, OnDestroy {
     private subscription: Subscription;
     private proposalId$: Observable<string>;
-    private proposal$: Observable<Proposal>;
+    proposal$: Observable<Proposal>;
     private datasets$: Observable<Dataset[]>;
 
     constructor(
@@ -53,7 +52,7 @@ export class ViewProposalPageComponent implements OnInit, OnDestroy {
                 ])
             )
             .subscribe(this.store);
-            
+
         this.proposal$ = this.store.pipe(select(getSelectedProposal));
         this.datasets$ = this.store.pipe(select(getSelectedProposalDatasets));
     }

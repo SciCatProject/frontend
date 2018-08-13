@@ -40,8 +40,7 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatChipsModule } from '@angular/material/chips';
 import { SharedCatanieModule } from 'shared/shared.module';
 import { SelectedListComponent } from 'datasets/selected-list/selected-list.component';
-import { MatDatepickerModule } from 'saturn-datepicker';
-import { DatasetTablePureComponent } from './dataset-table-pure/dataset-table-pure.component';
+import { SatDatepickerModule } from 'saturn-datepicker';
 import { StoreModule } from '@ngrx/store';
 import { datasetsReducer } from 'state-management/reducers/datasets.reducer';
 import { FileSizePipe } from './filesize.pipe';
@@ -51,7 +50,7 @@ import { FileSizePipe } from './filesize.pipe';
     MatCardModule, MatDialogModule, MatPaginatorModule, MatCheckboxModule, MatTableModule, MatFormFieldModule, MatAutocompleteModule,
     MatTabsModule, MatInputModule, MatButtonModule, MatSortModule, CommonModule, FormsModule, ReactiveFormsModule,
     SharedCatanieModule, MatSelectModule, MatOptionModule, MatNativeDateModule, MatIconModule,
-    MatListModule, MatDatepickerModule, MatTooltipModule, MatButtonToggleModule, MatProgressSpinnerModule, MatChipsModule,
+    MatListModule, SatDatepickerModule, MatTooltipModule, MatButtonToggleModule, MatProgressSpinnerModule, MatChipsModule,
     StoreModule.forFeature('datasets', datasetsReducer),
     FileHelpersModule, AppConfigModule
   ],
@@ -59,7 +58,7 @@ import { FileSizePipe } from './filesize.pipe';
     FilePickerComponent, FileDropzoneComponent,
     DashboardComponent, DatasetTableComponent, DatablocksComponent,
     DatafilesComponent, DatasetsFilterComponent, DatasetDetailComponent, SelectedListComponent,
-    DatasetTablePureComponent, FileSizePipe
+    FileSizePipe
   ],
   providers : [ DatasetService ],
   exports : [ DatasetTableComponent, DatasetsFilterComponent ]

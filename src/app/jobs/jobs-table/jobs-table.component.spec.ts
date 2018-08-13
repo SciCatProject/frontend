@@ -1,6 +1,6 @@
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
-import {Http} from '@angular/http';
+import {HttpClient} from '@angular/common/http';
 import {Router} from '@angular/router';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { MatTableModule} from '@angular/material';
@@ -26,7 +26,7 @@ describe('JobsTableComponent', () => {
         providers: [
           {provide: JobApi, useClass: MockJobApi},
           {provide: UserApi, useClass: MockUserApi},
-          {provide: Http, useClass: MockHttp},
+          {provide: HttpClient, useClass: MockHttp},
           {provide: Router, useClass: MockRouter},
           {provide: ConfigService, useClass: MockConfigService},
           {provide: Store, useClass: MockStore}

@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { Store, select } from '@ngrx/store';
+
+
 import { FacetCount } from 'state-management/state/datasets.store';
 import {
   getLocationFacetCounts,
@@ -43,19 +45,19 @@ type DateRange = {
   styleUrls: ['datasets-filter.component.css']
 })
 export class DatasetsFilterComponent {
-  private locationFacetCounts$ = this.store.pipe(select(getLocationFacetCounts));
-  private groupFacetCounts$ = this.store.pipe(select(getGroupFacetCounts));
-  private typeFacetCounts$ = this.store.pipe(select(getTypeFacetCounts));
-  private keywordFacetCounts$ = this.store.pipe(select(getKeywordFacetCounts));
+  locationFacetCounts$ = this.store.pipe(select(getLocationFacetCounts));
+  groupFacetCounts$ = this.store.pipe(select(getGroupFacetCounts));
+  typeFacetCounts$ = this.store.pipe(select(getTypeFacetCounts));
+  keywordFacetCounts$ = this.store.pipe(select(getKeywordFacetCounts));
 
-  private searchTerms$ = this.store.pipe(select(getSearchTerms));
-  private locationFilter$ = this.store.pipe(select(getLocationFilter));
-  private groupFilter$ = this.store.pipe(select(getGroupFilter));
-  private typeFilter$ = this.store.pipe(select(getTypeFilter));
+  searchTerms$ = this.store.pipe(select(getSearchTerms));
+  locationFilter$ = this.store.pipe(select(getLocationFilter));
+  groupFilter$ = this.store.pipe(select(getGroupFilter));
+  typeFilter$ = this.store.pipe(select(getTypeFilter));
   private keywordsFilter$ = this.store.pipe(select(getKeywordsFilter));
-  private creationTimeFilter$ = this.store.pipe(select(getCreationTimeFilter));
+  creationTimeFilter$ = this.store.pipe(select(getCreationTimeFilter));
 
-  private hasAppliedFilters$ = this.store.pipe(select(getHasAppliedFilters));
+  hasAppliedFilters$ = this.store.pipe(select(getHasAppliedFilters));
 
   private searchTermSubscription = this.searchTerms$.pipe(
     skipWhile(terms => terms === ''),

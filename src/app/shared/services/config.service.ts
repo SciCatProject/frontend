@@ -1,6 +1,7 @@
+
+import {throwError as observableThrowError, Observable} from 'rxjs';
 import {Injectable} from '@angular/core';
-import {Http} from '@angular/http';
-import {Observable} from 'rxjs/Observable';
+import {HttpClient} from '@angular/common/http';
 
 
 /**
@@ -15,7 +16,7 @@ export class ConfigService {
   url = 'assets/models/';
   // public activeConfig: ReplaySubject<any> = new ReplaySubject(1);
 
-  constructor(private http: Http) {}
+  constructor(private http: HttpClient) {}
   /**
    * return a json file for the matching file
    * or an error if not found
@@ -25,21 +26,21 @@ export class ConfigService {
    */
   getConfigFile(filename): Observable<any> {
     return Observable.create(observer => {
-      this.http.get(this.url + filename + '.json')
+      this.http.get(this.url + filename + '.json', { observe: 'response' })
           .subscribe(
               res => {
                 if (res['status'] === 200) {
-                  observer.next(res.json());
+                  observer.next(res);
                   observer.complete();
                 } else {
                   console.log('not found');
-                  Observable.throw(new Error('No config file found'));
+                  observableThrowError(new Error('No config file found'));
                 }
               },
               error => {
                 // observer.next(error);
                 // observer.complete();
-                Observable.throw(new Error('No config file found'));
+                observableThrowError(new Error('No config file found'));
               });
     });
   }
