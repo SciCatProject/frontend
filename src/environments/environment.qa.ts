@@ -3,4 +3,5 @@ export const environment = {
   lbBaseURL: 'https://dacat-qa.psi.ch',
   archiveWorkflowEnabled: true,
   externalAuthEndpoint: '/auth/msad',
+  facility: 'PSI'
 };
