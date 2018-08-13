@@ -1,6 +1,5 @@
 import { Component, Inject, OnInit, ViewEncapsulation } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material";
-import { EditPolicy } from "../archive-settings/EditPolicy";
 import { FormBuilder, Validators, FormGroup } from "@angular/forms";
 import { Policy } from 'state-management/models';
 

@@ -27,6 +27,7 @@ import {UsersModule} from 'users/users.module';
 import {ProposalsModule} from 'proposals/proposals.module';
 import { PoliciesModule} from 'policies/policies.module'
 import {SatDatepickerModule, SatNativeDateModule} from 'saturn-datepicker';
+import { PoliciesEffects } from 'state-management/effects/policies.effects';
 
 
 import {
@@ -58,7 +59,7 @@ export function localStorageSyncWrapper(reducer: any) {
     JobsTableComponent,
     SampleDataFormComponent,
     JobsDetailComponent
-    
+
   ],
   imports: [
     AppRoutingModule,

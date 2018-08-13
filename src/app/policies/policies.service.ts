@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 
 import { PolicyApi } from 'shared/sdk/services';
 import { Policy } from 'shared/sdk/models';

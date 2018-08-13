@@ -30,7 +30,6 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatChipsModule } from '@angular/material/chips';
 import { SharedCatanieModule } from 'shared/shared.module';
 
-import { MatDatepickerModule } from 'saturn-datepicker';
 
 import { StoreModule } from '@ngrx/store';
 import { policiesReducer } from 'state-management/reducers/policies.reducer';
@@ -43,7 +42,7 @@ import { policiesReducer } from 'state-management/reducers/policies.reducer';
     CommonModule, MatCardModule, MatPaginatorModule, MatCheckboxModule, MatTableModule, MatFormFieldModule, MatAutocompleteModule,
     MatTabsModule, MatInputModule, MatButtonModule, MatSortModule, CommonModule, FormsModule, ReactiveFormsModule,
     SharedCatanieModule, MatSelectModule, MatOptionModule, MatNativeDateModule, MatIconModule,
-    MatListModule, MatDatepickerModule, MatTooltipModule, MatButtonToggleModule, MatProgressSpinnerModule, MatChipsModule,
+    MatListModule, MatTooltipModule, MatButtonToggleModule, MatProgressSpinnerModule, MatChipsModule,
       StoreModule.forFeature('policies', policiesReducer), MatDialogModule,
 
   ],

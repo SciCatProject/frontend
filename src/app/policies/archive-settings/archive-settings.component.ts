@@ -15,7 +15,7 @@ import { SharedCatanieModule } from 'shared/shared.module';
 import { StoreModule } from '@ngrx/store';
 import { Store, select } from '@ngrx/store';
 import { policiesReducer } from 'state-management/reducers/policies.reducer';
-import { Observable } from 'rxjs/Observable';
+//import { Observable } from 'rxjs/Observable';
 import {
 
   FetchPoliciesAction,

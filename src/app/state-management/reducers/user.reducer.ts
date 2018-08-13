@@ -1,6 +1,6 @@
 import { Action } from '@ngrx/store';
 import { initialUserState, UserState } from 'state-management/state/user.store';
-import 'rxjs/add/operator/switchMap';
+import {switchMap} from 'rxjs/operators';
 
 import {
     SHOW_MESSAGE,

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { Action, Store, select } from '@ngrx/store';
 import { Angular5Csv } from 'angular5-csv/Angular5-csv';
@@ -42,7 +42,7 @@ submitPolicy$: Observable<Action> =
         map(res =>new SubmitPolicyCompleteAction(res))
       );
     }),
-    catchError(err => Observable.of(new SubmitPolicyFailedAction(err))
+    catchError(err => of(new SubmitPolicyFailedAction(err))
     ));
 
    @Effect()
@@ -52,7 +52,7 @@ submitPolicy$: Observable<Action> =
         switchMap((action) =>
           this.policiesService.getPolicies().pipe(
             map(policies => new FetchPoliciesCompleteAction(policies)),
-            catchError(err => Observable.of(new FetchPoliciesFailedAction()))
+            catchError(err => of(new FetchPoliciesFailedAction()))
 
 
 
