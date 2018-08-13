@@ -15,8 +15,25 @@ export const FETCH_POLICIES = '[Policy] Fetch Policies';
 export const FETCH_POLICIES_COMPLETE = '[Policy] Fetch Policies Complete';
 export const FETCH_POLICIES_FAILED = '[Policy] Fetch Policies Failed';
 
+export const SUBMIT_POLICY = '[Policy] Submit policy settings';
+export const SUBMIT_POLICY_COMPLETE = '[Policy] Submit policy settings complete';
+export const SUBMIT_POLICY_FAILED = '[Policy] Submit failed';
 
 
+export class SubmitPolicyAction implements Action {
+    readonly type = SUBMIT_POLICY;
+    constructor(readonly policy: Policy) {}
+}
+
+export class SubmitPolicyCompleteAction implements Action {
+    readonly type = SUBMIT_POLICY_COMPLETE;
+    constructor(readonly policy: Policy) {}
+}
+
+export class SubmitPolicyFailedAction implements Action {
+    readonly type = SUBMIT_POLICY_FAILED;
+    constructor(readonly error: Error) {}
+}
 
 
 export class SelectPolicyAction implements Action {
@@ -52,10 +69,15 @@ export type FetchPoliciesOutcomeAction =
   FetchPoliciesCompleteAction |
   FetchPoliciesFailedAction;
 
+  export type SubmitPoliciesOutcomeAction =
+    SubmitPolicyCompleteAction |
+    SubmitPolicyFailedAction;
+
 
 export type PoliciesActions =
   SelectPolicyAction | DeselectPolicyAction | FetchPoliciesAction |
   FetchPoliciesCompleteAction | FetchPoliciesFailedAction | FetchPoliciesOutcomeAction | ClearSelectionAction
+  | SubmitPolicyAction | SubmitPolicyCompleteAction | SubmitPolicyFailedAction
 
 
   // New filtering actions

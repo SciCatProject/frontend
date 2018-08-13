@@ -10,7 +10,10 @@ import {
   FetchPoliciesOutcomeAction,
   FETCH_POLICIES, FetchPoliciesAction,
   FETCH_POLICIES_COMPLETE, FetchPoliciesCompleteAction,
-  FETCH_POLICIES_FAILED, FetchPoliciesFailedAction
+  FETCH_POLICIES_FAILED, FetchPoliciesFailedAction,
+  SUBMIT_POLICY, SubmitPolicyAction,
+  SUBMIT_POLICY_COMPLETE, SubmitPolicyCompleteAction,
+  SUBMIT_POLICY_FAILED, SubmitPolicyFailedAction
 } from '../actions/policies.actions';
 import { map, switchMap, tap, mergeMap, catchError, withLatestFrom } from 'rxjs/operators';
 
@@ -28,6 +31,19 @@ export class PoliciesEffects {
     .do((action) => console.log("Received!!!!!!! "))
     .filter((action) => action.type === PoliciesActions.FETCH_POLICIES)
 */
+
+@Effect()
+submitPolicy$: Observable<Action> =
+  this.actions$.pipe(
+    ofType(SUBMIT_POLICY),
+    map((action: SubmitPolicyAction) => action.policy),
+    switchMap((policy) => {
+      return this.policyApi.patchAttributes(policy.id, policy).pipe(
+        map(res =>new SubmitPolicyCompleteAction(res))
+      );
+    }),
+    catchError(err => Observable.of(new SubmitPolicyFailedAction(err))
+    ));
 
    @Effect()
     fetchPolicies$: Observable<Action> =

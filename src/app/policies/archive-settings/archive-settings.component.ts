@@ -19,7 +19,11 @@ import { Observable } from 'rxjs/Observable';
 import {
 
   FetchPoliciesAction,
-  FetchPoliciesCompleteAction
+  FetchPoliciesCompleteAction,
+  SelectPolicyAction,
+  DeselectPolicyAction,
+  SubmitPolicyAction,
+  SubmitPolicyCompleteAction
 
 } from 'state-management/actions/policies.actions';
 //import * as selectors from 'state-management/selectors';
@@ -80,7 +84,7 @@ export class ArchiveSettingsComponent implements OnInit {
 
   @Output() private onClick: EventEmitter<Policy> = new EventEmitter();
   //@Output() private onSelect: EventEmitter<Policy> = new EventEmitter();
-  @Output() private onDeselect: EventEmitter<Policy> = new EventEmitter();
+  //@Output() private onDeselect: EventEmitter<Policy> = new EventEmitter();
   @Output() private onSortChange: EventEmitter<SortChangeEvent> = new EventEmitter();
 
   private pageSizeOptions: number[] = [30, 1000];
@@ -121,17 +125,11 @@ export class ArchiveSettingsComponent implements OnInit {
 
       })
 
-  /*  this.store
-      .select(getSelectedPolicies)
+    this.store.pipe(select(getSelectedPolicies))
       .subscribe(data => {
         this.selectedPolicies = data as Policy[];
-      });*/
 
-      this.store.pipe(select(getSelectedPolicies))
-        .subscribe(data => {
-              this.selectedPolicies = data as Policy[];
-
-        });
+      });
 
 
 
@@ -149,32 +147,29 @@ export class ArchiveSettingsComponent implements OnInit {
     dialogConfig.panelClass;
     dialogConfig.direction = "rtl";
 
-    dialogConfig.data = this.policies;
+    dialogConfig.data = this.selectedPolicies;
 
     const dialogRef = this.dialog.open(EditDialogComponent, dialogConfig);
 
     dialogRef.afterClosed().subscribe(
-      val => console.log("Dialog output:", val)
+      val => this.onClose(val)
     );
   }
-  /*  const dialogRef = this.dialog.open(DialogComponent, {
-      width: 'auto',
-      data: { title: 'Edit Archive Policy', question: '' }
-    });
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
 
+  private onClose(result: any) {
+    if (result) {
+      for (let policy of this.selectedPolicies) {
+        policy.autoArchive = result.autoArchive;
+        this.store.dispatch(new SubmitPolicyAction(policy));
       }
-       //this.dialog.onClose.emit(result);
-    });*/
-
-  //}
-
-  private onClose() {
-
+    }
   }
 
+
+  /*  if (result) {
+      console.log("val: ", result);
+      this.store.dispatch(new SubmitPolicyAction(result));*/
 
   private getDisplayedColumns(): string[] {
 
@@ -187,10 +182,11 @@ export class ArchiveSettingsComponent implements OnInit {
   }
 
   private handleSelect(event: MatCheckboxChange, policy: Policy): void {
+    console.log("handleSelect!!");
     if (event.checked) {
       this.onSelect(policy);
     } else {
-      this.onDeselect.emit(policy);
+      this.onDeselect(policy);
     }
   }
 
@@ -211,10 +207,13 @@ export class ArchiveSettingsComponent implements OnInit {
   }
 
   onSelect(policy: Policy): void {
-    //to do
-    // write action for select/ deselect
-    //  this.store.dispatch(new dsa.SelectDatasetAction(dataset));
+    this.store.dispatch(new SelectPolicyAction(policy));
   }
+
+  onDeselect(policy: Policy): void {
+    this.store.dispatch(new DeselectPolicyAction(policy));
+  }
+
   private onEditClick() {
     this.openDialog();
   }

@@ -9,34 +9,46 @@
   <button mat-button [mat-dialog-close]="data" tabindex="2">Ok</button>
   <button mat-button (click)="onNoClick()" tabindex="-1">No Thanks</button>
 </div>-->
+<mat-card>
+<form autofocus>
 
-<h1 mat-dialog-title align="center">Edit Archive Settings</h1>
-<h2 mat-dialog-title align="left">Groups {{ownerGroup}}</h2>
 
 
-<mat-dialog-content [formGroup]="form">
+<mat-dialog-content [formGroup]="form" autofocus>
+  <h1 mat-dialog-title align="center">Edit Archive Settings</h1>
+  <li > {{ownerGroups}}</li>
 
-    <mat-form-field>
-        <input matInput
-                placeholder="ownerGroup"
-               formControlName="ownerGroup">
-    </mat-form-field>
-    <mat-select placeholder="Select archiveDelay"
-    formControlName="archiveDelay">
-
+  <!--mat-form-field>
+    <input matInput placeholder="ownerGroups" formControlName="ownerGroups">
+  </mat-form-field-->
+  <!--mat-form-field>
+  <mat-select placeholder="Select archiveDelay" formControlName="archiveDelay">
+    < make configurable>
     <mat-option value="1">
-        1</mat-option>
+      1</mat-option>
     <mat-option value="2">
-        2</mat-option>
+      2</mat-option>
     <mat-option value="7">
-        7</mat-option>
+      7</mat-option>
 
-</mat-select>
-      ....
+
+  </mat-select>
+  </mat-form-field-->
+  <mat-form-field>
+  <mat-select placeholder="Auto Archive" formControlName="autoArchive" aria-label="Auto Archive">
+    <mat-option value=true>
+      True</mat-option>
+    <mat-option value=false>
+      False</mat-option>
+  </mat-select>
+  </mat-form-field>
+  ....
 
 </mat-dialog-content>
 
 <mat-dialog-actions>
-    <button class="mat-raised-button"(click)="close()">Close</button>
-    <button class="mat-raised-button mat-primary"(click)="save()">Save</button>
+  <button class="mat-raised-button" (click)="close()">Close</button>
+  <button class="mat-raised-button mat-primary" (click)="save()">Save</button>
 </mat-dialog-actions>
+</form>
+</mat-card>

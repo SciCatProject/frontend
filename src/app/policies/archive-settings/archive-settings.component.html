@@ -23,8 +23,8 @@
     <!-- Column Definitions -->
     <ng-container matColumnDef="select">
       <mat-header-cell *matHeaderCellDef>
-        <<mat-checkbox [checked]="allAreSelected()" (change)="handleSelectAll($event)">
-          </mat-checkbox>
+        <mat-checkbox [checked]="allAreSelected()" (change)="handleSelectAll($event)">
+        </mat-checkbox>
       </mat-header-cell>
       <mat-cell *matCellDef="let row">
         <mat-checkbox [checked]="isChecked(row)" (change)="handleSelect($event, row)" (click)="$event.stopPropagation()">
@@ -32,6 +32,20 @@
       </mat-cell>
     </ng-container>
 
+    <!--<ng-container matColumnDef="auto archive">
+      <mat-header-cell *matHeaderCellDef>auto archive</mat-header-cell>
+      <mat-cell *matCellDef="let policy">
+        <mat-checkbox>
+          {{policy.autoArchive}}
+        </mat-checkbox>
+      </mat-cell>
+    </ng-container>-->
+
+
+    <ng-container matColumnDef="auto archive">
+      <mat-header-cell *matHeaderCellDef>auto archive</mat-header-cell>
+      <mat-cell *matCellDef="let policy">{{policy.autoArchive}}</mat-cell>
+    </ng-container>
 
 
     <ng-container matColumnDef="notification email">
@@ -63,10 +77,6 @@
     </ng-container>
 
 
-    <ng-container matColumnDef="auto archive">
-      <mat-header-cell *matHeaderCellDef>auto archive</mat-header-cell>
-      <mat-cell *matCellDef="let policy">{{policy.autoArchive}}</mat-cell>
-    </ng-container>
 
     <!-- End of Column Definitions -->
 
