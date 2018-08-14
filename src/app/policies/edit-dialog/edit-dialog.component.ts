@@ -25,7 +25,7 @@ export class EditDialogComponent implements OnInit {
     this.form = fb.group({
       ownerGroups: [data.map(function(o) { return o.ownerGroup; }), Validators.required],
       autoArchive: [data.autoArchive, Validators.required],
-      archiveDelay: [data.archiveDelay, Validators.required]
+      //archiveDelay: [data.archiveDelay, Validators.required]
     });
 
   }

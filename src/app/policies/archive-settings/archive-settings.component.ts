@@ -156,20 +156,32 @@ export class ArchiveSettingsComponent implements OnInit {
     );
   }
 
-
   private onClose(result: any) {
     if (result) {
-      for (let policy of this.selectedPolicies) {
+      var selected = [];
+      //deep copy
+      selected = JSON.parse(JSON.stringify(this.selectedPolicies));
+      console.log("1: ", selected);
+      for (let policy of selected) {
         policy.autoArchive = result.autoArchive;
+        console.log("2: ", policy);
         this.store.dispatch(new SubmitPolicyAction(policy));
+        this.store.dispatch(new FetchPoliciesAction());
       }
     }
   }
 
+  /*
+    private onClose(result: any) {
+      if (result) {
+        for (let policy of this.selectedPolicies) {
+          policy.autoArchive = result.autoArchive;
+          this.store.dispatch(new SubmitPolicyAction(policy));
+        }
+      }
+    }
 
-  /*  if (result) {
-      console.log("val: ", result);
-      this.store.dispatch(new SubmitPolicyAction(result));*/
+  */
 
   private getDisplayedColumns(): string[] {
 
