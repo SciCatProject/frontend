@@ -1,17 +1,18 @@
-import {APP_CONFIG, AppConfig} from './app-config.module';
-import {MatSidenav} from '@angular/material/sidenav';
-import {Component, Inject, OnDestroy, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
-import {Router} from '@angular/router';
-import {Store} from '@ngrx/store';
-import {LoopBackConfig} from 'shared/sdk';
-import {UserApi} from 'shared/sdk/services';
+import { APP_CONFIG, AppConfig } from './app-config.module';
+import { MatSidenav } from '@angular/material/sidenav';
+import { Component, Inject, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Router } from '@angular/router';
+import { Store, select } from '@ngrx/store';
+import { LoopBackConfig } from 'shared/sdk';
+import { UserApi } from 'shared/sdk/services';
 import * as ua from 'state-management/actions/user.actions';
-import {MatSnackBar} from '@angular/material';
-import {Title} from '@angular/platform-browser';
-import {environment} from '../environments/environment';
+import { MatSnackBar } from '@angular/material';
+import { Title } from '@angular/platform-browser';
+import { environment } from '../environments/environment';
 import * as selectors from 'state-management/selectors';
+import { getCurrentUser } from 'state-management/selectors/users.selectors';
 
-const {version: appVersion} = require('../../package.json');
+const { version: appVersion } = require('../../package.json');
 
 
 // import { NotificationsService } from 'angular2-notifications';
@@ -26,6 +27,7 @@ const {version: appVersion} = require('../../package.json');
 export class AppComponent implements OnDestroy, OnInit {
 
   @ViewChild('sidenav') sidenav: MatSidenav;
+  private userObs$ = this.store.pipe(select(getCurrentUser));
 
   title = 'SciCat';
   appVersion = 0;
@@ -45,11 +47,11 @@ export class AppComponent implements OnDestroy, OnInit {
   };
 
   constructor(private router: Router,
-              private titleService: Title,
-              public snackBar: MatSnackBar,
-              // private _notif_service: NotificationsService,
-              @Inject(APP_CONFIG) private appConfig: AppConfig,
-              private store: Store<any>) {
+    private titleService: Title,
+    public snackBar: MatSnackBar,
+    // private _notif_service: NotificationsService,
+    @Inject(APP_CONFIG) private appConfig: AppConfig,
+    private store: Store<any>) {
     this.appVersion = appVersion;
     this.darkTheme$ = this.store.select(selectors.users.getTheme);
     const facility = this.appConfig.facility;
@@ -95,17 +97,21 @@ export class AppComponent implements OnDestroy, OnInit {
       }));
     this.subscriptions.push(this.store.select(state => state.root.user.currentUser)
       .subscribe(current => {
-        if (current && current.user) {
-          this.username = current.user.username.replace('ms-ad.', '');
-          if (!('realm' in current)) {
-            //this.store.dispatch(new dsa.AddGroupsAction(current.id));
-            this.store.dispatch(new ua.AccessUserEmailAction(current.id));
-            // TODO handle dataset loading
-          }
-        } else {
-          this.username = null;
-        }
-      }));
+            //console.log("current.user.username: ", current.user.username);
+            //console.log("state.root.user: ", state.root.user.loggedIn);
+            console.log("current: ", current);
+            if (current) {
+              if (('username' in current)) {
+                this.username = current.username.replace('ms-ad.', '');
+                //this.store.dispatch(new dsa.AddGroupsAction(current.id));
+                //this.username = this.username;
+                this.store.dispatch(new ua.AccessUserEmailAction(current.id));
+                // TODO handle dataset loading
+              }
+            } else {
+              this.username = null;
+            }
+          }));
 
     this.store.dispatch(new ua.RetrieveUserAction());
   }

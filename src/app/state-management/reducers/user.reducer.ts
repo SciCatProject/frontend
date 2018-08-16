@@ -30,7 +30,7 @@ export function userReducer(state = initialUserState, action: Action): UserState
 
         case LOGIN_COMPLETE: {
             const currentUser = (action as LoginCompleteAction).user;
-            return {...state, currentUser, isLoggingIn: false};
+            return {...state, currentUser, isLoggingIn: false, loggedIn: true};
         }
 
         case ACCESS_USER_EMAIL_COMPLETE: {
@@ -40,7 +40,7 @@ export function userReducer(state = initialUserState, action: Action): UserState
         }
 
         case LOGIN_FAILED: {
-            return {...state, isLoggingIn: false};
+            return {...state, isLoggingIn: false, loggedIn: false};
         }
 
         case SHOW_MESSAGE: {
@@ -66,7 +66,7 @@ export function userReducer(state = initialUserState, action: Action): UserState
         }
         case AD_LOGIN_COMPLETE:
         default: {
-            return state;
+            return {...state, isLoggingIn: false, loggedIn: true};
         }
     }
 }
