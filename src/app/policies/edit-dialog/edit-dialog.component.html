@@ -1,0 +1,54 @@
+<!--<h1 mat-dialog-title>{{data.title}}</h1>
+<div mat-dialog-content>
+  <p>{{data.question}}</p>
+  <mat-form-field *ngIf="data.input">
+    <input matInput tabindex="1" [(ngModel)]="data.input">
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button mat-button [mat-dialog-close]="data" tabindex="2">Ok</button>
+  <button mat-button (click)="onNoClick()" tabindex="-1">No Thanks</button>
+</div>-->
+<mat-card>
+<form autofocus>
+
+
+
+<mat-dialog-content [formGroup]="form" autofocus>
+  <h1 mat-dialog-title align="center">Edit Archive Settings</h1>
+  <li > {{ownerGroups}}</li>
+
+  <!--mat-form-field>
+    <input matInput placeholder="ownerGroups" formControlName="ownerGroups">
+  </mat-form-field-->
+  <!--mat-form-field>
+  <mat-select placeholder="Select archiveDelay" formControlName="archiveDelay">
+    < make configurable>
+    <mat-option value="1">
+      1</mat-option>
+    <mat-option value="2">
+      2</mat-option>
+    <mat-option value="7">
+      7</mat-option>
+
+
+  </mat-select>
+  </mat-form-field-->
+  <mat-form-field>
+  <mat-select placeholder="Auto Archive" formControlName="autoArchive" aria-label="Auto Archive">
+    <mat-option value=true>
+      True</mat-option>
+    <mat-option value=false>
+      False</mat-option>
+  </mat-select>
+  </mat-form-field>
+  ....
+
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button class="mat-raised-button" (click)="close()">Close</button>
+  <button class="mat-raised-button mat-primary" (click)="save()">Save</button>
+</mat-dialog-actions>
+</form>
+</mat-card>

@@ -26,7 +26,7 @@ const getCurrentUserAccountType = createSelector(
 export const getIsAdmin = createSelector(
     getCurrentUserName,
     getCurrentUserAccountType,
-    (name, type) => 
+    (name, type) =>
         name && ['ingestor', 'admin', 'archiveManager'].indexOf(name) !== -1 ||
         type && type === 'functional'
 )
@@ -43,4 +43,3 @@ export const getCurrentUserGroups = (state: any) => state.root.user.currentUserG
 export const getSettings = (state: any) => state.root.user.settings;
 export const getTapeCopies = (state: any) => state.root.user.settings.tapeCopies;
 export const getTheme = (state: any) => state.root.user.settings.darkTheme;
-

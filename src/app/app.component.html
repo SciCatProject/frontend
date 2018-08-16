@@ -16,6 +16,10 @@
         </mat-list-item>
 
         <mat-list-item>
+        <a class="item" (click)="sidenav.close()" [routerLink]="['/archive-settings/']" [routerLinkActive]="['active']">Archive Settings</a>
+        </mat-list-item>
+
+        <mat-list-item>
           <a class="item" (click)="sidenav.close()" [routerLink]="['/user/','jobs']" [routerLinkActive]="['active']">Jobs</a>
         </mat-list-item>
 
@@ -36,7 +40,7 @@
     <mat-sidenav-content>
       <mat-toolbar color="primary">
         <mat-toolbar-row>
-          <ng-container> 
+          <ng-container *ngIf="userObs$ | async as boolean"> 
             <i (click)="sidenavToggle()"  class="sidenav-toggle fa fa-bars" aria-hidden="true"></i>
           </ng-container>
           <h3 class="app-title">{{title}}</h3>
