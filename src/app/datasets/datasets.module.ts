@@ -41,12 +41,12 @@ import { MatChipsModule } from '@angular/material/chips';
 import { SharedCatanieModule } from 'shared/shared.module';
 import { SelectedListComponent } from 'datasets/selected-list/selected-list.component';
 import { SatDatepickerModule } from 'saturn-datepicker';
-import { DatasetBatchComponent } from './dataset-batch/dataset-batch.component';
 import { StoreModule } from '@ngrx/store';
 import { datasetsReducer } from 'state-management/reducers/datasets.reducer';
 import { FileSizePipe } from './filesize.pipe';
 import { BatchViewComponent } from './batch-view/batch-view.component';
 import { RouterModule } from '@angular/router';
+import { BatchCardComponent } from './batch-card/batch-card.component';
 
 @NgModule({
   imports : [
@@ -61,7 +61,7 @@ import { RouterModule } from '@angular/router';
     FilePickerComponent, FileDropzoneComponent,
     DashboardComponent, DatasetTableComponent, DatablocksComponent,
     DatafilesComponent, DatasetsFilterComponent, DatasetDetailComponent, SelectedListComponent,
-    FileSizePipe, DatasetBatchComponent, BatchViewComponent,
+    FileSizePipe, BatchCardComponent, BatchViewComponent,
   ],
   providers : [ DatasetService ],
   exports : [ DatasetTableComponent, DatasetsFilterComponent ]

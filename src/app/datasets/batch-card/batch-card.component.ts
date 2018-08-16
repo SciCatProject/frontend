@@ -4,11 +4,11 @@ import { getDatasetsInBatch } from 'state-management/selectors/datasets.selector
 import { map } from 'rxjs/operators';
 
 @Component({
-  selector: 'dataset-batch',
-  templateUrl: './dataset-batch.component.html',
-  styleUrls: ['./dataset-batch.component.scss']
+  selector: 'batch-card',
+  templateUrl: './batch-card.component.html',
+  styleUrls: ['./batch-card.component.scss']
 })
-export class DatasetBatchComponent {
+export class BatchCardComponent {
   private batch$ = this.store.pipe(select(getDatasetsInBatch));
   private batchSize$ = this.batch$.pipe(map(batch => batch.length));
   private nonEmpty$ = this.batchSize$.pipe(map(size => size > 0));
