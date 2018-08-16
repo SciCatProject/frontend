@@ -11,6 +11,7 @@ export interface UserState {
   email: string;
   message: Message;
   settings: Settings;
+  loggedIn: boolean;
 }
 
 export const initialUserState: UserState = {
@@ -24,5 +25,6 @@ export const initialUserState: UserState = {
     'datasetCount': 30,
     'jobCount': 30,
     'darkTheme': false
-  } // TODO sync with server settings?
+  }, // TODO sync with server settings?
+  loggedIn: false,
 };
