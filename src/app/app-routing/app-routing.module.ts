@@ -22,6 +22,7 @@ import {ListProposalsPageComponent} from '../proposals/containers/list-proposals
 import {ViewProposalPageComponent} from '../proposals/containers/view-proposal-page/view-proposal-page.component';
 
 import {AuthCheck} from '../AuthCheck';
+import { BatchViewComponent } from 'datasets/batch-view/batch-view.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/datasets', pathMatch: 'full' },
@@ -30,6 +31,7 @@ export const routes: Routes = [
   
   { path: 'dataset', redirectTo: '/datasets', pathMatch: 'full' },
   { path: 'datasets',  component: DashboardComponent, canActivate: [AuthCheck], },
+  { path: 'datasets/batch', component: BatchViewComponent, canActivate: [AuthCheck] },
   { path: 'dataset/:id', component: DatasetDetailComponent, canActivate: [AuthCheck] },
   { path: 'dataset/:id/datablocks', component: DatablocksComponent, canActivate: [AuthCheck] },
   { path: 'dataset/:id/datafiles', component: DatafilesComponent, canActivate: [AuthCheck] },
