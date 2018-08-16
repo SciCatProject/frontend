@@ -17,7 +17,8 @@ import {
   ClearSelectionAction,
   ChangePageAction,
   SortByColumnAction,
-  SetViewModeAction
+  SetViewModeAction,
+  AddToBatchAction
 } from 'state-management/actions/datasets.actions';
 
 import * as ua from 'state-management/actions/user.actions';
@@ -325,7 +326,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   }
 
   onAddToBatch(): void {
-    this.store.dispatch(new dsa.AddToBatchAction());
-    this.store.dispatch(new dsa.ClearSelectionAction());
+    this.store.dispatch(new AddToBatchAction());
+    this.store.dispatch(new ClearSelectionAction());
   }
 }
