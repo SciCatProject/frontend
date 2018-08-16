@@ -45,6 +45,7 @@ import { DatasetBatchComponent } from './dataset-batch/dataset-batch.component';
 import { StoreModule } from '@ngrx/store';
 import { datasetsReducer } from 'state-management/reducers/datasets.reducer';
 import { FileSizePipe } from './filesize.pipe';
+import { BatchViewComponent } from './batch-view/batch-view.component';
 
 @NgModule({
   imports : [
@@ -59,7 +60,7 @@ import { FileSizePipe } from './filesize.pipe';
     FilePickerComponent, FileDropzoneComponent,
     DashboardComponent, DatasetTableComponent, DatablocksComponent,
     DatafilesComponent, DatasetsFilterComponent, DatasetDetailComponent, SelectedListComponent,
-    FileSizePipe, DatasetBatchComponent
+    FileSizePipe, DatasetBatchComponent, BatchViewComponent,
   ],
   providers : [ DatasetService ],
   exports : [ DatasetTableComponent, DatasetsFilterComponent ]
