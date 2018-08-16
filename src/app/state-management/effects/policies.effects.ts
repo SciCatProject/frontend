@@ -39,7 +39,7 @@ submitPolicy$: Observable<Action> =
     map((action: SubmitPolicyAction) => action.policy),
     switchMap((policy) => {
       return this.policyApi.patchAttributes(policy.id, policy).pipe(
-        map(res =>new SubmitPolicyCompleteAction(res))
+        map(submitComplete =>new SubmitPolicyCompleteAction(submitComplete))
       );
     }),
     catchError(err => of(new SubmitPolicyFailedAction(err))
@@ -53,9 +53,6 @@ submitPolicy$: Observable<Action> =
           this.policiesService.getPolicies().pipe(
             map(policies => new FetchPoliciesCompleteAction(policies)),
             catchError(err => of(new FetchPoliciesFailedAction()))
-
-
-
           )
         )
       );

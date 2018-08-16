@@ -31,7 +31,9 @@ export function policiesReducer(
   switch (action.type) {
 
     case SUBMIT_POLICY_COMPLETE: {
-      return { ...state, policySubmission : null };
+      //const policySubmission = (action as SubmitPolicyCompleteAction).policySubmission;
+      return { ...state, submitComplete: true };
+      //return { ...state, policySubmission : null };
     }
 
     case SUBMIT_POLICY_FAILED: {

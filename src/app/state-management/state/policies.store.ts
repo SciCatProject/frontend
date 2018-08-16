@@ -8,6 +8,7 @@ export interface PolicyState {
     currentPolicy: Policy;
     policySubmission: Policy;
     totalCount: number;
+    submitComplete: boolean;
 
     policiesLoading: boolean;
     error: Error;
@@ -21,6 +22,7 @@ export const initialPolicyState: PolicyState = {
     currentPolicy: null,
     policySubmission: null,
     totalCount: 0,
+    submitComplete: false,
 
     policiesLoading: true,
     error: undefined

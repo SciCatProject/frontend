@@ -27,7 +27,7 @@ export class SubmitPolicyAction implements Action {
 
 export class SubmitPolicyCompleteAction implements Action {
     readonly type = SUBMIT_POLICY_COMPLETE;
-    constructor(readonly policy: Policy) {}
+    constructor(readonly submitComplete : true) {}
 }
 
 export class SubmitPolicyFailedAction implements Action {

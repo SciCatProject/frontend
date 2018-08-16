@@ -15,6 +15,7 @@ import { SharedCatanieModule } from 'shared/shared.module';
 import { StoreModule } from '@ngrx/store';
 import { Store, select } from '@ngrx/store';
 import { policiesReducer } from 'state-management/reducers/policies.reducer';
+import { ActionsSubject } from '@ngrx/store';
 //import { Observable } from 'rxjs/Observable';
 import {
 
@@ -23,7 +24,9 @@ import {
   SelectPolicyAction,
   DeselectPolicyAction,
   SubmitPolicyAction,
-  SubmitPolicyCompleteAction
+  SubmitPolicyCompleteAction,
+  PoliciesActions,
+  SUBMIT_POLICY_COMPLETE
 
 } from 'state-management/actions/policies.actions';
 //import * as selectors from 'state-management/selectors';
@@ -61,16 +64,20 @@ export class ArchiveSettingsComponent implements OnInit {
   private selectedPolicies$ = this.store.pipe(select(getSelectedPolicies));
   public selectedPolicies: Policy[] = [];
   private policies: Policy[] = [];
+  private subscriptions: any;
+
 
   constructor(
+    private actionsSubj: ActionsSubject,
     private store: Store<Policy>,
     private router: Router,
     private route: ActivatedRoute,
     private policiesService: PoliciesService,
     public dialog: MatDialog,
-  ) { }
+  ) {
 
-  subscriptions = [];
+  }
+
   dataSource: MatTableDataSource<any> | null;
 
 
@@ -114,8 +121,6 @@ export class ArchiveSettingsComponent implements OnInit {
   private editEnabled = true;
 
   ngOnInit() {
-    //var policyState$ = this.store.pipe(select(getPolicyState));
-    //console.log("policyState$: ", policyState$);
     this.store.dispatch(new FetchPoliciesAction());
     console.log("policyState$:", this.policyState$);
 
@@ -128,9 +133,13 @@ export class ArchiveSettingsComponent implements OnInit {
     this.store.pipe(select(getSelectedPolicies))
       .subscribe(data => {
         this.selectedPolicies = data as Policy[];
-
       });
 
+    this.subscriptions = this.actionsSubj.subscribe(data => {
+      if (data.type === '[Policy] Submit policy settings complete') {
+        this.store.dispatch(new FetchPoliciesAction());
+      }
+    });
 
 
 
@@ -166,7 +175,7 @@ export class ArchiveSettingsComponent implements OnInit {
         policy.autoArchive = result.autoArchive;
         console.log("2: ", policy);
         this.store.dispatch(new SubmitPolicyAction(policy));
-        this.store.dispatch(new FetchPoliciesAction());
+
       }
     }
   }
