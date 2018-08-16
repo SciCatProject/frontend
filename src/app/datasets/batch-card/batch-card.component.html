@@ -1,5 +1,5 @@
 <mat-card *ngIf="nonEmpty$ | async">
-    <div class="title">Batch Actions</div>
+    <div class="title">Batch</div>
 
     <mat-card-content>
         <div class="count" [ngPlural]="batchSize$ | async">
@@ -17,7 +17,7 @@
 
         <a mat-button routerLink="/datasets/batch" class="button" color="primary">
             <i class="table icon"></i>
-            Checkout
+            Actions
         </a>
     </mat-card-footer>
 </mat-card>
