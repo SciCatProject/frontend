@@ -1,6 +1,6 @@
 ### Scicat documents
 
-For new users, see the user documentation
+For new users, see the user documentation at the link below
 
 [Users](Users)
 
