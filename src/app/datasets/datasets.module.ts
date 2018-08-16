@@ -46,6 +46,7 @@ import { StoreModule } from '@ngrx/store';
 import { datasetsReducer } from 'state-management/reducers/datasets.reducer';
 import { FileSizePipe } from './filesize.pipe';
 import { BatchViewComponent } from './batch-view/batch-view.component';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   imports : [
@@ -54,7 +55,7 @@ import { BatchViewComponent } from './batch-view/batch-view.component';
     SharedCatanieModule, MatSelectModule, MatOptionModule, MatNativeDateModule, MatIconModule,
     MatListModule, SatDatepickerModule, MatTooltipModule, MatButtonToggleModule, MatProgressSpinnerModule, MatChipsModule,
     StoreModule.forFeature('datasets', datasetsReducer),
-    FileHelpersModule, AppConfigModule
+    FileHelpersModule, AppConfigModule, RouterModule
   ],
   declarations : [
     FilePickerComponent, FileDropzoneComponent,
