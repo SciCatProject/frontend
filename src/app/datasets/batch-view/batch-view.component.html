@@ -1,0 +1,37 @@
+<div>
+    <mat-table
+        [dataSource]="batch$"
+    >
+        <ng-container matColumnDef="pid">
+            <mat-header-cell *matHeaderCellDef>PID</mat-header-cell>
+            <mat-cell *matCellDef="let dataset">{{dataset.pid}}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="sourceFolder">
+            <mat-header-cell *matHeaderCellDef>Source Folder</mat-header-cell>
+            <mat-cell *matCellDef="let dataset">{{dataset.sourceFolder}}</mat-cell>  
+        </ng-container>
+
+        <ng-container matColumnDef="size">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>Size</mat-header-cell>
+            <mat-cell *matCellDef="let dataset">
+                {{dataset.size | filesize}}
+            </mat-cell>  
+        </ng-container>
+
+        <ng-container matColumnDef="creationTime">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>Creation Time</mat-header-cell>
+            <mat-cell *matCellDef="let dataset">
+                {{dataset.creationTime | date: 'dd/MM/yyyy HH:mm'}}
+            </mat-cell>  
+        </ng-container>
+
+        <mat-header-row class='datasets-header' *matHeaderRowDef="visibleColumns">
+        </mat-header-row>
+
+        <mat-row
+            *matRowDef="let dataset; columns: visibleColumns"
+        >
+        </mat-row>
+    </mat-table>
+</div>
