@@ -58,7 +58,7 @@ export interface SortChangeEvent {
 })
 export class DatasetTableComponent implements OnInit, OnDestroy {
   private selectedSets$ = this.store.pipe(select(getSelectedDatasets));
-  private datasets$ = this.store.pipe(select(getDatasets));
+  datasets$ = this.store.pipe(select(getDatasets));
 
   private allAreSeleted$ = combineLatest(
     this.datasets$,
@@ -74,12 +74,12 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     this.selectedPids = datasets.map(dataset => dataset.pid);
   });
   
-  private currentPage$ = this.store.pipe(select(getPage));
-  private datasetsPerPage$ = this.store.pipe(select(getDatasetsPerPage));
+  currentPage$ = this.store.pipe(select(getPage));
+  datasetsPerPage$ = this.store.pipe(select(getDatasetsPerPage));
   private mode$ = this.store.pipe(select(getViewMode));
   private isEmptySelection$ = this.store.pipe(select(isEmptySelection));
-  private datasetCount$ = this.store.select(getTotalSets);
-  private loading$ = this.store.pipe(select(getIsLoading));
+  datasetCount$ = this.store.select(getTotalSets);
+  loading$ = this.store.pipe(select(getIsLoading));
   private filters$ = this.store.pipe(select(getFilters));
 
   private modes = ['view', 'archive', 'retrieve'];
@@ -90,7 +90,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     this.selectedSets = selectedSets
   );
 
-  private currentMode: string = 'view';
+  currentMode: string = 'view';
   private modeSubscription = this.mode$.subscribe((mode: ViewMode) => {
     this.currentMode = mode;
   });
@@ -113,11 +113,11 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     'retrieveStatus'
   ];
 
-  private visibleColumns = this.defaultColumns.filter(
+  visibleColumns = this.defaultColumns.filter(
     column => this.appConfig.disabledDatasetColumns.indexOf(column) === -1
   );
 
-  private archiveWorkflowEnabled = this.appConfig.archiveWorkflowEnabled;
+  archiveWorkflowEnabled = this.appConfig.archiveWorkflowEnabled;
 
   constructor(
     private router: Router,
