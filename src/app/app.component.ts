@@ -27,7 +27,7 @@ const { version: appVersion } = require('../../package.json');
 export class AppComponent implements OnDestroy, OnInit {
 
   @ViewChild('sidenav') sidenav: MatSidenav;
-  private userObs$ = this.store.pipe(select(getCurrentUser));
+  userObs$ = this.store.pipe(select(getCurrentUser));
 
   title = 'SciCat';
   appVersion = 0;
