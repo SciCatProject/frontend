@@ -87,7 +87,7 @@
     "typescript": "~2.9.2",
     "webpack": "^4.16.5",
     "zone.js": "^0.8.26"
-  }
+  },
     "greenkeeper": {
     "ignore": [
       "typescript"
