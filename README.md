@@ -4,7 +4,7 @@
 ![scicat-logo](https://github.com/SciCatProject/catanie/blob/develop/src/assets/images/esslogo.png)
 
 [![Build Status](https://travis-ci.org/SciCatProject/catanie.svg?branch=develop)](https://travis-ci.org/SciCatProject/catanie)
-[![DeepScan grade](https://deepscan.io/api/projects/887/branches/19862/badge/grade.svg)](https://deepscan.io/dashboard#view=project&pid=887&bid=19862)
+[![DeepScan grade](https://deepscan.io/api/projects/887/branches/19862/badge/grade.svg)](https://deepscan.io/dashboard#view=project&pid=887&bid=19862) [![Greenkeeper badge](https://badges.greenkeeper.io/SciCatProject/catanie.svg)](https://greenkeeper.io/)
 
 ## Summary
 
