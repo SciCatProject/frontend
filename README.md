@@ -88,8 +88,5 @@ This project is licensed under the GPL License - see the [LICENSE.md](LICENSE.md
 
 ## Acknowledgments
 
-* PSI 
-* ESS
-* MAXIV
-* brightness
+Scicat is developed at PSI, ESS and MAXIV with in-kind funding from ESS and from the European Union Framework Programme for Research and Innovation Horizon 2020, under grant agreement 676548, “BrightnESS”.
 
