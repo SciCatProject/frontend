@@ -1,44 +1,62 @@
-import { MockAuthService, MockStore, MockUserApi } from '../shared/MockStubs';
-import { AccessUserApi, LoopBackAuth, OrigDatablockApi } from '../shared/sdk';
-import {TestBed, inject} from '@angular/core/testing';
-import { Store, StoreModule } from '@ngrx/store';
-import {DatasetService} from './dataset.service';
+import { MockAuthService, MockStore, MockUserApi } from "../shared/MockStubs";
+import { AccessUserApi, LoopBackAuth, OrigDatablockApi } from "../shared/sdk";
+import { inject, TestBed } from "@angular/core/testing";
+import { Store, StoreModule } from "@ngrx/store";
+import { DatasetService } from "./dataset.service";
 
-import {DatasetApi, DatasetLifecycleApi, DatablockApi} from 'shared/sdk/services';
-import {MockDatablockApi, MockDatasetApi, MockDatasetLifecycleApi} from 'shared/MockStubs';
+import {
+  DatablockApi,
+  DatasetApi,
+  DatasetLifecycleApi
+} from "shared/sdk/services";
+import {
+  MockDatablockApi,
+  MockDatasetApi,
+  MockDatasetLifecycleApi
+} from "shared/MockStubs";
 
-describe('DatasetService', () => {
+describe("DatasetService", () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports : [ StoreModule.forRoot({}) ],
-      providers: [DatasetService,
+      imports: [StoreModule.forRoot({})],
+      providers: [
+        DatasetService,
         {
-          provide: DatablockApi, useClass: MockDatablockApi
-        }
-        ,
-        {
-          provide: DatasetApi, useClass: MockDatasetApi
+          provide: DatablockApi,
+          useClass: MockDatablockApi
         },
         {
-          provide: DatasetLifecycleApi, useClass: MockDatasetLifecycleApi
+          provide: DatasetApi,
+          useClass: MockDatasetApi
         },
         {
-          provide: OrigDatablockApi, useClass: MockDatablockApi
+          provide: DatasetLifecycleApi,
+          useClass: MockDatasetLifecycleApi
         },
         {
-          provide: AccessUserApi, useClass: MockUserApi
+          provide: OrigDatablockApi,
+          useClass: MockDatablockApi
         },
         {
-          provide: LoopBackAuth, useClass: MockAuthService
+          provide: AccessUserApi,
+          useClass: MockUserApi
         },
         {
-          provide: Store, useClass: MockStore
+          provide: LoopBackAuth,
+          useClass: MockAuthService
+        },
+        {
+          provide: Store,
+          useClass: MockStore
         }
       ]
     });
   });
 
-  it('should be created', inject([DatasetService], (service: DatasetService) => {
-    expect(service).toBeTruthy();
-  }));
+  it("should be created", inject(
+    [DatasetService],
+    (service: DatasetService) => {
+      expect(service).toBeTruthy();
+    }
+  ));
 });
