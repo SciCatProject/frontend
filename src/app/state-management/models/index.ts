@@ -1,5 +1,5 @@
-import { User, AccessGroup, Job, Dataset, RawDataset, Proposal } from 'shared/sdk/models';
-export { User, AccessGroup, Job, Dataset, RawDataset, Proposal };
+import { User, AccessGroup, Job, Dataset, RawDataset, Proposal, Policy } from 'shared/sdk/models';
+export { User, AccessGroup, Job, Dataset, RawDataset, Proposal, Policy };
 
 import { DatasetInterface } from 'shared/sdk';
 export { DatasetInterface };

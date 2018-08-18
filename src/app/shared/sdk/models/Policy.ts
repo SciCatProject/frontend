@@ -2,9 +2,14 @@
 
 declare var Object: any;
 export interface PolicyInterface {
-  "availability"?: string;
-  "tapeRetentionTime"?: number;
+  "manager"?: Array<any>;
+  "tapeRedundancy"?: string;
+  "autoArchive"?: boolean;
   "autoArchiveDelay"?: number;
+  "archiveEmailNotification"?: boolean;
+  "archiveEmailsToBeNotified"?: Array<any>;
+  "retrieveEmailNotification"?: boolean;
+  "retrieveEmailsToBeNotified"?: Array<any>;
   "ownerGroup": string;
   "accessGroups"?: Array<any>;
   "createdBy"?: string;
@@ -15,9 +20,14 @@ export interface PolicyInterface {
 }
 
 export class Policy implements PolicyInterface {
-  "availability": string;
-  "tapeRetentionTime": number;
+  "manager": Array<any>;
+  "tapeRedundancy": string;
+  "autoArchive": boolean;
   "autoArchiveDelay": number;
+  "archiveEmailNotification": boolean;
+  "archiveEmailsToBeNotified": Array<any>;
+  "retrieveEmailNotification": boolean;
+  "retrieveEmailsToBeNotified": Array<any>;
   "ownerGroup": string;
   "accessGroups": Array<any>;
   "createdBy": string;
@@ -58,20 +68,41 @@ export class Policy implements PolicyInterface {
       path: 'Policies',
       idName: 'id',
       properties: {
-        "availability": {
-          name: 'availability',
+        "manager": {
+          name: 'manager',
+          type: 'Array&lt;any&gt;'
+        },
+        "tapeRedundancy": {
+          name: 'tapeRedundancy',
           type: 'string',
           default: 'low'
         },
-        "tapeRetentionTime": {
-          name: 'tapeRetentionTime',
-          type: 'number',
-          default: 10
+        "autoArchive": {
+          name: 'autoArchive',
+          type: 'boolean'
         },
         "autoArchiveDelay": {
           name: 'autoArchiveDelay',
           type: 'number',
           default: 7
+        },
+        "archiveEmailNotification": {
+          name: 'archiveEmailNotification',
+          type: 'boolean',
+          default: false
+        },
+        "archiveEmailsToBeNotified": {
+          name: 'archiveEmailsToBeNotified',
+          type: 'Array&lt;any&gt;'
+        },
+        "retrieveEmailNotification": {
+          name: 'retrieveEmailNotification',
+          type: 'boolean',
+          default: false
+        },
+        "retrieveEmailsToBeNotified": {
+          name: 'retrieveEmailsToBeNotified',
+          type: 'Array&lt;any&gt;'
         },
         "ownerGroup": {
           name: 'ownerGroup',
