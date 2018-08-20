@@ -54,6 +54,7 @@ import { RawDatasetApi } from './services/custom/RawDataset';
 import { DerivedDatasetApi } from './services/custom/DerivedDataset';
 import { SampleApi } from './services/custom/Sample';
 import { ProposalApi } from './services/custom/Proposal';
+import { PublishedDataApi } from './services/custom/PublishedData';
 import { DatasetLifecycleApi } from './services/custom/DatasetLifecycle';
 import { DatablockApi } from './services/custom/Datablock';
 import { AccessUserApi } from './services/custom/AccessUser';
@@ -101,6 +102,7 @@ export class SDKBrowserModule {
         DerivedDatasetApi,
         SampleApi,
         ProposalApi,
+        PublishedDataApi,
         DatasetLifecycleApi,
         DatablockApi,
         AccessUserApi,

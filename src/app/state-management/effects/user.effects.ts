@@ -100,24 +100,27 @@ export class UserEffects {
     ofType(UserActions.ACCESS_USER_EMAIL),
     map((action: UserActions.AccessUserEmailAction) => action.userId),
     switchMap(userId => {
-      console.log("gm userId 22", userId);
-      this.userIdentitySrv
-        .findOne({ where: { userId: userId } })
-        .subscribe(res => {
-          console.log("getting current user Id", res);
-          console.log("user id email ", res["profile"]["email"]);
-        });
-      this.userSrv
-        .getCurrent()
-        .subscribe(res => console.log("getting current user", res));
+      this.userSrv.getCurrent().subscribe(res => {
+        console.log("getting current user", res);
+        if (res["username"] !== "ingestor") {
+          this.userIdentitySrv
+            .findOne({ where: { userId: userId } })
+            .subscribe(res2 => {
+              console.log("getting current user Id", res2);
+              console.log("user id email ", res2["profile"]["email"]);
+              const xx = new UserActions.AccessUserEmailCompleteAction(
+                res2["profile"]["email"]
+              );
+            });
+        } else {
+          const xx = new UserActions.AccessUserEmailCompleteAction(
+            res["email"]
+          );
+        }
+      });
 
-      return this.userIdentitySrv.findOne({ where: { userId: userId } }).pipe(
-        map(
-          res =>
-            new UserActions.AccessUserEmailCompleteAction(
-              res["profile"]["email"]
-            )
-        ),
+      return this.userSrv.getCurrent().pipe(
+        map(res => new UserActions.AccessUserEmailCompleteAction(res["email"])),
         catchError(err => of(new UserActions.AccessUserEmailFailedAction(err)))
       );
     })
