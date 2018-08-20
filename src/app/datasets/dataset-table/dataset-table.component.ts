@@ -128,15 +128,12 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     public dialog: MatDialog,
     @Inject(APP_CONFIG) private appConfig: AppConfig
   ) {
-    console.log("gm email", this.email$);
-    // const email = this.email$.subscribe(email => email);
-    const email = "gm";
-    console.log("gm email", email);
+    this.email$.subscribe(res => console.log("gm subscribe to email", res));
   }
 
   ngOnInit() {
     this.submitJobSubscription = this.store
-      .select(jobSelectors.submitJob)
+      .pipe(select(jobSelectors.submitJob))
       .subscribe(
         ret => {
           if (ret && Array.isArray(ret)) {
@@ -155,7 +152,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
       );
 
     this.jobErrorSubscription = this.store
-      .select(jobSelectors.getError)
+      .pipe(select(jobSelectors.getError))
       .subscribe(err => {
         if (err) {
           this.store.dispatch(

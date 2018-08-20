@@ -10,9 +10,8 @@ import * as UserActions from "state-management/actions/user.actions";
 import { AppState } from "state-management/state/app.store";
 import { ADAuthService } from "users/adauth.service";
 import { Router } from "@angular/router";
-import { tap, map, switchMap, filter, catchError } from "rxjs/operators";
-import { MessageType } from "../models";
-import { User } from "../models";
+import { catchError, filter, map, switchMap, tap } from "rxjs/operators";
+import { MessageType, User } from "../models";
 
 @Injectable()
 export class UserEffects {
@@ -101,11 +100,16 @@ export class UserEffects {
     ofType(UserActions.ACCESS_USER_EMAIL),
     map((action: UserActions.AccessUserEmailAction) => action.userId),
     switchMap(userId => {
-      return this.userIdentitySrv.find({ where: { userId: userId } }).pipe(
+      console.log("gm userId 22", userId);
+      this.userSrv
+        .getCurrent()
+        .subscribe(res => console.log("getting current user", res));
+
+      return this.userSrv.getCurrent().pipe(
         map(
           res =>
             new UserActions.AccessUserEmailCompleteAction(
-              res["profile"]["email"]
+              res["email"]
             )
         ),
         catchError(err => of(new UserActions.AccessUserEmailFailedAction(err)))
