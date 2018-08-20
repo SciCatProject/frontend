@@ -16,6 +16,10 @@
         </mat-list-item>
 
         <mat-list-item>
+        <a class="item" (click)="sidenav.close()" [routerLink]="['/archive-settings/']" [routerLinkActive]="['active']">Archive Settings</a>
+        </mat-list-item>
+
+        <mat-list-item>
           <a class="item" (click)="sidenav.close()" [routerLink]="['/user/','jobs']" [routerLinkActive]="['active']">Jobs</a>
         </mat-list-item>
 
