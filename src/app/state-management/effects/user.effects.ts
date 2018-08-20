@@ -101,15 +101,21 @@ export class UserEffects {
     map((action: UserActions.AccessUserEmailAction) => action.userId),
     switchMap(userId => {
       console.log("gm userId 22", userId);
+      this.userIdentitySrv
+        .findOne({ where: { userId: userId } })
+        .subscribe(res => {
+          console.log("getting current user Id", res);
+          console.log("user id email ", res["profile"]["email"]);
+        });
       this.userSrv
         .getCurrent()
         .subscribe(res => console.log("getting current user", res));
 
-      return this.userSrv.getCurrent().pipe(
+      return this.userIdentitySrv.findOne({ where: { userId: userId } }).pipe(
         map(
           res =>
             new UserActions.AccessUserEmailCompleteAction(
-              res["email"]
+              res["profile"]["email"]
             )
         ),
         catchError(err => of(new UserActions.AccessUserEmailFailedAction(err)))

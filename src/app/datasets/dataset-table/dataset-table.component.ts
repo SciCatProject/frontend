@@ -250,8 +250,8 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
         )
         .subscribe(user => {
           job.emailJobInitiator = user["email"];
-          user = user["currentUser"];
-          job.jobParams["username"] = user["username"] || undefined;
+          user = user["currentUserIdentity"];
+          job.jobParams["username"] = user["profile"]["username"] || undefined;
           if (!job.emailJobInitiator) {
             job.emailJobInitiator = user["profile"]
               ? user["profile"]["email"]
