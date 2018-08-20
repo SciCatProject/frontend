@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router, ActivatedRoute,} from '@angular/router';
 
 import { Store, select } from '@ngrx/store';
@@ -14,6 +14,7 @@ import {
   FetchDatasetsAction,
   SetTextFilterAction,
   PrefillFiltersAction,
+  PrefillBatchAction,
 } from 'state-management/actions/datasets.actions';
 
 import {
@@ -29,7 +30,7 @@ import { filter, map, take, debounceTime, distinctUntilChanged, combineLatest, s
   templateUrl: 'dashboard.component.html',
   styleUrls: ['dashboard.component.css']
 })
-export class DashboardComponent implements OnDestroy
+export class DashboardComponent implements OnInit, OnDestroy
 {
   constructor(
     private store: Store<any>,
@@ -76,6 +77,10 @@ export class DashboardComponent implements OnDestroy
     this.writeRouteSubscription.unsubscribe();
     this.readRouteSubscription.unsubscribe();
     this.searchTermSubscription.unsubscribe();
+  }
+
+  ngOnInit() {
+    this.store.dispatch(new PrefillBatchAction());
   }
 
   textSearch(terms: string) {

@@ -67,11 +67,14 @@
       </mat-header-cell>
 
       <mat-cell *matCellDef="let dataset">
-        <mat-checkbox
+        <mat-checkbox *ngIf="!isInBatch(dataset); else in_batch"
           [checked]="isSelected(dataset)"
           (change)="onSelect($event, dataset)"
           (click)="$event.stopPropagation()">
         </mat-checkbox>
+        <ng-template #in_batch>
+          <i class="shopping cart icon"></i>
+        </ng-template> 
       </mat-cell>
     </ng-container>
 

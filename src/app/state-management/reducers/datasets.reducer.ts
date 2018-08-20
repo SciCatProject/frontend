@@ -54,7 +54,10 @@ import {
     PrefillFiltersAction,
     SearchIDCompleteAction,
     ADD_TO_BATCH,
+    CLEAR_BATCH,
     SELECT_ALL_DATASETS,
+    PREFILL_BATCH_COMPLETE,
+    PrefillBatchCompleteAction,
 } from 'state-management/actions/datasets.actions';
 
 import { DatasetState, initialDatasetState } from 'state-management/state/datasets.store';
@@ -274,6 +277,16 @@ export function datasetsReducer(state: DatasetState = initialDatasetState, actio
             const batch = [...state.batch, ...addition];
             return {...state, batch};
         }
+
+        case CLEAR_BATCH: {
+            return {...state, batch: []};
+        }
+
+        case PREFILL_BATCH_COMPLETE: {
+            const {batch} = action as PrefillBatchCompleteAction;
+            return {...state, batch};
+        }
+
         default: {
             return state;
         }

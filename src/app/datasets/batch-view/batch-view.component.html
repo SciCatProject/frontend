@@ -1,38 +1,80 @@
-<div>
-    <mat-table
-        [dataSource]="batch$"
-        class="mat-elevation-z2"
-    >
-        <ng-container matColumnDef="pid">
-            <mat-header-cell *matHeaderCellDef>PID</mat-header-cell>
-            <mat-cell *matCellDef="let dataset">{{dataset.pid}}</mat-cell>
-        </ng-container>
+<div style="margin-top: 1em">
+    <div *ngIf="hasBatch$ | async; else empty_batch">
+        <div style="text-align: right; margin-bottom: 1em">
+            <button (click)="onEmpty()" mat-button class="button" color="primary">
+                <i class="eraser icon icon"></i>
+                Empty Batch
+            </button>
+            <button mat-button class="button" color="primary">
+                <i class="graduation cap upload icon"></i>
+                Publish
+            </button>
+            <button mat-button class="button" color="primary">
+                <i class="table icon"></i>
+                Export as CSV
+            </button>
+            <button mat-button class="button" color="primary">
+                <i class="archive icon"></i>
+                Archive
+            </button>
+            <button mat-button class="button" color="primary">
+                <i class="archive icon"></i>
+                Retrieve
+            </button>
+        </div>
 
-        <ng-container matColumnDef="sourceFolder">
-            <mat-header-cell *matHeaderCellDef>Source Folder</mat-header-cell>
-            <mat-cell *matCellDef="let dataset">{{dataset.sourceFolder}}</mat-cell>  
-        </ng-container>
-
-        <ng-container matColumnDef="size">
-            <mat-header-cell *matHeaderCellDef mat-sort-header>Size</mat-header-cell>
-            <mat-cell *matCellDef="let dataset">
-                {{dataset.size | filesize}}
-            </mat-cell>  
-        </ng-container>
-
-        <ng-container matColumnDef="creationTime">
-            <mat-header-cell *matHeaderCellDef mat-sort-header>Creation Time</mat-header-cell>
-            <mat-cell *matCellDef="let dataset">
-                {{dataset.creationTime | date: 'dd/MM/yyyy HH:mm'}}
-            </mat-cell>  
-        </ng-container>
-
-        <mat-header-row class='datasets-header' *matHeaderRowDef="visibleColumns">
-        </mat-header-row>
-
-        <mat-row
-            *matRowDef="let dataset; columns: visibleColumns"
+        <mat-table
+            [dataSource]="batch$"
+            class="mat-elevation-z2"
+            style="margin-left: 1em"
         >
-        </mat-row>
-    </mat-table>
+            <ng-container matColumnDef="select">
+                <mat-header-cell *matHeaderCellDef>
+                    <mat-checkbox>
+                    </mat-checkbox>
+                </mat-header-cell>
+
+                <mat-cell *matCellDef="let dataset">
+                    <mat-checkbox>
+                    </mat-checkbox>
+                </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="pid">
+                <mat-header-cell *matHeaderCellDef>PID</mat-header-cell>
+                <mat-cell *matCellDef="let dataset">{{dataset.pid}}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="sourceFolder">
+                <mat-header-cell *matHeaderCellDef>Source Folder</mat-header-cell>
+                <mat-cell *matCellDef="let dataset">{{dataset.sourceFolder}}</mat-cell>  
+            </ng-container>
+
+            <ng-container matColumnDef="size">
+                <mat-header-cell *matHeaderCellDef>Size</mat-header-cell>
+                <mat-cell *matCellDef="let dataset">
+                    {{dataset.size | filesize}}
+                </mat-cell>  
+            </ng-container>
+
+            <ng-container matColumnDef="creationTime">
+                <mat-header-cell *matHeaderCellDef>Creation Time</mat-header-cell>
+                <mat-cell *matCellDef="let dataset">
+                    {{dataset.creationTime | date: 'dd/MM/yyyy HH:mm'}}
+                </mat-cell>  
+            </ng-container>
+
+            <mat-header-row class='datasets-header' *matHeaderRowDef="visibleColumns">
+            </mat-header-row>
+
+            <mat-row
+                *matRowDef="let dataset; columns: visibleColumns"
+            >
+            </mat-row>
+        </mat-table>
+    </div>
+
+    <ng-template #empty_batch>
+        There are no datasets in the batch.
+    </ng-template>
 </div>

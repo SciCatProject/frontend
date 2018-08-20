@@ -12,6 +12,7 @@ import {MatSnackBar} from '@angular/material';
 
 import {environment} from '../environments/environment';
 import * as selectors from 'state-management/selectors';
+import { PrefillBatchAction } from 'state-management/actions/datasets.actions';
 
 @Component({
   selector: 'app-root',
@@ -62,7 +63,7 @@ export class AppComponent implements OnDestroy, OnInit {
       LoopBackConfig.setApiVersion(lbApiVersion);
     }
 
-    localStorage.clear();
+    // localStorage.clear();
     if (window.location.pathname.indexOf('logout') !== -1) {
       this.logout();
       // this.router.navigate(['/login']);

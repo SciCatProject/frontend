@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, combineLatest } from 'rxjs';
 import { of } from 'rxjs';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { Action, Store, select } from '@ngrx/store';
@@ -10,10 +10,12 @@ import {Dataset} from 'state-management/models';
 import {
   getRectangularRepresentation,
   getFullqueryParams,
-  getFullfacetsParams
+  getFullfacetsParams,
+  getDatasetsInBatch
 } from '../selectors/datasets.selectors';
-import { map, switchMap, tap, mergeMap, catchError, withLatestFrom } from 'rxjs/operators';
-
+import { map, switchMap, tap, mergeMap, catchError, withLatestFrom, filter } from 'rxjs/operators';
+import { getCurrentUser } from '../selectors/users.selectors';
+import { LogoutAction, LOGOUT_COMPLETE } from '../actions/user.actions';
 
 @Injectable()
 export class DatasetEffects {
@@ -21,12 +23,30 @@ export class DatasetEffects {
     private actions$: Actions,
     private store: Store<any>,
     private datasetApi: DatasetApi,
-    private datablockApi: DatablockApi,
   ) {}
 
   private fullqueryParams$ = this.store.pipe(select(getFullqueryParams));
   private fullfacetParams$ = this.store.pipe(select(getFullfacetsParams));
   private rectangularRepresentation$ = this.store.pipe(select(getRectangularRepresentation));
+  private datasetsInBatch$ = this.store.pipe(select(getDatasetsInBatch));
+  private currentUser$ = this.store.pipe(select(getCurrentUser));
+
+  private storeBatch(batch: Dataset[], userId: string): void {
+    const json = JSON.stringify(batch);
+    localStorage.setItem("batch", json);
+    localStorage.setItem("batchUser", userId);
+  }
+  
+  private retrieveBatch(ofUserId: string): Dataset[] {
+    const json = localStorage.getItem("batch");
+    const userId = localStorage.getItem("batchUser");
+  
+    if (json != null && userId === ofUserId) {
+      return JSON.parse(json);
+    } else {
+      return [];
+    }
+  }
 
   @Effect()
   private fetchDatasets$: Observable<Action> = this.actions$.pipe(
@@ -100,6 +120,28 @@ export class DatasetEffects {
         );
       })
     );
+
+  @Effect({dispatch: false})
+  protected storeBatch$ = this.actions$.pipe(
+    ofType(DatasetActions.ADD_TO_BATCH, DatasetActions.CLEAR_BATCH),
+    withLatestFrom(this.datasetsInBatch$, this.currentUser$),
+    tap(([, batch, user]) => this.storeBatch(batch, user.id)),
+  );
+
+  @Effect({dispatch: false})
+  protected clearBatchOnLogout$ = this.actions$.pipe(
+    ofType(LOGOUT_COMPLETE),
+    tap(() => this.storeBatch([], null))
+  );
+
+  @Effect()
+  protected prefillBatch$ = this.actions$.pipe(
+    ofType(DatasetActions.PREFILL_BATCH),
+    withLatestFrom(this.currentUser$),
+    filter(([, user]) => user != null),
+    map(([, user]) => this.retrieveBatch(user.id)),
+    map(batch => new DatasetActions.PrefillBatchCompleteAction(batch))
+  );
 
       /*
   @Effect()

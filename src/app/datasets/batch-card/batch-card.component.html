@@ -9,14 +9,14 @@
         </div>
     </mat-card-content>
         
-    <mat-card-footer>
-        <button mat-button class="button" color="primary">
-            <i class="cloud upload icon"></i>
-            Clear
+    <mat-card-footer style="text-align: right">
+        <button mat-button class="button" color="primary" (click)="clear()">
+            <i class="eraser icon"></i>
+            Remove All
         </button>
 
         <a mat-button routerLink="/datasets/batch" class="button" color="primary">
-            <i class="table icon"></i>
+            <i class="arrow circle right icon"></i>
             Actions
         </a>
     </mat-card-footer>

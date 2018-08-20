@@ -74,6 +74,10 @@ export const PREFILL_FILTERS =              '[Dataset] Prefill Filter';
 export const CLEAR_FACETS =                 '[Dataset] Clear Facets';
 
 export const ADD_TO_BATCH =                 '[Dataset] Add to Batch';
+export const CLEAR_BATCH =                  '[Dataset] Clear Batch';
+
+export const PREFILL_BATCH =                '[Dataset] Prefill Batch';
+export const PREFILL_BATCH_COMPLETE =       '[Dataset] Prefill Batch Complete';
 
 export class UpdateFilterAction implements Action { // Inte gjord då den eventuellt ska tas bort
     readonly type = FILTER_UPDATE;
@@ -229,6 +233,20 @@ export class FetchFacetCountsFailedAction implements Action {
 export class AddToBatchAction implements Action {
     readonly type = ADD_TO_BATCH;
 }
+
+export class ClearBatchAction implements Action {
+    readonly type = CLEAR_BATCH;
+}
+
+export class PrefillBatchAction implements Action {
+    readonly type = PREFILL_BATCH;
+}
+
+export class PrefillBatchCompleteAction implements Action {
+    readonly type = PREFILL_BATCH_COMPLETE;
+    constructor(readonly batch: Dataset[]) {}
+}
+
 
 export type Actions =
     UpdateFilterAction |

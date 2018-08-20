@@ -14,8 +14,8 @@ mat-card {
         vertical-align: middle;
     }
 
-    button i {
-        display: inline-flex;
-        vertical-align: middle;
+    // NO idea why this is needed, but otherwise the icon will be wrongly aligned
+    .mat-button i {
+        vertical-align: unset;
     }
 }

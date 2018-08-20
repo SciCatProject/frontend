@@ -33,7 +33,8 @@ import {
   getDatasetsPerPage,
   getIsLoading,
   getTotalSets,
-  getFilters
+  getFilters,
+  getDatasetsInBatch
 } from 'state-management/selectors/datasets.selectors';
 
 import * as jobSelectors from 'state-management/selectors/jobs.selectors';
@@ -58,8 +59,17 @@ export interface SortChangeEvent {
   styleUrls: ['dataset-table.component.scss']
 })
 export class DatasetTableComponent implements OnInit, OnDestroy {
+  
   private selectedSets$ = this.store.pipe(select(getSelectedDatasets));
   private datasets$ = this.store.pipe(select(getDatasets));
+  private batch$ = this.store.pipe(select(getDatasetsInBatch));
+  private currentPage$ = this.store.pipe(select(getPage));
+  private datasetsPerPage$ = this.store.pipe(select(getDatasetsPerPage));
+  private mode$ = this.store.pipe(select(getViewMode));
+  private isEmptySelection$ = this.store.pipe(select(isEmptySelection));
+  private datasetCount$ = this.store.select(getTotalSets);
+  private loading$ = this.store.pipe(select(getIsLoading));
+  private filters$ = this.store.pipe(select(getFilters));
 
   private allAreSeleted$ = combineLatest(
     this.datasets$,
@@ -74,14 +84,11 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   private selectedPidsSubscription = this.selectedSets$.subscribe(datasets => {
     this.selectedPids = datasets.map(dataset => dataset.pid);
   });
-  
-  private currentPage$ = this.store.pipe(select(getPage));
-  private datasetsPerPage$ = this.store.pipe(select(getDatasetsPerPage));
-  private mode$ = this.store.pipe(select(getViewMode));
-  private isEmptySelection$ = this.store.pipe(select(isEmptySelection));
-  private datasetCount$ = this.store.select(getTotalSets);
-  private loading$ = this.store.pipe(select(getIsLoading));
-  private filters$ = this.store.pipe(select(getFilters));
+
+  private inBatchPids: string[] = [];
+  private inBatchPidsSubscription = this.batch$.subscribe(datasets => {
+    this.inBatchPids = datasets.map(dataset => dataset.pid);
+  });
 
   private modes = ['view', 'archive', 'retrieve'];
 
@@ -298,6 +305,10 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
 
   isSelected(dataset: Dataset): boolean {
     return this.selectedPids.indexOf(dataset.pid) !== -1;
+  }
+
+  isInBatch(dataset: Dataset): boolean {
+    return this.inBatchPids.indexOf(dataset.pid) !== -1;
   }
 
   onSelect(event: MatCheckboxChange, dataset: Dataset): void {
