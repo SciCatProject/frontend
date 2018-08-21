@@ -18,16 +18,9 @@ import { Title } from "@angular/platform-browser";
 import { environment } from "../environments/environment";
 import * as selectors from "state-management/selectors";
 import { getCurrentUser } from "state-management/selectors/users.selectors";
+import { PrefillBatchAction } from 'state-management/actions/datasets.actions';
 
 const { version: appVersion } = require("../../package.json");
-
-<<<<<<< HEAD
-import {environment} from '../environments/environment';
-import * as selectors from 'state-management/selectors';
-import { PrefillBatchAction } from 'state-management/actions/datasets.actions';
-=======
-// import { NotificationsService } from 'angular2-notifications';
->>>>>>> 0b8eafae32210620659d09157770b91e0b81ed4e
 
 @Component({
   selector: "app-root",

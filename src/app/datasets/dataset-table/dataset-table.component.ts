@@ -15,11 +15,10 @@ import {
   DeselectDatasetAction,
   ExportToCsvAction,
   SelectAllDatasetsAction,
-  ClearSelectionAction,
-  ChangePageAction,
   SortByColumnAction,
   SetViewModeAction,
-  AddToBatchAction
+  AddToBatchAction,
+  SelectDatasetAction
 } from 'state-management/actions/datasets.actions';
 
 import * as ua from "state-management/actions/user.actions";
@@ -33,8 +32,8 @@ import {
   getPage,
   getSelectedDatasets,
   getTotalSets,
-  getFilters,
-  getDatasetsInBatch
+  getDatasetsInBatch,
+  getViewMode
 } from 'state-management/selectors/datasets.selectors';
 
 import { getCurrentEmail } from "../../state-management/selectors/users.selectors";
@@ -49,6 +48,7 @@ import {
   ViewMode
 } from "state-management/models";
 import { APP_CONFIG, AppConfig } from "app-config.module";
+import { isEmptySelection } from "state-management/selectors/policies.selectors";
 
 export interface PageChangeEvent {
   pageIndex: number;
@@ -78,6 +78,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   private datasetCount$ = this.store.select(getTotalSets);
   private loading$ = this.store.pipe(select(getIsLoading));
   private filters$ = this.store.pipe(select(getFilters));
+  private email$ = this.store.pipe(select(getCurrentEmail));
 
   private allAreSeleted$ = combineLatest(
     this.datasets$,
@@ -109,6 +110,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   );
 
   // These should be made part of the NgRX state management
+  private currentMode: string;
   private modeSubscription = this.mode$.subscribe((mode: ViewMode) => {
     this.currentMode = mode;
   });
