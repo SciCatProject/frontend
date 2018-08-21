@@ -11,7 +11,7 @@ import { AppState } from "state-management/state/app.store";
 import { ADAuthService } from "users/adauth.service";
 import { Router } from "@angular/router";
 import { catchError, filter, map, switchMap, tap } from "rxjs/operators";
-import { MessageType, User } from "../models";
+import { MessageType, User, UserIdentity } from "../models";
 
 @Injectable()
 export class UserEffects {
@@ -33,11 +33,15 @@ export class UserEffects {
           };
 
           // result['user'] = self.loginForm.get('username').value;
+          console.log("AD login ");
           this.authSrv.setToken(res);
           return this.userSrv.getCurrent().pipe(
             switchMap(user => {
               this.authSrv.setUser(user);
               res["user"] = user;
+              this.userIdentitySrv
+                .findOne({ where: { userId: res["user"]["userId"] } })
+                .subscribe(res2 => new UserActions.RetrieveUserIdentityCompleteAction(res2 as UserIdentity));
               return of(new UserActions.LoginCompleteAction(user));
             })
           );
@@ -108,8 +112,9 @@ export class UserEffects {
             .subscribe(res2 => {
               console.log("getting current user Id", res2);
               console.log("user id email ", res2["profile"]["email"]);
-              const xx = new UserActions.AccessUserEmailCompleteAction(
-                res2["profile"]["email"]
+              const userIdentity: UserIdentity = res2 as UserIdentity;
+              const xx = new UserActions.RetrieveUserIdentityCompleteAction(
+                userIdentity
               );
             });
         } else {
@@ -119,8 +124,13 @@ export class UserEffects {
         }
       });
 
-      return this.userSrv.getCurrent().pipe(
-        map(res => new UserActions.AccessUserEmailCompleteAction(res["email"])),
+      return this.userIdentitySrv.findOne({ where: { userId: userId } }).pipe(
+        map(
+          res2 =>
+            new UserActions.AccessUserEmailCompleteAction(
+              res2["profile"]["email"]
+            )
+        ),
         catchError(err => of(new UserActions.AccessUserEmailFailedAction(err)))
       );
     })
@@ -140,6 +150,30 @@ export class UserEffects {
 
       return this.userSrv.getCurrent().pipe(
         map(res => new UserActions.RetrieveUserCompleteAction(res)),
+        catchError(err => of(new UserActions.RetrieveUserFailedAction(err)))
+      );
+    })
+  );
+
+  @Effect()
+  protected retrieveUserIdentity$: Observable<Action> = this.action$.pipe(
+    ofType(UserActions.RETRIEVE_USER_IDENTITY),
+    switchMap(payload => {
+      if (!this.userSrv.isAuthenticated()) {
+        return of(
+          new UserActions.RetrieveUserFailedAction(
+            new Error("No user is logged in")
+          )
+        );
+      }
+
+      return this.userIdentitySrv.findOne({ where: { userId: "sdss" } }).pipe(
+        map(res => {
+          const userIdentity: UserIdentity = res["userIdentity"];
+          return new UserActions.RetrieveUserIdentityCompleteAction(
+            userIdentity
+          );
+        }),
         catchError(err => of(new UserActions.RetrieveUserFailedAction(err)))
       );
     })

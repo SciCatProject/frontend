@@ -1,6 +1,5 @@
-import { Action } from '@ngrx/store';
-import { initialUserState, UserState } from 'state-management/state/user.store';
-import {switchMap} from 'rxjs/operators';
+import { Action } from "@ngrx/store";
+import { initialUserState, UserState } from "state-management/state/user.store";
 
 import {
   SHOW_MESSAGE,
@@ -17,7 +16,9 @@ import {
   LoginCompleteAction,
   AccessUserEmailCompleteAction,
   ShowMessageAction,
-  SaveSettingsAction
+  SaveSettingsAction,
+  RETRIEVE_USER_IDENTITY_COMPLETE,
+  RetrieveUserIdentityCompleteAction
 } from "state-management/actions/user.actions";
 
 export function userReducer(
@@ -30,9 +31,13 @@ export function userReducer(
 
   switch (action.type) {
     case RETRIEVE_USER_COMPLETE: {
-      // TODO check why susbcription does not receive this
       const currentUser = (action as RetrieveUserCompleteAction).user;
       return { ...state, currentUser };
+    }
+
+    case RETRIEVE_USER_IDENTITY_COMPLETE: {
+      const currentUserIdentity = (action as RetrieveUserIdentityCompleteAction).userIdentity;
+      return { ...state, currentUserIdentity };
     }
 
     case LOGIN_COMPLETE: {

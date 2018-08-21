@@ -1,5 +1,5 @@
 import { Action } from "@ngrx/store";
-import { Message, User, Settings } from "../models";
+import { Message, User, UserIdentity, Settings } from "../models";
 
 export const LOGIN = "[User] Login";
 export const LOGIN_COMPLETE = "[User] Login Complete";
@@ -14,6 +14,12 @@ export const AD_LOGIN_COMPLETE = "[User] Active Directory Login Complete";
 export const RETRIEVE_USER = "[User] Retrieve User";
 export const RETRIEVE_USER_COMPLETE = "[User] Retrieve User Complete";
 export const RETRIEVE_USER_FAILED = "[User] Retrieve User Failed";
+
+export const RETRIEVE_USER_IDENTITY = "[UserIdentity] Retrieve User Identity";
+export const RETRIEVE_USER_IDENTITY_COMPLETE =
+  "[UserIdentity] Retrieve User Identity Complete";
+export const RETRIEVE_USER_IDENTITY_FAILED =
+  "[UserIdentity] Retrieve User Identity Failed";
 
 export const ADD_GROUPS = "[User] Add Groups";
 export const ADD_GROUPS_FAILED = "[User] Add Groups Failed";
@@ -72,6 +78,20 @@ export class RetrieveUserFailedAction implements Action {
   constructor(readonly error: Error) {}
 }
 
+export class RetrieveUserIdentityAction implements Action {
+  readonly type = RETRIEVE_USER_IDENTITY;
+}
+
+export class RetrieveUserIdentityCompleteAction implements Action {
+  readonly type = RETRIEVE_USER_IDENTITY_COMPLETE;
+  constructor(readonly userIdentity: UserIdentity) {}
+}
+
+export class RetrieveUserIdentityFailedAction implements Action {
+  readonly type = RETRIEVE_USER_IDENTITY_FAILED;
+  constructor(readonly error: Error) {}
+}
+
 export class AccessUserEmailAction implements Action {
   readonly type = ACCESS_USER_EMAIL;
   constructor(readonly userId: string) {}
@@ -110,6 +130,9 @@ export type Actions =
   | RetrieveUserAction
   | RetrieveUserCompleteAction
   | RetrieveUserFailedAction
+  | RetrieveUserIdentityAction
+  | RetrieveUserIdentityCompleteAction
+  | RetrieveUserIdentityFailedAction
   | ActiveDirLoginAction
   | AccessUserEmailAction
   | AccessUserEmailCompleteAction

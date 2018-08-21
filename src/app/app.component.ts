@@ -1,35 +1,41 @@
-import { APP_CONFIG, AppConfig } from './app-config.module';
-import { MatSidenav } from '@angular/material/sidenav';
-import { Component, Inject, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-import { Router } from '@angular/router';
-import { Store, select } from '@ngrx/store';
-import { LoopBackConfig } from 'shared/sdk';
-import { UserApi } from 'shared/sdk/services';
-import * as ua from 'state-management/actions/user.actions';
-import { MatSnackBar } from '@angular/material';
-import { Title } from '@angular/platform-browser';
-import { environment } from '../environments/environment';
-import * as selectors from 'state-management/selectors';
-import { getCurrentUser } from 'state-management/selectors/users.selectors';
+import { APP_CONFIG, AppConfig } from "./app-config.module";
+import { MatSidenav } from "@angular/material/sidenav";
+import {
+  Component,
+  Inject,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+  ViewEncapsulation
+} from "@angular/core";
+import { Router } from "@angular/router";
+import { Store, select } from "@ngrx/store";
+import { LoopBackConfig } from "shared/sdk";
+import { UserApi } from "shared/sdk/services";
+import * as ua from "state-management/actions/user.actions";
+import { MatSnackBar } from "@angular/material";
+import { Title } from "@angular/platform-browser";
+import { environment } from "../environments/environment";
+import * as selectors from "state-management/selectors";
+import { getCurrentUser } from "state-management/selectors/users.selectors";
 
-const { version: appVersion } = require('../../package.json');
-
+const { version: appVersion } = require("../../package.json");
 
 // import { NotificationsService } from 'angular2-notifications';
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss'],
+  selector: "app-root",
+  templateUrl: "./app.component.html",
+  styleUrls: ["./app.component.scss"],
   providers: [UserApi],
   encapsulation: ViewEncapsulation.None
 })
 export class AppComponent implements OnDestroy, OnInit {
-
-  @ViewChild('sidenav') sidenav: MatSidenav;
+  @ViewChild("sidenav")
+  sidenav: MatSidenav;
   userObs$ = this.store.pipe(select(getCurrentUser));
 
-  title = 'SciCat';
+  title = "SciCat";
   appVersion = 0;
   us: UserApi;
   darkTheme$;
@@ -38,7 +44,7 @@ export class AppComponent implements OnDestroy, OnInit {
   msgClass$ = null;
   subscriptions = [];
   public options = {
-    position: ['top', 'right'],
+    position: ["top", "right"],
     lastOnBottom: true,
     showProgressBar: true,
     pauseOnHover: true,
@@ -46,20 +52,22 @@ export class AppComponent implements OnDestroy, OnInit {
     timeOut: 2000
   };
 
-  constructor(private router: Router,
+  constructor(
+    private router: Router,
     private titleService: Title,
     public snackBar: MatSnackBar,
     // private _notif_service: NotificationsService,
     @Inject(APP_CONFIG) private appConfig: AppConfig,
-    private store: Store<any>) {
+    private store: Store<any>
+  ) {
     this.appVersion = appVersion;
-    this.darkTheme$ = this.store.select(selectors.users.getTheme);
+    this.darkTheme$ = this.store.pipe(select(selectors.users.getTheme));
     const facility = this.appConfig.facility;
-    let status = 'test';
+    let status = "test";
     if (this.appConfig.production === true) {
-      status = '';
+      status = "";
     }
-    this.title = 'SciCat' + ' ' + facility + ' ' + status;
+    this.title = "SciCat" + " " + facility + " " + status;
     this.setTitle(this.title);
   }
 
@@ -75,43 +83,49 @@ export class AppComponent implements OnDestroy, OnInit {
   ngOnInit() {
     LoopBackConfig.setBaseURL(environment.lbBaseURL);
     console.log(LoopBackConfig.getPath());
-    if ('lbApiVersion' in environment) {
-      const lbApiVersion = environment['lbApiVersion'];
+    if ("lbApiVersion" in environment) {
+      const lbApiVersion = environment["lbApiVersion"];
       LoopBackConfig.setApiVersion(lbApiVersion);
     }
 
     localStorage.clear();
-    if (window.location.pathname.indexOf('logout') !== -1) {
+    if (window.location.pathname.indexOf("logout") !== -1) {
       this.logout();
       // this.router.navigate(['/login']);
     }
 
-    this.subscriptions.push(this.store.select(state => state.root.user.message)
-      .subscribe(current => {
-        if (current.content !== undefined) {
-          this.snackBar.open(current.content, undefined, {
-            duration: current.duration,
-          });
-          this.store.dispatch(new ua.ClearMessageAction());
-        }
-      }));
-    this.subscriptions.push(this.store.select(state => state.root.user.currentUser)
-      .subscribe(current => {
-            //console.log("current.user.username: ", current.user.username);
-            //console.log("state.root.user: ", state.root.user.loggedIn);
-            console.log("current: ", current);
-            if (current) {
-              if (('username' in current)) {
-                this.username = current.username.replace('ms-ad.', '');
-                //this.store.dispatch(new dsa.AddGroupsAction(current.id));
-                //this.username = this.username;
-                this.store.dispatch(new ua.AccessUserEmailAction(current.id));
-                // TODO handle dataset loading
-              }
-            } else {
-              this.username = null;
+    this.subscriptions.push(
+      this.store
+        .pipe(select(state => state.root.user.message))
+        .subscribe(current => {
+          if (current.content !== undefined) {
+            this.snackBar.open(current.content, undefined, {
+              duration: current.duration
+            });
+            this.store.dispatch(new ua.ClearMessageAction());
+          }
+        })
+    );
+    this.subscriptions.push(
+      this.store
+        .pipe(select(state => state.root.user.currentUser))
+        .subscribe(current => {
+          // console.log("current.user.username: ", current.user.username);
+          // console.log("state.root.user: ", state.root.user.loggedIn);
+          console.log("current: ", current);
+          if (current) {
+            if ("username" in current) {
+              this.username = current.username.replace("ms-ad.", "");
+              // this.store.dispatch(new dsa.AddGroupsAction(current.id));
+              // this.username = this.username;
+              this.store.dispatch(new ua.AccessUserEmailAction(current.id));
+              // TODO handle dataset loading
             }
-          }));
+          } else {
+            this.username = null;
+          }
+        })
+    );
 
     this.store.dispatch(new ua.RetrieveUserAction());
   }
@@ -128,7 +142,7 @@ export class AppComponent implements OnDestroy, OnInit {
   }
 
   login() {
-    this.router.navigateByUrl('/login');
+    this.router.navigateByUrl("/login");
   }
 
   sidenavToggle() {
