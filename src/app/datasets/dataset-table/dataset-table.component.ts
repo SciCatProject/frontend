@@ -1,44 +1,52 @@
-import {Component, OnInit, OnDestroy, Inject} from '@angular/core';
-import {Router} from '@angular/router';
-import {MatDialog, MatCheckboxChange} from '@angular/material';
+import { Component, Inject, OnDestroy, OnInit } from "@angular/core";
+import { Router } from "@angular/router";
+import { MatCheckboxChange, MatDialog } from "@angular/material";
 
-import {Store, select} from '@ngrx/store';
+import { select, Store } from "@ngrx/store";
 
-import {Subscription, combineLatest} from 'rxjs';
-import {take} from 'rxjs/operators';
+import { combineLatest, Subscription } from "rxjs";
+import { take } from "rxjs/operators";
 
-import {DialogComponent} from 'shared/modules/dialog/dialog.component';
+import { DialogComponent } from "shared/modules/dialog/dialog.component";
 
 import {
-  ExportToCsvAction,
-  SelectDatasetAction,
-  DeselectDatasetAction,
-  SelectAllDatasetsAction,
-  ClearSelectionAction,
   ChangePageAction,
-  SortByColumnAction,
-  SetViewModeAction
-} from 'state-management/actions/datasets.actions';
+  ClearSelectionAction,
+  DeselectDatasetAction,
+  ExportToCsvAction,
+  SelectAllDatasetsAction,
+  SelectDatasetAction,
+  SetViewModeAction,
+  SortByColumnAction
+} from "state-management/actions/datasets.actions";
 
-import * as ua from 'state-management/actions/user.actions';
-import * as ja from 'state-management/actions/jobs.actions';
+import * as ua from "state-management/actions/user.actions";
+import * as ja from "state-management/actions/jobs.actions";
 
 import {
   getDatasets,
-  getSelectedDatasets,
-  getPage,
-  getViewMode,
-  isEmptySelection,
   getDatasetsPerPage,
+  getFilters,
   getIsLoading,
+  getPage,
+  getSelectedDatasets,
   getTotalSets,
-  getFilters
-} from 'state-management/selectors/datasets.selectors';
+  getViewMode,
+  isEmptySelection
+} from "state-management/selectors/datasets.selectors";
 
-import * as jobSelectors from 'state-management/selectors/jobs.selectors';
+import { getCurrentEmail } from "../../state-management/selectors/users.selectors";
 
-import { Job, Dataset, Message, MessageType, ViewMode } from 'state-management/models';
-import { APP_CONFIG, AppConfig } from 'app-config.module';
+import * as jobSelectors from "state-management/selectors/jobs.selectors";
+
+import {
+  Dataset,
+  Job,
+  Message,
+  MessageType,
+  ViewMode
+} from "state-management/models";
+import { APP_CONFIG, AppConfig } from "app-config.module";
 
 export interface PageChangeEvent {
   pageIndex: number;
@@ -48,76 +56,71 @@ export interface PageChangeEvent {
 
 export interface SortChangeEvent {
   active: keyof Dataset;
-  direction: 'asc' | 'desc' | '';
+  direction: "asc" | "desc" | "";
 }
 
 @Component({
-  selector: 'dataset-table',
-  templateUrl: 'dataset-table.component.html',
-  styleUrls: ['dataset-table.component.scss']
+  selector: "dataset-table",
+  templateUrl: "dataset-table.component.html",
+  styleUrls: ["dataset-table.component.scss"]
 })
 export class DatasetTableComponent implements OnInit, OnDestroy {
-  private selectedSets$ = this.store.pipe(select(getSelectedDatasets));
   datasets$ = this.store.pipe(select(getDatasets));
-
+  email$ = this.store.pipe(select(getCurrentEmail));
+  currentPage$ = this.store.pipe(select(getPage));
+  datasetsPerPage$ = this.store.pipe(select(getDatasetsPerPage));
+  datasetCount$ = this.store.pipe(select(getTotalSets));
+  loading$ = this.store.pipe(select(getIsLoading));
+  currentMode: string = "view";
+  archiveWorkflowEnabled = this.appConfig.archiveWorkflowEnabled;
+  private selectedSets$ = this.store.pipe(select(getSelectedDatasets));
   private allAreSeleted$ = combineLatest(
     this.datasets$,
     this.selectedSets$,
     (datasets, selected) => {
       const pids = selected.map(set => set.pid);
-      return datasets.length && datasets.find(dataset => pids.indexOf(dataset.pid) === -1) == null;
+      return (
+        datasets.length &&
+        datasets.find(dataset => pids.indexOf(dataset.pid) === -1) == null
+      );
     }
   );
-
   private selectedPids: string[] = [];
   private selectedPidsSubscription = this.selectedSets$.subscribe(datasets => {
     this.selectedPids = datasets.map(dataset => dataset.pid);
   });
-  
-  currentPage$ = this.store.pipe(select(getPage));
-  datasetsPerPage$ = this.store.pipe(select(getDatasetsPerPage));
   private mode$ = this.store.pipe(select(getViewMode));
   private isEmptySelection$ = this.store.pipe(select(isEmptySelection));
-  datasetCount$ = this.store.select(getTotalSets);
-  loading$ = this.store.pipe(select(getIsLoading));
   private filters$ = this.store.pipe(select(getFilters));
-
-  private modes = ['view', 'archive', 'retrieve'];
-
+  private modes = ["view", "archive", "retrieve"];
   // compatibility analogs of observables
   private selectedSets: Dataset[] = [];
-  private selectedSetsSubscription = this.selectedSets$.subscribe(selectedSets =>
-    this.selectedSets = selectedSets
+  private selectedSetsSubscription = this.selectedSets$.subscribe(
+    selectedSets => (this.selectedSets = selectedSets)
   );
 
-  currentMode: string = 'view';
+  // These should be made part of the NgRX state management
   private modeSubscription = this.mode$.subscribe((mode: ViewMode) => {
     this.currentMode = mode;
   });
-
-  // These should be made part of the NgRX state management
   // and eventually be removed.
   private submitJobSubscription: Subscription;
   private jobErrorSubscription: Subscription;
-
   private readonly defaultColumns: string[] = [
-    'select',
-    'pid',
-    'sourceFolder',
-    'size',
-    'creationTime',
-    'type',
-    'proposalId',
-    'ownerGroup',
-    'archiveStatus',
-    'retrieveStatus'
+    "select",
+    "pid",
+    "sourceFolder",
+    "size",
+    "creationTime",
+    "type",
+    "proposalId",
+    "ownerGroup",
+    "archiveStatus",
+    "retrieveStatus"
   ];
-
   visibleColumns = this.defaultColumns.filter(
     column => this.appConfig.disabledDatasetColumns.indexOf(column) === -1
   );
-
-  archiveWorkflowEnabled = this.appConfig.archiveWorkflowEnabled;
 
   constructor(
     private router: Router,
@@ -125,11 +128,13 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     public dialog: MatDialog,
     @Inject(APP_CONFIG) private appConfig: AppConfig
   ) {
+    this.email$.subscribe(res => console.log("gm subscribe to email", res));
   }
 
   ngOnInit() {
-    this.submitJobSubscription =
-      this.store.select(jobSelectors.submitJob).subscribe(
+    this.submitJobSubscription = this.store
+      .pipe(select(jobSelectors.submitJob))
+      .subscribe(
         ret => {
           if (ret && Array.isArray(ret)) {
             console.log(ret);
@@ -137,20 +142,25 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
           }
         },
         error => {
-          this.store.dispatch(new ua.ShowMessageAction({
-            type: MessageType.Error,
-            content: 'Job not Submitted'
-          }));
+          this.store.dispatch(
+            new ua.ShowMessageAction({
+              type: MessageType.Error,
+              content: "Job not Submitted"
+            })
+          );
         }
       );
 
-    this.jobErrorSubscription =
-      this.store.select(jobSelectors.getError).subscribe(err => {
+    this.jobErrorSubscription = this.store
+      .pipe(select(jobSelectors.getError))
+      .subscribe(err => {
         if (err) {
-          this.store.dispatch(new ua.ShowMessageAction({
-            type: MessageType.Error,
-            content: err.message,
-          }));
+          this.store.dispatch(
+            new ua.ShowMessageAction({
+              type: MessageType.Error,
+              content: err.message
+            })
+          );
         }
       });
   }
@@ -184,8 +194,8 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
    */
   archiveClickHandle(event): void {
     const dialogRef = this.dialog.open(DialogComponent, {
-      width: 'auto',
-      data: {title: 'Really archive?', question: ''}
+      width: "auto",
+      data: { title: "Really archive?", question: "" }
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -202,10 +212,14 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
    * @memberof DashboardComponent
    */
   retrieveClickHandle(event): void {
-    const destPath = '/archive/retrieve';
+    const destPath = "/archive/retrieve";
     const dialogRef = this.dialog.open(DialogComponent, {
-      width: 'auto',
-      data: {title: 'Really retrieve?', question: '', input: 'Destination: ' + destPath}
+      width: "auto",
+      data: {
+        title: "Really retrieve?",
+        question: "",
+        input: "Destination: " + destPath
+      }
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -221,62 +235,71 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
    * action performed
    * @memberof DashboardComponent
    */
-  archiveOrRetrieve(archive: boolean, destPath = '/archive/retrieve/'): void {
+  archiveOrRetrieve(archive: boolean, destPath = "/archive/retrieve/"): void {
     const msg = new Message();
     if (this.selectedSets.length > 0) {
       const job = new Job();
+      console.log(this.email$);
       job.jobParams = {};
       job.creationTime = new Date();
       const backupFiles = [];
-      this.store.pipe(
-        select(state => state.root.user),
-        take(1))
+      this.store
+        .pipe(
+          select(state => state.root.user),
+          take(1)
+        )
         .subscribe(user => {
-          job.emailJobInitiator = user['email'];
-          user = user['currentUser'];
-          job.jobParams['username'] = user['username'] || undefined;
+          job.emailJobInitiator = user["email"];
+          user = user["currentUserIdentity"];
+          job.jobParams["username"] = user["profile"]["username"] || undefined;
           if (!job.emailJobInitiator) {
-            job.emailJobInitiator = user['profile'] ? user['profile']['email'] : user['email'];
+            job.emailJobInitiator = user["profile"]
+              ? user["profile"]["email"]
+              : user["email"];
           }
           this.selectedSets.forEach(set => {
             // if ('datablocks' in set && set['datablocks'].length > 0) {
             const fileObj = {};
             const fileList = [];
-            fileObj['pid'] = set['pid'];
-            if (set['datablocks'] && !archive) {
-              set['datablocks'].forEach(d => {
-                fileList.push(d['archiveId']);
+            fileObj["pid"] = set["pid"];
+            if (set["datablocks"] && !archive) {
+              set["datablocks"].forEach(d => {
+                fileList.push(d["archiveId"]);
               });
             }
-            fileObj['files'] = fileList;
+            fileObj["files"] = fileList;
             backupFiles.push(fileObj);
-            delete set['$$index'];
+            delete set["$$index"];
           });
 
           this.store.dispatch(new ClearSelectionAction());
 
           if (backupFiles.length === 0) {
             msg.type = MessageType.Error;
-            msg.content = 'Selected datasets have no datablocks associated with them';
+            msg.content =
+              "Selected datasets have no datablocks associated with them";
             this.store.dispatch(new ua.ShowMessageAction(msg));
           } else if (!job.emailJobInitiator) {
             msg.type = MessageType.Error;
-            msg.content = 'No email for this user could be found, the job will not be submitted';
+            msg.content =
+              "No email for this user could be found, the job will not be submitted";
             this.store.dispatch(new ua.ShowMessageAction(msg));
           } else {
             job.datasetList = backupFiles;
-            job.type = archive ? 'archive' : 'retrieve';
-            this.store.pipe(
-              select(state => state.root.user.settings.tapeCopies),
-              take(1))
+            job.type = archive ? "archive" : "retrieve";
+            this.store
+              .pipe(
+                select(state => state.root.user.settings.tapeCopies),
+                take(1)
+              )
               .subscribe(copies => {
-                job.jobParams['tapeCopies'] = copies;
+                job.jobParams["tapeCopies"] = copies;
               });
             // TODO check username in job object
             // job.jobParams['username'] = user['username'];
             if (!archive) {
               // TODO fix the path here
-              job.jobParams['destinationPath'] = destPath;
+              job.jobParams["destinationPath"] = destPath;
             }
             console.log(job);
             this.store.dispatch(new ja.SubmitAction(job));
@@ -284,7 +307,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
         });
     } else {
       msg.type = MessageType.Error;
-      msg.content = 'No datasets selected';
+      msg.content = "No datasets selected";
       this.store.dispatch(new ua.ShowMessageAction(msg));
       this.store.dispatch(new ClearSelectionAction());
     }
@@ -292,7 +315,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
 
   onClick(dataset: Dataset): void {
     const pid = encodeURIComponent(dataset.pid);
-    this.router.navigateByUrl('/dataset/' + pid);
+    this.router.navigateByUrl("/dataset/" + pid);
   }
 
   isSelected(dataset: Dataset): boolean {
@@ -320,7 +343,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   }
 
   onSortChange(event: SortChangeEvent): void {
-    const {active: column, direction} = event;
+    const { active: column, direction } = event;
     this.store.dispatch(new SortByColumnAction(column, direction));
   }
 }
