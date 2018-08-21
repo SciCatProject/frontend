@@ -18,7 +18,6 @@ import { Title } from "@angular/platform-browser";
 import { environment } from "../environments/environment";
 import * as selectors from "state-management/selectors";
 import { getCurrentUser } from "state-management/selectors/users.selectors";
-import { PrefillBatchAction } from 'state-management/actions/datasets.actions';
 
 const { version: appVersion } = require("../../package.json");
 

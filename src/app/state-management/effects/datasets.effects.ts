@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { Observable, combineLatest } from 'rxjs';
+import { Observable } from 'rxjs';
 import { of } from 'rxjs';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { Action, Store, select } from '@ngrx/store';
 import { Angular5Csv } from 'angular5-csv/Angular5-csv';
-import { DatasetApi, DatablockApi } from 'shared/sdk/services';
+import { DatasetApi } from 'shared/sdk/services';
 import * as DatasetActions from 'state-management/actions/datasets.actions';
 import {Dataset} from 'state-management/models';
 import {
@@ -15,7 +15,7 @@ import {
 } from '../selectors/datasets.selectors';
 import { map, switchMap, tap, mergeMap, catchError, withLatestFrom, filter } from 'rxjs/operators';
 import { getCurrentUser } from '../selectors/users.selectors';
-import { LogoutAction, LOGOUT_COMPLETE } from '../actions/user.actions';
+import { LOGOUT_COMPLETE } from '../actions/user.actions';
 
 @Injectable()
 export class DatasetEffects {
@@ -142,77 +142,4 @@ export class DatasetEffects {
     map(([, user]) => this.retrieveBatch(user.id)),
     map(batch => new DatasetActions.PrefillBatchCompleteAction(batch))
   );
-
-      /*
-  @Effect()
-  protected facet$: Observable<Action> =
-    this.action$.ofType(DatasetActions.FILTER_UPDATE)
-      .debounceTime(300)
-      .map((action: DatasetActions.UpdateFilterAction) => action.payload)
-      .switchMap(payload => {
-        const fq={}
-        // remove fields not relevant for facet filters
-        Object.keys(payload).forEach(key => {
-           if (['mode','initial','sortField','skip','limit'].indexOf(key)>=0)return
-           if (payload[key] === null) return
-           if (typeof payload[key] === 'undefined' || payload[key].length == 0) return
-           fq[key]=payload[key]
-        })
-        const facetObject = [  "type", "creationTime", "creationLocation", "ownerGroup","keywords"];
-        return this.ds
-          .fullfacet(JSON.stringify(fq), facetObject)
-          .switchMap(res => {
-            const filterValues = res[0];
-            return of(new DatasetActions.UpdateFilterCompleteAction(filterValues));
-          })
-          .catch(err => {
-            console.log(err);
-            return of(new DatasetActions.FilterFailedAction(err));
-          });
-      });*/
-
-  /*
-  @Effect()
-  protected facetDatasets$: Observable<Action> =
-    this.action$.ofType(DatasetActions.FILTER_UPDATE)
-      .debounceTime(300)
-      .map((action: DatasetActions.UpdateFilterAction) => action.payload)
-      .switchMap(payload => {
-          const limits= {};
-          limits['limit'] = payload['limit'] ? payload['limit'] : 30;
-          limits['skip'] = payload['skip'] ? payload['skip'] : 0;
-          limits['order'] = payload['sortField'] ? payload['sortField'] : "creationTime:desc";
-          // remove fields not relevant for facet filters
-          // TODO understand what defines the structure of the payload.
-          // TODO What is the meaning of "initial"
-          const fq={}
-          Object.keys(payload).forEach(key => {
-             // console.log("======key,payload[key]",key,payload[key])
-             if (['initial','sortField','skip','limit'].indexOf(key)>=0)return
-             if (payload[key] === null) return
-             if (typeof payload[key] === 'undefined' || payload[key].length == 0) return
-             if (key === 'mode'){
-                 if (payload['mode']==='archive'){
-                     fq['archiveStatusMessage']=config.archiveable
-                 } else if (payload['mode']==='retrieve'){
-                     fq['archiveStatusMessage']=config.retrieveable
-                 }
-             } else {
-                 fq[key]=payload[key]
-             }
-          })
-          return this.ds.fullquery(fq,limits)
-              .switchMap(res => {
-                return of(new DatasetActions.SearchCompleteAction(res));
-              })
-              .catch(err => {
-                console.log(err);
-                return of(new DatasetActions.SearchFailedAction(err));
-           });
-      });
-      */
-
-
 }
-
-
