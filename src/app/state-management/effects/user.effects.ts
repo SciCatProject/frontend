@@ -14,7 +14,6 @@ import { catchError, filter, map, switchMap, tap } from "rxjs/operators";
 import { MessageType, User, UserIdentity } from "../models";
 import * as userActions from "../actions/user.actions";
 
-const ObjectID = require("bson-objectid");
 
 @Injectable()
 export class UserEffects {
@@ -34,21 +33,8 @@ export class UserEffects {
             userId: result.body["userId"],
             ttl: 86400
           };
-          this.userIdentitySrv
-            .findOne({ where: { userId: ObjectID(result.body["userId"]) } })
-            .pipe(
-              switchMap(res2 => {
-                console.log("fire action retrieve user id ");
-                return of(
-                  new UserActions.RetrieveUserIdentityCompleteAction(
-                    res2 as UserIdentity
-                  )
-                );
-              })
-            );
 
           // result['user'] = self.loginForm.get('username').value;
-          console.log("AD login ");
           this.authSrv.setToken(res);
           return this.userSrv.getCurrent().pipe(
             switchMap(user => {
@@ -132,12 +118,10 @@ export class UserEffects {
     map((action: UserActions.AccessUserEmailAction) => action.userId),
     switchMap(userId => {
       this.userSrv.getCurrent().subscribe(res => {
-        console.log("getting current user", res);
         if (res["username"] !== "ingestor") {
           this.userIdentitySrv
             .findOne({ where: { userId: userId } })
             .subscribe(res2 => {
-              console.log("getting current user Id", res2);
               console.log("user id email ", res2["profile"]["email"]);
               const userIdentity: UserIdentity = res2 as UserIdentity;
               this.store.dispatch(
