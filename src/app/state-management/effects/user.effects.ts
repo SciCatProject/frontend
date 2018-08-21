@@ -12,6 +12,9 @@ import { ADAuthService } from "users/adauth.service";
 import { Router } from "@angular/router";
 import { catchError, filter, map, switchMap, tap } from "rxjs/operators";
 import { MessageType, User, UserIdentity } from "../models";
+import * as userActions from "../actions/user.actions";
+
+const ObjectID = require("bson-objectid");
 
 @Injectable()
 export class UserEffects {
@@ -31,6 +34,18 @@ export class UserEffects {
             userId: result.body["userId"],
             ttl: 86400
           };
+          this.userIdentitySrv
+            .findOne({ where: { userId: ObjectID(result.body["userId"]) } })
+            .pipe(
+              switchMap(res2 => {
+                console.log("fire action retrieve user id ");
+                return of(
+                  new UserActions.RetrieveUserIdentityCompleteAction(
+                    res2 as UserIdentity
+                  )
+                );
+              })
+            );
 
           // result['user'] = self.loginForm.get('username').value;
           console.log("AD login ");
@@ -39,9 +54,6 @@ export class UserEffects {
             switchMap(user => {
               this.authSrv.setUser(user);
               res["user"] = user;
-              this.userIdentitySrv
-                .findOne({ where: { userId: res["user"]["userId"] } })
-                .subscribe(res2 => new UserActions.RetrieveUserIdentityCompleteAction(res2 as UserIdentity));
               return of(new UserActions.LoginCompleteAction(user));
             })
           );
@@ -59,6 +71,21 @@ export class UserEffects {
       return this.userSrv.login(form).pipe(
         switchMap(res => {
           const user: User = res["user"];
+          const userIdentity: UserIdentity = {
+            provider: "",
+            authScheme: "ldap",
+            externalId: "",
+            profile: { email: user["email"] },
+            credentials: "",
+            created: new Date("2018-06-13T12:20:17.494Z"),
+            modified: new Date("2018-06-13T12:20:17.494Z"),
+            id: "",
+            userId: user["userId"],
+            user: user
+          };
+          this.store.dispatch(
+            new UserActions.RetrieveUserIdentityCompleteAction(userIdentity)
+          );
           return of(new UserActions.LoginCompleteAction(user));
         }),
         catchError(err => {
@@ -113,8 +140,8 @@ export class UserEffects {
               console.log("getting current user Id", res2);
               console.log("user id email ", res2["profile"]["email"]);
               const userIdentity: UserIdentity = res2 as UserIdentity;
-              const xx = new UserActions.RetrieveUserIdentityCompleteAction(
-                userIdentity
+              this.store.dispatch(
+                new UserActions.RetrieveUserIdentityCompleteAction(userIdentity)
               );
             });
         } else {
