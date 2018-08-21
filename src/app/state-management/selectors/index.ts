@@ -4,3 +4,5 @@ import * as jobs from './jobs.selectors';
 export {jobs};
 import * as users from './users.selectors';
 export {users};
+import * as policies from './policies.selectors';
+export {policies};

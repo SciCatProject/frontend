@@ -2,7 +2,7 @@ import {NgModule} from '@angular/core';
 import {RouterModule} from '@angular/router';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
-import {BrowserModule} from '@angular/platform-browser';
+import {BrowserModule, Title} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {EffectsModule} from '@ngrx/effects';
 import {routerReducer, StoreRouterConnectingModule} from '@ngrx/router-store';
@@ -25,19 +25,18 @@ import {JobsEffects} from 'state-management/effects/jobs.effects';
 import {rootReducer} from 'state-management/reducers/root.reducer';
 import {UsersModule} from 'users/users.module';
 import {ProposalsModule} from 'proposals/proposals.module';
-import { SatNativeDateModule, SatDatepickerModule } from 'saturn-datepicker';
-
-
-
+import { PoliciesModule} from 'policies/policies.module'
+import {SatDatepickerModule, SatNativeDateModule} from 'saturn-datepicker';
+import { PoliciesEffects } from 'state-management/effects/policies.effects';
 
 
 import {
   MatCardModule,
+  MatDatepickerModule,
   MatGridListModule,
   MatIconModule,
   MatListModule,
   MatMenuModule,
-  MatDatepickerModule,
   MatNativeDateModule,
   MatPaginatorModule,
   MatSidenavModule,
@@ -50,7 +49,6 @@ import {AppComponent} from './app.component';
 import {AuthCheck} from './AuthCheck';
 import {JobsDetailComponent} from './jobs/jobs-detail/jobs-detail.component';
 
-
 export function localStorageSyncWrapper(reducer: any) {
   return localStorageSync({keys: ['root'], rehydrate: true})(reducer);
 }
@@ -60,7 +58,8 @@ export function localStorageSyncWrapper(reducer: any) {
     AppComponent,
     JobsTableComponent,
     SampleDataFormComponent,
-    JobsDetailComponent,
+    JobsDetailComponent
+
   ],
   imports: [
     AppRoutingModule,
@@ -88,6 +87,7 @@ export function localStorageSyncWrapper(reducer: any) {
     DatasetsModule,
     UsersModule,
     ProposalsModule,
+    PoliciesModule,
     AppConfigModule,
 
     SDKBrowserModule.forRoot(),
@@ -97,7 +97,7 @@ export function localStorageSyncWrapper(reducer: any) {
     StoreDevtoolsModule.instrument({
       maxAge: 25 //  Retains last 25 states
     }),
-    EffectsModule.forRoot([DatasetEffects, UserEffects, JobsEffects]),
+    EffectsModule.forRoot([DatasetEffects, UserEffects, JobsEffects, PoliciesEffects]),
     StoreRouterConnectingModule,
   ],
   exports: [
@@ -107,6 +107,7 @@ export function localStorageSyncWrapper(reducer: any) {
     AuthCheck,
     DatasetService,
     UserApi,
+    Title,
     MatNativeDateModule,
     //      {provide: RouteReuseStrategy, useClass: CustomReuseStrategy}
   ],

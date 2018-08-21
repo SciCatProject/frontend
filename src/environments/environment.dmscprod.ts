@@ -4,10 +4,11 @@
 // The list of which env maps to which file can be found in `angular-cli.json`.
 
 export const environment = {
-  production: false,
+  production: true,
   lbBaseURL: 'https://scicatapi.esss.dk',
   fileserverBaseURL: 'https://scicatfileserver.esss.dk',
   externalAuthEndpoint: '/auth/msad',
   archiveWorkflowEnabled: false,
-  disabledDatasetColumns: ['archiveStatus', 'retrieveStatus' ]
+  disabledDatasetColumns: ['archiveStatus', 'retrieveStatus' ],
+  facility: 'ESS'
 };

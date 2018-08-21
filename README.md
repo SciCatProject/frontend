@@ -4,7 +4,7 @@
 ![scicat-logo](https://github.com/SciCatProject/catanie/blob/develop/src/assets/images/esslogo.png)
 
 [![Build Status](https://travis-ci.org/SciCatProject/catanie.svg?branch=develop)](https://travis-ci.org/SciCatProject/catanie)
-[![DeepScan grade](https://deepscan.io/api/projects/887/branches/19862/badge/grade.svg)](https://deepscan.io/dashboard#view=project&pid=887&bid=19862)
+[![DeepScan grade](https://deepscan.io/api/projects/887/branches/19862/badge/grade.svg)](https://deepscan.io/dashboard#view=project&pid=887&bid=19862) [![Greenkeeper badge](https://badges.greenkeeper.io/SciCatProject/catanie.svg)](https://greenkeeper.io/)
 
 ## Summary
 
@@ -12,45 +12,81 @@ An Angular (2+) based application that uses ngrx to communicate with the SciCat 
 as well as the option to carry out actions (i.e. archiving) and acts as a place to reference datasets used in publications.
 See documentation at [scicatproject](https://scicatproject.github.io/)
 
-## ISSUES
+# Getting Started
 
-Angular cli is currently unable to respond to hosts that do not match. See [here](https://github.com/angular/angular-cli/issues/6070) for explanation about webpack changes but will break a dev docker build (should not affect production as we would not use ng serve). Unsure if you can hardcode a docker IP (probably not a great idea).
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
 
-## Running
+### Prerequisites
 
-Running locally: `ng serve` ([catamel](https://gitlab.psi.ch/melanie/catamel) will need to be running)
+What things you need to install the software and how to install them
 
-Running through docker: `docker build -t <tag_name> .; docker run <tag_name>`
+```
+angular v6
+npm
+node
+```
+
+### Installing
 
 
-## Auto generated below
+You can deploy with kubernetes or docker-compose
 
-This project was generated with [angular-cli](https://github.com/angular/angular-cli) version 1.0.0-beta.30.
+```
+npm install
+npx ng build
+```
 
-## Development server
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+And repeat
 
-## Code scaffolding
+```
+npx ng serve 
+```
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive/pipe/service/class/module`.
+End with an example of getting some data out of the system or using it for a little demo
 
-## Build
+## Running the tests
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `-prod` flag for a production build.
+Unit tests 
 
-## Running unit tests
+```
+npm test
+```
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
 
-## Running end-to-end tests
+### Break down into end to end tests
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-Before running the tests make sure you are serving the app via `ng serve`.
+e2e tests check content is rendered correctly
+```
+npm run e2e
+```
 
-## Deploying to GitHub Pages
 
-Run `ng github-pages:deploy` to deploy to GitHub Pages.
 
-## Further help
+## Deployment
 
-To get more help on the `angular-cli` use `ng help` or go check out the [Angular-CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+Deploy with Docker
+
+## Built With
+
+* [NPM](http://npmjs.com) - node package manager
+* [Node](https://nodejs.org/) - node javascript runtime
+* [Angular](https://angular.io) - Web framework
+
+## Contributing
+
+Please read [CONTRIBUTING.md](https://github.com/SciCatProject/catanie/blob/develop/documentation/Catanie/Contributing.md) for details on our code of conduct, and the process for submitting pull requests to us.
+
+## Versioning
+
+We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/SciCatProject/catanie/tags). 
+
+
+
+## License
+
+This project is licensed under the GPL License - see the [LICENSE.md](LICENSE.md) file for details
+
+## Acknowledgments
+
+Scicat is developed at PSI, ESS and MAXIV with in-kind funding from ESS and from the European Union Framework Programme for Research and Innovation Horizon 2020, under grant agreement 676548, “BrightnESS”.
+

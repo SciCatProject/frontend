@@ -6,6 +6,7 @@ import { RawDataset } from '../../models/RawDataset';
 import { DerivedDataset } from '../../models/DerivedDataset';
 import { Sample } from '../../models/Sample';
 import { Proposal } from '../../models/Proposal';
+import { PublishedData } from '../../models/PublishedData';
 import { DatasetLifecycle } from '../../models/DatasetLifecycle';
 import { Datablock } from '../../models/Datablock';
 import { AccessUser } from '../../models/AccessUser';
@@ -30,6 +31,7 @@ export class SDKModels {
     DerivedDataset: DerivedDataset,
     Sample: Sample,
     Proposal: Proposal,
+    PublishedData: PublishedData,
     DatasetLifecycle: DatasetLifecycle,
     Datablock: Datablock,
     AccessUser: AccessUser,
