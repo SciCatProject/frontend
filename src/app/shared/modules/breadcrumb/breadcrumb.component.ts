@@ -11,7 +11,7 @@ import {
 import { TitleCasePipe } from '../../pipes/index';
 import { Store, select } from '@ngrx/store';
 import * as rison from 'rison';
-import { getViewMode, getFilters, getIsEmptySelection } from 'state-management/selectors/datasets.selectors';
+import { getViewMode, getFilters } from 'state-management/selectors/datasets.selectors';
 import { AppState } from 'state-management/state/app.store';
 import { take, filter, map } from 'rxjs/operators';
 
