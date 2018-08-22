@@ -1,6 +1,6 @@
 
 <div class="dataset-table">
-  <div class="mode-container" *ngIf="archiveWorkflowEnabled">
+  <div class="mode-container" *ngIf="appConfig.archiveWorkflowEnabled">
     <mat-button-toggle-group [value]="currentMode">
       <mat-button-toggle *ngFor="let mode of modes" (click)="onModeChange($event, mode)" [value]="mode" [ngClass]="mode">
         {{mode | titlecase}}
@@ -29,6 +29,11 @@
     <button mat-button [disabled]="isEmptySelection$ | async" *ngIf="currentMode === 'retrieve'"class="ui button retrieve-action-btn" (click)="retrieveClickHandle($event)" color="primary">
       <i class="upload icon"></i>
       Retrieve
+    </button>
+
+    <button mat-button class='ui button add-batch' mat-button (click)="onAddToBatch()" color="primary">
+      <i class="shopping cart icon"></i>
+      Add to Batch
     </button>
 
     <button mat-button class='ui button export-csv' mat-button (click)="onExportClick()" color="primary">
@@ -62,11 +67,14 @@
       </mat-header-cell>
 
       <mat-cell *matCellDef="let dataset">
-        <mat-checkbox
+        <mat-checkbox *ngIf="!isInBatch(dataset); else in_batch"
           [checked]="isSelected(dataset)"
           (change)="onSelect($event, dataset)"
           (click)="$event.stopPropagation()">
         </mat-checkbox>
+        <ng-template #in_batch>
+          <i class="shopping cart icon"></i>
+        </ng-template> 
       </mat-cell>
     </ng-container>
 

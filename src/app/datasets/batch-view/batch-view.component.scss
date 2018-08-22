@@ -1,0 +1,10 @@
+// NO idea why this is needed, but otherwise the icon will be wrongly aligned
+.mat-button i {
+    vertical-align: unset;
+}
+
+.mat-column-select {
+    overflow: visible; /* Needed to prevent offsetting of the checkbox when clicking */
+    flex-grow: 0;
+    padding-right: 2em;
+}

@@ -44,6 +44,9 @@ import { SatDatepickerModule } from 'saturn-datepicker';
 import { StoreModule } from '@ngrx/store';
 import { datasetsReducer } from 'state-management/reducers/datasets.reducer';
 import { FileSizePipe } from './filesize.pipe';
+import { BatchViewComponent } from './batch-view/batch-view.component';
+import { RouterModule } from '@angular/router';
+import { BatchCardComponent } from './batch-card/batch-card.component';
 
 @NgModule({
   imports : [
@@ -52,13 +55,13 @@ import { FileSizePipe } from './filesize.pipe';
     SharedCatanieModule, MatSelectModule, MatOptionModule, MatNativeDateModule, MatIconModule,
     MatListModule, SatDatepickerModule, MatTooltipModule, MatButtonToggleModule, MatProgressSpinnerModule, MatChipsModule,
     StoreModule.forFeature('datasets', datasetsReducer),
-    FileHelpersModule, AppConfigModule
+    FileHelpersModule, AppConfigModule, RouterModule
   ],
   declarations : [
     FilePickerComponent, FileDropzoneComponent,
     DashboardComponent, DatasetTableComponent, DatablocksComponent,
     DatafilesComponent, DatasetsFilterComponent, DatasetDetailComponent, SelectedListComponent,
-    FileSizePipe
+    FileSizePipe, BatchCardComponent, BatchViewComponent,
   ],
   providers : [ DatasetService ],
   exports : [ DatasetTableComponent, DatasetsFilterComponent ]

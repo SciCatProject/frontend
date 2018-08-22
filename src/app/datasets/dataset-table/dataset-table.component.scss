@@ -1,37 +1,39 @@
 @import '../../../theme.scss';
 
-.dataset-table .mode-container {
-  padding-left: 1em;
-  float: left;
+.dataset-table {
+  .mode-container {
+    padding-left: 1em;
+    float: left;
+  }
+
+  .action-container {
+    float: right;
+  }
+
+  .action-container.hidden {
+    visibility: hidden;
+  }
+
+  .raised {
+    position: relative;
+    float: left;
+    transform: translateY(50%);
+    margin-left: 1em; 
+  } 
+  
+  .mat-column-select {
+    overflow: visible; /* Needed to prevent offsetting of the checkbox when clicking */
+    flex-grow: 0;
+    padding-right: 2em;
+  }
+  
+  /* Columns with narrow content */
+  .mat-column-size,
+  .mat-column-type {
+    flex-grow: 0.5;
+  }
 }
-
-.dataset-table .action-container {
-  float: right;
-}
-
-.dataset-table .action-container.hidden {
-  visibility: hidden;
-}
-
-.dataset-table .raised {
-  position: relative;
-  float: left;
-  transform: translateY(50%);
-  margin-left: 1em; 
-}  
-
-.mat-column-select {
-  overflow: visible; /* Needed to prevent offsetting of the checkbox when clicking */
-  flex-grow: 0;
-  padding-right: 2em;
-}
-
-/* Columns with narrow content */
-.mat-column-size,
-.mat-column-type {
-  flex-grow: 0.5;
-}
-
+  
 :host /deep/ .disabled-row {
     pointer-events: none;
     opacity: 0.2 !important;
@@ -45,4 +47,3 @@
 :host /deep/ .mat-paginator {
   background-color: unset !important;
 }
-
