@@ -10,6 +10,7 @@ export class AppConfig {
     disabledDatasetColumns: string[];
     archiveWorkflowEnabled: boolean;
     facility: string;
+    shoppingCartEnabled: boolean;
 }
 
 export const APP_DI_CONFIG: AppConfig = {
@@ -18,7 +19,8 @@ export const APP_DI_CONFIG: AppConfig = {
     production: environment.production,
     disabledDatasetColumns: environment['disabledDatasetColumns'] || [],
     archiveWorkflowEnabled: environment['archiveWorkflowEnabled'] || null,
-    facility: environment['facility'] || null
+    facility: environment['facility'] || null,
+    shoppingCartEnabled: environment['shoppingCartEnabled'] || false
 };
 
 @NgModule({

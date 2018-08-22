@@ -33,7 +33,8 @@ import {
   getSelectedDatasets,
   getTotalSets,
   getDatasetsInBatch,
-  getViewMode
+  getViewMode,
+  getIsEmptySelection
 } from 'state-management/selectors/datasets.selectors';
 
 import { getCurrentEmail } from "../../state-management/selectors/users.selectors";
@@ -48,7 +49,6 @@ import {
   ViewMode
 } from "state-management/models";
 import { APP_CONFIG, AppConfig } from "app-config.module";
-import { isEmptySelection } from "state-management/selectors/policies.selectors";
 
 export interface PageChangeEvent {
   pageIndex: number;
@@ -74,7 +74,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   private currentPage$ = this.store.pipe(select(getPage));
   private datasetsPerPage$ = this.store.pipe(select(getDatasetsPerPage));
   private mode$ = this.store.pipe(select(getViewMode));
-  private isEmptySelection$ = this.store.pipe(select(isEmptySelection));
+  private isEmptySelection$ = this.store.pipe(select(getIsEmptySelection));
   private datasetCount$ = this.store.select(getTotalSets);
   private loading$ = this.store.pipe(select(getIsLoading));
   private filters$ = this.store.pipe(select(getFilters));
