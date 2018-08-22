@@ -15,10 +15,11 @@ import {
   DeselectDatasetAction,
   ExportToCsvAction,
   SelectAllDatasetsAction,
-  SelectDatasetAction,
+  SortByColumnAction,
   SetViewModeAction,
-  SortByColumnAction
-} from "state-management/actions/datasets.actions";
+  AddToBatchAction,
+  SelectDatasetAction
+} from 'state-management/actions/datasets.actions';
 
 import * as ua from "state-management/actions/user.actions";
 import * as ja from "state-management/actions/jobs.actions";
@@ -31,9 +32,9 @@ import {
   getPage,
   getSelectedDatasets,
   getTotalSets,
-  getViewMode,
-  isEmptySelection
-} from "state-management/selectors/datasets.selectors";
+  getDatasetsInBatch,
+  getViewMode
+} from 'state-management/selectors/datasets.selectors';
 
 import { getCurrentEmail } from "../../state-management/selectors/users.selectors";
 
@@ -47,6 +48,7 @@ import {
   ViewMode
 } from "state-management/models";
 import { APP_CONFIG, AppConfig } from "app-config.module";
+import { isEmptySelection } from "state-management/selectors/policies.selectors";
 
 export interface PageChangeEvent {
   pageIndex: number;
@@ -65,15 +67,19 @@ export interface SortChangeEvent {
   styleUrls: ["dataset-table.component.scss"]
 })
 export class DatasetTableComponent implements OnInit, OnDestroy {
-  datasets$ = this.store.pipe(select(getDatasets));
-  email$ = this.store.pipe(select(getCurrentEmail));
-  currentPage$ = this.store.pipe(select(getPage));
-  datasetsPerPage$ = this.store.pipe(select(getDatasetsPerPage));
-  datasetCount$ = this.store.pipe(select(getTotalSets));
-  loading$ = this.store.pipe(select(getIsLoading));
-  currentMode: string = "view";
-  archiveWorkflowEnabled = this.appConfig.archiveWorkflowEnabled;
+  
   private selectedSets$ = this.store.pipe(select(getSelectedDatasets));
+  private datasets$ = this.store.pipe(select(getDatasets));
+  private batch$ = this.store.pipe(select(getDatasetsInBatch));
+  private currentPage$ = this.store.pipe(select(getPage));
+  private datasetsPerPage$ = this.store.pipe(select(getDatasetsPerPage));
+  private mode$ = this.store.pipe(select(getViewMode));
+  private isEmptySelection$ = this.store.pipe(select(isEmptySelection));
+  private datasetCount$ = this.store.select(getTotalSets);
+  private loading$ = this.store.pipe(select(getIsLoading));
+  private filters$ = this.store.pipe(select(getFilters));
+  private email$ = this.store.pipe(select(getCurrentEmail));
+
   private allAreSeleted$ = combineLatest(
     this.datasets$,
     this.selectedSets$,
@@ -89,10 +95,14 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   private selectedPidsSubscription = this.selectedSets$.subscribe(datasets => {
     this.selectedPids = datasets.map(dataset => dataset.pid);
   });
-  private mode$ = this.store.pipe(select(getViewMode));
-  private isEmptySelection$ = this.store.pipe(select(isEmptySelection));
-  private filters$ = this.store.pipe(select(getFilters));
-  private modes = ["view", "archive", "retrieve"];
+
+  private inBatchPids: string[] = [];
+  private inBatchPidsSubscription = this.batch$.subscribe(datasets => {
+    this.inBatchPids = datasets.map(dataset => dataset.pid);
+  });
+
+  private modes = ['view', 'archive', 'retrieve'];
+
   // compatibility analogs of observables
   private selectedSets: Dataset[] = [];
   private selectedSetsSubscription = this.selectedSets$.subscribe(
@@ -100,6 +110,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   );
 
   // These should be made part of the NgRX state management
+  private currentMode: string;
   private modeSubscription = this.mode$.subscribe((mode: ViewMode) => {
     this.currentMode = mode;
   });
@@ -322,6 +333,10 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     return this.selectedPids.indexOf(dataset.pid) !== -1;
   }
 
+  isInBatch(dataset: Dataset): boolean {
+    return this.inBatchPids.indexOf(dataset.pid) !== -1;
+  }
+
   onSelect(event: MatCheckboxChange, dataset: Dataset): void {
     if (event.checked) {
       this.store.dispatch(new SelectDatasetAction(dataset));
@@ -345,5 +360,10 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   onSortChange(event: SortChangeEvent): void {
     const { active: column, direction } = event;
     this.store.dispatch(new SortByColumnAction(column, direction));
+  }
+
+  onAddToBatch(): void {
+    this.store.dispatch(new AddToBatchAction());
+    this.store.dispatch(new ClearSelectionAction());
   }
 }

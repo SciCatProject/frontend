@@ -21,8 +21,6 @@ import { getCurrentUser } from "state-management/selectors/users.selectors";
 
 const { version: appVersion } = require("../../package.json");
 
-// import { NotificationsService } from 'angular2-notifications';
-
 @Component({
   selector: "app-root",
   templateUrl: "./app.component.html",
@@ -88,8 +86,8 @@ export class AppComponent implements OnDestroy, OnInit {
       LoopBackConfig.setApiVersion(lbApiVersion);
     }
 
-    localStorage.clear();
-    if (window.location.pathname.indexOf("logout") !== -1) {
+    // localStorage.clear();
+    if (window.location.pathname.indexOf('logout') !== -1) {
       this.logout();
       // this.router.navigate(['/login']);
     }

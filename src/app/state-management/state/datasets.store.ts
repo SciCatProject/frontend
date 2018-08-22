@@ -1,15 +1,19 @@
 import { DatasetFilters, Dataset } from 'state-management/models';
 
-export type DateTriple = {year: number, month: number, day: number};
+export interface DateTriple {
+    year: number;
+    month: number;
+    day: number;
+}
 
-export type FacetCount = {
+export interface FacetCount {
     _id?: string | DateTriple;
     count: number;
-};
+}
 
-export type FacetCounts = {
-    [field: string]: FacetCount[],
-};
+export interface FacetCounts {
+    [field: string]: FacetCount[];
+}
 
 export interface DatasetState {
     datasets: Dataset[];
@@ -23,7 +27,9 @@ export interface DatasetState {
     hasPrefilledFilters: boolean;
 
     searchTerms: string;
-    filters: DatasetFilters; 
+    filters: DatasetFilters;
+
+    batch: Dataset[];
 }
 
 export const initialDatasetState: DatasetState = {
@@ -38,7 +44,8 @@ export const initialDatasetState: DatasetState = {
     hasPrefilledFilters: false,
 
     searchTerms: '',
-    
+    batch: [],
+
     filters: {
         mode: 'view',
         text: '',

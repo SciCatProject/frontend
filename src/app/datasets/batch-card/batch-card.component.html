@@ -1,0 +1,23 @@
+<mat-card *ngIf="nonEmpty$ | async">
+    <div class="title">Batch</div>
+
+    <mat-card-content>
+        <div class="count" [ngPlural]="batchSize$ | async">
+            <ng-template ngPluralCase="=0">No datasets.</ng-template>
+            <ng-template ngPluralCase="=1">1 dataset.</ng-template>
+            <ng-template ngPluralCase="other">{{ batchSize$ | async }} datasets.</ng-template>
+        </div>
+    </mat-card-content>
+        
+    <mat-card-footer style="text-align: right">
+        <button mat-button class="button" color="primary" (click)="clear()">
+            <i class="eraser icon"></i>
+            Remove All
+        </button>
+
+        <a mat-button routerLink="/datasets/batch" class="button" color="primary">
+            <i class="arrow circle right icon"></i>
+            Actions
+        </a>
+    </mat-card-footer>
+</mat-card>

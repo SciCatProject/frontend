@@ -7,7 +7,9 @@ There are many models within the catalog and many of them are self explanatory. 
 ```
 Note:
 
-We are using MongoDB for our datasource and it is not designed for any form of relation, nor does it handle inheritance. The driver for loopback solves this by inserting the ID of the relation as a foreign key into the document. This does mean that some documents will contain a:
+We are using MongoDB for our datasource and it is not designed for any form of relation, 
+nor does it handle inheritance. The driver for loopback solves this by inserting the ID 
+of the relation as a foreign key into the document. This does mean that some documents will contain a:
 DATASETID,
 RAWDATASETID,
 DERIVEDDATASETID
