@@ -326,7 +326,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
 
   onClick(dataset: Dataset): void {
     const pid = encodeURIComponent(dataset.pid);
-    this.router.navigateByUrl("/dataset/" + pid);
+    this.router.navigateByUrl("/datasets/" + pid);
   }
 
   isSelected(dataset: Dataset): boolean {

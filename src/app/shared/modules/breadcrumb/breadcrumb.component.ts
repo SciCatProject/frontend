@@ -11,9 +11,9 @@ import {
 import { TitleCasePipe } from '../../pipes/index';
 import { Store, select } from '@ngrx/store';
 import * as rison from 'rison';
-import { getViewMode, getFilters } from 'state-management/selectors/datasets.selectors';
+import { getViewMode, getFilters, getIsEmptySelection } from 'state-management/selectors/datasets.selectors';
 import { AppState } from 'state-management/state/app.store';
-import { take, filter } from 'rxjs/operators';
+import { take, filter, map } from 'rxjs/operators';
 
 interface Breadcrumb {
   label: string;
@@ -41,6 +41,18 @@ export class BreadcrumbComponent implements OnInit {
 
   // partially based on: http://brianflove.com/2016/10/23/angular2-breadcrumb-using-router/
   breadcrumbs = Array<Breadcrumb>();
+  
+  // TODO: make a proper selector from this.
+  // TODO: first, figure out how the NgRX connected router state works.
+  // the below selection makes sure a string reaches the last map() by providing fallback values
+  // all along the way.
+  private shouldDisplay$ = this.store.pipe(
+    select(state => state['router'] || {}),
+    select(router => router['state'] || {}),
+    select(state => state['url'] || ''),
+    select(url => url.split('?')[0]),
+    map(path => path !== '/datasets')
+  );
 
   constructor(private store: Store<AppState>, private route: ActivatedRoute, private router: Router) {
 
@@ -58,16 +70,14 @@ export class BreadcrumbComponent implements OnInit {
       this.route.children.forEach(function (root) {
         const urls = root.snapshot.url;
         urls.forEach(function (url) {
-          if (url.path !== 'datasets') {
-            const bc: Breadcrumb = {
-              label: self.sanitise(url.path),
-              path: url.path,
-              params: url.parameters,
-              url: '/' + encodeURIComponent(url.path),
-              fallback: '/' + encodeURIComponent(url.path + 's')
-            };
-            self.breadcrumbs.push(bc);
-          }
+          const bc: Breadcrumb = {
+            label: self.sanitise(url.path),
+            path: url.path,
+            params: url.parameters,
+            url: '/' + encodeURIComponent(url.path),
+            fallback: '/' + encodeURIComponent(url.path + 's')
+          };
+          self.breadcrumbs.push(bc);
         });
       });
     });
