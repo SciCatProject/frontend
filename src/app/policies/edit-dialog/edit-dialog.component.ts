@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit, ViewEncapsulation } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material";
-import { FormBuilder, Validators, FormGroup } from "@angular/forms";
+import { FormBuilder, Validators, FormGroup, FormControl} from "@angular/forms";
 import { Policy } from 'state-management/models';
 
 @Component({
@@ -13,6 +13,7 @@ export class EditDialogComponent implements OnInit {
   form: FormGroup;
   data: [Policy];
   ownerGroups: string;
+  multiEdit: boolean;
 
 
   constructor(
@@ -20,26 +21,36 @@ export class EditDialogComponent implements OnInit {
     private dialogRef: MatDialogRef<EditDialogComponent>,
 
     @Inject(MAT_DIALOG_DATA) data) {
+      this.data = data;
+    }
 
-    this.data = data;
-    this.form = fb.group({
-      ownerGroups: [data.map(function(o) { return o.ownerGroup; }), Validators.required],
-      autoArchive: [data.autoArchive, Validators.required],
-      manager: [data.manager, Validators.required],
-      tapeRedundancy: [data.tapeRedundancy, Validators.required],
-      archiveDelay: [data.archiveDelay, Validators.required],
-      archiveEmailNotification: [data.archiveEmailNotification, Validators.required],
-      archiveEmailsToBeNotified: [data.archiveEmailsToBeNotified, Validators.required],
-      //archiveDelay: [data.archiveDelay, Validators.required]
-    });
 
-  }
+
 
   ngOnInit() {
-    //determine if one or more is selected
-
+    this.form.addControl('selectMultiple', new FormControl(['2', '22']));
     console.log((this.data.map(function(o) { return o.ownerGroup; }).join()));
     this.ownerGroups = (this.data.map(function(o) { return o.ownerGroup; })).join();
+
+    this.multiEdit = this.data.length > 1;
+    if(!this.multiEdit){
+
+      this.form = this.fb.group({
+        ownerGroups: [this.data[0].ownerGroup , Validators.required],
+        autoArchive: [this.data[0].autoArchive, Validators.required],
+        manager: [this.data[0].manager, Validators.required],
+        tapeRedundancy: [this.data[0].tapeRedundancy, Validators.required],
+        autoArchiveDelay: [this.data[0].autoArchiveDelay, Validators.required],
+        archiveEmailNotification: [this.data[0].archiveEmailNotification, Validators.required],
+        archiveEmailsToBeNotified: [this.data[0].archiveEmailsToBeNotified, Validators.required],
+        //archiveDelay: [data.archiveDelay, Validators.required]
+      });
+    }
+    else{
+      this.form = this.fb.group({
+        ownerGroups: [this.data.map(function(o) { return o.ownerGroup; }), Validators.required]
+      })
+    }
 
 
   }

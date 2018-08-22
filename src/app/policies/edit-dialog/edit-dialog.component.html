@@ -1,21 +1,6 @@
-<!--<h1 mat-dialog-title>{{data.title}}</h1>
-<div mat-dialog-content>
-  <p>{{data.question}}</p>
-  <mat-form-field *ngIf="data.input">
-    <input matInput tabindex="1" [(ngModel)]="data.input">
-  </mat-form-field>
-</div>
-<div mat-dialog-actions>
-  <button mat-button [mat-dialog-close]="data" tabindex="2">Ok</button>
-  <button mat-button (click)="onNoClick()" tabindex="-1">No Thanks</button>
-</div>-->
-<div class="edit-dialog">
-
-
-  <form autofocus>
-
-
-
+<div >
+  <mat-card>
+  <form autofocus class="edit-dialog">
     <mat-dialog-content [formGroup]="form" autofocus>
       <h1 mat-dialog-title align="center">Edit Archive Settings</h1>
       <li> {{ownerGroups}}</li>
@@ -34,7 +19,7 @@
       </mat-form-field>
 
       <mat-form-field>
-        <mat-select placeholder="Auto Archive Delay" formControlName="archiveDelay" aria-label="Auto Archive Delay">
+        <mat-select placeholder="Auto Archive Delay" formControlName="autoArchiveDelay" aria-label="Auto Archive Delay">
           <mat-option value="1">
             1</mat-option>
           <mat-option value="2">
@@ -78,7 +63,7 @@
             {{email}}
             <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
           </mat-chip>
-          <input placeholder="New recipient..." [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur" (matChipInputTokenEnd)="add($event)">
+          <input placeholder="Archive Emails to be Notified" [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur" (matChipInputTokenEnd)="add($event)">
         </mat-chip-list>
       </mat-form-field>
 
@@ -90,5 +75,5 @@
       <button class="mat-raised-button mat-primary" (click)="save()">Save</button>
     </mat-dialog-actions>
   </form>
-
+</mat-card>
 </div>

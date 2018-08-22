@@ -76,7 +76,7 @@ export class ArchiveSettingsComponent implements OnInit {
 
   }
 
-    @Input() public totalNumber: number = 0;
+  @Input() public totalNumber: number = 0;
   @Input() public currentPage: number = 0;
 
   @Input() public showSelect: boolean = false;
