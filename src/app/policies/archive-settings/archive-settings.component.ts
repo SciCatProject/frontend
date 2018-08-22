@@ -29,12 +29,10 @@ import {
   SUBMIT_POLICY_COMPLETE
 
 } from 'state-management/actions/policies.actions';
-//import * as selectors from 'state-management/selectors';
 import { getPolicies, getPolicyState, getSelectedPolicies } from 'state-management/selectors/policies.selectors';
 import { MatTableDataSource, MatPaginator } from '@angular/material';
 import { PoliciesService } from '../policies.service';
 import { ConfigFormComponent } from 'shared/modules/config-form/config-form.component';
-//import { DialogComponent } from 'shared/modules/dialog/dialog.component';
 import { EditDialogComponent } from '../edit-dialog/edit-dialog.component';
 import { MatDialog, MatDialogConfig } from '@angular/material';
 
@@ -78,11 +76,7 @@ export class ArchiveSettingsComponent implements OnInit {
 
   }
 
-  dataSource: MatTableDataSource<any> | null;
-
-
-
-  @Input() public totalNumber: number = 0;
+    @Input() public totalNumber: number = 0;
   @Input() public currentPage: number = 0;
 
   @Input() public showSelect: boolean = false;
@@ -90,8 +84,6 @@ export class ArchiveSettingsComponent implements OnInit {
   @Input() public disabledColumns: string[] = [];
 
   @Output() private onClick: EventEmitter<Policy> = new EventEmitter();
-  //@Output() private onSelect: EventEmitter<Policy> = new EventEmitter();
-  //@Output() private onDeselect: EventEmitter<Policy> = new EventEmitter();
   @Output() private onSortChange: EventEmitter<SortChangeEvent> = new EventEmitter();
 
   private pageSizeOptions: number[] = [30, 1000];
@@ -99,50 +91,29 @@ export class ArchiveSettingsComponent implements OnInit {
     'select',
     'manager',
     'ownerGroup',
-    'auto archive',
-    'archive delay',
-    'number of copies on tape',
-    'notification email'
+    'autoArchive',
+    'autoArchiveDelay',
+    'tapeRedundancy',
+    'archiveEmailNotification',
+    'archiveEmailsToBeNotified',
+    'retrieveEmailNotification',
+    'retrieveEmailsToBeNotified',
+
   ];
-
-  editFields = {
-    'select': "",
-    'manager': "",
-    'ownerGroup': "",
-    'auto archive': "",
-    'archive delay': "",
-    'number of copies on tape': "",
-    'notification email': ""
-  };
-
-
 
 
   private editEnabled = true;
 
   ngOnInit() {
     this.store.dispatch(new FetchPoliciesAction());
-    console.log("policyState$:", this.policyState$);
 
-    this.policiesService.getPolicies()
-      .subscribe(data => {
+    this.policies$.subscribe(data => {
         this.policies = data as Policy[];
-
       })
 
-    this.store.pipe(select(getSelectedPolicies))
-      .subscribe(data => {
+      this.selectedPolicies$.subscribe(data => {
         this.selectedPolicies = data as Policy[];
       });
-
-    this.subscriptions = this.actionsSubj.subscribe(data => {
-      if (data.type === '[Policy] Submit policy settings complete') {
-        this.store.dispatch(new FetchPoliciesAction());
-      }
-    });
-
-
-
   };
 
   private openDialog() {
@@ -150,7 +121,6 @@ export class ArchiveSettingsComponent implements OnInit {
     console.log("selected: ", this.selectedPolicies);
 
     const dialogConfig = new MatDialogConfig();
-
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
     dialogConfig.panelClass;
@@ -170,27 +140,13 @@ export class ArchiveSettingsComponent implements OnInit {
       var selected = [];
       //deep copy
       selected = JSON.parse(JSON.stringify(this.selectedPolicies));
-      console.log("1: ", selected);
       for (let policy of selected) {
         policy.autoArchive = result.autoArchive;
-        console.log("2: ", policy);
         this.store.dispatch(new SubmitPolicyAction(policy));
-
       }
     }
   }
 
-  /*
-    private onClose(result: any) {
-      if (result) {
-        for (let policy of this.selectedPolicies) {
-          policy.autoArchive = result.autoArchive;
-          this.store.dispatch(new SubmitPolicyAction(policy));
-        }
-      }
-    }
-
-  */
 
   private getDisplayedColumns(): string[] {
 
@@ -203,7 +159,6 @@ export class ArchiveSettingsComponent implements OnInit {
   }
 
   private handleSelect(event: MatCheckboxChange, policy: Policy): void {
-    console.log("handleSelect!!");
     if (event.checked) {
       this.onSelect(policy);
     } else {

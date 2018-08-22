@@ -9,46 +9,86 @@
   <button mat-button [mat-dialog-close]="data" tabindex="2">Ok</button>
   <button mat-button (click)="onNoClick()" tabindex="-1">No Thanks</button>
 </div>-->
-<mat-card>
-<form autofocus>
+<div class="edit-dialog">
+
+
+  <form autofocus>
 
 
 
-<mat-dialog-content [formGroup]="form" autofocus>
-  <h1 mat-dialog-title align="center">Edit Archive Settings</h1>
-  <li > {{ownerGroups}}</li>
+    <mat-dialog-content [formGroup]="form" autofocus>
+      <h1 mat-dialog-title align="center">Edit Archive Settings</h1>
+      <li> {{ownerGroups}}</li>
 
-  <!--mat-form-field>
-    <input matInput placeholder="ownerGroups" formControlName="ownerGroups">
+      <!--mat-form-field>
+    <input matInput placeholder="ownerGroups" formControlName="ownerGroups">archiveEmailsToBeNotified
   </mat-form-field-->
-  <!--mat-form-field>
-  <mat-select placeholder="Select archiveDelay" formControlName="archiveDelay">
-    < make configurable>
-    <mat-option value="1">
-      1</mat-option>
-    <mat-option value="2">
-      2</mat-option>
-    <mat-option value="7">
-      7</mat-option>
+
+      <mat-form-field>
+        <mat-select placeholder="Auto Archive" formControlName="autoArchive" aria-label="Auto Archive">
+          <mat-option value=true>
+            True</mat-option>
+          <mat-option value=false>
+            False</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-select placeholder="Auto Archive Delay" formControlName="archiveDelay" aria-label="Auto Archive Delay">
+          <mat-option value="1">
+            1</mat-option>
+          <mat-option value="2">
+            2</mat-option>
+          <mat-option value="7">
+            7</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-select placeholder="Tape Redundancy" formControlName="tapeRedundancy" aria-label="Tape Redundancy">
+          <mat-option value="low">
+            1</mat-option>
+          <mat-option value="medium">
+            2</mat-option>
+          <mat-option value="high">
+            7</mat-option>
+        </mat-select>
+      </mat-form-field>
 
 
-  </mat-select>
-  </mat-form-field-->
-  <mat-form-field>
-  <mat-select placeholder="Auto Archive" formControlName="autoArchive" aria-label="Auto Archive">
-    <mat-option value=true>
-      True</mat-option>
-    <mat-option value=false>
-      False</mat-option>
-  </mat-select>
-  </mat-form-field>
-  ....
 
-</mat-dialog-content>
+      <mat-form-field>
+        <mat-select placeholder="Archive Email Notification" formControlName="archiveEmailNotification" aria-label="Archive Email Notification">
+          <mat-option value=true>
+            True</mat-option>
+          <mat-option value=false>
+            False</mat-option>
+        </mat-select>
+      </mat-form-field>
 
-<mat-dialog-actions>
-  <button class="mat-raised-button" (click)="close()">Close</button>
-  <button class="mat-raised-button mat-primary" (click)="save()">Save</button>
-</mat-dialog-actions>
-</form>
-</mat-card>
+      <!--mat-form-field>
+<mat-chip-list placeholder="Archive Emails Recipients" formControlName="archiveEmailsToBeNotified" aria-label="Archive Emails Recipients">
+  <mat-chip>{{manager}}</mat-chip>
+</mat-chip-list>
+</mat-form-field-->
+
+      <mat-form-field>
+        <mat-chip-list #chipList>
+          <mat-chip *ngFor="let email of archiveEmailsToBeNotified" [selectable]="selectable" [removable]="removable" (removed)="remove(email)">
+            {{email}}
+            <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+          </mat-chip>
+          <input placeholder="New recipient..." [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur" (matChipInputTokenEnd)="add($event)">
+        </mat-chip-list>
+      </mat-form-field>
+
+
+    </mat-dialog-content>
+
+    <mat-dialog-actions>
+      <button class="mat-raised-button" (click)="close()">Close</button>
+      <button class="mat-raised-button mat-primary" (click)="save()">Save</button>
+    </mat-dialog-actions>
+  </form>
+
+</div>

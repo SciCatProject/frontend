@@ -25,17 +25,22 @@ export class EditDialogComponent implements OnInit {
     this.form = fb.group({
       ownerGroups: [data.map(function(o) { return o.ownerGroup; }), Validators.required],
       autoArchive: [data.autoArchive, Validators.required],
+      manager: [data.manager, Validators.required],
+      tapeRedundancy: [data.tapeRedundancy, Validators.required],
+      archiveDelay: [data.archiveDelay, Validators.required],
+      archiveEmailNotification: [data.archiveEmailNotification, Validators.required],
+      archiveEmailsToBeNotified: [data.archiveEmailsToBeNotified, Validators.required],
       //archiveDelay: [data.archiveDelay, Validators.required]
     });
 
   }
 
   ngOnInit() {
+    //determine if one or more is selected
+
     console.log((this.data.map(function(o) { return o.ownerGroup; }).join()));
     this.ownerGroups = (this.data.map(function(o) { return o.ownerGroup; })).join();
 
-    this.data.forEach(policy => console.log(policy.manager));
-    //this.form.archiveDelay.value = false;
 
   }
 
