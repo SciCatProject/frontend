@@ -30,7 +30,7 @@
       Retrieve
     </button>
 
-    <button *ngIf="appConfig.shoppingCartEnabled" mat-button class='ui button add-batch' mat-button (click)="onAddToBatch()" color="primary">
+    <button [disabled]="isEmptySelection$ | async" *ngIf="appConfig.shoppingCartEnabled" mat-button class='ui button add-batch' mat-button (click)="onAddToBatch()" color="primary">
       <i class="shopping cart icon"></i>
       Add to Batch
     </button>
