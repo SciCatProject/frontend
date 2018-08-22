@@ -34,7 +34,7 @@ export const getSelectedDatasets = createSelector(
     state => state.selectedSets
 );
 
-export const isEmptySelection = createSelector(
+export const getIsEmptySelection = createSelector(
     getSelectedDatasets,
     sets => sets.length === 0
 );
