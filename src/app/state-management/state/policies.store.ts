@@ -7,6 +7,7 @@ export interface PolicyState {
     selectedPolicies: Policy[];
     currentPolicy: Policy;
     policySubmission: Policy;
+    submissionResponse: Policy;
     totalCount: number;
     submitComplete: boolean;
 
@@ -21,6 +22,7 @@ export const initialPolicyState: PolicyState = {
     selectedPolicies: [],
     currentPolicy: null,
     policySubmission: null,
+    submissionResponse: null,
     totalCount: 0,
     submitComplete: false,
 

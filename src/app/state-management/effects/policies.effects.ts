@@ -26,20 +26,15 @@ export class PoliciesEffects {
     private policiesService: PoliciesService
   ) { }
 
-/*  @Effect()
-  fetchPolicies$: Observable<Action> = this.actions$
-    .do((action) => console.log("Received!!!!!!! "))
-    .filter((action) => action.type === PoliciesActions.FETCH_POLICIES)
-*/
 
 @Effect()
 submitPolicy$: Observable<Action> =
   this.actions$.pipe(
     ofType(SUBMIT_POLICY),
-    map((action: SubmitPolicyAction) => action.policy),
+    map((action: SubmitPolicyAction) => action.policySubmission),
     switchMap((policy) => {
       return this.policyApi.patchAttributes(policy.id, policy).pipe(
-        map(submitComplete =>new SubmitPolicyCompleteAction(submitComplete))
+        mergeMap((data: any) => [new SubmitPolicyCompleteAction(data.submissionResponse), new FetchPoliciesAction()])
       );
     }),
     catchError(err => of(new SubmitPolicyFailedAction(err))

@@ -22,12 +22,12 @@ export const SUBMIT_POLICY_FAILED = '[Policy] Submit failed';
 
 export class SubmitPolicyAction implements Action {
     readonly type = SUBMIT_POLICY;
-    constructor(readonly policy: Policy) {}
+    constructor(readonly policySubmission : Policy) {}
 }
 
 export class SubmitPolicyCompleteAction implements Action {
     readonly type = SUBMIT_POLICY_COMPLETE;
-    constructor(readonly submitComplete : true) {}
+    constructor(readonly submissionResponse : Policy) {}
 }
 
 export class SubmitPolicyFailedAction implements Action {
