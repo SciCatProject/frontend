@@ -28,15 +28,15 @@
             class="mat-elevation-z2"
             style="margin-left: 1em"
         >
-            <ng-container matColumnDef="select">
+            <ng-container matColumnDef="remove">
                 <mat-header-cell *matHeaderCellDef>
-                    <mat-checkbox>
-                    </mat-checkbox>
+                    Remove
                 </mat-header-cell>
 
                 <mat-cell *matCellDef="let dataset">
-                    <mat-checkbox>
-                    </mat-checkbox>
+                    <button mat-button (click)="onRemove(dataset)">
+                        <i class="archive icon"></i>
+                    </button>
                 </mat-cell>
             </ng-container>
 

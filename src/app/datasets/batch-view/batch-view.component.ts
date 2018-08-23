@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Store, select } from '@ngrx/store';
-import { getDatasetsInBatch } from 'state-management/selectors/datasets.selectors';
 import { map } from 'rxjs/operators';
-import { PrefillBatchAction, ClearBatchAction } from 'state-management/actions/datasets.actions';
+
+import { getDatasetsInBatch } from 'state-management/selectors/datasets.selectors';
+import { PrefillBatchAction, ClearBatchAction, RemoveFromBatchAction } from 'state-management/actions/datasets.actions';
+import { Dataset } from 'state-management/models';
 
 @Component({
     selector: 'batch-view',
@@ -10,7 +12,7 @@ import { PrefillBatchAction, ClearBatchAction } from 'state-management/actions/d
     styleUrls: ['./batch-view.component.scss']
 })
 export class BatchViewComponent implements OnInit {
-    private visibleColumns = ['pid', 'sourceFolder', 'creationTime'];
+    private visibleColumns = ['remove', 'pid', 'sourceFolder', 'creationTime'];
     
     private batch$ = this.store.pipe(select(getDatasetsInBatch));
     private hasBatch$ = this.batch$.pipe(map(batch => batch.length > 0));
@@ -26,5 +28,9 @@ export class BatchViewComponent implements OnInit {
         if (confirm(msg)) {
             this.store.dispatch(new ClearBatchAction());
         }
+    }
+
+    onRemove(dataset: Dataset) {
+        this.store.dispatch(new RemoveFromBatchAction(dataset));
     }
 }

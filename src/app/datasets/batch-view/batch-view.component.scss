@@ -3,8 +3,13 @@
     vertical-align: unset;
 }
 
-.mat-column-select {
+
+.mat-column-remove {
     overflow: visible; /* Needed to prevent offsetting of the checkbox when clicking */
-    flex-grow: 0;
+    // flex-grow: 0;
     padding-right: 2em;
+
+    button {
+        padding: 0;
+    }
 }

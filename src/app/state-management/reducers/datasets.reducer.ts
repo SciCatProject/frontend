@@ -59,6 +59,8 @@ import {
     PREFILL_BATCH_COMPLETE,
     PrefillBatchCompleteAction,
     DATABLOCKS,
+    REMOVE_FROM_BATCH,
+    RemoveFromBatchAction,
 } from 'state-management/actions/datasets.actions';
 
 import { DatasetState, initialDatasetState } from 'state-management/state/datasets.store';
@@ -277,6 +279,12 @@ export function datasetsReducer(state: DatasetState = initialDatasetState, actio
             const batchedPids = state.batch.map(dataset => dataset.pid);
             const addition = state.selectedSets.filter(dataset => batchedPids.indexOf(dataset.pid) === -1);
             const batch = [...state.batch, ...addition];
+            return {...state, batch};
+        }
+
+        case REMOVE_FROM_BATCH: {
+            const {dataset} = action as RemoveFromBatchAction;
+            const batch = state.batch.filter(dataset2 => dataset2.pid !== dataset.pid);
             return {...state, batch};
         }
 
