@@ -58,6 +58,7 @@ import {
     SELECT_ALL_DATASETS,
     PREFILL_BATCH_COMPLETE,
     PrefillBatchCompleteAction,
+    DATABLOCKS,
 } from 'state-management/actions/datasets.actions';
 
 import { DatasetState, initialDatasetState } from 'state-management/state/datasets.store';
@@ -241,6 +242,7 @@ export function datasetsReducer(state: DatasetState = initialDatasetState, actio
 
         case SELECT_CURRENT:
         case CURRENT_BLOCKS_COMPLETE:
+        case DATABLOCKS:
         case SEARCH_ID_COMPLETE: {
             const currentSet = (action as SearchIDCompleteAction).dataset;
             return {...state, currentSet};
