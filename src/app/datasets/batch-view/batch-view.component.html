@@ -30,12 +30,15 @@
         >
             <ng-container matColumnDef="remove">
                 <mat-header-cell *matHeaderCellDef>
-                    Remove
+                    <!-- Quite terrible hack to ensure column header and regular cells have same width -->
+                    <button mat-button>
+                        <i class="trash icon"></i>
+                    </button>
                 </mat-header-cell>
 
                 <mat-cell *matCellDef="let dataset">
                     <button mat-button (click)="onRemove(dataset)">
-                        <i class="archive icon"></i>
+                        <i class="trash icon"></i>
                     </button>
                 </mat-cell>
             </ng-container>
