@@ -4,6 +4,7 @@ import { Job } from "shared/sdk/models";
 import { select, Store } from "@ngrx/store";
 import { ActivatedRoute } from "@angular/router";
 import * as selectors from "state-management/selectors";
+import { getCurrentJob } from "../../state-management/selectors/jobs.selectors";
 
 @Component({
   selector: "app-jobs-detail",
@@ -11,6 +12,7 @@ import * as selectors from "state-management/selectors";
   styleUrls: ["./jobs-detail.component.css"]
 })
 export class JobsDetailComponent implements OnInit, OnDestroy {
+  job$ = this.store.pipe(select(getCurrentJob));
   job: Job = undefined;
   subscriptions = [];
 
