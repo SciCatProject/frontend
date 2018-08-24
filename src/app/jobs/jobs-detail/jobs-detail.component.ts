@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import * as JobActions from "state-management/actions/jobs.actions";
 import { Job } from "shared/sdk/models";
-import {select, Store} from "@ngrx/store";
+import { select, Store } from "@ngrx/store";
 import { ActivatedRoute } from "@angular/router";
 import * as selectors from "state-management/selectors";
 
@@ -18,7 +18,7 @@ export class JobsDetailComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.subscriptions.push(
-      this.store.pipe( select(selectors.jobs.getCurrentJob)).subscribe(job => {
+      this.store.pipe(select(selectors.jobs.getCurrentJob)).subscribe(job => {
         if (job && Object.keys(job).length > 0) {
           this.job = <Job>job;
         } else {
