@@ -1,4 +1,4 @@
-<div class="ui breadcrumb" *ngIf="breadcrumbs && breadcrumbs.length > 0">
+<div class="ui breadcrumb" *ngIf="(shouldDisplay$ | async) && breadcrumbs && breadcrumbs.length > 0">
   <!-- <a class="section" [routerLink]="['/datasets']">Home</a> -->
   <!-- <div class="divider"> / </div> -->
   <hr>

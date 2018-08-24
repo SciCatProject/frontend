@@ -31,12 +31,12 @@ export const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'logout', component: AppComponent, canActivate: [AuthCheck] },
 
-  { path: 'dataset', redirectTo: '/datasets', pathMatch: 'full' },
+  // { path: 'dataset', redirectTo: '/datasets', pathMatch: 'full' },
   { path: 'datasets',  component: DashboardComponent, canActivate: [AuthCheck], },
   { path: 'datasets/batch', component: BatchViewComponent, canActivate: [AuthCheck] },
-  { path: 'dataset/:id', component: DatasetDetailComponent, canActivate: [AuthCheck] },
-  { path: 'dataset/:id/datablocks', component: DatablocksComponent, canActivate: [AuthCheck] },
-  { path: 'dataset/:id/datafiles', component: DatafilesComponent, canActivate: [AuthCheck] },
+  { path: 'datasets/:id', component: DatasetDetailComponent, canActivate: [AuthCheck] },
+  { path: 'datasets/:id/datablocks', component: DatablocksComponent, canActivate: [AuthCheck] },
+  { path: 'datasets/:id/datafiles', component: DatafilesComponent, canActivate: [AuthCheck] },
 
   { path: 'proposals', component: ListProposalsPageComponent, canActivate: [AuthCheck] },
   { path: 'proposals/:id', component: ViewProposalPageComponent, canActivate: [AuthCheck] },
