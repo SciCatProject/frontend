@@ -16,6 +16,9 @@ import {
   SUBMIT_POLICY, SubmitPolicyAction,
   SUBMIT_POLICY_COMPLETE, SubmitPolicyCompleteAction,
   SUBMIT_POLICY_FAILED, SubmitPolicyFailedAction,
+
+  CHANGE_PAGE, ChangePageAction,
+  SORT_BY_COLUMN, SortByColumnAction,
 } from 'state-management/actions/policies.actions';
 
 import { PolicyState, initialPolicyState } from 'state-management/state/policies.store';
@@ -73,6 +76,24 @@ export function policiesReducer(
 
     case CLEAR_SELECTION: {
       return { ...state, selectedPolicies: [] };
+    }
+
+    case CHANGE_PAGE: {
+        const {page, limit} = (action as ChangePageAction);
+        const skip = page * limit;
+        //const filters = {...state.filters, skip, limit};
+        return {
+            ...state,
+            policiesLoading: true,
+            //filters
+        };
+    }
+
+    case SORT_BY_COLUMN: {
+        const {column, direction} = action as SortByColumnAction;
+        const sortField = column + (direction ? ':' + direction : '');
+        //const filters = {...state.filters, sortField, skip: 0};
+        return {...state, /*filters,*/ policiesLoading: true};
     }
 
     default: {

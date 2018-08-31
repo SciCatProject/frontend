@@ -1,18 +1,20 @@
 <div class="archive-settings">
 </div>
 
-<div>
-  <div class="button-group" layout="row" layout-align="end end">
-    <ng-container *ngIf="editEnabled">
-      <button mat-raised-button mat-button (click)="onEditClick()" color="primary">Edit Selection
+
+  <div class="button-group" align="end">
+    <ng-container *ngIf="editEnabled" >
+      <button mat-button mat-button (click)="onEditClick()" color="primary">
+        <mat-icon >edit</mat-icon> Edit Selection
     </button>
+
     </ng-container>
   </div>
 
   <mat-paginator class="policy-paginator" [pageSizeOptions]="pageSizeOptions" [pageIndex]="currentPage" [pageSize]="policiesPerPage" [length]="totalNumber" (page)="handlePageChange($event)">
   </mat-paginator>
 
-  <mat-table [dataSource]="policies$ | async" class="policy-table mat-elevation-z8" matSort (matSortChange)="handleSortChange($event)">
+  <mat-table [dataSource]="policies$ | async" class="policy-table mat-elevation-z8" matSort (matSortChange)="onSortChange($event)">
 
     <!-- Column Definitions -->
     <ng-container matColumnDef="select">
@@ -82,7 +84,7 @@
 
   <mat-paginator class="policy-paginator" [pageSizeOptions]="pageSizeOptions" [pageIndex]="currentPage" [pageSize]="policiesPerPage" [length]="totalNumber" (page)="handlePageChange($event)">
   </mat-paginator>
-</div>
+
 
 <div class="edit">
   <ng-container *ngIf="sample">

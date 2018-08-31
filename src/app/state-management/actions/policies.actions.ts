@@ -19,6 +19,9 @@ export const SUBMIT_POLICY = '[Policy] Submit policy settings';
 export const SUBMIT_POLICY_COMPLETE = '[Policy] Submit policy settings complete';
 export const SUBMIT_POLICY_FAILED = '[Policy] Submit failed';
 
+export const CHANGE_PAGE = '[Policy] Change Page'
+export const SORT_BY_COLUMN = '[Policy] Sort by Column'
+
 
 export class SubmitPolicyAction implements Action {
     readonly type = SUBMIT_POLICY;
@@ -64,6 +67,16 @@ export class FetchPoliciesFailedAction implements Action {
   readonly type = FETCH_POLICIES_FAILED;
 }
 
+export class ChangePageAction implements Action {
+    readonly type = CHANGE_PAGE;
+    constructor(readonly page: number, readonly limit: number) {}
+}
+
+export class SortByColumnAction implements Action {
+    readonly type = SORT_BY_COLUMN;
+    constructor(readonly column: string, readonly direction: string) {}
+}
+
 
 export type FetchPoliciesOutcomeAction =
   FetchPoliciesCompleteAction |
@@ -77,7 +90,7 @@ export type FetchPoliciesOutcomeAction =
 export type PoliciesActions =
   SelectPolicyAction | DeselectPolicyAction | FetchPoliciesAction |
   FetchPoliciesCompleteAction | FetchPoliciesFailedAction | FetchPoliciesOutcomeAction | ClearSelectionAction
-  | SubmitPolicyAction | SubmitPolicyCompleteAction | SubmitPolicyFailedAction
+  | SubmitPolicyAction | SubmitPolicyCompleteAction | SubmitPolicyFailedAction | ChangePageAction | SortByColumnAction 
 
 
   // New filtering actions

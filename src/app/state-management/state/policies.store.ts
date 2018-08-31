@@ -14,6 +14,9 @@ export interface PolicyState {
     policiesLoading: boolean;
     error: Error;
 
+    skip: number;
+    limit: number;
+
 
 }
 
@@ -27,6 +30,8 @@ export const initialPolicyState: PolicyState = {
     submitComplete: false,
 
     policiesLoading: true,
-    error: undefined
+    error: undefined,
+    skip: 0,
+    limit: 0
 
 };

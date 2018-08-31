@@ -1,67 +1,116 @@
-import { Component, Inject, OnInit, ViewEncapsulation } from '@angular/core';
+import {
+  Component,
+  Inject,
+  OnInit,
+  ViewEncapsulation,
+  OnChanges,
+  Input,
+  Output,
+  EventEmitter
+} from "@angular/core";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material";
-import { FormBuilder, Validators, FormGroup, FormControl} from "@angular/forms";
-import { Policy } from 'state-management/models';
+import {
+  FormBuilder,
+  Validators,
+  FormGroup,
+  FormControl
+} from "@angular/forms";
+import { Policy } from "state-management/models";
 
 @Component({
-  selector: 'edit-dialog',
-  templateUrl: './edit-dialog.component.html',
-  styleUrls: ['./edit-dialog.component.scss']
+  selector: "edit-dialog",
+  templateUrl: "./edit-dialog.component.html",
+  styleUrls: ["./edit-dialog.component.scss"]
 })
-export class EditDialogComponent implements OnInit {
+export class EditDialogComponent implements /*OnChanges,*/ OnInit {
+  data: any;
+  multiEdit: boolean;
+  selectedGroups: string[];
 
   form: FormGroup;
-  data: [Policy];
-  ownerGroups: string;
-  multiEdit: boolean;
-
 
   constructor(
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<EditDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) data
+  ) {
+    this.data = data;
+    this.multiEdit = data.multiSelect;
 
-    @Inject(MAT_DIALOG_DATA) data) {
-      this.data = data;
-    }
-
-
-
-
-  ngOnInit() {
-    this.form.addControl('selectMultiple', new FormControl(['2', '22']));
-    console.log((this.data.map(function(o) { return o.ownerGroup; }).join()));
-    this.ownerGroups = (this.data.map(function(o) { return o.ownerGroup; })).join();
-
-    this.multiEdit = this.data.length > 1;
-    if(!this.multiEdit){
-
-      this.form = this.fb.group({
-        ownerGroups: [this.data[0].ownerGroup , Validators.required],
-        autoArchive: [this.data[0].autoArchive, Validators.required],
-        manager: [this.data[0].manager, Validators.required],
-        tapeRedundancy: [this.data[0].tapeRedundancy, Validators.required],
-        autoArchiveDelay: [this.data[0].autoArchiveDelay, Validators.required],
-        archiveEmailNotification: [this.data[0].archiveEmailNotification, Validators.required],
-        archiveEmailsToBeNotified: [this.data[0].archiveEmailsToBeNotified, Validators.required],
-        //archiveDelay: [data.archiveDelay, Validators.required]
-      });
-    }
-    else{
-      this.form = this.fb.group({
-        ownerGroups: [this.data.map(function(o) { return o.ownerGroup; }), Validators.required]
+    this.form = new FormGroup({
+      autoArchive: new FormControl({
+        value:
+          data.selectedPolicy.autoArchive != null && !this.multiEdit
+            ? data.selectedPolicy.autoArchive.toString()
+            : null,
+        disabled: true
+        /*, Validators.required*/
+      }),
+      tapeRedundancy: new FormControl({
+        value:
+          data.selectedPolicy.tapeRedundancy  != null && !this.multiEdit
+            ? data.selectedPolicy.tapeRedundancy.toString()
+            : null,
+        disabled: true
+      }),
+      autoArchiveDelay: new FormControl({
+        value:
+          data.selectedPolicy.autoArchiveDelay  != null && !this.multiEdit
+            ? data.selectedPolicy.autoArchiveDelay.toString()
+            : null,
+        disabled: true
+      }),
+      archiveEmailNotification: new FormControl({
+        value:
+          data.selectedPolicy.archiveEmailNotification && !this.multiEdit
+            ? data.selectedPolicy.archiveEmailNotification.toString()
+            : null,
+        disabled: true
+      }),
+      archiveEmailsToBeNotified: new FormControl({
+        value:
+          data.selectedPolicy.archiveEmailsToBeNotified  != null && !this.multiEdit
+            ? data.selectedPolicy.archiveEmailsToBeNotified
+            : null,
+        disabled: true
+      }),
+      retrieveEmailNotification: new FormControl({
+        value:
+          data.selectedPolicy.retrieveEmailNotification  != null && !this.multiEdit
+            ? data.selectedPolicy.retrieveEmailNotification.toString()
+            : null,
+        disabled: true
+      }),
+      retrieveEmailsToBeNotified: new FormControl({
+        value:
+          data.selectedPolicy.retrieveEmailsToBeNotified  != null && !this.multiEdit
+            ? data.selectedPolicy.retrieveEmailsToBeNotified
+            : null,
+        disabled: true
       })
-    }
-
-
+    });
   }
 
+  ngOnInit() {
+    this.selectedGroups = this.data.selectedGroups;
+  }
+
+  controlClick(control: any) {
+    control.disabled = false;
+  }
 
   save() {
-    this.dialogRef.close(this.form.value);
+    //dont patch results that are NULL
+    var result = this.form.value;
+    for (let key in result) {
+      if (result[key] === null) {
+        delete result[key];
+      }
+    }
+    this.dialogRef.close(result);
   }
 
   close() {
     this.dialogRef.close();
   }
-
 }
