@@ -1,88 +1,106 @@
 <!--<div class="ui raised segment" *ngIf="dataset">
   <h4 class="ui header">Dataset Details</h4>
   <!--http://stackoverflow.com/questions/35534959/access-key-and-value-of-object-using-ngfor-->
-  <!--<ul *ngFor="let d of dataset | objKeys">
-    <li >{{d.key}}: {{d.value}}</li>
-  </ul>
+<!--<ul *ngFor="let d of dataset | objKeys">
+  <li >{{d.key}}: {{d.value}}</li>
+</ul>
 </div>-->
+
 
 <mat-tab-group *ngIf="(dataset$ | async) as dataset" class="dataset-detail">
   <mat-tab label="Details">
-    <mat-card style="margin: 1em">
-      <div class="details">
-        <table>
-          <tr>
-            <th>PID</th>
-            <td>{{ dataset.pid }}</td>
-          </tr>
-          <tr *ngIf="dataset.owner as value">
-            <th>Owner</th>
-            <td>{{ value }}</td>
-          </tr>
-          <tr *ngIf="dataset.contactEmail as value">
-            <th>Contact Email</th>
-            <td>{{ value }}</td>
-          </tr>
-          <tr *ngIf="dataset.sourceFolder as value">
-            <th>Source Folder</th>
-            <td>{{ value }}</td>
-          </tr>
-          <!--
-          <tr *ngIf="dataset.sourceFolder as value">
-            <th>Source Folder</th>
-            <mat-form-field class="example-full-width">
-              <input matInput placeholder="Source Folder" [value]="value">
-            </mat-form-field>
-          </tr>
-          -->
-          <tr *ngIf="dataset.size as value">
-            <th>Size</th>
-            <td>{{ value | filesize }}</td>
-          </tr>
-          <tr *ngIf="dataset.creationTime as value">
-              <th>Creation Time</th>
-            <td>{{ value | date }}</td>
-          </tr>
-          <tr *ngIf="dataset.type as value">
-              <th>Type</th>
-            <td>{{ value }}</td>
-          </tr>
-          <tr *ngIf="dataset.version as value">
-              <th>Version</th>
-            <td>{{ value }}</td>
-          </tr>
-          <tr *ngIf="dataset.ownerGroup as value">
-            <th>Owner Group</th>
-            <td>{{ value }}</td>
-          </tr>
-          <!--
-          <tr>
-            <th>Created at</th>
-            <td>{{ dataset.createdAt | date }}</td>
-          </tr>
-          <tr>
-            <th>Updated at</th>
-            <td>{{ dataset.updatedAt | date }}</td>
-          </tr>
-          -->
-          <tr *ngIf="dataset.principalInvestigator as value">
-            <th>Principal Investigator</th>
-            <td>{{ value }}</td>
-          </tr>
-          <tr *ngIf="dataset.creationLocation as value">
-            <th>Creation Location</th>
-            <td>{{ value }}</td>
-          </tr>  
-        </table>
 
-        <div *ngIf="dataset.scientificMetadata as value">
-          <h3>Scientific Metadata</h3>
-          <pre>{{ value | json }}</pre>
-        </div>
-      </div>
-    </mat-card>
+
+    <mat-grid-list cols="2">
+      <mat-grid-tile>
+
+        <mat-card style="margin: 1em">
+          <div class="details">
+            <table>
+              <tr>
+                <th><fa-icon [icon]="faCoffee"></fa-icon>PID</th>
+                <td>{{ dataset.pid }}</td>
+              </tr>
+              <tr *ngIf="dataset.owner as value">
+                <th>Owner</th>
+                <td>{{ value }}</td>
+              </tr>
+              <tr *ngIf="dataset.contactEmail as value">
+                <th>Contact Email</th>
+                <td>{{ value }}</td>
+              </tr>
+              <tr *ngIf="dataset.sourceFolder as value">
+                <th>Source Folder</th>
+                <td>{{ value }}</td>
+              </tr>
+              <!--
+              <tr *ngIf="dataset.sourceFolder as value">
+                <th>Source Folder</th>
+                <mat-form-field class="example-full-width">
+                  <input matInput placeholder="Source Folder" [value]="value">
+                </mat-form-field>
+              </tr>
+              -->
+              <tr *ngIf="dataset.size as value">
+                <th>Size</th>
+                <td>{{ value | filesize }}</td>
+              </tr>
+              <tr *ngIf="dataset.creationTime as value">
+                <th>Creation Time</th>
+                <td>{{ value | date }}</td>
+              </tr>
+              <tr *ngIf="dataset.type as value">
+                <th>Type</th>
+                <td>{{ value }}</td>
+              </tr>
+              <tr *ngIf="dataset.version as value">
+                <th>Version</th>
+                <td>{{ value }}</td>
+              </tr>
+              <tr *ngIf="dataset.ownerGroup as value">
+                <th>Owner Group</th>
+                <td>{{ value }}</td>
+              </tr>
+              <!--
+              <tr>
+                <th>Created at</th>
+                <td>{{ dataset.createdAt | date }}</td>
+              </tr>
+              <tr>
+                <th>Updated at</th>
+                <td>{{ dataset.updatedAt | date }}</td>
+              </tr>
+              -->
+              <tr *ngIf="dataset.principalInvestigator as value">
+                <th>Principal Investigator</th>
+                <td>{{ value }}</td>
+              </tr>
+              <tr *ngIf="dataset.creationLocation as value">
+                <th>Creation Location</th>
+                <td>{{ value }}</td>
+              </tr>
+            </table>
+
+            <div *ngIf="dataset.scientificMetadata as value">
+              <h3>Scientific Metadata</h3>
+              <pre>{{ value | json }}</pre>
+            </div>
+          </div>
+        </mat-card>
+      </mat-grid-tile>
+      <mat-grid-tile>
+        <mat-card style="margin: 1em" *ngIf="(attachments$ | async) as attachments">
+          <h3>Attachments</h3>
+          <ng-container *ngFor="let da of attachments">
+            <img src="{{da.thumbnail}}" style="width: 372px">
+            <br>
+            preview image for experiment
+          </ng-container>
+        </mat-card>
+      </mat-grid-tile>
+    </mat-grid-list>
   </mat-tab>
-  
+
   <mat-tab label="Datafiles">
     <mat-card style="margin: 1em">
       <datafiles [dataBlocks]="origDatablocks$ | async"></datafiles>
@@ -92,7 +110,7 @@
       <app-file-picker></app-file-picker>
     </mat-card>
   </mat-tab>
-  
+
   <mat-tab *ngIf="(attachments$ | async) as attachments" label="Attachments">
     <mat-card style="margin: 1em">
       <h3>Attachments</h3>
@@ -101,7 +119,7 @@
       </ng-container>
     </mat-card>
   </mat-tab>
-  
+
   <mat-tab label="Admin" *ngIf="isAdmin$ | async">
     <mat-card style="margin: 1em">
       <button (click)="resetDataset(dataset)" class="ui yellow button">Reset Status</button>
@@ -116,7 +134,7 @@
       </ng-container>
     </mat-card>
   </mat-tab>
-  
+
   <mat-tab disabled>
     <ng-template mat-tab-label>
       <button mat-button class="export-btn" (click)="onExportClick()">Export to CSV</button>

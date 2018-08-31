@@ -8,6 +8,7 @@ import { combineLatest, Subscription } from "rxjs";
 import { take } from "rxjs/operators";
 
 import { DialogComponent } from "shared/modules/dialog/dialog.component";
+import { faCoffee } from "@fortawesome/free-solid-svg-icons";
 
 import {
   ChangePageAction,
@@ -19,7 +20,7 @@ import {
   SetViewModeAction,
   AddToBatchAction,
   SelectDatasetAction
-} from 'state-management/actions/datasets.actions';
+} from "state-management/actions/datasets.actions";
 
 import * as ua from "state-management/actions/user.actions";
 import * as ja from "state-management/actions/jobs.actions";
@@ -35,7 +36,7 @@ import {
   getDatasetsInBatch,
   getViewMode,
   getIsEmptySelection
-} from 'state-management/selectors/datasets.selectors';
+} from "state-management/selectors/datasets.selectors";
 
 import { getCurrentEmail } from "../../state-management/selectors/users.selectors";
 
@@ -67,7 +68,8 @@ export interface SortChangeEvent {
   styleUrls: ["dataset-table.component.scss"]
 })
 export class DatasetTableComponent implements OnInit, OnDestroy {
-  
+  faCoffee = faCoffee;
+
   private selectedSets$ = this.store.pipe(select(getSelectedDatasets));
   private datasets$ = this.store.pipe(select(getDatasets));
   private batch$ = this.store.pipe(select(getDatasetsInBatch));
@@ -101,7 +103,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     this.inBatchPids = datasets.map(dataset => dataset.pid);
   });
 
-  private modes = ['view', 'archive', 'retrieve'];
+  private modes = ["view", "archive", "retrieve"];
 
   // compatibility analogs of observables
   private selectedSets: Dataset[] = [];

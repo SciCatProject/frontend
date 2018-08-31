@@ -18,6 +18,8 @@ import {
 } from 'state-management/selectors/datasets.selectors';
 import {map, pluck, take} from 'rxjs/operators';
 
+import { faCoffee } from "@fortawesome/free-solid-svg-icons";
+
 /**
  * Component to show details for a dataset, using the
  * form compoennt
@@ -31,6 +33,7 @@ import {map, pluck, take} from 'rxjs/operators';
   styleUrls: ['./dataset-detail.component.scss']
 })
 export class DatasetDetailComponent implements OnInit, OnDestroy {
+  faCoffee = faCoffee;
   private subscriptions: Subscription[] = [];
   private routeSubscription = this.route.params
     .pipe(pluck('id'))
