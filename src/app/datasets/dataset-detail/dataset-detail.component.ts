@@ -29,6 +29,7 @@ import {
   faFolder,
   faIdBadge,
   faUpload,
+  faUserAlt,
   faUsers
 } from "@fortawesome/free-solid-svg-icons";
 
@@ -53,6 +54,7 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
   faCalendarAlt = faCalendarAlt;
   faFileAlt = faFileAlt;
   faCertificate = faCertificate;
+  faUserAlt = faUserAlt;
   faUsers = faUsers;
   faUpload = faUpload;
   faDownload = faDownload;

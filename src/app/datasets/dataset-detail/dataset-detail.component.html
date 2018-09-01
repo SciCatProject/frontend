@@ -8,9 +8,11 @@
 
 
 <mat-tab-group *ngIf="(dataset$ | async) as dataset" class="dataset-detail">
-  <mat-tab label="Details">
-
-
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <fa-icon [icon]="faIdBadge"></fa-icon>&nbsp;
+      Details
+    </ng-template>
     <mat-grid-list cols="2">
       <mat-grid-tile>
 
@@ -18,23 +20,31 @@
           <div class="details">
             <table>
               <tr>
-                <th><fa-icon [icon]="faIdBadge"></fa-icon>&nbsp;
-                  PID</th>
+                <th>
+                  <fa-icon [icon]="faIdBadge"></fa-icon>&nbsp;
+                  PID
+                </th>
                 <td>{{ dataset.pid }}</td>
               </tr>
               <tr *ngIf="dataset.owner as value">
-                <th><fa-icon [icon]="faIdBadge"></fa-icon>&nbsp;
-                  Owner</th>
+                <th>
+                  <fa-icon [icon]="faUserAlt"></fa-icon>&nbsp;
+                  Owner
+                </th>
                 <td>{{ value }}</td>
               </tr>
               <tr *ngIf="dataset.contactEmail as value">
-                <th><fa-icon [icon]="faAt"></fa-icon>&nbsp;
-                  Contact Email</th>
+                <th>
+                  <fa-icon [icon]="faAt"></fa-icon>&nbsp;
+                  Contact Email
+                </th>
                 <td>{{ value }}</td>
               </tr>
               <tr *ngIf="dataset.sourceFolder as value">
-                <th><fa-icon [icon]="faFolder"></fa-icon>&nbsp;
-                  Source Folder</th>
+                <th>
+                  <fa-icon [icon]="faFolder"></fa-icon>&nbsp;
+                  Source Folder
+                </th>
                 <td>{{ value }}</td>
               </tr>
               <!--
@@ -46,28 +56,38 @@
               </tr>
               -->
               <tr *ngIf="dataset.size as value">
-                <th><fa-icon [icon]="faCoins"></fa-icon>&nbsp;
-                  Size</th>
+                <th>
+                  <fa-icon [icon]="faCoins"></fa-icon>&nbsp;
+                  Size
+                </th>
                 <td>{{ value | filesize }}</td>
               </tr>
               <tr *ngIf="dataset.creationTime as value">
-                <th><fa-icon [icon]="faCalendarAlt"></fa-icon>&nbsp;
-                  Creation Time</th>
+                <th>
+                  <fa-icon [icon]="faCalendarAlt"></fa-icon>&nbsp;
+                  Creation Time
+                </th>
                 <td>{{ value | date }}</td>
               </tr>
               <tr *ngIf="dataset.type as value">
-                <th><fa-icon [icon]="faFileAlt"></fa-icon>&nbsp;
-                  Type</th>
+                <th>
+                  <fa-icon [icon]="faFileAlt"></fa-icon>&nbsp;
+                  Type
+                </th>
                 <td>{{ value }}</td>
               </tr>
               <tr *ngIf="dataset.version as value">
-                <th><fa-icon [icon]="faIdBadge"></fa-icon>&nbsp;
-                  Version</th>
+                <th>
+                  <fa-icon [icon]="faIdBadge"></fa-icon>&nbsp;
+                  Version
+                </th>
                 <td>{{ value }}</td>
               </tr>
               <tr *ngIf="dataset.ownerGroup as value">
-                <th><fa-icon [icon]="faUsers"></fa-icon>&nbsp;
-                  Owner Group</th>
+                <th>
+                  <fa-icon [icon]="faUsers"></fa-icon>&nbsp;
+                  Owner Group
+                </th>
                 <td>{{ value }}</td>
               </tr>
               <!--
@@ -81,13 +101,17 @@
               </tr>
               -->
               <tr *ngIf="dataset.principalInvestigator as value">
-                <th><fa-icon [icon]="faChessQueen"></fa-icon>&nbsp;
-                  Principal Investigator</th>
+                <th>
+                  <fa-icon [icon]="faChessQueen"></fa-icon>&nbsp;
+                  Principal Investigator
+                </th>
                 <td>{{ value }}</td>
               </tr>
               <tr *ngIf="dataset.creationLocation as value">
-                <th><fa-icon [icon]="faFolder"></fa-icon>&nbsp;
-                  Creation Location</th>
+                <th>
+                  <fa-icon [icon]="faFolder"></fa-icon>&nbsp;
+                  Creation Location
+                </th>
                 <td>{{ value }}</td>
               </tr>
             </table>
@@ -112,7 +136,11 @@
     </mat-grid-list>
   </mat-tab>
 
-  <mat-tab label="Datafiles">
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <fa-icon [icon]="faIdBadge"></fa-icon>&nbsp;
+        Datafiles
+      </ng-template>
     <mat-card style="margin: 1em">
       <datafiles [dataBlocks]="origDatablocks$ | async"></datafiles>
       <div *ngIf="(origDatablocks$ | async).length === 0">
@@ -122,7 +150,11 @@
     </mat-card>
   </mat-tab>
 
-  <mat-tab *ngIf="(attachments$ | async) as attachments" label="Attachments">
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <fa-icon [icon]="faIdBadge"></fa-icon>&nbsp;
+        Attachments
+      </ng-template>
     <mat-card style="margin: 1em">
       <h3>Attachments</h3>
       <ng-container *ngFor="let da of attachments">
@@ -131,7 +163,12 @@
     </mat-card>
   </mat-tab>
 
-  <mat-tab label="Admin" *ngIf="isAdmin$ | async">
+  <mat-tab  *ngIf="isAdmin$ | async">
+      <ng-template mat-tab-label>
+        <fa-icon [icon]="faChessQueen"></fa-icon>&nbsp;
+        Admin
+      </ng-template>
+
     <mat-card style="margin: 1em">
       <button (click)="resetDataset(dataset)" class="ui yellow button">Reset Status</button>
       <ng-container *ngIf="(datablocks$ | async) as datablocks">
