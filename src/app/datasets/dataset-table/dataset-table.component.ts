@@ -8,7 +8,13 @@ import { combineLatest, Subscription } from "rxjs";
 import { take } from "rxjs/operators";
 
 import { DialogComponent } from "shared/modules/dialog/dialog.component";
-import { faCoffee } from "@fortawesome/free-solid-svg-icons";
+import { faIdBadge } from "@fortawesome/free-solid-svg-icons";
+import { faFolder } from "@fortawesome/free-solid-svg-icons";
+import { faCoins } from "@fortawesome/free-solid-svg-icons";
+import { faCalendarAlt } from "@fortawesome/free-solid-svg-icons";
+import { faFileAlt } from "@fortawesome/free-solid-svg-icons";
+import { faCertificate } from "@fortawesome/free-solid-svg-icons";
+import { faUsers } from "@fortawesome/free-solid-svg-icons";
 
 import {
   ChangePageAction,
@@ -68,7 +74,13 @@ export interface SortChangeEvent {
   styleUrls: ["dataset-table.component.scss"]
 })
 export class DatasetTableComponent implements OnInit, OnDestroy {
-  faCoffee = faCoffee;
+  faIdBadge = faIdBadge;
+  faFolder = faFolder;
+  faCoins = faCoins
+  faCalendarAlt = faCalendarAlt;
+  faFileAlt = faFileAlt;
+  faCertificate = faCertificate;
+  faUsers = faUsers;
 
   private selectedSets$ = this.store.pipe(select(getSelectedDatasets));
   private datasets$ = this.store.pipe(select(getDatasets));
