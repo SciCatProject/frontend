@@ -96,7 +96,9 @@
         <fa-icon [icon]="faFolder"></fa-icon>&nbsp;
         Source Folder
       </mat-header-cell>
-      <mat-cell *matCellDef="let dataset">{{dataset.sourceFolder}}</mat-cell>
+      <mat-cell *matCellDef="let dataset" matTooltip="{{ dataset.sourceFolder}}">
+        ...{{dataset.sourceFolder | slice:-10}}
+      </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="size">
@@ -112,7 +114,8 @@
     <ng-container matColumnDef="creationTime">
       <mat-header-cell *matHeaderCellDef mat-sort-header>
         <fa-icon [icon]="faCalendarAlt"></fa-icon>&nbsp;
-        Creation Time</mat-header-cell>
+        Creation Time
+      </mat-header-cell>
       <mat-cell *matCellDef="let dataset">
         {{dataset.creationTime | date: 'dd/MM/yyyy HH:mm'}}
       </mat-cell>
@@ -121,28 +124,32 @@
     <ng-container matColumnDef="type">
       <mat-header-cell *matHeaderCellDef>
         <fa-icon [icon]="faFileAlt"></fa-icon>&nbsp;
-        Type</mat-header-cell>
+        Type
+      </mat-header-cell>
       <mat-cell *matCellDef="let dataset">{{dataset.type}}</mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="proposalId">
       <mat-header-cell *matHeaderCellDef>
         <fa-icon [icon]="faCertificate"></fa-icon>&nbsp;
-        Proposal</mat-header-cell>
+        Proposal
+      </mat-header-cell>
       <mat-cell *matCellDef="let dataset">{{dataset.proposalId}}</mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="ownerGroup">
       <mat-header-cell *matHeaderCellDef>
         <fa-icon [icon]="faUsers"></fa-icon>&nbsp;
-        Group</mat-header-cell>
+        Group
+      </mat-header-cell>
       <mat-cell *matCellDef="let dataset">{{dataset.ownerGroup}}</mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="archiveStatus">
       <mat-header-cell *matHeaderCellDef>
         <fa-icon [icon]="faDownload"></fa-icon>&nbsp;
-        Archive Status</mat-header-cell>
+        Archive Status
+      </mat-header-cell>
       <mat-cell *matCellDef="let dataset">
         {{ (dataset.datasetlifecycle || {}).archiveStatusMessage }}
       </mat-cell>
@@ -151,7 +158,8 @@
     <ng-container matColumnDef="retrieveStatus">
       <mat-header-cell *matHeaderCellDef>
         <fa-icon [icon]="faUpload"></fa-icon>&nbsp;
-        Retrieve Status</mat-header-cell>
+        Retrieve Status
+      </mat-header-cell>
       <mat-cell *matCellDef="let dataset">
         {{ (dataset.datasetlifecycle || {}).retrieveStatusMessage }}
       </mat-cell>

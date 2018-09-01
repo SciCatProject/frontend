@@ -1,25 +1,20 @@
-import { APP_CONFIG, AppConfig } from "./app-config.module";
-import { MatSidenav } from "@angular/material/sidenav";
-import {
-  Component,
-  Inject,
-  OnDestroy,
-  OnInit,
-  ViewChild,
-  ViewEncapsulation
-} from "@angular/core";
-import { Router } from "@angular/router";
-import { Store, select } from "@ngrx/store";
-import { LoopBackConfig } from "shared/sdk";
-import { UserApi } from "shared/sdk/services";
+import {APP_CONFIG, AppConfig} from "./app-config.module";
+import {MatSidenav} from "@angular/material/sidenav";
+import {Component, Inject, OnDestroy, OnInit, ViewChild, ViewEncapsulation} from "@angular/core";
+import {Router} from "@angular/router";
+import {select, Store} from "@ngrx/store";
+import {LoopBackConfig} from "shared/sdk";
+import {UserApi} from "shared/sdk/services";
 import * as ua from "state-management/actions/user.actions";
-import { MatSnackBar } from "@angular/material";
-import { Title } from "@angular/platform-browser";
-import { environment } from "../environments/environment";
+import {MatSnackBar} from "@angular/material";
+import {Title} from "@angular/platform-browser";
+import {environment} from "../environments/environment";
 import * as selectors from "state-management/selectors";
-import { getCurrentUser } from "state-management/selectors/users.selectors";
+import {getCurrentUser} from "state-management/selectors/users.selectors";
 
-const { version: appVersion } = require("../../package.json");
+import {faAddressBook, faCertificate, faDownload, faEdit, faFileAlt, faIdBadge, faPeopleCarry} from "@fortawesome/free-solid-svg-icons";
+
+const {version: appVersion} = require("../../package.json");
 
 @Component({
   selector: "app-root",
@@ -33,6 +28,13 @@ export class AppComponent implements OnDestroy, OnInit {
   sidenav: MatSidenav;
   userObs$ = this.store.pipe(select(getCurrentUser));
 
+  faAddressBook = faAddressBook;
+  faIdBadge = faIdBadge;
+  faEdit = faEdit;
+  faFileAlt = faFileAlt;
+  faCertificate = faCertificate;
+  faDownload = faDownload;
+  faPeopleCarry = faPeopleCarry;
   title = "SciCat";
   appVersion = 0;
   us: UserApi;
@@ -87,7 +89,7 @@ export class AppComponent implements OnDestroy, OnInit {
     }
 
     // localStorage.clear();
-    if (window.location.pathname.indexOf('logout') !== -1) {
+    if (window.location.pathname.indexOf("logout") !== -1) {
       this.logout();
       // this.router.navigate(['/login']);
     }
