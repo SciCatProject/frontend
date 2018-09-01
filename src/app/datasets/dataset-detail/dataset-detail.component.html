@@ -18,19 +18,23 @@
           <div class="details">
             <table>
               <tr>
-                <th><fa-icon [icon]="faCoffee"></fa-icon>PID</th>
+                <th><fa-icon [icon]="faIdBadge"></fa-icon>&nbsp;
+                  PID</th>
                 <td>{{ dataset.pid }}</td>
               </tr>
               <tr *ngIf="dataset.owner as value">
-                <th>Owner</th>
+                <th><fa-icon [icon]="faIdBadge"></fa-icon>&nbsp;
+                  Owner</th>
                 <td>{{ value }}</td>
               </tr>
               <tr *ngIf="dataset.contactEmail as value">
-                <th>Contact Email</th>
+                <th><fa-icon [icon]="faAt"></fa-icon>&nbsp;
+                  Contact Email</th>
                 <td>{{ value }}</td>
               </tr>
               <tr *ngIf="dataset.sourceFolder as value">
-                <th>Source Folder</th>
+                <th><fa-icon [icon]="faFolder"></fa-icon>&nbsp;
+                  Source Folder</th>
                 <td>{{ value }}</td>
               </tr>
               <!--
@@ -42,23 +46,28 @@
               </tr>
               -->
               <tr *ngIf="dataset.size as value">
-                <th>Size</th>
+                <th><fa-icon [icon]="faCoins"></fa-icon>&nbsp;
+                  Size</th>
                 <td>{{ value | filesize }}</td>
               </tr>
               <tr *ngIf="dataset.creationTime as value">
-                <th>Creation Time</th>
+                <th><fa-icon [icon]="faCalendarAlt"></fa-icon>&nbsp;
+                  Creation Time</th>
                 <td>{{ value | date }}</td>
               </tr>
               <tr *ngIf="dataset.type as value">
-                <th>Type</th>
+                <th><fa-icon [icon]="faFileAlt"></fa-icon>&nbsp;
+                  Type</th>
                 <td>{{ value }}</td>
               </tr>
               <tr *ngIf="dataset.version as value">
-                <th>Version</th>
+                <th><fa-icon [icon]="faIdBadge"></fa-icon>&nbsp;
+                  Version</th>
                 <td>{{ value }}</td>
               </tr>
               <tr *ngIf="dataset.ownerGroup as value">
-                <th>Owner Group</th>
+                <th><fa-icon [icon]="faUsers"></fa-icon>&nbsp;
+                  Owner Group</th>
                 <td>{{ value }}</td>
               </tr>
               <!--
@@ -72,11 +81,13 @@
               </tr>
               -->
               <tr *ngIf="dataset.principalInvestigator as value">
-                <th>Principal Investigator</th>
+                <th><fa-icon [icon]="faChessQueen"></fa-icon>&nbsp;
+                  Principal Investigator</th>
                 <td>{{ value }}</td>
               </tr>
               <tr *ngIf="dataset.creationLocation as value">
-                <th>Creation Location</th>
+                <th><fa-icon [icon]="faFolder"></fa-icon>&nbsp;
+                  Creation Location</th>
                 <td>{{ value }}</td>
               </tr>
             </table>
