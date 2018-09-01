@@ -78,7 +78,7 @@
               </tr>
               <tr *ngIf="dataset.version as value">
                 <th>
-                  <fa-icon [icon]="faIdBadge"></fa-icon>&nbsp;
+                  <fa-icon [icon]="faGem"></fa-icon>&nbsp;
                   Version
                 </th>
                 <td>{{ value }}</td>
@@ -109,7 +109,7 @@
               </tr>
               <tr *ngIf="dataset.creationLocation as value">
                 <th>
-                  <fa-icon [icon]="faFolder"></fa-icon>&nbsp;
+                  <fa-icon [icon]="faGlobe"></fa-icon>&nbsp;
                   Creation Location
                 </th>
                 <td>{{ value }}</td>
@@ -138,7 +138,7 @@
 
     <mat-tab>
       <ng-template mat-tab-label>
-        <fa-icon [icon]="faIdBadge"></fa-icon>&nbsp;
+        <fa-icon [icon]="faDownload"></fa-icon>&nbsp;
         Datafiles
       </ng-template>
     <mat-card style="margin: 1em">
@@ -152,7 +152,7 @@
 
     <mat-tab>
       <ng-template mat-tab-label>
-        <fa-icon [icon]="faIdBadge"></fa-icon>&nbsp;
+        <fa-icon [icon]="faImages"></fa-icon>&nbsp;
         Attachments
       </ng-template>
     <mat-card style="margin: 1em">

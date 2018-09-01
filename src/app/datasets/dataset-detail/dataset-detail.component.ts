@@ -27,7 +27,10 @@ import {
   faDownload,
   faFileAlt,
   faFolder,
+  faGem,
+  faGlobe,
   faIdBadge,
+  faImages,
   faUpload,
   faUserAlt,
   faUsers
@@ -53,6 +56,9 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
   faChessQueen = faChessQueen;
   faCalendarAlt = faCalendarAlt;
   faFileAlt = faFileAlt;
+  faImages = faImages;
+  faGem = faGem;
+  faGlobe = faGlobe;
   faCertificate = faCertificate;
   faUserAlt = faUserAlt;
   faUsers = faUsers;
