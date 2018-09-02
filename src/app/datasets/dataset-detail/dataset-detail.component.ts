@@ -1,29 +1,29 @@
-import {Component, OnDestroy, OnInit} from "@angular/core";
-import {ActivatedRoute} from "@angular/router";
-import {select, Store} from "@ngrx/store";
-import {Job} from "shared/sdk/models";
+import { Component, OnDestroy, OnInit } from "@angular/core";
+import { ActivatedRoute } from "@angular/router";
+import { select, Store } from "@ngrx/store";
+import { Job } from "shared/sdk/models";
 import * as dsa from "state-management/actions/datasets.actions";
 import * as ja from "state-management/actions/jobs.actions";
 import * as ua from "state-management/actions/user.actions";
 import * as selectors from "state-management/selectors";
-import {Subscription} from "rxjs";
-import {Message, MessageType} from "state-management/models";
-import {Angular5Csv} from "angular5-csv/Angular5-csv";
-import {getIsAdmin} from "state-management/selectors/users.selectors";
+import { Subscription } from "rxjs";
+import { Message, MessageType } from "state-management/models";
+import { Angular5Csv } from "angular5-csv/Angular5-csv";
+import { getIsAdmin } from "state-management/selectors/users.selectors";
 import {
   getCurrentAttachments,
   getCurrentDatablocks,
   getCurrentDataset,
   getCurrentOrigDatablocks
 } from "state-management/selectors/datasets.selectors";
-import {pluck, take} from "rxjs/operators";
+import { pluck, take } from "rxjs/operators";
 
 import {
   faAt,
   faCalendarAlt,
   faCertificate,
-  faCoins,
   faChessQueen,
+  faCoins,
   faDownload,
   faFileAlt,
   faFolder,
@@ -125,8 +125,8 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
         useBom: true,
         headers: Object.keys(ds)
       };
-      let newDs = {};
-      for (let key in ds) {
+      const newDs = {};
+      for (const key of Object.keys(ds)) {
         newDs[key] = JSON.stringify(ds[key]);
       }
       const ts = new Angular5Csv([newDs], "Dataset_" + ds.pid, options);

@@ -43,9 +43,15 @@
       </mat-list>
 
       <mat-menu #userMenu="matMenu">
-        <a mat-menu-item (click)="sidenav.close()" [routerLinkActive]="['active']" [routerLink]="['/user/','details']">Details</a>
-        <a mat-menu-item (click)="sidenav.close()" [routerLinkActive]="['active']" [routerLink]="['/user/','settings']">Settings</a>
-        <a mat-menu-item class="logout-link" (click)="logout()">Logout</a>
+        <a mat-menu-item (click)="sidenav.close()" [routerLinkActive]="['active']" [routerLink]="['/user/','details']">
+          <fa-icon [icon]="faIdBadge"></fa-icon>&nbsp;
+          Details</a>
+        <a mat-menu-item (click)="sidenav.close()" [routerLinkActive]="['active']" [routerLink]="['/user/','settings']">
+          <fa-icon [icon]="faCog"></fa-icon>&nbsp;
+          Settings</a>
+        <a mat-menu-item class="logout-link" (click)="logout()">
+          <fa-icon [icon]="faSignOutAlt"></fa-icon>&nbsp;
+          Logout</a>
       </mat-menu>
 
       <footer>{{appVersion}}</footer>

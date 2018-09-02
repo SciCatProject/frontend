@@ -185,7 +185,9 @@
 
   <mat-tab disabled>
     <ng-template mat-tab-label>
-      <button mat-button class="export-btn" (click)="onExportClick()">Export to CSV</button>
+      <button mat-button class="export-btn" (click)="onExportClick()">
+        <fa-icon [icon]="faChessQueen"></fa-icon>&nbsp;
+        Export to CSV</button>
     </ng-template>
   </mat-tab>
 </mat-tab-group>
