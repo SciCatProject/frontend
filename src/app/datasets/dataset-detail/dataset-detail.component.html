@@ -14,6 +14,8 @@
       Details
     </ng-template>
 
+    <div fxLayout="row">
+      <div fxFlex="60%">
           <mat-card style="margin: 1em">
             <div class="details">
               <table>
@@ -43,7 +45,7 @@
                     <fa-icon [icon]="faFolder"></fa-icon>&nbsp;
                     Source Folder
                   </th>
-                  <td>{{ value }}</td>
+                  <td>...{{ value | slice:-60}}</td>
                 </tr>
                 <!--
                 <tr *ngIf="dataset.sourceFolder as value">
@@ -120,13 +122,17 @@
               </div>
             </div>
           </mat-card>
-        <ng-container *ngFor="let da of attachments">
-          <mat-card style="margin: 1em" *ngIf="(attachments$ | async) as attachments">
-            <img src="{{da.thumbnail}}" style="width: 372px">
+      </div>
+      <div fxFlex="30%">
+        <mat-card style="margin: 1em" *ngIf="(attachments$ | async) as attachments">
+          <ng-container *ngFor="let da of attachments">
+            <img src="{{da.thumbnail}}" style="width: 300px">
             <br>
-            preview image for experiment
-          </mat-card>
-        </ng-container>
+            Sample preview image for experiment for experimental data
+          </ng-container>
+        </mat-card>
+      </div>
+    </div>
   </mat-tab>
 
   <mat-tab>
@@ -143,12 +149,12 @@
     </mat-card>
   </mat-tab>
 
-  <mat-tab>
+  <mat-tab *ngIf="(attachments$ | async) as attachments" >
     <ng-template mat-tab-label>
       <fa-icon [icon]="faImages"></fa-icon>&nbsp;
       Attachments
     </ng-template>
-    <mat-card style="margin: 1em">
+    <mat-card style="margin: 1em" >
       <h3>Attachments</h3>
       <ng-container *ngFor="let da of attachments">
         <img src="{{da.thumbnail}}">
