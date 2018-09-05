@@ -46,7 +46,8 @@ import {
   Job,
   Message,
   MessageType,
-  ViewMode
+  ViewMode,
+  User
 } from "state-management/models";
 import { APP_CONFIG, AppConfig } from "app-config.module";
 
@@ -248,7 +249,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     const msg = new Message();
     if (this.selectedSets.length > 0) {
       const job = new Job();
-      console.log(this.email$);
       job.jobParams = {};
       job.creationTime = new Date();
       const backupFiles = [];
@@ -257,15 +257,10 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
           select(state => state.root.user),
           take(1)
         )
-        .subscribe(user => {
-          job.emailJobInitiator = user["email"];
-          user = user["currentUserIdentity"];
-          job.jobParams["username"] = user["profile"]["username"] || undefined;
-          if (!job.emailJobInitiator) {
-            job.emailJobInitiator = user["profile"]
-              ? user["profile"]["email"]
-              : user["email"];
-          }
+        .subscribe((user: User) => {
+          job.emailJobInitiator = user.email;
+          job.jobParams["username"] = user.username;
+
           this.selectedSets.forEach(set => {
             // if ('datablocks' in set && set['datablocks'].length > 0) {
             const fileObj = {};
