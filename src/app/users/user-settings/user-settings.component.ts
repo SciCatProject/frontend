@@ -15,11 +15,12 @@ export class UserSettingsComponent implements OnInit {
   settings$ = null;
 
   constructor(private us: UserApi, private store: Store<any>) {
-    this.store.pipe(select(selectors.users.getCurrentUser)).subscribe(user => {
+    this.store.select(selectors.users.getCurrentUser).subscribe(user => {
       this.user = user;
     });
     console.log(this.us.getCurrentToken());
     this.settings$ = this.store.pipe(select(selectors.users.getSettings));
+
     // TODO handle service and endpoint for user settings
   }
 
