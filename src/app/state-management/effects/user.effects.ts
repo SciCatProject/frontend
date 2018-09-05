@@ -101,7 +101,7 @@ export class UserEffects {
   protected login$ = this.action$.pipe(
     ofType<UserActions.LoginAction>(UserActions.LOGIN),
     map(action => action.form),
-    switchMap(({username, password}) => this.loginSrv.login$(username, password)),
+    switchMap(({username, password, rememberMe}) => this.loginSrv.login$(username, password, rememberMe)),
     map(user => user 
       ? new UserActions.LoginCompleteAction(user)
       : new UserActions.LoginFailedAction('', '') // TODO

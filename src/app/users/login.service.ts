@@ -13,9 +13,9 @@ export class LoginService {
         private authSrv: LoopBackAuth
     ) {}
 
-    public login$(username: string, password: string): Observable<User> {
+    public login$(username: string, password: string, rememberMe: boolean): Observable<User> {
         /* Try both functional login... */
-        const funcLogin$ = this.userSrv.login({username, password}).pipe(
+        const funcLogin$ = this.userSrv.login({username, password, rememberMe}).pipe(
           map(({user}) => user),
           catchError(() => of(null))
         );
