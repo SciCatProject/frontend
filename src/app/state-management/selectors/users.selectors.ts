@@ -10,18 +10,18 @@ export const getCurrentUser = createSelector(
 );
 
 export const getIsLoggedIn = createSelector(
-  getCurrentUser,
-  user => user != null
+  getUserState,
+  state => state.loggedIn
 );
 
 export const getCurrentEmail = createSelector(
-  getEmail,
-  user => (user ? user["email"] : null)
+  getCurrentUser,
+  user => user ? user.email : null
 );
 
 const getCurrentUserName = createSelector(
   getCurrentUser,
-  user => (user ? user.username : null)
+  user => user ? user.username : null
 );
 
 const getCurrentUserAccountType = createSelector(

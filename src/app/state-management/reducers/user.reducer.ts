@@ -35,16 +35,19 @@ export function userReducer(
       return { ...state, currentUser };
     }
 
+    /*
     case RETRIEVE_USER_IDENTITY_COMPLETE: {
       const currentUserIdentity = (action as RetrieveUserIdentityCompleteAction).userIdentity;
       return { ...state, currentUserIdentity };
     }
+    */
 
     case LOGIN_COMPLETE: {
       const currentUser = (action as LoginCompleteAction).user;
       return { ...state, currentUser, isLoggingIn: false, loggedIn: true };
     }
 
+    /*
     case ACCESS_USER_EMAIL_COMPLETE: {
       // const c = state.currentUser;
       // c['email'] = action['payload'];
@@ -53,6 +56,7 @@ export function userReducer(
         email: (action as AccessUserEmailCompleteAction).email
       };
     }
+    */
 
     case LOGIN_FAILED: {
       return { ...state, isLoggingIn: false, loggedIn: false };
@@ -79,7 +83,7 @@ export function userReducer(
     case LOGIN: {
       return { ...state, isLoggingIn: true };
     }
-    case AD_LOGIN_COMPLETE:
+    //case AD_LOGIN_COMPLETE:
     default: {
       return { ...state, isLoggingIn: false, loggedIn: true };
     }
