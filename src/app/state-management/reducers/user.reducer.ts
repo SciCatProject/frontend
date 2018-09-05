@@ -44,7 +44,7 @@ export function userReducer(
 
     case LOGIN_COMPLETE: {
       const currentUser = (action as LoginCompleteAction).user;
-      return { ...state, currentUser, isLoggingIn: false, loggedIn: true };
+      return { ...state, currentUser, isLoggingIn: false, isLoggedIn: true };
     }
 
     /*
@@ -59,7 +59,7 @@ export function userReducer(
     */
 
     case LOGIN_FAILED: {
-      return { ...state, isLoggingIn: false, loggedIn: false };
+      return { ...state, isLoggingIn: false, isLoggedIn: false };
     }
 
     case SHOW_MESSAGE: {
@@ -83,10 +83,9 @@ export function userReducer(
     case LOGIN: {
       return { ...state, isLoggingIn: true };
     }
-    //case AD_LOGIN_COMPLETE:
-    default: {
-      return { ...state, isLoggingIn: false, loggedIn: true };
-    }
+
+    default:
+      return state;
   }
 }
 

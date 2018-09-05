@@ -10,7 +10,7 @@ export interface UserState {
   email: string;
   message: Message;
   settings: Settings;
-  loggedIn: boolean;
+  isLoggedIn: boolean;
 }
 
 export const initialUserState: UserState = {
@@ -26,5 +26,5 @@ export const initialUserState: UserState = {
     jobCount: 30,
     darkTheme: false
   }, // TODO sync with server settings?
-  loggedIn: false
+  isLoggedIn: false
 };

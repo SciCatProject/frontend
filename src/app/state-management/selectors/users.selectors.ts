@@ -11,7 +11,7 @@ export const getCurrentUser = createSelector(
 
 export const getIsLoggedIn = createSelector(
   getUserState,
-  state => state.loggedIn
+  state => state.isLoggedIn
 );
 
 export const getCurrentEmail = createSelector(
