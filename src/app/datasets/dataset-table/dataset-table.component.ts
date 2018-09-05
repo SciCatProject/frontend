@@ -254,7 +254,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
       const backupFiles = [];
       this.store
         .pipe(
-          select(state => state.root.user),
+          select(state => state.root.user.currentUser),
           take(1)
         )
         .subscribe((user: User) => {
