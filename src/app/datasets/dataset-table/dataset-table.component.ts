@@ -1,54 +1,59 @@
-import { Component, Inject, OnDestroy, OnInit } from "@angular/core";
-import { Router } from "@angular/router";
-import { MatCheckboxChange, MatDialog } from "@angular/material";
+import {Component, Inject, OnDestroy, OnInit} from "@angular/core";
+import {Router} from "@angular/router";
+import {MatCheckboxChange, MatDialog} from "@angular/material";
 
-import { select, Store } from "@ngrx/store";
+import {select, Store} from "@ngrx/store";
 
-import { combineLatest, Subscription } from "rxjs";
-import { take } from "rxjs/operators";
+import {combineLatest, Subscription} from "rxjs";
+import {take} from "rxjs/operators";
 
-import { DialogComponent } from "shared/modules/dialog/dialog.component";
+import {DialogComponent} from "shared/modules/dialog/dialog.component";
+import {
+  faCalendarAlt,
+  faCertificate,
+  faCoins,
+  faDownload,
+  faFileAlt,
+  faFolder,
+  faIdBadge,
+  faUpload,
+  faUsers
+} from "@fortawesome/free-solid-svg-icons";
 
 import {
+  AddToBatchAction,
   ChangePageAction,
   ClearSelectionAction,
   DeselectDatasetAction,
   ExportToCsvAction,
   SelectAllDatasetsAction,
-  SortByColumnAction,
+  SelectDatasetAction,
   SetViewModeAction,
-  AddToBatchAction,
-  SelectDatasetAction
-} from 'state-management/actions/datasets.actions';
+  SortByColumnAction
+} from "state-management/actions/datasets.actions";
 
 import * as ua from "state-management/actions/user.actions";
 import * as ja from "state-management/actions/jobs.actions";
 
 import {
   getDatasets,
+  getDatasetsInBatch,
   getDatasetsPerPage,
   getFilters,
+  getIsEmptySelection,
   getIsLoading,
   getPage,
   getSelectedDatasets,
   getTotalSets,
-  getDatasetsInBatch,
-  getViewMode,
-  getIsEmptySelection
-} from 'state-management/selectors/datasets.selectors';
+  getViewMode
+} from "state-management/selectors/datasets.selectors";
 
-import { getCurrentEmail } from "../../state-management/selectors/users.selectors";
+import {getCurrentEmail} from "../../state-management/selectors/users.selectors";
 
 import * as jobSelectors from "state-management/selectors/jobs.selectors";
 
-import {
-  Dataset,
-  Job,
-  Message,
-  MessageType,
-  ViewMode
-} from "state-management/models";
-import { APP_CONFIG, AppConfig } from "app-config.module";
+import {Dataset, Job, Message, MessageType, ViewMode} from "state-management/models";
+import {APP_CONFIG, AppConfig} from "app-config.module";
 
 export interface PageChangeEvent {
   pageIndex: number;
@@ -67,7 +72,16 @@ export interface SortChangeEvent {
   styleUrls: ["dataset-table.component.scss"]
 })
 export class DatasetTableComponent implements OnInit, OnDestroy {
-  
+  faIdBadge = faIdBadge;
+  faFolder = faFolder;
+  faCoins = faCoins
+  faCalendarAlt = faCalendarAlt;
+  faFileAlt = faFileAlt;
+  faCertificate = faCertificate;
+  faUsers = faUsers;
+  faUpload = faUpload;
+  faDownload = faDownload;
+
   private selectedSets$ = this.store.pipe(select(getSelectedDatasets));
   private datasets$ = this.store.pipe(select(getDatasets));
   private batch$ = this.store.pipe(select(getDatasetsInBatch));
@@ -101,7 +115,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     this.inBatchPids = datasets.map(dataset => dataset.pid);
   });
 
-  private modes = ['view', 'archive', 'retrieve'];
+  private modes = ["view", "archive", "retrieve"];
 
   // compatibility analogs of observables
   private selectedSets: Dataset[] = [];

@@ -9,7 +9,7 @@ import {
   ViewEncapsulation
 } from "@angular/core";
 import { Router } from "@angular/router";
-import { Store, select } from "@ngrx/store";
+import { select, Store } from "@ngrx/store";
 import { LoopBackConfig } from "shared/sdk";
 import { UserApi } from "shared/sdk/services";
 import * as ua from "state-management/actions/user.actions";
@@ -18,6 +18,18 @@ import { Title } from "@angular/platform-browser";
 import { environment } from "../environments/environment";
 import * as selectors from "state-management/selectors";
 import { getCurrentUser } from "state-management/selectors/users.selectors";
+
+import {
+  faAddressBook,
+  faCertificate,
+  faCog,
+  faDownload,
+  faEdit,
+  faFileAlt,
+  faIdBadge,
+  faPeopleCarry,
+  faSignOutAlt
+} from "@fortawesome/free-solid-svg-icons";
 
 const { version: appVersion } = require("../../package.json");
 
@@ -33,6 +45,15 @@ export class AppComponent implements OnDestroy, OnInit {
   sidenav: MatSidenav;
   userObs$ = this.store.pipe(select(getCurrentUser));
 
+  faAddressBook = faAddressBook;
+  faIdBadge = faIdBadge;
+  faEdit = faEdit;
+  faFileAlt = faFileAlt;
+  faCertificate = faCertificate;
+  faCog = faCog;
+  faDownload = faDownload;
+  faPeopleCarry = faPeopleCarry;
+  faSignOutAlt = faSignOutAlt;
   title = "SciCat";
   appVersion = 0;
   us: UserApi;
@@ -87,7 +108,7 @@ export class AppComponent implements OnDestroy, OnInit {
     }
 
     // localStorage.clear();
-    if (window.location.pathname.indexOf('logout') !== -1) {
+    if (window.location.pathname.indexOf("logout") !== -1) {
       this.logout();
       // this.router.navigate(['/login']);
     }
