@@ -48,7 +48,7 @@ export class ActiveDirLoginAction implements Action {
 
 export class LoginCompleteAction implements Action {
   readonly type = LOGIN_COMPLETE;
-  constructor(public user: User) {}
+  constructor(readonly user: User, readonly accountType: string) {}
 }
 
 export class LoginFailedAction implements Action {

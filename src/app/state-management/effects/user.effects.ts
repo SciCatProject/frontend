@@ -102,8 +102,8 @@ export class UserEffects {
     ofType<UserActions.LoginAction>(UserActions.LOGIN),
     map(action => action.form),
     switchMap(({username, password, rememberMe}) => this.loginSrv.login$(username, password, rememberMe)),
-    map(user => user 
-      ? new UserActions.LoginCompleteAction(user)
+    map(res => res 
+      ? new UserActions.LoginCompleteAction(res.user, res.accountType)
       : new UserActions.LoginFailedAction('', '') // TODO
     )
   );
