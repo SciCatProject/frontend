@@ -126,7 +126,7 @@
       <div fxFlex="30%" *ngIf="(attachments$ | async) as attachments" >
           <ng-container *ngFor="let da of attachments">
             <mat-card style="margin: 1em">
-            <img src="{{da.thumbnail}}" style="width: 300px">
+            <img mat-card-image src="{{da.thumbnail}}" >
             <br>
             </mat-card>
           </ng-container>
