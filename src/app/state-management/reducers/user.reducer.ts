@@ -43,8 +43,8 @@ export function userReducer(
     */
 
     case LOGIN_COMPLETE: {
-      const currentUser = (action as LoginCompleteAction).user;
-      return { ...state, currentUser, isLoggingIn: false, isLoggedIn: true };
+      const {user, accountType} = action as LoginCompleteAction;
+      return { ...state, currentUser: user, isLoggingIn: false, isLoggedIn: true, accountType };
     }
 
     /*

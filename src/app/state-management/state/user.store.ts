@@ -11,6 +11,7 @@ export interface UserState {
   message: Message;
   settings: Settings;
   isLoggedIn: boolean;
+  accountType?: string;
 }
 
 export const initialUserState: UserState = {

@@ -25,8 +25,8 @@ const getCurrentUserName = createSelector(
 );
 
 const getCurrentUserAccountType = createSelector(
-  getCurrentUser,
-  user => (user ? user["accountType"] : null) // ??? Why doesn't the User class have an accountType?
+  getUserState,
+  state => state.accountType
 );
 
 export const getIsAdmin = createSelector(
