@@ -138,9 +138,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     private store: Store<any>,
     public dialog: MatDialog,
     @Inject(APP_CONFIG) private appConfig: AppConfig
-  ) {
-    this.email$.subscribe(res => console.log("gm subscribe to email", res));
-  }
+  ) {}
 
   ngOnInit() {
     this.submitJobSubscription = this.store
