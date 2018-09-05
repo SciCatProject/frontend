@@ -104,7 +104,7 @@ export class UserEffects {
     switchMap(({username, password, rememberMe}) => this.loginSrv.login$(username, password, rememberMe)),
     map(res => res 
       ? new UserActions.LoginCompleteAction(res.user, res.accountType)
-      : new UserActions.LoginFailedAction('', '') // TODO
+      : new UserActions.LoginFailedAction()
     )
   );
 
@@ -114,7 +114,7 @@ export class UserEffects {
     map(
       (action: UserActions.LoginFailedAction) =>
         new UserActions.ShowMessageAction({
-          content: action.message,
+          content: 'Could not log in. Check your username and password.',
           type: MessageType.Error
         })
     )

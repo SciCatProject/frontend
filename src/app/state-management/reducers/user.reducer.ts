@@ -10,15 +10,15 @@ import {
   LOGIN_FAILED,
   RETRIEVE_USER_COMPLETE,
   RetrieveUserCompleteAction,
-  ACCESS_USER_EMAIL_COMPLETE,
-  AD_LOGIN_COMPLETE,
+  // ACCESS_USER_EMAIL_COMPLETE,
+  // AD_LOGIN_COMPLETE,
   LOGOUT_COMPLETE,
   LoginCompleteAction,
-  AccessUserEmailCompleteAction,
+  // AccessUserEmailCompleteAction,
   ShowMessageAction,
   SaveSettingsAction,
-  RETRIEVE_USER_IDENTITY_COMPLETE,
-  RetrieveUserIdentityCompleteAction
+  // RETRIEVE_USER_IDENTITY_COMPLETE,
+  // RetrieveUserIdentityCompleteAction
 } from "state-management/actions/user.actions";
 
 export function userReducer(

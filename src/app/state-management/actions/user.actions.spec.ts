@@ -11,6 +11,7 @@ import {
   RETRIEVE_USER_COMPLETE
 } from "./user.actions";
 import { RetrieveUserFailedAction, RETRIEVE_USER_FAILED } from "./user.actions";
+/*
 import { AccessUserEmailAction, ACCESS_USER_EMAIL } from "./user.actions";
 import {
   AccessUserEmailCompleteAction,
@@ -20,6 +21,7 @@ import {
   AccessUserEmailFailedAction,
   ACCESS_USER_EMAIL_FAILED
 } from "./user.actions";
+*/
 import { ShowMessageAction, SHOW_MESSAGE } from "./user.actions";
 import { ClearMessageAction, CLEAR_MESSAGE } from "./user.actions";
 import { SaveSettingsAction, SAVE_SETTINGS } from "./user.actions";
@@ -55,10 +57,8 @@ describe("LoginCompleteAction", () => {
 
 describe("LoginFailedAction", () => {
   it("should create an action", () => {
-    const message = "";
-    const errSrc = "";
-    const action = new LoginFailedAction(message, errSrc);
-    expect({ ...action }).toEqual({ type: LOGIN_FAILED, message, errSrc });
+    const action = new LoginFailedAction();
+    expect({ ...action }).toEqual({ type: LOGIN_FAILED });
   });
 });
 
@@ -99,6 +99,7 @@ describe("RetrieveUserFailedAction", () => {
   });
 });
 
+/*
 describe("AccessUserEmailAction", () => {
   it("should create an action", () => {
     const userId = "emailstring";
@@ -122,6 +123,7 @@ describe("AccessUserEmailFailedAction", () => {
     expect({ ...action }).toEqual({ type: ACCESS_USER_EMAIL_FAILED, error });
   });
 });
+*/
 
 describe("ShowMessageAction", () => {
   it("should create an action", () => {
