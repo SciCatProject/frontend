@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {Store, select} from '@ngrx/store';
-import {Job} from 'shared/sdk/models';
+import {Job, User} from 'shared/sdk/models';
 import * as dsa from 'state-management/actions/datasets.actions';
 import * as ja from 'state-management/actions/jobs.actions';
 import * as ua from 'state-management/actions/user.actions';
@@ -105,17 +105,13 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
 
   resetDataset(dataset) {
     this.store.pipe(
-      select(state => state.root.user),
+      select(state => state.root.user.currentUser),
       take(1))
-      .subscribe(user => {
-        user = user['currentUser'];
+      .subscribe((user: User) => {
         const job = new Job();
-        job.emailJobInitiator = user['email'];
+        job.emailJobInitiator = user.email;
         job.jobParams = {};
-        job.jobParams['username'] = user['username'] || undefined;
-        if (!job.emailJobInitiator) {
-          job.emailJobInitiator = user['profile'] ? user['profile']['email'] : user['email'];
-        }
+        job.jobParams['username'] = user.username;
         job.creationTime = new Date();
         job.type = 'reset';
         const fileObj = {};
