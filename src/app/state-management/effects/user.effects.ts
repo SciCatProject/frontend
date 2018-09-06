@@ -2,21 +2,25 @@
 
 import { Injectable } from "@angular/core";
 import { Actions, Effect, ofType } from "@ngrx/effects";
-import { Action, Store } from "@ngrx/store";
+import { Action } from "@ngrx/store";
 import { Observable, of } from "rxjs";
 import * as lb from "shared/sdk/services";
 import * as UserActions from "state-management/actions/user.actions";
-// import store state interface
-import { AppState } from "state-management/state/app.store";
 import { ADAuthService } from "users/adauth.service";
 import { Router } from "@angular/router";
 import { catchError, filter, map, switchMap, tap } from "rxjs/operators";
-import { MessageType, User, UserIdentity } from "../models";
-import * as userActions from "../actions/user.actions";
+import { MessageType } from "../models";
+import { LoginService } from "users/login.service";
+
+
+
+
 
 
 @Injectable()
 export class UserEffects {
+  
+  /*
   @Effect()
   protected loginActiveDirectory$: Observable<Action> = this.action$.pipe(
     ofType(UserActions.AD_LOGIN),
@@ -48,7 +52,9 @@ export class UserEffects {
       );
     })
   );
+  */
 
+  /*
   @Effect()
   protected login$: Observable<Action> = this.action$.pipe(
     ofType(UserActions.LOGIN),
@@ -85,6 +91,18 @@ export class UserEffects {
       );
     })
   );
+  */
+
+  @Effect()
+  protected login$ = this.action$.pipe(
+    ofType<UserActions.LoginAction>(UserActions.LOGIN),
+    map(action => action.form),
+    switchMap(({username, password, rememberMe}) => this.loginSrv.login$(username, password, rememberMe)),
+    map(res => res 
+      ? new UserActions.LoginCompleteAction(res.user, res.accountType)
+      : new UserActions.LoginFailedAction()
+    )
+  );
 
   @Effect()
   protected loginFailed$ = this.action$.pipe(
@@ -92,7 +110,7 @@ export class UserEffects {
     map(
       (action: UserActions.LoginFailedAction) =>
         new UserActions.ShowMessageAction({
-          content: action.message,
+          content: 'Could not log in. Check your username and password.',
           type: MessageType.Error
         })
     )
@@ -112,6 +130,7 @@ export class UserEffects {
     tap(() => this.router.navigate(["/login"]))
   );
 
+  /*
   @Effect()
   protected getEmail$: Observable<Action> = this.action$.pipe(
     ofType(UserActions.ACCESS_USER_EMAIL),
@@ -146,6 +165,7 @@ export class UserEffects {
       );
     })
   );
+  */
 
   @Effect()
   protected retrieveUser$: Observable<Action> = this.action$.pipe(
@@ -166,6 +186,7 @@ export class UserEffects {
     })
   );
 
+  /*
   @Effect()
   protected retrieveUserIdentity$: Observable<Action> = this.action$.pipe(
     ofType(UserActions.RETRIEVE_USER_IDENTITY),
@@ -202,15 +223,17 @@ export class UserEffects {
       );
     })
   );
+  */
 
   constructor(
     private action$: Actions,
-    private store: Store<AppState>,
+    // private store: Store<AppState>,
     private router: Router,
-    private accessUserSrv: lb.AccessUserApi,
-    private userIdentitySrv: lb.UserIdentityApi,
+    // private accessUserSrv: lb.AccessUserApi,
+    // private userIdentitySrv: lb.UserIdentityApi,
     private activeDirSrv: ADAuthService,
     private userSrv: lb.UserApi,
-    private authSrv: lb.LoopBackAuth
+    private authSrv: lb.LoopBackAuth,
+    private loginSrv: LoginService,
   ) {}
 }

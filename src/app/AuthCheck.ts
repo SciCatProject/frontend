@@ -24,12 +24,14 @@ export class AuthCheck implements CanActivate {
       return false;
     })
     .then(res => {
-      if (res !== false && 'name' in res && res['name'].toLowerCase().indexOf('error') === 0) {
+      return true;
+
+      /*if (res !== false && 'name' in res && res['name'].toLowerCase().indexOf('error') === 0) {
         this.router.navigate(['/login'], { queryParams: { returnUrl: state.url }});
         return false;
       } else {
         return true;
-      }
+      }*/
     });
   }
 }

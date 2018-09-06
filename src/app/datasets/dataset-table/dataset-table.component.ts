@@ -52,7 +52,7 @@ import {getCurrentEmail} from "../../state-management/selectors/users.selectors"
 
 import * as jobSelectors from "state-management/selectors/jobs.selectors";
 
-import {Dataset, Job, Message, MessageType, ViewMode} from "state-management/models";
+import {Dataset, Job, Message, MessageType, ViewMode, User} from "state-management/models";
 import {APP_CONFIG, AppConfig} from "app-config.module";
 
 export interface PageChangeEvent {
@@ -152,9 +152,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     private store: Store<any>,
     public dialog: MatDialog,
     @Inject(APP_CONFIG) private appConfig: AppConfig
-  ) {
-    this.email$.subscribe(res => console.log("gm subscribe to email", res));
-  }
+  ) {}
 
   ngOnInit() {
     this.submitJobSubscription = this.store
@@ -264,24 +262,18 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     const msg = new Message();
     if (this.selectedSets.length > 0) {
       const job = new Job();
-      console.log(this.email$);
       job.jobParams = {};
       job.creationTime = new Date();
       const backupFiles = [];
       this.store
         .pipe(
-          select(state => state.root.user),
+          select(state => state.root.user.currentUser),
           take(1)
         )
-        .subscribe(user => {
-          job.emailJobInitiator = user["email"];
-          user = user["currentUserIdentity"];
-          job.jobParams["username"] = user["profile"]["username"] || undefined;
-          if (!job.emailJobInitiator) {
-            job.emailJobInitiator = user["profile"]
-              ? user["profile"]["email"]
-              : user["email"];
-          }
+        .subscribe((user: User) => {
+          job.emailJobInitiator = user.email;
+          job.jobParams["username"] = user.username;
+
           this.selectedSets.forEach(set => {
             // if ('datablocks' in set && set['datablocks'].length > 0) {
             const fileObj = {};
