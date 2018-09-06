@@ -8,15 +8,15 @@ import { User, Dataset, Job, MessageType } from "state-management/models";
 import { ShowMessageAction } from "state-management/actions/user.actions";
 import { ClearSelectionAction } from "state-management/actions/datasets.actions";
 import { SubmitAction } from "state-management/actions/jobs.actions";
+import {
+  getCurrentUser,
+  getTapeCopies
+} from "state-management/selectors/users.selectors";
 
 @Injectable()
 export default class ArchivingService {
-  private currentUser$ = this.store.pipe(
-    select(state => state.root.user.currentUser)
-  );
-  private settings$ = this.store.pipe(
-    select(state => state.root.user.settings.tapeCopies)
-  );
+  private currentUser$ = this.store.pipe(select(getCurrentUser));
+  private settings$ = this.store.pipe(select(getTapeCopies));
 
   constructor(private store: Store<any>) {}
 
