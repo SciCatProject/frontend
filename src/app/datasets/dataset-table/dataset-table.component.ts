@@ -47,12 +47,12 @@ import {
 
 import {getCurrentEmail} from "../../state-management/selectors/users.selectors";
 
-import * as jobActions from 'state-management/actions/jobs.actions';
 import * as jobSelectors from "state-management/selectors/jobs.selectors";
 
 import {Dataset, Job, Message, MessageType, ViewMode, User} from "state-management/models";
 import {APP_CONFIG, AppConfig} from "app-config.module";
 import { ShowMessageAction } from "state-management/actions/user.actions";
+import ArchivingService from "../archiving.service";
 
 export interface PageChangeEvent {
   pageIndex: number;
@@ -149,6 +149,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   constructor(
     private router: Router,
     private store: Store<any>,
+    private archivingSrv: ArchivingService,
     public dialog: MatDialog,
     @Inject(APP_CONFIG) private appConfig: AppConfig
   ) {}
@@ -222,7 +223,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.archiveOrRetrieve(true);
+        this.archivingSrv.archive(this.selectedSets);
       }
       // this.onClose.emit(result);
     });
@@ -246,72 +247,8 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.archiveOrRetrieve(false, destPath);
+        this.archivingSrv.retrieve(this.selectedSets, destPath);
       }
-    });
-  }
-
-  /**
-   * Handles the archive/retrieve for all datasets in the `selected` array.
-   * Needs to feed back to the user if the selected datasets cannot have the
-   * action performed
-   * @memberof DashboardComponent
-   */
-  archiveOrRetrieve(archive: boolean, destPath = "/archive/retrieve/"): void {
-    
-    function createJob(user: User, datasets: Dataset[], archive: boolean, destPath: string, tapeCopies: string): Job {
-      const data = {
-        jobParams: createJobParams(user, archive, destPath, tapeCopies),
-        emailJobInitiator: user.email,
-        creationTime: new Date(),
-        datasetList: datasets.map(dataset => ({pid: dataset.pid, files: []})), // Revise this, files == []...? See earlier version for context
-        type: archive ? 'archive' : 'retrieve'
-      };
-
-      return new Job(data);
-    }
-  
-    function createJobParams(user: User, archive: boolean, destinationPath: string, tapeCopies: string) {
-      const jobParams = {
-        username: user.username,
-        tapeCopies,
-      };
-
-      return archive ? jobParams : {...jobParams, destinationPath};
-    }
-
-    const currentUser$ = this.store.pipe(select(state => state.root.user.currentUser));
-    const settings$ = this.store.pipe(select(state => state.root.user.settings.tapeCopies));
-
-    combineLatest(
-      currentUser$,
-      settings$,
-      this.selectedSets$
-    ).pipe(first()).subscribe(([
-      user,
-      tapeCopies,
-      datasets,
-    ]) => {
-      const email = user.email;
-      if (!email) {
-        this.store.dispatch(new ShowMessageAction({
-          type: MessageType.Error,
-          content: "No email for this user could be found, the job will not be submitted",
-        }));
-        return;
-      }
-
-      if (datasets.length === 0) {
-        this.store.dispatch(new ShowMessageAction({
-          type: MessageType.Error,
-          content: "No datasets selected",
-        }));
-        return;
-      }
-
-      const job = createJob(user, this.selectedSets, archive, destPath, tapeCopies);
-      this.store.dispatch(new ClearSelectionAction());
-      this.store.dispatch(new jobActions.SubmitAction(job));
     });
   }
 
