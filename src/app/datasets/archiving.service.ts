@@ -63,24 +63,22 @@ export default class ArchivingService {
       .subscribe(([user, tapeCopies]) => {
         const email = user.email;
         if (!email) {
-          this.store.dispatch(
+          return this.store.dispatch(
             new ShowMessageAction({
               type: MessageType.Error,
               content:
                 "No email for this user could be found, the job will not be submitted"
             })
           );
-          return;
         }
 
         if (datasets.length === 0) {
-          this.store.dispatch(
+          return this.store.dispatch(
             new ShowMessageAction({
               type: MessageType.Error,
               content: "No datasets selected"
             })
           );
-          return;
         }
 
         const job = this.createJob(
