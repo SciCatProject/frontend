@@ -43,7 +43,7 @@ export class LoginService {
 
     /* Return whichever was found, or null */
     return forkJoin(funcLogin$, adLogin$).pipe(
-      map(([funcUser, adUser]) => funcUser || adUser)
+      map(([funcRes, adRes]) => funcRes || adRes)
     );
   }
 }
