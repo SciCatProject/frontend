@@ -1,11 +1,13 @@
-import { Injectable } from "@angular/core";
-import { Store, select } from "@ngrx/store";
-import { combineLatest } from "rxjs";
-import { first } from "rxjs/operators";
-import { User, Dataset, Job, MessageType } from "state-management/models";
-import { ShowMessageAction } from "state-management/actions/user.actions";
-import { ClearSelectionAction } from "state-management/actions/datasets.actions";
-import { SubmitAction } from "state-management/actions/jobs.actions";
+import {Injectable} from "@angular/core";
+import {Store, select} from "@ngrx/store";
+
+import {combineLatest} from "rxjs";
+import {first} from "rxjs/operators";
+
+import {User, Dataset, Job, MessageType} from "state-management/models";
+import {ShowMessageAction} from "state-management/actions/user.actions";
+import {ClearSelectionAction} from "state-management/actions/datasets.actions";
+import {SubmitAction} from "state-management/actions/jobs.actions";
 
 @Injectable()
 export default class ArchivingService {
