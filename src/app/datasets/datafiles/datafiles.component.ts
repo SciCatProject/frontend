@@ -2,7 +2,6 @@ import {Component, Input, OnInit, ViewChild, AfterViewInit, Inject} from '@angul
 import {OrigDatablock} from 'shared/sdk/models';
 import {Store, select} from '@ngrx/store';
 import {Observable} from 'rxjs';
-import {map} from 'rxjs/operators';
 import {MatTableDataSource, MatPaginator} from '@angular/material';
 import {APP_CONFIG, AppConfig} from 'app-config.module';
 import { getIsAdmin } from 'state-management/selectors/users.selectors';

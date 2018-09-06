@@ -1,7 +1,7 @@
 import { userReducer } from "./user.reducer";
 import { initialUserState } from "../state/user.store";
 import * as userActions from "../actions/user.actions";
-import { User, UserIdentity, MessageType, Message, Settings } from "../models";
+import { User, MessageType, Message, Settings } from "../models";
 
 describe("UserReducer", () => {
   it("should set currentUser", () => {
