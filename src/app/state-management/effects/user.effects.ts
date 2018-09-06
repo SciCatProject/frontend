@@ -2,18 +2,14 @@
 
 import { Injectable } from "@angular/core";
 import { Actions, Effect, ofType } from "@ngrx/effects";
-import { Action, Store } from "@ngrx/store";
-import { Observable, of, forkJoin } from "rxjs";
+import { Action } from "@ngrx/store";
+import { Observable, of } from "rxjs";
 import * as lb from "shared/sdk/services";
 import * as UserActions from "state-management/actions/user.actions";
-// import store state interface
-import { AppState } from "state-management/state/app.store";
 import { ADAuthService } from "users/adauth.service";
 import { Router } from "@angular/router";
-import { catchError, filter, map, switchMap, tap, concatMap } from "rxjs/operators";
-import { MessageType, User, UserIdentity } from "../models";
-import * as userActions from "../actions/user.actions";
-import { SDKToken } from "shared/sdk";
+import { catchError, filter, map, switchMap, tap } from "rxjs/operators";
+import { MessageType } from "../models";
 import { LoginService } from "users/login.service";
 
 

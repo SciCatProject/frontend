@@ -1,5 +1,4 @@
 import { Settings, Message, User, AccessGroup } from "../models";
-import { UserIdentity } from "../../shared/sdk/models";
 
 // NOTE It IS ok to make up a state of other sub states
 export interface UserState {
