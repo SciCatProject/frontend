@@ -12,6 +12,7 @@ import { APP_CONFIG, AppConfigModule } from "app-config.module";
 import { FileSizePipe } from "../filesize.pipe";
 import { datasetsReducer } from "state-management/reducers/datasets.reducer";
 import { jobsReducer } from "state-management/reducers/jobs.reducer";
+import ArchivingService from "../archiving.service";
 
 describe("DatasetTableComponent", () => {
   let component: DatasetTableComponent;
@@ -44,7 +45,8 @@ describe("DatasetTableComponent", () => {
               disabledDatasetColumns: [],
               archiveWorkflowEnabled: true
             }
-          }
+          },
+          { provide: ArchivingService, useClass: ArchivingService }
         ]
       }
     });

@@ -50,6 +50,7 @@ import { RouterModule } from "@angular/router";
 import { BatchCardComponent } from "./batch-card/batch-card.component";
 
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
+import ArchivingService from "./archiving.service";
 
 @NgModule({
   imports: [
@@ -100,7 +101,7 @@ import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
     FileSizePipe,
     SelectedListComponent
   ],
-  providers: [DatasetService],
+  providers: [DatasetService, ArchivingService],
   exports: [DatasetTableComponent, DatasetsFilterComponent]
 })
 export class DatasetsModule {}
