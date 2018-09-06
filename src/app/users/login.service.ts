@@ -7,7 +7,7 @@ import {UserApi, SDKToken, User, LoopBackAuth} from 'shared/sdk';
 
 export interface SuccessfulLogin {
   user: User;
-  accountType: 'functional' | 'external'
+  accountType: 'functional' | 'external';
 }
 
 @Injectable()
