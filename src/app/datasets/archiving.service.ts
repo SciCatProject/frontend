@@ -16,7 +16,7 @@ import {
 @Injectable()
 export default class ArchivingService {
   private currentUser$ = this.store.pipe(select(getCurrentUser));
-  private settings$ = this.store.pipe(select(getTapeCopies));
+  private tapeCopies$ = this.store.pipe(select(getTapeCopies));
 
   constructor(private store: Store<any>) {}
 
@@ -58,7 +58,7 @@ export default class ArchivingService {
     archive: boolean,
     destPath?: string
   ): void {
-    combineLatest(this.currentUser$, this.settings$)
+    combineLatest(this.currentUser$, this.tapeCopies$)
       .pipe(first())
       .subscribe(([user, tapeCopies]) => {
         const email = user.email;
