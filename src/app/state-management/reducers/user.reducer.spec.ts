@@ -38,13 +38,6 @@ describe("UserReducer", () => {
     expect(state.isLoggingIn).toEqual(false);
   });
 
-  // it("should set email", () => {
-  //   const email = "abc";
-  //   const action = new userActions.AccessUserEmailCompleteAction(email);
-  //   const state = userReducer(initialUserState, action);
-  //   expect(state.email).toEqual(email);
-  // });
-
   it("should set isLoggingIn to false after login failed complete", () => {
     const action = new userActions.LoginFailedAction();
     const state = userReducer(initialUserState, action);
