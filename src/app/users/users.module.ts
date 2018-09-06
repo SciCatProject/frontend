@@ -5,7 +5,9 @@ import {CommonModule} from '@angular/common';
 import {LoginComponent} from 'users/login/login.component';
 import {UserDetailsComponent} from 'users/user-details/user-details.component';
 import {UserSettingsComponent} from 'users/user-settings/user-settings.component';
+
 import {ADAuthService} from './adauth.service';
+import {LoginService} from './login.service';
 
 import {SharedCatanieModule} from 'shared/shared.module';
 import {StoreModule} from '@ngrx/store';
@@ -28,7 +30,7 @@ import {MatCardModule, MatCheckboxModule, MatGridListModule} from '@angular/mate
     UserDetailsComponent,
     UserSettingsComponent,
   ],
-  providers: [ADAuthService]
+  providers: [ADAuthService, LoginService]
 })
 export class UsersModule {
 }

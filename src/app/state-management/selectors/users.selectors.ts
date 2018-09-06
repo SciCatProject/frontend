@@ -1,6 +1,5 @@
 import { createSelector, createFeatureSelector } from "@ngrx/store";
 import { UserState } from "../state/user.store";
-import { getEmail } from "../reducers/user.reducer";
 
 const getUserState = createFeatureSelector<UserState>("users");
 
@@ -10,23 +9,23 @@ export const getCurrentUser = createSelector(
 );
 
 export const getIsLoggedIn = createSelector(
-  getCurrentUser,
-  user => user != null
+  getUserState,
+  state => state.isLoggedIn
 );
 
 export const getCurrentEmail = createSelector(
-  getEmail,
-  user => (user ? user["email"] : null)
+  getCurrentUser,
+  user => user ? user.email : null
 );
 
 const getCurrentUserName = createSelector(
   getCurrentUser,
-  user => (user ? user.username : null)
+  user => user ? user.username : null
 );
 
 const getCurrentUserAccountType = createSelector(
-  getCurrentUser,
-  user => (user ? user["accountType"] : null) // ??? Why doesn't the User class have an accountType?
+  getUserState,
+  state => state.accountType
 );
 
 export const getIsAdmin = createSelector(

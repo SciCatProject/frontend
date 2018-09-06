@@ -17,6 +17,7 @@ import { APP_CONFIG, AppConfig } from '../app-config.module';
 
 export interface access_token {
   access_token: string;
+  userId;
 }
 
 
