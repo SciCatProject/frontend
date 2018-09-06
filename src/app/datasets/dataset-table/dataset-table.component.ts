@@ -5,7 +5,6 @@ import {MatCheckboxChange, MatDialog} from "@angular/material";
 import {select, Store} from "@ngrx/store";
 
 import {combineLatest, Subscription} from "rxjs";
-import {take, first} from "rxjs/operators";
 
 import {DialogComponent} from "shared/modules/dialog/dialog.component";
 import {
@@ -49,7 +48,7 @@ import {getCurrentEmail} from "../../state-management/selectors/users.selectors"
 
 import * as jobSelectors from "state-management/selectors/jobs.selectors";
 
-import {Dataset, Job, Message, MessageType, ViewMode, User} from "state-management/models";
+import {Dataset, MessageType, ViewMode} from "state-management/models";
 import {APP_CONFIG, AppConfig} from "app-config.module";
 import { ShowMessageAction } from "state-management/actions/user.actions";
 import ArchivingService from "../archiving.service";
