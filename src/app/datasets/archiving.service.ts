@@ -20,11 +20,11 @@ export default class ArchivingService {
 
   constructor(private store: Store<any>) {}
 
-  public archive(datasets: Dataset[]) {
+  public archive(datasets: Dataset[]): void {
     this.archiveOrRetrieve(datasets, true);
   }
 
-  public retrieve(datasets: Dataset[], destinationPath: string) {
+  public retrieve(datasets: Dataset[], destinationPath: string): void {
     this.archiveOrRetrieve(datasets, false, destinationPath);
   }
 
