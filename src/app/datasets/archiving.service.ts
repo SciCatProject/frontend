@@ -22,7 +22,10 @@ export default class ArchivingService {
     return this.archiveOrRetrieve(datasets, true);
   }
 
-  public retrieve(datasets: Dataset[], destinationPath: string): Observable<void> {
+  public retrieve(
+    datasets: Dataset[],
+    destinationPath: string
+  ): Observable<void> {
     return this.archiveOrRetrieve(datasets, false, destinationPath);
   }
 
@@ -60,8 +63,10 @@ export default class ArchivingService {
       first(),
       map(([user, tapeCopies]) => {
         const email = user.email;
-        if (!email) {
-          throw new Error("No email for this user could be found, the job will not be submitted")
+        if (email == null || email.length === 0) {
+          throw new Error(
+            "No email for this user could be found, the job will not be submitted"
+          );
         }
 
         if (datasets.length === 0) {

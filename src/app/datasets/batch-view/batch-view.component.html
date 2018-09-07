@@ -13,21 +13,17 @@
                 <i class="table icon"></i>
                 Export as CSV
             </button>
-            <button mat-button class="button" color="primary">
+            <button mat-button (click)="onArchive()" class="button" color="primary">
                 <i class="archive icon"></i>
                 Archive
             </button>
-            <button mat-button class="button" color="primary">
+            <button mat-button (click)="onRetrieve()" class="button" color="primary">
                 <i class="archive icon"></i>
                 Retrieve
             </button>
         </div>
 
-        <mat-table
-            [dataSource]="batch$"
-            class="mat-elevation-z2"
-            style="margin-left: 1em"
-        >
+        <mat-table [dataSource]="batch$" class="mat-elevation-z2" style="margin-left: 1em">
             <ng-container matColumnDef="remove">
                 <mat-header-cell *matHeaderCellDef>
                     <!-- Quite terrible hack to ensure column header and regular cells have same width -->
@@ -50,29 +46,27 @@
 
             <ng-container matColumnDef="sourceFolder">
                 <mat-header-cell *matHeaderCellDef>Source Folder</mat-header-cell>
-                <mat-cell *matCellDef="let dataset">{{dataset.sourceFolder}}</mat-cell>  
+                <mat-cell *matCellDef="let dataset">{{dataset.sourceFolder}}</mat-cell>
             </ng-container>
 
             <ng-container matColumnDef="size">
                 <mat-header-cell *matHeaderCellDef>Size</mat-header-cell>
                 <mat-cell *matCellDef="let dataset">
                     {{dataset.size | filesize}}
-                </mat-cell>  
+                </mat-cell>
             </ng-container>
 
             <ng-container matColumnDef="creationTime">
                 <mat-header-cell *matHeaderCellDef>Creation Time</mat-header-cell>
                 <mat-cell *matCellDef="let dataset">
                     {{dataset.creationTime | date: 'dd/MM/yyyy HH:mm'}}
-                </mat-cell>  
+                </mat-cell>
             </ng-container>
 
             <mat-header-row class='datasets-header' *matHeaderRowDef="visibleColumns">
             </mat-header-row>
 
-            <mat-row
-                *matRowDef="let dataset; columns: visibleColumns"
-            >
+            <mat-row *matRowDef="let dataset; columns: visibleColumns">
             </mat-row>
         </mat-table>
     </div>
