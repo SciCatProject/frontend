@@ -123,7 +123,11 @@ export class DatasetEffects {
 
   @Effect({dispatch: false})
   protected storeBatch$ = this.actions$.pipe(
-    ofType(DatasetActions.ADD_TO_BATCH, DatasetActions.CLEAR_BATCH),
+    ofType(
+      DatasetActions.ADD_TO_BATCH,
+      DatasetActions.REMOVE_FROM_BATCH,
+      DatasetActions.CLEAR_BATCH,
+    ),
     withLatestFrom(this.datasetsInBatch$, this.currentUser$),
     tap(([, batch, user]) => this.storeBatch(batch, user.id)),
   );

@@ -1,12 +1,12 @@
-import {Component, Inject, OnDestroy, OnInit} from "@angular/core";
-import {Router} from "@angular/router";
-import {MatCheckboxChange, MatDialog} from "@angular/material";
+import { Component, Inject, OnDestroy, OnInit } from "@angular/core";
+import { Router } from "@angular/router";
+import { MatCheckboxChange, MatDialog } from "@angular/material";
 
-import {select, Store} from "@ngrx/store";
+import { select, Store } from "@ngrx/store";
 
-import {combineLatest, Subscription} from "rxjs";
+import { combineLatest, Subscription } from "rxjs";
 
-import {DialogComponent} from "shared/modules/dialog/dialog.component";
+import { DialogComponent } from "shared/modules/dialog/dialog.component";
 import {
   faCalendarAlt,
   faCertificate,
@@ -44,12 +44,12 @@ import {
   getViewMode
 } from "state-management/selectors/datasets.selectors";
 
-import {getCurrentEmail} from "../../state-management/selectors/users.selectors";
+import { getCurrentEmail } from "../../state-management/selectors/users.selectors";
 
 import * as jobSelectors from "state-management/selectors/jobs.selectors";
 
-import {Dataset, MessageType, ViewMode} from "state-management/models";
-import {APP_CONFIG, AppConfig} from "app-config.module";
+import { Dataset, MessageType, ViewMode } from "state-management/models";
+import { APP_CONFIG, AppConfig } from "app-config.module";
 import { ShowMessageAction } from "state-management/actions/user.actions";
 import ArchivingService from "../archiving.service";
 
@@ -72,7 +72,7 @@ export interface SortChangeEvent {
 export class DatasetTableComponent implements OnInit, OnDestroy {
   faIdBadge = faIdBadge;
   faFolder = faFolder;
-  faCoins = faCoins
+  faCoins = faCoins;
   faCalendarAlt = faCalendarAlt;
   faFileAlt = faFileAlt;
   faCertificate = faCertificate;
@@ -222,7 +222,16 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.archivingSrv.archive(this.selectedSets);
+        this.archivingSrv.archive(this.selectedSets).subscribe(
+          () => this.store.dispatch(new ClearSelectionAction()),
+          err =>
+            this.store.dispatch(
+              new ShowMessageAction({
+                type: MessageType.Error,
+                content: err.message
+              })
+            )
+        );
       }
       // this.onClose.emit(result);
     });
@@ -246,7 +255,16 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.archivingSrv.retrieve(this.selectedSets, destPath);
+        this.archivingSrv.retrieve(this.selectedSets, destPath).subscribe(
+          () => this.store.dispatch(new ClearSelectionAction()),
+          err =>
+            this.store.dispatch(
+              new ShowMessageAction({
+                type: MessageType.Error,
+                content: err.message
+              })
+            )
+        );
       }
     });
   }
