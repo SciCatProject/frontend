@@ -1,12 +1,10 @@
 import { Injectable } from "@angular/core";
 import { Store, select } from "@ngrx/store";
 
-import { combineLatest } from "rxjs";
-import { first } from "rxjs/operators";
+import { Observable, combineLatest } from "rxjs";
+import { first, map } from "rxjs/operators";
 
-import { User, Dataset, Job, MessageType } from "state-management/models";
-import { ShowMessageAction } from "state-management/actions/user.actions";
-import { ClearSelectionAction } from "state-management/actions/datasets.actions";
+import { User, Dataset, Job } from "state-management/models";
 import { SubmitAction } from "state-management/actions/jobs.actions";
 import {
   getCurrentUser,
@@ -20,12 +18,12 @@ export default class ArchivingService {
 
   constructor(private store: Store<any>) {}
 
-  public archive(datasets: Dataset[]): void {
-    this.archiveOrRetrieve(datasets, true);
+  public archive(datasets: Dataset[]): Observable<void> {
+    return this.archiveOrRetrieve(datasets, true);
   }
 
-  public retrieve(datasets: Dataset[], destinationPath: string): void {
-    this.archiveOrRetrieve(datasets, false, destinationPath);
+  public retrieve(datasets: Dataset[], destinationPath: string): Observable<void> {
+    return this.archiveOrRetrieve(datasets, false, destinationPath);
   }
 
   private createJob(
@@ -57,28 +55,17 @@ export default class ArchivingService {
     datasets: Dataset[],
     archive: boolean,
     destPath?: string
-  ): void {
-    combineLatest(this.currentUser$, this.tapeCopies$)
-      .pipe(first())
-      .subscribe(([user, tapeCopies]) => {
+  ): Observable<void> {
+    return combineLatest(this.currentUser$, this.tapeCopies$).pipe(
+      first(),
+      map(([user, tapeCopies]) => {
         const email = user.email;
         if (!email) {
-          return this.store.dispatch(
-            new ShowMessageAction({
-              type: MessageType.Error,
-              content:
-                "No email for this user could be found, the job will not be submitted"
-            })
-          );
+          throw new Error("No email for this user could be found, the job will not be submitted")
         }
 
         if (datasets.length === 0) {
-          return this.store.dispatch(
-            new ShowMessageAction({
-              type: MessageType.Error,
-              content: "No datasets selected"
-            })
-          );
+          throw new Error("No datasets selected");
         }
 
         const job = this.createJob(
@@ -88,8 +75,9 @@ export default class ArchivingService {
           destPath,
           tapeCopies
         );
-        this.store.dispatch(new ClearSelectionAction());
+
         this.store.dispatch(new SubmitAction(job));
-      });
+      })
+    );
   }
 }
