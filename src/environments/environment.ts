@@ -11,5 +11,5 @@ export const environment = {
   archiveWorkflowEnabled: true,
   disabledDatasetColumns: [],
   facility: 'ESS',
-  shoppingCartEnabled: true
+  shoppingCartEnabled: false
 };
