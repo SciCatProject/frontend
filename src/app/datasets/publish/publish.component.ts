@@ -16,6 +16,9 @@ export class PublishComponent implements OnInit {
     map(datasets => datasets.length)
   );
 
+  // For simpliciy, this form (including valiation) is kept in component-local state.
+  // Can be moved to NgRX state if necessary.
+  
   protected form = {
     firstName: "",
     lastName: "",
