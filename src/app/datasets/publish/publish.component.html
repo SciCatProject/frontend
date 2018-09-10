@@ -37,11 +37,16 @@
     </mat-form-field>
 
     <mat-form-field>
-      <input required matInput type="number" placeholder="Publication Year" autocomplete="off" [(ngModel)]="form.publicationYear" name="publicationYear">
+      <input required matInput placeholder="Publication Year" autocomplete="off" [(ngModel)]="form.publicationYear"
+        name="publicationYear">
     </mat-form-field>
 
     <mat-form-field>
-        <textarea required matInput placeholder="Abstract" autocomplete="off" [(ngModel)]="form.abstract" name="abstract"></textarea>
+        <input required matInput placeholder="Resource Type" autocomplete="off" [(ngModel)]="form.resourceType" name="resourceType">
+      </mat-form-field>
+
+    <mat-form-field>
+      <textarea required matInput placeholder="Abstract" autocomplete="off" [(ngModel)]="form.abstract" name="abstract"></textarea>
     </mat-form-field>
 
     <button (click)="onPublish()" mat-raised-button color="primary">

@@ -18,13 +18,15 @@ export class PublishComponent implements OnInit {
 
   // For simpliciy, this form (including valiation) is kept in component-local state.
   // Can be moved to NgRX state if necessary.
-  
+
   protected form = {
     firstName: "",
     lastName: "",
     affiliation: this.appConfig.facility,
     publisher: this.appConfig.facility,
-    publicationYear: new Date().getFullYear()
+    publicationYear: String(new Date().getFullYear()),
+    resourceType: "NeXus HDF5 Files",
+    abstract: ""
   };
 
   constructor(
@@ -36,5 +38,32 @@ export class PublishComponent implements OnInit {
     this.store.dispatch(new PrefillBatchAction());
   }
 
-  protected onPublish() {}
+  protected onPublish() {
+    if (this.formIsValid()) {
+      // Publish
+    } else {
+      // Display error
+    }
+  }
+
+  private formIsValid() {
+    // Simplistic validation. Should probably use Angular's validation tools later on.
+    const {
+      firstName,
+      lastName,
+      affiliation,
+      publisher,
+      publicationYear,
+      resourceType
+    } = this.form;
+
+    return (
+      firstName.length !== 0 &&
+      lastName.length !== 0 &&
+      affiliation.length !== 0 &&
+      publisher.length !== 0 &&
+      publicationYear.match(/^\d{4}$/) != null &&
+      resourceType.length !== 0
+    );
+  }
 }
