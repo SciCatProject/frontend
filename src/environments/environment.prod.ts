@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  lbBaseURL: 'http://127.0.0.1:3000',
+  lbBaseURL: 'https://dacat.psi.ch',
   archiveWorkflowEnabled: true,
   externalAuthEndpoint: '/auth/msad',
   facility: 'ESS',
