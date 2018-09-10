@@ -10,6 +10,7 @@ import { StoreModule } from "@ngrx/store";
 import { StoreDevtoolsModule } from "@ngrx/store-devtools";
 import { NguiDatetimePickerModule } from "@ngui/datetime-picker";
 import { AppRoutingModule, routes } from "app-routing/app-routing.module";
+import { ArchivingService } from "datasets/archiving.service";
 import { DatasetService } from "datasets/dataset.service";
 import { DatasetsModule } from "datasets/datasets.module";
 import { JobsTableComponent } from "jobs/jobs-table/jobs-table.component";
@@ -49,6 +50,7 @@ import {
 import { AppComponent } from "./app.component";
 import { AuthCheck } from "./AuthCheck";
 import { JobsDetailComponent } from "./jobs/jobs-detail/jobs-detail.component";
+import { ArchitectCommand } from "@angular/cli/models/architect-command";
 
 export function localStorageSyncWrapper(reducer: any) {
   return localStorageSync({ keys: ["root"], rehydrate: true })(reducer);
@@ -111,6 +113,7 @@ export function localStorageSyncWrapper(reducer: any) {
   providers: [
     AuthCheck,
     DatasetService,
+    ArchivingService,
     UserApi,
     Title,
     MatNativeDateModule

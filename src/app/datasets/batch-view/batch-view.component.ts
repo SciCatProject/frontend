@@ -1,17 +1,18 @@
 import { Component, OnInit } from "@angular/core";
-import { Store, select } from "@ngrx/store";
-import { map, first, switchMap } from "rxjs/operators";
+import { select, Store } from "@ngrx/store";
+import { first, map, switchMap } from "rxjs/operators";
 
 import { getDatasetsInBatch } from "state-management/selectors/datasets.selectors";
 import {
-  PrefillBatchAction,
   ClearBatchAction,
+  PrefillBatchAction,
   RemoveFromBatchAction
 } from "state-management/actions/datasets.actions";
 import { Dataset, MessageType } from "state-management/models";
 import { ShowMessageAction } from "state-management/actions/user.actions";
 
-import ArchivingService from "../archiving.service";
+import { ArchivingService } from "../archiving.service";
+import { Observable } from "rxjs";
 
 @Component({
   selector: "batch-view",
@@ -19,10 +20,19 @@ import ArchivingService from "../archiving.service";
   styleUrls: ["./batch-view.component.scss"]
 })
 export class BatchViewComponent implements OnInit {
-  private visibleColumns = ["remove", "pid", "sourceFolder", "creationTime"];
+  private visibleColumns: [string, string, string, string] = [
+    "remove",
+    "pid",
+    "sourceFolder",
+    "creationTime"
+  ];
 
-  private batch$ = this.store.pipe(select(getDatasetsInBatch));
-  private hasBatch$ = this.batch$.pipe(map(batch => batch.length > 0));
+  private batch$: Observable<Dataset[]> = this.store.pipe(
+    select(getDatasetsInBatch)
+  );
+  public hasBatch$: Observable<boolean> = this.batch$.pipe(
+    map(batch => batch.length > 0)
+  );
 
   constructor(
     private store: Store<any>,
@@ -67,7 +77,9 @@ export class BatchViewComponent implements OnInit {
     this.batch$
       .pipe(
         first(),
-        switchMap(datasets => this.archivingSrv.retrieve(datasets, '/archive/retrieve'))
+        switchMap(datasets =>
+          this.archivingSrv.retrieve(datasets, "/archive/retrieve")
+        )
       )
       .subscribe(
         () => this.clearBatch(),

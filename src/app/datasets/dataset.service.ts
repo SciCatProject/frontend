@@ -1,16 +1,16 @@
-import {Injectable} from '@angular/core';
-import {Store} from '@ngrx/store';
-import {BehaviorSubject, Observable, Subject} from 'rxjs';
-import {OrigDatablock, Dataset} from 'shared/sdk/models';
+import { Injectable } from "@angular/core";
+import { Store } from "@ngrx/store";
+import { BehaviorSubject, Observable, Subject } from "rxjs";
+import { OrigDatablock, Dataset } from "shared/sdk/models";
 import {
   AccessUserApi,
   DatasetLifecycleApi,
   OrigDatablockApi,
   DatasetApi
-} from 'shared/sdk/services';
-import {LoopBackAuth} from 'shared/sdk/services';
-import * as ua from 'state-management/actions/user.actions';
-import { DatablockApi } from 'shared/sdk';
+} from "shared/sdk/services";
+import { LoopBackAuth } from "shared/sdk/services";
+import * as ua from "state-management/actions/user.actions";
+import { DatablockApi } from "shared/sdk";
 
 @Injectable()
 export class DatasetService {
@@ -20,39 +20,44 @@ export class DatasetService {
   datasets: Array<Dataset> = [];
   datasetChange: Subject<string> = new Subject<string>();
   facetSubject = new BehaviorSubject<object>({});
-  
+
   detailFilter = {
-    limit : this.limit,
-    include :
-        [ {relation : 'origdatablocks'}, {relation : 'datasetlifecycle'} ]
+    limit: this.limit,
+    include: [{ relation: "origdatablocks" }, { relation: "datasetlifecycle" }]
   };
-  
+
   filter = {
-    limit : this.limit,
-    include : [ {relation : 'datasetlifecycle'} ]
+    limit: this.limit,
+    include: [{ relation: "datasetlifecycle" }]
   };
 
   nullLifecycle = {
-    archiveRetentionTime : 'unknown',
-    archiveStatusMessage : 'unknown',
-    dateOfLastMessage : 'unknown',
-    doi : 'unknown',
-    exportedTo : 'unknown',
-    id : null,
-    isExported : 'unknown',
-    isOnDisk : 'unknown',
-    isOnTape : 'unknown',
-    isPublished : 'unknown',
-    publishingDate : 'unknown',
-    retrieveStatusMessage : 'unknown'
+    archiveRetentionTime: "unknown",
+    archiveStatusMessage: "unknown",
+    dateOfLastMessage: "unknown",
+    doi: "unknown",
+    exportedTo: "unknown",
+    id: null,
+    isExported: "unknown",
+    isOnDisk: "unknown",
+    isOnTape: "unknown",
+    isPublished: "unknown",
+    publishingDate: "unknown",
+    retrieveStatusMessage: "unknown"
   };
 
   userID;
   userGroups = null;
 
-  constructor(private rds: DatasetApi, private dlSrv: DatasetLifecycleApi,
-              private odb: OrigDatablockApi, private acSrv: AccessUserApi, private db: DatablockApi,
-              private auth: LoopBackAuth, private store: Store<any>) {}
+  constructor(
+    private rds: DatasetApi,
+    private dlSrv: DatasetLifecycleApi,
+    private odb: OrigDatablockApi,
+    private acSrv: AccessUserApi,
+    private db: DatablockApi,
+    private auth: LoopBackAuth,
+    private store: Store<any>
+  ) {}
 
   /**
    * Search datasets with search terms,
@@ -66,16 +71,20 @@ export class DatasetService {
     const filter = Object.assign(terms, this.filter);
 
     this.rds.find(filter).subscribe(
-        ret => {
-          this.loading = false;
-          this.datasets = <Array<Dataset>>ret;
+      ret => {
+        this.loading = false;
+        this.datasets = <Array<Dataset>>ret;
 
-          if (this.datasets.length > 0) {
-            // this.updateStatus(0, 10);
-            this.datasetChange.next('reload');
-          }
-        },
-        error => { console.error(error); }, () => {});
+        if (this.datasets.length > 0) {
+          // this.updateStatus(0, 10);
+          this.datasetChange.next("reload");
+        }
+      },
+      error => {
+        console.error(error);
+      },
+      () => {}
+    );
   }
 
   getDataset(id: string) {
@@ -98,28 +107,28 @@ export class DatasetService {
    * @param set
    */
 
-  getDatasetBlocks(set, type = 'original') {
-    const datasetSearch = {where : {datasetId : set.pid}};
+  getDatasetBlocks(set, type = "original") {
+    const datasetSearch = { where: { datasetId: set.pid } };
     let service: any = this.db;
-    if (type === 'original') {
+    if (type === "original") {
       service = this.odb;
     }
-    service.find(datasetSearch)
-        .subscribe(
-            bl => {
-              console.log(bl);
-              set['datablocks'] = <Array<OrigDatablock>>bl;
-            },
-            error => {
-              this.store.dispatch({
-                type : ua.SHOW_MESSAGE,
-                payload : {
-                  content : error.message,
-                  type : 'error',
-                  title: 'Error searching for datablocks'
-                }
-              });
-            });
+    service.find(datasetSearch).subscribe(
+      bl => {
+        console.log(bl);
+        set["datablocks"] = <Array<OrigDatablock>>bl;
+      },
+      error => {
+        this.store.dispatch({
+          type: ua.SHOW_MESSAGE,
+          payload: {
+            content: error.message,
+            type: "error",
+            title: "Error searching for datablocks"
+          }
+        });
+      }
+    );
   }
 
   /**
@@ -129,11 +138,11 @@ export class DatasetService {
    * @returns {Observable<T[]>}
    */
 
-  getBlockObservable(set, type = 'original'): Observable<Array<any>> {
-    const datasetSearch = {where : {datasetId : set.pid}};
+  getBlockObservable(set, type = "original"): Observable<Array<any>> {
+    const datasetSearch = { where: { datasetId: set.pid } };
 
     let service: any = this.db;
-    if (type === 'original') {
+    if (type === "original") {
       service = this.odb;
     }
 
