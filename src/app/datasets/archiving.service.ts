@@ -12,7 +12,7 @@ import {
 } from "state-management/selectors/users.selectors";
 
 @Injectable()
-export default class ArchivingService {
+export class ArchivingService {
   private currentUser$ = this.store.pipe(select(getCurrentUser));
   private tapeCopies$ = this.store.pipe(select(getTapeCopies));
 

@@ -1,9 +1,9 @@
 export const environment = {
   production: true,
-  lbBaseURL: 'https://dacat.psi.ch',
+  lbBaseURL: 'http://127.0.0.1:3000',
   archiveWorkflowEnabled: true,
   externalAuthEndpoint: '/auth/msad',
-  facility: 'PSI',
+  facility: 'ESS',
   disabledDatasetColumns: [],
   shoppingCartEnabled: false
 };
