@@ -12,6 +12,7 @@ import { Dataset, MessageType } from "state-management/models";
 import { ShowMessageAction } from "state-management/actions/user.actions";
 
 import ArchivingService from "../archiving.service";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "batch-view",
@@ -26,7 +27,8 @@ export class BatchViewComponent implements OnInit {
 
   constructor(
     private store: Store<any>,
-    private archivingSrv: ArchivingService
+    private archivingSrv: ArchivingService,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -43,6 +45,10 @@ export class BatchViewComponent implements OnInit {
 
   onRemove(dataset: Dataset) {
     this.store.dispatch(new RemoveFromBatchAction(dataset));
+  }
+
+  onPublish() {
+    this.router.navigate(['datasets', 'batch', 'publish']);
   }
 
   onArchive() {
@@ -67,7 +73,9 @@ export class BatchViewComponent implements OnInit {
     this.batch$
       .pipe(
         first(),
-        switchMap(datasets => this.archivingSrv.retrieve(datasets, '/archive/retrieve'))
+        switchMap(datasets =>
+          this.archivingSrv.retrieve(datasets, "/archive/retrieve")
+        )
       )
       .subscribe(
         () => this.clearBatch(),

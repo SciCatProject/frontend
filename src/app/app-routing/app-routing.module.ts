@@ -25,6 +25,7 @@ import {ArchiveSettingsComponent} from '../policies/archive-settings/archive-set
 
 import {AuthCheck} from '../AuthCheck';
 import { BatchViewComponent } from 'datasets/batch-view/batch-view.component';
+import { PublishComponent } from 'datasets/publish/publish.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/datasets', pathMatch: 'full' },
@@ -34,6 +35,7 @@ export const routes: Routes = [
   // { path: 'dataset', redirectTo: '/datasets', pathMatch: 'full' },
   { path: 'datasets',  component: DashboardComponent, canActivate: [AuthCheck], },
   { path: 'datasets/batch', component: BatchViewComponent, canActivate: [AuthCheck] },
+  { path: 'datasets/batch/publish', component: PublishComponent, canActivate: [AuthCheck] },
   { path: 'datasets/:id', component: DatasetDetailComponent, canActivate: [AuthCheck] },
   { path: 'datasets/:id/datablocks', component: DatablocksComponent, canActivate: [AuthCheck] },
   { path: 'datasets/:id/datafiles', component: DatafilesComponent, canActivate: [AuthCheck] },

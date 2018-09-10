@@ -51,6 +51,7 @@ import { BatchCardComponent } from "./batch-card/batch-card.component";
 
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import ArchivingService from "./archiving.service";
+import { PublishComponent } from "./publish/publish.component";
 
 @NgModule({
   imports: [
@@ -99,7 +100,8 @@ import ArchivingService from "./archiving.service";
     FileDropzoneComponent,
     FilePickerComponent,
     FileSizePipe,
-    SelectedListComponent
+    SelectedListComponent,
+    PublishComponent
   ],
   providers: [DatasetService, ArchivingService],
   exports: [DatasetTableComponent, DatasetsFilterComponent]
