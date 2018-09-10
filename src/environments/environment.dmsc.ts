@@ -5,10 +5,10 @@
 
 export const environment = {
   production: false,
-  lbBaseURL: 'https://kubetest02.dm.esss.dk:32223',
-  fileserverBaseURL: 'https://kubetest04.dm.esss.dk:32223',
-  externalAuthEndpoint: '/auth/msad',
+  lbBaseURL: "https://kubetest02.dm.esss.dk:32223",
+  fileserverBaseURL: "https://kubetest04.dm.esss.dk:32223",
+  externalAuthEndpoint: "/auth/msad",
   archiveWorkflowEnabled: false,
-  disabledDatasetColumns: ['archiveStatus', 'retrieveStatus' ],
-  facility: 'ESS'
+  disabledDatasetColumns: ["archiveStatus", "retrieveStatus"],
+  facility: "ESS"
 };
