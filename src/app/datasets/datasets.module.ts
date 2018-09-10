@@ -50,7 +50,7 @@ import { RouterModule } from "@angular/router";
 import { BatchCardComponent } from "./batch-card/batch-card.component";
 
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
-import ArchivingService from "./archiving.service";
+import { ArchivingService }  from "./archiving.service";
 
 @NgModule({
   imports: [

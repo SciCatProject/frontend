@@ -1,12 +1,12 @@
-import {Component, Inject, OnDestroy, OnInit} from "@angular/core";
-import {Router} from "@angular/router";
-import {MatCheckboxChange, MatDialog} from "@angular/material";
+import { Component, Inject, OnDestroy, OnInit } from "@angular/core";
+import { Router } from "@angular/router";
+import { MatCheckboxChange, MatDialog } from "@angular/material";
 
-import {select, Store} from "@ngrx/store";
+import { select, Store } from "@ngrx/store";
 
-import {combineLatest, Subscription} from "rxjs";
+import { combineLatest, Subscription } from "rxjs";
 
-import {DialogComponent} from "shared/modules/dialog/dialog.component";
+import { DialogComponent } from "shared/modules/dialog/dialog.component";
 import {
   faCalendarAlt,
   faCertificate,
@@ -44,14 +44,14 @@ import {
   getViewMode
 } from "state-management/selectors/datasets.selectors";
 
-import {getCurrentEmail} from "../../state-management/selectors/users.selectors";
+import { getCurrentEmail } from "../../state-management/selectors/users.selectors";
 
 import * as jobSelectors from "state-management/selectors/jobs.selectors";
 
-import {Dataset, MessageType, ViewMode} from "state-management/models";
-import {APP_CONFIG, AppConfig} from "app-config.module";
+import { Dataset, MessageType, ViewMode } from "state-management/models";
+import { APP_CONFIG, AppConfig } from "app-config.module";
 import { ShowMessageAction } from "state-management/actions/user.actions";
-import ArchivingService from "../archiving.service";
+import { ArchivingService } from "../archiving.service";
 
 export interface PageChangeEvent {
   pageIndex: number;
@@ -72,7 +72,7 @@ export interface SortChangeEvent {
 export class DatasetTableComponent implements OnInit, OnDestroy {
   faIdBadge = faIdBadge;
   faFolder = faFolder;
-  faCoins = faCoins
+  faCoins = faCoins;
   faCalendarAlt = faCalendarAlt;
   faFileAlt = faFileAlt;
   faCertificate = faCertificate;
@@ -81,14 +81,14 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   faDownload = faDownload;
 
   private selectedSets$ = this.store.pipe(select(getSelectedDatasets));
-  private datasets$ = this.store.pipe(select(getDatasets));
+  datasets$ = this.store.pipe(select(getDatasets));
   private batch$ = this.store.pipe(select(getDatasetsInBatch));
-  private currentPage$ = this.store.pipe(select(getPage));
-  private datasetsPerPage$ = this.store.pipe(select(getDatasetsPerPage));
+  currentPage$ = this.store.pipe(select(getPage));
+  datasetsPerPage$ = this.store.pipe(select(getDatasetsPerPage));
   private mode$ = this.store.pipe(select(getViewMode));
   private isEmptySelection$ = this.store.pipe(select(getIsEmptySelection));
-  private datasetCount$ = this.store.select(getTotalSets);
-  private loading$ = this.store.pipe(select(getIsLoading));
+  datasetCount$ = this.store.select(getTotalSets);
+  loading$ = this.store.pipe(select(getIsLoading));
   private filters$ = this.store.pipe(select(getFilters));
   private email$ = this.store.pipe(select(getCurrentEmail));
 
@@ -122,7 +122,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   );
 
   // These should be made part of the NgRX state management
-  private currentMode: string;
+  public currentMode: string;
   private modeSubscription = this.mode$.subscribe((mode: ViewMode) => {
     this.currentMode = mode;
   });
@@ -150,7 +150,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     private store: Store<any>,
     private archivingSrv: ArchivingService,
     public dialog: MatDialog,
-    @Inject(APP_CONFIG) private appConfig: AppConfig
+    @Inject(APP_CONFIG) public appConfig: AppConfig
   ) {}
 
   ngOnInit() {
@@ -222,7 +222,16 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.archivingSrv.archive(this.selectedSets);
+        this.archivingSrv.archive(this.selectedSets).subscribe(
+          () => this.store.dispatch(new ClearSelectionAction()),
+          err =>
+            this.store.dispatch(
+              new ShowMessageAction({
+                type: MessageType.Error,
+                content: err.message
+              })
+            )
+        );
       }
       // this.onClose.emit(result);
     });
@@ -246,7 +255,16 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.archivingSrv.retrieve(this.selectedSets, destPath);
+        this.archivingSrv.retrieve(this.selectedSets, destPath).subscribe(
+          () => this.store.dispatch(new ClearSelectionAction()),
+          err =>
+            this.store.dispatch(
+              new ShowMessageAction({
+                type: MessageType.Error,
+                content: err.message
+              })
+            )
+        );
       }
     });
   }
