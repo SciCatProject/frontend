@@ -1,7 +1,9 @@
-<div>
+<mat-card>
+  <p>
     You are about to publish {{ datasetCount$ | async }} datasets.
+  </p>
 
-    <!--
+  <!--
 
     const first_name = “Gareth”;
     const last_name = “Murphy”;
@@ -16,17 +18,34 @@
     const url = “https://scicat.esss.se/10.1178/BRIGHTNESS“;
 
     -->
-    <form action="">
-        <p>
-            <label for="">First Name</label>
-            <input type="text"/>
-        </p>
-        <p>
-            <label for="">Last Name</label>
-            <input type="text"/>
-        </p>
-        <p>
-            <button>Save</button>
-        </p>
-    </form>
-</div>
+
+  <form>
+    <mat-form-field>
+      <input required matInput placeholder="First Name" autocomplete="off" [(ngModel)]="form.firstName" name="firstName">
+    </mat-form-field>
+
+    <mat-form-field>
+      <input required matInput placeholder="Last Name" autocomplete="off" [(ngModel)]="form.lastName" name="lastName">
+    </mat-form-field>
+
+    <mat-form-field>
+      <input required matInput placeholder="Affiliation" autocomplete="off" [(ngModel)]="form.affiliation" name="affiliation">
+    </mat-form-field>
+
+    <mat-form-field>
+      <input required matInput placeholder="Publisher" autocomplete="off" [(ngModel)]="form.publisher" name="publisher">
+    </mat-form-field>
+
+    <mat-form-field>
+      <input required matInput type="number" placeholder="Publication Year" autocomplete="off" [(ngModel)]="form.publicationYear" name="publicationYear">
+    </mat-form-field>
+
+    <mat-form-field>
+        <textarea required matInput placeholder="Abstract" autocomplete="off" [(ngModel)]="form.abstract" name="abstract"></textarea>
+    </mat-form-field>
+
+    <button (click)="onPublish()" mat-raised-button color="primary">
+      Publish
+    </button>
+  </form>
+</mat-card>

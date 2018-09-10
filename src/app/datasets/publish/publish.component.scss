@@ -1,18 +1,8 @@
 form {
-    display: grid;
-    grid-template-columns: 200px 1fr;
-    grid-gap: 20px;
+    min-width: 50%;
+    width: 50%;
 }
 
-form p {
-    grid-column: 1 / 2;
-}
-
-label {
-    grid-column: 1 / 2;
-}
- 
-input,
-button {
-    grid-column: 2 / 3;
+mat-form-field {
+    width: 100%;
 }
