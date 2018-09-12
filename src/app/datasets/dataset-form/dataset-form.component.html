@@ -1,7 +1,7 @@
 
 <div class="container" *ngIf="(dataset$ | async) as dataset" >
   <div [hidden]="submitted">
-    <h1>Metadata Form</h1>
+    <h3>Add Metadata</h3>
     <form (ngSubmit)="onSubmit()" #datasetForm="ngForm">
       <div class="form-group">
         <label for="description">Name</label>

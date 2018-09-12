@@ -1,6 +1,5 @@
 import { Component, OnInit } from "@angular/core";
 import { RawDataset } from "../../shared/sdk/models";
-import { DatasetService } from "../dataset.service";
 import { select, Store } from "@ngrx/store";
 import { getCurrentDataset } from "../../state-management/selectors/datasets.selectors";
 import { SaveDatasetAction } from "../../state-management/actions/datasets.actions";
@@ -12,17 +11,12 @@ import { SaveDatasetAction } from "../../state-management/actions/datasets.actio
 })
 export class DatasetFormComponent implements OnInit {
   dataset$ = this.store.pipe(select(getCurrentDataset));
-  parameter_name: string;
-  parameter_value: string;
   submitted = false;
   model: RawDataset;
 
-
   constructor(
-    private store: Store<any>,
-    private datasetService: DatasetService
+    private store: Store<any>
   ) {
-
     this.model = new RawDataset();
   }
 
@@ -33,7 +27,9 @@ export class DatasetFormComponent implements OnInit {
 
   onSubmit() {
     this.submitted = true;
-    this.store.dispatch(new SaveDatasetAction(this.model));
+    this.dataset$.subscribe(updated_dataset => {
+      this.store.dispatch(new SaveDatasetAction(updated_dataset));
+    });
     console.log("gm submit", this.model);
   }
 
