@@ -27,6 +27,15 @@ import { LOGOUT_COMPLETE } from "../actions/user.actions";
 @Injectable()
 export class DatasetEffects {
   @Effect()
+  protected saveDataset$: Observable<Action> = this.actions$.pipe(
+    ofType(DatasetActions.SAVE_DATASET),
+    map( (action: DatasetActions.SaveDatasetAction) => action.dataset),
+    switchMap(dataset => {
+      return this.datasetApi.upsert(dataset);
+    })
+  );
+
+  @Effect()
   protected getDatablocks$: Observable<Action> = this.actions$.pipe(
     ofType(DatasetActions.DATABLOCKS),
     map((action: DatasetActions.DatablocksAction) => action.id),

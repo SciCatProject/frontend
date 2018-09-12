@@ -225,6 +225,7 @@ export class FetchDatasetsFailedAction implements Action {
 
 export class SaveDatasetAction implements Action {
     readonly type = SAVE_DATASET;
+    constructor(readonly dataset: Dataset) {}
 }
 
 export class SaveDatasetCompleteAction implements Action {
