@@ -35,6 +35,7 @@ import {
   faUserAlt,
   faUsers
 } from "@fortawesome/free-solid-svg-icons";
+import { ArchivingService } from "../archiving.service";
 
 /**
  * Component to show details for a data set, using the

@@ -4,7 +4,7 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { FileHelpersModule } from "ngx-file-helpers";
 import { FilePickerComponent } from "./file-picker/file-picker.component";
 import { FileDropzoneComponent } from "./file-dropzone/file-dropzone.component";
-import { FlexLayoutModule} from "@angular/flex-layout";
+import { FlexLayoutModule } from "@angular/flex-layout";
 import { AppConfigModule } from "app-config.module";
 import {
   DashboardComponent,
@@ -50,7 +50,8 @@ import { RouterModule } from "@angular/router";
 import { BatchCardComponent } from "./batch-card/batch-card.component";
 
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
-import { ArchivingService }  from "./archiving.service";
+import { ArchivingService } from "./archiving.service";
+import { DatasetFormComponent } from "./dataset-form/dataset-form.component";
 
 @NgModule({
   imports: [
@@ -99,7 +100,8 @@ import { ArchivingService }  from "./archiving.service";
     FileDropzoneComponent,
     FilePickerComponent,
     FileSizePipe,
-    SelectedListComponent
+    SelectedListComponent,
+    DatasetFormComponent
   ],
   providers: [DatasetService, ArchivingService],
   exports: [DatasetTableComponent, DatasetsFilterComponent]

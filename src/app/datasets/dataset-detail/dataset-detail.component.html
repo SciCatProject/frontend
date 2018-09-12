@@ -114,12 +114,22 @@
                 </th>
                 <td>{{ value }}</td>
               </tr>
+              <tr *ngIf="dataset.description as value">
+                <th>
+                  <fa-icon [icon]="faGlobe"></fa-icon>&nbsp;
+                  Description
+                </th>
+                <td>{{ value }}</td>
+              </tr>
+
             </table>
 
             <div *ngIf="dataset.scientificMetadata as value">
               <h3>Scientific Metadata</h3>
               <pre>{{ value | json }}</pre>
             </div>
+
+            <app-dataset-form></app-dataset-form>
           </div>
         </mat-card>
       </div>

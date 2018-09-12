@@ -91,6 +91,10 @@ export class DatasetService {
     return this.rds.findById(id, this.detailFilter);
   }
 
+  setDataset(dataset: Dataset) {
+    return this.rds.upsert(dataset);
+  }
+
   getUserGroups(userID: String): Observable<any> {
     return this.acSrv.findById(userID);
     // TODO this should be in a different service? Maybe called when the user
