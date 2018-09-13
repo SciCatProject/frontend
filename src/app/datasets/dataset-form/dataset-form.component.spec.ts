@@ -1,10 +1,8 @@
-import { async, ComponentFixture, TestBed } from "@angular/core/testing";
-
 import { DatasetFormComponent } from "./dataset-form.component";
 import { FormsModule } from "@angular/forms";
-import { DatasetDetailComponent } from "..";
 import { MockStore } from "../../shared/MockStubs";
 import { Store } from "@ngrx/store";
+import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
 describe("DatasetFormComponent", () => {
   let component: DatasetFormComponent;
