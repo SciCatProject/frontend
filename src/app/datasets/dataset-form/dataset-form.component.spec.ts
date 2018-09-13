@@ -1,6 +1,10 @@
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { DatasetFormComponent } from "./dataset-form.component";
+import { FormsModule } from "@angular/forms";
+import { DatasetDetailComponent } from "..";
+import { MockStore } from "../../shared/MockStubs";
+import { Store } from "@ngrx/store";
 
 describe("DatasetFormComponent", () => {
   let component: DatasetFormComponent;
@@ -8,12 +12,20 @@ describe("DatasetFormComponent", () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [DatasetFormComponent]
-    }).compileComponents();
+      declarations: [DatasetFormComponent],
+      imports: [FormsModule]
+    });
+    TestBed.overrideComponent(DatasetFormComponent, {
+      set: {
+        providers: [{ provide: Store, useClass: MockStore }]
+      }
+    });
+    TestBed.compileComponents();
   }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(DatasetFormComponent);
+
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

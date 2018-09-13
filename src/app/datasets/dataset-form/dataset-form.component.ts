@@ -1,8 +1,9 @@
 import { Component, OnInit } from "@angular/core";
-import { RawDataset } from "../../shared/sdk/models";
+import { Dataset, RawDataset } from "../../shared/sdk/models";
 import { select, Store } from "@ngrx/store";
 import { getCurrentDataset } from "../../state-management/selectors/datasets.selectors";
 import { SaveDatasetAction } from "../../state-management/actions/datasets.actions";
+import { Observable } from "rxjs";
 
 @Component({
   selector: "app-dataset-form",
@@ -10,13 +11,11 @@ import { SaveDatasetAction } from "../../state-management/actions/datasets.actio
   styleUrls: ["./dataset-form.component.css"]
 })
 export class DatasetFormComponent implements OnInit {
-  dataset$ = this.store.pipe(select(getCurrentDataset));
+  dataset$: Observable<Dataset>;
   submitted = false;
   model: RawDataset;
 
-  constructor(
-    private store: Store<any>
-  ) {
+  constructor(private store: Store<any>) {
     this.model = new RawDataset();
   }
 
@@ -34,5 +33,6 @@ export class DatasetFormComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.dataset$ = this.store.pipe(select(getCurrentDataset));
   }
 }
