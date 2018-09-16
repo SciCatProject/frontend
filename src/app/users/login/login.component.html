@@ -1,11 +1,8 @@
 <br>
 <div>
   <div fxLayout="row" fxLayout.xs="column" fxLayoutGap="0.5%" fxLayoutAlign="center center">
-    <div fxFlex="62%">
-      <img mat-card-image src="assets/images/ess-site.png" alt="ESS site" style="object-fit: cover;">
-    </div>
     <div fxFlex="32%">
-        <img mat-card-image src="assets/images/esslogo.png" style="width: 200px;">
+        <img mat-card-image class=facility_logo src="assets/images/esslogo.png" >
         <form [formGroup]="loginForm" (ngSubmit)="onLogin($event)" class="ui form">
           <div class="field">
             <label for="emailInput">Username:</label>
@@ -20,6 +17,9 @@
           </button>
           <mat-checkbox name="rememberMe">Remember me</mat-checkbox>
         </form>
+    </div>
+    <div fxFlex="62%">
+      <img mat-card-image src="assets/images/ess-site.png" alt="ESS site" style="object-fit: scale-down;">
     </div>
   </div>
 </div>
