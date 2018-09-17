@@ -129,17 +129,21 @@
               <pre>{{ value | json }}</pre>
             </div>
 
-            <app-dataset-form></app-dataset-form>
+
+            <div class="form-container" *ngIf="appConfig.editMetadataEnabled">
+              <app-dataset-form></app-dataset-form>
+            </div>
+
           </div>
         </mat-card>
       </div>
-      <div fxFlex="30%" *ngIf="(attachments$ | async) as attachments" >
-          <ng-container *ngFor="let da of attachments">
-            <mat-card style="margin: 1em">
-            <img mat-card-image src="{{da.thumbnail}}" >
+      <div fxFlex="30%" *ngIf="(attachments$ | async) as attachments">
+        <ng-container *ngFor="let da of attachments">
+          <mat-card style="margin: 1em">
+            <img mat-card-image src="{{da.thumbnail}}">
             <br>
-            </mat-card>
-          </ng-container>
+          </mat-card>
+        </ng-container>
       </div>
     </div>
   </mat-tab>

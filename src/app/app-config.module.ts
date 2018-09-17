@@ -9,6 +9,7 @@ export class AppConfig {
     production: boolean;
     disabledDatasetColumns: string[];
     archiveWorkflowEnabled: boolean;
+    editMetadataEnabled: boolean;
     facility: string;
     shoppingCartEnabled: boolean;
 }
@@ -19,6 +20,7 @@ export const APP_DI_CONFIG: AppConfig = {
     production: environment.production,
     disabledDatasetColumns: environment['disabledDatasetColumns'] || [],
     archiveWorkflowEnabled: environment['archiveWorkflowEnabled'] || null,
+    editMetadataEnabled: environment['editMetadataEnabled'] || null,
     facility: environment['facility'] || null,
     shoppingCartEnabled: environment['shoppingCartEnabled'] || false
 };
