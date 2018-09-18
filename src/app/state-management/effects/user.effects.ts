@@ -12,7 +12,6 @@ import { ADAuthService } from "users/adauth.service";
 import { Router } from "@angular/router";
 import { catchError, filter, map, switchMap, tap } from "rxjs/operators";
 import { MessageType, User, UserIdentity } from "../models";
-import * as userActions from "../actions/user.actions";
 
 
 @Injectable()

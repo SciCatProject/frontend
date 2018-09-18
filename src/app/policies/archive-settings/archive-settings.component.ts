@@ -1,27 +1,18 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
 
-import { OnInit, OnDestroy, Inject } from "@angular/core";
+import { OnInit } from "@angular/core";
 import { MatCheckboxChange } from "@angular/material";
 import { Policy } from "state-management/models";
 
 import { Router, ActivatedRoute } from "@angular/router";
-import { MatButtonToggleModule } from "@angular/material/button-toggle";
-import { MatChipsModule } from "@angular/material/chips";
-import { SharedCatanieModule } from "shared/shared.module";
-import { StoreModule } from "@ngrx/store";
 import { Store, select } from "@ngrx/store";
-import { policiesReducer } from "state-management/reducers/policies.reducer";
 import { ActionsSubject } from "@ngrx/store";
-//import { Observable } from 'rxjs/Observable';
+
 import {
   FetchPoliciesAction,
-  FetchPoliciesCompleteAction,
   SelectPolicyAction,
   DeselectPolicyAction,
   SubmitPolicyAction,
-  SubmitPolicyCompleteAction,
-  PoliciesActions,
-  SUBMIT_POLICY_COMPLETE,
   ClearSelectionAction,
   ChangePageAction,
   SortByColumnAction
@@ -32,9 +23,7 @@ import {
   getSelectedPolicies,
   getPage,
 } from "state-management/selectors/policies.selectors";
-import { MatTableDataSource, MatPaginator } from "@angular/material";
 import { PoliciesService } from "../policies.service";
-import { ConfigFormComponent } from "shared/modules/config-form/config-form.component";
 import { EditDialogComponent } from "../edit-dialog/edit-dialog.component";
 import { MatDialog, MatDialogConfig } from "@angular/material";
 
@@ -104,7 +93,7 @@ export class ArchiveSettingsComponent implements OnInit {
     "retrieveEmailsToBeNotified"
   ];
 
-  private editEnabled = true;
+  public editEnabled = true;
 
   ngOnInit() {
     this.store.dispatch(new ClearSelectionAction());
