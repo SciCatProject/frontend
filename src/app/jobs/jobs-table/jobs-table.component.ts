@@ -8,20 +8,25 @@ import { HttpClient } from "@angular/common/http";
 import { Job } from "shared/sdk/models";
 import { MatPaginator } from "@angular/material";
 import { Router } from "@angular/router";
-import { Store, select } from "@ngrx/store";
-import { map, takeLast } from "rxjs/operators";
+import { select, Store } from "@ngrx/store";
+import { takeLast } from "rxjs/operators";
 import {
   faAt,
   faCalendarAlt,
-  faCertificate, faChessQueen,
+  faCertificate,
+  faChessQueen,
   faCog,
   faCoins,
   faDownload,
   faEnvelope,
   faFileAlt,
-  faFolder, faGem, faGlobe,
-  faIdBadge, faImages,
-  faUpload, faUserAlt,
+  faFolder,
+  faGem,
+  faGlobe,
+  faIdBadge,
+  faImages,
+  faUpload,
+  faUserAlt,
   faUsers
 } from "@fortawesome/free-solid-svg-icons";
 
@@ -102,9 +107,9 @@ export class JobsTableComponent implements OnInit, OnDestroy, AfterViewInit {
       this.filters = Object.assign({}, filters);
     });
 
-    this.totalJobNumber$ = this.store.pipe(select(
-      state => state.root.jobs.currentJobs.length
-    ));
+    this.totalJobNumber$ = this.store.pipe(
+      select(state => state.root.jobs.currentJobs.length)
+    );
   }
 
   ngAfterViewInit() {
@@ -131,7 +136,10 @@ export class JobsTableComponent implements OnInit, OnDestroy, AfterViewInit {
     this.store.dispatch(new JobActions.ChildRetrieveAction(event.node));
     event.node.children = [];
     this.store
-      .pipe(select(state => state.root.jobs.ui), takeLast(1))
+      .pipe(
+        select(state => state.root.jobs.ui),
+        takeLast(1)
+      )
       .subscribe(jobs => {
         console.log(jobs);
         event.node.children = jobs;

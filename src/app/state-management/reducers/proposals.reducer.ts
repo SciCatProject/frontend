@@ -1,19 +1,19 @@
 import {
-  ProposalsState,
-  initialProposalsState
+  initialProposalsState,
+  ProposalsState
 } from "../state/proposals.store";
 import {
-  ProposalsAction,
-  SelectProposalAction,
-  SELECT_PROPOSAL,
-  FetchProposalsCompleteAction,
-  FETCH_PROPOSALS_COMPLETE,
-  FetchProposalCompleteAction,
+  FETCH_DATASETS_FOR_PROPOSAL_COMPLETE,
   FETCH_PROPOSAL_COMPLETE,
+  FETCH_PROPOSALS_COMPLETE,
   FetchDatasetsForProposalCompleteAction,
-  FETCH_DATASETS_FOR_PROPOSAL_COMPLETE
+  FetchProposalCompleteAction,
+  FetchProposalsCompleteAction,
+  ProposalsAction,
+  SELECT_PROPOSAL,
+  SelectProposalAction
 } from "../actions/proposals.actions";
-import { LogoutCompleteAction, LOGOUT_COMPLETE } from "../actions/user.actions";
+import { LOGOUT_COMPLETE, LogoutCompleteAction } from "../actions/user.actions";
 
 export function proposalsReducer(
   state: ProposalsState = initialProposalsState,
