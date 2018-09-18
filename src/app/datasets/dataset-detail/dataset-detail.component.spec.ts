@@ -3,7 +3,7 @@ import { ActivatedRoute } from "@angular/router";
 import { ConfigFormComponent } from "shared/modules/config-form/config-form.component";
 import { DatafilesComponent } from "datasets/datafiles/datafiles.component";
 import { DatasetDetailComponent } from "./dataset-detail.component";
-import { FileSizePipe } from "../filesize.pipe";
+import { FileSizePipe } from "../../shared/pipes/filesize.pipe";
 import { MatTableModule } from "@angular/material";
 import { MockActivatedRoute, MockStore } from "shared/MockStubs";
 import { NO_ERRORS_SCHEMA } from "@angular/core";

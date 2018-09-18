@@ -83,6 +83,7 @@ export class ArchiveSettingsComponent implements OnInit {
   // @Output() private onDeselect: EventEmitter<Policy> = new EventEmitter();
   @Output()
   private onSortChange: EventEmitter<SortChangeEvent> = new EventEmitter();
+
   // @Output() private onSelect: EventEmitter<Policy> = new EventEmitter();
 
   constructor(

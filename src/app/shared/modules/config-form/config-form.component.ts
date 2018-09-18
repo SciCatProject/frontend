@@ -1,25 +1,24 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import {
-  FormBuilder,
-  FormGroup
-} from '@angular/forms';
-import { Store } from '@ngrx/store';
-import { ConfigService } from 'shared/services/config.service';
-import { DatePipe } from '@angular/common';
-
+import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { FormBuilder, FormGroup } from "@angular/forms";
+import { Store } from "@ngrx/store";
+import { ConfigService } from "shared/services/config.service";
+import { DatePipe } from "@angular/common";
 
 @Component({
-  selector: 'config-form',
-  templateUrl: './config-form.component.html',
-  styleUrls: ['./config-form.component.css']
+  selector: "config-form",
+  templateUrl: "./config-form.component.html",
+  styleUrls: ["./config-form.component.css"]
 })
 export class ConfigFormComponent implements OnInit {
+  @Input()
+  source: object;
+  @Input()
+  sourceType;
+  @Input()
+  enabled = true;
 
-  @Input() source: object;
-  @Input() sourceType;
-  @Input() enabled = true;
-
-  @Output() onSubmit: EventEmitter<any> = new EventEmitter();
+  @Output()
+  onSubmit: EventEmitter<any> = new EventEmitter();
 
   dsFormGroup: FormGroup;
   properties: object;
@@ -27,9 +26,11 @@ export class ConfigFormComponent implements OnInit {
   formConfig: object;
   objData: object = {};
 
-  constructor(private formBuilder: FormBuilder,
-    private configService: ConfigService, private store: Store<any>) {
-  }
+  constructor(
+    private formBuilder: FormBuilder,
+    private configService: ConfigService,
+    private store: Store<any>
+  ) {}
 
   ngOnInit() {
     // TODO check if config exists, do not use if doesn't (i.e. for normal
@@ -37,17 +38,19 @@ export class ConfigFormComponent implements OnInit {
     let configFile = undefined;
     if (this.sourceType) {
       configFile = this.sourceType;
-    } else if (this.source && this.source.constructor.name !== 'Object') {
+    } else if (this.source && this.source.constructor.name !== "Object") {
       configFile = this.source.constructor.name;
     }
     if (configFile) {
-      this.configService.getConfigFile(configFile)
-        .subscribe(
-          res => {
-            this.formConfig = res;
-            this.loadForm(res);
-          },
-          error => { console.error(error); });
+      this.configService.getConfigFile(configFile).subscribe(
+        res => {
+          this.formConfig = res;
+          this.loadForm(res);
+        },
+        error => {
+          console.error(error);
+        }
+      );
     } else {
       this.loadForm();
     }
@@ -68,26 +71,33 @@ export class ConfigFormComponent implements OnInit {
       if (prop && this.formData.hasOwnProperty(prop)) {
         if (this.formConfig) {
           config = this.formConfig[prop];
-          if (config && config['type'] === 'Date') {
+          if (config && config["type"] === "Date") {
             const date = new Date(this.source[prop]);
-            const datePipe = new DatePipe('en-US');
-            const formattedDate = datePipe.transform(date, 'dd/MM/yyyy HH:mm');
+            const datePipe = new DatePipe("en-US");
+            const formattedDate = datePipe.transform(date, "dd/MM/yyyy HH:mm");
             this.formData[prop] = formattedDate;
           }
-          if (config && config['name'] === 'dataFileList.path') {
-            this.formData[prop] = '<a href='+this.source[prop]+'>'+this.source[prop]+'</a>';
+          if (config && config["name"] === "dataFileList.path") {
+            this.formData[prop] =
+              "<a href=" + this.source[prop] + ">" + this.source[prop] + "</a>";
           }
-          if (config && config['type'] === 'number' && config['name'] === 'size') {
-            this.formData[prop] = (((this.source[prop] / 1024) / 1024) / 1024).toFixed(10) + ' GB';
+          if (
+            config &&
+            config["type"] === "number" &&
+            config["name"] === "size"
+          ) {
+            this.formData[prop] =
+              (this.source[prop] / 1024 / 1024 / 1024).toFixed(10) + " GB";
           }
-          if (config && 'visible' in config && config['visible'] === false) {
+          if (config && "visible" in config && config["visible"] === false) {
             delete this.formData[prop];
           }
         }
-        if (this.getType(prop, this.source[prop]) === 'object') {
-          this.objData[prop] =
-            <Object[]>this.getTreeFromObject(this.source[prop]);
-        } else if (this.getType(prop, this.source[prop]) === 'array') {
+        if (this.getType(prop, this.source[prop]) === "object") {
+          this.objData[prop] = <Object[]>(
+            this.getTreeFromObject(this.source[prop])
+          );
+        } else if (this.getType(prop, this.source[prop]) === "array") {
           this.formData[prop] = JSON.stringify(this.source[prop]);
         }
       }
@@ -112,7 +122,7 @@ export class ConfigFormComponent implements OnInit {
    */
   getTreeFromObject(object) {
     const paths = [];
-    iterate(object, '');
+    iterate(object, "");
     return paths;
 
     /**
@@ -124,17 +134,21 @@ export class ConfigFormComponent implements OnInit {
     function iterate(obj, path) {
       for (const property in obj) {
         if (obj.hasOwnProperty(property)) {
-          if (typeof obj[property] === 'object') {
+          if (typeof obj[property] === "object") {
             const kids = [];
             if (path) {
-              path.push(
-                { data: { name: property, value: '' }, children: kids });
+              path.push({
+                data: { name: property, value: "" },
+                children: kids
+              });
             } else {
-              paths.push(
-                { data: { name: property, value: '' }, children: kids });
+              paths.push({
+                data: { name: property, value: "" },
+                children: kids
+              });
             }
             iterate(obj[property], kids);
-          } else if (path !== '') {
+          } else if (path !== "") {
             path.push({ data: { name: property, value: obj[property] } });
           } else {
             paths.push({ data: { name: property, value: obj[property] } });
@@ -164,11 +178,14 @@ export class ConfigFormComponent implements OnInit {
    * @memberof ConfigFormComponent
    */
   getType(key, value) {
-    if (this.formConfig && key in this.formConfig &&
-      this.formConfig[key]['type']) {
-      return this.formConfig[key]['type'];
+    if (
+      this.formConfig &&
+      key in this.formConfig &&
+      this.formConfig[key]["type"]
+    ) {
+      return this.formConfig[key]["type"];
     } else {
-      return typeof (value);
+      return typeof value;
     }
   }
 }
