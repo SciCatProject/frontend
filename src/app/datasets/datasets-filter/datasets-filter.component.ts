@@ -1,8 +1,7 @@
-import { Component } from '@angular/core';
-import { Store, select } from '@ngrx/store';
+import { Component } from "@angular/core";
+import { Store, select } from "@ngrx/store";
 
-
-import { FacetCount } from 'state-management/state/datasets.store';
+import { FacetCount } from "state-management/state/datasets.store";
 import {
   getLocationFacetCounts,
   getGroupFacetCounts,
@@ -14,8 +13,8 @@ import {
   getGroupFilter,
   getCreationTimeFilter,
   getSearchTerms,
-  getHasAppliedFilters,
-} from 'state-management/selectors/datasets.selectors';
+  getHasAppliedFilters
+} from "state-management/selectors/datasets.selectors";
 
 import {
   AddLocationFilterAction,
@@ -30,9 +29,9 @@ import {
   SetDateRangeFilterAction,
   SetSearchTermsAction,
   SetTextFilterAction
-} from 'state-management/actions/datasets.actions';
-import { MatDatepickerInputEvent } from '@angular/material';
-import { skipWhile, distinctUntilChanged, debounceTime } from 'rxjs/operators';
+} from "state-management/actions/datasets.actions";
+import { MatDatepickerInputEvent } from "@angular/material";
+import { skipWhile, distinctUntilChanged, debounceTime } from "rxjs/operators";
 
 type DateRange = {
   begin: Date;
@@ -40,9 +39,9 @@ type DateRange = {
 };
 
 @Component({
-  selector: 'datasets-filter',
-  templateUrl: 'datasets-filter.component.html',
-  styleUrls: ['datasets-filter.component.css']
+  selector: "datasets-filter",
+  templateUrl: "datasets-filter.component.html",
+  styleUrls: ["datasets-filter.component.css"]
 })
 export class DatasetsFilterComponent {
   locationFacetCounts$ = this.store.pipe(select(getLocationFacetCounts));
@@ -59,13 +58,15 @@ export class DatasetsFilterComponent {
 
   hasAppliedFilters$ = this.store.pipe(select(getHasAppliedFilters));
 
-  private searchTermSubscription = this.searchTerms$.pipe(
-    skipWhile(terms => terms === ''),
-    debounceTime(500),
-    distinctUntilChanged(),
-  ).subscribe(terms => {
-    this.store.dispatch(new SetTextFilterAction(terms));
-  });
+  private searchTermSubscription = this.searchTerms$
+    .pipe(
+      skipWhile(terms => terms === ""),
+      debounceTime(500),
+      distinctUntilChanged()
+    )
+    .subscribe(terms => {
+      this.store.dispatch(new SetTextFilterAction(terms));
+    });
 
   constructor(private store: Store<any>) {}
 
@@ -83,7 +84,7 @@ export class DatasetsFilterComponent {
   }
 
   locationSelected(location: string | null) {
-    this.store.dispatch(new AddLocationFilterAction(location || ''));
+    this.store.dispatch(new AddLocationFilterAction(location || ""));
   }
 
   locationRemoved(location: string) {
@@ -115,8 +116,10 @@ export class DatasetsFilterComponent {
   }
 
   dateChanged(event: MatDatepickerInputEvent<DateRange>) {
-    const {begin, end} = event.value;
-    this.store.dispatch(new SetDateRangeFilterAction(begin.toISOString(), end.toISOString()));
+    const { begin, end } = event.value;
+    this.store.dispatch(
+      new SetDateRangeFilterAction(begin.toISOString(), end.toISOString())
+    );
   }
 
   clearFacets() {

@@ -1,10 +1,10 @@
-import { Component } from '@angular/core';
-import { ReadFile, ReadMode } from 'ngx-file-helpers';
+import { Component } from "@angular/core";
+import { ReadFile, ReadMode } from "ngx-file-helpers";
 
 @Component({
-  selector: 'app-file-dropzone',
-  templateUrl: './file-dropzone.component.html',
-  styleUrls: ['./file-dropzone.component.css']
+  selector: "app-file-dropzone",
+  templateUrl: "./file-dropzone.component.html",
+  styleUrls: ["./file-dropzone.component.css"]
 })
 export class FileDropzoneComponent {
   public readMode = ReadMode.dataURL;
