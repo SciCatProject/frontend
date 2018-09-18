@@ -1,9 +1,7 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
-
 import { OnInit } from "@angular/core";
 import { MatCheckboxChange } from "@angular/material";
 import { Policy } from "state-management/models";
-
 import { Router, ActivatedRoute } from "@angular/router";
 import { Store, select } from "@ngrx/store";
 import { ActionsSubject } from "@ngrx/store";
@@ -44,7 +42,7 @@ export interface SortChangeEvent {
   styleUrls: ["./archive-settings.component.scss"]
 })
 export class ArchiveSettingsComponent implements OnInit {
-  private policies$ = this.store.pipe(select(getPolicies));
+  public policies$ = this.store.pipe(select(getPolicies));
   private policyState$ = this.store.pipe(select(getPolicyState));
   private selectedPolicies$ = this.store.pipe(select(getSelectedPolicies));
   private currentPage$ = this.store.pipe(select(getPage));
@@ -79,7 +77,7 @@ export class ArchiveSettingsComponent implements OnInit {
   @Output()
   private onClick: EventEmitter<Policy> = new EventEmitter();
 
-  private pageSizeOptions: number[] = [30, 1000];
+  public pageSizeOptions: number[] = [30, 1000];
   private displayedColumns: string[] = [
     "select",
     "manager",
@@ -149,7 +147,7 @@ export class ArchiveSettingsComponent implements OnInit {
     }
   }
 
-  private getDisplayedColumns(): string[] {
+  public getDisplayedColumns(): string[] {
     return this.displayedColumns.filter(
       column => this.disabledColumns.indexOf(column) === -1
     );

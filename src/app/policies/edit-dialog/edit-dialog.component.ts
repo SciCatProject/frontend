@@ -2,11 +2,6 @@ import {
   Component,
   Inject,
   OnInit,
-  ViewEncapsulation,
-  OnChanges,
-  Input,
-  Output,
-  EventEmitter
 } from "@angular/core";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material";
 import {
