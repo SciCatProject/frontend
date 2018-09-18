@@ -1,27 +1,22 @@
-import { Action } from "@ngrx/store";
 import {
-  SELECT_CURRENT,
+  CLEAR_SELECTION,
+  DESELECT_POLICY,
+  DeselectPolicyAction,
+  FETCH_POLICIES,
+  FETCH_POLICIES_COMPLETE,
+  FETCH_POLICIES_FAILED,
+  FetchPoliciesCompleteAction,
+  PoliciesActions,
   SELECT_POLICY,
   SelectPolicyAction,
-  DeselectPolicyAction,
-  DESELECT_POLICY,
-  CLEAR_SELECTION,
-  FETCH_POLICIES_COMPLETE,
-  FETCH_POLICIES,
-  FetchPoliciesCompleteAction,
-  FETCH_POLICIES_FAILED,
-  PoliciesActions,
-  SUBMIT_POLICY,
-  SubmitPolicyAction,
   SUBMIT_POLICY_COMPLETE,
-  SubmitPolicyCompleteAction,
   SUBMIT_POLICY_FAILED,
   SubmitPolicyFailedAction
 } from "state-management/actions/policies.actions";
 
 import {
-  PolicyState,
-  initialPolicyState
+  initialPolicyState,
+  PolicyState
 } from "state-management/state/policies.store";
 
 export function policiesReducer(
@@ -34,9 +29,9 @@ export function policiesReducer(
 
   switch (action.type) {
     case SUBMIT_POLICY_COMPLETE: {
-      //const policySubmission = (action as SubmitPolicyCompleteAction).policySubmission;
+      // const policySubmission = (action as SubmitPolicyCompleteAction).policySubmission;
       return { ...state, submitComplete: true };
-      //return { ...state, policySubmission : null };
+      // return { ...state, policySubmission : null };
     }
 
     case SUBMIT_POLICY_FAILED: {
