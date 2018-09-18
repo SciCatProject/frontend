@@ -68,7 +68,7 @@
               Source Folder
             </mat-header-cell>
             <mat-cell *matCellDef="let element" matTooltip="{{element.sourceFolder}}">
-              {{element.sourceFolder | slice:-14 }}
+              ...{{element.sourceFolder | slice:-14 }}
             </mat-cell>
           </ng-container>
           <ng-container matColumnDef="size">
