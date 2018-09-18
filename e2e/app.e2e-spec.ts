@@ -1,6 +1,6 @@
-import { CataniePage } from './app.po';
+import { CataniePage } from "./app.po";
 
-describe('catanie App', function() {
+describe("catanie App", function() {
   let page: CataniePage;
 
   beforeEach(() => {
@@ -8,7 +8,7 @@ describe('catanie App', function() {
     page.navigateTo();
   });
 
-  it('should contain app name', () => {
-    expect(page.getParagraphText('app-root')).toContain('SciCat');
+  it("should contain app name", () => {
+    expect(page.getParagraphText("app-root")).toContain("SciCat");
   });
 });
