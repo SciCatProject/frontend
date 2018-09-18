@@ -1,24 +1,29 @@
 <div class="container" *ngIf="(metadataField$ | async) as metadatafield">
   <div [hidden]="submitted">
     <h3>Add Metadata</h3>
-    <form (ngSubmit)="onSubmit()" #datasetForm="ngForm">
-      <div class="form-group">
-        <label for="name">Name</label>
-        <input type="text" class="form-control" id="name"
-               required
-               [(ngModel)]="metadatafield.name" name="name"
-               #name="ngModel">
-      </div>
-      <div class="form-group">
-        <label for="value">Value</label>
-        <input type="text" class="form-control" id="value"
-               required
-               [(ngModel)]="metadatafield.value" name="value"
-               #name="ngModel">
-      </div>
+    <div *ngIf="(dataset$ | async) as dataset">
+      <form (ngSubmit)="onSubmit()" #datasetForm="ngForm">
+        <ul *ngFor="let d of dataset.scientificMetadata ">
+          d
+        </ul>
+          <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" class="form-control" id="name"
+                   required
+                   [(ngModel)]="metadatafield.name" name="name"
+                   #name="ngModel">
+          </div>
+          <div class="form-group">
+            <label for="value">Value</label>
+            <input type="text" class="form-control" id="value"
+                   required
+                   [(ngModel)]="metadatafield.value" name="value"
+                   #name="ngModel">
+          </div>
 
-      <button type="submit" class="btn btn-success" [disabled]="!datasetForm.form.valid">Submit</button>
-    </form>
+          <button type="submit" class="btn btn-success" [disabled]="!datasetForm.form.valid">Submit</button>
+      </form>
+    </div>
   </div>
 
   <div [hidden]="!submitted">
