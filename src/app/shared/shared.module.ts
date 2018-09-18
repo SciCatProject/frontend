@@ -5,15 +5,17 @@ import { DialogModule } from "shared/modules/dialog/dialog.module";
 import { ErrorPageModule } from "shared/modules/error-page/error-page.module";
 import { FileSizePipe } from "./pipes/filesize.pipe";
 import { NgModule } from "@angular/core";
+import { KeysPipe } from "./pipes";
 
 @NgModule({
   imports: [BreadcrumbModule, ConfigFormModule, ErrorPageModule, DialogModule],
-  declarations: [FileSizePipe],
+  declarations: [FileSizePipe, KeysPipe],
   providers: [ConfigService],
   exports: [
     BreadcrumbModule,
     ConfigFormModule,
     FileSizePipe,
+    KeysPipe,
     ErrorPageModule,
     DialogModule
   ]

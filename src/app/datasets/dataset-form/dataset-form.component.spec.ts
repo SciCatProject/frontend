@@ -3,6 +3,7 @@ import { FormsModule } from "@angular/forms";
 import { MockStore } from "../../shared/MockStubs";
 import { Store } from "@ngrx/store";
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+import { KeysPipe} from "../../shared/pipes";
 
 describe("DatasetFormComponent", () => {
   let component: DatasetFormComponent;
@@ -10,7 +11,7 @@ describe("DatasetFormComponent", () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [DatasetFormComponent],
+      declarations: [DatasetFormComponent, KeysPipe],
       imports: [FormsModule]
     });
     TestBed.overrideComponent(DatasetFormComponent, {
