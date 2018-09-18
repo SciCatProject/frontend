@@ -4,5 +4,6 @@ export const environment = {
   externalAuthEndpoint: '/auth/msad',
   archiveWorkflowEnabled: false,
   disabledDatasetColumns: ['select', 'archiveStatus', 'retrieveStatus', 'ownerGroup'],
-  facility: 'MAXIV'
+  facility: 'MAX IV',
+  shoppingCartEnabled: false
 };

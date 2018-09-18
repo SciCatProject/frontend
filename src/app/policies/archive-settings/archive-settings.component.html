@@ -1,17 +1,15 @@
 <div class="archive-settings">
 </div>
-
-
   <div class="button-group" align="end">
     <ng-container *ngIf="editEnabled" >
       <button mat-button mat-button (click)="onEditClick()" color="primary">
         <mat-icon >edit</mat-icon> Edit Selection
     </button>
-
     </ng-container>
   </div>
 
-  <mat-paginator class="policy-paginator" [pageSizeOptions]="pageSizeOptions" [pageIndex]="currentPage" [pageSize]="policiesPerPage" [length]="totalNumber" (page)="handlePageChange($event)">
+  <mat-paginator class="policy-paginator" [pageSizeOptions]="pageSizeOptions" [pageIndex]="currentPage" [pageSize]="10"
+                 [length]="totalNumber">
   </mat-paginator>
 
   <mat-table [dataSource]="policies$ | async" class="policy-table mat-elevation-z8" matSort (matSortChange)="onSortChange($event)">
@@ -23,7 +21,8 @@
         </mat-checkbox>
       </mat-header-cell>
       <mat-cell *matCellDef="let row">
-        <mat-checkbox [checked]="isChecked(row)" (change)="handleSelect($event, row)" (click)="$event.stopPropagation()">
+        <mat-checkbox [checked]="isChecked(row)" (change)="handleSelect($event, row)"
+                      (click)="$event.stopPropagation()">
         </mat-checkbox>
       </mat-cell>
     </ng-container>
@@ -55,7 +54,6 @@
     </ng-container>
 
 
-
     <ng-container matColumnDef="archiveEmailNotification">
       <mat-header-cell *matHeaderCellDef mat-sort-header>Archive Email Notification</mat-header-cell>
       <mat-cell *matCellDef="let policy">{{policy.archiveEmailNotification }}</mat-cell>
@@ -74,7 +72,6 @@
       <mat-cell *matCellDef="let policy">{{policy.retrieveEmailsToBeNotified}}</mat-cell>
     </ng-container>
 
-
     <!-- End of Column Definitions -->
 
     <mat-header-row class='policies-header' *matHeaderRowDef="getDisplayedColumns()"></mat-header-row>
@@ -82,13 +79,8 @@
     </mat-row>
   </mat-table>
 
-  <mat-paginator class="policy-paginator" [pageSizeOptions]="pageSizeOptions" [pageIndex]="currentPage" [pageSize]="policiesPerPage" [length]="totalNumber" (page)="handlePageChange($event)">
+  <mat-paginator class="policy-paginator" [pageSizeOptions]="pageSizeOptions" [pageIndex]="currentPage" [pageSize]="10"
+                 [length]="totalNumber">
   </mat-paginator>
 
 
-<div class="edit">
-  <ng-container *ngIf="sample">
-    <h1>Metadata Entry Form</h1>
-    <config-form [source]="sample" [enabled]="true"></config-form>
-  </ng-container>
-</div>

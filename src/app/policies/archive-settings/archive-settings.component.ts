@@ -15,7 +15,6 @@ import { ActionsSubject } from "@ngrx/store";
 //import { Observable } from 'rxjs/Observable';
 import {
   FetchPoliciesAction,
-  FetchPoliciesCompleteAction,
   SelectPolicyAction,
   DeselectPolicyAction,
   SubmitPolicyAction,
