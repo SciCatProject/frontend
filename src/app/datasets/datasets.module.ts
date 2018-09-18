@@ -1,10 +1,24 @@
-import {CommonModule} from '@angular/common';
-import {NgModule} from '@angular/core';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import { FileHelpersModule } from 'ngx-file-helpers';
-import { FilePickerComponent } from './file-picker/file-picker.component';
-import { FileDropzoneComponent } from './file-dropzone/file-dropzone.component';
-import { AppConfigModule } from 'app-config.module';
+import { AppConfigModule } from "app-config.module";
+import { ArchivingService } from "./archiving.service";
+import { BatchCardComponent } from "./batch-card/batch-card.component";
+import { BatchViewComponent } from "./batch-view/batch-view.component";
+import { CommonModule } from "@angular/common";
+import { DatasetFormComponent } from "./dataset-form/dataset-form.component";
+import { FileDropzoneComponent } from "./file-dropzone/file-dropzone.component";
+import { FileHelpersModule } from "ngx-file-helpers";
+import { FilePickerComponent } from "./file-picker/file-picker.component";
+import { FlexLayoutModule } from "@angular/flex-layout";
+import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { MatButtonToggleModule } from "@angular/material/button-toggle";
+import { MatChipsModule } from "@angular/material/chips";
+import { NgModule } from "@angular/core";
+import { RouterModule } from "@angular/router";
+import { SatDatepickerModule } from "saturn-datepicker";
+import { SelectedListComponent } from "datasets/selected-list/selected-list.component";
+import { SharedCatanieModule } from "shared/shared.module";
+import { StoreModule } from "@ngrx/store";
+import { datasetsReducer } from "state-management/reducers/datasets.reducer";
 import {
   DashboardComponent,
   DatablocksComponent,
@@ -13,58 +27,80 @@ import {
   DatasetService,
   DatasetsFilterComponent,
   DatasetTableComponent
-} from 'datasets/index';
+} from "datasets/index";
 
 import {
   MatAutocompleteModule,
   MatButtonModule,
   MatCardModule,
   MatCheckboxModule,
-  // MatDatepickerModule,
   MatDialogModule,
+  MatFormFieldModule,
+  MatGridListModule,
   MatIconModule,
   MatInputModule,
   MatListModule,
   MatNativeDateModule,
+  MatOptionModule,
   MatPaginatorModule,
   MatProgressSpinnerModule,
   MatSelectModule,
   MatSortModule,
   MatTableModule,
   MatTabsModule,
-  MatTooltipModule,
-  MatFormFieldModule,
-  MatOptionModule,
-} from '@angular/material';
-import { MatButtonToggleModule } from '@angular/material/button-toggle';
-import { MatChipsModule } from '@angular/material/chips';
-import { SharedCatanieModule } from 'shared/shared.module';
-import { SelectedListComponent } from 'datasets/selected-list/selected-list.component';
-import { SatDatepickerModule } from 'saturn-datepicker';
-import { StoreModule } from '@ngrx/store';
-import { datasetsReducer } from 'state-management/reducers/datasets.reducer';
-import { FileSizePipe } from './filesize.pipe';
-import { BatchViewComponent } from './batch-view/batch-view.component';
-import { RouterModule } from '@angular/router';
-import { BatchCardComponent } from './batch-card/batch-card.component';
+  MatTooltipModule
+} from "@angular/material";
 
 @NgModule({
-  imports : [
-    MatCardModule, MatDialogModule, MatPaginatorModule, MatCheckboxModule, MatTableModule, MatFormFieldModule, MatAutocompleteModule,
-    MatTabsModule, MatInputModule, MatButtonModule, MatSortModule, CommonModule, FormsModule, ReactiveFormsModule,
-    SharedCatanieModule, MatSelectModule, MatOptionModule, MatNativeDateModule, MatIconModule,
-    MatListModule, SatDatepickerModule, MatTooltipModule, MatButtonToggleModule, MatProgressSpinnerModule, MatChipsModule,
-    StoreModule.forFeature('datasets', datasetsReducer),
-    FileHelpersModule, AppConfigModule, RouterModule
+  imports: [
+    AppConfigModule,
+    CommonModule,
+    FileHelpersModule,
+    FlexLayoutModule,
+    FontAwesomeModule,
+    FormsModule,
+    MatAutocompleteModule,
+    MatButtonModule,
+    MatButtonToggleModule,
+    MatCardModule,
+    MatCheckboxModule,
+    MatChipsModule,
+    MatDialogModule,
+    MatFormFieldModule,
+    MatGridListModule,
+    MatIconModule,
+    MatInputModule,
+    MatListModule,
+    MatNativeDateModule,
+    MatOptionModule,
+    MatPaginatorModule,
+    MatProgressSpinnerModule,
+    MatSelectModule,
+    MatSortModule,
+    MatTableModule,
+    MatTabsModule,
+    MatTooltipModule,
+    ReactiveFormsModule,
+    RouterModule,
+    SatDatepickerModule,
+    SharedCatanieModule,
+    StoreModule.forFeature("datasets", datasetsReducer)
   ],
-  declarations : [
-    FilePickerComponent, FileDropzoneComponent,
-    DashboardComponent, DatasetTableComponent, DatablocksComponent,
-    DatafilesComponent, DatasetsFilterComponent, DatasetDetailComponent, SelectedListComponent,
-    FileSizePipe, BatchCardComponent, BatchViewComponent,
+  declarations: [
+    BatchCardComponent,
+    BatchViewComponent,
+    DashboardComponent,
+    DatablocksComponent,
+    DatafilesComponent,
+    DatasetDetailComponent,
+    DatasetTableComponent,
+    DatasetsFilterComponent,
+    FileDropzoneComponent,
+    FilePickerComponent,
+    SelectedListComponent,
+    DatasetFormComponent
   ],
-  providers : [ DatasetService ],
-  exports : [ DatasetTableComponent, DatasetsFilterComponent ]
+  providers: [DatasetService, ArchivingService],
+  exports: [DatasetTableComponent, DatasetsFilterComponent]
 })
-export class DatasetsModule {
-}
+export class DatasetsModule {}

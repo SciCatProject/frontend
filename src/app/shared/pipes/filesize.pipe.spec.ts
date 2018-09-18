@@ -1,0 +1,17 @@
+import { FileSizePipe } from "./filesize.pipe";
+
+describe("Pipe: FileSize", () => {
+  let pipe: FileSizePipe;
+
+  beforeEach(() => {
+    pipe = new FileSizePipe();
+  });
+
+  it("converts properly", () => {
+    expect(pipe.transform("3746356")).toBe("3.57 MB");
+  });
+
+  it("converts empty string to 0 B", () => {
+    expect(pipe.transform("")).toBe("0 B");
+  });
+});

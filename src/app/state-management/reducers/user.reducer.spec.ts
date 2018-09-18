@@ -1,7 +1,7 @@
 import { userReducer } from "./user.reducer";
 import { initialUserState } from "../state/user.store";
 import * as userActions from "../actions/user.actions";
-import { User, UserIdentity, MessageType, Message, Settings } from "../models";
+import { User, MessageType, Message, Settings } from "../models";
 
 describe("UserReducer", () => {
   it("should set currentUser", () => {
@@ -21,26 +21,6 @@ describe("UserReducer", () => {
     expect(state.currentUser).toEqual(user);
   });
 
-  it("should set currentUserIdentity", () => {
-    const userIdentity: UserIdentity = {
-      provider: "",
-      authScheme: "ldap",
-      externalId: "",
-      profile: "",
-      credentials: "",
-      created: new Date("2018-06-13T12:20:17.494Z"),
-      modified: new Date("2018-06-13T12:20:17.494Z"),
-      id: "",
-      userId: "",
-      user: new User()
-    };
-    const action = new userActions.RetrieveUserIdentityCompleteAction(
-      userIdentity
-    );
-    const state = userReducer(initialUserState, action);
-    expect(state.currentUserIdentity).toEqual(userIdentity);
-  });
-
   it("should set loading to false after login complete", () => {
     const user: User = {
       realm: "",
@@ -53,20 +33,13 @@ describe("UserReducer", () => {
       identities: [],
       credentials: []
     };
-    const action = new userActions.LoginCompleteAction(user);
+    const action = new userActions.LoginCompleteAction(user, "account-type");
     const state = userReducer(initialUserState, action);
     expect(state.isLoggingIn).toEqual(false);
   });
 
-  it("should set email", () => {
-    const email = "abc";
-    const action = new userActions.AccessUserEmailCompleteAction(email);
-    const state = userReducer(initialUserState, action);
-    expect(state.email).toEqual(email);
-  });
-
   it("should set isLoggingIn to false after login failed complete", () => {
-    const action = new userActions.LoginFailedAction("", "");
+    const action = new userActions.LoginFailedAction();
     const state = userReducer(initialUserState, action);
     expect(state.isLoggingIn).toEqual(false);
   });

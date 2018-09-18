@@ -1,19 +1,26 @@
-import {Component, Input, OnInit, ViewChild, AfterViewInit, Inject} from '@angular/core';
-import {OrigDatablock} from 'shared/sdk/models';
-import {Store} from '@ngrx/store';
-import {Observable} from 'rxjs';
-import {map} from 'rxjs/operators';
-import {MatTableDataSource, MatPaginator} from '@angular/material';
-import {APP_CONFIG, AppConfig} from 'app-config.module';
+import { APP_CONFIG, AppConfig } from "app-config.module";
+import { MatTableDataSource, MatPaginator } from "@angular/material";
+import { Observable } from "rxjs";
+import { OrigDatablock } from "shared/sdk/models";
+import { Store, select } from "@ngrx/store";
+import { getIsAdmin } from "state-management/selectors/users.selectors";
+import {
+  Component,
+  Input,
+  OnInit,
+  ViewChild,
+  AfterViewInit,
+  Inject
+} from "@angular/core";
 
 @Component({
-  selector: 'datafiles',
-  templateUrl: './datafiles.component.html',
-  styleUrls: ['./datafiles.component.css']
+  selector: "datafiles",
+  templateUrl: "./datafiles.component.html",
+  styleUrls: ["./datafiles.component.css"]
 })
 export class DatafilesComponent implements OnInit, AfterViewInit {
-
-  @Input() dataBlocks: Array<OrigDatablock>;
+  @Input()
+  dataBlocks: Array<OrigDatablock>;
 
   urlPrefix: string;
   count: number = 0;
@@ -22,27 +29,23 @@ export class DatafilesComponent implements OnInit, AfterViewInit {
   dsId: string;
   dataFiles: Array<any> = [];
 
-  displayedColumns = ['name', 'size', 'path'];
+  displayedColumns = ["name", "size", "path"];
 
   dataSource: MatTableDataSource<any> | null;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatPaginator)
+  paginator: MatPaginator;
 
   admin$: Observable<boolean>;
 
   constructor(
     private store: Store<any>,
-    @Inject(APP_CONFIG) private appConfig: AppConfig,
+    @Inject(APP_CONFIG) private appConfig: AppConfig
   ) {
     this.urlPrefix = appConfig.fileserverBaseURL;
   }
 
   ngOnInit() {
-    const currentUser$ = this.store.select(state => state.root.user.currentUser);
-    const adminUserNames = ['ingestor', 'archiveManager'];
-    const userIsAdmin = (user) => {
-      return (user['accountType'] === 'functional') || (adminUserNames.indexOf(user.username) !== -1);
-    };
-    this.admin$ = currentUser$.pipe(map(userIsAdmin));
+    this.admin$ = this.store.pipe(select(getIsAdmin));
     if (this.dataBlocks) {
       this.getDatafiles(this.dataBlocks);
     }

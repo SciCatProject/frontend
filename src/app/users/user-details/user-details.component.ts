@@ -1,6 +1,6 @@
-import {Component, OnInit} from '@angular/core';
-import {Store} from '@ngrx/store';
-import * as selectors from 'state-management/selectors';
+import { Component, OnInit } from "@angular/core";
+import { Store } from "@ngrx/store";
+import * as selectors from "state-management/selectors";
 
 /**
  * Compoennt to show uneditable user details
@@ -9,9 +9,9 @@ import * as selectors from 'state-management/selectors';
  * @implements {OnInit}
  */
 @Component({
-  selector: 'app-user-details',
-  templateUrl: './user-details.component.html',
-  styleUrls: ['./user-details.component.css']
+  selector: "app-user-details",
+  templateUrl: "./user-details.component.html",
+  styleUrls: ["./user-details.component.css"]
 })
 export class UserDetailsComponent implements OnInit {
   public user: object;
