@@ -7,11 +7,15 @@ export interface PolicyState {
     selectedPolicies: Policy[];
     currentPolicy: Policy;
     policySubmission: Policy;
+    submissionResponse: Policy;
     totalCount: number;
     submitComplete: boolean;
 
     policiesLoading: boolean;
     error: Error;
+
+    skip: number;
+    limit: number;
 
 
 }
@@ -21,10 +25,13 @@ export const initialPolicyState: PolicyState = {
     selectedPolicies: [],
     currentPolicy: null,
     policySubmission: null,
+    submissionResponse: null,
     totalCount: 0,
     submitComplete: false,
 
     policiesLoading: true,
-    error: undefined
+    error: undefined,
+    skip: 0,
+    limit: 0
 
 };

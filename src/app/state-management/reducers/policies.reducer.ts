@@ -1,42 +1,46 @@
+import { Action } from '@ngrx/store';
 import {
-  CLEAR_SELECTION,
-  DESELECT_POLICY,
-  DeselectPolicyAction,
-  FETCH_POLICIES,
-  FETCH_POLICIES_COMPLETE,
-  FETCH_POLICIES_FAILED,
-  FetchPoliciesCompleteAction,
-  PoliciesActions,
+  SELECT_CURRENT,
   SELECT_POLICY,
   SelectPolicyAction,
-  SUBMIT_POLICY_COMPLETE,
-  SUBMIT_POLICY_FAILED,
-  SubmitPolicyFailedAction
-} from "state-management/actions/policies.actions";
+  DeselectPolicyAction,
+  DESELECT_POLICY,
+  CLEAR_SELECTION,
 
-import {
-  initialPolicyState,
-  PolicyState
-} from "state-management/state/policies.store";
+  FETCH_POLICIES_COMPLETE,
+  FETCH_POLICIES,
+  FetchPoliciesCompleteAction,
+  FETCH_POLICIES_FAILED,
+  PoliciesActions,
+
+  SUBMIT_POLICY, SubmitPolicyAction,
+  SUBMIT_POLICY_COMPLETE, SubmitPolicyCompleteAction,
+  SUBMIT_POLICY_FAILED, SubmitPolicyFailedAction,
+
+  CHANGE_PAGE, ChangePageAction,
+  SORT_BY_COLUMN, SortByColumnAction,
+} from 'state-management/actions/policies.actions';
+
+import { PolicyState, initialPolicyState } from 'state-management/state/policies.store';
 
 export function policiesReducer(
   state: PolicyState = initialPolicyState,
   action: PoliciesActions
 ): PolicyState {
-  if (action.type.indexOf("[Policy]") !== -1) {
-    console.log("Action came in! " + action.type);
+  if (action.type.indexOf('[Policy]') !== -1) {
+    console.log('Action came in! ' + action.type);
   }
 
   switch (action.type) {
+
     case SUBMIT_POLICY_COMPLETE: {
-      // const policySubmission = (action as SubmitPolicyCompleteAction).policySubmission;
-      return { ...state, submitComplete: true };
-      // return { ...state, policySubmission : null };
+      const submissionResponse = (action as SubmitPolicyCompleteAction).submissionResponse;
+      return { ...state, submissionResponse};
     }
 
     case SUBMIT_POLICY_FAILED: {
       const error = (action as SubmitPolicyFailedAction).error;
-      return { ...state, error, policySubmission: null };
+      return { ...state, error, policySubmission : null };
     }
 
     case FETCH_POLICIES: {
@@ -48,15 +52,14 @@ export function policiesReducer(
       return { ...state, policies, policiesLoading: false };
     }
 
+
     case FETCH_POLICIES_FAILED: {
       return { ...state, policiesLoading: false };
     }
 
     case SELECT_POLICY: {
       const policy = (action as SelectPolicyAction).policy;
-      const alreadySelected = state.selectedPolicies.find(
-        existing => policy.id === existing.id
-      );
+      const alreadySelected = state.selectedPolicies.find(existing => policy.id === existing.id);
       if (alreadySelected) {
         return state;
       } else {
@@ -67,14 +70,30 @@ export function policiesReducer(
 
     case DESELECT_POLICY: {
       const policy = (action as DeselectPolicyAction).policy;
-      const selectedPolicies = state.selectedPolicies.filter(
-        selectedPolicy => selectedPolicy.id !== policy.id
-      );
+      const selectedPolicies = state.selectedPolicies.filter(selectedPolicy => selectedPolicy.id !== policy.id);
       return { ...state, selectedPolicies };
     }
 
     case CLEAR_SELECTION: {
       return { ...state, selectedPolicies: [] };
+    }
+
+    case CHANGE_PAGE: {
+        const {page, limit} = (action as ChangePageAction);
+        const skip = page * limit;
+        //const filters = {...state.filters, skip, limit};
+        return {
+            ...state,
+            policiesLoading: true,
+            //filters
+        };
+    }
+
+    case SORT_BY_COLUMN: {
+        const {column, direction} = action as SortByColumnAction;
+        const sortField = column + (direction ? ':' + direction : '');
+        //const filters = {...state.filters, sortField, skip: 0};
+        return {...state, /*filters,*/ policiesLoading: true};
     }
 
     default: {
