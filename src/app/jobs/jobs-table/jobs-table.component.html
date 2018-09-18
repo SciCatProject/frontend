@@ -39,7 +39,7 @@
 
     <ng-container matColumnDef="jobParams">
       <mat-header-cell *matHeaderCellDef mat-sort-header>
-        <fa-icon [icon]="faCalendarAlt"></fa-icon>&nbsp;
+        <fa-icon [icon]="faCog"></fa-icon>&nbsp;
         Params</mat-header-cell>
       <mat-cell *matCellDef="let dataset">
         {{dataset.jobParams | json}}
@@ -48,7 +48,7 @@
 
     <ng-container matColumnDef="jobStatusMessage">
       <mat-header-cell *matHeaderCellDef mat-sort-header>
-        <fa-icon [icon]="faCalendarAlt"></fa-icon>&nbsp;
+        <fa-icon [icon]="faCog"></fa-icon>&nbsp;
         Status Message</mat-header-cell>
       <mat-cell *matCellDef="let dataset">
         {{dataset.jobStatusMessage}}
@@ -57,7 +57,7 @@
 
     <ng-container matColumnDef="datasetList">
       <mat-header-cell *matHeaderCellDef mat-sort-header>
-        <fa-icon [icon]="faCalendarAlt"></fa-icon>&nbsp;
+        <fa-icon [icon]="faCoins"></fa-icon>&nbsp;
         Datasets</mat-header-cell>
       <mat-cell *matCellDef="let dataset">
         {{dataset.datasetList | json}}

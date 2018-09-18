@@ -1,5 +1,9 @@
 <mat-tab-group>
-  <mat-tab label="General">
+  <mat-tab >
+    <ng-template mat-tab-label>
+      <fa-icon [icon]="faIdBadge"></fa-icon>&nbsp;
+      General
+    </ng-template>
     <div *ngIf="proposal" class="tab-content">
       <table>
         <tr>
@@ -10,13 +14,17 @@
           <td>{{proposal.title}}
         </tr>
         <tr>
-          <th>Main proposer</th>
+          <th>
+            <fa-icon [icon]="faUserAlt"></fa-icon>&nbsp;
+            Main proposer</th>
           <td>
             <a href="mailto:{{mainProposer.email}}">{{mainProposer.name}}</a>
           </td>
         </tr>
         <tr *ngIf="principalInvestigator && principalInvestigator.isPresent">
-          <th>Principal investigator</th>
+          <th>
+            <fa-icon [icon]="faChessQueen"></fa-icon>&nbsp;
+            Principal investigator</th>
 
           <td *ngIf="principalInvestigator.email; else withoutEmail">
             <a href="mailto:{{principalInvestigator.email}}">{{principalInvestigator.name}}</a>
@@ -28,14 +36,20 @@
           </ng-template>
         </tr>
         <tr>
-          <th>Abstract</th>
+          <th>
+            <fa-icon [icon]="faCog"></fa-icon>&nbsp;
+            Abstract</th>
           <td>{{proposal.abstract}}</td>
         </tr>
       </table>
     </div>
   </mat-tab>
 
-  <mat-tab label="Datasets">
+  <mat-tab >
+    <ng-template mat-tab-label>
+      <fa-icon [icon]="faCoins"></fa-icon>&nbsp;
+      Datasets
+    </ng-template>
     <div class="tab-content">
       <div class="ui segment">
         <mat-table #table [dataSource]="datasets" class="dataset-table">
@@ -44,7 +58,7 @@
               <fa-icon [icon]="faIdBadge"></fa-icon>&nbsp;
               PID
             </mat-header-cell>
-            <mat-cell *matCellDef="let element" matTooltip="{element.pid}">
+            <mat-cell *matCellDef="let element" matTooltip="{{element.pid}}">
               ...{{element.pid | slice:-10}}
             </mat-cell>
           </ng-container>
@@ -111,7 +125,11 @@
     </div>
   </mat-tab>
 
-  <mat-tab label="Instruments" disabled>
+  <mat-tab disabled>
+    <ng-template mat-tab-label>
+      <fa-icon [icon]="faCoins"></fa-icon>&nbsp;
+      Instruments
+    </ng-template>
     <div class="tab-content">
       Information on instruments.
     </div>

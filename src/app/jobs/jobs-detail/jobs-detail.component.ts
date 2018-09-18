@@ -13,6 +13,7 @@ import {
   faCog,
   faCoins,
   faDownload,
+  faEnvelope,
   faFileAlt,
   faFolder, faGem, faGlobe,
   faIdBadge, faImages,
@@ -23,7 +24,7 @@ import {
 @Component({
   selector: "app-jobs-detail",
   templateUrl: "./jobs-detail.component.html",
-  styleUrls: ["./jobs-detail.component.css"]
+  styleUrls: ["./jobs-detail.component.scss"]
 })
 export class JobsDetailComponent implements OnInit, OnDestroy {
   job$ = this.store.pipe(select(getCurrentJob));
@@ -33,6 +34,7 @@ export class JobsDetailComponent implements OnInit, OnDestroy {
   faAt = faAt;
   faIdBadge = faIdBadge;
   faFolder = faFolder;
+  faEnvelope = faEnvelope;
   faCog = faCog;
   faCoins = faCoins;
   faChessQueen = faChessQueen;

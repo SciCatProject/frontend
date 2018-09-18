@@ -14,8 +14,10 @@ import {
   faAt,
   faCalendarAlt,
   faCertificate, faChessQueen,
+  faCog,
   faCoins,
   faDownload,
+  faEnvelope,
   faFileAlt,
   faFolder, faGem, faGlobe,
   faIdBadge, faImages,
@@ -43,9 +45,11 @@ export class JobsTableComponent implements OnInit, OnDestroy, AfterViewInit {
   faAt = faAt;
   faIdBadge = faIdBadge;
   faFolder = faFolder;
+  faCog = faCog;
   faCoins = faCoins;
   faChessQueen = faChessQueen;
   faCalendarAlt = faCalendarAlt;
+  faEnvelope = faEnvelope;
   faFileAlt = faFileAlt;
   faImages = faImages;
   faGem = faGem;

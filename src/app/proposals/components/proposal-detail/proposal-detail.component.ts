@@ -5,6 +5,7 @@ import {
   faAt,
   faCalendarAlt,
   faCertificate, faChessQueen,
+  faCog,
   faCoins,
   faDownload,
   faFileAlt,
@@ -36,6 +37,7 @@ export class ProposalDetailComponent implements OnInit {
   faAt = faAt;
   faIdBadge = faIdBadge;
   faFolder = faFolder;
+  faCog = faCog;
   faCoins = faCoins;
   faChessQueen = faChessQueen;
   faCalendarAlt = faCalendarAlt;

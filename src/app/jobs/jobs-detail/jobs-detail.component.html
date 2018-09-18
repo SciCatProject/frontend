@@ -34,13 +34,13 @@
         </tr>
         <tr *ngIf="job.dateOfLastMessage as value">
           <th>
-            <fa-icon [icon]="faCalendarAlt"></fa-icon>&nbsp;
+            <fa-icon [icon]="faEnvelope"></fa-icon>&nbsp;
             Date Of Last Message</th>
           <td>{{ value | date: 'yyyy/MM/dd HH:mm' }}</td>
         </tr>
         <tr *ngIf="job.datasetList as value">
           <th>
-            <fa-icon [icon]="faCalendarAlt"></fa-icon>&nbsp;
+            <fa-icon [icon]="faCoins"></fa-icon>&nbsp;
             Dataset List</th>
           <td>{{ value | json }}</td>
         </tr>
