@@ -30,3 +30,11 @@ export const getPoliciesPerPage = createSelector(
     getPolicyState,
     state => state
 );
+
+export const getPage = createSelector(
+    getPolicyState,
+    state => {
+        const {skip, limit} = state;
+        return skip / limit;
+    }
+);
