@@ -1,10 +1,10 @@
 import {Component, Input, OnInit, ViewChild, AfterViewInit, Inject} from '@angular/core';
 import {OrigDatablock} from 'shared/sdk/models';
-import {Store} from '@ngrx/store';
+import {Store, select} from '@ngrx/store';
 import {Observable} from 'rxjs';
-import {map} from 'rxjs/operators';
 import {MatTableDataSource, MatPaginator} from '@angular/material';
 import {APP_CONFIG, AppConfig} from 'app-config.module';
+import { getIsAdmin } from 'state-management/selectors/users.selectors';
 
 @Component({
   selector: 'datafiles',
@@ -37,12 +37,7 @@ export class DatafilesComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-    const currentUser$ = this.store.select(state => state.root.user.currentUser);
-    const adminUserNames = ['ingestor', 'archiveManager'];
-    const userIsAdmin = (user) => {
-      return (user['accountType'] === 'functional') || (adminUserNames.indexOf(user.username) !== -1);
-    };
-    this.admin$ = currentUser$.pipe(map(userIsAdmin));
+    this.admin$ = this.store.pipe(select(getIsAdmin));
     if (this.dataBlocks) {
       this.getDatafiles(this.dataBlocks);
     }

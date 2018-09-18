@@ -79,9 +79,9 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.proceedSubscription = this.hasUser$.subscribe(() =>
-      this.router.navigate(['datasets'])
-    );
+    this.proceedSubscription = this.hasUser$.subscribe(() => {
+      this.router.navigate(['datasets']);
+    });
   }
 
   ngOnDestroy() {
@@ -94,7 +94,7 @@ export class LoginComponent implements OnInit, OnDestroy {
    * @param {any} event - form submission event (not currently used)
    * @memberof LoginComponent
    */
-  doADLogin(event) {
+  onLogin(event) {
     const form: LoginForm = this.loginForm.value;
     this.store.dispatch(new ua.LoginAction(form));
   }

@@ -1,5 +1,5 @@
 import { Action } from "@ngrx/store";
-import { Message, User, UserIdentity, Settings } from "../models";
+import { Message, User, Settings } from "../models";
 
 export const LOGIN = "[User] Login";
 export const LOGIN_COMPLETE = "[User] Login Complete";
@@ -48,12 +48,12 @@ export class ActiveDirLoginAction implements Action {
 
 export class LoginCompleteAction implements Action {
   readonly type = LOGIN_COMPLETE;
-  constructor(public user: User) {}
+  constructor(readonly user: User, readonly accountType: string) {}
 }
 
 export class LoginFailedAction implements Action {
   readonly type = LOGIN_FAILED;
-  constructor(readonly message: string, readonly errSrc: string) {}
+  constructor() {}
 }
 
 export class LogoutAction implements Action {
@@ -78,6 +78,7 @@ export class RetrieveUserFailedAction implements Action {
   constructor(readonly error: Error) {}
 }
 
+/*
 export class RetrieveUserIdentityAction implements Action {
   readonly type = RETRIEVE_USER_IDENTITY;
 }
@@ -106,6 +107,7 @@ export class AccessUserEmailFailedAction implements Action {
   readonly type = ACCESS_USER_EMAIL_FAILED;
   constructor(readonly error: Error) {}
 }
+*/
 
 export class ShowMessageAction implements Action {
   readonly type = SHOW_MESSAGE;
@@ -130,13 +132,13 @@ export type Actions =
   | RetrieveUserAction
   | RetrieveUserCompleteAction
   | RetrieveUserFailedAction
-  | RetrieveUserIdentityAction
-  | RetrieveUserIdentityCompleteAction
-  | RetrieveUserIdentityFailedAction
+  // | RetrieveUserIdentityAction
+  // | RetrieveUserIdentityCompleteAction
+  // | RetrieveUserIdentityFailedAction
   | ActiveDirLoginAction
-  | AccessUserEmailAction
-  | AccessUserEmailCompleteAction
-  | AccessUserEmailFailedAction
+  // | AccessUserEmailAction
+  // | AccessUserEmailCompleteAction
+  // | AccessUserEmailFailedAction
   | ShowMessageAction
   | ClearMessageAction
   | SaveSettingsAction;
