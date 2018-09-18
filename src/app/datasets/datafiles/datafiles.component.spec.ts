@@ -6,7 +6,7 @@ import { MatTableModule} from '@angular/material';
 import { Store} from '@ngrx/store';
 import { MockStore } from 'shared/MockStubs';
 import { AppConfigModule } from 'app-config.module';
-import { FileSizePipe } from '../filesize.pipe';
+import { FileSizePipe } from '../../shared/pipes/filesize.pipe';
 
 describe('DatafilesComponent', () => {
   let component: DatafilesComponent;

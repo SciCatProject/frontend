@@ -7,7 +7,7 @@ import { MatTableModule} from '@angular/material';
 import {MockActivatedRoute, MockRouter} from 'shared/MockStubs';
 
 import { DatablocksComponent } from './datablocks-table.component';
-import { FileSizePipe } from '../filesize.pipe';
+import { FileSizePipe } from '../../shared/pipes/filesize.pipe';
 
 
 describe('DatablocksComponent', () => {

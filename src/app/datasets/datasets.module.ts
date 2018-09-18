@@ -7,7 +7,6 @@ import { DatasetFormComponent } from "./dataset-form/dataset-form.component";
 import { FileDropzoneComponent } from "./file-dropzone/file-dropzone.component";
 import { FileHelpersModule } from "ngx-file-helpers";
 import { FilePickerComponent } from "./file-picker/file-picker.component";
-import { FileSizePipe } from "./filesize.pipe";
 import { FlexLayoutModule } from "@angular/flex-layout";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
@@ -98,7 +97,6 @@ import {
     DatasetsFilterComponent,
     FileDropzoneComponent,
     FilePickerComponent,
-    FileSizePipe,
     SelectedListComponent,
     DatasetFormComponent
   ],

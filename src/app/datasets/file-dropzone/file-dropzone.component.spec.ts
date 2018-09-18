@@ -12,7 +12,7 @@ import { MatTableModule} from '@angular/material';
 import { FileDropzoneComponent  } from './file-dropzone.component';
 import {APP_CONFIG} from '../../app-config.module';
 import * as lb from 'shared/sdk/services';
-import { FileSizePipe } from '../filesize.pipe';
+import { FileSizePipe } from '../../shared/pipes/filesize.pipe';
 
 let mockConfig = {};
 

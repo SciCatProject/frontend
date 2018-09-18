@@ -18,14 +18,14 @@
     <ng-container matColumnDef="creationTime">
       <mat-header-cell *matHeaderCellDef mat-sort-header>Created at</mat-header-cell>
       <mat-cell *matCellDef="let dataset">
-        {{dataset.creationTime | date }}
+        {{dataset.creationTime | date: 'yyyy/MM/dd' }}
       </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="executionTime">
       <mat-header-cell *matHeaderCellDef mat-sort-header>Executed at</mat-header-cell>
       <mat-cell *matCellDef="let dataset">
-        {{dataset.executionTime}}
+        {{dataset.executionTime | date: 'yyyy/MM/dd'}}
       </mat-cell>
     </ng-container>
 
