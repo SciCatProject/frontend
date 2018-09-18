@@ -59,12 +59,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private store: Store<any>
   ) {
-<<<<<<< HEAD
     // this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
-=======
-    //this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
->>>>>>> 659c373584cdfdf71ed850b48c059e26cd6ebcfe
-    /*this.store.select(selectors.users.getCurrentUser)
+    /* this.store.select(selectors.users.getCurrentUser)
     .subscribe(result => {
       console.log(result);
       if (result && result['username']) {
