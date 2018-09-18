@@ -1,8 +1,9 @@
-import { async, ComponentFixture, TestBed } from "@angular/core/testing";
-import { NO_ERRORS_SCHEMA } from "@angular/core";
-import { MatTableModule, MatTabsModule } from "@angular/material";
-import { ProposalDetailComponent } from "./proposal-detail.component";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { FileSizePipe } from "../../../shared/pipes";
+import { MatTableModule, MatTabsModule } from "@angular/material";
+import { NO_ERRORS_SCHEMA } from "@angular/core";
+import { ProposalDetailComponent } from "./proposal-detail.component";
+import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
 describe("ProposalsDetailComponent", () => {
   let component: ProposalDetailComponent;
@@ -11,7 +12,7 @@ describe("ProposalsDetailComponent", () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
-      declarations: [ProposalDetailComponent],
+      declarations: [ProposalDetailComponent, FileSizePipe],
       imports: [MatTableModule, MatTabsModule, BrowserAnimationsModule]
     });
 
