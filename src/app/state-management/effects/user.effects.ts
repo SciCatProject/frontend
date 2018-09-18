@@ -15,6 +15,7 @@ import { UserApi } from "shared/sdk";
 
 @Injectable()
 export class UserEffects {
+
   @Effect()
   protected login$ = this.action$.pipe(
     ofType<UserActions.LoginAction>(UserActions.LOGIN),
