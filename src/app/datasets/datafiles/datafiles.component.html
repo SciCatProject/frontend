@@ -12,9 +12,9 @@
 
       <ng-container matColumnDef="name">
         <mat-header-cell *matHeaderCellDef> Path.</mat-header-cell>
-        <mat-cell *matCellDef="let element">
+        <mat-cell *matCellDef="let element" matTooltip="{{element.path}}">
           <a *ngIf="urlPrefix; else noLink" href="{{urlPrefix}}{{element.path}}">
-            {{element.path}}
+            {{element.path | slice:-15 }}
           </a>
           <ng-template #noLink>
             {{element.path}}

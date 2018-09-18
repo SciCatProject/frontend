@@ -42,7 +42,7 @@
         <fa-icon [icon]="faCalendarAlt"></fa-icon>&nbsp;
         Params</mat-header-cell>
       <mat-cell *matCellDef="let dataset">
-        {{dataset.jobParams}}
+        {{dataset.jobParams | json}}
       </mat-cell>
     </ng-container>
 
