@@ -1,45 +1,45 @@
 <div *ngIf="(job$ | async) as job" class="job-detail">
-<mat-card style="margin: 1em">
-<div class="details">
-  <table>
-    <tr>
-      <th>Email Job Initiator</th>
-      <td>{{ job.emailJobInitiator }}</td>
-    </tr>
-    <tr *ngIf="job.type as value">
-      <th>Type</th>
-      <td>{{ value }}</td>
-    </tr>
-    <tr *ngIf="job.creationTime as value">
-      <th>Creation Time</th>
-      <td>{{ value }}</td>
-    </tr>
-    <tr *ngIf="job.executionTime as value">
-      <th>Execution Time</th>
-      <td>{{ value }}</td>
-    </tr>
-    <tr *ngIf="job.jobParams as value">
-      <th>Job Params</th>
-      <td>{{ value }}</td>
-    </tr>
-    <tr *ngIf="job.dateOfLastMessage as value">
-      <th>Date Of Last Message</th>
-      <td>{{ value }}</td>
-    </tr>
-    <tr *ngIf="job.datasetList as value">
-      <th>Dataset List</th>
-      <td>{{ value }}</td>
-    </tr>
-    <tr *ngIf="job.createdAt as value">
-      <th>Created At</th>
-      <td>{{ value }}</td>
-    </tr>
-    <tr *ngIf="job.updatedAt as value">
-      <th>Updated At</th>
-      <td>{{ value }}</td>
-    </tr>
-  </table>
-</div>
-</mat-card>
+  <mat-card style="margin: 1em">
+    <div class="details">
+      <table>
+        <tr>
+          <th>Email Job Initiator</th>
+          <td>{{ job.emailJobInitiator }}</td>
+        </tr>
+        <tr *ngIf="job.type as value">
+          <th>Type</th>
+          <td>{{ value }}</td>
+        </tr>
+        <tr *ngIf="job.creationTime as value">
+          <th>Creation Time</th>
+          <td>{{ value | date: 'yyyy/MM/dd HH:mm'}}</td>
+        </tr>
+        <tr *ngIf="job.executionTime as value">
+          <th>Execution Time</th>
+          <td>{{ value | date: 'yyyy/MM/dd HH:mm'}}</td>
+        </tr>
+        <tr *ngIf="job.jobParams as value">
+          <th>Job Params</th>
+          <td>{{ value }}</td>
+        </tr>
+        <tr *ngIf="job.dateOfLastMessage as value">
+          <th>Date Of Last Message</th>
+          <td>{{ value | date: 'yyyy/MM/dd HH:mm' }}</td>
+        </tr>
+        <tr *ngIf="job.datasetList as value">
+          <th>Dataset List</th>
+          <td>{{ value }}</td>
+        </tr>
+        <tr *ngIf="job.createdAt as value">
+          <th>Created At</th>
+          <td>{{ value | date: 'yyyy/MM/dd HH:mm' }}</td>
+        </tr>
+        <tr *ngIf="job.updatedAt as value">
+          <th>Updated At</th>
+          <td>{{ value | date: 'yyyy/MM/dd HH:mm' }}</td>
+        </tr>
+      </table>
+    </div>
+  </mat-card>
 </div>
 

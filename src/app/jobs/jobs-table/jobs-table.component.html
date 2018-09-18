@@ -2,49 +2,63 @@
 <div class="example-container mat-elevation-z8">
   <mat-table #table [dataSource]="jobs$ | async">
     <ng-container matColumnDef="emailJobInitiator">
-      <mat-header-cell *matHeaderCellDef mat-sort-header>Initiator</mat-header-cell>
+      <mat-header-cell *matHeaderCellDef mat-sort-header>
+        <fa-icon [icon]="faAt"></fa-icon>&nbsp;
+        Initiator</mat-header-cell>
       <mat-cell *matCellDef="let dataset">
         {{dataset.emailJobInitiator}}
       </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="type">
-      <mat-header-cell *matHeaderCellDef mat-sort-header>Type</mat-header-cell>
+      <mat-header-cell *matHeaderCellDef mat-sort-header>
+        <fa-icon [icon]="faFileAlt"></fa-icon>&nbsp;
+        Type</mat-header-cell>
       <mat-cell *matCellDef="let dataset">
         {{dataset.type}}
       </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="creationTime">
-      <mat-header-cell *matHeaderCellDef mat-sort-header>Created at</mat-header-cell>
+      <mat-header-cell *matHeaderCellDef mat-sort-header>
+        <fa-icon [icon]="faCalendarAlt"></fa-icon>&nbsp;
+      Created at</mat-header-cell>
       <mat-cell *matCellDef="let dataset">
         {{dataset.creationTime | date: 'yyyy/MM/dd' }}
       </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="executionTime">
-      <mat-header-cell *matHeaderCellDef mat-sort-header>Executed at</mat-header-cell>
+      <mat-header-cell *matHeaderCellDef mat-sort-header>
+        <fa-icon [icon]="faCalendarAlt"></fa-icon>&nbsp;
+        Executed at</mat-header-cell>
       <mat-cell *matCellDef="let dataset">
         {{dataset.executionTime | date: 'yyyy/MM/dd'}}
       </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="jobParams">
-      <mat-header-cell *matHeaderCellDef mat-sort-header>Params</mat-header-cell>
+      <mat-header-cell *matHeaderCellDef mat-sort-header>
+        <fa-icon [icon]="faCalendarAlt"></fa-icon>&nbsp;
+        Params</mat-header-cell>
       <mat-cell *matCellDef="let dataset">
         {{dataset.jobParams}}
       </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="jobStatusMessage">
-      <mat-header-cell *matHeaderCellDef mat-sort-header>Status Message</mat-header-cell>
+      <mat-header-cell *matHeaderCellDef mat-sort-header>
+        <fa-icon [icon]="faCalendarAlt"></fa-icon>&nbsp;
+        Status Message</mat-header-cell>
       <mat-cell *matCellDef="let dataset">
         {{dataset.jobStatusMessage}}
       </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="datasetList">
-      <mat-header-cell *matHeaderCellDef mat-sort-header>Datasets</mat-header-cell>
+      <mat-header-cell *matHeaderCellDef mat-sort-header>
+        <fa-icon [icon]="faCalendarAlt"></fa-icon>&nbsp;
+        Datasets</mat-header-cell>
       <mat-cell *matCellDef="let dataset">
         {{dataset.datasetList | json}}
       </mat-cell>

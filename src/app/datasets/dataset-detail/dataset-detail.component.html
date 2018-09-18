@@ -67,7 +67,7 @@
                   <fa-icon [icon]="faCalendarAlt"></fa-icon>&nbsp;
                   Creation Time
                 </th>
-                <td>{{ value | date }}</td>
+                <td>{{ value | date: 'yyyy/MM/dd HH:mm' }}</td>
               </tr>
               <tr *ngIf="dataset.type as value">
                 <th>
