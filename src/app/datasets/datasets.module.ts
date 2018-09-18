@@ -1,11 +1,24 @@
+import { AppConfigModule } from "app-config.module";
+import { ArchivingService } from "./archiving.service";
+import { BatchCardComponent } from "./batch-card/batch-card.component";
+import { BatchViewComponent } from "./batch-view/batch-view.component";
 import { CommonModule } from "@angular/common";
-import { NgModule } from "@angular/core";
-import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { DatasetFormComponent } from "./dataset-form/dataset-form.component";
+import { FileDropzoneComponent } from "./file-dropzone/file-dropzone.component";
 import { FileHelpersModule } from "ngx-file-helpers";
 import { FilePickerComponent } from "./file-picker/file-picker.component";
-import { FileDropzoneComponent } from "./file-dropzone/file-dropzone.component";
 import { FlexLayoutModule } from "@angular/flex-layout";
-import { AppConfigModule } from "app-config.module";
+import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { MatButtonToggleModule } from "@angular/material/button-toggle";
+import { MatChipsModule } from "@angular/material/chips";
+import { NgModule } from "@angular/core";
+import { RouterModule } from "@angular/router";
+import { SatDatepickerModule } from "saturn-datepicker";
+import { SelectedListComponent } from "datasets/selected-list/selected-list.component";
+import { SharedCatanieModule } from "shared/shared.module";
+import { StoreModule } from "@ngrx/store";
+import { datasetsReducer } from "state-management/reducers/datasets.reducer";
 import {
   DashboardComponent,
   DatablocksComponent,
@@ -37,21 +50,6 @@ import {
   MatTabsModule,
   MatTooltipModule
 } from "@angular/material";
-import { MatButtonToggleModule } from "@angular/material/button-toggle";
-import { MatChipsModule } from "@angular/material/chips";
-import { SharedCatanieModule } from "shared/shared.module";
-import { SelectedListComponent } from "datasets/selected-list/selected-list.component";
-import { SatDatepickerModule } from "saturn-datepicker";
-import { StoreModule } from "@ngrx/store";
-import { datasetsReducer } from "state-management/reducers/datasets.reducer";
-import { FileSizePipe } from "./filesize.pipe";
-import { BatchViewComponent } from "./batch-view/batch-view.component";
-import { RouterModule } from "@angular/router";
-import { BatchCardComponent } from "./batch-card/batch-card.component";
-
-import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
-import { ArchivingService } from "./archiving.service";
-import { DatasetFormComponent } from "./dataset-form/dataset-form.component";
 
 @NgModule({
   imports: [
@@ -99,7 +97,6 @@ import { DatasetFormComponent } from "./dataset-form/dataset-form.component";
     DatasetsFilterComponent,
     FileDropzoneComponent,
     FilePickerComponent,
-    FileSizePipe,
     SelectedListComponent,
     DatasetFormComponent
   ],

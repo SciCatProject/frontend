@@ -1,6 +1,6 @@
-import {Observable} from 'rxjs';
-import {of} from 'rxjs';
-import {Subject} from 'rxjs';
+import { Observable } from "rxjs";
+import { of } from "rxjs";
+import { Subject } from "rxjs";
 
 export class MockUserApi {
   getCurrentId() {
@@ -8,62 +8,55 @@ export class MockUserApi {
   }
 
   getCurrent() {
-    return (of([{'username': 'admin'}]));
+    return of([{ username: "admin" }]);
   }
 
   getCurrentToken() {
-    return {'user': {'username': 'admin'}};
+    return { user: { username: "admin" } };
   }
 
   getCachedCurrent() {
-    return {'username': 'admin'};
+    return { username: "admin" };
   }
 }
 
 export class MockDatasetApi {
   getDatasets() {
-    return (of([]));
+    return of([]);
   }
 
   getDatablocks() {
-    return (of([]));
+    return of([]);
   }
 
   find() {
-    return (of([]));
+    return of([]);
   }
 
   findById() {
-    return (of([]));
+    return of([]);
   }
 }
 
-export class MockMatDialogRef {
+export class MockMatDialogRef {}
 
-}
-
-export class MockMatDialogData {
-
-}
+export class MockMatDialogData {}
 
 export class MockDatablockApi {
   getDatafiles() {
-    return (of([]));
+    return of([]);
   }
 }
 
-export class MockDatasetLifecycleApi {
-}
+export class MockDatasetLifecycleApi {}
 
-export class MockAuthService {
-}
+export class MockAuthService {}
 
 export class MockLoopBackAuth {
-
   user = {};
 
   getUser() {
-    return (of([{'username': 'admin'}]));
+    return of([{ username: "admin" }]);
   }
 
   setUser(user) {
@@ -71,19 +64,17 @@ export class MockLoopBackAuth {
   }
 }
 
-export class MockLocation {
-}
+export class MockLocation {}
 
 export class MockActivatedRoute {
   // stub detail goes here
-  snapshot = {queryParams: {returnUrl: '/'}};
-  params = (of([{'id': 1}]));
-  queryParams = (of([{'limit': 10}]));
+  snapshot = { queryParams: { returnUrl: "/" } };
+  params = of([{ id: 1 }]);
+  queryParams = of([{ limit: 10 }]);
 }
 
 export class MockRouter {
-  navigate = function (url, params) {
-  };
+  navigate = function(url, params) {};
 
   // jasmine.createSpy('navigate');
   navigateByUrl(url: string) {
@@ -91,32 +82,32 @@ export class MockRouter {
   }
 }
 
-export class MockHttp {
-}
+export class MockHttp {}
 
 export class MockJobApi {
-
   find() {
-    return (of([[{
-      creationTime: '2017-06-19T08:38:14.671Z',
-      emailJobInitiator: 'test.user@psi.ch',
-      id: '59478d76d7bbe2dd2e619cb6',
-      type: 'retrieve'
-    }]]));
+    return of([
+      [
+        {
+          creationTime: "2017-06-19T08:38:14.671Z",
+          emailJobInitiator: "test.user@psi.ch",
+          id: "59478d76d7bbe2dd2e619cb6",
+          type: "retrieve"
+        }
+      ]
+    ]);
   }
 }
 
 export class MockConfigService {
   getConfigFile() {
-    return (of([undefined]));
+    return of([undefined]);
   }
 }
 
-export class MockJobHandlerService {
-}
+export class MockJobHandlerService {}
 
-export class MockParamsService {
-}
+export class MockParamsService {}
 
 export class MockDatasetService {
   datasetChange: Subject<string> = new Subject<string>();
@@ -127,40 +118,35 @@ export class MockDatasetService {
   }
 
   searchDatasetsObservable() {
-    return (of([]));
+    return of([]);
   }
 
   getBlockObservable() {
-    return (of([]));
+    return of([]);
   }
 }
 
 export class MockProposalApi {
-
   // TODO hold datasets and return array of samples
   find(filter?: any) {
-    return (of([]));
+    return of([]);
   }
 }
 
 export class MockUserMsgService {
-
   private subject = new Subject<any>();
 
   getMessage(): Observable<any> {
     return this.subject.asObservable();
   }
 
-  sendMessage(message: object, delay = 0) {
-  }
+  sendMessage(message: object, delay = 0) {}
 
-  clearMessage() {
-  }
+  clearMessage() {}
 }
 
 export class MockStore {
-  public dispatch(obj) {
-  }
+  public dispatch(obj) {}
 
   public select(obj) {
     return of([]);
@@ -171,10 +157,8 @@ export class MockStore {
   }
 }
 
-
 export class MockNotificationService {
-  public dispatch(obj) {
-  }
+  public dispatch(obj) {}
 
   public select(obj) {
     return of([]);

@@ -1,25 +1,23 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { SelectedListComponent } from './selected-list.component';
-import { MatCardModule, MatListModule } from '@angular/material';
+import { SelectedListComponent } from "./selected-list.component";
+import { MatCardModule, MatListModule } from "@angular/material";
 
-import {Store} from '@ngrx/store';
-import { MockStore} from 'shared/MockStubs';
+import { Store } from "@ngrx/store";
+import { MockStore } from "shared/MockStubs";
 
-describe('SelectedListComponent', () => {
+describe("SelectedListComponent", () => {
   let component: SelectedListComponent;
   let fixture: ComponentFixture<SelectedListComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SelectedListComponent ],
+      declarations: [SelectedListComponent],
       imports: [MatCardModule, MatListModule]
     });
     TestBed.overrideComponent(SelectedListComponent, {
       set: {
-        providers: [
-          {provide: Store, useClass: MockStore}
-        ]
+        providers: [{ provide: Store, useClass: MockStore }]
       }
     });
     TestBed.compileComponents();
@@ -31,7 +29,7 @@ describe('SelectedListComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });
