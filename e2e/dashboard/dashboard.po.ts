@@ -1,12 +1,11 @@
-import { browser } from 'protractor';
+import { browser } from "protractor";
 
 export class DashboardPage {
-
-  constructor(path = '/Datasets') {
-      this.navigateTo(path);
+  constructor(path = "/Datasets") {
+    this.navigateTo(path);
   }
 
-  navigateTo(path = '/datasets') {
+  navigateTo(path = "/datasets") {
     return browser.get(path);
   }
 }

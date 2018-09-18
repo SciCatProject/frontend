@@ -14,7 +14,7 @@
       Details
     </ng-template>
 
-    <div fxLayout="row">
+    <div fxLayout="row" fxLayout.xs="column">
       <div fxFlex="60%">
         <mat-card style="margin: 1em">
           <div class="details">
@@ -67,7 +67,7 @@
                   <fa-icon [icon]="faCalendarAlt"></fa-icon>&nbsp;
                   Creation Time
                 </th>
-                <td>{{ value | date }}</td>
+                <td>{{ value | date: 'yyyy/MM/dd HH:mm' }}</td>
               </tr>
               <tr *ngIf="dataset.type as value">
                 <th>

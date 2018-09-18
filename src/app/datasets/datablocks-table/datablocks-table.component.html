@@ -3,18 +3,18 @@
   <mat-table #blockTable [dataSource]="blockSource">
 
     <ng-container matColumnDef="id">
-      <mat-header-cell *matHeaderCellDef> ID. </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.id}} </mat-cell>
+      <mat-header-cell *matHeaderCellDef> ID.</mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.id}}</mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="size">
-      <mat-header-cell *matHeaderCellDef> Size </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.size | filesize}} </mat-cell>
+      <mat-header-cell *matHeaderCellDef> Size</mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.size | filesize}}</mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="files">
-      <mat-header-cell *matHeaderCellDef> Datafiles </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.dataFileList.length}} </mat-cell>
+      <mat-header-cell *matHeaderCellDef> Datafiles</mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.dataFileList.length}}</mat-cell>
     </ng-container>
 
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>

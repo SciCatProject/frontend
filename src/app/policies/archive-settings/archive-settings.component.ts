@@ -52,6 +52,7 @@ export class ArchiveSettingsComponent implements OnInit {
   private multiSelect: boolean = false;
   private policies: Policy[] = [];
   private subscriptions: any;
+  
   dialogConfig: MatDialogConfig;
 
   constructor(

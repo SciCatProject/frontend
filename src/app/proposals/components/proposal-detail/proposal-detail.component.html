@@ -1,67 +1,108 @@
 <mat-tab-group>
-	<mat-tab label="General">
-		<div *ngIf="proposal" class="tab-content">
-			<table>
-				<tr>
-					<th>Title</th>
-					<td>{{proposal.title}}
-				</tr>
-				<tr>
-					<th>Main proposer</th>
-					<td>
-						<a href="mailto:{{mainProposer.email}}">{{mainProposer.name}}</a>
-					</td>
-				</tr>
-				<tr *ngIf="principalInvestigator && principalInvestigator.isPresent">
-					<th>Principal investigator</th>
+  <mat-tab >
+    <ng-template mat-tab-label>
+      <fa-icon [icon]="faIdBadge"></fa-icon>&nbsp;
+      General
+    </ng-template>
+    <div *ngIf="proposal" class="tab-content">
+      <table>
+        <tr>
+          <th>
+            <fa-icon [icon]="faIdBadge"></fa-icon>&nbsp;
+            Title
+          </th>
+          <td>{{proposal.title}}
+        </tr>
+        <tr>
+          <th>
+            <fa-icon [icon]="faUserAlt"></fa-icon>&nbsp;
+            Main proposer</th>
+          <td>
+            <a href="mailto:{{mainProposer.email}}">{{mainProposer.name}}</a>
+          </td>
+        </tr>
+        <tr *ngIf="principalInvestigator && principalInvestigator.isPresent">
+          <th>
+            <fa-icon [icon]="faChessQueen"></fa-icon>&nbsp;
+            Principal investigator</th>
 
-					<td *ngIf="principalInvestigator.email; else withoutEmail">
-						<a href="mailto:{{principalInvestigator.email}}">{{principalInvestigator.name}}</a>
-					</td>
-					<ng-template #withoutEmail>
-						<td>
-							{{principalInvestigator.name}}
-						</td>
-					</ng-template>
-				</tr>
-				<tr>
-					<th>Abstract</th>
-					<td>{{proposal.abstract}}</td>
-				</tr>
-			</table>
-		</div>
-	</mat-tab>
+          <td *ngIf="principalInvestigator.email; else withoutEmail">
+            <a href="mailto:{{principalInvestigator.email}}">{{principalInvestigator.name}}</a>
+          </td>
+          <ng-template #withoutEmail>
+            <td>
+              {{principalInvestigator.name}}
+            </td>
+          </ng-template>
+        </tr>
+        <tr>
+          <th>
+            <fa-icon [icon]="faCog"></fa-icon>&nbsp;
+            Abstract</th>
+          <td>{{proposal.abstract}}</td>
+        </tr>
+      </table>
+    </div>
+  </mat-tab>
 
-	<mat-tab label="Datasets">
-		<div class="tab-content">
+  <mat-tab >
+    <ng-template mat-tab-label>
+      <fa-icon [icon]="faCoins"></fa-icon>&nbsp;
+      Datasets
+    </ng-template>
+    <div class="tab-content">
       <div class="ui segment">
         <mat-table #table [dataSource]="datasets" class="dataset-table">
           <ng-container matColumnDef="pid">
-            <mat-header-cell *matHeaderCellDef>PID</mat-header-cell>
-            <mat-cell *matCellDef="let element">{{element.pid}}</mat-cell>
+            <mat-header-cell *matHeaderCellDef>
+              <fa-icon [icon]="faIdBadge"></fa-icon>&nbsp;
+              PID
+            </mat-header-cell>
+            <mat-cell *matCellDef="let element" matTooltip="{{element.pid}}">
+              ...{{element.pid | slice:-10}}
+            </mat-cell>
           </ng-container>
           <ng-container matColumnDef="sourceFolder">
-            <mat-header-cell *matHeaderCellDef>Source Folder</mat-header-cell>
-            <mat-cell *matCellDef="let element">{{element.sourceFolder}}</mat-cell>
+            <mat-header-cell *matHeaderCellDef>
+              <fa-icon [icon]="faFileAlt"></fa-icon>&nbsp;
+              Source Folder
+            </mat-header-cell>
+            <mat-cell *matCellDef="let element" matTooltip="{{element.sourceFolder}}">
+              ...{{element.sourceFolder | slice:-14 }}
+            </mat-cell>
           </ng-container>
           <ng-container matColumnDef="size">
-            <mat-header-cell *matHeaderCellDef>Size</mat-header-cell>
-            <mat-cell *matCellDef="let element">{{element.size}}</mat-cell>
+            <mat-header-cell *matHeaderCellDef>
+              <fa-icon [icon]="faCoins"></fa-icon>&nbsp;
+              Size
+            </mat-header-cell>
+            <mat-cell *matCellDef="let element">{{element.size | filesize}}</mat-cell>
           </ng-container>
           <ng-container matColumnDef="creationTime">
-            <mat-header-cell *matHeaderCellDef>Creation Time</mat-header-cell>
-            <mat-cell *matCellDef="let element">{{element.creationTime}}</mat-cell>
+            <mat-header-cell *matHeaderCellDef>
+              <fa-icon [icon]="faCalendarAlt"></fa-icon>&nbsp;
+              Creation Time
+            </mat-header-cell>
+            <mat-cell *matCellDef="let element">{{element.creationTime | date: 'yyyy/MM/dd HH:mm'}}</mat-cell>
           </ng-container>
           <ng-container matColumnDef="owner">
-            <mat-header-cell *matHeaderCellDef>Owner</mat-header-cell>
+            <mat-header-cell *matHeaderCellDef>
+              <fa-icon [icon]="faUserAlt"></fa-icon>&nbsp;
+              Owner
+            </mat-header-cell>
             <mat-cell *matCellDef="let element">{{element.owner}}</mat-cell>
           </ng-container>
           <ng-container matColumnDef="ownerEmail">
-            <mat-header-cell *matHeaderCellDef>Owner email</mat-header-cell>
+            <mat-header-cell *matHeaderCellDef>
+              <fa-icon [icon]="faAt"></fa-icon>&nbsp;
+              Owner email
+            </mat-header-cell>
             <mat-cell *matCellDef="let element">{{element.ownerEmail}}</mat-cell>
           </ng-container>
           <ng-container matColumnDef="creationLocation">
-            <mat-header-cell *matHeaderCellDef>Location</mat-header-cell>
+            <mat-header-cell *matHeaderCellDef>
+              <fa-icon [icon]="faAt"></fa-icon>&nbsp;
+              Location</mat-header-cell>
             <mat-cell *matCellDef="let element">{{element.creationLocation}}</mat-cell>
           </ng-container>
           <ng-container matColumnDef="type">
@@ -76,7 +117,7 @@
             <mat-header-cell *matHeaderCellDef>Version</mat-header-cell>
             <mat-cell *matCellDef="let element">{{element.version}}</mat-cell>
           </ng-container>
-          
+
           <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
           <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
         </mat-table>
@@ -84,9 +125,13 @@
     </div>
   </mat-tab>
 
-	<mat-tab label="Instruments" disabled>
-		<div class="tab-content">
-			Information on instruments.
-		</div>
-	</mat-tab>
+  <mat-tab disabled>
+    <ng-template mat-tab-label>
+      <fa-icon [icon]="faCoins"></fa-icon>&nbsp;
+      Instruments
+    </ng-template>
+    <div class="tab-content">
+      Information on instruments.
+    </div>
+  </mat-tab>
 </mat-tab-group>

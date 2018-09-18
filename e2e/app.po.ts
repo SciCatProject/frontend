@@ -1,8 +1,8 @@
-import { browser, element, by } from 'protractor';
+import { browser, element, by } from "protractor";
 
 export class CataniePage {
   navigateTo() {
-    return browser.get('/');
+    return browser.get("/");
   }
 
   getParagraphText(elem) {

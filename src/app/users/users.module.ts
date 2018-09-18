@@ -1,18 +1,22 @@
-import {NgModule} from '@angular/core';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {CommonModule} from '@angular/common';
+import { NgModule } from "@angular/core";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { CommonModule } from "@angular/common";
 
-import {LoginComponent} from 'users/login/login.component';
-import {UserDetailsComponent} from 'users/user-details/user-details.component';
-import {UserSettingsComponent} from 'users/user-settings/user-settings.component';
+import { LoginComponent } from "users/login/login.component";
+import { UserDetailsComponent } from "users/user-details/user-details.component";
+import { UserSettingsComponent } from "users/user-settings/user-settings.component";
 
-import {ADAuthService} from './adauth.service';
-import {LoginService} from './login.service';
+import { ADAuthService } from "./adauth.service";
+import { LoginService } from "./login.service";
 
-import {SharedCatanieModule} from 'shared/shared.module';
-import {StoreModule} from '@ngrx/store';
-import {userReducer} from 'state-management/reducers/user.reducer';
-import {MatCardModule, MatCheckboxModule, MatGridListModule} from '@angular/material';
+import { SharedCatanieModule } from "shared/shared.module";
+import { StoreModule } from "@ngrx/store";
+import { userReducer } from "state-management/reducers/user.reducer";
+import {
+  MatCardModule,
+  MatCheckboxModule,
+  MatGridListModule
+} from "@angular/material";
 
 @NgModule({
   imports: [
@@ -23,14 +27,9 @@ import {MatCardModule, MatCheckboxModule, MatGridListModule} from '@angular/mate
     MatCardModule,
     MatCheckboxModule,
     MatGridListModule,
-    StoreModule.forFeature('users', userReducer),
+    StoreModule.forFeature("users", userReducer)
   ],
-  declarations: [
-    LoginComponent,
-    UserDetailsComponent,
-    UserSettingsComponent,
-  ],
+  declarations: [LoginComponent, UserDetailsComponent, UserSettingsComponent],
   providers: [ADAuthService, LoginService]
 })
-export class UsersModule {
-}
+export class UsersModule {}

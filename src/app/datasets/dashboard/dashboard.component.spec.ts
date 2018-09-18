@@ -1,14 +1,18 @@
-import {NO_ERRORS_SCHEMA} from '@angular/core';
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {HttpClient} from '@angular/common/http';
-import {ActivatedRoute, Router} from '@angular/router';
-import {Store, StoreModule} from '@ngrx/store';
-import {UserApi} from 'shared/sdk/services';
-import {ConfigService} from 'shared/services/config.service';
-import {rootReducer} from 'state-management/reducers/root.reducer';
-import { MatAutocompleteModule, MatTableModule, MatDialogModule} from '@angular/material';
-import { ParamsService } from 'params.service';
+import { NO_ERRORS_SCHEMA } from "@angular/core";
+import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { HttpClient } from "@angular/common/http";
+import { ActivatedRoute, Router } from "@angular/router";
+import { Store, StoreModule } from "@ngrx/store";
+import { UserApi } from "shared/sdk/services";
+import { ConfigService } from "shared/services/config.service";
+import { rootReducer } from "state-management/reducers/root.reducer";
+import {
+  MatAutocompleteModule,
+  MatTableModule,
+  MatDialogModule
+} from "@angular/material";
+import { ParamsService } from "params.service";
 import {
   MockActivatedRoute,
   MockConfigService,
@@ -17,11 +21,11 @@ import {
   MockStore,
   MockUserApi,
   MockParamsService
-} from '../../shared/MockStubs';
-import {DashboardComponent} from './dashboard.component';
+} from "../../shared/MockStubs";
+import { DashboardComponent } from "./dashboard.component";
 
 /* tslint:disable:no-unused-variable */
-describe('DashboardComponent', () => {
+describe("DashboardComponent", () => {
   let component: DashboardComponent;
   let fixture: ComponentFixture<DashboardComponent>;
 
@@ -34,22 +38,20 @@ describe('DashboardComponent', () => {
         MatDialogModule,
         FormsModule,
         ReactiveFormsModule,
-        StoreModule.forRoot({rootReducer})
+        StoreModule.forRoot({ rootReducer })
       ],
-      declarations: [
-        DashboardComponent,
-      ]
+      declarations: [DashboardComponent]
     });
     TestBed.overrideComponent(DashboardComponent, {
       set: {
         providers: [
-          {provide: ActivatedRoute, useClass: MockActivatedRoute},
-          {provide: Router, useClass: MockRouter},
-          {provide: ParamsService, useClass: MockParamsService},
-          {provide: Store, useClass: MockStore},
-          {provide: UserApi, useClass: MockUserApi},
-          {provide: HttpClient, useClass: MockHttp},
-          {provide: ConfigService, useClass: MockConfigService}
+          { provide: ActivatedRoute, useClass: MockActivatedRoute },
+          { provide: Router, useClass: MockRouter },
+          { provide: ParamsService, useClass: MockParamsService },
+          { provide: Store, useClass: MockStore },
+          { provide: UserApi, useClass: MockUserApi },
+          { provide: HttpClient, useClass: MockHttp },
+          { provide: ConfigService, useClass: MockConfigService }
         ]
       }
     });
@@ -62,7 +64,7 @@ describe('DashboardComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

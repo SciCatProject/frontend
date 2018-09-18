@@ -1,12 +1,14 @@
-import {Component, OnInit, OnDestroy} from '@angular/core';
-import {FormBuilder, Validators} from '@angular/forms';
-import {ActivatedRoute, Router} from '@angular/router';
-import {Store, select} from '@ngrx/store';
-import * as ua from 'state-management/actions/user.actions';
-import { Subscription } from 'rxjs';
-import { filter} from 'rxjs/operators';
-import { getIsLoggedIn, getIsLoggingIn } from 'state-management/selectors/users.selectors';
-
+import { Component, OnInit, OnDestroy } from "@angular/core";
+import { FormBuilder, Validators } from "@angular/forms";
+import { ActivatedRoute, Router } from "@angular/router";
+import { Store, select } from "@ngrx/store";
+import * as ua from "state-management/actions/user.actions";
+import { Subscription } from "rxjs";
+import { filter } from "rxjs/operators";
+import {
+  getIsLoggedIn,
+  getIsLoggingIn
+} from "state-management/selectors/users.selectors";
 
 interface LoginForm {
   username: string;
@@ -21,23 +23,25 @@ interface LoginForm {
  * @class LoginComponent
  */
 @Component({
-  selector: 'login-form',
-  templateUrl: './login.component.html',
-  styleUrls: ['login.component.css']
+  selector: "login-form",
+  templateUrl: "./login.component.html",
+  styleUrls: ["login.component.css"]
 })
 export class LoginComponent implements OnInit, OnDestroy {
-
   //returnUrl: string;
   //postError = '';
 
   public loginForm = this.fb.group({
-    username: ['', Validators.required],
-    password: ['', Validators.required],
+    username: ["", Validators.required],
+    password: ["", Validators.required],
     rememberMe: true
   });
 
   loading$ = this.store.pipe(select(getIsLoggingIn));
-  private hasUser$ = this.store.pipe(select(getIsLoggedIn), filter(is => is));
+  private hasUser$ = this.store.pipe(
+    select(getIsLoggedIn),
+    filter(is => is)
+  );
 
   private proceedSubscription: Subscription = null;
 
@@ -56,7 +60,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     private store: Store<any>
   ) {
     //this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
-
     /*this.store.select(selectors.users.getCurrentUser)
     .subscribe(result => {
       console.log(result);
@@ -80,7 +83,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.proceedSubscription = this.hasUser$.subscribe(() => {
-      this.router.navigate(['datasets']);
+      this.router.navigate(["datasets"]);
     });
   }
 

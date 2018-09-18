@@ -20,20 +20,27 @@ export class UserEffects {
   protected login$ = this.action$.pipe(
     ofType<UserActions.LoginAction>(UserActions.LOGIN),
     map(action => action.form),
-    switchMap(({username, password, rememberMe}) => this.loginSrv.login$(username, password, rememberMe)),
-    map(res => res
-      ? new UserActions.LoginCompleteAction(res.user, res.accountType)
-      : new UserActions.LoginFailedAction()
+    switchMap(({ username, password, rememberMe }) =>
+      this.loginSrv.login$(username, password, rememberMe)
+    ),
+    map(
+      res =>
+        res
+          ? new UserActions.LoginCompleteAction(res.user, res.accountType)
+          : new UserActions.LoginFailedAction()
     )
   );
 
   @Effect()
   protected loginFailed$ = this.action$.pipe(
     ofType(UserActions.LOGIN_FAILED),
-    map(() => new UserActions.ShowMessageAction({
-      content: 'Could not log in. Check your username and password.',
-      type: MessageType.Error
-    }))
+    map(
+      () =>
+        new UserActions.ShowMessageAction({
+          content: "Could not log in. Check your username and password.",
+          type: MessageType.Error
+        })
+    )
   );
 
   @Effect()
@@ -73,6 +80,6 @@ export class UserEffects {
     private action$: Actions,
     private router: Router,
     private userSrv: UserApi,
-    private loginSrv: LoginService,
+    private loginSrv: LoginService
   ) {}
 }
