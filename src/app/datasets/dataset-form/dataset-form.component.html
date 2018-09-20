@@ -2,7 +2,6 @@
   <h3>Add Metadata</h3>
   <div *ngIf="(dataset$ | async) as dataset">
 
-    {{ sci_met$ | async| json }}
     <form>
 
       <div [formGroup]="metadataForm">

@@ -80,7 +80,7 @@ export class DatasetFormComponent implements OnInit, OnDestroy {
           const json = '{"' + name + '":"' + value + '"}';
           console.log("json", json);
           const metadata_item2 = JSON.parse(json);
-          for (const key of Object.keys(metadata_item2)){
+          for (const key of Object.keys(metadata_item2)) {
             metadata_obj[key] = metadata_item2[key];
           }
           array.push(metadata_item2);
@@ -117,7 +117,7 @@ export class DatasetFormComponent implements OnInit, OnDestroy {
     });
     this.sci_met$.subscribe(met_array => {
       for (const field of met_array) {
-         // this.items.push(this.formBuilder.group(field));
+        // this.items.push(this.formBuilder.group(field));
         console.log("remove");
       }
     });
