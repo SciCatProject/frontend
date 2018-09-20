@@ -1,50 +1,43 @@
 <div class="container" *ngIf="(metadataField$ | async) as metadatafield">
-  <div [hidden]="submitted">
-    <h3>Add Metadata</h3>
-    <div *ngIf="(dataset$ | async) as dataset">
-      <form (ngSubmit)="onSubmit()" #datasetForm="ngForm">
-        <table>
+  <h3>Add Metadata</h3>
+  <div *ngIf="(dataset$ | async) as dataset">
 
-          <tr *ngFor="let entry of dataset.scientificMetadata | keys; let in = index">
-            <td>
-              <input type="text" name="unique-{{in}}" [(ngModel)]="entry.key" style="width: 18em">
-            </td>
-            <td>
-              <input type="text" name="unique2-{{in}}" [(ngModel)]="entry.value" style="width: 5em">
-            </td>
-          </tr>
-        </table>
-        <div class="form-group">
-          <label for="name">Name</label>
-          <input type="text" class="form-control" id="name"
-                 required
-                 [(ngModel)]="metadatafield.name" name="name"
-                 #name="ngModel">
-        </div>
-        <div class="form-group">
-          <label for="value">Value</label>
-          <input type="text" class="form-control" id="value"
-                 required
-                 [(ngModel)]="metadatafield.value" name="value"
-                 #name="ngModel">
+    {{ sci_met$ | async| json }}
+    <form>
+
+      <div [formGroup]="metadataForm">
+
+        <div formArrayName="items"
+             *ngFor="let item of metadataForm.get('items').controls; let i = index;">
+          <div [formGroupName]="i">
+            <input formControlName="fieldName" placeholder="Field name">
+            <input formControlName="fieldValue" placeholder="Field value">
+            <button
+              class="remove_button"
+              type="button"
+              (click)="onRemove(i)">
+              <fa-icon [icon]="faTimesCircle"></fa-icon>&nbsp;
+            </button>
+          </div>
         </div>
 
-        <button type="submit" class="btn btn-success" [disabled]="!datasetForm.form.valid">Submit</button>
-      </form>
-    </div>
+        <button
+          type="button"
+          class="add_button"
+          (click)="addMetadata()">
+          <fa-icon [icon]="faPlusCircle"></fa-icon>&nbsp;
+          Add metadata
+        </button>
+
+      </div>
+      <button
+        type="submit"
+        class="btn btn-success"
+        (click)="onSubmit()">
+        Submit
+      </button>
+    </form>
+
   </div>
 
-  <div [hidden]="!submitted">
-    <h2>Metadata field added:</h2>
-    <div class="row">
-      <div class="col-xs-3">name</div>
-      <div class="col-xs-9  pull-left">{{ metadatafield.name}}</div>
-    </div>
-    <div class="row">
-      <div class="col-xs-3">value</div>
-      <div class="col-xs-9  pull-left">{{ metadatafield.value}}</div>
-    </div>
-    <br>
-    <button class="btn btn-primary" (click)="submitted=false">Edit</button>
-  </div>
 </div>
