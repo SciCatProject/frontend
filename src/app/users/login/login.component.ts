@@ -1,7 +1,7 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { FormBuilder, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
-import { Store, select } from "@ngrx/store";
+import { select, Store } from "@ngrx/store";
 import * as ua from "state-management/actions/user.actions";
 import { Subscription } from "rxjs";
 import { filter } from "rxjs/operators";
@@ -28,8 +28,8 @@ interface LoginForm {
   styleUrls: ["login.component.css"]
 })
 export class LoginComponent implements OnInit, OnDestroy {
-  //returnUrl: string;
-  //postError = '';
+  // returnUrl: string;
+  // postError = '';
 
   public loginForm = this.fb.group({
     username: ["", Validators.required],
@@ -59,8 +59,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private store: Store<any>
   ) {
-    //this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
-    /*this.store.select(selectors.users.getCurrentUser)
+    // this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+    /* this.store.select(selectors.users.getCurrentUser)
     .subscribe(result => {
       console.log(result);
       if (result && result['username']) {
