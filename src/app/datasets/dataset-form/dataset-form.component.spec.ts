@@ -1,9 +1,10 @@
 import { DatasetFormComponent } from "./dataset-form.component";
-import { FormsModule } from "@angular/forms";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MockStore } from "../../shared/MockStubs";
 import { Store } from "@ngrx/store";
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 import { KeysPipe} from "../../shared/pipes";
+import { FontAwesomeModule} from "@fortawesome/angular-fontawesome";
 
 describe("DatasetFormComponent", () => {
   let component: DatasetFormComponent;
@@ -12,7 +13,7 @@ describe("DatasetFormComponent", () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [DatasetFormComponent, KeysPipe],
-      imports: [FormsModule]
+      imports: [FormsModule, ReactiveFormsModule, FontAwesomeModule]
     });
     TestBed.overrideComponent(DatasetFormComponent, {
       set: {

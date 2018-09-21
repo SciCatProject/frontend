@@ -1,34 +1,31 @@
-<div class="container" *ngIf="(metadataField$ | async) as metadatafield">
+<div class="container">
   <h3>Add Metadata</h3>
   <div *ngIf="(dataset$ | async) as dataset">
 
-    <form>
+    <form [formGroup]="metadataForm">
 
-      <div [formGroup]="metadataForm">
-
-        <div formArrayName="items"
-             *ngFor="let item of metadataForm.get('items').controls; let i = index;">
-          <div [formGroupName]="i">
-            <input formControlName="fieldName" placeholder="Field name">
-            <input formControlName="fieldValue" placeholder="Field value">
-            <button
-              class="remove_button"
-              type="button"
-              (click)="onRemove(i)">
-              <fa-icon [icon]="faTimesCircle"></fa-icon>&nbsp;
-            </button>
-          </div>
+      <div formArrayName="items"
+           *ngFor="let item of metadataForm.get('items').controls; let i = index;">
+        <div [formGroupName]="i">
+          <input formControlName="fieldName" placeholder="Field name">
+          <input formControlName="fieldValue" placeholder="Field value">
+          <button
+            class="remove_button"
+            type="button"
+            (click)="onRemove(i)">
+            <fa-icon [icon]="faTimesCircle"></fa-icon>&nbsp;
+          </button>
         </div>
-
-        <button
-          type="button"
-          class="add_button"
-          (click)="addMetadata()">
-          <fa-icon [icon]="faPlusCircle"></fa-icon>&nbsp;
-          Add metadata
-        </button>
-
       </div>
+
+      <button
+        type="button"
+        class="add_button"
+        (click)="addMetadata()">
+        <fa-icon [icon]="faPlusCircle"></fa-icon>&nbsp;
+        Add metadata
+      </button>
+
       <button
         type="submit"
         class="btn btn-success"
