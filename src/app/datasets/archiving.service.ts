@@ -4,12 +4,12 @@ import { Store, select } from "@ngrx/store";
 import { Observable, combineLatest } from "rxjs";
 import { first, map } from "rxjs/operators";
 
-import { User, Dataset, Job } from "state-management/models";
-import { SubmitAction } from "state-management/actions/jobs.actions";
+import { User, Dataset, Job } from "../state-management/models";
+import { SubmitAction } from "../state-management/actions/jobs.actions";
 import {
   getCurrentUser,
   getTapeCopies
-} from "state-management/selectors/users.selectors";
+} from "../state-management/selectors/users.selectors";
 
 @Injectable()
 export class ArchivingService {

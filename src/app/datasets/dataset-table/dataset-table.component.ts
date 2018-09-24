@@ -1,14 +1,14 @@
-import { APP_CONFIG, AppConfig } from "app-config.module";
+import { APP_CONFIG, AppConfig } from "../../app-config.module";
 import { ArchivingService } from "../archiving.service";
 import { Component, Inject, OnDestroy, OnInit } from "@angular/core";
-import { Dataset, MessageType, ViewMode } from "state-management/models";
-import { DialogComponent } from "shared/modules/dialog/dialog.component";
+import { Dataset, MessageType, ViewMode } from "../../state-management/models";
+import { DialogComponent } from "../../shared/modules/dialog/dialog.component";
 import { MatCheckboxChange, MatDialog } from "@angular/material";
 import { Router } from "@angular/router";
-import { ShowMessageAction } from "state-management/actions/user.actions";
+import { ShowMessageAction } from "../../state-management/actions/user.actions";
 import { combineLatest, Subscription } from "rxjs";
 import { getCurrentEmail } from "../../state-management/selectors/users.selectors";
-import { getError, submitJob } from "state-management/selectors/jobs.selectors";
+import { getError, submitJob } from "../../state-management/selectors/jobs.selectors";
 import { select, Store } from "@ngrx/store";
 
 import {

@@ -1,9 +1,9 @@
-import { APP_CONFIG, AppConfig } from "app-config.module";
+import { APP_CONFIG, AppConfig } from "../../app-config.module";
 import { MatTableDataSource, MatPaginator } from "@angular/material";
 import { Observable } from "rxjs";
-import { OrigDatablock } from "shared/sdk/models";
+import { OrigDatablock } from "../../shared/sdk/models";
 import { Store, select } from "@ngrx/store";
-import { getIsAdmin } from "state-management/selectors/users.selectors";
+import { getIsAdmin } from "../../state-management/selectors/users.selectors";
 import {
   Component,
   Input,

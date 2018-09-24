@@ -1,14 +1,14 @@
-import * as ua from "state-management/actions/user.actions";
+import * as ua from "../state-management/actions/user.actions";
 import {
   AccessUserApi,
   DatasetApi,
   DatasetLifecycleApi,
   LoopBackAuth,
   OrigDatablockApi
-} from "shared/sdk/services";
+} from "../shared/sdk/services";
 import { BehaviorSubject, Observable, Subject } from "rxjs";
-import { DatablockApi } from "shared/sdk";
-import { Dataset, OrigDatablock } from "shared/sdk/models";
+import { DatablockApi } from "../shared/sdk";
+import { Dataset, OrigDatablock } from "../shared/sdk/models";
 import { Injectable } from "@angular/core";
 import { Store } from "@ngrx/store";
 
