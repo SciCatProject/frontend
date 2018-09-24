@@ -2,8 +2,8 @@ import { Injectable } from "@angular/core";
 import { Observable, of } from "rxjs";
 import { Actions, Effect, ofType } from "@ngrx/effects";
 import { Action, Store } from "@ngrx/store";
-import { PolicyApi } from "shared/sdk/services";
-import { PoliciesService } from "policies/policies.service";
+import { PolicyApi } from "../../shared/sdk/services";
+import { PoliciesService } from "../../policies/policies.service";
 import {
   FETCH_POLICIES,
   FetchPoliciesCompleteAction,

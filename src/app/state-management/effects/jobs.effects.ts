@@ -5,10 +5,10 @@ import { Actions, Effect, ofType } from "@ngrx/effects";
 import { Action, Store } from "@ngrx/store";
 import { Observable } from "rxjs";
 import { of } from "rxjs";
-import * as lb from "shared/sdk/services";
-import * as JobActions from "state-management/actions/jobs.actions";
-import * as UserActions from "state-management/actions/user.actions";
-import { MessageType, Job } from "state-management/models";
+import * as lb from "../../shared/sdk/services";
+import * as JobActions from "../../state-management/actions/jobs.actions";
+import * as UserActions from "../../state-management/actions/user.actions";
+import { MessageType, Job } from "../../state-management/models";
 import { map, switchMap, catchError } from "rxjs/operators";
 
 // import store state interface

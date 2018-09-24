@@ -1,5 +1,5 @@
 import { Action } from "@ngrx/store";
-import { initialJobsState, JobsState } from "state-management/state/jobs.store";
+import { initialJobsState, JobsState } from "../../state-management/state/jobs.store";
 import {
   CHILD_RETRIEVE_COMPLETE,
   ChildRetrieveCompleteAction,
@@ -15,7 +15,7 @@ import {
   SortUpdateAction,
   SUBMIT_COMPLETE,
   UI_STORE
-} from "state-management/actions/jobs.actions";
+} from "../../state-management/actions/jobs.actions";
 
 export function jobsReducer(
   state = initialJobsState,

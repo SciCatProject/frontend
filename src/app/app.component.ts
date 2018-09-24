@@ -12,7 +12,7 @@ import { Router } from "@angular/router";
 import { select, Store } from "@ngrx/store";
 import { LoopBackConfig } from "./shared/sdk";
 import { UserApi } from "./shared/sdk/services";
-import * as ua from "state-management/actions/user.actions";
+import * as ua from "./state-management/actions/user.actions";
 import { MatSnackBar } from "@angular/material";
 import { Title } from "@angular/platform-browser";
 import { environment } from "../environments/environment";

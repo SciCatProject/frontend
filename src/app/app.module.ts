@@ -15,7 +15,7 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { HttpClientModule } from "@angular/common/http";
 import { JobsDetailComponent } from "./jobs/jobs-detail/jobs-detail.component";
 import { JobsEffects } from "./state-management/effects/jobs.effects";
-import { JobsTableComponent } from "jobs/jobs-table/jobs-table.component";
+import { JobsTableComponent } from "./jobs/jobs-table/jobs-table.component";
 import { NgModule } from "@angular/core";
 import { NguiDatetimePickerModule } from "@ngui/datetime-picker";
 import { NgxDatatableModule } from "@swimlane/ngx-datatable";

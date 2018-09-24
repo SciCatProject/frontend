@@ -1,10 +1,10 @@
 import { Injectable } from "@angular/core";
 import { Store, select } from "@ngrx/store";
 import * as rison from "rison";
-import * as dsa from "state-management/actions/datasets.actions";
-import * as dStore from "state-management/state/datasets.store";
+import * as dsa from "./state-management/actions/datasets.actions";
+import * as dStore from "./state-management/state/datasets.store";
 import { ActivatedRoute, Router } from "@angular/router";
-import { getViewMode } from "state-management/selectors/datasets.selectors";
+import { getViewMode } from "./state-management/selectors/datasets.selectors";
 import { take } from "rxjs/operators";
 
 @Injectable()

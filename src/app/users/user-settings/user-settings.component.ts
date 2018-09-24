@@ -1,9 +1,9 @@
 import { Component, OnInit } from "@angular/core";
 import { select, Store } from "@ngrx/store";
-import { UserApi } from "shared/sdk/services";
-import * as ua from "state-management/actions/user.actions";
-import * as selectors from "state-management/selectors";
-import { Message, MessageType } from "state-management/models";
+import { UserApi } from "../../shared/sdk/services";
+import * as ua from "../../state-management/actions/user.actions";
+import * as selectors from "../../state-management/selectors";
+import { Message, MessageType } from "../../state-management/models";
 
 @Component({
   selector: "app-user-settings",

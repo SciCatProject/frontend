@@ -2,8 +2,8 @@ import { Component } from "@angular/core";
 import { select, Store } from "@ngrx/store";
 import { map } from "rxjs/operators";
 
-import { getDatasetsInBatch } from "state-management/selectors/datasets.selectors";
-import { ClearBatchAction } from "state-management/actions/datasets.actions";
+import { getDatasetsInBatch } from "../../state-management/selectors/datasets.selectors";
+import { ClearBatchAction } from "../../state-management/actions/datasets.actions";
 
 @Component({
   selector: "batch-card",

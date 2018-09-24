@@ -2,14 +2,14 @@ import { Component, OnInit } from "@angular/core";
 import { select, Store } from "@ngrx/store";
 import { first, map, switchMap } from "rxjs/operators";
 
-import { getDatasetsInBatch } from "state-management/selectors/datasets.selectors";
+import { getDatasetsInBatch } from "../../state-management/selectors/datasets.selectors";
 import {
   ClearBatchAction,
   PrefillBatchAction,
   RemoveFromBatchAction
-} from "state-management/actions/datasets.actions";
-import { Dataset, MessageType } from "state-management/models";
-import { ShowMessageAction } from "state-management/actions/user.actions";
+} from "../../state-management/actions/datasets.actions";
+import { Dataset, MessageType } from "../../state-management/models";
+import { ShowMessageAction } from "../../state-management/actions/user.actions";
 
 import { ArchivingService } from "../archiving.service";
 import { Observable } from "rxjs";

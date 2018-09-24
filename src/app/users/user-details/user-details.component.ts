@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { Store } from "@ngrx/store";
-import * as selectors from "state-management/selectors";
+import * as selectors from "../../state-management/selectors";
 
 /**
  * Compoennt to show uneditable user details

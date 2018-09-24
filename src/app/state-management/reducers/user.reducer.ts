@@ -1,5 +1,5 @@
 import { Action } from "@ngrx/store";
-import { initialUserState, UserState } from "state-management/state/user.store";
+import { initialUserState, UserState } from "../../state-management/state/user.store";
 
 import {
   SHOW_MESSAGE,
@@ -14,7 +14,7 @@ import {
   LoginCompleteAction,
   ShowMessageAction,
   SaveSettingsAction,
-} from "state-management/actions/user.actions";
+} from "../../state-management/actions/user.actions";
 
 export function userReducer(
   state = initialUserState,

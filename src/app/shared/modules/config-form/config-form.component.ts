@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { FormBuilder, FormGroup } from "@angular/forms";
 import { Store } from "@ngrx/store";
-import { ConfigService } from "shared/services/config.service";
+import { ConfigService } from "../../../shared/services/config.service";
 import { DatePipe } from "@angular/common";
 
 @Component({
