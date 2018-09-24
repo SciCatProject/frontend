@@ -1,7 +1,7 @@
 import { Component, Inject, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { select, Store } from "@ngrx/store";
-import { Job, User } from "shared/sdk/models";
+import { Job, User } from "../../shared/sdk/models";
 import * as dsa from "../../state-management/actions/datasets.actions";
 import * as ja from "../../state-management/actions/jobs.actions";
 import * as ua from "../../state-management/actions/user.actions";

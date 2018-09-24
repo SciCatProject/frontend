@@ -8,8 +8,8 @@
     "start": "./node_modules/@angular/cli/bin/ng serve --host $HOST",
     "test": "./node_modules/@angular/cli/bin/ng test --watch false  ",
     "e2e": "ng e2e --project=catanie-e2e",
-    "compodoc": "./node_modules/.bin/compodoc -p src/tsconfig.json",
-"build:ssr": "npm run build:client-and-server-bundles && npm run webpack:server",
+    "compodoc": "./node_modules/.bin/compodoc -p tsconfig.json",
+    "build:ssr": "npm run build:client-and-server-bundles && npm run webpack:server",
     "serve:ssr": "node dist/server",
     "build:client-and-server-bundles": "ng build --prod && ng run catanie:server",
     "webpack:server": "webpack --config webpack.server.config.js --progress --colors",
@@ -104,6 +104,7 @@
     "tslint": "^5.11.0",
     "typescript": "~2.9.2",
     "webpack": "^4.17.2",
+    "webpack-cli": "^3.1.1",
     "zone.js": "^0.8.26"
   },
   "greenkeeper": {

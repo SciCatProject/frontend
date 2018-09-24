@@ -1,4 +1,4 @@
-import { AppConfigModule } from "app-config.module";
+import { AppConfigModule } from "../app-config.module";
 import { ArchivingService } from "./archiving.service";
 import { BatchCardComponent } from "./batch-card/batch-card.component";
 import { BatchViewComponent } from "./batch-view/batch-view.component";

@@ -12,7 +12,7 @@ import {
   MatTableModule,
   MatDialogModule
 } from "@angular/material";
-import { ParamsService } from "params.service";
+import { ParamsService } from "../../params.service";
 import {
   MockActivatedRoute,
   MockConfigService,

@@ -28,10 +28,10 @@ import {
 } from "@angular/material";
 import { MatButtonToggleModule } from "@angular/material/button-toggle";
 import { MatChipsModule } from "@angular/material/chips";
-import { SharedCatanieModule } from "shared/shared.module";
+import { SharedCatanieModule } from "../shared/shared.module";
 
 import { StoreModule } from "@ngrx/store";
-import { policiesReducer } from "state-management/reducers/policies.reducer";
+import { policiesReducer } from "../state-management/reducers/policies.reducer";
 
 @NgModule({
   imports: [

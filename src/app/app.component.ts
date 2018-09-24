@@ -1,3 +1,5 @@
+declare var require: any;
+
 import { APP_CONFIG, AppConfig } from "./app-config.module";
 import { MatSidenav } from "@angular/material/sidenav";
 import {

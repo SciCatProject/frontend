@@ -33,7 +33,7 @@ import {
   SelectDatasetAction,
   SetViewModeAction,
   SortByColumnAction
-} from "state-management/actions/datasets.actions";
+} from "../../state-management/actions/datasets.actions";
 
 import {
   getDatasets,
@@ -46,7 +46,7 @@ import {
   getSelectedDatasets,
   getTotalSets,
   getViewMode
-} from "state-management/selectors/datasets.selectors";
+} from "../../state-management/selectors/datasets.selectors";
 
 export interface PageChangeEvent {
   pageIndex: number;
