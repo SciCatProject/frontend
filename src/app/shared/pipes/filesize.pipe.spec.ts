@@ -8,7 +8,7 @@ describe("Pipe: FileSize", () => {
   });
 
   it("converts properly", () => {
-    expect(pipe.transform("3746356")).toBe("3.57 MB");
+    expect(pipe.transform("3746356")).toBe("4 MB");
   });
 
   it("converts empty string to 0 B", () => {
