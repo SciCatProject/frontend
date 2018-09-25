@@ -48,6 +48,7 @@
     "@types/socket.io-client": "^1.4.32",
     "angular-font-awesome": "^3.1.2",
     "angular5-csv": "^0.2.10",
+    "compression": "^1.7.3",
     "core-js": "^2.5.7",
     "deep-equal": "^1.0.1",
     "filesize": "^3.6.1",
