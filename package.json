@@ -75,7 +75,7 @@
     "@compodoc/compodoc": "^1.1.5",
     "@ngrx/store-devtools": "^6.1.0",
     "@types/jasmine": "^2.8.8",
-    "@types/node": "^10.9.4",
+    "@types/node": "^10.10.3",
     "@types/source-map-support": "^0.4.1",
     "codelyzer": "^4.4.4",
     "common-tags": "^1.8.0",

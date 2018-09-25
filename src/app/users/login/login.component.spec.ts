@@ -8,8 +8,8 @@ import {
   MockLoopBackAuth,
   MockRouter,
   MockStore
-} from "shared/MockStubs";
-import { LoopBackAuth } from "shared/sdk/services";
+} from "../../shared/MockStubs";
+import { LoopBackAuth } from "../../shared/sdk/services";
 
 import { ADAuthService } from "../adauth.service";
 import { LoginComponent } from "./login.component";

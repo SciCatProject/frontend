@@ -1,8 +1,8 @@
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 import { Store, StoreModule } from "@ngrx/store";
-import { rootReducer } from "state-management/reducers/root.reducer";
-import { DatasetsFilterComponent } from "datasets/datasets-filter/datasets-filter.component";
+import { rootReducer } from "../../state-management/reducers/root.reducer";
+import { DatasetsFilterComponent } from "../../datasets/datasets-filter/datasets-filter.component";
 import {
   MockStore,
   MockActivatedRoute,

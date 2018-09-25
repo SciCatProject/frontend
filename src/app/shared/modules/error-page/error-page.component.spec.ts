@@ -4,7 +4,7 @@ import { ErrorPageComponent } from "./error-page.component";
 
 import { ActivatedRoute } from "@angular/router";
 
-import { MockActivatedRoute } from "shared/MockStubs";
+import { MockActivatedRoute } from "../../../shared/MockStubs";
 
 describe("ErrorPageComponent", () => {
   let component: ErrorPageComponent;
