@@ -31,6 +31,7 @@
               "src/favicon-32x32.png",
               "src/mstile-150x150.png",
               "src/safari-pinned-tab.svg",
+              "src/robots.txt",
               "src/manifest.json"
             ],
             "styles": [
