@@ -3,6 +3,8 @@ declare var require: any;
 import { APP_CONFIG, AppConfig } from "./app-config.module";
 import { MatSidenav } from "@angular/material/sidenav";
 import {
+  PLATFORM_ID,
+  APP_ID,
   Component,
   Inject,
   OnDestroy,
@@ -20,6 +22,7 @@ import { Title } from "@angular/platform-browser";
 import { environment } from "../environments/environment";
 import * as selectors from "./state-management/selectors";
 import { getCurrentUser } from "./state-management/selectors/users.selectors";
+import { isPlatformBrowser } from "@angular/common";
 
 import {
   faAddressBook,
@@ -59,6 +62,7 @@ export class AppComponent implements OnDestroy, OnInit {
   title = "SciCat";
   appVersion = 0;
   us: UserApi;
+  platformisbrowser: any;
   darkTheme$;
   username: string = null;
   message$ = null;
@@ -77,6 +81,7 @@ export class AppComponent implements OnDestroy, OnInit {
     private router: Router,
     private titleService: Title,
     public snackBar: MatSnackBar,
+    @Inject(PLATFORM_ID) private platformId: Object,
     // private _notif_service: NotificationsService,
     @Inject(APP_CONFIG) private appConfig: AppConfig,
     private store: Store<any>
@@ -84,6 +89,7 @@ export class AppComponent implements OnDestroy, OnInit {
     this.appVersion = appVersion;
     this.darkTheme$ = this.store.pipe(select(selectors.users.getTheme));
     const facility = this.appConfig.facility;
+    this.platformisbrowser = isPlatformBrowser(platformId);
     let status = "test";
     if (this.appConfig.production === true) {
       status = "";
@@ -110,9 +116,11 @@ export class AppComponent implements OnDestroy, OnInit {
     }
 
     // localStorage.clear();
-    if (window.location.pathname.indexOf("logout") !== -1) {
-      this.logout();
-      // this.router.navigate(['/login']);
+    if (this.platformisbrowser) {
+      if (window.location.pathname.indexOf("logout") !== -1) {
+        this.logout();
+        // this.router.navigate(['/login']);
+      }
     }
 
     this.subscriptions.push(
