@@ -41,7 +41,9 @@
 
             <ng-container matColumnDef="pid">
                 <mat-header-cell *matHeaderCellDef>PID</mat-header-cell>
-                <mat-cell *matCellDef="let dataset">{{dataset.pid}}</mat-cell>
+                <mat-cell *matCellDef="let dataset">
+                    <a [routerLink]="['/datasets', dataset.pid]">{{dataset.pid}}</a>
+                </mat-cell>
             </ng-container>
 
             <ng-container matColumnDef="sourceFolder">
