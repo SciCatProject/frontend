@@ -14,10 +14,13 @@ node('docker') {
       sh "docker build --file CI/ESS/Dockerfile.hub  . --tag dacat/catanie:latest -t dacat/catanie:${IMAGE_ID}dev" 
       sh "docker push dacat/catanie:${IMAGE_ID}dev"
       sh "docker push dacat/catanie:latest"
+      sh "docker rmi dacat/catanie:${IMAGE_ID}dev"
+      sh "docker rmi dacat/catanie:${IMAGE_ID}dmscprod"
+      sh "docker rmi dacat/catanie:${IMAGE_ID}dmscdev"
     }
   }
   stage('Unit Test Catanie '){
     // unit tests require mongodb container
-    //sh 'docker run  -t dacat/catanie:latest npm run -- ng test --watch false --single-run true -v ./test:./test '
+    sh 'docker run  -t dacat/catanie:latest npm test'
   }
 }
