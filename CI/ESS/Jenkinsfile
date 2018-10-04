@@ -21,6 +21,7 @@ node('docker') {
   }
   stage('Unit Test Catanie '){
     // unit tests require mongodb container
-    sh 'docker run  -t dacat/catanie:latest npm test'
+    sh "docker build --file CI/ESS/Dockerfile.test  .  -t dacat/test"
+    sh 'docker run  -t dacat/test npm test'
   }
 }
