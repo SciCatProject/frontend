@@ -10,4 +10,4 @@ COPY package-lock.json /usr/src/app/package-lock.json
 RUN npm install
 COPY . /usr/src/app
 WORKDIR /usr/src/app
-# RUN npm run -- ng test --watch false --single-run true
+RUN npm test
