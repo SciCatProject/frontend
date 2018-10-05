@@ -17,9 +17,7 @@
             "tsConfig": "tsconfig.json",
             "polyfills": "src/polyfills.ts",
             "stylePreprocessorOptions": {
-              "includePaths": [
-                "node_modules"
-              ]
+              "includePaths": ["node_modules"]
             },
             "assets": [
               "src/assets",
@@ -34,13 +32,8 @@
               "src/robots.txt",
               "src/manifest.json"
             ],
-            "styles": [
-              "src/styles.css",
-              "src/theme.scss"
-            ],
-            "scripts": [
-              "node_modules/hammerjs/hammer.min.js"
-            ]
+            "styles": ["src/styles.css", "src/theme.scss"],
+            "scripts": ["node_modules/hammerjs/hammer.min.js"]
           },
           "configurations": {
             "dmscdev": {
@@ -73,20 +66,38 @@
               ]
             },
             "ess": {
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.ess.ts"
                 }
-              ]
+              ],
+              "serviceWorker": true
             },
             "dmscprod": {
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.dmscprod.ts"
                 }
-              ]
+              ],
+              "serviceWorker": true
             },
             "maxiv-prod": {
               "optimization": true,
@@ -132,7 +143,8 @@
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.dev.ts"
                 }
-              ]
+              ],
+              "serviceWorker": true
             },
             "production": {
               "optimization": true,
@@ -212,14 +224,80 @@
             }
           }
         },
-  "server": {
-    "builder": "@angular-devkit/build-angular:server",
-    "options": {
-      "outputPath": "dist/server",
-      "main": "src/main.server.ts",
-      "tsConfig": "src/tsconfig.server.json"
-    }
-  },
+        "server": {
+          "builder": "@angular-devkit/build-angular:server",
+          "options": {
+            "outputPath": "dist/server",
+            "main": "src/main.server.ts",
+            "tsConfig": "src/tsconfig.server.json"
+          },
+          "configurations": {
+            "dmscdev": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.dmscdev.ts"
+                }
+              ]
+            },
+            "ess": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.ess.ts"
+                }
+              ]
+            },
+            "dmsc": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.dmsc.ts"
+                }
+              ]
+            },
+            "maxiv-prod": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.maxiv.prod.ts"
+                }
+              ]
+            },
+            "staging": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.staging.ts"
+                }
+              ]
+            },
+            "qa": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.qa.ts"
+                }
+              ]
+            },
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod.ts"
+                }
+              ]
+            },
+            "dmscprod": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.dmscprod.ts"
+                }
+              ]
+            }
+          }
+        },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
@@ -276,13 +354,8 @@
             "main": "src/test.ts",
             "karmaConfig": "./karma.conf.js",
             "polyfills": "src/polyfills.ts",
-            "scripts": [
-              "node_modules/hammerjs/hammer.min.js"
-            ],
-            "styles": [
-              "src/styles.css",
-              "src/theme.scss"
-            ],
+            "scripts": ["node_modules/hammerjs/hammer.min.js"],
+            "styles": ["src/styles.css", "src/theme.scss"],
             "assets": [
               "src/assets",
               "src/favicon.ico",
@@ -300,9 +373,7 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": [
-              "tsconfig.json"
-            ],
+            "tsConfig": ["tsconfig.json"],
             "exclude": []
           }
         }
@@ -323,9 +394,7 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": "e2e/tsconfig.e2e.json",
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
           }
         }
       }
