@@ -4,7 +4,6 @@ import { APP_CONFIG, AppConfig } from "./app-config.module";
 import { MatSidenav } from "@angular/material/sidenav";
 import {
   PLATFORM_ID,
-  APP_ID,
   Component,
   Inject,
   OnDestroy,
