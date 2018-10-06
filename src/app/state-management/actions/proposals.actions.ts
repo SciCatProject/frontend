@@ -1,19 +1,19 @@
-import { Action } from '@ngrx/store';
-import { Proposal, Dataset } from '../models';
+import { Action } from "@ngrx/store";
+import { Proposal, Dataset } from "../models";
 
-export const SELECT_PROPOSAL			= '[Proposals] Select Proposal';
+export const SELECT_PROPOSAL			= "[Proposals] Select Proposal";
 
-export const FETCH_PROPOSALS    		= '[Proposals] Get Proposals';
-export const FETCH_PROPOSALS_COMPLETE 	= '[Proposals] Get Proposals Complete';
-export const FETCH_PROPOSALS_FAILED		= '[Proposals] Get Proposals Failed'
+export const FETCH_PROPOSALS    		= "[Proposals] Get Proposals";
+export const FETCH_PROPOSALS_COMPLETE 	= "[Proposals] Get Proposals Complete";
+export const FETCH_PROPOSALS_FAILED		= "[Proposals] Get Proposals Failed";
 
-export const FETCH_PROPOSAL             = '[Proposals] Get Proposal';
-export const FETCH_PROPOSAL_COMPLETE    = '[Proposals] Get Proposal Complete';
-export const FETCH_PROPOSAL_FAILED      = '[Proposals] Get Proposal Failed';
+export const FETCH_PROPOSAL             = "[Proposals] Get Proposal";
+export const FETCH_PROPOSAL_COMPLETE    = "[Proposals] Get Proposal Complete";
+export const FETCH_PROPOSAL_FAILED      = "[Proposals] Get Proposal Failed";
 
-export const FETCH_DATASETS_FOR_PROPOSAL            = '[Proposals] Fetch Datasets for Proposal';
-export const FETCH_DATASETS_FOR_PROPOSAL_COMPLETE   = '[Proposals] Fetch Datasets for Proposal Complete';
-export const FETCH_DATASETS_FOR_PROPOSAL_FAILED     = '[Proposals] Fetch Datasets for Proposal Failed';
+export const FETCH_DATASETS_FOR_PROPOSAL            = "[Proposals] Fetch Datasets for Proposal";
+export const FETCH_DATASETS_FOR_PROPOSAL_COMPLETE   = "[Proposals] Fetch Datasets for Proposal Complete";
+export const FETCH_DATASETS_FOR_PROPOSAL_FAILED     = "[Proposals] Fetch Datasets for Proposal Failed";
 
 export class SelectProposalAction implements Action {
     type = SELECT_PROPOSAL;

@@ -6,7 +6,7 @@
   <div class="button-group" layout="row" layout-align="end end">
     <ng-container *ngIf="editEnabled">
       <button mat-raised-button mat-button (click)="onEditClick()" color="primary">Edit Selection
-    </button>
+      </button>
     </ng-container>
   </div>
   <!--<div class="editForm">
@@ -15,10 +15,12 @@
     </ng-container>
   </div>-->
 
-  <mat-paginator class="policy-paginator" [pageSizeOptions]="pageSizeOptions" [pageIndex]="currentPage" [pageSize]="policiesPerPage" [length]="totalNumber" (page)="handlePageChange($event)">
+  <mat-paginator class="policy-paginator" [pageSizeOptions]="pageSizeOptions" [pageIndex]="currentPage" [pageSize]="10"
+                 [length]="totalNumber">
   </mat-paginator>
 
-  <mat-table [dataSource]="policies$ | async" class="policy-table mat-elevation-z8" matSort (matSortChange)="handleSortChange($event)">
+  <mat-table [dataSource]="policies$ | async" class="policy-table mat-elevation-z8" matSort
+             (matSortChange)="handleSortChange($event)">
 
     <!-- Column Definitions -->
     <ng-container matColumnDef="select">
@@ -27,7 +29,8 @@
         </mat-checkbox>
       </mat-header-cell>
       <mat-cell *matCellDef="let row">
-        <mat-checkbox [checked]="isChecked(row)" (change)="handleSelect($event, row)" (click)="$event.stopPropagation()">
+        <mat-checkbox [checked]="isChecked(row)" (change)="handleSelect($event, row)"
+                      (click)="$event.stopPropagation()">
         </mat-checkbox>
       </mat-cell>
     </ng-container>
@@ -77,7 +80,6 @@
     </ng-container>
 
 
-
     <!-- End of Column Definitions -->
 
     <mat-header-row class='policies-header' *matHeaderRowDef="getDisplayedColumns()"></mat-header-row>
@@ -85,13 +87,8 @@
     </mat-row>
   </mat-table>
 
-  <mat-paginator class="policy-paginator" [pageSizeOptions]="pageSizeOptions" [pageIndex]="currentPage" [pageSize]="policiesPerPage" [length]="totalNumber" (page)="handlePageChange($event)">
+  <mat-paginator class="policy-paginator" [pageSizeOptions]="pageSizeOptions" [pageIndex]="currentPage" [pageSize]="10"
+                 [length]="totalNumber">
   </mat-paginator>
 </div>
 
-<div class="edit">
-  <ng-container *ngIf="sample">
-    <h1>Metadata Entry Form</h1>
-    <config-form [source]="sample" [enabled]="true"></config-form>
-  </ng-container>
-</div>

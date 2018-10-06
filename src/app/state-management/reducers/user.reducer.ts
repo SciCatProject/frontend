@@ -10,15 +10,10 @@ import {
   LOGIN_FAILED,
   RETRIEVE_USER_COMPLETE,
   RetrieveUserCompleteAction,
-  // ACCESS_USER_EMAIL_COMPLETE,
-  // AD_LOGIN_COMPLETE,
   LOGOUT_COMPLETE,
   LoginCompleteAction,
-  // AccessUserEmailCompleteAction,
   ShowMessageAction,
   SaveSettingsAction,
-  // RETRIEVE_USER_IDENTITY_COMPLETE,
-  // RetrieveUserIdentityCompleteAction
 } from "state-management/actions/user.actions";
 
 export function userReducer(
@@ -35,28 +30,10 @@ export function userReducer(
       return { ...state, currentUser };
     }
 
-    /*
-    case RETRIEVE_USER_IDENTITY_COMPLETE: {
-      const currentUserIdentity = (action as RetrieveUserIdentityCompleteAction).userIdentity;
-      return { ...state, currentUserIdentity };
-    }
-    */
-
     case LOGIN_COMPLETE: {
       const {user, accountType} = action as LoginCompleteAction;
       return { ...state, currentUser: user, isLoggingIn: false, isLoggedIn: true, accountType };
     }
-
-    /*
-    case ACCESS_USER_EMAIL_COMPLETE: {
-      // const c = state.currentUser;
-      // c['email'] = action['payload'];
-      return {
-        ...state,
-        email: (action as AccessUserEmailCompleteAction).email
-      };
-    }
-    */
 
     case LOGIN_FAILED: {
       return { ...state, isLoggingIn: false, isLoggedIn: false };

@@ -17,11 +17,6 @@ RUN npm config set strict-ssl false
 
 
 
-RUN apt-get update && apt-get install -y apt-transport-https lsb-release curl gnupg2 git
-
-RUN curl -sL https://deb.nodesource.com/setup_9.x |  bash -
-
-RUN apt-get install -y nodejs
 
 
 

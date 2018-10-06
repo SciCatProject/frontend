@@ -1,15 +1,14 @@
-import { NO_ERRORS_SCHEMA } from "@angular/core";
-import { async, ComponentFixture, TestBed } from "@angular/core/testing";
-import { HttpClient } from "@angular/common/http";
-import { Router } from "@angular/router";
-import { MatDialogModule, MatTableModule } from "@angular/material";
-import { DatasetTableComponent } from "./dataset-table.component";
-import { combineReducers, StoreModule } from "@ngrx/store";
-
-import { MockHttp, MockRouter } from "shared/MockStubs";
-
 import { APP_CONFIG, AppConfigModule } from "app-config.module";
-import { FileSizePipe } from "../filesize.pipe";
+import { ArchivingService } from "../archiving.service";
+import { DatasetTableComponent } from "./dataset-table.component";
+import { FileSizePipe } from "../../shared/pipes/filesize.pipe";
+import { HttpClient } from "@angular/common/http";
+import { MatDialogModule, MatTableModule } from "@angular/material";
+import { MockHttp, MockRouter } from "shared/MockStubs";
+import { NO_ERRORS_SCHEMA } from "@angular/core";
+import { Router } from "@angular/router";
+import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+import { combineReducers, StoreModule } from "@ngrx/store";
 import { datasetsReducer } from "state-management/reducers/datasets.reducer";
 import { jobsReducer } from "state-management/reducers/jobs.reducer";
 
@@ -44,7 +43,8 @@ describe("DatasetTableComponent", () => {
               disabledDatasetColumns: [],
               archiveWorkflowEnabled: true
             }
-          }
+          },
+          { provide: ArchivingService, useClass: ArchivingService }
         ]
       }
     });

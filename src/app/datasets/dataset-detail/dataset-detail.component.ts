@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Component, Inject, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { select, Store } from "@ngrx/store";
 import { Job, User } from "shared/sdk/models";
@@ -10,6 +10,7 @@ import { Subscription } from "rxjs";
 import { Message, MessageType } from "state-management/models";
 import { Angular5Csv } from "angular5-csv/Angular5-csv";
 import { getIsAdmin } from "state-management/selectors/users.selectors";
+import { APP_CONFIG, AppConfig } from "app-config.module";
 import {
   getCurrentAttachments,
   getCurrentDatablocks,
@@ -35,6 +36,7 @@ import {
   faUserAlt,
   faUsers
 } from "@fortawesome/free-solid-svg-icons";
+import { ArchivingService } from "../archiving.service";
 
 /**
  * Component to show details for a data set, using the
@@ -68,7 +70,9 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
   private routeSubscription = this.route.params
     .pipe(pluck("id"))
-    .subscribe((id: string) => this.store.dispatch(new dsa.DatablocksAction(id)));
+    .subscribe((id: string) =>
+      this.store.dispatch(new dsa.DatablocksAction(id))
+    );
   private origDatablocks$ = this.store.pipe(select(getCurrentOrigDatablocks));
   private datablocks$ = this.store.pipe(select(getCurrentDatablocks));
   private attachments$ = this.store.pipe(select(getCurrentAttachments));
@@ -76,9 +80,9 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
 
   constructor(
     private route: ActivatedRoute,
-    private store: Store<any>
-  ) {
-  }
+    private store: Store<any>,
+    @Inject(APP_CONFIG) public appConfig: AppConfig
+  ) {}
 
   ngOnInit() {
     const msg = new Message();
@@ -115,10 +119,9 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
 
   onExportClick() {
     this.dataset$.pipe(take(1)).subscribe(ds => {
-
       const options = {
         fieldSeparator: ",",
-        quoteStrings: "\"",
+        quoteStrings: '"',
         decimalseparator: ".",
         showLabels: true,
         showTitle: false,
@@ -134,14 +137,16 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
   }
 
   resetDataset(dataset) {
-    this.store.pipe(
-      select(state => state.root.user.currentUser),
-      take(1))
+    this.store
+      .pipe(
+        select(state => state.root.user.currentUser),
+        take(1)
+      )
       .subscribe((user: User) => {
         const job = new Job();
         job.emailJobInitiator = user.email;
         job.jobParams = {};
-        job.jobParams['username'] = user.username;
+        job.jobParams["username"] = user.username;
         job.creationTime = new Date();
         job.type = "reset";
         const fileObj = {};

@@ -49,7 +49,7 @@ describe("ActiveDirLoginAction", () => {
 describe("LoginCompleteAction", () => {
   it("should create an action", () => {
     const user: User = new User({ username: "", email: "" });
-    const accountType = 'account-type';
+    const accountType = "account-type";
     const action = new LoginCompleteAction(user, accountType);
     expect({ ...action }).toEqual({ type: LOGIN_COMPLETE, user, accountType });
   });

@@ -33,17 +33,10 @@ describe("UserReducer", () => {
       identities: [],
       credentials: []
     };
-    const action = new userActions.LoginCompleteAction(user, 'account-type');
+    const action = new userActions.LoginCompleteAction(user, "account-type");
     const state = userReducer(initialUserState, action);
     expect(state.isLoggingIn).toEqual(false);
   });
-
-  // it("should set email", () => {
-  //   const email = "abc";
-  //   const action = new userActions.AccessUserEmailCompleteAction(email);
-  //   const state = userReducer(initialUserState, action);
-  //   expect(state.email).toEqual(email);
-  // });
 
   it("should set isLoggingIn to false after login failed complete", () => {
     const action = new userActions.LoginFailedAction();
