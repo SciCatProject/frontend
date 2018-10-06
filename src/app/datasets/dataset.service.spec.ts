@@ -8,12 +8,12 @@ import {
   DatablockApi,
   DatasetApi,
   DatasetLifecycleApi
-} from "shared/sdk/services";
+} from "../shared/sdk/services";
 import {
   MockDatablockApi,
   MockDatasetApi,
   MockDatasetLifecycleApi
-} from "shared/MockStubs";
+} from "../shared/MockStubs";
 
 describe("DatasetService", () => {
   beforeEach(() => {

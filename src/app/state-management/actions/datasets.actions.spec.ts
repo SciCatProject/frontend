@@ -1,4 +1,4 @@
-import { Dataset } from "shared/sdk/models";
+import { Dataset } from "../../shared/sdk/models";
 import { UpdateFilterAction, FILTER_UPDATE } from "./datasets.actions";
 import { SearchIDCompleteAction, SEARCH_ID_COMPLETE } from "./datasets.actions";
 import { DatablocksAction, DATABLOCKS } from "./datasets.actions";

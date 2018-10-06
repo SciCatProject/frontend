@@ -6,8 +6,8 @@ import * as rison from "rison";
 import {
   getViewMode,
   getFilters
-} from "state-management/selectors/datasets.selectors";
-import { AppState } from "state-management/state/app.store";
+} from "../../../state-management/selectors/datasets.selectors";
+import { AppState } from "../../../state-management/state/app.store";
 import { take, filter, map } from "rxjs/operators";
 
 interface Breadcrumb {

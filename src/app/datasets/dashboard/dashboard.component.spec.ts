@@ -4,15 +4,15 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { HttpClient } from "@angular/common/http";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Store, StoreModule } from "@ngrx/store";
-import { UserApi } from "shared/sdk/services";
-import { ConfigService } from "shared/services/config.service";
-import { rootReducer } from "state-management/reducers/root.reducer";
+import { UserApi } from "../../shared/sdk/services";
+import { ConfigService } from "../../shared/services/config.service";
+import { rootReducer } from "../../state-management/reducers/root.reducer";
 import {
   MatAutocompleteModule,
   MatTableModule,
   MatDialogModule
 } from "@angular/material";
-import { ParamsService } from "params.service";
+import { ParamsService } from "../../params.service";
 import {
   MockActivatedRoute,
   MockConfigService,

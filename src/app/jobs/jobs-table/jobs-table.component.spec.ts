@@ -6,7 +6,7 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MatTableModule } from "@angular/material";
 import { JobsTableComponent } from "./jobs-table.component";
 import { Store, StoreModule } from "@ngrx/store";
-import { ConfigService } from "shared/services/config.service";
+import { ConfigService } from "../../shared/services/config.service";
 import {
   MockConfigService,
   MockHttp,
@@ -14,8 +14,8 @@ import {
   MockRouter,
   MockStore,
   MockUserApi
-} from "shared/MockStubs";
-import { JobApi, UserApi } from "shared/sdk/services";
+} from "../../shared/MockStubs";
+import { JobApi, UserApi } from "../../shared/sdk/services";
 
 describe("JobsTableComponent", () => {
   let component: JobsTableComponent;

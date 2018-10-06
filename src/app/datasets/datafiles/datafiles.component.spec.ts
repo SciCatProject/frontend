@@ -4,8 +4,8 @@ import { ReactiveFormsModule } from "@angular/forms";
 import { DatafilesComponent } from "./datafiles.component";
 import { MatTableModule } from "@angular/material";
 import { Store } from "@ngrx/store";
-import { MockStore } from "shared/MockStubs";
-import { AppConfigModule } from "app-config.module";
+import { MockStore } from "../../shared/MockStubs";
+import { AppConfigModule } from "../../app-config.module";
 import { FileSizePipe } from "../../shared/pipes/filesize.pipe";
 
 describe("DatafilesComponent", () => {

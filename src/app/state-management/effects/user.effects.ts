@@ -7,11 +7,11 @@ import { Action } from "@ngrx/store";
 import { Observable, of } from "rxjs";
 import { catchError, filter, map, switchMap, tap } from "rxjs/operators";
 
-import * as UserActions from "state-management/actions/user.actions";
-import { MessageType } from "state-management/models";
+import * as UserActions from "../../state-management/actions/user.actions";
+import { MessageType } from "../../state-management/models";
 
-import { LoginService } from "users/login.service";
-import { UserApi } from "shared/sdk";
+import { LoginService } from "../../users/login.service";
+import { UserApi } from "../../shared/sdk";
 
 @Injectable()
 export class UserEffects {

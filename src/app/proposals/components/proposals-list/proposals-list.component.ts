@@ -1,5 +1,5 @@
 import { Component, Input } from "@angular/core";
-import { Proposal } from "state-management/models";
+import { Proposal } from "../../../state-management/models";
 
 @Component({
   selector: "proposals-list",

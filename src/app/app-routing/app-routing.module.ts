@@ -24,7 +24,7 @@ import { ViewProposalPageComponent } from "../proposals/containers/view-proposal
 import { ArchiveSettingsComponent } from "../policies/archive-settings/archive-settings.component";
 
 import { AuthCheck } from "../AuthCheck";
-import { BatchViewComponent } from "datasets/batch-view/batch-view.component";
+import { BatchViewComponent } from "../datasets/batch-view/batch-view.component";
 
 export const routes: Routes = [
   { path: "", redirectTo: "/datasets", pathMatch: "full" },

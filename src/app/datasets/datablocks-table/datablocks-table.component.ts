@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from "@angular/core";
-import { Datablock } from "shared/sdk/models";
+import { Datablock } from "../../shared/sdk/models";
 import { ActivatedRoute, Router } from "@angular/router";
 import { MatTableDataSource } from "@angular/material";
 

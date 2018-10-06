@@ -1,6 +1,6 @@
 import { Injectable, Inject } from "@angular/core";
 import { HttpClient, HttpResponse, HttpHeaders } from "@angular/common/http";
-import { LoopBackConfig } from "shared/sdk/lb.config";
+import { LoopBackConfig } from "../shared/sdk/lb.config";
 import { Observable } from "rxjs";
 import { APP_CONFIG, AppConfig } from "../app-config.module";
 

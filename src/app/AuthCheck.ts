@@ -5,7 +5,7 @@ import {
   ActivatedRouteSnapshot,
   RouterStateSnapshot
 } from "@angular/router";
-import { UserApi } from "shared/sdk/services";
+import { UserApi } from "./shared/sdk/services";
 
 import { Store } from "@ngrx/store";
 

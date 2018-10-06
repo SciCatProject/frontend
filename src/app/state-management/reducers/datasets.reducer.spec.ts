@@ -1,7 +1,7 @@
 import * as fromDatasets from "./datasets.reducer";
 import * as fromActions from "../actions/datasets.actions";
-import { Dataset, DatasetInterface } from "shared/sdk/models";
-import { initialDatasetState } from "state-management/state/datasets.store";
+import { Dataset, DatasetInterface } from "../../shared/sdk/models";
+import { initialDatasetState } from "../../state-management/state/datasets.store";
 import { DatasetFilters } from "../models";
 
 describe("DatasetsReducer", () => {

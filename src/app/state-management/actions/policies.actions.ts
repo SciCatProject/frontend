@@ -1,5 +1,5 @@
 import { Action } from "@ngrx/store";
-import { Policy } from "shared/sdk/models";
+import { Policy } from "../../shared/sdk/models";
 
 export const LOAD = "[Policy] Load";
 export const COUNT_COMPLETE = "[Policy] Complete";

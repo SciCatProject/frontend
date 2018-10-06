@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 import { Store, select } from "@ngrx/store";
 
-import { FacetCount } from "state-management/state/datasets.store";
+import { FacetCount } from "../../state-management/state/datasets.store";
 import {
   getLocationFacetCounts,
   getGroupFacetCounts,
@@ -14,7 +14,7 @@ import {
   getCreationTimeFilter,
   getSearchTerms,
   getHasAppliedFilters
-} from "state-management/selectors/datasets.selectors";
+} from "../../state-management/selectors/datasets.selectors";
 
 import {
   AddLocationFilterAction,
@@ -29,7 +29,7 @@ import {
   SetDateRangeFilterAction,
   SetSearchTermsAction,
   SetTextFilterAction
-} from "state-management/actions/datasets.actions";
+} from "../../state-management/actions/datasets.actions";
 import { MatDatepickerInputEvent } from "@angular/material";
 import { skipWhile, distinctUntilChanged, debounceTime } from "rxjs/operators";
 

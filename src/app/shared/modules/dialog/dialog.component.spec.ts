@@ -4,7 +4,7 @@ import { MatDialogModule, MatFormFieldModule } from "@angular/material";
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
 import { DialogComponent } from "./dialog.component";
-import { MockMatDialogRef, MockMatDialogData } from "shared/MockStubs";
+import { MockMatDialogRef, MockMatDialogData } from "../../../shared/MockStubs";
 
 describe("DialogComponent", () => {
   let component: DialogComponent;

@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from "@angular/core";
-import { Proposal, Dataset } from "state-management/models";
+import { Proposal, Dataset } from "../../../state-management/models";
 
 import {
   faAt,

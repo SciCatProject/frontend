@@ -12,12 +12,12 @@ import {
   SUBMIT_POLICY_COMPLETE,
   SUBMIT_POLICY_FAILED,
   SubmitPolicyFailedAction
-} from "state-management/actions/policies.actions";
+} from "../../state-management/actions/policies.actions";
 
 import {
   initialPolicyState,
   PolicyState
-} from "state-management/state/policies.store";
+} from "../../state-management/state/policies.store";
 
 export function policiesReducer(
   state: PolicyState = initialPolicyState,

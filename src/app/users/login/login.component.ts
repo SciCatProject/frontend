@@ -2,13 +2,13 @@ import { Component, OnDestroy, OnInit } from "@angular/core";
 import { FormBuilder, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { select, Store } from "@ngrx/store";
-import * as ua from "state-management/actions/user.actions";
+import * as ua from "../../state-management/actions/user.actions";
 import { Subscription } from "rxjs";
 import { filter } from "rxjs/operators";
 import {
   getIsLoggedIn,
   getIsLoggingIn
-} from "state-management/selectors/users.selectors";
+} from "../../state-management/selectors/users.selectors";
 
 interface LoginForm {
   username: string;

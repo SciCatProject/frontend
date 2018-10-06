@@ -1,4 +1,4 @@
-import { Job } from "shared/sdk/models";
+import { Job } from "../../shared/sdk/models";
 import { SubmitAction, SUBMIT } from "./jobs.actions";
 import { SubmitCompleteAction, SUBMIT_COMPLETE } from "./jobs.actions";
 import { FailedAction, FAILED } from "./jobs.actions";

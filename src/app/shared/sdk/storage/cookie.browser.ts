@@ -24,9 +24,7 @@ export class CookieBrowser {
    **/
   get(key: string): any {
     if (!this.cookies[key]) {
-      let cookie = window.document
-                         .cookie.split('; ')
-                         .filter((item: any) => item.split('=')[0] === key).pop();
+      let cookie = null;
       if (!cookie) {
         return null;
       }
@@ -48,7 +46,7 @@ export class CookieBrowser {
   set(key: string, value: any, expires?: Date): void {
     this.cookies[key] = value;
     let cookie = `${key}=${encodeURI(value)}; path=/${expires ? `; expires=${ expires.toUTCString() }` : ''}`;
-    window.document.cookie = cookie;
+    // window.document.cookie = cookie;
   }
   /**
    * @method remove

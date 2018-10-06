@@ -7,7 +7,7 @@ import {
   RawDataset,
   Proposal,
   Policy
-} from "shared/sdk/models";
+} from "../../shared/sdk/models";
 export {
   User,
   UserIdentity,
@@ -19,7 +19,7 @@ export {
   Policy
 };
 
-import { DatasetInterface } from "shared/sdk";
+import { DatasetInterface } from "../../shared/sdk";
 export { DatasetInterface };
 
 export interface Settings {

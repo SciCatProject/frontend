@@ -7,13 +7,13 @@ import {
   SelectProposalAction,
   FetchProposalAction,
   FetchDatasetsForProposalAction
-} from "state-management/actions/proposals.actions";
+} from "../../../state-management/actions/proposals.actions";
 import {
   getSelectedProposal,
   getSelectedProposalDatasets
-} from "state-management/selectors/proposals.selectors";
-import { AppState } from "state-management/state/app.store";
-import { Dataset, Proposal } from "state-management/models";
+} from "../../../state-management/selectors/proposals.selectors";
+import { AppState } from "../../../state-management/state/app.store";
+import { Dataset, Proposal } from "../../../state-management/models";
 
 @Component({
   selector: "view-proposal-page",

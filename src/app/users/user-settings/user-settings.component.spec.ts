@@ -3,10 +3,10 @@ import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 import { ReactiveFormsModule } from "@angular/forms";
 import { Store, StoreModule } from "@ngrx/store";
 import { NguiDatetimePickerModule } from "@ngui/datetime-picker";
-import { ConfigFormComponent } from "shared/modules/config-form/config-form.component";
-import { MockConfigService, MockStore, MockUserApi } from "shared/MockStubs";
-import { ObjKeysPipe, TitleCasePipe } from "shared/pipes/index";
-import { UserApi } from "shared/sdk/services";
+import { ConfigFormComponent } from "../../shared/modules/config-form/config-form.component";
+import { MockConfigService, MockStore, MockUserApi } from "../../shared/MockStubs";
+import { ObjKeysPipe, TitleCasePipe } from "../../shared/pipes/index";
+import { UserApi } from "../../shared/sdk/services";
 import { ConfigService } from "../../shared/services";
 
 import { UserSettingsComponent } from "./user-settings.component";

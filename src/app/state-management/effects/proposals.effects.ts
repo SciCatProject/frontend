@@ -3,7 +3,7 @@ import { Effect, Actions, ofType } from "@ngrx/effects";
 import { Observable } from "rxjs";
 import { of } from "rxjs";
 import { map, mergeMap, catchError } from "rxjs/operators";
-import { ProposalsService } from "proposals/proposals.service";
+import { ProposalsService } from "../../proposals/proposals.service";
 import {
   FetchProposalsOutcomeAction,
   FetchProposalsAction,

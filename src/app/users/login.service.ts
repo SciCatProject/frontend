@@ -3,7 +3,7 @@ import { map, catchError, concatMap } from "rxjs/operators";
 import { of, forkJoin, Observable } from "rxjs";
 
 import { ADAuthService } from "./adauth.service";
-import { UserApi, SDKToken, User, LoopBackAuth } from "shared/sdk";
+import { UserApi, SDKToken, User, LoopBackAuth } from "../shared/sdk";
 
 export interface SuccessfulLogin {
   user: User;

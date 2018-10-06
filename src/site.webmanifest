@@ -1,6 +1,6 @@
 {
-    "name": "",
-    "short_name": "",
+    "name": "scicat",
+    "short_name": "scicat",
     "icons": [
         {
             "src": "/android-chrome-192x192.png",

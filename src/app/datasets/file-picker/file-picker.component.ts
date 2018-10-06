@@ -3,9 +3,9 @@ import { ViewChild } from "@angular/core";
 import { Inject } from "@angular/core";
 import { Store, select } from "@ngrx/store";
 import { Observable } from "rxjs";
-import { Dataset } from "shared/sdk/models";
+import { Dataset } from "../../shared/sdk/models";
 import { APP_CONFIG, AppConfig } from "../../app-config.module";
-import * as lb from "shared/sdk/services";
+import * as lb from "../../shared/sdk/services";
 import { FilePickerDirective, ReadFile, ReadMode } from "ngx-file-helpers";
 import { filter } from "rxjs/operators";
 

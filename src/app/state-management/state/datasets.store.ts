@@ -1,4 +1,4 @@
-import { DatasetFilters, Dataset } from "state-management/models";
+import { DatasetFilters, Dataset } from "../../state-management/models";
 
 export interface DateTriple {
   year: number;

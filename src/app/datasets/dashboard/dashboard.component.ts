@@ -6,7 +6,7 @@ import { Store, select } from "@ngrx/store";
 import * as rison from "rison";
 import * as deepEqual from "deep-equal";
 
-import { DatasetFilters } from "state-management/models";
+import { DatasetFilters } from "../../state-management/models";
 
 import {
   SetSearchTermsAction,
@@ -15,14 +15,14 @@ import {
   SetTextFilterAction,
   PrefillFiltersAction,
   PrefillBatchAction
-} from "state-management/actions/datasets.actions";
+} from "../../state-management/actions/datasets.actions";
 
 import {
   getSelectedDatasets,
   getSearchTerms,
   getFilters,
   getHasPrefilledFilters
-} from "state-management/selectors/datasets.selectors";
+} from "../../state-management/selectors/datasets.selectors";
 import {
   filter,
   map,

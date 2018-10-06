@@ -5,26 +5,23 @@ import {
   MatDialogConfig,
   MatTableDataSource
 } from "@angular/material";
-import { Policy } from "state-management/models";
+import { Policy } from "../../state-management/models";
+import { PoliciesService } from "../policies.service";
+import { EditDialogComponent } from "../edit-dialog/edit-dialog.component";
 
 import { ActivatedRoute, Router } from "@angular/router";
 import { ActionsSubject, select, Store } from "@ngrx/store";
-// import { Observable } from 'rxjs/Observable';
 import {
   DeselectPolicyAction,
   FetchPoliciesAction,
   SelectPolicyAction,
   SubmitPolicyAction
-} from "state-management/actions/policies.actions";
-// import * as selectors from 'state-management/selectors';
+} from "../../state-management/actions/policies.actions";
 import {
   getPolicies,
   getPolicyState,
   getSelectedPolicies
-} from "state-management/selectors/policies.selectors";
-import { PoliciesService } from "../policies.service";
-// import { DialogComponent } from 'shared/modules/dialog/dialog.component';
-import { EditDialogComponent } from "../edit-dialog/edit-dialog.component";
+} from "../../state-management/selectors/policies.selectors";
 
 export interface PageChangeEvent {
   pageIndex: number;

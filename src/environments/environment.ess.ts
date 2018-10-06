@@ -4,7 +4,7 @@
 // The list of which env maps to which file can be found in `angular.json`.
 
 export const environment = {
-  production: false,
+  production: true,
   lbBaseURL: "https://scicat03.esss.lu.se:32223",
   fileserverBaseURL: "https://scicat02.esss.lu.se:32223",
   externalAuthEndpoint: "/auth/msad",

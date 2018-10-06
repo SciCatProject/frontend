@@ -1,22 +1,22 @@
 import { Component, Inject, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { select, Store } from "@ngrx/store";
-import { Job, User } from "shared/sdk/models";
-import * as dsa from "state-management/actions/datasets.actions";
-import * as ja from "state-management/actions/jobs.actions";
-import * as ua from "state-management/actions/user.actions";
-import * as selectors from "state-management/selectors";
+import { Job, User } from "../../shared/sdk/models";
+import * as dsa from "../../state-management/actions/datasets.actions";
+import * as ja from "../../state-management/actions/jobs.actions";
+import * as ua from "../../state-management/actions/user.actions";
+import * as selectors from "../../state-management/selectors";
 import { Subscription } from "rxjs";
-import { Message, MessageType } from "state-management/models";
+import { Message, MessageType } from "../../state-management/models";
 import { Angular5Csv } from "angular5-csv/Angular5-csv";
-import { getIsAdmin } from "state-management/selectors/users.selectors";
-import { APP_CONFIG, AppConfig } from "app-config.module";
+import { getIsAdmin } from "../../state-management/selectors/users.selectors";
+import { APP_CONFIG, AppConfig } from "../../app-config.module";
 import {
   getCurrentAttachments,
   getCurrentDatablocks,
   getCurrentDataset,
   getCurrentOrigDatablocks
-} from "state-management/selectors/datasets.selectors";
+} from "../../state-management/selectors/datasets.selectors";
 import { pluck, take } from "rxjs/operators";
 
 import {

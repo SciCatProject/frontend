@@ -1,4 +1,4 @@
-import { AppConfigModule } from "app-config.module";
+import { AppConfigModule } from "../app-config.module";
 import { ArchivingService } from "./archiving.service";
 import { BatchCardComponent } from "./batch-card/batch-card.component";
 import { BatchViewComponent } from "./batch-view/batch-view.component";
@@ -15,10 +15,10 @@ import { MatChipsModule } from "@angular/material/chips";
 import { NgModule } from "@angular/core";
 import { RouterModule } from "@angular/router";
 import { SatDatepickerModule } from "saturn-datepicker";
-import { SelectedListComponent } from "datasets/selected-list/selected-list.component";
-import { SharedCatanieModule } from "shared/shared.module";
+import { SelectedListComponent } from "../datasets/selected-list/selected-list.component";
+import { SharedCatanieModule } from "../shared/shared.module";
 import { StoreModule } from "@ngrx/store";
-import { datasetsReducer } from "state-management/reducers/datasets.reducer";
+import { datasetsReducer } from "../state-management/reducers/datasets.reducer";
 import {
   DashboardComponent,
   DatablocksComponent,
@@ -27,7 +27,7 @@ import {
   DatasetService,
   DatasetsFilterComponent,
   DatasetTableComponent
-} from "datasets/index";
+} from "../datasets/index";
 
 import {
   MatAutocompleteModule,

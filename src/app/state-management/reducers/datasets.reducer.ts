@@ -64,12 +64,12 @@ import {
   SetTextFilterAction,
   SetViewModeAction,
   SortByColumnAction
-} from "state-management/actions/datasets.actions";
+} from "../../state-management/actions/datasets.actions";
 
 import {
   DatasetState,
   initialDatasetState
-} from "state-management/state/datasets.store";
+} from "../../state-management/state/datasets.store";
 
 export function datasetsReducer(
   state: DatasetState = initialDatasetState,
