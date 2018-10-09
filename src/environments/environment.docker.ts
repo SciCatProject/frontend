@@ -5,8 +5,8 @@
 
 export const environment = {
   production: false,
-  lbBaseURL: 'http://127.0.0.1:3000',
+  lbBaseURL: "http://127.0.0.1:3000",
   archiveWorkflowEnabled: true,
-  externalAuthEndpoint: '/auth/msad',
-  facility: 'ESS'
+  externalAuthEndpoint: "/auth/msad",
+  facility: "ESS"
 };
