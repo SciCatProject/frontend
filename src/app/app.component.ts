@@ -1,13 +1,20 @@
 import { APP_CONFIG, AppConfig } from "./app-config.module";
 import { MatSidenav } from "@angular/material/sidenav";
-import { Component, Inject, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from "@angular/core";
+import {
+  Component,
+  Inject,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+  ViewEncapsulation
+} from "@angular/core";
 import { Router } from "@angular/router";
 import { select, Store } from "@ngrx/store";
 import { LoopBackConfig } from "shared/sdk";
 import { UserApi } from "shared/sdk/services";
 import * as ua from "state-management/actions/user.actions";
 import { MatSnackBar } from "@angular/material";
-import { Title } from "@angular/platform-browser";
+import { Meta, Title } from "@angular/platform-browser";
 import { environment } from "../environments/environment";
 import * as selectors from "state-management/selectors";
 import { getCurrentUser } from "state-management/selectors/users.selectors";
@@ -63,6 +70,7 @@ export class AppComponent implements OnDestroy, OnInit {
   constructor(
     private router: Router,
     private titleService: Title,
+    private metaService: Meta,
     public snackBar: MatSnackBar,
     // private _notif_service: NotificationsService,
     @Inject(APP_CONFIG) private appConfig: AppConfig,
@@ -77,6 +85,10 @@ export class AppComponent implements OnDestroy, OnInit {
     }
     this.title = "SciCat" + " " + facility + " " + status;
     this.setTitle(this.title);
+    this.metaService.addTag({
+      name: "description",
+      content: "SciCat metadata catalogue at" + facility
+    });
   }
 
   public setTitle(newTitle: string) {
