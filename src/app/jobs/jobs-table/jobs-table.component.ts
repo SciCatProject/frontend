@@ -10,25 +10,12 @@ import { MatPaginator } from "@angular/material";
 import { Router } from "@angular/router";
 import { select, Store } from "@ngrx/store";
 import { takeLast } from "rxjs/operators";
-import {
-  faAt,
-  faCalendarAlt,
-  faCertificate,
-  faChessQueen,
-  faCog,
-  faCoins,
-  faDownload,
-  faEnvelope,
-  faFileAlt,
-  faFolder,
-  faGem,
-  faGlobe,
-  faIdBadge,
-  faImages,
-  faUpload,
-  faUserAlt,
-  faUsers
-} from "@fortawesome/free-solid-svg-icons";
+
+import { faAt } from "@fortawesome/free-solid-svg-icons/faAt";
+import { faCog } from "@fortawesome/free-solid-svg-icons/faCog";
+import { faCalendarAlt } from "@fortawesome/free-solid-svg-icons/faCalendarAlt";
+import { faCoins } from "@fortawesome/free-solid-svg-icons/faCoins";
+import { faFileAlt } from "@fortawesome/free-solid-svg-icons/faFileAlt";
 
 @Component({
   selector: "jobs-table",
@@ -48,22 +35,10 @@ export class JobsTableComponent implements OnInit, OnDestroy, AfterViewInit {
   ];
 
   faAt = faAt;
-  faIdBadge = faIdBadge;
-  faFolder = faFolder;
   faCog = faCog;
   faCoins = faCoins;
-  faChessQueen = faChessQueen;
   faCalendarAlt = faCalendarAlt;
-  faEnvelope = faEnvelope;
   faFileAlt = faFileAlt;
-  faImages = faImages;
-  faGem = faGem;
-  faGlobe = faGlobe;
-  faCertificate = faCertificate;
-  faUserAlt = faUserAlt;
-  faUsers = faUsers;
-  faUpload = faUpload;
-  faDownload = faDownload;
 
   loading$: any = false;
   limit: any = 50;

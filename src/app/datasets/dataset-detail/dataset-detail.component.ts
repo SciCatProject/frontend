@@ -19,23 +19,19 @@ import {
 } from "state-management/selectors/datasets.selectors";
 import { pluck, take } from "rxjs/operators";
 
-import {
-  faAt,
-  faCalendarAlt,
-  faCertificate,
-  faChessQueen,
-  faCoins,
-  faDownload,
-  faFileAlt,
-  faFolder,
-  faGem,
-  faGlobe,
-  faIdBadge,
-  faImages,
-  faUpload,
-  faUserAlt,
-  faUsers
-} from "@fortawesome/free-solid-svg-icons";
+import { faAt } from "@fortawesome/free-solid-svg-icons/faAt";
+import { faCalendarAlt } from "@fortawesome/free-solid-svg-icons/faCalendarAlt";
+import { faChessQueen } from "@fortawesome/free-solid-svg-icons/faChessQueen";
+import { faCoins } from "@fortawesome/free-solid-svg-icons/faCoins";
+import { faDownload } from "@fortawesome/free-solid-svg-icons/faDownload";
+import { faFileAlt } from "@fortawesome/free-solid-svg-icons/faFileAlt";
+import { faFolder } from "@fortawesome/free-solid-svg-icons/faFolder";
+import { faGem } from "@fortawesome/free-solid-svg-icons/faGem";
+import { faGlobe } from "@fortawesome/free-solid-svg-icons/faGlobe";
+import { faIdBadge } from "@fortawesome/free-solid-svg-icons/faIdBadge";
+import { faImages } from "@fortawesome/free-solid-svg-icons/faImages";
+import { faUserAlt } from "@fortawesome/free-solid-svg-icons/faUserAlt";
+import { faUsers } from "@fortawesome/free-solid-svg-icons/faUsers";
 import { ArchivingService } from "../archiving.service";
 
 /**
@@ -61,10 +57,8 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
   faImages = faImages;
   faGem = faGem;
   faGlobe = faGlobe;
-  faCertificate = faCertificate;
   faUserAlt = faUserAlt;
   faUsers = faUsers;
-  faUpload = faUpload;
   faDownload = faDownload;
   dataset$ = this.store.pipe(select(getCurrentDataset));
   private subscriptions: Subscription[] = [];
