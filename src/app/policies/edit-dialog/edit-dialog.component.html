@@ -1,54 +1,80 @@
-<!--<h1 mat-dialog-title>{{data.title}}</h1>
-<div mat-dialog-content>
-  <p>{{data.question}}</p>
-  <mat-form-field *ngIf="data.input">
-    <input matInput tabindex="1" [(ngModel)]="data.input">
-  </mat-form-field>
-</div>
-<div mat-dialog-actions>
-  <button mat-button [mat-dialog-close]="data" tabindex="2">Ok</button>
-  <button mat-button (click)="onNoClick()" tabindex="-1">No Thanks</button>
-</div>-->
-<mat-card>
-<form autofocus>
+<div >
+  <mat-card>
+  <form [formGroup]="form" class="edit-dialog">
+    <mat-dialog-content [formGroup]="form" >
+      <h1 mat-dialog-title align="center" >Edit Archive Settings</h1>
+      <li>{{selectedGroups}}</li>
+
+      <mat-form-field (click)="controlClick(autoArchive)">
+        <mat-select  placeholder="Auto Archive" formControlName="autoArchive"
+         aria-label="Auto Archive"  #autoArchive>
+          <mat-option value=true>
+            True</mat-option>
+          <mat-option value=false>
+            False</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field (click)="controlClick(autoArchiveDelay)">
+        <mat-select placeholder="Auto Archive Delay" formControlName="autoArchiveDelay"
+        aria-label="Auto Archive Delay"  #autoArchiveDelay>
+          <mat-option value="1">
+            1</mat-option>
+          <mat-option value="2">
+            2</mat-option>
+          <mat-option value="7">
+            7</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field (click)="controlClick(tapeRedundancy)">
+        <mat-select placeholder="Tape Redundancy" formControlName="tapeRedundancy"
+        aria-label="Tape Redundancy"  #tapeRedundancy>
+          <mat-option value="low">
+            low</mat-option>
+          <mat-option value="medium">
+            medium</mat-option>
+          <mat-option value="high">
+            high</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field (click)="controlClick(archiveEmailNotification)">
+        <mat-select placeholder="Archive Email Notification" formControlName="archiveEmailNotification"
+        aria-label="Archive Email Notification"  #archiveEmailNotification>
+          <mat-option value=true>
+            True</mat-option>
+          <mat-option value=false>
+            False</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field (click)="controlClick(archiveEmailsToBeNotified)">
+          <input matInput placeholder="Archive Emails to be Notified" formControlName="archiveEmailsToBeNotified"
+          aria-label="Archive Emails to be Notified"  #archiveEmailsToBeNotified >
+      </mat-form-field>
+
+      <mat-form-field (click)="controlClick(retrieveEmailNotification)">
+        <mat-select placeholder="Retrieve Email Notification" formControlName="retrieveEmailNotification"
+        aria-label="Retrieve Email Notification"  #retrieveEmailNotification>
+          <mat-option value=true>
+            True</mat-option>
+          <mat-option value=false>
+            False</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field (click)="controlClick(retrieveEmailsToBeNotified)" >
+          <input matInput placeholder="Retrieve Emails to be Notified" formControlName="retrieveEmailsToBeNotified"
+          aria-label="Retrieve Emails to be Notified" #retrieveEmailsToBeNotified>
+      </mat-form-field>
 
 
-
-<mat-dialog-content [formGroup]="form" autofocus>
-  <h1 mat-dialog-title align="center">Edit Archive Settings</h1>
-  <li > {{ownerGroups}}</li>
-
-  <!--mat-form-field>
-    <input matInput placeholder="ownerGroups" formControlName="ownerGroups">
-  </mat-form-field-->
-  <!--mat-form-field>
-  <mat-select placeholder="Select archiveDelay" formControlName="archiveDelay">
-    < make configurable>
-    <mat-option value="1">
-      1</mat-option>
-    <mat-option value="2">
-      2</mat-option>
-    <mat-option value="7">
-      7</mat-option>
-
-
-  </mat-select>
-  </mat-form-field-->
-  <mat-form-field>
-  <mat-select placeholder="Auto Archive" formControlName="autoArchive" aria-label="Auto Archive">
-    <mat-option value=true>
-      True</mat-option>
-    <mat-option value=false>
-      False</mat-option>
-  </mat-select>
-  </mat-form-field>
-  ....
-
-</mat-dialog-content>
-
-<mat-dialog-actions>
-  <button class="mat-raised-button" (click)="close()">Close</button>
-  <button class="mat-raised-button mat-primary" (click)="save()">Save</button>
-</mat-dialog-actions>
-</form>
+    </mat-dialog-content>
+    <mat-dialog-actions>
+      <button class="mat-raised-button" (click)="close()">Close</button>
+      <button class="mat-raised-button mat-primary" (click)="save()">Save</button>
+    </mat-dialog-actions>
+  </form>
 </mat-card>
+</div>

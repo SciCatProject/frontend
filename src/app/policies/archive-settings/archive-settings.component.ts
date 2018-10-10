@@ -1,29 +1,21 @@
-import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
-import {
-  MatCheckboxChange,
-  MatDialog,
-  MatDialogConfig,
-  MatTableDataSource
-} from "@angular/material";
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from "@angular/core";
+import { MatCheckboxChange, MatDialog, MatDialogConfig, MatPaginator } from "@angular/material";
 import { Policy } from "state-management/models";
 
 import { ActivatedRoute, Router } from "@angular/router";
 import { ActionsSubject, select, Store } from "@ngrx/store";
-// import { Observable } from 'rxjs/Observable';
+
 import {
+  ChangePageAction,
+  ClearSelectionAction,
   DeselectPolicyAction,
   FetchPoliciesAction,
   SelectPolicyAction,
+  SortByColumnAction,
   SubmitPolicyAction
 } from "state-management/actions/policies.actions";
-// import * as selectors from 'state-management/selectors';
-import {
-  getPolicies,
-  getPolicyState,
-  getSelectedPolicies
-} from "state-management/selectors/policies.selectors";
+import { getPage, getPolicies, getPolicyState, getSelectedPolicies } from "state-management/selectors/policies.selectors";
 import { PoliciesService } from "../policies.service";
-// import { DialogComponent } from 'shared/modules/dialog/dialog.component';
 import { EditDialogComponent } from "../edit-dialog/edit-dialog.component";
 
 export interface PageChangeEvent {
@@ -43,19 +35,8 @@ export interface SortChangeEvent {
   styleUrls: ["./archive-settings.component.scss"]
 })
 export class ArchiveSettingsComponent implements OnInit {
-  public selectedPolicies: Policy[] = [];
-  public pageSizeOptions: number[] = [30, 1000];
-  public editFields = {
-    select: "",
-    manager: "",
-    ownerGroup: "",
-    "auto archive": "",
-    "archive delay": "",
-    "number of copies on tape": "",
-    "notification email": ""
-  };
-  public editEnabled = true;
-  public dataSource: MatTableDataSource<any> | null;
+  public policies$ = this.store.pipe(select(getPolicies));
+  dialogConfig: MatDialogConfig;
   @Input()
   public totalNumber: number = 0;
   @Input()
@@ -64,27 +45,34 @@ export class ArchiveSettingsComponent implements OnInit {
   public showSelect: boolean = false;
   @Input()
   public disabledColumns: string[] = [];
-  public policies$ = this.store.pipe(select(getPolicies));
+  public pageSizeOptions: number[] = [30, 1000];
+  public editEnabled = true;
+  public policiesPerPage = 10;
+  @ViewChild(MatPaginator)
+  paginator: MatPaginator;
   private policyState$ = this.store.pipe(select(getPolicyState));
   private selectedPolicies$ = this.store.pipe(select(getSelectedPolicies));
+  private currentPage$ = this.store.pipe(select(getPage));
+  private selectedPolicies: Policy[] = [];
+  private selectedGroups: string[] = [];
+  private selectedIds: string[] = [];
+  private multiSelect: boolean = false;
   private policies: Policy[] = [];
   private subscriptions: any;
+  @Output()
+  private onClick: EventEmitter<Policy> = new EventEmitter();
   private displayedColumns: string[] = [
     "select",
     "manager",
     "ownerGroup",
-    "auto archive",
-    "archive delay",
-    "number of copies on tape",
-    "notification email"
+    "autoArchive",
+    "autoArchiveDelay",
+    "tapeRedundancy",
+    "archiveEmailNotification",
+    "archiveEmailsToBeNotified",
+    "retrieveEmailNotification",
+    "retrieveEmailsToBeNotified"
   ];
-  @Output()
-  private onClick: EventEmitter<Policy> = new EventEmitter();
-  // @Output() private onDeselect: EventEmitter<Policy> = new EventEmitter();
-  @Output()
-  private onSortChange: EventEmitter<SortChangeEvent> = new EventEmitter();
-
-  // @Output() private onSelect: EventEmitter<Policy> = new EventEmitter();
 
   constructor(
     private actionsSubj: ActionsSubject,
@@ -93,23 +81,25 @@ export class ArchiveSettingsComponent implements OnInit {
     private route: ActivatedRoute,
     private policiesService: PoliciesService,
     public dialog: MatDialog
-  ) {}
+  ) {
+  }
 
   ngOnInit() {
+    this.store.dispatch(new ClearSelectionAction());
     this.store.dispatch(new FetchPoliciesAction());
-    console.log("policyState$:", this.policyState$);
 
-    this.policiesService.getPolicies().subscribe(data => {
+    this.policies$.subscribe(data => {
       this.policies = data as Policy[];
     });
 
-    this.store.pipe(select(getSelectedPolicies)).subscribe(data => {
+    this.selectedPolicies$.subscribe(data => {
       this.selectedPolicies = data as Policy[];
-    });
-
-    this.subscriptions = this.actionsSubj.subscribe(data => {
-      if (data.type === "[Policy] Submit policy settings complete") {
-        this.store.dispatch(new FetchPoliciesAction());
+      this.multiSelect = this.selectedPolicies.length > 1;
+      this.selectedGroups = [];
+      this.selectedIds = [];
+      for (let policy of data) {
+        this.selectedGroups.push(policy.ownerGroup);
+        this.selectedIds.push(policy.id);
       }
     });
   }
@@ -120,21 +110,14 @@ export class ArchiveSettingsComponent implements OnInit {
     );
   }
 
-  public handleSortChange(event: SortChangeEvent): void {
-    this.onSortChange.emit(event);
+  onPageChange(event: PageChangeEvent): void {
+    this.store.dispatch(new ChangePageAction(event.pageIndex, event.pageSize));
   }
 
-  /*
-    private onClose(result: any) {
-      if (result) {
-        for (let policy of this.selectedPolicies) {
-          policy.autoArchive = result.autoArchive;
-          this.store.dispatch(new SubmitPolicyAction(policy));
-        }
-      }
-    }
-
-  */
+  onSortChange(event: SortChangeEvent): void {
+    const { active: column, direction } = event;
+    this.store.dispatch(new SortByColumnAction(column, direction));
+  }
 
   onSelect(policy: Policy): void {
     this.store.dispatch(new SelectPolicyAction(policy));
@@ -145,33 +128,46 @@ export class ArchiveSettingsComponent implements OnInit {
   }
 
   private openDialog() {
-    console.log("selected: ", this.selectedPolicies);
-
-    const dialogConfig = new MatDialogConfig();
-
-    dialogConfig.disableClose = true;
-    dialogConfig.autoFocus = true;
-    dialogConfig.panelClass;
-    dialogConfig.direction = "rtl";
-
-    dialogConfig.data = this.selectedPolicies;
-
-    const dialogRef = this.dialog.open(EditDialogComponent, dialogConfig);
+    this.dialogConfig = new MatDialogConfig();
+    this.dialogConfig.disableClose = true;
+    this.dialogConfig.autoFocus = true;
+    this.dialogConfig.panelClass;
+    this.dialogConfig.direction = "rtl";
+    let selectedInfo = {
+      selectedPolicy: this.selectedPolicies[0],
+      selectedGroups: this.selectedGroups,
+      multiSelect: this.multiSelect
+    };
+    console.log("selectedInfo: ", selectedInfo);
+    this.dialogConfig.data = selectedInfo;
+    const dialogRef = this.dialog.open(EditDialogComponent, this.dialogConfig);
 
     dialogRef.afterClosed().subscribe(val => this.onClose(val));
   }
 
   private onClose(result: any) {
+    console.log("result: ", result);
     if (result) {
-      var selected = [];
-      //deep copy
-      selected = JSON.parse(JSON.stringify(this.selectedPolicies));
-      console.log("1: ", selected);
-      for (let policy of selected) {
-        policy.autoArchive = result.autoArchive;
-        console.log("2: ", policy);
-        this.store.dispatch(new SubmitPolicyAction(policy));
+      if (
+        result.archiveEmailsToBeNotified &&
+        typeof result.archiveEmailsToBeNotified === "string"
+      )
+        result.archiveEmailsToBeNotified = Array.from(
+          result.archiveEmailsToBeNotified.split(",")
+        );
+      if (
+        result.retrieveEmailsToBeNotified &&
+        typeof result.retrieveEmailsToBeNotified === "string"
+      )
+        result.retrieveEmailsToBeNotified = Array.from(
+          result.retrieveEmailsToBeNotified.split(",")
+        );
+      var template = { id: "", ...result };
+      for (var id of this.selectedIds) {
+        template["id"] = id;
+        this.store.dispatch(new SubmitPolicyAction(template));
       }
+      this.store.dispatch(new ClearSelectionAction());
     }
   }
 
@@ -180,7 +176,6 @@ export class ArchiveSettingsComponent implements OnInit {
   }
 
   private handleSelect(event: MatCheckboxChange, policy: Policy): void {
-    console.log("handleSelect!!");
     if (event.checked) {
       this.onSelect(policy);
     } else {
@@ -208,4 +203,5 @@ export class ArchiveSettingsComponent implements OnInit {
   private onEditClick() {
     this.openDialog();
   }
+
 }
