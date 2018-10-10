@@ -1,19 +1,32 @@
 import { Dataset } from "shared/sdk/models";
-import { UpdateFilterAction, FILTER_UPDATE } from "./datasets.actions";
-import { SearchIDCompleteAction, SEARCH_ID_COMPLETE } from "./datasets.actions";
-import { DatablocksAction, DATABLOCKS } from "./datasets.actions";
-import { DatablocksFailedAction, DATABLOCKS_FAILED } from "./datasets.actions";
-import { CurrentSetAction, SELECT_CURRENT } from "./datasets.actions";
-import { SelectDatasetAction, SELECT_DATASET } from "./datasets.actions";
-import { DeselectDatasetAction, DESELECT_DATASET } from "./datasets.actions";
-import { ClearSelectionAction, CLEAR_SELECTION } from "./datasets.actions";
-import { ExportToCsvAction, EXPORT_TO_CSV } from "./datasets.actions";
-import { SortByColumnAction, SORT_BY_COLUMN } from "./datasets.actions";
-import { SetViewModeAction, SET_VIEW_MODE } from "./datasets.actions";
+import {
+  CLEAR_SELECTION,
+  ClearSelectionAction,
+  CurrentSetAction,
+  DATABLOCKS,
+  DATABLOCKS_FAILED,
+  DatablocksAction,
+  DatablocksFailedAction,
+  DESELECT_DATASET,
+  DeselectDatasetAction,
+  EXPORT_TO_CSV,
+  ExportToCsvAction,
+  FILTER_UPDATE,
+  SEARCH_ID_COMPLETE,
+  SearchIDCompleteAction,
+  SELECT_CURRENT,
+  SELECT_DATASET,
+  SelectDatasetAction,
+  SET_VIEW_MODE,
+  SetViewModeAction,
+  SORT_BY_COLUMN,
+  SortByColumnAction,
+  UpdateFilterAction
+} from "./datasets.actions";
 
 describe("UpdateFilterAction", () => {
   it("should create an action", () => {
-    const payload = [{ id: 1 }];
+    const payload = [{ id: "1" }];
     const action = new UpdateFilterAction(payload);
     expect({ ...action }).toEqual({ type: FILTER_UPDATE, payload });
   });
