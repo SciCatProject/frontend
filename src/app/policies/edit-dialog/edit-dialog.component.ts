@@ -1,21 +1,6 @@
-import {
-  Component,
-  Inject,
-  OnInit,
-  ViewEncapsulation,
-  OnChanges,
-  Input,
-  Output,
-  EventEmitter
-} from "@angular/core";
+import { Component, Inject, OnInit } from "@angular/core";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material";
-import {
-  FormBuilder,
-  Validators,
-  FormGroup,
-  FormControl
-} from "@angular/forms";
-import { Policy } from "state-management/models";
+import { FormBuilder, FormControl, FormGroup } from "@angular/forms";
 
 @Component({
   selector: "edit-dialog",
@@ -48,14 +33,14 @@ export class EditDialogComponent implements /*OnChanges,*/ OnInit {
       }),
       tapeRedundancy: new FormControl({
         value:
-          data.selectedPolicy.tapeRedundancy  != null && !this.multiEdit
+          data.selectedPolicy.tapeRedundancy != null && !this.multiEdit
             ? data.selectedPolicy.tapeRedundancy.toString()
             : null,
         disabled: true
       }),
       autoArchiveDelay: new FormControl({
         value:
-          data.selectedPolicy.autoArchiveDelay  != null && !this.multiEdit
+          data.selectedPolicy.autoArchiveDelay != null && !this.multiEdit
             ? data.selectedPolicy.autoArchiveDelay.toString()
             : null,
         disabled: true
@@ -69,21 +54,24 @@ export class EditDialogComponent implements /*OnChanges,*/ OnInit {
       }),
       archiveEmailsToBeNotified: new FormControl({
         value:
-          data.selectedPolicy.archiveEmailsToBeNotified  != null && !this.multiEdit
+          data.selectedPolicy.archiveEmailsToBeNotified != null &&
+          !this.multiEdit
             ? data.selectedPolicy.archiveEmailsToBeNotified
             : null,
         disabled: true
       }),
       retrieveEmailNotification: new FormControl({
         value:
-          data.selectedPolicy.retrieveEmailNotification  != null && !this.multiEdit
+          data.selectedPolicy.retrieveEmailNotification != null &&
+          !this.multiEdit
             ? data.selectedPolicy.retrieveEmailNotification.toString()
             : null,
         disabled: true
       }),
       retrieveEmailsToBeNotified: new FormControl({
         value:
-          data.selectedPolicy.retrieveEmailsToBeNotified  != null && !this.multiEdit
+          data.selectedPolicy.retrieveEmailsToBeNotified != null &&
+          !this.multiEdit
             ? data.selectedPolicy.retrieveEmailsToBeNotified
             : null,
         disabled: true
