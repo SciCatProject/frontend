@@ -1,31 +1,31 @@
-import { Component, Input, Output, EventEmitter } from "@angular/core";
-
-import { OnInit } from "@angular/core";
-import { MatCheckboxChange } from "@angular/material";
+import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import {
+  MatCheckboxChange,
+  MatDialog,
+  MatDialogConfig
+} from "@angular/material";
 import { Policy } from "state-management/models";
 
-import { Router, ActivatedRoute } from "@angular/router";
-import { Store, select } from "@ngrx/store";
-import { ActionsSubject } from "@ngrx/store";
+import { ActivatedRoute, Router } from "@angular/router";
+import { ActionsSubject, select, Store } from "@ngrx/store";
 
 import {
+  ChangePageAction,
+  ClearSelectionAction,
+  DeselectPolicyAction,
   FetchPoliciesAction,
   SelectPolicyAction,
-  DeselectPolicyAction,
-  SubmitPolicyAction,
-  ClearSelectionAction,
-  ChangePageAction,
-  SortByColumnAction
+  SortByColumnAction,
+  SubmitPolicyAction
 } from "state-management/actions/policies.actions";
 import {
+  getPage,
   getPolicies,
   getPolicyState,
-  getSelectedPolicies,
-  getPage,
+  getSelectedPolicies
 } from "state-management/selectors/policies.selectors";
 import { PoliciesService } from "../policies.service";
 import { EditDialogComponent } from "../edit-dialog/edit-dialog.component";
-import { MatDialog, MatDialogConfig } from "@angular/material";
 
 export interface PageChangeEvent {
   pageIndex: number;
@@ -44,7 +44,18 @@ export interface SortChangeEvent {
   styleUrls: ["./archive-settings.component.scss"]
 })
 export class ArchiveSettingsComponent implements OnInit {
-  private policies$ = this.store.pipe(select(getPolicies));
+  public policies$ = this.store.pipe(select(getPolicies));
+  dialogConfig: MatDialogConfig;
+  @Input()
+  public totalNumber: number = 0;
+  @Input()
+  public currentPage: number = 0;
+  @Input()
+  public showSelect: boolean = false;
+  @Input()
+  public disabledColumns: string[] = [];
+  public pageSizeOptions: number[] = [30, 1000];
+  public editEnabled = true;
   private policyState$ = this.store.pipe(select(getPolicyState));
   private selectedPolicies$ = this.store.pipe(select(getSelectedPolicies));
   private currentPage$ = this.store.pipe(select(getPage));
@@ -54,32 +65,9 @@ export class ArchiveSettingsComponent implements OnInit {
   private multiSelect: boolean = false;
   private policies: Policy[] = [];
   private subscriptions: any;
-  dialogConfig: MatDialogConfig;
-
-  constructor(
-    private actionsSubj: ActionsSubject,
-    private store: Store<Policy>,
-    private router: Router,
-    private route: ActivatedRoute,
-    private policiesService: PoliciesService,
-    public dialog: MatDialog
-  ) {}
-
-  @Input()
-  public totalNumber: number = 0;
-  @Input()
-  public currentPage: number = 0;
-
-  @Input()
-  public showSelect: boolean = false;
-
-  @Input()
-  public disabledColumns: string[] = [];
-
+  private policiesPerPage = 10;
   @Output()
   private onClick: EventEmitter<Policy> = new EventEmitter();
-
-  private pageSizeOptions: number[] = [30, 1000];
   private displayedColumns: string[] = [
     "select",
     "manager",
@@ -93,7 +81,14 @@ export class ArchiveSettingsComponent implements OnInit {
     "retrieveEmailsToBeNotified"
   ];
 
-  public editEnabled = true;
+  constructor(
+    private actionsSubj: ActionsSubject,
+    private store: Store<Policy>,
+    private router: Router,
+    private route: ActivatedRoute,
+    private policiesService: PoliciesService,
+    public dialog: MatDialog
+  ) {}
 
   ngOnInit() {
     this.store.dispatch(new ClearSelectionAction());
@@ -113,6 +108,29 @@ export class ArchiveSettingsComponent implements OnInit {
         this.selectedIds.push(policy.id);
       }
     });
+  }
+
+  public getDisplayedColumns(): string[] {
+    return this.displayedColumns.filter(
+      column => this.disabledColumns.indexOf(column) === -1
+    );
+  }
+
+  onPageChange(event: PageChangeEvent): void {
+    this.store.dispatch(new ChangePageAction(event.pageIndex, event.pageSize));
+  }
+
+  onSortChange(event: SortChangeEvent): void {
+    const { active: column, direction } = event;
+    this.store.dispatch(new SortByColumnAction(column, direction));
+  }
+
+  onSelect(policy: Policy): void {
+    this.store.dispatch(new SelectPolicyAction(policy));
+  }
+
+  onDeselect(policy: Policy): void {
+    this.store.dispatch(new DeselectPolicyAction(policy));
   }
 
   private openDialog() {
@@ -136,11 +154,21 @@ export class ArchiveSettingsComponent implements OnInit {
   private onClose(result: any) {
     console.log("result: ", result);
     if (result) {
-      if(result.archiveEmailsToBeNotified && typeof result.archiveEmailsToBeNotified === "string")
-        result.archiveEmailsToBeNotified = Array.from(result.archiveEmailsToBeNotified.split(","));
-      if(result.retrieveEmailsToBeNotified && typeof result.retrieveEmailsToBeNotified === "string")
-        result.retrieveEmailsToBeNotified = Array.from(result.retrieveEmailsToBeNotified.split(","));
-      var template = {id: "", ...result};
+      if (
+        result.archiveEmailsToBeNotified &&
+        typeof result.archiveEmailsToBeNotified === "string"
+      )
+        result.archiveEmailsToBeNotified = Array.from(
+          result.archiveEmailsToBeNotified.split(",")
+        );
+      if (
+        result.retrieveEmailsToBeNotified &&
+        typeof result.retrieveEmailsToBeNotified === "string"
+      )
+        result.retrieveEmailsToBeNotified = Array.from(
+          result.retrieveEmailsToBeNotified.split(",")
+        );
+      var template = { id: "", ...result };
       for (var id of this.selectedIds) {
         template["id"] = id;
         this.store.dispatch(new SubmitPolicyAction(template));
@@ -149,16 +177,9 @@ export class ArchiveSettingsComponent implements OnInit {
     }
   }
 
-  private getDisplayedColumns(): string[] {
-    return this.displayedColumns.filter(
-      column => this.disabledColumns.indexOf(column) === -1
-    );
-  }
-
   private handleClick(policy): void {
     this.onClick.emit(policy);
   }
-
 
   private handleSelect(event: MatCheckboxChange, policy: Policy): void {
     if (event.checked) {
@@ -183,23 +204,6 @@ export class ArchiveSettingsComponent implements OnInit {
 
   private handleSelectAll(event: MatCheckboxChange): void {
     this.policies.forEach(policy => this.handleSelect(event, policy));
-  }
-
-  onPageChange(event: PageChangeEvent): void {
-    this.store.dispatch(new ChangePageAction(event.pageIndex, event.pageSize));
-  }
-
-  onSortChange(event: SortChangeEvent): void {
-    const { active: column, direction } = event;
-    this.store.dispatch(new SortByColumnAction(column, direction));
-  }
-
-  onSelect(policy: Policy): void {
-    this.store.dispatch(new SelectPolicyAction(policy));
-  }
-
-  onDeselect(policy: Policy): void {
-    this.store.dispatch(new DeselectPolicyAction(policy));
   }
 
   private onEditClick() {
