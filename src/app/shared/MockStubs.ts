@@ -1,6 +1,5 @@
-import { Observable } from "rxjs";
-import { of } from "rxjs";
-import { Subject } from "rxjs";
+import { Observable, of, Subject } from "rxjs";
+import { RawDataset } from "./sdk/models";
 
 export class MockUserApi {
   getCurrentId() {
@@ -38,9 +37,11 @@ export class MockDatasetApi {
   }
 }
 
-export class MockMatDialogRef {}
+export class MockMatDialogRef {
+}
 
-export class MockMatDialogData {}
+export class MockMatDialogData {
+}
 
 export class MockDatablockApi {
   getDatafiles() {
@@ -48,9 +49,11 @@ export class MockDatablockApi {
   }
 }
 
-export class MockDatasetLifecycleApi {}
+export class MockDatasetLifecycleApi {
+}
 
-export class MockAuthService {}
+export class MockAuthService {
+}
 
 export class MockLoopBackAuth {
   user = {};
@@ -64,7 +67,8 @@ export class MockLoopBackAuth {
   }
 }
 
-export class MockLocation {}
+export class MockLocation {
+}
 
 export class MockActivatedRoute {
   // stub detail goes here
@@ -74,7 +78,8 @@ export class MockActivatedRoute {
 }
 
 export class MockRouter {
-  navigate = function(url, params) {};
+  navigate = function(url, params) {
+  };
 
   // jasmine.createSpy('navigate');
   navigateByUrl(url: string) {
@@ -82,7 +87,8 @@ export class MockRouter {
   }
 }
 
-export class MockHttp {}
+export class MockHttp {
+}
 
 export class MockJobApi {
   find() {
@@ -105,9 +111,11 @@ export class MockConfigService {
   }
 }
 
-export class MockJobHandlerService {}
+export class MockJobHandlerService {
+}
 
-export class MockParamsService {}
+export class MockParamsService {
+}
 
 export class MockDatasetService {
   datasetChange: Subject<string> = new Subject<string>();
@@ -140,13 +148,16 @@ export class MockUserMsgService {
     return this.subject.asObservable();
   }
 
-  sendMessage(message: object, delay = 0) {}
+  sendMessage(message: object, delay = 0) {
+  }
 
-  clearMessage() {}
+  clearMessage() {
+  }
 }
 
 export class MockStore {
-  public dispatch(obj) {}
+  public dispatch(obj) {
+  }
 
   public select(obj) {
     return of([]);
@@ -158,7 +169,8 @@ export class MockStore {
 }
 
 export class MockNotificationService {
-  public dispatch(obj) {}
+  public dispatch(obj) {
+  }
 
   public select(obj) {
     return of([]);
