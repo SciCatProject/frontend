@@ -1,9 +1,5 @@
-import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
-import {
-  MatCheckboxChange,
-  MatDialog,
-  MatDialogConfig
-} from "@angular/material";
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from "@angular/core";
+import { MatCheckboxChange, MatDialog, MatDialogConfig, MatPaginator } from "@angular/material";
 import { Policy } from "state-management/models";
 
 import { ActivatedRoute, Router } from "@angular/router";
@@ -18,12 +14,7 @@ import {
   SortByColumnAction,
   SubmitPolicyAction
 } from "state-management/actions/policies.actions";
-import {
-  getPage,
-  getPolicies,
-  getPolicyState,
-  getSelectedPolicies
-} from "state-management/selectors/policies.selectors";
+import { getPage, getPolicies, getPolicyState, getSelectedPolicies } from "state-management/selectors/policies.selectors";
 import { PoliciesService } from "../policies.service";
 import { EditDialogComponent } from "../edit-dialog/edit-dialog.component";
 
@@ -56,6 +47,9 @@ export class ArchiveSettingsComponent implements OnInit {
   public disabledColumns: string[] = [];
   public pageSizeOptions: number[] = [30, 1000];
   public editEnabled = true;
+  public policiesPerPage = 10;
+  @ViewChild(MatPaginator)
+  paginator: MatPaginator;
   private policyState$ = this.store.pipe(select(getPolicyState));
   private selectedPolicies$ = this.store.pipe(select(getSelectedPolicies));
   private currentPage$ = this.store.pipe(select(getPage));
@@ -65,7 +59,6 @@ export class ArchiveSettingsComponent implements OnInit {
   private multiSelect: boolean = false;
   private policies: Policy[] = [];
   private subscriptions: any;
-  public policiesPerPage = 10;
   @Output()
   private onClick: EventEmitter<Policy> = new EventEmitter();
   private displayedColumns: string[] = [
@@ -88,7 +81,8 @@ export class ArchiveSettingsComponent implements OnInit {
     private route: ActivatedRoute,
     private policiesService: PoliciesService,
     public dialog: MatDialog
-  ) {}
+  ) {
+  }
 
   ngOnInit() {
     this.store.dispatch(new ClearSelectionAction());
@@ -209,4 +203,5 @@ export class ArchiveSettingsComponent implements OnInit {
   private onEditClick() {
     this.openDialog();
   }
+
 }

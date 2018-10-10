@@ -11,7 +11,7 @@
     </ng-container>
   </div>
 
-  <mat-paginator class="policy-paginator" [pageSizeOptions]="pageSizeOptions" [pageIndex]="currentPage" [pageSize]="policiesPerPage" [length]="totalNumber" (page)="handlePageChange($event)">
+  <mat-paginator class="policy-paginator" [pageSizeOptions]="pageSizeOptions" [pageIndex]="currentPage" [pageSize]="policiesPerPage" [length]="totalNumber" (page)="onPageChange($event)">
   </mat-paginator>
 
   <mat-table [dataSource]="policies$ | async" class="policy-table mat-elevation-z8" matSort (matSortChange)="onSortChange($event)">
@@ -82,7 +82,7 @@
     </mat-row>
   </mat-table>
 
-  <mat-paginator class="policy-paginator" [pageSizeOptions]="pageSizeOptions" [pageIndex]="currentPage" [pageSize]="policiesPerPage" [length]="totalNumber" (page)="handlePageChange($event)">
+  <mat-paginator class="policy-paginator" [pageSizeOptions]="pageSizeOptions" [pageIndex]="currentPage" [pageSize]="policiesPerPage" [length]="totalNumber" (page)="onPageChange($event)">
   </mat-paginator>
 
 
