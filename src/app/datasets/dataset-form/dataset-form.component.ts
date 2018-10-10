@@ -3,11 +3,11 @@ import { FormArray, FormBuilder, FormGroup } from "@angular/forms";
 import { Observable, Subscription } from "rxjs";
 import { RawDataset } from "../../shared/sdk/models";
 import { SaveDatasetAction } from "../../state-management/actions/datasets.actions";
-import { faPlusCircle, faTimesCircle } from "@fortawesome/free-solid-svg-icons";
+import { faPlusCircle } from "@fortawesome/free-solid-svg-icons/faPlusCircle";
+import { faTimesCircle } from "@fortawesome/free-solid-svg-icons/faTimesCircle";
 import { getCurrentDataset } from "../../state-management/selectors/datasets.selectors";
 import { select, Store } from "@ngrx/store";
 import { take } from "rxjs/operators";
-
 
 @Component({
   selector: "app-dataset-form",
@@ -23,8 +23,7 @@ export class DatasetFormComponent implements OnInit, OnDestroy {
   scientificMetaDataSubscription: Subscription;
   metadataForm: FormGroup;
 
-  constructor(private store: Store<any>, private formBuilder: FormBuilder) {
-  }
+  constructor(private store: Store<any>, private formBuilder: FormBuilder) {}
 
   get items() {
     return this.metadataForm.get("items") as FormArray;
@@ -82,8 +81,7 @@ export class DatasetFormComponent implements OnInit, OnDestroy {
     console.log("TODO: remove");
   }
 
-  ngOnDestroy() {
-  }
+  ngOnDestroy() {}
 
   ngOnInit() {
     this.metadataForm = this.formBuilder.group({
