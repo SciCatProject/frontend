@@ -65,7 +65,7 @@ export class ArchiveSettingsComponent implements OnInit {
   private multiSelect: boolean = false;
   private policies: Policy[] = [];
   private subscriptions: any;
-  private policiesPerPage = 10;
+  public policiesPerPage = 10;
   @Output()
   private onClick: EventEmitter<Policy> = new EventEmitter();
   private displayedColumns: string[] = [
