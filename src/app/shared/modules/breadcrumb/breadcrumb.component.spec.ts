@@ -23,7 +23,6 @@ describe("BreadcrumbComponent", () => {
     fixture.detectChanges();
   });
 
-
   afterEach(() => {
     fixture.destroy();
   });
