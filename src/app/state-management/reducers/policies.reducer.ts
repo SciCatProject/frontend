@@ -1,4 +1,6 @@
 import {
+  CHANGE_PAGE,
+  ChangePageAction,
   CLEAR_SELECTION,
   DESELECT_POLICY,
   DeselectPolicyAction,
@@ -9,8 +11,11 @@ import {
   PoliciesActions,
   SELECT_POLICY,
   SelectPolicyAction,
+  SORT_BY_COLUMN,
+  SortByColumnAction,
   SUBMIT_POLICY_COMPLETE,
   SUBMIT_POLICY_FAILED,
+  SubmitPolicyCompleteAction,
   SubmitPolicyFailedAction
 } from "state-management/actions/policies.actions";
 
@@ -29,9 +34,9 @@ export function policiesReducer(
 
   switch (action.type) {
     case SUBMIT_POLICY_COMPLETE: {
-      // const policySubmission = (action as SubmitPolicyCompleteAction).policySubmission;
-      return { ...state, submitComplete: true };
-      // return { ...state, policySubmission : null };
+      const submissionResponse = (action as SubmitPolicyCompleteAction)
+        .submissionResponse;
+      return { ...state, submissionResponse };
     }
 
     case SUBMIT_POLICY_FAILED: {
@@ -75,6 +80,24 @@ export function policiesReducer(
 
     case CLEAR_SELECTION: {
       return { ...state, selectedPolicies: [] };
+    }
+
+    case CHANGE_PAGE: {
+      const { page, limit } = action as ChangePageAction;
+      const skip = page * limit;
+      // const filters = {...state.filters, skip, limit};
+      return {
+        ...state,
+        policiesLoading: true
+        // filters
+      };
+    }
+
+    case SORT_BY_COLUMN: {
+      const { column, direction } = action as SortByColumnAction;
+      const sortField = column + (direction ? ":" + direction : "");
+      // const filters = {...state.filters, sortField, skip: 0};
+      return { ...state, /*filters,*/ policiesLoading: true };
     }
 
     default: {

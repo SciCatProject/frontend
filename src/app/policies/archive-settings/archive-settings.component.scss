@@ -7,13 +7,20 @@ mat-cell, .mat-header-cell {
   white-space: normal;
 }
 
+mat-cell, .mat-cell {
+  display:block; // flex prevents padding from working
+  min-height:auto; // overrides the 'inherit' that set the min height of the row
+  //padding: 5px 5px 0 0;
+}
+
+
 /*Columns are dynamically injected, so this /deep/ ensures it is reflected onto the selector  */
 /* ^-- Is this needed anymore? Seems to work fine without */
 
 .mat-column-select {
   overflow: visible; /* Needed to prevent offsetting of the checkbox when clicking */
   flex-grow: 0;
-  padding-right: 2em;
+  padding-right: 1em;
 }
 
 .mat-column-size, .mat-column-type {

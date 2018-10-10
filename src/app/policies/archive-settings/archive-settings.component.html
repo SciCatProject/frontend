@@ -1,26 +1,20 @@
 <div class="archive-settings">
 </div>
 
-<div>
-  <!--<pre>{{ policyState$ | async | json }}</pre>-->
-  <div class="button-group" layout="row" layout-align="end end">
-    <ng-container *ngIf="editEnabled">
-      <button mat-raised-button mat-button (click)="onEditClick()" color="primary">Edit Selection
-      </button>
+
+  <div class="button-group" align="end">
+    <ng-container *ngIf="editEnabled" >
+      <button mat-button mat-button (click)="onEditClick()" color="primary">
+        <mat-icon >edit</mat-icon> Edit Selection
+    </button>
+
     </ng-container>
   </div>
-  <!--<div class="editForm">
-    <ng-container>
-      <config-form [source]="editFields" [enabled]="true"></config-form>
-    </ng-container>
-  </div>-->
 
-  <mat-paginator class="policy-paginator" [pageSizeOptions]="pageSizeOptions" [pageIndex]="currentPage" [pageSize]="10"
-                 [length]="totalNumber">
+  <mat-paginator class="policy-paginator" [pageSizeOptions]="pageSizeOptions" [pageIndex]="currentPage" [pageSize]="policiesPerPage" [length]="totalNumber" (page)="onPageChange($event)">
   </mat-paginator>
 
-  <mat-table [dataSource]="policies$ | async" class="policy-table mat-elevation-z8" matSort
-             (matSortChange)="handleSortChange($event)">
+  <mat-table [dataSource]="policies$ | async" class="policy-table mat-elevation-z8" matSort (matSortChange)="onSortChange($event)">
 
     <!-- Column Definitions -->
     <ng-container matColumnDef="select">
@@ -29,54 +23,55 @@
         </mat-checkbox>
       </mat-header-cell>
       <mat-cell *matCellDef="let row">
-        <mat-checkbox [checked]="isChecked(row)" (change)="handleSelect($event, row)"
-                      (click)="$event.stopPropagation()">
+        <mat-checkbox [checked]="isChecked(row)" (change)="handleSelect($event, row)" (click)="$event.stopPropagation()">
         </mat-checkbox>
       </mat-cell>
     </ng-container>
 
-    <!--<ng-container matColumnDef="auto archive">
-      <mat-header-cell *matHeaderCellDef>auto archive</mat-header-cell>
-      <mat-cell *matCellDef="let policy">
-        <mat-checkbox>
-          {{policy.autoArchive}}
-        </mat-checkbox>
-      </mat-cell>
-    </ng-container>-->
-
-
-    <ng-container matColumnDef="auto archive">
-      <mat-header-cell *matHeaderCellDef>auto archive</mat-header-cell>
-      <mat-cell *matCellDef="let policy">{{policy.autoArchive}}</mat-cell>
-    </ng-container>
-
-
-    <ng-container matColumnDef="notification email">
-      <mat-header-cell *matHeaderCellDef mat-sort-header>notification email</mat-header-cell>
-      <mat-cell *matCellDef="let policy">
-        {{policy.archiveEmailNotification }}
-      </mat-cell>
-    </ng-container>
 
 
     <ng-container matColumnDef="manager">
-      <mat-header-cell *matHeaderCellDef>manager</mat-header-cell>
+      <mat-header-cell *matHeaderCellDef>Manager</mat-header-cell>
       <mat-cell *matCellDef="let policy">{{policy.manager}}</mat-cell>
     </ng-container>
 
-    <ng-container matColumnDef="number of copies on tape">
-      <mat-header-cell *matHeaderCellDef>number of copies on tape</mat-header-cell>
+    <ng-container matColumnDef="tapeRedundancy">
+      <mat-header-cell *matHeaderCellDef>Tape Redundancy</mat-header-cell>
       <mat-cell *matCellDef="let policy">{{policy.tapeRedundancy}}</mat-cell>
     </ng-container>
 
-    <ng-container matColumnDef="archive delay">
-      <mat-header-cell *matHeaderCellDef>Archive Delay</mat-header-cell>
+    <ng-container matColumnDef="autoArchive">
+      <mat-header-cell *matHeaderCellDef>Auto Archive</mat-header-cell>
+      <mat-cell *matCellDef="let policy">{{policy.autoArchive}}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="autoArchiveDelay">
+      <mat-header-cell *matHeaderCellDef>Auto Archive Delay</mat-header-cell>
       <mat-cell *matCellDef="let policy">{{policy.autoArchiveDelay}}</mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="ownerGroup">
-      <mat-header-cell *matHeaderCellDef>group</mat-header-cell>
+      <mat-header-cell *matHeaderCellDef>Group</mat-header-cell>
       <mat-cell *matCellDef="let policy">{{policy.ownerGroup}}</mat-cell>
+    </ng-container>
+
+
+
+    <ng-container matColumnDef="archiveEmailNotification">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Archive Email Notification</mat-header-cell>
+      <mat-cell *matCellDef="let policy">{{policy.archiveEmailNotification }}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="archiveEmailsToBeNotified">
+      <mat-header-cell *matHeaderCellDef>Archive Emails to be Notified</mat-header-cell>
+      <mat-cell *matCellDef="let policy">{{policy.archiveEmailsToBeNotified}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="retrieveEmailNotification">
+      <mat-header-cell *matHeaderCellDef>Retrive Email Notification</mat-header-cell>
+      <mat-cell *matCellDef="let policy">{{policy.retrieveEmailNotification}}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="retrieveEmailsToBeNotified">
+      <mat-header-cell *matHeaderCellDef>Retrive Emails to be Notified</mat-header-cell>
+      <mat-cell *matCellDef="let policy">{{policy.retrieveEmailsToBeNotified}}</mat-cell>
     </ng-container>
 
 
@@ -87,8 +82,8 @@
     </mat-row>
   </mat-table>
 
-  <mat-paginator class="policy-paginator" [pageSizeOptions]="pageSizeOptions" [pageIndex]="currentPage" [pageSize]="10"
-                 [length]="totalNumber">
+  <mat-paginator class="policy-paginator" [pageSizeOptions]="pageSizeOptions" [pageIndex]="currentPage" [pageSize]="policiesPerPage" [length]="totalNumber" (page)="onPageChange($event)">
   </mat-paginator>
-</div>
+
+
 
