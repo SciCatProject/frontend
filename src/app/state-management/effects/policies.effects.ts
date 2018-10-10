@@ -6,6 +6,7 @@ import { PolicyApi } from "shared/sdk/services";
 import { PoliciesService } from "policies/policies.service";
 import {
   FETCH_POLICIES,
+  FetchPoliciesAction,
   FetchPoliciesCompleteAction,
   FetchPoliciesFailedAction,
   SUBMIT_POLICY,
@@ -13,29 +14,26 @@ import {
   SubmitPolicyCompleteAction,
   SubmitPolicyFailedAction
 } from "../actions/policies.actions";
-import { catchError, map, switchMap } from "rxjs/operators";
+import { catchError, map, mergeMap, switchMap } from "rxjs/operators";
 
 @Injectable()
 export class PoliciesEffects {
   @Effect()
   submitPolicy$: Observable<Action> = this.actions$.pipe(
     ofType(SUBMIT_POLICY),
-    map((action: SubmitPolicyAction) => action.policy),
+    map((action: SubmitPolicyAction) => action.policySubmission),
     switchMap(policy => {
       return this.policyApi
         .patchAttributes(policy.id, policy)
         .pipe(
-          map(submitComplete => new SubmitPolicyCompleteAction(submitComplete))
+          mergeMap((data: any) => [
+            new SubmitPolicyCompleteAction(data.submissionResponse),
+            new FetchPoliciesAction()
+          ])
         );
     }),
     catchError(err => of(new SubmitPolicyFailedAction(err)))
   );
-
-  /*  @Effect()
-  fetchPolicies$: Observable<Action> = this.actions$
-    .do((action) => console.log("Received!!!!!!! "))
-    .filter((action) => action.type === PoliciesActions.FETCH_POLICIES)
-*/
   @Effect()
   fetchPolicies$: Observable<Action> = this.actions$.pipe(
     ofType(FETCH_POLICIES),

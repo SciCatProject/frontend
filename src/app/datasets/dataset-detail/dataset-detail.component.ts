@@ -1,23 +1,24 @@
-import { Component, Inject, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { select, Store } from "@ngrx/store";
+import { Component, Inject, OnDestroy, OnInit } from "@angular/core";
+import { DatablocksAction } from "state-management/actions/datasets.actions";
 import { Job, User } from "shared/sdk/models";
-import * as dsa from "state-management/actions/datasets.actions";
-import * as ja from "state-management/actions/jobs.actions";
-import * as ua from "state-management/actions/user.actions";
-import * as selectors from "state-management/selectors";
+import { select, Store } from "@ngrx/store";
+import { SubmitAction } from "state-management/actions/jobs.actions";
+import { ShowMessageAction } from "state-management/actions/user.actions";
+import { getError } from "../../state-management/selectors/jobs.selectors";
+import { submitJob } from "../../state-management/selectors/jobs.selectors";
 import { Subscription } from "rxjs";
 import { Message, MessageType } from "state-management/models";
 import { Angular5Csv } from "angular5-csv/Angular5-csv";
 import { getIsAdmin } from "state-management/selectors/users.selectors";
 import { APP_CONFIG, AppConfig } from "app-config.module";
+import { pluck, take } from "rxjs/operators";
 import {
   getCurrentAttachments,
   getCurrentDatablocks,
   getCurrentDataset,
   getCurrentOrigDatablocks
 } from "state-management/selectors/datasets.selectors";
-import { pluck, take } from "rxjs/operators";
 
 import { faAt } from "@fortawesome/free-solid-svg-icons/faAt";
 import { faCalendarAlt } from "@fortawesome/free-solid-svg-icons/faCalendarAlt";
@@ -64,9 +65,7 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
   private routeSubscription = this.route.params
     .pipe(pluck("id"))
-    .subscribe((id: string) =>
-      this.store.dispatch(new dsa.DatablocksAction(id))
-    );
+    .subscribe((id: string) => this.store.dispatch(new DatablocksAction(id)));
   private origDatablocks$ = this.store.pipe(select(getCurrentOrigDatablocks));
   private datablocks$ = this.store.pipe(select(getCurrentDatablocks));
   private attachments$ = this.store.pipe(select(getCurrentAttachments));
@@ -81,7 +80,7 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
   ngOnInit() {
     const msg = new Message();
     this.subscriptions.push(
-      this.store.pipe(select(selectors.jobs.submitJob)).subscribe(
+      this.store.pipe(select(submitJob)).subscribe(
         ret => {
           if (ret && Array.isArray(ret)) {
             console.log(ret);
@@ -91,17 +90,17 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
           console.log(error);
           msg.type = MessageType.Error;
           msg.content = "Job not Submitted";
-          this.store.dispatch(new ua.ShowMessageAction(msg));
+          this.store.dispatch(new ShowMessageAction(msg));
         }
       )
     );
 
     this.subscriptions.push(
-      this.store.pipe(select(selectors.jobs.getError)).subscribe(err => {
+      this.store.pipe(select(getError)).subscribe(err => {
         if (err) {
           msg.type = MessageType.Error;
           msg.content = err.message;
-          this.store.dispatch(new ua.ShowMessageAction(msg));
+          this.store.dispatch(new ShowMessageAction(msg));
         }
       })
     );
@@ -154,7 +153,7 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
         fileObj["files"] = fileList;
         job.datasetList = [fileObj];
         console.log(job);
-        this.store.dispatch(new ja.SubmitAction(job));
+        this.store.dispatch(new SubmitAction(job));
       });
   }
 }
