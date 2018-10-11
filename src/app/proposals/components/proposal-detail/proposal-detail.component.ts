@@ -1,19 +1,15 @@
 import { Component, Input, OnInit } from "@angular/core";
-import { Proposal, Dataset } from "state-management/models";
+import { Dataset, Proposal } from "state-management/models";
 
-import {
-  faAt,
-  faCalendarAlt,
-  faCertificate, faChessQueen,
-  faCog,
-  faCoins,
-  faDownload,
-  faFileAlt,
-  faFolder, faGem, faGlobe,
-  faIdBadge, faImages,
-  faUpload, faUserAlt,
-  faUsers
-} from "@fortawesome/free-solid-svg-icons";
+
+import { faAt } from "@fortawesome/free-solid-svg-icons/faAt";
+import { faCog } from "@fortawesome/free-solid-svg-icons/faCog";
+import { faCalendarAlt } from "@fortawesome/free-solid-svg-icons/faCalendarAlt";
+import { faChessQueen } from "@fortawesome/free-solid-svg-icons/faChessQueen";
+import { faCoins } from "@fortawesome/free-solid-svg-icons/faCoins";
+import { faFileAlt } from "@fortawesome/free-solid-svg-icons/faFileAlt";
+import { faIdBadge } from "@fortawesome/free-solid-svg-icons/faIdBadge";
+import { faUserAlt } from "@fortawesome/free-solid-svg-icons/faUserAlt";
 
 interface Proposer {
   name: string;
@@ -31,26 +27,14 @@ export class ProposalDetailComponent implements OnInit {
   proposal: Proposal;
   @Input()
   datasets: Dataset[];
-
-  private mainProposer: Proposer;
-  private principalInvestigator: Proposer;
   faAt = faAt;
   faIdBadge = faIdBadge;
-  faFolder = faFolder;
   faCog = faCog;
   faCoins = faCoins;
   faChessQueen = faChessQueen;
   faCalendarAlt = faCalendarAlt;
   faFileAlt = faFileAlt;
-  faImages = faImages;
-  faGem = faGem;
-  faGlobe = faGlobe;
-  faCertificate = faCertificate;
   faUserAlt = faUserAlt;
-  faUsers = faUsers;
-  faUpload = faUpload;
-  faDownload = faDownload;
-
   displayedColumns: string[] = [
     "pid",
     "sourceFolder",
@@ -63,6 +47,8 @@ export class ProposalDetailComponent implements OnInit {
     // 'dataFormat',
     // 'version'
   ];
+  private mainProposer: Proposer;
+  private principalInvestigator: Proposer;
 
   ngOnInit() {
     if (this.proposal == null) return;

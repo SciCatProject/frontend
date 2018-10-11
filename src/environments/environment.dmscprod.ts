@@ -5,10 +5,10 @@
 
 export const environment = {
   production: true,
-  lbBaseURL: 'https://scicatapi.esss.dk',
-  fileserverBaseURL: 'https://scicatfileserver.esss.dk',
-  externalAuthEndpoint: '/auth/msad',
+  lbBaseURL: "https://scicatapi.esss.dk",
+  fileserverBaseURL: "https://scicatfileserver.esss.dk",
+  externalAuthEndpoint: "/auth/msad",
   archiveWorkflowEnabled: false,
-  disabledDatasetColumns: ['archiveStatus', 'retrieveStatus' ],
-  facility: 'ESS'
+  disabledDatasetColumns: ["archiveStatus", "retrieveStatus"],
+  facility: "ESS"
 };
