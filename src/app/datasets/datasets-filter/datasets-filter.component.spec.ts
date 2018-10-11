@@ -4,16 +4,16 @@ import { Store, StoreModule } from "@ngrx/store";
 import { rootReducer } from "state-management/reducers/root.reducer";
 import { DatasetsFilterComponent } from "datasets/datasets-filter/datasets-filter.component";
 import {
-  MockStore,
   MockActivatedRoute,
-  MockRouter
+  MockRouter,
+  MockStore
 } from "../../shared/MockStubs";
 import { ActivatedRoute, Router } from "@angular/router";
 import {
   MatAutocompleteModule,
-  MatSelectModule,
   MatFormFieldModule,
-  MatInputModule
+  MatInputModule,
+  MatSelectModule
 } from "@angular/material";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
@@ -54,6 +54,10 @@ describe("DatasetsFilterComponent", () => {
     fixture = TestBed.createComponent(DatasetsFilterComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    fixture.destroy();
   });
 
   it("should be created", () => {

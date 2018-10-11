@@ -7,7 +7,7 @@ import { faPlusCircle } from "@fortawesome/free-solid-svg-icons/faPlusCircle";
 import { faTimesCircle } from "@fortawesome/free-solid-svg-icons/faTimesCircle";
 import { getCurrentDataset } from "../../state-management/selectors/datasets.selectors";
 import { select, Store } from "@ngrx/store";
-import { take } from "rxjs/operators";
+import { filter, take } from "rxjs/operators";
 
 @Component({
   selector: "app-dataset-form",
@@ -23,7 +23,8 @@ export class DatasetFormComponent implements OnInit, OnDestroy {
   scientificMetaDataSubscription: Subscription;
   metadataForm: FormGroup;
 
-  constructor(private store: Store<any>, private formBuilder: FormBuilder) {}
+  constructor(private store: Store<any>, private formBuilder: FormBuilder) {
+  }
 
   get items() {
     return this.metadataForm.get("items") as FormArray;
@@ -81,7 +82,8 @@ export class DatasetFormComponent implements OnInit, OnDestroy {
     console.log("TODO: remove");
   }
 
-  ngOnDestroy() {}
+  ngOnDestroy() {
+  }
 
   ngOnInit() {
     this.metadataForm = this.formBuilder.group({
@@ -93,9 +95,16 @@ export class DatasetFormComponent implements OnInit, OnDestroy {
     this.dataset$ = this.store.pipe(select<RawDataset>(getCurrentDataset));
 
     this.scientificMetaDataSubscription = this.dataset$
-      .pipe(take(1))
+      .pipe(
+        filter(Boolean),
+        take(1))
       .subscribe(data_set => {
-        const json_data = data_set.scientificMetadata;
+        let json_data = {};
+        if (typeof data_set.scientificMetadata === "undefined") {
+          json_data = {};
+        } else {
+          json_data = data_set.scientificMetadata;
+        }
         console.log(json_data);
         for (const key of Object.keys(json_data)) {
           console.log("gm key", key);
