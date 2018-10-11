@@ -41,6 +41,10 @@ describe("SampleDataFormComponent", () => {
     fixture.detectChanges();
   });
 
+  afterEach(() => {
+    fixture.destroy();
+  });
+
   it("should create", () => {
     // console.log(component);
     expect(component).toBeTruthy();
