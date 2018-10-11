@@ -33,7 +33,6 @@
     "@ngrx/router-store": "^6.1.0",
     "@ngrx/store": "^6.1.0",
     "@ngui/datetime-picker": "^0.16.2",
-    "@swimlane/ngx-datatable": "^13.1.0",
     "angular5-csv": "^0.2.10",
     "core-js": "^2.5.7",
     "deep-equal": "^1.0.1",
