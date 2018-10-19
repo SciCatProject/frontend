@@ -5,10 +5,10 @@
 
 export const environment = {
   production: false,
-  lbBaseURL: 'https://catamelservice.esss.dk:30003',
-  fileserverBaseURL: 'https://scicatfileserver.esss.dk:30003',
-  externalAuthEndpoint: '/auth/msad',
+  lbBaseURL: "https://catamelservice.esss.dk:30003",
+  fileserverBaseURL: "https://scicatfileserver.esss.dk:30003",
+  externalAuthEndpoint: "/auth/msad",
   archiveWorkflowEnabled: false,
-  disabledDatasetColumns: ['archiveStatus', 'retrieveStatus' ],
-  facility: 'ESS'
+  disabledDatasetColumns: ["archiveStatus", "retrieveStatus"],
+  facility: "ESS"
 };

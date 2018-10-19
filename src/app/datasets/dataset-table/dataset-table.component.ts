@@ -11,17 +11,16 @@ import { getCurrentEmail } from "../../state-management/selectors/users.selector
 import { getError, submitJob } from "state-management/selectors/jobs.selectors";
 import { select, Store } from "@ngrx/store";
 
-import {
-  faCalendarAlt,
-  faCertificate,
-  faCoins,
-  faDownload,
-  faFileAlt,
-  faFolder,
-  faIdBadge,
-  faUpload,
-  faUsers
-} from "@fortawesome/free-solid-svg-icons";
+
+import { faCertificate } from "@fortawesome/free-solid-svg-icons/faCertificate";
+import { faCalendarAlt } from "@fortawesome/free-solid-svg-icons/faCalendarAlt";
+import { faCoins } from "@fortawesome/free-solid-svg-icons/faCoins";
+import { faDownload } from "@fortawesome/free-solid-svg-icons/faDownload";
+import { faFileAlt } from "@fortawesome/free-solid-svg-icons/faFileAlt";
+import { faFolder } from "@fortawesome/free-solid-svg-icons/faFolder";
+import { faUpload } from "@fortawesome/free-solid-svg-icons/faUpload";
+import { faIdBadge } from "@fortawesome/free-solid-svg-icons/faIdBadge";
+import { faUsers } from "@fortawesome/free-solid-svg-icons/faUsers";
 
 import {
   AddToBatchAction,
@@ -74,19 +73,19 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   faUsers = faUsers;
   faUpload = faUpload;
   faDownload = faDownload;
-
-  private selectedSets$ = this.store.pipe(select(getSelectedDatasets));
   datasets$ = this.store.pipe(select(getDatasets));
-  private batch$ = this.store.pipe(select(getDatasetsInBatch));
   currentPage$ = this.store.pipe(select(getPage));
   datasetsPerPage$ = this.store.pipe(select(getDatasetsPerPage));
-  private mode$ = this.store.pipe(select(getViewMode));
-  private isEmptySelection$ = this.store.pipe(select(getIsEmptySelection));
   datasetCount$ = this.store.select(getTotalSets);
   loading$ = this.store.pipe(select(getIsLoading));
+  // These should be made part of the NgRX state management
+  public currentMode: string;
+  private selectedSets$ = this.store.pipe(select(getSelectedDatasets));
+  private batch$ = this.store.pipe(select(getDatasetsInBatch));
+  private mode$ = this.store.pipe(select(getViewMode));
+  private isEmptySelection$ = this.store.pipe(select(getIsEmptySelection));
   private filters$ = this.store.pipe(select(getFilters));
   private email$ = this.store.pipe(select(getCurrentEmail));
-
   private allAreSeleted$ = combineLatest(
     this.datasets$,
     this.selectedSets$,
@@ -102,22 +101,16 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   private selectedPidsSubscription = this.selectedSets$.subscribe(datasets => {
     this.selectedPids = datasets.map(dataset => dataset.pid);
   });
-
   private inBatchPids: string[] = [];
   private inBatchPidsSubscription = this.batch$.subscribe(datasets => {
     this.inBatchPids = datasets.map(dataset => dataset.pid);
   });
-
   private modes = ["view", "archive", "retrieve"];
-
   // compatibility analogs of observables
   private selectedSets: Dataset[] = [];
   private selectedSetsSubscription = this.selectedSets$.subscribe(
     selectedSets => (this.selectedSets = selectedSets)
   );
-
-  // These should be made part of the NgRX state management
-  public currentMode: string;
   private modeSubscription = this.mode$.subscribe((mode: ViewMode) => {
     this.currentMode = mode;
   });
@@ -146,7 +139,8 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     private archivingSrv: ArchivingService,
     public dialog: MatDialog,
     @Inject(APP_CONFIG) public appConfig: AppConfig
-  ) {}
+  ) {
+  }
 
   ngOnInit() {
     this.submitJobSubscription = this.store.pipe(select(submitJob)).subscribe(

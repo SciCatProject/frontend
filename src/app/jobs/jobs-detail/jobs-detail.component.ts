@@ -6,20 +6,14 @@ import { ActivatedRoute } from "@angular/router";
 import * as selectors from "state-management/selectors";
 import { getCurrentJob } from "../../state-management/selectors/jobs.selectors";
 
-import {
-  faAt,
-  faCalendarAlt,
-  faCertificate, faChessQueen,
-  faCog,
-  faCoins,
-  faDownload,
-  faEnvelope,
-  faFileAlt,
-  faFolder, faGem, faGlobe,
-  faIdBadge, faImages,
-  faUpload, faUserAlt,
-  faUsers
-} from "@fortawesome/free-solid-svg-icons";
+
+
+import { faAt } from "@fortawesome/free-solid-svg-icons/faAt";
+import { faCog } from "@fortawesome/free-solid-svg-icons/faCog";
+import { faEnvelope } from "@fortawesome/free-solid-svg-icons/faEnvelope";
+import { faCalendarAlt } from "@fortawesome/free-solid-svg-icons/faCalendarAlt";
+import { faCoins } from "@fortawesome/free-solid-svg-icons/faCoins";
+import { faFileAlt } from "@fortawesome/free-solid-svg-icons/faFileAlt";
 
 @Component({
   selector: "app-jobs-detail",
@@ -32,23 +26,11 @@ export class JobsDetailComponent implements OnInit, OnDestroy {
   subscriptions = [];
 
   faAt = faAt;
-  faIdBadge = faIdBadge;
-  faFolder = faFolder;
   faEnvelope = faEnvelope;
   faCog = faCog;
   faCoins = faCoins;
-  faChessQueen = faChessQueen;
   faCalendarAlt = faCalendarAlt;
   faFileAlt = faFileAlt;
-  faImages = faImages;
-  faGem = faGem;
-  faGlobe = faGlobe;
-  faCertificate = faCertificate;
-  faUserAlt = faUserAlt;
-  faUsers = faUsers;
-  faUpload = faUpload;
-  faDownload = faDownload;
-
 
   constructor(private route: ActivatedRoute, private store: Store<any>) {}
 
