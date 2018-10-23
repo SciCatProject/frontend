@@ -49,8 +49,8 @@ import {
   MatTabsModule,
   MatTooltipModule
 } from "@angular/material";
-import { FileSizePipe } from "../shared/pipes";
 import { PublishComponent } from "./publish/publish.component";
+import { DatasetFormComponent } from "./dataset-form/dataset-form.component";
 
 @NgModule({
   imports: [
@@ -96,9 +96,9 @@ import { PublishComponent } from "./publish/publish.component";
     DatasetDetailComponent,
     DatasetTableComponent,
     DatasetsFilterComponent,
+    DatasetFormComponent,
     FileDropzoneComponent,
     FilePickerComponent,
-    FileSizePipe,
     SelectedListComponent,
     PublishComponent
   ],

@@ -83,6 +83,8 @@ describe("DatasetsReducer", () => {
       archiveReturnMessage: "",
       dateOfLastMessage: new Date(),
       datasetList: "",
+      messageHistory: [""],
+      MessageHistory: [""],
       id: "",
       createdAt: new Date(),
       updatedAt: new Date()

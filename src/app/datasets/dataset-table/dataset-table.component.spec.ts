@@ -4,7 +4,7 @@ import { DatasetTableComponent } from "./dataset-table.component";
 import { FileSizePipe } from "../../shared/pipes/filesize.pipe";
 import { HttpClient } from "@angular/common/http";
 import { MatDialogModule, MatTableModule } from "@angular/material";
-import { MockHttp, MockRouter } from "shared/MockStubs";
+import { MockArchivingService, MockHttp, MockRouter } from "shared/MockStubs";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { Router } from "@angular/router";
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
@@ -44,7 +44,7 @@ describe("DatasetTableComponent", () => {
               archiveWorkflowEnabled: true
             }
           },
-          { provide: ArchivingService, useClass: ArchivingService }
+          { provide: ArchivingService, useClass: MockArchivingService }
         ]
       }
     });

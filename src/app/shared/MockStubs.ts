@@ -176,3 +176,12 @@ export class MockNotificationService {
     return of([]);
   }
 }
+
+export class MockArchivingService {
+  public dispatch(obj) {
+  }
+
+  public select(obj) {
+    return of([]);
+  }
+}

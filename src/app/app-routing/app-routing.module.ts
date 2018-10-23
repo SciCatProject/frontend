@@ -31,8 +31,6 @@ export const routes: Routes = [
   { path: "", redirectTo: "/datasets", pathMatch: "full" },
   { path: "login", component: LoginComponent },
   { path: "logout", component: AppComponent, canActivate: [AuthCheck] },
-
-  // { path: 'dataset', redirectTo: '/datasets', pathMatch: 'full' },
   {
     path: "datasets/batch/publish",
     component: PublishComponent,

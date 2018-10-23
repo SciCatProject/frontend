@@ -56,20 +56,20 @@ export class PublishComponent implements OnInit {
     }
     const published_data: PublishedData = {
       affiliation: "ESS",
-      doi: "ESS",
-      creator: "ESS ESS",
-      publisher: "string",
+      doi: "newdoi" + Math.random().toString(36).substring(7),
+      creator: "Addison Neutron",
+      publisher: "ESS",
       publicationYear: 2018,
-      title: "string",
-      url: "string",
-      abstract: "string",
+      title: "Test Data from SciCat",
+      url: "https://scicat.esss.se",
+      abstract: "Test abstract",
       dataDescription: "string",
       thumbnail: "string",
-      resourceType: "string",
+      resourceType: "NeXus files",
       numberOfFiles: 21,
       sizeOfArchive: 21,
       pidArray: ["2121"],
-      authors: ["ESS ESS"],
+      authors: ["Addison Neutron"],
       doiRegisteredSuccessfullyTime: new Date(Date.now())
     };
     this.pdapi.create(published_data).subscribe();

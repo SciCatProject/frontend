@@ -20,7 +20,7 @@ export class ArchivingService {
   }
 
   public publish(dataset_id) {
-    return this.pdapi.register(dataset_id);
+    return this.pdapi.register(dataset_id).subscribe();
   }
 
   public archive(datasets: Dataset[]): Observable<void> {
