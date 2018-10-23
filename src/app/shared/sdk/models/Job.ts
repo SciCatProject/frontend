@@ -8,12 +8,14 @@ export interface JobInterface {
   "executionTime"?: Date;
   "jobParams"?: any;
   "jobStatusMessage"?: string;
+  "datasetList": any;
   "archiveReturnMessage"?: string;
   "dateOfLastMessage"?: Date;
-  "datasetList": any;
   "id"?: any;
   "createdAt"?: Date;
   "updatedAt"?: Date;
+  "MessageHistory"?: Array<any>;
+  messageHistory?: any[];
 }
 
 export class Job implements JobInterface {
@@ -23,12 +25,14 @@ export class Job implements JobInterface {
   "executionTime": Date;
   "jobParams": any;
   "jobStatusMessage": string;
+  "datasetList": any;
   "archiveReturnMessage": string;
   "dateOfLastMessage": Date;
-  "datasetList": any;
   "id": any;
   "createdAt": Date;
   "updatedAt": Date;
+  "MessageHistory": Array<any>;
+  messageHistory: any[];
   constructor(data?: JobInterface) {
     Object.assign(this, data);
   }
@@ -87,6 +91,10 @@ export class Job implements JobInterface {
           name: 'jobStatusMessage',
           type: 'string'
         },
+        "datasetList": {
+          name: 'datasetList',
+          type: 'any'
+        },
         "archiveReturnMessage": {
           name: 'archiveReturnMessage',
           type: 'string'
@@ -94,10 +102,6 @@ export class Job implements JobInterface {
         "dateOfLastMessage": {
           name: 'dateOfLastMessage',
           type: 'Date'
-        },
-        "datasetList": {
-          name: 'datasetList',
-          type: 'any'
         },
         "id": {
           name: 'id',
@@ -111,8 +115,21 @@ export class Job implements JobInterface {
           name: 'updatedAt',
           type: 'Date'
         },
+        "MessageHistory": {
+          name: 'MessageHistory',
+          type: 'Array&lt;any&gt;',
+          default: <any>[]
+        },
       },
       relations: {
+        messageHistory: {
+          name: 'messageHistory',
+          type: 'any[]',
+          model: '',
+          relationType: 'embedsMany',
+                  keyFrom: 'MessageHistory',
+          keyTo: 'id'
+        },
       }
     }
   }

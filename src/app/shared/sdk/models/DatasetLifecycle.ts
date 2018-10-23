@@ -6,20 +6,21 @@ import {
 declare var Object: any;
 export interface DatasetLifecycleInterface {
   "id": string;
-  "isOnDisk"?: boolean;
-  "isOnTape"?: boolean;
   "archivable"?: boolean;
   "retrievable"?: boolean;
+  "dateOfDiskPurging"?: Date;
+  "archiveRetentionTime"?: Date;
+  "dateOfPublishing"?: Date;
+  "isOnCentralDisk"?: boolean;
+  "isOnDisk"?: boolean;
+  "isOnTape"?: boolean;
   "archiveStatusMessage"?: string;
   "retrieveStatusMessage"?: string;
   "lastUpdateMessage"?: string;
   "archiveReturnMessage"?: string;
   "dateOfLastMessage"?: Date;
-  "dateOfDiskPurging"?: Date;
-  "archiveRetentionTime"?: Date;
   "isExported"?: boolean;
   "exportedTo"?: string;
-  "dateOfPublishing"?: Date;
   "ownerGroup": string;
   "accessGroups"?: Array<any>;
   "createdBy"?: string;
@@ -29,25 +30,28 @@ export interface DatasetLifecycleInterface {
   "derivedDatasetId"?: string;
   "createdAt"?: Date;
   "updatedAt"?: Date;
+  "MessageHistory"?: Array<any>;
   dataset?: Dataset;
+  messageHistory?: any[];
 }
 
 export class DatasetLifecycle implements DatasetLifecycleInterface {
   "id": string;
-  "isOnDisk": boolean;
-  "isOnTape": boolean;
   "archivable": boolean;
   "retrievable": boolean;
+  "dateOfDiskPurging": Date;
+  "archiveRetentionTime": Date;
+  "dateOfPublishing": Date;
+  "isOnCentralDisk": boolean;
+  "isOnDisk": boolean;
+  "isOnTape": boolean;
   "archiveStatusMessage": string;
   "retrieveStatusMessage": string;
   "lastUpdateMessage": string;
   "archiveReturnMessage": string;
   "dateOfLastMessage": Date;
-  "dateOfDiskPurging": Date;
-  "archiveRetentionTime": Date;
   "isExported": boolean;
   "exportedTo": string;
-  "dateOfPublishing": Date;
   "ownerGroup": string;
   "accessGroups": Array<any>;
   "createdBy": string;
@@ -57,7 +61,9 @@ export class DatasetLifecycle implements DatasetLifecycleInterface {
   "derivedDatasetId": string;
   "createdAt": Date;
   "updatedAt": Date;
+  "MessageHistory": Array<any>;
   dataset: Dataset;
+  messageHistory: any[];
   constructor(data?: DatasetLifecycleInterface) {
     Object.assign(this, data);
   }
@@ -95,20 +101,36 @@ export class DatasetLifecycle implements DatasetLifecycleInterface {
           name: 'id',
           type: 'string'
         },
-        "isOnDisk": {
-          name: 'isOnDisk',
-          type: 'boolean'
-        },
-        "isOnTape": {
-          name: 'isOnTape',
-          type: 'boolean'
-        },
         "archivable": {
           name: 'archivable',
           type: 'boolean'
         },
         "retrievable": {
           name: 'retrievable',
+          type: 'boolean'
+        },
+        "dateOfDiskPurging": {
+          name: 'dateOfDiskPurging',
+          type: 'Date'
+        },
+        "archiveRetentionTime": {
+          name: 'archiveRetentionTime',
+          type: 'Date'
+        },
+        "dateOfPublishing": {
+          name: 'dateOfPublishing',
+          type: 'Date'
+        },
+        "isOnCentralDisk": {
+          name: 'isOnCentralDisk',
+          type: 'boolean'
+        },
+        "isOnDisk": {
+          name: 'isOnDisk',
+          type: 'boolean'
+        },
+        "isOnTape": {
+          name: 'isOnTape',
           type: 'boolean'
         },
         "archiveStatusMessage": {
@@ -131,14 +153,6 @@ export class DatasetLifecycle implements DatasetLifecycleInterface {
           name: 'dateOfLastMessage',
           type: 'Date'
         },
-        "dateOfDiskPurging": {
-          name: 'dateOfDiskPurging',
-          type: 'Date'
-        },
-        "archiveRetentionTime": {
-          name: 'archiveRetentionTime',
-          type: 'Date'
-        },
         "isExported": {
           name: 'isExported',
           type: 'boolean'
@@ -146,10 +160,6 @@ export class DatasetLifecycle implements DatasetLifecycleInterface {
         "exportedTo": {
           name: 'exportedTo',
           type: 'string'
-        },
-        "dateOfPublishing": {
-          name: 'dateOfPublishing',
-          type: 'Date'
         },
         "ownerGroup": {
           name: 'ownerGroup',
@@ -187,6 +197,11 @@ export class DatasetLifecycle implements DatasetLifecycleInterface {
           name: 'updatedAt',
           type: 'Date'
         },
+        "MessageHistory": {
+          name: 'MessageHistory',
+          type: 'Array&lt;any&gt;',
+          default: <any>[]
+        },
       },
       relations: {
         dataset: {
@@ -196,6 +211,14 @@ export class DatasetLifecycle implements DatasetLifecycleInterface {
           relationType: 'belongsTo',
                   keyFrom: 'datasetId',
           keyTo: 'pid'
+        },
+        messageHistory: {
+          name: 'messageHistory',
+          type: 'any[]',
+          model: '',
+          relationType: 'embedsMany',
+                  keyFrom: 'MessageHistory',
+          keyTo: 'id'
         },
       }
     }

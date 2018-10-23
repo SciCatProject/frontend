@@ -1,9 +1,12 @@
-import { Component, OnInit, Inject } from "@angular/core";
-import { Store, select } from "@ngrx/store";
+import { Component, Inject, OnInit } from "@angular/core";
+import { select, Store } from "@ngrx/store";
 import { getDatasetsInBatch } from "state-management/selectors/datasets.selectors";
 import { map } from "rxjs/operators";
 import { PrefillBatchAction } from "state-management/actions/datasets.actions";
 import { APP_CONFIG } from "app-config.module";
+
+import { PublishedDataApi } from "../../shared/sdk/services/custom";
+import { PublishedData } from "../../shared/sdk/models";
 
 @Component({
   selector: "publish",
@@ -31,19 +34,47 @@ export class PublishComponent implements OnInit {
 
   constructor(
     private store: Store<any>,
-    @Inject(APP_CONFIG) private appConfig
-  ) {}
+    @Inject(APP_CONFIG) private appConfig,
+    private pdapi: PublishedDataApi
+  ) {
+  }
 
   public ngOnInit() {
     this.store.dispatch(new PrefillBatchAction());
   }
 
-  protected onPublish() {
+  public onPublish() {
+    console.log("try and register");
+    this.store.pipe(select(getDatasetsInBatch), map(datasets => {
+      console.log(datasets);
+    }));
     if (this.formIsValid()) {
       // Publish
+
     } else {
       // Display error
     }
+    const published_data: PublishedData = {
+      affiliation: "ESS",
+      doi: "ESS",
+      creator: "ESS ESS",
+      publisher: "string",
+      publicationYear: 2018,
+      title: "string",
+      url: "string",
+      abstract: "string",
+      dataDescription: "string",
+      thumbnail: "string",
+      resourceType: "string",
+      numberOfFiles: 21,
+      sizeOfArchive: 21,
+      pidArray: ["2121"],
+      authors: ["ESS ESS"],
+      doiRegisteredSuccessfullyTime: new Date(Date.now())
+    };
+    this.pdapi.create(published_data).subscribe();
+    this.pdapi.register(published_data.doi).subscribe();
+
   }
 
   private formIsValid() {

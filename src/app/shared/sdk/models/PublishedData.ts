@@ -2,17 +2,22 @@
 
 declare var Object: any;
 export interface PublishedDataInterface {
-  "doi": string;
+  "doi"?: string;
   "affiliation": string;
   "creator": string;
   "publisher": string;
   "publicationYear": number;
   "title": string;
   "url": string;
+  "abstract": string;
+  "dataDescription": string;
+  "thumbnail": string;
+  "resourceType": string;
+  "numberOfFiles": number;
+  "sizeOfArchive": number;
   "pidArray": Array<any>;
   "authors": Array<any>;
   "doiRegisteredSuccessfullyTime"?: Date;
-  "id"?: any;
 }
 
 export class PublishedData implements PublishedDataInterface {
@@ -23,10 +28,15 @@ export class PublishedData implements PublishedDataInterface {
   "publicationYear": number;
   "title": string;
   "url": string;
+  "abstract": string;
+  "dataDescription": string;
+  "thumbnail": string;
+  "resourceType": string;
+  "numberOfFiles": number;
+  "sizeOfArchive": number;
   "pidArray": Array<any>;
   "authors": Array<any>;
   "doiRegisteredSuccessfullyTime": Date;
-  "id": any;
   constructor(data?: PublishedDataInterface) {
     Object.assign(this, data);
   }
@@ -58,7 +68,7 @@ export class PublishedData implements PublishedDataInterface {
       name: 'PublishedData',
       plural: 'PublishedData',
       path: 'PublishedData',
-      idName: 'id',
+      idName: 'doi',
       properties: {
         "doi": {
           name: 'doi',
@@ -88,6 +98,30 @@ export class PublishedData implements PublishedDataInterface {
           name: 'url',
           type: 'string'
         },
+        "abstract": {
+          name: 'abstract',
+          type: 'string'
+        },
+        "dataDescription": {
+          name: 'dataDescription',
+          type: 'string'
+        },
+        "thumbnail": {
+          name: 'thumbnail',
+          type: 'string'
+        },
+        "resourceType": {
+          name: 'resourceType',
+          type: 'string'
+        },
+        "numberOfFiles": {
+          name: 'numberOfFiles',
+          type: 'number'
+        },
+        "sizeOfArchive": {
+          name: 'sizeOfArchive',
+          type: 'number'
+        },
         "pidArray": {
           name: 'pidArray',
           type: 'Array&lt;any&gt;'
@@ -99,10 +133,6 @@ export class PublishedData implements PublishedDataInterface {
         "doiRegisteredSuccessfullyTime": {
           name: 'doiRegisteredSuccessfullyTime',
           type: 'Date'
-        },
-        "id": {
-          name: 'id',
-          type: 'any'
         },
       },
       relations: {

@@ -1,22 +1,27 @@
 import { Injectable } from "@angular/core";
-import { Store, select } from "@ngrx/store";
+import { select, Store } from "@ngrx/store";
 
-import { Observable, combineLatest } from "rxjs";
+import { combineLatest, Observable } from "rxjs";
 import { first, map } from "rxjs/operators";
 
-import { User, Dataset, Job } from "state-management/models";
+import { Dataset, Job, User } from "state-management/models";
 import { SubmitAction } from "state-management/actions/jobs.actions";
-import {
-  getCurrentUser,
-  getTapeCopies
-} from "state-management/selectors/users.selectors";
+import { getCurrentUser, getTapeCopies } from "state-management/selectors/users.selectors";
+
+import { PublishedDataApi } from "shared/sdk/services";
 
 @Injectable()
 export default class ArchivingService {
   private currentUser$ = this.store.pipe(select(getCurrentUser));
   private tapeCopies$ = this.store.pipe(select(getTapeCopies));
 
-  constructor(private store: Store<any>) {}
+  constructor(private store: Store<any>,
+              private pdapi: PublishedDataApi) {
+  }
+
+  public publish(dataset_id) {
+    return this.pdapi.register(dataset_id);
+  }
 
   public archive(datasets: Dataset[]): Observable<void> {
     return this.archiveOrRetrieve(datasets, true);
