@@ -19,7 +19,7 @@ export class PublishComponent implements OnInit {
     map(datasets => datasets.length)
   );
 
-  // For simpliciy, this form (including valiation) is kept in component-local state.
+  // For simplicity, this form (including validation) is kept in component-local state.
   // Can be moved to NgRX state if necessary.
 
   protected form = {
@@ -44,7 +44,7 @@ export class PublishComponent implements OnInit {
   }
 
   public onPublish() {
-    console.log("try and register");
+    console.log("register dataset");
     this.store.pipe(select(getDatasetsInBatch), map(datasets => {
       console.log(datasets);
     }));
