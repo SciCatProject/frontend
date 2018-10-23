@@ -5,11 +5,12 @@
 
 export const environment = {
   production: false,
-  lbBaseURL: 'http://127.0.0.1:3000',
-  fileserverBaseURL: 'http://127.0.0.1:8889',
-  externalAuthEndpoint: '/auth/msad',
+  lbBaseURL: "http://127.0.0.1:3000",
+  fileserverBaseURL: "http://127.0.0.1:8889",
+  externalAuthEndpoint: "/auth/msad",
   archiveWorkflowEnabled: true,
+  editMetadataEnabled: true,
   disabledDatasetColumns: [],
-  facility: 'ESS',
-  shoppingCartEnabled: true
+  facility: "ESS",
+  shoppingCartEnabled: false
 };

@@ -11,7 +11,7 @@ import { getCurrentUser, getTapeCopies } from "state-management/selectors/users.
 import { PublishedDataApi } from "shared/sdk/services";
 
 @Injectable()
-export default class ArchivingService {
+export class ArchivingService {
   private currentUser$ = this.store.pipe(select(getCurrentUser));
   private tapeCopies$ = this.store.pipe(select(getTapeCopies));
 

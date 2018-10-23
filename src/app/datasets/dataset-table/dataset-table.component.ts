@@ -1,23 +1,26 @@
+import { APP_CONFIG, AppConfig } from "app-config.module";
+import { ArchivingService } from "../archiving.service";
 import { Component, Inject, OnDestroy, OnInit } from "@angular/core";
-import { Router } from "@angular/router";
+import { Dataset, MessageType, ViewMode } from "state-management/models";
+import { DialogComponent } from "shared/modules/dialog/dialog.component";
 import { MatCheckboxChange, MatDialog } from "@angular/material";
-
+import { Router } from "@angular/router";
+import { ShowMessageAction } from "state-management/actions/user.actions";
+import { combineLatest, Subscription } from "rxjs";
+import { getCurrentEmail } from "../../state-management/selectors/users.selectors";
+import { getError, submitJob } from "state-management/selectors/jobs.selectors";
 import { select, Store } from "@ngrx/store";
 
-import { combineLatest, Subscription } from "rxjs";
 
-import { DialogComponent } from "shared/modules/dialog/dialog.component";
-import {
-  faCalendarAlt,
-  faCertificate,
-  faCoins,
-  faDownload,
-  faFileAlt,
-  faFolder,
-  faIdBadge,
-  faUpload,
-  faUsers
-} from "@fortawesome/free-solid-svg-icons";
+import { faCertificate } from "@fortawesome/free-solid-svg-icons/faCertificate";
+import { faCalendarAlt } from "@fortawesome/free-solid-svg-icons/faCalendarAlt";
+import { faCoins } from "@fortawesome/free-solid-svg-icons/faCoins";
+import { faDownload } from "@fortawesome/free-solid-svg-icons/faDownload";
+import { faFileAlt } from "@fortawesome/free-solid-svg-icons/faFileAlt";
+import { faFolder } from "@fortawesome/free-solid-svg-icons/faFolder";
+import { faUpload } from "@fortawesome/free-solid-svg-icons/faUpload";
+import { faIdBadge } from "@fortawesome/free-solid-svg-icons/faIdBadge";
+import { faUsers } from "@fortawesome/free-solid-svg-icons/faUsers";
 
 import {
   AddToBatchAction,
@@ -43,15 +46,6 @@ import {
   getTotalSets,
   getViewMode
 } from "state-management/selectors/datasets.selectors";
-
-import { getCurrentEmail } from "../../state-management/selectors/users.selectors";
-
-import * as jobSelectors from "state-management/selectors/jobs.selectors";
-
-import { Dataset, MessageType, ViewMode } from "state-management/models";
-import { APP_CONFIG, AppConfig } from "app-config.module";
-import { ShowMessageAction } from "state-management/actions/user.actions";
-import ArchivingService from "../archiving.service";
 
 export interface PageChangeEvent {
   pageIndex: number;
@@ -79,19 +73,19 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   faUsers = faUsers;
   faUpload = faUpload;
   faDownload = faDownload;
-
+  datasets$ = this.store.pipe(select(getDatasets));
+  currentPage$ = this.store.pipe(select(getPage));
+  datasetsPerPage$ = this.store.pipe(select(getDatasetsPerPage));
+  datasetCount$ = this.store.select(getTotalSets);
+  loading$ = this.store.pipe(select(getIsLoading));
+  // These should be made part of the NgRX state management
+  public currentMode: string;
   private selectedSets$ = this.store.pipe(select(getSelectedDatasets));
-  private datasets$ = this.store.pipe(select(getDatasets));
   private batch$ = this.store.pipe(select(getDatasetsInBatch));
-  private currentPage$ = this.store.pipe(select(getPage));
-  private datasetsPerPage$ = this.store.pipe(select(getDatasetsPerPage));
   private mode$ = this.store.pipe(select(getViewMode));
   private isEmptySelection$ = this.store.pipe(select(getIsEmptySelection));
-  private datasetCount$ = this.store.select(getTotalSets);
-  private loading$ = this.store.pipe(select(getIsLoading));
   private filters$ = this.store.pipe(select(getFilters));
   private email$ = this.store.pipe(select(getCurrentEmail));
-
   private allAreSeleted$ = combineLatest(
     this.datasets$,
     this.selectedSets$,
@@ -107,22 +101,16 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   private selectedPidsSubscription = this.selectedSets$.subscribe(datasets => {
     this.selectedPids = datasets.map(dataset => dataset.pid);
   });
-
   private inBatchPids: string[] = [];
   private inBatchPidsSubscription = this.batch$.subscribe(datasets => {
     this.inBatchPids = datasets.map(dataset => dataset.pid);
   });
-
   private modes = ["view", "archive", "retrieve"];
-
   // compatibility analogs of observables
   private selectedSets: Dataset[] = [];
   private selectedSetsSubscription = this.selectedSets$.subscribe(
     selectedSets => (this.selectedSets = selectedSets)
   );
-
-  // These should be made part of the NgRX state management
-  private currentMode: string;
   private modeSubscription = this.mode$.subscribe((mode: ViewMode) => {
     this.currentMode = mode;
   });
@@ -150,31 +138,30 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     private store: Store<any>,
     private archivingSrv: ArchivingService,
     public dialog: MatDialog,
-    @Inject(APP_CONFIG) private appConfig: AppConfig
-  ) {}
+    @Inject(APP_CONFIG) public appConfig: AppConfig
+  ) {
+  }
 
   ngOnInit() {
-    this.submitJobSubscription = this.store
-      .pipe(select(jobSelectors.submitJob))
-      .subscribe(
-        ret => {
-          if (ret && Array.isArray(ret)) {
-            console.log(ret);
-            this.store.dispatch(new ClearSelectionAction());
-          }
-        },
-        error => {
-          this.store.dispatch(
-            new ShowMessageAction({
-              type: MessageType.Error,
-              content: "Job not Submitted"
-            })
-          );
+    this.submitJobSubscription = this.store.pipe(select(submitJob)).subscribe(
+      ret => {
+        if (ret && Array.isArray(ret)) {
+          console.log(ret);
+          this.store.dispatch(new ClearSelectionAction());
         }
-      );
+      },
+      error => {
+        this.store.dispatch(
+          new ShowMessageAction({
+            type: MessageType.Error,
+            content: "Job not Submitted"
+          })
+        );
+      }
+    );
 
     this.jobErrorSubscription = this.store
-      .pipe(select(jobSelectors.getError))
+      .pipe(select(getError))
       .subscribe(err => {
         if (err) {
           this.store.dispatch(

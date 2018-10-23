@@ -4,7 +4,7 @@ Short description of the pull request
 
 ## Motivation
 
-Background on use case, chnages needed
+Background on use case, changes needed
 
 ## Fixes:
 

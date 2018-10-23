@@ -1,15 +1,21 @@
-import { DatePipe } from "@angular/common";
-import { Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
-import { Store, select } from "@ngrx/store";
-import { Router } from "@angular/router";
 import * as JobActions from "state-management/actions/jobs.actions";
+import * as selectors from "state-management/selectors";
+import { AfterViewInit } from "@angular/core/src/metadata/lifecycle_hooks";
+import { Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
+import { ConfigService } from "shared/services/config.service";
+import { DatePipe } from "@angular/common";
 import { HttpClient } from "@angular/common/http";
 import { Job } from "shared/sdk/models";
-import { ConfigService } from "shared/services/config.service";
-import * as selectors from "state-management/selectors";
 import { MatPaginator } from "@angular/material";
-import { AfterViewInit } from "@angular/core/src/metadata/lifecycle_hooks";
-import { map, takeLast } from "rxjs/operators";
+import { Router } from "@angular/router";
+import { select, Store } from "@ngrx/store";
+import { takeLast } from "rxjs/operators";
+
+import { faAt } from "@fortawesome/free-solid-svg-icons/faAt";
+import { faCog } from "@fortawesome/free-solid-svg-icons/faCog";
+import { faCalendarAlt } from "@fortawesome/free-solid-svg-icons/faCalendarAlt";
+import { faCoins } from "@fortawesome/free-solid-svg-icons/faCoins";
+import { faFileAlt } from "@fortawesome/free-solid-svg-icons/faFileAlt";
 
 @Component({
   selector: "jobs-table",
@@ -27,6 +33,12 @@ export class JobsTableComponent implements OnInit, OnDestroy, AfterViewInit {
     "jobStatusMessage",
     "datasetList"
   ];
+
+  faAt = faAt;
+  faCog = faCog;
+  faCoins = faCoins;
+  faCalendarAlt = faCalendarAlt;
+  faFileAlt = faFileAlt;
 
   loading$: any = false;
   limit: any = 50;
@@ -60,7 +72,7 @@ export class JobsTableComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnInit() {
-    this.loading$ = this.store.select(selectors.jobs.getLoading);
+    this.loading$ = this.store.pipe(select(selectors.jobs.getLoading));
     this.store
       .pipe(select(state => state.root.user.settings.jobCount))
       .subscribe(limit => {
@@ -70,9 +82,9 @@ export class JobsTableComponent implements OnInit, OnDestroy, AfterViewInit {
       this.filters = Object.assign({}, filters);
     });
 
-    this.totalJobNumber$ = this.store.pipe(select(
-      state => state.root.jobs.currentJobs.length
-    ));
+    this.totalJobNumber$ = this.store.pipe(
+      select(state => state.root.jobs.currentJobs.length)
+    );
   }
 
   ngAfterViewInit() {
@@ -99,8 +111,10 @@ export class JobsTableComponent implements OnInit, OnDestroy, AfterViewInit {
     this.store.dispatch(new JobActions.ChildRetrieveAction(event.node));
     event.node.children = [];
     this.store
-      .select(state => state.root.jobs.ui)
-      .pipe(takeLast(1))
+      .pipe(
+        select(state => state.root.jobs.ui),
+        takeLast(1)
+      )
       .subscribe(jobs => {
         console.log(jobs);
         event.node.children = jobs;

@@ -1,27 +1,24 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { ErrorPageComponent } from './error-page.component';
+import { ErrorPageComponent } from "./error-page.component";
 
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute } from "@angular/router";
 
-import { MockActivatedRoute } from 'shared/MockStubs';
+import { MockActivatedRoute } from "shared/MockStubs";
 
-describe('ErrorPageComponent', () => {
+describe("ErrorPageComponent", () => {
   let component: ErrorPageComponent;
   let fixture: ComponentFixture<ErrorPageComponent>;
 
   beforeEach(async(() => {
-     TestBed.overrideComponent(ErrorPageComponent, {
-    set: {
-      providers: [
-        { provide: ActivatedRoute, useClass: MockActivatedRoute },
-      ]
-    }
+    TestBed.overrideComponent(ErrorPageComponent, {
+      set: {
+        providers: [{ provide: ActivatedRoute, useClass: MockActivatedRoute }]
+      }
     });
     TestBed.configureTestingModule({
-      declarations: [ ErrorPageComponent ]
-    })
-    .compileComponents();
+      declarations: [ErrorPageComponent]
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -30,7 +27,12 @@ describe('ErrorPageComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+
+  afterEach(() => {
+    fixture.destroy();
+  });
+
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

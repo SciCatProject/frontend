@@ -1,14 +1,14 @@
 // The file contents for the current environment will overwrite these during build.
 // The build system defaults to the dev environment which uses `environment.ts`, but if you do
 // `ng build --env=prod` then `environment.prod.ts` will be used instead.
-// The list of which env maps to which file can be found in `angular-cli.json`.
+// The list of which env maps to which file can be found in `angular.json`.
 
 export const environment = {
   production: false,
-  lbBaseURL: 'https://scicat02.esss.lu.se:32223',
-  fileserverBaseURL: 'https://scicat03.esss.lu.se:32223',
-  externalAuthEndpoint: '/auth/msad',
+  lbBaseURL: "https://scicat03.esss.lu.se:32223",
+  fileserverBaseURL: "https://scicat02.esss.lu.se:32223",
+  externalAuthEndpoint: "/auth/msad",
   archiveWorkflowEnabled: false,
-  disabledDatasetColumns: ['archiveStatus', 'retrieveStatus' ],
-  facility: 'ESS'
+  disabledDatasetColumns: ["archiveStatus", "retrieveStatus"],
+  facility: "ESS"
 };

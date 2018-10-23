@@ -1,31 +1,30 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { Router, ActivatedRoute} from '@angular/router';
+import { ActivatedRoute, Router } from "@angular/router";
 
-import { MatTableModule} from '@angular/material';
+import { MatTableModule } from "@angular/material";
 
-import {MockActivatedRoute, MockRouter} from 'shared/MockStubs';
+import { MockActivatedRoute, MockRouter } from "shared/MockStubs";
 
-import { DatablocksComponent } from './datablocks-table.component';
-import { FileSizePipe } from '../filesize.pipe';
+import { DatablocksComponent } from "./datablocks-table.component";
+import { FileSizePipe } from "../../shared/pipes/filesize.pipe";
 
-
-describe('DatablocksComponent', () => {
+describe("DatablocksComponent", () => {
   let component: DatablocksComponent;
   let fixture: ComponentFixture<DatablocksComponent>;
 
   beforeEach(async(() => {
-      TestBed.configureTestingModule({
-      imports: [ MatTableModule ],
-      declarations: [ DatablocksComponent, FileSizePipe ]
+    TestBed.configureTestingModule({
+      imports: [MatTableModule],
+      declarations: [DatablocksComponent, FileSizePipe]
     });
-     TestBed.overrideComponent(DatablocksComponent, {
-    set: {
-      providers: [
-        { provide: ActivatedRoute, useClass: MockActivatedRoute },
-        { provide: Router, useClass: MockRouter },
-      ]
-    }
+    TestBed.overrideComponent(DatablocksComponent, {
+      set: {
+        providers: [
+          { provide: ActivatedRoute, useClass: MockActivatedRoute },
+          { provide: Router, useClass: MockRouter }
+        ]
+      }
     });
     TestBed.compileComponents();
   }));
@@ -36,7 +35,11 @@ describe('DatablocksComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  afterEach(() => {
+    fixture.destroy();
+  });
+
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

@@ -33,7 +33,7 @@ describe("UserReducer", () => {
       identities: [],
       credentials: []
     };
-    const action = new userActions.LoginCompleteAction(user, 'account-type');
+    const action = new userActions.LoginCompleteAction(user, "account-type");
     const state = userReducer(initialUserState, action);
     expect(state.isLoggingIn).toEqual(false);
   });

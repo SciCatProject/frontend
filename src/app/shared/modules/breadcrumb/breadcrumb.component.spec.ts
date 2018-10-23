@@ -1,24 +1,20 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
-import {HttpClientModule} from '@angular/common/http';
-import {RouterTestingModule} from '@angular/router/testing';
-import {MockStore} from 'shared/MockStubs';
-import {BreadcrumbComponent} from './breadcrumb.component';
-import { Store} from '@ngrx/store';
+import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+import { HttpClientModule } from "@angular/common/http";
+import { RouterTestingModule } from "@angular/router/testing";
+import { MockStore } from "shared/MockStubs";
+import { BreadcrumbComponent } from "./breadcrumb.component";
+import { Store } from "@ngrx/store";
 
-describe('BreadcrumbComponent', () => {
+describe("BreadcrumbComponent", () => {
   let component: BreadcrumbComponent;
   let fixture: ComponentFixture<BreadcrumbComponent>;
 
   beforeEach(async(() => {
-    TestBed
-        .configureTestingModule({
-          imports : [ RouterTestingModule, HttpClientModule ],
-          declarations : [ BreadcrumbComponent ],
-          providers : [
-            {provide : Store, useClass : MockStore},
-          ]
-        })
-        .compileComponents();
+    TestBed.configureTestingModule({
+      imports: [RouterTestingModule, HttpClientModule],
+      declarations: [BreadcrumbComponent],
+      providers: [{ provide: Store, useClass: MockStore }]
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -27,5 +23,11 @@ describe('BreadcrumbComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => { expect(component).toBeTruthy(); });
+  afterEach(() => {
+    fixture.destroy();
+  });
+
+  it("should create", () => {
+    expect(component).toBeTruthy();
+  });
 });

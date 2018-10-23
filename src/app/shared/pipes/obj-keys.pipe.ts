@@ -1,5 +1,4 @@
-import {Pipe, PipeTransform} from '@angular/core';
-
+import { Pipe, PipeTransform } from "@angular/core";
 
 /**
  * A class to iterate over the keys in an object
@@ -9,11 +8,9 @@ import {Pipe, PipeTransform} from '@angular/core';
  * @implements {PipeTransform}
  */
 @Pipe({
-  name: 'objKeys'
+  name: "objKeys"
 })
 export class ObjKeysPipe implements PipeTransform {
-
-
   /**
    * Takes an object and returns an array containing a key and a value
    * for all items
@@ -30,10 +27,9 @@ export class ObjKeysPipe implements PipeTransform {
     const keys = [];
     for (const key in value) {
       if (key) {
-        keys.push({key: key, value: value[key]});
+        keys.push({ key: key, value: value[key] });
       }
     }
     return keys;
   }
-
 }

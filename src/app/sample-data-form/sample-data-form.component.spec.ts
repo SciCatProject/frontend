@@ -1,29 +1,34 @@
-import {NO_ERRORS_SCHEMA} from '@angular/core';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import {Store} from '@ngrx/store';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import { NO_ERRORS_SCHEMA } from "@angular/core";
+import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+import { Store } from "@ngrx/store";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 
-import { SampleDataFormComponent } from './sample-data-form.component';
-import { ConfigFormComponent} from 'shared/modules/config-form/config-form.component';
-import {MockConfigService, MockStore} from 'shared/MockStubs';
-import {ObjKeysPipe, TitleCasePipe} from 'shared/pipes/index';
-import {ConfigService} from 'shared/services';
-describe('SampleDataFormComponent', () => {
+import { SampleDataFormComponent } from "./sample-data-form.component";
+import { ConfigFormComponent } from "shared/modules/config-form/config-form.component";
+import { MockConfigService, MockStore } from "shared/MockStubs";
+import { ObjKeysPipe, TitleCasePipe } from "shared/pipes/index";
+import { ConfigService } from "shared/services";
+describe("SampleDataFormComponent", () => {
   let component: SampleDataFormComponent;
   let fixture: ComponentFixture<SampleDataFormComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
-      imports : [ FormsModule, ReactiveFormsModule ],
-      declarations: [ SampleDataFormComponent, ConfigFormComponent, ObjKeysPipe, TitleCasePipe ]
+      imports: [FormsModule, ReactiveFormsModule],
+      declarations: [
+        SampleDataFormComponent,
+        ConfigFormComponent,
+        ObjKeysPipe,
+        TitleCasePipe
+      ]
     });
     TestBed.overrideComponent(SampleDataFormComponent, {
-      set : {
-        providers : [
+      set: {
+        providers: [
           // needed for config form sub component
-          {provide : ConfigService, useClass : MockConfigService},
-          {provide : Store, useClass : MockStore},
+          { provide: ConfigService, useClass: MockConfigService },
+          { provide: Store, useClass: MockStore }
         ]
       }
     });
@@ -36,7 +41,11 @@ describe('SampleDataFormComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  afterEach(() => {
+    fixture.destroy();
+  });
+
+  it("should create", () => {
     // console.log(component);
     expect(component).toBeTruthy();
   });

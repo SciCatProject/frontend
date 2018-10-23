@@ -19,7 +19,7 @@ before_install:
 
 before_script:
 - npm install
-- npx ng build
+- npx ng build --prod
 
 scripts: 
 - npm install codecov -g
