@@ -45,6 +45,7 @@ export class PublishComponent implements OnInit {
   }
 
   public onPublish() {
+    const doi = "new" + Math.random().toString(36).substring(7);
     console.log("register dataset");
     const batch_datasets$ = this.store.pipe(select(getDatasetsInBatch), map(datasets => {
       console.log(datasets);
@@ -57,7 +58,7 @@ export class PublishComponent implements OnInit {
         pub.authors.push(dataset.owner);
         pub.creator = dataset.owner;
         pub.dataDescription = dataset.owner;
-        pub.doi = dataset.owner;
+        pub.doi = doi;
         pub.doiRegisteredSuccessfullyTime = new Date(Date.now());
         pub.numberOfFiles = 27;
         pub.pidArray.push(dataset.pid);
@@ -68,7 +69,6 @@ export class PublishComponent implements OnInit {
         pub.thumbnail = "Test data from Scicat";
         pub.title = "Test data from Scicat";
         pub.url = "https://scicat.esss.se";
-        pub.doi = "new" + Math.random().toString(36).substring(7);
       }
       console.log(pub);
       return pub;
@@ -79,32 +79,17 @@ export class PublishComponent implements OnInit {
     } else {
       // Display error
     }
-    const published_data: PublishedData = {
-      affiliation: "ESS",
-      abstract: "Test abstract",
-      authors: ["Addison Neutron"],
-      creator: "Addison Neutron",
-      dataDescription: "string",
-      doi: "new" + Math.random().toString(36).substring(7),
-      doiRegisteredSuccessfullyTime: new Date(Date.now()),
-      numberOfFiles: 21,
-      pidArray: ["2121"],
-      publicationYear: 2018,
-      publisher: "ESS",
-      resourceType: "NeXus files",
-      sizeOfArchive: 21,
-      thumbnail: "string",
-      title: "Test Data from SciCat 2",
-      url: "https://scicat.esss.se"
-    };
-    published_data.doi = "new" + Math.random().toString(36).substring(7);
-    console.log(published_data.doi);
-    const create_pub$ = this.pdapi.create(published_data);
-    const register_pub$ = this.pdapi.register(published_data.doi);
+    console.log(doi);
+    const register_pub$ = this.pdapi.register(doi);
 
     const result$ = batch_datasets$.pipe(concatMap(val => this.getPubtoCreate(val)));
     result$.subscribe();
+    register_pub$.subscribe();
 
+  }
+
+  public register_helper(doi: string): Observable<any> {
+    return this.pdapi.register(doi);
   }
 
   public getPubtoCreate(pub: PublishedData): Observable<any> {
