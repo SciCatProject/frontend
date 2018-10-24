@@ -15,7 +15,7 @@ import { Observable } from "rxjs";
   styleUrls: ["./publish.component.scss"]
 })
 export class PublishComponent implements OnInit {
-  protected datasetCount$ = this.store.pipe(
+  public datasetCount$ = this.store.pipe(
     select(getDatasetsInBatch),
     map(datasets => datasets.length)
   );
@@ -23,7 +23,7 @@ export class PublishComponent implements OnInit {
   // For simplicity, this form (including validation) is kept in component-local state.
   // Can be moved to NgRX state if necessary.
 
-  protected form = {
+  public form = {
     firstName: "",
     lastName: "",
     affiliation: this.appConfig.facility,
