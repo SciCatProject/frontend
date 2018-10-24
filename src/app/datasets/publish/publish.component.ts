@@ -54,7 +54,8 @@ export class PublishComponent implements OnInit {
       pub.authors = [];
       for (const dataset of datasets) {
         pub.affiliation = dataset.license;
-        pub.abstract = dataset.license;
+        pub.abstract = "This is sample data generated for the " +
+          this.appConfig.facility + " research facility under licence from " + dataset.license;
         pub.authors.push(dataset.owner);
         pub.creator = dataset.owner;
         pub.dataDescription = dataset.owner;
