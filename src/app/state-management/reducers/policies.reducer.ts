@@ -50,7 +50,8 @@ export function policiesReducer(
 
     case FETCH_POLICIES_COMPLETE: {
       const policies = (action as FetchPoliciesCompleteAction).policies;
-      return { ...state, policies, policiesLoading: false };
+      const totalCount = policies.length;
+      return { ...state, policies, policiesLoading: false, totalCount };
     }
 
     case FETCH_POLICIES_FAILED: {
@@ -85,19 +86,19 @@ export function policiesReducer(
     case CHANGE_PAGE: {
       const { page, limit } = action as ChangePageAction;
       const skip = page * limit;
-      // const filters = {...state.filters, skip, limit};
+       const filters = {...state.filters, skip, limit};
       return {
         ...state,
-        policiesLoading: true
-        // filters
+        policiesLoading: true,
+        filters
       };
     }
 
     case SORT_BY_COLUMN: {
       const { column, direction } = action as SortByColumnAction;
       const sortField = column + (direction ? ":" + direction : "");
-      // const filters = {...state.filters, sortField, skip: 0};
-      return { ...state, /*filters,*/ policiesLoading: true };
+      const filters = { ...state.filters, sortField, skip: 0 };
+      return { ...state, filters, policiesLoading: true };
     }
 
     default: {

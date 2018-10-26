@@ -54,3 +54,9 @@ export interface DatasetFilters {
   sortField: string;
   mode: ViewMode;
 }
+
+export interface PolicyFilters {
+  sortField: string;
+  skip: number;
+  limit: number;
+}

@@ -11,10 +11,10 @@
     </ng-container>
   </div>
 
-  <mat-paginator class="policy-paginator" [pageSizeOptions]="pageSizeOptions" [pageIndex]="currentPage" [pageSize]="policiesPerPage" [length]="totalNumber" (page)="onPageChange($event)">
+  <mat-paginator class="policy-paginator" [pageSizeOptions]="pageSizeOptions" [pageIndex]="currentPage" [pageSize]="policiesPerPage" [length]="policyCount$ | async" (page)="onPageChange($event)">
   </mat-paginator>
 
-  <mat-table [dataSource]="policies$ | async" class="policy-table mat-elevation-z8" matSort (matSortChange)="onSortChange($event)">
+  <mat-table [dataSource]="policies$ | async" class="policy-table mat-elevation-z2" matSort (matSortChange)="onSortChange($event)">
 
     <!-- Column Definitions -->
     <ng-container matColumnDef="select">
@@ -31,7 +31,7 @@
 
 
     <ng-container matColumnDef="manager">
-      <mat-header-cell *matHeaderCellDef>Manager</mat-header-cell>
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Manager</mat-header-cell>
       <mat-cell *matCellDef="let policy">{{policy.manager}}</mat-cell>
     </ng-container>
 
@@ -45,7 +45,7 @@
       <mat-cell *matCellDef="let policy">{{policy.autoArchive}}</mat-cell>
     </ng-container>
     <ng-container matColumnDef="autoArchiveDelay">
-      <mat-header-cell *matHeaderCellDef>Auto Archive Delay</mat-header-cell>
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Auto Archive Delay</mat-header-cell>
       <mat-cell *matCellDef="let policy">{{policy.autoArchiveDelay}}</mat-cell>
     </ng-container>
 
@@ -81,9 +81,3 @@
     <mat-row class='row-generic' *matRowDef="let policy; columns: getDisplayedColumns()" (click)="handleClick(policy)">
     </mat-row>
   </mat-table>
-
-  <mat-paginator class="policy-paginator" [pageSizeOptions]="pageSizeOptions" [pageIndex]="currentPage" [pageSize]="policiesPerPage" [length]="totalNumber" (page)="onPageChange($event)">
-  </mat-paginator>
-
-
-

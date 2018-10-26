@@ -1,4 +1,4 @@
-import { Policy } from 'state-management/models';
+import { PolicyFilters, Policy } from 'state-management/models';
 
 
 
@@ -14,8 +14,7 @@ export interface PolicyState {
     policiesLoading: boolean;
     error: Error;
 
-    skip: number;
-    limit: number;
+    filters: PolicyFilters;
 
 
 }
@@ -31,7 +30,11 @@ export const initialPolicyState: PolicyState = {
 
     policiesLoading: true,
     error: undefined,
-    skip: 0,
-    limit: 0
+    filters: {
+      skip: 0,
+      limit: 30,
+      sortField: "ownerGroup:desc"
+    }
+
 
 };
