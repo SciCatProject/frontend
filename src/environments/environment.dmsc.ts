@@ -9,6 +9,7 @@ export const environment = {
   fileserverBaseURL: "https://kubetest04.dm.esss.dk:32223",
   externalAuthEndpoint: "/auth/msad",
   archiveWorkflowEnabled: false,
+  editMetadataEnabled: true,
   disabledDatasetColumns: ["archiveStatus", "retrieveStatus"],
   facility: "ESS"
 };
