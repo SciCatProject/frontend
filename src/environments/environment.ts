@@ -12,5 +12,7 @@ export const environment = {
   editMetadataEnabled: true,
   disabledDatasetColumns: [],
   facility: "ESS",
-  shoppingCartEnabled: false
+  shoppingCartEnabled: false,
+  multipleDownloadEnabled: true,
+  multipleDownloadAction: "http://0.0.0.0:9999/phpinfo.php"
 };

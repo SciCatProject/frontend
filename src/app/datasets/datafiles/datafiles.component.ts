@@ -1,7 +1,7 @@
 import { APP_CONFIG, AppConfig } from "app-config.module";
 import { MatTableDataSource, MatPaginator } from "@angular/material";
 import { Observable } from "rxjs";
-import { OrigDatablock } from "shared/sdk/models";
+import { OrigDatablock, Dataset } from "shared/sdk/models";
 import { Store, select } from "@ngrx/store";
 import { getIsAdmin } from "state-management/selectors/users.selectors";
 import {
@@ -12,6 +12,8 @@ import {
   AfterViewInit,
   Inject
 } from "@angular/core";
+import { getCurrentDataset } from "state-management/selectors/datasets.selectors";
+import { first } from "rxjs/operators";
 
 @Component({
   selector: "datafiles",
@@ -29,13 +31,20 @@ export class DatafilesComponent implements OnInit, AfterViewInit {
   dsId: string;
   dataFiles: Array<any> = [];
 
-  displayedColumns = ["name", "size", "path"];
+  areAllSelected: boolean = false;
+  isNoneSelected: boolean = true;
+
+  displayedColumns = (this.appConfig.multipleDownloadEnabled
+    ? ["select"]
+    : []
+  ).concat(["name", "size", "path"]);
 
   dataSource: MatTableDataSource<any> | null;
   @ViewChild(MatPaginator)
   paginator: MatPaginator;
 
   admin$: Observable<boolean>;
+  dataset$: Observable<Dataset>;
 
   constructor(
     private store: Store<any>,
@@ -46,6 +55,8 @@ export class DatafilesComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this.admin$ = this.store.pipe(select(getIsAdmin));
+    this.dataset$ = this.store.pipe(select(getCurrentDataset));
+
     if (this.dataBlocks) {
       this.getDatafiles(this.dataBlocks);
     }
@@ -63,21 +74,60 @@ export class DatafilesComponent implements OnInit, AfterViewInit {
    * @param datablocks
    */
   getDatafiles(datablocks: Array<OrigDatablock>) {
-    const self = this;
     datablocks.forEach(block => {
-      self.files = self.files.concat(block.dataFileList);
-      self.count += block.dataFileList.length;
+      const files = block.dataFileList;
+      const selectable = files.map(file => {
+        return { ...file, selected: false };
+      });
+      this.files = this.files.concat(selectable);
     });
+
+    this.count = this.files.length;
     this.dataSource = new MatTableDataSource(this.files);
   }
 
-  /**
-   * Handle clicks of rows
-   * and select a datatfile to be viewed
-   * @param event
-   */
-  onSelect(event) {
-    console.log(event);
-    this.selectedDF = event.data;
+  getAreAllSelected() {
+    return this.dataSource.data.reduce(
+      (accum, curr) => accum && curr.selected,
+      true
+    );
+  }
+
+  getIsNoneSelected() {
+    return this.dataSource.data.reduce(
+      (accum, curr) => accum && !curr.selected,
+      true
+    );
+  }
+
+  getSelectedFiles() {
+    return this.dataSource.data
+      .filter(file => file.selected)
+      .map(file => file.path);
+  }
+
+  updateSelectionStatus() {
+    this.areAllSelected = this.getAreAllSelected();
+    this.isNoneSelected = this.getIsNoneSelected();
+  }
+
+  onSelect(event, file) {
+    file.selected = event.checked;
+    this.updateSelectionStatus();
+  }
+
+  onSelectAll(event) {
+    for (const file of this.dataSource.data) {
+      file.selected = event.checked;
+    }
+    this.updateSelectionStatus();
+  }
+
+  onDownload() {
+    this.dataset$.pipe(first()).subscribe(dataset => {
+      const base = dataset.sourceFolder;
+      const selected = this.dataSource.data.filter(file => file.selected);
+      alert(selected.map(file => base + "/" + file.path).join("\n"));
+    });
   }
 }
