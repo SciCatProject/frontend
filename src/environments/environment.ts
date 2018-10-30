@@ -13,6 +13,4 @@ export const environment = {
   disabledDatasetColumns: [],
   facility: "ESS",
   shoppingCartEnabled: false,
-  multipleDownloadEnabled: true,
-  multipleDownloadAction: "http://0.0.0.0:9999/phpinfo.php"
 };
