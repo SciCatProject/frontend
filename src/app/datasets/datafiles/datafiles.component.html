@@ -5,7 +5,7 @@
     <ng-template ngPluralCase="other">{{ count }} datafiles.</ng-template>
   </span>
 
-  <form *ngIf="appConfig.multipleDownloadEnabled && appConfig.multipleDownloadAction" ngNoForm method="POST" [action]="appConfig.multipleDownloadAction">
+  <form *ngIf="multipleDownloadEnabled && multipleDownloadAction" ngNoForm method="POST" [action]="multipleDownloadAction">
     <input type="hidden" name="base" [value]="(dataset$ | async).sourceFolder" />
     <input *ngFor="let file of getSelectedFiles(); index as i" type="hidden" [name]="'files[' + i + ']'" [value]="file" />
     <button [disabled]="isNoneSelected" type="submit" mat-flat-button>Download</button>

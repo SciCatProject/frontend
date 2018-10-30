@@ -34,6 +34,9 @@ export class DatafilesComponent implements OnInit, AfterViewInit {
   areAllSelected: boolean = false;
   isNoneSelected: boolean = true;
 
+  multipleDownloadEnabled: boolean = this.appConfig.multipleDownloadEnabled;
+  multipleDownloadAction: string = this.appConfig.multipleDownloadAction;
+
   displayedColumns = (this.appConfig.multipleDownloadEnabled
     ? ["select"]
     : []
