@@ -12,5 +12,5 @@ export const environment = {
   editMetadataEnabled: true,
   disabledDatasetColumns: [],
   facility: "ESS",
-  shoppingCartEnabled: false
+  shoppingCartEnabled: true
 };

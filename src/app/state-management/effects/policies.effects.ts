@@ -31,10 +31,9 @@ export class PoliciesEffects {
   submitPolicy$: Observable<Action> = this.actions$.pipe(
     ofType(SUBMIT_POLICY),
     map((action: SubmitPolicyAction) => action.policySubmission),
-    concatMap(submission => {
+    switchMap(policy => {
       return this.policyApi
-        .updateAll("id:%7B%22id%22%3A%20%225b7d31c496f3ea542d9f67be%22%7", "")
-        //.updateAll( {id: submission.where}, submission.data)
+      .patchAttributes(policy.id, policy)
         .pipe(
           mergeMap((data: any) => [
             new SubmitPolicyCompleteAction(data.submissionResponse),

@@ -164,50 +164,15 @@ export class ArchiveSettingsComponent implements OnInit {
         result.retrieveEmailsToBeNotified = Array.from(
           result.retrieveEmailsToBeNotified.split(",")
         );
-      //var template = { id: "", ...result };
-      var template = { ...result };
-      //"{\"where\":{\"or\":";
-      /*var idField = "{\"or\":";
-      var idList = [];
-      var whereId = "";
 
-      for (var id of this.selectedIds) {
-        whereId = "{\"id\":\""+ id + "\"}"
-        idList.push(whereId);
-        //this.store.dispatch(new SubmitPolicyAction(template));
-      }
-      idField += "[" + idList.join() + "]}";
-      template = "";
-      var submission = {
-        where: JSON.parse(idField),
-        data: template
-      }
-      //template["id"] = this.selectedIds;*/
-
-      var idList = [];
-      var whereId = "";
-      /*for (var id of this.selectedIds) {
-        whereId = "{\"id\":\""+ id + "\"}"
-        idList.push(whereId);
-        //this.store.dispatch(new SubmitPolicyAction(template));
-      }*/
-      //var where = "id:" + this.selectedIds[0] ;
-      //var where = "{id:\""+ this.selectedIds[0] + "\"}";
-      var where =  "%7B%22id%22%3A%20%225b7d31c496f3ea542d9f67be%22%7";
-      var data = template;
-      var submission = {
-        //where: JSON.parse(idList.join()),
-        where:  where,
-        data: template
-      }
-      console.log("where: ", where)
-      //{"where":{"or":[{"id":1},{"id":2},...,{"id":20"},{"id":21}]}}
-      this.store.dispatch(new SubmitPolicyAction(submission));
-
-      this.store.dispatch(new ClearSelectionAction());
-
-    }
-  }
+      var template = { id: "", ...result };
+            for (var id of this.selectedIds) {
+              template["id"] = id;
+              this.store.dispatch(new SubmitPolicyAction(template));
+            }
+            this.store.dispatch(new ClearSelectionAction());
+          }
+        }
 
   private handleClick(policy): void {
     this.onClick.emit(policy);
