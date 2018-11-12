@@ -24,6 +24,7 @@ import { ProposalsModule } from "proposals/proposals.module";
 import { RouterModule } from "@angular/router";
 import { SDKBrowserModule } from "shared/sdk/index";
 import { SampleDataFormComponent } from "sample-data-form/sample-data-form.component";
+import { SamplesModule} from "./samples/samples.module";
 import { SatDatepickerModule, SatNativeDateModule } from "saturn-datepicker";
 import { SharedCatanieModule } from "shared/shared.module";
 import { StoreDevtoolsModule } from "@ngrx/store-devtools";
@@ -49,6 +50,8 @@ import {
   MatTableModule,
   MatToolbarModule
 } from "@angular/material";
+import { SampleDetailComponent } from "./samples/sample-detail/sample-detail.component";
+import { SampleTableComponent } from "./samples/sample-table/sample-table.component";
 
 export function localStorageSyncWrapper(reducer: any) {
   return localStorageSync({ keys: ["root"], rehydrate: true })(reducer);
@@ -87,6 +90,7 @@ export function localStorageSyncWrapper(reducer: any) {
     PoliciesModule,
     ProposalsModule,
     ReactiveFormsModule,
+    SamplesModule,
     SatDatepickerModule,
     SatNativeDateModule,
     SharedCatanieModule,

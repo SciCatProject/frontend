@@ -25,6 +25,8 @@ import { ArchiveSettingsComponent } from "../policies/archive-settings/archive-s
 
 import { AuthCheck } from "../AuthCheck";
 import { BatchViewComponent } from "datasets/batch-view/batch-view.component";
+import { SampleDetailComponent } from "../samples/sample-detail/sample-detail.component";
+import { SampleTableComponent } from "../samples/sample-table/sample-table.component";
 
 export const routes: Routes = [
   { path: "", redirectTo: "/datasets", pathMatch: "full" },
@@ -62,6 +64,16 @@ export const routes: Routes = [
   {
     path: "proposals/:id",
     component: ViewProposalPageComponent,
+    canActivate: [AuthCheck]
+  },
+  {
+    path: "samples",
+    component: SampleTableComponent,
+    canActivate: [AuthCheck]
+  },
+  {
+    path: "samples/:id",
+    component: SampleDetailComponent,
     canActivate: [AuthCheck]
   },
 
