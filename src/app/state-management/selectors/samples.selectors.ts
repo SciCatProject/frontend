@@ -1,36 +1,36 @@
-import { createSelector, createFeatureSelector } from "@ngrx/store";
-import { PolicyState } from "../state/policies.store";
+import { createFeatureSelector, createSelector } from "@ngrx/store";
+import { SampleState } from "../state/samples.store";
 
-export const getPolicyState = createFeatureSelector<PolicyState>("policies");
+export const getSampleState = createFeatureSelector<SampleState>("samples");
 
-// const getPolicyState = createFeatureSelector<PolicyState>('policies');
+// const getSampleState = createFeatureSelector<PolicyState>('policies');
 
-export const getCurrentPolicy = createSelector(
-  getPolicyState,
-  state => state.currentPolicy
+export const getCurrentSample = createSelector(
+  getSampleState,
+  state => state.currentSample
 );
 
-export const getPolicies = createSelector(
-  getPolicyState,
-  state => state.policies
+export const getSamples = createSelector(
+  getSampleState,
+  state => state.samples
 );
 
-export const getSelectedPolicies = createSelector(
-  getPolicyState,
-  state => state.selectedPolicies
+export const getSelectedSamples = createSelector(
+  getSampleState,
+  state => state.selectedSamples
 );
 
 export const isEmptySelection = createSelector(
-  getSelectedPolicies,
+  getSelectedSamples,
   sets => sets.length === 0
 );
 
-export const getPoliciesPerPage = createSelector(
-  getPolicyState,
+export const getSamplesPerPage = createSelector(
+  getSampleState,
   state => state
 );
 
-export const getPage = createSelector(getPolicyState, state => {
+export const getPage = createSelector(getSampleState, state => {
   const { skip, limit } = state;
   return skip / limit;
 });
