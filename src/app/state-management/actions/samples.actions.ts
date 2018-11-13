@@ -28,14 +28,14 @@ export class FetchSamplesFailedAction implements Action {
 
 export class FetchSampleAction implements Action {
   readonly type = FETCH_SAMPLE;
-  constructor(readonly id: string) {
+  constructor(readonly samplelId: string) {
   }
 }
 
 export class FetchSampleCompleteAction implements Action {
   readonly type = FETCH_SAMPLE_COMPLETE;
 
-  constructor(readonly sample: Sample) {
+  constructor(readonly currentSample: Sample) {
   }
 }
 

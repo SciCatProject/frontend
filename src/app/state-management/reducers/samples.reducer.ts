@@ -38,7 +38,7 @@ export function samplesReducer(
     }
 
     case FETCH_SAMPLE_COMPLETE: {
-      const currentSample = (action as FetchSampleCompleteAction).sample;
+      const currentSample = (action as FetchSampleCompleteAction).currentSample;
       return { ...state, currentSample, samplesLoading: false };
     }
 

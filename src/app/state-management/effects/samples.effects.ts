@@ -30,10 +30,10 @@ export class SamplesEffects {
   @Effect()
   protected getSample$: Observable<Action> = this.actions$.pipe(
     ofType(FETCH_SAMPLE),
-    map((action: FetchSampleAction) => action.id),
-    mergeMap(id =>
-      this.sampleService.getSample(encodeURIComponent(id)).pipe(
-        map(sample => new FetchSampleCompleteAction(sample),
+    map((action: FetchSampleAction) => action.samplelId),
+    mergeMap(samplelId =>
+      this.sampleService.getSample(encodeURIComponent(samplelId)).pipe(
+        map(currentSample => new FetchSampleCompleteAction(currentSample),
           catchError(() => of(new FetchSampleFailedAction()))
         )
       )
