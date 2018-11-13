@@ -1,3 +1,19 @@
-<p>
-  sample-table works!
-</p>
+
+<mat-table #table [dataSource]="samples">
+
+  <ng-container matColumnDef="samplelId">
+    <mat-header-cell *matHeaderCellDef> Id</mat-header-cell>
+    <mat-cell *matCellDef="let sample"> {{sample.samplelId}}</mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="owner">
+    <mat-header-cell *matHeaderCellDef> Owner</mat-header-cell>
+    <mat-cell *matCellDef="let sample"> {{sample.owner}}</mat-cell>
+  </ng-container>
+
+  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+  <mat-row (click)="onRowSelect($event, row)" *matRowDef="let row; columns: displayedColumns;"></mat-row>
+
+</mat-table>
+
+

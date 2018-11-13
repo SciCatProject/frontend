@@ -5,3 +5,5 @@ export const getSampleState = createFeatureSelector<SampleState>("samples");
 
 
 export const getSamples = (state: any) => state.root.samples.samples;
+
+export const getCurrentSample = (state: any) => state.root.jobs.currentSample;

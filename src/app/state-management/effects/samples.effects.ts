@@ -5,7 +5,11 @@ import { Action, Store } from "@ngrx/store";
 import { SampleApi } from "shared/sdk/services";
 import { catchError, map, switchMap } from "rxjs/operators";
 import {
+  FETCH_SAMPLE,
   FETCH_SAMPLES,
+  FetchSampleAction,
+  FetchSampleCompleteAction,
+  FetchSampleFailedAction,
   FetchSamplesCompleteAction,
   FetchSamplesFailedAction
 } from "../actions/samples.actions";
@@ -20,6 +24,17 @@ export class SamplesEffects {
       this.sampleService.getSamples().pipe(
         map(samples => new FetchSamplesCompleteAction(samples)),
         catchError(err => of(new FetchSamplesFailedAction()))
+      )
+    )
+  );
+  @Effect()
+  protected getSample$: Observable<Action> = this.actions$.pipe(
+    ofType(FETCH_SAMPLE),
+    map((action: FetchSampleAction) => action.id),
+    switchMap(id =>
+      this.sampleService.getSample(encodeURIComponent(id)).pipe(
+        map(sampleset => new FetchSampleCompleteAction(sampleset)),
+        catchError(err => of(new FetchSampleFailedAction()))
       )
     )
   );
