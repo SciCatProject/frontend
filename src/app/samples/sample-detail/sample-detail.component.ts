@@ -20,7 +20,8 @@ export class SampleDetailComponent implements OnInit {
     private route: ActivatedRoute,
     private sampleService: SampleService,
     private store: Store<Sample>
-  ) {}
+  ) {
+  }
 
   ngOnInit() {
     this.store.dispatch(new FetchSampleAction("string"));
@@ -40,9 +41,11 @@ export class SampleDetailComponent implements OnInit {
     */
 
     this.subscriptions.push(
-      this.sampleService.getSample("string").subscribe(sample => {
-        this.sample = <Sample>sample;
-        console.log(sample);
+      this.route.params.subscribe(params => {
+        this.sampleService.getSample(params.id).subscribe(sample => {
+          this.sample = <Sample>sample;
+          console.log(sample);
+        });
       })
     );
   }
