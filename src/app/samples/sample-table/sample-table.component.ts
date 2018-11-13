@@ -26,15 +26,23 @@ export class SampleTableComponent implements OnInit {
 
   ngOnInit() {
     this.store.dispatch(new FetchSamplesAction());
-    this.samples$.subscribe(data => {
-      //  this.samples = data as Sample[];
-    });
 
     this.subscriptions.push(
-      this.sampleApi.find().subscribe(data => {
-        this.samples = data as Sample[];
-        console.log(data);
-      })
+      this.sampleService.getSamples().subscribe(
+        data => {
+          this.samples = data;
+          console.log(data);
+        }
+      )
     );
+
+    this.subscriptions.push(
+      this.samples$.subscribe(
+        data2 => {
+          console.log(data2);
+        }
+      )
+    );
+
   }
 }
