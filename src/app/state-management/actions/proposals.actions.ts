@@ -11,15 +11,17 @@ export const FETCH_PROPOSAL = "[Proposals] Get Proposal";
 export const FETCH_PROPOSAL_COMPLETE = "[Proposals] Get Proposal Complete";
 export const FETCH_PROPOSAL_FAILED = "[Proposals] Get Proposal Failed";
 
-export const FETCH_DATASETS_FOR_PROPOSAL = "[Proposals] Fetch Datasets for Proposal";
-export const FETCH_DATASETS_FOR_PROPOSAL_COMPLETE = "[Proposals] Fetch Datasets for Proposal Complete";
-export const FETCH_DATASETS_FOR_PROPOSAL_FAILED = "[Proposals] Fetch Datasets for Proposal Failed";
+export const FETCH_DATASETS_FOR_PROPOSAL =
+  "[Proposals] Fetch Datasets for Proposal";
+export const FETCH_DATASETS_FOR_PROPOSAL_COMPLETE =
+  "[Proposals] Fetch Datasets for Proposal Complete";
+export const FETCH_DATASETS_FOR_PROPOSAL_FAILED =
+  "[Proposals] Fetch Datasets for Proposal Failed";
 
 export class SelectProposalAction implements Action {
   type = SELECT_PROPOSAL;
 
-  constructor(readonly proposalId: string) {
-  }
+  constructor(readonly proposalId: string) {}
 }
 
 export class FetchProposalsAction implements Action {
@@ -29,8 +31,7 @@ export class FetchProposalsAction implements Action {
 export class FetchProposalsCompleteAction implements Action {
   type = FETCH_PROPOSALS_COMPLETE;
 
-  constructor(readonly proposals: Proposal[]) {
-  }
+  constructor(readonly proposals: Proposal[]) {}
 }
 
 export class FetchProposalsFailedAction implements Action {
@@ -40,15 +41,13 @@ export class FetchProposalsFailedAction implements Action {
 export class FetchProposalAction implements Action {
   type = FETCH_PROPOSAL;
 
-  constructor(readonly proposalId: string) {
-  };
+  constructor(readonly proposalId: string) {}
 }
 
 export class FetchProposalCompleteAction implements Action {
   type = FETCH_PROPOSAL_COMPLETE;
 
-  constructor(readonly proposal: Proposal) {
-  };
+  constructor(readonly proposal: Proposal) {}
 }
 
 export class FetchProposalFailedAction implements Action {
@@ -58,15 +57,13 @@ export class FetchProposalFailedAction implements Action {
 export class FetchDatasetsForProposalAction implements Action {
   type = FETCH_DATASETS_FOR_PROPOSAL;
 
-  constructor(readonly proposalId: string) {
-  };
+  constructor(readonly proposalId: string) {}
 }
 
 export class FetchDatasetsForProposalCompleteAction implements Action {
   type = FETCH_DATASETS_FOR_PROPOSAL_COMPLETE;
 
-  constructor(readonly datasets: Dataset[]) {
-  };
+  constructor(readonly datasets: Dataset[]) {}
 }
 
 export class FetchDatasetsForProposalFailedAction implements Action {
@@ -74,19 +71,22 @@ export class FetchDatasetsForProposalFailedAction implements Action {
 }
 
 export type FetchProposalsOutcomeAction =
-  FetchProposalsCompleteAction |
-  FetchProposalsFailedAction;
+  | FetchProposalsCompleteAction
+  | FetchProposalsFailedAction;
 
 export type FetchProposalOutcomeAction =
-  FetchProposalCompleteAction |
-  FetchProposalFailedAction;
+  | FetchProposalCompleteAction
+  | FetchProposalFailedAction;
 
 export type FetchDatasetsForProposalOutcomeAction =
-  FetchDatasetsForProposalCompleteAction |
-  FetchDatasetsForProposalFailedAction;
+  | FetchDatasetsForProposalCompleteAction
+  | FetchDatasetsForProposalFailedAction;
 
 export type ProposalsAction =
-  SelectProposalAction |
-  FetchProposalsAction | FetchProposalsOutcomeAction |
-  FetchProposalAction | FetchProposalOutcomeAction |
-  FetchDatasetsForProposalAction | FetchDatasetsForProposalOutcomeAction;
+  | SelectProposalAction
+  | FetchProposalsAction
+  | FetchProposalsOutcomeAction
+  | FetchProposalAction
+  | FetchProposalOutcomeAction
+  | FetchDatasetsForProposalAction
+  | FetchDatasetsForProposalOutcomeAction;

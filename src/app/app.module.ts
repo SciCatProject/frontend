@@ -50,9 +50,8 @@ import {
   MatTableModule,
   MatToolbarModule
 } from "@angular/material";
-import { SampleDetailComponent } from "./samples/sample-detail/sample-detail.component";
-import { SampleTableComponent } from "./samples/sample-table/sample-table.component";
 import { SampleService } from "./samples/sample.service";
+import { SamplesEffects } from "./state-management/effects/samples.effects";
 
 export function localStorageSyncWrapper(reducer: any) {
   return localStorageSync({ keys: ["root"], rehydrate: true })(reducer);
@@ -108,7 +107,8 @@ export function localStorageSyncWrapper(reducer: any) {
       DatasetEffects,
       UserEffects,
       JobsEffects,
-      PoliciesEffects
+      PoliciesEffects,
+      SamplesEffects
     ]),
     StoreRouterConnectingModule
   ],
