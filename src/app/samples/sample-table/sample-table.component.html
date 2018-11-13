@@ -11,6 +11,11 @@
     <mat-cell *matCellDef="let sample"> {{sample.owner}}</mat-cell>
   </ng-container>
 
+  <ng-container matColumnDef="description">
+    <mat-header-cell *matHeaderCellDef> Description</mat-header-cell>
+    <mat-cell *matCellDef="let sample"> {{sample.description}}</mat-cell>
+  </ng-container>
+
   <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
   <mat-row (click)="onRowSelect($event, row)" *matRowDef="let row; columns: displayedColumns;"></mat-row>
 

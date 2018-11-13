@@ -18,7 +18,7 @@
         </tr>
         <tr *ngIf="sample.sampleCharacteristics as value">
           <th> Sample Characteristics </th>
-          <td>{{ value }}</td>
+          <td>{{ value | json}}</td>
         </tr>
         <tr *ngIf="sample.createdAt as value">
           <th>

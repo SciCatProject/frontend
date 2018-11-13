@@ -14,7 +14,7 @@ import { Router } from "@angular/router";
 export class SampleTableComponent implements OnInit {
   public samples$ = this.store.pipe(select(getSamples));
   samples: Sample[] = [];
-  displayedColumns = ["samplelId", "owner"];
+  displayedColumns = ["samplelId", "owner", "description"];
   private subscriptions = [];
 
   constructor(
