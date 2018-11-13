@@ -5,12 +5,14 @@ import { Store } from "@ngrx/store";
 import { MatTableModule } from "@angular/material";
 import {
   MockHttp,
-  MockRouter, MockSampleApi,
+  MockRouter,
+  MockSampleService,
   MockStore
 } from "../../shared/MockStubs";
 import { HttpClient } from "@angular/common/http";
 import { Router } from "@angular/router";
-import { SampleApi } from "../../shared/sdk/services/custom";
+import { SampleService } from "../sample.service";
+
 
 describe("SampleTableComponent", () => {
   let component: SampleTableComponent;
@@ -26,7 +28,7 @@ describe("SampleTableComponent", () => {
         providers: [
           { provide: HttpClient, useClass: MockHttp },
           { provide: Router, useClass: MockRouter },
-          { provide: SampleApi, useClass: MockSampleApi },
+          { provide: SampleService, useClass: MockSampleService },
           { provide: Store, useClass: MockStore }
         ]
       }

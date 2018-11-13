@@ -5,6 +5,7 @@ import { SampleTableComponent } from "./sample-table/sample-table.component";
 import { StoreModule } from "@ngrx/store";
 import { samplesReducer } from "../state-management/reducers/samples.reducer";
 import { MatTableModule } from "@angular/material";
+import { SampleApi } from "../shared/sdk/services/custom";
 
 @NgModule({
   imports: [
@@ -12,7 +13,8 @@ import { MatTableModule } from "@angular/material";
     MatTableModule,
     StoreModule.forFeature("samples", samplesReducer)
   ],
-  declarations: [SampleDetailComponent, SampleTableComponent]
+  declarations: [SampleDetailComponent, SampleTableComponent],
+  providers: [ SampleApi]
 })
 export class SamplesModule {
 }

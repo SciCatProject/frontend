@@ -1,4 +1,5 @@
 import { Observable, of, Subject } from "rxjs";
+import { Sample } from "./sdk/models";
 
 export class MockUserApi {
   getCurrentId() {
@@ -52,6 +53,28 @@ export class MockDatasetLifecycleApi {
 }
 
 export class MockAuthService {
+}
+
+export class MockSampleService {
+  sample: Sample;
+
+  getSamples(): Observable<Sample[]> {
+    this.sample = {
+      samplelId: "string",
+      owner: "string",
+      description: "string",
+      createdAt: new Date,
+      sampleCharacteristics: "string",
+      attachments: ["string"],
+      ownerGroup: "string",
+      accessGroups: ["string"],
+      createdBy: "string",
+      updatedBy: "string",
+      updatedAt: new Date
+    };
+
+    return of([this.sample]);
+  }
 }
 
 export class MockLoopBackAuth {
@@ -118,8 +141,8 @@ export class MockSampleApi {
           attachments: ["string"],
           ownerGroup: "string",
           accessGroups: ["string"],
-          createdBy: string,
-          updatedBy: string,
+          createdBy: ["string"],
+          updatedBy: ["string"],
           updatedAt: Date
         }
       ]

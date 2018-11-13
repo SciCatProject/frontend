@@ -22,7 +22,7 @@ import { PoliciesEffects } from "state-management/effects/policies.effects";
 import { PoliciesModule } from "policies/policies.module";
 import { ProposalsModule } from "proposals/proposals.module";
 import { RouterModule } from "@angular/router";
-import { SDKBrowserModule } from "shared/sdk/index";
+import { SampleApi, SDKBrowserModule } from "shared/sdk/index";
 import { SampleDataFormComponent } from "sample-data-form/sample-data-form.component";
 import { SamplesModule} from "./samples/samples.module";
 import { SatDatepickerModule, SatNativeDateModule } from "saturn-datepicker";
@@ -52,6 +52,7 @@ import {
 } from "@angular/material";
 import { SampleDetailComponent } from "./samples/sample-detail/sample-detail.component";
 import { SampleTableComponent } from "./samples/sample-table/sample-table.component";
+import { SampleService } from "./samples/sample.service";
 
 export function localStorageSyncWrapper(reducer: any) {
   return localStorageSync({ keys: ["root"], rehydrate: true })(reducer);
@@ -116,7 +117,9 @@ export function localStorageSyncWrapper(reducer: any) {
     AuthCheck,
     DatasetService,
     ArchivingService,
+    SampleService,
     UserApi,
+    SampleApi,
     Title,
     MatNativeDateModule
     //      {provide: RouteReuseStrategy, useClass: CustomReuseStrategy}
