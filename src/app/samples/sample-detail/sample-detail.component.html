@@ -1,30 +1,31 @@
-
 <div *ngIf="sample">
-    <div class="details">
-      Sample Details
-      <table>
-        <tr>
-          <th>
-            Sample Owner</th>
-          <td>{{ sample.owner }}</td>
-        </tr>
-        <tr *ngIf="sample.description as value">
-          <th> Description </th>
-          <td>{{ value }}</td>
-        </tr>
-        <tr *ngIf="sample.ownerGroup as value">
-          <th> Owner Group </th>
-          <td>{{ value }}</td>
-        </tr>
-        <tr *ngIf="sample.sampleCharacteristics as value">
-          <th> Sample Characteristics </th>
-          <td>{{ value | json}}</td>
-        </tr>
-        <tr *ngIf="sample.createdAt as value">
-          <th>
-            Creation Time</th>
-          <td>{{ value | date: 'yyyy/MM/dd HH:mm'}}</td>
-        </tr>
-      </table>
+  <div class="details">
+    Sample Details
+    <table>
+      <tr>
+        <th>
+          Sample Owner
+        </th>
+        <td>{{ sample.owner }}</td>
+      </tr>
+      <tr *ngIf="sample.description as value">
+        <th> Description</th>
+        <td>{{ value }}</td>
+      </tr>
+      <tr *ngIf="sample.ownerGroup as value">
+        <th> Owner Group</th>
+        <td>{{ value }}</td>
+      </tr>
+      <tr *ngIf="sample.createdAt as value">
+        <th>
+          Creation Time
+        </th>
+        <td>{{ value | date: 'yyyy/MM/dd HH:mm'}}</td>
+      </tr>
+    </table>
+    <div *ngIf="sample.sampleCharacteristics as value">
+      <h3>Sample Characteristics</h3>
+      <pre>{{ value | json}}</pre>
     </div>
+  </div>
 </div>
