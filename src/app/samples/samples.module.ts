@@ -1,12 +1,16 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { SampleDetailComponent } from './sample-detail/sample-detail.component';
-import { SampleTableComponent } from './sample-table/sample-table.component';
+import { NgModule } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { SampleDetailComponent } from "./sample-detail/sample-detail.component";
+import { SampleTableComponent } from "./sample-table/sample-table.component";
+import { StoreModule } from "@ngrx/store";
+import { samplesReducer } from "../state-management/reducers/samples.reducer";
 
 @NgModule({
   imports: [
-    CommonModule
+    CommonModule,
+    StoreModule.forFeature("samples", samplesReducer)
   ],
   declarations: [SampleDetailComponent, SampleTableComponent]
 })
-export class SamplesModule { }
+export class SamplesModule {
+}

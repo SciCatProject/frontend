@@ -7,8 +7,7 @@ import { Sample } from "shared/sdk/models";
   providedIn: "root"
 })
 export class SampleService {
-  constructor(private sampleApi: SampleApi) {
-  }
+  constructor(private sampleApi: SampleApi) {}
 
   getSamples(): Observable<Sample[]> {
     const ret = this.sampleApi.find();
