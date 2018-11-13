@@ -4,7 +4,6 @@ import { select, Store } from "@ngrx/store";
 import { Sample } from "../../shared/sdk/models";
 import { getSamples } from "state-management/selectors/samples.selectors";
 import { SampleService } from "../../samples/sample.service";
-import { SampleApi } from "../../shared/sdk/services/custom";
 
 @Component({
   selector: "app-sample-table",
@@ -19,7 +18,6 @@ export class SampleTableComponent implements OnInit {
 
   constructor(
     private store: Store<Sample>,
-    private sampleApi: SampleApi,
     private sampleService: SampleService
   ) {
   }

@@ -1,5 +1,4 @@
 import { Observable, of, Subject } from "rxjs";
-import { RawDataset } from "./sdk/models";
 
 export class MockUserApi {
   getCurrentId() {
@@ -102,6 +101,29 @@ export class MockJobApi {
         }
       ]
     ]);
+  }
+}
+
+
+export class MockSampleApi {
+  find() {
+    return of(
+      [
+        {
+          samplelId: "string",
+          owner: "string",
+          description: "string",
+          createdAt: Date,
+          sampleCharacteristics: "string",
+          attachments: ["string"],
+          ownerGroup: "string",
+          accessGroups: ["string"],
+          createdBy: string,
+          updatedBy: string,
+          updatedAt: Date
+        }
+      ]
+    );
   }
 }
 
