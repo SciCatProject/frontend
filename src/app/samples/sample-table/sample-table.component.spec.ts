@@ -13,7 +13,6 @@ import { HttpClient } from "@angular/common/http";
 import { Router } from "@angular/router";
 import { SampleService } from "../sample.service";
 
-
 describe("SampleTableComponent", () => {
   let component: SampleTableComponent;
   let fixture: ComponentFixture<SampleTableComponent>;
