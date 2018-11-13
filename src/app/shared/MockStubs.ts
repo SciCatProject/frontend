@@ -75,6 +75,25 @@ export class MockSampleService {
 
     return of([this.sample]);
   }
+
+  getSample(): Observable<Sample> {
+    this.sample = {
+      samplelId: "string",
+      owner: "string",
+      description: "string",
+      createdAt: new Date,
+      sampleCharacteristics: "string",
+      attachments: ["string"],
+      ownerGroup: "string",
+      accessGroups: ["string"],
+      createdBy: "string",
+      updatedBy: "string",
+      updatedAt: new Date
+    };
+
+    return of(this.sample);
+  }
+
 }
 
 export class MockLoopBackAuth {

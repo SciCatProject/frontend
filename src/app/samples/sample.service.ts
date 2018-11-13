@@ -13,7 +13,7 @@ export class SampleService {
     return this.sampleApi.find();
   }
 
-  getSample(id: string): Observable<Sample> {
-    return this.sampleApi.findOne({ where: { id } });
+  getSample(samplelId: string): Observable<Sample> {
+    return this.sampleApi.findOne({ where: { samplelId } });
   }
 }

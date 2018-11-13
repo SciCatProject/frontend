@@ -1,11 +1,17 @@
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { SampleDetailComponent } from "./sample-detail.component";
-import { SampleTableComponent } from "../sample-table/sample-table.component";
 import { HttpClient } from "@angular/common/http";
-import { MockHttp, MockRouter, MockStore } from "../../shared/MockStubs";
-import { Router } from "@angular/router";
+import {
+  MockActivatedRoute,
+  MockHttp,
+  MockRouter,
+  MockSampleService,
+  MockStore
+} from "../../shared/MockStubs";
+import { ActivatedRoute, Router } from "@angular/router";
 import { Store } from "@ngrx/store";
+import { SampleService } from "../../samples/sample.service";
 
 describe("SampleDetailComponent", () => {
   let component: SampleDetailComponent;
@@ -20,6 +26,8 @@ describe("SampleDetailComponent", () => {
         providers: [
           { provide: HttpClient, useClass: MockHttp },
           { provide: Router, useClass: MockRouter },
+          { provide: ActivatedRoute, useClass: MockActivatedRoute },
+          { provide: SampleService, useClass: MockSampleService },
           { provide: Store, useClass: MockStore }
         ]
       }
