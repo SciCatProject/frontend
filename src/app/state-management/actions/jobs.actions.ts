@@ -1,27 +1,27 @@
-import {Action} from '@ngrx/store';
-import {Job} from 'shared/sdk/models';
+import {Action} from "@ngrx/store";
+import {Job} from "shared/sdk/models";
 
-export const SUBMIT =                  '[Jobs] Submit';
-export const SUBMIT_COMPLETE =         '[Jobs] Submit Complete';
+export const SUBMIT =                  "[Jobs] Submit";
+export const SUBMIT_COMPLETE =         "[Jobs] Submit Complete";
 
-export const RETRIEVE =                '[Jobs] Retrieve';
-export const RETRIEVE_COMPLETE =       '[Jobs] Retrieve Complete';
+export const RETRIEVE =                "[Jobs] Retrieve";
+export const RETRIEVE_COMPLETE =       "[Jobs] Retrieve Complete";
 
-export const FAILED =                  '[Jobs] Action Failed';
-export const UI_STORE =                '[Jobs] UI Store';
-export const SELECT_CURRENT =          '[Jobs] Current set selected';
-export const SORT_VALUE_UPDATE =       '[Jobs] Sort Update';
-export const SORT_FAILED =             '[Jobs] Sort Failed';
+export const FAILED =                  "[Jobs] Action Failed";
+export const UI_STORE =                "[Jobs] UI Store";
+export const SELECT_CURRENT =          "[Jobs] Current set selected";
+export const SORT_VALUE_UPDATE =       "[Jobs] Sort Update";
+export const SORT_FAILED =             "[Jobs] Sort Failed";
 
-export const CHILD_RETRIEVE =          '[Jobs] Child Retrieve';
-export const CHILD_RETRIEVE_COMPLETE = '[Jobs] Child Retrieve Complete';
+export const CHILD_RETRIEVE =          "[Jobs] Child Retrieve";
+export const CHILD_RETRIEVE_COMPLETE = "[Jobs] Child Retrieve Complete";
 
-export const SEARCH_ID =               '[Jobs] Search ID';
-export const SEARCH_ID_COMPLETE =      '[Jobs] Search ID Complete';
-export const SEARCH_ID_FAILED =        '[Jobs] Search ID Failed';
+export const SEARCH_ID =               "[Jobs] Search ID";
+export const SEARCH_ID_COMPLETE =      "[Jobs] Search ID Complete";
+export const SEARCH_ID_FAILED =        "[Jobs] Search ID Failed";
 
-export const SORT_UPDATE =             '[Jobs] Sort Update'; // Duplicate of SORT_VALUE_UPDATE?
-export const SORT_UPDATE_COMPLETE =    '[Jobs] Sort Update Complete';
+export const SORT_UPDATE =             "[Jobs] Sort Update"; // Duplicate of SORT_VALUE_UPDATE?
+export const SORT_UPDATE_COMPLETE =    "[Jobs] Sort Update Complete";
 
 export class SubmitAction implements Action {
     readonly type = SUBMIT;
