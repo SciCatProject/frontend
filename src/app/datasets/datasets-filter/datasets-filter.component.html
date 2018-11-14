@@ -93,5 +93,29 @@
       <sat-datepicker #picker [rangeMode]="true"></sat-datepicker>
     </mat-form-field>
 
+    <div class="top-container" style="margin-top: 1em">
+      <span class="title">Scientific Conditions</span>
+      <button mat-button class="clear-button" color="primary" (click)="showAddConditionDialog()">
+        <mat-icon>add</mat-icon> Add
+      </button>
+
+      <div style="clear: both"></div>
+
+      <mat-chip-list>
+        <mat-chip *ngFor="let condition of conditions; index as i">
+          {{condition.lhs}}
+          <ng-container [ngSwitch]="condition.relation">
+            <ng-container *ngSwitchCase="'EQUAL_TO_NUMERIC'">=</ng-container>
+            <ng-container *ngSwitchCase="'EQUAL_TO_STRING'">=</ng-container>
+            <ng-container *ngSwitchCase="'LESS_THAN'">&lt;</ng-container>
+            <ng-container *ngSwitchCase="'GREATER_THAN'">&gt;</ng-container>
+          </ng-container>
+          
+          {{ condition.relation === "EQUAL_TO_STRING" ? '"' + condition.rhs + '"' : condition.rhs }}
+          <mat-icon matChipRemove (click)="removeCondition(i)">cancel</mat-icon>
+        </mat-chip>
+      </mat-chip-list>
+      <pre>{{ conditionQuery() | json }}</pre>
+    </div>
   </form>
 </mat-card>

@@ -1,0 +1,39 @@
+<h2 mat-dialog-title>Add Condition</h2>
+<mat-dialog-content>
+  <mat-form-field>
+    <input
+      matInput
+      name="lhs"
+      type="text"
+      placeholder="Field"
+      [(ngModel)]="lhs"
+    />
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-select
+      name="operator"
+      [(ngModel)]="relation"
+      placeholder="Relation"
+    >
+      <mat-option value="EQUAL_TO_NUMERIC">is equal to (numeric)</mat-option>
+      <mat-option value="EQUAL_TO_STRING">is equal to (string)</mat-option>
+      <mat-option value="GREATER_THAN">is greater than</mat-option>
+      <mat-option value="LESS_THAN">is less than</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field>
+    <input
+      matInput
+      name="rhs"
+      type="text"
+      placeholder="Value"
+      [(ngModel)]="rhs"
+    />
+  </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button mat-dialog-close>Cancel</button>
+  <button mat-button (click)="add()" [disabled]="invalid()">Add</button>
+</mat-dialog-actions>

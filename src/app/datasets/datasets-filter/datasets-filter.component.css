@@ -55,3 +55,7 @@
 .title {
   float: left;
 }
+
+.scientific-todo-move input {
+  max-width: 3em;
+}

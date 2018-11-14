@@ -1,7 +1,10 @@
-import { Component } from "@angular/core";
-import { Store, select } from "@ngrx/store";
+import { Component } from '@angular/core';
+import { MatDatepickerInputEvent, MatDialog } from '@angular/material';
 
-import { FacetCount } from "state-management/state/datasets.store";
+import { Store, select } from '@ngrx/store';
+import { skipWhile, distinctUntilChanged, debounceTime } from 'rxjs/operators';
+
+import { FacetCount } from 'state-management/state/datasets.store';
 import {
   getLocationFacetCounts,
   getGroupFacetCounts,
@@ -29,9 +32,8 @@ import {
   SetDateRangeFilterAction,
   SetSearchTermsAction,
   SetTextFilterAction
-} from "state-management/actions/datasets.actions";
-import { MatDatepickerInputEvent } from "@angular/material";
-import { skipWhile, distinctUntilChanged, debounceTime } from "rxjs/operators";
+} from 'state-management/actions/datasets.actions';
+import { ScientificConditionDialogComponent } from 'datasets/scientific-condition-dialog/scientific-condition-dialog.component';
 
 type DateRange = {
   begin: Date;
@@ -68,7 +70,10 @@ export class DatasetsFilterComponent {
       this.store.dispatch(new SetTextFilterAction(terms));
     });
 
-  constructor(private store: Store<any>) {}
+  constructor(
+    public dialog: MatDialog,
+    private store: Store<any>
+  ) {}
 
   getFacetId(facetCount: FacetCount, fallback: string = null): string {
     const id = facetCount._id;
@@ -124,5 +129,35 @@ export class DatasetsFilterComponent {
 
   clearFacets() {
     this.store.dispatch(new ClearFacetsAction());
+  }
+
+  showAddConditionDialog() {
+    this.dialog
+      .open(ScientificConditionDialogComponent)
+      .afterClosed()
+      .subscribe(({ data }) => {
+        this.conditions.push(data);
+      });
+  }
+
+  public conditions: {relation: string, lhs: any, rhs: any}[] = []; // TODO move
+
+  removeCondition(index: number) {
+    this.conditions.splice(index, 1);
+  }
+
+  conditionQuery() {
+    const and = this.conditions.map(cond => {
+      const { relation, lhs, rhs } = cond;
+      const dollar = {
+        "EQUAL_TO_NUMERIC": "$eq",
+        "EQUAL_TO_STRING": "$eq",
+        "LESS_THAN": "$lt",
+        "GREATER_THAN": "$gt"
+      }[relation];
+      return { [lhs]: { [dollar]: rhs }};
+    });
+
+    return { and };
   }
 }
