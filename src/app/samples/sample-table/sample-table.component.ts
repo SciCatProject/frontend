@@ -17,7 +17,7 @@ import { Router } from "@angular/router";
 export class SampleTableComponent implements OnInit, OnDestroy {
   public samples$ = this.store.pipe(select(getSamples));
   samples: Sample[] = [];
-  displayedColumns = ["samplelId", "owner", "description"];
+  displayedColumns = ["samplelId", "owner", "createdAt", "description"];
   private subscriptions = [];
 
   constructor(
