@@ -136,7 +136,9 @@ export class DatasetsFilterComponent {
       .open(ScientificConditionDialogComponent)
       .afterClosed()
       .subscribe(({ data }) => {
-        this.conditions.push(data);
+        if (data != null) {
+          this.conditions.push(data);
+        }
       });
   }
 

@@ -4,7 +4,6 @@
     <input
       matInput
       name="lhs"
-      type="text"
       placeholder="Field"
       [(ngModel)]="lhs"
     />
@@ -27,13 +26,12 @@
     <input
       matInput
       name="rhs"
-      type="text"
       placeholder="Value"
       [(ngModel)]="rhs"
     />
   </mat-form-field>
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button mat-button mat-dialog-close>Cancel</button>
+  <button mat-button (click)="cancel()">Cancel</button>
   <button mat-button (click)="add()" [disabled]="invalid()">Add</button>
 </mat-dialog-actions>

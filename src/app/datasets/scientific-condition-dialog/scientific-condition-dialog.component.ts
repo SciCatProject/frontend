@@ -22,6 +22,10 @@ export class ScientificConditionDialogComponent {
     this.dialogRef.close({ data: { lhs, rhs, relation }});
   }
 
+  cancel() {
+    this.dialogRef.close({ data: null });
+  }
+
   invalid() {
     if (this.relation !== "EQUAL_TO_STRING" && isNaN(Number(this.rhs))) {
       return true;
