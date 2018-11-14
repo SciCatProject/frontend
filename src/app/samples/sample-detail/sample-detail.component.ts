@@ -4,7 +4,7 @@ import { FetchSampleAction, SelectSampleAction } from "../../state-management/ac
 import { Observable, Subscription } from "rxjs";
 import { Sample } from "../../shared/sdk/models";
 import { filter, flatMap, map } from "rxjs/operators";
-import { getSelectedSample } from "../../state-management/selectors/samples.selectors";
+import { getCurrentSample, getSelectedSample } from "../../state-management/selectors/samples.selectors";
 import { select, Store } from "@ngrx/store";
 
 @Component({
@@ -35,7 +35,7 @@ export class SampleDetailComponent implements OnInit, OnDestroy {
       )
       .subscribe(this.store);
 
-    this.sample$ = this.store.pipe(select(getSelectedSample));
+    this.sample$ = this.store.pipe(select(getCurrentSample));
   }
 
   ngOnDestroy() {
