@@ -27,6 +27,7 @@ describe("DatasetsReducer", () => {
     const state = fromDatasets.datasetsReducer(initialDatasetState, action);
     expect(state.datasetsLoading).toEqual(true);
   });
+
   it("should have the correct number of datasets after fetch datasets complete", () => {
     const data: DatasetInterface = {
       owner: "",
@@ -46,6 +47,7 @@ describe("DatasetsReducer", () => {
     const ids = Object.keys(state.datasets);
     expect(ids.length).toEqual(3);
   });
+
   it("should set datasetsLoading to false after fetch datasets complete complete", () => {
     const data: DatasetInterface = {
       owner: "",
@@ -65,16 +67,19 @@ describe("DatasetsReducer", () => {
     const state = fromDatasets.datasetsReducer(initialDatasetState, action);
     expect(state.datasetsLoading).toEqual(false);
   });
+  
   it("should set datasetsLoading to false after fetch datasets failed complete", () => {
     const action = new fromActions.FetchDatasetsFailedAction();
     const state = fromDatasets.datasetsReducer(initialDatasetState, action);
     expect(state.datasetsLoading).toEqual(false);
   });
+
   it("should set facetCountsLoading to true after fetch facet counts complete", () => {
     const action = new fromActions.FetchFacetCountsAction();
     const state = fromDatasets.datasetsReducer(initialDatasetState, action);
     expect(state.facetCountsLoading).toEqual(true);
   });
+  
   it("should set facetCountsLoading to false after fetch facet counts failed complete", () => {
     const action = new fromActions.FetchFacetCountsFailedAction();
     const state = fromDatasets.datasetsReducer(initialDatasetState, action);
@@ -87,24 +92,28 @@ describe("DatasetsReducer", () => {
     const state = fromDatasets.datasetsReducer(initialDatasetState, action);
     expect(state.datasetsLoading).toEqual(true);
   });
+
   it("should set filters", () => {
     const filter = { ...defaultFilter };
     const action = new fromActions.UpdateFilterAction(filter);
     const state = fromDatasets.datasetsReducer(initialDatasetState, action);
     expect(state.filters).toEqual(filter);
   });
+
   it("should set selectedSets to an empty array", () => {
     const filter = { ...defaultFilter };
     const action = new fromActions.UpdateFilterAction(filter);
     const state = fromDatasets.datasetsReducer(initialDatasetState, action);
     expect(state.selectedSets.length).toEqual(0);
   });
+
   it("should set hasPrefilledFilters to true after prefil filter complete", () => {
     const data = {};
     const action = new fromActions.PrefillFiltersAction(data);
     const state = fromDatasets.datasetsReducer(initialDatasetState, action);
     expect(state.hasPrefilledFilters).toEqual(true);
   });
+  
   it("should set filters", () => {
     const filter = { ...defaultFilter };
     const action = new fromActions.PrefillFiltersAction(filter);
@@ -219,10 +228,9 @@ describe("DatasetsReducer", () => {
   it("should set filters sortField", () => {
     const column = "123";
     const direction = "456";
-    const filter = { ...defaultFilter };
     const action = new fromActions.SortByColumnAction(column, direction);
     const state = fromDatasets.datasetsReducer(initialDatasetState, action);
-    expect(state.filters.sortField).toEqual(filter.sortField);
+    expect(state.filters.sortField).toEqual(`${column}:${direction}`);
   });
 
   it("should set currentSet ", () => {
