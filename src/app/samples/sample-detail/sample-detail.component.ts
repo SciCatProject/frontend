@@ -13,7 +13,7 @@ import { select, Store } from "@ngrx/store";
 @Component({
   selector: "app-sample-detail",
   templateUrl: "./sample-detail.component.html",
-  styleUrls: ["./sample-detail.component.css"]
+  styleUrls: ["./sample-detail.component.scss"]
 })
 export class SampleDetailComponent implements OnInit, OnDestroy {
   sample$: Observable<Sample>;

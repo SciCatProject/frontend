@@ -1,20 +1,25 @@
-import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
+import {
+  MatCardModule,
+  MatIconModule,
+  MatTableModule
+} from "@angular/material";
+import { NgModule } from "@angular/core";
+import { SampleApi } from "../shared/sdk/services/custom";
 import { SampleDetailComponent } from "./sample-detail/sample-detail.component";
 import { SampleTableComponent } from "./sample-table/sample-table.component";
 import { StoreModule } from "@ngrx/store";
 import { samplesReducer } from "../state-management/reducers/samples.reducer";
-import { MatTableModule } from "@angular/material";
-import { SampleApi } from "../shared/sdk/services/custom";
 
 @NgModule({
   imports: [
     CommonModule,
+    MatCardModule,
+    MatIconModule,
     MatTableModule,
     StoreModule.forFeature("samples", samplesReducer)
   ],
   declarations: [SampleDetailComponent, SampleTableComponent],
-  providers: [ SampleApi]
+  providers: [SampleApi]
 })
-export class SamplesModule {
-}
+export class SamplesModule {}
