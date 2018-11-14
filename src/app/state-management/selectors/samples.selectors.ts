@@ -1,5 +1,5 @@
-import { createFeatureSelector, createSelector } from "@ngrx/store";
 import { SampleState } from "../state/samples.store";
+import { createFeatureSelector, createSelector } from "@ngrx/store";
 
 export const getSampleState = createFeatureSelector<SampleState>("samples");
 

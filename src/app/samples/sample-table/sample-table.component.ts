@@ -1,9 +1,9 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { FetchSampleAction, FetchSamplesAction } from "../../state-management/actions/samples.actions";
-import { select, Store } from "@ngrx/store";
+import { Router } from "@angular/router";
 import { Sample } from "../../shared/sdk/models";
 import { getSamplesList } from "state-management/selectors/samples.selectors";
-import { Router } from "@angular/router";
+import { select, Store } from "@ngrx/store";
 
 @Component({
   selector: "app-sample-table",

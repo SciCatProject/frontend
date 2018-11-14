@@ -1,3 +1,4 @@
+import { initialSampleState, SampleState } from "../state/samples.store";
 import {
   FETCH_SAMPLE,
   FETCH_SAMPLE_COMPLETE,
@@ -11,7 +12,6 @@ import {
   SELECT_SAMPLE,
   SelectSampleAction
 } from "state-management/actions/samples.actions";
-import { initialSampleState, SampleState } from "../state/samples.store";
 
 export function samplesReducer(
   state: SampleState = initialSampleState,
