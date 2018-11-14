@@ -59,7 +59,7 @@ export class DatasetsFilterComponent {
   groupFilter$ = this.store.pipe(select(getGroupFilter));
   typeFilter$ = this.store.pipe(select(getTypeFilter));
   private keywordsFilter$ = this.store.pipe(select(getKeywordsFilter));
-  creationTimeFilter$ = this.store.pipe(select(getCreationTimeFilter));
+  creationTimeFilter$ = this.store.pipe(select(getCreationTimeFilter));  
   scientificConditions$ = this.store.pipe(select(getScientificConditions));
 
   hasAppliedFilters$ = this.store.pipe(select(getHasAppliedFilters));

@@ -40,11 +40,16 @@
   text-transform: uppercase;
 }
 
-.top-container {
+.section-container {
   font-size: 1.25em;
   font-weight: 425;
   margin-bottom: 0.5em;
   position: relative;
+  margin-top: 1em;
+}
+
+.section-container:first-child {
+  margin-top: unset;
 }
 
 .clear-button {
