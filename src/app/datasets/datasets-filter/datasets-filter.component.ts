@@ -16,7 +16,8 @@ import {
   getGroupFilter,
   getCreationTimeFilter,
   getSearchTerms,
-  getHasAppliedFilters
+  getHasAppliedFilters,
+  getScientificConditions
 } from "state-management/selectors/datasets.selectors";
 
 import {
@@ -31,7 +32,9 @@ import {
   ClearFacetsAction,
   SetDateRangeFilterAction,
   SetSearchTermsAction,
-  SetTextFilterAction
+  SetTextFilterAction,
+  RemoveScientificConditionAction,
+  AddScientificConditionAction
 } from 'state-management/actions/datasets.actions';
 import { ScientificConditionDialogComponent } from 'datasets/scientific-condition-dialog/scientific-condition-dialog.component';
 
@@ -57,6 +60,7 @@ export class DatasetsFilterComponent {
   typeFilter$ = this.store.pipe(select(getTypeFilter));
   private keywordsFilter$ = this.store.pipe(select(getKeywordsFilter));
   creationTimeFilter$ = this.store.pipe(select(getCreationTimeFilter));
+  scientificConditions$ = this.store.pipe(select(getScientificConditions));
 
   hasAppliedFilters$ = this.store.pipe(select(getHasAppliedFilters));
 
@@ -137,29 +141,12 @@ export class DatasetsFilterComponent {
       .afterClosed()
       .subscribe(({ data }) => {
         if (data != null) {
-          this.conditions.push(data);
+          this.store.dispatch(new AddScientificConditionAction(data));
         }
       });
   }
 
-  public conditions: {relation: string, lhs: any, rhs: any}[] = []; // TODO move
-
   removeCondition(index: number) {
-    this.conditions.splice(index, 1);
-  }
-
-  conditionQuery() {
-    const and = this.conditions.map(cond => {
-      const { relation, lhs, rhs } = cond;
-      const dollar = {
-        "EQUAL_TO_NUMERIC": "$eq",
-        "EQUAL_TO_STRING": "$eq",
-        "LESS_THAN": "$lt",
-        "GREATER_THAN": "$gt"
-      }[relation];
-      return { [lhs]: { [dollar]: rhs }};
-    });
-
-    return { and };
+    this.store.dispatch(new RemoveScientificConditionAction(index));
   }
 }

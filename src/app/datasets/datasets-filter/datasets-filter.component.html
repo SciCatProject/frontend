@@ -102,7 +102,7 @@
       <div style="clear: both"></div>
 
       <mat-chip-list>
-        <mat-chip *ngFor="let condition of conditions; index as i">
+        <mat-chip *ngFor="let condition of (scientificConditions$ | async); index as i">
           {{condition.lhs}}
           <ng-container [ngSwitch]="condition.relation">
             <ng-container *ngSwitchCase="'EQUAL_TO_NUMERIC'">=</ng-container>
@@ -115,7 +115,6 @@
           <mat-icon matChipRemove (click)="removeCondition(i)">cancel</mat-icon>
         </mat-chip>
       </mat-chip-list>
-      <pre>{{ conditionQuery() | json }}</pre>
     </div>
   </form>
 </mat-card>
