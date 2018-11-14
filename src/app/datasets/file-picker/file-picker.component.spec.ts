@@ -50,6 +50,11 @@ describe("FilePickerComponent", () => {
     TestBed.compileComponents();
   }));
 
+
+  afterEach(() => {
+    fixture.destroy();
+  });
+
   beforeEach(() => {
     fixture = TestBed.createComponent(FilePickerComponent);
     component = fixture.componentInstance;

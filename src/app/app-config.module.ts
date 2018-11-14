@@ -12,6 +12,8 @@ export class AppConfig {
   editMetadataEnabled: boolean;
   facility: string;
   shoppingCartEnabled: boolean;
+  multipleDownloadEnabled: boolean;
+  multipleDownloadAction?: string;
 }
 
 export const APP_DI_CONFIG: AppConfig = {
@@ -22,7 +24,9 @@ export const APP_DI_CONFIG: AppConfig = {
   archiveWorkflowEnabled: environment["archiveWorkflowEnabled"] || null,
   editMetadataEnabled: environment["editMetadataEnabled"] || null,
   facility: environment["facility"] || null,
-  shoppingCartEnabled: environment["shoppingCartEnabled"] || false
+  shoppingCartEnabled: environment["shoppingCartEnabled"] || false,
+  multipleDownloadEnabled: environment["multipleDownloadEnabled"] || false,
+  multipleDownloadAction: environment["multipleDownloadAction"]
 };
 
 @NgModule({

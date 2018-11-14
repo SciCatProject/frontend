@@ -35,6 +35,4 @@ export const initialPolicyState: PolicyState = {
       limit: 30,
       sortField: "ownerGroup:desc"
     }
-
-
 };

@@ -14,22 +14,19 @@ import { LoopBackConfig } from "shared/sdk";
 import { UserApi } from "shared/sdk/services";
 import * as ua from "state-management/actions/user.actions";
 import { MatSnackBar } from "@angular/material";
-import { Title } from "@angular/platform-browser";
+import { Meta, Title } from "@angular/platform-browser";
 import { environment } from "../environments/environment";
 import * as selectors from "state-management/selectors";
 import { getCurrentUser } from "state-management/selectors/users.selectors";
 
-import {
-  faAddressBook,
-  faCertificate,
-  faCog,
-  faDownload,
-  faEdit,
-  faFileAlt,
-  faIdBadge,
-  faPeopleCarry,
-  faSignOutAlt
-} from "@fortawesome/free-solid-svg-icons";
+import { faCog } from "@fortawesome/free-solid-svg-icons/faCog";
+import { faCertificate } from "@fortawesome/free-solid-svg-icons/faCertificate";
+import { faEdit } from "@fortawesome/free-solid-svg-icons/faEdit";
+import { faPeopleCarry } from "@fortawesome/free-solid-svg-icons/faPeopleCarry";
+import { faSignOutAlt } from "@fortawesome/free-solid-svg-icons/faSignOutAlt";
+import { faDownload } from "@fortawesome/free-solid-svg-icons/faDownload";
+import { faFileAlt } from "@fortawesome/free-solid-svg-icons/faFileAlt";
+import { faIdBadge } from "@fortawesome/free-solid-svg-icons/faIdBadge";
 
 const { version: appVersion } = require("../../package.json");
 
@@ -45,7 +42,6 @@ export class AppComponent implements OnDestroy, OnInit {
   sidenav: MatSidenav;
   userObs$ = this.store.pipe(select(getCurrentUser));
 
-  faAddressBook = faAddressBook;
   faIdBadge = faIdBadge;
   faEdit = faEdit;
   faFileAlt = faFileAlt;
@@ -74,6 +70,7 @@ export class AppComponent implements OnDestroy, OnInit {
   constructor(
     private router: Router,
     private titleService: Title,
+    private metaService: Meta,
     public snackBar: MatSnackBar,
     // private _notif_service: NotificationsService,
     @Inject(APP_CONFIG) private appConfig: AppConfig,
@@ -88,6 +85,10 @@ export class AppComponent implements OnDestroy, OnInit {
     }
     this.title = "SciCat" + " " + facility + " " + status;
     this.setTitle(this.title);
+    this.metaService.addTag({
+      name: "description",
+      content: "SciCat metadata catalogue at" + facility
+    });
   }
 
   public setTitle(newTitle: string) {
