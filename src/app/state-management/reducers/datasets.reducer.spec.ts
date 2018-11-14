@@ -4,6 +4,23 @@ import { Dataset, DatasetInterface } from "shared/sdk/models";
 import { initialDatasetState } from "state-management/state/datasets.store";
 import { DatasetFilters } from "../models";
 
+const defaultFilter: DatasetFilters = {
+  text: "",
+  ownerGroup: [],
+  type: [],
+  creationTime: {
+    begin: new Date(2018, 1, 1).toISOString(),
+    end: new Date(2018, 1, 2).toISOString()
+  },
+  creationLocation: [],
+  skip: 0,
+  limit: 0,
+  keywords: [],
+  sortField: "",
+  mode: "view",
+  scientific: []
+};
+
 describe("DatasetsReducer", () => {
   it("should set datasetsLoading to true after fetch complete", () => {
     const action = new fromActions.FetchDatasetsAction();
@@ -71,41 +88,13 @@ describe("DatasetsReducer", () => {
     expect(state.datasetsLoading).toEqual(true);
   });
   it("should set filters", () => {
-    const filter: DatasetFilters = {
-      text: "",
-      ownerGroup: [],
-      type: [],
-      creationTime: {
-        begin: new Date(2018, 1, 1).toISOString(),
-        end: new Date(2018, 1, 2).toISOString()
-      },
-      creationLocation: [],
-      skip: 0,
-      limit: 0,
-      keywords: [],
-      sortField: "",
-      mode: "view"
-    };
+    const filter = { ...defaultFilter };
     const action = new fromActions.UpdateFilterAction(filter);
     const state = fromDatasets.datasetsReducer(initialDatasetState, action);
     expect(state.filters).toEqual(filter);
   });
   it("should set selectedSets to an empty array", () => {
-    const filter: DatasetFilters = {
-      text: "",
-      ownerGroup: [],
-      type: [],
-      creationTime: {
-        begin: new Date(2018, 1, 1).toISOString(),
-        end: new Date(2018, 1, 2).toISOString()
-      },
-      creationLocation: [],
-      skip: 0,
-      limit: 0,
-      keywords: [],
-      sortField: "",
-      mode: "view"
-    };
+    const filter = { ...defaultFilter };
     const action = new fromActions.UpdateFilterAction(filter);
     const state = fromDatasets.datasetsReducer(initialDatasetState, action);
     expect(state.selectedSets.length).toEqual(0);
@@ -117,42 +106,14 @@ describe("DatasetsReducer", () => {
     expect(state.hasPrefilledFilters).toEqual(true);
   });
   it("should set filters", () => {
-    const filter: DatasetFilters = {
-      text: "",
-      ownerGroup: [],
-      type: [],
-      creationTime: {
-        begin: new Date(2018, 1, 1).toISOString(),
-        end: new Date(2018, 1, 2).toISOString()
-      },
-      creationLocation: [],
-      skip: 0,
-      limit: 0,
-      keywords: [],
-      sortField: "",
-      mode: "view"
-    };
+    const filter = { ...defaultFilter };
     const action = new fromActions.PrefillFiltersAction(filter);
     const state = fromDatasets.datasetsReducer(initialDatasetState, action);
     expect(state.filters).toEqual(filter);
   });
 
   it("should set searchterms", () => {
-    const filter: DatasetFilters = {
-      text: "abc",
-      ownerGroup: [],
-      type: [],
-      creationTime: {
-        begin: new Date(2018, 1, 1).toISOString(),
-        end: new Date(2018, 1, 2).toISOString()
-      },
-      creationLocation: [],
-      skip: 0,
-      limit: 0,
-      keywords: [],
-      sortField: "",
-      mode: "view"
-    };
+    const filter = { ...defaultFilter };
     const action = new fromActions.PrefillFiltersAction(filter);
     const state = fromDatasets.datasetsReducer(initialDatasetState, action);
     expect(state.searchTerms).toEqual(filter.text);
@@ -222,21 +183,9 @@ describe("DatasetsReducer", () => {
   it("should set filters creationTime", () => {
     const begin = new Date(2018, 1, 2).toISOString();
     const end = new Date(2018, 1, 3).toISOString();
-    const filter: DatasetFilters = {
-      text: "",
-      ownerGroup: [],
-      type: [],
-      creationTime: { begin, end },
-      creationLocation: [],
-      skip: 0,
-      limit: 0,
-      keywords: [],
-      sortField: "",
-      mode: "view"
-    };
     const action = new fromActions.SetDateRangeFilterAction(begin, end);
     const state = fromDatasets.datasetsReducer(initialDatasetState, action);
-    expect(state.filters.creationTime).toEqual(filter.creationTime);
+    expect(state.filters.creationTime).toEqual({ begin, end });
   });
   it("should remove filters keyword", () => {
     const keyword = "111";
@@ -270,21 +219,7 @@ describe("DatasetsReducer", () => {
   it("should set filters sortField", () => {
     const column = "123";
     const direction = "456";
-    const filter: DatasetFilters = {
-      text: "",
-      ownerGroup: [],
-      type: [],
-      creationTime: {
-        begin: new Date(2018, 1, 1).toISOString(),
-        end: new Date(2018, 1, 2).toISOString()
-      },
-      creationLocation: [],
-      skip: 0,
-      limit: 0,
-      keywords: [],
-      sortField: column + (direction ? ":" + direction : ""),
-      mode: "view"
-    };
+    const filter = { ...defaultFilter };
     const action = new fromActions.SortByColumnAction(column, direction);
     const state = fromDatasets.datasetsReducer(initialDatasetState, action);
     expect(state.filters.sortField).toEqual(filter.sortField);
