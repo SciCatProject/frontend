@@ -1,4 +1,4 @@
-import { createFeatureSelector, createSelector } from "@ngrx/store";
+import { createFeatureSelector } from "@ngrx/store";
 import { SampleState } from "../state/samples.store";
 
 export const getSampleState = createFeatureSelector<SampleState>("samples");
@@ -6,4 +6,4 @@ export const getSampleState = createFeatureSelector<SampleState>("samples");
 
 export const getSamples = (state: any) => state.root.samples.samples;
 
-export const getCurrentSample = (state: any) => state.root.jobs.currentSample;
+export const getCurrentSample = (state: any) => state.samples.currentSample;

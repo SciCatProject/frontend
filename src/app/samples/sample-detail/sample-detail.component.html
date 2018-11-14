@@ -1,12 +1,10 @@
-<div *ngIf="sample">
+<div *ngIf="(sample$ | async) as sample">
   <div class="details">
     Sample Details
     <table>
-      <tr>
-        <th>
-          Sample Owner
-        </th>
-        <td>{{ sample.owner }}</td>
+      <tr *ngIf="sample.owner as value">
+        <th> Sample Owner </th>
+        <td>{{ value }}</td>
       </tr>
       <tr *ngIf="sample.description as value">
         <th> Description</th>
@@ -17,11 +15,11 @@
         <td>{{ value }}</td>
       </tr>
       <tr *ngIf="sample.createdAt as value">
-        <th> Creation Time </th>
+        <th> Creation Time</th>
         <td>{{ value | date: 'yyyy/MM/dd HH:mm'}}</td>
       </tr>
       <tr *ngIf="sample.updatedAt as value">
-        <th> Update Time </th>
+        <th> Update Time</th>
         <td>{{ value | date: 'yyyy/MM/dd HH:mm'}}</td>
       </tr>
     </table>
