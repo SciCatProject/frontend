@@ -18,7 +18,6 @@ import { JobsEffects } from "state-management/effects/jobs.effects";
 import { JobsTableComponent } from "jobs/jobs-table/jobs-table.component";
 import { NgModule } from "@angular/core";
 import { NguiDatetimePickerModule } from "@ngui/datetime-picker";
-import { NgxDatatableModule } from "@swimlane/ngx-datatable";
 import { PoliciesEffects } from "state-management/effects/policies.effects";
 import { PoliciesModule } from "policies/policies.module";
 import { ProposalsModule } from "proposals/proposals.module";
@@ -85,7 +84,6 @@ export function localStorageSyncWrapper(reducer: any) {
     MatTableModule,
     MatToolbarModule,
     NguiDatetimePickerModule,
-    NgxDatatableModule,
     PoliciesModule,
     ProposalsModule,
     ReactiveFormsModule,

@@ -1,34 +1,25 @@
-import { Proposal, Dataset } from "../models";
-import { SelectProposalAction, SELECT_PROPOSAL } from "./proposals.actions";
-import { FetchProposalsAction, FETCH_PROPOSALS } from "./proposals.actions";
+import { Dataset, Proposal } from "../models";
 import {
-  FetchProposalsCompleteAction,
-  FETCH_PROPOSALS_COMPLETE
-} from "./proposals.actions";
-import {
-  FetchProposalsFailedAction,
-  FETCH_PROPOSALS_FAILED
-} from "./proposals.actions";
-import { FetchProposalAction, FETCH_PROPOSAL } from "./proposals.actions";
-import {
-  FetchProposalCompleteAction,
-  FETCH_PROPOSAL_COMPLETE
-} from "./proposals.actions";
-import {
-  FetchProposalFailedAction,
-  FETCH_PROPOSAL_FAILED
-} from "./proposals.actions";
-import {
+  FETCH_DATASETS_FOR_PROPOSAL,
+  FETCH_DATASETS_FOR_PROPOSAL_COMPLETE,
+  FETCH_DATASETS_FOR_PROPOSAL_FAILED,
+  FETCH_PROPOSAL,
+  FETCH_PROPOSAL_COMPLETE,
+  FETCH_PROPOSAL_FAILED,
+  FETCH_PROPOSALS,
+  FETCH_PROPOSALS_COMPLETE,
+  FETCH_PROPOSALS_FAILED,
   FetchDatasetsForProposalAction,
-  FETCH_DATASETS_FOR_PROPOSAL
-} from "./proposals.actions";
-import {
   FetchDatasetsForProposalCompleteAction,
-  FETCH_DATASETS_FOR_PROPOSAL_COMPLETE
-} from "./proposals.actions";
-import {
   FetchDatasetsForProposalFailedAction,
-  FETCH_DATASETS_FOR_PROPOSAL_FAILED
+  FetchProposalAction,
+  FetchProposalCompleteAction,
+  FetchProposalFailedAction,
+  FetchProposalsAction,
+  FetchProposalsCompleteAction,
+  FetchProposalsFailedAction,
+  SELECT_PROPOSAL,
+  SelectProposalAction
 } from "./proposals.actions";
 
 describe("SelectProposalAction", () => {

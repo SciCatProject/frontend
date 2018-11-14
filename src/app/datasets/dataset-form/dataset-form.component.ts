@@ -3,11 +3,11 @@ import { FormArray, FormBuilder, FormGroup } from "@angular/forms";
 import { Observable, Subscription } from "rxjs";
 import { RawDataset } from "../../shared/sdk/models";
 import { SaveDatasetAction } from "../../state-management/actions/datasets.actions";
-import { faPlusCircle, faTimesCircle } from "@fortawesome/free-solid-svg-icons";
+import { faPlusCircle } from "@fortawesome/free-solid-svg-icons/faPlusCircle";
+import { faTimesCircle } from "@fortawesome/free-solid-svg-icons/faTimesCircle";
 import { getCurrentDataset } from "../../state-management/selectors/datasets.selectors";
 import { select, Store } from "@ngrx/store";
-import { take } from "rxjs/operators";
-
+import { filter, take } from "rxjs/operators";
 
 @Component({
   selector: "app-dataset-form",
@@ -95,9 +95,16 @@ export class DatasetFormComponent implements OnInit, OnDestroy {
     this.dataset$ = this.store.pipe(select<RawDataset>(getCurrentDataset));
 
     this.scientificMetaDataSubscription = this.dataset$
-      .pipe(take(1))
+      .pipe(
+        filter(Boolean),
+        take(1))
       .subscribe(data_set => {
-        const json_data = data_set.scientificMetadata;
+        let json_data = {};
+        if (typeof data_set.scientificMetadata === "undefined") {
+          json_data = {};
+        } else {
+          json_data = data_set.scientificMetadata;
+        }
         console.log(json_data);
         for (const key of Object.keys(json_data)) {
           console.log("gm key", key);

@@ -14,7 +14,7 @@ import { APP_CONFIG } from "../../app-config.module";
 import * as lb from "shared/sdk/services";
 import { FileSizePipe } from "../../shared/pipes/filesize.pipe";
 
-let mockConfig = {};
+const mockConfig = {};
 
 describe("FileDropzoneComponent", () => {
   let component: FileDropzoneComponent;
@@ -54,6 +54,11 @@ describe("FileDropzoneComponent", () => {
     fixture = TestBed.createComponent(FileDropzoneComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+  });
+
+
+  afterEach(() => {
+    fixture.destroy();
   });
 
   it("should create", () => {

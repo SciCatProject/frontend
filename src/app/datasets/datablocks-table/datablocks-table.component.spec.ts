@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { Router, ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 
 import { MatTableModule } from "@angular/material";
 
@@ -33,6 +33,10 @@ describe("DatablocksComponent", () => {
     fixture = TestBed.createComponent(DatablocksComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    fixture.destroy();
   });
 
   it("should create", () => {
