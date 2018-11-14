@@ -52,9 +52,9 @@ export class ArchiveSettingsComponent implements OnInit {
   @ViewChild(MatPaginator)
   paginator: MatPaginator;
   private policyState$ = this.store.pipe(select(getPolicyState));
-  private selectedPolicies$ = this.store.pipe(select(getSelectedPolicies));
-  private currentPage$ = this.store.pipe(select(getPage));
-  private policyCount$ = this.store.select(getTotalCount);
+  public selectedPolicies$ = this.store.pipe(select(getSelectedPolicies));
+  public currentPage$ = this.store.pipe(select(getPage));
+  public policyCount$ = this.store.select(getTotalCount);
   private selectedPolicies: Policy[] = [];
   private selectedGroups: string[] = [];
   private selectedIds: string[] = [];
