@@ -1,5 +1,5 @@
 import { Action } from "@ngrx/store";
-import { DatasetFilters, ViewMode } from "state-management/models";
+import { DatasetFilters, ViewMode, ScientificCondition } from "state-management/models";
 import { Dataset} from "shared/sdk/models";
 import { FacetCounts } from "../state/datasets.store";
 
@@ -83,6 +83,9 @@ export const CLEAR_BATCH =                  "[Dataset] Clear Batch";
 
 export const PREFILL_BATCH =                "[Dataset] Prefill Batch";
 export const PREFILL_BATCH_COMPLETE =       "[Dataset] Prefill Batch Complete";
+
+export const ADD_SCIENTIFIC_CONDITION =     "[Dataset] Add Scientific Condition";
+export const REMOVE_SCIENTIFIC_CONDITION =  "[Dataset] Remove Scientific Condition";
 
 export class UpdateFilterAction implements Action { // Inte gjord då den eventuellt ska tas bort
     readonly type = FILTER_UPDATE;
@@ -271,6 +274,15 @@ export class PrefillBatchCompleteAction implements Action {
     constructor(readonly batch: Dataset[]) {}
 }
 
+export class AddScientificConditionAction implements Action {
+    readonly type = ADD_SCIENTIFIC_CONDITION;
+    constructor(readonly condition: ScientificCondition) {}
+}
+
+export class RemoveScientificConditionAction implements Action {
+    readonly type = REMOVE_SCIENTIFIC_CONDITION;
+    constructor(readonly index: number) {}
+}
 
 export type Actions =
     UpdateFilterAction |
@@ -283,4 +295,5 @@ export type Actions =
     SelectDatasetAction | DeselectDatasetAction | SelectAllDatasetsAction |
     ExportToCsvAction | ChangePageAction | SortByColumnAction | SetViewModeAction |
     SetSearchTermsAction | ClearFacetsAction |
-    AddToBatchAction;
+    AddToBatchAction |
+    AddScientificConditionAction | RemoveScientificConditionAction;

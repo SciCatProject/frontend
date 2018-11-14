@@ -63,7 +63,11 @@ import {
   SetSearchTermsAction,
   SetTextFilterAction,
   SetViewModeAction,
-  SortByColumnAction
+  SortByColumnAction,
+  ADD_SCIENTIFIC_CONDITION,
+  AddScientificConditionAction,
+  REMOVE_SCIENTIFIC_CONDITION,
+  RemoveScientificConditionAction
 } from "state-management/actions/datasets.actions";
 
 import {
@@ -258,6 +262,23 @@ export function datasetsReducer(
     case SET_VIEW_MODE: {
       const { mode } = action as SetViewModeAction;
       const filters = { ...state.filters, mode };
+      return { ...state, filters };
+    }
+
+    case ADD_SCIENTIFIC_CONDITION: {
+      const { condition } = action as AddScientificConditionAction;
+      const currentFilters = state.filters;
+      const currentScientific = currentFilters.scientific;
+      const filters = { ...currentFilters, scientific: [...currentScientific, condition] };
+      return { ...state, filters };
+    }
+
+    case REMOVE_SCIENTIFIC_CONDITION: {
+      const { index } = action as RemoveScientificConditionAction;
+      const currentFilters = state.filters;
+      const scientific = [...currentFilters.scientific];
+      scientific.splice(index, 1);
+      const filters = { ...currentFilters, scientific };
       return { ...state, filters };
     }
 
