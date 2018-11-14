@@ -10,7 +10,6 @@ export class SampleService {
   constructor(private sampleApi: SampleApi) {}
 
   getSamples(): Observable<Sample[]> {
-    console.log("fired now");
     return this.sampleApi.find();
   }
 

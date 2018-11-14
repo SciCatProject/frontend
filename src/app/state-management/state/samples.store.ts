@@ -12,6 +12,7 @@ export interface SampleState {
 
   skip: number;
   limit: number;
+  selectedId: string;
 }
 
 export const initialSampleState: SampleState = {
@@ -24,5 +25,6 @@ export const initialSampleState: SampleState = {
   samplesLoading: true,
   error: undefined,
   skip: 0,
-  limit: 0
+  limit: 0,
+  selectedId: null
 };

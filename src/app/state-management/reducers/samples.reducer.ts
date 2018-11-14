@@ -1,13 +1,15 @@
 import {
-  FETCH_SAMPLES,
-  FETCH_SAMPLES_COMPLETE,
-  FETCH_SAMPLES_FAILED,
   FETCH_SAMPLE,
   FETCH_SAMPLE_COMPLETE,
   FETCH_SAMPLE_FAILED,
-  FetchSamplesCompleteAction,
+  FETCH_SAMPLES,
+  FETCH_SAMPLES_COMPLETE,
+  FETCH_SAMPLES_FAILED,
   FetchSampleCompleteAction,
-  SamplesActions
+  FetchSamplesCompleteAction,
+  SamplesActions,
+  SELECT_SAMPLE,
+  SelectSampleAction
 } from "state-management/actions/samples.actions";
 import { initialSampleState, SampleState } from "../state/samples.store";
 
@@ -20,6 +22,11 @@ export function samplesReducer(
   }
 
   switch (action.type) {
+    case SELECT_SAMPLE: {
+      const selectedId = (action as SelectSampleAction).samplelId;
+      return { ...state, selectedId };
+    }
+
     case FETCH_SAMPLES: {
       return { ...state, samplesLoading: true };
     }
