@@ -17,7 +17,6 @@
     <mat-select
       name="operator"
       [(ngModel)]="relation"
-      placeholder="Relation"
     >
       <mat-option value="EQUAL_TO_NUMERIC">is equal to (numeric)</mat-option>
       <mat-option value="EQUAL_TO_STRING">is equal to (string)</mat-option>
@@ -39,7 +38,7 @@
     />
   </mat-form-field>
 </mat-dialog-content>
-<mat-dialog-actions>
+<mat-dialog-actions [attr.align]="'end'">
   <button mat-button (click)="cancel()">Cancel</button>
   <button mat-button (click)="add()" color="primary" [disabled]="isInvalid()">Add</button>
 </mat-dialog-actions>
