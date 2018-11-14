@@ -19,18 +19,18 @@ export class ScientificConditionDialogComponent {
     const { lhs, relation } = this;
     const rawRhs = this.rhs;
     const rhs = relation === "EQUAL_TO_STRING" ? rawRhs : Number(rawRhs);
-    this.dialogRef.close({ data: { lhs, rhs, relation }});
+    this.dialogRef.close({ data: { lhs, rhs, relation } });
   }
 
   cancel() {
     this.dialogRef.close({ data: null });
   }
 
-  invalid() {
+  isInvalid() {
     if (this.relation !== "EQUAL_TO_STRING" && isNaN(Number(this.rhs))) {
       return true;
+    } else {
+      return this.lhs.length * this.rhs.length === 0;
     }
-
-    return this.lhs.length * this.rhs.length === 0;
   }
 }
