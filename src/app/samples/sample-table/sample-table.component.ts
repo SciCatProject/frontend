@@ -1,12 +1,8 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import {
-  FetchSampleAction,
-  FetchSamplesAction
-} from "../../state-management/actions/samples.actions";
+import { FetchSampleAction, FetchSamplesAction } from "../../state-management/actions/samples.actions";
 import { select, Store } from "@ngrx/store";
 import { Sample } from "../../shared/sdk/models";
-import { getSamples } from "state-management/selectors/samples.selectors";
-import { SampleService } from "../../samples/sample.service";
+import { getSamplesList } from "state-management/selectors/samples.selectors";
 import { Router } from "@angular/router";
 
 @Component({
@@ -15,26 +11,19 @@ import { Router } from "@angular/router";
   styleUrls: ["./sample-table.component.css"]
 })
 export class SampleTableComponent implements OnInit, OnDestroy {
-  public samples$ = this.store.pipe(select(getSamples));
+  public samples$ = this.store.pipe(select(getSamplesList));
   samples: Sample[] = [];
   displayedColumns = ["samplelId", "owner", "createdAt", "description"];
   private subscriptions = [];
 
   constructor(
     private store: Store<Sample>,
-    private router: Router,
-    private sampleService: SampleService
-  ) {}
+    private router: Router
+  ) {
+  }
 
   ngOnInit() {
     this.store.dispatch(new FetchSamplesAction());
-
-    this.subscriptions.push(
-      this.sampleService.getSamples().subscribe(data => {
-        this.samples = data;
-        // console.log(data);
-      })
-    );
 
     this.subscriptions.push(
       this.samples$.subscribe(data2 => {

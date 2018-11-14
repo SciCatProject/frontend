@@ -32,7 +32,14 @@ export function samplesReducer(
     }
 
     case FETCH_SAMPLES_COMPLETE: {
-      const samples = (action as FetchSamplesCompleteAction).samples;
+      const list = (action as FetchSamplesCompleteAction).samples;
+      const samples = list.reduce(
+        (samples, sample) => ({
+          ...samples,
+          [sample.samplelId]: sample
+        }),
+        {}
+      );
       return { ...state, samples, samplesLoading: false };
     }
 

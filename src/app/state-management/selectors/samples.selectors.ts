@@ -8,7 +8,16 @@ export const getSelectedSampleId = createSelector(
   state => state.selectedId
 );
 
-export const getSamples = (state: any) => state.root.samples.samples;
+
+const getSamples = createSelector(
+  getSampleState,
+  state => state.samples
+);
+
+export const getSamplesList = createSelector(getSamples, samples =>
+  Object.keys(samples).map(samplelId => samples[samplelId])
+);
+
 
 const getSamples2 = createSelector(
   getSampleState,

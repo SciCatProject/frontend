@@ -1,7 +1,7 @@
 import { Sample } from "state-management/models";
 
 export interface SampleState {
-  samples: Sample[];
+  samples: { [samplelId: string]: Sample };
   selectedSamples: Sample[];
   currentSample: Sample;
   totalCount: number;
@@ -16,7 +16,7 @@ export interface SampleState {
 }
 
 export const initialSampleState: SampleState = {
-  samples: [],
+  samples: {},
   selectedSamples: [],
   currentSample: null,
   totalCount: 0,

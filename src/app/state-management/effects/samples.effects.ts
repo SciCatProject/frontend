@@ -23,8 +23,8 @@ export class SamplesEffects {
     ofType(FETCH_SAMPLES),
     switchMap(action =>
       this.sampleService.getSamples().pipe(
-        map((samples: Sample[]) => new FetchSamplesCompleteAction(samples)),
-        catchError(err => of(new FetchSamplesFailedAction()))
+        map(samples => new FetchSamplesCompleteAction(samples)),
+        catchError(() => of(new FetchSamplesFailedAction()))
       )
     )
   );

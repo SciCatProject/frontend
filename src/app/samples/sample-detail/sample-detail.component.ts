@@ -1,10 +1,13 @@
 import { ActivatedRoute } from "@angular/router";
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import { FetchSampleAction, SelectSampleAction } from "../../state-management/actions/samples.actions";
+import {
+  FetchSampleAction,
+  SelectSampleAction
+} from "../../state-management/actions/samples.actions";
 import { Observable, Subscription } from "rxjs";
 import { Sample } from "../../shared/sdk/models";
 import { filter, flatMap, map } from "rxjs/operators";
-import { getCurrentSample, getSelectedSample } from "../../state-management/selectors/samples.selectors";
+import { getSelectedSample } from "../../state-management/selectors/samples.selectors";
 import { select, Store } from "@ngrx/store";
 
 @Component({
@@ -17,11 +20,7 @@ export class SampleDetailComponent implements OnInit, OnDestroy {
   private sampleId$: Observable<string>;
   private subscription: Subscription;
 
-  constructor(
-    private route: ActivatedRoute,
-    private store: Store<Sample>
-  ) {
-  }
+  constructor(private route: ActivatedRoute, private store: Store<Sample>) {}
 
   ngOnInit() {
     this.sampleId$ = this.route.params.pipe(
@@ -35,7 +34,7 @@ export class SampleDetailComponent implements OnInit, OnDestroy {
       )
       .subscribe(this.store);
 
-    this.sample$ = this.store.pipe(select(getCurrentSample));
+    this.sample$ = this.store.pipe(select(getSelectedSample));
   }
 
   ngOnDestroy() {
