@@ -4,6 +4,8 @@ import { Router } from "@angular/router";
 import { Sample } from "../../shared/sdk/models";
 import { getSamplesList } from "state-management/selectors/samples.selectors";
 import { select, Store } from "@ngrx/store";
+import { MatDialog, MatDialogConfig } from "@angular/material";
+import { SampleDialogComponent } from "../sample-dialog/sample-dialog.component";
 
 @Component({
   selector: "app-sample-table",
@@ -14,11 +16,15 @@ export class SampleTableComponent implements OnInit, OnDestroy {
   public samples$ = this.store.pipe(select(getSamplesList));
   samples: Sample[] = [];
   displayedColumns = ["samplelId", "owner", "createdAt", "description"];
+  dialogConfig: MatDialogConfig;
+  description: string;
+  name: string;
   private subscriptions = [];
 
   constructor(
     private store: Store<Sample>,
-    private router: Router
+    private router: Router,
+    public dialog: MatDialog
   ) {
   }
 
@@ -44,5 +50,21 @@ export class SampleTableComponent implements OnInit, OnDestroy {
     this.router.navigateByUrl(
       "/samples/" + encodeURIComponent(sample.samplelId)
     );
+  }
+
+  public onEditClick() {
+    this.openDialog();
+  }
+
+  private openDialog() {
+    this.dialogConfig = new MatDialogConfig();
+    // this.dialogConfig.disableClose = true;
+    // this.dialogConfig.autoFocus = true;
+    // this.dialogConfig.direction = "ltr";
+    const dialogRef = this.dialog.open(SampleDialogComponent, {
+      width: "250px",
+      data: { name: this.name, description: this.description }
+    });
+
   }
 }

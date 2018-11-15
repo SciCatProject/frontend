@@ -1,3 +1,12 @@
+<div class="button-group" align="end">
+  <ng-container >
+    <button mat-button mat-button (click)="onEditClick()" color="primary">
+      <mat-icon >edit</mat-icon> Add Sample
+    </button>
+
+  </ng-container>
+</div>
+
 <mat-card style="margin: 1em">
   <div class="details">
     <mat-table #table [dataSource]="samples">
