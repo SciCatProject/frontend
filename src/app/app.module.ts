@@ -23,7 +23,6 @@ import { PoliciesModule } from "policies/policies.module";
 import { ProposalsModule } from "proposals/proposals.module";
 import { RouterModule } from "@angular/router";
 import { SampleApi, SDKBrowserModule } from "shared/sdk/index";
-import { SampleDataFormComponent } from "sample-data-form/sample-data-form.component";
 import { SamplesModule} from "./samples/samples.module";
 import { SatDatepickerModule, SatNativeDateModule } from "saturn-datepicker";
 import { SharedCatanieModule } from "shared/shared.module";
@@ -61,7 +60,6 @@ export function localStorageSyncWrapper(reducer: any) {
   declarations: [
     AppComponent,
     JobsTableComponent,
-    SampleDataFormComponent,
     JobsDetailComponent
   ],
   imports: [

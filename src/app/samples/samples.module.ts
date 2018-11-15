@@ -8,6 +8,7 @@ import { NgModule } from "@angular/core";
 import { SampleApi } from "../shared/sdk/services/custom";
 import { SampleDetailComponent } from "./sample-detail/sample-detail.component";
 import { SampleTableComponent } from "./sample-table/sample-table.component";
+import { SampleDataFormComponent } from "./sample-data-form/sample-data-form.component";
 import { StoreModule } from "@ngrx/store";
 import { samplesReducer } from "../state-management/reducers/samples.reducer";
 
@@ -19,7 +20,7 @@ import { samplesReducer } from "../state-management/reducers/samples.reducer";
     MatTableModule,
     StoreModule.forFeature("samples", samplesReducer)
   ],
-  declarations: [SampleDetailComponent, SampleTableComponent],
+  declarations: [SampleDetailComponent, SampleTableComponent, SampleDataFormComponent],
   providers: [SampleApi]
 })
 export class SamplesModule {}
