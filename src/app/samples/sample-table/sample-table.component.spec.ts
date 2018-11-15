@@ -2,7 +2,7 @@ import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { SampleTableComponent } from "./sample-table.component";
 import { Store } from "@ngrx/store";
-import { MatCardModule, MatTableModule } from "@angular/material";
+import { MatCardModule, MatDialog, MatIconModule, MatTableModule } from "@angular/material";
 import { MockHttp, MockRouter, MockSampleService, MockStore } from "../../shared/MockStubs";
 import { HttpClient } from "@angular/common/http";
 import { Router } from "@angular/router";
@@ -15,7 +15,10 @@ describe("SampleTableComponent", () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [SampleTableComponent],
-      imports: [MatTableModule, MatCardModule]
+      imports: [MatTableModule, MatCardModule, MatIconModule],
+      providers: [
+        { provide: MatDialog, useValue: {} }
+      ]
     });
     TestBed.overrideComponent(SampleTableComponent, {
       set: {
