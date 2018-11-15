@@ -14,7 +14,7 @@ import {
   SortByColumnAction,
   SubmitPolicyAction
 } from "state-management/actions/policies.actions";
-import { getPage, getPolicies, getPolicyState, getSelectedPolicies } from "state-management/selectors/policies.selectors";
+import { getPage, getPolicies, getPolicyState, getSelectedPolicies, getTotalCount } from "state-management/selectors/policies.selectors";
 import { PoliciesService } from "../policies.service";
 import { EditDialogComponent } from "../edit-dialog/edit-dialog.component";
 
@@ -37,13 +37,14 @@ export interface SortChangeEvent {
 export class ArchiveSettingsComponent implements OnInit {
   public policies$ = this.store.pipe(select(getPolicies));
   dialogConfig: MatDialogConfig;
-  @Input()
+  /*@Input()
   public totalNumber: number = 0;
   @Input()
-  public currentPage: number = 0;
+
   @Input()
   public showSelect: boolean = false;
-  @Input()
+  @Input()*/
+  public currentPage: number = 0;
   public disabledColumns: string[] = [];
   public pageSizeOptions: number[] = [30, 1000];
   public editEnabled = true;
@@ -51,8 +52,9 @@ export class ArchiveSettingsComponent implements OnInit {
   @ViewChild(MatPaginator)
   paginator: MatPaginator;
   private policyState$ = this.store.pipe(select(getPolicyState));
-  private selectedPolicies$ = this.store.pipe(select(getSelectedPolicies));
-  private currentPage$ = this.store.pipe(select(getPage));
+  public selectedPolicies$ = this.store.pipe(select(getSelectedPolicies));
+  public currentPage$ = this.store.pipe(select(getPage));
+  public policyCount$ = this.store.select(getTotalCount);
   private selectedPolicies: Policy[] = [];
   private selectedGroups: string[] = [];
   private selectedIds: string[] = [];
@@ -117,6 +119,7 @@ export class ArchiveSettingsComponent implements OnInit {
   onSortChange(event: SortChangeEvent): void {
     const { active: column, direction } = event;
     this.store.dispatch(new SortByColumnAction(column, direction));
+  //  this.store.dispatch(new FetchPoliciesAction());
   }
 
   onSelect(policy: Policy): void {
@@ -132,7 +135,7 @@ export class ArchiveSettingsComponent implements OnInit {
     this.dialogConfig.disableClose = true;
     this.dialogConfig.autoFocus = true;
     this.dialogConfig.panelClass;
-    this.dialogConfig.direction = "rtl";
+    this.dialogConfig.direction = "ltr";
     let selectedInfo = {
       selectedPolicy: this.selectedPolicies[0],
       selectedGroups: this.selectedGroups,
@@ -146,7 +149,6 @@ export class ArchiveSettingsComponent implements OnInit {
   }
 
   private onClose(result: any) {
-    console.log("result: ", result);
     if (result) {
       if (
         result.archiveEmailsToBeNotified &&
@@ -162,14 +164,15 @@ export class ArchiveSettingsComponent implements OnInit {
         result.retrieveEmailsToBeNotified = Array.from(
           result.retrieveEmailsToBeNotified.split(",")
         );
+
       var template = { id: "", ...result };
-      for (var id of this.selectedIds) {
-        template["id"] = id;
-        this.store.dispatch(new SubmitPolicyAction(template));
-      }
-      this.store.dispatch(new ClearSelectionAction());
-    }
-  }
+            for (var id of this.selectedIds) {
+              template["id"] = id;
+              this.store.dispatch(new SubmitPolicyAction(template));
+            }
+            this.store.dispatch(new ClearSelectionAction());
+          }
+        }
 
   private handleClick(policy): void {
     this.onClick.emit(policy);

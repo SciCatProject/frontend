@@ -9,8 +9,6 @@ export class PoliciesService {
   constructor(private policyApi: PolicyApi) {}
 
   getPolicies(): Observable<Policy[]> {
-    var ret = this.policyApi.find();
-    console.log("ret: ", ret);
     return this.policyApi.find();
   }
 

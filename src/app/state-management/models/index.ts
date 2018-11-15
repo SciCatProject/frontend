@@ -69,3 +69,9 @@ export interface DatasetFilters {
   mode: ViewMode;
   scientific: ScientificCondition[]
 }
+
+export interface PolicyFilters {
+  sortField: string;
+  skip: number;
+  limit: number;
+}

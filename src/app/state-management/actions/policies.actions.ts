@@ -24,7 +24,7 @@ export const SORT_BY_COLUMN = "[Policy] Sort by Column";
 
 export class SubmitPolicyAction implements Action {
   readonly type = SUBMIT_POLICY;
-  constructor(readonly policySubmission: Policy) {}
+  constructor(readonly policySubmission: any) {}
 }
 
 export class SubmitPolicyCompleteAction implements Action {

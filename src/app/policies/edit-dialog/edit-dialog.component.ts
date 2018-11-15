@@ -25,58 +25,46 @@ export class EditDialogComponent implements /*OnChanges,*/ OnInit {
     this.form = new FormGroup({
       autoArchive: new FormControl({
         value:
-          data.selectedPolicy.autoArchive != null && !this.multiEdit
-            ? data.selectedPolicy.autoArchive.toString()
-            : null,
+          this.getPreFill(data.selectedPolicy.autoArchive, this.multiEdit),
         disabled: true
         /*, Validators.required*/
       }),
       tapeRedundancy: new FormControl({
         value:
-          data.selectedPolicy.tapeRedundancy != null && !this.multiEdit
-            ? data.selectedPolicy.tapeRedundancy.toString()
-            : null,
+          this.getPreFill(data.selectedPolicy.tapeRedundancy, this.multiEdit),
         disabled: true
       }),
       autoArchiveDelay: new FormControl({
         value:
-          data.selectedPolicy.autoArchiveDelay != null && !this.multiEdit
-            ? data.selectedPolicy.autoArchiveDelay.toString()
-            : null,
+          this.getPreFill(data.selectedPolicy.autoArchiveDelay, this.multiEdit),
         disabled: true
       }),
       archiveEmailNotification: new FormControl({
-        value:
-          data.selectedPolicy.archiveEmailNotification && !this.multiEdit
-            ? data.selectedPolicy.archiveEmailNotification.toString()
-            : null,
+        value: this.getPreFill(data.selectedPolicy.archiveEmailNotification, this.multiEdit),
         disabled: true
       }),
       archiveEmailsToBeNotified: new FormControl({
         value:
-          data.selectedPolicy.archiveEmailsToBeNotified != null &&
-          !this.multiEdit
-            ? data.selectedPolicy.archiveEmailsToBeNotified
-            : null,
+          this.getPreFill(data.selectedPolicy.archiveEmailsToBeNotified, this.multiEdit),
         disabled: true
       }),
       retrieveEmailNotification: new FormControl({
         value:
-          data.selectedPolicy.retrieveEmailNotification != null &&
-          !this.multiEdit
-            ? data.selectedPolicy.retrieveEmailNotification.toString()
-            : null,
+          this.getPreFill(data.selectedPolicy.retrieveEmailNotification, this.multiEdit),
         disabled: true
       }),
       retrieveEmailsToBeNotified: new FormControl({
-        value:
-          data.selectedPolicy.retrieveEmailsToBeNotified != null &&
-          !this.multiEdit
-            ? data.selectedPolicy.retrieveEmailsToBeNotified
-            : null,
+        value: this.getPreFill(
+          data.selectedPolicy.retrieveEmailsToBeNotified,
+          this.multiEdit
+        ),
         disabled: true
       })
     });
+  }
+
+  getPreFill(field: any, multi: boolean): any {
+    return field != null && !multi ? field.toString() : null;
   }
 
   ngOnInit() {
