@@ -4,6 +4,9 @@ import { of, forkJoin, Observable } from "rxjs";
 
 import { ADAuthService } from "./adauth.service";
 import { UserApi, SDKToken, User, LoopBackAuth } from "shared/sdk";
+import { UserIdentityApi } from "shared/sdk/services";
+import { UserIdentity } from "shared/sdk/models";
+
 
 export interface SuccessfulLogin {
   user: User;
@@ -15,6 +18,7 @@ export class LoginService {
   constructor(
     private activeDirSrv: ADAuthService,
     private userSrv: UserApi,
+    private UserIdentityApi: UserIdentityApi,
     private authSrv: LoopBackAuth
   ) {}
 
@@ -51,5 +55,10 @@ export class LoginService {
     return forkJoin(funcLogin$, adLogin$).pipe(
       map(([funcRes, adRes]) => funcRes || adRes)
     );
+  }
+
+  /* fetch the current userIdentity for accurate user email*/
+  public getUserIdent(id: string): Observable<UserIdentity> {
+    return this.UserIdentityApi.findOne({filter: {id}});
   }
 }
