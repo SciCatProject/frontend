@@ -1,15 +1,12 @@
 import { Injectable } from "@angular/core";
-import { Store, select } from "@ngrx/store";
+import { select, Store } from "@ngrx/store";
 
-import { Observable, combineLatest } from "rxjs";
+import { combineLatest, Observable } from "rxjs";
 import { first, map } from "rxjs/operators";
 
-import { User, UserIdentity, Dataset, Job } from "state-management/models";
+import { Dataset, Job, User } from "state-management/models";
 import { SubmitAction } from "state-management/actions/jobs.actions";
-import {
-  getCurrentUser,
-  getTapeCopies
-} from "state-management/selectors/users.selectors";
+import { getCurrentUser, getTapeCopies } from "state-management/selectors/users.selectors";
 import { LoginService } from "from ../../users/login.service";
 
 @Injectable()
@@ -20,7 +17,8 @@ export class ArchivingService {
   constructor(
     private store: Store<any>,
     private loginService: LoginService
-  ) {}
+  ) {
+  }
 
   public archive(datasets: Dataset[]): Observable<void> {
     return this.archiveOrRetrieve(datasets, true);
@@ -50,8 +48,8 @@ export class ArchivingService {
 
     var ident$ = this.loginService.getUserIdent(user.id);
     ident$.subscribe(data => {
-            user.email = data.profile.email;
-          
+      user.email = data.profile.email;
+
     });
 
     const data = {

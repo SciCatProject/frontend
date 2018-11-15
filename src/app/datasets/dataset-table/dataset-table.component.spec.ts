@@ -12,7 +12,6 @@ import { combineReducers, StoreModule } from "@ngrx/store";
 import { datasetsReducer } from "state-management/reducers/datasets.reducer";
 import { jobsReducer } from "state-management/reducers/jobs.reducer";
 import { LoginService } from "../../users/login.service";
-import { ADAuthService } from "../../users/adauth.service";
 
 describe("DatasetTableComponent", () => {
   let component: DatasetTableComponent;
