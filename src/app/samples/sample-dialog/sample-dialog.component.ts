@@ -1,5 +1,6 @@
 import { Component, Inject } from "@angular/core";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material";
+import { FormBuilder, FormControl, FormGroup } from "@angular/forms";
 
 export interface DialogData {
   animal: string;
@@ -14,8 +15,10 @@ export interface DialogData {
 })
 export class SampleDialogComponent {
 
+  form: FormGroup;
 
   constructor(
+    private fb: FormBuilder,
     public dialogRef: MatDialogRef<SampleDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData) {
   }
