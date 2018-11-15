@@ -1,7 +1,7 @@
 import { ActivatedRoute } from "@angular/router";
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import {
-  FetchSampleAction,
+  FetchSampleAction, FetchSamplesAction,
   SelectSampleAction
 } from "../../state-management/actions/samples.actions";
 import { Observable, Subscription } from "rxjs";
@@ -23,6 +23,7 @@ export class SampleDetailComponent implements OnInit, OnDestroy {
   constructor(private route: ActivatedRoute, private store: Store<Sample>) {}
 
   ngOnInit() {
+    this.store.dispatch(new FetchSamplesAction());
     this.sampleId$ = this.route.params.pipe(
       map(params => params.id),
       filter(id => id != null)
