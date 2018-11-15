@@ -42,6 +42,18 @@ export class Message {
 
 export type ViewMode = "view" | "archive" | "retrieve";
 
+type ScientificConditionRelation =
+  | "EQUAL_TO_NUMERIC"
+  | "EQUAL_TO_STRING"
+  | "GREATER_THAN"
+  | "LESS_THAN";
+
+export interface ScientificCondition {
+  lhs: string;
+  relation: ScientificConditionRelation;
+  rhs: string | number;
+}
+
 export interface DatasetFilters {
   text: string;
   ownerGroup: string[];
@@ -53,4 +65,5 @@ export interface DatasetFilters {
   keywords: string[];
   sortField: string;
   mode: ViewMode;
+  scientific: ScientificCondition[]
 }

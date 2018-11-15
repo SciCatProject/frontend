@@ -1,7 +1,10 @@
-import { Component } from "@angular/core";
-import { Store, select } from "@ngrx/store";
+import { Component } from '@angular/core';
+import { MatDatepickerInputEvent, MatDialog } from '@angular/material';
 
-import { FacetCount } from "state-management/state/datasets.store";
+import { Store, select } from '@ngrx/store';
+import { skipWhile, distinctUntilChanged, debounceTime } from 'rxjs/operators';
+
+import { FacetCount } from 'state-management/state/datasets.store';
 import {
   getLocationFacetCounts,
   getGroupFacetCounts,
@@ -13,7 +16,8 @@ import {
   getGroupFilter,
   getCreationTimeFilter,
   getSearchTerms,
-  getHasAppliedFilters
+  getHasAppliedFilters,
+  getScientificConditions
 } from "state-management/selectors/datasets.selectors";
 
 import {
@@ -28,10 +32,11 @@ import {
   ClearFacetsAction,
   SetDateRangeFilterAction,
   SetSearchTermsAction,
-  SetTextFilterAction
-} from "state-management/actions/datasets.actions";
-import { MatDatepickerInputEvent } from "@angular/material";
-import { skipWhile, distinctUntilChanged, debounceTime } from "rxjs/operators";
+  SetTextFilterAction,
+  RemoveScientificConditionAction,
+  AddScientificConditionAction
+} from 'state-management/actions/datasets.actions';
+import { ScientificConditionDialogComponent } from 'datasets/scientific-condition-dialog/scientific-condition-dialog.component';
 
 type DateRange = {
   begin: Date;
@@ -54,7 +59,8 @@ export class DatasetsFilterComponent {
   groupFilter$ = this.store.pipe(select(getGroupFilter));
   typeFilter$ = this.store.pipe(select(getTypeFilter));
   private keywordsFilter$ = this.store.pipe(select(getKeywordsFilter));
-  creationTimeFilter$ = this.store.pipe(select(getCreationTimeFilter));
+  creationTimeFilter$ = this.store.pipe(select(getCreationTimeFilter));  
+  scientificConditions$ = this.store.pipe(select(getScientificConditions));
 
   hasAppliedFilters$ = this.store.pipe(select(getHasAppliedFilters));
 
@@ -68,7 +74,10 @@ export class DatasetsFilterComponent {
       this.store.dispatch(new SetTextFilterAction(terms));
     });
 
-  constructor(private store: Store<any>) {}
+  constructor(
+    public dialog: MatDialog,
+    private store: Store<any>
+  ) {}
 
   getFacetId(facetCount: FacetCount, fallback: string = null): string {
     const id = facetCount._id;
@@ -124,5 +133,20 @@ export class DatasetsFilterComponent {
 
   clearFacets() {
     this.store.dispatch(new ClearFacetsAction());
+  }
+
+  showAddConditionDialog() {
+    this.dialog
+      .open(ScientificConditionDialogComponent)
+      .afterClosed()
+      .subscribe(({ data }) => {
+        if (data != null) {
+          this.store.dispatch(new AddScientificConditionAction(data));
+        }
+      });
+  }
+
+  removeCondition(index: number) {
+    this.store.dispatch(new RemoveScientificConditionAction(index));
   }
 }

@@ -1,35 +1,53 @@
-<h4>Orig Datablocks</h4>
-<datablocks-table [datablocks]="dataBlocks"></datablocks-table>
+<div class="datafiles-header">
+  <span [ngPlural]="count" class="nbr-of-files">
+    <ng-template ngPluralCase="=0">No datafiles.</ng-template>
+    <ng-template ngPluralCase="=1">1 datafile.</ng-template>
+    <ng-template ngPluralCase="other">{{ count }} datafiles.</ng-template>
+  </span>
 
-<h4>Datafiles</h4>
-<h5>Count: {{count}}</h5>
+  <form *ngIf="multipleDownloadEnabled && multipleDownloadAction" ngNoForm method="POST" [action]="multipleDownloadAction">
+    <input type="hidden" name="base" [value]="(dataset$ | async).sourceFolder" />
+    <input *ngFor="let file of getSelectedFiles(); index as i" type="hidden" [name]="'files[' + i + ']'" [value]="file" />
+    <button [disabled]="isNoneSelected" type="submit" mat-flat-button>Download</button>
+  </form>
+
+  <div style="clear: both"></div>
+</div>
+
 <div *ngIf="dataBlocks && dataBlocks.length > 0">
-  <div class="example-container mat-elevation-z8">
+  <div class="example-container">
     <mat-table #table [dataSource]="dataSource">
-
-      <!--- Note that these columns can be defined in any order.
-            The actual rendered columns are set as a property on the row definition" -->
+      <ng-container matColumnDef="select">
+        <mat-header-cell *matHeaderCellDef>
+          <mat-checkbox [checked]="areAllSelected" (change)="onSelectAll($event)">
+          </mat-checkbox>
+        </mat-header-cell>
+        <mat-cell *matCellDef="let file">
+          <mat-checkbox [name]="file.path" [checked]="file.selected" (change)="onSelect($event, file)">
+          </mat-checkbox>
+        </mat-cell>
+      </ng-container>
 
       <ng-container matColumnDef="name">
-        <mat-header-cell *matHeaderCellDef> Path.</mat-header-cell>
-        <mat-cell *matCellDef="let element" matTooltip="{{element.path}}">
-          <a *ngIf="urlPrefix; else noLink" href="{{urlPrefix}}{{element.path}}">
-            {{element.path | slice:-15 }}
+        <mat-header-cell *matHeaderCellDef>Path</mat-header-cell>
+        <mat-cell *matCellDef="let file" matTooltip="{{file.path}}">
+          <a *ngIf="urlPrefix; else noLink" href="{{urlPrefix}}{{file.path}}">
+            {{file.path | slice:-15 }}
           </a>
           <ng-template #noLink>
-            {{element.path}}
+            {{file.path}}
           </ng-template>
         </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="path">
         <mat-header-cell *matHeaderCellDef>Time</mat-header-cell>
-        <mat-cell *matCellDef="let element">{{element.time | date: 'yyyy/MM/dd HH:mm'}}</mat-cell>
+        <mat-cell *matCellDef="let file">{{file.time | date: 'yyyy/MM/dd HH:mm'}}</mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="size">
         <mat-header-cell *matHeaderCellDef>Size</mat-header-cell>
-        <mat-cell *matCellDef="let element">{{element.size | filesize}}</mat-cell>
+        <mat-cell *matCellDef="let file">{{file.size | filesize}}</mat-cell>
       </ng-container>
 
       <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
@@ -39,3 +57,6 @@
 
   <mat-paginator [pageSize]="30" [pageSizeOptions]="[10,30, 50, 100]" [length]="count"></mat-paginator>
 </div>
+
+<h4>Original Datablocks</h4>
+<datablocks-table [datablocks]="dataBlocks"></datablocks-table>

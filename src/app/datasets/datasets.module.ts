@@ -49,8 +49,10 @@ import {
   MatTabsModule,
   MatTooltipModule
 } from "@angular/material";
+
 import { PublishComponent } from "./publish/publish.component";
 import { DatasetFormComponent } from "./dataset-form/dataset-form.component";
+import { ScientificConditionDialogComponent } from "./scientific-condition-dialog/scientific-condition-dialog.component";
 
 @NgModule({
   imports: [
@@ -100,7 +102,12 @@ import { DatasetFormComponent } from "./dataset-form/dataset-form.component";
     FileDropzoneComponent,
     FilePickerComponent,
     SelectedListComponent,
-    PublishComponent
+    PublishComponent,
+    DatasetFormComponent,
+    ScientificConditionDialogComponent,
+  ],
+  entryComponents: [
+    ScientificConditionDialogComponent
   ],
   providers: [DatasetService, ArchivingService],
   exports: [DatasetTableComponent, DatasetsFilterComponent]

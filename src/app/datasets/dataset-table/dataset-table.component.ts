@@ -235,8 +235,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
       width: "auto",
       data: {
         title: "Really retrieve?",
-        question: "",
-        input: "Destination: " + destPath
+        question: ""
       }
     });
 

@@ -133,6 +133,28 @@ export const getHasAppliedFilters = createSelector(
         filters.creationTime.end !== null))
 );
 
+export const getScientificConditions = createSelector(
+  getFilters,
+  filters => filters.scientific
+);
+
+export const getScientificQuery = createSelector(
+  getScientificConditions,
+  conditions => {
+    const and = conditions.map(cond => {
+      const { relation, lhs, rhs } = cond;
+      const dollar = {
+        "EQUAL_TO_NUMERIC": "$eq",
+        "EQUAL_TO_STRING": "$eq",
+        "LESS_THAN": "$lt",
+        "GREATER_THAN": "$gt"
+      }[relation];
+      return { [lhs]: { [dollar]: rhs }};
+    });
+    return { and };
+  }
+);
+
 // === Facet Counts ===
 
 const getFacetCounts = createSelector(
@@ -182,7 +204,7 @@ function restrictFilter(filter: object, allowedKeys?: string[]) {
 }
 
 export const getFullqueryParams = createSelector(getFilters, filter => {
-  const { skip, limit, sortField, mode, ...theRest } = filter;
+  const { skip, limit, sortField, mode, scientific, ...theRest } = filter;
   const limits = { skip, limit, order: sortField };
   const query = restrictFilter(theRest);
 

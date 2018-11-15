@@ -13,10 +13,13 @@ import {
   MatAutocompleteModule,
   MatFormFieldModule,
   MatInputModule,
-  MatSelectModule
+  MatSelectModule,
+  MatDialogModule,
 } from "@angular/material";
+
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { ScientificConditionDialogComponent } from "datasets/scientific-condition-dialog/scientific-condition-dialog.component";
 
 describe("DatasetsFilterComponent", () => {
   let component: DatasetsFilterComponent;
@@ -30,12 +33,16 @@ describe("DatasetsFilterComponent", () => {
         MatSelectModule,
         MatFormFieldModule,
         MatInputModule,
+        MatDialogModule,
         FormsModule,
         ReactiveFormsModule,
         BrowserAnimationsModule,
         StoreModule.forRoot({ rootReducer })
       ],
-      declarations: [DatasetsFilterComponent],
+      declarations: [
+        DatasetsFilterComponent,
+        ScientificConditionDialogComponent
+      ],
       providers: [{ provide: Store, useClass: MockStore }]
     });
     TestBed.overrideComponent(DatasetsFilterComponent, {
