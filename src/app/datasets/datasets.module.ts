@@ -50,6 +50,7 @@ import {
   MatTabsModule,
   MatTooltipModule
 } from "@angular/material";
+import { ScientificConditionDialogComponent } from "./scientific-condition-dialog/scientific-condition-dialog.component";
 
 @NgModule({
   imports: [
@@ -98,7 +99,11 @@ import {
     FileDropzoneComponent,
     FilePickerComponent,
     SelectedListComponent,
-    DatasetFormComponent
+    DatasetFormComponent,
+    ScientificConditionDialogComponent,
+  ],
+  entryComponents: [
+    ScientificConditionDialogComponent
   ],
   providers: [DatasetService, ArchivingService],
   exports: [DatasetTableComponent, DatasetsFilterComponent]

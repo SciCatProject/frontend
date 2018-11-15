@@ -56,6 +56,7 @@ export const initialDatasetState: DatasetState = {
     skip: 0,
     limit: 30,
     sortField: "creationTime:desc",
-    keywords: []
+    keywords: [],
+    scientific: []
   }
 };
