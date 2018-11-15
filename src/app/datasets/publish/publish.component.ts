@@ -1,13 +1,15 @@
 import { Component, Inject, OnInit } from "@angular/core";
+import { COMMA, ENTER } from "@angular/cdk/keycodes";
+
 import { select, Store } from "@ngrx/store";
+import { map, first, tap } from "rxjs/operators";
+
 import { getDatasetsInBatch } from "state-management/selectors/datasets.selectors";
-import { concatMap, map } from "rxjs/operators";
 import { PrefillBatchAction } from "state-management/actions/datasets.actions";
 import { APP_CONFIG } from "app-config.module";
 
 import { PublishedDataApi } from "../../shared/sdk/services/custom";
 import { PublishedData } from "../../shared/sdk/models";
-import { Observable } from "rxjs";
 
 @Component({
   selector: "publish",
@@ -15,106 +17,72 @@ import { Observable } from "rxjs";
   styleUrls: ["./publish.component.scss"]
 })
 export class PublishComponent implements OnInit {
-  public datasetCount$ = this.store.pipe(
-    select(getDatasetsInBatch),
-    map(datasets => datasets.length)
-  );
+  public separatorKeysCodes: number[] = [ENTER, COMMA];
 
-  // For simplicity, this form (including validation) is kept in component-local state.
-  // Can be moved to NgRX state if necessary.
+  private datasets$ = this.store.pipe(select(getDatasetsInBatch));
+  public datasetCount$ = this.datasets$.pipe(map(datasets => datasets.length));
 
   public form = {
     firstName: "",
     lastName: "",
+    creators: [],
+    authors: [],
     affiliation: this.appConfig.facility,
     publisher: this.appConfig.facility,
-    publicationYear: String(new Date().getFullYear()),
     resourceType: "NeXus HDF5 Files",
+    description: "",
     abstract: ""
   };
 
   constructor(
     private store: Store<any>,
     @Inject(APP_CONFIG) private appConfig,
-    private pdapi: PublishedDataApi
-  ) {
-  }
+    private publishedDataApi: PublishedDataApi
+  ) {}
 
   public ngOnInit() {
     this.store.dispatch(new PrefillBatchAction());
+
+    this.datasets$
+      .pipe(
+        first(),
+        tap(datasets => {
+          const authors = datasets.map(dataset => dataset.owner);
+          const unique = authors.filter((author, i) => authors.indexOf(author) === i);
+          this.form.authors = unique;
+          this.form.creators = [...unique];
+        })
+      )
+      .subscribe();
   }
 
   public onPublish() {
-    const doi = "new" + Math.random().toString(36).substring(7);
-    console.log("register dataset");
-    const batch_datasets$ = this.store.pipe(select(getDatasetsInBatch), map(datasets => {
-      console.log(datasets);
-      const pub = new PublishedData();
-      pub.pidArray = [];
-      pub.authors = [];
-      for (const dataset of datasets) {
-        pub.affiliation = dataset.license;
-        pub.abstract = "This is sample data generated for the " +
-          this.appConfig.facility + " research facility under licence from " + dataset.license;
-        pub.authors.push(dataset.owner);
-        pub.creator = dataset.owner;
-        pub.dataDescription = dataset.owner;
-        pub.doi = doi;
-        pub.doiRegisteredSuccessfullyTime = new Date(Date.now());
-        pub.numberOfFiles = 27;
-        pub.pidArray.push(dataset.pid);
-        pub.publicationYear = 2018;
-        pub.publisher = dataset.license;
-        pub.resourceType = "NeXus HDF5 files";
-        pub.sizeOfArchive = 27;
-        pub.thumbnail = "Test data from Scicat";
-        pub.title = "Test data from Scicat";
-        pub.url = "https://scicat.esss.se";
-      }
-      console.log(pub);
-      return pub;
-    }));
-    if (this.formIsValid()) {
-      // Publish
-
-    } else {
-      // Display error
-    }
-    console.log(doi);
-    const register_pub$ = this.pdapi.register(doi);
-
-    const result$ = batch_datasets$.pipe(concatMap(val => this.getPubtoCreate(val)));
-    result$.subscribe();
-    register_pub$.subscribe();
-
+    const publishedData = new PublishedData();
+    publishedData.affiliation = this.form.affiliation;
+    publishedData.abstract = this.form.abstract;
+    publishedData.authors = this.form.authors;
+    publishedData.dataDescription = this.form.description;
+    alert(JSON.stringify(publishedData));
   }
 
-  public register_helper(doi: string): Observable<any> {
-    return this.pdapi.register(doi);
+  addAuthor(event) {
+    this.form.authors.push(event.value);
+    event.input.value = "";
   }
 
-  public getPubtoCreate(pub: PublishedData): Observable<any> {
-    return this.pdapi.create(pub);
+  removeAuthor(author) {
+    const index = this.form.authors.indexOf(author);
+    this.form.authors.splice(index, 1);
   }
 
-  private formIsValid() {
-    // Simplistic validation. Should probably use Angular's validation tools later on.
-    const {
-      firstName,
-      lastName,
-      affiliation,
-      publisher,
-      publicationYear,
-      resourceType
-    } = this.form;
-
+  public formIsValid() {
     return (
-      firstName.length !== 0 &&
-      lastName.length !== 0 &&
-      affiliation.length !== 0 &&
-      publisher.length !== 0 &&
-      publicationYear.match(/^\d{4}$/) != null &&
-      resourceType.length !== 0
+      this.form.authors.length > 0 &&
+      this.form.affiliation.length > 0 &&
+      this.form.publisher.length > 0 &&
+      this.form.resourceType.length > 0 &&
+      this.form.description.length > 0 &&
+      this.form.abstract.length > 0
     );
   }
 }

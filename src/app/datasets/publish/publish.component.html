@@ -1,10 +1,7 @@
 <mat-card>
-  <p>
-    You are about to publish {{ datasetCount$ | async }} datasets.
-  </p>
+  <p>You are about to publish {{ datasetCount$ | async }} datasets.</p>
 
   <!--
-
     const first_name = “Gareth”;
     const last_name = “Murphy”;
     const affiliation = “ESS”;
@@ -16,40 +13,91 @@
     const doi = “10.17199/BRIGHTNESS/NMX0001”;
     const resource_type = “NeXus HDF5 Files”;
     const url = “https://scicat.esss.se/10.1178/BRIGHTNESS“;
-
-    -->
+  -->
 
   <form>
     <mat-form-field>
-      <input required matInput placeholder="First Name" autocomplete="off" [(ngModel)]="form.firstName" name="firstName">
+      <mat-chip-list #chipList>
+        <mat-chip
+          *ngFor="let name of form.authors"
+          (removed)="removeAuthor(name)"
+        >
+          {{ name }}
+          <mat-icon matChipRemove>cancel</mat-icon>
+        </mat-chip>
+        <input
+          placeholder="Authors *"
+          [matChipInputFor]="chipList"
+          [matChipInputAddOnBlur]="true"
+          [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+          (matChipInputTokenEnd)="addAuthor($event)"
+        />
+      </mat-chip-list>
     </mat-form-field>
 
     <mat-form-field>
-      <input required matInput placeholder="Last Name" autocomplete="off" [(ngModel)]="form.lastName" name="lastName">
+      <input
+        required
+        matInput
+        placeholder="Affiliation"
+        autocomplete="off"
+        [(ngModel)]="form.affiliation"
+        name="affiliation"
+      />
     </mat-form-field>
 
     <mat-form-field>
-      <input required matInput placeholder="Affiliation" autocomplete="off" [(ngModel)]="form.affiliation" name="affiliation">
+      <input
+        required
+        matInput
+        placeholder="Publisher"
+        autocomplete="off"
+        [(ngModel)]="form.publisher"
+        name="publisher"
+      />
     </mat-form-field>
 
     <mat-form-field>
-      <input required matInput placeholder="Publisher" autocomplete="off" [(ngModel)]="form.publisher" name="publisher">
+      <input
+        required
+        matInput
+        placeholder="Resource Type"
+        autocomplete="off"
+        [(ngModel)]="form.resourceType"
+        name="resourceType"
+      />
     </mat-form-field>
 
     <mat-form-field>
-      <input required matInput placeholder="Publication Year" autocomplete="off" [(ngModel)]="form.publicationYear"
-        name="publicationYear">
+      <textarea
+        required
+        matInput
+        placeholder="Description"
+        autocomplete="off"
+        [(ngModel)]="form.description"
+        name="Description"
+        rows="5"
+      ></textarea>
     </mat-form-field>
 
     <mat-form-field>
-        <input required matInput placeholder="Resource Type" autocomplete="off" [(ngModel)]="form.resourceType" name="resourceType">
-      </mat-form-field>
-
-    <mat-form-field>
-      <textarea required matInput placeholder="Abstract" autocomplete="off" [(ngModel)]="form.abstract" name="abstract" rows="5"></textarea>
+      <textarea
+        required
+        matInput
+        placeholder="Abstract"
+        autocomplete="off"
+        [(ngModel)]="form.abstract"
+        name="abstract"
+        rows="5"
+      ></textarea>
     </mat-form-field>
 
-    <button (click)="onPublish()" mat-raised-button color="primary">
+    <button
+      (click)="onPublish()"
+      mat-raised-button
+      color="primary"
+      [disabled]="!formIsValid()"
+    >
       Publish
     </button>
   </form>
