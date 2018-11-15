@@ -2,16 +2,11 @@ import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { SampleDetailComponent } from "./sample-detail.component";
 import { HttpClient } from "@angular/common/http";
-import {
-  MockActivatedRoute,
-  MockHttp,
-  MockRouter,
-  MockSampleService,
-  MockStore
-} from "../../shared/MockStubs";
+import { MockActivatedRoute, MockHttp, MockRouter, MockSampleService, MockStore } from "../../shared/MockStubs";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Store } from "@ngrx/store";
 import { SampleService } from "../../samples/sample.service";
+import { MatCardModule } from "@angular/material";
 
 describe("SampleDetailComponent", () => {
   let component: SampleDetailComponent;
@@ -19,7 +14,8 @@ describe("SampleDetailComponent", () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [SampleDetailComponent]
+      declarations: [SampleDetailComponent],
+      imports: [MatCardModule]
     });
     TestBed.overrideComponent(SampleDetailComponent, {
       set: {
