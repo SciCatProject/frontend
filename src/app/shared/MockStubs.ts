@@ -176,3 +176,8 @@ export class MockNotificationService {
     return of([]);
   }
 }
+
+
+export class MockLoginService {
+
+}
