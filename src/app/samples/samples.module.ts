@@ -8,15 +8,18 @@ import { SampleDataFormComponent } from "./sample-data-form/sample-data-form.com
 import { StoreModule } from "@ngrx/store";
 import { samplesReducer } from "../state-management/reducers/samples.reducer";
 import { SampleDialogComponent } from "./sample-dialog/sample-dialog.component";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 
 @NgModule({
   imports: [
     CommonModule,
+    FormsModule,
     MatCardModule,
     MatIconModule,
     MatFormFieldModule,
     MatDialogModule,
     MatTableModule,
+    ReactiveFormsModule,
     StoreModule.forFeature("samples", samplesReducer)
   ],
   declarations: [

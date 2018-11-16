@@ -11,9 +11,10 @@ describe("SampleDialogComponent", () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [SampleDialogComponent],
-      imports: [MatDialogModule, FormBuilder],
+      imports: [MatDialogModule],
       providers: [
         { provide: MatDialogRef, useValue: {} },
+        { provide: FormBuilder, useValue: {} },
         { provide: MAT_DIALOG_DATA, useValue: {} }
       ]
     });
