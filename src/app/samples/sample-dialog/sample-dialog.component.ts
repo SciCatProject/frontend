@@ -1,5 +1,6 @@
 import { Component, Inject } from "@angular/core";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material";
+
 import { FormBuilder, FormControl, FormGroup } from "@angular/forms";
 
 export interface DialogData {
@@ -21,6 +22,22 @@ export class SampleDialogComponent {
     private fb: FormBuilder,
     public dialogRef: MatDialogRef<SampleDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData) {
+
+    this.data = data;
+
+
+    this.form = new FormGroup({
+      description: new FormControl({
+        value:
+          this.getPreFill(data, true),
+        disabled: true
+      })
+    });
+
+  }
+
+  getPreFill(field: any, multi: boolean): any {
+    return field != null && !multi ? field.toString() : null;
   }
 
   onNoClick(): void {
