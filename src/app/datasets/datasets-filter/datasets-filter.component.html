@@ -77,8 +77,8 @@
       <input matInput class="keyword-input" [matChipInputFor]="keywordChipList" placeholder="Keywords" aria-label="Keywords"  [matAutocomplete]="kw">
       <mat-autocomplete #kw="matAutocomplete">
         <mat-option class="options" (onSelectionChange)="keywordSelected(getFacetId(fc))" *ngFor="let fc of keywordFacetCounts$ | async">
-          <span>{{ getFacetId(g, 'No Keywords') }}</span>
-          <small>: {{ getFacetCount(g) }}</small>
+          <span>{{ getFacetId(fc, 'No Keywords') }}</span>
+          <small>: {{ getFacetCount(fc) }}</small>
         </mat-option>
       </mat-autocomplete>
     </mat-form-field>

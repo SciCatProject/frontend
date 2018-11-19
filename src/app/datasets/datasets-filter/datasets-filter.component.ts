@@ -16,6 +16,7 @@ import {
   getLocationFilter,
   getScientificConditions,
   getSearchTerms,
+  getKeywordsTerms,
   getTypeFacetCounts,
   getTypeFilter
 } from "state-management/selectors/datasets.selectors";
@@ -55,12 +56,14 @@ export class DatasetsFilterComponent {
   keywordFacetCounts$ = this.store.pipe(select(getKeywordFacetCounts));
 
   searchTerms$ = this.store.pipe(select(getSearchTerms));
+  keywordsTerms$ = this.store.pipe(select(getKeywordsTerms));
   locationFilter$ = this.store.pipe(select(getLocationFilter));
   groupFilter$ = this.store.pipe(select(getGroupFilter));
   typeFilter$ = this.store.pipe(select(getTypeFilter));
   keywordsFilter$ = this.store.pipe(select(getKeywordsFilter));
   creationTimeFilter$ = this.store.pipe(select(getCreationTimeFilter));
   scientificConditions$ = this.store.pipe(select(getScientificConditions));
+
 
   hasAppliedFilters$ = this.store.pipe(select(getHasAppliedFilters));
 
@@ -72,6 +75,16 @@ export class DatasetsFilterComponent {
     )
     .subscribe(terms => {
       this.store.dispatch(new SetTextFilterAction(terms));
+    });
+
+  private keywordSubscription = this.keywordsTerms$
+    .pipe(
+      skipWhile(terms => terms === ""),
+      debounceTime(500),
+      distinctUntilChanged()
+    )
+    .subscribe(terms => {
+      this.store.dispatch(new AddKeywordFilterAction(terms));
     });
 
   constructor(public dialog: MatDialog, private store: Store<any>) {}
