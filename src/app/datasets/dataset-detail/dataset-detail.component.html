@@ -158,7 +158,6 @@
       <div *ngIf="(origDatablocks$ | async).length === 0">
         <h3>No datafiles linked to this dataset</h3>
       </div>
-      <app-file-picker></app-file-picker>
     </mat-card>
   </mat-tab>
 
@@ -167,11 +166,17 @@
       <fa-icon [icon]="faImages"></fa-icon>&nbsp;
       Attachments
     </ng-template>
+    <h3>Attachments</h3>
+    <ng-container *ngFor="let da of attachments">
+      <mat-card style="margin: 1em">
+        <img src="{{da.thumbnail}}" style="width: 20em; height: 20em">
+        <mat-card-actions>
+          <button mat-button="delete" (click)="delete(da.id)">delete</button>
+        </mat-card-actions>
+      </mat-card>
+    </ng-container>
     <mat-card style="margin: 1em">
-      <h3>Attachments</h3>
-      <ng-container *ngFor="let da of attachments">
-        <img src="{{da.thumbnail}}">
-      </ng-container>
+      <app-file-picker></app-file-picker>
     </mat-card>
   </mat-tab>
 
