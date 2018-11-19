@@ -67,10 +67,10 @@
       </mat-autocomplete>
     </mat-form-field>
 
-    <mat-form-field>
-      <mat-chip-list #keywordChipList>
-        <mat-chip *ngFor="let keyword of keywordsFilter$ | async" [removable]="true" (removed)="keywordRemoved(keyword)">{{
-          keywords
+    <mat-form-field class="keyword-chip-list">
+      <mat-chip-list #keywordChipList style="width: 100%">
+        <mat-chip *ngFor="let keyword of keywordsFilter$ | async" [removable]="true" (removed)="keywordRemoved(keyword)" >{{
+          keyword
           }}<mat-icon matChipRemove>cancel</mat-icon>
         </mat-chip>
       </mat-chip-list>
