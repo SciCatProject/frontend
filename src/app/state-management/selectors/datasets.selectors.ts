@@ -179,7 +179,7 @@ export const getTypeFacetCounts = createSelector(
 
 export const getKeywordFacetCounts = createSelector(
   getFacetCounts,
-  counts => counts.keyword
+  counts => counts.keywords
 );
 
 export const getCreationTimeFacetCounts = createSelector(
@@ -241,6 +241,11 @@ export const getFullfacetsParams = createSelector(getFilters, filter => {
 export const getSearchTerms = createSelector(
   getDatasetState,
   state => state.searchTerms
+);
+
+export const getKeywordsTerms = createSelector(
+  getDatasetState,
+  state => state.keywordsTerms
 );
 
 export const getSearchCaughtUp = createSelector(
