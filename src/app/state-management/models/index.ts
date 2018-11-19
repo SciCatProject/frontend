@@ -37,7 +37,7 @@ export enum MessageType {
 export class Message {
   content: string;
   type: MessageType;
-  duration? = 10000;
+  duration: number;
 }
 
 export type ViewMode = "view" | "archive" | "retrieve";
