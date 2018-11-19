@@ -154,7 +154,8 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
         this.store.dispatch(
           new ShowMessageAction({
             type: MessageType.Error,
-            content: "Job not Submitted"
+            content: "Job not Submitted",
+            duration: 5000
           })
         );
       }
@@ -164,12 +165,11 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
       .pipe(select(getError))
       .subscribe(err => {
         if (err) {
-          this.store.dispatch(
-            new ShowMessageAction({
+          this.store.dispatch(new ShowMessageAction({
               type: MessageType.Error,
-              content: err.message
-            })
-          );
+              content: err.message,
+              duration: 5000
+            }));
         }
       });
   }
@@ -215,7 +215,8 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
             this.store.dispatch(
               new ShowMessageAction({
                 type: MessageType.Error,
-                content: err.message
+                content: err.message,
+                duration: 5000
               })
             )
         );
@@ -247,7 +248,8 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
             this.store.dispatch(
               new ShowMessageAction({
                 type: MessageType.Error,
-                content: err.message
+                content: err.message,
+                duration: 5000
               })
             )
         );
