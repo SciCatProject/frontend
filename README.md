@@ -5,6 +5,8 @@
 
 [![Build Status](https://travis-ci.org/SciCatProject/catanie.svg?branch=develop)](https://travis-ci.org/SciCatProject/catanie)
 [![DeepScan grade](https://deepscan.io/api/projects/887/branches/19862/badge/grade.svg)](https://deepscan.io/dashboard#view=project&pid=887&bid=19862) [![DOI](https://zenodo.org/badge/106383330.svg)](https://zenodo.org/badge/latestdoi/106383330) [![Greenkeeper badge](https://badges.greenkeeper.io/SciCatProject/catanie.svg)](https://greenkeeper.io/)
+[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
+
 
 ## Summary
 
