@@ -1,6 +1,6 @@
 import { ActivatedRoute } from "@angular/router";
 import { Component, Inject, OnDestroy, OnInit } from "@angular/core";
-import { DatablocksAction } from "state-management/actions/datasets.actions";
+import { DatablocksAction, DeleteAttachment } from "state-management/actions/datasets.actions";
 import { Job, User } from "shared/sdk/models";
 import { select, Store } from "@ngrx/store";
 import { SubmitAction } from "state-management/actions/jobs.actions";
@@ -159,5 +159,6 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
 
   delete(dataset_attachment_id) {
     console.log("fire action to delete dataset attachment id " , dataset_attachment_id);
+    this.store.dispatch(new DeleteAttachment(dataset_attachment_id));
   }
 }

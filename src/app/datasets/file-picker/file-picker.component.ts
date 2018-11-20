@@ -1,12 +1,12 @@
 import { Component, Inject, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { select, Store } from "@ngrx/store";
 import { Observable } from "rxjs";
-import { Dataset } from "shared/sdk/models";
+import { Dataset, DatasetAttachment } from "shared/sdk/models";
 import { APP_CONFIG, AppConfig } from "../../app-config.module";
 import * as lb from "shared/sdk/services";
 import { FilePickerDirective, ReadFile, ReadMode } from "ngx-file-helpers";
 import { filter } from "rxjs/operators";
-import { getCurrentAttachments } from "../../state-management/selectors/datasets.selectors";
+import { AddAttachment } from "../../state-management/actions/datasets.actions";
 
 @Component({
   selector: "app-file-picker",
@@ -27,7 +27,8 @@ export class FilePickerComponent implements OnInit, OnDestroy {
     @Inject(APP_CONFIG) private config: AppConfig,
     private daSrv: lb.DatasetAttachmentApi,
     private store: Store<any>
-  ) {}
+  ) {
+  }
 
   ngOnInit() {
     const currentSet$ = this.store.pipe(
@@ -58,16 +59,23 @@ export class FilePickerComponent implements OnInit, OnDestroy {
     if (fileCount > 0) {
       const creds = {
         thumbnail: this.picked.content,
-        creationTime: "2018-04-23T09:23:46.853Z",
+        creationTime: new Date(),
         datasetId: this.dataset.pid,
+        dataset: this.dataset.pid,
         rawDatasetId: "string",
+        id: null,
         derivedDatasetId: "string"
       };
+
+      this.filePicker.reset();
+      return this.store.dispatch(new AddAttachment(creds));
+
+      /*
       return this.daSrv.create(creds).subscribe(res => {
         console.log(res);
         this.filePicker.reset();
-        const attachment$ = this.store.pipe(select(getCurrentAttachments));
       });
+      */
     }
   }
 
