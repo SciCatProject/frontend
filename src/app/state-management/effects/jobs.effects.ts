@@ -45,7 +45,8 @@ export class JobsEffects {
     switchMap(res => {
       const msg = {
         type: MessageType.Success,
-        content: "Job Created Successfully"
+        content: "Job Created Successfully",
+        duration: 5000
       };
       return of(new UserActions.ShowMessageAction(msg));
     })

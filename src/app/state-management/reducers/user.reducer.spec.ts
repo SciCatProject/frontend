@@ -48,7 +48,7 @@ describe("UserReducer", () => {
     const message: Message = {
       content: "",
       type: MessageType.Success,
-      duration: 10000
+      duration: 500000
     };
     const action = new userActions.ShowMessageAction(message);
     const state = userReducer(initialUserState, action);

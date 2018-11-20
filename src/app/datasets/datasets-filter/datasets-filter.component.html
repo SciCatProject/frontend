@@ -67,12 +67,18 @@
       </mat-autocomplete>
     </mat-form-field>
 
-    <mat-form-field>
-      <input matInput class="keyword-input" matInput placeholder="Keywords"   [matAutocomplete]="kw">
+    <mat-form-field class="keyword-chip-list">
+      <mat-chip-list #keywordChipList style="width: 100%">
+        <mat-chip *ngFor="let keyword of keywordsFilter$ | async" [removable]="true" (removed)="keywordRemoved(keyword)" >{{
+          keyword
+          }}<mat-icon matChipRemove>cancel</mat-icon>
+        </mat-chip>
+      </mat-chip-list>
+      <input matInput class="keyword-input" [matChipInputFor]="keywordChipList" placeholder="Keywords" aria-label="Keywords"  [matAutocomplete]="kw">
       <mat-autocomplete #kw="matAutocomplete">
         <mat-option class="options" (onSelectionChange)="keywordSelected(getFacetId(fc))" *ngFor="let fc of keywordFacetCounts$ | async">
-          <span>{{ getFacetId(g, 'No Keywords') }}</span>
-          <small>: {{ getFacetCount(g) }}</small>
+          <span>{{ getFacetId(fc, 'No Keywords') }}</span>
+          <small>: {{ getFacetCount(fc) }}</small>
         </mat-option>
       </mat-autocomplete>
     </mat-form-field>

@@ -32,7 +32,8 @@ export class UserEffects {
     ofType(UserActions.LOGIN_FAILED),
     map(() => new UserActions.ShowMessageAction({
       content: 'Could not log in. Check your username and password.',
-      type: MessageType.Error
+      type: MessageType.Error,
+      duration: 5000
     }))
   );
 
