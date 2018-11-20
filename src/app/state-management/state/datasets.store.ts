@@ -27,6 +27,7 @@ export interface DatasetState {
   hasPrefilledFilters: boolean;
 
   searchTerms: string;
+  keywordsTerms: string;
   filters: DatasetFilters;
 
   batch: Dataset[];
@@ -44,6 +45,7 @@ export const initialDatasetState: DatasetState = {
   hasPrefilledFilters: false,
 
   searchTerms: "",
+  keywordsTerms: "",
   batch: [],
 
   filters: {

@@ -121,6 +121,13 @@
                 </th>
                 <td>{{ value }}</td>
               </tr>
+              <tr *ngIf="dataset.keywords as value">
+                <th>
+                  <fa-icon [icon]="faGlobe"></fa-icon>&nbsp;
+                  Keywords
+                </th>
+                <td>{{ value | json }}</td>
+              </tr>
 
             </table>
 

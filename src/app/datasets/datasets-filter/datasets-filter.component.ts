@@ -1,42 +1,43 @@
-import { Component } from '@angular/core';
-import { MatDatepickerInputEvent, MatDialog } from '@angular/material';
+import { Component } from "@angular/core";
+import { MatDatepickerInputEvent, MatDialog } from "@angular/material";
 
-import { Store, select } from '@ngrx/store';
-import { skipWhile, distinctUntilChanged, debounceTime } from 'rxjs/operators';
+import { select, Store } from "@ngrx/store";
+import { debounceTime, distinctUntilChanged, skipWhile } from "rxjs/operators";
 
-import { FacetCount } from 'state-management/state/datasets.store';
+import { FacetCount } from "state-management/state/datasets.store";
 import {
-  getLocationFacetCounts,
-  getGroupFacetCounts,
-  getTypeFacetCounts,
-  getKeywordFacetCounts,
-  getLocationFilter,
-  getTypeFilter,
-  getKeywordsFilter,
-  getGroupFilter,
   getCreationTimeFilter,
-  getSearchTerms,
+  getGroupFacetCounts,
+  getGroupFilter,
   getHasAppliedFilters,
-  getScientificConditions
+  getKeywordFacetCounts,
+  getKeywordsFilter,
+  getLocationFacetCounts,
+  getLocationFilter,
+  getScientificConditions,
+  getSearchTerms,
+  getKeywordsTerms,
+  getTypeFacetCounts,
+  getTypeFilter
 } from "state-management/selectors/datasets.selectors";
 
 import {
-  AddLocationFilterAction,
-  RemoveLocationFilterAction,
   AddGroupFilterAction,
-  RemoveGroupFilterAction,
   AddKeywordFilterAction,
-  RemoveKeywordFilterAction,
+  AddLocationFilterAction,
+  AddScientificConditionAction,
   AddTypeFilterAction,
-  RemoveTypeFilterAction,
   ClearFacetsAction,
+  RemoveGroupFilterAction,
+  RemoveKeywordFilterAction,
+  RemoveLocationFilterAction,
+  RemoveScientificConditionAction,
+  RemoveTypeFilterAction,
   SetDateRangeFilterAction,
   SetSearchTermsAction,
-  SetTextFilterAction,
-  RemoveScientificConditionAction,
-  AddScientificConditionAction
-} from 'state-management/actions/datasets.actions';
-import { ScientificConditionDialogComponent } from 'datasets/scientific-condition-dialog/scientific-condition-dialog.component';
+  SetTextFilterAction
+} from "state-management/actions/datasets.actions";
+import { ScientificConditionDialogComponent } from "datasets/scientific-condition-dialog/scientific-condition-dialog.component";
 
 type DateRange = {
   begin: Date;
@@ -55,12 +56,14 @@ export class DatasetsFilterComponent {
   keywordFacetCounts$ = this.store.pipe(select(getKeywordFacetCounts));
 
   searchTerms$ = this.store.pipe(select(getSearchTerms));
+  keywordsTerms$ = this.store.pipe(select(getKeywordsTerms));
   locationFilter$ = this.store.pipe(select(getLocationFilter));
   groupFilter$ = this.store.pipe(select(getGroupFilter));
   typeFilter$ = this.store.pipe(select(getTypeFilter));
-  private keywordsFilter$ = this.store.pipe(select(getKeywordsFilter));
-  creationTimeFilter$ = this.store.pipe(select(getCreationTimeFilter));  
+  keywordsFilter$ = this.store.pipe(select(getKeywordsFilter));
+  creationTimeFilter$ = this.store.pipe(select(getCreationTimeFilter));
   scientificConditions$ = this.store.pipe(select(getScientificConditions));
+
 
   hasAppliedFilters$ = this.store.pipe(select(getHasAppliedFilters));
 
@@ -74,10 +77,17 @@ export class DatasetsFilterComponent {
       this.store.dispatch(new SetTextFilterAction(terms));
     });
 
-  constructor(
-    public dialog: MatDialog,
-    private store: Store<any>
-  ) {}
+  private keywordSubscription = this.keywordsTerms$
+    .pipe(
+      skipWhile(terms => terms === ""),
+      debounceTime(500),
+      distinctUntilChanged()
+    )
+    .subscribe(terms => {
+      this.store.dispatch(new AddKeywordFilterAction(terms));
+    });
+
+  constructor(public dialog: MatDialog, private store: Store<any>) {}
 
   getFacetId(facetCount: FacetCount, fallback: string = null): string {
     const id = facetCount._id;

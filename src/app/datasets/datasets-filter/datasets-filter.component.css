@@ -64,3 +64,8 @@
 .scientific-todo-move input {
   max-width: 3em;
 }
+
+.keyword-chip-list {
+  width: 100%;
+}
+
