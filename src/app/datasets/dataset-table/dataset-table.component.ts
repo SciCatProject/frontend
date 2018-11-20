@@ -57,7 +57,6 @@ export interface SortChangeEvent {
   active: keyof Dataset;
   direction: "asc" | "desc" | "";
 }
-
 @Component({
   selector: "dataset-table",
   templateUrl: "dataset-table.component.html",
@@ -105,7 +104,9 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   private inBatchPidsSubscription = this.batch$.subscribe(datasets => {
     this.inBatchPids = datasets.map(dataset => dataset.pid);
   });
+
   private modes = ["view", "archive", "retrieve"];
+  private modeLabels = ["all", "archivable", "retrievable"];
   // compatibility analogs of observables
   private selectedSets: Dataset[] = [];
   private selectedSetsSubscription = this.selectedSets$.subscribe(
@@ -139,8 +140,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     private archivingSrv: ArchivingService,
     public dialog: MatDialog,
     @Inject(APP_CONFIG) public appConfig: AppConfig
-  ) {
-  }
+  ) {}
 
   ngOnInit() {
     this.submitJobSubscription = this.store.pipe(select(submitJob)).subscribe(
@@ -165,11 +165,13 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
       .pipe(select(getError))
       .subscribe(err => {
         if (err) {
-          this.store.dispatch(new ShowMessageAction({
+          this.store.dispatch(
+            new ShowMessageAction({
               type: MessageType.Error,
               content: err.message,
               duration: 5000
-            }));
+            })
+          );
         }
       });
   }
