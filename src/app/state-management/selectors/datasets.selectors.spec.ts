@@ -40,7 +40,7 @@ const initialDatasetState: DatasetState = {
 
 describe("test dataset selectors", () => {
   it("should get total set number", () => {
-    expect(fromDatasetSelectors.getTotalSets.projector(initialDatasetState)).toEqual(false);
+    expect(fromDatasetSelectors.getTotalSets.projector(initialDatasetState)).toEqual(0);
   });
 });
 
