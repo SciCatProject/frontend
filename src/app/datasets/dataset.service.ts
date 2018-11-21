@@ -1,13 +1,7 @@
 import * as ua from "state-management/actions/user.actions";
-import {
-  AccessUserApi,
-  DatasetApi,
-  DatasetLifecycleApi,
-  LoopBackAuth,
-  OrigDatablockApi
-} from "shared/sdk/services";
+import { AccessUserApi, DatasetApi, DatasetAttachmentApi, DatasetLifecycleApi, LoopBackAuth, OrigDatablockApi } from "shared/sdk/services";
 import { BehaviorSubject, Observable, Subject } from "rxjs";
-import { DatablockApi } from "shared/sdk";
+import { DatablockApi, DatasetAttachment } from "shared/sdk";
 import { Dataset, OrigDatablock } from "shared/sdk/models";
 import { Injectable } from "@angular/core";
 import { Store } from "@ngrx/store";
@@ -52,12 +46,14 @@ export class DatasetService {
   constructor(
     private rds: DatasetApi,
     private dlSrv: DatasetLifecycleApi,
+    private daSrv: DatasetAttachmentApi,
     private odb: OrigDatablockApi,
     private acSrv: AccessUserApi,
     private db: DatablockApi,
     private auth: LoopBackAuth,
     private store: Store<any>
-  ) {}
+  ) {
+  }
 
   /**
    * Search datasets with search terms,
@@ -83,13 +79,27 @@ export class DatasetService {
       error => {
         console.error(error);
       },
-      () => {}
+      () => {
+      }
     );
   }
 
   getDataset(id: string) {
     return this.rds.findById(id, this.detailFilter);
   }
+
+  addAttachment(attachment: DatasetAttachment) {
+    return this.daSrv.create(attachment);
+  }
+
+  deleteAttachment(attachment_id: string) {
+    return this.daSrv.deleteById(attachment_id);
+  }
+
+  getAttachments(attachment_id: string) {
+    return this.daSrv.deleteById(attachment_id);
+  }
+
 
   setDataset(dataset: Dataset) {
     return this.rds.upsert(dataset);

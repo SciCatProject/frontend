@@ -1,17 +1,10 @@
-  <span class="mat-title">Choose a file</span>
+<div class="file-chooser">
+
+  <span class="mat-title">Choose an image to upload</span>
   <br>
   <span>{{status}}</span>
 
-  <figure *ngIf="picked">
-    <img [src]="picked.content">
 
-    <figcaption>
-      File:
-      <strong>{{picked.name}}</strong>
-      <br> {{picked.size | filesize}}
-      <br> Read as {{picked.readMode  }}
-    </figcaption>
-  </figure>
-
-  <button type="button" mat-button [ngxFilePicker]="readMode" multiple accept="image/*" (readStart)="onReadStart($event)" (filePick)="onFilePicked($event)"
+  <button class="attach-button" type="button" mat-button [ngxFilePicker]="readMode" multiple accept="image/*" (readStart)="onReadStart($event)" (filePick)="onFilePicked($event)"
     (readEnd)="onReadEnd($event)">Browse</button>
+</div>

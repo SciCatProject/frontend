@@ -4,7 +4,7 @@ import { ReadFile, ReadMode } from "ngx-file-helpers";
 @Component({
   selector: "app-file-dropzone",
   templateUrl: "./file-dropzone.component.html",
-  styleUrls: ["./file-dropzone.component.css"]
+  styleUrls: ["./file-dropzone.component.scss"]
 })
 export class FileDropzoneComponent {
   public readMode = ReadMode.dataURL;
