@@ -121,6 +121,13 @@
                 </th>
                 <td>{{ value }}</td>
               </tr>
+              <tr *ngIf="dataset.keywords as value">
+                <th>
+                  <fa-icon [icon]="faGlobe"></fa-icon>&nbsp;
+                  Keywords
+                </th>
+                <td>{{ value | json }}</td>
+              </tr>
 
             </table>
 
@@ -158,7 +165,6 @@
       <div *ngIf="(origDatablocks$ | async).length === 0">
         <h3>No datafiles linked to this dataset</h3>
       </div>
-      <app-file-picker></app-file-picker>
     </mat-card>
   </mat-tab>
 
@@ -167,12 +173,17 @@
       <fa-icon [icon]="faImages"></fa-icon>&nbsp;
       Attachments
     </ng-template>
-    <mat-card style="margin: 1em">
-      <h3>Attachments</h3>
-      <ng-container *ngFor="let da of attachments">
-        <img src="{{da.thumbnail}}">
-      </ng-container>
-    </mat-card>
+    <h3>Attachments</h3>
+      <app-file-picker></app-file-picker>
+    <br>
+    <ng-container *ngFor="let da of attachments; let i = index" [attr.data-index]="i">
+      <mat-card class="attach-card">
+        <img src="{{da.thumbnail}}" style="width: 20em; height: 20em">
+        <mat-card-actions>
+          <button mat-raised-button (click)="delete(da.id)"><mat-icon>delete</mat-icon></button>
+        </mat-card-actions>
+      </mat-card>
+    </ng-container>
   </mat-tab>
 
   <mat-tab *ngIf="isAdmin$ | async">

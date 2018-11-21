@@ -4,13 +4,14 @@ import { DatasetTableComponent } from "./dataset-table.component";
 import { FileSizePipe } from "../../shared/pipes/filesize.pipe";
 import { HttpClient } from "@angular/common/http";
 import { MatDialogModule, MatTableModule } from "@angular/material";
-import { MockArchivingService, MockHttp, MockRouter } from "shared/MockStubs";
+import { MockHttp, MockRouter, MockArchivingService, MockLoginService } from "shared/MockStubs";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { Router } from "@angular/router";
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 import { combineReducers, StoreModule } from "@ngrx/store";
 import { datasetsReducer } from "state-management/reducers/datasets.reducer";
 import { jobsReducer } from "state-management/reducers/jobs.reducer";
+import { LoginService } from "../../users/login.service";
 
 describe("DatasetTableComponent", () => {
   let component: DatasetTableComponent;
@@ -44,7 +45,8 @@ describe("DatasetTableComponent", () => {
               archiveWorkflowEnabled: true
             }
           },
-          { provide: ArchivingService, useClass: MockArchivingService }
+          { provide: ArchivingService, useClass: MockArchivingService },
+          { provide: LoginService, useClass: MockLoginService }
         ]
       }
     });
@@ -68,13 +70,13 @@ describe("DatasetTableComponent", () => {
   it("should contain mode switching buttons", () => {
     const compiled = fixture.debugElement.nativeElement;
     expect(compiled.querySelector(".archive")).toBeTruthy();
-    expect(compiled.querySelector(".archive").textContent).toContain("Archive");
+    expect(compiled.querySelector(".archive").textContent).toContain("Archivable");
     expect(compiled.querySelector(".retrieve")).toBeTruthy();
     expect(compiled.querySelector(".retrieve").textContent).toContain(
-      "Retrieve"
+      "Retrievable"
     );
     expect(compiled.querySelector(".view")).toBeTruthy();
-    expect(compiled.querySelector(".view").textContent).toContain("View");
+    expect(compiled.querySelector(".view").textContent).toContain("All");
   });
 
   it("should contain an export button", () => {

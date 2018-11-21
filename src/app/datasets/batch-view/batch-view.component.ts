@@ -73,7 +73,8 @@ export class BatchViewComponent implements OnInit {
           this.store.dispatch(
             new ShowMessageAction({
               type: MessageType.Error,
-              content: err.message
+              content: err.message,
+              duration: 5000
             })
           )
       );
@@ -81,22 +82,16 @@ export class BatchViewComponent implements OnInit {
 
   onRetrieve() {
     this.batch$
-      .pipe(
-        first(),
-        switchMap(datasets =>
+      .pipe( first(), switchMap(datasets =>
           this.archivingSrv.retrieve(datasets, "/archive/retrieve")
-        )
-      )
-      .subscribe(
-        () => this.clearBatch(),
-        err =>
-          this.store.dispatch(
-            new ShowMessageAction({
-              type: MessageType.Error,
-              content: err.message
-            })
-          )
-      );
+        ) )
+      .subscribe(() => this.clearBatch(), err => this.store.dispatch(new ShowMessageAction(
+              {
+                type: MessageType.Error,
+                content: err.message,
+                duration: 5000
+              }
+            )));
   }
 
   private clearBatch() {

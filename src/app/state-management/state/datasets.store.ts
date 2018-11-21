@@ -24,9 +24,12 @@ export interface DatasetState {
 
   datasetsLoading: boolean;
   facetCountsLoading: boolean;
+  deletingAttachment: boolean;
+  addingAttachment: boolean;
   hasPrefilledFilters: boolean;
 
   searchTerms: string;
+  keywordsTerms: string;
   filters: DatasetFilters;
 
   batch: Dataset[];
@@ -40,10 +43,13 @@ export const initialDatasetState: DatasetState = {
   totalCount: 0,
 
   datasetsLoading: true,
+  deletingAttachment: false,
+  addingAttachment: false,
   facetCountsLoading: true,
   hasPrefilledFilters: false,
 
   searchTerms: "",
+  keywordsTerms: "",
   batch: [],
 
   filters: {

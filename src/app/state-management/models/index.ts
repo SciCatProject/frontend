@@ -37,7 +37,7 @@ export enum MessageType {
 export class Message {
   content: string;
   type: MessageType;
-  duration? = 10000;
+  duration: number;
 }
 
 export type ViewMode = "view" | "archive" | "retrieve";
@@ -66,4 +66,10 @@ export interface DatasetFilters {
   sortField: string;
   mode: ViewMode;
   scientific: ScientificCondition[]
+}
+
+export interface PolicyFilters {
+  sortField: string;
+  skip: number;
+  limit: number;
 }

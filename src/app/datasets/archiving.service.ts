@@ -7,20 +7,17 @@ import { first, map } from "rxjs/operators";
 import { Dataset, Job, User } from "state-management/models";
 import { SubmitAction } from "state-management/actions/jobs.actions";
 import { getCurrentUser, getTapeCopies } from "state-management/selectors/users.selectors";
-
-import { PublishedDataApi } from "shared/sdk/services";
+import { LoginService } from "from ../../users/login.service";
 
 @Injectable()
 export class ArchivingService {
   private currentUser$ = this.store.pipe(select(getCurrentUser));
   private tapeCopies$ = this.store.pipe(select(getTapeCopies));
 
-  constructor(private store: Store<any>,
-              private pdapi: PublishedDataApi) {
-  }
-
-  public publish(dataset_id) {
-    return this.pdapi.register(dataset_id).subscribe();
+  constructor(
+    private store: Store<any>,
+    private loginService: LoginService
+  ) {
   }
 
   public archive(datasets: Dataset[]): Observable<void> {
@@ -48,6 +45,13 @@ export class ArchivingService {
       ...extra
     };
 
+
+    var ident$ = this.loginService.getUserIdent(user.id);
+    ident$.subscribe(data => {
+      user.email = data.profile.email;
+
+    });
+
     const data = {
       jobParams,
       emailJobInitiator: user.email,
@@ -67,6 +71,8 @@ export class ArchivingService {
     return combineLatest(this.currentUser$, this.tapeCopies$).pipe(
       first(),
       map(([user, tapeCopies]) => {
+
+
         const email = user.email;
         if (email == null || email.length === 0) {
           throw new Error(

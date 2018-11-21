@@ -31,6 +31,31 @@ export const getPoliciesPerPage = createSelector(
 );
 
 export const getPage = createSelector(getPolicyState, state => {
-  const { skip, limit } = state;
+  const { skip, limit } = state.filters;
   return skip / limit;
+});
+
+export const getTotalCount = createSelector(
+  getPolicyState,
+  state => state.totalCount
+);
+
+export const getFilters = createSelector(
+  getPolicyState,
+  state => state.filters
+);
+
+/*export const getIsLoading = createSelector(
+  getPolicyState,
+  state => state.policiesLoading
+);*/
+
+export const getQueryParams = createSelector(getFilters, filter => {
+  const { skip, limit, sortField } = filter;
+  const limits = { skip, limit, order: sortField };
+  return {
+    limits
+  };
+
+
 });

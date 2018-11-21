@@ -67,3 +67,7 @@ mat-cell, .mat-cell {
 /*:host /deep/*/ .row-empty {
   background-color: mat-color($warn, 100, 0.2);
 }
+
+:host /deep/ .mat-paginator {
+  background-color: unset !important;
+}
