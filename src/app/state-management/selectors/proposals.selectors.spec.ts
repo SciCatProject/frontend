@@ -1,29 +1,23 @@
-const createProposal = ({
-  proposalId = "string",
-  pi_email = "string",
-  pi_firstname = "string",
-  pi_lastname = "string",
-  email = "string",
-  firstname = "string",
-  lastname = "string",
-  title = "string",
-  abstract = "string",
-  attachments = ["string"],
-  ownerGroup = "string",
-  accessGroups = ["string"],
-  createdBy = "string",
-  updatedBy = "string",
-  createdAt = Date,
-  updatedAt = Date,
-  MeasurementPeriodList = ["string"],
-  measurementPeriods = ["string"]
-} ={}): Proposal => ({
-  proposalId: proposalId,
-  pi_email: proposalId,
-  pi_firstname: proposalId,
-});
+import * as fromProposalSelectors from "./proposals.selectors";
+import { Proposal, RawDataset } from "../../shared/sdk/models";
+
+interface ProposalsState {
+  proposals: { [proposalId: string]: Proposal };
+  datasets: { [datasetId: string]: RawDataset };
+  hasFetched: boolean;
+  selectedId: string;
+}
 
 
-const createProposalState = ({
-  
+const initialProposalsState: ProposalsState = {
+  proposals: {},
+  datasets: {},
+  hasFetched: false,
+  selectedId: null
+};
+
+describe("test select", () => {
+  it("should get select", () => {
+    expect(fromProposalSelectors.getHasFetched.projector(initialProposalsState)).toEqual(false);
+  });
 });
