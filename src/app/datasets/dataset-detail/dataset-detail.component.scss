@@ -1,18 +1,36 @@
 .dataset-detail .details {
-    padding: 1em;
+  padding: 1em;
 
-    table {
-        td {
-            padding: 0.5em;
-        }
-    
-        th {
-            text-align: left;
-            padding-right: 0.5em;
-        }
+  table {
+    td {
+      padding: 0.5em;
     }
-    
-    h3 {
-        margin-top: 1em;
+
+    th {
+      text-align: left;
+      padding-right: 0.5em;
     }
+  }
+
+  h3 {
+    margin-top: 1em;
+  }
+
+  mat-card {
+    width: 20em;
+  }
+
+
+}
+
+.attach-card {
+  width: 22em;
+  float: left;
+  margin: 1em;
+}
+
+
+.file-picker {
+  width: 21em;
+  margin: 1em;
 }

@@ -1,12 +1,11 @@
 import { ActivatedRoute } from "@angular/router";
 import { Component, Inject, OnDestroy, OnInit } from "@angular/core";
-import { DatablocksAction } from "state-management/actions/datasets.actions";
+import { DatablocksAction, DeleteAttachment } from "state-management/actions/datasets.actions";
 import { Job, User } from "shared/sdk/models";
 import { select, Store } from "@ngrx/store";
 import { SubmitAction } from "state-management/actions/jobs.actions";
 import { ShowMessageAction } from "state-management/actions/user.actions";
-import { getError } from "../../state-management/selectors/jobs.selectors";
-import { submitJob } from "../../state-management/selectors/jobs.selectors";
+import { getError, submitJob } from "../../state-management/selectors/jobs.selectors";
 import { Subscription } from "rxjs";
 import { Message, MessageType } from "state-management/models";
 import { Angular5Csv } from "angular5-csv/Angular5-csv";
@@ -33,7 +32,6 @@ import { faIdBadge } from "@fortawesome/free-solid-svg-icons/faIdBadge";
 import { faImages } from "@fortawesome/free-solid-svg-icons/faImages";
 import { faUserAlt } from "@fortawesome/free-solid-svg-icons/faUserAlt";
 import { faUsers } from "@fortawesome/free-solid-svg-icons/faUsers";
-import { ArchivingService } from "../archiving.service";
 
 /**
  * Component to show details for a data set, using the
@@ -75,7 +73,8 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private store: Store<any>,
     @Inject(APP_CONFIG) public appConfig: AppConfig
-  ) {}
+  ) {
+  }
 
   ngOnInit() {
     const msg = new Message();
@@ -114,7 +113,7 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
     this.dataset$.pipe(take(1)).subscribe(ds => {
       const options = {
         fieldSeparator: ",",
-        quoteStrings: '"',
+        quoteStrings: "\"",
         decimalseparator: ".",
         showLabels: true,
         showTitle: false,
@@ -155,5 +154,11 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
         console.log(job);
         this.store.dispatch(new SubmitAction(job));
       });
+  }
+
+
+  delete(dataset_attachment_id) {
+    console.log("fire action to delete dataset attachment id " , dataset_attachment_id);
+    this.store.dispatch(new DeleteAttachment(dataset_attachment_id));
   }
 }
