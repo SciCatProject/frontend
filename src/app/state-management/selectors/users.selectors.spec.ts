@@ -19,8 +19,8 @@ const initialUserState: UserState = {
   isLoggedIn: false
 };
 
-describe("test select", () => {
-  it("should get select", () => {
+describe("test User Selectors", () => {
+  it("should get IsLoggingIn", () => {
     expect(fromUserSelectors.getIsLoggingIn.projector(initialUserState)).toEqual(false);
   });
 });

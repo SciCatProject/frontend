@@ -22,7 +22,7 @@ const initialPolicyState: PolicyState = {
 };
 
 describe("test select", () => {
-  it("should get select", () => {
+  it("should get total Count", () => {
     expect(fromPoliciesSelectors.getTotalCount.projector(initialPolicyState)).toEqual(0);
   });
 });

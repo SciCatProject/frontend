@@ -16,8 +16,8 @@ const initialProposalsState: ProposalsState = {
   selectedId: null
 };
 
-describe("test select", () => {
-  it("should get select", () => {
+describe("test Proposal Selectors", () => {
+  it("should get HasFetched", () => {
     expect(fromProposalSelectors.getHasFetched.projector(initialProposalsState)).toEqual(false);
   });
 });
