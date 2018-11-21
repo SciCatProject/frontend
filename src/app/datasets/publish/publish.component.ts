@@ -62,7 +62,11 @@ export class PublishComponent implements OnInit {
     publishedData.abstract = this.form.abstract;
     publishedData.authors = this.form.authors;
     publishedData.dataDescription = this.form.description;
-    alert(JSON.stringify(publishedData));
+
+    return;
+    this.publishedDataApi.create(publishedData).subscribe(result => {
+      alert(JSON.stringify(result));
+    });
   }
 
   addAuthor(event) {
