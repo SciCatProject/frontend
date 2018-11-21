@@ -70,13 +70,13 @@ describe("DatasetTableComponent", () => {
   it("should contain mode switching buttons", () => {
     const compiled = fixture.debugElement.nativeElement;
     expect(compiled.querySelector(".archive")).toBeTruthy();
-    expect(compiled.querySelector(".archive").textContent).toContain("Archive");
+    expect(compiled.querySelector(".archive").textContent).toContain("Archivable");
     expect(compiled.querySelector(".retrieve")).toBeTruthy();
     expect(compiled.querySelector(".retrieve").textContent).toContain(
-      "Retrieve"
+      "Retrievable"
     );
     expect(compiled.querySelector(".view")).toBeTruthy();
-    expect(compiled.querySelector(".view").textContent).toContain("View");
+    expect(compiled.querySelector(".view").textContent).toContain("All");
   });
 
   it("should contain an export button", () => {
