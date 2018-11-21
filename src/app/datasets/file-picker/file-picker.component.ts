@@ -61,10 +61,10 @@ export class FilePickerComponent implements OnInit, OnDestroy {
         thumbnail: this.picked.content,
         creationTime: new Date(),
         datasetId: this.dataset.pid,
-        dataset: this.dataset.pid,
-        rawDatasetId: "string",
+        rawDatasetId:  this.dataset.pid,
         id: null,
-        derivedDatasetId: "string"
+        dataset: null,
+        derivedDatasetId:  this.dataset.pid
       };
 
       this.filePicker.reset();
