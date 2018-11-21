@@ -21,7 +21,7 @@ const initialPolicyState: PolicyState = {
   }
 };
 
-describe("test select", () => {
+describe("test Policies selectors", () => {
   it("should get total Count", () => {
     expect(fromPoliciesSelectors.getTotalCount.projector(initialPolicyState)).toEqual(0);
   });
