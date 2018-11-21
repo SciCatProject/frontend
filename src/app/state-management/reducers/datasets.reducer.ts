@@ -91,15 +91,13 @@ export function datasetsReducer(
 
     case ADD_ATTACHMENT_COMPLETE: {
       const attachment = (action as AddAttachmentComplete).attachment;
-      console.log(attachment.id);
       const attachments = state.currentSet.datasetattachments;
-      console.log("");
-      // following line adds attachment twice
-      attachments.push(attachment);
+      const attach2 = new Set(attachments);
+      attach2.add(attachment);
       return {
         ...state,
-        addingAttachment: false
-        //    currentSet: { ...state.currentSet, datasetattachments: attachments }
+        addingAttachment: false,
+        currentSet: { ...state.currentSet, datasetattachments: attach2 }
       };
     }
 
