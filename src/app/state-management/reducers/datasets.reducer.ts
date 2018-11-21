@@ -94,10 +94,11 @@ export function datasetsReducer(
       const attachments = state.currentSet.datasetattachments;
       const attach2 = new Set(attachments);
       attach2.add(attachment);
+
       return {
         ...state,
         addingAttachment: false,
-        currentSet: { ...state.currentSet, datasetattachments: attach2 }
+        currentSet: { ...state.currentSet, datasetattachments: Array.from(attach2) }
       };
     }
 

@@ -4,9 +4,6 @@
   <br>
   <span>{{status}}</span>
 
-  <mat-card class="upload-card" *ngIf="picked">
-    <img [src]="picked.content" class="upload-image">
-  </mat-card>
 
   <button class="attach-button" type="button" mat-button [ngxFilePicker]="readMode" multiple accept="image/*" (readStart)="onReadStart($event)" (filePick)="onFilePicked($event)"
     (readEnd)="onReadEnd($event)">Browse</button>
