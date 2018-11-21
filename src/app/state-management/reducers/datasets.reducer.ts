@@ -23,7 +23,8 @@ import {
   CURRENT_BLOCKS_COMPLETE,
   DATABLOCKS,
   DELETE_ATTACHMENT,
-  DELETE_ATTACHMENT_COMPLETE, DeleteAttachmentComplete,
+  DELETE_ATTACHMENT_COMPLETE,
+  DeleteAttachmentComplete,
   DESELECT_DATASET,
   DeselectDatasetAction,
   FETCH_DATASETS,
@@ -92,7 +93,9 @@ export function datasetsReducer(
       const attachment = (action as AddAttachmentComplete).attachment;
       console.log(attachment.id);
       const attachments = state.currentSet.datasetattachments;
-      // attachments.push(attachment);
+      console.log("");
+      // following line adds attachment twice
+      attachments.push(attachment);
       return {
         ...state,
         addingAttachment: false,
@@ -109,11 +112,13 @@ export function datasetsReducer(
     }
 
     case DELETE_ATTACHMENT_COMPLETE: {
-      let attachments = state.currentSet.datasetattachments;
+      const attachments = state.currentSet.datasetattachments;
       const attachment_id = (action as DeleteAttachmentComplete).attachment_id;
       delete attachments[attachment_id];
-      return { ...state, deletingAttachment: false,
-      currentSet: {...state.currentSet, datasetattachments: attachments}};
+      return {
+        ...state, deletingAttachment: false,
+        currentSet: { ...state.currentSet, datasetattachments: attachments }
+      };
     }
 
     case SAVE_DATASET: {
