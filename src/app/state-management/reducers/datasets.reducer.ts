@@ -98,8 +98,8 @@ export function datasetsReducer(
       attachments.push(attachment);
       return {
         ...state,
-        addingAttachment: false,
-        currentSet: { ...state.currentSet, datasetattachments: attachments }
+        addingAttachment: false
+        //    currentSet: { ...state.currentSet, datasetattachments: attachments }
       };
     }
 
@@ -114,10 +114,11 @@ export function datasetsReducer(
     case DELETE_ATTACHMENT_COMPLETE: {
       const attachments = state.currentSet.datasetattachments;
       const attachment_id = (action as DeleteAttachmentComplete).attachment_id;
-      delete attachments[attachment_id];
+      const attach2 = attachments.filter(attachment => attachment.id !== attachment_id);
+      console.log("array index", attachment_id);
       return {
         ...state, deletingAttachment: false,
-        currentSet: { ...state.currentSet, datasetattachments: attachments }
+        currentSet: { ...state.currentSet, datasetattachments: attach2 }
       };
     }
 

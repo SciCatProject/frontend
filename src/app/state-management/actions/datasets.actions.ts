@@ -89,6 +89,8 @@ export const REMOVE_SCIENTIFIC_CONDITION = "[Dataset] Remove Scientific Conditio
 
 export const DELETE_ATTACHMENT = "[DatasetAttachment] Delete Attachment";
 export const DELETE_ATTACHMENT_COMPLETE = "[DatasetAttachment] Delete Attachment Complete";
+export const DELETE_ATTACHMENT_FAILED = "[DatasetAttachment] Delete Attachment Failed";
+
 export const ADD_ATTACHMENT = "[DatasetAttachment] Add Attachment";
 export const ADD_ATTACHMENT_COMPLETE = "[DatasetAttachment] Add Attachment Complete";
 export const ADD_ATTACHMENT_FAILED = "[DatasetAttachment] Add Attachment Failed";
@@ -130,6 +132,14 @@ export class DeleteAttachmentComplete implements Action {
   constructor(readonly attachment_id: string) {
   }
 }
+
+export class DeleteAttachmentFailed implements Action {
+  readonly type = DELETE_ATTACHMENT_FAILED;
+
+  constructor(readonly attachment_id: string) {
+  }
+}
+
 
 export class UpdateFilterAction implements Action { // Inte gjord då den eventuellt ska tas bort
   readonly type = FILTER_UPDATE;

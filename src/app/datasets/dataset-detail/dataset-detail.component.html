@@ -176,7 +176,7 @@
     <h3>Attachments</h3>
       <app-file-picker></app-file-picker>
     <br>
-    <ng-container *ngFor="let da of attachments">
+    <ng-container *ngFor="let da of attachments; let i = index" [attr.data-index]="i">
       <mat-card class="attach-card">
         <img src="{{da.thumbnail}}" style="width: 20em; height: 20em">
         <mat-card-actions>

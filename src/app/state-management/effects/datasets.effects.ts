@@ -22,7 +22,8 @@ export class DatasetEffects {
       return this.datasetAttachmentApi
         .deleteById(attachment_id)
         .pipe(
-          map(res => new DatasetActions.DeleteAttachmentComplete(attachment_id))
+          map(res => new DatasetActions.DeleteAttachmentComplete(attachment_id)),
+          catchError (err => of (new DatasetActions.DeleteAttachmentFailed(err)))
         );
     })
   );
