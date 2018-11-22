@@ -1,10 +1,6 @@
-
-
 import * as fromDatasetSelectors from "./datasets.selectors";
 
-import { DatasetState } from "../state/datasets.store"
-
-
+import { DatasetState } from "../state/datasets.store";
 
 const initialDatasetState: DatasetState = {
   datasets: [],
@@ -19,7 +15,7 @@ const initialDatasetState: DatasetState = {
   facetCountsLoading: true,
   hasPrefilledFilters: false,
 
-  searchTerms: "",
+  searchTerms: "run",
   keywordsTerms: "",
   batch: [],
 
@@ -40,7 +36,13 @@ const initialDatasetState: DatasetState = {
 
 describe("test dataset selectors", () => {
   it("should get total set number", () => {
-    expect(fromDatasetSelectors.getTotalSets.projector(initialDatasetState)).toEqual(0);
+    expect(
+      fromDatasetSelectors.getTotalSets.projector(initialDatasetState)
+    ).toEqual(0);
+  });
+  it("should get total set number", () => {
+    expect(
+      fromDatasetSelectors.getSearchTerms.projector(initialDatasetState)
+    ).toEqual("run");
   });
 });
-

@@ -51,6 +51,7 @@ import {
   MatTooltipModule
 } from "@angular/material";
 import { ScientificConditionDialogComponent } from "./scientific-condition-dialog/scientific-condition-dialog.component";
+import { jobsReducer } from "../state-management/reducers/jobs.reducer";
 
 @NgModule({
   imports: [
@@ -85,7 +86,8 @@ import { ScientificConditionDialogComponent } from "./scientific-condition-dialo
     RouterModule,
     SatDatepickerModule,
     SharedCatanieModule,
-    StoreModule.forFeature("datasets", datasetsReducer)
+    StoreModule.forFeature("datasets", datasetsReducer),
+    StoreModule.forFeature("jobs", jobsReducer)
   ],
   declarations: [
     BatchCardComponent,
