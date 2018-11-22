@@ -16,9 +16,9 @@ import {
   getLocationFilter,
   getScientificConditions,
   getSearchTerms,
-  getKeywordsTerms,
   getTypeFacetCounts,
-  getTypeFilter
+  getTypeFilter,
+  getKeywordsTerms
 } from "state-management/selectors/datasets.selectors";
 
 import {
