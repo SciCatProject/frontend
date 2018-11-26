@@ -4,7 +4,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material";
 import { FormBuilder, FormControl, FormGroup } from "@angular/forms";
 
 export interface DialogData {
-  animal: string;
+  sample: string;
   name: string;
 }
 
