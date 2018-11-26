@@ -1,21 +1,30 @@
 import { Action } from "@ngrx/store";
 import {
+  ADD_ATTACHMENT,
+  ADD_ATTACHMENT_COMPLETE,
+  ADD_ATTACHMENT_FAILED,
   ADD_GROUP_FILTER,
   ADD_KEYWORD_FILTER,
   ADD_LOCATION_FILTER,
+  ADD_SCIENTIFIC_CONDITION,
   ADD_TO_BATCH,
   ADD_TYPE_FILTER,
+  AddAttachmentComplete,
   AddGroupFilterAction,
   AddKeywordFilterAction,
   AddLocationFilterAction,
+  AddScientificConditionAction,
   AddTypeFilterAction,
   CHANGE_PAGE,
+  ChangePageAction,
   CLEAR_BATCH,
   CLEAR_FACETS,
   CLEAR_SELECTION,
   CURRENT_BLOCKS_COMPLETE,
-  ChangePageAction,
   DATABLOCKS,
+  DELETE_ATTACHMENT,
+  DELETE_ATTACHMENT_COMPLETE,
+  DeleteAttachmentComplete,
   DESELECT_DATASET,
   DeselectDatasetAction,
   FETCH_DATASETS,
@@ -24,10 +33,10 @@ import {
   FETCH_FACET_COUNTS,
   FETCH_FACET_COUNTS_COMPLETE,
   FETCH_FACET_COUNTS_FAILED,
-  FILTER_UPDATE,
-  FILTER_VALUE_UPDATE,
   FetchDatasetsCompleteAction,
   FetchFacetCountsCompleteAction,
+  FILTER_UPDATE,
+  FILTER_VALUE_UPDATE,
   PREFILL_BATCH_COMPLETE,
   PREFILL_FILTERS,
   PrefillBatchCompleteAction,
@@ -36,44 +45,36 @@ import {
   REMOVE_GROUP_FILTER,
   REMOVE_KEYWORD_FILTER,
   REMOVE_LOCATION_FILTER,
+  REMOVE_SCIENTIFIC_CONDITION,
   REMOVE_TYPE_FILTER,
   RemoveFromBatchAction,
   RemoveGroupFilterAction,
   RemoveKeywordFilterAction,
   RemoveLocationFilterAction,
+  RemoveScientificConditionAction,
   RemoveTypeFilterAction,
   SAVE_DATASET,
   SAVE_DATASET_COMPLETE,
   SAVE_DATASET_FAILED,
   SEARCH_ID_COMPLETE,
+  SearchIDCompleteAction,
   SELECT_ALL_DATASETS,
   SELECT_CURRENT,
   SELECT_DATASET,
+  SelectDatasetAction,
   SET_DATE_RANGE,
   SET_SEARCH_TERMS,
   SET_TEXT_FILTER,
   SET_VIEW_MODE,
-  SORT_BY_COLUMN,
-  SaveDatasetAction,
-  SaveDatasetCompleteAction,
-  SaveDatasetFailedAction,
-  SearchIDCompleteAction,
-  SelectDatasetAction,
   SetDateRangeFilterAction,
   SetSearchTermsAction,
   SetTextFilterAction,
   SetViewModeAction,
-  SortByColumnAction,
-  ADD_SCIENTIFIC_CONDITION,
-  AddScientificConditionAction,
-  REMOVE_SCIENTIFIC_CONDITION,
-  RemoveScientificConditionAction
+  SORT_BY_COLUMN,
+  SortByColumnAction
 } from "state-management/actions/datasets.actions";
 
-import {
-  DatasetState,
-  initialDatasetState
-} from "state-management/state/datasets.store";
+import { DatasetState, initialDatasetState } from "state-management/state/datasets.store";
 
 export function datasetsReducer(
   state: DatasetState = initialDatasetState,
@@ -84,8 +85,44 @@ export function datasetsReducer(
   }
 
   switch (action.type) {
+    case ADD_ATTACHMENT: {
+      return { ...state, addingAttachment: true };
+    }
+
+    case ADD_ATTACHMENT_COMPLETE: {
+      const attachment = (action as AddAttachmentComplete).attachment;
+      const attachments = state.currentSet.datasetattachments;
+      const attach2 = new Set(attachments);
+      attach2.add(attachment);
+
+      return {
+        ...state,
+        addingAttachment: false,
+        currentSet: { ...state.currentSet, datasetattachments: Array.from(attach2) }
+      };
+    }
+
+    case ADD_ATTACHMENT_FAILED: {
+      return { ...state };
+    }
+
+    case DELETE_ATTACHMENT: {
+      return { ...state, deletingAttachment: true };
+    }
+
+    case DELETE_ATTACHMENT_COMPLETE: {
+      const attachments = state.currentSet.datasetattachments;
+      const attachment_id = (action as DeleteAttachmentComplete).attachment_id;
+      const attach2 = attachments.filter(attachment => attachment.id !== attachment_id);
+      console.log("array index", attachment_id);
+      return {
+        ...state, deletingAttachment: false,
+        currentSet: { ...state.currentSet, datasetattachments: attach2 }
+      };
+    }
+
     case SAVE_DATASET: {
-      return { ...state};
+      return { ...state };
     }
 
     case SAVE_DATASET_COMPLETE: {
@@ -269,7 +306,10 @@ export function datasetsReducer(
       const { condition } = action as AddScientificConditionAction;
       const currentFilters = state.filters;
       const currentScientific = currentFilters.scientific;
-      const filters = { ...currentFilters, scientific: [...currentScientific, condition] };
+      const filters = {
+        ...currentFilters,
+        scientific: [...currentScientific, condition]
+      };
       return { ...state, filters };
     }
 

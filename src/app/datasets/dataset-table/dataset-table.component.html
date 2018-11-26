@@ -1,9 +1,9 @@
 <div class="dataset-table" style="min-width:800px;">
   <div class="mode-container" *ngIf="appConfig.archiveWorkflowEnabled">
     <mat-button-toggle-group [value]="currentMode">
-      <mat-button-toggle *ngFor="let mode of modes" (click)="onModeChange($event, mode)" [value]="mode"
-                         [ngClass]="mode">
-        {{mode | titlecase}}
+      <mat-button-toggle *ngFor="let mode of modes; let i = index"  (click)="onModeChange($event, mode)" [value]="mode"
+            [ngClass]="mode">
+        {{modeLabels[i] | titlecase}} 
       </mat-button-toggle>
     </mat-button-toggle-group>
   </div>
