@@ -27,9 +27,7 @@ import { faSignOutAlt } from "@fortawesome/free-solid-svg-icons/faSignOutAlt";
 import { faDownload } from "@fortawesome/free-solid-svg-icons/faDownload";
 import { faFileAlt } from "@fortawesome/free-solid-svg-icons/faFileAlt";
 import { faIdBadge } from "@fortawesome/free-solid-svg-icons/faIdBadge";
-import { UserIdentityApi } from "shared/sdk/services";
 import { LoginService } from "users/login.service";
-import { BreakpointObserver } from "@angular/cdk/layout";
 
 const { version: appVersion } = require("../../package.json");
 

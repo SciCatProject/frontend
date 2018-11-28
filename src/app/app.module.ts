@@ -47,7 +47,8 @@ import {
   MatSidenavModule,
   MatSnackBarModule,
   MatTableModule,
-  MatToolbarModule
+  MatToolbarModule,
+  MatButtonToggleModule,
 } from "@angular/material";
 
 export function localStorageSyncWrapper(reducer: any) {
@@ -91,6 +92,7 @@ export function localStorageSyncWrapper(reducer: any) {
     SatNativeDateModule,
     SharedCatanieModule,
     UsersModule,
+    MatButtonToggleModule,
 
     SDKBrowserModule.forRoot(),
     // StoreModule.forRoot({router: routerReducer, root: rootReducer}, {metaReducers: [localStorageSyncWrapper]}),
