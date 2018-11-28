@@ -37,10 +37,6 @@
   background-color: unset !important;
 }
 
-
-
-
-
 mat-cell,
 .mat-cell {
   display: block; // flex prevents padding from working
@@ -48,16 +44,10 @@ mat-cell,
   //padding: 5px 5px 0 0;
 }
 
-
-/*Columns are dynamically injected, so this /deep/ ensures it is reflected onto the selector  */
-/* ^-- Is this needed anymore? Seems to work fine without */
-
-
 .mat-column-size,
 .mat-column-type {
   flex-grow: 0.5;
 }
-
 
 /*:host /deep/*/
 .left-align {
