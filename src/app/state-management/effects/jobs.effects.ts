@@ -91,10 +91,12 @@ export class JobsEffects {
   );
 
   @Effect()
+  // this is the jobs view get effect
   protected get_updated_sort$: Observable<Action> = this.action$.pipe(
     ofType(JobActions.SORT_UPDATE),
     switchMap((action: JobActions.SortUpdateAction) => {
       const filter = {};
+      filter["where"] = action.mode;
       filter["skip"] = action.skip;
       filter["limit"] = action.limit;
       filter["order"] = "creationTime DESC";

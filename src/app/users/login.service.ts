@@ -7,7 +7,6 @@ import { UserApi, SDKToken, User, LoopBackAuth } from "shared/sdk";
 import { UserIdentityApi } from "shared/sdk/services";
 import { UserIdentity } from "shared/sdk/models";
 
-
 export interface SuccessfulLogin {
   user: User;
   accountType: "functional" | "external";
@@ -57,8 +56,10 @@ export class LoginService {
     );
   }
 
-  /* fetch the current userIdentity for accurate user email*/
-  public getUserIdent(id: string): Observable<UserIdentity> {
-    return this.UserIdentityApi.findOne({filter: {id}});
+  /* fetch the current AD userIdentity for accurate user email*/
+  public getUserIdent(id: string): Observable<any> {
+    // This is a much more robust way of defining a filter as a string first then parse.
+    const filter = JSON.parse('{"where": {"userId":"' + id + '"}}');
+    return this.UserIdentityApi.find(filter);
   }
 }

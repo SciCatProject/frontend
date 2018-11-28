@@ -3,6 +3,7 @@ import { Settings, Message, User, AccessGroup } from "../models";
 // NOTE It IS ok to make up a state of other sub states
 export interface UserState {
   currentUser: User;
+  profile?: any;
   isLoggingIn: boolean;
   currentUserGroups: AccessGroup[];
   email: string;
@@ -14,6 +15,7 @@ export interface UserState {
 
 export const initialUserState: UserState = {
   currentUser: null,
+  profile: null,
   currentUserGroups: [],
   email: undefined,
   isLoggingIn: false,

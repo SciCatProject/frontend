@@ -42,7 +42,10 @@
           <th>
             <fa-icon [icon]="faCoins"></fa-icon>&nbsp;
             Dataset List</th>
-          <td>{{ value | json }}</td>
+          <div *ngFor="let daSet of job.datasetList">
+            {{daSet.pid | json }}
+          </div>
+          
         </tr>
         <tr *ngIf="job.createdAt as value">
           <th>

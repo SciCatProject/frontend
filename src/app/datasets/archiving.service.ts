@@ -46,9 +46,9 @@ export class ArchivingService {
     };
 
 
-    var ident$ = this.loginService.getUserIdent(user.id);
-    ident$.subscribe(data => {
-      user.email = data.profile.email;
+    const ident$ = this.loginService.getUserIdent(user.id);
+    ident$.subscribe(usident => {
+      user.email = usident.profile.email;
 
     });
 
