@@ -1,11 +1,18 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import { FetchSampleAction, FetchSamplesAction } from "../../state-management/actions/samples.actions";
+import { FetchSampleAction, FetchSamplesAction, SampleSortByColumnAction } from "../../state-management/actions/samples.actions";
 import { Router } from "@angular/router";
 import { Sample } from "../../shared/sdk/models";
 import { getSamplesList } from "state-management/selectors/samples.selectors";
 import { select, Store } from "@ngrx/store";
 import { MatDialog, MatDialogConfig } from "@angular/material";
 import { SampleDialogComponent } from "../sample-dialog/sample-dialog.component";
+
+
+
+export interface SortChangeEvent {
+  active: keyof Sample;
+  direction: "asc" | "desc" | "";
+}
 
 @Component({
   selector: "app-sample-table",
@@ -66,5 +73,10 @@ export class SampleTableComponent implements OnInit, OnDestroy {
       data: { name: this.name, description: this.description }
     });
 
+  }
+
+  onSortChange(event: SortChangeEvent): void {
+    const { active: column, direction } = event;
+     this.store.dispatch(new SampleSortByColumnAction(column, direction));
   }
 }
