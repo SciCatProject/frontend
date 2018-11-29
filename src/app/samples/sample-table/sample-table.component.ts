@@ -42,7 +42,7 @@ export class SampleTableComponent implements OnInit, OnDestroy {
       filters => {
         this.store.dispatch(new FetchSamplesAction());
       }
-    ))
+    ));
     this.store.dispatch(new FetchSamplesAction());
 
     this.subscriptions.push(
