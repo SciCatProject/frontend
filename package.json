@@ -44,6 +44,7 @@
     "rison": "github:nanonid/rison",
     "rxjs": "^6.3.3",
     "saturn-datepicker": "^7.0.0",
+    "shortid": "^2.2.14",
     "socket.io-client": "^2.1.1"
   },
   "devDependencies": {

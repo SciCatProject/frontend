@@ -3,8 +3,11 @@ import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material";
 
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { Sample } from "shared/sdk";
-import { Store } from "@ngrx/store";
+import { Store, select } from "@ngrx/store";
 import { AddSampleAction } from "state-management/actions/samples.actions";
+import { getCurrentUser } from "state-management/selectors/users.selectors";
+
+const shortid = require("shortid");
 
 export interface DialogData {
   sample: string;
@@ -21,9 +24,10 @@ export class SampleDialogComponent implements OnInit {
 
   public form: FormGroup;
   description: string;
+  sample: Sample;
 
   constructor(
-    private store: Store<Sample>,
+    private store: Store<any>,
     private fb: FormBuilder,
     public dialogRef: MatDialogRef<SampleDialogComponent>,
     @Inject(MAT_DIALOG_DATA) { description, sampleCharacteristics, owner }: Sample) {
@@ -54,12 +58,15 @@ export class SampleDialogComponent implements OnInit {
   save() {
     this.dialogRef.close(this.form.value);
     console.log("gmnov", this.form.value);
-    const sample = new Sample();
-    sample.sampleCharacteristics = { "char": this.form.value.sampleCharacteristics };
-    sample.description = this.form.value.description;
-    sample.samplelId = "erew";
-    sample.ownerGroup = "ess";
-    this.store.dispatch(new AddSampleAction(sample));
+    this.sample = new Sample();
+    this.sample.sampleCharacteristics = { "char": this.form.value.sampleCharacteristics };
+    this.sample.description = this.form.value.description;
+    this.sample.samplelId = shortid.generate();
+
+    this.store.pipe(select(getCurrentUser)).subscribe(res => { this.sample.owner = res.username; return console.log(res); });
+
+    this.sample.ownerGroup = "ess";
+    this.store.dispatch(new AddSampleAction(this.sample));
   }
 
   close() {
