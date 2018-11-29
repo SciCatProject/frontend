@@ -50,17 +50,17 @@ export class SamplesEffects {
     )
   );
 
-@Effect()
+  @Effect()
   protected addSample$: Observable<Action> = this.actions$.pipe(
     ofType(ADD_SAMPLE),
     map((action: AddSampleAction) => action.sample),
-    mergeMap(samplelId =>
+    mergeMap(sample =>
       this.sampleService
-        .getSample(encodeURIComponent(sample.samplelId))
+        .addSample(sample)
         .pipe(
           map(
-            (currentSample: Sample) =>
-              new AddSampleCompleteAction(currentSample),
+            res =>
+              new AddSampleCompleteAction(res[0]),
             catchError(() => of(new AddSampleFailedAction(new Sample())))
           )
         )
@@ -71,5 +71,5 @@ export class SamplesEffects {
     private store: Store<any>,
     private sampleApi: SampleApi,
     private sampleService: SampleService
-  ) {}
+  ) { }
 }
