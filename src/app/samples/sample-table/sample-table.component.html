@@ -9,7 +9,8 @@
 
 <mat-card style="margin: 1em">
   <div class="details">
-    <mat-table #table [dataSource]="samples">
+    <mat-table #table [dataSource]="samples" matSort
+    (matSortChange)="onSortChange($event)">
 
       <ng-container matColumnDef="samplelId">
         <mat-header-cell *matHeaderCellDef mat-sort-header>Id</mat-header-cell>

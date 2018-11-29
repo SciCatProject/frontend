@@ -1,5 +1,8 @@
 import { CommonModule } from "@angular/common";
-import { MatCardModule, MatDialogModule, MatFormFieldModule, MatIconModule, MatTableModule, MatInputModule } from "@angular/material";
+import { MatCardModule,
+  MatDialogModule,
+  MatFormFieldModule, MatIconModule, MatTableModule,
+ MatInputModule, MatSortModule } from "@angular/material";
 import { NgModule } from "@angular/core";
 import { SampleApi } from "../shared/sdk/services/custom";
 import { SampleDetailComponent } from "./sample-detail/sample-detail.component";
@@ -20,6 +23,7 @@ import { SampleService } from "./sample.service";
     MatFormFieldModule,
     MatInputModule,
     MatDialogModule,
+    MatSortModule,
     MatTableModule,
     ReactiveFormsModule,
     StoreModule.forFeature("samples", samplesReducer)
