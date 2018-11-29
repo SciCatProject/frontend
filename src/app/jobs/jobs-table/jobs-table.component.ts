@@ -82,42 +82,48 @@ export class JobsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngOnInit() {
     this.loading$ = this.store.pipe(select(selectors.jobs.getLoading));
-    this.store
-      .pipe(select(state => state.root.user.settings.jobCount))
-      .subscribe(limit => {
-        this.limit = limit;
-      });
-    this.store.pipe(select(selectors.jobs.getFilters)).subscribe(filters => {
-      this.filters = Object.assign({}, filters);
-    });
+    this.subscriptions.push(
+      this.store
+        .pipe(select(state => state.root.user.settings.jobCount))
+        .subscribe(limit => {
+          this.limit = limit;
+        })
+    );
+
+    this.subscriptions.push(
+      this.store.pipe(select(selectors.jobs.getFilters)).subscribe(filters => {
+        this.filters = Object.assign({}, filters);
+      })
+    );
 
     this.totalJobNumber$ = this.store.pipe(
       select(state => state.root.jobs.currentJobs.length)
     );
 
-    this.store
-      .pipe(select(state => state.root.user.currentUser))
-      .subscribe(current => {
-        if (current) {
-          // set this email for functional users. Override for MSAD
-          this.email = current.email;
-          // realm is only defined for functional users
-          if (!current.realm) {
-            this.loginService
-              .getUserIdent$(current.id)
-              .subscribe(currentIdent => {
-                if (currentIdent && currentIdent.profile) {
-                  this.profile = currentIdent.profile;
-                  this.email = this.profile.email;
-                }
-
-                this.onModeChange(null, JobViewMode.myJobs);
-              });
-          } else {
-            this.onModeChange(null, JobViewMode.myJobs);
+    this.subscriptions.push(
+      this.store
+        .pipe(select(state => state.root.user.currentUser))
+        .subscribe(current => {
+          if (current) {
+            // set this email for functional users. Override for MSAD
+            this.email = current.email;
+            // realm is only defined for functional users
+            if (!current.realm) {
+              this.loginService
+                .getUserIdent$(current.id)
+                .subscribe(currentIdent => {
+                  if (currentIdent && currentIdent.profile) {
+                    this.profile = currentIdent.profile;
+                    this.email = this.profile.email;
+                  }
+                  this.onModeChange(null, JobViewMode.myJobs);
+                });
+            } else {
+              this.onModeChange(null, JobViewMode.myJobs);
+            }
           }
-        }
-      });
+        })
+    );
   }
 
   ngAfterViewInit() {}

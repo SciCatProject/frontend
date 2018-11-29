@@ -135,7 +135,7 @@ export class AppComponent implements OnDestroy, OnInit {
           console.log("current: ", current);
           if (current) {
             this.username = current.username.replace("ms-ad.", "");
-            if (!current.realm) {
+            if (!current.realm && current.id) {
               this.loginService
                 .getUserIdent$(current.id)
                 .subscribe(currentIdent => {

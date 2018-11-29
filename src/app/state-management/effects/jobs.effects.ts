@@ -96,7 +96,9 @@ export class JobsEffects {
     ofType(JobActions.SORT_UPDATE),
     switchMap((action: JobActions.SortUpdateAction) => {
       const filter = {};
-      filter["where"] = action.mode;
+      if (action.mode) {
+        filter["where"] = action.mode;
+      }
       filter["skip"] = action.skip;
       filter["limit"] = action.limit;
       filter["order"] = "creationTime DESC";
