@@ -55,6 +55,10 @@ export class SampleDialogComponent implements OnInit {
     this.dialogRef.close(this.form.value);
     console.log("gmnov", this.form.value);
     const sample = new Sample();
+    sample.sampleCharacteristics = { "char": this.form.value.sampleCharacteristics };
+    sample.description = this.form.value.description;
+    sample.samplelId = "erew";
+    sample.ownerGroup = "ess";
     this.store.dispatch(new AddSampleAction(sample));
   }
 
