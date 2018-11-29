@@ -27,6 +27,7 @@ import { faSignOutAlt } from "@fortawesome/free-solid-svg-icons/faSignOutAlt";
 import { faDownload } from "@fortawesome/free-solid-svg-icons/faDownload";
 import { faFileAlt } from "@fortawesome/free-solid-svg-icons/faFileAlt";
 import { faIdBadge } from "@fortawesome/free-solid-svg-icons/faIdBadge";
+import { LoginService } from "users/login.service";
 
 const { version: appVersion } = require("../../package.json");
 
@@ -72,6 +73,7 @@ export class AppComponent implements OnDestroy, OnInit {
     private titleService: Title,
     private metaService: Meta,
     public snackBar: MatSnackBar,
+    private loginService: LoginService,
     // private _notif_service: NotificationsService,
     @Inject(APP_CONFIG) private appConfig: AppConfig,
     private store: Store<any>
@@ -130,19 +132,19 @@ export class AppComponent implements OnDestroy, OnInit {
       this.store
         .pipe(select(state => state.root.user.currentUser))
         .subscribe(current => {
-          // console.log("current.user.username: ", current.user.username);
-          // console.log("state.root.user: ", state.root.user.loggedIn);
           console.log("current: ", current);
           if (current) {
-            if ("username" in current) {
-              this.username = current.username.replace("ms-ad.", "");
-              // this.store.dispatch(new dsa.AddGroupsAction(current.id));
-              // this.username = this.username;
-              // this.store.dispatch(new ua.AccessUserEmailAction(current.id));
-              // TODO handle dataset loading
+            this.username = current.username.replace("ms-ad.", "");
+            if (!current.realm && current.id) {
+              this.loginService
+                .getUserIdent$(current.id)
+                .subscribe(currentIdent => {
+                  if (currentIdent) {
+                    this.username = currentIdent.profile.username;
+                  }
+                });
             }
-          } else {
-            this.username = null;
+            // TODO handle dataset loading
           }
         })
     );

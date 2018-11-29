@@ -5,59 +5,70 @@
         <tr>
           <th>
             <fa-icon [icon]="faAt"></fa-icon>&nbsp;
-            Email Job Initiator</th>
+            Email Job Initiator
+          </th>
           <td>{{ job.emailJobInitiator }}</td>
         </tr>
         <tr *ngIf="job.type as value">
           <th>
             <fa-icon [icon]="faFileAlt"></fa-icon>&nbsp;
-            Type</th>
+            Type
+          </th>
           <td>{{ value }}</td>
         </tr>
         <tr *ngIf="job.creationTime as value">
           <th>
             <fa-icon [icon]="faCalendarAlt"></fa-icon>&nbsp;
-            Creation Time</th>
+            Creation Time
+          </th>
           <td>{{ value | date: 'yyyy/MM/dd HH:mm'}}</td>
         </tr>
         <tr *ngIf="job.executionTime as value">
           <th>
             <fa-icon [icon]="faCalendarAlt"></fa-icon>&nbsp;
-            Execution Time</th>
+            Execution Time
+          </th>
           <td>{{ value | date: 'yyyy/MM/dd HH:mm'}}</td>
         </tr>
         <tr *ngIf="job.jobParams as value">
           <th>
             <fa-icon [icon]="faCog"></fa-icon>&nbsp;
-            Job Params</th>
+            Job Params
+          </th>
           <td>{{ value | json }}</td>
         </tr>
         <tr *ngIf="job.dateOfLastMessage as value">
           <th>
             <fa-icon [icon]="faEnvelope"></fa-icon>&nbsp;
-            Date Of Last Message</th>
+            Date Of Last Message
+          </th>
           <td>{{ value | date: 'yyyy/MM/dd HH:mm' }}</td>
         </tr>
         <tr *ngIf="job.datasetList as value">
           <th>
             <fa-icon [icon]="faCoins"></fa-icon>&nbsp;
-            Dataset List</th>
-          <td>{{ value | json }}</td>
+            Dataset List
+          </th>
+          <div *ngFor="let daSet of job.datasetList">
+            {{job.datasetList | json }}
+          </div>
+
         </tr>
         <tr *ngIf="job.createdAt as value">
           <th>
             <fa-icon [icon]="faCalendarAlt"></fa-icon>&nbsp;
-            Created At</th>
+            Created At
+          </th>
           <td>{{ value | date: 'yyyy/MM/dd HH:mm' }}</td>
         </tr>
         <tr *ngIf="job.updatedAt as value">
           <th>
             <fa-icon [icon]="faCalendarAlt"></fa-icon>&nbsp;
-            Updated At</th>
+            Updated At
+          </th>
           <td>{{ value | date: 'yyyy/MM/dd HH:mm' }}</td>
         </tr>
       </table>
     </div>
   </mat-card>
 </div>
-

@@ -27,8 +27,8 @@ export function jobsReducer(
 
   switch (action.type) {
     case SORT_UPDATE: {
-      const { skip, limit } = action as SortUpdateAction;
-      const filters = { skip, limit };
+      const { skip, limit, mode } = action as SortUpdateAction;
+      const filters = { skip, limit, mode };
       return { ...state, filters, loading: true };
     }
 

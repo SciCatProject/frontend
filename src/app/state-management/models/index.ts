@@ -43,6 +43,7 @@ export class Message {
 }
 
 export type ViewMode = "view" | "archive" | "retrieve";
+export enum JobViewMode { myJobs = "my jobs", allJobs = "all jobs"}
 
 type ScientificConditionRelation =
   | "EQUAL_TO_NUMERIC"
