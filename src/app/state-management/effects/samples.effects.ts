@@ -13,7 +13,11 @@ import {
   FetchSampleCompleteAction,
   FetchSampleFailedAction,
   FetchSamplesCompleteAction,
-  FetchSamplesFailedAction
+  FetchSamplesFailedAction,
+  ADD_SAMPLE,
+  AddSampleAction,
+  AddSampleCompleteAction,
+  AddSampleFailedAction
 } from "../actions/samples.actions";
 
 @Injectable()
@@ -46,6 +50,22 @@ export class SamplesEffects {
     )
   );
 
+@Effect()
+  protected addSample$: Observable<Action> = this.actions$.pipe(
+    ofType(ADD_SAMPLE),
+    map((action: AddSampleAction) => action.sample),
+    mergeMap(samplelId =>
+      this.sampleService
+        .getSample(encodeURIComponent(sample.samplelId))
+        .pipe(
+          map(
+            (currentSample: Sample) =>
+              new AddSampleCompleteAction(currentSample),
+            catchError(() => of(new AddSampleFailedAction(new Sample())))
+          )
+        )
+    )
+  );
   constructor(
     private actions$: Actions,
     private store: Store<any>,
