@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { SampleDialogComponent } from "./sample-dialog.component";
-import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from "@angular/material";
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef, MatFormField } from "@angular/material";
 import { FormBuilder } from "@angular/forms";
 
 describe("SampleDialogComponent", () => {

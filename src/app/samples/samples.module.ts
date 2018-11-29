@@ -22,6 +22,9 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
     ReactiveFormsModule,
     StoreModule.forFeature("samples", samplesReducer)
   ],
+  exports: [
+    MatFormFieldModule
+  ],
   declarations: [
     SampleDetailComponent,
     SampleTableComponent,

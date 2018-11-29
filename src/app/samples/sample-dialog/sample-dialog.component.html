@@ -1,7 +1,11 @@
-<h1 mat-dialog-title>Hi {{data.name}}</h1>
-<div mat-dialog-content>
-  <p>Please add sample metadata below</p>
-</div>
+<h1 mat-dialog-title>Sample Entry</h1>
+<mat-dialog-content [formGroup]="form">
+    <mat-form-field>
+        <input matInput
+                placeholder="Sample Description"
+               formControlName="description">
+    </mat-form-field>
+</mat-dialog-content>
 <div mat-dialog-actions>
   <button mat-button (click)="onNoClick()">No Thanks</button>
   <button mat-button [mat-dialog-close]="data.name" cdkFocusInitial>Ok</button>

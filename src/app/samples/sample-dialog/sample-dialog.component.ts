@@ -1,4 +1,4 @@
-import { Component, Inject } from "@angular/core";
+import { Component, Inject, OnInit } from "@angular/core";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material";
 
 import { FormBuilder, FormControl, FormGroup } from "@angular/forms";
@@ -14,9 +14,9 @@ export interface DialogData {
   templateUrl: "./sample-dialog.component.html",
   styleUrls: ["./sample-dialog.component.scss"]
 })
-export class SampleDialogComponent {
+export class SampleDialogComponent implements OnInit {
 
-  form: FormGroup;
+  public form: FormGroup;
 
   constructor(
     private fb: FormBuilder,
@@ -24,12 +24,13 @@ export class SampleDialogComponent {
     @Inject(MAT_DIALOG_DATA) public data: DialogData) {
 
     this.data = data;
+  }
+
+  ngOnInit() {
 
 
-    this.form = new FormGroup({
+    this.form = this.fb.group({
       description: new FormControl({
-        value:
-          this.getPreFill(data, true),
         disabled: true
       })
     });
@@ -43,5 +44,14 @@ export class SampleDialogComponent {
   onNoClick(): void {
     this.dialogRef.close();
   }
+
+  save() {
+    this.dialogRef.close(this.form.value);
+  }
+
+  close() {
+    this.dialogRef.close();
+  }
+
 
 }
