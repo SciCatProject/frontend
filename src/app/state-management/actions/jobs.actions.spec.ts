@@ -13,6 +13,7 @@ import { SearchIDCompleteAction, SEARCH_ID_COMPLETE } from "./jobs.actions";
 import { SearchIDFailedAction, SEARCH_ID_FAILED } from "./jobs.actions";
 import { CurrentJobAction, SELECT_CURRENT } from "./jobs.actions";
 import { SortUpdateAction, SORT_UPDATE } from "./jobs.actions";
+import { JobViewMode } from "state-management/models";
 
 describe("SubmitAction", () => {
   it("should create an action", () => {
@@ -98,7 +99,8 @@ describe("SortUpdateAction", () => {
   it("should create an action", () => {
     const limit = 0;
     const skip = 0;
-    const action = new SortUpdateAction(skip, limit);
-    expect({ ...action }).toEqual({ type: SORT_UPDATE, skip, limit });
+    const mode = null;
+    const action = new SortUpdateAction(skip, limit, mode);
+    expect({ ...action }).toEqual({ type: SORT_UPDATE, skip, limit, mode });
   });
 });

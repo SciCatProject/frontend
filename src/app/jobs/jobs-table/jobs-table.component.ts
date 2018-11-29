@@ -22,7 +22,8 @@ import { faFileAlt } from "@fortawesome/free-solid-svg-icons/faFileAlt";
 @Component({
   selector: "jobs-table",
   templateUrl: "./jobs-table.component.html",
-  styleUrls: ["./jobs-table.component.scss"]
+  styleUrls: ["./jobs-table.component.scss"],
+  providers: [LoginService]
 })
 export class JobsTableComponent implements OnInit, OnDestroy, AfterViewInit {
   jobs$ = this.store.pipe(select(selectors.jobs.getJobs));
@@ -100,15 +101,17 @@ export class JobsTableComponent implements OnInit, OnDestroy, AfterViewInit {
         if (current) {
           // set this email for functional users. Override for MSAD
           this.email = current.email;
-          this.loginService.getUserIdent(current.id).subscribe(currentIdent => {
-            if (currentIdent && currentIdent[0]) {
-              this.profile = currentIdent[0].profile;
-              if (this.profile) {
-                this.email = this.profile.email;
+          this.loginService
+            .getUserIdent$(current.id)
+            .subscribe(currentIdent => {
+              if (currentIdent && currentIdent) {
+                this.profile = currentIdent.profile;
+                if (this.profile) {
+                  this.email = this.profile.email;
+                }
               }
-            }
-            this.onModeChange(null, JobViewMode.myJobs);
-          });
+              this.onModeChange(null, JobViewMode.myJobs);
+            });
         }
       });
   }

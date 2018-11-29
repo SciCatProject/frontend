@@ -136,10 +136,10 @@ export class AppComponent implements OnDestroy, OnInit {
           if (current) {
             this.username = current.username.replace("ms-ad.", "");
             this.loginService
-              .getUserIdent(current.id)
+              .getUserIdent$(current.id)
               .subscribe(currentIdent => {
-                if (currentIdent && currentIdent[0]) {
-                  this.username = currentIdent[0].profile.username;
+                if (currentIdent && currentIdent) {
+                  this.username = currentIdent.profile.username;
                 }
               });
 

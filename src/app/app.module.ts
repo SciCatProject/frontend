@@ -34,6 +34,7 @@ import { UsersModule } from "users/users.module";
 import { localStorageSync } from "ngrx-store-localstorage";
 import { rootReducer } from "state-management/reducers/root.reducer";
 import { routerReducer, StoreRouterConnectingModule } from "@ngrx/router-store";
+import { LoginService } from "users/login.service";
 
 import {
   MatCardModule,
@@ -116,10 +117,10 @@ export function localStorageSyncWrapper(reducer: any) {
     ArchivingService,
     UserApi,
     Title,
-    MatNativeDateModule
+    MatNativeDateModule,
+    LoginService
     //      {provide: RouteReuseStrategy, useClass: CustomReuseStrategy}
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule {
-}
+export class AppModule {}
