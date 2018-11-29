@@ -13,7 +13,6 @@ import { SearchIDCompleteAction, SEARCH_ID_COMPLETE } from "./jobs.actions";
 import { SearchIDFailedAction, SEARCH_ID_FAILED } from "./jobs.actions";
 import { CurrentJobAction, SELECT_CURRENT } from "./jobs.actions";
 import { SortUpdateAction, SORT_UPDATE } from "./jobs.actions";
-import { JobViewMode } from "state-management/models";
 
 describe("SubmitAction", () => {
   it("should create an action", () => {

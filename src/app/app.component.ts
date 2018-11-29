@@ -138,7 +138,7 @@ export class AppComponent implements OnDestroy, OnInit {
             this.loginService
               .getUserIdent$(current.id)
               .subscribe(currentIdent => {
-                if (currentIdent && currentIdent) {
+                if (currentIdent) {
                   this.username = currentIdent.profile.username;
                 }
               });
