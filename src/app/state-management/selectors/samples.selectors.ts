@@ -14,6 +14,10 @@ const getSamples = createSelector(
   state => state.samples
 );
 
+export const getSampleFilters = createSelector(
+  getSampleState,
+  state => state.filters
+);
 export const getSamplesList = createSelector(getSamples, samples =>
   Object.keys(samples).map(samplelId => samples[samplelId])
 );

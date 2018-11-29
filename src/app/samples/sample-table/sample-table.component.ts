@@ -6,6 +6,7 @@ import { getSamplesList } from "state-management/selectors/samples.selectors";
 import { select, Store } from "@ngrx/store";
 import { MatDialog, MatDialogConfig } from "@angular/material";
 import { SampleDialogComponent } from "../sample-dialog/sample-dialog.component";
+import { getSampleFilters } from "../../state-management/selectors/samples.selectors";
 
 
 
@@ -27,6 +28,7 @@ export class SampleTableComponent implements OnInit, OnDestroy {
   description: string;
   name: string;
   private subscriptions = [];
+  private filters$ = this.store.pipe(select(getSampleFilters));
 
   constructor(
     private store: Store<Sample>,
@@ -36,6 +38,11 @@ export class SampleTableComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.subscriptions.push(this.filters$.subscribe(
+      filters => {
+        this.store.dispatch(new FetchSamplesAction());
+      }
+    ))
     this.store.dispatch(new FetchSamplesAction());
 
     this.subscriptions.push(
