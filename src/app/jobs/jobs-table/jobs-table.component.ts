@@ -101,29 +101,28 @@ export class JobsTableComponent implements OnInit, OnDestroy, AfterViewInit {
         if (current) {
           // set this email for functional users. Override for MSAD
           this.email = current.email;
-          this.loginService
-            .getUserIdent$(current.id)
-            .subscribe(currentIdent => {
-              if (currentIdent) {
-                this.profile = currentIdent.profile;
-                if (this.profile) {
-                  this.email = this.profile.email;
+          // realm is only defined for functional users
+          if (!current.realm) {
+            this.loginService
+              .getUserIdent$(current.id)
+              .subscribe(currentIdent => {
+                if (currentIdent && currentIdent.profile) {
+                  this.profile = currentIdent.profile;
+                  if (this.profile) {
+                    this.email = this.profile.email;
+                  }
                 }
-              }
-              this.onModeChange(null, JobViewMode.myJobs);
-            });
+
+                this.onModeChange(null, JobViewMode.myJobs);
+              });
+          } else {
+            this.onModeChange(null, JobViewMode.myJobs);
+          }
         }
       });
   }
 
-  ngAfterViewInit() {
-    this.store.dispatch(
-      new JobActions.SortUpdateAction(
-        this.filters["skip"],
-        this.filters["limit"]
-      )
-    );
-  }
+  ngAfterViewInit() {}
 
   ngOnDestroy() {
     for (let i = 0; i < this.subscriptions.length; i++) {
@@ -137,7 +136,6 @@ export class JobsTableComponent implements OnInit, OnDestroy, AfterViewInit {
    * @param mode
    */
   onModeChange(event, mode: JobViewMode): void {
-    console.log("mode:", mode);
     switch (mode) {
       case JobViewMode.allJobs: {
         this.filters["mode"] = "";

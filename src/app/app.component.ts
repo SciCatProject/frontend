@@ -135,14 +135,15 @@ export class AppComponent implements OnDestroy, OnInit {
           console.log("current: ", current);
           if (current) {
             this.username = current.username.replace("ms-ad.", "");
-            this.loginService
-              .getUserIdent$(current.id)
-              .subscribe(currentIdent => {
-                if (currentIdent) {
-                  this.username = currentIdent.profile.username;
-                }
-              });
-
+            if (!current.realm) {
+              this.loginService
+                .getUserIdent$(current.id)
+                .subscribe(currentIdent => {
+                  if (currentIdent) {
+                    this.username = currentIdent.profile.username;
+                  }
+                });
+            }
             // TODO handle dataset loading
           }
         })
