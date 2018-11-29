@@ -108,9 +108,7 @@ export class JobsTableComponent implements OnInit, OnDestroy, AfterViewInit {
               .subscribe(currentIdent => {
                 if (currentIdent && currentIdent.profile) {
                   this.profile = currentIdent.profile;
-                  if (this.profile) {
-                    this.email = this.profile.email;
-                  }
+                  this.email = this.profile.email;
                 }
 
                 this.onModeChange(null, JobViewMode.myJobs);
