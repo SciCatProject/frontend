@@ -1,8 +1,10 @@
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { SampleDialogComponent } from "./sample-dialog.component";
-import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef, MatFormField } from "@angular/material";
-import { FormBuilder } from "@angular/forms";
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef, MatFormFieldModule } from "@angular/material";
+import { FormBuilder, ReactiveFormsModule, FormsModule } from "@angular/forms";
+import { Store } from "@ngrx/store";
+import { MockStore } from "shared/MockStubs";
 
 describe("SampleDialogComponent", () => {
   let component: SampleDialogComponent;
@@ -11,8 +13,9 @@ describe("SampleDialogComponent", () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [SampleDialogComponent],
-      imports: [MatDialogModule],
+      imports: [MatDialogModule, FormsModule, ReactiveFormsModule, MatFormFieldModule],
       providers: [
+        { provide: Store, useClass: MockStore },
         { provide: MatDialogRef, useValue: {} },
         { provide: FormBuilder, useValue: {} },
         { provide: MAT_DIALOG_DATA, useValue: {} }
