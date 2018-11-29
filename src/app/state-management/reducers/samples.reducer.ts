@@ -10,7 +10,10 @@ import {
   FetchSamplesCompleteAction,
   SamplesActions,
   SELECT_SAMPLE,
-  SelectSampleAction
+  SelectSampleAction,
+  ADD_SAMPLE,
+  ADD_SAMPLE_COMPLETE,
+  ADD_SAMPLE_FAILED
 } from "state-management/actions/samples.actions";
 
 export function samplesReducer(
@@ -27,6 +30,18 @@ export function samplesReducer(
       return { ...state, selectedId };
     }
 
+
+    case ADD_SAMPLE: {
+      return {...state};
+    }
+
+    case ADD_SAMPLE_COMPLETE: {
+      return {...state};
+    }
+    case ADD_SAMPLE_FAILED: {
+      return {...state};
+    }
+
     case FETCH_SAMPLES: {
       return { ...state, samplesLoading: true };
     }
@@ -34,8 +49,8 @@ export function samplesReducer(
     case FETCH_SAMPLES_COMPLETE: {
       const list = (action as FetchSamplesCompleteAction).samples;
       const samples = list.reduce(
-        (samples, sample) => ({
-          ...samples,
+        (samples2, sample) => ({
+          ...samples2,
           [sample.samplelId]: sample
         }),
         {}

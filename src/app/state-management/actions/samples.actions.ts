@@ -65,6 +65,9 @@ export class FetchSampleFailedAction implements Action {
 
 export type SamplesActions =
   | SelectSampleAction
+  | AddSampleAction
+  | AddSampleCompleteAction
+  | AddSampleFailedAction
   | FetchSamplesAction
   | FetchSamplesCompleteAction
   | FetchSamplesFailedAction
