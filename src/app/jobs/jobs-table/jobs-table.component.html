@@ -82,7 +82,7 @@
       <mat-cell *matCellDef="let job ">
         <!-- dont include the file names here, TMI -->
         <div *ngFor="let daSet of job.datasetList">
-          {{daSet.pid | json }}
+          {{job.datasetList | json }}
         </div>
       </mat-cell>
     </ng-container>
