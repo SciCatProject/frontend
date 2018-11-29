@@ -37,7 +37,7 @@ export class JobsTableComponent implements OnInit, OnDestroy, AfterViewInit {
     "datasetList"
   ];
   modes = Object.keys(JobViewMode).map(k => JobViewMode[k as any]);
-  currentMode = "my jobs";
+  currentMode = JobViewMode.myJobs;
 
   faAt = faAt;
   faCog = faCog;
@@ -146,6 +146,8 @@ export class JobsTableComponent implements OnInit, OnDestroy, AfterViewInit {
         break;
       }
     }
+    this.filters["skip"] = 0;
+    this.paginator.pageIndex = 0;
     this.store.dispatch(
       new JobActions.SortUpdateAction(
         this.filters["skip"],
