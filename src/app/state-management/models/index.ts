@@ -68,7 +68,11 @@ export interface DatasetFilters {
   keywords: string[];
   sortField: string;
   mode: ViewMode;
-  scientific: ScientificCondition[]
+  scientific: ScientificCondition[];
+}
+
+export interface SampleFilters {
+  sortField: string;
 }
 
 export interface PolicyFilters {

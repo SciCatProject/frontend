@@ -13,7 +13,9 @@ import {
   SelectSampleAction,
   ADD_SAMPLE,
   ADD_SAMPLE_COMPLETE,
-  ADD_SAMPLE_FAILED
+  ADD_SAMPLE_FAILED,
+  SAMPLE_SORT_BY_COLUMN,
+  SampleSortByColumnAction
 } from "state-management/actions/samples.actions";
 
 export function samplesReducer(
@@ -30,6 +32,12 @@ export function samplesReducer(
       return { ...state, selectedId };
     }
 
+    case SAMPLE_SORT_BY_COLUMN: {
+        const { column, direction } = action as SampleSortByColumnAction;
+        const sortField = column + (direction ? ":" + direction : "");
+        const filters = { ...state.filters, sortField, skip: 0 };
+        return { ...state, filters, samplesLoading: true };
+      }
 
     case ADD_SAMPLE: {
       return {...state};

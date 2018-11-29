@@ -1,4 +1,4 @@
-import { Sample } from "state-management/models";
+import { Sample, SampleFilters } from "state-management/models";
 
 export interface SampleState {
   samples: { [samplelId: string]: Sample };
@@ -13,6 +13,7 @@ export interface SampleState {
   skip: number;
   limit: number;
   selectedId: string;
+  filters: SampleFilters;
 }
 
 export const initialSampleState: SampleState = {
@@ -26,5 +27,8 @@ export const initialSampleState: SampleState = {
   error: undefined,
   skip: 0,
   limit: 0,
+  filters: {
+    sortField: "creationTime:desc"
+  },
   selectedId: null
 };

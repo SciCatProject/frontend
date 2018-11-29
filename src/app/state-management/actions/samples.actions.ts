@@ -20,8 +20,7 @@ export const SAMPLE_SORT_BY_COLUMN = "[Sample] Sort by Column";
 export class SampleSortByColumnAction implements Action {
   readonly type = SAMPLE_SORT_BY_COLUMN;
 
-  constructor(readonly column: string, readonly direction: string) {
-  }
+  constructor(readonly column: string, readonly direction: string) { }
 }
 
 export class SelectSampleAction implements Action {
@@ -77,6 +76,7 @@ export type SamplesActions =
   | AddSampleAction
   | AddSampleCompleteAction
   | AddSampleFailedAction
+  | SampleSortByColumnAction
   | FetchSamplesAction
   | FetchSamplesCompleteAction
   | FetchSamplesFailedAction
