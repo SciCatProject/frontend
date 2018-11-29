@@ -9,6 +9,7 @@ import { StoreModule } from "@ngrx/store";
 import { samplesReducer } from "../state-management/reducers/samples.reducer";
 import { SampleDialogComponent } from "./sample-dialog/sample-dialog.component";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { SampleService } from "./sample.service";
 
 @NgModule({
   imports: [
@@ -24,7 +25,10 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
     StoreModule.forFeature("samples", samplesReducer)
   ],
   exports: [
-    MatFormFieldModule
+    SampleDetailComponent,
+    SampleTableComponent,
+    SampleDataFormComponent,
+    SampleDialogComponent
   ],
   declarations: [
     SampleDetailComponent,
@@ -32,7 +36,7 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
     SampleDataFormComponent,
     SampleDialogComponent
   ],
-  providers: [SampleApi],
+  providers: [SampleApi, SampleService],
   entryComponents: [SampleDialogComponent]
 })
 export class SamplesModule {
