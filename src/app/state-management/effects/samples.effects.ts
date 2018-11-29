@@ -5,7 +5,7 @@ import { Observable, of } from "rxjs";
 import { Sample } from "../../shared/sdk/models";
 import { SampleApi } from "shared/sdk/services";
 import { SampleService } from "../../samples/sample.service";
-import { catchError, map, mergeMap, switchMap } from "rxjs/operators";
+import { catchError, map, mergeMap, switchMap, withLatestFrom } from "rxjs/operators";
 import {
   FETCH_SAMPLE,
   FETCH_SAMPLES,
@@ -19,15 +19,19 @@ import {
   AddSampleCompleteAction,
   AddSampleFailedAction
 } from "../actions/samples.actions";
+import { getSampleFilters } from "state-management/selectors/samples.selectors";
 
 @Injectable()
 export class SamplesEffects {
+  private filters$ = this.store.select(getSampleFilters);
   @Effect()
   fetchSamples$: Observable<Action> = this.actions$.pipe(
     ofType(FETCH_SAMPLES),
+    withLatestFrom(this.filters$),
+    map(([action, params]) => params),
     switchMap(action =>
-      this.sampleService.getSamples().pipe(
-        map(samples => new FetchSamplesCompleteAction(samples)),
+      this.sampleApi.find({"order": "createdAt ASC"}).pipe(
+        map((samples: Sample[]) => new FetchSamplesCompleteAction(samples)),
         catchError(() => of(new FetchSamplesFailedAction()))
       )
     )
