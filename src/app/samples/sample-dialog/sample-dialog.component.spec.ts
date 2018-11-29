@@ -5,6 +5,7 @@ import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef, MatFormFieldModule, Mat
 import { FormBuilder, ReactiveFormsModule, FormsModule } from "@angular/forms";
 import { Store } from "@ngrx/store";
 import { MockStore } from "shared/MockStubs";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
 describe("SampleDialogComponent", () => {
   let component: SampleDialogComponent;
@@ -13,7 +14,7 @@ describe("SampleDialogComponent", () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [SampleDialogComponent],
-      imports: [MatDialogModule, MatInputModule, FormsModule, ReactiveFormsModule, MatFormFieldModule],
+      imports: [MatDialogModule, BrowserAnimationsModule,  MatInputModule, FormsModule, ReactiveFormsModule, MatFormFieldModule],
       providers: [
         { provide: Store, useClass: MockStore },
         { provide: MatDialogRef, useValue: {} },
