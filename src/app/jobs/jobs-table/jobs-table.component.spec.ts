@@ -13,9 +13,12 @@ import {
   MockJobApi,
   MockRouter,
   MockStore,
-  MockUserApi
+  MockUserApi,
+  MockLoginService
 } from "shared/MockStubs";
 import { JobApi, UserApi } from "shared/sdk/services";
+import { LoginService } from "users/login.service";
+
 
 describe("JobsTableComponent", () => {
   let component: JobsTableComponent;
@@ -35,6 +38,7 @@ describe("JobsTableComponent", () => {
     TestBed.overrideComponent(JobsTableComponent, {
       set: {
         providers: [
+          { provide: LoginService, useClass: MockLoginService },
           { provide: JobApi, useClass: MockJobApi },
           { provide: UserApi, useClass: MockUserApi },
           { provide: HttpClient, useClass: MockHttp },

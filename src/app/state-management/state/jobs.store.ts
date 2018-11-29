@@ -1,4 +1,4 @@
-import {Job} from 'shared/sdk/models';
+import {Job} from "shared/sdk/models";
 
 export interface JobsState {
     currentJobs: Job[];
@@ -13,7 +13,7 @@ export interface JobsState {
 export const initialJobsState: JobsState = {
     currentJobs: [],
     jobSubmission: undefined,
-    filters: {'skip': 0, 'limit': 50},
+    filters: {"skip": 0, "limit": 50, "mode": ""},
     totalJobNumber: 1000,
     ui: [],
     loading: false,

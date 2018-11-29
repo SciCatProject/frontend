@@ -34,6 +34,7 @@ import { UsersModule } from "users/users.module";
 import { localStorageSync } from "ngrx-store-localstorage";
 import { rootReducer } from "state-management/reducers/root.reducer";
 import { routerReducer, StoreRouterConnectingModule } from "@ngrx/router-store";
+import { LoginService } from "users/login.service";
 
 import {
   MatCardModule,
@@ -47,7 +48,8 @@ import {
   MatSidenavModule,
   MatSnackBarModule,
   MatTableModule,
-  MatToolbarModule
+  MatToolbarModule,
+  MatButtonToggleModule,
 } from "@angular/material";
 
 export function localStorageSyncWrapper(reducer: any) {
@@ -91,6 +93,7 @@ export function localStorageSyncWrapper(reducer: any) {
     SatNativeDateModule,
     SharedCatanieModule,
     UsersModule,
+    MatButtonToggleModule,
 
     SDKBrowserModule.forRoot(),
     // StoreModule.forRoot({router: routerReducer, root: rootReducer}, {metaReducers: [localStorageSyncWrapper]}),
@@ -114,10 +117,10 @@ export function localStorageSyncWrapper(reducer: any) {
     ArchivingService,
     UserApi,
     Title,
-    MatNativeDateModule
+    MatNativeDateModule,
+    LoginService
     //      {provide: RouteReuseStrategy, useClass: CustomReuseStrategy}
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule {
-}
+export class AppModule {}

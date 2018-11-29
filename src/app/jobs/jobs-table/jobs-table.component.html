@@ -1,76 +1,97 @@
+<mat-paginator [pageSize]="30" [length]="totalJobNumber$ | async" (page)="onPage(event)"></mat-paginator>
+<div class="jobs-table mat-elevation-z8">
+  <div class="mode-container">
+    <mat-button-toggle-group [value]="currentMode">
+      <mat-button-toggle *ngFor="let mode of modes; let i = index" (click)="onModeChange($event, mode)" [value]="mode"
+        [ngClass]="mode">
+        {{mode | titlecase}}
+      </mat-button-toggle>
+    </mat-button-toggle-group>
+  </div>
 
-<div class="example-container mat-elevation-z8">
   <mat-table #table [dataSource]="jobs$ | async">
     <ng-container matColumnDef="emailJobInitiator">
       <mat-header-cell *matHeaderCellDef mat-sort-header>
         <fa-icon [icon]="faAt"></fa-icon>&nbsp;
-        Initiator</mat-header-cell>
-      <mat-cell *matCellDef="let dataset">
-        {{dataset.emailJobInitiator}}
+        Initiator
+      </mat-header-cell>
+      <mat-cell *matCellDef="let job">
+        {{job.emailJobInitiator}}
       </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="type">
       <mat-header-cell *matHeaderCellDef mat-sort-header>
         <fa-icon [icon]="faFileAlt"></fa-icon>&nbsp;
-        Type</mat-header-cell>
-      <mat-cell *matCellDef="let dataset">
-        {{dataset.type}}
+        Type
+      </mat-header-cell>
+      <mat-cell *matCellDef="let job">
+        {{job.type}}
       </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="creationTime">
       <mat-header-cell *matHeaderCellDef mat-sort-header>
         <fa-icon [icon]="faCalendarAlt"></fa-icon>&nbsp;
-      Created at</mat-header-cell>
-      <mat-cell *matCellDef="let dataset">
-        {{dataset.creationTime | date: 'yyyy/MM/dd' }}
+        Created at
+      </mat-header-cell>
+      <mat-cell *matCellDef="let job">
+        {{job.creationTime | date: 'yyyy/MM/dd' }}
       </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="executionTime">
       <mat-header-cell *matHeaderCellDef mat-sort-header>
         <fa-icon [icon]="faCalendarAlt"></fa-icon>&nbsp;
-        Executed at</mat-header-cell>
-      <mat-cell *matCellDef="let dataset">
-        {{dataset.executionTime | date: 'yyyy/MM/dd'}}
+        Executed at
+      </mat-header-cell>
+      <mat-cell *matCellDef="let job">
+        {{job.executionTime | date: 'yyyy/MM/dd'}}
       </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="jobParams">
       <mat-header-cell *matHeaderCellDef mat-sort-header>
         <fa-icon [icon]="faCog"></fa-icon>&nbsp;
-        Params</mat-header-cell>
-      <mat-cell *matCellDef="let dataset">
-        {{dataset.jobParams | json}}
+        Params
+      </mat-header-cell>
+      <mat-cell *matCellDef="let job">
+        {{job.jobParams | json}}
       </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="jobStatusMessage">
       <mat-header-cell *matHeaderCellDef mat-sort-header>
         <fa-icon [icon]="faCog"></fa-icon>&nbsp;
-        Status Message</mat-header-cell>
-      <mat-cell *matCellDef="let dataset">
-        {{dataset.jobStatusMessage}}
+        Status Message
+      </mat-header-cell>
+      <mat-cell *matCellDef="let job; let rowIndex = index">
+
+        <div *ngIf="!job.jobStatusMessage; then thenBlock else elseBlock"></div>
+        <ng-template #thenBlock>Processing</ng-template>
+        <ng-template #elseBlock>{{job.jobStatusMessage}}</ng-template>
+
       </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="datasetList">
       <mat-header-cell *matHeaderCellDef mat-sort-header>
         <fa-icon [icon]="faCoins"></fa-icon>&nbsp;
-        Datasets</mat-header-cell>
-      <mat-cell *matCellDef="let dataset">
-        {{dataset.datasetList | json}}
+        Datasets
+      </mat-header-cell>
+      <mat-cell *matCellDef="let job ">
+        <!-- dont include the file names here, TMI -->
+        <div *ngFor="let daSet of job.datasetList">
+          {{job.datasetList | json }}
+        </div>
       </mat-cell>
     </ng-container>
 
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-    <mat-row (click)="onRowSelect($event, row)" *matRowDef="let row; columns: displayedColumns;"></mat-row>
-
+    <mat-row (click)="onRowSelect($event, row)" *matRowDef="let row; columns: displayedColumns; let i = index"
+      [ngClass]="{'red' : row.jobStatusMessage && row.jobStatusMessage.indexOf('Unsuccessful') > -1}">
+    </mat-row>
   </mat-table>
 
-  <mat-paginator [pageSize]="30" [length]="totalJobNumber$ | async" (page)="onPage(event)"></mat-paginator>
+
 </div>
-
-
-

@@ -1,0 +1,59 @@
+@import '../../../theme.scss';
+
+.job-table {
+
+  mat-cell,
+  .mat-header-cell {
+    word-wrap: break-word;
+    white-space: normal;
+  }
+
+
+  /* Columns with narrow content */
+  .mat-column-size,
+  .mat-column-type {
+    flex-grow: 0.5;
+  }
+
+  .red {
+    background: rgb(207, 34, 34);
+  }
+
+}
+
+:host /deep/ .js-check {
+  width: 25px !important;
+}
+
+:host /deep/ .mat-row:hover {
+  border-width: 1px;
+  border-top-color: rgba(0, 0, 0, 1);
+  border-color: rgba(0, 0, 0, 1);
+  border-style: solid;
+  cursor: pointer;
+}
+
+:host /deep/ .mat-paginator {
+  background-color: unset !important;
+}
+
+mat-cell,
+.mat-cell {
+  display: block; // flex prevents padding from working
+  min-height: auto; // overrides the 'inherit' that set the min height of the row
+  //padding: 5px 5px 0 0;
+}
+
+.mat-column-size,
+.mat-column-type {
+  flex-grow: 0.5;
+}
+
+/*:host /deep/*/
+.left-align {
+  width: 100%;
+  text-align: left !important;
+}
+
+
+

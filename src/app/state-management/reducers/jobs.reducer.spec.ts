@@ -12,8 +12,8 @@ describe("DatasetsReducer", () => {
   });
 
   it("should set filters", () => {
-    const filter = { skip: 0, limit: 50 };
-    const action = new jobsActions.SortUpdateAction(filter.skip, filter.limit);
+    const filter = { skip: 0, limit: 50, mode: null };
+    const action = new jobsActions.SortUpdateAction(filter.skip, filter.limit, filter.mode);
     const state = jobsReducer(initialJobsState, action);
     expect(state.filters).toEqual(filter);
   });
