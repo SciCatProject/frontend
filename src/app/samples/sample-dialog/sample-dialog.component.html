@@ -5,8 +5,18 @@
                 placeholder="Sample Description"
                formControlName="description">
     </mat-form-field>
+    <mat-form-field>
+        <input matInput
+                placeholder="Sample Characteristics"
+               formControlName="sampleCharacteristics">
+    </mat-form-field>
+    <mat-form-field>
+        <input matInput
+                placeholder="Owner"
+               formControlName="owner">
+    </mat-form-field>
 </mat-dialog-content>
 <div mat-dialog-actions>
-  <button mat-button (click)="onNoClick()">No Thanks</button>
-  <button mat-button [mat-dialog-close]="data.name" cdkFocusInitial>Ok</button>
+  <button mat-button (click)="close()">Close</button>
+  <button mat-button (click)="save()">Save</button>
 </div>

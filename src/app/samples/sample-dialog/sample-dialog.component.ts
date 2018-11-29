@@ -1,7 +1,8 @@
 import { Component, Inject, OnInit } from "@angular/core";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material";
 
-import { FormBuilder, FormControl, FormGroup } from "@angular/forms";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { Sample } from "shared/sdk";
 
 export interface DialogData {
   sample: string;
@@ -17,23 +18,25 @@ export interface DialogData {
 export class SampleDialogComponent implements OnInit {
 
   public form: FormGroup;
+  description: string;
 
   constructor(
     private fb: FormBuilder,
     public dialogRef: MatDialogRef<SampleDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: DialogData) {
+    @Inject(MAT_DIALOG_DATA) { description, sampleCharacteristics, owner }: Sample) {
 
-    this.data = data;
+    this.description = description;
+
+    this.form = this.fb.group({
+      description: [description, Validators.required],
+      sampleCharacteristics: [sampleCharacteristics, Validators.required],
+      owner: [owner, Validators.required]
+    });
   }
 
   ngOnInit() {
 
 
-    this.form = this.fb.group({
-      description: new FormControl({
-        disabled: true
-      })
-    });
 
   }
 
@@ -47,6 +50,7 @@ export class SampleDialogComponent implements OnInit {
 
   save() {
     this.dialogRef.close(this.form.value);
+    console.log("gmnov", this.form.value);
   }
 
   close() {

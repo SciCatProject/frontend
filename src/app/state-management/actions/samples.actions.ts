@@ -3,6 +3,10 @@ import { Sample } from "shared/sdk/models";
 
 export const SELECT_SAMPLE = "[Sample] Select Sample";
 
+export const ADD_SAMPLE = "[Sample] Add Samples";
+export const ADD_SAMPLE_COMPLETE = "[Sample] Add Samples Complete";
+export const ADD_SAMPLE_FAILED = "[Sample] Add Samples Failed";
+
 export const FETCH_SAMPLES = "[Sample] Fetch Samples";
 export const FETCH_SAMPLES_COMPLETE = "[Sample] Fetch Samples Complete";
 export const FETCH_SAMPLES_FAILED = "[Sample] Fetch Samples Failed";
@@ -17,6 +21,9 @@ export class SelectSampleAction implements Action {
   constructor(readonly samplelId: string) {}
 }
 
+export class AddSampleAction implements Action { readonly type = ADD_SAMPLE; }
+export class AddSampleCompleteAction implements Action { readonly type = ADD_SAMPLE_COMPLETE; }
+export class AddSampleFailedAction implements Action { readonly type = ADD_SAMPLE_FAILED; }
 export class FetchSamplesAction implements Action {
   readonly type = FETCH_SAMPLES;
 }

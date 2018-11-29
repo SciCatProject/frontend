@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { MatCardModule, MatDialogModule, MatFormFieldModule, MatIconModule, MatTableModule } from "@angular/material";
+import { MatCardModule, MatDialogModule, MatFormFieldModule, MatIconModule, MatTableModule, MatInputModule } from "@angular/material";
 import { NgModule } from "@angular/core";
 import { SampleApi } from "../shared/sdk/services/custom";
 import { SampleDetailComponent } from "./sample-detail/sample-detail.component";
@@ -17,6 +17,7 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
     MatCardModule,
     MatIconModule,
     MatFormFieldModule,
+    MatInputModule,
     MatDialogModule,
     MatTableModule,
     ReactiveFormsModule,
