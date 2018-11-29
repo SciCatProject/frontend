@@ -3,6 +3,8 @@ import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material";
 
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { Sample } from "shared/sdk";
+import { Store } from "@ngrx/store";
+import { AddSampleAction } from "state-management/actions/samples.actions";
 
 export interface DialogData {
   sample: string;
@@ -21,6 +23,7 @@ export class SampleDialogComponent implements OnInit {
   description: string;
 
   constructor(
+    private store: Store<Sample>,
     private fb: FormBuilder,
     public dialogRef: MatDialogRef<SampleDialogComponent>,
     @Inject(MAT_DIALOG_DATA) { description, sampleCharacteristics, owner }: Sample) {
@@ -51,6 +54,8 @@ export class SampleDialogComponent implements OnInit {
   save() {
     this.dialogRef.close(this.form.value);
     console.log("gmnov", this.form.value);
+    const sample = new Sample();
+    this.store.dispatch(new AddSampleAction(sample));
   }
 
   close() {
