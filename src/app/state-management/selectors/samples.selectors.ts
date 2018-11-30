@@ -16,7 +16,11 @@ const getSamples = createSelector(
 
 export const getSampleFilters = createSelector(
   getSampleState,
-  state => state.filters
+  state => {
+    console.log(state.filters);
+    const query = {order: state.filters.sortField};
+    return state.filters.sortField;
+  }
 );
 export const getSamplesList = createSelector(getSamples, samples =>
   Object.keys(samples).map(samplelId => samples[samplelId])

@@ -29,8 +29,8 @@ export class SamplesEffects {
     ofType(FETCH_SAMPLES),
     withLatestFrom(this.filters$),
     map(([action, params]) => params),
-    switchMap(action =>
-      this.sampleApi.find({"order": "createdAt ASC"}).pipe(
+    mergeMap(params =>
+      this.sampleApi.find({"order": "createdAt ASC"} ).pipe(
         map((samples: Sample[]) => new FetchSamplesCompleteAction(samples)),
         catchError(() => of(new FetchSamplesFailedAction()))
       )
