@@ -34,7 +34,7 @@ export function samplesReducer(
 
     case SAMPLE_SORT_BY_COLUMN: {
         const { column, direction } = action as SampleSortByColumnAction;
-        const sortField = column + (direction ? ":" + direction : "");
+        const sortField = column + (direction ? " " + direction : "");
         const filters = { ...state.filters, sortField, skip: 0 };
         return { ...state, filters, samplesLoading: true };
       }
