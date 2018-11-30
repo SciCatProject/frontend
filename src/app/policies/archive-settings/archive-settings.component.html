@@ -2,7 +2,7 @@
 </div>
 
 
-  <div class="button-group" align="end">
+  <div class="button-group">
     <ng-container *ngIf="editEnabled" >
       <button mat-button mat-button (click)="onEditClick()" color="primary">
         <mat-icon >edit</mat-icon> Edit Selection
@@ -66,11 +66,11 @@
     </ng-container>
 
     <ng-container matColumnDef="retrieveEmailNotification">
-      <mat-header-cell *matHeaderCellDef>Retrive Email Notification</mat-header-cell>
+      <mat-header-cell *matHeaderCellDef>Retrieve Email Notification</mat-header-cell>
       <mat-cell *matCellDef="let policy">{{policy.retrieveEmailNotification}}</mat-cell>
     </ng-container>
     <ng-container matColumnDef="retrieveEmailsToBeNotified">
-      <mat-header-cell *matHeaderCellDef>Retrive Emails to be Notified</mat-header-cell>
+      <mat-header-cell *matHeaderCellDef>Retrieve Emails to be Notified</mat-header-cell>
       <mat-cell *matCellDef="let policy">{{policy.retrieveEmailsToBeNotified}}</mat-cell>
     </ng-container>
 
