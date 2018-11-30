@@ -31,7 +31,6 @@ export class SamplesEffects {
     map(([action, params]) => params),
     mergeMap(params =>
       this.sampleApi.find(params ).pipe(
-        tap(res => console.log (res)),
         map((samples: Sample[]) => new FetchSamplesCompleteAction(samples)),
         catchError(() => of(new FetchSamplesFailedAction()))
       )

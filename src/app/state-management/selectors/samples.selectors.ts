@@ -23,7 +23,6 @@ export const getSampleFilters = createSelector(
 
 
 export const getQuery = createSelector (getSampleState, state => {
-    console.log(state.filters);
     const query = {order: state.filters.sortField};
     return query;
 });
