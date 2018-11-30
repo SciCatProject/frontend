@@ -19,18 +19,18 @@ import {
   AddSampleCompleteAction,
   AddSampleFailedAction
 } from "../actions/samples.actions";
-import { getSampleFilters } from "state-management/selectors/samples.selectors";
+import {  getQuery } from "state-management/selectors/samples.selectors";
 
 @Injectable()
 export class SamplesEffects {
-  private filters$ = this.store.select(getSampleFilters);
+  private query$ = this.store.select(getQuery);
   @Effect()
   fetchSamples$: Observable<Action> = this.actions$.pipe(
     ofType(FETCH_SAMPLES),
-    withLatestFrom(this.filters$),
+    withLatestFrom(this.query$),
     map(([action, params]) => params),
     mergeMap(params =>
-      this.sampleApi.find({"order": "createdAt ASC"} ).pipe(
+      this.sampleApi.find(params ).pipe(
         map((samples: Sample[]) => new FetchSamplesCompleteAction(samples)),
         catchError(() => of(new FetchSamplesFailedAction()))
       )
