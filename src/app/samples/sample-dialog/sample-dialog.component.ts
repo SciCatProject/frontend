@@ -4,7 +4,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { Sample } from "shared/sdk";
 import { Store, select } from "@ngrx/store";
-import { AddSampleAction } from "state-management/actions/samples.actions";
+import { AddSampleAction, FetchSamplesAction } from "state-management/actions/samples.actions";
 import { getCurrentUser } from "state-management/selectors/users.selectors";
 
 const shortid = require("shortid");
@@ -63,10 +63,15 @@ export class SampleDialogComponent implements OnInit {
     this.sample.description = this.form.value.description;
     this.sample.samplelId = shortid.generate();
 
-    this.store.pipe(select(getCurrentUser)).subscribe(res => { this.sample.owner = res.username; return console.log(res); });
+    this.store.pipe(select(getCurrentUser)).subscribe(res => {
+      this.sample.owner = res.username.replace(
+        "ldap.", ""
+      ); return console.log(res);
+    });
 
     this.sample.ownerGroup = "ess";
     this.store.dispatch(new AddSampleAction(this.sample));
+    this.store.dispatch(new FetchSamplesAction());
   }
 
   close() {
