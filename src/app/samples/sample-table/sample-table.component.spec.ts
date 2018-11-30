@@ -3,7 +3,7 @@ import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 import { SampleTableComponent } from "./sample-table.component";
 import { Store } from "@ngrx/store";
 import { MatCardModule, MatDialog, MatIconModule, MatTableModule } from "@angular/material";
-import { MockHttp, MockRouter, MockSampleService, MockStore } from "../../shared/MockStubs";
+import { MockHttp, MockRouter,  MockStore } from "../../shared/MockStubs";
 import { HttpClient } from "@angular/common/http";
 import { Router } from "@angular/router";
 import { SampleService } from "../sample.service";
@@ -25,7 +25,7 @@ describe("SampleTableComponent", () => {
         providers: [
           { provide: HttpClient, useClass: MockHttp },
           { provide: Router, useClass: MockRouter },
-          { provide: SampleService, useClass: MockSampleService },
+          { provide: SampleService, useClass: {} },
           { provide: Store, useClass: MockStore }
         ]
       }

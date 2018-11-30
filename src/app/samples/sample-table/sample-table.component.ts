@@ -18,7 +18,7 @@ export interface SortChangeEvent {
 @Component({
   selector: "app-sample-table",
   templateUrl: "./sample-table.component.html",
-  styleUrls: ["./sample-table.component.css"]
+  styleUrls: ["./sample-table.component.scss"]
 })
 export class SampleTableComponent implements OnInit, OnDestroy {
   public samples$ = this.store.pipe(select(getSamplesList));
