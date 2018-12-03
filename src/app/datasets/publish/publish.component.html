@@ -17,6 +17,17 @@
 
   <form>
     <mat-form-field>
+      <input
+        required
+        matInput
+        placeholder="Title"
+        autocomplete="off"
+        [(ngModel)]="form.title"
+        name="title"
+      />
+    </mat-form-field>
+
+    <mat-form-field>
       <mat-chip-list #chipList>
         <mat-chip
           *ngFor="let name of form.authors"

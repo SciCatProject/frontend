@@ -2,7 +2,7 @@ import { Component, Inject, OnInit } from "@angular/core";
 import { COMMA, ENTER } from "@angular/cdk/keycodes";
 
 import { select, Store } from "@ngrx/store";
-import { map, first, tap } from "rxjs/operators";
+import { map, first, tap, publish } from "rxjs/operators";
 
 import { getDatasetsInBatch } from "state-management/selectors/datasets.selectors";
 import { PrefillBatchAction } from "state-management/actions/datasets.actions";
@@ -23,8 +23,7 @@ export class PublishComponent implements OnInit {
   public datasetCount$ = this.datasets$.pipe(map(datasets => datasets.length));
 
   public form = {
-    firstName: "",
-    lastName: "",
+    title: "",
     creators: [],
     authors: [],
     affiliation: this.appConfig.facility,
@@ -62,8 +61,8 @@ export class PublishComponent implements OnInit {
     publishedData.abstract = this.form.abstract;
     publishedData.authors = this.form.authors;
     publishedData.dataDescription = this.form.description;
+    //publishedData.pidArray = 
 
-    return;
     this.publishedDataApi.create(publishedData).subscribe(result => {
       alert(JSON.stringify(result));
     });
@@ -81,6 +80,7 @@ export class PublishComponent implements OnInit {
 
   public formIsValid() {
     return (
+      this.form.title.length > 0 &&
       this.form.authors.length > 0 &&
       this.form.affiliation.length > 0 &&
       this.form.publisher.length > 0 &&
