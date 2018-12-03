@@ -1,6 +1,8 @@
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { FileSizePipe } from "../../../shared/pipes";
 import { MatTableModule, MatTabsModule } from "@angular/material";
+import { MockRouter } from "shared/MockStubs";
+import { Router } from "@angular/router";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { ProposalDetailComponent } from "./proposal-detail.component";
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
@@ -14,6 +16,11 @@ describe("ProposalsDetailComponent", () => {
       schemas: [NO_ERRORS_SCHEMA],
       declarations: [ProposalDetailComponent, FileSizePipe],
       imports: [MatTableModule, MatTabsModule, BrowserAnimationsModule]
+    });
+    TestBed.overrideComponent(ProposalDetailComponent, {
+      set: {
+        providers: [{ provide: Router, useClass: MockRouter }]
+      }
     });
 
     TestBed.compileComponents();

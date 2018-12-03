@@ -83,6 +83,13 @@
                 </th>
                 <td>{{ value }}</td>
               </tr>
+              <tr *ngIf="dataset.proposalId as value" (click)="onClickProp(value)">
+                <th>
+                  <fa-icon [icon]="faCertificate"></fa-icon>&nbsp;
+                  Proposal
+                </th>
+                <td><a>{{ value }}</a></td>
+              </tr>
               <tr *ngIf="dataset.ownerGroup as value">
                 <th>
                   <fa-icon [icon]="faUsers"></fa-icon>&nbsp;
@@ -174,13 +181,15 @@
       Attachments
     </ng-template>
     <h3>Attachments</h3>
-      <app-file-picker></app-file-picker>
+    <app-file-picker></app-file-picker>
     <br>
     <ng-container *ngFor="let da of attachments; let i = index" [attr.data-index]="i">
       <mat-card class="attach-card">
         <img src="{{da.thumbnail}}" style="width: 20em; height: 20em">
         <mat-card-actions>
-          <button mat-raised-button (click)="delete(da.id)"><mat-icon>delete</mat-icon></button>
+          <button mat-raised-button (click)="delete(da.id)">
+            <mat-icon>delete</mat-icon>
+          </button>
         </mat-card-actions>
       </mat-card>
     </ng-container>
