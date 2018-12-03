@@ -28,7 +28,7 @@ interface LoginForm {
   styleUrls: ["login.component.css"]
 })
 export class LoginComponent implements OnInit, OnDestroy {
-  // returnUrl: string;
+   returnUrl: string;
   // postError = '';
 
   public loginForm = this.fb.group({
@@ -59,7 +59,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private store: Store<any>
   ) {
-    // this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
     /* this.store.select(selectors.users.getCurrentUser)
     .subscribe(result => {
       console.log(result);
@@ -83,7 +83,9 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.proceedSubscription = this.hasUser$.subscribe(() => {
-      this.router.navigate(["datasets"]);
+       // this.router.navigate(["datasets"]);
+       console.log(this.returnUrl);
+       this.router.navigateByUrl( this.returnUrl );
     });
   }
 
