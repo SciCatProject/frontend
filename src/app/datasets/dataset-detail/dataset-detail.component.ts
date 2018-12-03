@@ -12,6 +12,7 @@ import { Angular5Csv } from "angular5-csv/Angular5-csv";
 import { getIsAdmin } from "state-management/selectors/users.selectors";
 import { APP_CONFIG, AppConfig } from "app-config.module";
 import { pluck, take } from "rxjs/operators";
+import { Router } from "@angular/router";
 import {
   getCurrentAttachments,
   getCurrentDatablocks,
@@ -21,6 +22,7 @@ import {
 
 import { faAt } from "@fortawesome/free-solid-svg-icons/faAt";
 import { faCalendarAlt } from "@fortawesome/free-solid-svg-icons/faCalendarAlt";
+import { faCertificate } from "@fortawesome/free-solid-svg-icons/faCertificate";
 import { faChessQueen } from "@fortawesome/free-solid-svg-icons/faChessQueen";
 import { faCoins } from "@fortawesome/free-solid-svg-icons/faCoins";
 import { faDownload } from "@fortawesome/free-solid-svg-icons/faDownload";
@@ -49,6 +51,7 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
   faAt = faAt;
   faIdBadge = faIdBadge;
   faFolder = faFolder;
+  faCertificate = faCertificate;
   faCoins = faCoins;
   faChessQueen = faChessQueen;
   faCalendarAlt = faCalendarAlt;
@@ -70,11 +73,11 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
   private isAdmin$ = this.store.pipe(select(getIsAdmin));
 
   constructor(
+    private router: Router,
     private route: ActivatedRoute,
     private store: Store<any>,
     @Inject(APP_CONFIG) public appConfig: AppConfig
-  ) {
-  }
+  ) {}
 
   ngOnInit() {
     const msg = new Message();
@@ -107,13 +110,16 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.routeSubscription.unsubscribe();
+    for (let i = 0; i < this.subscriptions.length; i++) {
+      this.subscriptions[i].unsubscribe();
+    }
   }
 
   onExportClick() {
     this.dataset$.pipe(take(1)).subscribe(ds => {
       const options = {
         fieldSeparator: ",",
-        quoteStrings: "\"",
+        quoteStrings: '"',
         decimalseparator: ".",
         showLabels: true,
         showTitle: false,
@@ -156,9 +162,16 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
       });
   }
 
-
   delete(dataset_attachment_id) {
-    console.log("fire action to delete dataset attachment id " , dataset_attachment_id);
+    console.log(
+      "fire action to delete dataset attachment id ",
+      dataset_attachment_id
+    );
     this.store.dispatch(new DeleteAttachment(dataset_attachment_id));
+  }
+
+  onClickProp(proposalId: string): void {
+    const id = encodeURIComponent(proposalId);
+    this.router.navigateByUrl("/proposals/" + id);
   }
 }
