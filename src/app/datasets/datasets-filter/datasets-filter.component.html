@@ -1,5 +1,4 @@
 <mat-card>
-  <form class="example-form">
     <div class="section-container">
       <span class="title">Filter Results</span>
       <button [disabled]="!(hasAppliedFilters$ | async)" mat-button class="clear-button" color="primary" (click)="clearFacets()">
@@ -40,10 +39,9 @@
           }}<mat-icon matChipRemove>cancel</mat-icon>
         </mat-chip>
       </mat-chip-list>
-      <input matInput class="group-input" [matChipInputFor]="groupChipList" placeholder="Group" aria-label="Group" [matAutocomplete]="grp">
-
-      <mat-autocomplete #grp="matAutocomplete">
-        <mat-option class="options" (onSelectionChange)="groupSelected(getFacetId(fc))" *ngFor="let fc of groupFacetCounts$ | async">
+      <input (input)="groupInpuKeyUp$.next($event.target.value)" matInput class="group-input" [matChipInputFor]="groupChipList" placeholder="Group" aria-label="Group" [matAutocomplete]="grp">
+      <mat-autocomplete autoActiveFirstOption #grp="matAutocomplete">
+        <mat-option class="options" (onSelectionChange)="groupSelected(getFacetId(fc))" *ngFor="let fc of filteredGroups$ | async">
           <span>{{ getFacetId(fc, 'No Group') }}</span> |
           <small>{{ getFacetCount(fc) }}</small>
         </mat-option>
@@ -122,5 +120,4 @@
         </mat-chip>
       </mat-chip-list>
     </div>
-  </form>
 </mat-card>

@@ -2,7 +2,8 @@ import { Component } from "@angular/core";
 import { MatDatepickerInputEvent, MatDialog } from "@angular/material";
 
 import { select, Store } from "@ngrx/store";
-import { debounceTime, distinctUntilChanged, skipWhile } from "rxjs/operators";
+import { debounceTime, distinctUntilChanged, skipWhile, withLatestFrom, map } from "rxjs/operators";
+
 
 import { FacetCount } from "state-management/state/datasets.store";
 import {
@@ -38,6 +39,7 @@ import {
   SetTextFilterAction
 } from "state-management/actions/datasets.actions";
 import { ScientificConditionDialogComponent } from "datasets/scientific-condition-dialog/scientific-condition-dialog.component";
+import { Subject, combineLatest } from "rxjs";
 
 type DateRange = {
   begin: Date;
@@ -65,6 +67,19 @@ export class DatasetsFilterComponent {
   scientificConditions$ = this.store.pipe(select(getScientificConditions));
 
 
+  groupInpuKeyUp$ = new Subject<string>();
+ 
+  filteredGroups$  = combineLatest(this.groupFacetCounts$, this.groupInpuKeyUp$).pipe(
+        map(([counts, filterString]) => {
+      console.log(counts);
+      console.log(filterString)
+      console.log("group-1".includes(filterString))
+      //return counts;
+      return counts.filter((count) => typeof count._id === "string" && count._id.includes(filterString));
+    })
+  )
+
+  
   hasAppliedFilters$ = this.store.pipe(select(getHasAppliedFilters));
 
   private searchTermSubscription = this.searchTerms$
@@ -87,7 +102,8 @@ export class DatasetsFilterComponent {
       this.store.dispatch(new AddKeywordFilterAction(terms));
     });
 
-  constructor(public dialog: MatDialog, private store: Store<any>) {}
+  constructor(public dialog: MatDialog, private store: Store<any>) {
+  }
 
   getFacetId(facetCount: FacetCount, fallback: string = null): string {
     const id = facetCount._id;
