@@ -52,6 +52,7 @@ type DateRange = {
   styleUrls: ["datasets-filter.component.css"]
 })
 export class DatasetsFilterComponent {
+
   locationFacetCounts$ = this.store.pipe(select(getLocationFacetCounts));
   groupFacetCounts$ = this.store.pipe(select(getGroupFacetCounts));
   typeFacetCounts$ = this.store.pipe(select(getTypeFacetCounts));
@@ -71,10 +72,6 @@ export class DatasetsFilterComponent {
  
   filteredGroups$  = combineLatest(this.groupFacetCounts$, this.groupInpuKeyUp$).pipe(
         map(([counts, filterString]) => {
-      console.log(counts);
-      console.log(filterString)
-      console.log("group-1".includes(filterString))
-      //return counts;
       return counts.filter((count) => typeof count._id === "string" && count._id.includes(filterString));
     })
   )
@@ -128,6 +125,7 @@ export class DatasetsFilterComponent {
 
   groupSelected(group: string) {
     this.store.dispatch(new AddGroupFilterAction(group));
+    this.groupInpuKeyUp$.next("");
   }
 
   groupRemoved(group: string) {

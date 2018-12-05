@@ -39,7 +39,7 @@
           }}<mat-icon matChipRemove>cancel</mat-icon>
         </mat-chip>
       </mat-chip-list>
-      <input (input)="groupInpuKeyUp$.next($event.target.value)" matInput class="group-input" [matChipInputFor]="groupChipList" placeholder="Group" aria-label="Group" [matAutocomplete]="grp">
+      <input (input)="groupInpuKeyUp$.next($event.target.value)" [value]="groupInpuKeyUp$ | async" id="fu" matInput class="group-input" [matChipInputFor]="groupChipList" placeholder="Group" aria-label="Group" [matAutocomplete]="grp">
       <mat-autocomplete autoActiveFirstOption #grp="matAutocomplete">
         <mat-option class="options" (onSelectionChange)="groupSelected(getFacetId(fc))" *ngFor="let fc of filteredGroups$ | async">
           <span>{{ getFacetId(fc, 'No Group') }}</span> |
