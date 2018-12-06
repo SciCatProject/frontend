@@ -2,8 +2,13 @@ import { Component } from "@angular/core";
 import { MatDatepickerInputEvent, MatDialog } from "@angular/material";
 
 import { select, Store } from "@ngrx/store";
-import { debounceTime, distinctUntilChanged, skipWhile, withLatestFrom, map } from "rxjs/operators";
-
+import {
+  debounceTime,
+  distinctUntilChanged,
+  skipWhile,
+  withLatestFrom,
+  map
+} from "rxjs/operators";
 
 import { FacetCount } from "state-management/state/datasets.store";
 import {
@@ -39,7 +44,7 @@ import {
   SetTextFilterAction
 } from "state-management/actions/datasets.actions";
 import { ScientificConditionDialogComponent } from "datasets/scientific-condition-dialog/scientific-condition-dialog.component";
-import { Subject, combineLatest } from "rxjs";
+import { Subject, combineLatest, BehaviorSubject } from "rxjs";
 
 type DateRange = {
   begin: Date;
@@ -52,7 +57,6 @@ type DateRange = {
   styleUrls: ["datasets-filter.component.css"]
 })
 export class DatasetsFilterComponent {
-
   locationFacetCounts$ = this.store.pipe(select(getLocationFacetCounts));
   groupFacetCounts$ = this.store.pipe(select(getGroupFacetCounts));
   typeFacetCounts$ = this.store.pipe(select(getTypeFacetCounts));
@@ -67,16 +71,70 @@ export class DatasetsFilterComponent {
   creationTimeFilter$ = this.store.pipe(select(getCreationTimeFilter));
   scientificConditions$ = this.store.pipe(select(getScientificConditions));
 
+  locationInpuKeyUp$ = new BehaviorSubject<string>("");
+  groupInpuKeyUp$ = new BehaviorSubject<string>("");
+  typeInpuKeyUp$ = new BehaviorSubject<string>("");
+  keywordsInpuKeyUp$ = new BehaviorSubject<string>("");
 
-  groupInpuKeyUp$ = new Subject<string>();
- 
-  filteredGroups$  = combineLatest(this.groupFacetCounts$, this.groupInpuKeyUp$).pipe(
-        map(([counts, filterString]) => {
-      return counts.filter((count) => typeof count._id === "string" && count._id.includes(filterString));
+  //List of displayed suggestions. Based on groupFacetcounts, it filters out suggestions that have already been 
+  //added, as well as suggestions that don't includes the current text filter
+  groupSuggestions$ = combineLatest(
+    this.groupFacetCounts$,
+    this.groupInpuKeyUp$,
+    this.groupFilter$ 
+  ).pipe(
+    map(([counts, filterString, groupFilters]) => {
+      if (!counts) return [];
+      return counts.filter(
+        count =>
+          typeof count._id === "string" && count._id.toLowerCase().includes(filterString.toLowerCase()) && groupFilters.indexOf(count._id) < 0
+      );
     })
-  )
+  );
 
+  locationSuggestions$ = combineLatest(
+    this.locationFacetCounts$,
+    this.locationInpuKeyUp$,
+    this.locationFilter$
+  ).pipe(
+    map(([counts, filterString, locationFilters]) => {
+      if (!counts) return [];
+      return counts.filter(
+        count =>
+          typeof count._id === "string" && count._id.toLowerCase().includes(filterString.toLowerCase()) && locationFilters.indexOf(count._id) < 0
+      );
+    })
+  );
+
+  typeSuggestions$ = combineLatest(
+    this.typeFacetCounts$,
+    this.typeInpuKeyUp$,
+    this.typeFilter$
+  ).pipe(
+    map(([counts, filterString, typeFilters]) => {
+      if (!counts) return [];
+      return counts.filter(
+        count =>
+          typeof count._id === "string" && count._id.toLowerCase().includes(filterString.toLowerCase()) && typeFilters.indexOf(count._id) < 0
+      );
+    })
+  );
   
+  keywordsSuggestions$ = combineLatest(
+    this.keywordFacetCounts$,
+    this.keywordsInpuKeyUp$,
+    this.keywordsFilter$
+  ).pipe(
+    map(([counts, filterString, keywordFilters]) => {
+      if (!counts) return [];
+      return counts.filter(
+        count =>
+          typeof count._id === "string" && count._id.toLowerCase().includes(filterString.toLowerCase()) && keywordFilters.indexOf(count._id) < 0
+      );
+    })
+  );
+
+
   hasAppliedFilters$ = this.store.pipe(select(getHasAppliedFilters));
 
   private searchTermSubscription = this.searchTerms$
@@ -99,8 +157,7 @@ export class DatasetsFilterComponent {
       this.store.dispatch(new AddKeywordFilterAction(terms));
     });
 
-  constructor(public dialog: MatDialog, private store: Store<any>) {
-  }
+  constructor(public dialog: MatDialog, private store: Store<any>) {}
 
   getFacetId(facetCount: FacetCount, fallback: string = null): string {
     const id = facetCount._id;
@@ -117,6 +174,7 @@ export class DatasetsFilterComponent {
 
   locationSelected(location: string | null) {
     this.store.dispatch(new AddLocationFilterAction(location || ""));
+    this.locationInpuKeyUp$.next("");
   }
 
   locationRemoved(location: string) {
@@ -134,6 +192,7 @@ export class DatasetsFilterComponent {
 
   keywordSelected(keyword: string) {
     this.store.dispatch(new AddKeywordFilterAction(keyword));
+    this.keywordsInpuKeyUp$.next("");
   }
 
   keywordRemoved(keyword: string) {
@@ -142,6 +201,7 @@ export class DatasetsFilterComponent {
 
   typeSelected(type: string) {
     this.store.dispatch(new AddTypeFilterAction(type));
+    this.typeInpuKeyUp$.next("");
   }
 
   typeRemoved(type: string) {
