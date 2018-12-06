@@ -6,7 +6,6 @@ import {
   debounceTime,
   distinctUntilChanged,
   skipWhile,
-  withLatestFrom,
   map
 } from "rxjs/operators";
 
@@ -44,7 +43,7 @@ import {
   SetTextFilterAction
 } from "state-management/actions/datasets.actions";
 import { ScientificConditionDialogComponent } from "datasets/scientific-condition-dialog/scientific-condition-dialog.component";
-import { Subject, combineLatest, BehaviorSubject } from "rxjs";
+import { combineLatest, BehaviorSubject } from "rxjs";
 
 type DateRange = {
   begin: Date;
@@ -76,8 +75,6 @@ export class DatasetsFilterComponent {
   typeInpuKeyUp$ = new BehaviorSubject<string>("");
   keywordsInpuKeyUp$ = new BehaviorSubject<string>("");
 
-  //List of displayed suggestions. Based on groupFacetcounts, it filters out suggestions that have already been 
-  //added, as well as suggestions that don't includes the current text filter
   groupSuggestions$ = combineLatest(
     this.groupFacetCounts$,
     this.groupInpuKeyUp$,
