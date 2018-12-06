@@ -22,9 +22,9 @@
           }} <mat-icon matChipRemove>cancel</mat-icon>
         </mat-chip>
       </mat-chip-list>
-      <input (input)="locationInpuKeyUp$.next($event.target.value)" [value]="locationInpuKeyUp$ | async" matInput class="location-input" [matChipInputFor]="locationChipList" placeholder="Location" aria-label="Location" [matAutocomplete]="loc">
+      <input (input)="locationInput$.next($event.target.value)" [value]="locationInput$ | async" matInput class="location-input" [matChipInputFor]="locationChipList" placeholder="Location" aria-label="Location" [matAutocomplete]="loc">
 
-      <mat-autocomplete #loc="matAutocomplete">
+      <mat-autocomplete autoActiveFirstOption #loc="matAutocomplete">
         <mat-option class="options" (onSelectionChange)="locationSelected(getFacetId(fc))" *ngFor="let fc of locationSuggestions$ | async">
           <span>{{ getFacetId(fc, 'No Location') }} | </span>
           <small>{{ getFacetCount(fc) }}</small>
@@ -39,7 +39,7 @@
           }}<mat-icon matChipRemove>cancel</mat-icon>
         </mat-chip>
       </mat-chip-list>
-      <input (input)="groupInpuKeyUp$.next($event.target.value)" [value]="groupInpuKeyUp$ | async" matInput class="group-input" [matChipInputFor]="groupChipList" placeholder="Group" aria-label="Group" [matAutocomplete]="grp">
+      <input (input)="groupInput$.next($event.target.value)" [value]="groupInput$ | async" matInput class="group-input" [matChipInputFor]="groupChipList" placeholder="Group" aria-label="Group" [matAutocomplete]="grp">
 
       <mat-autocomplete autoActiveFirstOption #grp="matAutocomplete">
         <mat-option class="options" (onSelectionChange)="groupSelected(getFacetId(fc))" *ngFor="let fc of groupSuggestions$ | async">
@@ -56,9 +56,9 @@
           }}<mat-icon matChipRemove>cancel</mat-icon>
         </mat-chip>
       </mat-chip-list>
-      <input (input)="typeInpuKeyUp$.next($event.target.value)" [value]="typeInpuKeyUp$ | async" matInput class="type-input" [matChipInputFor]="typeChipList" placeholder="Type" aria-label="Type" [matAutocomplete]="type">
+      <input (input)="typeInput$.next($event.target.value)" [value]="typeInput$ | async" matInput class="type-input" [matChipInputFor]="typeChipList" placeholder="Type" aria-label="Type" [matAutocomplete]="type">
 
-      <mat-autocomplete #type="matAutocomplete">
+      <mat-autocomplete autoActiveFirstOption #type="matAutocomplete">
         <mat-option class="options" (onSelectionChange)="typeSelected(getFacetId(fc))" *ngFor="let fc of typeSuggestions$ | async">
           <span>{{ getFacetId(fc, 'No Type') }}</span> |
           <small>{{ getFacetCount(fc) }}</small>
@@ -73,8 +73,8 @@
           }}<mat-icon matChipRemove>cancel</mat-icon>
         </mat-chip>
       </mat-chip-list>
-      <input (input)="keywordsInpuKeyUp$.next($event.target.value)" [value]="keywordsInpuKeyUp$ | async" matInput class="keyword-input" [matChipInputFor]="keywordChipList" placeholder="Keywords" aria-label="Keywords"  [matAutocomplete]="kw">
-      <mat-autocomplete #kw="matAutocomplete">
+      <input (input)="keywordsInput$.next($event.target.value)" [value]="keywordsInput$ | async" matInput class="keyword-input" [matChipInputFor]="keywordChipList" placeholder="Keywords" aria-label="Keywords"  [matAutocomplete]="kw">
+      <mat-autocomplete autoActiveFirstOption #kw="matAutocomplete">
         <mat-option class="options" (onSelectionChange)="keywordSelected(getFacetId(fc))" *ngFor="let fc of keywordsSuggestions$ | async">
           <span>{{ getFacetId(fc, 'No Keywords') }}</span>
           <small>: {{ getFacetCount(fc) }}</small>

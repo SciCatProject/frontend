@@ -43,7 +43,7 @@ import {
   SetTextFilterAction
 } from "state-management/actions/datasets.actions";
 import { ScientificConditionDialogComponent } from "datasets/scientific-condition-dialog/scientific-condition-dialog.component";
-import { combineLatest, BehaviorSubject } from "rxjs";
+import { combineLatest, BehaviorSubject, Observable } from "rxjs";
 
 type DateRange = {
   begin: Date;
@@ -70,67 +70,49 @@ export class DatasetsFilterComponent {
   creationTimeFilter$ = this.store.pipe(select(getCreationTimeFilter));
   scientificConditions$ = this.store.pipe(select(getScientificConditions));
 
-  locationInpuKeyUp$ = new BehaviorSubject<string>("");
-  groupInpuKeyUp$ = new BehaviorSubject<string>("");
-  typeInpuKeyUp$ = new BehaviorSubject<string>("");
-  keywordsInpuKeyUp$ = new BehaviorSubject<string>("");
+  locationInput$ = new BehaviorSubject<string>("");
+  groupInput$ = new BehaviorSubject<string>("");
+  typeInput$ = new BehaviorSubject<string>("");
+  keywordsInput$ = new BehaviorSubject<string>("");
 
-  groupSuggestions$ = combineLatest(
+  createSuggestionObserver(facetCounts$ : Observable<FacetCount[]>, input$: BehaviorSubject<string>, currentFilters$: Observable<string[]>) : Observable<FacetCount[]>{
+    return combineLatest(
+      facetCounts$,
+      input$,
+      currentFilters$ 
+    ).pipe(
+      map(([counts, filterString, currentFilters]) => {
+        if (!counts) return [];
+        return counts.filter(
+          count =>
+            typeof count._id === "string" && count._id.toLowerCase().includes(filterString.toLowerCase()) && currentFilters.indexOf(count._id) < 0
+        );
+      })
+    );
+  }
+  groupSuggestions$  = this.createSuggestionObserver(
     this.groupFacetCounts$,
-    this.groupInpuKeyUp$,
-    this.groupFilter$ 
-  ).pipe(
-    map(([counts, filterString, groupFilters]) => {
-      if (!counts) return [];
-      return counts.filter(
-        count =>
-          typeof count._id === "string" && count._id.toLowerCase().includes(filterString.toLowerCase()) && groupFilters.indexOf(count._id) < 0
-      );
-    })
-  );
+    this.groupInput$,
+    this.groupFilter$
+  )
 
-  locationSuggestions$ = combineLatest(
+  locationSuggestions$ = this.createSuggestionObserver(
     this.locationFacetCounts$,
-    this.locationInpuKeyUp$,
+    this.locationInput$,
     this.locationFilter$
-  ).pipe(
-    map(([counts, filterString, locationFilters]) => {
-      if (!counts) return [];
-      return counts.filter(
-        count =>
-          typeof count._id === "string" && count._id.toLowerCase().includes(filterString.toLowerCase()) && locationFilters.indexOf(count._id) < 0
-      );
-    })
-  );
+  )
 
-  typeSuggestions$ = combineLatest(
+  typeSuggestions$ = this.createSuggestionObserver(
     this.typeFacetCounts$,
-    this.typeInpuKeyUp$,
+    this.typeInput$,
     this.typeFilter$
-  ).pipe(
-    map(([counts, filterString, typeFilters]) => {
-      if (!counts) return [];
-      return counts.filter(
-        count =>
-          typeof count._id === "string" && count._id.toLowerCase().includes(filterString.toLowerCase()) && typeFilters.indexOf(count._id) < 0
-      );
-    })
-  );
+  )
   
-  keywordsSuggestions$ = combineLatest(
+  keywordsSuggestions$ = this.createSuggestionObserver(
     this.keywordFacetCounts$,
-    this.keywordsInpuKeyUp$,
+    this.keywordsInput$,
     this.keywordsFilter$
-  ).pipe(
-    map(([counts, filterString, keywordFilters]) => {
-      if (!counts) return [];
-      return counts.filter(
-        count =>
-          typeof count._id === "string" && count._id.toLowerCase().includes(filterString.toLowerCase()) && keywordFilters.indexOf(count._id) < 0
-      );
-    })
-  );
-
+  )
 
   hasAppliedFilters$ = this.store.pipe(select(getHasAppliedFilters));
 
@@ -171,7 +153,7 @@ export class DatasetsFilterComponent {
 
   locationSelected(location: string | null) {
     this.store.dispatch(new AddLocationFilterAction(location || ""));
-    this.locationInpuKeyUp$.next("");
+    this.locationInput$.next("");
   }
 
   locationRemoved(location: string) {
@@ -180,7 +162,7 @@ export class DatasetsFilterComponent {
 
   groupSelected(group: string) {
     this.store.dispatch(new AddGroupFilterAction(group));
-    this.groupInpuKeyUp$.next("");
+    this.groupInput$.next("");
   }
 
   groupRemoved(group: string) {
@@ -189,7 +171,7 @@ export class DatasetsFilterComponent {
 
   keywordSelected(keyword: string) {
     this.store.dispatch(new AddKeywordFilterAction(keyword));
-    this.keywordsInpuKeyUp$.next("");
+    this.keywordsInput$.next("");
   }
 
   keywordRemoved(keyword: string) {
@@ -198,7 +180,7 @@ export class DatasetsFilterComponent {
 
   typeSelected(type: string) {
     this.store.dispatch(new AddTypeFilterAction(type));
-    this.typeInpuKeyUp$.next("");
+    this.typeInput$.next("");
   }
 
   typeRemoved(type: string) {
