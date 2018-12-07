@@ -116,8 +116,10 @@
         Creation Time
       </mat-header-cell>
       <mat-cell *matCellDef="let dataset">
-        {{dataset.creationTime | date: 'yyyy/MM/dd'}}
-        {{dataset.creationTime | date: 'EEE HH:mm'}}
+        <div fxLayout="column">
+        <div> {{dataset.creationTime | date: 'yyyy/MM/dd'}} </div>
+        <div> {{dataset.creationTime | date: 'EEE HH:mm'}} </div>
+        </div>
       </mat-cell>
     </ng-container>
 
