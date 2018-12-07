@@ -55,6 +55,7 @@ describe("DatasetFormComponent", () => {
       orcidOfOwner: "string",
       contactEmail: "string",
       sourceFolder: "string",
+      datasetName: "string",
       size: 0,
       packedSize: 0,
       creationTime: date,

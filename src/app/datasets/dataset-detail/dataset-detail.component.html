@@ -26,6 +26,13 @@
                 </th>
                 <td>{{ dataset.pid }}</td>
               </tr>
+              <tr *ngIf="dataset.datasetName as value">
+                <th>
+                  <fa-icon [icon]="faUserAlt"></fa-icon>&nbsp;
+                  Name
+                </th>
+                <td>{{ value }}</td>
+              </tr>
               <tr *ngIf="dataset.owner as value">
                 <th>
                   <fa-icon [icon]="faUserAlt"></fa-icon>&nbsp;
