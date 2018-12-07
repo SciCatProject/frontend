@@ -48,7 +48,8 @@ describe("DatasetsReducer", () => {
   });
 
   it("should set current jobs", () => {
-    const data = {
+    const data: Job = {
+      id : "jfkler",
       emailJobInitiator: "",
       type: "",
       creationTime: new Date(),
@@ -58,6 +59,8 @@ describe("DatasetsReducer", () => {
       archiveReturnMessage: "",
       dateOfLastMessage: new Date(),
       datasetList: "",
+      MessageHistory: [],
+      messageHistory: [],
       createdAt: new Date(),
       updatedAt: new Date()
     };
@@ -83,6 +86,8 @@ describe("DatasetsReducer", () => {
       archiveReturnMessage: "",
       dateOfLastMessage: new Date(),
       datasetList: "",
+      MessageHistory: [],
+      messageHistory: [],
       id: "",
       createdAt: new Date(),
       updatedAt: new Date()
