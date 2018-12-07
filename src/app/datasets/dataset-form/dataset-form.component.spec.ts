@@ -71,6 +71,7 @@ describe("DatasetFormComponent", () => {
       isPublished: true,
       archivable: true,
       retrievable: true,
+      publishable: true,
       ownerGroup: "string",
       accessGroups: ["string"],
       createdBy: "string",
