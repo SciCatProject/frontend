@@ -80,7 +80,7 @@
         <fa-icon [icon]="faIdBadge"></fa-icon>&nbsp;
         Name
       </mat-header-cell>
-      <mat-cell *matCellDef="let dataset" matTooltip="{{ dataset.datasetName}}">
+      <mat-cell *matCellDef="let dataset" >
         {{dataset.datasetName }}
       </mat-cell>
     </ng-container>
