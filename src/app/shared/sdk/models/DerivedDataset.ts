@@ -26,12 +26,16 @@ export interface DerivedDatasetInterface {
   "validationStatus"?: string;
   "keywords"?: Array<any>;
   "description"?: string;
+  "datasetName"?: string;
   "userTargetLocation"?: string;
   "classification"?: string;
   "license"?: string;
   "version"?: string;
   "doi"?: string;
   "isPublished"?: boolean;
+  "archivable"?: boolean;
+  "retrievable"?: boolean;
+  "publishable"?: boolean;
   "ownerGroup": string;
   "accessGroups"?: Array<any>;
   "createdBy"?: string;
@@ -63,12 +67,16 @@ export class DerivedDataset implements DerivedDatasetInterface {
   "validationStatus": string;
   "keywords": Array<any>;
   "description": string;
+  "datasetName": string;
   "userTargetLocation": string;
   "classification": string;
   "license": string;
   "version": string;
   "doi": string;
   "isPublished": boolean;
+  "archivable": boolean;
+  "retrievable": boolean;
+  "publishable": boolean;
   "ownerGroup": string;
   "accessGroups": Array<any>;
   "createdBy": string;
@@ -184,6 +192,10 @@ export class DerivedDataset implements DerivedDatasetInterface {
           name: 'description',
           type: 'string'
         },
+        "datasetName": {
+          name: 'datasetName',
+          type: 'string'
+        },
         "userTargetLocation": {
           name: 'userTargetLocation',
           type: 'string'
@@ -206,6 +218,18 @@ export class DerivedDataset implements DerivedDatasetInterface {
         },
         "isPublished": {
           name: 'isPublished',
+          type: 'boolean'
+        },
+        "archivable": {
+          name: 'archivable',
+          type: 'boolean'
+        },
+        "retrievable": {
+          name: 'retrievable',
+          type: 'boolean'
+        },
+        "publishable": {
+          name: 'publishable',
           type: 'boolean'
         },
         "ownerGroup": {
