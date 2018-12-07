@@ -120,7 +120,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   private jobErrorSubscription: Subscription;
   private readonly defaultColumns: string[] = [
     "select",
-    "pid",
+    "datasetName",
     "sourceFolder",
     "size",
     "creationTime",

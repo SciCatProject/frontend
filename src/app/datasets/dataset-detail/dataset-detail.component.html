@@ -19,16 +19,9 @@
         <mat-card style="margin: 1em">
           <div class="details">
             <table>
-              <tr>
-                <th>
-                  <fa-icon [icon]="faIdBadge"></fa-icon>&nbsp;
-                  PID
-                </th>
-                <td>{{ dataset.pid }}</td>
-              </tr>
               <tr *ngIf="dataset.datasetName as value">
                 <th>
-                  <fa-icon [icon]="faUserAlt"></fa-icon>&nbsp;
+                  <fa-icon [icon]="faIdBadge"></fa-icon>&nbsp;
                   Name
                 </th>
                 <td>{{ value }}</td>
@@ -46,6 +39,13 @@
                   Contact Email
                 </th>
                 <td>{{ value }}</td>
+              </tr>
+              <tr>
+                <th>
+                  <fa-icon [icon]="faIdBadge"></fa-icon>&nbsp;
+                  PID
+                </th>
+                <td>{{ dataset.pid }}</td>
               </tr>
               <tr *ngIf="dataset.sourceFolder as value">
                 <th>

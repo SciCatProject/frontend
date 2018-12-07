@@ -47,3 +47,12 @@
 :host /deep/ .mat-paginator {
   background-color: unset !important;
 }
+
+
+.mat-column-datasetName {
+  flex: 0 0 200px;
+}
+
+.mat-column-group {
+  flex: 0 0 5em;
+}
