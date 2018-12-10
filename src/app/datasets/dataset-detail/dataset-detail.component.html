@@ -19,12 +19,12 @@
         <mat-card style="margin: 1em">
           <div class="details">
             <table>
-              <tr>
+              <tr *ngIf="dataset.datasetName as value">
                 <th>
                   <fa-icon [icon]="faIdBadge"></fa-icon>&nbsp;
-                  PID
+                  Name
                 </th>
-                <td>{{ dataset.pid }}</td>
+                <td>{{ value }}</td>
               </tr>
               <tr *ngIf="dataset.owner as value">
                 <th>
@@ -40,12 +40,19 @@
                 </th>
                 <td>{{ value }}</td>
               </tr>
+              <tr>
+                <th>
+                  <fa-icon [icon]="faIdBadge"></fa-icon>&nbsp;
+                  PID
+                </th>
+                <td>{{ dataset.pid }}</td>
+              </tr>
               <tr *ngIf="dataset.sourceFolder as value">
                 <th>
                   <fa-icon [icon]="faFolder"></fa-icon>&nbsp;
                   Source Folder
                 </th>
-                <td>...{{ value | slice:-60}}</td>
+                <td>{{ value }}</td>
               </tr>
               <!--
               <tr *ngIf="dataset.sourceFolder as value">
