@@ -10,6 +10,7 @@ export interface PolicyInterface {
   "archiveEmailsToBeNotified"?: Array<any>;
   "retrieveEmailNotification"?: boolean;
   "retrieveEmailsToBeNotified"?: Array<any>;
+  "embargoPeriod"?: number;
   "ownerGroup": string;
   "accessGroups"?: Array<any>;
   "createdBy"?: string;
@@ -28,6 +29,7 @@ export class Policy implements PolicyInterface {
   "archiveEmailsToBeNotified": Array<any>;
   "retrieveEmailNotification": boolean;
   "retrieveEmailsToBeNotified": Array<any>;
+  "embargoPeriod": number;
   "ownerGroup": string;
   "accessGroups": Array<any>;
   "createdBy": string;
@@ -79,7 +81,8 @@ export class Policy implements PolicyInterface {
         },
         "autoArchive": {
           name: 'autoArchive',
-          type: 'boolean'
+          type: 'boolean',
+          default: true
         },
         "autoArchiveDelay": {
           name: 'autoArchiveDelay',
@@ -103,6 +106,11 @@ export class Policy implements PolicyInterface {
         "retrieveEmailsToBeNotified": {
           name: 'retrieveEmailsToBeNotified',
           type: 'Array&lt;any&gt;'
+        },
+        "embargoPeriod": {
+          name: 'embargoPeriod',
+          type: 'number',
+          default: 3
         },
         "ownerGroup": {
           name: 'ownerGroup',

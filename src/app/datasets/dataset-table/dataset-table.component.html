@@ -75,18 +75,18 @@
       </mat-cell>
     </ng-container>
 
-    <ng-container matColumnDef="pid">
-      <mat-header-cell *matHeaderCellDef>
+    <ng-container matColumnDef="datasetName">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>
         <fa-icon [icon]="faIdBadge"></fa-icon>&nbsp;
-        PID
+        Name
       </mat-header-cell>
-      <mat-cell *matCellDef="let dataset" matTooltip="{{ dataset.pid}}">
-        ...{{dataset.pid | slice:-10}}
+      <mat-cell *matCellDef="let dataset" >
+        {{dataset.datasetName }}
       </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="sourceFolder">
-      <mat-header-cell *matHeaderCellDef>
+      <mat-header-cell *matHeaderCellDef mat-sort-header>
         <fa-icon [icon]="faFolder"></fa-icon>&nbsp;
         Source Folder
       </mat-header-cell>
@@ -100,8 +100,13 @@
         <fa-icon [icon]="faCoins"></fa-icon>&nbsp;
         Size
       </mat-header-cell>
-      <mat-cell *matCellDef="let dataset">
-        {{dataset.size | filesize}}
+      <mat-cell *matCellDef="let dataset" >
+        <div fxLayout="column">
+          <div> {{dataset.size | filesize}}   </div>
+        <div [ngStyle]="{'height.px':'4','width.px': dataset.size >= 1000000000 ? 35 + 5*dataset.size/10000000000 : 5 + 15*dataset.size/1000000000 , 'background': dataset.size >= 1000000000 ? 'red': 'green' }">
+            &nbsp;
+        </div>
+        </div>
       </mat-cell>
     </ng-container>
 
@@ -111,7 +116,10 @@
         Creation Time
       </mat-header-cell>
       <mat-cell *matCellDef="let dataset">
-        {{dataset.creationTime | date: 'yyyy/MM/dd HH:mm'}}
+        <div fxLayout="column">
+        <div> {{dataset.creationTime | date: 'yyyy/MM/dd'}} </div>
+        <div> {{dataset.creationTime | date: 'EEE HH:mm'}} </div>
+        </div>
       </mat-cell>
     </ng-container>
 
