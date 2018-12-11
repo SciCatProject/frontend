@@ -41,7 +41,11 @@ make data
 You should see the scicat interface and be able to login with username ingestor and password 
 
 
-6.
+
+6. For the backend REST api, you can see the online documentation at localhost:3000/explorer
+
+
+
 
 
 
