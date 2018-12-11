@@ -58,8 +58,12 @@ You should see the scicat interface and be able to login with username ingestor 
 
 
 6. For the backend REST api, you can see the online documentation at localhost:3000/explorer
+Instructions for using the loopback API explorer are available at 
+https://loopback.io/doc/en/lb3/Use-API-Explorer.html
 
 ![explorer](img/explorer.png)
+
+
 
 
 
