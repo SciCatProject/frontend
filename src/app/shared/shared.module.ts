@@ -7,10 +7,12 @@ import { FileSizePipe } from "./pipes/filesize.pipe";
 import { FormsModule, ReactiveFormsModule} from "@angular/forms";
 import { NgModule } from "@angular/core";
 import { KeysPipe } from "./pipes";
+import { JsonHeadPipe } from './pipes/json-head.pipe';
+import { ThumbnailPipe } from './pipes/thumbnail.pipe';
 
 @NgModule({
   imports: [BreadcrumbModule, ConfigFormModule, ErrorPageModule, FormsModule, DialogModule, ReactiveFormsModule],
-  declarations: [FileSizePipe, KeysPipe],
+  declarations: [FileSizePipe, KeysPipe, JsonHeadPipe, ThumbnailPipe],
   providers: [ConfigService],
   exports: [
     BreadcrumbModule,
