@@ -30,6 +30,12 @@ make run-hot
 
 make data
 
-5. point your browser to localhost
+5. point your browser to localhost:4200
 
-should see scicat and be able to login with ingestor and password 
+You should see the scicat interface and be able to login with username ingestor and password 
+
+
+6.
+
+
+
