@@ -54,6 +54,7 @@ In addition random data wikll be generated and added to the database.
 
 You should see the scicat interface and be able to login with username ingestor and password 
 
+![Login](../Users/img/login.png)
 
 
 6. For the backend REST api, you can see the online documentation at localhost:3000/explorer
