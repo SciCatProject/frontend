@@ -1,5 +1,10 @@
 # Instructions 
 
+0. Prerequisites
+Docker
+Git
+Make
+Web browser
 
 1. Install docker & docker-compose 
 
