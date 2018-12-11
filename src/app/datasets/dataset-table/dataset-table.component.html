@@ -131,6 +131,24 @@
       <mat-cell *matCellDef="let dataset">{{dataset.type}}</mat-cell>
     </ng-container>
 
+    <ng-container matColumnDef="image">
+      <mat-header-cell *matHeaderCellDef>
+        <fa-icon [icon]="faFileAlt"></fa-icon>&nbsp;
+        Image
+      </mat-header-cell>
+      <mat-cell *matCellDef="let dataset">
+      <img src="./assets/images/esslogo.png" height="60px">
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="metadata">
+      <mat-header-cell *matHeaderCellDef>
+        <fa-icon [icon]="faFileAlt"></fa-icon>&nbsp;
+        Scientific Metadata
+      </mat-header-cell>
+      <mat-cell *matCellDef="let dataset">{{dataset.scientificMetadata | json}}</mat-cell>
+    </ng-container>
+
     <ng-container matColumnDef="proposalId">
       <mat-header-cell *matHeaderCellDef>
         <fa-icon [icon]="faCertificate"></fa-icon>&nbsp;

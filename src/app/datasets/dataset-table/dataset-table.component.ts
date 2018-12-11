@@ -126,6 +126,8 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     "size",
     "creationTime",
     "type",
+    "image",
+    "metadata",
     "proposalId",
     "ownerGroup",
     "archiveStatus",
