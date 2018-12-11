@@ -28,6 +28,7 @@ make
 
 ```
 
+
 ```
 make run-hot
 ```
@@ -36,6 +37,11 @@ make run-hot
 ```
 make data
 ```
+
+
+These commands will install mongoDB which is the scicat database, catamel which is the REST API backend, and finally the frontend web interface (catanie).
+In addition random data wikll be generated and added to the database.
+
 5. point your browser to localhost:4200
 
 You should see the scicat interface and be able to login with username ingestor and password 
