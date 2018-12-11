@@ -146,7 +146,7 @@
         <fa-icon [icon]="faFileAlt"></fa-icon>&nbsp;
         Scientific Metadata
       </mat-header-cell>
-      <mat-cell *matCellDef="let dataset">{{dataset.scientificMetadata | json}}</mat-cell>
+      <mat-cell *matCellDef="let dataset">{{dataset.scientificMetadata | jsonHead }}</mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="proposalId">
