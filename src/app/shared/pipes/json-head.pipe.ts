@@ -12,7 +12,7 @@ export class JsonHeadPipe implements PipeTransform {
     for (const key of Object.keys(value)) {
       count = count + 1;
       newvalue[key] = value[key];
-      if (count > 0) {
+      if (count > 1) {
         break;
       }
     }
