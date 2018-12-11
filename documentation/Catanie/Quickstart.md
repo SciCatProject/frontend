@@ -23,13 +23,19 @@ cd scicat-develop
 4.
 Following the instructions in the README.md
 
+```
+make
 
-make 
+```
 
+```
 make run-hot
+```
 
+
+```
 make data
-
+```
 5. point your browser to localhost:4200
 
 You should see the scicat interface and be able to login with username ingestor and password 
