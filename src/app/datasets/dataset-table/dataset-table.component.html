@@ -137,7 +137,7 @@
         Image
       </mat-header-cell>
       <mat-cell *matCellDef="let dataset">
-      <img src="./assets/images/esslogo.png" height="60px">
+      <img src="{{ dataset.pid | thumbnail | async}}" height="30px">
       </mat-cell>
     </ng-container>
 
