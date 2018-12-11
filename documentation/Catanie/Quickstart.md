@@ -55,6 +55,9 @@ You should see the scicat interface and be able to login with username ingestor 
 
 6. For the backend REST api, you can see the online documentation at localhost:3000/explorer
 
+![explorer](img/explorer.png)
+
+
 
 
 
