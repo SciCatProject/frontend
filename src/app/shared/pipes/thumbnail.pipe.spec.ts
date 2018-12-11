@@ -1,7 +1,7 @@
-import { ThumbnailPipe } from './thumbnail.pipe';
+import { ThumbnailPipe } from "./thumbnail.pipe";
 
-describe('ThumbnailPipe', () => {
-  it('create an instance', () => {
+describe("ThumbnailPipe", () => {
+  it("create an instance", () => {
     const pipe = new ThumbnailPipe();
     expect(pipe).toBeTruthy();
   });
