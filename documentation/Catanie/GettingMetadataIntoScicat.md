@@ -1,5 +1,8 @@
 
-Getting Metadata Into SciCat.
+# Getting Metadata Into SciCat.
+
+
+## Automatic Ingestion
 
 An automatic login and ingestion of random data can be seen in scicat-develop
 ```
@@ -7,6 +10,7 @@ https://github.com/SciCatProject/scicat-develop/blob/master/create-data/index.js
 ```
 
 
+## Manual ingestion
 
 1.
 Login to catamel
@@ -19,12 +23,12 @@ Create a json file in the correct format.
 
 ```
 {
-            "principalInvestigator": "Ramsey Al Jebali",
+            "principalInvestigator": "Test User",
             "endTime": "2018-06-06T15:26:02.680Z",
-            "owner": "Ramsey Al Jebali",
-            "ownerEmail": "ramsey.aljebali@esss.se",
+            "owner": "Test User",
+            "ownerEmail": "test.user@test.se",
             "orcidOfOwner": "0000-0000-0000-0000",
-            "contactEmail": "ramsey.aljebali@esss.se",
+            "contactEmail": "test.user@esss.se",
             "sourceFolder": "/users/detector/experiments/sonde/IFE_june_2018/data/S1",
             "size": 872025994,
             "packedSize": 872025994,
@@ -104,4 +108,6 @@ curl -X POST --header 'Content-Type: application/json' --header 'Accept: applica
 Here, the access token  must be replaced by the one provided after logging in as above.
 
 
+## Loopback explorer ingestion
 
+Using the loopback interface, data can be added to through the explorer interface
