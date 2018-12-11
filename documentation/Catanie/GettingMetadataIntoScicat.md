@@ -5,9 +5,10 @@
 ## Automatic Ingestion
 
 An automatic login and ingestion of random data can be seen in scicat-develop
-```
+
+
 https://github.com/SciCatProject/scicat-develop/blob/master/create-data/index.js
-```
+
 
 
 ## Manual ingestion
