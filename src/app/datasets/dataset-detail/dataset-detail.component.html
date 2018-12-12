@@ -157,6 +157,16 @@
 
           </div>
         </mat-card>
+
+
+        <mat-card>
+          <button (click)="show = !show">{{show ? 'Hide MetaData' : 'Show Metadata'}}</button>
+          <br>
+          <div *ngIf="show">
+            {{ dataset | json }}
+          </div>
+        </mat-card>
+
       </div>
       <div fxFlex="30%" *ngIf="(attachments$ | async) as attachments">
         <ng-container *ngFor="let da of attachments">
