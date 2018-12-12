@@ -33,7 +33,11 @@ describe("DatasetTableComponent", () => {
         }),
         AppConfigModule
       ],
-      declarations: [DatasetTableComponent, FileSizePipe, JsonHeadPipe, ThumbnailPipe
+      declarations: [
+        DatasetTableComponent,
+        FileSizePipe,
+        JsonHeadPipe,
+        ThumbnailPipe
       ]
     });
     TestBed.overrideComponent(DatasetTableComponent, {
@@ -73,7 +77,9 @@ describe("DatasetTableComponent", () => {
   it("should contain mode switching buttons", () => {
     const compiled = fixture.debugElement.nativeElement;
     expect(compiled.querySelector(".archive")).toBeTruthy();
-    expect(compiled.querySelector(".archive").textContent).toContain("Archivable");
+    expect(compiled.querySelector(".archive").textContent).toContain(
+      "Archivable"
+    );
     expect(compiled.querySelector(".retrieve")).toBeTruthy();
     expect(compiled.querySelector(".retrieve").textContent).toContain(
       "Retrievable"
