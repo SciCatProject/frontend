@@ -13,6 +13,7 @@ import { combineReducers, StoreModule } from "@ngrx/store";
 import { datasetsReducer } from "state-management/reducers/datasets.reducer";
 import { jobsReducer } from "state-management/reducers/jobs.reducer";
 import { LoginService } from "../../users/login.service";
+import { ThumbnailPipe } from "shared/pipes";
 
 describe("DatasetTableComponent", () => {
   let component: DatasetTableComponent;
@@ -32,7 +33,8 @@ describe("DatasetTableComponent", () => {
         }),
         AppConfigModule
       ],
-      declarations: [DatasetTableComponent, FileSizePipe]
+      declarations: [DatasetTableComponent, FileSizePipe, JsonHeadPipe, ThumbnailPipe
+      ]
     });
     TestBed.overrideComponent(DatasetTableComponent, {
       set: {
