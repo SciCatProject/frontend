@@ -5,7 +5,7 @@ import { FileSizePipe } from "../../shared/pipes/filesize.pipe";
 import { JsonHeadPipe } from "../../shared/pipes/json-head.pipe";
 import { HttpClient } from "@angular/common/http";
 import { MatDialogModule, MatTableModule } from "@angular/material";
-import { MockHttp, MockLoginService, MockRouter } from "shared/MockStubs";
+import { MockHttp, MockLoginService, MockRouter, MockDatasetAttachmentApi, MockDatasetApi } from "shared/MockStubs";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { Router } from "@angular/router";
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
@@ -14,6 +14,7 @@ import { datasetsReducer } from "state-management/reducers/datasets.reducer";
 import { jobsReducer } from "state-management/reducers/jobs.reducer";
 import { LoginService } from "../../users/login.service";
 import { ThumbnailPipe } from "shared/pipes";
+import { DatasetAttachmentApi, DatasetApi } from "shared/sdk";
 
 describe("DatasetTableComponent", () => {
   let component: DatasetTableComponent;
@@ -45,6 +46,8 @@ describe("DatasetTableComponent", () => {
         providers: [
           { provide: HttpClient, useClass: MockHttp },
           { provide: Router, useClass: MockRouter },
+          { provide: DatasetAttachmentApi, useClass: MockDatasetAttachmentApi },
+          { provide: DatasetApi, useClass: MockDatasetApi },
           {
             provide: APP_CONFIG,
             useValue: {
