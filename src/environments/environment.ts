@@ -8,9 +8,9 @@ export const environment = {
   lbBaseURL: "http://127.0.0.1:3000",
   fileserverBaseURL: "http://127.0.0.1:8889",
   externalAuthEndpoint: "/auth/msad",
-  archiveWorkflowEnabled: true,
+  archiveWorkflowEnabled: false,
   editMetadataEnabled: true,
-  disabledDatasetColumns: [],
+  disabledDatasetColumns: ["archiveStatus", "retrieveStatus"],
   facility: "ESS",
   shoppingCartEnabled: true
 };
