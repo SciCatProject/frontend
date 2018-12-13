@@ -6,7 +6,9 @@ import { Pipe, PipeTransform } from "@angular/core";
 export class JsonHeadPipe implements PipeTransform {
 
   transform(value: any, args?: any): any {
-
+    if (!value) {
+      return null;
+    }
     const newvalue = {};
     let count = 0;
     for (const key of Object.keys(value)) {
