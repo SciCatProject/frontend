@@ -1,4 +1,4 @@
-@import '../../../theme.scss';
+@import "../../../theme.scss";
 
 .dataset-table {
   .mode-container {
@@ -18,25 +18,25 @@
     position: relative;
     float: left;
     transform: translateY(50%);
-    margin-left: 1em; 
-  } 
-  
+    margin-left: 1em;
+  }
+
   .mat-column-select {
     overflow: visible; /* Needed to prevent offsetting of the checkbox when clicking */
     flex-grow: 0;
     padding-right: 2em;
   }
-  
+
   /* Columns with narrow content */
   .mat-column-size,
   .mat-column-type {
     flex-grow: 0.5;
   }
 }
-  
+
 :host /deep/ .disabled-row {
-    pointer-events: none;
-    opacity: 0.2 !important;
+  pointer-events: none;
+  opacity: 0.2 !important;
 }
 
 :host /deep/ .mat-row:hover {
@@ -48,7 +48,6 @@
   background-color: unset !important;
 }
 
-
 .mat-column-datasetName {
   flex: 0 0 200px;
 }
@@ -57,8 +56,37 @@
   flex: 0 0 5em;
 }
 
-
 .mat-column-size {
-
   flex: 0 0 11px;
+}
+
+
+mat-cell{
+  display:flex !important;
+  justify-content:center!important;
+}
+
+mat-header-cell {
+  color: white;
+  background: #0094ca;
+  display:flex;
+  justify-content:center;
+}
+
+mat-header-row {
+  color: white;
+  background: #0094ca;
+}
+
+
+.aligned-with-icon{
+  position: absolute;
+  margin-top: 5px;
+  margin-left: 5px; /* optional */
+}
+
+
+.with-icon {
+  display: flex;
+  align-items: center;
 }
