@@ -55,7 +55,7 @@
       (click)="onAddToBatch()"
       color="primary"
     >
-      <i class="shopping cart icon"></i> Add to Batch
+      <i class="shopping cart icon" style="color: black"></i> Add to Batch
     </button>
 
     <button
@@ -65,7 +65,7 @@
       (click)="onExportClick()"
       color="primary"
     >
-      <i class="table icon"></i> Export Page to CSV
+      <i class="table icon" style="color: black"></i> Export Page to CSV
     </button>
   </div>
 
@@ -216,7 +216,7 @@
           <div>
             <i class="material-icons" >assessment</i>
           </div>
-          <div class="table_column">Scientific&nbsp;Metadata</div>
+          <div class="table_column">Science&nbsp;Metadata</div>
         </div>
       </mat-header-cell>
       <mat-cell
@@ -252,7 +252,12 @@
 
     <ng-container matColumnDef="archiveStatus">
       <mat-header-cell *matHeaderCellDef>
-        <fa-icon [icon]="faDownload"></fa-icon>&nbsp; Archive Status
+        <div fxLayout="column" style="align-items: center">
+          <div>
+            <i class="material-icons" >archive</i>
+          </div>
+          <div class="table_column">Archive Status</div>
+        </div>
       </mat-header-cell>
       <mat-cell *matCellDef="let dataset">
         {{ (dataset.datasetlifecycle || {}).archiveStatusMessage }}
@@ -261,7 +266,12 @@
 
     <ng-container matColumnDef="retrieveStatus">
       <mat-header-cell *matHeaderCellDef>
-        <fa-icon [icon]="faUpload"></fa-icon>&nbsp; Retrieve Status
+        <div fxLayout="column" style="align-items: center">
+          <div>
+            <i class="material-icons" style="font-size: 48;">description</i>
+          </div>
+          <div class="table_column">Retrieve Status</div>
+        </div>
       </mat-header-cell>
       <mat-cell *matCellDef="let dataset">
         {{ (dataset.datasetlifecycle || {}).retrieveStatusMessage }}
