@@ -50,6 +50,7 @@
 
 .mat-column-datasetName {
   flex: 0 0 200px;
+  justify-content:left!important;
 }
 
 .mat-column-group {
@@ -63,8 +64,9 @@
 
 mat-cell{
   display:flex !important;
-  justify-content:left!important;
+  justify-content:center!important;
 }
+
 
 mat-header-cell {
   color: white;

@@ -89,7 +89,7 @@
     <!-- Column Definitions -->
     <ng-container matColumnDef="select">
       <mat-header-cell *matHeaderCellDef>
-        <mat-checkbox
+        <mat-checkbox color="#ffffff"
           [checked]="allAreSeleted$ | async"
           (change)="onSelectAll($event)"
         >
@@ -119,14 +119,14 @@
           <div class="table_column">Name</div>
         </div>
       </mat-header-cell>
-      <mat-cell *matCellDef="let dataset"> {{ dataset.datasetName }} </mat-cell>
+      <mat-cell class="datasetName" *matCellDef="let dataset"> {{ dataset.datasetName }} </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="sourceFolder">
       <mat-header-cell *matHeaderCellDef mat-sort-header>
         <div fxLayout="column" style="align-items: center">
           <div>
-            <i class="material-icons" >description</i>
+            <i class="material-icons" >map</i>
           </div>
           <div class="table_column">Source&nbsp;Folder</div>
         </div>
