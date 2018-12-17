@@ -114,9 +114,9 @@
       <mat-header-cell *matHeaderCellDef mat-sort-header>
         <div fxLayout="column" style="align-items: center">
           <div>
-            <i class="material-icons" style="font-size: 48;">description</i>
+            <i class="material-icons" >fingerprint</i>
           </div>
-          <div>Name</div>
+          <div class="table_column">Name</div>
         </div>
       </mat-header-cell>
       <mat-cell *matCellDef="let dataset"> {{ dataset.datasetName }} </mat-cell>
@@ -126,9 +126,9 @@
       <mat-header-cell *matHeaderCellDef mat-sort-header>
         <div fxLayout="column" style="align-items: center">
           <div>
-            <i class="material-icons" style="font-size: 48;">description</i>
+            <i class="material-icons" >description</i>
           </div>
-          <div>Source Folder</div>
+          <div class="table_column">Source&nbsp;Folder</div>
         </div>
       </mat-header-cell>
       <mat-cell
@@ -145,7 +145,7 @@
           <div>
             <i class="material-icons" style="font-size: 48;">save</i>
           </div>
-          <div>Size</div>
+          <div class="table_column">Size</div>
         </div>
       </mat-header-cell>
       <mat-cell *matCellDef="let dataset">
@@ -173,7 +173,7 @@
           <div>
             <i class="material-icons" style="font-size: 48;">calendar_today</i>
           </div>
-          <div>Start Time</div>
+          <div class="table_column">Start&nbsp;Time</div>
         </div>
       </mat-header-cell>
       <mat-cell *matCellDef="let dataset">
@@ -186,14 +186,24 @@
 
     <ng-container matColumnDef="type">
       <mat-header-cell *matHeaderCellDef>
-        <fa-icon [icon]="faFileAlt"></fa-icon>&nbsp; Type
+        <div fxLayout="column" style="align-items: center">
+          <div>
+            <i class="material-icons" style="font-size: 48;">bubble_chart</i>
+          </div>
+          <div class="table_column">Type</div>
+        </div>
       </mat-header-cell>
       <mat-cell *matCellDef="let dataset">{{ dataset.type }}</mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="image">
       <mat-header-cell *matHeaderCellDef>
-        <fa-icon [icon]="faFileAlt"></fa-icon>&nbsp; Image
+        <div fxLayout="column" style="align-items: center">
+          <div>
+            <i class="material-icons" style="font-size: 48;">camera_alt</i>
+          </div>
+          <div class="table_column">Image</div>
+        </div>
       </mat-header-cell>
       <mat-cell *matCellDef="let dataset">
         <img src="{{ dataset.pid | thumbnail | async }}" height="60px" />
@@ -202,7 +212,12 @@
 
     <ng-container matColumnDef="metadata">
       <mat-header-cell *matHeaderCellDef>
-        <fa-icon [icon]="faFileAlt"></fa-icon>&nbsp; Scientific Metadata
+        <div fxLayout="column" style="align-items: center">
+          <div>
+            <i class="material-icons" >assessment</i>
+          </div>
+          <div class="table_column">Scientific&nbsp;Metadata</div>
+        </div>
       </mat-header-cell>
       <mat-cell
         *matCellDef="let dataset"
@@ -213,14 +228,24 @@
 
     <ng-container matColumnDef="proposalId">
       <mat-header-cell *matHeaderCellDef>
-        <fa-icon [icon]="faCertificate"></fa-icon>&nbsp; Proposal
+        <div fxLayout="column" style="align-items: center">
+          <div>
+            <i class="material-icons" style="font-size: 48;">vpn_key</i>
+          </div>
+          <div class="table_column">Proposal</div>
+        </div>
       </mat-header-cell>
       <mat-cell *matCellDef="let dataset">{{ dataset.proposalId }}</mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="ownerGroup">
       <mat-header-cell *matHeaderCellDef>
-        <fa-icon [icon]="faUsers"></fa-icon>&nbsp; Group
+        <div fxLayout="column" style="align-items: center">
+          <div>
+            <i class="material-icons" >group_work</i>
+          </div>
+          <div class="table_column">Group</div>
+        </div>
       </mat-header-cell>
       <mat-cell *matCellDef="let dataset">{{ dataset.ownerGroup }}</mat-cell>
     </ng-container>
