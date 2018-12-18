@@ -1,4 +1,4 @@
-<div class="dataset-table" style="min-width:800px;">
+<div class="dataset-table" >
   <div class="mode-container" *ngIf="appConfig.archiveWorkflowEnabled">
     <mat-button-toggle-group [value]="currentMode">
       <mat-button-toggle
@@ -111,7 +111,7 @@
     </ng-container>
 
     <ng-container matColumnDef="datasetName" style="align-content: center">
-      <mat-header-cell *matHeaderCellDef mat-sort-header>
+      <mat-header-cell *matHeaderCellDef >
         <div fxLayout="column" style="align-items: center">
           <div>
             <i class="material-icons" >fingerprint</i>
@@ -123,7 +123,7 @@
     </ng-container>
 
     <ng-container matColumnDef="sourceFolder">
-      <mat-header-cell *matHeaderCellDef mat-sort-header>
+      <mat-header-cell *matHeaderCellDef >
         <div fxLayout="column" style="align-items: center">
           <div>
             <i class="material-icons" >map</i>
@@ -143,7 +143,7 @@
       <mat-header-cell *matHeaderCellDef mat-sort-header>
         <div fxLayout="column" style="align-items: center">
           <div>
-            <i class="material-icons" style="font-size: 48;">save</i>
+            <i class="material-icons" >save</i>
           </div>
           <div class="table_column">Size</div>
         </div>
@@ -171,7 +171,7 @@
       <mat-header-cell *matHeaderCellDef mat-sort-header>
         <div fxLayout="column" style="align-items: center">
           <div>
-            <i class="material-icons" style="font-size: 48;">calendar_today</i>
+            <i class="material-icons" >calendar_today</i>
           </div>
           <div class="table_column">Start&nbsp;Time</div>
         </div>
@@ -188,7 +188,7 @@
       <mat-header-cell *matHeaderCellDef>
         <div fxLayout="column" style="align-items: center">
           <div>
-            <i class="material-icons" style="font-size: 48;">bubble_chart</i>
+            <i class="material-icons" >bubble_chart</i>
           </div>
           <div class="table_column">Type</div>
         </div>
@@ -200,7 +200,7 @@
       <mat-header-cell *matHeaderCellDef>
         <div fxLayout="column" style="align-items: center">
           <div>
-            <i class="material-icons" style="font-size: 48;">camera_alt</i>
+            <i class="material-icons" >camera_alt</i>
           </div>
           <div class="table_column">Image</div>
         </div>
@@ -230,7 +230,7 @@
       <mat-header-cell *matHeaderCellDef>
         <div fxLayout="column" style="align-items: center">
           <div>
-            <i class="material-icons" style="font-size: 48;">vpn_key</i>
+            <i class="material-icons" >vpn_key</i>
           </div>
           <div class="table_column">Proposal</div>
         </div>
@@ -268,7 +268,7 @@
       <mat-header-cell *matHeaderCellDef>
         <div fxLayout="column" style="align-items: center">
           <div>
-            <i class="material-icons" style="font-size: 48;">cloud_upload</i>
+            <i class="material-icons" >cloud_upload</i>
           </div>
           <div class="table_column">Retrieve&nbsp;Status</div>
         </div>

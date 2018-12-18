@@ -23,11 +23,11 @@
 
   .mat-column-select {
     overflow: visible; /* Needed to prevent offsetting of the checkbox when clicking */
+    flex-shrink: 0;
     flex-grow: 0;
-    padding-right: 2em;
+    padding-right: 1em;
   }
 
-  /* Columns with narrow content */
 }
 
 :host /deep/ .disabled-row {
@@ -45,29 +45,30 @@
 }
 
 .mat-column-datasetName {
+  border-left: 1px solid grey;
   border-right: 1px solid grey;
-  flex: 1 0 200px;
+  flex: 0 0 200px;
   justify-content: left !important;
 }
 
 .mat-column-sourceFolder {
   border-right: 1px solid grey;
-  flex: 1 0 9em;
+  flex: 0 0 120px;
 }
 
 .mat-column-size {
   border-right: 1px solid grey;
-  flex: 0 0 4em;
+  flex: 0 0 50px;
 }
 
 .mat-column-creationTime {
   border-right: 1px solid grey;
-  flex: 0 0 6em;
+  flex: 0 0 70px;
 }
 
 .mat-column-type {
   border-right: 1px solid grey;
-  flex: 0 0 4em;
+  flex: 0 0 40px;
 }
 
 .mat-column-image {
@@ -77,30 +78,29 @@
 
 .mat-column-metadata {
   border-right: 1px solid grey;
-  flex: 2 0 10em;
+  flex: 2 0 100px;
 }
 
 .mat-column-proposalId {
   border-right: 1px solid grey;
-  flex: 0 0 5em;
+  flex: 0 0 50px;
 }
 
 .mat-column-ownerGroup {
-  flex: 0 0 5em;
+  border-right: 1px solid grey;
+  flex: 0 0 50px;
 }
 
 .mat-column-archiveStatus {
-  flex: 0 0 9em;
+  border-right: 1px solid grey;
+  flex: 0 0 90px;
 }
 
 .mat-column-retrieveStatus {
-  flex: 0 0 9em;
+  border-right: 1px solid grey;
+  flex: 0 0 90px;
 }
 
-mat-cell {
-  display: flex !important;
-  justify-content: center !important;
-}
 
 mat-header-cell {
   color: white;
@@ -122,15 +122,6 @@ mat-header-row {
 .with-icon {
   display: flex;
   align-items: center;
-}
-
-i {
-  color: white;
-  font-size: 48;
-}
-
-.table_column {
-  color: white;
 }
 
 ::ng-deep mat-header-cell .mat-checkbox-frame {
