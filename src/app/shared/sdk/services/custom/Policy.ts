@@ -158,6 +158,7 @@ export class PolicyApi extends BaseLoopBackApi {
   }
 
   /**
+
    * The name of the model represented by this $resource,
    * i.e. `Policy`.
    */

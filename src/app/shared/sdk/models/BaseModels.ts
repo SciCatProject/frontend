@@ -11,7 +11,6 @@ export interface LoopBackFilter {
   skip?: any;
   offset?: any;
   where?: any;
-  filter?: any;
 }
 
 export interface AccessTokenInterface {
@@ -48,7 +47,7 @@ export class AccessToken implements AccessTokenInterface {
   **/
   public static factory(data: AccessTokenInterface): AccessToken{
     return new AccessToken(data);
-  }
+  }  
   /**
   * @method getModelDefinition
   * @author Julien Ledun

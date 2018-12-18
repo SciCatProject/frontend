@@ -46,6 +46,7 @@ import {
   getTotalSets,
   getViewMode
 } from "state-management/selectors/datasets.selectors";
+import { StylesCompileDependency } from "@angular/compiler";
 
 export interface PageChangeEvent {
   pageIndex: number;
@@ -120,11 +121,13 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   private jobErrorSubscription: Subscription;
   private readonly defaultColumns: string[] = [
     "select",
-    "pid",
+    "datasetName",
     "sourceFolder",
     "size",
     "creationTime",
     "type",
+    "image",
+    "metadata",
     "proposalId",
     "ownerGroup",
     "archiveStatus",
@@ -140,7 +143,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     private archivingSrv: ArchivingService,
     public dialog: MatDialog,
     @Inject(APP_CONFIG) public appConfig: AppConfig
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.submitJobSubscription = this.store.pipe(select(submitJob)).subscribe(
@@ -300,5 +303,23 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   onAddToBatch(): void {
     this.store.dispatch(new AddToBatchAction());
     this.store.dispatch(new ClearSelectionAction());
+  }
+
+
+  setWidthColor(datasetSize) {
+    let width = 10;
+    let color = "red";
+    if (datasetSize > 1000000000) {
+      width = 10;
+      color = "red";
+    } else {
+      width = 5;
+      color = "green";
+    }
+    const styles = {
+      "background-color": "red",
+      "width.px": width
+    };
+    return styles;
   }
 }
