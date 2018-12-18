@@ -1,14 +1,18 @@
-<div class="dataset-table" style="min-width:800px;">
+<div class="dataset-table" >
   <div class="mode-container" *ngIf="appConfig.archiveWorkflowEnabled">
     <mat-button-toggle-group [value]="currentMode">
-      <mat-button-toggle *ngFor="let mode of modes; let i = index" (click)="onModeChange($event, mode)" [value]="mode"
-        [ngClass]="mode">
-        {{modeLabels[i] | titlecase}}
+      <mat-button-toggle
+        *ngFor="let mode of modes; let i = index"
+        (click)="onModeChange($event, mode)"
+        [value]="mode"
+        [ngClass]="mode"
+      >
+        {{ modeLabels[i] | titlecase }}
       </mat-button-toggle>
     </mat-button-toggle-group>
   </div>
 
-  <ng-template *ngIf="datasetCount$ | async as count">
+  <ng-template *ngIf="(datasetCount$ | async) as count">
     <div class="raised" [ngPlural]="count">
       <ng-template ngPluralCase="=0">No datasets.</ng-template>
       <ng-template ngPluralCase="=1">1 dataset.</ng-template>
@@ -16,53 +20,89 @@
     </div>
   </ng-template>
 
-  <div *ngIf="loading$ | async" class="raised">
+  <div *ngIf="(loading$ | async)" class="raised">
     <mat-spinner diameter="20"></mat-spinner>
   </div>
 
   <div class="action-container" [class.hidden]="loading$ | async">
-    <button mat-button [disabled]="isEmptySelection$ | async" *ngIf="currentMode === 'archive'" class="ui button archive-action-btn"
-      (click)="archiveClickHandle($event)" color="primary">
-      <i class="archive icon"></i>
-      Archive
+    <button
+      mat-button
+      [disabled]="isEmptySelection$ | async"
+      *ngIf="currentMode === 'archive'"
+      class="ui button archive-action-btn"
+      (click)="archiveClickHandle($event)"
+      color="primary"
+    >
+      <i class="archive icon"></i> Archive
     </button>
 
-    <button mat-button [disabled]="isEmptySelection$ | async" *ngIf="currentMode === 'retrieve'" class="ui button retrieve-action-btn"
-      (click)="retrieveClickHandle($event)" color="primary">
-      <i class="upload icon"></i>
-      Retrieve
+    <button
+      mat-button
+      [disabled]="isEmptySelection$ | async"
+      *ngIf="currentMode === 'retrieve'"
+      class="ui button retrieve-action-btn"
+      (click)="retrieveClickHandle($event)"
+      color="primary"
+    >
+      <i class="upload icon"></i> Retrieve
     </button>
 
-    <button mat-button [disabled]="isEmptySelection$ | async" *ngIf="appConfig.shoppingCartEnabled" class='ui button add-batch'
-      (click)="onAddToBatch()" color="primary">
-      <i class="shopping cart icon"></i>
-      Add to Batch
+    <button
+      mat-button
+      [disabled]="isEmptySelection$ | async"
+      *ngIf="appConfig.shoppingCartEnabled"
+      class="ui button add-batch"
+      (click)="onAddToBatch()"
+      color="primary"
+    >
+      <i class="shopping cart icon" style="color: black"></i> Add to Batch
     </button>
 
-    <button mat-button class='ui button export-csv' mat-button (click)="onExportClick()" color="primary">
-      <i class="table icon"></i>
-      Export Page to CSV
+    <button
+      mat-button
+      class="ui button export-csv"
+      mat-button
+      (click)="onExportClick()"
+      color="primary"
+    >
+      <i class="table icon" style="color: black"></i> Export Page to CSV
     </button>
   </div>
 
   <div style="clear: both"></div>
 
-  <mat-paginator [pageSizeOptions]="[30, 1000]" [pageIndex]="currentPage$ | async" [length]="datasetCount$ | async"
-    [pageSize]="datasetsPerPage$ | async" (page)="onPageChange($event)">
+  <mat-paginator
+    [pageSizeOptions]="[30, 1000]"
+    [pageIndex]="currentPage$ | async"
+    [length]="datasetCount$ | async"
+    [pageSize]="datasetsPerPage$ | async"
+    (page)="onPageChange($event)"
+  >
   </mat-paginator>
 
-  <mat-table [dataSource]="datasets$" class="dataset-table mat-elevation-z2" matSort (matSortChange)="onSortChange($event)">
-
+  <mat-table
+    [dataSource]="datasets$"
+    class="dataset-table mat-elevation-z2"
+    matSort
+    (matSortChange)="onSortChange($event)"
+  >
     <!-- Column Definitions -->
     <ng-container matColumnDef="select">
       <mat-header-cell *matHeaderCellDef>
-        <mat-checkbox [checked]="allAreSeleted$ | async" (change)="onSelectAll($event)">
+        <mat-checkbox color="#ffffff"
+          [checked]="allAreSeleted$ | async"
+          (change)="onSelectAll($event)"
+        >
         </mat-checkbox>
       </mat-header-cell>
 
       <mat-cell *matCellDef="let dataset">
-        <mat-checkbox *ngIf="!isInBatch(dataset); else in_batch" [checked]="isSelected(dataset)" (change)="onSelect($event, dataset)"
-          (click)="$event.stopPropagation()">
+        <mat-checkbox
+          *ngIf="!isInBatch(dataset); else in_batch"
+          [checked]="isSelected(dataset)"
+          (change)="onSelect($event, dataset)"
+          (click)="$event.stopPropagation()"
+        >
         </mat-checkbox>
         <ng-template #in_batch>
           <i class="shopping cart icon"></i>
@@ -70,35 +110,57 @@
       </mat-cell>
     </ng-container>
 
-    <ng-container matColumnDef="datasetName">
+    <ng-container matColumnDef="datasetName" style="align-content: center">
       <mat-header-cell *matHeaderCellDef mat-sort-header>
-        <fa-icon [icon]="faIdBadge"></fa-icon>&nbsp;
-        Name
+        <div fxLayout="column" style="align-items: center">
+          <div>
+            <i class="material-icons" >fingerprint</i>
+          </div>
+          <div class="table_column">Name</div>
+        </div>
       </mat-header-cell>
-      <mat-cell *matCellDef="let dataset">
-        {{dataset.datasetName }}
-      </mat-cell>
+      <mat-cell class="datasetName" *matCellDef="let dataset"> {{ dataset.datasetName }} </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="sourceFolder">
       <mat-header-cell *matHeaderCellDef mat-sort-header>
-        <fa-icon [icon]="faFolder"></fa-icon>&nbsp;
-        Source Folder
+        <div fxLayout="column" style="align-items: center">
+          <div>
+            <i class="material-icons" >map</i>
+          </div>
+          <div class="table_column">Source&nbsp;Folder</div>
+        </div>
       </mat-header-cell>
-      <mat-cell *matCellDef="let dataset" matTooltip="{{ dataset.sourceFolder}}">
-        ...{{dataset.sourceFolder | slice:-10}}
+      <mat-cell
+        *matCellDef="let dataset"
+        matTooltip="{{ dataset.sourceFolder }}"
+      >
+        ...{{ dataset.sourceFolder | slice: -10 }}
       </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="size">
       <mat-header-cell *matHeaderCellDef mat-sort-header>
-        <fa-icon [icon]="faCoins"></fa-icon>&nbsp;
-        Size
+        <div fxLayout="column" style="align-items: center">
+          <div>
+            <i class="material-icons" >save</i>
+          </div>
+          <div class="table_column">Size</div>
+        </div>
       </mat-header-cell>
       <mat-cell *matCellDef="let dataset">
         <div fxLayout="column">
-          <div> {{dataset.size | filesize}} </div>
-          <div [ngStyle]="{'height.px':'4','width.px': dataset.size >= 1000000000 ? 35 + 5*dataset.size/10000000000 : 5 + 15*dataset.size/1000000000 , 'background': dataset.size >= 1000000000 ? 'red': 'green' }">
+          <div>{{ dataset.size | filesize }}</div>
+          <div
+            [ngStyle]="{
+              'height.px': '4',
+              'width.px':
+                dataset.size >= 1000000000
+                  ? 35 + (5 * dataset.size) / 10000000000
+                  : 5 + (15 * dataset.size) / 1000000000,
+              background: dataset.size >= 1000000000 ? 'red' : 'green'
+            }"
+          >
             &nbsp;
           </div>
         </div>
@@ -107,88 +169,131 @@
 
     <ng-container matColumnDef="creationTime">
       <mat-header-cell *matHeaderCellDef mat-sort-header>
-        <fa-icon [icon]="faCalendarAlt"></fa-icon>&nbsp;
-        Creation Time
+        <div fxLayout="column" style="align-items: center">
+          <div>
+            <i class="material-icons" >calendar_today</i>
+          </div>
+          <div class="table_column">Start&nbsp;Time</div>
+        </div>
       </mat-header-cell>
       <mat-cell *matCellDef="let dataset">
         <div fxLayout="column">
-          <div> {{dataset.creationTime | date: 'yyyy/MM/dd'}} </div>
-          <div> {{dataset.creationTime | date: 'EEE HH:mm'}} </div>
+          <div>{{ dataset.creationTime | date: "yyyy/MM/dd" }}</div>
+          <div>{{ dataset.creationTime | date: "EEE HH:mm" }}</div>
         </div>
       </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="type">
       <mat-header-cell *matHeaderCellDef>
-        <fa-icon [icon]="faFileAlt"></fa-icon>&nbsp;
-        Type
+        <div fxLayout="column" style="align-items: center">
+          <div>
+            <i class="material-icons" >bubble_chart</i>
+          </div>
+          <div class="table_column">Type</div>
+        </div>
       </mat-header-cell>
-      <mat-cell *matCellDef="let dataset">{{dataset.type}}</mat-cell>
+      <mat-cell *matCellDef="let dataset">{{ dataset.type }}</mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="image">
       <mat-header-cell *matHeaderCellDef>
-        <fa-icon [icon]="faFileAlt"></fa-icon>&nbsp;
-        Image
+        <div fxLayout="column" style="align-items: center">
+          <div>
+            <i class="material-icons" >camera_alt</i>
+          </div>
+          <div class="table_column">Image</div>
+        </div>
       </mat-header-cell>
       <mat-cell *matCellDef="let dataset">
-        <img src="{{ dataset.pid | thumbnail | async}}" height="60px">
+        <img src="{{ dataset.pid | thumbnail | async }}" height="60px" />
       </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="metadata">
       <mat-header-cell *matHeaderCellDef>
-        <fa-icon [icon]="faFileAlt"></fa-icon>&nbsp;
-        Scientific Metadata
+        <div fxLayout="column" style="align-items: center">
+          <div>
+            <i class="material-icons" >assessment</i>
+          </div>
+          <div class="table_column">Science&nbsp;Metadata</div>
+        </div>
       </mat-header-cell>
-      <mat-cell *matCellDef="let dataset" matTooltip="{{ dataset.scientificMetadata | jsonHead}}">{{dataset.scientificMetadata
-        |
-        jsonHead |
-        slice:1:100 }}...</mat-cell>
+      <mat-cell
+        *matCellDef="let dataset"
+        matTooltip="{{ dataset.scientificMetadata | jsonHead }}">
+        <div *ngIf="dataset.scientificMetadata && (dataset.scientificMetadata | jsonHead).length > 100; then thenBlock else elseBlock"></div>
+        <ng-template #thenBlock>{{ dataset.scientificMetadata | jsonHead | slice: 0:100 }}...</ng-template>
+        <ng-template #elseBlock>{{ dataset.scientificMetadata | jsonHead  }}</ng-template>
+        </mat-cell
+      >
     </ng-container>
 
     <ng-container matColumnDef="proposalId">
-      <mat-header-cell *matHeaderCellDef>
-        <fa-icon [icon]="faCertificate"></fa-icon>&nbsp;
-        Proposal
+      <mat-header-cell *matHeaderCellDef mat-sort-header>
+        <div fxLayout="column" style="align-items: center">
+          <div>
+            <i class="material-icons" >vpn_key</i>
+          </div>
+          <div class="table_column">Proposal</div>
+        </div>
       </mat-header-cell>
-      <mat-cell *matCellDef="let dataset">{{dataset.proposalId}}</mat-cell>
+      <mat-cell *matCellDef="let dataset">{{ dataset.proposalId }}</mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="ownerGroup">
-      <mat-header-cell *matHeaderCellDef>
-        <fa-icon [icon]="faUsers"></fa-icon>&nbsp;
-        Group
+      <mat-header-cell *matHeaderCellDef mat-sort-header>
+        <div fxLayout="column" style="align-items: center">
+          <div>
+            <i class="material-icons" >group_work</i>
+          </div>
+          <div class="table_column">Group</div>
+        </div>
       </mat-header-cell>
-      <mat-cell *matCellDef="let dataset">{{dataset.ownerGroup}}</mat-cell>
+      <mat-cell *matCellDef="let dataset">{{ dataset.ownerGroup }}</mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="archiveStatus">
-      <mat-header-cell *matHeaderCellDef>
-        <fa-icon [icon]="faDownload"></fa-icon>&nbsp;
-        Archive Status
+      <mat-header-cell *matHeaderCellDef mat-sort-header>
+        <div fxLayout="column" style="align-items: center">
+          <div>
+            <i class="material-icons" >archive</i>
+          </div>
+          <div class="table_column">Archive&nbsp;Status</div>
+        </div>
       </mat-header-cell>
       <mat-cell *matCellDef="let dataset">
-        {{ (dataset.datasetlifecycle || {}).archiveStatusMessage }}
+        {{ (dataset.datasetlifecycle || {}).archiveStatusMessage }}
       </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="retrieveStatus">
-      <mat-header-cell *matHeaderCellDef>
-        <fa-icon [icon]="faUpload"></fa-icon>&nbsp;
-        Retrieve Status
+      <mat-header-cell *matHeaderCellDef mat-sort-header>
+        <div fxLayout="column" style="align-items: center">
+          <div>
+            <i class="material-icons" >cloud_upload</i>
+          </div>
+          <div class="table_column">Retrieve&nbsp;Status</div>
+        </div>
       </mat-header-cell>
       <mat-cell *matCellDef="let dataset">
-        {{ (dataset.datasetlifecycle || {}).retrieveStatusMessage }}
+        {{ (dataset.datasetlifecycle || {}).retrieveStatusMessage }}
       </mat-cell>
     </ng-container>
 
     <!-- End of Column Definitions -->
 
-    <mat-header-row class='datasets-header' *matHeaderRowDef="visibleColumns">
+    <mat-header-row
+      class="datasets-header"
+      *matHeaderRowDef="visibleColumns; sticky: true"
+    >
     </mat-header-row>
 
-    <mat-row class='row-generic' *matRowDef="let dataset; columns: visibleColumns" (click)="onClick(dataset)">
+    <mat-row
+      class="row-generic"
+      *matRowDef="let dataset; columns: visibleColumns"
+      (click)="onClick(dataset)"
+    >
     </mat-row>
   </mat-table>
 </div>
