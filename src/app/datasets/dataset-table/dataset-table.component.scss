@@ -101,3 +101,7 @@ i {
 .table_column {
   color: white;
 }
+
+::ng-deep mat-header-cell .mat-checkbox-frame {
+  border-color: white;
+}
