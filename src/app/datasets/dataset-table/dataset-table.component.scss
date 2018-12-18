@@ -45,60 +45,48 @@
 }
 
 .mat-column-datasetName {
-  border-left: 1px solid grey;
-  border-right: 1px solid grey;
   flex: 0 0 200px;
   justify-content: left !important;
 }
 
 .mat-column-sourceFolder {
-  border-right: 1px solid grey;
   flex: 0 0 120px;
 }
 
 .mat-column-size {
-  border-right: 1px solid grey;
   flex: 0 0 50px;
 }
 
 .mat-column-creationTime {
-  border-right: 1px solid grey;
-  flex: 0 0 70px;
+  flex: 0 0 80px;
 }
 
 .mat-column-type {
-  border-right: 1px solid grey;
   flex: 0 0 40px;
 }
 
 .mat-column-image {
-  border-right: 1px solid grey;
   flex: 0 0 60px;
 }
 
 .mat-column-metadata {
-  border-right: 1px solid grey;
   flex: 2 0 100px;
 }
 
 .mat-column-proposalId {
-  border-right: 1px solid grey;
   flex: 0 0 50px;
 }
 
 .mat-column-ownerGroup {
-  border-right: 1px solid grey;
   flex: 0 0 50px;
 }
 
 .mat-column-archiveStatus {
-  border-right: 1px solid grey;
   flex: 0 0 90px;
 }
 
 .mat-column-retrieveStatus {
-  border-right: 1px solid grey;
-  flex: 0 0 90px;
+  flex: 0 0 110px;
 }
 
 
@@ -113,6 +101,13 @@ mat-header-row {
   background: mat-color($primary);
 }
 
+.table_column {
+  color: white;
+}
+
+i {
+  color: white;
+}
 .aligned-with-icon {
   position: absolute;
   margin-top: 5px;
@@ -123,6 +118,7 @@ mat-header-row {
   display: flex;
   align-items: center;
 }
+
 
 ::ng-deep mat-header-cell .mat-checkbox-frame {
   border-color: white;
