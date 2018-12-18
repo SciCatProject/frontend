@@ -2,7 +2,7 @@
 
 .dataset-table {
   .mode-container {
-    padding-left: 1em;
+    padding-left: 10px;
     float: left;
   }
 
@@ -18,14 +18,14 @@
     position: relative;
     float: left;
     transform: translateY(50%);
-    margin-left: 1em;
+    margin-left: 10px;
   }
 
   .mat-column-select {
     overflow: visible; /* Needed to prevent offsetting of the checkbox when clicking */
     flex-shrink: 0;
     flex-grow: 0;
-    padding-right: 1em;
+    padding-right: 10px;
   }
 
 }
