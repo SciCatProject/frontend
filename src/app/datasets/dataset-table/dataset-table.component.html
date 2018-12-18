@@ -221,8 +221,11 @@
       </mat-header-cell>
       <mat-cell
         *matCellDef="let dataset"
-        matTooltip="{{ dataset.scientificMetadata | jsonHead }}"
-        >{{ dataset.scientificMetadata | jsonHead | slice: 1:100 }}...</mat-cell
+        matTooltip="{{ dataset.scientificMetadata | jsonHead }}">
+        <div *ngIf="dataset.scientificMetadata && (dataset.scientificMetadata | jsonHead).length > 100; then thenBlock else elseBlock"></div>
+        <ng-template #thenBlock>{{ dataset.scientificMetadata | jsonHead | slice: 0:100 }}...</ng-template>
+        <ng-template #elseBlock>{{ dataset.scientificMetadata | jsonHead  }}</ng-template>
+        </mat-cell
       >
     </ng-container>
 
