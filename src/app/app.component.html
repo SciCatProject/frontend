@@ -57,7 +57,7 @@
     </mat-sidenav>
 
     <mat-sidenav-content>
-      <mat-toolbar color="primary">
+      <mat-toolbar color="primary" style="position: sticky;">
         <mat-toolbar-row>
           <ng-container *ngIf="userObs$ | async as boolean">
             <i (click)="sidenavToggle()" class="sidenav-toggle fa fa-bars" aria-hidden="true"></i>
