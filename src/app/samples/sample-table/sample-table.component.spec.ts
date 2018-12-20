@@ -7,6 +7,7 @@ import { MockHttp, MockRouter,  MockStore } from "../../shared/MockStubs";
 import { HttpClient } from "@angular/common/http";
 import { Router } from "@angular/router";
 import { SampleService } from "../sample.service";
+import { APP_CONFIG } from "app-config.module";
 
 describe("SampleTableComponent", () => {
   let component: SampleTableComponent;
@@ -17,6 +18,12 @@ describe("SampleTableComponent", () => {
       declarations: [SampleTableComponent],
       imports: [MatTableModule, MatCardModule, MatIconModule],
       providers: [
+        {
+          provide: APP_CONFIG,
+          useValue: {
+            editSampleEnabled: true
+          }
+        },
         { provide: MatDialog, useValue: {} }
       ]
     });

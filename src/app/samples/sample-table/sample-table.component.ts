@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit, Inject } from "@angular/core";
 import { FetchSampleAction, FetchSamplesAction, SampleSortByColumnAction } from "../../state-management/actions/samples.actions";
 import { Router } from "@angular/router";
 import { Sample } from "../../shared/sdk/models";
@@ -7,6 +7,7 @@ import { select, Store } from "@ngrx/store";
 import { MatDialog, MatDialogConfig } from "@angular/material";
 import { SampleDialogComponent } from "../sample-dialog/sample-dialog.component";
 import { getSampleFilters } from "../../state-management/selectors/samples.selectors";
+import { AppConfig, APP_CONFIG } from "app-config.module";
 
 
 
@@ -33,7 +34,8 @@ export class SampleTableComponent implements OnInit, OnDestroy {
   constructor(
     private store: Store<Sample>,
     private router: Router,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    @Inject(APP_CONFIG) public appConfig: AppConfig
   ) {
   }
 
