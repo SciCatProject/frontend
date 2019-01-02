@@ -11,7 +11,7 @@ export const environment = {
   archiveWorkflowEnabled: false,
   editMetadataEnabled: true,
   editSampleEnabled: true,
-  disabledDatasetColumns: ["archiveStatus","retrieveStatus"],
+  disabledDatasetColumns: ["archiveStatus", "retrieveStatus"],
   facility: "ESS",
   shoppingCartEnabled: true
 };
