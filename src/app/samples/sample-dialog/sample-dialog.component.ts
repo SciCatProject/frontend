@@ -30,14 +30,14 @@ export class SampleDialogComponent implements OnInit {
     private store: Store<any>,
     private fb: FormBuilder,
     public dialogRef: MatDialogRef<SampleDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) { description, sampleCharacteristics, owner }: Sample) {
+    @Inject(MAT_DIALOG_DATA) { description, sampleCharacteristics, ownerGroup }: Sample) {
 
     this.description = description;
 
     this.form = this.fb.group({
       description: [description, Validators.required],
       sampleCharacteristics: [sampleCharacteristics, Validators.required],
-      owner: [owner, Validators.required]
+      ownerGroup: [ownerGroup, Validators.required]
     });
   }
 
@@ -61,6 +61,7 @@ export class SampleDialogComponent implements OnInit {
     this.sample = new Sample();
     this.sample.sampleCharacteristics = { "char": this.form.value.sampleCharacteristics };
     this.sample.description = this.form.value.description;
+    this.sample.ownerGroup = this.form.value.ownerGroup;
     this.sample.samplelId = shortid.generate();
 
     this.store.pipe(select(getCurrentUser)).subscribe(res => {
@@ -69,7 +70,6 @@ export class SampleDialogComponent implements OnInit {
       ); return console.log(res);
     });
 
-    this.sample.ownerGroup = "ess";
     this.store.dispatch(new AddSampleAction(this.sample));
     this.store.dispatch(new FetchSamplesAction());
   }

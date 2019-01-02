@@ -24,7 +24,7 @@ export interface SortChangeEvent {
 export class SampleTableComponent implements OnInit, OnDestroy {
   public samples$ = this.store.pipe(select(getSamplesList));
   samples: Sample[] = [];
-  displayedColumns = ["samplelId", "owner", "createdAt", "description"];
+  displayedColumns = ["samplelId", "owner", "createdAt", "description", "ownerGroup"];
   dialogConfig: MatDialogConfig;
   description: string;
   name: string;

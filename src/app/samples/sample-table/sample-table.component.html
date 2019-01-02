@@ -42,6 +42,11 @@
         <mat-cell *matCellDef="let sample"> {{ sample.description }}</mat-cell>
       </ng-container>
 
+      <ng-container matColumnDef="ownerGroup">
+        <mat-header-cell *matHeaderCellDef>ownerGroup</mat-header-cell>
+        <mat-cell *matCellDef="let sample"> {{ sample.ownerGroup }}</mat-cell>
+      </ng-container>
+
       <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
       <mat-row
         (click)="onRowSelect($event, row)"
