@@ -4,7 +4,10 @@ import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { Sample } from "shared/sdk";
 import { Store, select } from "@ngrx/store";
-import { AddSampleAction, FetchSamplesAction } from "state-management/actions/samples.actions";
+import {
+  AddSampleAction,
+  FetchSamplesAction
+} from "state-management/actions/samples.actions";
 import { getCurrentUser } from "state-management/selectors/users.selectors";
 
 const shortid = require("shortid");
@@ -14,14 +17,12 @@ export interface DialogData {
   name: string;
 }
 
-
 @Component({
   selector: "app-sample-dialog",
   templateUrl: "./sample-dialog.component.html",
   styleUrls: ["./sample-dialog.component.scss"]
 })
 export class SampleDialogComponent implements OnInit {
-
   public form: FormGroup;
   description: string;
   sample: Sample;
@@ -30,8 +31,9 @@ export class SampleDialogComponent implements OnInit {
     private store: Store<any>,
     private fb: FormBuilder,
     public dialogRef: MatDialogRef<SampleDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) { description, sampleCharacteristics, ownerGroup }: Sample) {
-
+    @Inject(MAT_DIALOG_DATA)
+    { description, sampleCharacteristics, ownerGroup }: Sample
+  ) {
     this.description = description;
 
     this.form = this.fb.group({
@@ -41,11 +43,7 @@ export class SampleDialogComponent implements OnInit {
     });
   }
 
-  ngOnInit() {
-
-
-
-  }
+  ngOnInit() {}
 
   getPreFill(field: any, multi: boolean): any {
     return field != null && !multi ? field.toString() : null;
@@ -59,15 +57,24 @@ export class SampleDialogComponent implements OnInit {
     this.dialogRef.close(this.form.value);
     console.log("gmnov", this.form.value);
     this.sample = new Sample();
-    this.sample.sampleCharacteristics = { "char": this.form.value.sampleCharacteristics };
+    this.sample.sampleCharacteristics = {
+      characteristics: this.form.value.sampleCharacteristics
+    };
+    try {
+      const parsed = JSON.parse(this.form.value.sampleCharacteristics);
+      this.sample.sampleCharacteristics = parsed;
+    } catch (e) {
+      this.sample.sampleCharacteristics = {
+        characteristics: this.form.value.sampleCharacteristics
+      };
+    }
     this.sample.description = this.form.value.description;
     this.sample.ownerGroup = this.form.value.ownerGroup;
     this.sample.samplelId = shortid.generate();
 
     this.store.pipe(select(getCurrentUser)).subscribe(res => {
-      this.sample.owner = res.username.replace(
-        "ldap.", ""
-      ); return console.log(res);
+      this.sample.owner = res.username.replace("ldap.", "");
+      return console.log(res);
     });
 
     this.store.dispatch(new AddSampleAction(this.sample));
@@ -77,6 +84,4 @@ export class SampleDialogComponent implements OnInit {
   close() {
     this.dialogRef.close();
   }
-
-
 }
