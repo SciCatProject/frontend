@@ -14,7 +14,9 @@ import {
   SORT_UPDATE,
   SortUpdateAction,
   SUBMIT_COMPLETE,
-  UI_STORE
+  UI_STORE,
+  GET_COUNT_COMPLETE,
+  GetCountCompleteAction
 } from "state-management/actions/jobs.actions";
 
 export function jobsReducer(
@@ -53,6 +55,11 @@ export function jobsReducer(
     case RETRIEVE_COMPLETE: {
       const currentJobs = (action as RetrieveCompleteAction).jobsets;
       return { ...state, loading: false, currentJobs };
+    }
+
+    case GET_COUNT_COMPLETE: {
+      const totalJobNumber = (action as GetCountCompleteAction).totalJobNumber;
+      return { ...state, totalJobNumber };
     }
 
     // TODO: There is no field in the store called currentSet

@@ -9,7 +9,7 @@ import * as lb from "shared/sdk/services";
 import * as JobActions from "state-management/actions/jobs.actions";
 import * as UserActions from "state-management/actions/user.actions";
 import { MessageType, Job } from "state-management/models";
-import { map, switchMap, catchError } from "rxjs/operators";
+import { map, switchMap, catchError, mergeMap } from "rxjs/operators";
 
 // import store state interface
 
@@ -100,13 +100,29 @@ export class JobsEffects {
         filter["where"] = action.mode;
       }
       filter["skip"] = action.skip;
-      filter["limit"] = action.limit;
+      filter["limit"] = action.limit; //items per page
       filter["order"] = "creationTime DESC";
       return this.jobSrv
         .find(filter)
         .pipe(
           map(
             (jobsets: Job[]) => new JobActions.RetrieveCompleteAction(jobsets)
+          )
+        );
+    }),
+    catchError(err => of(new JobActions.FailedAction(err)))
+  );
+
+  @Effect()
+  private getCount$: Observable<Action> = this.action$.pipe(
+    ofType(JobActions.SORT_UPDATE),
+    mergeMap((action: JobActions.SortUpdateAction) => {
+      return this.jobSrv
+        .count(action.mode)
+        .pipe(
+          map(
+            jobCount =>
+              new JobActions.GetCountCompleteAction(jobCount.count)
           )
         );
     }),

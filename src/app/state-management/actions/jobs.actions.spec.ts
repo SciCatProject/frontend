@@ -13,6 +13,8 @@ import { SearchIDCompleteAction, SEARCH_ID_COMPLETE } from "./jobs.actions";
 import { SearchIDFailedAction, SEARCH_ID_FAILED } from "./jobs.actions";
 import { CurrentJobAction, SELECT_CURRENT } from "./jobs.actions";
 import { SortUpdateAction, SORT_UPDATE } from "./jobs.actions";
+import { GetCountCompleteAction, GET_COUNT_COMPLETE } from "./jobs.actions";
+
 
 describe("SubmitAction", () => {
   it("should create an action", () => {
@@ -41,8 +43,17 @@ describe("FailedAction", () => {
 describe("RetrieveCompleteAction", () => {
   it("should create an action", () => {
     const jobsets = [new Job()];
+    const totalJobNumber = 1;
     const action = new RetrieveCompleteAction(jobsets);
     expect({ ...action }).toEqual({ type: RETRIEVE_COMPLETE, jobsets });
+  });
+});
+
+describe("GetCountCompleteAction", () => {
+  it("should create an action", () => {
+    const totalJobNumber = 1;
+    const action = new GetCountCompleteAction(totalJobNumber);
+    expect({ ...action }).toEqual({ type: GET_COUNT_COMPLETE, totalJobNumber });
   });
 });
 
