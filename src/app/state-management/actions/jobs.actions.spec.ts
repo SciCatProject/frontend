@@ -43,7 +43,6 @@ describe("FailedAction", () => {
 describe("RetrieveCompleteAction", () => {
   it("should create an action", () => {
     const jobsets = [new Job()];
-    const totalJobNumber = 1;
     const action = new RetrieveCompleteAction(jobsets);
     expect({ ...action }).toEqual({ type: RETRIEVE_COMPLETE, jobsets });
   });
