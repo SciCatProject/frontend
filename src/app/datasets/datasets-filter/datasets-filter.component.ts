@@ -1,4 +1,5 @@
-import { Component } from "@angular/core";
+import { APP_CONFIG, AppConfig } from "app-config.module";
+import { Component, Inject } from "@angular/core";
 import { MatDatepickerInputEvent, MatDialog } from "@angular/material";
 
 import { select, Store } from "@ngrx/store";
@@ -75,44 +76,46 @@ export class DatasetsFilterComponent {
   typeInput$ = new BehaviorSubject<string>("");
   keywordsInput$ = new BehaviorSubject<string>("");
 
-  createSuggestionObserver(facetCounts$ : Observable<FacetCount[]>, input$: BehaviorSubject<string>, currentFilters$: Observable<string[]>) : Observable<FacetCount[]>{
-    return combineLatest(
-      facetCounts$,
-      input$,
-      currentFilters$ 
-    ).pipe(
+  createSuggestionObserver(
+    facetCounts$: Observable<FacetCount[]>,
+    input$: BehaviorSubject<string>,
+    currentFilters$: Observable<string[]>
+  ): Observable<FacetCount[]> {
+    return combineLatest(facetCounts$, input$, currentFilters$).pipe(
       map(([counts, filterString, currentFilters]) => {
         if (!counts) return [];
         return counts.filter(
           count =>
-            typeof count._id === "string" && count._id.toLowerCase().includes(filterString.toLowerCase()) && currentFilters.indexOf(count._id) < 0
+            typeof count._id === "string" &&
+            count._id.toLowerCase().includes(filterString.toLowerCase()) &&
+            currentFilters.indexOf(count._id) < 0
         );
       })
     );
   }
-  groupSuggestions$  = this.createSuggestionObserver(
+  groupSuggestions$ = this.createSuggestionObserver(
     this.groupFacetCounts$,
     this.groupInput$,
     this.groupFilter$
-  )
+  );
 
   locationSuggestions$ = this.createSuggestionObserver(
     this.locationFacetCounts$,
     this.locationInput$,
     this.locationFilter$
-  )
+  );
 
   typeSuggestions$ = this.createSuggestionObserver(
     this.typeFacetCounts$,
     this.typeInput$,
     this.typeFilter$
-  )
-  
+  );
+
   keywordsSuggestions$ = this.createSuggestionObserver(
     this.keywordFacetCounts$,
     this.keywordsInput$,
     this.keywordsFilter$
-  )
+  );
 
   hasAppliedFilters$ = this.store.pipe(select(getHasAppliedFilters));
 
@@ -136,7 +139,11 @@ export class DatasetsFilterComponent {
       this.store.dispatch(new AddKeywordFilterAction(terms));
     });
 
-  constructor(public dialog: MatDialog, private store: Store<any>) {}
+  constructor(
+    public dialog: MatDialog,
+    private store: Store<any>,
+    @Inject(APP_CONFIG) public appConfig: AppConfig
+  ) {}
 
   getFacetId(facetCount: FacetCount, fallback: string = null): string {
     const id = facetCount._id;

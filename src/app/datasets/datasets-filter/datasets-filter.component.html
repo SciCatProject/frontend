@@ -98,7 +98,7 @@
       <sat-datepicker #picker [rangeMode]="true"></sat-datepicker>
     </mat-form-field>
 
-    <div class="section-container">
+    <div class="section-container" *ngIf="appConfig.scienceSearchEnabled" >
       <span class="title">Scientific Conditions</span>
       <button mat-button class="clear-button" color="primary" (click)="showAddConditionDialog()">
         <mat-icon>add</mat-icon> Add
