@@ -13,8 +13,8 @@ export interface JobsState {
 export const initialJobsState: JobsState = {
     currentJobs: [],
     jobSubmission: undefined,
-    filters: {"skip": 0, "limit": 50, "mode": ""},
-    totalJobNumber: 1000,
+    filters: {"skip": 0, "limit": 30, "mode": ""},
+    totalJobNumber: 0,
     ui: [],
     loading: false,
     error: undefined

@@ -27,6 +27,7 @@ import { faFileAlt } from "@fortawesome/free-solid-svg-icons/faFileAlt";
 })
 export class JobsTableComponent implements OnInit, OnDestroy, AfterViewInit {
   jobs$ = this.store.pipe(select(selectors.jobs.getJobs));
+  totalJobNumber$ = this.store.pipe(select(selectors.jobs.getJobsCount));
   cols = [
     "emailJobInitiator",
     "type",
@@ -52,7 +53,6 @@ export class JobsTableComponent implements OnInit, OnDestroy, AfterViewInit {
   subscriptions = [];
   jobsCount = 1000;
   filters = {};
-  totalJobNumber$: any;
   event: any;
 
   displayedColumns = this.cols.concat();
@@ -94,10 +94,6 @@ export class JobsTableComponent implements OnInit, OnDestroy, AfterViewInit {
       this.store.pipe(select(selectors.jobs.getFilters)).subscribe(filters => {
         this.filters = Object.assign({}, filters);
       })
-    );
-
-    this.totalJobNumber$ = this.store.pipe(
-      select(state => state.root.jobs.currentJobs.length)
     );
 
     this.subscriptions.push(
