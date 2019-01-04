@@ -1,0 +1,24 @@
+.sample-detail .details {
+  padding: 1em;
+
+  table {
+    tr {
+      td {
+        padding: 0.9em;
+        vertical-align: middle;
+      }
+
+      th {
+        text-align: left;
+        padding-right: 0.5em;
+        material-icons {
+          vertical-align: middle;
+        }
+      }
+    }
+  }
+
+  h3 {
+    margin-top: 1em;
+  }
+}

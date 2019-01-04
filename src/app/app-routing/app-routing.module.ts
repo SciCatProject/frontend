@@ -16,7 +16,7 @@ import { LoginComponent } from "../users/login/login.component";
 import { UserSettingsComponent } from "../users/user-settings/user-settings.component";
 import { UserDetailsComponent } from "../users/user-details/user-details.component";
 
-import { SampleDataFormComponent } from "../sample-data-form/sample-data-form.component";
+import { SampleDataFormComponent } from "../samples/sample-data-form/sample-data-form.component";
 
 import { ListProposalsPageComponent } from "../proposals/containers/list-proposals-page/list-proposals-page.component";
 import { ViewProposalPageComponent } from "../proposals/containers/view-proposal-page/view-proposal-page.component";
@@ -25,6 +25,8 @@ import { ArchiveSettingsComponent } from "../policies/archive-settings/archive-s
 
 import { AuthCheck } from "../AuthCheck";
 import { BatchViewComponent } from "datasets/batch-view/batch-view.component";
+import { SampleDetailComponent } from "../samples/sample-detail/sample-detail.component";
+import { SampleTableComponent } from "../samples/sample-table/sample-table.component";
 
 export const routes: Routes = [
   { path: "", redirectTo: "/datasets", pathMatch: "full" },
@@ -62,6 +64,16 @@ export const routes: Routes = [
   {
     path: "proposals/:id",
     component: ViewProposalPageComponent,
+    canActivate: [AuthCheck]
+  },
+  {
+    path: "samples",
+    component: SampleTableComponent,
+    canActivate: [AuthCheck]
+  },
+  {
+    path: "samples/:id",
+    component: SampleDetailComponent,
     canActivate: [AuthCheck]
   },
 

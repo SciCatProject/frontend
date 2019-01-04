@@ -1,25 +1,24 @@
 import { Injectable } from "@angular/core";
-import { Effect, Actions, ofType } from "@ngrx/effects";
-import { Observable } from "rxjs";
-import { of } from "rxjs";
-import { map, mergeMap, catchError } from "rxjs/operators";
+import { Actions, Effect, ofType } from "@ngrx/effects";
+import { Observable, of } from "rxjs";
+import { catchError, map, mergeMap } from "rxjs/operators";
 import { ProposalsService } from "proposals/proposals.service";
 import {
-  FetchProposalsOutcomeAction,
-  FetchProposalsAction,
-  FETCH_PROPOSALS,
-  FetchProposalsCompleteAction,
-  FetchProposalsFailedAction,
-  FetchProposalOutcomeAction,
-  FetchProposalAction,
+  FETCH_DATASETS_FOR_PROPOSAL,
   FETCH_PROPOSAL,
+  FETCH_PROPOSALS,
+  FetchDatasetsForProposalAction,
+  FetchDatasetsForProposalCompleteAction,
+  FetchDatasetsForProposalFailedAction,
+  FetchDatasetsForProposalOutcomeAction,
+  FetchProposalAction,
   FetchProposalCompleteAction,
   FetchProposalFailedAction,
-  FetchDatasetsForProposalOutcomeAction,
-  FetchDatasetsForProposalAction,
-  FETCH_DATASETS_FOR_PROPOSAL,
-  FetchDatasetsForProposalCompleteAction,
-  FetchDatasetsForProposalFailedAction
+  FetchProposalOutcomeAction,
+  FetchProposalsAction,
+  FetchProposalsCompleteAction,
+  FetchProposalsFailedAction,
+  FetchProposalsOutcomeAction
 } from "../actions/proposals.actions";
 
 @Injectable()
@@ -47,9 +46,7 @@ export class ProposalsEffects {
   );
 
   @Effect()
-  getDatasetsForProposal$: Observable<
-    FetchDatasetsForProposalOutcomeAction
-  > = this.actions$.pipe(
+  getDatasetsForProposal$: Observable<FetchDatasetsForProposalOutcomeAction> = this.actions$.pipe(
     ofType<FetchDatasetsForProposalAction>(FETCH_DATASETS_FOR_PROPOSAL),
     mergeMap(action =>
       this.proposalsService.getDatasetsForProposal(action.proposalId).pipe(
@@ -62,5 +59,6 @@ export class ProposalsEffects {
   constructor(
     private actions$: Actions,
     private proposalsService: ProposalsService
-  ) {}
+  ) {
+  }
 }

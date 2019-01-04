@@ -42,6 +42,7 @@
     "ngx-file-helpers": "^1.1.0",
     "rison": "github:nanonid/rison",
     "rxjs": "^6.3.3",
+    "shortid": "^2.2.14",
     "saturn-datepicker": "^7.0.2",
     "socket.io-client": "^2.2.0",
     "tslib": "^1.9.0"
