@@ -20,6 +20,7 @@ import {
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { ScientificConditionDialogComponent } from "datasets/scientific-condition-dialog/scientific-condition-dialog.component";
+import { APP_CONFIG } from "app-config.module";
 
 describe("DatasetsFilterComponent", () => {
   let component: DatasetsFilterComponent;
@@ -43,7 +44,13 @@ describe("DatasetsFilterComponent", () => {
         DatasetsFilterComponent,
         ScientificConditionDialogComponent
       ],
-      providers: [{ provide: Store, useClass: MockStore }]
+      providers: [{ provide: Store, useClass: MockStore },
+        {
+          provide: APP_CONFIG,
+          useValue: {
+            scienceSearchEnabled: false,
+          }
+        },]
     });
     TestBed.overrideComponent(DatasetsFilterComponent, {
       set: {
