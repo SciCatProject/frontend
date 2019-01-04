@@ -6,12 +6,10 @@
 </ul>
 </div>-->
 
-
 <mat-tab-group *ngIf="(dataset$ | async) as dataset" class="dataset-detail">
   <mat-tab>
     <ng-template mat-tab-label>
-      <fa-icon [icon]="faIdBadge"></fa-icon>&nbsp;
-      Details
+      <i class="material-icons"> details </i> Details
     </ng-template>
 
     <div fxLayout="row" fxLayout.xs="column">
@@ -20,38 +18,25 @@
           <div class="details">
             <table>
               <tr *ngIf="dataset.datasetName as value">
-                <th>
-                  <fa-icon [icon]="faIdBadge"></fa-icon>&nbsp;
-                  Name
-                </th>
+                <th><i class="material-icons"> fingerprint </i> Name</th>
                 <td>{{ value }}</td>
               </tr>
               <tr *ngIf="dataset.owner as value">
-                <th>
-                  <fa-icon [icon]="faUserAlt"></fa-icon>&nbsp;
-                  Owner
-                </th>
+                <th><i class="material-icons"> person </i> Owner</th>
                 <td>{{ value }}</td>
               </tr>
               <tr *ngIf="dataset.contactEmail as value">
-                <th>
-                  <fa-icon [icon]="faAt"></fa-icon>&nbsp;
-                  Contact Email
-                </th>
+                <th><i class="material-icons"> email </i> Contact Email</th>
                 <td>{{ value }}</td>
               </tr>
               <tr>
                 <th>
-                  <fa-icon [icon]="faIdBadge"></fa-icon>&nbsp;
-                  PID
+                  <i class="material-icons"> perm_contact_calendar </i> PID
                 </th>
                 <td>{{ dataset.pid }}</td>
               </tr>
               <tr *ngIf="dataset.sourceFolder as value">
-                <th>
-                  <fa-icon [icon]="faFolder"></fa-icon>&nbsp;
-                  Source Folder
-                </th>
+                <th><i class="material-icons"> folder </i> Source Folder</th>
                 <td>{{ value }}</td>
               </tr>
               <!--
@@ -63,45 +48,34 @@
               </tr>
               -->
               <tr *ngIf="dataset.size as value">
-                <th>
-                  <fa-icon [icon]="faCoins"></fa-icon>&nbsp;
-                  Size
-                </th>
+                <th><i class="material-icons"> storage </i> Size</th>
                 <td>{{ value | filesize }}</td>
               </tr>
               <tr *ngIf="dataset.creationTime as value">
                 <th>
-                  <fa-icon [icon]="faCalendarAlt"></fa-icon>&nbsp;
-                  Creation Time
+                  <i class="material-icons"> calendar_today </i> Creation Time
                 </th>
-                <td>{{ value | date: 'yyyy/MM/dd HH:mm' }}</td>
+                <td>{{ value | date: "yyyy/MM/dd HH:mm" }}</td>
               </tr>
               <tr *ngIf="dataset.type as value">
-                <th>
-                  <fa-icon [icon]="faFileAlt"></fa-icon>&nbsp;
-                  Type
-                </th>
+                <th><i class="material-icons"> bubble_chart </i> Type</th>
                 <td>{{ value }}</td>
               </tr>
               <tr *ngIf="dataset.version as value">
-                <th>
-                  <fa-icon [icon]="faGem"></fa-icon>&nbsp;
-                  Version
-                </th>
+                <th><i class="material-icons"> map </i> Version</th>
                 <td>{{ value }}</td>
               </tr>
-              <tr *ngIf="dataset.proposalId as value" (click)="onClickProp(value)">
-                <th>
-                  <fa-icon [icon]="faCertificate"></fa-icon>&nbsp;
-                  Proposal
-                </th>
-                <td><a>{{ value }}</a></td>
+              <tr
+                *ngIf="dataset.proposalId as value"
+                (click)="onClickProp(value)"
+              >
+                <th><i class="material-icons"> spa </i> Proposal</th>
+                <td>
+                  <a>{{ value }}</a>
+                </td>
               </tr>
               <tr *ngIf="dataset.ownerGroup as value">
-                <th>
-                  <fa-icon [icon]="faUsers"></fa-icon>&nbsp;
-                  Owner Group
-                </th>
+                <th><i class="material-icons"> group </i> Owner Group</th>
                 <td>{{ value }}</td>
               </tr>
               <!--
@@ -116,63 +90,50 @@
               -->
               <tr *ngIf="dataset.principalInvestigator as value">
                 <th>
-                  <fa-icon [icon]="faChessQueen"></fa-icon>&nbsp;
-                  Principal Investigator
+                  <i class="material-icons"> brightness_5 </i> Principal
+                  Investigator
                 </th>
                 <td>{{ value }}</td>
               </tr>
               <tr *ngIf="dataset.creationLocation as value">
-                <th>
-                  <fa-icon [icon]="faGlobe"></fa-icon>&nbsp;
-                  Creation Location
-                </th>
+                <th><i class="material-icons"> map </i> Creation Location</th>
                 <td>{{ value }}</td>
               </tr>
               <tr *ngIf="dataset.description as value">
-                <th>
-                  <fa-icon [icon]="faGlobe"></fa-icon>&nbsp;
-                  Description
-                </th>
+                <th><i class="material-icons"> description </i> Description</th>
                 <td>{{ value }}</td>
               </tr>
               <tr *ngIf="dataset.keywords as value">
-                <th>
-                  <fa-icon [icon]="faGlobe"></fa-icon>&nbsp;
-                  Keywords
-                </th>
+                <th><i class="material-icons"> vpn_key </i> Keywords</th>
                 <td>{{ value | json }}</td>
               </tr>
-
             </table>
-
-            <div *ngIf="dataset.scientificMetadata as value">
-              <h3>Scientific Metadata</h3>
-              <pre>{{ value | json }}</pre>
-            </div>
-
-
-            <div class="form-container" *ngIf="appConfig.editMetadataEnabled">
-              <app-dataset-form></app-dataset-form>
-            </div>
-
           </div>
         </mat-card>
 
+        <mat-card style="margin:1em">
+          <div *ngIf="dataset.scientificMetadata as value">
+            <h3>Scientific Metadata</h3>
+            <pre>{{ value | json }}</pre>
+          </div>
 
-        <mat-card>
-          <button (click)="show = !show">{{show ? 'Hide MetaData' : 'Show Metadata'}}</button>
-          <br>
-          <div *ngIf="show">
-            {{ dataset | json }}
+          <div class="form-container" *ngIf="appConfig.editMetadataEnabled">
+            <app-dataset-form></app-dataset-form>
           </div>
         </mat-card>
 
+        <mat-card style="margin:1em">
+          <button (click)="show = !show">
+            {{ show ? "Hide MetaData" : "Show Metadata" }}
+          </button>
+          <br />
+          <div *ngIf="show">{{ dataset | json }}</div>
+        </mat-card>
       </div>
       <div fxFlex="30%" *ngIf="(attachments$ | async) as attachments">
         <ng-container *ngFor="let da of attachments">
           <mat-card style="margin: 1em">
-            <img mat-card-image src="{{da.thumbnail}}">
-            <br>
+            <img mat-card-image src="{{ da.thumbnail }}" /> <br />
           </mat-card>
         </ng-container>
       </div>
@@ -181,8 +142,7 @@
 
   <mat-tab>
     <ng-template mat-tab-label>
-      <fa-icon [icon]="faDownload"></fa-icon>&nbsp;
-      Datafiles
+      <i class="material-icons"> cloud_download </i> Datafiles
     </ng-template>
     <mat-card style="margin: 1em">
       <datafiles [dataBlocks]="origDatablocks$ | async"></datafiles>
@@ -194,15 +154,17 @@
 
   <mat-tab *ngIf="(attachments$ | async) as attachments">
     <ng-template mat-tab-label>
-      <fa-icon [icon]="faImages"></fa-icon>&nbsp;
-      Attachments
+      <i class="material-icons"> insert_photo </i> Attachments
     </ng-template>
     <h3>Attachments</h3>
     <app-file-picker></app-file-picker>
-    <br>
-    <ng-container *ngFor="let da of attachments; let i = index" [attr.data-index]="i">
+    <br />
+    <ng-container
+      *ngFor="let da of attachments; let i = index"
+      [attr.data-index]="i"
+    >
       <mat-card class="attach-card">
-        <img src="{{da.thumbnail}}" style="width: 20em; height: 20em">
+        <img src="{{ da.thumbnail }}" style="width: 20em; height: 20em" />
         <mat-card-actions>
           <button mat-raised-button (click)="delete(da.id)">
             <mat-icon>delete</mat-icon>
@@ -212,20 +174,21 @@
     </ng-container>
   </mat-tab>
 
-  <mat-tab *ngIf="isAdmin$ | async">
+  <mat-tab *ngIf="(isAdmin$ | async)">
     <ng-template mat-tab-label>
-      <fa-icon [icon]="faChessQueen"></fa-icon>&nbsp;
-      Admin
+      <i class="material-icons"> settings </i> Admin
     </ng-template>
 
     <mat-card style="margin: 1em">
-      <button (click)="resetDataset(dataset)" class="ui yellow button">Reset Status</button>
+      <button (click)="resetDataset(dataset)" class="ui yellow button">
+        Reset Status
+      </button>
       <ng-container *ngIf="(datablocks$ | async) as datablocks">
-        <h3>Datablocks: {{datablocks.length}}</h3>
+        <h3>Datablocks: {{ datablocks.length }}</h3>
         <ul *ngFor="let block of datablocks">
-          <li>{{block.id}}</li>
+          <li>{{ block.id }}</li>
           <ul>
-            <li>{{block.archiveId}}</li>
+            <li>{{ block.archiveId }}</li>
           </ul>
         </ul>
       </ng-container>
@@ -235,8 +198,7 @@
   <mat-tab disabled>
     <ng-template mat-tab-label>
       <button mat-button class="export-btn" (click)="onExportClick()">
-        <fa-icon [icon]="faChessQueen"></fa-icon>&nbsp;
-        Export to CSV
+      <i class="material-icons"> list </i> Export to CSV
       </button>
     </ng-template>
   </mat-tab>

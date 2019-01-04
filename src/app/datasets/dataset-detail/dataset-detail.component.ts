@@ -20,20 +20,6 @@ import {
   getCurrentOrigDatablocks
 } from "state-management/selectors/datasets.selectors";
 
-import { faAt } from "@fortawesome/free-solid-svg-icons/faAt";
-import { faCalendarAlt } from "@fortawesome/free-solid-svg-icons/faCalendarAlt";
-import { faCertificate } from "@fortawesome/free-solid-svg-icons/faCertificate";
-import { faChessQueen } from "@fortawesome/free-solid-svg-icons/faChessQueen";
-import { faCoins } from "@fortawesome/free-solid-svg-icons/faCoins";
-import { faDownload } from "@fortawesome/free-solid-svg-icons/faDownload";
-import { faFileAlt } from "@fortawesome/free-solid-svg-icons/faFileAlt";
-import { faFolder } from "@fortawesome/free-solid-svg-icons/faFolder";
-import { faGem } from "@fortawesome/free-solid-svg-icons/faGem";
-import { faGlobe } from "@fortawesome/free-solid-svg-icons/faGlobe";
-import { faIdBadge } from "@fortawesome/free-solid-svg-icons/faIdBadge";
-import { faImages } from "@fortawesome/free-solid-svg-icons/faImages";
-import { faUserAlt } from "@fortawesome/free-solid-svg-icons/faUserAlt";
-import { faUsers } from "@fortawesome/free-solid-svg-icons/faUsers";
 
 /**
  * Component to show details for a data set, using the
@@ -48,20 +34,7 @@ import { faUsers } from "@fortawesome/free-solid-svg-icons/faUsers";
   styleUrls: ["./dataset-detail.component.scss"]
 })
 export class DatasetDetailComponent implements OnInit, OnDestroy {
-  faAt = faAt;
-  faIdBadge = faIdBadge;
-  faFolder = faFolder;
-  faCertificate = faCertificate;
-  faCoins = faCoins;
-  faChessQueen = faChessQueen;
-  faCalendarAlt = faCalendarAlt;
-  faFileAlt = faFileAlt;
-  faImages = faImages;
-  faGem = faGem;
-  faGlobe = faGlobe;
-  faUserAlt = faUserAlt;
-  faUsers = faUsers;
-  faDownload = faDownload;
+
   dataset$ = this.store.pipe(select(getCurrentDataset));
   private subscriptions: Subscription[] = [];
   private routeSubscription = this.route.params

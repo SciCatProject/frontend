@@ -50,7 +50,7 @@ describe("DatasetsFilterComponent", () => {
           useValue: {
             scienceSearchEnabled: false,
           }
-        },]
+        }]
     });
     TestBed.overrideComponent(DatasetsFilterComponent, {
       set: {
