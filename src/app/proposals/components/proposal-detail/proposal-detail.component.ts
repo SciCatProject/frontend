@@ -40,7 +40,9 @@ export class ProposalDetailComponent implements OnInit {
    ) { }
 
   ngOnInit() {
-    if (this.proposal == null) return;
+    if (this.proposal == null) {
+      return;
+    }
 
     // Set up fallback values for main proposer
     const { firstname, lastname } = this.proposal;
