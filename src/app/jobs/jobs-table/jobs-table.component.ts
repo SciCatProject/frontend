@@ -13,11 +13,6 @@ import { select, Store } from "@ngrx/store";
 import { takeLast } from "rxjs/operators";
 import { LoginService } from "users/login.service";
 
-import { faAt } from "@fortawesome/free-solid-svg-icons/faAt";
-import { faCog } from "@fortawesome/free-solid-svg-icons/faCog";
-import { faCalendarAlt } from "@fortawesome/free-solid-svg-icons/faCalendarAlt";
-import { faCoins } from "@fortawesome/free-solid-svg-icons/faCoins";
-import { faFileAlt } from "@fortawesome/free-solid-svg-icons/faFileAlt";
 
 @Component({
   selector: "jobs-table",
@@ -40,11 +35,6 @@ export class JobsTableComponent implements OnInit, OnDestroy, AfterViewInit {
   modes = Object.keys(JobViewMode).map(k => JobViewMode[k as any]);
   currentMode = JobViewMode.myJobs;
 
-  faAt = faAt;
-  faCog = faCog;
-  faCoins = faCoins;
-  faCalendarAlt = faCalendarAlt;
-  faFileAlt = faFileAlt;
 
   loading$: any = false;
   limit: any = 50;

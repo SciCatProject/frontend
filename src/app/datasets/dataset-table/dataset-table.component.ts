@@ -10,18 +10,6 @@ import { combineLatest, Subscription } from "rxjs";
 import { getCurrentEmail } from "../../state-management/selectors/users.selectors";
 import { getError, submitJob } from "state-management/selectors/jobs.selectors";
 import { select, Store } from "@ngrx/store";
-
-
-import { faCertificate } from "@fortawesome/free-solid-svg-icons/faCertificate";
-import { faCalendarAlt } from "@fortawesome/free-solid-svg-icons/faCalendarAlt";
-import { faCoins } from "@fortawesome/free-solid-svg-icons/faCoins";
-import { faDownload } from "@fortawesome/free-solid-svg-icons/faDownload";
-import { faFileAlt } from "@fortawesome/free-solid-svg-icons/faFileAlt";
-import { faFolder } from "@fortawesome/free-solid-svg-icons/faFolder";
-import { faUpload } from "@fortawesome/free-solid-svg-icons/faUpload";
-import { faIdBadge } from "@fortawesome/free-solid-svg-icons/faIdBadge";
-import { faUsers } from "@fortawesome/free-solid-svg-icons/faUsers";
-
 import {
   AddToBatchAction,
   ChangePageAction,
@@ -64,15 +52,6 @@ export interface SortChangeEvent {
   styleUrls: ["dataset-table.component.scss"]
 })
 export class DatasetTableComponent implements OnInit, OnDestroy {
-  faIdBadge = faIdBadge;
-  faFolder = faFolder;
-  faCoins = faCoins;
-  faCalendarAlt = faCalendarAlt;
-  faFileAlt = faFileAlt;
-  faCertificate = faCertificate;
-  faUsers = faUsers;
-  faUpload = faUpload;
-  faDownload = faDownload;
   datasets$ = this.store.pipe(select(getDatasets));
   currentPage$ = this.store.pipe(select(getPage));
   datasetsPerPage$ = this.store.pipe(select(getDatasetsPerPage));

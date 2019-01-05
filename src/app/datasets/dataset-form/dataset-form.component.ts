@@ -3,8 +3,6 @@ import { FormArray, FormBuilder, FormGroup } from "@angular/forms";
 import { Observable, Subscription } from "rxjs";
 import { RawDataset } from "../../shared/sdk/models";
 import { SaveDatasetAction } from "../../state-management/actions/datasets.actions";
-import { faPlusCircle } from "@fortawesome/free-solid-svg-icons/faPlusCircle";
-import { faTimesCircle } from "@fortawesome/free-solid-svg-icons/faTimesCircle";
 import { getCurrentDataset } from "../../state-management/selectors/datasets.selectors";
 import { select, Store } from "@ngrx/store";
 import { filter, take } from "rxjs/operators";
@@ -15,8 +13,6 @@ import { filter, take } from "rxjs/operators";
   styleUrls: ["./dataset-form.component.scss"]
 })
 export class DatasetFormComponent implements OnInit, OnDestroy {
-  faTimesCircle = faTimesCircle;
-  faPlusCircle = faPlusCircle;
   dataset$: Observable<RawDataset>;
   submitted = false;
   datasetSubscription: void;
