@@ -19,14 +19,6 @@ import { environment } from "../environments/environment";
 import * as selectors from "state-management/selectors";
 import { getCurrentUser } from "state-management/selectors/users.selectors";
 
-import { faCog } from "@fortawesome/free-solid-svg-icons/faCog";
-import { faCertificate } from "@fortawesome/free-solid-svg-icons/faCertificate";
-import { faEdit } from "@fortawesome/free-solid-svg-icons/faEdit";
-import { faPeopleCarry } from "@fortawesome/free-solid-svg-icons/faPeopleCarry";
-import { faSignOutAlt } from "@fortawesome/free-solid-svg-icons/faSignOutAlt";
-import { faDownload } from "@fortawesome/free-solid-svg-icons/faDownload";
-import { faFileAlt } from "@fortawesome/free-solid-svg-icons/faFileAlt";
-import { faIdBadge } from "@fortawesome/free-solid-svg-icons/faIdBadge";
 import { LoginService } from "users/login.service";
 
 const { version: appVersion } = require("../../package.json");
@@ -43,14 +35,7 @@ export class AppComponent implements OnDestroy, OnInit {
   sidenav: MatSidenav;
   userObs$ = this.store.pipe(select(getCurrentUser));
 
-  faIdBadge = faIdBadge;
-  faEdit = faEdit;
-  faFileAlt = faFileAlt;
-  faCertificate = faCertificate;
-  faCog = faCog;
-  faDownload = faDownload;
-  faPeopleCarry = faPeopleCarry;
-  faSignOutAlt = faSignOutAlt;
+
   title = "SciCat";
   appVersion = 0;
   us: UserApi;
