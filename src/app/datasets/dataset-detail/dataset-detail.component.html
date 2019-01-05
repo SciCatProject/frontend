@@ -36,7 +36,7 @@
                 <td>{{ dataset.pid }}</td>
               </tr>
               <tr *ngIf="dataset.sourceFolder as value">
-                <th><i class="material-icons"> folder </i> Source Folder</th>
+                <th><i class="material-icons"> explore </i> Source Folder</th>
                 <td>{{ value }}</td>
               </tr>
               <!--
@@ -48,7 +48,7 @@
               </tr>
               -->
               <tr *ngIf="dataset.size as value">
-                <th><i class="material-icons"> storage </i> Size</th>
+                <th><i class="material-icons"> save </i> Size</th>
                 <td>{{ value | filesize }}</td>
               </tr>
               <tr *ngIf="dataset.creationTime as value">
