@@ -108,6 +108,9 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
   }
 
   resetDataset(dataset) {
+    if (!confirm("Reset datablaocks?")) {
+      return null;
+    }
     this.store
       .pipe(
         select(state => state.root.user.currentUser),
