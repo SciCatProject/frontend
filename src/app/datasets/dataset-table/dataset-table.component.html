@@ -263,7 +263,7 @@
           <div class="table_column">Archive&nbsp;Status</div>
         </div>
       </mat-header-cell>
-      <mat-cell *matCellDef="let dataset">
+      <mat-cell *matCellDef="let dataset" matTooltip="{{ (dataset.datasetlifecycle || {}).archiveStatusMessage }}">
         {{ (dataset.datasetlifecycle || {}).archiveStatusMessage }}
       </mat-cell>
     </ng-container>
@@ -277,7 +277,7 @@
           <div class="table_column">Retrieve&nbsp;Status</div>
         </div>
       </mat-header-cell>
-      <mat-cell *matCellDef="let dataset">
+      <mat-cell *matCellDef="let dataset" matTooltip="{{ (dataset.datasetlifecycle || {}).retrieveStatusMessage }}">
         {{ (dataset.datasetlifecycle || {}).retrieveStatusMessage }}
       </mat-cell>
     </ng-container>
