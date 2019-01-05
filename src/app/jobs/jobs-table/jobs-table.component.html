@@ -12,7 +12,7 @@
   <mat-table #table [dataSource]="jobs$ | async">
     <ng-container matColumnDef="emailJobInitiator">
       <mat-header-cell *matHeaderCellDef mat-sort-header>
-        <fa-icon [icon]="faAt"></fa-icon>&nbsp;
+        <i class="material-icons"> mail </i> 
         Initiator
       </mat-header-cell>
       <mat-cell *matCellDef="let job">
