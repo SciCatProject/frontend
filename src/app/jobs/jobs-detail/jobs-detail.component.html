@@ -4,14 +4,14 @@
       <table>
         <tr>
           <th>
-            <fa-icon [icon]="faAt"></fa-icon>&nbsp;
+            <i class="material-icons"> mail </i> 
             Email Job Initiator
           </th>
           <td>{{ job.emailJobInitiator }}</td>
         </tr>
         <tr *ngIf="job.type as value">
           <th>
-            <fa-icon [icon]="faFileAlt"></fa-icon>&nbsp;
+            <i class="material-icons"> bubble_chart </i> 
             Type
           </th>
           <td>{{ value }}</td>
