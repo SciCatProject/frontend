@@ -12,7 +12,7 @@
   <mat-table #table [dataSource]="jobs$ | async">
     <ng-container matColumnDef="emailJobInitiator">
       <mat-header-cell *matHeaderCellDef mat-sort-header>
-        <fa-icon [icon]="faAt"></fa-icon>&nbsp;
+        <i class="material-icons"> mail </i> 
         Initiator
       </mat-header-cell>
       <mat-cell *matCellDef="let job">
@@ -22,7 +22,7 @@
 
     <ng-container matColumnDef="type">
       <mat-header-cell *matHeaderCellDef mat-sort-header>
-        <fa-icon [icon]="faFileAlt"></fa-icon>&nbsp;
+        <i class="material-icons"> bubble_chart </i> 
         Type
       </mat-header-cell>
       <mat-cell *matCellDef="let job">
@@ -32,7 +32,7 @@
 
     <ng-container matColumnDef="creationTime">
       <mat-header-cell *matHeaderCellDef mat-sort-header>
-        <fa-icon [icon]="faCalendarAlt"></fa-icon>&nbsp;
+        <i class="material-icons"> brightness_high </i> 
         Created at
       </mat-header-cell>
       <mat-cell *matCellDef="let job">
@@ -42,7 +42,7 @@
 
     <ng-container matColumnDef="executionTime">
       <mat-header-cell *matHeaderCellDef mat-sort-header>
-        <fa-icon [icon]="faCalendarAlt"></fa-icon>&nbsp;
+        <i class="material-icons"> gavel </i> 
         Executed at
       </mat-header-cell>
       <mat-cell *matCellDef="let job">
@@ -52,7 +52,7 @@
 
     <ng-container matColumnDef="jobParams">
       <mat-header-cell *matHeaderCellDef mat-sort-header>
-        <fa-icon [icon]="faCog"></fa-icon>&nbsp;
+        <i class="material-icons"> brightness_high </i> 
         Params
       </mat-header-cell>
       <mat-cell *matCellDef="let job">
@@ -62,7 +62,7 @@
 
     <ng-container matColumnDef="jobStatusMessage">
       <mat-header-cell *matHeaderCellDef mat-sort-header>
-        <fa-icon [icon]="faCog"></fa-icon>&nbsp;
+        <i class="material-icons"> comment </i> 
         Status Message
       </mat-header-cell>
       <mat-cell *matCellDef="let job; let rowIndex = index">
@@ -76,7 +76,7 @@
 
     <ng-container matColumnDef="datasetList">
       <mat-header-cell *matHeaderCellDef mat-sort-header>
-        <fa-icon [icon]="faCoins"></fa-icon>&nbsp;
+        <i class="material-icons"> folder </i> 
         Datasets
       </mat-header-cell>
       <mat-cell *matCellDef="let job ">

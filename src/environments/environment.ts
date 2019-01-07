@@ -8,12 +8,12 @@ export const environment = {
   lbBaseURL: "http://127.0.0.1:3000",
   fileserverBaseURL: "http://127.0.0.1:8889",
   externalAuthEndpoint: "/auth/msad",
-  archiveWorkflowEnabled: false,
+  archiveWorkflowEnabled: true,
   editMetadataEnabled: true,
   editSampleEnabled: true,
   csvEnabled: false,
   scienceSearchEnabled: false,
-  disabledDatasetColumns: ["archiveStatus", "retrieveStatus"],
+  disabledDatasetColumns: [],
   facility: "ESS",
   shoppingCartEnabled: true
 };
