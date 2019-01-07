@@ -108,7 +108,7 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
   }
 
   resetDataset(dataset) {
-    if (!confirm("Reset datablaocks?")) {
+    if (!confirm("Reset datablocks?")) {
       return null;
     }
     this.store
