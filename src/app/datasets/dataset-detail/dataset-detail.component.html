@@ -80,6 +80,15 @@
                   <a>{{ value }}</a>
                 </td>
               </tr>
+              <tr
+                *ngIf="dataset.sampleId as value"
+                (click)="onClickSample(value)"
+              >
+                <th><i class="material-icons"> spa </i> Sample</th>
+                <td>
+                  <a>{{ value }}</a>
+                </td>
+              </tr>
               <tr *ngIf="dataset.size as value">
                 <th><i class="material-icons"> save </i> Size</th>
                 <td>{{ value | filesize }}</td>
@@ -134,7 +143,9 @@
 
         <mat-card style="margin:1em">
           <div *ngIf="dataset.scientificMetadata as value">
-            <h3>Scientific Metadata</h3>
+          <mat-card-header style="background:#ff6e6e;">
+            Scientific Metadata
+          </mat-card-header>
             <pre>{{ value | json }}</pre>
           </div>
 

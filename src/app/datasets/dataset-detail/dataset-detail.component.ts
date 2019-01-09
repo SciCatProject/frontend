@@ -150,4 +150,9 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
     const id = encodeURIComponent(proposalId);
     this.router.navigateByUrl("/proposals/" + id);
   }
+
+  onClickSample(proposalId: string): void {
+    const id = encodeURIComponent(proposalId);
+    this.router.navigateByUrl("/samples/" + id);
+  }
 }
