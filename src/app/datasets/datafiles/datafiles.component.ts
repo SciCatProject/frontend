@@ -4,6 +4,9 @@ import { Observable } from "rxjs";
 import { OrigDatablock, Dataset } from "shared/sdk/models";
 import { Store, select } from "@ngrx/store";
 import { getIsAdmin } from "state-management/selectors/users.selectors";
+import { HttpClient } from '@angular/common/http';
+import { JWTService, IJWT } from './datafiles.service';
+
 import {
   Component,
   Input,
@@ -18,6 +21,7 @@ import { first } from "rxjs/operators";
 @Component({
   selector: "datafiles",
   templateUrl: "./datafiles.component.html",
+  providers: [ JWTService ],
   styleUrls: ["./datafiles.component.css"]
 })
 export class DatafilesComponent implements OnInit, AfterViewInit {
@@ -48,9 +52,11 @@ export class DatafilesComponent implements OnInit, AfterViewInit {
 
   admin$: Observable<boolean>;
   dataset$: Observable<Dataset>;
+  jwt$: Observable<IJWT>;
 
   constructor(
     private store: Store<any>,
+    private jwtService: JWTService,
     @Inject(APP_CONFIG) private appConfig: AppConfig
   ) {
     this.urlPrefix = appConfig.fileserverBaseURL;
@@ -63,6 +69,7 @@ export class DatafilesComponent implements OnInit, AfterViewInit {
     if (this.dataBlocks) {
       this.getDatafiles(this.dataBlocks);
     }
+    this.jwt$ = this.jwtService.getJWT();
   }
 
   ngAfterViewInit() {
