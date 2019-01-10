@@ -10,8 +10,8 @@
 
 ## Summary
 
-An Angular (2+) based application that uses ngrx to communicate with the SciCat API and provide a searchable interface for datasets,
-as well as the option to carry out actions (i.e. archiving) and acts as a place to reference datasets used in publications.
+A data catalogue web application to provide a searchable interface for datasets,
+as well as the option to carry out actions (i.e. archiving and publishing) and acts as a place to reference datasets used in publications.
 See documentation at [scicatproject](https://scicatproject.github.io/)
 
 # Getting Started
