@@ -1,4 +1,5 @@
 import { AppConfigModule } from "app-config.module";
+import { LinkyModule } from "ngx-linky";
 import { ArchivingService } from "./archiving.service";
 import { BatchCardComponent } from "./batch-card/batch-card.component";
 import { BatchViewComponent } from "./batch-view/batch-view.component";
@@ -61,6 +62,7 @@ import { jobsReducer } from "../state-management/reducers/jobs.reducer";
     FlexLayoutModule,
     FontAwesomeModule,
     FormsModule,
+    LinkyModule, 
     MatAutocompleteModule,
     MatButtonModule,
     MatButtonToggleModule,

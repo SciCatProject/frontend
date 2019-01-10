@@ -26,7 +26,7 @@
               </tr>
               <tr *ngIf="dataset.description as value">
                 <th><i class="material-icons"> description </i> Description</th>
-                <td>{{ value | linky }}</td>
+                <td><span [innerHTML]="value | linky"></span></td>
               </tr>
               <tr *ngIf="dataset.owner as value">
                 <th><i class="material-icons"> person </i> Owner</th>
