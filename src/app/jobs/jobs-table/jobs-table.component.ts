@@ -10,7 +10,6 @@ import { Job } from "shared/sdk/models";
 import { MatPaginator } from "@angular/material";
 import { Router } from "@angular/router";
 import { select, Store } from "@ngrx/store";
-import { takeLast } from "rxjs/operators";
 import { LoginService } from "users/login.service";
 
 
