@@ -62,7 +62,7 @@ import { jobsReducer } from "../state-management/reducers/jobs.reducer";
     FlexLayoutModule,
     FontAwesomeModule,
     FormsModule,
-    LinkyModule, 
+    LinkyModule,
     MatAutocompleteModule,
     MatButtonModule,
     MatButtonToggleModule,
