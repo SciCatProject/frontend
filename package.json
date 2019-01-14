@@ -35,7 +35,7 @@
     "angular5-csv": "^0.2.10",
     "core-js": "^2.6.0",
     "deep-equal": "^1.0.1",
-    "filesize": "^3.6.1",
+    "filesize": "^4.0.0",
     "hammerjs": "^2.0.8",
     "json-format": "^1.0.1",
     "ng-treetable": "^1.3.3",
