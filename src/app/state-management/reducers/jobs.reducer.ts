@@ -1,8 +1,6 @@
 import { Action } from "@ngrx/store";
 import { initialJobsState, JobsState } from "state-management/state/jobs.store";
 import {
-  CHILD_RETRIEVE_COMPLETE,
-  ChildRetrieveCompleteAction,
   CurrentJobAction,
   FAILED,
   FailedAction,
@@ -14,7 +12,6 @@ import {
   SORT_UPDATE,
   SortUpdateAction,
   SUBMIT_COMPLETE,
-  UI_STORE,
   GET_COUNT_COMPLETE,
   GetCountCompleteAction
 } from "state-management/actions/jobs.actions";
@@ -32,15 +29,6 @@ export function jobsReducer(
       const { skip, limit, mode } = action as SortUpdateAction;
       const filters = { skip, limit, mode };
       return { ...state, filters, loading: true };
-    }
-
-    // TODO: These replace any field in the store with values from the payload.
-    // Should probably be made less destructive?
-    case UI_STORE:
-    case CHILD_RETRIEVE_COMPLETE: {
-      // Är inte ändrad från payload
-      const ui = (action as ChildRetrieveCompleteAction).payload;
-      return { ...state, ui };
     }
 
     case SUBMIT_COMPLETE: {
