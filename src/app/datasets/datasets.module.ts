@@ -53,6 +53,7 @@ import {
 } from "@angular/material";
 import { ScientificConditionDialogComponent } from "./scientific-condition-dialog/scientific-condition-dialog.component";
 import { jobsReducer } from "../state-management/reducers/jobs.reducer";
+import { ColumnSelectorComponent } from './column-selector/column-selector.component';
 
 @NgModule({
   imports: [
@@ -105,6 +106,7 @@ import { jobsReducer } from "../state-management/reducers/jobs.reducer";
     SelectedListComponent,
     DatasetFormComponent,
     ScientificConditionDialogComponent,
+    ColumnSelectorComponent,
   ],
   entryComponents: [
     ScientificConditionDialogComponent
