@@ -11,6 +11,7 @@ export interface UserState {
   settings: Settings;
   isLoggedIn: boolean;
   accountType?: string;
+  columns: string[];
 }
 
 export const initialUserState: UserState = {
@@ -19,12 +20,23 @@ export const initialUserState: UserState = {
   currentUserGroups: [],
   email: undefined,
   isLoggingIn: false,
-  message: { content: undefined, type: undefined, duration: undefined},
+  message: { content: undefined, type: undefined, duration: undefined },
   settings: {
     tapeCopies: "one",
     datasetCount: 30,
     jobCount: 30,
     darkTheme: false
   }, // TODO sync with server settings?
-  isLoggedIn: false
+  isLoggedIn: false,
+  columns: [
+    "size",
+    "creationTime",
+    "type",
+    "image",
+    "metadata",
+    "proposalId",
+    "ownerGroup",
+    "archiveStatus",
+    "retrieveStatus"
+  ]
 };
