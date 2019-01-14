@@ -3,11 +3,6 @@ import { SubmitAction, SUBMIT } from "./jobs.actions";
 import { SubmitCompleteAction, SUBMIT_COMPLETE } from "./jobs.actions";
 import { FailedAction, FAILED } from "./jobs.actions";
 import { RetrieveCompleteAction, RETRIEVE_COMPLETE } from "./jobs.actions";
-import { ChildRetrieveAction, CHILD_RETRIEVE } from "./jobs.actions";
-import {
-  ChildRetrieveCompleteAction,
-  CHILD_RETRIEVE_COMPLETE
-} from "./jobs.actions";
 import { SearchIDAction, SEARCH_ID } from "./jobs.actions";
 import { SearchIDCompleteAction, SEARCH_ID_COMPLETE } from "./jobs.actions";
 import { SearchIDFailedAction, SEARCH_ID_FAILED } from "./jobs.actions";
@@ -53,22 +48,6 @@ describe("GetCountCompleteAction", () => {
     const totalJobNumber = 1;
     const action = new GetCountCompleteAction(totalJobNumber);
     expect({ ...action }).toEqual({ type: GET_COUNT_COMPLETE, totalJobNumber });
-  });
-});
-
-describe("ChildRetrieveAction", () => {
-  it("should create an action", () => {
-    const payload = [{ id: 1 }];
-    const action = new ChildRetrieveAction(payload);
-    expect({ ...action }).toEqual({ type: CHILD_RETRIEVE, payload });
-  });
-});
-
-describe("ChildRetrieveCompleteAction", () => {
-  it("should create an action", () => {
-    const payload = [{ id: 1 }];
-    const action = new ChildRetrieveCompleteAction(payload);
-    expect({ ...action }).toEqual({ type: CHILD_RETRIEVE_COMPLETE, payload });
   });
 });
 

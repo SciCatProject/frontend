@@ -53,44 +53,6 @@ export class JobsEffects {
   );
 
   @Effect()
-  protected childRetrieve$: Observable<Action> = this.action$.pipe(
-    ofType(JobActions.CHILD_RETRIEVE),
-    switchMap(pl => {
-      const node = pl["payload"];
-      node.children = [];
-      if (node.data.datasetList.length > 0) {
-        node.data.datasetList.map(ds => {
-          if (ds.pid && ds.pid.length > 0) {
-            this.dsSrv // Hur gör man här?
-              .findById(encodeURIComponent(ds.pid), {
-                include: "datasetlifecycle"
-              })
-              .subscribe(dataset => {
-                const entry = {
-                  data: {
-                    creationTime: ds.pid,
-                    emailJobInitiator: "",
-                    type: dataset["datasetlifecycle"]["archiveStatusMessage"],
-                    jobStatusMessage:
-                      dataset["datasetlifecycle"]["retrieveStatusMessage"]
-                  }
-                };
-                node.children.push(entry);
-              });
-          }
-        });
-      } else {
-        node.children.push({ data: { type: "No datasets could be found" } });
-      }
-      return of(new JobActions.ChildRetrieveCompleteAction(node.children));
-    }),
-    catchError(err => {
-      console.log(err);
-      return of(new JobActions.FailedAction(err));
-    })
-  );
-
-  @Effect()
   // this is the jobs view get effect
   protected get_updated_sort$: Observable<Action> = this.action$.pipe(
     ofType(JobActions.SORT_UPDATE),
