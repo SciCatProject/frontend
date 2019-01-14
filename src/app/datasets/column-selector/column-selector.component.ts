@@ -6,7 +6,19 @@ import { Component, OnInit } from "@angular/core";
   styleUrls: ["./column-selector.component.scss"]
 })
 export class ColumnSelectorComponent implements OnInit {
-  public columns = [ "datasetName", "sourceFolder"];
+  public columns = [
+    "datasetName",
+    "sourceFolder",
+    "size",
+    "creationTime",
+    "type",
+    "image",
+    "metadata",
+    "proposalId",
+    "ownerGroup",
+    "archiveStatus",
+    "retrieveStatus"
+  ];
   constructor() {}
 
   ngOnInit() {}
