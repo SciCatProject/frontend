@@ -29,6 +29,7 @@ export const initialUserState: UserState = {
   }, // TODO sync with server settings?
   isLoggedIn: false,
   columns: [
+    "select",
     "datasetName",
     "sourceFolder",
     "size",
