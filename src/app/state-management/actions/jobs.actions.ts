@@ -51,18 +51,6 @@ export class GetCountCompleteAction implements Action {
   constructor(readonly totalJobNumber: number) { }
 }
 
-export class ChildRetrieveAction implements Action {
-  //Vad innebär event.node?
-  readonly type = CHILD_RETRIEVE;
-  constructor(public payload?: any) {}
-}
-
-export class ChildRetrieveCompleteAction implements Action {
-  //Vad innebär node.children?
-  readonly type = CHILD_RETRIEVE_COMPLETE;
-  constructor(public payload?: any) {}
-}
-
 export class SearchIDAction implements Action {
   readonly type = SEARCH_ID;
   constructor(readonly id: string) {}

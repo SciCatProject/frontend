@@ -10,7 +10,6 @@ import { Job } from "shared/sdk/models";
 import { MatPaginator } from "@angular/material";
 import { Router } from "@angular/router";
 import { select, Store } from "@ngrx/store";
-import { takeLast } from "rxjs/operators";
 import { LoginService } from "users/login.service";
 
 
@@ -152,20 +151,6 @@ export class JobsTableComponent implements OnInit, OnDestroy, AfterViewInit {
   onRowSelect(event, job) {
     this.store.dispatch(new JobActions.CurrentJobAction(job));
     this.router.navigateByUrl("/user/job/" + encodeURIComponent(job.id));
-  }
-
-  nodeExpand(event) {
-    this.store.dispatch(new JobActions.ChildRetrieveAction(event.node));
-    event.node.children = [];
-    this.store
-      .pipe(
-        select(state => state.root.jobs.ui),
-        takeLast(1)
-      )
-      .subscribe(jobs => {
-        console.log(jobs);
-        event.node.children = jobs;
-      });
   }
 
   onPage(event) {
