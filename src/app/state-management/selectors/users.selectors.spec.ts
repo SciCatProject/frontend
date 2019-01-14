@@ -13,7 +13,7 @@ const initialUserState: UserState = {
     datasetCount: 30,
     jobCount: 30,
     darkTheme: false
-  }, // TODO sync with server settings?
+  },
   isLoggedIn: false,
   columns: ["datasetName"]
 };

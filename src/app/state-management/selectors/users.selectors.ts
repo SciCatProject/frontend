@@ -57,7 +57,7 @@ export const getColumns = createSelector(
 );
 
 export const getState = (state: any) => state.root.user;
-// export const getCurrentUser = (state: any) => state.root.user.currentUser;
+
 export const getLoading = (state: any) => state.root.user.loading;
 export const getCurrentUserGroups = (state: any) =>
   state.root.user.currentUserGroups;
