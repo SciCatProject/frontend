@@ -76,7 +76,7 @@ export function userReducer(
       console.log("array index", result);
       return {
         ...state, deletingColumn: false,
-        currentSet: { ...state, columns: result }
+        columns:  result 
       };
     }
 
