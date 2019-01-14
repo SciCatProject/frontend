@@ -4,6 +4,7 @@ import { ConfigFormComponent } from "shared/modules/config-form/config-form.comp
 import { DatafilesComponent } from "datasets/datafiles/datafiles.component";
 import { DatasetDetailComponent } from "./dataset-detail.component";
 import { FileSizePipe } from "../../shared/pipes/filesize.pipe";
+import { LinkyPipe } from "ngx-linky";
 import { MatTableModule } from "@angular/material";
 import { MockActivatedRoute, MockStore } from "shared/MockStubs";
 import { MockRouter } from "shared/MockStubs";
@@ -32,6 +33,7 @@ describe("DatasetDetailComponent", () => {
         DatasetDetailComponent,
         DatafilesComponent,
         ConfigFormComponent,
+        LinkyPipe,
         ObjKeysPipe,
         TitleCasePipe,
         FileSizePipe

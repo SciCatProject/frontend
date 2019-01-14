@@ -26,7 +26,7 @@
               </tr>
               <tr *ngIf="dataset.description as value">
                 <th><i class="material-icons"> description </i> Description</th>
-                <td>{{ value }}</td>
+                <td><span [innerHTML]="value | linky"></span></td>
               </tr>
               <tr *ngIf="dataset.owner as value">
                 <th><i class="material-icons"> person </i> Owner</th>
@@ -76,6 +76,15 @@
                 (click)="onClickProp(value)"
               >
                 <th><i class="material-icons"> spa </i> Proposal</th>
+                <td>
+                  <a>{{ value }}</a>
+                </td>
+              </tr>
+              <tr
+                *ngIf="dataset.sampleId as value"
+                (click)="onClickSample(value)"
+              >
+                <th><i class="material-icons"> center_focus_weak </i> Sample</th>
                 <td>
                   <a>{{ value }}</a>
                 </td>
@@ -134,7 +143,9 @@
 
         <mat-card style="margin:1em">
           <div *ngIf="dataset.scientificMetadata as value">
-            <h3>Scientific Metadata</h3>
+          <mat-card-header style="background:#ff96fa;">
+            Scientific Metadata
+          </mat-card-header>
             <pre>{{ value | json }}</pre>
           </div>
 

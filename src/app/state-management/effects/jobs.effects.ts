@@ -62,7 +62,7 @@ export class JobsEffects {
         filter["where"] = action.mode;
       }
       filter["skip"] = action.skip;
-      filter["limit"] = action.limit; //items per page
+      filter["limit"] = action.limit; // items per page
       filter["order"] = "creationTime DESC";
       return this.jobSrv
         .find(filter)
