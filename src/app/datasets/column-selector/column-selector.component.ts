@@ -1,4 +1,7 @@
 import { Component, OnInit } from "@angular/core";
+import { Observable } from "rxjs";
+import { Store, select } from "@ngrx/store";
+import { getColumns } from "state-management/selectors/users.selectors";
 
 @Component({
   selector: "column-selector",
@@ -19,7 +22,9 @@ export class ColumnSelectorComponent implements OnInit {
     "archiveStatus",
     "retrieveStatus"
   ];
-  constructor() {}
+  columns$ = this.store.pipe(select(getColumns));
+
+  constructor(private store: Store<any>) {}
 
   ngOnInit() {}
 }

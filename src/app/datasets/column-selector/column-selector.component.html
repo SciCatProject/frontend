@@ -1,6 +1,6 @@
 <mat-card>
   <div class="title">Select</div>
-  <div *ngFor="let column of columns; let i = index">
+  <div *ngFor="let column of columns$ | async; let i = index">
     <mat-checkbox > {{ column }} </mat-checkbox>
   </div>
 </mat-card>
