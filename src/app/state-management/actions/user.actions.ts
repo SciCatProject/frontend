@@ -32,6 +32,14 @@ export const SHOW_MESSAGE = "[User] Message Show";
 export const CLEAR_MESSAGE = "[User] Message Clear";
 export const SAVE_SETTINGS = "[User] Settings Save";
 
+export const ADD_COLUMN = "[User] Add Column";
+export const ADD_COLUMN_COMPLETE = "[User] Add Column Complete";
+export const ADD_COLUMN_FAILED = "[User] Add Column Failed";
+
+export const DELETE_COLUMN = "[User] Delete Column";
+export const DELETE_COLUMN_COMPLETE = "[User] Delete Column Complete";
+export const DELETE_COLUMN_FAILED = "[User] Delete Column Failed";
+
 export class LoginAction implements Action {
   readonly type = LOGIN;
   constructor(
@@ -78,6 +86,15 @@ export class RetrieveUserFailedAction implements Action {
   constructor(readonly error: Error) {}
 }
 
+export class DeleteColumn implements Action {
+  readonly type = DELETE_COLUMN;
+  constructor(readonly columnName: string) {}
+}
+
+export class DeleteColumnComplete implements Action {
+  readonly type = DELETE_COLUMN_COMPLETE;
+  constructor(readonly columnName: string) {}
+}
 /*
 export class RetrieveUserIdentityAction implements Action {
   readonly type = RETRIEVE_USER_IDENTITY;

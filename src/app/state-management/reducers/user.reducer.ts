@@ -14,6 +14,10 @@ import {
   LoginCompleteAction,
   ShowMessageAction,
   SaveSettingsAction,
+  DELETE_COLUMN,
+  DELETE_COLUMN_COMPLETE,
+  DeleteColumn,
+  DeleteColumnComplete,
 } from "state-management/actions/user.actions";
 
 export function userReducer(
@@ -59,6 +63,21 @@ export function userReducer(
 
     case LOGIN: {
       return { ...state, isLoggingIn: true };
+    }
+
+    case DELETE_COLUMN: {
+      return { ...state, deletingColumn: true };
+    }
+
+    case DELETE_COLUMN_COMPLETE : {
+      const columns = state.columns;
+      const columnName = (action as DeleteColumnComplete).columnName;
+      const result = columns.filter(column => column !== columnName);
+      console.log("array index", result);
+      return {
+        ...state, deletingColumn: false,
+        currentSet: { ...state, columns: result }
+      };
     }
 
     default:

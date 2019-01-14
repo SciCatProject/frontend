@@ -7,6 +7,7 @@ const initialUserState: UserState = {
   currentUserGroups: [],
   email: undefined,
   isLoggingIn: false,
+  deletingColumn: false,
   message: { content: undefined, type: undefined, duration: undefined },
   settings: {
     tapeCopies: "one",
