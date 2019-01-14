@@ -45,6 +45,7 @@ import {
   MatOptionModule,
   MatPaginatorModule,
   MatProgressSpinnerModule,
+  MatRadioModule,
   MatSelectModule,
   MatSortModule,
   MatTableModule,
@@ -53,7 +54,7 @@ import {
 } from "@angular/material";
 import { ScientificConditionDialogComponent } from "./scientific-condition-dialog/scientific-condition-dialog.component";
 import { jobsReducer } from "../state-management/reducers/jobs.reducer";
-import { ColumnSelectorComponent } from './column-selector/column-selector.component';
+import { ColumnSelectorComponent } from "./column-selector/column-selector.component";
 
 @NgModule({
   imports: [
@@ -80,6 +81,7 @@ import { ColumnSelectorComponent } from './column-selector/column-selector.compo
     MatOptionModule,
     MatPaginatorModule,
     MatProgressSpinnerModule,
+    MatRadioModule,
     MatSelectModule,
     MatSortModule,
     MatTableModule,
@@ -106,11 +108,9 @@ import { ColumnSelectorComponent } from './column-selector/column-selector.compo
     SelectedListComponent,
     DatasetFormComponent,
     ScientificConditionDialogComponent,
-    ColumnSelectorComponent,
+    ColumnSelectorComponent
   ],
-  entryComponents: [
-    ScientificConditionDialogComponent
-  ],
+  entryComponents: [ScientificConditionDialogComponent],
   providers: [DatasetService, ArchivingService],
   exports: [DatasetTableComponent, DatasetsFilterComponent]
 })

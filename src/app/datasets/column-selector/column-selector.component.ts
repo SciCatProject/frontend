@@ -1,15 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit } from "@angular/core";
 
 @Component({
-  selector: 'app-column-selector',
-  templateUrl: './column-selector.component.html',
-  styleUrls: ['./column-selector.component.css']
+  selector: "column-selector",
+  templateUrl: "./column-selector.component.html",
+  styleUrls: ["./column-selector.component.scss"]
 })
 export class ColumnSelectorComponent implements OnInit {
+  public columns = [ "datasetName", "sourceFolder"];
+  constructor() {}
 
-  constructor() { }
-
-  ngOnInit() {
-  }
-
+  ngOnInit() {}
 }
