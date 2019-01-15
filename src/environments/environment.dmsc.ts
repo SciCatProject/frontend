@@ -11,6 +11,7 @@ export const environment = {
   archiveWorkflowEnabled: false,
   editMetadataEnabled: true,
   columnSelectEnabled: true,
+  editSampleEnabled: true,
   disabledDatasetColumns: ["archiveStatus", "retrieveStatus"],
   facility: "ESS"
 };
