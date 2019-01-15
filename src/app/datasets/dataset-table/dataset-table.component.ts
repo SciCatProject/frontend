@@ -103,7 +103,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   private submitJobSubscription: Subscription;
   private jobErrorSubscription: Subscription;
   private defaultColumns: string[];
-  private visibleColumns: string[];
+  public visibleColumns: string[];
   columns$ = this.store.pipe(select(getDisplayedColumns));
 
   constructor(
