@@ -13,6 +13,7 @@ export interface UserState {
   isLoggedIn: boolean;
   accountType?: string;
   columns: string[];
+  displayedColumns: string[];
 }
 
 export const initialUserState: UserState = {
@@ -31,6 +32,20 @@ export const initialUserState: UserState = {
   }, // TODO sync with server settings?
   isLoggedIn: false,
   columns: [
+    "select",
+    "datasetName",
+    "sourceFolder",
+    "size",
+    "creationTime",
+    "type",
+    "image",
+    "metadata",
+    "proposalId",
+    "ownerGroup",
+    "archiveStatus",
+    "retrieveStatus"
+  ],
+  displayedColumns: [
     "select",
     "datasetName",
     "sourceFolder",

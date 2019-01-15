@@ -16,7 +16,8 @@ const initialUserState: UserState = {
     darkTheme: false
   },
   isLoggedIn: false,
-  columns: ["datasetName"]
+  columns: ["datasetName"],
+  displayedColumns: ["datasetName"]
 };
 
 describe("test User Selectors", () => {
