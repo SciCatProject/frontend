@@ -1,21 +1,21 @@
 <mat-tab-group>
   <mat-tab >
     <ng-template mat-tab-label>
-      <fa-icon [icon]="faIdBadge"></fa-icon>&nbsp;
+      <i class="material-icons"> portrait </i> 
       General
     </ng-template>
     <div *ngIf="proposal" class="tab-content">
       <table>
         <tr>
           <th>
-            <fa-icon [icon]="faIdBadge"></fa-icon>&nbsp;
+            <i class="material-icons"> fingerprint </i> 
             Title
           </th>
           <td>{{proposal.title}}
         </tr>
         <tr>
           <th>
-            <fa-icon [icon]="faUserAlt"></fa-icon>&nbsp;
+            <i class="material-icons"> person </i> 
             Main proposer</th>
           <td>
             <a href="mailto:{{mainProposer.email}}">{{mainProposer.name}}</a>
@@ -23,7 +23,7 @@
         </tr>
         <tr *ngIf="principalInvestigator && principalInvestigator.isPresent">
           <th>
-            <fa-icon [icon]="faChessQueen"></fa-icon>&nbsp;
+            <i class="material-icons"> security </i> 
             Principal investigator</th>
 
           <td *ngIf="principalInvestigator.email; else withoutEmail">
@@ -37,7 +37,7 @@
         </tr>
         <tr>
           <th>
-            <fa-icon [icon]="faCog"></fa-icon>&nbsp;
+            <i class="material-icons"> description </i> 
             Abstract</th>
           <td>{{proposal.abstract}}</td>
         </tr>
@@ -47,7 +47,7 @@
 
   <mat-tab >
     <ng-template mat-tab-label>
-      <fa-icon [icon]="faCoins"></fa-icon>&nbsp;
+      <i class="material-icons"> folder </i> 
       Datasets
     </ng-template>
     <div class="tab-content">
@@ -55,7 +55,7 @@
         <mat-table #table [dataSource]="datasets" class="dataset-table">
           <ng-container matColumnDef="pid">
             <mat-header-cell *matHeaderCellDef>
-              <fa-icon [icon]="faIdBadge"></fa-icon>&nbsp;
+              <i class="material-icons"> portrait </i> 
               PID
             </mat-header-cell>
             <mat-cell *matCellDef="let element" matTooltip="{{element.pid}}">
@@ -64,7 +64,7 @@
           </ng-container>
           <ng-container matColumnDef="sourceFolder">
             <mat-header-cell *matHeaderCellDef>
-              <fa-icon [icon]="faFileAlt"></fa-icon>&nbsp;
+            <i class="material-icons"> explore </i> 
               Source Folder
             </mat-header-cell>
             <mat-cell *matCellDef="let element" matTooltip="{{element.sourceFolder}}">
@@ -73,35 +73,35 @@
           </ng-container>
           <ng-container matColumnDef="size">
             <mat-header-cell *matHeaderCellDef>
-              <fa-icon [icon]="faCoins"></fa-icon>&nbsp;
+              <i class="material-icons"> save </i> 
               Size
             </mat-header-cell>
             <mat-cell *matCellDef="let element">{{element.size | filesize}}</mat-cell>
           </ng-container>
           <ng-container matColumnDef="creationTime">
             <mat-header-cell *matHeaderCellDef>
-              <fa-icon [icon]="faCalendarAlt"></fa-icon>&nbsp;
+              <i class="material-icons"> calendar_today </i> 
               Creation Time
             </mat-header-cell>
             <mat-cell *matCellDef="let element">{{element.creationTime | date: 'yyyy/MM/dd HH:mm'}}</mat-cell>
           </ng-container>
           <ng-container matColumnDef="owner">
             <mat-header-cell *matHeaderCellDef>
-              <fa-icon [icon]="faUserAlt"></fa-icon>&nbsp;
+              <i class="material-icons"> person </i> 
               Owner
             </mat-header-cell>
             <mat-cell *matCellDef="let element">{{element.owner}}</mat-cell>
           </ng-container>
           <ng-container matColumnDef="ownerEmail">
             <mat-header-cell *matHeaderCellDef>
-              <fa-icon [icon]="faAt"></fa-icon>&nbsp;
+              <i class="material-icons"> mail </i> 
               Owner email
             </mat-header-cell>
             <mat-cell *matCellDef="let element">{{element.ownerEmail}}</mat-cell>
           </ng-container>
           <ng-container matColumnDef="creationLocation">
             <mat-header-cell *matHeaderCellDef>
-              <fa-icon [icon]="faAt"></fa-icon>&nbsp;
+              <i class="material-icons"> explore </i> 
               Location</mat-header-cell>
             <mat-cell *matCellDef="let element">{{element.creationLocation}}</mat-cell>
           </ng-container>
@@ -127,7 +127,7 @@
 
   <mat-tab disabled>
     <ng-template mat-tab-label>
-      <fa-icon [icon]="faCoins"></fa-icon>&nbsp;
+      <i class="material-icons"> scanner </i> 
       Instruments
     </ng-template>
     <div class="tab-content">

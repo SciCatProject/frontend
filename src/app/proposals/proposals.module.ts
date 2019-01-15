@@ -23,7 +23,8 @@ import {
   MatTableModule,
   MatTooltipModule,
   MatTabsModule,
-  MatCardModule
+  MatCardModule,
+  MatIconModule
 } from "@angular/material";
 import { SharedCatanieModule } from "../shared/shared.module";
 
@@ -33,10 +34,9 @@ import { SharedCatanieModule } from "../shared/shared.module";
     RouterModule,
     SharedCatanieModule,
     FontAwesomeModule,
-
     StoreModule.forFeature("proposals", proposalsReducer),
     EffectsModule.forFeature([ProposalsEffects]),
-
+    MatIconModule,
     MatTooltipModule,
     MatListModule,
     MatCardModule,

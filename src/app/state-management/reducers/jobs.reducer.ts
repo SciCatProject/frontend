@@ -1,8 +1,6 @@
 import { Action } from "@ngrx/store";
 import { initialJobsState, JobsState } from "state-management/state/jobs.store";
 import {
-  CHILD_RETRIEVE_COMPLETE,
-  ChildRetrieveCompleteAction,
   CurrentJobAction,
   FAILED,
   FailedAction,
@@ -14,7 +12,8 @@ import {
   SORT_UPDATE,
   SortUpdateAction,
   SUBMIT_COMPLETE,
-  UI_STORE
+  GET_COUNT_COMPLETE,
+  GetCountCompleteAction
 } from "state-management/actions/jobs.actions";
 
 export function jobsReducer(
@@ -32,15 +31,6 @@ export function jobsReducer(
       return { ...state, filters, loading: true };
     }
 
-    // TODO: These replace any field in the store with values from the payload.
-    // Should probably be made less destructive?
-    case UI_STORE:
-    case CHILD_RETRIEVE_COMPLETE: {
-      // Är inte ändrad från payload
-      const ui = (action as ChildRetrieveCompleteAction).payload;
-      return { ...state, ui };
-    }
-
     case SUBMIT_COMPLETE: {
       return { ...state, jobSubmission: [] };
     }
@@ -53,6 +43,11 @@ export function jobsReducer(
     case RETRIEVE_COMPLETE: {
       const currentJobs = (action as RetrieveCompleteAction).jobsets;
       return { ...state, loading: false, currentJobs };
+    }
+
+    case GET_COUNT_COMPLETE: {
+      const totalJobNumber = (action as GetCountCompleteAction).totalJobNumber;
+      return { ...state, totalJobNumber };
     }
 
     // TODO: There is no field in the store called currentSet

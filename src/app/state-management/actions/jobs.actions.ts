@@ -24,6 +24,8 @@ export const SEARCH_ID_FAILED = "[Jobs] Search ID Failed";
 export const SORT_UPDATE = "[Jobs] Sort Update"; // Duplicate of SORT_VALUE_UPDATE?
 export const SORT_UPDATE_COMPLETE = "[Jobs] Sort Update Complete";
 
+export const GET_COUNT_COMPLETE = "[Jobs] Get Count Complete";
+
 export class SubmitAction implements Action {
   readonly type = SUBMIT;
   constructor(readonly job: Job) {}
@@ -44,16 +46,9 @@ export class RetrieveCompleteAction implements Action {
   constructor(readonly jobsets: Job[]) {}
 }
 
-export class ChildRetrieveAction implements Action {
-  //Vad innebär event.node?
-  readonly type = CHILD_RETRIEVE;
-  constructor(public payload?: any) {}
-}
-
-export class ChildRetrieveCompleteAction implements Action {
-  //Vad innebär node.children?
-  readonly type = CHILD_RETRIEVE_COMPLETE;
-  constructor(public payload?: any) {}
+export class GetCountCompleteAction implements Action {
+  readonly type = GET_COUNT_COMPLETE;
+  constructor(readonly totalJobNumber: number) { }
 }
 
 export class SearchIDAction implements Action {

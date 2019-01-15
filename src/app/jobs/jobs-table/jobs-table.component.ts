@@ -10,14 +10,8 @@ import { Job } from "shared/sdk/models";
 import { MatPaginator } from "@angular/material";
 import { Router } from "@angular/router";
 import { select, Store } from "@ngrx/store";
-import { takeLast } from "rxjs/operators";
 import { LoginService } from "users/login.service";
 
-import { faAt } from "@fortawesome/free-solid-svg-icons/faAt";
-import { faCog } from "@fortawesome/free-solid-svg-icons/faCog";
-import { faCalendarAlt } from "@fortawesome/free-solid-svg-icons/faCalendarAlt";
-import { faCoins } from "@fortawesome/free-solid-svg-icons/faCoins";
-import { faFileAlt } from "@fortawesome/free-solid-svg-icons/faFileAlt";
 
 @Component({
   selector: "jobs-table",
@@ -27,6 +21,7 @@ import { faFileAlt } from "@fortawesome/free-solid-svg-icons/faFileAlt";
 })
 export class JobsTableComponent implements OnInit, OnDestroy, AfterViewInit {
   jobs$ = this.store.pipe(select(selectors.jobs.getJobs));
+  totalJobNumber$ = this.store.pipe(select(selectors.jobs.getJobsCount));
   cols = [
     "emailJobInitiator",
     "type",
@@ -39,11 +34,6 @@ export class JobsTableComponent implements OnInit, OnDestroy, AfterViewInit {
   modes = Object.keys(JobViewMode).map(k => JobViewMode[k as any]);
   currentMode = JobViewMode.myJobs;
 
-  faAt = faAt;
-  faCog = faCog;
-  faCoins = faCoins;
-  faCalendarAlt = faCalendarAlt;
-  faFileAlt = faFileAlt;
 
   loading$: any = false;
   limit: any = 50;
@@ -52,7 +42,6 @@ export class JobsTableComponent implements OnInit, OnDestroy, AfterViewInit {
   subscriptions = [];
   jobsCount = 1000;
   filters = {};
-  totalJobNumber$: any;
   event: any;
 
   displayedColumns = this.cols.concat();
@@ -94,10 +83,6 @@ export class JobsTableComponent implements OnInit, OnDestroy, AfterViewInit {
       this.store.pipe(select(selectors.jobs.getFilters)).subscribe(filters => {
         this.filters = Object.assign({}, filters);
       })
-    );
-
-    this.totalJobNumber$ = this.store.pipe(
-      select(state => state.root.jobs.currentJobs.length)
     );
 
     this.subscriptions.push(
@@ -166,20 +151,6 @@ export class JobsTableComponent implements OnInit, OnDestroy, AfterViewInit {
   onRowSelect(event, job) {
     this.store.dispatch(new JobActions.CurrentJobAction(job));
     this.router.navigateByUrl("/user/job/" + encodeURIComponent(job.id));
-  }
-
-  nodeExpand(event) {
-    this.store.dispatch(new JobActions.ChildRetrieveAction(event.node));
-    event.node.children = [];
-    this.store
-      .pipe(
-        select(state => state.root.jobs.ui),
-        takeLast(1)
-      )
-      .subscribe(jobs => {
-        console.log(jobs);
-        event.node.children = jobs;
-      });
   }
 
   onPage(event) {

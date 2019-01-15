@@ -15,4 +15,16 @@ export class PoliciesService {
   getPolicy(id: string): Observable<Policy> {
     return this.policyApi.findOne({ where: { id } });
   }
+
+  updatePolicies(idList: string[], attributes: {}) {
+    const or = [];
+    for (const idx of idList) {
+      or.push({ id: idx });
+    }
+    const where = { or };
+    return this.policyApi
+      .updatewhere(where, attributes);
+  }
+
+
 }

@@ -3,16 +3,18 @@ import { datasetsReducer } from "state-management/reducers/datasets.reducer";
 import { jobsReducer } from "state-management/reducers/jobs.reducer";
 import { userReducer } from "state-management/reducers/user.reducer";
 import { policiesReducer } from "state-management/reducers/policies.reducer";
+import { samplesReducer } from "state-management/reducers/samples.reducer";
 import {
   DatasetState,
   initialDatasetState
 } from "state-management/state/datasets.store";
 import {
-  PolicyState,
-  initialPolicyState
+  initialPolicyState,
+  PolicyState
 } from "state-management/state/policies.store";
 import { initialJobsState, JobsState } from "state-management/state/jobs.store";
 import { initialUserState, UserState } from "state-management/state/user.store";
+import { initialSampleState, SampleState } from "state-management/state/samples.store";
 import * as ua from "state-management/actions/user.actions";
 
 export interface AppState {
@@ -20,20 +22,23 @@ export interface AppState {
   user: UserState;
   jobs: JobsState;
   policies: PolicyState;
+  samples: SampleState;
 }
 
 export const initialState: AppState = {
   datasets: initialDatasetState,
   user: initialUserState,
   jobs: initialJobsState,
-  policies: initialPolicyState
+  policies: initialPolicyState,
+  samples: initialSampleState
 };
 
 const appReducer = combineReducers({
   user: userReducer,
   datasets: datasetsReducer,
   jobs: jobsReducer,
-  policies: policiesReducer
+  policies: policiesReducer,
+  samples: samplesReducer
 });
 
 export function rootReducer(state, action) {

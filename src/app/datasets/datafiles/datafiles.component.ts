@@ -73,8 +73,10 @@ export class DatafilesComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    if (this.dataSource) {
-      this.dataSource.paginator = this.paginator;
+    this.dataSource = new MatTableDataSource();
+    this.dataSource.paginator = this.paginator;
+    if (this.dataBlocks) {
+      this.getDatafiles(this.dataBlocks);
     }
     // this.dataSource.sort = this.sort;
   }
@@ -93,7 +95,7 @@ export class DatafilesComponent implements OnInit, AfterViewInit {
     });
 
     this.count = this.files.length;
-    this.dataSource = new MatTableDataSource(this.files);
+    this.dataSource.data = this.files;
   }
 
   getAreAllSelected() {

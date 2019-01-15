@@ -10,10 +10,9 @@
           <input formControlName="fieldName" placeholder="Field name">
           <input formControlName="fieldValue" placeholder="Field value">
           <button
-            class="remove_button"
             type="button"
             (click)="onRemove(i)">
-            <fa-icon [icon]="faTimesCircle"></fa-icon>&nbsp;
+            <i class="material-icons"> remove_circle </i> 
           </button>
         </div>
       </div>
@@ -22,7 +21,7 @@
         type="button"
         class="add_button"
         (click)="addMetadata()">
-        <fa-icon [icon]="faPlusCircle"></fa-icon>&nbsp;
+        <i class="material-icons"> add_circle </i> 
         Add metadata
       </button>
 

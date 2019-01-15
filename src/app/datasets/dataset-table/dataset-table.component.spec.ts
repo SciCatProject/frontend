@@ -52,7 +52,8 @@ describe("DatasetTableComponent", () => {
             provide: APP_CONFIG,
             useValue: {
               disabledDatasetColumns: [],
-              archiveWorkflowEnabled: true
+              archiveWorkflowEnabled: true,
+              csvEnabled: true
             }
           },
           { provide: ArchivingService, useClass: ArchivingService },
