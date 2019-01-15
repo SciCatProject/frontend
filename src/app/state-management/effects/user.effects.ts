@@ -64,6 +64,13 @@ export class UserEffects {
   );
 
   @Effect()
+  protected selectColumn$: Observable<Action> = this.action$.pipe(
+    ofType(UserActions.SELECT_COLUMN),
+    map((action: UserActions.DeselectColumnAction) => action.columnName),
+    concatMap(columnName => [new UserActions.SelectColumnCompleteAction(columnName)])
+  );
+
+  @Effect()
   protected retrieveUser$: Observable<Action> = this.action$.pipe(
     ofType(UserActions.RETRIEVE_USER),
     switchMap(() => {
