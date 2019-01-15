@@ -4,6 +4,7 @@ import { ColumnSelectorComponent } from "./column-selector.component";
 import { APP_CONFIG } from "app-config.module";
 import { Store } from "@ngrx/store";
 import { MockStore } from "shared/MockStubs";
+import { MatCheckboxModule } from "@angular/material";
 
 describe("ColumnSelectorComponent", () => {
   let component: ColumnSelectorComponent;
@@ -11,7 +12,10 @@ describe("ColumnSelectorComponent", () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ColumnSelectorComponent]
+      declarations: [ColumnSelectorComponent],
+      imports: [
+        MatCheckboxModule
+      ]
     }).compileComponents();
   }));
 
