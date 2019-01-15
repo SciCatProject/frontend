@@ -19,6 +19,7 @@ import {
   SELECT_COLUMN,
   SELECT_COLUMN_COMPLETE,
   DeselectColumnCompleteAction,
+  SelectColumnCompleteAction
 } from "state-management/actions/user.actions";
 
 export function userReducer(
@@ -36,8 +37,14 @@ export function userReducer(
     }
 
     case LOGIN_COMPLETE: {
-      const {user, accountType} = action as LoginCompleteAction;
-      return { ...state, currentUser: user, isLoggingIn: false, isLoggedIn: true, accountType };
+      const { user, accountType } = action as LoginCompleteAction;
+      return {
+        ...state,
+        currentUser: user,
+        isLoggingIn: false,
+        isLoggedIn: true,
+        accountType
+      };
     }
 
     case LOGIN_FAILED: {
@@ -72,10 +79,11 @@ export function userReducer(
 
     case SELECT_COLUMN_COMPLETE: {
       const displayedColumns = state.displayedColumns;
-      const result = displayedColumns;
+      const columnName = (action as SelectColumnCompleteAction).columnName;
+      displayedColumns.push(columnName);
       return {
         ...state,
-        displayedColumns:  result,
+        displayedColumns: displayedColumns
       };
     }
 
@@ -83,15 +91,16 @@ export function userReducer(
       return { ...state, deletingColumn: true };
     }
 
-    case DESELECT_COLUMN_COMPLETE : {
+    case DESELECT_COLUMN_COMPLETE: {
       const displayedColumns = state.displayedColumns;
       const columnName = (action as DeselectColumnCompleteAction).columnName;
       const result = displayedColumns.filter(column => column !== columnName);
       console.log("removing index", columnName);
       console.log("array index", result);
       return {
-        ...state, deletingColumn: false,
-        displayedColumns:  result,
+        ...state,
+        deletingColumn: false,
+        displayedColumns: result
       };
     }
 
