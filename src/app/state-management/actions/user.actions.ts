@@ -32,13 +32,13 @@ export const SHOW_MESSAGE = "[User] Message Show";
 export const CLEAR_MESSAGE = "[User] Message Clear";
 export const SAVE_SETTINGS = "[User] Settings Save";
 
-export const ADD_COLUMN = "[User] Add Column";
-export const ADD_COLUMN_COMPLETE = "[User] Add Column Complete";
-export const ADD_COLUMN_FAILED = "[User] Add Column Failed";
+export const SELECT_COLUMN = "[User] Add Column";
+export const SELECT_COLUMN_COMPLETE = "[User] Add Column Complete";
+export const SELECT_COLUMN_FAILED = "[User] Add Column Failed";
 
-export const DELETE_COLUMN = "[User] Delete Column";
-export const DELETE_COLUMN_COMPLETE = "[User] Delete Column Complete";
-export const DELETE_COLUMN_FAILED = "[User] Delete Column Failed";
+export const DESELECT_COLUMN = "[User] Delete Column";
+export const DESELECT_COLUMN_COMPLETE = "[User] Delete Column Complete";
+export const DESELECT_COLUMN_FAILED = "[User] Delete Column Failed";
 
 export class LoginAction implements Action {
   readonly type = LOGIN;
@@ -86,13 +86,23 @@ export class RetrieveUserFailedAction implements Action {
   constructor(readonly error: Error) {}
 }
 
-export class DeleteColumn implements Action {
-  readonly type = DELETE_COLUMN;
+export class SelectColumnAction implements Action {
+  readonly type = SELECT_COLUMN;
   constructor(readonly columnName: string) {}
 }
 
-export class DeleteColumnComplete implements Action {
-  readonly type = DELETE_COLUMN_COMPLETE;
+export class SelectColumnCompleteAction implements Action {
+  readonly type = SELECT_COLUMN_COMPLETE;
+  constructor(readonly columnName: string) {}
+}
+
+export class DeselectColumnAction implements Action {
+  readonly type = DESELECT_COLUMN;
+  constructor(readonly columnName: string) {}
+}
+
+export class DeselectColumnCompleteAction implements Action {
+  readonly type = DESELECT_COLUMN_COMPLETE;
   constructor(readonly columnName: string) {}
 }
 /*
@@ -149,6 +159,10 @@ export type Actions =
   | RetrieveUserAction
   | RetrieveUserCompleteAction
   | RetrieveUserFailedAction
+  | SelectColumnAction
+  | SelectColumnCompleteAction
+  | DeselectColumnAction
+  | DeselectColumnCompleteAction
   // | RetrieveUserIdentityAction
   // | RetrieveUserIdentityCompleteAction
   // | RetrieveUserIdentityFailedAction
