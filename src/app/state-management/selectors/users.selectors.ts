@@ -56,6 +56,11 @@ export const getColumns = createSelector(
   state => state.columns
 );
 
+export const getDisplayedColumns = createSelector(
+  getUserState,
+  state => state.displayedColumns
+);
+
 export const getState = (state: any) => state.root.user;
 
 export const getLoading = (state: any) => state.root.user.loading;

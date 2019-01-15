@@ -9,7 +9,8 @@ import { ShowMessageAction } from "state-management/actions/user.actions";
 import { combineLatest, Subscription } from "rxjs";
 import {
   getCurrentEmail,
-  getColumns
+  getColumns,
+  getDisplayedColumns
 } from "../../state-management/selectors/users.selectors";
 import { getError, submitJob } from "state-management/selectors/jobs.selectors";
 import { select, Store } from "@ngrx/store";
@@ -103,7 +104,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   private jobErrorSubscription: Subscription;
   private defaultColumns: string[];
   private visibleColumns: string[];
-  columns$ = this.store.pipe(select(getColumns));
+  columns$ = this.store.pipe(select(getDisplayedColumns));
 
   constructor(
     private router: Router,

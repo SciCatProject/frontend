@@ -79,13 +79,14 @@ export function userReducer(
     }
 
     case DESELECT_COLUMN_COMPLETE : {
-      const columns = state.columns;
+      const displayedColumns = state.displayedColumns;
       const columnName = (action as DeselectColumnCompleteAction).columnName;
-      const result = columns.filter(column => column !== columnName);
+      const result = displayedColumns.filter(column => column !== columnName);
+      console.log("removing index", columnName);
       console.log("array index", result);
       return {
         ...state, deletingColumn: false,
-        columns:  result,
+        displayedColumns:  result,
       };
     }
 
