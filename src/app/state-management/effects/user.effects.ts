@@ -11,7 +11,7 @@ import * as UserActions from "state-management/actions/user.actions";
 import { MessageType } from "state-management/models";
 
 import { LoginService } from "users/login.service";
-import { UserApi, User } from "shared/sdk";
+import { UserApi } from "shared/sdk";
 
 @Injectable()
 export class UserEffects {

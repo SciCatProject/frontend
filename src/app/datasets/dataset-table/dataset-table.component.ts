@@ -9,7 +9,6 @@ import { ShowMessageAction } from "state-management/actions/user.actions";
 import { combineLatest, Subscription } from "rxjs";
 import {
   getCurrentEmail,
-  getColumns,
   getDisplayedColumns
 } from "../../state-management/selectors/users.selectors";
 import { getError, submitJob } from "state-management/selectors/jobs.selectors";
