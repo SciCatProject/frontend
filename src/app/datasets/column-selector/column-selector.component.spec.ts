@@ -13,15 +13,8 @@ describe("ColumnSelectorComponent", () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ColumnSelectorComponent],
-      imports: [
-        MatCardModule,
-        MatCheckboxModule
-      ]
-    }).compileComponents();
-  }));
-
-  beforeEach(() => {
-    fixture = TestBed.createComponent(ColumnSelectorComponent);
+      imports: [MatCardModule, MatCheckboxModule]
+    });
     TestBed.overrideComponent(ColumnSelectorComponent, {
       set: {
         providers: [
@@ -35,6 +28,11 @@ describe("ColumnSelectorComponent", () => {
         ]
       }
     });
+    TestBed.compileComponents();
+  }));
+
+  beforeEach(() => {
+    fixture = TestBed.createComponent(ColumnSelectorComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
