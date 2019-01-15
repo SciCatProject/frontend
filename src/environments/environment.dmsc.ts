@@ -10,6 +10,7 @@ export const environment = {
   externalAuthEndpoint: "/auth/msad",
   archiveWorkflowEnabled: false,
   editMetadataEnabled: true,
+  columnSelectEnabled: true,
   disabledDatasetColumns: ["archiveStatus", "retrieveStatus"],
   facility: "ESS"
 };
