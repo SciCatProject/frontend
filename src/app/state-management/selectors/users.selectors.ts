@@ -51,8 +51,18 @@ export const getIsLoggingIn = createSelector(
   state => state.isLoggingIn
 );
 
+export const getColumns = createSelector(
+  getUserState,
+  state => state.columns
+);
+
+export const getDisplayedColumns = createSelector(
+  getUserState,
+  state => state.displayedColumns
+);
+
 export const getState = (state: any) => state.root.user;
-// export const getCurrentUser = (state: any) => state.root.user.currentUser;
+
 export const getLoading = (state: any) => state.root.user.loading;
 export const getCurrentUserGroups = (state: any) =>
   state.root.user.currentUserGroups;

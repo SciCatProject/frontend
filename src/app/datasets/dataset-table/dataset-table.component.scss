@@ -45,20 +45,20 @@
 }
 
 .mat-column-datasetName {
-  flex: 0 0 200px;
+  flex: 1 0 200px;
   justify-content: left !important;
 }
 
 .mat-column-sourceFolder {
-  flex: 0 0 120px;
+  flex: 1 0 120px;
 }
 
 .mat-column-size {
-  flex: 0 0 50px;
+  flex: 1 0 50px;
 }
 
 .mat-column-creationTime {
-  flex: 0 0 80px;
+  flex: 1 0 80px;
 }
 
 .mat-column-type {
@@ -74,7 +74,7 @@
 }
 
 .mat-column-proposalId {
-  flex: 0 0 70px;
+  flex: 1 0 70px;
 }
 
 .mat-column-ownerGroup {
@@ -82,11 +82,11 @@
 }
 
 .mat-column-archiveStatus {
-  flex: 0 0 150px;
+  flex: 1 0 150px;
 }
 
 .mat-column-retrieveStatus {
-  flex: 0 0 130px;
+  flex: 1 0 130px;
 }
 
 

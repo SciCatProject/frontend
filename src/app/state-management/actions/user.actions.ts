@@ -32,6 +32,14 @@ export const SHOW_MESSAGE = "[User] Message Show";
 export const CLEAR_MESSAGE = "[User] Message Clear";
 export const SAVE_SETTINGS = "[User] Settings Save";
 
+export const SELECT_COLUMN = "[User] Select Column";
+export const SELECT_COLUMN_COMPLETE = "[User] Select Column Complete";
+export const SELECT_COLUMN_FAILED = "[User] Select Column Failed";
+
+export const DESELECT_COLUMN = "[User] Deselect Column";
+export const DESELECT_COLUMN_COMPLETE = "[User] Deselect Column Complete";
+export const DESELECT_COLUMN_FAILED = "[User] Deselect Column Failed";
+
 export class LoginAction implements Action {
   readonly type = LOGIN;
   constructor(
@@ -78,37 +86,29 @@ export class RetrieveUserFailedAction implements Action {
   constructor(readonly error: Error) {}
 }
 
-/*
-export class RetrieveUserIdentityAction implements Action {
-  readonly type = RETRIEVE_USER_IDENTITY;
+export class SelectColumnAction implements Action {
+  readonly type = SELECT_COLUMN;
+  constructor(readonly columnName: string) {}
 }
 
-export class RetrieveUserIdentityCompleteAction implements Action {
-  readonly type = RETRIEVE_USER_IDENTITY_COMPLETE;
-  constructor(readonly userIdentity: UserIdentity) {}
+export class SelectColumnCompleteAction implements Action {
+  readonly type = SELECT_COLUMN_COMPLETE;
+  constructor(readonly columnName: string) {}
 }
 
-export class RetrieveUserIdentityFailedAction implements Action {
-  readonly type = RETRIEVE_USER_IDENTITY_FAILED;
-  constructor(readonly error: Error) {}
+export class DeselectColumnAction implements Action {
+  readonly type = DESELECT_COLUMN;
+  constructor(readonly columnName: string) {}
 }
 
-export class AccessUserEmailAction implements Action {
-  readonly type = ACCESS_USER_EMAIL;
-  constructor(readonly userId: string) {}
+export class DeselectColumnCompleteAction implements Action {
+  readonly type = DESELECT_COLUMN_COMPLETE;
+  constructor(readonly columnName: string) {}
 }
-
-export class AccessUserEmailCompleteAction implements Action {
-  readonly type = ACCESS_USER_EMAIL_COMPLETE;
-  constructor(readonly email: string) {}
+export class DeselectColumnFailedAction implements Action {
+  readonly type = DESELECT_COLUMN_FAILED;
+  constructor(readonly columnName: string) {}
 }
-
-export class AccessUserEmailFailedAction implements Action {
-  readonly type = ACCESS_USER_EMAIL_FAILED;
-  constructor(readonly error: Error) {}
-}
-*/
-
 export class ShowMessageAction implements Action {
   readonly type = SHOW_MESSAGE;
   constructor(readonly message: Message) {}
@@ -132,14 +132,12 @@ export type Actions =
   | RetrieveUserAction
   | RetrieveUserCompleteAction
   | RetrieveUserFailedAction
-  // | RetrieveUserIdentityAction
-  // | RetrieveUserIdentityCompleteAction
-  // | RetrieveUserIdentityFailedAction
+  | SelectColumnAction
+  | SelectColumnCompleteAction
+  | DeselectColumnAction
+  | DeselectColumnCompleteAction
+  | DeselectColumnFailedAction
   | ActiveDirLoginAction
-  // | AccessUserEmailAction
-  // | AccessUserEmailCompleteAction
-  // | AccessUserEmailFailedAction
   | ShowMessageAction
   | ClearMessageAction
   | SaveSettingsAction;
-// AddGroupsAction

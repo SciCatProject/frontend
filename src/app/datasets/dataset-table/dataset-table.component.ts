@@ -7,7 +7,10 @@ import { MatCheckboxChange, MatDialog } from "@angular/material";
 import { Router } from "@angular/router";
 import { ShowMessageAction } from "state-management/actions/user.actions";
 import { combineLatest, Subscription } from "rxjs";
-import { getCurrentEmail } from "../../state-management/selectors/users.selectors";
+import {
+  getCurrentEmail,
+  getDisplayedColumns
+} from "../../state-management/selectors/users.selectors";
 import { getError, submitJob } from "state-management/selectors/jobs.selectors";
 import { select, Store } from "@ngrx/store";
 import {
@@ -98,23 +101,9 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   // and eventually be removed.
   private submitJobSubscription: Subscription;
   private jobErrorSubscription: Subscription;
-  private readonly defaultColumns: string[] = [
-    "select",
-    "datasetName",
-    "sourceFolder",
-    "size",
-    "creationTime",
-    "type",
-    "image",
-    "metadata",
-    "proposalId",
-    "ownerGroup",
-    "archiveStatus",
-    "retrieveStatus"
-  ];
-  visibleColumns = this.defaultColumns.filter(
-    column => this.appConfig.disabledDatasetColumns.indexOf(column) === -1
-  );
+  private defaultColumns: string[];
+  public visibleColumns: string[];
+  columns$ = this.store.pipe(select(getDisplayedColumns));
 
   constructor(
     private router: Router,
@@ -122,9 +111,15 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     private archivingSrv: ArchivingService,
     public dialog: MatDialog,
     @Inject(APP_CONFIG) public appConfig: AppConfig
-  ) { }
+  ) {}
 
   ngOnInit() {
+    this.columns$.subscribe(columns => {
+      this.defaultColumns = columns;
+      this.visibleColumns = this.defaultColumns.filter(
+        column => this.appConfig.disabledDatasetColumns.indexOf(column) === -1
+      );
+    });
     this.submitJobSubscription = this.store.pipe(select(submitJob)).subscribe(
       ret => {
         if (ret && Array.isArray(ret)) {
@@ -283,7 +278,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     this.store.dispatch(new AddToBatchAction());
     this.store.dispatch(new ClearSelectionAction());
   }
-
 
   setWidthColor(datasetSize) {
     let width = 10;

@@ -5,7 +5,7 @@ import { Actions, Effect, ofType } from "@ngrx/effects";
 import { Action } from "@ngrx/store";
 
 import { Observable, of } from "rxjs";
-import { catchError, filter, map, switchMap, tap } from "rxjs/operators";
+import { catchError, filter, map, switchMap, tap, concatMap } from "rxjs/operators";
 
 import * as UserActions from "state-management/actions/user.actions";
 import { MessageType } from "state-management/models";
@@ -54,6 +54,20 @@ export class UserEffects {
   protected navigate$ = this.action$.pipe(
     ofType(UserActions.LOGOUT_COMPLETE),
     tap(() => this.router.navigate(["/login"]))
+  );
+
+  @Effect()
+  protected deselectColumn$: Observable<Action> = this.action$.pipe(
+    ofType(UserActions.DESELECT_COLUMN),
+    map((action: UserActions.DeselectColumnAction) => action.columnName),
+    concatMap(columnName => [new UserActions.DeselectColumnCompleteAction(columnName)])
+  );
+
+  @Effect()
+  protected selectColumn$: Observable<Action> = this.action$.pipe(
+    ofType(UserActions.SELECT_COLUMN),
+    map((action: UserActions.DeselectColumnAction) => action.columnName),
+    concatMap(columnName => [new UserActions.SelectColumnCompleteAction(columnName)])
   );
 
   @Effect()
