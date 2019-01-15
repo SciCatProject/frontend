@@ -1,9 +1,12 @@
-import { Component, OnInit } from "@angular/core";
-import { Observable } from "rxjs";
+import { Component, OnInit, Inject } from "@angular/core";
 import { Store, select } from "@ngrx/store";
 import { getColumns } from "state-management/selectors/users.selectors";
 import { MatCheckboxChange } from "@angular/material";
-import { SelectColumnAction, DeselectColumnAction } from "state-management/actions/user.actions";
+import {
+  SelectColumnAction,
+  DeselectColumnAction
+} from "state-management/actions/user.actions";
+import { AppConfig, APP_CONFIG } from "app-config.module";
 
 @Component({
   selector: "column-selector",
@@ -41,7 +44,10 @@ export class ColumnSelectorComponent implements OnInit {
     }
   }
 
-  constructor(private store: Store<any>) {}
+  constructor(
+    private store: Store<any>,
+    @Inject(APP_CONFIG) public appConfig: AppConfig
+  ) {}
 
   ngOnInit() {}
 }

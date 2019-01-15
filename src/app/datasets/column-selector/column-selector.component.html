@@ -1,4 +1,4 @@
-<mat-card>
+<mat-card *ngIf="appConfig.archiveWorkflowEnabled">
   <div class="title">Select</div>
   <div *ngFor="let column of columns$ | async; let i = index">
     <mat-checkbox           [checked]="isSelected(column)"

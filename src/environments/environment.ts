@@ -16,5 +16,5 @@ export const environment = {
   disabledDatasetColumns: [],
   facility: "ESS",
   shoppingCartEnabled: true,
-  columnSelectEnabled: true,
+  columnSelectEnabled: false,
 };
