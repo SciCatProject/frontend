@@ -5,6 +5,7 @@ export interface UserState {
   currentUser: User;
   profile?: any;
   isLoggingIn: boolean;
+  selectingColumn: boolean;
   deletingColumn: boolean;
   currentUserGroups: AccessGroup[];
   email: string;
@@ -22,6 +23,7 @@ export const initialUserState: UserState = {
   currentUserGroups: [],
   email: undefined,
   isLoggingIn: false,
+  selectingColumn: false,
   deletingColumn: false,
   message: { content: undefined, type: undefined, duration: undefined },
   settings: {

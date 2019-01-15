@@ -74,16 +74,17 @@ export function userReducer(
     }
 
     case SELECT_COLUMN: {
-      return { ...state, deletingColumn: true };
+      return { ...state, selectingColumn: true };
     }
 
     case SELECT_COLUMN_COMPLETE: {
       const displayedColumns = state.displayedColumns;
       const columnName = (action as SelectColumnCompleteAction).columnName;
-      displayedColumns.push(columnName);
+      const result = displayedColumns.concat(columnName);
       return {
         ...state,
-        displayedColumns: displayedColumns
+        selectingColumn: false,
+        displayedColumns: result
       };
     }
 
