@@ -15,5 +15,6 @@ export const environment = {
   scienceSearchEnabled: false,
   disabledDatasetColumns: [],
   facility: "ESS",
-  shoppingCartEnabled: true
+  shoppingCartEnabled: true,
+  columnSelectEnabled: true,
 };
