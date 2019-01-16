@@ -104,6 +104,9 @@ export class DatafilesComponent implements OnInit, AfterViewInit {
   }
 
   getSelectedFiles() {
+    if (!this.dataSource){
+      return [];
+    }
     return this.dataSource.data
       .filter(file => file.selected)
       .map(file => file.path);
