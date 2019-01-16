@@ -1,14 +1,20 @@
 import { ActivatedRoute } from "@angular/router";
 import { Component, Inject, OnDestroy, OnInit } from "@angular/core";
-import { DatablocksAction, DeleteAttachment } from "state-management/actions/datasets.actions";
+import {
+  DatablocksAction,
+  DeleteAttachment
+} from "state-management/actions/datasets.actions";
 import { Job, User } from "shared/sdk/models";
 import { select, Store } from "@ngrx/store";
 import { SubmitAction } from "state-management/actions/jobs.actions";
 import { ShowMessageAction } from "state-management/actions/user.actions";
-import { getError, submitJob } from "../../state-management/selectors/jobs.selectors";
+import {
+  getError,
+  submitJob
+} from "../../state-management/selectors/jobs.selectors";
 import { Subscription } from "rxjs";
 import { Message, MessageType } from "state-management/models";
-import { Angular5Csv } from "angular5-csv/Angular5-csv";
+import { Angular5Csv } from "angular5-csv/dist/Angular5-csv";
 import { getIsAdmin } from "state-management/selectors/users.selectors";
 import { APP_CONFIG, AppConfig } from "app-config.module";
 import { pluck, take } from "rxjs/operators";
@@ -19,7 +25,6 @@ import {
   getCurrentDataset,
   getCurrentOrigDatablocks
 } from "state-management/selectors/datasets.selectors";
-
 
 /**
  * Component to show details for a data set, using the
@@ -34,7 +39,6 @@ import {
   styleUrls: ["./dataset-detail.component.scss"]
 })
 export class DatasetDetailComponent implements OnInit, OnDestroy {
-
   dataset$ = this.store.pipe(select(getCurrentDataset));
   private subscriptions: Subscription[] = [];
   private routeSubscription = this.route.params
