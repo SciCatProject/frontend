@@ -108,8 +108,8 @@ export class DatafilesComponent implements OnInit, AfterViewInit {
       return [];
     }
     return this.dataSource.data
-    .filter(file => file.selected)
-    .map(file => file.path);
+      .filter(file => file.selected)
+      .map(file => file.path);
   }
 
   updateSelectionStatus() {
