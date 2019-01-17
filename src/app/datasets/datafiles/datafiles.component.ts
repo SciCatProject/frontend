@@ -14,10 +14,12 @@ import {
 } from "@angular/core";
 import { getCurrentDataset } from "state-management/selectors/datasets.selectors";
 import { first } from "rxjs/operators";
+import { UserApi } from "shared/sdk/services";
 
 @Component({
   selector: "datafiles",
   templateUrl: "./datafiles.component.html",
+  providers: [ UserApi ],
   styleUrls: ["./datafiles.component.css"]
 })
 export class DatafilesComponent implements OnInit, AfterViewInit {
@@ -48,9 +50,11 @@ export class DatafilesComponent implements OnInit, AfterViewInit {
 
   admin$: Observable<boolean>;
   dataset$: Observable<Dataset>;
+  jwt$: Observable<any>;
 
   constructor(
     private store: Store<any>,
+    private userApi: UserApi,
     @Inject(APP_CONFIG) private appConfig: AppConfig
   ) {
     this.urlPrefix = appConfig.fileserverBaseURL;
@@ -59,7 +63,7 @@ export class DatafilesComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     this.admin$ = this.store.pipe(select(getIsAdmin));
     this.dataset$ = this.store.pipe(select(getCurrentDataset));
-
+    this.jwt$ = this.userApi.jwt();
  
   }
 
