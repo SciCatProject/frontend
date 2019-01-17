@@ -17,6 +17,10 @@ export class MockUserApi {
   getCachedCurrent() {
     return { username: "admin" };
   }
+
+  jwt() {
+    return of("");
+  }
 }
 
 export class MockDatasetApi {
