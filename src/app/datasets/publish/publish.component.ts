@@ -24,14 +24,20 @@ export class PublishComponent implements OnInit {
 
   public form = {
     title: "",
-    creators: [],
+    creator: "",
     authors: [],
     affiliation: this.appConfig.facility,
     publisher: this.appConfig.facility,
     resourceType: "NeXus HDF5 Files",
     description: "",
     abstract: "",
-    pidArray: []
+    pidArray: [],
+    publicationYear: "",
+    url: "",
+    dataDescription: "",
+    thumbnail: "",
+    numberOfFiles: null,
+    sizeOfArchive: null
   };
 
   constructor(
@@ -52,7 +58,7 @@ export class PublishComponent implements OnInit {
             (author, i) => authors.indexOf(author) === i
           );
           this.form.authors = unique;
-          this.form.creators = [...unique];
+          this.form.creator = unique.join(",");
           this.form.pidArray = datasets.map(dataset => dataset.pid);
         })
       )
@@ -61,6 +67,10 @@ export class PublishComponent implements OnInit {
 
   public onPublish() {
     const publishedData = new PublishedData();
+    publishedData.title = this.form.title;
+    publishedData.creator = this.form.creator;
+    publishedData.title = this.form.title;
+    publishedData.title = this.form.title;
     publishedData.affiliation = this.form.affiliation;
     publishedData.abstract = this.form.abstract;
     publishedData.authors = this.form.authors;
