@@ -14,7 +14,6 @@ import {
 } from "@angular/core";
 import { getCurrentDataset } from "state-management/selectors/datasets.selectors";
 import { first } from "rxjs/operators";
-import { HttpClient } from '@angular/common/http';
 import { JWTService, IJWT } from './datafiles.service';
 
 @Component({
