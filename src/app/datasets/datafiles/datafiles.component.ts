@@ -4,6 +4,7 @@ import { Observable } from "rxjs";
 import { OrigDatablock, Dataset } from "shared/sdk/models";
 import { Store, select } from "@ngrx/store";
 import { getIsAdmin } from "state-management/selectors/users.selectors";
+import { ChangeDetectorRef } from '@angular/core';
 import {
   Component,
   Input,
@@ -55,6 +56,7 @@ export class DatafilesComponent implements OnInit, AfterViewInit {
   constructor(
     private store: Store<any>,
     private userApi: UserApi,
+    private cdRef: ChangeDetectorRef,
     @Inject(APP_CONFIG) private appConfig: AppConfig
   ) {
     this.urlPrefix = appConfig.fileserverBaseURL;
@@ -75,6 +77,11 @@ export class DatafilesComponent implements OnInit, AfterViewInit {
     }
     // this.dataSource.sort = this.sort;
   }
+  ngAfterViewChecked()
+  {
+    this.count = this.files.length;
+    this.cdRef.detectChanges();
+  }
 
   /**
    * Load datafiles and add to source for table viewing
@@ -88,8 +95,6 @@ export class DatafilesComponent implements OnInit, AfterViewInit {
       });
       this.files = this.files.concat(selectable);
     });
-
-    this.count = this.files.length;
     this.dataSource.data = this.files;
   }
 
