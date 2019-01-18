@@ -5,7 +5,7 @@ import { Actions, Effect, ofType } from "@ngrx/effects";
 import { Action } from "@ngrx/store";
 
 import { Observable, of } from "rxjs";
-import { catchError, filter, map, switchMap, tap } from "rxjs/operators";
+import { catchError, filter, map, switchMap, tap, concatMap } from "rxjs/operators";
 
 import * as UserActions from "state-management/actions/user.actions";
 import { MessageType } from "state-management/models";
@@ -15,26 +15,31 @@ import { UserApi } from "shared/sdk";
 
 @Injectable()
 export class UserEffects {
-  
   @Effect()
   protected login$ = this.action$.pipe(
     ofType<UserActions.LoginAction>(UserActions.LOGIN),
     map(action => action.form),
-    switchMap(({username, password, rememberMe}) => this.loginSrv.login$(username, password, rememberMe)),
-    map(res => res 
-      ? new UserActions.LoginCompleteAction(res.user, res.accountType)
-      : new UserActions.LoginFailedAction()
+    switchMap(({ username, password, rememberMe }) =>
+      this.loginSrv.login$(username, password, rememberMe)
+    ),
+    map(res =>
+      res
+        ? new UserActions.LoginCompleteAction(res.user, res.accountType)
+        : new UserActions.LoginFailedAction()
     )
   );
 
   @Effect()
   protected loginFailed$ = this.action$.pipe(
     ofType(UserActions.LOGIN_FAILED),
-    map(() => new UserActions.ShowMessageAction({
-      content: 'Could not log in. Check your username and password.',
-      type: MessageType.Error,
-      duration: 5000
-    }))
+    map(
+      () =>
+        new UserActions.ShowMessageAction({
+          content: "Could not log in. Check your username and password.",
+          type: MessageType.Error,
+          duration: 5000
+        })
+    )
   );
 
   @Effect()
@@ -49,6 +54,20 @@ export class UserEffects {
   protected navigate$ = this.action$.pipe(
     ofType(UserActions.LOGOUT_COMPLETE),
     tap(() => this.router.navigate(["/login"]))
+  );
+
+  @Effect()
+  protected deselectColumn$: Observable<Action> = this.action$.pipe(
+    ofType(UserActions.DESELECT_COLUMN),
+    map((action: UserActions.DeselectColumnAction) => action.columnName),
+    concatMap(columnName => [new UserActions.DeselectColumnCompleteAction(columnName)])
+  );
+
+  @Effect()
+  protected selectColumn$: Observable<Action> = this.action$.pipe(
+    ofType(UserActions.SELECT_COLUMN),
+    map((action: UserActions.DeselectColumnAction) => action.columnName),
+    concatMap(columnName => [new UserActions.SelectColumnCompleteAction(columnName)])
   );
 
   @Effect()
@@ -74,6 +93,6 @@ export class UserEffects {
     private action$: Actions,
     private router: Router,
     private userSrv: UserApi,
-    private loginSrv: LoginService,
+    private loginSrv: LoginService
   ) {}
 }

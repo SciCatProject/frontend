@@ -6,3 +6,5 @@ import * as users from "./users.selectors";
 export { users };
 import * as policies from "./policies.selectors";
 export { policies };
+import * as samples from "./samples.selectors";
+export { samples };

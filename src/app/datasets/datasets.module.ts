@@ -1,4 +1,5 @@
 import { AppConfigModule } from "app-config.module";
+import { LinkyModule } from "ngx-linky";
 import { ArchivingService } from "./archiving.service";
 import { BatchCardComponent } from "./batch-card/batch-card.component";
 import { BatchViewComponent } from "./batch-view/batch-view.component";
@@ -43,6 +44,7 @@ import {
   MatOptionModule,
   MatPaginatorModule,
   MatProgressSpinnerModule,
+  MatRadioModule,
   MatSelectModule,
   MatSortModule,
   MatTableModule,
@@ -53,6 +55,8 @@ import {
 import { PublishComponent } from "./publish/publish.component";
 import { DatasetFormComponent } from "./dataset-form/dataset-form.component";
 import { ScientificConditionDialogComponent } from "./scientific-condition-dialog/scientific-condition-dialog.component";
+import { jobsReducer } from "../state-management/reducers/jobs.reducer";
+import { ColumnSelectorComponent } from "./column-selector/column-selector.component";
 
 @NgModule({
   imports: [
@@ -62,6 +66,7 @@ import { ScientificConditionDialogComponent } from "./scientific-condition-dialo
     FlexLayoutModule,
     FontAwesomeModule,
     FormsModule,
+    LinkyModule,
     MatAutocompleteModule,
     MatButtonModule,
     MatButtonToggleModule,
@@ -78,6 +83,7 @@ import { ScientificConditionDialogComponent } from "./scientific-condition-dialo
     MatOptionModule,
     MatPaginatorModule,
     MatProgressSpinnerModule,
+    MatRadioModule,
     MatSelectModule,
     MatSortModule,
     MatTableModule,
@@ -87,7 +93,8 @@ import { ScientificConditionDialogComponent } from "./scientific-condition-dialo
     RouterModule,
     SatDatepickerModule,
     SharedCatanieModule,
-    StoreModule.forFeature("datasets", datasetsReducer)
+    StoreModule.forFeature("datasets", datasetsReducer),
+    StoreModule.forFeature("jobs", jobsReducer)
   ],
   declarations: [
     BatchCardComponent,
@@ -105,10 +112,9 @@ import { ScientificConditionDialogComponent } from "./scientific-condition-dialo
     PublishComponent,
     DatasetFormComponent,
     ScientificConditionDialogComponent,
+    ColumnSelectorComponent
   ],
-  entryComponents: [
-    ScientificConditionDialogComponent
-  ],
+  entryComponents: [ScientificConditionDialogComponent],
   providers: [DatasetService, ArchivingService],
   exports: [DatasetTableComponent, DatasetsFilterComponent]
 })

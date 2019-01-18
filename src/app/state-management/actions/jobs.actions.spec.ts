@@ -3,16 +3,13 @@ import { SubmitAction, SUBMIT } from "./jobs.actions";
 import { SubmitCompleteAction, SUBMIT_COMPLETE } from "./jobs.actions";
 import { FailedAction, FAILED } from "./jobs.actions";
 import { RetrieveCompleteAction, RETRIEVE_COMPLETE } from "./jobs.actions";
-import { ChildRetrieveAction, CHILD_RETRIEVE } from "./jobs.actions";
-import {
-  ChildRetrieveCompleteAction,
-  CHILD_RETRIEVE_COMPLETE
-} from "./jobs.actions";
 import { SearchIDAction, SEARCH_ID } from "./jobs.actions";
 import { SearchIDCompleteAction, SEARCH_ID_COMPLETE } from "./jobs.actions";
 import { SearchIDFailedAction, SEARCH_ID_FAILED } from "./jobs.actions";
 import { CurrentJobAction, SELECT_CURRENT } from "./jobs.actions";
 import { SortUpdateAction, SORT_UPDATE } from "./jobs.actions";
+import { GetCountCompleteAction, GET_COUNT_COMPLETE } from "./jobs.actions";
+
 
 describe("SubmitAction", () => {
   it("should create an action", () => {
@@ -46,19 +43,11 @@ describe("RetrieveCompleteAction", () => {
   });
 });
 
-describe("ChildRetrieveAction", () => {
+describe("GetCountCompleteAction", () => {
   it("should create an action", () => {
-    const payload = [{ id: 1 }];
-    const action = new ChildRetrieveAction(payload);
-    expect({ ...action }).toEqual({ type: CHILD_RETRIEVE, payload });
-  });
-});
-
-describe("ChildRetrieveCompleteAction", () => {
-  it("should create an action", () => {
-    const payload = [{ id: 1 }];
-    const action = new ChildRetrieveCompleteAction(payload);
-    expect({ ...action }).toEqual({ type: CHILD_RETRIEVE_COMPLETE, payload });
+    const totalJobNumber = 1;
+    const action = new GetCountCompleteAction(totalJobNumber);
+    expect({ ...action }).toEqual({ type: GET_COUNT_COMPLETE, totalJobNumber });
   });
 });
 
@@ -98,7 +87,8 @@ describe("SortUpdateAction", () => {
   it("should create an action", () => {
     const limit = 0;
     const skip = 0;
-    const action = new SortUpdateAction(skip, limit);
-    expect({ ...action }).toEqual({ type: SORT_UPDATE, skip, limit });
+    const mode = null;
+    const action = new SortUpdateAction(skip, limit, mode);
+    expect({ ...action }).toEqual({ type: SORT_UPDATE, skip, limit, mode });
   });
 });

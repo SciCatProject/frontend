@@ -22,8 +22,8 @@ import { PoliciesEffects } from "state-management/effects/policies.effects";
 import { PoliciesModule } from "policies/policies.module";
 import { ProposalsModule } from "proposals/proposals.module";
 import { RouterModule } from "@angular/router";
-import { SDKBrowserModule } from "shared/sdk/index";
-import { SampleDataFormComponent } from "sample-data-form/sample-data-form.component";
+import { SampleApi, SDKBrowserModule } from "shared/sdk/index";
+import { SamplesModule} from "./samples/samples.module";
 import { SatDatepickerModule, SatNativeDateModule } from "saturn-datepicker";
 import { SharedCatanieModule } from "shared/shared.module";
 import { StoreDevtoolsModule } from "@ngrx/store-devtools";
@@ -34,6 +34,7 @@ import { UsersModule } from "users/users.module";
 import { localStorageSync } from "ngrx-store-localstorage";
 import { rootReducer } from "state-management/reducers/root.reducer";
 import { routerReducer, StoreRouterConnectingModule } from "@ngrx/router-store";
+import { LoginService } from "users/login.service";
 
 import {
   MatCardModule,
@@ -47,8 +48,11 @@ import {
   MatSidenavModule,
   MatSnackBarModule,
   MatTableModule,
-  MatToolbarModule
+  MatToolbarModule,
+  MatButtonToggleModule,
 } from "@angular/material";
+import { SampleService } from "./samples/sample.service";
+import { SamplesEffects } from "./state-management/effects/samples.effects";
 
 export function localStorageSyncWrapper(reducer: any) {
   return localStorageSync({ keys: ["root"], rehydrate: true })(reducer);
@@ -58,7 +62,6 @@ export function localStorageSyncWrapper(reducer: any) {
   declarations: [
     AppComponent,
     JobsTableComponent,
-    SampleDataFormComponent,
     JobsDetailComponent
   ],
   imports: [
@@ -87,10 +90,12 @@ export function localStorageSyncWrapper(reducer: any) {
     PoliciesModule,
     ProposalsModule,
     ReactiveFormsModule,
+    SamplesModule,
     SatDatepickerModule,
     SatNativeDateModule,
     SharedCatanieModule,
     UsersModule,
+    MatButtonToggleModule,
 
     SDKBrowserModule.forRoot(),
     // StoreModule.forRoot({router: routerReducer, root: rootReducer}, {metaReducers: [localStorageSyncWrapper]}),
@@ -103,7 +108,8 @@ export function localStorageSyncWrapper(reducer: any) {
       DatasetEffects,
       UserEffects,
       JobsEffects,
-      PoliciesEffects
+      PoliciesEffects,
+      SamplesEffects
     ]),
     StoreRouterConnectingModule
   ],
@@ -112,12 +118,14 @@ export function localStorageSyncWrapper(reducer: any) {
     AuthCheck,
     DatasetService,
     ArchivingService,
+    SampleService,
     UserApi,
+    SampleApi,
     Title,
-    MatNativeDateModule
+    MatNativeDateModule,
+    LoginService
     //      {provide: RouteReuseStrategy, useClass: CustomReuseStrategy}
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule {
-}
+export class AppModule {}

@@ -5,52 +5,53 @@
       <mat-list>
         <mat-list-item>
           <a class="item" (click)="sidenav.close()" [routerLink]="['/datasets/']" [routerLinkActive]="['active']">
-            <fa-icon [icon]="faFileAlt"></fa-icon>&nbsp;
+              <i class="material-icons"> folder_open </i> 
             Datasets</a>
         </mat-list-item>
 
         <mat-list-item>
           <a class="item" (click)="sidenav.close()" [routerLink]="['/proposals/']" [routerLinkActive]="['active']">
-            <fa-icon [icon]="faCertificate"></fa-icon>&nbsp;
+            <i class="material-icons"> spa </i> 
             Proposals</a>
         </mat-list-item>
 
         <mat-list-item>
-          <a class="item" (click)="sidenav.close()" [routerLink]="['/sample-data/', 'add']"
-             [routerLinkActive]="['active']">
-            <fa-icon [icon]="faEdit"></fa-icon>&nbsp;
-            Sample Data Entry</a>
+          <a class="item" (click)="sidenav.close()" [routerLink]="['/samples/']" [routerLinkActive]="['active']">
+            <i class="material-icons"> center_focus_weak </i> 
+            Samples </a>
         </mat-list-item>
 
         <mat-list-item>
           <a class="item" (click)="sidenav.close()" [routerLink]="['/archive-settings/']"
              [routerLinkActive]="['active']">
-            <fa-icon [icon]="faDownload"></fa-icon>&nbsp;
+            <i class="material-icons"> cloud_download </i> 
             Archive Settings</a>
         </mat-list-item>
 
         <mat-list-item>
           <a class="item" (click)="sidenav.close()" [routerLink]="['/user/','jobs']" [routerLinkActive]="['active']">
-            <fa-icon [icon]="faPeopleCarry"></fa-icon>&nbsp;
+            <i class="material-icons"> transfer_within_a_station </i> 
             Jobs</a>
         </mat-list-item>
 
         <mat-list-item>
           <a class="item user-menu" [matMenuTriggerFor]="userMenu">
-            <fa-icon [icon]="faIdBadge"></fa-icon>&nbsp;
-            {{ username }} <i class="fa fa-angle-down"></i></a>
+            <i class="material-icons"> portrait </i> 
+            {{ username }} 
+            <i class="material-icons"> expand_more </i> 
+          </a>
         </mat-list-item>
       </mat-list>
 
       <mat-menu #userMenu="matMenu">
         <a mat-menu-item (click)="sidenav.close()" [routerLinkActive]="['active']" [routerLink]="['/user/','details']">
-          <fa-icon [icon]="faIdBadge"></fa-icon>&nbsp;
+          <i class="material-icons"> portrait </i> 
           Details</a>
         <a mat-menu-item (click)="sidenav.close()" [routerLinkActive]="['active']" [routerLink]="['/user/','settings']">
-          <fa-icon [icon]="faCog"></fa-icon>&nbsp;
+          <i class="material-icons"> settings </i> 
           Settings</a>
         <a mat-menu-item class="logout-link" (click)="logout()">
-          <fa-icon [icon]="faSignOutAlt"></fa-icon>&nbsp;
+          <i class="material-icons"> exit_to_app </i> 
           Logout</a>
       </mat-menu>
 
@@ -58,10 +59,10 @@
     </mat-sidenav>
 
     <mat-sidenav-content>
-      <mat-toolbar color="primary">
+      <mat-toolbar color="primary" style="position: sticky;">
         <mat-toolbar-row>
           <ng-container *ngIf="userObs$ | async as boolean">
-            <i (click)="sidenavToggle()" class="sidenav-toggle fa fa-bars" aria-hidden="true"></i>
+            <i (click)="sidenavToggle()" class="sidenav-toggle material-icons" aria-hidden="true">menu</i>
           </ng-container>
           <h3 class="app-title">{{title}}</h3>
           <span class="example-spacer"></span>

@@ -32,7 +32,7 @@ export class PublishComponent implements OnInit {
     description: "",
     abstract: "",
     pidArray: [],
-    publicationYear: "",
+    publicationYear: null,
     url: "",
     dataDescription: "",
     thumbnail: "",
@@ -69,13 +69,18 @@ export class PublishComponent implements OnInit {
     const publishedData = new PublishedData();
     publishedData.title = this.form.title;
     publishedData.creator = this.form.creator;
-    publishedData.title = this.form.title;
-    publishedData.title = this.form.title;
     publishedData.affiliation = this.form.affiliation;
     publishedData.abstract = this.form.abstract;
     publishedData.authors = this.form.authors;
     publishedData.dataDescription = this.form.description;
     publishedData.pidArray = this.form.pidArray;
+    publishedData.publisher = this.form.publisher;
+    publishedData.resourceType = this.form.resourceType;
+    publishedData.publicationYear = this.form.publicationYear;
+    publishedData.url = this.form.url;
+    publishedData.thumbnail = this.form.thumbnail;
+    publishedData.numberOfFiles = this.form.numberOfFiles;
+    publishedData.sizeOfArchive = this.form.sizeOfArchive;
 
     this.publishedDataApi.create(publishedData).subscribe(result => {
       alert(JSON.stringify(result));

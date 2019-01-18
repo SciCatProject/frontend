@@ -9,7 +9,7 @@ import * as lb from "shared/sdk/services";
 import * as JobActions from "state-management/actions/jobs.actions";
 import * as UserActions from "state-management/actions/user.actions";
 import { MessageType, Job } from "state-management/models";
-import { map, switchMap, catchError } from "rxjs/operators";
+import { map, switchMap, catchError, mergeMap } from "rxjs/operators";
 
 // import store state interface
 
@@ -53,56 +53,38 @@ export class JobsEffects {
   );
 
   @Effect()
-  protected childRetrieve$: Observable<Action> = this.action$.pipe(
-    ofType(JobActions.CHILD_RETRIEVE),
-    switchMap(pl => {
-      const node = pl["payload"];
-      node.children = [];
-      if (node.data.datasetList.length > 0) {
-        node.data.datasetList.map(ds => {
-          if (ds.pid && ds.pid.length > 0) {
-            this.dsSrv // Hur gör man här?
-              .findById(encodeURIComponent(ds.pid), {
-                include: "datasetlifecycle"
-              })
-              .subscribe(dataset => {
-                const entry = {
-                  data: {
-                    creationTime: ds.pid,
-                    emailJobInitiator: "",
-                    type: dataset["datasetlifecycle"]["archiveStatusMessage"],
-                    jobStatusMessage:
-                      dataset["datasetlifecycle"]["retrieveStatusMessage"]
-                  }
-                };
-                node.children.push(entry);
-              });
-          }
-        });
-      } else {
-        node.children.push({ data: { type: "No datasets could be found" } });
-      }
-      return of(new JobActions.ChildRetrieveCompleteAction(node.children));
-    }),
-    catchError(err => {
-      console.log(err);
-      return of(new JobActions.FailedAction(err));
-    })
-  );
-
-  @Effect()
+  // this is the jobs view get effect
   protected get_updated_sort$: Observable<Action> = this.action$.pipe(
     ofType(JobActions.SORT_UPDATE),
     switchMap((action: JobActions.SortUpdateAction) => {
       const filter = {};
+      if (action.mode) {
+        filter["where"] = action.mode;
+      }
       filter["skip"] = action.skip;
-      filter["limit"] = action.limit;
+      filter["limit"] = action.limit; // items per page
       filter["order"] = "creationTime DESC";
       return this.jobSrv
         .find(filter)
         .pipe(
           map(
             (jobsets: Job[]) => new JobActions.RetrieveCompleteAction(jobsets)
+          )
+        );
+    }),
+    catchError(err => of(new JobActions.FailedAction(err)))
+  );
+
+  @Effect()
+  private getCount$: Observable<Action> = this.action$.pipe(
+    ofType(JobActions.SORT_UPDATE),
+    mergeMap((action: JobActions.SortUpdateAction) => {
+      return this.jobSrv
+        .count(action.mode)
+        .pipe(
+          map(
+            jobCount =>
+              new JobActions.GetCountCompleteAction(jobCount.count)
           )
         );
     }),

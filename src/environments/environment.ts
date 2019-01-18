@@ -10,7 +10,11 @@ export const environment = {
   externalAuthEndpoint: "/auth/msad",
   archiveWorkflowEnabled: true,
   editMetadataEnabled: true,
+  editSampleEnabled: true,
+  csvEnabled: false,
+  scienceSearchEnabled: false,
   disabledDatasetColumns: [],
   facility: "ESS",
-  shoppingCartEnabled: true
+  shoppingCartEnabled: true,
+  columnSelectEnabled: true
 };

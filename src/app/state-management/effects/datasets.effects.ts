@@ -2,12 +2,25 @@ import { Injectable } from "@angular/core";
 import { Observable, of } from "rxjs";
 import { Actions, Effect, ofType } from "@ngrx/effects";
 import { Action, select, Store } from "@ngrx/store";
-import { Angular5Csv } from "angular5-csv/Angular5-csv";
+import { Angular5Csv } from "angular5-csv/dist/Angular5-csv";
 import { DatasetApi, DatasetAttachmentApi } from "shared/sdk/services";
 import * as DatasetActions from "state-management/actions/datasets.actions";
 import { Dataset } from "state-management/models";
-import { getDatasetsInBatch, getFullfacetsParams, getFullqueryParams, getRectangularRepresentation } from "../selectors/datasets.selectors";
-import { catchError, filter, map, mergeMap, switchMap, tap, withLatestFrom } from "rxjs/operators";
+import {
+  getDatasetsInBatch,
+  getFullfacetsParams,
+  getFullqueryParams,
+  getRectangularRepresentation
+} from "../selectors/datasets.selectors";
+import {
+  catchError,
+  filter,
+  map,
+  mergeMap,
+  switchMap,
+  tap,
+  withLatestFrom
+} from "rxjs/operators";
 import { getCurrentUser } from "../selectors/users.selectors";
 import { LOGOUT_COMPLETE } from "../actions/user.actions";
 
@@ -19,15 +32,12 @@ export class DatasetEffects {
     map((action: DatasetActions.DeleteAttachment) => action.attachment_id),
     switchMap(attachment_id => {
       console.log("deleting attachment", attachment_id);
-      return this.datasetAttachmentApi
-        .deleteById(attachment_id)
-        .pipe(
-          map(res => new DatasetActions.DeleteAttachmentComplete(attachment_id)),
-          catchError (err => of (new DatasetActions.DeleteAttachmentFailed(err)))
-        );
+      return this.datasetAttachmentApi.deleteById(attachment_id).pipe(
+        map(res => new DatasetActions.DeleteAttachmentComplete(attachment_id)),
+        catchError(err => of(new DatasetActions.DeleteAttachmentFailed(err)))
+      );
     })
   );
-
 
   @Effect()
   protected saveDataset$: Observable<Action> = this.actions$.pipe(
@@ -45,11 +55,10 @@ export class DatasetEffects {
     switchMap(attachment => {
       console.log("creating attachment for", attachment.datasetId);
       delete attachment.id;
-      return this.datasetAttachmentApi
-        .create(attachment)
-        .pipe(map(res => new DatasetActions.AddAttachmentComplete(attachment)),
-          catchError(err => of(new DatasetActions.AddAttachmentFailed(err)))
-        );
+      return this.datasetAttachmentApi.create(attachment).pipe(
+        map(res => new DatasetActions.AddAttachmentComplete(attachment)),
+        catchError(err => of(new DatasetActions.AddAttachmentFailed(err)))
+      );
     })
   );
 
@@ -95,7 +104,7 @@ export class DatasetEffects {
     tap((rect: any) => {
       const options = {
         fieldSeparator: ",",
-        quoteStrings: "\"",
+        quoteStrings: '"',
         decimalseparator: ".",
         showLabels: true,
         showTitle: false,
@@ -168,8 +177,7 @@ export class DatasetEffects {
     private store: Store<any>,
     private datasetApi: DatasetApi,
     private datasetAttachmentApi: DatasetAttachmentApi
-  ) {
-  }
+  ) {}
 
   private storeBatch(batch: Dataset[], userId: string): void {
     const json = JSON.stringify(batch);

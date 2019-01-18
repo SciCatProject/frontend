@@ -1,0 +1,8 @@
+<mat-card *ngIf="appConfig.columnSelectEnabled">
+  <div class="title">Select</div>
+  <div *ngFor="let column of columns$ | async; let i = index">
+    <mat-checkbox           [checked]="isSelected(column)"
+    (change)="onSelect($event, column)"
+     > {{ column }} </mat-checkbox>
+  </div>
+</mat-card>

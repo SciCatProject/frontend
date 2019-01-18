@@ -1,15 +1,8 @@
 import { Component, Input, OnInit } from "@angular/core";
 import { Dataset, Proposal } from "state-management/models";
+import { Router } from "@angular/router";
 
 
-import { faAt } from "@fortawesome/free-solid-svg-icons/faAt";
-import { faCog } from "@fortawesome/free-solid-svg-icons/faCog";
-import { faCalendarAlt } from "@fortawesome/free-solid-svg-icons/faCalendarAlt";
-import { faChessQueen } from "@fortawesome/free-solid-svg-icons/faChessQueen";
-import { faCoins } from "@fortawesome/free-solid-svg-icons/faCoins";
-import { faFileAlt } from "@fortawesome/free-solid-svg-icons/faFileAlt";
-import { faIdBadge } from "@fortawesome/free-solid-svg-icons/faIdBadge";
-import { faUserAlt } from "@fortawesome/free-solid-svg-icons/faUserAlt";
 
 interface Proposer {
   name: string;
@@ -27,14 +20,6 @@ export class ProposalDetailComponent implements OnInit {
   proposal: Proposal;
   @Input()
   datasets: Dataset[];
-  faAt = faAt;
-  faIdBadge = faIdBadge;
-  faCog = faCog;
-  faCoins = faCoins;
-  faChessQueen = faChessQueen;
-  faCalendarAlt = faCalendarAlt;
-  faFileAlt = faFileAlt;
-  faUserAlt = faUserAlt;
   displayedColumns: string[] = [
     "pid",
     "sourceFolder",
@@ -50,8 +35,14 @@ export class ProposalDetailComponent implements OnInit {
   private mainProposer: Proposer;
   private principalInvestigator: Proposer;
 
+  constructor(
+    private router: Router,
+   ) { }
+
   ngOnInit() {
-    if (this.proposal == null) return;
+    if (this.proposal == null) {
+      return;
+    }
 
     // Set up fallback values for main proposer
     const { firstname, lastname } = this.proposal;
@@ -80,4 +71,11 @@ export class ProposalDetailComponent implements OnInit {
   calculateRowClasses(row: Dataset) {
     return row.size === 0 ? { "row-empty": true } : { "row-generic": true };
   }
+
+  onClick(datasetPid: string): void {
+    const pid = encodeURIComponent(datasetPid);
+    this.router.navigateByUrl("/datasets/" + pid);
+  }
+
 }
+

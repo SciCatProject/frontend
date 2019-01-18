@@ -4,8 +4,11 @@ import { ConfigFormComponent } from "shared/modules/config-form/config-form.comp
 import { DatafilesComponent } from "datasets/datafiles/datafiles.component";
 import { DatasetDetailComponent } from "./dataset-detail.component";
 import { FileSizePipe } from "../../shared/pipes/filesize.pipe";
+import { LinkyPipe } from "ngx-linky";
 import { MatTableModule } from "@angular/material";
 import { MockActivatedRoute, MockStore } from "shared/MockStubs";
+import { MockRouter } from "shared/MockStubs";
+import { Router } from "@angular/router";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { ObjKeysPipe, TitleCasePipe } from "shared/pipes/index";
 import { ReactiveFormsModule } from "@angular/forms";
@@ -30,6 +33,7 @@ describe("DatasetDetailComponent", () => {
         DatasetDetailComponent,
         DatafilesComponent,
         ConfigFormComponent,
+        LinkyPipe,
         ObjKeysPipe,
         TitleCasePipe,
         FileSizePipe
@@ -38,6 +42,7 @@ describe("DatasetDetailComponent", () => {
     TestBed.overrideComponent(DatasetDetailComponent, {
       set: {
         providers: [
+          {provide: Router, useClass: MockRouter},
           {
             provide: APP_CONFIG,
             useValue: {

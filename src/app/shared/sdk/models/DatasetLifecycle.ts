@@ -8,6 +8,7 @@ export interface DatasetLifecycleInterface {
   "id": string;
   "archivable"?: boolean;
   "retrievable"?: boolean;
+  "publishable"?: boolean;
   "dateOfDiskPurging"?: Date;
   "archiveRetentionTime"?: Date;
   "dateOfPublishing"?: Date;
@@ -39,6 +40,7 @@ export class DatasetLifecycle implements DatasetLifecycleInterface {
   "id": string;
   "archivable": boolean;
   "retrievable": boolean;
+  "publishable": boolean;
   "dateOfDiskPurging": Date;
   "archiveRetentionTime": Date;
   "dateOfPublishing": Date;
@@ -107,6 +109,10 @@ export class DatasetLifecycle implements DatasetLifecycleInterface {
         },
         "retrievable": {
           name: 'retrievable',
+          type: 'boolean'
+        },
+        "publishable": {
+          name: 'publishable',
           type: 'boolean'
         },
         "dateOfDiskPurging": {

@@ -7,7 +7,7 @@ import { SampleDataFormComponent } from "./sample-data-form.component";
 import { ConfigFormComponent } from "shared/modules/config-form/config-form.component";
 import { MockConfigService, MockStore } from "shared/MockStubs";
 import { ObjKeysPipe, TitleCasePipe } from "shared/pipes/index";
-import { ConfigService } from "shared/services";
+import { ConfigService } from "shared/services/index";
 describe("SampleDataFormComponent", () => {
   let component: SampleDataFormComponent;
   let fixture: ComponentFixture<SampleDataFormComponent>;

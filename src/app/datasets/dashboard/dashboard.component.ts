@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import { Router, ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 
-import { Store, select } from "@ngrx/store";
+import { select, Store } from "@ngrx/store";
 
 import * as rison from "rison";
 import * as deepEqual from "deep-equal";
@@ -9,28 +9,28 @@ import * as deepEqual from "deep-equal";
 import { DatasetFilters } from "state-management/models";
 
 import {
-  SetSearchTermsAction,
-  FetchFacetCountsAction,
   FetchDatasetsAction,
-  SetTextFilterAction,
+  FetchFacetCountsAction,
+  PrefillBatchAction,
   PrefillFiltersAction,
-  PrefillBatchAction
+  SetSearchTermsAction,
+  SetTextFilterAction
 } from "state-management/actions/datasets.actions";
 
 import {
-  getSelectedDatasets,
-  getSearchTerms,
   getFilters,
-  getHasPrefilledFilters
+  getHasPrefilledFilters,
+  getSearchTerms,
+  getSelectedDatasets
 } from "state-management/selectors/datasets.selectors";
 import {
-  filter,
-  map,
-  take,
+  combineLatest,
   debounceTime,
   distinctUntilChanged,
-  combineLatest,
-  skipWhile
+  filter,
+  map,
+  skipWhile,
+  take
 } from "rxjs/operators";
 
 @Component({
@@ -39,21 +39,13 @@ import {
   styleUrls: ["dashboard.component.css"]
 })
 export class DashboardComponent implements OnInit, OnDestroy {
-  constructor(
-    private store: Store<any>,
-    private router: Router,
-    private route: ActivatedRoute
-  ) {}
-
-  private filters$ = this.store.pipe(select(getFilters));
   selectedDatasets$ = this.store.pipe(select(getSelectedDatasets));
+  private filters$ = this.store.pipe(select(getFilters));
   private searchTerms$ = this.store.pipe(select(getSearchTerms));
-
   private readyToFetch$ = this.store.pipe(
     select(getHasPrefilledFilters),
     filter(has => has)
   );
-
   private writeRouteSubscription = this.filters$
     .pipe(
       combineLatest(this.readyToFetch$),
@@ -67,7 +59,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
         queryParams: { args: rison.encode(filters) }
       });
     });
-
   private readRouteSubscription = this.route.queryParams
     .pipe(
       map(params => params.args as string),
@@ -77,7 +68,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
     .subscribe(filters =>
       this.store.dispatch(new PrefillFiltersAction(filters))
     );
-
   private searchTermSubscription = this.searchTerms$
     .pipe(
       skipWhile(terms => terms === ""),
@@ -87,6 +77,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
     .subscribe(terms => {
       this.store.dispatch(new SetTextFilterAction(terms));
     });
+
+  constructor(
+    private store: Store<any>,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {}
 
   ngOnDestroy() {
     this.writeRouteSubscription.unsubscribe();

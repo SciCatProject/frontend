@@ -1,5 +1,8 @@
 @import '../../../theme.scss';
 
+.button-group {
+  float: right;
+}
 $ds-archive: mat-palette($mat-green, 600);
 
 mat-cell, .mat-header-cell {

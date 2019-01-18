@@ -6,7 +6,8 @@ import {
   Dataset,
   RawDataset,
   Proposal,
-  Policy
+  Policy,
+  Sample
 } from "shared/sdk/models";
 export {
   User,
@@ -16,7 +17,8 @@ export {
   Dataset,
   RawDataset,
   Proposal,
-  Policy
+  Policy,
+  Sample
 };
 
 import { DatasetInterface } from "shared/sdk";
@@ -41,6 +43,7 @@ export class Message {
 }
 
 export type ViewMode = "view" | "archive" | "retrieve";
+export enum JobViewMode { myJobs = "my jobs", allJobs = "all jobs"}
 
 type ScientificConditionRelation =
   | "EQUAL_TO_NUMERIC"
@@ -65,7 +68,11 @@ export interface DatasetFilters {
   keywords: string[];
   sortField: string;
   mode: ViewMode;
-  scientific: ScientificCondition[]
+  scientific: ScientificCondition[];
+}
+
+export interface SampleFilters {
+  sortField: string;
 }
 
 export interface PolicyFilters {

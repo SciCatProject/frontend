@@ -1,8 +1,14 @@
-import { Component } from "@angular/core";
+import { APP_CONFIG, AppConfig } from "app-config.module";
+import { Component, Inject } from "@angular/core";
 import { MatDatepickerInputEvent, MatDialog } from "@angular/material";
 
 import { select, Store } from "@ngrx/store";
-import { debounceTime, distinctUntilChanged, skipWhile } from "rxjs/operators";
+import {
+  debounceTime,
+  distinctUntilChanged,
+  skipWhile,
+  map
+} from "rxjs/operators";
 
 import { FacetCount } from "state-management/state/datasets.store";
 import {
@@ -38,6 +44,7 @@ import {
   SetTextFilterAction
 } from "state-management/actions/datasets.actions";
 import { ScientificConditionDialogComponent } from "datasets/scientific-condition-dialog/scientific-condition-dialog.component";
+import { combineLatest, BehaviorSubject, Observable } from "rxjs";
 
 type DateRange = {
   begin: Date;
@@ -64,6 +71,51 @@ export class DatasetsFilterComponent {
   creationTimeFilter$ = this.store.pipe(select(getCreationTimeFilter));
   scientificConditions$ = this.store.pipe(select(getScientificConditions));
 
+  locationInput$ = new BehaviorSubject<string>("");
+  groupInput$ = new BehaviorSubject<string>("");
+  typeInput$ = new BehaviorSubject<string>("");
+  keywordsInput$ = new BehaviorSubject<string>("");
+
+  createSuggestionObserver(
+    facetCounts$: Observable<FacetCount[]>,
+    input$: BehaviorSubject<string>,
+    currentFilters$: Observable<string[]>
+  ): Observable<FacetCount[]> {
+    return combineLatest(facetCounts$, input$, currentFilters$).pipe(
+      map(([counts, filterString, currentFilters]) => {
+        if (!counts) return [];
+        return counts.filter(
+          count =>
+            typeof count._id === "string" &&
+            count._id.toLowerCase().includes(filterString.toLowerCase()) &&
+            currentFilters.indexOf(count._id) < 0
+        );
+      })
+    );
+  }
+  groupSuggestions$ = this.createSuggestionObserver(
+    this.groupFacetCounts$,
+    this.groupInput$,
+    this.groupFilter$
+  );
+
+  locationSuggestions$ = this.createSuggestionObserver(
+    this.locationFacetCounts$,
+    this.locationInput$,
+    this.locationFilter$
+  );
+
+  typeSuggestions$ = this.createSuggestionObserver(
+    this.typeFacetCounts$,
+    this.typeInput$,
+    this.typeFilter$
+  );
+
+  keywordsSuggestions$ = this.createSuggestionObserver(
+    this.keywordFacetCounts$,
+    this.keywordsInput$,
+    this.keywordsFilter$
+  );
 
   hasAppliedFilters$ = this.store.pipe(select(getHasAppliedFilters));
 
@@ -87,7 +139,11 @@ export class DatasetsFilterComponent {
       this.store.dispatch(new AddKeywordFilterAction(terms));
     });
 
-  constructor(public dialog: MatDialog, private store: Store<any>) {}
+  constructor(
+    public dialog: MatDialog,
+    private store: Store<any>,
+    @Inject(APP_CONFIG) public appConfig: AppConfig
+  ) {}
 
   getFacetId(facetCount: FacetCount, fallback: string = null): string {
     const id = facetCount._id;
@@ -104,6 +160,7 @@ export class DatasetsFilterComponent {
 
   locationSelected(location: string | null) {
     this.store.dispatch(new AddLocationFilterAction(location || ""));
+    this.locationInput$.next("");
   }
 
   locationRemoved(location: string) {
@@ -112,6 +169,7 @@ export class DatasetsFilterComponent {
 
   groupSelected(group: string) {
     this.store.dispatch(new AddGroupFilterAction(group));
+    this.groupInput$.next("");
   }
 
   groupRemoved(group: string) {
@@ -120,6 +178,7 @@ export class DatasetsFilterComponent {
 
   keywordSelected(keyword: string) {
     this.store.dispatch(new AddKeywordFilterAction(keyword));
+    this.keywordsInput$.next("");
   }
 
   keywordRemoved(keyword: string) {
@@ -128,6 +187,7 @@ export class DatasetsFilterComponent {
 
   typeSelected(type: string) {
     this.store.dispatch(new AddTypeFilterAction(type));
+    this.typeInput$.next("");
   }
 
   typeRemoved(type: string) {

@@ -60,14 +60,14 @@ export class DatafilesComponent implements OnInit, AfterViewInit {
     this.admin$ = this.store.pipe(select(getIsAdmin));
     this.dataset$ = this.store.pipe(select(getCurrentDataset));
 
-    if (this.dataBlocks) {
-      this.getDatafiles(this.dataBlocks);
-    }
+ 
   }
 
   ngAfterViewInit() {
-    if (this.dataSource) {
-      this.dataSource.paginator = this.paginator;
+    this.dataSource = new MatTableDataSource();
+    this.dataSource.paginator = this.paginator;
+    if (this.dataBlocks) {
+      this.getDatafiles(this.dataBlocks);
     }
     // this.dataSource.sort = this.sort;
   }
@@ -86,7 +86,7 @@ export class DatafilesComponent implements OnInit, AfterViewInit {
     });
 
     this.count = this.files.length;
-    this.dataSource = new MatTableDataSource(this.files);
+    this.dataSource.data = this.files;
   }
 
   getAreAllSelected() {
@@ -104,6 +104,9 @@ export class DatafilesComponent implements OnInit, AfterViewInit {
   }
 
   getSelectedFiles() {
+    if (!this.dataSource){
+      return [];
+    }
     return this.dataSource.data
       .filter(file => file.selected)
       .map(file => file.path);

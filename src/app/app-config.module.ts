@@ -10,10 +10,14 @@ export class AppConfig {
   disabledDatasetColumns: string[];
   archiveWorkflowEnabled: boolean;
   editMetadataEnabled: boolean;
+  editSampleEnabled: boolean;
+  csvEnabled: boolean;
+  scienceSearchEnabled: boolean;
   facility: string;
   shoppingCartEnabled: boolean;
   multipleDownloadEnabled: boolean;
   multipleDownloadAction?: string;
+  columnSelectEnabled: boolean;
 }
 
 export const APP_DI_CONFIG: AppConfig = {
@@ -23,10 +27,14 @@ export const APP_DI_CONFIG: AppConfig = {
   disabledDatasetColumns: environment["disabledDatasetColumns"] || [],
   archiveWorkflowEnabled: environment["archiveWorkflowEnabled"] || null,
   editMetadataEnabled: environment["editMetadataEnabled"] || null,
+  editSampleEnabled: environment["editSampleEnabled"] || null,
+  csvEnabled: environment["csvEnabled"] || null,
+  scienceSearchEnabled: environment["scienceSearchEnabled"] || null,
   facility: environment["facility"] || null,
   shoppingCartEnabled: environment["shoppingCartEnabled"] || false,
   multipleDownloadEnabled: environment["multipleDownloadEnabled"] || false,
-  multipleDownloadAction: environment["multipleDownloadAction"]
+  multipleDownloadAction: environment["multipleDownloadAction"],
+  columnSelectEnabled: environment["columnSelectEnabled"] || false
 };
 
 @NgModule({

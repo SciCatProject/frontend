@@ -7,21 +7,12 @@ import { MatCheckboxChange, MatDialog } from "@angular/material";
 import { Router } from "@angular/router";
 import { ShowMessageAction } from "state-management/actions/user.actions";
 import { combineLatest, Subscription } from "rxjs";
-import { getCurrentEmail } from "../../state-management/selectors/users.selectors";
+import {
+  getCurrentEmail,
+  getDisplayedColumns
+} from "../../state-management/selectors/users.selectors";
 import { getError, submitJob } from "state-management/selectors/jobs.selectors";
 import { select, Store } from "@ngrx/store";
-
-
-import { faCertificate } from "@fortawesome/free-solid-svg-icons/faCertificate";
-import { faCalendarAlt } from "@fortawesome/free-solid-svg-icons/faCalendarAlt";
-import { faCoins } from "@fortawesome/free-solid-svg-icons/faCoins";
-import { faDownload } from "@fortawesome/free-solid-svg-icons/faDownload";
-import { faFileAlt } from "@fortawesome/free-solid-svg-icons/faFileAlt";
-import { faFolder } from "@fortawesome/free-solid-svg-icons/faFolder";
-import { faUpload } from "@fortawesome/free-solid-svg-icons/faUpload";
-import { faIdBadge } from "@fortawesome/free-solid-svg-icons/faIdBadge";
-import { faUsers } from "@fortawesome/free-solid-svg-icons/faUsers";
-
 import {
   AddToBatchAction,
   ChangePageAction,
@@ -46,6 +37,7 @@ import {
   getTotalSets,
   getViewMode
 } from "state-management/selectors/datasets.selectors";
+import { StylesCompileDependency } from "@angular/compiler";
 
 export interface PageChangeEvent {
   pageIndex: number;
@@ -63,15 +55,6 @@ export interface SortChangeEvent {
   styleUrls: ["dataset-table.component.scss"]
 })
 export class DatasetTableComponent implements OnInit, OnDestroy {
-  faIdBadge = faIdBadge;
-  faFolder = faFolder;
-  faCoins = faCoins;
-  faCalendarAlt = faCalendarAlt;
-  faFileAlt = faFileAlt;
-  faCertificate = faCertificate;
-  faUsers = faUsers;
-  faUpload = faUpload;
-  faDownload = faDownload;
   datasets$ = this.store.pipe(select(getDatasets));
   currentPage$ = this.store.pipe(select(getPage));
   datasetsPerPage$ = this.store.pipe(select(getDatasetsPerPage));
@@ -118,21 +101,9 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   // and eventually be removed.
   private submitJobSubscription: Subscription;
   private jobErrorSubscription: Subscription;
-  private readonly defaultColumns: string[] = [
-    "select",
-    "pid",
-    "sourceFolder",
-    "size",
-    "creationTime",
-    "type",
-    "proposalId",
-    "ownerGroup",
-    "archiveStatus",
-    "retrieveStatus"
-  ];
-  visibleColumns = this.defaultColumns.filter(
-    column => this.appConfig.disabledDatasetColumns.indexOf(column) === -1
-  );
+  private defaultColumns: string[];
+  public visibleColumns: string[];
+  columns$ = this.store.pipe(select(getDisplayedColumns));
 
   constructor(
     private router: Router,
@@ -143,6 +114,12 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
+    this.columns$.subscribe(columns => {
+      this.defaultColumns = columns;
+      this.visibleColumns = this.defaultColumns.filter(
+        column => this.appConfig.disabledDatasetColumns.indexOf(column) === -1
+      );
+    });
     this.submitJobSubscription = this.store.pipe(select(submitJob)).subscribe(
       ret => {
         if (ret && Array.isArray(ret)) {
@@ -300,5 +277,22 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   onAddToBatch(): void {
     this.store.dispatch(new AddToBatchAction());
     this.store.dispatch(new ClearSelectionAction());
+  }
+
+  setWidthColor(datasetSize) {
+    let width = 10;
+    let color = "red";
+    if (datasetSize > 1000000000) {
+      width = 10;
+      color = "red";
+    } else {
+      width = 5;
+      color = "green";
+    }
+    const styles = {
+      "background-color": "red",
+      "width.px": width
+    };
+    return styles;
   }
 }

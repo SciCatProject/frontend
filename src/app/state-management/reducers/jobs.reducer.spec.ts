@@ -12,17 +12,10 @@ describe("DatasetsReducer", () => {
   });
 
   it("should set filters", () => {
-    const filter = { skip: 0, limit: 50 };
-    const action = new jobsActions.SortUpdateAction(filter.skip, filter.limit);
+    const filter = { skip: 0, limit: 50, mode: null };
+    const action = new jobsActions.SortUpdateAction(filter.skip, filter.limit, filter.mode);
     const state = jobsReducer(initialJobsState, action);
     expect(state.filters).toEqual(filter);
-  });
-
-  it("should set ui", () => {
-    const ui = [];
-    const action = new jobsActions.ChildRetrieveAction(ui);
-    const state = jobsReducer(initialJobsState, action);
-    expect(state.ui).toEqual(ui);
   });
 
   it("should set jobSubmission to an empty array", () => {
@@ -48,7 +41,8 @@ describe("DatasetsReducer", () => {
   });
 
   it("should set current jobs", () => {
-    const data = {
+    const data: Job = {
+      id : "jfkler",
       emailJobInitiator: "",
       type: "",
       creationTime: new Date(),
@@ -58,6 +52,8 @@ describe("DatasetsReducer", () => {
       archiveReturnMessage: "",
       dateOfLastMessage: new Date(),
       datasetList: "",
+      MessageHistory: [],
+      messageHistory: [],
       createdAt: new Date(),
       updatedAt: new Date()
     };
@@ -83,8 +79,8 @@ describe("DatasetsReducer", () => {
       archiveReturnMessage: "",
       dateOfLastMessage: new Date(),
       datasetList: "",
-      messageHistory: [""],
-      MessageHistory: [""],
+      MessageHistory: [],
+      messageHistory: [],
       id: "",
       createdAt: new Date(),
       updatedAt: new Date()

@@ -1,37 +1,30 @@
 import { ActivatedRoute } from "@angular/router";
 import { Component, Inject, OnDestroy, OnInit } from "@angular/core";
-import { DatablocksAction, DeleteAttachment } from "state-management/actions/datasets.actions";
+import {
+  DatablocksAction,
+  DeleteAttachment
+} from "state-management/actions/datasets.actions";
 import { Job, User } from "shared/sdk/models";
 import { select, Store } from "@ngrx/store";
 import { SubmitAction } from "state-management/actions/jobs.actions";
 import { ShowMessageAction } from "state-management/actions/user.actions";
-import { getError, submitJob } from "../../state-management/selectors/jobs.selectors";
+import {
+  getError,
+  submitJob
+} from "../../state-management/selectors/jobs.selectors";
 import { Subscription } from "rxjs";
 import { Message, MessageType } from "state-management/models";
-import { Angular5Csv } from "angular5-csv/Angular5-csv";
+import { Angular5Csv } from "angular5-csv/dist/Angular5-csv";
 import { getIsAdmin } from "state-management/selectors/users.selectors";
 import { APP_CONFIG, AppConfig } from "app-config.module";
 import { pluck, take } from "rxjs/operators";
+import { Router } from "@angular/router";
 import {
   getCurrentAttachments,
   getCurrentDatablocks,
   getCurrentDataset,
   getCurrentOrigDatablocks
 } from "state-management/selectors/datasets.selectors";
-
-import { faAt } from "@fortawesome/free-solid-svg-icons/faAt";
-import { faCalendarAlt } from "@fortawesome/free-solid-svg-icons/faCalendarAlt";
-import { faChessQueen } from "@fortawesome/free-solid-svg-icons/faChessQueen";
-import { faCoins } from "@fortawesome/free-solid-svg-icons/faCoins";
-import { faDownload } from "@fortawesome/free-solid-svg-icons/faDownload";
-import { faFileAlt } from "@fortawesome/free-solid-svg-icons/faFileAlt";
-import { faFolder } from "@fortawesome/free-solid-svg-icons/faFolder";
-import { faGem } from "@fortawesome/free-solid-svg-icons/faGem";
-import { faGlobe } from "@fortawesome/free-solid-svg-icons/faGlobe";
-import { faIdBadge } from "@fortawesome/free-solid-svg-icons/faIdBadge";
-import { faImages } from "@fortawesome/free-solid-svg-icons/faImages";
-import { faUserAlt } from "@fortawesome/free-solid-svg-icons/faUserAlt";
-import { faUsers } from "@fortawesome/free-solid-svg-icons/faUsers";
 
 /**
  * Component to show details for a data set, using the
@@ -46,19 +39,6 @@ import { faUsers } from "@fortawesome/free-solid-svg-icons/faUsers";
   styleUrls: ["./dataset-detail.component.scss"]
 })
 export class DatasetDetailComponent implements OnInit, OnDestroy {
-  faAt = faAt;
-  faIdBadge = faIdBadge;
-  faFolder = faFolder;
-  faCoins = faCoins;
-  faChessQueen = faChessQueen;
-  faCalendarAlt = faCalendarAlt;
-  faFileAlt = faFileAlt;
-  faImages = faImages;
-  faGem = faGem;
-  faGlobe = faGlobe;
-  faUserAlt = faUserAlt;
-  faUsers = faUsers;
-  faDownload = faDownload;
   dataset$ = this.store.pipe(select(getCurrentDataset));
   private subscriptions: Subscription[] = [];
   private routeSubscription = this.route.params
@@ -70,11 +50,11 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
   private isAdmin$ = this.store.pipe(select(getIsAdmin));
 
   constructor(
+    private router: Router,
     private route: ActivatedRoute,
     private store: Store<any>,
     @Inject(APP_CONFIG) public appConfig: AppConfig
-  ) {
-  }
+  ) {}
 
   ngOnInit() {
     const msg = new Message();
@@ -107,13 +87,16 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.routeSubscription.unsubscribe();
+    for (let i = 0; i < this.subscriptions.length; i++) {
+      this.subscriptions[i].unsubscribe();
+    }
   }
 
   onExportClick() {
     this.dataset$.pipe(take(1)).subscribe(ds => {
       const options = {
         fieldSeparator: ",",
-        quoteStrings: "\"",
+        quoteStrings: '"',
         decimalseparator: ".",
         showLabels: true,
         showTitle: false,
@@ -129,6 +112,9 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
   }
 
   resetDataset(dataset) {
+    if (!confirm("Reset datablocks?")) {
+      return null;
+    }
     this.store
       .pipe(
         select(state => state.root.user.currentUser),
@@ -156,9 +142,21 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
       });
   }
 
-
   delete(dataset_attachment_id) {
-    console.log("fire action to delete dataset attachment id " , dataset_attachment_id);
+    console.log(
+      "fire action to delete dataset attachment id ",
+      dataset_attachment_id
+    );
     this.store.dispatch(new DeleteAttachment(dataset_attachment_id));
+  }
+
+  onClickProp(proposalId: string): void {
+    const id = encodeURIComponent(proposalId);
+    this.router.navigateByUrl("/proposals/" + id);
+  }
+
+  onClickSample(proposalId: string): void {
+    const id = encodeURIComponent(proposalId);
+    this.router.navigateByUrl("/samples/" + id);
   }
 }
