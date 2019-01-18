@@ -2,7 +2,7 @@ import { Component, Inject, OnInit } from "@angular/core";
 import { COMMA, ENTER } from "@angular/cdk/keycodes";
 
 import { select, Store } from "@ngrx/store";
-import { map, first, tap, publish } from "rxjs/operators";
+import { map, first, tap } from "rxjs/operators";
 
 import { getDatasetsInBatch } from "state-management/selectors/datasets.selectors";
 import { PrefillBatchAction } from "state-management/actions/datasets.actions";
