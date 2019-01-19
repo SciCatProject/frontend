@@ -13,5 +13,6 @@ export const environment = {
   columnSelectEnabled: true,
   editSampleEnabled: true,
   disabledDatasetColumns: ["archiveStatus", "retrieveStatus"],
+  shoppingCartEnabled: true,
   facility: "ESS"
 };
