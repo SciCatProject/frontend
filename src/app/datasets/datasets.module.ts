@@ -4,7 +4,6 @@ import { ArchivingService } from "./archiving.service";
 import { BatchCardComponent } from "./batch-card/batch-card.component";
 import { BatchViewComponent } from "./batch-view/batch-view.component";
 import { CommonModule } from "@angular/common";
-import { DatasetFormComponent } from "./dataset-form/dataset-form.component";
 import { FileDropzoneComponent } from "./file-dropzone/file-dropzone.component";
 import { FileHelpersModule } from "ngx-file-helpers";
 import { FilePickerComponent } from "./file-picker/file-picker.component";
@@ -52,6 +51,9 @@ import {
   MatTabsModule,
   MatTooltipModule
 } from "@angular/material";
+
+import { PublishComponent } from "./publish/publish.component";
+import { DatasetFormComponent } from "./dataset-form/dataset-form.component";
 import { ScientificConditionDialogComponent } from "./scientific-condition-dialog/scientific-condition-dialog.component";
 import { jobsReducer } from "../state-management/reducers/jobs.reducer";
 import { ColumnSelectorComponent } from "./column-selector/column-selector.component";
@@ -103,9 +105,11 @@ import { ColumnSelectorComponent } from "./column-selector/column-selector.compo
     DatasetDetailComponent,
     DatasetTableComponent,
     DatasetsFilterComponent,
+    DatasetFormComponent,
     FileDropzoneComponent,
     FilePickerComponent,
     SelectedListComponent,
+    PublishComponent,
     DatasetFormComponent,
     ScientificConditionDialogComponent,
     ColumnSelectorComponent

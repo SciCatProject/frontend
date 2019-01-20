@@ -234,4 +234,13 @@ export class MockNotificationService {
   }
 }
 
+export class MockArchivingService {
+  public dispatch(obj) {
+  }
+
+  public select(obj) {
+    return of([]);
+  }
+}
+
 export class MockLoginService {}

@@ -1,5 +1,5 @@
 import { NgModule } from "@angular/core";
-import { Routes, RouterModule } from "@angular/router";
+import { RouterModule, Routes } from "@angular/router";
 
 import { DashboardComponent } from "../datasets/dashboard/dashboard.component";
 import { DatafilesComponent } from "../datasets/datafiles/datafiles.component";
@@ -23,6 +23,7 @@ import { ViewProposalPageComponent } from "../proposals/containers/view-proposal
 
 import { ArchiveSettingsComponent } from "../policies/archive-settings/archive-settings.component";
 
+import { PublishComponent } from "datasets/publish/publish.component";
 import { AuthCheck } from "../AuthCheck";
 import { BatchViewComponent } from "datasets/batch-view/batch-view.component";
 import { SampleDetailComponent } from "../samples/sample-detail/sample-detail.component";
@@ -32,8 +33,11 @@ export const routes: Routes = [
   { path: "", redirectTo: "/datasets", pathMatch: "full" },
   { path: "login", component: LoginComponent },
   { path: "logout", component: AppComponent, canActivate: [AuthCheck] },
-
-  // { path: 'dataset', redirectTo: '/datasets', pathMatch: 'full' },
+  {
+    path: "datasets/batch/publish",
+    component: PublishComponent,
+    canActivate: [AuthCheck]
+  },
   { path: "datasets", component: DashboardComponent, canActivate: [AuthCheck] },
   {
     path: "datasets/batch",
@@ -55,7 +59,6 @@ export const routes: Routes = [
     component: DatafilesComponent,
     canActivate: [AuthCheck]
   },
-
   {
     path: "proposals",
     component: ListProposalsPageComponent,
