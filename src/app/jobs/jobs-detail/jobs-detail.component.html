@@ -49,8 +49,8 @@
             <i class="material-icons"> folder </i> 
             Dataset List
           </th>
-          <div *ngFor="let daSet of job.datasetList">
-            {{job.datasetList | json }}
+          <div *ngFor="let daSet of value">
+            {{daSet.pid | json }}
           </div>
 
         </tr>

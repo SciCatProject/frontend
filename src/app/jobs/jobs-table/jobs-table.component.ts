@@ -28,8 +28,7 @@ export class JobsTableComponent implements OnInit, OnDestroy, AfterViewInit {
     "creationTime",
     // "executionTime",
     // "jobParams",
-    "jobStatusMessage",
-    "datasetList"
+    "jobStatusMessage"
   ];
   modes = Object.keys(JobViewMode).map(k => JobViewMode[k as any]);
   currentMode = JobViewMode.myJobs;
