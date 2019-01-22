@@ -74,19 +74,6 @@
       </mat-cell>
     </ng-container>
 
-    <ng-container matColumnDef="datasetList">
-      <mat-header-cell *matHeaderCellDef mat-sort-header>
-        <i class="material-icons"> folder </i> 
-        Datasets
-      </mat-header-cell>
-      <mat-cell *matCellDef="let job ">
-        <!-- dont include the file names here, TMI -->
-        <div *ngFor="let daSet of job.datasetList">
-          {{job.datasetList | json }}
-        </div>
-      </mat-cell>
-    </ng-container>
-
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
     <mat-row (click)="onRowSelect($event, row)" *matRowDef="let row; columns: displayedColumns; let i = index"
       [ngClass]="{'red' : row.jobStatusMessage && row.jobStatusMessage.indexOf('Unsuccessful') > -1}">
