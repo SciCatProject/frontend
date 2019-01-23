@@ -21,14 +21,14 @@
             <i class="material-icons"> brightness_high </i> 
             Creation Time
           </th>
-          <td>{{ value | date: 'yyyy/MM/dd HH:mm'}}</td>
+          <td>{{ value | date: 'yyyy/MM/dd HH:mm:ss'}}</td>
         </tr>
         <tr *ngIf="job.executionTime as value">
           <th>
             <i class="material-icons"> gavel </i> 
             Execution Time
           </th>
-          <td>{{ value | date: 'yyyy/MM/dd HH:mm'}}</td>
+          <td>{{ value | date: 'yyyy/MM/dd HH:mm:ss'}}</td>
         </tr>
         <tr *ngIf="job.jobParams as value">
           <th>
@@ -42,7 +42,7 @@
             <i class="material-icons"> markunread </i> 
             Date Of Last Message
           </th>
-          <td>{{ value | date: 'yyyy/MM/dd HH:mm' }}</td>
+          <td>{{ value | date: 'yyyy/MM/dd HH:mm:ss' }}</td>
         </tr>
         <tr *ngIf="job.datasetList as value">
           <th>
@@ -59,14 +59,14 @@
             <i class="material-icons"> calendar_today </i> 
             Created At
           </th>
-          <td>{{ value | date: 'yyyy/MM/dd HH:mm' }}</td>
+          <td>{{ value | date: 'yyyy/MM/dd HH:mm:ss' }}</td>
         </tr>
         <tr *ngIf="job.updatedAt as value">
           <th>
             <i class="material-icons"> calendar_today </i> 
             Updated At
           </th>
-          <td>{{ value | date: 'yyyy/MM/dd HH:mm' }}</td>
+          <td>{{ value | date: 'yyyy/MM/dd HH:mm:ss' }}</td>
         </tr>
       </table>
     </div>
