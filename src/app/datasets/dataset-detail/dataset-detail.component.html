@@ -141,6 +141,37 @@
           </div>
         </mat-card>
 
+        <mat-card style="margin:1em" *ngIf="dataset.investigator" >
+          <mat-card-header style="background:#d2b478;">
+            Derived Data
+          </mat-card-header>
+          <div class="details">
+            <table>
+              <tr *ngIf="dataset.investigator as value">
+                <th><i class="material-icons"> school </i> Investigator</th>
+                <td>{{ value }}</td>
+              </tr>
+              <tr *ngIf="dataset.inputDatasets as value">
+                <th><i class="material-icons"> input </i> Input Datasets</th>
+                <td>{{ value }}</td>
+              </tr>
+              <tr *ngIf="dataset.usedSoftware as value">
+                <th><i class="material-icons"> screen_share</i> Software Used</th>
+                <td>{{ value }}</td>
+              </tr>
+              <tr *ngIf="dataset.jobParameters as value">
+                <th><i class="material-icons"> settings </i> Job Parameters</th>
+                <td>{{ value | json}}</td>
+              </tr>
+              <tr *ngIf="dataset.jobLogData as value">
+                <th><i class="material-icons"> ballot </i> Job Log Data</th>
+                <td>{{ value }}</td>
+              </tr>
+            </table>
+          </div>
+        </mat-card>
+
+
         <mat-card style="margin:1em">
           <div *ngIf="dataset.scientificMetadata as value">
           <mat-card-header style="background:#ff96fa;">
