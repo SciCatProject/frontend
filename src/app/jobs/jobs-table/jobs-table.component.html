@@ -36,7 +36,7 @@
         Created at
       </mat-header-cell>
       <mat-cell *matCellDef="let job">
-        {{job.creationTime | date: 'yyyy/MM/dd' }}
+        {{job.creationTime | date: 'yyyy/MM/dd HH:mm:ss' }}
       </mat-cell>
     </ng-container>
 
@@ -46,7 +46,7 @@
         Executed at
       </mat-header-cell>
       <mat-cell *matCellDef="let job">
-        {{job.executionTime | date: 'yyyy/MM/dd'}}
+        {{job.executionTime | date: 'yyyy/MM/dd HH:mm:ss'}}
       </mat-cell>
     </ng-container>
 
@@ -71,19 +71,6 @@
         <ng-template #thenBlock>Processing</ng-template>
         <ng-template #elseBlock>{{job.jobStatusMessage}}</ng-template>
 
-      </mat-cell>
-    </ng-container>
-
-    <ng-container matColumnDef="datasetList">
-      <mat-header-cell *matHeaderCellDef mat-sort-header>
-        <i class="material-icons"> folder </i> 
-        Datasets
-      </mat-header-cell>
-      <mat-cell *matCellDef="let job ">
-        <!-- dont include the file names here, TMI -->
-        <div *ngFor="let daSet of job.datasetList">
-          {{job.datasetList | json }}
-        </div>
       </mat-cell>
     </ng-container>
 

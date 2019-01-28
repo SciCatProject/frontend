@@ -4,6 +4,7 @@ import { Observable } from "rxjs";
 import { OrigDatablock, Dataset } from "shared/sdk/models";
 import { Store, select } from "@ngrx/store";
 import { getIsAdmin } from "state-management/selectors/users.selectors";
+import { ChangeDetectorRef } from '@angular/core';
 import {
   Component,
   Input,
@@ -14,10 +15,12 @@ import {
 } from "@angular/core";
 import { getCurrentDataset } from "state-management/selectors/datasets.selectors";
 import { first } from "rxjs/operators";
+import { UserApi } from "shared/sdk/services";
 
 @Component({
   selector: "datafiles",
   templateUrl: "./datafiles.component.html",
+  providers: [ UserApi ],
   styleUrls: ["./datafiles.component.css"]
 })
 export class DatafilesComponent implements OnInit, AfterViewInit {
@@ -48,9 +51,12 @@ export class DatafilesComponent implements OnInit, AfterViewInit {
 
   admin$: Observable<boolean>;
   dataset$: Observable<Dataset>;
+  jwt$: Observable<any>;
 
   constructor(
     private store: Store<any>,
+    private userApi: UserApi,
+    private cdRef: ChangeDetectorRef,
     @Inject(APP_CONFIG) private appConfig: AppConfig
   ) {
     this.urlPrefix = appConfig.fileserverBaseURL;
@@ -59,7 +65,7 @@ export class DatafilesComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     this.admin$ = this.store.pipe(select(getIsAdmin));
     this.dataset$ = this.store.pipe(select(getCurrentDataset));
-
+    this.jwt$ = this.userApi.jwt();
  
   }
 
@@ -70,6 +76,11 @@ export class DatafilesComponent implements OnInit, AfterViewInit {
       this.getDatafiles(this.dataBlocks);
     }
     // this.dataSource.sort = this.sort;
+  }
+  ngAfterViewChecked()
+  {
+    this.count = this.files.length;
+    this.cdRef.detectChanges();
   }
 
   /**
@@ -84,8 +95,6 @@ export class DatafilesComponent implements OnInit, AfterViewInit {
       });
       this.files = this.files.concat(selectable);
     });
-
-    this.count = this.files.length;
     this.dataSource.data = this.files;
   }
 
@@ -104,6 +113,9 @@ export class DatafilesComponent implements OnInit, AfterViewInit {
   }
 
   getSelectedFiles() {
+    if (!this.dataSource){
+      return [];
+    }
     return this.dataSource.data
       .filter(file => file.selected)
       .map(file => file.path);

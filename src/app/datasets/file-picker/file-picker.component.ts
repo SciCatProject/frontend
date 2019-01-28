@@ -1,12 +1,12 @@
 import { Component, Inject, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { select, Store } from "@ngrx/store";
 import { Observable } from "rxjs";
-import { Dataset, DatasetAttachment } from "shared/sdk/models";
+import { Dataset } from "shared/sdk/models";
 import { APP_CONFIG, AppConfig } from "../../app-config.module";
 import * as lb from "shared/sdk/services";
 import { FilePickerDirective, ReadFile, ReadMode } from "ngx-file-helpers";
 import { filter } from "rxjs/operators";
-import { AddAttachment } from "../../state-management/actions/datasets.actions";
+import { AddAttachment } from "state-management/actions/datasets.actions";
 
 @Component({
   selector: "app-file-picker",

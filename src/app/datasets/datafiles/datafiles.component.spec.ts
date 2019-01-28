@@ -4,9 +4,10 @@ import { ReactiveFormsModule } from "@angular/forms";
 import { DatafilesComponent } from "./datafiles.component";
 import { MatTableModule } from "@angular/material";
 import { Store } from "@ngrx/store";
-import { MockStore } from "shared/MockStubs";
+import { MockStore, MockUserApi } from "shared/MockStubs";
 import { AppConfigModule } from "app-config.module";
 import { FileSizePipe } from "../../shared/pipes/filesize.pipe";
+import { UserApi } from "shared/sdk";
 
 describe("DatafilesComponent", () => {
   let component: DatafilesComponent;
@@ -20,7 +21,10 @@ describe("DatafilesComponent", () => {
     });
     TestBed.overrideComponent(DatafilesComponent, {
       set: {
-        providers: [{ provide: Store, useClass: MockStore }]
+        providers: [
+          { provide: Store, useClass: MockStore },
+          { provide: UserApi, useClass: MockUserApi }
+        ]
       }
     });
     TestBed.compileComponents();

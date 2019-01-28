@@ -3,9 +3,10 @@ import { ArchivingService } from "../archiving.service";
 import { DatasetTableComponent } from "./dataset-table.component";
 import { FileSizePipe } from "../../shared/pipes/filesize.pipe";
 import { JsonHeadPipe } from "../../shared/pipes/json-head.pipe";
+import { NumericPipe } from "../../shared/pipes/numeric.pipe";
 import { HttpClient } from "@angular/common/http";
 import { MatDialogModule, MatTableModule } from "@angular/material";
-import { MockHttp, MockLoginService, MockRouter, MockDatasetAttachmentApi, MockDatasetApi } from "shared/MockStubs";
+import { MockHttp, MockLoginService, MockRouter, MockDatasetAttachmentApi, MockDatasetApi, MockArchivingService } from "shared/MockStubs";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { Router } from "@angular/router";
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
@@ -38,7 +39,8 @@ describe("DatasetTableComponent", () => {
         DatasetTableComponent,
         FileSizePipe,
         JsonHeadPipe,
-        ThumbnailPipe
+        ThumbnailPipe,
+        NumericPipe
       ]
     });
     TestBed.overrideComponent(DatasetTableComponent, {
@@ -56,7 +58,7 @@ describe("DatasetTableComponent", () => {
               csvEnabled: true
             }
           },
-          { provide: ArchivingService, useClass: ArchivingService },
+          { provide: ArchivingService, useClass: MockArchivingService },
           { provide: LoginService, useClass: MockLoginService }
         ]
       }
