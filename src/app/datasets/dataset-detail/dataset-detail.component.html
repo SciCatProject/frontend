@@ -144,6 +144,21 @@
         <mat-card style="margin:1em">
           <div *ngIf="dataset.scientificMetadata as value">
           <mat-card-header style="background:#ff96fa;">
+            Derived Data
+          </mat-card-header>
+            <table>
+              <tr *ngIf="dataset.investigator as value">
+                <th><i class="material-icons"> email </i> Contact Email</th>
+                <td>{{ value }}</td>
+              </tr>
+            </table>
+          </div>
+        </mat-card>
+
+
+        <mat-card style="margin:1em">
+          <div *ngIf="dataset.scientificMetadata as value">
+          <mat-card-header style="background:#ff96fa;">
             Scientific Metadata
           </mat-card-header>
             <pre>{{ value | json }}</pre>
