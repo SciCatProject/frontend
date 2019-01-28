@@ -142,13 +142,29 @@
         </mat-card>
 
         <mat-card style="margin:1em">
-          <div *ngIf="dataset.scientificMetadata as value">
+          <div *ngIf="dataset.investigator as value">
           <mat-card-header style="background:#ff96fa;">
             Derived Data
           </mat-card-header>
-            <table>
+            <table class="details">
               <tr *ngIf="dataset.investigator as value">
-                <th><i class="material-icons"> email </i> Contact Email</th>
+                <th><i class="material-icons"> email </i> Investigator</th>
+                <td>{{ value }}</td>
+              </tr>
+              <tr *ngIf="dataset.inputDatasets as value">
+                <th><i class="material-icons"> email </i> Input Datasets</th>
+                <td>{{ value }}</td>
+              </tr>
+              <tr *ngIf="dataset.usedSoftware as value">
+                <th><i class="material-icons"> email </i> Software Used</th>
+                <td>{{ value }}</td>
+              </tr>
+              <tr *ngIf="dataset.jobParameters as value">
+                <th><i class="material-icons"> email </i> Job Parameters</th>
+                <td>{{ value }}</td>
+              </tr>
+              <tr *ngIf="dataset.jobLogData as value">
+                <th><i class="material-icons"> email </i> Job Log Data</th>
                 <td>{{ value }}</td>
               </tr>
             </table>
