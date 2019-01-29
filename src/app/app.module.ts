@@ -53,6 +53,8 @@ import {
 } from "@angular/material";
 import { SampleService } from "./samples/sample.service";
 import { SamplesEffects } from "./state-management/effects/samples.effects";
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 export function localStorageSyncWrapper(reducer: any) {
   return localStorageSync({ keys: ["root"], rehydrate: true })(reducer);
@@ -111,7 +113,8 @@ export function localStorageSyncWrapper(reducer: any) {
       PoliciesEffects,
       SamplesEffects
     ]),
-    StoreRouterConnectingModule
+    StoreRouterConnectingModule,
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   exports: [MatNativeDateModule],
   providers: [

@@ -17,7 +17,9 @@
             "tsConfig": "src/tsconfig.json",
             "polyfills": "src/polyfills.ts",
             "stylePreprocessorOptions": {
-              "includePaths": ["node_modules"]
+              "includePaths": [
+                "node_modules"
+              ]
             },
             "assets": [
               "src/assets",
@@ -29,10 +31,16 @@
               "src/favicon-16x16.png",
               "src/favicon-32x32.png",
               "src/mstile-150x150.png",
-              "src/safari-pinned-tab.svg"
+              "src/safari-pinned-tab.svg",
+              "src/manifest.json"
             ],
-            "styles": ["src/styles.css", "src/theme.scss"],
-            "scripts": ["node_modules/hammerjs/hammer.min.js"]
+            "styles": [
+              "src/styles.css",
+              "src/theme.scss"
+            ],
+            "scripts": [
+              "node_modules/hammerjs/hammer.min.js"
+            ]
           },
           "configurations": {
             "dmscdev": {
@@ -167,7 +175,8 @@
                   "replace": "src/assets/images/esslogo.png",
                   "with": "CI/PSI/site-logo.png"
                 }
-              ]
+              ],
+              "serviceWorker": true
             },
             "staging": {
               "optimization": true,
@@ -277,8 +286,13 @@
             "main": "src/test.ts",
             "karmaConfig": "./karma.conf.js",
             "polyfills": "src/polyfills.ts",
-            "scripts": ["node_modules/hammerjs/hammer.min.js"],
-            "styles": ["src/styles.css", "src/theme.scss"],
+            "scripts": [
+              "node_modules/hammerjs/hammer.min.js"
+            ],
+            "styles": [
+              "src/styles.css",
+              "src/theme.scss"
+            ],
             "assets": [
               "src/assets",
               "src/favicon.ico",
@@ -288,14 +302,17 @@
               "src/favicon-16x16.png",
               "src/favicon-32x32.png",
               "src/mstile-150x150.png",
-              "src/safari-pinned-tab.svg"
+              "src/safari-pinned-tab.svg",
+              "src/manifest.json"
             ]
           }
         },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": ["src/tsconfig.json"],
+            "tsConfig": [
+              "src/tsconfig.json"
+            ],
             "exclude": []
           }
         }
@@ -316,7 +333,9 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": "e2e/tsconfig.e2e.json",
-            "exclude": ["**/node_modules/**"]
+            "exclude": [
+              "**/node_modules/**"
+            ]
           }
         }
       }
