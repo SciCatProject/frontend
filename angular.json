@@ -104,7 +104,8 @@
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.dmscprod.ts"
                 }
-              ]
+              ],
+              "serviceWorker": true
             },
             "maxiv-prod": {
               "optimization": true,
@@ -133,7 +134,8 @@
                   "replace": "src/assets/images/ess-site.png",
                   "with": "CI/PSI/site.png"
                 }
-              ]
+              ],
+              "serviceWorker": true
             },
             "dmscproduction": {
               "optimization": true,
@@ -150,7 +152,8 @@
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.dev.ts"
                 }
-              ]
+              ],
+              "serviceWorker": true
             },
             "production": {
               "optimization": true,
