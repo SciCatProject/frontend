@@ -239,7 +239,7 @@
           <div class="table_column">Proposal ID</div>
         </div>
       </mat-header-cell>
-      <mat-cell *matCellDef="let dataset">{{ dataset.proposalId | numeric }}</mat-cell>
+      <mat-cell *matCellDef="let dataset">{{ dataset.proposalId | StripProposalPrefix }}</mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="ownerGroup">

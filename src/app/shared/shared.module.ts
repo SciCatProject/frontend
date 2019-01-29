@@ -9,11 +9,11 @@ import { NgModule } from "@angular/core";
 import { KeysPipe } from "./pipes";
 import { JsonHeadPipe } from "./pipes/json-head.pipe";
 import { ThumbnailPipe } from "./pipes/thumbnail.pipe";
-import { NumericPipe } from "shared/pipes/numeric.pipe";
+import { StripProposalPrefixPipe } from "shared/pipes/stripProposalPrefix.pipe";
 
 @NgModule({
   imports: [BreadcrumbModule, ConfigFormModule, ErrorPageModule, FormsModule, DialogModule, ReactiveFormsModule],
-  declarations: [FileSizePipe, KeysPipe, JsonHeadPipe, ThumbnailPipe, NumericPipe],
+  declarations: [FileSizePipe, KeysPipe, JsonHeadPipe, ThumbnailPipe, StripProposalPrefixPipe],
   providers: [ConfigService],
   exports: [
     BreadcrumbModule,
@@ -22,7 +22,7 @@ import { NumericPipe } from "shared/pipes/numeric.pipe";
     KeysPipe,
     JsonHeadPipe,
     ThumbnailPipe,
-    NumericPipe,
+    StripProposalPrefixPipe,
     ErrorPageModule,
     DialogModule
   ]
