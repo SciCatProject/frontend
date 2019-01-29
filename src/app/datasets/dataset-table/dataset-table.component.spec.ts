@@ -3,7 +3,7 @@ import { ArchivingService } from "../archiving.service";
 import { DatasetTableComponent } from "./dataset-table.component";
 import { FileSizePipe } from "../../shared/pipes/filesize.pipe";
 import { JsonHeadPipe } from "../../shared/pipes/json-head.pipe";
-import { NumericPipe } from "../../shared/pipes/numeric.pipe";
+import { StripProposalPrefixPipe } from "../../shared/pipes/stripProposalPrefix.pipe";
 import { HttpClient } from "@angular/common/http";
 import { MatDialogModule, MatTableModule } from "@angular/material";
 import { MockHttp, MockLoginService, MockRouter, MockDatasetAttachmentApi, MockDatasetApi, MockArchivingService } from "shared/MockStubs";
@@ -40,7 +40,7 @@ describe("DatasetTableComponent", () => {
         FileSizePipe,
         JsonHeadPipe,
         ThumbnailPipe,
-        NumericPipe
+        StripProposalPrefixPipe
       ]
     });
     TestBed.overrideComponent(DatasetTableComponent, {

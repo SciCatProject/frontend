@@ -1,17 +1,27 @@
-import { NumericPipe } from "./numeric.pipe";
+import { StripProposalPrefixPipe } from "./stripProposalPrefix.pipe";
 
-describe("Pipe: Numeric", () => {
-  let pipe: NumericPipe;
+describe("Pipe: StripProposalPrefix", () => {
+  let pipe: StripProposalPrefixPipe;
 
   beforeEach(() => {
-    pipe = new NumericPipe();
+    pipe = new StripProposalPrefixPipe();
   });
 
   it("converts properly", () => {
-    expect(pipe.transform("abc123def")).toBe("123");
+    expect(pipe.transform("proposal-")).toBe("");
+  });
+  it("converts properly", () => {
+    expect(pipe.transform("PROPOSAL-")).toBe("");
   });
 
   it("converts properly", () => {
-    expect(pipe.transform("!#¤%&/)1\"/()=MFL2IDA,lds.-,m'3åäö¨ |><½~^´`\\")).toBe("123");
+    expect(pipe.transform("PROPOSAL")).toBe("PROPOSAL");
+  });
+
+  it("converts properly", () => {
+    expect(pipe.transform("123abc")).toBe("123abc");
+  });
+  it("converts properly", () => {
+    expect(pipe.transform(null)).toBe("");
   });
 });
