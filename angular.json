@@ -53,7 +53,8 @@
                   "replace": "src/assets/images/ess-site.png",
                   "with": "CI/ESS/ess-site.png"
                 }
-              ]
+              ],
+              "serviceWorker": true
             },
             "dmsc": {
               "optimization": true,
@@ -70,7 +71,8 @@
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.dmsc.ts"
                 }
-              ]
+              ],
+              "serviceWorker": true
             },
             "ess": {
               "optimization": true,
@@ -87,7 +89,8 @@
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.ess.ts"
                 }
-              ]
+              ],
+              "serviceWorker": true
             },
             "dmscprod": {
               "optimization": true,
@@ -178,8 +181,7 @@
                   "replace": "src/assets/images/esslogo.png",
                   "with": "CI/PSI/site-logo.png"
                 }
-              ],
-              "serviceWorker": true
+              ]
             },
             "staging": {
               "optimization": true,
