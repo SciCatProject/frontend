@@ -21,4 +21,7 @@ describe("Pipe: StripProposalPrefix", () => {
   it("converts properly", () => {
     expect(pipe.transform("123abc")).toBe("123abc");
   });
+  it("converts properly", () => {
+    expect(pipe.transform(null)).toBe("");
+  });
 });
