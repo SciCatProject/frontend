@@ -44,20 +44,12 @@ Create a json file in the correct format.
             "creationLocation": "SoNDe",
             "license": "ESS",
             "version": "version",
-            "doi": "10.78327/SONDE0001",
             "isPublished": true,
             "ownerGroup": "ess",
             "accessGroups": [
                 "brightness",
                 "ess"
             ],
-            "createdBy": "ingestor",
-            "updatedBy": "ingestor",
-            "createdAt": "2018-06-06T15:26:02.680Z",
-            "updatedAt": "2018-06-06T15:26:02.680Z",
-            "archivable": true,
-            "retrievable": true,
-            "publishable": true,
             "scientificMetadata": {
                 "elog_id": "242",
                 "Optical coupling": "Dryfit"
