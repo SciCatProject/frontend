@@ -1,5 +1,5 @@
 import * as ua from "state-management/actions/user.actions";
-import { AccessUserApi, DatasetApi, DatasetAttachmentApi, DatasetLifecycleApi, LoopBackAuth, OrigDatablockApi } from "shared/sdk/services";
+import { AccessUserApi, DatasetApi, DatasetAttachmentApi, LoopBackAuth, OrigDatablockApi } from "shared/sdk/services";
 import { BehaviorSubject, Observable, Subject } from "rxjs";
 import { DatablockApi, DatasetAttachment } from "shared/sdk";
 import { Dataset, OrigDatablock } from "shared/sdk/models";
@@ -17,12 +17,11 @@ export class DatasetService {
 
   detailFilter = {
     limit: this.limit,
-    include: [{ relation: "origdatablocks" }, { relation: "datasetlifecycle" }]
+    include: [{ relation: "origdatablocks" }]
   };
 
   filter = {
     limit: this.limit,
-    include: [{ relation: "datasetlifecycle" }]
   };
 
   nullLifecycle = {
@@ -45,7 +44,6 @@ export class DatasetService {
 
   constructor(
     private rds: DatasetApi,
-    private dlSrv: DatasetLifecycleApi,
     private daSrv: DatasetAttachmentApi,
     private odb: OrigDatablockApi,
     private acSrv: AccessUserApi,

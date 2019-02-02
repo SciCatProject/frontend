@@ -1,6 +1,5 @@
 /* tslint:disable */
 import {
-  DatasetLifecycle,
   Datablock,
   DatasetAttachment,
   OrigDatablock
@@ -22,25 +21,23 @@ export interface DatasetInterface {
   "keywords"?: Array<any>;
   "description"?: string;
   "datasetName"?: string;
-  "userTargetLocation"?: string;
   "classification"?: string;
   "license"?: string;
   "version"?: string;
-  "doi"?: string;
   "isPublished"?: boolean;
-  "archivable"?: boolean;
-  "retrievable"?: boolean;
-  "publishable"?: boolean;
   "ownerGroup": string;
   "accessGroups"?: Array<any>;
   "createdBy"?: string;
   "updatedBy"?: string;
   "createdAt"?: Date;
   "updatedAt"?: Date;
-  datasetlifecycle?: DatasetLifecycle;
+  "datasetlifecycle"?: any;
+  "history"?: Array<any>;
+  datasetLifecycle?: any[];
   datablocks?: Datablock[];
   datasetattachments?: DatasetAttachment[];
   origdatablocks?: OrigDatablock[];
+  historyList?: any[];
 }
 
 export class Dataset implements DatasetInterface {
@@ -58,25 +55,23 @@ export class Dataset implements DatasetInterface {
   "keywords": Array<any>;
   "description": string;
   "datasetName": string;
-  "userTargetLocation": string;
   "classification": string;
   "license": string;
   "version": string;
-  "doi": string;
   "isPublished": boolean;
-  "archivable": boolean;
-  "retrievable": boolean;
-  "publishable": boolean;
   "ownerGroup": string;
   "accessGroups": Array<any>;
   "createdBy": string;
   "updatedBy": string;
   "createdAt": Date;
   "updatedAt": Date;
-  datasetlifecycle: DatasetLifecycle;
+  "datasetlifecycle": any;
+  "history": Array<any>;
+  datasetLifecycle: any[];
   datablocks: Datablock[];
   datasetattachments: DatasetAttachment[];
   origdatablocks: OrigDatablock[];
+  historyList: any[];
   constructor(data?: DatasetInterface) {
     Object.assign(this, data);
   }
@@ -166,10 +161,6 @@ export class Dataset implements DatasetInterface {
           name: 'datasetName',
           type: 'string'
         },
-        "userTargetLocation": {
-          name: 'userTargetLocation',
-          type: 'string'
-        },
         "classification": {
           name: 'classification',
           type: 'string'
@@ -182,24 +173,8 @@ export class Dataset implements DatasetInterface {
           name: 'version',
           type: 'string'
         },
-        "doi": {
-          name: 'doi',
-          type: 'string'
-        },
         "isPublished": {
           name: 'isPublished',
-          type: 'boolean'
-        },
-        "archivable": {
-          name: 'archivable',
-          type: 'boolean'
-        },
-        "retrievable": {
-          name: 'retrievable',
-          type: 'boolean'
-        },
-        "publishable": {
-          name: 'publishable',
           type: 'boolean'
         },
         "ownerGroup": {
@@ -226,15 +201,25 @@ export class Dataset implements DatasetInterface {
           name: 'updatedAt',
           type: 'Date'
         },
+        "datasetlifecycle": {
+          name: 'datasetlifecycle',
+          type: 'any',
+          default: <any>null
+        },
+        "history": {
+          name: 'history',
+          type: 'Array&lt;any&gt;',
+          default: <any>[]
+        },
       },
       relations: {
-        datasetlifecycle: {
-          name: 'datasetlifecycle',
-          type: 'DatasetLifecycle',
-          model: 'DatasetLifecycle',
-          relationType: 'hasOne',
-                  keyFrom: 'pid',
-          keyTo: 'datasetId'
+        datasetLifecycle: {
+          name: 'datasetLifecycle',
+          type: 'any[]',
+          model: '',
+          relationType: 'embedsOne',
+                  keyFrom: 'datasetlifecycle',
+          keyTo: 'id'
         },
         datablocks: {
           name: 'datablocks',
@@ -259,6 +244,14 @@ export class Dataset implements DatasetInterface {
           relationType: 'hasMany',
                   keyFrom: 'pid',
           keyTo: 'datasetId'
+        },
+        historyList: {
+          name: 'historyList',
+          type: 'any[]',
+          model: '',
+          relationType: 'embedsMany',
+                  keyFrom: 'history',
+          keyTo: 'id'
         },
       }
     }

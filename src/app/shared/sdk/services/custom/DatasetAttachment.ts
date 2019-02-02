@@ -19,7 +19,7 @@ import { Dataset } from '../../models/Dataset';
  *
  * **Details**
  *
- * Small less than 16 MB attchments for datasets, envisaged for png/jpeg previews
+ * Small less than 16 MB attachments for datasets, envisaged for png/jpeg previews
  */
 @Injectable()
 export class DatasetAttachmentApi extends BaseLoopBackApi {
