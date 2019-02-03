@@ -4,11 +4,17 @@
 // The list of which env maps to which file can be found in `angular-cli.json`.
 
 export const environment = {
-  production: false,
+  production: true,
   lbBaseURL: 'https://dacat-development.psi.ch',
   archiveWorkflowEnabled: true,
   externalAuthEndpoint: '/auth/msad',
-  facility: 'PSI',
+  editMetadataEnabled: true,
+  editSampleEnabled: true,
+  csvEnabled: true,
+  scienceSearchEnabled: true,
   disabledDatasetColumns: [],
-  shoppingCartEnabled: false
+  facility: "PSI",
+  multipleDownloadEnabled: true,
+  shoppingCartEnabled: true,
+  columnSelectEnabled: true
 };
