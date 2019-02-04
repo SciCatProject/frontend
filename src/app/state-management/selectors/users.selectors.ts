@@ -18,6 +18,11 @@ export const getCurrentEmail = createSelector(
   user => user ? user.email : null
 );
 
+export const getCurrentUserId = createSelector(
+  getCurrentUser,
+  user => user ? user.id : null
+);
+
 export const getSettings = createSelector(
   getUserState,
   state => state.settings

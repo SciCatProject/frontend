@@ -12,6 +12,7 @@ import { MessageType } from "state-management/models";
 
 import { LoginService } from "users/login.service";
 import { UserApi } from "shared/sdk";
+import { UserIdentityApi } from "shared/sdk";
 
 @Injectable()
 export class UserEffects {
@@ -89,10 +90,29 @@ export class UserEffects {
     })
   );
 
+  @Effect()
+  protected initUserIdentityRetrieval$: Observable<Action> = this.action$.pipe(
+    ofType(UserActions.RETRIEVE_USER_COMPLETE),
+    map((action: UserActions.RetrieveUserCompleteAction) => action.user.id),
+    concatMap(id => [new UserActions.RetrieveUserIdentAction(id)])
+  );
+
+  @Effect()
+  protected retrieveUserIdentity$: Observable<Action> = this.action$.pipe(
+    ofType(UserActions.RETRIEVE_USER_IDENTITY),
+    switchMap((action: UserActions.RetrieveUserIdentAction) => this.loginSrv.getUserIdent$(action.id)),
+    map(res =>
+      res
+        ? new UserActions.RetrieveUserIdentCompleteAction(res)
+        : new UserActions.RetrieveUserIdentFailedAction( new Error("Failed to load user identity"))
+    )
+  );
+
   constructor(
     private action$: Actions,
     private router: Router,
     private userSrv: UserApi,
-    private loginSrv: LoginService
+    private loginSrv: LoginService,
+    private userIdentifySrv: UserIdentityApi,
   ) {}
 }

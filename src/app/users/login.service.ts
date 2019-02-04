@@ -57,9 +57,7 @@ export class LoginService {
   }
 
   /* fetch the current AD userIdentity for accurate user email*/
-  public getUserIdent$(id: string): Observable<UserIdentity> {
-    // This is a much more robust way of defining a filter as a string first then parse.
-    const filter = JSON.parse('{"where": {"userId":"' + id + '"}}');
-    return this.userIdentitySrv.findOne(filter);
+  public getUserIdent$(userId: string): Observable<UserIdentity> {
+    return this.userIdentitySrv.findOne({ where: { userId } });
   }
 }
