@@ -19,7 +19,9 @@ import {
   SELECT_COLUMN,
   SELECT_COLUMN_COMPLETE,
   DeselectColumnCompleteAction,
-  SelectColumnCompleteAction
+  SelectColumnCompleteAction,
+  RETRIEVE_USER_IDENTITY_COMPLETE,
+  RetrieveUserIdentCompleteAction
 } from "state-management/actions/user.actions";
 
 export function userReducer(
@@ -103,6 +105,11 @@ export function userReducer(
         deletingColumn: false,
         displayedColumns: result
       };
+    }
+
+    case RETRIEVE_USER_IDENTITY_COMPLETE: {
+      const userIdentity = (action as RetrieveUserIdentCompleteAction).userIdentity;
+      return { ...state, profile: userIdentity.profile };
     }
 
     default:
