@@ -94,7 +94,7 @@ export class UserEffects {
   protected initUserIdentityRetrieval$: Observable<Action> = this.action$.pipe(
     ofType(UserActions.RETRIEVE_USER_COMPLETE),
     map((action: UserActions.RetrieveUserCompleteAction) => action.user.id),
-    concatMap(id => [new UserActions.RetrieveUserIdentAction(id)])
+    map(id => new UserActions.RetrieveUserIdentAction(id))
   );
 
   @Effect()
