@@ -3,7 +3,13 @@ export const environment = {
   lbBaseURL: 'https://dacat-qa.psi.ch',
   archiveWorkflowEnabled: true,
   externalAuthEndpoint: '/auth/msad',
-  facility: 'PSI',
+  editMetadataEnabled: true,
+  editSampleEnabled: true,
+  csvEnabled: false,
+  scienceSearchEnabled: true,
   disabledDatasetColumns: [],
-  shoppingCartEnabled: true
+  facility: "PSI",
+  multipleDownloadEnabled: false,
+  shoppingCartEnabled: true,
+  columnSelectEnabled: true
 };

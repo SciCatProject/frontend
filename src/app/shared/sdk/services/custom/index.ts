@@ -6,7 +6,6 @@ export * from './DerivedDataset';
 export * from './Sample';
 export * from './Proposal';
 export * from './PublishedData';
-export * from './DatasetLifecycle';
 export * from './Datablock';
 export * from './AccessUser';
 export * from './AccessGroup';

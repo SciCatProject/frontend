@@ -71,8 +71,7 @@ export class DatasetEffects {
         include: [
           { relation: "origdatablocks" },
           { relation: "datablocks" },
-          { relation: "datasetattachments" },
-          { relation: "datasetlifecycle" }
+          { relation: "datasetattachments" }
         ]
       };
 

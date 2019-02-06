@@ -59,6 +59,7 @@ export class FilePickerComponent implements OnInit, OnDestroy {
     if (fileCount > 0) {
       const creds = {
         thumbnail: this.picked.content,
+        caption: "Some caption",
         creationTime: new Date(),
         datasetId: this.dataset.pid,
         rawDatasetId:  this.dataset.pid,

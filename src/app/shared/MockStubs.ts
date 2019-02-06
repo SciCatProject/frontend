@@ -53,8 +53,6 @@ export class MockDatablockApi {
   }
 }
 
-export class MockDatasetLifecycleApi {}
-
 export class MockAuthService {}
 
 export class MockSampleService {

@@ -2,7 +2,6 @@
 import {
   Sample,
   Proposal,
-  DatasetLifecycle,
   Datablock,
   DatasetAttachment,
   OrigDatablock
@@ -29,15 +28,10 @@ export interface RawDatasetInterface {
   "keywords"?: Array<any>;
   "description"?: string;
   "datasetName"?: string;
-  "userTargetLocation"?: string;
   "classification"?: string;
   "license"?: string;
   "version"?: string;
-  "doi"?: string;
   "isPublished"?: boolean;
-  "archivable"?: boolean;
-  "retrievable"?: boolean;
-  "publishable"?: boolean;
   "ownerGroup": string;
   "accessGroups"?: Array<any>;
   "createdBy"?: string;
@@ -46,12 +40,15 @@ export interface RawDatasetInterface {
   "updatedAt"?: Date;
   "sampleId"?: string;
   "proposalId"?: string;
+  "datasetlifecycle"?: any;
+  "history"?: Array<any>;
   sample?: Sample;
   proposal?: Proposal;
-  datasetlifecycle?: DatasetLifecycle;
+  datasetLifecycle?: any[];
   datablocks?: Datablock[];
   datasetattachments?: DatasetAttachment[];
   origdatablocks?: OrigDatablock[];
+  historyList?: any[];
 }
 
 export class RawDataset implements RawDatasetInterface {
@@ -74,15 +71,10 @@ export class RawDataset implements RawDatasetInterface {
   "keywords": Array<any>;
   "description": string;
   "datasetName": string;
-  "userTargetLocation": string;
   "classification": string;
   "license": string;
   "version": string;
-  "doi": string;
   "isPublished": boolean;
-  "archivable": boolean;
-  "retrievable": boolean;
-  "publishable": boolean;
   "ownerGroup": string;
   "accessGroups": Array<any>;
   "createdBy": string;
@@ -91,12 +83,15 @@ export class RawDataset implements RawDatasetInterface {
   "updatedAt": Date;
   "sampleId": string;
   "proposalId": string;
+  "datasetlifecycle": any;
+  "history": Array<any>;
   sample: Sample;
   proposal: Proposal;
-  datasetlifecycle: DatasetLifecycle;
+  datasetLifecycle: any[];
   datablocks: Datablock[];
   datasetattachments: DatasetAttachment[];
   origdatablocks: OrigDatablock[];
+  historyList: any[];
   constructor(data?: RawDatasetInterface) {
     Object.assign(this, data);
   }
@@ -206,10 +201,6 @@ export class RawDataset implements RawDatasetInterface {
           name: 'datasetName',
           type: 'string'
         },
-        "userTargetLocation": {
-          name: 'userTargetLocation',
-          type: 'string'
-        },
         "classification": {
           name: 'classification',
           type: 'string'
@@ -222,24 +213,8 @@ export class RawDataset implements RawDatasetInterface {
           name: 'version',
           type: 'string'
         },
-        "doi": {
-          name: 'doi',
-          type: 'string'
-        },
         "isPublished": {
           name: 'isPublished',
-          type: 'boolean'
-        },
-        "archivable": {
-          name: 'archivable',
-          type: 'boolean'
-        },
-        "retrievable": {
-          name: 'retrievable',
-          type: 'boolean'
-        },
-        "publishable": {
-          name: 'publishable',
           type: 'boolean'
         },
         "ownerGroup": {
@@ -274,6 +249,16 @@ export class RawDataset implements RawDatasetInterface {
           name: 'proposalId',
           type: 'string'
         },
+        "datasetlifecycle": {
+          name: 'datasetlifecycle',
+          type: 'any',
+          default: <any>null
+        },
+        "history": {
+          name: 'history',
+          type: 'Array&lt;any&gt;',
+          default: <any>[]
+        },
       },
       relations: {
         sample: {
@@ -292,13 +277,13 @@ export class RawDataset implements RawDatasetInterface {
                   keyFrom: 'proposalId',
           keyTo: 'proposalId'
         },
-        datasetlifecycle: {
-          name: 'datasetlifecycle',
-          type: 'DatasetLifecycle',
-          model: 'DatasetLifecycle',
-          relationType: 'hasOne',
-                  keyFrom: 'pid',
-          keyTo: 'rawDatasetId'
+        datasetLifecycle: {
+          name: 'datasetLifecycle',
+          type: 'any[]',
+          model: '',
+          relationType: 'embedsOne',
+                  keyFrom: 'datasetlifecycle',
+          keyTo: 'id'
         },
         datablocks: {
           name: 'datablocks',
@@ -323,6 +308,14 @@ export class RawDataset implements RawDatasetInterface {
           relationType: 'hasMany',
                   keyFrom: 'pid',
           keyTo: 'rawDatasetId'
+        },
+        historyList: {
+          name: 'historyList',
+          type: 'any[]',
+          model: '',
+          relationType: 'embedsMany',
+                  keyFrom: 'history',
+          keyTo: 'id'
         },
       }
     }

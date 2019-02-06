@@ -49,11 +49,8 @@ describe("DatasetsReducer", () => {
       executionTime: new Date(),
       jobParams: "",
       jobStatusMessage: "",
-      archiveReturnMessage: "",
-      dateOfLastMessage: new Date(),
+      jobResultObject: {},
       datasetList: "",
-      MessageHistory: [],
-      messageHistory: [],
       createdAt: new Date(),
       updatedAt: new Date()
     };
@@ -76,11 +73,8 @@ describe("DatasetsReducer", () => {
       executionTime: new Date(),
       jobParams: "",
       jobStatusMessage: "",
-      archiveReturnMessage: "",
-      dateOfLastMessage: new Date(),
+      jobResultObject: {},
       datasetList: "",
-      MessageHistory: [],
-      messageHistory: [],
       id: "",
       createdAt: new Date(),
       updatedAt: new Date()

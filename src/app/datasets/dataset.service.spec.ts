@@ -7,14 +7,12 @@ import { DatasetService } from "./dataset.service";
 import {
   DatablockApi,
   DatasetApi,
-  DatasetAttachmentApi,
-  DatasetLifecycleApi
+  DatasetAttachmentApi
 } from "shared/sdk/services";
 import {
   MockDatablockApi,
   MockDatasetApi,
   MockDatasetAttachmentApi,
-  MockDatasetLifecycleApi
 } from "shared/MockStubs";
 
 describe("DatasetService", () => {
@@ -34,10 +32,6 @@ describe("DatasetService", () => {
         {
           provide: DatasetAttachmentApi,
           useClass: MockDatasetAttachmentApi
-        },
-        {
-          provide: DatasetLifecycleApi,
-          useClass: MockDatasetLifecycleApi
         },
         {
           provide: OrigDatablockApi,

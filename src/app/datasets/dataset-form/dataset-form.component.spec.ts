@@ -7,7 +7,7 @@ import { KeysPipe } from "../../shared/pipes";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { rootReducer } from "../../state-management/reducers/root.reducer";
 
-import { Datablock, DatasetAttachment, DatasetLifecycle, OrigDatablock, Proposal, RawDataset, Sample } from "../../shared/sdk/models";
+import { Datablock, DatasetAttachment, OrigDatablock, Proposal, RawDataset, Sample } from "../../shared/sdk/models";
 import { DatasetState } from "../../state-management/state/datasets.store";
 
 describe("DatasetFormComponent", () => {
@@ -63,15 +63,10 @@ describe("DatasetFormComponent", () => {
       validationStatus: "string",
       keywords: ["string"],
       description: "string",
-      userTargetLocation: "string",
       classification: "string",
       license: "string",
       version: "string",
-      doi: "string",
       isPublished: true,
-      archivable: true,
-      retrievable: true,
-      publishable: true,
       ownerGroup: "string",
       accessGroups: ["string"],
       createdBy: "string",
@@ -81,11 +76,14 @@ describe("DatasetFormComponent", () => {
       sample: new Sample(),
       proposal: new Proposal(),
       sampleId: "string",
-      datasetlifecycle: new DatasetLifecycle(),
+      datasetlifecycle: {},
       datasetattachments: [new DatasetAttachment()],
       datablocks: [new Datablock()],
       origdatablocks: [new OrigDatablock()],
-      proposalId: "string"
+      proposalId: "string",
+      history: [{}],
+      datasetLifecycle: null,
+      historyList: null
     };
     // store.select.returnValue( of (dataset));
 
