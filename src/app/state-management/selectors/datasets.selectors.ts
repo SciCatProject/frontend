@@ -1,7 +1,5 @@
 import { createSelector, createFeatureSelector } from "@ngrx/store";
 import { DatasetState } from "../state/datasets.store";
-import { ArchViewMode } from "state-management/models";
-import { config } from "../../../config/config";
 
 const getDatasetState = createFeatureSelector<DatasetState>("datasets");
 

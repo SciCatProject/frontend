@@ -6,9 +6,8 @@ import { DialogComponent } from "shared/modules/dialog/dialog.component";
 import { MatCheckboxChange, MatDialog } from "@angular/material";
 import { Router } from "@angular/router";
 import { ShowMessageAction } from "state-management/actions/user.actions";
-import { combineLatest, Subscription } from "rxjs";
+import { Subscription } from "rxjs";
 import {
-  getCurrentEmail,
   getDisplayedColumns
 } from "../../state-management/selectors/users.selectors";
 import { getError, submitJob } from "state-management/selectors/jobs.selectors";
@@ -27,10 +26,7 @@ import {
 
 import {
   getDatasets,
-  getDatasetsInBatch,
   getDatasetsPerPage,
-  getFilters,
-  getIsEmptySelection,
   getIsLoading,
   getPage,
   getSelectedDatasets,
@@ -60,37 +56,15 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   datasetsPerPage$ = this.store.pipe(select(getDatasetsPerPage));
   datasetCount$ = this.store.select(getTotalSets);
   loading$ = this.store.pipe(select(getIsLoading));
-  // These should be made part of the NgRX state management
+
   public currentMode: ArchViewMode;
   private selectedSets$ = this.store.pipe(select(getSelectedDatasets));
-  private batch$ = this.store.pipe(select(getDatasetsInBatch));
   private mode$ = this.store.pipe(select(getViewMode));
-  /*private isEmptySelection$ = this.store.pipe(select(getIsEmptySelection));
-  private filters$ = this.store.pipe(select(getFilters));
-  private email$ = this.store.pipe(select(getCurrentEmail));
-  private allAreSeleted$ = combineLatest(
-    this.datasets$,
-    this.selectedSets$,
-    (datasets, selected) => {
-      const pids = selected.map(set => set.pid);
-      return (
-        datasets.length &&
-        datasets.find(dataset => pids.indexOf(dataset.pid) === -1) == null
-      );
-    }
-  );*/
   private selectedPids: string[] = [];
   private selectedPidsSubscription = this.selectedSets$.subscribe(datasets => {
     this.selectedPids = datasets.map(dataset => dataset.pid);
   });
   private inBatchPids: string[] = [];
-  /*private inBatchPidsSubscription = this.batch$.subscribe(datasets => {
-    this.inBatchPids = datasets.map(dataset => dataset.pid);
-  });*/
-
-  /*private modes = Object.keys(ArchViewMode)
-    .map(key => ArchViewMode[key])
-    .filter(value => typeof value === "string") as string[];*/
   public viewModes =  ArchViewMode;
   private modes = [
     ArchViewMode.all,
