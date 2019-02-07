@@ -24,7 +24,7 @@
     "@angular/platform-browser": "^7.2.0",
     "@angular/platform-browser-dynamic": "^7.2.0",
     "@angular/platform-server": "^7.2.0",
-    "@angular/pwa": "^0.12.3",
+    "@angular/pwa": "^0.13.1",
     "@angular/router": "^7.2.0",
     "@angular/service-worker": "^7.2.0",
     "@fortawesome/angular-fontawesome": "^0.3.0",
