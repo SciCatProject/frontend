@@ -24,8 +24,7 @@ import {
   MatTooltipModule,
   MatTabsModule,
   MatCardModule,
-  MatIconModule,
-  MatPaginatorModule
+  MatIconModule
 } from "@angular/material";
 import { SharedCatanieModule } from "../shared/shared.module";
 
@@ -42,8 +41,7 @@ import { SharedCatanieModule } from "../shared/shared.module";
     MatListModule,
     MatCardModule,
     MatTabsModule,
-    MatTableModule,
-    MatPaginatorModule
+    MatTableModule
   ],
   declarations: [
     ListProposalsPageComponent,
