@@ -1,4 +1,5 @@
 import { Dataset } from "shared/sdk/models";
+import { ArchViewMode } from "state-management/models";
 import {
   CLEAR_SELECTION,
   ClearSelectionAction,
@@ -105,7 +106,7 @@ describe("SortByColumnAction", () => {
 
 describe("SetViewModeAction", () => {
   it("should create an action", () => {
-    const mode = "view";
+    const mode = ArchViewMode.all;
     const action = new SetViewModeAction(mode);
     expect({ ...action }).toEqual({ type: SET_VIEW_MODE, mode });
   });

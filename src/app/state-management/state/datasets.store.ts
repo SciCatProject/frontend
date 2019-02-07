@@ -1,4 +1,4 @@
-import { DatasetFilters, Dataset } from "state-management/models";
+import { DatasetFilters, Dataset, ArchViewMode } from "state-management/models";
 
 export interface DateTriple {
   year: number;
@@ -53,7 +53,7 @@ export const initialDatasetState: DatasetState = {
   batch: [],
 
   filters: {
-    mode: "view",
+    mode: {},
     text: "",
     creationTime: null,
     type: [],

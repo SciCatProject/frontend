@@ -50,6 +50,7 @@ import {
   MatTableModule,
   MatToolbarModule,
   MatButtonToggleModule,
+  MatTooltipModule
 } from "@angular/material";
 import { SampleService } from "./samples/sample.service";
 import { SamplesEffects } from "./state-management/effects/samples.effects";
@@ -61,11 +62,7 @@ export function localStorageSyncWrapper(reducer: any) {
 }
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    JobsTableComponent,
-    JobsDetailComponent
-  ],
+  declarations: [AppComponent, JobsTableComponent, JobsDetailComponent],
   imports: [
     AppConfigModule,
     AppRoutingModule,
@@ -114,7 +111,9 @@ export function localStorageSyncWrapper(reducer: any) {
       SamplesEffects
     ]),
     StoreRouterConnectingModule,
-    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
+    MatTooltipModule
+
   ],
   exports: [MatNativeDateModule],
   providers: [

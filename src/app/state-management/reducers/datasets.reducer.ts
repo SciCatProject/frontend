@@ -75,6 +75,7 @@ import {
 } from "state-management/actions/datasets.actions";
 
 import { DatasetState, initialDatasetState } from "state-management/state/datasets.store";
+import { ArchViewMode } from "state-management/models";
 
 export function datasetsReducer(
   state: DatasetState = initialDatasetState,
@@ -297,7 +298,27 @@ export function datasetsReducer(
     }
 
     case SET_VIEW_MODE: {
-      const { mode } = action as SetViewModeAction;
+      const guiMode = (action as SetViewModeAction).mode;
+      console.log("________action as SetViewModeAction: ", guiMode);
+      let mode = {};
+
+      switch (guiMode) {
+        case ArchViewMode.all:
+          console.log("here all");
+          mode = {};
+          break;
+        case ArchViewMode.archivable:
+          console.log("here arch");
+          mode = { $and: [{ retrievable: false }, { archivable: true }] };
+          break;
+        case ArchViewMode.retrievable:
+          console.log("here ret");
+          mode = {$and: [{ retrievable: true }, { archivable: false }] };
+          break;
+        case ArchViewMode.erroneous:
+          mode = { $and: [{ retrievable: true }, { archivable: true }] };
+          break;
+      }
       const filters = { ...state.filters, mode };
       return { ...state, filters };
     }

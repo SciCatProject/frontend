@@ -1,5 +1,5 @@
 import * as fromDatasetSelectors from "./datasets.selectors";
-
+import { ArchViewMode } from "../models";
 import { DatasetState } from "../state/datasets.store";
 
 const initialDatasetState: DatasetState = {
@@ -20,7 +20,7 @@ const initialDatasetState: DatasetState = {
   batch: [],
 
   filters: {
-    mode: "view",
+    mode: ArchViewMode.all,
     text: "",
     creationTime: null,
     type: [],

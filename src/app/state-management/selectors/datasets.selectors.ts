@@ -1,5 +1,6 @@
 import { createSelector, createFeatureSelector } from "@ngrx/store";
 import { DatasetState } from "../state/datasets.store";
+import { ArchViewMode } from "state-management/models";
 import { config } from "../../../config/config";
 
 const getDatasetState = createFeatureSelector<DatasetState>("datasets");
@@ -204,17 +205,11 @@ function restrictFilter(filter: object, allowedKeys?: string[]) {
 }
 
 export const getFullqueryParams = createSelector(getFilters, filter => {
-  const { skip, limit, sortField, mode, scientific, ...theRest } = filter;
+  const { skip, limit, sortField, scientific, ...theRest } = filter;
   const limits = { skip, limit, order: sortField };
   const query = restrictFilter(theRest);
 
-  // Archiving handling
-  if (mode !== "view") {
-    query["archiveStatusMessage"] = {
-      archive: config.archiveable,
-      retrieve: config.retrieveable
-    }[mode];
-  }
+
 
   return {
     query: JSON.stringify(query),
@@ -229,7 +224,9 @@ export const getFullfacetsParams = createSelector(getFilters, filter => {
     "creationTime",
     "creationLocation",
     "ownerGroup",
-    "keywords"
+    "keywords",
+    "archivable",
+    "retrievable",
   ]; // , 'archiveStatusMessage'];
   const fields = restrictFilter(filter, keys);
   const facets = keys.filter(facet => facet !== "text"); // Why shouldn't 'text' be included among the facets?

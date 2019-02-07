@@ -45,6 +45,7 @@
     </div>
   </mat-tab>
 
+
   <mat-tab >
     <ng-template mat-tab-label>
       <i class="material-icons"> folder </i> 
@@ -52,6 +53,9 @@
     </ng-template>
     <div class="tab-content">
       <div class="ui segment">
+      <mat-paginator 
+      [pageSizeOptions]="[30]" [pageIndex]="currentPage$ | async" [length]="datasetCount$ | async" (page)="onPageChange($event)">
+      </mat-paginator>
         <mat-table #table [dataSource]="datasets" class="dataset-table">
           <ng-container matColumnDef="pid">
             <mat-header-cell *matHeaderCellDef>
