@@ -42,12 +42,11 @@ export class Message {
   duration: number;
 }
 
-//export type ArchViewMode = "all" | "archivable" | "retrievable" | "erroneous";
 export enum ArchViewMode {
   all = "all",
   archivable = "archivable",
   retrievable = "retrievable",
-  erroneous = "erroneous"
+  erroneous = "work in progress"
 }
 export enum JobViewMode { myJobs = "my jobs", allJobs = "all jobs"}
 

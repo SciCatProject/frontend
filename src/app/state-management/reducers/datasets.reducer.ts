@@ -74,7 +74,10 @@ import {
   SortByColumnAction
 } from "state-management/actions/datasets.actions";
 
-import { DatasetState, initialDatasetState } from "state-management/state/datasets.store";
+import {
+  DatasetState,
+  initialDatasetState
+} from "state-management/state/datasets.store";
 import { ArchViewMode } from "state-management/models";
 
 export function datasetsReducer(
@@ -99,7 +102,10 @@ export function datasetsReducer(
       return {
         ...state,
         addingAttachment: false,
-        currentSet: { ...state.currentSet, datasetattachments: Array.from(attach2) }
+        currentSet: {
+          ...state.currentSet,
+          datasetattachments: Array.from(attach2)
+        }
       };
     }
 
@@ -114,10 +120,13 @@ export function datasetsReducer(
     case DELETE_ATTACHMENT_COMPLETE: {
       const attachments = state.currentSet.datasetattachments;
       const attachment_id = (action as DeleteAttachmentComplete).attachment_id;
-      const attach2 = attachments.filter(attachment => attachment.id !== attachment_id);
+      const attach2 = attachments.filter(
+        attachment => attachment.id !== attachment_id
+      );
       console.log("array index", attachment_id);
       return {
-        ...state, deletingAttachment: false,
+        ...state,
+        deletingAttachment: false,
         currentSet: { ...state.currentSet, datasetattachments: attach2 }
       };
     }
@@ -309,14 +318,26 @@ export function datasetsReducer(
           break;
         case ArchViewMode.archivable:
           console.log("here arch");
-          mode = { $and: [{ retrievable: false }, { archivable: true }] };
+          mode = { "datasetlifecycle.archivable": true, "datasetlifecycle.retrievable": false };
           break;
         case ArchViewMode.retrievable:
           console.log("here ret");
-          mode = {$and: [{ retrievable: true }, { archivable: false }] };
+          mode = { "datasetlifecycle.retrievable": true, "datasetlifecycle.archivable": false };
+          //mode = {$and: [{ retrievable: true }, { archivable: false }] };
           break;
         case ArchViewMode.erroneous:
-          mode = { $and: [{ retrievable: true }, { archivable: true }] };
+          mode = {
+            $or: [
+              {
+                "datasetlifecycle.retrievable": false,
+                "datasetlifecycle.archivable": false
+              },
+              {
+                "datasetlifecycle.retrievable": true,
+                "datasetlifecycle.archivable": true
+              }
+            ]
+          };
           break;
       }
       const filters = { ...state.filters, mode };

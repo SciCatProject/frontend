@@ -225,8 +225,8 @@ export const getFullfacetsParams = createSelector(getFilters, filter => {
     "creationLocation",
     "ownerGroup",
     "keywords",
-    "archivable",
-    "retrievable",
+    "datasetlifecycle.archivable",
+    "datasetlifecycle.retrievable",
   ]; // , 'archiveStatusMessage'];
   const fields = restrictFilter(filter, keys);
   const facets = keys.filter(facet => facet !== "text"); // Why shouldn't 'text' be included among the facets?
