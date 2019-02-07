@@ -307,25 +307,20 @@ export function datasetsReducer(
     }
 
     case SET_VIEW_MODE: {
-      const guiMode = (action as SetViewModeAction).mode;
-      console.log("________action as SetViewModeAction: ", guiMode);
+      const modeToggle = (action as SetViewModeAction).modeToggle;
       let mode = {};
 
-      switch (guiMode) {
+      switch (modeToggle) {
         case ArchViewMode.all:
-          console.log("here all");
           mode = {};
           break;
         case ArchViewMode.archivable:
-          console.log("here arch");
           mode = { "datasetlifecycle.archivable": true, "datasetlifecycle.retrievable": false };
           break;
         case ArchViewMode.retrievable:
-          console.log("here ret");
           mode = { "datasetlifecycle.retrievable": true, "datasetlifecycle.archivable": false };
-          //mode = {$and: [{ retrievable: true }, { archivable: false }] };
           break;
-        case ArchViewMode.erroneous:
+        case ArchViewMode.work_in_progress:
           mode = {
             $or: [
               {
@@ -341,7 +336,7 @@ export function datasetsReducer(
           break;
       }
       const filters = { ...state.filters, mode };
-      return { ...state, filters };
+      return { ...state, filters, modeToggle };
     }
 
     case ADD_SCIENTIFIC_CONDITION: {

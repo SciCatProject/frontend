@@ -140,7 +140,6 @@ export class DatasetEffects {
     withLatestFrom(this.fullqueryParams$),
     map(([action, params]) => params),
     mergeMap(({ query, limits }) => {
-      console.log("query: ", query);
       return this.datasetApi.fullquery(query, limits).pipe(
         map(
           datasets =>

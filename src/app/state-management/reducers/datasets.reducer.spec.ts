@@ -333,10 +333,10 @@ describe("DatasetsReducer", () => {
 
   describe("SetViewModeAction", () => {
     it("should return the state", () => {
-      const mode = ArchViewMode.all;
-      const action = new fromActions.SetViewModeAction(mode);
+      const modeToggle = ArchViewMode.all;
+      const action = new fromActions.SetViewModeAction(modeToggle);
       const state = fromDatasets.datasetsReducer(initialDatasetState, action);
-      expect(state.filters.mode).toEqual(mode);
+      expect(state.modeToggle).toEqual(modeToggle);
     });
   });
 });

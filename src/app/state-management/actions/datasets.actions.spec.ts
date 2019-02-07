@@ -106,8 +106,8 @@ describe("SortByColumnAction", () => {
 
 describe("SetViewModeAction", () => {
   it("should create an action", () => {
-    const mode = ArchViewMode.all;
-    const action = new SetViewModeAction(mode);
-    expect({ ...action }).toEqual({ type: SET_VIEW_MODE, mode });
+    const modeToggle = ArchViewMode.all;
+    const action = new SetViewModeAction(modeToggle);
+    expect({ ...action }).toEqual({ type: SET_VIEW_MODE, modeToggle });
   });
 });

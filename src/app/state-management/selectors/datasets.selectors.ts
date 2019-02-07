@@ -119,7 +119,7 @@ export const getCreationTimeFilter = createSelector(
   filters => filters.creationTime
 );
 
-export const getViewMode = createSelector(getFilters, state => state.mode);
+export const getViewMode = createSelector(getDatasetState, state => state.modeToggle );
 
 export const getHasAppliedFilters = createSelector(
   getFilters,

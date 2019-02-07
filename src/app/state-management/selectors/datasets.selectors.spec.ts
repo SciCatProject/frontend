@@ -8,6 +8,7 @@ const initialDatasetState: DatasetState = {
   currentSet: null,
   facetCounts: {},
   totalCount: 0,
+  modeToggle: ArchViewMode.all,
 
   datasetsLoading: true,
   deletingAttachment: false,

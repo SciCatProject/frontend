@@ -219,7 +219,7 @@ export class SortByColumnAction implements Action {
 export class SetViewModeAction implements Action {
   readonly type = SET_VIEW_MODE;
 
-  constructor(readonly mode: ArchViewMode) {
+  constructor(readonly modeToggle: ArchViewMode) {
   }
 }
 

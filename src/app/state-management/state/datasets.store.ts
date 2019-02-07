@@ -21,6 +21,7 @@ export interface DatasetState {
   currentSet: Dataset;
   facetCounts: FacetCounts;
   totalCount: number;
+  modeToggle: ArchViewMode;
 
   datasetsLoading: boolean;
   facetCountsLoading: boolean;
@@ -41,6 +42,7 @@ export const initialDatasetState: DatasetState = {
   currentSet: null,
   facetCounts: {},
   totalCount: 0,
+  modeToggle: ArchViewMode.all,
 
   datasetsLoading: true,
   deletingAttachment: false,

@@ -46,7 +46,7 @@ export enum ArchViewMode {
   all = "all",
   archivable = "archivable",
   retrievable = "retrievable",
-  erroneous = "work in progress"
+  work_in_progress = "work in progress"
 }
 export enum JobViewMode { myJobs = "my jobs", allJobs = "all jobs"}
 
