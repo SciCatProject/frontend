@@ -6,6 +6,7 @@ import {
 declare var Object: any;
 export interface DatasetAttachmentInterface {
   "thumbnail": string;
+  "caption"?: string;
   "creationTime"?: Date;
   "id"?: any;
   "datasetId"?: string;
@@ -16,6 +17,7 @@ export interface DatasetAttachmentInterface {
 
 export class DatasetAttachment implements DatasetAttachmentInterface {
   "thumbnail": string;
+  "caption": string;
   "creationTime": Date;
   "id": any;
   "datasetId": string;
@@ -57,6 +59,11 @@ export class DatasetAttachment implements DatasetAttachmentInterface {
       properties: {
         "thumbnail": {
           name: 'thumbnail',
+          type: 'string',
+          default: 'retrieve'
+        },
+        "caption": {
+          name: 'caption',
           type: 'string',
           default: 'retrieve'
         },

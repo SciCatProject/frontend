@@ -13,7 +13,6 @@ import { RawDataset } from '../../models/RawDataset';
 import { SocketConnection } from '../../sockets/socket.connections';
 import { Sample } from '../../models/Sample';
 import { Proposal } from '../../models/Proposal';
-import { DatasetLifecycle } from '../../models/DatasetLifecycle';
 import { Datablock } from '../../models/Datablock';
 import { DatasetAttachment } from '../../models/DatasetAttachment';
 import { OrigDatablock } from '../../models/OrigDatablock';
@@ -100,7 +99,7 @@ export class RawDatasetApi extends BaseLoopBackApi {
   }
 
   /**
-   * Fetches hasOne relation datasetlifecycle.
+   * Fetches hasOne relation datasetLifecycle.
    *
    * @param {any} id RawDataset id
    *
@@ -115,10 +114,10 @@ export class RawDatasetApi extends BaseLoopBackApi {
    * This usually means the response is a `RawDataset` object.)
    * </em>
    */
-  public getDatasetlifecycle(id: any, refresh: any = {}, customHeaders?: Function): Observable<any> {
+  public getDatasetLifecycle(id: any, refresh: any = {}, customHeaders?: Function): Observable<any> {
     let _method: string = "GET";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/RawDatasets/:id/datasetlifecycle";
+    "/RawDatasets/:id/datasetLifecycle";
     let _routeParams: any = {
       id: id
     };
@@ -130,7 +129,7 @@ export class RawDatasetApi extends BaseLoopBackApi {
   }
 
   /**
-   * Creates a new instance in datasetlifecycle of this model.
+   * Creates a new instance in datasetLifecycle of this model.
    *
    * @param {any} id RawDataset id
    *
@@ -147,10 +146,10 @@ export class RawDatasetApi extends BaseLoopBackApi {
    * This usually means the response is a `RawDataset` object.)
    * </em>
    */
-  public createDatasetlifecycle(id: any, data: any = {}, customHeaders?: Function): Observable<any> {
+  public createDatasetLifecycle(id: any, data: any = {}, customHeaders?: Function): Observable<any> {
     let _method: string = "POST";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/RawDatasets/:id/datasetlifecycle";
+    "/RawDatasets/:id/datasetLifecycle";
     let _routeParams: any = {
       id: id
     };
@@ -163,7 +162,7 @@ export class RawDatasetApi extends BaseLoopBackApi {
   }
 
   /**
-   * Update datasetlifecycle of this model.
+   * Update datasetLifecycle of this model.
    *
    * @param {any} id RawDataset id
    *
@@ -180,10 +179,10 @@ export class RawDatasetApi extends BaseLoopBackApi {
    * This usually means the response is a `RawDataset` object.)
    * </em>
    */
-  public updateDatasetlifecycle(id: any, data: any = {}, customHeaders?: Function): Observable<any> {
+  public updateDatasetLifecycle(id: any, data: any = {}, customHeaders?: Function): Observable<any> {
     let _method: string = "PUT";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/RawDatasets/:id/datasetlifecycle";
+    "/RawDatasets/:id/datasetLifecycle";
     let _routeParams: any = {
       id: id
     };
@@ -196,7 +195,7 @@ export class RawDatasetApi extends BaseLoopBackApi {
   }
 
   /**
-   * Deletes datasetlifecycle of this model.
+   * Deletes datasetLifecycle of this model.
    *
    * @param {any} id RawDataset id
    *
@@ -206,10 +205,10 @@ export class RawDatasetApi extends BaseLoopBackApi {
    *
    * This method returns no data.
    */
-  public destroyDatasetlifecycle(id: any, customHeaders?: Function): Observable<any> {
+  public destroyDatasetLifecycle(id: any, customHeaders?: Function): Observable<any> {
     let _method: string = "DELETE";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/RawDatasets/:id/datasetlifecycle";
+    "/RawDatasets/:id/datasetLifecycle";
     let _routeParams: any = {
       id: id
     };
@@ -486,6 +485,99 @@ export class RawDatasetApi extends BaseLoopBackApi {
     let _method: string = "PUT";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
     "/RawDatasets/:id/origdatablocks/:fk";
+    let _routeParams: any = {
+      id: id,
+      fk: fk
+    };
+    let _postBody: any = {
+      data: data
+    };
+    let _urlParams: any = {};
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    return result;
+  }
+
+  /**
+   * Find a related item by id for historyList.
+   *
+   * @param {any} id RawDataset id
+   *
+   * @param {any} fk Foreign key for historyList
+   *
+   * @returns {object} An empty reference that will be
+   *   populated with the actual data once the response is returned
+   *   from the server.
+   *
+   * <em>
+   * (The remote method definition does not provide any description.
+   * This usually means the response is a `RawDataset` object.)
+   * </em>
+   */
+  public findByIdHistoryList(id: any, fk: any, customHeaders?: Function): Observable<any> {
+    let _method: string = "GET";
+    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
+    "/RawDatasets/:id/historyList/:fk";
+    let _routeParams: any = {
+      id: id,
+      fk: fk
+    };
+    let _postBody: any = {};
+    let _urlParams: any = {};
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    return result;
+  }
+
+  /**
+   * Delete a related item by id for historyList.
+   *
+   * @param {any} id RawDataset id
+   *
+   * @param {any} fk Foreign key for historyList
+   *
+   * @returns {object} An empty reference that will be
+   *   populated with the actual data once the response is returned
+   *   from the server.
+   *
+   * This method returns no data.
+   */
+  public destroyByIdHistoryList(id: any, fk: any, customHeaders?: Function): Observable<any> {
+    let _method: string = "DELETE";
+    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
+    "/RawDatasets/:id/historyList/:fk";
+    let _routeParams: any = {
+      id: id,
+      fk: fk
+    };
+    let _postBody: any = {};
+    let _urlParams: any = {};
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    return result;
+  }
+
+  /**
+   * Update a related item by id for historyList.
+   *
+   * @param {any} id RawDataset id
+   *
+   * @param {any} fk Foreign key for historyList
+   *
+   * @param {object} data Request data.
+   *
+   * This method expects a subset of model properties as request parameters.
+   *
+   * @returns {object} An empty reference that will be
+   *   populated with the actual data once the response is returned
+   *   from the server.
+   *
+   * <em>
+   * (The remote method definition does not provide any description.
+   * This usually means the response is a `RawDataset` object.)
+   * </em>
+   */
+  public updateByIdHistoryList(id: any, fk: any, data: any = {}, customHeaders?: Function): Observable<any> {
+    let _method: string = "PUT";
+    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
+    "/RawDatasets/:id/historyList/:fk";
     let _routeParams: any = {
       id: id,
       fk: fk
@@ -847,6 +939,122 @@ export class RawDatasetApi extends BaseLoopBackApi {
   }
 
   /**
+   * Queries historyList of RawDataset.
+   *
+   * @param {any} id RawDataset id
+   *
+   * @param {object} filter 
+   *
+   * @returns {object[]} An empty reference that will be
+   *   populated with the actual data once the response is returned
+   *   from the server.
+   *
+   * <em>
+   * (The remote method definition does not provide any description.
+   * This usually means the response is a `RawDataset` object.)
+   * </em>
+   */
+  public getHistoryList(id: any, filter: LoopBackFilter = {}, customHeaders?: Function): Observable<any> {
+    let _method: string = "GET";
+    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
+    "/RawDatasets/:id/historyList";
+    let _routeParams: any = {
+      id: id
+    };
+    let _postBody: any = {};
+    let _urlParams: any = {};
+    if (typeof filter !== 'undefined' && filter !== null) _urlParams.filter = filter;
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    return result;
+  }
+
+  /**
+   * Creates a new instance in historyList of this model.
+   *
+   * @param {any} id RawDataset id
+   *
+   * @param {object} data Request data.
+   *
+   * This method expects a subset of model properties as request parameters.
+   *
+   * @returns {object} An empty reference that will be
+   *   populated with the actual data once the response is returned
+   *   from the server.
+   *
+   * <em>
+   * (The remote method definition does not provide any description.
+   * This usually means the response is a `RawDataset` object.)
+   * </em>
+   */
+  public createHistoryList(id: any, data: any = {}, customHeaders?: Function): Observable<any> {
+    let _method: string = "POST";
+    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
+    "/RawDatasets/:id/historyList";
+    let _routeParams: any = {
+      id: id
+    };
+    let _postBody: any = {
+      data: data
+    };
+    let _urlParams: any = {};
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    return result;
+  }
+
+  /**
+   * Deletes all historyList of this model.
+   *
+   * @param {any} id RawDataset id
+   *
+   * @returns {object} An empty reference that will be
+   *   populated with the actual data once the response is returned
+   *   from the server.
+   *
+   * This method returns no data.
+   */
+  public deleteHistoryList(id: any, customHeaders?: Function): Observable<any> {
+    let _method: string = "DELETE";
+    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
+    "/RawDatasets/:id/historyList";
+    let _routeParams: any = {
+      id: id
+    };
+    let _postBody: any = {};
+    let _urlParams: any = {};
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    return result;
+  }
+
+  /**
+   * Counts historyList of RawDataset.
+   *
+   * @param {any} id RawDataset id
+   *
+   * @param {object} where Criteria to match model instances
+   *
+   * @returns {object} An empty reference that will be
+   *   populated with the actual data once the response is returned
+   *   from the server.
+   *
+   * Data properties:
+   *
+   *  - `count` – `{number}` - 
+   */
+  public countHistoryList(id: any, where: any = {}, customHeaders?: Function): Observable<any> {
+    let _method: string = "GET";
+    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
+    "/RawDatasets/:id/historyList/count";
+    let _routeParams: any = {
+      id: id
+    };
+    let _postBody: any = {};
+    let _urlParams: any = {};
+    if (typeof where !== 'undefined' && where !== null) _urlParams.where = where;
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    return result;
+  }
+
+  /**
    * Patch an existing model instance or insert a new one into the data source.
    *
    * @param {object} data Request data.
@@ -863,7 +1071,7 @@ export class RawDatasetApi extends BaseLoopBackApi {
    * </em>
    */
   public patchOrCreate(data: any = {}, customHeaders?: Function): Observable<any> {
-    let _method: string = "PATCH";
+    let _method: string = "PUT";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
     "/RawDatasets";
     let _routeParams: any = {};
@@ -894,7 +1102,7 @@ export class RawDatasetApi extends BaseLoopBackApi {
    * </em>
    */
   public patchAttributes(id: any, data: any = {}, customHeaders?: Function): Observable<any> {
-    let _method: string = "PATCH";
+    let _method: string = "PUT";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
     "/RawDatasets/:id";
     let _routeParams: any = {
@@ -938,7 +1146,7 @@ export class RawDatasetApi extends BaseLoopBackApi {
   }
 
   /**
-   * Delete datablocks of dataset and reset status message. Warning: to be oboleted, use reset call for DatasetLifecycle instead
+   * Reset archive status by deleting created datablocks of dataset and resetting  archiveStatusMessage and archivable flag.
    *
    * @param {object} data Request data.
    *
@@ -948,48 +1156,19 @@ export class RawDatasetApi extends BaseLoopBackApi {
    *   populated with the actual data once the response is returned
    *   from the server.
    *
-   * Data properties:
-   *
-   *  - `result` – `{string}` - 
+   * <em>
+   * (The remote method definition does not provide any description.
+   * This usually means the response is a `RawDataset` object.)
+   * </em>
    */
   public reset(datasetId: any = {}, customHeaders?: Function): Observable<any> {
-    let _method: string = "POST";
+    let _method: string = "PUT";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
     "/RawDatasets/resetArchiveStatus";
     let _routeParams: any = {};
     let _postBody: any = {};
     let _urlParams: any = {};
     if (typeof datasetId !== 'undefined' && datasetId !== null) _urlParams.datasetId = datasetId;
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
-    return result;
-  }
-
-  /**
-   * Search for numbers associated with dataset properties. I.e. How many datasets in Group A. Default returns: Creation Location, Owner Groups and Creation Time
-   *
-   * @param {object} data Request data.
-   *
-   *  - `fields` – `{object}` - Define the fields to search by, these will be mapped to the Dataset object and ensure the fields exist. There is also support for a `text` search to look for keywords. Can be undefined.
-   *
-   *  - `facets` – `{any}` - This should be an array of objects with the structure: {name: key in mongo (without $ prefix), type: date|text|etc, preConditions: object to include in the query (i.e. unwind)}
-   *
-   * @returns {object} An empty reference that will be
-   *   populated with the actual data once the response is returned
-   *   from the server.
-   *
-   * Data properties:
-   *
-   *  - `results` – `{Object}` - 
-   */
-  public facet(fields: any = {}, facets: any = {}, customHeaders?: Function): Observable<any> {
-    let _method: string = "POST";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/RawDatasets/facet";
-    let _routeParams: any = {};
-    let _postBody: any = {};
-    let _urlParams: any = {};
-    if (typeof fields !== 'undefined' && fields !== null) _urlParams.fields = fields;
-    if (typeof facets !== 'undefined' && facets !== null) _urlParams.facets = facets;
     let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
     return result;
   }
@@ -1053,7 +1232,7 @@ export class RawDatasetApi extends BaseLoopBackApi {
   }
 
   /**
-   * Creates a new instance in datasetlifecycle of this model.
+   * Creates a new instance in datasetLifecycle of this model.
    *
    * @param {any} id RawDataset id
    *
@@ -1070,10 +1249,10 @@ export class RawDatasetApi extends BaseLoopBackApi {
    * This usually means the response is a `RawDataset` object.)
    * </em>
    */
-  public createManyDatasetlifecycle(id: any, data: any[] = [], customHeaders?: Function): Observable<any> {
+  public createManyDatasetLifecycle(id: any, data: any[] = [], customHeaders?: Function): Observable<any> {
     let _method: string = "POST";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/RawDatasets/:id/datasetlifecycle";
+    "/RawDatasets/:id/datasetLifecycle";
     let _routeParams: any = {
       id: id
     };
@@ -1173,6 +1352,39 @@ export class RawDatasetApi extends BaseLoopBackApi {
     let _method: string = "POST";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
     "/RawDatasets/:id/origdatablocks";
+    let _routeParams: any = {
+      id: id
+    };
+    let _postBody: any = {
+      data: data
+    };
+    let _urlParams: any = {};
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    return result;
+  }
+
+  /**
+   * Creates a new instance in historyList of this model.
+   *
+   * @param {any} id RawDataset id
+   *
+   * @param {object} data Request data.
+   *
+   * This method expects a subset of model properties as request parameters.
+   *
+   * @returns {object[]} An empty reference that will be
+   *   populated with the actual data once the response is returned
+   *   from the server.
+   *
+   * <em>
+   * (The remote method definition does not provide any description.
+   * This usually means the response is a `RawDataset` object.)
+   * </em>
+   */
+  public createManyHistoryList(id: any, data: any[] = [], customHeaders?: Function): Observable<any> {
+    let _method: string = "POST";
+    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
+    "/RawDatasets/:id/historyList";
     let _routeParams: any = {
       id: id
     };

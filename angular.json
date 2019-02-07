@@ -136,6 +136,10 @@
                 {
                   "replace": "src/assets/images/ess-site.png",
                   "with": "CI/PSI/site.png"
+                },
+                {
+                  "replace": "src/assets/images/esslogo.png",
+                  "with": "CI/PSI/site-logo.png"
                 }
               ],
               "serviceWorker": true
@@ -222,6 +226,14 @@
                 {
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.qa.ts"
+                },
+                {
+                  "replace": "src/assets/images/ess-site.png",
+                  "with": "CI/PSI/site.png"
+                },
+                {
+                  "replace": "src/assets/images/esslogo.png",
+                  "with": "CI/PSI/site-logo.png"
                 }
               ]
             },
