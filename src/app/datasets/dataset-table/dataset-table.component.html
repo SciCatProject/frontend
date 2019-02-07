@@ -28,7 +28,7 @@
     <button
       mat-button
       [disabled]="isEmptySelection$ | async"
-      *ngIf="currentMode === 'archive'"
+      *ngIf="currentMode === viewModes.archivable"
       class="ui button archive-action-btn"
       (click)="archiveClickHandle($event)"
       color="primary"
@@ -39,7 +39,7 @@
     <button
       mat-button
       [disabled]="isEmptySelection$ | async"
-      *ngIf="currentMode === 'retrieve'"
+      *ngIf="currentMode === viewModes.retrievable"
       class="ui button retrieve-action-btn"
       (click)="retrieveClickHandle($event)"
       color="primary"

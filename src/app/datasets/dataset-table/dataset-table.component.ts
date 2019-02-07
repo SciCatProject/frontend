@@ -91,6 +91,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   /*private modes = Object.keys(ArchViewMode)
     .map(key => ArchViewMode[key])
     .filter(value => typeof value === "string") as string[];*/
+  public viewModes =  ArchViewMode;
   private modes = [
     ArchViewMode.all,
     ArchViewMode.archivable,
