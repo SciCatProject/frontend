@@ -206,9 +206,6 @@ export const getFullqueryParams = createSelector(getFilters, filter => {
   const { skip, limit, sortField, scientific, ...theRest } = filter;
   const limits = { skip, limit, order: sortField };
   const query = restrictFilter(theRest);
-  console.log("Inside fullquery query:",query)
-  console.log("Inside fullquery filter:",filter)
-
   return {
     query: JSON.stringify(query),
     limits
@@ -225,8 +222,6 @@ export const getFullfacetsParams = createSelector(getFilters, filter => {
     "ownerGroup",
     "keywords"
   ]; 
-  console.log("Inside fullfacets fields:",fields)
-  console.log("Inside fullfacets filter:",filter)
   return { fields, facets };
 });
 
