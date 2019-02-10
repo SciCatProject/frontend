@@ -2,7 +2,7 @@ import * as fromDatasets from "./datasets.reducer";
 import * as fromActions from "../actions/datasets.actions";
 import { Dataset, DatasetInterface } from "shared/sdk/models";
 import { initialDatasetState } from "state-management/state/datasets.store";
-import { DatasetFilters } from "../models";
+import { DatasetFilters, ArchViewMode } from "../models";
 
 const defaultFilter: DatasetFilters = {
   text: "",
@@ -17,7 +17,7 @@ const defaultFilter: DatasetFilters = {
   limit: 0,
   keywords: [],
   sortField: "",
-  mode: "view",
+  mode: ArchViewMode.all,
   scientific: []
 };
 
@@ -333,10 +333,10 @@ describe("DatasetsReducer", () => {
 
   describe("SetViewModeAction", () => {
     it("should return the state", () => {
-      const mode = "view";
-      const action = new fromActions.SetViewModeAction(mode);
+      const modeToggle = ArchViewMode.all;
+      const action = new fromActions.SetViewModeAction(modeToggle);
       const state = fromDatasets.datasetsReducer(initialDatasetState, action);
-      expect(state.filters.mode).toEqual(mode);
+      expect(state.modeToggle).toEqual(modeToggle);
     });
   });
 });

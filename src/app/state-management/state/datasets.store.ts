@@ -1,4 +1,4 @@
-import { DatasetFilters, Dataset } from "state-management/models";
+import { DatasetFilters, Dataset, ArchViewMode } from "state-management/models";
 
 export interface DateTriple {
   year: number;
@@ -21,6 +21,7 @@ export interface DatasetState {
   currentSet: Dataset;
   facetCounts: FacetCounts;
   totalCount: number;
+  modeToggle: ArchViewMode;
 
   datasetsLoading: boolean;
   facetCountsLoading: boolean;
@@ -41,6 +42,7 @@ export const initialDatasetState: DatasetState = {
   currentSet: null,
   facetCounts: {},
   totalCount: 0,
+  modeToggle: ArchViewMode.all,
 
   datasetsLoading: true,
   deletingAttachment: false,
@@ -53,7 +55,7 @@ export const initialDatasetState: DatasetState = {
   batch: [],
 
   filters: {
-    mode: "view",
+    mode: {},
     text: "",
     creationTime: null,
     type: [],

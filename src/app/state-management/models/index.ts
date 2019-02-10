@@ -42,7 +42,12 @@ export class Message {
   duration: number;
 }
 
-export type ViewMode = "view" | "archive" | "retrieve";
+export enum ArchViewMode {
+  all = "all",
+  archivable = "archivable",
+  retrievable = "retrievable",
+  work_in_progress = "work in progress"
+}
 export enum JobViewMode { myJobs = "my jobs", allJobs = "all jobs"}
 
 type ScientificConditionRelation =
@@ -67,7 +72,7 @@ export interface DatasetFilters {
   limit: number;
   keywords: string[];
   sortField: string;
-  mode: ViewMode;
+  mode: {};
   scientific: ScientificCondition[];
 }
 

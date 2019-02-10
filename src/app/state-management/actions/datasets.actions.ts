@@ -1,5 +1,5 @@
 import { Action } from "@ngrx/store";
-import { DatasetFilters, ScientificCondition, ViewMode } from "state-management/models";
+import { DatasetFilters, ScientificCondition, ArchViewMode } from "state-management/models";
 import { Dataset, DatasetAttachment } from "shared/sdk/models";
 import { FacetCounts } from "../state/datasets.store";
 
@@ -219,7 +219,7 @@ export class SortByColumnAction implements Action {
 export class SetViewModeAction implements Action {
   readonly type = SET_VIEW_MODE;
 
-  constructor(readonly mode: ViewMode) {
+  constructor(readonly modeToggle: ArchViewMode) {
   }
 }
 
