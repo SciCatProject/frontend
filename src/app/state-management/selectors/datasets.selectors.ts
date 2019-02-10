@@ -206,8 +206,8 @@ export const getFullqueryParams = createSelector(getFilters, filter => {
   const { skip, limit, sortField, scientific, ...theRest } = filter;
   const limits = { skip, limit, order: sortField };
   const query = restrictFilter(theRest);
-
-
+  console.log("Inside fullquery query:",query)
+  console.log("Inside fullquery filter:",filter)
 
   return {
     query: JSON.stringify(query),
@@ -216,18 +216,17 @@ export const getFullqueryParams = createSelector(getFilters, filter => {
 });
 
 export const getFullfacetsParams = createSelector(getFilters, filter => {
-  const keys = [
+  const { skip, limit, sortField, scientific, ...theRest } = filter;
+  const fields = restrictFilter(theRest);
+  const facets = [
     "type",
-    "text",
     "creationTime",
     "creationLocation",
     "ownerGroup",
-    "keywords",
-    "datasetlifecycle.archivable",
-    "datasetlifecycle.retrievable",
-  ]; // , 'archiveStatusMessage'];
-  const fields = restrictFilter(filter, keys);
-  const facets = keys.filter(facet => facet !== "text"); // Why shouldn't 'text' be included among the facets?
+    "keywords"
+  ]; 
+  console.log("Inside fullfacets fields:",fields)
+  console.log("Inside fullfacets filter:",filter)
   return { fields, facets };
 });
 
