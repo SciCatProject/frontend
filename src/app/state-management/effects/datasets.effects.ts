@@ -71,8 +71,7 @@ export class DatasetEffects {
         include: [
           { relation: "origdatablocks" },
           { relation: "datablocks" },
-          { relation: "datasetattachments" },
-          { relation: "datasetlifecycle" }
+          { relation: "datasetattachments" }
         ]
       };
 
@@ -140,8 +139,8 @@ export class DatasetEffects {
     ofType(DatasetActions.FETCH_DATASETS),
     withLatestFrom(this.fullqueryParams$),
     map(([action, params]) => params),
-    mergeMap(({ query, limits }) =>
-      this.datasetApi.fullquery(query, limits).pipe(
+    mergeMap(({ query, limits }) => {
+      return this.datasetApi.fullquery(query, limits).pipe(
         map(
           datasets =>
             new DatasetActions.FetchDatasetsCompleteAction(
@@ -149,8 +148,8 @@ export class DatasetEffects {
             )
         ),
         catchError(() => of(new DatasetActions.FetchDatasetsFailedAction()))
-      )
-    )
+      );
+            })
   );
   @Effect()
   private fetchFacetCounts$: Observable<Action> = this.actions$.pipe(

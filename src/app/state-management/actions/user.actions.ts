@@ -1,5 +1,5 @@
 import { Action } from "@ngrx/store";
-import { Message, User, Settings } from "../models";
+import { Message, User, UserIdentity, Settings } from "../models";
 
 export const LOGIN = "[User] Login";
 export const LOGIN_COMPLETE = "[User] Login Complete";
@@ -83,6 +83,21 @@ export class RetrieveUserCompleteAction implements Action {
 
 export class RetrieveUserFailedAction implements Action {
   readonly type = RETRIEVE_USER_FAILED;
+  constructor(readonly error: Error) {}
+}
+
+export class RetrieveUserIdentAction implements Action {
+  readonly type = RETRIEVE_USER_IDENTITY;
+  constructor(readonly id: string) {}
+}
+
+export class RetrieveUserIdentCompleteAction implements Action {
+  readonly type = RETRIEVE_USER_IDENTITY_COMPLETE;
+  constructor(readonly userIdentity: UserIdentity) {}
+}
+
+export class RetrieveUserIdentFailedAction implements Action {
+  readonly type = RETRIEVE_USER_IDENTITY_FAILED;
   constructor(readonly error: Error) {}
 }
 

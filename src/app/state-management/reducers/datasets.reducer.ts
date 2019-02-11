@@ -74,7 +74,11 @@ import {
   SortByColumnAction
 } from "state-management/actions/datasets.actions";
 
-import { DatasetState, initialDatasetState } from "state-management/state/datasets.store";
+import {
+  DatasetState,
+  initialDatasetState
+} from "state-management/state/datasets.store";
+import { ArchViewMode } from "state-management/models";
 
 export function datasetsReducer(
   state: DatasetState = initialDatasetState,
@@ -98,7 +102,10 @@ export function datasetsReducer(
       return {
         ...state,
         addingAttachment: false,
-        currentSet: { ...state.currentSet, datasetattachments: Array.from(attach2) }
+        currentSet: {
+          ...state.currentSet,
+          datasetattachments: Array.from(attach2)
+        }
       };
     }
 
@@ -113,10 +120,13 @@ export function datasetsReducer(
     case DELETE_ATTACHMENT_COMPLETE: {
       const attachments = state.currentSet.datasetattachments;
       const attachment_id = (action as DeleteAttachmentComplete).attachment_id;
-      const attach2 = attachments.filter(attachment => attachment.id !== attachment_id);
+      const attach2 = attachments.filter(
+        attachment => attachment.id !== attachment_id
+      );
       console.log("array index", attachment_id);
       return {
-        ...state, deletingAttachment: false,
+        ...state,
+        deletingAttachment: false,
         currentSet: { ...state.currentSet, datasetattachments: attach2 }
       };
     }
@@ -297,9 +307,36 @@ export function datasetsReducer(
     }
 
     case SET_VIEW_MODE: {
-      const { mode } = action as SetViewModeAction;
+      const modeToggle = (action as SetViewModeAction).modeToggle;
+      let mode = {};
+
+      switch (modeToggle) {
+        case ArchViewMode.all:
+          mode = {};
+          break;
+        case ArchViewMode.archivable:
+          mode = { "datasetlifecycle.archivable": true, "datasetlifecycle.retrievable": false };
+          break;
+        case ArchViewMode.retrievable:
+          mode = { "datasetlifecycle.retrievable": true, "datasetlifecycle.archivable": false };
+          break;
+        case ArchViewMode.work_in_progress:
+          mode = {
+            $or: [
+              {
+                "datasetlifecycle.retrievable": false,
+                "datasetlifecycle.archivable": false
+              },
+              {
+                "datasetlifecycle.retrievable": true,
+                "datasetlifecycle.archivable": true
+              }
+            ]
+          };
+          break;
+      }
       const filters = { ...state.filters, mode };
-      return { ...state, filters };
+      return { ...state, filters, modeToggle };
     }
 
     case ADD_SCIENTIFIC_CONDITION: {

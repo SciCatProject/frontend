@@ -17,7 +17,7 @@ https://github.com/SciCatProject/scicat-develop/blob/master/create-data/index.js
 Login to catamel
 
  curl -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' -d '{"username":"ingestor", \ 
- "password":"<your_password>"}' 'http://localhost:3000/api/v2/Users/login'
+ "password":"<your_password>"}' 'http://localhost:3000/api/v3/Users/login'
 
 2. 
 Create a json file in the correct format.
@@ -41,24 +41,15 @@ Create a json file in the correct format.
                 "valid"
             ],
             "description": "https://github.com/ess-dmsc/ess_file_formats/wiki/SONDE",
-            "userTargetLocation": "SoNDe",
             "creationLocation": "SoNDe",
             "license": "ESS",
             "version": "version",
-            "doi": "10.78327/SONDE0001",
             "isPublished": true,
             "ownerGroup": "ess",
             "accessGroups": [
                 "brightness",
                 "ess"
             ],
-            "createdBy": "ingestor",
-            "updatedBy": "ingestor",
-            "createdAt": "2018-06-06T15:26:02.680Z",
-            "updatedAt": "2018-06-06T15:26:02.680Z",
-            "archivable": true,
-            "retrievable": true,
-            "publishable": true,
             "scientificMetadata": {
                 "elog_id": "242",
                 "Optical coupling": "Dryfit"
@@ -90,7 +81,6 @@ curl -X POST --header 'Content-Type: application/json' --header 'Accept: applica
      "string" \ 
    ], \ 
    "description": "string", \ 
-   "userTargetLocation": "string", \ 
    "classification": "string", \ 
    "license": "string", \ 
    "version": "string", \ 
@@ -104,7 +94,7 @@ curl -X POST --header 'Content-Type: application/json' --header 'Accept: applica
    "updatedBy": "string", \ 
    "createdAt": "2018-12-10T15:38:43.042Z", \ 
    "updatedAt": "2018-12-10T15:38:43.042Z" \ 
- }' 'http://localhost:3000/api/v2/Datasets?access_token=TTQFlqAWWWnMHHxZdPbYP2LZhaLgUrb8DoQcmNeIpDgku0ScNH0oRCOq8JODcF70'
+ }' 'http://localhost:3000/api/v3/Datasets?access_token=TTQFlqAWWWnMHHxZdPbYP2LZhaLgUrb8DoQcmNeIpDgku0ScNH0oRCOq8JODcF70'
 ```
 Here, the access token  must be replaced by the one provided after logging in as above.
 

@@ -1,6 +1,5 @@
 import { createSelector, createFeatureSelector } from "@ngrx/store";
 import { DatasetState } from "../state/datasets.store";
-import { config } from "../../../config/config";
 
 const getDatasetState = createFeatureSelector<DatasetState>("datasets");
 
@@ -118,7 +117,7 @@ export const getCreationTimeFilter = createSelector(
   filters => filters.creationTime
 );
 
-export const getViewMode = createSelector(getFilters, state => state.mode);
+export const getViewMode = createSelector(getDatasetState, state => state.modeToggle );
 
 export const getHasAppliedFilters = createSelector(
   getFilters,
@@ -204,18 +203,9 @@ function restrictFilter(filter: object, allowedKeys?: string[]) {
 }
 
 export const getFullqueryParams = createSelector(getFilters, filter => {
-  const { skip, limit, sortField, mode, scientific, ...theRest } = filter;
+  const { skip, limit, sortField, scientific, ...theRest } = filter;
   const limits = { skip, limit, order: sortField };
   const query = restrictFilter(theRest);
-
-  // Archiving handling
-  if (mode !== "view") {
-    query["archiveStatusMessage"] = {
-      archive: config.archiveable,
-      retrieve: config.retrieveable
-    }[mode];
-  }
-
   return {
     query: JSON.stringify(query),
     limits
@@ -223,16 +213,15 @@ export const getFullqueryParams = createSelector(getFilters, filter => {
 });
 
 export const getFullfacetsParams = createSelector(getFilters, filter => {
-  const keys = [
+  const { skip, limit, sortField, scientific, ...theRest } = filter;
+  const fields = restrictFilter(theRest);
+  const facets = [
     "type",
-    "text",
     "creationTime",
     "creationLocation",
     "ownerGroup",
     "keywords"
-  ]; // , 'archiveStatusMessage'];
-  const fields = restrictFilter(filter, keys);
-  const facets = keys.filter(facet => facet !== "text"); // Why shouldn't 'text' be included among the facets?
+  ]; 
   return { fields, facets };
 });
 

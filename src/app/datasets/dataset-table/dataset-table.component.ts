@@ -1,14 +1,13 @@
 import { APP_CONFIG, AppConfig } from "app-config.module";
 import { ArchivingService } from "../archiving.service";
 import { Component, Inject, OnDestroy, OnInit } from "@angular/core";
-import { Dataset, MessageType, ViewMode } from "state-management/models";
+import { Dataset, MessageType, ArchViewMode } from "state-management/models";
 import { DialogComponent } from "shared/modules/dialog/dialog.component";
 import { MatCheckboxChange, MatDialog } from "@angular/material";
 import { Router } from "@angular/router";
 import { ShowMessageAction } from "state-management/actions/user.actions";
-import { combineLatest, Subscription } from "rxjs";
+import { Subscription } from "rxjs";
 import {
-  getCurrentEmail,
   getDisplayedColumns
 } from "../../state-management/selectors/users.selectors";
 import { getError, submitJob } from "state-management/selectors/jobs.selectors";
@@ -27,10 +26,7 @@ import {
 
 import {
   getDatasets,
-  getDatasetsInBatch,
   getDatasetsPerPage,
-  getFilters,
-  getIsEmptySelection,
   getIsLoading,
   getPage,
   getSelectedDatasets,
@@ -60,42 +56,34 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   datasetsPerPage$ = this.store.pipe(select(getDatasetsPerPage));
   datasetCount$ = this.store.select(getTotalSets);
   loading$ = this.store.pipe(select(getIsLoading));
-  // These should be made part of the NgRX state management
-  public currentMode: string;
+
+  public currentMode: ArchViewMode;
   private selectedSets$ = this.store.pipe(select(getSelectedDatasets));
-  private batch$ = this.store.pipe(select(getDatasetsInBatch));
   private mode$ = this.store.pipe(select(getViewMode));
-  private isEmptySelection$ = this.store.pipe(select(getIsEmptySelection));
-  private filters$ = this.store.pipe(select(getFilters));
-  private email$ = this.store.pipe(select(getCurrentEmail));
-  private allAreSeleted$ = combineLatest(
-    this.datasets$,
-    this.selectedSets$,
-    (datasets, selected) => {
-      const pids = selected.map(set => set.pid);
-      return (
-        datasets.length &&
-        datasets.find(dataset => pids.indexOf(dataset.pid) === -1) == null
-      );
-    }
-  );
   private selectedPids: string[] = [];
   private selectedPidsSubscription = this.selectedSets$.subscribe(datasets => {
     this.selectedPids = datasets.map(dataset => dataset.pid);
   });
   private inBatchPids: string[] = [];
-  private inBatchPidsSubscription = this.batch$.subscribe(datasets => {
-    this.inBatchPids = datasets.map(dataset => dataset.pid);
-  });
-
-  private modes = ["view", "archive", "retrieve"];
-  private modeLabels = ["all", "archivable", "retrievable"];
+  public viewModes =  ArchViewMode;
+  private modes = [
+    ArchViewMode.all,
+    ArchViewMode.archivable,
+    ArchViewMode.retrievable,
+    ArchViewMode.work_in_progress
+  ];
+  private modeLabels = [
+    ArchViewMode.all,
+    ArchViewMode.archivable,
+    ArchViewMode.retrievable,
+    ArchViewMode.work_in_progress
+  ];
   // compatibility analogs of observables
   private selectedSets: Dataset[] = [];
   private selectedSetsSubscription = this.selectedSets$.subscribe(
     selectedSets => (this.selectedSets = selectedSets)
   );
-  private modeSubscription = this.mode$.subscribe((mode: ViewMode) => {
+  private modeSubscription = this.mode$.subscribe((mode: ArchViewMode) => {
     this.currentMode = mode;
   });
   // and eventually be removed.
@@ -170,7 +158,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
    * @param event
    * @param mode
    */
-  onModeChange(event, mode: ViewMode): void {
+  onModeChange(event, mode: ArchViewMode): void {
     this.store.dispatch(new SetViewModeAction(mode));
   }
 

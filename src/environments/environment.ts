@@ -11,10 +11,11 @@ export const environment = {
   archiveWorkflowEnabled: true,
   editMetadataEnabled: true,
   editSampleEnabled: true,
-  csvEnabled: false,
-  scienceSearchEnabled: false,
+  csvEnabled: true,
+  scienceSearchEnabled: true,
   disabledDatasetColumns: [],
   facility: "ESS",
+  multipleDownloadEnabled: true,
   shoppingCartEnabled: true,
   columnSelectEnabled: true
 };

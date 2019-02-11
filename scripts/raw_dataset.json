@@ -18,7 +18,7 @@
      "string"  
    ],  
    "description": "string",  
-   "userTargetLocation": "string",  
+ 
    "classification": "string",  
    "license": "string",  
    "ownerGroup": "string",  
