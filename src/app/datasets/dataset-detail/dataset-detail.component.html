@@ -84,7 +84,9 @@
                 *ngIf="dataset.sampleId as value"
                 (click)="onClickSample(value)"
               >
-                <th><i class="material-icons"> center_focus_weak </i> Sample</th>
+                <th>
+                  <i class="material-icons"> center_focus_weak </i> Sample
+                </th>
                 <td>
                   <a>{{ value }}</a>
                 </td>
@@ -141,7 +143,7 @@
           </div>
         </mat-card>
 
-        <mat-card style="margin:1em" *ngIf="dataset.investigator" >
+        <mat-card style="margin:1em" *ngIf="dataset.investigator">
           <mat-card-header style="background:#d2b478;">
             Derived Data
           </mat-card-header>
@@ -156,12 +158,14 @@
                 <td>{{ value }}</td>
               </tr>
               <tr *ngIf="dataset.usedSoftware as value">
-                <th><i class="material-icons"> screen_share</i> Software Used</th>
+                <th>
+                  <i class="material-icons"> screen_share</i> Software Used
+                </th>
                 <td>{{ value }}</td>
               </tr>
               <tr *ngIf="dataset.jobParameters as value">
                 <th><i class="material-icons"> settings </i> Job Parameters</th>
-                <td>{{ value | json}}</td>
+                <td>{{ value | json }}</td>
               </tr>
               <tr *ngIf="dataset.jobLogData as value">
                 <th><i class="material-icons"> ballot </i> Job Log Data</th>
@@ -171,13 +175,12 @@
           </div>
         </mat-card>
 
-
         <mat-card style="margin:1em">
           <div *ngIf="dataset.scientificMetadata as value">
-          <mat-card-header style="background:#ff96fa;">
-            Scientific Metadata
-          </mat-card-header>
-            <pre>{{ value | jsonHead }}</pre>
+            <mat-card-header style="background:#ff96fa;">
+              Scientific Metadata
+            </mat-card-header>
+            <pre>{{ value | scientificMetadata }}</pre>
           </div>
 
           <div class="form-container" *ngIf="appConfig.editMetadataEnabled">
@@ -261,7 +264,7 @@
   <mat-tab disabled>
     <ng-template mat-tab-label>
       <button mat-button class="export-btn" (click)="onExportClick()">
-      <i class="material-icons"> list </i> Export to CSV
+        <i class="material-icons"> list </i> Export to CSV
       </button>
     </ng-template>
   </mat-tab>
