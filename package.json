@@ -58,7 +58,7 @@
     "@angular/compiler-cli": "^7.2.0",
     "@ngrx/store-devtools": "^7.0.0",
     "@types/jasmine": "^3.3.5",
-    "@types/node": "^10.12.18",
+    "@types/node": "^11.9.0",
     "@types/rison": "^0.0.6",
     "@types/socket.io-client": "^1.4.32",
     "@types/source-map-support": "^0.4.1",
