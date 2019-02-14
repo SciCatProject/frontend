@@ -1,6 +1,5 @@
 import { createSelector, createFeatureSelector } from "@ngrx/store";
 import { ProposalsState } from "../state/proposals.store";
-// import { getDatasets } from './datasets.selectors';
 
 const getProposalsState = createFeatureSelector<ProposalsState>("proposals");
 
@@ -37,7 +36,20 @@ export const getSelectedProposal = createSelector(
 
 export const getSelectedProposalDatasets = createSelector(
   getDatasetList,
-  getSelectedProposalId,
-  (datasets, proposalId) =>
-    datasets.filter(dataset => dataset.proposalId === proposalId)
+  getProposalsState,
+  (datasets, propState) => datasets.slice(propState.filters.skip, propState.filters.skip + propState.filters.limit)
+);
+
+export const getdatasetCount = createSelector(
+  getProposalsState,
+  state => state.datasetCount
+);
+
+
+export const getPage = createSelector(
+  getProposalsState,
+  state => {
+    const { skip, limit } = state.filters;
+    return skip / limit;
+  }
 );
