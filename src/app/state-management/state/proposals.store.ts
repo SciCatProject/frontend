@@ -1,4 +1,4 @@
-import { Proposal, RawDataset } from "../models";
+import { Proposal } from "../models";
 
 export interface ProposalFilters {
   skip: number;
