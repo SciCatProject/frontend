@@ -18,6 +18,8 @@ export const FETCH_DATASETS_FOR_PROPOSAL_COMPLETE =
 export const FETCH_DATASETS_FOR_PROPOSAL_FAILED =
   "[Proposals] Fetch Datasets for Proposal Failed";
 
+export const CHANGE_PAGE = "[Proposals] Change page";
+
 export class SelectProposalAction implements Action {
   type = SELECT_PROPOSAL;
 
@@ -68,6 +70,12 @@ export class FetchDatasetsForProposalCompleteAction implements Action {
 
 export class FetchDatasetsForProposalFailedAction implements Action {
   type = FETCH_DATASETS_FOR_PROPOSAL_FAILED;
+}
+
+
+export class ChangePageAction implements Action {
+  type = CHANGE_PAGE;
+  constructor(readonly page: number, readonly limit: number) {}
 }
 
 export type FetchProposalsOutcomeAction =
