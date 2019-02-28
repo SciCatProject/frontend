@@ -203,8 +203,7 @@ export class Dataset implements DatasetInterface {
         },
         "datasetlifecycle": {
           name: 'datasetlifecycle',
-          type: 'any',
-          default: <any>null
+          type: 'any'
         },
         "history": {
           name: 'history',

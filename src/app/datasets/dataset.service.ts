@@ -1,5 +1,5 @@
 import * as ua from "state-management/actions/user.actions";
-import { AccessUserApi, DatasetApi, DatasetAttachmentApi, LoopBackAuth, OrigDatablockApi } from "shared/sdk/services";
+import { DatasetApi, DatasetAttachmentApi, LoopBackAuth, OrigDatablockApi } from "shared/sdk/services";
 import { BehaviorSubject, Observable, Subject } from "rxjs";
 import { DatablockApi, DatasetAttachment } from "shared/sdk";
 import { Dataset, OrigDatablock } from "shared/sdk/models";
@@ -46,7 +46,6 @@ export class DatasetService {
     private rds: DatasetApi,
     private daSrv: DatasetAttachmentApi,
     private odb: OrigDatablockApi,
-    private acSrv: AccessUserApi,
     private db: DatablockApi,
     private auth: LoopBackAuth,
     private store: Store<any>
@@ -101,12 +100,6 @@ export class DatasetService {
 
   setDataset(dataset: Dataset) {
     return this.rds.upsert(dataset);
-  }
-
-  getUserGroups(userID: String): Observable<any> {
-    return this.acSrv.findById(userID);
-    // TODO this should be in a different service? Maybe called when the user
-    // logs in
   }
 
   searchDatasetsObservable(terms: object = this.filter) {

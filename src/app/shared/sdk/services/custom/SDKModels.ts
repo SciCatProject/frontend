@@ -8,8 +8,6 @@ import { Sample } from '../../models/Sample';
 import { Proposal } from '../../models/Proposal';
 import { PublishedData } from '../../models/PublishedData';
 import { Datablock } from '../../models/Datablock';
-import { AccessUser } from '../../models/AccessUser';
-import { AccessGroup } from '../../models/AccessGroup';
 import { UserCredential } from '../../models/UserCredential';
 import { UserIdentity } from '../../models/UserIdentity';
 import { ApplicationCredential } from '../../models/ApplicationCredential';
@@ -32,8 +30,6 @@ export class SDKModels {
     Proposal: Proposal,
     PublishedData: PublishedData,
     Datablock: Datablock,
-    AccessUser: AccessUser,
-    AccessGroup: AccessGroup,
     UserCredential: UserCredential,
     UserIdentity: UserIdentity,
     ApplicationCredential: ApplicationCredential,

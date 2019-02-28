@@ -8,13 +8,13 @@ export interface PublishedDataInterface {
   "publisher": string;
   "publicationYear": number;
   "title": string;
-  "url": string;
+  "url"?: string;
   "abstract": string;
   "dataDescription": string;
-  "thumbnail": string;
+  "thumbnail"?: string;
   "resourceType": string;
-  "numberOfFiles": number;
-  "sizeOfArchive": number;
+  "numberOfFiles"?: number;
+  "sizeOfArchive"?: number;
   "pidArray": Array<any>;
   "authors": Array<any>;
   "doiRegisteredSuccessfullyTime"?: Date;
