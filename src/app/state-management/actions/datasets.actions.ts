@@ -122,7 +122,7 @@ export class AddAttachmentFailed implements Action {
 export class DeleteAttachment implements Action {
   readonly type = DELETE_ATTACHMENT;
 
-  constructor(readonly attachment_id: string) {
+  constructor(readonly dataset_id:string, readonly attachment_id: string) {
   }
 }
 
