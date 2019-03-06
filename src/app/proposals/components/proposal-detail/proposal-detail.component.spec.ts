@@ -6,7 +6,7 @@ import { Router } from "@angular/router";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { ProposalDetailComponent } from "./proposal-detail.component";
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
-import { combineReducers, StoreModule } from "@ngrx/store";
+import { StoreModule } from "@ngrx/store";
 import { proposalsReducer } from "state-management/reducers/proposals.reducer";
 
 describe("ProposalsDetailComponent", () => {
