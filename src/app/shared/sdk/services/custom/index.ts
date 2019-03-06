@@ -7,8 +7,6 @@ export * from './Sample';
 export * from './Proposal';
 export * from './PublishedData';
 export * from './Datablock';
-export * from './AccessUser';
-export * from './AccessGroup';
 export * from './UserCredential';
 export * from './UserIdentity';
 export * from './ApplicationCredential';

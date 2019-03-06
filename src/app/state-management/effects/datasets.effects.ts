@@ -29,11 +29,11 @@ export class DatasetEffects {
   @Effect()
   protected removeAttachment$: Observable<Action> = this.actions$.pipe(
     ofType(DatasetActions.DELETE_ATTACHMENT),
-    map((action: DatasetActions.DeleteAttachment) => action.attachment_id),
-    switchMap(attachment_id => {
-      console.log("deleting attachment", attachment_id);
-      return this.datasetAttachmentApi.deleteById(attachment_id).pipe(
-        map(res => new DatasetActions.DeleteAttachmentComplete(attachment_id)),
+    map((action: DatasetActions.DeleteAttachment) => action),
+    switchMap( action  => {
+      console.log("deleting attachment", action.attachment_id);
+      return this.datasetApi.destroyByIdDatasetattachments(encodeURIComponent(action.dataset_id), action.attachment_id).pipe(
+        map(res => new DatasetActions.DeleteAttachmentComplete(action.attachment_id)),
         catchError(err => of(new DatasetActions.DeleteAttachmentFailed(err)))
       );
     })
@@ -58,7 +58,7 @@ export class DatasetEffects {
     switchMap(attachment => {
       console.log("creating attachment for", attachment.datasetId);
       delete attachment.id;
-      return this.datasetAttachmentApi.create(attachment).pipe(
+      return this.datasetApi.createDatasetattachments(encodeURIComponent(attachment.datasetId),attachment).pipe(
         map(res => new DatasetActions.AddAttachmentComplete(attachment)),
         catchError(err => of(new DatasetActions.AddAttachmentFailed(err)))
       );

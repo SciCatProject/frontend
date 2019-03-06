@@ -251,8 +251,7 @@ export class RawDataset implements RawDatasetInterface {
         },
         "datasetlifecycle": {
           name: 'datasetlifecycle',
-          type: 'any',
-          default: <any>null
+          type: 'any'
         },
         "history": {
           name: 'history',

@@ -229,7 +229,7 @@
       <mat-card class="attach-card">
         <img src="{{ da.thumbnail }}" style="width: 20em; height: 20em" />
         <mat-card-actions>
-          <button mat-raised-button (click)="delete(da.id)">
+          <button mat-raised-button (click)="delete(dataset.pid, da.id)">
             <mat-icon>delete</mat-icon>
           </button>
         </mat-card-actions>

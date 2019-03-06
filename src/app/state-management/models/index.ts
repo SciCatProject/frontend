@@ -1,7 +1,6 @@
 import {
   User,
   UserIdentity,
-  AccessGroup,
   Job,
   Dataset,
   RawDataset,
@@ -12,7 +11,6 @@ import {
 export {
   User,
   UserIdentity,
-  AccessGroup,
   Job,
   Dataset,
   RawDataset,
