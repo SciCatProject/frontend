@@ -18,6 +18,21 @@ export class ScientificMetadataPipe implements PipeTransform {
       }
     }
     const newvalue2 = JSON.stringify(newvalue, null, 2);
+    const obj = {
+      dates: {
+        d1: "2011-10-05T14:48:00.000Z" ,
+        d2: "2011-10-05T14:48:00.000Z" ,
+      },
+      units: {
+        speed: { u: "Hz", v: "14" },
+        speed2: { u: "Hz", v: "14" }
+      },
+      objs: {
+        obja: {
+          prop1: "12"
+        }
+      }
+    };
     return newvalue2;
   }
 }

@@ -181,7 +181,11 @@
               Scientific Metadata
             </mat-card-header>
             <pre>{{ value | scientificMetadata }}</pre>
+
           </div>
+              <div *ngFor="let key of objectKeys(dates)">{{key + ' : ' + dates[key]   }}</div>
+
+              <div *ngFor="let key of objectKeys(units)">{{key + ' : ' + units[key]['v'] + units[key]['u'] }}</div>
 
           <div class="form-container" *ngIf="appConfig.editMetadataEnabled">
             <app-dataset-form></app-dataset-form>

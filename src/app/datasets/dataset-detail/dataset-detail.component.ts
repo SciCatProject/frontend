@@ -12,7 +12,7 @@ import {
   getError,
   submitJob
 } from "../../state-management/selectors/jobs.selectors";
-import { Subscription } from "rxjs";
+import { Subscription, of } from "rxjs";
 import { Message, MessageType } from "state-management/models";
 import { Angular5Csv } from "angular5-csv/dist/Angular5-csv";
 import { getIsAdmin } from "state-management/selectors/users.selectors";
@@ -40,6 +40,16 @@ import {
 })
 export class DatasetDetailComponent implements OnInit, OnDestroy {
   dataset$ = this.store.pipe(select(getCurrentDataset));
+  public dates = {
+    d1: "2011-10-05T14:48:00.000Z",
+    d2: "2011-10-05T14:48:00.000Z"
+  };
+  public objectKeys = Object.keys;
+  public units = {
+    speed: { v: "13", u: "Hz" },
+    speed1: { v: "13", u: "Hz" }
+  };
+  public objs;
   private subscriptions: Subscription[] = [];
   private routeSubscription = this.route.params
     .pipe(pluck("id"))
@@ -145,9 +155,12 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
   delete(dataset_id, dataset_attachment_id) {
     console.log(
       "fire action to delete dataset attachment id ",
-      dataset_attachment_id, dataset_id
+      dataset_attachment_id,
+      dataset_id
     );
-    this.store.dispatch(new DeleteAttachment(dataset_id, dataset_attachment_id));
+    this.store.dispatch(
+      new DeleteAttachment(dataset_id, dataset_attachment_id)
+    );
   }
 
   onClickProp(proposalId: string): void {
