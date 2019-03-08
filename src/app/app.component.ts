@@ -1,5 +1,4 @@
 import { APP_CONFIG, AppConfig } from "./app-config.module";
-import { MatSidenav } from "@angular/material/sidenav";
 import {
   Component,
   Inject,
@@ -31,8 +30,6 @@ const { version: appVersion } = require("../../package.json");
   encapsulation: ViewEncapsulation.None
 })
 export class AppComponent implements OnDestroy, OnInit {
-  @ViewChild("sidenav")
-  sidenav: MatSidenav;
   userObs$ = this.store.pipe(select(getCurrentUser));
 
 
@@ -144,7 +141,6 @@ export class AppComponent implements OnDestroy, OnInit {
   }
 
   logout() {
-    this.sidenav.close();
     this.store.dispatch(new ua.LogoutAction());
   }
 
@@ -152,7 +148,4 @@ export class AppComponent implements OnDestroy, OnInit {
     this.router.navigateByUrl("/login");
   }
 
-  sidenavToggle() {
-    this.sidenav.opened ? this.sidenav.close() : this.sidenav.open();
-  }
 }

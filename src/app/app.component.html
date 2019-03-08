@@ -23,9 +23,9 @@
         <a mat-menu-item [routerLinkActive]="['active']" [routerLink]="['/user/','settings']">
           <i class="material-icons"> settings </i>
           Settings</a>
-        <a mat-menu-item class="logout-link" (click)="logout()">
+        <button mat-menu-item (click)="logout()" >
           <i class="material-icons"> exit_to_app </i>
-          Logout</a>
+          Logout</button>
       </mat-menu>
 
 
