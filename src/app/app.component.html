@@ -33,8 +33,9 @@
         <mat-toolbar-row>
           <h3 class="app-title">{{title}}</h3>
           <span class="example-spacer"></span>
-          <button mat-fab [matMenuTriggerFor]="userMenu" style="background-color: transparent; border: none;">
-            <mat-icon>person</mat-icon>
+          <button class="userButton" [matMenuTriggerFor]="userMenu" >
+            <img class="user-image" src="assets/images/user.png" style="height: 40px">
+            <div>{{ username }}</div>
           </button>
         </mat-toolbar-row>
       </mat-toolbar>
