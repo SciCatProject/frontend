@@ -6,6 +6,8 @@ import { Router } from "@angular/router";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { ProposalDetailComponent } from "./proposal-detail.component";
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+import { StoreModule } from "@ngrx/store";
+import { proposalsReducer } from "state-management/reducers/proposals.reducer";
 
 describe("ProposalsDetailComponent", () => {
   let component: ProposalDetailComponent;
@@ -15,7 +17,9 @@ describe("ProposalsDetailComponent", () => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
       declarations: [ProposalDetailComponent, FileSizePipe],
-      imports: [MatTableModule, MatTabsModule, BrowserAnimationsModule]
+      imports: [MatTableModule, MatTabsModule, BrowserAnimationsModule, StoreModule.forRoot({
+        proposals: proposalsReducer
+      })]
     });
     TestBed.overrideComponent(ProposalDetailComponent, {
       set: {

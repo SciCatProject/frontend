@@ -1,5 +1,5 @@
 import { MockAuthService, MockStore, MockUserApi } from "../shared/MockStubs";
-import { AccessUserApi, LoopBackAuth, OrigDatablockApi } from "../shared/sdk";
+import { LoopBackAuth, OrigDatablockApi } from "../shared/sdk";
 import { inject, TestBed } from "@angular/core/testing";
 import { Store, StoreModule } from "@ngrx/store";
 import { DatasetService } from "./dataset.service";
@@ -36,10 +36,6 @@ describe("DatasetService", () => {
         {
           provide: OrigDatablockApi,
           useClass: MockDatablockApi
-        },
-        {
-          provide: AccessUserApi,
-          useClass: MockUserApi
         },
         {
           provide: LoopBackAuth,

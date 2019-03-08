@@ -1,8 +1,16 @@
 import { Component, Input, OnInit } from "@angular/core";
 import { Dataset, Proposal } from "state-management/models";
 import { Router } from "@angular/router";
+import { select, Store } from "@ngrx/store";
 
+import {
+  getdatasetCount,
+  getPage
+} from "state-management/selectors/proposals.selectors";
 
+import {
+  ChangePageAction,
+} from "state-management/actions/proposals.actions";
 
 interface Proposer {
   name: string;
@@ -16,6 +24,9 @@ interface Proposer {
   styleUrls: ["proposal-detail.component.scss"]
 })
 export class ProposalDetailComponent implements OnInit {
+  currentPage$ = this.store.pipe(select(getPage));
+  datasetCount$ = this.store.select(getdatasetCount);
+
   @Input()
   proposal: Proposal;
   @Input()
@@ -35,9 +46,7 @@ export class ProposalDetailComponent implements OnInit {
   private mainProposer: Proposer;
   private principalInvestigator: Proposer;
 
-  constructor(
-    private router: Router,
-   ) { }
+  constructor(private router: Router, private store: Store<any>) {}
 
   ngOnInit() {
     if (this.proposal == null) {
@@ -77,5 +86,8 @@ export class ProposalDetailComponent implements OnInit {
     this.router.navigateByUrl("/datasets/" + pid);
   }
 
+  onPageChange(event: any): void {
+    this.store.dispatch(new ChangePageAction(event.pageIndex, event.pageSize));
+  }
 }
 

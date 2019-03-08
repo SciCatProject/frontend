@@ -1,4 +1,4 @@
-import { Settings, Message, User, AccessGroup } from "../models";
+import { Settings, Message, User} from "../models";
 
 // NOTE It IS ok to make up a state of other sub states
 export interface UserState {
@@ -7,7 +7,7 @@ export interface UserState {
   isLoggingIn: boolean;
   selectingColumn: boolean;
   deletingColumn: boolean;
-  currentUserGroups: AccessGroup[];
+  currentUserGroups: string[];
   email: string;
   message: Message;
   settings: Settings;

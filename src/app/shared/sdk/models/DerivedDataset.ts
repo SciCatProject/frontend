@@ -239,8 +239,7 @@ export class DerivedDataset implements DerivedDatasetInterface {
         },
         "datasetlifecycle": {
           name: 'datasetlifecycle',
-          type: 'any',
-          default: <any>null
+          type: 'any'
         },
         "history": {
           name: 'history',

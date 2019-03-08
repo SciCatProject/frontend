@@ -1118,6 +1118,8 @@ export class DatasetApi extends BaseLoopBackApi {
    *
    * @param {any} facets Defines list of field names, for which facet counts should be calculated
    *
+   * @param {object} options 
+   *
    * @returns {object} An empty reference that will be
    *   populated with the actual data once the response is returned
    *   from the server.
@@ -1146,6 +1148,8 @@ export class DatasetApi extends BaseLoopBackApi {
    * @param {object} fields Define the filter conditions by specifying the name of values of fields requested. There ia also support for a `text` search to look for strings anywhere in the dataset. Skip and limit parameters allow for paging.
    *
    * @param {object} limits Define further query parameters like skip, limit, order
+   *
+   * @param {object} options 
    *
    * @returns {object} An empty reference that will be
    *   populated with the actual data once the response is returned

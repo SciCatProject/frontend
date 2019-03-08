@@ -16,9 +16,9 @@ Background on use case, changes needed
 
 ## Tests included/Docs Updated?
 
-[]  Included for each change/fix?
+[] Included for each change/fix?
 [] Passing? (Merge will not be approved unless this is checked) 
-[]  Docs updated?
+[] Docs updated?
 [] New packages used/requires npm install? 
+[] Toggle added for new features?
 
-## Extra Information/Screenshots
