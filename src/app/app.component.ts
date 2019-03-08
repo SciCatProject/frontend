@@ -4,7 +4,6 @@ import {
   Inject,
   OnDestroy,
   OnInit,
-  ViewChild,
   ViewEncapsulation
 } from "@angular/core";
 import { Router } from "@angular/router";
