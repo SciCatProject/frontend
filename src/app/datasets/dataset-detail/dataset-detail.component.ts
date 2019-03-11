@@ -12,12 +12,12 @@ import {
   getError,
   submitJob
 } from "../../state-management/selectors/jobs.selectors";
-import { Subscription, of } from "rxjs";
+import { Subscription, of, Observable } from "rxjs";
 import { Message, MessageType } from "state-management/models";
 import { Angular5Csv } from "angular5-csv/dist/Angular5-csv";
 import { getIsAdmin } from "state-management/selectors/users.selectors";
 import { APP_CONFIG, AppConfig } from "app-config.module";
-import { pluck, take, map, filter } from "rxjs/operators";
+import { pluck, take, map, filter, mergeMap } from "rxjs/operators";
 import { Router } from "@angular/router";
 import {
   getCurrentAttachments,
@@ -41,6 +41,7 @@ import {
 export class DatasetDetailComponent implements OnInit, OnDestroy {
   dataset$ = this.store.pipe(select(getCurrentDataset));
   sciMet: Object;
+  private withUnits$;
   public dates = {
     start_time: "2011-10-05T14:48:00.000Z",
     end_time: "2011-10-05T14:48:00.000Z"
@@ -64,23 +65,39 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
     @Inject(APP_CONFIG) public appConfig: AppConfig
   ) {}
 
+  convertUnits(scimeta) {
+    const units = {};
+    for (const key in scimeta) {
+      if (scimeta[key].hasOwnProperty("u")) {
+        units[key] = scimeta[key];
+      }
+    }
+    return units;
+  }
+
   ngOnInit() {
     const msg = new Message();
     this.dataset$.subscribe((result: RawDataset) => {
       if (result.hasOwnProperty("scientificMetadata")) {
         this.sciMet = result.scientificMetadata;
-        for (const key of Object.keys(this.sciMet)) {
+        for (const key of this.sciMet) {
           console.log("gm", key);
           if (this.sciMet[key].hasOwnProperty("u")) {
-            // this.units[key] = this.sciMet[key];
+            this.units[key] = this.sciMet[key];
           }
         }
       }
     });
-    this.dataset$.pipe(
-      map((content: RawDataset) => content.scientificMetadata),
-      filter(item => item.hasOwnProperty("u"))
-    ).subscribe( val => console.log(val));
+    this.withUnits$ = this.dataset$.pipe(
+      pluck("scientificMetadata"),
+      mergeMap(val => of(this.convertUnits(val)))
+    );
+    this.dataset$
+      .pipe(
+        map((content: RawDataset) => content.scientificMetadata),
+        filter(item => item.hasOwnProperty("u"))
+      )
+      .subscribe(val => console.log(val));
     this.subscriptions.push(
       this.store.pipe(select(submitJob)).subscribe(
         ret => {

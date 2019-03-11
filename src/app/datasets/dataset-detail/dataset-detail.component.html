@@ -199,6 +199,8 @@
             </tr>
           </table>
 
+          <pre *ngIf="withUnits$ | async as withUnits"> gm {{ withUnits | json}} </pre>
+
           <div class="form-container" *ngIf="appConfig.editMetadataEnabled">
             <app-dataset-form></app-dataset-form>
           </div>
