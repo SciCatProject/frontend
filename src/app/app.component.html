@@ -33,10 +33,12 @@
         <mat-toolbar-row>
           <h3 class="app-title">{{title}}</h3>
           <span class="example-spacer"></span>
+          <div *ngIf="isLoggedIn$ | async">
           <button class="userButton" [matMenuTriggerFor]="userMenu" >
             <img class="user-image" src="assets/images/user.png" style="height: 37px">
             <div>{{ username }}</div>
           </button>
+          </div>
         </mat-toolbar-row>
       </mat-toolbar>
       <div class="main">

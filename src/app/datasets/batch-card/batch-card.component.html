@@ -1,5 +1,5 @@
 <mat-card *ngIf="nonEmpty$ | async">
-    <div class="title">Batch</div>
+    <div class="title">Cart</div>
 
     <mat-card-content>
         <div class="count" [ngPlural]="batchSize$ | async">
@@ -8,7 +8,7 @@
             <ng-template ngPluralCase="other">{{ batchSize$ | async }} datasets.</ng-template>
         </div>
     </mat-card-content>
-        
+
     <mat-card-footer style="text-align: right">
         <button mat-button class="button" color="primary" (click)="clear()">
             <i class="eraser icon"></i>

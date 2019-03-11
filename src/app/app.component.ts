@@ -1,3 +1,4 @@
+import { getIsLoggedIn } from './state-management/selectors/users.selectors';
 import { APP_CONFIG, AppConfig } from "./app-config.module";
 import {
   Component,
@@ -30,6 +31,7 @@ const { version: appVersion } = require("../../package.json");
 })
 export class AppComponent implements OnDestroy, OnInit {
   userObs$ = this.store.pipe(select(getCurrentUser));
+  isLoggedIn$ = this.store.pipe(select(getIsLoggedIn));
 
 
   title = "SciCat";
