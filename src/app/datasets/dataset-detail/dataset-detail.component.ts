@@ -4,7 +4,7 @@ import {
   DatablocksAction,
   DeleteAttachment
 } from "state-management/actions/datasets.actions";
-import { Job, User } from "shared/sdk/models";
+import { Job, User, RawDataset } from "shared/sdk/models";
 import { select, Store } from "@ngrx/store";
 import { SubmitAction } from "state-management/actions/jobs.actions";
 import { ShowMessageAction } from "state-management/actions/user.actions";
@@ -17,7 +17,7 @@ import { Message, MessageType } from "state-management/models";
 import { Angular5Csv } from "angular5-csv/dist/Angular5-csv";
 import { getIsAdmin } from "state-management/selectors/users.selectors";
 import { APP_CONFIG, AppConfig } from "app-config.module";
-import { pluck, take } from "rxjs/operators";
+import { pluck, take, map, filter } from "rxjs/operators";
 import { Router } from "@angular/router";
 import {
   getCurrentAttachments,
@@ -40,15 +40,13 @@ import {
 })
 export class DatasetDetailComponent implements OnInit, OnDestroy {
   dataset$ = this.store.pipe(select(getCurrentDataset));
+  sciMet: Object;
   public dates = {
-    d1: "2011-10-05T14:48:00.000Z",
-    d2: "2011-10-05T14:48:00.000Z"
+    start_time: "2011-10-05T14:48:00.000Z",
+    end_time: "2011-10-05T14:48:00.000Z"
   };
   public objectKeys = Object.keys;
-  public units = {
-    speed: { v: "13", u: "Hz" },
-    speed1: { v: "13", u: "Hz" }
-  };
+  public units = { t: { u: "Hz", v: "21" } };
   public objs;
   private subscriptions: Subscription[] = [];
   private routeSubscription = this.route.params
@@ -68,6 +66,21 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     const msg = new Message();
+    this.dataset$.subscribe((result: RawDataset) => {
+      if (result.hasOwnProperty("scientificMetadata")) {
+        this.sciMet = result.scientificMetadata;
+        for (const key of Object.keys(this.sciMet)) {
+          console.log("gm", key);
+          if (this.sciMet[key].hasOwnProperty("u")) {
+            // this.units[key] = this.sciMet[key];
+          }
+        }
+      }
+    });
+    this.dataset$.pipe(
+      map((content: RawDataset) => content.scientificMetadata),
+      filter(item => item.hasOwnProperty("u"))
+    ).subscribe( val => console.log(val));
     this.subscriptions.push(
       this.store.pipe(select(submitJob)).subscribe(
         ret => {
