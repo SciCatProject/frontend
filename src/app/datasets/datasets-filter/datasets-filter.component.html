@@ -1,6 +1,6 @@
 <mat-card>
     <div class="section-container">
-      <span class="title">Filter Results</span>
+      <span class="title">Search</span>
       <button [disabled]="!(hasAppliedFilters$ | async)" mat-button class="clear-button" color="primary" (click)="clearFacets()">
         <mat-icon>clear_all</mat-icon> Clear
       </button>
@@ -115,7 +115,7 @@
             <ng-container *ngSwitchCase="'LESS_THAN'">&lt;</ng-container>
             <ng-container *ngSwitchCase="'GREATER_THAN'">&gt;</ng-container>
           </ng-container>
-          
+
           {{ condition.relation === "EQUAL_TO_STRING" ? '"' + condition.rhs + '"' : condition.rhs }}
           <mat-icon matChipRemove (click)="removeCondition(i)">cancel</mat-icon>
         </mat-chip>
