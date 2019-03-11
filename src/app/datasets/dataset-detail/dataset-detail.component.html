@@ -190,7 +190,7 @@
             {{ show ? "Hide MetaData" : "Show Metadata" }}
           </button>
           <br />
-          <div *ngIf="show">{{ dataset | json }}</div>
+          <div *ngIf="show"><ngx-json-viewer [json]="dataset" [expanded]="false" ></ngx-json-viewer></div>
         </mat-card>
       </div>
       <div fxFlex="30%" *ngIf="(attachments$ | async) as attachments">
