@@ -43,6 +43,7 @@
     "json-format": "^1.0.1",
     "ng-treetable": "^1.3.3",
     "ngx-file-helpers": "^1.2.0",
+    "ngx-json-viewer": "^2.4.0",
     "ngx-linky": "^2.1.0",
     "rison": "github:nanonid/rison",
     "rxjs": "^6.4.0",
