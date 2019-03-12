@@ -13,6 +13,7 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MatButtonToggleModule } from "@angular/material/button-toggle";
 import { MatChipsModule } from "@angular/material/chips";
 import { NgModule } from "@angular/core";
+import { NgxJsonViewerModule } from 'ngx-json-viewer';
 import { RouterModule } from "@angular/router";
 import { SatDatepickerModule } from "saturn-datepicker";
 import { SelectedListComponent } from "datasets/selected-list/selected-list.component";
@@ -89,6 +90,7 @@ import { ColumnSelectorComponent } from "./column-selector/column-selector.compo
     MatTableModule,
     MatTabsModule,
     MatTooltipModule,
+    NgxJsonViewerModule,
     ReactiveFormsModule,
     RouterModule,
     SatDatepickerModule,
