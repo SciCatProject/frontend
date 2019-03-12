@@ -42,12 +42,12 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
   dataset$ = this.store.pipe(select(getCurrentDataset));
   sciMet: Object;
   private withUnits$;
+  private dates$;
   public dates = {
     start_time: "2011-10-05T14:48:00.000Z",
     end_time: "2011-10-05T14:48:00.000Z"
   };
   public objectKeys = Object.keys;
-  public units = { t: { u: "Hz", v: "21" } };
   public objs;
   private subscriptions: Subscription[] = [];
   private routeSubscription = this.route.params
@@ -75,20 +75,42 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
     return units;
   }
 
+  getDates(scimeta) {
+    const dates = {};
+    for (const key in scimeta) {
+      if (scimeta[key] instanceof Date) {
+        dates[key] = scimeta[key];
+      }
+    }
+    return dates;
+  }
+
+  getStrings(scimeta) {
+    const strings = {};
+    for (const key in scimeta) {
+      if (typeof scimeta[key] === 'string') {
+        strings[key] = scimeta[key];
+      }
+    }
+    return strings;
+  }
+
+  getObjects(scimeta) {
+    const objects = {};
+    for (const key in scimeta) {
+      if (scimeta[key] instanceof Date) {
+      }
+    }
+    return objects;
+  }
+
   ngOnInit() {
     const msg = new Message();
-    this.dataset$.subscribe((result: RawDataset) => {
-      if (result.hasOwnProperty("scientificMetadata")) {
-        this.sciMet = result.scientificMetadata;
-        for (const key of this.sciMet) {
-          console.log("gm", key);
-          if (this.sciMet[key].hasOwnProperty("u")) {
-            this.units[key] = this.sciMet[key];
-          }
-        }
-      }
-    });
     this.withUnits$ = this.dataset$.pipe(
+      pluck("scientificMetadata"),
+      mergeMap(val => of(this.convertUnits(val)))
+    );
+    this.dates$ = this.dataset$.pipe(
       pluck("scientificMetadata"),
       mergeMap(val => of(this.convertUnits(val)))
     );
