@@ -24,7 +24,7 @@ export class UserEffects {
       return this.loginSrv.login$(username, password, rememberMe)
         .pipe(mergeMap((res: any) => [
           new UserActions.LoginCompleteAction(res.user, res.accountType),
-          new UserActions.RetrieveUserIdentAction(res.user.id)
+          res.user.accountType !== "functional" ? new UserActions.RetrieveUserIdentAction(res.user.id) : null
           ]));
     }),
     catchError(err => of(new UserActions.LoginFailedAction()))

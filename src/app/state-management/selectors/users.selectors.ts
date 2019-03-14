@@ -33,11 +33,25 @@ export const getTapeCopies = createSelector(
   settings => settings.tapeCopies
 );
 
-const getCurrentUserName = createSelector(
-  getCurrentUser,
-  user => user ? user.username : null
+export const getCurrentUserName = createSelector(
+  getUserState,
+  user => {
+    if (!user) {
+      return null;
+    }
+    if (user.profile) {
+      return user.profile.username;
+    } else if (user.currentUser) {
+      return user.currentUser.username;
+    }
+    return null;
+  }
 );
 
+const getCurrentUserProfile = createSelector(
+  getUserState,
+  user => user.profile ? user.profile : null
+);
 const getCurrentUserAccountType = createSelector(
   getUserState,
   state => state.accountType
