@@ -1,4 +1,4 @@
-import { getIsLoggedIn } from './state-management/selectors/users.selectors';
+import { getIsLoggedIn, getProfile } from './state-management/selectors/users.selectors';
 import { APP_CONFIG, AppConfig } from "./app-config.module";
 import {
   Component,
@@ -19,6 +19,7 @@ import * as selectors from "state-management/selectors";
 import { getCurrentUser } from "state-management/selectors/users.selectors";
 
 import { LoginService } from "users/login.service";
+import { map } from 'rxjs/operators';
 
 const { version: appVersion } = require("../../package.json");
 
