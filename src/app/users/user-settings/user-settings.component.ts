@@ -22,7 +22,7 @@ import { LoginService } from "users/login.service";
 export class UserSettingsComponent implements OnInit {
   user: object;
   settings$ = null;
-  profileImage:  string;
+  profileImage = "assets/images/user.png";
   profile: object;
   email: string;
   displayName: string;
@@ -50,6 +50,9 @@ export class UserSettingsComponent implements OnInit {
           this.email = userId.profile.email;
           this.displayName = userId.profile.displayName;
           this.profileImage = "data:image/jpeg;base64," + userId.profile.thumbnailPhoto;
+          if (userId.profile === null) {
+            this.profileImage = "assets/images/user.png";
+          }
           console.log(userId.profile);
           console.log(this.profileImage);
         });

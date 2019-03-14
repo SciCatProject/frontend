@@ -38,7 +38,7 @@ const getCurrentUserName = createSelector(
   user => user ? user.username : null
 );
 
-const getCurrentUserAccountType = createSelector(
+export const getCurrentUserAccountType = createSelector(
   getUserState,
   state => state.accountType
 );

@@ -1,4 +1,5 @@
-import { getIsLoggedIn, getProfile } from './state-management/selectors/users.selectors';
+import { submitJob } from 'state-management/selectors/jobs.selectors';
+import { getIsLoggedIn, getProfile, getCurrentUserAccountType } from './state-management/selectors/users.selectors';
 import { APP_CONFIG, AppConfig } from "./app-config.module";
 import {
   Component,
@@ -101,6 +102,12 @@ export class AppComponent implements OnDestroy, OnInit {
       // this.router.navigate(['/login']);
     }
 
+    this.subscriptions.push(
+      this.store.pipe(select(getCurrentUserAccountType)).subscribe(type => {
+        if (type === "functional") {
+          this.profileImage = "assets/images/user.png";
+      }})
+    );
     this.subscriptions.push(
       this.store
         .pipe(select(state => state.root.user.message))
