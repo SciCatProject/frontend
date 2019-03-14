@@ -5,7 +5,7 @@ import { Actions, Effect, ofType } from "@ngrx/effects";
 import { Action } from "@ngrx/store";
 
 import { Observable, of } from "rxjs";
-import { catchError, filter, map, switchMap, tap, concatMap } from "rxjs/operators";
+import { catchError, filter, map, switchMap, tap, concatMap, mergeMap } from "rxjs/operators";
 
 import * as UserActions from "state-management/actions/user.actions";
 import { MessageType } from "state-management/models";
@@ -20,14 +20,14 @@ export class UserEffects {
   protected login$ = this.action$.pipe(
     ofType<UserActions.LoginAction>(UserActions.LOGIN),
     map(action => action.form),
-    switchMap(({ username, password, rememberMe }) =>
-      this.loginSrv.login$(username, password, rememberMe)
-    ),
-    map(res =>
-      res
-        ? new UserActions.LoginCompleteAction(res.user, res.accountType)
-        : new UserActions.LoginFailedAction()
-    )
+    switchMap(({ username, password, rememberMe }) => {
+      return this.loginSrv.login$(username, password, rememberMe)
+        .pipe(mergeMap((res: any) => [
+          new UserActions.LoginCompleteAction(res.user, res.accountType),
+          new UserActions.RetrieveUserIdentAction(res.user.id)
+          ]));
+    }),
+    catchError(err => of(new UserActions.LoginFailedAction()))
   );
 
   @Effect()
