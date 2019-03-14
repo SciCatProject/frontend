@@ -40,6 +40,7 @@ export class AppComponent implements OnDestroy, OnInit {
   us: UserApi;
   darkTheme$;
   username: string = null;
+  profileImage: string = null;
   message$ = null;
   msgClass$ = null;
   subscriptions = [];
@@ -125,6 +126,7 @@ export class AppComponent implements OnDestroy, OnInit {
                 .subscribe(currentIdent => {
                   if (currentIdent) {
                     this.username = currentIdent.profile.username;
+                    this.profileImage = "data:image/jpeg;base64," +  currentIdent.profile.thumbnailPhoto;
                   }
                 });
             }
@@ -132,6 +134,7 @@ export class AppComponent implements OnDestroy, OnInit {
           }
         })
     );
+
 
     this.store.dispatch(new ua.RetrieveUserAction());
   }

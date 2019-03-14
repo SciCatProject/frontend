@@ -41,15 +41,6 @@ export class UserSettingsComponent implements OnInit {
     // TODO handle service and endpoint for user settings
   }
 
-  b64EncodeUnicode(str) {
-    // first we use encodeURIComponent to get percent-encoded UTF-8,
-    // then we convert the percent encodings into raw bytes which
-    // can be fed into btoa.
-    return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g,
-        function toSolidBytes(match, p1) {
-            return String.fromCharCode("0x" + p1);
-    }));
-  }
 
   ngOnInit() {
     this.store
@@ -58,7 +49,7 @@ export class UserSettingsComponent implements OnInit {
         this.loginService.getUserIdent$(current.id).subscribe(userId => {
           this.email = userId.profile.email;
           this.displayName = userId.profile.displayName;
-          this.profileImage = "data:image/jpeg;base64," + this.b64EncodeUnicode( userId.profile.thumbnailPhoto);
+          this.profileImage = "data:image/jpeg;base64," +  userId.profile.thumbnailPhoto;
           console.log(userId.profile);
           console.log(this.profileImage);
         });
