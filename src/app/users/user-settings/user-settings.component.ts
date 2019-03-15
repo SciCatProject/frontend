@@ -35,19 +35,23 @@ export class UserSettingsComponent implements OnInit {
     // TODO handle service and endpoint for user settings
   }
 
+
   ngOnInit() {
     this.store
       .pipe(select(state => state.root.user.currentUser))
       .subscribe(current => {
-        this.loginService.getUserIdent$(current.id).subscribe(userId => {
-          this.email = userId.profile.email;
-          this.displayName = userId.profile.displayName;
-          if (!this.appConfig.userProfileImageEnabled || userId.profile === null) {
+
+        this.loginService.getUserIdent$(current.id).subscribe(currentIdent => {
+          this.email = currentIdent.profile.email;
+          this.displayName = currentIdent.profile.displayName;
+          if (!this.appConfig.userProfileImageEnabled) {
             this.profileImage = "assets/images/user.png";
+          } else if (currentIdent.profile.thumbnailPhoto.startsWith("data")) {
+            this.profileImage = currentIdent.profile.thumbnailPhoto;
           } else {
-            this.profileImage = userId.profile.thumbnailPhoto;
+            this.profileImage = "assets/images/user.png";
           }
-          console.log(userId.profile);
+          console.log(currentIdent.profile);
           console.log(this.profileImage);
         });
       });

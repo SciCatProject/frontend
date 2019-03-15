@@ -61,7 +61,7 @@ export class AppComponent implements OnDestroy, OnInit {
     public snackBar: MatSnackBar,
     private loginService: LoginService,
     // private _notif_service: NotificationsService,
-    @Inject(APP_CONFIG) private appConfig: AppConfig,
+    @Inject(APP_CONFIG) public appConfig: AppConfig,
     private store: Store<any>
   ) {
     this.appVersion = appVersion;
@@ -71,7 +71,7 @@ export class AppComponent implements OnDestroy, OnInit {
     if (this.appConfig.production === true) {
       status = "";
     }
-    this.title = "SciCat" + " " + facility + " " + status;
+    this.title = "SciCat " + " " + facility + " " + status;
     this.setTitle(this.title);
     this.metaService.addTag({
       name: "description",
@@ -134,10 +134,10 @@ export class AppComponent implements OnDestroy, OnInit {
                 .subscribe(currentIdent => {
                   if (currentIdent) {
                     this.username = currentIdent.profile.username;
-                    if (currentIdent.profile.thumbnailPhoto === undefined) {
-                      this.profileImage = "assets/images/user.png";
-                    } else {
+                    if (currentIdent.profile.thumbnailPhoto.startsWith("data")) {
                       this.profileImage = currentIdent.profile.thumbnailPhoto;
+                    } else {
+                      this.profileImage = "assets/images/user.png";
                     }
                   }
                   if (!this.appConfig.userProfileImageEnabled) {
