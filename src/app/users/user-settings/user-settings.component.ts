@@ -1,17 +1,9 @@
-import { localStorageSync } from "ngrx-store-localstorage";
-import { getCurrentUserId } from "./../../state-management/selectors/users.selectors";
-import {
-  RetrieveUserIdentAction,
-  RetrieveUserAction
-} from "./../../state-management/actions/user.actions";
-import { map, pluck } from "rxjs/operators";
 import { Component, OnInit } from "@angular/core";
 import { select, Store } from "@ngrx/store";
 import { UserApi } from "shared/sdk/services";
 import * as ua from "state-management/actions/user.actions";
 import * as selectors from "state-management/selectors";
 import { Message, MessageType } from "state-management/models";
-import { getProfile } from "state-management/selectors/users.selectors";
 import { LoginService } from "users/login.service";
 
 @Component({

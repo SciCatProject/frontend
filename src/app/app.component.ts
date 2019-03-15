@@ -1,5 +1,7 @@
-import { submitJob } from 'state-management/selectors/jobs.selectors';
-import { getIsLoggedIn, getProfile, getCurrentUserAccountType } from './state-management/selectors/users.selectors';
+import {
+  getIsLoggedIn,
+  getCurrentUserAccountType
+} from "./state-management/selectors/users.selectors";
 import { APP_CONFIG, AppConfig } from "./app-config.module";
 import {
   Component,
@@ -20,7 +22,6 @@ import * as selectors from "state-management/selectors";
 import { getCurrentUser } from "state-management/selectors/users.selectors";
 
 import { LoginService } from "users/login.service";
-import { map } from 'rxjs/operators';
 
 const { version: appVersion } = require("../../package.json");
 
@@ -34,7 +35,6 @@ const { version: appVersion } = require("../../package.json");
 export class AppComponent implements OnDestroy, OnInit {
   userObs$ = this.store.pipe(select(getCurrentUser));
   isLoggedIn$ = this.store.pipe(select(getIsLoggedIn));
-
 
   title = "SciCat";
   appVersion = 0;
@@ -106,7 +106,8 @@ export class AppComponent implements OnDestroy, OnInit {
       this.store.pipe(select(getCurrentUserAccountType)).subscribe(type => {
         if (type === "functional") {
           this.profileImage = "assets/images/user.png";
-      }})
+        }
+      })
     );
     this.subscriptions.push(
       this.store
@@ -134,7 +135,7 @@ export class AppComponent implements OnDestroy, OnInit {
                   if (currentIdent) {
                     this.username = currentIdent.profile.username;
                     this.profileImage = currentIdent.profile.thumbnailPhoto;
-                    if (typeof currentIdent.profile.thumbnailPhoto === undefined){
+                    if (currentIdent.profile.thumbnailPhoto === undefined) {
                       this.profileImage = "assets/images/user.png";
                     }
                   }
@@ -144,7 +145,6 @@ export class AppComponent implements OnDestroy, OnInit {
           }
         })
     );
-
 
     this.store.dispatch(new ua.RetrieveUserAction());
   }
@@ -162,5 +162,4 @@ export class AppComponent implements OnDestroy, OnInit {
   login() {
     this.router.navigateByUrl("/login");
   }
-
 }
