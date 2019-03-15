@@ -33,7 +33,6 @@ export class UserSettingsComponent implements OnInit {
     // TODO handle service and endpoint for user settings
   }
 
-
   ngOnInit() {
     this.store
       .pipe(select(state => state.root.user.currentUser))
@@ -41,9 +40,10 @@ export class UserSettingsComponent implements OnInit {
         this.loginService.getUserIdent$(current.id).subscribe(userId => {
           this.email = userId.profile.email;
           this.displayName = userId.profile.displayName;
-          this.profileImage = userId.profile.thumbnailPhoto;
           if (userId.profile === null) {
             this.profileImage = "assets/images/user.png";
+          } else {
+            this.profileImage = userId.profile.thumbnailPhoto;
           }
           console.log(userId.profile);
           console.log(this.profileImage);
