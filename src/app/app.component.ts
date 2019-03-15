@@ -140,6 +140,9 @@ export class AppComponent implements OnDestroy, OnInit {
                       this.profileImage = currentIdent.profile.thumbnailPhoto;
                     }
                   }
+                  if (!this.appConfig.userProfileImageEnabled) {
+                    this.profileImage = "assets/images/user.png";
+                  }
                 });
             }
             // TODO handle dataset loading

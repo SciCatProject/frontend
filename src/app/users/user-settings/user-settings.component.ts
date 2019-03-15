@@ -1,4 +1,5 @@
-import { Component, OnInit } from "@angular/core";
+import { APP_CONFIG, AppConfig } from "../../app-config.module";
+import { Component, OnInit, Inject } from "@angular/core";
 import { select, Store } from "@ngrx/store";
 import { UserApi } from "shared/sdk/services";
 import * as ua from "state-management/actions/user.actions";
@@ -20,6 +21,7 @@ export class UserSettingsComponent implements OnInit {
   displayName: string;
 
   constructor(
+    @Inject(APP_CONFIG) private appConfig: AppConfig,
     private us: UserApi,
     private store: Store<any>,
     private loginService: LoginService
@@ -40,7 +42,7 @@ export class UserSettingsComponent implements OnInit {
         this.loginService.getUserIdent$(current.id).subscribe(userId => {
           this.email = userId.profile.email;
           this.displayName = userId.profile.displayName;
-          if (userId.profile === null) {
+          if (!this.appConfig.userProfileImageEnabled || userId.profile === null) {
             this.profileImage = "assets/images/user.png";
           } else {
             this.profileImage = userId.profile.thumbnailPhoto;
