@@ -11,5 +11,6 @@ export const environment = {
   facility: "PSI",
   multipleDownloadEnabled: false,
   shoppingCartEnabled: false,
-  columnSelectEnabled: false
+  columnSelectEnabled: false,
+  userProfileImageEnabled: false
 };

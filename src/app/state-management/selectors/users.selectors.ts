@@ -38,7 +38,7 @@ const getCurrentUserName = createSelector(
   user => user ? user.username : null
 );
 
-const getCurrentUserAccountType = createSelector(
+export const getCurrentUserAccountType = createSelector(
   getUserState,
   state => state.accountType
 );
@@ -72,3 +72,8 @@ export const getLoading = (state: any) => state.root.user.loading;
 export const getCurrentUserGroups = (state: any) =>
   state.root.user.currentUserGroups;
 export const getTheme = (state: any) => state.root.user.settings.darkTheme;
+
+export const getProfile = createSelector(
+  getUserState,
+  state => state.profile
+);
