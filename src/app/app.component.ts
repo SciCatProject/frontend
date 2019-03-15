@@ -133,8 +133,8 @@ export class AppComponent implements OnDestroy, OnInit {
                 .subscribe(currentIdent => {
                   if (currentIdent) {
                     this.username = currentIdent.profile.username;
-                    this.profileImage = "data:image/jpeg;base64," +  currentIdent.profile.thumbnailPhoto;
-                    if (typeof currentIdent.profile.thumbnail === undefined){
+                    this.profileImage = currentIdent.profile.thumbnailPhoto;
+                    if (typeof currentIdent.profile.thumbnailPhoto === undefined){
                       this.profileImage = "assets/images/user.png";
                     }
                   }
