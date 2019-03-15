@@ -70,7 +70,7 @@
     <mat-toolbar-row>
       <h3 class="app-title">{{ title }}</h3>
       <span class="example-spacer"></span>
-      <div *ngIf="(isLoggedIn$ | async)">
+      <div *ngIf="(isLoggedIn$ | async) || !appConfig.production">
         <button class="userButton" [matMenuTriggerFor]="userMenu">
           <img
             class="user-image"
