@@ -86,3 +86,8 @@ export const getLoading = (state: any) => state.root.user.loading;
 export const getCurrentUserGroups = (state: any) =>
   state.root.user.currentUserGroups;
 export const getTheme = (state: any) => state.root.user.settings.darkTheme;
+
+export const getProfile = createSelector(
+  getUserState,
+  state => state.profile
+);

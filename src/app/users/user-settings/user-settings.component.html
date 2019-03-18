@@ -1,4 +1,12 @@
 <ng-container *ngIf="user">
     <h1>{{user['username']}} Settings</h1>
+    <mat-card>
+
+    <img src="{{profileImage }}" height=100px alt="profile photo">
+    <p>
+    <b>Email:</b> {{ email  }}
+    <p>
+    <b>Name:</b> {{ displayName  }}
+    </mat-card>
     <config-form *ngIf="settings$" [sourceType]="'UserSettings'" [source]="settings$ | async" (onSubmit)="onSubmit($event)"></config-form>
 </ng-container>
