@@ -1,5 +1,4 @@
-import { APP_CONFIG, AppConfig } from "app-config.module";
-import { Component, OnInit, Inject } from "@angular/core";
+import { Component, OnInit} from "@angular/core";
 import { select, Store } from "@ngrx/store";
 import { UserApi } from "shared/sdk/services";
 import * as ua from "state-management/actions/user.actions";
