@@ -31,12 +31,14 @@ export class JobsEffects {
   protected submit$: Observable<Action> = this.action$.pipe(
     ofType(JobActions.SUBMIT),
     map((action: JobActions.SubmitAction) => action.job),
-    switchMap(job => {
-      return this.jobSrv
+    switchMap(job =>
+      this.jobSrv
         .create(job)
-        .pipe(map(res => new JobActions.SubmitCompleteAction(res)));
-    }),
-    catchError(err => of(new JobActions.FailedAction(err)))
+        .pipe(
+          map(res => new JobActions.SubmitCompleteAction(res)),
+          catchError(err => of(new JobActions.FailedAction(err)))
+        )
+    ),
   );
 
   @Effect()
