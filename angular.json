@@ -56,6 +56,19 @@
               ],
               "serviceWorker": true
             },
+            "v20": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.v20.ts"
+                },
+                {
+                  "replace": "src/assets/images/ess-site.png",
+                  "with": "CI/ESS/ess-site.png"
+                }
+              ],
+              "serviceWorker": true
+            },
             "dmsc": {
               "optimization": true,
               "outputHashing": "all",
@@ -257,6 +270,9 @@
           "configurations": {
             "dmscdev": {
               "browserTarget": "catanie:build:dmscdev"
+            },
+            "v20": {
+              "browserTarget": "catanie:build:v20"
             },
             "dmsc": {
               "browserTarget": "catanie:build:dmsc"
