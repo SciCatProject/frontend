@@ -5,7 +5,7 @@
 
 export const environment = {
   production: true,
-  lbBaseURL: "https://10.4.0.49:3001",
+  lbBaseURL: "http://10.4.0.49:3001",
   fileserverBaseURL: "https://kubetest04.dm.esss.dk:32223",
   externalAuthEndpoint: "/auth/msad",
   archiveWorkflowEnabled: false,
