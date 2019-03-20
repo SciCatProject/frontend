@@ -5,7 +5,15 @@ import { Actions, Effect, ofType } from "@ngrx/effects";
 import { Action } from "@ngrx/store";
 
 import { Observable, of } from "rxjs";
-import { catchError, filter, map, switchMap, tap, concatMap, mergeMap } from "rxjs/operators";
+import {
+  catchError,
+  filter,
+  map,
+  switchMap,
+  tap,
+  concatMap,
+  mergeMap
+} from "rxjs/operators";
 
 import * as UserActions from "state-management/actions/user.actions";
 import { MessageType } from "state-management/models";
@@ -21,13 +29,16 @@ export class UserEffects {
     ofType<UserActions.LoginAction>(UserActions.LOGIN),
     map(action => action.form),
     switchMap(({ username, password, rememberMe }) => {
-      return this.loginSrv.login$(username, password, rememberMe)
-        .pipe(mergeMap((res: any) => [
+      return this.loginSrv.login$(username, password, rememberMe).pipe(
+        mergeMap((res: any) => [
           new UserActions.LoginCompleteAction(res.user, res.accountType),
-          res.user.accountType !== "functional" ? new UserActions.RetrieveUserIdentAction(res.user.id) : null
-          ]));
-    }),
-    catchError(err => of(new UserActions.LoginFailedAction()))
+          res.user.accountType !== "functional"
+            ? new UserActions.RetrieveUserIdentAction(res.user.id)
+            : null
+        ]),
+        catchError(err => of(new UserActions.LoginFailedAction()))
+      );
+    })
   );
 
   @Effect()
@@ -61,14 +72,18 @@ export class UserEffects {
   protected deselectColumn$: Observable<Action> = this.action$.pipe(
     ofType(UserActions.DESELECT_COLUMN),
     map((action: UserActions.DeselectColumnAction) => action.columnName),
-    concatMap(columnName => [new UserActions.DeselectColumnCompleteAction(columnName)])
+    concatMap(columnName => [
+      new UserActions.DeselectColumnCompleteAction(columnName)
+    ])
   );
 
   @Effect()
   protected selectColumn$: Observable<Action> = this.action$.pipe(
     ofType(UserActions.SELECT_COLUMN),
     map((action: UserActions.DeselectColumnAction) => action.columnName),
-    concatMap(columnName => [new UserActions.SelectColumnCompleteAction(columnName)])
+    concatMap(columnName => [
+      new UserActions.SelectColumnCompleteAction(columnName)
+    ])
   );
 
   @Effect()
@@ -82,7 +97,6 @@ export class UserEffects {
           )
         );
       }
-
       return this.userSrv.getCurrent().pipe(
         map(res => new UserActions.RetrieveUserCompleteAction(res)),
         catchError(err => of(new UserActions.RetrieveUserFailedAction(err)))
@@ -100,11 +114,15 @@ export class UserEffects {
   @Effect()
   protected retrieveUserIdentity$: Observable<Action> = this.action$.pipe(
     ofType(UserActions.RETRIEVE_USER_IDENTITY),
-    switchMap((action: UserActions.RetrieveUserIdentAction) => this.loginSrv.getUserIdent$(action.id)),
+    switchMap((action: UserActions.RetrieveUserIdentAction) =>
+      this.loginSrv.getUserIdent$(action.id)
+    ),
     map(res =>
       res
         ? new UserActions.RetrieveUserIdentCompleteAction(res)
-        : new UserActions.RetrieveUserIdentFailedAction( new Error("Failed to load user identity"))
+        : new UserActions.RetrieveUserIdentFailedAction(
+            new Error("Failed to load user identity")
+          )
     )
   );
 
@@ -113,6 +131,5 @@ export class UserEffects {
     private router: Router,
     private userSrv: UserApi,
     private loginSrv: LoginService,
-    private userIdentifySrv: UserIdentityApi,
   ) {}
 }

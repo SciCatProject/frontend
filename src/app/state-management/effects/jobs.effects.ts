@@ -32,13 +32,11 @@ export class JobsEffects {
     ofType(JobActions.SUBMIT),
     map((action: JobActions.SubmitAction) => action.job),
     switchMap(job =>
-      this.jobSrv
-        .create(job)
-        .pipe(
-          map(res => new JobActions.SubmitCompleteAction(res)),
-          catchError(err => of(new JobActions.FailedAction(err)))
-        )
-    ),
+      this.jobSrv.create(job).pipe(
+        map(res => new JobActions.SubmitCompleteAction(res)),
+        catchError(err => of(new JobActions.FailedAction(err)))
+      )
+    )
   );
 
   @Effect()
@@ -66,37 +64,26 @@ export class JobsEffects {
       filter["skip"] = action.skip;
       filter["limit"] = action.limit; // items per page
       filter["order"] = "creationTime DESC";
-      return this.jobSrv
-        .find(filter)
-        .pipe(
-          map(
-            (jobsets: Job[]) => new JobActions.RetrieveCompleteAction(jobsets)
-          )
-        );
-    }),
-    catchError(err => of(new JobActions.FailedAction(err)))
+      return this.jobSrv.find(filter).pipe(
+        map((jobsets: Job[]) => new JobActions.RetrieveCompleteAction(jobsets)),
+        catchError(err => of(new JobActions.FailedAction(err)))
+      );
+    })
   );
 
   @Effect()
   private getCount$: Observable<Action> = this.action$.pipe(
     ofType(JobActions.SORT_UPDATE),
     mergeMap((action: JobActions.SortUpdateAction) => {
-      return this.jobSrv
-        .count(action.mode)
-        .pipe(
-          map(
-            jobCount =>
-              new JobActions.GetCountCompleteAction(jobCount.count)
-          )
-        );
-    }),
-    catchError(err => of(new JobActions.FailedAction(err)))
+      return this.jobSrv.count(action.mode).pipe(
+        map(jobCount => new JobActions.GetCountCompleteAction(jobCount.count)),
+        catchError(err => of(new JobActions.FailedAction(err)))
+      );
+    })
   );
 
   constructor(
     private action$: Actions,
-    private store: Store<any>,
     private jobSrv: lb.JobApi,
-    private dsSrv: lb.DatasetApi
   ) {}
 }
