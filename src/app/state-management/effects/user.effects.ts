@@ -20,7 +20,6 @@ import { MessageType } from "state-management/models";
 
 import { LoginService } from "users/login.service";
 import { UserApi } from "shared/sdk";
-import { UserIdentityApi } from "shared/sdk";
 
 @Injectable()
 export class UserEffects {

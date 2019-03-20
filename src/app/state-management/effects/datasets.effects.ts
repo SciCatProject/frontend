@@ -3,7 +3,7 @@ import { Observable, of } from "rxjs";
 import { Actions, Effect, ofType } from "@ngrx/effects";
 import { Action, select, Store } from "@ngrx/store";
 import { Angular5Csv } from "angular5-csv/dist/Angular5-csv";
-import { DatasetApi, DatasetAttachmentApi } from "shared/sdk/services";
+import { DatasetApi } from "shared/sdk/services";
 import * as DatasetActions from "state-management/actions/datasets.actions";
 import { Dataset } from "state-management/models";
 import {

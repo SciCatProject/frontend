@@ -2,7 +2,7 @@
 
 import { Injectable } from "@angular/core";
 import { Actions, Effect, ofType } from "@ngrx/effects";
-import { Action, Store } from "@ngrx/store";
+import { Action } from "@ngrx/store";
 import { Observable } from "rxjs";
 import { of } from "rxjs";
 import * as lb from "shared/sdk/services";
