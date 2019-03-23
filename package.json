@@ -83,7 +83,7 @@
     "ngrx-store-localstorage": "^7.0.0",
     "node-sass": "^4.11.0",
     "prettier": "^1.16.4",
-    "protractor": "^5.4.2",
+    "protractor": "^6.0.0",
     "reselect": "^4.0.0",
     "source-map-support": "^0.5.10",
     "ts-helpers": "^1.1.2",
