@@ -1,4 +1,7 @@
-import { getIsLoggedIn } from './state-management/selectors/users.selectors';
+import {
+  getIsLoggedIn,
+  getCurrentUserAccountType
+} from "./state-management/selectors/users.selectors";
 import { APP_CONFIG, AppConfig } from "./app-config.module";
 import {
   Component,
@@ -33,12 +36,12 @@ export class AppComponent implements OnDestroy, OnInit {
   userObs$ = this.store.pipe(select(getCurrentUser));
   isLoggedIn$ = this.store.pipe(select(getIsLoggedIn));
 
-
   title = "SciCat";
   appVersion = 0;
   us: UserApi;
   darkTheme$;
   username: string = null;
+  profileImage: string = null;
   message$ = null;
   msgClass$ = null;
   subscriptions = [];
@@ -58,7 +61,7 @@ export class AppComponent implements OnDestroy, OnInit {
     public snackBar: MatSnackBar,
     private loginService: LoginService,
     // private _notif_service: NotificationsService,
-    @Inject(APP_CONFIG) private appConfig: AppConfig,
+    @Inject(APP_CONFIG) public appConfig: AppConfig,
     private store: Store<any>
   ) {
     this.appVersion = appVersion;
@@ -68,7 +71,7 @@ export class AppComponent implements OnDestroy, OnInit {
     if (this.appConfig.production === true) {
       status = "";
     }
-    this.title = "SciCat" + " " + facility + " " + status;
+    this.title = "SciCat " + " " + facility + " " + status;
     this.setTitle(this.title);
     this.metaService.addTag({
       name: "description",
@@ -100,6 +103,13 @@ export class AppComponent implements OnDestroy, OnInit {
     }
 
     this.subscriptions.push(
+      this.store.pipe(select(getCurrentUserAccountType)).subscribe(type => {
+        if (type === "functional") {
+          this.profileImage = "assets/images/user.png";
+        }
+      })
+    );
+    this.subscriptions.push(
       this.store
         .pipe(select(state => state.root.user.message))
         .subscribe(current => {
@@ -124,6 +134,14 @@ export class AppComponent implements OnDestroy, OnInit {
                 .subscribe(currentIdent => {
                   if (currentIdent) {
                     this.username = currentIdent.profile.username;
+                    if (currentIdent.profile.thumbnailPhoto.startsWith("data")) {
+                      this.profileImage = currentIdent.profile.thumbnailPhoto;
+                    } else {
+                      this.profileImage = "assets/images/user.png";
+                    }
+                  }
+                  if (!this.appConfig.userProfileImageEnabled) {
+                    this.profileImage = "assets/images/user.png";
                   }
                 });
             }
@@ -148,5 +166,4 @@ export class AppComponent implements OnDestroy, OnInit {
   login() {
     this.router.navigateByUrl("/login");
   }
-
 }
