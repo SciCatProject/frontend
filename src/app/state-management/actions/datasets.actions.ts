@@ -303,7 +303,7 @@ export class SetDateRangeFilterAction implements Action {
 export class PrefillFiltersAction implements Action {
   readonly type = PREFILL_FILTERS;
 
-  constructor(readonly values: Partial<DatasetFilters>, readonly modeToggle: ArchViewMode) {
+  constructor(readonly values: Partial<DatasetFilters>) {
   }
 }
 

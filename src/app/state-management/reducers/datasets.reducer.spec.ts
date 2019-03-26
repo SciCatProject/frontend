@@ -17,7 +17,8 @@ const defaultFilter: DatasetFilters = {
   limit: 0,
   keywords: [],
   sortField: "",
-  mode: ArchViewMode.all,
+  mode: {},
+  modeToggle: ArchViewMode.all,
   scientific: []
 };
 
@@ -336,7 +337,7 @@ describe("DatasetsReducer", () => {
       const modeToggle = ArchViewMode.all;
       const action = new fromActions.SetViewModeAction(modeToggle);
       const state = fromDatasets.datasetsReducer(initialDatasetState, action);
-      expect(state.modeToggle).toEqual(modeToggle);
+      expect(state.filters.modeToggle).toEqual(modeToggle);
     });
   });
 });

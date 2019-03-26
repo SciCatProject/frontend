@@ -263,7 +263,7 @@
           <div class="table_column">Data&nbsp;Status</div>
         </div>
       </mat-header-cell>
-      <mat-cell *matCellDef="let dataset" matTooltip="{{ (dataset.datasetlifecycle || {}).archiveStatusMessage }}">
+      <mat-cell *matCellDef="let dataset" [matTooltip]="[(dataset.datasetlifecycle || {}).archiveStatusMessage,(dataset.datasetlifecycle || {}).retrieveStatus].join('\n')">
           <ng-container *ngIf="(dataset.datasetlifecycle.archivable && dataset.datasetlifecycle.retrievable) 
           || (!dataset.datasetlifecycle.archivable && !dataset.datasetlifecycle.retrievable); then first else second"></ng-container>
           <ng-template #first><i class="material-icons" style="color: black;">hourglass_empty</i>
