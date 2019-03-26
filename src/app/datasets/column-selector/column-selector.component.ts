@@ -25,7 +25,8 @@ export class ColumnSelectorComponent implements OnInit {
     "proposalId",
     "ownerGroup",
     "archiveStatus",
-    "retrieveStatus"
+    "retrieveStatus",
+    "dataStatus"
   ];
   columns$ = this.store.pipe(select(getColumns));
 

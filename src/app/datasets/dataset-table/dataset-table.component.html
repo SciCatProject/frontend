@@ -254,6 +254,32 @@
       <mat-cell *matCellDef="let dataset">{{ dataset.ownerGroup }}</mat-cell>
     </ng-container>
 
+    <ng-container matColumnDef="dataStatus">
+      <mat-header-cell *matHeaderCellDef>
+        <div fxLayout="column" style="align-items: center">
+          <div>
+            <i class="material-icons" >archive&#47;&nbsp;cloud_upload</i>
+          </div>
+          <div class="table_column">Data&nbsp;Status</div>
+        </div>
+      </mat-header-cell>
+      <mat-cell *matCellDef="let dataset" matTooltip="{{ (dataset.datasetlifecycle || {}).archiveStatusMessage }}">
+          <ng-container *ngIf="(dataset.datasetlifecycle.archivable && dataset.datasetlifecycle.retrievable) 
+          || (!dataset.datasetlifecycle.archivable && !dataset.datasetlifecycle.retrievable); then first else second"></ng-container>
+          <ng-template #first><i class="material-icons" style="color: black;">hourglass_empty</i>
+            &nbsp;Work in Progress</ng-template>
+          <ng-template #second >
+              <ng-container *ngIf="dataset.datasetlifecycle.archivable; then third else fourth"></ng-container>
+                <ng-template #third>
+                    <i class="material-icons" style="color: black;">archive</i>
+                    &nbsp;archivable</ng-template>
+                <ng-template #fourth >
+                    <i class="material-icons" style="color: black;">cloud_upload</i>
+                    &nbsp;retrievable</ng-template>
+          </ng-template>
+      </mat-cell>
+    </ng-container>
+
     <ng-container matColumnDef="archiveStatus">
       <mat-header-cell *matHeaderCellDef mat-sort-header>
         <div fxLayout="column" style="align-items: center">
