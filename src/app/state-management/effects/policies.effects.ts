@@ -20,7 +20,6 @@ import {
   map,
   mergeMap,
   switchMap,
-  concatMap,
   withLatestFrom
 } from "rxjs/operators";
 import { Policy } from "state-management/models";
@@ -31,15 +30,17 @@ export class PoliciesEffects {
   submitPolicy$: Observable<Action> = this.actions$.pipe(
     ofType(SUBMIT_POLICY),
     map((action: SubmitPolicyAction) => action),
-    switchMap(action => {
-      return this.policiesService
+    switchMap(action =>
+      this.policiesService
         .updatePolicies(action.idList, action.policyAttributes)
-        .pipe(mergeMap((data: any) => [
+        .pipe(
+          mergeMap((data: any) => [
             new SubmitPolicyCompleteAction(data.submissionResponse),
             new FetchPoliciesAction()
-          ]));
-    }),
-    catchError(err => of(new SubmitPolicyFailedAction(err)))
+          ]),
+          catchError(err => of(new SubmitPolicyFailedAction(err)))
+        )
+    )
   );
 
   @Effect({ dispatch: false })
