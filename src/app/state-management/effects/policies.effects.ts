@@ -20,7 +20,6 @@ import {
   map,
   mergeMap,
   switchMap,
-  concatMap,
   withLatestFrom
 } from "rxjs/operators";
 import { Policy } from "state-management/models";
