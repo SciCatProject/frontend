@@ -61,6 +61,7 @@ export interface ScientificCondition {
 }
 
 export interface DatasetFilters {
+  modeToggle: ArchViewMode;
   text: string;
   ownerGroup: string[];
   type: string[];

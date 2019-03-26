@@ -335,8 +335,8 @@ export function datasetsReducer(
           };
           break;
       }
-      const filters = { ...state.filters, mode };
-      return { ...state, filters, modeToggle };
+      const filters = { ...state.filters, mode, modeToggle };
+      return { ...state, filters  };
     }
 
     case ADD_SCIENTIFIC_CONDITION: {
