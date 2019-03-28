@@ -1,4 +1,4 @@
-import { combineReducers } from "@ngrx/store";
+import { combineReducers, ReducerManager } from "@ngrx/store";
 import { datasetsReducer } from "state-management/reducers/datasets.reducer";
 import { jobsReducer } from "state-management/reducers/jobs.reducer";
 import { userReducer } from "state-management/reducers/user.reducer";
@@ -16,6 +16,9 @@ import { initialJobsState, JobsState } from "state-management/state/jobs.store";
 import { initialUserState, UserState } from "state-management/state/user.store";
 import { initialSampleState, SampleState } from "state-management/state/samples.store";
 import * as ua from "state-management/actions/user.actions";
+import { initialPublishedDataState, PublishedDataState } from "state-management/state/publishedData.store";
+import { publishedDataReducer } from "state-management/reducers/published-data.reducer";
+
 
 export interface AppState {
   datasets: DatasetState;
@@ -23,6 +26,7 @@ export interface AppState {
   jobs: JobsState;
   policies: PolicyState;
   samples: SampleState;
+  publishedData: PublishedDataState;
 }
 
 export const initialState: AppState = {
@@ -30,7 +34,8 @@ export const initialState: AppState = {
   user: initialUserState,
   jobs: initialJobsState,
   policies: initialPolicyState,
-  samples: initialSampleState
+  samples: initialSampleState,
+  publishedData: initialPublishedDataState
 };
 
 const appReducer = combineReducers({
@@ -38,7 +43,8 @@ const appReducer = combineReducers({
   datasets: datasetsReducer,
   jobs: jobsReducer,
   policies: policiesReducer,
-  samples: samplesReducer
+  samples: samplesReducer,
+  publishedData: publishedDataReducer
 });
 
 export function rootReducer(state, action) {

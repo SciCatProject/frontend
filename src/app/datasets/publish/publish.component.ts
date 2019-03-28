@@ -49,6 +49,8 @@ export class PublishComponent implements OnInit {
   public ngOnInit() {
     this.store.dispatch(new PrefillBatchAction());
 
+    
+
     this.datasets$
       .pipe(
         first(),
