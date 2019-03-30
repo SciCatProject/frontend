@@ -44,8 +44,7 @@ export const initialUserState: UserState = {
     "metadata",
     "proposalId",
     "ownerGroup",
-    "archiveStatus",
-    "retrieveStatus"
+    "dataStatus"
   ],
   displayedColumns: [
     "select",
@@ -58,7 +57,6 @@ export const initialUserState: UserState = {
     "metadata",
     "proposalId",
     "ownerGroup",
-    "archiveStatus",
-    "retrieveStatus"
+    "dataStatus"
   ]
 };

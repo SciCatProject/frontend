@@ -117,7 +117,7 @@ export const getCreationTimeFilter = createSelector(
   filters => filters.creationTime
 );
 
-export const getViewMode = createSelector(getDatasetState, state => state.modeToggle );
+export const getViewMode = createSelector(getFilters, filters => filters.modeToggle );
 
 export const getHasAppliedFilters = createSelector(
   getFilters,
@@ -203,7 +203,8 @@ function restrictFilter(filter: object, allowedKeys?: string[]) {
 }
 
 export const getFullqueryParams = createSelector(getFilters, filter => {
-  const { skip, limit, sortField, scientific, ...theRest } = filter;
+  // dont query with modeToggle, its only in filters for persistent routing
+  const { skip, limit, sortField, scientific, modeToggle, ...theRest } = filter;
   const limits = { skip, limit, order: sortField };
   const query = restrictFilter(theRest);
   return {
