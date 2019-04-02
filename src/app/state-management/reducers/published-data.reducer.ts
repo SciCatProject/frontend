@@ -21,6 +21,7 @@ export function publishedDataReducer(
   state = initialState,
   action: PublishedDataActions
 ): State {
+  console.log("Action came in! " + action.type);
   switch (action.type) {
     case PublishedDataActionTypes.AddPublishedData: {
       return adapter.addOne(action.payload.publishedData, state);

@@ -3,7 +3,8 @@ import { Update } from "@ngrx/entity";
 import { PublishedData } from "state-management/models";
 
 export enum PublishedDataActionTypes {
-  RequestPublishedData = "[PublishedData] Request PublishedDatas",
+  FetchAllPublishedData = "[PublishedData] Fetch all PublishedDatas",
+  FetchPublishedData = "[PublishedData] Fetch PublishedDatas",
   LoadPublishedDatas = "[PublishedData] Load PublishedDatas",
   AddPublishedData = "[PublishedData] Add PublishedData",
   UpsertPublishedData = "[PublishedData] Upsert PublishedData",
@@ -16,10 +17,15 @@ export enum PublishedDataActionTypes {
   ClearPublishedDatas = "[PublishedData] Clear PublishedDatas"
 }
 
-export class RequestPublishedData implements Action {
-  readonly type = PublishedDataActionTypes.RequestPublishedData;
+export class FetchPublishedData implements Action {
+  readonly type = PublishedDataActionTypes.FetchPublishedData;
 
   constructor(public payload: { id: number }) {}
+}
+
+export class FetchAllPublishedData implements Action {
+  readonly type = PublishedDataActionTypes.FetchAllPublishedData;
+  constructor() {}
 }
 
 export class LoadPublishedDatas implements Action {
@@ -91,4 +97,5 @@ export type PublishedDataActions =
   | DeletePublishedData
   | DeletePublishedDatas
   | ClearPublishedDatas
-  | RequestPublishedData;
+  | FetchPublishedData
+  | FetchAllPublishedData;
