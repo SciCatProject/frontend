@@ -8,8 +8,7 @@ const initialDatasetState: DatasetState = {
   currentSet: null,
   facetCounts: {},
   totalCount: 0,
-  modeToggle: ArchViewMode.all,
-
+  
   datasetsLoading: true,
   deletingAttachment: false,
   addingAttachment: false,
@@ -21,7 +20,8 @@ const initialDatasetState: DatasetState = {
   batch: [],
 
   filters: {
-    mode: ArchViewMode.all,
+    mode: {},
+    modeToggle: ArchViewMode.all,
     text: "",
     creationTime: null,
     type: [],

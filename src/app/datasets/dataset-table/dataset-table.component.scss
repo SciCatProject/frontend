@@ -51,42 +51,57 @@
 
 .mat-column-sourceFolder {
   flex: 1 0 120px;
+  justify-content: center !important;
 }
 
 .mat-column-size {
   flex: 1 0 50px;
+  justify-content: center !important;
 }
 
 .mat-column-creationTime {
   flex: 1 0 80px;
+  justify-content: center !important;
 }
 
 .mat-column-type {
   flex: 0 0 40px;
+  justify-content: center !important;
 }
 
 .mat-column-image {
   flex: 0 0 60px;
+  justify-content: center !important;
 }
 
 .mat-column-metadata {
   flex: 2 0 100px;
+  justify-content: center !important;
 }
 
 .mat-column-proposalId {
   flex: 1 0 70px;
+  justify-content: center !important;
 }
 
 .mat-column-ownerGroup {
   flex: 0 0 80px;
+  justify-content: center !important;
 }
 
 .mat-column-archiveStatus {
   flex: 1 0 150px;
+  justify-content: center !important;
 }
 
 .mat-column-retrieveStatus {
   flex: 1 0 130px;
+  justify-content: center !important;
+}
+
+.mat-column-dataStatus {
+  flex: 1 0 130px;
+  justify-content: center !important;
 }
 
 
