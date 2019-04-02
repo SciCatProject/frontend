@@ -35,7 +35,8 @@ export function userReducer(
   switch (action.type) {
     case RETRIEVE_USER_COMPLETE: {
       const currentUser = (action as RetrieveUserCompleteAction).user;
-      return { ...state, currentUser };
+      const isLoggedIn = true;
+      return { ...state, currentUser, isLoggedIn };
     }
 
     case LOGIN_COMPLETE: {

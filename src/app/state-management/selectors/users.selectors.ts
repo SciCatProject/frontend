@@ -33,12 +33,22 @@ export const getTapeCopies = createSelector(
   settings => settings.tapeCopies
 );
 
-const getCurrentUserName = createSelector(
-  getCurrentUser,
-  user => user ? user.username : null
+export const getCurrentUserName = createSelector(
+  getUserState,
+  user => {
+    if (!user) {
+      return null;
+    }
+    if (user.profile) {
+      return user.profile.username;
+    } else if (user.currentUser) {
+      return user.currentUser.username;
+    }
+    return null;
+  }
 );
 
-const getCurrentUserAccountType = createSelector(
+export const getCurrentUserAccountType = createSelector(
   getUserState,
   state => state.accountType
 );
@@ -72,3 +82,8 @@ export const getLoading = (state: any) => state.root.user.loading;
 export const getCurrentUserGroups = (state: any) =>
   state.root.user.currentUserGroups;
 export const getTheme = (state: any) => state.root.user.settings.darkTheme;
+
+export const getProfile = createSelector(
+  getUserState,
+  user => user.profile ? user.profile : null
+);

@@ -1,9 +1,10 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit} from "@angular/core";
 import { select, Store } from "@ngrx/store";
 import { UserApi } from "shared/sdk/services";
 import * as ua from "state-management/actions/user.actions";
 import * as selectors from "state-management/selectors";
 import { Message, MessageType } from "state-management/models";
+import { LoginService } from "users/login.service";
 
 @Component({
   selector: "app-user-settings",
@@ -13,8 +14,16 @@ import { Message, MessageType } from "state-management/models";
 export class UserSettingsComponent implements OnInit {
   user: object;
   settings$ = null;
+  profileImage = "assets/images/user.png";
+  profile: object;
+  email: string;
+  displayName: string;
 
-  constructor(private us: UserApi, private store: Store<any>) {
+  constructor(
+    private us: UserApi,
+    private store: Store<any>,
+    private loginService: LoginService
+  ) {
     this.store.select(selectors.users.getCurrentUser).subscribe(user => {
       this.user = user;
     });
@@ -24,7 +33,25 @@ export class UserSettingsComponent implements OnInit {
     // TODO handle service and endpoint for user settings
   }
 
-  ngOnInit() {}
+
+  ngOnInit() {
+    this.store
+      .pipe(select(state => state.root.user.currentUser))
+      .subscribe(current => {
+
+        this.loginService.getUserIdent$(current.id).subscribe(currentIdent => {
+          this.email = currentIdent.profile.email;
+          this.displayName = currentIdent.profile.displayName;
+           if (currentIdent.profile.thumbnailPhoto.startsWith("data")) {
+            this.profileImage = currentIdent.profile.thumbnailPhoto;
+          } else {
+            this.profileImage = "assets/images/user.png";
+          }
+          console.log(currentIdent.profile);
+          console.log(this.profileImage);
+        });
+      });
+  }
 
   onSubmit(values) {
     // TODO validate here

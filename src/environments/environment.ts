@@ -17,5 +17,6 @@ export const environment = {
   facility: "ESS",
   multipleDownloadEnabled: true,
   shoppingCartEnabled: true,
-  columnSelectEnabled: true
+  columnSelectEnabled: true,
+  userProfileImageEnabled: false
 };

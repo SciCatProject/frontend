@@ -1,48 +1,89 @@
 <!-- <div class="ui fixed menu"> -->
-<div [class.dark-theme]="(darkTheme$ | async)" [class.light-theme]="!(darkTheme$ | async)">
+<div
+  [class.dark-theme]="darkTheme$ | async"
+  [class.light-theme]="!(darkTheme$ | async)"
+>
+  <mat-menu #userMenu="matMenu">
+    <a
+      mat-menu-item
+      [routerLinkActive]="['active']"
+      [routerLink]="['/datasets/']"
+    >
+      <i class="material-icons"> folder </i>
+      Datasets</a
+    >
+    <a
+      mat-menu-item
+      [routerLinkActive]="['active']"
+      [routerLink]="['/user/', 'jobs']"
+    >
+      <i class="material-icons"> transfer_within_a_station </i>
+      Jobs</a
+    >
+    <a
+      mat-menu-item
+      [routerLinkActive]="['active']"
+      [routerLink]="['/proposals/']"
+    >
+      <i class="material-icons"> spa </i>
+      Proposals</a
+    >
+    <a
+      mat-menu-item
+      [routerLinkActive]="['active']"
+      [routerLink]="['/archive-settings/']"
+    >
+      <i class="material-icons"> cloud_download </i>
+      Archive Settings</a
+    >
+    <a
+      mat-menu-item
+      [routerLinkActive]="['active']"
+      [routerLink]="['/samples/']"
+    >
+      <i class="material-icons"> center_focus_weak </i>
+      Samples</a
+    >
+    <a
+      mat-menu-item
+      [routerLinkActive]="['active']"
+      [routerLink]="['/user/', 'details']"
+    >
+      <i class="material-icons"> portrait </i>
+      Details</a
+    >
+    <a
+      mat-menu-item
+      [routerLinkActive]="['active']"
+      [routerLink]="['/user/', 'settings']"
+    >
+      <i class="material-icons"> settings </i>
+      Settings</a
+    >
+    <button mat-menu-item (click)="logout()">
+      <i class="material-icons"> exit_to_app </i>
+      Logout
+    </button>
+  </mat-menu>
 
-      <mat-menu #userMenu="matMenu">
-        <a mat-menu-item [routerLinkActive]="['active']" [routerLink]="['/datasets/']">
-          <i class="material-icons"> folder </i>
-          Datasets</a>
-        <a mat-menu-item [routerLinkActive]="['active']" [routerLink]="['/user/','jobs']">
-          <i class="material-icons"> transfer_within_a_station </i>
-          Jobs</a>
-        <a mat-menu-item [routerLinkActive]="['active']" [routerLink]="['/proposals/']">
-          <i class="material-icons"> spa </i>
-          Proposals</a>
-        <a mat-menu-item [routerLinkActive]="['active']" [routerLink]="['/archive-settings/']">
-          <i class="material-icons"> cloud_download </i>
-          Archive Settings</a>
-        <a mat-menu-item [routerLinkActive]="['active']" [routerLink]="['/samples/']">
-          <i class="material-icons"> center_focus_weak </i>
-          Samples</a>
-        <a mat-menu-item [routerLinkActive]="['active']" [routerLink]="['/user/','details']">
-          <i class="material-icons"> portrait </i>
-          Details</a>
-        <a mat-menu-item [routerLinkActive]="['active']" [routerLink]="['/user/','settings']">
-          <i class="material-icons"> settings </i>
-          Settings</a>
-        <button mat-menu-item (click)="logout()" >
-          <i class="material-icons"> exit_to_app </i>
-          Logout</button>
-      </mat-menu>
-
-
-      <mat-toolbar color="primary" style="position: sticky;">
-        <mat-toolbar-row>
-          <h3 class="app-title">{{title}}</h3>
-          <span class="example-spacer"></span>
-          <div *ngIf="isLoggedIn$ | async">
-          <button class="userButton" [matMenuTriggerFor]="userMenu" >
-            <img class="user-image" src="assets/images/user.png" style="height: 37px">
-            <div>{{ username }}</div>
-          </button>
-          </div>
-        </mat-toolbar-row>
-      </mat-toolbar>
-      <div class="main">
-        <breadcrumb></breadcrumb>
-        <router-outlet></router-outlet>
+  <mat-toolbar color="primary" style="position: sticky;">
+    <mat-toolbar-row>
+      <h3 class="app-title">{{ title }}</h3>
+      <span class="example-spacer"></span>
+      <div *ngIf="(isLoggedIn$ | async) || !appConfig.production">
+        <button class="userButton" [matMenuTriggerFor]="userMenu">
+          <img
+            class="user-image"
+            src="{{ profileImage }}"
+            style="height: 37px"
+          />
+          <div>{{ username }}</div>
+        </button>
       </div>
+    </mat-toolbar-row>
+  </mat-toolbar>
+  <div class="main">
+    <breadcrumb></breadcrumb>
+    <router-outlet></router-outlet>
+  </div>
 </div>
