@@ -181,6 +181,8 @@
               Scientific Metadata
             </mat-card-header>
           </div>
+          <ng-template [ngIf]="appConfig.tableSciDataEnabled" [ngIfElse]="jsonview">
+            enabled
 
           <pre *ngIf="(withUnits$ | async) as withUnits">
           <table>
@@ -197,12 +199,20 @@
             </tr>
             <tr *ngFor="let key of objectKeys(dates )">
               <td><b>{{ key }}</b></td>
-              <td>{{ dates[key] }}</td>
+              <td>{{ dates[key] | date }}</td>
               <td></td>
             </tr>
           </table>
 
             </pre>
+          </ng-template>
+          <ng-template #jsonview>
+
+            <ngx-json-viewer
+              [json]="dataset.scientificMetadata"
+              [expanded]="false"
+            ></ngx-json-viewer>
+          </ng-template>
 
           <div class="form-container" *ngIf="appConfig.editMetadataEnabled">
             <app-dataset-form></app-dataset-form>
