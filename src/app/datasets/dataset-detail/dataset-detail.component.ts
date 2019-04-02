@@ -54,10 +54,10 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
   private routeSubscription = this.route.params
     .pipe(pluck("id"))
     .subscribe((id: string) => this.store.dispatch(new DatablocksAction(id)));
-  private origDatablocks$ = this.store.pipe(select(getCurrentOrigDatablocks));
-  private datablocks$ = this.store.pipe(select(getCurrentDatablocks));
-  private attachments$ = this.store.pipe(select(getCurrentAttachments));
-  private isAdmin$ = this.store.pipe(select(getIsAdmin));
+  public origDatablocks$ = this.store.pipe(select(getCurrentOrigDatablocks));
+  public datablocks$ = this.store.pipe(select(getCurrentDatablocks));
+  public attachments$ = this.store.pipe(select(getCurrentAttachments));
+  public isAdmin$ = this.store.pipe(select(getIsAdmin));
 
   constructor(
     private router: Router,
@@ -91,7 +91,6 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
     const strings = [];
     for (const key in scimeta) {
       if (typeof scimeta[key] === "string") {
-        //strings[key] = scimeta[key];
         const arr = {name: key, value: scimeta[key] };
         strings.push(arr);
 
