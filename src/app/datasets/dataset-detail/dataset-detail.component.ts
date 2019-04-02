@@ -77,10 +77,11 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
   }
 
   getDates(scimeta) {
-    const dates = {};
+    const dates = [];
     for (const key in scimeta) {
       if (scimeta[key] instanceof Date) {
-        dates[key] = scimeta[key];
+        const arr = {name: key, value: scimeta[key] };
+        dates.push(arr);
       }
     }
     return dates;
