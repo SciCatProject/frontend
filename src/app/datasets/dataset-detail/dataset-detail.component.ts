@@ -43,6 +43,7 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
   sciMet: Object;
   public withUnits$;
   public dates$;
+  public noUnits$;
   public dates = {
     start_time: "2011-10-05T14:48:00.000Z",
     end_time: "2011-10-05T14:48:00.000Z"
@@ -86,10 +87,13 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
   }
 
   getStrings(scimeta) {
-    const strings = {};
+    const strings = [];
     for (const key in scimeta) {
-      if (typeof scimeta[key] === 'string') {
-        strings[key] = scimeta[key];
+      if (typeof scimeta[key] === "string") {
+        //strings[key] = scimeta[key];
+        const arr = {name: key, value: scimeta[key] };
+        strings.push(arr);
+
       }
     }
     return strings;
@@ -110,9 +114,13 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
       pluck("scientificMetadata"),
       mergeMap(val => of(this.convertUnits(val)))
     );
+    this.noUnits$ = this.dataset$.pipe(
+      pluck("scientificMetadata"),
+      mergeMap(val => of(this.getStrings(val)))
+    );
     this.dates$ = this.dataset$.pipe(
       pluck("scientificMetadata"),
-      mergeMap(val => of(this.convertUnits(val)))
+      mergeMap(val => of(this.getDates(val)))
     );
     this.dataset$
       .pipe(
