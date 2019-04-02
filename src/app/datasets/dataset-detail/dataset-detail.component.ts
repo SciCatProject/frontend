@@ -41,8 +41,8 @@ import {
 export class DatasetDetailComponent implements OnInit, OnDestroy {
   dataset$ = this.store.pipe(select(getCurrentDataset));
   sciMet: Object;
-  private withUnits$;
-  private dates$;
+  public withUnits$;
+  public dates$;
   public dates = {
     start_time: "2011-10-05T14:48:00.000Z",
     end_time: "2011-10-05T14:48:00.000Z"
