@@ -1,7 +1,6 @@
 import { Injectable } from "@angular/core";
-import { Observable, of } from "rxjs";
+import { of } from "rxjs";
 import { Actions, Effect, ofType } from "@ngrx/effects";
-import { Action, select, Store } from "@ngrx/store";
 import { PublishedDataApi } from "shared/sdk/services";
 
 import {
@@ -16,10 +15,7 @@ import {
 import {
   catchError,
   map,
-  mergeMap,
   switchMap,
-  withLatestFrom,
-  tap
 } from "rxjs/operators";
 import { PublishedData } from "shared/sdk/models";
 
@@ -43,7 +39,6 @@ export class PublishedDataEffects {
 
   constructor(
     private actions$: Actions,
-    private store: Store<any>,
     private publishedDataApi: PublishedDataApi
   ) {}
 }

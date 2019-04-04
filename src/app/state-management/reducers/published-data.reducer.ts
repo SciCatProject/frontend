@@ -1,5 +1,3 @@
-import { EntityState, EntityAdapter, createEntityAdapter } from "@ngrx/entity";
-import { PublishedData } from "state-management/models";
 import {
   PublishedDataActions,
   PublishedDataActionTypes

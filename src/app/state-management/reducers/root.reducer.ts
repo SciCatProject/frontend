@@ -1,4 +1,4 @@
-import { combineReducers, ReducerManager } from "@ngrx/store";
+import { combineReducers } from "@ngrx/store";
 import { datasetsReducer } from "state-management/reducers/datasets.reducer";
 import { jobsReducer } from "state-management/reducers/jobs.reducer";
 import { userReducer } from "state-management/reducers/user.reducer";
