@@ -18,6 +18,11 @@ import {
 } from "state-management/actions/datasets.actions";
 
 import {
+  FetchAllPublishedData
+} from "state-management/actions/published-data.actions";
+
+
+import {
   getFilters,
   getHasPrefilledFilters,
   getSearchTerms,
@@ -54,6 +59,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     )
     .subscribe(filters => {
       this.store.dispatch(new FetchDatasetsAction());
+      this.store.dispatch(new FetchAllPublishedData());
       this.store.dispatch(new FetchFacetCountsAction());
       this.router.navigate(["/datasets"], {
         queryParams: { args: rison.encode(filters) }

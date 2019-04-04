@@ -5,6 +5,7 @@ import { Action, select, Store } from "@ngrx/store";
 import { PublishedDataApi } from "shared/sdk/services";
 
 import {
+  FailedPublishedDataAction,
   LoadPublishedDatas,
   AddPublishedData,
   FetchAllPublishedData,
@@ -27,20 +28,17 @@ export class PublishedDataEffects {
   @Effect()
   AddPublishedData$ = this.actions$.pipe(
     ofType<FetchPublishedData>(PublishedDataActionTypes.FetchPublishedData),
-    mergeMap(action => this.publishedDataApi.findById(action.payload.id)),
-    map((data: PublishedData) => new AddPublishedData({ publishedData: data }))
+    switchMap(action => this.publishedDataApi.findById(action.payload.id)
+    .pipe(map((data: PublishedData) => new AddPublishedData({ publishedData: data })),
+    catchError(err => of(new FailedPublishedDataAction(err)))))
   );
 
   @Effect()
   LoadPublishedDatas$ = this.actions$.pipe(
-    ofType<FetchAllPublishedData>(
-      PublishedDataActionTypes.FetchAllPublishedData
-    ),
-    mergeMap(action => this.publishedDataApi.find()),
-    map(
-      (data: PublishedData[]) =>
-        new LoadPublishedDatas({ publishedDatas: data })
-    )
+    ofType<FetchAllPublishedData>(PublishedDataActionTypes.FetchAllPublishedData),
+    switchMap(action => this.publishedDataApi.find()
+    .pipe(map((data: PublishedData[]) => new LoadPublishedDatas({ publishedDatas: data })),
+    catchError(err => of(new FailedPublishedDataAction(err)))))
   );
 
   constructor(
