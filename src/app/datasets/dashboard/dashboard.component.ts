@@ -59,7 +59,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
     )
     .subscribe(filters => {
       this.store.dispatch(new FetchDatasetsAction());
-      this.store.dispatch(new FetchAllPublishedData());
       this.store.dispatch(new FetchFacetCountsAction());
       this.router.navigate(["/datasets"], {
         queryParams: { args: rison.encode(filters) }
