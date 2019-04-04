@@ -18,29 +18,34 @@ export enum PublishedDataActionTypes {
   ClearPublishedDatas = "[PublishedData] Clear PublishedDatas"
 }
 
+// universal error action
 export class FailedPublishedDataAction implements Action {
   readonly type = PublishedDataActionTypes.FailedPublishedDataAction;
 
   constructor(public payload: { err: string }) {}
 }
 
+// trigger effect that will get one record from db
 export class FetchPublishedData implements Action {
   readonly type = PublishedDataActionTypes.FetchPublishedData;
 
   constructor(public payload: { id: number }) {}
 }
 
+// trigger effect that will get all records from db
 export class FetchAllPublishedData implements Action {
   readonly type = PublishedDataActionTypes.FetchAllPublishedData;
   constructor() {}
 }
 
+// add multiple records to store
 export class LoadPublishedDatas implements Action {
   readonly type = PublishedDataActionTypes.LoadPublishedDatas;
 
   constructor(public payload: { publishedDatas: PublishedData[] }) {}
 }
 
+// add just one record to store
 export class AddPublishedData implements Action {
   readonly type = PublishedDataActionTypes.AddPublishedData;
 

@@ -4,14 +4,11 @@ import {
   PublishedDataActions,
   PublishedDataActionTypes
 } from "../actions/published-data.actions";
+import { adapter } from "../state/publishedData.store";
 
 export interface State extends EntityState<PublishedData> {
   // additional entities state properties
 }
-
-export const adapter: EntityAdapter<PublishedData> = createEntityAdapter<
-  PublishedData
->();
 
 export const initialState: State = adapter.getInitialState({
   // additional entity state properties

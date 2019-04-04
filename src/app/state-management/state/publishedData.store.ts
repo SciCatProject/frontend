@@ -2,14 +2,18 @@ import { PublishedData } from "state-management/models";
 import { EntityState, EntityAdapter, createEntityAdapter } from "@ngrx/entity";
 
 export interface PublishedDataState extends EntityState<PublishedData> {
-  // publishedData: PublishedData[];
+  publishedData: PublishedData[];
   currentPublishedData: PublishedData;
 }
 
-export const adapter: EntityAdapter<PublishedData> = createEntityAdapter<PublishedData>({});
+// adapter with custom selectId using doi
+export const adapter: EntityAdapter<PublishedData > = createEntityAdapter<PublishedData>({
+  selectId: (publishedData: PublishedData) => publishedData.doi,
+});
 
 export const initialPublishedDataState: PublishedDataState = adapter.getInitialState({
-  currentPublishedData: null
+  currentPublishedData: null,
+  publishedData: null
 });
   /*ids: null,
     entities: null,
