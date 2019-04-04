@@ -17,10 +17,6 @@ import {
   SetTextFilterAction
 } from "state-management/actions/datasets.actions";
 
-import {
-  FetchAllPublishedData
-} from "state-management/actions/published-data.actions";
-
 
 import {
   getFilters,
