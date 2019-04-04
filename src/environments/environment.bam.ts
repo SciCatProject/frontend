@@ -5,14 +5,14 @@
 
 export const environment = {
   production: true,
-  lbBaseURL: "http://10.4.0.49:3001",
+  lbBaseURL: "http://scicat04.esss.lu.se:3001",
   fileserverBaseURL: "https://kubetest04.dm.esss.dk:32223",
   externalAuthEndpoint: "/auth/msad",
   archiveWorkflowEnabled: false,
   editMetadataEnabled: true,
   columnSelectEnabled: true,
   editSampleEnabled: true,
-  disabledDatasetColumns: ["archiveStatus", "retrieveStatus","dataStatus"],
+  disabledDatasetColumns: ["archiveStatus", "retrieveStatus"],
   shoppingCartEnabled: true,
   facility: "ESS",
   userProfileImageEnabled: true
