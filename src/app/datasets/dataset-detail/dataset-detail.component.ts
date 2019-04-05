@@ -12,7 +12,7 @@ import {
   getError,
   submitJob
 } from "../../state-management/selectors/jobs.selectors";
-import { Subscription, of, Observable } from "rxjs";
+import { Subscription, of } from "rxjs";
 import { Message, MessageType } from "state-management/models";
 import { Angular5Csv } from "angular5-csv/dist/Angular5-csv";
 import { getIsAdmin } from "state-management/selectors/users.selectors";
@@ -100,9 +100,10 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
   }
 
   getObjects(scimeta) {
-    const objects = {};
+    const objects = [];
     for (const key in scimeta) {
-      if (scimeta[key] instanceof Date) {
+      if (scimeta[key] instanceof Object) {
+        objects.push(scimeta[key]);
       }
     }
     return objects;
