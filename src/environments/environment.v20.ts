@@ -12,7 +12,7 @@ export const environment = {
   editMetadataEnabled: true,
   columnSelectEnabled: true,
   editSampleEnabled: true,
-  disabledDatasetColumns: ["archiveStatus", "retrieveStatus"],
+  disabledDatasetColumns: ["archiveStatus", "retrieveStatus","dataStatus"],
   shoppingCartEnabled: true,
   facility: "ESS",
   userProfileImageEnabled: true

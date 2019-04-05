@@ -5,8 +5,8 @@
 
 export const environment = {
   production: false,
-  lbBaseURL: "https://scicat03.esss.lu.se:32223",
-  fileserverBaseURL: "https://scicat02.esss.lu.se:32223",
+  lbBaseURL: "https://scicat05.esss.lu.se:32223",
+  fileserverBaseURL: "https://scicat06.esss.lu.se:32223",
   externalAuthEndpoint: "/auth/msad",
   archiveWorkflowEnabled: false,
   disabledDatasetColumns: ["archiveStatus", "retrieveStatus"],

@@ -96,6 +96,40 @@ export class JobApi extends BaseLoopBackApi {
   }
 
   /**
+   * Returns for all linked datasets the details as defined in the fields array. Useful to avoid URL size limititations for large dataset queries
+   *
+   * @param {string} jobId 
+   *
+   * @param {object} datasetFields 
+   *
+   * @param {object} include 
+   *
+   * @param {object} options 
+   *
+   * @returns {object} An empty reference that will be
+   *   populated with the actual data once the response is returned
+   *   from the server.
+   *
+   * <em>
+   * (The remote method definition does not provide any description.
+   * This usually means the response is a `Job` object.)
+   * </em>
+   */
+  public datasetDetails(jobId: any = {}, datasetFields: any = {}, include: any = {}, customHeaders?: Function): Observable<any> {
+    let _method: string = "GET";
+    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
+    "/Jobs/datasetDetails";
+    let _routeParams: any = {};
+    let _postBody: any = {};
+    let _urlParams: any = {};
+    if (typeof jobId !== 'undefined' && jobId !== null) _urlParams.jobId = jobId;
+    if (typeof datasetFields !== 'undefined' && datasetFields !== null) _urlParams.datasetFields = datasetFields;
+    if (typeof include !== 'undefined' && include !== null) _urlParams.include = include;
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    return result;
+  }
+
+  /**
    * The name of the model represented by this $resource,
    * i.e. `Job`.
    */
