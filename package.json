@@ -38,7 +38,7 @@
     "@ngui/datetime-picker": "^0.16.2",
     "angular5-csv": "^0.2.11",
     "autolinker": "^3.0.5",
-    "core-js": "^2.6.5",
+    "core-js": "^3.0.1",
     "deep-equal": "^1.0.1",
     "filesize": "^4.1.2",
     "hammerjs": "^2.0.8",
