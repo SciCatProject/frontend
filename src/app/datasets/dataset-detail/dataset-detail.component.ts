@@ -123,12 +123,6 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
       pluck("scientificMetadata"),
       mergeMap(val => of(this.getDates(val)))
     );
-    this.dataset$
-      .pipe(
-        map((content: RawDataset) => content.scientificMetadata),
-        filter(item => item.hasOwnProperty("u"))
-      )
-      .subscribe(val => console.log(val));
     this.subscriptions.push(
       this.store.pipe(select(submitJob)).subscribe(
         ret => {

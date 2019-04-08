@@ -176,14 +176,13 @@
         </mat-card>
 
         <mat-card style="margin:1em">
-          <div *ngIf="dataset.scientificMetadata as value">
+          <div >
             <mat-card-header style="background:#ff96fa;">
               Scientific Metadata
             </mat-card-header>
           </div>
-          <ng-template [ngIf]="appConfig.tableSciDataEnabled" [ngIfElse]="jsonview">
-
           <pre *ngIf="(withUnits$ | async) as withUnits">
+          <ng-template [ngIf]="appConfig.tableSciDataEnabled && withUnits.length" [ngIfElse]="jsonview">
           <table>
           <tr>
             <td>Name</td>
@@ -208,8 +207,9 @@
             </tr>
           </table>
 
-            </pre>
+            
           </ng-template>
+        </pre>
           <ng-template #jsonview>
 
             <ngx-json-viewer
