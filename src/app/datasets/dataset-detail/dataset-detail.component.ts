@@ -4,7 +4,7 @@ import {
   DatablocksAction,
   DeleteAttachment
 } from "state-management/actions/datasets.actions";
-import { Job, User, RawDataset } from "shared/sdk/models";
+import { Job, User } from "shared/sdk/models";
 import { select, Store } from "@ngrx/store";
 import { SubmitAction } from "state-management/actions/jobs.actions";
 import { ShowMessageAction } from "state-management/actions/user.actions";
@@ -17,7 +17,7 @@ import { Message, MessageType } from "state-management/models";
 import { Angular5Csv } from "angular5-csv/dist/Angular5-csv";
 import { getIsAdmin } from "state-management/selectors/users.selectors";
 import { APP_CONFIG, AppConfig } from "app-config.module";
-import { pluck, take, map, filter, mergeMap } from "rxjs/operators";
+import { pluck, take mergeMap } from "rxjs/operators";
 import { Router } from "@angular/router";
 import {
   getCurrentAttachments,
