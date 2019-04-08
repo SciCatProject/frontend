@@ -7,5 +7,13 @@ import { Logbook } from "shared/sdk/models";
   providedIn: "root"
 })
 export class LogbookService {
-  constructor() {}
+  constructor(private logbookApi: LogbookApi) {}
+
+  getLogbooks(): Observable<Logbook[]> {
+    return this.logbookApi.findAll();
+  }
+
+  getLogbook(name: string): Observable<Logbook> {
+    return this.logbookApi.findByName(name);
+  }
 }

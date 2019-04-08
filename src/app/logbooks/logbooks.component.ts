@@ -1,8 +1,9 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Component, Input, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { select, Store } from "@ngrx/store";
 import { Observable, Subscription } from "rxjs";
 import { Logbook } from "shared/sdk/models";
+import { LogbookService } from "./logbook.service";
 
 @Component({
   selector: "app-logbooks",
@@ -10,11 +11,19 @@ import { Logbook } from "shared/sdk/models";
   styleUrls: ["./logbooks.component.scss"]
 })
 export class LogbooksComponent implements OnInit {
-  logbook$: Observable<Logbook>;
+  logbooks: Logbook[];
 
-  constructor(private route: ActivatedRoute, private store: Store<any>) {}
+  columnsToDisplay: string[] = ["name", "latestEntry"];
 
-  ngOnInit() {}
+  constructor(private logbookService: LogbookService) {}
 
-  ngOnDestroy() {}
+  ngOnInit() {
+    this.getLogbooks();
+  }
+
+  getLogbooks(): void {
+    this.logbookService
+      .getLogbooks()
+      .subscribe(logbooks => (this.logbooks = logbooks));
+  }
 }

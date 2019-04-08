@@ -1,29 +1,16 @@
 /* tslint:disable */
-import {
-  Proposal
-} from '../index';
 
 declare var Object: any;
 export interface LogbookInterface {
-  "name": string;
-  "members"?: Array<any>;
-  "userMessages"?: Array<any>;
-  "botMessages"?: Array<any>;
-  "images"?: Array<any>;
-  "id"?: any;
-  "proposalId"?: string;
-  proposal?: Proposal;
+  "name"?: string;
+  "messages"?: Array<any>;
+  "id"?: number;
 }
 
 export class Logbook implements LogbookInterface {
   "name": string;
-  "members": Array<any>;
-  "userMessages": Array<any>;
-  "botMessages": Array<any>;
-  "images": Array<any>;
-  "id": any;
-  "proposalId": string;
-  proposal: Proposal;
+  "messages": Array<any>;
+  "id": number;
   constructor(data?: LogbookInterface) {
     Object.assign(this, data);
   }
@@ -61,40 +48,16 @@ export class Logbook implements LogbookInterface {
           name: 'name',
           type: 'string'
         },
-        "members": {
-          name: 'members',
-          type: 'Array&lt;any&gt;'
-        },
-        "userMessages": {
-          name: 'userMessages',
-          type: 'Array&lt;any&gt;'
-        },
-        "botMessages": {
-          name: 'botMessages',
-          type: 'Array&lt;any&gt;'
-        },
-        "images": {
-          name: 'images',
+        "messages": {
+          name: 'messages',
           type: 'Array&lt;any&gt;'
         },
         "id": {
           name: 'id',
-          type: 'any'
-        },
-        "proposalId": {
-          name: 'proposalId',
-          type: 'string'
+          type: 'number'
         },
       },
       relations: {
-        proposal: {
-          name: 'proposal',
-          type: 'Proposal',
-          model: 'Proposal',
-          relationType: 'belongsTo',
-                  keyFrom: 'proposalId',
-          keyTo: 'proposalId'
-        },
       }
     }
   }
