@@ -1,7 +1,5 @@
-import { Component, Input, OnDestroy, OnInit } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
-import { select, Store } from "@ngrx/store";
-import { Observable, Subscription } from "rxjs";
+import { Component, OnInit } from "@angular/core";
+
 import { Logbook } from "shared/sdk/models";
 import { LogbookService } from "./logbook.service";
 
