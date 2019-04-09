@@ -29,7 +29,7 @@ import { BatchViewComponent } from "datasets/batch-view/batch-view.component";
 import { SampleDetailComponent } from "../samples/sample-detail/sample-detail.component";
 import { SampleTableComponent } from "../samples/sample-table/sample-table.component";
 
-import { LogbooksComponent } from "../logbooks/logbooks.component";
+import { LogbooksTableComponent } from "../logbooks/logbooks-table/logbooks-table.component";
 
 export const routes: Routes = [
   { path: "", redirectTo: "/datasets", pathMatch: "full" },
@@ -117,7 +117,7 @@ export const routes: Routes = [
   },
   {
     path: "logbooks",
-    component: LogbooksComponent,
+    component: LogbooksTableComponent,
     canActivate: [AuthCheck]
   },
   {

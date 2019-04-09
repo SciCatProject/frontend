@@ -84,7 +84,9 @@
                 *ngIf="dataset.sampleId as value"
                 (click)="onClickSample(value)"
               >
-                <th><i class="material-icons"> center_focus_weak </i> Sample</th>
+                <th>
+                  <i class="material-icons"> center_focus_weak </i> Sample
+                </th>
                 <td>
                   <a>{{ value }}</a>
                 </td>
@@ -141,7 +143,7 @@
           </div>
         </mat-card>
 
-        <mat-card style="margin:1em" *ngIf="dataset.investigator" >
+        <mat-card style="margin:1em" *ngIf="dataset.investigator">
           <mat-card-header style="background:#d2b478;">
             Derived Data
           </mat-card-header>
@@ -156,12 +158,14 @@
                 <td>{{ value }}</td>
               </tr>
               <tr *ngIf="dataset.usedSoftware as value">
-                <th><i class="material-icons"> screen_share</i> Software Used</th>
+                <th>
+                  <i class="material-icons"> screen_share</i> Software Used
+                </th>
                 <td>{{ value }}</td>
               </tr>
               <tr *ngIf="dataset.jobParameters as value">
                 <th><i class="material-icons"> settings </i> Job Parameters</th>
-                <td>{{ value | json}}</td>
+                <td>{{ value | json }}</td>
               </tr>
               <tr *ngIf="dataset.jobLogData as value">
                 <th><i class="material-icons"> ballot </i> Job Log Data</th>
@@ -171,12 +175,11 @@
           </div>
         </mat-card>
 
-
         <mat-card style="margin:1em">
           <div *ngIf="dataset.scientificMetadata as value">
-          <mat-card-header style="background:#ff96fa;">
-            Scientific Metadata
-          </mat-card-header>
+            <mat-card-header style="background:#ff96fa;">
+              Scientific Metadata
+            </mat-card-header>
             <pre>{{ value | json }}</pre>
           </div>
 
@@ -190,7 +193,12 @@
             {{ show ? "Hide MetaData" : "Show Metadata" }}
           </button>
           <br />
-          <div *ngIf="show"><ngx-json-viewer [json]="dataset" [expanded]="false" ></ngx-json-viewer></div>
+          <div *ngIf="show">
+            <ngx-json-viewer
+              [json]="dataset"
+              [expanded]="false"
+            ></ngx-json-viewer>
+          </div>
         </mat-card>
       </div>
       <div fxFlex="30%" *ngIf="(attachments$ | async) as attachments">
@@ -237,6 +245,15 @@
     </ng-container>
   </mat-tab>
 
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <i class="material-icons"> book </i> Logbook
+    </ng-template>
+    <mat-card style="margin: 1em">
+      <app-logbooks-detail></app-logbooks-detail>
+    </mat-card>
+  </mat-tab>
+
   <mat-tab *ngIf="(isAdmin$ | async)">
     <ng-template mat-tab-label>
       <i class="material-icons"> settings </i> Admin
@@ -261,7 +278,7 @@
   <mat-tab disabled>
     <ng-template mat-tab-label>
       <button mat-button class="export-btn" (click)="onExportClick()">
-      <i class="material-icons"> list </i> Export to CSV
+        <i class="material-icons"> list </i> Export to CSV
       </button>
     </ng-template>
   </mat-tab>

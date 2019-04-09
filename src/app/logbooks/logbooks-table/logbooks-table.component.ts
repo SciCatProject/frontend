@@ -1,17 +1,17 @@
 import { Component, OnInit } from "@angular/core";
 
 import { Logbook } from "shared/sdk/models";
-import { LogbookService } from "./logbook.service";
+import { LogbookService } from "../logbook.service";
 
 @Component({
-  selector: "app-logbooks",
-  templateUrl: "./logbooks.component.html",
-  styleUrls: ["./logbooks.component.scss"]
+  selector: "app-logbooks-table",
+  templateUrl: "./logbooks-table.component.html",
+  styleUrls: ["./logbooks-table.component.scss"]
 })
-export class LogbooksComponent implements OnInit {
+export class LogbooksTableComponent implements OnInit {
   logbooks: Logbook[];
 
-  columnsToDisplay: string[] = ["name", "latestEntry"];
+  columnsToDisplay: string[] = ["name", "latestEntry", "sender", "entry"];
 
   constructor(private logbookService: LogbookService) {}
 
