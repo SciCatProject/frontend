@@ -182,7 +182,7 @@
             </mat-card-header>
           </div>
           <pre *ngIf="(withUnits$ | async) as withUnits">
-          <ng-template [ngIf]="appConfig.tableSciDataEnabled && withUnits.length" [ngIfElse]="jsonview">
+          <ng-template [ngIf]="appConfig.tableSciDataEnabled" [ngIfElse]="jsonview">
           <table>
           <tr>
             <td>Name</td>
