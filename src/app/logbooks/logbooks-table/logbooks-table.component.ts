@@ -20,8 +20,12 @@ export class LogbooksTableComponent implements OnInit {
   }
 
   getLogbooks(): void {
-    this.logbookService
-      .getLogbooks()
-      .subscribe(logbooks => (this.logbooks = logbooks));
+    this.logbookService.getLogbooks().subscribe(logbooks => {
+      logbooks.forEach(logbook => {
+        let descendingMessages = logbook.messages.reverse();
+        logbook.messages = descendingMessages;
+      });
+      this.logbooks = logbooks;
+    });
   }
 }
