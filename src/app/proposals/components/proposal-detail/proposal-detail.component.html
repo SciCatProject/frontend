@@ -1,137 +1,175 @@
 <mat-tab-group>
-  <mat-tab >
+  <mat-tab>
     <ng-template mat-tab-label>
-      <i class="material-icons"> portrait </i> 
+      <i class="material-icons"> portrait </i>
       General
     </ng-template>
     <div *ngIf="proposal" class="tab-content">
       <table>
         <tr>
           <th>
-            <i class="material-icons"> fingerprint </i> 
+            <i class="material-icons"> fingerprint </i>
             Title
           </th>
-          <td>{{proposal.title}}
+          <td>{{ proposal.title }}</td>
         </tr>
+
         <tr>
           <th>
-            <i class="material-icons"> person </i> 
-            Main proposer</th>
+            <i class="material-icons"> person </i>
+            Main proposer
+          </th>
           <td>
-            <a href="mailto:{{mainProposer.email}}">{{mainProposer.name}}</a>
+            <a href="mailto:{{ mainProposer.email }}">{{
+              mainProposer.name
+            }}</a>
           </td>
         </tr>
         <tr *ngIf="principalInvestigator && principalInvestigator.isPresent">
           <th>
-            <i class="material-icons"> security </i> 
-            Principal investigator</th>
+            <i class="material-icons"> security </i>
+            Principal investigator
+          </th>
 
           <td *ngIf="principalInvestigator.email; else withoutEmail">
-            <a href="mailto:{{principalInvestigator.email}}">{{principalInvestigator.name}}</a>
+            <a href="mailto:{{ principalInvestigator.email }}">{{
+              principalInvestigator.name
+            }}</a>
           </td>
           <ng-template #withoutEmail>
             <td>
-              {{principalInvestigator.name}}
+              {{ principalInvestigator.name }}
             </td>
           </ng-template>
         </tr>
         <tr>
           <th>
-            <i class="material-icons"> description </i> 
-            Abstract</th>
-          <td>{{proposal.abstract}}</td>
+            <i class="material-icons"> description </i>
+            Abstract
+          </th>
+          <td>{{ proposal.abstract }}</td>
         </tr>
       </table>
     </div>
   </mat-tab>
 
-
-  <mat-tab >
+  <mat-tab>
     <ng-template mat-tab-label>
-      <i class="material-icons"> folder </i> 
+      <i class="material-icons"> folder </i>
       Datasets
     </ng-template>
     <div class="tab-content">
       <div class="ui segment">
-      <mat-paginator 
-      [pageSizeOptions]="[30]" [pageIndex]="currentPage$ | async" [length]="datasetCount$ | async" (page)="onPageChange($event)">
-      </mat-paginator>
+        <mat-paginator
+          [pageSizeOptions]="[30]"
+          [pageIndex]="currentPage$ | async"
+          [length]="datasetCount$ | async"
+          (page)="onPageChange($event)"
+        >
+        </mat-paginator>
         <mat-table #table [dataSource]="datasets" class="dataset-table">
           <ng-container matColumnDef="pid">
             <mat-header-cell *matHeaderCellDef>
-              <i class="material-icons"> portrait </i> 
+              <i class="material-icons"> portrait </i>
               PID
             </mat-header-cell>
-            <mat-cell *matCellDef="let element" matTooltip="{{element.pid}}">
-              ...{{element.pid | slice:-10}}
+            <mat-cell *matCellDef="let element" matTooltip="{{ element.pid }}">
+              ...{{ element.pid | slice: -10 }}
             </mat-cell>
           </ng-container>
           <ng-container matColumnDef="sourceFolder">
             <mat-header-cell *matHeaderCellDef>
-            <i class="material-icons"> explore </i> 
+              <i class="material-icons"> explore </i>
               Source Folder
             </mat-header-cell>
-            <mat-cell *matCellDef="let element" matTooltip="{{element.sourceFolder}}">
-              ...{{element.sourceFolder | slice:-14 }}
+            <mat-cell
+              *matCellDef="let element"
+              matTooltip="{{ element.sourceFolder }}"
+            >
+              ...{{ element.sourceFolder | slice: -14 }}
             </mat-cell>
           </ng-container>
           <ng-container matColumnDef="size">
             <mat-header-cell *matHeaderCellDef>
-              <i class="material-icons"> save </i> 
+              <i class="material-icons"> save </i>
               Size
             </mat-header-cell>
-            <mat-cell *matCellDef="let element">{{element.size | filesize}}</mat-cell>
+            <mat-cell *matCellDef="let element">{{
+              element.size | filesize
+            }}</mat-cell>
           </ng-container>
           <ng-container matColumnDef="creationTime">
             <mat-header-cell *matHeaderCellDef>
-              <i class="material-icons"> calendar_today </i> 
+              <i class="material-icons"> calendar_today </i>
               Creation Time
             </mat-header-cell>
-            <mat-cell *matCellDef="let element">{{element.creationTime | date: 'yyyy/MM/dd HH:mm'}}</mat-cell>
+            <mat-cell *matCellDef="let element">{{
+              element.creationTime | date: "yyyy/MM/dd HH:mm"
+            }}</mat-cell>
           </ng-container>
           <ng-container matColumnDef="owner">
             <mat-header-cell *matHeaderCellDef>
-              <i class="material-icons"> person </i> 
+              <i class="material-icons"> person </i>
               Owner
             </mat-header-cell>
-            <mat-cell *matCellDef="let element">{{element.owner}}</mat-cell>
+            <mat-cell *matCellDef="let element">{{ element.owner }}</mat-cell>
           </ng-container>
           <ng-container matColumnDef="ownerEmail">
             <mat-header-cell *matHeaderCellDef>
-              <i class="material-icons"> mail </i> 
+              <i class="material-icons"> mail </i>
               Owner email
             </mat-header-cell>
-            <mat-cell *matCellDef="let element">{{element.ownerEmail}}</mat-cell>
+            <mat-cell *matCellDef="let element">{{
+              element.ownerEmail
+            }}</mat-cell>
           </ng-container>
           <ng-container matColumnDef="creationLocation">
             <mat-header-cell *matHeaderCellDef>
-              <i class="material-icons"> explore </i> 
-              Location</mat-header-cell>
-            <mat-cell *matCellDef="let element">{{element.creationLocation}}</mat-cell>
+              <i class="material-icons"> explore </i>
+              Location</mat-header-cell
+            >
+            <mat-cell *matCellDef="let element">{{
+              element.creationLocation
+            }}</mat-cell>
           </ng-container>
           <ng-container matColumnDef="type">
             <mat-header-cell *matHeaderCellDef>Type</mat-header-cell>
-            <mat-cell *matCellDef="let element">{{element.type}}</mat-cell>
+            <mat-cell *matCellDef="let element">{{ element.type }}</mat-cell>
           </ng-container>
           <ng-container matColumnDef="dataFormat">
             <mat-header-cell *matHeaderCellDef>Data Format</mat-header-cell>
-            <mat-cell *matCellDef="let element">{{element.dataFormat}}</mat-cell>
+            <mat-cell *matCellDef="let element">{{
+              element.dataFormat
+            }}</mat-cell>
           </ng-container>
           <ng-container matColumnDef="version">
             <mat-header-cell *matHeaderCellDef>Version</mat-header-cell>
-            <mat-cell *matCellDef="let element">{{element.version}}</mat-cell>
+            <mat-cell *matCellDef="let element">{{ element.version }}</mat-cell>
           </ng-container>
 
           <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-<mat-row *matRowDef="let row; columns: displayedColumns;" (click)="onClick(row.pid)"></mat-row>
+          <mat-row
+            *matRowDef="let row; columns: displayedColumns"
+            (click)="onClick(row.pid)"
+          ></mat-row>
         </mat-table>
       </div>
     </div>
   </mat-tab>
 
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <i class="material-icons"> book </i>
+      Logbook
+    </ng-template>
+    <mat-card style="margin: 1em">
+      <app-logbooks-detail [proposal]="proposal"></app-logbooks-detail>
+    </mat-card>
+  </mat-tab>
+
   <mat-tab disabled>
     <ng-template mat-tab-label>
-      <i class="material-icons"> scanner </i> 
+      <i class="material-icons"> scanner </i>
       Instruments
     </ng-template>
     <div class="tab-content">

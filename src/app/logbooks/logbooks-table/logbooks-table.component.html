@@ -87,7 +87,10 @@
     <!-- End of Column Definitions -->
 
     <mat-header-row *matHeaderRowDef="columnsToDisplay"></mat-header-row>
-    <mat-row *matRowDef="let row; columns: columnsToDisplay"></mat-row>
+    <mat-row
+      *matRowDef="let logbook; columns: columnsToDisplay"
+      (click)="onClick(logbook)"
+    ></mat-row>
   </mat-table>
 </div>
 

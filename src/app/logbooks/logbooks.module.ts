@@ -42,9 +42,16 @@ import { NgxJsonViewerModule } from "ngx-json-viewer";
 import { RouterModule } from "@angular/router";
 import { SatDatepickerModule } from "saturn-datepicker";
 import { SharedCatanieModule } from "shared/shared.module";
+import { ContentSelectorComponent } from "./content-selector/content-selector.component";
+import { LogbooksDashboardComponent } from "./logbooks-dashboard/logbooks-dashboard.component";
 
 @NgModule({
-  declarations: [LogbooksTableComponent, LogbooksDetailComponent],
+  declarations: [
+    LogbooksTableComponent,
+    LogbooksDetailComponent,
+    ContentSelectorComponent,
+    LogbooksDashboardComponent
+  ],
   imports: [
     AppConfigModule,
     CommonModule,
@@ -87,6 +94,11 @@ import { SharedCatanieModule } from "shared/shared.module";
     SharedCatanieModule
   ],
   providers: [LogbookService],
-  exports: [LogbooksTableComponent, LogbooksDetailComponent]
+  exports: [
+    LogbooksTableComponent,
+    LogbooksDetailComponent,
+    LogbooksDashboardComponent,
+    ContentSelectorComponent
+  ]
 })
 export class LogbooksModule {}

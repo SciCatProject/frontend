@@ -22,7 +22,18 @@
     <ng-container matColumnDef="entry">
       <mat-header-cell *matHeaderCellDef> Entry </mat-header-cell>
       <mat-cell *matCellDef="let message">
-        {{ message.content.body }}
+        <div fxLayout="column" *ngIf="message.content.msgtype !== 'm.image'">
+          {{ message.content.body }}
+        </div>
+        <div fxLayout="column" *ngIf="message.content.msgtype === 'm.image'">
+          <a
+            href="{{ message.content.url }}"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <img src="{{ message.content.info.thumbnail_url }}" height="60px" />
+          </a>
+        </div>
       </mat-cell>
     </ng-container>
 

@@ -1,4 +1,5 @@
 import { Component, OnInit } from "@angular/core";
+import { Router } from "@angular/router";
 
 import { Logbook } from "shared/sdk/models";
 import { LogbookService } from "../logbook.service";
@@ -13,7 +14,7 @@ export class LogbooksTableComponent implements OnInit {
 
   columnsToDisplay: string[] = ["name", "latestEntry", "sender", "entry"];
 
-  constructor(private logbookService: LogbookService) {}
+  constructor(private logbookService: LogbookService, private router: Router) {}
 
   ngOnInit() {
     this.getLogbooks();
@@ -27,5 +28,9 @@ export class LogbooksTableComponent implements OnInit {
       });
       this.logbooks = logbooks;
     });
+  }
+
+  onClick(logbook: Logbook): void {
+    this.router.navigateByUrl("/logbooks/" + logbook.name);
   }
 }

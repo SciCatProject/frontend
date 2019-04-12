@@ -249,9 +249,7 @@
     <ng-template mat-tab-label>
       <i class="material-icons"> book </i> Logbook
     </ng-template>
-    <mat-card style="margin: 1em">
-      <app-logbooks-detail></app-logbooks-detail>
-    </mat-card>
+    <app-logbooks-dashboard [dataset]="dataset"></app-logbooks-dashboard>
   </mat-tab>
 
   <mat-tab *ngIf="(isAdmin$ | async)">
