@@ -15,7 +15,7 @@ export class ContentSelectorComponent implements OnInit {
   ngOnInit() {}
 
   isSelected(entry: string): boolean {
-    console.log("entry: " + entry);
+    // console.log("entry: " + entry);
     return true;
   }
 

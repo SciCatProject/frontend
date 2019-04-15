@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from "@angular/core";
+import { MatTableDataSource } from "@angular/material";
 import { ActivatedRoute } from "@angular/router";
 
 import { Dataset, Logbook, Proposal } from "shared/sdk/models";
@@ -11,6 +12,8 @@ import { LogbookService } from "../logbook.service";
 })
 export class LogbooksDetailComponent implements OnInit {
   logbook: Logbook;
+  dataSource: MatTableDataSource<Object[]>;
+  displayedColumns: string[] = ["timestamp", "sender", "entry"];
   @Input() dataset: Dataset;
   @Input() proposal: Proposal;
 
@@ -28,7 +31,7 @@ export class LogbooksDetailComponent implements OnInit {
     if (name === null) {
       name = "ERIC";
     }
-    console.log("Logbook name: " + name);
+    // console.log("Logbook name: " + name);
     this.logbookService.getLogbook(name).subscribe(logbook => {
       logbook.messages.forEach(message => {
         if (message.content.msgtype === "m.image") {
@@ -45,6 +48,11 @@ export class LogbooksDetailComponent implements OnInit {
         }
       });
       this.logbook = logbook;
+      this.dataSource = new MatTableDataSource(this.logbook.messages);
     });
+  }
+
+  applyFilter(filterValue: string) {
+    this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 }

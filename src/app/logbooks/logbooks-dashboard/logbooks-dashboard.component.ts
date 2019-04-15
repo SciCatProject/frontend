@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from "@angular/core";
 import { Dataset, Logbook, Proposal } from "shared/sdk/models";
+import { MatTableDataSource } from "@angular/material";
 
 @Component({
   selector: "app-logbooks-dashboard",
@@ -10,6 +11,7 @@ export class LogbooksDashboardComponent implements OnInit {
   @Input() dataset: Dataset;
   @Input() logbook: Logbook;
   @Input() proposal: Proposal;
+  @Input() dataSource: MatTableDataSource<Object[]>;
 
   constructor() {}
 

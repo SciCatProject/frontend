@@ -23,16 +23,19 @@
 
 .mat-column-name {
   flex: 1 0 100px;
+  max-width: 300px;
   justify-content: left !important;
 }
 
 .mat-column-latestEntry {
   flex: 1 0 100px;
-  justify-content: center !important;
+  max-width: 300px;
+  justify-content: left !important;
 }
 
 .mat-column-sender {
   flex: 1 0 100px;
+  max-width: 300px;
   justify-content: left !important;
 }
 

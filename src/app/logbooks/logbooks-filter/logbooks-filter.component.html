@@ -1,0 +1,14 @@
+<div class="section-container">
+  <span class="title">Search</span>
+</div>
+
+<mat-form-field>
+  <input
+    matInput
+    class="search-input"
+    placeholder="Text Search"
+    aria-label="Text Search"
+    name="search"
+    (keyup)="applyFilter($event.target.value)"
+  />
+</mat-form-field>

@@ -44,13 +44,15 @@ import { SatDatepickerModule } from "saturn-datepicker";
 import { SharedCatanieModule } from "shared/shared.module";
 import { ContentSelectorComponent } from "./content-selector/content-selector.component";
 import { LogbooksDashboardComponent } from "./logbooks-dashboard/logbooks-dashboard.component";
+import { LogbooksFilterComponent } from './logbooks-filter/logbooks-filter.component';
 
 @NgModule({
   declarations: [
     LogbooksTableComponent,
     LogbooksDetailComponent,
     ContentSelectorComponent,
-    LogbooksDashboardComponent
+    LogbooksDashboardComponent,
+    LogbooksFilterComponent
   ],
   imports: [
     AppConfigModule,

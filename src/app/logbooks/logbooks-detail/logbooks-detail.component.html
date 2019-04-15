@@ -1,5 +1,5 @@
 <div *ngIf="logbook && logbook.messages.length > 0">
-  <mat-table [dataSource]="logbook.messages">
+  <mat-table [dataSource]="dataSource">
     <!-- Column Definitions -->
 
     <!-- Timestamp Column -->
@@ -39,12 +39,8 @@
 
     <!-- End of Column Definitions -->
 
-    <mat-header-row
-      *matHeaderRowDef="['timestamp', 'sender', 'entry']"
-    ></mat-header-row>
-    <mat-row
-      *matRowDef="let row; columns: ['timestamp', 'sender', 'entry']"
-    ></mat-row>
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
   </mat-table>
 </div>
 
