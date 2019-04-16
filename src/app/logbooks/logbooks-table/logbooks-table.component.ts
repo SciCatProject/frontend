@@ -1,8 +1,12 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, Inject } from "@angular/core";
 import { Router } from "@angular/router";
+import { select, Store } from "@ngrx/store";
+import { Observable } from "rxjs";
+import { APP_CONFIG, AppConfig } from "app-config.module";
 
-import { Logbook } from "shared/sdk/models";
-import { LogbookService } from "../logbook.service";
+import { FetchLogbooksAction } from "state-management/actions/logbooks.actions";
+import { getLogbooks } from "state-management/selectors/logbooks.selector";
+import { Logbook } from "state-management/models";
 
 @Component({
   selector: "app-logbooks-table",
@@ -10,24 +14,20 @@ import { LogbookService } from "../logbook.service";
   styleUrls: ["./logbooks-table.component.scss"]
 })
 export class LogbooksTableComponent implements OnInit {
-  logbooks: Logbook[];
+  logbooks$: Observable<Logbook[]>;
 
   columnsToDisplay: string[] = ["name", "latestEntry", "sender", "entry"];
 
-  constructor(private logbookService: LogbookService, private router: Router) {}
-
-  ngOnInit() {
-    this.getLogbooks();
+  constructor(
+    private router: Router,
+    private store: Store<Logbook[]>,
+    @Inject(APP_CONFIG) public appConfig: AppConfig
+  ) {
+    this.logbooks$ = store.pipe(select(getLogbooks));
   }
 
-  getLogbooks(): void {
-    this.logbookService.getLogbooks().subscribe(logbooks => {
-      logbooks.forEach(logbook => {
-        let descendingMessages = logbook.messages.reverse();
-        logbook.messages = descendingMessages;
-      });
-      this.logbooks = logbooks;
-    });
+  ngOnInit() {
+    this.store.dispatch(new FetchLogbooksAction());
   }
 
   onClick(logbook: Logbook): void {

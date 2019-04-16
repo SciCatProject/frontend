@@ -6,7 +6,8 @@ import {
   RawDataset,
   Proposal,
   Policy,
-  Sample
+  Sample,
+  Logbook
 } from "shared/sdk/models";
 export {
   User,
@@ -16,7 +17,8 @@ export {
   RawDataset,
   Proposal,
   Policy,
-  Sample
+  Sample,
+  Logbook
 };
 
 import { DatasetInterface } from "shared/sdk";

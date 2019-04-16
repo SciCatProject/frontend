@@ -1,9 +1,9 @@
 <div
   class="logbooks-table"
   style="min-width: 1060px"
-  *ngIf="logbooks && logbooks.length > 0"
+  *ngIf="(logbooks$ | async) && (logbooks$ | async).length > 0"
 >
-  <mat-table [dataSource]="logbooks" class="logbook-table mat-elevation-z2">
+  <mat-table [dataSource]="logbooks$" class="logbook-table mat-elevation-z2">
     <!-- Column Definitions -->
 
     <!-- Name Column -->

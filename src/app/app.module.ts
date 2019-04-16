@@ -9,7 +9,7 @@ import { DatasetEffects } from "state-management/effects/datasets.effects";
 import { DatasetService } from "datasets/dataset.service";
 import { DatasetsModule } from "datasets/datasets.module";
 import { EffectsModule } from "@ngrx/effects";
-import { FlexLayoutModule} from "@angular/flex-layout";
+import { FlexLayoutModule } from "@angular/flex-layout";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { HttpClientModule } from "@angular/common/http";
@@ -23,7 +23,7 @@ import { PoliciesModule } from "policies/policies.module";
 import { ProposalsModule } from "proposals/proposals.module";
 import { RouterModule } from "@angular/router";
 import { SampleApi, SDKBrowserModule } from "shared/sdk/index";
-import { SamplesModule} from "./samples/samples.module";
+import { SamplesModule } from "./samples/samples.module";
 import { SatDatepickerModule, SatNativeDateModule } from "saturn-datepicker";
 import { SharedCatanieModule } from "shared/shared.module";
 import { StoreDevtoolsModule } from "@ngrx/store-devtools";
@@ -49,24 +49,21 @@ import {
   MatSnackBarModule,
   MatTableModule,
   MatToolbarModule,
-  MatButtonToggleModule,
+  MatButtonToggleModule
 } from "@angular/material";
 import { SampleService } from "./samples/sample.service";
 import { SamplesEffects } from "./state-management/effects/samples.effects";
-import { ServiceWorkerModule } from '@angular/service-worker';
-import { environment } from '../environments/environment';
+import { ServiceWorkerModule } from "@angular/service-worker";
+import { environment } from "../environments/environment";
 import { LogbooksModule } from "./logbooks/logbooks.module";
+import { LogbookEffect } from "state-management/effects/logbooks.effects";
 
 export function localStorageSyncWrapper(reducer: any) {
   return localStorageSync({ keys: ["root"], rehydrate: true })(reducer);
 }
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    JobsTableComponent,
-    JobsDetailComponent
-  ],
+  declarations: [AppComponent, JobsTableComponent, JobsDetailComponent],
   imports: [
     AppConfigModule,
     AppRoutingModule,
@@ -113,10 +110,13 @@ export function localStorageSyncWrapper(reducer: any) {
       UserEffects,
       JobsEffects,
       PoliciesEffects,
-      SamplesEffects
+      SamplesEffects,
+      LogbookEffect
     ]),
     StoreRouterConnectingModule,
-    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
+    ServiceWorkerModule.register("ngsw-worker.js", {
+      enabled: environment.production
+    })
   ],
   exports: [MatNativeDateModule],
   providers: [
