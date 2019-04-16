@@ -7,3 +7,8 @@ export const getLogbooks = createSelector(
   getLogbookState,
   state => state.logbooks
 );
+
+export const getLogbook = createSelector(
+  getLogbookState,
+  state => state.logbook
+);

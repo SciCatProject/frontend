@@ -1,29 +1,44 @@
-import { Component, OnInit, Input } from "@angular/core";
-import { MatTableDataSource } from "@angular/material";
+import { Component, OnInit, Inject, Input, OnDestroy } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
+import { select, Store } from "@ngrx/store";
+import { Subscription } from "rxjs";
+import { APP_CONFIG, AppConfig } from "app-config.module";
 
-import { Dataset, Logbook, Proposal } from "shared/sdk/models";
-import { LogbookService } from "../logbook.service";
+import { Dataset, Proposal } from "shared/sdk/models";
+import { FetchLogbookAction } from "state-management/actions/logbooks.actions";
+import { getLogbook } from "state-management/selectors/logbooks.selector";
+import { Logbook } from "state-management/models";
 
 @Component({
   selector: "app-logbooks-detail",
   templateUrl: "./logbooks-detail.component.html",
   styleUrls: ["./logbooks-detail.component.scss"]
 })
-export class LogbooksDetailComponent implements OnInit {
+export class LogbooksDetailComponent implements OnInit, OnDestroy {
   logbook: Logbook;
-  dataSource: MatTableDataSource<Object[]>;
+  logbookSubscription: Subscription;
   displayedColumns: string[] = ["timestamp", "sender", "entry"];
   @Input() dataset: Dataset;
   @Input() proposal: Proposal;
 
   constructor(
-    private logbookService: LogbookService,
-    private route: ActivatedRoute
-  ) {}
+    private route: ActivatedRoute,
+    private store: Store<Logbook>,
+    @Inject(APP_CONFIG) public appConfig: AppConfig
+  ) {
+    this.logbookSubscription = store
+      .pipe(select(getLogbook))
+      .subscribe(logbook => {
+        this.logbook = logbook;
+      });
+  }
 
   ngOnInit() {
     this.getLogbook();
+  }
+
+  ngOnDestroy() {
+    this.logbookSubscription.unsubscribe();
   }
 
   getLogbook(): void {
@@ -31,28 +46,10 @@ export class LogbooksDetailComponent implements OnInit {
     if (name === null) {
       name = "ERIC";
     }
-    // console.log("Logbook name: " + name);
-    this.logbookService.getLogbook(name).subscribe(logbook => {
-      logbook.messages.forEach(message => {
-        if (message.content.msgtype === "m.image") {
-          let externalThumbnailUrl = message.content.info.thumbnail_url.replace(
-            "mxc://",
-            "https://scicat03.esss.lu.se:8448/_matrix/media/r0/download/"
-          );
-          message.content.info.thumbnail_url = externalThumbnailUrl;
-          let externalFullsizeUrl = message.content.url.replace(
-            "mxc://",
-            "https://scicat03.esss.lu.se:8448/_matrix/media/r0/download/"
-          );
-          message.content.url = externalFullsizeUrl;
-        }
-      });
-      this.logbook = logbook;
-      this.dataSource = new MatTableDataSource(this.logbook.messages);
-    });
+    this.store.dispatch(new FetchLogbookAction(name));
   }
 
-  applyFilter(filterValue: string) {
-    this.dataSource.filter = filterValue.trim().toLowerCase();
-  }
+  // applyFilter(filterValue: string) {
+  //   this.dataSource.filter = filterValue.trim().toLowerCase();
+  // }
 }
