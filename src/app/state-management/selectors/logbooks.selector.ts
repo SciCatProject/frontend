@@ -13,7 +13,12 @@ export const getLogbook = createSelector(
   state => state.logbook
 );
 
-export const getFilteredLogbook = createSelector(
+export const getSearchedEntries = createSelector(
+  getLogbookState,
+  state => state.logbook
+);
+
+export const getFilteredEntries = createSelector(
   getLogbookState,
   state => state.logbook
 );

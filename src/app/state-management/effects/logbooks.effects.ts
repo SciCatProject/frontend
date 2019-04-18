@@ -13,11 +13,19 @@ import {
   FetchLogbookAction,
   FetchLogbookCompleteAction,
   FetchLogbookFailedAction,
-  FetchFilteredLogbookOutcomeAction,
-  FetchFilteredLogbookAction,
-  FetchFilteredLogbookCompleteAction,
-  FetchFilteredLogbookFailedAction
+  FetchSearchedEntriesOutcomeAction,
+  FetchSearchedEntriesAction,
+  FetchSearchedEntriesCompleteAction,
+  FetchSearchedEntriesFailedAction,
+  FetchFilteredEntriesOutcomeActions,
+  FetchFilteredEntriesAction,
+  FetchFilteredEntriesCompleteAction,
+  FetchFilteredEntriesFailedAction
 } from "state-management/actions/logbooks.actions";
+import {
+  getSearchedEntries,
+  getFilteredEntries
+} from "state-management/selectors/logbooks.selector";
 
 @Injectable()
 export class LogbookEffect {
@@ -44,14 +52,27 @@ export class LogbookEffect {
   );
 
   @Effect()
-  getFilteredLogbook: Observable<
-    FetchFilteredLogbookOutcomeAction
+  getSearchedEntries: Observable<
+    FetchSearchedEntriesOutcomeAction
   > = this.actions$.pipe(
-    ofType<FetchFilteredLogbookAction>(ActionTypes.FETCH_FILTERED_LOGBOOK),
+    ofType<FetchSearchedEntriesAction>(ActionTypes.FETCH_SEARCHED_ENTRIES),
     mergeMap(action =>
-      this.logbookService.getFilteredLogbook(action.name, action.query).pipe(
-        map(logbook => new FetchFilteredLogbookCompleteAction(logbook)),
-        catchError(() => of(new FetchFilteredLogbookFailedAction()))
+      this.logbookService.getSearchedEntries(action.name, action.query).pipe(
+        map(logbook => new FetchSearchedEntriesCompleteAction(logbook)),
+        catchError(() => of(new FetchSearchedEntriesFailedAction()))
+      )
+    )
+  );
+
+  @Effect()
+  getFilteredEntries: Observable<
+    FetchFilteredEntriesOutcomeActions
+  > = this.actions$.pipe(
+    ofType<FetchFilteredEntriesAction>(ActionTypes.FETCH_FILTERED_ENTRIES),
+    mergeMap(action =>
+      this.logbookService.getFilteredEntries(action.name, action.query).pipe(
+        map(logbook => new FetchFilteredEntriesCompleteAction(logbook)),
+        catchError(() => of(new FetchFilteredEntriesFailedAction()))
       )
     )
   );

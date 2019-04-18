@@ -18,7 +18,11 @@ export class LogbookService {
     return this.logbookApi.findByName(name);
   }
 
-  getFilteredLogbook(name: string, query: string): Observable<Logbook> {
+  getSearchedEntries(name: string, query: string): Observable<Logbook> {
     return this.logbookApi.findEntries(name, query);
+  }
+
+  getFilteredEntries(name: string, query: string): Observable<Logbook> {
+    return this.logbookApi.filterEntries(name, query);
   }
 }

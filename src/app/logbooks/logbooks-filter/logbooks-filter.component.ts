@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { Subscription } from "rxjs";
 import { Store, select } from "@ngrx/store";
-import { FetchFilteredLogbookAction } from "state-management/actions/logbooks.actions";
+import { FetchSearchedEntriesAction } from "state-management/actions/logbooks.actions";
 import { Logbook } from "shared/sdk";
 import { getLogbook } from "state-management/selectors/logbooks.selector";
 
@@ -31,7 +31,7 @@ export class LogbooksFilterComponent implements OnInit, OnDestroy {
 
   textSearchChanged(query: string) {
     this.store.dispatch(
-      new FetchFilteredLogbookAction(this.logbook.name, query)
+      new FetchSearchedEntriesAction(this.logbook.name, query)
     );
   }
 }

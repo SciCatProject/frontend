@@ -4,7 +4,8 @@ import {
   FetchLogbooksCompleteAction,
   LogbooksAction,
   FetchLogbookCompleteAction,
-  FetchFilteredLogbookCompleteAction
+  FetchSearchedEntriesCompleteAction,
+  FetchFilteredEntriesCompleteAction
 } from "../actions/logbooks.actions";
 import { Logbook } from "shared/sdk";
 
@@ -27,8 +28,13 @@ export function logbooksReducer(
       formatImageUrls(logbook);
       return { ...state, logbook };
     }
-    case ActionTypes.FETCH_FILTERED_LOGBOOK_COMPLETE: {
-      let logbook = (action as FetchFilteredLogbookCompleteAction).logbook;
+    case ActionTypes.FETCH_SEARCHED_ENTRIES_COMPLETE: {
+      let logbook = (action as FetchSearchedEntriesCompleteAction).logbook;
+      formatImageUrls(logbook);
+      return { ...state, logbook };
+    }
+    case ActionTypes.FETCH_FILTERED_ENTRIES_COMPLETE: {
+      let logbook = (action as FetchFilteredEntriesCompleteAction).logbook;
       formatImageUrls(logbook);
       return { ...state, logbook };
     }
