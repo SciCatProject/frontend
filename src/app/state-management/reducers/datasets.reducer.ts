@@ -315,28 +315,57 @@ export function datasetsReducer(
           mode = {};
           break;
         case ArchViewMode.archivable:
-          mode = { "datasetlifecycle.archivable": true, "datasetlifecycle.retrievable": false };
+          mode = {
+            "datasetlifecycle.archivable": true,
+            "datasetlifecycle.retrievable": false
+          };
           break;
         case ArchViewMode.retrievable:
-          mode = { "datasetlifecycle.retrievable": true, "datasetlifecycle.archivable": false };
+          mode = {
+            "datasetlifecycle.retrievable": true,
+            "datasetlifecycle.archivable": false
+          };
           break;
         case ArchViewMode.work_in_progress:
           mode = {
             $or: [
               {
                 "datasetlifecycle.retrievable": false,
-                "datasetlifecycle.archivable": false
-              },
+                "datasetlifecycle.archivable": false,
+                "datasetlifecycle.archiveStatusMessage": { $ne: "scheduleArchiveJobFailed"},
+                "datasetlifecycle.retrieveStatusMessage": { $ne: "scheduleRetrieveJobFailed"},
+              }
+            ]
+          };
+          break;
+        case ArchViewMode.system_error:
+          mode = {
+            $or: [
               {
                 "datasetlifecycle.retrievable": true,
                 "datasetlifecycle.archivable": true
+              },
+              {
+                "datasetlifecycle.archiveStatusMessage": "scheduleArchiveJobFailed"
+              },
+              {
+                "datasetlifecycle.retrieveStatusMessage": "scheduleRetrieveJobFailed"
+              }
+            ]
+          };
+          break;
+        case ArchViewMode.user_error:
+          mode = {
+            $or: [
+              {
+                "datasetlifecycle.archiveStatusMessage": "missingFilesError"
               }
             ]
           };
           break;
       }
       const filters = { ...state.filters, mode, modeToggle };
-      return { ...state, filters  };
+      return { ...state, filters };
     }
 
     case ADD_SCIENTIFIC_CONDITION: {
