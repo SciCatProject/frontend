@@ -1,6 +1,5 @@
 import { Component, OnInit, Inject } from "@angular/core";
 import { MatCheckboxChange } from "@angular/material";
-import { AppConfig, APP_CONFIG } from "app-config.module";
 
 @Component({
   selector: "app-content-selector",
@@ -10,7 +9,7 @@ import { AppConfig, APP_CONFIG } from "app-config.module";
 export class ContentSelectorComponent implements OnInit {
   public entries = ["Bot Messages", "User Messages", "Images"];
 
-  constructor(@Inject(APP_CONFIG) public appConfig: AppConfig) {}
+  constructor() {}
 
   ngOnInit() {}
 

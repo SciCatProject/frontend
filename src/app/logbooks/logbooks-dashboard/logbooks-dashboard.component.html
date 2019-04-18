@@ -1,7 +1,7 @@
 <div fxLayout="row" fxLayout.xs="column">
   <div fxFlex="14" style="margin-right: 1em">
     <mat-card style="margin: 1em">
-      <app-logbooks-filter [dataSource]="dataSource"></app-logbooks-filter>
+      <app-logbooks-filter></app-logbooks-filter>
     </mat-card>
     <mat-card style="margin: 1em">
       <app-content-selector></app-content-selector>
@@ -9,7 +9,7 @@
   </div>
   <div fxFlex="85">
     <mat-card style="margin: 1em">
-      <app-logbooks-detail [dataset]="dataset"></app-logbooks-detail>
+      <app-logbooks-detail></app-logbooks-detail>
     </mat-card>
   </div>
 </div>

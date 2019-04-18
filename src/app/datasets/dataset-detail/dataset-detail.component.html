@@ -245,11 +245,11 @@
     </ng-container>
   </mat-tab>
 
-  <mat-tab>
+  <mat-tab *ngIf="appConfig.logbookEnabled">
     <ng-template mat-tab-label>
       <i class="material-icons"> book </i> Logbook
     </ng-template>
-    <app-logbooks-dashboard [dataset]="dataset"></app-logbooks-dashboard>
+    <app-logbooks-dashboard></app-logbooks-dashboard>
   </mat-tab>
 
   <mat-tab *ngIf="(isAdmin$ | async)">

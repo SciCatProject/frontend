@@ -12,7 +12,11 @@ import {
   FetchLogbookOutcomeAction,
   FetchLogbookAction,
   FetchLogbookCompleteAction,
-  FetchLogbookFailedAction
+  FetchLogbookFailedAction,
+  FetchFilteredLogbookOutcomeAction,
+  FetchFilteredLogbookAction,
+  FetchFilteredLogbookCompleteAction,
+  FetchFilteredLogbookFailedAction
 } from "state-management/actions/logbooks.actions";
 
 @Injectable()
@@ -35,6 +39,19 @@ export class LogbookEffect {
       this.logbookService.getLogbook(action.name).pipe(
         map(logbook => new FetchLogbookCompleteAction(logbook)),
         catchError(() => of(new FetchLogbookFailedAction()))
+      )
+    )
+  );
+
+  @Effect()
+  getFilteredLogbook: Observable<
+    FetchFilteredLogbookOutcomeAction
+  > = this.actions$.pipe(
+    ofType<FetchFilteredLogbookAction>(ActionTypes.FETCH_FILTERED_LOGBOOK),
+    mergeMap(action =>
+      this.logbookService.getFilteredLogbook(action.name, action.query).pipe(
+        map(logbook => new FetchFilteredLogbookCompleteAction(logbook)),
+        catchError(() => of(new FetchFilteredLogbookFailedAction()))
       )
     )
   );

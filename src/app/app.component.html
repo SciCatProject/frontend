@@ -32,6 +32,7 @@
       mat-menu-item
       [routerLinkActive]="['active']"
       [routerLink]="['/logbooks/']"
+      *ngIf="appConfig.logbookEnabled"
       ><i class="material-icons"> book </i> Logbooks</a
     >
     <a

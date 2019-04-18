@@ -12,3 +12,8 @@ export const getLogbook = createSelector(
   getLogbookState,
   state => state.logbook
 );
+
+export const getFilteredLogbook = createSelector(
+  getLogbookState,
+  state => state.logbook
+);

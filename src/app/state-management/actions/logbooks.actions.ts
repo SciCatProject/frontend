@@ -5,9 +5,14 @@ export enum ActionTypes {
   FETCH_LOGBOOKS = "[Logbook] Fetch Logbooks",
   FETCH_LOGBOOKS_COMPLETE = "[Logbook] Fetch Logbooks Complete",
   FETCH_LOGBOOKS_FAILED = "[Logbook] Fetch Logbooks Failed",
+
   FETCH_LOGBOOK = "[Logbook] Fetch Logbook",
   FETCH_LOGBOOK_COMPLETE = "[Logbook] Fetch Logbook Complete",
-  FETCH_LOGBOOK_FAILED = "[Logbook] Fetch Logbook Failed"
+  FETCH_LOGBOOK_FAILED = "[Logbook] Fetch Logbook Failed",
+
+  FETCH_FILTERED_LOGBOOK = "[Logbook] Fetch Filtered Logbook",
+  FETCH_FILTERED_LOGBOOK_COMPLETE = "[Logbook] Fetch Filtered Logbook Complete",
+  FETCH_FILTERED_LOGBOOK_FAILED = "[Logbook] Fetch Filtered Logbook Failed"
 }
 
 export class FetchLogbooksAction implements Action {
@@ -40,13 +45,32 @@ export class FetchLogbookFailedAction implements Action {
   readonly type = ActionTypes.FETCH_LOGBOOK_FAILED;
 }
 
+export class FetchFilteredLogbookAction implements Action {
+  readonly type = ActionTypes.FETCH_FILTERED_LOGBOOK;
+
+  constructor(readonly name: string, readonly query: string) {}
+}
+
+export class FetchFilteredLogbookCompleteAction implements Action {
+  readonly type = ActionTypes.FETCH_FILTERED_LOGBOOK_COMPLETE;
+
+  constructor(readonly logbook: Logbook) {}
+}
+
+export class FetchFilteredLogbookFailedAction implements Action {
+  readonly type = ActionTypes.FETCH_FILTERED_LOGBOOK_FAILED;
+}
+
 export type LogbooksAction =
   | FetchLogbooksAction
   | FetchLogbooksCompleteAction
   | FetchLogbooksFailedAction
   | FetchLogbookAction
   | FetchLogbookCompleteAction
-  | FetchLogbookFailedAction;
+  | FetchLogbookFailedAction
+  | FetchFilteredLogbookAction
+  | FetchFilteredLogbookCompleteAction
+  | FetchFilteredLogbookFailedAction;
 
 export type FetchLogbooksOutcomeAction =
   | FetchLogbooksCompleteAction
@@ -60,3 +84,7 @@ export type LogbookAction =
 export type FetchLogbookOutcomeAction =
   | FetchLogbookCompleteAction
   | FetchLogbookFailedAction;
+
+export type FetchFilteredLogbookOutcomeAction =
+  | FetchFilteredLogbookCompleteAction
+  | FetchFilteredLogbookFailedAction;

@@ -2,7 +2,6 @@ import { Component, OnInit, Inject } from "@angular/core";
 import { Router } from "@angular/router";
 import { select, Store } from "@ngrx/store";
 import { Observable } from "rxjs";
-import { APP_CONFIG, AppConfig } from "app-config.module";
 
 import { FetchLogbooksAction } from "state-management/actions/logbooks.actions";
 import { getLogbooks } from "state-management/selectors/logbooks.selector";
@@ -18,11 +17,7 @@ export class LogbooksTableComponent implements OnInit {
 
   columnsToDisplay: string[] = ["name", "latestEntry", "sender", "entry"];
 
-  constructor(
-    private router: Router,
-    private store: Store<Logbook[]>,
-    @Inject(APP_CONFIG) public appConfig: AppConfig
-  ) {
+  constructor(private router: Router, private store: Store<Logbook[]>) {
     this.logbooks$ = store.pipe(select(getLogbooks));
   }
 

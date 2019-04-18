@@ -2,11 +2,12 @@ import { Component, OnInit, Inject, Input, OnDestroy } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { select, Store } from "@ngrx/store";
 import { Subscription } from "rxjs";
-import { APP_CONFIG, AppConfig } from "app-config.module";
 
-import { Dataset, Proposal } from "shared/sdk/models";
 import { FetchLogbookAction } from "state-management/actions/logbooks.actions";
-import { getLogbook } from "state-management/selectors/logbooks.selector";
+import {
+  getLogbook,
+  getFilteredLogbook
+} from "state-management/selectors/logbooks.selector";
 import { Logbook } from "state-management/models";
 
 @Component({
@@ -17,28 +18,30 @@ import { Logbook } from "state-management/models";
 export class LogbooksDetailComponent implements OnInit, OnDestroy {
   logbook: Logbook;
   logbookSubscription: Subscription;
+  filteredLogbookSubscription: Subscription;
   displayedColumns: string[] = ["timestamp", "sender", "entry"];
-  @Input() dataset: Dataset;
-  @Input() proposal: Proposal;
 
-  constructor(
-    private route: ActivatedRoute,
-    private store: Store<Logbook>,
-    @Inject(APP_CONFIG) public appConfig: AppConfig
-  ) {
-    this.logbookSubscription = store
+  constructor(private route: ActivatedRoute, private store: Store<Logbook>) {}
+
+  ngOnInit() {
+    this.getLogbook();
+
+    this.logbookSubscription = this.store
       .pipe(select(getLogbook))
+      .subscribe(logbook => {
+        this.logbook = logbook;
+      });
+
+    this.filteredLogbookSubscription = this.store
+      .pipe(select(getFilteredLogbook))
       .subscribe(logbook => {
         this.logbook = logbook;
       });
   }
 
-  ngOnInit() {
-    this.getLogbook();
-  }
-
   ngOnDestroy() {
     this.logbookSubscription.unsubscribe();
+    this.filteredLogbookSubscription.unsubscribe();
   }
 
   getLogbook(): void {
@@ -48,8 +51,4 @@ export class LogbooksDetailComponent implements OnInit, OnDestroy {
     }
     this.store.dispatch(new FetchLogbookAction(name));
   }
-
-  // applyFilter(filterValue: string) {
-  //   this.dataSource.filter = filterValue.trim().toLowerCase();
-  // }
 }

@@ -19,6 +19,7 @@ export class AppConfig {
   multipleDownloadAction?: string;
   columnSelectEnabled: boolean;
   userProfileImageEnabled: boolean;
+  logbookEnabled: boolean;
 }
 
 export const APP_DI_CONFIG: AppConfig = {
@@ -36,7 +37,8 @@ export const APP_DI_CONFIG: AppConfig = {
   multipleDownloadEnabled: environment["multipleDownloadEnabled"] || false,
   multipleDownloadAction: environment["multipleDownloadAction"],
   columnSelectEnabled: environment["columnSelectEnabled"] || false,
-  userProfileImageEnabled: environment["userProfileImageEnabled"] || false
+  userProfileImageEnabled: environment["userProfileImageEnabled"] || false,
+  logbookEnabled: environment["logbookEnabled"] || false
 };
 
 @NgModule({

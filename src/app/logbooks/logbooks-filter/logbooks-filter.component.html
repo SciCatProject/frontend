@@ -6,9 +6,10 @@
   <input
     matInput
     class="search-input"
-    placeholder="Text Search"
-    aria-label="Text Search"
+    placeholder="Search Entries"
+    aria-label="Search Entries"
     name="search"
-    (keyup)="applyFilter($event.target.value)"
+    [ngModel]="query"
+    (ngModelChange)="textSearchChanged($event)"
   />
 </mat-form-field>

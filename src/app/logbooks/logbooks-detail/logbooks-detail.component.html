@@ -31,7 +31,11 @@
             target="_blank"
             rel="noopener noreferrer"
           >
-            <img src="{{ message.content.info.thumbnail_url }}" height="60px" />
+            <img
+              src="{{ message.content.info.thumbnail_url }}"
+              alt="{{ message.content.body }}"
+              height="60px"
+            />
           </a>
         </div>
       </mat-cell>
@@ -40,7 +44,7 @@
     <!-- End of Column Definitions -->
 
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
   </mat-table>
 </div>
 
