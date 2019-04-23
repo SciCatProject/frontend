@@ -71,6 +71,7 @@
       <h3 class="app-title">{{ title }}</h3>
       <span class="example-spacer"></span>
       <div *ngIf="(isLoggedIn$ | async) || !appConfig.production">
+        <button><div>? </div></button>
         <button class="userButton" [matMenuTriggerFor]="userMenu">
           <img
             class="user-image"

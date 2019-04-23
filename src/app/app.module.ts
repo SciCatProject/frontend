@@ -40,6 +40,7 @@ import { LoginService } from "users/login.service";
 import {
   MatCardModule,
   MatDatepickerModule,
+  MatDialogModule,
   MatGridListModule,
   MatIconModule,
   MatListModule,
@@ -79,6 +80,7 @@ export function localStorageSyncWrapper(reducer: any) {
     HttpClientModule,
     MatCardModule,
     MatDatepickerModule,
+    MatDialogModule,
     MatGridListModule,
     MatIconModule,
     MatListModule,
