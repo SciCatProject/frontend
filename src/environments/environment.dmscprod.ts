@@ -11,5 +11,6 @@ export const environment = {
   archiveWorkflowEnabled: false,
   disabledDatasetColumns: ["archiveStatus", "retrieveStatus"],
   userProfileImageEnabled: true,
-  facility: "ESS"
+  facility: "ESS",
+  tableSciDataEnabled: true
 };
