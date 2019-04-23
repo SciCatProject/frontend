@@ -3,6 +3,7 @@ import { Observable } from "rxjs";
 
 import { LogbookApi } from "shared/sdk/services";
 import { Logbook } from "shared/sdk/models";
+import { LogbookFilters } from "state-management/models";
 
 @Injectable({
   providedIn: "root"
@@ -18,11 +19,7 @@ export class LogbookService {
     return this.logbookApi.findByName(name);
   }
 
-  getSearchedEntries(name: string, query: string): Observable<Logbook> {
-    return this.logbookApi.findEntries(name, query);
-  }
-
-  getFilteredEntries(name: string, query: string): Observable<Logbook> {
-    return this.logbookApi.filterEntries(name, query);
+  getFilteredEntries(name: string, filter: Object): Observable<Logbook> {
+    return this.logbookApi.filter(name, filter);
   }
 }

@@ -6,7 +6,6 @@ import { Subscription } from "rxjs";
 import { FetchLogbookAction } from "state-management/actions/logbooks.actions";
 import {
   getLogbook,
-  getSearchedEntries,
   getFilteredEntries
 } from "state-management/selectors/logbooks.selector";
 import { Logbook } from "state-management/models";
@@ -19,8 +18,7 @@ import { Logbook } from "state-management/models";
 export class LogbooksDetailComponent implements OnInit, OnDestroy {
   logbook: Logbook;
   logbookSubscription: Subscription;
-  searchedEntriesSubscription: Subscription;
-  filteredEntriesSubscription: Subscription;
+  filteredLogbookDescription: Subscription;
   displayedColumns: string[] = ["timestamp", "sender", "entry"];
 
   constructor(private route: ActivatedRoute, private store: Store<Logbook>) {}
@@ -34,21 +32,14 @@ export class LogbooksDetailComponent implements OnInit, OnDestroy {
         this.logbook = logbook;
       });
 
-    this.searchedEntriesSubscription = this.store
-      .pipe(select(getSearchedEntries))
-      .subscribe(logbook => {
-        this.logbook = logbook;
-      });
-
-    this.filteredEntriesSubscription = this.store
+    this.filteredLogbookDescription = this.store
       .pipe(select(getFilteredEntries))
       .subscribe(logbook => (this.logbook = logbook));
   }
 
   ngOnDestroy() {
     this.logbookSubscription.unsubscribe();
-    this.searchedEntriesSubscription.unsubscribe();
-    this.filteredEntriesSubscription.unsubscribe();
+    this.filteredLogbookDescription.unsubscribe();
   }
 
   getLogbook(): void {

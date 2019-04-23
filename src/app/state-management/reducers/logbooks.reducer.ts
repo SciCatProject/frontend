@@ -2,16 +2,16 @@ import { initialLogbookState, LogbookState } from "../state/logbooks.store";
 import {
   ActionTypes,
   FetchLogbooksCompleteAction,
-  LogbooksAction,
   FetchLogbookCompleteAction,
-  FetchSearchedEntriesCompleteAction,
-  FetchFilteredEntriesCompleteAction
+  FetchFilteredEntriesCompleteAction,
+  UpdateFilterCompleteAction,
+  AllActions,
 } from "../actions/logbooks.actions";
 import { Logbook } from "shared/sdk";
 
 export function logbooksReducer(
   state: LogbookState = initialLogbookState,
-  action: LogbooksAction
+  action: AllActions
 ): LogbookState {
   console.log("Action came in! " + action.type);
   switch (action.type) {
@@ -28,15 +28,14 @@ export function logbooksReducer(
       formatImageUrls(logbook);
       return { ...state, logbook };
     }
-    case ActionTypes.FETCH_SEARCHED_ENTRIES_COMPLETE: {
-      let logbook = (action as FetchSearchedEntriesCompleteAction).logbook;
-      formatImageUrls(logbook);
-      return { ...state, logbook };
-    }
     case ActionTypes.FETCH_FILTERED_ENTRIES_COMPLETE: {
       let logbook = (action as FetchFilteredEntriesCompleteAction).logbook;
       formatImageUrls(logbook);
       return { ...state, logbook };
+    }
+    case ActionTypes.UPDATE_FILTER_COMPLETE: {
+      let filters = (action as UpdateFilterCompleteAction).filter;
+      return { ...state, filters };
     }
     default: {
       return state;

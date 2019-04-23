@@ -56,7 +56,7 @@ export class LogbookApi extends BaseLoopBackApi {
   /**
    * Find all Logbook model instances
    *
-   * @returns {object[]} An empty reference that will be
+   * @returns {object} An empty reference that will be
    *   populated with the actual data once the response is returned
    *   from the server.
    *
@@ -76,11 +76,11 @@ export class LogbookApi extends BaseLoopBackApi {
   }
 
   /**
-   * Find all Logbook entries matching the query
+   * Filter Logbook entries matching query
    *
    * @param {string} name The name of the Logbook
    *
-   * @param {string} query Query of content in Logbook entry
+   * @param {string} filter Filter JSON object, keys: textSearch, showBotMessages, showUserMessages, showImages
    *
    * @returns {object} An empty reference that will be
    *   populated with the actual data once the response is returned
@@ -88,40 +88,13 @@ export class LogbookApi extends BaseLoopBackApi {
    *
    * Filtered Logbook model instance
    */
-  public findEntries(name: any, query: any, customHeaders?: Function): Observable<Logbook> {
+  public filter(name: any, filter: any, customHeaders?: Function): Observable<Logbook> {
     let _method: string = "GET";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/Logbooks/:name/:query";
+    "/Logbooks/:name/:filter";
     let _routeParams: any = {
       name: name,
-      query: query
-    };
-    let _postBody: any = {};
-    let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
-    return result.pipe(map((instance: Logbook) => new Logbook(instance)));
-  }
-
-  /**
-   * Filter Logbook entries matching query
-   *
-   * @param {string} name The name of the logbook
-   *
-   * @param {string} query Query used to filter Logbook entries
-   *
-   * @returns {object} An empty reference that will be
-   *   populated with the actual data once the response is returned
-   *   from the server.
-   *
-   * Filtered Logbook model instance
-   */
-  public filterEntries(name: any, query: any, customHeaders?: Function): Observable<Logbook> {
-    let _method: string = "GET";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/Logbooks/:name/filter/:query";
-    let _routeParams: any = {
-      name: name,
-      query: query
+      filter: filter
     };
     let _postBody: any = {};
     let _urlParams: any = {};

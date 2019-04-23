@@ -85,3 +85,10 @@ export interface PolicyFilters {
   skip: number;
   limit: number;
 }
+
+export interface LogbookFilters {
+  textSearch: string;
+  showBotMessages: boolean;
+  showUserMessages: boolean;
+  showImages: boolean
+}

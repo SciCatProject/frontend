@@ -1,5 +1,5 @@
 import { Action } from "@ngrx/store";
-import { Logbook } from "../models";
+import { Logbook, LogbookFilters } from "../models";
 
 export enum ActionTypes {
   FETCH_LOGBOOKS = "[Logbook] Fetch Logbooks",
@@ -10,9 +10,9 @@ export enum ActionTypes {
   FETCH_LOGBOOK_COMPLETE = "[Logbook] Fetch Logbook Complete",
   FETCH_LOGBOOK_FAILED = "[Logbook] Fetch Logbook Failed",
 
-  FETCH_SEARCHED_ENTRIES = "[Logbook] Fetch Searched Entries",
-  FETCH_SEARCHED_ENTRIES_COMPLETE = "[Logbook] Fetch Searched Entries Complete",
-  FETCH_SEARCHED_ENTRIES_FAILED = "[Logbook] Fetch Searched Entries Failed",
+  UPDATE_FILTER = "[Logbook] Update Filter",
+  UPDATE_FILTER_COMPLETE = "[Logbook] Update Filter Complete",
+  UPDATE_FILTER_FAILED = "[Logbook] Update Filter Failed",
 
   FETCH_FILTERED_ENTRIES = "[Logbook] Fetch Filtered Entries",
   FETCH_FILTERED_ENTRIES_COMPLETE = "[Logbook] Fetch Filtered Entries Complete",
@@ -49,26 +49,10 @@ export class FetchLogbookFailedAction implements Action {
   readonly type = ActionTypes.FETCH_LOGBOOK_FAILED;
 }
 
-export class FetchSearchedEntriesAction implements Action {
-  readonly type = ActionTypes.FETCH_SEARCHED_ENTRIES;
-
-  constructor(readonly name: string, readonly query: string) {}
-}
-
-export class FetchSearchedEntriesCompleteAction implements Action {
-  readonly type = ActionTypes.FETCH_SEARCHED_ENTRIES_COMPLETE;
-
-  constructor(readonly logbook: Logbook) {}
-}
-
-export class FetchSearchedEntriesFailedAction implements Action {
-  readonly type = ActionTypes.FETCH_SEARCHED_ENTRIES_FAILED;
-}
-
 export class FetchFilteredEntriesAction implements Action {
   readonly type = ActionTypes.FETCH_FILTERED_ENTRIES;
 
-  constructor(readonly name: string, readonly query: string) {}
+  constructor(readonly name: string, readonly filter: Object) {}
 }
 
 export class FetchFilteredEntriesCompleteAction implements Action {
@@ -81,37 +65,48 @@ export class FetchFilteredEntriesFailedAction implements Action {
   readonly type = ActionTypes.FETCH_FILTERED_ENTRIES_FAILED;
 }
 
-export type LogbooksAction =
+export class UpdateFilterAction implements Action {
+  readonly type = ActionTypes.UPDATE_FILTER;
+
+  constructor(readonly filter: LogbookFilters) {}
+}
+
+export class UpdateFilterCompleteAction implements Action {
+  readonly type = ActionTypes.UPDATE_FILTER_COMPLETE;
+
+  constructor(readonly filter: LogbookFilters) {}
+}
+
+export class UpdateFilterFailedAction implements Action {
+  readonly type = ActionTypes.UPDATE_FILTER_FAILED;
+}
+
+export type AllActions =
   | FetchLogbooksAction
   | FetchLogbooksCompleteAction
   | FetchLogbooksFailedAction
   | FetchLogbookAction
   | FetchLogbookCompleteAction
   | FetchLogbookFailedAction
-  | FetchSearchedEntriesAction
-  | FetchSearchedEntriesCompleteAction
-  | FetchSearchedEntriesFailedAction
   | FetchFilteredEntriesAction
   | FetchFilteredEntriesCompleteAction
-  | FetchFilteredEntriesFailedAction;
+  | FetchFilteredEntriesFailedAction
+  | UpdateFilterAction
+  | UpdateFilterCompleteAction
+  | UpdateFilterFailedAction;
 
 export type FetchLogbooksOutcomeAction =
   | FetchLogbooksCompleteAction
   | FetchLogbooksFailedAction;
 
-export type LogbookAction =
-  | FetchLogbookAction
-  | FetchLogbookCompleteAction
-  | FetchLogbookFailedAction;
-
 export type FetchLogbookOutcomeAction =
   | FetchLogbookCompleteAction
   | FetchLogbookFailedAction;
 
-export type FetchSearchedEntriesOutcomeAction =
-  | FetchSearchedEntriesCompleteAction
-  | FetchSearchedEntriesFailedAction;
-
 export type FetchFilteredEntriesOutcomeActions =
   | FetchFilteredEntriesCompleteAction
   | FetchFilteredEntriesFailedAction;
+
+export type UpdateFilterOutcomeActions =
+  | UpdateFilterCompleteAction
+  | UpdateFilterFailedAction;

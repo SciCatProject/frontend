@@ -1,9 +1,16 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { Subscription } from "rxjs";
 import { Store, select } from "@ngrx/store";
-import { FetchSearchedEntriesAction } from "state-management/actions/logbooks.actions";
+import {
+  UpdateFilterAction,
+  FetchFilteredEntriesAction
+} from "state-management/actions/logbooks.actions";
 import { Logbook } from "shared/sdk";
-import { getLogbook } from "state-management/selectors/logbooks.selector";
+import {
+  getFilters,
+  getFilteredEntries
+} from "state-management/selectors/logbooks.selector";
+import { LogbookFilters } from "state-management/models";
 
 @Component({
   selector: "app-logbooks-filter",
@@ -13,25 +20,35 @@ import { getLogbook } from "state-management/selectors/logbooks.selector";
 export class LogbooksFilterComponent implements OnInit, OnDestroy {
   logbook: Logbook;
   logbookSubscription: Subscription;
+  filter: LogbookFilters;
+  filterSubscription: Subscription;
   query: string;
 
   constructor(private store: Store<any>) {}
 
   ngOnInit() {
     this.logbookSubscription = this.store
-      .pipe(select(getLogbook))
+      .pipe(select(getFilteredEntries))
       .subscribe(logbook => {
         this.logbook = logbook;
       });
+    this.filterSubscription = this.store
+      .pipe(select(getFilters))
+      .subscribe(filter => (this.filter = filter));
   }
 
   ngOnDestroy() {
     this.logbookSubscription.unsubscribe();
+    this.filterSubscription.unsubscribe();
   }
 
   textSearchChanged(query: string) {
+    this.filter.textSearch = query;
+    this.store.dispatch(new UpdateFilterAction(this.filter));
+
+    let filterJSON = JSON.stringify(this.filter);
     this.store.dispatch(
-      new FetchSearchedEntriesAction(this.logbook.name, query)
+      new FetchFilteredEntriesAction(this.logbook.name, filterJSON)
     );
   }
 }

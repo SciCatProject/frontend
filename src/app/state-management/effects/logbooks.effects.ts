@@ -13,19 +13,11 @@ import {
   FetchLogbookAction,
   FetchLogbookCompleteAction,
   FetchLogbookFailedAction,
-  FetchSearchedEntriesOutcomeAction,
-  FetchSearchedEntriesAction,
-  FetchSearchedEntriesCompleteAction,
-  FetchSearchedEntriesFailedAction,
   FetchFilteredEntriesOutcomeActions,
   FetchFilteredEntriesAction,
   FetchFilteredEntriesCompleteAction,
   FetchFilteredEntriesFailedAction
 } from "state-management/actions/logbooks.actions";
-import {
-  getSearchedEntries,
-  getFilteredEntries
-} from "state-management/selectors/logbooks.selector";
 
 @Injectable()
 export class LogbookEffect {
@@ -52,25 +44,12 @@ export class LogbookEffect {
   );
 
   @Effect()
-  getSearchedEntries: Observable<
-    FetchSearchedEntriesOutcomeAction
-  > = this.actions$.pipe(
-    ofType<FetchSearchedEntriesAction>(ActionTypes.FETCH_SEARCHED_ENTRIES),
-    mergeMap(action =>
-      this.logbookService.getSearchedEntries(action.name, action.query).pipe(
-        map(logbook => new FetchSearchedEntriesCompleteAction(logbook)),
-        catchError(() => of(new FetchSearchedEntriesFailedAction()))
-      )
-    )
-  );
-
-  @Effect()
   getFilteredEntries: Observable<
     FetchFilteredEntriesOutcomeActions
   > = this.actions$.pipe(
     ofType<FetchFilteredEntriesAction>(ActionTypes.FETCH_FILTERED_ENTRIES),
     mergeMap(action =>
-      this.logbookService.getFilteredEntries(action.name, action.query).pipe(
+      this.logbookService.getFilteredEntries(action.name, action.filter).pipe(
         map(logbook => new FetchFilteredEntriesCompleteAction(logbook)),
         catchError(() => of(new FetchFilteredEntriesFailedAction()))
       )
