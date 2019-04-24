@@ -89,6 +89,10 @@ export class PublishComponent implements OnInit {
     });
   }
 
+
+  public onRegister() {
+  }
+
   addAuthor(event) {
     this.form.authors.push(event.value);
     event.input.value = "";

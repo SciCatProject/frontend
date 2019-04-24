@@ -103,13 +103,23 @@
       ></textarea>
     </mat-form-field>
 
-    <button
-      (click)="onPublish()"
-      mat-raised-button
-      color="primary"
-      [disabled]="!formIsValid()"
-    >
-      Publish
-    </button>
+    <div fxLayout="row" fxLayoutGap="20px">
+      <button
+        (click)="onPublish()"
+        mat-raised-button
+        color="primary"
+        [disabled]="!formIsValid()"
+      >
+        Publish
+      </button>
+      <button
+        (click)="onRegister()"
+        mat-raised-button
+        color="primary"
+        [disabled]="!formIsValid()"
+      >
+        Register
+      </button>
+    </div>
   </form>
 </mat-card>
