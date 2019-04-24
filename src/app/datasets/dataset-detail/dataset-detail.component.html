@@ -180,7 +180,7 @@
         </mat-card>
 
         <mat-card style="margin:1em">
-          <div >
+          <div>
             <mat-card-header style="background:#ff96fa;">
               Scientific Metadata
             </mat-card-header>
@@ -215,7 +215,6 @@
           </ng-template>
         </pre>
           <ng-template #jsonview>
-
             <ngx-json-viewer
               [json]="dataset.scientificMetadata"
               [expanded]="false"
@@ -259,6 +258,20 @@
       <div *ngIf="(origDatablocks$ | async).length === 0">
         <h3>No datafiles linked to this dataset</h3>
       </div>
+    </mat-card>
+  </mat-tab>
+
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <i class="material-icons"> photo_size_select_small </i> Reduce
+    </ng-template>
+    <mat-card style="margin: 1em">
+      <h3>Reduce dataset</h3>
+      <mat-card-actions>
+        <button mat-button style="color: #ffffff; background: #0ea432;">
+          Reduce
+        </button>
+      </mat-card-actions>
     </mat-card>
   </mat-tab>
 
