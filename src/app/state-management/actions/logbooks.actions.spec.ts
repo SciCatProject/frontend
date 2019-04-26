@@ -42,7 +42,7 @@ describe("FetchLogbooksFailedAction", () => {
 
 describe("FetchLogbookAction", () => {
   it("should create an action", () => {
-    const name = "string";
+    const name = "ERIC";
     const action = new FetchLogbookAction(name);
     expect({ ...action }).toEqual({ type: ActionTypes.FETCH_LOGBOOK, name });
   });
@@ -68,9 +68,9 @@ describe("FetchLogbookFailedAction", () => {
 
 describe("FetchFilteredEntriesAction", () => {
   it("should create an action", () => {
-    const name = "string";
+    const name = "ERIC";
     const filter = {
-      textSearch: "string",
+      textSearch: "Hello",
       showBotMessages: true,
       showUserMessages: true,
       showImages: true
@@ -107,7 +107,7 @@ describe("FetchFilteredEntriesFailedAction", () => {
 describe("UpdateFilterAction", () => {
   it("should create an action", () => {
     const filter: LogbookFilters = {
-      textSearch: "string",
+      textSearch: "Hello",
       showBotMessages: true,
       showUserMessages: true,
       showImages: true
@@ -120,7 +120,7 @@ describe("UpdateFilterAction", () => {
 describe("UpdateFilterCompleteAction", () => {
   it("should create an action", () => {
     const filter: LogbookFilters = {
-      textSearch: "string",
+      textSearch: "Hello",
       showBotMessages: true,
       showUserMessages: true,
       showImages: true
