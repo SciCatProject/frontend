@@ -89,6 +89,6 @@
   </mat-table>
 </div>
 
-<div *ngIf="logbooks$ && logbooks$.length === 0">
+<div *ngIf="(logbooks$ | async) && (logbooks$ | async).length === 0">
   {{ hasFetched ? "No logbooks." : "Loading..." }}
 </div>
