@@ -2,7 +2,7 @@
 
 import { Injectable } from "@angular/core";
 import { Actions, Effect, ofType } from "@ngrx/effects";
-import { Action, Store } from "@ngrx/store";
+import { Action } from "@ngrx/store";
 import { Observable } from "rxjs";
 import { of } from "rxjs";
 import * as lb from "shared/sdk/services";
@@ -31,12 +31,12 @@ export class JobsEffects {
   protected submit$: Observable<Action> = this.action$.pipe(
     ofType(JobActions.SUBMIT),
     map((action: JobActions.SubmitAction) => action.job),
-    switchMap(job => {
-      return this.jobSrv
-        .create(job)
-        .pipe(map(res => new JobActions.SubmitCompleteAction(res)));
-    }),
-    catchError(err => of(new JobActions.FailedAction(err)))
+    switchMap(job =>
+      this.jobSrv.create(job).pipe(
+        map(res => new JobActions.SubmitCompleteAction(res)),
+        catchError(err => of(new JobActions.FailedAction(err)))
+      )
+    )
   );
 
   @Effect()
@@ -64,37 +64,26 @@ export class JobsEffects {
       filter["skip"] = action.skip;
       filter["limit"] = action.limit; // items per page
       filter["order"] = "creationTime DESC";
-      return this.jobSrv
-        .find(filter)
-        .pipe(
-          map(
-            (jobsets: Job[]) => new JobActions.RetrieveCompleteAction(jobsets)
-          )
-        );
-    }),
-    catchError(err => of(new JobActions.FailedAction(err)))
+      return this.jobSrv.find(filter).pipe(
+        map((jobsets: Job[]) => new JobActions.RetrieveCompleteAction(jobsets)),
+        catchError(err => of(new JobActions.FailedAction(err)))
+      );
+    })
   );
 
   @Effect()
   private getCount$: Observable<Action> = this.action$.pipe(
     ofType(JobActions.SORT_UPDATE),
     mergeMap((action: JobActions.SortUpdateAction) => {
-      return this.jobSrv
-        .count(action.mode)
-        .pipe(
-          map(
-            jobCount =>
-              new JobActions.GetCountCompleteAction(jobCount.count)
-          )
-        );
-    }),
-    catchError(err => of(new JobActions.FailedAction(err)))
+      return this.jobSrv.count(action.mode).pipe(
+        map(jobCount => new JobActions.GetCountCompleteAction(jobCount.count)),
+        catchError(err => of(new JobActions.FailedAction(err)))
+      );
+    })
   );
 
   constructor(
     private action$: Actions,
-    private store: Store<any>,
     private jobSrv: lb.JobApi,
-    private dsSrv: lb.DatasetApi
   ) {}
 }

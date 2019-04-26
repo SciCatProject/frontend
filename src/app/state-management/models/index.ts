@@ -7,7 +7,8 @@ import {
   Proposal,
   Policy,
   Sample,
-  Logbook
+  Logbook,
+  PublishedData
 } from "shared/sdk/models";
 export {
   User,
@@ -18,7 +19,8 @@ export {
   Proposal,
   Policy,
   Sample,
-  Logbook
+  Logbook,
+  PublishedData
 };
 
 import { DatasetInterface } from "shared/sdk";
@@ -46,7 +48,9 @@ export enum ArchViewMode {
   all = "all",
   archivable = "archivable",
   retrievable = "retrievable",
-  work_in_progress = "work in progress"
+  work_in_progress = "work in progress",
+  system_error = "system error",
+  user_error = "user error"
 }
 export enum JobViewMode { myJobs = "my jobs", allJobs = "all jobs"}
 
@@ -63,6 +67,7 @@ export interface ScientificCondition {
 }
 
 export interface DatasetFilters {
+  modeToggle: ArchViewMode;
   text: string;
   ownerGroup: string[];
   type: string[];

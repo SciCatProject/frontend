@@ -3,7 +3,7 @@ import { Observable, of } from "rxjs";
 import { Actions, Effect, ofType } from "@ngrx/effects";
 import { Action, select, Store } from "@ngrx/store";
 import { Angular5Csv } from "angular5-csv/dist/Angular5-csv";
-import { DatasetApi, DatasetAttachmentApi } from "shared/sdk/services";
+import { DatasetApi } from "shared/sdk/services";
 import * as DatasetActions from "state-management/actions/datasets.actions";
 import { Dataset } from "state-management/models";
 import {
@@ -30,12 +30,20 @@ export class DatasetEffects {
   protected removeAttachment$: Observable<Action> = this.actions$.pipe(
     ofType(DatasetActions.DELETE_ATTACHMENT),
     map((action: DatasetActions.DeleteAttachment) => action),
-    switchMap( action  => {
+    switchMap(action => {
       console.log("deleting attachment", action.attachment_id);
-      return this.datasetApi.destroyByIdDatasetattachments(encodeURIComponent(action.dataset_id), action.attachment_id).pipe(
-        map(res => new DatasetActions.DeleteAttachmentComplete(action.attachment_id)),
-        catchError(err => of(new DatasetActions.DeleteAttachmentFailed(err)))
-      );
+      return this.datasetApi
+        .destroyByIdDatasetattachments(
+          encodeURIComponent(action.dataset_id),
+          action.attachment_id
+        )
+        .pipe(
+          map(
+            res =>
+              new DatasetActions.DeleteAttachmentComplete(action.attachment_id)
+          ),
+          catchError(err => of(new DatasetActions.DeleteAttachmentFailed(err)))
+        );
     })
   );
 
@@ -58,10 +66,15 @@ export class DatasetEffects {
     switchMap(attachment => {
       console.log("creating attachment for", attachment.datasetId);
       delete attachment.id;
-      return this.datasetApi.createDatasetattachments(encodeURIComponent(attachment.datasetId),attachment).pipe(
-        map(res => new DatasetActions.AddAttachmentComplete(attachment)),
-        catchError(err => of(new DatasetActions.AddAttachmentFailed(err)))
-      );
+      return this.datasetApi
+        .createDatasetattachments(
+          encodeURIComponent(attachment.datasetId),
+          attachment
+        )
+        .pipe(
+          map(res => new DatasetActions.AddAttachmentComplete(attachment)),
+          catchError(err => of(new DatasetActions.AddAttachmentFailed(err)))
+        );
     })
   );
 
@@ -152,7 +165,7 @@ export class DatasetEffects {
         ),
         catchError(() => of(new DatasetActions.FetchDatasetsFailedAction()))
       );
-            })
+    })
   );
   @Effect()
   private fetchFacetCounts$: Observable<Action> = this.actions$.pipe(
@@ -178,7 +191,6 @@ export class DatasetEffects {
     private actions$: Actions,
     private store: Store<any>,
     private datasetApi: DatasetApi,
-    private datasetAttachmentApi: DatasetAttachmentApi
   ) {}
 
   private storeBatch(batch: Dataset[], userId: string): void {

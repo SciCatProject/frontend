@@ -56,6 +56,32 @@
               ],
               "serviceWorker": true
             },
+            "bam": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.bam.ts"
+                },
+                {
+                  "replace": "src/assets/images/ess-site.png",
+                  "with": "CI/ESS/ess-site.png"
+                }
+              ],
+              "serviceWorker": true
+            },
+            "v20": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.v20.ts"
+                },
+                {
+                  "replace": "src/assets/images/ess-site.png",
+                  "with": "CI/ESS/ess-site.png"
+                }
+              ],
+              "serviceWorker": true
+            },
             "dmsc": {
               "optimization": true,
               "outputHashing": "all",
@@ -258,6 +284,12 @@
             "dmscdev": {
               "browserTarget": "catanie:build:dmscdev"
             },
+            "v20": {
+              "browserTarget": "catanie:build:v20"
+            },
+            "bam": {
+              "browserTarget": "catanie:build:bam"
+            },
             "dmsc": {
               "browserTarget": "catanie:build:dmsc"
             },
@@ -367,5 +399,8 @@
     "@schematics/angular:directive": {
       "prefix": "app"
     }
+  },
+  "cli": {
+    "defaultCollection": "@ngrx/schematics"
   }
 }

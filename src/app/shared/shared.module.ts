@@ -10,21 +10,23 @@ import { KeysPipe } from "./pipes";
 import { JsonHeadPipe } from "./pipes/json-head.pipe";
 import { ThumbnailPipe } from "./pipes/thumbnail.pipe";
 import { StripProposalPrefixPipe } from "shared/pipes/stripProposalPrefix.pipe";
+import { ScientificMetadataPipe } from './pipes/scientific-metadata.pipe';
 
 @NgModule({
   imports: [BreadcrumbModule, ConfigFormModule, ErrorPageModule, FormsModule, DialogModule, ReactiveFormsModule],
-  declarations: [FileSizePipe, KeysPipe, JsonHeadPipe, ThumbnailPipe, StripProposalPrefixPipe],
+  declarations: [FileSizePipe, KeysPipe, JsonHeadPipe, ThumbnailPipe, StripProposalPrefixPipe, ScientificMetadataPipe],
   providers: [ConfigService],
   exports: [
     BreadcrumbModule,
     ConfigFormModule,
     FileSizePipe,
+    DialogModule,
+    ErrorPageModule,
     KeysPipe,
     JsonHeadPipe,
     ThumbnailPipe,
-    StripProposalPrefixPipe,
-    ErrorPageModule,
-    DialogModule
+    ScientificMetadataPipe,
+    StripProposalPrefixPipe
   ]
 })
 export class SharedCatanieModule {}

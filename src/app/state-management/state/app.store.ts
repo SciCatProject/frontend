@@ -3,6 +3,8 @@ import { initialUserState, UserState } from "state-management/state/user.store";
 import { initialJobsState, JobsState } from "state-management/state/jobs.store";
 import { initialPolicyState, PolicyState } from "state-management/state/policies.store";
 import { initialSampleState, SampleState } from "state-management/state/samples.store";
+import { PublishedDataState, initialPublishedDataState } from "./publishedData.store";
+
 
 export interface AppState {
   datasets: DatasetState;
@@ -10,6 +12,7 @@ export interface AppState {
   jobs: JobsState;
   policies: PolicyState;
   samples: SampleState;
+  publishedData: PublishedDataState;
 }
 
 export const initialState: AppState = {
@@ -17,5 +20,6 @@ export const initialState: AppState = {
   user: initialUserState,
   jobs: initialJobsState,
   policies: initialPolicyState,
-  samples: initialSampleState
+  samples: initialSampleState,
+  publishedData: initialPublishedDataState
 };

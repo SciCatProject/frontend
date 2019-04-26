@@ -70,13 +70,17 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     ArchViewMode.all,
     ArchViewMode.archivable,
     ArchViewMode.retrievable,
-    ArchViewMode.work_in_progress
+    ArchViewMode.work_in_progress,
+    ArchViewMode.system_error,
+    ArchViewMode.user_error
   ];
   private modeLabels = [
     ArchViewMode.all,
     ArchViewMode.archivable,
     ArchViewMode.retrievable,
-    ArchViewMode.work_in_progress
+    ArchViewMode.work_in_progress,
+    ArchViewMode.system_error,
+    ArchViewMode.user_error
   ];
   // compatibility analogs of observables
   private selectedSets: Dataset[] = [];
@@ -222,6 +226,48 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
         );
       }
     });
+  }
+
+  // conditional to asses dataset status and assign correct icon ArchViewMode.work_in_progress
+  // TODO: when these concepts stabilise, we should move the definitions to site config
+  wipCondition(dataset: Dataset): boolean {
+    if (!dataset.datasetlifecycle.archivable && !dataset.datasetlifecycle.retrievable &&
+      dataset.datasetlifecycle.archiveStatusMessage !== "scheduleArchiveJobFailed" &&
+      dataset.datasetlifecycle.retrieveStatusMessage !== "scheduleRetrieveJobFailed") {
+      return true;
+    }
+    return false;
+  }
+
+  systemErrorCondition(dataset: Dataset): boolean {
+    if ((dataset.datasetlifecycle.retrievable && dataset.datasetlifecycle.archivable)
+      || dataset.datasetlifecycle.archiveStatusMessage === "scheduleArchiveJobFailed"
+      || dataset.datasetlifecycle.retrieveStatusMessage === "scheduleRetrieveJobFailed") {
+        return true;
+      }
+    return false;
+  }
+
+  userErrorCondition(dataset: Dataset): boolean {
+    if (dataset.datasetlifecycle.archiveStatusMessage === "missingFilesError") {
+        return true;
+      }
+    return false;
+  }
+
+  archivableCondition(dataset: Dataset): boolean {
+    if ((dataset.datasetlifecycle.archivable && !dataset.datasetlifecycle.retrievable)
+      &&  dataset.datasetlifecycle.archiveStatusMessage !== "missingFilesError") {
+      return true;
+    }
+    return false;
+  }
+
+  retrievableCondition(dataset: Dataset): boolean {
+    if (!dataset.datasetlifecycle.archivable && dataset.datasetlifecycle.retrievable) {
+      return true;
+    }
+    return false;
   }
 
   onClick(dataset: Dataset): void {

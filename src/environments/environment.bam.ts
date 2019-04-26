@@ -5,12 +5,15 @@
 
 export const environment = {
   production: true,
-  lbBaseURL: "https://scicatapi.esss.dk",
-  fileserverBaseURL: "https://scicatfileserver.esss.dk",
+  lbBaseURL: "http://scicat04.esss.lu.se:3001",
+  fileserverBaseURL: "https://kubetest04.dm.esss.dk:32223",
   externalAuthEndpoint: "/auth/msad",
   archiveWorkflowEnabled: false,
-  disabledDatasetColumns: ["archiveStatus", "retrieveStatus","dataStatus"],
-  userProfileImageEnabled: true,
+  editMetadataEnabled: true,
+  columnSelectEnabled: true,
+  editSampleEnabled: true,
+  disabledDatasetColumns: ["archiveStatus", "retrieveStatus"],
+  shoppingCartEnabled: true,
   facility: "ESS",
-  tableSciDataEnabled: true
+  userProfileImageEnabled: true
 };
