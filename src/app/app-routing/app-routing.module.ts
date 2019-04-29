@@ -29,6 +29,9 @@ import { BatchViewComponent } from "datasets/batch-view/batch-view.component";
 import { SampleDetailComponent } from "../samples/sample-detail/sample-detail.component";
 import { SampleTableComponent } from "../samples/sample-table/sample-table.component";
 
+import { LogbooksDashboardComponent } from "../logbooks/logbooks-dashboard/logbooks-dashboard.component";
+import { LogbooksTableComponent } from "../logbooks/logbooks-table/logbooks-table.component";
+
 export const routes: Routes = [
   { path: "", redirectTo: "/datasets", pathMatch: "full" },
   { path: "login", component: LoginComponent },
@@ -111,6 +114,16 @@ export const routes: Routes = [
   {
     path: "sample-data/add",
     component: SampleDataFormComponent,
+    canActivate: [AuthCheck]
+  },
+  {
+    path: "logbooks",
+    component: LogbooksTableComponent,
+    canActivate: [AuthCheck]
+  },
+  {
+    path: "logbooks/:name",
+    component: LogbooksDashboardComponent,
     canActivate: [AuthCheck]
   },
   {

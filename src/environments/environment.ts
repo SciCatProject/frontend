@@ -19,5 +19,6 @@ export const environment = {
   shoppingCartEnabled: true,
   columnSelectEnabled: true,
   userProfileImageEnabled: false,
+  logbookEnabled: true,
   tableSciDataEnabled: true
 };

@@ -58,6 +58,7 @@ import { DatasetFormComponent } from "./dataset-form/dataset-form.component";
 import { ScientificConditionDialogComponent } from "./scientific-condition-dialog/scientific-condition-dialog.component";
 import { jobsReducer } from "../state-management/reducers/jobs.reducer";
 import { ColumnSelectorComponent } from "./column-selector/column-selector.component";
+import { LogbooksModule } from "logbooks/logbooks.module";
 
 @NgModule({
   imports: [
@@ -96,7 +97,8 @@ import { ColumnSelectorComponent } from "./column-selector/column-selector.compo
     SatDatepickerModule,
     SharedCatanieModule,
     StoreModule.forFeature("datasets", datasetsReducer),
-    StoreModule.forFeature("jobs", jobsReducer)
+    StoreModule.forFeature("jobs", jobsReducer),
+    LogbooksModule
   ],
   declarations: [
     BatchCardComponent,

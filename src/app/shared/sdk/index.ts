@@ -63,6 +63,7 @@ import { PolicyApi } from './services/custom/Policy';
 import { JobApi } from './services/custom/Job';
 import { DatasetAttachmentApi } from './services/custom/DatasetAttachment';
 import { OrigDatablockApi } from './services/custom/OrigDatablock';
+import { LogbookApi } from './services/custom/Logbook';
 /**
 * @module SDKBrowserModule
 * @description
@@ -108,6 +109,7 @@ export class SDKBrowserModule {
         JobApi,
         DatasetAttachmentApi,
         OrigDatablockApi,
+        LogbookApi,
         internalStorageProvider,
         { provide: SDKStorage, useClass: StorageBrowser },
         { provide: SocketDriver, useClass: SocketBrowser }

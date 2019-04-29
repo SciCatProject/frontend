@@ -1,0 +1,53 @@
+<div *ngIf="logbook && logbook.messages.length > 0">
+  <mat-table [dataSource]="logbook.messages">
+    <!-- Column Definitions -->
+
+    <!-- Timestamp Column -->
+    <ng-container matColumnDef="timestamp">
+      <mat-header-cell *matHeaderCellDef> Timestamp </mat-header-cell>
+      <mat-cell *matCellDef="let message">
+        {{ message.timestamp | date: "yyyy/MM/dd, EEE HH:mm" }}
+      </mat-cell>
+    </ng-container>
+
+    <!-- Sender Column -->
+    <ng-container matColumnDef="sender">
+      <mat-header-cell *matHeaderCellDef> Sender </mat-header-cell>
+      <mat-cell *matCellDef="let message">
+        {{ message.sender | slice: 1:-20 }}
+      </mat-cell>
+    </ng-container>
+
+    <!-- Entry Column -->
+    <ng-container matColumnDef="entry">
+      <mat-header-cell *matHeaderCellDef> Entry </mat-header-cell>
+      <mat-cell *matCellDef="let message">
+        <div fxLayout="column" *ngIf="message.content.msgtype !== 'm.image'">
+          {{ message.content.body }}
+        </div>
+        <div fxLayout="column" *ngIf="message.content.msgtype === 'm.image'">
+          <a
+            href="{{ message.content.url }}"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <img
+              src="{{ message.content.info.thumbnail_url }}"
+              alt="{{ message.content.body }}"
+              height="60px"
+            />
+          </a>
+        </div>
+      </mat-cell>
+    </ng-container>
+
+    <!-- End of Column Definitions -->
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+  </mat-table>
+</div>
+
+<div *ngIf="logbook && logbook.messages.length === 0">
+  No entries found.
+</div>

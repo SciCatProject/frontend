@@ -15,6 +15,7 @@ import { Policy } from '../../models/Policy';
 import { Job } from '../../models/Job';
 import { DatasetAttachment } from '../../models/DatasetAttachment';
 import { OrigDatablock } from '../../models/OrigDatablock';
+import { Logbook } from '../../models/Logbook';
 
 export interface Models { [name: string]: any }
 
@@ -37,6 +38,7 @@ export class SDKModels {
     Job: Job,
     DatasetAttachment: DatasetAttachment,
     OrigDatablock: OrigDatablock,
+    Logbook: Logbook,
     
   };
 
