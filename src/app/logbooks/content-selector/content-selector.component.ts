@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, OnDestroy } from "@angular/core";
+import { Component, OnInit, OnDestroy } from "@angular/core";
 import { MatCheckboxChange } from "@angular/material";
 import { Logbook } from "shared/sdk";
 import { Subscription } from "rxjs";

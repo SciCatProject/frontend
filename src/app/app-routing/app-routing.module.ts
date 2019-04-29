@@ -31,7 +31,6 @@ import { SampleTableComponent } from "../samples/sample-table/sample-table.compo
 
 import { LogbooksDashboardComponent } from "../logbooks/logbooks-dashboard/logbooks-dashboard.component";
 import { LogbooksTableComponent } from "../logbooks/logbooks-table/logbooks-table.component";
-import { LogbooksDetailComponent } from "logbooks/logbooks-detail/logbooks-detail.component";
 
 export const routes: Routes = [
   { path: "", redirectTo: "/datasets", pathMatch: "full" },
