@@ -1,16 +1,19 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { NO_ERRORS_SCHEMA } from "@angular/core";
+import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+import { MatCardModule } from "@angular/material";
 
-import { LogbooksDashboardComponent } from './logbooks-dashboard.component';
+import { LogbooksDashboardComponent } from "./logbooks-dashboard.component";
 
-describe('DashboardComponent', () => {
+describe("DashboardComponent", () => {
   let component: LogbooksDashboardComponent;
   let fixture: ComponentFixture<LogbooksDashboardComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ LogbooksDashboardComponent ]
-    })
-    .compileComponents();
+      schemas: [NO_ERRORS_SCHEMA],
+      imports: [MatCardModule],
+      declarations: [LogbooksDashboardComponent]
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -19,7 +22,11 @@ describe('DashboardComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  afterEach(() => {
+    fixture.destroy();
+  });
+
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

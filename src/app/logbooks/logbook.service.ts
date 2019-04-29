@@ -3,7 +3,6 @@ import { Observable } from "rxjs";
 
 import { LogbookApi } from "shared/sdk/services";
 import { Logbook } from "shared/sdk/models";
-import { LogbookFilters } from "state-management/models";
 
 @Injectable({
   providedIn: "root"

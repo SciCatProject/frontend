@@ -1,10 +1,9 @@
 import * as fromLogbookSelectors from "./logbooks.selector";
 import { initialLogbookState } from "../state/logbooks.store";
-import { Logbook } from "../../shared/sdk/models";
 import { LogbookFilters } from "state-management/models";
 
 const filters: LogbookFilters = {
-  textSearch: "string",
+  textSearch: "",
   showBotMessages: true,
   showUserMessages: true,
   showImages: true

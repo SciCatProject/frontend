@@ -1,16 +1,27 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { NO_ERRORS_SCHEMA } from "@angular/core";
+import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+import { MatCheckboxModule } from "@angular/material";
+import { Store, StoreModule } from "@ngrx/store";
 
-import { ContentSelectorComponent } from './content-selector.component';
+import { ContentSelectorComponent } from "./content-selector.component";
+import { MockStore } from "shared/MockStubs";
 
-describe('ContentSelectorComponent', () => {
+describe("ContentSelectorComponent", () => {
   let component: ContentSelectorComponent;
   let fixture: ComponentFixture<ContentSelectorComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ContentSelectorComponent ]
-    })
-    .compileComponents();
+      schemas: [NO_ERRORS_SCHEMA],
+      imports: [MatCheckboxModule, StoreModule.forRoot({})],
+      declarations: [ContentSelectorComponent]
+    });
+    TestBed.overrideComponent(ContentSelectorComponent, {
+      set: {
+        providers: [{ provide: Store, useClass: MockStore }]
+      }
+    });
+    TestBed.compileComponents();
   }));
 
   beforeEach(() => {
@@ -19,7 +30,11 @@ describe('ContentSelectorComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  afterEach(() => {
+    fixture.destroy();
+  });
+
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

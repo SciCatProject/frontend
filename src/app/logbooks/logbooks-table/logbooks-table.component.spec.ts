@@ -1,16 +1,28 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { NO_ERRORS_SCHEMA } from "@angular/core";
+import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+import { MatTableModule } from "@angular/material";
+import { Store, StoreModule } from "@ngrx/store";
+import { Router } from "@angular/router";
 
-import { LogbooksTableComponent } from './logbooks-table.component';
+import { LogbooksTableComponent } from "./logbooks-table.component";
+import { MockRouter } from "shared/MockStubs";
 
-describe('LogbooksTableComponent', () => {
+describe("LogbooksTableComponent", () => {
   let component: LogbooksTableComponent;
   let fixture: ComponentFixture<LogbooksTableComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ LogbooksTableComponent ]
-    })
-    .compileComponents();
+      schemas: [NO_ERRORS_SCHEMA],
+      imports: [MatTableModule, StoreModule.forRoot({})],
+      declarations: [LogbooksTableComponent]
+    });
+    TestBed.overrideComponent(LogbooksTableComponent, {
+      set: {
+        providers: [{ provide: Router, useClass: MockRouter }]
+      }
+    });
+    TestBed.compileComponents();
   }));
 
   beforeEach(() => {
@@ -19,7 +31,11 @@ describe('LogbooksTableComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  afterEach(() => {
+    fixture.destroy();
+  });
+
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });
