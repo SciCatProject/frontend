@@ -1,5 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
+import * as rison from "rison";
 
 import { LogbookApi } from "shared/sdk/services";
 import { Logbook } from "shared/sdk/models";
@@ -19,6 +20,7 @@ export class LogbookService {
   }
 
   getFilteredEntries(name: string, filter: Object): Observable<Logbook> {
-    return this.logbookApi.filter(name, filter);
+    let risonFilter = rison.encode(filter)
+    return this.logbookApi.filter(name, risonFilter);
   }
 }
