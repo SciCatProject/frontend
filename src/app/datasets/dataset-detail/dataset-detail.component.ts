@@ -23,7 +23,8 @@ import {
   getCurrentAttachments,
   getCurrentDatablocks,
   getCurrentDataset,
-  getCurrentOrigDatablocks
+  getCurrentOrigDatablocks,
+  getCurrentDatasetWithoutOrigData
 } from "state-management/selectors/datasets.selectors";
 
 /**
@@ -40,6 +41,7 @@ import {
 })
 export class DatasetDetailComponent implements OnInit, OnDestroy {
   dataset$ = this.store.pipe(select(getCurrentDataset));
+  datasetwithout$ = this.store.pipe(select(getCurrentDatasetWithoutOrigData));
   sciMet: Object;
   public withUnits$;
   public dates$;
