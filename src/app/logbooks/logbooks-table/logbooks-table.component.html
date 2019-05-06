@@ -1,0 +1,94 @@
+<div
+  class="logbooks-table"
+  style="min-width: 1060px"
+  *ngIf="(logbooks$ | async) && (logbooks$ | async).length > 0"
+>
+  <mat-table [dataSource]="logbooks$" class="logbook-table mat-elevation-z2">
+    <!-- Column Definitions -->
+
+    <!-- Name Column -->
+    <ng-container matColumnDef="name">
+      <mat-header-cell *matHeaderCellDef>
+        <div fxLayout="column" style="align-items: center">
+          <div>
+            <i class="material-icons">fingerprint</i>
+          </div>
+          <div class="table_column">Name</div>
+        </div>
+      </mat-header-cell>
+      <mat-cell *matCellDef="let logbook">{{ logbook.name }}</mat-cell>
+    </ng-container>
+
+    <!-- Latest Entry Column -->
+    <ng-container matColumnDef="latestEntry">
+      <mat-header-cell *matHeaderCellDef>
+        <div fxLayout="column" style="align-items: center">
+          <div>
+            <i class="material-icons">calendar_today</i>
+          </div>
+          <div class="table_column">Latest&nbsp;Entry</div>
+        </div>
+      </mat-header-cell>
+      <mat-cell *matCellDef="let logbook">
+        <div fxLayout="column" *ngIf="logbook.messages.length > 0">
+            {{ logbook.messages[0].timestamp | date: "yyyy/MM/dd, EEE HH:mm" }}
+        </div>
+        <div fxLayout="column" *ngIf="logbook.messages.length === 0">
+          No entries.
+        </div>
+      </mat-cell>
+    </ng-container>
+
+    <!-- Sender Column -->
+    <ng-container matColumnDef="sender">
+      <mat-header-cell *matHeaderCellDef>
+        <div fxLayout="column" style="align-items: center">
+          <div>
+            <i class="material-icons">person</i>
+          </div>
+          <div class="table_column">Sender</div>
+        </div>
+      </mat-header-cell>
+      <mat-cell *matCellDef="let logbook">
+        <div fxLayout="column" *ngIf="logbook.messages.length > 0">
+          {{ logbook.messages[0].sender | slice: 1:-20 }}
+        </div>
+        <div fxLayout="column" *ngIf="logbook.messages.length === 0">
+          --
+        </div>
+      </mat-cell>
+    </ng-container>
+
+    <!-- Entry Column -->
+    <ng-container matColumnDef="entry">
+      <mat-header-cell *matHeaderCellDef>
+        <div fxLayout="column" style="align-items: center">
+          <div>
+            <i class="material-icons">message</i>
+          </div>
+          <div class="table_column">Entry</div>
+        </div>
+      </mat-header-cell>
+      <mat-cell *matCellDef="let logbook">
+        <div fxLayout="column" *ngIf="logbook.messages.length > 0">
+          {{ logbook.messages[0].content.body }}
+        </div>
+        <div fxLayout="column" *ngIf="logbook.messages.length === 0">
+          --
+        </div>
+      </mat-cell>
+    </ng-container>
+
+    <!-- End of Column Definitions -->
+
+    <mat-header-row *matHeaderRowDef="columnsToDisplay"></mat-header-row>
+    <mat-row
+      *matRowDef="let logbook; columns: columnsToDisplay"
+      (click)="onClick(logbook)"
+    ></mat-row>
+  </mat-table>
+</div>
+
+<div *ngIf="(logbooks$ | async) && (logbooks$ | async).length === 0">
+  {{ hasFetched ? "No logbooks." : "Loading..." }}
+</div>

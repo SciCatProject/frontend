@@ -14,5 +14,6 @@ export * from './Policy';
 export * from './Job';
 export * from './DatasetAttachment';
 export * from './OrigDatablock';
+export * from './Logbook';
 export * from './SDKModels';
 export * from './logger.service';

@@ -8,6 +8,14 @@ export const getCurrentDataset = createSelector(
   state => state.currentSet
 );
 
+export const getCurrentDatasetWithoutOrigData = createSelector(
+  getDatasetState,
+  state => {
+    const {origdatablocks, ...theRest} = state.currentSet;
+    return theRest;
+  }
+);
+
 export const getCurrentOrigDatablocks = createSelector(
   getCurrentDataset,
   dataset => dataset.origdatablocks
@@ -38,10 +46,13 @@ export const getIsEmptySelection = createSelector(
   sets => sets.length === 0
 );
 
-export const getPage = createSelector(getDatasetState, state => {
-  const { skip, limit } = state.filters;
-  return skip / limit;
-});
+export const getPage = createSelector(
+  getDatasetState,
+  state => {
+    const { skip, limit } = state.filters;
+    return skip / limit;
+  }
+);
 
 export const getDatasetsPerPage = createSelector(
   getDatasetState,
@@ -117,7 +128,10 @@ export const getCreationTimeFilter = createSelector(
   filters => filters.creationTime
 );
 
-export const getViewMode = createSelector(getFilters, filters => filters.modeToggle );
+export const getViewMode = createSelector(
+  getFilters,
+  filters => filters.modeToggle
+);
 
 export const getHasAppliedFilters = createSelector(
   getFilters,
@@ -143,12 +157,12 @@ export const getScientificQuery = createSelector(
     const and = conditions.map(cond => {
       const { relation, lhs, rhs } = cond;
       const dollar = {
-        "EQUAL_TO_NUMERIC": "$eq",
-        "EQUAL_TO_STRING": "$eq",
-        "LESS_THAN": "$lt",
-        "GREATER_THAN": "$gt"
+        EQUAL_TO_NUMERIC: "$eq",
+        EQUAL_TO_STRING: "$eq",
+        LESS_THAN: "$lt",
+        GREATER_THAN: "$gt"
       }[relation];
-      return { [lhs]: { [dollar]: rhs }};
+      return { [lhs]: { [dollar]: rhs } };
     });
     return { and };
   }
@@ -202,29 +216,49 @@ function restrictFilter(filter: object, allowedKeys?: string[]) {
   }, {});
 }
 
-export const getFullqueryParams = createSelector(getFilters, filter => {
-  // dont query with modeToggle, its only in filters for persistent routing
-  const { skip, limit, sortField, scientific, modeToggle, ...theRest } = filter;
-  const limits = { skip, limit, order: sortField };
-  const query = restrictFilter(theRest);
-  return {
-    query: JSON.stringify(query),
-    limits
-  };
-});
+export const getFullqueryParams = createSelector(
+  getFilters,
+  filter => {
+    // dont query with modeToggle, its only in filters for persistent routing
+    const {
+      skip,
+      limit,
+      sortField,
+      scientific,
+      modeToggle,
+      ...theRest
+    } = filter;
+    const limits = { skip, limit, order: sortField };
+    const query = restrictFilter(theRest);
+    return {
+      query: JSON.stringify(query),
+      limits
+    };
+  }
+);
 
-export const getFullfacetsParams = createSelector(getFilters, filter => {
-  const { skip, limit, sortField, scientific, modeToggle, ...theRest } = filter;
-  const fields = restrictFilter(theRest);
-  const facets = [
-    "type",
-    "creationTime",
-    "creationLocation",
-    "ownerGroup",
-    "keywords"
-  ]; 
-  return { fields, facets };
-});
+export const getFullfacetsParams = createSelector(
+  getFilters,
+  filter => {
+    const {
+      skip,
+      limit,
+      sortField,
+      scientific,
+      modeToggle,
+      ...theRest
+    } = filter;
+    const fields = restrictFilter(theRest);
+    const facets = [
+      "type",
+      "creationTime",
+      "creationLocation",
+      "ownerGroup",
+      "keywords"
+    ];
+    return { fields, facets };
+  }
+);
 
 // === Misc. ===
 

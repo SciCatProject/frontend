@@ -234,7 +234,7 @@
           <br />
           <div *ngIf="show">
             <ngx-json-viewer
-              [json]="dataset"
+              [json]="(datasetwithout$ | async)"
               [expanded]="false"
             ></ngx-json-viewer>
           </div>
@@ -282,6 +282,13 @@
         </mat-card-actions>
       </mat-card>
     </ng-container>
+  </mat-tab>
+
+  <mat-tab *ngIf="appConfig.logbookEnabled">
+    <ng-template mat-tab-label>
+      <i class="material-icons"> book </i> Logbook
+    </ng-template>
+    <app-logbooks-dashboard></app-logbooks-dashboard>
   </mat-tab>
 
   <mat-tab *ngIf="(isAdmin$ | async)">
