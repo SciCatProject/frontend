@@ -59,6 +59,7 @@ import { ServiceWorkerModule } from "@angular/service-worker";
 import { environment } from "../environments/environment";
 import { LogbooksModule } from "./logbooks/logbooks.module";
 import { LogbookEffect } from "state-management/effects/logbooks.effects";
+import { AboutModule } from "about/about.module";
 
 export function localStorageSyncWrapper(reducer: any) {
   return localStorageSync({ keys: ["root"], rehydrate: true })(reducer);
@@ -67,6 +68,7 @@ export function localStorageSyncWrapper(reducer: any) {
 @NgModule({
   declarations: [AppComponent, JobsTableComponent, JobsDetailComponent],
   imports: [
+    AboutModule,
     AppConfigModule,
     AppRoutingModule,
     BrowserAnimationsModule,
