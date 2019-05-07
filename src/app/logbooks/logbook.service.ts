@@ -20,7 +20,8 @@ export class LogbookService {
   }
 
   getFilteredEntries(name: string, filter: Object): Observable<Logbook> {
-    let risonFilter = rison.encode(filter)
+    let risonFilter = rison.encode_object(filter);
+    console.log("risonFilter", risonFilter);
     return this.logbookApi.filter(name, risonFilter);
   }
 }

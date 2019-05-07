@@ -49,7 +49,6 @@ export class ContentSelectorComponent implements OnInit, OnDestroy {
 
   onSelect(event: MatCheckboxChange, entry: string): void {
     console.log("checked: " + entry);
-    let filterJSON: Object;
 
     if (event.checked) {
       switch (entry) {
@@ -57,33 +56,29 @@ export class ContentSelectorComponent implements OnInit, OnDestroy {
           this.filter.showBotMessages = true;
           this.store.dispatch(new UpdateFilterAction(this.filter));
 
-          filterJSON = JSON.stringify(this.filter);
           break;
         }
         case "User Messages": {
           this.filter.showUserMessages = true;
           this.store.dispatch(new UpdateFilterAction(this.filter));
 
-          filterJSON = JSON.stringify(this.filter);
           break;
         }
         case "Images": {
           this.filter.showImages = true;
           this.store.dispatch(new UpdateFilterAction(this.filter));
 
-          filterJSON = JSON.stringify(this.filter);
           break;
         }
         default: {
           this.store.dispatch(new UpdateFilterAction(this.filter));
 
-          filterJSON = JSON.stringify(this.filter);
           break;
         }
       }
-      console.log("filter", filterJSON);
+      console.log("filter", this.filter);
       this.store.dispatch(
-        new FetchFilteredEntriesAction(this.logbook.name, filterJSON)
+        new FetchFilteredEntriesAction(this.logbook.name, this.filter)
       );
     } else {
       console.log("unchecked: " + entry);
@@ -94,33 +89,29 @@ export class ContentSelectorComponent implements OnInit, OnDestroy {
 
           this.store.dispatch(new UpdateFilterAction(this.filter));
 
-          filterJSON = JSON.stringify(this.filter);
           break;
         }
         case "User Messages": {
           this.filter.showUserMessages = false;
           this.store.dispatch(new UpdateFilterAction(this.filter));
 
-          filterJSON = JSON.stringify(this.filter);
           break;
         }
         case "Images": {
           this.filter.showImages = false;
           this.store.dispatch(new UpdateFilterAction(this.filter));
 
-          filterJSON = JSON.stringify(this.filter);
           break;
         }
         default: {
           this.store.dispatch(new UpdateFilterAction(this.filter));
 
-          filterJSON = JSON.stringify(this.filter);
           break;
         }
       }
-      console.log("filter", filterJSON);
+      console.log("filter", this.filter);
       this.store.dispatch(
-        new FetchFilteredEntriesAction(this.logbook.name, filterJSON)
+        new FetchFilteredEntriesAction(this.logbook.name, this.filter)
       );
     }
   }
