@@ -75,7 +75,20 @@
 
   <mat-toolbar color="primary" style="position: sticky;">
     <mat-toolbar-row>
-      <h3 class="app-title">{{ title }}</h3>
+      <h3 class="app-title">
+        <a style="color:#ffffff;" [routerLink]="['/']"> {{ title }}</a>
+      </h3>
+      <div></div>
+      <div>
+        <h6>
+          <a class="toplink" [routerLink]="['/help']">Help</a>
+        </h6>
+      </div>
+      <div>
+        <h6>
+          <a class="toplink" [routerLink]="['/about']">About</a>
+        </h6>
+      </div>
       <span class="example-spacer"></span>
       <div *ngIf="(isLoggedIn$ | async) || !appConfig.production">
         <button class="userButton" [matMenuTriggerFor]="userMenu">

@@ -31,6 +31,8 @@ import { SampleTableComponent } from "../samples/sample-table/sample-table.compo
 
 import { LogbooksDashboardComponent } from "../logbooks/logbooks-dashboard/logbooks-dashboard.component";
 import { LogbooksTableComponent } from "../logbooks/logbooks-table/logbooks-table.component";
+import { AboutComponent } from "about/about/about.component";
+import { HelpComponent } from "help/help/help.component";
 
 export const routes: Routes = [
   { path: "", redirectTo: "/datasets", pathMatch: "full" },
@@ -110,7 +112,14 @@ export const routes: Routes = [
     component: JobsDetailComponent,
     canActivate: [AuthCheck]
   },
-
+  {
+    path: "about",
+    component: AboutComponent
+  },
+  {
+    path: "help",
+    component: HelpComponent
+  },
   {
     path: "sample-data/add",
     component: SampleDataFormComponent,
