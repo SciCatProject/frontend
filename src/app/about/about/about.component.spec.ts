@@ -1,16 +1,27 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { AboutComponent } from './about.component';
+import { AboutComponent } from "./about.component";
+import { APP_CONFIG } from "app-config.module";
 
-describe('AboutComponent', () => {
+describe("AboutComponent", () => {
   let component: AboutComponent;
   let fixture: ComponentFixture<AboutComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AboutComponent ]
-    })
-    .compileComponents();
+      declarations: [AboutComponent]
+    });
+    TestBed.overrideComponent(AboutComponent, {
+      set: {
+        providers: [
+          {
+            provide: APP_CONFIG, useValue: {
+            facility: "ESS"
+          }}
+        ]
+      }
+    });
+    TestBed.compileComponents();
   }));
 
   beforeEach(() => {
@@ -19,7 +30,7 @@ describe('AboutComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });
