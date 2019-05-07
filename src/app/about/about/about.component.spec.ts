@@ -2,6 +2,7 @@ import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { AboutComponent } from "./about.component";
 import { APP_CONFIG } from "app-config.module";
+import { MatCardModule } from "@angular/material";
 
 describe("AboutComponent", () => {
   let component: AboutComponent;
@@ -9,15 +10,18 @@ describe("AboutComponent", () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [AboutComponent]
+      declarations: [AboutComponent],
+      imports: [MatCardModule]
     });
     TestBed.overrideComponent(AboutComponent, {
       set: {
         providers: [
           {
-            provide: APP_CONFIG, useValue: {
-            facility: "ESS"
-          }}
+            provide: APP_CONFIG,
+            useValue: {
+              facility: "ESS"
+            }
+          }
         ]
       }
     });
