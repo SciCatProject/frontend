@@ -2,6 +2,8 @@ import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { HelpComponent } from "./help.component";
 import { MatCardModule } from "@angular/material";
+import { APP_CONFIG } from "app-config.module";
+import { USE_VALUE } from "@angular/core/src/di/injector";
 
 describe("HelpComponent", () => {
   let component: HelpComponent;
@@ -11,7 +13,20 @@ describe("HelpComponent", () => {
     TestBed.configureTestingModule({
       declarations: [HelpComponent],
       imports: [MatCardModule]
-    }).compileComponents();
+    });
+    TestBed.overrideComponent(HelpComponent, {
+      set: {
+        providers: [
+          {
+            provide: APP_CONFIG,
+            useValue: {
+              facility: "ESS"
+            }
+          }
+        ]
+      }
+    });
+    TestBed.compileComponents();
   }));
 
   beforeEach(() => {
