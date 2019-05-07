@@ -46,9 +46,8 @@ export class LogbooksFilterComponent implements OnInit, OnDestroy {
     this.filter.textSearch = query;
     this.store.dispatch(new UpdateFilterAction(this.filter));
 
-    let filterJSON = JSON.stringify(this.filter);
     this.store.dispatch(
-      new FetchFilteredEntriesAction(this.logbook.name, filterJSON)
+      new FetchFilteredEntriesAction(this.logbook.name, this.filter)
     );
   }
 }
