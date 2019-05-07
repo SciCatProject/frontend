@@ -3,7 +3,6 @@ import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 import { HelpComponent } from "./help.component";
 import { MatCardModule } from "@angular/material";
 import { APP_CONFIG } from "app-config.module";
-import { USE_VALUE } from "@angular/core/src/di/injector";
 
 describe("HelpComponent", () => {
   let component: HelpComponent;
