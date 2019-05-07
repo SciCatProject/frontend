@@ -234,7 +234,7 @@
           <br />
           <div *ngIf="show">
             <ngx-json-viewer
-              [json]="dataset"
+              [json]="(datasetwithout$ | async)"
               [expanded]="false"
             ></ngx-json-viewer>
           </div>

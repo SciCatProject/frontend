@@ -10,6 +10,7 @@ import { APP_CONFIG } from "app-config.module";
 
 import { PublishedDataApi } from "../../shared/sdk/services/custom";
 import { PublishedData } from "../../shared/sdk/models";
+import { formatDate } from "@angular/common";
 
 @Component({
   selector: "publish",
@@ -21,6 +22,7 @@ export class PublishComponent implements OnInit {
 
   private datasets$ = this.store.pipe(select(getDatasetsInBatch));
   public datasetCount$ = this.datasets$.pipe(map(datasets => datasets.length));
+  today: number = Date.now();
 
   public form = {
     title: "",
@@ -28,7 +30,7 @@ export class PublishComponent implements OnInit {
     authors: [],
     affiliation: this.appConfig.facility,
     publisher: this.appConfig.facility,
-    resourceType: "NeXus HDF5 Files",
+    resourceType: "",
     description: "",
     abstract: "",
     pidArray: [],
@@ -40,6 +42,8 @@ export class PublishComponent implements OnInit {
     sizeOfArchive: null
   };
 
+  public formData = null;
+
   constructor(
     private store: Store<any>,
     @Inject(APP_CONFIG) private appConfig,
@@ -48,8 +52,6 @@ export class PublishComponent implements OnInit {
 
   public ngOnInit() {
     this.store.dispatch(new PrefillBatchAction());
-
-    
 
     this.datasets$
       .pipe(
@@ -65,20 +67,28 @@ export class PublishComponent implements OnInit {
         })
       )
       .subscribe();
+
+      this.publishedDataApi.formPopulate( this.form.pidArray[0]).subscribe(result => {
+        this.form.abstract = result.abstract;
+        this.form.title = result.title;
+        this.form.description = result.description;
+        this.form.resourceType = result.resourceType;
+       });
   }
 
   public onPublish() {
     const publishedData = new PublishedData();
     publishedData.title = this.form.title;
+    publishedData.abstract = this.form.abstract;
+    publishedData.dataDescription = this.form.description;
+    publishedData.resourceType = this.form.resourceType;
+
     publishedData.creator = this.form.creator;
     publishedData.affiliation = this.form.affiliation;
-    publishedData.abstract = this.form.abstract;
     publishedData.authors = this.form.authors;
-    publishedData.dataDescription = this.form.description;
     publishedData.pidArray = this.form.pidArray;
     publishedData.publisher = this.form.publisher;
-    publishedData.resourceType = this.form.resourceType;
-    publishedData.publicationYear = this.form.publicationYear;
+    publishedData.publicationYear = parseInt(formatDate(this.today, "yyyy", "en_GB"), 10);
     publishedData.url = this.form.url;
     publishedData.thumbnail = this.form.thumbnail;
     publishedData.numberOfFiles = this.form.numberOfFiles;
