@@ -15,5 +15,6 @@ export const environment = {
   disabledDatasetColumns: ["archiveStatus", "retrieveStatus","dataStatus"],
   shoppingCartEnabled: true,
   facility: "ESS",
-  userProfileImageEnabled: true
+  userProfileImageEnabled: true,
+  tableSciDataEnabled: true
 };
