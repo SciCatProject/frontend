@@ -180,7 +180,7 @@
         </mat-card>
 
         <mat-card style="margin:1em">
-          <div >
+          <div>
             <mat-card-header style="background:#ff96fa;">
               Scientific Metadata
             </mat-card-header>
@@ -215,7 +215,6 @@
           </ng-template>
         </pre>
           <ng-template #jsonview>
-
             <ngx-json-viewer
               [json]="dataset.scientificMetadata"
               [expanded]="false"
@@ -234,7 +233,7 @@
           <br />
           <div *ngIf="show">
             <ngx-json-viewer
-              [json]="(datasetwithout$ | async)"
+              [json]="datasetwithout$ | async"
               [expanded]="false"
             ></ngx-json-viewer>
           </div>
