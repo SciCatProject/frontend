@@ -78,7 +78,7 @@
       <h3 class="app-title">
         <a style="color:#ffffff;" [routerLink]="['/']"> {{ title }}</a>
       </h3>
-      <div></div>
+      <span class="example-spacer"></span>
       <div>
         <h6>
           <a class="toplink" [routerLink]="['/help']">
@@ -93,7 +93,6 @@
             About</a>
         </h6>
       </div>
-      <span class="example-spacer"></span>
       <div *ngIf="(isLoggedIn$ | async) || !appConfig.production">
         <button class="userButton" [matMenuTriggerFor]="userMenu">
           <img
