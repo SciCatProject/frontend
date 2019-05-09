@@ -141,7 +141,7 @@
               </tr>
               <tr *ngIf="dataset.contactEmail as value">
                 <th><i class="material-icons"> email </i> Contact Email</th>
-                <td>{{ value }}</td>
+                <td><span [innerHTML]="value | linky"></span></td>
               </tr>
             </table>
           </div>
