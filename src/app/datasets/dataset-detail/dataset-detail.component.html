@@ -43,7 +43,7 @@
                 <td>{{ dataset.pid }}</td>
               </tr>
               <tr *ngIf="dataset.sourceFolder as value">
-                <th><i class="material-icons"> explore </i> Source Folder</th>
+                <th><i class="material-icons"> folder </i> Source Folder</th>
                 <td>{{ value }}</td>
               </tr>
               <!--
@@ -96,7 +96,7 @@
                 <td>{{ value | filesize }}</td>
               </tr>
               <tr *ngIf="dataset.orcidOfOwner as value">
-                <th><i class="material-icons"> save </i> Orcid</th>
+                <th><i class="material-icons"> local_florist </i> Orcid</th>
                 <td><span [innerHTML]="value | linky"></span></td>
               </tr>
             </table>
@@ -141,7 +141,7 @@
               </tr>
               <tr *ngIf="dataset.contactEmail as value">
                 <th><i class="material-icons"> email </i> Contact Email</th>
-                <td>{{ value }}</td>
+                <td><span [innerHTML]="value | linky"></span></td>
               </tr>
             </table>
           </div>
@@ -180,7 +180,7 @@
         </mat-card>
 
         <mat-card style="margin:1em">
-          <div >
+          <div>
             <mat-card-header style="background:#ff96fa;">
               Scientific Metadata
             </mat-card-header>
@@ -194,18 +194,18 @@
             <td>Units</td>
           </tr>
             <tr *ngFor="let key of objectKeys(withUnits )">
-              <td><b>{{ key }}</b></td>
+              <td><b>{{ key | replaceUnderscore | titlecase }}</b></td>
               <td>{{ withUnits[key]["v"] }}</td>
               <td>{{ withUnits[key]["u"] }}</td>
               <td></td>
             </tr>
             <tr *ngFor="let key of (dates$ | async )">
-              <td><b>{{ key.name }}</b></td>
+              <td><b>{{ key.name | replaceUnderscore | titlecase }}</b></td>
               <td>{{ key.value | date }}</td>
               <td></td>
             </tr>
             <tr *ngFor="let key of (noUnits$ | async )">
-              <td><b>{{ key.name }}</b></td>
+              <td><b>{{ key.name | replaceUnderscore | titlecase }}</b></td>
               <td>{{  key.value }}</td>
               <td></td>
             </tr>
@@ -215,7 +215,6 @@
           </ng-template>
         </pre>
           <ng-template #jsonview>
-
             <ngx-json-viewer
               [json]="dataset.scientificMetadata"
               [expanded]="false"
@@ -234,7 +233,7 @@
           <br />
           <div *ngIf="show">
             <ngx-json-viewer
-              [json]="(datasetwithout$ | async)"
+              [json]="datasetwithout$ | async"
               [expanded]="false"
             ></ngx-json-viewer>
           </div>
