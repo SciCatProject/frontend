@@ -19,12 +19,18 @@ export class AboutComponent implements OnInit {
     this.termsText = "Data can be used freely under the CC-BY-4.0 licence";
     if (this.appConfig["facility"] === "ESS") {
       this.aboutText =
-        "Scicat allows users to access data and metadata from neutron experiments at ESS.";
+        "Scicat allows users to access the metadata of raw and derived data which is taken at experiment facilities. " +
+        "Scientific datasets are linked to proposals and samples. " +
+        "Scientific datasets are can be linked to publications (DOI, PID). " +
+        "SciCat helps keeping track of data provenance (i.e. the steps leading to the final results). " +
+        "Scicat allows users to find data based on the metadata (both your own data and other peoples’ public data). " +
+        "In the long term, SciCat will help to automate scientific analysis workflows.";
       this.accessText =
         "Access to the online catalogue of open data will be given to a user," +
         " providing the user registers with ESS " +
         " and accepts the terms of the ESS scientific data policy ";
-      this.termsText = "All scientific datasets are licensed under the CC-BY-4.0 license ";
+      this.termsText =
+        "All scientific datasets are licensed under the CC-BY-4.0 license ";
     } else if (this.appConfig["facility"] === "PSI") {
       this.aboutText =
         "Scicat allows users to access data and metadata from experiments at PSI.";
