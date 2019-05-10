@@ -1,8 +1,17 @@
 import { Component, OnDestroy, OnInit, Inject } from "@angular/core";
-import { FetchSampleAction, FetchSamplesAction, SampleSortByColumnAction, FetchSampleCountAction } from "../../state-management/actions/samples.actions";
+import {
+  FetchSampleAction,
+  FetchSamplesAction,
+  SampleSortByColumnAction,
+  FetchSampleCountAction
+} from "../../state-management/actions/samples.actions";
 import { Router } from "@angular/router";
 import { Sample } from "../../shared/sdk/models";
-import { getSamplesList, getSampleCount, getSamplesPerPage } from "state-management/selectors/samples.selectors";
+import {
+  getSamplesList,
+  getSampleCount,
+  getSamplesPerPage
+} from "state-management/selectors/samples.selectors";
 import { select, Store } from "@ngrx/store";
 import { MatDialog, MatDialogConfig } from "@angular/material";
 import { SampleDialogComponent } from "../sample-dialog/sample-dialog.component";
@@ -15,9 +24,7 @@ export interface PageChangeEvent {
   pageIndex: number;
   pageSize: number;
   length: number;
-
 }
-
 
 export interface SortChangeEvent {
   active: keyof Sample;
@@ -31,11 +38,17 @@ export interface SortChangeEvent {
 })
 export class SampleTableComponent implements OnInit, OnDestroy {
   public sampleCount$ = this.store.pipe(select(getSampleCount));
-  public samplesPerPage$ =  this.store.pipe(select(getSamplesPerPage));
-  public currentPage$ =   this.store.pipe(select(getPage));
+  public samplesPerPage$ = this.store.pipe(select(getSamplesPerPage));
+  public currentPage$ = this.store.pipe(select(getPage));
   public samples$ = this.store.pipe(select(getSamplesList));
   samples: Sample[] = [];
-  displayedColumns = ["samplelId", "owner", "createdAt", "description", "ownerGroup"];
+  displayedColumns = [
+    "samplelId",
+    "owner",
+    "createdAt",
+    "description",
+    "ownerGroup"
+  ];
   dialogConfig: MatDialogConfig;
   description: string;
   name: string;
@@ -47,15 +60,14 @@ export class SampleTableComponent implements OnInit, OnDestroy {
     private router: Router,
     public dialog: MatDialog,
     @Inject(APP_CONFIG) public appConfig: AppConfig
-  ) {
-  }
+  ) {}
 
   ngOnInit() {
-    this.subscriptions.push(this.filters$.subscribe(
-      filters => {
+    this.subscriptions.push(
+      this.filters$.subscribe(filters => {
         this.store.dispatch(new FetchSamplesAction());
-      }
-    ));
+      })
+    );
     this.store.dispatch(new FetchSamplesAction());
     this.store.dispatch(new FetchSampleCountAction(0));
 
@@ -93,14 +105,12 @@ export class SampleTableComponent implements OnInit, OnDestroy {
       width: "250px",
       data: { name: this.name, description: this.description }
     });
-
   }
 
   onSortChange(event: SortChangeEvent): void {
     const { active: column, direction } = event;
-     this.store.dispatch(new SampleSortByColumnAction(column, direction));
+    this.store.dispatch(new SampleSortByColumnAction(column, direction));
   }
-
 
   onPageChange(event: PageChangeEvent): void {
     this.store.dispatch(new ChangePageAction(event.pageIndex, event.pageSize));

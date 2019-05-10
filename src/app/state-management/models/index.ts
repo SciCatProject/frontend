@@ -97,5 +97,5 @@ export interface LogbookFilters {
   textSearch: string;
   showBotMessages: boolean;
   showUserMessages: boolean;
-  showImages: boolean
+  showImages: boolean;
 }

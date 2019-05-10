@@ -8,7 +8,6 @@ export const getSelectedSampleId = createSelector(
   state => state.selectedId
 );
 
-
 const getSamples = createSelector(
   getSampleState,
   state => state.samples
@@ -28,17 +27,22 @@ export const getSampleCount = createSelector(
   }
 );
 
-export const getQuery = createSelector (getSampleState, state => {
-    const query = {order: state.filters.sortField};
+export const getQuery = createSelector(
+  getSampleState,
+  state => {
+    const query = {
+      order: state.filters.sortField,
+      skip: state.filters.skip,
+      limit: state.filters.limit
+    };
     return query;
-});
-
-
-
-export const getSamplesList = createSelector(getSamples, samples =>
-  Object.keys(samples).map(samplelId => samples[samplelId])
+  }
 );
 
+export const getSamplesList = createSelector(
+  getSamples,
+  samples => Object.keys(samples).map(samplelId => samples[samplelId])
+);
 
 const getSamples2 = createSelector(
   getSampleState,
@@ -64,4 +68,5 @@ export const getSamplesPerPage = createSelector(
   state => state.filters.limit
 );
 
-export const getCurrentSample = (state: any) => state.root.samples.currentSample;
+export const getCurrentSample = (state: any) =>
+  state.root.samples.currentSample;
