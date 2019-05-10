@@ -33,6 +33,7 @@ import { LogbooksDashboardComponent } from "../logbooks/logbooks-dashboard/logbo
 import { LogbooksTableComponent } from "../logbooks/logbooks-table/logbooks-table.component";
 import { AboutComponent } from "about/about/about.component";
 import { HelpComponent } from "help/help/help.component";
+import { PublisheddataTableComponent } from "publisheddata/publisheddata-table/publisheddata-table.component";
 
 export const routes: Routes = [
   { path: "", redirectTo: "/datasets", pathMatch: "full" },
@@ -72,6 +73,16 @@ export const routes: Routes = [
   {
     path: "proposals/:id",
     component: ViewProposalPageComponent,
+    canActivate: [AuthCheck]
+  },
+  {
+    path: "published",
+    component: PublisheddataTableComponent,
+    canActivate: [AuthCheck]
+  },
+  {
+    path: "published/:id",
+    component: PublisheddataTableComponent,
     canActivate: [AuthCheck]
   },
   {
