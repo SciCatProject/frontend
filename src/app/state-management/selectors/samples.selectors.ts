@@ -21,6 +21,12 @@ export const getSampleFilters = createSelector(
   }
 );
 
+export const getSampleCount = createSelector(
+  getSampleState,
+  state => {
+    return state.totalCount;
+  }
+);
 
 export const getQuery = createSelector (getSampleState, state => {
     const query = {order: state.filters.sortField};
