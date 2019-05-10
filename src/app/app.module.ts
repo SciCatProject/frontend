@@ -61,6 +61,7 @@ import { LogbooksModule } from "./logbooks/logbooks.module";
 import { LogbookEffect } from "state-management/effects/logbooks.effects";
 import { AboutModule } from "about/about.module";
 import { HelpModule } from "help/help.module";
+import { PublisheddataModule } from "publisheddata/publisheddata.module";
 
 export function localStorageSyncWrapper(reducer: any) {
   return localStorageSync({ keys: ["root"], rehydrate: true })(reducer);
@@ -96,6 +97,7 @@ export function localStorageSyncWrapper(reducer: any) {
     NguiDatetimePickerModule,
     PoliciesModule,
     ProposalsModule,
+    PublisheddataModule,
     ReactiveFormsModule,
     SamplesModule,
     SatDatepickerModule,
