@@ -8,7 +8,14 @@ import { MatDialog, MatDialogConfig } from "@angular/material";
 import { SampleDialogComponent } from "../sample-dialog/sample-dialog.component";
 import { getSampleFilters } from "../../state-management/selectors/samples.selectors";
 import { AppConfig, APP_CONFIG } from "app-config.module";
+import { of } from "rxjs";
 
+export interface PageChangeEvent {
+  pageIndex: number;
+  pageSize: number;
+  length: number;
+
+}
 
 
 export interface SortChangeEvent {
@@ -22,6 +29,9 @@ export interface SortChangeEvent {
   styleUrls: ["./sample-table.component.scss"]
 })
 export class SampleTableComponent implements OnInit, OnDestroy {
+  public samplesCount$ = of(100);
+  public samplesPerPage$ = of(10);
+  public currentPage$ = of(1);
   public samples$ = this.store.pipe(select(getSamplesList));
   samples: Sample[] = [];
   displayedColumns = ["samplelId", "owner", "createdAt", "description", "ownerGroup"];
@@ -87,5 +97,10 @@ export class SampleTableComponent implements OnInit, OnDestroy {
   onSortChange(event: SortChangeEvent): void {
     const { active: column, direction } = event;
      this.store.dispatch(new SampleSortByColumnAction(column, direction));
+  }
+
+
+  onPageChange(event: PageChangeEvent): void {
+    this.store.dispatch(new ChangePageAction(event.pageIndex, event.pageSize));
   }
 }
