@@ -3,6 +3,7 @@ import {
   FetchSampleAction,
   FetchSamplesAction,
   SampleSortByColumnAction,
+  ChangePageAction,
   FetchSampleCountAction
 } from "../../state-management/actions/samples.actions";
 import { Router } from "@angular/router";

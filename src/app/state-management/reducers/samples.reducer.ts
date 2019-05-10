@@ -19,6 +19,8 @@ import {
   FETCH_SAMPLE_COUNT_COMPLETE,
   FETCH_SAMPLE_COUNT_FAILED,
   FETCH_SAMPLE_COUNT,
+  CHANGE_PAGE,
+  ChangePageAction,
   FetchSampleCountCompleteAction
 } from "state-management/actions/samples.actions";
 
@@ -98,6 +100,17 @@ export function samplesReducer(
 
     case FETCH_SAMPLE_COUNT_FAILED: {
       return { ...state, samplesLoading: false };
+    }
+
+    case CHANGE_PAGE: {
+      const { page, limit } = action as ChangePageAction;
+      const skip = page * limit;
+      const filters = { ...state.filters, skip, limit };
+      return {
+        ...state,
+        samplesLoading: true,
+        filters
+      };
     }
 
     default: {

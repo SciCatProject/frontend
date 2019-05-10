@@ -20,6 +20,7 @@ export const FETCH_SAMPLE_COUNT_COMPLETE = "[Sample] Fetch Sample Count Complete
 export const FETCH_SAMPLE_COUNT_FAILED = "[Sample] Fetch Sample Count Failed";
 
 export const SAMPLE_SORT_BY_COLUMN = "[Sample] Sort by Column";
+export const CHANGE_PAGE = "[Sample] Change Page";
 
 export class SampleSortByColumnAction implements Action {
   readonly type = SAMPLE_SORT_BY_COLUMN;
@@ -90,6 +91,13 @@ export class FetchSampleCountFailedAction implements Action {
   readonly type = FETCH_SAMPLE_COUNT_FAILED;
 }
 
+export class ChangePageAction implements Action {
+  readonly type = CHANGE_PAGE;
+
+  constructor(readonly page: number, readonly limit: number) {
+  }
+}
+
 
 export type SamplesActions =
   | SelectSampleAction
@@ -97,6 +105,7 @@ export type SamplesActions =
   | AddSampleCompleteAction
   | AddSampleFailedAction
   | SampleSortByColumnAction
+  | ChangePageAction
   | FetchSamplesAction
   | FetchSamplesCompleteAction
   | FetchSamplesFailedAction
