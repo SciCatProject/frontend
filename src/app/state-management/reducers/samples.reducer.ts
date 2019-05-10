@@ -15,7 +15,11 @@ import {
   ADD_SAMPLE_COMPLETE,
   ADD_SAMPLE_FAILED,
   SAMPLE_SORT_BY_COLUMN,
-  SampleSortByColumnAction
+  SampleSortByColumnAction,
+  FETCH_SAMPLE_COUNT_COMPLETE,
+  FETCH_SAMPLE_COUNT_FAILED,
+  FETCH_SAMPLE_COUNT,
+  FetchSampleCountCompleteAction
 } from "state-management/actions/samples.actions";
 
 export function samplesReducer(
@@ -33,21 +37,21 @@ export function samplesReducer(
     }
 
     case SAMPLE_SORT_BY_COLUMN: {
-        const { column, direction } = action as SampleSortByColumnAction;
-        const sortField = column + (direction ? " " + direction : "");
-        const filters = { ...state.filters, sortField, skip: 0 };
-        return { ...state, filters, samplesLoading: true };
-      }
+      const { column, direction } = action as SampleSortByColumnAction;
+      const sortField = column + (direction ? " " + direction : "");
+      const filters = { ...state.filters, sortField, skip: 0 };
+      return { ...state, filters, samplesLoading: true };
+    }
 
     case ADD_SAMPLE: {
-      return {...state};
+      return { ...state };
     }
 
     case ADD_SAMPLE_COMPLETE: {
-      return {...state};
+      return { ...state };
     }
     case ADD_SAMPLE_FAILED: {
-      return {...state};
+      return { ...state };
     }
 
     case FETCH_SAMPLES: {
@@ -80,6 +84,19 @@ export function samplesReducer(
     }
 
     case FETCH_SAMPLE_FAILED: {
+      return { ...state, samplesLoading: false };
+    }
+
+    case FETCH_SAMPLE_COUNT: {
+      return { ...state, samplesLoading: true };
+    }
+
+    case FETCH_SAMPLE_COUNT_COMPLETE: {
+      const totalCount = (action as FetchSampleCountCompleteAction).sampleCount;
+      return { ...state, totalCount, samplesLoading: false };
+    }
+
+    case FETCH_SAMPLE_COUNT_FAILED: {
       return { ...state, samplesLoading: false };
     }
 
