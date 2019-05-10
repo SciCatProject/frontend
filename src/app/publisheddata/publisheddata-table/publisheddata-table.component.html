@@ -1,3 +1,14 @@
-<p>
-  publisheddata-table works!
-</p>
+pub!
+
+<mat-table
+#table
+[dataSource]="publishedData"
+>
+
+<ng-container matColumnDef="owner">
+    <mat-header-cell *matHeaderCellDef mat-sort-header
+      >Owner</mat-header-cell
+    >
+    <mat-cell *matCellDef="let pub"> {{ pub.owner }}</mat-cell>
+</ng-container>
+</mat-table>

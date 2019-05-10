@@ -24,7 +24,7 @@ export const selectPublishedDataEntities = createSelector(
   selectPublishedDataState,
   fromPublishedData.selectPublishedDataEntities
 );
-export const selectAllPublishedData = createSelector(
+export const selectAllUsers = createSelector(
   selectPublishedDataState,
   fromPublishedData.selectAllPublishedData
 );
