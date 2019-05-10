@@ -15,6 +15,10 @@ export const FETCH_SAMPLE = "[Sample] Fetch Sample";
 export const FETCH_SAMPLE_COMPLETE = "[Sample] Fetch Sample Complete";
 export const FETCH_SAMPLE_FAILED = "[Sample] Fetch Sample Failed";
 
+export const FETCH_SAMPLE_COUNT = "[Sample] Fetch Sample Count";
+export const FETCH_SAMPLE_COUNT_COMPLETE = "[Sample] Fetch Sample Count Complete";
+export const FETCH_SAMPLE_COUNT_FAILED = "[Sample] Fetch Sample Count Failed";
+
 export const SAMPLE_SORT_BY_COLUMN = "[Sample] Sort by Column";
 
 export class SampleSortByColumnAction implements Action {
@@ -57,7 +61,6 @@ export class FetchSamplesFailedAction implements Action {
 
 export class FetchSampleAction implements Action {
   readonly type = FETCH_SAMPLE;
-
   constructor(readonly samplelId: string) { }
 }
 
@@ -71,6 +74,22 @@ export class FetchSampleFailedAction implements Action {
   readonly type = FETCH_SAMPLE_FAILED;
 }
 
+
+export class FetchSampleCountAction implements Action {
+  readonly type = FETCH_SAMPLE_COUNT;
+}
+
+export class FetchSampleCountCompleteAction implements Action {
+  readonly type = FETCH_SAMPLE_COUNT_COMPLETE;
+
+  constructor(readonly sampleCount: number) { }
+}
+
+export class FetchSampleCountFailedAction implements Action {
+  readonly type = FETCH_SAMPLE_COUNT_FAILED;
+}
+
+
 export type SamplesActions =
   | SelectSampleAction
   | AddSampleAction
@@ -82,4 +101,7 @@ export type SamplesActions =
   | FetchSamplesFailedAction
   | FetchSampleAction
   | FetchSampleCompleteAction
-  | FetchSampleFailedAction;
+  | FetchSampleFailedAction
+  | FetchSampleCountAction
+  | FetchSampleCountCompleteAction
+  | FetchSampleCountFailedAction;
