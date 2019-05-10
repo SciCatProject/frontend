@@ -23,7 +23,7 @@ export class SampleService {
   }
 
   getSampleCount() {
-    return this.sampleApi.find();
+    return this.sampleApi.count();
   }
 
 }
