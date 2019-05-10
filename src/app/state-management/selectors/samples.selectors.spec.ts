@@ -11,9 +11,9 @@ const initialSampleState: SampleState = {
 
   samplesLoading: true,
   error: undefined,
-  skip: 0,
-  limit: 0,
   filters: {
+    skip: 0,
+    limit: 0,
     sortField: "creationTime:desc"
   },
   selectedId: null
