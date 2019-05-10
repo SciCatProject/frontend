@@ -22,4 +22,8 @@ export class SampleService {
     return this.sampleApi.create([sample]);
   }
 
+  getSampleCount() {
+    return this.sampleApi.find();
+  }
+
 }
