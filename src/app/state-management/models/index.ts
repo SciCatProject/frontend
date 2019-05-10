@@ -83,6 +83,8 @@ export interface DatasetFilters {
 
 export interface SampleFilters {
   sortField: string;
+  skip: number;
+  limit: number;
 }
 
 export interface PolicyFilters {
