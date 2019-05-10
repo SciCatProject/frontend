@@ -17,7 +17,11 @@ import {
   ADD_SAMPLE,
   AddSampleAction,
   AddSampleCompleteAction,
-  AddSampleFailedAction
+  AddSampleFailedAction,
+  FETCH_SAMPLE_COUNT,
+  FetchSampleCountAction,
+  FetchSampleCountCompleteAction,
+  FetchSampleCountFailedAction
 } from "../actions/samples.actions";
 import {  getQuery } from "state-management/selectors/samples.selectors";
 
@@ -70,6 +74,23 @@ export class SamplesEffects {
         )
     )
   );
+
+ @Effect()
+  protected getSampleCount$: Observable<Action> = this.actions$.pipe(
+    ofType(FETCH_SAMPLE_COUNT),
+    map((action: FetchSampleCountAction) => action.sampleCount),
+    mergeMap(sample =>
+      this.sampleService
+        .getSampleCount()
+        .pipe(
+          map(
+            res =>
+              new FetchSampleCountCompleteAction(res.count),
+            catchError(() => of(new FetchSampleCountFailedAction()))
+          )
+        )
+    )
+  ); 
 
 
   constructor(
