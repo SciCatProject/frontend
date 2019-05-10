@@ -2,13 +2,14 @@ import { Component, OnDestroy, OnInit, Inject } from "@angular/core";
 import { FetchSampleAction, FetchSamplesAction, SampleSortByColumnAction, FetchSampleCountAction } from "../../state-management/actions/samples.actions";
 import { Router } from "@angular/router";
 import { Sample } from "../../shared/sdk/models";
-import { getSamplesList, getSampleCount } from "state-management/selectors/samples.selectors";
+import { getSamplesList, getSampleCount, getSamplesPerPage } from "state-management/selectors/samples.selectors";
 import { select, Store } from "@ngrx/store";
 import { MatDialog, MatDialogConfig } from "@angular/material";
 import { SampleDialogComponent } from "../sample-dialog/sample-dialog.component";
 import { getSampleFilters } from "../../state-management/selectors/samples.selectors";
 import { AppConfig, APP_CONFIG } from "app-config.module";
 import { of } from "rxjs";
+import { getPage } from "state-management/selectors/datasets.selectors";
 
 export interface PageChangeEvent {
   pageIndex: number;
@@ -29,9 +30,9 @@ export interface SortChangeEvent {
   styleUrls: ["./sample-table.component.scss"]
 })
 export class SampleTableComponent implements OnInit, OnDestroy {
-  public samplesCount$ = this.store.pipe(select(getSampleCount));
-  public samplesPerPage$ = of(10);
-  public currentPage$ = of(1);
+  public sampleCount$ = this.store.pipe(select(getSampleCount));
+  public samplesPerPage$ =  this.store.pipe(select(getSamplesPerPage));
+  public currentPage$ =   this.store.pipe(select(getPage));
   public samples$ = this.store.pipe(select(getSamplesList));
   samples: Sample[] = [];
   displayedColumns = ["samplelId", "owner", "createdAt", "description", "ownerGroup"];
