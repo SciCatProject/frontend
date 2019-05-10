@@ -14,6 +14,7 @@ import { HttpClient } from "@angular/common/http";
 import { Router } from "@angular/router";
 import { SampleService } from "../sample.service";
 import { APP_CONFIG } from "app-config.module";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
 describe("SampleTableComponent", () => {
   let component: SampleTableComponent;
@@ -23,6 +24,7 @@ describe("SampleTableComponent", () => {
     TestBed.configureTestingModule({
       declarations: [SampleTableComponent],
       imports: [
+        BrowserAnimationsModule,
         MatTableModule,
         MatCardModule,
         MatIconModule,
