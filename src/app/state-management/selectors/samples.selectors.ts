@@ -51,5 +51,17 @@ export const getSelectedSample = createSelector(
   (samples, selectedId) => samples[selectedId] || null
 );
 
+export const getPage = createSelector(
+  getSampleState,
+  state => {
+    const { skip, limit } = state.filters;
+    return skip / limit;
+  }
+);
+
+export const getSamplesPerPage = createSelector(
+  getSampleState,
+  state => state.filters.limit
+);
 
 export const getCurrentSample = (state: any) => state.root.samples.currentSample;
