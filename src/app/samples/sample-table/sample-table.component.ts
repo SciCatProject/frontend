@@ -18,7 +18,6 @@ import { MatDialog, MatDialogConfig } from "@angular/material";
 import { SampleDialogComponent } from "../sample-dialog/sample-dialog.component";
 import { getSampleFilters } from "../../state-management/selectors/samples.selectors";
 import { AppConfig, APP_CONFIG } from "app-config.module";
-import { of } from "rxjs";
 import { getPage } from "state-management/selectors/datasets.selectors";
 
 export interface PageChangeEvent {
