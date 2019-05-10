@@ -83,6 +83,8 @@ export interface DatasetFilters {
 
 export interface SampleFilters {
   sortField: string;
+  skip: number;
+  limit: number;
 }
 
 export interface PolicyFilters {
@@ -95,5 +97,5 @@ export interface LogbookFilters {
   textSearch: string;
   showBotMessages: boolean;
   showUserMessages: boolean;
-  showImages: boolean
+  showImages: boolean;
 }
