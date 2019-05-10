@@ -77,6 +77,7 @@ export class FetchSampleFailedAction implements Action {
 
 export class FetchSampleCountAction implements Action {
   readonly type = FETCH_SAMPLE_COUNT;
+  constructor(readonly sampleCount: number) { }
 }
 
 export class FetchSampleCountCompleteAction implements Action {
