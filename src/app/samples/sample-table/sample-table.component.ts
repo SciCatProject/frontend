@@ -69,7 +69,7 @@ export class SampleTableComponent implements OnInit, OnDestroy {
         this.store.dispatch(new FetchSamplesAction());
       })
     );
-    this.store.dispatch(new FetchSamplesAction());
+    // this.store.dispatch(new FetchSamplesAction());
     this.store.dispatch(new FetchSampleCountAction(0));
 
     this.subscriptions.push(
@@ -115,5 +115,6 @@ export class SampleTableComponent implements OnInit, OnDestroy {
 
   onPageChange(event: PageChangeEvent): void {
     this.store.dispatch(new ChangePageAction(event.pageIndex, event.pageSize));
+    this.store.dispatch(new FetchSamplesAction());
   }
 }
