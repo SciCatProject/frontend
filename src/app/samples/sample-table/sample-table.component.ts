@@ -1,8 +1,8 @@
 import { Component, OnDestroy, OnInit, Inject } from "@angular/core";
-import { FetchSampleAction, FetchSamplesAction, SampleSortByColumnAction } from "../../state-management/actions/samples.actions";
+import { FetchSampleAction, FetchSamplesAction, SampleSortByColumnAction, FetchSampleCountAction } from "../../state-management/actions/samples.actions";
 import { Router } from "@angular/router";
 import { Sample } from "../../shared/sdk/models";
-import { getSamplesList } from "state-management/selectors/samples.selectors";
+import { getSamplesList, getSampleCount } from "state-management/selectors/samples.selectors";
 import { select, Store } from "@ngrx/store";
 import { MatDialog, MatDialogConfig } from "@angular/material";
 import { SampleDialogComponent } from "../sample-dialog/sample-dialog.component";
@@ -29,7 +29,7 @@ export interface SortChangeEvent {
   styleUrls: ["./sample-table.component.scss"]
 })
 export class SampleTableComponent implements OnInit, OnDestroy {
-  public samplesCount$ = of(100);
+  public samplesCount$ = this.store.pipe(select(getSampleCount));
   public samplesPerPage$ = of(10);
   public currentPage$ = of(1);
   public samples$ = this.store.pipe(select(getSamplesList));
@@ -56,6 +56,7 @@ export class SampleTableComponent implements OnInit, OnDestroy {
       }
     ));
     this.store.dispatch(new FetchSamplesAction());
+    this.store.dispatch(new FetchSampleCountAction(0));
 
     this.subscriptions.push(
       this.samples$.subscribe(data2 => {
