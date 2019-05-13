@@ -3,9 +3,14 @@ import { Store } from "@ngrx/store";
 import { PublishedData, PublishedDataApi } from "shared/sdk";
 import { Observable, Subscription } from "rxjs";
 import { PublisheddataService } from "publisheddata/publisheddata.service";
-import { FetchPublishedData } from "state-management/actions/published-data.actions";
+import {
+  FetchPublishedData,
+  FetchAllPublishedData,
+  ChangePageAction
+} from "state-management/actions/published-data.actions";
 import { Router } from "@angular/router";
 import { PageEvent } from "@angular/material";
+import { PageChangeEvent } from "datasets";
 
 export interface PubElement {
   doi: string;
@@ -43,7 +48,7 @@ const ELEMENT_DATA: PubElement[] = [
 export class PublisheddataTableComponent implements OnInit, OnDestroy {
   public publishedData$: Observable<PublishedData[]>;
   public publishedData: PublishedData[];
-  private sub: Subscription;
+  private sub: Subscription[];
   public event: any;
   public constData = [
     {
@@ -75,7 +80,8 @@ export class PublisheddataTableComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.publishedData$ = this.pubApi.find({ limit: 7 });
-    this.sub = this.pubApi.find({ limit: 11 }).subscribe(res => {
+
+    this.pubApi.find({ limit: 11 }).subscribe(res => {
       this.publishedData = <PublishedData[]>res;
     });
   }
@@ -88,5 +94,12 @@ export class PublisheddataTableComponent implements OnInit, OnDestroy {
     console.log("published", published);
   }
 
-  ngOnDestroy() {}
+  ngOnDestroy() {
+    // this.sub.forEach(subscription => subscription.unsubscribe());
+  }
+
+  onPageChange(event: PageChangeEvent): void {
+    this.store.dispatch(new ChangePageAction(event.pageIndex, event.pageSize));
+    this.store.dispatch(new FetchAllPublishedData());
+  }
 }

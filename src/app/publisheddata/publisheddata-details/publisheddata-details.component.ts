@@ -32,6 +32,7 @@ export class PublisheddataDetailsComponent implements OnInit, OnDestroy {
       this.publishedData$ = this.pubApi.findById(
         encodeURIComponent(this.id)
     );
+      this.store.dispatch(new FetchPublishedData({ id: encodeURIComponent(this.id) }) );
     });
 
   }
