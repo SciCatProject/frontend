@@ -3,7 +3,7 @@ import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 import { PublisheddataTableComponent } from "./publisheddata-table.component";
 import { MatTableModule } from "@angular/material";
 import { Store } from "@ngrx/store";
-import { MockStore, MockPublishedDataApi } from "shared/MockStubs";
+import { MockStore, MockPublishedDataApi, MockRouter } from "shared/MockStubs";
 import { PublishedDataApi } from "shared/sdk";
 
 describe("PublisheddataTableComponent", () => {
@@ -19,6 +19,7 @@ describe("PublisheddataTableComponent", () => {
       set: {
         providers: [
           { provide: Store, useClass: MockStore },
+          { provide: Router, useClass: MockRouter },
           { provide: PublishedDataApi, useClass: MockPublishedDataApi }
         ]
       }
