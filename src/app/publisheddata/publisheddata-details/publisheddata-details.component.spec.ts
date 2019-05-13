@@ -1,13 +1,14 @@
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { PublisheddataDetailsComponent } from "./publisheddata-details.component";
-import { MockStore, MockPublishedDataApi, MockRouter } from "shared/MockStubs";
+import { MockStore, MockPublishedDataApi, MockRouter, MockActivatedRoute } from "shared/MockStubs";
 import { Store } from "@ngrx/store";
 import { PublishedDataApi } from "shared/sdk";
 import { MatCardModule } from "@angular/material";
 import { NgxJsonViewerModule } from "ngx-json-viewer";
-import { Router } from "@angular/router";
+import { Router, ActivatedRoute } from "@angular/router";
 import { LinkyModule } from "ngx-linky";
+import { FileSizePipe } from "shared/pipes";
 
 describe("PublisheddataDetailsComponent", () => {
   let component: PublisheddataDetailsComponent;
@@ -15,7 +16,7 @@ describe("PublisheddataDetailsComponent", () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [PublisheddataDetailsComponent],
+      declarations: [PublisheddataDetailsComponent, FileSizePipe],
       imports: [MatCardModule, NgxJsonViewerModule, LinkyModule]
     });
     TestBed.overrideComponent(PublisheddataDetailsComponent, {
@@ -23,6 +24,7 @@ describe("PublisheddataDetailsComponent", () => {
         providers: [
           { provide: Store, useClass: MockStore },
           { provide: Router, useClass: MockRouter },
+          { provide: ActivatedRoute, useClass: MockActivatedRoute },
           { provide: PublishedDataApi, useClass: MockPublishedDataApi }
         ]
       }

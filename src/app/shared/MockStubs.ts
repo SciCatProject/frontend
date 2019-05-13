@@ -259,10 +259,26 @@ export class MockLogbookApi {
 
 export class MockPublishedDataApi {
   findbyId() {
-    return of();
+    return of({
+      creator: "string",
+      publicationYear: "string",
+      doi: "string",
+      affiliation: "string",
+      publisher: "string",
+      authorList: "string"
+    });
   }
 
   find() {
-    return of([]);
+    return of([
+      {
+        creator: "string",
+        publicationYear: "string",
+        doi: "string",
+        affiliation: "string",
+        publisher: "string",
+        authorList: "string"
+      }
+    ]);
   }
 }
