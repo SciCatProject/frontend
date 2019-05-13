@@ -3,6 +3,8 @@ import { Store } from "@ngrx/store";
 import { PublishedData, PublishedDataApi } from "shared/sdk";
 import { Observable, Subscription } from "rxjs";
 import { PublisheddataService } from "publisheddata/publisheddata.service";
+import { FetchPublishedData } from "state-management/actions/published-data.actions";
+import { Router } from "@angular/router";
 
 export interface PubElement {
   doi: string;
@@ -58,6 +60,7 @@ export class PublisheddataTableComponent implements OnInit, OnDestroy {
   constructor(
     private store: Store<PublishedData>,
     private pubApi: PublishedDataApi,
+    private router: Router,
     private pubService: PublisheddataService
   ) {}
 
@@ -66,6 +69,14 @@ export class PublisheddataTableComponent implements OnInit, OnDestroy {
     this.sub = this.pubApi.find({ limit: 6 }).subscribe(res => {
       this.publishedData = <PublishedData[]>res;
     });
+  }
+
+  onRowSelect(event, published) {
+    this.store.dispatch(new FetchPublishedData(published));
+    this.router.navigateByUrl(
+      "/published/" + encodeURIComponent(published.doi)
+    );
+    console.log("published", published)
   }
 
   ngOnDestroy() {}

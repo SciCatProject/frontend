@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, OnDestroy } from "@angular/core";
 import { PublishedData } from "shared/sdk";
 import { Store } from "@ngrx/store";
 import { ActivatedRoute } from "@angular/router";
@@ -11,7 +11,7 @@ import { Observable } from "rxjs";
   templateUrl: "./publisheddata-details.component.html",
   styleUrls: ["./publisheddata-details.component.css"]
 })
-export class PublisheddataDetailsComponent implements OnInit {
+export class PublisheddataDetailsComponent implements OnInit, OnDestroy {
   publishedDataId$: any;
   constructor(
     private route: ActivatedRoute,
@@ -23,5 +23,10 @@ export class PublisheddataDetailsComponent implements OnInit {
       map(params => params.id),
       filter(id => id != null)
     );
+    console.log("id");
+  }
+
+  ngOnDestroy() {
+    // destroy subscriptions
   }
 }
