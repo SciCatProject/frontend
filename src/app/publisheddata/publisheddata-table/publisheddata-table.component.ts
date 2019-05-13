@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from "@angular/core";
 import { Store } from "@ngrx/store";
 import { PublishedData, PublishedDataApi } from "shared/sdk";
 import { Observable, Subscription } from "rxjs";
+import { PublisheddataService } from "publisheddata/publisheddata.service";
 
 export interface PubElement {
   doi: string;
@@ -56,20 +57,16 @@ export class PublisheddataTableComponent implements OnInit, OnDestroy {
 
   constructor(
     private store: Store<PublishedData>,
-    private pubApi: PublishedDataApi
+    private pubApi: PublishedDataApi,
+    private pubService: PublisheddataService
   ) {}
 
   ngOnInit() {
-    this.publishedData$ = this.pubApi.find({ limit: 5 });
-    this.sub = this.pubApi.find({ limit: 5 }).subscribe(
-      res => {
-        this.publishedData = <PublishedData[]>res;
-      }
-    );
-    // this.store.dispatch(new FetchAllPublishedData());
+    this.publishedData$ = this.pubApi.find({ limit: 7 });
+    this.sub = this.pubApi.find({ limit: 6 }).subscribe(res => {
+      this.publishedData = <PublishedData[]>res;
+    });
   }
 
-  ngOnDestroy() {
-    //    this.subscriptions.forEach(sub => sub.unsubscribe());
-  }
+  ngOnDestroy() {}
 }
