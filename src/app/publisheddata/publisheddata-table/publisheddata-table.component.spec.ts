@@ -5,6 +5,7 @@ import { MatTableModule } from "@angular/material";
 import { Store } from "@ngrx/store";
 import { MockStore, MockPublishedDataApi, MockRouter } from "shared/MockStubs";
 import { PublishedDataApi } from "shared/sdk";
+import { Router } from "@angular/router";
 
 describe("PublisheddataTableComponent", () => {
   let component: PublisheddataTableComponent;
