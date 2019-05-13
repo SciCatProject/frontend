@@ -25,17 +25,15 @@ export class PublisheddataDetailsComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.publishedDataId$ = this.route.params.pipe(
-      map(params => {
-        this.id = params.get("id");
-        console.log("gm this id", this.id);
-      }),
-      filter(id => id != null)
+    this.route.paramMap.subscribe(params => {
+      console.log("gm params", params);
+      console.log(params.params["id"]); // log the value of id
+      this.id = params.params["id"];
+      this.publishedData$ = this.pubApi.findById(
+        encodeURIComponent(this.id)
     );
+    });
 
-    this.publishedData$ = this.pubApi.findById(
-      "10.17199%2FBRIGHTNESS%2FMB0001"
-    );
   }
 
   ngOnDestroy() {

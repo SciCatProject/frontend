@@ -1,6 +1,14 @@
 .details-table {
   text-align: left;
   padding: 8px 8px 8px 0;
+  th {
+    min-width: 200px;
+  }
+}
+
+.matcarddetails {
+  margin:1em;
+  width: 800px;
 }
 
 .material-icons {
@@ -8,26 +16,24 @@
 }
 
 .details {
-    padding: 1em;
-  
-    table {
-      td {
-        padding: 0.5em;
-      }
-  
-      th {
-        text-align: left;
-        padding-right: 0.5em;
-      }
+  padding: 1em;
+
+  table {
+    td {
+      padding: 0.5em;
     }
-  
-    h3 {
-      margin-top: 1em;
+
+    th {
+      text-align: left;
+      padding-right: 0.9em;
     }
-  
-    mat-card {
-      width: 20em;
-    }
-  
-  
   }
+
+  h3 {
+    margin-top: 1em;
+  }
+
+  mat-card {
+    width: 20em;
+  }
+}
