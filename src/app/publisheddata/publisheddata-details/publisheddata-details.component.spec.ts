@@ -1,11 +1,12 @@
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { PublisheddataDetailsComponent } from "./publisheddata-details.component";
-import { MockStore, MockPublishedDataApi } from "shared/MockStubs";
+import { MockStore, MockPublishedDataApi, MockRouter } from "shared/MockStubs";
 import { Store } from "@ngrx/store";
 import { PublishedDataApi } from "shared/sdk";
 import { MatCardModule } from "@angular/material";
 import { NgxJsonViewerComponent } from "ngx-json-viewer";
+import { Router } from "@angular/router";
 
 describe("PublisheddataDetailsComponent", () => {
   let component: PublisheddataDetailsComponent;
@@ -20,6 +21,7 @@ describe("PublisheddataDetailsComponent", () => {
       set: {
         providers: [
           { provide: Store, useClass: MockStore },
+          { provide: Router, useClass: MockRouter },
           { provide: PublishedDataApi, useClass: MockPublishedDataApi }
         ]
       }
