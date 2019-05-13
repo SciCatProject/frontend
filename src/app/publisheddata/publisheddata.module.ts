@@ -8,14 +8,18 @@ import {
   MatCardModule
 } from "@angular/material";
 import { SharedCatanieModule } from "shared/shared.module";
+import { LinkyModule } from "ngx-linky";
+import { NgxJsonViewerModule } from "ngx-json-viewer";
 
 @NgModule({
   declarations: [PublisheddataTableComponent, PublisheddataDetailsComponent],
   imports: [
     CommonModule,
+    LinkyModule,
     MatCardModule,
     MatTableModule,
     MatPaginatorModule,
+    NgxJsonViewerModule,
     SharedCatanieModule
   ]
 })

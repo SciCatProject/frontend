@@ -1,42 +1,128 @@
-
-{{ publishedData$ | async | json }}
-
-
-<div class=publishedData-detail *ngIf="(publishedData$ | async) as publishedData">
-    <mat-card style="margin: 1em">
-      <div class="details">
-        Sample Details
-        <table class="details-table">
-          <tr *ngIf="publishedData.creator as value">
-            <th><i class="material-icons" style="vertical-align: middle"> person </i>Creator</th>
-            <td>{{ value }}</td>
-          </tr>
-          <tr *ngIf="publishedData.doi as value">
-            <th><i class="material-icons" style="vertical-align: middle"> description </i>DOI</th>
-            <td>{{ value }}</td>
-          </tr>
-          <tr *ngIf="publishedData.authors as value">
-            <th><i class="material-icons" style="vertical-align: middle"> group </i>Author List</th>
-            <td>{{ value }}</td>
-          </tr>
-          <tr *ngIf="publishedData.title as value">
-            <th><i class="material-icons" style="vertical-align: middle"> event </i>Title</th>
-            <td>{{ value | date: 'yyyy/MM/dd HH:mm'}}</td>
-          </tr>
-          <tr *ngIf="publishedData.sizeOfArchive as value">
-            <th><i class="material-icons" style="vertical-align: middle"> event </i>Size</th>
-            <td>{{ value | filesize }}</td>
-          </tr>
-          <tr *ngIf="publishedData.numberOfFiles as value">
-            <th><i class="material-icons" style="vertical-align: middle"> event </i>Number of Files</th>
-            <td>{{ value }}</td>
-          </tr>
-          <tr *ngIf="publishedData.resourceType as value">
-            <th><i class="material-icons" style="vertical-align: middle"> event </i>Resource Type</th>
-            <td>{{ value }}</td>
-          </tr>
-        </table>
-      </div>
-    </mat-card>
-  </div>
-  
+<div
+  class="publishedData-detail"
+  *ngIf="(publishedData$ | async) as publishedData"
+>
+  <mat-card style="margin: 1em">
+    <div class="details">
+      <mat-card-header style="background:#7de1ff;">
+          About the published data
+      </mat-card-header>
+      <table class="details-table">
+        <tr *ngIf="publishedData.creator as value">
+          <th>
+            <i class="material-icons" style="vertical-align: middle">
+              person
+            </i>
+            Creator
+          </th>
+          <td>{{ value }}</td>
+        </tr>
+        <tr *ngIf="publishedData.affiliation as value">
+          <th>
+            <i class="material-icons" style="vertical-align: middle">
+              person
+            </i>
+            Affiliation
+          </th>
+          <td>{{ value }}</td>
+        </tr>
+        <tr *ngIf="publishedData.publisher as value">
+          <th>
+            <i class="material-icons" style="vertical-align: middle">
+              person
+            </i>
+            Publisher
+          </th>
+          <td>{{ value }}</td>
+        </tr>
+        <tr *ngIf="publishedData.creator as value">
+          <th>
+            <i class="material-icons" style="vertical-align: middle">
+              person
+            </i>
+            Creator
+          </th>
+          <td>{{ value }}</td>
+        </tr>
+        <tr *ngIf="publishedData.doi as value">
+          <th>
+            <i class="material-icons" style="vertical-align: middle">
+              description
+            </i>
+            DOI
+          </th>
+          <td>{{ value }}</td>
+        </tr>
+        <tr *ngIf="publishedData.authors as value">
+          <th>
+            <i class="material-icons" style="vertical-align: middle"> group </i>
+            Author List
+          </th>
+          <td>{{ value }}</td>
+        </tr>
+        <tr *ngIf="publishedData.title as value">
+          <th>
+            <i class="material-icons" style="vertical-align: middle"> event </i>
+            Title
+          </th>
+          <td>{{ value }}</td>
+        </tr>
+        <tr *ngIf="publishedData.sizeOfArchive as value">
+          <th>
+            <i class="material-icons" style="vertical-align: middle">
+              sd_storage
+            </i>
+            Size
+          </th>
+          <td>{{ value | filesize }}</td>
+        </tr>
+        <tr *ngIf="publishedData.numberOfFiles as value">
+          <th>
+            <i class="material-icons" style="vertical-align: middle">
+              file_copy
+            </i>
+            Number of Files
+          </th>
+          <td>{{ value }}</td>
+        </tr>
+        <tr *ngIf="publishedData.dataDescription as value">
+          <th>
+            <i class="material-icons" style="vertical-align: middle">
+              language
+            </i>
+            Data Description
+          </th>
+          <td><span [innerHTML]="value | linky"></span></td>
+        </tr>
+        <tr *ngIf="publishedData.pidArray as value">
+          <th>
+            <i class="material-icons" style="vertical-align: middle">
+              file_copy </i
+            >Dataset IDs
+          </th>
+          <td>{{ value }}</td>
+        </tr>
+        <tr *ngIf="publishedData.resourceType as value">
+          <th>
+            <i class="material-icons" style="vertical-align: middle">
+              local_offer </i
+            >Resource Type
+          </th>
+          <td>{{ value }}</td>
+        </tr>
+      </table>
+    </div>
+  </mat-card>
+  <mat-card style="margin:1em">
+    <button (click)="show = !show">
+      {{ show ? "Hide MetaData" : "Show Metadata" }}
+    </button>
+    <br />
+    <div *ngIf="show">
+      <ngx-json-viewer
+        [json]="publishedData$ | async"
+        [expanded]="false"
+      ></ngx-json-viewer>
+    </div>
+  </mat-card>
+</div>

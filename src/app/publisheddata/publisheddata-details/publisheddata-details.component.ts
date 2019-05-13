@@ -29,9 +29,6 @@ export class PublisheddataDetailsComponent implements OnInit, OnDestroy {
       filter(id => id != null)
     );
 
-    this.subscription = this.publishedDataId$
-      .pipe(flatMap(id => [new FetchPublishedData(id)]))
-      .subscribe(this.store);
 
     this.publishedData$ = this.pubApi.findById(
       "10.17199%2FBRIGHTNESS%2FMB0001"
