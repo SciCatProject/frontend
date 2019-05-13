@@ -7,6 +7,7 @@ import { PublishedDataApi } from "shared/sdk";
 import { MatCardModule } from "@angular/material";
 import { NgxJsonViewerModule } from "ngx-json-viewer";
 import { Router } from "@angular/router";
+import { LinkyModule } from "ngx-linky";
 
 describe("PublisheddataDetailsComponent", () => {
   let component: PublisheddataDetailsComponent;
@@ -15,7 +16,7 @@ describe("PublisheddataDetailsComponent", () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [PublisheddataDetailsComponent],
-      imports: [MatCardModule, NgxJsonViewerModule]
+      imports: [MatCardModule, NgxJsonViewerModule, LinkyModule]
     });
     TestBed.overrideComponent(PublisheddataDetailsComponent, {
       set: {
