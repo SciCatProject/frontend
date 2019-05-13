@@ -5,6 +5,7 @@ import { Observable, Subscription } from "rxjs";
 import { PublisheddataService } from "publisheddata/publisheddata.service";
 import { FetchPublishedData } from "state-management/actions/published-data.actions";
 import { Router } from "@angular/router";
+import { PageEvent } from "@angular/material";
 
 export interface PubElement {
   doi: string;
@@ -57,6 +58,13 @@ export class PublisheddataTableComponent implements OnInit, OnDestroy {
     "publicationYear"
   ];
   public dataSource = ELEMENT_DATA;
+  // MatPaginator Inputs
+  public length = 100;
+  public pageSize = 10;
+  public pageSizeOptions: number[] = [5, 10, 25, 100];
+
+  // MatPaginator Output
+  public pageEvent: PageEvent;
 
   constructor(
     private store: Store<PublishedData>,
@@ -67,7 +75,7 @@ export class PublisheddataTableComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.publishedData$ = this.pubApi.find({ limit: 7 });
-    this.sub = this.pubApi.find({ limit: 6 }).subscribe(res => {
+    this.sub = this.pubApi.find({ limit: 11 }).subscribe(res => {
       this.publishedData = <PublishedData[]>res;
     });
   }
@@ -77,7 +85,7 @@ export class PublisheddataTableComponent implements OnInit, OnDestroy {
     this.router.navigateByUrl(
       "/published/" + encodeURIComponent(published.doi)
     );
-    console.log("published", published)
+    console.log("published", published);
   }
 
   ngOnDestroy() {}

@@ -1,5 +1,10 @@
 
 
+<mat-paginator [length]="length"
+[pageSize]="pageSize"
+[pageSizeOptions]="pageSizeOptions"
+(page)="pageEvent = $event">
+</mat-paginator>
 <table mat-table [dataSource]="publishedData" class="mat-elevation-z8">
 
     <!--- Note that these columns can be defined in any order.
