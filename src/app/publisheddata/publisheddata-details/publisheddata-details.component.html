@@ -1,5 +1,42 @@
-<p>
-  publisheddata-details works!
-</p>
 
-{{ publishedData$ | async }}
+{{ publishedData$ | async | json }}
+
+
+<div class=publishedData-detail *ngIf="(publishedData$ | async) as publishedData">
+    <mat-card style="margin: 1em">
+      <div class="details">
+        Sample Details
+        <table class="details-table">
+          <tr *ngIf="publishedData.creator as value">
+            <th><i class="material-icons" style="vertical-align: middle"> person </i>Creator</th>
+            <td>{{ value }}</td>
+          </tr>
+          <tr *ngIf="publishedData.doi as value">
+            <th><i class="material-icons" style="vertical-align: middle"> description </i>DOI</th>
+            <td>{{ value }}</td>
+          </tr>
+          <tr *ngIf="publishedData.authors as value">
+            <th><i class="material-icons" style="vertical-align: middle"> group </i>Author List</th>
+            <td>{{ value }}</td>
+          </tr>
+          <tr *ngIf="publishedData.title as value">
+            <th><i class="material-icons" style="vertical-align: middle"> event </i>Title</th>
+            <td>{{ value | date: 'yyyy/MM/dd HH:mm'}}</td>
+          </tr>
+          <tr *ngIf="publishedData.sizeOfArchive as value">
+            <th><i class="material-icons" style="vertical-align: middle"> event </i>Size</th>
+            <td>{{ value | filesize }}</td>
+          </tr>
+          <tr *ngIf="publishedData.numberOfFiles as value">
+            <th><i class="material-icons" style="vertical-align: middle"> event </i>Number of Files</th>
+            <td>{{ value }}</td>
+          </tr>
+          <tr *ngIf="publishedData.resourceType as value">
+            <th><i class="material-icons" style="vertical-align: middle"> event </i>Resource Type</th>
+            <td>{{ value }}</td>
+          </tr>
+        </table>
+      </div>
+    </mat-card>
+  </div>
+  
