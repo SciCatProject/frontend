@@ -5,7 +5,7 @@ import { MockStore, MockPublishedDataApi, MockRouter } from "shared/MockStubs";
 import { Store } from "@ngrx/store";
 import { PublishedDataApi } from "shared/sdk";
 import { MatCardModule } from "@angular/material";
-import { NgxJsonViewerComponent } from "ngx-json-viewer";
+import { NgxJsonViewerModule } from "ngx-json-viewer";
 import { Router } from "@angular/router";
 
 describe("PublisheddataDetailsComponent", () => {
@@ -15,7 +15,7 @@ describe("PublisheddataDetailsComponent", () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [PublisheddataDetailsComponent],
-      imports: [MatCardModule, NgxJsonViewerComponent]
+      imports: [MatCardModule, NgxJsonViewerModule]
     });
     TestBed.overrideComponent(PublisheddataDetailsComponent, {
       set: {
