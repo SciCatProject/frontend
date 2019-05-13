@@ -43,6 +43,7 @@ export class PublisheddataTableComponent implements OnInit, OnDestroy {
   public publishedData$: Observable<PublishedData[]>;
   public publishedData: PublishedData[];
   private sub: Subscription;
+  public event: any;
   public constData = [
     {
       name: "x1",
