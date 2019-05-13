@@ -4,6 +4,8 @@ import { PublisheddataDetailsComponent } from "./publisheddata-details.component
 import { MockStore, MockPublishedDataApi } from "shared/MockStubs";
 import { Store } from "@ngrx/store";
 import { PublishedDataApi } from "shared/sdk";
+import { MatCardModule } from "@angular/material";
+import { NgxJsonViewerComponent } from "ngx-json-viewer";
 
 describe("PublisheddataDetailsComponent", () => {
   let component: PublisheddataDetailsComponent;
@@ -11,7 +13,8 @@ describe("PublisheddataDetailsComponent", () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [PublisheddataDetailsComponent]
+      declarations: [PublisheddataDetailsComponent],
+      imports: [MatCardModule, NgxJsonViewerComponent]
     });
     TestBed.overrideComponent(PublisheddataDetailsComponent, {
       set: {
