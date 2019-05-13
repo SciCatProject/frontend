@@ -1,4 +1,10 @@
 import { Component, OnInit } from "@angular/core";
+import { PublishedData } from "shared/sdk";
+import { Store } from "@ngrx/store";
+import { ActivatedRoute } from "@angular/router";
+import { FetchPublishedData } from "state-management/actions/published-data.actions";
+import { map, filter } from "rxjs/operators";
+import { Observable } from "rxjs";
 
 @Component({
   selector: "publisheddata-details",
@@ -6,7 +12,16 @@ import { Component, OnInit } from "@angular/core";
   styleUrls: ["./publisheddata-details.component.css"]
 })
 export class PublisheddataDetailsComponent implements OnInit {
-  constructor() {}
+  publishedDataId$: any;
+  constructor(
+    private route: ActivatedRoute,
+    private store: Store<PublishedData>
+  ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.publishedDataId$ = this.route.params.pipe(
+      map(params => params.id),
+      filter(id => id != null)
+    );
+  }
 }
