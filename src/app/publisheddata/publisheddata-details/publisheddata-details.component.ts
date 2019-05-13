@@ -27,8 +27,8 @@ export class PublisheddataDetailsComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.route.paramMap.subscribe(params => {
       console.log("gm params", params);
-      console.log(params.params["id"]); // log the value of id
-      this.id = params.params["id"];
+      this.id = params["params"]["id"];
+      console.log(this.id); // log the value of id
       this.publishedData$ = this.pubApi.findById(
         encodeURIComponent(this.id)
     );

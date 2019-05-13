@@ -256,3 +256,13 @@ export class MockLogbookApi {
     return of(this.logbook);
   }
 }
+
+export class MockPublishedDataApi {
+  findbyId() {
+    return of();
+  }
+
+  find() {
+    return of([]);
+  }
+}
