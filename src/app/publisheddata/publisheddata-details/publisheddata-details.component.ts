@@ -10,9 +10,10 @@ import { getSelectedPublishedDataId } from "state-management/reducers/published-
 @Component({
   selector: "publisheddata-details",
   templateUrl: "./publisheddata-details.component.html",
-  styleUrls: ["./publisheddata-details.component.css"]
+  styleUrls: ["./publisheddata-details.component.scss"]
 })
 export class PublisheddataDetailsComponent implements OnInit, OnDestroy {
+  id: string;
   publishedDataId$: any;
   publishedData$: any;
 
@@ -25,10 +26,12 @@ export class PublisheddataDetailsComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.publishedDataId$ = this.route.params.pipe(
-      map(params => params.id),
+      map(params => {
+        this.id = params.get("id");
+        console.log("gm this id", this.id);
+      }),
       filter(id => id != null)
     );
-
 
     this.publishedData$ = this.pubApi.findById(
       "10.17199%2FBRIGHTNESS%2FMB0001"

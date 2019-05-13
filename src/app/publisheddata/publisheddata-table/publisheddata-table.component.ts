@@ -37,7 +37,7 @@ const ELEMENT_DATA: PubElement[] = [
 @Component({
   selector: "publisheddata-table",
   templateUrl: "./publisheddata-table.component.html",
-  styleUrls: ["./publisheddata-table.component.css"]
+  styleUrls: ["./publisheddata-table.component.scss"]
 })
 export class PublisheddataTableComponent implements OnInit, OnDestroy {
   public publishedData$: Observable<PublishedData[]>;
