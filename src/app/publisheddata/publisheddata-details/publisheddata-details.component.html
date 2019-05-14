@@ -12,26 +12,6 @@
           <th><i class="material-icons"> label </i> Title</th>
           <td>{{ value }}</td>
         </tr>
-        <tr *ngIf="publishedData.creator as value">
-          <th><i class="material-icons"> person </i> Creator</th>
-          <td>{{ value }}</td>
-        </tr>
-        <tr *ngIf="publishedData.affiliation as value">
-          <th>
-            <i class="material-icons"> home </i>
-            Affiliation
-          </th>
-          <td>{{ value }}</td>
-        </tr>
-        <tr *ngIf="publishedData.publisher as value">
-          <th>
-            <i class="material-icons">
-              account_balance
-            </i>
-            Publisher
-          </th>
-          <td>{{ value }}</td>
-        </tr>
         <tr *ngIf="publishedData.abstract as value">
           <th>
             <i class="material-icons">
@@ -57,6 +37,19 @@
         <tr *ngIf="publishedData.url as value">
           <th><i class="material-icons"> link </i> URL</th>
           <td><span [innerHTML]="value | linky"></span></td>
+        </tr>
+      </table>
+    </div>
+  </mat-card>
+  <mat-card class="matcarddetails">
+    <div class="details">
+      <mat-card-header style="background:#7de1ff;">
+        Administrative metadata
+      </mat-card-header>
+      <table class="details-table">
+        <tr *ngIf="publishedData.creator as value">
+          <th><i class="material-icons"> person </i> Creator</th>
+          <td>{{ value }}</td>
         </tr>
         <tr *ngIf="publishedData.sizeOfArchive as value">
           <th>
@@ -87,6 +80,17 @@
         </tr>
         <tr *ngIf="publishedData.pidArray as value">
           <th><i class="material-icons"> file_copy </i>Dataset IDs</th>
+          <td>{{ value }}</td>
+        </tr>
+        <tr *ngIf="publishedData.affiliation as value">
+          <th><i class="material-icons"> home </i> Affiliation</th>
+          <td>{{ value }}</td>
+        </tr>
+        <tr *ngIf="publishedData.publisher as value">
+          <th>
+            <i class="material-icons"> account_balance </i>
+            Publisher
+          </th>
           <td>{{ value }}</td>
         </tr>
         <tr *ngIf="publishedData.resourceType as value">
