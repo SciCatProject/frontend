@@ -12,6 +12,10 @@
           <th><i class="material-icons"> label </i> Title</th>
           <td>{{ value }}</td>
         </tr>
+        <tr *ngIf="publishedData.authors as value">
+          <th><i class="material-icons"> group </i> Author List</th>
+          <td>{{ value }}</td>
+        </tr>
         <tr *ngIf="publishedData.abstract as value">
           <th>
             <i class="material-icons">
@@ -30,10 +34,6 @@
           </th>
           <td>{{ value }}</td>
         </tr>
-        <tr *ngIf="publishedData.authors as value">
-          <th><i class="material-icons"> group </i> Author List</th>
-          <td>{{ value }}</td>
-        </tr>
         <tr *ngIf="publishedData.url as value">
           <th><i class="material-icons"> link </i> URL</th>
           <td><span [innerHTML]="value | linky"></span></td>
@@ -43,7 +43,7 @@
   </mat-card>
   <mat-card class="matcarddetails">
     <div class="details">
-      <mat-card-header style="background:#7de1ff;">
+      <mat-card-header style="background:#d2f082;">
         Administrative metadata
       </mat-card-header>
       <table class="details-table">
