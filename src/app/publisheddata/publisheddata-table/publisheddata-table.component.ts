@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
-import { Store } from "@ngrx/store";
+import { Store, select } from "@ngrx/store";
 import { PublishedData, PublishedDataApi } from "shared/sdk";
 import { Observable, Subscription } from "rxjs";
 import { PublisheddataService } from "publisheddata/publisheddata.service";
@@ -8,6 +8,11 @@ import {
   FetchAllPublishedData,
   ChangePageAction
 } from "state-management/actions/published-data.actions";
+import {
+  selectPublishedDataTotal,
+  selectAllPublished,
+  selectFilteredPublished,
+} from "state-management/selectors/published-data.selectors";
 import { Router } from "@angular/router";
 import { PageEvent } from "@angular/material";
 import { PageChangeEvent } from "datasets";
@@ -46,7 +51,7 @@ const ELEMENT_DATA: PubElement[] = [
   styleUrls: ["./publisheddata-table.component.scss"]
 })
 export class PublisheddataTableComponent implements OnInit, OnDestroy {
-  public publishedData$: Observable<PublishedData[]>;
+  public publishedData$ = this.store.pipe(select(selectFilteredPublished));
   public publishedData: PublishedData[];
   private sub: Subscription[];
   public event: any;
@@ -79,11 +84,11 @@ export class PublisheddataTableComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.publishedData$ = this.pubApi.find({ limit: 7 });
-
-    this.pubApi.find({ limit: 11 }).subscribe(res => {
+    this.store.dispatch(new FetchAllPublishedData());
+    // this.publishedData$ = this.pubApi.find({ limit: 7 });
+    /*this.pubApi.find({ limit: 11 }).subscribe(res => {
       this.publishedData = <PublishedData[]>res;
-    });
+    });*/
   }
 
   onRowSelect(event, published) {
@@ -95,11 +100,11 @@ export class PublisheddataTableComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    // this.sub.forEach(subscription => subscription.unsubscribe());
+    //this.sub.forEach(subscription => subscription.unsubscribe());
   }
 
   onPageChange(event: PageChangeEvent): void {
-    this.store.dispatch(new ChangePageAction(event.pageIndex, event.pageSize));
-    this.store.dispatch(new FetchAllPublishedData());
+    this.store.dispatch(new ChangePageAction( { page: event.pageIndex, limit: event.pageSize }));
+    //this.store.dispatch(new FetchAllPublishedData());
   }
 }

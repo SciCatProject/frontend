@@ -29,13 +29,14 @@ export const selectAllPublished = createSelector(
   fromPublishedData.selectAllPublishedData
 );
 
-export const fetchArrayPublished = createSelector(
+export const selectFilteredPublished = createSelector(
   selectPublishedDataState,
-  array => {
-    const arr = ["pub1", "pub2"];
-    return arr;
+  selectAllPublished,
+  (state, data) => {
+    return data.slice(state.filters.skip, state.filters.skip + state.filters.limit);
   }
 );
+
 export const selectPublishedDataTotal = createSelector(
   selectPublishedDataState,
   fromPublishedData.selectPublishedDataTotal

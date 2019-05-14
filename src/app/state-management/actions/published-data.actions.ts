@@ -101,8 +101,7 @@ export class ClearPublishedDatas implements Action {
 
 export class ChangePageAction implements Action {
   readonly type = PublishedDataActionTypes.ChangePagePub;
-  constructor(readonly page: number, readonly limit: number) {
-  }
+  constructor(public payload: { page: number, limit: number }) {}
 }
 
 export type PublishedDataActions =

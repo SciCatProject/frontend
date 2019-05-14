@@ -11,6 +11,9 @@ import { SharedCatanieModule } from "shared/shared.module";
 import { LinkyModule } from "ngx-linky";
 import { NgxJsonViewerModule } from "ngx-json-viewer";
 
+import { StoreModule } from "@ngrx/store";
+import { publishedDataReducer } from "state-management/reducers/published-data.reducer";
+
 @NgModule({
   declarations: [PublisheddataTableComponent, PublisheddataDetailsComponent],
   imports: [
@@ -20,7 +23,8 @@ import { NgxJsonViewerModule } from "ngx-json-viewer";
     MatTableModule,
     MatPaginatorModule,
     NgxJsonViewerModule,
-    SharedCatanieModule
+    SharedCatanieModule,
+    StoreModule.forFeature("PublishedData", publishedDataReducer),
   ]
 })
 export class PublisheddataModule {}
