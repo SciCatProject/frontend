@@ -1,8 +1,7 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { Store, select } from "@ngrx/store";
-import { PublishedData, PublishedDataApi } from "shared/sdk";
+import { PublishedData } from "shared/sdk";
 import { Subscription } from "rxjs";
-import { PublisheddataService } from "publisheddata/publisheddata.service";
 import {
   FetchAllPublishedData,
   ChangePageAction
@@ -77,9 +76,7 @@ export class PublisheddataTableComponent implements OnInit, OnDestroy {
 
   constructor(
     private store: Store<PublishedData>,
-    private pubApi: PublishedDataApi,
-    private router: Router,
-    private pubService: PublisheddataService
+    private router: Router
   ) {}
 
   ngOnInit() {

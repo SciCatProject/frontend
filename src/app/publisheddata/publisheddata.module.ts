@@ -13,16 +13,19 @@ import { NgxJsonViewerModule } from "ngx-json-viewer";
 
 import { StoreModule } from "@ngrx/store";
 import { publishedDataReducer } from "state-management/reducers/published-data.reducer";
+import { BrowserAnimationsModule, NoopAnimationsModule } from "@angular/platform-browser/animations";
 
 @NgModule({
   declarations: [PublisheddataTableComponent, PublisheddataDetailsComponent],
   imports: [
+    BrowserAnimationsModule,
     CommonModule,
     LinkyModule,
     MatCardModule,
     MatTableModule,
     MatPaginatorModule,
     NgxJsonViewerModule,
+    NoopAnimationsModule,
     SharedCatanieModule,
     StoreModule.forFeature("PublishedData", publishedDataReducer),
   ]

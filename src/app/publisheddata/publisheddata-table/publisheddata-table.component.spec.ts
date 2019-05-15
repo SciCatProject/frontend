@@ -1,11 +1,12 @@
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { PublisheddataTableComponent } from "./publisheddata-table.component";
-import { MatTableModule } from "@angular/material";
+import { MatTableModule,  MatPaginatorModule } from "@angular/material";
 import { Store } from "@ngrx/store";
 import { MockStore, MockPublishedDataApi, MockRouter } from "shared/MockStubs";
 import { PublishedDataApi } from "shared/sdk";
 import { Router } from "@angular/router";
+import { NoopAnimationsModule, BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
 describe("PublisheddataTableComponent", () => {
   let component: PublisheddataTableComponent;
@@ -14,7 +15,7 @@ describe("PublisheddataTableComponent", () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [PublisheddataTableComponent],
-      imports: [MatTableModule]
+      imports: [BrowserAnimationsModule , MatTableModule, MatPaginatorModule, NoopAnimationsModule]
     });
     TestBed.overrideComponent(PublisheddataTableComponent, {
       set: {
