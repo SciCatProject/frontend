@@ -6,8 +6,6 @@ import { FetchPublishedData } from "state-management/actions/published-data.acti
 import { Subscription } from "rxjs";
 import { pluck } from "rxjs/operators";
 import {
-  selectFilteredPublished,
-  selectPublishedDataTotal,
   selectCurrentPublishedData
 } from "state-management/selectors/published-data.selectors";
 
