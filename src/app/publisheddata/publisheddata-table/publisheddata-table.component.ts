@@ -8,7 +8,8 @@ import {
   ChangePageAction
 } from "state-management/actions/published-data.actions";
 import {
-  selectFilteredPublished
+  selectFilteredPublished,
+  selectPublishedDataTotal
 } from "state-management/selectors/published-data.selectors";
 import { Router } from "@angular/router";
 import { PageEvent } from "@angular/material";
@@ -49,6 +50,7 @@ const ELEMENT_DATA: PubElement[] = [
 })
 export class PublisheddataTableComponent implements OnInit, OnDestroy {
   public publishedData$ = this.store.pipe(select(selectFilteredPublished));
+  public publishedCount$ = this.store.pipe(select(selectPublishedDataTotal));
   public publishedData: PublishedData[];
   private sub: Subscription[];
   public event: any;
