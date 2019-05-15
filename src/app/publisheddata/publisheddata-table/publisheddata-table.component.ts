@@ -11,7 +11,7 @@ import {
 import {
   selectPublishedDataTotal,
   selectAllPublished,
-  selectFilteredPublished,
+  selectFilteredPublished
 } from "state-management/selectors/published-data.selectors";
 import { Router } from "@angular/router";
 import { PageEvent } from "@angular/material";
@@ -91,8 +91,7 @@ export class PublisheddataTableComponent implements OnInit, OnDestroy {
     });*/
   }
 
-  onRowSelect(event, published) {
-    this.store.dispatch(new FetchPublishedData(published));
+  onClick(published: PublishedData) {
     this.router.navigateByUrl(
       "/published/" + encodeURIComponent(published.doi)
     );
@@ -104,7 +103,9 @@ export class PublisheddataTableComponent implements OnInit, OnDestroy {
   }
 
   onPageChange(event: PageChangeEvent): void {
-    this.store.dispatch(new ChangePageAction( { page: event.pageIndex, limit: event.pageSize }));
+    this.store.dispatch(
+      new ChangePageAction({ page: event.pageIndex, limit: event.pageSize })
+    );
     //this.store.dispatch(new FetchAllPublishedData());
   }
 }
