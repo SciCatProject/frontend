@@ -1,9 +1,15 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { PublishedData, PublishedDataApi } from "shared/sdk";
-import { Store } from "@ngrx/store";
+import { Store, select } from "@ngrx/store";
 import { ActivatedRoute } from "@angular/router";
 import { FetchPublishedData } from "state-management/actions/published-data.actions";
 import { Subscription } from "rxjs";
+import { pluck } from "rxjs/operators";
+import {
+  selectFilteredPublished,
+  selectPublishedDataTotal,
+  selectCurrentPublishedData
+} from "state-management/selectors/published-data.selectors";
 
 @Component({
   selector: "publisheddata-details",
@@ -13,7 +19,10 @@ import { Subscription } from "rxjs";
 export class PublisheddataDetailsComponent implements OnInit, OnDestroy {
   id: string;
   publishedDataId$: any;
-  publishedData$: any;
+  currentData$ = this.store.pipe(select(selectCurrentPublishedData));
+  private routeSubscription = this.route.params
+  .pipe(pluck("id"))
+  .subscribe((id: string) => this.store.dispatch(new FetchPublishedData({ id: encodeURIComponent(this.id) })));
 
   subscription: Subscription;
   constructor(
@@ -23,19 +32,10 @@ export class PublisheddataDetailsComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.route.paramMap.subscribe(params => {
-      console.log("gm params", params);
-      this.id = params["params"]["id"];
-      console.log(this.id); // log the value of id
-      this.publishedData$ = this.pubApi.findById(encodeURIComponent(this.id));
-      this.store.dispatch(
-        new FetchPublishedData({ id: encodeURIComponent(this.id) })
-      );
-    });
   }
 
   ngOnDestroy() {
-    // this.subscription.unsubscribe();
+    this.routeSubscription.unsubscribe();
     // destroy subscriptions
   }
 }
