@@ -99,13 +99,13 @@ export class PublisheddataTableComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    //this.sub.forEach(subscription => subscription.unsubscribe());
+    // this.sub.forEach(subscription => subscription.unsubscribe());
   }
 
   onPageChange(event: PageChangeEvent): void {
     this.store.dispatch(
       new ChangePageAction({ page: event.pageIndex, limit: event.pageSize })
     );
-    //this.store.dispatch(new FetchAllPublishedData());
+    // this.store.dispatch(new FetchAllPublishedData());
   }
 }

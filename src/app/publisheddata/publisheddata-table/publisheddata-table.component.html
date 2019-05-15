@@ -1,39 +1,42 @@
-
-
-<mat-paginator [length]="length"
-[pageSize]="pageSize"
-[pageSizeOptions]="pageSizeOptions"
-(page)="onPageChange($event)">
-</mat-paginator>
-<table mat-table [dataSource]="publishedData$" class="mat-elevation-z8">
-
+<div class="paginator_table">
+  <mat-paginator
+    [length]="length"
+    [pageSize]="pageSize"
+    [pageSizeOptions]="pageSizeOptions"
+    (page)="onPageChange($event)"
+  >
+  </mat-paginator>
+  <table mat-table [dataSource]="publishedData$" class="mat-elevation-z8">
     <!--- Note that these columns can be defined in any order.
           The actual rendered columns are set as a property on the row definition" -->
-  
+
     <ng-container matColumnDef="doi">
-      <th mat-header-cell *matHeaderCellDef> DOI  </th>
-      <td mat-cell *matCellDef="let published"> {{published.doi}} </td>
+      <th mat-header-cell *matHeaderCellDef>DOI</th>
+      <td mat-cell *matCellDef="let published">{{ published.doi }}</td>
     </ng-container>
-    
-  
+
     <ng-container matColumnDef="creator">
-      <th mat-header-cell *matHeaderCellDef> Creator </th>
-      <td mat-cell *matCellDef="let published"> {{published.creator}} </td>
+      <th mat-header-cell *matHeaderCellDef>Creator</th>
+      <td mat-cell *matCellDef="let published">{{ published.creator }}</td>
     </ng-container>
-  
+
     <ng-container matColumnDef="title">
-      <th mat-header-cell *matHeaderCellDef> Title </th>
-      <td mat-cell *matCellDef="let published"> {{published.title}} </td>
+      <th mat-header-cell *matHeaderCellDef>Title</th>
+      <td mat-cell *matCellDef="let published">{{ published.title }}</td>
     </ng-container>
-  
+
     <ng-container matColumnDef="publicationYear">
-      <th mat-header-cell *matHeaderCellDef> Year </th>
-      <td mat-cell *matCellDef="let published"> {{published.publicationYear}} </td>
+      <th mat-header-cell *matHeaderCellDef>Year</th>
+      <td mat-cell *matCellDef="let published">
+        {{ published.publicationYear }}
+      </td>
     </ng-container>
-  
+
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let published; columns: displayedColumns;"
+    <tr
+      mat-row
+      *matRowDef="let published; columns: displayedColumns"
       (click)="onClick(published)"
     ></tr>
-
   </table>
+</div>
