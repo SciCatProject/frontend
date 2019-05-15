@@ -1,11 +1,9 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { PublishedData, PublishedDataApi } from "shared/sdk";
-import { Store, select } from "@ngrx/store";
+import { Store } from "@ngrx/store";
 import { ActivatedRoute } from "@angular/router";
 import { FetchPublishedData } from "state-management/actions/published-data.actions";
-import { map, filter, flatMap } from "rxjs/operators";
-import { Observable, Subscription } from "rxjs";
-import { getSelectedPublishedDataId } from "state-management/reducers/published-data.reducer";
+import { Subscription } from "rxjs";
 
 @Component({
   selector: "publisheddata-details",
@@ -29,12 +27,11 @@ export class PublisheddataDetailsComponent implements OnInit, OnDestroy {
       console.log("gm params", params);
       this.id = params["params"]["id"];
       console.log(this.id); // log the value of id
-      this.publishedData$ = this.pubApi.findById(
-        encodeURIComponent(this.id)
-    );
-      this.store.dispatch(new FetchPublishedData({ id: encodeURIComponent(this.id) }) );
+      this.publishedData$ = this.pubApi.findById(encodeURIComponent(this.id));
+      this.store.dispatch(
+        new FetchPublishedData({ id: encodeURIComponent(this.id) })
+      );
     });
-
   }
 
   ngOnDestroy() {

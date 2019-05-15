@@ -1,16 +1,13 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { Store, select } from "@ngrx/store";
 import { PublishedData, PublishedDataApi } from "shared/sdk";
-import { Observable, Subscription } from "rxjs";
+import { Subscription } from "rxjs";
 import { PublisheddataService } from "publisheddata/publisheddata.service";
 import {
-  FetchPublishedData,
   FetchAllPublishedData,
   ChangePageAction
 } from "state-management/actions/published-data.actions";
 import {
-  selectPublishedDataTotal,
-  selectAllPublished,
   selectFilteredPublished
 } from "state-management/selectors/published-data.selectors";
 import { Router } from "@angular/router";
