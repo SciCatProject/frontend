@@ -15,7 +15,8 @@ export enum PublishedDataActionTypes {
   UpdatePublishedDatas = "[PublishedData] Update PublishedDatas",
   DeletePublishedData = "[PublishedData] Delete PublishedData",
   DeletePublishedDatas = "[PublishedData] Delete PublishedDatas",
-  ClearPublishedDatas = "[PublishedData] Clear PublishedDatas"
+  ClearPublishedDatas = "[PublishedData] Clear PublishedDatas",
+  ChangePagePub = "[PublishedData] Change Page Pub"
 }
 
 // universal error action
@@ -29,7 +30,7 @@ export class FailedPublishedDataAction implements Action {
 export class FetchPublishedData implements Action {
   readonly type = PublishedDataActionTypes.FetchPublishedData;
 
-  constructor(public payload: { id: number }) {}
+  constructor(public payload: { id: string }) {}
 }
 
 // trigger effect that will get all records from db
@@ -98,6 +99,11 @@ export class ClearPublishedDatas implements Action {
   readonly type = PublishedDataActionTypes.ClearPublishedDatas;
 }
 
+export class ChangePageAction implements Action {
+  readonly type = PublishedDataActionTypes.ChangePagePub;
+  constructor(public payload: { page: number, limit: number }) {}
+}
+
 export type PublishedDataActions =
   FailedPublishedDataAction
   | LoadPublishedDatas
@@ -111,4 +117,5 @@ export type PublishedDataActions =
   | DeletePublishedDatas
   | ClearPublishedDatas
   | FetchPublishedData
+  | ChangePageAction
   | FetchAllPublishedData;

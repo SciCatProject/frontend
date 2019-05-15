@@ -87,6 +87,13 @@ export interface SampleFilters {
   limit: number;
 }
 
+
+export interface PublishedDataFilters {
+  sortField: string;
+  skip: number;
+  limit: number;
+}
+
 export interface PolicyFilters {
   sortField: string;
   skip: number;
