@@ -77,12 +77,12 @@ export const routes: Routes = [
     canActivate: [AuthCheck]
   },
   {
-    path: "published",
+    path: "publishedDatasets",
     component: PublisheddataTableComponent,
     canActivate: [AuthCheck]
   },
   {
-    path: "published/:id",
+    path: "publishedDataset/:id",
     component: PublisheddataDetailsComponent,
     canActivate: [AuthCheck]
   },

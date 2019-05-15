@@ -93,7 +93,7 @@ export class PublisheddataTableComponent implements OnInit, OnDestroy {
 
   onClick(published: PublishedData) {
     this.router.navigateByUrl(
-      "/published/" + encodeURIComponent(published.doi)
+      "/publishedDataset/" + encodeURIComponent(published.doi)
     );
     console.log("published", published);
   }

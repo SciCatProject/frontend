@@ -38,7 +38,7 @@ export class PublisheddataDetailsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.subscription.unsubscribe();
+    // this.subscription.unsubscribe();
     // destroy subscriptions
   }
 }
