@@ -3,6 +3,7 @@ import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 import { AboutComponent } from "./about.component";
 import { APP_CONFIG } from "app-config.module";
 import { MatCardModule } from "@angular/material";
+import { LinkyModule } from "ngx-linky";
 
 describe("AboutComponent", () => {
   let component: AboutComponent;
@@ -11,7 +12,7 @@ describe("AboutComponent", () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [AboutComponent],
-      imports: [MatCardModule]
+      imports: [MatCardModule, LinkyModule]
     });
     TestBed.overrideComponent(AboutComponent, {
       set: {
