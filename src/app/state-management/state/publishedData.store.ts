@@ -1,13 +1,11 @@
-import { PublishedData } from "state-management/models";
+import { PublishedData, PublishedDataFilters } from "state-management/models";
 import { EntityState, EntityAdapter, createEntityAdapter } from "@ngrx/entity";
 
 export interface PublishedDataState extends EntityState<PublishedData> {
   publishedData: PublishedData[];
   currentPublishedData: PublishedData;
-  filters: {
-    skip: number;
-    limit: number;
-  };
+  filters: PublishedDataFilters;
+  count: number;
 }
 
 // adapter with custom selectId using doi
@@ -21,8 +19,10 @@ export const initialPublishedDataState: PublishedDataState = adapter.getInitialS
     publishedData: null,
     filters: {
       skip: 0,
-      limit: 10
-    }
+      limit: 10,
+      sortField: ""
+    },
+    count: 0
   }
 );
 /*ids: null,

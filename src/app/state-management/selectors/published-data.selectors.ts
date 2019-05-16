@@ -51,3 +51,19 @@ export const selectCurrentPublishedData = createSelector(
   selectCurrentPublishedDataId,
   (publishedDataEntities, doi) => publishedDataEntities[doi]
 );
+
+export const getFilters = createSelector(
+  selectPublishedDataState,
+  (state) => {
+    const { skip, limit, sortField } = state.filters;
+    const limits = { skip, limit, order: sortField };
+    return {limits};
+  }
+);
+
+export const getCount = createSelector(
+  selectPublishedDataState,
+  (state) => {
+    return state.count;
+  }
+);

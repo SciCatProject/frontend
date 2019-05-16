@@ -57,6 +57,11 @@ export function publishedDataReducer(
       return {...state, filters};
     }
 
+    case PublishedDataActionTypes.FetchCountPublishedData: {
+      const count = action.payload.count;
+      return {...state, count};
+    }
+
     default: {
       return state;
     }

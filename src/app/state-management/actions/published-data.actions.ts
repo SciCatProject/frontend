@@ -16,7 +16,8 @@ export enum PublishedDataActionTypes {
   DeletePublishedData = "[PublishedData] Delete PublishedData",
   DeletePublishedDatas = "[PublishedData] Delete PublishedDatas",
   ClearPublishedDatas = "[PublishedData] Clear PublishedDatas",
-  ChangePagePub = "[PublishedData] Change Page Pub"
+  ChangePagePub = "[PublishedData] Change Page Pub",
+  FetchCountPublishedData = "[PublishedData] Fetch count"
 }
 
 // universal error action
@@ -99,9 +100,15 @@ export class ClearPublishedDatas implements Action {
   readonly type = PublishedDataActionTypes.ClearPublishedDatas;
 }
 
-export class ChangePageAction implements Action {
+export class ChangePagePub implements Action {
   readonly type = PublishedDataActionTypes.ChangePagePub;
   constructor(public payload: { page: number, limit: number }) {}
+}
+
+
+export class FetchCountPublishedData implements Action {
+  readonly type = PublishedDataActionTypes.FetchCountPublishedData;
+  constructor(public payload: { count: number }) {}
 }
 
 export type PublishedDataActions =
@@ -117,5 +124,6 @@ export type PublishedDataActions =
   | DeletePublishedDatas
   | ClearPublishedDatas
   | FetchPublishedData
-  | ChangePageAction
-  | FetchAllPublishedData;
+  | ChangePagePub
+  | FetchAllPublishedData
+  | FetchCountPublishedData;
