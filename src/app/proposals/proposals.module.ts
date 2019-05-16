@@ -28,6 +28,7 @@ import {
   MatPaginatorModule
 } from "@angular/material";
 import { SharedCatanieModule } from "../shared/shared.module";
+import { LogbooksModule } from "logbooks/logbooks.module";
 
 @NgModule({
   imports: [
@@ -43,7 +44,8 @@ import { SharedCatanieModule } from "../shared/shared.module";
     MatCardModule,
     MatTabsModule,
     MatTableModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    LogbooksModule
   ],
   declarations: [
     ListProposalsPageComponent,

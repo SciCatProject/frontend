@@ -7,6 +7,7 @@ import {
   Proposal,
   Policy,
   Sample,
+  Logbook,
   PublishedData
 } from "shared/sdk/models";
 export {
@@ -18,6 +19,7 @@ export {
   Proposal,
   Policy,
   Sample,
+  Logbook,
   PublishedData
 };
 
@@ -81,10 +83,26 @@ export interface DatasetFilters {
 
 export interface SampleFilters {
   sortField: string;
+  skip: number;
+  limit: number;
+}
+
+
+export interface PublishedDataFilters {
+  sortField: string;
+  skip: number;
+  limit: number;
 }
 
 export interface PolicyFilters {
   sortField: string;
   skip: number;
   limit: number;
+}
+
+export interface LogbookFilters {
+  textSearch: string;
+  showBotMessages: boolean;
+  showUserMessages: boolean;
+  showImages: boolean;
 }

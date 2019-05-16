@@ -1,0 +1,24 @@
+<div fxLayout="row" fxLayout.xs="column">
+  <div fxFlex="80%">
+    <mat-card class="example-card">
+      <mat-card-header style="background: #ffffff;">
+        <mat-card-title>About SciCat</mat-card-title>
+      </mat-card-header>
+      <span [innerHTML]="aboutText | linky"></span>
+    </mat-card>
+
+    <mat-card class="example-card">
+      <mat-card-header style="background: #ffffff;">
+        <mat-card-title>Access Conditions</mat-card-title>
+      </mat-card-header>
+      {{ accessText }}
+    </mat-card>
+
+    <mat-card class="example-card">
+      <mat-card-header style="background:#ffffff;">
+        <mat-card-title>Terms of Use</mat-card-title>
+      </mat-card-header>
+      {{ termsText }}
+    </mat-card>
+  </div>
+</div>

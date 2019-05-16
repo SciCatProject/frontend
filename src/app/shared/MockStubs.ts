@@ -1,5 +1,6 @@
 import { Observable, of, Subject } from "rxjs";
-import { Sample } from "./sdk/models";
+import { Sample, Logbook } from "./sdk/models";
+import { convertToParamMap } from "@angular/router";
 
 export class MockUserApi {
   getCurrentId() {
@@ -63,14 +64,14 @@ export class MockSampleService {
       samplelId: "string",
       owner: "string",
       description: "string",
-      createdAt: new Date,
+      createdAt: new Date(),
       sampleCharacteristics: "string",
       attachments: ["string"],
       ownerGroup: "string",
       accessGroups: ["string"],
       createdBy: "string",
       updatedBy: "string",
-      updatedAt: new Date
+      updatedAt: new Date()
     };
 
     return of([this.sample]);
@@ -81,19 +82,18 @@ export class MockSampleService {
       samplelId: "string",
       owner: "string",
       description: "string",
-      createdAt: new Date,
+      createdAt: new Date(),
       sampleCharacteristics: "string",
       attachments: ["string"],
       ownerGroup: "string",
       accessGroups: ["string"],
       createdBy: "string",
       updatedBy: "string",
-      updatedAt: new Date
+      updatedAt: new Date()
     };
 
     return of(this.sample);
   }
-
 }
 
 export class MockLoopBackAuth {
@@ -112,7 +112,10 @@ export class MockLocation {}
 
 export class MockActivatedRoute {
   // stub detail goes here
-  snapshot = { queryParams: { returnUrl: "/" } };
+  snapshot = {
+    queryParams: { returnUrl: "/" },
+    paramMap: convertToParamMap({ name: "string" })
+  };
   params = of([{ id: 1 }]);
   queryParams = of([{ limit: 10 }]);
 }
@@ -143,26 +146,23 @@ export class MockJobApi {
   }
 }
 
-
 export class MockSampleApi {
   find() {
-    return of(
-      [
-        {
-          samplelId: "string",
-          owner: "string",
-          description: "string",
-          createdAt: Date,
-          sampleCharacteristics: "string",
-          attachments: ["string"],
-          ownerGroup: "string",
-          accessGroups: ["string"],
-          createdBy: ["string"],
-          updatedBy: ["string"],
-          updatedAt: Date
-        }
-      ]
-    );
+    return of([
+      {
+        samplelId: "string",
+        owner: "string",
+        description: "string",
+        createdAt: Date,
+        sampleCharacteristics: "string",
+        attachments: ["string"],
+        ownerGroup: "string",
+        accessGroups: ["string"],
+        createdBy: ["string"],
+        updatedBy: ["string"],
+        updatedAt: Date
+      }
+    ]);
   }
 }
 
@@ -233,8 +233,7 @@ export class MockNotificationService {
 }
 
 export class MockArchivingService {
-  public dispatch(obj) {
-  }
+  public dispatch(obj) {}
 
   public select(obj) {
     return of([]);
@@ -242,3 +241,44 @@ export class MockArchivingService {
 }
 
 export class MockLoginService {}
+
+export class MockLogbookApi {
+  logbook: Logbook;
+  findByName(name: string): Observable<Logbook> {
+    return of(this.logbook);
+  }
+
+  findAll(): Observable<Logbook[]> {
+    return of([this.logbook]);
+  }
+
+  filter(name: string, filter: Object): Observable<Logbook> {
+    return of(this.logbook);
+  }
+}
+
+export class MockPublishedDataApi {
+  findbyId() {
+    return of({
+      creator: "string",
+      publicationYear: "string",
+      doi: "string",
+      affiliation: "string",
+      publisher: "string",
+      authorList: "string"
+    });
+  }
+
+  find() {
+    return of([
+      {
+        creator: "string",
+        publicationYear: "string",
+        doi: "string",
+        affiliation: "string",
+        publisher: "string",
+        authorList: "string"
+      }
+    ]);
+  }
+}

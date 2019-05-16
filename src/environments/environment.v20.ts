@@ -5,7 +5,7 @@
 
 export const environment = {
   production: true,
-  lbBaseURL: "http://10.4.0.49:3001",
+  lbBaseURL: "http://172.30.242.21:3001",
   fileserverBaseURL: "https://kubetest04.dm.esss.dk:32223",
   externalAuthEndpoint: "/auth/msad",
   archiveWorkflowEnabled: false,
@@ -15,5 +15,6 @@ export const environment = {
   disabledDatasetColumns: ["archiveStatus", "retrieveStatus","dataStatus"],
   shoppingCartEnabled: true,
   facility: "ESS",
-  userProfileImageEnabled: true
+  userProfileImageEnabled: true,
+  tableSciDataEnabled: true
 };

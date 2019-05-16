@@ -1,0 +1,11 @@
+<div>
+  <div class="title">Select</div>
+  <div *ngFor="let entry of entries">
+    <mat-checkbox
+      [checked]="isSelected(entry)"
+      (change)="onSelect($event, entry)"
+    >
+      {{ entry }}
+    </mat-checkbox>
+  </div>
+</div>

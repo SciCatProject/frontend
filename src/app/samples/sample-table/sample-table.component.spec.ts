@@ -2,12 +2,19 @@ import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { SampleTableComponent } from "./sample-table.component";
 import { Store } from "@ngrx/store";
-import { MatCardModule, MatDialog, MatIconModule, MatTableModule } from "@angular/material";
-import { MockHttp, MockRouter,  MockStore } from "../../shared/MockStubs";
+import {
+  MatCardModule,
+  MatDialog,
+  MatIconModule,
+  MatTableModule,
+  MatPaginatorModule
+} from "@angular/material";
+import { MockHttp, MockRouter, MockStore } from "../../shared/MockStubs";
 import { HttpClient } from "@angular/common/http";
 import { Router } from "@angular/router";
 import { SampleService } from "../sample.service";
 import { APP_CONFIG } from "app-config.module";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
 describe("SampleTableComponent", () => {
   let component: SampleTableComponent;
@@ -16,7 +23,13 @@ describe("SampleTableComponent", () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [SampleTableComponent],
-      imports: [MatTableModule, MatCardModule, MatIconModule],
+      imports: [
+        BrowserAnimationsModule,
+        MatTableModule,
+        MatCardModule,
+        MatIconModule,
+        MatPaginatorModule
+      ],
       providers: [
         {
           provide: APP_CONFIG,

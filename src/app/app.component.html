@@ -31,19 +31,24 @@
     <a
       mat-menu-item
       [routerLinkActive]="['active']"
+      [routerLink]="['/logbooks/']"
+      *ngIf="appConfig.logbookEnabled"
+      ><i class="material-icons"> book </i> Logbooks</a
+    >
+    <a
+      mat-menu-item
+      [routerLinkActive]="['active']"
       [routerLink]="['/archive-settings/']"
     >
       <i class="material-icons"> cloud_download </i>
       Archive Settings</a
     >
-    <a
-      mat-menu-item
-      [routerLinkActive]="['active']"
-      [routerLink]="['/samples/']"
-    >
+    <a mat-menu-item [routerLinkActive]="['active']" [routerLink]="['/samples/']" >
       <i class="material-icons"> center_focus_weak </i>
-      Samples</a
-    >
+      Samples</a >
+    <a mat-menu-item [routerLinkActive]="['active']" [routerLink]="['/publishedDatasets/']" >
+      <i class="material-icons"> chrome_reader_mode </i>
+      Published Data</a >
     <a
       mat-menu-item
       [routerLinkActive]="['active']"
@@ -68,8 +73,24 @@
 
   <mat-toolbar color="primary" style="position: sticky;">
     <mat-toolbar-row>
-      <h3 class="app-title">{{ title }}</h3>
+      <h3 class="app-title">
+        <a style="color:#ffffff;" [routerLink]="['/']"> {{ title }}</a>
+      </h3>
       <span class="example-spacer"></span>
+      <div>
+        <h6>
+          <a class="toplink" [routerLink]="['/help']">
+            <i class="material-icons"> help </i>
+            Help</a>
+        </h6>
+      </div>
+      <div>
+        <h6>
+          <a class="toplink" [routerLink]="['/about']">
+            <i class="material-icons"> info </i>
+            About</a>
+        </h6>
+      </div>
       <div *ngIf="(isLoggedIn$ | async) || !appConfig.production">
         <button class="userButton" [matMenuTriggerFor]="userMenu">
           <img

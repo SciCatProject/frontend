@@ -5,7 +5,7 @@ import { Observable, of } from "rxjs";
 import { Sample } from "../../shared/sdk/models";
 import { SampleApi } from "shared/sdk/services";
 import { SampleService } from "../../samples/sample.service";
-import { catchError, map, mergeMap, switchMap, withLatestFrom, tap } from "rxjs/operators";
+import { catchError, map, mergeMap, withLatestFrom } from "rxjs/operators";
 import {
   FETCH_SAMPLE,
   FETCH_SAMPLES,
@@ -17,9 +17,13 @@ import {
   ADD_SAMPLE,
   AddSampleAction,
   AddSampleCompleteAction,
-  AddSampleFailedAction
+  AddSampleFailedAction,
+  FETCH_SAMPLE_COUNT,
+  FetchSampleCountAction,
+  FetchSampleCountCompleteAction,
+  FetchSampleCountFailedAction
 } from "../actions/samples.actions";
-import {  getQuery } from "state-management/selectors/samples.selectors";
+import { getQuery } from "state-management/selectors/samples.selectors";
 
 @Injectable()
 export class SamplesEffects {
@@ -30,7 +34,7 @@ export class SamplesEffects {
     withLatestFrom(this.query$),
     map(([action, params]) => params),
     mergeMap(params =>
-      this.sampleApi.find(params ).pipe(
+      this.sampleApi.find(params).pipe(
         map((samples: Sample[]) => new FetchSamplesCompleteAction(samples)),
         catchError(() => of(new FetchSamplesFailedAction()))
       )
@@ -63,17 +67,33 @@ export class SamplesEffects {
         .addSample(sample)
         .pipe(
           map(
-            res =>
-              new AddSampleCompleteAction(res[0]),
+            res => new AddSampleCompleteAction(res[0]),
             catchError(() => of(new AddSampleFailedAction(new Sample())))
           )
         )
     )
   );
+
+  @Effect()
+  protected getSampleCount$: Observable<Action> = this.actions$.pipe(
+    ofType(FETCH_SAMPLE_COUNT),
+    map((action: FetchSampleCountAction) => action.sampleCount),
+    mergeMap(sample =>
+      this.sampleService
+        .getSampleCount()
+        .pipe(
+          map(
+            res => new FetchSampleCountCompleteAction(res.count),
+            catchError(() => of(new FetchSampleCountFailedAction()))
+          )
+        )
+    )
+  );
+
   constructor(
     private actions$: Actions,
     private store: Store<any>,
     private sampleApi: SampleApi,
     private sampleService: SampleService
-  ) { }
+  ) {}
 }

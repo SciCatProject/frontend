@@ -29,6 +29,13 @@ import { BatchViewComponent } from "datasets/batch-view/batch-view.component";
 import { SampleDetailComponent } from "../samples/sample-detail/sample-detail.component";
 import { SampleTableComponent } from "../samples/sample-table/sample-table.component";
 
+import { LogbooksDashboardComponent } from "../logbooks/logbooks-dashboard/logbooks-dashboard.component";
+import { LogbooksTableComponent } from "../logbooks/logbooks-table/logbooks-table.component";
+import { AboutComponent } from "about/about/about.component";
+import { HelpComponent } from "help/help/help.component";
+import { PublisheddataTableComponent } from "publisheddata/publisheddata-table/publisheddata-table.component";
+import { PublisheddataDetailsComponent } from "publisheddata/publisheddata-details/publisheddata-details.component";
+
 export const routes: Routes = [
   { path: "", redirectTo: "/datasets", pathMatch: "full" },
   { path: "login", component: LoginComponent },
@@ -70,6 +77,16 @@ export const routes: Routes = [
     canActivate: [AuthCheck]
   },
   {
+    path: "publishedDatasets",
+    component: PublisheddataTableComponent,
+    canActivate: [AuthCheck]
+  },
+  {
+    path: "publishedDataset/:id",
+    component: PublisheddataDetailsComponent,
+    canActivate: [AuthCheck]
+  },
+  {
     path: "samples",
     component: SampleTableComponent,
     canActivate: [AuthCheck]
@@ -107,10 +124,27 @@ export const routes: Routes = [
     component: JobsDetailComponent,
     canActivate: [AuthCheck]
   },
-
+  {
+    path: "about",
+    component: AboutComponent
+  },
+  {
+    path: "help",
+    component: HelpComponent
+  },
   {
     path: "sample-data/add",
     component: SampleDataFormComponent,
+    canActivate: [AuthCheck]
+  },
+  {
+    path: "logbooks",
+    component: LogbooksTableComponent,
+    canActivate: [AuthCheck]
+  },
+  {
+    path: "logbooks/:name",
+    component: LogbooksDashboardComponent,
     canActivate: [AuthCheck]
   },
   {
