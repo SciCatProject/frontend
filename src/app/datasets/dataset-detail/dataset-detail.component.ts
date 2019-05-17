@@ -220,6 +220,10 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
     );
   }
 
+  reduceDataset() {
+    console.log("Initiating dataset reduction...");
+  }
+
   onClickProp(proposalId: string): void {
     const id = encodeURIComponent(proposalId);
     this.router.navigateByUrl("/proposals/" + id);
