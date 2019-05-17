@@ -1205,15 +1205,17 @@ export class DatasetApi extends BaseLoopBackApi {
   /**
    * Sends a post request for Dataset reduction to OpenWhisk
    *
-   * @param {Dataset} dataset Request data.
-   * 
+   * @param {object} data Request data.
+   *
+   *  - `dataset` – `{Dataset}` - The Dataset to send for reduction
+   *
    * @returns {object} An empty reference that will be
    *   populated with the actual data once the response is returned
    *   from the server.
    *
    * The response from the OpenWhisk reduce action
    */
-  public reduce(dataset: any, customHeaders?: Function): Observable<any> {
+  public reduceDataset(dataset: any, customHeaders?: Function): Observable<any> {
     let _method: string = "POST";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
     "/Datasets/reduce";

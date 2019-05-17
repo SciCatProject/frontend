@@ -268,10 +268,13 @@
     <mat-card style="margin: 1em">
       <h3>Reduce dataset</h3>
       <mat-card-actions>
-        <button mat-button style="color: #ffffff; background: #0ea432;" (click)="reduceDataset()">
+        <button mat-button style="color: #ffffff; background: #0ea432;" (click)="reduceDataset(dataset)">
           Reduce
         </button>
       </mat-card-actions>
+      <div *ngIf="result.output">
+        {{ result.output }}
+      </div>
     </mat-card>
   </mat-tab>
 

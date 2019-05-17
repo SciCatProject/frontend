@@ -2,9 +2,10 @@ import { ActivatedRoute } from "@angular/router";
 import { Component, Inject, OnDestroy, OnInit } from "@angular/core";
 import {
   DatablocksAction,
-  DeleteAttachment
+  DeleteAttachment,
+  ReduceDatasetAction
 } from "state-management/actions/datasets.actions";
-import { Job, User } from "shared/sdk/models";
+import { Job, User, Dataset } from "shared/sdk/models";
 import { select, Store } from "@ngrx/store";
 import { SubmitAction } from "state-management/actions/jobs.actions";
 import { ShowMessageAction } from "state-management/actions/user.actions";
@@ -24,7 +25,8 @@ import {
   getCurrentDatablocks,
   getCurrentDataset,
   getCurrentOrigDatablocks,
-  getCurrentDatasetWithoutOrigData
+  getCurrentDatasetWithoutOrigData,
+  reduceDataset
 } from "state-management/selectors/datasets.selectors";
 
 /**
@@ -61,6 +63,9 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
   public attachments$ = this.store.pipe(select(getCurrentAttachments));
   public isAdmin$ = this.store.pipe(select(getIsAdmin));
 
+  result: Object;
+  resultSubscription: Subscription;
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -82,7 +87,7 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
     const dates = [];
     for (const key in scimeta) {
       if (scimeta[key] instanceof Date) {
-        const arr = {name: key, value: scimeta[key] };
+        const arr = { name: key, value: scimeta[key] };
         dates.push(arr);
       }
     }
@@ -93,9 +98,8 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
     const strings = [];
     for (const key in scimeta) {
       if (typeof scimeta[key] === "string") {
-        const arr = {name: key, value: scimeta[key] };
+        const arr = { name: key, value: scimeta[key] };
         strings.push(arr);
-
       }
     }
     return strings;
@@ -150,6 +154,12 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
         }
       })
     );
+
+    this.resultSubscription = this.store
+      .pipe(select(reduceDataset))
+      .subscribe(result => {
+        this.result = result;
+      });
   }
 
   ngOnDestroy() {
@@ -157,6 +167,7 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
     for (let i = 0; i < this.subscriptions.length; i++) {
       this.subscriptions[i].unsubscribe();
     }
+    this.resultSubscription.unsubscribe();
   }
 
   onExportClick() {
@@ -220,8 +231,8 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
     );
   }
 
-  reduceDataset() {
-    console.log("Initiating dataset reduction...");
+  reduceDataset(dataset: Dataset) {
+    this.store.dispatch(new ReduceDatasetAction(dataset));
   }
 
   onClickProp(proposalId: string): void {
