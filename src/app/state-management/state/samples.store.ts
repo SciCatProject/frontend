@@ -10,8 +10,6 @@ export interface SampleState {
   samplesLoading: boolean;
   error: Error;
 
-  skip: number;
-  limit: number;
   selectedId: string;
   filters: SampleFilters;
 }
@@ -25,10 +23,10 @@ export const initialSampleState: SampleState = {
 
   samplesLoading: true,
   error: undefined,
-  skip: 0,
-  limit: 0,
   filters: {
-    sortField: "creationTime:desc"
+    sortField: "creationTime:desc",
+    skip: 0,
+    limit: 30
   },
   selectedId: null
 };

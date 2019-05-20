@@ -24,11 +24,20 @@ export const selectPublishedDataEntities = createSelector(
   selectPublishedDataState,
   fromPublishedData.selectPublishedDataEntities
 );
-export const selectAllUsers = createSelector(
+export const selectAllPublished = createSelector(
   selectPublishedDataState,
   fromPublishedData.selectAllPublishedData
 );
-export const selecPublishedDataTotal = createSelector(
+
+export const selectFilteredPublished = createSelector(
+  selectPublishedDataState,
+  selectAllPublished,
+  (state, data) => {
+    return data.slice(state.filters.skip, state.filters.skip + state.filters.limit);
+  }
+);
+
+export const selectPublishedDataTotal = createSelector(
   selectPublishedDataState,
   fromPublishedData.selectPublishedDataTotal
 );

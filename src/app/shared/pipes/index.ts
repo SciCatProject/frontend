@@ -5,3 +5,4 @@ export * from "./keys.pipe";
 export * from "./json-head.pipe";
 export * from "./thumbnail.pipe";
 export * from "./scientific-metadata.pipe";
+export * from "./replace-underscore.pipe";

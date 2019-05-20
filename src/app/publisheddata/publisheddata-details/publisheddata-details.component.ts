@@ -1,0 +1,39 @@
+import { Component, OnInit, OnDestroy } from "@angular/core";
+import { PublishedData, PublishedDataApi } from "shared/sdk";
+import { Store, select } from "@ngrx/store";
+import { ActivatedRoute } from "@angular/router";
+import { FetchPublishedData } from "state-management/actions/published-data.actions";
+import { Subscription } from "rxjs";
+import { pluck } from "rxjs/operators";
+import {
+  selectCurrentPublishedData
+} from "state-management/selectors/published-data.selectors";
+
+@Component({
+  selector: "publisheddata-details",
+  templateUrl: "./publisheddata-details.component.html",
+  styleUrls: ["./publisheddata-details.component.scss"]
+})
+export class PublisheddataDetailsComponent implements OnInit, OnDestroy {
+  id: string;
+  publishedDataId$: any;
+  currentData$ = this.store.pipe(select(selectCurrentPublishedData));
+  private routeSubscription = this.route.params
+  .pipe(pluck("id"))
+  .subscribe((id: string) => this.store.dispatch(new FetchPublishedData({ id: encodeURIComponent(this.id) })));
+
+  subscription: Subscription;
+  constructor(
+    private route: ActivatedRoute,
+    private pubApi: PublishedDataApi,
+    private store: Store<PublishedData>
+  ) {}
+
+  ngOnInit() {
+  }
+
+  ngOnDestroy() {
+    this.routeSubscription.unsubscribe();
+    // destroy subscriptions
+  }
+}

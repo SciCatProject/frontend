@@ -15,7 +15,12 @@ export const FETCH_SAMPLE = "[Sample] Fetch Sample";
 export const FETCH_SAMPLE_COMPLETE = "[Sample] Fetch Sample Complete";
 export const FETCH_SAMPLE_FAILED = "[Sample] Fetch Sample Failed";
 
+export const FETCH_SAMPLE_COUNT = "[Sample] Fetch Sample Count";
+export const FETCH_SAMPLE_COUNT_COMPLETE = "[Sample] Fetch Sample Count Complete";
+export const FETCH_SAMPLE_COUNT_FAILED = "[Sample] Fetch Sample Count Failed";
+
 export const SAMPLE_SORT_BY_COLUMN = "[Sample] Sort by Column";
+export const CHANGE_PAGE = "[Sample] Change Page";
 
 export class SampleSortByColumnAction implements Action {
   readonly type = SAMPLE_SORT_BY_COLUMN;
@@ -57,7 +62,6 @@ export class FetchSamplesFailedAction implements Action {
 
 export class FetchSampleAction implements Action {
   readonly type = FETCH_SAMPLE;
-
   constructor(readonly samplelId: string) { }
 }
 
@@ -71,15 +75,43 @@ export class FetchSampleFailedAction implements Action {
   readonly type = FETCH_SAMPLE_FAILED;
 }
 
+
+export class FetchSampleCountAction implements Action {
+  readonly type = FETCH_SAMPLE_COUNT;
+  constructor(readonly sampleCount: number) { }
+}
+
+export class FetchSampleCountCompleteAction implements Action {
+  readonly type = FETCH_SAMPLE_COUNT_COMPLETE;
+
+  constructor(readonly sampleCount: number) { }
+}
+
+export class FetchSampleCountFailedAction implements Action {
+  readonly type = FETCH_SAMPLE_COUNT_FAILED;
+}
+
+export class ChangePageAction implements Action {
+  readonly type = CHANGE_PAGE;
+
+  constructor(readonly page: number, readonly limit: number) {
+  }
+}
+
+
 export type SamplesActions =
   | SelectSampleAction
   | AddSampleAction
   | AddSampleCompleteAction
   | AddSampleFailedAction
   | SampleSortByColumnAction
+  | ChangePageAction
   | FetchSamplesAction
   | FetchSamplesCompleteAction
   | FetchSamplesFailedAction
   | FetchSampleAction
   | FetchSampleCompleteAction
-  | FetchSampleFailedAction;
+  | FetchSampleFailedAction
+  | FetchSampleCountAction
+  | FetchSampleCountCompleteAction
+  | FetchSampleCountFailedAction;

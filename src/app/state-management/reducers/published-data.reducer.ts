@@ -50,6 +50,13 @@ export function publishedDataReducer(
       return adapter.removeAll(state);
     }
 
+    case PublishedDataActionTypes.ChangePagePub: {
+      const limit = action.payload.limit;
+      const skip = action.payload.page * limit;
+      const filters = { ...state.filters, skip, limit };
+      return {...state, filters};
+    }
+
     default: {
       return state;
     }
