@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
-import { PublishedData, PublishedDataApi } from "shared/sdk";
+import { PublishedData } from "shared/sdk";
 import { Store, select } from "@ngrx/store";
 import { ActivatedRoute } from "@angular/router";
 import { FetchPublishedData as FetchCurrentPublishedData } from "state-management/actions/published-data.actions";

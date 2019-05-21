@@ -8,9 +8,8 @@ import { select, Store } from "@ngrx/store";
 import {
   FailedPublishedDataAction,
   LoadPublishedDatas,
-  AddPublishedData,
   FetchAllPublishedData,
-  FetchPublishedData,
+  // FetchPublishedData,
   PublishedDataActionTypes,
   FetchCountPublishedData
 } from "../actions/published-data.actions";
