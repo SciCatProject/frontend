@@ -2,11 +2,11 @@ import { Component, OnInit, OnDestroy } from "@angular/core";
 import { PublishedData, PublishedDataApi } from "shared/sdk";
 import { Store, select } from "@ngrx/store";
 import { ActivatedRoute } from "@angular/router";
-import { FetchPublishedData } from "state-management/actions/published-data.actions";
+import { FetchPublishedData as FetchCurrentPublishedData } from "state-management/actions/published-data.actions";
 import { Subscription } from "rxjs";
 import { pluck } from "rxjs/operators";
 import {
-  selectCurrentPublishedData
+  selectCurrentPublishedData,
 } from "state-management/selectors/published-data.selectors";
 
 @Component({
@@ -15,12 +15,16 @@ import {
   styleUrls: ["./publisheddata-details.component.scss"]
 })
 export class PublisheddataDetailsComponent implements OnInit, OnDestroy {
-  id: string;
+  publishedData: PublishedData;
   publishedDataId$: any;
+  subscriptions = [];
   currentData$ = this.store.pipe(select(selectCurrentPublishedData));
   private routeSubscription = this.route.params
   .pipe(pluck("id"))
-  .subscribe((id: string) => this.store.dispatch(new FetchPublishedData({ id: encodeURIComponent(this.id) })));
+  .subscribe((id: string) =>
+    this.store.dispatch(new FetchCurrentPublishedData({ id: encodeURIComponent(id) })
+  ));
+
 
   subscription: Subscription;
   constructor(
@@ -30,6 +34,7 @@ export class PublisheddataDetailsComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
+
   }
 
   ngOnDestroy() {

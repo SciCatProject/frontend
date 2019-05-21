@@ -49,7 +49,7 @@ export const selectCurrentPublishedDataId = createSelector(
 export const selectCurrentPublishedData = createSelector(
   selectPublishedDataEntities,
   selectCurrentPublishedDataId,
-  (publishedDataEntities, doi) => publishedDataEntities[doi]
+  (publishedDataEntities, doi) => publishedDataEntities[doi] // this is a dictionary look up
 );
 
 export const getFilters = createSelector(

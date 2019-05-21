@@ -8,7 +8,9 @@ export function publishedDataReducer(
   state = initialPublishedDataState,
   action: PublishedDataActions
 ): PublishedDataState {
-  console.log("Action came in! " + action.type);
+  if (action.type.indexOf("[PublishedData]") !== -1) {
+    console.log("Action came in! " + action.type);
+  }
   switch (action.type) {
     case PublishedDataActionTypes.AddPublishedData: {
       return adapter.addOne(action.payload.publishedData, state);
@@ -61,6 +63,14 @@ export function publishedDataReducer(
       const count = action.payload.count;
       return {...state, count};
     }
+
+    case PublishedDataActionTypes.FetchPublishedData: {
+      const id = action.payload.id;
+      const currentPublishedData = state.entities[id];
+      console.log("currentPublishedData: ",  action.payload)
+      return {...state, currentPublishedData};
+    }
+
 
     default: {
       return state;

@@ -91,7 +91,6 @@ export class PublisheddataTableComponent implements OnInit, OnDestroy {
     this.router.navigateByUrl(
       "/publishedDataset/" + encodeURIComponent(published.doi)
     );
-    console.log("published", published);
   }
 
   ngOnDestroy() {
