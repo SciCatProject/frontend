@@ -8,7 +8,8 @@ export function publishedDataReducer(
   state = initialPublishedDataState,
   action: PublishedDataActions
 ): PublishedDataState {
-  if (action.type.indexOf("[PublishedData]") !== -1) {
+  // action.type is an enum in this case
+  if (action.type && action.type.indexOf("[PublishedData]") !== -1) {
     console.log("Action came in! " + action.type);
   }
   switch (action.type) {
@@ -67,7 +68,6 @@ export function publishedDataReducer(
     case PublishedDataActionTypes.FetchPublishedData: {
       const id = action.payload.id;
       const currentPublishedData = state.entities[id];
-      console.log("currentPublishedData: ",  action.payload)
       return {...state, currentPublishedData};
     }
 

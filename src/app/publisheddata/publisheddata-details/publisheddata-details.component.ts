@@ -29,7 +29,6 @@ export class PublisheddataDetailsComponent implements OnInit, OnDestroy {
   subscription: Subscription;
   constructor(
     private route: ActivatedRoute,
-    private pubApi: PublishedDataApi,
     private store: Store<PublishedData>
   ) {}
 
