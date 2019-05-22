@@ -66,7 +66,7 @@ export function publishedDataReducer(
     }
 
     case PublishedDataActionTypes.FetchPublishedData: {
-      const id = action.payload.id;
+      const id = encodeURIComponent(action.payload.id);
       const currentPublishedData = state.entities[id];
       return {...state, currentPublishedData};
     }
