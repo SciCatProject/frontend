@@ -22,7 +22,7 @@ export class PublisheddataDetailsComponent implements OnInit, OnDestroy {
   private routeSubscription = this.route.params
   .pipe(pluck("id"))
   .subscribe((id: string) =>
-    this.store.dispatch(new FetchCurrentPublishedData({ id: encodeURIComponent(id) })
+    this.store.dispatch(new FetchCurrentPublishedData({ id })
   ));
 
 
