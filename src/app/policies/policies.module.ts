@@ -1,6 +1,6 @@
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import { ArchiveSettingsComponent } from "./archive-settings/archive-settings.component";
+import { ArchiveSettingsComponent } from "./policies/policies.component";
 // import { ConfigFormModule } from 'shared/modules/config-form/config-form.module';
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { PoliciesService } from "./policies.service";

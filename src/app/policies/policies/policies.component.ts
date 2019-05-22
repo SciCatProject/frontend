@@ -47,9 +47,9 @@ export interface SortChangeEvent {
 }
 
 @Component({
-  selector: "archive-settings",
-  templateUrl: "./archive-settings.component.html",
-  styleUrls: ["./archive-settings.component.scss"]
+  selector: "policies",
+  templateUrl: "./policies.component.html",
+  styleUrls: ["./policies.component.scss"]
 })
 export class ArchiveSettingsComponent implements OnInit {
   public policies$ = this.store.pipe(select(getPolicies));
@@ -61,14 +61,14 @@ export class ArchiveSettingsComponent implements OnInit {
   @Input()
   public showSelect: boolean = false;
   @Input()*/
-  public currentPage: number = 0;
-  public disabledColumns: string[] = [];
+  // public currentPage: number = 0;
+  // public disabledColumns: string[] = [];
   public pageSizeOptions: number[] = [30, 1000];
   public editEnabled = true;
   public policiesPerPage = 10;
   @ViewChild(MatPaginator)
   paginator: MatPaginator;
-  private policyState$ = this.store.pipe(select(getPolicyState));
+  // private policyState$ = this.store.pipe(select(getPolicyState));
   public selectedPolicies$ = this.store.pipe(select(getSelectedPolicies));
   public currentPage$ = this.store.pipe(select(getPage));
   public policyCount$ = this.store.select(getTotalCount);
@@ -80,8 +80,20 @@ export class ArchiveSettingsComponent implements OnInit {
   private subscriptions: any;
   @Output()
   private onClick: EventEmitter<Policy> = new EventEmitter();
-  private displayedColumns: string[] = [
+  private editableDisplayedColumns: string[] = [
     "select",
+    "manager",
+    "ownerGroup",
+    "autoArchive",
+    "autoArchiveDelay",
+    "tapeRedundancy",
+    "archiveEmailNotification",
+    "archiveEmailsToBeNotified",
+    "retrieveEmailNotification",
+    "retrieveEmailsToBeNotified"
+  ];
+
+  private readableDisplayedColumns: string[] = [
     "manager",
     "ownerGroup",
     "autoArchive",
@@ -122,11 +134,11 @@ export class ArchiveSettingsComponent implements OnInit {
     });
   }
 
-  public getDisplayedColumns(): string[] {
-    return this.displayedColumns.filter(
+  /*public getDisplayedColumns(): string[] {
+    return this.editableDisplayedColumns.filter(
       column => this.disabledColumns.indexOf(column) === -1
     );
-  }
+  }*/
 
   onPageChange(event: PageChangeEvent): void {
     this.store.dispatch(new ChangePageAction(event.pageIndex, event.pageSize));
