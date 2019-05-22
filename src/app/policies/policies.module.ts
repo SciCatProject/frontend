@@ -32,6 +32,7 @@ import { SharedCatanieModule } from "shared/shared.module";
 
 import { StoreModule } from "@ngrx/store";
 import { policiesReducer } from "state-management/reducers/policies.reducer";
+import { FlexLayoutModule } from "@angular/flex-layout";
 
 @NgModule({
   imports: [
@@ -60,7 +61,8 @@ import { policiesReducer } from "state-management/reducers/policies.reducer";
     MatProgressSpinnerModule,
     MatChipsModule,
     StoreModule.forFeature("policies", policiesReducer),
-    MatDialogModule
+    MatDialogModule,
+    FlexLayoutModule
   ],
   declarations: [ArchiveSettingsComponent, EditDialogComponent],
   providers: [PoliciesService],
