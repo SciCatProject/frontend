@@ -18,6 +18,8 @@ import { initialSampleState, SampleState } from "state-management/state/samples.
 import * as ua from "state-management/actions/user.actions";
 import { initialPublishedDataState, PublishedDataState } from "state-management/state/publishedData.store";
 import { publishedDataReducer } from "state-management/reducers/published-data.reducer";
+import { logbooksReducer } from "./logbooks.reducer";
+import { initialLogbookState, LogbookState } from "state-management/state/logbooks.store";
 
 
 export interface AppState {
@@ -27,6 +29,7 @@ export interface AppState {
   policies: PolicyState;
   samples: SampleState;
   publishedData: PublishedDataState;
+  logbook: LogbookState;
 }
 
 export const initialState: AppState = {
@@ -35,7 +38,8 @@ export const initialState: AppState = {
   jobs: initialJobsState,
   policies: initialPolicyState,
   samples: initialSampleState,
-  publishedData: initialPublishedDataState
+  publishedData: initialPublishedDataState,
+  logbook: initialLogbookState,
 };
 
 const appReducer = combineReducers({
@@ -44,7 +48,8 @@ const appReducer = combineReducers({
   jobs: jobsReducer,
   policies: policiesReducer,
   samples: samplesReducer,
-  publishedData: publishedDataReducer
+  publishedData: publishedDataReducer,
+  logbook: logbooksReducer,
 });
 
 export function rootReducer(state, action) {

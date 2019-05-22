@@ -1,6 +1,6 @@
 <div class="paginator_table">
   <mat-paginator
-    [length]="publishedCount$ | async"
+    [length]="count$ | async"
     [pageSize]="pageSize"
     [pageSizeOptions]="pageSizeOptions"
     (page)="onPageChange($event)"

@@ -13,7 +13,9 @@ export function logbooksReducer(
   state: LogbookState = initialLogbookState,
   action: AllActions
 ): LogbookState {
-  console.log("Action came in! " + action.type);
+  if (action.type.indexOf("[Logbook]") !== -1) {
+    console.log("Action came in! " + action.type);
+  }
   switch (action.type) {
     case ActionTypes.FETCH_LOGBOOKS_COMPLETE: {
       let logbooks = (action as FetchLogbooksCompleteAction).logbooks;

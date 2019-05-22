@@ -4,11 +4,11 @@ import { PublishedData } from "shared/sdk";
 import { Subscription } from "rxjs";
 import {
   FetchAllPublishedData,
-  ChangePageAction
+  ChangePagePub
 } from "state-management/actions/published-data.actions";
 import {
-  selectFilteredPublished,
-  selectPublishedDataTotal
+  selectAllPublished,
+  getCount
 } from "state-management/selectors/published-data.selectors";
 import { Router } from "@angular/router";
 import { PageEvent } from "@angular/material";
@@ -48,8 +48,8 @@ const ELEMENT_DATA: PubElement[] = [
   styleUrls: ["./publisheddata-table.component.scss"]
 })
 export class PublisheddataTableComponent implements OnInit, OnDestroy {
-  public publishedData$ = this.store.pipe(select(selectFilteredPublished));
-  public publishedCount$ = this.store.pipe(select(selectPublishedDataTotal));
+  public publishedData$ = this.store.pipe(select(selectAllPublished));
+  public count$ = this.store.pipe(select(getCount));
   public publishedData: PublishedData[];
   private sub: Subscription[];
   public event: any;
@@ -91,7 +91,6 @@ export class PublisheddataTableComponent implements OnInit, OnDestroy {
     this.router.navigateByUrl(
       "/publishedDataset/" + encodeURIComponent(published.doi)
     );
-    console.log("published", published);
   }
 
   ngOnDestroy() {
@@ -100,7 +99,7 @@ export class PublisheddataTableComponent implements OnInit, OnDestroy {
 
   onPageChange(event: PageChangeEvent): void {
     this.store.dispatch(
-      new ChangePageAction({ page: event.pageIndex, limit: event.pageSize })
+      new ChangePagePub({ page: event.pageIndex, limit: event.pageSize })
     );
     // this.store.dispatch(new FetchAllPublishedData());
   }
