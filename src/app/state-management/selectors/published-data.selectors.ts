@@ -61,6 +61,19 @@ export const getFilters = createSelector(
   }
 );
 
+export const getPage = createSelector(
+  selectPublishedDataState,
+  state => {
+    const { skip, limit } = state.filters;
+    return skip / limit;
+  }
+);
+
+export const getItemsPerPage = createSelector(
+  selectPublishedDataState,
+  state => state.filters.limit
+);
+
 export const getCount = createSelector(
   selectPublishedDataState,
   (state) => {
