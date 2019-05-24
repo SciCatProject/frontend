@@ -110,10 +110,6 @@ export class PublisheddataTableComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.store.dispatch(new FetchAllPublishedData());
-    // this.publishedData$ = this.pubApi.find({ limit: 7 });
-    /*this.pubApi.find({ limit: 11 }).subscribe(res => {
-      this.publishedData = <PublishedData[]>res;
-    });*/
   }
 
   onClick(published: PublishedData) {
@@ -124,7 +120,7 @@ export class PublisheddataTableComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.writeRouteSubscription.unsubscribe();
-    //this.readRouteSubscription.unsubscribe();
+    this.readRouteSubscription.unsubscribe();
     // this.sub.forEach(subscription => subscription.unsubscribe());
   }
 

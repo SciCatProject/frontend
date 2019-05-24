@@ -7,6 +7,7 @@ import { MockStore, MockPublishedDataApi, MockRouter } from "shared/MockStubs";
 import { PublishedDataApi } from "shared/sdk";
 import { Router } from "@angular/router";
 import { NoopAnimationsModule, BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { RouterTestingModule } from "@angular/router/testing";
 
 describe("PublisheddataTableComponent", () => {
   let component: PublisheddataTableComponent;
@@ -15,7 +16,8 @@ describe("PublisheddataTableComponent", () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [PublisheddataTableComponent],
-      imports: [BrowserAnimationsModule , MatTableModule, MatPaginatorModule, NoopAnimationsModule]
+      imports: [BrowserAnimationsModule , MatTableModule, MatPaginatorModule, NoopAnimationsModule,
+        RouterTestingModule.withRoutes([{ path: "publishedDatasets/", component: PublisheddataTableComponent }])]
     });
     TestBed.overrideComponent(PublisheddataTableComponent, {
       set: {
