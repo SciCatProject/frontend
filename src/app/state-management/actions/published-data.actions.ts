@@ -18,6 +18,7 @@ export enum PublishedDataActionTypes {
   ClearPublishedDatas = "[PublishedData] Clear PublishedDatas",
   ChangePagePub = "[PublishedData] Change Page Pub",
   FetchCountPublishedData = "[PublishedData] Fetch count",
+  LoadCurrentPublishedData = "[PublishedData] Load Current Published Data"
 }
 
 // universal error action
@@ -49,6 +50,12 @@ export class LoadPublishedDatas implements Action {
 // add just one record to store
 export class AddPublishedData implements Action {
   readonly type = PublishedDataActionTypes.AddPublishedData;
+
+  constructor(public payload: { publishedData: PublishedData }) {}
+}
+
+export class LoadCurrentPublishedData implements Action {
+  readonly type = PublishedDataActionTypes.LoadCurrentPublishedData;
 
   constructor(public payload: { publishedData: PublishedData }) {}
 }
@@ -127,4 +134,5 @@ export type PublishedDataActions =
   | FetchPublishedData
   | ChangePagePub
   | FetchAllPublishedData
-  | FetchCountPublishedData;
+  | FetchCountPublishedData
+  | LoadCurrentPublishedData;

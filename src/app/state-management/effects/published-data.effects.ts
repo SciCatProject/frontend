@@ -11,7 +11,10 @@ import {
   FetchAllPublishedData,
   // FetchPublishedData,
   PublishedDataActionTypes,
-  FetchCountPublishedData
+  FetchCountPublishedData,
+  FetchPublishedData,
+  AddPublishedData,
+  LoadCurrentPublishedData
 } from "../actions/published-data.actions";
 
 import {
@@ -26,13 +29,13 @@ import { getFilters } from "state-management/selectors/published-data.selectors"
 
 @Injectable()
 export class PublishedDataEffects {
- /* @Effect()
+  @Effect()
   AddPublishedData$ = this.actions$.pipe(
     ofType<FetchPublishedData>(PublishedDataActionTypes.FetchPublishedData),
-    switchMap(action => this.publishedDataApi.findById(action.payload.id)
-    .pipe(map((data: PublishedData) => new AddPublishedData({ publishedData: data })),
+    switchMap(action => this.publishedDataApi.findById(encodeURIComponent(action.payload.id))
+    .pipe(map((data: PublishedData) => new LoadCurrentPublishedData({ publishedData: data })),
     catchError(err => of(new FailedPublishedDataAction(err)))))
-  );*/
+  );
 
   @Effect({ dispatch: false })
   private queryParams$ = this.store.pipe(select(getFilters));

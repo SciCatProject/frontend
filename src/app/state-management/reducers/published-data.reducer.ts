@@ -17,6 +17,11 @@ export function publishedDataReducer(
       return adapter.addOne(action.payload.publishedData, state);
     }
 
+    case PublishedDataActionTypes.LoadCurrentPublishedData: {
+      const currentPublishedData = action.payload.publishedData;
+      return {...state, currentPublishedData};
+    }
+
     case PublishedDataActionTypes.UpsertPublishedData: {
       return adapter.upsertOne(action.payload.publishedData, state);
     }
