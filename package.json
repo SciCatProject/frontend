@@ -27,7 +27,7 @@
     "@angular/pwa": "^0.13.7",
     "@angular/router": "^7.2.11",
     "@angular/service-worker": "^7.2.11",
-    "@fortawesome/angular-fontawesome": "^0.3.0",
+    "@fortawesome/angular-fontawesome": "^0.4.0",
     "@ngrx/entity": "^7.3.0",
     "@ngrx/schematics": "^7.3.0",
     "@fortawesome/fontawesome-svg-core": "^1.2.17",
