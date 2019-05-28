@@ -1,8 +1,9 @@
 <div class="paginator_table">
   <mat-paginator
     [length]="count$ | async"
-    [pageSize]="pageSize"
+    [pageSize]="itemsPerPage$ | async"
     [pageSizeOptions]="pageSizeOptions"
+    [pageIndex]="currentPage$ | async"
     (page)="onPageChange($event)"
   >
   </mat-paginator>

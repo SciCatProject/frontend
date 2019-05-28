@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from "@angular/core";
 import { PublishedData } from "shared/sdk";
 import { Store, select } from "@ngrx/store";
 import { ActivatedRoute } from "@angular/router";
-import { FetchPublishedData as FetchCurrentPublishedData } from "state-management/actions/published-data.actions";
+import { FetchPublishedData } from "state-management/actions/published-data.actions";
 import { Subscription } from "rxjs";
 import { pluck } from "rxjs/operators";
 import {
@@ -22,7 +22,7 @@ export class PublisheddataDetailsComponent implements OnInit, OnDestroy {
   private routeSubscription = this.route.params
   .pipe(pluck("id"))
   .subscribe((id: string) =>
-    this.store.dispatch(new FetchCurrentPublishedData({ id })
+    this.store.dispatch(new FetchPublishedData({ id })
   ));
 
 
