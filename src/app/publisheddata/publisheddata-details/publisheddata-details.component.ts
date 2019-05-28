@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from "@angular/core";
 import { PublishedData } from "shared/sdk";
 import { Store, select } from "@ngrx/store";
 import { ActivatedRoute } from "@angular/router";
-import { FetchPublishedData as FetchCurrentPublishedData, FetchPublishedData } from "state-management/actions/published-data.actions";
+import { FetchPublishedData } from "state-management/actions/published-data.actions";
 import { Subscription } from "rxjs";
 import { pluck } from "rxjs/operators";
 import {

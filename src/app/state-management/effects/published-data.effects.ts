@@ -9,11 +9,9 @@ import {
   FailedPublishedDataAction,
   LoadPublishedDatas,
   FetchAllPublishedData,
-  // FetchPublishedData,
   PublishedDataActionTypes,
   FetchCountPublishedData,
   FetchPublishedData,
-  AddPublishedData,
   LoadCurrentPublishedData
 } from "../actions/published-data.actions";
 
