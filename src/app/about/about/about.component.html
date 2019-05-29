@@ -4,7 +4,7 @@
       <mat-card-header style="background: #ffffff;">
         <mat-card-title>About SciCat</mat-card-title>
       </mat-card-header>
-      {{ aboutText }}
+      <span [innerHTML]="aboutText | linky"></span>
     </mat-card>
 
     <mat-card class="example-card">

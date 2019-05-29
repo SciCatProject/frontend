@@ -256,3 +256,29 @@ export class MockLogbookApi {
     return of(this.logbook);
   }
 }
+
+export class MockPublishedDataApi {
+  findbyId() {
+    return of({
+      creator: "string",
+      publicationYear: "string",
+      doi: "string",
+      affiliation: "string",
+      publisher: "string",
+      authorList: "string"
+    });
+  }
+
+  find() {
+    return of([
+      {
+        creator: "string",
+        publicationYear: "string",
+        doi: "string",
+        affiliation: "string",
+        publisher: "string",
+        authorList: "string"
+      }
+    ]);
+  }
+}

@@ -23,7 +23,16 @@
       <mat-header-cell *matHeaderCellDef> Entry </mat-header-cell>
       <mat-cell *matCellDef="let message">
         <div fxLayout="column" *ngIf="message.content.msgtype !== 'm.image'">
-          {{ message.content.body }}
+          <div
+            *ngIf="!message.content.formatted_body"
+            style="white-space:pre-wrap"
+          >
+            {{ message.content.body }}
+          </div>
+          <div
+            *ngIf="message.content.formatted_body"
+            [innerHTML]="message.content.formatted_body"
+          ></div>
         </div>
         <div fxLayout="column" *ngIf="message.content.msgtype === 'm.image'">
           <a

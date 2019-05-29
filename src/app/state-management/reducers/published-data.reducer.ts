@@ -8,10 +8,18 @@ export function publishedDataReducer(
   state = initialPublishedDataState,
   action: PublishedDataActions
 ): PublishedDataState {
-  console.log("Action came in! " + action.type);
+  // action.type is an enum in this case
+  if (action.type && action.type.indexOf("[PublishedData]") !== -1) {
+    console.log("Action came in! " + action.type);
+  }
   switch (action.type) {
     case PublishedDataActionTypes.AddPublishedData: {
       return adapter.addOne(action.payload.publishedData, state);
+    }
+
+    case PublishedDataActionTypes.LoadCurrentPublishedData: {
+      const currentPublishedData = action.payload.publishedData;
+      return {...state, currentPublishedData};
     }
 
     case PublishedDataActionTypes.UpsertPublishedData: {
@@ -49,6 +57,25 @@ export function publishedDataReducer(
     case PublishedDataActionTypes.ClearPublishedDatas: {
       return adapter.removeAll(state);
     }
+
+    case PublishedDataActionTypes.ChangePagePub: {
+      const limit = action.payload.limit;
+      const skip = action.payload.page * limit;
+      const filters = { ...state.filters, skip, limit };
+      return {...state, filters};
+    }
+
+    case PublishedDataActionTypes.FetchCountPublishedData: {
+      const count = action.payload.count;
+      return {...state, count};
+    }
+
+    case PublishedDataActionTypes.FetchPublishedData: {
+      const id = action.payload.id;
+      const currentPublishedData = state.entities[id];
+      return {...state, currentPublishedData};
+    }
+
 
     default: {
       return state;

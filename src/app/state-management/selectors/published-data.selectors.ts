@@ -7,14 +7,16 @@ import * as fromPublishedData from "../reducers/published-data.reducer";
 import { PublishedDataState } from "../state/publishedData.store";
 
 export interface State {
-    PublishedData: PublishedDataState;
+  PublishedData: PublishedDataState;
 }
 
 export const reducers: ActionReducerMap<State> = {
-    PublishedData: fromPublishedData.publishedDataReducer
+  PublishedData: fromPublishedData.publishedDataReducer
 };
 
-export const selectPublishedDataState = createFeatureSelector<PublishedDataState>("PublishedData");
+export const selectPublishedDataState = createFeatureSelector<
+  PublishedDataState
+>("PublishedData");
 
 export const selectPublishedDataIds = createSelector(
   selectPublishedDataState,
@@ -24,11 +26,23 @@ export const selectPublishedDataEntities = createSelector(
   selectPublishedDataState,
   fromPublishedData.selectPublishedDataEntities
 );
-export const selectAllUsers = createSelector(
+export const selectAllPublished = createSelector(
   selectPublishedDataState,
   fromPublishedData.selectAllPublishedData
 );
-export const selecPublishedDataTotal = createSelector(
+
+export const selectFilteredPublished = createSelector(
+  selectPublishedDataState,
+  selectAllPublished,
+  (state, data) => {
+    return data.slice(
+      state.filters.skip,
+      state.filters.skip + state.filters.limit
+    );
+  }
+);
+
+export const selectPublishedDataTotal = createSelector(
   selectPublishedDataState,
   fromPublishedData.selectPublishedDataTotal
 );
@@ -38,7 +52,35 @@ export const selectCurrentPublishedDataId = createSelector(
 );
 
 export const selectCurrentPublishedData = createSelector(
-  selectPublishedDataEntities,
-  selectCurrentPublishedDataId,
-  (publishedDataEntities, doi) => publishedDataEntities[doi]
+  selectPublishedDataState,
+  state => state.currentPublishedData
+);
+
+export const getFilters = createSelector(
+  selectPublishedDataState,
+  state => {
+    const { skip, limit, sortField } = state.filters;
+    const limits = { skip, limit, order: sortField };
+    return { limits };
+  }
+);
+
+export const getPage = createSelector(
+  selectPublishedDataState,
+  state => {
+    const { skip, limit } = state.filters;
+    return skip / limit;
+  }
+);
+
+export const getItemsPerPage = createSelector(
+  selectPublishedDataState,
+  state => state.filters.limit
+);
+
+export const getCount = createSelector(
+  selectPublishedDataState,
+  state => {
+    return state.count;
+  }
 );

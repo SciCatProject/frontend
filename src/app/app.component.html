@@ -43,14 +43,12 @@
       <i class="material-icons"> cloud_download </i>
       Archive Settings</a
     >
-    <a
-      mat-menu-item
-      [routerLinkActive]="['active']"
-      [routerLink]="['/samples/']"
-    >
+    <a mat-menu-item [routerLinkActive]="['active']" [routerLink]="['/samples/']" >
       <i class="material-icons"> center_focus_weak </i>
-      Samples</a
-    >
+      Samples</a >
+    <a mat-menu-item [routerLinkActive]="['active']" [routerLink]="['/publishedDatasets/']" >
+      <i class="material-icons"> chrome_reader_mode </i>
+      Published Data</a >
     <a
       mat-menu-item
       [routerLinkActive]="['active']"
@@ -78,18 +76,21 @@
       <h3 class="app-title">
         <a style="color:#ffffff;" [routerLink]="['/']"> {{ title }}</a>
       </h3>
-      <div></div>
-      <div>
-        <h6>
-          <a class="toplink" [routerLink]="['/help']">Help</a>
-        </h6>
-      </div>
-      <div>
-        <h6>
-          <a class="toplink" [routerLink]="['/about']">About</a>
-        </h6>
-      </div>
       <span class="example-spacer"></span>
+      <div>
+        <h6>
+          <a class="toplink" [routerLink]="['/help']">
+            <i class="material-icons"> help </i>
+            Help</a>
+        </h6>
+      </div>
+      <div>
+        <h6>
+          <a class="toplink" [routerLink]="['/about']">
+            <i class="material-icons"> info </i>
+            About</a>
+        </h6>
+      </div>
       <div *ngIf="(isLoggedIn$ | async) || !appConfig.production">
         <button class="userButton" [matMenuTriggerFor]="userMenu">
           <img

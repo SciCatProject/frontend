@@ -10,7 +10,7 @@ import { MockActivatedRoute, MockStore } from "shared/MockStubs";
 import { MockRouter } from "shared/MockStubs";
 import { Router } from "@angular/router";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
-import { ObjKeysPipe, TitleCasePipe } from "shared/pipes/index";
+import { ObjKeysPipe, TitleCasePipe, ReplaceUnderscorePipe } from "shared/pipes/index";
 import { ReactiveFormsModule } from "@angular/forms";
 import { Store, StoreModule } from "@ngrx/store";
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
@@ -36,7 +36,8 @@ describe("DatasetDetailComponent", () => {
         LinkyPipe,
         ObjKeysPipe,
         TitleCasePipe,
-        FileSizePipe
+        FileSizePipe,
+        ReplaceUnderscorePipe
       ]
     });
     TestBed.overrideComponent(DatasetDetailComponent, {
