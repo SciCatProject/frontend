@@ -16,7 +16,9 @@ export enum PublishedDataActionTypes {
   DeletePublishedData = "[PublishedData] Delete PublishedData",
   DeletePublishedDatas = "[PublishedData] Delete PublishedDatas",
   ClearPublishedDatas = "[PublishedData] Clear PublishedDatas",
-  ChangePagePub = "[PublishedData] Change Page Pub"
+  ChangePagePub = "[PublishedData] Change Page Pub",
+  FetchCountPublishedData = "[PublishedData] Fetch count",
+  LoadCurrentPublishedData = "[PublishedData] Load Current Published Data"
 }
 
 // universal error action
@@ -29,7 +31,6 @@ export class FailedPublishedDataAction implements Action {
 // trigger effect that will get one record from db
 export class FetchPublishedData implements Action {
   readonly type = PublishedDataActionTypes.FetchPublishedData;
-
   constructor(public payload: { id: string }) {}
 }
 
@@ -49,6 +50,12 @@ export class LoadPublishedDatas implements Action {
 // add just one record to store
 export class AddPublishedData implements Action {
   readonly type = PublishedDataActionTypes.AddPublishedData;
+
+  constructor(public payload: { publishedData: PublishedData }) {}
+}
+
+export class LoadCurrentPublishedData implements Action {
+  readonly type = PublishedDataActionTypes.LoadCurrentPublishedData;
 
   constructor(public payload: { publishedData: PublishedData }) {}
 }
@@ -99,10 +106,18 @@ export class ClearPublishedDatas implements Action {
   readonly type = PublishedDataActionTypes.ClearPublishedDatas;
 }
 
-export class ChangePageAction implements Action {
+export class ChangePagePub implements Action {
   readonly type = PublishedDataActionTypes.ChangePagePub;
   constructor(public payload: { page: number, limit: number }) {}
 }
+
+
+export class FetchCountPublishedData implements Action {
+  readonly type = PublishedDataActionTypes.FetchCountPublishedData;
+  constructor(public payload: { count: number }) {}
+}
+
+
 
 export type PublishedDataActions =
   FailedPublishedDataAction
@@ -117,5 +132,7 @@ export type PublishedDataActions =
   | DeletePublishedDatas
   | ClearPublishedDatas
   | FetchPublishedData
-  | ChangePageAction
-  | FetchAllPublishedData;
+  | ChangePagePub
+  | FetchAllPublishedData
+  | FetchCountPublishedData
+  | LoadCurrentPublishedData;
