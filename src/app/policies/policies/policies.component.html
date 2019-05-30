@@ -1,132 +1,34 @@
 <div class="policies"></div>
 
-<div fxLayout="row" fxLayout.xs="column">
-  <div>
-    <div class="button-group"></div>
-    <mat-paginator
-      class="policy-paginator"
-      [pageSizeOptions]="pageSizeOptions"
-      [pageIndex]="currentPage"
-      [pageSize]="policiesPerPage"
-      [length]="policyCount$ | async"
-      (page)="onPageChange($event)"
-    >
-    </mat-paginator>
-    <ng-container *ngIf="editEnabled">
-      <button mat-button mat-button (click)="onEditClick()" color="primary">
-        <mat-icon>edit</mat-icon> Edit Selection
-      </button>
-    </ng-container>
-  </div>
+<!--mat-button-toggle-group [value]="currentMode">
+  <mat-button-toggle
+    *ngFor="let mode of modes; let i = index"
+    (click)="onModeChange($event, mode)"
+    [value]="mode"
+    [ngClass]="mode"
+  >
+    {{ modes[i] | titlecase }}
+  </mat-button-toggle>
+</mat-button-toggle-group-->
 
-  <div fxLayout="row" fxLayoutGap="20px">
+<mat-tab-group>
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <i class="material-icons"> </i> Readable
+    </ng-template>
     <div>
-      <mat-table
-        [dataSource]="policies$ | async"
-        class="policy-table mat-elevation-z2"
-        matSort
-        (matSortChange)="onSortChange($event)"
+      <mat-paginator
+        class="policy-paginator"
+        [pageSizeOptions]="pageSizeOptions"
+        [pageIndex]="currentPage"
+        [pageSize]="policiesPerPage"
+        [length]="policyCount$ | async"
+        (page)="onPageChange($event)"
       >
-        <!-- Column Definitions -->
-        <ng-container matColumnDef="select">
-          <mat-header-cell *matHeaderCellDef>
-            <mat-checkbox
-              [checked]="allAreSelected()"
-              (change)="handleSelectAll($event)"
-            >
-            </mat-checkbox>
-          </mat-header-cell>
-          <mat-cell *matCellDef="let row">
-            <mat-checkbox
-              [checked]="isChecked(row)"
-              (change)="handleSelect($event, row)"
-              (click)="$event.stopPropagation()"
-            >
-            </mat-checkbox>
-          </mat-cell>
-        </ng-container>
-
-        <ng-container matColumnDef="manager">
-          <mat-header-cell *matHeaderCellDef mat-sort-header
-            >Manager</mat-header-cell
-          >
-          <mat-cell *matCellDef="let policy">{{ policy.manager }}</mat-cell>
-        </ng-container>
-
-        <ng-container matColumnDef="tapeRedundancy">
-          <mat-header-cell *matHeaderCellDef>Tape Redundancy</mat-header-cell>
-          <mat-cell *matCellDef="let policy">{{
-            policy.tapeRedundancy
-          }}</mat-cell>
-        </ng-container>
-
-        <ng-container matColumnDef="autoArchive">
-          <mat-header-cell *matHeaderCellDef>Auto Archive</mat-header-cell>
-          <mat-cell *matCellDef="let policy">{{ policy.autoArchive }}</mat-cell>
-        </ng-container>
-        <ng-container matColumnDef="autoArchiveDelay">
-          <mat-header-cell *matHeaderCellDef mat-sort-header
-            >Auto Archive Delay</mat-header-cell
-          >
-          <mat-cell *matCellDef="let policy">{{
-            policy.autoArchiveDelay
-          }}</mat-cell>
-        </ng-container>
-
-        <ng-container matColumnDef="ownerGroup">
-          <mat-header-cell *matHeaderCellDef>Group</mat-header-cell>
-          <mat-cell *matCellDef="let policy">{{ policy.ownerGroup }}</mat-cell>
-        </ng-container>
-
-        <ng-container matColumnDef="archiveEmailNotification">
-          <mat-header-cell *matHeaderCellDef mat-sort-header
-            >Archive Email Notification</mat-header-cell
-          >
-          <mat-cell *matCellDef="let policy">{{
-            policy.archiveEmailNotification
-          }}</mat-cell>
-        </ng-container>
-        <ng-container matColumnDef="archiveEmailsToBeNotified">
-          <mat-header-cell *matHeaderCellDef
-            >Archive Emails to be Notified</mat-header-cell
-          >
-          <mat-cell *matCellDef="let policy">{{
-            policy.archiveEmailsToBeNotified
-          }}</mat-cell>
-        </ng-container>
-
-        <ng-container matColumnDef="retrieveEmailNotification">
-          <mat-header-cell *matHeaderCellDef
-            >Retrieve Email Notification</mat-header-cell
-          >
-          <mat-cell *matCellDef="let policy">{{
-            policy.retrieveEmailNotification
-          }}</mat-cell>
-        </ng-container>
-        <ng-container matColumnDef="retrieveEmailsToBeNotified">
-          <mat-header-cell *matHeaderCellDef
-            >Retrieve Emails to be Notified</mat-header-cell
-          >
-          <mat-cell *matCellDef="let policy">{{
-            policy.retrieveEmailsToBeNotified
-          }}</mat-cell>
-        </ng-container>
-
-        <!-- End of Column Definitions -->
-
-        <mat-header-row
-          class="policies-header"
-          *matHeaderRowDef="editableDisplayedColumns"
-        ></mat-header-row>
-        <mat-row
-          class="row-generic"
-          *matRowDef="let policy; columns: editableDisplayedColumns"
-          (click)="handleClick(policy)"
-        >
-        </mat-row>
-      </mat-table>
-    </div>
-    <div>
+      </mat-paginator>
+      <mat-card-subtitle>
+        Readable Policies
+      </mat-card-subtitle>
       <mat-table
         [dataSource]="policies$ | async"
         class="policy-table-readable mat-elevation-z2"
@@ -232,5 +134,145 @@
         </mat-row>
       </mat-table>
     </div>
-  </div>
-</div>
+  </mat-tab>
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <i class="material-icons"> </i> Editable
+    </ng-template>
+
+    <div fxLayout="column" fxLayoutGap="row" fxLayoutAlign="end end">
+      <div>
+        <ng-container *ngIf="editEnabled">
+          <button mat-button mat-button (click)="onEditClick()" color="primary">
+            <mat-icon>edit</mat-icon> Edit Selection
+          </button>
+        </ng-container>
+      </div>
+      <mat-paginator
+        class="policy-paginator"
+        [pageSizeOptions]="pageSizeOptions"
+        [pageIndex]="currentPage"
+        [pageSize]="policiesPerPage"
+        [length]="policyCount$ | async"
+        (page)="onPageChange($event)"
+      >
+      </mat-paginator>
+    </div>
+
+    <div fxLayout="column" fxLayoutGap="column">
+      <div>
+        <mat-card-subtitle>
+          Editable Policies
+        </mat-card-subtitle>
+        <mat-table
+          [dataSource]="policies$ | async"
+          class="policy-table mat-elevation-z2"
+          matSort
+          (matSortChange)="onSortChange($event)"
+        >
+          <!-- Column Definitions -->
+          <ng-container matColumnDef="select">
+            <mat-header-cell *matHeaderCellDef>
+              <mat-checkbox
+                [checked]="allAreSelected()"
+                (change)="handleSelectAll($event)"
+              >
+              </mat-checkbox>
+            </mat-header-cell>
+            <mat-cell *matCellDef="let row">
+              <mat-checkbox
+                [checked]="isChecked(row)"
+                (change)="handleSelect($event, row)"
+                (click)="$event.stopPropagation()"
+              >
+              </mat-checkbox>
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="manager">
+            <mat-header-cell *matHeaderCellDef mat-sort-header
+              >Manager</mat-header-cell
+            >
+            <mat-cell *matCellDef="let policy">{{ policy.manager }}</mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="tapeRedundancy">
+            <mat-header-cell *matHeaderCellDef>Tape Redundancy</mat-header-cell>
+            <mat-cell *matCellDef="let policy">{{
+              policy.tapeRedundancy
+            }}</mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="autoArchive">
+            <mat-header-cell *matHeaderCellDef>Auto Archive</mat-header-cell>
+            <mat-cell *matCellDef="let policy">{{
+              policy.autoArchive
+            }}</mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="autoArchiveDelay">
+            <mat-header-cell *matHeaderCellDef mat-sort-header
+              >Auto Archive Delay</mat-header-cell
+            >
+            <mat-cell *matCellDef="let policy">{{
+              policy.autoArchiveDelay
+            }}</mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="ownerGroup">
+            <mat-header-cell *matHeaderCellDef>Group</mat-header-cell>
+            <mat-cell *matCellDef="let policy">{{
+              policy.ownerGroup
+            }}</mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="archiveEmailNotification">
+            <mat-header-cell *matHeaderCellDef mat-sort-header
+              >Archive Email Notification</mat-header-cell
+            >
+            <mat-cell *matCellDef="let policy">{{
+              policy.archiveEmailNotification
+            }}</mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="archiveEmailsToBeNotified">
+            <mat-header-cell *matHeaderCellDef
+              >Archive Emails to be Notified</mat-header-cell
+            >
+            <mat-cell *matCellDef="let policy">{{
+              policy.archiveEmailsToBeNotified
+            }}</mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="retrieveEmailNotification">
+            <mat-header-cell *matHeaderCellDef
+              >Retrieve Email Notification</mat-header-cell
+            >
+            <mat-cell *matCellDef="let policy">{{
+              policy.retrieveEmailNotification
+            }}</mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="retrieveEmailsToBeNotified">
+            <mat-header-cell *matHeaderCellDef
+              >Retrieve Emails to be Notified</mat-header-cell
+            >
+            <mat-cell *matCellDef="let policy">{{
+              policy.retrieveEmailsToBeNotified
+            }}</mat-cell>
+          </ng-container>
+
+          <!-- End of Column Definitions -->
+
+          <mat-header-row
+            class="policies-header"
+            *matHeaderRowDef="editableDisplayedColumns"
+          ></mat-header-row>
+          <mat-row
+            class="row-generic"
+            *matRowDef="let policy; columns: editableDisplayedColumns"
+            (click)="handleClick(policy)"
+          >
+          </mat-row>
+        </mat-table>
+      </div>
+    </div>
+  </mat-tab>
+</mat-tab-group>

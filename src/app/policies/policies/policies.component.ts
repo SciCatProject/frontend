@@ -54,15 +54,7 @@ export interface SortChangeEvent {
 export class ArchiveSettingsComponent implements OnInit {
   public policies$ = this.store.pipe(select(getPolicies));
   dialogConfig: MatDialogConfig;
-  /*@Input()
-  public totalNumber: number = 0;
-  @Input()
 
-  @Input()
-  public showSelect: boolean = false;
-  @Input()*/
-  // public currentPage: number = 0;
-  // public disabledColumns: string[] = [];
   public pageSizeOptions: number[] = [30, 1000];
   public editEnabled = true;
   public policiesPerPage = 10;
@@ -80,6 +72,12 @@ export class ArchiveSettingsComponent implements OnInit {
   private subscriptions: any;
   @Output()
   private onClick: EventEmitter<Policy> = new EventEmitter();
+  private currentMode = "readable";
+  private modes = [
+    "readable",
+    "editable"
+  ];
+
   private editableDisplayedColumns: string[] = [
     "select",
     "manager",
@@ -139,6 +137,10 @@ export class ArchiveSettingsComponent implements OnInit {
       column => this.disabledColumns.indexOf(column) === -1
     );
   }*/
+
+  onModeChange(event, mode: string): void {
+    this.currentMode = mode;
+  }
 
   onPageChange(event: PageChangeEvent): void {
     this.store.dispatch(new ChangePageAction(event.pageIndex, event.pageSize));
