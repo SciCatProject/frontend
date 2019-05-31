@@ -64,6 +64,7 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
   public isAdmin$ = this.store.pipe(select(getIsAdmin));
 
   result: Object;
+  resultAsString: string = "";
   resultSubscription: Subscription;
 
   constructor(
@@ -159,6 +160,7 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
       .pipe(select(reduceDataset))
       .subscribe(result => {
         this.result = result;
+        this.resultAsString = JSON.stringify(result);
       });
   }
 
