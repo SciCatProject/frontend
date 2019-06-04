@@ -32,7 +32,7 @@ export class PoliciesEffects {
     map((action: SubmitPolicyAction) => action),
     switchMap(action =>
       this.policiesService
-        .updatePolicies(action.idList, action.policyAttributes)
+        .updatePolicies(action.ownerList, action.policyAttributes)
         .pipe(
           mergeMap((data: any) => [
             new SubmitPolicyCompleteAction(data.submissionResponse),

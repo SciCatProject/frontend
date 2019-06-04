@@ -132,11 +132,6 @@ export class ArchiveSettingsComponent implements OnInit {
     });
   }
 
-  /*public getDisplayedColumns(): string[] {
-    return this.editableDisplayedColumns.filter(
-      column => this.disabledColumns.indexOf(column) === -1
-    );
-  }*/
 
   onModeChange(event, mode: string): void {
     this.currentMode = mode;
@@ -189,7 +184,7 @@ export class ArchiveSettingsComponent implements OnInit {
         result.retrieveEmailsToBeNotified = Array.from(
           result.retrieveEmailsToBeNotified.split(","));
       }
-      this.store.dispatch(new SubmitPolicyAction(this.selectedIds, result));
+      this.store.dispatch(new SubmitPolicyAction(this.selectedGroups, result));
       this.store.dispatch(new ClearSelectionAction());
     }
   }
