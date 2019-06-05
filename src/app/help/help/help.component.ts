@@ -8,9 +8,11 @@ import { APP_CONFIG, AppConfig } from "app-config.module";
 })
 export class HelpComponent implements OnInit {
   facility: string;
+  ingestManual: string;
   constructor(@Inject(APP_CONFIG) public appConfig: AppConfig) {}
 
   ngOnInit() {
     this.facility = this.appConfig.facility;
+    this.ingestManual = this.appConfig.ingestManual;
   }
 }

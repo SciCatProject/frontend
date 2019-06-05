@@ -12,5 +12,6 @@ export const environment = {
   multipleDownloadEnabled: false,
   shoppingCartEnabled: false,
   columnSelectEnabled: false,
-  userProfileImageEnabled: false
+  userProfileImageEnabled: false,
+  ingestManual: "https://melanie.gitpages.psi.ch/SciCatPages/"
 };

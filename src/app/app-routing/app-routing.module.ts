@@ -36,6 +36,9 @@ import { HelpComponent } from "help/help/help.component";
 import { PublisheddataTableComponent } from "publisheddata/publisheddata-table/publisheddata-table.component";
 import { PublisheddataDetailsComponent } from "publisheddata/publisheddata-details/publisheddata-details.component";
 
+// handles external URLs by lookup in the env config
+import { RedirectGuard } from "app-routing/redirect-guard";
+
 export const routes: Routes = [
   { path: "", redirectTo: "/datasets", pathMatch: "full" },
   { path: "login", component: LoginComponent },
@@ -151,11 +154,21 @@ export const routes: Routes = [
     path: "error",
     component: ErrorPageComponent,
     data: { message: "Location Not Found", breadcrumb: "Error" }
+  },
+  {
+    path: "help/ingestManual",
+    canActivate: [RedirectGuard],
+    component: RedirectGuard,
+    data: {
+      urlConfigItem: "ingestManual"
+    }
   }
 ];
-
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
+  providers: []
 })
-export class AppRoutingModule {}
+export class AppRoutingModule {
+  constructor() {}
+}

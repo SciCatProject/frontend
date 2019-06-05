@@ -16,5 +16,6 @@ export const environment = {
   facility: "PSI",
   multipleDownloadEnabled: true,
   shoppingCartEnabled: true,
-  columnSelectEnabled: true
+  columnSelectEnabled: true,
+  ingestManual: "https://melanie.gitpages.psi.ch/SciCatPages/"
 };
