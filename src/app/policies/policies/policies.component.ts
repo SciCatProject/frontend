@@ -28,9 +28,9 @@ import {
 import {
   getPage,
   getPolicies,
-  getPolicyState,
   getSelectedPolicies,
-  getTotalCount
+  getTotalCount,
+  getEditablePolicies
 } from "state-management/selectors/policies.selectors";
 import { PoliciesService } from "../policies.service";
 import { EditDialogComponent } from "../edit-dialog/edit-dialog.component";
@@ -53,6 +53,7 @@ export interface SortChangeEvent {
 })
 export class ArchiveSettingsComponent implements OnInit {
   public policies$ = this.store.pipe(select(getPolicies));
+  public editablePolicies$ = this.store.pipe(select(getEditablePolicies));
   dialogConfig: MatDialogConfig;
 
   public pageSizeOptions: number[] = [30, 1000];

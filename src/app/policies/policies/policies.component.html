@@ -165,7 +165,7 @@
           Editable Policies
         </mat-card-subtitle>
         <mat-table
-          [dataSource]="policies$ | async"
+          [dataSource]="editablePolicies$ | async"
           class="policy-table mat-elevation-z2"
           matSort
           (matSortChange)="onSortChange($event)"
