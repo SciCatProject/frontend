@@ -1,8 +1,26 @@
 <mat-card-actions>
-    <button mat-button class="reduce-btn" (click)="reduceDataset(dataset)">
-      Reduce
-    </button>
-  </mat-card-actions>
-  <div>
-    {{ resultAsString }}
-  </div>
+  <button mat-button class="reduce-btn" (click)="reduceDataset(dataset)">
+    Reduce
+  </button>
+</mat-card-actions>
+
+<div *ngIf="result.hasOwnProperty('message')">
+  {{ result.message }}
+</div>
+
+<div *ngIf="result.hasOwnProperty('derivedDataset')">
+  <button (click)="goTo(result.derivedDataset)">
+    Go to: {{ result.derivedDataset.datasetName }}
+  </button>
+</div>
+
+<button (click)="show = !show" *ngIf="result.hasOwnProperty('derivedDataset')">
+  {{ show ? "Hide MetaData" : "Show MetaData" }}
+</button>
+<br />
+<div *ngIf="show">
+  <ngx-json-viewer
+    [json]="result.derivedDataset"
+    [expanded]="false"
+  ></ngx-json-viewer>
+</div>

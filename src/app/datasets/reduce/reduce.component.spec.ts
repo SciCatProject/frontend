@@ -3,7 +3,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { Store } from "@ngrx/store";
 
 import { ReduceComponent } from './reduce.component';
-import { MockStore, MockActivatedRoute } from "shared/MockStubs";
+import { MockStore } from "shared/MockStubs";
 import { MatCardModule } from "@angular/material";
 
 describe('ReduceComponent', () => {

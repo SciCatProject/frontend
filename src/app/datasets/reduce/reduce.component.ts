@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Router } from "@angular/router";
 import { select, Store } from "@ngrx/store";
-import { Dataset } from "shared/sdk/models";
+import { Dataset, DerivedDataset } from "shared/sdk/models";
 import { Subscription } from "rxjs";
 import {
   getCurrentDataset,
@@ -21,7 +22,7 @@ export class ReduceComponent implements OnInit, OnDestroy {
   resultAsString: string = "";
   resultSubscription: Subscription;
 
-  constructor(private store: Store<any>) {}
+  constructor(private router: Router, private store: Store<any>) {}
 
   ngOnInit() {
     this.datasetSubscription = this.store
@@ -45,5 +46,10 @@ export class ReduceComponent implements OnInit, OnDestroy {
 
   reduceDataset(dataset: Dataset) {
     this.store.dispatch(new ReduceDatasetAction(dataset));
+  }
+
+  goTo(dataset: DerivedDataset) {
+    const pid = encodeURIComponent(dataset.pid);
+    this.router.navigateByUrl("/datasets/" + pid);
   }
 }
