@@ -261,7 +261,7 @@
     </mat-card>
   </mat-tab>
 
-  <mat-tab>
+  <mat-tab *ngIf="appConfig.datasetReduceEnabled">
     <ng-template mat-tab-label>
       <i class="material-icons"> tune </i> Reduce
     </ng-template>
