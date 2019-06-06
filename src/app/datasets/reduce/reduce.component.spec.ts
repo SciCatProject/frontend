@@ -1,6 +1,10 @@
+import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { Store } from "@ngrx/store";
 
 import { ReduceComponent } from './reduce.component';
+import { MockStore, MockActivatedRoute } from "shared/MockStubs";
+import { MatCardModule } from "@angular/material";
 
 describe('ReduceComponent', () => {
   let component: ReduceComponent;
@@ -8,9 +12,18 @@ describe('ReduceComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
+      schemas: [NO_ERRORS_SCHEMA],
+      imports: [MatCardModule],
       declarations: [ ReduceComponent ]
-    })
-    .compileComponents();
+    });
+    TestBed.overrideComponent(ReduceComponent, {
+      set: {
+        providers: [
+          { provide: Store, useClass: MockStore }
+        ]
+      }
+    });
+    TestBed.compileComponents();
   }));
 
   beforeEach(() => {
