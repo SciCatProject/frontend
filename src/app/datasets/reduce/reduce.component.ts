@@ -22,6 +22,8 @@ export class ReduceComponent implements OnInit, OnDestroy {
   resultAsString: string = "";
   resultSubscription: Subscription;
 
+  show: boolean;
+
   constructor(private router: Router, private store: Store<any>) {}
 
   ngOnInit() {
