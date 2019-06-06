@@ -2,10 +2,9 @@ import { ActivatedRoute } from "@angular/router";
 import { Component, Inject, OnDestroy, OnInit } from "@angular/core";
 import {
   DatablocksAction,
-  DeleteAttachment,
-  ReduceDatasetAction
+  DeleteAttachment
 } from "state-management/actions/datasets.actions";
-import { Job, User, Dataset } from "shared/sdk/models";
+import { Job, User } from "shared/sdk/models";
 import { select, Store } from "@ngrx/store";
 import { SubmitAction } from "state-management/actions/jobs.actions";
 import { ShowMessageAction } from "state-management/actions/user.actions";
@@ -25,8 +24,7 @@ import {
   getCurrentDatablocks,
   getCurrentDataset,
   getCurrentOrigDatablocks,
-  getCurrentDatasetWithoutOrigData,
-  reduceDataset
+  getCurrentDatasetWithoutOrigData
 } from "state-management/selectors/datasets.selectors";
 
 /**
@@ -62,10 +60,6 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
   public datablocks$ = this.store.pipe(select(getCurrentDatablocks));
   public attachments$ = this.store.pipe(select(getCurrentAttachments));
   public isAdmin$ = this.store.pipe(select(getIsAdmin));
-
-  result: Object;
-  resultAsString: string = "";
-  resultSubscription: Subscription;
 
   constructor(
     private router: Router,
@@ -155,13 +149,6 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
         }
       })
     );
-
-    this.resultSubscription = this.store
-      .pipe(select(reduceDataset))
-      .subscribe(result => {
-        this.result = result;
-        this.resultAsString = JSON.stringify(result);
-      });
   }
 
   ngOnDestroy() {
@@ -169,7 +156,6 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
     for (let i = 0; i < this.subscriptions.length; i++) {
       this.subscriptions[i].unsubscribe();
     }
-    this.resultSubscription.unsubscribe();
   }
 
   onExportClick() {
@@ -231,10 +217,6 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
     this.store.dispatch(
       new DeleteAttachment(dataset_id, dataset_attachment_id)
     );
-  }
-
-  reduceDataset(dataset: Dataset) {
-    this.store.dispatch(new ReduceDatasetAction(dataset));
   }
 
   onClickProp(proposalId: string): void {
