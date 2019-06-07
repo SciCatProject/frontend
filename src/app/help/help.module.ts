@@ -4,9 +4,10 @@ import { HelpComponent } from "./help/help.component";
 import { FlexModule } from "@angular/flex-layout";
 import { MatCardModule } from "@angular/material";
 import { AppConfigModule } from "app-config.module";
+import { RouterModule } from "@angular/router";
 
 @NgModule({
   declarations: [HelpComponent],
-  imports: [AppConfigModule, CommonModule, FlexModule, MatCardModule]
+  imports: [AppConfigModule, CommonModule, FlexModule, MatCardModule, RouterModule]
 })
 export class HelpModule {}

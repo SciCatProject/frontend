@@ -1,6 +1,7 @@
 import { AppComponent } from "./app.component";
 import { AppConfigModule } from "app-config.module";
 import { AppRoutingModule, routes } from "app-routing/app-routing.module";
+import { RedirectGuard } from "app-routing/redirect-guard";
 import { ArchivingService } from "datasets/archiving.service";
 import { AuthCheck } from "./AuthCheck";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
@@ -138,7 +139,8 @@ export function localStorageSyncWrapper(reducer: any) {
     SampleApi,
     Title,
     MatNativeDateModule,
-    LoginService
+    LoginService,
+    RedirectGuard
     //      {provide: RouteReuseStrategy, useClass: CustomReuseStrategy}
   ],
   bootstrap: [AppComponent]
