@@ -20,5 +20,6 @@ export const environment = {
   columnSelectEnabled: true,
   userProfileImageEnabled: false,
   logbookEnabled: true,
+  sharingEnabled: true,
   tableSciDataEnabled: true
 };
