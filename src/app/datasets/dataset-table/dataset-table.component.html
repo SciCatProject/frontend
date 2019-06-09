@@ -175,8 +175,8 @@
         <div
           *ngIf="dataset.scientificMetadata && appConfig.metadataPreviewEnabled ; then thenBlock else elseBlock">
         </div>
-        <ng-template #thenBlock>{{ dataset.scientificMetadata | json | slice: 0:100 }}...</ng-template>
-        <ng-template #elseBlock>{{ dataset.scientificMetadata | jsonHead  }}</ng-template>
+        <ng-template #thenBlock>{{ dataset.scientificMetadata | jsonHead }}</ng-template>
+        <ng-template #elseBlock>{{ dataset.scientificMetadata | json  | slice: 0:100 }}...</ng-template>
       </mat-cell>
     </ng-container>
 
