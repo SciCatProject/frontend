@@ -22,6 +22,7 @@ export class AppConfig {
   logbookEnabled: boolean;
   tableSciDataEnabled: boolean;
   fileColorEnabled: boolean;
+  metadataPreviewEnabled: boolean;
   ingestManual: string;
 }
 
@@ -44,6 +45,7 @@ export const APP_DI_CONFIG: AppConfig = {
   logbookEnabled: environment["logbookEnabled"] || false,
   tableSciDataEnabled: environment["tableSciDataEnabled"] || false,
   fileColorEnabled: environment["fileColorEnabled"] || false,
+  metadataPreviewEnabled: environment["metadataPreviewEnabled"] || false,
   ingestManual: environment["ingestManual"] || null,
 };
 
