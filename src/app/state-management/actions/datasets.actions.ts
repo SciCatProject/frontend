@@ -87,6 +87,10 @@ export const PREFILL_BATCH_COMPLETE = "[Dataset] Prefill Batch Complete";
 export const ADD_SCIENTIFIC_CONDITION = "[Dataset] Add Scientific Condition";
 export const REMOVE_SCIENTIFIC_CONDITION = "[Dataset] Remove Scientific Condition";
 
+export const REDUCE_DATASET = "[Dataset] Reduce Dataset";
+export const REDUCE_DATASET_COMPLETE = "[Dataset] Reduce Dataset Complete";
+export const REDUCE_DATASET_FAILED = "[Dataset] Reduce Dataset Failed";
+
 export const DELETE_ATTACHMENT = "[DatasetAttachment] Delete Attachment";
 export const DELETE_ATTACHMENT_COMPLETE = "[DatasetAttachment] Delete Attachment Complete";
 export const DELETE_ATTACHMENT_FAILED = "[DatasetAttachment] Delete Attachment Failed";
@@ -399,6 +403,22 @@ export class RemoveScientificConditionAction implements Action {
   }
 }
 
+export class ReduceDatasetAction implements Action {
+  readonly type = REDUCE_DATASET;
+
+  constructor(readonly dataset: Dataset) {}
+}
+
+export class ReduceDatasetCompleteAction implements Action {
+  readonly type = REDUCE_DATASET_COMPLETE;
+
+  constructor(readonly result: object) {}
+}
+
+export class ReduceDatasetFailedAction implements Action {
+  readonly type = REDUCE_DATASET_FAILED;
+}
+
 export type Actions =
   UpdateFilterAction |
   SearchIDCompleteAction |
@@ -415,4 +435,5 @@ export type Actions =
   ExportToCsvAction | ChangePageAction | SortByColumnAction | SetViewModeAction |
   SetSearchTermsAction | ClearFacetsAction |
   AddToBatchAction |
-  AddScientificConditionAction | RemoveScientificConditionAction;
+  AddScientificConditionAction | RemoveScientificConditionAction |
+  ReduceDatasetAction | ReduceDatasetCompleteAction | ReduceDatasetFailedAction;

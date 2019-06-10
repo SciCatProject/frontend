@@ -261,6 +261,16 @@
     </mat-card>
   </mat-tab>
 
+  <mat-tab *ngIf="appConfig.datasetReduceEnabled">
+    <ng-template mat-tab-label>
+      <i class="material-icons"> tune </i> Reduce
+    </ng-template>
+    <mat-card style="margin: 1em">
+        <h3>Reduce dataset</h3>
+        <reduce></reduce>
+    </mat-card>
+  </mat-tab>
+
   <mat-tab *ngIf="(attachments$ | async) as attachments">
     <ng-template mat-tab-label>
       <i class="material-icons"> insert_photo </i> Attachments
