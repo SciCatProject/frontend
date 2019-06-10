@@ -1,7 +1,6 @@
 import { createSelector, createFeatureSelector } from "@ngrx/store";
 import { PolicyState } from "../state/policies.store";
 import { UserState } from "../state/user.store";
-import * as userSelectors from "state-management/selectors/users.selectors";
 
 export const getPolicyState = createFeatureSelector<PolicyState>("policies");
 
@@ -66,21 +65,6 @@ export const getQueryParams = createSelector(getFilters, filter => {
     limits
   };
 });
-
-/*export const getEditablePolicies = createSelector(getPolicies, userSelectors.getProfile, (policies, profile) => {
-  if (!profile) {
-    return null;
-  }
-  const email = profile.email;
-  const editablePolicies = [];
-  policies.forEach(pol => {
-    if (pol.manager.indexOf(email) !== -1) {
-      editablePolicies.push(pol);
-    }
-  });
-  return editablePolicies;
-});*/
-
 
 export const getItemsPerPage = createSelector(
   getPolicyState,

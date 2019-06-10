@@ -10,8 +10,7 @@ import {
 } from "@angular/material";
 import { Policy } from "state-management/models";
 
-import { ActivatedRoute, Router } from "@angular/router";
-import { ActionsSubject, select, Store } from "@ngrx/store";
+import { select, Store } from "@ngrx/store";
 
 import {
   ChangePageAction,

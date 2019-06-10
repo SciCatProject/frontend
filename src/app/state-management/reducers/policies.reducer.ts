@@ -18,7 +18,6 @@ import {
   SubmitPolicyCompleteAction,
   SubmitPolicyFailedAction,
   FETCH_COUNT_POLICIES,
-  FetchEditablePolicies,
   FETCH_EDITABLE_POLICIES_COMPLETE,
   FETCH_EDITABLE_POLICIES,
   FetchEditablePoliciesComplete
