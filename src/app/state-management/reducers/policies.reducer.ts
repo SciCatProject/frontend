@@ -16,7 +16,12 @@ import {
   SUBMIT_POLICY_COMPLETE,
   SUBMIT_POLICY_FAILED,
   SubmitPolicyCompleteAction,
-  SubmitPolicyFailedAction
+  SubmitPolicyFailedAction,
+  FETCH_COUNT_POLICIES,
+  FetchEditablePolicies,
+  FETCH_EDITABLE_POLICIES_COMPLETE,
+  FETCH_EDITABLE_POLICIES,
+  FetchEditablePoliciesComplete
 } from "state-management/actions/policies.actions";
 
 import {
@@ -50,8 +55,16 @@ export function policiesReducer(
 
     case FETCH_POLICIES_COMPLETE: {
       const policies = (action as FetchPoliciesCompleteAction).policies;
-      const totalCount = policies.length;
-      return { ...state, policies, policiesLoading: false, totalCount };
+      return { ...state, policies, policiesLoading: false };
+    }
+
+    case FETCH_EDITABLE_POLICIES: {
+      return { ...state, policiesLoading: true };
+    }
+
+    case FETCH_EDITABLE_POLICIES_COMPLETE: {
+      const editablePolicies = (action as FetchEditablePoliciesComplete).editablePolicies;
+      return { ...state, editablePolicies, policiesLoading: false  };
     }
 
     case FETCH_POLICIES_FAILED: {
@@ -99,6 +112,11 @@ export function policiesReducer(
       const sortField = column + (direction ? ":" + direction : "");
       const filters = { ...state.filters, sortField, skip: 0 };
       return { ...state, filters, policiesLoading: true };
+    }
+
+    case FETCH_COUNT_POLICIES: {
+      const count = action.count;
+      return {...state, totalCount: count};
     }
 
     default: {

@@ -18,12 +18,12 @@
     </ng-template>
     <div>
       <mat-paginator
-        class="policy-paginator"
-        [pageSizeOptions]="pageSizeOptions"
-        [pageIndex]="currentPage"
-        [pageSize]="policiesPerPage"
-        [length]="policyCount$ | async"
-        (page)="onPageChange($event)"
+      class="policy-paginator"
+      [pageSize]="itemsPerPage$ | async"
+      [pageSizeOptions]="pageSizeOptions"
+      [pageIndex]="currentPage$ | async"
+      [length]="policyCount$ | async"
+      (page)="onPageChange($event)"
       >
       </mat-paginator>
       <mat-card-subtitle>
@@ -149,10 +149,10 @@
         </ng-container>
       </div>
       <mat-paginator
-        class="policy-paginator"
+        class="policy-paginator-editable"
+        [pageSize]="itemsPerPage$ | async"
         [pageSizeOptions]="pageSizeOptions"
-        [pageIndex]="currentPage"
-        [pageSize]="policiesPerPage"
+        [pageIndex]="currentPage$ | async"
         [length]="policyCount$ | async"
         (page)="onPageChange($event)"
       >

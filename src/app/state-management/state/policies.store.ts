@@ -10,13 +10,11 @@ export interface PolicyState {
     submissionResponse: Policy;
     totalCount: number;
     submitComplete: boolean;
-
     policiesLoading: boolean;
     error: Error;
-
     filters: PolicyFilters;
-
-
+    editableCount: number;
+    editablePolicies: Policy[];
 }
 
 export const initialPolicyState: PolicyState = {
@@ -27,7 +25,8 @@ export const initialPolicyState: PolicyState = {
     submissionResponse: null,
     totalCount: 0,
     submitComplete: false,
-
+    editableCount: 0,
+    editablePolicies: null,
     policiesLoading: true,
     error: undefined,
     filters: {

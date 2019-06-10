@@ -19,6 +19,11 @@ export const getPolicies = createSelector(
   state => state.policies
 );
 
+export const getEditablePolicies = createSelector(
+  getPolicyState,
+  state => state.editablePolicies
+);
+
 export const getSelectedPolicies = createSelector(
   getPolicyState,
   state => state.selectedPolicies
@@ -62,7 +67,7 @@ export const getQueryParams = createSelector(getFilters, filter => {
   };
 });
 
-export const getEditablePolicies = createSelector(getPolicies, userSelectors.getProfile, (policies, profile) => {
+/*export const getEditablePolicies = createSelector(getPolicies, userSelectors.getProfile, (policies, profile) => {
   if (!profile) {
     return null;
   }
@@ -74,4 +79,10 @@ export const getEditablePolicies = createSelector(getPolicies, userSelectors.get
     }
   });
   return editablePolicies;
-});
+});*/
+
+
+export const getItemsPerPage = createSelector(
+  getPolicyState,
+  state => state.filters.limit
+);

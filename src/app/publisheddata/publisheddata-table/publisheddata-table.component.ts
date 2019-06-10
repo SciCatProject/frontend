@@ -56,7 +56,6 @@ export class PublisheddataTableComponent implements OnInit, OnDestroy {
   public publishedData$ = this.store.pipe(select(selectAllPublished));
   public count$ = this.store.pipe(select(getCount));
   public publishedData: PublishedData[];
-  private sub: Subscription[];
   public event: any;
   public page: number;
   public filters$ = this.store.pipe(select(getFilters));
@@ -74,7 +73,6 @@ export class PublisheddataTableComponent implements OnInit, OnDestroy {
   ];
   public dataSource = ELEMENT_DATA;
   // MatPaginator Inputs
-  public length = 100;
   public pageSizeOptions: number[] = [5, 10, 25, 100];
   public currentPage$ = this.store.pipe(select(getPage));
   public itemsPerPage$ = this.store.pipe(select(getItemsPerPage));
@@ -84,13 +82,11 @@ export class PublisheddataTableComponent implements OnInit, OnDestroy {
 
   private writeRouteSubscription = this.filters$
     .subscribe(filters => {
-      // this.store.dispatch(new FetchAllPublishedData());
       this.router.navigate(["/publishedDatasets"], {
         queryParams: { args: rison.encode(filters) }
       });
     });
 
-  // this.route.queryParams = this.page;
   private readRouteSubscription = this.route.queryParams
     .pipe(
       map(params => params.args as string),
@@ -121,7 +117,6 @@ export class PublisheddataTableComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.writeRouteSubscription.unsubscribe();
     this.readRouteSubscription.unsubscribe();
-    // this.sub.forEach(subscription => subscription.unsubscribe());
   }
 
   onPageChange(event: PageChangeEvent): void {
@@ -129,6 +124,5 @@ export class PublisheddataTableComponent implements OnInit, OnDestroy {
       new ChangePagePub({ page: event.pageIndex, limit: event.pageSize })
     );
     this.page = event.pageIndex;
-    // this.store.dispatch(new FetchAllPublishedData());
   }
 }
