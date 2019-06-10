@@ -1,6 +1,6 @@
 /*import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ArchiveSettingsComponent } from './archive-settings.component';
+import { ArchiveSettingsComponent } from './policies.component';
 
 describe('ArchiveSettingsComponent', () => {
   let component: ArchiveSettingsComponent;

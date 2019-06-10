@@ -22,9 +22,16 @@ export const SUBMIT_POLICY_FAILED = "[Policy] Submit failed";
 export const CHANGE_PAGE = "[Policy] Change Page";
 export const SORT_BY_COLUMN = "[Policy] Sort by Column";
 
+export const FETCH_COUNT_POLICIES = "[Policy] Fetch count";
+export const FAILED_POLICIES = "[Policy] Failed policies action";
+export const FETCH_EDITABLE_POLICIES = "[Policy] Fetch editable policies";
+export const FETCH_EDITABLE_POLICIES_COMPLETE = "[Policy] Fetch editable policies complete";
+
+
+
 export class SubmitPolicyAction implements Action {
   readonly type = SUBMIT_POLICY;
-  constructor(readonly idList: string[], readonly policyAttributes: any) {}
+  constructor(readonly ownerList: string[], readonly policyAttributes: Policy) {}
 }
 
 export class SubmitPolicyCompleteAction implements Action {
@@ -74,13 +81,37 @@ export class SortByColumnAction implements Action {
   constructor(readonly column: string, readonly direction: string) {}
 }
 
-export type FetchPoliciesOutcomeAction =
+export class FetchCountPolicies implements Action {
+  readonly type = FETCH_COUNT_POLICIES;
+  constructor(readonly count: number) {}
+}
+
+
+export class FailedPoliciesAction implements Action {
+  readonly type = FAILED_POLICIES;
+  constructor( err: string ) {}
+}
+
+export class FetchEditablePolicies implements Action {
+  readonly type = FETCH_EDITABLE_POLICIES;
+  constructor( ) {}
+}
+
+export class FetchEditablePoliciesComplete implements Action {
+  readonly type = FETCH_EDITABLE_POLICIES_COMPLETE;
+  constructor( readonly editablePolicies: Policy[]) {}
+}
+
+
+
+/*export type FetchPoliciesOutcomeAction =
   | FetchPoliciesCompleteAction
-  | FetchPoliciesFailedAction;
+  | FetchPoliciesFailedAction
+  | FetchEditablePoliciesComplete;
 
 export type SubmitPoliciesOutcomeAction =
   | SubmitPolicyCompleteAction
-  | SubmitPolicyFailedAction;
+  | SubmitPolicyFailedAction;*/
 
 export type PoliciesActions =
   | SelectPolicyAction
@@ -88,12 +119,15 @@ export type PoliciesActions =
   | FetchPoliciesAction
   | FetchPoliciesCompleteAction
   | FetchPoliciesFailedAction
-  | FetchPoliciesOutcomeAction
   | ClearSelectionAction
   | SubmitPolicyAction
   | SubmitPolicyCompleteAction
   | SubmitPolicyFailedAction
   | ChangePageAction
-  | SortByColumnAction;
+  | SortByColumnAction
+  | FetchCountPolicies
+  | FailedPoliciesAction
+  | FetchEditablePolicies
+  | FetchEditablePoliciesComplete;
 
 // New filtering actions
