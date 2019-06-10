@@ -3,8 +3,9 @@ import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 import { Store } from "@ngrx/store";
 
 import { ReduceComponent } from "./reduce.component";
-import { MockStore } from "shared/MockStubs";
+import { MockStore, MockRouter } from "shared/MockStubs";
 import { MatCardModule } from "@angular/material";
+import { Router } from "@angular/router";
 
 describe("ReduceComponent", () => {
   let component: ReduceComponent;
@@ -18,7 +19,10 @@ describe("ReduceComponent", () => {
     });
     TestBed.overrideComponent(ReduceComponent, {
       set: {
-        providers: [{ provide: Store, useClass: MockStore }]
+        providers: [
+          { provide: Store, useClass: MockStore },
+          { provide: Router, useClass: MockRouter }
+        ]
       }
     });
     TestBed.compileComponents();
@@ -28,6 +32,10 @@ describe("ReduceComponent", () => {
     fixture = TestBed.createComponent(ReduceComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    fixture.destroy();
   });
 
   it("should create", () => {
