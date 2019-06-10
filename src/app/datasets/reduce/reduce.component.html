@@ -4,17 +4,17 @@
   </button>
 </mat-card-actions>
 
-<div *ngIf="result.hasOwnProperty('message')">
+<div *ngIf="result !== null && result.hasOwnProperty('message')">
   {{ result.message }}
 </div>
 
-<div *ngIf="result.hasOwnProperty('derivedDataset')">
+<div *ngIf="result !== null && result.hasOwnProperty('derivedDataset')">
   <button (click)="goTo(result.derivedDataset)">
     Go to: {{ result.derivedDataset.datasetName }}
   </button>
 </div>
 
-<button (click)="show = !show" *ngIf="result.hasOwnProperty('derivedDataset')">
+<button (click)="show = !show" *ngIf="result !== null && result.hasOwnProperty('derivedDataset')">
   {{ show ? "Hide MetaData" : "Show MetaData" }}
 </button>
 <br />
