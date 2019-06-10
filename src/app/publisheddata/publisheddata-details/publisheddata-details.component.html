@@ -112,7 +112,7 @@
     <br />
     <div *ngIf="show">
       <ngx-json-viewer
-        [json]="publishedData$ | async"
+        [json]="currentData$ | async"
         [expanded]="false"
       ></ngx-json-viewer>
     </div>

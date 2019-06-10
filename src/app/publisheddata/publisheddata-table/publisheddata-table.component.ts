@@ -4,15 +4,20 @@ import { PublishedData } from "shared/sdk";
 import { Subscription } from "rxjs";
 import {
   FetchAllPublishedData,
-  ChangePageAction
+  ChangePagePub
 } from "state-management/actions/published-data.actions";
 import {
-  selectFilteredPublished,
-  selectPublishedDataTotal
+  selectAllPublished,
+  getCount,
+  getFilters,
+  getPage,
+  getItemsPerPage
 } from "state-management/selectors/published-data.selectors";
-import { Router } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { PageEvent } from "@angular/material";
 import { PageChangeEvent } from "datasets";
+import { map, take } from "rxjs/operators";
+import * as rison from "rison";
 
 export interface PubElement {
   doi: string;
@@ -48,11 +53,13 @@ const ELEMENT_DATA: PubElement[] = [
   styleUrls: ["./publisheddata-table.component.scss"]
 })
 export class PublisheddataTableComponent implements OnInit, OnDestroy {
-  public publishedData$ = this.store.pipe(select(selectFilteredPublished));
-  public publishedCount$ = this.store.pipe(select(selectPublishedDataTotal));
+  public publishedData$ = this.store.pipe(select(selectAllPublished));
+  public count$ = this.store.pipe(select(getCount));
   public publishedData: PublishedData[];
   private sub: Subscription[];
   public event: any;
+  public page: number;
+  public filters$ = this.store.pipe(select(getFilters));
   public constData = [
     {
       name: "x1",
@@ -68,40 +75,60 @@ export class PublisheddataTableComponent implements OnInit, OnDestroy {
   public dataSource = ELEMENT_DATA;
   // MatPaginator Inputs
   public length = 100;
-  public pageSize = 10;
   public pageSizeOptions: number[] = [5, 10, 25, 100];
+  public currentPage$ = this.store.pipe(select(getPage));
+  public itemsPerPage$ = this.store.pipe(select(getItemsPerPage));
 
   // MatPaginator Output
   public pageEvent: PageEvent;
 
+  private writeRouteSubscription = this.filters$
+    .subscribe(filters => {
+      // this.store.dispatch(new FetchAllPublishedData());
+      this.router.navigate(["/publishedDatasets"], {
+        queryParams: { args: rison.encode(filters) }
+      });
+    });
+
+  // this.route.queryParams = this.page;
+  private readRouteSubscription = this.route.queryParams
+    .pipe(
+      map(params => params.args as string),
+      take(1),
+      map(args => (args))
+    )
+    .subscribe(filters =>
+      this.store.pipe(select(getFilters))
+    );
+
+
   constructor(
     private store: Store<PublishedData>,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit() {
     this.store.dispatch(new FetchAllPublishedData());
-    // this.publishedData$ = this.pubApi.find({ limit: 7 });
-    /*this.pubApi.find({ limit: 11 }).subscribe(res => {
-      this.publishedData = <PublishedData[]>res;
-    });*/
   }
 
   onClick(published: PublishedData) {
     this.router.navigateByUrl(
       "/publishedDataset/" + encodeURIComponent(published.doi)
     );
-    console.log("published", published);
   }
 
   ngOnDestroy() {
+    this.writeRouteSubscription.unsubscribe();
+    this.readRouteSubscription.unsubscribe();
     // this.sub.forEach(subscription => subscription.unsubscribe());
   }
 
   onPageChange(event: PageChangeEvent): void {
     this.store.dispatch(
-      new ChangePageAction({ page: event.pageIndex, limit: event.pageSize })
+      new ChangePagePub({ page: event.pageIndex, limit: event.pageSize })
     );
+    this.page = event.pageIndex;
     // this.store.dispatch(new FetchAllPublishedData());
   }
 }

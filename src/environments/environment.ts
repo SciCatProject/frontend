@@ -21,5 +21,6 @@ export const environment = {
   userProfileImageEnabled: false,
   logbookEnabled: true,
   tableSciDataEnabled: true,
-  datasetReduceEnabled: true
+  datasetReduceEnabled: true,
+  fileColorEnabled: true
 };

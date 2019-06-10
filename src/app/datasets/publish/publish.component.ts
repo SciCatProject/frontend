@@ -2,10 +2,11 @@ import { Component, Inject, OnInit } from "@angular/core";
 import { COMMA, ENTER } from "@angular/cdk/keycodes";
 
 import { select, Store } from "@ngrx/store";
-import { map, first, tap } from "rxjs/operators";
+import { map, first, tap, flatMap } from "rxjs/operators";
 
 import { getDatasetsInBatch } from "state-management/selectors/datasets.selectors";
 import { PrefillBatchAction } from "state-management/actions/datasets.actions";
+// import { UpsertPublishedDatas} from "state-management/actions/published-data.actions";
 import { APP_CONFIG } from "app-config.module";
 
 import { PublishedDataApi } from "../../shared/sdk/services/custom";
@@ -94,10 +95,13 @@ export class PublishComponent implements OnInit {
     publishedData.numberOfFiles = this.form.numberOfFiles;
     publishedData.sizeOfArchive = this.form.sizeOfArchive;
 
-    this.publishedDataApi.create(publishedData).subscribe(result => {
-      alert(JSON.stringify(result));
-    });
-  }
+    this.publishedDataApi.create(publishedData).pipe(
+      flatMap(result => this.publishedDataApi.register(result.doi))
+    ).subscribe();
+
+   // const pub = [ publishedData ];
+    // this.store.dispatch(new UpsertPublishedDatas({publishedDatas: pub}));
+}
 
   addAuthor(event) {
     this.form.authors.push(event.value);
