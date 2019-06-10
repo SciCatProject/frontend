@@ -17,9 +17,6 @@ mat-cell, .mat-cell {
 }
 
 
-/*Columns are dynamically injected, so this /deep/ ensures it is reflected onto the selector  */
-/* ^-- Is this needed anymore? Seems to work fine without */
-
 .mat-column-select {
   overflow: visible; /* Needed to prevent offsetting of the checkbox when clicking */
   flex-grow: 0;
@@ -34,6 +31,17 @@ mat-cell, .mat-cell {
   padding-left: 30px;
   text-align: center ;
 }
+
+.mat-header-cell {
+  color: white;
+  background: mat-color($primary);
+  justify-content: center !important;
+}
+
+::ng-deep mat-header-cell .mat-checkbox-frame {
+  border-color: white;
+}
+
 
 /*:host /deep/*/ .center-align {
   text-align: center;
@@ -74,3 +82,4 @@ mat-cell, .mat-cell {
 :host /deep/ .mat-paginator {
   background-color: unset !important;
 }
+

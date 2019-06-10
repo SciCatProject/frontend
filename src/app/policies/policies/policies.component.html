@@ -7,12 +7,12 @@
     </ng-template>
     <div>
       <mat-paginator
-      class="policy-paginator"
-      [pageSize]="itemsPerPage$ | async"
-      [pageSizeOptions]="pageSizeOptions"
-      [pageIndex]="currentPage$ | async"
-      [length]="policyCount$ | async"
-      (page)="onPageChange($event)"
+        class="policy-paginator"
+        [pageSize]="itemsPerPage$ | async"
+        [pageSizeOptions]="pageSizeOptions"
+        [pageIndex]="currentPage$ | async"
+        [length]="policyCount$ | async"
+        (page)="onPageChange($event)"
       >
       </mat-paginator>
       <mat-table
@@ -41,66 +41,120 @@
         </ng-container>
 
         <ng-container matColumnDef="manager">
-          <mat-header-cell *matHeaderCellDef mat-sort-header
-            >Manager</mat-header-cell
-          >
+          <mat-header-cell *matHeaderCellDef mat-sort-header>
+            <div fxLayout="column" style="align-items: center; text-align: center">
+              <div>
+                <i class="material-icons">account_box</i>
+              </div>
+              <div class="table_column">manager</div>
+            </div>
+          </mat-header-cell>
           <mat-cell *matCellDef="let policy">{{ policy.manager }}</mat-cell>
         </ng-container>
 
+        <ng-container matColumnDef="ownerGroup">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>
+            <div fxLayout="column" style="align-items: center; text-align: center">
+              <div>
+                <i class="material-icons">people</i>
+              </div>
+              <div class="table_column">Group</div>
+            </div>
+          </mat-header-cell>
+          <mat-cell *matCellDef="let policy">{{ policy.ownerGroup }}</mat-cell>
+        </ng-container>
+
         <ng-container matColumnDef="tapeRedundancy">
-          <mat-header-cell *matHeaderCellDef>Tape Redundancy</mat-header-cell>
+          <mat-header-cell *matHeaderCellDef >
+            <div fxLayout="column" style="align-items: center; text-align: center">
+              <div>
+                <i class="material-icons">people</i>
+              </div>
+              <div class="table_column">Tape Redundancy</div>
+            </div>
+          </mat-header-cell>
           <mat-cell *matCellDef="let policy">{{
             policy.tapeRedundancy
           }}</mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="autoArchive">
-          <mat-header-cell *matHeaderCellDef>Auto Archive</mat-header-cell>
+          <mat-header-cell *matHeaderCellDef >
+            <div fxLayout="column" style="align-items: center; text-align: center">
+              <div>
+                <i class="material-icons">archive</i>
+              </div>
+              <div class="table_column">Auto Archive</div>
+            </div>
+          </mat-header-cell>
           <mat-cell *matCellDef="let policy">{{ policy.autoArchive }}</mat-cell>
         </ng-container>
+
         <ng-container matColumnDef="autoArchiveDelay">
-          <mat-header-cell *matHeaderCellDef 
-            >Auto Archive Delay</mat-header-cell
-          >
+          <mat-header-cell *matHeaderCellDef >
+            <div fxLayout="column" style="align-items: center; text-align: center">
+              <div>
+                <i class="material-icons">timer</i>
+              </div>
+              <div class="table_column">Auto Archive Delay</div>
+            </div>
+          </mat-header-cell>
           <mat-cell *matCellDef="let policy">{{
             policy.autoArchiveDelay
           }}</mat-cell>
         </ng-container>
 
-        <ng-container matColumnDef="ownerGroup">
-          <mat-header-cell *matHeaderCellDef mat-sort-header>Group</mat-header-cell>
-          <mat-cell *matCellDef="let policy">{{ policy.ownerGroup }}</mat-cell>
-        </ng-container>
-
         <ng-container matColumnDef="archiveEmailNotification">
-          <mat-header-cell *matHeaderCellDef
-            >Archive Email Notification</mat-header-cell
-          >
+          <mat-header-cell *matHeaderCellDef >
+            <div fxLayout="column" style="align-items: center; text-align: center">
+              <div>
+                <i class="material-icons">email</i>
+              </div>
+              <div class="table_column">Archive Email Notification</div>
+            </div>
+          </mat-header-cell>
           <mat-cell *matCellDef="let policy">{{
             policy.archiveEmailNotification
           }}</mat-cell>
         </ng-container>
+
         <ng-container matColumnDef="archiveEmailsToBeNotified">
-          <mat-header-cell *matHeaderCellDef
-            >Archive Emails</mat-header-cell
-          >
+          <mat-header-cell *matHeaderCellDef >
+            <div fxLayout="column" style="align-items: center; text-align: center">
+              <div>
+                <i class="material-icons">playlist_add</i>
+              </div>
+              <div class="table_column">Archive Emails</div>
+            </div>
+          </mat-header-cell>
           <mat-cell *matCellDef="let policy">{{
             policy.archiveEmailsToBeNotified
           }}</mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="retrieveEmailNotification">
-          <mat-header-cell *matHeaderCellDef
-            >Retrieve Email Notification</mat-header-cell
-          >
+          <mat-header-cell *matHeaderCellDef >
+            <div fxLayout="column" style="align-items: center; text-align: center">
+              <div>
+                <i class="material-icons">email</i>
+              </div>
+              <div class="table_column">Retrieve Email Notification</div>
+            </div>
+          </mat-header-cell>
           <mat-cell *matCellDef="let policy">{{
             policy.retrieveEmailNotification
           }}</mat-cell>
         </ng-container>
+
         <ng-container matColumnDef="retrieveEmailsToBeNotified">
-          <mat-header-cell *matHeaderCellDef
-            >Retrieve Emails</mat-header-cell
-          >
+          <mat-header-cell *matHeaderCellDef >
+            <div fxLayout="column" style="align-items: center; text-align: center">
+              <div>
+                <i class="material-icons">playlist_add</i>
+              </div>
+              <div class="table_column">Retrieve Emails</div>
+            </div>
+          </mat-header-cell>
           <mat-cell *matCellDef="let policy">{{
             policy.retrieveEmailsToBeNotified
           }}</mat-cell>
@@ -127,8 +181,13 @@
 
     <div fxLayout="column" fxLayoutGap="row" fxLayoutAlign="end end">
       <div>
-        <ng-container *ngIf="editEnabled" >
-          <button mat-button [disabled]="selectedPolicies.length === 0"  (click)="onEditClick()" color="primary" >
+        <ng-container *ngIf="editEnabled">
+          <button
+            mat-button
+            [disabled]="selectedPolicies.length === 0"
+            (click)="onEditClick()"
+            color="primary"
+          >
             <mat-icon>edit</mat-icon> Edit Selection
           </button>
         </ng-container>
@@ -171,75 +230,125 @@
             </mat-cell>
           </ng-container>
 
-          <ng-container matColumnDef="manager">
-            <mat-header-cell *matHeaderCellDef mat-sort-header
-              >Manager</mat-header-cell
-            >
-            <mat-cell *matCellDef="let policy">{{ policy.manager }}</mat-cell>
-          </ng-container>
+                 <ng-container matColumnDef="manager">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>
+            <div fxLayout="column" style="align-items: center; text-align: center">
+              <div>
+                <i class="material-icons">account_box</i>
+              </div>
+              <div class="table_column">manager</div>
+            </div>
+          </mat-header-cell>
+          <mat-cell *matCellDef="let policy">{{ policy.manager }}</mat-cell>
+        </ng-container>
 
-          <ng-container matColumnDef="tapeRedundancy">
-            <mat-header-cell *matHeaderCellDef>Tape Redundancy</mat-header-cell>
-            <mat-cell *matCellDef="let policy">{{
-              policy.tapeRedundancy
-            }}</mat-cell>
-          </ng-container>
+        <ng-container matColumnDef="ownerGroup">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>
+            <div fxLayout="column" style="align-items: center; text-align: center">
+              <div>
+                <i class="material-icons">people</i>
+              </div>
+              <div class="table_column">Group</div>
+            </div>
+          </mat-header-cell>
+          <mat-cell *matCellDef="let policy">{{ policy.ownerGroup }}</mat-cell>
+        </ng-container>
 
-          <ng-container matColumnDef="autoArchive">
-            <mat-header-cell *matHeaderCellDef>Auto Archive</mat-header-cell>
-            <mat-cell *matCellDef="let policy">{{
-              policy.autoArchive
-            }}</mat-cell>
-          </ng-container>
-          <ng-container matColumnDef="autoArchiveDelay">
-            <mat-header-cell *matHeaderCellDef 
-              >Auto Archive Delay</mat-header-cell
-            >
-            <mat-cell *matCellDef="let policy">{{
-              policy.autoArchiveDelay
-            }}</mat-cell>
-          </ng-container>
+        <ng-container matColumnDef="tapeRedundancy">
+          <mat-header-cell *matHeaderCellDef >
+            <div fxLayout="column" style="align-items: center; text-align: center">
+              <div>
+                <i class="material-icons">people</i>
+              </div>
+              <div class="table_column">Tape Redundancy</div>
+            </div>
+          </mat-header-cell>
+          <mat-cell *matCellDef="let policy">{{
+            policy.tapeRedundancy
+          }}</mat-cell>
+        </ng-container>
 
-          <ng-container matColumnDef="ownerGroup">
-            <mat-header-cell *matHeaderCellDef mat-sort-header>Group</mat-header-cell>
-            <mat-cell *matCellDef="let policy">{{
-              policy.ownerGroup
-            }}</mat-cell>
-          </ng-container>
+        <ng-container matColumnDef="autoArchive">
+          <mat-header-cell *matHeaderCellDef >
+            <div fxLayout="column" style="align-items: center; text-align: center">
+              <div>
+                <i class="material-icons">archive</i>
+              </div>
+              <div class="table_column">Auto Archive</div>
+            </div>
+          </mat-header-cell>
+          <mat-cell *matCellDef="let policy">{{ policy.autoArchive }}</mat-cell>
+        </ng-container>
 
-          <ng-container matColumnDef="archiveEmailNotification">
-            <mat-header-cell *matHeaderCellDef 
-              >Archive Email Notification</mat-header-cell
-            >
-            <mat-cell *matCellDef="let policy">{{
-              policy.archiveEmailNotification
-            }}</mat-cell>
-          </ng-container>
-          <ng-container matColumnDef="archiveEmailsToBeNotified">
-            <mat-header-cell *matHeaderCellDef
-              >Archive Emails</mat-header-cell
-            >
-            <mat-cell *matCellDef="let policy">{{
-              policy.archiveEmailsToBeNotified
-            }}</mat-cell>
-          </ng-container>
+        <ng-container matColumnDef="autoArchiveDelay">
+          <mat-header-cell *matHeaderCellDef >
+            <div fxLayout="column" style="align-items: center; text-align: center">
+              <div>
+                <i class="material-icons">timer</i>
+              </div>
+              <div class="table_column">Auto Archive Delay</div>
+            </div>
+          </mat-header-cell>
+          <mat-cell *matCellDef="let policy">{{
+            policy.autoArchiveDelay
+          }}</mat-cell>
+        </ng-container>
 
-          <ng-container matColumnDef="retrieveEmailNotification">
-            <mat-header-cell *matHeaderCellDef
-              >Retrieve Email Notification</mat-header-cell
-            >
-            <mat-cell *matCellDef="let policy">{{
-              policy.retrieveEmailNotification
-            }}</mat-cell>
-          </ng-container>
-          <ng-container matColumnDef="retrieveEmailsToBeNotified">
-            <mat-header-cell *matHeaderCellDef
-              >Retrieve Emails</mat-header-cell
-            >
-            <mat-cell *matCellDef="let policy">{{
-              policy.retrieveEmailsToBeNotified
-            }}</mat-cell>
-          </ng-container>
+        <ng-container matColumnDef="archiveEmailNotification">
+          <mat-header-cell *matHeaderCellDef >
+            <div fxLayout="column" style="align-items: center; text-align: center">
+              <div>
+                <i class="material-icons">email</i>
+              </div>
+              <div class="table_column">Archive Email Notification</div>
+            </div>
+          </mat-header-cell>
+          <mat-cell *matCellDef="let policy">{{
+            policy.archiveEmailNotification
+          }}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="archiveEmailsToBeNotified">
+          <mat-header-cell *matHeaderCellDef >
+            <div fxLayout="column" style="align-items: center; text-align: center">
+              <div>
+                <i class="material-icons">playlist_add</i>
+              </div>
+              <div class="table_column">Archive Emails</div>
+            </div>
+          </mat-header-cell>
+          <mat-cell *matCellDef="let policy">{{
+            policy.archiveEmailsToBeNotified
+          }}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="retrieveEmailNotification">
+          <mat-header-cell *matHeaderCellDef >
+            <div fxLayout="column" style="align-items: center; text-align: center">
+              <div>
+                <i class="material-icons">email</i>
+              </div>
+              <div class="table_column">Retrieve Email Notification</div>
+            </div>
+          </mat-header-cell>
+          <mat-cell *matCellDef="let policy">{{
+            policy.retrieveEmailNotification
+          }}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="retrieveEmailsToBeNotified">
+          <mat-header-cell *matHeaderCellDef >
+            <div fxLayout="column" style="align-items: center; text-align: center">
+              <div>
+                <i class="material-icons">playlist_add</i>
+              </div>
+              <div class="table_column">Retrieve Emails</div>
+            </div>
+          </mat-header-cell>
+          <mat-cell *matCellDef="let policy">{{
+            policy.retrieveEmailsToBeNotified
+          }}</mat-cell>
+        </ng-container>
 
           <!-- End of Column Definitions -->
 
