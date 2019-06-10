@@ -19,6 +19,7 @@ import {
   FETCH_EDITABLE_POLICIES,
   FetchEditablePoliciesComplete,
   FetchEditablePolicies,
+  SORT_BY_COLUMN
 } from "../actions/policies.actions";
 import { getQueryParams, getPolicies } from "../selectors/policies.selectors";
 import {
@@ -55,7 +56,7 @@ export class PoliciesEffects {
 
   @Effect()
   private fetchPolicies$: Observable<Action> = this.actions$.pipe(
-    ofType(FETCH_POLICIES, CHANGE_PAGE),
+    ofType(FETCH_POLICIES, CHANGE_PAGE, SORT_BY_COLUMN),
     withLatestFrom(this.queryParams$),
     map(([action, params]) => params),
     switchMap(({ limits }) =>

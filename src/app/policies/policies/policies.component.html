@@ -15,9 +15,6 @@
       (page)="onPageChange($event)"
       >
       </mat-paginator>
-      <mat-card-subtitle>
-        Readable Policies
-      </mat-card-subtitle>
       <mat-table
         [dataSource]="policies$ | async"
         class="policy-table-readable mat-elevation-z2"
@@ -62,7 +59,7 @@
           <mat-cell *matCellDef="let policy">{{ policy.autoArchive }}</mat-cell>
         </ng-container>
         <ng-container matColumnDef="autoArchiveDelay">
-          <mat-header-cell *matHeaderCellDef mat-sort-header
+          <mat-header-cell *matHeaderCellDef 
             >Auto Archive Delay</mat-header-cell
           >
           <mat-cell *matCellDef="let policy">{{
@@ -71,12 +68,12 @@
         </ng-container>
 
         <ng-container matColumnDef="ownerGroup">
-          <mat-header-cell *matHeaderCellDef>Group</mat-header-cell>
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Group</mat-header-cell>
           <mat-cell *matCellDef="let policy">{{ policy.ownerGroup }}</mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="archiveEmailNotification">
-          <mat-header-cell *matHeaderCellDef mat-sort-header
+          <mat-header-cell *matHeaderCellDef
             >Archive Email Notification</mat-header-cell
           >
           <mat-cell *matCellDef="let policy">{{
@@ -85,7 +82,7 @@
         </ng-container>
         <ng-container matColumnDef="archiveEmailsToBeNotified">
           <mat-header-cell *matHeaderCellDef
-            >Archive Emails to be Notified</mat-header-cell
+            >Archive Emails</mat-header-cell
           >
           <mat-cell *matCellDef="let policy">{{
             policy.archiveEmailsToBeNotified
@@ -102,7 +99,7 @@
         </ng-container>
         <ng-container matColumnDef="retrieveEmailsToBeNotified">
           <mat-header-cell *matHeaderCellDef
-            >Retrieve Emails to be Notified</mat-header-cell
+            >Retrieve Emails</mat-header-cell
           >
           <mat-cell *matCellDef="let policy">{{
             policy.retrieveEmailsToBeNotified
@@ -149,9 +146,6 @@
 
     <div fxLayout="column" fxLayoutGap="column">
       <div>
-        <mat-card-subtitle>
-          Editable Policies
-        </mat-card-subtitle>
         <mat-table
           [dataSource]="editablePolicies$ | async"
           class="policy-table mat-elevation-z2"
@@ -198,7 +192,7 @@
             }}</mat-cell>
           </ng-container>
           <ng-container matColumnDef="autoArchiveDelay">
-            <mat-header-cell *matHeaderCellDef mat-sort-header
+            <mat-header-cell *matHeaderCellDef 
               >Auto Archive Delay</mat-header-cell
             >
             <mat-cell *matCellDef="let policy">{{
@@ -207,14 +201,14 @@
           </ng-container>
 
           <ng-container matColumnDef="ownerGroup">
-            <mat-header-cell *matHeaderCellDef>Group</mat-header-cell>
+            <mat-header-cell *matHeaderCellDef mat-sort-header>Group</mat-header-cell>
             <mat-cell *matCellDef="let policy">{{
               policy.ownerGroup
             }}</mat-cell>
           </ng-container>
 
           <ng-container matColumnDef="archiveEmailNotification">
-            <mat-header-cell *matHeaderCellDef mat-sort-header
+            <mat-header-cell *matHeaderCellDef 
               >Archive Email Notification</mat-header-cell
             >
             <mat-cell *matCellDef="let policy">{{
@@ -223,7 +217,7 @@
           </ng-container>
           <ng-container matColumnDef="archiveEmailsToBeNotified">
             <mat-header-cell *matHeaderCellDef
-              >Archive Emails to be Notified</mat-header-cell
+              >Archive Emails</mat-header-cell
             >
             <mat-cell *matCellDef="let policy">{{
               policy.archiveEmailsToBeNotified
@@ -240,7 +234,7 @@
           </ng-container>
           <ng-container matColumnDef="retrieveEmailsToBeNotified">
             <mat-header-cell *matHeaderCellDef
-              >Retrieve Emails to be Notified</mat-header-cell
+              >Retrieve Emails</mat-header-cell
             >
             <mat-cell *matCellDef="let policy">{{
               policy.retrieveEmailsToBeNotified

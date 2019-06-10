@@ -109,7 +109,11 @@ export function policiesReducer(
 
     case SORT_BY_COLUMN: {
       const { column, direction } = action as SortByColumnAction;
-      const sortField = column + (direction ? ":" + direction : "");
+      let sortField = "";
+      if (direction) {
+        sortField = column + " " + direction;
+      }
+
       const filters = { ...state.filters, sortField, skip: 0 };
       return { ...state, filters, policiesLoading: true };
     }
