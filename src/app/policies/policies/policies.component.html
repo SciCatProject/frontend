@@ -1,16 +1,5 @@
 <div class="policies"></div>
 
-<!--mat-button-toggle-group [value]="currentMode">
-  <mat-button-toggle
-    *ngFor="let mode of modes; let i = index"
-    (click)="onModeChange($event, mode)"
-    [value]="mode"
-    [ngClass]="mode"
-  >
-    {{ modes[i] | titlecase }}
-  </mat-button-toggle>
-</mat-button-toggle-group-->
-
 <mat-tab-group>
   <mat-tab>
     <ng-template mat-tab-label>
@@ -129,7 +118,6 @@
         <mat-row
           class="row-generic"
           *matRowDef="let policy; columns: readableDisplayedColumns"
-          (click)="handleClick(policy)"
         >
         </mat-row>
       </mat-table>
@@ -142,8 +130,8 @@
 
     <div fxLayout="column" fxLayoutGap="row" fxLayoutAlign="end end">
       <div>
-        <ng-container *ngIf="editEnabled">
-          <button mat-button mat-button (click)="onEditClick()" color="primary">
+        <ng-container *ngIf="editEnabled" >
+          <button mat-button [disabled]="selectedPolicies.length === 0"  (click)="onEditClick()" color="primary" >
             <mat-icon>edit</mat-icon> Edit Selection
           </button>
         </ng-container>
@@ -268,7 +256,6 @@
           <mat-row
             class="row-generic"
             *matRowDef="let policy; columns: editableDisplayedColumns"
-            (click)="handleClick(policy)"
           >
           </mat-row>
         </mat-table>

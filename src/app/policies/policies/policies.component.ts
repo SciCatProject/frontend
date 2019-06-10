@@ -1,9 +1,6 @@
 import {
   Component,
-  EventEmitter,
   OnInit,
-  Output,
-  ViewChild,
   OnDestroy
 } from "@angular/core";
 import {
@@ -33,7 +30,6 @@ import {
   getEditablePolicies,
   getItemsPerPage
 } from "state-management/selectors/policies.selectors";
-import { PoliciesService } from "../policies.service";
 import { EditDialogComponent } from "../edit-dialog/edit-dialog.component";
 
 export interface PageChangeEvent {
