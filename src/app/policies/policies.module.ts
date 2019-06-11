@@ -1,6 +1,6 @@
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import { ArchiveSettingsComponent } from "./policies/policies.component";
+import { PoliciesComponent } from "./policies/policies.component";
 // import { ConfigFormModule } from 'shared/modules/config-form/config-form.module';
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { PoliciesService } from "./policies.service";
@@ -64,9 +64,9 @@ import { FlexLayoutModule } from "@angular/flex-layout";
     MatDialogModule,
     FlexLayoutModule
   ],
-  declarations: [ArchiveSettingsComponent, EditDialogComponent],
+  declarations: [PoliciesComponent, EditDialogComponent],
   providers: [PoliciesService],
-  exports: [ArchiveSettingsComponent],
+  exports: [PoliciesComponent],
   entryComponents: [EditDialogComponent]
 })
 export class PoliciesModule {}
