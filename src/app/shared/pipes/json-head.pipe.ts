@@ -20,14 +20,25 @@ export class JsonHeadPipe implements PipeTransform {
       }
     }
     const key1 = Object.keys(value)[0];
-    const key2 = Object.keys(value)[1];
-    const val1 = value[key1];
-    const val2 = value[key2];
+    let key2 = Object.keys(value)[1];
+    let val1 = value[key1];
+    if (val1 !== undefined && val1.hasOwnProperty("u")) {
+      val1 = val1.v.toString() + " " + val1.u;
+    }
+    let val2 = " ";
+    if (key2 !== undefined) {
+      const prop = value[key2];
+      if (prop.hasOwnProperty("u")) {
+        val2 = prop.v.toString() + " " + prop.u;
+      }
+    } else {
+      key2 = " ";
+      val2 = " ";
+    }
     outputString = key1 + ":" + val1 + "\n" + key2 + ":" + val2;
     if (key1 === undefined) {
       outputString = "No metadata found";
     }
-    const newvalue2 = JSON.stringify(newvalue, null, 2);
-    return outputString;
+    return outputString.slice(0, 100);
   }
 }
