@@ -21,7 +21,7 @@ import { SampleDataFormComponent } from "../samples/sample-data-form/sample-data
 import { ListProposalsPageComponent } from "../proposals/containers/list-proposals-page/list-proposals-page.component";
 import { ViewProposalPageComponent } from "../proposals/containers/view-proposal-page/view-proposal-page.component";
 
-import { ArchiveSettingsComponent } from "../policies/policies/policies.component";
+import { PoliciesComponent } from "../policies/policies/policies.component";
 
 import { PublishComponent } from "datasets/publish/publish.component";
 import { AuthCheck } from "../AuthCheck";
@@ -102,7 +102,7 @@ export const routes: Routes = [
 
   {
     path: "policies",
-    component: ArchiveSettingsComponent,
+    component: PoliciesComponent,
     canActivate: [AuthCheck]
   },
 

@@ -47,7 +47,7 @@ export interface SortChangeEvent {
   templateUrl: "./policies.component.html",
   styleUrls: ["./policies.component.scss"]
 })
-export class ArchiveSettingsComponent implements OnInit, OnDestroy {
+export class PoliciesComponent implements OnInit, OnDestroy {
   public policies$ = this.store.pipe(select(getPolicies));
   public editablePolicies$ = this.store.pipe(select(getEditablePolicies));
   dialogConfig: MatDialogConfig;
@@ -68,7 +68,7 @@ export class ArchiveSettingsComponent implements OnInit, OnDestroy {
   private currentMode = "readable";
   private modes = ["readable", "editable"];
 
-  private editableDisplayedColumns: string[] = [
+  public editableDisplayedColumns: string[] = [
     "select",
     "manager",
     "ownerGroup",
@@ -81,7 +81,7 @@ export class ArchiveSettingsComponent implements OnInit, OnDestroy {
     "retrieveEmailsToBeNotified"
   ];
 
-  private readableDisplayedColumns: string[] = [
+  public readableDisplayedColumns: string[] = [
     "manager",
     "ownerGroup",
     "autoArchive",
