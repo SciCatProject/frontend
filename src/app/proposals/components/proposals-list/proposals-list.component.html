@@ -2,7 +2,8 @@
   <mat-list>
     <!-- <h3 mat-subheader>Proposals</h3> -->
     <mat-list-item *ngFor="let proposal of proposals" [routerLink]="['/proposals/', proposal.proposalId]">
-      <h4 mat-line>{{proposal.title}}</h4>
+      <h4 mat-line>{{proposal.proposalId}} : {{proposal.title}}</h4>
+      <p mat-line>{{proposal.firstname}} {{proposal.lastname}}</p>
       <p mat-line>{{proposal.abstract}}</p>
     </mat-list-item>
   </mat-list>
@@ -10,3 +11,6 @@
 <div *ngIf="proposals && proposals.length === 0">
   {{ hasFetched ? "No proposals." : "Loading..." }}
 </div>
+
+
+

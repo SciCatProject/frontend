@@ -45,12 +45,9 @@ export class DatasetFormComponent implements OnInit, OnDestroy {
         const metadata_obj = {};
         const array = [];
         for (const control of this.items.controls) {
-          console.log("gm", control.value.fieldName);
-          console.log("gm", control.value.fieldValue);
           const name = control.value.fieldName;
           const value = control.value.fieldValue;
           const json = `{"${name}":"${value}"}`;
-          console.log("json", json);
           const metadata_item2 = JSON.parse(json);
           for (const key of Object.keys(metadata_item2)) {
             metadata_obj[key] = metadata_item2[key];
@@ -75,7 +72,6 @@ export class DatasetFormComponent implements OnInit, OnDestroy {
 
   onRemove(index: any) {
     this.items.removeAt(index);
-    console.log("TODO: remove");
   }
 
   ngOnDestroy() {
@@ -103,8 +99,6 @@ export class DatasetFormComponent implements OnInit, OnDestroy {
         }
         console.log(json_data);
         for (const key of Object.keys(json_data)) {
-          console.log("gm key", key);
-          console.log("gm json_data", json_data[key]);
           const field = {
             fieldName: key.toString(),
             fieldValue: json_data[key].toString()

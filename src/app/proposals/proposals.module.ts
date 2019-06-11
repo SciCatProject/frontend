@@ -1,3 +1,4 @@
+import { NgxJsonViewerModule } from 'ngx-json-viewer';
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { RouterModule } from "@angular/router";
@@ -45,6 +46,7 @@ import { LogbooksModule } from "logbooks/logbooks.module";
     MatTabsModule,
     MatTableModule,
     MatPaginatorModule,
+    NgxJsonViewerModule,
     LogbooksModule
   ],
   declarations: [
