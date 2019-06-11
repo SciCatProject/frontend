@@ -1,4 +1,4 @@
-<div *ngIf="logbook && logbook.messages.length > 0">
+<div *ngIf="logbook && logbook.messages">
   <mat-table [dataSource]="logbook.messages">
     <!-- Column Definitions -->
 
@@ -57,6 +57,6 @@
   </mat-table>
 </div>
 
-<div *ngIf="logbook && logbook.messages.length === 0">
+<div *ngIf="logbook && !logbook.messages">
   No entries found.
 </div>
