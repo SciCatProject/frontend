@@ -294,3 +294,8 @@ export const getDatasetsInBatch = createSelector(
   getDatasetState,
   state => state.batch
 );
+
+export const reduceDataset = createSelector(
+  getDatasetState,
+  state => state.result
+);

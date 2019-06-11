@@ -187,6 +187,17 @@ export class DatasetEffects {
     })
   );
 
+  @Effect()
+  reduceDataset: Observable<object> = this.actions$.pipe(
+    ofType<DatasetActions.ReduceDatasetAction>(DatasetActions.REDUCE_DATASET),
+    mergeMap(action =>
+      this.datasetApi.reduceDataset(action.dataset).pipe(
+      map(result => new DatasetActions.ReduceDatasetCompleteAction(result)),
+      catchError(() => of(new DatasetActions.ReduceDatasetFailedAction()))
+      )
+    )
+  );
+
   constructor(
     private actions$: Actions,
     private store: Store<any>,

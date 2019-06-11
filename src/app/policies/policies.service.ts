@@ -16,10 +16,10 @@ export class PoliciesService {
     return this.policyApi.findOne({ where: { id } });
   }
 
-  updatePolicies(idList: string[], attributes: {}) {
+  updatePolicies(onwerList: string[], attributes: {}) {
     const or = [];
-    for (const idx of idList) {
-      or.push({ id: idx });
+    for (const idx of onwerList) {
+      or.push({ ownerGroup: idx });
     }
     const where = { or };
     return this.policyApi

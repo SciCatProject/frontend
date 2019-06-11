@@ -1,6 +1,6 @@
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import { ArchiveSettingsComponent } from "./archive-settings/archive-settings.component";
+import { ArchiveSettingsComponent } from "./policies/policies.component";
 // import { ConfigFormModule } from 'shared/modules/config-form/config-form.module';
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { PoliciesService } from "./policies.service";
@@ -32,6 +32,7 @@ import { SharedCatanieModule } from "shared/shared.module";
 
 import { StoreModule } from "@ngrx/store";
 import { policiesReducer } from "state-management/reducers/policies.reducer";
+import { FlexLayoutModule } from "@angular/flex-layout";
 
 @NgModule({
   imports: [
@@ -60,7 +61,8 @@ import { policiesReducer } from "state-management/reducers/policies.reducer";
     MatProgressSpinnerModule,
     MatChipsModule,
     StoreModule.forFeature("policies", policiesReducer),
-    MatDialogModule
+    MatDialogModule,
+    FlexLayoutModule
   ],
   declarations: [ArchiveSettingsComponent, EditDialogComponent],
   providers: [PoliciesService],
