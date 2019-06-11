@@ -167,3 +167,13 @@
     </div>
   </mat-tab>
 </mat-tab-group>
+
+<mat-card style="margin:1em">
+  <button (click)="show = !show">
+    {{ show ? "Hide MetaData" : "Show Metadata" }}
+  </button>
+  <br />
+  <div *ngIf="show">
+    <ngx-json-viewer [json]="proposal" [expanded]="false"></ngx-json-viewer>
+  </div>
+</mat-card>
