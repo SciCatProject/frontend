@@ -21,6 +21,9 @@ export function proposalsReducer(
   state: ProposalsState = initialProposalsState,
   action: ProposalsAction | LogoutCompleteAction
 ): ProposalsState {
+  if (action.type.indexOf("[Proposals]") !== -1) {
+    console.log("Action came in! " + action.type);
+  }
   switch (action.type) {
     case SELECT_PROPOSAL:
       const selectedId = (action as SelectProposalAction).proposalId;
