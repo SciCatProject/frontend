@@ -11,6 +11,8 @@ const initialPolicyState: PolicyState = {
   submissionResponse: null,
   totalCount: 0,
   submitComplete: false,
+  editableCount: 0,
+  editablePolicies: null,
 
   policiesLoading: true,
   error: undefined,

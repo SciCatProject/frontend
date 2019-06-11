@@ -76,12 +76,18 @@ export class EditDialogComponent implements /*OnChanges,*/ OnInit {
   }
 
   save() {
-    //dont patch results that are NULL
-    var result = this.form.value;
+    // dont patch results that are NULL
+    const result = this.form.value;
     for (let key in result) {
       if (result[key] === null) {
         delete result[key];
       }
+    }
+    if (result.retrieveEmailsToBeNotified === "") {
+      result.retrieveEmailsToBeNotified = [];
+    }
+    if (result.archiveEmailsToBeNotified === "") {
+      result.archiveEmailsToBeNotified = [];
     }
     this.dialogRef.close(result);
   }

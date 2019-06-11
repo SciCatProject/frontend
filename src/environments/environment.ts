@@ -22,5 +22,6 @@ export const environment = {
   logbookEnabled: true,
   sharingEnabled: true,
   tableSciDataEnabled: true,
+  datasetReduceEnabled: true,
   fileColorEnabled: true
 };

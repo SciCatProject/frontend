@@ -21,6 +21,7 @@ export class AppConfig {
   userProfileImageEnabled: boolean;
   logbookEnabled: boolean;
   tableSciDataEnabled: boolean;
+  datasetReduceEnabled: boolean;
   fileColorEnabled: boolean;
   ingestManual: string;
 }
@@ -43,6 +44,7 @@ export const APP_DI_CONFIG: AppConfig = {
   userProfileImageEnabled: environment["userProfileImageEnabled"] || false,
   logbookEnabled: environment["logbookEnabled"] || false,
   tableSciDataEnabled: environment["tableSciDataEnabled"] || false,
+  datasetReduceEnabled: environment["datasetReduceEnabled"] || false,
   fileColorEnabled: environment["fileColorEnabled"] || false,
   ingestManual: environment["ingestManual"] || null,
 };

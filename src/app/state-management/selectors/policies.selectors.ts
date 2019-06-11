@@ -1,7 +1,10 @@
 import { createSelector, createFeatureSelector } from "@ngrx/store";
 import { PolicyState } from "../state/policies.store";
+import { UserState } from "../state/user.store";
 
 export const getPolicyState = createFeatureSelector<PolicyState>("policies");
+
+export const getUserState = createFeatureSelector<UserState>("users");
 
 // const getPolicyState = createFeatureSelector<PolicyState>('policies');
 
@@ -13,6 +16,11 @@ export const getCurrentPolicy = createSelector(
 export const getPolicies = createSelector(
   getPolicyState,
   state => state.policies
+);
+
+export const getEditablePolicies = createSelector(
+  getPolicyState,
+  state => state.editablePolicies
 );
 
 export const getSelectedPolicies = createSelector(
@@ -56,6 +64,9 @@ export const getQueryParams = createSelector(getFilters, filter => {
   return {
     limits
   };
-
-
 });
+
+export const getItemsPerPage = createSelector(
+  getPolicyState,
+  state => state.filters.limit
+);
