@@ -49,6 +49,21 @@
           </th>
           <td>{{ proposal.abstract }}</td>
         </tr>
+        <tr>
+          <th>
+            <i class="material-icons"> timer </i>
+            Start Time
+          </th>
+          <td>{{ startTime | date }}</td>
+        </tr>
+        <tr>
+          <th>
+            <i class="material-icons"> timer_off </i>
+            End Time
+          </th>
+          <td>{{ endTime | date }}</td>
+        </tr>
+
       </table>
     </div>
   </mat-tab>
