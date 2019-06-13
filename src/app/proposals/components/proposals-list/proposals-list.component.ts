@@ -6,7 +6,7 @@ import { Store, select } from "@ngrx/store";
 import { APP_CONFIG, AppConfig } from "app-config.module";
 import { SortChangeEvent } from "datasets";
 import { Observable } from "rxjs";
-import { getProposalCount } from "state-management/selectors/proposals.selectors";
+import { getProposalCount, getProposalPage } from "state-management/selectors/proposals.selectors";
 
 @Component({
   selector: "proposals-list",
@@ -20,6 +20,7 @@ export class ProposalsListComponent {
   displayedColumns = ["proposalId", "title", "name", "start", "end"];
   proposalsCount$ = this.store.pipe(select(getProposalCount));
   proposalsPerPage$ = this.store.pipe(select(getProposalCount));
+  currentPage$ = this.store.pipe(select(getProposalPage));
   pageSize$ = this.store.pipe(select(getProposalCount));
 
   constructor(

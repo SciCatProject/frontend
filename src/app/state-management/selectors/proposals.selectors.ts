@@ -58,3 +58,12 @@ export const getPage = createSelector(
     return skip / limit;
   }
 );
+
+
+export const getProposalPage = createSelector(
+  getProposalsState,
+  state => {
+    const { skip, limit } = state.filters;
+    return skip / limit;
+  }
+);

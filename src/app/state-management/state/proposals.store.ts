@@ -14,6 +14,7 @@ export interface ProposalsState {
   datasetCount: number;
   proposalCount: number;
   filters: ProposalFilters;
+  propFilters: ProposalFilters;
 }
 
 export const initialProposalsState: ProposalsState = {
@@ -23,5 +24,6 @@ export const initialProposalsState: ProposalsState = {
   selectedId: null,
   datasetCount: null,
   proposalCount: null,
-  filters: { skip: 0, limit: 30,   sortField: "MeasurementPeriodList[0].start:desc" }
+  filters: { skip: 0, limit: 30,   sortField: "MeasurementPeriodList[0].start desc" },
+  propFilters: { skip: 0, limit: 30,   sortField: "MeasurementPeriodList[0].start desc" }
 };
