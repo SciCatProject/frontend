@@ -4,6 +4,7 @@ import { FetchProposalAction } from "state-management/actions/proposals.actions"
 import { Router } from "@angular/router";
 import { Store } from "@ngrx/store";
 import { APP_CONFIG, AppConfig } from "app-config.module";
+import { SortChangeEvent } from "datasets";
 
 @Component({
   selector: "proposals-list",
@@ -33,5 +34,10 @@ export class ProposalsListComponent {
     this.router.navigateByUrl(
       "/proposals/" + encodeURIComponent(proposal.proposalId)
     );
+  }
+
+  onSortChange(event: SortChangeEvent): void {
+    const { active: column, direction } = event;
+    // this.store.dispatch(new SortProposalByColumnAction(column, direction));
   }
 }
