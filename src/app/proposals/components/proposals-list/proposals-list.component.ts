@@ -11,7 +11,8 @@ export class ProposalsListComponent {
   proposals: Proposal[];
   displayedColumns = [
     "proposalId",
-    "owner",
+    "title",
+    "name",
     "start",
     "end"
   ];

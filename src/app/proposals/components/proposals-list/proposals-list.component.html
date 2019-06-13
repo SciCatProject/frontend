@@ -14,24 +14,47 @@
     (matSortChange)="onSortChange($event)"
   >
     <ng-container matColumnDef="proposalId">
-      <mat-header-cell *matHeaderCellDef mat-sort-header>Id</mat-header-cell>
+      <mat-header-cell *matHeaderCellDef mat-sort-header>
+        <i class="material-icons">perm_contact_calendar</i>
+        Id</mat-header-cell
+      >
       <mat-cell *matCellDef="let proposal"> {{ proposal.proposalId }}</mat-cell>
     </ng-container>
 
-    <ng-container matColumnDef="owner">
-      <mat-header-cell *matHeaderCellDef mat-sort-header>Owner</mat-header-cell>
-      <mat-cell *matCellDef="let proposal"> {{ proposal.owner }}</mat-cell>
+    <ng-container matColumnDef="title">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>
+        <i class="material-icons">fingerprint</i>
+        Title</mat-header-cell
+      >
+      <mat-cell *matCellDef="let proposal"> {{ proposal.title }}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="name">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>
+        <i class="material-icons">person</i>
+        Author</mat-header-cell
+      >
+      <mat-cell *matCellDef="let proposal">
+        {{ proposal.firstname }}&nbsp;{{ proposal.lastname }}</mat-cell
+      >
     </ng-container>
 
     <ng-container matColumnDef="start">
-      <mat-header-cell *matHeaderCellDef mat-sort-header>Start</mat-header-cell>
+      <mat-header-cell *matHeaderCellDef mat-sort-header>
+        <i class="material-icons">timer</i>
+        Start</mat-header-cell
+      >
       <mat-cell *matCellDef="let proposal">
         {{ proposal.MeasurementPeriodList[0].start | date }}</mat-cell
       >
     </ng-container>
 
     <ng-container matColumnDef="end">
-      <mat-header-cell *matHeaderCellDef mat-sort-header>End</mat-header-cell>
+      <mat-header-cell *matHeaderCellDef mat-sort-header>
+        <i class="material-icons">timer_off</i>
+
+        End</mat-header-cell
+      >
       <mat-cell *matCellDef="let proposal">
         {{ proposal.MeasurementPeriodList[0].end | date }}</mat-cell
       >
@@ -44,7 +67,7 @@
     ></mat-row>
   </mat-table>
 </div>
- 
+
 <div *ngIf="proposals && proposals.length === 0">
   {{ hasFetched ? "No proposals." : "Loading..." }}
 </div>
