@@ -3,7 +3,7 @@ import { Proposal } from "../models";
 export interface ProposalFilters {
   skip: number;
   limit: number;
-  sortField: "MeasurementPeriodList[0].start:desc";
+  sortField: "MeasurementPeriodList[0].start desc";
 }
 
 export interface ProposalsState {
