@@ -45,6 +45,11 @@ export const getdatasetCount = createSelector(
   state => state.datasetCount
 );
 
+export const getProposalCount = createSelector(
+  getProposalsState,
+  state => state.proposalCount
+);
+
 
 export const getPage = createSelector(
   getProposalsState,

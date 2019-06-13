@@ -27,6 +27,7 @@ export class ListProposalsPageComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.proposals$ = this.store.pipe(select(getProposalList));
     this.hasFetched$ = this.store.pipe(select(getHasFetched));
+    // this.store.dispatch();
 
     this.subscription = this.hasFetched$
       .pipe(

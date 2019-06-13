@@ -12,6 +12,7 @@ export interface ProposalsState {
   hasFetched: boolean;
   selectedId: string;
   datasetCount: number;
+  proposalCount: number;
   filters: ProposalFilters;
 }
 
@@ -21,5 +22,6 @@ export const initialProposalsState: ProposalsState = {
   hasFetched: false,
   selectedId: null,
   datasetCount: null,
+  proposalCount: null,
   filters: { skip: 0, limit: 30,   sortField: "MeasurementPeriodList[0].start:desc" }
 };

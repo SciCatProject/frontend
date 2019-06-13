@@ -31,6 +31,7 @@ import {
 } from "rxjs/operators";
 import { Policy } from "state-management/models";
 import * as userSelectors from "state-management/selectors/users.selectors";
+import { FetchCountFailed } from "state-management/actions/proposals.actions";
 
 @Injectable()
 export class PoliciesEffects {
@@ -76,7 +77,7 @@ export class PoliciesEffects {
     ofType(FETCH_POLICIES),
     switchMap(action => this.policyApi.count()
     .pipe(map(({ count }) => new FetchCountPolicies(count)),
-    catchError(err => of(new FailedPoliciesAction(err)))))
+    catchError(err => of(new FetchCountFailed()))))
   );
 
   @Effect({ dispatch: false })

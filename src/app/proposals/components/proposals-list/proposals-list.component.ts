@@ -6,6 +6,7 @@ import { Store } from "@ngrx/store";
 import { APP_CONFIG, AppConfig } from "app-config.module";
 import { SortChangeEvent } from "datasets";
 import { Observable } from "rxjs";
+import { getProposalCount } from "state-management/selectors/proposals.selectors";
 
 @Component({
   selector: "proposals-list",
@@ -17,7 +18,7 @@ export class ProposalsListComponent {
   proposals: Proposal[];
 
   displayedColumns = ["proposalId", "title", "name", "start", "end"];
-  proposalsCount$: Observable<number>;
+  proposalsCount$ = this.store.select(getProposalCount);
 
   constructor(
     private store: Store<Proposal>,

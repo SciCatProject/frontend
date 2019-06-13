@@ -18,7 +18,9 @@ import {
   FetchProposalsAction,
   FetchProposalsCompleteAction,
   FetchProposalsFailedAction,
-  FetchProposalsOutcomeAction
+  FetchProposalsOutcomeAction,
+  FetchCountOfProposals,
+  FETCH_COUNT_PROPOSALS
 } from "../actions/proposals.actions";
 
 @Injectable()
@@ -32,6 +34,14 @@ export class ProposalsEffects {
         catchError(() => of(new FetchProposalsFailedAction()))
       )
     )
+  );
+
+  @Effect()
+  FetchCountOfProposals$ = this.actions$.pipe(
+    ofType(FETCH_COUNT_PROPOSALS),
+    switchMap(action => this.proposalsService.count()
+    .pipe(map(({ count }) => new FetchCountOfProposals(count)),
+    catchError(err => of(new FailedPoliciesAction(err)))))
   );
 
   @Effect()

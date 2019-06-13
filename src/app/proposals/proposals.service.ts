@@ -22,4 +22,8 @@ export class ProposalsService {
   getDatasetsForProposal(proposalId: string): Observable<Dataset[]> {
     return this.datasetApi.find({ where: { proposalId } });
   }
+
+  count(): Observable<{ count: number }> {
+    return this.proposalApi.count();
+  }
 }
