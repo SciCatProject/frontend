@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { ProposalsListComponent } from "./proposals-list.component";
-import { MatListModule } from "@angular/material";
+import { MatListModule, MatTableModule, MatPaginatorModule } from "@angular/material";
 import { RouterTestingModule } from "@angular/router/testing";
 import { Router } from "@angular/router";
 import { MockRouter } from "shared/MockStubs";
@@ -14,7 +14,7 @@ describe("ProposalsListComponent", () => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
       declarations: [ProposalsListComponent],
-      imports: [MatListModule, RouterTestingModule]
+      imports: [MatListModule, MatTableModule, MatPaginatorModule, RouterTestingModule]
     });
     TestBed.overrideComponent(ProposalsListComponent, {
       set: {
