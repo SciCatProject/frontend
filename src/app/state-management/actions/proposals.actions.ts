@@ -20,6 +20,15 @@ export const FETCH_DATASETS_FOR_PROPOSAL_FAILED =
 
 export const CHANGE_PAGE = "[Proposals] Change page";
 
+export const SORT_BY_COLUMN = "[Proposals] Sort by Column";
+
+export class SortByColumnAction implements Action {
+  readonly type = SORT_BY_COLUMN;
+
+  constructor(readonly column: string, readonly direction: string) {
+  }
+}
+
 export class SelectProposalAction implements Action {
   type = SELECT_PROPOSAL;
 
