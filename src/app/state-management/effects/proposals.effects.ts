@@ -20,7 +20,8 @@ import {
   FetchProposalsFailedAction,
   FetchProposalsOutcomeAction,
   FetchCountOfProposals,
-  FETCH_COUNT_PROPOSALS
+  FETCH_COUNT_PROPOSALS,
+  FetchCountFailed
 } from "../actions/proposals.actions";
 
 @Injectable()
@@ -39,9 +40,12 @@ export class ProposalsEffects {
   @Effect()
   FetchCountOfProposals$ = this.actions$.pipe(
     ofType(FETCH_COUNT_PROPOSALS),
-    switchMap(action => this.proposalsService.count()
-    .pipe(map(({ count }) => new FetchCountOfProposals(count)),
-    catchError(err => of(new FailedPoliciesAction(err)))))
+    switchMap(action =>
+      this.proposalsService.count().pipe(
+        map(({ count }) => new FetchCountOfProposals(count)),
+        catchError(err => of(new FetchCountFailed()))
+      )
+    )
   );
 
   @Effect()
@@ -56,7 +60,9 @@ export class ProposalsEffects {
   );
 
   @Effect()
-  getDatasetsForProposal$: Observable<FetchDatasetsForProposalOutcomeAction> = this.actions$.pipe(
+  getDatasetsForProposal$: Observable<
+    FetchDatasetsForProposalOutcomeAction
+  > = this.actions$.pipe(
     ofType<FetchDatasetsForProposalAction>(FETCH_DATASETS_FOR_PROPOSAL),
     switchMap(action =>
       this.proposalsService.getDatasetsForProposal(action.proposalId).pipe(
@@ -69,6 +75,5 @@ export class ProposalsEffects {
   constructor(
     private actions$: Actions,
     private proposalsService: ProposalsService
-  ) {
-  }
+  ) {}
 }
