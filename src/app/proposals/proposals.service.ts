@@ -12,7 +12,7 @@ export class ProposalsService {
   ) {}
 
   getProposals(): Observable<Proposal[]> {
-    return this.proposalApi.find();
+    return this.proposalApi.find({"order": "createdAt DESC"});
   }
 
   getProposal(proposalId: string): Observable<Proposal> {

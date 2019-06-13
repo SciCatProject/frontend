@@ -3,6 +3,7 @@ import { Proposal } from "../models";
 export interface ProposalFilters {
   skip: number;
   limit: number;
+  sortField: "MeasurementPeriodList[0].start:desc";
 }
 
 export interface ProposalsState {
@@ -20,5 +21,5 @@ export const initialProposalsState: ProposalsState = {
   hasFetched: false,
   selectedId: null,
   datasetCount: null,
-  filters: { skip: 0, limit: 30}
+  filters: { skip: 0, limit: 30,   sortField: "MeasurementPeriodList[0].start:desc" }
 };
