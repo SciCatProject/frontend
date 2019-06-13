@@ -1,16 +1,50 @@
-<mat-nav-list *ngIf="proposals && proposals.length > 0">
-  <mat-list>
-    <!-- <h3 mat-subheader>Proposals</h3> -->
-    <mat-list-item *ngFor="let proposal of proposals" [routerLink]="['/proposals/', proposal.proposalId]">
-      <h4 mat-line>{{proposal.proposalId}} : {{proposal.title}}</h4>
-      <p mat-line>{{proposal.firstname}} {{proposal.lastname}}</p>
-      <p mat-line>{{proposal.abstract}}</p>
-    </mat-list-item>
-  </mat-list>
-</mat-nav-list>
+<div *ngIf="proposals && proposals.length > 0">
+  <mat-paginator
+    [pageSizeOptions]="[30, 1000]"
+    [pageIndex]="currentPage$ | async"
+    [length]="sampleCount$ | async"
+    [pageSize]="samplesPerPage$ | async"
+    (page)="onPageChange($event)"
+  >
+  </mat-paginator>
+  <mat-table
+    #table
+    [dataSource]="proposals"
+    matSort
+    (matSortChange)="onSortChange($event)"
+  >
+    <ng-container matColumnDef="proposalId">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Id</mat-header-cell>
+      <mat-cell *matCellDef="let proposal"> {{ proposal.proposalId }}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="owner">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Owner</mat-header-cell>
+      <mat-cell *matCellDef="let proposal"> {{ proposal.owner }}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="start">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Start</mat-header-cell>
+      <mat-cell *matCellDef="let proposal">
+        {{ proposal.MeasurementPeriodList[0].start | date }}</mat-cell
+      >
+    </ng-container>
+
+    <ng-container matColumnDef="end">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>End</mat-header-cell>
+      <mat-cell *matCellDef="let proposal">
+        {{ proposal.MeasurementPeriodList[0].end | date }}</mat-cell
+      >
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row
+      (click)="onRowSelect($event, row)"
+      *matRowDef="let row; columns: displayedColumns"
+    ></mat-row>
+  </mat-table>
+</div>
+ 
 <div *ngIf="proposals && proposals.length === 0">
   {{ hasFetched ? "No proposals." : "Loading..." }}
 </div>
-
-
-
