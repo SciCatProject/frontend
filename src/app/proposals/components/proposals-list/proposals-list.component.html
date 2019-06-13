@@ -2,8 +2,8 @@
   <mat-paginator
     [pageSizeOptions]="[30, 1000]"
     [pageIndex]="currentPage$ | async"
-    [length]="sampleCount$ | async"
-    [pageSize]="samplesPerPage$ | async"
+    [length]="proposalCount$ | async"
+    [pageSize]="proposalsPerPage$ | async"
     (page)="onPageChange($event)"
   >
   </mat-paginator>

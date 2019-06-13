@@ -5,6 +5,7 @@ import { Router } from "@angular/router";
 import { Store } from "@ngrx/store";
 import { APP_CONFIG, AppConfig } from "app-config.module";
 import { SortChangeEvent } from "datasets";
+import { Observable } from "rxjs";
 
 @Component({
   selector: "proposals-list",
@@ -14,20 +15,15 @@ import { SortChangeEvent } from "datasets";
 export class ProposalsListComponent {
   @Input()
   proposals: Proposal[];
-  displayedColumns = [
-    "proposalId",
-    "title",
-    "name",
-    "start",
-    "end"
-  ];
+
+  displayedColumns = ["proposalId", "title", "name", "start", "end"];
+  proposalsCount$: Observable<number>;
 
   constructor(
     private store: Store<Proposal>,
     private router: Router,
     @Inject(APP_CONFIG) public appConfig: AppConfig
   ) {}
-
 
   onRowSelect(event, proposal) {
     this.store.dispatch(new FetchProposalAction(proposal));
