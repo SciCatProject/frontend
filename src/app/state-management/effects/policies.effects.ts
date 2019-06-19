@@ -93,7 +93,8 @@ export class PoliciesEffects {
     map(([[action, profile], allPolicies]) => {
       const editablePolicies = [];
       if (!profile) {
-        return new FetchEditablePoliciesComplete(editablePolicies);
+        // allow functional users
+        return new FetchEditablePoliciesComplete(allPolicies);
       }
       const email = profile.email;
       allPolicies.forEach(pol => {
