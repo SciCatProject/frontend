@@ -13,5 +13,10 @@ export const environment = {
   shoppingCartEnabled: false,
   columnSelectEnabled: false,
   userProfileImageEnabled: false,
-  ingestManual: "https://melanie.gitpages.psi.ch/SciCatPages/"
+  ingestManual: "https://melanie.gitpages.psi.ch/SciCatPages/",
+  logbookEnabled: false,
+  tableSciDataEnabled: false,
+  metadataPreviewEnabled: false,
+  datasetReduceEnabled: false,
+  fileColorEnabled: false
 };
