@@ -64,10 +64,32 @@
         </mat-select>
       </mat-form-field>
 
-      <mat-form-field (click)="controlClick(retrieveEmailsToBeNotified)" >
-          <input matInput placeholder="Retrieve Emails to be Notified" formControlName="retrieveEmailsToBeNotified"
+      <!--mat-form-field (click)="controlClick(retrieveEmailsToBeNotified)" >
+          <input  placeholder="Retrieve Emails to be Notified" formControlName="retrieveEmailsToBeNotified"
           aria-label="Retrieve Emails to be Notified" #retrieveEmailsToBeNotified>
-      </mat-form-field>
+      </mat-form-field-->
+
+
+      <mat-form-field (click)="controlClick(retrieveChipList)">
+          <mat-chip-list #retrieveChipList formControlName="retrieveChipList">
+            <mat-chip
+            *ngFor="let email of data.selectedPolicy.retrieveEmailsToBeNotified" 
+              (removed)="remove(email)" [selectable]="selectable"
+              [removable]="removable" 
+            >
+              {{ email }}
+              <mat-icon matChipRemove>cancel</mat-icon>
+            </mat-chip>
+            <input
+            placeholder="Retrieve Emails to be Notified" 
+            formControlName="retrieveChipList"
+              [matChipInputFor]="retrieveChipList"
+              [matChipInputAddOnBlur]="true"
+              [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+              (matChipInputTokenEnd)="addRetrieveEmails($event)"
+            />
+          </mat-chip-list>
+        </mat-form-field>
 
 
     </mat-dialog-content>
