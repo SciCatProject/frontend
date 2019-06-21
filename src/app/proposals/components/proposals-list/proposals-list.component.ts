@@ -5,7 +5,10 @@ import { Router } from "@angular/router";
 import { Store, select } from "@ngrx/store";
 import { APP_CONFIG, AppConfig } from "app-config.module";
 import { SortChangeEvent } from "datasets";
-import { getProposalCount, getProposalPage } from "state-management/selectors/proposals.selectors";
+import {
+  getProposalCount,
+  getProposalPage
+} from "state-management/selectors/proposals.selectors";
 
 @Component({
   selector: "proposals-list",
@@ -37,6 +40,7 @@ export class ProposalsListComponent {
 
   onSortChange(event: SortChangeEvent): void {
     const { active: column, direction } = event;
+    console.log("gm", column, direction);
     // this.store.dispatch(new SortProposalByColumnAction(column, direction));
   }
 }
