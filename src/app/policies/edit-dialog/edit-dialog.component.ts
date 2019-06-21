@@ -1,5 +1,9 @@
 import { Component, Inject, OnInit } from "@angular/core";
-import { MAT_DIALOG_DATA, MatDialogRef, MatChipInputEvent } from "@angular/material";
+import {
+  MAT_DIALOG_DATA,
+  MatDialogRef,
+  MatChipInputEvent
+} from "@angular/material";
 import { FormBuilder, FormControl, FormGroup } from "@angular/forms";
 import { COMMA, ENTER } from "@angular/cdk/keycodes";
 
@@ -26,39 +30,46 @@ export class EditDialogComponent implements /*OnChanges,*/ OnInit {
 
     this.form = new FormGroup({
       autoArchive: new FormControl({
-        value:
-          this.getPreFill(data.selectedPolicy.autoArchive, this.multiEdit),
+        value: this.getPreFill(data.selectedPolicy.autoArchive, this.multiEdit),
         disabled: true
         /*, Validators.required*/
       }),
       tapeRedundancy: new FormControl({
-        value:
-          this.getPreFill(data.selectedPolicy.tapeRedundancy, this.multiEdit),
+        value: this.getPreFill(
+          data.selectedPolicy.tapeRedundancy,
+          this.multiEdit
+        ),
         disabled: true
       }),
       autoArchiveDelay: new FormControl({
-        value:
-          this.getPreFill(data.selectedPolicy.autoArchiveDelay, this.multiEdit),
+        value: this.getPreFill(
+          data.selectedPolicy.autoArchiveDelay,
+          this.multiEdit
+        ),
         disabled: true
       }),
       archiveEmailNotification: new FormControl({
-        value: this.getPreFill(data.selectedPolicy.archiveEmailNotification, this.multiEdit),
+        value: this.getPreFill(
+          data.selectedPolicy.archiveEmailNotification,
+          this.multiEdit
+        ),
         disabled: true
       }),
       archiveEmailsToBeNotified: new FormControl({
-        value:
-          this.getPreFill(data.selectedPolicy.archiveEmailsToBeNotified, this.multiEdit),
-        disabled: true
-      }),
-      retrieveEmailNotification: new FormControl({
-        value:
-          this.getPreFill(data.selectedPolicy.retrieveEmailNotification, this.multiEdit),
-        disabled: true
-      }),
-      retrieveChipList: new FormControl({
         value: null,
         disabled: true
       }),
+      retrieveEmailNotification: new FormControl({
+        value: this.getPreFill(
+          data.selectedPolicy.retrieveEmailNotification,
+          this.multiEdit
+        ),
+        disabled: true
+      }),
+      retrieveEmailsToBeNotified: new FormControl({
+        value: null, // value is not useable in chiplists
+        disabled: true
+      })
     });
   }
 
@@ -70,34 +81,41 @@ export class EditDialogComponent implements /*OnChanges,*/ OnInit {
     return field != null && !multi ? field : null;
   }
 
-
-  /*addAuthor(event) {
-    this.form.authors.push(event.value);
-    event.input.value = "";
-  }*/
-
   addRetrieveEmails(event: MatChipInputEvent): void {
     const input = event.input;
     const value = event.value;
 
-    console.log("in val ", input, value)
-
     // Add our fruit
-    if ((value || '').trim()) {
+    if ((value || "").trim()) {
       this.data.selectedPolicy.retrieveEmailsToBeNotified.push(value.trim());
     }
 
     // Reset the input value
     if (input) {
-      input.value = '';
+      input.value = "";
     }
   }
 
-  remove(fruit: any): void {
-    const index = this.data.retrieveEmailsToBeNotified.indexOf(fruit);
+  addArchiveEmails(event: MatChipInputEvent): void {
+    const input = event.input;
+    const value = event.value;
+
+    // Add our fruit
+    if ((value || "").trim()) {
+      this.data.selectedPolicy.archiveEmailsToBeNotified.push(value.trim());
+    }
+
+    // Reset the input value
+    if (input) {
+      input.value = "";
+    }
+  }
+
+  remove(chip: any): void {
+    const index = this.data.retrieveEmailsToBeNotified.indexOf(chip);
 
     if (index >= 0) {
-      this.data.retrieveEmailsToBeNotifiedsplice(index, 1);
+      this.data.retrieveEmailsToBeNotified.splice(index, 1);
     }
   }
 
@@ -106,24 +124,25 @@ export class EditDialogComponent implements /*OnChanges,*/ OnInit {
   }
 
   controlClick(control: any) {
-    console.log("control", control)
-    control.disabled = false;
+    this.form.controls[control.ngControl.name].enable();
   }
 
   save() {
     // dont patch results that are NULL
-    console.log("this.form.value", this.form.value)
+    // handle chip lists
+    if (!this.multiEdit) {
+      this.form.controls.archiveEmailsToBeNotified.setValue(
+        this.data.selectedPolicy.archiveEmailsToBeNotified
+      );
+      this.form.controls.retrieveEmailsToBeNotified.setValue(
+        this.data.selectedPolicy.retrieveEmailsToBeNotified
+      );
+    }
     const result = this.form.value;
-    for (let key in result) {
+    for (const key in result) {
       if (result[key] === null) {
         delete result[key];
       }
-    }
-    if (result.retrieveEmailsToBeNotified === "") {
-      result.retrieveEmailsToBeNotified = [];
-    }
-    if (result.archiveEmailsToBeNotified === "") {
-      result.archiveEmailsToBeNotified = [];
     }
     this.dialogRef.close(result);
   }

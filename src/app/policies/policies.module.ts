@@ -26,6 +26,7 @@ import {
   MatFormFieldModule,
   MatOptionModule
 } from "@angular/material";
+import {MatExpansionModule} from '@angular/material/expansion';
 import { MatButtonToggleModule } from "@angular/material/button-toggle";
 import { MatChipsModule } from "@angular/material/chips";
 import { SharedCatanieModule } from "shared/shared.module";
@@ -62,7 +63,8 @@ import { FlexLayoutModule } from "@angular/flex-layout";
     MatChipsModule,
     StoreModule.forFeature("policies", policiesReducer),
     MatDialogModule,
-    FlexLayoutModule
+    FlexLayoutModule,
+    MatExpansionModule
   ],
   declarations: [PoliciesComponent, EditDialogComponent],
   providers: [PoliciesService],
