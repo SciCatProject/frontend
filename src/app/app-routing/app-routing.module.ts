@@ -162,6 +162,14 @@ export const routes: Routes = [
     data: {
       urlConfigItem: "ingestManual"
     }
+  },
+  {
+    path: "help/SciCatGettingStartedSLSSummary",
+    canActivate: [RedirectGuard],
+    component: RedirectGuard,
+    data: {
+      urlConfigItem: "gettingStarted"
+    }
   }
 ];
 @NgModule({

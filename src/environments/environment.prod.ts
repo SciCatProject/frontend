@@ -14,6 +14,7 @@ export const environment = {
   columnSelectEnabled: false,
   userProfileImageEnabled: false,
   ingestManual: "https://melanie.gitpages.psi.ch/SciCatPages/",
+  gettingStarted: "https://melanie.gitpages.psi.ch/SciCatPages/SciCatGettingStartedSLSSummary.pdf",
   logbookEnabled: false,
   tableSciDataEnabled: false,
   metadataPreviewEnabled: false,
