@@ -18,7 +18,6 @@ import {
   FetchCountOfProposals
 } from "../actions/proposals.actions";
 import { LOGOUT_COMPLETE, LogoutCompleteAction } from "../actions/user.actions";
-import { FETCH_COUNT_POLICIES } from "state-management/actions/policies.actions";
 
 export function proposalsReducer(
   state: ProposalsState = initialProposalsState,
