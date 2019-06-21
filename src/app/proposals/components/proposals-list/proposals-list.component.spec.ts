@@ -1,3 +1,5 @@
+import { Store } from '@ngrx/store';
+import { MockStore } from './../../../shared/MockStubs';
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { ProposalsListComponent } from "./proposals-list.component";
@@ -18,7 +20,10 @@ describe("ProposalsListComponent", () => {
     });
     TestBed.overrideComponent(ProposalsListComponent, {
       set: {
-        providers: [{ provide: Router, useClass: MockRouter }]
+        providers: [
+          { provide: Router, useClass: MockRouter },
+          { provide: Store, useClass: MockStore }
+        ]
       }
     });
     TestBed.compileComponents();

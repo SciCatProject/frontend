@@ -5,7 +5,6 @@ import { Router } from "@angular/router";
 import { Store, select } from "@ngrx/store";
 import { APP_CONFIG, AppConfig } from "app-config.module";
 import { SortChangeEvent } from "datasets";
-import { Observable } from "rxjs";
 import { getProposalCount, getProposalPage } from "state-management/selectors/proposals.selectors";
 
 @Component({
