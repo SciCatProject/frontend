@@ -1,3 +1,4 @@
+import { APP_CONFIG } from './../../../app-config.module';
 import { Store } from '@ngrx/store';
 import { MockStore } from './../../../shared/MockStubs';
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
@@ -22,7 +23,15 @@ describe("ProposalsListComponent", () => {
       set: {
         providers: [
           { provide: Router, useClass: MockRouter },
-          { provide: Store, useClass: MockStore }
+          { provide: Store, useClass: MockStore },
+          {
+            provide: APP_CONFIG,
+            useValue: {
+              disabledDatasetColumns: [],
+              archiveWorkflowEnabled: true,
+              csvEnabled: true
+            }
+          },
         ]
       }
     });
