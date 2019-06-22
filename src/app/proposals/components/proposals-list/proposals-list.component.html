@@ -45,7 +45,7 @@
         Start</mat-header-cell
       >
       <mat-cell *matCellDef="let proposal">
-        <div *ngIf="proposal.MeasurementPeriodList[0].start">
+        <div *ngIf="proposal.MeasurementPeriodList.length >0">
           {{ proposal.MeasurementPeriodList[0].start | date }}
         </div>
       </mat-cell>
@@ -58,7 +58,7 @@
         End</mat-header-cell
       >
       <mat-cell *matCellDef="let proposal">
-        <div *ngIf="proposal.MeasurementPeriodList[0].end">
+        <div *ngIf="proposal.MeasurementPeriodList.length >0">
           {{ proposal.MeasurementPeriodList[0].end | date }}
         </div>
       </mat-cell>
