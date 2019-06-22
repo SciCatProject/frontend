@@ -30,3 +30,14 @@
     provides detailed information on how to make your data available to the catalog as well as archiving and retrieval of datasets.
   </mat-card>
 </p>
+
+<p>
+  <mat-card class="help-card" *ngIf="gettingStarted">
+    <mat-card-header style="background: #ffffff;">
+      <mat-card-title>How to get started</mat-card-title>
+    </mat-card-header>
+    The  
+    <a href="{{gettingStarted}}" target="blank">Getting Started Guide</a>
+   gives a brief description on how to get started using the data catalog.
+  </mat-card>
+</p>
