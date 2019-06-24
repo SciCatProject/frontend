@@ -27,6 +27,11 @@ export class EditDialogComponent implements /*OnChanges,*/ OnInit {
   ) {
     this.data = data;
     this.multiEdit = data.multiSelect;
+    // should make selected policy null is multi select, need to preserve group?
+    if (this.multiEdit) {
+      this.data.selectedPolicy.archiveEmailsToBeNotified = [];
+      this.data.selectedPolicy.retrieveEmailsToBeNotified = [];
+    }
 
     this.form = new FormGroup({
       autoArchive: new FormControl({
@@ -111,16 +116,26 @@ export class EditDialogComponent implements /*OnChanges,*/ OnInit {
     }
   }
 
-  remove(chip: any): void {
-    const index = this.data.retrieveEmailsToBeNotified.indexOf(chip);
+  removeRetrieveEmail(chip: any): void {
+    const index = this.data.selectedPolicy.retrieveEmailsToBeNotified.indexOf(chip);
 
     if (index >= 0) {
-      this.data.retrieveEmailsToBeNotified.splice(index, 1);
+      this.data.selectedPolicy.retrieveEmailsToBeNotified.splice(index, 1);
+    }
+  }
+
+  removeArchiveEmail(chip: any): void {
+    const index = this.data.selectedPolicy.archiveEmailsToBeNotified.indexOf(chip);
+
+    if (index >= 0) {
+      this.data.selectedPolicy.archiveEmailsToBeNotified.splice(index, 1);
     }
   }
 
   ngOnInit() {
     this.selectedGroups = this.data.selectedGroups;
+
+
   }
 
   controlClick(control: any) {
