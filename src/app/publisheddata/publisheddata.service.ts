@@ -18,4 +18,5 @@ export class PublisheddataService {
   getPublished(pubId: string): Observable<PublishedData> {
     return this.pubApi.findOne({ where: { "doi": pubId } });
   }
+
 }

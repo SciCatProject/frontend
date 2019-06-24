@@ -12,7 +12,7 @@ export class ProposalsService {
   ) {}
 
   getProposals(): Observable<Proposal[]> {
-    return this.proposalApi.find();
+    return this.proposalApi.find({order: "updatedAt desc"});
   }
 
   getProposal(proposalId: string): Observable<Proposal> {
@@ -21,5 +21,9 @@ export class ProposalsService {
 
   getDatasetsForProposal(proposalId: string): Observable<Dataset[]> {
     return this.datasetApi.find({ where: { proposalId } });
+  }
+
+  count(): Observable<{ count: number }> {
+    return this.proposalApi.count();
   }
 }
