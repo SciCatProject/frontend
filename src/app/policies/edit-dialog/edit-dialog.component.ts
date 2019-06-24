@@ -25,8 +25,10 @@ export class EditDialogComponent implements /*OnChanges,*/ OnInit {
     private dialogRef: MatDialogRef<EditDialogComponent>,
     @Inject(MAT_DIALOG_DATA) data
   ) {
-    this.data = data;
     this.multiEdit = data.multiSelect;
+    // clone input, do not mutate
+    this.data = JSON.parse(JSON.stringify(data));
+
     // should make selected policy null is multi select, need to preserve group?
     if (this.multiEdit) {
       this.data.selectedPolicy.archiveEmailsToBeNotified = [];
@@ -117,7 +119,9 @@ export class EditDialogComponent implements /*OnChanges,*/ OnInit {
   }
 
   removeRetrieveEmail(chip: any): void {
-    const index = this.data.selectedPolicy.retrieveEmailsToBeNotified.indexOf(chip);
+    const index = this.data.selectedPolicy.retrieveEmailsToBeNotified.indexOf(
+      chip
+    );
 
     if (index >= 0) {
       this.data.selectedPolicy.retrieveEmailsToBeNotified.splice(index, 1);
@@ -125,7 +129,9 @@ export class EditDialogComponent implements /*OnChanges,*/ OnInit {
   }
 
   removeArchiveEmail(chip: any): void {
-    const index = this.data.selectedPolicy.archiveEmailsToBeNotified.indexOf(chip);
+    const index = this.data.selectedPolicy.archiveEmailsToBeNotified.indexOf(
+      chip
+    );
 
     if (index >= 0) {
       this.data.selectedPolicy.archiveEmailsToBeNotified.splice(index, 1);
@@ -134,8 +140,6 @@ export class EditDialogComponent implements /*OnChanges,*/ OnInit {
 
   ngOnInit() {
     this.selectedGroups = this.data.selectedGroups;
-
-
   }
 
   controlClick(control: any) {
