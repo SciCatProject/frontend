@@ -22,7 +22,7 @@ export class AboutComponent implements OnInit {
   ngOnInit() {
     this.SciCatDevopsDocIO = "https://scicatproject.github.io/documentation/Devops/Documentation/";
     this.SciCatGitIO = "https://scicatproject.github.io/";
-    this.SciCatGitHub = "  https://github.com/SciCatProject";
+    this.SciCatGitHub = "https://github.com/SciCatProject";
     this.facility = this.appConfig["facility"];
     this.SNFLink = "http://www.snf.ch/en/theSNSF/research-policies/open_research_data/Pages/default.aspx#Guidelines%20and%20Regulations";
     this.PSIDataPolicy = "https://www.psi.ch/en/science/psi-data-policy";
