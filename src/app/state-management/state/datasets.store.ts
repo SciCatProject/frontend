@@ -32,7 +32,7 @@ export interface DatasetState {
   filters: DatasetFilters;
 
   batch: Dataset[];
-  
+
   result: object;
   resultLoading: boolean;
 }

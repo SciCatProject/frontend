@@ -25,6 +25,7 @@ export class AppConfig {
   fileColorEnabled: boolean;
   metadataPreviewEnabled: boolean;
   ingestManual: string;
+  gettingStarted: string;
 }
 
 export const APP_DI_CONFIG: AppConfig = {
@@ -49,6 +50,7 @@ export const APP_DI_CONFIG: AppConfig = {
   fileColorEnabled: environment["fileColorEnabled"] || false,
   metadataPreviewEnabled: environment["metadataPreviewEnabled"] || false,
   ingestManual: environment["ingestManual"] || null,
+  gettingStarted: environment["gettingStarted"] || null,
 };
 
 @NgModule({

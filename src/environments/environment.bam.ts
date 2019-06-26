@@ -5,7 +5,7 @@
 
 export const environment = {
   production: true,
-  lbBaseURL: "http://scicat04.esss.lu.se:3001",
+  lbBaseURL: "http://scicatbackend.esss.lu.se",
   fileserverBaseURL: "https://kubetest04.dm.esss.dk:32223",
   externalAuthEndpoint: "/auth/msad",
   archiveWorkflowEnabled: false,
