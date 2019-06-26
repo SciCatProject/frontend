@@ -13,7 +13,7 @@ import {
   ReduceDatasetAction,
   FetchDatasetsAction
 } from "state-management/actions/datasets.actions";
-import { FormControl, Validators } from "@angular/forms";
+import { FormControl, Validators, FormGroup } from "@angular/forms";
 
 @Component({
   selector: "reduce",
@@ -36,6 +36,8 @@ export class ReduceComponent implements OnInit, OnDestroy {
 
   show: boolean;
   columnsToDisplay: string[] = ["timestamp", "name", "status"];
+
+  formGroup: FormGroup;
 
   actions: string[] = ["Analyze", "Reduce"];
   selectedAction = new FormControl("", [Validators.required]);
