@@ -25,8 +25,6 @@ mat-card {
   }
 
   .action-workflow {
-    padding-left: 1em;
-
     .action-selector {
       height: 5em;
 
@@ -40,7 +38,7 @@ mat-card {
 
       table {
         .script-selector {
-          width: 30em;
+          width: 30%;
 
           mat-form-field {
             vertical-align: middle;
