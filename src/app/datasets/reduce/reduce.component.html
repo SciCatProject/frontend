@@ -88,12 +88,13 @@
                   </td>
                   <td class="script-details">
                     <h4>Description</h4>
-                    <p>
-                      Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                      Sit voluptates molestiae aperiam non voluptatum, ea iure
-                      similique accusantium facilis suscipit voluptas alias
-                      mollitia perferendis numquam delectus, ut modi qui
-                      consequuntur.
+                    <div *ngFor="let script of reduceScripts">
+                      <p *ngIf="script.value === selectedScript.value">
+                        {{ script.description }}
+                      </p>
+                    </div>
+                    <p *ngIf="!selectedScript.value">
+                      Select a script to view description.
                     </p>
                   </td>
                 </tr>
@@ -299,10 +300,10 @@
 
       <div *ngIf="datasetHistory">
         <mat-table [dataSource]="datasetHistory" class="history-table"> -->
-          <!-- Column Definitions -->
+    <!-- Column Definitions -->
 
-          <!-- Timestamp Column -->
-          <!-- <ng-container matColumnDef="timestamp">
+    <!-- Timestamp Column -->
+    <!-- <ng-container matColumnDef="timestamp">
             <mat-header-cell *matHeaderCellDef>
               <div fxLayout="column" style="align-items: center">
                 <div>
@@ -323,8 +324,8 @@
             </mat-cell>
           </ng-container> -->
 
-          <!-- Name Column -->
-          <!-- <ng-container matColumnDef="name">
+    <!-- Name Column -->
+    <!-- <ng-container matColumnDef="name">
             <mat-header-cell *matHeaderCellDef>
               <div fxLayout="column" style="align-items: center">
                 <div>
@@ -340,8 +341,8 @@
             </mat-cell>
           </ng-container> -->
 
-          <!-- Status Column -->
-          <!-- <ng-container matColumnDef="status">
+    <!-- Status Column -->
+    <!-- <ng-container matColumnDef="status">
             <mat-header-cell *matHeaderCellDef>
               <div fxLayout="column" style="align-items: center">
                 <div>
@@ -362,9 +363,9 @@
             </mat-cell>
           </ng-container> -->
 
-          <!-- End of Column Definitions -->
+    <!-- End of Column Definitions -->
 
-          <!-- <mat-header-row *matHeaderRowDef="columnsToDisplay"></mat-header-row>
+    <!-- <mat-header-row *matHeaderRowDef="columnsToDisplay"></mat-header-row>
           <mat-row *matRowDef="let entry; columns: columnsToDisplay"></mat-row>
         </mat-table>
       </div>
