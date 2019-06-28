@@ -1,5 +1,4 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
 import { select, Store } from "@ngrx/store";
 import { Subscription } from "rxjs";
 
@@ -9,6 +8,7 @@ import {
   getFilteredEntries
 } from "state-management/selectors/logbooks.selector";
 import { Logbook } from "state-management/models";
+import { getCurrentDataset } from "state-management/selectors/datasets.selectors";
 
 @Component({
   selector: "app-logbooks-detail",
@@ -21,32 +21,36 @@ export class LogbooksDetailComponent implements OnInit, OnDestroy {
   filteredLogbookDescription: Subscription;
   displayedColumns: string[] = ["timestamp", "sender", "entry"];
 
-  constructor(private route: ActivatedRoute, private store: Store<Logbook>) {}
+  dataset: any;
+  datasetSubscription: Subscription;
+
+  constructor(private store: Store<Logbook>) {}
 
   ngOnInit() {
-    this.getLogbook();
-
     this.logbookSubscription = this.store
       .pipe(select(getLogbook))
       .subscribe(logbook => {
         this.logbook = logbook;
+        console.log("logbook", logbook);
       });
 
     this.filteredLogbookDescription = this.store
       .pipe(select(getFilteredEntries))
       .subscribe(logbook => (this.logbook = logbook));
+
+    this.datasetSubscription = this.store
+      .pipe(select(getCurrentDataset))
+      .subscribe(dataset => {
+        this.dataset = dataset;
+        if (this.dataset.hasOwnProperty("proposalId")) {
+          this.store.dispatch(new FetchLogbookAction(this.dataset.proposalId));
+        }
+      });
   }
 
   ngOnDestroy() {
     this.logbookSubscription.unsubscribe();
     this.filteredLogbookDescription.unsubscribe();
-  }
-
-  getLogbook(): void {
-    let name = this.route.snapshot.paramMap.get("name");
-    if (name === null) {
-      name = "ERIC";
-    }
-    this.store.dispatch(new FetchLogbookAction(name));
+    this.datasetSubscription.unsubscribe();
   }
 }
