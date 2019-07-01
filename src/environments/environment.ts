@@ -20,5 +20,8 @@ export const environment = {
   columnSelectEnabled: true,
   userProfileImageEnabled: false,
   logbookEnabled: true,
-  tableSciDataEnabled: true
+  tableSciDataEnabled: true,
+  metadataPreviewEnabled: true,
+  datasetReduceEnabled: true,
+  fileColorEnabled: true
 };

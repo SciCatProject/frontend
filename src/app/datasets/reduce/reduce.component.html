@@ -1,0 +1,374 @@
+<div fxLayout="row" fxLayout.xs="column">
+  <div fxFlex="70%">
+    <mat-card style="margin: 1em">
+      <mat-card-header style="background:#7de1ff;">
+        New Action
+      </mat-card-header>
+
+      <div class="details">
+        <table>
+          <tr>
+            <th><i class="material-icons">info</i> Status</th>
+            <td>
+              <div *ngIf="resultLoading">
+                Dataset reduction in progress...
+              </div>
+
+              <div *ngIf="result && result.hasOwnProperty('message')">
+                {{ result.message }}
+              </div>
+
+              <div *ngIf="result && result.hasOwnProperty('errno')">
+                Error reducing dataset: {{ result.code }}
+              </div>
+
+              <div
+                *ngIf="
+                  result &&
+                  !result.hasOwnProperty('message') &&
+                  !result.hasOwnProperty('errno') &&
+                  !resultLoading &&
+                  datasetHistory
+                "
+              >
+                <div *ngFor="let entry of datasetHistory">
+                  <div *ngIf="datasetPids.includes(entry.derivedDataset.pid)">
+                    Previously derived dataset available.
+                  </div>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </table>
+      </div>
+
+      <div class="action-workflow">
+        <mat-horizontal-stepper linear #stepper>
+          <mat-step [stepControl]="formGroup">
+            <ng-template matStepLabel>Select action</ng-template>
+            <div class="action-selector">
+              <mat-radio-group
+                aria-label="Select an action"
+                [(formControl)]="selectedAction"
+                required
+              >
+                <mat-radio-button
+                  *ngFor="let action of actions"
+                  [value]="action"
+                  >{{ action }}</mat-radio-button
+                >
+              </mat-radio-group>
+            </div>
+            <div>
+              <button mat-stroked-button matStepperNext type="button">
+                Next
+              </button>
+            </div>
+          </mat-step>
+          <mat-step [stepControl]="formGroup">
+            <ng-template matStepLabel>Select script</ng-template>
+            <div class="script-table">
+              <table>
+                <tr>
+                  <td class="script-selector">
+                    <mat-form-field>
+                      <mat-label>Reduce script</mat-label>
+                      <mat-select [(formControl)]="selectedScript" required>
+                        <mat-option
+                          *ngFor="let script of reduceScripts"
+                          [value]="script.value"
+                          >{{ script.value }}</mat-option
+                        >
+                      </mat-select>
+                      <mat-error *ngIf="selectedScript.hasError('required')">
+                        Please choose a script
+                      </mat-error>
+                    </mat-form-field>
+                    <mat-divider [vertical]="true"></mat-divider>
+                  </td>
+                  <td class="script-details">
+                    <h4>Description</h4>
+                    <div *ngFor="let script of reduceScripts">
+                      <p *ngIf="script.value === selectedScript.value">
+                        {{ script.description }}
+                      </p>
+                    </div>
+                    <p *ngIf="!selectedScript.value">
+                      Select a script to view description.
+                    </p>
+                  </td>
+                </tr>
+              </table>
+            </div>
+            <div>
+              <button mat-stroked-button matStepperPrevious type="button">
+                Back
+              </button>
+              <button mat-stroked-button matStepperNext type="button">
+                Next
+              </button>
+            </div>
+          </mat-step>
+          <mat-step [stepControl]="formGroup">
+            <ng-template matStepLabel>Confirm</ng-template>
+            <div class="confirmation-table">
+              <table>
+                <tr>
+                  <th>Action</th>
+                  <td>{{ selectedAction.value }}</td>
+                </tr>
+                <tr>
+                  <th>Script</th>
+                  <td>{{ selectedScript.value }}</td>
+                </tr>
+              </table>
+            </div>
+            <div>
+              <button mat-stroked-button matStepperPrevious type="button">
+                Back
+              </button>
+              <button mat-stroked-button (click)="stepper.reset()">
+                Reset
+              </button>
+              <button
+                mat-flat-button
+                class="reduce-btn"
+                (click)="reduceDataset(dataset)"
+              >
+                Run Action
+              </button>
+            </div>
+          </mat-step>
+        </mat-horizontal-stepper>
+      </div>
+
+      <!-- <div>
+    <mat-form-field>
+      <mat-label>Reduce script</mat-label>
+      <mat-select [(formControl)]="selectedScript" required>
+        <mat-option
+          *ngFor="let script of reduceScripts"
+          [value]="script.value"
+          >{{ script.viewValue }}</mat-option
+        >
+      </mat-select>
+      <mat-error *ngIf="selectedScript.hasError('required')"
+        >Please choose a script</mat-error
+      >
+    </mat-form-field>
+  </div>
+
+  <button mat-flat-button class="reduce-btn" (click)="reduceDataset(dataset)">
+    Reduce
+  </button> -->
+    </mat-card>
+
+    <mat-card style="margin: 1em">
+      <mat-card-header style="background:#d2f082;">
+        Available Derived Dataset
+      </mat-card-header>
+
+      <div *ngIf="result && result.hasOwnProperty('derivedDataset')">
+        <div class="details">
+          <table>
+            <tr>
+              <th><i class="material-icons"> fingerprint </i> Name</th>
+              <td>
+                <a (click)="goTo(entry.derivedDataset)">
+                  {{ result.derivedDataset.datasetName }}
+                </a>
+              </td>
+            </tr>
+            <tr>
+              <th><i class="material-icons"> description </i> Description</th>
+              <td>
+                {{ result.derivedDataset.description }}
+              </td>
+            </tr>
+            <tr>
+              <th><i class="material-icons"> person </i> Owner</th>
+              <td>
+                {{ result.derivedDataset.owner }}
+              </td>
+            </tr>
+            <tr>
+              <th><i class="material-icons"> vpn_key </i> Keywords</th>
+              <td>
+                {{ result.derivedDataset.keywords | json }}
+              </td>
+            </tr>
+            <tr>
+              <th><i class="material-icons"> perm_contact_calendar </i> PID</th>
+              <td>
+                {{ result.derivedDataset.pid }}
+              </td>
+            </tr>
+            <tr>
+              <th><i class="material-icons"> folder </i> Source Folder</th>
+              <td>
+                {{ result.derivedDataset.sourceFolder }}
+              </td>
+            </tr>
+          </table>
+        </div>
+
+        <button mat-stroked-button (click)="show = !show">
+          {{ show ? "Hide Metadata" : "Show Metadata" }}
+        </button>
+        <br />
+        <div *ngIf="show">
+          <ngx-json-viewer
+            [json]="result.derivedDataset"
+            [expanded]="false"
+          ></ngx-json-viewer>
+        </div>
+      </div>
+
+      <div
+        *ngIf="
+          result && !result.hasOwnProperty('derivedDataset') && datasetHistory
+        "
+      >
+        <div *ngFor="let entry of datasetHistory">
+          <div *ngIf="datasetPids.includes(entry.derivedDataset.pid)">
+            <div class="details">
+              <table>
+                <tr>
+                  <th><i class="material-icons"> fingerprint </i> Name</th>
+                  <td>
+                    <a (click)="goTo(entry.derivedDataset)">
+                      {{ entry.derivedDataset.datasetName }}
+                    </a>
+                  </td>
+                </tr>
+                <tr>
+                  <th>
+                    <i class="material-icons"> description </i> Description
+                  </th>
+                  <td>
+                    {{ entry.derivedDataset.description }}
+                  </td>
+                </tr>
+                <tr>
+                  <th><i class="material-icons"> person </i> Owner</th>
+                  <td>
+                    {{ entry.derivedDataset.owner }}
+                  </td>
+                </tr>
+                <tr>
+                  <th><i class="material-icons"> vpn_key </i> Keywords</th>
+                  <td>
+                    {{ entry.derivedDataset.keywords | json }}
+                  </td>
+                </tr>
+                <tr>
+                  <th>
+                    <i class="material-icons"> perm_contact_calendar </i> PID
+                  </th>
+                  <td>
+                    {{ entry.derivedDataset.pid }}
+                  </td>
+                </tr>
+                <tr>
+                  <th><i class="material-icons"> folder </i> Source Folder</th>
+                  <td>
+                    {{ entry.derivedDataset.sourceFolder }}
+                  </td>
+                </tr>
+              </table>
+            </div>
+
+            <button mat-stroked-button (click)="show = !show">
+              {{ show ? "Hide Metadata" : "Show Metadata" }}
+            </button>
+            <br />
+            <div *ngIf="show">
+              <ngx-json-viewer
+                [json]="entry.derivedDataset"
+                [expanded]="false"
+              ></ngx-json-viewer>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-card>
+
+    <!-- <mat-card style="margin: 1em">
+      <mat-card-header style="background:#ff6e6e;">
+        Reduction History
+      </mat-card-header>
+
+      <div *ngIf="datasetHistory">
+        <mat-table [dataSource]="datasetHistory" class="history-table"> -->
+    <!-- Column Definitions -->
+
+    <!-- Timestamp Column -->
+    <!-- <ng-container matColumnDef="timestamp">
+            <mat-header-cell *matHeaderCellDef>
+              <div fxLayout="column" style="align-items: center">
+                <div>
+                  <i class="material-icons">calendar_today</i>
+                </div>
+                <div class="table_column">Date</div>
+              </div>
+            </mat-header-cell>
+            <mat-cell *matCellDef="let entry">
+              <div
+                fxLayout="column"
+                *ngIf="entry.hasOwnProperty('derivedDataset')"
+              >
+                {{
+                  entry.derivedDataset.createdAt | date: "yyyy/MM/dd, EEE HH:mm"
+                }}
+              </div>
+            </mat-cell>
+          </ng-container> -->
+
+    <!-- Name Column -->
+    <!-- <ng-container matColumnDef="name">
+            <mat-header-cell *matHeaderCellDef>
+              <div fxLayout="column" style="align-items: center">
+                <div>
+                  <i class="material-icons">fingerprint</i>
+                </div>
+                <div class="table_column">Name</div>
+              </div>
+            </mat-header-cell>
+            <mat-cell *matCellDef="let entry">
+              <div *ngIf="entry.hasOwnProperty('derivedDataset')">
+                {{ entry.derivedDataset.datasetName }}
+              </div>
+            </mat-cell>
+          </ng-container> -->
+
+    <!-- Status Column -->
+    <!-- <ng-container matColumnDef="status">
+            <mat-header-cell *matHeaderCellDef>
+              <div fxLayout="column" style="align-items: center">
+                <div>
+                  <i class="material-icons">info</i>
+                </div>
+                <div class="table_column">Status</div>
+              </div>
+            </mat-header-cell>
+            <mat-cell *matCellDef="let entry">
+              <div *ngIf="entry.hasOwnProperty('derivedDataset')">
+                <div *ngIf="datasetPids.includes(entry.derivedDataset.pid)">
+                  Available
+                </div>
+                <div *ngIf="!datasetPids.includes(entry.derivedDataset.pid)">
+                  Deleted
+                </div>
+              </div>
+            </mat-cell>
+          </ng-container> -->
+
+    <!-- End of Column Definitions -->
+
+    <!-- <mat-header-row *matHeaderRowDef="columnsToDisplay"></mat-header-row>
+          <mat-row *matRowDef="let entry; columns: columnsToDisplay"></mat-row>
+        </mat-table>
+      </div>
+    </mat-card> -->
+  </div>
+</div>

@@ -12,9 +12,16 @@ import {
   SUBMIT_POLICY,
   SubmitPolicyAction,
   SubmitPolicyCompleteAction,
-  SubmitPolicyFailedAction
+  SubmitPolicyFailedAction,
+  CHANGE_PAGE,
+  FetchCountPolicies,
+  FailedPoliciesAction,
+  FETCH_EDITABLE_POLICIES,
+  FetchEditablePoliciesComplete,
+  FetchEditablePolicies,
+  SORT_BY_COLUMN
 } from "../actions/policies.actions";
-import { getQueryParams } from "../selectors/policies.selectors";
+import { getQueryParams, getPolicies } from "../selectors/policies.selectors";
 import {
   catchError,
   map,
@@ -23,6 +30,7 @@ import {
   withLatestFrom
 } from "rxjs/operators";
 import { Policy } from "state-management/models";
+import * as userSelectors from "state-management/selectors/users.selectors";
 
 @Injectable()
 export class PoliciesEffects {
@@ -32,7 +40,7 @@ export class PoliciesEffects {
     map((action: SubmitPolicyAction) => action),
     switchMap(action =>
       this.policiesService
-        .updatePolicies(action.idList, action.policyAttributes)
+        .updatePolicies(action.ownerList, action.policyAttributes)
         .pipe(
           mergeMap((data: any) => [
             new SubmitPolicyCompleteAction(data.submissionResponse),
@@ -48,16 +56,57 @@ export class PoliciesEffects {
 
   @Effect()
   private fetchPolicies$: Observable<Action> = this.actions$.pipe(
-    ofType(FETCH_POLICIES),
+    ofType(FETCH_POLICIES, CHANGE_PAGE, SORT_BY_COLUMN),
     withLatestFrom(this.queryParams$),
     map(([action, params]) => params),
-    mergeMap(({ limits }) =>
-      this.policyApi.find(limits).pipe(
-        map(policies => new FetchPoliciesCompleteAction(policies as Policy[])),
+    switchMap(({ limits }) =>
+      this.policyApi.find(limits)
+      .pipe(
+        mergeMap(policies => [
+          new FetchPoliciesCompleteAction(policies as Policy[]),
+          new FetchEditablePolicies()
+        ]),
         catchError(err => of(new FetchPoliciesFailedAction()))
       )
     )
   );
+
+  @Effect()
+  FetchCountPolicies$ = this.actions$.pipe(
+    ofType(FETCH_POLICIES),
+    switchMap(action => this.policyApi.count()
+    .pipe(map(({ count }) => new FetchCountPolicies(count)),
+    catchError(err => of(new FailedPoliciesAction(err)))))
+  );
+
+  @Effect({ dispatch: false })
+  private userProfile$ = this.store.pipe(select(userSelectors.getProfile));
+
+  @Effect({ dispatch: false })
+  private policies$ = this.store.pipe(select(getPolicies));
+
+  @Effect()
+  FetchEditablePolicies$ = this.actions$.pipe(
+    ofType(FETCH_EDITABLE_POLICIES),
+    withLatestFrom(this.userProfile$),
+    withLatestFrom(this.policies$),
+    map(([[action, profile], allPolicies]) => {
+      const editablePolicies = [];
+      if (!profile) {
+        // allow functional users
+        return new FetchEditablePoliciesComplete(allPolicies);
+      }
+      const email = profile.email;
+      allPolicies.forEach(pol => {
+        if (pol.manager.indexOf(email) !== -1) {
+          editablePolicies.push(pol);
+        }
+      });
+      return new FetchEditablePoliciesComplete(editablePolicies);
+    }));
+
+
+
 
   constructor(
     private actions$: Actions,

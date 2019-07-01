@@ -21,7 +21,7 @@ import { SampleDataFormComponent } from "../samples/sample-data-form/sample-data
 import { ListProposalsPageComponent } from "../proposals/containers/list-proposals-page/list-proposals-page.component";
 import { ViewProposalPageComponent } from "../proposals/containers/view-proposal-page/view-proposal-page.component";
 
-import { ArchiveSettingsComponent } from "../policies/archive-settings/archive-settings.component";
+import { PoliciesComponent } from "../policies/policies/policies.component";
 
 import { PublishComponent } from "datasets/publish/publish.component";
 import { AuthCheck } from "../AuthCheck";
@@ -35,6 +35,9 @@ import { AboutComponent } from "about/about/about.component";
 import { HelpComponent } from "help/help/help.component";
 import { PublisheddataTableComponent } from "publisheddata/publisheddata-table/publisheddata-table.component";
 import { PublisheddataDetailsComponent } from "publisheddata/publisheddata-details/publisheddata-details.component";
+
+// handles external URLs by lookup in the env config
+import { RedirectGuard } from "app-routing/redirect-guard";
 
 export const routes: Routes = [
   { path: "", redirectTo: "/datasets", pathMatch: "full" },
@@ -98,8 +101,8 @@ export const routes: Routes = [
   },
 
   {
-    path: "archive-settings",
-    component: ArchiveSettingsComponent,
+    path: "policies",
+    component: PoliciesComponent,
     canActivate: [AuthCheck]
   },
 
@@ -151,11 +154,29 @@ export const routes: Routes = [
     path: "error",
     component: ErrorPageComponent,
     data: { message: "Location Not Found", breadcrumb: "Error" }
+  },
+  {
+    path: "help/ingestManual",
+    canActivate: [RedirectGuard],
+    component: RedirectGuard,
+    data: {
+      urlConfigItem: "ingestManual"
+    }
+  },
+  {
+    path: "help/SciCatGettingStartedSLSSummary",
+    canActivate: [RedirectGuard],
+    component: RedirectGuard,
+    data: {
+      urlConfigItem: "gettingStarted"
+    }
   }
 ];
-
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
+  providers: []
 })
-export class AppRoutingModule {}
+export class AppRoutingModule {
+  constructor() {}
+}

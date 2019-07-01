@@ -50,7 +50,8 @@ import {
   MatSortModule,
   MatTableModule,
   MatTabsModule,
-  MatTooltipModule
+  MatTooltipModule,
+  MatStepperModule
 } from "@angular/material";
 
 import { PublishComponent } from "./publish/publish.component";
@@ -59,6 +60,7 @@ import { ScientificConditionDialogComponent } from "./scientific-condition-dialo
 import { jobsReducer } from "../state-management/reducers/jobs.reducer";
 import { ColumnSelectorComponent } from "./column-selector/column-selector.component";
 import { LogbooksModule } from "logbooks/logbooks.module";
+import { ReduceComponent } from './reduce/reduce.component';
 
 @NgModule({
   imports: [
@@ -88,6 +90,7 @@ import { LogbooksModule } from "logbooks/logbooks.module";
     MatRadioModule,
     MatSelectModule,
     MatSortModule,
+    MatStepperModule,
     MatTableModule,
     MatTabsModule,
     MatTooltipModule,
@@ -116,7 +119,8 @@ import { LogbooksModule } from "logbooks/logbooks.module";
     PublishComponent,
     DatasetFormComponent,
     ScientificConditionDialogComponent,
-    ColumnSelectorComponent
+    ColumnSelectorComponent,
+    ReduceComponent
   ],
   entryComponents: [ScientificConditionDialogComponent],
   providers: [DatasetService, ArchivingService],

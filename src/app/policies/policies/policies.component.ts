@@ -1,20 +1,16 @@
 import {
   Component,
-  EventEmitter,
   OnInit,
-  Output,
-  ViewChild
+  OnDestroy
 } from "@angular/core";
 import {
   MatCheckboxChange,
   MatDialog,
   MatDialogConfig,
-  MatPaginator
 } from "@angular/material";
 import { Policy } from "state-management/models";
 
-import { ActivatedRoute, Router } from "@angular/router";
-import { ActionsSubject, select, Store } from "@ngrx/store";
+import { select, Store } from "@ngrx/store";
 
 import {
   ChangePageAction,
@@ -23,16 +19,16 @@ import {
   FetchPoliciesAction,
   SelectPolicyAction,
   SortByColumnAction,
-  SubmitPolicyAction
+  SubmitPolicyAction,
 } from "state-management/actions/policies.actions";
 import {
   getPage,
   getPolicies,
-  getPolicyState,
   getSelectedPolicies,
-  getTotalCount
+  getTotalCount,
+  getEditablePolicies,
+  getItemsPerPage
 } from "state-management/selectors/policies.selectors";
-import { PoliciesService } from "../policies.service";
 import { EditDialogComponent } from "../edit-dialog/edit-dialog.component";
 
 export interface PageChangeEvent {
@@ -47,40 +43,32 @@ export interface SortChangeEvent {
 }
 
 @Component({
-  selector: "archive-settings",
-  templateUrl: "./archive-settings.component.html",
-  styleUrls: ["./archive-settings.component.scss"]
+  selector: "policies",
+  templateUrl: "./policies.component.html",
+  styleUrls: ["./policies.component.scss"]
 })
-export class ArchiveSettingsComponent implements OnInit {
+export class PoliciesComponent implements OnInit, OnDestroy {
   public policies$ = this.store.pipe(select(getPolicies));
+  public editablePolicies$ = this.store.pipe(select(getEditablePolicies));
   dialogConfig: MatDialogConfig;
-  /*@Input()
-  public totalNumber: number = 0;
-  @Input()
 
-  @Input()
-  public showSelect: boolean = false;
-  @Input()*/
-  public currentPage: number = 0;
-  public disabledColumns: string[] = [];
-  public pageSizeOptions: number[] = [30, 1000];
+  public pageSizeOptions: number[] = [10, 30, 1000];
+  public itemsPerPage$ = this.store.pipe(select(getItemsPerPage));
   public editEnabled = true;
   public policiesPerPage = 10;
-  @ViewChild(MatPaginator)
-  paginator: MatPaginator;
-  private policyState$ = this.store.pipe(select(getPolicyState));
   public selectedPolicies$ = this.store.pipe(select(getSelectedPolicies));
   public currentPage$ = this.store.pipe(select(getPage));
   public policyCount$ = this.store.select(getTotalCount);
   private selectedPolicies: Policy[] = [];
   private selectedGroups: string[] = [];
   private selectedIds: string[] = [];
-  private multiSelect: boolean = false;
+  private multiSelect = false;
   private policies: Policy[] = [];
-  private subscriptions: any;
-  @Output()
-  private onClick: EventEmitter<Policy> = new EventEmitter();
-  private displayedColumns: string[] = [
+  private subs: any[] = [];
+  private currentMode = "readable";
+  private modes = ["readable", "editable"];
+
+  public editableDisplayedColumns: string[] = [
     "select",
     "manager",
     "ownerGroup",
@@ -93,12 +81,20 @@ export class ArchiveSettingsComponent implements OnInit {
     "retrieveEmailsToBeNotified"
   ];
 
+  public readableDisplayedColumns: string[] = [
+    "manager",
+    "ownerGroup",
+    "autoArchive",
+    "autoArchiveDelay",
+    "tapeRedundancy",
+    "archiveEmailNotification",
+    "archiveEmailsToBeNotified",
+    "retrieveEmailNotification",
+    "retrieveEmailsToBeNotified"
+  ];
+
   constructor(
-    private actionsSubj: ActionsSubject,
     private store: Store<Policy>,
-    private router: Router,
-    private route: ActivatedRoute,
-    private policiesService: PoliciesService,
     public dialog: MatDialog
   ) {}
 
@@ -110,22 +106,26 @@ export class ArchiveSettingsComponent implements OnInit {
       this.policies = data as Policy[];
     });
 
-    this.selectedPolicies$.subscribe(data => {
-      this.selectedPolicies = data as Policy[];
-      this.multiSelect = this.selectedPolicies.length > 1;
-      this.selectedGroups = [];
-      this.selectedIds = [];
-      for (let policy of data) {
-        this.selectedGroups.push(policy.ownerGroup);
-        this.selectedIds.push(policy.id);
-      }
-    });
+    this.subs.push(
+      this.selectedPolicies$.subscribe(data => {
+        this.selectedPolicies = data as Policy[];
+        this.multiSelect = this.selectedPolicies.length > 1;
+        this.selectedGroups = [];
+        this.selectedIds = [];
+        for (const policy of data) {
+          this.selectedGroups.push(policy.ownerGroup);
+          this.selectedIds.push(policy.id);
+        }
+      })
+    );
   }
 
-  public getDisplayedColumns(): string[] {
-    return this.displayedColumns.filter(
-      column => this.disabledColumns.indexOf(column) === -1
-    );
+  ngOnDestroy() {
+    this.subs.forEach(sub => sub.unsubscribe());
+  }
+
+  onModeChange(event, mode: string): void {
+    this.currentMode = mode;
   }
 
   onPageChange(event: PageChangeEvent): void {
@@ -135,7 +135,6 @@ export class ArchiveSettingsComponent implements OnInit {
   onSortChange(event: SortChangeEvent): void {
     const { active: column, direction } = event;
     this.store.dispatch(new SortByColumnAction(column, direction));
-    //  this.store.dispatch(new FetchPoliciesAction());
   }
 
   onSelect(policy: Policy): void {
@@ -165,23 +164,25 @@ export class ArchiveSettingsComponent implements OnInit {
 
   private onClose(result: any) {
     if (result) {
-      if (result.archiveEmailsToBeNotified &&
-        typeof result.archiveEmailsToBeNotified === "string") {
+      if (
+        result.archiveEmailsToBeNotified &&
+        typeof result.archiveEmailsToBeNotified === "string"
+      ) {
         result.archiveEmailsToBeNotified = Array.from(
-          result.archiveEmailsToBeNotified.split(","));
+          result.archiveEmailsToBeNotified.split(",")
+        );
       }
-      if (result.retrieveEmailsToBeNotified &&
-        typeof result.retrieveEmailsToBeNotified === "string") {
+      if (
+        result.retrieveEmailsToBeNotified &&
+        typeof result.retrieveEmailsToBeNotified === "string"
+      ) {
         result.retrieveEmailsToBeNotified = Array.from(
-          result.retrieveEmailsToBeNotified.split(","));
+          result.retrieveEmailsToBeNotified.split(",")
+        );
       }
-      this.store.dispatch(new SubmitPolicyAction(this.selectedIds, result));
+      this.store.dispatch(new SubmitPolicyAction(this.selectedGroups, result));
       this.store.dispatch(new ClearSelectionAction());
     }
-  }
-
-  private handleClick(policy): void {
-    this.onClick.emit(policy);
   }
 
   private handleSelect(event: MatCheckboxChange, policy: Policy): void {

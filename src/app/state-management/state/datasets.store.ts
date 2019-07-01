@@ -32,6 +32,9 @@ export interface DatasetState {
   filters: DatasetFilters;
 
   batch: Dataset[];
+
+  result: object;
+  resultLoading: boolean;
 }
 
 export const initialDatasetState: DatasetState = {
@@ -49,6 +52,9 @@ export const initialDatasetState: DatasetState = {
   searchTerms: "",
   keywordsTerms: "",
   batch: [],
+
+  result: {},
+  resultLoading: false,
 
   filters: {
     modeToggle: ArchViewMode.all,

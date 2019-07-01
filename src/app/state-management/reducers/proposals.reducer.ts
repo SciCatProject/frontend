@@ -13,7 +13,9 @@ import {
   SELECT_PROPOSAL,
   SelectProposalAction,
   CHANGE_PAGE,
-  ChangePageAction
+  ChangePageAction,
+  FETCH_COUNT_PROPOSALS,
+  FetchCountOfProposals
 } from "../actions/proposals.actions";
 import { LOGOUT_COMPLETE, LogoutCompleteAction } from "../actions/user.actions";
 
@@ -21,11 +23,18 @@ export function proposalsReducer(
   state: ProposalsState = initialProposalsState,
   action: ProposalsAction | LogoutCompleteAction
 ): ProposalsState {
+  if (action.type.indexOf("[Proposals]") !== -1) {
+    console.log("Action came in! " + action.type);
+  }
   switch (action.type) {
     case SELECT_PROPOSAL:
       const selectedId = (action as SelectProposalAction).proposalId;
       return { ...state, selectedId };
 
+    case FETCH_COUNT_PROPOSALS: {
+      const proposalCount = (action as FetchCountOfProposals).count;
+      return { ...state,  proposalCount };
+    }
     case FETCH_PROPOSALS_COMPLETE: {
       const list = (action as FetchProposalsCompleteAction).proposals;
       const proposals = list.reduce((proposals, proposal) => ({ ...proposals, [proposal.proposalId]: proposal }), {});

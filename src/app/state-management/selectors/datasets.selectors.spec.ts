@@ -19,6 +19,9 @@ const initialDatasetState: DatasetState = {
   keywordsTerms: "",
   batch: [],
 
+  result: {},
+  resultLoading: false,
+
   filters: {
     mode: {},
     modeToggle: ArchViewMode.all,

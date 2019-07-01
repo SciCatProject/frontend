@@ -16,14 +16,9 @@ export class PoliciesService {
     return this.policyApi.findOne({ where: { id } });
   }
 
-  updatePolicies(idList: string[], attributes: {}) {
-    const or = [];
-    for (const idx of idList) {
-      or.push({ id: idx });
-    }
-    const where = { or };
+  updatePolicies(onwerList: string[], attributes: {}) {
     return this.policyApi
-      .updatewhere(where, attributes);
+      .updatewhere(onwerList.join(), attributes);
   }
 
 

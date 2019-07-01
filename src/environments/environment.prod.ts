@@ -12,5 +12,12 @@ export const environment = {
   multipleDownloadEnabled: false,
   shoppingCartEnabled: false,
   columnSelectEnabled: false,
-  userProfileImageEnabled: false
+  userProfileImageEnabled: false,
+  ingestManual: "https://melanie.gitpages.psi.ch/SciCatPages/",
+  gettingStarted: "https://melanie.gitpages.psi.ch/SciCatPages/SciCatGettingStartedSLSSummary.pdf",
+  logbookEnabled: false,
+  tableSciDataEnabled: false,
+  metadataPreviewEnabled: false,
+  datasetReduceEnabled: false,
+  fileColorEnabled: false
 };

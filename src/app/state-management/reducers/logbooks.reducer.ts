@@ -18,25 +18,27 @@ export function logbooksReducer(
   }
   switch (action.type) {
     case ActionTypes.FETCH_LOGBOOKS_COMPLETE: {
-      let logbooks = (action as FetchLogbooksCompleteAction).logbooks;
-      logbooks.forEach(logbook => {
-        let descendingMessages = logbook.messages.reverse();
-        logbook.messages = descendingMessages;
-      });
+      const logbooks = (action as FetchLogbooksCompleteAction).logbooks;
+      if (logbooks) {
+        logbooks.forEach(logbook => {
+          const descendingMessages = logbook.messages.reverse();
+          logbook.messages = descendingMessages;
+        });
+      }
       return { ...state, logbooks };
     }
     case ActionTypes.FETCH_LOGBOOK_COMPLETE: {
-      let logbook = (action as FetchLogbookCompleteAction).logbook;
+      const logbook = (action as FetchLogbookCompleteAction).logbook;
       formatImageUrls(logbook);
       return { ...state, logbook };
     }
     case ActionTypes.FETCH_FILTERED_ENTRIES_COMPLETE: {
-      let logbook = (action as FetchFilteredEntriesCompleteAction).logbook;
+      const logbook = (action as FetchFilteredEntriesCompleteAction).logbook;
       formatImageUrls(logbook);
       return { ...state, logbook };
     }
     case ActionTypes.UPDATE_FILTER_COMPLETE: {
-      let filters = (action as UpdateFilterCompleteAction).filter;
+      const filters = (action as UpdateFilterCompleteAction).filter;
       return { ...state, filters };
     }
     default: {
@@ -46,14 +48,17 @@ export function logbooksReducer(
 }
 
 function formatImageUrls(logbook: Logbook) {
+  if (!logbook || !logbook.messages) {
+    return;
+  }
   logbook.messages.forEach(message => {
     if (message.content.msgtype === "m.image") {
-      let externalThumbnailUrl = message.content.info.thumbnail_url.replace(
+      const externalThumbnailUrl = message.content.info.thumbnail_url.replace(
         "mxc://",
         "https://scicat03.esss.lu.se:8448/_matrix/media/r0/download/"
       );
       message.content.info.thumbnail_url = externalThumbnailUrl;
-      let externalFullsizeUrl = message.content.url.replace(
+      const externalFullsizeUrl = message.content.url.replace(
         "mxc://",
         "https://scicat03.esss.lu.se:8448/_matrix/media/r0/download/"
       );

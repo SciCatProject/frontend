@@ -71,7 +71,11 @@ import {
   SetTextFilterAction,
   SetViewModeAction,
   SORT_BY_COLUMN,
-  SortByColumnAction
+  SortByColumnAction,
+  REDUCE_DATASET_COMPLETE,
+  ReduceDatasetCompleteAction,
+  REDUCE_DATASET,
+  REDUCE_DATASET_FAILED
 } from "state-management/actions/datasets.actions";
 
 import {
@@ -454,6 +458,19 @@ export function datasetsReducer(
     case PREFILL_BATCH_COMPLETE: {
       const { batch } = action as PrefillBatchCompleteAction;
       return { ...state, batch };
+    }
+
+    case REDUCE_DATASET: {
+      return { ...state, resultLoading: true }
+    }
+
+    case REDUCE_DATASET_FAILED: {
+      return { ...state, resultLoading: false }
+    }
+
+    case REDUCE_DATASET_COMPLETE: {
+      let result = (action as ReduceDatasetCompleteAction).result;
+      return { ...state, result, resultLoading: false };
     }
 
     default: {

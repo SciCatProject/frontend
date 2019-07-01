@@ -21,6 +21,11 @@ export class AppConfig {
   userProfileImageEnabled: boolean;
   logbookEnabled: boolean;
   tableSciDataEnabled: boolean;
+  datasetReduceEnabled: boolean;
+  fileColorEnabled: boolean;
+  metadataPreviewEnabled: boolean;
+  ingestManual: string;
+  gettingStarted: string;
 }
 
 export const APP_DI_CONFIG: AppConfig = {
@@ -40,7 +45,12 @@ export const APP_DI_CONFIG: AppConfig = {
   columnSelectEnabled: environment["columnSelectEnabled"] || false,
   userProfileImageEnabled: environment["userProfileImageEnabled"] || false,
   logbookEnabled: environment["logbookEnabled"] || false,
-  tableSciDataEnabled: environment["tableSciDataEnabled"] || false
+  tableSciDataEnabled: environment["tableSciDataEnabled"] || false,
+  datasetReduceEnabled: environment["datasetReduceEnabled"] || false,
+  fileColorEnabled: environment["fileColorEnabled"] || false,
+  metadataPreviewEnabled: environment["metadataPreviewEnabled"] || false,
+  ingestManual: environment["ingestManual"] || null,
+  gettingStarted: environment["gettingStarted"] || null,
 };
 
 @NgModule({

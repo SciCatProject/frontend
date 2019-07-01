@@ -26,6 +26,7 @@ interface Proposer {
 export class ProposalDetailComponent implements OnInit {
   currentPage$ = this.store.pipe(select(getPage));
   datasetCount$ = this.store.select(getdatasetCount);
+  show = false;
 
   @Input()
   proposal: Proposal;
@@ -45,6 +46,8 @@ export class ProposalDetailComponent implements OnInit {
   ];
   private mainProposer: Proposer;
   private principalInvestigator: Proposer;
+  public startTime: Date;
+  public endTime: Date;
 
   constructor(private router: Router, private store: Store<any>) {}
 
@@ -75,6 +78,13 @@ export class ProposalDetailComponent implements OnInit {
       email: piEmail,
       isPresent: piFullName !== null || piEmail !== null
     };
+
+    if (this.proposal.MeasurementPeriodList.length >0){
+      const measure = this.proposal.MeasurementPeriodList.pop();
+      this.startTime = measure.start || null;
+      this.endTime = measure.end || null;
+
+    }
   }
 
   calculateRowClasses(row: Dataset) {

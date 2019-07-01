@@ -82,7 +82,7 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
     const dates = [];
     for (const key in scimeta) {
       if (scimeta[key] instanceof Date) {
-        const arr = {name: key, value: scimeta[key] };
+        const arr = { name: key, value: scimeta[key] };
         dates.push(arr);
       }
     }
@@ -93,9 +93,8 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
     const strings = [];
     for (const key in scimeta) {
       if (typeof scimeta[key] === "string") {
-        const arr = {name: key, value: scimeta[key] };
+        const arr = { name: key, value: scimeta[key] };
         strings.push(arr);
-
       }
     }
     return strings;
