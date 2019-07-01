@@ -28,11 +28,7 @@ describe("UserSettingsComponent", () => {
         NguiDatetimePickerModule,
         StoreModule.forRoot({})
       ],
-      declarations: [
-        UserSettingsComponent,
-        ObjKeysPipe,
-        TitleCasePipe
-      ]
+      declarations: [UserSettingsComponent, ObjKeysPipe, TitleCasePipe]
     });
     TestBed.overrideComponent(UserSettingsComponent, {
       set: {
@@ -60,17 +56,5 @@ describe("UserSettingsComponent", () => {
 
   it("should create", () => {
     expect(component).toBeTruthy();
-  });
-
-  // NOTE this test could be written inside the dataset form by changing the
-  // enabled flag and passing mock data, maybe this is better?
-  it("should have enabled form fields", () => {
-    // const compiled = fixture.debugElement.nativeElement;
-    // expect(compiled.querySelector('input').getAttribute("disabled")).toBeNull();
-  });
-
-  it("should have a submission or update button", () => {
-    const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector("button")).toBeTruthy();
   });
 });
