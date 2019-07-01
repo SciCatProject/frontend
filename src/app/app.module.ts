@@ -35,7 +35,7 @@ import { UsersModule } from "users/users.module";
 import { PublishedDataEffects } from "state-management/effects/published-data.effects";
 import { localStorageSync } from "ngrx-store-localstorage";
 import { rootReducer } from "state-management/reducers/root.reducer";
-import { routerReducer, StoreRouterConnectingModule } from "@ngrx/router-store";
+import { routerReducer } from "@ngrx/router-store";
 import { LoginService } from "users/login.service";
 
 import {
@@ -124,7 +124,6 @@ export function localStorageSyncWrapper(reducer: any) {
       LogbookEffect,
       PublishedDataEffects
     ]),
-    StoreRouterConnectingModule,
     ServiceWorkerModule.register("ngsw-worker.js", {
       enabled: environment.production
     })
