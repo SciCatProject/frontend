@@ -11,6 +11,7 @@ import { ThumbnailPipe } from "./pipes/thumbnail.pipe";
 import { StripProposalPrefixPipe } from "shared/pipes/stripProposalPrefix.pipe";
 import { ScientificMetadataPipe } from "./pipes/scientific-metadata.pipe";
 import { ReplaceUnderscorePipe } from "./pipes/replace-underscore.pipe";
+import { Title } from "@angular/platform-browser";
 
 @NgModule({
   imports: [
@@ -24,7 +25,9 @@ import { ReplaceUnderscorePipe } from "./pipes/replace-underscore.pipe";
     FileSizePipe,
     KeysPipe,
     JsonHeadPipe,
+    ObjKeysPipe,
     ThumbnailPipe,
+    TitleCasePipe,
     StripProposalPrefixPipe,
     ScientificMetadataPipe,
     ReplaceUnderscorePipe
