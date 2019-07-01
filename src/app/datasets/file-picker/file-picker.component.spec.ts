@@ -13,7 +13,7 @@ import { APP_CONFIG } from "../../app-config.module";
 import * as lb from "shared/sdk/services";
 import { FileSizePipe } from "../../shared/pipes/filesize.pipe";
 
-let mockConfig = {};
+const mockConfig = {};
 
 describe("FilePickerComponent", () => {
   let component: FilePickerComponent;
