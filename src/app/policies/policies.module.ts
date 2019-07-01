@@ -1,7 +1,6 @@
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { PoliciesComponent } from "./policies/policies.component";
-// import { ConfigFormModule } from 'shared/modules/config-form/config-form.module';
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { PoliciesService } from "./policies.service";
 import { EditDialogComponent } from "./edit-dialog/edit-dialog.component";
@@ -26,7 +25,7 @@ import {
   MatFormFieldModule,
   MatOptionModule
 } from "@angular/material";
-import {MatExpansionModule} from '@angular/material/expansion';
+import { MatExpansionModule } from "@angular/material/expansion";
 import { MatButtonToggleModule } from "@angular/material/button-toggle";
 import { MatChipsModule } from "@angular/material/chips";
 import { SharedCatanieModule } from "shared/shared.module";
