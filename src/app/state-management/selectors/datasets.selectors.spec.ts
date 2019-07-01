@@ -20,6 +20,7 @@ const initialDatasetState: DatasetState = {
   batch: [],
 
   result: {},
+  resultLoading: false,
 
   filters: {
     mode: {},

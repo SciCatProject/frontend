@@ -50,7 +50,8 @@ import {
   MatSortModule,
   MatTableModule,
   MatTabsModule,
-  MatTooltipModule
+  MatTooltipModule,
+  MatStepperModule
 } from "@angular/material";
 
 import { PublishComponent } from "./publish/publish.component";
@@ -89,6 +90,7 @@ import { ReduceComponent } from './reduce/reduce.component';
     MatRadioModule,
     MatSelectModule,
     MatSortModule,
+    MatStepperModule,
     MatTableModule,
     MatTabsModule,
     MatTooltipModule,
