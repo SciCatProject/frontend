@@ -1,8 +1,7 @@
 import * as JobActions from "state-management/actions/jobs.actions";
 import * as selectors from "state-management/selectors";
 import { JobViewMode } from "state-management/models";
-import { AfterViewInit } from "@angular/core/src/metadata/lifecycle_hooks";
-import { Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
+import { Component, OnDestroy, OnInit, ViewChild, AfterViewInit } from "@angular/core";
 import { ConfigService } from "shared/services/config.service";
 import { DatePipe } from "@angular/common";
 import { HttpClient } from "@angular/common/http";
