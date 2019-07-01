@@ -8,7 +8,6 @@ import { ObjKeysPipe, TitleCasePipe } from "shared/pipes/index";
 
 import { ConfigFormComponent } from "./config-form.component";
 import { Store, StoreModule } from "@ngrx/store";
-import { TreeTableModule } from "ng-treetable";
 
 import {
   MatButtonModule,
@@ -28,7 +27,6 @@ describe("ConfigFormComponent", () => {
         FormsModule,
         ReactiveFormsModule,
         NguiDatetimePickerModule,
-        TreeTableModule,
         StoreModule.forRoot({}),
         MatButtonModule,
         MatCardModule,
