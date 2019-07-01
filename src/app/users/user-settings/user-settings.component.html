@@ -8,5 +8,4 @@
     <p>
     <b>Name:</b> {{ displayName  }}
     </mat-card>
-    <config-form *ngIf="settings$" [sourceType]="'UserSettings'" [source]="settings$ | async" (onSubmit)="onSubmit($event)"></config-form>
 </ng-container>

@@ -3,7 +3,6 @@ import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 import { ReactiveFormsModule } from "@angular/forms";
 import { Store, StoreModule } from "@ngrx/store";
 import { NguiDatetimePickerModule } from "@ngui/datetime-picker";
-import { ConfigFormComponent } from "shared/modules/config-form/config-form.component";
 import { MockStore } from "shared/MockStubs";
 import { ObjKeysPipe, TitleCasePipe } from "shared/pipes/index";
 
@@ -26,7 +25,6 @@ describe("UserDetailsComponent", () => {
       ],
       declarations: [
         UserDetailsComponent,
-        ConfigFormComponent,
         ObjKeysPipe,
         TitleCasePipe
       ]
