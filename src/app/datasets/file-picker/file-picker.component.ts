@@ -20,7 +20,7 @@ export class FilePickerComponent implements OnInit, OnDestroy {
   public readMode = ReadMode.dataURL;
   public picked: ReadFile;
   public status: string;
-  @ViewChild(FilePickerDirective)
+  @ViewChild(FilePickerDirective, {static: false} )
   private filePicker;
 
   constructor(

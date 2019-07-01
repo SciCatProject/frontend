@@ -5,7 +5,7 @@ ENV no_proxy "localhost, 127.0.0.1"
 
 RUN apt-get update && apt-get install -y apt-transport-https lsb-release curl gnupg2 git
 
-RUN curl -sL https://deb.nodesource.com/setup_9.x |  bash -
+RUN curl -sL https://deb.nodesource.com/setup_12.x |  bash -
 
 RUN apt-get install -y nodejs
 
