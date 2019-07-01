@@ -5,7 +5,7 @@ import { ErrorPageModule } from "shared/modules/error-page/error-page.module";
 import { FileSizePipe } from "./pipes/filesize.pipe";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { NgModule } from "@angular/core";
-import { KeysPipe } from "./pipes";
+import { KeysPipe, TitleCasePipe, ObjKeysPipe } from "./pipes";
 import { JsonHeadPipe } from "./pipes/json-head.pipe";
 import { ThumbnailPipe } from "./pipes/thumbnail.pipe";
 import { StripProposalPrefixPipe } from "shared/pipes/stripProposalPrefix.pipe";
@@ -37,7 +37,9 @@ import { ReplaceUnderscorePipe } from "./pipes/replace-underscore.pipe";
     ErrorPageModule,
     KeysPipe,
     JsonHeadPipe,
+    ObjKeysPipe,
     ThumbnailPipe,
+    TitleCasePipe,
     ScientificMetadataPipe,
     StripProposalPrefixPipe,
     ReplaceUnderscorePipe
