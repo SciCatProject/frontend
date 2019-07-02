@@ -71,29 +71,55 @@
               <table>
                 <tr>
                   <td class="script-selector">
-                    <mat-form-field>
-                      <mat-label>Reduce script</mat-label>
-                      <mat-select [(formControl)]="selectedScript" required>
-                        <mat-option
-                          *ngFor="let script of reduceScripts"
-                          [value]="script.value"
-                          >{{ script.value }}</mat-option
-                        >
-                      </mat-select>
-                      <mat-error *ngIf="selectedScript.hasError('required')">
-                        Please choose a script
-                      </mat-error>
-                    </mat-form-field>
+                    <div *ngIf="selectedAction.value === 'Reduce'">
+                      <mat-form-field>
+                        <mat-label>Reduce script</mat-label>
+                        <mat-select [(formControl)]="selectedScript" required>
+                          <mat-option
+                            *ngFor="let script of reduceScripts"
+                            [value]="script.value"
+                            >{{ script.value }}</mat-option
+                          >
+                        </mat-select>
+                        <mat-error *ngIf="selectedScript.hasError('required')">
+                          Please choose a script
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div *ngIf="selectedAction.value === 'Analyze'">
+                      <mat-form-field>
+                        <mat-label>Analyze script</mat-label>
+                        <mat-select [(formControl)]="selectedScript" required>
+                          <mat-option
+                            *ngFor="let script of analyzeScripts"
+                            [value]="script.value"
+                            >{{ script.value }}</mat-option
+                          >
+                        </mat-select>
+                        <mat-error *ngIf="selectedScript.hasError('required')">
+                          Please choose a script
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
                     <mat-divider [vertical]="true"></mat-divider>
                   </td>
                   <td class="script-details">
                     <h4>Description</h4>
-                    <div *ngFor="let script of reduceScripts">
-                      <p *ngIf="script.value === selectedScript.value">
-                        {{ script.description }}
-                      </p>
+                    <div *ngIf="selectedAction.value === 'Reduce'">
+                      <div *ngFor="let script of reduceScripts">
+                        <p *ngIf="script.value === selectedScript.value">
+                          {{ script.description }}
+                        </p>
+                      </div>
                     </div>
-                    <p *ngIf="!selectedScript.value">
+                    <div *ngIf="selectedAction.value === 'Analyze'">
+                      <div *ngFor="let script of analyzeScripts">
+                        <p *ngIf="script.value === selectedScript.value">
+                          {{ script.description }}
+                        </p>
+                      </div>
+                    </div>
+                    <p *ngIf="!selectedScript.value || !selectedScript.value.startsWith(selectedAction.value.charAt(0))">
                       Select a script to view description.
                     </p>
                   </td>

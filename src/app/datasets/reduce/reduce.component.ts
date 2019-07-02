@@ -42,17 +42,32 @@ export class ReduceComponent implements OnInit, OnDestroy {
   actions: string[] = ["Analyze", "Reduce"];
   selectedAction = new FormControl("", [Validators.required]);
 
+  analyzeScripts: object[] = [
+    {
+      value: "Analyze Option 1",
+      description: "Short description of the first analyze script."
+    },
+    {
+      value: "Analyze Option 2",
+      description: "Short description of the second analyze script."
+    },
+    {
+      value: "Analyze Option 3",
+      description: "Short description of the third analyze script."
+    }
+  ];
+
   reduceScripts: object[] = [
     {
-      value: "Option 1",
+      value: "Reduce Option 1",
       description: "Short description of the first reduce script."
     },
     {
-      value: "Option 2",
+      value: "Reduce Option 2",
       description: "Short description of the second reduce script."
     },
     {
-      value: "Option 3",
+      value: "Reduce Option 3",
       description: "Short description of the third reduce script."
     }
   ];
