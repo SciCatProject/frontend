@@ -9,6 +9,7 @@ import {
 } from "state-management/selectors/logbooks.selector";
 import { Logbook } from "state-management/models";
 import { getCurrentDataset } from "state-management/selectors/datasets.selectors";
+import { ActivatedRoute } from "@angular/router";
 
 @Component({
   selector: "app-logbooks-detail",
@@ -16,6 +17,8 @@ import { getCurrentDataset } from "state-management/selectors/datasets.selectors
   styleUrls: ["./logbooks-detail.component.scss"]
 })
 export class LogbooksDetailComponent implements OnInit, OnDestroy {
+  logbookName: string;
+
   logbook: Logbook;
   logbookSubscription: Subscription;
   filteredLogbookDescription: Subscription;
@@ -24,7 +27,7 @@ export class LogbooksDetailComponent implements OnInit, OnDestroy {
   dataset: any;
   datasetSubscription: Subscription;
 
-  constructor(private store: Store<Logbook>) {}
+  constructor(private route: ActivatedRoute, private store: Store<Logbook>) {}
 
   ngOnInit() {
     this.logbookSubscription = this.store
@@ -41,10 +44,19 @@ export class LogbooksDetailComponent implements OnInit, OnDestroy {
       .pipe(select(getCurrentDataset))
       .subscribe(dataset => {
         this.dataset = dataset;
-        if (this.dataset.hasOwnProperty("proposalId")) {
-          this.store.dispatch(new FetchLogbookAction(this.dataset.proposalId));
-        }
       });
+
+    this.route.params.subscribe(params => {
+      if (params.hasOwnProperty("name")) {
+        this.logbookName = params["name"];
+      } else {
+        if (this.dataset.hasOwnProperty("proposalId")) {
+          this.logbookName = this.dataset.proposalId;
+        }
+      }
+    });
+
+    this.store.dispatch(new FetchLogbookAction(this.logbookName));
   }
 
   ngOnDestroy() {
