@@ -14,7 +14,6 @@ import {
 } from "../../state-management/selectors/jobs.selectors";
 import { Subscription, of } from "rxjs";
 import { Message, MessageType } from "state-management/models";
-import { Angular5Csv } from "angular5-csv/dist/Angular5-csv";
 import { getIsAdmin } from "state-management/selectors/users.selectors";
 import { APP_CONFIG, AppConfig } from "app-config.module";
 import { pluck, take, mergeMap } from "rxjs/operators";
@@ -158,24 +157,6 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
     }
   }
 
-  onExportClick() {
-    this.dataset$.pipe(take(1)).subscribe(ds => {
-      const options = {
-        fieldSeparator: ",",
-        quoteStrings: '"',
-        decimalseparator: ".",
-        showLabels: true,
-        showTitle: false,
-        useBom: true,
-        headers: Object.keys(ds)
-      };
-      const newDs = {};
-      for (const key of Object.keys(ds)) {
-        newDs[key] = JSON.stringify(ds[key]);
-      }
-      const ts = new Angular5Csv([newDs], "Dataset_" + ds.pid, options);
-    });
-  }
 
   resetDataset(dataset) {
     if (!confirm("Reset datablocks?")) {
