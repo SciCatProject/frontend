@@ -28,8 +28,7 @@ describe("ProposalsListComponent", () => {
             provide: APP_CONFIG,
             useValue: {
               disabledDatasetColumns: [],
-              archiveWorkflowEnabled: true,
-              csvEnabled: true
+              archiveWorkflowEnabled: true
             }
           },
         ]

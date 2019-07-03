@@ -45,7 +45,6 @@ export const DESELECT_DATASET = "[Dataset] Deselect Dataset";
 export const SELECT_ALL_DATASETS = "[Dataset] Select all Datasets";
 export const CLEAR_SELECTION = "[Dataset] Clear Selection";
 
-export const EXPORT_TO_CSV = "[Dataset] Export to CSV";
 export const SET_VIEW_MODE = "[Dataset] Set View Mode";
 
 export const FETCH_DATASETS = "[Dataset] Fetch Datasets";
@@ -196,9 +195,6 @@ export class ClearSelectionAction implements Action {
   readonly type = CLEAR_SELECTION;
 }
 
-export class ExportToCsvAction implements Action {
-  readonly type = EXPORT_TO_CSV;
-}
 
 export class ChangePageAction implements Action {
   readonly type = CHANGE_PAGE;
@@ -405,7 +401,6 @@ export type Actions =
   | SelectDatasetAction
   | DeselectDatasetAction
   | SelectAllDatasetsAction
-  | ExportToCsvAction
   | ChangePageAction
   | SortByColumnAction
   | SetViewModeAction

@@ -11,7 +11,6 @@ export class AppConfig {
   archiveWorkflowEnabled: boolean;
   editMetadataEnabled: boolean;
   editSampleEnabled: boolean;
-  csvEnabled: boolean;
   scienceSearchEnabled: boolean;
   facility: string;
   shoppingCartEnabled: boolean;
@@ -36,7 +35,6 @@ export const APP_DI_CONFIG: AppConfig = {
   archiveWorkflowEnabled: environment["archiveWorkflowEnabled"] || null,
   editMetadataEnabled: environment["editMetadataEnabled"] || null,
   editSampleEnabled: environment["editSampleEnabled"] || null,
-  csvEnabled: environment["csvEnabled"] || null,
   scienceSearchEnabled: environment["scienceSearchEnabled"] || null,
   facility: environment["facility"] || null,
   shoppingCartEnabled: environment["shoppingCartEnabled"] || false,

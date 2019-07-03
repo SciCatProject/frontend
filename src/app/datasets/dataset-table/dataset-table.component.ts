@@ -17,7 +17,6 @@ import {
   ChangePageAction,
   ClearSelectionAction,
   DeselectDatasetAction,
-  ExportToCsvAction,
   SelectAllDatasetsAction,
   SelectDatasetAction,
   SetViewModeAction,
@@ -153,9 +152,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     this.selectedPidsSubscription.unsubscribe();
   }
 
-  onExportClick(): void {
-    this.store.dispatch(new ExportToCsvAction());
-  }
 
   /**
    * Handle changing of view mode and disabling selected rows

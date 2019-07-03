@@ -54,8 +54,7 @@ describe("DatasetTableComponent", () => {
             provide: APP_CONFIG,
             useValue: {
               disabledDatasetColumns: [],
-              archiveWorkflowEnabled: true,
-              csvEnabled: true
+              archiveWorkflowEnabled: true
             }
           },
           { provide: ArchivingService, useClass: MockArchivingService },
@@ -90,8 +89,4 @@ describe("DatasetTableComponent", () => {
     expect(compiled.querySelector(".all").textContent).toContain("All");
   });
 
-  it("should contain an export button", () => {
-    const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelectorAll(".export-csv")).toBeTruthy();
-  });
 });

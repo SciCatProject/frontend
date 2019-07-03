@@ -11,7 +11,6 @@ export const environment = {
   archiveWorkflowEnabled: true,
   editMetadataEnabled: true,
   editSampleEnabled: true,
-  csvEnabled: true,
   scienceSearchEnabled: true,
   disabledDatasetColumns: [],
   facility: "ESS",
