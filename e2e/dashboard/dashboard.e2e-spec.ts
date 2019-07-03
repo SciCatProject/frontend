@@ -2,7 +2,6 @@ import { LoginPage } from "../login/login.po";
 import { DashboardPage } from "./dashboard.po";
 import { browser, element, by } from "protractor";
 import { protractor } from "protractor/built/ptor";
-import * as fs from "fs";
 
 describe("catanie Dashboard", function() {
   let lp: LoginPage;
