@@ -32,7 +32,6 @@ import {
   getTotalSets,
   getViewMode
 } from "state-management/selectors/datasets.selectors";
-import { StylesCompileDependency } from "@angular/compiler";
 
 export interface PageChangeEvent {
   pageIndex: number;
