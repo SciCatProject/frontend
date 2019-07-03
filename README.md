@@ -23,9 +23,9 @@ These instructions will get you a copy of the project up and running on your loc
 What things you need to install the software and how to install them
 
 ```
-angular v6 or higher
+Angular v8 or higher
 npm version 6 or higher
-node version 8 or higher
+node version 10 or higher
 ```
 
 ### Installing
