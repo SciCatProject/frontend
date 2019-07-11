@@ -12,8 +12,11 @@ import {
   FetchCountPublishedData,
   FetchPublishedData,
   PublishedDataActionTypes,
-  UpsertPublishedDatas,
-  LoadCurrentPublishedData
+  UpsertWaitPublishedData,
+  LoadCurrentPublishedData,
+  AddPublishedData,
+  RegisterPublishedData,
+  SuccessPublishedData
 } from "../actions/published-data.actions";
 
 import {
@@ -29,12 +32,21 @@ import { getFilters } from "state-management/selectors/published-data.selectors"
 @Injectable()
 export class PublishedDataEffects {
 
+  // to fullfill the expectations of the upsert name, the create api call is insufficient
   @Effect()
-  UpsertPublishedDatas$ = this.actions$.pipe(
-    ofType<UpsertPublishedDatas>(PublishedDataActionTypes.UpsertPublishedDatas),
-    switchMap(action => this.publishedDataApi.create(action.payload.publishedDatas)
-    .pipe(mergeMap((data: PublishedData[]) => [ new UpsertPublishedDatas({ publishedDatas: data }),
-      this.publishedDataApi.register(data[0].doi)]),
+  UpsertWaitPublishedData$ = this.actions$.pipe(
+    ofType<UpsertWaitPublishedData>(PublishedDataActionTypes.UpsertWaitPublishedData),
+    switchMap(action => this.publishedDataApi.create(action.payload.publishedData)
+    .pipe(mergeMap((data: PublishedData) => [ new AddPublishedData({ publishedData: data }),
+    new RegisterPublishedData({doi: data.doi})]),
+    catchError(err => of(new FailedPublishedDataAction(err)))))
+  );
+
+  @Effect()
+  RegisterPublishedData$ = this.actions$.pipe(
+    ofType<RegisterPublishedData>(PublishedDataActionTypes.RegisterPublishedData),
+    switchMap(action => this.publishedDataApi.register(action.payload.doi)
+    .pipe(map(( resp ) => new SuccessPublishedData({ data: resp })),
     catchError(err => of(new FailedPublishedDataAction(err)))))
   );
 

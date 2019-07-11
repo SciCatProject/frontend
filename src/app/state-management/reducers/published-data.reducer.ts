@@ -26,6 +26,15 @@ export function publishedDataReducer(
       return adapter.upsertOne(action.payload.publishedData, state);
     }
 
+    // the same as upsert but it needs doi to be defined else it cant add it to store
+    case PublishedDataActionTypes.UpsertWaitPublishedData: {
+      if (action.payload.publishedData && action.payload.publishedData.doi) {
+        return adapter.upsertOne(action.payload.publishedData, state);
+      }
+      // else do nothing but trigger an effect
+      return state;
+    }
+
     case PublishedDataActionTypes.AddPublishedDatas: {
       return adapter.addMany(action.payload.publishedDatas, state);
     }

@@ -32,7 +32,7 @@
                 "
               >
                 <div *ngFor="let entry of datasetHistory">
-                  <div *ngIf="datasetPids.includes(entry.derivedDataset.pid)">
+                  <div *ngIf="entry.derivedDataset && datasetPids.includes(entry.derivedDataset.pid)">
                     Previously derived dataset available.
                   </div>
                 </div>
@@ -230,7 +230,7 @@
         "
       >
         <div *ngFor="let entry of datasetHistory">
-          <div *ngIf="datasetPids.includes(entry.derivedDataset.pid)">
+          <div *ngIf="entry.derivedDataset && datasetPids.includes(entry.derivedDataset.pid)">
             <div class="details">
               <table>
                 <tr>
