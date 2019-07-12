@@ -49,26 +49,6 @@ export class ProposalsEffects {
     )
   );
 
-  /*@Effect()
-  FetchFilteredPublishedData$ = this.actions$.pipe(
-    ofType<FetchAllPublishedData>(PublishedDataActionTypes.FetchAllPublishedData, PublishedDataActionTypes.ChangePagePub),
-    withLatestFrom(this.queryParams$),
-    map(([action, params]) => params),
-    mergeMap(({ limits }) => this.publishedDataApi.find(limits)
-    .pipe(map((data: PublishedData[]) => new LoadPublishedDatas({ publishedDatas: data })),
-    catchError(err => of(new FailedPublishedDataAction(err))))));
-*/
-
-
- /* @Effect()
-  UpsertWaitPublishedData$ = this.actions$.pipe(
-    ofType<UpsertWaitPublishedData>(PublishedDataActionTypes.UpsertWaitPublishedData),
-    switchMap(action => this.publishedDataApi.create(action.payload.publishedData)
-    .pipe(mergeMap((data: PublishedData) => [ new AddPublishedData({ publishedData: data }),
-    new RegisterPublishedData({doi: data.doi})]),
-    catchError(err => of(new FailedPublishedDataAction(err)))))
-  );*/
-
   @Effect()
   FetchCountOfProposals$ = this.actions$.pipe(
     ofType(FETCH_COUNT_PROPOSALS),
