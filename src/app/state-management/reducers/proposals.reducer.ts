@@ -15,7 +15,9 @@ import {
   CHANGE_PAGE,
   ChangePageAction,
   FETCH_COUNT_PROPOSALS,
-  FetchCountOfProposals
+  FetchCountOfProposals,
+  FETCH_COUNT_PROPOSALS_SUCCESS,
+  FetchCountOfProposalsSuccess
 } from "../actions/proposals.actions";
 import { LOGOUT_COMPLETE, LogoutCompleteAction } from "../actions/user.actions";
 
@@ -31,8 +33,8 @@ export function proposalsReducer(
       const selectedId = (action as SelectProposalAction).proposalId;
       return { ...state, selectedId };
 
-    case FETCH_COUNT_PROPOSALS: {
-      const proposalCount = (action as FetchCountOfProposals).count;
+    case FETCH_COUNT_PROPOSALS_SUCCESS: {
+      const proposalCount = (action as FetchCountOfProposalsSuccess).count;
       return { ...state,  proposalCount };
     }
     case FETCH_PROPOSALS_COMPLETE: {
