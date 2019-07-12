@@ -10,7 +10,7 @@ import {
   getProposalPage,
   getProposalsPerPage
 } from "state-management/selectors/proposals.selectors";
-import { Observable, Subscription } from "rxjs";
+import { Subscription } from "rxjs";
 
 @Component({
   selector: "proposals-list",
