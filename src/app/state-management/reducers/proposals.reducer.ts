@@ -14,8 +14,6 @@ import {
   SelectProposalAction,
   CHANGE_PAGE,
   ChangePageAction,
-  FETCH_COUNT_PROPOSALS,
-  FetchCountOfProposals,
   FETCH_COUNT_PROPOSALS_SUCCESS,
   FetchCountOfProposalsSuccess
 } from "../actions/proposals.actions";

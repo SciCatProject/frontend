@@ -71,7 +71,7 @@ export const getProposalPage = createSelector(
 export const getProposalsPerPage = createSelector(
   getProposalsState,
   state => {
-    const { skip, limit } = state.filters;
+    const { limit } = state.filters;
     return limit;
   }
 );

@@ -8,7 +8,7 @@ import {
   getProposalList,
   getHasFetched
 } from "state-management/selectors/proposals.selectors";
-import { FetchProposalsAction, FetchCountOfProposals } from "state-management/actions/proposals.actions";
+import { FetchProposalsAction } from "state-management/actions/proposals.actions";
 
 @Component({
   selector: "list-proposals-page",
@@ -27,7 +27,6 @@ export class ListProposalsPageComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.proposals$ = this.store.pipe(select(getProposalList));
     this.hasFetched$ = this.store.pipe(select(getHasFetched));
-    //this.store.dispatch(new FetchCountOfProposals(null));
 
     this.subscription = this.hasFetched$
       .pipe(
