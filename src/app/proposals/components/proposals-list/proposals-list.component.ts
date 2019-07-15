@@ -49,7 +49,7 @@ export class ProposalsListComponent implements OnDestroy {
   }
 
   ngOnDestroy() {
-    this.subscriptions.unsubscribe();
+    // this.subscriptions.unsubscribe();
   }
 
 
