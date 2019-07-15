@@ -23,9 +23,15 @@ export const CHANGE_PAGE = "[Proposals] Change page";
 export const SORT_BY_COLUMN = "[Proposals] Sort by Column";
 export const FETCH_COUNT_PROPOSALS = "[Proposals] Fetch Count of Proposals";
 export const FETCH_COUNT_FAILED = "[Proposals] Fetch Count of Proposals Failed";
+export const FETCH_COUNT_PROPOSALS_SUCCESS = "[Proposals] Fetch Count of Proposals Success";
 
 export class FetchCountOfProposals implements Action {
   readonly type = FETCH_COUNT_PROPOSALS;
+  constructor() {}
+}
+
+export class FetchCountOfProposalsSuccess implements Action {
+  readonly type = FETCH_COUNT_PROPOSALS_SUCCESS;
   constructor(readonly count: number) {}
 }
 
