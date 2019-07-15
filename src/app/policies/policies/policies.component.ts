@@ -1,12 +1,8 @@
-import {
-  Component,
-  OnInit,
-  OnDestroy
-} from "@angular/core";
+import { Component, OnInit, OnDestroy } from "@angular/core";
 import {
   MatCheckboxChange,
   MatDialog,
-  MatDialogConfig,
+  MatDialogConfig
 } from "@angular/material";
 import { Policy } from "state-management/models";
 
@@ -19,7 +15,7 @@ import {
   FetchPoliciesAction,
   SelectPolicyAction,
   SortByColumnAction,
-  SubmitPolicyAction,
+  SubmitPolicyAction
 } from "state-management/actions/policies.actions";
 import {
   getPage,
@@ -30,6 +26,10 @@ import {
   getItemsPerPage
 } from "state-management/selectors/policies.selectors";
 import { EditDialogComponent } from "../edit-dialog/edit-dialog.component";
+
+import { DatasetApi } from "shared/sdk/services";
+import { flatMap, map } from "rxjs/operators";
+import { JitEmitterVisitor } from "@angular/compiler/src/output/output_jit";
 
 export interface PageChangeEvent {
   pageIndex: number;
@@ -93,10 +93,7 @@ export class PoliciesComponent implements OnInit, OnDestroy {
     "retrieveEmailsToBeNotified"
   ];
 
-  constructor(
-    private store: Store<Policy>,
-    public dialog: MatDialog
-  ) {}
+  constructor(private store: Store<Policy>, public dialog: MatDialog, private datasetApi: DatasetApi) {}
 
   ngOnInit() {
     this.store.dispatch(new ClearSelectionAction());
@@ -164,24 +161,22 @@ export class PoliciesComponent implements OnInit, OnDestroy {
 
   private onClose(result: any) {
     if (result) {
-      if (
-        result.archiveEmailsToBeNotified &&
-        typeof result.archiveEmailsToBeNotified === "string"
-      ) {
-        result.archiveEmailsToBeNotified = Array.from(
-          result.archiveEmailsToBeNotified.split(",")
-        );
-      }
-      if (
-        result.retrieveEmailsToBeNotified &&
-        typeof result.retrieveEmailsToBeNotified === "string"
-      ) {
-        result.retrieveEmailsToBeNotified = Array.from(
-          result.retrieveEmailsToBeNotified.split(",")
-        );
-      }
       this.store.dispatch(new SubmitPolicyAction(this.selectedGroups, result));
-      this.store.dispatch(new ClearSelectionAction());
+      // if datasets already exist
+      this.selectedGroups.forEach(element => {
+        this.datasetApi.count({ ownerGroup: element }).pipe(
+          map((count) => {
+            if (count) {
+              // apply settings (trigger jobs? Archive this, notify them, )
+              if (confirm("Apply policy settings to existing datasets?")) {
+              }
+              console.log("count", count);
+            }
+            return null;
+           })
+        ).subscribe();
+        this.store.dispatch(new ClearSelectionAction());
+      });
     }
   }
 
