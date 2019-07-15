@@ -28,8 +28,7 @@ import {
 import { EditDialogComponent } from "../edit-dialog/edit-dialog.component";
 
 import { DatasetApi } from "shared/sdk/services";
-import { flatMap, map } from "rxjs/operators";
-import { JitEmitterVisitor } from "@angular/compiler/src/output/output_jit";
+import { map } from "rxjs/operators";
 
 export interface PageChangeEvent {
   pageIndex: number;
