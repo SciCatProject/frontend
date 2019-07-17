@@ -5,6 +5,7 @@
     [pageSizeOptions]="pageSizeOptions"
     [pageIndex]="currentPage$ | async"
     (page)="onPageChange($event)"
+    showFirstLastButtons
   >
   </mat-paginator>
   <table mat-table [dataSource]="publishedData$" class="mat-elevation-z8">

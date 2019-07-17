@@ -5,6 +5,7 @@
     [length]="proposalsCount$ | async"
     [pageSize]="proposalsPerPage$ | async"
     (page)="onPageChange($event)"
+    showFirstLastButtons
   >
   </mat-paginator>
   <mat-table

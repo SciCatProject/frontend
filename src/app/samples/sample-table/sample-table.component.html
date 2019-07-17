@@ -9,7 +9,7 @@
 </div>
 
 <mat-paginator [pageSizeOptions]="[30, 1000]" [pageIndex]="currentPage$ | async" [length]="sampleCount$ | async"
-[pageSize]="samplesPerPage$ | async" (page)="onPageChange($event)">
+[pageSize]="samplesPerPage$ | async" (page)="onPageChange($event)" showFirstLastButtons>
 </mat-paginator>
 <mat-card style="margin: 1em">
   <div class="details">

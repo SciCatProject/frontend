@@ -87,6 +87,7 @@
           [pageIndex]="currentPage$ | async"
           [length]="datasetCount$ | async"
           (page)="onPageChange($event)"
+          showFirstLastButtons
         >
         </mat-paginator>
         <mat-table #table [dataSource]="datasets" class="dataset-table">
