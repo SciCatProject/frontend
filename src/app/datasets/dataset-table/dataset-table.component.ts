@@ -8,7 +8,8 @@ import { Router } from "@angular/router";
 import { ShowMessageAction } from "state-management/actions/user.actions";
 import { Subscription } from "rxjs";
 import {
-  getDisplayedColumns
+  getDisplayedColumns,
+  getColumns
 } from "../../state-management/selectors/users.selectors";
 import { getError, submitJob } from "state-management/selectors/jobs.selectors";
 import { select, Store } from "@ngrx/store";
@@ -45,6 +46,12 @@ export interface SortChangeEvent {
   active: keyof Dataset;
   direction: "asc" | "desc" | "";
 }
+
+import {
+  SelectColumnAction,
+  DeselectColumnAction
+} from "state-management/actions/user.actions";
+
 @Component({
   selector: "dataset-table",
   templateUrl: "dataset-table.component.html",
@@ -56,6 +63,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   datasetsPerPage$ = this.store.pipe(select(getDatasetsPerPage));
   datasetCount$ = this.store.select(getTotalSets);
   loading$ = this.store.pipe(select(getIsLoading));
+
 
   public currentMode: ArchViewMode;
   private selectedSets$ = this.store.pipe(select(getSelectedDatasets));
@@ -95,7 +103,8 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   private jobErrorSubscription: Subscription;
   private defaultColumns: string[];
   public visibleColumns: string[];
-  columns$ = this.store.pipe(select(getDisplayedColumns));
+  dispColumns$ = this.store.pipe(select(getDisplayedColumns));
+  columns$ = this.store.pipe(select(getColumns));
 
   constructor(
     private router: Router,
@@ -106,7 +115,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.columns$.subscribe(columns => {
+    this.dispColumns$.subscribe(columns => {
       this.defaultColumns = columns;
       this.visibleColumns = this.defaultColumns.filter(
         column => this.appConfig.disabledDatasetColumns.indexOf(column) === -1

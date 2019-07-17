@@ -138,3 +138,11 @@ i {
 ::ng-deep mat-header-cell .mat-checkbox-frame {
   border-color: white;
 }
+
+::ng-deep .langSelect div.mat-select-arrow-wrapper {
+  display: none;
+}
+
+::ng-deep .langSelect.mat-select {
+  display: inline;
+}
