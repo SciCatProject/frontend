@@ -139,10 +139,14 @@ i {
   border-color: white;
 }
 
-::ng-deep .langSelect div.mat-select-arrow-wrapper {
+::ng-deep .tblSettingSelect div.mat-select-arrow-wrapper {
   display: none;
 }
 
-::ng-deep .langSelect.mat-select {
+::ng-deep .tblSettingSelect.mat-select {
   display: inline;
 }
+
+/*::ng-deep .tblSettingSelectPanel.mat-select-panel {
+  background: rgba(0, 0, 255, 1);
+}*/

@@ -55,15 +55,10 @@
       <mat-select
         #select
         multiple
-        [(ngModel)]="setLang"
-        class="langSelect"
+        class="tblSettingSelect"
+        panelClass="tblSettingSelectPanel"
         >
         <mat-option *ngFor="let column of columns$ | async; let i = index" [value]="column">{{column}}</mat-option>
-
-
-
-        <mat-option (click)="changeLang()" value="en">English</mat-option>
-        <mat-option (click)="changeLang()" value="de">Deutsch</mat-option>
       </mat-select>
     </button>
   </div>
