@@ -159,7 +159,18 @@
               </tr>
               <tr *ngIf="dataset.inputDatasets as value">
                 <th><i class="material-icons"> input </i> Input Datasets</th>
-                <td>{{ value }}</td>
+                <td>
+                  <div *ngFor="let datasetPid of value">
+                    <span>
+                      <a [routerLink]="['/datasets/', datasetPid]">
+                        {{ datasetPid }}
+                      </a>
+                    </span>
+                    <span *ngIf="value.indexOf(datasetPid) < value.length - 1"
+                      >,
+                    </span>
+                  </div>
+                </td>
               </tr>
               <tr *ngIf="dataset.usedSoftware as value">
                 <th>
