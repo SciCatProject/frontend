@@ -28,7 +28,7 @@ export class ColumnSelectorComponent implements OnInit {
     "retrieveStatus",
     "dataStatus"
   ];
-  columns$ = this.store.pipe(select(getColumns));
+  // columns$ = this.store.pipe(select(getColumns));
 
   isSelected(column: string): boolean {
     // console.log(column);

@@ -58,7 +58,7 @@
         class="tblSettingSelect"
         panelClass="tblSettingSelectPanel"
         >
-        <mat-option *ngFor="let column of columns$ | async; let i = index" [value]="column">{{column}}</mat-option>
+        <mat-option *ngFor="let column of (configCols$ | async); let i = index" [value]="column" (onSelectionChange)="onSelectColumn($event)">{{column}}</mat-option>
       </mat-select>
     </button>
   </div>
@@ -298,10 +298,10 @@
 
     <!-- End of Column Definitions -->
 
-    <mat-header-row class="datasets-header" *matHeaderRowDef="visibleColumns; sticky: true">
+    <mat-header-row class="datasets-header" *matHeaderRowDef="(dispColumns$ | async); sticky: true">
     </mat-header-row>
 
-    <mat-row class="row-generic" *matRowDef="let dataset; columns: visibleColumns" (click)="onClick(dataset)">
+    <mat-row class="row-generic" *matRowDef="let dataset; columns: (dispColumns$ | async)" (click)="onClick(dataset)">
     </mat-row>
   </mat-table>
 </div>

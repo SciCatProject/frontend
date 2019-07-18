@@ -9,7 +9,8 @@ import { ShowMessageAction } from "state-management/actions/user.actions";
 import { Subscription } from "rxjs";
 import {
   getDisplayedColumns,
-  getColumns
+  getColumns,
+  getConfigurableColumns
 } from "../../state-management/selectors/users.selectors";
 import { getError, submitJob } from "state-management/selectors/jobs.selectors";
 import { select, Store } from "@ngrx/store";
@@ -64,7 +65,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   datasetCount$ = this.store.select(getTotalSets);
   loading$ = this.store.pipe(select(getIsLoading));
 
-
   public currentMode: ArchViewMode;
   private selectedSets$ = this.store.pipe(select(getSelectedDatasets));
   private mode$ = this.store.pipe(select(getViewMode));
@@ -73,7 +73,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     this.selectedPids = datasets.map(dataset => dataset.pid);
   });
   private inBatchPids: string[] = [];
-  public viewModes =  ArchViewMode;
+  public viewModes = ArchViewMode;
   private modes = [
     ArchViewMode.all,
     ArchViewMode.archivable,
@@ -101,10 +101,9 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   // and eventually be removed.
   private submitJobSubscription: Subscription;
   private jobErrorSubscription: Subscription;
-  private defaultColumns: string[];
-  public visibleColumns: string[];
   dispColumns$ = this.store.pipe(select(getDisplayedColumns));
   columns$ = this.store.pipe(select(getColumns));
+  configCols$ = this.store.pipe(select(getConfigurableColumns));
 
   constructor(
     private router: Router,
@@ -115,12 +114,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.dispColumns$.subscribe(columns => {
-      this.defaultColumns = columns;
-      this.visibleColumns = this.defaultColumns.filter(
-        column => this.appConfig.disabledDatasetColumns.indexOf(column) === -1
-      );
-    });
     this.submitJobSubscription = this.store.pipe(select(submitJob)).subscribe(
       ret => {
         if (ret && Array.isArray(ret)) {
@@ -160,6 +153,22 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     this.submitJobSubscription.unsubscribe();
     this.jobErrorSubscription.unsubscribe();
     this.selectedPidsSubscription.unsubscribe();
+  }
+
+  columnIsSelected(column: string): boolean {
+    // console.log(column);
+    return true;
+  }
+
+  onSelectColumn(event: any): void {
+    const column = event.source.value;
+    if (event.isUserInput) {
+      if (event.source.selected) {
+        this.store.dispatch(new SelectColumnAction(column));
+      } else if (!event.source.selected) {
+        this.store.dispatch(new DeselectColumnAction(column));
+      }
+    }
   }
 
   onExportClick(): void {
@@ -240,40 +249,56 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   // conditional to asses dataset status and assign correct icon ArchViewMode.work_in_progress
   // TODO: when these concepts stabilise, we should move the definitions to site config
   wipCondition(dataset: Dataset): boolean {
-    if (!dataset.datasetlifecycle.archivable && !dataset.datasetlifecycle.retrievable &&
-      dataset.datasetlifecycle.archiveStatusMessage !== "scheduleArchiveJobFailed" &&
-      dataset.datasetlifecycle.retrieveStatusMessage !== "scheduleRetrieveJobFailed") {
+    if (
+      !dataset.datasetlifecycle.archivable &&
+      !dataset.datasetlifecycle.retrievable &&
+      dataset.datasetlifecycle.archiveStatusMessage !==
+        "scheduleArchiveJobFailed" &&
+      dataset.datasetlifecycle.retrieveStatusMessage !==
+        "scheduleRetrieveJobFailed"
+    ) {
       return true;
     }
     return false;
   }
 
   systemErrorCondition(dataset: Dataset): boolean {
-    if ((dataset.datasetlifecycle.retrievable && dataset.datasetlifecycle.archivable)
-      || dataset.datasetlifecycle.archiveStatusMessage === "scheduleArchiveJobFailed"
-      || dataset.datasetlifecycle.retrieveStatusMessage === "scheduleRetrieveJobFailed") {
-        return true;
-      }
+    if (
+      (dataset.datasetlifecycle.retrievable &&
+        dataset.datasetlifecycle.archivable) ||
+      dataset.datasetlifecycle.archiveStatusMessage ===
+        "scheduleArchiveJobFailed" ||
+      dataset.datasetlifecycle.retrieveStatusMessage ===
+        "scheduleRetrieveJobFailed"
+    ) {
+      return true;
+    }
     return false;
   }
 
   userErrorCondition(dataset: Dataset): boolean {
     if (dataset.datasetlifecycle.archiveStatusMessage === "missingFilesError") {
-        return true;
-      }
+      return true;
+    }
     return false;
   }
 
   archivableCondition(dataset: Dataset): boolean {
-    if ((dataset.datasetlifecycle.archivable && !dataset.datasetlifecycle.retrievable)
-      &&  dataset.datasetlifecycle.archiveStatusMessage !== "missingFilesError") {
+    if (
+      dataset.datasetlifecycle.archivable &&
+      !dataset.datasetlifecycle.retrievable &&
+      dataset.datasetlifecycle.archiveStatusMessage !== "missingFilesError"
+    ) {
       return true;
     }
     return false;
   }
 
   retrievableCondition(dataset: Dataset): boolean {
-    if (!dataset.datasetlifecycle.archivable && dataset.datasetlifecycle.retrievable) {
+    if (
+      !dataset.datasetlifecycle.archivable &&
+      dataset.datasetlifecycle.retrievable
+    ) {
       return true;
     }
     return false;
