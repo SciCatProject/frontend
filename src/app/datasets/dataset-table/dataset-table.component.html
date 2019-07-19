@@ -52,13 +52,9 @@
       color="primary" matTooltip="Table Settings"
       (click)=select.open()>
       <mat-icon>settings</mat-icon>
-      <mat-select
-        #select
-        multiple
-        class="tblSettingSelect"
-        panelClass="tblSettingSelectPanel"
-        >
-        <mat-option *ngFor="let column of (configCols$ | async); let i = index" [value]="column" (onSelectionChange)="onSelectColumn($event)">{{column}}</mat-option>
+      <mat-select #select class="tblSettingSelect" panelClass="tblSettingSelectPanel" [formControl]="configForm" multiple>
+        <mat-option *ngFor="let column of (configCols$ | async)" [value]="column" (onSelectionChange)="onSelectColumn($event)">
+          {{column}}</mat-option>
       </mat-select>
     </button>
   </div>

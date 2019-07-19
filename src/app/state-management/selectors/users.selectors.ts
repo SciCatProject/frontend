@@ -76,6 +76,24 @@ export const getDisplayedColumns = createSelector(
   state => state.displayedColumns
 );
 
+export const getColumnOrder = function() {
+  // not ideal place for this, move to config file
+  // logic may need to be made more robust
+  const ordering = {
+    datasetName: 2,
+    sourceFolder: 3,
+    size: 4,
+    creationTime: 5,
+    type: 6,
+    image: 7,
+    metadata: 8,
+    proposalId: 9,
+    ownerGroup: 10,
+    dataStatus: 11
+  };
+  return ordering;
+};
+
 export const getConfigurableColumns = createSelector(
   getUserState,
   state => {

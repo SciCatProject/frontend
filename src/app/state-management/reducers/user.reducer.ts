@@ -1,5 +1,8 @@
 import { Action } from "@ngrx/store";
 import { initialUserState, UserState } from "state-management/state/user.store";
+import {
+  getColumnOrder as getColumnOrderList
+} from "../../state-management/selectors/users.selectors";
 
 import {
   SHOW_MESSAGE,
@@ -84,8 +87,7 @@ export function userReducer(
       const displayedColumns = state.displayedColumns;
       const columnName = (action as SelectColumnCompleteAction).columnName;
       const result = displayedColumns.concat(columnName);
-      const ordering = { "datasetName": 2, "sourceFolder": 3, "size": 4, "creationTime": 5,
-       "type": 6, "image": 7, "metadata": 8, "proposalId": 9, "ownerGroup": 10, "dataStatus": 11 };
+      const ordering = getColumnOrderList();
       result.sort(function(a, b) { return ordering[a] - ordering[b]; });
       return {
         ...state,

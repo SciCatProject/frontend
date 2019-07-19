@@ -52,6 +52,7 @@ import {
   SelectColumnAction,
   DeselectColumnAction
 } from "state-management/actions/user.actions";
+import { FormControl } from "@angular/forms";
 
 @Component({
   selector: "dataset-table",
@@ -102,8 +103,14 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   private submitJobSubscription: Subscription;
   private jobErrorSubscription: Subscription;
   dispColumns$ = this.store.pipe(select(getDisplayedColumns));
-  columns$ = this.store.pipe(select(getColumns));
   configCols$ = this.store.pipe(select(getConfigurableColumns));
+  configForm = new FormControl();
+  $ = this.store.pipe(select(getConfigurableColumns)).subscribe(
+    ret => {
+      // this is required to set all columns check to true
+      // param must match the type defined by the ngFor in template
+      this.configForm.setValue(ret);
+      });
 
   constructor(
     private router: Router,
@@ -153,11 +160,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     this.submitJobSubscription.unsubscribe();
     this.jobErrorSubscription.unsubscribe();
     this.selectedPidsSubscription.unsubscribe();
-  }
-
-  columnIsSelected(column: string): boolean {
-    // console.log(column);
-    return true;
   }
 
   onSelectColumn(event: any): void {
