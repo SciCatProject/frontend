@@ -6,6 +6,7 @@ export const APP_CONFIG = new InjectionToken<AppConfig>("app.config");
 export class AppConfig {
   externalAuthEndpoint: string;
   fileserverBaseURL: string;
+  synapseBaseUrl: string;
   production: boolean;
   disabledDatasetColumns: string[];
   archiveWorkflowEnabled: boolean;
@@ -31,6 +32,7 @@ export class AppConfig {
 export const APP_DI_CONFIG: AppConfig = {
   externalAuthEndpoint: environment.externalAuthEndpoint,
   fileserverBaseURL: environment["fileserverBaseURL"] || null,
+  synapseBaseUrl: environment["synapseBaseUrl"] || null,
   production: environment.production,
   disabledDatasetColumns: environment["disabledDatasetColumns"] || [],
   archiveWorkflowEnabled: environment["archiveWorkflowEnabled"] || null,
