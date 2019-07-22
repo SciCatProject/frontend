@@ -138,3 +138,15 @@ i {
 ::ng-deep mat-header-cell .mat-checkbox-frame {
   border-color: white;
 }
+
+::ng-deep .tblSettingSelect div.mat-select-arrow-wrapper {
+  display: none;
+}
+
+::ng-deep .tblSettingSelect.mat-select {
+  display: inline;
+}
+
+/*::ng-deep .tblSettingSelectPanel.mat-select-panel {
+  background: rgba(0, 0, 255, 1);
+}*/

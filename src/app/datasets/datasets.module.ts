@@ -58,7 +58,6 @@ import { PublishComponent } from "./publish/publish.component";
 import { DatasetFormComponent } from "./dataset-form/dataset-form.component";
 import { ScientificConditionDialogComponent } from "./scientific-condition-dialog/scientific-condition-dialog.component";
 import { jobsReducer } from "../state-management/reducers/jobs.reducer";
-import { ColumnSelectorComponent } from "./column-selector/column-selector.component";
 import { LogbooksModule } from "logbooks/logbooks.module";
 import { ReduceComponent } from './reduce/reduce.component';
 
@@ -119,7 +118,6 @@ import { ReduceComponent } from './reduce/reduce.component';
     PublishComponent,
     DatasetFormComponent,
     ScientificConditionDialogComponent,
-    ColumnSelectorComponent,
     ReduceComponent
   ],
   entryComponents: [ScientificConditionDialogComponent],
