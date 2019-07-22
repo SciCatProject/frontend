@@ -1,4 +1,4 @@
-<mat-paginator [pageSize]="30" [length]="totalJobNumber$ | async" (page)="onPage(event)"></mat-paginator>
+<mat-paginator [pageSize]="30" [length]="totalJobNumber$ | async" (page)="onPage(event)" showFirstLastButtons></mat-paginator>
 <div class="jobs-table mat-elevation-z8">
   <div class="mode-container">
     <mat-button-toggle-group [value]="currentMode">
