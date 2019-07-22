@@ -2,16 +2,24 @@ import { Component, Inject, OnInit } from "@angular/core";
 import { COMMA, ENTER } from "@angular/cdk/keycodes";
 
 import { select, Store } from "@ngrx/store";
-import { map, first, tap, flatMap } from "rxjs/operators";
+import { map, first, tap } from "rxjs/operators";
 
 import { getDatasetsInBatch } from "state-management/selectors/datasets.selectors";
 import { PrefillBatchAction } from "state-management/actions/datasets.actions";
-// import { UpsertPublishedDatas} from "state-management/actions/published-data.actions";
+import {
+  UpsertWaitPublishedData,
+  PublishedDataActionTypes,
+  CustomAction
+} from "state-management/actions/published-data.actions";
 import { APP_CONFIG } from "app-config.module";
 
 import { PublishedDataApi } from "../../shared/sdk/services/custom";
 import { PublishedData } from "../../shared/sdk/models";
 import { formatDate } from "@angular/common";
+import { MessageType } from "state-management/models";
+import { ShowMessageAction } from "state-management/actions/user.actions";
+import { Router } from "@angular/router";
+import { ActionsSubject } from "@ngrx/store";
 
 @Component({
   selector: "publish",
@@ -44,12 +52,40 @@ export class PublishComponent implements OnInit {
   };
 
   public formData = null;
+  subsc = null;
 
   constructor(
     private store: Store<any>,
     @Inject(APP_CONFIG) private appConfig,
-    private publishedDataApi: PublishedDataApi
-  ) {}
+    private publishedDataApi: PublishedDataApi,
+    private actionsSubj: ActionsSubject,
+    private router: Router,
+  ) {
+    this.subsc = actionsSubj.subscribe(data => {
+      if (data.type === PublishedDataActionTypes.AddPublishedData) {
+        this.store.dispatch(
+          new ShowMessageAction({
+            type: MessageType.Success,
+            content: "Publication Successful" ,
+            duration: 5000
+          })
+        );
+        const pub = data as CustomAction;
+        const doi = encodeURIComponent(pub.payload.publishedData.doi);
+        this.router.navigateByUrl("/publishedDataset/" + doi);
+      } else if (
+        data.type === PublishedDataActionTypes.FailedPublishedDataAction
+      ) {
+        this.store.dispatch(
+          new ShowMessageAction({
+            type: MessageType.Success,
+            content: "Publication Failed",
+            duration: 5000
+          })
+        );
+      }
+    });
+  }
 
   public ngOnInit() {
     this.store.dispatch(new PrefillBatchAction());
@@ -69,12 +105,14 @@ export class PublishComponent implements OnInit {
       )
       .subscribe();
 
-      this.publishedDataApi.formPopulate( this.form.pidArray[0]).subscribe(result => {
+    this.publishedDataApi
+      .formPopulate(this.form.pidArray[0])
+      .subscribe(result => {
         this.form.abstract = result.abstract;
         this.form.title = result.title;
         this.form.description = result.description;
         this.form.resourceType = result.resourceType;
-       });
+      });
   }
 
   public onPublish() {
@@ -89,19 +127,17 @@ export class PublishComponent implements OnInit {
     publishedData.authors = this.form.authors;
     publishedData.pidArray = this.form.pidArray;
     publishedData.publisher = this.form.publisher;
-    publishedData.publicationYear = parseInt(formatDate(this.today, "yyyy", "en_GB"), 10);
+    publishedData.publicationYear = parseInt(
+      formatDate(this.today, "yyyy", "en_GB"),
+      10
+    );
     publishedData.url = this.form.url;
     publishedData.thumbnail = this.form.thumbnail;
     publishedData.numberOfFiles = this.form.numberOfFiles;
     publishedData.sizeOfArchive = this.form.sizeOfArchive;
 
-    this.publishedDataApi.create(publishedData).pipe(
-      flatMap(result => this.publishedDataApi.register(result.doi))
-    ).subscribe();
-
-   // const pub = [ publishedData ];
-    // this.store.dispatch(new UpsertPublishedDatas({publishedDatas: pub}));
-}
+    this.store.dispatch(new UpsertWaitPublishedData({ publishedData }));
+  }
 
   addAuthor(event) {
     this.form.authors.push(event.value);
