@@ -88,7 +88,7 @@ export class LogbookApi extends BaseLoopBackApi {
    *
    * Filtered Logbook model instance
    */
-  public filter(name: any, filter: any, customHeaders?: Function): Observable<Logbook> {
+  public filter(name: any, filter: any, customHeaders?: Function): Observable<any> {
     let _method: string = "GET";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
     "/Logbooks/:name/:filter";
@@ -99,7 +99,7 @@ export class LogbookApi extends BaseLoopBackApi {
     let _postBody: any = {};
     let _urlParams: any = {};
     let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
-    return result.pipe(map((instance: Logbook) => new Logbook(instance)));
+    return result;
   }
 
   /**
