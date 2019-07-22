@@ -15,12 +15,12 @@ export const getIsLoggedIn = createSelector(
 
 export const getCurrentEmail = createSelector(
   getCurrentUser,
-  user => user ? user.email : null
+  user => (user ? user.email : null)
 );
 
 export const getCurrentUserId = createSelector(
   getCurrentUser,
-  user => user ? user.id : null
+  user => (user ? user.id : null)
 );
 
 export const getSettings = createSelector(
@@ -76,6 +76,36 @@ export const getDisplayedColumns = createSelector(
   state => state.displayedColumns
 );
 
+export const getColumnOrder = function() {
+  // not ideal place for this, move to config file
+  // logic may need to be made more robust
+  const ordering = {
+    datasetName: 2,
+    sourceFolder: 3,
+    size: 4,
+    creationTime: 5,
+    type: 6,
+    image: 7,
+    metadata: 8,
+    proposalId: 9,
+    ownerGroup: 10,
+    dataStatus: 11
+  };
+  return ordering;
+};
+
+export const getConfigurableColumns = createSelector(
+  getUserState,
+  state => {
+    const columns = state.columns;
+    const index = columns.indexOf("select");
+    if (index > -1) {
+      columns.splice(index, 1);
+    }
+    return columns;
+  }
+);
+
 export const getState = (state: any) => state.root.user;
 
 export const getLoading = (state: any) => state.root.user.loading;
@@ -85,5 +115,5 @@ export const getTheme = (state: any) => state.root.user.settings.darkTheme;
 
 export const getProfile = createSelector(
   getUserState,
-  user => user.profile ? user.profile : null
+  user => (user.profile ? user.profile : null)
 );

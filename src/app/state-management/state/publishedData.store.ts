@@ -11,7 +11,7 @@ export interface PublishedDataState extends EntityState<PublishedData> {
 // adapter with custom selectId using doi
 export const adapter: EntityAdapter<PublishedData> = createEntityAdapter<
   PublishedData
->({ selectId: (publishedData: PublishedData) => publishedData.doi });
+>({ selectId: (publishedData: PublishedData) => publishedData.doi ? publishedData.doi : null });
 
 export const initialPublishedDataState: PublishedDataState = adapter.getInitialState(
   {

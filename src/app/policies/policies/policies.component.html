@@ -13,6 +13,7 @@
         [pageIndex]="currentPage$ | async"
         [length]="policyCount$ | async"
         (page)="onPageChange($event)"
+        showFirstLastButtons
       >
       </mat-paginator>
       <mat-table
@@ -199,6 +200,7 @@
         [pageIndex]="currentPage$ | async"
         [length]="policyCount$ | async"
         (page)="onPageChange($event)"
+        showFirstLastButtons
       >
       </mat-paginator>
     </div>

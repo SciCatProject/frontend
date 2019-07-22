@@ -3,12 +3,14 @@
 declare var Object: any;
 export interface LogbookInterface {
   "name"?: string;
+  "roomId"?: string;
   "messages"?: Array<any>;
   "id"?: number;
 }
 
 export class Logbook implements LogbookInterface {
   "name": string;
+  "roomId": string;
   "messages": Array<any>;
   "id": number;
   constructor(data?: LogbookInterface) {
@@ -46,6 +48,10 @@ export class Logbook implements LogbookInterface {
       properties: {
         "name": {
           name: 'name',
+          type: 'string'
+        },
+        "roomId": {
+          name: 'roomId',
           type: 'string'
         },
         "messages": {
