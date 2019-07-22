@@ -7,6 +7,7 @@ export const environment = {
   production: false,
   lbBaseURL: "http://127.0.0.1:3000",
   fileserverBaseURL: "http://127.0.0.1:8889",
+  synapseBaseUrl: "https://scicat03.esss.lu.se:8448",
   externalAuthEndpoint: "/auth/msad",
   archiveWorkflowEnabled: true,
   editMetadataEnabled: true,
