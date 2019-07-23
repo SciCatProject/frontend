@@ -20,7 +20,7 @@ export class LogbooksDashboardComponent implements OnInit, OnDestroy {
   logbook: Logbook;
   logbookSubscription: Subscription;
 
-  dataset: Dataset;
+  dataset: any;
   datasetSubscription: Subscription;
 
   constructor(
