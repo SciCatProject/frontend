@@ -24,7 +24,13 @@
           <i class="material-icons"> group_work </i>
           Groups
         </th>
-        <td> {{ value }} </td>
+        <td>
+            <ul>
+                <li *ngFor="let hero of value">
+                  {{ hero }}
+                </li>
+              </ul>
+           </td>
       </tr>
 
     </table>
