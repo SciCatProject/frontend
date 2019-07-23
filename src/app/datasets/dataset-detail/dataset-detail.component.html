@@ -122,7 +122,7 @@
                 <th>
                   <i class="material-icons"> calendar_today </i> Creation Time
                 </th>
-                <td>{{ value | date: "yyyy/MM/dd HH:mm" }}</td>
+                <td>{{ value | date: "yyyy-MM-dd HH:mm" }}</td>
               </tr>
               <tr *ngIf="dataset.principalInvestigator as value">
                 <th>
@@ -322,15 +322,15 @@
           <table>
               <tr *ngIf="dataset.datasetlifecycle.dateOfPublishing as value">
                   <th><i class="material-icons"> radio </i> Data Publishing Date</th>
-                  <td>{{ value | date: 'fullDate' }}</td>
+                  <td>{{ value | date:'yyyy-MM-dd' }}</td>
               </tr>
               <tr *ngIf="dataset.datasetlifecycle.dateOfDiskPurging as value">
                   <th><i class="material-icons"> gavel </i> Data Deletion Date</th>
-                  <td>{{ value | date:'fullDate' }}</td>
+                  <td>{{ value | date:'yyyy-MM-dd' }}</td>
               </tr>
               <tr *ngIf="dataset.datasetlifecycle.archiveRetentionTime as value">
-                  <th><i class="material-icons"> gavel </i> Archive Retention Date</th>
-                  <td>{{ value | date: 'fullDate' }}</td>
+                  <th><i class="material-icons"> save </i> Archive Retention Date</th>
+                  <td>{{ value | date: 'yyyy-MM-dd' }}</td>
               </tr>
           </table>
         </div>
