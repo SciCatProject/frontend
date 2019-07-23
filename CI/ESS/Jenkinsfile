@@ -19,7 +19,7 @@ node('docker') {
       sh "docker push dacat/catanie:${IMAGE_ID}dmscdev"
       sh "docker build --file CI/ESS/Dockerfile.dmscprod  .  -t dacat/catanie:${IMAGE_ID}dmsc --build-arg env=dmsc"
       sh "docker push dacat/catanie:${IMAGE_ID}dmsc"
-      sh "docker build --file CI/ESS/Dockerfile.hub  . --tag dacat/catanie:latest -t dacat/catanie:${IMAGE_ID}dev"
+      sh "docker build --file CI/ESS/Dockerfile.hub  .  -t dacat/catanie:${IMAGE_ID}dev"
       sh "docker push dacat/catanie:${IMAGE_ID}dev"
       sh "docker push dacat/catanie:latest"
       sh "docker rmi dacat/catanie:${IMAGE_ID}dev"
