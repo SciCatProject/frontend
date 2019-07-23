@@ -1,9 +1,9 @@
 <div
   class="logbooks-table"
   style="min-width: 1060px"
-  *ngIf="(logbooks$ | async) && (logbooks$ | async).length > 0"
+  *ngIf="logbooks && logbooks.length > 0"
 >
-  <mat-table [dataSource]="logbooks$" class="logbook-table mat-elevation-z2">
+  <mat-table [dataSource]="logbooks" class="logbook-table mat-elevation-z2">
     <!-- Column Definitions -->
 
     <!-- Name Column -->
@@ -31,7 +31,7 @@
       </mat-header-cell>
       <mat-cell *matCellDef="let logbook">
         <div fxLayout="column" *ngIf="logbook.messages.length > 0">
-            {{ logbook.messages[0].timestamp | date: "yyyy/MM/dd, EEE HH:mm" }}
+            {{ logbook.messages[0].origin_server_ts | date: "yyyy/MM/dd, EEE HH:mm" }}
         </div>
         <div fxLayout="column" *ngIf="logbook.messages.length === 0">
           No entries.
@@ -51,7 +51,7 @@
       </mat-header-cell>
       <mat-cell *matCellDef="let logbook">
         <div fxLayout="column" *ngIf="logbook.messages.length > 0">
-          {{ logbook.messages[0].sender | slice: 1:-20 }}
+          {{ logbook.messages[0].sender | slice: 1:logbook.messages[0].sender.indexOf(":") }}
         </div>
         <div fxLayout="column" *ngIf="logbook.messages.length === 0">
           --
@@ -89,6 +89,6 @@
   </mat-table>
 </div>
 
-<div *ngIf="(logbooks$ | async) && (logbooks$ | async).length === 0">
+<div *ngIf="logbooks && logbooks.length === 0">
   {{ hasFetched ? "No logbooks." : "Loading..." }}
 </div>
