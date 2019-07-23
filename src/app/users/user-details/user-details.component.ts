@@ -1,6 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { Store } from "@ngrx/store";
 import * as selectors from "state-management/selectors";
+import { ConsoleReporter } from "jasmine";
 
 /**
  * Compoennt to show uneditable user details
@@ -21,6 +22,7 @@ export class UserDetailsComponent implements OnInit {
   ngOnInit() {
     this.store.select(selectors.users.getCurrentUser).subscribe(user => {
       this.user = user;
+      console.log(user);
     });
   }
 }

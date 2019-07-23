@@ -18,6 +18,7 @@ export class UserSettingsComponent implements OnInit {
   profile: object;
   email: string;
   displayName: string;
+  groups: string[];
 
   constructor(
     private us: UserApi,
@@ -42,13 +43,14 @@ export class UserSettingsComponent implements OnInit {
         this.loginService.getUserIdent$(current.id).subscribe(currentIdent => {
           this.email = currentIdent.profile.email;
           this.displayName = currentIdent.profile.displayName;
+          this.groups = currentIdent.profile.accessGroups;
            if (currentIdent.profile.thumbnailPhoto.startsWith("data")) {
             this.profileImage = currentIdent.profile.thumbnailPhoto;
           } else {
             this.profileImage = "assets/images/user.png";
           }
           console.log(currentIdent.profile);
-          console.log(this.profileImage);
+          //console.log(this.profileImage);
         });
       });
   }

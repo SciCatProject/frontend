@@ -17,10 +17,16 @@
           <i class="material-icons"> mail </i>
           Email
         </th>
-        <td>
-          {{ value }}
-        </td>
+        <td> {{ value }} </td>
       </tr>
+      <tr *ngIf="groups as value">
+        <th>
+          <i class="material-icons"> group_work </i>
+          Groups
+        </th>
+        <td> {{ value }} </td>
+      </tr>
+
     </table>
   </mat-card>
 </ng-container>
