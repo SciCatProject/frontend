@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { Store, select } from "@ngrx/store";
-import { Logbook, Dataset } from "shared/sdk";
+import { Logbook } from "shared/sdk";
 import { Subscription } from "rxjs";
 import { getLogbook } from "state-management/selectors/logbooks.selector";
 import { MatIconRegistry } from "@angular/material";
