@@ -3,7 +3,7 @@ import { Store } from "@ngrx/store";
 import * as selectors from "state-management/selectors";
 
 /**
- * Compoennt to show uneditable user details
+ * Component to show uneditable user details
  * @export
  * @class UserDetailsComponent
  * @implements {OnInit}
@@ -21,6 +21,7 @@ export class UserDetailsComponent implements OnInit {
   ngOnInit() {
     this.store.select(selectors.users.getCurrentUser).subscribe(user => {
       this.user = user;
+      console.log(user);
     });
   }
 }
