@@ -43,7 +43,7 @@
 
       <ng-container matColumnDef="path">
         <mat-header-cell *matHeaderCellDef>Time</mat-header-cell>
-        <mat-cell *matCellDef="let file">{{file.time | date: 'yyyy/MM/dd HH:mm'}}</mat-cell>
+        <mat-cell *matCellDef="let file">{{file.time | date: 'yyyy-MM-dd HH:mm'}}</mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="size">
