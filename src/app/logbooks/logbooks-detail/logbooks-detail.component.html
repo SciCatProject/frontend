@@ -6,7 +6,7 @@
     <ng-container matColumnDef="timestamp">
       <mat-header-cell *matHeaderCellDef> Timestamp </mat-header-cell>
       <mat-cell *matCellDef="let message">
-        {{ message.timestamp | date: "yyyy/MM/dd, EEE HH:mm" }}
+        {{ message.origin_server_ts | date: "yyyy-MM-dd, EEE HH:mm" }}
       </mat-cell>
     </ng-container>
 
@@ -14,7 +14,7 @@
     <ng-container matColumnDef="sender">
       <mat-header-cell *matHeaderCellDef> Sender </mat-header-cell>
       <mat-cell *matCellDef="let message">
-        {{ message.sender | slice: 1:-20 }}
+        {{ message.sender | slice: 1:message.sender.indexOf(":") }}
       </mat-cell>
     </ng-container>
 

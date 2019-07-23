@@ -4,7 +4,8 @@ import { MatCardModule, MatIconModule } from "@angular/material";
 
 import { LogbooksDashboardComponent } from "./logbooks-dashboard.component";
 import { Store } from "@ngrx/store";
-import { MockStore } from "shared/MockStubs";
+import { MockStore, MockActivatedRoute } from "shared/MockStubs";
+import { ActivatedRoute } from "@angular/router";
 
 describe("DashboardComponent", () => {
   let component: LogbooksDashboardComponent;
@@ -18,7 +19,10 @@ describe("DashboardComponent", () => {
     });
     TestBed.overrideComponent(LogbooksDashboardComponent, {
       set: {
-        providers: [{ provide: Store, useClass: MockStore }]
+        providers: [
+          { provide: ActivatedRoute, useClass: MockActivatedRoute },
+          { provide: Store, useClass: MockStore }
+        ]
       }
     }).compileComponents();
   }));
