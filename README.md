@@ -30,15 +30,21 @@ node version 10 or higher
 
 ### Installing
 
-
-You can deploy with kubernetes or docker-compose
-
+Use git to clone the repository
+```
+git clone https://github.com/SciCatProject/catanie
+cd catanie
+```
+First install the required modules
 ```
 npm install
+```
+Then build with the Angular CLI
+```
 npx ng build
 ```
 
-And repeat
+You can deploy a test server with the following command:
 
 ```
 npx ng serve 
