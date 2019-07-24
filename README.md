@@ -50,20 +50,19 @@ You can deploy a test server with the following command:
 npx ng serve 
 ```
 
-End with an example of getting some data out of the system or using it for a little demo
 
-## Running the tests
+## Running the unit tests
 
-Unit tests 
-
+To run the unit tests, type:
 ```
 npm test
 ```
 
 
-### Break down into end to end tests
+### End to end tests
 
-e2e tests check content is rendered correctly
+To run the end to end tests, type:
+
 ```
 npm run e2e
 ```
