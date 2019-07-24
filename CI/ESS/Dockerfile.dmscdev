@@ -16,7 +16,11 @@ RUN ./CI/ESS/copyimages.sh
 RUN npx ng build --configuration=${env}
 
 FROM nginx:alpine
+RUN sed -i -e 's/^root::/root:!:/' /etc/shadow
+RUN rm -rf /usr/share/nginx/html/*
 COPY --from=builder /catanie/dist/ /usr/share/nginx/html
 COPY scripts/nginx.conf /etc/nginx/nginx.conf
 COPY CI/ESS/google43e14584df796f63.html   /usr/share/nginx/html
+ENV http_proxy "http://192.168.1.1:8123"
+ENV no_proxy "localhost, 127.0.0.1"
 EXPOSE 80
