@@ -6,7 +6,7 @@
 export const environment = {
   production: false,
   lbBaseURL: "/api",
-  fileserverBaseURL: "https://scicatfileserver.esss.dk:30003",
+  fileserverBaseURL: "/fileserver",
   externalAuthEndpoint: "/auth/msad",
   disabledDatasetColumns: ["dataStatus"],
   archiveWorkflowEnabled: true,
