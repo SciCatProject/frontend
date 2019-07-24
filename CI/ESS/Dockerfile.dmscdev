@@ -1,5 +1,6 @@
-FROM node:12 as builder
+FROM node:12.6.0-alpine as builder
 LABEL maintainer="gareth.murphy@esss.se"
+RUN sed -i -e 's/^root::/root:!:/' /etc/shadow
 ENV http_proxy "http://192.168.1.1:8123"
 ENV no_proxy "localhost, 127.0.0.1"
 
