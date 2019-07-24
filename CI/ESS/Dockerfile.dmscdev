@@ -2,6 +2,7 @@ FROM node:12.6.0-alpine as builder
 LABEL maintainer="gareth.murphy@esss.se"
 RUN sed -i -e 's/^root::/root:!:/' /etc/shadow
 ENV http_proxy "http://192.168.1.1:8123"
+ENV https_proxy "http://192.168.1.1:8123"
 ENV no_proxy "localhost, 127.0.0.1"
 
 RUN npm config set proxy  $http_proxy
