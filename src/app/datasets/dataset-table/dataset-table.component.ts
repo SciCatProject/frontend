@@ -170,10 +170,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     }
   }
 
-  onExportClick(): void {
-    this.store.dispatch(new ExportToCsvAction());
-  }
-
   /**
    * Handle changing of view mode and disabling selected rows
    * @param event
