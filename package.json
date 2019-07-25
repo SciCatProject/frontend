@@ -36,7 +36,6 @@
     "@ngrx/schematics": "^8.0.1",
     "@ngrx/store": "^8.0.1",
     "@ngui/datetime-picker": "^0.16.2",
-    "angular5-csv": "^0.2.11",
     "autolinker": "^3.1.0",
     "core-js": "^2.6.9",
     "deep-equal": "^1.0.1",

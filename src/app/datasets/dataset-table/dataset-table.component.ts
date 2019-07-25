@@ -18,7 +18,6 @@ import {
   ChangePageAction,
   ClearSelectionAction,
   DeselectDatasetAction,
-  ExportToCsvAction,
   SelectAllDatasetsAction,
   SelectDatasetAction,
   SetViewModeAction,
@@ -34,7 +33,6 @@ import {
   getTotalSets,
   getViewMode
 } from "state-management/selectors/datasets.selectors";
-import { StylesCompileDependency } from "@angular/compiler";
 
 export interface PageChangeEvent {
   pageIndex: number;
@@ -170,10 +168,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
         this.store.dispatch(new DeselectColumnAction(column));
       }
     }
-  }
-
-  onExportClick(): void {
-    this.store.dispatch(new ExportToCsvAction());
   }
 
   /**

@@ -5,7 +5,6 @@ export const environment = {
   archiveWorkflowEnabled: true,
   editMetadataEnabled: false,
   editSampleEnabled: false,
-  csvEnabled: false,
   scienceSearchEnabled: false,
   disabledDatasetColumns: ["image"],
   facility: "PSI",

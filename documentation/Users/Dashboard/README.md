@@ -42,9 +42,3 @@ When you select a dataset, it will become checked and you will see details at th
 ## Paging
 
 At the bottom of the table are arrows for navigation and page numbers. If there are more entries than can fit on the page, more results will be accessible through the pages. Each page will make a call to the server to retrieve more.
-
-
-## Export CSV 
-
-This function allows users to download the onscreen table in comma separated variable (CSV) format.
-
