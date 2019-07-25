@@ -4,6 +4,8 @@ RUN sed -i -e 's/^root::/root:!:/' /etc/shadow
 ENV http_proxy "http://192.168.1.1:8123"
 ENV https_proxy "http://192.168.1.1:8123"
 ENV no_proxy "localhost, 127.0.0.1"
+RUN apk update && apk upgrade && \
+    apk add --no-cache bash git openssh
 
 RUN npm config set proxy  $http_proxy
 RUN npm config set https-proxy  $http_proxy
