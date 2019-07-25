@@ -1,5 +1,8 @@
 import { Action } from "@ngrx/store";
 import { initialUserState, UserState } from "state-management/state/user.store";
+import {
+  getColumnOrder as getColumnOrderList
+} from "../../state-management/selectors/users.selectors";
 
 import {
   SHOW_MESSAGE,
@@ -84,6 +87,8 @@ export function userReducer(
       const displayedColumns = state.displayedColumns;
       const columnName = (action as SelectColumnCompleteAction).columnName;
       const result = displayedColumns.concat(columnName);
+      const ordering = getColumnOrderList();
+      result.sort(function(a, b) { return ordering[a] - ordering[b]; });
       return {
         ...state,
         selectingColumn: false,
@@ -99,8 +104,6 @@ export function userReducer(
       const displayedColumns = state.displayedColumns;
       const columnName = (action as DeselectColumnCompleteAction).columnName;
       const result = displayedColumns.filter(column => column !== columnName);
-      console.log("removing index", columnName);
-      console.log("array index", result);
       return {
         ...state,
         deletingColumn: false,

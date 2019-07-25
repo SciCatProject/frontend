@@ -5,9 +5,10 @@ import {
   FetchLogbookCompleteAction,
   FetchFilteredEntriesCompleteAction,
   UpdateFilterCompleteAction,
-  AllActions,
+  AllActions
 } from "../actions/logbooks.actions";
 import { Logbook } from "shared/sdk";
+import { APP_DI_CONFIG } from "app-config.module";
 
 export function logbooksReducer(
   state: LogbookState = initialLogbookState,
@@ -48,21 +49,24 @@ export function logbooksReducer(
 }
 
 function formatImageUrls(logbook: Logbook) {
-  if (!logbook || !logbook.messages) {
-    return;
+  if (logbook && logbook.messages) {
+    logbook.messages.forEach(message => {
+      if (message.content.msgtype === "m.image") {
+        if (message.content.info.hasOwnProperty("thumbnail_url")) {
+          const externalThumbnailUrl = message.content.info.thumbnail_url.replace(
+            "mxc://",
+            `${APP_DI_CONFIG.synapseBaseUrl}/_matrix/media/r0/download/`
+          );
+          message.content.info.thumbnail_url = externalThumbnailUrl;
+        }
+        if (message.content.hasOwnProperty("url")) {
+          const externalFullsizeUrl = message.content.url.replace(
+            "mxc://",
+            `${APP_DI_CONFIG.synapseBaseUrl}/_matrix/media/r0/download/`
+          );
+          message.content.url = externalFullsizeUrl;
+        }
+      }
+    });
   }
-  logbook.messages.forEach(message => {
-    if (message.content.msgtype === "m.image") {
-      const externalThumbnailUrl = message.content.info.thumbnail_url.replace(
-        "mxc://",
-        "https://scicat03.esss.lu.se:8448/_matrix/media/r0/download/"
-      );
-      message.content.info.thumbnail_url = externalThumbnailUrl;
-      const externalFullsizeUrl = message.content.url.replace(
-        "mxc://",
-        "https://scicat03.esss.lu.se:8448/_matrix/media/r0/download/"
-      );
-      message.content.url = externalFullsizeUrl;
-    }
-  });
 }

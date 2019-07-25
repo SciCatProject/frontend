@@ -1,15 +1,34 @@
-<div fxLayout="row" fxLayout.xs="column">
-  <div fxFlex="14" style="margin-right: 1em">
-    <mat-card style="margin: 1em">
-      <app-logbooks-filter></app-logbooks-filter>
-    </mat-card>
-    <mat-card style="margin: 1em">
-      <app-content-selector></app-content-selector>
-    </mat-card>
+<div *ngIf="logbook">
+  <div fxLayout="row" fxLayout.xs="column">
+    <div fxFlex="14" style="margin-right: 1em">
+      <mat-card style="margin: 1em">
+        <app-logbooks-filter></app-logbooks-filter>
+      </mat-card>
+      <mat-card style="margin: 1em">
+        <app-content-selector></app-content-selector>
+      </mat-card>
+      <mat-card style="margin: 1em">
+        <a
+          mat-stroked-button
+          href="https://riot.im/app/#/room/{{ logbook.roomId }}"
+          target="_blank"
+          rel="noopener noreferrer"
+          >Open in
+          <mat-icon
+            svgIcon="riot-im"
+            aria-hidden="false"
+            aria-label="Riot.im logo"
+          ></mat-icon
+        ></a>
+      </mat-card>
+    </div>
+    <div fxFlex="85">
+      <mat-card style="margin: 1em">
+        <app-logbooks-detail></app-logbooks-detail>
+      </mat-card>
+    </div>
   </div>
-  <div fxFlex="85">
-    <mat-card style="margin: 1em">
-      <app-logbooks-detail></app-logbooks-detail>
-    </mat-card>
-  </div>
+</div>
+<div style="margin: 1em" *ngIf="!logbook">
+  Logbook not available.
 </div>

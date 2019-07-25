@@ -67,3 +67,22 @@ export const getProposalPage = createSelector(
     return skip / limit;
   }
 );
+
+export const getProposalsPerPage = createSelector(
+  getProposalsState,
+  state => {
+    const { limit } = state.filters;
+    return limit;
+  }
+);
+
+
+
+export const getFilters = createSelector(
+  getProposalsState,
+  state => {
+    const { skip, limit, sortField } = state.filters;
+    const limits = { skip, limit, order: sortField };
+    return { limits };
+  }
+);

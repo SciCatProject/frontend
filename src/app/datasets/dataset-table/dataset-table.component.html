@@ -61,14 +61,24 @@
 
   <div style="clear: both"></div>
 
-  <mat-paginator
-    [pageSizeOptions]="[30, 1000]"
-    [pageIndex]="currentPage$ | async"
-    [length]="datasetCount$ | async"
-    [pageSize]="datasetsPerPage$ | async"
-    (page)="onPageChange($event)"
-  >
+  <!--https://tburleson-layouts-demos.firebaseapp.com/#/docs-->
+  <div fxLayout="row" fxLayoutAlign="space-evenly end">
+    <div style="flex: 1">
+      <button   mat-stroked-button class="tableSettings" 
+      color="primary" matTooltip="Table Settings"
+      (click)=select.open()>
+      <mat-icon>settings</mat-icon>
+      <mat-select #select class="tblSettingSelect" panelClass="tblSettingSelectPanel" [formControl]="configForm" multiple>
+        <mat-option *ngFor="let column of (configCols$ | async)" [value]="column" (onSelectionChange)="onSelectColumn($event)">
+          {{column}}</mat-option>
+      </mat-select>
+    </button>
+  </div>
+  <mat-paginator [pageSizeOptions]="[30, 1000]" [pageIndex]="currentPage$ | async" [length]="datasetCount$ | async"
+    [pageSize]="datasetsPerPage$ | async" (page)="onPageChange($event)" showFirstLastButtons>
   </mat-paginator>
+ </div>
+
 
   <mat-table
     [dataSource]="datasets$"
@@ -172,7 +182,7 @@
       </mat-header-cell>
       <mat-cell *matCellDef="let dataset">
         <div fxLayout="column">
-          <div>{{ dataset.creationTime | date: "yyyy/MM/dd" }}</div>
+          <div>{{ dataset.creationTime | date: "yyyy-MM-dd" }}</div>
           <div>{{ dataset.creationTime | date: "EEE HH:mm" }}</div>
         </div>
       </mat-cell>
@@ -368,18 +378,10 @@
     </ng-container>
 
     <!-- End of Column Definitions -->
-
-    <mat-header-row
-      class="datasets-header"
-      *matHeaderRowDef="visibleColumns; sticky: true"
-    >
+    <mat-header-row class="datasets-header" *matHeaderRowDef="(dispColumns$ | async); sticky: true">
     </mat-header-row>
 
-    <mat-row
-      class="row-generic"
-      *matRowDef="let dataset; columns: visibleColumns"
-      (click)="onClick(dataset)"
-    >
+    <mat-row class="row-generic" *matRowDef="let dataset; columns: (dispColumns$ | async)" (click)="onClick(dataset)">
     </mat-row>
   </mat-table>
 </div>

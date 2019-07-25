@@ -5,11 +5,23 @@
 
 export const environment = {
   production: false,
-  lbBaseURL: "https://catamelservice.esss.dk:30003",
-  fileserverBaseURL: "https://scicatfileserver.esss.dk:30003",
+  lbBaseURL: "/api",
+  fileserverBaseURL: "/fileserver",
   externalAuthEndpoint: "/auth/msad",
-  archiveWorkflowEnabled: false,
-  disabledDatasetColumns: ["archiveStatus", "retrieveStatus"],
-  userProfileImageEnabled: true,
-  facility: "ESS"
+  disabledDatasetColumns: ["dataStatus"],
+  archiveWorkflowEnabled: true,
+  editMetadataEnabled: true,
+  editSampleEnabled: true,
+  csvEnabled: true,
+  scienceSearchEnabled: true,
+  facility: "ESS",
+  multipleDownloadEnabled: true,
+  shoppingCartEnabled: true,
+  columnSelectEnabled: true,
+  userProfileImageEnabled: false,
+  logbookEnabled: true,
+  tableSciDataEnabled: true,
+  metadataPreviewEnabled: true,
+  datasetReduceEnabled: true,
+  fileColorEnabled: true
 };

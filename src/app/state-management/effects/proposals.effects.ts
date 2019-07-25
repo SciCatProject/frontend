@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Actions, Effect, ofType } from "@ngrx/effects";
 import { Observable, of } from "rxjs";
-import { catchError, map, switchMap } from "rxjs/operators";
+import { catchError, map, switchMap, mergeMap, withLatestFrom } from "rxjs/operators";
 import { ProposalsService } from "proposals/proposals.service";
 import {
   FETCH_DATASETS_FOR_PROPOSAL,
@@ -21,17 +21,29 @@ import {
   FetchProposalsOutcomeAction,
   FetchCountOfProposals,
   FETCH_COUNT_PROPOSALS,
-  FetchCountFailed
+  FetchCountFailed,
+  FetchCountOfProposalsSuccess,
+  CHANGE_PAGE
 } from "../actions/proposals.actions";
+
+import { getFilters } from "state-management/selectors/proposals.selectors";
+import { select, Store } from "@ngrx/store";
+import { ProposalApi, Proposal } from "shared/sdk";
 
 @Injectable()
 export class ProposalsEffects {
+  @Effect({ dispatch: false })
+  private queryParams$ = this.store.pipe(select(getFilters));
+
   @Effect()
   getProposals$: Observable<FetchProposalsOutcomeAction> = this.actions$.pipe(
-    ofType<FetchProposalsAction>(FETCH_PROPOSALS),
-    switchMap(action =>
-      this.proposalsService.getProposals().pipe(
-        map(proposals => new FetchProposalsCompleteAction(proposals)),
+    ofType<FetchProposalsAction>(FETCH_PROPOSALS, CHANGE_PAGE),
+    withLatestFrom(this.queryParams$),
+    map(([action, params]) => params),
+    switchMap(params =>
+      this.proposalApi.find(params.limits).pipe(
+        mergeMap((data: Proposal[]) => [ new FetchProposalsCompleteAction(data),
+          new FetchCountOfProposals()]),
         catchError(() => of(new FetchProposalsFailedAction()))
       )
     )
@@ -42,7 +54,7 @@ export class ProposalsEffects {
     ofType(FETCH_COUNT_PROPOSALS),
     switchMap(action =>
       this.proposalsService.count().pipe(
-        map(({ count }) => new FetchCountOfProposals(count)),
+        map(({ count }) => new FetchCountOfProposalsSuccess(count)),
         catchError(err => of(new FetchCountFailed()))
       )
     )
@@ -73,7 +85,9 @@ export class ProposalsEffects {
   );
 
   constructor(
+    private store: Store<any>,
     private actions$: Actions,
-    private proposalsService: ProposalsService
+    private proposalsService: ProposalsService,
+    private proposalApi: ProposalApi
   ) {}
 }
