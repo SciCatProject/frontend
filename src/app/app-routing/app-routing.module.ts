@@ -14,7 +14,6 @@ import { ErrorPageComponent } from "../shared/modules/error-page/error-page.comp
 
 import { LoginComponent } from "../users/login/login.component";
 import { UserSettingsComponent } from "../users/user-settings/user-settings.component";
-import { UserDetailsComponent } from "../users/user-details/user-details.component";
 
 import { SampleDataFormComponent } from "../samples/sample-data-form/sample-data-form.component";
 
@@ -110,11 +109,6 @@ export const routes: Routes = [
   {
     path: "user/settings",
     component: UserSettingsComponent,
-    canActivate: [AuthCheck]
-  },
-  {
-    path: "user/details",
-    component: UserDetailsComponent,
     canActivate: [AuthCheck]
   },
   {
