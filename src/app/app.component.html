@@ -23,14 +23,6 @@
     <a
       mat-menu-item
       [routerLinkActive]="['active']"
-      [routerLink]="['/proposals/']"
-    >
-      <i class="material-icons"> spa </i>
-      Proposals</a
-    >
-    <a
-      mat-menu-item
-      [routerLinkActive]="['active']"
       [routerLink]="['/logbooks/']"
       *ngIf="appConfig.logbookEnabled"
       ><i class="material-icons"> book </i> Logbooks</a
@@ -46,10 +38,10 @@
     <a
       mat-menu-item
       [routerLinkActive]="['active']"
-      [routerLink]="['/samples/']"
+      [routerLink]="['/proposals/']"
     >
-      <i class="material-icons"> center_focus_weak </i>
-      Samples</a
+      <i class="material-icons"> spa </i>
+      Proposals</a
     >
     <a
       mat-menu-item
@@ -58,6 +50,14 @@
     >
       <i class="material-icons"> chrome_reader_mode </i>
       Published Data</a
+    >
+    <a
+      mat-menu-item
+      [routerLinkActive]="['active']"
+      [routerLink]="['/samples/']"
+    >
+      <i class="material-icons"> center_focus_weak </i>
+      Samples</a
     >
     <a
       mat-menu-item
