@@ -13,9 +13,9 @@ export class SampleService {
     return this.sampleApi.find();
   }
 
-  getSample(samplelId: string): Observable<Sample> {
-    console.log ("samplelId", samplelId);
-    return this.sampleApi.findOne({ where: { "samplelId": samplelId } });
+  getSample(sampleId: string): Observable<Sample> {
+    console.log ("sampleId", sampleId);
+    return this.sampleApi.findOne({ where: { "sampleId": sampleId } });
   }
 
   addSample(sample: Sample): Observable<Sample[]> {

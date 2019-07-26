@@ -31,7 +31,7 @@ export class SampleSortByColumnAction implements Action {
 export class SelectSampleAction implements Action {
   type = SELECT_SAMPLE;
 
-  constructor(readonly samplelId: string) { }
+  constructor(readonly sampleId: string) { }
 }
 
 export class AddSampleAction implements Action {
@@ -62,7 +62,7 @@ export class FetchSamplesFailedAction implements Action {
 
 export class FetchSampleAction implements Action {
   readonly type = FETCH_SAMPLE;
-  constructor(readonly samplelId: string) { }
+  constructor(readonly sampleId: string) { }
 }
 
 export class FetchSampleCompleteAction implements Action {

@@ -44,10 +44,10 @@ export class SamplesEffects {
   @Effect()
   protected getSample$: Observable<Action> = this.actions$.pipe(
     ofType(FETCH_SAMPLE),
-    map((action: FetchSampleAction) => action.samplelId),
-    mergeMap(samplelId =>
+    map((action: FetchSampleAction) => action.sampleId),
+    mergeMap(sampleId =>
       this.sampleService
-        .getSample(encodeURIComponent(samplelId))
+        .getSample(encodeURIComponent(sampleId))
         .pipe(
           map(
             (currentSample: Sample) =>
