@@ -1,5 +1,5 @@
 <ng-container *ngIf="user">
-  <h1>{{ user["username"] }} Details</h1>
+  <h1>{{ profile.displayName }} Details</h1>
   <table>
     <tr *ngIf="user.realm as value">
       <th>
@@ -10,10 +10,10 @@
         {{ value }}
       </td>
     </tr>
-    <tr *ngIf="user.username as value">
+    <tr *ngIf="profile.displayName as value">
       <th>
         <i class="material-icons"> person </i>
-        Username
+        Name
       </th>
       <td>
         {{ value }}

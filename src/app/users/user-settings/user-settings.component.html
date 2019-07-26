@@ -1,21 +1,40 @@
 <ng-container *ngIf="user">
-  <h1>{{ user["username"] }} Settings</h1>
+  <h1>{{ displayName }} Settings</h1>
   <mat-card>
     <img src="{{ profileImage }}" height="100px" alt="profile photo" />
     <table>
-      <tr *ngIf="user.username as value">
+      <tr *ngIf="displayName as value">
         <th>
           <i class="material-icons"> person </i>
-          Username
+          Name
         </th>
-        <td>
-          {{ value }}
-        </td>
+        <td> {{ value }} </td>
       </tr>
       <tr *ngIf="user.email as value">
         <th>
           <i class="material-icons"> mail </i>
           Email
+        </th>
+        <td> {{ value }} </td>
+      </tr>
+      <tr *ngIf="id as value">
+        <th>
+          <i class="material-icons"> person </i>
+          Id
+        </th>
+        <td> {{ value }} </td>
+      </tr>
+      <tr *ngIf="settings.datasetCount as value">
+        <th>
+          <i class="material-icons"> save </i>
+          Dataset Count
+        </th>
+        <td> {{ value }} </td>
+      </tr>
+      <tr *ngIf="settings.jobCount as value">
+        <th>
+          <i class="material-icons"> work </i>
+          Job Count
         </th>
         <td> {{ value }} </td>
       </tr>
@@ -26,8 +45,8 @@
         </th>
         <td>
             <ul>
-                <li *ngFor="let hero of value">
-                  {{ hero }}
+                <li *ngFor="let group of value">
+                  {{ group }}
                 </li>
               </ul>
            </td>

@@ -1,6 +1,10 @@
 import { Component, OnInit } from "@angular/core";
 import { Store } from "@ngrx/store";
-import * as selectors from "state-management/selectors";
+import {
+  getCurrentUser,
+  getCurrentUserId,
+  getProfile
+} from "state-management/selectors/users.selectors";
 
 /**
  * Component to show uneditable user details
@@ -15,13 +19,20 @@ import * as selectors from "state-management/selectors";
 })
 export class UserDetailsComponent implements OnInit {
   public user: object;
+  public userId: object;
+  public profile: object;
+  public displayName: string;
 
   constructor(private store: Store<any>) {}
 
   ngOnInit() {
-    this.store.select(selectors.users.getCurrentUser).subscribe(user => {
+    this.store.select(getCurrentUser).subscribe(user => {
       this.user = user;
       console.log(user);
+    });
+    this.store.select(getProfile).subscribe(profile => {
+      this.profile = profile;
+      console.log(this.profile);
     });
   }
 }

@@ -106,7 +106,7 @@ export const routes: Routes = [
     canActivate: [AuthCheck]
   },
 
-  { path: "user", component: UserDetailsComponent, canActivate: [AuthCheck] },
+  { path: "user", component: UserSettingsComponent, canActivate: [AuthCheck] },
   {
     path: "user/settings",
     component: UserSettingsComponent,

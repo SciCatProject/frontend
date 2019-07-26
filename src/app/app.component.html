@@ -43,24 +43,26 @@
       <i class="material-icons"> cloud_download </i>
       Policies</a
     >
-    <a mat-menu-item [routerLinkActive]="['active']" [routerLink]="['/samples/']" >
+    <a
+      mat-menu-item
+      [routerLinkActive]="['active']"
+      [routerLink]="['/samples/']"
+    >
       <i class="material-icons"> center_focus_weak </i>
-      Samples</a >
-    <a mat-menu-item [routerLinkActive]="['active']" [routerLink]="['/publishedDatasets/']" >
+      Samples</a
+    >
+    <a
+      mat-menu-item
+      [routerLinkActive]="['active']"
+      [routerLink]="['/publishedDatasets/']"
+    >
       <i class="material-icons"> chrome_reader_mode </i>
-      Published Data</a >
-    <a
-      mat-menu-item
-      [routerLinkActive]="['active']"
-      [routerLink]="['/user/', 'details']"
-    >
-      <i class="material-icons"> portrait </i>
-      Details</a
+      Published Data</a
     >
     <a
       mat-menu-item
       [routerLinkActive]="['active']"
-      [routerLink]="['/user/', 'settings']"
+      [routerLink]="['/user/']"
     >
       <i class="material-icons"> settings </i>
       Settings</a
@@ -81,14 +83,16 @@
         <h6>
           <a class="toplink" [routerLink]="['/help']">
             <i class="material-icons"> help </i>
-            Help</a>
+            Help</a
+          >
         </h6>
       </div>
       <div>
         <h6>
           <a class="toplink" [routerLink]="['/about']">
             <i class="material-icons"> info </i>
-            About</a>
+            About</a
+          >
         </h6>
       </div>
       <div *ngIf="(isLoggedIn$ | async) || !appConfig.production">
