@@ -70,7 +70,7 @@ export class SampleDialogComponent implements OnInit {
     }
     this.sample.description = this.form.value.description;
     this.sample.ownerGroup = this.form.value.ownerGroup;
-    this.sample.samplelId = shortid.generate();
+    this.sample.sampleId = shortid.generate();
 
     this.store.pipe(select(getCurrentUser)).subscribe(res => {
       this.sample.owner = res.username.replace("ldap.", "");

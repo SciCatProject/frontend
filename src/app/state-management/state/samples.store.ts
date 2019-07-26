@@ -1,7 +1,7 @@
 import { Sample, SampleFilters } from "state-management/models";
 
 export interface SampleState {
-  samples: { [samplelId: string]: Sample };
+  samples: { [sampleId: string]: Sample };
   selectedSamples: Sample[];
   currentSample: Sample;
   totalCount: number;

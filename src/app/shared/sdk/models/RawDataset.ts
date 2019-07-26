@@ -266,7 +266,7 @@ export class RawDataset implements RawDatasetInterface {
           model: 'Sample',
           relationType: 'belongsTo',
                   keyFrom: 'sampleId',
-          keyTo: 'samplelId'
+          keyTo: 'sampleId'
         },
         proposal: {
           name: 'proposal',
