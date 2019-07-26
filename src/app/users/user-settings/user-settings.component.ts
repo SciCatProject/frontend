@@ -23,6 +23,8 @@ export class UserSettingsComponent implements OnInit {
   email: string;
   id: string;
   displayName: string;
+  datasetCount: number;
+  jobCount: number;
   groups: string[];
   settings: Object;
 
@@ -61,6 +63,12 @@ export class UserSettingsComponent implements OnInit {
 
     this.store.pipe(select(getSettings)).subscribe(settings => {
       this.settings = settings;
+      if (settings.hasOwnProperty("datasetCount")) {
+        this.datasetCount = settings.datasetCount;
+      }
+      if (settings.hasOwnProperty("jobCount")) {
+      this.jobCount = settings.jobCount;
+      }
       console.log("settings", settings);
     });
   }
