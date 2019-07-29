@@ -7,7 +7,6 @@ import { LoginService } from "./login.service";
 import { NgModule } from "@angular/core";
 import { SharedCatanieModule } from "shared/shared.module";
 import { StoreModule } from "@ngrx/store";
-import { UserDetailsComponent } from "users/user-details/user-details.component";
 import { UserSettingsComponent } from "users/user-settings/user-settings.component";
 import { userReducer } from "state-management/reducers/user.reducer";
 import {
@@ -28,7 +27,7 @@ import {
     SharedCatanieModule,
     StoreModule.forFeature("users", userReducer)
   ],
-  declarations: [LoginComponent, UserDetailsComponent, UserSettingsComponent],
+  declarations: [LoginComponent,  UserSettingsComponent],
   providers: [ADAuthService, LoginService]
 })
 export class UsersModule {}

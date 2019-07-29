@@ -8,6 +8,7 @@ import {
 import * as selectors from "state-management/selectors";
 import { Message, MessageType } from "state-management/models";
 import { LoginService } from "users/login.service";
+import { getSettings } from "state-management/selectors/users.selectors";
 
 @Component({
   selector: "app-user-settings",
@@ -20,8 +21,12 @@ export class UserSettingsComponent implements OnInit {
   profileImage = "assets/images/user.png";
   profile: object;
   email: string;
+  id: string;
   displayName: string;
+  datasetCount: number;
+  jobCount: number;
   groups: string[];
+  settings: Object;
 
   constructor(
     private us: UserApi,
@@ -45,6 +50,7 @@ export class UserSettingsComponent implements OnInit {
           this.email = currentIdent.profile.email;
           this.displayName = currentIdent.profile.displayName;
           this.groups = currentIdent.profile.accessGroups;
+          this.id = currentIdent.profile.id;
           if (currentIdent.profile.thumbnailPhoto.startsWith("data")) {
             this.profileImage = currentIdent.profile.thumbnailPhoto;
           } else {
@@ -54,6 +60,17 @@ export class UserSettingsComponent implements OnInit {
           // console.log(this.profileImage);
         });
       });
+
+    this.store.pipe(select(getSettings)).subscribe(settings => {
+      this.settings = settings;
+      if (settings.hasOwnProperty("datasetCount")) {
+        this.datasetCount = settings.datasetCount;
+      }
+      if (settings.hasOwnProperty("jobCount")) {
+      this.jobCount = settings.jobCount;
+      }
+      console.log("settings", settings);
+    });
   }
 
   onSubmit(values) {
