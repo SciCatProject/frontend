@@ -17,7 +17,7 @@ COPY package.json  /catanie
 RUN npm install
 COPY . /catanie/
 RUN ./CI/ESS/copyimages.sh
-RUN npx ng build --configuration=${env}
+RUN npx ng build 
 
 FROM nginx:alpine
 RUN sed -i -e 's/^root::/root:!:/' /etc/shadow
