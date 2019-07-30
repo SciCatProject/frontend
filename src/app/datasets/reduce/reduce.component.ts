@@ -18,7 +18,7 @@ import { FormControl, Validators, FormGroup } from "@angular/forms";
 @Component({
   selector: "reduce",
   templateUrl: "./reduce.component.html",
-  styleUrls: ["./reduce.component.scss"]
+  styleUrls: ["./reduce.component.scss"],
 })
 export class ReduceComponent implements OnInit, OnDestroy {
   dataset: Dataset;
@@ -35,7 +35,7 @@ export class ReduceComponent implements OnInit, OnDestroy {
   resultLoadingSubscription: Subscription;
 
   show: boolean;
-  columnsToDisplay: string[] = ["timestamp", "name", "status"];
+  columnsToDisplay: string[] = ["timestamp", "name", "pid", "software"];
 
   formGroup: FormGroup;
 
@@ -78,13 +78,6 @@ export class ReduceComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.store.dispatch(new FetchDatasetsAction());
 
-    this.datasetSubscription = this.store
-      .pipe(select(getCurrentDataset))
-      .subscribe(dataset => {
-        this.dataset = dataset;
-        this.datasetHistory = dataset.history.reverse();
-      });
-
     this.datasetsSubscription = this.store
       .pipe(select(getDatasets))
       .subscribe(datasets => {
@@ -92,6 +85,16 @@ export class ReduceComponent implements OnInit, OnDestroy {
         this.datasetPids = datasets.map(dataset => {
           return dataset.pid;
         });
+        this.datasetSubscription = this.store
+          .pipe(select(getCurrentDataset))
+          .subscribe(dataset => {
+            this.dataset = dataset;
+            this.datasetHistory = dataset.history.filter(entry => {
+              if (entry.hasOwnProperty("derivedDataset")) {
+                return this.datasetPids.includes(entry.derivedDataset.pid);
+              }
+            });
+          });
       });
 
     this.resultSubscription = this.store
