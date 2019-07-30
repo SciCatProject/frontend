@@ -35,7 +35,7 @@ export class ReduceComponent implements OnInit, OnDestroy {
   resultLoadingSubscription: Subscription;
 
   show: boolean;
-  columnsToDisplay: string[] = ["timestamp", "name", "status"];
+  columnsToDisplay: string[] = ["timestamp", "name", "pid", "software"];
 
   formGroup: FormGroup;
 
@@ -78,13 +78,6 @@ export class ReduceComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.store.dispatch(new FetchDatasetsAction());
 
-    this.datasetSubscription = this.store
-      .pipe(select(getCurrentDataset))
-      .subscribe(dataset => {
-        this.dataset = dataset;
-        this.datasetHistory = dataset.history.reverse();
-      });
-
     this.datasetsSubscription = this.store
       .pipe(select(getDatasets))
       .subscribe(datasets => {
@@ -92,6 +85,14 @@ export class ReduceComponent implements OnInit, OnDestroy {
         this.datasetPids = datasets.map(dataset => {
           return dataset.pid;
         });
+        this.updateHistory();
+      });
+
+    this.datasetSubscription = this.store
+      .pipe(select(getCurrentDataset))
+      .subscribe(dataset => {
+        this.dataset = dataset;
+        this.updateHistory();
       });
 
     this.resultSubscription = this.store
@@ -113,6 +114,16 @@ export class ReduceComponent implements OnInit, OnDestroy {
     this.datasetsSubscription.unsubscribe();
     this.resultSubscription.unsubscribe();
     this.resultLoadingSubscription.unsubscribe();
+  }
+
+  updateHistory(): void {
+    if (this.dataset) {
+      this.datasetHistory = this.dataset.history.filter(entry => {
+        if (entry.hasOwnProperty("derivedDataset")) {
+          return this.datasetPids.includes(entry.derivedDataset.pid);
+        }
+      });
+    }
   }
 
   reduceDataset(dataset: Dataset): void {
