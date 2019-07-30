@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
+import { Component, OnInit, OnDestroy, Inject } from "@angular/core";
 import { Store, select } from "@ngrx/store";
 import { Logbook } from "shared/sdk";
 import { Subscription } from "rxjs";
@@ -8,6 +8,7 @@ import { DomSanitizer } from "@angular/platform-browser";
 import { getCurrentDataset } from "state-management/selectors/datasets.selectors";
 import { FetchLogbookAction } from "state-management/actions/logbooks.actions";
 import { ActivatedRoute } from "@angular/router";
+import { APP_CONFIG, AppConfig } from "app-config.module";
 
 @Component({
   selector: "app-logbooks-dashboard",
@@ -27,7 +28,8 @@ export class LogbooksDashboardComponent implements OnInit, OnDestroy {
     iconRegistry: MatIconRegistry,
     sanitizer: DomSanitizer,
     private route: ActivatedRoute,
-    private store: Store<Logbook>
+    private store: Store<Logbook>,
+    @Inject(APP_CONFIG) public appConfig: AppConfig
   ) {
     iconRegistry.addSvgIcon(
       "riot-im",
