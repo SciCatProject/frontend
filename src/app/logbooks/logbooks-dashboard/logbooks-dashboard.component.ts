@@ -3,8 +3,6 @@ import { Store, select } from "@ngrx/store";
 import { Logbook } from "shared/sdk";
 import { Subscription } from "rxjs";
 import { getLogbook } from "state-management/selectors/logbooks.selector";
-import { MatIconRegistry } from "@angular/material";
-import { DomSanitizer } from "@angular/platform-browser";
 import { getCurrentDataset } from "state-management/selectors/datasets.selectors";
 import { FetchLogbookAction } from "state-management/actions/logbooks.actions";
 import { ActivatedRoute } from "@angular/router";
@@ -25,19 +23,10 @@ export class LogbooksDashboardComponent implements OnInit, OnDestroy {
   datasetSubscription: Subscription;
 
   constructor(
-    iconRegistry: MatIconRegistry,
-    sanitizer: DomSanitizer,
     private route: ActivatedRoute,
     private store: Store<Logbook>,
     @Inject(APP_CONFIG) public appConfig: AppConfig
-  ) {
-    iconRegistry.addSvgIcon(
-      "riot-im",
-      sanitizer.bypassSecurityTrustResourceUrl(
-        "assets/icons/riot-im-logo-black-text.svg"
-      )
-    );
-  }
+  ) {}
 
   ngOnInit() {
     this.logbookSubscription = this.store
