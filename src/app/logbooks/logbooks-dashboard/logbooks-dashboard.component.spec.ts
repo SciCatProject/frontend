@@ -6,6 +6,7 @@ import { LogbooksDashboardComponent } from "./logbooks-dashboard.component";
 import { Store } from "@ngrx/store";
 import { MockStore, MockActivatedRoute } from "shared/MockStubs";
 import { ActivatedRoute } from "@angular/router";
+import { AppConfigModule } from "app-config.module";
 
 describe("DashboardComponent", () => {
   let component: LogbooksDashboardComponent;
@@ -14,7 +15,7 @@ describe("DashboardComponent", () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
-      imports: [MatCardModule, MatIconModule],
+      imports: [AppConfigModule, MatCardModule, MatIconModule],
       declarations: [LogbooksDashboardComponent]
     });
     TestBed.overrideComponent(LogbooksDashboardComponent, {
