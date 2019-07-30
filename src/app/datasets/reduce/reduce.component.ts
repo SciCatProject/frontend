@@ -18,7 +18,7 @@ import { FormControl, Validators, FormGroup } from "@angular/forms";
 @Component({
   selector: "reduce",
   templateUrl: "./reduce.component.html",
-  styleUrls: ["./reduce.component.scss"],
+  styleUrls: ["./reduce.component.scss"]
 })
 export class ReduceComponent implements OnInit, OnDestroy {
   dataset: Dataset;
@@ -85,16 +85,14 @@ export class ReduceComponent implements OnInit, OnDestroy {
         this.datasetPids = datasets.map(dataset => {
           return dataset.pid;
         });
-        this.datasetSubscription = this.store
-          .pipe(select(getCurrentDataset))
-          .subscribe(dataset => {
-            this.dataset = dataset;
-            this.datasetHistory = dataset.history.filter(entry => {
-              if (entry.hasOwnProperty("derivedDataset")) {
-                return this.datasetPids.includes(entry.derivedDataset.pid);
-              }
-            });
-          });
+        this.updateHistory();
+      });
+
+    this.datasetSubscription = this.store
+      .pipe(select(getCurrentDataset))
+      .subscribe(dataset => {
+        this.dataset = dataset;
+        this.updateHistory();
       });
 
     this.resultSubscription = this.store
@@ -116,6 +114,16 @@ export class ReduceComponent implements OnInit, OnDestroy {
     this.datasetsSubscription.unsubscribe();
     this.resultSubscription.unsubscribe();
     this.resultLoadingSubscription.unsubscribe();
+  }
+
+  updateHistory(): void {
+    if (this.dataset) {
+      this.datasetHistory = this.dataset.history.filter(entry => {
+        if (entry.hasOwnProperty("derivedDataset")) {
+          return this.datasetPids.includes(entry.derivedDataset.pid);
+        }
+      });
+    }
   }
 
   reduceDataset(dataset: Dataset): void {
