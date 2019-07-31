@@ -9,6 +9,8 @@ const initialSampleState: SampleState = {
   totalCount: 0,
   submitComplete: false,
 
+  searchTerms: "",
+
   samplesLoading: true,
   error: undefined,
   filters: {
