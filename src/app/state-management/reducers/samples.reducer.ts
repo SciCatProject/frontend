@@ -21,7 +21,8 @@ import {
   FETCH_SAMPLE_COUNT,
   CHANGE_PAGE,
   ChangePageAction,
-  FetchSampleCountCompleteAction
+  FetchSampleCountCompleteAction,
+  SEARCH_SAMPLES
 } from "state-management/actions/samples.actions";
 
 export function samplesReducer(
@@ -46,6 +47,10 @@ export function samplesReducer(
     }
 
     case ADD_SAMPLE: {
+      return { ...state };
+    }
+
+    case SEARCH_SAMPLES: {
       return { ...state };
     }
 
