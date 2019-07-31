@@ -14,14 +14,13 @@ import { ErrorPageComponent } from "../shared/modules/error-page/error-page.comp
 
 import { LoginComponent } from "../users/login/login.component";
 import { UserSettingsComponent } from "../users/user-settings/user-settings.component";
-import { UserDetailsComponent } from "../users/user-details/user-details.component";
 
 import { SampleDataFormComponent } from "../samples/sample-data-form/sample-data-form.component";
 
 import { ListProposalsPageComponent } from "../proposals/containers/list-proposals-page/list-proposals-page.component";
 import { ViewProposalPageComponent } from "../proposals/containers/view-proposal-page/view-proposal-page.component";
 
-import { ArchiveSettingsComponent } from "../policies/policies/policies.component";
+import { PoliciesComponent } from "../policies/policies/policies.component";
 
 import { PublishComponent } from "datasets/publish/publish.component";
 import { AuthCheck } from "../AuthCheck";
@@ -102,19 +101,14 @@ export const routes: Routes = [
 
   {
     path: "policies",
-    component: ArchiveSettingsComponent,
+    component: PoliciesComponent,
     canActivate: [AuthCheck]
   },
 
-  { path: "user", component: UserDetailsComponent, canActivate: [AuthCheck] },
+  { path: "user", component: UserSettingsComponent, canActivate: [AuthCheck] },
   {
     path: "user/settings",
     component: UserSettingsComponent,
-    canActivate: [AuthCheck]
-  },
-  {
-    path: "user/details",
-    component: UserDetailsComponent,
     canActivate: [AuthCheck]
   },
   {
@@ -161,6 +155,14 @@ export const routes: Routes = [
     component: RedirectGuard,
     data: {
       urlConfigItem: "ingestManual"
+    }
+  },
+  {
+    path: "help/SciCatGettingStartedSLSSummary",
+    canActivate: [RedirectGuard],
+    component: RedirectGuard,
+    data: {
+      urlConfigItem: "gettingStarted"
     }
   }
 ];

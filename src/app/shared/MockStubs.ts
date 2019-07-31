@@ -61,7 +61,7 @@ export class MockSampleService {
 
   getSamples(): Observable<Sample[]> {
     this.sample = {
-      samplelId: "string",
+      sampleId: "string",
       owner: "string",
       description: "string",
       createdAt: new Date(),
@@ -79,7 +79,7 @@ export class MockSampleService {
 
   getSample(): Observable<Sample> {
     this.sample = {
-      samplelId: "string",
+      sampleId: "string",
       owner: "string",
       description: "string",
       createdAt: new Date(),
@@ -150,7 +150,7 @@ export class MockSampleApi {
   find() {
     return of([
       {
-        samplelId: "string",
+        sampleId: "string",
         owner: "string",
         description: "string",
         createdAt: Date,

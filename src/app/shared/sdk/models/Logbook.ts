@@ -5,14 +5,12 @@ export interface LogbookInterface {
   "name"?: string;
   "roomId"?: string;
   "messages"?: Array<any>;
-  "id"?: number;
 }
 
 export class Logbook implements LogbookInterface {
   "name": string;
   "roomId": string;
   "messages": Array<any>;
-  "id": number;
   constructor(data?: LogbookInterface) {
     Object.assign(this, data);
   }
@@ -44,7 +42,7 @@ export class Logbook implements LogbookInterface {
       name: 'Logbook',
       plural: 'Logbooks',
       path: 'Logbooks',
-      idName: 'id',
+      idName: 'roomId',
       properties: {
         "name": {
           name: 'name',
@@ -57,10 +55,6 @@ export class Logbook implements LogbookInterface {
         "messages": {
           name: 'messages',
           type: 'Array&lt;any&gt;'
-        },
-        "id": {
-          name: 'id',
-          type: 'number'
         },
       },
       relations: {

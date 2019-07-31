@@ -17,13 +17,8 @@ export class PoliciesService {
   }
 
   updatePolicies(onwerList: string[], attributes: {}) {
-    const or = [];
-    for (const idx of onwerList) {
-      or.push({ ownerGroup: idx });
-    }
-    const where = { or };
     return this.policyApi
-      .updatewhere(where, attributes);
+      .updatewhere(onwerList.join(), attributes);
   }
 
 

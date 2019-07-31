@@ -4,7 +4,7 @@ import { Observable } from "rxjs";
 import { OrigDatablock, Dataset } from "shared/sdk/models";
 import { Store, select } from "@ngrx/store";
 import { getIsAdmin } from "state-management/selectors/users.selectors";
-import { ChangeDetectorRef } from '@angular/core';
+import { ChangeDetectorRef } from "@angular/core";
 import {
   Component,
   Input,
@@ -20,7 +20,7 @@ import { UserApi } from "shared/sdk/services";
 @Component({
   selector: "datafiles",
   templateUrl: "./datafiles.component.html",
-  providers: [ UserApi ],
+  providers: [UserApi],
   styleUrls: ["./datafiles.component.css"]
 })
 export class DatafilesComponent implements OnInit, AfterViewInit {
@@ -46,7 +46,7 @@ export class DatafilesComponent implements OnInit, AfterViewInit {
   ).concat(["name", "size", "path"]);
 
   dataSource: MatTableDataSource<any> | null;
-  @ViewChild(MatPaginator)
+  @ViewChild(MatPaginator, { static: false })
   paginator: MatPaginator;
 
   admin$: Observable<boolean>;
@@ -66,7 +66,6 @@ export class DatafilesComponent implements OnInit, AfterViewInit {
     this.admin$ = this.store.pipe(select(getIsAdmin));
     this.dataset$ = this.store.pipe(select(getCurrentDataset));
     this.jwt$ = this.userApi.jwt();
- 
   }
 
   ngAfterViewInit() {
@@ -77,8 +76,8 @@ export class DatafilesComponent implements OnInit, AfterViewInit {
     }
     // this.dataSource.sort = this.sort;
   }
-  ngAfterViewChecked()
-  {
+
+  ngAfterViewChecked() {
     this.count = this.files.length;
     this.cdRef.detectChanges();
   }
@@ -113,7 +112,7 @@ export class DatafilesComponent implements OnInit, AfterViewInit {
   }
 
   getSelectedFiles() {
-    if (!this.dataSource){
+    if (!this.dataSource) {
       return [];
     }
     return this.dataSource.data

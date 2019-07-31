@@ -2,7 +2,6 @@ import { LoginPage } from "../login/login.po";
 import { DashboardPage } from "./dashboard.po";
 import { browser, element, by } from "protractor";
 import { protractor } from "protractor/built/ptor";
-import * as fs from "fs";
 
 describe("catanie Dashboard", function() {
   let lp: LoginPage;
@@ -52,20 +51,6 @@ describe("catanie Dashboard", function() {
     expect(browser.getCurrentUrl()).toContain("mode:archive");
   });
 
-  it("should download a csv of datasets", () => {
-    browser.sleep(2000);
-    const btn = element(by.css(".export-csv"));
-    const filename = "./e2e/Datasets_01.csv";
-    expect(btn).toBeTruthy();
-    btn.click();
-    browser.driver
-      .wait(function() {
-        return fs.existsSync(filename);
-      }, 30000)
-      .then(function() {
-        expect(fs.existsSync(filename)).toBeTruthy();
-      });
-  });
 
   it("should log out", () => {
     element(by.css(".sidenav-toggle")).click(); // TODO could disable animations while being tested

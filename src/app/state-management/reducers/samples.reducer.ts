@@ -34,7 +34,7 @@ export function samplesReducer(
 
   switch (action.type) {
     case SELECT_SAMPLE: {
-      const selectedId = (action as SelectSampleAction).samplelId;
+      const selectedId = (action as SelectSampleAction).sampleId;
       return { ...state, selectedId };
     }
 
@@ -65,7 +65,7 @@ export function samplesReducer(
       const samples = list.reduce(
         (samples2, sample) => ({
           ...samples2,
-          [sample.samplelId]: sample
+          [sample.sampleId]: sample
         }),
         {}
       );

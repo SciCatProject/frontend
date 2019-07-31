@@ -10,8 +10,6 @@ import {
   DatablocksFailedAction,
   DESELECT_DATASET,
   DeselectDatasetAction,
-  EXPORT_TO_CSV,
-  ExportToCsvAction,
   FILTER_UPDATE,
   SEARCH_ID_COMPLETE,
   SearchIDCompleteAction,
@@ -88,12 +86,6 @@ describe("ClearSelectionAction", () => {
   });
 });
 
-describe("ExportToCsvAction", () => {
-  it("should create an action", () => {
-    const action = new ExportToCsvAction();
-    expect({ ...action }).toEqual({ type: EXPORT_TO_CSV });
-  });
-});
 
 describe("SortByColumnAction", () => {
   it("should create an action", () => {

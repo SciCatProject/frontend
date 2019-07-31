@@ -20,6 +20,30 @@ export const FETCH_DATASETS_FOR_PROPOSAL_FAILED =
 
 export const CHANGE_PAGE = "[Proposals] Change page";
 
+export const SORT_BY_COLUMN = "[Proposals] Sort by Column";
+export const FETCH_COUNT_PROPOSALS = "[Proposals] Fetch Count of Proposals";
+export const FETCH_COUNT_FAILED = "[Proposals] Fetch Count of Proposals Failed";
+export const FETCH_COUNT_PROPOSALS_SUCCESS = "[Proposals] Fetch Count of Proposals Success";
+
+export class FetchCountOfProposals implements Action {
+  readonly type = FETCH_COUNT_PROPOSALS;
+  constructor() {}
+}
+
+export class FetchCountOfProposalsSuccess implements Action {
+  readonly type = FETCH_COUNT_PROPOSALS_SUCCESS;
+  constructor(readonly count: number) {}
+}
+
+export class FetchCountFailed implements Action {
+  readonly type = FETCH_COUNT_FAILED;
+}
+
+export class SortByColumnAction implements Action {
+  readonly type = SORT_BY_COLUMN;
+  constructor(readonly column: string, readonly direction: string) {}
+}
+
 export class SelectProposalAction implements Action {
   type = SELECT_PROPOSAL;
 
@@ -71,7 +95,6 @@ export class FetchDatasetsForProposalCompleteAction implements Action {
 export class FetchDatasetsForProposalFailedAction implements Action {
   type = FETCH_DATASETS_FOR_PROPOSAL_FAILED;
 }
-
 
 export class ChangePageAction implements Action {
   type = CHANGE_PAGE;

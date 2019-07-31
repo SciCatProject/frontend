@@ -45,11 +45,44 @@ export const getdatasetCount = createSelector(
   state => state.datasetCount
 );
 
+export const getProposalCount = createSelector(
+  getProposalsState,
+  state => state.proposalCount
+);
+
 
 export const getPage = createSelector(
   getProposalsState,
   state => {
     const { skip, limit } = state.filters;
     return skip / limit;
+  }
+);
+
+
+export const getProposalPage = createSelector(
+  getProposalsState,
+  state => {
+    const { skip, limit } = state.filters;
+    return skip / limit;
+  }
+);
+
+export const getProposalsPerPage = createSelector(
+  getProposalsState,
+  state => {
+    const { limit } = state.filters;
+    return limit;
+  }
+);
+
+
+
+export const getFilters = createSelector(
+  getProposalsState,
+  state => {
+    const { skip, limit, sortField } = state.filters;
+    const limits = { skip, limit, order: sortField };
+    return { limits };
   }
 );

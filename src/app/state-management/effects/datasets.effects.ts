@@ -2,7 +2,6 @@ import { Injectable } from "@angular/core";
 import { Observable, of } from "rxjs";
 import { Actions, Effect, ofType } from "@ngrx/effects";
 import { Action, select, Store } from "@ngrx/store";
-import { Angular5Csv } from "angular5-csv/dist/Angular5-csv";
 import { DatasetApi } from "shared/sdk/services";
 import * as DatasetActions from "state-management/actions/datasets.actions";
 import { Dataset } from "state-management/models";
@@ -112,24 +111,8 @@ export class DatasetEffects {
   private rectangularRepresentation$ = this.store.pipe(
     select(getRectangularRepresentation)
   );
-  @Effect({ dispatch: false })
-  protected exportToCsv$: Observable<Action> = this.actions$.pipe(
-    ofType(DatasetActions.EXPORT_TO_CSV),
-    mergeMap(() => this.rectangularRepresentation$),
-    tap((rect: any) => {
-      const options = {
-        fieldSeparator: ",",
-        quoteStrings: '"',
-        decimalseparator: ".",
-        showLabels: true,
-        showTitle: false,
-        useBom: true,
-        headers: Object.keys(rect[0])
-      };
 
-      const ts = new Angular5Csv(rect, "Datasets", options);
-    })
-  );
+
   private datasetsInBatch$ = this.store.pipe(select(getDatasetsInBatch));
   private currentUser$ = this.store.pipe(select(getCurrentUser));
   @Effect({ dispatch: false })

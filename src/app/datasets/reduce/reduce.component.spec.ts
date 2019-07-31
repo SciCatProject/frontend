@@ -4,8 +4,17 @@ import { Store } from "@ngrx/store";
 
 import { ReduceComponent } from "./reduce.component";
 import { MockStore, MockRouter } from "shared/MockStubs";
-import { MatCardModule } from "@angular/material";
+import {
+  MatCardModule,
+  MatStepperModule,
+  MatButtonModule,
+  MatIconModule,
+  MatRadioModule,
+  MatSelectModule,
+  MatTableModule
+} from "@angular/material";
 import { Router } from "@angular/router";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
 describe("ReduceComponent", () => {
   let component: ReduceComponent;
@@ -14,7 +23,16 @@ describe("ReduceComponent", () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
-      imports: [MatCardModule],
+      imports: [
+        BrowserAnimationsModule,
+        MatButtonModule,
+        MatCardModule,
+        MatIconModule,
+        MatRadioModule,
+        MatSelectModule,
+        MatStepperModule,
+        MatTableModule
+      ],
       declarations: [ReduceComponent]
     });
     TestBed.overrideComponent(ReduceComponent, {

@@ -5,12 +5,12 @@ export const environment = {
   externalAuthEndpoint: '/auth/msad',
   editMetadataEnabled: true,
   editSampleEnabled: true,
-  csvEnabled: false,
   scienceSearchEnabled: true,
   disabledDatasetColumns: [],
   facility: "PSI",
   multipleDownloadEnabled: false,
   shoppingCartEnabled: true,
   columnSelectEnabled: true,
-  ingestManual: "https://melanie.gitpages.psi.ch/SciCatPages/"
+  ingestManual: "https://melanie.gitpages.psi.ch/SciCatPages/",
+  gettingStarted: "https://melanie.gitpages.psi.ch/SciCatPages/SciCatGettingStartedSLSSummary.pdf",
 };

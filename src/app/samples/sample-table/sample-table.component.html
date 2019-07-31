@@ -9,7 +9,7 @@
 </div>
 
 <mat-paginator [pageSizeOptions]="[30, 1000]" [pageIndex]="currentPage$ | async" [length]="sampleCount$ | async"
-[pageSize]="samplesPerPage$ | async" (page)="onPageChange($event)">
+[pageSize]="samplesPerPage$ | async" (page)="onPageChange($event)" showFirstLastButtons>
 </mat-paginator>
 <mat-card style="margin: 1em">
   <div class="details">
@@ -19,9 +19,9 @@
       matSort
       (matSortChange)="onSortChange($event)"
     >
-      <ng-container matColumnDef="samplelId">
+      <ng-container matColumnDef="sampleId">
         <mat-header-cell *matHeaderCellDef mat-sort-header>Id</mat-header-cell>
-        <mat-cell *matCellDef="let sample"> {{ sample.samplelId }}</mat-cell>
+        <mat-cell *matCellDef="let sample"> {{ sample.sampleId }}</mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="owner">

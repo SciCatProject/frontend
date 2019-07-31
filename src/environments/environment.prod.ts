@@ -5,7 +5,6 @@ export const environment = {
   archiveWorkflowEnabled: true,
   editMetadataEnabled: false,
   editSampleEnabled: false,
-  csvEnabled: false,
   scienceSearchEnabled: false,
   disabledDatasetColumns: ["image"],
   facility: "PSI",
@@ -13,5 +12,11 @@ export const environment = {
   shoppingCartEnabled: false,
   columnSelectEnabled: false,
   userProfileImageEnabled: false,
-  ingestManual: "https://melanie.gitpages.psi.ch/SciCatPages/"
+  ingestManual: "https://melanie.gitpages.psi.ch/SciCatPages/",
+  gettingStarted: "https://melanie.gitpages.psi.ch/SciCatPages/SciCatGettingStartedSLSSummary.pdf",
+  logbookEnabled: false,
+  tableSciDataEnabled: false,
+  metadataPreviewEnabled: false,
+  datasetReduceEnabled: false,
+  fileColorEnabled: false
 };

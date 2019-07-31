@@ -41,7 +41,7 @@ export const getQuery = createSelector(
 
 export const getSamplesList = createSelector(
   getSamples,
-  samples => Object.keys(samples).map(samplelId => samples[samplelId])
+  samples => Object.keys(samples).map(sampleId => samples[sampleId])
 );
 
 const getSamples2 = createSelector(

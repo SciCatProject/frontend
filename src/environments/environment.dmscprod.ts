@@ -13,5 +13,7 @@ export const environment = {
   userProfileImageEnabled: true,
   facility: "ESS",
   tableSciDataEnabled: true,
+  columnSelectEnabled: true,
+  metadataPreviewEnabled: true,
   fileColorEnabled: true
 };

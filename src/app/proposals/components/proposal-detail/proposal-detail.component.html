@@ -49,6 +49,28 @@
           </th>
           <td>{{ proposal.abstract }}</td>
         </tr>
+        <tr>
+          <th>
+            <i class="material-icons"> timer </i>
+            Start Time
+          </th>
+          <td>{{ startTime | date }}</td>
+        </tr>
+        <tr>
+          <th>
+            <i class="material-icons"> timer_off </i>
+            End Time
+          </th>
+          <td>{{ endTime | date }}</td>
+        </tr>
+        <tr>
+          <th>
+            <i class="material-icons"> perm_contact_calendar </i>
+            Identifier
+          </th>
+          <td>{{ proposal.proposalId  }}</td>
+        </tr>
+
       </table>
     </div>
   </mat-tab>
@@ -65,6 +87,7 @@
           [pageIndex]="currentPage$ | async"
           [length]="datasetCount$ | async"
           (page)="onPageChange($event)"
+          showFirstLastButtons
         >
         </mat-paginator>
         <mat-table #table [dataSource]="datasets" class="dataset-table">
@@ -167,3 +190,13 @@
     </div>
   </mat-tab>
 </mat-tab-group>
+
+<mat-card style="margin:1em">
+  <button (click)="show = !show">
+    {{ show ? "Hide MetaData" : "Show Metadata" }}
+  </button>
+  <br />
+  <div *ngIf="show">
+    <ngx-json-viewer [json]="proposal" [expanded]="false"></ngx-json-viewer>
+  </div>
+</mat-card>

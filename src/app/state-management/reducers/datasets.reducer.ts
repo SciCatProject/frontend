@@ -73,7 +73,9 @@ import {
   SORT_BY_COLUMN,
   SortByColumnAction,
   REDUCE_DATASET_COMPLETE,
-  ReduceDatasetCompleteAction
+  ReduceDatasetCompleteAction,
+  REDUCE_DATASET,
+  REDUCE_DATASET_FAILED
 } from "state-management/actions/datasets.actions";
 
 import {
@@ -458,9 +460,17 @@ export function datasetsReducer(
       return { ...state, batch };
     }
 
+    case REDUCE_DATASET: {
+      return { ...state, resultLoading: true }
+    }
+
+    case REDUCE_DATASET_FAILED: {
+      return { ...state, resultLoading: false }
+    }
+
     case REDUCE_DATASET_COMPLETE: {
       let result = (action as ReduceDatasetCompleteAction).result;
-      return { ...state, result };
+      return { ...state, result, resultLoading: false };
     }
 
     default: {

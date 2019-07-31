@@ -23,41 +23,46 @@ These instructions will get you a copy of the project up and running on your loc
 What things you need to install the software and how to install them
 
 ```
-angular v6 or higher
+Angular v8 or higher
 npm version 6 or higher
-node version 8 or higher
+node version 10 or higher
 ```
 
 ### Installing
 
-
-You can deploy with kubernetes or docker-compose
-
+Use git to clone the repository
+```
+git clone https://github.com/SciCatProject/catanie
+cd catanie
+```
+First install the required modules
 ```
 npm install
+```
+Then build with the Angular CLI
+```
 npx ng build
 ```
 
-And repeat
+You can deploy a test server with the following command:
 
 ```
 npx ng serve 
 ```
 
-End with an example of getting some data out of the system or using it for a little demo
 
-## Running the tests
+## Running the unit tests
 
-Unit tests 
-
+To run the unit tests, type:
 ```
 npm test
 ```
 
 
-### Break down into end to end tests
+### End to end tests
 
-e2e tests check content is rendered correctly
+To run the end to end tests, type:
+
 ```
 npm run e2e
 ```

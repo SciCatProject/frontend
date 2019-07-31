@@ -43,7 +43,7 @@ export class SampleTableComponent implements OnInit, OnDestroy {
   public samples$ = this.store.pipe(select(getSamplesList));
   samples: Sample[] = [];
   displayedColumns = [
-    "samplelId",
+    "sampleId",
     "owner",
     "createdAt",
     "description",
@@ -88,7 +88,7 @@ export class SampleTableComponent implements OnInit, OnDestroy {
   onRowSelect(event, sample) {
     this.store.dispatch(new FetchSampleAction(sample));
     this.router.navigateByUrl(
-      "/samples/" + encodeURIComponent(sample.samplelId)
+      "/samples/" + encodeURIComponent(sample.sampleId)
     );
   }
 

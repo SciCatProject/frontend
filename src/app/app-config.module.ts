@@ -6,12 +6,13 @@ export const APP_CONFIG = new InjectionToken<AppConfig>("app.config");
 export class AppConfig {
   externalAuthEndpoint: string;
   fileserverBaseURL: string;
+  synapseBaseUrl: string;
+  riotBaseUrl: string;
   production: boolean;
   disabledDatasetColumns: string[];
   archiveWorkflowEnabled: boolean;
   editMetadataEnabled: boolean;
   editSampleEnabled: boolean;
-  csvEnabled: boolean;
   scienceSearchEnabled: boolean;
   facility: string;
   shoppingCartEnabled: boolean;
@@ -23,18 +24,21 @@ export class AppConfig {
   tableSciDataEnabled: boolean;
   datasetReduceEnabled: boolean;
   fileColorEnabled: boolean;
+  metadataPreviewEnabled: boolean;
   ingestManual: string;
+  gettingStarted: string;
 }
 
 export const APP_DI_CONFIG: AppConfig = {
   externalAuthEndpoint: environment.externalAuthEndpoint,
   fileserverBaseURL: environment["fileserverBaseURL"] || null,
+  synapseBaseUrl: environment["synapseBaseUrl"] || null,
+  riotBaseUrl: environment["riotBaseUrl"] || null,
   production: environment.production,
   disabledDatasetColumns: environment["disabledDatasetColumns"] || [],
   archiveWorkflowEnabled: environment["archiveWorkflowEnabled"] || null,
   editMetadataEnabled: environment["editMetadataEnabled"] || null,
   editSampleEnabled: environment["editSampleEnabled"] || null,
-  csvEnabled: environment["csvEnabled"] || null,
   scienceSearchEnabled: environment["scienceSearchEnabled"] || null,
   facility: environment["facility"] || null,
   shoppingCartEnabled: environment["shoppingCartEnabled"] || false,
@@ -46,7 +50,9 @@ export const APP_DI_CONFIG: AppConfig = {
   tableSciDataEnabled: environment["tableSciDataEnabled"] || false,
   datasetReduceEnabled: environment["datasetReduceEnabled"] || false,
   fileColorEnabled: environment["fileColorEnabled"] || false,
+  metadataPreviewEnabled: environment["metadataPreviewEnabled"] || false,
   ingestManual: environment["ingestManual"] || null,
+  gettingStarted: environment["gettingStarted"] || null,
 };
 
 @NgModule({

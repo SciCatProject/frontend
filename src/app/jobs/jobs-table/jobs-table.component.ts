@@ -1,8 +1,7 @@
 import * as JobActions from "state-management/actions/jobs.actions";
 import * as selectors from "state-management/selectors";
 import { JobViewMode } from "state-management/models";
-import { AfterViewInit } from "@angular/core/src/metadata/lifecycle_hooks";
-import { Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
+import { Component, OnDestroy, OnInit, ViewChild, AfterViewInit } from "@angular/core";
 import { ConfigService } from "shared/services/config.service";
 import { DatePipe } from "@angular/common";
 import { HttpClient } from "@angular/common/http";
@@ -11,7 +10,6 @@ import { MatPaginator } from "@angular/material";
 import { Router } from "@angular/router";
 import { select, Store } from "@ngrx/store";
 import { LoginService } from "users/login.service";
-
 
 @Component({
   selector: "jobs-table",
@@ -33,7 +31,6 @@ export class JobsTableComponent implements OnInit, OnDestroy, AfterViewInit {
   modes = Object.keys(JobViewMode).map(k => JobViewMode[k as any]);
   currentMode = JobViewMode.myJobs;
 
-
   loading$: any = false;
   limit: any = 50;
 
@@ -44,7 +41,7 @@ export class JobsTableComponent implements OnInit, OnDestroy, AfterViewInit {
   event: any;
 
   displayedColumns = this.cols.concat();
-  @ViewChild(MatPaginator)
+  @ViewChild(MatPaginator, { static: false })
   paginator: MatPaginator;
 
   profile: any;

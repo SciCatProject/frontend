@@ -1,7 +1,6 @@
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import { ArchiveSettingsComponent } from "./policies/policies.component";
-// import { ConfigFormModule } from 'shared/modules/config-form/config-form.module';
+import { PoliciesComponent } from "./policies/policies.component";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { PoliciesService } from "./policies.service";
 import { EditDialogComponent } from "./edit-dialog/edit-dialog.component";
@@ -26,6 +25,7 @@ import {
   MatFormFieldModule,
   MatOptionModule
 } from "@angular/material";
+import { MatExpansionModule } from "@angular/material/expansion";
 import { MatButtonToggleModule } from "@angular/material/button-toggle";
 import { MatChipsModule } from "@angular/material/chips";
 import { SharedCatanieModule } from "shared/shared.module";
@@ -62,11 +62,12 @@ import { FlexLayoutModule } from "@angular/flex-layout";
     MatChipsModule,
     StoreModule.forFeature("policies", policiesReducer),
     MatDialogModule,
-    FlexLayoutModule
+    FlexLayoutModule,
+    MatExpansionModule
   ],
-  declarations: [ArchiveSettingsComponent, EditDialogComponent],
+  declarations: [PoliciesComponent, EditDialogComponent],
   providers: [PoliciesService],
-  exports: [ArchiveSettingsComponent],
+  exports: [PoliciesComponent],
   entryComponents: [EditDialogComponent]
 })
 export class PoliciesModule {}

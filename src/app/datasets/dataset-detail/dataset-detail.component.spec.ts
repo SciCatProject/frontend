@@ -1,6 +1,5 @@
 import { APP_CONFIG, AppConfigModule } from "app-config.module";
 import { ActivatedRoute } from "@angular/router";
-import { ConfigFormComponent } from "shared/modules/config-form/config-form.component";
 import { DatafilesComponent } from "datasets/datafiles/datafiles.component";
 import { DatasetDetailComponent } from "./dataset-detail.component";
 import { FileSizePipe } from "../../shared/pipes/filesize.pipe";
@@ -32,7 +31,6 @@ describe("DatasetDetailComponent", () => {
       declarations: [
         DatasetDetailComponent,
         DatafilesComponent,
-        ConfigFormComponent,
         LinkyPipe,
         ObjKeysPipe,
         TitleCasePipe,
