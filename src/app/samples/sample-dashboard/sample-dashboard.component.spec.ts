@@ -5,6 +5,8 @@ import { SampleDashboardComponent } from "./sample-dashboard.component";
 import { SampleSearchComponent } from "samples/sample-search/sample-search.component";
 import { SampleTableComponent } from "samples/sample-table/sample-table.component";
 import { MatTableModule } from "@angular/material";
+import { MockStore } from "shared/MockStubs";
+import { Store } from "@ngrx/store";
 
 describe("SampleDashboardComponent", () => {
   let component: SampleDashboardComponent;
@@ -21,7 +23,15 @@ describe("SampleDashboardComponent", () => {
         SampleSearchComponent,
         SampleTableComponent
       ]
-    }).compileComponents();
+    });
+    TestBed.overrideComponent(SampleDashboardComponent, {
+      set: {
+        providers: [
+          { provide: Store , useClass: MockStore}
+        ]
+      }
+    });
+    TestBed.compileComponents();
   }));
 
   beforeEach(() => {
