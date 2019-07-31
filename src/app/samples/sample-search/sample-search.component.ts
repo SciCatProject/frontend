@@ -1,4 +1,5 @@
 import { Component, OnInit } from "@angular/core";
+import { Store } from "@ngrx/store";
 
 @Component({
   selector: "app-sample-search",
@@ -8,9 +9,14 @@ import { Component, OnInit } from "@angular/core";
 export class SampleSearchComponent implements OnInit {
   query: string;
 
-  constructor() {}
+  constructor(
+    private store: Store<any>
+  ) {}
 
   ngOnInit() {}
 
-  textSearchChanged() {}
+  textSearchChanged(query: string) {
+    console.log(query);
+    // this.store.dispatch ( new SampleSearchAction(query));
+  }
 }
