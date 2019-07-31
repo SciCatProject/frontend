@@ -5,6 +5,7 @@ import { MatFormFieldModule } from "@angular/material";
 import { MockStore } from "shared/MockStubs";
 import { Store } from "@ngrx/store";
 import { NO_ERRORS_SCHEMA } from "@angular/compiler/src/core";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 
 describe("SampleSearchComponent", () => {
   let component: SampleSearchComponent;
@@ -12,9 +13,10 @@ describe("SampleSearchComponent", () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      schemas: [NO_ERRORS_SCHEMA],
       imports: [
-        MatFormFieldModule
+        FormsModule,
+        MatFormFieldModule,
+        ReactiveFormsModule
       ],
       declarations: [
         SampleSearchComponent]
