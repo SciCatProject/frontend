@@ -91,11 +91,6 @@ export const routes: Routes = [
   },
   {
     path: "samples",
-    component: SampleTableComponent,
-    canActivate: [AuthCheck]
-  },
-  {
-    path: "samples/dashboard",
     component: SampleDashboardComponent,
     canActivate: [AuthCheck]
   },
