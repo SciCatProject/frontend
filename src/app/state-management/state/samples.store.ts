@@ -29,6 +29,7 @@ export const initialSampleState: SampleState = {
   searchTerms: "",
 
   filters: {
+    text: "",
     sortField: "creationTime:desc",
     skip: 0,
     limit: 30
