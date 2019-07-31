@@ -6,6 +6,7 @@ import { MockStore } from "shared/MockStubs";
 import { Store } from "@ngrx/store";
 import { NO_ERRORS_SCHEMA } from "@angular/compiler/src/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { BrowserAnimationsModule, NoopAnimationsModule } from "@angular/platform-browser/animations";
 
 describe("SampleSearchComponent", () => {
   let component: SampleSearchComponent;
@@ -14,10 +15,12 @@ describe("SampleSearchComponent", () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
+        BrowserAnimationsModule,
         FormsModule,
         MatFormFieldModule,
-        ReactiveFormsModule,
-        MatInputModule
+        MatInputModule,
+        NoopAnimationsModule,
+        ReactiveFormsModule
       ],
       declarations: [
         SampleSearchComponent]
