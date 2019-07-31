@@ -9,7 +9,7 @@
         <i class="material-icons"> school </i>
         Publish
       </button>
-      <button mat-button (click)="onShare()" class="button" color="primary">
+      <button mat-button (click)="openDialogWithoutRef()" class="button" color="primary">
         <i class="material-icons"> group_add </i>
         Share
       </button>
@@ -75,3 +75,27 @@
     There are no datasets in the batch.
   </ng-template>
 </div>
+
+<ng-template #secondDialog>
+  <h2 matDialogTitle>Share Datasets</h2>
+  <mat-dialog-content>
+    <p><em>*insert user emails to share datasets with*</em></p>
+  </mat-dialog-content>
+  <mat-form-field class="chip-list">
+      <mat-chip-list #chipList aria-label="Fruit selection">
+        <mat-chip *ngFor="let share of shareEmails" [selectable]="selectable"
+                 [removable]="removable" (removed)="remove(share)">
+          {{share.name}}
+          <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+        </mat-chip>
+        <input placeholder="New share..."
+               [matChipInputFor]="chipList"
+               [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+               [matChipInputAddOnBlur]="addOnBlur"
+               (matChipInputTokenEnd)="add($event)">
+      </mat-chip-list>
+    </mat-form-field>
+  <mat-dialog-actions align="end">
+    <button mat-button matDialogClose (click)="onShare()" color="primary">Share Datasets</button>
+  </mat-dialog-actions>
+</ng-template>
