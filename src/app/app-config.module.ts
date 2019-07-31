@@ -26,6 +26,7 @@ export class AppConfig {
   metadataPreviewEnabled: boolean;
   ingestManual: string;
   gettingStarted: string;
+  searchSamples: string;
 }
 
 export const APP_DI_CONFIG: AppConfig = {
@@ -51,6 +52,7 @@ export const APP_DI_CONFIG: AppConfig = {
   metadataPreviewEnabled: environment["metadataPreviewEnabled"] || false,
   ingestManual: environment["ingestManual"] || null,
   gettingStarted: environment["gettingStarted"] || null,
+  searchSamples: environment["searchSamples"] || false
 };
 
 @NgModule({
