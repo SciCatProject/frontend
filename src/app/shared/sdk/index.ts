@@ -61,6 +61,7 @@ import { UserIdentityApi } from './services/custom/UserIdentity';
 import { ApplicationCredentialApi } from './services/custom/ApplicationCredential';
 import { PolicyApi } from './services/custom/Policy';
 import { JobApi } from './services/custom/Job';
+import { ShareGroupApi } from './services/custom/ShareGroup';
 import { DatasetAttachmentApi } from './services/custom/DatasetAttachment';
 import { OrigDatablockApi } from './services/custom/OrigDatablock';
 import { LogbookApi } from './services/custom/Logbook';
@@ -107,6 +108,7 @@ export class SDKBrowserModule {
         ApplicationCredentialApi,
         PolicyApi,
         JobApi,
+        ShareGroupApi,
         DatasetAttachmentApi,
         OrigDatablockApi,
         LogbookApi,

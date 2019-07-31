@@ -9,19 +9,19 @@ import { LoopBackFilter,  } from '../../models/BaseModels';
 import { ErrorHandler } from '../core/error.service';
 import { Observable, Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { PublishedData } from '../../models/PublishedData';
+import { ShareGroup } from '../../models/ShareGroup';
 import { SocketConnection } from '../../sockets/socket.connections';
 
 
 /**
- * Api services for the `PublishedData` model.
+ * Api services for the `ShareGroup` model.
  *
  * **Details**
  *
- * Stores the meta data information for an accessible, published and DOI-identified collection of datasets. It defines a list of mandatory and optional metadata fields to be included. DataCite mandatory fields, a full URL to the landing page and modification times are included.
+ * Definition of groups to share datasets between scicat users
  */
 @Injectable()
-export class PublishedDataApi extends BaseLoopBackApi {
+export class ShareGroupApi extends BaseLoopBackApi {
 
   constructor(
     @Inject(HttpClient) protected http: HttpClient,
@@ -46,13 +46,13 @@ export class PublishedDataApi extends BaseLoopBackApi {
    *
    * <em>
    * (The remote method definition does not provide any description.
-   * This usually means the response is a `PublishedData` object.)
+   * This usually means the response is a `ShareGroup` object.)
    * </em>
    */
   public patchOrCreate(data: any = {}, customHeaders?: Function): Observable<any> {
     let _method: string = "PATCH";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/PublishedData";
+    "/ShareGroups";
     let _routeParams: any = {};
     let _postBody: any = {
       data: data
@@ -65,7 +65,7 @@ export class PublishedDataApi extends BaseLoopBackApi {
   /**
    * Patch attributes for a model instance and persist it into the data source.
    *
-   * @param {any} id PublishedData id
+   * @param {any} id ShareGroup id
    *
    * @param {object} data Request data.
    *
@@ -77,13 +77,13 @@ export class PublishedDataApi extends BaseLoopBackApi {
    *
    * <em>
    * (The remote method definition does not provide any description.
-   * This usually means the response is a `PublishedData` object.)
+   * This usually means the response is a `ShareGroup` object.)
    * </em>
    */
   public patchAttributes(id: any, data: any = {}, customHeaders?: Function): Observable<any> {
     let _method: string = "PATCH";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/PublishedData/:id";
+    "/ShareGroups/:id";
     let _routeParams: any = {
       id: id
     };
@@ -91,34 +91,6 @@ export class PublishedDataApi extends BaseLoopBackApi {
       data: data
     };
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
-    return result;
-  }
-
-  /**
-   * <em>
-         * (The remote method definition does not provide any description.)
-         * </em>
-   *
-   * @param {string} pid 
-   *
-   * @returns {object} An empty reference that will be
-   *   populated with the actual data once the response is returned
-   *   from the server.
-   *
-   * <em>
-   * (The remote method definition does not provide any description.
-   * This usually means the response is a `PublishedData` object.)
-   * </em>
-   */
-  public formPopulate(pid: any, customHeaders?: Function): Observable<any> {
-    let _method: string = "GET";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/PublishedData/formPopulate";
-    let _routeParams: any = {};
-    let _postBody: any = {};
-    let _urlParams: any = {};
-    if (typeof pid !== 'undefined' && pid !== null) _urlParams.pid = pid;
     let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
     return result;
   }
@@ -138,12 +110,12 @@ export class PublishedDataApi extends BaseLoopBackApi {
    *
    * Data properties:
    *
-   *  - `doi` – `{string}` - 
+   *  - `groups` – `{Object}` - 
    */
-  public register(id: any, customHeaders?: Function): Observable<any> {
+  public getGroups(id: any, customHeaders?: Function): Observable<any> {
     let _method: string = "POST";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/PublishedData/:id/register";
+    "/ShareGroups/:id/register";
     let _routeParams: any = {
       id: id
     };
@@ -155,9 +127,9 @@ export class PublishedDataApi extends BaseLoopBackApi {
 
   /**
    * The name of the model represented by this $resource,
-   * i.e. `PublishedData`.
+   * i.e. `ShareGroup`.
    */
   public getModelName() {
-    return "PublishedData";
+    return "ShareGroup";
   }
 }

@@ -125,13 +125,11 @@ export class PolicyApi extends BaseLoopBackApi {
   }
 
   /**
-   * <em>
-         * (The remote method definition does not provide any description.)
-         * </em>
+   * updates multiple records on the Policy model and uses ownerGroup to identify those records
    *
    * @param {object} data Request data.
    *
-   *  - `where` – `{object}` - 
+   *  - `ownerGroupList` – `{string}` - Comma-separated string of owner groups to update e.g. "p14159, p24959"
    *
    *  - `data` – `{object}` - 
    *
@@ -144,14 +142,14 @@ export class PolicyApi extends BaseLoopBackApi {
    * This usually means the response is a `Policy` object.)
    * </em>
    */
-  public updatewhere(where: any, data: any, customHeaders?: Function): Observable<any> {
+  public updatewhere(ownerGroupList: any, data: any, customHeaders?: Function): Observable<any> {
     let _method: string = "POST";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
     "/Policies/updatewhere";
     let _routeParams: any = {};
     let _postBody: any = {};
     let _urlParams: any = {};
-    if (typeof where !== 'undefined' && where !== null) _urlParams.where = where;
+    if (typeof ownerGroupList !== 'undefined' && ownerGroupList !== null) _urlParams.ownerGroupList = ownerGroupList;
     if (typeof data !== 'undefined' && data !== null) _urlParams.data = data;
     let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
     return result;

@@ -2,7 +2,7 @@
 
 declare var Object: any;
 export interface SampleInterface {
-  "samplelId"?: string;
+  "sampleId"?: string;
   "owner"?: string;
   "description"?: string;
   "createdAt"?: Date;
@@ -16,7 +16,7 @@ export interface SampleInterface {
 }
 
 export class Sample implements SampleInterface {
-  "samplelId": string;
+  "sampleId": string;
   "owner": string;
   "description": string;
   "createdAt": Date;
@@ -58,10 +58,10 @@ export class Sample implements SampleInterface {
       name: 'Sample',
       plural: 'Samples',
       path: 'Samples',
-      idName: 'samplelId',
+      idName: 'sampleId',
       properties: {
-        "samplelId": {
-          name: 'samplelId',
+        "sampleId": {
+          name: 'sampleId',
           type: 'string'
         },
         "owner": {
