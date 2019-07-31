@@ -1,5 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { Store } from "@ngrx/store";
+import { SearchSampleAction } from "state-management/actions/samples.actions";
 
 @Component({
   selector: "app-sample-search",
@@ -17,6 +18,6 @@ export class SampleSearchComponent implements OnInit {
 
   textSearchChanged(query: string) {
     console.log(query);
-    // this.store.dispatch ( new SampleSearchAction(query));
+    this.store.dispatch ( new SearchSampleAction (query));
   }
 }
