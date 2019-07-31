@@ -26,7 +26,7 @@ export class AppConfig {
   metadataPreviewEnabled: boolean;
   ingestManual: string;
   gettingStarted: string;
-  searchSamples: string;
+  searchSamples: boolean;
 }
 
 export const APP_DI_CONFIG: AppConfig = {

@@ -1,4 +1,5 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, Inject } from "@angular/core";
+import { APP_CONFIG, AppConfig } from "app-config.module";
 
 @Component({
   selector: "sample-dashboard",
@@ -6,7 +7,9 @@ import { Component, OnInit } from "@angular/core";
   styleUrls: ["./sample-dashboard.component.scss"]
 })
 export class SampleDashboardComponent implements OnInit {
-  constructor() {}
+  constructor(
+    @Inject(APP_CONFIG) public appConfig: AppConfig
+  ) {}
 
   ngOnInit() {}
 }
