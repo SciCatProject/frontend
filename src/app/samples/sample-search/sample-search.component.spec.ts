@@ -2,6 +2,8 @@ import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { SampleSearchComponent } from "./sample-search.component";
 import { MatFormFieldModule } from "@angular/material";
+import { MockStore } from "shared/MockStubs";
+import { Store } from "@ngrx/store";
 
 describe("SampleSearchComponent", () => {
   let component: SampleSearchComponent;
@@ -14,7 +16,13 @@ describe("SampleSearchComponent", () => {
       ],
       declarations: [
         SampleSearchComponent]
-    }).compileComponents();
+    });
+    TestBed.overrideComponent(SampleSearchComponent,  {
+      set: {
+        providers: [{ provide: Store, useClass: MockStore }]
+      }
+    });
+    TestBed.compileComponents();
   }));
 
   beforeEach(() => {

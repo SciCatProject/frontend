@@ -30,6 +30,11 @@ export class SampleSortByColumnAction implements Action {
   constructor(readonly column: string, readonly direction: string) { }
 }
 
+export class SearchSampleAction implements Action {
+  type = SEARCH_SAMPLES;
+
+  constructor(readonly query: string) { }
+}
 export class SelectSampleAction implements Action {
   type = SELECT_SAMPLE;
 
