@@ -21,7 +21,8 @@ import {
   FETCH_SAMPLE_COUNT,
   FetchSampleCountAction,
   FetchSampleCountCompleteAction,
-  FetchSampleCountFailedAction
+  FetchSampleCountFailedAction,
+  SEARCH_SAMPLES
 } from "../actions/samples.actions";
 import { getQuery, getFullqueryParams } from "state-management/selectors/samples.selectors";
 
@@ -30,7 +31,7 @@ export class SamplesEffects {
   private query$ = this.store.select(getQuery);
   private fullquery$ = this.store.select(getFullqueryParams);
   @Effect()
-  fetchSamples1$: Observable<Action> = this.actions$.pipe(
+  fetchSamples$: Observable<Action> = this.actions$.pipe(
     ofType(FETCH_SAMPLES),
     withLatestFrom(this.query$),
     map(([action, params]) => params),
@@ -43,8 +44,8 @@ export class SamplesEffects {
   );
 
   @Effect()
-  private fetchSamples$: Observable<Action> = this.actions$.pipe(
-    ofType(FETCH_SAMPLES),
+  private searchSamples$: Observable<Action> = this.actions$.pipe(
+    ofType(SEARCH_SAMPLES),
     withLatestFrom(this.fullquery$),
     map(([action, params]) => params),
     mergeMap(({ query, limits }) => {

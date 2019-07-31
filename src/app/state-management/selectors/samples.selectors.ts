@@ -43,7 +43,6 @@ export const getQuery = createSelector(
 export const getFullqueryParams = createSelector(
   getSampleState,
   state => {
-    // dont query with modeToggle, its only in filters for persistent routing
     const query = {
       text: state.filters.text
     };
