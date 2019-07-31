@@ -46,7 +46,7 @@ describe("SampleTableComponent", () => {
         providers: [
           { provide: HttpClient, useClass: MockHttp },
           { provide: Router, useClass: MockRouter },
-          { provide: SampleService, useClass: {} },
+          { provide: SampleService, useValue: {} },
           { provide: Store, useClass: MockStore }
         ]
       }
