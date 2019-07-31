@@ -1,1 +1,13 @@
-<p>sample-search works!</p>
+
+
+<mat-form-field>
+  <input
+    matInput
+    class="search-input"
+    placeholder="Search Entries"
+    aria-label="Search Entries"
+    name="search"
+    [ngModel]="query"
+    (ngModelChange)="textSearchChanged($event)"
+  />
+</mat-form-field>

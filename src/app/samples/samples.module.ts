@@ -21,10 +21,12 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { SampleService } from "./sample.service";
 import { SampleSearchComponent } from "./sample-search/sample-search.component";
 import { SampleDashboardComponent } from "./sample-dashboard/sample-dashboard.component";
+import { FlexLayoutModule } from "@angular/flex-layout";
 
 @NgModule({
   imports: [
     CommonModule,
+    FlexLayoutModule,
     FormsModule,
     MatCardModule,
     MatIconModule,

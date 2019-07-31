@@ -37,6 +37,7 @@ import { PublisheddataDetailsComponent } from "publisheddata/publisheddata-detai
 
 // handles external URLs by lookup in the env config
 import { RedirectGuard } from "app-routing/redirect-guard";
+import { SampleDashboardComponent } from "samples/sample-dashboard/sample-dashboard.component";
 
 export const routes: Routes = [
   { path: "", redirectTo: "/datasets", pathMatch: "full" },
@@ -91,6 +92,11 @@ export const routes: Routes = [
   {
     path: "samples",
     component: SampleTableComponent,
+    canActivate: [AuthCheck]
+  },
+  {
+    path: "samples/dashboard",
+    component: SampleDashboardComponent,
     canActivate: [AuthCheck]
   },
   {
