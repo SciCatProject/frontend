@@ -8,6 +8,7 @@ import { MatTableModule, MatDialog } from "@angular/material";
 import { MockStore, MockRouter } from "shared/MockStubs";
 import { Store } from "@ngrx/store";
 import { Router } from "@angular/router";
+import { APP_CONFIG } from "app-config.module";
 
 describe("SampleDashboardComponent", () => {
   let component: SampleDashboardComponent;
@@ -28,6 +29,7 @@ describe("SampleDashboardComponent", () => {
     TestBed.overrideComponent(SampleDashboardComponent, {
       set: {
         providers: [
+          { provide: APP_CONFIG, useValue: { editSampleEnabled: true } },
           { provide: Store, useClass: MockStore },
           { provide: MatDialog, useValue: {} },
           { provide: Router, useClass: MockRouter },
