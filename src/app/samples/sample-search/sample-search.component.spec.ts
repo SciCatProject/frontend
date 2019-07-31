@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { SampleSearchComponent } from "./sample-search.component";
-import { MatFormFieldModule } from "@angular/material";
+import { MatFormFieldModule, MatInputModule } from "@angular/material";
 import { MockStore } from "shared/MockStubs";
 import { Store } from "@ngrx/store";
 import { NO_ERRORS_SCHEMA } from "@angular/compiler/src/core";
@@ -16,7 +16,8 @@ describe("SampleSearchComponent", () => {
       imports: [
         FormsModule,
         MatFormFieldModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        MatInputModule
       ],
       declarations: [
         SampleSearchComponent]

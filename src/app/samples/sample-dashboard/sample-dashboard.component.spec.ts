@@ -4,7 +4,7 @@ import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 import { SampleDashboardComponent } from "./sample-dashboard.component";
 import { SampleSearchComponent } from "samples/sample-search/sample-search.component";
 import { SampleTableComponent } from "samples/sample-table/sample-table.component";
-import { MatTableModule } from "@angular/material";
+import { MatTableModule, MatDialog } from "@angular/material";
 import { MockStore, MockRouter } from "shared/MockStubs";
 import { Store } from "@ngrx/store";
 import { Router } from "@angular/router";
@@ -29,6 +29,7 @@ describe("SampleDashboardComponent", () => {
       set: {
         providers: [
           { provide: Store, useClass: MockStore },
+          { provide: MatDialog, useValue: {} },
           { provide: Router, useClass: MockRouter },
         ]
       }
