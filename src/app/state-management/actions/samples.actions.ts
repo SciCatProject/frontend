@@ -22,6 +22,8 @@ export const FETCH_SAMPLE_COUNT_FAILED = "[Sample] Fetch Sample Count Failed";
 export const SAMPLE_SORT_BY_COLUMN = "[Sample] Sort by Column";
 export const CHANGE_PAGE = "[Sample] Change Page";
 
+export const SEARCH_SAMPLES = "[Sample] Search Samples";
+
 export class SampleSortByColumnAction implements Action {
   readonly type = SAMPLE_SORT_BY_COLUMN;
 

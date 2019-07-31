@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { SampleSearchComponent } from "./sample-search.component";
+import { MatFormFieldModule } from "@angular/material";
 
 describe("SampleSearchComponent", () => {
   let component: SampleSearchComponent;
@@ -8,7 +9,11 @@ describe("SampleSearchComponent", () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [SampleSearchComponent]
+      imports: [
+        MatFormFieldModule
+      ],
+      declarations: [
+        SampleSearchComponent]
     }).compileComponents();
   }));
 
