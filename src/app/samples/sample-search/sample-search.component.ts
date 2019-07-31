@@ -12,7 +12,5 @@ export class SampleSearchComponent implements OnInit {
 
   ngOnInit() {}
 
-  textSearchChanged() {
-    
-  }
+  textSearchChanged() {}
 }
