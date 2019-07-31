@@ -37,7 +37,8 @@ describe("SampleTableComponent", () => {
             editSampleEnabled: true
           }
         },
-        { provide: MatDialog, useValue: {} }
+        { provide: MatDialog, useValue: {} },
+        { provide: Store, useClass: MockStore }
       ]
     });
     TestBed.overrideComponent(SampleTableComponent, {
