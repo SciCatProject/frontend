@@ -53,7 +53,8 @@ export function samplesReducer(
 
     case SEARCH_SAMPLES: {
       const { query } = action as SearchSampleAction;
-      return { ...state, searchTerms: query };
+      const filters = {...state.filters, text: query}  ;
+      return { ...state, filters,  searchTerms: query };
     }
 
     case ADD_SAMPLE_COMPLETE: {

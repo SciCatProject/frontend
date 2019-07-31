@@ -100,7 +100,7 @@ export class PublishedDataApi extends BaseLoopBackApi {
          * (The remote method definition does not provide any description.)
          * </em>
    *
-   * @param {object} pid 
+   * @param {string} pid 
    *
    * @returns {object} An empty reference that will be
    *   populated with the actual data once the response is returned

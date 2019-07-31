@@ -40,6 +40,25 @@ export const getQuery = createSelector(
   }
 );
 
+export const getFullqueryParams = createSelector(
+  getSampleState,
+  state => {
+    // dont query with modeToggle, its only in filters for persistent routing
+    const query = {
+      text: state.filters.text
+    };
+    const limits = {
+      order: state.filters.sortField,
+      skip: state.filters.skip,
+      limit: state.filters.limit
+    };
+    return {
+      query: JSON.stringify(query),
+      limits
+    };
+  }
+);
+
 export const getSamplesList = createSelector(
   getSamples,
   samples => Object.keys(samples).map(sampleId => samples[sampleId])
