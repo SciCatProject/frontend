@@ -1,15 +1,24 @@
 <div *ngIf="logbook">
-  <div fxLayout="row" fxLayout.xs="column">
+  <div fxLayout="row" fxLayout.lt-lg="column">
     <div fxFlex="14" style="margin-right: 1em">
-      <mat-card style="margin: 1em">
+      <mat-card class="bigFilter" style="margin: 1em">
         <app-logbooks-filter></app-logbooks-filter>
       </mat-card>
-      <mat-card style="margin: 1em">
+      <mat-card class="bigFilter" style="margin: 1em">
         <app-content-selector></app-content-selector>
       </mat-card>
+      <mat-expansion-panel class="smallFilter" style="margin: 1em">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <div class="title">Filter</div>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <app-logbooks-filter></app-logbooks-filter>
+        <app-content-selector></app-content-selector>
+      </mat-expansion-panel>
       <a
         mat-raised-button
-        class="mat-elevation-z1"
+        class="chatButton mat-elevation-z1"
         href="{{ appConfig.riotBaseUrl }}/#/room/{{ logbook.roomId }}"
         target="_blank"
         rel="noopener noreferrer"
