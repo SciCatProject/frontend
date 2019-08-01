@@ -69,7 +69,7 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
     ProposalDashboardComponent,
     ProposalSearchComponent
   ],
-  exports: [ProposalSearchComponent],
+  exports: [ProposalSearchComponent, ListProposalsPageComponent],
   providers: [ProposalsService, DatasetService]
 })
 export class ProposalsModule {}

@@ -8,6 +8,7 @@ import { Store } from "@ngrx/store";
 import { MatDialog } from "@angular/material";
 import { Router } from "@angular/router";
 import { MockRouter, MockStore } from "shared/MockStubs";
+import { ProposalsListComponent } from "proposals/components/proposals-list/proposals-list.component";
 
 describe("ProposalDashboardComponent", () => {
   let component: ProposalDashboardComponent;
@@ -18,6 +19,7 @@ describe("ProposalDashboardComponent", () => {
       declarations: [
         ProposalDashboardComponent,
         ListProposalsPageComponent,
+        ProposalsListComponent,
         ProposalSearchComponent
       ]
     });
