@@ -37,6 +37,7 @@ import { PublisheddataDetailsComponent } from "publisheddata/publisheddata-detai
 
 // handles external URLs by lookup in the env config
 import { RedirectGuard } from "app-routing/redirect-guard";
+import { ProposalDashboardComponent } from "proposals/proposal-dashboard/proposal-dashboard.component";
 
 export const routes: Routes = [
   { path: "", redirectTo: "/datasets", pathMatch: "full" },
@@ -71,6 +72,11 @@ export const routes: Routes = [
   {
     path: "proposals",
     component: ListProposalsPageComponent,
+    canActivate: [AuthCheck]
+  },
+  {
+    path: "proposals/dashboard",
+    component: ProposalDashboardComponent,
     canActivate: [AuthCheck]
   },
   {
