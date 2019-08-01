@@ -32,24 +32,26 @@ import { SharedCatanieModule } from "../shared/shared.module";
 import { LogbooksModule } from "logbooks/logbooks.module";
 import { ProposalDashboardComponent } from './proposal-dashboard/proposal-dashboard.component';
 import { ProposalSearchComponent } from './proposal-search/proposal-search.component';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 @NgModule({
   imports: [
     CommonModule,
+    EffectsModule.forFeature([ProposalsEffects]),
+    FlexLayoutModule,
+    FontAwesomeModule,
+    LogbooksModule,
+    MatCardModule,
+    MatIconModule,
+    MatListModule,
+    MatPaginatorModule,
+    MatTableModule,
+    MatTabsModule,
+    MatTooltipModule,
+    NgxJsonViewerModule,
     RouterModule,
     SharedCatanieModule,
-    FontAwesomeModule,
-    StoreModule.forFeature("proposals", proposalsReducer),
-    EffectsModule.forFeature([ProposalsEffects]),
-    MatIconModule,
-    MatTooltipModule,
-    MatListModule,
-    MatCardModule,
-    MatTabsModule,
-    MatTableModule,
-    MatPaginatorModule,
-    NgxJsonViewerModule,
-    LogbooksModule
+    StoreModule.forFeature("proposals", proposalsReducer)
   ],
   declarations: [
     ListProposalsPageComponent,

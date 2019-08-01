@@ -71,11 +71,6 @@ export const routes: Routes = [
   },
   {
     path: "proposals",
-    component: ListProposalsPageComponent,
-    canActivate: [AuthCheck]
-  },
-  {
-    path: "proposals/dashboard",
     component: ProposalDashboardComponent,
     canActivate: [AuthCheck]
   },
