@@ -32,7 +32,12 @@
                 "
               >
                 <div *ngFor="let entry of datasetHistory">
-                  <div *ngIf="entry.derivedDataset && datasetPids.includes(entry.derivedDataset.pid)">
+                  <div
+                    *ngIf="
+                      entry.derivedDataset &&
+                      datasetPids.includes(entry.derivedDataset.pid)
+                    "
+                  >
                     Previously derived dataset available.
                   </div>
                 </div>
@@ -119,7 +124,14 @@
                         </p>
                       </div>
                     </div>
-                    <p *ngIf="!selectedScript.value || !selectedScript.value.startsWith(selectedAction.value.charAt(0))">
+                    <p
+                      *ngIf="
+                        !selectedScript.value ||
+                        !selectedScript.value.startsWith(
+                          selectedAction.value.charAt(0)
+                        )
+                      "
+                    >
                       Select a script to view description.
                     </p>
                   </td>
@@ -189,64 +201,66 @@
   </button> -->
     </mat-card>
 
-    <mat-card style="margin: 1em">
+    <!-- <mat-card style="margin: 1em">
       <mat-card-header style="background:#d2f082;">
         Available Derived Dataset
       </mat-card-header>
 
       <div *ngIf="result && result.hasOwnProperty('derivedDataset')">
-        <div class="details">
+        <div class="details" *ngIf="result.derivedDataset as dataset">
           <table>
             <tr>
               <th><i class="material-icons"> fingerprint </i> Name</th>
               <td>
-                <a (click)="goTo(entry.derivedDataset)">
-                  {{ result.derivedDataset.datasetName }}
-                </a>
+                {{ dataset.datasetName }}
               </td>
             </tr>
             <tr>
               <th><i class="material-icons"> description </i> Description</th>
               <td>
-                {{ result.derivedDataset.description }}
+                {{ dataset.description }}
               </td>
             </tr>
             <tr>
               <th><i class="material-icons"> person </i> Owner</th>
               <td>
-                {{ result.derivedDataset.owner }}
+                {{ dataset.owner }}
               </td>
             </tr>
             <tr>
               <th><i class="material-icons"> vpn_key </i> Keywords</th>
               <td>
-                {{ result.derivedDataset.keywords | json }}
+                {{ dataset.keywords | json }}
               </td>
             </tr>
             <tr>
               <th><i class="material-icons"> perm_contact_calendar </i> PID</th>
               <td>
-                {{ result.derivedDataset.pid }}
+                <a (click)="goTo(entry.derivedDataset)">
+                  {{ dataset.pid }}
+                </a>
               </td>
             </tr>
             <tr>
               <th><i class="material-icons"> folder </i> Source Folder</th>
               <td>
-                {{ result.derivedDataset.sourceFolder }}
+                {{ dataset.sourceFolder }}
               </td>
             </tr>
           </table>
         </div>
 
-        <button mat-stroked-button (click)="show = !show">
-          {{ show ? "Hide Metadata" : "Show Metadata" }}
-        </button>
-        <br />
-        <div *ngIf="show">
-          <ngx-json-viewer
-            [json]="result.derivedDataset"
-            [expanded]="false"
-          ></ngx-json-viewer>
+        <div *ngIf="result.derivedDataset as dataset">
+          <button mat-stroked-button (click)="show = !show">
+            {{ show ? "Hide Metadata" : "Show Metadata" }}
+          </button>
+          <br />
+          <div *ngIf="show">
+            <ngx-json-viewer
+              [json]="dataset"
+              [expanded]="false"
+            ></ngx-json-viewer>
+          </div>
         </div>
       </div>
 
@@ -256,15 +270,18 @@
         "
       >
         <div *ngFor="let entry of datasetHistory">
-          <div *ngIf="entry.derivedDataset && datasetPids.includes(entry.derivedDataset.pid)">
+          <div
+            *ngIf="
+              entry.derivedDataset &&
+              datasetPids.includes(entry.derivedDataset.pid)
+            "
+          >
             <div class="details">
               <table>
-                <tr>
+                <tr *ngIf="result.derivedDataset as dataset">
                   <th><i class="material-icons"> fingerprint </i> Name</th>
                   <td>
-                    <a (click)="goTo(entry.derivedDataset)">
-                      {{ entry.derivedDataset.datasetName }}
-                    </a>
+                    {{ dataset.datasetName }}
                   </td>
                 </tr>
                 <tr>
@@ -272,19 +289,19 @@
                     <i class="material-icons"> description </i> Description
                   </th>
                   <td>
-                    {{ entry.derivedDataset.description }}
+                    {{ dataset.description }}
                   </td>
                 </tr>
                 <tr>
                   <th><i class="material-icons"> person </i> Owner</th>
                   <td>
-                    {{ entry.derivedDataset.owner }}
+                    {{ dataset.owner }}
                   </td>
                 </tr>
                 <tr>
                   <th><i class="material-icons"> vpn_key </i> Keywords</th>
                   <td>
-                    {{ entry.derivedDataset.keywords | json }}
+                    {{ dataset.keywords | json }}
                   </td>
                 </tr>
                 <tr>
@@ -292,50 +309,54 @@
                     <i class="material-icons"> perm_contact_calendar </i> PID
                   </th>
                   <td>
-                    {{ entry.derivedDataset.pid }}
+                    <a (click)="goTo(entry.derivedDataset)">
+                      {{ dataset.pid }}
+                    </a>
                   </td>
                 </tr>
                 <tr>
                   <th><i class="material-icons"> folder </i> Source Folder</th>
                   <td>
-                    {{ entry.derivedDataset.sourceFolder }}
+                    {{ dataset.sourceFolder }}
                   </td>
                 </tr>
               </table>
             </div>
 
-            <button mat-stroked-button (click)="show = !show">
-              {{ show ? "Hide Metadata" : "Show Metadata" }}
-            </button>
-            <br />
-            <div *ngIf="show">
-              <ngx-json-viewer
-                [json]="entry.derivedDataset"
-                [expanded]="false"
-              ></ngx-json-viewer>
+            <div *ngIf="result.derivedDataset as dataset">
+              <button mat-stroked-button (click)="show = !show">
+                {{ show ? "Hide Metadata" : "Show Metadata" }}
+              </button>
+              <br />
+              <div *ngIf="show">
+                <ngx-json-viewer
+                  [json]="dataset"
+                  [expanded]="false"
+                ></ngx-json-viewer>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </mat-card>
+    </mat-card> -->
 
-    <!-- <mat-card style="margin: 1em">
-      <mat-card-header style="background:#ff6e6e;">
-        Reduction History
+    <mat-card style="margin: 1em">
+      <mat-card-header style="background:#d2f082;">
+        Derived Datasets
       </mat-card-header>
 
       <div *ngIf="datasetHistory">
-        <mat-table [dataSource]="datasetHistory" class="history-table"> -->
-    <!-- Column Definitions -->
+        <mat-table [dataSource]="datasetHistory" class="history-table">
+          <!-- Column Definitions -->
 
-    <!-- Timestamp Column -->
-    <!-- <ng-container matColumnDef="timestamp">
+          <!-- Timestamp Column -->
+          <ng-container matColumnDef="timestamp">
             <mat-header-cell *matHeaderCellDef>
               <div fxLayout="column" style="align-items: center">
                 <div>
                   <i class="material-icons">calendar_today</i>
                 </div>
-                <div class="table_column">Date</div>
+                <div class="table_column">Creation Time</div>
               </div>
             </mat-header-cell>
             <mat-cell *matCellDef="let entry">
@@ -348,10 +369,10 @@
                 }}
               </div>
             </mat-cell>
-          </ng-container> -->
+          </ng-container>
 
-    <!-- Name Column -->
-    <!-- <ng-container matColumnDef="name">
+          <!-- Name Column -->
+          <ng-container matColumnDef="name">
             <mat-header-cell *matHeaderCellDef>
               <div fxLayout="column" style="align-items: center">
                 <div>
@@ -361,40 +382,50 @@
               </div>
             </mat-header-cell>
             <mat-cell *matCellDef="let entry">
-              <div *ngIf="entry.hasOwnProperty('derivedDataset')">
-                {{ entry.derivedDataset.datasetName }}
-              </div>
+              {{ entry.derivedDataset.datasetName }}
             </mat-cell>
-          </ng-container> -->
+          </ng-container>
 
-    <!-- Status Column -->
-    <!-- <ng-container matColumnDef="status">
+          <!-- Pid Column -->
+          <ng-container matColumnDef="pid">
             <mat-header-cell *matHeaderCellDef>
               <div fxLayout="column" style="align-items: center">
                 <div>
-                  <i class="material-icons">info</i>
+                  <i class="material-icons"> perm_contact_calendar </i>
                 </div>
-                <div class="table_column">Status</div>
+                <div class="table_column">PID</div>
               </div>
             </mat-header-cell>
             <mat-cell *matCellDef="let entry">
-              <div *ngIf="entry.hasOwnProperty('derivedDataset')">
-                <div *ngIf="datasetPids.includes(entry.derivedDataset.pid)">
-                  Available
-                </div>
-                <div *ngIf="!datasetPids.includes(entry.derivedDataset.pid)">
-                  Deleted
-                </div>
-              </div>
+              {{ entry.derivedDataset.pid }}
             </mat-cell>
-          </ng-container> -->
+          </ng-container>
 
-    <!-- End of Column Definitions -->
+          <!-- Software Column -->
+          <ng-container matColumnDef="software">
+            <mat-header-cell *matHeaderCellDef>
+              <div fxLayout="column" style="align-items: center">
+                <div>
+                  <i class="material-icons"> screen_share</i>
+                </div>
+                <div class="table_column">Software Used</div>
+              </div>
+            </mat-header-cell>
+            <mat-cell *matCellDef="let entry">
+              {{ entry.derivedDataset.usedSoftware }}
+            </mat-cell>
+          </ng-container>
 
-    <!-- <mat-header-row *matHeaderRowDef="columnsToDisplay"></mat-header-row>
-          <mat-row *matRowDef="let entry; columns: columnsToDisplay"></mat-row>
+          <!-- End of Column Definitions -->
+
+          <mat-header-row *matHeaderRowDef="columnsToDisplay"></mat-header-row>
+          <mat-row
+            *matRowDef="let entry; columns: columnsToDisplay"
+            (click)="goTo(entry.derivedDataset)"
+          >
+          </mat-row>
         </mat-table>
       </div>
-    </mat-card> -->
+    </mat-card>
   </div>
 </div>
