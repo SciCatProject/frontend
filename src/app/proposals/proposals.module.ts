@@ -1,4 +1,4 @@
-import { NgxJsonViewerModule } from 'ngx-json-viewer';
+import { NgxJsonViewerModule } from "ngx-json-viewer";
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { RouterModule } from "@angular/router";
@@ -30,9 +30,9 @@ import {
 } from "@angular/material";
 import { SharedCatanieModule } from "../shared/shared.module";
 import { LogbooksModule } from "logbooks/logbooks.module";
-import { ProposalDashboardComponent } from './proposal-dashboard/proposal-dashboard.component';
-import { ProposalSearchComponent } from './proposal-search/proposal-search.component';
-import { FlexLayoutModule } from '@angular/flex-layout';
+import { ProposalDashboardComponent } from "./proposal-dashboard/proposal-dashboard.component";
+import { ProposalSearchComponent } from "./proposal-search/proposal-search.component";
+import { FlexLayoutModule } from "@angular/flex-layout";
 
 @NgModule({
   imports: [
@@ -62,9 +62,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     ProposalDashboardComponent,
     ProposalSearchComponent
   ],
-  exports: [
-    ProposalSearchComponent
-  ],
+  exports: [ProposalSearchComponent],
   providers: [ProposalsService, DatasetService]
 })
 export class ProposalsModule {}
