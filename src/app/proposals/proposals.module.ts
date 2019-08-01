@@ -30,6 +30,8 @@ import {
 } from "@angular/material";
 import { SharedCatanieModule } from "../shared/shared.module";
 import { LogbooksModule } from "logbooks/logbooks.module";
+import { ProposalDashboardComponent } from './proposal-dashboard/proposal-dashboard.component';
+import { ProposalSearchComponent } from './proposal-search/proposal-search.component';
 
 @NgModule({
   imports: [
@@ -54,7 +56,9 @@ import { LogbooksModule } from "logbooks/logbooks.module";
     ViewProposalPageComponent,
 
     ProposalsListComponent,
-    ProposalDetailComponent
+    ProposalDetailComponent,
+    ProposalDashboardComponent,
+    ProposalSearchComponent
   ],
   providers: [ProposalsService, DatasetService]
 })
