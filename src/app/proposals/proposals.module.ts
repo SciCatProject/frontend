@@ -26,13 +26,16 @@ import {
   MatTabsModule,
   MatCardModule,
   MatIconModule,
-  MatPaginatorModule
+  MatPaginatorModule,
+  MatFormFieldModule,
+  MatInputModule
 } from "@angular/material";
 import { SharedCatanieModule } from "../shared/shared.module";
 import { LogbooksModule } from "logbooks/logbooks.module";
 import { ProposalDashboardComponent } from "./proposal-dashboard/proposal-dashboard.component";
 import { ProposalSearchComponent } from "./proposal-search/proposal-search.component";
 import { FlexLayoutModule } from "@angular/flex-layout";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 
 @NgModule({
   imports: [
@@ -40,15 +43,19 @@ import { FlexLayoutModule } from "@angular/flex-layout";
     EffectsModule.forFeature([ProposalsEffects]),
     FlexLayoutModule,
     FontAwesomeModule,
+    FormsModule,
     LogbooksModule,
     MatCardModule,
+    MatFormFieldModule,
     MatIconModule,
+    MatInputModule,
     MatListModule,
     MatPaginatorModule,
     MatTableModule,
     MatTabsModule,
     MatTooltipModule,
     NgxJsonViewerModule,
+    ReactiveFormsModule,
     RouterModule,
     SharedCatanieModule,
     StoreModule.forFeature("proposals", proposalsReducer)

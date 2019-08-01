@@ -6,7 +6,14 @@ import { Component, OnInit } from "@angular/core";
   styleUrls: ["./proposal-search.component.scss"]
 })
 export class ProposalSearchComponent implements OnInit {
+  query: string;
   constructor() {}
 
   ngOnInit() {}
+
+
+  textSearchChanged(query: string) {
+    console.log(query);
+    // this.store.dispatch ( new SearchSampleAction (query));
+  }
 }
