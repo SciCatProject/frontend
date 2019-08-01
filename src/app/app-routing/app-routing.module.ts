@@ -17,7 +17,6 @@ import { UserSettingsComponent } from "../users/user-settings/user-settings.comp
 
 import { SampleDataFormComponent } from "../samples/sample-data-form/sample-data-form.component";
 
-import { ListProposalsPageComponent } from "../proposals/containers/list-proposals-page/list-proposals-page.component";
 import { ViewProposalPageComponent } from "../proposals/containers/view-proposal-page/view-proposal-page.component";
 
 import { PoliciesComponent } from "../policies/policies/policies.component";

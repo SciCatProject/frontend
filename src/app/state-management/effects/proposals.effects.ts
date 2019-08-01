@@ -19,7 +19,6 @@ import {
   FetchProposalsCompleteAction,
   FetchProposalsFailedAction,
   FetchProposalsOutcomeAction,
-  FetchCountOfProposals,
   FETCH_COUNT_PROPOSALS,
   FetchCountFailed,
   FetchCountOfProposalsSuccess,
@@ -28,10 +27,9 @@ import {
   SORT_PROPOSALS_BY_COLUMN
 } from "../actions/proposals.actions";
 
-import { getFilters, getPropFilters } from "state-management/selectors/proposals.selectors";
+import {  getPropFilters } from "state-management/selectors/proposals.selectors";
 import { select, Action, Store } from "@ngrx/store";
 import { ProposalApi, Proposal } from "shared/sdk";
-import { SORT_BY_COLUMN } from "state-management/actions/datasets.actions";
 
 @Injectable()
 export class ProposalsEffects {
