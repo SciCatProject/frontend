@@ -26,7 +26,6 @@ import { PublishComponent } from "datasets/publish/publish.component";
 import { AuthCheck } from "../AuthCheck";
 import { BatchViewComponent } from "datasets/batch-view/batch-view.component";
 import { SampleDetailComponent } from "../samples/sample-detail/sample-detail.component";
-import { SampleTableComponent } from "../samples/sample-table/sample-table.component";
 
 import { LogbooksDashboardComponent } from "../logbooks/logbooks-dashboard/logbooks-dashboard.component";
 import { LogbooksTableComponent } from "../logbooks/logbooks-table/logbooks-table.component";
@@ -37,6 +36,7 @@ import { PublisheddataDetailsComponent } from "publisheddata/publisheddata-detai
 
 // handles external URLs by lookup in the env config
 import { RedirectGuard } from "app-routing/redirect-guard";
+import { SampleDashboardComponent } from "samples/sample-dashboard/sample-dashboard.component";
 
 export const routes: Routes = [
   { path: "", redirectTo: "/datasets", pathMatch: "full" },
@@ -90,7 +90,7 @@ export const routes: Routes = [
   },
   {
     path: "samples",
-    component: SampleTableComponent,
+    component: SampleDashboardComponent,
     canActivate: [AuthCheck]
   },
   {

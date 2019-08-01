@@ -42,7 +42,7 @@ export class Logbook implements LogbookInterface {
       name: 'Logbook',
       plural: 'Logbooks',
       path: 'Logbooks',
-      idName: 'roomId',
+      idName: 'id',
       properties: {
         "name": {
           name: 'name',

@@ -31,11 +31,30 @@ export const getQuery = createSelector(
   getSampleState,
   state => {
     const query = {
+      text: state.filters.text,
       order: state.filters.sortField,
       skip: state.filters.skip,
       limit: state.filters.limit
     };
     return query;
+  }
+);
+
+export const getFullqueryParams = createSelector(
+  getSampleState,
+  state => {
+    const query = {
+      text: state.filters.text
+    };
+    const limits = {
+      order: state.filters.sortField,
+      skip: state.filters.skip,
+      limit: state.filters.limit
+    };
+    return {
+      query: JSON.stringify(query),
+      limits
+    };
   }
 );
 

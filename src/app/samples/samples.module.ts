@@ -1,8 +1,14 @@
 import { CommonModule } from "@angular/common";
-import { MatCardModule,
+import {
+  MatCardModule,
   MatDialogModule,
-  MatFormFieldModule, MatIconModule, MatTableModule,
- MatInputModule, MatSortModule, MatPaginatorModule } from "@angular/material";
+  MatFormFieldModule,
+  MatIconModule,
+  MatTableModule,
+  MatInputModule,
+  MatSortModule,
+  MatPaginatorModule
+} from "@angular/material";
 import { NgModule } from "@angular/core";
 import { SampleApi } from "../shared/sdk/services/custom";
 import { SampleDetailComponent } from "./sample-detail/sample-detail.component";
@@ -13,10 +19,14 @@ import { samplesReducer } from "../state-management/reducers/samples.reducer";
 import { SampleDialogComponent } from "./sample-dialog/sample-dialog.component";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { SampleService } from "./sample.service";
+import { SampleSearchComponent } from "./sample-search/sample-search.component";
+import { SampleDashboardComponent } from "./sample-dashboard/sample-dashboard.component";
+import { FlexLayoutModule } from "@angular/flex-layout";
 
 @NgModule({
   imports: [
     CommonModule,
+    FlexLayoutModule,
     FormsModule,
     MatCardModule,
     MatIconModule,
@@ -39,10 +49,11 @@ import { SampleService } from "./sample.service";
     SampleDetailComponent,
     SampleTableComponent,
     SampleDataFormComponent,
-    SampleDialogComponent
+    SampleDialogComponent,
+    SampleSearchComponent,
+    SampleDashboardComponent
   ],
   providers: [SampleApi, SampleService],
   entryComponents: [SampleDialogComponent]
 })
-export class SamplesModule {
-}
+export class SamplesModule {}

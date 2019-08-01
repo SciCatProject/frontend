@@ -21,7 +21,9 @@ import {
   FETCH_SAMPLE_COUNT,
   CHANGE_PAGE,
   ChangePageAction,
-  FetchSampleCountCompleteAction
+  FetchSampleCountCompleteAction,
+  SEARCH_SAMPLES,
+  SearchSampleAction
 } from "state-management/actions/samples.actions";
 
 export function samplesReducer(
@@ -47,6 +49,12 @@ export function samplesReducer(
 
     case ADD_SAMPLE: {
       return { ...state };
+    }
+
+    case SEARCH_SAMPLES: {
+      const { query } = action as SearchSampleAction;
+      const filters = {...state.filters, text: query}  ;
+      return { ...state, filters,  searchTerms: query };
     }
 
     case ADD_SAMPLE_COMPLETE: {

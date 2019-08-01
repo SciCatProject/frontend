@@ -21,7 +21,7 @@ export interface PolicyInterface {
 }
 
 export class Policy implements PolicyInterface {
-  "manager": Array<string>;
+  "manager": Array<any>;
   "tapeRedundancy": string;
   "autoArchive": boolean;
   "autoArchiveDelay": number;
