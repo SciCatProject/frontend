@@ -25,6 +25,14 @@ export const FETCH_COUNT_PROPOSALS = "[Proposals] Fetch Count of Proposals";
 export const FETCH_COUNT_FAILED = "[Proposals] Fetch Count of Proposals Failed";
 export const FETCH_COUNT_PROPOSALS_SUCCESS = "[Proposals] Fetch Count of Proposals Success";
 
+export const SEARCH_PROPOSALS = "[Proposals] Search Proposals";
+
+export class SearchProposalAction implements Action {
+  type = SEARCH_PROPOSALS ;
+
+  constructor(readonly query: string) { }
+}
+
 export class FetchCountOfProposals implements Action {
   readonly type = FETCH_COUNT_PROPOSALS;
   constructor() {}
