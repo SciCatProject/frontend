@@ -47,7 +47,7 @@
       >
       <mat-cell *matCellDef="let proposal">
         <div *ngIf="proposal.MeasurementPeriodList.length >0">
-          {{ proposal.MeasurementPeriodList[0].start | date }}
+          {{ proposal.MeasurementPeriodList[0].start | date: 'yyyy-MM-dd' }}
         </div>
       </mat-cell>
     </ng-container>
@@ -60,7 +60,7 @@
       >
       <mat-cell *matCellDef="let proposal">
         <div *ngIf="proposal.MeasurementPeriodList.length >0">
-          {{ proposal.MeasurementPeriodList[0].end | date }}
+          {{ proposal.MeasurementPeriodList[0].end | date: 'yyyy-MM-dd' }}
         </div>
       </mat-cell>
     </ng-container>
