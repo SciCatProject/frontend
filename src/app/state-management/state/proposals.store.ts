@@ -1,6 +1,7 @@
 import { Proposal } from "../models";
 
 export interface ProposalFilters {
+  text: string;
   skip: number;
   limit: number;
   sortField: "MeasurementPeriodList[0].start desc";
@@ -24,6 +25,9 @@ export const initialProposalsState: ProposalsState = {
   selectedId: null,
   datasetCount: null,
   proposalCount: null,
-  filters: { skip: 0, limit: 30,   sortField: "MeasurementPeriodList[0].start desc" },
-  propFilters: { skip: 0, limit: 30,   sortField: "MeasurementPeriodList[0].start desc" }
+  filters: { text: "", skip: 0, limit: 30,   sortField: "MeasurementPeriodList[0].start desc" },
+  propFilters: {
+    text: "",
+    skip: 0, limit: 30, sortField: "MeasurementPeriodList[0].start desc"
+  }
 };
