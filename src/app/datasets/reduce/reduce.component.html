@@ -360,9 +360,14 @@
               </div>
             </mat-header-cell>
             <mat-cell *matCellDef="let entry">
-              {{
-                entry.derivedDataset.createdAt | date: "yyyy-MM-dd, EEE HH:mm"
-              }}
+              <div
+                fxLayout="column"
+                *ngIf="entry.hasOwnProperty('derivedDataset')"
+              >
+                {{
+                  entry.derivedDataset.createdAt | date: "yyyy-MM-dd, EEE HH:mm"
+                }}
+              </div>
             </mat-cell>
           </ng-container>
 

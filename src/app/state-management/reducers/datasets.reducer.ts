@@ -461,11 +461,11 @@ export function datasetsReducer(
     }
 
     case REDUCE_DATASET: {
-      return { ...state, resultLoading: true }
+      return { ...state, resultLoading: true };
     }
 
     case REDUCE_DATASET_FAILED: {
-      return { ...state, resultLoading: false }
+      return { ...state, resultLoading: false };
     }
 
     case REDUCE_DATASET_COMPLETE: {

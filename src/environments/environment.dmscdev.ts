@@ -5,7 +5,7 @@
 
 export const environment = {
   production: false,
-  lbBaseURL: "/api",
+  lbBaseURL: "",
   fileserverBaseURL: "/fileserver",
   externalAuthEndpoint: "/auth/msad",
   disabledDatasetColumns: ["dataStatus"],

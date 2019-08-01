@@ -1,0 +1,10 @@
+<div fxLayout="row">
+  <div fxFlex="13">
+    <div *ngIf="appConfig.searchSamples">
+      <app-sample-search></app-sample-search>
+    </div>
+  </div>
+  <div fxFlex="63">
+    <app-sample-table></app-sample-table>
+  </div>
+</div>

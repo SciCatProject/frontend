@@ -24,5 +24,6 @@ export const environment = {
   tableSciDataEnabled: true,
   metadataPreviewEnabled: true,
   datasetReduceEnabled: true,
+  searchSamples: true,
   fileColorEnabled: true
 };
