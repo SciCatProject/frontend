@@ -44,7 +44,7 @@ export class ProposalsListComponent implements OnDestroy {
 
   onSortChange(event: SortChangeEvent): void {
     const { active: column, direction } = event;
-    console.log("gm", column, direction);
+    console.log("gm sort change", column, direction);
     this.store.dispatch(new SortProposalByColumnAction(column, direction));
   }
 
