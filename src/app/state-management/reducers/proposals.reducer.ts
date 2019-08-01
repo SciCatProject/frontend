@@ -15,7 +15,9 @@ import {
   CHANGE_PAGE,
   ChangePageAction,
   FETCH_COUNT_PROPOSALS_SUCCESS,
-  FetchCountOfProposalsSuccess
+  FetchCountOfProposalsSuccess,
+  SEARCH_PROPOSALS,
+  SearchProposalAction
 } from "../actions/proposals.actions";
 import { LOGOUT_COMPLETE, LogoutCompleteAction } from "../actions/user.actions";
 
@@ -27,17 +29,28 @@ export function proposalsReducer(
     console.log("Action came in! " + action.type);
   }
   switch (action.type) {
+    case SEARCH_PROPOSALS: {
+      const { query } = action as SearchProposalAction;
+      const propFilters = { ...state.propFilters, text: query };
+      return { ...state, propFilters };
+    }
     case SELECT_PROPOSAL:
       const selectedId = (action as SelectProposalAction).proposalId;
       return { ...state, selectedId };
 
     case FETCH_COUNT_PROPOSALS_SUCCESS: {
       const proposalCount = (action as FetchCountOfProposalsSuccess).count;
-      return { ...state,  proposalCount };
+      return { ...state, proposalCount };
     }
     case FETCH_PROPOSALS_COMPLETE: {
       const list = (action as FetchProposalsCompleteAction).proposals;
-      const proposals = list.reduce((proposals, proposal) => ({ ...proposals, [proposal.proposalId]: proposal }), {});
+      const proposals = list.reduce(
+        (proposals, proposal) => ({
+          ...proposals,
+          [proposal.proposalId]: proposal
+        }),
+        {}
+      );
       return { ...state, proposals, hasFetched: true };
     }
     case FETCH_PROPOSAL_COMPLETE: {
@@ -47,7 +60,10 @@ export function proposalsReducer(
     }
     case FETCH_DATASETS_FOR_PROPOSAL_COMPLETE: {
       const list = (action as FetchDatasetsForProposalCompleteAction).datasets;
-      const datasets = list.reduce((datasets, dataset) => ({ ...datasets, [dataset.pid]: dataset }), {});
+      const datasets = list.reduce(
+        (datasets, dataset) => ({ ...datasets, [dataset.pid]: dataset }),
+        {}
+      );
       const datasetCount = Object.keys(datasets).length;
       return { ...state, datasets, datasetCount };
     }
