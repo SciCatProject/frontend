@@ -1,4 +1,6 @@
 import { Component, OnInit } from "@angular/core";
+import { SearchProposalAction } from "state-management/actions/proposals.actions";
+import { Store } from "@ngrx/store";
 
 @Component({
   selector: "proposal-search",
@@ -7,13 +9,15 @@ import { Component, OnInit } from "@angular/core";
 })
 export class ProposalSearchComponent implements OnInit {
   query: string;
-  constructor() {}
+  constructor(
+    private store: Store<any>
+  ) {}
 
   ngOnInit() {}
 
 
   textSearchChanged(query: string) {
     console.log(query);
-    // this.store.dispatch ( new SearchSampleAction (query));
+    this.store.dispatch ( new SearchProposalAction (query));
   }
 }
