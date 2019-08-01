@@ -1,14 +1,13 @@
+import { APP_CONFIG } from "app-config.module";
+import { MatTableModule, MatDialog } from "@angular/material";
+import { MockStore, MockRouter } from "shared/MockStubs";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
-import { async, ComponentFixture, TestBed } from "@angular/core/testing";
-
+import { Router } from "@angular/router";
 import { SampleDashboardComponent } from "./sample-dashboard.component";
 import { SampleSearchComponent } from "samples/sample-search/sample-search.component";
 import { SampleTableComponent } from "samples/sample-table/sample-table.component";
-import { MatTableModule, MatDialog } from "@angular/material";
-import { MockStore, MockRouter } from "shared/MockStubs";
 import { Store } from "@ngrx/store";
-import { Router } from "@angular/router";
-import { APP_CONFIG } from "app-config.module";
+import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
 describe("SampleDashboardComponent", () => {
   let component: SampleDashboardComponent;
