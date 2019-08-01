@@ -28,7 +28,8 @@ import {
   MatIconModule,
   MatPaginatorModule,
   MatFormFieldModule,
-  MatInputModule
+  MatInputModule,
+  MatSortModule
 } from "@angular/material";
 import { SharedCatanieModule } from "../shared/shared.module";
 import { LogbooksModule } from "logbooks/logbooks.module";
@@ -51,6 +52,7 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
     MatInputModule,
     MatListModule,
     MatPaginatorModule,
+    MatSortModule,
     MatTableModule,
     MatTabsModule,
     MatTooltipModule,

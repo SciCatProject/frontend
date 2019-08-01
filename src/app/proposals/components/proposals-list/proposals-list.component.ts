@@ -1,6 +1,6 @@
 import { Component, Input, Inject, OnDestroy } from "@angular/core";
 import { Proposal } from "state-management/models";
-import { FetchProposalAction, ChangePageAction } from "state-management/actions/proposals.actions";
+import { FetchProposalAction, ChangePageAction, SortProposalByColumnAction } from "state-management/actions/proposals.actions";
 import { Router } from "@angular/router";
 import { Store, select } from "@ngrx/store";
 import { APP_CONFIG, AppConfig } from "app-config.module";
@@ -23,7 +23,7 @@ export class ProposalsListComponent implements OnDestroy {
   private subscriptions: Subscription;
   public page: number;
 
-  displayedColumns = ["proposalId", "title", "name", "start", "end"];
+  displayedColumns = ["proposalId", "title", "lastname", "start", "end"];
   proposalsCount$ = this.store.pipe(select(getProposalCount));
   proposalsPerPage$ = this.store.pipe(select(getProposalsPerPage));
   currentPage$ = this.store.pipe(select(getProposalPage));
@@ -45,7 +45,7 @@ export class ProposalsListComponent implements OnDestroy {
   onSortChange(event: SortChangeEvent): void {
     const { active: column, direction } = event;
     console.log("gm", column, direction);
-    // this.store.dispatch(new SortProposalByColumnAction(column, direction));
+    this.store.dispatch(new SortProposalByColumnAction(column, direction));
   }
 
   ngOnDestroy() {

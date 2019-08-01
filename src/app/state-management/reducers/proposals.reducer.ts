@@ -17,6 +17,8 @@ import {
   FETCH_COUNT_PROPOSALS_SUCCESS,
   FetchCountOfProposalsSuccess,
   SEARCH_PROPOSALS,
+  SORT_PROPOSALS_BY_COLUMN,
+  SortProposalByColumnAction,
   SearchProposalAction
 } from "../actions/proposals.actions";
 import { LOGOUT_COMPLETE, LogoutCompleteAction } from "../actions/user.actions";
@@ -34,6 +36,15 @@ export function proposalsReducer(
       const propFilters = { ...state.propFilters, text: query };
       return { ...state, propFilters };
     }
+
+    case SORT_PROPOSALS_BY_COLUMN: {
+      const { column, direction } = action as SortProposalByColumnAction;
+      const sortField = column + (direction ? " " + direction : "");
+      const propFilters = { ...state.propFilters, sortField, skip: 0 };
+      const proposalsLoading = !state.proposalsLoading;
+      return { ...state, propFilters, proposalsLoading };
+    }
+
     case SELECT_PROPOSAL:
       const selectedId = (action as SelectProposalAction).proposalId;
       return { ...state, selectedId };

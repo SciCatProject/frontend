@@ -4,7 +4,7 @@ export interface ProposalFilters {
   text: string;
   skip: number;
   limit: number;
-  sortField: "MeasurementPeriodList[0].start desc";
+  sortField: string;
 }
 
 export interface ProposalsState {
@@ -16,6 +16,7 @@ export interface ProposalsState {
   proposalCount: number;
   filters: ProposalFilters;
   propFilters: ProposalFilters;
+  proposalsLoading: boolean;
 }
 
 export const initialProposalsState: ProposalsState = {
@@ -29,5 +30,6 @@ export const initialProposalsState: ProposalsState = {
   propFilters: {
     text: "",
     skip: 0, limit: 30, sortField: "MeasurementPeriodList[0].start desc"
-  }
+  },
+  proposalsLoading: false
 };
