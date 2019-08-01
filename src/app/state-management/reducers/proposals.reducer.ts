@@ -35,7 +35,7 @@ export function proposalsReducer(
       const { query } = action as SearchProposalAction;
       const propFilters = { ...state.propFilters, text: query };
       const proposalsLoading = true;
-      return { ...state, propFilters , proposalsLoading};
+      return { ...state, propFilters, proposalsLoading };
     }
 
     case SORT_PROPOSALS_BY_COLUMN: {
@@ -64,7 +64,7 @@ export function proposalsReducer(
         }),
         {}
       );
-      return { ...state, proposals,proposalsLoading, hasFetched: true };
+      return { ...state, proposals, proposalsLoading, hasFetched: true };
     }
     case FETCH_PROPOSAL_COMPLETE: {
       const proposal = (action as FetchProposalCompleteAction).proposal;
