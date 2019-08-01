@@ -60,6 +60,9 @@ import { ProposalSearchComponent } from './proposal-search/proposal-search.compo
     ProposalDashboardComponent,
     ProposalSearchComponent
   ],
+  exports: [
+    ProposalSearchComponent
+  ],
   providers: [ProposalsService, DatasetService]
 })
 export class ProposalsModule {}
