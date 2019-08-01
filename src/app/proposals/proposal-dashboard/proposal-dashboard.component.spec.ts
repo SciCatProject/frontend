@@ -5,7 +5,7 @@ import { ProposalSearchComponent } from "proposals/proposal-search/proposal-sear
 import { ListProposalsPageComponent } from "proposals/containers/list-proposals-page/list-proposals-page.component";
 import { APP_CONFIG } from "app-config.module";
 import { Store } from "@ngrx/store";
-import { MatDialog, MatPaginator, MatPaginatorModule, MatInputModule, MatFormFieldModule } from "@angular/material";
+import { MatDialog, MatPaginator, MatPaginatorModule, MatInputModule, MatFormFieldModule, MatTableModule } from "@angular/material";
 import { Router } from "@angular/router";
 import { MockRouter, MockStore } from "shared/MockStubs";
 import { ProposalsListComponent } from "proposals/components/proposals-list/proposals-list.component";
@@ -30,6 +30,7 @@ describe("ProposalDashboardComponent", () => {
         MatFormFieldModule,
         MatInputModule,
         MatPaginatorModule,
+        MatTableModule,
         NoopAnimationsModule,
         ReactiveFormsModule
       ]
