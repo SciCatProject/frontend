@@ -1,14 +1,14 @@
 import { ActivatedRoute } from "@angular/router";
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import {
-  FetchSampleAction, FetchSamplesAction,
-  SelectSampleAction
-} from "../../state-management/actions/samples.actions";
 import { Observable, Subscription } from "rxjs";
 import { Sample } from "../../shared/sdk/models";
 import { filter, flatMap, map } from "rxjs/operators";
 import { getSelectedSample } from "../../state-management/selectors/samples.selectors";
 import { select, Store } from "@ngrx/store";
+import {
+  FetchSampleAction, FetchSamplesAction,
+  SelectSampleAction
+} from "../../state-management/actions/samples.actions";
 
 @Component({
   selector: "app-sample-detail",
