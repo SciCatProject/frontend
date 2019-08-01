@@ -23,7 +23,7 @@ export class ProposalsListComponent implements OnDestroy {
   private subscriptions: Subscription;
   public page: number;
 
-  displayedColumns = ["proposalId", "title", "lastname", "start", "end"];
+  displayedColumns = ["proposalId", "title", "firstname", "start", "end"];
   proposalsCount$ = this.store.pipe(select(getProposalCount));
   proposalsPerPage$ = this.store.pipe(select(getProposalsPerPage));
   currentPage$ = this.store.pipe(select(getProposalPage));

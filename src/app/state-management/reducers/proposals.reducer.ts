@@ -34,14 +34,15 @@ export function proposalsReducer(
     case SEARCH_PROPOSALS: {
       const { query } = action as SearchProposalAction;
       const propFilters = { ...state.propFilters, text: query };
-      return { ...state, propFilters };
+      const proposalsLoading = true;
+      return { ...state, propFilters , proposalsLoading};
     }
 
     case SORT_PROPOSALS_BY_COLUMN: {
       const { column, direction } = action as SortProposalByColumnAction;
       const sortField = column + (direction ? " " + direction : "");
       const propFilters = { ...state.propFilters, sortField, skip: 0 };
-      const proposalsLoading = !state.proposalsLoading;
+      const proposalsLoading = true;
       return { ...state, propFilters, proposalsLoading };
     }
 
@@ -55,6 +56,7 @@ export function proposalsReducer(
     }
     case FETCH_PROPOSALS_COMPLETE: {
       const list = (action as FetchProposalsCompleteAction).proposals;
+      const proposalsLoading = false;
       const proposals = list.reduce(
         (proposals, proposal) => ({
           ...proposals,
@@ -62,7 +64,7 @@ export function proposalsReducer(
         }),
         {}
       );
-      return { ...state, proposals, hasFetched: true };
+      return { ...state, proposals,proposalsLoading, hasFetched: true };
     }
     case FETCH_PROPOSAL_COMPLETE: {
       const proposal = (action as FetchProposalCompleteAction).proposal;
@@ -82,7 +84,9 @@ export function proposalsReducer(
       const { page, limit } = action as ChangePageAction;
       const skip = page * limit;
       const filters = { ...state.filters, skip, limit };
-      return { ...state, filters };
+
+      const proposalsLoading = true;
+      return { ...state, filters, proposalsLoading };
     }
     case LOGOUT_COMPLETE:
       return { ...initialProposalsState };
