@@ -23,17 +23,18 @@ import {
   FETCH_COUNT_PROPOSALS,
   FetchCountFailed,
   FetchCountOfProposalsSuccess,
-  CHANGE_PAGE
+  CHANGE_PAGE,
+  SEARCH_PROPOSALS
 } from "../actions/proposals.actions";
 
-import { getFilters } from "state-management/selectors/proposals.selectors";
-import { select, Store } from "@ngrx/store";
+import { getFilters, getPropFilters } from "state-management/selectors/proposals.selectors";
+import { select, Action, Store } from "@ngrx/store";
 import { ProposalApi, Proposal } from "shared/sdk";
 
 @Injectable()
 export class ProposalsEffects {
   @Effect({ dispatch: false })
-  private queryParams$ = this.store.pipe(select(getFilters));
+  private queryParams$ = this.store.pipe(select(getPropFilters));
 
   @Effect()
   getProposals$: Observable<FetchProposalsOutcomeAction> = this.actions$.pipe(
@@ -47,6 +48,26 @@ export class ProposalsEffects {
         catchError(() => of(new FetchProposalsFailedAction()))
       )
     )
+  );
+
+  @Effect()
+  private searchProposals$: Observable<Action> = this.actions$.pipe(
+    ofType(SEARCH_PROPOSALS),
+    withLatestFrom(this.queryParams$),
+    map(([action, params]) => params),
+    mergeMap(({ query, limits }) => {
+      console.log("gm query", query);
+      console.log("gm limits", limits);
+      return this.proposalApi.fullquery(query, limits).pipe(
+        map(
+          proposals =>
+            new FetchProposalsCompleteAction(
+              proposals as Proposal[]
+            )
+        ),
+        catchError(() => of(new FetchProposalsFailedAction()))
+      );
+    })
   );
 
   @Effect()
