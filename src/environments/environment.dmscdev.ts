@@ -22,6 +22,7 @@ export const environment = {
   logbookEnabled: true,
   metadataPreviewEnabled: true,
   multipleDownloadEnabled: true,
+  searchProposals: true,
   scienceSearchEnabled: true,
   searchSamples: true,
   shoppingCartEnabled: true,
