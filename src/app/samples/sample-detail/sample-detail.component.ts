@@ -31,23 +31,24 @@ export class SampleDetailComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.subscriptions.push(
       this.store.pipe(select(getCurrentSample)).subscribe(sample => {
-        // if (sample && Object.keys(sample).length > 0) {
-        //  this.sample = <Sample>sample;
-        //} else {
-        // console.log("Searching from URL params");
-        this.route.params.subscribe(params => {
-         //  console.log("fetching,", params.id);
-          this.store.dispatch(new FetchSampleAction(params.id));
-        });
-        //}
+        if (sample && Object.keys(sample).length > 0) {
+          this.sample = <Sample>sample;
+        } else {
+          // console.log("Searching from URL params");
+          this.route.params.subscribe(params => {
+              console.log("fetching,", params.id);
+            this.store.dispatch(new FetchSampleAction(params.id));
+          });
+        }
       })
     );
   }
 
   ngOnDestroy() {
+    console.log("on destroy");
     for (let i = 0; i < this.subscriptions.length; i++) {
       this.subscriptions[i].unsubscribe();
     }
-    // this.store.dispatch(new SetCurrentSample(undefined));
+    this.store.dispatch(new SetCurrentSample(undefined));
   }
 }
