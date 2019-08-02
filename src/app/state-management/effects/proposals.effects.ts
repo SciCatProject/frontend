@@ -19,34 +19,61 @@ import {
   FetchProposalsCompleteAction,
   FetchProposalsFailedAction,
   FetchProposalsOutcomeAction,
-  FetchCountOfProposals,
   FETCH_COUNT_PROPOSALS,
   FetchCountFailed,
   FetchCountOfProposalsSuccess,
-  CHANGE_PAGE
+  CHANGE_PAGE,
+  SEARCH_PROPOSALS,
+  SORT_PROPOSALS_BY_COLUMN
 } from "../actions/proposals.actions";
 
-import { getFilters } from "state-management/selectors/proposals.selectors";
-import { select, Store } from "@ngrx/store";
+import {  getPropFilters } from "state-management/selectors/proposals.selectors";
+import { select, Action, Store } from "@ngrx/store";
 import { ProposalApi, Proposal } from "shared/sdk";
 
 @Injectable()
 export class ProposalsEffects {
   @Effect({ dispatch: false })
-  private queryParams$ = this.store.pipe(select(getFilters));
+  private queryParams$ = this.store.pipe(select(getPropFilters));
 
   @Effect()
   getProposals$: Observable<FetchProposalsOutcomeAction> = this.actions$.pipe(
-    ofType<FetchProposalsAction>(FETCH_PROPOSALS, CHANGE_PAGE),
+    ofType<FetchProposalsAction>(FETCH_PROPOSALS, CHANGE_PAGE, SORT_PROPOSALS_BY_COLUMN),
     withLatestFrom(this.queryParams$),
     map(([action, params]) => params),
-    switchMap(params =>
-      this.proposalApi.find(params.limits).pipe(
-        mergeMap((data: Proposal[]) => [ new FetchProposalsCompleteAction(data),
-          new FetchCountOfProposals()]),
+    mergeMap(({ query, limits }) => {
+      console.log("gm1 query", query);
+      console.log("gm1 limits", limits);
+      return this.proposalApi.fullquery(query, limits).pipe(
+        map(
+          proposals =>
+            new FetchProposalsCompleteAction(
+              proposals as Proposal[]
+            )
+        ),
         catchError(() => of(new FetchProposalsFailedAction()))
-      )
-    )
+      );
+    })
+  );
+
+  @Effect()
+  private searchProposals$: Observable<Action> = this.actions$.pipe(
+    ofType(SEARCH_PROPOSALS),
+    withLatestFrom(this.queryParams$),
+    map(([action, params]) => params),
+    mergeMap(({ query, limits }) => {
+      console.log("gm query", query);
+      console.log("gm limits", limits);
+      return this.proposalApi.fullquery(query, limits).pipe(
+        map(
+          proposals =>
+            new FetchProposalsCompleteAction(
+              proposals as Proposal[]
+            )
+        ),
+        catchError(() => of(new FetchProposalsFailedAction()))
+      );
+    })
   );
 
   @Effect()

@@ -1,4 +1,4 @@
-import { NgxJsonViewerModule } from 'ngx-json-viewer';
+import { NgxJsonViewerModule } from "ngx-json-viewer";
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { RouterModule } from "@angular/router";
@@ -26,36 +26,52 @@ import {
   MatTabsModule,
   MatCardModule,
   MatIconModule,
-  MatPaginatorModule
+  MatPaginatorModule,
+  MatFormFieldModule,
+  MatInputModule,
+  MatSortModule
 } from "@angular/material";
 import { SharedCatanieModule } from "../shared/shared.module";
 import { LogbooksModule } from "logbooks/logbooks.module";
+import { ProposalDashboardComponent } from "./proposal-dashboard/proposal-dashboard.component";
+import { ProposalSearchComponent } from "./proposal-search/proposal-search.component";
+import { FlexLayoutModule } from "@angular/flex-layout";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 
 @NgModule({
   imports: [
     CommonModule,
+    EffectsModule.forFeature([ProposalsEffects]),
+    FlexLayoutModule,
+    FontAwesomeModule,
+    FormsModule,
+    LogbooksModule,
+    MatCardModule,
+    MatFormFieldModule,
+    MatIconModule,
+    MatInputModule,
+    MatListModule,
+    MatPaginatorModule,
+    MatSortModule,
+    MatTableModule,
+    MatTabsModule,
+    MatTooltipModule,
+    NgxJsonViewerModule,
+    ReactiveFormsModule,
     RouterModule,
     SharedCatanieModule,
-    FontAwesomeModule,
-    StoreModule.forFeature("proposals", proposalsReducer),
-    EffectsModule.forFeature([ProposalsEffects]),
-    MatIconModule,
-    MatTooltipModule,
-    MatListModule,
-    MatCardModule,
-    MatTabsModule,
-    MatTableModule,
-    MatPaginatorModule,
-    NgxJsonViewerModule,
-    LogbooksModule
+    StoreModule.forFeature("proposals", proposalsReducer)
   ],
   declarations: [
     ListProposalsPageComponent,
     ViewProposalPageComponent,
 
     ProposalsListComponent,
-    ProposalDetailComponent
+    ProposalDetailComponent,
+    ProposalDashboardComponent,
+    ProposalSearchComponent
   ],
+  exports: [ProposalSearchComponent, ListProposalsPageComponent],
   providers: [ProposalsService, DatasetService]
 })
 export class ProposalsModule {}

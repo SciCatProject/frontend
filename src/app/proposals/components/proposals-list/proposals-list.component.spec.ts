@@ -1,13 +1,17 @@
-import { APP_CONFIG } from './../../../app-config.module';
-import { Store } from '@ngrx/store';
-import { MockStore } from './../../../shared/MockStubs';
-import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+import { APP_CONFIG } from "./../../../app-config.module";
+import { MockRouter } from "shared/MockStubs";
+import { MockStore } from "./../../../shared/MockStubs";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { ProposalsListComponent } from "./proposals-list.component";
-import { MatListModule, MatTableModule, MatPaginatorModule } from "@angular/material";
-import { RouterTestingModule } from "@angular/router/testing";
 import { Router } from "@angular/router";
-import { MockRouter } from "shared/MockStubs";
+import { RouterTestingModule } from "@angular/router/testing";
+import { Store } from "@ngrx/store";
+import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+import {
+  MatListModule,
+  MatTableModule,
+  MatPaginatorModule
+} from "@angular/material";
 
 describe("ProposalsListComponent", () => {
   let component: ProposalsListComponent;
@@ -17,7 +21,12 @@ describe("ProposalsListComponent", () => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
       declarations: [ProposalsListComponent],
-      imports: [MatListModule, MatTableModule, MatPaginatorModule, RouterTestingModule]
+      imports: [
+        MatListModule,
+        MatTableModule,
+        MatPaginatorModule,
+        RouterTestingModule
+      ]
     });
     TestBed.overrideComponent(ProposalsListComponent, {
       set: {
@@ -30,7 +39,7 @@ describe("ProposalsListComponent", () => {
               disabledDatasetColumns: [],
               archiveWorkflowEnabled: true
             }
-          },
+          }
         ]
       }
     });
