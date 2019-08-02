@@ -28,14 +28,14 @@ export class DatafilesComponent implements OnInit, AfterViewInit {
   dataBlocks: Array<OrigDatablock>;
 
   urlPrefix: string;
-  count: number = 0;
+  count = 0;
   files: Array<JSON> = [];
   selectedDF;
   dsId: string;
   dataFiles: Array<any> = [];
 
-  areAllSelected: boolean = false;
-  isNoneSelected: boolean = true;
+  areAllSelected = false;
+  isNoneSelected = true;
 
   multipleDownloadEnabled: boolean = this.appConfig.multipleDownloadEnabled;
   multipleDownloadAction: string = this.appConfig.multipleDownloadAction;
