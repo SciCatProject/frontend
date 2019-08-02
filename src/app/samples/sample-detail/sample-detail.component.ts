@@ -3,10 +3,14 @@ import { Component, OnDestroy, OnInit } from "@angular/core";
 import { Observable, Subscription } from "rxjs";
 import { Sample } from "../../shared/sdk/models";
 import { filter, flatMap, map } from "rxjs/operators";
-import { getSelectedSample } from "../../state-management/selectors/samples.selectors";
+import {
+  getSelectedSample,
+  getCurrentSample
+} from "../../state-management/selectors/samples.selectors";
 import { select, Store } from "@ngrx/store";
 import {
-  FetchSampleAction, FetchSamplesAction,
+  FetchSampleAction,
+  FetchSamplesAction,
   SelectSampleAction
 } from "../../state-management/actions/samples.actions";
 
@@ -16,29 +20,30 @@ import {
   styleUrls: ["./sample-detail.component.scss"]
 })
 export class SampleDetailComponent implements OnInit, OnDestroy {
-  sample$: Observable<Sample>;
+  sample: Object;
+  sample$ = this.store.pipe(select(getCurrentSample));
   private sampleId$: Observable<string>;
-  private subscription: Subscription;
+  private subscriptions = [];
 
   constructor(private route: ActivatedRoute, private store: Store<Sample>) {}
 
   ngOnInit() {
-    this.store.dispatch(new FetchSamplesAction());
-    this.sampleId$ = this.route.params.pipe(
-      map(params => params.id),
-      filter(id => id != null)
+    this.subscriptions.push(
+      this.store.pipe(select(getCurrentSample)).subscribe(sample => {
+        if (sample && Object.keys(sample).length > 0) {
+          this.sample = <Sample>sample;
+        } else {
+          console.log("Searching from URL params");
+          this.route.params.subscribe(params => {
+            this.store.dispatch(new FetchSampleAction(params.id));
+          });
+        }
+      })
     );
-
-    this.subscription = this.sampleId$
-      .pipe(
-        flatMap(id => [new FetchSampleAction(id), new SelectSampleAction(id)])
-      )
-      .subscribe(this.store);
-
-    this.sample$ = this.store.pipe(select(getSelectedSample));
   }
-
   ngOnDestroy() {
-    this.subscription.unsubscribe();
+    for (let i = 0; i < this.subscriptions.length; i++) {
+      this.subscriptions[i].unsubscribe();
+    }
   }
 }

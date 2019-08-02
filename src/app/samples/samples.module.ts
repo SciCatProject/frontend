@@ -22,6 +22,7 @@ import { SampleService } from "./sample.service";
 import { SampleSearchComponent } from "./sample-search/sample-search.component";
 import { SampleDashboardComponent } from "./sample-dashboard/sample-dashboard.component";
 import { FlexLayoutModule } from "@angular/flex-layout";
+import { NgxJsonViewerModule } from "ngx-json-viewer";
 
 @NgModule({
   imports: [
@@ -36,6 +37,7 @@ import { FlexLayoutModule } from "@angular/flex-layout";
     MatSortModule,
     MatPaginatorModule,
     MatTableModule,
+    NgxJsonViewerModule,
     ReactiveFormsModule,
     StoreModule.forFeature("samples", samplesReducer)
   ],
