@@ -4,7 +4,7 @@ import { Observable } from "rxjs";
 import { OrigDatablock, Dataset } from "shared/sdk/models";
 import { Store, select } from "@ngrx/store";
 import { getIsAdmin } from "state-management/selectors/users.selectors";
-import { ChangeDetectorRef } from "@angular/core";
+import { ChangeDetectorRef, AfterViewChecked } from "@angular/core";
 import {
   Component,
   Input,
@@ -23,7 +23,7 @@ import { UserApi } from "shared/sdk/services";
   providers: [UserApi],
   styleUrls: ["./datafiles.component.css"]
 })
-export class DatafilesComponent implements OnInit, AfterViewInit {
+export class DatafilesComponent implements OnInit, AfterViewInit, AfterViewChecked {
   @Input()
   dataBlocks: Array<OrigDatablock>;
 
