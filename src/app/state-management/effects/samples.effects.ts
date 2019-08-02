@@ -68,8 +68,8 @@ export class SamplesEffects {
     ofType(FETCH_SAMPLE),
     map((action: FetchSampleAction) => action.sampleId),
     mergeMap(sampleId =>
-      this.sampleService
-        .getSample(encodeURIComponent(sampleId))
+      this.sampleApi
+        .findById(sampleId)
         .pipe(
           map(
             (currentSample: Sample) =>

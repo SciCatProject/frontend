@@ -23,7 +23,9 @@ import {
   ChangePageAction,
   FetchSampleCountCompleteAction,
   SEARCH_SAMPLES,
-  SearchSampleAction
+  SearchSampleAction,
+  SET_CURRENT_SAMPLE,
+  SetCurrentSample
 } from "state-management/actions/samples.actions";
 
 export function samplesReducer(
@@ -38,6 +40,13 @@ export function samplesReducer(
     case SELECT_SAMPLE: {
       const selectedId = (action as SelectSampleAction).sampleId;
       return { ...state, selectedId };
+    }
+
+    case SET_CURRENT_SAMPLE: {
+      const s = Object.assign({}, state, {
+        currentSample: (action as SetCurrentSample).sample
+      });
+      return s;
     }
 
     case SAMPLE_SORT_BY_COLUMN: {
@@ -90,6 +99,7 @@ export function samplesReducer(
 
     case FETCH_SAMPLE_COMPLETE: {
       const currentSample = (action as FetchSampleCompleteAction).currentSample;
+      // console.log("fetch sample complete");
       return { ...state, currentSample, samplesLoading: false };
     }
 
