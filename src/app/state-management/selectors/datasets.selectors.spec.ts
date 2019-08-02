@@ -8,7 +8,7 @@ const initialDatasetState: DatasetState = {
   currentSet: null,
   facetCounts: {},
   totalCount: 0,
-  
+
   datasetsLoading: true,
   deletingAttachment: false,
   addingAttachment: false,

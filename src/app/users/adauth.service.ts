@@ -35,7 +35,7 @@ export class ADAuthService {
     username: string,
     password: string
   ): Observable<HttpResponse<access_token>> {
-    var creds = {};
+    let creds = {};
     creds["username"] = username;
     creds["password"] = password;
     const headers = new HttpHeaders();
