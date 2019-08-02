@@ -2,8 +2,22 @@
   font-size: 1.25em;
 }
 
+.cardButton {
+  margin: 1em;
+  text-align: center;
+}
+
+.cardButton:hover {
+  cursor: pointer;
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
 @media only screen and (min-width: 1280px) {
   .smallFilter {
+    display: none;
+  }
+
+  .reverseCard {
     display: none;
   }
 }
@@ -15,5 +29,9 @@
 
   .smallFilter {
     margin: 1em 0 1em 1em;
+  }
+
+  .cardButton {
+    margin-right: 0;
   }
 }
