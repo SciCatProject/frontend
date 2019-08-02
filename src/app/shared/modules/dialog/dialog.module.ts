@@ -1,14 +1,14 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { DialogComponent } from './dialog.component';
-import { FormsModule } from '@angular/forms';
+import { NgModule } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { DialogComponent } from "./dialog.component";
+import { FormsModule } from "@angular/forms";
 
 import {
   MatButtonModule,
   MatDialogModule,
   MatInputModule,
-  MatFormFieldModule,
-} from '@angular/material';
+  MatFormFieldModule
+} from "@angular/material";
 @NgModule({
   imports: [
     CommonModule,
@@ -21,4 +21,4 @@ import {
   entryComponents: [DialogComponent],
   declarations: [DialogComponent]
 })
-export class DialogModule { }
+export class DialogModule {}

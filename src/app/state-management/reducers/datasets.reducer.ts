@@ -469,7 +469,7 @@ export function datasetsReducer(
     }
 
     case REDUCE_DATASET_COMPLETE: {
-      let result = (action as ReduceDatasetCompleteAction).result;
+      const result = (action as ReduceDatasetCompleteAction).result;
       return { ...state, result, resultLoading: false };
     }
 
