@@ -1,45 +1,28 @@
 <div class="sample-detail" *ngIf="sample$ | async as sample">
   <mat-card style="margin: 1em">
-    <mat-card-header style="background:#7de1ff;">
+    <mat-card-header>
       Sample Details
     </mat-card-header>
     <div class="details">
       <table>
         <tr *ngIf="sample.description as value">
-          <th>
-            <i class="material-icons" style="vertical-align: middle">
-              description </i
-            >Description
-          </th>
+          <th><i class="material-icons"> description </i>Description</th>
           <td>{{ value }}</td>
         </tr>
         <tr *ngIf="sample.createdAt as value">
-          <th>
-            <i class="material-icons" style="vertical-align: middle"> event </i
-            >Creation Time
-          </th>
+          <th><i class="material-icons"> event </i>Creation Time</th>
           <td>{{ value | date: "yyyy-MM-dd HH:mm" }}</td>
         </tr>
         <tr *ngIf="sample.owner as value">
-          <th>
-            <i class="material-icons" style="vertical-align: middle"> person </i
-            >Sample Owner
-          </th>
+          <th><i class="material-icons"> person </i>Sample Owner</th>
           <td>{{ value }}</td>
         </tr>
         <tr *ngIf="sample.ownerGroup as value">
-          <th>
-            <i class="material-icons" style="vertical-align: middle"> group </i
-            >Owner Group
-          </th>
+          <th><i class="material-icons"> group </i>Owner Group</th>
           <td>{{ value }}</td>
         </tr>
         <tr *ngIf="sample.sampleId as value">
-          <th>
-            <i class="material-icons" style="vertical-align: middle">
-              fingerprint </i
-            >Sample ID Group
-          </th>
+          <th><i class="material-icons"> fingerprint </i>Sample ID</th>
           <td>{{ value }}</td>
         </tr>
       </table>
