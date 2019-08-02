@@ -86,3 +86,22 @@ export const getFilters = createSelector(
     return { limits };
   }
 );
+
+
+export const getPropFilters = createSelector(
+  getProposalsState,
+  state => {
+    const query = {
+      text: state.propFilters.text
+    };
+    const limits = {
+      order: state.propFilters.sortField,
+      skip: state.propFilters.skip,
+      limit: state.propFilters.limit
+    };
+    return {
+      query: JSON.stringify(query),
+      limits
+    };
+  }
+);

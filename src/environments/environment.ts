@@ -25,5 +25,6 @@ export const environment = {
   metadataPreviewEnabled: true,
   datasetReduceEnabled: true,
   searchSamples: true,
+  searchProposals: true,
   fileColorEnabled: true
 };

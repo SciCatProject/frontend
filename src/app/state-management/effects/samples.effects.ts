@@ -61,7 +61,7 @@ export class SamplesEffects {
         catchError(() => of(new FetchSamplesFailedAction()))
       );
     })
-  )
+  );
 
   @Effect()
   protected getSample$: Observable<Action> = this.actions$.pipe(
