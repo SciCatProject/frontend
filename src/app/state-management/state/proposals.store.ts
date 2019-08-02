@@ -26,10 +26,17 @@ export const initialProposalsState: ProposalsState = {
   selectedId: null,
   datasetCount: null,
   proposalCount: null,
-  filters: { text: "", skip: 0, limit: 30,   sortField: "MeasurementPeriodList[0].start desc" },
+  filters: {
+    text: "",
+    skip: 0,
+    limit: 30,
+    sortField: "createdAt"
+  },
   propFilters: {
     text: "",
-    skip: 0, limit: 30, sortField: "MeasurementPeriodList[0].start desc"
+    skip: 0,
+    limit: 30,
+    sortField: "createdAt"
   },
   proposalsLoading: false
 };
