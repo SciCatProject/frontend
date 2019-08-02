@@ -30,13 +30,13 @@ export const initialProposalsState: ProposalsState = {
     text: "",
     skip: 0,
     limit: 30,
-    sortField: "createdAt"
+    sortField: "createdAt desc"
   },
   propFilters: {
     text: "",
     skip: 0,
     limit: 30,
-    sortField: "createdAt"
+    sortField: "createdAt desc"
   },
   proposalsLoading: false
 };
