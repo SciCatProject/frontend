@@ -13,7 +13,7 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MatButtonToggleModule } from "@angular/material/button-toggle";
 import { MatChipsModule } from "@angular/material/chips";
 import { NgModule } from "@angular/core";
-import { NgxJsonViewerModule } from 'ngx-json-viewer';
+import { NgxJsonViewerModule } from "ngx-json-viewer";
 import { RouterModule } from "@angular/router";
 import { SatDatepickerModule } from "saturn-datepicker";
 import { SelectedListComponent } from "datasets/selected-list/selected-list.component";
@@ -59,7 +59,7 @@ import { DatasetFormComponent } from "./dataset-form/dataset-form.component";
 import { ScientificConditionDialogComponent } from "./scientific-condition-dialog/scientific-condition-dialog.component";
 import { jobsReducer } from "../state-management/reducers/jobs.reducer";
 import { LogbooksModule } from "logbooks/logbooks.module";
-import { ReduceComponent } from './reduce/reduce.component';
+import { ReduceComponent } from "./reduce/reduce.component";
 
 @NgModule({
   imports: [

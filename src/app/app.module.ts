@@ -110,7 +110,17 @@ export function localStorageSyncWrapper(reducer: any) {
 
     SDKBrowserModule.forRoot(),
     // StoreModule.forRoot({router: routerReducer, root: rootReducer}, {metaReducers: [localStorageSyncWrapper]}),
-    StoreModule.forRoot({ router: routerReducer, root: rootReducer }),
+    StoreModule.forRoot(
+      { router: routerReducer, root: rootReducer },
+      {
+        runtimeChecks: {
+          strictStateImmutability: false,
+          strictActionImmutability: false,
+          strictStateSerializability: false,
+          strictActionSerializability: false
+        }
+      }
+    ),
     RouterModule.forRoot(routes, { useHash: false }),
     StoreDevtoolsModule.instrument({
       maxAge: 25 //  Retains last 25 states

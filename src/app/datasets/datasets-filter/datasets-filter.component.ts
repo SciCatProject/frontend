@@ -83,7 +83,9 @@ export class DatasetsFilterComponent {
   ): Observable<FacetCount[]> {
     return combineLatest(facetCounts$, input$, currentFilters$).pipe(
       map(([counts, filterString, currentFilters]) => {
-        if (!counts) return [];
+        if (!counts) {
+          return [];
+        }
         return counts.filter(
           count =>
             typeof count._id === "string" &&

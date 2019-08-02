@@ -68,7 +68,7 @@ describe("DatasetsReducer", () => {
     const state = fromDatasets.datasetsReducer(initialDatasetState, action);
     expect(state.datasetsLoading).toEqual(false);
   });
-  
+
   it("should set datasetsLoading to false after fetch datasets failed complete", () => {
     const action = new fromActions.FetchDatasetsFailedAction();
     const state = fromDatasets.datasetsReducer(initialDatasetState, action);
@@ -80,7 +80,7 @@ describe("DatasetsReducer", () => {
     const state = fromDatasets.datasetsReducer(initialDatasetState, action);
     expect(state.facetCountsLoading).toEqual(true);
   });
-  
+
   it("should set facetCountsLoading to false after fetch facet counts failed complete", () => {
     const action = new fromActions.FetchFacetCountsFailedAction();
     const state = fromDatasets.datasetsReducer(initialDatasetState, action);
@@ -114,7 +114,7 @@ describe("DatasetsReducer", () => {
     const state = fromDatasets.datasetsReducer(initialDatasetState, action);
     expect(state.hasPrefilledFilters).toEqual(true);
   });
-  
+
   it("should set filters", () => {
     const filter = { ...defaultFilter };
     const action = new fromActions.PrefillFiltersAction(filter);
