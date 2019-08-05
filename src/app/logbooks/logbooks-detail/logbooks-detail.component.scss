@@ -1,13 +1,41 @@
-.mat-column-timestamp {
-  flex: 1 0 100px;
-  max-width: 300px;
+@media only screen and (min-width: 1280px) {
+  .mat-column-timestamp {
+    flex: 1 0 100px;
+    max-width: 200px;
+  }
+
+  .mat-column-sender {
+    flex: 1 0 100px;
+    max-width: 200px;
+  }
+
+  .mat-column-entry {
+    flex: 1 0 100px;
+  }
+
+  .smallDetails {
+    display: none;
+  }
 }
 
-.mat-column-sender {
-  flex: 1 0 100px;
-  max-width: 300px;
-}
+@media only screen and (max-width: 1279px) {
+  .largeDetails {
+    display: none;
+  }
 
-.mat-column-entry {
-  flex: 1 0 100px;
+  .entryDate {
+    font-size: 1.25em;
+    margin-bottom: 1em;
+  }
+
+  .sender {
+    color: rgba(0, 0, 0, 0.54);
+    font-size: 14px;
+    display: block;
+    margin-bottom: 16px;
+  }
+
+  .textContent {
+    margin-bottom: 1em;
+  }
 }

@@ -62,4 +62,8 @@ export class LogbooksDashboardComponent implements OnInit, OnDestroy {
     this.logbookSubscription.unsubscribe();
     this.datasetSubscription.unsubscribe();
   }
+
+  reverseTimeline(): void {
+    this.logbook.messages.reverse();
+  }
 }
