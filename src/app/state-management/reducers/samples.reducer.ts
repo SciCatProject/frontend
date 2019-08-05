@@ -8,7 +8,6 @@ import {
   FETCH_SAMPLES_FAILED,
   FetchSampleCompleteAction,
   FetchSamplesCompleteAction,
-  SamplesActions,
   SELECT_SAMPLE,
   SelectSampleAction,
   ADD_SAMPLE,
