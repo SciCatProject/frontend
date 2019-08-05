@@ -27,6 +27,13 @@ export const getSampleCount = createSelector(
   }
 );
 
+export const getDatasetsForSample = createSelector(
+  getSampleState,
+  state => {
+    return state.datasets;
+  }
+);
+
 export const getQuery = createSelector(
   getSampleState,
   state => {

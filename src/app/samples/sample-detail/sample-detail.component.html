@@ -25,7 +25,7 @@
           <th><i class="material-icons"> fingerprint </i>Sample ID</th>
           <td>{{ value }}</td>
         </tr>
-        <tr *ngIf="datasets as value">
+        <tr *ngIf="datasets$ | async as value">
           <th><i class="material-icons"> save </i>Datasets</th>
           <td>{{ value }}</td>
         </tr>
