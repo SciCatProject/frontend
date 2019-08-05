@@ -37,7 +37,7 @@ export class FetchDatasetsForSample implements Action {
 export class FetchDatasetsForSampleComplete implements Action {
   readonly type = FETCH_DATASETS_FOR_SAMPLE_COMPLETE;
 
-  constructor(readonly datasets[]: Dataset[]) { }
+  constructor(readonly datasets: Dataset[]) { }
 }
 
 export class FetchDatasetsForSampleFailed implements Action {
