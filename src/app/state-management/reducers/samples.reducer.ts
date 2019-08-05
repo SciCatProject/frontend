@@ -86,10 +86,15 @@ export function samplesReducer(
 
     case FETCH_DATASETS_FOR_SAMPLE_COMPLETE: {
       const list = (action as FetchDatasetsForSampleComplete).datasets;
-      const datasets = list.reduce(
+      const items = list.reduce(
         (datasets, dataset) => ({ ...datasets, [dataset.pid]: dataset }),
         {}
       );
+
+      const datasets = list.map(function(item) {
+        return item["pid"];
+      });
+
       const datasetCount = Object.keys(datasets).length;
       return { ...state, datasets, datasetsLoading: false };
     }

@@ -29,8 +29,8 @@
           <th><i class="material-icons"> save </i>Datasets</th>
           <td>
             <ul>
-              <li *ngFor="let group of value">
-                {{ group }}
+              <li>
+                {{ datasets | json }}
               </li>
             </ul>
           </td>
