@@ -27,10 +27,8 @@ export const SEARCH_SAMPLES = "[Sample] Search Samples";
 export const SET_CURRENT_SAMPLE = "[Sample] Set current Sample";
 
 export const FETCH_DATASETS_FOR_SAMPLE = "[Sample] Fetch Datsets for Sample";
-export const FETCH_DATASETS_FOR_SAMPLE_COMPLETE =
-  "[Sample] Fetch Datsets for Sample";
-export const FETCH_DATASETS_FOR_SAMPLE_FAILED =
-  "[Sample] Fetch Datsets for Sample";
+export const FETCH_DATASETS_FOR_SAMPLE_COMPLETE = "[Sample] Fetch Datasets for Sample Complete";
+export const FETCH_DATASETS_FOR_SAMPLE_FAILED = "[Sample] Fetch Datasets for Sample Failed";
 
 export class FetchDatasetsForSample implements Action {
   readonly type = FETCH_DATASETS_FOR_SAMPLE;
