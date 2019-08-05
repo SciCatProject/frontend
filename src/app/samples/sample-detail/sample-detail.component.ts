@@ -1,7 +1,7 @@
 import { ActivatedRoute } from "@angular/router";
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { Observable } from "rxjs";
-import { Sample } from "../../shared/sdk/models";
+import { Sample, Dataset } from "../../shared/sdk/models";
 import { getCurrentSample } from "../../state-management/selectors/samples.selectors";
 import { select, Store } from "@ngrx/store";
 import {
@@ -17,7 +17,8 @@ import {
 export class SampleDetailComponent implements OnInit, OnDestroy {
   sample: Object;
   sample$ = this.store.pipe(select(getCurrentSample));
-  datasets: string[] = ["hfjeiwgev","hferiu"];
+  datasets: string[] = ["hfjeiwgev", "hferiu"];
+  datasets$: Observable<Dataset>;
   private sampleId$: Observable<string>;
   private subscriptions = [];
 
@@ -37,6 +38,7 @@ export class SampleDetailComponent implements OnInit, OnDestroy {
         }
       })
     );
+
   }
 
   ngOnDestroy() {

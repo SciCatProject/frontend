@@ -1,5 +1,5 @@
 import { Action } from "@ngrx/store";
-import { Sample } from "shared/sdk/models";
+import { Sample, Dataset } from "shared/sdk/models";
 
 export const SELECT_SAMPLE = "[Sample] Select Sample";
 
@@ -25,6 +25,26 @@ export const CHANGE_PAGE = "[Sample] Change Page";
 export const SEARCH_SAMPLES = "[Sample] Search Samples";
 export const SET_CURRENT_SAMPLE = "[Sample] Set current Sample";
 
+export const FETCH_DATASETS_FOR_SAMPLE = "[Sample] Fetch Datsets for Sample";
+export const FETCH_DATASETS_FOR_SAMPLE_COMPLETE = "[Sample] Fetch Datsets for Sample";
+export const FETCH_DATASETS_FOR_SAMPLE_FAILED = "[Sample] Fetch Datsets for Sample";
+
+export class FetchDatasetsForSample implements Action {
+  readonly type = FETCH_DATASETS_FOR_SAMPLE;
+
+  constructor(readonly sampleId:string) { }
+}
+export class FetchDatasetsForSampleComplete implements Action {
+  readonly type = FETCH_DATASETS_FOR_SAMPLE_COMPLETE;
+
+  constructor(readonly datasets[]: Dataset[]) { }
+}
+
+export class FetchDatasetsForSampleFailed implements Action {
+  readonly type = FETCH_DATASETS_FOR_SAMPLE_FAILED;
+
+  constructor() { }
+}
 
 export class SetCurrentSample implements Action {
   readonly type = SET_CURRENT_SAMPLE;
