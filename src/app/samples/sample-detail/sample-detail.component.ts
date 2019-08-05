@@ -6,7 +6,8 @@ import { getCurrentSample, getDatasetsForSample } from "../../state-management/s
 import { select, Store } from "@ngrx/store";
 import {
   FetchSampleAction,
-  SetCurrentSample
+  SetCurrentSample,
+  FetchDatasetsForSample
 } from "../../state-management/actions/samples.actions";
 
 @Component({
@@ -33,6 +34,7 @@ export class SampleDetailComponent implements OnInit, OnDestroy {
           this.route.params.subscribe(params => {
             console.log("fetching,", params.id);
             this.store.dispatch(new FetchSampleAction(params.id));
+  //          this.store.dispatch(new FetchDatasetsForSample(params.id));
           });
         }
       })

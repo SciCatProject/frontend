@@ -27,6 +27,7 @@ export class SampleService {
   }
 
   getDatasetsForSample(sampleId: string): Observable<Dataset[]> {
-    return this.datasetApi.find({ where: {sampleId: sampleId}});
+    console.log("gm: fetch datasets for ", sampleId);
+    return this.datasetApi.find({ where: { sampleId: sampleId } });
   }
 }

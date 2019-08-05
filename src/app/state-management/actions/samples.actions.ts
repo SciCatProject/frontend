@@ -150,7 +150,6 @@ export type SamplesActions =
   | FetchSampleCountCompleteAction
   | FetchSampleCountFailedAction;
 
-
 export type FetchDatasetsForSampleOutcomeAction =
   | FetchDatasetsForSampleComplete
   | FetchDatasetsForSampleFailed;
