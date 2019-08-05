@@ -1,24 +1,41 @@
 <div *ngIf="logbook">
-  <div fxLayout="row" fxLayout.xs="column">
+  <div fxLayout="row" fxLayout.lt-lg="column">
     <div fxFlex="14" style="margin-right: 1em">
-      <mat-card style="margin: 1em">
+      <mat-card class="bigFilter" style="margin: 1em">
+        <div class="title">Filter</div>
         <app-logbooks-filter></app-logbooks-filter>
-      </mat-card>
-      <mat-card style="margin: 1em">
         <app-content-selector></app-content-selector>
       </mat-card>
-      <a
-        mat-raised-button
-        class="mat-elevation-z1"
-        href="{{ appConfig.riotBaseUrl }}/#/room/{{ logbook.roomId }}"
-        target="_blank"
-        rel="noopener noreferrer"
-        style="margin: 0 1em 1em"
-        ><i class="material-icons"> chat_bubble_outline </i> Go to chat</a
-      >
+      <mat-expansion-panel class="smallFilter">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <div class="title">Filter</div>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <app-logbooks-filter></app-logbooks-filter>
+        <app-content-selector></app-content-selector>
+      </mat-expansion-panel>
+      <div fxLayout="column" fxLayout.lt-lg="row">
+        <div fxFlex="50">
+          <a
+            href="{{ appConfig.riotBaseUrl }}/#/room/{{ logbook.roomId }}"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <mat-card class="cardButton">
+              <i class="material-icons"> chat_bubble_outline </i> Go to chat
+            </mat-card>
+          </a>
+        </div>
+        <div class="reverseCard" fxFlex="50">
+          <mat-card class="cardButton" (click)="reverseTimeline()">
+            <i class="material-icons"> swap_vert </i> Reverse
+          </mat-card>
+        </div>
+      </div>
     </div>
     <div fxFlex="85">
-      <mat-card style="margin: 1em">
+      <mat-card style="margin: 1em; padding: 0">
         <app-logbooks-detail></app-logbooks-detail>
       </mat-card>
     </div>

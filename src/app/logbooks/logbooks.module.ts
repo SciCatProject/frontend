@@ -30,7 +30,8 @@ import {
   MatSelectModule,
   MatSortModule,
   MatTabsModule,
-  MatTooltipModule
+  MatTooltipModule,
+  MatExpansionModule
 } from "@angular/material";
 import { AppConfigModule } from "app-config.module";
 import { FlexLayoutModule } from "@angular/flex-layout";
@@ -71,6 +72,7 @@ import { StoreModule } from "@ngrx/store";
     MatChipsModule,
     MatDatepickerModule,
     MatDialogModule,
+    MatExpansionModule,
     MatFormFieldModule,
     MatGridListModule,
     MatIconModule,
