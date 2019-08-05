@@ -16,7 +16,8 @@ export const FETCH_SAMPLE_COMPLETE = "[Sample] Fetch Sample Complete";
 export const FETCH_SAMPLE_FAILED = "[Sample] Fetch Sample Failed";
 
 export const FETCH_SAMPLE_COUNT = "[Sample] Fetch Sample Count";
-export const FETCH_SAMPLE_COUNT_COMPLETE = "[Sample] Fetch Sample Count Complete";
+export const FETCH_SAMPLE_COUNT_COMPLETE =
+  "[Sample] Fetch Sample Count Complete";
 export const FETCH_SAMPLE_COUNT_FAILED = "[Sample] Fetch Sample Count Failed";
 
 export const SAMPLE_SORT_BY_COLUMN = "[Sample] Sort by Column";
@@ -26,59 +27,61 @@ export const SEARCH_SAMPLES = "[Sample] Search Samples";
 export const SET_CURRENT_SAMPLE = "[Sample] Set current Sample";
 
 export const FETCH_DATASETS_FOR_SAMPLE = "[Sample] Fetch Datsets for Sample";
-export const FETCH_DATASETS_FOR_SAMPLE_COMPLETE = "[Sample] Fetch Datsets for Sample";
-export const FETCH_DATASETS_FOR_SAMPLE_FAILED = "[Sample] Fetch Datsets for Sample";
+export const FETCH_DATASETS_FOR_SAMPLE_COMPLETE =
+  "[Sample] Fetch Datsets for Sample";
+export const FETCH_DATASETS_FOR_SAMPLE_FAILED =
+  "[Sample] Fetch Datsets for Sample";
 
 export class FetchDatasetsForSample implements Action {
   readonly type = FETCH_DATASETS_FOR_SAMPLE;
 
-  constructor(readonly sampleId:string) { }
+  constructor(readonly sampleId: string) {}
 }
 export class FetchDatasetsForSampleComplete implements Action {
   readonly type = FETCH_DATASETS_FOR_SAMPLE_COMPLETE;
 
-  constructor(readonly datasets: Dataset[]) { }
+  constructor(readonly datasets: Dataset[]) {}
 }
 
 export class FetchDatasetsForSampleFailed implements Action {
   readonly type = FETCH_DATASETS_FOR_SAMPLE_FAILED;
 
-  constructor() { }
+  constructor() {}
 }
 
 export class SetCurrentSample implements Action {
   readonly type = SET_CURRENT_SAMPLE;
 
-  constructor(readonly sample) { }
+  constructor(readonly sample) {}
 }
 export class SampleSortByColumnAction implements Action {
   readonly type = SAMPLE_SORT_BY_COLUMN;
 
-  constructor(readonly column: string, readonly direction: string) { }
+  constructor(readonly column: string, readonly direction: string) {}
 }
 
 export class SearchSampleAction implements Action {
   type = SEARCH_SAMPLES;
 
-  constructor(readonly query: string) { }
+  constructor(readonly query: string) {}
 }
 export class SelectSampleAction implements Action {
   type = SELECT_SAMPLE;
 
-  constructor(readonly sampleId: string) { }
+  constructor(readonly sampleId: string) {}
 }
 
 export class AddSampleAction implements Action {
   readonly type = ADD_SAMPLE;
-  constructor(readonly sample: Sample) { }
+  constructor(readonly sample: Sample) {}
 }
 export class AddSampleCompleteAction implements Action {
   readonly type = ADD_SAMPLE_COMPLETE;
-  constructor(readonly sample: Sample) { }
+  constructor(readonly sample: Sample) {}
 }
 export class AddSampleFailedAction implements Action {
   readonly type = ADD_SAMPLE_FAILED;
-  constructor(readonly sample: Sample) { }
+  constructor(readonly sample: Sample) {}
 }
 export class FetchSamplesAction implements Action {
   readonly type = FETCH_SAMPLES;
@@ -87,7 +90,7 @@ export class FetchSamplesAction implements Action {
 export class FetchSamplesCompleteAction implements Action {
   readonly type = FETCH_SAMPLES_COMPLETE;
 
-  constructor(readonly samples: Sample[]) { }
+  constructor(readonly samples: Sample[]) {}
 }
 
 export class FetchSamplesFailedAction implements Action {
@@ -96,29 +99,28 @@ export class FetchSamplesFailedAction implements Action {
 
 export class FetchSampleAction implements Action {
   readonly type = FETCH_SAMPLE;
-  constructor(readonly sampleId: string) { }
+  constructor(readonly sampleId: string) {}
 }
 
 export class FetchSampleCompleteAction implements Action {
   readonly type = FETCH_SAMPLE_COMPLETE;
 
-  constructor(readonly currentSample: Sample) { }
+  constructor(readonly currentSample: Sample) {}
 }
 
 export class FetchSampleFailedAction implements Action {
   readonly type = FETCH_SAMPLE_FAILED;
 }
 
-
 export class FetchSampleCountAction implements Action {
   readonly type = FETCH_SAMPLE_COUNT;
-  constructor(readonly sampleCount: number) { }
+  constructor(readonly sampleCount: number) {}
 }
 
 export class FetchSampleCountCompleteAction implements Action {
   readonly type = FETCH_SAMPLE_COUNT_COMPLETE;
 
-  constructor(readonly sampleCount: number) { }
+  constructor(readonly sampleCount: number) {}
 }
 
 export class FetchSampleCountFailedAction implements Action {
@@ -128,10 +130,8 @@ export class FetchSampleCountFailedAction implements Action {
 export class ChangePageAction implements Action {
   readonly type = CHANGE_PAGE;
 
-  constructor(readonly page: number, readonly limit: number) {
-  }
+  constructor(readonly page: number, readonly limit: number) {}
 }
-
 
 export type SamplesActions =
   | SelectSampleAction
