@@ -22,7 +22,12 @@ import {
   FetchSampleCountAction,
   FetchSampleCountCompleteAction,
   FetchSampleCountFailedAction,
-  SEARCH_SAMPLES
+  SEARCH_SAMPLES,
+  FetchDatasetsForSample,
+  FetchDatasetsForSampleComplete,
+  FetchDatasetsForSampleFailed,
+  FETCH_DATASETS_FOR_SAMPLE,
+  FetchDatasetsForSampleOutcomeAction
 } from "../actions/samples.actions";
 import { getQuery, getFullqueryParams } from "state-management/selectors/samples.selectors";
 
@@ -109,6 +114,19 @@ export class SamplesEffects {
             catchError(() => of(new FetchSampleCountFailedAction()))
           )
         )
+    )
+  );
+
+  @Effect()
+  getDatasetsForSamples$: Observable<
+    FetchDatasetsForSampleOutcomeAction
+  > = this.actions$.pipe(
+    ofType<FetchDatasetsForSample>(FETCH_DATASETS_FOR_SAMPLE),
+    switchMap(action =>
+      this.sampleService.getDatasetsForSample(action.sampleId).pipe(
+        map(datasets => new FetchDatasetsForSampleComplete(datasets)),
+        catchError(() => of(new FetchDatasetsForSampleFailed()))
+      )
     )
   );
 
