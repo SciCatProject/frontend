@@ -36,7 +36,7 @@
         Created at
       </mat-header-cell>
       <mat-cell *matCellDef="let job">
-        {{job.creationTime | date: 'yyyy/MM/dd HH:mm:ss' }}
+        {{job.creationTime | date: 'yyyy-MM-dd HH:mm' }}
       </mat-cell>
     </ng-container>
 
@@ -46,7 +46,7 @@
         Executed at
       </mat-header-cell>
       <mat-cell *matCellDef="let job">
-        {{job.executionTime | date: 'yyyy/MM/dd HH:mm:ss'}}
+        {{job.executionTime | date: 'yyyy-MM-dd HH:mm:ss'}}
       </mat-cell>
     </ng-container>
 

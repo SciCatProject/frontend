@@ -39,7 +39,7 @@ export class LogbooksDetailComponent implements OnInit, OnDestroy {
     this.filteredLogbookDescription = this.store
       .pipe(select(getFilteredEntries))
       .subscribe(logbook => {
-        this.logbook = logbook
+        this.logbook = logbook;
       });
 
     this.datasetSubscription = this.store

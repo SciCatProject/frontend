@@ -6,9 +6,9 @@ import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material";
   templateUrl: "scientific-condition-dialog.component.html"
 })
 export class ScientificConditionDialogComponent {
-  public lhs: string = "";
-  public rhs: string = "";
-  public relation: string = "EQUAL_TO_NUMERIC";
+  public lhs = "";
+  public rhs = "";
+  public relation = "EQUAL_TO_NUMERIC";
 
   constructor(
     public dialogRef: MatDialogRef<ScientificConditionDialogComponent>,

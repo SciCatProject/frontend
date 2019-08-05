@@ -1,12 +1,12 @@
-import { async, ComponentFixture, TestBed } from "@angular/core/testing";
-
-import { SampleDetailComponent } from "./sample-detail.component";
-import { HttpClient } from "@angular/common/http";
-import { MockActivatedRoute, MockHttp, MockRouter, MockSampleService, MockStore } from "../../shared/MockStubs";
 import { ActivatedRoute, Router } from "@angular/router";
-import { Store } from "@ngrx/store";
-import { SampleService } from "../../samples/sample.service";
+import { HttpClient } from "@angular/common/http";
 import { MatCardModule } from "@angular/material";
+import { MockActivatedRoute, MockHttp, MockRouter, MockSampleService, MockStore } from "../../shared/MockStubs";
+import { SampleDetailComponent } from "./sample-detail.component";
+import { SampleService } from "../../samples/sample.service";
+import { Store } from "@ngrx/store";
+import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+import { NgxJsonViewerModule } from "ngx-json-viewer";
 
 describe("SampleDetailComponent", () => {
   let component: SampleDetailComponent;
@@ -15,7 +15,7 @@ describe("SampleDetailComponent", () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [SampleDetailComponent],
-      imports: [MatCardModule]
+      imports: [MatCardModule, NgxJsonViewerModule]
     });
     TestBed.overrideComponent(SampleDetailComponent, {
       set: {

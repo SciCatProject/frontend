@@ -26,7 +26,7 @@ export class LogbooksTableComponent implements OnInit, OnDestroy {
       .pipe(select(getLogbooks))
       .subscribe(logbooks => {
         logbooks.forEach(logbook => {
-          let reversedMessages = logbook.messages.reverse();
+          const reversedMessages = logbook.messages.reverse();
           logbook.messages = reversedMessages;
         });
         this.logbooks = logbooks;

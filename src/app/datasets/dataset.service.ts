@@ -1,5 +1,10 @@
 import * as ua from "state-management/actions/user.actions";
-import { DatasetApi, DatasetAttachmentApi, LoopBackAuth, OrigDatablockApi } from "shared/sdk/services";
+import {
+  DatasetApi,
+  DatasetAttachmentApi,
+  LoopBackAuth,
+  OrigDatablockApi
+} from "shared/sdk/services";
 import { BehaviorSubject, Observable, Subject } from "rxjs";
 import { DatablockApi, DatasetAttachment } from "shared/sdk";
 import { Dataset, OrigDatablock } from "shared/sdk/models";
@@ -21,10 +26,9 @@ export class DatasetService {
   };
 
   filter = {
-    limit: this.limit,
+    limit: this.limit
   };
 
-  
   nullLifecycle = {
     archiveRetentionTime: "unknown",
     archiveStatusMessage: "unknown",
@@ -50,8 +54,7 @@ export class DatasetService {
     private db: DatablockApi,
     private auth: LoopBackAuth,
     private store: Store<any>
-  ) {
-  }
+  ) {}
 
   /**
    * Search datasets with search terms,
@@ -77,8 +80,7 @@ export class DatasetService {
       error => {
         console.error(error);
       },
-      () => {
-      }
+      () => {}
     );
   }
 
@@ -97,7 +99,6 @@ export class DatasetService {
   getAttachments(attachment_id: string) {
     return this.daSrv.deleteById(attachment_id);
   }
-
 
   setDataset(dataset: Dataset) {
     return this.rds.upsert(dataset);

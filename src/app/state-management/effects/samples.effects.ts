@@ -5,7 +5,7 @@ import { Observable, of } from "rxjs";
 import { Sample } from "../../shared/sdk/models";
 import { SampleApi } from "shared/sdk/services";
 import { SampleService } from "../../samples/sample.service";
-import { catchError, map, mergeMap, withLatestFrom } from "rxjs/operators";
+import { catchError, map, mergeMap, withLatestFrom, switchMap } from "rxjs/operators";
 import {
   FETCH_SAMPLE,
   FETCH_SAMPLES,
@@ -21,13 +21,15 @@ import {
   FETCH_SAMPLE_COUNT,
   FetchSampleCountAction,
   FetchSampleCountCompleteAction,
-  FetchSampleCountFailedAction
+  FetchSampleCountFailedAction,
+  SEARCH_SAMPLES
 } from "../actions/samples.actions";
-import { getQuery } from "state-management/selectors/samples.selectors";
+import { getQuery, getFullqueryParams } from "state-management/selectors/samples.selectors";
 
 @Injectable()
 export class SamplesEffects {
   private query$ = this.store.select(getQuery);
+  private fullquery$ = this.store.select(getFullqueryParams);
   @Effect()
   fetchSamples$: Observable<Action> = this.actions$.pipe(
     ofType(FETCH_SAMPLES),
@@ -42,12 +44,32 @@ export class SamplesEffects {
   );
 
   @Effect()
+  private searchSamples$: Observable<Action> = this.actions$.pipe(
+    ofType(SEARCH_SAMPLES),
+    withLatestFrom(this.fullquery$),
+    map(([action, params]) => params),
+    mergeMap(({ query, limits }) => {
+      console.log("gm query", query);
+      console.log("gm limits", limits);
+      return this.sampleApi.fullquery(query, limits).pipe(
+        map(
+          samples =>
+            new FetchSamplesCompleteAction(
+              samples as Sample[]
+            )
+        ),
+        catchError(() => of(new FetchSamplesFailedAction()))
+      );
+    })
+  );
+
+  @Effect()
   protected getSample$: Observable<Action> = this.actions$.pipe(
     ofType(FETCH_SAMPLE),
     map((action: FetchSampleAction) => action.sampleId),
-    mergeMap(sampleId =>
-      this.sampleService
-        .getSample(encodeURIComponent(sampleId))
+    switchMap(sampleId =>
+      this.sampleApi
+        .findById(sampleId)
         .pipe(
           map(
             (currentSample: Sample) =>

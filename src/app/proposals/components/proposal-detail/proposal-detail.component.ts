@@ -8,9 +8,7 @@ import {
   getPage
 } from "state-management/selectors/proposals.selectors";
 
-import {
-  ChangePageAction,
-} from "state-management/actions/proposals.actions";
+import { ChangePageAction } from "state-management/actions/proposals.actions";
 
 interface Proposer {
   name: string;
@@ -79,11 +77,10 @@ export class ProposalDetailComponent implements OnInit {
       isPresent: piFullName !== null || piEmail !== null
     };
 
-    if (this.proposal.MeasurementPeriodList.length >0){
+    if (this.proposal.MeasurementPeriodList.length > 0) {
       const measure = this.proposal.MeasurementPeriodList.pop();
       this.startTime = measure.start || null;
       this.endTime = measure.end || null;
-
     }
   }
 
@@ -100,4 +97,3 @@ export class ProposalDetailComponent implements OnInit {
     this.store.dispatch(new ChangePageAction(event.pageIndex, event.pageSize));
   }
 }
-

@@ -30,10 +30,10 @@ import {
   MatSelectModule,
   MatSortModule,
   MatTabsModule,
-  MatTooltipModule
+  MatTooltipModule,
+  MatExpansionModule
 } from "@angular/material";
 import { AppConfigModule } from "app-config.module";
-import { FileHelpersModule } from "ngx-file-helpers";
 import { FlexLayoutModule } from "@angular/flex-layout";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
@@ -61,7 +61,6 @@ import { StoreModule } from "@ngrx/store";
   imports: [
     AppConfigModule,
     CommonModule,
-    FileHelpersModule,
     FlexLayoutModule,
     FontAwesomeModule,
     FormsModule,
@@ -73,6 +72,7 @@ import { StoreModule } from "@ngrx/store";
     MatChipsModule,
     MatDatepickerModule,
     MatDialogModule,
+    MatExpansionModule,
     MatFormFieldModule,
     MatGridListModule,
     MatIconModule,

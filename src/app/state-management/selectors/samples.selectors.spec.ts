@@ -9,9 +9,12 @@ const initialSampleState: SampleState = {
   totalCount: 0,
   submitComplete: false,
 
+  searchTerms: "",
+
   samplesLoading: true,
   error: undefined,
   filters: {
+    text: "",
     skip: 0,
     limit: 0,
     sortField: "creationTime:desc"

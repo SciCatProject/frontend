@@ -82,6 +82,7 @@ export interface DatasetFilters {
 }
 
 export interface SampleFilters {
+  text: string;
   sortField: string;
   skip: number;
   limit: number;

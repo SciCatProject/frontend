@@ -7,10 +7,12 @@ const filters: LogbookFilters = {
   showBotMessages: true,
   showUserMessages: true,
   showImages: true
-}
+};
 
 describe("test Logbook Selectors", () => {
   it("should get filters", () => {
-    expect(fromLogbookSelectors.getFilters.projector(initialLogbookState)).toEqual(filters)
-  })
-})
+    expect(
+      fromLogbookSelectors.getFilters.projector(initialLogbookState)
+    ).toEqual(filters);
+  });
+});

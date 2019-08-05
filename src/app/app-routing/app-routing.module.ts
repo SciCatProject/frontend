@@ -17,7 +17,6 @@ import { UserSettingsComponent } from "../users/user-settings/user-settings.comp
 
 import { SampleDataFormComponent } from "../samples/sample-data-form/sample-data-form.component";
 
-import { ListProposalsPageComponent } from "../proposals/containers/list-proposals-page/list-proposals-page.component";
 import { ViewProposalPageComponent } from "../proposals/containers/view-proposal-page/view-proposal-page.component";
 
 import { PoliciesComponent } from "../policies/policies/policies.component";
@@ -26,7 +25,6 @@ import { PublishComponent } from "datasets/publish/publish.component";
 import { AuthCheck } from "../AuthCheck";
 import { BatchViewComponent } from "datasets/batch-view/batch-view.component";
 import { SampleDetailComponent } from "../samples/sample-detail/sample-detail.component";
-import { SampleTableComponent } from "../samples/sample-table/sample-table.component";
 
 import { LogbooksDashboardComponent } from "../logbooks/logbooks-dashboard/logbooks-dashboard.component";
 import { LogbooksTableComponent } from "../logbooks/logbooks-table/logbooks-table.component";
@@ -37,6 +35,8 @@ import { PublisheddataDetailsComponent } from "publisheddata/publisheddata-detai
 
 // handles external URLs by lookup in the env config
 import { RedirectGuard } from "app-routing/redirect-guard";
+import { ProposalDashboardComponent } from "proposals/proposal-dashboard/proposal-dashboard.component";
+import { SampleDashboardComponent } from "samples/sample-dashboard/sample-dashboard.component";
 
 export const routes: Routes = [
   { path: "", redirectTo: "/datasets", pathMatch: "full" },
@@ -70,7 +70,7 @@ export const routes: Routes = [
   },
   {
     path: "proposals",
-    component: ListProposalsPageComponent,
+    component: ProposalDashboardComponent,
     canActivate: [AuthCheck]
   },
   {
@@ -90,7 +90,7 @@ export const routes: Routes = [
   },
   {
     path: "samples",
-    component: SampleTableComponent,
+    component: SampleDashboardComponent,
     canActivate: [AuthCheck]
   },
   {

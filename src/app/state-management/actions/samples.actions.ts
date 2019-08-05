@@ -22,12 +22,26 @@ export const FETCH_SAMPLE_COUNT_FAILED = "[Sample] Fetch Sample Count Failed";
 export const SAMPLE_SORT_BY_COLUMN = "[Sample] Sort by Column";
 export const CHANGE_PAGE = "[Sample] Change Page";
 
+export const SEARCH_SAMPLES = "[Sample] Search Samples";
+export const SET_CURRENT_SAMPLE = "[Sample] Set current Sample";
+
+
+export class SetCurrentSample implements Action {
+  readonly type = SET_CURRENT_SAMPLE;
+
+  constructor(readonly sample) { }
+}
 export class SampleSortByColumnAction implements Action {
   readonly type = SAMPLE_SORT_BY_COLUMN;
 
   constructor(readonly column: string, readonly direction: string) { }
 }
 
+export class SearchSampleAction implements Action {
+  type = SEARCH_SAMPLES;
+
+  constructor(readonly query: string) { }
+}
 export class SelectSampleAction implements Action {
   type = SELECT_SAMPLE;
 

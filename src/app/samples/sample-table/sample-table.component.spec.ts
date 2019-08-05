@@ -29,23 +29,16 @@ describe("SampleTableComponent", () => {
         MatCardModule,
         MatIconModule,
         MatPaginatorModule
-      ],
-      providers: [
-        {
-          provide: APP_CONFIG,
-          useValue: {
-            editSampleEnabled: true
-          }
-        },
-        { provide: MatDialog, useValue: {} }
       ]
     });
     TestBed.overrideComponent(SampleTableComponent, {
       set: {
         providers: [
+          { provide: APP_CONFIG, useValue: { editSampleEnabled: true } },
           { provide: HttpClient, useClass: MockHttp },
           { provide: Router, useClass: MockRouter },
-          { provide: SampleService, useClass: {} },
+          { provide: MatDialog, useValue: {} },
+          { provide: SampleService, useValue: {} },
           { provide: Store, useClass: MockStore }
         ]
       }
