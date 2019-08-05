@@ -1,6 +1,11 @@
 import { Component, OnInit } from "@angular/core";
 import { select, Store } from "@ngrx/store";
-import { first, map, switchMap } from "rxjs/operators";
+import {
+  first,
+  map,
+  switchMap,
+  mergeMap
+} from "rxjs/operators";
 
 import { getDatasetsInBatch } from "state-management/selectors/datasets.selectors";
 import {
@@ -14,13 +19,34 @@ import { ShowMessageAction } from "state-management/actions/user.actions";
 import { Router } from "@angular/router";
 import { ArchivingService } from "../archiving.service";
 import { Observable } from "rxjs";
+import { ShareGroupApi } from "shared/sdk/services/custom/ShareGroup";
+import { DatasetApi } from "shared/sdk/services/custom/Dataset";
+import { ShareGroup } from "shared/sdk/models/ShareGroup";
 
+import { ViewChild, TemplateRef } from "@angular/core";
+import { MatDialog } from "@angular/material";
+import { COMMA, ENTER } from "@angular/cdk/keycodes";
+import { MatChipInputEvent } from "@angular/material/chips";
+
+export interface Share {
+  name: string;
+}
 @Component({
   selector: "batch-view",
   templateUrl: "./batch-view.component.html",
   styleUrls: ["./batch-view.component.scss"]
 })
 export class BatchViewComponent implements OnInit {
+  @ViewChild("secondDialog", { static: true }) secondDialog: TemplateRef<any>;
+
+  visible = true;
+  selectable = true;
+  removable = true;
+  addOnBlur = true;
+  readonly separatorKeysCodes: number[] = [ENTER, COMMA];
+  shareEmails: Share[] = [];
+  datasetList = [];
+
   private visibleColumns: [string, string, string, string] = [
     "remove",
     "pid",
@@ -34,15 +60,49 @@ export class BatchViewComponent implements OnInit {
   public hasBatch$: Observable<boolean> = this.batch$.pipe(
     map(batch => batch.length > 0)
   );
+  subsc = null;
 
   constructor(
     private store: Store<any>,
     private archivingSrv: ArchivingService,
-    private router: Router
-  ) {}
+    private router: Router,
+    private shareGroupApi: ShareGroupApi,
+    private datasetApi: DatasetApi,
+    private dialog: MatDialog
+  ) // private actionsSubj: ActionsSubject
+  {}
+
+  add(event: MatChipInputEvent): void {
+    const input = event.input;
+    const value = event.value;
+
+    if ((value || "").trim()) {
+      this.shareEmails.push({ name: value.trim() });
+    }
+
+    // Reset the input value
+    if (input) {
+      input.value = "";
+    }
+  }
+
+  remove(fruit: Share): void {
+    const index = this.shareEmails.indexOf(fruit);
+
+    if (index >= 0) {
+      this.shareEmails.splice(index, 1);
+    }
+  }
+
+  openDialogWithoutRef() {
+    this.dialog.open(this.secondDialog);
+  }
 
   ngOnInit() {
     this.store.dispatch(new PrefillBatchAction());
+    this.batch$.subscribe(result => {
+      this.datasetList = result;
+    });
   }
 
   onEmpty() {
@@ -59,6 +119,46 @@ export class BatchViewComponent implements OnInit {
 
   onPublish() {
     this.router.navigate(["datasets", "batch", "publish"]);
+  }
+
+  onShare() {
+    // add new share group to model and update datasets access groups
+    const myShare = new ShareGroup();
+    myShare.datasets = this.datasetList.map(dataset => dataset.pid);
+    myShare.members = this.shareEmails.map(share => share.name);
+    this.shareGroupApi
+      .upsert(myShare)
+      .pipe(
+        mergeMap((result: any) => {
+          const newShare = result as ShareGroup;
+          const datasetId: string = myShare.datasets[0];
+          return this.datasetApi.appendToArrayField(
+            encodeURIComponent(datasetId),
+            "accessGroups",
+            newShare.id
+          );
+        })
+      )
+      .subscribe(
+        success => {
+          this.store.dispatch(
+            new ShowMessageAction({
+              type: MessageType.Success,
+              content: "Share Successful",
+              duration: 5000
+            })
+          );
+        },
+        err => {
+          return this.store.dispatch(
+            new ShowMessageAction({
+              type: MessageType.Error,
+              content: "Share Failed",
+              duration: 5000
+            })
+          );
+        }
+      );
   }
 
   onArchive() {
@@ -82,16 +182,23 @@ export class BatchViewComponent implements OnInit {
 
   onRetrieve() {
     this.batch$
-      .pipe( first(), switchMap(datasets =>
+      .pipe(
+        first(),
+        switchMap(datasets =>
           this.archivingSrv.retrieve(datasets, "/archive/retrieve")
-        ) )
-      .subscribe(() => this.clearBatch(), err => this.store.dispatch(new ShowMessageAction(
-              {
-                type: MessageType.Error,
-                content: err.message,
-                duration: 5000
-              }
-            )));
+        )
+      )
+      .subscribe(
+        () => this.clearBatch(),
+        err =>
+          this.store.dispatch(
+            new ShowMessageAction({
+              type: MessageType.Error,
+              content: err.message,
+              duration: 5000
+            })
+          )
+      );
   }
 
   private clearBatch() {

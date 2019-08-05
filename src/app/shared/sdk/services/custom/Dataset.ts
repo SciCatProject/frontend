@@ -1205,6 +1205,41 @@ export class DatasetApi extends BaseLoopBackApi {
   }
 
   /**
+   * updates a single record by appending data to the specified field
+   *
+   * @param {object} data Request data.
+   *
+   *  - `id` – `{string}` - 
+   *
+   *  - `fieldName` – `{string}` - Name of field to append data to
+   *
+   *  - `data` – `{any}` - An array of values to append
+   *
+   * @returns {object} An empty reference that will be
+   *   populated with the actual data once the response is returned
+   *   from the server.
+   *
+   * <em>
+   * (The remote method definition does not provide any description.
+   * This usually means the response is a `Dataset` object.)
+   * </em>
+   */
+  public appendToArrayField(id: any, fieldName: any, data: any, customHeaders?: Function): Observable<any> {
+    let _method: string = "POST";
+    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
+    "/Datasets/:id/appendToArrayField";
+    let _routeParams: any = {
+      id: id
+    };
+    let _postBody: any = {};
+    let _urlParams: any = {};
+    if (typeof fieldName !== 'undefined' && fieldName !== null) _urlParams.fieldName = fieldName;
+    if (typeof data !== 'undefined' && data !== null) _urlParams.data = data;
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    return result;
+  }
+
+  /**
    * <em>
          * (The remote method definition does not provide any description.)
          * </em>
