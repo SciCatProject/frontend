@@ -1,5 +1,4 @@
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { FileSizePipe } from "../../../shared/pipes";
 import { MatTableModule, MatTabsModule } from "@angular/material";
 import { MockRouter, MockStore } from "shared/MockStubs";
 import { Router } from "@angular/router";
@@ -8,6 +7,7 @@ import { ProposalDetailComponent } from "./proposal-detail.component";
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 import { StoreModule, Store } from "@ngrx/store";
 import { proposalsReducer } from "state-management/reducers/proposals.reducer";
+import { SharedCatanieModule } from "shared/shared.module";
 
 describe("ProposalsDetailComponent", () => {
   let component: ProposalDetailComponent;
@@ -16,11 +16,12 @@ describe("ProposalsDetailComponent", () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
-      declarations: [ProposalDetailComponent, FileSizePipe],
+      declarations: [ProposalDetailComponent],
       imports: [
         MatTableModule,
         MatTabsModule,
         BrowserAnimationsModule,
+        SharedCatanieModule,
         StoreModule.forRoot({
           proposals: proposalsReducer
         })

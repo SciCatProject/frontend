@@ -5,19 +5,18 @@ import { ActivatedRoute } from "@angular/router";
 import { Store, StoreModule } from "@ngrx/store";
 import { DatafilesComponent } from "datasets/datafiles/datafiles.component";
 import { MockActivatedRoute, MockStore } from "shared/MockStubs";
-import { ObjKeysPipe, TitleCasePipe } from "shared/pipes/index";
 import { rootReducer } from "state-management/reducers/root.reducer";
 import { MatTableModule } from "@angular/material";
-import { FileDropzoneComponent } from "./file-dropzone.component";
-import { APP_CONFIG } from "../../app-config.module";
+import { FilePickerComponent } from "./file-picker.component";
+import { APP_CONFIG } from "../../../../app-config.module";
 import * as lb from "shared/sdk/services";
-import { FileSizePipe } from "../../shared/pipes/filesize.pipe";
+import { PipesModule } from "shared/pipes/pipes.module";
 
 const mockConfig = {};
 
-describe("FileDropzoneComponent", () => {
-  let component: FileDropzoneComponent;
-  let fixture: ComponentFixture<FileDropzoneComponent>;
+describe("FilePickerComponent", () => {
+  let component: FilePickerComponent;
+  let fixture: ComponentFixture<FilePickerComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -25,17 +24,15 @@ describe("FileDropzoneComponent", () => {
       imports: [
         ReactiveFormsModule,
         MatTableModule,
+        PipesModule,
         StoreModule.forRoot({ rootReducer })
       ],
       declarations: [
-        FileDropzoneComponent,
-        DatafilesComponent,
-        ObjKeysPipe,
-        TitleCasePipe,
-        FileSizePipe
+        FilePickerComponent,
+        DatafilesComponent
       ]
     });
-    TestBed.overrideComponent(FileDropzoneComponent, {
+    TestBed.overrideComponent(FilePickerComponent, {
       set: {
         providers: [
           { provide: ActivatedRoute, useClass: MockActivatedRoute },
@@ -48,15 +45,15 @@ describe("FileDropzoneComponent", () => {
     TestBed.compileComponents();
   }));
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(FileDropzoneComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
-
 
   afterEach(() => {
     fixture.destroy();
+  });
+
+  beforeEach(() => {
+    fixture = TestBed.createComponent(FilePickerComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
   });
 
   it("should create", () => {

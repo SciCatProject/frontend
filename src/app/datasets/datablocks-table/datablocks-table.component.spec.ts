@@ -7,7 +7,7 @@ import { MatTableModule } from "@angular/material";
 import { MockActivatedRoute, MockRouter } from "shared/MockStubs";
 
 import { DatablocksComponent } from "./datablocks-table.component";
-import { FileSizePipe } from "../../shared/pipes/filesize.pipe";
+import { SharedCatanieModule } from "shared/shared.module";
 
 describe("DatablocksComponent", () => {
   let component: DatablocksComponent;
@@ -15,8 +15,8 @@ describe("DatablocksComponent", () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [MatTableModule],
-      declarations: [DatablocksComponent, FileSizePipe]
+      imports: [MatTableModule, SharedCatanieModule],
+      declarations: [DatablocksComponent]
     });
     TestBed.overrideComponent(DatablocksComponent, {
       set: {

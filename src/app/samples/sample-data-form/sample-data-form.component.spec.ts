@@ -5,8 +5,8 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 
 import { SampleDataFormComponent } from "./sample-data-form.component";
 import { MockConfigService, MockStore } from "shared/MockStubs";
-import { ObjKeysPipe, TitleCasePipe } from "shared/pipes/index";
 import { ConfigService } from "shared/services/index";
+import { SharedCatanieModule } from "shared/shared.module";
 describe("SampleDataFormComponent", () => {
   let component: SampleDataFormComponent;
   let fixture: ComponentFixture<SampleDataFormComponent>;
@@ -14,12 +14,8 @@ describe("SampleDataFormComponent", () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
-      imports: [FormsModule, ReactiveFormsModule],
-      declarations: [
-        SampleDataFormComponent,
-        ObjKeysPipe,
-        TitleCasePipe
-      ]
+      imports: [FormsModule, ReactiveFormsModule, SharedCatanieModule],
+      declarations: [SampleDataFormComponent]
     });
     TestBed.overrideComponent(SampleDataFormComponent, {
       set: {

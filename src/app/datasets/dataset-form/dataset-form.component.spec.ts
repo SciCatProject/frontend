@@ -3,27 +3,37 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MockStore } from "../../shared/MockStubs";
 import { Store, StoreModule } from "@ngrx/store";
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
-import { KeysPipe } from "../../shared/pipes";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { rootReducer } from "../../state-management/reducers/root.reducer";
 
-import { Datablock, DatasetAttachment, OrigDatablock, Proposal, RawDataset, Sample } from "../../shared/sdk/models";
+import {
+  Datablock,
+  DatasetAttachment,
+  OrigDatablock,
+  Proposal,
+  RawDataset,
+  Sample
+} from "../../shared/sdk/models";
 import { DatasetState } from "../../state-management/state/datasets.store";
+import { SharedCatanieModule } from "shared/shared.module";
 
 describe("DatasetFormComponent", () => {
   let component: DatasetFormComponent;
   let fixture: ComponentFixture<DatasetFormComponent>;
   let store: Store<DatasetState>;
 
-
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [DatasetFormComponent, KeysPipe],
+      declarations: [DatasetFormComponent],
       imports: [
+        SharedCatanieModule,
         StoreModule.forRoot({
           rootReducer
         }),
-        FormsModule, ReactiveFormsModule, FontAwesomeModule]
+        FormsModule,
+        ReactiveFormsModule,
+        FontAwesomeModule
+      ]
     });
     TestBed.overrideComponent(DatasetFormComponent, {
       set: {

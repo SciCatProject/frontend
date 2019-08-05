@@ -1,6 +1,5 @@
 import { Component, OnInit } from "@angular/core";
 import { Router, ActivatedRoute, NavigationEnd, Params } from "@angular/router";
-import { TitleCasePipe } from "../../pipes/index";
 import { Store, select } from "@ngrx/store";
 import * as rison from "rison";
 import {
@@ -9,6 +8,7 @@ import {
 } from "state-management/selectors/datasets.selectors";
 import { AppState } from "state-management/state/app.store";
 import { take, filter, map } from "rxjs/operators";
+import { TitleCasePipe } from "shared/pipes/title-case.pipe";
 
 interface Breadcrumb {
   label: string;
