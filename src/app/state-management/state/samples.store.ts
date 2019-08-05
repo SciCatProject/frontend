@@ -9,6 +9,7 @@ export interface SampleState {
   submitComplete: boolean;
 
   samplesLoading: boolean;
+  datasetsLoading: boolean;
   error: Error;
 
   searchTerms: string;
@@ -26,6 +27,7 @@ export const initialSampleState: SampleState = {
   submitComplete: false,
 
   samplesLoading: true,
+  datasetsLoading: true,
   error: undefined,
 
   searchTerms: "",

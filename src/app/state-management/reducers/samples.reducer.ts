@@ -77,7 +77,7 @@ export function samplesReducer(
     }
 
     case FETCH_DATASETS_FOR_SAMPLE: {
-      return { ...state, samplesLoading: true };
+      return { ...state, datasetsLoading: true };
     }
 
     case FETCH_SAMPLES: {
@@ -91,7 +91,7 @@ export function samplesReducer(
         {}
       );
       const datasetCount = Object.keys(datasets).length;
-      return { ...state, datasets, samplesLoading: false };
+      return { ...state, datasets, datasetsLoading: false };
     }
 
     case FETCH_SAMPLES_COMPLETE: {

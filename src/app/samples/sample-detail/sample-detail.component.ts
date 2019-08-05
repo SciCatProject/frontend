@@ -50,7 +50,7 @@ export class SampleDetailComponent implements OnInit, OnDestroy {
             this.route.params.subscribe(
               params => {
                 console.log("gm: fetching datasets sampleId", params.id);
-                //this.store.dispatch( new FetchDatasetsForSample(params.id));
+                // this.store.dispatch( new FetchDatasetsForSample(params.id));
               }
             );
           }
