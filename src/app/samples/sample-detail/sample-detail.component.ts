@@ -1,17 +1,11 @@
 import { ActivatedRoute } from "@angular/router";
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import { Observable, Subscription } from "rxjs";
+import { Observable } from "rxjs";
 import { Sample } from "../../shared/sdk/models";
-import { filter, flatMap, map } from "rxjs/operators";
-import {
-  getSelectedSample,
-  getCurrentSample
-} from "../../state-management/selectors/samples.selectors";
+import { getCurrentSample } from "../../state-management/selectors/samples.selectors";
 import { select, Store } from "@ngrx/store";
 import {
   FetchSampleAction,
-  FetchSamplesAction,
-  SelectSampleAction,
   SetCurrentSample
 } from "../../state-management/actions/samples.actions";
 
@@ -36,7 +30,7 @@ export class SampleDetailComponent implements OnInit, OnDestroy {
         } else {
           // console.log("Searching from URL params");
           this.route.params.subscribe(params => {
-              console.log("fetching,", params.id);
+            console.log("fetching,", params.id);
             this.store.dispatch(new FetchSampleAction(params.id));
           });
         }
