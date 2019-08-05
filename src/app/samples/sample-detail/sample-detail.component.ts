@@ -2,7 +2,10 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { Observable } from "rxjs";
 import { Sample, Dataset } from "../../shared/sdk/models";
-import { getCurrentSample, getDatasetsForSample } from "../../state-management/selectors/samples.selectors";
+import {
+  getCurrentSample,
+  getDatasetsForSample
+} from "../../state-management/selectors/samples.selectors";
 import { select, Store } from "@ngrx/store";
 import {
   FetchSampleAction,
@@ -26,7 +29,9 @@ export class SampleDetailComponent implements OnInit, OnDestroy {
 
   constructor(
     private router: Router,
-    private route: ActivatedRoute, private store: Store<Sample>) { }
+    private route: ActivatedRoute,
+    private store: Store<Sample>
+  ) {}
 
   ngOnInit() {
     this.subscriptions.push(
@@ -44,22 +49,18 @@ export class SampleDetailComponent implements OnInit, OnDestroy {
     );
 
     this.subscriptions.push(
-      this.store.pipe(select(getDatasetsForSample)).subscribe(
-        datasets => {
-          if (datasets && Object.keys(datasets).length > 0) {
-            this.datasets = <Dataset>datasets;
-            console.log(datasets);
-          } else {
-            console.log("get from param");
-            this.route.params.subscribe(
-              params => {
-                console.log("gm: fetching datasets sampleId", params.id);
-                this.store.dispatch(new FetchDatasetsForSample(params.id));
-              }
-            );
-          }
+      this.store.pipe(select(getDatasetsForSample)).subscribe(datasets => {
+        if (datasets && Object.keys(datasets).length > 0) {
+          this.datasets = <Dataset>datasets;
+          console.log(datasets);
+        } else {
+          console.log("get from param");
+          this.route.params.subscribe(params => {
+            console.log("gm: fetching datasets sampleId", params.id);
+            this.store.dispatch(new FetchDatasetsForSample(params.id));
+          });
         }
-      )
+      })
     );
   }
 
@@ -72,11 +73,8 @@ export class SampleDetailComponent implements OnInit, OnDestroy {
     this.store.dispatch(new SetCurrentDatasets(undefined));
   }
 
-
   onClickDataset(proposalId: string): void {
     const id = encodeURIComponent(proposalId);
     this.router.navigateByUrl("/datasets/" + id);
-
   }
-
 }
