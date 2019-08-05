@@ -2,7 +2,7 @@ import { Component, Inject, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { select, Store } from "@ngrx/store";
 import { Observable } from "rxjs";
 import { Dataset } from "shared/sdk/models";
-import { APP_CONFIG, AppConfig } from "../../app-config.module";
+import { APP_CONFIG, AppConfig } from "../../../../app-config.module";
 import * as lb from "shared/sdk/services";
 import { FilePickerDirective, ReadFile, ReadMode } from "ngx-file-helpers";
 import { filter } from "rxjs/operators";

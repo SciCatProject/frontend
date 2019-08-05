@@ -10,11 +10,11 @@ import {
   MockUserApi,
   MockLoginService
 } from "shared/MockStubs";
-import { ObjKeysPipe, TitleCasePipe } from "shared/pipes/index";
 import { UserApi } from "shared/sdk/services";
 import { ConfigService } from "../../shared/services";
 
 import { UserSettingsComponent } from "./user-settings.component";
+import { SharedCatanieModule } from "shared/shared.module";
 
 describe("UserSettingsComponent", () => {
   let component: UserSettingsComponent;
@@ -26,9 +26,10 @@ describe("UserSettingsComponent", () => {
       imports: [
         ReactiveFormsModule,
         NguiDatetimePickerModule,
+        SharedCatanieModule,
         StoreModule.forRoot({})
       ],
-      declarations: [UserSettingsComponent, ObjKeysPipe, TitleCasePipe]
+      declarations: [UserSettingsComponent]
     });
     TestBed.overrideComponent(UserSettingsComponent, {
       set: {
