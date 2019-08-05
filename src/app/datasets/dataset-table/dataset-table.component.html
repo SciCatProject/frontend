@@ -75,7 +75,7 @@
     </button>
   </div>
   <mat-paginator [pageSizeOptions]="[30, 1000]" [pageIndex]="currentPage$ | async" [length]="datasetCount$ | async"
-    [pageSize]="datasetsPerPage$ | async" (page)="onPageChange($event)">
+    [pageSize]="datasetsPerPage$ | async" (page)="onPageChange($event)" showFirstLastButtons>
   </mat-paginator>
  </div>
 
