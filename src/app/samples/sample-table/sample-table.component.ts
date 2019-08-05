@@ -86,10 +86,9 @@ export class SampleTableComponent implements OnInit, OnDestroy {
   }
 
   onRowSelect(event, sample) {
+    // console.log("row select sample:", sample);
     this.store.dispatch(new FetchSampleAction(sample));
-    this.router.navigateByUrl(
-      "/samples/" + encodeURIComponent(sample.sampleId)
-    );
+    this.router.navigateByUrl("/samples/" + sample.sampleId);
   }
 
   public onEditClick() {

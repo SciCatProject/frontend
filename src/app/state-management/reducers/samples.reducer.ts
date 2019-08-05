@@ -8,7 +8,6 @@ import {
   FETCH_SAMPLES_FAILED,
   FetchSampleCompleteAction,
   FetchSamplesCompleteAction,
-  SamplesActions,
   SELECT_SAMPLE,
   SelectSampleAction,
   ADD_SAMPLE,
@@ -23,12 +22,15 @@ import {
   ChangePageAction,
   FetchSampleCountCompleteAction,
   SEARCH_SAMPLES,
-  SearchSampleAction
+  SearchSampleAction,
+  SET_CURRENT_SAMPLE,
+  SetCurrentSample
 } from "state-management/actions/samples.actions";
+import { Action } from "@ngrx/store";
 
 export function samplesReducer(
   state: SampleState = initialSampleState,
-  action: SamplesActions
+  action: Action
 ): SampleState {
   if (action.type.indexOf("[Sample]") !== -1) {
     console.log("Action came in! " + action.type);
@@ -38,6 +40,13 @@ export function samplesReducer(
     case SELECT_SAMPLE: {
       const selectedId = (action as SelectSampleAction).sampleId;
       return { ...state, selectedId };
+    }
+
+    case SET_CURRENT_SAMPLE: {
+      const s = Object.assign({}, state, {
+        currentSample: (action as SetCurrentSample).sample
+      });
+      return s;
     }
 
     case SAMPLE_SORT_BY_COLUMN: {
@@ -53,8 +62,8 @@ export function samplesReducer(
 
     case SEARCH_SAMPLES: {
       const { query } = action as SearchSampleAction;
-      const filters = {...state.filters, text: query}  ;
-      return { ...state, filters,  searchTerms: query };
+      const filters = { ...state.filters, text: query };
+      return { ...state, filters, searchTerms: query };
     }
 
     case ADD_SAMPLE_COMPLETE: {
@@ -90,6 +99,7 @@ export function samplesReducer(
 
     case FETCH_SAMPLE_COMPLETE: {
       const currentSample = (action as FetchSampleCompleteAction).currentSample;
+      // console.log("fetch sample complete");
       return { ...state, currentSample, samplesLoading: false };
     }
 

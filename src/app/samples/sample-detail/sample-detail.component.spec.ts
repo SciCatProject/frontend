@@ -6,6 +6,7 @@ import { SampleDetailComponent } from "./sample-detail.component";
 import { SampleService } from "../../samples/sample.service";
 import { Store } from "@ngrx/store";
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+import { NgxJsonViewerModule } from "ngx-json-viewer";
 
 describe("SampleDetailComponent", () => {
   let component: SampleDetailComponent;
@@ -14,7 +15,7 @@ describe("SampleDetailComponent", () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [SampleDetailComponent],
-      imports: [MatCardModule]
+      imports: [MatCardModule, NgxJsonViewerModule]
     });
     TestBed.overrideComponent(SampleDetailComponent, {
       set: {

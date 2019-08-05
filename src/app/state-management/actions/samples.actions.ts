@@ -23,7 +23,14 @@ export const SAMPLE_SORT_BY_COLUMN = "[Sample] Sort by Column";
 export const CHANGE_PAGE = "[Sample] Change Page";
 
 export const SEARCH_SAMPLES = "[Sample] Search Samples";
+export const SET_CURRENT_SAMPLE = "[Sample] Set current Sample";
 
+
+export class SetCurrentSample implements Action {
+  readonly type = SET_CURRENT_SAMPLE;
+
+  constructor(readonly sample) { }
+}
 export class SampleSortByColumnAction implements Action {
   readonly type = SAMPLE_SORT_BY_COLUMN;
 

@@ -5,7 +5,7 @@ import { Observable, of } from "rxjs";
 import { Sample } from "../../shared/sdk/models";
 import { SampleApi } from "shared/sdk/services";
 import { SampleService } from "../../samples/sample.service";
-import { catchError, map, mergeMap, withLatestFrom } from "rxjs/operators";
+import { catchError, map, mergeMap, withLatestFrom, switchMap } from "rxjs/operators";
 import {
   FETCH_SAMPLE,
   FETCH_SAMPLES,
@@ -67,9 +67,9 @@ export class SamplesEffects {
   protected getSample$: Observable<Action> = this.actions$.pipe(
     ofType(FETCH_SAMPLE),
     map((action: FetchSampleAction) => action.sampleId),
-    mergeMap(sampleId =>
-      this.sampleService
-        .getSample(encodeURIComponent(sampleId))
+    switchMap(sampleId =>
+      this.sampleApi
+        .findById(sampleId)
         .pipe(
           map(
             (currentSample: Sample) =>
