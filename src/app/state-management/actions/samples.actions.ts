@@ -29,6 +29,7 @@ export const SET_CURRENT_SAMPLE = "[Sample] Set current Sample";
 export const FETCH_DATASETS_FOR_SAMPLE = "[Sample] Fetch Datsets for Sample";
 export const FETCH_DATASETS_FOR_SAMPLE_COMPLETE = "[Sample] Fetch Datasets for Sample Complete";
 export const FETCH_DATASETS_FOR_SAMPLE_FAILED = "[Sample] Fetch Datasets for Sample Failed";
+export const SET_CURRENT_DATASETS = "[Sample] Set current datasets";
 
 export class FetchDatasetsForSample implements Action {
   readonly type = FETCH_DATASETS_FOR_SAMPLE;
@@ -45,6 +46,12 @@ export class FetchDatasetsForSampleFailed implements Action {
   readonly type = FETCH_DATASETS_FOR_SAMPLE_FAILED;
 
   constructor() {}
+}
+
+export class SetCurrentDatasets implements Action {
+  readonly type = SET_CURRENT_DATASETS;
+
+  constructor(readonly datasets) {}
 }
 
 export class SetCurrentSample implements Action {

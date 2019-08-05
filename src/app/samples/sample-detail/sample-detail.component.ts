@@ -7,7 +7,8 @@ import { select, Store } from "@ngrx/store";
 import {
   FetchSampleAction,
   SetCurrentSample,
-  FetchDatasetsForSample
+  FetchDatasetsForSample,
+  SetCurrentDatasets
 } from "../../state-management/actions/samples.actions";
 
 @Component({
@@ -66,5 +67,6 @@ export class SampleDetailComponent implements OnInit, OnDestroy {
       this.subscriptions[i].unsubscribe();
     }
     this.store.dispatch(new SetCurrentSample(undefined));
+    this.store.dispatch(new SetCurrentDatasets(undefined));
   }
 }

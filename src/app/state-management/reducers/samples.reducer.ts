@@ -27,7 +27,9 @@ import {
   SetCurrentSample,
   FETCH_DATASETS_FOR_SAMPLE,
   FETCH_DATASETS_FOR_SAMPLE_COMPLETE,
-  FetchDatasetsForSampleComplete
+  FetchDatasetsForSampleComplete,
+  SET_CURRENT_DATASETS,
+  SetCurrentDatasets
 } from "state-management/actions/samples.actions";
 import { Action } from "@ngrx/store";
 
@@ -48,6 +50,13 @@ export function samplesReducer(
     case SET_CURRENT_SAMPLE: {
       const s = Object.assign({}, state, {
         currentSample: (action as SetCurrentSample).sample
+      });
+      return s;
+    }
+
+    case SET_CURRENT_DATASETS: {
+      const s = Object.assign({}, state, {
+        datasets: (action as SetCurrentDatasets).datasets
       });
       return s;
     }
