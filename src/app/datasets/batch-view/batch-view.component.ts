@@ -23,8 +23,6 @@ import { ShareGroupApi } from "shared/sdk/services/custom/ShareGroup";
 import { DatasetApi } from "shared/sdk/services/custom/Dataset";
 import { ShareGroup } from "shared/sdk/models/ShareGroup";
 
-import { ActionsSubject } from "@ngrx/store";
-
 import { ViewChild, TemplateRef } from "@angular/core";
 import { MatDialog } from "@angular/material";
 import { COMMA, ENTER } from "@angular/cdk/keycodes";
