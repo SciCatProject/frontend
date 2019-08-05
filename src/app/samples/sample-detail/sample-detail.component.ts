@@ -45,12 +45,13 @@ export class SampleDetailComponent implements OnInit, OnDestroy {
         datasets => {
           if (datasets && Object.keys(datasets).length > 0) {
             this.datasets = <Dataset>datasets;
+            console.log(datasets);
           } else {
             console.log("get from param");
             this.route.params.subscribe(
               params => {
                 console.log("gm: fetching datasets sampleId", params.id);
-                // this.store.dispatch( new FetchDatasetsForSample(params.id));
+                this.store.dispatch( new FetchDatasetsForSample(params.id));
               }
             );
           }

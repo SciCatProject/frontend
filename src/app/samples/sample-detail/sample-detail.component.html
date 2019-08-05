@@ -27,7 +27,13 @@
         </tr>
         <tr *ngIf="datasets$ | async as value">
           <th><i class="material-icons"> save </i>Datasets</th>
-          <td>{{ value }}</td>
+          <td>
+            <ul>
+              <li *ngFor="let group of value">
+                {{ group }}
+              </li>
+            </ul>
+          </td>
         </tr>
       </table>
 
@@ -35,7 +41,6 @@
         <h3>Sample Characteristics</h3>
         <pre>{{ value | json }}</pre>
       </div>
-
     </div>
 
     <button (click)="show = !show">
