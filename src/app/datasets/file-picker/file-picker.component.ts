@@ -20,15 +20,14 @@ export class FilePickerComponent implements OnInit, OnDestroy {
   public readMode = ReadMode.dataURL;
   public picked: ReadFile;
   public status: string;
-  @ViewChild(FilePickerDirective, {static: false} )
-  private filePicker;
+  @ViewChild(FilePickerDirective, { static: false })
+  private filePicker: FilePickerDirective;
 
   constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
     private daSrv: lb.DatasetAttachmentApi,
     private store: Store<any>
-  ) {
-  }
+  ) {}
 
   ngOnInit() {
     const currentSet$ = this.store.pipe(
@@ -62,10 +61,10 @@ export class FilePickerComponent implements OnInit, OnDestroy {
         caption: "Some caption",
         creationTime: new Date(),
         datasetId: this.dataset.pid,
-        rawDatasetId:  this.dataset.pid,
+        rawDatasetId: this.dataset.pid,
         id: null,
         dataset: null,
-        derivedDatasetId:  this.dataset.pid
+        derivedDatasetId: this.dataset.pid
       };
 
       this.filePicker.reset();

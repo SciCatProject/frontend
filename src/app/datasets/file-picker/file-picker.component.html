@@ -1,10 +1,20 @@
 <div class="file-chooser">
-
   <span class="mat-title">Choose an image to upload</span>
-  <br>
-  <span>{{status}}</span>
+  <br />
+  <span>{{ status }}</span>
 
-
-  <button class="attach-button" type="button" mat-button [ngxFilePicker]="readMode" multiple accept="image/*" (readStart)="onReadStart($event)" (filePick)="onFilePicked($event)"
-    (readEnd)="onReadEnd($event)">Browse</button>
+  <button
+    class="attach-button"
+    type="button"
+    mat-button
+    ngxFilePicker
+    [readMode]="readMode"
+    multiple
+    accept="image/*"
+    (readStart)="onReadStart($event)"
+    (filePick)="onFilePicked($event)"
+    (readEnd)="onReadEnd($event)"
+  >
+    Browse
+  </button>
 </div>
