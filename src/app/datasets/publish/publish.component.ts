@@ -78,7 +78,7 @@ export class PublishComponent implements OnInit {
       ) {
         this.store.dispatch(
           new ShowMessageAction({
-            type: MessageType.Success,
+            type: MessageType.Error,
             content: "Publication Failed",
             duration: 5000
           })

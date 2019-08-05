@@ -12,6 +12,7 @@ export * from './UserIdentity';
 export * from './ApplicationCredential';
 export * from './Policy';
 export * from './Job';
+export * from './ShareGroup';
 export * from './DatasetAttachment';
 export * from './OrigDatablock';
 export * from './Logbook';
