@@ -1,4 +1,4 @@
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { Observable } from "rxjs";
 import { Sample, Dataset } from "../../shared/sdk/models";
@@ -24,7 +24,9 @@ export class SampleDetailComponent implements OnInit, OnDestroy {
   private sampleId$: Observable<string>;
   private subscriptions = [];
 
-  constructor(private route: ActivatedRoute, private store: Store<Sample>) {}
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute, private store: Store<Sample>) { }
 
   ngOnInit() {
     this.subscriptions.push(
@@ -52,7 +54,7 @@ export class SampleDetailComponent implements OnInit, OnDestroy {
             this.route.params.subscribe(
               params => {
                 console.log("gm: fetching datasets sampleId", params.id);
-                this.store.dispatch( new FetchDatasetsForSample(params.id));
+                this.store.dispatch(new FetchDatasetsForSample(params.id));
               }
             );
           }
@@ -69,4 +71,12 @@ export class SampleDetailComponent implements OnInit, OnDestroy {
     this.store.dispatch(new SetCurrentSample(undefined));
     this.store.dispatch(new SetCurrentDatasets(undefined));
   }
+
+
+  onClickDataset(proposalId: string): void {
+    const id = encodeURIComponent(proposalId);
+    this.router.navigateByUrl("/datasets/" + id);
+
+  }
+
 }
