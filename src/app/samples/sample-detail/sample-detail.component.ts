@@ -17,6 +17,7 @@ import {
 export class SampleDetailComponent implements OnInit, OnDestroy {
   sample: Object;
   sample$ = this.store.pipe(select(getCurrentSample));
+  datasets: string[] = ["hfjeiwgev","hferiu"];
   private sampleId$: Observable<string>;
   private subscriptions = [];
 

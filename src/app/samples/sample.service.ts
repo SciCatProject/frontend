@@ -1,21 +1,21 @@
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
-import { SampleApi } from "shared/sdk/services";
-import { Sample } from "shared/sdk/models";
+import { SampleApi, DatasetApi } from "shared/sdk/services";
+import { Sample, Dataset } from "shared/sdk/models";
 
 @Injectable({
   providedIn: "root"
 })
 export class SampleService {
-  constructor(private sampleApi: SampleApi) {}
+  constructor(private sampleApi: SampleApi, private datasetApi: DatasetApi) {}
 
   getSamples(): Observable<Sample[]> {
     return this.sampleApi.find();
   }
 
   getSample(sampleId: string): Observable<Sample> {
-    console.log ("get sample service: sampleId", sampleId);
-    return this.sampleApi.findOne({ where: { "sampleId": sampleId } });
+    console.log("get sample service: sampleId", sampleId);
+    return this.sampleApi.findOne({ where: { sampleId: sampleId } });
   }
 
   addSample(sample: Sample): Observable<Sample[]> {
@@ -26,4 +26,7 @@ export class SampleService {
     return this.sampleApi.count();
   }
 
+  getDatasetsForSample(sampleId: string): Observable<Dataset[]> {
+    return this.datasetApi.find({ where: {sampleId: sampleId}});
+  }
 }

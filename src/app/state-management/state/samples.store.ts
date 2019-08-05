@@ -3,6 +3,7 @@ import { Sample, SampleFilters } from "state-management/models";
 export interface SampleState {
   samples: { [sampleId: string]: Sample };
   selectedSamples: Sample[];
+  datasets: string[];
   currentSample: Sample;
   totalCount: number;
   submitComplete: boolean;
@@ -19,6 +20,7 @@ export interface SampleState {
 export const initialSampleState: SampleState = {
   samples: {},
   selectedSamples: [],
+  datasets: [],
   currentSample: null,
   totalCount: 0,
   submitComplete: false,
