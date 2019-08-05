@@ -33,7 +33,6 @@ import {
   MatTooltipModule
 } from "@angular/material";
 import { AppConfigModule } from "app-config.module";
-import { FileHelpersModule } from "ngx-file-helpers";
 import { FlexLayoutModule } from "@angular/flex-layout";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
@@ -61,7 +60,6 @@ import { StoreModule } from "@ngrx/store";
   imports: [
     AppConfigModule,
     CommonModule,
-    FileHelpersModule,
     FlexLayoutModule,
     FontAwesomeModule,
     FormsModule,
