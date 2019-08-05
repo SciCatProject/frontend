@@ -4,9 +4,6 @@ import { ArchivingService } from "./archiving.service";
 import { BatchCardComponent } from "./batch-card/batch-card.component";
 import { BatchViewComponent } from "./batch-view/batch-view.component";
 import { CommonModule } from "@angular/common";
-import { FileDropzoneComponent } from "./file-dropzone/file-dropzone.component";
-import { NgxFileHelpersModule } from "ngx-file-helpers";
-import { FilePickerComponent } from "./file-picker/file-picker.component";
 import { FlexLayoutModule } from "@angular/flex-layout";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
@@ -65,7 +62,6 @@ import { ReduceComponent } from "./reduce/reduce.component";
   imports: [
     AppConfigModule,
     CommonModule,
-    NgxFileHelpersModule,
     FlexLayoutModule,
     FontAwesomeModule,
     FormsModule,
@@ -112,8 +108,6 @@ import { ReduceComponent } from "./reduce/reduce.component";
     DatasetTableComponent,
     DatasetsFilterComponent,
     DatasetFormComponent,
-    FileDropzoneComponent,
-    FilePickerComponent,
     SelectedListComponent,
     PublishComponent,
     DatasetFormComponent,

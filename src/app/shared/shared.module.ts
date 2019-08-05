@@ -2,50 +2,29 @@ import { BreadcrumbModule } from "shared/modules/breadcrumb/breadcrumb.module";
 import { ConfigService } from "./services";
 import { DialogModule } from "shared/modules/dialog/dialog.module";
 import { ErrorPageModule } from "shared/modules/error-page/error-page.module";
-import { FileSizePipe } from "./pipes/filesize.pipe";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { NgModule } from "@angular/core";
-import { KeysPipe, TitleCasePipe, ObjKeysPipe } from "./pipes";
-import { JsonHeadPipe } from "./pipes/json-head.pipe";
-import { ThumbnailPipe } from "./pipes/thumbnail.pipe";
-import { StripProposalPrefixPipe } from "shared/pipes/stripProposalPrefix.pipe";
-import { ScientificMetadataPipe } from "./pipes/scientific-metadata.pipe";
-import { ReplaceUnderscorePipe } from "./pipes/replace-underscore.pipe";
-import { Title } from "@angular/platform-browser";
+import { FileUploaderModule } from "./modules/file-uploader/file-uploader.module";
+import { PipesModule } from "./pipes/pipes.module";
 
 @NgModule({
   imports: [
     BreadcrumbModule,
     ErrorPageModule,
+    FileUploaderModule,
     FormsModule,
     DialogModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    PipesModule
   ],
-  declarations: [
-    FileSizePipe,
-    KeysPipe,
-    JsonHeadPipe,
-    ObjKeysPipe,
-    ThumbnailPipe,
-    TitleCasePipe,
-    StripProposalPrefixPipe,
-    ScientificMetadataPipe,
-    ReplaceUnderscorePipe
-  ],
+  declarations: [],
   providers: [ConfigService],
   exports: [
     BreadcrumbModule,
-    FileSizePipe,
+    FileUploaderModule,
     DialogModule,
     ErrorPageModule,
-    KeysPipe,
-    JsonHeadPipe,
-    ObjKeysPipe,
-    ThumbnailPipe,
-    TitleCasePipe,
-    ScientificMetadataPipe,
-    StripProposalPrefixPipe,
-    ReplaceUnderscorePipe
+    PipesModule
   ]
 })
 export class SharedCatanieModule {}

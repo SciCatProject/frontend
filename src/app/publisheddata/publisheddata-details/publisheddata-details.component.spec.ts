@@ -8,7 +8,7 @@ import { MatCardModule } from "@angular/material";
 import { NgxJsonViewerModule } from "ngx-json-viewer";
 import { Router, ActivatedRoute } from "@angular/router";
 import { LinkyModule } from "ngx-linky";
-import { FileSizePipe } from "shared/pipes";
+import { SharedCatanieModule } from "shared/shared.module";
 
 describe("PublisheddataDetailsComponent", () => {
   let component: PublisheddataDetailsComponent;
@@ -16,8 +16,8 @@ describe("PublisheddataDetailsComponent", () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [PublisheddataDetailsComponent, FileSizePipe],
-      imports: [MatCardModule, NgxJsonViewerModule, LinkyModule]
+      declarations: [PublisheddataDetailsComponent],
+      imports: [MatCardModule, NgxJsonViewerModule, LinkyModule, SharedCatanieModule]
     });
     TestBed.overrideComponent(PublisheddataDetailsComponent, {
       set: {

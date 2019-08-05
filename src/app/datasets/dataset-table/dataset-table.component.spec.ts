@@ -1,9 +1,6 @@
 import { APP_CONFIG, AppConfigModule } from "app-config.module";
 import { ArchivingService } from "../archiving.service";
 import { DatasetTableComponent } from "./dataset-table.component";
-import { FileSizePipe } from "../../shared/pipes/filesize.pipe";
-import { JsonHeadPipe } from "../../shared/pipes/json-head.pipe";
-import { StripProposalPrefixPipe } from "../../shared/pipes/stripProposalPrefix.pipe";
 import { HttpClient } from "@angular/common/http";
 import { MatDialogModule, MatTableModule } from "@angular/material";
 import { MockHttp, MockLoginService, MockRouter, MockDatasetAttachmentApi, MockDatasetApi, MockArchivingService } from "shared/MockStubs";
@@ -14,8 +11,8 @@ import { combineReducers, StoreModule } from "@ngrx/store";
 import { datasetsReducer } from "state-management/reducers/datasets.reducer";
 import { jobsReducer } from "state-management/reducers/jobs.reducer";
 import { LoginService } from "../../users/login.service";
-import { ThumbnailPipe } from "shared/pipes";
 import { DatasetAttachmentApi, DatasetApi } from "shared/sdk";
+import { SharedCatanieModule } from "shared/shared.module";
 
 describe("DatasetTableComponent", () => {
   let component: DatasetTableComponent;
@@ -27,6 +24,7 @@ describe("DatasetTableComponent", () => {
       imports: [
         MatTableModule,
         MatDialogModule,
+        SharedCatanieModule,
         StoreModule.forRoot({
           datasets: datasetsReducer,
           root: combineReducers({
@@ -35,13 +33,7 @@ describe("DatasetTableComponent", () => {
         }),
         AppConfigModule
       ],
-      declarations: [
-        DatasetTableComponent,
-        FileSizePipe,
-        JsonHeadPipe,
-        ThumbnailPipe,
-        StripProposalPrefixPipe
-      ]
+      declarations: [DatasetTableComponent]
     });
     TestBed.overrideComponent(DatasetTableComponent, {
       set: {
