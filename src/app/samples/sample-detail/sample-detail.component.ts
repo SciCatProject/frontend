@@ -1,7 +1,7 @@
 import { ActivatedRoute } from "@angular/router";
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { Observable } from "rxjs";
-import { Sample } from "../../shared/sdk/models";
+import { Sample, Dataset } from "../../shared/sdk/models";
 import { getCurrentSample, getDatasetsForSample } from "../../state-management/selectors/samples.selectors";
 import { select, Store } from "@ngrx/store";
 import {
@@ -17,6 +17,7 @@ import {
 })
 export class SampleDetailComponent implements OnInit, OnDestroy {
   sample: Object;
+  datasets: Object;
   sample$ = this.store.pipe(select(getCurrentSample));
   datasets$ = this.store.pipe(select(getDatasetsForSample));
   private sampleId$: Observable<string>;
@@ -32,12 +33,29 @@ export class SampleDetailComponent implements OnInit, OnDestroy {
         } else {
           // console.log("Searching from URL params");
           this.route.params.subscribe(params => {
-            console.log("fetching,", params.id);
+            console.log("gm: fetching sampleId", params.id);
             this.store.dispatch(new FetchSampleAction(params.id));
-  //          this.store.dispatch(new FetchDatasetsForSample(params.id));
           });
         }
       })
+    );
+
+    this.subscriptions.push(
+      this.store.pipe(select(getDatasetsForSample)).subscribe(
+        datasets => {
+          if (datasets && Object.keys(datasets).length > 0) {
+            this.datasets = <Dataset>datasets;
+          } else {
+            console.log("get from param");
+            this.route.params.subscribe(
+              params => {
+                console.log("gm: fetching datasets sampleId", params.id);
+                //this.store.dispatch( new FetchDatasetsForSample(params.id));
+              }
+            );
+          }
+        }
+      )
     );
   }
 

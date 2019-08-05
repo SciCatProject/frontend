@@ -91,7 +91,7 @@ export function samplesReducer(
         {}
       );
       const datasetCount = Object.keys(datasets).length;
-      return { ...state, datasets };
+      return { ...state, datasets, samplesLoading: false };
     }
 
     case FETCH_SAMPLES_COMPLETE: {
