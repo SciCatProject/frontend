@@ -1,25 +1,5 @@
 @import 'src/theme.scss';
 
-.toplink {
-  color: #ffffff;
-  padding: 10px;
-  font: bold;
-  font-size: 11pt;
-  font-family: "Times New Roman", Times, serif;
-}
-
-a {
-  color: mat-color($primary);
-}
-
-a:hover {
-  color: mat-color($accent);
-}
-
-.main {
-  padding: 1.5em;
-}
-
 .ui#content {
   padding-top: 75px;
 }
@@ -39,22 +19,8 @@ td {
   min-height: 100%;
 }
 
-.app-title {
-  margin-left: 2%;
-}
-
-.example-spacer {
-  flex: 1 1 auto;
-}
-
 .sidenav-toggle {
   padding-right: 0.5%;
-}
-
-.example-container {
-  /* position: absolute; */
-  /* margin-left: 10%; */
-  /* min-height: 100% !important; */
 }
 
 .mat-snack-bar-container {
@@ -73,17 +39,4 @@ footer {
   padding: 1rem;
   background-color: mat-color($accent, lighter, 0.5);
   text-align: center;
-}
-
-.material-icons {
-  vertical-align: middle;
-}
-
-
-.userButton {
-  margin-top: 3px;
-  background-color: transparent;
-  border: none;
-  font-size: 10px;
-  line-height: 20px;
 }

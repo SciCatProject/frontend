@@ -1,5 +1,4 @@
-<!-- <div class="ui fixed menu"> -->
-<!-- <div
+<div
   [class.dark-theme]="darkTheme$ | async"
   [class.light-theme]="!(darkTheme$ | async)"
 >
@@ -59,11 +58,7 @@
       <i class="material-icons"> center_focus_weak </i>
       Samples</a
     >
-    <a
-      mat-menu-item
-      [routerLinkActive]="['active']"
-      [routerLink]="['/user/']"
-    >
+    <a mat-menu-item [routerLinkActive]="['active']" [routerLink]="['/user/']">
       <i class="material-icons"> settings </i>
       Settings</a
     >
@@ -73,10 +68,10 @@
     </button>
   </mat-menu>
 
-  <mat-toolbar color="primary" style="position: sticky;">
+  <mat-toolbar color="primary">
     <mat-toolbar-row>
       <h3 class="app-title">
-        <a style="color:#ffffff;" [routerLink]="['/']"> {{ title }}</a>
+        <a style="color:#ffffff;" [routerLink]="['/datasets/']"> {{ title }}</a>
       </h3>
       <span class="example-spacer"></span>
       <div>
@@ -95,7 +90,7 @@
           >
         </h6>
       </div>
-      <div *ngIf="(isLoggedIn$ | async) || !appConfig.production">
+      <div *ngIf="!appConfig.production">
         <button class="userButton" [matMenuTriggerFor]="userMenu">
           <img
             class="user-image"
@@ -107,8 +102,4 @@
       </div>
     </mat-toolbar-row>
   </mat-toolbar>
-  <div class="main">
-    <breadcrumb></breadcrumb> -->
-<router-outlet></router-outlet>
-<!-- </div>
-</div> -->
+</div>

@@ -1,7 +1,3 @@
-import {
-  getIsLoggedIn,
-  getCurrentUserAccountType
-} from "./state-management/selectors/users.selectors";
 import { APP_CONFIG, AppConfig } from "./app-config.module";
 import {
   Component,
@@ -10,18 +6,14 @@ import {
   OnInit,
   ViewEncapsulation
 } from "@angular/core";
-import { Router } from "@angular/router";
 import { select, Store } from "@ngrx/store";
 import { LoopBackConfig } from "shared/sdk";
 import { UserApi } from "shared/sdk/services";
 import * as ua from "state-management/actions/user.actions";
 import { MatSnackBar } from "@angular/material";
-import { Meta, Title } from "@angular/platform-browser";
+import { Meta } from "@angular/platform-browser";
 import { environment } from "../environments/environment";
-import * as selectors from "state-management/selectors";
 import { getCurrentUser } from "state-management/selectors/users.selectors";
-
-import { LoginService } from "users/login.service";
 
 const { version: appVersion } = require("../../package.json");
 
@@ -34,14 +26,10 @@ const { version: appVersion } = require("../../package.json");
 })
 export class AppComponent implements OnDestroy, OnInit {
   userObs$ = this.store.pipe(select(getCurrentUser));
-  isLoggedIn$ = this.store.pipe(select(getIsLoggedIn));
 
-  title = "SciCat";
-  appVersion = 0;
+  facility: string;
+  appVersion: number;
   us: UserApi;
-  darkTheme$;
-  username: string = null;
-  profileImage: string = null;
   message$ = null;
   msgClass$ = null;
   subscriptions = [];
@@ -55,32 +43,18 @@ export class AppComponent implements OnDestroy, OnInit {
   };
 
   constructor(
-    private router: Router,
-    private titleService: Title,
     private metaService: Meta,
     public snackBar: MatSnackBar,
-    private loginService: LoginService,
     // private _notif_service: NotificationsService,
     @Inject(APP_CONFIG) public appConfig: AppConfig,
     private store: Store<any>
   ) {
     this.appVersion = appVersion;
-    this.darkTheme$ = this.store.pipe(select(selectors.users.getTheme));
-    const facility = this.appConfig.facility;
-    let status = "test";
-    if (this.appConfig.production === true) {
-      status = "";
-    }
-    this.title = "SciCat " + " " + facility + " " + status;
-    this.setTitle(this.title);
+    this.facility = this.appConfig.facility;
     this.metaService.addTag({
       name: "description",
-      content: "SciCat metadata catalogue at" + facility
+      content: "SciCat metadata catalogue at" + this.facility
     });
-  }
-
-  public setTitle(newTitle: string) {
-    this.titleService.setTitle(newTitle);
   }
 
   /**
@@ -103,13 +77,6 @@ export class AppComponent implements OnDestroy, OnInit {
     }
 
     this.subscriptions.push(
-      this.store.pipe(select(getCurrentUserAccountType)).subscribe(type => {
-        if (type === "functional") {
-          this.profileImage = "assets/images/user.png";
-        }
-      })
-    );
-    this.subscriptions.push(
       this.store
         .pipe(select(state => state.root.user.message))
         .subscribe(current => {
@@ -121,36 +88,10 @@ export class AppComponent implements OnDestroy, OnInit {
           }
         })
     );
-    this.subscriptions.push(
-      this.store
-        .pipe(select(state => state.root.user.currentUser))
-        .subscribe(current => {
-          console.log("current: ", current);
-          if (current) {
-            this.username = current.username.replace("ms-ad.", "");
-            if (!current.realm && current.id) {
-              this.loginService
-                .getUserIdent$(current.id)
-                .subscribe(currentIdent => {
-                  if (currentIdent) {
-                    this.username = currentIdent.profile.username;
-                    if (currentIdent.profile.thumbnailPhoto.startsWith("data")) {
-                      this.profileImage = currentIdent.profile.thumbnailPhoto;
-                    } else {
-                      this.profileImage = "assets/images/user.png";
-                    }
-                  }
-                  if (!this.appConfig.userProfileImageEnabled) {
-                    this.profileImage = "assets/images/user.png";
-                  }
-                });
-            }
-            // TODO handle dataset loading
-          }
-        })
-    );
 
-    this.store.dispatch(new ua.RetrieveUserAction());
+    // TODO handle dataset loading
+
+    // this.store.dispatch(new ua.RetrieveUserAction());
   }
 
   ngOnDestroy() {
@@ -161,9 +102,5 @@ export class AppComponent implements OnDestroy, OnInit {
 
   logout() {
     this.store.dispatch(new ua.LogoutAction());
-  }
-
-  login() {
-    this.router.navigateByUrl("/login");
   }
 }

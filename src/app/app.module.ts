@@ -63,13 +63,17 @@ import { LogbookEffect } from "state-management/effects/logbooks.effects";
 import { AboutModule } from "about/about.module";
 import { HelpModule } from "help/help.module";
 import { PublisheddataModule } from "publisheddata/publisheddata.module";
+import { AppLayoutComponent } from './_layout/app-layout/app-layout.component';
+import { AppHeaderComponent } from './_layout/app-header/app-header.component';
+import { LoginHeaderComponent } from './_layout/login-header/login-header.component';
+import { LoginLayoutComponent } from './_layout/login-layout/login-layout.component';
 
 export function localStorageSyncWrapper(reducer: any) {
   return localStorageSync({ keys: ["root"], rehydrate: true })(reducer);
 }
 
 @NgModule({
-  declarations: [AppComponent, JobsTableComponent, JobsDetailComponent],
+  declarations: [AppComponent, JobsTableComponent, JobsDetailComponent, AppLayoutComponent, AppHeaderComponent, LoginHeaderComponent, LoginLayoutComponent],
   imports: [
     AboutModule,
     AppConfigModule,
