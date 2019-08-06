@@ -26,5 +26,5 @@ export const environment = {
   searchSamples: true,
   shoppingCartEnabled: true,
   tableSciDataEnabled: true,
-  userProfileImageEnabled: false
+  userProfileImageEnabled: true
 };
