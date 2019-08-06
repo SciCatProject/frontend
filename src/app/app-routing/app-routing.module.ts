@@ -45,7 +45,12 @@ export const routes: Routes = [
     path: "",
     component: LoginLayoutComponent,
     children: [
-      { path: "", redirectTo: "/login", pathMatch: "full" },
+      {
+        path: "",
+        redirectTo: "/datasets",
+        pathMatch: "full",
+        canActivate: [AuthCheck]
+      },
       { path: "login", component: LoginComponent },
       {
         path: "about",
@@ -66,12 +71,6 @@ export const routes: Routes = [
     path: "",
     component: AppLayoutComponent,
     children: [
-      {
-        path: "",
-        redirectTo: "/datasets",
-        pathMatch: "full",
-        canActivate: [AuthCheck]
-      },
       {
         path: "datasets/batch/publish",
         component: PublishComponent,
