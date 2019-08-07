@@ -1,0 +1,105 @@
+<div
+  [class.dark-theme]="darkTheme$ | async"
+  [class.light-theme]="!(darkTheme$ | async)"
+>
+  <mat-menu #userMenu="matMenu">
+    <a
+      mat-menu-item
+      [routerLinkActive]="['active']"
+      [routerLink]="['/datasets/']"
+    >
+      <i class="material-icons"> folder </i>
+      Datasets</a
+    >
+    <a
+      mat-menu-item
+      [routerLinkActive]="['active']"
+      [routerLink]="['/user/', 'jobs']"
+    >
+      <i class="material-icons"> transfer_within_a_station </i>
+      Jobs</a
+    >
+    <a
+      mat-menu-item
+      [routerLinkActive]="['active']"
+      [routerLink]="['/logbooks/']"
+      *ngIf="appConfig.logbookEnabled"
+      ><i class="material-icons"> book </i> Logbooks</a
+    >
+    <a
+      mat-menu-item
+      [routerLinkActive]="['active']"
+      [routerLink]="['/policies/']"
+    >
+      <i class="material-icons"> cloud_download </i>
+      Policies</a
+    >
+    <a
+      mat-menu-item
+      [routerLinkActive]="['active']"
+      [routerLink]="['/proposals/']"
+    >
+      <i class="material-icons"> spa </i>
+      Proposals</a
+    >
+    <a
+      mat-menu-item
+      [routerLinkActive]="['active']"
+      [routerLink]="['/publishedDatasets/']"
+    >
+      <i class="material-icons"> chrome_reader_mode </i>
+      Published Data</a
+    >
+    <a
+      mat-menu-item
+      [routerLinkActive]="['active']"
+      [routerLink]="['/samples/']"
+    >
+      <i class="material-icons"> center_focus_weak </i>
+      Samples</a
+    >
+    <a mat-menu-item [routerLinkActive]="['active']" [routerLink]="['/user/']">
+      <i class="material-icons"> settings </i>
+      Settings</a
+    >
+    <button mat-menu-item (click)="logout()">
+      <i class="material-icons"> exit_to_app </i>
+      Logout
+    </button>
+  </mat-menu>
+
+  <mat-toolbar color="primary">
+    <mat-toolbar-row>
+      <h3 class="app-title">
+        <a style="color:#ffffff;" [routerLink]="['/']"> {{ title }}</a>
+      </h3>
+      <span class="example-spacer"></span>
+      <div>
+        <h6>
+          <a class="toplink" [routerLink]="['/help']">
+            <i class="material-icons"> help </i>
+            Help</a
+          >
+        </h6>
+      </div>
+      <div>
+        <h6>
+          <a class="toplink" [routerLink]="['/about']">
+            <i class="material-icons"> info </i>
+            About</a
+          >
+        </h6>
+      </div>
+      <div *ngIf="!appConfig.production">
+        <button class="userButton" [matMenuTriggerFor]="userMenu">
+          <img
+            class="user-image"
+            src="{{ profileImage }}"
+            style="height: 37px"
+          />
+          <div>{{ username }}</div>
+        </button>
+      </div>
+    </mat-toolbar-row>
+  </mat-toolbar>
+</div>
