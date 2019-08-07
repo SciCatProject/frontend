@@ -10,7 +10,7 @@ import { select, Store } from "@ngrx/store";
 import { LoopBackConfig } from "shared/sdk";
 import * as ua from "state-management/actions/user.actions";
 import { MatSnackBar } from "@angular/material";
-import { Meta } from "@angular/platform-browser";
+import { Meta, Title } from "@angular/platform-browser";
 import { environment } from "../environments/environment";
 import { Subscription } from "rxjs";
 
@@ -23,18 +23,28 @@ const { version: appVersion } = require("../../package.json");
   encapsulation: ViewEncapsulation.None
 })
 export class AppComponent implements OnDestroy, OnInit {
+  title: string;
   facility: string;
+  status: string;
   appVersion: number;
   userMessageSubscription: Subscription;
 
   constructor(
     private metaService: Meta,
     public snackBar: MatSnackBar,
+    private titleService: Title,
     @Inject(APP_CONFIG) public appConfig: AppConfig,
     private store: Store<any>
   ) {
     this.appVersion = appVersion;
     this.facility = this.appConfig.facility;
+    if (appConfig.production === true) {
+      this.status = "";
+    } else {
+      this.status = "test";
+    }
+    this.title = "SciCat " + this.facility + " " + this.status;
+    this.titleService.setTitle(this.title);
     this.metaService.addTag({
       name: "description",
       content: "SciCat metadata catalogue at" + this.facility

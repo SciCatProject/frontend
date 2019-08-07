@@ -1,16 +1,26 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { LoginHeaderComponent } from './login-header.component';
+import { LoginHeaderComponent } from "./login-header.component";
+import { NO_ERRORS_SCHEMA } from "@angular/core";
+import { MatToolbarModule } from "@angular/material";
+import { APP_CONFIG } from "app-config.module";
 
-describe('LoginHeaderComponent', () => {
+describe("LoginHeaderComponent", () => {
   let component: LoginHeaderComponent;
   let fixture: ComponentFixture<LoginHeaderComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ LoginHeaderComponent ]
-    })
-    .compileComponents();
+      schemas: [NO_ERRORS_SCHEMA],
+      declarations: [LoginHeaderComponent],
+      imports: [MatToolbarModule]
+    });
+    TestBed.overrideComponent(LoginHeaderComponent, {
+      set: {
+        providers: [{ provide: APP_CONFIG, useValue: { facility: "ESS" } }]
+      }
+    });
+    TestBed.compileComponents();
   }));
 
   beforeEach(() => {
@@ -19,7 +29,7 @@ describe('LoginHeaderComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

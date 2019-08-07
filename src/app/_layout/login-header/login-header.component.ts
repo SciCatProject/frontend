@@ -1,5 +1,4 @@
 import { Component, OnInit, Inject } from "@angular/core";
-import { Title } from "@angular/platform-browser";
 import { APP_CONFIG, AppConfig } from "app-config.module";
 
 @Component({
@@ -12,10 +11,7 @@ export class LoginHeaderComponent implements OnInit {
   facility: string;
   status: string;
 
-  constructor(
-    private titleService: Title,
-    @Inject(APP_CONFIG) public appConfig: AppConfig
-  ) {
+  constructor(@Inject(APP_CONFIG) public appConfig: AppConfig) {
     this.facility = appConfig.facility;
     if (appConfig.production === true) {
       this.status = "";
@@ -23,7 +19,6 @@ export class LoginHeaderComponent implements OnInit {
       this.status = "test";
     }
     this.title = "SciCat " + this.facility + " " + this.status;
-    this.titleService.setTitle(this.title);
   }
 
   ngOnInit() {}

@@ -1,6 +1,5 @@
 import { Component, OnInit, Inject, OnDestroy } from "@angular/core";
 import { APP_CONFIG, AppConfig } from "app-config.module";
-import { Title } from "@angular/platform-browser";
 import { Store, select } from "@ngrx/store";
 import * as selectors from "state-management/selectors";
 import * as ua from "state-management/actions/user.actions";
@@ -27,7 +26,6 @@ export class AppHeaderComponent implements OnInit, OnDestroy {
   constructor(
     private loginService: LoginService,
     private store: Store<any>,
-    private titleService: Title,
     @Inject(APP_CONFIG) public appConfig: AppConfig
   ) {
     this.darkTheme$ = this.store.pipe(select(selectors.users.getTheme));
@@ -38,7 +36,6 @@ export class AppHeaderComponent implements OnInit, OnDestroy {
       this.status = "test";
     }
     this.title = "SciCat " + this.facility + " " + this.status;
-    this.titleService.setTitle(this.title);
     this.profileImage = "assets/images/user.png";
   }
 
