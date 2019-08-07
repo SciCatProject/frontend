@@ -4,7 +4,7 @@ import { Store, select } from "@ngrx/store";
 import * as selectors from "state-management/selectors";
 import * as ua from "state-management/actions/user.actions";
 import { LoginService } from "users/login.service";
-import { Subscription } from "rxjs";
+import { Subscription, Observable } from "rxjs";
 import { getCurrentUserAccountType } from "state-management/selectors/users.selectors";
 
 @Component({
@@ -17,7 +17,7 @@ export class AppHeaderComponent implements OnInit, OnDestroy {
   facility: string;
   status: string;
 
-  darkTheme$;
+  darkTheme$: Observable<any>;
   username: string;
   profileImage: string;
   userSubscription: Subscription;
@@ -77,7 +77,7 @@ export class AppHeaderComponent implements OnInit, OnDestroy {
     this.accountTypeSubscription.unsubscribe();
   }
 
-  logout() {
+  logout(): void {
     this.store.dispatch(new ua.LogoutAction());
   }
 }

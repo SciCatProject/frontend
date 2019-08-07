@@ -84,7 +84,7 @@ export class AppComponent implements OnDestroy, OnInit {
     this.userMessageSubscription.unsubscribe();
   }
 
-  logout() {
+  logout(): void {
     this.store.dispatch(new ua.LogoutAction());
   }
 }
