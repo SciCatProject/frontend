@@ -1,16 +1,19 @@
 import { TestBed } from "@angular/core/testing";
 
 import { SampleService } from "./sample.service";
-import { SampleApi } from "../shared/sdk/services/custom";
-import { MockSampleApi } from "../shared/MockStubs";
+import { SampleApi, DatasetApi } from "../shared/sdk/services/custom";
+import { MockSampleApi, MockDatasetApi } from "../shared/MockStubs";
 
 describe("SampleService", () => {
   beforeEach(() => TestBed.configureTestingModule({
     providers: [
-      SampleApi,
       {
         provide: SampleApi,
         useClass: MockSampleApi
+      },
+      {
+        provide: DatasetApi,
+        useClass: MockDatasetApi
       }
     ]
   }));
