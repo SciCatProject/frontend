@@ -1,42 +1,5 @@
-@import 'src/theme.scss';
-
-.ui#content {
-  padding-top: 75px;
-}
-
-td {
-  overflow: hidden;
-}
-
-.dash-container {
-  width: 90%;
-  margin-left: 5%;
-}
-
-.container {
-  margin: 0 1%;
-  min-width: 98%;
-  min-height: 100%;
-}
-
-.sidenav-toggle {
-  padding-right: 0.5%;
-}
+@import "src/theme.scss";
 
 .mat-snack-bar-container {
   background-color: mat-color($primary);
-}
-
-.mat-drawer-backdrop {
-  opacity: 0;
-}
-
-footer {
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  padding: 1rem;
-  background-color: mat-color($accent, lighter, 0.5);
-  text-align: center;
 }
