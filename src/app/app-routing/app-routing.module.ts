@@ -9,7 +9,6 @@ import { DatasetDetailComponent } from "../datasets/dataset-detail/dataset-detai
 import { JobsTableComponent } from "../jobs/jobs-table/jobs-table.component";
 import { JobsDetailComponent } from "../jobs/jobs-detail/jobs-detail.component";
 
-import { AppComponent } from "../app.component";
 import { ErrorPageComponent } from "../shared/modules/error-page/error-page.component";
 
 import { LoginComponent } from "../users/login/login.component";
