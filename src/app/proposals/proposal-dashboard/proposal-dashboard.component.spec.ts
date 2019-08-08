@@ -13,7 +13,8 @@ import {
   MatPaginatorModule,
   MatInputModule,
   MatFormFieldModule,
-  MatTableModule
+  MatTableModule,
+  MatCardModule
 } from "@angular/material";
 import {
   BrowserAnimationsModule,
@@ -35,6 +36,7 @@ describe("ProposalDashboardComponent", () => {
       imports: [
         BrowserAnimationsModule,
         FormsModule,
+        MatCardModule,
         MatFormFieldModule,
         MatInputModule,
         MatPaginatorModule,
