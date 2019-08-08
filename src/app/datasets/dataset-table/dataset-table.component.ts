@@ -45,6 +45,11 @@ export interface SortChangeEvent {
   direction: "asc" | "desc" | "";
 }
 
+export interface datasetDerivationsMap {
+  datasetPid: string;
+  derivedDatasetsNum: number;
+}
+
 import {
   SelectColumnAction,
   DeselectColumnAction
@@ -62,6 +67,11 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   datasetsPerPage$ = this.store.pipe(select(getDatasetsPerPage));
   datasetCount$ = this.store.select(getTotalSets);
   loading$ = this.store.pipe(select(getIsLoading));
+
+  datasetsSubscription: Subscription;
+  datasetPids: string[] = [];
+  datasetDerivationsMaps: datasetDerivationsMap[] = [];
+  derivationMapPids: string[] = [];
 
   public currentMode: ArchViewMode;
   private selectedSets$ = this.store.pipe(select(getSelectedDatasets));
@@ -102,12 +112,11 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   dispColumns$ = this.store.pipe(select(getDisplayedColumns));
   configCols$ = this.store.pipe(select(getConfigurableColumns));
   configForm = new FormControl();
-  $ = this.store.pipe(select(getConfigurableColumns)).subscribe(
-    ret => {
-      // this is required to set all columns check to true
-      // param must match the type defined by the ngFor in template
-      this.configForm.setValue(ret);
-      });
+  $ = this.store.pipe(select(getConfigurableColumns)).subscribe(ret => {
+    // this is required to set all columns check to true
+    // param must match the type defined by the ngFor in template
+    this.configForm.setValue(ret);
+  });
 
   constructor(
     private router: Router,
@@ -149,6 +158,28 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
           );
         }
       });
+
+    this.datasetsSubscription = this.store
+      .pipe(select(getDatasets))
+      .subscribe(datasets => {
+        this.datasetPids = datasets.map(dataset => {
+          return dataset.pid;
+        });
+        this.derivationMapPids = this.datasetDerivationsMaps.map(
+          datasetderivationMap => {
+            return datasetderivationMap.datasetPid;
+          }
+        );
+        datasets.forEach(dataset => {
+          if (!this.derivationMapPids.includes(dataset.pid)) {
+            let map: datasetDerivationsMap = {
+              datasetPid: dataset.pid,
+              derivedDatasetsNum: this.countDerivedDatasets(dataset)
+            };
+            this.datasetDerivationsMaps.push(map);
+          }
+        });
+      });
   }
 
   ngOnDestroy() {
@@ -157,6 +188,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     this.submitJobSubscription.unsubscribe();
     this.jobErrorSubscription.unsubscribe();
     this.selectedPidsSubscription.unsubscribe();
+    this.datasetsSubscription.unsubscribe();
   }
 
   onSelectColumn(event: any): void {
@@ -357,5 +389,18 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
       "width.px": width
     };
     return styles;
+  }
+
+  countDerivedDatasets(dataset: Dataset): number {
+    let derivedDatasetsNum: number = 0;
+    dataset.history.forEach(item => {
+      if (
+        item.hasOwnProperty("derivedDataset") &&
+        this.datasetPids.includes(item.derivedDataset.pid)
+      ) {
+        derivedDatasetsNum++;
+      }
+    });
+    return derivedDatasetsNum;
   }
 }

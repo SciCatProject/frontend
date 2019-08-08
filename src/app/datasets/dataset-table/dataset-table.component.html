@@ -64,21 +64,41 @@
   <!--https://tburleson-layouts-demos.firebaseapp.com/#/docs-->
   <div fxLayout="row" fxLayoutAlign="space-evenly end">
     <div style="flex: 1">
-      <button   mat-stroked-button class="tableSettings" 
-      color="primary" matTooltip="Table Settings"
-      (click)=select.open()>
-      <mat-icon>settings</mat-icon>
-      <mat-select #select class="tblSettingSelect" panelClass="tblSettingSelectPanel" [formControl]="configForm" multiple>
-        <mat-option *ngFor="let column of (configCols$ | async)" [value]="column" (onSelectionChange)="onSelectColumn($event)">
-          {{column}}</mat-option>
-      </mat-select>
-    </button>
+      <button
+        mat-stroked-button
+        class="tableSettings"
+        color="primary"
+        matTooltip="Table Settings"
+        (click)="select.open()"
+      >
+        <mat-icon>settings</mat-icon>
+        <mat-select
+          #select
+          class="tblSettingSelect"
+          panelClass="tblSettingSelectPanel"
+          [formControl]="configForm"
+          multiple
+        >
+          <mat-option
+            *ngFor="let column of configCols$ | async"
+            [value]="column"
+            (onSelectionChange)="onSelectColumn($event)"
+          >
+            {{ column }}</mat-option
+          >
+        </mat-select>
+      </button>
+    </div>
+    <mat-paginator
+      [pageSizeOptions]="[30, 1000]"
+      [pageIndex]="currentPage$ | async"
+      [length]="datasetCount$ | async"
+      [pageSize]="datasetsPerPage$ | async"
+      (page)="onPageChange($event)"
+      showFirstLastButtons
+    >
+    </mat-paginator>
   </div>
-  <mat-paginator [pageSizeOptions]="[30, 1000]" [pageIndex]="currentPage$ | async" [length]="datasetCount$ | async"
-    [pageSize]="datasetsPerPage$ | async" (page)="onPageChange($event)" showFirstLastButtons>
-  </mat-paginator>
- </div>
-
 
   <mat-table
     [dataSource]="datasets$"
@@ -87,6 +107,8 @@
     (matSortChange)="onSortChange($event)"
   >
     <!-- Column Definitions -->
+
+    <!-- Select Column -->
     <ng-container matColumnDef="select">
       <mat-header-cell *matHeaderCellDef>
         <mat-checkbox
@@ -111,6 +133,7 @@
       </mat-cell>
     </ng-container>
 
+    <!-- Name Column -->
     <ng-container matColumnDef="datasetName" style="align-content: center">
       <mat-header-cell *matHeaderCellDef mat-sort-header>
         <div fxLayout="column" style="align-items: center">
@@ -125,6 +148,7 @@
       </mat-cell>
     </ng-container>
 
+    <!-- Source Folder Column -->
     <ng-container matColumnDef="sourceFolder">
       <mat-header-cell *matHeaderCellDef mat-sort-header>
         <div fxLayout="column" style="align-items: center">
@@ -142,6 +166,7 @@
       </mat-cell>
     </ng-container>
 
+    <!-- Size Column -->
     <ng-container matColumnDef="size">
       <mat-header-cell *matHeaderCellDef mat-sort-header>
         <div fxLayout="column" style="align-items: center">
@@ -171,6 +196,7 @@
       </mat-cell>
     </ng-container>
 
+    <!-- Start Time Column -->
     <ng-container matColumnDef="creationTime">
       <mat-header-cell *matHeaderCellDef mat-sort-header>
         <div fxLayout="column" style="align-items: center">
@@ -188,6 +214,7 @@
       </mat-cell>
     </ng-container>
 
+    <!-- Type Column -->
     <ng-container matColumnDef="type">
       <mat-header-cell *matHeaderCellDef>
         <div fxLayout="column" style="align-items: center">
@@ -200,6 +227,26 @@
       <mat-cell *matCellDef="let dataset">{{ dataset.type }}</mat-cell>
     </ng-container>
 
+    <!-- Derived Datasets Column -->
+    <ng-container matColumnDef="derivedDatasetsNum">
+      <mat-header-cell *matHeaderCellDef>
+        <div fxLayout="column" style="align-items: center">
+          <div>
+            <i class="material-icons">layers</i>
+          </div>
+          <div class="table_column">Derivations</div>
+        </div>
+      </mat-header-cell>
+      <mat-cell *matCellDef="let dataset">
+        <div *ngFor="let map of datasetDerivationsMaps">
+          <div *ngIf="dataset.pid === map.datasetPid">
+            {{ map.derivedDatasetsNum }}
+          </div>
+        </div>
+      </mat-cell>
+    </ng-container>
+
+    <!-- Image Column -->
     <ng-container matColumnDef="image">
       <mat-header-cell *matHeaderCellDef>
         <div fxLayout="column" style="align-items: center">
@@ -218,6 +265,7 @@
       </mat-cell>
     </ng-container>
 
+    <!-- Metadata Column -->
     <ng-container matColumnDef="metadata">
       <mat-header-cell *matHeaderCellDef>
         <div fxLayout="column" style="align-items: center">
@@ -249,6 +297,7 @@
       </mat-cell>
     </ng-container>
 
+    <!-- Proposal ID Column -->
     <ng-container matColumnDef="proposalId">
       <mat-header-cell *matHeaderCellDef mat-sort-header>
         <div fxLayout="column" style="align-items: center">
@@ -263,6 +312,7 @@
       }}</mat-cell>
     </ng-container>
 
+    <!-- Group Column -->
     <ng-container matColumnDef="ownerGroup">
       <mat-header-cell *matHeaderCellDef mat-sort-header>
         <div fxLayout="column" style="align-items: center">
@@ -275,6 +325,7 @@
       <mat-cell *matCellDef="let dataset">{{ dataset.ownerGroup }}</mat-cell>
     </ng-container>
 
+    <!-- Data Status Column -->
     <ng-container matColumnDef="dataStatus">
       <mat-header-cell *matHeaderCellDef>
         <div fxLayout="column" style="align-items: center">
@@ -341,6 +392,7 @@
       </mat-cell>
     </ng-container>
 
+    <!-- Archive Status Column -->
     <ng-container matColumnDef="archiveStatus">
       <mat-header-cell *matHeaderCellDef mat-sort-header>
         <div fxLayout="column" style="align-items: center">
@@ -358,6 +410,7 @@
       </mat-cell>
     </ng-container>
 
+    <!-- Retrieve Status Column -->
     <ng-container matColumnDef="retrieveStatus">
       <mat-header-cell *matHeaderCellDef mat-sort-header>
         <div fxLayout="column" style="align-items: center">
@@ -378,10 +431,18 @@
     </ng-container>
 
     <!-- End of Column Definitions -->
-    <mat-header-row class="datasets-header" *matHeaderRowDef="(dispColumns$ | async); sticky: true">
+
+    <mat-header-row
+      class="datasets-header"
+      *matHeaderRowDef="dispColumns$ | async; sticky: true"
+    >
     </mat-header-row>
 
-    <mat-row class="row-generic" *matRowDef="let dataset; columns: (dispColumns$ | async)" (click)="onClick(dataset)">
+    <mat-row
+      class="row-generic"
+      *matRowDef="let dataset; columns: dispColumns$ | async"
+      (click)="onClick(dataset)"
+    >
     </mat-row>
   </mat-table>
 </div>

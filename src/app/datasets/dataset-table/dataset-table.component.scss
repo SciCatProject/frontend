@@ -21,6 +21,21 @@
     margin-left: 10px;
   }
 
+  mat-header-cell {
+    color: white;
+    background: mat-color($primary);
+    justify-content: center;
+  }
+
+  mat-header-row {
+    color: white;
+    background: mat-color($primary);
+  }
+
+  i {
+    color: white;
+  }
+
   .mat-column-select {
     overflow: visible; /* Needed to prevent offsetting of the checkbox when clicking */
     flex-shrink: 0;
@@ -28,125 +43,94 @@
     padding-right: 10px;
   }
 
+  .mat-column-datasetName {
+    flex: 1 0 200px;
+    justify-content: left !important;
+  }
+
+  .mat-column-sourceFolder {
+    flex: 1 0 120px;
+    justify-content: center !important;
+  }
+
+  .mat-column-size {
+    flex: 1 0 50px;
+    justify-content: center !important;
+  }
+
+  .mat-column-creationTime {
+    flex: 1 0 80px;
+    justify-content: center !important;
+  }
+
+  .mat-column-type {
+    flex: 0 0 50px;
+    justify-content: center !important;
+  }
+
+  .mat-column-derivedDatasetsNum {
+    flex: 0 0 100px;
+    justify-content: center !important;
+  }
+
+  .mat-column-image {
+    flex: 0 0 60px;
+    justify-content: center !important;
+  }
+
+  .mat-column-metadata {
+    flex: 2 0 100px;
+    justify-content: center !important;
+  }
+
+  .mat-column-proposalId {
+    flex: 1 0 70px;
+    justify-content: center !important;
+  }
+
+  .mat-column-ownerGroup {
+    flex: 0 0 80px;
+    justify-content: center !important;
+  }
+
+  .mat-column-archiveStatus {
+    flex: 1 0 150px;
+    justify-content: center !important;
+  }
+
+  .mat-column-retrieveStatus {
+    flex: 1 0 130px;
+    justify-content: center !important;
+  }
+
+  .mat-column-dataStatus {
+    flex: 1 0 130px;
+    justify-content: center !important;
+  }
+
+  :host /deep/ .disabled-row {
+    pointer-events: none;
+    opacity: 0.2 !important;
+  }
+
+  :host /deep/ .mat-row:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+  }
+
+  :host /deep/ .mat-paginator {
+    background-color: unset !important;
+  }
+
+  ::ng-deep mat-header-cell .mat-checkbox-frame {
+    border-color: white;
+  }
+
+  ::ng-deep .tblSettingSelect div.mat-select-arrow-wrapper {
+    display: none;
+  }
+
+  ::ng-deep .tblSettingSelect.mat-select {
+    display: inline;
+  }
 }
-
-:host /deep/ .disabled-row {
-  pointer-events: none;
-  opacity: 0.2 !important;
-}
-
-:host /deep/ .mat-row:hover {
-  background-color: rgba(0, 0, 0, 0.1);
-  cursor: pointer;
-}
-
-:host /deep/ .mat-paginator {
-  background-color: unset !important;
-}
-
-.mat-column-datasetName {
-  flex: 1 0 200px;
-  justify-content: left !important;
-}
-
-.mat-column-sourceFolder {
-  flex: 1 0 120px;
-  justify-content: center !important;
-}
-
-.mat-column-size {
-  flex: 1 0 50px;
-  justify-content: center !important;
-}
-
-.mat-column-creationTime {
-  flex: 1 0 80px;
-  justify-content: center !important;
-}
-
-.mat-column-type {
-  flex: 0 0 40px;
-  justify-content: center !important;
-}
-
-.mat-column-image {
-  flex: 0 0 60px;
-  justify-content: center !important;
-}
-
-.mat-column-metadata {
-  flex: 2 0 100px;
-  justify-content: center !important;
-}
-
-.mat-column-proposalId {
-  flex: 1 0 70px;
-  justify-content: center !important;
-}
-
-.mat-column-ownerGroup {
-  flex: 0 0 80px;
-  justify-content: center !important;
-}
-
-.mat-column-archiveStatus {
-  flex: 1 0 150px;
-  justify-content: center !important;
-}
-
-.mat-column-retrieveStatus {
-  flex: 1 0 130px;
-  justify-content: center !important;
-}
-
-.mat-column-dataStatus {
-  flex: 1 0 130px;
-  justify-content: center !important;
-}
-
-
-mat-header-cell {
-  color: white;
-  background: mat-color($primary);
-  justify-content: center;
-}
-
-mat-header-row {
-  color: white;
-  background: mat-color($primary);
-}
-
-.table_column {
-  color: white;
-}
-
-i {
-  color: white;
-}
-.aligned-with-icon {
-  position: absolute;
-  margin-top: 5px;
-  margin-left: 5px; /* optional */
-}
-
-.with-icon {
-  display: flex;
-  align-items: center;
-}
-
-
-::ng-deep mat-header-cell .mat-checkbox-frame {
-  border-color: white;
-}
-
-::ng-deep .tblSettingSelect div.mat-select-arrow-wrapper {
-  display: none;
-}
-
-::ng-deep .tblSettingSelect.mat-select {
-  display: inline;
-}
-
-/*::ng-deep .tblSettingSelectPanel.mat-select-panel {
-  background: rgba(0, 0, 255, 1);
-}*/
