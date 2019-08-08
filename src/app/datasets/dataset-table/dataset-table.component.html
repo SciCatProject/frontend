@@ -227,25 +227,6 @@
       <mat-cell *matCellDef="let dataset">{{ dataset.type }}</mat-cell>
     </ng-container>
 
-    <!-- Derived Datasets Column -->
-    <ng-container matColumnDef="derivedDatasetsNum">
-      <mat-header-cell *matHeaderCellDef>
-        <div fxLayout="column" style="align-items: center">
-          <div>
-            <i class="material-icons">layers</i>
-          </div>
-          <div class="table_column">Derivations</div>
-        </div>
-      </mat-header-cell>
-      <mat-cell *matCellDef="let dataset">
-        <div *ngFor="let map of datasetDerivationsMaps">
-          <div *ngIf="dataset.pid === map.datasetPid">
-            {{ map.derivedDatasetsNum }}
-          </div>
-        </div>
-      </mat-cell>
-    </ng-container>
-
     <!-- Image Column -->
     <ng-container matColumnDef="image">
       <mat-header-cell *matHeaderCellDef>
@@ -427,6 +408,25 @@
         }}"
       >
         {{ (dataset.datasetlifecycle || {}).retrieveStatusMessage }}
+      </mat-cell>
+    </ng-container>
+
+    <!-- Derived Datasets Column -->
+    <ng-container matColumnDef="derivedDatasetsNum">
+      <mat-header-cell *matHeaderCellDef>
+        <div fxLayout="column" style="align-items: center">
+          <div>
+            <i class="material-icons">layers</i>
+          </div>
+          <div class="table_column">Derivations</div>
+        </div>
+      </mat-header-cell>
+      <mat-cell *matCellDef="let dataset">
+        <div *ngFor="let map of datasetDerivationsMaps">
+          <div *ngIf="dataset.pid === map.datasetPid">
+            {{ map.derivedDatasetsNum }}
+          </div>
+        </div>
       </mat-cell>
     </ng-container>
 
