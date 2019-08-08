@@ -32,8 +32,7 @@ import {
   FetchDatasetsForSample,
   FetchDatasetsForSampleComplete,
   FetchDatasetsForSampleFailed,
-  FETCH_DATASETS_FOR_SAMPLE,
-  FetchDatasetsForSampleOutcomeAction
+  FETCH_DATASETS_FOR_SAMPLE
 } from "../actions/samples.actions";
 import {
   getQuery,
@@ -127,7 +126,9 @@ export class SamplesEffects {
     map((action: FetchDatasetsForSample) => action.sampleId),
     mergeMap(sampleId =>
       this.sampleService.getDatasetsForSample(sampleId).pipe(
-        map(datasets => new FetchDatasetsForSampleComplete(datasets as Dataset[])),
+        map(
+          datasets => new FetchDatasetsForSampleComplete(datasets as Dataset[])
+        ),
         catchError(() => of(new FetchDatasetsForSampleFailed()))
       )
     )
