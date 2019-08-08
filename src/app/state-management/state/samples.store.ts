@@ -4,6 +4,7 @@ export interface SampleState {
   samples: { [sampleId: string]: Sample };
   selectedSamples: Sample[];
   datasets: { [datasetId: string]: any };
+  hasFetched: boolean;
   currentSample: Sample;
   totalCount: number;
   submitComplete: boolean;
@@ -22,6 +23,7 @@ export const initialSampleState: SampleState = {
   samples: {},
   selectedSamples: [],
   datasets: {},
+  hasFetched: false,
   currentSample: null,
   totalCount: 0,
   submitComplete: false,

@@ -1,7 +1,7 @@
 import { ActivatedRoute, Router } from "@angular/router";
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { Observable } from "rxjs";
-import { Sample, Dataset } from "../../shared/sdk/models";
+import { Sample } from "../../shared/sdk/models";
 import {
   getCurrentSample,
   getDatasetsForSample
@@ -43,20 +43,6 @@ export class SampleDetailComponent implements OnInit, OnDestroy {
           this.route.params.subscribe(params => {
             console.log("gm: fetching sampleId", params.id);
             this.store.dispatch(new FetchSampleAction(params.id));
-          });
-        }
-      })
-    );
-
-    this.subscriptions.push(
-      this.store.pipe(select(getDatasetsForSample)).subscribe(datasets => {
-        if (datasets && Object.keys(datasets).length > 0) {
-          this.datasets = <Dataset>datasets;
-          console.log(datasets);
-        } else {
-          console.log("get from param");
-          this.route.params.subscribe(params => {
-            console.log("gm: fetching datasets sampleId", params.id);
             this.store.dispatch(new FetchDatasetsForSample(params.id));
           });
         }
