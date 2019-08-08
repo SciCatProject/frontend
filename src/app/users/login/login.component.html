@@ -1,25 +1,48 @@
-<br>
-<div>
-  <div fxLayout="row" fxLayout.xs="column" fxLayoutGap="0.5%" fxLayoutAlign="center center">
-    <div fxFlex="32%">
-        <img mat-card-image class=facility_logo src="assets/images/esslogo.png" >
-        <form [formGroup]="loginForm" (ngSubmit)="onLogin($event)" class="ui form">
-          <div class="field">
-            <label for="emailInput">Username:</label>
-            <input id="emailInput" formControlName="username" class="form-control" type="text" placeholder="Username">
-          </div>
-          <div class="field">
-            <label for="pwdInput">Password:</label>
-            <input id="pwdInput" formControlName="password" type="password" class="form-control" placeholder="Password">
-          </div>
-          <button type="submit" [ngClass]="{'loading': loading$ | async}" class="ui button login-btn" id="login-btn">Log
-            in
-          </button>
-          <mat-checkbox name="rememberMe">Remember me</mat-checkbox>
-        </form>
-    </div>
-    <div fxFlex="62%">
-      <img mat-card-image src="assets/images/ess-site.png" alt="ESS site" style="object-fit: scale-down;">
-    </div>
-  </div>
+<div class="login-container" fxLayoutAlign="center center">
+  <mat-card>
+    <mat-card-header>
+      <img
+        mat-card-image
+        class="facility_logo"
+        src="assets/images/esslogo.png"
+      />
+    </mat-card-header>
+    <mat-card-content>
+      <form
+        [formGroup]="loginForm"
+        (ngSubmit)="onLogin($event)"
+        class="ui form"
+      >
+        <div class="field">
+          <label for="emailInput">Username:</label>
+          <input
+            id="emailInput"
+            formControlName="username"
+            class="form-control"
+            type="text"
+            placeholder="Username"
+          />
+        </div>
+        <div class="field">
+          <label for="pwdInput">Password:</label>
+          <input
+            id="pwdInput"
+            formControlName="password"
+            type="password"
+            class="form-control"
+            placeholder="Password"
+          />
+        </div>
+        <button
+          type="submit"
+          [ngClass]="{ loading: loading$ | async }"
+          class="ui button login-btn"
+          id="login-btn"
+        >
+          Log in
+        </button>
+        <mat-checkbox name="rememberMe">Remember me</mat-checkbox>
+      </form>
+    </mat-card-content>
+  </mat-card>
 </div>
