@@ -27,3 +27,22 @@ mat-sort-header-button {
 i {
   color: white;
 }
+
+.mat-column-doi {
+  flex: 1 0 130px;
+  justify-content: left !important;
+}
+
+.mat-column-creator {
+  flex: 1 0 130px;
+  justify-content: center !important;
+}
+
+.mat-column-description {
+  flex: 1 0 130px;
+  justify-content: center !important;
+}
+
+.mat-column-publicationYear {
+  justify-content: center !important;
+}
