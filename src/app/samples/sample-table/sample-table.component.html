@@ -17,84 +17,84 @@
   showFirstLastButtons
 >
 </mat-paginator>
-<mat-card style="margin: 1em">
-  <div class="details">
-    <mat-table
-      #table
-      [dataSource]="samples"
-      matSort
-      (matSortChange)="onSortChange($event)"
-    >
-      <ng-container matColumnDef="sampleId">
-        <mat-header-cell *matHeaderCellDef mat-sort-header>
-          <div fxLayout="column" style="align-items: center">
-            <div>
-              <i class="material-icons">fingerprint</i>
-            </div>
-            <div class="table_column">
-              Id</div>
+<div class="details">
+  <mat-table
+    #table
+    [dataSource]="samples"
+    matSort
+    class="mat-elevation-z8"
+    (matSortChange)="onSortChange($event)"
+  >
+    <ng-container matColumnDef="sampleId">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>
+        <div fxLayout="column" style="align-items: center">
+          <div>
+            <i class="material-icons">fingerprint</i>
           </div>
-        </mat-header-cell>
-        <mat-cell *matCellDef="let sample"> {{ sample.sampleId }}</mat-cell>
-      </ng-container>
-
-      <ng-container matColumnDef="owner">
-        <mat-header-cell *matHeaderCellDef mat-sort-header>
-          <div fxLayout="column" style="align-items: center">
-            <div>
-              <i class="material-icons">face</i>
-            </div>
-            <div class="table_column">Owner</div>
+          <div class="table_column">
+            Id
           </div>
-        </mat-header-cell>
-        <mat-cell *matCellDef="let sample"> {{ sample.owner }}</mat-cell>
-      </ng-container>
+        </div>
+      </mat-header-cell>
+      <mat-cell *matCellDef="let sample"> {{ sample.sampleId }}</mat-cell>
+    </ng-container>
 
-      <ng-container matColumnDef="createdAt">
-        <mat-header-cell *matHeaderCellDef mat-sort-header>
-          <div fxLayout="column" style="align-items: center">
-            <div>
-              <i class="material-icons">date_range</i>
-            </div>
-            <div class="table_column">Creation&nbsp;Time</div>
+    <ng-container matColumnDef="owner">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>
+        <div fxLayout="column" style="align-items: center">
+          <div>
+            <i class="material-icons">face</i>
           </div>
-        </mat-header-cell>
-        <mat-cell *matCellDef="let sample">
-          {{ sample.createdAt | date: "yyyy-MM-dd HH:mm" }}</mat-cell
-        >
-      </ng-container>
+          <div class="table_column">Owner</div>
+        </div>
+      </mat-header-cell>
+      <mat-cell *matCellDef="let sample"> {{ sample.owner }}</mat-cell>
+    </ng-container>
 
-      <ng-container matColumnDef="description">
-        <mat-header-cell *matHeaderCellDef>
-          <div fxLayout="column" style="align-items: center">
-            <div>
-              <i class="material-icons">description</i>
-            </div>
-            <div class="table_column">Description</div>
+    <ng-container matColumnDef="createdAt">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>
+        <div fxLayout="column" style="align-items: center">
+          <div>
+            <i class="material-icons">date_range</i>
           </div>
-        </mat-header-cell>
-        <mat-cell *matCellDef="let sample"> {{ sample.description }}</mat-cell>
-      </ng-container>
+          <div class="table_column">Creation&nbsp;Time</div>
+        </div>
+      </mat-header-cell>
+      <mat-cell *matCellDef="let sample">
+        {{ sample.createdAt | date: "yyyy-MM-dd HH:mm" }}</mat-cell
+      >
+    </ng-container>
 
-      <ng-container matColumnDef="ownerGroup">
-        <mat-header-cell *matHeaderCellDef>
-          <div fxLayout="column" style="align-items: center">
-            <div>
-              <i class="material-icons">group</i>
-            </div>
-            <div class="table_column">Group</div>
+    <ng-container matColumnDef="description">
+      <mat-header-cell *matHeaderCellDef>
+        <div fxLayout="column" style="align-items: center">
+          <div>
+            <i class="material-icons">description</i>
           </div>
-        </mat-header-cell>
-        <mat-cell *matCellDef="let sample">
-          {{ sample.ownerGroup }}
-        </mat-cell>
-      </ng-container>
+          <div class="table_column">Description</div>
+        </div>
+      </mat-header-cell>
+      <mat-cell *matCellDef="let sample"> {{ sample.description }}</mat-cell>
+    </ng-container>
 
-      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-      <mat-row
-        (click)="onRowSelect($event, row)"
-        *matRowDef="let row; columns: displayedColumns"
-      ></mat-row>
-    </mat-table>
-  </div>
-</mat-card>
+    <ng-container matColumnDef="ownerGroup">
+      <mat-header-cell *matHeaderCellDef>
+        <div fxLayout="column" style="align-items: center">
+          <div>
+            <i class="material-icons">group</i>
+          </div>
+          <div class="table_column">Group</div>
+        </div>
+      </mat-header-cell>
+      <mat-cell *matCellDef="let sample">
+        {{ sample.ownerGroup }}
+      </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row
+      (click)="onRowSelect($event, row)"
+      *matRowDef="let row; columns: displayedColumns"
+    ></mat-row>
+  </mat-table>
+</div>

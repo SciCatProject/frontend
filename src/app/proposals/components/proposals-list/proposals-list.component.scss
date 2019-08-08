@@ -1,24 +1,24 @@
 @import "../../../../theme.scss";
 
 mat-header-row {
-    color: white;
-    background: mat-color($primary);
-  }
-  
-  .table_column {
-    color: white;
-    justify-content: center;
-  }
+  color: white;
+  background: mat-color($primary);
+}
 
-  mat-sort-header-button {
-      color: white;
-  }
+.table_column {
+  color: white;
+  justify-content: center;
+}
 
-  i {
-    color: white;
-  }
+mat-sort-header-button {
+  color: white;
+}
 
-  .mat-column-owner {
-    flex: 1 0 130px;
-    justify-content: center !important;
-  }
+i {
+  color: white;
+}
+
+.mat-column-owner {
+  flex: 1 0 130px;
+  justify-content: center !important;
+}
