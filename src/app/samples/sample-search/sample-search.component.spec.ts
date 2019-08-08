@@ -1,6 +1,6 @@
 import { BrowserAnimationsModule, NoopAnimationsModule } from "@angular/platform-browser/animations";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { MatFormFieldModule, MatInputModule } from "@angular/material";
+import { MatFormFieldModule, MatInputModule, MatCardModule } from "@angular/material";
 import { MockStore } from "shared/MockStubs";
 import { SampleSearchComponent } from "./sample-search.component";
 import { Store } from "@ngrx/store";
@@ -15,6 +15,7 @@ describe("SampleSearchComponent", () => {
       imports: [
         BrowserAnimationsModule,
         FormsModule,
+        MatCardModule,
         MatFormFieldModule,
         MatInputModule,
         NoopAnimationsModule,
