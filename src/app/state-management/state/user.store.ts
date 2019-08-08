@@ -58,7 +58,6 @@ export const initialUserState: UserState = {
     "metadata",
     "proposalId",
     "ownerGroup",
-    "dataStatus",
-    "derivedDatasetsNum"
+    "dataStatus"
   ]
 };

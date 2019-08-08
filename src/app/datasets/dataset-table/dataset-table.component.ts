@@ -115,7 +115,11 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   $ = this.store.pipe(select(getConfigurableColumns)).subscribe(ret => {
     // this is required to set all columns check to true
     // param must match the type defined by the ngFor in template
-    this.configForm.setValue(ret);
+    // setTrue can be used to filter out columns that should be false by default
+    const setTrue = ret.filter(item => {
+      return item !== "derivedDatasetsNum";
+    });
+    this.configForm.setValue(setTrue);
   });
 
   constructor(
