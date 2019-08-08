@@ -19,7 +19,7 @@ export const initialPublishedDataState: PublishedDataState = adapter.getInitialS
     publishedData: null,
     filters: {
       skip: 0,
-      limit: 10,
+      limit: 30,
       sortField: ""
     },
     count: 0
