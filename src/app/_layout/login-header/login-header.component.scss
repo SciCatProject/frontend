@@ -3,6 +3,8 @@
 mat-toolbar {
   position: sticky;
 
+  height: 5vh;
+
   a {
     color: mat-color($primary);
   }

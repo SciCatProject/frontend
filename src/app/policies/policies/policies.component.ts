@@ -169,7 +169,7 @@ export class PoliciesComponent implements OnInit, OnDestroy {
               // if theres already some datasets for this ask to do stuff. It doesnt matter if they have alredy
               // been archived, the archiving job creator should check that
               // apply settings (trigger jobs? Archive this, notify them, )
-              if (confirm("Apply policy settings to existing datasets?")) {
+              if (confirm("Apply group " + element + " policy settings to existing datasets?")) {
               }
               console.log("count", count);
             }
