@@ -1,10 +1,19 @@
-<mat-paginator [pageSize]="30" [length]="totalJobNumber$ | async" (page)="onPage(event)" showFirstLastButtons></mat-paginator>
+<mat-paginator
+  [pageSize]="30"
+  [length]="totalJobNumber$ | async"
+  (page)="onPage(event)"
+  showFirstLastButtons
+></mat-paginator>
 <div class="jobs-table mat-elevation-z8">
   <div class="mode-container">
     <mat-button-toggle-group [value]="currentMode">
-      <mat-button-toggle *ngFor="let mode of modes; let i = index" (click)="onModeChange($event, mode)" [value]="mode"
-        [ngClass]="mode">
-        {{mode | titlecase}}
+      <mat-button-toggle
+        *ngFor="let mode of modes; let i = index"
+        (click)="onModeChange($event, mode)"
+        [value]="mode"
+        [ngClass]="mode"
+      >
+        {{ mode | titlecase }}
       </mat-button-toggle>
     </mat-button-toggle-group>
   </div>
@@ -12,73 +21,108 @@
   <mat-table #table [dataSource]="jobs$ | async">
     <ng-container matColumnDef="emailJobInitiator">
       <mat-header-cell *matHeaderCellDef mat-sort-header>
-        <i class="material-icons"> mail </i> 
-        Initiator
+        <div fxLayout="column" style="align-items: center">
+          <div>
+            <i class="material-icons"> mail </i>
+          </div>
+          <div>
+            Initiator
+          </div>
+        </div>
       </mat-header-cell>
       <mat-cell *matCellDef="let job">
-        {{job.emailJobInitiator}}
+        {{ job.emailJobInitiator }}
       </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="type">
       <mat-header-cell *matHeaderCellDef mat-sort-header>
-        <i class="material-icons"> bubble_chart </i> 
+        <div fxLayout="column" style="align-items: center">
+          <div>
+        <i class="material-icons"> bubble_chart </i>
+          </div>
+          <div>
         Type
+          </div>
+        </div>
       </mat-header-cell>
       <mat-cell *matCellDef="let job">
-        {{job.type}}
+        {{ job.type }}
       </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="creationTime">
       <mat-header-cell *matHeaderCellDef mat-sort-header>
-        <i class="material-icons"> brightness_high </i> 
+        <div fxLayout="column" style="align-items: center">
+          <div>
+        <i class="material-icons"> brightness_high </i>
+          </div>
+          <div>
         Created at
+          </div>
+        </div>
       </mat-header-cell>
       <mat-cell *matCellDef="let job">
-        {{job.creationTime | date: 'yyyy-MM-dd HH:mm' }}
+        {{ job.creationTime | date: "yyyy-MM-dd HH:mm" }}
       </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="executionTime">
       <mat-header-cell *matHeaderCellDef mat-sort-header>
-        <i class="material-icons"> gavel </i> 
+        <div fxLayout="column" style="align-items: center">
+          <div>
+        <i class="material-icons"> gavel </i>
+          </div>
+          <div>
         Executed at
+          </div>
+        </div>
       </mat-header-cell>
       <mat-cell *matCellDef="let job">
-        {{job.executionTime | date: 'yyyy-MM-dd HH:mm:ss'}}
+        {{ job.executionTime | date: "yyyy-MM-dd HH:mm:ss" }}
       </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="jobParams">
       <mat-header-cell *matHeaderCellDef mat-sort-header>
-        <i class="material-icons"> brightness_high </i> 
+        <i class="material-icons"> brightness_high </i>
         Params
       </mat-header-cell>
       <mat-cell *matCellDef="let job">
-        {{job.jobParams | json}}
+        {{ job.jobParams | json }}
       </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="jobStatusMessage">
       <mat-header-cell *matHeaderCellDef mat-sort-header>
-        <i class="material-icons"> comment </i> 
+        <div fxLayout="column" style="align-items: center">
+          <div>
+        <i class="material-icons"> comment </i>
+          </div>
+          <div>
         Status Message
+          </div>
+        </div>
       </mat-header-cell>
       <mat-cell *matCellDef="let job; let rowIndex = index">
-
-        <div *ngIf="!job.jobStatusMessage; then thenBlock else elseBlock"></div>
+        <div
+          *ngIf="!job.jobStatusMessage; then thenBlock; else elseBlock"
+        ></div>
         <ng-template #thenBlock>Processing</ng-template>
-        <ng-template #elseBlock>{{job.jobStatusMessage}}</ng-template>
-
+        <ng-template #elseBlock>{{ job.jobStatusMessage }}</ng-template>
       </mat-cell>
     </ng-container>
 
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-    <mat-row (click)="onRowSelect($event, row)" *matRowDef="let row; columns: displayedColumns; let i = index"
-      [ngClass]="{'red' : row.jobStatusMessage && row.jobStatusMessage.indexOf('Unsuccessful') > -1}">
+    <mat-row
+      (click)="onRowSelect($event, row)"
+      *matRowDef="let row; columns: displayedColumns; let i = index"
+      [ngClass]="{
+        red:
+          row.jobStatusMessage &&
+          row.jobStatusMessage.indexOf('Unsuccessful') > -1
+      }"
+    >
     </mat-row>
   </mat-table>
-
-
 </div>
