@@ -1,13 +1,16 @@
-
-
-<mat-form-field>
-  <input
-    matInput
-    class="search-input"
-    placeholder="Search Samples"
-    aria-label="Search Samples"
-    name="search"
-    [ngModel]="query"
-    (ngModelChange)="textSearchChanged($event)"
-  />
-</mat-form-field>
+<mat-card>
+  <mat-card-header>
+      <span class="title">Search</span>
+  </mat-card-header>
+  <mat-form-field>
+    <input
+      matInput
+      class="search-input"
+      placeholder="Search Samples"
+      aria-label="Search Samples"
+      name="search"
+      [ngModel]="query"
+      (ngModelChange)="textSearchChanged($event)"
+    />
+  </mat-form-field>
+</mat-card>

@@ -1,0 +1,24 @@
+<mat-toolbar class="mat-elevation-z1" color="primary">
+  <mat-toolbar-row>
+    <h3 class="app-title">
+      <a style="color:#ffffff;" [routerLink]="['/']"> {{ title }}</a>
+    </h3>
+    <span class="example-spacer"></span>
+    <div>
+      <h6>
+        <a class="toplink" [routerLink]="['/help']">
+          <i class="material-icons"> help </i>
+          Help</a
+        >
+      </h6>
+    </div>
+    <div>
+      <h6>
+        <a class="toplink" [routerLink]="['/about']">
+          <i class="material-icons"> info </i>
+          About</a
+        >
+      </h6>
+    </div>
+  </mat-toolbar-row>
+</mat-toolbar>

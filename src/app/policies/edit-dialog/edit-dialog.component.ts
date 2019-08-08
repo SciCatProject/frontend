@@ -92,7 +92,6 @@ export class EditDialogComponent implements /*OnChanges,*/ OnInit {
     const input = event.input;
     const value = event.value;
 
-    // Add our fruit
     if ((value || "").trim()) {
       this.data.selectedPolicy.retrieveEmailsToBeNotified.push(value.trim());
     }
@@ -107,7 +106,6 @@ export class EditDialogComponent implements /*OnChanges,*/ OnInit {
     const input = event.input;
     const value = event.value;
 
-    // Add our fruit
     if ((value || "").trim()) {
       this.data.selectedPolicy.archiveEmailsToBeNotified.push(value.trim());
     }
@@ -149,10 +147,12 @@ export class EditDialogComponent implements /*OnChanges,*/ OnInit {
   save() {
     // dont patch results that are NULL
     // handle chip lists
-    if (!this.multiEdit) {
+    if (this.form.controls.archiveEmailsToBeNotified.enabled) {
       this.form.controls.archiveEmailsToBeNotified.setValue(
         this.data.selectedPolicy.archiveEmailsToBeNotified
       );
+    }
+    if (this.form.controls.retrieveEmailsToBeNotified.enabled) {
       this.form.controls.retrieveEmailsToBeNotified.setValue(
         this.data.selectedPolicy.retrieveEmailsToBeNotified
       );

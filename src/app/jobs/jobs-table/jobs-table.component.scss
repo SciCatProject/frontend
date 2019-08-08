@@ -1,13 +1,35 @@
-@import '../../../theme.scss';
+@import "../../../theme.scss";
+
+mat-header-cell {
+  color: white;
+  background: mat-color($primary);
+  justify-content: center;
+}
+
+mat-header-row {
+  color: white;
+  background: mat-color($primary);
+}
+
+.table_column {
+  color: white;
+  justify-content: center;
+}
+
+mat-sort-header-button {
+  color: white;
+}
+
+i {
+  color: white;
+}
 
 .job-table {
-
   mat-cell,
   .mat-header-cell {
     word-wrap: break-word;
     white-space: normal;
   }
-
 
   /* Columns with narrow content */
   .mat-column-size,
@@ -18,7 +40,6 @@
   .red {
     background: rgb(207, 34, 34);
   }
-
 }
 
 :host /deep/ .js-check {
@@ -54,6 +75,3 @@ mat-cell,
   width: 100%;
   text-align: left !important;
 }
-
-
-

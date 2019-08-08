@@ -1,5 +1,5 @@
 import { APP_CONFIG } from "app-config.module";
-import { MatTableModule, MatDialog } from "@angular/material";
+import { MatTableModule, MatDialog, MatCardModule } from "@angular/material";
 import { MockStore, MockRouter } from "shared/MockStubs";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { Router } from "@angular/router";
@@ -17,6 +17,7 @@ describe("SampleDashboardComponent", () => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
       imports: [
+        MatCardModule,
         MatTableModule
       ],
       declarations: [

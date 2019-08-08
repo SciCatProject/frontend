@@ -1,14 +1,22 @@
+.login-container {
+  margin-top: 1em;
+}
+
+mat-card {
+  background-color: rgba(255, 255, 255, 0.9);
+}
+
+.facility_logo {
+  width: 200px;
+  margin-bottom: 36px;
+  margin-top: 20px;
+  margin-right: 20px;
+}
+
 .field {
   max-width: 20em;
 }
 
 mat-checkbox {
   margin-left: 1em;
-}
-
-.facility_logo {
-  width: 200px;
-  margin-left: 20px;
-  margin-bottom: 20px;
-  margin-top: 20px;
 }

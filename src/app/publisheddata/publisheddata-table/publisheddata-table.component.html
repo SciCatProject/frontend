@@ -8,37 +8,72 @@
     showFirstLastButtons
   >
   </mat-paginator>
-  <table mat-table [dataSource]="publishedData$" class="mat-elevation-z8">
+  <mat-table [dataSource]="publishedData$" class="mat-elevation-z2">
     <!--- Note that these columns can be defined in any order.
           The actual rendered columns are set as a property on the row definition" -->
 
     <ng-container matColumnDef="doi">
-      <th mat-header-cell *matHeaderCellDef>DOI</th>
-      <td mat-cell *matCellDef="let published">{{ published.doi }}</td>
+      <mat-header-cell *matHeaderCellDef>
+        <div fxLayout="column" style="align-items: center">
+          <div>
+            <i class="material-icons">fingerprint</i>
+          </div>
+          <div class="table_column">
+            DOI
+          </div>
+        </div>
+      </mat-header-cell>
+      <mat-cell *matCellDef="let published">{{ published.doi }}</mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="creator">
-      <th mat-header-cell *matHeaderCellDef>Creator</th>
-      <td mat-cell *matCellDef="let published">{{ published.creator }}</td>
+      <mat-header-cell *matHeaderCellDef>
+        <div fxLayout="column" style="align-items: center">
+          <div>
+            <i class="material-icons">face</i>
+          </div>
+          <div class="table_column">
+            Creator
+          </div>
+        </div>
+      </mat-header-cell>
+      <mat-cell *matCellDef="let published"> {{ published.creator }}</mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="title">
-      <th mat-header-cell *matHeaderCellDef>Title</th>
-      <td mat-cell *matCellDef="let published">{{ published.title }}</td>
+      <mat-header-cell *matHeaderCellDef>
+        <div fxLayout="column" style="align-items: center">
+          <div>
+            <i class="material-icons">description</i>
+          </div>
+          <div class="table_column">
+            Title
+          </div>
+        </div>
+      </mat-header-cell>
+      <mat-cell *matCellDef="let published">{{ published.title }}</mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="publicationYear">
-      <th mat-header-cell *matHeaderCellDef>Year</th>
-      <td mat-cell *matCellDef="let published">
+      <mat-header-cell *matHeaderCellDef>
+        <div fxLayout="column" style="align-items: center">
+          <div>
+            <i class="material-icons">date_range</i>
+          </div>
+          <div class="table_column">
+            Year
+          </div>
+        </div>
+      </mat-header-cell>
+      <mat-cell *matCellDef="let published">
         {{ published.publicationYear }}
-      </td>
+      </mat-cell>
     </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr
-      mat-row
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row
       *matRowDef="let published; columns: displayedColumns"
       (click)="onClick(published)"
-    ></tr>
-  </table>
+    ></mat-row>
+  </mat-table>
 </div>
