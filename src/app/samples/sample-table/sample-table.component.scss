@@ -1,3 +1,20 @@
+@import "../../../theme.scss";
 .button-group {
     float: right;
 }
+
+mat-header-cell {
+    color: white;
+    background: mat-color($primary);
+    justify-content: center;
+  }
+  
+  mat-header-row {
+    color: white;
+    background: mat-color($primary);
+  }
+  
+  .table_column {
+    color: white;
+    justify-content: center;
+  }

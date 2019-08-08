@@ -8,8 +8,14 @@
   </div>
 </div>
 
-<mat-paginator [pageSizeOptions]="[30, 1000]" [pageIndex]="currentPage$ | async" [length]="sampleCount$ | async"
-[pageSize]="samplesPerPage$ | async" (page)="onPageChange($event)" showFirstLastButtons>
+<mat-paginator
+  [pageSizeOptions]="[30, 1000]"
+  [pageIndex]="currentPage$ | async"
+  [length]="sampleCount$ | async"
+  [pageSize]="samplesPerPage$ | async"
+  (page)="onPageChange($event)"
+  showFirstLastButtons
+>
 </mat-paginator>
 <mat-card style="margin: 1em">
   <div class="details">
@@ -20,33 +26,44 @@
       (matSortChange)="onSortChange($event)"
     >
       <ng-container matColumnDef="sampleId">
-        <mat-header-cell *matHeaderCellDef mat-sort-header>Id</mat-header-cell>
+        <mat-header-cell *matHeaderCellDef mat-sort-header>
+          <i class="material-icons">fingerprint</i>
+          Id
+        </mat-header-cell>
         <mat-cell *matCellDef="let sample"> {{ sample.sampleId }}</mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="owner">
-        <mat-header-cell *matHeaderCellDef mat-sort-header
-          >Owner</mat-header-cell
-        >
+        <mat-header-cell *matHeaderCellDef mat-sort-header>
+          <i class="material-icons">face</i>
+          Owner
+        </mat-header-cell>
         <mat-cell *matCellDef="let sample"> {{ sample.owner }}</mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="createdAt">
-        <mat-header-cell *matHeaderCellDef mat-sort-header
-          >Creation Time</mat-header-cell
-        >
+        <mat-header-cell *matHeaderCellDef mat-sort-header>
+          <i class="material-icons">date_range</i>
+          Creation Time
+        </mat-header-cell>
         <mat-cell *matCellDef="let sample">
           {{ sample.createdAt | date: "yyyy-MM-dd HH:mm" }}</mat-cell
         >
       </ng-container>
 
       <ng-container matColumnDef="description">
-        <mat-header-cell *matHeaderCellDef>Description</mat-header-cell>
+        <mat-header-cell *matHeaderCellDef>
+          <i class="material-icons">description</i>
+          Description</mat-header-cell
+        >
         <mat-cell *matCellDef="let sample"> {{ sample.description }}</mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="ownerGroup">
-        <mat-header-cell *matHeaderCellDef>Group</mat-header-cell>
+        <mat-header-cell *matHeaderCellDef>
+          <i class="material-icons">group</i>
+          Group
+        </mat-header-cell>
         <mat-cell *matCellDef="let sample"> {{ sample.ownerGroup }}</mat-cell>
       </ng-container>
 
