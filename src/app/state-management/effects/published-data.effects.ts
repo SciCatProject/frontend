@@ -45,7 +45,7 @@ export class PublishedDataEffects {
   @Effect()
   RegisterPublishedData$ = this.actions$.pipe(
     ofType<RegisterPublishedData>(PublishedDataActionTypes.RegisterPublishedData),
-    switchMap(action => this.publishedDataApi.register(action.payload.doi)
+    switchMap(action => this.publishedDataApi.register(encodeURIComponent( action.payload.doi))
     .pipe(map(( resp ) => new SuccessPublishedData({ data: resp })),
     catchError(err => of(new FailedPublishedDataAction(err)))))
   );

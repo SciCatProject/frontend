@@ -32,7 +32,7 @@ interface Breadcrumb {
 })
 export class BreadcrumbComponent implements OnInit {
   // partially based on: http://brianflove.com/2016/10/23/angular2-breadcrumb-using-router/
-  breadcrumbs = Array<Breadcrumb>();
+  breadcrumbs: Breadcrumb[] = [];
 
   // TODO: make a proper selector from this.
   // TODO: first, figure out how the NgRX connected router state works.
@@ -53,40 +53,44 @@ export class BreadcrumbComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    // const ROUTE_DATA_BREADCRUMB = 'breadcrumb';
-
-    // TODO handle query params
+    // Set initial breadcrumb
+    this.setBreadcrumbs();
+    // Update breadcrumb when navigating to child routes
     this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe(event => {
-        // set breadcrumbs
-        this.breadcrumbs = [];
-        const self = this;
-        // let root: ActivatedRoute = this.route.root;
-        this.route.children.forEach(function(root) {
-          const urls = root.snapshot.url;
-          urls.forEach(function(url) {
-            const bc: Breadcrumb = {
-              label: self.sanitise(url.path),
-              path: url.path,
-              params: url.parameters,
-              url: "/" + encodeURIComponent(url.path),
-              fallback: "/" + encodeURIComponent(url.path + "s")
-            };
-            self.breadcrumbs.push(bc);
-          });
-        });
+        this.setBreadcrumbs();
       });
+  }
+
+  /**
+   * Creates breadcrumbs from route and pushes them to breadcrumbs array
+   * @memberof BreadcrumbComponent
+   */
+  setBreadcrumbs(): void {
+    this.breadcrumbs = [];
+    this.route.children.forEach(root => {
+      root.snapshot.url.forEach(url => {
+        const crumb: Breadcrumb = {
+          label: this.sanitise(url.path),
+          path: url.path,
+          params: url.parameters,
+          url: "/" + encodeURIComponent(url.path),
+          fallback: "/" + encodeURIComponent(url.path + "s")
+        };
+        this.breadcrumbs.push(crumb);
+      });
+    });
   }
 
   /**
    * Clean text for easy reading
    * of path info (capitalise, strip chars etc)
-   * @param {any} path
-   * @returns
+   * @param {string} path
+   * @returns Sanitised path for breadcrumb label
    * @memberof BreadcrumbComponent
    */
-  sanitise(path) {
+  sanitise(path: string): string {
     path = path.replace(new RegExp("_", "g"), " ");
     path = new TitleCasePipe().transform(path);
     return path;
@@ -96,11 +100,11 @@ export class BreadcrumbComponent implements OnInit {
    * Handles navigation for a click on a crumb
    * Fallsback to pluralised version of the page if there is an error
    * @example dataset -> Datasets
-   * @param {any} index
-   * @param {any} crumb
+   * @param {number} index
+   * @param {Breadcrumb} crumb
    * @memberof BreadcrumbComponent
    */
-  crumbClick(index, crumb) {
+  crumbClick(index: number, crumb: Breadcrumb): void {
     let url = "";
     for (let i = 0; i < index; i++) {
       url += this.breadcrumbs[i].url;

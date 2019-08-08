@@ -1,0 +1,41 @@
+@import "src/theme.scss";
+
+mat-toolbar {
+  position: sticky;
+
+  a {
+    color: mat-color($primary);
+  }
+
+  a:hover {
+    color: mat-color($accent);
+  }
+
+  .material-icons {
+    vertical-align: middle;
+  }
+
+  .app-title {
+    margin-left: 2%;
+  }
+
+  .example-spacer {
+    flex: 1 1 auto;
+  }
+
+  .toplink {
+    color: #ffffff;
+    padding: 10px;
+    font: bold;
+    font-size: 11pt;
+    font-family: "Times New Roman", Times, serif;
+  }
+
+  .userButton {
+    margin-top: 3px;
+    background-color: transparent;
+    border: none;
+    font-size: 10px;
+    line-height: 20px;
+  }
+}

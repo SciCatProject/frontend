@@ -1,6 +1,6 @@
 import { Observable, of, Subject } from "rxjs";
 import { Sample, Logbook } from "./sdk/models";
-import { convertToParamMap } from "@angular/router";
+import { convertToParamMap, UrlTree } from "@angular/router";
 
 export class MockUserApi {
   getCurrentId() {
@@ -118,6 +118,7 @@ export class MockActivatedRoute {
   };
   params = of([{ id: 1 }]);
   queryParams = of([{ limit: 10 }]);
+  children = [];
 }
 
 export class MockRouter {
@@ -127,6 +128,14 @@ export class MockRouter {
   navigateByUrl(url: string) {
     return url;
   }
+
+  events = new Observable(observer => {
+    observer.next();
+    observer.complete();
+  });
+
+  createUrlTree = (commands, navExtras = {}) => {};
+  serializeUrl = (url: UrlTree) => "";
 }
 
 export class MockHttp {}

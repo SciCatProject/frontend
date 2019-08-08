@@ -16,6 +16,7 @@ export const environment = {
   metadataPreviewEnabled: true,
   searchProposals: true,
   searchSamples: true,
+  shoppingCartEnabled: true,
   tableSciDataEnabled: true,
   userProfileImageEnabled: true
 };

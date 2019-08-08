@@ -85,7 +85,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.proceedSubscription = this.hasUser$.subscribe(() => {
       // this.router.navigate(["datasets"]);
       console.log(this.returnUrl);
-      this.router.navigateByUrl(this.returnUrl);
+      this.router.navigateByUrl("/datasets");
     });
   }
 
