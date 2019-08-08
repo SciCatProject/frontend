@@ -23,8 +23,6 @@ import {
 describe("LoginComponent", () => {
   let component: LoginComponent;
   let fixture: ComponentFixture<LoginComponent>;
-  // let el;
-  // let de;
 
   beforeEach(async(() => {
     TestBed.overrideComponent(LoginComponent, {
@@ -56,8 +54,6 @@ describe("LoginComponent", () => {
     fixture = TestBed.createComponent(LoginComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-    // de = fixture.debugElement.query(By.css('form'));
-    // el = de.nativeElement;
   });
 
   it("should create component", () => {
