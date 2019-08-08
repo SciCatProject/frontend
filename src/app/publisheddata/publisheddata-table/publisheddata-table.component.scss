@@ -1,15 +1,40 @@
+@import "../../../theme.scss";
 .mat-row {
-    height: auto;
-  }
-  
-  .mat-cell {
-    padding: 8px 8px 8px 0;
-  }
+  height: auto;
+}
 
-  .paginator_table {
-    width: 800px;
-  }
+.mat-cell {
+  padding: 8px 8px 8px 0;
+}
 
-  .mat-elevation-z8 {
-    width: 790px;
-  }
+.paginator_table {
+  width: 800px;
+}
+
+.mat-elevation-z8 {
+  width: 790px;
+}
+
+mat-header-cell {
+  color: white;
+  background: mat-color($primary);
+  justify-content: center;
+}
+
+mat-header-row {
+  color: white;
+  background: mat-color($primary);
+}
+
+.table_column {
+  color: black;
+  justify-content: center;
+}
+
+mat-sort-header-button {
+  color: white;
+}
+
+i {
+  color: black;
+}

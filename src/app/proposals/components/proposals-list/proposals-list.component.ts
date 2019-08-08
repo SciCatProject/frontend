@@ -15,7 +15,7 @@ import { Subscription } from "rxjs";
 @Component({
   selector: "proposals-list",
   templateUrl: "proposals-list.component.html",
-  styleUrls: ["proposals-list.component.css"]
+  styleUrls: ["proposals-list.component.scss"]
 })
 export class ProposalsListComponent implements OnDestroy {
   @Input()

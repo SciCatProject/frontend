@@ -1,0 +1,24 @@
+@import "../../../../theme.scss";
+
+mat-header-row {
+    color: white;
+    background: mat-color($primary);
+  }
+  
+  .table_column {
+    color: white;
+    justify-content: center;
+  }
+
+  mat-sort-header-button {
+      color: white;
+  }
+
+  i {
+    color: white;
+  }
+
+  .mat-column-owner {
+    flex: 1 0 130px;
+    justify-content: center !important;
+  }

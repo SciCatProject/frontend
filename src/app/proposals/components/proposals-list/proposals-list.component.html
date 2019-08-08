@@ -15,52 +15,81 @@
     (matSortChange)="onSortChange($event)"
   >
     <ng-container matColumnDef="proposalId">
-      <mat-header-cell *matHeaderCellDef >
-        <i class="material-icons">perm_contact_calendar</i>
-        Id</mat-header-cell
-      >
+      <mat-header-cell *matHeaderCellDef>
+        <div fxLayout="column" style="align-items: center">
+          <div>
+            <i class="material-icons">perm_contact_calendar</i>
+          </div>
+          <div class="table_column">
+            Proposal Id
+          </div>
+        </div>
+      </mat-header-cell>
       <mat-cell *matCellDef="let proposal"> {{ proposal.proposalId }}</mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="title">
       <mat-header-cell *matHeaderCellDef mat-sort-header>
-        <i class="material-icons">fingerprint</i>
-        Title</mat-header-cell
-      >
+        <div fxLayout="column" style="align-items: center">
+          <div>
+            <i class="material-icons">fingerprint</i>
+          </div>
+          <div class="table_column">
+            Title
+          </div>
+        </div>
+      </mat-header-cell>
       <mat-cell *matCellDef="let proposal"> {{ proposal.title }}</mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="firstname">
       <mat-header-cell *matHeaderCellDef mat-sort-header>
-        <i class="material-icons">person</i>
-        Author</mat-header-cell
-      >
+        <div fxLayout="column" style="align-items: center">
+          <div>
+            <i class="material-icons">person</i>
+          </div>
+          <div class="table_column">
+            Author
+          </div>
+        </div>
+      </mat-header-cell>
       <mat-cell *matCellDef="let proposal">
         {{ proposal.firstname }}&nbsp;{{ proposal.lastname }}</mat-cell
       >
     </ng-container>
 
     <ng-container matColumnDef="start">
-      <mat-header-cell *matHeaderCellDef >
-        <i class="material-icons">timer</i>
-        Start</mat-header-cell
-      >
+      <mat-header-cell *matHeaderCellDef>
+        <div fxLayout="column" style="align-items: center">
+          <div>
+            <i class="material-icons">timer</i>
+          </div>
+          <div class="table_column">
+            Start
+          </div>
+        </div>
+      </mat-header-cell>
       <mat-cell *matCellDef="let proposal">
-        <div *ngIf="proposal.MeasurementPeriodList.length >0">
-          {{ proposal.MeasurementPeriodList[0].start | date: 'yyyy-MM-dd' }}
+        <div *ngIf="proposal.MeasurementPeriodList.length > 0">
+          {{ proposal.MeasurementPeriodList[0].start | date: "yyyy-MM-dd" }}
         </div>
       </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="end">
-      <mat-header-cell *matHeaderCellDef >
-        <i class="material-icons">timer_off</i>
-
-        End</mat-header-cell
-      >
+      <mat-header-cell *matHeaderCellDef>
+        <div fxLayout="column" style="align-items: center">
+          <div>
+            <i class="material-icons">timer_off</i>
+          </div>
+          <div class="table_column">
+            End
+          </div>
+        </div>
+      </mat-header-cell>
       <mat-cell *matCellDef="let proposal">
-        <div *ngIf="proposal.MeasurementPeriodList.length >0">
-          {{ proposal.MeasurementPeriodList[0].end | date: 'yyyy-MM-dd' }}
+        <div *ngIf="proposal.MeasurementPeriodList.length > 0">
+          {{ proposal.MeasurementPeriodList[0].end | date: "yyyy-MM-dd" }}
         </div>
       </mat-cell>
     </ng-container>
