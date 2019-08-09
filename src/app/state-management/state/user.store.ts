@@ -28,7 +28,7 @@ export const initialUserState: UserState = {
   message: { content: undefined, type: undefined, duration: undefined },
   settings: {
     tapeCopies: "one",
-    datasetCount: 30,
+    datasetCount: 25,
     jobCount: 30,
     darkTheme: false
   }, // TODO sync with server settings?

@@ -90,7 +90,7 @@
       </button>
     </div>
     <mat-paginator
-      [pageSizeOptions]="[30, 1000]"
+      [pageSizeOptions]="[10, 25, 50, 100, 500, 1000]"
       [pageIndex]="currentPage$ | async"
       [length]="datasetCount$ | async"
       [pageSize]="datasetsPerPage$ | async"
