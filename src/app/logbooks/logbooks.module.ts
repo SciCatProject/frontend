@@ -5,42 +5,19 @@ import { LogbooksDetailComponent } from "./logbooks-detail/logbooks-detail.compo
 import { LogbookService } from "./logbook.service";
 import {
   MatCardModule,
-  MatDatepickerModule,
-  MatGridListModule,
   MatIconModule,
   MatListModule,
-  MatMenuModule,
-  MatNativeDateModule,
-  MatPaginatorModule,
-  MatSidenavModule,
-  MatSnackBarModule,
   MatTableModule,
-  MatToolbarModule,
-  MatButtonToggleModule,
-  MatAutocompleteModule,
-  MatButtonModule,
   MatCheckboxModule,
-  MatChipsModule,
-  MatDialogModule,
-  MatFormFieldModule,
   MatInputModule,
-  MatOptionModule,
-  MatProgressSpinnerModule,
-  MatRadioModule,
   MatSelectModule,
-  MatSortModule,
-  MatTabsModule,
-  MatTooltipModule,
   MatExpansionModule
 } from "@angular/material";
 import { AppConfigModule } from "app-config.module";
 import { FlexLayoutModule } from "@angular/flex-layout";
-import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
-import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { FormsModule } from "@angular/forms";
 import { LinkyModule } from "ngx-linky";
-import { NgxJsonViewerModule } from "ngx-json-viewer";
 import { RouterModule } from "@angular/router";
-import { SatDatepickerModule } from "saturn-datepicker";
 import { SharedCatanieModule } from "shared/shared.module";
 import { ContentSelectorComponent } from "./content-selector/content-selector.component";
 import { LogbooksDashboardComponent } from "./logbooks-dashboard/logbooks-dashboard.component";
@@ -62,41 +39,17 @@ import { StoreModule } from "@ngrx/store";
     AppConfigModule,
     CommonModule,
     FlexLayoutModule,
-    FontAwesomeModule,
     FormsModule,
     LinkyModule,
-    MatAutocompleteModule,
-    MatButtonModule,
     MatCardModule,
     MatCheckboxModule,
-    MatChipsModule,
-    MatDatepickerModule,
-    MatDialogModule,
     MatExpansionModule,
-    MatFormFieldModule,
-    MatGridListModule,
     MatIconModule,
     MatInputModule,
     MatListModule,
-    MatMenuModule,
-    MatNativeDateModule,
-    MatOptionModule,
-    MatPaginatorModule,
-    MatProgressSpinnerModule,
-    MatRadioModule,
     MatSelectModule,
-    MatSidenavModule,
-    MatSnackBarModule,
-    MatSortModule,
     MatTableModule,
-    MatTabsModule,
-    MatToolbarModule,
-    MatTooltipModule,
-    MatButtonToggleModule,
-    NgxJsonViewerModule,
-    ReactiveFormsModule,
     RouterModule,
-    SatDatepickerModule,
     SharedCatanieModule,
     StoreModule.forFeature("logbooks", logbooksReducer),
     EffectsModule.forFeature([LogbookEffect])

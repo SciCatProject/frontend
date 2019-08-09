@@ -6,6 +6,7 @@ import { ActivatedRoute } from "@angular/router";
 
 import { LogbooksDetailComponent } from "./logbooks-detail.component";
 import { MockStore, MockActivatedRoute } from "shared/MockStubs";
+import { LinkyModule } from "ngx-linky";
 
 describe("LogbooksDetailComponent", () => {
   let component: LogbooksDetailComponent;
@@ -14,7 +15,7 @@ describe("LogbooksDetailComponent", () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
-      imports: [MatTableModule],
+      imports: [MatTableModule, LinkyModule],
       declarations: [LogbooksDetailComponent]
     });
     TestBed.overrideComponent(LogbooksDetailComponent, {
