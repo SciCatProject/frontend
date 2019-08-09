@@ -51,15 +51,15 @@ export const routes: Routes = [
       },
       { path: "login", component: LoginComponent },
       {
-        path: "about",
+        path: "login/about",
         component: AboutComponent
       },
       {
-        path: "help",
+        path: "login/help",
         component: HelpComponent
       },
       {
-        path: "error",
+        path: "login/error",
         component: ErrorPageComponent,
         data: { message: "Location Not Found", breadcrumb: "Error" }
       }
