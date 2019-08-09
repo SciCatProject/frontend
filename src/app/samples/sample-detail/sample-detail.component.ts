@@ -1,12 +1,17 @@
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { Observable } from "rxjs";
 import { Sample } from "../../shared/sdk/models";
-import { getCurrentSample } from "../../state-management/selectors/samples.selectors";
+import {
+  getCurrentSample,
+  getDatasetsForSample
+} from "../../state-management/selectors/samples.selectors";
 import { select, Store } from "@ngrx/store";
 import {
   FetchSampleAction,
-  SetCurrentSample
+  SetCurrentSample,
+  FetchDatasetsForSample,
+  SetCurrentDatasets
 } from "../../state-management/actions/samples.actions";
 
 @Component({
@@ -16,11 +21,17 @@ import {
 })
 export class SampleDetailComponent implements OnInit, OnDestroy {
   sample: Object;
+  datasets: Object;
   sample$ = this.store.pipe(select(getCurrentSample));
+  datasets$ = this.store.pipe(select(getDatasetsForSample));
   private sampleId$: Observable<string>;
   private subscriptions = [];
 
-  constructor(private route: ActivatedRoute, private store: Store<Sample>) {}
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+    private store: Store<Sample>
+  ) {}
 
   ngOnInit() {
     this.subscriptions.push(
@@ -30,8 +41,9 @@ export class SampleDetailComponent implements OnInit, OnDestroy {
         } else {
           // console.log("Searching from URL params");
           this.route.params.subscribe(params => {
-            console.log("fetching,", params.id);
+            console.log("gm: fetching sampleId", params.id);
             this.store.dispatch(new FetchSampleAction(params.id));
+            this.store.dispatch(new FetchDatasetsForSample(params.id));
           });
         }
       })
@@ -44,5 +56,11 @@ export class SampleDetailComponent implements OnInit, OnDestroy {
       this.subscriptions[i].unsubscribe();
     }
     this.store.dispatch(new SetCurrentSample(undefined));
+    this.store.dispatch(new SetCurrentDatasets(undefined));
+  }
+
+  onClickDataset(proposalId: string): void {
+    const id = encodeURIComponent(proposalId);
+    this.router.navigateByUrl("/datasets/" + id);
   }
 }

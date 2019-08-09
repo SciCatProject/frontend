@@ -8,10 +8,12 @@ const initialSampleState: SampleState = {
   currentSample: null,
   totalCount: 0,
   submitComplete: false,
+  datasets: {},
 
   searchTerms: "",
 
   samplesLoading: true,
+  datasetsLoading: true,
   error: undefined,
   filters: {
     text: "",

@@ -24,7 +24,12 @@ import {
   SEARCH_SAMPLES,
   SearchSampleAction,
   SET_CURRENT_SAMPLE,
-  SetCurrentSample
+  SetCurrentSample,
+  FETCH_DATASETS_FOR_SAMPLE,
+  FETCH_DATASETS_FOR_SAMPLE_COMPLETE,
+  FetchDatasetsForSampleComplete,
+  SET_CURRENT_DATASETS,
+  SetCurrentDatasets
 } from "state-management/actions/samples.actions";
 import { Action } from "@ngrx/store";
 
@@ -45,6 +50,13 @@ export function samplesReducer(
     case SET_CURRENT_SAMPLE: {
       const s = Object.assign({}, state, {
         currentSample: (action as SetCurrentSample).sample
+      });
+      return s;
+    }
+
+    case SET_CURRENT_DATASETS: {
+      const s = Object.assign({}, state, {
+        datasets: (action as SetCurrentDatasets).datasets
       });
       return s;
     }
@@ -73,8 +85,22 @@ export function samplesReducer(
       return { ...state };
     }
 
+    case FETCH_DATASETS_FOR_SAMPLE: {
+      return { ...state, datasetsLoading: true };
+    }
+
     case FETCH_SAMPLES: {
       return { ...state, samplesLoading: true };
+    }
+
+    case FETCH_DATASETS_FOR_SAMPLE_COMPLETE: {
+      const list = (action as FetchDatasetsForSampleComplete).datasets;
+
+      const datasets = list.map(function(item) {
+        return item["pid"];
+      });
+
+      return { ...state, datasets, datasetsLoading: false };
     }
 
     case FETCH_SAMPLES_COMPLETE: {
