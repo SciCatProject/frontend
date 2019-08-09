@@ -3,11 +3,46 @@
 .logbooks-table {
   margin-top: 1em;
 
-  .mat-column-select {
-    overflow: visible; /* Needed to prevent offsetting of the checkbox when clicking */
-    flex-shrink: 0;
-    flex-grow: 0;
-    padding-right: 10px;
+  mat-header-cell {
+    color: white;
+    background: mat-color($primary);
+    justify-content: center;
+
+    i {
+      color: white;
+    }
+  }
+
+  mat-header-row {
+    color: white;
+    background: mat-color($primary);
+  }
+
+  .table_column {
+    color: white;
+  }
+
+  .mat-column-name {
+    flex: 1 0 100px;
+    max-width: 300px;
+    justify-content: left !important;
+  }
+
+  .mat-column-latestEntry {
+    flex: 1 0 100px;
+    max-width: 300px;
+    justify-content: left !important;
+  }
+
+  .mat-column-sender {
+    flex: 1 0 100px;
+    max-width: 300px;
+    justify-content: left !important;
+  }
+
+  .mat-column-entry {
+    flex: 1 0 100px;
+    justify-content: left !important;
   }
 }
 
@@ -19,56 +54,4 @@
 :host /deep/ .mat-row:hover {
   background-color: rgba(0, 0, 0, 0.1);
   cursor: pointer;
-}
-
-.mat-column-name {
-  flex: 1 0 100px;
-  max-width: 300px;
-  justify-content: left !important;
-}
-
-.mat-column-latestEntry {
-  flex: 1 0 100px;
-  max-width: 300px;
-  justify-content: left !important;
-}
-
-.mat-column-sender {
-  flex: 1 0 100px;
-  max-width: 300px;
-  justify-content: left !important;
-}
-
-.mat-column-entry {
-  flex: 1 0 100px;
-  justify-content: left !important;
-}
-
-mat-header-cell {
-  color: white;
-  background: mat-color($primary);
-  justify-content: center;
-}
-
-mat-header-row {
-  color: white;
-  background: mat-color($primary);
-}
-
-.table_column {
-  color: white;
-}
-
-i {
-  color: white;
-}
-.aligned-with-icon {
-  position: absolute;
-  margin-top: 5px;
-  margin-left: 5px; /* optional */
-}
-
-.with-icon {
-  display: flex;
-  align-items: center;
 }
