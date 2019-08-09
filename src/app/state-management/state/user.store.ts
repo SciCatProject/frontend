@@ -1,4 +1,4 @@
-import { Settings, Message, User} from "../models";
+import { Settings, Message, User } from "../models";
 
 // NOTE It IS ok to make up a state of other sub states
 export interface UserState {
@@ -44,7 +44,8 @@ export const initialUserState: UserState = {
     "metadata",
     "proposalId",
     "ownerGroup",
-    "dataStatus"
+    "dataStatus",
+    "derivedDatasetsNum"
   ],
   displayedColumns: [
     "select",
