@@ -1,20 +1,19 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
+import { Component, OnInit, ViewChild, OnDestroy } from "@angular/core";
 import { ReadFile, ReadMode, FilePickerDirective } from "ngx-file-helpers";
-import { Observable } from "rxjs";
+import { Subscription } from "rxjs";
 import { Store, select } from "@ngrx/store";
-import { filter } from "rxjs/operators";
 import { Dataset } from "shared/sdk";
 import { AddAttachment } from "state-management/actions/datasets.actions";
+import { getCurrentDataset } from "state-management/selectors/datasets.selectors";
 
 @Component({
   selector: "app-file-dropzone",
   templateUrl: "./file-dropzone.component.html",
   styleUrls: ["./file-dropzone.component.scss"]
 })
-export class FileDropzoneComponent implements OnInit {
-  dataset$: Observable<Dataset>;
-  dataset: any;
-  currentSet$: any;
+export class FileDropzoneComponent implements OnInit, OnDestroy {
+  dataset: Dataset;
+  datasetSubscription: Subscription;
 
   public readMode = ReadMode.dataURL;
   public picked: ReadFile;
@@ -25,23 +24,20 @@ export class FileDropzoneComponent implements OnInit {
   constructor(private store: Store<any>) {}
 
   ngOnInit() {
-    this.currentSet$ = this.store.pipe(
-      select(state => state.root.datasets.currentSet)
-    );
+    this.datasetSubscription = this.store
+      .pipe(select(getCurrentDataset))
+      .subscribe(dataset => {
+        this.dataset = dataset;
+      });
+  }
 
-    this.dataset$ = this.currentSet$.pipe(
-      filter((dataset: Dataset) => {
-        return dataset && Object.keys(dataset).length > 0;
-      })
-    );
-
-    this.dataset$.subscribe(dataset => {
-      this.dataset = dataset;
-    });
+  ngOnDestroy() {
+    this.datasetSubscription.unsubscribe();
   }
 
   onReadStart(fileCount: number) {
     this.status = `Now reading ${fileCount} file(s)...`;
+    console.log("on readstart", this.status);
   }
 
   onFilePicked(file: ReadFile) {
@@ -50,6 +46,7 @@ export class FileDropzoneComponent implements OnInit {
 
   onReadEnd(fileCount: number) {
     this.status = `Read ${fileCount} file(s) on ${new Date().toLocaleTimeString()}.`;
+    console.log("on readend", this.status);
     console.log("on readend", this.picked);
     console.log("on readend", this.dataset);
     if (fileCount > 0) {
