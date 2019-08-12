@@ -4,11 +4,11 @@ import { FileDropzoneComponent } from "./file-dropzone/file-dropzone.component";
 import { FilePickerComponent } from "./file-picker/file-picker.component";
 import { NgxFileHelpersModule } from "ngx-file-helpers";
 import { PipesModule } from "shared/pipes/pipes.module";
-import { MatButtonModule } from "@angular/material";
+import { MatButtonModule, MatCardModule } from "@angular/material";
 
 @NgModule({
   declarations: [FileDropzoneComponent, FilePickerComponent],
-  imports: [CommonModule, MatButtonModule, NgxFileHelpersModule, PipesModule],
+  imports: [CommonModule, MatButtonModule, MatCardModule, NgxFileHelpersModule, PipesModule],
   exports: [FileDropzoneComponent, FilePickerComponent]
 })
 export class FileUploaderModule {}

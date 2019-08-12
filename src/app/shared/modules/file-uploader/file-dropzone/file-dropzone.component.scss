@@ -1,13 +1,25 @@
 .dropzone {
   align-items: center;
-  background: lightgrey;
+  background: #dcdcdc;
   border: dashed 1px grey;
   display: flex;
   justify-content: center;
   height: 350px;
   width: 500px;
+
+  .instructions {
+    margin: 0.5em;
+    font-size: 1.25em;
+    flex: 1 0 100px;
+    text-align: center;
+  }
+
+  .attach-button {
+    color: #ffffff;
+    background: #0ea432;
+  }
 }
-  
+
 .hover {
   background: grey;
   border: dashed 1px darkgrey;

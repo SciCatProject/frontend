@@ -1,16 +1,43 @@
-<span class="mat-title">Drop a file</span>
+<!-- <span class="mat-title">Drop a file</span> -->
 
 <div
-  ngxFileDropzone
   class="dropzone"
+  ngxFileDropzone
   [readMode]="readMode"
-  (fileDrop)="addFile($event)"
-></div>
+  multiple
+  accept="image/*"
+  (readStart)="onReadStart($event)"
+  (fileDrop)="onFilePicked($event)"
+  (readEnd)="onReadEnd($event)"
+>
+  <div fxLayout="column" style="align-items: center">
+    <div class="instructions">
+      Drop a file here
+    </div>
+    <div class="instructions">or</div>
+    <div class="instructions">
+      <button
+        class="attach-button"
+        type="button"
+        mat-button
+        ngxFilePicker
+        [readMode]="readMode"
+        multiple
+        accept="image/*"
+        (readStart)="onReadStart($event)"
+        (filePick)="onFilePicked($event)"
+        (readEnd)="onReadEnd($event)"
+      >
+        Browse
+      </button>
+    </div>
+  </div>
+</div>
 
-<span class="mat-title" *ngIf="files.length">Dropped files</span>
-<ul>
-  <li *ngFor="let file of files">
-    {{ file.name }} ({{ file.size | filesize }}) read using {{ readMode }}
-    <pre>{{ file.content }}</pre>
-  </li>
-</ul>
+<!-- <span class="mat-title" *ngIf="files.length">Dropped files</span>
+  <ul>
+    <li *ngFor="let file of files">
+      {{ file.name }} ({{ file.size | filesize }}) read using {{ readMode }}
+      <pre>{{ file.content }}</pre>
+    </li>
+  </ul> -->
