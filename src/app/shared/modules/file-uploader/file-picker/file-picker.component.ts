@@ -1,8 +1,7 @@
-import { Component, Inject, OnDestroy, OnInit, ViewChild } from "@angular/core";
+import { Component, OnInit, ViewChild } from "@angular/core";
 import { select, Store } from "@ngrx/store";
 import { Observable } from "rxjs";
 import { Dataset } from "shared/sdk/models";
-import { APP_CONFIG, AppConfig } from "../../../../app-config.module";
 import { FilePickerDirective, ReadFile, ReadMode } from "ngx-file-helpers";
 import { filter } from "rxjs/operators";
 import { AddAttachment } from "state-management/actions/datasets.actions";
@@ -12,7 +11,7 @@ import { AddAttachment } from "state-management/actions/datasets.actions";
   templateUrl: "./file-picker.component.html",
   styleUrls: ["./file-picker.component.scss"]
 })
-export class FilePickerComponent implements OnInit, OnDestroy {
+export class FilePickerComponent implements OnInit {
   dataset$: Observable<Dataset>;
   dataset: any;
   subscriptions = [];
@@ -22,10 +21,7 @@ export class FilePickerComponent implements OnInit, OnDestroy {
   @ViewChild(FilePickerDirective, { static: false })
   private filePicker: FilePickerDirective;
 
-  constructor(
-    @Inject(APP_CONFIG) private config: AppConfig,
-    private store: Store<any>
-  ) {}
+  constructor(private store: Store<any>) {}
 
   ngOnInit() {
     const currentSet$ = this.store.pipe(
@@ -67,17 +63,6 @@ export class FilePickerComponent implements OnInit, OnDestroy {
 
       this.filePicker.reset();
       return this.store.dispatch(new AddAttachment(creds));
-
-      /*
-      return this.daSrv.create(creds).subscribe(res => {
-        console.log(res);
-        this.filePicker.reset();
-      });
-      */
     }
-  }
-
-  ngOnDestroy() {
-    //    this.subscriptions.forEach(subscription => subscription.unsubscribe());
   }
 }
