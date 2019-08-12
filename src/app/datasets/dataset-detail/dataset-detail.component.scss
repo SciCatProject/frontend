@@ -25,6 +25,12 @@
   vertical-align: middle;
 }
 
+.attach-card {
+  width: 22em;
+  float: left;
+  margin: 1em;
+}
+
 @media only screen and (min-width: 1280px) {
   app-file-picker {
     display: none;

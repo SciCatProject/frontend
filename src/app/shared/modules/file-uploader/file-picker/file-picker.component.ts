@@ -3,7 +3,6 @@ import { select, Store } from "@ngrx/store";
 import { Observable } from "rxjs";
 import { Dataset } from "shared/sdk/models";
 import { APP_CONFIG, AppConfig } from "../../../../app-config.module";
-import * as lb from "shared/sdk/services";
 import { FilePickerDirective, ReadFile, ReadMode } from "ngx-file-helpers";
 import { filter } from "rxjs/operators";
 import { AddAttachment } from "state-management/actions/datasets.actions";
@@ -25,7 +24,6 @@ export class FilePickerComponent implements OnInit, OnDestroy {
 
   constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
-    private daSrv: lb.DatasetAttachmentApi,
     private store: Store<any>
   ) {}
 

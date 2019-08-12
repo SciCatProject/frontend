@@ -18,9 +18,7 @@ export class FileDropzoneComponent implements OnInit {
 
   public readMode = ReadMode.dataURL;
   public picked: ReadFile;
-  // public files: Array<ReadFile> = [];
   public status: string;
-  // public isHover: boolean;
   @ViewChild(FilePickerDirective, { static: false })
   private filePicker: FilePickerDirective;
 
@@ -41,10 +39,6 @@ export class FileDropzoneComponent implements OnInit {
       this.dataset = dataset;
     });
   }
-
-  // addFile(file: ReadFile) {
-  //   this.files.push(file);
-  // }
 
   onReadStart(fileCount: number) {
     this.status = `Now reading ${fileCount} file(s)...`;
