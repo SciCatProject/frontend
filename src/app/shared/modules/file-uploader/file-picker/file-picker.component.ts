@@ -38,35 +38,61 @@ export class FilePickerComponent implements OnInit, OnDestroy {
   constructor(private route: ActivatedRoute, private store: Store<any>) {}
 
   ngOnInit() {
-    this.datasetSubscription = this.store
-      .pipe(select(getCurrentDataset))
-      .subscribe(dataset => {
-        this.dataset = dataset;
-      });
-
-    this.proposalSubscription = this.store
-      .pipe(select(getSelectedProposal))
-      .subscribe(proposal => {
-        console.log("proposal", proposal);
-        this.proposal = proposal;
-      });
-
     this.routeSubscription = this.route.url.subscribe(route => {
       this.currentRoute = route[0].path;
+      this.addSubscription(this.currentRoute);
     });
-
-    this.sampleSubscription = this.store
-      .pipe(select(getCurrentSample))
-      .subscribe(sample => {
-        this.sample = sample;
-      });
   }
 
   ngOnDestroy() {
-    this.datasetSubscription.unsubscribe();
-    this.proposalSubscription.unsubscribe();
-    this.routeSubscription.unsubscribe();
-    this.sampleSubscription.unsubscribe();
+    this.unsubscribe();
+  }
+
+  private addSubscription(route: string): void {
+    switch (route) {
+      case "datasets": {
+        this.datasetSubscription = this.store
+          .pipe(select(getCurrentDataset))
+          .subscribe(dataset => {
+            this.dataset = dataset;
+          });
+        break;
+      }
+      case "proposals": {
+        this.proposalSubscription = this.store
+          .pipe(select(getSelectedProposal))
+          .subscribe(proposal => {
+            this.proposal = proposal;
+          });
+        break;
+      }
+      case "samples": {
+        this.sampleSubscription = this.store
+          .pipe(select(getCurrentSample))
+          .subscribe(sample => {
+            this.sample = sample;
+          });
+        break;
+      }
+      default: {
+        break;
+      }
+    }
+  }
+
+  private unsubscribe(): void {
+    if (this.datasetSubscription) {
+      this.datasetSubscription.unsubscribe();
+    }
+    if (this.proposalSubscription) {
+      this.proposalSubscription.unsubscribe();
+    }
+    if (this.routeSubscription) {
+      this.routeSubscription.unsubscribe();
+    }
+    if (this.sampleSubscription) {
+      this.sampleSubscription.unsubscribe();
+    }
   }
 
   onReadStart(fileCount: number) {
@@ -99,7 +125,7 @@ export class FilePickerComponent implements OnInit, OnDestroy {
           caption: "",
           creationTime: new Date(),
           id: null,
-          dataset: null,
+          dataset: this.dataset,
           datasetId: this.dataset.pid,
           rawDatasetId: null,
           derivedDatasetId: null,
