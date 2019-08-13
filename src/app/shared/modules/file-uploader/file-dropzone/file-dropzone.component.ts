@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, OnDestroy } from "@angular/core";
 import { ReadFile, ReadMode, FilePickerDirective } from "ngx-file-helpers";
 import { Subscription } from "rxjs";
 import { Store, select } from "@ngrx/store";
-import { Dataset } from "shared/sdk";
+import { Dataset, Attachment } from "shared/sdk";
 import { AddAttachment } from "state-management/actions/datasets.actions";
 import { getCurrentDataset } from "state-management/selectors/datasets.selectors";
 
@@ -50,7 +50,7 @@ export class FileDropzoneComponent implements OnInit, OnDestroy {
     console.log("on readend", this.picked);
     console.log("on readend", this.dataset);
     if (fileCount > 0) {
-      const creds = {
+      const creds: Attachment = {
         thumbnail: this.picked.content,
         caption: "Some caption",
         creationTime: new Date(),
@@ -58,7 +58,11 @@ export class FileDropzoneComponent implements OnInit, OnDestroy {
         rawDatasetId: this.dataset.pid,
         id: null,
         dataset: null,
-        derivedDatasetId: this.dataset.pid
+        derivedDatasetId: this.dataset.pid,
+        proposal: null,
+        proposalId: null,
+        sample: null,
+        sampleId: null
       };
 
       this.filePicker.reset();
