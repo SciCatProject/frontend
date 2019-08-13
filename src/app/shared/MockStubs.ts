@@ -120,6 +120,7 @@ export class MockActivatedRoute {
   };
   params = of([{ id: 1 }]);
   queryParams = of([{ limit: 10 }]);
+  url = of([]);
   children = [];
 }
 
