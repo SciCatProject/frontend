@@ -42,7 +42,7 @@ export class MockDatasetApi {
   }
 }
 
-export class MockDatasetAttachmentApi {}
+export class MockAttachmentApi {}
 
 export class MockMatDialogRef {}
 
@@ -71,7 +71,8 @@ export class MockSampleService {
       accessGroups: ["string"],
       createdBy: "string",
       updatedBy: "string",
-      updatedAt: new Date()
+      updatedAt: new Date(),
+      sampleAttachments: []
     };
 
     return of([this.sample]);
@@ -89,7 +90,8 @@ export class MockSampleService {
       accessGroups: ["string"],
       createdBy: "string",
       updatedBy: "string",
-      updatedAt: new Date()
+      updatedAt: new Date(),
+      sampleAttachments: []
     };
 
     return of(this.sample);

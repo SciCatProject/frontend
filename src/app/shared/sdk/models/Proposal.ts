@@ -1,4 +1,7 @@
 /* tslint:disable */
+import {
+  Attachment
+} from '../index';
 
 declare var Object: any;
 export interface ProposalInterface {
@@ -20,6 +23,7 @@ export interface ProposalInterface {
   "updatedAt"?: Date;
   "MeasurementPeriodList"?: Array<any>;
   measurementPeriods?: any[];
+  proposalAttachments?: Attachment[];
 }
 
 export class Proposal implements ProposalInterface {
@@ -41,6 +45,7 @@ export class Proposal implements ProposalInterface {
   "updatedAt": Date;
   "MeasurementPeriodList": Array<any>;
   measurementPeriods: any[];
+  proposalAttachments: Attachment[];
   constructor(data?: ProposalInterface) {
     Object.assign(this, data);
   }
@@ -152,6 +157,14 @@ export class Proposal implements ProposalInterface {
           relationType: 'embedsMany',
                   keyFrom: 'MeasurementPeriodList',
           keyTo: 'id'
+        },
+        proposalAttachments: {
+          name: 'proposalAttachments',
+          type: 'Attachment[]',
+          model: 'Attachment',
+          relationType: 'hasMany',
+                  keyFrom: 'proposalId',
+          keyTo: 'proposalId'
         },
       }
     }

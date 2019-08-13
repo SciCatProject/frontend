@@ -4,7 +4,7 @@ import {
   ScientificCondition,
   ArchViewMode
 } from "state-management/models";
-import { Dataset, DatasetAttachment } from "shared/sdk/models";
+import { Dataset, Attachment } from "shared/sdk/models";
 import { FacetCounts } from "../state/datasets.store";
 
 export const SEARCH_FAILED = "[Dataset] Search Failed";
@@ -112,18 +112,18 @@ export const ADD_ATTACHMENT_FAILED =
 export class AddAttachment implements Action {
   readonly type = ADD_ATTACHMENT;
 
-  constructor(readonly attachment: DatasetAttachment) {}
+  constructor(readonly attachment: Attachment) {}
 }
 
 export class AddAttachmentComplete implements Action {
   readonly type = ADD_ATTACHMENT_COMPLETE;
 
-  constructor(readonly attachment: DatasetAttachment) {}
+  constructor(readonly attachment: Attachment) {}
 }
 
 export class AddAttachmentFailed implements Action {
   readonly type = ADD_ATTACHMENT_FAILED;
-  constructor(readonly attachment: DatasetAttachment) {}
+  constructor(readonly attachment: Attachment) {}
 }
 
 export class DeleteAttachment implements Action {

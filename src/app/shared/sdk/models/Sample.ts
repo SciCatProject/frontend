@@ -1,4 +1,7 @@
 /* tslint:disable */
+import {
+  Attachment
+} from '../index';
 
 declare var Object: any;
 export interface SampleInterface {
@@ -13,6 +16,7 @@ export interface SampleInterface {
   "createdBy"?: string;
   "updatedBy"?: string;
   "updatedAt"?: Date;
+  sampleAttachments?: Attachment[];
 }
 
 export class Sample implements SampleInterface {
@@ -27,6 +31,7 @@ export class Sample implements SampleInterface {
   "createdBy": string;
   "updatedBy": string;
   "updatedAt": Date;
+  sampleAttachments: Attachment[];
   constructor(data?: SampleInterface) {
     Object.assign(this, data);
   }
@@ -106,6 +111,14 @@ export class Sample implements SampleInterface {
         },
       },
       relations: {
+        sampleAttachments: {
+          name: 'sampleAttachments',
+          type: 'Attachment[]',
+          model: 'Attachment',
+          relationType: 'hasMany',
+                  keyFrom: 'sampleId',
+          keyTo: 'sampleId'
+        },
       }
     }
   }

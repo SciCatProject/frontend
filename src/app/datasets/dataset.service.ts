@@ -1,12 +1,12 @@
 import * as ua from "state-management/actions/user.actions";
 import {
   DatasetApi,
-  DatasetAttachmentApi,
+  AttachmentApi,
   LoopBackAuth,
   OrigDatablockApi
 } from "shared/sdk/services";
 import { BehaviorSubject, Observable, Subject } from "rxjs";
-import { DatablockApi, DatasetAttachment } from "shared/sdk";
+import { DatablockApi, Attachment } from "shared/sdk";
 import { Dataset, OrigDatablock } from "shared/sdk/models";
 import { Injectable } from "@angular/core";
 import { Store } from "@ngrx/store";
@@ -49,7 +49,7 @@ export class DatasetService {
 
   constructor(
     private rds: DatasetApi,
-    private daSrv: DatasetAttachmentApi,
+    private daSrv: AttachmentApi,
     private odb: OrigDatablockApi,
     private db: DatablockApi,
     private auth: LoopBackAuth,
@@ -88,7 +88,7 @@ export class DatasetService {
     return this.rds.findById(id, this.detailFilter);
   }
 
-  addAttachment(attachment: DatasetAttachment) {
+  addAttachment(attachment: Attachment) {
     return this.daSrv.create(attachment);
   }
 

@@ -1,8 +1,8 @@
 import { Pipe, PipeTransform } from "@angular/core";
 
 import {
-  DatasetAttachmentApi,
-  DatasetAttachment,
+  AttachmentApi,
+  Attachment,
   DatasetApi,
   Dataset
 } from "shared/sdk";
@@ -13,7 +13,7 @@ import { datasets } from "state-management/selectors";
 })
 export class ThumbnailPipe implements PipeTransform {
   attach: string;
-  constructor(private ds: DatasetApi, private da: DatasetAttachmentApi) {}
+  constructor(private ds: DatasetApi, private da: AttachmentApi) {}
 
   transform(value: any, args?: any): any {
     const encoded = encodeURIComponent(value);

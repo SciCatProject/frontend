@@ -8,11 +8,11 @@ import { rootReducer } from "../../state-management/reducers/root.reducer";
 
 import {
   Datablock,
-  DatasetAttachment,
   OrigDatablock,
   Proposal,
   RawDataset,
-  Sample
+  Sample,
+  Attachment
 } from "../../shared/sdk/models";
 import { DatasetState } from "../../state-management/state/datasets.store";
 import { SharedCatanieModule } from "shared/shared.module";
@@ -87,7 +87,7 @@ describe("DatasetFormComponent", () => {
       proposal: new Proposal(),
       sampleId: "string",
       datasetlifecycle: {},
-      datasetattachments: [new DatasetAttachment()],
+      datasetAttachments: [new Attachment()],
       datablocks: [new Datablock()],
       origdatablocks: [new OrigDatablock()],
       proposalId: "string",

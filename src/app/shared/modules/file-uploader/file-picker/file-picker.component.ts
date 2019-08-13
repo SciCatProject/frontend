@@ -1,7 +1,7 @@
 import { Component, Inject, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { select, Store } from "@ngrx/store";
 import { Observable } from "rxjs";
-import { Dataset } from "shared/sdk/models";
+import { Dataset, Attachment } from "shared/sdk/models";
 import { APP_CONFIG, AppConfig } from "../../../../app-config.module";
 import * as lb from "shared/sdk/services";
 import { FilePickerDirective, ReadFile, ReadMode } from "ngx-file-helpers";
@@ -24,8 +24,6 @@ export class FilePickerComponent implements OnInit, OnDestroy {
   private filePicker: FilePickerDirective;
 
   constructor(
-    @Inject(APP_CONFIG) private config: AppConfig,
-    private daSrv: lb.DatasetAttachmentApi,
     private store: Store<any>
   ) {}
 
@@ -56,7 +54,7 @@ export class FilePickerComponent implements OnInit, OnDestroy {
     console.log("on readend", this.picked);
     console.log("on readend", this.dataset);
     if (fileCount > 0) {
-      const creds = {
+      const creds: Attachment = {
         thumbnail: this.picked.content,
         caption: "Some caption",
         creationTime: new Date(),
@@ -64,7 +62,11 @@ export class FilePickerComponent implements OnInit, OnDestroy {
         rawDatasetId: this.dataset.pid,
         id: null,
         dataset: null,
-        derivedDatasetId: this.dataset.pid
+        derivedDatasetId: this.dataset.pid,
+        sampleId: null,
+        sample: null,
+        proposalId: null,
+        proposal: null
       };
 
       this.filePicker.reset();

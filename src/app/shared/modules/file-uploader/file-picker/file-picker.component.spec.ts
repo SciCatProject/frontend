@@ -37,7 +37,7 @@ describe("FilePickerComponent", () => {
         providers: [
           { provide: ActivatedRoute, useClass: MockActivatedRoute },
           { provide: APP_CONFIG, useValue: mockConfig },
-          { provide: lb.DatasetAttachmentApi, useValue: mockConfig },
+          { provide: lb.AttachmentApi, useValue: mockConfig },
           { provide: Store, useClass: MockStore }
         ]
       }

@@ -32,7 +32,7 @@ export class DatasetEffects {
     switchMap(action => {
       console.log("deleting attachment", action.attachment_id);
       return this.datasetApi
-        .destroyByIdDatasetattachments(
+        .destroyByIdDatasetAttachments(
           encodeURIComponent(action.dataset_id),
           action.attachment_id
         )
@@ -66,7 +66,7 @@ export class DatasetEffects {
       console.log("creating attachment for", attachment.datasetId);
       delete attachment.id;
       return this.datasetApi
-        .createDatasetattachments(
+        .createDatasetAttachments(
           encodeURIComponent(attachment.datasetId),
           attachment
         )
@@ -86,7 +86,7 @@ export class DatasetEffects {
         include: [
           { relation: "origdatablocks" },
           { relation: "datablocks" },
-          { relation: "datasetattachments" }
+          { relation: "datasetAttachments" }
         ]
       };
 

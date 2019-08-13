@@ -23,7 +23,7 @@ export const getCurrentOrigDatablocks = createSelector(
 
 export const getCurrentAttachments = createSelector(
   getCurrentDataset,
-  dataset => dataset.datasetattachments
+  dataset => dataset.datasetAttachments
 );
 
 export const getCurrentDatablocks = createSelector(
