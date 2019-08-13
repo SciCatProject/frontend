@@ -106,30 +106,30 @@
     flex: 1 0 130px;
     justify-content: center !important;
   }
+}
 
-  :host /deep/ .disabled-row {
-    pointer-events: none;
-    opacity: 0.2 !important;
-  }
+:host /deep/ .disabled-row {
+  pointer-events: none;
+  opacity: 0.2 !important;
+}
 
-  :host /deep/ .mat-row:hover {
-    background-color: rgba(0, 0, 0, 0.1);
-    cursor: pointer;
-  }
+:host /deep/ .mat-row:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+}
 
-  :host /deep/ .mat-paginator {
-    background-color: unset !important;
-  }
+:host /deep/ .mat-paginator {
+  background-color: unset !important;
+}
 
-  ::ng-deep mat-header-cell .mat-checkbox-frame {
-    border-color: white;
-  }
+::ng-deep mat-header-cell .mat-checkbox-frame {
+  border-color: white;
+}
 
-  ::ng-deep .tblSettingSelect div.mat-select-arrow-wrapper {
-    display: none;
-  }
+::ng-deep .tblSettingSelect div.mat-select-arrow-wrapper {
+  display: none;
+}
 
-  ::ng-deep .tblSettingSelect.mat-select {
-    display: inline;
-  }
+::ng-deep .tblSettingSelect.mat-select {
+  display: inline;
 }

@@ -19,8 +19,10 @@
   mat-card {
     width: 20em;
   }
+}
 
-
+.material-icons {
+  vertical-align: middle;
 }
 
 .attach-card {
@@ -29,13 +31,14 @@
   margin: 1em;
 }
 
-
-.file-picker {
-  width: 21em;
-  margin: 1em;
+@media only screen and (min-width: 1280px) {
+  app-file-picker {
+    display: none;
+  }
 }
 
-
-.material-icons {
-  vertical-align: middle;
+@media only screen and (max-width: 1279px) {
+  app-file-dropzone {
+    display: none;
+  }
 }

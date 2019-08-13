@@ -1,12 +1,10 @@
-import { Component, Inject, OnDestroy, OnInit, ViewChild } from "@angular/core";
+import { Component, OnInit, ViewChild, OnDestroy } from "@angular/core";
 import { select, Store } from "@ngrx/store";
-import { Observable } from "rxjs";
+import { Subscription } from "rxjs";
 import { Dataset, Attachment } from "shared/sdk/models";
-import { APP_CONFIG, AppConfig } from "../../../../app-config.module";
-import * as lb from "shared/sdk/services";
 import { FilePickerDirective, ReadFile, ReadMode } from "ngx-file-helpers";
-import { filter } from "rxjs/operators";
 import { AddAttachment } from "state-management/actions/datasets.actions";
+import { getCurrentDataset } from "state-management/selectors/datasets.selectors";
 
 @Component({
   selector: "app-file-picker",
@@ -14,35 +12,32 @@ import { AddAttachment } from "state-management/actions/datasets.actions";
   styleUrls: ["./file-picker.component.scss"]
 })
 export class FilePickerComponent implements OnInit, OnDestroy {
-  dataset$: Observable<Dataset>;
-  dataset: any;
-  subscriptions = [];
+  dataset: Dataset;
+  datasetSubscription: Subscription;
+
   public readMode = ReadMode.dataURL;
   public picked: ReadFile;
   public status: string;
   @ViewChild(FilePickerDirective, { static: false })
   private filePicker: FilePickerDirective;
 
-  constructor(
-    private store: Store<any>
-  ) {}
+  constructor(private store: Store<any>) {}
 
   ngOnInit() {
-    const currentSet$ = this.store.pipe(
-      select(state => state.root.datasets.currentSet)
-    );
-    this.dataset$ = currentSet$.pipe(
-      filter((dataset: Dataset) => {
-        return dataset && Object.keys(dataset).length > 0;
-      })
-    );
-    this.dataset$.subscribe(dataset => {
-      this.dataset = dataset;
-    });
+    this.datasetSubscription = this.store
+      .pipe(select(getCurrentDataset))
+      .subscribe(dataset => {
+        this.dataset = dataset;
+      });
+  }
+
+  ngOnDestroy() {
+    this.datasetSubscription.unsubscribe();
   }
 
   onReadStart(fileCount: number) {
     this.status = `Now reading ${fileCount} file(s)...`;
+    console.log("on readstart", this.status);
   }
 
   onFilePicked(file: ReadFile) {
@@ -51,6 +46,7 @@ export class FilePickerComponent implements OnInit, OnDestroy {
 
   onReadEnd(fileCount: number) {
     this.status = `Read ${fileCount} file(s) on ${new Date().toLocaleTimeString()}.`;
+    console.log("on readend", this.status);
     console.log("on readend", this.picked);
     console.log("on readend", this.dataset);
     if (fileCount > 0) {
@@ -71,17 +67,6 @@ export class FilePickerComponent implements OnInit, OnDestroy {
 
       this.filePicker.reset();
       return this.store.dispatch(new AddAttachment(creds));
-
-      /*
-      return this.daSrv.create(creds).subscribe(res => {
-        console.log(res);
-        this.filePicker.reset();
-      });
-      */
     }
-  }
-
-  ngOnDestroy() {
-    //    this.subscriptions.forEach(subscription => subscription.unsubscribe());
   }
 }

@@ -284,6 +284,7 @@
       <i class="material-icons"> insert_photo </i> Attachments
     </ng-template>
     <h3>Attachments</h3>
+    <app-file-dropzone></app-file-dropzone>
     <app-file-picker></app-file-picker>
     <br />
     <ng-container
@@ -293,7 +294,7 @@
       <mat-card class="attach-card">
         <img src="{{ da.thumbnail }}" style="width: 20em; height: 20em" />
         <mat-card-actions>
-          <button mat-raised-button (click)="delete(dataset.pid, da.id)">
+          <button mat-button (click)="delete(dataset.pid, da.id)">
             <mat-icon>delete</mat-icon>
           </button>
         </mat-card-actions>
