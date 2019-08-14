@@ -498,11 +498,11 @@ export class RawDatasetApi extends BaseLoopBackApi {
   }
 
   /**
-   * Find a related item by id for datasetAttachments.
+   * Find a related item by id for attachments.
    *
    * @param {any} id RawDataset id
    *
-   * @param {any} fk Foreign key for datasetAttachments
+   * @param {any} fk Foreign key for attachments
    *
    * @returns {object} An empty reference that will be
    *   populated with the actual data once the response is returned
@@ -513,10 +513,10 @@ export class RawDatasetApi extends BaseLoopBackApi {
    * This usually means the response is a `RawDataset` object.)
    * </em>
    */
-  public findByIdDatasetAttachments(id: any, fk: any, customHeaders?: Function): Observable<any> {
+  public findByIdAttachments(id: any, fk: any, customHeaders?: Function): Observable<any> {
     let _method: string = "GET";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/RawDatasets/:id/datasetAttachments/:fk";
+    "/RawDatasets/:id/attachments/:fk";
     let _routeParams: any = {
       id: id,
       fk: fk
@@ -528,11 +528,11 @@ export class RawDatasetApi extends BaseLoopBackApi {
   }
 
   /**
-   * Delete a related item by id for datasetAttachments.
+   * Delete a related item by id for attachments.
    *
    * @param {any} id RawDataset id
    *
-   * @param {any} fk Foreign key for datasetAttachments
+   * @param {any} fk Foreign key for attachments
    *
    * @returns {object} An empty reference that will be
    *   populated with the actual data once the response is returned
@@ -540,10 +540,10 @@ export class RawDatasetApi extends BaseLoopBackApi {
    *
    * This method returns no data.
    */
-  public destroyByIdDatasetAttachments(id: any, fk: any, customHeaders?: Function): Observable<any> {
+  public destroyByIdAttachments(id: any, fk: any, customHeaders?: Function): Observable<any> {
     let _method: string = "DELETE";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/RawDatasets/:id/datasetAttachments/:fk";
+    "/RawDatasets/:id/attachments/:fk";
     let _routeParams: any = {
       id: id,
       fk: fk
@@ -555,11 +555,11 @@ export class RawDatasetApi extends BaseLoopBackApi {
   }
 
   /**
-   * Update a related item by id for datasetAttachments.
+   * Update a related item by id for attachments.
    *
    * @param {any} id RawDataset id
    *
-   * @param {any} fk Foreign key for datasetAttachments
+   * @param {any} fk Foreign key for attachments
    *
    * @param {object} data Request data.
    *
@@ -574,10 +574,10 @@ export class RawDatasetApi extends BaseLoopBackApi {
    * This usually means the response is a `RawDataset` object.)
    * </em>
    */
-  public updateByIdDatasetAttachments(id: any, fk: any, data: any = {}, customHeaders?: Function): Observable<any> {
+  public updateByIdAttachments(id: any, fk: any, data: any = {}, customHeaders?: Function): Observable<any> {
     let _method: string = "PUT";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/RawDatasets/:id/datasetAttachments/:fk";
+    "/RawDatasets/:id/attachments/:fk";
     let _routeParams: any = {
       id: id,
       fk: fk
@@ -939,7 +939,7 @@ export class RawDatasetApi extends BaseLoopBackApi {
   }
 
   /**
-   * Queries datasetAttachments of RawDataset.
+   * Queries attachments of RawDataset.
    *
    * @param {any} id RawDataset id
    *
@@ -954,10 +954,10 @@ export class RawDatasetApi extends BaseLoopBackApi {
    * This usually means the response is a `RawDataset` object.)
    * </em>
    */
-  public getDatasetAttachments(id: any, filter: LoopBackFilter = {}, customHeaders?: Function): Observable<any> {
+  public getAttachments(id: any, filter: LoopBackFilter = {}, customHeaders?: Function): Observable<any> {
     let _method: string = "GET";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/RawDatasets/:id/datasetAttachments";
+    "/RawDatasets/:id/attachments";
     let _routeParams: any = {
       id: id
     };
@@ -969,7 +969,7 @@ export class RawDatasetApi extends BaseLoopBackApi {
   }
 
   /**
-   * Creates a new instance in datasetAttachments of this model.
+   * Creates a new instance in attachments of this model.
    *
    * @param {any} id RawDataset id
    *
@@ -986,10 +986,10 @@ export class RawDatasetApi extends BaseLoopBackApi {
    * This usually means the response is a `RawDataset` object.)
    * </em>
    */
-  public createDatasetAttachments(id: any, data: any = {}, customHeaders?: Function): Observable<any> {
+  public createAttachments(id: any, data: any = {}, customHeaders?: Function): Observable<any> {
     let _method: string = "POST";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/RawDatasets/:id/datasetAttachments";
+    "/RawDatasets/:id/attachments";
     let _routeParams: any = {
       id: id
     };
@@ -1002,7 +1002,7 @@ export class RawDatasetApi extends BaseLoopBackApi {
   }
 
   /**
-   * Deletes all datasetAttachments of this model.
+   * Deletes all attachments of this model.
    *
    * @param {any} id RawDataset id
    *
@@ -1012,10 +1012,10 @@ export class RawDatasetApi extends BaseLoopBackApi {
    *
    * This method returns no data.
    */
-  public deleteDatasetAttachments(id: any, customHeaders?: Function): Observable<any> {
+  public deleteAttachments(id: any, customHeaders?: Function): Observable<any> {
     let _method: string = "DELETE";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/RawDatasets/:id/datasetAttachments";
+    "/RawDatasets/:id/attachments";
     let _routeParams: any = {
       id: id
     };
@@ -1026,7 +1026,7 @@ export class RawDatasetApi extends BaseLoopBackApi {
   }
 
   /**
-   * Counts datasetAttachments of RawDataset.
+   * Counts attachments of RawDataset.
    *
    * @param {any} id RawDataset id
    *
@@ -1040,10 +1040,10 @@ export class RawDatasetApi extends BaseLoopBackApi {
    *
    *  - `count` – `{number}` - 
    */
-  public countDatasetAttachments(id: any, where: any = {}, customHeaders?: Function): Observable<any> {
+  public countAttachments(id: any, where: any = {}, customHeaders?: Function): Observable<any> {
     let _method: string = "GET";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/RawDatasets/:id/datasetAttachments/count";
+    "/RawDatasets/:id/attachments/count";
     let _routeParams: any = {
       id: id
     };
@@ -1399,7 +1399,7 @@ export class RawDatasetApi extends BaseLoopBackApi {
   }
 
   /**
-   * Creates a new instance in datasetAttachments of this model.
+   * Creates a new instance in attachments of this model.
    *
    * @param {any} id RawDataset id
    *
@@ -1416,10 +1416,10 @@ export class RawDatasetApi extends BaseLoopBackApi {
    * This usually means the response is a `RawDataset` object.)
    * </em>
    */
-  public createManyDatasetAttachments(id: any, data: any[] = [], customHeaders?: Function): Observable<any> {
+  public createManyAttachments(id: any, data: any[] = [], customHeaders?: Function): Observable<any> {
     let _method: string = "POST";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/RawDatasets/:id/datasetAttachments";
+    "/RawDatasets/:id/attachments";
     let _routeParams: any = {
       id: id
     };

@@ -87,7 +87,7 @@ describe("DatasetFormComponent", () => {
       proposal: new Proposal(),
       sampleId: "string",
       datasetlifecycle: {},
-      datasetAttachments: [new Attachment()],
+      attachments: [new Attachment()],
       datablocks: [new Datablock()],
       origdatablocks: [new OrigDatablock()],
       proposalId: "string",

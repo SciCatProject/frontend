@@ -43,7 +43,7 @@ export interface DerivedDatasetInterface {
   datablocks?: Datablock[];
   origdatablocks?: OrigDatablock[];
   historyList?: any[];
-  datasetAttachments?: Attachment[];
+  attachments?: Attachment[];
 }
 
 export class DerivedDataset implements DerivedDatasetInterface {
@@ -83,7 +83,7 @@ export class DerivedDataset implements DerivedDatasetInterface {
   datablocks: Datablock[];
   origdatablocks: OrigDatablock[];
   historyList: any[];
-  datasetAttachments: Attachment[];
+  attachments: Attachment[];
   constructor(data?: DerivedDatasetInterface) {
     Object.assign(this, data);
   }
@@ -280,8 +280,8 @@ export class DerivedDataset implements DerivedDatasetInterface {
                   keyFrom: 'history',
           keyTo: 'id'
         },
-        datasetAttachments: {
-          name: 'datasetAttachments',
+        attachments: {
+          name: 'attachments',
           type: 'Attachment[]',
           model: 'Attachment',
           relationType: 'hasMany',

@@ -35,11 +35,11 @@ export class SampleApi extends BaseLoopBackApi {
   }
 
   /**
-   * Find a related item by id for sampleAttachments.
+   * Find a related item by id for attachments.
    *
    * @param {any} id Sample id
    *
-   * @param {any} fk Foreign key for sampleAttachments
+   * @param {any} fk Foreign key for attachments
    *
    * @returns {object} An empty reference that will be
    *   populated with the actual data once the response is returned
@@ -50,10 +50,10 @@ export class SampleApi extends BaseLoopBackApi {
    * This usually means the response is a `Sample` object.)
    * </em>
    */
-  public findByIdSampleAttachments(id: any, fk: any, customHeaders?: Function): Observable<any> {
+  public findByIdAttachments(id: any, fk: any, customHeaders?: Function): Observable<any> {
     let _method: string = "GET";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/Samples/:id/sampleAttachments/:fk";
+    "/Samples/:id/attachments/:fk";
     let _routeParams: any = {
       id: id,
       fk: fk
@@ -65,11 +65,11 @@ export class SampleApi extends BaseLoopBackApi {
   }
 
   /**
-   * Delete a related item by id for sampleAttachments.
+   * Delete a related item by id for attachments.
    *
    * @param {any} id Sample id
    *
-   * @param {any} fk Foreign key for sampleAttachments
+   * @param {any} fk Foreign key for attachments
    *
    * @returns {object} An empty reference that will be
    *   populated with the actual data once the response is returned
@@ -77,10 +77,10 @@ export class SampleApi extends BaseLoopBackApi {
    *
    * This method returns no data.
    */
-  public destroyByIdSampleAttachments(id: any, fk: any, customHeaders?: Function): Observable<any> {
+  public destroyByIdAttachments(id: any, fk: any, customHeaders?: Function): Observable<any> {
     let _method: string = "DELETE";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/Samples/:id/sampleAttachments/:fk";
+    "/Samples/:id/attachments/:fk";
     let _routeParams: any = {
       id: id,
       fk: fk
@@ -92,11 +92,11 @@ export class SampleApi extends BaseLoopBackApi {
   }
 
   /**
-   * Update a related item by id for sampleAttachments.
+   * Update a related item by id for attachments.
    *
    * @param {any} id Sample id
    *
-   * @param {any} fk Foreign key for sampleAttachments
+   * @param {any} fk Foreign key for attachments
    *
    * @param {object} data Request data.
    *
@@ -111,10 +111,10 @@ export class SampleApi extends BaseLoopBackApi {
    * This usually means the response is a `Sample` object.)
    * </em>
    */
-  public updateByIdSampleAttachments(id: any, fk: any, data: any = {}, customHeaders?: Function): Observable<any> {
+  public updateByIdAttachments(id: any, fk: any, data: any = {}, customHeaders?: Function): Observable<any> {
     let _method: string = "PUT";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/Samples/:id/sampleAttachments/:fk";
+    "/Samples/:id/attachments/:fk";
     let _routeParams: any = {
       id: id,
       fk: fk
@@ -128,7 +128,7 @@ export class SampleApi extends BaseLoopBackApi {
   }
 
   /**
-   * Queries sampleAttachments of Sample.
+   * Queries attachments of Sample.
    *
    * @param {any} id Sample id
    *
@@ -143,10 +143,10 @@ export class SampleApi extends BaseLoopBackApi {
    * This usually means the response is a `Sample` object.)
    * </em>
    */
-  public getSampleAttachments(id: any, filter: LoopBackFilter = {}, customHeaders?: Function): Observable<any> {
+  public getAttachments(id: any, filter: LoopBackFilter = {}, customHeaders?: Function): Observable<any> {
     let _method: string = "GET";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/Samples/:id/sampleAttachments";
+    "/Samples/:id/attachments";
     let _routeParams: any = {
       id: id
     };
@@ -158,7 +158,7 @@ export class SampleApi extends BaseLoopBackApi {
   }
 
   /**
-   * Creates a new instance in sampleAttachments of this model.
+   * Creates a new instance in attachments of this model.
    *
    * @param {any} id Sample id
    *
@@ -175,10 +175,10 @@ export class SampleApi extends BaseLoopBackApi {
    * This usually means the response is a `Sample` object.)
    * </em>
    */
-  public createSampleAttachments(id: any, data: any = {}, customHeaders?: Function): Observable<any> {
+  public createAttachments(id: any, data: any = {}, customHeaders?: Function): Observable<any> {
     let _method: string = "POST";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/Samples/:id/sampleAttachments";
+    "/Samples/:id/attachments";
     let _routeParams: any = {
       id: id
     };
@@ -191,7 +191,7 @@ export class SampleApi extends BaseLoopBackApi {
   }
 
   /**
-   * Deletes all sampleAttachments of this model.
+   * Deletes all attachments of this model.
    *
    * @param {any} id Sample id
    *
@@ -201,10 +201,10 @@ export class SampleApi extends BaseLoopBackApi {
    *
    * This method returns no data.
    */
-  public deleteSampleAttachments(id: any, customHeaders?: Function): Observable<any> {
+  public deleteAttachments(id: any, customHeaders?: Function): Observable<any> {
     let _method: string = "DELETE";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/Samples/:id/sampleAttachments";
+    "/Samples/:id/attachments";
     let _routeParams: any = {
       id: id
     };
@@ -215,7 +215,7 @@ export class SampleApi extends BaseLoopBackApi {
   }
 
   /**
-   * Counts sampleAttachments of Sample.
+   * Counts attachments of Sample.
    *
    * @param {any} id Sample id
    *
@@ -229,10 +229,10 @@ export class SampleApi extends BaseLoopBackApi {
    *
    *  - `count` – `{number}` - 
    */
-  public countSampleAttachments(id: any, where: any = {}, customHeaders?: Function): Observable<any> {
+  public countAttachments(id: any, where: any = {}, customHeaders?: Function): Observable<any> {
     let _method: string = "GET";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/Samples/:id/sampleAttachments/count";
+    "/Samples/:id/attachments/count";
     let _routeParams: any = {
       id: id
     };
@@ -366,7 +366,7 @@ export class SampleApi extends BaseLoopBackApi {
   }
 
   /**
-   * Creates a new instance in sampleAttachments of this model.
+   * Creates a new instance in attachments of this model.
    *
    * @param {any} id Sample id
    *
@@ -383,10 +383,10 @@ export class SampleApi extends BaseLoopBackApi {
    * This usually means the response is a `Sample` object.)
    * </em>
    */
-  public createManySampleAttachments(id: any, data: any[] = [], customHeaders?: Function): Observable<any> {
+  public createManyAttachments(id: any, data: any[] = [], customHeaders?: Function): Observable<any> {
     let _method: string = "POST";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/Samples/:id/sampleAttachments";
+    "/Samples/:id/attachments";
     let _routeParams: any = {
       id: id
     };

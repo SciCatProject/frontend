@@ -48,7 +48,7 @@ export interface RawDatasetInterface {
   datablocks?: Datablock[];
   origdatablocks?: OrigDatablock[];
   historyList?: any[];
-  datasetAttachments?: Attachment[];
+  attachments?: Attachment[];
 }
 
 export class RawDataset implements RawDatasetInterface {
@@ -91,7 +91,7 @@ export class RawDataset implements RawDatasetInterface {
   datablocks: Datablock[];
   origdatablocks: OrigDatablock[];
   historyList: any[];
-  datasetAttachments: Attachment[];
+  attachments: Attachment[];
   constructor(data?: RawDatasetInterface) {
     Object.assign(this, data);
   }
@@ -308,8 +308,8 @@ export class RawDataset implements RawDatasetInterface {
                   keyFrom: 'history',
           keyTo: 'id'
         },
-        datasetAttachments: {
-          name: 'datasetAttachments',
+        attachments: {
+          name: 'attachments',
           type: 'Attachment[]',
           model: 'Attachment',
           relationType: 'hasMany',

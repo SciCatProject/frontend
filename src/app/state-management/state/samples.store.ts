@@ -12,6 +12,9 @@ export interface SampleState {
   datasetsLoading: boolean;
   error: Error;
 
+  addingAttachment: boolean;
+  deletingAttachment: boolean;
+
   searchTerms: string;
 
   selectedId: string;
@@ -29,6 +32,9 @@ export const initialSampleState: SampleState = {
   samplesLoading: true,
   datasetsLoading: true,
   error: undefined,
+
+  addingAttachment: false,
+  deletingAttachment: false,
 
   searchTerms: "",
 

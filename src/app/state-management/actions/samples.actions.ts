@@ -1,5 +1,5 @@
 import { Action } from "@ngrx/store";
-import { Sample, Dataset } from "shared/sdk/models";
+import { Sample, Dataset, Attachment } from "shared/sdk/models";
 
 export const SELECT_SAMPLE = "[Sample] Select Sample";
 
@@ -27,9 +27,19 @@ export const SEARCH_SAMPLES = "[Sample] Search Samples";
 export const SET_CURRENT_SAMPLE = "[Sample] Set current Sample";
 
 export const FETCH_DATASETS_FOR_SAMPLE = "[Sample] Fetch Datsets for Sample";
-export const FETCH_DATASETS_FOR_SAMPLE_COMPLETE = "[Sample] Fetch Datasets for Sample Complete";
-export const FETCH_DATASETS_FOR_SAMPLE_FAILED = "[Sample] Fetch Datasets for Sample Failed";
+export const FETCH_DATASETS_FOR_SAMPLE_COMPLETE =
+  "[Sample] Fetch Datasets for Sample Complete";
+export const FETCH_DATASETS_FOR_SAMPLE_FAILED =
+  "[Sample] Fetch Datasets for Sample Failed";
 export const SET_CURRENT_DATASETS = "[Sample] Set current datasets";
+
+export const ADD_ATTACHMENT = "[Sample] Add Attachment";
+export const ADD_ATTACHMENT_COMPLETE = "[Sample] Add Attachment Complete";
+export const ADD_ATTACHMENT_FAILED = "[Sample] Add Attachment Failed";
+
+export const DELETE_ATTACHMENT = "[Sample] Delete Attachment";
+export const DELETE_ATTACHMENT_COMPLETE = "[Sample] Delete Attachment Complete";
+export const DELETE_ATTACHMENT_FAILED = "[Sample] Delete Attachment Failed";
 
 export class FetchDatasetsForSample implements Action {
   readonly type = FETCH_DATASETS_FOR_SAMPLE;
@@ -138,6 +148,42 @@ export class ChangePageAction implements Action {
   constructor(readonly page: number, readonly limit: number) {}
 }
 
+export class AddAttachmentAction implements Action {
+  readonly type = ADD_ATTACHMENT;
+
+  constructor(readonly attachment: Attachment) {}
+}
+
+export class AddAttachmentCompleteAction implements Action {
+  readonly type = ADD_ATTACHMENT_COMPLETE;
+
+  constructor(readonly attachment: Attachment) {}
+}
+
+export class AddAttachmentFailedAction implements Action {
+  readonly type = ADD_ATTACHMENT_FAILED;
+
+  constructor(readonly error: Error) {}
+}
+
+export class DeleteAttachmentAction implements Action {
+  readonly type = DELETE_ATTACHMENT;
+
+  constructor(readonly sampleId: string, readonly attachmentId: string) {}
+}
+
+export class DeleteAttachmentCompleteAction implements Action {
+  readonly type = DELETE_ATTACHMENT_COMPLETE;
+
+  constructor(readonly attachmentId: string) {}
+}
+
+export class DeleteAttachmentFailedAction implements Action {
+  readonly type = DELETE_ATTACHMENT_FAILED;
+
+  constructor(readonly error: Error) {}
+}
+
 export type SamplesActions =
   | SelectSampleAction
   | AddSampleAction
@@ -153,7 +199,13 @@ export type SamplesActions =
   | FetchSampleFailedAction
   | FetchSampleCountAction
   | FetchSampleCountCompleteAction
-  | FetchSampleCountFailedAction;
+  | FetchSampleCountFailedAction
+  | AddAttachmentAction
+  | AddAttachmentCompleteAction
+  | AddAttachmentFailedAction
+  | DeleteAttachmentAction
+  | DeleteAttachmentCompleteAction
+  | DeleteAttachmentFailedAction;
 
 export type FetchDatasetsForSampleOutcomeAction =
   | FetchDatasetsForSampleComplete

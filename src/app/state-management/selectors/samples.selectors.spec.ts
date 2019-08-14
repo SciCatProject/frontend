@@ -10,6 +10,9 @@ const initialSampleState: SampleState = {
   submitComplete: false,
   datasets: {},
 
+  addingAttachment: false,
+  deletingAttachment: false,
+
   searchTerms: "",
 
   samplesLoading: true,

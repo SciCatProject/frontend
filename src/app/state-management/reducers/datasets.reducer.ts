@@ -99,7 +99,7 @@ export function datasetsReducer(
 
     case ADD_ATTACHMENT_COMPLETE: {
       const attachment = (action as AddAttachmentComplete).attachment;
-      const attachments = state.currentSet.datasetAttachments;
+      const attachments = state.currentSet.attachments;
       const attach2 = new Set(attachments);
       attach2.add(attachment);
 
@@ -108,7 +108,7 @@ export function datasetsReducer(
         addingAttachment: false,
         currentSet: {
           ...state.currentSet,
-          datasetAttachments: Array.from(attach2)
+          attachments: Array.from(attach2)
         }
       };
     }
@@ -122,7 +122,7 @@ export function datasetsReducer(
     }
 
     case DELETE_ATTACHMENT_COMPLETE: {
-      const attachments = state.currentSet.datasetAttachments;
+      const attachments = state.currentSet.attachments;
       const attachment_id = (action as DeleteAttachmentComplete).attachment_id;
       const attach2 = attachments.filter(
         attachment => attachment.id !== attachment_id
@@ -131,7 +131,7 @@ export function datasetsReducer(
       return {
         ...state,
         deletingAttachment: false,
-        currentSet: { ...state.currentSet, datasetAttachments: attach2 }
+        currentSet: { ...state.currentSet, attachments: attach2 }
       };
     }
 
@@ -336,8 +336,12 @@ export function datasetsReducer(
               {
                 "datasetlifecycle.retrievable": false,
                 "datasetlifecycle.archivable": false,
-                "datasetlifecycle.archiveStatusMessage": { $ne: "scheduleArchiveJobFailed"},
-                "datasetlifecycle.retrieveStatusMessage": { $ne: "scheduleRetrieveJobFailed"},
+                "datasetlifecycle.archiveStatusMessage": {
+                  $ne: "scheduleArchiveJobFailed"
+                },
+                "datasetlifecycle.retrieveStatusMessage": {
+                  $ne: "scheduleRetrieveJobFailed"
+                }
               }
             ]
           };
@@ -350,10 +354,12 @@ export function datasetsReducer(
                 "datasetlifecycle.archivable": true
               },
               {
-                "datasetlifecycle.archiveStatusMessage": "scheduleArchiveJobFailed"
+                "datasetlifecycle.archiveStatusMessage":
+                  "scheduleArchiveJobFailed"
               },
               {
-                "datasetlifecycle.retrieveStatusMessage": "scheduleRetrieveJobFailed"
+                "datasetlifecycle.retrieveStatusMessage":
+                  "scheduleRetrieveJobFailed"
               }
             ]
           };

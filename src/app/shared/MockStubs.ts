@@ -66,13 +66,12 @@ export class MockSampleService {
       description: "string",
       createdAt: new Date(),
       sampleCharacteristics: "string",
-      attachments: ["string"],
+      attachments: [],
       ownerGroup: "string",
       accessGroups: ["string"],
       createdBy: "string",
       updatedBy: "string",
-      updatedAt: new Date(),
-      sampleAttachments: []
+      updatedAt: new Date()
     };
 
     return of([this.sample]);
@@ -85,13 +84,12 @@ export class MockSampleService {
       description: "string",
       createdAt: new Date(),
       sampleCharacteristics: "string",
-      attachments: ["string"],
+      attachments: [],
       ownerGroup: "string",
       accessGroups: ["string"],
       createdBy: "string",
       updatedBy: "string",
-      updatedAt: new Date(),
-      sampleAttachments: []
+      updatedAt: new Date()
     };
 
     return of(this.sample);

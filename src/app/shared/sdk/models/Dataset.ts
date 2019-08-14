@@ -37,7 +37,7 @@ export interface DatasetInterface {
   datablocks?: Datablock[];
   origdatablocks?: OrigDatablock[];
   historyList?: any[];
-  datasetAttachments?: Attachment[];
+  attachments?: Attachment[];
 }
 
 export class Dataset implements DatasetInterface {
@@ -71,7 +71,7 @@ export class Dataset implements DatasetInterface {
   datablocks: Datablock[];
   origdatablocks: OrigDatablock[];
   historyList: any[];
-  datasetAttachments: Attachment[];
+  attachments: Attachment[];
   constructor(data?: DatasetInterface) {
     Object.assign(this, data);
   }
@@ -244,8 +244,8 @@ export class Dataset implements DatasetInterface {
                   keyFrom: 'history',
           keyTo: 'id'
         },
-        datasetAttachments: {
-          name: 'datasetAttachments',
+        attachments: {
+          name: 'attachments',
           type: 'Attachment[]',
           model: 'Attachment',
           relationType: 'hasMany',

@@ -19,8 +19,7 @@ export class DatasetFormComponent implements OnInit, OnDestroy {
   scientificMetaDataSubscription: Subscription;
   metadataForm: FormGroup;
 
-  constructor(private store: Store<any>, private formBuilder: FormBuilder) {
-  }
+  constructor(private store: Store<any>, private formBuilder: FormBuilder) {}
 
   get items() {
     return this.metadataForm.get("items") as FormArray;
@@ -74,8 +73,7 @@ export class DatasetFormComponent implements OnInit, OnDestroy {
     this.items.removeAt(index);
   }
 
-  ngOnDestroy() {
-  }
+  ngOnDestroy() {}
 
   ngOnInit() {
     this.metadataForm = this.formBuilder.group({
@@ -89,8 +87,9 @@ export class DatasetFormComponent implements OnInit, OnDestroy {
     this.scientificMetaDataSubscription = this.dataset$
       .pipe(
         filter(Boolean),
-        take(1))
-      .subscribe(data_set => {
+        take(1)
+      )
+      .subscribe((data_set: RawDataset) => {
         let json_data = {};
         if (typeof data_set.scientificMetadata === "undefined") {
           json_data = {};
