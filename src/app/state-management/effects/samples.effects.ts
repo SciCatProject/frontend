@@ -147,7 +147,10 @@ export class SamplesEffects {
     ofType(ADD_ATTACHMENT),
     map((action: AddAttachmentAction) => action.attachment),
     switchMap(attachment => {
-      console.log("creating attachment for", attachment.sampleId);
+      console.log(
+        "Sample Effects: Creating attachment for",
+        attachment.sampleId
+      );
       delete attachment.id;
       return this.sampleApi
         .createAttachments(encodeURIComponent(attachment.sampleId), attachment)
@@ -163,7 +166,7 @@ export class SamplesEffects {
     ofType(DELETE_ATTACHMENT),
     map((action: DeleteAttachmentAction) => action),
     switchMap(action => {
-      console.log("deleting attachment", action.attachmentId);
+      console.log("Sample Effects: Deleting attachment", action.attachmentId);
       return this.sampleApi
         .destroyByIdAttachments(
           encodeURIComponent(action.sampleId),

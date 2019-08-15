@@ -127,7 +127,6 @@ export function datasetsReducer(
       const attach2 = attachments.filter(
         attachment => attachment.id !== attachment_id
       );
-      console.log("array index", attachment_id);
       return {
         ...state,
         deletingAttachment: false,

@@ -19,7 +19,15 @@ import {
   SEARCH_PROPOSALS,
   SORT_PROPOSALS_BY_COLUMN,
   SortProposalByColumnAction,
-  SearchProposalAction
+  SearchProposalAction,
+  ADD_ATTACHMENT,
+  ADD_ATTACHMENT_COMPLETE,
+  AddAttachmentCompleteAction,
+  ADD_ATTACHMENT_FAILED,
+  DELETE_ATTACHMENT,
+  DELETE_ATTACHMENT_COMPLETE,
+  DELETE_ATTACHMENT_FAILED,
+  DeleteAttachmentCompleteAction
 } from "../actions/proposals.actions";
 import { LOGOUT_COMPLETE, LogoutCompleteAction } from "../actions/user.actions";
 
@@ -67,9 +75,8 @@ export function proposalsReducer(
       return { ...state, proposals, proposalsLoading, hasFetched: true };
     }
     case FETCH_PROPOSAL_COMPLETE: {
-      const proposal = (action as FetchProposalCompleteAction).proposal;
-      const proposals = { ...state.proposals, [proposal.proposalId]: proposal };
-      return { ...state, proposals };
+      const currentProposal = (action as FetchProposalCompleteAction).proposal;
+      return { ...state, currentProposal };
     }
     case FETCH_DATASETS_FOR_PROPOSAL_COMPLETE: {
       const list = (action as FetchDatasetsForProposalCompleteAction).datasets;
@@ -88,6 +95,54 @@ export function proposalsReducer(
       const proposalsLoading = true;
       return { ...state, filters, proposalsLoading };
     }
+
+    case ADD_ATTACHMENT: {
+      return { ...state, addingAttachment: true };
+    }
+
+    case ADD_ATTACHMENT_COMPLETE: {
+      const attachment = (action as AddAttachmentCompleteAction).attachment;
+      const attachments = state.currentProposal.attachments;
+      const attach2 = new Set(attachments);
+      attach2.add(attachment);
+
+      return {
+        ...state,
+        addingAttachment: false,
+        currentProposal: {
+          ...state.currentProposal,
+          attachments: Array.from(attach2)
+        }
+      };
+    }
+
+    case ADD_ATTACHMENT_FAILED: {
+      return { ...state };
+    }
+
+    case DELETE_ATTACHMENT: {
+      return { ...state, deletingAttachment: true };
+    }
+
+    case DELETE_ATTACHMENT_COMPLETE: {
+      const attachments = state.currentProposal.attachments;
+      const attachmentId = (action as DeleteAttachmentCompleteAction)
+        .attachmentId;
+      const attach2 = attachments.filter(
+        attachment => attachment.id !== attachmentId
+      );
+
+      return {
+        ...state,
+        deletingAttachment: false,
+        currentProposal: { ...state.currentProposal, attachments: attach2 }
+      };
+    }
+
+    case DELETE_ATTACHMENT_FAILED: {
+      return { ...state };
+    }
+
     case LOGOUT_COMPLETE:
       return { ...initialProposalsState };
 

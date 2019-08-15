@@ -8,10 +8,14 @@ const getProposals = createSelector(
   state => state.proposals
 );
 
-const getDatasets = createSelector(getProposalsState, state => state.datasets);
+const getDatasets = createSelector(
+  getProposalsState,
+  state => state.datasets
+);
 
-const getDatasetList = createSelector(getDatasets, datasets =>
-  Object.keys(datasets).map(id => datasets[id])
+const getDatasetList = createSelector(
+  getDatasets,
+  datasets => Object.keys(datasets).map(id => datasets[id])
 );
 
 export const getHasFetched = createSelector(
@@ -19,25 +23,24 @@ export const getHasFetched = createSelector(
   state => state.hasFetched
 );
 
-export const getProposalList = createSelector(getProposals, proposals =>
-  Object.keys(proposals).map(id => proposals[id])
-);
-
-export const getSelectedProposalId = createSelector(
-  getProposalsState,
-  state => state.selectedId
-);
-
-export const getSelectedProposal = createSelector(
+export const getProposalList = createSelector(
   getProposals,
-  getSelectedProposalId,
-  (proposals, selectedId) => proposals[selectedId] || null
+  proposals => Object.keys(proposals).map(id => proposals[id])
+);
+
+export const getCurrentProposal = createSelector(
+  getProposalsState,
+  state => state.currentProposal
 );
 
 export const getSelectedProposalDatasets = createSelector(
   getDatasetList,
   getProposalsState,
-  (datasets, propState) => datasets.slice(propState.filters.skip, propState.filters.skip + propState.filters.limit)
+  (datasets, propState) =>
+    datasets.slice(
+      propState.filters.skip,
+      propState.filters.skip + propState.filters.limit
+    )
 );
 
 export const getdatasetCount = createSelector(
@@ -50,7 +53,6 @@ export const getProposalCount = createSelector(
   state => state.proposalCount
 );
 
-
 export const getPage = createSelector(
   getProposalsState,
   state => {
@@ -58,7 +60,6 @@ export const getPage = createSelector(
     return skip / limit;
   }
 );
-
 
 export const getProposalPage = createSelector(
   getProposalsState,
@@ -76,8 +77,6 @@ export const getProposalsPerPage = createSelector(
   }
 );
 
-
-
 export const getFilters = createSelector(
   getProposalsState,
   state => {
@@ -86,7 +85,6 @@ export const getFilters = createSelector(
     return { limits };
   }
 );
-
 
 export const getPropFilters = createSelector(
   getProposalsState,
@@ -104,4 +102,9 @@ export const getPropFilters = createSelector(
       limits
     };
   }
+);
+
+export const getCurrentAttachments = createSelector(
+  getCurrentProposal,
+  proposal => proposal.attachments
 );

@@ -3,11 +3,13 @@ import { ReadFile, ReadMode, FilePickerDirective } from "ngx-file-helpers";
 import { Subscription } from "rxjs";
 import { Store, select } from "@ngrx/store";
 import { Dataset, Attachment, Proposal, Sample } from "shared/sdk";
-import { AddAttachment } from "state-management/actions/datasets.actions";
+import { AddAttachment as AddDatasetAttachment } from "state-management/actions/datasets.actions";
 import { getCurrentDataset } from "state-management/selectors/datasets.selectors";
 import { getCurrentSample } from "state-management/selectors/samples.selectors";
 import { ActivatedRoute } from "@angular/router";
-import { getSelectedProposal } from "state-management/selectors/proposals.selectors";
+import { getCurrentProposal } from "state-management/selectors/proposals.selectors";
+import { AddAttachmentAction as AddProposalAttachment } from "state-management/actions/proposals.actions";
+import { AddAttachmentAction as AddSampleAttachment } from "state-management/actions/samples.actions";
 
 @Component({
   selector: "app-file-dropzone",
@@ -60,7 +62,7 @@ export class FileDropzoneComponent implements OnInit, OnDestroy {
       }
       case "proposals": {
         this.proposalSubscription = this.store
-          .pipe(select(getSelectedProposal))
+          .pipe(select(getCurrentProposal))
           .subscribe(proposal => {
             this.proposal = proposal;
           });
@@ -96,8 +98,8 @@ export class FileDropzoneComponent implements OnInit, OnDestroy {
   }
 
   onReadStart(fileCount: number) {
-    this.status = `Now reading ${fileCount} file(s)...`;
-    console.log("on readstart", this.status);
+    this.status = `Started reading ${fileCount} file(s) on ${new Date().toLocaleTimeString()}.`;
+    console.log("File Uploader:", this.status);
   }
 
   onFilePicked(file: ReadFile) {
@@ -105,13 +107,12 @@ export class FileDropzoneComponent implements OnInit, OnDestroy {
   }
 
   onReadEnd(fileCount: number) {
-    this.status = `Read ${fileCount} file(s) on ${new Date().toLocaleTimeString()}.`;
-    console.log("on readend", this.status);
-    console.log("on readend", this.picked);
+    this.status = `Finished reading ${fileCount} file(s) on ${new Date().toLocaleTimeString()}.`;
+    console.log("File Uploader:", this.status);
     if (fileCount > 0) {
       this.newAttachment = this.createAttachmentFromRoute();
       this.filePicker.reset();
-      return this.store.dispatch(new AddAttachment(this.newAttachment));
+      return this.addAttachmentFromRoute();
     }
   }
 
@@ -164,6 +165,27 @@ export class FileDropzoneComponent implements OnInit, OnDestroy {
           sample: this.sample,
           sampleId: this.sample.sampleId
         };
+      }
+      default: {
+        return null;
+      }
+    }
+  }
+
+  private addAttachmentFromRoute(): void {
+    switch (this.currentRoute) {
+      case "datasets": {
+        return this.store.dispatch(
+          new AddDatasetAttachment(this.newAttachment)
+        );
+      }
+      case "proposals": {
+        return this.store.dispatch(
+          new AddProposalAttachment(this.newAttachment)
+        );
+      }
+      case "samples": {
+        return this.store.dispatch(new AddSampleAttachment(this.newAttachment));
       }
       default: {
         return null;

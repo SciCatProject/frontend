@@ -133,7 +133,6 @@ export function samplesReducer(
 
     case FETCH_SAMPLE_COMPLETE: {
       const currentSample = (action as FetchSampleCompleteAction).currentSample;
-      // console.log("fetch sample complete");
       return { ...state, currentSample, samplesLoading: false };
     }
 
@@ -200,7 +199,6 @@ export function samplesReducer(
       const attach2 = attachments.filter(
         attachment => attachment.id !== attachmentId
       );
-      console.log("array index", attachmentId);
       return {
         ...state,
         deletingAttachment: false,

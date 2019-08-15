@@ -1,5 +1,5 @@
 import { Action } from "@ngrx/store";
-import { Dataset, Proposal } from "../models";
+import { Attachment, Dataset, Proposal } from "shared/sdk/models";
 
 export const SELECT_PROPOSAL = "[Proposals] Select Proposal";
 
@@ -23,14 +23,24 @@ export const CHANGE_PAGE = "[Proposals] Change page";
 export const SORT_PROPOSALS_BY_COLUMN = "[Proposals] Sort by Column";
 export const FETCH_COUNT_PROPOSALS = "[Proposals] Fetch Count of Proposals";
 export const FETCH_COUNT_FAILED = "[Proposals] Fetch Count of Proposals Failed";
-export const FETCH_COUNT_PROPOSALS_SUCCESS = "[Proposals] Fetch Count of Proposals Success";
+export const FETCH_COUNT_PROPOSALS_SUCCESS =
+  "[Proposals] Fetch Count of Proposals Success";
 
 export const SEARCH_PROPOSALS = "[Proposals] Search Proposals";
 
-export class SearchProposalAction implements Action {
-  type = SEARCH_PROPOSALS ;
+export const ADD_ATTACHMENT = "[Proposals] Add Attachment";
+export const ADD_ATTACHMENT_COMPLETE = "[Proposals] Add Attachment Complete";
+export const ADD_ATTACHMENT_FAILED = "[Proposals] Add Attachment Failed";
 
-  constructor(readonly query: string) { }
+export const DELETE_ATTACHMENT = "[Proposals] Delete Attachment";
+export const DELETE_ATTACHMENT_COMPLETE =
+  "[Proposals] Delete Attachment Complete";
+export const DELETE_ATTACHMENT_FAILED = "[Proposals] Delete Attachment Failed";
+
+export class SearchProposalAction implements Action {
+  type = SEARCH_PROPOSALS;
+
+  constructor(readonly query: string) {}
 }
 
 export class FetchCountOfProposals implements Action {
@@ -109,6 +119,42 @@ export class ChangePageAction implements Action {
   constructor(readonly page: number, readonly limit: number) {}
 }
 
+export class AddAttachmentAction implements Action {
+  readonly type = ADD_ATTACHMENT;
+
+  constructor(readonly attachment: Attachment) {}
+}
+
+export class AddAttachmentCompleteAction implements Action {
+  readonly type = ADD_ATTACHMENT_COMPLETE;
+
+  constructor(readonly attachment: Attachment) {}
+}
+
+export class AddAttachmentFailedAction implements Action {
+  readonly type = ADD_ATTACHMENT_FAILED;
+
+  constructor(readonly error: Error) {}
+}
+
+export class DeleteAttachmentAction implements Action {
+  readonly type = DELETE_ATTACHMENT;
+
+  constructor(readonly sampleId: string, readonly attachmentId: string) {}
+}
+
+export class DeleteAttachmentCompleteAction implements Action {
+  readonly type = DELETE_ATTACHMENT_COMPLETE;
+
+  constructor(readonly attachmentId: string) {}
+}
+
+export class DeleteAttachmentFailedAction implements Action {
+  readonly type = DELETE_ATTACHMENT_FAILED;
+
+  constructor(readonly error: Error) {}
+}
+
 export type FetchProposalsOutcomeAction =
   | FetchProposalsCompleteAction
   | FetchProposalsFailedAction;
@@ -121,6 +167,14 @@ export type FetchDatasetsForProposalOutcomeAction =
   | FetchDatasetsForProposalCompleteAction
   | FetchDatasetsForProposalFailedAction;
 
+export type AddSampleAttachmentOutcomeActions =
+  | AddAttachmentCompleteAction
+  | AddAttachmentFailedAction;
+
+export type DeleteSampleAttachmentOutcomeActions =
+  | DeleteAttachmentCompleteAction
+  | DeleteAttachmentFailedAction;
+
 export type ProposalsAction =
   | SelectProposalAction
   | FetchProposalsAction
@@ -128,4 +182,8 @@ export type ProposalsAction =
   | FetchProposalAction
   | FetchProposalOutcomeAction
   | FetchDatasetsForProposalAction
-  | FetchDatasetsForProposalOutcomeAction;
+  | FetchDatasetsForProposalOutcomeAction
+  | AddAttachmentAction
+  | AddSampleAttachmentOutcomeActions
+  | DeleteAttachmentAction
+  | DeleteSampleAttachmentOutcomeActions;

@@ -30,7 +30,7 @@ export class DatasetEffects {
     ofType(DatasetActions.DELETE_ATTACHMENT),
     map((action: DatasetActions.DeleteAttachment) => action),
     switchMap(action => {
-      console.log("deleting attachment", action.attachment_id);
+      console.log("Dataset Effects: Deleting attachment", action.attachment_id);
       return this.datasetApi
         .destroyByIdAttachments(
           encodeURIComponent(action.dataset_id),
@@ -63,7 +63,10 @@ export class DatasetEffects {
     ofType(DatasetActions.ADD_ATTACHMENT),
     map((action: DatasetActions.AddAttachment) => action.attachment),
     switchMap(attachment => {
-      console.log("creating attachment for", attachment.datasetId);
+      console.log(
+        "Dataset Effects: Creating attachment for",
+        attachment.datasetId
+      );
       delete attachment.id;
       return this.datasetApi
         .createAttachments(encodeURIComponent(attachment.datasetId), attachment)
