@@ -37,7 +37,10 @@ import {
   DELETE_ATTACHMENT_COMPLETE,
   DELETE_ATTACHMENT,
   DeleteAttachmentCompleteAction,
-  DELETE_ATTACHMENT_FAILED
+  DELETE_ATTACHMENT_FAILED,
+  UPDATE_ATTACHMENT_CAPTION_COMPLETE,
+  UPDATE_ATTACHMENT_CAPTION_FAILED,
+  UpdateAttachmentCaptionCompleteAction
 } from "state-management/actions/samples.actions";
 import { Action } from "@ngrx/store";
 
@@ -207,6 +210,28 @@ export function samplesReducer(
     }
 
     case DELETE_ATTACHMENT_FAILED: {
+      return { ...state };
+    }
+
+    case UPDATE_ATTACHMENT_CAPTION_COMPLETE: {
+      const updatedAttachment = (action as UpdateAttachmentCaptionCompleteAction)
+        .attachment;
+      const attachments = state.currentSample.attachments;
+      let attach2 = attachments.filter(
+        attachment => attachment.id !== updatedAttachment.id
+      );
+      attach2.push(updatedAttachment);
+
+      return {
+        ...state,
+        currentSample: {
+          ...state.currentSample,
+          attachments: attach2
+        }
+      };
+    }
+
+    case UPDATE_ATTACHMENT_CAPTION_FAILED: {
       return { ...state };
     }
 

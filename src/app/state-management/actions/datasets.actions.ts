@@ -97,17 +97,20 @@ export const REDUCE_DATASET = "[Dataset] Reduce Dataset";
 export const REDUCE_DATASET_COMPLETE = "[Dataset] Reduce Dataset Complete";
 export const REDUCE_DATASET_FAILED = "[Dataset] Reduce Dataset Failed";
 
-export const DELETE_ATTACHMENT = "[DatasetAttachment] Delete Attachment";
+export const DELETE_ATTACHMENT = "[Dataset] Delete Attachment";
 export const DELETE_ATTACHMENT_COMPLETE =
-  "[DatasetAttachment] Delete Attachment Complete";
-export const DELETE_ATTACHMENT_FAILED =
-  "[DatasetAttachment] Delete Attachment Failed";
+  "[Dataset] Delete Attachment Complete";
+export const DELETE_ATTACHMENT_FAILED = "[Dataset] Delete Attachment Failed";
 
-export const ADD_ATTACHMENT = "[DatasetAttachment] Add Attachment";
-export const ADD_ATTACHMENT_COMPLETE =
-  "[DatasetAttachment] Add Attachment Complete";
-export const ADD_ATTACHMENT_FAILED =
-  "[DatasetAttachment] Add Attachment Failed";
+export const ADD_ATTACHMENT = "[Dataset] Add Attachment";
+export const ADD_ATTACHMENT_COMPLETE = "[Dataset] Add Attachment Complete";
+export const ADD_ATTACHMENT_FAILED = "[Dataset] Add Attachment Failed";
+
+export const UPDATE_ATTACHMENT_CAPTION = "[Dataset] Update Attachment Caption";
+export const UPDATE_ATTACHMENT_CAPTION_COMPLETE =
+  "[Dataset] Update Attachment Caption Complete";
+export const UPDATE_ATTACHMENT_CAPTION_FAILED =
+  "[Dataset] Update Attachment Caption Failed";
 
 export class AddAttachment implements Action {
   readonly type = ADD_ATTACHMENT;
@@ -142,6 +145,28 @@ export class DeleteAttachmentFailed implements Action {
   readonly type = DELETE_ATTACHMENT_FAILED;
 
   constructor(readonly attachment_id: string) {}
+}
+
+export class UpdateAttachmentCaptionAction implements Action {
+  readonly type = UPDATE_ATTACHMENT_CAPTION;
+
+  constructor(
+    readonly datasetId: string,
+    readonly attachmentId: string,
+    readonly caption: string
+  ) {}
+}
+
+export class UpdateAttachmentCaptionCompleteAction implements Action {
+  readonly type = UPDATE_ATTACHMENT_CAPTION_COMPLETE;
+
+  constructor(readonly attachment: Attachment) {}
+}
+
+export class UpdateAttachmentCaptionFailedAction implements Action {
+  readonly type = UPDATE_ATTACHMENT_CAPTION_FAILED;
+
+  constructor(readonly error: Error) {}
 }
 
 export class UpdateFilterAction implements Action {
@@ -194,7 +219,6 @@ export class SelectAllDatasetsAction implements Action {
 export class ClearSelectionAction implements Action {
   readonly type = CLEAR_SELECTION;
 }
-
 
 export class ChangePageAction implements Action {
   readonly type = CHANGE_PAGE;

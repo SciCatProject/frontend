@@ -40,7 +40,11 @@ import {
   DELETE_ATTACHMENT,
   DeleteAttachmentAction,
   DeleteAttachmentCompleteAction,
-  DeleteAttachmentFailedAction
+  DeleteAttachmentFailedAction,
+  UPDATE_ATTACHMENT_CAPTION,
+  UpdateAttachmentCaptionAction,
+  UpdateAttachmentCaptionCompleteAction,
+  UpdateAttachmentCaptionFailedAction
 } from "../actions/samples.actions";
 import {
   getQuery,
@@ -178,6 +182,33 @@ export class SamplesEffects {
         .pipe(
           map(res => new DeleteAttachmentCompleteAction(res)),
           catchError(err => of(new DeleteAttachmentFailedAction(err)))
+        );
+    })
+  );
+
+  @Effect()
+  protected updateAttachmentCaption$: Observable<Action> = this.actions$.pipe(
+    ofType(UPDATE_ATTACHMENT_CAPTION),
+    map((action: UpdateAttachmentCaptionAction) => action),
+    switchMap(action => {
+      console.log(
+        "Sample Effects: Updating attachment caption:",
+        action.attachmentId
+      );
+      const newCaption = { caption: action.caption };
+      return this.sampleApi
+        .updateByIdAttachments(
+          encodeURIComponent(action.sampleId),
+          encodeURIComponent(action.attachmentId),
+          newCaption
+        )
+        .pipe(
+          map(
+            res => new UpdateAttachmentCaptionCompleteAction(res)
+          ),
+          catchError(err =>
+            of(new UpdateAttachmentCaptionFailedAction(err))
+          )
         );
     })
   );

@@ -27,7 +27,10 @@ import {
   DELETE_ATTACHMENT,
   DELETE_ATTACHMENT_COMPLETE,
   DELETE_ATTACHMENT_FAILED,
-  DeleteAttachmentCompleteAction
+  DeleteAttachmentCompleteAction,
+  UPDATE_ATTACHMENT_CAPTION_COMPLETE,
+  UPDATE_ATTACHMENT_CAPTION_FAILED,
+  UpdateAttachmentCaptionCompleteAction
 } from "../actions/proposals.actions";
 import { LOGOUT_COMPLETE, LogoutCompleteAction } from "../actions/user.actions";
 
@@ -140,6 +143,28 @@ export function proposalsReducer(
     }
 
     case DELETE_ATTACHMENT_FAILED: {
+      return { ...state };
+    }
+
+    case UPDATE_ATTACHMENT_CAPTION_COMPLETE: {
+      const updatedAttachment = (action as UpdateAttachmentCaptionCompleteAction)
+        .attachment;
+      const attachments = state.currentProposal.attachments;
+      let attach2 = attachments.filter(
+        attachment => attachment.id !== updatedAttachment.id
+      );
+      attach2.push(updatedAttachment);
+
+      return {
+        ...state,
+        currentProposal: {
+          ...state.currentProposal,
+          attachments: attach2
+        }
+      };
+    }
+
+    case UPDATE_ATTACHMENT_CAPTION_FAILED: {
       return { ...state };
     }
 

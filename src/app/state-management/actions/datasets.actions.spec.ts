@@ -24,7 +24,13 @@ import {
   AddAttachment,
   ADD_ATTACHMENT,
   DeleteAttachment,
-  DELETE_ATTACHMENT
+  DELETE_ATTACHMENT,
+  UpdateAttachmentCaptionAction,
+  UPDATE_ATTACHMENT_CAPTION,
+  UpdateAttachmentCaptionCompleteAction,
+  UPDATE_ATTACHMENT_CAPTION_COMPLETE,
+  UpdateAttachmentCaptionFailedAction,
+  UPDATE_ATTACHMENT_CAPTION_FAILED
 } from "./datasets.actions";
 
 describe("UpdateFilterAction", () => {
@@ -124,6 +130,47 @@ describe("DeleteAttachment", () => {
       type: DELETE_ATTACHMENT,
       dataset_id,
       attachment_id
+    });
+  });
+});
+
+describe("UpdateAttachmentCaption", () => {
+  it("should create an action", () => {
+    const datasetId = "123abc";
+    const attachmentId = "abc123";
+    const caption = "New caption";
+    const action = new UpdateAttachmentCaptionAction(
+      datasetId,
+      attachmentId,
+      caption
+    );
+    expect({ ...action }).toEqual({
+      type: UPDATE_ATTACHMENT_CAPTION,
+      datasetId,
+      attachmentId,
+      caption
+    });
+  });
+});
+
+describe("UpdateAttachmentCompleteCaption", () => {
+  it("should create an action", () => {
+    const attachment = new Attachment();
+    const action = new UpdateAttachmentCaptionCompleteAction(attachment);
+    expect({ ...action }).toEqual({
+      type: UPDATE_ATTACHMENT_CAPTION_COMPLETE,
+      attachment
+    });
+  });
+});
+
+describe("UpdateAttachmentFailedCaption", () => {
+  it("should create an action", () => {
+    const error = new Error();
+    const action = new UpdateAttachmentCaptionFailedAction(error);
+    expect({ ...action }).toEqual({
+      type: UPDATE_ATTACHMENT_CAPTION_FAILED,
+      error
     });
   });
 });
