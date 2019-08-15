@@ -253,8 +253,7 @@
       <div fxFlex="30%" *ngIf="attachments$ | async as attachments">
         <ng-container *ngFor="let da of attachments">
           <mat-card style="margin: 1em">
-            <img mat-card-image src="{{ da.thumbnail }}" />
-            <p>{{ da.caption }}</p>
+            <img mat-card-image src="{{ da.thumbnail }}" /> <br />
           </mat-card>
         </ng-container>
       </div>
@@ -322,22 +321,18 @@
         </mat-card-header>
         <div class="details">
           <table>
-            <tr *ngIf="dataset.datasetlifecycle.dateOfPublishing as value">
-              <th>
-                <i class="material-icons"> radio </i> Data Publishing Date
-              </th>
-              <td>{{ value | date: "yyyy-MM-dd" }}</td>
-            </tr>
-            <tr *ngIf="dataset.datasetlifecycle.dateOfDiskPurging as value">
-              <th><i class="material-icons"> gavel </i> Data Deletion Date</th>
-              <td>{{ value | date: "yyyy-MM-dd" }}</td>
-            </tr>
-            <tr *ngIf="dataset.datasetlifecycle.archiveRetentionTime as value">
-              <th>
-                <i class="material-icons"> save </i> Archive Retention Date
-              </th>
-              <td>{{ value | date: "yyyy-MM-dd" }}</td>
-            </tr>
+              <tr *ngIf="dataset.datasetlifecycle.dateOfPublishing as value">
+                  <th><i class="material-icons"> radio </i> Data Publishing Date</th>
+                  <td>{{ value | date:'yyyy-MM-dd' }}</td>
+              </tr>
+              <tr *ngIf="dataset.datasetlifecycle.dateOfDiskPurging as value">
+                  <th><i class="material-icons"> gavel </i> Data Deletion Date</th>
+                  <td>{{ value | date:'yyyy-MM-dd' }}</td>
+              </tr>
+              <tr *ngIf="dataset.datasetlifecycle.archiveRetentionTime as value">
+                  <th><i class="material-icons"> save </i> Archive Retention Date</th>
+                  <td>{{ value | date: 'yyyy-MM-dd' }}</td>
+              </tr>
           </table>
         </div>
       </mat-card>
@@ -364,4 +359,6 @@
       </ng-container>
     </mat-card>
   </mat-tab>
+
+
 </mat-tab-group>
