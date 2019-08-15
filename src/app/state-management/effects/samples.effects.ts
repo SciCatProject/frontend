@@ -152,6 +152,9 @@ export class SamplesEffects {
         attachment.sampleId
       );
       delete attachment.id;
+      delete attachment.rawDatasetId;
+      delete attachment.derivedDatasetId;
+      delete attachment.proposalId;
       return this.sampleApi
         .createAttachments(encodeURIComponent(attachment.sampleId), attachment)
         .pipe(

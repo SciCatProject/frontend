@@ -68,6 +68,10 @@ export class DatasetEffects {
         attachment.datasetId
       );
       delete attachment.id;
+      delete attachment.rawDatasetId;
+      delete attachment.derivedDatasetId;
+      delete attachment.proposalId;
+      delete attachment.sampleId;
       return this.datasetApi
         .createAttachments(encodeURIComponent(attachment.datasetId), attachment)
         .pipe(

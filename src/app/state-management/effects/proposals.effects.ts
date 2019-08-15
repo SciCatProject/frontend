@@ -137,6 +137,9 @@ export class ProposalsEffects {
         attachment.proposalId
       );
       delete attachment.id;
+      delete attachment.rawDatasetId;
+      delete attachment.derivedDatasetId;
+      delete attachment.sampleId;
       return this.proposalApi
         .createAttachments(
           encodeURIComponent(attachment.proposalId),
