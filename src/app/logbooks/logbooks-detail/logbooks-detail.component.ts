@@ -27,6 +27,8 @@ export class LogbooksDetailComponent implements OnInit, OnDestroy {
   dataset: any;
   datasetSubscription: Subscription;
 
+  routeSubscription: Subscription;
+
   constructor(private route: ActivatedRoute, private store: Store<Logbook>) {}
 
   ngOnInit() {
@@ -48,7 +50,7 @@ export class LogbooksDetailComponent implements OnInit, OnDestroy {
         this.dataset = dataset;
       });
 
-    this.route.params.subscribe(params => {
+    this.routeSubscription = this.route.params.subscribe(params => {
       if (params.hasOwnProperty("name")) {
         this.logbookName = params["name"];
       } else {
@@ -65,5 +67,6 @@ export class LogbooksDetailComponent implements OnInit, OnDestroy {
     this.logbookSubscription.unsubscribe();
     this.filteredLogbookDescription.unsubscribe();
     this.datasetSubscription.unsubscribe();
+    this.routeSubscription.unsubscribe();
   }
 }

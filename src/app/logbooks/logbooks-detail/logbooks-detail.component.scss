@@ -1,16 +1,42 @@
+@import "../../../theme.scss";
+
 @media only screen and (min-width: 1280px) {
-  .mat-column-timestamp {
-    flex: 1 0 100px;
-    max-width: 200px;
-  }
+  .largeDetails {
+    mat-header-cell {
+      color: white;
+      background: mat-color($primary);
+      justify-content: center;
 
-  .mat-column-sender {
-    flex: 1 0 100px;
-    max-width: 200px;
-  }
+      i {
+        color: white;
+      }
+    }
 
-  .mat-column-entry {
-    flex: 1 0 100px;
+    mat-header-row {
+      color: white;
+      background: mat-color($primary);
+    }
+
+    .table_column {
+      color: white;
+    }
+
+    .mat-column-timestamp {
+      flex: 1 0 100px;
+      max-width: 200px;
+      justify-content: left !important;
+    }
+
+    .mat-column-sender {
+      flex: 1 0 100px;
+      max-width: 200px;
+      justify-content: left !important;
+    }
+
+    .mat-column-entry {
+      flex: 1 0 100px;
+      justify-content: left !important;
+    }
   }
 
   .smallDetails {

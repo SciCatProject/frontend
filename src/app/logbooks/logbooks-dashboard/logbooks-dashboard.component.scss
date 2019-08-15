@@ -5,6 +5,10 @@
 .cardButton {
   margin: 1em;
   text-align: center;
+
+  .material-icons {
+    vertical-align: middle;
+  }
 }
 
 .cardButton:hover {

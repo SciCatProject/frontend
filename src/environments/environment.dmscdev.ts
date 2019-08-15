@@ -7,7 +7,7 @@ export const environment = {
   production: false,
   lbBaseURL: "",
   fileserverBaseURL: "/fileserver",
-  synapseBaseUrl: "https://scicat03.esss.lu.se:8448",
+  synapseBaseUrl: "https://scicat06.esss.lu.se:8448",
   riotBaseUrl: "http://scicat05.esss.lu.se",
   externalAuthEndpoint: "/auth/msad",
   disabledDatasetColumns: ["dataStatus"],
