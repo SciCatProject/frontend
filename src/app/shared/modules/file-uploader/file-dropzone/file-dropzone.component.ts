@@ -121,7 +121,7 @@ export class FileDropzoneComponent implements OnInit, OnDestroy {
       case "datasets": {
         return {
           thumbnail: this.picked.content,
-          caption: "",
+          caption: this.picked.name,
           creationTime: new Date(),
           id: null,
           dataset: this.dataset,
@@ -137,7 +137,7 @@ export class FileDropzoneComponent implements OnInit, OnDestroy {
       case "proposals": {
         return {
           thumbnail: this.picked.content,
-          caption: "",
+          caption: this.picked.name,
           creationTime: new Date(),
           id: null,
           dataset: null,
@@ -153,7 +153,7 @@ export class FileDropzoneComponent implements OnInit, OnDestroy {
       case "samples": {
         return {
           thumbnail: this.picked.content,
-          caption: "",
+          caption: this.picked.name,
           creationTime: new Date(),
           id: null,
           dataset: null,
