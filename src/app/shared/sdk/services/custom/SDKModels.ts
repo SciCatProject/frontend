@@ -14,9 +14,9 @@ import { ApplicationCredential } from '../../models/ApplicationCredential';
 import { Policy } from '../../models/Policy';
 import { Job } from '../../models/Job';
 import { ShareGroup } from '../../models/ShareGroup';
-import { DatasetAttachment } from '../../models/DatasetAttachment';
 import { OrigDatablock } from '../../models/OrigDatablock';
 import { Logbook } from '../../models/Logbook';
+import { Attachment } from '../../models/Attachment';
 
 export interface Models { [name: string]: any }
 
@@ -38,9 +38,9 @@ export class SDKModels {
     Policy: Policy,
     Job: Job,
     ShareGroup: ShareGroup,
-    DatasetAttachment: DatasetAttachment,
     OrigDatablock: OrigDatablock,
     Logbook: Logbook,
+    Attachment: Attachment,
     
   };
 

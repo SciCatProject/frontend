@@ -9,6 +9,7 @@ export interface ProposalFilters {
 
 export interface ProposalsState {
   proposals: { [proposalId: string]: Proposal };
+  currentProposal: Proposal;
   datasets: { [datasetId: string]: any };
   hasFetched: boolean;
   selectedId: string;
@@ -17,10 +18,14 @@ export interface ProposalsState {
   filters: ProposalFilters;
   propFilters: ProposalFilters;
   proposalsLoading: boolean;
+
+  addingAttachment: boolean;
+  deletingAttachment: boolean;
 }
 
 export const initialProposalsState: ProposalsState = {
   proposals: {},
+  currentProposal: null,
   datasets: {},
   hasFetched: false,
   selectedId: null,
@@ -38,5 +43,8 @@ export const initialProposalsState: ProposalsState = {
     limit: 30,
     sortField: "createdAt desc"
   },
-  proposalsLoading: false
+  proposalsLoading: false,
+
+  addingAttachment: false,
+  deletingAttachment: false
 };

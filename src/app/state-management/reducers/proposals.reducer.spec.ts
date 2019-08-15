@@ -1,7 +1,7 @@
 import { proposalsReducer } from "./proposals.reducer";
 import { initialProposalsState } from "../state/proposals.store";
 import * as proposalsActions from "../actions/proposals.actions";
-import { Dataset, DatasetInterface } from "../models";
+import { Attachment, Dataset, DatasetInterface, Proposal } from "../models";
 
 describe("ProposalsReducer", () => {
   it("should set proposal id", () => {
@@ -39,5 +39,30 @@ describe("ProposalsReducer", () => {
     const action = new proposalsActions.FetchProposalsCompleteAction([]);
     const state = proposalsReducer(initialProposalsState, action);
     expect(state.hasFetched).toEqual(true);
+  });
+
+  it("should set currentProposal", () => {
+    const proposal = new Proposal();
+    const action = new proposalsActions.FetchProposalCompleteAction(proposal);
+    const state = proposalsReducer(initialProposalsState, action);
+    expect(state.currentProposal).toEqual(proposal);
+  });
+
+  it("should set addingAttachment to true when adding attachment", () => {
+    const attachment = new Attachment();
+    const action = new proposalsActions.AddAttachmentAction(attachment);
+    const state = proposalsReducer(initialProposalsState, action);
+    expect(state.addingAttachment).toEqual(true);
+  });
+
+  it("should set deletingAttachment to true when deleting attachment", () => {
+    const proposalId = "123abc";
+    const attachmentId = "abc123";
+    const action = new proposalsActions.DeleteAttachmentAction(
+      proposalId,
+      attachmentId
+    );
+    const state = proposalsReducer(initialProposalsState, action);
+    expect(state.deletingAttachment).toEqual(true);
   });
 });

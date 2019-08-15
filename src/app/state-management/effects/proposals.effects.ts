@@ -1,7 +1,13 @@
 import { Injectable } from "@angular/core";
 import { Actions, Effect, ofType } from "@ngrx/effects";
 import { Observable, of } from "rxjs";
-import { catchError, map, switchMap, mergeMap, withLatestFrom } from "rxjs/operators";
+import {
+  catchError,
+  map,
+  switchMap,
+  mergeMap,
+  withLatestFrom
+} from "rxjs/operators";
 import { ProposalsService } from "proposals/proposals.service";
 import {
   FETCH_DATASETS_FOR_PROPOSAL,
@@ -24,10 +30,20 @@ import {
   FetchCountOfProposalsSuccess,
   CHANGE_PAGE,
   SEARCH_PROPOSALS,
-  SORT_PROPOSALS_BY_COLUMN
+  SORT_PROPOSALS_BY_COLUMN,
+  AddProposalAttachmentOutcomeActions,
+  AddAttachmentAction,
+  ADD_ATTACHMENT,
+  AddAttachmentCompleteAction,
+  AddAttachmentFailedAction,
+  DeleteProposalAttachmentOutcomeActions,
+  DeleteAttachmentAction,
+  DELETE_ATTACHMENT,
+  DeleteAttachmentCompleteAction,
+  DeleteAttachmentFailedAction
 } from "../actions/proposals.actions";
 
-import {  getPropFilters } from "state-management/selectors/proposals.selectors";
+import { getPropFilters } from "state-management/selectors/proposals.selectors";
 import { select, Action, Store } from "@ngrx/store";
 import { ProposalApi, Proposal } from "shared/sdk";
 
@@ -38,7 +54,11 @@ export class ProposalsEffects {
 
   @Effect()
   getProposals$: Observable<FetchProposalsOutcomeAction> = this.actions$.pipe(
-    ofType<FetchProposalsAction>(FETCH_PROPOSALS, CHANGE_PAGE, SORT_PROPOSALS_BY_COLUMN),
+    ofType<FetchProposalsAction>(
+      FETCH_PROPOSALS,
+      CHANGE_PAGE,
+      SORT_PROPOSALS_BY_COLUMN
+    ),
     withLatestFrom(this.queryParams$),
     map(([action, params]) => params),
     mergeMap(({ query, limits }) => {
@@ -46,10 +66,7 @@ export class ProposalsEffects {
       console.log("gm1 limits", limits);
       return this.proposalApi.fullquery(query, limits).pipe(
         map(
-          proposals =>
-            new FetchProposalsCompleteAction(
-              proposals as Proposal[]
-            )
+          proposals => new FetchProposalsCompleteAction(proposals as Proposal[])
         ),
         catchError(() => of(new FetchProposalsFailedAction()))
       );
@@ -66,10 +83,7 @@ export class ProposalsEffects {
       console.log("gm limits", limits);
       return this.proposalApi.fullquery(query, limits).pipe(
         map(
-          proposals =>
-            new FetchProposalsCompleteAction(
-              proposals as Proposal[]
-            )
+          proposals => new FetchProposalsCompleteAction(proposals as Proposal[])
         ),
         catchError(() => of(new FetchProposalsFailedAction()))
       );
@@ -109,6 +123,53 @@ export class ProposalsEffects {
         catchError(() => of(new FetchDatasetsForProposalFailedAction()))
       )
     )
+  );
+
+  @Effect()
+  protected addAttachment$: Observable<
+    AddProposalAttachmentOutcomeActions
+  > = this.actions$.pipe(
+    ofType<AddAttachmentAction>(ADD_ATTACHMENT),
+    map((action: AddAttachmentAction) => action.attachment),
+    switchMap(attachment => {
+      console.log(
+        "Proposal Effects: Creating attachment for",
+        attachment.proposalId
+      );
+      delete attachment.id;
+      delete attachment.rawDatasetId;
+      delete attachment.derivedDatasetId;
+      delete attachment.sampleId;
+      return this.proposalApi
+        .createAttachments(
+          encodeURIComponent(attachment.proposalId),
+          attachment
+        )
+        .pipe(
+          map(res => new AddAttachmentCompleteAction(res)),
+          catchError(err => of(new AddAttachmentFailedAction(err)))
+        );
+    })
+  );
+
+  @Effect()
+  protected removeAttachment$: Observable<
+    DeleteProposalAttachmentOutcomeActions
+  > = this.actions$.pipe(
+    ofType<DeleteAttachmentAction>(DELETE_ATTACHMENT),
+    map((action: DeleteAttachmentAction) => action),
+    switchMap(action => {
+      console.log("Proposal Effects: Deleting attachment", action.attachmentId);
+      return this.proposalApi
+        .destroyByIdAttachments(
+          encodeURIComponent(action.proposalId),
+          action.attachmentId
+        )
+        .pipe(
+          map(res => new DeleteAttachmentCompleteAction(res)),
+          catchError(err => of(new DeleteAttachmentFailedAction(err)))
+        );
+    })
   );
 
   constructor(

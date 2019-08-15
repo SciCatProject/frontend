@@ -1,4 +1,7 @@
 /* tslint:disable */
+import {
+  Attachment
+} from '../index';
 
 declare var Object: any;
 export interface ProposalInterface {
@@ -11,7 +14,6 @@ export interface ProposalInterface {
   "lastname"?: string;
   "title"?: string;
   "abstract"?: string;
-  "attachments"?: Array<any>;
   "ownerGroup": string;
   "accessGroups"?: Array<any>;
   "createdBy"?: string;
@@ -20,6 +22,7 @@ export interface ProposalInterface {
   "updatedAt"?: Date;
   "MeasurementPeriodList"?: Array<any>;
   measurementPeriods?: any[];
+  attachments?: Attachment[];
 }
 
 export class Proposal implements ProposalInterface {
@@ -32,7 +35,6 @@ export class Proposal implements ProposalInterface {
   "lastname": string;
   "title": string;
   "abstract": string;
-  "attachments": Array<any>;
   "ownerGroup": string;
   "accessGroups": Array<any>;
   "createdBy": string;
@@ -41,6 +43,7 @@ export class Proposal implements ProposalInterface {
   "updatedAt": Date;
   "MeasurementPeriodList": Array<any>;
   measurementPeriods: any[];
+  attachments: Attachment[];
   constructor(data?: ProposalInterface) {
     Object.assign(this, data);
   }
@@ -110,10 +113,6 @@ export class Proposal implements ProposalInterface {
           name: 'abstract',
           type: 'string'
         },
-        "attachments": {
-          name: 'attachments',
-          type: 'Array&lt;any&gt;'
-        },
         "ownerGroup": {
           name: 'ownerGroup',
           type: 'string'
@@ -152,6 +151,14 @@ export class Proposal implements ProposalInterface {
           relationType: 'embedsMany',
                   keyFrom: 'MeasurementPeriodList',
           keyTo: 'id'
+        },
+        attachments: {
+          name: 'attachments',
+          type: 'Attachment[]',
+          model: 'Attachment',
+          relationType: 'hasMany',
+                  keyFrom: 'proposalId',
+          keyTo: 'proposalId'
         },
       }
     }

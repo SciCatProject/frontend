@@ -3,7 +3,7 @@ import { ArchivingService } from "../archiving.service";
 import { DatasetTableComponent } from "./dataset-table.component";
 import { HttpClient } from "@angular/common/http";
 import { MatDialogModule, MatTableModule } from "@angular/material";
-import { MockHttp, MockLoginService, MockRouter, MockDatasetAttachmentApi, MockDatasetApi, MockArchivingService } from "shared/MockStubs";
+import { MockHttp, MockLoginService, MockRouter, MockDatasetApi, MockArchivingService, MockAttachmentApi } from "shared/MockStubs";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { Router } from "@angular/router";
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
@@ -11,7 +11,7 @@ import { combineReducers, StoreModule } from "@ngrx/store";
 import { datasetsReducer } from "state-management/reducers/datasets.reducer";
 import { jobsReducer } from "state-management/reducers/jobs.reducer";
 import { LoginService } from "../../users/login.service";
-import { DatasetAttachmentApi, DatasetApi } from "shared/sdk";
+import { AttachmentApi, DatasetApi } from "shared/sdk";
 import { SharedCatanieModule } from "shared/shared.module";
 
 describe("DatasetTableComponent", () => {
@@ -40,7 +40,7 @@ describe("DatasetTableComponent", () => {
         providers: [
           { provide: HttpClient, useClass: MockHttp },
           { provide: Router, useClass: MockRouter },
-          { provide: DatasetAttachmentApi, useClass: MockDatasetAttachmentApi },
+          { provide: AttachmentApi, useClass: MockAttachmentApi },
           { provide: DatasetApi, useClass: MockDatasetApi },
           {
             provide: APP_CONFIG,

@@ -11,7 +11,7 @@ export const getCurrentDataset = createSelector(
 export const getCurrentDatasetWithoutOrigData = createSelector(
   getDatasetState,
   state => {
-    const {origdatablocks, ...theRest} = state.currentSet;
+    const { origdatablocks, ...theRest } = state.currentSet;
     return theRest;
   }
 );
@@ -23,7 +23,7 @@ export const getCurrentOrigDatablocks = createSelector(
 
 export const getCurrentAttachments = createSelector(
   getCurrentDataset,
-  dataset => dataset.datasetattachments
+  dataset => dataset.attachments
 );
 
 export const getCurrentDatablocks = createSelector(

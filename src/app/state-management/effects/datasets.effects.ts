@@ -30,9 +30,9 @@ export class DatasetEffects {
     ofType(DatasetActions.DELETE_ATTACHMENT),
     map((action: DatasetActions.DeleteAttachment) => action),
     switchMap(action => {
-      console.log("deleting attachment", action.attachment_id);
+      console.log("Dataset Effects: Deleting attachment", action.attachment_id);
       return this.datasetApi
-        .destroyByIdDatasetattachments(
+        .destroyByIdAttachments(
           encodeURIComponent(action.dataset_id),
           action.attachment_id
         )
@@ -63,15 +63,19 @@ export class DatasetEffects {
     ofType(DatasetActions.ADD_ATTACHMENT),
     map((action: DatasetActions.AddAttachment) => action.attachment),
     switchMap(attachment => {
-      console.log("creating attachment for", attachment.datasetId);
+      console.log(
+        "Dataset Effects: Creating attachment for",
+        attachment.datasetId
+      );
       delete attachment.id;
+      delete attachment.rawDatasetId;
+      delete attachment.derivedDatasetId;
+      delete attachment.proposalId;
+      delete attachment.sampleId;
       return this.datasetApi
-        .createDatasetattachments(
-          encodeURIComponent(attachment.datasetId),
-          attachment
-        )
+        .createAttachments(encodeURIComponent(attachment.datasetId), attachment)
         .pipe(
-          map(res => new DatasetActions.AddAttachmentComplete(attachment)),
+          map(res => new DatasetActions.AddAttachmentComplete(res)),
           catchError(err => of(new DatasetActions.AddAttachmentFailed(err)))
         );
     })
@@ -86,7 +90,7 @@ export class DatasetEffects {
         include: [
           { relation: "origdatablocks" },
           { relation: "datablocks" },
-          { relation: "datasetattachments" }
+          { relation: "attachments" }
         ]
       };
 
@@ -111,7 +115,6 @@ export class DatasetEffects {
   private rectangularRepresentation$ = this.store.pipe(
     select(getRectangularRepresentation)
   );
-
 
   private datasetsInBatch$ = this.store.pipe(select(getDatasetsInBatch));
   private currentUser$ = this.store.pipe(select(getCurrentUser));
@@ -175,8 +178,8 @@ export class DatasetEffects {
     ofType<DatasetActions.ReduceDatasetAction>(DatasetActions.REDUCE_DATASET),
     mergeMap(action =>
       this.datasetApi.reduceDataset(action.dataset).pipe(
-      map(result => new DatasetActions.ReduceDatasetCompleteAction(result)),
-      catchError(() => of(new DatasetActions.ReduceDatasetFailedAction()))
+        map(result => new DatasetActions.ReduceDatasetCompleteAction(result)),
+        catchError(() => of(new DatasetActions.ReduceDatasetFailedAction()))
       )
     )
   );
@@ -184,7 +187,7 @@ export class DatasetEffects {
   constructor(
     private actions$: Actions,
     private store: Store<any>,
-    private datasetApi: DatasetApi,
+    private datasetApi: DatasetApi
   ) {}
 
   private storeBatch(batch: Dataset[], userId: string): void {

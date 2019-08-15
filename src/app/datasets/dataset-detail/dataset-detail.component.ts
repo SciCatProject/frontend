@@ -190,11 +190,6 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
   }
 
   delete(dataset_id, dataset_attachment_id) {
-    console.log(
-      "fire action to delete dataset attachment id ",
-      dataset_attachment_id,
-      dataset_id
-    );
     this.store.dispatch(
       new DeleteAttachment(dataset_id, dataset_attachment_id)
     );

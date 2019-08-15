@@ -62,9 +62,9 @@ import { ApplicationCredentialApi } from './services/custom/ApplicationCredentia
 import { PolicyApi } from './services/custom/Policy';
 import { JobApi } from './services/custom/Job';
 import { ShareGroupApi } from './services/custom/ShareGroup';
-import { DatasetAttachmentApi } from './services/custom/DatasetAttachment';
 import { OrigDatablockApi } from './services/custom/OrigDatablock';
 import { LogbookApi } from './services/custom/Logbook';
+import { AttachmentApi } from './services/custom/Attachment';
 /**
 * @module SDKBrowserModule
 * @description
@@ -109,9 +109,9 @@ export class SDKBrowserModule {
         PolicyApi,
         JobApi,
         ShareGroupApi,
-        DatasetAttachmentApi,
         OrigDatablockApi,
         LogbookApi,
+        AttachmentApi,
         internalStorageProvider,
         { provide: SDKStorage, useClass: StorageBrowser },
         { provide: SocketDriver, useClass: SocketBrowser }

@@ -32,7 +32,15 @@ import {
   FetchDatasetsForSample,
   FetchDatasetsForSampleComplete,
   FetchDatasetsForSampleFailed,
-  FETCH_DATASETS_FOR_SAMPLE
+  FETCH_DATASETS_FOR_SAMPLE,
+  ADD_ATTACHMENT,
+  AddAttachmentAction,
+  AddAttachmentCompleteAction,
+  AddAttachmentFailedAction,
+  DELETE_ATTACHMENT,
+  DeleteAttachmentAction,
+  DeleteAttachmentCompleteAction,
+  DeleteAttachmentFailedAction
 } from "../actions/samples.actions";
 import {
   getQuery,
@@ -132,6 +140,46 @@ export class SamplesEffects {
         catchError(() => of(new FetchDatasetsForSampleFailed()))
       )
     )
+  );
+
+  @Effect()
+  protected addAttachment$: Observable<Action> = this.actions$.pipe(
+    ofType(ADD_ATTACHMENT),
+    map((action: AddAttachmentAction) => action.attachment),
+    switchMap(attachment => {
+      console.log(
+        "Sample Effects: Creating attachment for",
+        attachment.sampleId
+      );
+      delete attachment.id;
+      delete attachment.rawDatasetId;
+      delete attachment.derivedDatasetId;
+      delete attachment.proposalId;
+      return this.sampleApi
+        .createAttachments(encodeURIComponent(attachment.sampleId), attachment)
+        .pipe(
+          map(res => new AddAttachmentCompleteAction(res)),
+          catchError(err => of(new AddAttachmentFailedAction(err)))
+        );
+    })
+  );
+
+  @Effect()
+  protected removeAttachment$: Observable<Action> = this.actions$.pipe(
+    ofType(DELETE_ATTACHMENT),
+    map((action: DeleteAttachmentAction) => action),
+    switchMap(action => {
+      console.log("Sample Effects: Deleting attachment", action.attachmentId);
+      return this.sampleApi
+        .destroyByIdAttachments(
+          encodeURIComponent(action.sampleId),
+          action.attachmentId
+        )
+        .pipe(
+          map(res => new DeleteAttachmentCompleteAction(res)),
+          catchError(err => of(new DeleteAttachmentFailedAction(err)))
+        );
+    })
   );
 
   constructor(

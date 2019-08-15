@@ -3,8 +3,8 @@ import {
   Sample,
   Proposal,
   Datablock,
-  DatasetAttachment,
-  OrigDatablock
+  OrigDatablock,
+  Attachment
 } from '../index';
 
 declare var Object: any;
@@ -46,9 +46,9 @@ export interface RawDatasetInterface {
   proposal?: Proposal;
   datasetLifecycle?: any[];
   datablocks?: Datablock[];
-  datasetattachments?: DatasetAttachment[];
   origdatablocks?: OrigDatablock[];
   historyList?: any[];
+  attachments?: Attachment[];
 }
 
 export class RawDataset implements RawDatasetInterface {
@@ -89,9 +89,9 @@ export class RawDataset implements RawDatasetInterface {
   proposal: Proposal;
   datasetLifecycle: any[];
   datablocks: Datablock[];
-  datasetattachments: DatasetAttachment[];
   origdatablocks: OrigDatablock[];
   historyList: any[];
+  attachments: Attachment[];
   constructor(data?: RawDatasetInterface) {
     Object.assign(this, data);
   }
@@ -292,14 +292,6 @@ export class RawDataset implements RawDatasetInterface {
                   keyFrom: 'pid',
           keyTo: 'rawDatasetId'
         },
-        datasetattachments: {
-          name: 'datasetattachments',
-          type: 'DatasetAttachment[]',
-          model: 'DatasetAttachment',
-          relationType: 'hasMany',
-                  keyFrom: 'pid',
-          keyTo: 'rawDatasetId'
-        },
         origdatablocks: {
           name: 'origdatablocks',
           type: 'OrigDatablock[]',
@@ -315,6 +307,14 @@ export class RawDataset implements RawDatasetInterface {
           relationType: 'embedsMany',
                   keyFrom: 'history',
           keyTo: 'id'
+        },
+        attachments: {
+          name: 'attachments',
+          type: 'Attachment[]',
+          model: 'Attachment',
+          relationType: 'hasMany',
+                  keyFrom: 'pid',
+          keyTo: 'rawDatasetId'
         },
       }
     }

@@ -1,47 +1,57 @@
 /* tslint:disable */
 import {
-  Dataset
+  Dataset,
+  Sample,
+  Proposal
 } from '../index';
 
 declare var Object: any;
-export interface DatasetAttachmentInterface {
+export interface AttachmentInterface {
   "thumbnail": string;
   "caption"?: string;
   "creationTime"?: Date;
   "id"?: any;
   "datasetId"?: string;
+  "sampleId"?: string;
+  "proposalId"?: string;
   "rawDatasetId"?: string;
   "derivedDatasetId"?: string;
   dataset?: Dataset;
+  sample?: Sample;
+  proposal?: Proposal;
 }
 
-export class DatasetAttachment implements DatasetAttachmentInterface {
+export class Attachment implements AttachmentInterface {
   "thumbnail": string;
   "caption": string;
   "creationTime": Date;
   "id": any;
   "datasetId": string;
+  "sampleId": string;
+  "proposalId": string;
   "rawDatasetId": string;
   "derivedDatasetId": string;
   dataset: Dataset;
-  constructor(data?: DatasetAttachmentInterface) {
+  sample: Sample;
+  proposal: Proposal;
+  constructor(data?: AttachmentInterface) {
     Object.assign(this, data);
   }
   /**
    * The name of the model represented by this $resource,
-   * i.e. `DatasetAttachment`.
+   * i.e. `Attachment`.
    */
   public static getModelName() {
-    return "DatasetAttachment";
+    return "Attachment";
   }
   /**
   * @method factory
   * @author Jonathan Casarrubias
   * @license MIT
-  * This method creates an instance of DatasetAttachment for dynamic purposes.
+  * This method creates an instance of Attachment for dynamic purposes.
   **/
-  public static factory(data: DatasetAttachmentInterface): DatasetAttachment{
-    return new DatasetAttachment(data);
+  public static factory(data: AttachmentInterface): Attachment{
+    return new Attachment(data);
   }
   /**
   * @method getModelDefinition
@@ -52,9 +62,9 @@ export class DatasetAttachment implements DatasetAttachmentInterface {
   **/
   public static getModelDefinition() {
     return {
-      name: 'DatasetAttachment',
-      plural: 'DatasetAttachments',
-      path: 'DatasetAttachments',
+      name: 'Attachment',
+      plural: 'Attachments',
+      path: 'Attachments',
       idName: 'id',
       properties: {
         "thumbnail": {
@@ -65,7 +75,7 @@ export class DatasetAttachment implements DatasetAttachmentInterface {
         "caption": {
           name: 'caption',
           type: 'string',
-          default: 'retrieve'
+          default: ''
         },
         "creationTime": {
           name: 'creationTime',
@@ -77,6 +87,14 @@ export class DatasetAttachment implements DatasetAttachmentInterface {
         },
         "datasetId": {
           name: 'datasetId',
+          type: 'string'
+        },
+        "sampleId": {
+          name: 'sampleId',
+          type: 'string'
+        },
+        "proposalId": {
+          name: 'proposalId',
           type: 'string'
         },
         "rawDatasetId": {
@@ -96,6 +114,22 @@ export class DatasetAttachment implements DatasetAttachmentInterface {
           relationType: 'belongsTo',
                   keyFrom: 'datasetId',
           keyTo: 'pid'
+        },
+        sample: {
+          name: 'sample',
+          type: 'Sample',
+          model: 'Sample',
+          relationType: 'belongsTo',
+                  keyFrom: 'sampleId',
+          keyTo: 'sampleId'
+        },
+        proposal: {
+          name: 'proposal',
+          type: 'Proposal',
+          model: 'Proposal',
+          relationType: 'belongsTo',
+                  keyFrom: 'proposalId',
+          keyTo: 'proposalId'
         },
       }
     }

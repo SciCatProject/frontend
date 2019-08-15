@@ -8,7 +8,8 @@ import {
   Policy,
   Sample,
   Logbook,
-  PublishedData
+  PublishedData,
+  Attachment
 } from "shared/sdk/models";
 export {
   User,
@@ -20,7 +21,8 @@ export {
   Policy,
   Sample,
   Logbook,
-  PublishedData
+  PublishedData,
+  Attachment
 };
 
 import { DatasetInterface } from "shared/sdk";
@@ -52,7 +54,10 @@ export enum ArchViewMode {
   system_error = "system error",
   user_error = "user error"
 }
-export enum JobViewMode { myJobs = "my jobs", allJobs = "all jobs"}
+export enum JobViewMode {
+  myJobs = "my jobs",
+  allJobs = "all jobs"
+}
 
 type ScientificConditionRelation =
   | "EQUAL_TO_NUMERIC"
@@ -87,7 +92,6 @@ export interface SampleFilters {
   skip: number;
   limit: number;
 }
-
 
 export interface PublishedDataFilters {
   sortField: string;

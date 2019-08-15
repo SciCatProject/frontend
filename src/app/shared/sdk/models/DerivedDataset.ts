@@ -1,8 +1,8 @@
 /* tslint:disable */
 import {
   Datablock,
-  DatasetAttachment,
-  OrigDatablock
+  OrigDatablock,
+  Attachment
 } from '../index';
 
 declare var Object: any;
@@ -41,9 +41,9 @@ export interface DerivedDatasetInterface {
   "history"?: Array<any>;
   datasetLifecycle?: any[];
   datablocks?: Datablock[];
-  datasetattachments?: DatasetAttachment[];
   origdatablocks?: OrigDatablock[];
   historyList?: any[];
+  attachments?: Attachment[];
 }
 
 export class DerivedDataset implements DerivedDatasetInterface {
@@ -81,9 +81,9 @@ export class DerivedDataset implements DerivedDatasetInterface {
   "history": Array<any>;
   datasetLifecycle: any[];
   datablocks: Datablock[];
-  datasetattachments: DatasetAttachment[];
   origdatablocks: OrigDatablock[];
   historyList: any[];
+  attachments: Attachment[];
   constructor(data?: DerivedDatasetInterface) {
     Object.assign(this, data);
   }
@@ -264,14 +264,6 @@ export class DerivedDataset implements DerivedDatasetInterface {
                   keyFrom: 'pid',
           keyTo: 'derivedDatasetId'
         },
-        datasetattachments: {
-          name: 'datasetattachments',
-          type: 'DatasetAttachment[]',
-          model: 'DatasetAttachment',
-          relationType: 'hasMany',
-                  keyFrom: 'pid',
-          keyTo: 'derivedDatasetId'
-        },
         origdatablocks: {
           name: 'origdatablocks',
           type: 'OrigDatablock[]',
@@ -287,6 +279,14 @@ export class DerivedDataset implements DerivedDatasetInterface {
           relationType: 'embedsMany',
                   keyFrom: 'history',
           keyTo: 'id'
+        },
+        attachments: {
+          name: 'attachments',
+          type: 'Attachment[]',
+          model: 'Attachment',
+          relationType: 'hasMany',
+                  keyFrom: 'pid',
+          keyTo: 'derivedDatasetId'
         },
       }
     }

@@ -42,7 +42,7 @@ export class MockDatasetApi {
   }
 }
 
-export class MockDatasetAttachmentApi {}
+export class MockAttachmentApi {}
 
 export class MockMatDialogRef {}
 
@@ -66,7 +66,7 @@ export class MockSampleService {
       description: "string",
       createdAt: new Date(),
       sampleCharacteristics: "string",
-      attachments: ["string"],
+      attachments: [],
       ownerGroup: "string",
       accessGroups: ["string"],
       createdBy: "string",
@@ -84,7 +84,7 @@ export class MockSampleService {
       description: "string",
       createdAt: new Date(),
       sampleCharacteristics: "string",
-      attachments: ["string"],
+      attachments: [],
       ownerGroup: "string",
       accessGroups: ["string"],
       createdBy: "string",
@@ -118,6 +118,7 @@ export class MockActivatedRoute {
   };
   params = of([{ id: 1 }]);
   queryParams = of([{ limit: 10 }]);
+  url = of([]);
   children = [];
 }
 

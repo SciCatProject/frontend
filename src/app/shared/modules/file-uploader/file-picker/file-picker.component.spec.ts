@@ -1,8 +1,9 @@
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 import { Store } from "@ngrx/store";
-import { MockStore } from "shared/MockStubs";
+import { MockStore, MockActivatedRoute } from "shared/MockStubs";
 import { FilePickerComponent } from "./file-picker.component";
+import { ActivatedRoute } from "@angular/router";
 
 describe("FilePickerComponent", () => {
   let component: FilePickerComponent;
@@ -15,7 +16,10 @@ describe("FilePickerComponent", () => {
     });
     TestBed.overrideComponent(FilePickerComponent, {
       set: {
-        providers: [{ provide: Store, useClass: MockStore }]
+        providers: [
+          { provide: ActivatedRoute, useClass: MockActivatedRoute },
+          { provide: Store, useClass: MockStore }
+        ]
       }
     });
     TestBed.compileComponents();

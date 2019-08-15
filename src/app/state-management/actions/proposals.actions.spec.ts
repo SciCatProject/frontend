@@ -1,4 +1,4 @@
-import { Dataset, Proposal } from "../models";
+import { Attachment, Dataset, Proposal } from "../models";
 import {
   FETCH_DATASETS_FOR_PROPOSAL,
   FETCH_DATASETS_FOR_PROPOSAL_COMPLETE,
@@ -19,7 +19,11 @@ import {
   FetchProposalsCompleteAction,
   FetchProposalsFailedAction,
   SELECT_PROPOSAL,
-  SelectProposalAction
+  SelectProposalAction,
+  AddAttachmentAction,
+  ADD_ATTACHMENT,
+  DeleteAttachmentAction,
+  DELETE_ATTACHMENT
 } from "./proposals.actions";
 
 describe("SelectProposalAction", () => {
@@ -104,5 +108,26 @@ describe("FetchDatasetsForProposalFailedAction", () => {
   it("should create an action", () => {
     const action = new FetchDatasetsForProposalFailedAction();
     expect({ ...action }).toEqual({ type: FETCH_DATASETS_FOR_PROPOSAL_FAILED });
+  });
+});
+
+describe("AddAttachmentAction", () => {
+  it("should create an action", () => {
+    const attachment = new Attachment();
+    const action = new AddAttachmentAction(attachment);
+    expect({ ...action }).toEqual({ type: ADD_ATTACHMENT, attachment });
+  });
+});
+
+describe("DeleteAttachmentAction", () => {
+  it("should create an action", () => {
+    const proposalId = "123abc";
+    const attachmentId = "abc123";
+    const action = new DeleteAttachmentAction(proposalId, attachmentId);
+    expect({ ...action }).toEqual({
+      type: DELETE_ATTACHMENT,
+      proposalId,
+      attachmentId
+    });
   });
 });

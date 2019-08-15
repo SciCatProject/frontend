@@ -96,3 +96,8 @@ export const getSamplesPerPage = createSelector(
 
 export const getCurrentSample = (state: any) =>
   state.root.samples.currentSample;
+
+export const getCurrentAttachments = createSelector(
+  getCurrentSample,
+  sample => sample.attachments
+);

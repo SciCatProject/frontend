@@ -9,7 +9,7 @@ import {
   FetchDatasetsForProposalAction
 } from "state-management/actions/proposals.actions";
 import {
-  getSelectedProposal,
+  getCurrentProposal,
   getSelectedProposalDatasets
 } from "state-management/selectors/proposals.selectors";
 import { AppState } from "state-management/state/app.store";
@@ -18,12 +18,13 @@ import { Dataset, Proposal } from "state-management/models";
 @Component({
   selector: "view-proposal-page",
   template: `
-        <proposal-detail
-            *ngIf="proposal$ | async"
-            [proposal]="proposal$ | async"
-            [datasets]="datasets$ | async">
-        </proposal-detail>
-    `
+    <proposal-detail
+      *ngIf="proposal$ | async"
+      [proposal]="proposal$ | async"
+      [datasets]="datasets$ | async"
+    >
+    </proposal-detail>
+  `
 })
 export class ViewProposalPageComponent implements OnInit, OnDestroy {
   private subscription: Subscription;
@@ -49,7 +50,7 @@ export class ViewProposalPageComponent implements OnInit, OnDestroy {
       )
       .subscribe(this.store);
 
-    this.proposal$ = this.store.pipe(select(getSelectedProposal));
+    this.proposal$ = this.store.pipe(select(getCurrentProposal));
     this.datasets$ = this.store.pipe(select(getSelectedProposalDatasets));
   }
 

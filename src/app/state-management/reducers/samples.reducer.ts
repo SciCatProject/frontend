@@ -29,7 +29,15 @@ import {
   FETCH_DATASETS_FOR_SAMPLE_COMPLETE,
   FetchDatasetsForSampleComplete,
   SET_CURRENT_DATASETS,
-  SetCurrentDatasets
+  SetCurrentDatasets,
+  ADD_ATTACHMENT,
+  ADD_ATTACHMENT_COMPLETE,
+  AddAttachmentCompleteAction,
+  ADD_ATTACHMENT_FAILED,
+  DELETE_ATTACHMENT_COMPLETE,
+  DELETE_ATTACHMENT,
+  DeleteAttachmentCompleteAction,
+  DELETE_ATTACHMENT_FAILED
 } from "state-management/actions/samples.actions";
 import { Action } from "@ngrx/store";
 
@@ -125,7 +133,6 @@ export function samplesReducer(
 
     case FETCH_SAMPLE_COMPLETE: {
       const currentSample = (action as FetchSampleCompleteAction).currentSample;
-      // console.log("fetch sample complete");
       return { ...state, currentSample, samplesLoading: false };
     }
 
@@ -155,6 +162,52 @@ export function samplesReducer(
         samplesLoading: true,
         filters
       };
+    }
+
+    case ADD_ATTACHMENT: {
+      return { ...state, addingAttachment: true };
+    }
+
+    case ADD_ATTACHMENT_COMPLETE: {
+      const attachment = (action as AddAttachmentCompleteAction).attachment;
+      const attachments = state.currentSample.attachments;
+      const attach2 = new Set(attachments);
+      attach2.add(attachment);
+
+      return {
+        ...state,
+        addingAttachment: false,
+        currentSample: {
+          ...state.currentSample,
+          attachments: Array.from(attach2)
+        }
+      };
+    }
+
+    case ADD_ATTACHMENT_FAILED: {
+      return { ...state };
+    }
+
+    case DELETE_ATTACHMENT: {
+      return { ...state, deletingAttachment: true };
+    }
+
+    case DELETE_ATTACHMENT_COMPLETE: {
+      const attachments = state.currentSample.attachments;
+      const attachmentId = (action as DeleteAttachmentCompleteAction)
+        .attachmentId;
+      const attach2 = attachments.filter(
+        attachment => attachment.id !== attachmentId
+      );
+      return {
+        ...state,
+        deletingAttachment: false,
+        currentSample: { ...state.currentSample, attachments: attach2 }
+      };
+    }
+
+    case DELETE_ATTACHMENT_FAILED: {
+      return { ...state };
     }
 
     default: {
