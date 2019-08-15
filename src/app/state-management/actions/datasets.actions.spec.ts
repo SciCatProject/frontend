@@ -1,4 +1,4 @@
-import { Dataset } from "shared/sdk/models";
+import { Dataset, Attachment } from "shared/sdk/models";
 import { ArchViewMode } from "state-management/models";
 import {
   CLEAR_SELECTION,
@@ -20,7 +20,11 @@ import {
   SetViewModeAction,
   SORT_BY_COLUMN,
   SortByColumnAction,
-  UpdateFilterAction
+  UpdateFilterAction,
+  AddAttachment,
+  ADD_ATTACHMENT,
+  DeleteAttachment,
+  DELETE_ATTACHMENT
 } from "./datasets.actions";
 
 describe("UpdateFilterAction", () => {
@@ -86,7 +90,6 @@ describe("ClearSelectionAction", () => {
   });
 });
 
-
 describe("SortByColumnAction", () => {
   it("should create an action", () => {
     const column = "3";
@@ -101,5 +104,26 @@ describe("SetViewModeAction", () => {
     const modeToggle = ArchViewMode.all;
     const action = new SetViewModeAction(modeToggle);
     expect({ ...action }).toEqual({ type: SET_VIEW_MODE, modeToggle });
+  });
+});
+
+describe("AddAttachment", () => {
+  it("should create an action", () => {
+    const attachment = new Attachment();
+    const action = new AddAttachment(attachment);
+    expect({ ...action }).toEqual({ type: ADD_ATTACHMENT, attachment });
+  });
+});
+
+describe("DeleteAttachment", () => {
+  it("should create an action", () => {
+    const dataset_id = "123abc";
+    const attachment_id = "abc123";
+    const action = new DeleteAttachment(dataset_id, attachment_id);
+    expect({ ...action }).toEqual({
+      type: DELETE_ATTACHMENT,
+      dataset_id,
+      attachment_id
+    });
   });
 });

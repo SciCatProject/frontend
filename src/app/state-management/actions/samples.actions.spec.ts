@@ -4,9 +4,13 @@ import {
   FETCH_SAMPLES_FAILED,
   FetchSamplesAction,
   FetchSamplesCompleteAction,
-  FetchSamplesFailedAction
+  FetchSamplesFailedAction,
+  AddAttachmentAction,
+  ADD_ATTACHMENT,
+  DeleteAttachmentAction,
+  DELETE_ATTACHMENT
 } from "./samples.actions";
-import { Sample } from "../../shared/sdk/models";
+import { Attachment, Sample } from "../../shared/sdk/models";
 
 
 describe("FetchSamplesAction", () => {
@@ -34,4 +38,23 @@ describe("FetchSamplesFailedAction", () => {
   });
 });
 
+describe("AddAttachmentAction", () => {
+  it("should create an action", () => {
+    const attachment = new Attachment();
+    const action = new AddAttachmentAction(attachment);
+    expect({ ...action }).toEqual({ type: ADD_ATTACHMENT, attachment });
+  });
+});
 
+describe("DeleteAttachmentAction", () => {
+  it("should create an action", () => {
+    const sampleId = "123abc";
+    const attachmentId = "abc123";
+    const action = new DeleteAttachmentAction(sampleId, attachmentId);
+    expect({ ...action }).toEqual({
+      type: DELETE_ATTACHMENT,
+      sampleId,
+      attachmentId
+    });
+  });
+});

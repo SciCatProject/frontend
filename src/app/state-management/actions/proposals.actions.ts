@@ -140,7 +140,7 @@ export class AddAttachmentFailedAction implements Action {
 export class DeleteAttachmentAction implements Action {
   readonly type = DELETE_ATTACHMENT;
 
-  constructor(readonly sampleId: string, readonly attachmentId: string) {}
+  constructor(readonly proposalId: string, readonly attachmentId: string) {}
 }
 
 export class DeleteAttachmentCompleteAction implements Action {
@@ -167,11 +167,11 @@ export type FetchDatasetsForProposalOutcomeAction =
   | FetchDatasetsForProposalCompleteAction
   | FetchDatasetsForProposalFailedAction;
 
-export type AddSampleAttachmentOutcomeActions =
+export type AddProposalAttachmentOutcomeActions =
   | AddAttachmentCompleteAction
   | AddAttachmentFailedAction;
 
-export type DeleteSampleAttachmentOutcomeActions =
+export type DeleteProposalAttachmentOutcomeActions =
   | DeleteAttachmentCompleteAction
   | DeleteAttachmentFailedAction;
 
@@ -184,6 +184,6 @@ export type ProposalsAction =
   | FetchDatasetsForProposalAction
   | FetchDatasetsForProposalOutcomeAction
   | AddAttachmentAction
-  | AddSampleAttachmentOutcomeActions
+  | AddProposalAttachmentOutcomeActions
   | DeleteAttachmentAction
-  | DeleteSampleAttachmentOutcomeActions;
+  | DeleteProposalAttachmentOutcomeActions;

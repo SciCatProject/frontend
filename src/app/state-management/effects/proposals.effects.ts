@@ -31,12 +31,12 @@ import {
   CHANGE_PAGE,
   SEARCH_PROPOSALS,
   SORT_PROPOSALS_BY_COLUMN,
-  AddSampleAttachmentOutcomeActions,
+  AddProposalAttachmentOutcomeActions,
   AddAttachmentAction,
   ADD_ATTACHMENT,
   AddAttachmentCompleteAction,
   AddAttachmentFailedAction,
-  DeleteSampleAttachmentOutcomeActions,
+  DeleteProposalAttachmentOutcomeActions,
   DeleteAttachmentAction,
   DELETE_ATTACHMENT,
   DeleteAttachmentCompleteAction,
@@ -127,7 +127,7 @@ export class ProposalsEffects {
 
   @Effect()
   protected addAttachment$: Observable<
-    AddSampleAttachmentOutcomeActions
+    AddProposalAttachmentOutcomeActions
   > = this.actions$.pipe(
     ofType<AddAttachmentAction>(ADD_ATTACHMENT),
     map((action: AddAttachmentAction) => action.attachment),
@@ -154,7 +154,7 @@ export class ProposalsEffects {
 
   @Effect()
   protected removeAttachment$: Observable<
-    DeleteSampleAttachmentOutcomeActions
+    DeleteProposalAttachmentOutcomeActions
   > = this.actions$.pipe(
     ofType<DeleteAttachmentAction>(DELETE_ATTACHMENT),
     map((action: DeleteAttachmentAction) => action),
@@ -162,7 +162,7 @@ export class ProposalsEffects {
       console.log("Proposal Effects: Deleting attachment", action.attachmentId);
       return this.proposalApi
         .destroyByIdAttachments(
-          encodeURIComponent(action.sampleId),
+          encodeURIComponent(action.proposalId),
           action.attachmentId
         )
         .pipe(
