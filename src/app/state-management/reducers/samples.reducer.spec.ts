@@ -3,9 +3,7 @@ import { initialSampleState } from "../state/samples.store";
 import {
   SelectSampleAction,
   AddAttachmentAction,
-  AddAttachmentCompleteAction,
-  DeleteAttachmentAction,
-  DeleteAttachmentCompleteAction
+  DeleteAttachmentAction
 } from "../actions/samples.actions";
 import { Attachment } from "../models";
 
