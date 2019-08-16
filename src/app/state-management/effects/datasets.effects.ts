@@ -30,7 +30,6 @@ export class DatasetEffects {
     ofType(DatasetActions.DELETE_ATTACHMENT),
     map((action: DatasetActions.DeleteAttachment) => action),
     switchMap(action => {
-      console.log("Dataset Effects: Deleting attachment", action.attachment_id);
       return this.datasetApi
         .destroyByIdAttachments(
           encodeURIComponent(action.dataset_id),
@@ -63,10 +62,6 @@ export class DatasetEffects {
     ofType(DatasetActions.ADD_ATTACHMENT),
     map((action: DatasetActions.AddAttachment) => action.attachment),
     switchMap(attachment => {
-      console.log(
-        "Dataset Effects: Creating attachment for",
-        attachment.datasetId
-      );
       delete attachment.id;
       delete attachment.rawDatasetId;
       delete attachment.derivedDatasetId;
@@ -86,10 +81,6 @@ export class DatasetEffects {
     ofType(DatasetActions.UPDATE_ATTACHMENT_CAPTION),
     map((action: DatasetActions.UpdateAttachmentCaptionAction) => action),
     switchMap(action => {
-      console.log(
-        "Dataset Effects: Updating attachment caption:",
-        action.attachmentId
-      );
       const newCaption = { caption: action.caption };
       return this.datasetApi
         .updateByIdAttachments(

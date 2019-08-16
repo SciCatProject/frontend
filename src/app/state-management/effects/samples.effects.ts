@@ -151,10 +151,6 @@ export class SamplesEffects {
     ofType(ADD_ATTACHMENT),
     map((action: AddAttachmentAction) => action.attachment),
     switchMap(attachment => {
-      console.log(
-        "Sample Effects: Creating attachment for",
-        attachment.sampleId
-      );
       delete attachment.id;
       delete attachment.rawDatasetId;
       delete attachment.derivedDatasetId;
@@ -173,7 +169,6 @@ export class SamplesEffects {
     ofType(DELETE_ATTACHMENT),
     map((action: DeleteAttachmentAction) => action),
     switchMap(action => {
-      console.log("Sample Effects: Deleting attachment", action.attachmentId);
       return this.sampleApi
         .destroyByIdAttachments(
           encodeURIComponent(action.sampleId),
@@ -191,10 +186,6 @@ export class SamplesEffects {
     ofType(UPDATE_ATTACHMENT_CAPTION),
     map((action: UpdateAttachmentCaptionAction) => action),
     switchMap(action => {
-      console.log(
-        "Sample Effects: Updating attachment caption:",
-        action.attachmentId
-      );
       const newCaption = { caption: action.caption };
       return this.sampleApi
         .updateByIdAttachments(
@@ -203,12 +194,8 @@ export class SamplesEffects {
           newCaption
         )
         .pipe(
-          map(
-            res => new UpdateAttachmentCaptionCompleteAction(res)
-          ),
-          catchError(err =>
-            of(new UpdateAttachmentCaptionFailedAction(err))
-          )
+          map(res => new UpdateAttachmentCaptionCompleteAction(res)),
+          catchError(err => of(new UpdateAttachmentCaptionFailedAction(err)))
         );
     })
   );
