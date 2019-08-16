@@ -2,7 +2,8 @@ import { ActivatedRoute } from "@angular/router";
 import { Component, Inject, OnDestroy, OnInit } from "@angular/core";
 import {
   DatablocksAction,
-  DeleteAttachment
+  DeleteAttachment,
+  UpdateAttachmentCaptionAction
 } from "state-management/actions/datasets.actions";
 import { Job, User } from "shared/sdk/models";
 import { select, Store } from "@ngrx/store";
@@ -157,7 +158,6 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
     }
   }
 
-
   resetDataset(dataset) {
     if (!confirm("Reset datablocks?")) {
       return null;
@@ -187,6 +187,15 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
         console.log(job);
         this.store.dispatch(new SubmitAction(job));
       });
+  }
+
+  updateCaption(datasetId: string, attachmentId: string, caption: string) {
+    console.log("updateCaption datasetId:", datasetId);
+    console.log("updateCaption attachmentId:", attachmentId);
+    console.log("updateCaption caption:", caption);
+    this.store.dispatch(
+      new UpdateAttachmentCaptionAction(datasetId, attachmentId, caption)
+    );
   }
 
   delete(dataset_id, dataset_attachment_id) {

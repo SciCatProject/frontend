@@ -75,7 +75,10 @@ import {
   REDUCE_DATASET_COMPLETE,
   ReduceDatasetCompleteAction,
   REDUCE_DATASET,
-  REDUCE_DATASET_FAILED
+  REDUCE_DATASET_FAILED,
+  UPDATE_ATTACHMENT_CAPTION_COMPLETE,
+  UpdateAttachmentCaptionCompleteAction,
+  UPDATE_ATTACHMENT_CAPTION_FAILED
 } from "state-management/actions/datasets.actions";
 
 import {
@@ -132,6 +135,28 @@ export function datasetsReducer(
         deletingAttachment: false,
         currentSet: { ...state.currentSet, attachments: attach2 }
       };
+    }
+
+    case UPDATE_ATTACHMENT_CAPTION_COMPLETE: {
+      const updatedAttachment = (action as UpdateAttachmentCaptionCompleteAction)
+        .attachment;
+      const attachments = state.currentSet.attachments;
+      let attach2 = attachments.filter(
+        attachment => attachment.id !== updatedAttachment.id
+      );
+      attach2.push(updatedAttachment);
+
+      return {
+        ...state,
+        currentSet: {
+          ...state.currentSet,
+          attachments: attach2
+        }
+      };
+    }
+
+    case UPDATE_ATTACHMENT_CAPTION_FAILED: {
+      return { ...state };
     }
 
     case SAVE_DATASET: {

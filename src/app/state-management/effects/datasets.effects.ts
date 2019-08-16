@@ -82,6 +82,33 @@ export class DatasetEffects {
   );
 
   @Effect()
+  protected updateAttachmentCaption$: Observable<Action> = this.actions$.pipe(
+    ofType(DatasetActions.UPDATE_ATTACHMENT_CAPTION),
+    map((action: DatasetActions.UpdateAttachmentCaptionAction) => action),
+    switchMap(action => {
+      console.log(
+        "Dataset Effects: Updating attachment caption:",
+        action.attachmentId
+      );
+      const newCaption = { caption: action.caption };
+      return this.datasetApi
+        .updateByIdAttachments(
+          encodeURIComponent(action.datasetId),
+          encodeURIComponent(action.attachmentId),
+          newCaption
+        )
+        .pipe(
+          map(
+            res => new DatasetActions.UpdateAttachmentCaptionCompleteAction(res)
+          ),
+          catchError(err =>
+            of(new DatasetActions.UpdateAttachmentCaptionFailedAction(err))
+          )
+        );
+    })
+  );
+
+  @Effect()
   protected getDatablocks$: Observable<Action> = this.actions$.pipe(
     ofType(DatasetActions.DATABLOCKS),
     map((action: DatasetActions.DatablocksAction) => action.id),

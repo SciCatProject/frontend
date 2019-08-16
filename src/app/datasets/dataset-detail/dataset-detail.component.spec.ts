@@ -8,7 +8,7 @@ import { MockActivatedRoute, MockStore } from "shared/MockStubs";
 import { MockRouter } from "shared/MockStubs";
 import { Router } from "@angular/router";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
-import { ReactiveFormsModule } from "@angular/forms";
+import { ReactiveFormsModule, FormsModule } from "@angular/forms";
 import { Store, StoreModule } from "@ngrx/store";
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 import { rootReducer } from "state-management/reducers/root.reducer";
@@ -23,21 +23,18 @@ describe("DatasetDetailComponent", () => {
       schemas: [NO_ERRORS_SCHEMA],
       imports: [
         AppConfigModule,
+        FormsModule,
         ReactiveFormsModule,
         MatTableModule,
         SharedCatanieModule,
         StoreModule.forRoot({ rootReducer })
       ],
-      declarations: [
-        DatasetDetailComponent,
-        DatafilesComponent,
-        LinkyPipe
-      ]
+      declarations: [DatasetDetailComponent, DatafilesComponent, LinkyPipe]
     });
     TestBed.overrideComponent(DatasetDetailComponent, {
       set: {
         providers: [
-          {provide: Router, useClass: MockRouter},
+          { provide: Router, useClass: MockRouter },
           {
             provide: APP_CONFIG,
             useValue: {
@@ -61,7 +58,6 @@ describe("DatasetDetailComponent", () => {
   afterEach(() => {
     fixture.destroy();
   });
-
 
   it("should create", () => {
     expect(component).toBeTruthy();

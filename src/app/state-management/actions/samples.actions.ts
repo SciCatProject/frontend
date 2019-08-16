@@ -41,6 +41,12 @@ export const DELETE_ATTACHMENT = "[Sample] Delete Attachment";
 export const DELETE_ATTACHMENT_COMPLETE = "[Sample] Delete Attachment Complete";
 export const DELETE_ATTACHMENT_FAILED = "[Sample] Delete Attachment Failed";
 
+export const UPDATE_ATTACHMENT_CAPTION = "[Sample] Update Attachment Caption";
+export const UPDATE_ATTACHMENT_CAPTION_COMPLETE =
+  "[Sample] Update Attachment Caption Complete";
+export const UPDATE_ATTACHMENT_CAPTION_FAILED =
+  "[Sample] Update Attachment Caption Failed";
+
 export class FetchDatasetsForSample implements Action {
   readonly type = FETCH_DATASETS_FOR_SAMPLE;
 
@@ -180,6 +186,28 @@ export class DeleteAttachmentCompleteAction implements Action {
 
 export class DeleteAttachmentFailedAction implements Action {
   readonly type = DELETE_ATTACHMENT_FAILED;
+
+  constructor(readonly error: Error) {}
+}
+
+export class UpdateAttachmentCaptionAction implements Action {
+  readonly type = UPDATE_ATTACHMENT_CAPTION;
+
+  constructor(
+    readonly sampleId: string,
+    readonly attachmentId: string,
+    readonly caption: string
+  ) {}
+}
+
+export class UpdateAttachmentCaptionCompleteAction implements Action {
+  readonly type = UPDATE_ATTACHMENT_CAPTION_COMPLETE;
+
+  constructor(readonly attachment: Attachment) {}
+}
+
+export class UpdateAttachmentCaptionFailedAction implements Action {
+  readonly type = UPDATE_ATTACHMENT_CAPTION_FAILED;
 
   constructor(readonly error: Error) {}
 }

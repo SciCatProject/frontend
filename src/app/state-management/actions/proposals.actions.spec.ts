@@ -23,7 +23,13 @@ import {
   AddAttachmentAction,
   ADD_ATTACHMENT,
   DeleteAttachmentAction,
-  DELETE_ATTACHMENT
+  DELETE_ATTACHMENT,
+  UpdateAttachmentCaptionAction,
+  UPDATE_ATTACHMENT_CAPTION,
+  UpdateAttachmentCaptionCompleteAction,
+  UPDATE_ATTACHMENT_CAPTION_COMPLETE,
+  UpdateAttachmentCaptionFailedAction,
+  UPDATE_ATTACHMENT_CAPTION_FAILED
 } from "./proposals.actions";
 
 describe("SelectProposalAction", () => {
@@ -128,6 +134,47 @@ describe("DeleteAttachmentAction", () => {
       type: DELETE_ATTACHMENT,
       proposalId,
       attachmentId
+    });
+  });
+});
+
+describe("UpdateAttachmentCaption", () => {
+  it("should create an action", () => {
+    const proposalId = "123abc";
+    const attachmentId = "abc123";
+    const caption = "New caption";
+    const action = new UpdateAttachmentCaptionAction(
+      proposalId,
+      attachmentId,
+      caption
+    );
+    expect({ ...action }).toEqual({
+      type: UPDATE_ATTACHMENT_CAPTION,
+      proposalId,
+      attachmentId,
+      caption
+    });
+  });
+});
+
+describe("UpdateAttachmentCompleteCaption", () => {
+  it("should create an action", () => {
+    const attachment = new Attachment();
+    const action = new UpdateAttachmentCaptionCompleteAction(attachment);
+    expect({ ...action }).toEqual({
+      type: UPDATE_ATTACHMENT_CAPTION_COMPLETE,
+      attachment
+    });
+  });
+});
+
+describe("UpdateAttachmentFailedCaption", () => {
+  it("should create an action", () => {
+    const error = new Error();
+    const action = new UpdateAttachmentCaptionFailedAction(error);
+    expect({ ...action }).toEqual({
+      type: UPDATE_ATTACHMENT_CAPTION_FAILED,
+      error
     });
   });
 });

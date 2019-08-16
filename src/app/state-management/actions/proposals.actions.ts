@@ -37,6 +37,13 @@ export const DELETE_ATTACHMENT_COMPLETE =
   "[Proposals] Delete Attachment Complete";
 export const DELETE_ATTACHMENT_FAILED = "[Proposals] Delete Attachment Failed";
 
+export const UPDATE_ATTACHMENT_CAPTION =
+  "[Proposals] Update Attachment Caption";
+export const UPDATE_ATTACHMENT_CAPTION_COMPLETE =
+  "[Proposals] Update Attachment Caption Complete";
+export const UPDATE_ATTACHMENT_CAPTION_FAILED =
+  "[Proposals] Update Attachment Caption Failed";
+
 export class SearchProposalAction implements Action {
   type = SEARCH_PROPOSALS;
 
@@ -151,6 +158,28 @@ export class DeleteAttachmentCompleteAction implements Action {
 
 export class DeleteAttachmentFailedAction implements Action {
   readonly type = DELETE_ATTACHMENT_FAILED;
+
+  constructor(readonly error: Error) {}
+}
+
+export class UpdateAttachmentCaptionAction implements Action {
+  readonly type = UPDATE_ATTACHMENT_CAPTION;
+
+  constructor(
+    readonly proposalId: string,
+    readonly attachmentId: string,
+    readonly caption: string
+  ) {}
+}
+
+export class UpdateAttachmentCaptionCompleteAction implements Action {
+  readonly type = UPDATE_ATTACHMENT_CAPTION_COMPLETE;
+
+  constructor(readonly attachment: Attachment) {}
+}
+
+export class UpdateAttachmentCaptionFailedAction implements Action {
+  readonly type = UPDATE_ATTACHMENT_CAPTION_FAILED;
 
   constructor(readonly error: Error) {}
 }

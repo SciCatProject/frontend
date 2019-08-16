@@ -40,7 +40,11 @@ import {
   DeleteAttachmentAction,
   DELETE_ATTACHMENT,
   DeleteAttachmentCompleteAction,
-  DeleteAttachmentFailedAction
+  DeleteAttachmentFailedAction,
+  UPDATE_ATTACHMENT_CAPTION,
+  UpdateAttachmentCaptionAction,
+  UpdateAttachmentCaptionCompleteAction,
+  UpdateAttachmentCaptionFailedAction
 } from "../actions/proposals.actions";
 
 import { getPropFilters } from "state-management/selectors/proposals.selectors";
@@ -168,6 +172,33 @@ export class ProposalsEffects {
         .pipe(
           map(res => new DeleteAttachmentCompleteAction(res)),
           catchError(err => of(new DeleteAttachmentFailedAction(err)))
+        );
+    })
+  );
+
+  @Effect()
+  protected updateAttachmentCaption$: Observable<Action> = this.actions$.pipe(
+    ofType(UPDATE_ATTACHMENT_CAPTION),
+    map((action: UpdateAttachmentCaptionAction) => action),
+    switchMap(action => {
+      console.log(
+        "Proposal Effects: Updating attachment caption:",
+        action.attachmentId
+      );
+      const newCaption = { caption: action.caption };
+      return this.proposalApi
+        .updateByIdAttachments(
+          encodeURIComponent(action.proposalId),
+          encodeURIComponent(action.attachmentId),
+          newCaption
+        )
+        .pipe(
+          map(
+            res => new UpdateAttachmentCaptionCompleteAction(res)
+          ),
+          catchError(err =>
+            of(new UpdateAttachmentCaptionFailedAction(err))
+          )
         );
     })
   );
