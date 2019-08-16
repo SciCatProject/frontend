@@ -25,3 +25,4 @@ before_script:
 scripts:
   - npm install coveralls
   - npm test
+  - npm coverage
