@@ -1,0 +1,30 @@
+{
+  "creators": [
+      {
+        "orcid": "0000-0002-2785-3674", 
+        "affiliation": "European Spallation Source ERIC", 
+        "name": "Gareth Murphy"
+      }, 
+      {
+        "orcid": "0000-0002-8786-5845", 
+        "affiliation": "Paul Scherrer Institut", 
+        "name": "Stephan Egli"
+      }, 
+      {
+        "affiliation": "Paul Scherrer Institut", 
+        "name": "Luke Gorman"
+      },
+      {
+        "affiliation": "European Spallation Source ERIC", 
+        "name": "Henrik Johansson"
+      },
+      {
+        "affiliation": "Paul Scherrer Institut", 
+        "name": "Chris Gwilliams"
+      }, 
+      {
+        "affiliation": "MAXIV", 
+        "name": "Hannes Petri"
+      }
+    ]
+}
