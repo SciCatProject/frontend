@@ -6,7 +6,7 @@
   "scripts": {
     "ng": "./node_modules/@angular/cli/bin/ng",
     "start": "./node_modules/@angular/cli/bin/ng serve --host $HOST",
-    "test": "./node_modules/@angular/cli/bin/ng test --watch false --source-map=false  ",
+    "test": "./node_modules/@angular/cli/bin/ng test --watch=false --code-coverage && cat ./coverage/lcov.info | coveralls",
     "e2e": "ng e2e --project=catanie-e2e",
     "lint": "./node_modules/tslint/bin/tslint --project tslint.json --force --fix"
   },
@@ -63,6 +63,7 @@
     "@types/source-map-support": "^0.5.0",
     "codelyzer": "^5.1.0",
     "common-tags": "^1.8.0",
+    "coveralls": "^3.0.6",
     "jasmine": "^3.4.0",
     "jasmine-core": "^3.4.0",
     "jasmine-spec-reporter": "^4.2.1",

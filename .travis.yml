@@ -2,7 +2,7 @@ sudo: required
 dist: trusty
 language: node_js
 node_js:
-  - '10.9'
+  - "10.9"
 
 addons:
 apt:
@@ -19,12 +19,9 @@ before_install:
   - sh -e /etc/init.d/xvfb start
 
 before_script:
-- npm install
-- npx ng build --prod
+  - npm install
+  - npx ng build --prod
 
-scripts: 
-- npm install codecov -g
-- npm test
-
-after_success:
-  - codecov
+scripts:
+  - npm install coveralls
+  - npm test
