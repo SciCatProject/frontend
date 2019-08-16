@@ -354,7 +354,7 @@
               "src/safari-pinned-tab.svg",
               "src/manifest.json"
             ],
-            "codeCoverageExclude": ["src/app/shared/sdk"]
+            "codeCoverageExclude": ["src/app/shared/sdk/**"]
           }
         },
         "lint": {
