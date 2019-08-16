@@ -6,7 +6,7 @@
   "scripts": {
     "ng": "./node_modules/@angular/cli/bin/ng",
     "start": "./node_modules/@angular/cli/bin/ng serve --host $HOST",
-    "test": "./node_modules/@angular/cli/bin/ng test --watch=false --source-map=false  ",
+    "test": "./node_modules/@angular/cli/bin/ng test --watch=false --source-map=false --code-coverage",
     "coverage": "cat ./coverage/lcov.info | coveralls",
     "e2e": "ng e2e --project=catanie-e2e",
     "lint": "./node_modules/tslint/bin/tslint --project tslint.json --force --fix"
