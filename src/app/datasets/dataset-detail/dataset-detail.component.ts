@@ -190,9 +190,6 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
   }
 
   updateCaption(datasetId: string, attachmentId: string, caption: string) {
-    console.log("updateCaption datasetId:", datasetId);
-    console.log("updateCaption attachmentId:", attachmentId);
-    console.log("updateCaption caption:", caption);
     this.store.dispatch(
       new UpdateAttachmentCaptionAction(datasetId, attachmentId, caption)
     );

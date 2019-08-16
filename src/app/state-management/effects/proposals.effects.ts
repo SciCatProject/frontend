@@ -136,10 +136,6 @@ export class ProposalsEffects {
     ofType<AddAttachmentAction>(ADD_ATTACHMENT),
     map((action: AddAttachmentAction) => action.attachment),
     switchMap(attachment => {
-      console.log(
-        "Proposal Effects: Creating attachment for",
-        attachment.proposalId
-      );
       delete attachment.id;
       delete attachment.rawDatasetId;
       delete attachment.derivedDatasetId;
@@ -163,7 +159,6 @@ export class ProposalsEffects {
     ofType<DeleteAttachmentAction>(DELETE_ATTACHMENT),
     map((action: DeleteAttachmentAction) => action),
     switchMap(action => {
-      console.log("Proposal Effects: Deleting attachment", action.attachmentId);
       return this.proposalApi
         .destroyByIdAttachments(
           encodeURIComponent(action.proposalId),
@@ -181,10 +176,6 @@ export class ProposalsEffects {
     ofType(UPDATE_ATTACHMENT_CAPTION),
     map((action: UpdateAttachmentCaptionAction) => action),
     switchMap(action => {
-      console.log(
-        "Proposal Effects: Updating attachment caption:",
-        action.attachmentId
-      );
       const newCaption = { caption: action.caption };
       return this.proposalApi
         .updateByIdAttachments(
@@ -193,12 +184,8 @@ export class ProposalsEffects {
           newCaption
         )
         .pipe(
-          map(
-            res => new UpdateAttachmentCaptionCompleteAction(res)
-          ),
-          catchError(err =>
-            of(new UpdateAttachmentCaptionFailedAction(err))
-          )
+          map(res => new UpdateAttachmentCaptionCompleteAction(res)),
+          catchError(err => of(new UpdateAttachmentCaptionFailedAction(err)))
         );
     })
   );
