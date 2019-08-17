@@ -353,7 +353,8 @@
               "src/mstile-150x150.png",
               "src/safari-pinned-tab.svg",
               "src/manifest.json"
-            ]
+            ],
+            "codeCoverageExclude": ["src/app/shared/sdk/**"]
           }
         },
         "lint": {
