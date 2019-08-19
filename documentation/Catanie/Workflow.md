@@ -1,4 +1,6 @@
+# SciCat Workflow from data ingestion to publication
 
+The below workflow describes the cycle of data from ingestion to the metadata catalogue to the publication stage.
  
 1. One or a group of user(s) is created (as part of /Users), and given access to the web frontend. Database user creation/registration is not possible yet using Catanie. Users are linked to catamel through AD/LDAP
 2. Their proposal is uploaded as part of /Proposals by proposalIngestor
