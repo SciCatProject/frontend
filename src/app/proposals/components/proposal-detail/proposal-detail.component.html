@@ -5,6 +5,11 @@
       General
     </ng-template>
     <div *ngIf="proposal" class="tab-content">
+      <mat-card>
+          <mat-card-header>
+              About the proposal
+            </mat-card-header>
+
       <table>
         <tr>
           <th>
@@ -71,6 +76,7 @@
           <td>{{ proposal.proposalId }}</td>
         </tr>
       </table>
+      </mat-card>
     </div>
     <mat-card style="margin:1em">
       <button (click)="show = !show">
