@@ -90,19 +90,19 @@
         >
         </mat-paginator>
         <mat-table #table [dataSource]="datasets" class="dataset-table">
-          <ng-container matColumnDef="pid">
+          <ng-container matColumnDef="datasetName">
             <mat-header-cell *matHeaderCellDef>
               <div fxLayout="column" style="align-items: center">
                 <div>
                   <i class="material-icons"> portrait </i>
                 </div>
                 <div>
-                  PID
+                  Name
                 </div>
               </div>
             </mat-header-cell>
-            <mat-cell *matCellDef="let element" matTooltip="{{ element.pid }}">
-              ...{{ element.pid | slice: -10 }}
+            <mat-cell *matCellDef="let element" matTooltip="{{ element.datasetName }}">
+              {{ element.datasetName  }}
             </mat-cell>
           </ng-container>
           <ng-container matColumnDef="sourceFolder">
