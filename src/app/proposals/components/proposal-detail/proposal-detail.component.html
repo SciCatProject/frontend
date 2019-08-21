@@ -72,6 +72,15 @@
         </tr>
       </table>
     </div>
+    <mat-card style="margin:1em">
+      <button (click)="show = !show">
+        {{ show ? "Hide MetaData" : "Show Metadata" }}
+      </button>
+      <br />
+      <div *ngIf="show">
+        <ngx-json-viewer [json]="proposal" [expanded]="false"></ngx-json-viewer>
+      </div>
+    </mat-card>
   </mat-tab>
 
   <mat-tab>
@@ -101,8 +110,11 @@
                 </div>
               </div>
             </mat-header-cell>
-            <mat-cell *matCellDef="let element" matTooltip="{{ element.datasetName }}">
-              {{ element.datasetName  }}
+            <mat-cell
+              *matCellDef="let element"
+              matTooltip="{{ element.datasetName }}"
+            >
+              {{ element.datasetName }}
             </mat-cell>
           </ng-container>
           <ng-container matColumnDef="sourceFolder">
@@ -225,13 +237,3 @@
     </div>
   </mat-tab>
 </mat-tab-group>
-
-<mat-card style="margin:1em">
-  <button (click)="show = !show">
-    {{ show ? "Hide MetaData" : "Show Metadata" }}
-  </button>
-  <br />
-  <div *ngIf="show">
-    <ngx-json-viewer [json]="proposal" [expanded]="false"></ngx-json-viewer>
-  </div>
-</mat-card>
