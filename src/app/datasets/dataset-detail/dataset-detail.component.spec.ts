@@ -19,8 +19,12 @@ import { rootReducer } from "state-management/reducers/root.reducer";
 import { SharedCatanieModule } from "shared/shared.module";
 import {
   ClearFacetsAction,
-  AddKeywordFilterAction
+  AddKeywordFilterAction,
+  DeleteAttachment,
+  UpdateAttachmentCaptionAction
 } from "state-management/actions/datasets.actions";
+import { Dataset, Job } from "shared/sdk";
+import { SubmitAction } from "state-management/actions/jobs.actions";
 
 describe("DatasetDetailComponent", () => {
   let component: DatasetDetailComponent;
@@ -31,6 +35,7 @@ describe("DatasetDetailComponent", () => {
   };
   let store: MockStore;
   let dispatchSpy;
+  let pipeSpy;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -78,6 +83,82 @@ describe("DatasetDetailComponent", () => {
 
   it("should create", () => {
     expect(component).toBeTruthy();
+  });
+
+  it("#converUnits should return an object", () => {
+    const res = component.convertUnits({});
+
+    expect(res).toEqual({});
+  });
+
+  it("#getDates should return an array", () => {
+    const res = component.getDates({});
+
+    expect(res).toEqual([]);
+  });
+
+  it("#getStrings should return an array", () => {
+    const res = component.getStrings({});
+
+    expect(res).toEqual([]);
+  });
+
+  it("#getObjects should return an array", () => {
+    const res = component.getObjects({});
+
+    expect(res).toEqual([]);
+  });
+
+  it("#resetDataset should return 'null' without confirmation", () => {
+    dispatchSpy = spyOn(store, "dispatch");
+    pipeSpy = spyOn(store, "pipe");
+    const dataset = new Dataset();
+    const res = component.resetDataset(dataset);
+
+    expect(res).toBeNull();
+    expect(dispatchSpy).toHaveBeenCalledTimes(0);
+    expect(pipeSpy).toHaveBeenCalledTimes(0);
+  });
+
+  it("#updateCaption should dispatch an UpdateAttachmentCaptionAction", () => {
+    dispatchSpy = spyOn(store, "dispatch");
+    const datasetId = "testDatasetId";
+    const attachmentId = "testAttachmentId";
+    const caption = "Test caption";
+    component.updateCaption(datasetId, attachmentId, caption);
+
+    expect(dispatchSpy).toHaveBeenCalledTimes(1);
+    expect(dispatchSpy).toHaveBeenCalledWith(
+      new UpdateAttachmentCaptionAction(datasetId, attachmentId, caption)
+    );
+  });
+
+  it("#delete should dispatch a DeleteAttachment action", () => {
+    dispatchSpy = spyOn(store, "dispatch");
+    const datasetId = "testDatasetId";
+    const attachmentId = "testAttachmentId";
+    component.delete(datasetId, attachmentId);
+
+    expect(dispatchSpy).toHaveBeenCalledTimes(1);
+    expect(dispatchSpy).toHaveBeenCalledWith(
+      new DeleteAttachment(datasetId, attachmentId)
+    );
+  });
+
+  it("#onClickProp should navigate to a proposal", () => {
+    const proposalId = "ABC123";
+    component.onClickProp(proposalId);
+
+    expect(router.navigateByUrl).toHaveBeenCalledWith(
+      "/proposals/" + proposalId
+    );
+  });
+
+  it("#onClickSample should navigate to a sample", () => {
+    const sampleId = "testId";
+    component.onClickSample(sampleId);
+
+    expect(router.navigateByUrl).toHaveBeenCalledWith("/samples/" + sampleId);
   });
 
   it("#onClickKeyword should update datasets keyword filter and navigate to datasets table", () => {
