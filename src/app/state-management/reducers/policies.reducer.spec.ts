@@ -21,11 +21,11 @@ import { initialPolicyState } from "state-management/state/policies.store";
 describe("PoliciesReducer", () => {
   describe("default", () => {
     it("should return the initial state", () => {
+      const initialState = initialPolicyState;
       const policy = new Policy();
       const noopAction = new SubmitPolicyAction(["test"], policy);
       const newState = policiesReducer(undefined, noopAction);
 
-      const initialState = initialPolicyState;
       expect(newState).toEqual(initialState);
     });
   });
