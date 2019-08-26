@@ -31,7 +31,7 @@ export class ProposalDetailComponent implements OnInit {
   @Input()
   datasets: Dataset[];
   displayedColumns: string[] = [
-    "pid",
+    "datasetName",
     "sourceFolder",
     "size",
     "creationTime",

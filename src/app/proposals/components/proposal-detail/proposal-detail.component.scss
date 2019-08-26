@@ -1,19 +1,24 @@
 .tab-content {
-	padding: 1.5em;
+  padding: 1.5em;
 }
 
-td, th {
-	padding: 0.5em;
+td,
+th {
+  padding: 0.5em;
 }
 
 th {
-	text-align: left;
-	vertical-align: top;
+  text-align: left;
+  vertical-align: top;
 }
 
-@import '../../../datasets/dataset-table/dataset-table.component.scss';
+@import "../../../datasets/dataset-table/dataset-table.component.scss";
 
 .material-icons {
-	vertical-align: middle;
-	color: black;
+  vertical-align: middle;
+  color: black;
+}
+
+.mat-card-header {
+  background-color: #7de1ff;
 }

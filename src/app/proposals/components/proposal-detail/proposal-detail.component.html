@@ -5,6 +5,11 @@
       General
     </ng-template>
     <div *ngIf="proposal" class="tab-content">
+      <mat-card>
+          <mat-card-header>
+              About the proposal
+            </mat-card-header>
+
       <table>
         <tr>
           <th>
@@ -68,11 +73,20 @@
             <i class="material-icons"> perm_contact_calendar </i>
             Identifier
           </th>
-          <td>{{ proposal.proposalId  }}</td>
+          <td>{{ proposal.proposalId }}</td>
         </tr>
-
       </table>
+      </mat-card>
     </div>
+    <mat-card style="margin:1em">
+      <button (click)="show = !show">
+        {{ show ? "Hide MetaData" : "Show Metadata" }}
+      </button>
+      <br />
+      <div *ngIf="show">
+        <ngx-json-viewer [json]="proposal" [expanded]="false"></ngx-json-viewer>
+      </div>
+    </mat-card>
   </mat-tab>
 
   <mat-tab>
@@ -91,19 +105,34 @@
         >
         </mat-paginator>
         <mat-table #table [dataSource]="datasets" class="dataset-table">
-          <ng-container matColumnDef="pid">
+          <ng-container matColumnDef="datasetName">
             <mat-header-cell *matHeaderCellDef>
-              <i class="material-icons"> portrait </i>
-              PID
+              <div fxLayout="column" style="align-items: center">
+                <div>
+                  <i class="material-icons"> portrait </i>
+                </div>
+                <div>
+                  Name
+                </div>
+              </div>
             </mat-header-cell>
-            <mat-cell *matCellDef="let element" matTooltip="{{ element.pid }}">
-              ...{{ element.pid | slice: -10 }}
+            <mat-cell
+              *matCellDef="let element"
+              matTooltip="{{ element.datasetName }}"
+            >
+              {{ element.datasetName }}
             </mat-cell>
           </ng-container>
           <ng-container matColumnDef="sourceFolder">
             <mat-header-cell *matHeaderCellDef>
-              <i class="material-icons"> explore </i>
-              Source Folder
+              <div fxLayout="column" style="align-items: center">
+                <div>
+                  <i class="material-icons"> explore </i>
+                </div>
+                <div>
+                  Source&nbsp;Folder
+                </div>
+              </div>
             </mat-header-cell>
             <mat-cell
               *matCellDef="let element"
@@ -114,8 +143,14 @@
           </ng-container>
           <ng-container matColumnDef="size">
             <mat-header-cell *matHeaderCellDef>
-              <i class="material-icons"> save </i>
-              Size
+              <div fxLayout="column" style="align-items: center">
+                <div>
+                  <i class="material-icons"> save </i>
+                </div>
+                <div>
+                  Size
+                </div>
+              </div>
             </mat-header-cell>
             <mat-cell *matCellDef="let element">{{
               element.size | filesize
@@ -123,8 +158,14 @@
           </ng-container>
           <ng-container matColumnDef="creationTime">
             <mat-header-cell *matHeaderCellDef>
-              <i class="material-icons"> calendar_today </i>
-              Creation Time
+              <div fxLayout="column" style="align-items: center">
+                <div>
+                  <i class="material-icons"> calendar_today </i>
+                </div>
+                <div>
+                  Creation Time
+                </div>
+              </div>
             </mat-header-cell>
             <mat-cell *matCellDef="let element">{{
               element.creationTime | date: "yyyy-MM-dd HH:mm"
@@ -132,8 +173,14 @@
           </ng-container>
           <ng-container matColumnDef="owner">
             <mat-header-cell *matHeaderCellDef>
-              <i class="material-icons"> person </i>
-              Owner
+              <div fxLayout="column" style="align-items: center">
+                <div>
+                  <i class="material-icons"> face </i>
+                </div>
+                <div>
+                  Owner
+                </div>
+              </div>
             </mat-header-cell>
             <mat-cell *matCellDef="let element">{{ element.owner }}</mat-cell>
           </ng-container>
@@ -148,9 +195,15 @@
           </ng-container>
           <ng-container matColumnDef="creationLocation">
             <mat-header-cell *matHeaderCellDef>
-              <i class="material-icons"> explore </i>
-              Location</mat-header-cell
-            >
+              <div fxLayout="column" style="align-items: center">
+                <div>
+                  <i class="material-icons"> explore </i>
+                </div>
+                <div>
+                  Location
+                </div>
+              </div>
+            </mat-header-cell>
             <mat-cell *matCellDef="let element">{{
               element.creationLocation
             }}</mat-cell>
@@ -190,13 +243,3 @@
     </div>
   </mat-tab>
 </mat-tab-group>
-
-<mat-card style="margin:1em">
-  <button (click)="show = !show">
-    {{ show ? "Hide MetaData" : "Show Metadata" }}
-  </button>
-  <br />
-  <div *ngIf="show">
-    <ngx-json-viewer [json]="proposal" [expanded]="false"></ngx-json-viewer>
-  </div>
-</mat-card>
