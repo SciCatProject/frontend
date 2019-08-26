@@ -32,9 +32,22 @@
                 <th><i class="material-icons"> person </i> Owner</th>
                 <td>{{ value }}</td>
               </tr>
-              <tr *ngIf="dataset.keywords as value">
+              <tr *ngIf="dataset.keywords as keywords">
                 <th><i class="material-icons"> vpn_key </i> Keywords</th>
-                <td>{{ value | json }}</td>
+                <td>
+                  <mat-chip-list>
+                    <div *ngIf="keywords.length > 0">
+                      <span *ngFor="let keyword of keywords">
+                        <mat-chip (click)="onClickKeyword(keyword)">
+                          {{ keyword }}
+                        </mat-chip>
+                      </span>
+                    </div>
+                    <div *ngIf="keywords.length === 0">
+                      <mat-chip disabled>No Keywords</mat-chip>
+                    </div>
+                  </mat-chip-list>
+                </td>
               </tr>
               <tr>
                 <th>

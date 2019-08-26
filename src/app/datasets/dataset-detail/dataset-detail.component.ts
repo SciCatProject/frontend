@@ -3,10 +3,12 @@ import { Component, Inject, OnDestroy, OnInit } from "@angular/core";
 import {
   DatablocksAction,
   DeleteAttachment,
-  UpdateAttachmentCaptionAction
+  UpdateAttachmentCaptionAction,
+  ClearFacetsAction
 } from "state-management/actions/datasets.actions";
 import { Job, User } from "shared/sdk/models";
 import { select, Store } from "@ngrx/store";
+import { AddKeywordFilterAction } from "state-management/actions/datasets.actions";
 import { SubmitAction } from "state-management/actions/jobs.actions";
 import { ShowMessageAction } from "state-management/actions/user.actions";
 import {
@@ -209,5 +211,11 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
   onClickSample(proposalId: string): void {
     const id = encodeURIComponent(proposalId);
     this.router.navigateByUrl("/samples/" + id);
+  }
+
+  onClickKeyword(keyword: string): void {
+    this.store.dispatch(new ClearFacetsAction());
+    this.store.dispatch(new AddKeywordFilterAction(keyword));
+    this.router.navigateByUrl("/datasets");
   }
 }
