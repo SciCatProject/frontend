@@ -17,7 +17,6 @@ import {
 import { policiesReducer } from "./policies.reducer";
 import { Policy } from "shared/sdk";
 import { initialPolicyState } from "state-management/state/policies.store";
-import { Action } from "rxjs/internal/scheduler/Action";
 
 describe("PoliciesReducer", () => {
   describe("default", () => {
