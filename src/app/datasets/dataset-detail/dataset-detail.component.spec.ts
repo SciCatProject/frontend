@@ -23,8 +23,7 @@ import {
   DeleteAttachment,
   UpdateAttachmentCaptionAction
 } from "state-management/actions/datasets.actions";
-import { Dataset, Job } from "shared/sdk";
-import { SubmitAction } from "state-management/actions/jobs.actions";
+import { Dataset } from "shared/sdk";
 
 describe("DatasetDetailComponent", () => {
   let component: DatasetDetailComponent;
