@@ -132,6 +132,23 @@ describe("PoliciesReducer", () => {
 
       expect(newState.selectedPolicies).toEqual([policy]);
     });
+
+    it("should return same state if policy already selected", () => {
+      const initialState = initialPolicyState;
+      const policy = new Policy();
+      const selectPolicyAction = new SelectPolicyAction(policy);
+      const intermediateState = policiesReducer(
+        initialState,
+        selectPolicyAction
+      );
+      const sameSelectPolicyAction = new SelectPolicyAction(policy);
+      const newState = policiesReducer(
+        intermediateState,
+        sameSelectPolicyAction
+      );
+
+      expect(newState).toEqual(intermediateState);
+    });
   });
 
   describe("DESELECT_POLICY", () => {
