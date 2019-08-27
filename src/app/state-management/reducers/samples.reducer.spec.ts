@@ -87,7 +87,7 @@ describe("SamplesReducer", () => {
   });
 
   describe("ADD_SAMPLE", () => {
-    it("should return the same state", () => {
+    it("should return the initial state", () => {
       const sample = new Sample();
       const action = new AddSampleAction(sample);
       const state = samplesReducer(initialSampleState, action);
@@ -108,7 +108,7 @@ describe("SamplesReducer", () => {
   });
 
   describe("ADD_SAMPLE_COMPLETE", () => {
-    it("should return the same state", () => {
+    it("should return the initial state", () => {
       const sample = new Sample();
       const action = new AddSampleCompleteAction(sample);
       const state = samplesReducer(initialSampleState, action);
@@ -118,7 +118,7 @@ describe("SamplesReducer", () => {
   });
 
   describe("ADD_SAMPLE_FAILED", () => {
-    it("should return a new state", () => {
+    it("should return the initial state", () => {
       const sample = new Sample();
       const action = new AddSampleFailedAction(sample);
       const state = samplesReducer(initialSampleState, action);
@@ -274,7 +274,7 @@ describe("SamplesReducer", () => {
   });
 
   describe("ADD_ATTACHMENT_FAILED", () => {
-    it("should return the same state", () => {
+    it("should return the initial state", () => {
       const error = new Error();
       const action = new AddAttachmentFailedAction(error);
       const state = samplesReducer(initialSampleState, action);
@@ -325,7 +325,7 @@ describe("SamplesReducer", () => {
   });
 
   describe("DELETE_ATTACHMENT_FAILED", () => {
-    it("should return the same state", () => {
+    it("should return the initial state", () => {
       const error = new Error();
       const action = new DeleteAttachmentFailedAction(error);
       const state = samplesReducer(initialSampleState, action);
@@ -366,7 +366,7 @@ describe("SamplesReducer", () => {
   });
 
   describe("UPDATE_ATTACHMENT_CAPTION_FAILED", () => {
-    it("should return the same state", () => {
+    it("should return the initial state", () => {
       const error = new Error();
       const action = new UpdateAttachmentCaptionFailedAction(error);
       const state = samplesReducer(initialSampleState, action);
