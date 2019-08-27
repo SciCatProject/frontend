@@ -113,8 +113,8 @@ describe("PoliciesReducer", () => {
       policy.id = "1";
       const action = new SelectPolicyAction(policy);
       const intermediateState = policiesReducer(initialPolicyState, action);
-      const redoAction = new SelectPolicyAction(policy);
-      const state = policiesReducer(intermediateState, redoAction);
+      const repeatAction = new SelectPolicyAction(policy);
+      const state = policiesReducer(intermediateState, repeatAction);
 
       expect(state.selectedPolicies).toEqual([policy]);
     });
