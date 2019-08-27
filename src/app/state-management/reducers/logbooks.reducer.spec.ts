@@ -21,15 +21,29 @@ describe("LogbooksReducer", () => {
   });
 
   describe("FETCH_LOGBOOKS_COMPLETE", () => {
-    it("should set logbooks", () => {
+    it("should set logbooks and reverse messages array", () => {
       const logbooks = [new Logbook()];
+      const firstTestMessage = { content: "First message" };
+      const secondTestMessage = { content: "Second message" };
       logbooks.forEach(logbook => {
-        logbook.messages = [];
+        logbook.messages = [firstTestMessage, secondTestMessage];
       });
       const action = new logbooksActions.FetchLogbooksCompleteAction(logbooks);
       const state = logbooksReducer(initialLogbookState, action);
 
       expect(state.logbooks).toEqual(logbooks);
+      state.logbooks.forEach(logbook => {
+        expect(logbook.messages[0]).toEqual(secondTestMessage);
+        expect(logbook.messages[1]).toEqual(firstTestMessage);
+      });
+    });
+
+    it("should set logbooks even if the logbooks array is empty", () => {
+      const logbooks = [];
+      const action = new logbooksActions.FetchLogbooksCompleteAction(logbooks);
+      const state = logbooksReducer(initialLogbookState, action);
+
+      expect(state.logbooks).toEqual([]);
     });
   });
 
