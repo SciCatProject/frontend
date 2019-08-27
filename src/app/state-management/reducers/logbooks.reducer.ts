@@ -48,7 +48,7 @@ export function logbooksReducer(
   }
 }
 
-function formatImageUrls(logbook: Logbook) {
+export function formatImageUrls(logbook: Logbook) {
   if (logbook && logbook.messages) {
     logbook.messages.forEach(message => {
       if (message.content.msgtype === "m.image") {
