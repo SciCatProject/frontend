@@ -115,7 +115,7 @@ describe("PoliciesReducer", () => {
       const redoAction = new SelectPolicyAction(policy);
       const state = policiesReducer(intermediateState, redoAction);
 
-      expect(state).toEqual(intermediateState);
+      expect(state.selectedPolicies).toEqual(intermediateState.selectedPolicies);
     });
   });
 
