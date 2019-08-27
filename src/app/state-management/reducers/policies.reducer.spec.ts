@@ -105,17 +105,35 @@ describe("PoliciesReducer", () => {
       const action = new SelectPolicyAction(policy);
       const state = policiesReducer(initialPolicyState, action);
 
-      expect(state.selectedPolicies).toEqual([policy]);
+      expect(state.selectedPolicies).toContain(policy);
     });
 
     it("should return same state if policy already selected", () => {
       const policy = new Policy();
+      policy.id = "1";
       const action = new SelectPolicyAction(policy);
       const intermediateState = policiesReducer(initialPolicyState, action);
       const redoAction = new SelectPolicyAction(policy);
       const state = policiesReducer(intermediateState, redoAction);
 
-      expect(state.selectedPolicies).toEqual(intermediateState.selectedPolicies);
+      expect(state.selectedPolicies).toEqual([policy]);
+    });
+
+    it("should add different policies to selectedPolicies", () => {
+      const firstPolicy = new Policy();
+      firstPolicy.id = "1";
+      const firstSelectAction = new SelectPolicyAction(firstPolicy);
+      const intermediateState = policiesReducer(
+        initialPolicyState,
+        firstSelectAction
+      );
+      const secondPolicy = new Policy();
+      secondPolicy.id = "2";
+      const secondSelectAction = new SelectPolicyAction(secondPolicy);
+      const state = policiesReducer(intermediateState, secondSelectAction);
+
+      expect(state.selectedPolicies).toContain(firstPolicy);
+      expect(state.selectedPolicies).toContain(secondPolicy);
     });
   });
 
