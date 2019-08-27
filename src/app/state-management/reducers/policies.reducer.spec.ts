@@ -21,199 +21,164 @@ import { initialPolicyState } from "state-management/state/policies.store";
 describe("PoliciesReducer", () => {
   describe("default", () => {
     it("should return the initial state", () => {
-      const initialState = initialPolicyState;
       const policy = new Policy();
       const noopAction = new SubmitPolicyAction(["test"], policy);
-      const newState = policiesReducer(undefined, noopAction);
+      const state = policiesReducer(undefined, noopAction);
 
-      expect(newState).toEqual(initialState);
+      expect(state).toEqual(initialPolicyState);
     });
   });
 
   describe("SUBMIT_POLICY_COMPLETE", () => {
     it("should set submissionResponse", () => {
-      const initialState = initialPolicyState;
       const policy = new Policy();
-      const submitPolicyCompleteAction = new SubmitPolicyCompleteAction(policy);
-      const newState = policiesReducer(
-        initialState,
-        submitPolicyCompleteAction
-      );
+      const action = new SubmitPolicyCompleteAction(policy);
+      const state = policiesReducer(initialPolicyState, action);
 
-      expect(newState.submissionResponse).toEqual(policy);
+      expect(state.submissionResponse).toEqual(policy);
     });
   });
 
   describe("SUBMIT_POLICY_FAILED", () => {
     it("should set policySubmission to null and error", () => {
-      const initialState = initialPolicyState;
       const error = new Error();
-      const submitPolicyFailedAction = new SubmitPolicyFailedAction(error);
-      const newState = policiesReducer(initialState, submitPolicyFailedAction);
+      const action = new SubmitPolicyFailedAction(error);
+      const state = policiesReducer(initialPolicyState, action);
 
-      expect(newState.policySubmission).toBeNull();
-      expect(newState.error).toEqual(error);
+      expect(state.policySubmission).toBeNull();
+      expect(state.error).toEqual(error);
     });
   });
 
   describe("FETCH_POLICIES", () => {
     it("should set policiesLoading to true", () => {
-      const initialState = initialPolicyState;
-      const fetchPoliciesAction = new FetchPoliciesAction();
-      const newState = policiesReducer(initialState, fetchPoliciesAction);
+      const action = new FetchPoliciesAction();
+      const state = policiesReducer(initialPolicyState, action);
 
-      expect(newState.policiesLoading).toBe(true);
+      expect(state.policiesLoading).toBe(true);
     });
   });
 
   describe("FETCH_POLICIES_COMPLETE", () => {
     it("should set policies and set policiesLoading to false", () => {
-      const initialState = initialPolicyState;
       const policies = [new Policy()];
-      const fetchPoliciesCompleteAction = new FetchPoliciesCompleteAction(
-        policies
-      );
-      const newState = policiesReducer(
-        initialState,
-        fetchPoliciesCompleteAction
-      );
+      const action = new FetchPoliciesCompleteAction(policies);
+      const state = policiesReducer(initialPolicyState, action);
 
-      expect(newState.policiesLoading).toBe(false);
-      expect(newState.policies).toEqual(policies);
+      expect(state.policiesLoading).toBe(false);
+      expect(state.policies).toEqual(policies);
     });
   });
 
   describe("FETCH_EDITABLE_POLICIES", () => {
     it("should set policiesLoading to true", () => {
-      const initialState = initialPolicyState;
-      const fetchEditablePoliciesAction = new FetchEditablePolicies();
-      const newState = policiesReducer(
-        initialState,
-        fetchEditablePoliciesAction
-      );
+      const action = new FetchEditablePolicies();
+      const state = policiesReducer(initialPolicyState, action);
 
-      expect(newState.policiesLoading).toBe(true);
+      expect(state.policiesLoading).toBe(true);
     });
   });
 
   describe("FETCH_EDITABLE_POLICIES_COMPLETE", () => {
     it("should set editablePolicies and set policiesLoading to false", () => {
-      const initialState = initialPolicyState;
       const policies = [new Policy()];
-      const fetchEditablePoliciesCompleteAction = new FetchEditablePoliciesComplete(
-        policies
-      );
-      const newState = policiesReducer(
-        initialState,
-        fetchEditablePoliciesCompleteAction
-      );
+      const action = new FetchEditablePoliciesComplete(policies);
+      const state = policiesReducer(initialPolicyState, action);
 
-      expect(newState.policiesLoading).toBe(false);
-      expect(newState.editablePolicies).toEqual(policies);
+      expect(state.policiesLoading).toBe(false);
+      expect(state.editablePolicies).toEqual(policies);
     });
   });
 
   describe("FETCH_POLICIES_FAILED", () => {
     it("should set policiesLoading to false", () => {
-      const initialState = initialPolicyState;
-      const fetchPoliciesFailedAction = new FetchPoliciesFailedAction();
-      const newState = policiesReducer(initialState, fetchPoliciesFailedAction);
+      const action = new FetchPoliciesFailedAction();
+      const state = policiesReducer(initialPolicyState, action);
 
-      expect(newState.policiesLoading).toBe(false);
+      expect(state.policiesLoading).toBe(false);
     });
   });
 
   describe("SELECT_POLICY", () => {
     it("should set selectedPolicies", () => {
-      const initialState = initialPolicyState;
       const policy = new Policy();
-      const selectPolicyAction = new SelectPolicyAction(policy);
-      const newState = policiesReducer(initialState, selectPolicyAction);
+      const action = new SelectPolicyAction(policy);
+      const state = policiesReducer(initialPolicyState, action);
 
-      expect(newState.selectedPolicies).toEqual([policy]);
+      expect(state.selectedPolicies).toEqual([policy]);
     });
 
     it("should return same state if policy already selected", () => {
-      const initialState = initialPolicyState;
       const policy = new Policy();
-      const selectPolicyAction = new SelectPolicyAction(policy);
-      const intermediateState = policiesReducer(
-        initialState,
-        selectPolicyAction
-      );
-      const sameSelectPolicyAction = new SelectPolicyAction(policy);
-      const newState = policiesReducer(
-        intermediateState,
-        sameSelectPolicyAction
-      );
+      const action = new SelectPolicyAction(policy);
+      const intermediateState = policiesReducer(initialPolicyState, action);
+      const redoAction = new SelectPolicyAction(policy);
+      const state = policiesReducer(intermediateState, redoAction);
 
-      expect(newState).toEqual(intermediateState);
+      expect(state).toEqual(intermediateState);
     });
   });
 
   describe("DESELECT_POLICY", () => {
     it("should remove policy from selectedPolicies", () => {
-      const initialState = initialPolicyState;
       const policy = new Policy();
-      const selectPolicyAction = new SelectPolicyAction(policy);
+      const selectAction = new SelectPolicyAction(policy);
       const intermediateState = policiesReducer(
-        initialState,
-        selectPolicyAction
+        initialPolicyState,
+        selectAction
       );
-      const deselectPolicyAction = new DeselectPolicyAction(policy);
-      const newState = policiesReducer(intermediateState, deselectPolicyAction);
+      const deselectAction = new DeselectPolicyAction(policy);
+      const state = policiesReducer(intermediateState, deselectAction);
 
       expect(intermediateState.selectedPolicies).toEqual([policy]);
-      expect(newState.selectedPolicies).toEqual(initialState.selectedPolicies);
+      expect(state.selectedPolicies).toEqual(
+        initialPolicyState.selectedPolicies
+      );
     });
   });
 
   describe("CLEAR_SELECTION", () => {
     it("should set selectedPolicies to an empty array", () => {
-      const initialState = initialPolicyState;
-      const clearSelectionAction = new ClearSelectionAction();
-      const newState = policiesReducer(initialState, clearSelectionAction);
+      const action = new ClearSelectionAction();
+      const state = policiesReducer(initialPolicyState, action);
 
-      expect(newState.selectedPolicies).toEqual([]);
+      expect(state.selectedPolicies).toEqual([]);
     });
   });
 
   describe("CHANGE_PAGE", () => {
     it("should set filters and set policiesLoading to true", () => {
-      const initialState = initialPolicyState;
       const page = 2;
       const limit = 25;
-      const changePageAction = new ChangePageAction(page, limit);
-      const newState = policiesReducer(initialState, changePageAction);
+      const action = new ChangePageAction(page, limit);
+      const state = policiesReducer(initialPolicyState, action);
 
-      expect(newState.policiesLoading).toBe(true);
-      expect(newState.filters.limit).toEqual(limit);
-      expect(newState.filters.skip).toEqual(page * limit);
+      expect(state.policiesLoading).toBe(true);
+      expect(state.filters.limit).toEqual(limit);
+      expect(state.filters.skip).toEqual(page * limit);
     });
   });
 
   describe("SORT_BY_COLUMN", () => {
     it("should set filters and set policiesLoading to true", () => {
-      const initialState = initialPolicyState;
       const column = "manager";
       const direction = "desc";
-      const sortByColumnsAction = new SortByColumnAction(column, direction);
-      const newState = policiesReducer(initialState, sortByColumnsAction);
+      const action = new SortByColumnAction(column, direction);
+      const state = policiesReducer(initialPolicyState, action);
 
-      expect(newState.policiesLoading).toBe(true);
-      expect(newState.filters.sortField).toEqual(column + " " + direction);
-      expect(newState.filters.skip).toEqual(0);
+      expect(state.policiesLoading).toBe(true);
+      expect(state.filters.sortField).toEqual(column + " " + direction);
+      expect(state.filters.skip).toEqual(0);
     });
   });
 
   describe("FETCH_COUNT_POLICIES", () => {
     it("should set totalCount", () => {
-      const initialState = initialPolicyState;
       const count = 50;
-      const fetchCountPolicies = new FetchCountPolicies(count);
-      const newState = policiesReducer(initialState, fetchCountPolicies);
+      const action = new FetchCountPolicies(count);
+      const state = policiesReducer(initialPolicyState, action);
 
-      expect(newState.totalCount).toEqual(count);
+      expect(state.totalCount).toEqual(count);
     });
   });
 });
