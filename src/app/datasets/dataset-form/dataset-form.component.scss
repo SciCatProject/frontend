@@ -1,6 +1,25 @@
+table {
+  tr {
+    td {
+      padding-right: 1em;
 
-.add_button {
-  background: #00ff00;
+      .deleteButton {
+        color: red;
+
+        .material-icons {
+          vertical-align: middle;
+        }
+      }
+    }
+  }
 }
 
+.addButton {
+  margin-right: 1em;
+  color: #ffffff;
+  background: #0ea432;
 
+  .material-icons {
+    vertical-align: middle;
+  }
+}
