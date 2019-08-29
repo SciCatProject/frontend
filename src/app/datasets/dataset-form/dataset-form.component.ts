@@ -29,7 +29,8 @@ export class DatasetFormComponent implements OnInit, OnDestroy {
     return this.formBuilder.group({
       fieldType: "",
       fieldName: "",
-      fieldValue: ""
+      fieldValue: "",
+      fieldUnit: ""
     });
   }
 
@@ -66,7 +67,8 @@ export class DatasetFormComponent implements OnInit, OnDestroy {
     const field = this.formBuilder.group({
       fieldType: [],
       fieldName: [],
-      fieldValue: []
+      fieldValue: [],
+      fieldUnit: []
     });
     this.items.push(field);
   }
@@ -82,6 +84,7 @@ export class DatasetFormComponent implements OnInit, OnDestroy {
       field1: "",
       field2: "",
       field3: "",
+      field4: "",
       items: this.formBuilder.array([])
     });
     this.submitted = false;

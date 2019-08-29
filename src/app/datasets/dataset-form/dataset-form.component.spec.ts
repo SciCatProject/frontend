@@ -3,7 +3,6 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MockStore } from "../../shared/MockStubs";
 import { Store, StoreModule } from "@ngrx/store";
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
-import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { rootReducer } from "../../state-management/reducers/root.reducer";
 
 import {
@@ -16,6 +15,7 @@ import {
 } from "../../shared/sdk/models";
 import { DatasetState } from "../../state-management/state/datasets.store";
 import { SharedCatanieModule } from "shared/shared.module";
+import { MatSelectModule, MatFormFieldModule } from "@angular/material";
 
 describe("DatasetFormComponent", () => {
   let component: DatasetFormComponent;
@@ -26,13 +26,14 @@ describe("DatasetFormComponent", () => {
     TestBed.configureTestingModule({
       declarations: [DatasetFormComponent],
       imports: [
+        FormsModule,
+        MatFormFieldModule,
+        MatSelectModule,
+        ReactiveFormsModule,
         SharedCatanieModule,
         StoreModule.forRoot({
           rootReducer
-        }),
-        FormsModule,
-        ReactiveFormsModule,
-        FontAwesomeModule
+        })
       ]
     });
     TestBed.overrideComponent(DatasetFormComponent, {
