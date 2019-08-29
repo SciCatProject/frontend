@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import { FormArray, FormBuilder, FormGroup, FormControl } from "@angular/forms";
+import { FormArray, FormBuilder, FormGroup } from "@angular/forms";
 import { Observable, Subscription } from "rxjs";
 import { RawDataset } from "../../shared/sdk/models";
 import { SaveDatasetAction } from "../../state-management/actions/datasets.actions";
@@ -25,17 +25,14 @@ export class DatasetFormComponent implements OnInit, OnDestroy {
     return this.metadataForm.get("items") as FormArray;
   }
 
-  createItem(): FormGroup {
-    return this.formBuilder.group({
-      fieldType: "",
-      fieldName: "",
-      fieldValue: "",
-      fieldUnit: ""
+  addMetadata() {
+    const field = this.formBuilder.group({
+      fieldType: [],
+      fieldName: [],
+      fieldValue: [],
+      fieldUnit: []
     });
-  }
-
-  addItem(): void {
-    this.items.push(this.createItem());
+    this.items.push(field);
   }
 
   onChange(index: any) {
@@ -61,81 +58,64 @@ export class DatasetFormComponent implements OnInit, OnDestroy {
     this.submitted = true;
     this.datasetSubscription = this.dataset$
       .pipe(take(1))
-      .subscribe(updated_dataset => {
-        const metadata_obj = {};
-        const array = [];
-        for (const control of this.items.controls) {
+      .subscribe(updatedDataset => {
+        let metadata = {};
+        this.items.controls.forEach(control => {
           const name = control.value.fieldName;
-          const type = control.value.fieldType;
-          const value = control.value.fieldValue;
-          let unit;
-          if (type === "string") {
-            unit = "";
-          } else {
-            unit = control.value.fieldUnit;
-          }
-          const json = `{"${name}":{"type":"${type}","value":"${value}","unit":"${unit}"}}`;
-          const metadata_item2 = JSON.parse(json);
-          for (const key of Object.keys(metadata_item2)) {
-            metadata_obj[key] = metadata_item2[key];
-          }
-          array.push(metadata_item2);
-        }
 
-        updated_dataset.scientificMetadata = metadata_obj;
-        this.store.dispatch(new SaveDatasetAction(updated_dataset));
+          metadata[name] = {
+            type: control.value.fieldType,
+            value: control.value.fieldValue
+          };
+          if (control.value.fieldType === "string") {
+            metadata[name].unit = "";
+          } else {
+            metadata[name].unit = control.value.fieldUnit;
+          }
+        });
+
+        updatedDataset.scientificMetadata = metadata;
+        this.store.dispatch(new SaveDatasetAction(updatedDataset));
       })
       .unsubscribe();
-  }
-
-  addMetadata() {
-    console.log("add a field");
-    const field = this.formBuilder.group({
-      fieldType: [],
-      fieldName: [],
-      fieldValue: [],
-      fieldUnit: []
-    });
-    this.items.push(field);
   }
 
   onRemove(index: any) {
     this.items.removeAt(index);
   }
 
-  ngOnDestroy() {}
-
   ngOnInit() {
+    this.dataset$ = this.store.pipe(select<RawDataset>(getCurrentDataset));
+    this.submitted = false;
+
     this.metadataForm = this.formBuilder.group({
-      field1: "",
-      field2: "",
-      field3: "",
-      field4: "",
       items: this.formBuilder.array([])
     });
-    this.submitted = false;
-    this.dataset$ = this.store.pipe(select<RawDataset>(getCurrentDataset));
 
     this.scientificMetaDataSubscription = this.dataset$
       .pipe(
         filter(Boolean),
         take(1)
       )
-      .subscribe((data_set: RawDataset) => {
-        let json_data = {};
-        if (typeof data_set.scientificMetadata === "undefined") {
-          json_data = {};
+      .subscribe((dataset: RawDataset) => {
+        let jsonData: object;
+        if (typeof dataset.scientificMetadata === "undefined") {
+          jsonData = {};
         } else {
-          json_data = data_set.scientificMetadata;
+          jsonData = dataset.scientificMetadata;
         }
-        console.log(json_data);
-        for (const key of Object.keys(json_data)) {
+        console.log(jsonData);
+        for (const key of Object.keys(jsonData)) {
           const field = {
             fieldName: key.toString(),
-            fieldValue: json_data[key].toString()
+            fieldValue: jsonData[key].toString()
           };
           this.items.push(this.formBuilder.group(field));
         }
       });
+  }
+
+  ngOnDestroy() {
+    this.scientificMetaDataSubscription.unsubscribe();
   }
 }
