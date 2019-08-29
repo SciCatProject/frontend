@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import { FormArray, FormBuilder, FormGroup } from "@angular/forms";
+import { FormArray, FormBuilder, FormGroup, FormControl } from "@angular/forms";
 import { Observable, Subscription } from "rxjs";
 import { RawDataset } from "../../shared/sdk/models";
 import { SaveDatasetAction } from "../../state-management/actions/datasets.actions";
@@ -38,6 +38,25 @@ export class DatasetFormComponent implements OnInit, OnDestroy {
     this.items.push(this.createItem());
   }
 
+  onChange(index: any) {
+    let typeValue = this.items.at(index).get("fieldType").value;
+    if (typeValue === "string") {
+      this.items
+        .at(index)
+        .get("fieldUnit")
+        .reset();
+      this.items
+        .at(index)
+        .get("fieldUnit")
+        .disable();
+    } else {
+      this.items
+        .at(index)
+        .get("fieldUnit")
+        .enable();
+    }
+  }
+
   onSubmit() {
     this.submitted = true;
     this.datasetSubscription = this.dataset$
@@ -47,8 +66,15 @@ export class DatasetFormComponent implements OnInit, OnDestroy {
         const array = [];
         for (const control of this.items.controls) {
           const name = control.value.fieldName;
+          const type = control.value.fieldType;
           const value = control.value.fieldValue;
-          const json = `{"${name}":"${value}"}`;
+          let unit;
+          if (type === "string") {
+            unit = "";
+          } else {
+            unit = control.value.fieldUnit;
+          }
+          const json = `{"${name}":{"type":"${type}","value":"${value}","unit":"${unit}"}}`;
           const metadata_item2 = JSON.parse(json);
           for (const key of Object.keys(metadata_item2)) {
             metadata_obj[key] = metadata_item2[key];

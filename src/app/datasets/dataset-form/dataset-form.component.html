@@ -12,7 +12,10 @@
               <td>
                 <mat-form-field class="selectField">
                   <mat-label>Type</mat-label>
-                  <mat-select formControlName="fieldType">
+                  <mat-select
+                    formControlName="fieldType"
+                    (selectionChange)="onChange(i)"
+                  >
                     <mat-option value="string">string</mat-option>
                     <mat-option value="quantity">quantity</mat-option>
                   </mat-select>
