@@ -10,7 +10,16 @@
           <table>
             <tr>
               <td>
-                <mat-form-field>
+                <mat-form-field class="selectField">
+                  <mat-label>Type</mat-label>
+                  <mat-select formControlName="fieldType">
+                    <mat-option value="string">string</mat-option>
+                    <mat-option value="quantity">quantity</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </td>
+              <td>
+                <mat-form-field class="inputField">
                   <input
                     matInput
                     formControlName="fieldName"
@@ -19,7 +28,7 @@
                 </mat-form-field>
               </td>
               <td>
-                <mat-form-field>
+                <mat-form-field class="inputField">
                   <input
                     matInput
                     formControlName="fieldValue"
@@ -32,6 +41,7 @@
                   mat-icon-button
                   class="deleteButton"
                   type="button"
+                  title="Delete metadata"
                   (click)="onRemove(i)"
                 >
                   <i class="material-icons"> remove_circle </i>
@@ -45,6 +55,7 @@
       <button
         mat-flat-button
         type="button"
+        title="Add metadata"
         class="addButton"
         (click)="addMetadata()"
       >
@@ -52,8 +63,15 @@
         Add metadata
       </button>
 
-      <button mat-stroked-button type="submit" (click)="onSubmit()">
-        Submit
+      <button
+        mat-stroked-button
+        type="submit"
+        title="Save metadata"
+        class="submitButton"
+        (click)="onSubmit()"
+      >
+        <i class="material-icons"> save </i>
+        Save
       </button>
     </form>
   </div>

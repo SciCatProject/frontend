@@ -27,6 +27,7 @@ export class DatasetFormComponent implements OnInit, OnDestroy {
 
   createItem(): FormGroup {
     return this.formBuilder.group({
+      fieldType: "",
       fieldName: "",
       fieldValue: ""
     });
@@ -63,6 +64,7 @@ export class DatasetFormComponent implements OnInit, OnDestroy {
   addMetadata() {
     console.log("add a field");
     const field = this.formBuilder.group({
+      fieldType: [],
       fieldName: [],
       fieldValue: []
     });
@@ -79,6 +81,7 @@ export class DatasetFormComponent implements OnInit, OnDestroy {
     this.metadataForm = this.formBuilder.group({
       field1: "",
       field2: "",
+      field3: "",
       items: this.formBuilder.array([])
     });
     this.submitted = false;
