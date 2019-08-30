@@ -15,7 +15,7 @@ export class DatasetFormComponent implements OnInit, OnDestroy {
   datasetSubscription: Subscription;
 
   metadataForm: FormGroup;
-  typeValues = ["string", "quantity"];
+  typeValues = ["date", "string", "quantity"];
 
   constructor(private store: Store<any>, private formBuilder: FormBuilder) {}
 
@@ -35,7 +35,7 @@ export class DatasetFormComponent implements OnInit, OnDestroy {
 
   onChange(index: any) {
     const typeValue = this.items.at(index).get("fieldType").value;
-    if (typeValue === "string") {
+    if (typeValue !== "quantity") {
       this.items
         .at(index)
         .get("fieldUnit")
@@ -56,13 +56,27 @@ export class DatasetFormComponent implements OnInit, OnDestroy {
     let metadata = {};
     this.items.controls.forEach(control => {
       metadata[control.value.fieldName] = {
-        type: control.value.fieldType,
-        value: control.value.fieldValue
+        type: control.value.fieldType
       };
-      if (control.value.fieldType === "string") {
-        metadata[control.value.fieldName].unit = "";
-      } else {
-        metadata[control.value.fieldName].unit = control.value.fieldUnit;
+
+      switch (control.value.fieldType) {
+        case "string": {
+          metadata[control.value.fieldName].value = control.value.fieldValue;
+          metadata[control.value.fieldName].unit = "";
+          return;
+        }
+        case "date": {
+          metadata[control.value.fieldName].value = new Date(
+            control.value.fieldValue
+          );
+          metadata[control.value.fieldName].unit = "";
+          return;
+        }
+        default: {
+          metadata[control.value.fieldName].value = control.value.fieldValue;
+          metadata[control.value.fieldName].unit = control.value.fieldUnit;
+          return;
+        }
       }
     });
 
