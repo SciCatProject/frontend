@@ -1,11 +1,9 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { FormArray, FormBuilder, FormGroup } from "@angular/forms";
-import { Observable, Subscription } from "rxjs";
-import { RawDataset } from "../../shared/sdk/models";
+import { Subscription } from "rxjs";
 import { SaveDatasetAction } from "../../state-management/actions/datasets.actions";
 import { getCurrentDataset } from "../../state-management/selectors/datasets.selectors";
 import { select, Store } from "@ngrx/store";
-import { filter, take } from "rxjs/operators";
 
 @Component({
   selector: "app-dataset-form",
@@ -13,11 +11,11 @@ import { filter, take } from "rxjs/operators";
   styleUrls: ["./dataset-form.component.scss"]
 })
 export class DatasetFormComponent implements OnInit, OnDestroy {
-  dataset$: Observable<RawDataset>;
-  submitted = false;
-  datasetSubscription: void;
-  scientificMetaDataSubscription: Subscription;
+  dataset: any;
+  datasetSubscription: Subscription;
+
   metadataForm: FormGroup;
+  typeValues = ["string", "quantity"];
 
   constructor(private store: Store<any>, private formBuilder: FormBuilder) {}
 
@@ -36,7 +34,7 @@ export class DatasetFormComponent implements OnInit, OnDestroy {
   }
 
   onChange(index: any) {
-    let typeValue = this.items.at(index).get("fieldType").value;
+    const typeValue = this.items.at(index).get("fieldType").value;
     if (typeValue === "string") {
       this.items
         .at(index)
@@ -55,67 +53,59 @@ export class DatasetFormComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
-    this.submitted = true;
-    this.datasetSubscription = this.dataset$
-      .pipe(take(1))
-      .subscribe(updatedDataset => {
-        let metadata = {};
-        this.items.controls.forEach(control => {
-          const name = control.value.fieldName;
+    let metadata = {};
+    this.items.controls.forEach(control => {
+      metadata[control.value.fieldName] = {
+        type: control.value.fieldType,
+        value: control.value.fieldValue
+      };
+      if (control.value.fieldType === "string") {
+        metadata[control.value.fieldName].unit = "";
+      } else {
+        metadata[control.value.fieldName].unit = control.value.fieldUnit;
+      }
+    });
 
-          metadata[name] = {
-            type: control.value.fieldType,
-            value: control.value.fieldValue
-          };
-          if (control.value.fieldType === "string") {
-            metadata[name].unit = "";
-          } else {
-            metadata[name].unit = control.value.fieldUnit;
-          }
-        });
-
-        updatedDataset.scientificMetadata = metadata;
-        this.store.dispatch(new SaveDatasetAction(updatedDataset));
-      })
-      .unsubscribe();
+    this.dataset.scientificMetadata = metadata;
+    this.store.dispatch(new SaveDatasetAction(this.dataset));
   }
 
   onRemove(index: any) {
     this.items.removeAt(index);
   }
 
+  addCurrentMetadata() {
+    if (this.dataset) {
+      Object.keys(this.dataset.scientificMetadata).forEach(key => {
+        let field = {
+          fieldName: key,
+          fieldType: this.dataset.scientificMetadata[key].type,
+          fieldValue: this.dataset.scientificMetadata[key].value,
+          fieldUnit: this.dataset.scientificMetadata[key].unit
+        };
+        this.items.push(this.formBuilder.group(field));
+      });
+      for (let i = 0; i < this.items.length; i++) {
+        this.onChange(i);
+      }
+    }
+  }
+
   ngOnInit() {
-    this.dataset$ = this.store.pipe(select<RawDataset>(getCurrentDataset));
-    this.submitted = false;
+    this.datasetSubscription = this.store
+      .pipe(select(getCurrentDataset))
+      .subscribe(dataset => {
+        this.dataset = dataset;
+      });
 
     this.metadataForm = this.formBuilder.group({
       items: this.formBuilder.array([])
     });
 
-    this.scientificMetaDataSubscription = this.dataset$
-      .pipe(
-        filter(Boolean),
-        take(1)
-      )
-      .subscribe((dataset: RawDataset) => {
-        let jsonData: object;
-        if (typeof dataset.scientificMetadata === "undefined") {
-          jsonData = {};
-        } else {
-          jsonData = dataset.scientificMetadata;
-        }
-        console.log(jsonData);
-        for (const key of Object.keys(jsonData)) {
-          const field = {
-            fieldName: key.toString(),
-            fieldValue: jsonData[key].toString()
-          };
-          this.items.push(this.formBuilder.group(field));
-        }
-      });
+    this.addCurrentMetadata();
   }
 
   ngOnDestroy() {
-    this.scientificMetaDataSubscription.unsubscribe();
+    this.datasetSubscription.unsubscribe();
   }
 }

@@ -51,8 +51,8 @@ export class DatasetEffects {
     map((action: DatasetActions.SaveDatasetAction) => action.dataset),
     switchMap(dataset => {
       return this.datasetApi.upsert(dataset).pipe(
-        map(res => new DatasetActions.SaveDatasetCompleteAction(dataset)),
-        catchError(err => of(new DatasetActions.SaveDatasetFailedAction()))
+        map(res => new DatasetActions.SaveDatasetCompleteAction(res)),
+        catchError(err => of(new DatasetActions.SaveDatasetFailedAction(err)))
       );
     })
   );

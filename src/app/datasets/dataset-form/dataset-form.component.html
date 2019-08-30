@@ -1,6 +1,6 @@
 <div class="container">
   <h3>Add Metadata</h3>
-  <div *ngIf="dataset$ | async as dataset">
+  <div *ngIf="dataset">
     <form [formGroup]="metadataForm">
       <div
         formArrayName="items"
@@ -16,8 +16,11 @@
                     formControlName="fieldType"
                     (selectionChange)="onChange(i)"
                   >
-                    <mat-option value="string">string</mat-option>
-                    <mat-option value="quantity">quantity</mat-option>
+                    <mat-option
+                      *ngFor="let type of typeValues"
+                      [value]="type"
+                      >{{ type }}</mat-option
+                    >
                   </mat-select>
                 </mat-form-field>
               </td>
@@ -56,7 +59,7 @@
                   title="Delete metadata"
                   (click)="onRemove(i)"
                 >
-                  <i class="material-icons"> remove_circle </i>
+                  <i class="material-icons"> cancel </i>
                 </button>
               </td>
             </tr>
