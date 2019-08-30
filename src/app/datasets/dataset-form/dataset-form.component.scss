@@ -1,37 +1,28 @@
-table {
-  tr {
-    td {
-      padding-right: 1em;
+.material-icons {
+  vertical-align: middle;
+}
 
-      .selectField {
-        max-width: 7em;
-      }
-    }
-    .deleteButton {
-      color: #c81919;
+.formRow {
+  .formColumn {
+    padding-right: 1em;
 
-      .material-icons {
-        vertical-align: middle;
-      }
+    .selectField {
+      max-width: 7em;
     }
+  }
+  .deleteButton {
+    color: #c81919;
   }
 }
 
 .addButton {
   margin-right: 1em;
+  margin-bottom: 1em;
   color: #ffffff;
   background: #0ea432;
-
-  .material-icons {
-    vertical-align: middle;
-  }
 }
 
 .submitButton {
   color: #ffffff;
   background: #0094ca;
-
-  .material-icons {
-    vertical-align: middle;
-  }
 }
