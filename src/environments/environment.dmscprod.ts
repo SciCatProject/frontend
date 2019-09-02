@@ -5,11 +5,11 @@
 
 export const environment = {
   production: true,
-  lbBaseURL: "https://scicatapi.esss.dk",
+  lbBaseURL: "",
   fileserverBaseURL: "https://scicatfileserver.esss.dk",
   externalAuthEndpoint: "/auth/msad",
   archiveWorkflowEnabled: false,
-  disabledDatasetColumns: ["archiveStatus", "retrieveStatus", "dataStatus"],
+  disabledDatasetColumns: ["dataStatus"],
   columnSelectEnabled: true,
   facility: "ESS",
   fileColorEnabled: true,
