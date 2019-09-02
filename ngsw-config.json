@@ -3,7 +3,7 @@
   "dataGroups": [
     {
       "name": "api",
-      "urls": ["/api", "/explorer", "/scicat", "/panosc"],
+      "urls": ["/api", "/explorer", "/scicat", "/panosc","/auth"],
       "cacheConfig": {
         "maxAge": "0u",
         "maxSize": "0",
