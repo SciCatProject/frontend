@@ -33,7 +33,7 @@ export class DatasetFormComponent implements OnInit, OnDestroy {
     this.items.push(field);
   }
 
-  onChange(index: any) {
+  detectType(index: any) {
     const typeValue = this.items.at(index).get("fieldType").value;
     if (typeValue !== "quantity") {
       this.items
@@ -100,7 +100,7 @@ export class DatasetFormComponent implements OnInit, OnDestroy {
         this.items.push(this.formBuilder.group(field));
       });
       for (let i = 0; i < this.items.length; i++) {
-        this.onChange(i);
+        this.detectType(i);
       }
     }
   }

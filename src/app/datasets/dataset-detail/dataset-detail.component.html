@@ -245,8 +245,18 @@
             ></ngx-json-viewer>
           </ng-template>
 
-          <div class="form-container" *ngIf="appConfig.editMetadataEnabled">
-            <app-dataset-form></app-dataset-form>
+          <div *ngIf="appConfig.editMetadataEnabled">
+            <button
+              mat-stroked-button
+              class="edit-button"
+              (click)="edit = !edit"
+            >
+              <i class="material-icons"> edit </i>
+              Edit
+            </button>
+            <div class="form-container" *ngIf="edit">
+              <app-dataset-form></app-dataset-form>
+            </div>
           </div>
         </mat-card>
 

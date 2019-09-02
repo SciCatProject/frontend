@@ -1,5 +1,5 @@
 <div class="container">
-  <h3>Add Metadata</h3>
+  <h3>Edit Metadata</h3>
   <div *ngIf="dataset">
     <form [formGroup]="metadataForm">
       <div
@@ -13,7 +13,7 @@
                 <mat-label>Type</mat-label>
                 <mat-select
                   formControlName="fieldType"
-                  (selectionChange)="onChange(i)"
+                  (selectionChange)="detectType(i)"
                 >
                   <mat-option *ngFor="let type of typeValues" [value]="type">{{
                     type
@@ -48,7 +48,7 @@
                 />
               </mat-form-field>
             </div>
-            <div class="formColumn">
+            <div class="formColumn" fxFlexAlign="end">
               <button
                 mat-icon-button
                 class="deleteButton"
