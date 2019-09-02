@@ -53,34 +53,7 @@ export class DatasetFormComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
-    let metadata = {};
-    this.items.controls.forEach(control => {
-      metadata[control.value.fieldName] = {
-        type: control.value.fieldType
-      };
-
-      switch (control.value.fieldType) {
-        case "string": {
-          metadata[control.value.fieldName].value = control.value.fieldValue;
-          metadata[control.value.fieldName].unit = "";
-          return;
-        }
-        case "date": {
-          metadata[control.value.fieldName].value = new Date(
-            control.value.fieldValue
-          );
-          metadata[control.value.fieldName].unit = "";
-          return;
-        }
-        default: {
-          metadata[control.value.fieldName].value = control.value.fieldValue;
-          metadata[control.value.fieldName].unit = control.value.fieldUnit;
-          return;
-        }
-      }
-    });
-
-    this.dataset.scientificMetadata = metadata;
+    this.dataset.scientificMetadata = this.createMetadataObjects();
     this.store.dispatch(new SaveDatasetAction(this.dataset));
   }
 
@@ -91,18 +64,72 @@ export class DatasetFormComponent implements OnInit, OnDestroy {
   addCurrentMetadata() {
     if (this.dataset) {
       Object.keys(this.dataset.scientificMetadata).forEach(key => {
-        let field = {
-          fieldName: key,
-          fieldType: this.dataset.scientificMetadata[key].type,
-          fieldValue: this.dataset.scientificMetadata[key].value,
-          fieldUnit: this.dataset.scientificMetadata[key].unit
-        };
+        let field = {};
+        if ("type" in this.dataset.scientificMetadata[key]) {
+          field = {
+            fieldName: key,
+            fieldType: this.dataset.scientificMetadata[key].type,
+            fieldValue: this.dataset.scientificMetadata[key].value,
+            fieldUnit: this.dataset.scientificMetadata[key].unit
+          };
+        } else {
+          field = {
+            fieldName: key,
+            fieldType: "string",
+            fieldValue: JSON.stringify(this.dataset.scientificMetadata[key]),
+            fieldUnit: ""
+          };
+        }
         this.items.push(this.formBuilder.group(field));
       });
       for (let i = 0; i < this.items.length; i++) {
         this.detectType(i);
       }
     }
+  }
+
+  createMetadataObjects(): object {
+    let metadata = {};
+    this.items.controls.forEach(control => {
+      metadata[control.value.fieldName] = {
+        type: control.value.fieldType
+      };
+
+      switch (control.value.fieldType) {
+        case "date": {
+          metadata[control.value.fieldName].value = new Date(
+            control.value.fieldValue
+          );
+          metadata[control.value.fieldName].unit = "";
+          break;
+        }
+        case "measurement": {
+          metadata[control.value.fieldName].value = Number(
+            control.value.fieldValue
+          );
+          metadata[control.value.fieldName].unit = control.value.fieldUnit;
+        }
+        case "number": {
+          metadata[control.value.fieldName].value = Number(
+            control.value.fieldValue
+          );
+          metadata[control.value.fieldName].unit = "";
+          break;
+        }
+        case "string": {
+          metadata[control.value.fieldName].value = control.value.fieldValue;
+          metadata[control.value.fieldName].unit = "";
+          break;
+        }
+        default: {
+          metadata[control.value.fieldName].value = control.value.fieldValue;
+          metadata[control.value.fieldName].unit = control.value.fieldUnit;
+          break;
+        }
+      }
+    });
+
+    return metadata;
   }
 
   ngOnInit() {

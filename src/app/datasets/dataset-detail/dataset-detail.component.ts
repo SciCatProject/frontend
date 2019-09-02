@@ -15,7 +15,7 @@ import {
   getError,
   submitJob
 } from "../../state-management/selectors/jobs.selectors";
-import { Subscription, of } from "rxjs";
+import { Subscription, of, Observable } from "rxjs";
 import { Message, MessageType } from "state-management/models";
 import { getIsAdmin } from "state-management/selectors/users.selectors";
 import { APP_CONFIG, AppConfig } from "app-config.module";
@@ -44,16 +44,7 @@ import {
 export class DatasetDetailComponent implements OnInit, OnDestroy {
   dataset$ = this.store.pipe(select(getCurrentDataset));
   datasetwithout$ = this.store.pipe(select(getCurrentDatasetWithoutOrigData));
-  sciMet: Object;
-  public withUnits$;
-  public dates$;
-  public noUnits$;
-  public dates = {
-    start_time: "2011-10-05T14:48:00.000Z",
-    end_time: "2011-10-05T14:48:00.000Z"
-  };
-  public objectKeys = Object.keys;
-  public objs;
+
   private subscriptions: Subscription[] = [];
   private routeSubscription = this.route.params
     .pipe(pluck("id"))
@@ -70,62 +61,9 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
     @Inject(APP_CONFIG) public appConfig: AppConfig
   ) {}
 
-  convertUnits(scimeta) {
-    const units = {};
-    for (const key in scimeta) {
-      if (scimeta[key].hasOwnProperty("u")) {
-        units[key] = scimeta[key];
-      }
-    }
-    return units;
-  }
-
-  getDates(scimeta) {
-    const dates = [];
-    for (const key in scimeta) {
-      if (scimeta[key] instanceof Date) {
-        const arr = { name: key, value: scimeta[key] };
-        dates.push(arr);
-      }
-    }
-    return dates;
-  }
-
-  getStrings(scimeta) {
-    const strings = [];
-    for (const key in scimeta) {
-      if (typeof scimeta[key] === "string") {
-        const arr = { name: key, value: scimeta[key] };
-        strings.push(arr);
-      }
-    }
-    return strings;
-  }
-
-  getObjects(scimeta) {
-    const objects = [];
-    for (const key in scimeta) {
-      if (scimeta[key] instanceof Object) {
-        objects.push(scimeta[key]);
-      }
-    }
-    return objects;
-  }
-
   ngOnInit() {
     const msg = new Message();
-    this.withUnits$ = this.dataset$.pipe(
-      pluck("scientificMetadata"),
-      mergeMap(val => of(this.convertUnits(val)))
-    );
-    this.noUnits$ = this.dataset$.pipe(
-      pluck("scientificMetadata"),
-      mergeMap(val => of(this.getStrings(val)))
-    );
-    this.dates$ = this.dataset$.pipe(
-      pluck("scientificMetadata"),
-      mergeMap(val => of(this.getDates(val)))
-    );
+
     this.subscriptions.push(
       this.store.pipe(select(submitJob)).subscribe(
         ret => {

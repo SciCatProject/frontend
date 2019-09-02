@@ -1,46 +1,54 @@
-button {
-  margin: 1em 1em 0 0;
-}
+.container {
+  margin: 1em;
 
-.material-icons {
-  vertical-align: middle;
-}
+  button {
+    margin: 1em 1em 0 0;
+  }
 
-.formRow {
-  .deleteButton {
-    color: #c81919;
+  .material-icons {
+    vertical-align: middle;
+  }
+
+  .formRow {
+    .deleteButton {
+      color: #c81919;
+    }
+  }
+
+  .addButton {
+    color: #ffffff;
+    background: #0ea432;
+  }
+
+  .submitButton {
+    color: #ffffff;
+    background: #0094ca;
   }
 }
 
-.addButton {
-  color: #ffffff;
-  background: #0ea432;
-}
-
-.submitButton {
-  color: #ffffff;
-  background: #0094ca;
-}
-
 @media only screen and (min-width: 1280px) {
-  .formRow {
-    .formColumn {
-      padding-right: 1em;
+  .container {
+    .formRow {
+      .formColumn {
+        padding-right: 1em;
 
-      .selectField {
-        max-width: 8em;
+        .selectField {
+          max-width: 8em;
+        }
       }
     }
   }
 }
 
 @media only screen and (max-width: 1279px) {
-  .formRow {
-    .formColumn {
-      padding-right: none;
+  .container {
+    .formRow {
+      .formColumn {
+        padding-right: none;
 
-      .selectField {
-        max-width: none;
+        .selectField {
+          max-width: none;
+        }
       }
     }
   }

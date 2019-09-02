@@ -57,6 +57,7 @@ import { ScientificConditionDialogComponent } from "./scientific-condition-dialo
 import { jobsReducer } from "../state-management/reducers/jobs.reducer";
 import { LogbooksModule } from "logbooks/logbooks.module";
 import { ReduceComponent } from "./reduce/reduce.component";
+import { MetadataTableComponent } from './metadata-table/metadata-table.component';
 
 @NgModule({
   imports: [
@@ -112,7 +113,8 @@ import { ReduceComponent } from "./reduce/reduce.component";
     PublishComponent,
     DatasetFormComponent,
     ScientificConditionDialogComponent,
-    ReduceComponent
+    ReduceComponent,
+    MetadataTableComponent
   ],
   entryComponents: [ScientificConditionDialogComponent],
   providers: [DatasetService, ArchivingService],
