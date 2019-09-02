@@ -1,5 +1,5 @@
 button {
-  margin: 0.5em 0.5em 0.5em 0.5em;
+  margin: 1em 1em 0 0;
 }
 
 .material-icons {
@@ -7,13 +7,6 @@ button {
 }
 
 .formRow {
-  .formColumn {
-    padding-right: 1em;
-
-    .selectField {
-      max-width: 7em;
-    }
-  }
   .deleteButton {
     color: #c81919;
   }
@@ -27,4 +20,28 @@ button {
 .submitButton {
   color: #ffffff;
   background: #0094ca;
+}
+
+@media only screen and (min-width: 1280px) {
+  .formRow {
+    .formColumn {
+      padding-right: 1em;
+
+      .selectField {
+        max-width: 8em;
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 1279px) {
+  .formRow {
+    .formColumn {
+      padding-right: none;
+
+      .selectField {
+        max-width: none;
+      }
+    }
+  }
 }
