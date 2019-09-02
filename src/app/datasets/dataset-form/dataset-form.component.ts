@@ -15,7 +15,7 @@ export class DatasetFormComponent implements OnInit, OnDestroy {
   datasetSubscription: Subscription;
 
   metadataForm: FormGroup;
-  typeValues = ["date", "string", "quantity"];
+  typeValues = ["date", "measurement", "number", "string"];
 
   constructor(private store: Store<any>, private formBuilder: FormBuilder) {}
 
@@ -35,7 +35,7 @@ export class DatasetFormComponent implements OnInit, OnDestroy {
 
   detectType(index: any) {
     const typeValue = this.items.at(index).get("fieldType").value;
-    if (typeValue !== "quantity") {
+    if (typeValue !== "measurement") {
       this.items
         .at(index)
         .get("fieldUnit")
