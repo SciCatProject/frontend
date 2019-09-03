@@ -10,7 +10,8 @@
         "/panosc",
         "/auth",
         "/_matrix",
-        "/scichat"
+        "/scichat",
+        "riot"
       ],
       "cacheConfig": {
         "maxAge": "0u",
