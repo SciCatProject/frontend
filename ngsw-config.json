@@ -11,7 +11,7 @@
         "/auth",
         "/_matrix",
         "/scichat",
-        "riot"
+        "/riot"
       ],
       "cacheConfig": {
         "maxAge": "0u",
