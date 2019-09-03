@@ -21,6 +21,7 @@ export const environment = {
   logbookEnabled: true,
   metadataPreviewEnabled: true,
   multipleDownloadEnabled: true,
+  multipleDownloadAction: "http://localhost:3011/zip",
   scienceSearchEnabled: true,
   searchProposals: true,
   searchSamples: true,
