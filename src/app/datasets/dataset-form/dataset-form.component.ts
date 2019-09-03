@@ -123,6 +123,7 @@ export class DatasetFormComponent implements OnInit, OnDestroy {
           break;
         }
         default: {
+          metadata[control.value.fieldName].type = "";
           metadata[control.value.fieldName].value = control.value.fieldValue;
           metadata[control.value.fieldName].unit = control.value.fieldUnit;
           break;

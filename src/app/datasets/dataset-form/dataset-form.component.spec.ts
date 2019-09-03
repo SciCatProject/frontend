@@ -291,5 +291,34 @@ describe("DatasetFormComponent", () => {
       expect(metadataObject["testName"].value).toEqual("test");
       expect(metadataObject["testName"].unit).toEqual("");
     });
+
+    it("should create a metadata object with no type from the FormGroup array", () => {
+      component.addMetadata();
+      component.items
+        .at(0)
+        .get("fieldName")
+        .setValue("testName");
+      component.items
+        .at(0)
+        .get("fieldType")
+        .setValue("");
+      component.items
+        .at(0)
+        .get("fieldValue")
+        .setValue("test");
+      component.items
+        .at(0)
+        .get("fieldUnit")
+        .setValue("test");
+
+      const metadataObject = component.createMetadataObjects();
+
+      expect(metadataObject).toBeDefined();
+      expect(Object.keys(metadataObject).length).toBe(1);
+      expect(Object.keys(metadataObject)[0]).toEqual("testName");
+      expect(metadataObject["testName"].type).toEqual("");
+      expect(metadataObject["testName"].value).toEqual("test");
+      expect(metadataObject["testName"].unit).toEqual("test");
+    });
   });
 });
