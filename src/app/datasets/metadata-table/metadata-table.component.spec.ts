@@ -34,4 +34,28 @@ describe("MetadataTableComponent", () => {
   it("should create", () => {
     expect(component).toBeTruthy();
   });
+
+  it("#createMetadataArray() should parse metadata objects to an array", () => {
+    const testMetadata = {
+      typedTestName: {
+        type: "string",
+        value: "test",
+        unit: ""
+      },
+      untypedTestName: {
+        v: "test",
+        u: ""
+      }
+    };
+    const metadataArray = component.createMetadataArray(testMetadata);
+
+    expect(metadataArray[0].name).toEqual("typedTestName");
+    expect(metadataArray[0].type).toEqual("string");
+    expect(metadataArray[0].value).toEqual("test");
+    expect(metadataArray[0].unit).toEqual("");
+    expect(metadataArray[1].name).toEqual("untypedTestName");
+    expect(metadataArray[1].type).toEqual("undefined");
+    expect(metadataArray[1].value).toEqual('{"v":"test","u":""}');
+    expect(metadataArray[1].unit).toEqual("");
+  });
 });

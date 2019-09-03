@@ -2,14 +2,23 @@ import { DatasetFormComponent } from "./dataset-form.component";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MockStore } from "../../shared/MockStubs";
 import { Store, StoreModule } from "@ngrx/store";
-import { async, ComponentFixture, TestBed } from "@angular/core/testing";
-import { rootReducer } from "../../state-management/reducers/root.reducer";
-import { SharedCatanieModule } from "shared/shared.module";
+import {
+  async,
+  ComponentFixture,
+  TestBed,
+  inject
+} from "@angular/core/testing";
+import { rootReducer } from "state-management/reducers/root.reducer";
 import { MatSelectModule, MatFormFieldModule } from "@angular/material";
+import { SaveDatasetAction } from "state-management/actions/datasets.actions";
+import { RawDataset } from "shared/sdk";
 
 describe("DatasetFormComponent", () => {
   let component: DatasetFormComponent;
   let fixture: ComponentFixture<DatasetFormComponent>;
+
+  let store: MockStore;
+  let dispatchSpy;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -19,16 +28,8 @@ describe("DatasetFormComponent", () => {
         MatFormFieldModule,
         MatSelectModule,
         ReactiveFormsModule,
-        SharedCatanieModule,
-        StoreModule.forRoot({
-          rootReducer
-        })
+        StoreModule.forRoot({ rootReducer })
       ]
-    });
-    TestBed.overrideComponent(DatasetFormComponent, {
-      set: {
-        providers: [{ provide: Store, useClass: MockStore }]
-      }
     });
     TestBed.compileComponents();
   }));
@@ -39,7 +40,26 @@ describe("DatasetFormComponent", () => {
     fixture.detectChanges();
   });
 
+  beforeEach(inject([Store], (mockStore: MockStore) => {
+    store = mockStore;
+  }));
+
+  afterEach(() => {
+    fixture.destroy();
+  });
+
   it("should create", () => {
     expect(component).toBeTruthy();
+  });
+
+  it("#onSubmit() should dispatch a SaveDataset action", () => {
+    dispatchSpy = spyOn(store, "dispatch");
+    component.dataset = new RawDataset();
+    component.onSubmit();
+
+    expect(dispatchSpy).toHaveBeenCalledTimes(1);
+    expect(dispatchSpy).toHaveBeenCalledWith(
+      new SaveDatasetAction(component.dataset)
+    );
   });
 });

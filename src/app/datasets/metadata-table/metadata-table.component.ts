@@ -10,7 +10,7 @@ import { getCurrentDataset } from "state-management/selectors/datasets.selectors
   styleUrls: ["./metadata-table.component.scss"]
 })
 export class MetadataTableComponent implements OnInit, OnDestroy {
-  public metadata: any[];
+  public metadata: object[];
   private metadataSubscription: Subscription;
   public displayMetadataColumns = ["name", "value", "unit"];
 

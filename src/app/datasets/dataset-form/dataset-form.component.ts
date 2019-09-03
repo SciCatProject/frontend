@@ -108,6 +108,7 @@ export class DatasetFormComponent implements OnInit, OnDestroy {
             control.value.fieldValue
           );
           metadata[control.value.fieldName].unit = control.value.fieldUnit;
+          break;
         }
         case "number": {
           metadata[control.value.fieldName].value = Number(
