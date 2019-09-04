@@ -204,54 +204,39 @@
         </mat-card>
 
         <mat-card style="margin:1em">
-          <div>
-            <mat-card-header style="background:#ff96fa;">
-              Scientific Metadata
-            </mat-card-header>
-          </div>
-          <pre *ngIf="withUnits$ | async as withUnits">
-          <ng-template [ngIf]="appConfig.tableSciDataEnabled" [ngIfElse]="jsonview">
-          <table>
-          <tr>
-            <td>Name</td>
-            <td>Value</td>
-            <td>Units</td>
-          </tr>
-            <tr *ngFor="let key of objectKeys(withUnits )">
-              <td><b>{{ key | replaceUnderscore | titlecase }}</b></td>
-              <td>{{ withUnits[key]["v"] }}</td>
-              <td>{{ withUnits[key]["u"] }}</td>
-              <td></td>
-            </tr>
-            <tr *ngFor="let key of (dates$ | async )">
-              <td><b>{{ key.name | replaceUnderscore | titlecase }}</b></td>
-              <td>{{ key.value | date }}</td>
-              <td></td>
-            </tr>
-            <tr *ngFor="let key of (noUnits$ | async )">
-              <td><b>{{ key.name | replaceUnderscore | titlecase }}</b></td>
-              <td>{{  key.value }}</td>
-              <td></td>
-            </tr>
-          </table>
-
-            
+          <mat-card-header style="background:#ff96fa;">
+            Scientific Metadata
+          </mat-card-header>
+          <ng-template
+            [ngIf]="appConfig.tableSciDataEnabled"
+            [ngIfElse]="jsonview"
+          >
+            <mat-tab-group>
+              <mat-tab>
+                <ng-template mat-tab-label>
+                  <i class="material-icons"> list </i> View
+                </ng-template>
+                <app-metadata-table></app-metadata-table>
+              </mat-tab>
+              <mat-tab *ngIf="appConfig.editMetadataEnabled">
+                <ng-template mat-tab-label>
+                  <i class="material-icons"> edit </i> Edit
+                </ng-template>
+                <app-dataset-form></app-dataset-form>
+              </mat-tab>
+            </mat-tab-group>
           </ng-template>
-        </pre>
+
           <ng-template #jsonview>
             <ngx-json-viewer
               [json]="dataset.scientificMetadata"
               [expanded]="false"
             ></ngx-json-viewer>
           </ng-template>
-
-          <div class="form-container" *ngIf="appConfig.editMetadataEnabled">
-            <app-dataset-form></app-dataset-form>
-          </div>
         </mat-card>
 
         <mat-card style="margin:1em">
-          <button (click)="show = !show">
+          <button mat-stroked-button (click)="show = !show">
             {{ show ? "Hide MetaData" : "Show Metadata" }}
           </button>
           <br />

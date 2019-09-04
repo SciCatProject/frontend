@@ -22,14 +22,14 @@ export class JsonHeadPipe implements PipeTransform {
     const key1 = Object.keys(value)[0];
     let key2 = Object.keys(value)[1];
     let val1 = value[key1];
-    if (val1 !== undefined && val1.hasOwnProperty("u")) {
-      val1 = val1.v.toString() + " " + val1.u;
+    if (val1 !== undefined && val1.hasOwnProperty("unit")) {
+      val1 = val1.value.toString() + " " + val1.unit;
     }
     let val2 = " ";
     if (key2 !== undefined) {
       const prop = value[key2];
-      if (prop.hasOwnProperty("u")) {
-        val2 = prop.v.toString() + " " + prop.u;
+      if (prop.hasOwnProperty("unit")) {
+        val2 = prop.value.toString() + " " + prop.unit;
       }
     } else {
       key2 = " ";

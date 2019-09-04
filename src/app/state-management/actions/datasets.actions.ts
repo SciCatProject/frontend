@@ -337,11 +337,13 @@ export class SaveDatasetAction implements Action {
 export class SaveDatasetCompleteAction implements Action {
   readonly type = SAVE_DATASET_COMPLETE;
 
-  constructor(readonly datasets: Dataset) {}
+  constructor(readonly dataset: Dataset) {}
 }
 
 export class SaveDatasetFailedAction implements Action {
   readonly type = SAVE_DATASET_FAILED;
+
+  constructor(readonly error: Error) {}
 }
 
 export class FetchFacetCountsAction implements Action {

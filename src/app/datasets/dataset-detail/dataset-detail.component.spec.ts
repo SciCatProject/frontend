@@ -84,30 +84,6 @@ describe("DatasetDetailComponent", () => {
     expect(component).toBeTruthy();
   });
 
-  it("#converUnits should return an object", () => {
-    const res = component.convertUnits({});
-
-    expect(res).toEqual({});
-  });
-
-  it("#getDates should return an array", () => {
-    const res = component.getDates({});
-
-    expect(res).toEqual([]);
-  });
-
-  it("#getStrings should return an array", () => {
-    const res = component.getStrings({});
-
-    expect(res).toEqual([]);
-  });
-
-  it("#getObjects should return an array", () => {
-    const res = component.getObjects({});
-
-    expect(res).toEqual([]);
-  });
-
   it("#resetDataset should return 'null' without confirmation", () => {
     dispatchSpy = spyOn(store, "dispatch");
     pipeSpy = spyOn(store, "pipe");
