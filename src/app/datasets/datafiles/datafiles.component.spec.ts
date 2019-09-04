@@ -8,6 +8,7 @@ import { MockStore, MockUserApi } from "shared/MockStubs";
 import { AppConfigModule } from "app-config.module";
 import { FileSizePipe } from "../../shared/pipes/filesize.pipe";
 import { UserApi } from "shared/sdk";
+import { FilePathTruncate } from "shared/pipes/file-path-truncate.pipe";
 
 describe("DatafilesComponent", () => {
   let component: DatafilesComponent;
@@ -17,7 +18,7 @@ describe("DatafilesComponent", () => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
       imports: [ReactiveFormsModule, MatTableModule, AppConfigModule],
-      declarations: [DatafilesComponent, FileSizePipe]
+      declarations: [DatafilesComponent, FileSizePipe, FilePathTruncate]
     });
     TestBed.overrideComponent(DatafilesComponent, {
       set: {

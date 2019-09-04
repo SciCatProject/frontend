@@ -33,7 +33,7 @@
         <mat-header-cell *matHeaderCellDef>Path</mat-header-cell>
         <mat-cell *matCellDef="let file" matTooltip="{{file.path}}">
           <a *ngIf="urlPrefix; else noLink" href="{{urlPrefix}}{{file.path}}">
-            {{file.path | slice:-15 }}
+            {{file.path | filePathTruncate }}
           </a>
           <ng-template #noLink>
             {{file.path}}

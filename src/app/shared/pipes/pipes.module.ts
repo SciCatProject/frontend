@@ -9,10 +9,12 @@ import { StripProposalPrefixPipe } from "./stripProposalPrefix.pipe";
 import { ThumbnailPipe } from "./thumbnail.pipe";
 import { TitleCasePipe } from "./title-case.pipe";
 import { FileSizePipe } from "./filesize.pipe";
+import { FilePathTruncate } from "./file-path-truncate.pipe";
 
 @NgModule({
   declarations: [
     FileSizePipe,
+    FilePathTruncate,
     JsonHeadPipe,
     KeysPipe,
     ObjKeysPipe,
@@ -25,6 +27,7 @@ import { FileSizePipe } from "./filesize.pipe";
   imports: [CommonModule],
   exports: [
     FileSizePipe,
+    FilePathTruncate,
     JsonHeadPipe,
     KeysPipe,
     ObjKeysPipe,
