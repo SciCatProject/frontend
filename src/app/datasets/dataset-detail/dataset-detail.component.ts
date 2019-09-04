@@ -15,11 +15,11 @@ import {
   getError,
   submitJob
 } from "../../state-management/selectors/jobs.selectors";
-import { Subscription, of, Observable } from "rxjs";
+import { Subscription } from "rxjs";
 import { Message, MessageType } from "state-management/models";
 import { getIsAdmin } from "state-management/selectors/users.selectors";
 import { APP_CONFIG, AppConfig } from "app-config.module";
-import { pluck, take, mergeMap } from "rxjs/operators";
+import { pluck, take } from "rxjs/operators";
 import { Router } from "@angular/router";
 import {
   getCurrentAttachments,

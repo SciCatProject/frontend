@@ -1,5 +1,5 @@
 import { DatasetFormComponent } from "./dataset-form.component";
-import { FormsModule, ReactiveFormsModule, FormArray } from "@angular/forms";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MockStore } from "../../shared/MockStubs";
 import { Store, StoreModule } from "@ngrx/store";
 import {
@@ -12,7 +12,6 @@ import { rootReducer } from "state-management/reducers/root.reducer";
 import { MatSelectModule, MatFormFieldModule } from "@angular/material";
 import { SaveDatasetAction } from "state-management/actions/datasets.actions";
 import { RawDataset } from "shared/sdk";
-import { ofType } from "@ngrx/effects";
 
 describe("DatasetFormComponent", () => {
   let component: DatasetFormComponent;
