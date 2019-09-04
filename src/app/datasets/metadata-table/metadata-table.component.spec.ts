@@ -35,27 +35,36 @@ describe("MetadataTableComponent", () => {
     expect(component).toBeTruthy();
   });
 
-  it("#createMetadataArray() should parse metadata objects to an array", () => {
-    const testMetadata = {
-      typedTestName: {
-        type: "string",
-        value: "test",
-        unit: ""
-      },
-      untypedTestName: {
-        v: "test",
-        u: ""
-      }
-    };
-    const metadataArray = component.createMetadataArray(testMetadata);
+  describe("#createMetadataArray()", () => {
+    it("should parse a typed metadata object to an array", () => {
+      const testMetadata = {
+        typedTestName: {
+          type: "string",
+          value: "test",
+          unit: ""
+        }
+      };
+      const metadataArray = component.createMetadataArray(testMetadata);
 
-    expect(metadataArray[0].name).toEqual("typedTestName");
-    expect(metadataArray[0].type).toEqual("string");
-    expect(metadataArray[0].value).toEqual("test");
-    expect(metadataArray[0].unit).toEqual("");
-    expect(metadataArray[1].name).toEqual("untypedTestName");
-    expect(metadataArray[1].type).toEqual("undefined");
-    expect(metadataArray[1].value).toEqual('{"v":"test","u":""}');
-    expect(metadataArray[1].unit).toEqual("");
+      expect(metadataArray[0].name).toEqual("typedTestName");
+      expect(metadataArray[0].type).toEqual("string");
+      expect(metadataArray[0].value).toEqual("test");
+      expect(metadataArray[0].unit).toEqual("");
+    });
+
+    it("should parse an untyped metadata object to an array", () => {
+      const testMetadata = {
+        untypedTestName: {
+          v: "test",
+          u: ""
+        }
+      };
+      const metadataArray = component.createMetadataArray(testMetadata);
+
+      expect(metadataArray[0].name).toEqual("untypedTestName");
+      expect(metadataArray[0].type).toEqual("");
+      expect(metadataArray[0].value).toEqual('{"v":"test","u":""}');
+      expect(metadataArray[0].unit).toEqual("");
+    });
   });
 });

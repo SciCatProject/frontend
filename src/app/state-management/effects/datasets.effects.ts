@@ -8,7 +8,7 @@ import {
   DerivedDatasetApi
 } from "shared/sdk/services";
 import * as DatasetActions from "state-management/actions/datasets.actions";
-import { Dataset } from "state-management/models";
+import { Dataset, RawDataset } from "state-management/models";
 import {
   getDatasetsInBatch,
   getFullfacetsParams,
@@ -26,6 +26,7 @@ import {
 } from "rxjs/operators";
 import { getCurrentUser } from "../selectors/users.selectors";
 import { LOGOUT_COMPLETE } from "../actions/user.actions";
+import { DerivedDataset } from "shared/sdk";
 
 @Injectable()
 export class DatasetEffects {
@@ -54,27 +55,32 @@ export class DatasetEffects {
     ofType(DatasetActions.SAVE_DATASET),
     map((action: DatasetActions.SaveDatasetAction) => action.dataset),
     switchMap(dataset => {
-      delete dataset.origdatablocks;
-      delete dataset.datablocks;
-      delete dataset.attachments;
-      switch (dataset.type) {
-        case "raw": {
-          return this.rawDatasetApi.upsert(dataset).pipe(
-            map(res => new DatasetActions.SaveDatasetCompleteAction(res)),
-            catchError(err =>
-              of(new DatasetActions.SaveDatasetFailedAction(err))
-            )
-          );
-        }
-        case "derived": {
-          return this.derivedDatasetApi.upsert(dataset).pipe(
-            map(res => new DatasetActions.SaveDatasetCompleteAction(res)),
-            catchError(err =>
-              of(new DatasetActions.SaveDatasetFailedAction(err))
-            )
-          );
-        }
-      }
+      return this.datasetApi.updateScientificMetadata(dataset).pipe(
+        map(dataset => new DatasetActions.SaveDatasetCompleteAction(dataset)),
+        catchError(err => of(new DatasetActions.SaveDatasetFailedAction(err)))
+      );
+
+      // delete dataset.origdatablocks;
+      // delete dataset.datablocks;
+      // delete dataset.attachments;
+      // switch (dataset.type) {
+      //   case "raw": {
+      //     return this.rawDatasetApi.upsert(dataset).pipe(
+      //       map(res => new DatasetActions.SaveDatasetCompleteAction(res)),
+      //       catchError(err =>
+      //         of(new DatasetActions.SaveDatasetFailedAction(err))
+      //       )
+      //     );
+      //   }
+      //   case "derived": {
+      //     return this.derivedDatasetApi.upsert(dataset).pipe(
+      //       map(res => new DatasetActions.SaveDatasetCompleteAction(res)),
+      //       catchError(err =>
+      //         of(new DatasetActions.SaveDatasetFailedAction(err))
+      //       )
+      //     );
+      //   }
+      // }
     })
   );
 

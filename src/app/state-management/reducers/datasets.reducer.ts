@@ -78,14 +78,15 @@ import {
   REDUCE_DATASET_FAILED,
   UPDATE_ATTACHMENT_CAPTION_COMPLETE,
   UpdateAttachmentCaptionCompleteAction,
-  UPDATE_ATTACHMENT_CAPTION_FAILED
+  UPDATE_ATTACHMENT_CAPTION_FAILED,
+  SaveDatasetCompleteAction
 } from "state-management/actions/datasets.actions";
 
 import {
   DatasetState,
   initialDatasetState
 } from "state-management/state/datasets.store";
-import { ArchViewMode } from "state-management/models";
+import { ArchViewMode, Dataset } from "state-management/models";
 
 export function datasetsReducer(
   state: DatasetState = initialDatasetState,
@@ -164,7 +165,10 @@ export function datasetsReducer(
     }
 
     case SAVE_DATASET_COMPLETE: {
-      return { ...state, datasetsLoading: false };
+      const currentSet = (action as SaveDatasetCompleteAction)
+        .dataset as Dataset;
+
+      return { ...state, currentSet, datasetsLoading: false };
     }
 
     case SAVE_DATASET_FAILED: {

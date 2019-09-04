@@ -28,7 +28,7 @@ export class MetadataTableComponent implements OnInit, OnDestroy {
       } else {
         metadataObject = {
           name: key,
-          type: "undefined",
+          type: "",
           value: JSON.stringify(scientificMetadata[key]),
           unit: ""
         };

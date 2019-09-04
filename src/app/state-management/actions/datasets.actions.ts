@@ -337,7 +337,7 @@ export class SaveDatasetAction implements Action {
 export class SaveDatasetCompleteAction implements Action {
   readonly type = SAVE_DATASET_COMPLETE;
 
-  constructor(readonly dataset: any) {}
+  constructor(readonly dataset: Dataset) {}
 }
 
 export class SaveDatasetFailedAction implements Action {
