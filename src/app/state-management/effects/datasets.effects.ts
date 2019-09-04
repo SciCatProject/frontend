@@ -2,13 +2,9 @@ import { Injectable } from "@angular/core";
 import { Observable, of } from "rxjs";
 import { Actions, Effect, ofType } from "@ngrx/effects";
 import { Action, select, Store } from "@ngrx/store";
-import {
-  DatasetApi,
-  RawDatasetApi,
-  DerivedDatasetApi
-} from "shared/sdk/services";
+import { DatasetApi } from "shared/sdk/services";
 import * as DatasetActions from "state-management/actions/datasets.actions";
-import { Dataset, RawDataset } from "state-management/models";
+import { Dataset } from "state-management/models";
 import {
   getDatasetsInBatch,
   getFullfacetsParams,
@@ -26,7 +22,6 @@ import {
 } from "rxjs/operators";
 import { getCurrentUser } from "../selectors/users.selectors";
 import { LOGOUT_COMPLETE } from "../actions/user.actions";
-import { DerivedDataset } from "shared/sdk";
 
 @Injectable()
 export class DatasetEffects {
@@ -59,28 +54,6 @@ export class DatasetEffects {
         map(dataset => new DatasetActions.SaveDatasetCompleteAction(dataset)),
         catchError(err => of(new DatasetActions.SaveDatasetFailedAction(err)))
       );
-
-      // delete dataset.origdatablocks;
-      // delete dataset.datablocks;
-      // delete dataset.attachments;
-      // switch (dataset.type) {
-      //   case "raw": {
-      //     return this.rawDatasetApi.upsert(dataset).pipe(
-      //       map(res => new DatasetActions.SaveDatasetCompleteAction(res)),
-      //       catchError(err =>
-      //         of(new DatasetActions.SaveDatasetFailedAction(err))
-      //       )
-      //     );
-      //   }
-      //   case "derived": {
-      //     return this.derivedDatasetApi.upsert(dataset).pipe(
-      //       map(res => new DatasetActions.SaveDatasetCompleteAction(res)),
-      //       catchError(err =>
-      //         of(new DatasetActions.SaveDatasetFailedAction(err))
-      //       )
-      //     );
-      //   }
-      // }
     })
   );
 
@@ -232,9 +205,7 @@ export class DatasetEffects {
   constructor(
     private actions$: Actions,
     private store: Store<any>,
-    private datasetApi: DatasetApi,
-    private derivedDatasetApi: DerivedDatasetApi,
-    private rawDatasetApi: RawDatasetApi
+    private datasetApi: DatasetApi
   ) {}
 
   private storeBatch(batch: Dataset[], userId: string): void {
