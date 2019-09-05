@@ -65,8 +65,6 @@ export class ProposalsEffects {
     withLatestFrom(this.queryParams$),
     map(([action, params]) => params),
     mergeMap(({ query, limits }) => {
-      console.log("gm1 query", query);
-      console.log("gm1 limits", limits);
       return this.proposalApi.fullquery(query, limits).pipe(
         map(
           proposals => new FetchProposalsCompleteAction(proposals as Proposal[])
@@ -82,8 +80,6 @@ export class ProposalsEffects {
     withLatestFrom(this.queryParams$),
     map(([action, params]) => params),
     mergeMap(({ query, limits }) => {
-      console.log("gm query", query);
-      console.log("gm limits", limits);
       return this.proposalApi.fullquery(query, limits).pipe(
         map(
           proposals => new FetchProposalsCompleteAction(proposals as Proposal[])
