@@ -1,16 +1,11 @@
-<mat-card>
-  <mat-card-header>
-    <span class="title">Search</span>
-  </mat-card-header>
-  <mat-form-field>
-    <input
-      matInput
-      class="search-input"
-      placeholder="Search Proposals"
-      aria-label="Search Proposals"
-      name="search"
-      [ngModel]="query"
-      (ngModelChange)="textSearchChanged($event)"
-    />
-  </mat-form-field>
-</mat-card>
+<mat-form-field>
+  <input
+    matInput
+    class="search-input"
+    aria-label="Search Proposals"
+    name="search"
+    [ngModel]="query"
+    (ngModelChange)="textSearchChanged($event)"
+  />
+  <mat-icon matSuffix>search</mat-icon>
+</mat-form-field>

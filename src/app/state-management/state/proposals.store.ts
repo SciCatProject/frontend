@@ -34,7 +34,7 @@ export const initialProposalsState: ProposalsState = {
   filters: {
     text: "",
     skip: 0,
-    limit: 30,
+    limit: 25,
     sortField: "createdAt desc"
   },
   propFilters: {

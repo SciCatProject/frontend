@@ -1,6 +1,10 @@
 import { Component, Input, Inject, OnDestroy } from "@angular/core";
 import { Proposal } from "state-management/models";
-import { FetchProposalAction, ChangePageAction, SortProposalByColumnAction } from "state-management/actions/proposals.actions";
+import {
+  FetchProposalAction,
+  ChangePageAction,
+  SortProposalByColumnAction
+} from "state-management/actions/proposals.actions";
 import { Router } from "@angular/router";
 import { Store, select } from "@ngrx/store";
 import { APP_CONFIG, AppConfig } from "app-config.module";
@@ -10,7 +14,6 @@ import {
   getProposalPage,
   getProposalsPerPage
 } from "state-management/selectors/proposals.selectors";
-import { Subscription } from "rxjs";
 
 @Component({
   selector: "proposals-list",
@@ -20,7 +23,6 @@ import { Subscription } from "rxjs";
 export class ProposalsListComponent implements OnDestroy {
   @Input()
   proposals: Proposal[];
-  private subscriptions: Subscription;
   public page: number;
 
   displayedColumns = ["proposalId", "title", "firstname", "start", "end"];
@@ -35,8 +37,8 @@ export class ProposalsListComponent implements OnDestroy {
     @Inject(APP_CONFIG) public appConfig: AppConfig
   ) {}
 
-  onRowSelect(event, proposal) {
-    this.store.dispatch(new FetchProposalAction(proposal));
+  onRowSelect(event: Event, proposal: Proposal) {
+    this.store.dispatch(new FetchProposalAction(proposal.proposalId));
     this.router.navigateByUrl(
       "/proposals/" + encodeURIComponent(proposal.proposalId)
     );
@@ -48,15 +50,10 @@ export class ProposalsListComponent implements OnDestroy {
     this.store.dispatch(new SortProposalByColumnAction(column, direction));
   }
 
-  ngOnDestroy() {
-    // this.subscriptions.unsubscribe();
-  }
-
+  ngOnDestroy() {}
 
   onPageChange(event: any): void {
-    this.store.dispatch(
-      new ChangePageAction( event.pageIndex, event.pageSize)
-    );
+    this.store.dispatch(new ChangePageAction(event.pageIndex, event.pageSize));
     this.page = event.pageIndex;
   }
 }
