@@ -1,5 +1,5 @@
 <div fxLayout="row" fxLayout.lt-lg="column">
-  <div fxFlex="14">
+  <div fxFlex="14" fxFlex.lt-xl="20">
     <div *ngIf="appConfig.searchProposals">
       <mat-card class="bigSearch">
         <div class="title">Search</div>
@@ -10,7 +10,7 @@
       </div>
     </div>
   </div>
-  <div fxFlex="63">
+  <div fxFlex="63" fxFlex.lt-xl="80">
     <list-proposals-page></list-proposals-page>
   </div>
 </div>
