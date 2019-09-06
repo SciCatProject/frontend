@@ -12,13 +12,9 @@ import { ProposalDetailComponent } from "./components/proposal-detail/proposal-d
 import { ListProposalsPageComponent } from "./containers/list-proposals-page/list-proposals-page.component";
 import { ViewProposalPageComponent } from "./containers/view-proposal-page/view-proposal-page.component";
 
-import { ProposalsService } from "./proposals.service";
-import { DatasetService } from "../datasets/dataset.service";
-
 import { proposalsReducer } from "../state-management/reducers/proposals.reducer";
 import { ProposalsEffects } from "../state-management/effects/proposals.effects";
 
-import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import {
   MatListModule,
   MatTableModule,
@@ -32,7 +28,6 @@ import {
   MatSortModule
 } from "@angular/material";
 import { SharedCatanieModule } from "../shared/shared.module";
-import { LogbooksModule } from "logbooks/logbooks.module";
 import { ProposalDashboardComponent } from "./proposal-dashboard/proposal-dashboard.component";
 import { ProposalSearchComponent } from "./proposal-search/proposal-search.component";
 import { FlexLayoutModule } from "@angular/flex-layout";
@@ -43,9 +38,7 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
     CommonModule,
     EffectsModule.forFeature([ProposalsEffects]),
     FlexLayoutModule,
-    FontAwesomeModule,
     FormsModule,
-    LogbooksModule,
     MatCardModule,
     MatFormFieldModule,
     MatIconModule,
@@ -65,13 +58,12 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
   declarations: [
     ListProposalsPageComponent,
     ViewProposalPageComponent,
-
     ProposalsListComponent,
     ProposalDetailComponent,
     ProposalDashboardComponent,
     ProposalSearchComponent
   ],
   exports: [ProposalSearchComponent, ListProposalsPageComponent],
-  providers: [ProposalsService, DatasetService]
+  providers: []
 })
 export class ProposalsModule {}

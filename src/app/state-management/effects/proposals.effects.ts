@@ -8,7 +8,6 @@ import {
   mergeMap,
   withLatestFrom
 } from "rxjs/operators";
-import { ProposalsService } from "proposals/proposals.service";
 import {
   FETCH_DATASETS_FOR_PROPOSAL,
   FETCH_PROPOSAL,
@@ -49,7 +48,7 @@ import {
 
 import { getPropFilters } from "state-management/selectors/proposals.selectors";
 import { select, Action, Store } from "@ngrx/store";
-import { ProposalApi, Proposal } from "shared/sdk";
+import { ProposalApi, Proposal, Dataset, DatasetApi } from "shared/sdk";
 
 @Injectable()
 export class ProposalsEffects {
@@ -66,8 +65,6 @@ export class ProposalsEffects {
     withLatestFrom(this.queryParams$),
     map(([action, params]) => params),
     mergeMap(({ query, limits }) => {
-      console.log("gm1 query", query);
-      console.log("gm1 limits", limits);
       return this.proposalApi.fullquery(query, limits).pipe(
         map(
           proposals => new FetchProposalsCompleteAction(proposals as Proposal[])
@@ -83,8 +80,6 @@ export class ProposalsEffects {
     withLatestFrom(this.queryParams$),
     map(([action, params]) => params),
     mergeMap(({ query, limits }) => {
-      console.log("gm query", query);
-      console.log("gm limits", limits);
       return this.proposalApi.fullquery(query, limits).pipe(
         map(
           proposals => new FetchProposalsCompleteAction(proposals as Proposal[])
@@ -98,7 +93,7 @@ export class ProposalsEffects {
   FetchCountOfProposals$ = this.actions$.pipe(
     ofType(FETCH_COUNT_PROPOSALS),
     switchMap(action =>
-      this.proposalsService.count().pipe(
+      this.proposalApi.count().pipe(
         map(({ count }) => new FetchCountOfProposalsSuccess(count)),
         catchError(err => of(new FetchCountFailed()))
       )
@@ -109,10 +104,14 @@ export class ProposalsEffects {
   getProposal$: Observable<FetchProposalOutcomeAction> = this.actions$.pipe(
     ofType<FetchProposalAction>(FETCH_PROPOSAL),
     switchMap(action =>
-      this.proposalsService.getProposal(action.proposalId).pipe(
-        map(proposal => new FetchProposalCompleteAction(proposal)),
-        catchError(() => of(new FetchProposalFailedAction()))
-      )
+      this.proposalApi
+        .findOne({ where: { proposalId: action.proposalId } })
+        .pipe(
+          map(
+            (proposal: Proposal) => new FetchProposalCompleteAction(proposal)
+          ),
+          catchError(() => of(new FetchProposalFailedAction()))
+        )
     )
   );
 
@@ -122,8 +121,11 @@ export class ProposalsEffects {
   > = this.actions$.pipe(
     ofType<FetchDatasetsForProposalAction>(FETCH_DATASETS_FOR_PROPOSAL),
     switchMap(action =>
-      this.proposalsService.getDatasetsForProposal(action.proposalId).pipe(
-        map(datasets => new FetchDatasetsForProposalCompleteAction(datasets)),
+      this.datasetApi.find({ where: { proposalId: action.proposalId } }).pipe(
+        map(
+          (datasets: Dataset[]) =>
+            new FetchDatasetsForProposalCompleteAction(datasets)
+        ),
         catchError(() => of(new FetchDatasetsForProposalFailedAction()))
       )
     )
@@ -193,7 +195,7 @@ export class ProposalsEffects {
   constructor(
     private store: Store<any>,
     private actions$: Actions,
-    private proposalsService: ProposalsService,
-    private proposalApi: ProposalApi
+    private proposalApi: ProposalApi,
+    private datasetApi: DatasetApi
   ) {}
 }

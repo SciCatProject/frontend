@@ -1,15 +1,32 @@
-import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+import {
+  async,
+  ComponentFixture,
+  TestBed,
+  inject
+} from "@angular/core/testing";
 
 import { ProposalSearchComponent } from "./proposal-search.component";
-import { Store } from "@ngrx/store";
+import { Store, StoreModule } from "@ngrx/store";
 import { MockStore } from "shared/MockStubs";
-import { BrowserAnimationsModule, NoopAnimationsModule } from "@angular/platform-browser/animations";
+import {
+  BrowserAnimationsModule,
+  NoopAnimationsModule
+} from "@angular/platform-browser/animations";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { MatFormFieldModule, MatInputModule, MatCardModule } from "@angular/material";
+import {
+  MatFormFieldModule,
+  MatInputModule,
+  MatIconModule
+} from "@angular/material";
+import { rootReducer } from "state-management/reducers/root.reducer";
+import { SearchProposalAction } from "state-management/actions/proposals.actions";
 
 describe("ProposalSearchComponent", () => {
   let component: ProposalSearchComponent;
   let fixture: ComponentFixture<ProposalSearchComponent>;
+
+  let store: MockStore;
+  let dispatchSpy;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -17,18 +34,15 @@ describe("ProposalSearchComponent", () => {
       imports: [
         BrowserAnimationsModule,
         FormsModule,
-        MatCardModule,
         MatFormFieldModule,
+        MatIconModule,
         MatInputModule,
         NoopAnimationsModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        StoreModule.forRoot({ rootReducer })
       ]
     });
-    TestBed.overrideComponent(ProposalSearchComponent,  {
-      set: {
-        providers: [{ provide: Store, useClass: MockStore }]
-      }
-    });
+    TestBed.overrideComponent(ProposalSearchComponent, {});
     TestBed.compileComponents();
   }));
 
@@ -38,7 +52,27 @@ describe("ProposalSearchComponent", () => {
     fixture.detectChanges();
   });
 
+  beforeEach(inject([Store], (mockStore: MockStore) => {
+    store = mockStore;
+  }));
+
+  afterEach(() => {
+    fixture.destroy();
+  });
+
   it("should create", () => {
     expect(component).toBeTruthy();
+  });
+
+  describe("#textSearchChanged()", () => {
+    it("should dispatch a SearchProposalAction", () => {
+      dispatchSpy = spyOn(store, "dispatch");
+
+      const query = "test";
+      component.textSearchChanged(query);
+
+      expect(dispatchSpy).toHaveBeenCalledTimes(1);
+      expect(dispatchSpy).toHaveBeenCalledWith(new SearchProposalAction(query));
+    });
   });
 });
