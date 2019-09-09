@@ -1,0 +1,62 @@
+<ng-template [ngIf]="data && data.length > 0">
+  <mat-paginator
+    class="largeData"
+    [pageSizeOptions]="pageSizeOptions"
+    [pageIndex]="currentPage"
+    [length]="dataCount"
+    [pageSize]="dataPerPage"
+    (page)="onPageChange($event)"
+    showFirstLastButtons
+    *ngIf="paginate"
+  >
+  </mat-paginator>
+
+  <mat-table
+    [dataSource]="data"
+    matSort
+    class="largeData mat-elevation-z2"
+    (matSortChange)="onSortChange($event)"
+  >
+    <ng-template ngFor let-column [ngForOf]="columns">
+      <ng-container matColumnDef="{{ column.name }}">
+        <mat-header-cell
+          *matHeaderCellDef
+          mat-sort-header
+          [disabled]="!column.sort"
+        >
+          <div fxLayout="column" style="align-items: center">
+            <div>
+              <mat-icon>{{ column.icon }}</mat-icon>
+            </div>
+            <div>
+              {{ column.name | titleCase }}
+            </div>
+          </div>
+        </mat-header-cell>
+        <mat-cell *matCellDef="let data"> {{ data[column.name] }}</mat-cell>
+      </ng-container>
+    </ng-template>
+
+    <mat-header-row *matHeaderRowDef="columnsToDisplay"></mat-header-row>
+    <mat-row
+      *matRowDef="let row; columns: columnsToDisplay"
+      (click)="onRowSelect(row)"
+    ></mat-row>
+  </mat-table>
+
+  <mat-card class="smallData">
+    <mat-list>
+      <ng-template ngFor let-entry [ngForOf]="data" let-last="last">
+        <mat-list-item (click)="onRowSelect(entry)">
+          <p mat-line class="title">{{ entry[listItems[0]] }}</p>
+          <p mat-line *ngFor="let item of listItems; let first = first">
+            <span *ngIf="!first">
+              {{ item | titleCase }}: {{ entry[item] }}
+            </span>
+          </p>
+          <mat-divider *ngIf="!last"></mat-divider>
+        </mat-list-item>
+      </ng-template>
+    </mat-list>
+  </mat-card>
+</ng-template>
