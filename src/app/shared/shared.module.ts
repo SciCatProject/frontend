@@ -6,6 +6,7 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { NgModule } from "@angular/core";
 import { FileUploaderModule } from "./modules/file-uploader/file-uploader.module";
 import { PipesModule } from "./pipes/pipes.module";
+import { TableModule } from "./modules/table/table.module";
 
 @NgModule({
   imports: [
@@ -15,7 +16,8 @@ import { PipesModule } from "./pipes/pipes.module";
     FormsModule,
     DialogModule,
     ReactiveFormsModule,
-    PipesModule
+    PipesModule,
+    TableModule
   ],
   declarations: [],
   providers: [ConfigService],
@@ -24,7 +26,8 @@ import { PipesModule } from "./pipes/pipes.module";
     FileUploaderModule,
     DialogModule,
     ErrorPageModule,
-    PipesModule
+    PipesModule,
+    TableModule
   ]
 })
 export class SharedCatanieModule {}

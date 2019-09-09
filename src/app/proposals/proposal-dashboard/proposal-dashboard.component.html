@@ -11,6 +11,19 @@
     </div>
   </div>
   <div fxFlex="63" fxFlex.lt-xl="80">
-    <list-proposals-page></list-proposals-page>
+    <app-table
+      [data]="tableData"
+      [columns]="tableColumns"
+      [paginate]="tablePaginate"
+      [currentPage]="currentPage$ | async"
+      [dataCount]="dataCount$ | async"
+      [dataPerPage]="dataPerPage$ | async"
+      (pageChange)="onPageChange($event)"
+      (sortChange)="onSortChange($event)"
+      (rowSelect)="onRowSelect($event)"
+    ></app-table>
+    <ng-template [ngIf]="tableData && tableData.length === 0">
+      {{ (hasFetched$ | async) ? "No proposals." : "Loading..." }}
+    </ng-template>
   </div>
 </div>
