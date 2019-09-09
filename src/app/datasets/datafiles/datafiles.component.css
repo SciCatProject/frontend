@@ -6,6 +6,8 @@
 }
 
 button[type=submit] {
+    background-color: #0ea432;
+    color: #ffffff;
     margin-bottom: 1em;
     float: right;
 }

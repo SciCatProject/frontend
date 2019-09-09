@@ -264,7 +264,10 @@
       <i class="material-icons"> cloud_download </i> Datafiles
     </ng-template>
     <mat-card style="margin: 1em">
-      <datafiles [dataBlocks]="origDatablocks$ | async"></datafiles>
+      <datafiles
+        [dataBlocks]="origDatablocks$ | async"
+        [sourceFolder]="(dataset$ | async).sourceFolder"
+      ></datafiles>
       <div *ngIf="(origDatablocks$ | async).length === 0">
         <h3>No datafiles linked to this dataset</h3>
       </div>

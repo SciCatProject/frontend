@@ -23,9 +23,13 @@ import { UserApi } from "shared/sdk/services";
   providers: [UserApi],
   styleUrls: ["./datafiles.component.css"]
 })
-export class DatafilesComponent implements OnInit, AfterViewInit, AfterViewChecked {
+export class DatafilesComponent
+  implements OnInit, AfterViewInit, AfterViewChecked {
   @Input()
   dataBlocks: Array<OrigDatablock>;
+
+  @Input()
+  sourceFolder: string;
 
   urlPrefix: string;
   count = 0;
@@ -34,11 +38,20 @@ export class DatafilesComponent implements OnInit, AfterViewInit, AfterViewCheck
   dsId: string;
   dataFiles: Array<any> = [];
 
+  totalFileSize: number = 0;
+  selectedFileSize: number = 0;
+
   areAllSelected = false;
   isNoneSelected = true;
 
   multipleDownloadEnabled: boolean = this.appConfig.multipleDownloadEnabled;
   multipleDownloadAction: string = this.appConfig.multipleDownloadAction;
+  maxFileSize: number = this.appConfig.maxDirectDownloadSize;
+  sftpHost: string = this.appConfig.sftpHost;
+  sftpInfo: string =
+    this.sftpHost && this.sourceFolder
+      ? `These files are available via sftp host "${this.sftpHost}" in directory "${this.sourceFolder}".`
+      : "";
 
   displayedColumns = (this.appConfig.multipleDownloadEnabled
     ? ["select"]
@@ -90,6 +103,7 @@ export class DatafilesComponent implements OnInit, AfterViewInit, AfterViewCheck
     datablocks.forEach(block => {
       const files = block.dataFileList;
       const selectable = files.map(file => {
+        this.totalFileSize += file.size;
         return { ...file, selected: false };
       });
       this.files = this.files.concat(selectable);
@@ -128,6 +142,11 @@ export class DatafilesComponent implements OnInit, AfterViewInit, AfterViewCheck
   onSelect(event, file) {
     file.selected = event.checked;
     this.updateSelectionStatus();
+    if (event.checked) {
+      this.selectedFileSize += file.size;
+    } else {
+      this.selectedFileSize -= file.size;
+    }
   }
 
   onSelectAll(event) {
