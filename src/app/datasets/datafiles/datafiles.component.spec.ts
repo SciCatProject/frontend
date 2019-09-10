@@ -3,12 +3,9 @@ import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 import { ReactiveFormsModule } from "@angular/forms";
 import { DatafilesComponent } from "./datafiles.component";
 import { MatTableModule } from "@angular/material";
-import { Store } from "@ngrx/store";
-import { MockStore, MockUserApi } from "shared/MockStubs";
 import { AppConfigModule } from "app-config.module";
-import { FileSizePipe } from "../../shared/pipes/filesize.pipe";
 import { OrigDatablock } from "shared/sdk";
-import { FilePathTruncate } from "shared/pipes/file-path-truncate.pipe";
+import { PipesModule } from "shared/pipes/pipes.module";
 
 describe("DatafilesComponent", () => {
   let component: DatafilesComponent;
@@ -19,13 +16,13 @@ describe("DatafilesComponent", () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
-      imports: [ReactiveFormsModule, MatTableModule, AppConfigModule],
-      declarations: [DatafilesComponent, FileSizePipe, FilePathTruncate]
-    });
-    TestBed.overrideComponent(DatafilesComponent, {
-      set: {
-        providers: [{ provide: Store, useClass: MockStore }]
-      }
+      imports: [
+        ReactiveFormsModule,
+        MatTableModule,
+        AppConfigModule,
+        PipesModule
+      ],
+      declarations: [DatafilesComponent]
     });
     TestBed.compileComponents();
   }));
