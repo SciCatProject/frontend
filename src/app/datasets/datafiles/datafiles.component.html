@@ -68,7 +68,7 @@
           (change)="onSelectAll($event)"
           [disabled]="
             maxFileSize &&
-            (totalFileSize > maxFileSize || selectedFileSize > maxFileSize)
+            (totalFileSize > maxFileSize || selectedFileSize > maxFileSize || tooLargeFile)
           "
         >
         </mat-checkbox>
