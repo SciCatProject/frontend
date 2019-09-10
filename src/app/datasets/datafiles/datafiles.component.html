@@ -1,4 +1,4 @@
-<ng-template [ngIf]="maxFileSize && totalFileSize > maxFileSize">
+<ng-template [ngIf]="maxFileSize && tooLargeFile">
   <span>
     <i class="material-icons" style="color: #ffbe00; vertical-align: middle"
       >warning</i
@@ -28,6 +28,7 @@
     ngNoForm
     method="POST"
     [action]="multipleDownloadAction"
+    target="_blank"
   >
     <input type="hidden" name="jwt" [value]="jwt?.jwt" />
     <input type="hidden" name="base" [value]="dataset.sourceFolder" />
@@ -39,11 +40,11 @@
     />
     <button
       class="download-button"
+      type="submit"
+      mat-flat-button
       [disabled]="
         isNoneSelected || (maxFileSize && selectedFileSize > maxFileSize)
       "
-      type="submit"
-      mat-flat-button
     >
       Download
     </button>

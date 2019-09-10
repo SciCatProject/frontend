@@ -269,6 +269,32 @@ describe("DatafilesComponent", () => {
     });
   });
 
+  describe("#hasTooLargeFiles()", () => {
+    it("should return false if maxFileSize is undefined", () => {
+      component.getDatafiles(datablocks);
+      component.maxFileSize = null;
+      const tooLargeFile = component.hasTooLargeFiles(component.files);
+
+      expect(tooLargeFile).toEqual(false);
+    });
+
+    it("should return false if all files are smaller than maxFileSize", () => {
+      component.getDatafiles(datablocks);
+      component.maxFileSize = 20000;
+      const tooLargeFile = component.hasTooLargeFiles(component.files);
+
+      expect(tooLargeFile).toEqual(false);
+    });
+
+    it("should return true if one or more files are larger than maxFileSize", () => {
+      component.getDatafiles(datablocks);
+      component.maxFileSize = 10;
+      const tooLargeFile = component.hasTooLargeFiles(component.files);
+
+      expect(tooLargeFile).toEqual(true);
+    });
+  });
+
   describe("onDownload()", () => {
     xit("should ...", () => {});
   });

@@ -28,7 +28,8 @@ export class DatafilesComponent
   jwt: any;
 
   count = 0;
-  files: Array<JSON> = [];
+  files: Array<any> = [];
+  tooLargeFile: boolean;
   totalFileSize: number = 0;
   selectedFileSize: number = 0;
 
@@ -81,6 +82,7 @@ export class DatafilesComponent
       });
       this.files = this.files.concat(selectable);
     });
+    this.tooLargeFile = this.hasTooLargeFiles(this.files);
     this.dataSource.data = this.files;
   }
 
@@ -132,6 +134,21 @@ export class DatafilesComponent
       }
     }
     this.updateSelectionStatus();
+  }
+
+  hasTooLargeFiles(files: any[]) {
+    if (this.maxFileSize) {
+      const largeFiles = files.filter(file => {
+        return file.size > this.maxFileSize;
+      });
+      if (largeFiles.length > 0) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
   }
 
   // onDownload() {
