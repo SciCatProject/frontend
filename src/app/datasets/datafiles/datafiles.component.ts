@@ -1,9 +1,6 @@
 import { APP_CONFIG, AppConfig } from "app-config.module";
 import { MatTableDataSource, MatPaginator } from "@angular/material";
-import { Observable } from "rxjs";
 import { OrigDatablock, Dataset } from "shared/sdk/models";
-import { Store, select } from "@ngrx/store";
-import { getIsAdmin } from "state-management/selectors/users.selectors";
 import { ChangeDetectorRef, AfterViewChecked } from "@angular/core";
 import {
   Component,
@@ -13,46 +10,36 @@ import {
   AfterViewInit,
   Inject
 } from "@angular/core";
-import { getCurrentDataset } from "state-management/selectors/datasets.selectors";
-import { first } from "rxjs/operators";
-import { UserApi } from "shared/sdk/services";
 
 @Component({
   selector: "datafiles",
   templateUrl: "./datafiles.component.html",
-  providers: [UserApi],
   styleUrls: ["./datafiles.component.css"]
 })
 export class DatafilesComponent
   implements OnInit, AfterViewInit, AfterViewChecked {
   @Input()
-  dataBlocks: Array<OrigDatablock>;
+  datablocks: Array<OrigDatablock>;
 
   @Input()
-  sourceFolder: string;
+  dataset: Dataset;
 
-  urlPrefix: string;
+  @Input()
+  jwt: any;
+
   count = 0;
   files: Array<JSON> = [];
-  selectedDF;
-  dsId: string;
-  dataFiles: Array<any> = [];
-
   totalFileSize: number = 0;
   selectedFileSize: number = 0;
 
   areAllSelected = false;
   isNoneSelected = true;
 
+  urlPrefix: string = this.appConfig.fileserverBaseURL;
   multipleDownloadEnabled: boolean = this.appConfig.multipleDownloadEnabled;
   multipleDownloadAction: string = this.appConfig.multipleDownloadAction;
   maxFileSize: number = this.appConfig.maxDirectDownloadSize;
   sftpHost: string = this.appConfig.sftpHost;
-  sftpInfo: string =
-    this.sftpHost && this.sourceFolder
-      ? `These files are available via sftp host "${this.sftpHost}" in directory "${this.sourceFolder}".`
-      : "";
-
   displayedColumns = (this.appConfig.multipleDownloadEnabled
     ? ["select"]
     : []
@@ -62,32 +49,19 @@ export class DatafilesComponent
   @ViewChild(MatPaginator, { static: false })
   paginator: MatPaginator;
 
-  admin$: Observable<boolean>;
-  dataset$: Observable<Dataset>;
-  jwt$: Observable<any>;
-
   constructor(
-    private store: Store<any>,
-    private userApi: UserApi,
     private cdRef: ChangeDetectorRef,
     @Inject(APP_CONFIG) private appConfig: AppConfig
-  ) {
-    this.urlPrefix = appConfig.fileserverBaseURL;
-  }
+  ) {}
 
-  ngOnInit() {
-    this.admin$ = this.store.pipe(select(getIsAdmin));
-    this.dataset$ = this.store.pipe(select(getCurrentDataset));
-    this.jwt$ = this.userApi.jwt();
-  }
+  ngOnInit() {}
 
   ngAfterViewInit() {
     this.dataSource = new MatTableDataSource();
     this.dataSource.paginator = this.paginator;
-    if (this.dataBlocks) {
-      this.getDatafiles(this.dataBlocks);
+    if (this.datablocks) {
+      this.getDatafiles(this.datablocks);
     }
-    // this.dataSource.sort = this.sort;
   }
 
   ngAfterViewChecked() {
@@ -101,8 +75,7 @@ export class DatafilesComponent
    */
   getDatafiles(datablocks: Array<OrigDatablock>) {
     datablocks.forEach(block => {
-      const files = block.dataFileList;
-      const selectable = files.map(file => {
+      const selectable = block.dataFileList.map(file => {
         this.totalFileSize += file.size;
         return { ...file, selected: false };
       });
@@ -152,15 +125,18 @@ export class DatafilesComponent
   onSelectAll(event) {
     for (const file of this.dataSource.data) {
       file.selected = event.checked;
+      if (event.checked) {
+        this.selectedFileSize += file.size;
+      } else {
+        this.selectedFileSize -= file.size;
+      }
     }
     this.updateSelectionStatus();
   }
 
-  onDownload() {
-    this.dataset$.pipe(first()).subscribe(dataset => {
-      const base = dataset.sourceFolder;
-      const selected = this.dataSource.data.filter(file => file.selected);
-      alert(selected.map(file => base + "/" + file.path).join("\n"));
-    });
-  }
+  // onDownload() {
+  //   const base = this.dataset.sourceFolder;
+  //   const selected = this.dataSource.data.filter(file => file.selected);
+  //   alert(selected.map(file => base + "/" + file.path).join("\n"));
+  // }
 }
