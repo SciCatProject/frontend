@@ -18,6 +18,8 @@ export class AppConfig {
   shoppingCartEnabled: boolean;
   multipleDownloadEnabled: boolean;
   multipleDownloadAction?: string;
+  maxDirectDownloadSize: number;
+  sftpHost: string;
   columnSelectEnabled: boolean;
   userProfileImageEnabled: boolean;
   logbookEnabled: boolean;
@@ -46,6 +48,8 @@ export const APP_DI_CONFIG: AppConfig = {
   shoppingCartEnabled: environment["shoppingCartEnabled"] || false,
   multipleDownloadEnabled: environment["multipleDownloadEnabled"] || false,
   multipleDownloadAction: environment["multipleDownloadAction"],
+  maxDirectDownloadSize: environment["maxDirectDownloadSize"] || null,
+  sftpHost: environment["sftpHost"] || null,
   columnSelectEnabled: environment["columnSelectEnabled"] || false,
   userProfileImageEnabled: environment["userProfileImageEnabled"] || false,
   logbookEnabled: environment["logbookEnabled"] || false,
