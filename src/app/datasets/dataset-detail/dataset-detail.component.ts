@@ -98,15 +98,11 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
       })
     );
 
-<<<<<<< HEAD
     this.subscriptions.push(
       this.dataset$.subscribe(dataset => {
         this.dataset = dataset;
       })
     );
-=======
-    this.jwt$ = this.userApi.jwt();
->>>>>>> 0ab7feb0800e63a33490fe7ead4e6cd6aed55e02
   }
 
   ngOnDestroy() {
