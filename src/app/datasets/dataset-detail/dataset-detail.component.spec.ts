@@ -24,7 +24,7 @@ import {
   UpdateAttachmentCaptionAction,
   AddAttachment
 } from "state-management/actions/datasets.actions";
-import { Dataset } from "shared/sdk";
+import { Dataset, UserApi } from "shared/sdk";
 import { ReadFile, ReadMode } from "ngx-file-helpers";
 
 describe("DatasetDetailComponent", () => {
