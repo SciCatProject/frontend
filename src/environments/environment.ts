@@ -21,6 +21,7 @@ export const environment = {
   logbookEnabled: true,
   metadataPreviewEnabled: true,
   multipleDownloadEnabled: true,
+  maxDirectDownloadSize: 5000000000,
   multipleDownloadAction: "http://localhost:3011/zip",
   scienceSearchEnabled: true,
   searchProposals: true,

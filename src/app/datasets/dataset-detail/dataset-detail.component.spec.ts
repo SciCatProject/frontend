@@ -4,7 +4,7 @@ import { DatafilesComponent } from "datasets/datafiles/datafiles.component";
 import { DatasetDetailComponent } from "./dataset-detail.component";
 import { LinkyPipe } from "ngx-linky";
 import { MatTableModule } from "@angular/material";
-import { MockActivatedRoute, MockStore } from "shared/MockStubs";
+import { MockActivatedRoute, MockStore, MockUserApi } from "shared/MockStubs";
 import { Router } from "@angular/router";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { ReactiveFormsModule, FormsModule } from "@angular/forms";
@@ -61,7 +61,8 @@ describe("DatasetDetailComponent", () => {
               editMetadataEnabled: true
             }
           },
-          { provide: ActivatedRoute, useClass: MockActivatedRoute }
+          { provide: ActivatedRoute, useClass: MockActivatedRoute },
+          { provide: UserApi, useClass: MockUserApi }
         ]
       }
     });

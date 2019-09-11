@@ -16,7 +16,7 @@ import {
   getError,
   submitJob
 } from "../../state-management/selectors/jobs.selectors";
-import { Subscription } from "rxjs";
+import { Subscription, Observable } from "rxjs";
 import { Message, MessageType } from "state-management/models";
 import { getIsAdmin } from "state-management/selectors/users.selectors";
 import { APP_CONFIG, AppConfig } from "app-config.module";
@@ -46,6 +46,7 @@ import { ReadFile } from "ngx-file-helpers";
 export class DatasetDetailComponent implements OnInit, OnDestroy {
   dataset$ = this.store.pipe(select(getCurrentDataset));
   datasetwithout$ = this.store.pipe(select(getCurrentDatasetWithoutOrigData));
+  jwt$: Observable<any>;
 
   private subscriptions: Subscription[] = [];
   private routeSubscription = this.route.params
@@ -64,6 +65,7 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     private store: Store<any>,
+    private userApi: UserApi,
     @Inject(APP_CONFIG) public appConfig: AppConfig
   ) {}
 
@@ -96,11 +98,15 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
       })
     );
 
+<<<<<<< HEAD
     this.subscriptions.push(
       this.dataset$.subscribe(dataset => {
         this.dataset = dataset;
       })
     );
+=======
+    this.jwt$ = this.userApi.jwt();
+>>>>>>> 0ab7feb0800e63a33490fe7ead4e6cd6aed55e02
   }
 
   ngOnDestroy() {

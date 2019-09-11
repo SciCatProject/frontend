@@ -1,24 +1,26 @@
-<div>
-  <!-- <h4>{{title}}</h4> -->
-  <mat-table #blockTable [dataSource]="blockSource">
+<mat-table #blockTable [dataSource]="blockSource">
+  <ng-container matColumnDef="id">
+    <mat-header-cell *matHeaderCellDef> ID.</mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{ element.id }}</mat-cell>
+  </ng-container>
 
-    <ng-container matColumnDef="id">
-      <mat-header-cell *matHeaderCellDef> ID.</mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.id}}</mat-cell>
-    </ng-container>
+  <ng-container matColumnDef="size">
+    <mat-header-cell *matHeaderCellDef> Size</mat-header-cell>
+    <mat-cell *matCellDef="let element">
+      {{ element.size | filesize }}</mat-cell
+    >
+  </ng-container>
 
-    <ng-container matColumnDef="size">
-      <mat-header-cell *matHeaderCellDef> Size</mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.size | filesize}}</mat-cell>
-    </ng-container>
+  <ng-container matColumnDef="files">
+    <mat-header-cell *matHeaderCellDef> Datafiles</mat-header-cell>
+    <mat-cell *matCellDef="let element">
+      {{ element.dataFileList.length }}</mat-cell
+    >
+  </ng-container>
 
-    <ng-container matColumnDef="files">
-      <mat-header-cell *matHeaderCellDef> Datafiles</mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.dataFileList.length}}</mat-cell>
-    </ng-container>
-
-    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-    <mat-row (click)="onSelect($event, row)" *matRowDef="let row; columns: displayedColumns;"></mat-row>
-  </mat-table>
-</div>
-
+  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+  <mat-row
+    (click)="onSelect($event, row)"
+    *matRowDef="let row; columns: displayedColumns"
+  ></mat-row>
+</mat-table>
