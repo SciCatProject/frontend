@@ -30,6 +30,7 @@ import {
   getCurrentDatasetWithoutOrigData
 } from "state-management/selectors/datasets.selectors";
 import { ReadFile } from "ngx-file-helpers";
+import { UserApi } from "shared/sdk";
 
 /**
  * Component to show details for a data set, using the
@@ -103,6 +104,7 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
         this.dataset = dataset;
       })
     );
+    this.jwt$ = this.userApi.jwt();
   }
 
   ngOnDestroy() {
