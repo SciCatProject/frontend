@@ -228,8 +228,8 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   }
 
   onViewPublicChange(value: boolean): void {
-    console.log("value", value);
-    this.store.dispatch(new SetPublicViewModeAction(value));
+    this.viewPublic = value;
+    this.store.dispatch(new SetPublicViewModeAction(this.viewPublic));
   }
 
   /**
