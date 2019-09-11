@@ -61,22 +61,16 @@
 
   <div style="clear: both"></div>
 
-  <div>
-      <mat-button-toggle-group [value]="viewPublic">
-        <mat-button-toggle
-          [value]="false"
-          (click)="onViewPublicChange(false)"
-        >
-          My Data
-        </mat-button-toggle>
-        <mat-button-toggle
-          [value]="true"
-          (click)="onViewPublicChange(true)"
-        >
-          Public Data
-        </mat-button-toggle>
-      </mat-button-toggle-group>
-    </div>
+  <div *ngIf="searchPublicDataEnabled">
+    <mat-button-toggle-group [value]="viewPublic">
+      <mat-button-toggle [value]="false" (click)="onViewPublicChange(false)">
+        My Data
+      </mat-button-toggle>
+      <mat-button-toggle [value]="true" (click)="onViewPublicChange(true)">
+        Public Data
+      </mat-button-toggle>
+    </mat-button-toggle-group>
+  </div>
 
   <!--https://tburleson-layouts-demos.firebaseapp.com/#/docs-->
   <div fxLayout="row" fxLayoutAlign="space-evenly end">

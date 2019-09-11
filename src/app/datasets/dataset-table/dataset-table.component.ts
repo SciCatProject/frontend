@@ -124,6 +124,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     this.configForm.setValue(setTrue);
   });
 
+  searchPublicDataEnabled = this.appConfig.searchPublicDataEnabled;
   viewPublic: boolean = false;
   viewPublicSubscription: Subscription;
 
@@ -413,14 +414,16 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
 
   countDerivedDatasets(dataset: Dataset): number {
     let derivedDatasetsNum: number = 0;
-    dataset.history.forEach(item => {
-      if (
-        item.hasOwnProperty("derivedDataset") &&
-        this.datasetPids.includes(item.derivedDataset.pid)
-      ) {
-        derivedDatasetsNum++;
-      }
-    });
+    if (dataset.history) {
+      dataset.history.forEach(item => {
+        if (
+          item.hasOwnProperty("derivedDataset") &&
+          this.datasetPids.includes(item.derivedDataset.pid)
+        ) {
+          derivedDatasetsNum++;
+        }
+      });
+    }
     return derivedDatasetsNum;
   }
 }
