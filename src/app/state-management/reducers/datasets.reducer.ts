@@ -79,7 +79,9 @@ import {
   UPDATE_ATTACHMENT_CAPTION_COMPLETE,
   UpdateAttachmentCaptionCompleteAction,
   UPDATE_ATTACHMENT_CAPTION_FAILED,
-  SaveDatasetCompleteAction
+  SaveDatasetCompleteAction,
+  SET_PUBLIC_VIEW_MODE,
+  SetPublicViewModeAction
 } from "state-management/actions/datasets.actions";
 
 import {
@@ -405,6 +407,12 @@ export function datasetsReducer(
       const skip = 0;
       const filters = { ...state.filters, skip, mode, modeToggle };
       return { ...state, filters, datasetsLoading: true };
+    }
+
+    case SET_PUBLIC_VIEW_MODE: {
+      const isPublished = (action as SetPublicViewModeAction).isPublished;
+
+      return { ...state, filters: { ...state.filters, isPublished } };
     }
 
     case ADD_SCIENTIFIC_CONDITION: {

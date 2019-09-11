@@ -34,7 +34,8 @@ const initialDatasetState: DatasetState = {
     limit: 30,
     sortField: "creationTime:desc",
     keywords: [],
-    scientific: []
+    scientific: [],
+    isPublished: false
   }
 };
 

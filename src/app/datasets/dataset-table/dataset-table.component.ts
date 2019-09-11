@@ -21,7 +21,8 @@ import {
   SelectAllDatasetsAction,
   SelectDatasetAction,
   SetViewModeAction,
-  SortByColumnAction
+  SortByColumnAction,
+  SetPublicViewModeAction
 } from "state-management/actions/datasets.actions";
 
 import {
@@ -31,7 +32,8 @@ import {
   getPage,
   getSelectedDatasets,
   getTotalSets,
-  getViewMode
+  getViewMode,
+  getViewPublicMode
 } from "state-management/selectors/datasets.selectors";
 
 export interface PageChangeEvent {
@@ -122,6 +124,9 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     this.configForm.setValue(setTrue);
   });
 
+  viewPublic: boolean = false;
+  viewPublicSubscription: Subscription;
+
   constructor(
     private router: Router,
     private store: Store<any>,
@@ -184,6 +189,12 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
           }
         });
       });
+
+    this.viewPublicSubscription = this.store
+      .pipe(select(getViewPublicMode))
+      .subscribe(viewPublic => {
+        this.viewPublic = viewPublic;
+      });
   }
 
   ngOnDestroy() {
@@ -213,6 +224,11 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
    */
   onModeChange(event, mode: ArchViewMode): void {
     this.store.dispatch(new SetViewModeAction(mode));
+  }
+
+  onViewPublicChange(value: boolean): void {
+    console.log("value", value);
+    this.store.dispatch(new SetPublicViewModeAction(value));
   }
 
   /**
