@@ -4,9 +4,10 @@ import {
   DatablocksAction,
   DeleteAttachment,
   UpdateAttachmentCaptionAction,
-  ClearFacetsAction
+  ClearFacetsAction,
+  AddAttachment
 } from "state-management/actions/datasets.actions";
-import { Job, User } from "shared/sdk/models";
+import { Job, User, Attachment, Dataset } from "shared/sdk/models";
 import { select, Store } from "@ngrx/store";
 import { AddKeywordFilterAction } from "state-management/actions/datasets.actions";
 import { SubmitAction } from "state-management/actions/jobs.actions";
@@ -28,6 +29,7 @@ import {
   getCurrentOrigDatablocks,
   getCurrentDatasetWithoutOrigData
 } from "state-management/selectors/datasets.selectors";
+import { ReadFile } from "ngx-file-helpers";
 import { UserApi } from "shared/sdk";
 
 /**
@@ -55,6 +57,10 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
   public datablocks$ = this.store.pipe(select(getCurrentDatablocks));
   public attachments$ = this.store.pipe(select(getCurrentAttachments));
   public isAdmin$ = this.store.pipe(select(getIsAdmin));
+
+  dataset: Dataset;
+  pickedFile: ReadFile;
+  attachment: Attachment;
 
   constructor(
     private router: Router,
@@ -93,6 +99,11 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
       })
     );
 
+    this.subscriptions.push(
+      this.dataset$.subscribe(dataset => {
+        this.dataset = dataset;
+      })
+    );
     this.jwt$ = this.userApi.jwt();
   }
 
@@ -160,5 +171,29 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
     this.store.dispatch(new ClearFacetsAction());
     this.store.dispatch(new AddKeywordFilterAction(keyword));
     this.router.navigateByUrl("/datasets");
+  }
+
+  onFileUploaderFilePicked(file: ReadFile) {
+    this.pickedFile = file;
+  }
+
+  onFileUploaderReadEnd(fileCount: number) {
+    if (fileCount > 0) {
+      this.attachment = {
+        thumbnail: this.pickedFile.content,
+        caption: this.pickedFile.name,
+        creationTime: new Date(),
+        id: null,
+        dataset: this.dataset,
+        datasetId: this.dataset.pid,
+        rawDatasetId: null,
+        derivedDatasetId: null,
+        proposal: null,
+        proposalId: null,
+        sample: null,
+        sampleId: null
+      };
+      this.store.dispatch(new AddAttachment(this.attachment));
+    }
   }
 }

@@ -1,0 +1,33 @@
+.attach-button {
+  color: #ffffff;
+  background: #0ea432;
+}
+
+@media only screen and (min-width: 1280px) {
+  .dropzone {
+    align-items: center;
+    background: #dcdcdc;
+    border: dashed 1px grey;
+    display: flex;
+    justify-content: center;
+    height: 350px;
+    width: 500px;
+
+    .instructions {
+      margin: 0.5em;
+      font-size: 1.25em;
+      flex: 1 0 100px;
+      text-align: center;
+    }
+  }
+
+  .file-picker {
+    display: none;
+  }
+}
+
+@media only screen and (max-width: 1279px) {
+  .dropzone {
+    display: none;
+  }
+}
