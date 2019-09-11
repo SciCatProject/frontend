@@ -282,10 +282,12 @@
     <ng-template mat-tab-label>
       <i class="material-icons"> insert_photo </i> Attachments
     </ng-template>
-    <h3>Attachments</h3>
-    <app-file-dropzone></app-file-dropzone>
-    <app-file-picker></app-file-picker>
-    <br />
+    <div class="file-uploader">
+      <app-file-uploader
+        (filePicked)="onFileUploaderFilePicked($event)"
+        (readEnd)="onFileUploaderReadEnd($event)"
+      ></app-file-uploader>
+    </div>
     <ng-container
       *ngFor="let da of attachments; let i = index"
       [attr.data-index]="i"
