@@ -102,9 +102,12 @@ export class DatasetEffects {
   @Effect()
   protected getDatablocks$: Observable<Action> = this.actions$.pipe(
     ofType(DatasetActions.DATABLOCKS),
-    map((action: DatasetActions.DatablocksAction) => action.id),
-    switchMap(id => {
-      const blockFilter = {
+    map((action: DatasetActions.DatablocksAction) => action),
+    switchMap(action => {
+      let filter = {
+        where: {
+          pid: action.id
+        },
         include: [
           { relation: "origdatablocks" },
           { relation: "datablocks" },
@@ -112,9 +115,15 @@ export class DatasetEffects {
         ]
       };
 
+      if (action.filter) {
+        Object.keys(action.filter).forEach(key => {
+          filter.where[key] = action.filter[key];
+        });
+      }
+
       // TODO separate action for dataBlocks? or retrieve at once?
 
-      return this.datasetApi.findById(encodeURIComponent(id), blockFilter).pipe(
+      return this.datasetApi.findOne(filter).pipe(
         map(
           (dataset: Dataset) =>
             new DatasetActions.SearchIDCompleteAction(dataset)
