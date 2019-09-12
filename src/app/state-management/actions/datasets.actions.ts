@@ -186,7 +186,7 @@ export class SearchIDCompleteAction implements Action {
 export class DatablocksAction implements Action {
   readonly type = DATABLOCKS;
 
-  constructor(readonly id: string, readonly filter?: any) {}
+  constructor(readonly id: string) {}
 }
 
 export class DatablocksFailedAction implements Action {

@@ -26,8 +26,7 @@ import {
   getCurrentDatablocks,
   getCurrentDataset,
   getCurrentOrigDatablocks,
-  getCurrentDatasetWithoutOrigData,
-  getViewPublicMode
+  getCurrentDatasetWithoutOrigData
 } from "state-management/selectors/datasets.selectors";
 
 /**
@@ -43,21 +42,17 @@ import {
   styleUrls: ["./dataset-detail.component.scss"]
 })
 export class DatasetDetailComponent implements OnInit, OnDestroy {
-  datasetPid: string;
   dataset$ = this.store.pipe(select(getCurrentDataset));
   datasetwithout$ = this.store.pipe(select(getCurrentDatasetWithoutOrigData));
 
   private subscriptions: Subscription[] = [];
   private routeSubscription = this.route.params
     .pipe(pluck("id"))
-    .subscribe((id: string) => {
-      this.datasetPid = id;
-    });
+    .subscribe((id: string) => this.store.dispatch(new DatablocksAction(id)));
   public origDatablocks$ = this.store.pipe(select(getCurrentOrigDatablocks));
   public datablocks$ = this.store.pipe(select(getCurrentDatablocks));
   public attachments$ = this.store.pipe(select(getCurrentAttachments));
   public isAdmin$ = this.store.pipe(select(getIsAdmin));
-  public viewPublic: boolean;
 
   constructor(
     private router: Router,
@@ -93,16 +88,6 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
           this.store.dispatch(new ShowMessageAction(msg));
         }
       })
-    );
-
-    this.subscriptions.push(
-      this.store.pipe(select(getViewPublicMode)).subscribe(viewPublic => {
-        this.viewPublic = viewPublic;
-      })
-    );
-
-    this.store.dispatch(
-      new DatablocksAction(this.datasetPid, { isPublished: this.viewPublic })
     );
   }
 
