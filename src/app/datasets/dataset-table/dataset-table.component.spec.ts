@@ -9,13 +9,11 @@ import { HttpClient } from "@angular/common/http";
 import {
   MatDialogModule,
   MatTableModule,
-  MatCheckboxChange,
-  MatCheckbox
+  MatCheckboxChange
 } from "@angular/material";
 import {
   MockHttp,
   MockLoginService,
-  MockRouter,
   MockDatasetApi,
   MockArchivingService,
   MockAttachmentApi,
@@ -234,7 +232,7 @@ describe("DatasetTableComponent", () => {
   });
 
   describe("#userErrorCondition()", () => {
-    xit("should...", () => {});
+    it("should...", () => {});
   });
 
   describe("#archivableCondition()", () => {
