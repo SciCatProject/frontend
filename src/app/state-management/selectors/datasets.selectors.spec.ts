@@ -40,14 +40,29 @@ const initialDatasetState: DatasetState = {
 };
 
 describe("test dataset selectors", () => {
-  it("should get total set number", () => {
-    expect(
-      fromDatasetSelectors.getTotalSets.projector(initialDatasetState)
-    ).toEqual(0);
+  describe("getTotalSets", () => {
+    it("should get total set number", () => {
+      expect(
+        fromDatasetSelectors.getTotalSets.projector(initialDatasetState)
+      ).toEqual(0);
+    });
   });
-  it("should get total set number", () => {
-    expect(
-      fromDatasetSelectors.getSearchTerms.projector(initialDatasetState)
-    ).toEqual("run");
+
+  describe("getSearchTerms", () => {
+    it("should get total set number", () => {
+      expect(
+        fromDatasetSelectors.getSearchTerms.projector(initialDatasetState)
+      ).toEqual("run");
+    });
+  });
+
+  describe("getViewPublicMode", () => {
+    it("should return the the state of isPublished", () => {
+      expect(
+        fromDatasetSelectors.getViewPublicMode.projector(
+          initialDatasetState.filters
+        )
+      ).toEqual(false);
+    });
   });
 });

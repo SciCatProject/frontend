@@ -232,15 +232,183 @@ describe("DatasetTableComponent", () => {
   });
 
   describe("#userErrorCondition()", () => {
-    it("should...", () => {});
+    it("should return true if dataset has missingFilesError", () => {
+      let dataset = new Dataset();
+      dataset.datasetlifecycle = {
+        archiveStatusMessage: "missingFilesError"
+      };
+
+      const userError = component.userErrorCondition(dataset);
+
+      expect(userError).toEqual(true);
+    });
+
+    it("should return false if dataset has no missingFilesError", () => {
+      let dataset = new Dataset();
+      dataset.datasetlifecycle = {
+        archiveStatusMessage: ""
+      };
+
+      const userError = component.userErrorCondition(dataset);
+
+      expect(userError).toEqual(false);
+    });
   });
 
   describe("#archivableCondition()", () => {
-    xit("should...", () => {});
+    it("should return false if dataset is not archivable and retrievable and does not have a missingFilesError", () => {
+      let dataset = new Dataset();
+      dataset.datasetlifecycle = {
+        archivable: false,
+        retrievable: true,
+        archiveStatusMessage: ""
+      };
+
+      const archivable = component.archivableCondition(dataset);
+
+      expect(archivable).toEqual(false);
+    });
+
+    it("should return false if dataset is not archivable and retrievable and does have a missingFilesError", () => {
+      let dataset = new Dataset();
+      dataset.datasetlifecycle = {
+        archivable: false,
+        retrievable: true,
+        archiveStatusMessage: "missingFilesError"
+      };
+
+      const archivable = component.archivableCondition(dataset);
+
+      expect(archivable).toEqual(false);
+    });
+
+    it("should return false if dataset is not archivable and not retrievable and does not have a missingFilesError", () => {
+      let dataset = new Dataset();
+      dataset.datasetlifecycle = {
+        archivable: false,
+        retrievable: false,
+        archiveStatusMessage: ""
+      };
+
+      const archivable = component.archivableCondition(dataset);
+
+      expect(archivable).toEqual(false);
+    });
+
+    it("should return false if dataset is not archivable and not retrievable and does have a missingFilesError", () => {
+      let dataset = new Dataset();
+      dataset.datasetlifecycle = {
+        archivable: false,
+        retrievable: false,
+        archiveStatusMessage: "missingFilesError"
+      };
+
+      const archivable = component.archivableCondition(dataset);
+
+      expect(archivable).toEqual(false);
+    });
+
+    it("should return false if dataset is not archivable and retrievable and does not have a missingFilesError", () => {
+      let dataset = new Dataset();
+      dataset.datasetlifecycle = {
+        archivable: false,
+        retrievable: true,
+        archiveStatusMessage: ""
+      };
+
+      const archivable = component.archivableCondition(dataset);
+
+      expect(archivable).toEqual(false);
+    });
+
+    it("should return false if dataset is archivable and retrievable and does not have a missingFilesError", () => {
+      let dataset = new Dataset();
+      dataset.datasetlifecycle = {
+        archivable: true,
+        retrievable: true,
+        archiveStatusMessage: ""
+      };
+
+      const archivable = component.archivableCondition(dataset);
+
+      expect(archivable).toEqual(false);
+    });
+
+    it("should return false if dataset is archivable and retrievable and does have a missingFilesError", () => {
+      let dataset = new Dataset();
+      dataset.datasetlifecycle = {
+        archivable: true,
+        retrievable: true,
+        archiveStatusMessage: "missingFilesError"
+      };
+
+      const archivable = component.archivableCondition(dataset);
+
+      expect(archivable).toEqual(false);
+    });
+
+    it("should return true if dataset is archivable and not retrievable and does not have a missingFilesError", () => {
+      let dataset = new Dataset();
+      dataset.datasetlifecycle = {
+        archivable: true,
+        retrievable: false,
+        archiveStatusMessage: ""
+      };
+
+      const archivable = component.archivableCondition(dataset);
+
+      expect(archivable).toEqual(true);
+    });
   });
 
   describe("#retrievableCondition()", () => {
-    xit("should...", () => {});
+    it("should return false if dataset is archivable and not retrievable", () => {
+      let dataset = new Dataset();
+      dataset.datasetlifecycle = {
+        archivable: true,
+        retrievable: false
+      };
+
+      const retrievable = component.retrievableCondition(dataset);
+
+      expect(retrievable).toEqual(false);
+    });
+
+    it("should return false if dataset is not archivable and not retrievable", () => {
+      let dataset = new Dataset();
+      dataset.datasetlifecycle = {
+        archivable: false,
+        retrievable: false
+      };
+
+      const retrievable = component.retrievableCondition(dataset);
+
+      expect(retrievable).toEqual(false);
+    });
+
+    it("should return false if dataset is archivable and retrievable", () => {
+      let dataset = new Dataset();
+      dataset.datasetlifecycle = {
+        archivable: true,
+        retrievable: true
+      };
+
+      const retrievable = component.retrievableCondition(dataset);
+
+      expect(retrievable).toEqual(false);
+    });
+
+    it("should return true if dataset is retrievable and not archivable", () => {
+      let dataset = new Dataset();
+      dataset.datasetlifecycle = {
+        archivable: false,
+        retrievable: true
+      };
+
+      const retrievable = component.retrievableCondition(dataset);
+
+      expect(retrievable).toEqual(true);
+    });
   });
 
   describe("#onClick()", () => {
