@@ -20,7 +20,7 @@ export const environment = {
   logbookEnabled: false,
   metadataPreviewEnabled: true,
   multipleDownloadEnabled: true,
-  multipleDownloadAction: "http://localhost:3011/zip",
+  multipleDownloadAction: "https://scicatfileserver.esss.dk/zip",
   scienceSearchEnabled: false,
   searchProposals: true,
   searchSamples: true,
