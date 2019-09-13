@@ -1,18 +1,19 @@
 .mat-column-select {
-    flex-grow: 0;
-    overflow: visible; /* Needed to prevent offsetting of the checkbox when clicking */
-    padding-right: 1.5em;
-
+  flex-grow: 0;
+  overflow: visible; /* Needed to prevent offsetting of the checkbox when clicking */
+  padding-right: 1.5em;
 }
 
-button[type=submit] {
-    margin-bottom: 1em;
-    float: right;
+.download-button {
+  background-color: #0ea432;
+  color: #ffffff;
+  margin-bottom: 1em;
+  float: right;
 }
 
 .nbr-of-files {
-    float: left;
-    transform: translateY(50%);
-    margin-bottom: 1em;
-    font-size: larger;
+  float: left;
+  transform: translateY(50%);
+  margin-bottom: 1em;
+  font-size: larger;
 }

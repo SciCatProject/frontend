@@ -4,9 +4,10 @@ import {
   DatablocksAction,
   DeleteAttachment,
   UpdateAttachmentCaptionAction,
-  ClearFacetsAction
+  ClearFacetsAction,
+  AddAttachment
 } from "state-management/actions/datasets.actions";
-import { Job, User } from "shared/sdk/models";
+import { Job, User, Attachment, Dataset } from "shared/sdk/models";
 import { select, Store } from "@ngrx/store";
 import { AddKeywordFilterAction } from "state-management/actions/datasets.actions";
 import { SubmitAction } from "state-management/actions/jobs.actions";
@@ -15,7 +16,7 @@ import {
   getError,
   submitJob
 } from "../../state-management/selectors/jobs.selectors";
-import { Subscription } from "rxjs";
+import { Subscription, Observable } from "rxjs";
 import { Message, MessageType } from "state-management/models";
 import { getIsAdmin } from "state-management/selectors/users.selectors";
 import { APP_CONFIG, AppConfig } from "app-config.module";
@@ -29,6 +30,8 @@ import {
   getCurrentDatasetWithoutOrigData,
   getViewPublicMode
 } from "state-management/selectors/datasets.selectors";
+import { ReadFile } from "ngx-file-helpers";
+import { UserApi } from "shared/sdk";
 
 /**
  * Component to show details for a data set, using the
@@ -46,6 +49,7 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
   datasetPid: string;
   dataset$ = this.store.pipe(select(getCurrentDataset));
   datasetwithout$ = this.store.pipe(select(getCurrentDatasetWithoutOrigData));
+  jwt$: Observable<any>;
 
   private subscriptions: Subscription[] = [];
   private routeSubscription = this.route.params
@@ -59,10 +63,15 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
   public isAdmin$ = this.store.pipe(select(getIsAdmin));
   public viewPublic: boolean;
 
+  dataset: Dataset;
+  pickedFile: ReadFile;
+  attachment: Attachment;
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
     private store: Store<any>,
+    private userApi: UserApi,
     @Inject(APP_CONFIG) public appConfig: AppConfig
   ) {}
 
@@ -101,6 +110,12 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
       })
     );
 
+    this.subscriptions.push(
+      this.dataset$.subscribe(dataset => {
+        this.dataset = dataset;
+      })
+    );
+
     if (this.viewPublic) {
       this.store.dispatch(
         new DatablocksAction(this.datasetPid, { isPublished: this.viewPublic })
@@ -108,6 +123,8 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
     } else {
       this.store.dispatch(new DatablocksAction(this.datasetPid));
     }
+
+    this.jwt$ = this.userApi.jwt();
   }
 
   ngOnDestroy() {
@@ -174,5 +191,29 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
     this.store.dispatch(new ClearFacetsAction());
     this.store.dispatch(new AddKeywordFilterAction(keyword));
     this.router.navigateByUrl("/datasets");
+  }
+
+  onFileUploaderFilePicked(file: ReadFile) {
+    this.pickedFile = file;
+  }
+
+  onFileUploaderReadEnd(fileCount: number) {
+    if (fileCount > 0) {
+      this.attachment = {
+        thumbnail: this.pickedFile.content,
+        caption: this.pickedFile.name,
+        creationTime: new Date(),
+        id: null,
+        dataset: this.dataset,
+        datasetId: this.dataset.pid,
+        rawDatasetId: null,
+        derivedDatasetId: null,
+        proposal: null,
+        proposalId: null,
+        sample: null,
+        sampleId: null
+      };
+      this.store.dispatch(new AddAttachment(this.attachment));
+    }
   }
 }
