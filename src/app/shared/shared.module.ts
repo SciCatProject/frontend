@@ -7,6 +7,7 @@ import { NgModule } from "@angular/core";
 import { FileUploaderModule } from "./modules/file-uploader/file-uploader.module";
 import { PipesModule } from "./pipes/pipes.module";
 import { TableModule } from "./modules/table/table.module";
+import { SearchBarModule } from "./modules/search-bar/search-bar.module";
 
 @NgModule({
   imports: [
@@ -17,6 +18,7 @@ import { TableModule } from "./modules/table/table.module";
     DialogModule,
     ReactiveFormsModule,
     PipesModule,
+    SearchBarModule,
     TableModule
   ],
   declarations: [],
@@ -27,6 +29,7 @@ import { TableModule } from "./modules/table/table.module";
     DialogModule,
     ErrorPageModule,
     PipesModule,
+    SearchBarModule,
     TableModule
   ]
 })

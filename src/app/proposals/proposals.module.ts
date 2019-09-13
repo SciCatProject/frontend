@@ -27,7 +27,6 @@ import {
 } from "@angular/material";
 import { SharedCatanieModule } from "../shared/shared.module";
 import { ProposalDashboardComponent } from "./proposal-dashboard/proposal-dashboard.component";
-import { ProposalSearchComponent } from "./proposal-search/proposal-search.component";
 import { FlexLayoutModule } from "@angular/flex-layout";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 
@@ -56,10 +55,9 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
   declarations: [
     ViewProposalPageComponent,
     ProposalDetailComponent,
-    ProposalDashboardComponent,
-    ProposalSearchComponent
+    ProposalDashboardComponent
   ],
-  exports: [ProposalSearchComponent],
+  exports: [],
   providers: [DatePipe]
 })
 export class ProposalsModule {}

@@ -21,7 +21,8 @@ import {
   ChangePageAction,
   SortProposalByColumnAction,
   FetchProposalAction,
-  FetchProposalsAction
+  FetchProposalsAction,
+  SearchProposalAction
 } from "state-management/actions/proposals.actions";
 import { distinctUntilChanged, map } from "rxjs/operators";
 
@@ -69,7 +70,10 @@ export class ProposalDashboardComponent implements OnInit, OnDestroy {
           title: proposal.title,
           author: proposal.firstname + " " + proposal.lastname
         };
-        if (proposal.MeasurementPeriodList) {
+        if (
+          proposal.MeasurementPeriodList &&
+          proposal.MeasurementPeriodList.length > 0
+        ) {
           data.start = this.datePipe.transform(
             proposal.MeasurementPeriodList[0].start,
             "yyyy-MM-dd"
@@ -87,6 +91,10 @@ export class ProposalDashboardComponent implements OnInit, OnDestroy {
     } else {
       return [];
     }
+  }
+
+  onTextSearchChange(query: string) {
+    this.store.dispatch(new SearchProposalAction(query));
   }
 
   onPageChange(event: PageChangeEvent) {
