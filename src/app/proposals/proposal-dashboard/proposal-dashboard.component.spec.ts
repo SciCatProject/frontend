@@ -2,7 +2,6 @@ import { APP_CONFIG } from "app-config.module";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MockStore } from "shared/MockStubs";
 import { ProposalDashboardComponent } from "./proposal-dashboard.component";
-import { ProposalSearchComponent } from "proposals/proposal-search/proposal-search.component";
 import { Router } from "@angular/router";
 import { Store, StoreModule } from "@ngrx/store";
 import {
@@ -37,7 +36,8 @@ import {
 import {
   ChangePageAction,
   SortProposalByColumnAction,
-  FetchProposalAction
+  FetchProposalAction,
+  SearchProposalAction
 } from "state-management/actions/proposals.actions";
 
 describe("ProposalDashboardComponent", () => {
@@ -52,7 +52,7 @@ describe("ProposalDashboardComponent", () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ProposalDashboardComponent, ProposalSearchComponent],
+      declarations: [ProposalDashboardComponent],
       imports: [
         BrowserAnimationsModule,
         FormsModule,
@@ -113,6 +113,18 @@ describe("ProposalDashboardComponent", () => {
       const data = component.formatTableData(proposals);
 
       expect(data.length).toEqual(1);
+    });
+  });
+
+  describe("#onTextSearchChange()", () => {
+    it("should dispatch a SearchProposalAction", () => {
+      dispatchSpy = spyOn(store, "dispatch");
+
+      const query = "test";
+      component.onTextSearchChange(query);
+
+      expect(dispatchSpy).toHaveBeenCalledTimes(1);
+      expect(dispatchSpy).toHaveBeenCalledWith(new SearchProposalAction(query));
     });
   });
 
