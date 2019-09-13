@@ -84,6 +84,7 @@ export interface DatasetFilters {
   sortField: string;
   mode: {};
   scientific: ScientificCondition[];
+  isPublished: boolean;
 }
 
 export interface SampleFilters {

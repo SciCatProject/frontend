@@ -46,6 +46,7 @@ export const SELECT_ALL_DATASETS = "[Dataset] Select all Datasets";
 export const CLEAR_SELECTION = "[Dataset] Clear Selection";
 
 export const SET_VIEW_MODE = "[Dataset] Set View Mode";
+export const SET_PUBLIC_VIEW_MODE = "[Dataset] Set Public View Mode";
 
 export const FETCH_DATASETS = "[Dataset] Fetch Datasets";
 export const FETCH_DATASETS_COMPLETE = "[Dataset] Fetch Datasets Complete";
@@ -185,7 +186,7 @@ export class SearchIDCompleteAction implements Action {
 export class DatablocksAction implements Action {
   readonly type = DATABLOCKS;
 
-  constructor(readonly id: string) {}
+  constructor(readonly id: string, readonly filter?: any) {}
 }
 
 export class DatablocksFailedAction implements Action {
@@ -236,6 +237,12 @@ export class SetViewModeAction implements Action {
   readonly type = SET_VIEW_MODE;
 
   constructor(readonly modeToggle: ArchViewMode) {}
+}
+
+export class SetPublicViewModeAction implements Action {
+  readonly type = SET_PUBLIC_VIEW_MODE;
+
+  constructor(readonly isPublished: boolean) {}
 }
 
 export class SetSearchTermsAction implements Action {

@@ -19,7 +19,8 @@ const defaultFilter: DatasetFilters = {
   sortField: "",
   mode: {},
   modeToggle: ArchViewMode.all,
-  scientific: []
+  scientific: [],
+  isPublished: false
 };
 
 describe("DatasetsReducer", () => {
