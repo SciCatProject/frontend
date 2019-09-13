@@ -27,7 +27,8 @@ import {
   getCurrentDatablocks,
   getCurrentDataset,
   getCurrentOrigDatablocks,
-  getCurrentDatasetWithoutOrigData
+  getCurrentDatasetWithoutOrigData,
+  getViewPublicMode
 } from "state-management/selectors/datasets.selectors";
 import { ReadFile } from "ngx-file-helpers";
 import { UserApi } from "shared/sdk";
@@ -45,6 +46,7 @@ import { UserApi } from "shared/sdk";
   styleUrls: ["./dataset-detail.component.scss"]
 })
 export class DatasetDetailComponent implements OnInit, OnDestroy {
+  datasetPid: string;
   dataset$ = this.store.pipe(select(getCurrentDataset));
   datasetwithout$ = this.store.pipe(select(getCurrentDatasetWithoutOrigData));
   jwt$: Observable<any>;
@@ -52,11 +54,14 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
   private routeSubscription = this.route.params
     .pipe(pluck("id"))
-    .subscribe((id: string) => this.store.dispatch(new DatablocksAction(id)));
+    .subscribe((id: string) => {
+      this.datasetPid = id;
+    });
   public origDatablocks$ = this.store.pipe(select(getCurrentOrigDatablocks));
   public datablocks$ = this.store.pipe(select(getCurrentDatablocks));
   public attachments$ = this.store.pipe(select(getCurrentAttachments));
   public isAdmin$ = this.store.pipe(select(getIsAdmin));
+  public viewPublic: boolean;
 
   dataset: Dataset;
   pickedFile: ReadFile;
@@ -100,10 +105,25 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
     );
 
     this.subscriptions.push(
+      this.store.pipe(select(getViewPublicMode)).subscribe(viewPublic => {
+        this.viewPublic = viewPublic;
+      })
+    );
+
+    this.subscriptions.push(
       this.dataset$.subscribe(dataset => {
         this.dataset = dataset;
       })
     );
+
+    if (this.viewPublic) {
+      this.store.dispatch(
+        new DatablocksAction(this.datasetPid, { isPublished: this.viewPublic })
+      );
+    } else {
+      this.store.dispatch(new DatablocksAction(this.datasetPid));
+    }
+
     this.jwt$ = this.userApi.jwt();
   }
 

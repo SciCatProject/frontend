@@ -68,6 +68,7 @@ export const initialDatasetState: DatasetState = {
     limit: 25,
     sortField: "creationTime:desc",
     keywords: [],
-    scientific: []
+    scientific: [],
+    isPublished: false
   }
 };

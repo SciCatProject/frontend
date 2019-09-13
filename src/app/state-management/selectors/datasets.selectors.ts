@@ -133,6 +133,11 @@ export const getViewMode = createSelector(
   filters => filters.modeToggle
 );
 
+export const getViewPublicMode = createSelector(
+  getFilters,
+  filters => filters.isPublished
+);
+
 export const getHasAppliedFilters = createSelector(
   getFilters,
   filters =>

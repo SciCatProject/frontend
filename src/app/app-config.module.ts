@@ -31,6 +31,7 @@ export class AppConfig {
   gettingStarted: string;
   searchSamples: boolean;
   searchProposals: boolean;
+  searchPublicDataEnabled: boolean;
 }
 
 export const APP_DI_CONFIG: AppConfig = {
@@ -60,7 +61,8 @@ export const APP_DI_CONFIG: AppConfig = {
   ingestManual: environment["ingestManual"] || null,
   gettingStarted: environment["gettingStarted"] || null,
   searchProposals: environment["searchProposals"] || false,
-  searchSamples: environment["searchSamples"] || false
+  searchSamples: environment["searchSamples"] || false,
+  searchPublicDataEnabled: environment["searchPublicDataEnabled"] || false
 };
 
 @NgModule({
