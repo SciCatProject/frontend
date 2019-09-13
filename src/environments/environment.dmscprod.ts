@@ -23,6 +23,7 @@ export const environment = {
   multipleDownloadAction: "https://scicatfileserver.esss.dk/zip",
   scienceSearchEnabled: false,
   searchProposals: true,
+  searchPublicDataEnabled: true,
   searchSamples: true,
   sftpHost: "login.esss.dk",
   shoppingCartEnabled: true,
