@@ -1,5 +1,6 @@
 <mat-form-field>
   <input
+    [placeholder]="placeholder"
     matInput
     class="search-input"
     aria-label="Search"
@@ -7,5 +8,5 @@
     [ngModel]="query"
     (ngModelChange)="onChange($event)"
   />
-  <mat-icon matSuffix>search</mat-icon>
+  <mat-icon matSuffix *ngIf="!placeholder">search</mat-icon>
 </mat-form-field>
