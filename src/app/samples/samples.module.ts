@@ -19,10 +19,10 @@ import { samplesReducer } from "../state-management/reducers/samples.reducer";
 import { SampleDialogComponent } from "./sample-dialog/sample-dialog.component";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { SampleService } from "./sample.service";
-import { SampleSearchComponent } from "./sample-search/sample-search.component";
 import { SampleDashboardComponent } from "./sample-dashboard/sample-dashboard.component";
 import { FlexLayoutModule } from "@angular/flex-layout";
 import { NgxJsonViewerModule } from "ngx-json-viewer";
+import { SearchBarModule } from "shared/modules/search-bar/search-bar.module";
 
 @NgModule({
   imports: [
@@ -39,6 +39,7 @@ import { NgxJsonViewerModule } from "ngx-json-viewer";
     MatTableModule,
     NgxJsonViewerModule,
     ReactiveFormsModule,
+    SearchBarModule,
     StoreModule.forFeature("samples", samplesReducer)
   ],
   exports: [
@@ -52,7 +53,6 @@ import { NgxJsonViewerModule } from "ngx-json-viewer";
     SampleTableComponent,
     SampleDataFormComponent,
     SampleDialogComponent,
-    SampleSearchComponent,
     SampleDashboardComponent
   ],
   providers: [SampleApi, SampleService],
