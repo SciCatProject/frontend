@@ -11,27 +11,27 @@ export class AppConfig {
   production: boolean;
   disabledDatasetColumns: string[];
   archiveWorkflowEnabled: boolean;
+  columnSelectEnabled: boolean;
+  datasetReduceEnabled: boolean;
   editMetadataEnabled: boolean;
   editSampleEnabled: boolean;
-  scienceSearchEnabled: boolean;
   facility: string;
-  shoppingCartEnabled: boolean;
-  multipleDownloadEnabled: boolean;
-  multipleDownloadAction?: string;
-  maxDirectDownloadSize: number;
-  sftpHost: string;
-  columnSelectEnabled: boolean;
-  userProfileImageEnabled: boolean;
-  logbookEnabled: boolean;
-  tableSciDataEnabled: boolean;
-  datasetReduceEnabled: boolean;
   fileColorEnabled: boolean;
-  metadataPreviewEnabled: boolean;
-  ingestManual: string;
   gettingStarted: string;
-  searchSamples: boolean;
+  ingestManual: string;
+  logbookEnabled: boolean;
+  maxDirectDownloadSize: number;
+  metadataPreviewEnabled: boolean;
+  multipleDownloadAction?: string;
+  multipleDownloadEnabled: boolean;
+  scienceSearchEnabled: boolean;
   searchProposals: boolean;
   searchPublicDataEnabled: boolean;
+  searchSamples: boolean;
+  sftpHost: string;
+  shoppingCartEnabled: boolean;
+  tableSciDataEnabled: boolean;
+  userProfileImageEnabled: boolean;
 }
 
 export const APP_DI_CONFIG: AppConfig = {
