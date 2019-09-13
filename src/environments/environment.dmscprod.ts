@@ -24,6 +24,7 @@ export const environment = {
   scienceSearchEnabled: false,
   searchProposals: true,
   searchSamples: true,
+  sftpHost: "login.esss.dk",
   shoppingCartEnabled: true,
   tableSciDataEnabled: true,
   userProfileImageEnabled: true
