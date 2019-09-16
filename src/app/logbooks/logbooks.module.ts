@@ -21,7 +21,6 @@ import { RouterModule } from "@angular/router";
 import { SharedCatanieModule } from "shared/shared.module";
 import { ContentSelectorComponent } from "./content-selector/content-selector.component";
 import { LogbooksDashboardComponent } from "./logbooks-dashboard/logbooks-dashboard.component";
-import { LogbooksFilterComponent } from "./logbooks-filter/logbooks-filter.component";
 import { EffectsModule } from "@ngrx/effects";
 import { LogbookEffect } from "state-management/effects/logbooks.effects";
 import { logbooksReducer } from "state-management/reducers/logbooks.reducer";
@@ -32,8 +31,7 @@ import { StoreModule } from "@ngrx/store";
     LogbooksTableComponent,
     LogbooksDetailComponent,
     ContentSelectorComponent,
-    LogbooksDashboardComponent,
-    LogbooksFilterComponent
+    LogbooksDashboardComponent
   ],
   imports: [
     AppConfigModule,

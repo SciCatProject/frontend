@@ -46,7 +46,7 @@ import {
 import { ScientificConditionDialogComponent } from "datasets/scientific-condition-dialog/scientific-condition-dialog.component";
 import { combineLatest, BehaviorSubject, Observable } from "rxjs";
 
-type DateRange = {
+export type DateRange = {
   begin: Date;
   end: Date;
 };

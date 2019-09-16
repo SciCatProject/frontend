@@ -7,13 +7,11 @@
       <div style="clear: both"></div>
     </div>
 
-    <mat-form-field>
-      <input matInput class="search-input" placeholder="Text Search" aria-label="Text Search"
-      [ngModel]="searchTerms$ | async"
-      (ngModelChange)="textSearchChanged($event)"
-      name="search"
+    <app-search-bar
+      [placeholder]="'Text Search'"
+      (change)="textSearchChanged($event)"
       >
-    </mat-form-field>
+    </app-search-bar>
 
     <mat-form-field>
       <mat-chip-list #locationChipList>

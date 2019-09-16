@@ -1,5 +1,8 @@
 import { Component, OnInit, Inject } from "@angular/core";
 import { APP_CONFIG, AppConfig } from "app-config.module";
+import { Store } from "@ngrx/store";
+import { Sample } from "shared/sdk";
+import { SearchSampleAction } from "state-management/actions/samples.actions";
 
 @Component({
   selector: "sample-dashboard",
@@ -8,8 +11,13 @@ import { APP_CONFIG, AppConfig } from "app-config.module";
 })
 export class SampleDashboardComponent implements OnInit {
   constructor(
-    @Inject(APP_CONFIG) public appConfig: AppConfig
+    @Inject(APP_CONFIG) public appConfig: AppConfig,
+    private store: Store<Sample>
   ) {}
+
+  onTextSearchChange(query) {
+    this.store.dispatch(new SearchSampleAction(query));
+  }
 
   ngOnInit() {}
 }
