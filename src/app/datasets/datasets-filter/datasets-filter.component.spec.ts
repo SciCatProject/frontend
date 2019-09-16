@@ -7,24 +7,14 @@ import {
 } from "@angular/core/testing";
 import { Store, StoreModule } from "@ngrx/store";
 import { rootReducer } from "state-management/reducers/root.reducer";
-import {
-  DatasetsFilterComponent,
-  DateRange
-} from "datasets/datasets-filter/datasets-filter.component";
-import {
-  MockActivatedRoute,
-  MockRouter,
-  MockStore
-} from "../../shared/MockStubs";
-import { ActivatedRoute, Router } from "@angular/router";
+import { DatasetsFilterComponent } from "datasets/datasets-filter/datasets-filter.component";
+import { MockStore } from "../../shared/MockStubs";
 import {
   MatAutocompleteModule,
   MatFormFieldModule,
   MatInputModule,
   MatSelectModule,
-  MatDialogModule,
-  MatDatepickerInputEvent,
-  MatDatepickerInput
+  MatDialogModule
 } from "@angular/material";
 
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
@@ -41,7 +31,9 @@ import {
   AddKeywordFilterAction,
   RemoveKeywordFilterAction,
   AddTypeFilterAction,
-  RemoveTypeFilterAction
+  RemoveTypeFilterAction,
+  ClearFacetsAction,
+  RemoveScientificConditionAction
 } from "state-management/actions/datasets.actions";
 
 describe("DatasetsFilterComponent", () => {
@@ -78,9 +70,7 @@ describe("DatasetsFilterComponent", () => {
             useValue: {
               scienceSearchEnabled: false
             }
-          },
-          { provide: Router, useClass: MockRouter },
-          { provide: ActivatedRoute, useClass: MockActivatedRoute }
+          }
         ]
       }
     });
@@ -309,14 +299,31 @@ describe("DatasetsFilterComponent", () => {
   });
 
   describe("#clearFacets()", () => {
-    it("should", () => {});
+    it("should dispatch a ClearFacetsAction", () => {
+      dispatchSpy = spyOn(store, "dispatch");
+
+      component.clearFacets();
+
+      expect(dispatchSpy).toHaveBeenCalledTimes(1);
+      expect(dispatchSpy).toHaveBeenCalledWith(new ClearFacetsAction());
+    });
   });
 
   describe("#showAddConditionDialog()", () => {
-    it("should", () => {});
+    xit("should dispatch an AddScientificConditionAction if dialog returns data", () => {});
   });
 
   describe("#removeCondition()", () => {
-    it("should", () => {});
+    it("should dispatch a RemoveScientificConditionAction", () => {
+      dispatchSpy = spyOn(store, "dispatch");
+
+      const index = 0;
+      component.removeCondition(index);
+
+      expect(dispatchSpy).toHaveBeenCalledTimes(1);
+      expect(dispatchSpy).toHaveBeenCalledWith(
+        new RemoveScientificConditionAction(index)
+      );
+    });
   });
 });
