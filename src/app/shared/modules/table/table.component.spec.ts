@@ -3,13 +3,16 @@ import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 import {
   TableComponent,
   PageChangeEvent,
-  SortChangeEvent
+  SortChangeEvent,
+  CheckboxEvent
 } from "./table.component";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import {
   MatListModule,
   MatTableModule,
-  MatPaginatorModule
+  MatPaginatorModule,
+  MatCheckboxChange,
+  MatCheckbox
 } from "@angular/material";
 import { PipesModule } from "shared/pipes/pipes.module";
 
@@ -79,6 +82,49 @@ describe("TableComponent", () => {
 
       expect(component.rowSelect.emit).toHaveBeenCalledTimes(1);
       expect(component.rowSelect.emit).toHaveBeenCalledWith(data);
+    });
+  });
+
+  describe("#onSelectAll()", () => {
+    it("should emit a MatCheckboxChange event", () => {
+      spyOn(component.selectAll, "emit");
+
+      const event = new MatCheckboxChange();
+      component.onSelectAll(event);
+
+      expect(component.selectAll.emit).toHaveBeenCalledTimes(1);
+      expect(component.selectAll.emit).toHaveBeenCalledWith(event);
+    });
+  });
+
+  describe("#onSelectOne()", () => {
+    it("should emit a CheckboxEvent", () => {
+      spyOn(component.selectOne, "emit");
+
+      const selectEvent: CheckboxEvent = {
+        event: new MatCheckboxChange(),
+        row: {}
+      };
+      component.onSelectOne(selectEvent.event, selectEvent.row);
+
+      expect(component.selectOne.emit).toHaveBeenCalledTimes(1);
+      expect(component.selectOne.emit).toHaveBeenCalledWith(selectEvent);
+    });
+  });
+
+  describe("#isAllSelected()", () => {
+    it("should return false if length of data array and length of selected array are not equal", () => {
+      component.data = ["test1", "test2"];
+
+      const allSelected = component.isAllSelected();
+
+      expect(allSelected).toEqual(false);
+    });
+
+    it("should return true if length of data array and length of selected array are equal", () => {
+      const allSelected = component.isAllSelected();
+
+      expect(allSelected).toEqual(true);
     });
   });
 });
