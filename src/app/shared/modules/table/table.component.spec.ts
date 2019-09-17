@@ -72,16 +72,16 @@ describe("TableComponent", () => {
 
   describe("#onRowSelect()", () => {
     it("should emit the data in the selected row", () => {
-      spyOn(component.rowSelect, "emit");
+      spyOn(component.rowClick, "emit");
 
       const data = {
         id: "123",
         name: "test"
       };
-      component.onRowSelect(data);
+      component.onRowClick(data);
 
-      expect(component.rowSelect.emit).toHaveBeenCalledTimes(1);
-      expect(component.rowSelect.emit).toHaveBeenCalledWith(data);
+      expect(component.rowClick.emit).toHaveBeenCalledTimes(1);
+      expect(component.rowClick.emit).toHaveBeenCalledWith(data);
     });
   });
 

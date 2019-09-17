@@ -110,7 +110,7 @@ export class ProposalDashboardComponent implements OnInit, OnDestroy {
     );
   }
 
-  onRowSelect(proposal: Proposal) {
+  onRowClick(proposal: Proposal) {
     this.store.dispatch(new FetchProposalAction(proposal.proposalId));
     this.router.navigateByUrl("/proposals/" + proposal.proposalId);
   }

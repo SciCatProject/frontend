@@ -49,7 +49,7 @@ export class TableComponent implements OnInit {
 
   @Output() pageChange? = new EventEmitter<PageChangeEvent>();
   @Output() sortChange? = new EventEmitter<SortChangeEvent>();
-  @Output() rowSelect? = new EventEmitter<any>();
+  @Output() rowClick? = new EventEmitter<any>();
   @Output() selectAll? = new EventEmitter<MatCheckboxChange>();
   @Output() selectOne? = new EventEmitter<CheckboxEvent>();
 
@@ -63,8 +63,8 @@ export class TableComponent implements OnInit {
     this.sortChange.emit(event);
   }
 
-  onRowSelect(event: any) {
-    this.rowSelect.emit(event);
+  onRowClick(event: any) {
+    this.rowClick.emit(event);
   }
 
   onSelectAll(event: MatCheckboxChange) {
