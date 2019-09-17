@@ -43,6 +43,7 @@ import {
   UpdateAttachmentCaptionCompleteAction
 } from "state-management/actions/samples.actions";
 import { Action } from "@ngrx/store";
+import { Dataset } from "shared/sdk";
 
 export function samplesReducer(
   state: SampleState = initialSampleState,
@@ -66,10 +67,9 @@ export function samplesReducer(
     }
 
     case SET_CURRENT_DATASETS: {
-      const s = Object.assign({}, state, {
-        datasets: (action as SetCurrentDatasets).datasets
-      });
-      return s;
+      const datasets = (action as SetCurrentDatasets).datasets;
+      const datasetPids = datasets.map((dataset: Dataset) => dataset.pid);
+      return { ...state, datasets: datasetPids };
     }
 
     case SAMPLE_SORT_BY_COLUMN: {

@@ -20,7 +20,7 @@
       [dataPerPage]="dataPerPage$ | async"
       (pageChange)="onPageChange($event)"
       (sortChange)="onSortChange($event)"
-      (rowSelect)="onRowSelect($event)"
+      (rowClick)="onRowClick($event)"
     ></app-table>
     <ng-template [ngIf]="tableData && tableData.length === 0">
       {{ (hasFetched$ | async) ? "No proposals." : "Loading..." }}

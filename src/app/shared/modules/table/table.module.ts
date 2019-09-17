@@ -7,7 +7,8 @@ import {
   MatSortModule,
   MatListModule,
   MatCardModule,
-  MatPaginatorModule
+  MatPaginatorModule,
+  MatCheckboxModule
 } from "@angular/material";
 import { PipesModule } from "shared/pipes/pipes.module";
 
@@ -16,6 +17,7 @@ import { PipesModule } from "shared/pipes/pipes.module";
   imports: [
     CommonModule,
     MatCardModule,
+    MatCheckboxModule,
     MatIconModule,
     MatListModule,
     MatPaginatorModule,
