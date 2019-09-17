@@ -80,7 +80,7 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
 
   openDialog() {
     this.dialogConfig = new MatDialogConfig();
-    const dialogRef = this.dialog.open(SampleDialogComponent, {
+    this.dialog.open(SampleDialogComponent, {
       width: "250px",
       data: { name: this.name, description: this.description }
     });
