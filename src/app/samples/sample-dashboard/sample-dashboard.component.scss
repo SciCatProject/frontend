@@ -1,7 +1,45 @@
-.search-card {
-  margin: 4em 1em;
+@media only screen and (min-width: 1280px) {
+  .big-search {
+    margin: 4em 1em 1em 0;
 
-  .title {
-    font-size: 1.25em;
+    .title {
+      font-size: 1.25em;
+    }
+  }
+
+  .small-search {
+    display: none;
+  }
+
+  .big-edit-sample {
+    margin: 1em 1em 1em 0;
+    text-align: center;
+  }
+
+  .big-edit-sample:hover {
+    cursor: pointer;
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+
+  .small-edit-sample {
+    display: none;
+  }
+}
+
+@media only screen and (max-width: 1279px) {
+  .big-search {
+    display: none;
+  }
+
+  .small-search {
+    margin: 1em 0;
+  }
+
+  .big-edit-sample {
+    display: none;
+  }
+
+  .small-edit-sample {
+    margin-top: 1em;
   }
 }

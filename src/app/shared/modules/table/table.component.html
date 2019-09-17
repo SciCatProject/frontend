@@ -40,14 +40,14 @@
     <mat-header-row *matHeaderRowDef="columnsToDisplay"></mat-header-row>
     <mat-row
       *matRowDef="let row; columns: columnsToDisplay"
-      (click)="onRowSelect(row)"
+      (click)="onRowClick(row)"
     ></mat-row>
   </mat-table>
 
   <mat-card class="smallData">
     <mat-list>
       <ng-template ngFor let-entry [ngForOf]="data" let-last="last">
-        <mat-list-item (click)="onRowSelect(entry)">
+        <mat-list-item (click)="onRowClick(entry)">
           <p mat-line class="title">{{ entry[listItems[0]] }}</p>
           <p mat-line *ngFor="let item of listItems; let first = first">
             <span *ngIf="!first">

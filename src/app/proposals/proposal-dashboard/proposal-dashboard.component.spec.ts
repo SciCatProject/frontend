@@ -170,7 +170,7 @@ describe("ProposalDashboardComponent", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
       const proposal = new Proposal();
-      component.onRowSelect(proposal);
+      component.onRowClick(proposal);
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
