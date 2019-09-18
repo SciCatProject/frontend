@@ -66,10 +66,11 @@ describe("SamplesReducer", () => {
   describe("SET_CURRENT_DATASETS", () => {
     it("should set datasets", () => {
       const datasets = [new Dataset()];
+      const datasetPids = datasets.map(dataset => dataset.pid);
       const action = new SetCurrentDatasets(datasets);
       const state = samplesReducer(initialSampleState, action);
 
-      expect(state.datasets).toEqual(datasets);
+      expect(state.datasets).toEqual(datasetPids);
     });
   });
 

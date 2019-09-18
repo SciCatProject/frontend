@@ -8,7 +8,7 @@ const initialSampleState: SampleState = {
   currentSample: null,
   totalCount: 0,
   submitComplete: false,
-  datasets: {},
+  datasets: [],
 
   addingAttachment: false,
   deletingAttachment: false,

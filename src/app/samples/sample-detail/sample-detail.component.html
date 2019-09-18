@@ -25,13 +25,17 @@
           <th><i class="material-icons"> fingerprint </i>Sample ID</th>
           <td>{{ value }}</td>
         </tr>
-        <tr *ngIf="datasets$ | async as value">
+        <tr *ngIf="(datasets$ | async).length > 0 && datasets$ | async as value">
           <th><i class="material-icons"> save </i>Datasets</th>
           <td>
             <ul>
-                <li *ngFor="let group of value" >
-                    <a class="dropdown-item btn-sm" (click)="onClickDataset(group)" >{{ group }}</a>
-                </li>
+              <li *ngFor="let group of value">
+                <a
+                  class="dropdown-item btn-sm"
+                  (click)="onClickDataset(group)"
+                  >{{ group }}</a
+                >
+              </li>
             </ul>
           </td>
         </tr>

@@ -7,12 +7,12 @@ import {
   MatTableModule,
   MatInputModule,
   MatSortModule,
-  MatPaginatorModule
+  MatPaginatorModule,
+  MatButtonModule
 } from "@angular/material";
 import { NgModule } from "@angular/core";
 import { SampleApi } from "../shared/sdk/services/custom";
 import { SampleDetailComponent } from "./sample-detail/sample-detail.component";
-import { SampleTableComponent } from "./sample-table/sample-table.component";
 import { SampleDataFormComponent } from "./sample-data-form/sample-data-form.component";
 import { StoreModule } from "@ngrx/store";
 import { samplesReducer } from "../state-management/reducers/samples.reducer";
@@ -23,12 +23,14 @@ import { SampleDashboardComponent } from "./sample-dashboard/sample-dashboard.co
 import { FlexLayoutModule } from "@angular/flex-layout";
 import { NgxJsonViewerModule } from "ngx-json-viewer";
 import { SearchBarModule } from "shared/modules/search-bar/search-bar.module";
+import { TableModule } from "shared/modules/table/table.module";
 
 @NgModule({
   imports: [
     CommonModule,
     FlexLayoutModule,
     FormsModule,
+    MatButtonModule,
     MatCardModule,
     MatIconModule,
     MatFormFieldModule,
@@ -40,17 +42,16 @@ import { SearchBarModule } from "shared/modules/search-bar/search-bar.module";
     NgxJsonViewerModule,
     ReactiveFormsModule,
     SearchBarModule,
-    StoreModule.forFeature("samples", samplesReducer)
+    StoreModule.forFeature("samples", samplesReducer),
+    TableModule
   ],
   exports: [
     SampleDetailComponent,
-    SampleTableComponent,
     SampleDataFormComponent,
     SampleDialogComponent
   ],
   declarations: [
     SampleDetailComponent,
-    SampleTableComponent,
     SampleDataFormComponent,
     SampleDialogComponent,
     SampleDashboardComponent

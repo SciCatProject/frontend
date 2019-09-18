@@ -70,7 +70,7 @@ describe("TableComponent", () => {
     });
   });
 
-  describe("#onRowSelect()", () => {
+  describe("#onRowClick()", () => {
     it("should emit the data in the selected row", () => {
       spyOn(component.rowClick, "emit");
 

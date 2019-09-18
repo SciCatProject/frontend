@@ -1,13 +1,40 @@
-<div fxLayout="row">
-  <div fxFlex="13">
-    <div *ngIf="appConfig.searchSamples">
-      <mat-card class="search-card">
+<div fxLayout="row" fxLayout.lt-lg="column">
+  <div fxFlex="14" fxFlex.lt-xl="20">
+    <ng-template [ngIf]="appConfig.editSampleEnabled">
+      <button
+        mat-stroked-button
+        class="small-edit-sample"
+        (click)="openDialog()"
+      >
+        <mat-icon>edit</mat-icon> Add Sample
+      </button>
+    </ng-template>
+    <ng-template [ngIf]="appConfig.searchSamples">
+      <mat-card class="big-search">
         <div class="title">Search</div>
         <app-search-bar (change)="onTextSearchChange($event)"></app-search-bar>
       </mat-card>
-    </div>
+      <div class="small-search" fxFlexOrder="2">
+        <app-search-bar (change)="onTextSearchChange($event)"></app-search-bar>
+      </div>
+    </ng-template>
+    <ng-template [ngIf]="appConfig.editSampleEnabled">
+      <mat-card class="big-edit-sample" (click)="openDialog()">
+        <mat-icon>edit</mat-icon> Add Sample
+      </mat-card>
+    </ng-template>
   </div>
-  <div fxFlex="63">
-    <app-sample-table></app-sample-table>
+  <div fxFlex="63" fxFlex.lt-xl="80">
+    <app-table
+      [data]="tableData"
+      [columns]="tableColumns"
+      [paginate]="tablePaginate"
+      [currentPage]="currentPage$ | async"
+      [dataCount]="sampleCount$ | async"
+      [dataPerPage]="samplesPerPage$ | async"
+      (pageChange)="onPageChange($event)"
+      (sortChange)="onSortChange($event)"
+      (rowClick)="onRowClick($event)"
+    ></app-table>
   </div>
 </div>
