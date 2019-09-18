@@ -116,5 +116,5 @@ export interface LogbookFilters {
 export interface JobFilters {
   skip: number;
   limit: number;
-  mode: string | object;
+  mode?: string | object;
 }
