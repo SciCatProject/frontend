@@ -1,6 +1,5 @@
 import { Action } from "@ngrx/store";
 import { Job } from "shared/sdk/models";
-import { JobViewMode } from "state-management/models";
 
 export const SUBMIT = "[Jobs] Submit";
 export const SUBMIT_COMPLETE = "[Jobs] Submit Complete";
