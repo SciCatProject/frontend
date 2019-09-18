@@ -6,7 +6,7 @@ import { DatafilesComponent } from "../datasets/datafiles/datafiles.component";
 import { DatablocksComponent } from "../datasets/datablocks-table/datablocks-table.component";
 import { DatasetDetailComponent } from "../datasets/dataset-detail/dataset-detail.component";
 
-import { JobsTableComponent } from "../jobs/jobs-table/jobs-table.component";
+import { JobsDashboardComponent } from "jobs/jobs-dashboard/jobs-dashboard.component";
 import { JobsDetailComponent } from "../jobs/jobs-detail/jobs-detail.component";
 
 import { ErrorPageComponent } from "../shared/modules/error-page/error-page.component";
@@ -148,11 +148,11 @@ export const routes: Routes = [
       },
       {
         path: "user/jobs",
-        component: JobsTableComponent,
+        component: JobsDashboardComponent,
         canActivate: [AuthCheck]
       },
       {
-        path: "user/job/:id",
+        path: "user/jobs/:id",
         component: JobsDetailComponent,
         canActivate: [AuthCheck]
       },

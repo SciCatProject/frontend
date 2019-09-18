@@ -48,7 +48,7 @@ export class RetrieveCompleteAction implements Action {
 
 export class GetCountCompleteAction implements Action {
   readonly type = GET_COUNT_COMPLETE;
-  constructor(readonly totalJobNumber: number) { }
+  constructor(readonly totalJobNumber: number) {}
 }
 
 export class SearchIDAction implements Action {
@@ -76,7 +76,7 @@ export class SortUpdateAction implements Action {
   constructor(
     readonly skip: number,
     readonly limit: number,
-    readonly mode?: JobViewMode
+    readonly mode?: string | object
   ) {}
 }
 

@@ -5,7 +5,7 @@ import { JobsState } from "../state/jobs.store";
 const initialJobsState: JobsState = {
   currentJobs: [],
   jobSubmission: undefined,
-  filters: { skip: 0, limit: 50 },
+  filters: { skip: 0, limit: 50, mode: "" },
   totalJobNumber: 1000,
   ui: [],
   loading: false,
@@ -19,10 +19,11 @@ describe("test Jobs selectors", () => {
     );
   });
 
-
   it("should get filters", () => {
-    expect(fromJobSelectors.getFilters.projector(initialJobsState)).toEqual(
-      { skip: 0, limit: 50 }
-    );
+    expect(fromJobSelectors.getFilters.projector(initialJobsState)).toEqual({
+      skip: 0,
+      limit: 50,
+      mode: ""
+    });
   });
 });
