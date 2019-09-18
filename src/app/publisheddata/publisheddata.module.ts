@@ -1,6 +1,5 @@
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import { PublisheddataTableComponent } from "./publisheddata-table/publisheddata-table.component";
 import { PublisheddataDetailsComponent } from "./publisheddata-details/publisheddata-details.component";
 import {
   MatTableModule,
@@ -13,13 +12,22 @@ import { NgxJsonViewerModule } from "ngx-json-viewer";
 
 import { StoreModule } from "@ngrx/store";
 import { publishedDataReducer } from "state-management/reducers/published-data.reducer";
-import { BrowserAnimationsModule, NoopAnimationsModule } from "@angular/platform-browser/animations";
+import {
+  BrowserAnimationsModule,
+  NoopAnimationsModule
+} from "@angular/platform-browser/animations";
+import { PublisheddataDashboardComponent } from "./publisheddata-dashboard/publisheddata-dashboard.component";
+import { FlexLayoutModule } from "@angular/flex-layout";
 
 @NgModule({
-  declarations: [PublisheddataTableComponent, PublisheddataDetailsComponent],
+  declarations: [
+    PublisheddataDetailsComponent,
+    PublisheddataDashboardComponent
+  ],
   imports: [
     BrowserAnimationsModule,
     CommonModule,
+    FlexLayoutModule,
     LinkyModule,
     MatCardModule,
     MatTableModule,
@@ -27,7 +35,7 @@ import { BrowserAnimationsModule, NoopAnimationsModule } from "@angular/platform
     NgxJsonViewerModule,
     NoopAnimationsModule,
     SharedCatanieModule,
-    StoreModule.forFeature("PublishedData", publishedDataReducer),
+    StoreModule.forFeature("PublishedData", publishedDataReducer)
   ]
 })
 export class PublisheddataModule {}
