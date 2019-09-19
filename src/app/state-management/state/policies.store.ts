@@ -29,7 +29,7 @@ export const initialPolicyState: PolicyState = {
   error: undefined,
   filters: {
     skip: 0,
-    limit: 30,
+    limit: 25,
     sortField: "ownerGroup:desc"
   }
 };

@@ -96,7 +96,7 @@ export class PoliciesEffects {
         // allow functional users
         return new FetchEditablePoliciesComplete(allPolicies);
       }
-      const email = profile.email;
+      const email = profile.email.toLowerCase();
       allPolicies.forEach(pol => {
         if (pol.manager.indexOf(email) !== -1) {
           editablePolicies.push(pol);

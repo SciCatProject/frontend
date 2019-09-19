@@ -18,8 +18,6 @@ import { SampleDataFormComponent } from "../samples/sample-data-form/sample-data
 
 import { ViewProposalPageComponent } from "../proposals/containers/view-proposal-page/view-proposal-page.component";
 
-import { PoliciesComponent } from "../policies/policies/policies.component";
-
 import { PublishComponent } from "datasets/publish/publish.component";
 import { AuthCheck } from "../AuthCheck";
 import { BatchViewComponent } from "datasets/batch-view/batch-view.component";
@@ -38,6 +36,7 @@ import { ProposalDashboardComponent } from "proposals/proposal-dashboard/proposa
 import { SampleDashboardComponent } from "samples/sample-dashboard/sample-dashboard.component";
 import { LoginLayoutComponent } from "_layout/login-layout/login-layout.component";
 import { AppLayoutComponent } from "_layout/app-layout/app-layout.component";
+import { PoliciesDashboardComponent } from "policies/policies-dashboard/policies-dashboard.component";
 
 export const routes: Routes = [
   {
@@ -132,7 +131,7 @@ export const routes: Routes = [
 
       {
         path: "policies",
-        component: PoliciesComponent,
+        component: PoliciesDashboardComponent,
         canActivate: [AuthCheck]
       },
 
