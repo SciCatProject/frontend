@@ -112,3 +112,9 @@ export interface LogbookFilters {
   showUserMessages: boolean;
   showImages: boolean;
 }
+
+export interface JobFilters {
+  skip: number;
+  limit: number;
+  mode?: string | object;
+}

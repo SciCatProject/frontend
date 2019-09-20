@@ -14,9 +14,7 @@ import { FlexLayoutModule } from "@angular/flex-layout";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { HttpClientModule } from "@angular/common/http";
-import { JobsDetailComponent } from "./jobs/jobs-detail/jobs-detail.component";
 import { JobsEffects } from "state-management/effects/jobs.effects";
-import { JobsTableComponent } from "jobs/jobs-table/jobs-table.component";
 import { NgModule } from "@angular/core";
 import { NguiDatetimePickerModule } from "@ngui/datetime-picker";
 import { PoliciesEffects } from "state-management/effects/policies.effects";
@@ -63,17 +61,24 @@ import { LogbookEffect } from "state-management/effects/logbooks.effects";
 import { AboutModule } from "about/about.module";
 import { HelpModule } from "help/help.module";
 import { PublisheddataModule } from "publisheddata/publisheddata.module";
-import { AppLayoutComponent } from './_layout/app-layout/app-layout.component';
-import { AppHeaderComponent } from './_layout/app-header/app-header.component';
-import { LoginHeaderComponent } from './_layout/login-header/login-header.component';
-import { LoginLayoutComponent } from './_layout/login-layout/login-layout.component';
+import { AppLayoutComponent } from "./_layout/app-layout/app-layout.component";
+import { AppHeaderComponent } from "./_layout/app-header/app-header.component";
+import { LoginHeaderComponent } from "./_layout/login-header/login-header.component";
+import { LoginLayoutComponent } from "./_layout/login-layout/login-layout.component";
+import { JobsModule } from "jobs/jobs.module";
 
 export function localStorageSyncWrapper(reducer: any) {
   return localStorageSync({ keys: ["root"], rehydrate: true })(reducer);
 }
 
 @NgModule({
-  declarations: [AppComponent, JobsTableComponent, JobsDetailComponent, AppLayoutComponent, AppHeaderComponent, LoginHeaderComponent, LoginLayoutComponent],
+  declarations: [
+    AppComponent,
+    AppLayoutComponent,
+    AppHeaderComponent,
+    LoginHeaderComponent,
+    LoginLayoutComponent
+  ],
   imports: [
     AboutModule,
     AppConfigModule,
@@ -86,6 +91,7 @@ export function localStorageSyncWrapper(reducer: any) {
     FormsModule,
     HelpModule,
     HttpClientModule,
+    JobsModule,
     MatCardModule,
     MatDatepickerModule,
     MatDialogModule,
