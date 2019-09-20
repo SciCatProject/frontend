@@ -126,8 +126,6 @@ export class PoliciesDashboardComponent implements OnInit, OnDestroy {
     }
   }
 
-  onRowClick(policy: Policy) {}
-
   openDialog() {
     this.dialogConfig = new MatDialogConfig();
     this.dialogConfig.disableClose = true;
@@ -169,9 +167,9 @@ export class PoliciesDashboardComponent implements OnInit, OnDestroy {
             })
           )
           .subscribe();
+        this.store.dispatch(new ClearSelectionAction());
       });
     }
-    this.store.dispatch(new ClearSelectionAction());
   }
 
   ngOnInit() {
@@ -184,6 +182,8 @@ export class PoliciesDashboardComponent implements OnInit, OnDestroy {
         if (selectedPolicies) {
           this.selectedPolicies = selectedPolicies;
           this.multiSelect = this.selectedPolicies.length > 1;
+          this.selectedGroups = [];
+          this.selectedIds = [];
 
           selectedPolicies.forEach(policy => {
             this.selectedGroups.push(policy.ownerGroup);

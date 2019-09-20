@@ -133,10 +133,6 @@ describe("PoliciesDashboardComponent", () => {
     });
   });
 
-  describe("#onSelectRow", () => {
-    xit("should...", () => {});
-  });
-
   describe("#openDialog", () => {
     xit("should...", () => {});
   });

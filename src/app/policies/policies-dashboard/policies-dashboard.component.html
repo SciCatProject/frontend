@@ -32,7 +32,6 @@
     <div fxLayout="column" fxLayoutGap="row" fxLayoutAlign="end end">
       <ng-template [ngIf]="editEnabled">
         <button
-          class="edit-button"
           mat-button
           [disabled]="selectedPolicies.length === 0"
           (click)="openDialog()"
@@ -59,7 +58,6 @@
           (sortChange)="onSortChange($event)"
           (selectAll)="onSelectAll($event)"
           (selectOne)="onSelectOne($event)"
-          (rowClick)="onRowClick($event)"
         ></app-table>
       </div>
       <div fxFlex="1"></div>

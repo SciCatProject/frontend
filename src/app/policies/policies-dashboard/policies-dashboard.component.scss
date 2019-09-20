@@ -1,9 +1,3 @@
-@media only screen and (max-width: 1279px) {
-  .edit-button {
-    display: none;
-  }
-}
-
 :host ::ng-deep app-table.readable {
   mat-cell:first-child {
     display: block;
