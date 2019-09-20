@@ -3,7 +3,7 @@ import { Sample, SampleFilters } from "state-management/models";
 export interface SampleState {
   samples: { [sampleId: string]: Sample };
   selectedSamples: Sample[];
-  datasets: { [datasetId: string]: any };
+  datasets: string[];
   currentSample: Sample;
   totalCount: number;
   submitComplete: boolean;
@@ -24,7 +24,7 @@ export interface SampleState {
 export const initialSampleState: SampleState = {
   samples: {},
   selectedSamples: [],
-  datasets: {},
+  datasets: [],
   currentSample: null,
   totalCount: 0,
   submitComplete: false,
@@ -42,7 +42,7 @@ export const initialSampleState: SampleState = {
     text: "",
     sortField: "creationTime:desc",
     skip: 0,
-    limit: 30
+    limit: 25
   },
   selectedId: null
 };

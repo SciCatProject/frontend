@@ -94,8 +94,10 @@ export const getSamplesPerPage = createSelector(
   state => state.filters.limit
 );
 
-export const getCurrentSample = (state: any) =>
-  state.root.samples.currentSample;
+export const getCurrentSample = createSelector(
+  getSampleState,
+  state => state.currentSample
+);
 
 export const getCurrentAttachments = createSelector(
   getCurrentSample,

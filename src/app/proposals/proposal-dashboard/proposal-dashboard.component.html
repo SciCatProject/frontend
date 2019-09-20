@@ -3,10 +3,10 @@
     <div *ngIf="appConfig.searchProposals">
       <mat-card class="bigSearch">
         <div class="title">Search</div>
-        <proposal-search></proposal-search>
+        <app-search-bar (change)="onTextSearchChange($event)"></app-search-bar>
       </mat-card>
       <div class="smallSearch">
-        <proposal-search></proposal-search>
+        <app-search-bar (change)="onTextSearchChange($event)"></app-search-bar>
       </div>
     </div>
   </div>
@@ -20,7 +20,7 @@
       [dataPerPage]="dataPerPage$ | async"
       (pageChange)="onPageChange($event)"
       (sortChange)="onSortChange($event)"
-      (rowSelect)="onRowSelect($event)"
+      (rowClick)="onRowClick($event)"
     ></app-table>
     <ng-template [ngIf]="tableData && tableData.length === 0">
       {{ (hasFetched$ | async) ? "No proposals." : "Loading..." }}

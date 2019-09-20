@@ -6,7 +6,7 @@ import { DatafilesComponent } from "../datasets/datafiles/datafiles.component";
 import { DatablocksComponent } from "../datasets/datablocks-table/datablocks-table.component";
 import { DatasetDetailComponent } from "../datasets/dataset-detail/dataset-detail.component";
 
-import { JobsTableComponent } from "../jobs/jobs-table/jobs-table.component";
+import { JobsDashboardComponent } from "jobs/jobs-dashboard/jobs-dashboard.component";
 import { JobsDetailComponent } from "../jobs/jobs-detail/jobs-detail.component";
 
 import { ErrorPageComponent } from "../shared/modules/error-page/error-page.component";
@@ -29,7 +29,7 @@ import { LogbooksDashboardComponent } from "../logbooks/logbooks-dashboard/logbo
 import { LogbooksTableComponent } from "../logbooks/logbooks-table/logbooks-table.component";
 import { AboutComponent } from "about/about/about.component";
 import { HelpComponent } from "help/help/help.component";
-import { PublisheddataTableComponent } from "publisheddata/publisheddata-table/publisheddata-table.component";
+import { PublisheddataDashboardComponent } from "publisheddata/publisheddata-dashboard/publisheddata-dashboard.component";
 import { PublisheddataDetailsComponent } from "publisheddata/publisheddata-details/publisheddata-details.component";
 
 // handles external URLs by lookup in the env config
@@ -111,11 +111,11 @@ export const routes: Routes = [
       },
       {
         path: "publishedDatasets",
-        component: PublisheddataTableComponent,
+        component: PublisheddataDashboardComponent,
         canActivate: [AuthCheck]
       },
       {
-        path: "publishedDataset/:id",
+        path: "publishedDatasets/:id",
         component: PublisheddataDetailsComponent,
         canActivate: [AuthCheck]
       },
@@ -148,11 +148,11 @@ export const routes: Routes = [
       },
       {
         path: "user/jobs",
-        component: JobsTableComponent,
+        component: JobsDashboardComponent,
         canActivate: [AuthCheck]
       },
       {
-        path: "user/job/:id",
+        path: "user/jobs/:id",
         component: JobsDetailComponent,
         canActivate: [AuthCheck]
       },

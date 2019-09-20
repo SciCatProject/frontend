@@ -2,11 +2,19 @@ import { Component, OnInit, OnDestroy, Inject } from "@angular/core";
 import { Store, select } from "@ngrx/store";
 import { Logbook } from "shared/sdk";
 import { Subscription } from "rxjs";
-import { getLogbook } from "state-management/selectors/logbooks.selector";
+import {
+  getLogbook,
+  getFilters
+} from "state-management/selectors/logbooks.selector";
 import { getCurrentDataset } from "state-management/selectors/datasets.selectors";
-import { FetchLogbookAction } from "state-management/actions/logbooks.actions";
+import {
+  FetchLogbookAction,
+  FetchFilteredEntriesAction,
+  UpdateFilterAction
+} from "state-management/actions/logbooks.actions";
 import { ActivatedRoute } from "@angular/router";
 import { APP_CONFIG, AppConfig } from "app-config.module";
+import { LogbookFilters } from "state-management/models";
 
 @Component({
   selector: "app-logbooks-dashboard",
@@ -18,6 +26,9 @@ export class LogbooksDashboardComponent implements OnInit, OnDestroy {
 
   logbook: Logbook;
   logbookSubscription: Subscription;
+
+  filter: LogbookFilters;
+  filterSubscription: Subscription;
 
   dataset: any;
   datasetSubscription: Subscription;
@@ -34,11 +45,13 @@ export class LogbooksDashboardComponent implements OnInit, OnDestroy {
       .subscribe(logbook => {
         this.logbook = logbook;
       });
-    this.datasetSubscription = this.store
-      .pipe(select(getCurrentDataset))
-      .subscribe(dataset => {
-        this.dataset = dataset;
+
+    this.filterSubscription = this.store
+      .pipe(select(getFilters))
+      .subscribe(filter => {
+        this.filter = filter;
       });
+
     this.datasetSubscription = this.store
       .pipe(select(getCurrentDataset))
       .subscribe(dataset => {
@@ -60,7 +73,17 @@ export class LogbooksDashboardComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.logbookSubscription.unsubscribe();
+    this.filterSubscription.unsubscribe();
     this.datasetSubscription.unsubscribe();
+  }
+
+  onTextSearchChange(query) {
+    this.filter.textSearch = query;
+    this.store.dispatch(new UpdateFilterAction(this.filter));
+
+    this.store.dispatch(
+      new FetchFilteredEntriesAction(this.logbook.name, this.filter)
+    );
   }
 
   reverseTimeline(): void {

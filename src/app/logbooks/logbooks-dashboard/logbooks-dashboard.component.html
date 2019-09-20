@@ -3,18 +3,22 @@
     <div fxFlex="14" style="margin-right: 1em">
       <mat-card class="bigFilter" style="margin: 1em">
         <div class="title">Filter</div>
-        <app-logbooks-filter></app-logbooks-filter>
+        <app-search-bar (change)="onTextSearchChange($event)"></app-search-bar>
         <app-content-selector></app-content-selector>
       </mat-card>
-      <mat-expansion-panel class="smallFilter">
-        <mat-expansion-panel-header>
-          <mat-panel-title>
-            <div class="title">Filter</div>
-          </mat-panel-title>
-        </mat-expansion-panel-header>
-        <app-logbooks-filter></app-logbooks-filter>
-        <app-content-selector></app-content-selector>
-      </mat-expansion-panel>
+
+      <div class="smallFilter">
+        <app-search-bar (change)="onTextSearchChange($event)"></app-search-bar>
+
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <div class="title">Filter</div>
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <app-content-selector></app-content-selector>
+        </mat-expansion-panel>
+      </div>
       <div fxLayout="column" fxLayout.lt-lg="row">
         <div fxFlex="50">
           <a

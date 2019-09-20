@@ -19,10 +19,10 @@ describe("test Jobs selectors", () => {
     );
   });
 
-
   it("should get filters", () => {
-    expect(fromJobSelectors.getFilters.projector(initialJobsState)).toEqual(
-      { skip: 0, limit: 50 }
-    );
+    expect(fromJobSelectors.getFilters.projector(initialJobsState)).toEqual({
+      skip: 0,
+      limit: 50
+    });
   });
 });

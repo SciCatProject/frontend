@@ -17,6 +17,27 @@
     class="largeData mat-elevation-z2"
     (matSortChange)="onSortChange($event)"
   >
+    <ng-template [ngIf]="select">
+      <ng-container matColumnDef="select">
+        <mat-header-cell *matHeaderCellDef>
+          <mat-checkbox
+            [checked]="selection.hasValue() && isAllSelected()"
+            [indeterminate]="selection.hasValue() && !isAllSelected()"
+            (change)="$event ? onSelectAll($event) : null"
+          >
+          </mat-checkbox>
+        </mat-header-cell>
+        <mat-cell *matCellDef="let row">
+          <mat-checkbox
+            [checked]="selection.isSelected(row)"
+            (change)="$event ? onSelectOne($event, row) : null"
+            (click)="$event.stopPropagation()"
+          >
+          </mat-checkbox>
+        </mat-cell>
+      </ng-container>
+    </ng-template>
+
     <ng-template ngFor let-column [ngForOf]="columns">
       <ng-container matColumnDef="{{ column.name }}">
         <mat-header-cell
@@ -37,17 +58,17 @@
       </ng-container>
     </ng-template>
 
-    <mat-header-row *matHeaderRowDef="columnsToDisplay"></mat-header-row>
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
     <mat-row
-      *matRowDef="let row; columns: columnsToDisplay"
-      (click)="onRowSelect(row)"
+      *matRowDef="let row; columns: displayedColumns"
+      (click)="onRowClick(row)"
     ></mat-row>
   </mat-table>
 
   <mat-card class="smallData">
     <mat-list>
       <ng-template ngFor let-entry [ngForOf]="data" let-last="last">
-        <mat-list-item (click)="onRowSelect(entry)">
+        <mat-list-item (click)="onRowClick(entry)">
           <p mat-line class="title">{{ entry[listItems[0]] }}</p>
           <p mat-line *ngFor="let item of listItems; let first = first">
             <span *ngIf="!first">
