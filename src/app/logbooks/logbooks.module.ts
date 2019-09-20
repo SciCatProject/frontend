@@ -2,7 +2,6 @@ import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { LogbooksTableComponent } from "./logbooks-table/logbooks-table.component";
 import { LogbooksDetailComponent } from "./logbooks-detail/logbooks-detail.component";
-import { LogbookService } from "./logbook.service";
 import {
   MatCardModule,
   MatIconModule,
@@ -52,7 +51,7 @@ import { StoreModule } from "@ngrx/store";
     StoreModule.forFeature("logbooks", logbooksReducer),
     EffectsModule.forFeature([LogbookEffect])
   ],
-  providers: [LogbookService],
+  providers: [],
   exports: [
     LogbooksTableComponent,
     LogbooksDetailComponent,

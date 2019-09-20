@@ -1,5 +1,5 @@
 import { Observable, of, Subject } from "rxjs";
-import { Sample, Logbook } from "./sdk/models";
+import { Logbook } from "./sdk/models";
 import { convertToParamMap, UrlTree } from "@angular/router";
 
 export class MockUserApi {
@@ -55,46 +55,6 @@ export class MockDatablockApi {
 }
 
 export class MockAuthService {}
-
-export class MockSampleService {
-  sample: Sample;
-
-  getSamples(): Observable<Sample[]> {
-    this.sample = {
-      sampleId: "string",
-      owner: "string",
-      description: "string",
-      createdAt: new Date(),
-      sampleCharacteristics: "string",
-      attachments: [],
-      ownerGroup: "string",
-      accessGroups: ["string"],
-      createdBy: "string",
-      updatedBy: "string",
-      updatedAt: new Date()
-    };
-
-    return of([this.sample]);
-  }
-
-  getSample(): Observable<Sample> {
-    this.sample = {
-      sampleId: "string",
-      owner: "string",
-      description: "string",
-      createdAt: new Date(),
-      sampleCharacteristics: "string",
-      attachments: [],
-      ownerGroup: "string",
-      accessGroups: ["string"],
-      createdBy: "string",
-      updatedBy: "string",
-      updatedAt: new Date()
-    };
-
-    return of(this.sample);
-  }
-}
 
 export class MockLoopBackAuth {
   user = {};

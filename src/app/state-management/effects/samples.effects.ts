@@ -3,8 +3,7 @@ import { Actions, Effect, ofType } from "@ngrx/effects";
 import { Injectable } from "@angular/core";
 import { Observable, of } from "rxjs";
 import { Sample, Dataset } from "../../shared/sdk/models";
-import { SampleApi } from "shared/sdk/services";
-import { SampleService } from "../../samples/sample.service";
+import { SampleApi, DatasetApi } from "shared/sdk/services";
 import {
   catchError,
   map,
@@ -105,8 +104,8 @@ export class SamplesEffects {
     ofType(ADD_SAMPLE),
     map((action: AddSampleAction) => action.sample),
     mergeMap(sample =>
-      this.sampleService
-        .addSample(sample)
+      this.sampleApi
+        .create([sample])
         .pipe(
           map(
             res => new AddSampleCompleteAction(res[0]),
@@ -121,8 +120,8 @@ export class SamplesEffects {
     ofType(FETCH_SAMPLE_COUNT),
     map((action: FetchSampleCountAction) => action.sampleCount),
     mergeMap(sample =>
-      this.sampleService
-        .getSampleCount()
+      this.sampleApi
+        .count()
         .pipe(
           map(
             res => new FetchSampleCountCompleteAction(res.count),
@@ -137,7 +136,7 @@ export class SamplesEffects {
     ofType(FETCH_DATASETS_FOR_SAMPLE),
     map((action: FetchDatasetsForSample) => action.sampleId),
     mergeMap(sampleId =>
-      this.sampleService.getDatasetsForSample(sampleId).pipe(
+      this.datasetApi.find({ where: { sampleId: sampleId } }).pipe(
         map(
           datasets => new FetchDatasetsForSampleComplete(datasets as Dataset[])
         ),
@@ -204,6 +203,6 @@ export class SamplesEffects {
     private actions$: Actions,
     private store: Store<any>,
     private sampleApi: SampleApi,
-    private sampleService: SampleService
+    private datasetApi: DatasetApi
   ) {}
 }

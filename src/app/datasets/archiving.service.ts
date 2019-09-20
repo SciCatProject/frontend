@@ -8,16 +8,16 @@ import { Dataset, Job, User } from "state-management/models";
 import { SubmitAction } from "state-management/actions/jobs.actions";
 import {
   getCurrentUser,
-  getTapeCopies
+  getTapeCopies,
+  getProfile
 } from "state-management/selectors/users.selectors";
-import { LoginService } from "from ../../users/login.service";
 
 @Injectable()
 export class ArchivingService {
   private currentUser$ = this.store.pipe(select(getCurrentUser));
   private tapeCopies$ = this.store.pipe(select(getTapeCopies));
 
-  constructor(private store: Store<any>, private loginService: LoginService) {}
+  constructor(private store: Store<any>) {}
 
   public archive(datasets: Dataset[]): Observable<void> {
     return this.archiveOrRetrieve(datasets, true);
@@ -43,9 +43,8 @@ export class ArchivingService {
       ...extra
     };
 
-    const ident$ = this.loginService.getUserIdent$(user.id);
-    ident$.subscribe(usident => {
-      user.email = usident.profile.email;
+    this.store.pipe(select(getProfile)).subscribe(profile => {
+      user.email = profile.email;
     });
 
     const data = {
@@ -82,12 +81,7 @@ export class ArchivingService {
           throw new Error("No datasets selected");
         }
 
-        const job = this.createJob(
-          user,
-          datasets,
-          archive,
-          destPath,
-        );
+        const job = this.createJob(user, datasets, archive, destPath);
 
         this.store.dispatch(new SubmitAction(job));
       })

@@ -2,7 +2,6 @@ import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { PoliciesComponent } from "./policies/policies.component";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { PoliciesService } from "./policies.service";
 import { EditDialogComponent } from "./edit-dialog/edit-dialog.component";
 import {
   MatAutocompleteModule,
@@ -66,7 +65,7 @@ import { FlexLayoutModule } from "@angular/flex-layout";
     MatExpansionModule
   ],
   declarations: [PoliciesComponent, EditDialogComponent],
-  providers: [PoliciesService],
+  providers: [],
   exports: [PoliciesComponent],
   entryComponents: [EditDialogComponent]
 })

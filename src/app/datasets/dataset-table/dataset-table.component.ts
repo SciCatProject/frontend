@@ -92,14 +92,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     ArchViewMode.system_error,
     ArchViewMode.user_error
   ];
-  private modeLabels = [
-    ArchViewMode.all,
-    ArchViewMode.archivable,
-    ArchViewMode.retrievable,
-    ArchViewMode.work_in_progress,
-    ArchViewMode.system_error,
-    ArchViewMode.user_error
-  ];
+
   // compatibility analogs of observables
   private selectedSets: Dataset[] = [];
   private selectedSetsSubscription = this.selectedSets$.subscribe(

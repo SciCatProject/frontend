@@ -1,14 +1,16 @@
 import { Component, OnInit } from "@angular/core";
 import { select, Store } from "@ngrx/store";
-import { UserApi } from "shared/sdk/services";
 import {
   SaveSettingsAction,
-  ShowMessageAction
+  ShowMessageAction,
+  RetrieveUserAction
 } from "state-management/actions/user.actions";
 import * as selectors from "state-management/selectors";
 import { Message, MessageType } from "state-management/models";
-import { LoginService } from "users/login.service";
-import { getSettings } from "state-management/selectors/users.selectors";
+import {
+  getSettings,
+  getProfile
+} from "state-management/selectors/users.selectors";
 
 @Component({
   selector: "app-user-settings",
@@ -28,38 +30,31 @@ export class UserSettingsComponent implements OnInit {
   groups: string[];
   settings: Object;
 
-  constructor(
-    private us: UserApi,
-    private store: Store<any>,
-    private loginService: LoginService
-  ) {
+  constructor(private store: Store<any>) {
     this.store.select(selectors.users.getCurrentUser).subscribe(user => {
       this.user = user;
     });
-    console.log(this.us.getCurrentToken());
     this.settings$ = this.store.pipe(select(selectors.users.getSettings));
 
     // TODO handle service and endpoint for user settings
   }
 
   ngOnInit() {
-    this.store
-      .pipe(select(state => state.root.user.currentUser))
-      .subscribe(current => {
-        this.loginService.getUserIdent$(current.id).subscribe(currentIdent => {
-          this.email = currentIdent.profile.email;
-          this.displayName = currentIdent.profile.displayName;
-          this.groups = currentIdent.profile.accessGroups;
-          this.id = currentIdent.profile.id;
-          if (currentIdent.profile.thumbnailPhoto.startsWith("data")) {
-            this.profileImage = currentIdent.profile.thumbnailPhoto;
-          } else {
-            this.profileImage = "assets/images/user.png";
-          }
-          console.log(currentIdent.profile);
-          // console.log(this.profileImage);
-        });
-      });
+    this.store.dispatch(new RetrieveUserAction());
+
+    this.store.pipe(select(getProfile)).subscribe(profile => {
+      if (profile) {
+        this.email = profile.email;
+        this.displayName = profile.displayName;
+        this.groups = profile.accessGroups;
+        this.id = profile.id;
+        if (profile.thumbnailPhoto.startsWith("data")) {
+          this.profileImage = profile.thumbnailPhoto;
+        } else {
+          this.profileImage = "assets/images/user.png";
+        }
+      }
+    });
 
     this.store.pipe(select(getSettings)).subscribe(settings => {
       this.settings = settings;
@@ -67,7 +62,7 @@ export class UserSettingsComponent implements OnInit {
         this.datasetCount = settings.datasetCount;
       }
       if (settings.hasOwnProperty("jobCount")) {
-      this.jobCount = settings.jobCount;
+        this.jobCount = settings.jobCount;
       }
       console.log("settings", settings);
     });

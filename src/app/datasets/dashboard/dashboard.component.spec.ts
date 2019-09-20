@@ -12,7 +12,6 @@ import {
   MatTableModule,
   MatDialogModule
 } from "@angular/material";
-import { ParamsService } from "params.service";
 import {
   MockActivatedRoute,
   MockConfigService,
@@ -47,7 +46,6 @@ describe("DashboardComponent", () => {
         providers: [
           { provide: ActivatedRoute, useClass: MockActivatedRoute },
           { provide: Router, useClass: MockRouter },
-          { provide: ParamsService, useClass: MockParamsService },
           { provide: Store, useClass: MockStore },
           { provide: UserApi, useClass: MockUserApi },
           { provide: HttpClient, useClass: MockHttp },
