@@ -1,6 +1,5 @@
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import { PoliciesComponent } from "./policies/policies.component";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { PoliciesService } from "./policies.service";
 import { EditDialogComponent } from "./edit-dialog/edit-dialog.component";
@@ -66,13 +65,9 @@ import { FlexModule } from "@angular/flex-layout";
     MatExpansionModule,
     FlexModule
   ],
-  declarations: [
-    PoliciesComponent,
-    EditDialogComponent,
-    PoliciesDashboardComponent
-  ],
+  declarations: [EditDialogComponent, PoliciesDashboardComponent],
   providers: [PoliciesService],
-  exports: [PoliciesComponent],
+  exports: [],
   entryComponents: [EditDialogComponent]
 })
 export class PoliciesModule {}
