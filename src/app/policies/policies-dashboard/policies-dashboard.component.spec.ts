@@ -21,9 +21,11 @@ import {
   ChangePageAction,
   SortByColumnAction,
   SelectPolicyAction,
-  DeselectPolicyAction
+  DeselectPolicyAction,
+  SubmitPolicyAction,
+  ClearSelectionAction
 } from "state-management/actions/policies.actions";
-import { MatCheckbox, MatCheckboxChange } from "@angular/material";
+import { MatCheckboxChange } from "@angular/material";
 
 describe("PoliciesDashboardComponent", () => {
   let component: PoliciesDashboardComponent;
@@ -99,7 +101,7 @@ describe("PoliciesDashboardComponent", () => {
     });
   });
 
-  describe("#onSelectOne", () => {
+  describe("#onSelectOne()", () => {
     it("should dispatch a SelectPolicyAction if checked is true", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
@@ -133,11 +135,31 @@ describe("PoliciesDashboardComponent", () => {
     });
   });
 
-  describe("#openDialog", () => {
+  describe("#openDialog()", () => {
     xit("should...", () => {});
   });
 
-  describe("#onDialogClose", () => {
-    xit("should...", () => {});
+  describe("#onDialogClose()", () => {
+    it("should do nothing if there is no result", () => {
+      dispatchSpy = spyOn(store, "dispatch");
+
+      component.onDialogClose(null);
+
+      expect(dispatchSpy).toHaveBeenCalledTimes(0);
+    });
+
+    it("should dispatch a SubmitPolicyAction and a ClearSelectionAction if there is a result", () => {
+      dispatchSpy = spyOn(store, "dispatch");
+
+      const result = new Policy();
+      component.selectedGroups = ["test"];
+      component.onDialogClose(result);
+
+      expect(dispatchSpy).toHaveBeenCalledTimes(2);
+      expect(dispatchSpy).toHaveBeenCalledWith(
+        new SubmitPolicyAction(component.selectedGroups, result)
+      );
+      expect(dispatchSpy).toHaveBeenCalledWith(new ClearSelectionAction());
+    });
   });
 });
