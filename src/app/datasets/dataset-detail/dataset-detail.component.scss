@@ -1,5 +1,7 @@
-.dataset-detail .details {
-  padding: 1em;
+mat-card {
+  mat-icon {
+    vertical-align: middle;
+  }
 
   table {
     td {
@@ -10,39 +12,5 @@
       text-align: left;
       padding-right: 0.5em;
     }
-  }
-
-  h3 {
-    margin-top: 1em;
-  }
-
-  mat-card {
-    width: 20em;
-  }
-}
-
-.material-icons {
-  vertical-align: middle;
-}
-
-.file-uploader {
-  margin: 1em;
-}
-
-.attach-card {
-  width: 22em;
-  float: left;
-  margin: 1em;
-}
-
-@media only screen and (min-width: 1280px) {
-  app-file-picker {
-    display: none;
-  }
-}
-
-@media only screen and (max-width: 1279px) {
-  app-file-dropzone {
-    display: none;
   }
 }

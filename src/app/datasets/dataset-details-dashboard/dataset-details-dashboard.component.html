@@ -1,27 +1,21 @@
-<p>details-dashboard works!</p>
-<mat-tab-group *ngIf="dataset" class="dataset-detail">
+<mat-tab-group *ngIf="dataset">
   <mat-tab>
     <ng-template mat-tab-label>
-      <i class="material-icons"> details </i> Details
+      <mat-icon> details </mat-icon> Details
     </ng-template>
-    <div fxLayout="row" fxLayout.xs="column">
-      <div fxFlex="80%">
-        <dataset-detail></dataset-detail>
-      </div>
-      <div fxFlex="30%" *ngIf="attachments$ | async as attachments">
-        <ng-container *ngFor="let da of attachments">
-          <mat-card style="margin: 1em">
-            <img mat-card-image src="{{ da.thumbnail }}" />
-            <p>{{ da.caption }}</p>
-          </mat-card>
-        </ng-container>
-      </div>
-    </div>
+    <dataset-detail
+      [dataset]="dataset"
+      [datasetWithout]="datasetWithout$ | async"
+      [attachments]="attachments$ | async"
+      (clickKeyword)="onClickKeyword($event)"
+      (clickProposal)="onClickProposal($event)"
+      (clickSample)="onClickSample($event)"
+    ></dataset-detail>
   </mat-tab>
 
   <mat-tab>
     <ng-template mat-tab-label>
-      <i class="material-icons"> cloud_download </i> Datafiles
+      <mat-icon> cloud_download </mat-icon> Datafiles
     </ng-template>
     <mat-card style="margin: 1em">
       <datafiles
@@ -43,14 +37,14 @@
 
   <mat-tab *ngIf="appConfig.datasetReduceEnabled">
     <ng-template mat-tab-label>
-      <i class="material-icons"> tune </i> Reduce
+      <mat-icon> tune </mat-icon> Reduce
     </ng-template>
     <reduce></reduce>
   </mat-tab>
 
   <mat-tab *ngIf="attachments$ | async as attachments">
     <ng-template mat-tab-label>
-      <i class="material-icons"> insert_photo </i> Attachments
+      <mat-icon> insert_photo </mat-icon> Attachments
     </ng-template>
     <div class="file-uploader">
       <app-file-uploader
@@ -89,7 +83,7 @@
           <button
             mat-button
             style="float: right"
-            (click)="delete(dataset.pid, da.id)"
+            (click)="deleteAttachment(dataset.pid, da.id)"
           >
             <mat-icon>delete</mat-icon>
           </button>
@@ -99,14 +93,14 @@
   </mat-tab>
   <mat-tab *ngIf="appConfig.logbookEnabled">
     <ng-template mat-tab-label>
-      <i class="material-icons"> book </i> Logbook
+      <mat-icon> book </mat-icon> Logbook
     </ng-template>
     <app-logbooks-dashboard></app-logbooks-dashboard>
   </mat-tab>
 
   <mat-tab>
     <ng-template mat-tab-label>
-      <i class="material-icons"> loop </i> Lifecycle
+      <mat-icon> loop </mat-icon> Lifecycle
     </ng-template>
 
     <div fxFlex="80%">
@@ -117,19 +111,15 @@
         <div class="details">
           <table>
             <tr *ngIf="dataset.datasetlifecycle.dateOfPublishing as value">
-              <th>
-                <i class="material-icons"> radio </i> Data Publishing Date
-              </th>
+              <th><mat-icon> radio </mat-icon> Data Publishing Date</th>
               <td>{{ value | date: "yyyy-MM-dd" }}</td>
             </tr>
             <tr *ngIf="dataset.datasetlifecycle.dateOfDiskPurging as value">
-              <th><i class="material-icons"> gavel </i> Data Deletion Date</th>
+              <th><mat-icon> gavel </mat-icon> Data Deletion Date</th>
               <td>{{ value | date: "yyyy-MM-dd" }}</td>
             </tr>
             <tr *ngIf="dataset.datasetlifecycle.archiveRetentionTime as value">
-              <th>
-                <i class="material-icons"> save </i> Archive Retention Date
-              </th>
+              <th><mat-icon> save </mat-icon> Archive Retention Date</th>
               <td>{{ value | date: "yyyy-MM-dd" }}</td>
             </tr>
           </table>
@@ -139,7 +129,7 @@
   </mat-tab>
   <mat-tab *ngIf="isAdmin$ | async">
     <ng-template mat-tab-label>
-      <i class="material-icons"> settings </i> Admin
+      <mat-icon> settings </mat-icon> Admin
     </ng-template>
 
     <mat-card style="margin: 1em">

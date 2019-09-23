@@ -1,0 +1,30 @@
+mat-card {
+  mat-icon {
+    vertical-align: middle;
+  }
+
+  table {
+    td {
+      padding: 0.5em;
+    }
+
+    th {
+      text-align: left;
+      padding-right: 0.5em;
+    }
+  }
+}
+
+.datablocks-table {
+  margin-top: 5em;
+}
+
+.file-uploader {
+  margin: 1em;
+}
+
+.attach-card {
+  width: 22em;
+  float: left;
+  margin: 1em;
+}
