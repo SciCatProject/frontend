@@ -40,6 +40,10 @@ export class MockDatasetApi {
   findById() {
     return of([]);
   }
+
+  count(data?: any) {
+    return of(0);
+  }
 }
 
 export class MockAttachmentApi {}
