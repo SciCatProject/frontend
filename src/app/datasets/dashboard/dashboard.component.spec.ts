@@ -18,8 +18,7 @@ import {
   MockHttp,
   MockRouter,
   MockStore,
-  MockUserApi,
-  MockParamsService
+  MockUserApi
 } from "../../shared/MockStubs";
 import { DashboardComponent } from "./dashboard.component";
 
