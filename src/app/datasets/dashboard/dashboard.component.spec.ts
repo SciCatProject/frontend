@@ -12,15 +12,13 @@ import {
   MatTableModule,
   MatDialogModule
 } from "@angular/material";
-import { ParamsService } from "params.service";
 import {
   MockActivatedRoute,
   MockConfigService,
   MockHttp,
   MockRouter,
   MockStore,
-  MockUserApi,
-  MockParamsService
+  MockUserApi
 } from "../../shared/MockStubs";
 import { DashboardComponent } from "./dashboard.component";
 
@@ -47,7 +45,6 @@ describe("DashboardComponent", () => {
         providers: [
           { provide: ActivatedRoute, useClass: MockActivatedRoute },
           { provide: Router, useClass: MockRouter },
-          { provide: ParamsService, useClass: MockParamsService },
           { provide: Store, useClass: MockStore },
           { provide: UserApi, useClass: MockUserApi },
           { provide: HttpClient, useClass: MockHttp },

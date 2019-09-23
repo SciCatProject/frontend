@@ -3,7 +3,6 @@ import { Observable, of } from "rxjs";
 import { Actions, Effect, ofType } from "@ngrx/effects";
 import { Action, select, Store } from "@ngrx/store";
 import { PolicyApi } from "shared/sdk/services";
-import { PoliciesService } from "policies/policies.service";
 import {
   FETCH_POLICIES,
   FetchPoliciesAction,
@@ -39,8 +38,8 @@ export class PoliciesEffects {
     ofType(SUBMIT_POLICY),
     map((action: SubmitPolicyAction) => action),
     switchMap(action =>
-      this.policiesService
-        .updatePolicies(action.ownerList, action.policyAttributes)
+      this.policyApi
+        .updatewhere(action.ownerList.join(), action.policyAttributes)
         .pipe(
           mergeMap((data: any) => [
             new SubmitPolicyCompleteAction(data.submissionResponse),
@@ -60,8 +59,7 @@ export class PoliciesEffects {
     withLatestFrom(this.queryParams$),
     map(([action, params]) => params),
     switchMap(({ limits }) =>
-      this.policyApi.find(limits)
-      .pipe(
+      this.policyApi.find(limits).pipe(
         mergeMap(policies => [
           new FetchPoliciesCompleteAction(policies as Policy[]),
           new FetchEditablePolicies()
@@ -74,9 +72,12 @@ export class PoliciesEffects {
   @Effect()
   FetchCountPolicies$ = this.actions$.pipe(
     ofType(FETCH_POLICIES),
-    switchMap(action => this.policyApi.count()
-    .pipe(map(({ count }) => new FetchCountPolicies(count)),
-    catchError(err => of(new FailedPoliciesAction(err)))))
+    switchMap(action =>
+      this.policyApi.count().pipe(
+        map(({ count }) => new FetchCountPolicies(count)),
+        catchError(err => of(new FailedPoliciesAction(err)))
+      )
+    )
   );
 
   @Effect({ dispatch: false })
@@ -96,22 +97,19 @@ export class PoliciesEffects {
         // allow functional users
         return new FetchEditablePoliciesComplete(allPolicies);
       }
-      const email = profile.email;
+      const email = profile.email.toLowerCase();
       allPolicies.forEach(pol => {
         if (pol.manager.indexOf(email) !== -1) {
           editablePolicies.push(pol);
         }
       });
       return new FetchEditablePoliciesComplete(editablePolicies);
-    }));
-
-
-
+    })
+  );
 
   constructor(
     private actions$: Actions,
     private store: Store<any>,
-    private policyApi: PolicyApi,
-    private policiesService: PoliciesService
+    private policyApi: PolicyApi
   ) {}
 }

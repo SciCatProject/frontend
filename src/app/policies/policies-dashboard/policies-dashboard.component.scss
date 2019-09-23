@@ -1,0 +1,17 @@
+:host ::ng-deep app-table.readable {
+  mat-cell:first-child {
+    display: block;
+    min-height: auto;
+    word-wrap: break-word;
+    white-space: normal;
+  }
+}
+
+:host ::ng-deep app-table.editable {
+  mat-cell:nth-child(2) {
+    display: block;
+    min-height: auto;
+    word-wrap: break-word;
+    white-space: normal;
+  }
+}

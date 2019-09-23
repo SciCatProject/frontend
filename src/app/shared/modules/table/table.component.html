@@ -67,8 +67,29 @@
 
   <mat-card class="smallData">
     <mat-list>
+      <ng-template [ngIf]="select">
+        <mat-list-item>
+          <mat-checkbox
+            [checked]="selection.hasValue() && isAllSelected()"
+            [indeterminate]="selection.hasValue() && !isAllSelected()"
+            (change)="$event ? onSelectAll($event) : null"
+          >
+          </mat-checkbox>
+
+          <p mat-line></p>
+          <mat-divider></mat-divider>
+        </mat-list-item>
+      </ng-template>
       <ng-template ngFor let-entry [ngForOf]="data" let-last="last">
         <mat-list-item (click)="onRowClick(entry)">
+          <ng-template [ngIf]="select">
+            <mat-checkbox
+              [checked]="selection.isSelected(entry)"
+              (change)="$event ? onSelectOne($event, entry) : null"
+              (click)="$event.stopPropagation()"
+            >
+            </mat-checkbox>
+          </ng-template>
           <p mat-line class="title">{{ entry[listItems[0]] }}</p>
           <p mat-line *ngFor="let item of listItems; let first = first">
             <span *ngIf="!first">

@@ -1,9 +1,13 @@
 import { ActivatedRoute, Router } from "@angular/router";
 import { HttpClient } from "@angular/common/http";
 import { MatCardModule } from "@angular/material";
-import { MockActivatedRoute, MockHttp, MockRouter, MockSampleService, MockStore } from "../../shared/MockStubs";
+import {
+  MockActivatedRoute,
+  MockHttp,
+  MockRouter,
+  MockStore
+} from "../../shared/MockStubs";
 import { SampleDetailComponent } from "./sample-detail.component";
-import { SampleService } from "../../samples/sample.service";
 import { Store } from "@ngrx/store";
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 import { NgxJsonViewerModule } from "ngx-json-viewer";
@@ -23,7 +27,6 @@ describe("SampleDetailComponent", () => {
           { provide: HttpClient, useClass: MockHttp },
           { provide: Router, useClass: MockRouter },
           { provide: ActivatedRoute, useClass: MockActivatedRoute },
-          { provide: SampleService, useClass: MockSampleService },
           { provide: Store, useClass: MockStore }
         ]
       }

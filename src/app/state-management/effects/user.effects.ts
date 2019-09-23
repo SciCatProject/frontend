@@ -56,8 +56,8 @@ export class UserEffects {
   @Effect()
   protected $logout = this.action$.pipe(
     ofType(UserActions.LOGOUT),
-    filter(() => this.userSrv.isAuthenticated()),
-    switchMap(() => this.userSrv.logout()),
+    filter(() => this.userApi.isAuthenticated()),
+    switchMap(() => this.userApi.logout()),
     map(() => new UserActions.LogoutCompleteAction())
   );
 
@@ -89,14 +89,14 @@ export class UserEffects {
   protected retrieveUser$: Observable<Action> = this.action$.pipe(
     ofType(UserActions.RETRIEVE_USER),
     switchMap(() => {
-      if (!this.userSrv.isAuthenticated()) {
+      if (!this.userApi.isAuthenticated()) {
         return of(
           new UserActions.RetrieveUserFailedAction(
             new Error("No user is logged in")
           )
         );
       }
-      return this.userSrv.getCurrent().pipe(
+      return this.userApi.getCurrent().pipe(
         map(res => new UserActions.RetrieveUserCompleteAction(res)),
         catchError(err => of(new UserActions.RetrieveUserFailedAction(err)))
       );
@@ -116,19 +116,20 @@ export class UserEffects {
     switchMap((action: UserActions.RetrieveUserIdentAction) =>
       this.loginSrv.getUserIdent$(action.id)
     ),
-    map(res =>
-      res
-        ? new UserActions.RetrieveUserIdentCompleteAction(res)
-        : new UserActions.RetrieveUserIdentFailedAction(
-            new Error("Failed to load user identity")
-          )
+    map(res => new UserActions.RetrieveUserIdentCompleteAction(res)),
+    catchError(err =>
+      of(
+        new UserActions.RetrieveUserFailedAction(
+          new Error("Failed to load user identity")
+        )
+      )
     )
   );
 
   constructor(
     private action$: Actions,
     private router: Router,
-    private userSrv: UserApi,
-    private loginSrv: LoginService,
+    private userApi: UserApi,
+    private loginSrv: LoginService
   ) {}
 }

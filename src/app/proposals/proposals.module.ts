@@ -14,40 +14,31 @@ import { proposalsReducer } from "../state-management/reducers/proposals.reducer
 import { ProposalsEffects } from "../state-management/effects/proposals.effects";
 
 import {
-  MatListModule,
   MatTableModule,
   MatTooltipModule,
   MatTabsModule,
   MatCardModule,
   MatIconModule,
   MatPaginatorModule,
-  MatFormFieldModule,
-  MatInputModule,
   MatSortModule
 } from "@angular/material";
 import { SharedCatanieModule } from "../shared/shared.module";
 import { ProposalDashboardComponent } from "./proposal-dashboard/proposal-dashboard.component";
 import { FlexLayoutModule } from "@angular/flex-layout";
-import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 
 @NgModule({
   imports: [
     CommonModule,
     EffectsModule.forFeature([ProposalsEffects]),
     FlexLayoutModule,
-    FormsModule,
     MatCardModule,
-    MatFormFieldModule,
     MatIconModule,
-    MatInputModule,
-    MatListModule,
     MatPaginatorModule,
     MatSortModule,
     MatTableModule,
     MatTabsModule,
     MatTooltipModule,
     NgxJsonViewerModule,
-    ReactiveFormsModule,
     RouterModule,
     SharedCatanieModule,
     StoreModule.forFeature("proposals", proposalsReducer)

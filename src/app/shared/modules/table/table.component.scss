@@ -18,6 +18,10 @@
 
     mat-header-cell {
       color: white;
+
+      ::ng-deep .mat-checkbox .mat-checkbox-frame {
+        border-color: white;
+      }
     }
 
     mat-header-cell:first-child {

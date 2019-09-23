@@ -48,6 +48,11 @@ export const getTotalCount = createSelector(
   state => state.totalCount
 );
 
+export const getEditableCount = createSelector(
+  getPolicyState,
+  state => state.editableCount
+)
+
 export const getFilters = createSelector(
   getPolicyState,
   state => state.filters
