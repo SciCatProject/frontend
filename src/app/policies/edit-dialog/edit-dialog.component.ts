@@ -4,7 +4,7 @@ import {
   MatDialogRef,
   MatChipInputEvent
 } from "@angular/material";
-import { FormBuilder, FormControl, FormGroup } from "@angular/forms";
+import { FormControl, FormGroup } from "@angular/forms";
 import { COMMA, ENTER } from "@angular/cdk/keycodes";
 
 @Component({
@@ -21,7 +21,6 @@ export class EditDialogComponent implements /*OnChanges,*/ OnInit {
   form: FormGroup;
 
   constructor(
-    private fb: FormBuilder,
     private dialogRef: MatDialogRef<EditDialogComponent>,
     @Inject(MAT_DIALOG_DATA) data
   ) {

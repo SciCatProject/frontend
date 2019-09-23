@@ -1,21 +1,18 @@
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { PoliciesService } from "./policies.service";
 import { EditDialogComponent } from "./edit-dialog/edit-dialog.component";
 import {
   MatAutocompleteModule,
   MatButtonModule,
   MatCardModule,
   MatCheckboxModule,
-  // MatDatepickerModule,
   MatDialogModule,
   MatIconModule,
   MatInputModule,
   MatListModule,
   MatNativeDateModule,
   MatPaginatorModule,
-  MatProgressSpinnerModule,
   MatSelectModule,
   MatSortModule,
   MatTableModule,
@@ -24,11 +21,9 @@ import {
   MatFormFieldModule,
   MatOptionModule,
   MatChipsModule,
-  MatExpansionModule,
-  MatButtonToggleModule
+  MatExpansionModule
 } from "@angular/material";
 import { SharedCatanieModule } from "shared/shared.module";
-
 import { StoreModule } from "@ngrx/store";
 import { policiesReducer } from "state-management/reducers/policies.reducer";
 import { PoliciesDashboardComponent } from "./policies-dashboard/policies-dashboard.component";
@@ -37,18 +32,26 @@ import { FlexModule } from "@angular/flex-layout";
 @NgModule({
   imports: [
     CommonModule,
-    MatCardModule,
-    MatPaginatorModule,
-    MatCheckboxModule,
-    MatTableModule,
-    MatFormFieldModule,
-    MatAutocompleteModule,
-    MatTabsModule,
-    MatInputModule,
-    MatButtonModule,
-    MatSortModule,
-    CommonModule,
     FormsModule,
+    MatAutocompleteModule,
+    MatButtonModule,
+    MatCardModule,
+    MatCheckboxModule,
+    MatChipsModule,
+    MatDialogModule,
+    MatExpansionModule,
+    MatFormFieldModule,
+    MatIconModule,
+    MatInputModule,
+    MatListModule,
+    MatNativeDateModule,
+    MatOptionModule,
+    MatPaginatorModule,
+    MatSelectModule,
+    MatSortModule,
+    MatTableModule,
+    MatTabsModule,
+    MatTooltipModule,
     ReactiveFormsModule,
     SharedCatanieModule,
     MatSelectModule,
@@ -57,8 +60,6 @@ import { FlexModule } from "@angular/flex-layout";
     MatIconModule,
     MatListModule,
     MatTooltipModule,
-    MatButtonToggleModule,
-    MatProgressSpinnerModule,
     MatChipsModule,
     StoreModule.forFeature("policies", policiesReducer),
     MatDialogModule,
@@ -66,7 +67,6 @@ import { FlexModule } from "@angular/flex-layout";
     FlexModule
   ],
   declarations: [EditDialogComponent, PoliciesDashboardComponent],
-  providers: [PoliciesService],
   exports: [],
   entryComponents: [EditDialogComponent]
 })

@@ -2,17 +2,14 @@ import { AppComponent } from "./app.component";
 import { AppConfigModule } from "app-config.module";
 import { AppRoutingModule, routes } from "app-routing/app-routing.module";
 import { RedirectGuard } from "app-routing/redirect-guard";
-import { ArchivingService } from "datasets/archiving.service";
 import { AuthCheck } from "./AuthCheck";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { BrowserModule, Title } from "@angular/platform-browser";
 import { DatasetEffects } from "state-management/effects/datasets.effects";
-import { DatasetService } from "datasets/dataset.service";
 import { DatasetsModule } from "datasets/datasets.module";
 import { EffectsModule } from "@ngrx/effects";
 import { FlexLayoutModule } from "@angular/flex-layout";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
-import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { HttpClientModule } from "@angular/common/http";
 import { JobsEffects } from "state-management/effects/jobs.effects";
 import { NgModule } from "@angular/core";
@@ -37,22 +34,11 @@ import { routerReducer } from "@ngrx/router-store";
 import { LoginService } from "users/login.service";
 
 import {
-  MatCardModule,
-  MatDatepickerModule,
-  MatDialogModule,
-  MatGridListModule,
-  MatIconModule,
-  MatListModule,
   MatMenuModule,
   MatNativeDateModule,
-  MatPaginatorModule,
-  MatSidenavModule,
   MatSnackBarModule,
-  MatTableModule,
-  MatToolbarModule,
-  MatButtonToggleModule
+  MatToolbarModule
 } from "@angular/material";
-import { SampleService } from "./samples/sample.service";
 import { SamplesEffects } from "./state-management/effects/samples.effects";
 import { ServiceWorkerModule } from "@angular/service-worker";
 import { environment } from "../environments/environment";
@@ -88,38 +74,24 @@ export function localStorageSyncWrapper(reducer: any) {
     DatasetsModule,
     FlexLayoutModule,
     FontAwesomeModule,
-    FormsModule,
     HelpModule,
     HttpClientModule,
     JobsModule,
-    MatCardModule,
-    MatDatepickerModule,
-    MatDialogModule,
-    MatGridListModule,
-    MatIconModule,
-    MatListModule,
+    LogbooksModule,
     MatMenuModule,
-    MatNativeDateModule,
-    MatPaginatorModule,
-    MatSidenavModule,
     MatSnackBarModule,
-    MatTableModule,
     MatToolbarModule,
     NguiDatetimePickerModule,
     PoliciesModule,
     ProposalsModule,
     PublisheddataModule,
-    ReactiveFormsModule,
     SamplesModule,
     SatDatepickerModule,
     SatNativeDateModule,
     SharedCatanieModule,
     UsersModule,
-    MatButtonToggleModule,
-    LogbooksModule,
 
     SDKBrowserModule.forRoot(),
-    // StoreModule.forRoot({router: routerReducer, root: rootReducer}, {metaReducers: [localStorageSyncWrapper]}),
     StoreModule.forRoot(
       { router: routerReducer, root: rootReducer },
       {
@@ -151,9 +123,6 @@ export function localStorageSyncWrapper(reducer: any) {
   exports: [MatNativeDateModule],
   providers: [
     AuthCheck,
-    DatasetService,
-    ArchivingService,
-    SampleService,
     UserApi,
     SampleApi,
     Title,

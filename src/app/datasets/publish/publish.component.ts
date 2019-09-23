@@ -61,7 +61,7 @@ export class PublishComponent implements OnInit {
     private actionsSubj: ActionsSubject,
     private router: Router,
   ) {
-    this.subsc = actionsSubj.subscribe(data => {
+    this.subsc = this.actionsSubj.subscribe(data => {
       if (data.type === PublishedDataActionTypes.AddPublishedData) {
         this.store.dispatch(
           new ShowMessageAction({

@@ -2,20 +2,16 @@ import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { LogbooksTableComponent } from "./logbooks-table/logbooks-table.component";
 import { LogbooksDetailComponent } from "./logbooks-detail/logbooks-detail.component";
-import { LogbookService } from "./logbook.service";
 import {
   MatCardModule,
   MatIconModule,
-  MatListModule,
   MatTableModule,
   MatCheckboxModule,
-  MatInputModule,
-  MatSelectModule,
-  MatExpansionModule
+  MatExpansionModule,
+  MatDividerModule
 } from "@angular/material";
 import { AppConfigModule } from "app-config.module";
 import { FlexLayoutModule } from "@angular/flex-layout";
-import { FormsModule } from "@angular/forms";
 import { LinkyModule } from "ngx-linky";
 import { RouterModule } from "@angular/router";
 import { SharedCatanieModule } from "shared/shared.module";
@@ -37,22 +33,19 @@ import { StoreModule } from "@ngrx/store";
     AppConfigModule,
     CommonModule,
     FlexLayoutModule,
-    FormsModule,
     LinkyModule,
     MatCardModule,
     MatCheckboxModule,
+    MatDividerModule,
     MatExpansionModule,
     MatIconModule,
-    MatInputModule,
-    MatListModule,
-    MatSelectModule,
     MatTableModule,
     RouterModule,
     SharedCatanieModule,
     StoreModule.forFeature("logbooks", logbooksReducer),
     EffectsModule.forFeature([LogbookEffect])
   ],
-  providers: [LogbookService],
+  providers: [],
   exports: [
     LogbooksTableComponent,
     LogbooksDetailComponent,
