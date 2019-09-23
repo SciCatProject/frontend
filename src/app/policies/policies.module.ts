@@ -8,27 +8,23 @@ import {
   MatButtonModule,
   MatCardModule,
   MatCheckboxModule,
-  // MatDatepickerModule,
   MatDialogModule,
   MatIconModule,
   MatInputModule,
   MatListModule,
   MatNativeDateModule,
   MatPaginatorModule,
-  MatProgressSpinnerModule,
   MatSelectModule,
   MatSortModule,
   MatTableModule,
   MatTabsModule,
   MatTooltipModule,
   MatFormFieldModule,
-  MatOptionModule
+  MatOptionModule,
+  MatExpansionModule,
+  MatChipsModule
 } from "@angular/material";
-import { MatExpansionModule } from "@angular/material/expansion";
-import { MatButtonToggleModule } from "@angular/material/button-toggle";
-import { MatChipsModule } from "@angular/material/chips";
 import { SharedCatanieModule } from "shared/shared.module";
-
 import { StoreModule } from "@ngrx/store";
 import { policiesReducer } from "state-management/reducers/policies.reducer";
 import { FlexLayoutModule } from "@angular/flex-layout";
@@ -36,33 +32,30 @@ import { FlexLayoutModule } from "@angular/flex-layout";
 @NgModule({
   imports: [
     CommonModule,
-    MatCardModule,
-    MatPaginatorModule,
-    MatCheckboxModule,
-    MatTableModule,
-    MatFormFieldModule,
-    MatAutocompleteModule,
-    MatTabsModule,
-    MatInputModule,
-    MatButtonModule,
-    MatSortModule,
-    CommonModule,
+    FlexLayoutModule,
     FormsModule,
+    MatAutocompleteModule,
+    MatButtonModule,
+    MatCardModule,
+    MatCheckboxModule,
+    MatChipsModule,
+    MatDialogModule,
+    MatExpansionModule,
+    MatFormFieldModule,
+    MatIconModule,
+    MatInputModule,
+    MatListModule,
+    MatNativeDateModule,
+    MatOptionModule,
+    MatPaginatorModule,
+    MatSelectModule,
+    MatSortModule,
+    MatTableModule,
+    MatTabsModule,
+    MatTooltipModule,
     ReactiveFormsModule,
     SharedCatanieModule,
-    MatSelectModule,
-    MatOptionModule,
-    MatNativeDateModule,
-    MatIconModule,
-    MatListModule,
-    MatTooltipModule,
-    MatButtonToggleModule,
-    MatProgressSpinnerModule,
-    MatChipsModule,
-    StoreModule.forFeature("policies", policiesReducer),
-    MatDialogModule,
-    FlexLayoutModule,
-    MatExpansionModule
+    StoreModule.forFeature("policies", policiesReducer)
   ],
   declarations: [PoliciesComponent, EditDialogComponent],
   providers: [],

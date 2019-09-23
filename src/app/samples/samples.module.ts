@@ -4,10 +4,7 @@ import {
   MatDialogModule,
   MatFormFieldModule,
   MatIconModule,
-  MatTableModule,
   MatInputModule,
-  MatSortModule,
-  MatPaginatorModule,
   MatButtonModule
 } from "@angular/material";
 import { NgModule } from "@angular/core";
@@ -34,9 +31,6 @@ import { TableModule } from "shared/modules/table/table.module";
     MatFormFieldModule,
     MatInputModule,
     MatDialogModule,
-    MatSortModule,
-    MatPaginatorModule,
-    MatTableModule,
     NgxJsonViewerModule,
     ReactiveFormsModule,
     SearchBarModule,
