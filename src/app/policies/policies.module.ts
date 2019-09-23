@@ -1,6 +1,5 @@
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import { PoliciesComponent } from "./policies/policies.component";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { PoliciesService } from "./policies.service";
 import { EditDialogComponent } from "./edit-dialog/edit-dialog.component";
@@ -23,16 +22,17 @@ import {
   MatTabsModule,
   MatTooltipModule,
   MatFormFieldModule,
-  MatOptionModule
+  MatOptionModule,
+  MatChipsModule,
+  MatExpansionModule,
+  MatButtonToggleModule
 } from "@angular/material";
-import { MatExpansionModule } from "@angular/material/expansion";
-import { MatButtonToggleModule } from "@angular/material/button-toggle";
-import { MatChipsModule } from "@angular/material/chips";
 import { SharedCatanieModule } from "shared/shared.module";
 
 import { StoreModule } from "@ngrx/store";
 import { policiesReducer } from "state-management/reducers/policies.reducer";
-import { FlexLayoutModule } from "@angular/flex-layout";
+import { PoliciesDashboardComponent } from "./policies-dashboard/policies-dashboard.component";
+import { FlexModule } from "@angular/flex-layout";
 
 @NgModule({
   imports: [
@@ -62,12 +62,12 @@ import { FlexLayoutModule } from "@angular/flex-layout";
     MatChipsModule,
     StoreModule.forFeature("policies", policiesReducer),
     MatDialogModule,
-    FlexLayoutModule,
-    MatExpansionModule
+    MatExpansionModule,
+    FlexModule
   ],
-  declarations: [PoliciesComponent, EditDialogComponent],
+  declarations: [EditDialogComponent, PoliciesDashboardComponent],
   providers: [PoliciesService],
-  exports: [PoliciesComponent],
+  exports: [],
   entryComponents: [EditDialogComponent]
 })
 export class PoliciesModule {}
