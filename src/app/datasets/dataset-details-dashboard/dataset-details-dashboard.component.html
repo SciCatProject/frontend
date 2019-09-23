@@ -1,0 +1,160 @@
+<p>details-dashboard works!</p>
+<mat-tab-group *ngIf="dataset" class="dataset-detail">
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <i class="material-icons"> details </i> Details
+    </ng-template>
+    <div fxLayout="row" fxLayout.xs="column">
+      <div fxFlex="80%">
+        <dataset-detail></dataset-detail>
+      </div>
+      <div fxFlex="30%" *ngIf="attachments$ | async as attachments">
+        <ng-container *ngFor="let da of attachments">
+          <mat-card style="margin: 1em">
+            <img mat-card-image src="{{ da.thumbnail }}" />
+            <p>{{ da.caption }}</p>
+          </mat-card>
+        </ng-container>
+      </div>
+    </div>
+  </mat-tab>
+
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <i class="material-icons"> cloud_download </i> Datafiles
+    </ng-template>
+    <mat-card style="margin: 1em">
+      <datafiles
+        [datablocks]="origDatablocks$ | async"
+        [dataset]="dataset"
+        [jwt]="jwt$ | async"
+      ></datafiles>
+      <div class="datablocks-table">
+        <h4>Original Datablocks</h4>
+        <datablocks-table
+          [datablocks]="origDatablocks$ | async"
+        ></datablocks-table>
+      </div>
+      <div *ngIf="(origDatablocks$ | async).length === 0">
+        <h3>No datafiles linked to this dataset</h3>
+      </div>
+    </mat-card>
+  </mat-tab>
+
+  <mat-tab *ngIf="appConfig.datasetReduceEnabled">
+    <ng-template mat-tab-label>
+      <i class="material-icons"> tune </i> Reduce
+    </ng-template>
+    <reduce></reduce>
+  </mat-tab>
+
+  <mat-tab *ngIf="attachments$ | async as attachments">
+    <ng-template mat-tab-label>
+      <i class="material-icons"> insert_photo </i> Attachments
+    </ng-template>
+    <div class="file-uploader">
+      <app-file-uploader
+        (filePicked)="onFileUploaderFilePicked($event)"
+        (readEnd)="onFileUploaderReadEnd($event)"
+      ></app-file-uploader>
+    </div>
+    <ng-container
+      *ngFor="let da of attachments; let i = index"
+      [attr.data-index]="i"
+    >
+      <mat-card class="attach-card">
+        <img src="{{ da.thumbnail }}" style="width: 20em; height: 20em" />
+        <mat-card-actions>
+          <form
+            (submit)="updateCaption(dataset.pid, da.id, caption.value)"
+            action="#"
+          >
+            <mat-form-field>
+              <input
+                matInput
+                id="caption"
+                placeholder="Edit caption"
+                value="{{ da.caption }}"
+                #caption
+              />
+            </mat-form-field>
+            <button
+              mat-button
+              type="submit"
+              style="margin-top: 0.5em; float: right;"
+            >
+              Submit
+            </button>
+          </form>
+          <button
+            mat-button
+            style="float: right"
+            (click)="delete(dataset.pid, da.id)"
+          >
+            <mat-icon>delete</mat-icon>
+          </button>
+        </mat-card-actions>
+      </mat-card>
+    </ng-container>
+  </mat-tab>
+  <mat-tab *ngIf="appConfig.logbookEnabled">
+    <ng-template mat-tab-label>
+      <i class="material-icons"> book </i> Logbook
+    </ng-template>
+    <app-logbooks-dashboard></app-logbooks-dashboard>
+  </mat-tab>
+
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <i class="material-icons"> loop </i> Lifecycle
+    </ng-template>
+
+    <div fxFlex="80%">
+      <mat-card style="margin: 1em">
+        <mat-card-header style="background:#7de1ff;">
+          Lifecycle
+        </mat-card-header>
+        <div class="details">
+          <table>
+            <tr *ngIf="dataset.datasetlifecycle.dateOfPublishing as value">
+              <th>
+                <i class="material-icons"> radio </i> Data Publishing Date
+              </th>
+              <td>{{ value | date: "yyyy-MM-dd" }}</td>
+            </tr>
+            <tr *ngIf="dataset.datasetlifecycle.dateOfDiskPurging as value">
+              <th><i class="material-icons"> gavel </i> Data Deletion Date</th>
+              <td>{{ value | date: "yyyy-MM-dd" }}</td>
+            </tr>
+            <tr *ngIf="dataset.datasetlifecycle.archiveRetentionTime as value">
+              <th>
+                <i class="material-icons"> save </i> Archive Retention Date
+              </th>
+              <td>{{ value | date: "yyyy-MM-dd" }}</td>
+            </tr>
+          </table>
+        </div>
+      </mat-card>
+    </div>
+  </mat-tab>
+  <mat-tab *ngIf="isAdmin$ | async">
+    <ng-template mat-tab-label>
+      <i class="material-icons"> settings </i> Admin
+    </ng-template>
+
+    <mat-card style="margin: 1em">
+      <button (click)="resetDataset(dataset)" class="ui yellow button">
+        Reset Status
+      </button>
+      <ng-container *ngIf="datablocks$ | async as datablocks">
+        <h3>Datablocks: {{ datablocks.length }}</h3>
+        <ul *ngFor="let block of datablocks">
+          <li>{{ block.id }}</li>
+          <ul>
+            <li>{{ block.archiveId }}</li>
+          </ul>
+        </ul>
+      </ng-container>
+    </mat-card>
+  </mat-tab>
+</mat-tab-group>

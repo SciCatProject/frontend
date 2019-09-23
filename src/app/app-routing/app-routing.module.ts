@@ -38,6 +38,7 @@ import { ProposalDashboardComponent } from "proposals/proposal-dashboard/proposa
 import { SampleDashboardComponent } from "samples/sample-dashboard/sample-dashboard.component";
 import { LoginLayoutComponent } from "_layout/login-layout/login-layout.component";
 import { AppLayoutComponent } from "_layout/app-layout/app-layout.component";
+import { DatasetDetailsDashboardComponent } from "datasets/dataset-details-dashboard/dataset-details-dashboard.component";
 
 export const routes: Routes = [
   {
@@ -86,7 +87,7 @@ export const routes: Routes = [
       },
       {
         path: "datasets/:id",
-        component: DatasetDetailComponent,
+        component: DatasetDetailsDashboardComponent,
         canActivate: [AuthCheck]
       },
       {
