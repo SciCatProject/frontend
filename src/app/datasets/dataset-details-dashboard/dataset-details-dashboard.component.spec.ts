@@ -19,8 +19,6 @@ import { Dataset, UserApi } from "shared/sdk";
 import { ReadFile, ReadMode } from "ngx-file-helpers";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { AppConfigModule, APP_CONFIG } from "app-config.module";
-import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { MatTableModule } from "@angular/material";
 import { SharedCatanieModule } from "shared/shared.module";
 import { rootReducer } from "state-management/reducers/root.reducer";
 import { Router, ActivatedRoute } from "@angular/router";

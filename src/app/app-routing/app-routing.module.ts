@@ -4,7 +4,7 @@ import { RouterModule, Routes } from "@angular/router";
 import { DashboardComponent } from "../datasets/dashboard/dashboard.component";
 import { DatafilesComponent } from "../datasets/datafiles/datafiles.component";
 import { DatablocksComponent } from "../datasets/datablocks-table/datablocks-table.component";
-import { DatasetDetailComponent } from "../datasets/dataset-detail/dataset-detail.component";
+import { DatasetDetailsDashboardComponent } from "datasets/dataset-details-dashboard/dataset-details-dashboard.component";
 
 import { JobsDashboardComponent } from "jobs/jobs-dashboard/jobs-dashboard.component";
 import { JobsDetailComponent } from "../jobs/jobs-detail/jobs-detail.component";
@@ -36,7 +36,6 @@ import { ProposalDashboardComponent } from "proposals/proposal-dashboard/proposa
 import { SampleDashboardComponent } from "samples/sample-dashboard/sample-dashboard.component";
 import { LoginLayoutComponent } from "_layout/login-layout/login-layout.component";
 import { AppLayoutComponent } from "_layout/app-layout/app-layout.component";
-import { DatasetDetailsDashboardComponent } from "datasets/dataset-details-dashboard/dataset-details-dashboard.component";
 import { PoliciesDashboardComponent } from "policies/policies-dashboard/policies-dashboard.component";
 
 export const routes: Routes = [
