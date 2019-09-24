@@ -1,14 +1,14 @@
 import { NgxJsonViewerModule } from "ngx-json-viewer";
 import { NgModule } from "@angular/core";
-import { CommonModule, DatePipe } from "@angular/common";
+import { CommonModule, DatePipe, SlicePipe } from "@angular/common";
 import { RouterModule } from "@angular/router";
 
 import { StoreModule } from "@ngrx/store";
 import { EffectsModule } from "@ngrx/effects";
 
-import { ProposalDetailComponent } from "./components/proposal-detail/proposal-detail.component";
+import { ProposalDetailComponent } from "./proposal-detail/proposal-detail.component";
 
-import { ViewProposalPageComponent } from "./containers/view-proposal-page/view-proposal-page.component";
+import { ViewProposalPageComponent } from "./view-proposal-page/view-proposal-page.component";
 
 import { proposalsReducer } from "../state-management/reducers/proposals.reducer";
 import { ProposalsEffects } from "../state-management/effects/proposals.effects";
@@ -20,17 +20,20 @@ import {
   MatCardModule,
   MatIconModule,
   MatPaginatorModule,
-  MatSortModule
+  MatSortModule,
+  MatButtonModule
 } from "@angular/material";
 import { SharedCatanieModule } from "../shared/shared.module";
 import { ProposalDashboardComponent } from "./proposal-dashboard/proposal-dashboard.component";
 import { FlexLayoutModule } from "@angular/flex-layout";
+import { FileSizePipe } from "shared/pipes/filesize.pipe";
 
 @NgModule({
   imports: [
     CommonModule,
     EffectsModule.forFeature([ProposalsEffects]),
     FlexLayoutModule,
+    MatButtonModule,
     MatCardModule,
     MatIconModule,
     MatPaginatorModule,
@@ -49,6 +52,6 @@ import { FlexLayoutModule } from "@angular/flex-layout";
     ProposalDashboardComponent
   ],
   exports: [],
-  providers: [DatePipe]
+  providers: [DatePipe, FileSizePipe, SlicePipe]
 })
 export class ProposalsModule {}

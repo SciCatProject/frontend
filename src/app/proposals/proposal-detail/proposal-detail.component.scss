@@ -1,0 +1,23 @@
+.tab-content {
+  padding: 1.5em;
+
+  .mat-card-header {
+    background-color: #7de1ff;
+  }
+
+  mat-icon {
+    vertical-align: middle;
+    color: black;
+  }
+
+  td,
+  th {
+    padding: 0.5em;
+  }
+
+  th {
+    text-align: left;
+    vertical-align: top;
+    min-width: 15em;
+  }
+}
