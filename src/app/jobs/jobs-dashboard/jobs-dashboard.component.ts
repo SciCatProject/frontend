@@ -18,8 +18,10 @@ import {
   SortUpdateAction,
   CurrentJobAction
 } from "state-management/actions/jobs.actions";
-import { getCurrentUser } from "state-management/selectors/users.selectors";
-import { LoginService } from "users/login.service";
+import {
+  getCurrentUser,
+  getProfile
+} from "state-management/selectors/users.selectors";
 
 @Component({
   selector: "app-jobs-dashboard",
@@ -29,7 +31,6 @@ import { LoginService } from "users/login.service";
 export class JobsDashboardComponent implements OnInit, OnDestroy {
   constructor(
     private datePipe: DatePipe,
-    private loginService: LoginService,
     private router: Router,
     private store: Store<Job>
   ) {}
@@ -139,15 +140,13 @@ export class JobsDashboardComponent implements OnInit, OnDestroy {
           this.email = current.email;
 
           if (!current.realm) {
-            this.loginService
-              .getUserIdent$(current.id)
-              .subscribe(currentIdent => {
-                if (currentIdent && currentIdent.profile) {
-                  this.profile = currentIdent.profile;
-                  this.email = this.profile.email;
-                }
-                this.onModeChange(null, JobViewMode.myJobs);
-              });
+            this.store.pipe(select(getProfile)).subscribe(profile => {
+              if (profile) {
+                this.profile = profile;
+                this.email = profile.email;
+              }
+              this.onModeChange(null, JobViewMode.myJobs);
+            });
           } else {
             this.onModeChange(null, JobViewMode.myJobs);
           }

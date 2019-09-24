@@ -115,5 +115,5 @@ export const getTheme = (state: any) => state.root.user.settings.darkTheme;
 
 export const getProfile = createSelector(
   getUserState,
-  user => (user.profile ? user.profile : null)
+  state => state.profile
 );

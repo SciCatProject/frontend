@@ -4,21 +4,16 @@ import {
   MatDialogModule,
   MatFormFieldModule,
   MatIconModule,
-  MatTableModule,
   MatInputModule,
-  MatSortModule,
-  MatPaginatorModule,
   MatButtonModule
 } from "@angular/material";
 import { NgModule } from "@angular/core";
-import { SampleApi } from "../shared/sdk/services/custom";
 import { SampleDetailComponent } from "./sample-detail/sample-detail.component";
 import { SampleDataFormComponent } from "./sample-data-form/sample-data-form.component";
 import { StoreModule } from "@ngrx/store";
 import { samplesReducer } from "../state-management/reducers/samples.reducer";
 import { SampleDialogComponent } from "./sample-dialog/sample-dialog.component";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { SampleService } from "./sample.service";
 import { SampleDashboardComponent } from "./sample-dashboard/sample-dashboard.component";
 import { FlexLayoutModule } from "@angular/flex-layout";
 import { NgxJsonViewerModule } from "ngx-json-viewer";
@@ -36,9 +31,6 @@ import { TableModule } from "shared/modules/table/table.module";
     MatFormFieldModule,
     MatInputModule,
     MatDialogModule,
-    MatSortModule,
-    MatPaginatorModule,
-    MatTableModule,
     NgxJsonViewerModule,
     ReactiveFormsModule,
     SearchBarModule,
@@ -56,7 +48,7 @@ import { TableModule } from "shared/modules/table/table.module";
     SampleDialogComponent,
     SampleDashboardComponent
   ],
-  providers: [SampleApi, SampleService],
+  providers: [],
   entryComponents: [SampleDialogComponent]
 })
 export class SamplesModule {}

@@ -62,8 +62,14 @@ export function policiesReducer(
     }
 
     case FETCH_EDITABLE_POLICIES_COMPLETE: {
-      const editablePolicies = (action as FetchEditablePoliciesComplete).editablePolicies;
-      return { ...state, editablePolicies, policiesLoading: false  };
+      const editablePolicies = (action as FetchEditablePoliciesComplete)
+        .editablePolicies;
+      return {
+        ...state,
+        editablePolicies,
+        editableCount: editablePolicies.length,
+        policiesLoading: false
+      };
     }
 
     case FETCH_POLICIES_FAILED: {
@@ -98,7 +104,7 @@ export function policiesReducer(
     case CHANGE_PAGE: {
       const { page, limit } = action as ChangePageAction;
       const skip = page * limit;
-       const filters = {...state.filters, skip, limit};
+      const filters = { ...state.filters, skip, limit };
       return {
         ...state,
         policiesLoading: true,
@@ -119,7 +125,7 @@ export function policiesReducer(
 
     case FETCH_COUNT_POLICIES: {
       const count = action.count;
-      return {...state, totalCount: count};
+      return { ...state, totalCount: count };
     }
 
     default: {
