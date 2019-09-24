@@ -30,6 +30,7 @@ import {
 } from "state-management/actions/datasets.actions";
 import { SubmitAction } from "state-management/actions/jobs.actions";
 import { ReadFile } from "ngx-file-helpers";
+import { SubmitCaptionEvent } from "shared/modules/file-uploader/file-uploader.component";
 
 @Component({
   selector: "dataset-details-dashboard",
@@ -122,16 +123,18 @@ export class DatasetDetailsDashboardComponent implements OnInit, OnDestroy {
     }
   }
 
-  updateCaption(datasetId: string, attachmentId: string, caption: string) {
+  updateCaption(event: SubmitCaptionEvent) {
     this.store.dispatch(
-      new UpdateAttachmentCaptionAction(datasetId, attachmentId, caption)
+      new UpdateAttachmentCaptionAction(
+        this.dataset.pid,
+        event.attachmentId,
+        event.caption
+      )
     );
   }
 
-  deleteAttachment(dataset_id, dataset_attachment_id) {
-    this.store.dispatch(
-      new DeleteAttachment(dataset_id, dataset_attachment_id)
-    );
+  deleteAttachment(attachmentId: string) {
+    this.store.dispatch(new DeleteAttachment(this.dataset.pid, attachmentId));
   }
 
   constructor(

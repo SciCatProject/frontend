@@ -46,51 +46,18 @@
     <ng-template mat-tab-label>
       <mat-icon> insert_photo </mat-icon> Attachments
     </ng-template>
+
     <div class="file-uploader">
       <app-file-uploader
+        [attachments]="attachments$ | async"
         (filePicked)="onFileUploaderFilePicked($event)"
         (readEnd)="onFileUploaderReadEnd($event)"
+        (submitCaption)="updateCaption($event)"
+        (deleteAttachment)="deleteAttachment($event)"
       ></app-file-uploader>
     </div>
-    <ng-container
-      *ngFor="let da of attachments; let i = index"
-      [attr.data-index]="i"
-    >
-      <mat-card class="attach-card">
-        <img src="{{ da.thumbnail }}" style="width: 20em; height: 20em" />
-        <mat-card-actions>
-          <form
-            (submit)="updateCaption(dataset.pid, da.id, caption.value)"
-            action="#"
-          >
-            <mat-form-field>
-              <input
-                matInput
-                id="caption"
-                placeholder="Edit caption"
-                value="{{ da.caption }}"
-                #caption
-              />
-            </mat-form-field>
-            <button
-              mat-button
-              type="submit"
-              style="margin-top: 0.5em; float: right;"
-            >
-              Submit
-            </button>
-          </form>
-          <button
-            mat-button
-            style="float: right"
-            (click)="deleteAttachment(dataset.pid, da.id)"
-          >
-            <mat-icon>delete</mat-icon>
-          </button>
-        </mat-card-actions>
-      </mat-card>
-    </ng-container>
   </mat-tab>
+
   <mat-tab *ngIf="appConfig.logbookEnabled">
     <ng-template mat-tab-label>
       <mat-icon> book </mat-icon> Logbook

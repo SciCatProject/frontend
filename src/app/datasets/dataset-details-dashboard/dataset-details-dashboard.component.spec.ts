@@ -24,6 +24,7 @@ import { MatTableModule } from "@angular/material";
 import { SharedCatanieModule } from "shared/shared.module";
 import { rootReducer } from "state-management/reducers/root.reducer";
 import { Router, ActivatedRoute } from "@angular/router";
+import { SubmitCaptionEvent } from "shared/modules/file-uploader/file-uploader.component";
 
 describe("DetailsDashboardComponent", () => {
   let component: DatasetDetailsDashboardComponent;
@@ -192,14 +193,21 @@ describe("DetailsDashboardComponent", () => {
   describe("#updateCaption()", () => {
     it("should dispatch an UpdateAttachmentCaptionAction", () => {
       dispatchSpy = spyOn(store, "dispatch");
-      const datasetId = "testDatasetId";
-      const attachmentId = "testAttachmentId";
-      const caption = "Test caption";
-      component.updateCaption(datasetId, attachmentId, caption);
+
+      component.dataset = new Dataset();
+      const event: SubmitCaptionEvent = {
+        attachmentId: "testAttachmentId",
+        caption: "Test caption"
+      };
+      component.updateCaption(event);
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        new UpdateAttachmentCaptionAction(datasetId, attachmentId, caption)
+        new UpdateAttachmentCaptionAction(
+          component.dataset.pid,
+          event.attachmentId,
+          event.caption
+        )
       );
     });
   });
@@ -207,13 +215,14 @@ describe("DetailsDashboardComponent", () => {
   describe("#deleteAttachment()", () => {
     it("should dispatch a DeleteAttachment action", () => {
       dispatchSpy = spyOn(store, "dispatch");
-      const datasetId = "testDatasetId";
+
+      component.dataset = new Dataset();
       const attachmentId = "testAttachmentId";
-      component.deleteAttachment(datasetId, attachmentId);
+      component.deleteAttachment(attachmentId);
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        new DeleteAttachment(datasetId, attachmentId)
+        new DeleteAttachment(component.dataset.pid, attachmentId)
       );
     });
   });

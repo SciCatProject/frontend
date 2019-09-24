@@ -3,9 +3,16 @@ import {
   OnInit,
   Output,
   EventEmitter,
-  ViewChild
+  ViewChild,
+  Input
 } from "@angular/core";
 import { ReadFile, ReadMode, FilePickerDirective } from "ngx-file-helpers";
+import { Attachment } from "shared/sdk";
+
+export interface SubmitCaptionEvent {
+  attachmentId: string;
+  caption: string;
+}
 
 @Component({
   selector: "app-file-uploader",
@@ -13,10 +20,13 @@ import { ReadFile, ReadMode, FilePickerDirective } from "ngx-file-helpers";
   styleUrls: ["./file-uploader.component.scss"]
 })
 export class FileUploaderComponent implements OnInit {
-  constructor() {}
+  @Input() attachments: Attachment[];
+  attachment: Attachment;
 
   @Output() filePicked = new EventEmitter<ReadFile>();
   @Output() readEnd = new EventEmitter<number>();
+  @Output() submitCaption = new EventEmitter<SubmitCaptionEvent>();
+  @Output() deleteAttachment = new EventEmitter<string>();
 
   public readMode = ReadMode.dataURL;
   public status: string;
@@ -41,6 +51,20 @@ export class FileUploaderComponent implements OnInit {
       this.filePicker.reset();
     }
   }
+
+  onSubmitCaption(attachmentId: string, caption: string) {
+    const event: SubmitCaptionEvent = {
+      attachmentId: attachmentId,
+      caption: caption
+    };
+    this.submitCaption.emit(event);
+  }
+
+  onDeleteAttachment(attachmentId: string) {
+    this.deleteAttachment.emit(attachmentId);
+  }
+
+  constructor() {}
 
   ngOnInit() {}
 }

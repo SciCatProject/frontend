@@ -15,7 +15,7 @@
     <div class="instructions">or</div>
     <div class="instructions">
       <button
-        class="attach-button"
+        class="browse-button"
         type="button"
         mat-button
         ngxFilePicker
@@ -36,7 +36,7 @@
   <div class="mat-title">Choose an image to upload</div>
 
   <button
-    class="attach-button"
+    class="browse-button"
     type="button"
     mat-button
     ngxFilePicker
@@ -50,3 +50,28 @@
     Browse
   </button>
 </mat-card>
+
+<ng-template ngFor let-attachment [ngForOf]="attachments">
+  <mat-card class="attachment-card">
+    <img src="{{ attachment.thumbnail }}" />
+    <mat-card-actions>
+      <form (submit)="onSubmitCaption(attachment.id, caption.value)">
+        <mat-form-field>
+          <input
+            matInput
+            id="caption"
+            placeholder="Edit caption"
+            value="{{ attachment.caption }}"
+            #caption
+          />
+        </mat-form-field>
+        <button mat-button type="submit" class="submit-button">
+          Submit
+        </button>
+      </form>
+      <button mat-button (click)="onDeleteAttachment(attachment.id)">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</ng-template>
