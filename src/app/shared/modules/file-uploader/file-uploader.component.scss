@@ -1,6 +1,25 @@
-.attach-button {
+.browse-button {
   color: #ffffff;
   background: #0ea432;
+}
+
+.attachment-card {
+  width: 22em;
+  float: left;
+  margin: 1em 2em 1em 0;
+
+  img {
+    width: 20em;
+    height: 20em;
+  }
+
+  button {
+    float: right;
+  }
+
+  .submit-button {
+    margin-top: 0.5em;
+  }
 }
 
 @media only screen and (min-width: 1280px) {

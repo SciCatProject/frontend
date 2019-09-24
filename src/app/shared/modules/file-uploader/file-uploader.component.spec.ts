@@ -1,6 +1,9 @@
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
-import { FileUploaderComponent } from "./file-uploader.component";
+import {
+  FileUploaderComponent,
+  SubmitCaptionEvent
+} from "./file-uploader.component";
 import { ReadFile, ReadMode } from "ngx-file-helpers";
 
 describe("FileUploaderComponent", () => {
@@ -74,6 +77,35 @@ describe("FileUploaderComponent", () => {
       expect(component.status).toBeDefined();
       expect(component.readEnd.emit).toHaveBeenCalledTimes(1);
       expect(component.readEnd.emit).toHaveBeenCalledWith(1);
+    });
+  });
+
+  describe("#onSubmitCaption()", () => {
+    it("should emit an event", () => {
+      spyOn(component.submitCaption, "emit");
+
+      const event: SubmitCaptionEvent = {
+        attachmentId: "testId",
+        caption: "test"
+      };
+      component.onSubmitCaption(event.attachmentId, event.caption);
+
+      expect(component.submitCaption.emit).toHaveBeenCalledTimes(1);
+      expect(component.submitCaption.emit).toHaveBeenCalledWith(event);
+    });
+  });
+
+  describe("#onDeleteAttachment()", () => {
+    it("should emit an event", () => {
+      spyOn(component.deleteAttachment, "emit");
+
+      const attachmentId = "testId";
+      component.onDeleteAttachment(attachmentId);
+
+      expect(component.deleteAttachment.emit).toHaveBeenCalledTimes(1);
+      expect(component.deleteAttachment.emit).toHaveBeenCalledWith(
+        attachmentId
+      );
     });
   });
 });
