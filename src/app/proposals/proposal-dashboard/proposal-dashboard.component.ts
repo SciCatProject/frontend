@@ -90,8 +90,6 @@ export class ProposalDashboardComponent implements OnInit, OnDestroy {
         }
         return data;
       });
-    } else {
-      return [];
     }
   }
 
