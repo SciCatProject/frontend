@@ -1,25 +1,31 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, OnDestroy, Inject } from "@angular/core";
 import { select, Store } from "@ngrx/store";
 import {
   SaveSettingsAction,
   ShowMessageAction,
-  RetrieveUserAction
+  RetrieveUserAction,
+  FetchCatamelTokenAction
 } from "state-management/actions/user.actions";
 import * as selectors from "state-management/selectors";
 import { Message, MessageType } from "state-management/models";
 import {
   getSettings,
-  getProfile
+  getProfile,
+  getCurrentUser,
+  getCatamelToken
 } from "state-management/selectors/users.selectors";
+import { Subscription } from "rxjs";
+import { DOCUMENT } from "@angular/common";
 
 @Component({
   selector: "app-user-settings",
   templateUrl: "./user-settings.component.html",
   styleUrls: ["./user-settings.component.scss"]
 })
-export class UserSettingsComponent implements OnInit {
+export class UserSettingsComponent implements OnInit, OnDestroy {
+  settings$ = this.store.pipe(select(selectors.users.getSettings));
+
   user: object;
-  settings$ = null;
   profileImage = "assets/images/user.png";
   profile: object;
   email: string;
@@ -29,42 +35,66 @@ export class UserSettingsComponent implements OnInit {
   jobCount: number;
   groups: string[];
   settings: Object;
+  catamelToken: string;
 
-  constructor(private store: Store<any>) {
-    this.store.select(selectors.users.getCurrentUser).subscribe(user => {
-      this.user = user;
-    });
-    this.settings$ = this.store.pipe(select(selectors.users.getSettings));
+  subscriptions: Subscription[] = [];
 
+  constructor(
+    @Inject(DOCUMENT) private document: Document,
+    private store: Store<any>
+  ) {
     // TODO handle service and endpoint for user settings
   }
 
   ngOnInit() {
     this.store.dispatch(new RetrieveUserAction());
+    this.store.dispatch(new FetchCatamelTokenAction());
 
-    this.store.pipe(select(getProfile)).subscribe(profile => {
-      if (profile) {
-        this.email = profile.email;
-        this.displayName = profile.displayName;
-        this.groups = profile.accessGroups;
-        this.id = profile.id;
-        if (profile.thumbnailPhoto.startsWith("data")) {
-          this.profileImage = profile.thumbnailPhoto;
-        } else {
-          this.profileImage = "assets/images/user.png";
+    this.subscriptions.push(
+      this.store.pipe(select(getCurrentUser)).subscribe(user => {
+        this.user = user;
+      })
+    );
+
+    this.subscriptions.push(
+      this.store.pipe(select(getProfile)).subscribe(profile => {
+        if (profile) {
+          this.email = profile.email;
+          this.displayName = profile.displayName;
+          this.groups = profile.accessGroups;
+          this.id = profile.id;
+          if (profile.thumbnailPhoto.startsWith("data")) {
+            this.profileImage = profile.thumbnailPhoto;
+          } else {
+            this.profileImage = "assets/images/user.png";
+          }
         }
-      }
-    });
+      })
+    );
 
-    this.store.pipe(select(getSettings)).subscribe(settings => {
-      this.settings = settings;
-      if (settings.hasOwnProperty("datasetCount")) {
-        this.datasetCount = settings.datasetCount;
-      }
-      if (settings.hasOwnProperty("jobCount")) {
-        this.jobCount = settings.jobCount;
-      }
-      console.log("settings", settings);
+    this.subscriptions.push(
+      this.store.pipe(select(getSettings)).subscribe(settings => {
+        this.settings = settings;
+        if (settings.hasOwnProperty("datasetCount")) {
+          this.datasetCount = settings.datasetCount;
+        }
+        if (settings.hasOwnProperty("jobCount")) {
+          this.jobCount = settings.jobCount;
+        }
+        console.log("settings", settings);
+      })
+    );
+
+    this.subscriptions.push(
+      this.store.pipe(select(getCatamelToken)).subscribe(catamelToken => {
+        this.catamelToken = catamelToken.id;
+      })
+    );
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach(subscription => {
+      subscription.unsubscribe();
     });
   }
 
@@ -77,5 +107,19 @@ export class UserSettingsComponent implements OnInit {
     msg.content = "Settings saved locally";
     msg.type = MessageType.Success;
     this.store.dispatch(new ShowMessageAction(msg));
+  }
+
+  onCopy(token: string) {
+    let selectionBox = this.document.createElement("textarea");
+    selectionBox.style.position = "fixed";
+    selectionBox.style.left = "0";
+    selectionBox.style.top = "0";
+    selectionBox.style.opacity = "0";
+    selectionBox.value = token;
+    this.document.body.appendChild(selectionBox);
+    selectionBox.focus();
+    selectionBox.select();
+    this.document.execCommand("copy");
+    this.document.body.removeChild(selectionBox);
   }
 }

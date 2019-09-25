@@ -19,7 +19,7 @@ import * as UserActions from "state-management/actions/user.actions";
 import { MessageType } from "state-management/models";
 
 import { LoginService } from "users/login.service";
-import { UserApi } from "shared/sdk";
+import { UserApi, AccessToken } from "shared/sdk";
 
 @Injectable()
 export class UserEffects {
@@ -124,6 +124,16 @@ export class UserEffects {
         )
       )
     )
+  );
+
+  @Effect()
+  protected fetchCatamelToken$: Observable<Action> = this.action$.pipe(
+    ofType(UserActions.FETCH_CATAMEL_TOKEN),
+    switchMap(() => of(this.userApi.getCurrentToken())),
+    map(
+      (res: AccessToken) => new UserActions.FetchCatamelTokenCompleteAction(res)
+    ),
+    catchError(err => of(new UserActions.FetchCatamelTokenFailedAction(err)))
   );
 
   constructor(

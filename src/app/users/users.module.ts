@@ -12,7 +12,9 @@ import { userReducer } from "state-management/reducers/user.reducer";
 import {
   MatCardModule,
   MatCheckboxModule,
-  MatGridListModule
+  MatGridListModule,
+  MatButtonModule,
+  MatIconModule
 } from "@angular/material";
 
 @NgModule({
@@ -20,14 +22,16 @@ import {
     CommonModule,
     FlexLayoutModule,
     FormsModule,
+    MatButtonModule,
     MatCardModule,
     MatCheckboxModule,
     MatGridListModule,
+    MatIconModule,
     ReactiveFormsModule,
     SharedCatanieModule,
     StoreModule.forFeature("users", userReducer)
   ],
-  declarations: [LoginComponent,  UserSettingsComponent],
+  declarations: [LoginComponent, UserSettingsComponent],
   providers: [ADAuthService, LoginService]
 })
 export class UsersModule {}

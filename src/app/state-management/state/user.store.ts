@@ -1,9 +1,11 @@
 import { Settings, Message, User } from "../models";
+import { AccessToken } from "shared/sdk";
 
 // NOTE It IS ok to make up a state of other sub states
 export interface UserState {
   currentUser: User;
   profile?: any;
+  catamelToken: AccessToken;
   isLoggingIn: boolean;
   selectingColumn: boolean;
   deletingColumn: boolean;
@@ -20,6 +22,7 @@ export interface UserState {
 export const initialUserState: UserState = {
   currentUser: null,
   profile: null,
+  catamelToken: null,
   currentUserGroups: [],
   email: undefined,
   isLoggingIn: false,

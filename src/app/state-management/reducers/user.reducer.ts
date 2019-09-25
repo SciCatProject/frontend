@@ -1,8 +1,6 @@
 import { Action } from "@ngrx/store";
 import { initialUserState, UserState } from "state-management/state/user.store";
-import {
-  getColumnOrder as getColumnOrderList
-} from "../../state-management/selectors/users.selectors";
+import { getColumnOrder as getColumnOrderList } from "../../state-management/selectors/users.selectors";
 
 import {
   SHOW_MESSAGE,
@@ -24,7 +22,9 @@ import {
   DeselectColumnCompleteAction,
   SelectColumnCompleteAction,
   RETRIEVE_USER_IDENTITY_COMPLETE,
-  RetrieveUserIdentCompleteAction
+  RetrieveUserIdentCompleteAction,
+  FETCH_CATAMEL_TOKEN_COMPLETE,
+  FetchCatamelTokenCompleteAction
 } from "state-management/actions/user.actions";
 
 export function userReducer(
@@ -88,7 +88,9 @@ export function userReducer(
       const columnName = (action as SelectColumnCompleteAction).columnName;
       const result = displayedColumns.concat(columnName);
       const ordering = getColumnOrderList();
-      result.sort(function(a, b) { return ordering[a] - ordering[b]; });
+      result.sort(function(a, b) {
+        return ordering[a] - ordering[b];
+      });
       return {
         ...state,
         selectingColumn: false,
@@ -112,8 +114,15 @@ export function userReducer(
     }
 
     case RETRIEVE_USER_IDENTITY_COMPLETE: {
-      const userIdentity = (action as RetrieveUserIdentCompleteAction).userIdentity;
+      const userIdentity = (action as RetrieveUserIdentCompleteAction)
+        .userIdentity;
       return { ...state, profile: userIdentity.profile };
+    }
+
+    case FETCH_CATAMEL_TOKEN_COMPLETE: {
+      const catamelToken = (action as FetchCatamelTokenCompleteAction)
+        .catamelToken;
+      return { ...state, catamelToken };
     }
 
     default:

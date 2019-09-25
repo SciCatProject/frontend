@@ -8,35 +8,49 @@
           <i class="material-icons"> person </i>
           Name
         </th>
-        <td> {{ value }} </td>
+        <td>{{ value }}</td>
       </tr>
       <tr *ngIf="user.email as value">
         <th>
           <i class="material-icons"> mail </i>
           Email
         </th>
-        <td> {{ value }} </td>
+        <td>{{ value }}</td>
       </tr>
       <tr *ngIf="id as value">
         <th>
           <i class="material-icons"> person </i>
           Id
         </th>
-        <td> {{ value }} </td>
+        <td>{{ value }}</td>
+      </tr>
+      <tr *ngIf="catamelToken as value">
+        <th>
+          <i class="material-icons"> vpn_key </i>
+          Catamel Token
+        </th>
+        <td>
+          <span id="token" contenteditable="false">
+            {{ value }}
+          </span>
+          <button mat-icon-button (click)="onCopy(value)">
+            <mat-icon>post_add</mat-icon>
+          </button>
+        </td>
       </tr>
       <tr *ngIf="datasetCount as value">
         <th>
           <i class="material-icons"> save </i>
           Dataset Count
         </th>
-        <td> {{ value }} </td>
+        <td>{{ value }}</td>
       </tr>
       <tr *ngIf="jobCount as value">
         <th>
           <i class="material-icons"> transfer_within_a_station </i>
           Job Count
         </th>
-        <td> {{ value }} </td>
+        <td>{{ value }}</td>
       </tr>
       <tr *ngIf="groups as value">
         <th>
@@ -44,14 +58,13 @@
           Groups
         </th>
         <td>
-            <ul>
-                <li *ngFor="let group of value">
-                  {{ group }}
-                </li>
-              </ul>
-           </td>
+          <ul>
+            <li *ngFor="let group of value">
+              {{ group }}
+            </li>
+          </ul>
+        </td>
       </tr>
-
     </table>
   </mat-card>
 </ng-container>
