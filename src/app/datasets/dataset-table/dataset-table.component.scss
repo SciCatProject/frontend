@@ -3,6 +3,10 @@
 .dataset-table {
   .mode-container {
     float: left;
+
+    .public-toggle {
+      margin-right: 1em;
+    }
   }
 
   .action-container {
@@ -19,10 +23,27 @@
   }
 
   .raised {
-    position: relative;
-    float: left;
-    transform: translateY(50%);
-    margin-left: 10px;
+    position: fixed;
+    z-index: 999;
+    height: 2em;
+    width: 2em;
+    overflow: show;
+    margin: auto;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+  }
+
+  .raised:before {
+    content: "";
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.1);
   }
 
   mat-header-cell {
