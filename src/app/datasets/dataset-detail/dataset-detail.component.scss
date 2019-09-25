@@ -6,6 +6,10 @@ mat-card {
   table {
     td {
       padding: 0.5em;
+
+      a:hover {
+        cursor: pointer;
+      }
     }
 
     th {
