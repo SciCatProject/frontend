@@ -1,0 +1,29 @@
+<mat-tab-group>
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <i class="material-icons"> portrait </i>
+      Details
+    </ng-template>
+    <proposal-detail [proposal]="proposal$ | async"></proposal-detail>
+  </mat-tab>
+
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <i class="material-icons"> folder </i>
+      Datasets
+    </ng-template>
+
+    <div class="dataset-table">
+      <app-table
+        [data]="tableData"
+        [columns]="tableColumns"
+        [paginate]="tablePaginate"
+        [currentPage]="currentPage$ | async"
+        [dataCount]="datasetCount$ | async"
+        [dataPerPage]="itemsPerPage$ | async"
+        (pageChange)="onPageChange($event)"
+        (rowClick)="onRowClick($event)"
+      ></app-table>
+    </div>
+  </mat-tab>
+</mat-tab-group>

@@ -102,10 +102,10 @@ describe("ProposalDashboardComponent", () => {
   });
 
   describe("#formatTableData()", () => {
-    it("should return an empty array if there are no proposals", () => {
+    it("should do nothing if there are no proposals", () => {
       const data = component.formatTableData(null);
 
-      expect(data.length).toEqual(0);
+      expect(data).toBeUndefined();
     });
 
     it("should return an array of data objects if proposals are defined", () => {

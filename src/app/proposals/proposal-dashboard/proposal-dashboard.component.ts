@@ -79,7 +79,9 @@ export class ProposalDashboardComponent implements OnInit, OnDestroy {
             "yyyy-MM-dd"
           );
           data.end = this.datePipe.transform(
-            proposal.MeasurementPeriodList[0].end,
+            proposal.MeasurementPeriodList[
+              proposal.MeasurementPeriodList.length - 1
+            ].end,
             "yyyy-MM-dd"
           );
         } else {
@@ -88,8 +90,6 @@ export class ProposalDashboardComponent implements OnInit, OnDestroy {
         }
         return data;
       });
-    } else {
-      return [];
     }
   }
 
