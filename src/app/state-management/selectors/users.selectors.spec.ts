@@ -4,6 +4,7 @@ import { UserState } from "../state/user.store";
 
 const initialUserState: UserState = {
   currentUser: null,
+  catamelToken: null,
   currentUserGroups: [],
   email: undefined,
   isLoggingIn: false,

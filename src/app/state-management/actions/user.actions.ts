@@ -1,5 +1,6 @@
 import { Action } from "@ngrx/store";
 import { Message, User, UserIdentity, Settings } from "../models";
+import { AccessToken } from "shared/sdk";
 
 export const LOGIN = "[User] Login";
 export const LOGIN_COMPLETE = "[User] Login Complete";
@@ -20,6 +21,11 @@ export const RETRIEVE_USER_IDENTITY_COMPLETE =
   "[UserIdentity] Retrieve User Identity Complete";
 export const RETRIEVE_USER_IDENTITY_FAILED =
   "[UserIdentity] Retrieve User Identity Failed";
+
+export const FETCH_CATAMEL_TOKEN = "[User] Fetch Catamel Token";
+export const FETCH_CATAMEL_TOKEN_COMPLETE =
+  "[User] Fetch Catamel Token Complete";
+export const FETCH_CATAMEL_TOKEN_FAILED = "[User] Fetch Catamel Token Failed";
 
 export const ADD_GROUPS = "[User] Add Groups";
 export const ADD_GROUPS_FAILED = "[User] Add Groups Failed";
@@ -98,6 +104,22 @@ export class RetrieveUserIdentCompleteAction implements Action {
 
 export class RetrieveUserIdentFailedAction implements Action {
   readonly type = RETRIEVE_USER_IDENTITY_FAILED;
+  constructor(readonly error: Error) {}
+}
+
+export class FetchCatamelTokenAction implements Action {
+  readonly type = FETCH_CATAMEL_TOKEN;
+}
+
+export class FetchCatamelTokenCompleteAction implements Action {
+  readonly type = FETCH_CATAMEL_TOKEN_COMPLETE;
+
+  constructor(readonly catamelToken: AccessToken) {}
+}
+
+export class FetchCatamelTokenFailedAction implements Action {
+  readonly type = FETCH_CATAMEL_TOKEN_FAILED;
+
   constructor(readonly error: Error) {}
 }
 

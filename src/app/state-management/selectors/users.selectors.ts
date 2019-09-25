@@ -117,3 +117,8 @@ export const getProfile = createSelector(
   getUserState,
   state => state.profile
 );
+
+export const getCatamelToken = createSelector(
+  getUserState,
+  state => state.catamelToken
+);
