@@ -22,7 +22,7 @@
     color: #969696;
   }
 
-  .raised {
+  .spinner {
     position: fixed;
     z-index: 999;
     height: 2em;
@@ -35,7 +35,7 @@
     right: 0;
   }
 
-  .raised:before {
+  .spinner:before {
     content: "";
     display: block;
     position: fixed;
