@@ -109,13 +109,17 @@ export class UserSettingsComponent implements OnInit, OnDestroy {
     this.store.dispatch(new ShowMessageAction(msg));
   }
 
-  onCopy() {
-    const tokenElement = this.document.getElementById("token");
-    tokenElement.setAttribute("contentEditable", "true");
-    tokenElement.focus();
-    this.document.execCommand("selectAll");
+  onCopy(token: string) {
+    let selectionBox = this.document.createElement("textarea");
+    selectionBox.style.position = "fixed";
+    selectionBox.style.left = "0";
+    selectionBox.style.top = "0";
+    selectionBox.style.opacity = "0";
+    selectionBox.value = token;
+    this.document.body.appendChild(selectionBox);
+    selectionBox.focus();
+    selectionBox.select();
     this.document.execCommand("copy");
-    tokenElement.setAttribute("contentEditable", "false");
-    tokenElement.blur();
+    this.document.body.removeChild(selectionBox);
   }
 }
