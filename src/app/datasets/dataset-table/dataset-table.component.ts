@@ -388,23 +388,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     this.store.dispatch(new ClearSelectionAction());
   }
 
-  setWidthColor(datasetSize) {
-    let width = 10;
-    let color = "red";
-    if (datasetSize > 1000000000) {
-      width = 10;
-      color = "red";
-    } else {
-      width = 5;
-      color = "green";
-    }
-    const styles = {
-      "background-color": "red",
-      "width.px": width
-    };
-    return styles;
-  }
-
   countDerivedDatasets(dataset: Dataset): number {
     let derivedDatasetsNum: number = 0;
     if (dataset.history) {

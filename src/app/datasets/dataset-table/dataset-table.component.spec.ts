@@ -542,26 +542,6 @@ describe("DatasetTableComponent", () => {
     });
   });
 
-  describe("#setWidthColor()", () => {
-    it("should return a style object with background-color red and width.px 10 if datasetSize > 1000000000", () => {
-      const datasetSize = 1000000001;
-
-      const styles = component.setWidthColor(datasetSize);
-
-      expect(styles["background-color"]).toEqual("red");
-      expect(styles["width.px"]).toEqual(10);
-    });
-
-    it("should return a style object with background-color red and width.px 5 if datasetSize < 1000000000", () => {
-      const datasetSize = 100000000;
-
-      const styles = component.setWidthColor(datasetSize);
-
-      expect(styles["background-color"]).toEqual("red");
-      expect(styles["width.px"]).toEqual(5);
-    });
-  });
-
   describe("#countDerivedDatasets()", () => {
     it("should return the number of derived datasets for a dataset", () => {
       const dataset = new Dataset();

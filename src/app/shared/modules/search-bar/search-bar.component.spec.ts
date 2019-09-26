@@ -38,15 +38,39 @@ describe("SearchBarComponent", () => {
     expect(component).toBeTruthy();
   });
 
-  describe("#onChange()", () => {
+  describe("#doFocus()", () => {
     it("should emit an event", () => {
-      spyOn(component.change, "emit");
+      spyOn(component.onFocus, "emit");
 
-      const query = "test";
-      component.onChange(query);
+      component.query = "test";
+      component.doFocus();
 
-      expect(component.change.emit).toHaveBeenCalledTimes(1);
-      expect(component.change.emit).toHaveBeenCalledWith(query);
+      expect(component.onFocus.emit).toHaveBeenCalledTimes(1);
+      expect(component.onFocus.emit).toHaveBeenCalledWith(component.query);
+    });
+  });
+
+  describe("#doSearch()", () => {
+    it("should call next on searchSubject", () => {
+      spyOn(component.searchSubject, "next");
+
+      component.query = "test";
+      component.doSearch();
+
+      expect(component.searchSubject.next).toHaveBeenCalledTimes(1);
+      expect(component.searchSubject.next).toHaveBeenCalledWith(
+        component.query
+      );
+    });
+  });
+
+  describe("#focus()", () => {
+    it("should call focus on searchBar", () => {
+      spyOn(component.searchBar.nativeElement, "focus");
+
+      component.focus();
+
+      expect(component.searchBar.nativeElement.focus).toHaveBeenCalledTimes(1);
     });
   });
 });

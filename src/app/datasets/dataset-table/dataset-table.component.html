@@ -1,6 +1,21 @@
 <div class="dataset-table" style="min-width: 1060px">
-  <div class="mode-container" *ngIf="appConfig.archiveWorkflowEnabled">
-    <mat-button-toggle-group [value]="currentMode">
+  <div class="mode-container">
+    <mat-button-toggle-group
+      class="public-toggle"
+      [value]="viewPublic"
+      *ngIf="searchPublicDataEnabled"
+    >
+      <mat-button-toggle [value]="false" (click)="onViewPublicChange(false)">
+        My Data
+      </mat-button-toggle>
+      <mat-button-toggle [value]="true" (click)="onViewPublicChange(true)">
+        Public Data
+      </mat-button-toggle>
+    </mat-button-toggle-group>
+    <mat-button-toggle-group
+      [value]="currentMode"
+      *ngIf="appConfig.archiveWorkflowEnabled"
+    >
       <mat-button-toggle
         *ngFor="let mode of modes"
         (click)="onModeChange($event, mode)"
@@ -20,8 +35,8 @@
     </div>
   </ng-template>
 
-  <div *ngIf="loading$ | async" class="raised">
-    <mat-spinner diameter="20"></mat-spinner>
+  <div *ngIf="loading$ | async" class="spinner">
+    <mat-spinner></mat-spinner>
   </div>
 
   <div class="action-container" [class.hidden]="loading$ | async">
@@ -61,45 +76,10 @@
 
   <div style="clear: both"></div>
 
-  <div *ngIf="searchPublicDataEnabled">
-    <mat-button-toggle-group [value]="viewPublic">
-      <mat-button-toggle [value]="false" (click)="onViewPublicChange(false)">
-        My Data
-      </mat-button-toggle>
-      <mat-button-toggle [value]="true" (click)="onViewPublicChange(true)">
-        Public Data
-      </mat-button-toggle>
-    </mat-button-toggle-group>
-  </div>
-
   <!--https://tburleson-layouts-demos.firebaseapp.com/#/docs-->
   <div fxLayout="row" fxLayoutAlign="space-evenly end">
-    <div style="flex: 1">
-      <button
-        mat-stroked-button
-        class="tableSettings"
-        color="primary"
-        matTooltip="Table Settings"
-        (click)="select.open()"
-      >
-        <mat-icon>settings</mat-icon>
-        <mat-select
-          #select
-          class="tblSettingSelect"
-          panelClass="tblSettingSelectPanel"
-          [formControl]="configForm"
-          multiple
-        >
-          <mat-option
-            *ngFor="let column of configCols$ | async"
-            [value]="column"
-            (onSelectionChange)="onSelectColumn($event)"
-          >
-            {{ column }}</mat-option
-          >
-        </mat-select>
-      </button>
-    </div>
+    <div style="flex: 1"></div>
+
     <mat-paginator
       [pageSizeOptions]="[10, 25, 50, 100, 500, 1000]"
       [pageIndex]="currentPage$ | async"
@@ -109,6 +89,31 @@
       showFirstLastButtons
     >
     </mat-paginator>
+
+    <button
+      mat-icon-button
+      class="tableSettings"
+      color="primary"
+      matTooltip="Table Settings"
+      (click)="select.open()"
+    >
+      <mat-icon>settings</mat-icon>
+      <mat-select
+        #select
+        class="tblSettingSelect"
+        panelClass="tblSettingSelectPanel"
+        [formControl]="configForm"
+        multiple
+      >
+        <mat-option
+          *ngFor="let column of configCols$ | async"
+          [value]="column"
+          (onSelectionChange)="onSelectColumn($event)"
+        >
+          {{ column }}</mat-option
+        >
+      </mat-select>
+    </button>
   </div>
 
   <mat-table

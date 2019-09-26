@@ -8,8 +8,11 @@
     </div>
 
     <app-search-bar
+      #searchBar
       [placeholder]="'Text Search'"
-      (change)="textSearchChanged($event)"
+      [clear]="clearSearchBar"
+      (onSearch)="textSearchChanged($event)"
+      (onFocus)="textSearchChanged($event)"
       >
     </app-search-bar>
 
