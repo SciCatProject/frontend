@@ -3,10 +3,16 @@
     <div *ngIf="appConfig.searchProposals">
       <mat-card class="bigSearch">
         <div class="title">Search</div>
-        <app-search-bar (change)="onTextSearchChange($event)"></app-search-bar>
+        <app-search-bar
+          (onSearch)="onTextSearchChange($event)"
+          (onFocus)="onTextSearchChange($event)"
+        ></app-search-bar>
       </mat-card>
       <div class="smallSearch">
-        <app-search-bar (change)="onTextSearchChange($event)"></app-search-bar>
+        <app-search-bar
+          (onSearch)="onTextSearchChange($event)"
+          (onFocus)="onTextSearchChange($event)"
+        ></app-search-bar>
       </div>
     </div>
   </div>

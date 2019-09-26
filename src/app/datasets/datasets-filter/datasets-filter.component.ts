@@ -76,6 +76,8 @@ export class DatasetsFilterComponent {
   typeInput$ = new BehaviorSubject<string>("");
   keywordsInput$ = new BehaviorSubject<string>("");
 
+  clearSearchBar: boolean = false;
+
   createSuggestionObserver(
     facetCounts$: Observable<FacetCount[]>,
     input$: BehaviorSubject<string>,
@@ -157,6 +159,7 @@ export class DatasetsFilterComponent {
   }
 
   textSearchChanged(terms: string) {
+    this.clearSearchBar = false;
     this.store.dispatch(new SetSearchTermsAction(terms));
   }
 
@@ -204,6 +207,7 @@ export class DatasetsFilterComponent {
   }
 
   clearFacets() {
+    this.clearSearchBar = true;
     this.store.dispatch(new ClearFacetsAction());
   }
 

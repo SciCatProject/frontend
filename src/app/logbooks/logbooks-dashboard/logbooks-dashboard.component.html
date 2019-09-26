@@ -3,12 +3,18 @@
     <div fxFlex="14" style="margin-right: 1em">
       <mat-card class="bigFilter" style="margin: 1em">
         <div class="title">Filter</div>
-        <app-search-bar (change)="onTextSearchChange($event)"></app-search-bar>
+        <app-search-bar
+          (onSearch)="onTextSearchChange($event)"
+          (onFocus)="onTextSearchChange($event)"
+        ></app-search-bar>
         <app-content-selector></app-content-selector>
       </mat-card>
 
       <div class="smallFilter">
-        <app-search-bar (change)="onTextSearchChange($event)"></app-search-bar>
+        <app-search-bar
+          (onSearch)="onTextSearchChange($event)"
+          (onFocus)="onTextSearchChange($event)"
+        ></app-search-bar>
 
         <mat-expansion-panel>
           <mat-expansion-panel-header>
