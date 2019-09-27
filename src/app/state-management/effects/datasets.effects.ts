@@ -51,7 +51,10 @@ export class DatasetEffects {
     map((action: DatasetActions.SaveDatasetAction) => action.dataset),
     switchMap(dataset => {
       return this.datasetApi.updateScientificMetadata(dataset).pipe(
-        map(dataset => new DatasetActions.SaveDatasetCompleteAction(dataset)),
+        map(
+          savedDataset =>
+            new DatasetActions.SaveDatasetCompleteAction(savedDataset)
+        ),
         catchError(err => of(new DatasetActions.SaveDatasetFailedAction(err)))
       );
     })
@@ -104,7 +107,7 @@ export class DatasetEffects {
     ofType(DatasetActions.DATABLOCKS),
     map((action: DatasetActions.DatablocksAction) => action),
     switchMap(action => {
-      let filter = {
+      const datasetFilter = {
         where: {
           pid: action.id
         },
@@ -117,13 +120,13 @@ export class DatasetEffects {
 
       if (action.filter) {
         Object.keys(action.filter).forEach(key => {
-          filter.where[key] = action.filter[key];
+          datasetFilter.where[key] = action.filter[key];
         });
       }
 
       // TODO separate action for dataBlocks? or retrieve at once?
 
-      return this.datasetApi.findOne(filter).pipe(
+      return this.datasetApi.findOne(datasetFilter).pipe(
         map(
           (dataset: Dataset) =>
             new DatasetActions.SearchIDCompleteAction(dataset)

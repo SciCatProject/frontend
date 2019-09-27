@@ -33,13 +33,6 @@ import { SampleDialogComponent } from "samples/sample-dialog/sample-dialog.compo
   styleUrls: ["./sample-dashboard.component.scss"]
 })
 export class SampleDashboardComponent implements OnInit, OnDestroy {
-  constructor(
-    @Inject(APP_CONFIG) public appConfig: AppConfig,
-    private datePipe: DatePipe,
-    public dialog: MatDialog,
-    private router: Router,
-    private store: Store<Sample>
-  ) {}
 
   sampleSubscription: Subscription;
 
@@ -60,6 +53,13 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
   dialogConfig: MatDialogConfig;
   name: string;
   description: string;
+  constructor(
+    @Inject(APP_CONFIG) public appConfig: AppConfig,
+    private datePipe: DatePipe,
+    public dialog: MatDialog,
+    private router: Router,
+    private store: Store<Sample>
+  ) {}
 
   formatTableData(samples: Sample[]): any {
     if (samples) {

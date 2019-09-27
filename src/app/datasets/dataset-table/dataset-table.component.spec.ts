@@ -54,7 +54,7 @@ describe("DatasetTableComponent", () => {
   let component: DatasetTableComponent;
   let fixture: ComponentFixture<DatasetTableComponent>;
 
-  let router = {
+  const router = {
     navigateByUrl: jasmine.createSpy("navigateByUrl")
   };
   let store: MockStore;
@@ -233,7 +233,7 @@ describe("DatasetTableComponent", () => {
 
   describe("#userErrorCondition()", () => {
     it("should return true if dataset has missingFilesError", () => {
-      let dataset = new Dataset();
+      const dataset = new Dataset();
       dataset.datasetlifecycle = {
         archiveStatusMessage: "missingFilesError"
       };
@@ -244,7 +244,7 @@ describe("DatasetTableComponent", () => {
     });
 
     it("should return false if dataset has no missingFilesError", () => {
-      let dataset = new Dataset();
+      const dataset = new Dataset();
       dataset.datasetlifecycle = {
         archiveStatusMessage: ""
       };
@@ -257,7 +257,7 @@ describe("DatasetTableComponent", () => {
 
   describe("#archivableCondition()", () => {
     it("should return false if dataset is not archivable and retrievable and does not have a missingFilesError", () => {
-      let dataset = new Dataset();
+      const dataset = new Dataset();
       dataset.datasetlifecycle = {
         archivable: false,
         retrievable: true,
@@ -270,7 +270,7 @@ describe("DatasetTableComponent", () => {
     });
 
     it("should return false if dataset is not archivable and retrievable and does have a missingFilesError", () => {
-      let dataset = new Dataset();
+      const dataset = new Dataset();
       dataset.datasetlifecycle = {
         archivable: false,
         retrievable: true,
@@ -283,7 +283,7 @@ describe("DatasetTableComponent", () => {
     });
 
     it("should return false if dataset is not archivable and not retrievable and does not have a missingFilesError", () => {
-      let dataset = new Dataset();
+      const dataset = new Dataset();
       dataset.datasetlifecycle = {
         archivable: false,
         retrievable: false,
@@ -296,7 +296,7 @@ describe("DatasetTableComponent", () => {
     });
 
     it("should return false if dataset is not archivable and not retrievable and does have a missingFilesError", () => {
-      let dataset = new Dataset();
+      const dataset = new Dataset();
       dataset.datasetlifecycle = {
         archivable: false,
         retrievable: false,
@@ -309,7 +309,7 @@ describe("DatasetTableComponent", () => {
     });
 
     it("should return false if dataset is not archivable and retrievable and does not have a missingFilesError", () => {
-      let dataset = new Dataset();
+      const dataset = new Dataset();
       dataset.datasetlifecycle = {
         archivable: false,
         retrievable: true,
@@ -322,7 +322,7 @@ describe("DatasetTableComponent", () => {
     });
 
     it("should return false if dataset is archivable and retrievable and does not have a missingFilesError", () => {
-      let dataset = new Dataset();
+      const dataset = new Dataset();
       dataset.datasetlifecycle = {
         archivable: true,
         retrievable: true,
@@ -335,7 +335,7 @@ describe("DatasetTableComponent", () => {
     });
 
     it("should return false if dataset is archivable and retrievable and does have a missingFilesError", () => {
-      let dataset = new Dataset();
+      const dataset = new Dataset();
       dataset.datasetlifecycle = {
         archivable: true,
         retrievable: true,
@@ -348,7 +348,7 @@ describe("DatasetTableComponent", () => {
     });
 
     it("should return true if dataset is archivable and not retrievable and does not have a missingFilesError", () => {
-      let dataset = new Dataset();
+      const dataset = new Dataset();
       dataset.datasetlifecycle = {
         archivable: true,
         retrievable: false,
@@ -363,7 +363,7 @@ describe("DatasetTableComponent", () => {
 
   describe("#retrievableCondition()", () => {
     it("should return false if dataset is archivable and not retrievable", () => {
-      let dataset = new Dataset();
+      const dataset = new Dataset();
       dataset.datasetlifecycle = {
         archivable: true,
         retrievable: false
@@ -375,7 +375,7 @@ describe("DatasetTableComponent", () => {
     });
 
     it("should return false if dataset is not archivable and not retrievable", () => {
-      let dataset = new Dataset();
+      const dataset = new Dataset();
       dataset.datasetlifecycle = {
         archivable: false,
         retrievable: false
@@ -387,7 +387,7 @@ describe("DatasetTableComponent", () => {
     });
 
     it("should return false if dataset is archivable and retrievable", () => {
-      let dataset = new Dataset();
+      const dataset = new Dataset();
       dataset.datasetlifecycle = {
         archivable: true,
         retrievable: true
@@ -399,7 +399,7 @@ describe("DatasetTableComponent", () => {
     });
 
     it("should return true if dataset is retrievable and not archivable", () => {
-      let dataset = new Dataset();
+      const dataset = new Dataset();
       dataset.datasetlifecycle = {
         archivable: false,
         retrievable: true
@@ -445,7 +445,7 @@ describe("DatasetTableComponent", () => {
     it("should dispatch a SelectDatasetAction if checked is true", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
-      let event = new MatCheckboxChange();
+      const event = new MatCheckboxChange();
       event.checked = true;
       const dataset = new Dataset();
       component.onSelect(event, dataset);
@@ -459,7 +459,7 @@ describe("DatasetTableComponent", () => {
     it("should dispatch a DeselectDatasetAction if checked is false", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
-      let event = new MatCheckboxChange();
+      const event = new MatCheckboxChange();
       event.checked = false;
       const dataset = new Dataset();
       component.onSelect(event, dataset);
@@ -475,7 +475,7 @@ describe("DatasetTableComponent", () => {
     it("should dispatch a SelectAllDatasetsAction if checked is true", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
-      let event = new MatCheckboxChange();
+      const event = new MatCheckboxChange();
       event.checked = true;
       component.onSelectAll(event);
 
@@ -486,7 +486,7 @@ describe("DatasetTableComponent", () => {
     it("should dispatch a ClearSelectionAction if checked is false", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
-      let event = new MatCheckboxChange();
+      const event = new MatCheckboxChange();
       event.checked = false;
       component.onSelectAll(event);
 

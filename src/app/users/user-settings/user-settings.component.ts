@@ -110,7 +110,7 @@ export class UserSettingsComponent implements OnInit, OnDestroy {
   }
 
   onCopy(token: string) {
-    let selectionBox = this.document.createElement("textarea");
+    const selectionBox = this.document.createElement("textarea");
     selectionBox.style.position = "fixed";
     selectionBox.style.left = "0";
     selectionBox.style.top = "0";

@@ -32,12 +32,6 @@ import { distinctUntilChanged, map } from "rxjs/operators";
   styleUrls: ["./proposal-dashboard.component.scss"]
 })
 export class ProposalDashboardComponent implements OnInit, OnDestroy {
-  constructor(
-    @Inject(APP_CONFIG) public appConfig: AppConfig,
-    private datePipe: DatePipe,
-    private router: Router,
-    private store: Store<Proposal>
-  ) {}
 
   private proposalSubscription: Subscription;
   private hasFetchedSubscription: Subscription;
@@ -61,11 +55,17 @@ export class ProposalDashboardComponent implements OnInit, OnDestroy {
     { name: "end", icon: "timer_off", sort: false, inList: true }
   ];
   tablePaginate = true;
+  constructor(
+    @Inject(APP_CONFIG) public appConfig: AppConfig,
+    private datePipe: DatePipe,
+    private router: Router,
+    private store: Store<Proposal>
+  ) {}
 
   formatTableData(proposals: Proposal[]): any[] {
     if (proposals) {
       return proposals.map(proposal => {
-        let data: any = {
+        const data: any = {
           proposalId: proposal.proposalId,
           title: proposal.title,
           author: proposal.firstname + " " + proposal.lastname

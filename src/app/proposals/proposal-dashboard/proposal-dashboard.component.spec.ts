@@ -44,7 +44,7 @@ describe("ProposalDashboardComponent", () => {
   let component: ProposalDashboardComponent;
   let fixture: ComponentFixture<ProposalDashboardComponent>;
 
-  let router = {
+  const router = {
     navigateByUrl: jasmine.createSpy("navigateByUrl")
   };
   let store: MockStore;

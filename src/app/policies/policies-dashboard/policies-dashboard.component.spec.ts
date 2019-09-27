@@ -105,7 +105,7 @@ describe("PoliciesDashboardComponent", () => {
     it("should dispatch a SelectPolicyAction if checked is true", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
-      let checkboxEvent: CheckboxEvent = {
+      const checkboxEvent: CheckboxEvent = {
         event: new MatCheckboxChange(),
         row: new Policy()
       };
@@ -121,7 +121,7 @@ describe("PoliciesDashboardComponent", () => {
     it("should dispatch a DeselectPolicyAction if checked is false", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
-      let checkboxEvent: CheckboxEvent = {
+      const checkboxEvent: CheckboxEvent = {
         event: new MatCheckboxChange(),
         row: new Policy()
       };

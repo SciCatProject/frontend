@@ -1,11 +1,6 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ViewChild, TemplateRef } from "@angular/core";
 import { select, Store } from "@ngrx/store";
-import {
-  first,
-  map,
-  switchMap,
-  mergeMap
-} from "rxjs/operators";
+import { first, map, switchMap, mergeMap } from "rxjs/operators";
 
 import { getDatasetsInBatch } from "state-management/selectors/datasets.selectors";
 import {
@@ -23,7 +18,6 @@ import { ShareGroupApi } from "shared/sdk/services/custom/ShareGroup";
 import { DatasetApi } from "shared/sdk/services/custom/Dataset";
 import { ShareGroup } from "shared/sdk/models/ShareGroup";
 
-import { ViewChild, TemplateRef } from "@angular/core";
 import { MatDialog } from "@angular/material";
 import { COMMA, ENTER } from "@angular/cdk/keycodes";
 import { MatChipInputEvent } from "@angular/material/chips";
@@ -69,8 +63,7 @@ export class BatchViewComponent implements OnInit {
     private shareGroupApi: ShareGroupApi,
     private datasetApi: DatasetApi,
     private dialog: MatDialog
-  ) // private actionsSubj: ActionsSubject
-  {}
+  ) {}
 
   add(event: MatChipInputEvent): void {
     const input = event.input;

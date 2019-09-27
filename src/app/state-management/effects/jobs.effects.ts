@@ -3,8 +3,7 @@
 import { Injectable } from "@angular/core";
 import { Actions, Effect, ofType } from "@ngrx/effects";
 import { Action } from "@ngrx/store";
-import { Observable } from "rxjs";
-import { of } from "rxjs";
+import { Observable, of } from "rxjs";
 import * as lb from "shared/sdk/services";
 import * as JobActions from "state-management/actions/jobs.actions";
 import * as UserActions from "state-management/actions/user.actions";
@@ -82,8 +81,5 @@ export class JobsEffects {
     })
   );
 
-  constructor(
-    private action$: Actions,
-    private jobSrv: lb.JobApi,
-  ) {}
+  constructor(private action$: Actions, private jobSrv: lb.JobApi) {}
 }

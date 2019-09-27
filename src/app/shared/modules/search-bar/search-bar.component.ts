@@ -52,7 +52,7 @@ export class SearchBarComponent implements OnChanges {
   constructor() {}
 
   ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
-    for (let propName in changes) {
+    for (const propName in changes) {
       if (propName === "clear" && changes[propName].currentValue === true) {
         this.query = "";
       }

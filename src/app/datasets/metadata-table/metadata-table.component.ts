@@ -15,25 +15,27 @@ export class MetadataTableComponent implements OnInit, OnDestroy {
   public displayMetadataColumns = ["name", "value", "unit"];
 
   createMetadataArray(scientificMetadata) {
-    let objects = [];
-    for (const key in scientificMetadata) {
-      let metadataObject = {};
-      if ("type" in scientificMetadata[key]) {
-        metadataObject = {
-          name: key,
-          type: scientificMetadata[key].type,
-          value: scientificMetadata[key].value,
-          unit: scientificMetadata[key].unit
-        };
-      } else {
-        metadataObject = {
-          name: key,
-          type: "",
-          value: JSON.stringify(scientificMetadata[key]),
-          unit: ""
-        };
-      }
-      objects.push(metadataObject);
+    const objects = [];
+    if (scientificMetadata) {
+      Object.keys(scientificMetadata).forEach(key => {
+        let metadataObject = {};
+        if ("type" in scientificMetadata[key]) {
+          metadataObject = {
+            name: key,
+            type: scientificMetadata[key].type,
+            value: scientificMetadata[key].value,
+            unit: scientificMetadata[key].unit
+          };
+        } else {
+          metadataObject = {
+            name: key,
+            type: "",
+            value: JSON.stringify(scientificMetadata[key]),
+            unit: ""
+          };
+        }
+        objects.push(metadataObject);
+      });
     }
     return objects;
   }

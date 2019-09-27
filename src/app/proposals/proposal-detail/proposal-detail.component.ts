@@ -9,7 +9,7 @@ import { Proposal } from "state-management/models";
 export class ProposalDetailComponent implements OnInit {
   @Input() proposal: Proposal;
 
-  show: boolean = false;
+  show = false;
 
   constructor() {}
 
