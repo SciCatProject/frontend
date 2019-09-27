@@ -1,12 +1,15 @@
 <mat-form-field>
   <input
-    [placeholder]="placeholder"
+    #searchBar
     matInput
     class="search-input"
+    type="search"
     aria-label="Search"
-    name="search"
-    [ngModel]="query"
-    (ngModelChange)="onChange($event)"
+    [placeholder]="placeholder"
+    (click)="doSearch()"
+    (input)="doSearch()"
+    (keyup)="doSearch()"
+    (focus)="doFocus()"
   />
   <mat-icon matSuffix *ngIf="!placeholder">search</mat-icon>
 </mat-form-field>

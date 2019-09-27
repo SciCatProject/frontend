@@ -12,10 +12,16 @@
     <ng-template [ngIf]="appConfig.searchSamples">
       <mat-card class="big-search">
         <div class="title">Search</div>
-        <app-search-bar (change)="onTextSearchChange($event)"></app-search-bar>
+        <app-search-bar
+          (onSearch)="onTextSearchChange($event)"
+          (onFocus)="onTextSearchChange($event)"
+        ></app-search-bar>
       </mat-card>
       <div class="small-search" fxFlexOrder="2">
-        <app-search-bar (change)="onTextSearchChange($event)"></app-search-bar>
+        <app-search-bar
+          (onSearch)="onTextSearchChange($event)"
+          (onFocus)="onTextSearchChange($event)"
+        ></app-search-bar>
       </div>
     </ng-template>
     <ng-template [ngIf]="appConfig.editSampleEnabled">
