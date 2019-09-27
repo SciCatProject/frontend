@@ -435,9 +435,9 @@ export function datasetsReducer(
       return { ...state, filters };
     }
 
-    // case FILTER_VALUE_UPDATE: {
-    //   return { ...state, facetCountsLoading: true };
-    // }
+    case FILTER_VALUE_UPDATE: {
+      return { ...state, facetCountsLoading: true };
+    }
 
     case SELECT_CURRENT:
     case CURRENT_BLOCKS_COMPLETE:
