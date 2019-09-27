@@ -77,4 +77,16 @@ describe("DatasetDetailComponent", () => {
       expect(component.clickSample.emit).toHaveBeenCalledWith(sampleId);
     });
   });
+
+  describe("#onSaveMetadata()", () => {
+    it("should emit en event", () => {
+      spyOn(component.saveMetadata, "emit");
+
+      const metadata = {};
+      component.onSaveMetadata(metadata);
+
+      expect(component.saveMetadata.emit).toHaveBeenCalledTimes(1);
+      expect(component.saveMetadata.emit).toHaveBeenCalledWith(metadata);
+    });
+  });
 });

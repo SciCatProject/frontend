@@ -1,11 +1,4 @@
-import {
-  Component,
-  Inject,
-  OnInit,
-  Input,
-  Output,
-  EventEmitter
-} from "@angular/core";
+import { Component, Inject, Input, Output, EventEmitter } from "@angular/core";
 import { Attachment, Dataset } from "shared/sdk/models";
 import { APP_CONFIG, AppConfig } from "app-config.module";
 
@@ -14,14 +7,13 @@ import { APP_CONFIG, AppConfig } from "app-config.module";
  * form component
  * @export
  * @class DatasetDetailComponent
- * @implements {OnInit}
  */
 @Component({
   selector: "dataset-detail",
   templateUrl: "./dataset-detail.component.html",
   styleUrls: ["./dataset-detail.component.scss"]
 })
-export class DatasetDetailComponent implements OnInit {
+export class DatasetDetailComponent {
   @Input() dataset: Dataset;
   @Input() datasetWithout: any;
   @Input() attachments: Attachment[];
@@ -48,6 +40,4 @@ export class DatasetDetailComponent implements OnInit {
   }
 
   constructor(@Inject(APP_CONFIG) public appConfig: AppConfig) {}
-
-  ngOnInit() {}
 }

@@ -1,4 +1,4 @@
-<div fxLayout="row" fxLayout.xs="column" [hidden]="!dataset">
+<div fxLayout="row" fxLayout.xs="column" *ngIf="dataset">
   <div fxFlex="80%">
     <mat-card style="margin: 1em">
       <mat-card-header style="background:#7de1ff;">
@@ -160,32 +160,34 @@
         Scientific Metadata
       </mat-card-header>
 
-      <mat-tab-group [hidden]="!appConfig.tableSciDataEnabled">
-        <mat-tab>
-          <ng-template mat-tab-label>
-            <mat-icon> list </mat-icon> View
-          </ng-template>
-          <metadata-view
-            [metadata]="dataset.scientificMetadata"
-          ></metadata-view>
-        </mat-tab>
-        <mat-tab [hidden]="!appConfig.editMetadataEnabled">
-          <ng-template mat-tab-label>
-            <mat-icon> edit </mat-icon> Edit
-          </ng-template>
-          <metadata-edit
-            #metadataEdit
-            [metadata]="dataset.scientificMetadata"
-            (save)="onSaveMetadata($event)"
-          ></metadata-edit>
-        </mat-tab>
-      </mat-tab-group>
+      <ng-template [ngIf]="appConfig.tableSciDataEnabled" [ngIfElse]="jsonView">
+        <mat-tab-group>
+          <mat-tab>
+            <ng-template mat-tab-label>
+              <mat-icon> list </mat-icon> View
+            </ng-template>
+            <metadata-view
+              [metadata]="dataset.scientificMetadata"
+            ></metadata-view>
+          </mat-tab>
+          <mat-tab [hidden]="!appConfig.editMetadataEnabled">
+            <ng-template mat-tab-label>
+              <mat-icon> edit </mat-icon> Edit
+            </ng-template>
+            <metadata-edit
+              [metadata]="dataset.scientificMetadata"
+              (save)="onSaveMetadata($event)"
+            ></metadata-edit>
+          </mat-tab>
+        </mat-tab-group>
+      </ng-template>
 
-      <ngx-json-viewer
-        [hidden]="appConfig.tableSciDataEnabled"
-        [json]="dataset.scientificMetadata"
-        [expanded]="false"
-      ></ngx-json-viewer>
+      <ng-template #jsonView>
+        <ngx-json-viewer
+          [json]="dataset.scientificMetadata"
+          [expanded]="false"
+        ></ngx-json-viewer>
+      </ng-template>
     </mat-card>
 
     <mat-card style="margin:1em">

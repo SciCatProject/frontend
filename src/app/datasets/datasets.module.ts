@@ -42,12 +42,10 @@ import {
 } from "@angular/material";
 
 import { PublishComponent } from "./publish/publish.component";
-import { DatasetFormComponent } from "./dataset-form/dataset-form.component";
 import { ScientificConditionDialogComponent } from "./scientific-condition-dialog/scientific-condition-dialog.component";
 import { jobsReducer } from "../state-management/reducers/jobs.reducer";
 import { LogbooksModule } from "logbooks/logbooks.module";
 import { ReduceComponent } from "./reduce/reduce.component";
-import { MetadataTableComponent } from "./metadata-table/metadata-table.component";
 import { DatasetDetailsDashboardComponent } from "./dataset-details-dashboard/dataset-details-dashboard.component";
 import { DashboardComponent } from "./dashboard/dashboard.component";
 import { DatablocksComponent } from "./datablocks-table/datablocks-table.component";
@@ -105,12 +103,9 @@ import { DatasetsFilterComponent } from "./datasets-filter/datasets-filter.compo
     DatasetDetailComponent,
     DatasetTableComponent,
     DatasetsFilterComponent,
-    DatasetFormComponent,
     PublishComponent,
-    DatasetFormComponent,
     ScientificConditionDialogComponent,
     ReduceComponent,
-    MetadataTableComponent,
     DatasetDetailsDashboardComponent
   ],
   entryComponents: [ScientificConditionDialogComponent],

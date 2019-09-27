@@ -80,7 +80,6 @@ export class DatasetDetailsDashboardComponent implements OnInit, OnDestroy {
   }
 
   onSaveMetadata(metadata: object) {
-    console.log("submitted", metadata);
     this.dataset.scientificMetadata = metadata;
     this.store.dispatch(new SaveDatasetAction(this.dataset));
   }
