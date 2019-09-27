@@ -29,6 +29,7 @@ export class DatasetDetailComponent implements OnInit {
   @Output() clickKeyword = new EventEmitter<string>();
   @Output() clickProposal = new EventEmitter<string>();
   @Output() clickSample = new EventEmitter<string>();
+  @Output() saveMetadata = new EventEmitter<object>();
 
   onClickKeyword(keyword: string): void {
     this.clickKeyword.emit(keyword);
@@ -40,6 +41,10 @@ export class DatasetDetailComponent implements OnInit {
 
   onClickSample(sampleId: string): void {
     this.clickSample.emit(sampleId);
+  }
+
+  onSaveMetadata(metadata: object) {
+    this.saveMetadata.emit(metadata);
   }
 
   constructor(@Inject(APP_CONFIG) public appConfig: AppConfig) {}

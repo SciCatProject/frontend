@@ -1,0 +1,86 @@
+<div class="container">
+  <div *ngIf="metadata">
+    <form [formGroup]="metadataForm">
+      <div
+        formArrayName="items"
+        *ngFor="let item of metadataForm.get('items').controls; let i = index"
+      >
+        <div [formGroupName]="i">
+          <div class="formRow" fxLayout="row" fxLayout.lt-lg="column">
+            <div class="formColumn">
+              <mat-form-field class="selectField">
+                <mat-label>Type</mat-label>
+                <mat-select
+                  formControlName="fieldType"
+                  (selectionChange)="detectType(i)"
+                >
+                  <mat-option *ngFor="let type of typeValues" [value]="type">{{
+                    type
+                  }}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="formColumn">
+              <mat-form-field class="inputField">
+                <input
+                  matInput
+                  formControlName="fieldName"
+                  placeholder="Name"
+                />
+              </mat-form-field>
+            </div>
+            <div class="formColumn">
+              <mat-form-field class="inputField">
+                <input
+                  matInput
+                  formControlName="fieldValue"
+                  placeholder="Value"
+                />
+              </mat-form-field>
+            </div>
+            <div class="formColumn">
+              <mat-form-field class="inputField">
+                <input
+                  matInput
+                  formControlName="fieldUnit"
+                  placeholder="Unit"
+                />
+              </mat-form-field>
+            </div>
+            <div class="formColumn" fxFlexAlign="end">
+              <button
+                mat-icon-button
+                class="deleteButton"
+                type="button"
+                title="Delete row"
+                (click)="onRemove(i)"
+              >
+                <i class="material-icons"> cancel </i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <button
+        mat-flat-button
+        type="button"
+        class="addButton"
+        (click)="addMetadata()"
+      >
+        <i class="material-icons"> add_circle </i>
+        Add row
+      </button>
+
+      <button
+        mat-flat-button
+        type="submit"
+        class="submitButton"
+        (click)="doSave()"
+      >
+        <i class="material-icons"> save </i>
+        Save changes
+      </button>
+    </form>
+  </div>
+</div>

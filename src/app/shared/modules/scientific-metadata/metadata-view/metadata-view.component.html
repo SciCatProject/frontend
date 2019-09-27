@@ -1,0 +1,58 @@
+<div class="metadataTable" *ngIf="metadata">
+  <mat-table class="metadataTable" [dataSource]="tableData">
+    <!-- Column Definitions -->
+
+    <!-- Name Column -->
+    <ng-container matColumnDef="name" style="align-content: center">
+      <mat-header-cell *matHeaderCellDef>
+        Name
+      </mat-header-cell>
+      <mat-cell *matCellDef="let metadata">
+        {{ metadata.name | replaceUnderscore | titlecase }}
+      </mat-cell>
+    </ng-container>
+
+    <!-- Value Column -->
+    <ng-container matColumnDef="value" style="align-content: center">
+      <mat-header-cell *matHeaderCellDef>
+        Value
+      </mat-header-cell>
+      <mat-cell *matCellDef="let metadata">
+        <ng-template [ngIf]="metadata.type === 'date'" [ngIfElse]="stringValue">
+          <div fxLayout="column">
+            <div>
+              {{ metadata.value | date: "yyyy-MM-dd," }}
+            </div>
+            <div>
+              {{ metadata.value | date: "HH:mm:ss zzzz" }}
+            </div>
+          </div>
+        </ng-template>
+        <ng-template #stringValue>
+          {{ metadata.value }}
+        </ng-template>
+      </mat-cell>
+    </ng-container>
+
+    <!-- Unit Column -->
+    <ng-container matColumnDef="unit" style="align-content: center">
+      <mat-header-cell *matHeaderCellDef>
+        Unit
+      </mat-header-cell>
+      <mat-cell *matCellDef="let metadata">
+        <ng-template [ngIf]="metadata.unit.length > 0" [ngIfElse]="noUnit">
+          {{ metadata.unit }}
+        </ng-template>
+        <ng-template #noUnit>
+          --
+        </ng-template>
+      </mat-cell>
+    </ng-container>
+
+    <!-- End of Column Definitions -->
+
+    <mat-header-row *matHeaderRowDef="columnsToDisplay"> </mat-header-row>
+
+    <mat-row *matRowDef="let metadata; columns: columnsToDisplay"> </mat-row>
+  </mat-table>
+</div>
