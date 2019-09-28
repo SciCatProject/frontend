@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from "@angular/core";
 import { COMMA, ENTER } from "@angular/cdk/keycodes";
 
-import { select, Store } from "@ngrx/store";
+import { select, Store, ActionsSubject } from "@ngrx/store";
 import { map, first, tap } from "rxjs/operators";
 
 import { getDatasetsInBatch } from "state-management/selectors/datasets.selectors";
@@ -19,7 +19,6 @@ import { formatDate } from "@angular/common";
 import { MessageType } from "state-management/models";
 import { ShowMessageAction } from "state-management/actions/user.actions";
 import { Router } from "@angular/router";
-import { ActionsSubject } from "@ngrx/store";
 
 @Component({
   selector: "publish",
@@ -59,14 +58,14 @@ export class PublishComponent implements OnInit {
     @Inject(APP_CONFIG) private appConfig,
     private publishedDataApi: PublishedDataApi,
     private actionsSubj: ActionsSubject,
-    private router: Router,
+    private router: Router
   ) {
     this.subsc = this.actionsSubj.subscribe(data => {
       if (data.type === PublishedDataActionTypes.AddPublishedData) {
         this.store.dispatch(
           new ShowMessageAction({
             type: MessageType.Success,
-            content: "Publication Successful" ,
+            content: "Publication Successful",
             duration: 5000
           })
         );

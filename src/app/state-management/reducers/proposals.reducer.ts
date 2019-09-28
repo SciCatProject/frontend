@@ -69,8 +69,8 @@ export function proposalsReducer(
       const list = (action as FetchProposalsCompleteAction).proposals;
       const proposalsLoading = false;
       const proposals = list.reduce(
-        (proposals, proposal) => ({
-          ...proposals,
+        (existingProposals, proposal) => ({
+          ...existingProposals,
           [proposal.proposalId]: proposal
         }),
         {}
@@ -84,7 +84,10 @@ export function proposalsReducer(
     case FETCH_DATASETS_FOR_PROPOSAL_COMPLETE: {
       const list = (action as FetchDatasetsForProposalCompleteAction).datasets;
       const datasets = list.reduce(
-        (datasets, dataset) => ({ ...datasets, [dataset.pid]: dataset }),
+        (existingDatasets, dataset) => ({
+          ...existingDatasets,
+          [dataset.pid]: dataset
+        }),
         {}
       );
       const datasetCount = Object.keys(datasets).length;
@@ -150,7 +153,7 @@ export function proposalsReducer(
       const updatedAttachment = (action as UpdateAttachmentCaptionCompleteAction)
         .attachment;
       const attachments = state.currentProposal.attachments;
-      let attach2 = attachments.filter(
+      const attach2 = attachments.filter(
         attachment => attachment.id !== updatedAttachment.id
       );
       attach2.push(updatedAttachment);

@@ -89,7 +89,7 @@ export class DatasetFormComponent implements OnInit, OnDestroy {
   }
 
   createMetadataObjects(): object {
-    let metadata = {};
+    const metadata = {};
     this.items.controls.forEach(control => {
       metadata[control.value.fieldName] = {
         type: control.value.fieldType

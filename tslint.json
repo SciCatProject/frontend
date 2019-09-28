@@ -24,6 +24,8 @@
     "no-console": [true, "debug", "info", "time", "timeEnd", "trace"],
     "no-construct": true,
     "no-debugger": true,
+    "no-duplicate-imports": true,
+    "no-duplicate-switch-case": true,
     "no-duplicate-variable": true,
     "no-empty": false,
     "no-empty-interface": true,
@@ -49,6 +51,7 @@
     "quotemark": [true, "double"],
     "radix": true,
     "semicolon": true,
+    "switch-default": true,
     "triple-equals": [true, "allow-null-check"],
     "typedef-whitespace": [
       true,

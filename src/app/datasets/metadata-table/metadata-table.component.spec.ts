@@ -63,7 +63,7 @@ describe("MetadataTableComponent", () => {
 
       expect(metadataArray[0].name).toEqual("untypedTestName");
       expect(metadataArray[0].type).toEqual("");
-      expect(metadataArray[0].value).toEqual('{"v":"test","u":""}');
+      expect(metadataArray[0].value).toEqual("{\"v\":\"test\",\"u\":\"\"}");
       expect(metadataArray[0].unit).toEqual("");
     });
   });

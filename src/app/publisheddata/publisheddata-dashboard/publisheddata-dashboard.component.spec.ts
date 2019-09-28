@@ -19,7 +19,7 @@ describe("PublisheddataDashboardComponent", () => {
   let component: PublisheddataDashboardComponent;
   let fixture: ComponentFixture<PublisheddataDashboardComponent>;
 
-  let router = {
+  const router = {
     navigateByUrl: jasmine.createSpy("navigateByUrl")
   };
   let store: MockStore;

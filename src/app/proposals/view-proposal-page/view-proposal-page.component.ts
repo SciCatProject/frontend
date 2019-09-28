@@ -38,7 +38,7 @@ export class ViewProposalPageComponent implements OnInit, OnDestroy {
   datasetsSubscription: Subscription;
   routeSubscription: Subscription;
 
-  tablePaginate: boolean = true;
+  tablePaginate = true;
   tableData: any[];
   tableColumns: TableColumn[] = [
     { name: "name", icon: "portrait", sort: false, inList: true },

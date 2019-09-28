@@ -99,7 +99,7 @@ describe("PublishedData Reducer", () => {
 
   describe("UpdatePublishedData", () => {
     xit("should ...", () => {
-      let update: Update<PublishedData> = null;
+      const update: Update<PublishedData> = null;
       const payload = {
         publishedData: update
       };
@@ -110,7 +110,7 @@ describe("PublishedData Reducer", () => {
 
   describe("UpdatePublishedDatas", () => {
     it("should return the initial state", () => {
-      let updates: Update<PublishedData>[] = [];
+      const updates: Update<PublishedData>[] = [];
       const payload = {
         publishedDatas: updates
       };

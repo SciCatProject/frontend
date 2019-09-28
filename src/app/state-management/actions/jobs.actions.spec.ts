@@ -1,15 +1,26 @@
 import { Job } from "shared/sdk/models";
-import { SubmitAction, SUBMIT } from "./jobs.actions";
-import { SubmitCompleteAction, SUBMIT_COMPLETE } from "./jobs.actions";
-import { FailedAction, FAILED } from "./jobs.actions";
-import { RetrieveCompleteAction, RETRIEVE_COMPLETE } from "./jobs.actions";
-import { SearchIDAction, SEARCH_ID } from "./jobs.actions";
-import { SearchIDCompleteAction, SEARCH_ID_COMPLETE } from "./jobs.actions";
-import { SearchIDFailedAction, SEARCH_ID_FAILED } from "./jobs.actions";
-import { CurrentJobAction, SELECT_CURRENT } from "./jobs.actions";
-import { SortUpdateAction, SORT_UPDATE } from "./jobs.actions";
-import { GetCountCompleteAction, GET_COUNT_COMPLETE } from "./jobs.actions";
-
+import {
+  SubmitAction,
+  SUBMIT,
+  SubmitCompleteAction,
+  SUBMIT_COMPLETE,
+  FailedAction,
+  FAILED,
+  RetrieveCompleteAction,
+  RETRIEVE_COMPLETE,
+  SearchIDAction,
+  SEARCH_ID,
+  SearchIDCompleteAction,
+  SEARCH_ID_COMPLETE,
+  SearchIDFailedAction,
+  SEARCH_ID_FAILED,
+  CurrentJobAction,
+  SELECT_CURRENT,
+  SortUpdateAction,
+  SORT_UPDATE,
+  GetCountCompleteAction,
+  GET_COUNT_COMPLETE
+} from "./jobs.actions";
 
 describe("SubmitAction", () => {
   it("should create an action", () => {

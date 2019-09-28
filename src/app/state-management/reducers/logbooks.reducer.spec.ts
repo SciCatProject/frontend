@@ -7,7 +7,7 @@ import { APP_DI_CONFIG } from "app-config.module";
 describe("LogbooksReducer", () => {
   describe("default", () => {
     it("should return the initial state", () => {
-      let filter: LogbookFilters = {
+      const filter: LogbookFilters = {
         textSearch: "",
         showBotMessages: true,
         showImages: true,
@@ -86,7 +86,7 @@ describe("LogbooksReducer", () => {
   describe("#formatImageUrls", () => {
     it("should reformat 'mxc://' urls to 'http(s)://' urls", () => {
       const logbook = new Logbook();
-      const message = {
+      const inputMessage = {
         content: {
           info: {
             thumbnail_url: "mxc://"
@@ -95,7 +95,7 @@ describe("LogbooksReducer", () => {
           url: "mxc://"
         }
       };
-      logbook.messages = [message];
+      logbook.messages = [inputMessage];
       formatImageUrls(logbook);
 
       logbook.messages.forEach(message => {
@@ -124,7 +124,7 @@ describe("LogbooksReducer", () => {
 
     it("should do nothing if msgtype is not 'm.image'", () => {
       const logbook = new Logbook();
-      const message = {
+      const inputMessage = {
         content: {
           info: {
             thumbnail_url: "mxc://"
@@ -133,7 +133,7 @@ describe("LogbooksReducer", () => {
           url: "mxc://"
         }
       };
-      logbook.messages = [message];
+      logbook.messages = [inputMessage];
       formatImageUrls(logbook);
 
       logbook.messages.forEach(message => {
@@ -144,14 +144,14 @@ describe("LogbooksReducer", () => {
 
     it("should only format 'url' if there is no 'thumbnail_url' property", () => {
       const logbook = new Logbook();
-      const message = {
+      const inputMessage = {
         content: {
           info: {},
           msgtype: "m.image",
           url: "mxc://"
         }
       };
-      logbook.messages = [message];
+      logbook.messages = [inputMessage];
       formatImageUrls(logbook);
 
       logbook.messages.forEach(message => {
@@ -164,7 +164,7 @@ describe("LogbooksReducer", () => {
 
     it("should only format 'thumbnail_url' if there is no 'url' property", () => {
       const logbook = new Logbook();
-      const message = {
+      const inputMessage = {
         content: {
           info: {
             thumbnail_url: "mxc://"
@@ -172,7 +172,7 @@ describe("LogbooksReducer", () => {
           msgtype: "m.image"
         }
       };
-      logbook.messages = [message];
+      logbook.messages = [inputMessage];
       formatImageUrls(logbook);
 
       logbook.messages.forEach(message => {
@@ -185,13 +185,13 @@ describe("LogbooksReducer", () => {
 
     it("should do nothing if there are no properties 'thumbnail_url' and 'url'", () => {
       const logbook = new Logbook();
-      const message = {
+      const inputMessage = {
         content: {
           info: {},
           msgtype: "m.image"
         }
       };
-      logbook.messages = [message];
+      logbook.messages = [inputMessage];
       formatImageUrls(logbook);
 
       logbook.messages.forEach(message => {
