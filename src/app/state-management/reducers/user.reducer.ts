@@ -129,6 +129,3 @@ export function userReducer(
       return state;
   }
 }
-
-export const getEmail = (state: UserState) => state.email;
-export const getCurrentUser = (state: UserState) => state.currentUser;
