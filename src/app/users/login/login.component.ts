@@ -63,13 +63,6 @@ export class LoginComponent implements OnInit, OnDestroy {
   ) {
     this.returnUrl = this.route.snapshot.queryParams["returnUrl"] || "/";
 
-    if (this.appConfig.facility === "ESS") {
-      this.store.dispatch( new ua.DeselectColumnAction("dataStatus") );
-      this.store.dispatch( new ua.DeselectColumnAction("runNumber") );
-      this.store.dispatch( new ua.SelectColumnAction("runNumber") );
-    } else {
-      this.store.dispatch( new ua.DeselectColumnAction("runNumber") );
-    }
     /* this.store.select(selectors.users.getCurrentUser)
     .subscribe(result => {
       console.log(result);
