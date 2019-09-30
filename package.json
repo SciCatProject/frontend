@@ -40,7 +40,6 @@
     "deep-equal": "^1.1.0",
     "filesize": "^4.2.0",
     "hammerjs": "^2.0.8",
-    "json-format": "^1.0.1",
     "ngx-file-helpers": "^2.0.0",
     "ngx-json-viewer": "^2.4.0",
     "ngx-linky": "^2.2.0",
