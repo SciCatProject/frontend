@@ -1,11 +1,6 @@
 import { Action } from "@ngrx/store";
 import { Policy } from "shared/sdk/models";
 
-export const LOAD = "[Policy] Load";
-export const COUNT_COMPLETE = "[Policy] Complete";
-export const SELECT_CURRENT = "[Policy] Current set selected";
-export const TOTAL_UPDATE = "[Policy] Total Policies Update";
-
 export const SELECT_POLICY = "[Policy] Select Policy";
 export const DESELECT_POLICY = "[Policy] Deselect Policy";
 export const CLEAR_SELECTION = "[Policy] Clear Selection";
@@ -25,13 +20,15 @@ export const SORT_BY_COLUMN = "[Policy] Sort by Column";
 export const FETCH_COUNT_POLICIES = "[Policy] Fetch count";
 export const FAILED_POLICIES = "[Policy] Failed policies action";
 export const FETCH_EDITABLE_POLICIES = "[Policy] Fetch editable policies";
-export const FETCH_EDITABLE_POLICIES_COMPLETE = "[Policy] Fetch editable policies complete";
-
-
+export const FETCH_EDITABLE_POLICIES_COMPLETE =
+  "[Policy] Fetch editable policies complete";
 
 export class SubmitPolicyAction implements Action {
   readonly type = SUBMIT_POLICY;
-  constructor(readonly ownerList: string[], readonly policyAttributes: Policy) {}
+  constructor(
+    readonly ownerList: string[],
+    readonly policyAttributes: Policy
+  ) {}
 }
 
 export class SubmitPolicyCompleteAction implements Action {
@@ -86,23 +83,20 @@ export class FetchCountPolicies implements Action {
   constructor(readonly count: number) {}
 }
 
-
 export class FailedPoliciesAction implements Action {
   readonly type = FAILED_POLICIES;
-  constructor( err: string ) {}
+  constructor(err: string) {}
 }
 
 export class FetchEditablePolicies implements Action {
   readonly type = FETCH_EDITABLE_POLICIES;
-  constructor( ) {}
+  constructor() {}
 }
 
 export class FetchEditablePoliciesComplete implements Action {
   readonly type = FETCH_EDITABLE_POLICIES_COMPLETE;
-  constructor( readonly editablePolicies: Policy[]) {}
+  constructor(readonly editablePolicies: Policy[]) {}
 }
-
-
 
 /*export type FetchPoliciesOutcomeAction =
   | FetchPoliciesCompleteAction
