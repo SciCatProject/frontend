@@ -10,7 +10,7 @@ import {
   SelectColumnAction,
   DeselectColumnAction
 } from "state-management/actions/user.actions";
-import { Subscription } from "rxjs";
+import { Subscription, of } from "rxjs";
 import {
   getDisplayedColumns,
   getConfigurableColumns
@@ -104,6 +104,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   private submitJobSubscription: Subscription;
   private jobErrorSubscription: Subscription;
   dispColumns$ = this.store.pipe(select(getDisplayedColumns));
+
   configCols$ = this.store.pipe(select(getConfigurableColumns));
   configForm = new FormControl();
   $ = this.store.pipe(select(getConfigurableColumns)).subscribe(ret => {
@@ -129,6 +130,20 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
+    if (this.appConfig.facility === "ESS") {
+      this.dispColumns$ = of([
+        "select",
+        "datasetName",
+        "runNumber",
+        "sourceFolder",
+        "size",
+        "creationTime",
+        "type",
+        "image",
+        "metadata",
+        "proposalId"
+      ] );
+    }
     this.submitJobSubscription = this.store.pipe(select(submitJob)).subscribe(
       ret => {
         if (ret && Array.isArray(ret)) {

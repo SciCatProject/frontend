@@ -10,7 +10,7 @@ export const environment = {
   synapseBaseUrl: "https://scitest.esss.lu.se",
   riotBaseUrl: "http://scitest.esss.lu.se/riot",
   externalAuthEndpoint: "/auth/msad",
-  archiveWorkflowEnabled: true,
+  archiveWorkflowEnabled: false,
   columnSelectEnabled: true,
   datasetReduceEnabled: true,
   disabledDatasetColumns: [],

@@ -39,6 +39,7 @@ export const initialUserState: UserState = {
   columns: [
     "select",
     "datasetName",
+    "runNumber",
     "sourceFolder",
     "size",
     "creationTime",
@@ -53,6 +54,7 @@ export const initialUserState: UserState = {
   displayedColumns: [
     "select",
     "datasetName",
+    "runNumber",
     "sourceFolder",
     "size",
     "creationTime",

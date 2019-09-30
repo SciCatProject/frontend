@@ -182,6 +182,23 @@
       </mat-cell>
     </ng-container>
 
+    <ng-container matColumnDef="runNumber">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>
+        <div fxLayout="column" style="align-items: center">
+          <div>
+            <i class="material-icons">directions_run</i>
+          </div>
+          <div class="table_column">Run&nbsp;No.</div>
+        </div>
+      </mat-header-cell>
+      <mat-cell
+        *matCellDef="let dataset"
+        matTooltip="{{ dataset.scientificMetadata.runNumber }}"
+      >
+        {{ dataset.scientificMetadata.runNumber  }}
+      </mat-cell>
+    </ng-container>
+
     <!-- Size Column -->
     <ng-container matColumnDef="size">
       <mat-header-cell *matHeaderCellDef mat-sort-header>
