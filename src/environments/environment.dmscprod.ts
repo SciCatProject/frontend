@@ -19,6 +19,18 @@ export const environment = {
   editSampleEnable: false,
   facility: "ESS",
   fileColorEnabled: true,
+  localColumns: [
+    "select",
+    "datasetName",
+    "runNumber",
+    "sourceFolder",
+    "size",
+    "creationTime",
+    "type",
+    "image",
+    "metadata",
+    "proposalId"
+  ],
   logbookEnabled: false,
   maxDirectDownloadSize: 5000000000,
   metadataPreviewEnabled: true,

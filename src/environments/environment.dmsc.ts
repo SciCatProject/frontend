@@ -14,6 +14,18 @@ export const environment = {
   editSampleEnabled: true,
   disabledDatasetColumns: ["archiveStatus", "retrieveStatus"],
   shoppingCartEnabled: true,
+  localColumns: [
+    "select",
+    "datasetName",
+    "runNumber",
+    "sourceFolder",
+    "size",
+    "creationTime",
+    "type",
+    "image",
+    "metadata",
+    "proposalId"
+  ],
   facility: "ESS",
   userProfileImageEnabled: true
 };
