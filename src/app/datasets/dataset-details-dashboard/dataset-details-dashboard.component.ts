@@ -1,4 +1,11 @@
-import { Component, OnInit, OnDestroy, Inject } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  Inject,
+  ChangeDetectorRef,
+  AfterViewChecked
+} from "@angular/core";
 import { Store, select } from "@ngrx/store";
 import {
   Dataset,
@@ -47,7 +54,8 @@ import { SubmitCaptionEvent } from "shared/modules/file-uploader/file-uploader.c
   templateUrl: "./dataset-details-dashboard.component.html",
   styleUrls: ["./dataset-details-dashboard.component.scss"]
 })
-export class DatasetDetailsDashboardComponent implements OnInit, OnDestroy {
+export class DatasetDetailsDashboardComponent
+  implements OnInit, OnDestroy, AfterViewChecked {
   datasetWithout$ = this.store.pipe(select(getCurrentDatasetWithoutOrigData));
   origDatablocks$ = this.store.pipe(select(getCurrentOrigDatablocks));
   datablocks$ = this.store.pipe(select(getCurrentDatablocks));
@@ -155,6 +163,7 @@ export class DatasetDetailsDashboardComponent implements OnInit, OnDestroy {
 
   constructor(
     @Inject(APP_CONFIG) public appConfig: AppConfig,
+    private cdRef: ChangeDetectorRef,
     private route: ActivatedRoute,
     private router: Router,
     private store: Store<Dataset>,
@@ -221,6 +230,10 @@ export class DatasetDetailsDashboardComponent implements OnInit, OnDestroy {
     );
 
     this.jwt$ = this.userApi.jwt();
+  }
+
+  ngAfterViewChecked() {
+    this.cdRef.detectChanges();
   }
 
   ngOnDestroy() {
