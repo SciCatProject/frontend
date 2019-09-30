@@ -18,6 +18,7 @@ import {
   MatCardModule,
   MatGridListModule
 } from "@angular/material";
+import { APP_CONFIG, AppConfigModule } from "app-config.module";
 
 /* tslint:disable:no-unused-variable */
 describe("LoginComponent", () => {
@@ -31,6 +32,13 @@ describe("LoginComponent", () => {
         providers: [
           { provide: ADAuthService, useClass: MockAuthService },
           { provide: LoopBackAuth, useClass: MockLoopBackAuth },
+          {
+            provide: APP_CONFIG,
+            useValue: {
+              disabledDatasetColumns: [],
+              archiveWorkflowEnabled: true
+            }
+          },
           { provide: ActivatedRoute, useClass: MockActivatedRoute },
           { provide: Router, useClass: MockRouter },
           { provide: Store, useClass: MockStore }
@@ -39,6 +47,7 @@ describe("LoginComponent", () => {
     });
     TestBed.configureTestingModule({
       imports: [
+        AppConfigModule,
         ReactiveFormsModule,
         StoreModule.forRoot({}),
         MatCheckboxModule,
