@@ -193,8 +193,8 @@
       <mat-cell
         *matCellDef="let dataset"
       >
-      <div *ngIf="dataset.scientificMetadata && dataset.scientificMetadata.runNumber ">
-        {{ dataset.scientificMetadata.runNumber }}
+      <div *ngIf="dataset.scientificMetadata && dataset.scientificMetadata.runNumber && dataset.scientificMetadata.runNumber.value ">
+        {{ dataset.scientificMetadata.runNumber.value }}
       </div>
       </mat-cell>
     </ng-container>
@@ -217,10 +217,10 @@
             [ngStyle]="{
               'height.px': '4',
               'width.px':
-                dataset.size >= 1000000000
-                  ? 35 + (5 * dataset.size) / 10000000000
-                  : 5 + (15 * dataset.size) / 1000000000,
-              background: dataset.size >= 1000000000 ? 'red' : 'green'
+                dataset.size >= 4000000000
+                  ? 35 + (5 * dataset.size) / 40000000000
+                  : 5 + (15 * dataset.size) / 4000000000,
+              background: dataset.size >= 4000000000 ? 'red' : 'green'
             }"
           >
             &nbsp;
