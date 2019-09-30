@@ -130,7 +130,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    if (this.appConfig.localColumn) {
+    if (this.appConfig.facility === "ESS") {
       this.dispColumns$ = of(this.appConfig.localColumn);
     }
     this.submitJobSubscription = this.store.pipe(select(submitJob)).subscribe(
