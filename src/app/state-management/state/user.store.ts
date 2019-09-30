@@ -1,5 +1,6 @@
 import { Settings, Message, User } from "../models";
 import { AccessToken } from "shared/sdk";
+import { APP_DI_CONFIG } from "app-config.module";
 
 // NOTE It IS ok to make up a state of other sub states
 export interface UserState {
@@ -39,6 +40,7 @@ export const initialUserState: UserState = {
   columns: [
     "select",
     "datasetName",
+    "runNumber",
     "sourceFolder",
     "size",
     "creationTime",
@@ -50,9 +52,14 @@ export const initialUserState: UserState = {
     "dataStatus",
     "derivedDatasetsNum"
   ],
-  displayedColumns: [
+  displayedColumns: getColumns()
+};
+
+function getColumns() {
+  let columns = [
     "select",
     "datasetName",
+    "runNumber",
     "sourceFolder",
     "size",
     "creationTime",
@@ -61,6 +68,11 @@ export const initialUserState: UserState = {
     "metadata",
     "proposalId",
     "ownerGroup",
-    "dataStatus"
-  ]
-};
+    "dataStatus",
+    "derivedDatasetsNum"
+  ];
+  if (APP_DI_CONFIG.facility === "ESS") {
+    columns = APP_DI_CONFIG.localColumns;
+  }
+  return columns;
+}

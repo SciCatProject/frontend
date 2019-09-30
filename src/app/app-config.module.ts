@@ -19,6 +19,7 @@ export class AppConfig {
   fileColorEnabled: boolean;
   gettingStarted: string;
   ingestManual: string;
+  localColumns: string[];
   logbookEnabled: boolean;
   maxDirectDownloadSize: number;
   metadataPreviewEnabled: boolean;
@@ -40,29 +41,42 @@ export const APP_DI_CONFIG: AppConfig = {
   synapseBaseUrl: environment["synapseBaseUrl"] || null,
   riotBaseUrl: environment["riotBaseUrl"] || null,
   production: environment.production,
-  disabledDatasetColumns: environment["disabledDatasetColumns"] || [],
   archiveWorkflowEnabled: environment["archiveWorkflowEnabled"] || null,
+  columnSelectEnabled: environment["columnSelectEnabled"] || false,
+  datasetReduceEnabled: environment["datasetReduceEnabled"] || false,
+  disabledDatasetColumns: environment["disabledDatasetColumns"] || [],
   editMetadataEnabled: environment["editMetadataEnabled"] || null,
   editSampleEnabled: environment["editSampleEnabled"] || null,
-  scienceSearchEnabled: environment["scienceSearchEnabled"] || null,
   facility: environment["facility"] || null,
-  shoppingCartEnabled: environment["shoppingCartEnabled"] || false,
-  multipleDownloadEnabled: environment["multipleDownloadEnabled"] || false,
-  multipleDownloadAction: environment["multipleDownloadAction"],
-  maxDirectDownloadSize: environment["maxDirectDownloadSize"] || null,
-  sftpHost: environment["sftpHost"] || null,
-  columnSelectEnabled: environment["columnSelectEnabled"] || false,
-  userProfileImageEnabled: environment["userProfileImageEnabled"] || false,
-  logbookEnabled: environment["logbookEnabled"] || false,
-  tableSciDataEnabled: environment["tableSciDataEnabled"] || false,
-  datasetReduceEnabled: environment["datasetReduceEnabled"] || false,
   fileColorEnabled: environment["fileColorEnabled"] || false,
-  metadataPreviewEnabled: environment["metadataPreviewEnabled"] || false,
-  ingestManual: environment["ingestManual"] || null,
   gettingStarted: environment["gettingStarted"] || null,
+  ingestManual: environment["ingestManual"] || null,
+  logbookEnabled: environment["logbookEnabled"] || false,
+  localColumns: environment["localColumns"] || [
+    "select",
+    "datasetName",
+    "sourceFolder",
+    "size",
+    "creationTime",
+    "type",
+    "image",
+    "metadata",
+    "proposalId",
+    "ownerGroup",
+    "dataStatus",
+  ],
+  maxDirectDownloadSize: environment["maxDirectDownloadSize"] || null,
+  metadataPreviewEnabled: environment["metadataPreviewEnabled"] || false,
+  multipleDownloadAction: environment["multipleDownloadAction"],
+  multipleDownloadEnabled: environment["multipleDownloadEnabled"] || false,
+  scienceSearchEnabled: environment["scienceSearchEnabled"] || null,
   searchProposals: environment["searchProposals"] || false,
+  searchPublicDataEnabled: environment["searchPublicDataEnabled"] || false,
   searchSamples: environment["searchSamples"] || false,
-  searchPublicDataEnabled: environment["searchPublicDataEnabled"] || false
+  sftpHost: environment["sftpHost"] || null,
+  shoppingCartEnabled: environment["shoppingCartEnabled"] || false,
+  tableSciDataEnabled: environment["tableSciDataEnabled"] || false,
+  userProfileImageEnabled: environment["userProfileImageEnabled"] || false
 };
 
 @NgModule({

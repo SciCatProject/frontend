@@ -104,6 +104,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   private submitJobSubscription: Subscription;
   private jobErrorSubscription: Subscription;
   dispColumns$ = this.store.pipe(select(getDisplayedColumns));
+
   configCols$ = this.store.pipe(select(getConfigurableColumns));
   configForm = new FormControl();
   $ = this.store.pipe(select(getConfigurableColumns)).subscribe(ret => {

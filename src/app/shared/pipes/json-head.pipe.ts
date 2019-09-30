@@ -19,8 +19,8 @@ export class JsonHeadPipe implements PipeTransform {
         break;
       }
     }
-    const key1 = Object.keys(value)[0];
-    let key2 = Object.keys(value)[1];
+    const key1 = Object.keys(value).sort()[0];
+    let key2 = Object.keys(value).sort()[1];
     let val1 = value[key1];
     if (val1 !== undefined && val1.hasOwnProperty("unit")) {
       val1 = val1.value.toString() + " " + val1.unit;

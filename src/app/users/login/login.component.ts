@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit, Inject } from "@angular/core";
 import { FormBuilder, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { select, Store } from "@ngrx/store";
@@ -9,6 +9,7 @@ import {
   getIsLoggedIn,
   getIsLoggingIn
 } from "state-management/selectors/users.selectors";
+import { APP_CONFIG, AppConfig } from "app-config.module";
 
 interface LoginForm {
   username: string;
@@ -57,9 +58,11 @@ export class LoginComponent implements OnInit, OnDestroy {
     public fb: FormBuilder,
     private router: Router,
     private route: ActivatedRoute,
-    private store: Store<any>
+    private store: Store<any>,
+    @Inject(APP_CONFIG) public appConfig: AppConfig
   ) {
     this.returnUrl = this.route.snapshot.queryParams["returnUrl"] || "/";
+
     /* this.store.select(selectors.users.getCurrentUser)
     .subscribe(result => {
       console.log(result);
