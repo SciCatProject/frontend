@@ -18,6 +18,18 @@ export const environment = {
   editSampleEnabled: true,
   facility: "ESS",
   fileColorEnabled: true,
+  localColumn: [
+    "select",
+    "datasetName",
+    "runNumber",
+    "sourceFolder",
+    "size",
+    "creationTime",
+    "type",
+    "image",
+    "metadata",
+    "proposalId"
+  ],
   logbookEnabled: true,
   metadataPreviewEnabled: true,
   multipleDownloadEnabled: true,

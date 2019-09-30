@@ -130,19 +130,8 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    if (this.appConfig.facility === "ESS") {
-      this.dispColumns$ = of([
-        "select",
-        "datasetName",
-        "runNumber",
-        "sourceFolder",
-        "size",
-        "creationTime",
-        "type",
-        "image",
-        "metadata",
-        "proposalId"
-      ] );
+    if (this.appConfig.localColumn) {
+      this.dispColumns$ = of(this.appConfig.localColumn);
     }
     this.submitJobSubscription = this.store.pipe(select(submitJob)).subscribe(
       ret => {
