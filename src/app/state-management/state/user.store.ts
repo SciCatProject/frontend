@@ -1,6 +1,5 @@
 import { Settings, Message, User } from "../models";
 import { AccessToken } from "shared/sdk";
-import { APP_CONFIG, AppConfig } from "app-config.module";
 
 // NOTE It IS ok to make up a state of other sub states
 export interface UserState {

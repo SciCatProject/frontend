@@ -10,7 +10,7 @@ import {
   SelectColumnAction,
   DeselectColumnAction
 } from "state-management/actions/user.actions";
-import { Subscription, of } from "rxjs";
+import { Subscription } from "rxjs";
 import {
   getDisplayedColumns,
   getConfigurableColumns
