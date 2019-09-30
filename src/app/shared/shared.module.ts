@@ -8,6 +8,7 @@ import { FileUploaderModule } from "./modules/file-uploader/file-uploader.module
 import { PipesModule } from "./pipes/pipes.module";
 import { TableModule } from "./modules/table/table.module";
 import { SearchBarModule } from "./modules/search-bar/search-bar.module";
+import { ScientificMetadataModule } from "./modules/scientific-metadata/scientific-metadata.module";
 
 @NgModule({
   imports: [
@@ -18,6 +19,7 @@ import { SearchBarModule } from "./modules/search-bar/search-bar.module";
     DialogModule,
     ReactiveFormsModule,
     PipesModule,
+    ScientificMetadataModule,
     SearchBarModule,
     TableModule
   ],
@@ -29,6 +31,7 @@ import { SearchBarModule } from "./modules/search-bar/search-bar.module";
     DialogModule,
     ErrorPageModule,
     PipesModule,
+    ScientificMetadataModule,
     SearchBarModule,
     TableModule
   ]

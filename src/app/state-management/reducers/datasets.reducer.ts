@@ -163,7 +163,7 @@ export function datasetsReducer(
     }
 
     case SAVE_DATASET: {
-      return { ...state };
+      return { ...state, datasetsLoading: true };
     }
 
     case SAVE_DATASET_COMPLETE: {

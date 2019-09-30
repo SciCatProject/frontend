@@ -1,13 +1,22 @@
 import { Component, OnInit, OnDestroy, Inject } from "@angular/core";
 import { Store, select } from "@ngrx/store";
-import { Dataset, UserApi, User, Job, Attachment } from "shared/sdk";
+import {
+  Dataset,
+  UserApi,
+  User,
+  Job,
+  Attachment,
+  RawDataset,
+  DerivedDataset
+} from "shared/sdk";
 import {
   getCurrentDataset,
   getCurrentDatasetWithoutOrigData,
   getCurrentOrigDatablocks,
   getCurrentDatablocks,
   getCurrentAttachments,
-  getViewPublicMode
+  getViewPublicMode,
+  getIsLoading
 } from "state-management/selectors/datasets.selectors";
 import {
   getIsAdmin,
@@ -26,7 +35,8 @@ import {
   DeleteAttachment,
   AddAttachment,
   ClearFacetsAction,
-  AddKeywordFilterAction
+  AddKeywordFilterAction,
+  SaveDatasetAction
 } from "state-management/actions/datasets.actions";
 import { SubmitAction } from "state-management/actions/jobs.actions";
 import { ReadFile } from "ngx-file-helpers";
@@ -43,9 +53,10 @@ export class DatasetDetailsDashboardComponent implements OnInit, OnDestroy {
   datablocks$ = this.store.pipe(select(getCurrentDatablocks));
   attachments$ = this.store.pipe(select(getCurrentAttachments));
   isAdmin$ = this.store.pipe(select(getIsAdmin));
+  loading$ = this.store.pipe(select(getIsLoading));
   jwt$: Observable<any>;
 
-  dataset: Dataset;
+  dataset: RawDataset | DerivedDataset;
   viewPublic: boolean;
   pickedFile: ReadFile;
   attachment: Attachment;
@@ -66,6 +77,11 @@ export class DatasetDetailsDashboardComponent implements OnInit, OnDestroy {
   onClickSample(sampleId: string) {
     const id = encodeURIComponent(sampleId);
     this.router.navigateByUrl("/samples/" + id);
+  }
+
+  onSaveMetadata(metadata: object) {
+    this.dataset.scientificMetadata = metadata;
+    this.store.dispatch(new SaveDatasetAction(this.dataset));
   }
 
   resetDataset(dataset: Dataset) {
@@ -163,9 +179,13 @@ export class DatasetDetailsDashboardComponent implements OnInit, OnDestroy {
     );
 
     this.subscriptions.push(
-      this.store.pipe(select(getCurrentDataset)).subscribe(dataset => {
-        this.dataset = dataset;
-      })
+      this.store
+        .pipe(select(getCurrentDataset))
+        .subscribe((dataset: RawDataset | DerivedDataset) => {
+          if (dataset) {
+            this.dataset = dataset;
+          }
+        })
     );
 
     this.subscriptions.push(

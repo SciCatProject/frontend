@@ -46,7 +46,7 @@ export const initialDatasetState: DatasetState = {
   datasetsLoading: true,
   deletingAttachment: false,
   addingAttachment: false,
-  facetCountsLoading: true,
+  facetCountsLoading: false,
   hasPrefilledFilters: false,
 
   searchTerms: "",
