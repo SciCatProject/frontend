@@ -19,7 +19,7 @@ export class AppConfig {
   fileColorEnabled: boolean;
   gettingStarted: string;
   ingestManual: string;
-  localColumn: string[];
+  localColumns: string[];
   logbookEnabled: boolean;
   maxDirectDownloadSize: number;
   metadataPreviewEnabled: boolean;
@@ -52,7 +52,7 @@ export const APP_DI_CONFIG: AppConfig = {
   gettingStarted: environment["gettingStarted"] || null,
   ingestManual: environment["ingestManual"] || null,
   logbookEnabled: environment["logbookEnabled"] || false,
-  localColumn: environment["localColumns"] || ["datasetName", "sourceFolder"],
+  localColumns: environment["localColumns"] || ["datasetName", "sourceFolder"],
   maxDirectDownloadSize: environment["maxDirectDownloadSize"] || null,
   metadataPreviewEnabled: environment["metadataPreviewEnabled"] || false,
   multipleDownloadAction: environment["multipleDownloadAction"],

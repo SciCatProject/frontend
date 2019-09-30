@@ -18,7 +18,7 @@ export const environment = {
   editSampleEnabled: true,
   facility: "ESS",
   fileColorEnabled: true,
-  localColumn: [
+  localColumns: [
     "select",
     "datasetName",
     "runNumber",
