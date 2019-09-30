@@ -68,7 +68,7 @@ export const getRectangularRepresentation = createSelector(
     }));
 
     const empty = Object.keys(merged).reduce(
-      (empty, key) => ({ [key]: "", ...empty }),
+      (empties, key) => ({ [key]: "", ...empties }),
       {}
     );
 

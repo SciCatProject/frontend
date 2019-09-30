@@ -20,7 +20,7 @@ describe("ViewProposalPageComponent", () => {
   let component: ViewProposalPageComponent;
   let fixture: ComponentFixture<ViewProposalPageComponent>;
 
-  let router = {
+  const router = {
     navigateByUrl: jasmine.createSpy("navigateByUrl")
   };
   let store: MockStore;

@@ -51,7 +51,7 @@ export const getTotalCount = createSelector(
 export const getEditableCount = createSelector(
   getPolicyState,
   state => state.editableCount
-)
+);
 
 export const getFilters = createSelector(
   getPolicyState,

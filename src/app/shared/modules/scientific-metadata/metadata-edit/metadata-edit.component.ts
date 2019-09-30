@@ -79,7 +79,7 @@ export class MetadataEditComponent implements OnInit {
   }
 
   createMetadataObjects(): object {
-    let metadata = {};
+    const metadata = {};
     this.items.controls.forEach(control => {
       metadata[control.value.fieldName] = {
         type: control.value.fieldType

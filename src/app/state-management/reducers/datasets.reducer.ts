@@ -144,7 +144,7 @@ export function datasetsReducer(
       const updatedAttachment = (action as UpdateAttachmentCaptionCompleteAction)
         .attachment;
       const attachments = state.currentSet.attachments;
-      let attach2 = attachments.filter(
+      const attach2 = attachments.filter(
         attachment => attachment.id !== updatedAttachment.id
       );
       attach2.push(updatedAttachment);
@@ -403,6 +403,9 @@ export function datasetsReducer(
             ]
           };
           break;
+        default: {
+          break;
+        }
       }
       const skip = 0;
       const filters = { ...state.filters, skip, mode, modeToggle };

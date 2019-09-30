@@ -29,7 +29,7 @@ describe("DetailsDashboardComponent", () => {
   let component: DatasetDetailsDashboardComponent;
   let fixture: ComponentFixture<DatasetDetailsDashboardComponent>;
 
-  let router = {
+  const router = {
     navigateByUrl: jasmine.createSpy("navigateByUrl")
   };
   let store: MockStore;

@@ -7,6 +7,7 @@ import { AppConfigModule } from "app-config.module";
 import { OrigDatablock } from "shared/sdk";
 import { PipesModule } from "shared/pipes/pipes.module";
 
+/* tslint:disable:max-line-length */
 describe("DatafilesComponent", () => {
   let component: DatafilesComponent;
   let fixture: ComponentFixture<DatafilesComponent>;

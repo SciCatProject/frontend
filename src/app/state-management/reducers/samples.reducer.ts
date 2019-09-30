@@ -217,7 +217,7 @@ export function samplesReducer(
       const updatedAttachment = (action as UpdateAttachmentCaptionCompleteAction)
         .attachment;
       const attachments = state.currentSample.attachments;
-      let attach2 = attachments.filter(
+      const attach2 = attachments.filter(
         attachment => attachment.id !== updatedAttachment.id
       );
       attach2.push(updatedAttachment);
