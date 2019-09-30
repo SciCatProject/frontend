@@ -1,5 +1,5 @@
 <div class="metadataTable" *ngIf="metadata">
-  <mat-table class="metadataTable" [dataSource]="metadata">
+  <mat-table class="metadataTable" [dataSource]="tableData">
     <!-- Column Definitions -->
 
     <!-- Name Column -->
@@ -51,9 +51,8 @@
 
     <!-- End of Column Definitions -->
 
-    <mat-header-row *matHeaderRowDef="displayMetadataColumns"> </mat-header-row>
+    <mat-header-row *matHeaderRowDef="columnsToDisplay"> </mat-header-row>
 
-    <mat-row *matRowDef="let metadata; columns: displayMetadataColumns">
-    </mat-row>
+    <mat-row *matRowDef="let metadata; columns: columnsToDisplay"> </mat-row>
   </mat-table>
 </div>

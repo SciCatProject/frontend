@@ -46,10 +46,10 @@ import {
 import { ScientificConditionDialogComponent } from "datasets/scientific-condition-dialog/scientific-condition-dialog.component";
 import { combineLatest, BehaviorSubject, Observable } from "rxjs";
 
-export type DateRange = {
+export interface DateRange {
   begin: Date;
   end: Date;
-};
+}
 
 @Component({
   selector: "datasets-filter",
@@ -76,27 +76,7 @@ export class DatasetsFilterComponent {
   typeInput$ = new BehaviorSubject<string>("");
   keywordsInput$ = new BehaviorSubject<string>("");
 
-  clearSearchBar: boolean = false;
-
-  createSuggestionObserver(
-    facetCounts$: Observable<FacetCount[]>,
-    input$: BehaviorSubject<string>,
-    currentFilters$: Observable<string[]>
-  ): Observable<FacetCount[]> {
-    return combineLatest(facetCounts$, input$, currentFilters$).pipe(
-      map(([counts, filterString, currentFilters]) => {
-        if (!counts) {
-          return [];
-        }
-        return counts.filter(
-          count =>
-            typeof count._id === "string" &&
-            count._id.toLowerCase().includes(filterString.toLowerCase()) &&
-            currentFilters.indexOf(count._id) < 0
-        );
-      })
-    );
-  }
+  clearSearchBar = false;
   groupSuggestions$ = this.createSuggestionObserver(
     this.groupFacetCounts$,
     this.groupInput$,
@@ -142,6 +122,26 @@ export class DatasetsFilterComponent {
     .subscribe(terms => {
       this.store.dispatch(new AddKeywordFilterAction(terms));
     });
+
+  createSuggestionObserver(
+    facetCounts$: Observable<FacetCount[]>,
+    input$: BehaviorSubject<string>,
+    currentFilters$: Observable<string[]>
+  ): Observable<FacetCount[]> {
+    return combineLatest(facetCounts$, input$, currentFilters$).pipe(
+      map(([counts, filterString, currentFilters]) => {
+        if (!counts) {
+          return [];
+        }
+        return counts.filter(
+          count =>
+            typeof count._id === "string" &&
+            count._id.toLowerCase().includes(filterString.toLowerCase()) &&
+            currentFilters.indexOf(count._id) < 0
+        );
+      })
+    );
+  }
 
   constructor(
     public dialog: MatDialog,

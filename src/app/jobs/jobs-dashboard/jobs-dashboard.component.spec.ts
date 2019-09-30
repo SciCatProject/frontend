@@ -27,7 +27,7 @@ describe("JobsDashboardComponent", () => {
   let component: JobsDashboardComponent;
   let fixture: ComponentFixture<JobsDashboardComponent>;
 
-  let router = {
+  const router = {
     navigateByUrl: jasmine.createSpy("navigateByUrl")
   };
   let store: MockStore;
@@ -148,7 +148,7 @@ describe("JobsDashboardComponent", () => {
     it("should dispatch a CurrentJobAction and navigate to a job", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
-      let job = new Job();
+      const job = new Job();
       job.id = "test";
       component.onRowClick(job);
 

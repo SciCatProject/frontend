@@ -129,7 +129,6 @@
       <mat-header-cell *matHeaderCellDef>
         <mat-checkbox
           color="#ffffff"
-          [checked]="allAreSeleted$ | async"
           (change)="onSelectAll($event)"
         >
         </mat-checkbox>
@@ -179,6 +178,24 @@
         matTooltip="{{ dataset.sourceFolder }}"
       >
         ...{{ dataset.sourceFolder | slice: -10 }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="runNumber">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>
+        <div fxLayout="column" style="align-items: center">
+          <div>
+            <i class="material-icons">directions_run</i>
+          </div>
+          <div class="table_column">Run&nbsp;No.</div>
+        </div>
+      </mat-header-cell>
+      <mat-cell
+        *matCellDef="let dataset"
+      >
+      <div *ngIf="dataset.scientificMetadata && dataset.scientificMetadata.runNumber ">
+        {{ dataset.scientificMetadata.runNumber }}
+      </div>
       </mat-cell>
     </ng-container>
 

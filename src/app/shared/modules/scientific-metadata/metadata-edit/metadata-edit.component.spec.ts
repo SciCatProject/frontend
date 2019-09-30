@@ -1,51 +1,31 @@
-import { DatasetFormComponent } from "./dataset-form.component";
-import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { MockStore } from "../../shared/MockStubs";
-import { Store, StoreModule } from "@ngrx/store";
+import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+
+import { MetadataEditComponent } from "./metadata-edit.component";
+import { NO_ERRORS_SCHEMA } from "@angular/core";
 import {
-  async,
-  ComponentFixture,
-  TestBed,
-  inject
-} from "@angular/core/testing";
-import { rootReducer } from "state-management/reducers/root.reducer";
-import { MatSelectModule, MatFormFieldModule } from "@angular/material";
-import { SaveDatasetAction } from "state-management/actions/datasets.actions";
-import { RawDataset } from "shared/sdk";
+  MatFormFieldModule,
+  MatOptionModule,
+  MatSelectModule
+} from "@angular/material";
+import { FormBuilder } from "@angular/forms";
 
-describe("DatasetFormComponent", () => {
-  let component: DatasetFormComponent;
-  let fixture: ComponentFixture<DatasetFormComponent>;
-
-  let store: MockStore;
-  let dispatchSpy;
+describe("MetadataEditComponent", () => {
+  let component: MetadataEditComponent;
+  let fixture: ComponentFixture<MetadataEditComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [DatasetFormComponent],
-      imports: [
-        FormsModule,
-        MatFormFieldModule,
-        MatSelectModule,
-        ReactiveFormsModule,
-        StoreModule.forRoot({ rootReducer })
-      ]
-    });
-    TestBed.compileComponents();
+      schemas: [NO_ERRORS_SCHEMA],
+      declarations: [MetadataEditComponent],
+      imports: [MatFormFieldModule, MatOptionModule, MatSelectModule],
+      providers: [FormBuilder]
+    }).compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DatasetFormComponent);
+    fixture = TestBed.createComponent(MetadataEditComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-  });
-
-  beforeEach(inject([Store], (mockStore: MockStore) => {
-    store = mockStore;
-  }));
-
-  afterEach(() => {
-    fixture.destroy();
   });
 
   it("should create", () => {
@@ -92,16 +72,15 @@ describe("DatasetFormComponent", () => {
     });
   });
 
-  describe("#onSubmit()", () => {
-    it("should dispatch a SaveDataset action", () => {
-      dispatchSpy = spyOn(store, "dispatch");
-      component.dataset = new RawDataset();
-      component.onSubmit();
+  describe("#doSave()", () => {
+    it("should emit an event", () => {
+      spyOn(component.save, "emit");
 
-      expect(dispatchSpy).toHaveBeenCalledTimes(1);
-      expect(dispatchSpy).toHaveBeenCalledWith(
-        new SaveDatasetAction(component.dataset)
-      );
+      component.metadata = {};
+      component.doSave();
+
+      expect(component.save.emit).toHaveBeenCalledTimes(1);
+      expect(component.save.emit).toHaveBeenCalledWith(component.metadata);
     });
   });
 
@@ -118,11 +97,10 @@ describe("DatasetFormComponent", () => {
   });
 
   describe("#addCurrentMetadata()", () => {
-    it("should add typed metadata from the current dataset to the FormGroup array", () => {
+    it("should add typed metadata from the provided metadata object to the FormGroup array", () => {
       expect(component.items.length).toEqual(0);
 
-      component.dataset = new RawDataset();
-      component.dataset.scientificMetadata = {
+      component.metadata = {
         testName: {
           type: "measurement",
           value: 100,
@@ -141,11 +119,10 @@ describe("DatasetFormComponent", () => {
       expect(component.items.at(0).get("fieldUnit").value).toEqual("Hz");
     });
 
-    it("should add untyped metadata from the current dataset to the FormGroup array", () => {
+    it("should add untyped metadata from the provided metadata object to the FormGroup array", () => {
       expect(component.items.length).toEqual(0);
 
-      component.dataset = new RawDataset();
-      component.dataset.scientificMetadata = {
+      component.metadata = {
         testName: {
           v: 100,
           u: "Hz"
@@ -158,13 +135,14 @@ describe("DatasetFormComponent", () => {
       expect(component.items.at(0).get("fieldName").value).toEqual("testName");
       expect(component.items.at(0).get("fieldType").value).toEqual("string");
       expect(component.items.at(0).get("fieldValue").value).toEqual(
-        '{"v":100,"u":"Hz"}'
+        "{\"v\":100,\"u\":\"Hz\"}"
       );
       expect(component.items.at(0).get("fieldUnit").status).toEqual("DISABLED");
     });
-    it("should do nothing if current dataset is undefined", () => {
+
+    it("should do nothing if the metadata object is undefined", () => {
       expect(component.items.length).toEqual(0);
-      expect(component.dataset).toBeUndefined();
+      expect(component.metadata).toBeUndefined();
 
       component.addCurrentMetadata();
 

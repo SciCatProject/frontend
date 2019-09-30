@@ -1,14 +1,15 @@
 import { APP_CONFIG, AppConfig } from "app-config.module";
 import { MatTableDataSource, MatPaginator } from "@angular/material";
 import { OrigDatablock, Dataset } from "shared/sdk/models";
-import { ChangeDetectorRef, AfterViewChecked } from "@angular/core";
 import {
   Component,
   Input,
   OnInit,
   ViewChild,
   AfterViewInit,
-  Inject
+  Inject,
+  ChangeDetectorRef,
+  AfterViewChecked
 } from "@angular/core";
 
 @Component({
@@ -30,8 +31,8 @@ export class DatafilesComponent
   count = 0;
   files: Array<any> = [];
   tooLargeFile: boolean;
-  totalFileSize: number = 0;
-  selectedFileSize: number = 0;
+  totalFileSize = 0;
+  selectedFileSize = 0;
 
   areAllSelected = false;
   isNoneSelected = true;

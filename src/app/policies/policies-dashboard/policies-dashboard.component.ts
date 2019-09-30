@@ -40,11 +40,6 @@ import { map } from "rxjs/operators";
   styleUrls: ["./policies-dashboard.component.scss"]
 })
 export class PoliciesDashboardComponent implements OnInit, OnDestroy {
-  constructor(
-    private datasetApi: DatasetApi,
-    public dialog: MatDialog,
-    private store: Store<Policy>
-  ) {}
 
   policies$: Observable<Policy[]> = this.store.pipe(select(getPolicies));
   editablePolicies$: Observable<Policy[]> = this.store.pipe(
@@ -57,7 +52,7 @@ export class PoliciesDashboardComponent implements OnInit, OnDestroy {
     select(getEditableCount)
   );
 
-  multiSelect: boolean = false;
+  multiSelect = false;
   selectedIds: string[] = [];
   selectedGroups: string[] = [];
   selectedPolicies: Policy[] = [];
@@ -65,8 +60,8 @@ export class PoliciesDashboardComponent implements OnInit, OnDestroy {
 
   dialogConfig: MatDialogConfig;
 
-  editEnabled: boolean = true;
-  paginate: boolean = true;
+  editEnabled = true;
+  paginate = true;
   tableColumns: TableColumn[] = [
     { name: "manager", icon: "account_box", sort: true, inList: true },
     { name: "ownerGroup", icon: "people", sort: true, inList: true },
@@ -98,6 +93,11 @@ export class PoliciesDashboardComponent implements OnInit, OnDestroy {
       inList: true
     }
   ];
+  constructor(
+    private datasetApi: DatasetApi,
+    public dialog: MatDialog,
+    private store: Store<Policy>
+  ) {}
 
   onPageChange(event: PageChangeEvent) {
     this.store.dispatch(new ChangePageAction(event.pageIndex, event.pageSize));

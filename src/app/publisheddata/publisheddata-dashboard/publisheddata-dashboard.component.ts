@@ -23,7 +23,6 @@ import {
   styleUrls: ["./publisheddata-dashboard.component.scss"]
 })
 export class PublisheddataDashboardComponent implements OnInit {
-  constructor(private router: Router, private store: Store<PublishedData>) {}
 
   public publishedData$ = this.store.pipe(select(selectAllPublished));
   public count$ = this.store.pipe(select(getCount));
@@ -37,6 +36,7 @@ export class PublisheddataDashboardComponent implements OnInit {
     { name: "publicationYear", icon: "date_range", sort: false, inList: true }
   ];
   paginate = true;
+  constructor(private router: Router, private store: Store<PublishedData>) {}
 
   onPageChange(event: PageChangeEvent) {
     this.store.dispatch(

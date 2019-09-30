@@ -11,5 +11,17 @@ export const environment = {
   archiveWorkflowEnabled: false,
   disabledDatasetColumns: ["archiveStatus", "retrieveStatus"],
   userProfileImageEnabled: true,
-  facility: "ESS"
+  facility: "ESS",
+  localColumns: [
+    "select",
+    "datasetName",
+    "runNumber",
+    "sourceFolder",
+    "size",
+    "creationTime",
+    "type",
+    "image",
+    "metadata",
+    "proposalId"
+  ],
 };

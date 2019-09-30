@@ -5,7 +5,11 @@ import { Dataset, MessageType, ArchViewMode } from "state-management/models";
 import { DialogComponent } from "shared/modules/dialog/dialog.component";
 import { MatCheckboxChange, MatDialog } from "@angular/material";
 import { Router } from "@angular/router";
-import { ShowMessageAction } from "state-management/actions/user.actions";
+import {
+  ShowMessageAction,
+  SelectColumnAction,
+  DeselectColumnAction
+} from "state-management/actions/user.actions";
 import { Subscription } from "rxjs";
 import {
   getDisplayedColumns,
@@ -35,6 +39,7 @@ import {
   getViewMode,
   getViewPublicMode
 } from "state-management/selectors/datasets.selectors";
+import { FormControl } from "@angular/forms";
 
 export interface PageChangeEvent {
   pageIndex: number;
@@ -47,16 +52,10 @@ export interface SortChangeEvent {
   direction: "asc" | "desc" | "";
 }
 
-export interface datasetDerivationsMap {
+export interface DatasetDerivationsMap {
   datasetPid: string;
   derivedDatasetsNum: number;
 }
-
-import {
-  SelectColumnAction,
-  DeselectColumnAction
-} from "state-management/actions/user.actions";
-import { FormControl } from "@angular/forms";
 
 @Component({
   selector: "dataset-table",
@@ -72,7 +71,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
 
   datasetsSubscription: Subscription;
   datasetPids: string[] = [];
-  datasetDerivationsMaps: datasetDerivationsMap[] = [];
+  datasetDerivationsMaps: DatasetDerivationsMap[] = [];
   derivationMapPids: string[] = [];
 
   public currentMode: ArchViewMode;
@@ -105,6 +104,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   private submitJobSubscription: Subscription;
   private jobErrorSubscription: Subscription;
   dispColumns$ = this.store.pipe(select(getDisplayedColumns));
+
   configCols$ = this.store.pipe(select(getConfigurableColumns));
   configForm = new FormControl();
   $ = this.store.pipe(select(getConfigurableColumns)).subscribe(ret => {
@@ -118,7 +118,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   });
 
   searchPublicDataEnabled = this.appConfig.searchPublicDataEnabled;
-  viewPublic: boolean = false;
+  viewPublic = false;
   viewPublicSubscription: Subscription;
 
   constructor(
@@ -175,7 +175,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
         );
         datasets.forEach(dataset => {
           if (!this.derivationMapPids.includes(dataset.pid)) {
-            let map: datasetDerivationsMap = {
+            const map: DatasetDerivationsMap = {
               datasetPid: dataset.pid,
               derivedDatasetsNum: this.countDerivedDatasets(dataset)
             };
@@ -389,7 +389,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   }
 
   countDerivedDatasets(dataset: Dataset): number {
-    let derivedDatasetsNum: number = 0;
+    let derivedDatasetsNum = 0;
     if (dataset.history) {
       dataset.history.forEach(item => {
         if (

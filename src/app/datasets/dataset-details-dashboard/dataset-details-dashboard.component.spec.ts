@@ -13,9 +13,10 @@ import {
   AddKeywordFilterAction,
   AddAttachment,
   UpdateAttachmentCaptionAction,
-  DeleteAttachment
+  DeleteAttachment,
+  SaveDatasetAction
 } from "state-management/actions/datasets.actions";
-import { Dataset, UserApi } from "shared/sdk";
+import { Dataset, UserApi, RawDataset } from "shared/sdk";
 import { ReadFile, ReadMode } from "ngx-file-helpers";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { AppConfigModule, APP_CONFIG } from "app-config.module";
@@ -28,7 +29,7 @@ describe("DetailsDashboardComponent", () => {
   let component: DatasetDetailsDashboardComponent;
   let fixture: ComponentFixture<DatasetDetailsDashboardComponent>;
 
-  let router = {
+  const router = {
     navigateByUrl: jasmine.createSpy("navigateByUrl")
   };
   let store: MockStore;
@@ -81,6 +82,21 @@ describe("DetailsDashboardComponent", () => {
     expect(component).toBeTruthy();
   });
 
+  describe("#onClickKeyword()", () => {
+    it(" should update datasets keyword filter and navigate to datasets table", () => {
+      dispatchSpy = spyOn(store, "dispatch");
+      const keyword = "test";
+      component.onClickKeyword(keyword);
+
+      expect(dispatchSpy).toHaveBeenCalledTimes(2);
+      expect(dispatchSpy).toHaveBeenCalledWith(new ClearFacetsAction());
+      expect(dispatchSpy).toHaveBeenCalledWith(
+        new AddKeywordFilterAction(keyword)
+      );
+      expect(router.navigateByUrl).toHaveBeenCalledWith("/datasets");
+    });
+  });
+
   describe("#onClickProposal()", () => {
     it("should navigate to a proposal", () => {
       const proposalId = "ABC123";
@@ -101,18 +117,19 @@ describe("DetailsDashboardComponent", () => {
     });
   });
 
-  describe("#onClickKeyword()", () => {
-    it(" should update datasets keyword filter and navigate to datasets table", () => {
+  describe("onSaveMetadata()", () => {
+    it("should dispatch a SaveDatasetAction", () => {
       dispatchSpy = spyOn(store, "dispatch");
-      const keyword = "test";
-      component.onClickKeyword(keyword);
 
-      expect(dispatchSpy).toHaveBeenCalledTimes(2);
-      expect(dispatchSpy).toHaveBeenCalledWith(new ClearFacetsAction());
+      component.dataset = new RawDataset();
+      const metadata = {};
+      component.onSaveMetadata(metadata);
+      component.dataset.scientificMetadata = metadata;
+
+      expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        new AddKeywordFilterAction(keyword)
+        new SaveDatasetAction(component.dataset)
       );
-      expect(router.navigateByUrl).toHaveBeenCalledWith("/datasets");
     });
   });
 
@@ -164,7 +181,7 @@ describe("DetailsDashboardComponent", () => {
     it("should dispatch an AddAttchment action if fileCount is larger than zero", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
-      component.dataset = new Dataset();
+      component.dataset = new RawDataset();
       component.pickedFile = {
         name: "test",
         size: 100,
@@ -192,7 +209,7 @@ describe("DetailsDashboardComponent", () => {
     it("should dispatch an UpdateAttachmentCaptionAction", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
-      component.dataset = new Dataset();
+      component.dataset = new RawDataset();
       const event: SubmitCaptionEvent = {
         attachmentId: "testAttachmentId",
         caption: "Test caption"
@@ -214,7 +231,7 @@ describe("DetailsDashboardComponent", () => {
     it("should dispatch a DeleteAttachment action", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
-      component.dataset = new Dataset();
+      component.dataset = new RawDataset();
       const attachmentId = "testAttachmentId";
       component.deleteAttachment(attachmentId);
 

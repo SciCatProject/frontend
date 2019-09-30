@@ -1,27 +1,17 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
-import { FormArray, FormBuilder, FormGroup } from "@angular/forms";
-import { Subscription } from "rxjs";
-import { SaveDatasetAction } from "../../state-management/actions/datasets.actions";
-import { getCurrentDataset } from "../../state-management/selectors/datasets.selectors";
-import { select, Store } from "@ngrx/store";
+import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
+import { FormBuilder, FormGroup, FormArray } from "@angular/forms";
 
 @Component({
-  selector: "app-dataset-form",
-  templateUrl: "./dataset-form.component.html",
-  styleUrls: ["./dataset-form.component.scss"]
+  selector: "metadata-edit",
+  templateUrl: "./metadata-edit.component.html",
+  styleUrls: ["./metadata-edit.component.scss"]
 })
-export class DatasetFormComponent implements OnInit, OnDestroy {
-  dataset: any;
-  datasetSubscription: Subscription;
-
+export class MetadataEditComponent implements OnInit {
   metadataForm: FormGroup;
-  typeValues = ["date", "measurement", "number", "string"];
+  typeValues: string[] = ["date", "measurement", "number", "string"];
 
-  constructor(private store: Store<any>, private formBuilder: FormBuilder) {}
-
-  get items() {
-    return this.metadataForm.get("items") as FormArray;
-  }
+  @Input() metadata: object;
+  @Output() save = new EventEmitter<object>();
 
   addMetadata() {
     const field = this.formBuilder.group({
@@ -52,9 +42,9 @@ export class DatasetFormComponent implements OnInit, OnDestroy {
     }
   }
 
-  onSubmit() {
-    this.dataset.scientificMetadata = this.createMetadataObjects();
-    this.store.dispatch(new SaveDatasetAction(this.dataset));
+  doSave() {
+    this.metadata = this.createMetadataObjects();
+    this.save.emit(this.metadata);
   }
 
   onRemove(index: any) {
@@ -62,21 +52,21 @@ export class DatasetFormComponent implements OnInit, OnDestroy {
   }
 
   addCurrentMetadata() {
-    if (this.dataset) {
-      Object.keys(this.dataset.scientificMetadata).forEach(key => {
+    if (this.metadata) {
+      Object.keys(this.metadata).forEach(key => {
         let field = {};
-        if ("type" in this.dataset.scientificMetadata[key]) {
+        if ("type" in this.metadata[key]) {
           field = {
             fieldName: key,
-            fieldType: this.dataset.scientificMetadata[key].type,
-            fieldValue: this.dataset.scientificMetadata[key].value,
-            fieldUnit: this.dataset.scientificMetadata[key].unit
+            fieldType: this.metadata[key].type,
+            fieldValue: this.metadata[key].value,
+            fieldUnit: this.metadata[key].unit
           };
         } else {
           field = {
             fieldName: key,
             fieldType: "string",
-            fieldValue: JSON.stringify(this.dataset.scientificMetadata[key]),
+            fieldValue: JSON.stringify(this.metadata[key]),
             fieldUnit: ""
           };
         }
@@ -89,7 +79,7 @@ export class DatasetFormComponent implements OnInit, OnDestroy {
   }
 
   createMetadataObjects(): object {
-    let metadata = {};
+    const metadata = {};
     this.items.controls.forEach(control => {
       metadata[control.value.fieldName] = {
         type: control.value.fieldType
@@ -134,21 +124,17 @@ export class DatasetFormComponent implements OnInit, OnDestroy {
     return metadata;
   }
 
-  ngOnInit() {
-    this.datasetSubscription = this.store
-      .pipe(select(getCurrentDataset))
-      .subscribe(dataset => {
-        this.dataset = dataset;
-      });
+  get items() {
+    return this.metadataForm.get("items") as FormArray;
+  }
 
+  constructor(private formBuilder: FormBuilder) {}
+
+  ngOnInit() {
     this.metadataForm = this.formBuilder.group({
       items: this.formBuilder.array([])
     });
 
     this.addCurrentMetadata();
-  }
-
-  ngOnDestroy() {
-    this.datasetSubscription.unsubscribe();
   }
 }

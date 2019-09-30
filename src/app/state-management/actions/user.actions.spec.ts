@@ -1,30 +1,30 @@
 import { Message, User, Settings } from "../models";
-import { LoginAction, LOGIN } from "./user.actions";
-import { ActiveDirLoginAction, AD_LOGIN } from "./user.actions";
-import { LoginCompleteAction, LOGIN_COMPLETE } from "./user.actions";
-import { LoginFailedAction, LOGIN_FAILED } from "./user.actions";
-import { LogoutAction, LOGOUT } from "./user.actions";
-import { LogoutCompleteAction, LOGOUT_COMPLETE } from "./user.actions";
-import { RetrieveUserAction, RETRIEVE_USER } from "./user.actions";
 import {
+  LoginAction,
+  LOGIN,
+  ActiveDirLoginAction,
+  AD_LOGIN,
+  LoginCompleteAction,
+  LOGIN_COMPLETE,
+  LoginFailedAction,
+  LOGIN_FAILED,
+  LogoutAction,
+  LOGOUT,
+  LogoutCompleteAction,
+  LOGOUT_COMPLETE,
+  RetrieveUserAction,
+  RETRIEVE_USER,
   RetrieveUserCompleteAction,
-  RETRIEVE_USER_COMPLETE
+  RETRIEVE_USER_COMPLETE,
+  RetrieveUserFailedAction,
+  RETRIEVE_USER_FAILED,
+  ShowMessageAction,
+  SHOW_MESSAGE,
+  ClearMessageAction,
+  CLEAR_MESSAGE,
+  SaveSettingsAction,
+  SAVE_SETTINGS
 } from "./user.actions";
-import { RetrieveUserFailedAction, RETRIEVE_USER_FAILED } from "./user.actions";
-/*
-import { AccessUserEmailAction, ACCESS_USER_EMAIL } from "./user.actions";
-import {
-  AccessUserEmailCompleteAction,
-  ACCESS_USER_EMAIL_COMPLETE
-} from "./user.actions";
-import {
-  AccessUserEmailFailedAction,
-  ACCESS_USER_EMAIL_FAILED
-} from "./user.actions";
-*/
-import { ShowMessageAction, SHOW_MESSAGE } from "./user.actions";
-import { ClearMessageAction, CLEAR_MESSAGE } from "./user.actions";
-import { SaveSettingsAction, SAVE_SETTINGS } from "./user.actions";
 
 describe("LoginAction", () => {
   it("should create an action", () => {

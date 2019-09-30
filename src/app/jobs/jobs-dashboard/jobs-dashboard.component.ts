@@ -29,11 +29,6 @@ import {
   styleUrls: ["./jobs-dashboard.component.scss"]
 })
 export class JobsDashboardComponent implements OnInit, OnDestroy {
-  constructor(
-    private datePipe: DatePipe,
-    private router: Router,
-    private store: Store<Job>
-  ) {}
 
   jobs: any[] = [];
   jobsSubscription: Subscription;
@@ -62,6 +57,11 @@ export class JobsDashboardComponent implements OnInit, OnDestroy {
     },
     { name: "statusMessage", icon: "comment", sort: false, inList: true }
   ];
+  constructor(
+    private datePipe: DatePipe,
+    private router: Router,
+    private store: Store<Job>
+  ) {}
 
   formatTableData(jobs: Job[]): any[] {
     if (jobs) {
