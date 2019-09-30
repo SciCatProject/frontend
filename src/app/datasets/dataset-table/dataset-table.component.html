@@ -192,9 +192,10 @@
       </mat-header-cell>
       <mat-cell
         *matCellDef="let dataset"
-        matTooltip="{{ dataset.scientificMetadata.runNumber }}"
       >
-        {{ dataset.scientificMetadata.runNumber  }}
+      <div *ngIf="dataset.scientificMetadata && dataset.scientificMetadata.runNumber ">
+        {{ dataset.scientificMetadata.runNumber }}
+      </div>
       </mat-cell>
     </ng-container>
 
