@@ -61,7 +61,8 @@
   ></mat-paginator>
 
   <mat-table #table [dataSource]="dataSource">
-    <ng-container matColumnDef="select">
+    <ng-container matColumnDef="select"
+    style="color:#000000">
       <mat-header-cell *matHeaderCellDef>
         <mat-checkbox
           [checked]="areAllSelected"

@@ -1,8 +1,25 @@
+@import "../../../theme.scss";
+
 .mat-column-select {
   flex-grow: 0;
   overflow: visible; /* Needed to prevent offsetting of the checkbox when clicking */
+  color: #000000;
   padding-right: 1.5em;
 }
+
+.mat-header-cell {
+  color: white;
+  background: mat-color($primary);
+  justify-content: left;
+}
+
+mat-header-row {
+  color: white;
+  background: mat-color($primary);
+}
+
+
+
 
 .download-button {
   background-color: #0ea432;

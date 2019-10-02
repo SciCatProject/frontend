@@ -5,7 +5,7 @@ import { MatTableDataSource } from "@angular/material";
 @Component({
   selector: "datablocks-table",
   templateUrl: "./datablocks-table.component.html",
-  styleUrls: ["./datablocks-table.component.css"]
+  styleUrls: ["./datablocks-table.component.scss"]
 })
 export class DatablocksComponent implements OnInit {
   @Input()
