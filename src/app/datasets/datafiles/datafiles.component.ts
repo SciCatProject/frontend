@@ -22,7 +22,7 @@ export class DatafilesComponent
   @Input()
   datablocks: Array<OrigDatablock>;
 
-  @Input()
+  @Input("data")
   dataset: Dataset;
 
   @Input()

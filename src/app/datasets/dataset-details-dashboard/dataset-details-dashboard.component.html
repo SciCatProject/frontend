@@ -5,7 +5,7 @@
         <mat-icon> details </mat-icon> Details
       </ng-template>
       <dataset-detail
-        [dataset]="dataset"
+        [data]="dataset"
         [datasetWithout]="datasetWithout$ | async"
         [attachments]="attachments$ | async"
         (clickKeyword)="onClickKeyword($event)"
@@ -22,7 +22,7 @@
       <mat-card style="margin: 1em">
         <datafiles
           [datablocks]="origDatablocks$ | async"
-          [dataset]="dataset"
+          [data]="dataset"
           [jwt]="jwt$ | async"
         ></datafiles>
         <div class="datablocks-table">
