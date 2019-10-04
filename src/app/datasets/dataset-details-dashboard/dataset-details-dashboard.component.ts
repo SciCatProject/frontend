@@ -1,4 +1,11 @@
-import { Component, OnInit, OnDestroy, Inject } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  Inject,
+  AfterViewChecked,
+  ChangeDetectorRef
+} from "@angular/core";
 import { Store, select } from "@ngrx/store";
 import {
   Dataset,
@@ -15,7 +22,7 @@ import {
   getCurrentOrigDatablocks,
   getCurrentDatablocks,
   getCurrentAttachments,
-  getViewPublicMode,
+  getPublicViewMode,
   getIsLoading
 } from "state-management/selectors/datasets.selectors";
 import {
@@ -30,13 +37,13 @@ import { Message, MessageType } from "state-management/models";
 import { submitJob, getError } from "state-management/selectors/jobs.selectors";
 import { ShowMessageAction } from "state-management/actions/user.actions";
 import {
-  DatablocksAction,
-  UpdateAttachmentCaptionAction,
-  DeleteAttachment,
-  AddAttachment,
-  ClearFacetsAction,
-  AddKeywordFilterAction,
-  SaveDatasetAction
+  clearFacetsAction,
+  addKeywordFilterAction,
+  saveDatasetAction,
+  updateAttachmentCaptionAction,
+  removeAttachmentAction,
+  fetchDatasetAction,
+  addAttachmentAction
 } from "state-management/actions/datasets.actions";
 import { SubmitAction } from "state-management/actions/jobs.actions";
 import { ReadFile } from "ngx-file-helpers";
@@ -47,7 +54,8 @@ import { SubmitCaptionEvent } from "shared/modules/file-uploader/file-uploader.c
   templateUrl: "./dataset-details-dashboard.component.html",
   styleUrls: ["./dataset-details-dashboard.component.scss"]
 })
-export class DatasetDetailsDashboardComponent implements OnInit, OnDestroy {
+export class DatasetDetailsDashboardComponent
+  implements OnInit, OnDestroy, AfterViewChecked {
   datasetWithout$ = this.store.pipe(select(getCurrentDatasetWithoutOrigData));
   origDatablocks$ = this.store.pipe(select(getCurrentOrigDatablocks));
   datablocks$ = this.store.pipe(select(getCurrentDatablocks));
@@ -64,8 +72,8 @@ export class DatasetDetailsDashboardComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
 
   onClickKeyword(keyword: string) {
-    this.store.dispatch(new ClearFacetsAction());
-    this.store.dispatch(new AddKeywordFilterAction(keyword));
+    this.store.dispatch(clearFacetsAction());
+    this.store.dispatch(addKeywordFilterAction({ keyword }));
     this.router.navigateByUrl("/datasets");
   }
 
@@ -81,7 +89,7 @@ export class DatasetDetailsDashboardComponent implements OnInit, OnDestroy {
 
   onSaveMetadata(metadata: object) {
     this.dataset.scientificMetadata = metadata;
-    this.store.dispatch(new SaveDatasetAction(this.dataset));
+    this.store.dispatch(saveDatasetAction({ dataset: this.dataset }));
   }
 
   resetDataset(dataset: Dataset) {
@@ -135,26 +143,29 @@ export class DatasetDetailsDashboardComponent implements OnInit, OnDestroy {
         sample: null,
         sampleId: null
       };
-      this.store.dispatch(new AddAttachment(this.attachment));
+      this.store.dispatch(addAttachmentAction({ attachment: this.attachment }));
     }
   }
 
   updateCaption(event: SubmitCaptionEvent) {
     this.store.dispatch(
-      new UpdateAttachmentCaptionAction(
-        this.dataset.pid,
-        event.attachmentId,
-        event.caption
-      )
+      updateAttachmentCaptionAction({
+        datasetId: this.dataset.pid,
+        attachmentId: event.attachmentId,
+        caption: event.caption
+      })
     );
   }
 
   deleteAttachment(attachmentId: string) {
-    this.store.dispatch(new DeleteAttachment(this.dataset.pid, attachmentId));
+    this.store.dispatch(
+      removeAttachmentAction({ datasetId: this.dataset.pid, attachmentId })
+    );
   }
 
   constructor(
     @Inject(APP_CONFIG) public appConfig: AppConfig,
+    private cdRef: ChangeDetectorRef,
     private route: ActivatedRoute,
     private router: Router,
     private store: Store<Dataset>,
@@ -169,10 +180,13 @@ export class DatasetDetailsDashboardComponent implements OnInit, OnDestroy {
         if (id) {
           if (this.viewPublic) {
             this.store.dispatch(
-              new DatablocksAction(id, { isPublished: this.viewPublic })
+              fetchDatasetAction({
+                pid: id,
+                filter: { isPublished: this.viewPublic }
+              })
             );
           } else {
-            this.store.dispatch(new DatablocksAction(id));
+            this.store.dispatch(fetchDatasetAction({ pid: id }));
           }
         }
       })
@@ -215,12 +229,16 @@ export class DatasetDetailsDashboardComponent implements OnInit, OnDestroy {
     );
 
     this.subscriptions.push(
-      this.store.pipe(select(getViewPublicMode)).subscribe(viewPublic => {
+      this.store.pipe(select(getPublicViewMode)).subscribe(viewPublic => {
         this.viewPublic = viewPublic;
       })
     );
 
     this.jwt$ = this.userApi.jwt();
+  }
+
+  ngAfterViewChecked() {
+    this.cdRef.detectChanges();
   }
 
   ngOnDestroy() {

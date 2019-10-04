@@ -1,447 +1,215 @@
-import { Action } from "@ngrx/store";
+import { createAction, props } from "@ngrx/store";
+import { Dataset, Attachment } from "shared/sdk";
+import { FacetCounts } from "state-management/state/datasets.store";
 import {
+  ArchViewMode,
   DatasetFilters,
-  ScientificCondition,
-  ArchViewMode
+  ScientificCondition
 } from "state-management/models";
-import { Dataset, Attachment } from "shared/sdk/models";
-import { FacetCounts } from "../state/datasets.store";
 
-export const SEARCH_FAILED = "[Dataset] Search Failed";
-
-export const SEARCH_ID = "[Dataset] Search ID";
-export const SEARCH_ID_COMPLETE = "[Dataset] Search ID Complete";
-export const SEARCH_ID_FAILED = "[Dataset] Search ID Failed";
-
-export const FILTER_UPDATE = "[Dataset] Filter Update";
-export const FILTER_VALUE_UPDATE = "[Dataset] Filter Update";
-export const FILTER_FAILED = "[Dataset] Filter Failed";
-
-export const DATABLOCKS = "[Dataset] Datablocks Update";
-export const DATABLOCKS_COMPLETE = "[Dataset] Datablocks Update Complete";
-export const DATABLOCKS_FAILED = "[Dataset] Datablocks Failed";
-
-export const DATABLOCK_DELETE = "[Dataset] Datablock Delete";
-export const DATABLOCK_DELETE_COMPLETE = "[Dataset] Datablock Delete Complete";
-export const DATABLOCK_DELETE_FAILED = "[Dataset] Datablock Delete Failed";
-
-export const ADD_GROUPS = "[User] Add Groups";
-export const ADD_GROUPS_FAILED = "[User] Add Groups Failed";
-
-export const RESET_STATUS = "[Dataset] Status Reset";
-export const RESET_STATUS_COMPLETE = "[Dataset] Status Reset Complete";
-
-export const LOAD = "[Dataset] Load";
-export const COUNT_COMPLETE = "[Dataset] Complete";
-export const SELECT_CURRENT = "[Dataset] Current set selected";
-export const CURRENT_BLOCKS_COMPLETE =
-  "[Dataset] Current set datablocks update complete";
-export const TOTAL_UPDATE = "[Dataset] Total Datasets Update";
-// export const FILTER_UPDATE_COMPLETE = "[Dataset]  Filter Update Complete";
-
-export const SELECT_DATASET = "[Dataset] Select Dataset";
-export const DESELECT_DATASET = "[Dataset] Deselect Dataset";
-
-export const SELECT_ALL_DATASETS = "[Dataset] Select all Datasets";
-export const CLEAR_SELECTION = "[Dataset] Clear Selection";
-
-export const SET_VIEW_MODE = "[Dataset] Set View Mode";
-export const SET_PUBLIC_VIEW_MODE = "[Dataset] Set Public View Mode";
-
-export const FETCH_DATASETS = "[Dataset] Fetch Datasets";
-export const FETCH_DATASETS_COMPLETE = "[Dataset] Fetch Datasets Complete";
-export const FETCH_DATASETS_FAILED = "[Dataset] Fetch Datasets Failed";
-
-export const SAVE_DATASET = "[Dataset] Save Dataset";
-export const SAVE_DATASET_COMPLETE = "[Dataset] Save Dataset Complete";
-export const SAVE_DATASET_FAILED = "[Dataset] Save Dataset Failed";
-
-export const FETCH_FACET_COUNTS = "[Dataset] Fetch Facet Counts";
-export const FETCH_FACET_COUNTS_COMPLETE =
-  "[Dataset] Fetch Facet Counts Complete";
-export const FETCH_FACET_COUNTS_FAILED = "[Dataset] Fetch Facet Counts Failed";
-
-export const CHANGE_PAGE = "[Dataset] Change Page";
-export const SORT_BY_COLUMN = "[Dataset] Sort by Column";
-export const SET_SEARCH_TERMS = "[Dataset] Set Search Terms";
-
-export const ADD_LOCATION_FILTER = "[Dataset] Add Location Filter";
-export const REMOVE_LOCATION_FILTER = "[Dataset] Remove Location Filter";
-
-export const ADD_GROUP_FILTER = "[Dataset] Add Group Filter";
-export const REMOVE_GROUP_FILTER = "[Dataset] Remove Group Filter";
-
-export const ADD_KEYWORD_FILTER = "[Dataset] Add Keyword Filter";
-export const REMOVE_KEYWORD_FILTER = "[Dataset] Remove Keyword Filter";
-
-export const ADD_TYPE_FILTER = "[Dataset] Add Type Filter";
-export const REMOVE_TYPE_FILTER = "[Dataset] Remove Type Filter";
-
-export const SET_TEXT_FILTER = "[Dataset] Set Text Filter";
-export const SET_DATE_RANGE = "[Dataset] Set Date Range Filter";
-
-export const PREFILL_FILTERS = "[Dataset] Prefill Filter";
-export const CLEAR_FACETS = "[Dataset] Clear Facets";
-
-export const ADD_TO_BATCH = "[Dataset] Add to Batch";
-export const REMOVE_FROM_BATCH = "[Dataset] Remove from Batch";
-export const CLEAR_BATCH = "[Dataset] Clear Batch";
-
-export const PREFILL_BATCH = "[Dataset] Prefill Batch";
-export const PREFILL_BATCH_COMPLETE = "[Dataset] Prefill Batch Complete";
-
-export const ADD_SCIENTIFIC_CONDITION = "[Dataset] Add Scientific Condition";
-export const REMOVE_SCIENTIFIC_CONDITION =
-  "[Dataset] Remove Scientific Condition";
-
-export const REDUCE_DATASET = "[Dataset] Reduce Dataset";
-export const REDUCE_DATASET_COMPLETE = "[Dataset] Reduce Dataset Complete";
-export const REDUCE_DATASET_FAILED = "[Dataset] Reduce Dataset Failed";
-
-export const DELETE_ATTACHMENT = "[Dataset] Delete Attachment";
-export const DELETE_ATTACHMENT_COMPLETE =
-  "[Dataset] Delete Attachment Complete";
-export const DELETE_ATTACHMENT_FAILED = "[Dataset] Delete Attachment Failed";
-
-export const ADD_ATTACHMENT = "[Dataset] Add Attachment";
-export const ADD_ATTACHMENT_COMPLETE = "[Dataset] Add Attachment Complete";
-export const ADD_ATTACHMENT_FAILED = "[Dataset] Add Attachment Failed";
-
-export const UPDATE_ATTACHMENT_CAPTION = "[Dataset] Update Attachment Caption";
-export const UPDATE_ATTACHMENT_CAPTION_COMPLETE =
-  "[Dataset] Update Attachment Caption Complete";
-export const UPDATE_ATTACHMENT_CAPTION_FAILED =
-  "[Dataset] Update Attachment Caption Failed";
-
-export class AddAttachment implements Action {
-  readonly type = ADD_ATTACHMENT;
-
-  constructor(readonly attachment: Attachment) {}
-}
-
-export class AddAttachmentComplete implements Action {
-  readonly type = ADD_ATTACHMENT_COMPLETE;
-
-  constructor(readonly attachment: Attachment) {}
-}
-
-export class AddAttachmentFailed implements Action {
-  readonly type = ADD_ATTACHMENT_FAILED;
-  constructor(readonly attachment: Attachment) {}
-}
-
-export class DeleteAttachment implements Action {
-  readonly type = DELETE_ATTACHMENT;
-
-  constructor(readonly dataset_id: string, readonly attachment_id: string) {}
-}
-
-export class DeleteAttachmentComplete implements Action {
-  readonly type = DELETE_ATTACHMENT_COMPLETE;
-
-  constructor(readonly attachment_id: string) {}
-}
-
-export class DeleteAttachmentFailed implements Action {
-  readonly type = DELETE_ATTACHMENT_FAILED;
-
-  constructor(readonly attachment_id: string) {}
-}
-
-export class UpdateAttachmentCaptionAction implements Action {
-  readonly type = UPDATE_ATTACHMENT_CAPTION;
-
-  constructor(
-    readonly datasetId: string,
-    readonly attachmentId: string,
-    readonly caption: string
-  ) {}
-}
-
-export class UpdateAttachmentCaptionCompleteAction implements Action {
-  readonly type = UPDATE_ATTACHMENT_CAPTION_COMPLETE;
-
-  constructor(readonly attachment: Attachment) {}
-}
-
-export class UpdateAttachmentCaptionFailedAction implements Action {
-  readonly type = UPDATE_ATTACHMENT_CAPTION_FAILED;
-
-  constructor(readonly error: Error) {}
-}
-
-export class UpdateFilterAction implements Action {
-  // Inte gjord då den eventuellt ska tas bort
-  readonly type = FILTER_UPDATE;
-
-  constructor(public payload: {}) {}
-}
-
-export class SearchIDCompleteAction implements Action {
-  readonly type = SEARCH_ID_COMPLETE;
-
-  constructor(readonly dataset: Dataset) {}
-}
-
-export class DatablocksAction implements Action {
-  readonly type = DATABLOCKS;
-
-  constructor(readonly id: string, readonly filter?: any) {}
-}
-
-export class DatablocksFailedAction implements Action {
-  readonly type = DATABLOCKS_FAILED;
-
-  constructor(readonly error: Error) {}
-}
-
-export class CurrentSetAction implements Action {
-  readonly type = SELECT_CURRENT;
-
-  constructor(readonly dataset: Dataset) {}
-}
-
-export class SelectDatasetAction implements Action {
-  readonly type = SELECT_DATASET;
-
-  constructor(readonly dataset: Dataset) {}
-}
-
-export class DeselectDatasetAction implements Action {
-  readonly type = DESELECT_DATASET;
-
-  constructor(readonly dataset: Dataset) {}
-}
-
-export class SelectAllDatasetsAction implements Action {
-  readonly type = SELECT_ALL_DATASETS;
-}
-
-export class ClearSelectionAction implements Action {
-  readonly type = CLEAR_SELECTION;
-}
-
-export class ChangePageAction implements Action {
-  readonly type = CHANGE_PAGE;
-
-  constructor(readonly page: number, readonly limit: number) {}
-}
-
-export class SortByColumnAction implements Action {
-  readonly type = SORT_BY_COLUMN;
-
-  constructor(readonly column: string, readonly direction: string) {}
-}
-
-export class SetViewModeAction implements Action {
-  readonly type = SET_VIEW_MODE;
-
-  constructor(readonly modeToggle: ArchViewMode) {}
-}
-
-export class SetPublicViewModeAction implements Action {
-  readonly type = SET_PUBLIC_VIEW_MODE;
-
-  constructor(readonly isPublished: boolean) {}
-}
-
-export class SetSearchTermsAction implements Action {
-  readonly type = SET_SEARCH_TERMS;
-
-  constructor(readonly terms: string) {}
-}
-
-export class AddLocationFilterAction implements Action {
-  readonly type = ADD_LOCATION_FILTER;
-
-  constructor(readonly location: string) {}
-}
-
-export class RemoveLocationFilterAction implements Action {
-  readonly type = REMOVE_LOCATION_FILTER;
-
-  constructor(readonly location: string) {}
-}
-
-export class AddGroupFilterAction implements Action {
-  readonly type = ADD_GROUP_FILTER;
-
-  constructor(readonly group: string) {}
-}
-
-export class RemoveGroupFilterAction implements Action {
-  readonly type = REMOVE_GROUP_FILTER;
-
-  constructor(readonly group: string) {}
-}
-
-export class AddKeywordFilterAction implements Action {
-  readonly type = ADD_KEYWORD_FILTER;
-
-  constructor(readonly keyword: string) {}
-}
-
-export class RemoveKeywordFilterAction implements Action {
-  readonly type = REMOVE_KEYWORD_FILTER;
-
-  constructor(readonly keyword: string) {}
-}
-
-export class AddTypeFilterAction implements Action {
-  readonly type = ADD_TYPE_FILTER;
-
-  constructor(readonly datasetType: string) {}
-}
-
-export class RemoveTypeFilterAction implements Action {
-  readonly type = REMOVE_TYPE_FILTER;
-
-  constructor(readonly datasetType: string) {}
-}
-
-export class SetTextFilterAction implements Action {
-  readonly type = SET_TEXT_FILTER;
-
-  constructor(readonly text: string) {}
-}
-
-export class SetDateRangeFilterAction implements Action {
-  readonly type = SET_DATE_RANGE;
-
-  constructor(readonly begin: string, readonly end: string) {}
-}
-
-export class PrefillFiltersAction implements Action {
-  readonly type = PREFILL_FILTERS;
-
-  constructor(readonly values: Partial<DatasetFilters>) {}
-}
-
-export class ClearFacetsAction implements Action {
-  readonly type = CLEAR_FACETS;
-}
-
-export class FetchDatasetsAction implements Action {
-  readonly type = FETCH_DATASETS;
-}
-
-export class FetchDatasetsCompleteAction implements Action {
-  readonly type = FETCH_DATASETS_COMPLETE;
-
-  constructor(readonly datasets: Dataset[]) {}
-}
-
-export class FetchDatasetsFailedAction implements Action {
-  readonly type = FETCH_DATASETS_FAILED;
-}
-
-export class SaveDatasetAction implements Action {
-  readonly type = SAVE_DATASET;
-
-  constructor(readonly dataset: Dataset) {}
-}
-
-export class SaveDatasetCompleteAction implements Action {
-  readonly type = SAVE_DATASET_COMPLETE;
-
-  constructor(readonly dataset: Dataset) {}
-}
-
-export class SaveDatasetFailedAction implements Action {
-  readonly type = SAVE_DATASET_FAILED;
-
-  constructor(readonly error: Error) {}
-}
-
-export class FetchFacetCountsAction implements Action {
-  readonly type = FETCH_FACET_COUNTS;
-}
-
-export class FetchFacetCountsCompleteAction implements Action {
-  readonly type = FETCH_FACET_COUNTS_COMPLETE;
-
-  constructor(readonly facetCounts: FacetCounts, readonly allCounts: number) {}
-}
-
-export class FetchFacetCountsFailedAction implements Action {
-  readonly type = FETCH_FACET_COUNTS_FAILED;
-}
-
-export class AddToBatchAction implements Action {
-  readonly type = ADD_TO_BATCH;
-}
-
-export class RemoveFromBatchAction implements Action {
-  readonly type = REMOVE_FROM_BATCH;
-
-  constructor(readonly dataset: Dataset) {}
-}
-
-export class ClearBatchAction implements Action {
-  readonly type = CLEAR_BATCH;
-}
-
-export class PrefillBatchAction implements Action {
-  readonly type = PREFILL_BATCH;
-}
-
-export class PrefillBatchCompleteAction implements Action {
-  readonly type = PREFILL_BATCH_COMPLETE;
-
-  constructor(readonly batch: Dataset[]) {}
-}
-
-export class AddScientificConditionAction implements Action {
-  readonly type = ADD_SCIENTIFIC_CONDITION;
-
-  constructor(readonly condition: ScientificCondition) {}
-}
-
-export class RemoveScientificConditionAction implements Action {
-  readonly type = REMOVE_SCIENTIFIC_CONDITION;
-
-  constructor(readonly index: number) {}
-}
-
-export class ReduceDatasetAction implements Action {
-  readonly type = REDUCE_DATASET;
-
-  constructor(readonly dataset: Dataset) {}
-}
-
-export class ReduceDatasetCompleteAction implements Action {
-  readonly type = REDUCE_DATASET_COMPLETE;
-
-  constructor(readonly result: object) {}
-}
-
-export class ReduceDatasetFailedAction implements Action {
-  readonly type = REDUCE_DATASET_FAILED;
-}
-
-export type Actions =
-  | UpdateFilterAction
-  | SearchIDCompleteAction
-  | DatablocksAction
-  | DatablocksAction
-  | SaveDatasetFailedAction
-  | SaveDatasetAction
-  | SaveDatasetCompleteAction
-  | DeleteAttachment
-  | DeleteAttachmentComplete
-  | AddAttachment
-  | AddAttachmentComplete
-  | SelectDatasetAction
-  | DeselectDatasetAction
-  | SelectAllDatasetsAction
-  | ChangePageAction
-  | SortByColumnAction
-  | SetViewModeAction
-  | SetSearchTermsAction
-  | ClearFacetsAction
-  | AddToBatchAction
-  | AddScientificConditionAction
-  | RemoveScientificConditionAction
-  | ReduceDatasetAction
-  | ReduceDatasetCompleteAction
-  | ReduceDatasetFailedAction;
+// === Effects ===
+
+export const fetchDatasetsAction = createAction("[Dataset] Fetch Datasets");
+export const fetchDatasetsCompleteAction = createAction(
+  "[Dataset] Fetch Datasets Complete",
+  props<{ datasets: Dataset[] }>()
+);
+export const fetchDatasetsFailedAction = createAction(
+  "[Dataset] Fetch Datasets Failed"
+);
+
+export const fetchFacetCountsAction = createAction(
+  "[Dataset] Fetch Facet Counts"
+);
+export const fetchFacetCountsCompleteAction = createAction(
+  "[Dataset] Fetch Facet Counts Complete",
+  props<{ facetCounts: FacetCounts; allCounts: number }>()
+);
+export const fetchFacetCountsFailedAction = createAction(
+  "[Dataset] Fetch Facet Counts Failed"
+);
+
+export const fetchDatasetAction = createAction(
+  "[Dataset] Fetch Dataset",
+  props<{ pid: string; filter?: any }>()
+);
+export const fetchDatasetCompleteAction = createAction(
+  "[Dataset] Fetch Dataset Complete",
+  props<{ dataset: Dataset }>()
+);
+export const fetchDatasetFailedAction = createAction(
+  "[Dataset] Fetch Dataset Failed"
+);
+
+export const prefillBatchAction = createAction("[Dataset] Prefill Batch");
+export const prefillBatchCompleteAction = createAction(
+  "[Dataset] Prefill Batch Complete",
+  props<{ batch: Dataset[] }>()
+);
+export const addToBatchAction = createAction("[Dataset] Add To Batch");
+export const removeFromBatchAction = createAction(
+  "[Dataset] Remove From Batch",
+  props<{ dataset: Dataset }>()
+);
+export const clearBatchAction = createAction("[Dataset] Clear Batch");
+
+export const saveDatasetAction = createAction(
+  "[Dataset] Save Dataset",
+  props<{ dataset: Dataset }>()
+);
+export const saveDatasetCompleteAction = createAction(
+  "[Dataset] Save Dataset Complete",
+  props<{ dataset: Dataset }>()
+);
+export const saveDatasetFailedAction = createAction(
+  "[Dataset] Save Dataset Failed"
+);
+
+export const addAttachmentAction = createAction(
+  "[Dataset] Add Attachment",
+  props<{ attachment: Attachment }>()
+);
+export const addAttachmentCompleteAction = createAction(
+  "[Dataset] Add Attachment Complete",
+  props<{ attachment: Attachment }>()
+);
+export const addAttachmentFailedAction = createAction(
+  "[Dataset] Add Attachment Failed"
+);
+
+export const updateAttachmentCaptionAction = createAction(
+  "[Dataset] Update Attachment Caption",
+  props<{ datasetId: string; attachmentId: string; caption: string }>()
+);
+export const updateAttachmentCaptionCompleteAction = createAction(
+  "[Dataset] Update Attachment Caption Complete",
+  props<{ attachment: Attachment }>()
+);
+export const updateAttachmentCaptionFailedAction = createAction(
+  "[Dataset] Update Attachment Action Failed"
+);
+
+export const removeAttachmentAction = createAction(
+  "[Dataset] Remove Attachment",
+  props<{ datasetId: string; attachmentId: string }>()
+);
+export const removeAttachmentCompleteAction = createAction(
+  "[Dataset] Remove Attachment Complete",
+  props<{ attachmentId: string }>()
+);
+export const removeAttachmentFailedAction = createAction(
+  "[Dataset] Remove Attachment Failed"
+);
+
+export const reduceDatasetAction = createAction(
+  "[Dataset] Reduce Dataset",
+  props<{ dataset: Dataset }>()
+);
+export const reduceDatasetCompleteAction = createAction(
+  "[Dataset] Reduce Dataset Complete",
+  props<{ result: object }>()
+);
+export const reduceDatasetFailedAction = createAction(
+  "[Dataset] Reduce Dataset Failed"
+);
+
+// === Dataset Table Selection ===
+
+export const selectDatasetAction = createAction(
+  "[Dataset] Select Dataset",
+  props<{ dataset: Dataset }>()
+);
+export const deselectDatasetAction = createAction(
+  "[Dataset] Deselect Dataset",
+  props<{ dataset: Dataset }>()
+);
+
+export const selectAllDatasetsAction = createAction(
+  "[Dataset] Select All Datasets"
+);
+export const clearSelectionAction = createAction("[Dataset] Clear Selection");
+
+// === Dataset Table Filtering ===
+
+export const changePageAction = createAction(
+  "[Dataset] Change Page",
+  props<{ page: number; limit: number }>()
+);
+export const sortByColumnAction = createAction(
+  "[Dataset] Sort By Column",
+  props<{ column: string; direction: string }>()
+);
+export const setSearchTermsAction = createAction(
+  "[Dataset] Set Search Terms",
+  props<{ terms: string }>()
+);
+
+export const setArchiveViewModeAction = createAction(
+  "[Dataset] Set Archive View Mode",
+  props<{ modeToggle: ArchViewMode }>()
+);
+export const setPublicViewModeAction = createAction(
+  "[Dataset] Set Public View Mode",
+  props<{ isPublished: boolean }>()
+);
+
+export const prefillFiltersAction = createAction(
+  "[Dataset] Prefill Filters",
+  props<{ values: Partial<DatasetFilters> }>()
+);
+export const clearFacetsAction = createAction("[Dataset] Clear Facets");
+
+export const setTextFilterAction = createAction(
+  "[Dataset] Set Text Filter",
+  props<{ text: string }>()
+);
+
+export const addLocationFilterAction = createAction(
+  "[Dataset] Add Location Filter",
+  props<{ location: string }>()
+);
+export const removeLocationFilterAction = createAction(
+  "[Dataset] Remove Location Filter",
+  props<{ location: string }>()
+);
+
+export const addGroupFilterAction = createAction(
+  "[Dataset] Add Group Filter",
+  props<{ group: string }>()
+);
+export const removeGroupFilterAction = createAction(
+  "[Dataset] Remove Group Filter",
+  props<{ group: string }>()
+);
+
+export const addTypeFilterAction = createAction(
+  "[Dataset] Add Type Filter",
+  props<{ datasetType: string }>()
+);
+export const removeTypeFilterAction = createAction(
+  "[Dataset] Remove Type Filter",
+  props<{ datasetType: string }>()
+);
+
+export const addKeywordFilterAction = createAction(
+  "[Dataset] Add Keyword Filter",
+  props<{ keyword: string }>()
+);
+export const removeKeywordFilterAction = createAction(
+  "[Dataset] Remove Keyword Filter",
+  props<{ keyword: string }>()
+);
+
+export const setDateRangeFilterAction = createAction(
+  "[Dataset] Set Date Range Filter",
+  props<{ begin: string; end: string }>()
+);
+
+export const addScientificConditionAction = createAction(
+  "[Dataset] Add Scientific Condition",
+  props<{ condition: ScientificCondition }>()
+);
+export const removeScientificConditionAction = createAction(
+  "[Dataset] Remove Scientific Condition",
+  props<{ index: number }>()
+);

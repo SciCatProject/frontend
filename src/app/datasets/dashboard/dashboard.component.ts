@@ -9,14 +9,13 @@ import * as deepEqual from "deep-equal";
 import { DatasetFilters } from "state-management/models";
 
 import {
-  FetchDatasetsAction,
-  FetchFacetCountsAction,
-  PrefillBatchAction,
-  PrefillFiltersAction,
-  SetSearchTermsAction,
-  SetTextFilterAction
+  fetchDatasetsAction,
+  fetchFacetCountsAction,
+  prefillBatchAction,
+  prefillFiltersAction,
+  setSearchTermsAction,
+  setTextFilterAction
 } from "state-management/actions/datasets.actions";
-
 
 import {
   getFilters,
@@ -54,8 +53,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
       distinctUntilChanged(deepEqual)
     )
     .subscribe(filters => {
-      this.store.dispatch(new FetchDatasetsAction());
-      this.store.dispatch(new FetchFacetCountsAction());
+      this.store.dispatch(fetchDatasetsAction());
+      this.store.dispatch(fetchFacetCountsAction());
       this.router.navigate(["/datasets"], {
         queryParams: { args: rison.encode(filters) }
       });
@@ -67,7 +66,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       map(args => (args ? rison.decode<DatasetFilters>(args) : {}))
     )
     .subscribe(filters =>
-      this.store.dispatch(new PrefillFiltersAction(filters))
+      this.store.dispatch(prefillFiltersAction({ values: filters }))
     );
   private searchTermSubscription = this.searchTerms$
     .pipe(
@@ -76,7 +75,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       distinctUntilChanged()
     )
     .subscribe(terms => {
-      this.store.dispatch(new SetTextFilterAction(terms));
+      this.store.dispatch(setTextFilterAction({ text: terms }));
     });
 
   constructor(
@@ -92,10 +91,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.store.dispatch(new PrefillBatchAction());
+    this.store.dispatch(prefillBatchAction());
   }
 
   textSearch(terms: string) {
-    this.store.dispatch(new SetSearchTermsAction(terms));
+    this.store.dispatch(setSearchTermsAction({ terms }));
   }
 }

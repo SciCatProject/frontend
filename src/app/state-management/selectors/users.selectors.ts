@@ -97,7 +97,7 @@ export const getColumnOrder = function() {
 export const getConfigurableColumns = createSelector(
   getUserState,
   state => {
-    const columns = state.columns;
+    const columns = [...state.columns];
     const index = columns.indexOf("select");
     if (index > -1) {
       columns.splice(index, 1);

@@ -5,7 +5,7 @@ import { select, Store, ActionsSubject } from "@ngrx/store";
 import { map, first, tap } from "rxjs/operators";
 
 import { getDatasetsInBatch } from "state-management/selectors/datasets.selectors";
-import { PrefillBatchAction } from "state-management/actions/datasets.actions";
+import { prefillBatchAction } from "state-management/actions/datasets.actions";
 import {
   UpsertWaitPublishedData,
   PublishedDataActionTypes,
@@ -87,7 +87,7 @@ export class PublishComponent implements OnInit {
   }
 
   public ngOnInit() {
-    this.store.dispatch(new PrefillBatchAction());
+    this.store.dispatch(prefillBatchAction());
 
     this.datasets$
       .pipe(
