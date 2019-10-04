@@ -15,7 +15,7 @@ import {
 @Component({
   selector: "datafiles",
   templateUrl: "./datafiles.component.html",
-  styleUrls: ["./datafiles.component.css"]
+  styleUrls: ["./datafiles.component.scss"]
 })
 export class DatafilesComponent
   implements OnInit, AfterViewInit, AfterViewChecked {

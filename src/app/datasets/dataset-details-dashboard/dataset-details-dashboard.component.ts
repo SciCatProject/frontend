@@ -3,8 +3,8 @@ import {
   OnInit,
   OnDestroy,
   Inject,
-  AfterViewChecked,
-  ChangeDetectorRef
+  ChangeDetectorRef,
+  AfterViewChecked
 } from "@angular/core";
 import { Store, select } from "@ngrx/store";
 import {
