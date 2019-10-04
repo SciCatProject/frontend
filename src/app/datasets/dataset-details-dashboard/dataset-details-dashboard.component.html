@@ -81,7 +81,7 @@
           Lifecycle
         </mat-card-header>
         <div class="details">
-          <table>
+          <table *ngIf="dataset.datasetlifecycle">
             <tr *ngIf="dataset.datasetlifecycle.dateOfPublishing as value">
               <th><mat-icon> radio </mat-icon> Data Publishing Date</th>
               <td>{{ value | date: "yyyy-MM-dd" }}</td>
