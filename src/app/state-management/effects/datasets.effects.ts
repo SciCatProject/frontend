@@ -100,12 +100,14 @@ export class DatasetEffects {
   saveDataset$ = createEffect(() =>
     this.actions$.pipe(
       ofType(fromActions.saveDatasetAction),
-      mergeMap(action =>
-        this.datasetApi.updateScientificMetadata(action.dataset).pipe(
+      mergeMap(action => {
+        const saveDataset = action.dataset;
+        saveDataset.scientificMetadata = action.metadata;
+        return this.datasetApi.updateScientificMetadata(saveDataset).pipe(
           map(dataset => fromActions.saveDatasetCompleteAction({ dataset })),
           catchError(() => of(fromActions.saveDatasetFailedAction()))
-        )
-      )
+        );
+      })
     )
   );
 

@@ -52,7 +52,7 @@ import {
   addScientificConditionAction,
   removeScientificConditionAction
 } from "./datasets.actions";
-import { Dataset, Attachment } from "shared/sdk";
+import { Dataset, Attachment, RawDataset } from "shared/sdk";
 import { FacetCounts } from "state-management/state/datasets.store";
 import {
   ArchViewMode,
@@ -190,11 +190,13 @@ describe("Dataset Actions", () => {
 
   describe("#saveDataset()", () => {
     it("should create an action", () => {
-      const dataset = new Dataset();
-      const action = saveDatasetAction({ dataset });
+      const dataset = new RawDataset();
+      const metadata = {};
+      const action = saveDatasetAction({ dataset, metadata });
       expect({ ...action }).toEqual({
         type: "[Dataset] Save Dataset",
-        dataset
+        dataset,
+        metadata
       });
     });
   });

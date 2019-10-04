@@ -1,5 +1,5 @@
 import { createAction, props } from "@ngrx/store";
-import { Dataset, Attachment } from "shared/sdk";
+import { Dataset, Attachment, RawDataset, DerivedDataset } from "shared/sdk";
 import { FacetCounts } from "state-management/state/datasets.store";
 import {
   ArchViewMode,
@@ -55,7 +55,7 @@ export const clearBatchAction = createAction("[Dataset] Clear Batch");
 
 export const saveDatasetAction = createAction(
   "[Dataset] Save Dataset",
-  props<{ dataset: Dataset }>()
+  props<{ dataset: RawDataset | DerivedDataset; metadata: object }>()
 );
 export const saveDatasetCompleteAction = createAction(
   "[Dataset] Save Dataset Complete",

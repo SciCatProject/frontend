@@ -1,6 +1,11 @@
 import * as fromDatasets from "./datasets.reducer";
 import * as fromActions from "../actions/datasets.actions";
-import { Dataset, DatasetInterface, Attachment } from "shared/sdk/models";
+import {
+  Dataset,
+  DatasetInterface,
+  Attachment,
+  RawDataset
+} from "shared/sdk/models";
 import {
   FacetCounts,
   DatasetState
@@ -201,7 +206,12 @@ describe("DatasetsReducer", () => {
 
   describe("on #saveDatasetAction()", () => {
     it("should set isLoading to true", () => {
-      const action = fromActions.saveDatasetAction({ dataset });
+      const rawDataset = new RawDataset();
+      const metadata = {};
+      const action = fromActions.saveDatasetAction({
+        dataset: rawDataset,
+        metadata
+      });
       const state = fromDatasets.datasetsReducer(initialDatasetState, action);
 
       expect(state.isLoading).toEqual(true);

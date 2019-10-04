@@ -2,7 +2,13 @@ import { TestBed } from "@angular/core/testing";
 import { provideMockActions } from "@ngrx/effects/testing";
 import { provideMockStore } from "@ngrx/store/testing";
 import { cold, hot } from "jasmine-marbles";
-import { DatasetInterface, Dataset, DatasetApi, Attachment } from "shared/sdk";
+import {
+  DatasetInterface,
+  Dataset,
+  DatasetApi,
+  Attachment,
+  RawDataset
+} from "shared/sdk";
 import * as fromActions from "../actions/datasets.actions";
 import { Observable } from "rxjs";
 import { DatasetEffects } from "./datasets.effects";
@@ -163,8 +169,13 @@ describe("DatasetEffects", () => {
   });
 
   describe("saveDataset$", () => {
+    const rawDataset = new RawDataset();
+    const metadata = {};
     it("should result in a saveDatasetCompleteAction", () => {
-      const action = fromActions.saveDatasetAction({ dataset });
+      const action = fromActions.saveDatasetAction({
+        dataset: rawDataset,
+        metadata
+      });
       const outcome = fromActions.saveDatasetCompleteAction({ dataset });
 
       actions = hot("-a", { a: action });
@@ -176,7 +187,10 @@ describe("DatasetEffects", () => {
     });
 
     it("should result in a saveDatasetFailedAction", () => {
-      const action = fromActions.saveDatasetAction({ dataset });
+      const action = fromActions.saveDatasetAction({
+        dataset: rawDataset,
+        metadata
+      });
       const outcome = fromActions.saveDatasetFailedAction();
 
       actions = hot("-a", { a: action });

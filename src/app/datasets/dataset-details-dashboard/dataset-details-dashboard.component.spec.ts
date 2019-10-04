@@ -124,11 +124,10 @@ describe("DetailsDashboardComponent", () => {
       component.dataset = new RawDataset();
       const metadata = {};
       component.onSaveMetadata(metadata);
-      component.dataset.scientificMetadata = metadata;
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        saveDatasetAction({ dataset: component.dataset })
+        saveDatasetAction({ dataset: component.dataset, metadata })
       );
     });
   });
