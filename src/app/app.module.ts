@@ -28,7 +28,6 @@ import { UserApi } from "shared/sdk/services";
 import { UserEffects } from "state-management/effects/user.effects";
 import { UsersModule } from "users/users.module";
 import { PublishedDataEffects } from "state-management/effects/published-data.effects";
-import { localStorageSync } from "ngrx-store-localstorage";
 import { rootReducer } from "state-management/reducers/root.reducer";
 import { routerReducer } from "@ngrx/router-store";
 import { LoginService } from "users/login.service";
@@ -52,10 +51,6 @@ import { AppHeaderComponent } from "./_layout/app-header/app-header.component";
 import { LoginHeaderComponent } from "./_layout/login-header/login-header.component";
 import { LoginLayoutComponent } from "./_layout/login-layout/login-layout.component";
 import { JobsModule } from "jobs/jobs.module";
-
-export function localStorageSyncWrapper(reducer: any) {
-  return localStorageSync({ keys: ["root"], rehydrate: true })(reducer);
-}
 
 @NgModule({
   declarations: [
@@ -129,7 +124,6 @@ export function localStorageSyncWrapper(reducer: any) {
     MatNativeDateModule,
     LoginService,
     RedirectGuard
-    //      {provide: RouteReuseStrategy, useClass: CustomReuseStrategy}
   ],
   bootstrap: [AppComponent]
 })
