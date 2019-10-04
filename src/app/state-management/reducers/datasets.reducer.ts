@@ -3,96 +3,56 @@ import {
   initialDatasetState,
   DatasetState
 } from "state-management/state/datasets.store";
-import {
-  fetchDatasetsAction,
-  fetchDatasetsCompleteAction,
-  fetchDatasetsFailedAction,
-  fetchFacetCountsAction,
-  fetchFacetCountsCompleteAction,
-  fetchFacetCountsFailedAction,
-  fetchDatasetAction,
-  fetchDatasetCompleteAction,
-  fetchDatasetFailedAction,
-  prefillBatchCompleteAction,
-  addToBatchAction,
-  removeFromBatchAction,
-  clearBatchAction,
-  saveDatasetAction,
-  saveDatasetCompleteAction,
-  saveDatasetFailedAction,
-  addAttachmentAction,
-  addAttachmentCompleteAction,
-  addAttachmentFailedAction,
-  updateAttachmentCaptionAction,
-  updateAttachmentCaptionCompleteAction,
-  updateAttachmentCaptionFailedAction,
-  removeAttachmentAction,
-  removeAttachmentCompleteAction,
-  removeAttachmentFailedAction,
-  selectDatasetAction,
-  deselectDatasetAction,
-  selectAllDatasetsAction,
-  clearSelectionAction,
-  changePageAction,
-  sortByColumnAction,
-  setSearchTermsAction,
-  setArchiveViewModeAction,
-  setPublicViewModeAction,
-  prefillFiltersAction,
-  clearFacetsAction,
-  setTextFilterAction,
-  addLocationFilterAction,
-  removeLocationFilterAction,
-  addGroupFilterAction,
-  removeGroupFilterAction,
-  addTypeFilterAction,
-  removeTypeFilterAction,
-  addKeywordFilterAction,
-  removeKeywordFilterAction,
-  setDateRangeFilterAction,
-  addScientificConditionAction,
-  removeScientificConditionAction
-} from "state-management/actions/datasets.actions";
+import * as fromActions from "state-management/actions/datasets.actions";
 import { ArchViewMode } from "state-management/models";
 
 const reducer = createReducer(
   initialDatasetState,
-  on(fetchDatasetsAction, state => ({ ...state, isLoading: true })),
-  on(fetchDatasetsCompleteAction, (state, { datasets }) => ({
+  on(fromActions.fetchDatasetsAction, state => ({ ...state, isLoading: true })),
+  on(fromActions.fetchDatasetsCompleteAction, (state, { datasets }) => ({
     ...state,
     datasets,
     isLoading: false
   })),
-  on(fetchDatasetsFailedAction, state => ({
+  on(fromActions.fetchDatasetsFailedAction, state => ({
     ...state,
     isLoading: false
   })),
 
-  on(fetchFacetCountsAction, state => ({ ...state, isLoading: true })),
-  on(fetchFacetCountsCompleteAction, (state, { facetCounts, allCounts }) => ({
+  on(fromActions.fetchFacetCountsAction, state => ({
     ...state,
-    facetCounts,
-    totalCount: allCounts,
-    isLoading: false
+    isLoading: true
   })),
-  on(fetchFacetCountsFailedAction, state => ({
+  on(
+    fromActions.fetchFacetCountsCompleteAction,
+    (state, { facetCounts, allCounts }) => ({
+      ...state,
+      facetCounts,
+      totalCount: allCounts,
+      isLoading: false
+    })
+  ),
+  on(fromActions.fetchFacetCountsFailedAction, state => ({
     ...state,
     isLoading: false
   })),
 
-  on(fetchDatasetAction, state => ({ ...state, isLoading: true })),
-  on(fetchDatasetCompleteAction, (state, { dataset }) => ({
+  on(fromActions.fetchDatasetAction, state => ({ ...state, isLoading: true })),
+  on(fromActions.fetchDatasetCompleteAction, (state, { dataset }) => ({
     ...state,
     currentSet: dataset,
     isLoading: false
   })),
-  on(fetchDatasetFailedAction, state => ({
+  on(fromActions.fetchDatasetFailedAction, state => ({
     ...state,
     isLoading: false
   })),
 
-  on(prefillBatchCompleteAction, (state, { batch }) => ({ ...state, batch })),
-  on(addToBatchAction, state => {
+  on(fromActions.prefillBatchCompleteAction, (state, { batch }) => ({
+    ...state,
+    batch
+  })),
+  on(fromActions.addToBatchAction, state => {
     const batchedPids = state.batch.map(dataset => dataset.pid);
     const addition = state.selectedSets.filter(
       dataset => batchedPids.indexOf(dataset.pid) === -1
@@ -100,27 +60,27 @@ const reducer = createReducer(
     const batch = [...state.batch, ...addition];
     return { ...state, batch };
   }),
-  on(removeFromBatchAction, (state, { dataset }) => {
+  on(fromActions.removeFromBatchAction, (state, { dataset }) => {
     const batch = state.batch.filter(
       datasetInBatch => datasetInBatch.pid !== dataset.pid
     );
     return { ...state, batch };
   }),
-  on(clearBatchAction, state => ({ ...state, batch: [] })),
+  on(fromActions.clearBatchAction, state => ({ ...state, batch: [] })),
 
-  on(saveDatasetAction, state => ({ ...state, isLoading: true })),
-  on(saveDatasetCompleteAction, (state, { dataset }) => ({
+  on(fromActions.saveDatasetAction, state => ({ ...state, isLoading: true })),
+  on(fromActions.saveDatasetCompleteAction, (state, { dataset }) => ({
     ...state,
     currentSet: dataset,
     isLoading: false
   })),
-  on(saveDatasetFailedAction, state => ({
+  on(fromActions.saveDatasetFailedAction, state => ({
     ...state,
     isLoading: false
   })),
 
-  on(addAttachmentAction, state => ({ ...state, isLoading: true })),
-  on(addAttachmentCompleteAction, (state, { attachment }) => {
+  on(fromActions.addAttachmentAction, state => ({ ...state, isLoading: true })),
+  on(fromActions.addAttachmentCompleteAction, (state, { attachment }) => {
     const attachments = state.currentSet.attachments;
     attachments.push(attachment);
 
@@ -130,30 +90,39 @@ const reducer = createReducer(
       isLoading: false
     };
   }),
-  on(addAttachmentFailedAction, state => ({
+  on(fromActions.addAttachmentFailedAction, state => ({
     ...state,
     isLoading: false
   })),
 
-  on(updateAttachmentCaptionAction, state => ({ ...state, isLoading: true })),
-  on(updateAttachmentCaptionCompleteAction, (state, { attachment }) => {
-    const attachments = state.currentSet.attachments.filter(
-      existingAttachment => existingAttachment.id !== attachment.id
-    );
-    attachments.push(attachment);
-    return {
-      ...state,
-      currentSet: { ...state.currentSet, attachments },
-      isLoading: false
-    };
-  }),
-  on(updateAttachmentCaptionFailedAction, state => ({
+  on(fromActions.updateAttachmentCaptionAction, state => ({
+    ...state,
+    isLoading: true
+  })),
+  on(
+    fromActions.updateAttachmentCaptionCompleteAction,
+    (state, { attachment }) => {
+      const attachments = state.currentSet.attachments.filter(
+        existingAttachment => existingAttachment.id !== attachment.id
+      );
+      attachments.push(attachment);
+      return {
+        ...state,
+        currentSet: { ...state.currentSet, attachments },
+        isLoading: false
+      };
+    }
+  ),
+  on(fromActions.updateAttachmentCaptionFailedAction, state => ({
     ...state,
     isLoading: false
   })),
 
-  on(removeAttachmentAction, state => ({ ...state, isLoading: true })),
-  on(removeAttachmentCompleteAction, (state, { attachmentId }) => {
+  on(fromActions.removeAttachmentAction, state => ({
+    ...state,
+    isLoading: true
+  })),
+  on(fromActions.removeAttachmentCompleteAction, (state, { attachmentId }) => {
     const attachments = state.currentSet.attachments.filter(
       attachment => attachment.id !== attachmentId
     );
@@ -163,12 +132,12 @@ const reducer = createReducer(
       isLoading: false
     };
   }),
-  on(removeAttachmentFailedAction, state => ({
+  on(fromActions.removeAttachmentFailedAction, state => ({
     ...state,
     isLoading: false
   })),
 
-  on(selectDatasetAction, (state, { dataset }) => {
+  on(fromActions.selectDatasetAction, (state, { dataset }) => {
     const alreadySelected = state.selectedSets.find(
       existing => dataset.pid === existing.pid
     );
@@ -179,33 +148,36 @@ const reducer = createReducer(
       return { ...state, selectedSets };
     }
   }),
-  on(deselectDatasetAction, (state, { dataset }) => {
+  on(fromActions.deselectDatasetAction, (state, { dataset }) => {
     const selectedSets = state.selectedSets.filter(
       selectedSet => selectedSet.pid !== dataset.pid
     );
     return { ...state, selectedSets };
   }),
 
-  on(selectAllDatasetsAction, state => ({
+  on(fromActions.selectAllDatasetsAction, state => ({
     ...state,
     selectedSets: [...state.datasets]
   })),
-  on(clearSelectionAction, state => ({ ...state, selectedSets: [] })),
+  on(fromActions.clearSelectionAction, state => ({
+    ...state,
+    selectedSets: []
+  })),
 
-  on(changePageAction, (state, { page, limit }) => {
+  on(fromActions.changePageAction, (state, { page, limit }) => {
     const skip = page * limit;
     return { ...state, filters: { ...state.filters, skip, limit } };
   }),
-  on(sortByColumnAction, (state, { column, direction }) => {
+  on(fromActions.sortByColumnAction, (state, { column, direction }) => {
     const sortField = column + (direction ? ":" + direction : "");
     return { ...state, filters: { ...state.filters, sortField, skip: 0 } };
   }),
-  on(setSearchTermsAction, (state, { terms }) => ({
+  on(fromActions.setSearchTermsAction, (state, { terms }) => ({
     ...state,
     searchTerms: terms
   })),
 
-  on(setArchiveViewModeAction, (state, { modeToggle }) => {
+  on(fromActions.setArchiveViewModeAction, (state, { modeToggle }) => {
     let mode = {};
 
     switch (modeToggle) {
@@ -274,35 +246,35 @@ const reducer = createReducer(
     const filters = { ...state.filters, skip: 0, mode, modeToggle };
     return { ...state, filters, datasetsLoading: true };
   }),
-  on(setPublicViewModeAction, (state, { isPublished }) => ({
+  on(fromActions.setPublicViewModeAction, (state, { isPublished }) => ({
     ...state,
     filters: { ...state.filters, isPublished }
   })),
 
-  on(prefillFiltersAction, (state, { values }) => {
+  on(fromActions.prefillFiltersAction, (state, { values }) => {
     const filters = { ...state.filters, ...values };
     const searchTerms = filters.text || "";
     return { ...state, searchTerms, filters, hasPrefilledFilters: true };
   }),
-  on(clearFacetsAction, state => {
+  on(fromActions.clearFacetsAction, state => {
     const limit = state.filters.limit; // Save limit
     const filters = { ...initialDatasetState.filters, skip: 0, limit };
     return { ...state, filters, searchTerms: "" };
   }),
 
-  on(setTextFilterAction, (state, { text }) => {
+  on(fromActions.setTextFilterAction, (state, { text }) => {
     const filters = { ...state.filters, text, skip: 0 };
     return { ...state, filters };
   }),
 
-  on(addLocationFilterAction, (state, { location }) => {
+  on(fromActions.addLocationFilterAction, (state, { location }) => {
     const creationLocation = state.filters.creationLocation
       .concat(location)
       .filter((val, i, self) => self.indexOf(val) === i); // Unique
     const filters = { ...state.filters, creationLocation, skip: 0 };
     return { ...state, filters };
   }),
-  on(removeLocationFilterAction, (state, { location }) => {
+  on(fromActions.removeLocationFilterAction, (state, { location }) => {
     const creationLocation = state.filters.creationLocation.filter(
       existingLocation => existingLocation !== location
     );
@@ -310,14 +282,14 @@ const reducer = createReducer(
     return { ...state, filters };
   }),
 
-  on(addGroupFilterAction, (state, { group }) => {
+  on(fromActions.addGroupFilterAction, (state, { group }) => {
     const ownerGroup = state.filters.ownerGroup
       .concat(group)
       .filter((val, i, self) => self.indexOf(val) === i); // Unique
     const filters = { ...state.filters, ownerGroup, skip: 0 };
     return { ...state, filters };
   }),
-  on(removeGroupFilterAction, (state, { group }) => {
+  on(fromActions.removeGroupFilterAction, (state, { group }) => {
     const ownerGroup = state.filters.ownerGroup.filter(
       existingGroup => existingGroup !== group
     );
@@ -325,14 +297,14 @@ const reducer = createReducer(
     return { ...state, filters };
   }),
 
-  on(addTypeFilterAction, (state, { datasetType }) => {
+  on(fromActions.addTypeFilterAction, (state, { datasetType }) => {
     const type = state.filters.type
       .concat(datasetType)
       .filter((val, i, self) => self.indexOf(val) === i); // Unique
     const filters = { ...state.filters, type, skip: 0 };
     return { ...state, filters };
   }),
-  on(removeTypeFilterAction, (state, { datasetType }) => {
+  on(fromActions.removeTypeFilterAction, (state, { datasetType }) => {
     const type = state.filters.type.filter(
       existingType => existingType !== datasetType
     );
@@ -340,14 +312,14 @@ const reducer = createReducer(
     return { ...state, filters };
   }),
 
-  on(addKeywordFilterAction, (state, { keyword }) => {
+  on(fromActions.addKeywordFilterAction, (state, { keyword }) => {
     const keywords = state.filters.keywords
       .concat(keyword)
       .filter((val, i, self) => self.indexOf(val) === i); // Unique
     const filters = { ...state.filters, keywords, skip: 0 };
     return { ...state, filters };
   }),
-  on(removeKeywordFilterAction, (state, { keyword }) => {
+  on(fromActions.removeKeywordFilterAction, (state, { keyword }) => {
     const keywords = state.filters.keywords.filter(
       existingKeyword => existingKeyword !== keyword
     );
@@ -355,14 +327,14 @@ const reducer = createReducer(
     return { ...state, filters };
   }),
 
-  on(setDateRangeFilterAction, (state, { begin, end }) => {
+  on(fromActions.setDateRangeFilterAction, (state, { begin, end }) => {
     const oldTime = state.filters.creationTime;
     const creationTime = { ...oldTime, begin, end };
     const filters = { ...state.filters, creationTime };
     return { ...state, filters };
   }),
 
-  on(addScientificConditionAction, (state, { condition }) => {
+  on(fromActions.addScientificConditionAction, (state, { condition }) => {
     const currentFilters = state.filters;
     const currentScientific = currentFilters.scientific;
     const filters = {
@@ -371,7 +343,7 @@ const reducer = createReducer(
     };
     return { ...state, filters };
   }),
-  on(removeScientificConditionAction, (state, { index }) => {
+  on(fromActions.removeScientificConditionAction, (state, { index }) => {
     const currentFilters = state.filters;
     const scientific = [...currentFilters.scientific];
     scientific.splice(index, 1);

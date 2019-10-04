@@ -30,7 +30,11 @@
           [datablocks]="origDatablocks$ | async"
         ></datablocks-table>
       </div>
-      <div *ngIf="(origDatablocks$ | async).length === 0">
+      <div
+        *ngIf="
+          (origDatablocks$ | async) && (origDatablocks$ | async).length === 0
+        "
+      >
         <h3>No datafiles linked to this dataset</h3>
       </div>
     </mat-card>

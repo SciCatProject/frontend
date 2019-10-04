@@ -1,43 +1,13 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { DatasetApi, Dataset, RawDataset } from "shared/sdk";
+import { DatasetApi, Dataset } from "shared/sdk";
 import { Store, select } from "@ngrx/store";
 import {
   getFullqueryParams,
   getFullfacetParams,
   getDatasetsInBatch
 } from "state-management/selectors/datasets.selectors";
-import {
-  fetchDatasetsAction,
-  fetchDatasetsCompleteAction,
-  fetchDatasetsFailedAction,
-  fetchFacetCountsAction,
-  fetchFacetCountsCompleteAction,
-  fetchFacetCountsFailedAction,
-  fetchDatasetAction,
-  fetchDatasetCompleteAction,
-  fetchDatasetFailedAction,
-  saveDatasetAction,
-  saveDatasetCompleteAction,
-  saveDatasetFailedAction,
-  addAttachmentAction,
-  addAttachmentCompleteAction,
-  addAttachmentFailedAction,
-  updateAttachmentCaptionAction,
-  updateAttachmentCaptionCompleteAction,
-  updateAttachmentCaptionFailedAction,
-  removeAttachmentAction,
-  removeAttachmentCompleteAction,
-  removeAttachmentFailedAction,
-  reduceDatasetAction,
-  reduceDatasetCompleteAction,
-  reduceDatasetFailedAction,
-  prefillBatchAction,
-  prefillBatchCompleteAction,
-  removeFromBatchAction,
-  clearBatchAction,
-  addToBatchAction
-} from "state-management/actions/datasets.actions";
+import * as fromActions from "state-management/actions/datasets.actions";
 import {
   withLatestFrom,
   mergeMap,
@@ -60,13 +30,15 @@ export class DatasetEffects {
 
   fetchDatasets$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(fetchDatasetsAction),
+      ofType(fromActions.fetchDatasetsAction),
       withLatestFrom(this.fullqueryParams$),
       map(([action, params]) => params),
       mergeMap(({ query, limits }) => {
         return this.datasetApi.fullquery(query, limits).pipe(
-          map(datasets => fetchDatasetsCompleteAction({ datasets })),
-          catchError(() => of(fetchDatasetsFailedAction()))
+          map(datasets =>
+            fromActions.fetchDatasetsCompleteAction({ datasets })
+          ),
+          catchError(() => of(fromActions.fetchDatasetsFailedAction()))
         );
       })
     )
@@ -74,7 +46,7 @@ export class DatasetEffects {
 
   fetchFacetCounts$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(fetchFacetCountsAction),
+      ofType(fromActions.fetchFacetCountsAction),
       withLatestFrom(this.fullfacetParams$),
       map(([action, params]) => params),
       mergeMap(({ fields, facets }) => {
@@ -83,9 +55,12 @@ export class DatasetEffects {
             console.log("fetchFacetCounts$", res);
             const { all, ...facetCounts } = res[0];
             const allCounts = all && all.length > 0 ? all[0].totalSets : 0;
-            return fetchFacetCountsCompleteAction({ facetCounts, allCounts });
+            return fromActions.fetchFacetCountsCompleteAction({
+              facetCounts,
+              allCounts
+            });
           }),
-          catchError(() => of(fetchFacetCountsFailedAction()))
+          catchError(() => of(fromActions.fetchFacetCountsFailedAction()))
         );
       })
     )
@@ -93,7 +68,7 @@ export class DatasetEffects {
 
   fetchDataset$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(fetchDatasetAction),
+      ofType(fromActions.fetchDatasetAction),
       switchMap(action => {
         const datasetFilter = {
           where: {
@@ -113,8 +88,10 @@ export class DatasetEffects {
         }
 
         return this.datasetApi.findOne(datasetFilter).pipe(
-          map((dataset: Dataset) => fetchDatasetCompleteAction({ dataset })),
-          catchError(() => of(fetchDatasetFailedAction()))
+          map((dataset: Dataset) =>
+            fromActions.fetchDatasetCompleteAction({ dataset })
+          ),
+          catchError(() => of(fromActions.fetchDatasetFailedAction()))
         );
       })
     )
@@ -122,11 +99,11 @@ export class DatasetEffects {
 
   saveDataset$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(saveDatasetAction),
+      ofType(fromActions.saveDatasetAction),
       mergeMap(action =>
         this.datasetApi.updateScientificMetadata(action.dataset).pipe(
-          map(dataset => saveDatasetCompleteAction({ dataset })),
-          catchError(() => of(saveDatasetFailedAction()))
+          map(dataset => fromActions.saveDatasetCompleteAction({ dataset })),
+          catchError(() => of(fromActions.saveDatasetFailedAction()))
         )
       )
     )
@@ -134,7 +111,7 @@ export class DatasetEffects {
 
   addAttachment$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(addAttachmentAction),
+      ofType(fromActions.addAttachmentAction),
       map(action => action.attachment),
       switchMap(attachment => {
         delete attachment.id;
@@ -145,8 +122,10 @@ export class DatasetEffects {
         return this.datasetApi
           .createAttachments(encodeURI(attachment.datasetId), attachment)
           .pipe(
-            map(res => addAttachmentCompleteAction({ attachment: res })),
-            catchError(() => of(addAttachmentFailedAction()))
+            map(res =>
+              fromActions.addAttachmentCompleteAction({ attachment: res })
+            ),
+            catchError(() => of(fromActions.addAttachmentFailedAction()))
           );
       })
     )
@@ -154,7 +133,7 @@ export class DatasetEffects {
 
   updateAttchmentCaption$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(updateAttachmentCaptionAction),
+      ofType(fromActions.updateAttachmentCaptionAction),
       switchMap(action => {
         const newCaption = { caption: action.caption };
         return this.datasetApi
@@ -165,9 +144,11 @@ export class DatasetEffects {
           )
           .pipe(
             map(attachment =>
-              updateAttachmentCaptionCompleteAction({ attachment })
+              fromActions.updateAttachmentCaptionCompleteAction({ attachment })
             ),
-            catchError(() => of(updateAttachmentCaptionFailedAction()))
+            catchError(() =>
+              of(fromActions.updateAttachmentCaptionFailedAction())
+            )
           );
       })
     )
@@ -175,7 +156,7 @@ export class DatasetEffects {
 
   removeAttachment$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(removeAttachmentAction),
+      ofType(fromActions.removeAttachmentAction),
       switchMap(action =>
         this.datasetApi
           .destroyByIdAttachments(
@@ -184,9 +165,9 @@ export class DatasetEffects {
           )
           .pipe(
             map(attachmentId =>
-              removeAttachmentCompleteAction({ attachmentId })
+              fromActions.removeAttachmentCompleteAction({ attachmentId })
             ),
-            catchError(() => of(removeAttachmentFailedAction()))
+            catchError(() => of(fromActions.removeAttachmentFailedAction()))
           )
       )
     )
@@ -194,11 +175,11 @@ export class DatasetEffects {
 
   reduceDataset$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(reduceDatasetAction),
+      ofType(fromActions.reduceDatasetAction),
       mergeMap(action =>
         this.datasetApi.reduceDataset(action.dataset).pipe(
-          map(result => reduceDatasetCompleteAction({ result })),
-          catchError(() => of(reduceDatasetFailedAction()))
+          map(result => fromActions.reduceDatasetCompleteAction({ result })),
+          catchError(() => of(fromActions.reduceDatasetFailedAction()))
         )
       )
     )
@@ -206,18 +187,22 @@ export class DatasetEffects {
 
   protected prefillBatch$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(prefillBatchAction),
+      ofType(fromActions.prefillBatchAction),
       withLatestFrom(this.currentUser$),
       filter(([, user]) => user != null),
       map(([, user]) => this.retrieveBatch(user.id)),
-      map(batch => prefillBatchCompleteAction({ batch }))
+      map(batch => fromActions.prefillBatchCompleteAction({ batch }))
     )
   );
 
   protected storeBatch$ = createEffect(
     () =>
       this.actions$.pipe(
-        ofType(addToBatchAction, removeFromBatchAction, clearBatchAction),
+        ofType(
+          fromActions.addToBatchAction,
+          fromActions.removeFromBatchAction,
+          fromActions.clearBatchAction
+        ),
         withLatestFrom(this.datasetsInBatch$, this.currentUser$),
         tap(([, batch, user]) => this.storeBatch(batch, user.id))
       ),
