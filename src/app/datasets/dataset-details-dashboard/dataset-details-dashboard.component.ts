@@ -88,7 +88,8 @@ export class DatasetDetailsDashboardComponent
   }
 
   onSaveMetadata(metadata: object) {
-    this.store.dispatch(saveDatasetAction({ dataset: this.dataset, metadata }));
+    const saveDataset = { ...this.dataset } as RawDataset;
+    this.store.dispatch(saveDatasetAction({ dataset: saveDataset, metadata }));
   }
 
   resetDataset(dataset: Dataset) {

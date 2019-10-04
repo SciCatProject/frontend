@@ -122,12 +122,13 @@ describe("DetailsDashboardComponent", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
       component.dataset = new RawDataset();
+      const saveDataset = { ...component.dataset } as RawDataset;
       const metadata = {};
       component.onSaveMetadata(metadata);
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        saveDatasetAction({ dataset: component.dataset, metadata })
+        saveDatasetAction({ dataset: saveDataset, metadata })
       );
     });
   });
