@@ -1,56 +1,72 @@
-import { initialLogbookState, LogbookState } from "../state/logbooks.store";
+import { createReducer, on, Action } from "@ngrx/store";
 import {
-  ActionTypes,
-  FetchLogbooksCompleteAction,
-  FetchLogbookCompleteAction,
-  FetchFilteredEntriesCompleteAction,
-  UpdateFilterCompleteAction,
-  AllActions
-} from "../actions/logbooks.actions";
+  initialLogbookState,
+  LogbookState
+} from "state-management/state/logbooks.store";
+import * as fromActions from "state-management/actions/logbooks.actions";
 import { Logbook } from "shared/sdk";
 import { APP_DI_CONFIG } from "app-config.module";
 
+const reducer = createReducer(
+  initialLogbookState,
+  on(fromActions.fetchLogbooksAction, state => ({ ...state, isLoading: true })),
+  on(fromActions.fetchLogbooksCompleteAction, (state, { logbooks }) => {
+    if (logbooks) {
+      logbooks.forEach(logbook => {
+        const descendingMessages = logbook.messages.reverse();
+        logbook.messages = descendingMessages;
+      });
+    }
+    return { ...state, logbooks, isLoading: false };
+  }),
+  on(fromActions.fetchLogbooksFailedAction, state => ({
+    ...state,
+    isLoading: false
+  })),
+
+  on(fromActions.fetchLogbookAction, state => ({ ...state, isLoading: true })),
+  on(fromActions.fetchLogbookCompleteAction, (state, { logbook }) => {
+    const currentLogbook = formatImageUrls(logbook);
+    return { ...state, currentLogbook, isLoading: false };
+  }),
+  on(fromActions.fetchLogbookFailedAction, state => ({
+    ...state,
+    isLoading: false
+  })),
+
+  on(fromActions.fetchFilteredEntriesAction, state => ({
+    ...state,
+    isLoading: true
+  })),
+  on(fromActions.fetchFilteredEntriesCompleteAction, (state, { logbook }) => {
+    const currentLogbook = formatImageUrls(logbook);
+    return { ...state, currentLogbook, isLoading: false };
+  }),
+  on(fromActions.fetchFilteredEntriesFailedAction, state => ({
+    ...state,
+    isLoading: false
+  })),
+
+  on(fromActions.updateFilterAction, (state, { filters }) => ({
+    ...state,
+    filters
+  }))
+);
+
 export function logbooksReducer(
-  state: LogbookState = initialLogbookState,
-  action: AllActions
-): LogbookState {
+  state: LogbookState | undefined,
+  action: Action
+) {
   if (action.type.indexOf("[Logbook]") !== -1) {
     console.log("Action came in! " + action.type);
   }
-  switch (action.type) {
-    case ActionTypes.FETCH_LOGBOOKS_COMPLETE: {
-      const logbooks = (action as FetchLogbooksCompleteAction).logbooks;
-      if (logbooks) {
-        logbooks.forEach(logbook => {
-          const descendingMessages = logbook.messages.reverse();
-          logbook.messages = descendingMessages;
-        });
-      }
-      return { ...state, logbooks };
-    }
-    case ActionTypes.FETCH_LOGBOOK_COMPLETE: {
-      const logbook = (action as FetchLogbookCompleteAction).logbook;
-      formatImageUrls(logbook);
-      return { ...state, logbook };
-    }
-    case ActionTypes.FETCH_FILTERED_ENTRIES_COMPLETE: {
-      const logbook = (action as FetchFilteredEntriesCompleteAction).logbook;
-      formatImageUrls(logbook);
-      return { ...state, logbook };
-    }
-    case ActionTypes.UPDATE_FILTER_COMPLETE: {
-      const filters = (action as UpdateFilterCompleteAction).filter;
-      return { ...state, filters };
-    }
-    default: {
-      return state;
-    }
-  }
+  return reducer(state, action);
 }
 
-export function formatImageUrls(logbook: Logbook) {
+export function formatImageUrls(logbook: Logbook): Logbook {
   if (logbook && logbook.messages) {
-    logbook.messages.forEach(message => {
+    const logbookCopy = { ...logbook } as Logbook;
+    logbookCopy.messages.forEach(message => {
       if (message.content.msgtype === "m.image") {
         if (message.content.info.hasOwnProperty("thumbnail_url")) {
           const externalThumbnailUrl = message.content.info.thumbnail_url.replace(
@@ -68,5 +84,8 @@ export function formatImageUrls(logbook: Logbook) {
         }
       }
     });
+    return logbookCopy;
+  } else {
+    return logbook;
   }
 }

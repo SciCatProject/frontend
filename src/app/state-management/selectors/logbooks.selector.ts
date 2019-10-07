@@ -8,14 +8,14 @@ export const getLogbooks = createSelector(
   state => state.logbooks
 );
 
-export const getLogbook = createSelector(
+export const getCurrentLogbook = createSelector(
   getLogbookState,
-  state => state.logbook
+  state => state.currentLogbook
 );
 
-export const getFilteredEntries = createSelector(
+export const getIsLoading = createSelector(
   getLogbookState,
-  state => state.logbook
+  state => state.isLoading
 );
 
 export const getFilters = createSelector(
