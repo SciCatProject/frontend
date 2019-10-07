@@ -17,7 +17,8 @@ import {
   updateFilterAction,
   fetchFilteredEntriesAction
 } from "state-management/actions/logbooks.actions";
-import { Logbook } from "shared/sdk";
+import { Logbook, LogbookInterface } from "shared/sdk";
+import { LogbookFilters } from "state-management/models";
 
 const logbook = new Logbook();
 
@@ -27,6 +28,14 @@ describe("DashboardComponent", () => {
 
   let store: MockStore;
   let dispatchSpy;
+
+  const logbookData: LogbookInterface = {
+    name: "tesName",
+    roomId: "testId",
+    messages: [{ message: "test1" }, { message: "test2" }],
+    id: 0
+  };
+  const logbook = new Logbook(logbookData);
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -69,7 +78,6 @@ describe("DashboardComponent", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
       component.logbook = logbook;
-      component.logbook.name = "testName";
       component.filters = {
         textSearch: "",
         showBotMessages: true,
@@ -79,6 +87,41 @@ describe("DashboardComponent", () => {
       const query = "test";
       component.filters.textSearch = query;
       component.onTextSearchChange(query);
+
+      expect(dispatchSpy).toHaveBeenCalledTimes(2);
+      expect(dispatchSpy).toHaveBeenCalledWith(
+        updateFilterAction({ filters: component.filters })
+      );
+      expect(dispatchSpy).toHaveBeenCalledWith(
+        fetchFilteredEntriesAction({
+          name: component.logbook.name,
+          filters: component.filters
+        })
+      );
+    });
+  });
+
+  describe("onFilterSelect()", () => {
+    it("should dispatch an updateFilterAction and a fetchFilteredEntriesAction", () => {
+      dispatchSpy = spyOn(store, "dispatch");
+
+      component.logbook = logbook;
+      component.filters = {
+        textSearch: "",
+        showBotMessages: true,
+        showImages: true,
+        showUserMessages: true
+      };
+      const updatedFilters: LogbookFilters = {
+        textSearch: "",
+        showBotMessages: false,
+        showImages: true,
+        showUserMessages: true
+      };
+
+      component.onFilterSelect(updatedFilters);
+
+      component.filters = updatedFilters;
 
       expect(dispatchSpy).toHaveBeenCalledTimes(2);
       expect(dispatchSpy).toHaveBeenCalledWith(

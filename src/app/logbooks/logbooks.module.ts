@@ -16,7 +16,7 @@ import { FlexLayoutModule } from "@angular/flex-layout";
 import { LinkyModule } from "ngx-linky";
 import { RouterModule } from "@angular/router";
 import { SharedCatanieModule } from "shared/shared.module";
-import { ContentSelectorComponent } from "./content-selector/content-selector.component";
+import { LogbookFilterComponent } from "./logbook-filter/logbook-filter.component";
 import { LogbooksDashboardComponent } from "./logbooks-dashboard/logbooks-dashboard.component";
 import { EffectsModule } from "@ngrx/effects";
 import { LogbookEffects } from "state-management/effects/logbooks.effects";
@@ -27,7 +27,7 @@ import { StoreModule } from "@ngrx/store";
   declarations: [
     LogbooksTableComponent,
     LogbooksDetailComponent,
-    ContentSelectorComponent,
+    LogbookFilterComponent,
     LogbooksDashboardComponent
   ],
   imports: [
@@ -52,7 +52,7 @@ import { StoreModule } from "@ngrx/store";
     LogbooksTableComponent,
     LogbooksDetailComponent,
     LogbooksDashboardComponent,
-    ContentSelectorComponent
+    LogbookFilterComponent
   ]
 })
 export class LogbooksModule {}

@@ -33,8 +33,6 @@ export class LogbooksDashboardComponent
   implements OnInit, OnDestroy, AfterViewChecked {
   loading$ = this.store.pipe(select(getIsLoading));
 
-  logbookName: string;
-
   logbook: Logbook;
   logbookSubscription: Subscription;
 
@@ -49,7 +47,17 @@ export class LogbooksDashboardComponent
   onTextSearchChange(query: string) {
     this.filters.textSearch = query;
     this.store.dispatch(updateFilterAction({ filters: this.filters }));
+    this.store.dispatch(
+      fetchFilteredEntriesAction({
+        name: this.logbook.name,
+        filters: this.filters
+      })
+    );
+  }
 
+  onFilterSelect(filters: LogbookFilters) {
+    this.filters = filters;
+    this.store.dispatch(updateFilterAction({ filters: this.filters }));
     this.store.dispatch(
       fetchFilteredEntriesAction({
         name: this.logbook.name,
@@ -90,15 +98,15 @@ export class LogbooksDashboardComponent
 
     this.routeSubscription = this.route.params.subscribe(params => {
       if (params.hasOwnProperty("name")) {
-        this.logbookName = params["name"];
+        const logbookName = params["name"];
+        this.store.dispatch(fetchLogbookAction({ name: logbookName }));
       } else {
         if (this.dataset.hasOwnProperty("proposalId")) {
-          this.logbookName = this.dataset.proposalId;
+          const logbookName = this.dataset.proposalId;
+          this.store.dispatch(fetchLogbookAction({ name: logbookName }));
         }
       }
     });
-
-    this.store.dispatch(fetchLogbookAction({ name: this.logbookName }));
   }
 
   ngAfterViewChecked() {
