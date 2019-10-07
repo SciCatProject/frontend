@@ -14,7 +14,7 @@ import {
   updateFilterAction,
   fetchFilteredEntriesAction
 } from "state-management/actions/logbooks.actions";
-import { Logbook } from "shared/sdk";
+import { Logbook, LogbookInterface } from "shared/sdk";
 
 describe("ContentSelectorComponent", () => {
   let component: ContentSelectorComponent;
@@ -22,6 +22,15 @@ describe("ContentSelectorComponent", () => {
 
   let store: MockStore;
   let dispatchSpy;
+
+  const logbookData: LogbookInterface = {
+    name: "tesName",
+    roomId: "testId",
+    messages: [{ message: "test1" }, { message: "test2" }],
+    id: 0
+  };
+  const logbook = new Logbook(logbookData);
+  const event = new MatCheckboxChange();
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -59,22 +68,19 @@ describe("ContentSelectorComponent", () => {
   });
 
   describe("#onSelect()", () => {
-    it("should dispatch an updateFilterAction and a fetchFilteredEntriesAction", () => {
-      let dispatchSpy = spyOn(store, "dispatch");
+    it("should dispatch an updateFilterAction and a fetchFilteredEntriesAction with showBotMessages set to true", () => {
+      dispatchSpy = spyOn(store, "dispatch");
 
-      const name = "testName";
-      component.logbook = new Logbook();
-      component.logbook.name = name;
-
+      component.logbook = logbook;
       component.filters = {
         textSearch: "test",
         showBotMessages: true,
         showImages: true,
         showUserMessages: true
       };
-      const event = new MatCheckboxChange();
-      event.checked = false;
+
       const entry = "Bot Messages";
+      event.checked = false;
 
       component.onSelect(event, entry);
 
@@ -85,7 +91,165 @@ describe("ContentSelectorComponent", () => {
         updateFilterAction({ filters: component.filters })
       );
       expect(dispatchSpy).toHaveBeenCalledWith(
-        fetchFilteredEntriesAction({ name, filters: component.filters })
+        fetchFilteredEntriesAction({
+          name: logbook.name,
+          filters: component.filters
+        })
+      );
+    });
+
+    it("should dispatch an updateFilterAction and a fetchFilteredEntriesAction with showImages set to true", () => {
+      dispatchSpy = spyOn(store, "dispatch");
+
+      component.logbook = logbook;
+
+      component.filters = {
+        textSearch: "test",
+        showBotMessages: true,
+        showImages: true,
+        showUserMessages: true
+      };
+
+      const entry = "Images";
+      event.checked = false;
+
+      component.onSelect(event, entry);
+
+      component.filters.showBotMessages = false;
+
+      expect(dispatchSpy).toHaveBeenCalledTimes(2);
+      expect(dispatchSpy).toHaveBeenCalledWith(
+        updateFilterAction({ filters: component.filters })
+      );
+      expect(dispatchSpy).toHaveBeenCalledWith(
+        fetchFilteredEntriesAction({
+          name: logbook.name,
+          filters: component.filters
+        })
+      );
+    });
+
+    it("should dispatch an updateFilterAction and a fetchFilteredEntriesAction with showUserMessages set to true", () => {
+      dispatchSpy = spyOn(store, "dispatch");
+
+      component.logbook = logbook;
+
+      component.filters = {
+        textSearch: "test",
+        showBotMessages: true,
+        showImages: true,
+        showUserMessages: true
+      };
+
+      const entry = "User Messages";
+      event.checked = false;
+
+      component.onSelect(event, entry);
+
+      component.filters.showBotMessages = false;
+
+      expect(dispatchSpy).toHaveBeenCalledTimes(2);
+      expect(dispatchSpy).toHaveBeenCalledWith(
+        updateFilterAction({ filters: component.filters })
+      );
+      expect(dispatchSpy).toHaveBeenCalledWith(
+        fetchFilteredEntriesAction({
+          name: logbook.name,
+          filters: component.filters
+        })
+      );
+    });
+
+    it("should dispatch an updateFilterAction and a fetchFilteredEntriesAction with showBotMessages set to false", () => {
+      dispatchSpy = spyOn(store, "dispatch");
+
+      component.logbook = logbook;
+
+      component.filters = {
+        textSearch: "test",
+        showBotMessages: false,
+        showImages: false,
+        showUserMessages: false
+      };
+
+      const entry = "Bot Messages";
+      event.checked = true;
+
+      component.onSelect(event, entry);
+
+      component.filters.showBotMessages = false;
+
+      expect(dispatchSpy).toHaveBeenCalledTimes(2);
+      expect(dispatchSpy).toHaveBeenCalledWith(
+        updateFilterAction({ filters: component.filters })
+      );
+      expect(dispatchSpy).toHaveBeenCalledWith(
+        fetchFilteredEntriesAction({
+          name: logbook.name,
+          filters: component.filters
+        })
+      );
+    });
+
+    it("should dispatch an updateFilterAction and a fetchFilteredEntriesAction with showImages set to false", () => {
+      dispatchSpy = spyOn(store, "dispatch");
+
+      component.logbook = logbook;
+
+      component.filters = {
+        textSearch: "test",
+        showBotMessages: false,
+        showImages: false,
+        showUserMessages: false
+      };
+
+      const entry = "Images";
+      event.checked = true;
+
+      component.onSelect(event, entry);
+
+      component.filters.showBotMessages = false;
+
+      expect(dispatchSpy).toHaveBeenCalledTimes(2);
+      expect(dispatchSpy).toHaveBeenCalledWith(
+        updateFilterAction({ filters: component.filters })
+      );
+      expect(dispatchSpy).toHaveBeenCalledWith(
+        fetchFilteredEntriesAction({
+          name: logbook.name,
+          filters: component.filters
+        })
+      );
+    });
+
+    it("should dispatch an updateFilterAction and a fetchFilteredEntriesAction with showUserMessages set to false", () => {
+      dispatchSpy = spyOn(store, "dispatch");
+
+      component.logbook = logbook;
+
+      component.filters = {
+        textSearch: "test",
+        showBotMessages: false,
+        showImages: false,
+        showUserMessages: false
+      };
+
+      const entry = "User Messages";
+      event.checked = true;
+
+      component.onSelect(event, entry);
+
+      component.filters.showBotMessages = false;
+
+      expect(dispatchSpy).toHaveBeenCalledTimes(2);
+      expect(dispatchSpy).toHaveBeenCalledWith(
+        updateFilterAction({ filters: component.filters })
+      );
+      expect(dispatchSpy).toHaveBeenCalledWith(
+        fetchFilteredEntriesAction({
+          name: logbook.name,
+          filters: component.filters
+        })
       );
     });
   });
