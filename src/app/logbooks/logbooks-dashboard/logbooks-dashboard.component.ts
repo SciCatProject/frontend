@@ -1,16 +1,24 @@
-import { Component, OnInit, OnDestroy, Inject } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  Inject,
+  ChangeDetectorRef,
+  AfterViewChecked
+} from "@angular/core";
 import { Store, select } from "@ngrx/store";
 import { Logbook } from "shared/sdk";
 import { Subscription } from "rxjs";
 import {
-  getLogbook,
-  getFilters
+  getCurrentLogbook,
+  getFilters,
+  getIsLoading
 } from "state-management/selectors/logbooks.selector";
 import { getCurrentDataset } from "state-management/selectors/datasets.selectors";
 import {
-  FetchLogbookAction,
-  FetchFilteredEntriesAction,
-  UpdateFilterAction
+  fetchLogbookAction,
+  fetchFilteredEntriesAction,
+  updateFilterAction
 } from "state-management/actions/logbooks.actions";
 import { ActivatedRoute } from "@angular/router";
 import { APP_CONFIG, AppConfig } from "app-config.module";
@@ -21,19 +29,49 @@ import { LogbookFilters } from "state-management/models";
   templateUrl: "./logbooks-dashboard.component.html",
   styleUrls: ["./logbooks-dashboard.component.scss"]
 })
-export class LogbooksDashboardComponent implements OnInit, OnDestroy {
-  logbookName: string;
+export class LogbooksDashboardComponent
+  implements OnInit, OnDestroy, AfterViewChecked {
+  loading$ = this.store.pipe(select(getIsLoading));
 
   logbook: Logbook;
   logbookSubscription: Subscription;
 
-  filter: LogbookFilters;
-  filterSubscription: Subscription;
+  filters: LogbookFilters;
+  filtersSubscription: Subscription;
 
   dataset: any;
   datasetSubscription: Subscription;
 
+  routeSubscription: Subscription;
+
+  onTextSearchChange(query: string) {
+    this.filters.textSearch = query;
+    this.store.dispatch(updateFilterAction({ filters: this.filters }));
+    this.store.dispatch(
+      fetchFilteredEntriesAction({
+        name: this.logbook.name,
+        filters: this.filters
+      })
+    );
+  }
+
+  onFilterSelect(filters: LogbookFilters) {
+    this.filters = filters;
+    this.store.dispatch(updateFilterAction({ filters: this.filters }));
+    this.store.dispatch(
+      fetchFilteredEntriesAction({
+        name: this.logbook.name,
+        filters: this.filters
+      })
+    );
+  }
+
+  reverseTimeline(): void {
+    this.logbook.messages.reverse();
+  }
+
   constructor(
+    private cdRef: ChangeDetectorRef,
     private route: ActivatedRoute,
     private store: Store<Logbook>,
     @Inject(APP_CONFIG) public appConfig: AppConfig
@@ -41,15 +79,15 @@ export class LogbooksDashboardComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.logbookSubscription = this.store
-      .pipe(select(getLogbook))
+      .pipe(select(getCurrentLogbook))
       .subscribe(logbook => {
         this.logbook = logbook;
       });
 
-    this.filterSubscription = this.store
+    this.filtersSubscription = this.store
       .pipe(select(getFilters))
       .subscribe(filter => {
-        this.filter = filter;
+        this.filters = filter;
       });
 
     this.datasetSubscription = this.store
@@ -58,35 +96,27 @@ export class LogbooksDashboardComponent implements OnInit, OnDestroy {
         this.dataset = dataset;
       });
 
-    this.route.params.subscribe(params => {
+    this.routeSubscription = this.route.params.subscribe(params => {
       if (params.hasOwnProperty("name")) {
-        this.logbookName = params["name"];
+        const logbookName = params["name"];
+        this.store.dispatch(fetchLogbookAction({ name: logbookName }));
       } else {
         if (this.dataset.hasOwnProperty("proposalId")) {
-          this.logbookName = this.dataset.proposalId;
+          const logbookName = this.dataset.proposalId;
+          this.store.dispatch(fetchLogbookAction({ name: logbookName }));
         }
       }
     });
+  }
 
-    this.store.dispatch(new FetchLogbookAction(this.logbookName));
+  ngAfterViewChecked() {
+    this.cdRef.detectChanges();
   }
 
   ngOnDestroy() {
     this.logbookSubscription.unsubscribe();
-    this.filterSubscription.unsubscribe();
+    this.filtersSubscription.unsubscribe();
     this.datasetSubscription.unsubscribe();
-  }
-
-  onTextSearchChange(query) {
-    this.filter.textSearch = query;
-    this.store.dispatch(new UpdateFilterAction(this.filter));
-
-    this.store.dispatch(
-      new FetchFilteredEntriesAction(this.logbook.name, this.filter)
-    );
-  }
-
-  reverseTimeline(): void {
-    this.logbook.messages.reverse();
+    this.routeSubscription.unsubscribe();
   }
 }

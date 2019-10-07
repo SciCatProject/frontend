@@ -39,15 +39,15 @@ import {
 } from "state-management/actions/user.actions";
 import { ArchViewMode } from "state-management/models";
 import {
-  SetViewModeAction,
-  SetPublicViewModeAction,
-  SelectDatasetAction,
-  DeselectDatasetAction,
-  SelectAllDatasetsAction,
-  ClearSelectionAction,
-  ChangePageAction,
-  SortByColumnAction,
-  AddToBatchAction
+  setArchiveViewModeAction,
+  setPublicViewModeAction,
+  selectDatasetAction,
+  deselectDatasetAction,
+  selectAllDatasetsAction,
+  clearSelectionAction,
+  changePageAction,
+  sortByColumnAction,
+  addToBatchAction
 } from "state-management/actions/datasets.actions";
 
 describe("DatasetTableComponent", () => {
@@ -192,12 +192,14 @@ describe("DatasetTableComponent", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
       const event = "test";
-      const mode = ArchViewMode.all;
+      const modeToggle = ArchViewMode.all;
 
-      component.onModeChange(event, mode);
+      component.onModeChange(event, modeToggle);
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
-      expect(dispatchSpy).toHaveBeenCalledWith(new SetViewModeAction(mode));
+      expect(dispatchSpy).toHaveBeenCalledWith(
+        setArchiveViewModeAction({ modeToggle })
+      );
     });
   });
 
@@ -210,7 +212,7 @@ describe("DatasetTableComponent", () => {
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        new SetPublicViewModeAction(viewPublic)
+        setPublicViewModeAction({ isPublished: viewPublic })
       );
     });
   });
@@ -452,7 +454,7 @@ describe("DatasetTableComponent", () => {
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        new SelectDatasetAction(dataset)
+        selectDatasetAction({ dataset })
       );
     });
 
@@ -466,7 +468,7 @@ describe("DatasetTableComponent", () => {
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        new DeselectDatasetAction(dataset)
+        deselectDatasetAction({ dataset })
       );
     });
   });
@@ -480,7 +482,7 @@ describe("DatasetTableComponent", () => {
       component.onSelectAll(event);
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
-      expect(dispatchSpy).toHaveBeenCalledWith(new SelectAllDatasetsAction());
+      expect(dispatchSpy).toHaveBeenCalledWith(selectAllDatasetsAction());
     });
 
     it("should dispatch a ClearSelectionAction if checked is false", () => {
@@ -491,7 +493,7 @@ describe("DatasetTableComponent", () => {
       component.onSelectAll(event);
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
-      expect(dispatchSpy).toHaveBeenCalledWith(new ClearSelectionAction());
+      expect(dispatchSpy).toHaveBeenCalledWith(clearSelectionAction());
     });
   });
 
@@ -508,7 +510,7 @@ describe("DatasetTableComponent", () => {
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        new ChangePageAction(event.pageIndex, event.pageSize)
+        changePageAction({ page: event.pageIndex, limit: event.pageSize })
       );
     });
   });
@@ -525,7 +527,7 @@ describe("DatasetTableComponent", () => {
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        new SortByColumnAction(event.active, event.direction)
+        sortByColumnAction({ column: event.active, direction: event.direction })
       );
     });
   });
@@ -537,8 +539,8 @@ describe("DatasetTableComponent", () => {
       component.onAddToBatch();
 
       expect(dispatchSpy).toHaveBeenCalledTimes(2);
-      expect(dispatchSpy).toHaveBeenCalledWith(new AddToBatchAction());
-      expect(dispatchSpy).toHaveBeenCalledWith(new ClearSelectionAction());
+      expect(dispatchSpy).toHaveBeenCalledWith(addToBatchAction());
+      expect(dispatchSpy).toHaveBeenCalledWith(clearSelectionAction());
     });
   });
 

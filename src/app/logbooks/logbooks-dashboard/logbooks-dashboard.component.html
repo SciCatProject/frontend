@@ -7,7 +7,11 @@
           (onSearch)="onTextSearchChange($event)"
           (onFocus)="onTextSearchChange($event)"
         ></app-search-bar>
-        <app-content-selector></app-content-selector>
+        <logbook-filter
+          [logbook]="logbook"
+          [filters]="filters"
+          (onSelect)="onFilterSelect($event)"
+        ></logbook-filter>
       </mat-card>
 
       <div class="smallFilter">
@@ -22,7 +26,11 @@
               <div class="title">Filter</div>
             </mat-panel-title>
           </mat-expansion-panel-header>
-          <app-content-selector></app-content-selector>
+          <logbook-filter
+            [logbook]="logbook"
+            [filters]="filters"
+            (onSelect)="onFilterSelect($event)"
+          ></logbook-filter>
         </mat-expansion-panel>
       </div>
       <div fxLayout="column" fxLayout.lt-lg="row">
@@ -46,11 +54,15 @@
     </div>
     <div fxFlex="85">
       <mat-card style="margin: 1em; padding: 0">
-        <app-logbooks-detail></app-logbooks-detail>
+        <app-logbooks-detail [logbook]="logbook"></app-logbooks-detail>
       </mat-card>
     </div>
   </div>
 </div>
 <div style="margin: 1em" *ngIf="!logbook">
   Logbook not available.
+</div>
+
+<div *ngIf="loading$ | async" class="spinner">
+  <mat-spinner></mat-spinner>
 </div>

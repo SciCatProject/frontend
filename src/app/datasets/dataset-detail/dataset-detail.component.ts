@@ -14,7 +14,7 @@ import { APP_CONFIG, AppConfig } from "app-config.module";
   styleUrls: ["./dataset-detail.component.scss"]
 })
 export class DatasetDetailComponent {
-  @Input() dataset: Dataset;
+  @Input("data") dataset: Dataset;
   @Input() datasetWithout: any;
   @Input() attachments: Attachment[];
 

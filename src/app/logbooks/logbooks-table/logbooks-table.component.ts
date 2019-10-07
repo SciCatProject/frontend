@@ -3,8 +3,11 @@ import { Router } from "@angular/router";
 import { select, Store } from "@ngrx/store";
 import { Subscription } from "rxjs";
 
-import { FetchLogbooksAction } from "state-management/actions/logbooks.actions";
-import { getLogbooks } from "state-management/selectors/logbooks.selector";
+import { fetchLogbooksAction } from "state-management/actions/logbooks.actions";
+import {
+  getLogbooks,
+  getIsLoading
+} from "state-management/selectors/logbooks.selector";
 import { Logbook } from "state-management/models";
 
 @Component({
@@ -13,6 +16,8 @@ import { Logbook } from "state-management/models";
   styleUrls: ["./logbooks-table.component.scss"]
 })
 export class LogbooksTableComponent implements OnInit, OnDestroy {
+  loading$ = this.store.pipe(select(getIsLoading));
+
   logbooks: Logbook[];
   logbooksSubscription: Subscription;
 
@@ -21,7 +26,7 @@ export class LogbooksTableComponent implements OnInit, OnDestroy {
   constructor(private router: Router, private store: Store<Logbook[]>) {}
 
   ngOnInit() {
-    this.store.dispatch(new FetchLogbooksAction());
+    this.store.dispatch(fetchLogbooksAction());
     this.logbooksSubscription = this.store
       .pipe(select(getLogbooks))
       .subscribe(logbooks => {

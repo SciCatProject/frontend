@@ -1,7 +1,17 @@
-import { createSelector, createFeatureSelector } from "@ngrx/store";
-import { DatasetState } from "../state/datasets.store";
+import { DatasetState } from "state-management/state/datasets.store";
+import { createFeatureSelector, createSelector } from "@ngrx/store";
 
-const getDatasetState = createFeatureSelector<DatasetState>("datasets");
+export const getDatasetState = createFeatureSelector<DatasetState>("datasets");
+
+export const getDatasets = createSelector(
+  getDatasetState,
+  (state: DatasetState) => state.datasets
+);
+
+export const getSelectedDatasets = createSelector(
+  getDatasetState,
+  state => state.selectedSets
+);
 
 export const getCurrentDataset = createSelector(
   getDatasetState,
@@ -21,81 +31,21 @@ export const getCurrentOrigDatablocks = createSelector(
   dataset => dataset.origdatablocks
 );
 
-export const getCurrentAttachments = createSelector(
-  getCurrentDataset,
-  dataset => dataset.attachments
-);
-
 export const getCurrentDatablocks = createSelector(
   getCurrentDataset,
   dataset => dataset.datablocks
 );
 
-export const getDatasets = createSelector(
-  getDatasetState,
-  state => state.datasets
-);
-
-export const getSelectedDatasets = createSelector(
-  getDatasetState,
-  state => state.selectedSets
-);
-
-export const getIsEmptySelection = createSelector(
-  getSelectedDatasets,
-  sets => sets.length === 0
-);
-
-export const getPage = createSelector(
-  getDatasetState,
-  state => {
-    const { skip, limit } = state.filters;
-    return skip / limit;
-  }
-);
-
-export const getDatasetsPerPage = createSelector(
-  getDatasetState,
-  state => state.filters.limit
-);
-
-export const getRectangularRepresentation = createSelector(
-  getDatasets,
-  datasets => {
-    const merged = datasets.reduce((result, current) => ({
-      ...result,
-      ...current
-    }));
-
-    const empty = Object.keys(merged).reduce(
-      (empties, key) => ({ [key]: "", ...empties }),
-      {}
-    );
-
-    return (
-      datasets
-        /*.map(dataset => Object -- Isn't this part taken care of by the CSV library?
-                .keys(dataset)
-                .reduce((result, key) => {
-                    const value = JSON.stringify(dataset[key]);
-                    return {...result, [key]: value};
-                }, {})
-            )*/
-        .map(dataset => ({ ...empty, ...dataset }))
-    );
-  }
-);
-
-export const getTotalSets = createSelector(
-  getDatasetState,
-  state => state.totalCount
+export const getCurrentAttachments = createSelector(
+  getCurrentDataset,
+  dataset => dataset.attachments
 );
 
 // === Filters ===
 
 export const getFilters = createSelector(
   getDatasetState,
-  state => state.filters
+  (state: DatasetState) => state.filters
 );
 
 export const getTextFilter = createSelector(
@@ -128,12 +78,12 @@ export const getCreationTimeFilter = createSelector(
   filters => filters.creationTime
 );
 
-export const getViewMode = createSelector(
+export const getArchiveViewMode = createSelector(
   getFilters,
   filters => filters.modeToggle
 );
 
-export const getViewPublicMode = createSelector(
+export const getPublicViewMode = createSelector(
   getFilters,
   filters => filters.isPublished
 );
@@ -156,23 +106,6 @@ export const getScientificConditions = createSelector(
   filters => filters.scientific
 );
 
-export const getScientificQuery = createSelector(
-  getScientificConditions,
-  conditions => {
-    const and = conditions.map(cond => {
-      const { relation, lhs, rhs } = cond;
-      const dollar = {
-        EQUAL_TO_NUMERIC: "$eq",
-        EQUAL_TO_STRING: "$eq",
-        LESS_THAN: "$lt",
-        GREATER_THAN: "$gt"
-      }[relation];
-      return { [lhs]: { [dollar]: rhs } };
-    });
-    return { and };
-  }
-);
-
 // === Facet Counts ===
 
 const getFacetCounts = createSelector(
@@ -192,17 +125,12 @@ export const getGroupFacetCounts = createSelector(
 
 export const getTypeFacetCounts = createSelector(
   getFacetCounts,
-  counts => counts.type
+  counts => counts.type || []
 );
 
 export const getKeywordFacetCounts = createSelector(
   getFacetCounts,
-  counts => counts.keywords
-);
-
-export const getCreationTimeFacetCounts = createSelector(
-  getFacetCounts,
-  counts => counts.creationTime || []
+  counts => counts.keywords || []
 );
 
 // === Querying ===
@@ -224,7 +152,7 @@ function restrictFilter(filter: object, allowedKeys?: string[]) {
 export const getFullqueryParams = createSelector(
   getFilters,
   filter => {
-    // dont query with modeToggle, its only in filters for persistent routing
+    // don't query with modeToggle, it's only in filters for persistent routing
     const {
       skip,
       limit,
@@ -235,14 +163,11 @@ export const getFullqueryParams = createSelector(
     } = filter;
     const limits = { skip, limit, order: sortField };
     const query = restrictFilter(theRest);
-    return {
-      query: JSON.stringify(query),
-      limits
-    };
+    return { query: JSON.stringify(query), limits };
   }
 );
 
-export const getFullfacetsParams = createSelector(
+export const getFullfacetParams = createSelector(
   getFilters,
   filter => {
     const {
@@ -267,6 +192,24 @@ export const getFullfacetsParams = createSelector(
 
 // === Misc. ===
 
+export const getTotalSets = createSelector(
+  getDatasetState,
+  state => state.totalCount
+);
+
+export const getPage = createSelector(
+  getFilters,
+  filters => {
+    const { skip, limit } = filters;
+    return skip / limit;
+  }
+);
+
+export const getDatasetsPerPage = createSelector(
+  getFilters,
+  filters => filters.limit
+);
+
 export const getSearchTerms = createSelector(
   getDatasetState,
   state => state.searchTerms
@@ -286,8 +229,7 @@ export const getSearchCaughtUp = createSelector(
 export const getIsLoading = createSelector(
   getDatasetState,
   getSearchCaughtUp,
-  (state, caughtUp) =>
-    state.datasetsLoading || state.facetCountsLoading || !caughtUp
+  (state, caughtUp) => state.isLoading || !caughtUp
 );
 
 export const getHasPrefilledFilters = createSelector(
@@ -300,12 +242,7 @@ export const getDatasetsInBatch = createSelector(
   state => state.batch
 );
 
-export const reduceDataset = createSelector(
+export const getOpenwhiskResult = createSelector(
   getDatasetState,
-  state => state.result
-);
-
-export const getReduceLoading = createSelector(
-  getDatasetState,
-  state => state.resultLoading
+  state => state.openwhiskResult
 );

@@ -18,15 +18,15 @@ import {
 import { getError, submitJob } from "state-management/selectors/jobs.selectors";
 import { select, Store } from "@ngrx/store";
 import {
-  AddToBatchAction,
-  ChangePageAction,
-  ClearSelectionAction,
-  DeselectDatasetAction,
-  SelectAllDatasetsAction,
-  SelectDatasetAction,
-  SetViewModeAction,
-  SortByColumnAction,
-  SetPublicViewModeAction
+  clearSelectionAction,
+  setArchiveViewModeAction,
+  setPublicViewModeAction,
+  selectDatasetAction,
+  deselectDatasetAction,
+  selectAllDatasetsAction,
+  changePageAction,
+  sortByColumnAction,
+  addToBatchAction
 } from "state-management/actions/datasets.actions";
 
 import {
@@ -36,8 +36,8 @@ import {
   getPage,
   getSelectedDatasets,
   getTotalSets,
-  getViewMode,
-  getViewPublicMode
+  getArchiveViewMode,
+  getPublicViewMode
 } from "state-management/selectors/datasets.selectors";
 import { FormControl } from "@angular/forms";
 
@@ -76,7 +76,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
 
   public currentMode: ArchViewMode;
   private selectedSets$ = this.store.pipe(select(getSelectedDatasets));
-  private mode$ = this.store.pipe(select(getViewMode));
+  private mode$ = this.store.pipe(select(getArchiveViewMode));
   private selectedPids: string[] = [];
   private selectedPidsSubscription = this.selectedSets$.subscribe(datasets => {
     this.selectedPids = datasets.map(dataset => dataset.pid);
@@ -134,7 +134,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
       ret => {
         if (ret && Array.isArray(ret)) {
           console.log(ret);
-          this.store.dispatch(new ClearSelectionAction());
+          this.store.dispatch(clearSelectionAction());
         }
       },
       error => {
@@ -185,7 +185,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
       });
 
     this.viewPublicSubscription = this.store
-      .pipe(select(getViewPublicMode))
+      .pipe(select(getPublicViewMode))
       .subscribe(viewPublic => {
         this.viewPublic = viewPublic;
       });
@@ -217,12 +217,14 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
    * @param mode
    */
   onModeChange(event, mode: ArchViewMode): void {
-    this.store.dispatch(new SetViewModeAction(mode));
+    this.store.dispatch(setArchiveViewModeAction({ modeToggle: mode }));
   }
 
   onViewPublicChange(value: boolean): void {
     this.viewPublic = value;
-    this.store.dispatch(new SetPublicViewModeAction(this.viewPublic));
+    this.store.dispatch(
+      setPublicViewModeAction({ isPublished: this.viewPublic })
+    );
   }
 
   /**
@@ -240,7 +242,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.archivingSrv.archive(this.selectedSets).subscribe(
-          () => this.store.dispatch(new ClearSelectionAction()),
+          () => this.store.dispatch(clearSelectionAction()),
           err =>
             this.store.dispatch(
               new ShowMessageAction({
@@ -273,7 +275,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.archivingSrv.retrieve(this.selectedSets, destPath).subscribe(
-          () => this.store.dispatch(new ClearSelectionAction()),
+          () => this.store.dispatch(clearSelectionAction()),
           err =>
             this.store.dispatch(
               new ShowMessageAction({
@@ -360,32 +362,34 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
 
   onSelect(event: MatCheckboxChange, dataset: Dataset): void {
     if (event.checked) {
-      this.store.dispatch(new SelectDatasetAction(dataset));
+      this.store.dispatch(selectDatasetAction({ dataset }));
     } else {
-      this.store.dispatch(new DeselectDatasetAction(dataset));
+      this.store.dispatch(deselectDatasetAction({ dataset }));
     }
   }
 
   onSelectAll(event: MatCheckboxChange) {
     if (event.checked) {
-      this.store.dispatch(new SelectAllDatasetsAction());
+      this.store.dispatch(selectAllDatasetsAction());
     } else {
-      this.store.dispatch(new ClearSelectionAction());
+      this.store.dispatch(clearSelectionAction());
     }
   }
 
   onPageChange(event: PageChangeEvent): void {
-    this.store.dispatch(new ChangePageAction(event.pageIndex, event.pageSize));
+    this.store.dispatch(
+      changePageAction({ page: event.pageIndex, limit: event.pageSize })
+    );
   }
 
   onSortChange(event: SortChangeEvent): void {
     const { active: column, direction } = event;
-    this.store.dispatch(new SortByColumnAction(column, direction));
+    this.store.dispatch(sortByColumnAction({ column, direction }));
   }
 
   onAddToBatch(): void {
-    this.store.dispatch(new AddToBatchAction());
-    this.store.dispatch(new ClearSelectionAction());
+    this.store.dispatch(addToBatchAction());
+    this.store.dispatch(clearSelectionAction());
   }
 
   countDerivedDatasets(dataset: Dataset): number {
