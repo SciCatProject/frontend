@@ -1,4 +1,10 @@
-import { Component, OnInit, Input } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  Input,
+  OnChanges,
+  SimpleChange
+} from "@angular/core";
 import { ScientificMetaData } from "../scientific-metadata.module";
 
 @Component({
@@ -6,7 +12,7 @@ import { ScientificMetaData } from "../scientific-metadata.module";
   templateUrl: "./metadata-view.component.html",
   styleUrls: ["./metadata-view.component.scss"]
 })
-export class MetadataViewComponent implements OnInit {
+export class MetadataViewComponent implements OnInit, OnChanges {
   @Input() metadata: object;
 
   tableData: ScientificMetaData[];
@@ -41,6 +47,15 @@ export class MetadataViewComponent implements OnInit {
   ngOnInit() {
     if (this.metadata) {
       this.tableData = this.createMetadataArray(this.metadata);
+    }
+  }
+
+  ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
+    for (const propName in changes) {
+      if (propName === "metadata") {
+        this.metadata = changes[propName].currentValue;
+        this.tableData = this.createMetadataArray(this.metadata);
+      }
     }
   }
 }

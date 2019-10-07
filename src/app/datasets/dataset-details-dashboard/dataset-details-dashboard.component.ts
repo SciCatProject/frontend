@@ -22,7 +22,7 @@ import {
   getCurrentOrigDatablocks,
   getCurrentDatablocks,
   getCurrentAttachments,
-  getViewPublicMode,
+  getPublicViewMode,
   getIsLoading
 } from "state-management/selectors/datasets.selectors";
 import {
@@ -37,13 +37,13 @@ import { Message, MessageType } from "state-management/models";
 import { submitJob, getError } from "state-management/selectors/jobs.selectors";
 import { ShowMessageAction } from "state-management/actions/user.actions";
 import {
-  DatablocksAction,
-  UpdateAttachmentCaptionAction,
-  DeleteAttachment,
-  AddAttachment,
-  ClearFacetsAction,
-  AddKeywordFilterAction,
-  SaveDatasetAction
+  clearFacetsAction,
+  addKeywordFilterAction,
+  saveDatasetAction,
+  updateAttachmentCaptionAction,
+  removeAttachmentAction,
+  fetchDatasetAction,
+  addAttachmentAction
 } from "state-management/actions/datasets.actions";
 import { SubmitAction } from "state-management/actions/jobs.actions";
 import { ReadFile } from "ngx-file-helpers";
@@ -72,8 +72,8 @@ export class DatasetDetailsDashboardComponent
   private subscriptions: Subscription[] = [];
 
   onClickKeyword(keyword: string) {
-    this.store.dispatch(new ClearFacetsAction());
-    this.store.dispatch(new AddKeywordFilterAction(keyword));
+    this.store.dispatch(clearFacetsAction());
+    this.store.dispatch(addKeywordFilterAction({ keyword }));
     this.router.navigateByUrl("/datasets");
   }
 
@@ -88,8 +88,8 @@ export class DatasetDetailsDashboardComponent
   }
 
   onSaveMetadata(metadata: object) {
-    this.dataset.scientificMetadata = metadata;
-    this.store.dispatch(new SaveDatasetAction(this.dataset));
+    const saveDataset = { ...this.dataset } as RawDataset;
+    this.store.dispatch(saveDatasetAction({ dataset: saveDataset, metadata }));
   }
 
   resetDataset(dataset: Dataset) {
@@ -143,22 +143,24 @@ export class DatasetDetailsDashboardComponent
         sample: null,
         sampleId: null
       };
-      this.store.dispatch(new AddAttachment(this.attachment));
+      this.store.dispatch(addAttachmentAction({ attachment: this.attachment }));
     }
   }
 
   updateCaption(event: SubmitCaptionEvent) {
     this.store.dispatch(
-      new UpdateAttachmentCaptionAction(
-        this.dataset.pid,
-        event.attachmentId,
-        event.caption
-      )
+      updateAttachmentCaptionAction({
+        datasetId: this.dataset.pid,
+        attachmentId: event.attachmentId,
+        caption: event.caption
+      })
     );
   }
 
   deleteAttachment(attachmentId: string) {
-    this.store.dispatch(new DeleteAttachment(this.dataset.pid, attachmentId));
+    this.store.dispatch(
+      removeAttachmentAction({ datasetId: this.dataset.pid, attachmentId })
+    );
   }
 
   constructor(
@@ -178,10 +180,13 @@ export class DatasetDetailsDashboardComponent
         if (id) {
           if (this.viewPublic) {
             this.store.dispatch(
-              new DatablocksAction(id, { isPublished: this.viewPublic })
+              fetchDatasetAction({
+                pid: id,
+                filter: { isPublished: this.viewPublic }
+              })
             );
           } else {
-            this.store.dispatch(new DatablocksAction(id));
+            this.store.dispatch(fetchDatasetAction({ pid: id }));
           }
         }
       })
@@ -224,7 +229,7 @@ export class DatasetDetailsDashboardComponent
     );
 
     this.subscriptions.push(
-      this.store.pipe(select(getViewPublicMode)).subscribe(viewPublic => {
+      this.store.pipe(select(getPublicViewMode)).subscribe(viewPublic => {
         this.viewPublic = viewPublic;
       })
     );

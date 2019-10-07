@@ -28,20 +28,20 @@ import {
 } from "state-management/selectors/datasets.selectors";
 
 import {
-  AddGroupFilterAction,
-  AddKeywordFilterAction,
-  AddLocationFilterAction,
-  AddScientificConditionAction,
-  AddTypeFilterAction,
-  ClearFacetsAction,
-  RemoveGroupFilterAction,
-  RemoveKeywordFilterAction,
-  RemoveLocationFilterAction,
-  RemoveScientificConditionAction,
-  RemoveTypeFilterAction,
-  SetDateRangeFilterAction,
-  SetSearchTermsAction,
-  SetTextFilterAction
+  setTextFilterAction,
+  addKeywordFilterAction,
+  setSearchTermsAction,
+  addLocationFilterAction,
+  removeLocationFilterAction,
+  addGroupFilterAction,
+  removeGroupFilterAction,
+  removeKeywordFilterAction,
+  addTypeFilterAction,
+  removeTypeFilterAction,
+  setDateRangeFilterAction,
+  clearFacetsAction,
+  addScientificConditionAction,
+  removeScientificConditionAction
 } from "state-management/actions/datasets.actions";
 import { ScientificConditionDialogComponent } from "datasets/scientific-condition-dialog/scientific-condition-dialog.component";
 import { combineLatest, BehaviorSubject, Observable } from "rxjs";
@@ -110,7 +110,7 @@ export class DatasetsFilterComponent {
       distinctUntilChanged()
     )
     .subscribe(terms => {
-      this.store.dispatch(new SetTextFilterAction(terms));
+      this.store.dispatch(setTextFilterAction({ text: terms }));
     });
 
   private keywordSubscription = this.keywordsTerms$
@@ -120,7 +120,7 @@ export class DatasetsFilterComponent {
       distinctUntilChanged()
     )
     .subscribe(terms => {
-      this.store.dispatch(new AddKeywordFilterAction(terms));
+      this.store.dispatch(addKeywordFilterAction({ keyword: terms }));
     });
 
   createSuggestionObserver(
@@ -160,55 +160,59 @@ export class DatasetsFilterComponent {
 
   textSearchChanged(terms: string) {
     this.clearSearchBar = false;
-    this.store.dispatch(new SetSearchTermsAction(terms));
+    this.store.dispatch(setSearchTermsAction({ terms }));
   }
 
   locationSelected(location: string | null) {
-    this.store.dispatch(new AddLocationFilterAction(location || ""));
+    const loc = location || "";
+    this.store.dispatch(addLocationFilterAction({ location: loc }));
     this.locationInput$.next("");
   }
 
   locationRemoved(location: string) {
-    this.store.dispatch(new RemoveLocationFilterAction(location));
+    this.store.dispatch(removeLocationFilterAction({ location }));
   }
 
   groupSelected(group: string) {
-    this.store.dispatch(new AddGroupFilterAction(group));
+    this.store.dispatch(addGroupFilterAction({ group }));
     this.groupInput$.next("");
   }
 
   groupRemoved(group: string) {
-    this.store.dispatch(new RemoveGroupFilterAction(group));
+    this.store.dispatch(removeGroupFilterAction({ group }));
   }
 
   keywordSelected(keyword: string) {
-    this.store.dispatch(new AddKeywordFilterAction(keyword));
+    this.store.dispatch(addKeywordFilterAction({ keyword }));
     this.keywordsInput$.next("");
   }
 
   keywordRemoved(keyword: string) {
-    this.store.dispatch(new RemoveKeywordFilterAction(keyword));
+    this.store.dispatch(removeKeywordFilterAction({ keyword }));
   }
 
   typeSelected(type: string) {
-    this.store.dispatch(new AddTypeFilterAction(type));
+    this.store.dispatch(addTypeFilterAction({ datasetType: type }));
     this.typeInput$.next("");
   }
 
   typeRemoved(type: string) {
-    this.store.dispatch(new RemoveTypeFilterAction(type));
+    this.store.dispatch(removeTypeFilterAction({ datasetType: type }));
   }
 
   dateChanged(event: MatDatepickerInputEvent<DateRange>) {
     const { begin, end } = event.value;
     this.store.dispatch(
-      new SetDateRangeFilterAction(begin.toISOString(), end.toISOString())
+      setDateRangeFilterAction({
+        begin: begin.toISOString(),
+        end: end.toISOString()
+      })
     );
   }
 
   clearFacets() {
     this.clearSearchBar = true;
-    this.store.dispatch(new ClearFacetsAction());
+    this.store.dispatch(clearFacetsAction());
   }
 
   showAddConditionDialog() {
@@ -217,12 +221,14 @@ export class DatasetsFilterComponent {
       .afterClosed()
       .subscribe(({ data }) => {
         if (data != null) {
-          this.store.dispatch(new AddScientificConditionAction(data));
+          this.store.dispatch(
+            addScientificConditionAction({ condition: data })
+          );
         }
       });
   }
 
   removeCondition(index: number) {
-    this.store.dispatch(new RemoveScientificConditionAction(index));
+    this.store.dispatch(removeScientificConditionAction({ index }));
   }
 }

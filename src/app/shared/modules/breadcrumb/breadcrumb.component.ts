@@ -3,7 +3,7 @@ import { Router, ActivatedRoute, NavigationEnd, Params } from "@angular/router";
 import { Store, select } from "@ngrx/store";
 import * as rison from "rison";
 import {
-  getViewMode,
+  getArchiveViewMode,
   getFilters
 } from "state-management/selectors/datasets.selectors";
 import { AppState } from "state-management/state/app.store";
@@ -120,7 +120,7 @@ export class BreadcrumbComponent implements OnInit {
           console.log(filters);
           this.store
             .pipe(
-              select(getViewMode),
+              select(getArchiveViewMode),
               take(1)
             )
             .subscribe(currentMode => {

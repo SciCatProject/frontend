@@ -5,13 +5,13 @@ import { Dataset, DerivedDataset } from "shared/sdk/models";
 import { Subscription } from "rxjs";
 import {
   getCurrentDataset,
-  reduceDataset,
-  getReduceLoading,
+  getOpenwhiskResult,
+  getIsLoading,
   getDatasets
 } from "state-management/selectors/datasets.selectors";
 import {
-  ReduceDatasetAction,
-  FetchDatasetsAction
+  reduceDatasetAction,
+  fetchDatasetsAction
 } from "state-management/actions/datasets.actions";
 import { FormControl, Validators, FormGroup } from "@angular/forms";
 
@@ -76,7 +76,7 @@ export class ReduceComponent implements OnInit, OnDestroy {
   constructor(private router: Router, private store: Store<any>) {}
 
   ngOnInit() {
-    this.store.dispatch(new FetchDatasetsAction());
+    this.store.dispatch(fetchDatasetsAction());
 
     this.datasetsSubscription = this.store
       .pipe(select(getDatasets))
@@ -96,16 +96,16 @@ export class ReduceComponent implements OnInit, OnDestroy {
       });
 
     this.resultSubscription = this.store
-      .pipe(select(reduceDataset))
+      .pipe(select(getOpenwhiskResult))
       .subscribe(result => {
         this.result = result;
       });
 
     this.resultLoadingSubscription = this.store
-      .pipe(select(getReduceLoading))
+      .pipe(select(getIsLoading))
       .subscribe(resultLoading => {
         this.resultLoading = resultLoading;
-        this.store.dispatch(new FetchDatasetsAction());
+        // this.store.dispatch(fetchDatasetsAction());
       });
   }
 
@@ -127,7 +127,7 @@ export class ReduceComponent implements OnInit, OnDestroy {
   }
 
   reduceDataset(dataset: Dataset): void {
-    this.store.dispatch(new ReduceDatasetAction(dataset));
+    this.store.dispatch(reduceDatasetAction({ dataset }));
   }
 
   goTo(dataset: DerivedDataset): void {
