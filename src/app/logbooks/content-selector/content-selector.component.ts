@@ -5,11 +5,11 @@ import { Subscription } from "rxjs";
 import { Store, select } from "@ngrx/store";
 import {
   getFilters,
-  getFilteredEntries
+  getCurrentLogbook
 } from "state-management/selectors/logbooks.selector";
 import {
-  FetchFilteredEntriesAction,
-  UpdateFilterAction
+  fetchFilteredEntriesAction,
+  updateFilterAction
 } from "state-management/actions/logbooks.actions";
 import { LogbookFilters } from "state-management/models";
 
@@ -30,7 +30,7 @@ export class ContentSelectorComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.logbookSubscription = this.store
-      .pipe(select(getFilteredEntries))
+      .pipe(select(getCurrentLogbook))
       .subscribe(logbook => (this.logbook = logbook));
     this.filterSubscription = this.store
       .pipe(select(getFilters))
@@ -54,31 +54,34 @@ export class ContentSelectorComponent implements OnInit, OnDestroy {
       switch (entry) {
         case "Bot Messages": {
           this.filter.showBotMessages = true;
-          this.store.dispatch(new UpdateFilterAction(this.filter));
+          this.store.dispatch(updateFilterAction({ filters: this.filter }));
 
           break;
         }
         case "User Messages": {
           this.filter.showUserMessages = true;
-          this.store.dispatch(new UpdateFilterAction(this.filter));
+          this.store.dispatch(updateFilterAction({ filters: this.filter }));
 
           break;
         }
         case "Images": {
           this.filter.showImages = true;
-          this.store.dispatch(new UpdateFilterAction(this.filter));
+          this.store.dispatch(updateFilterAction({ filters: this.filter }));
 
           break;
         }
         default: {
-          this.store.dispatch(new UpdateFilterAction(this.filter));
+          this.store.dispatch(updateFilterAction({ filters: this.filter }));
 
           break;
         }
       }
       console.log("filter", this.filter);
       this.store.dispatch(
-        new FetchFilteredEntriesAction(this.logbook.name, this.filter)
+        fetchFilteredEntriesAction({
+          name: this.logbook.name,
+          filters: this.filter
+        })
       );
     } else {
       console.log("unchecked: " + entry);
@@ -87,31 +90,34 @@ export class ContentSelectorComponent implements OnInit, OnDestroy {
         case "Bot Messages": {
           this.filter.showBotMessages = false;
 
-          this.store.dispatch(new UpdateFilterAction(this.filter));
+          this.store.dispatch(updateFilterAction({ filters: this.filter }));
 
           break;
         }
         case "User Messages": {
           this.filter.showUserMessages = false;
-          this.store.dispatch(new UpdateFilterAction(this.filter));
+          this.store.dispatch(updateFilterAction({ filters: this.filter }));
 
           break;
         }
         case "Images": {
           this.filter.showImages = false;
-          this.store.dispatch(new UpdateFilterAction(this.filter));
+          this.store.dispatch(updateFilterAction({ filters: this.filter }));
 
           break;
         }
         default: {
-          this.store.dispatch(new UpdateFilterAction(this.filter));
+          this.store.dispatch(updateFilterAction({ filters: this.filter }));
 
           break;
         }
       }
       console.log("filter", this.filter);
       this.store.dispatch(
-        new FetchFilteredEntriesAction(this.logbook.name, this.filter)
+        fetchFilteredEntriesAction({
+          name: this.logbook.name,
+          filters: this.filter
+        })
       );
     }
   }

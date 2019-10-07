@@ -1,61 +1,52 @@
 import { Injectable } from "@angular/core";
-import { Actions, Effect, ofType } from "@ngrx/effects";
-import { of, Observable } from "rxjs";
-import { map, mergeMap, catchError } from "rxjs/operators";
-import {
-  ActionTypes,
-  FetchLogbooksCompleteAction,
-  FetchLogbooksFailedAction,
-  FetchLogbooksOutcomeAction,
-  FetchLogbooksAction,
-  FetchLogbookOutcomeAction,
-  FetchLogbookAction,
-  FetchLogbookCompleteAction,
-  FetchLogbookFailedAction,
-  FetchFilteredEntriesOutcomeActions,
-  FetchFilteredEntriesAction,
-  FetchFilteredEntriesCompleteAction,
-  FetchFilteredEntriesFailedAction
-} from "state-management/actions/logbooks.actions";
+import { createEffect, Actions, ofType } from "@ngrx/effects";
 import { LogbookApi } from "shared/sdk";
+import * as fromActions from "state-management/actions/logbooks.actions";
+import { mergeMap, catchError, map } from "rxjs/operators";
+import { of } from "rxjs";
 import * as rison from "rison";
 
 @Injectable()
-export class LogbookEffect {
-  @Effect()
-  getLogbooks: Observable<FetchLogbooksOutcomeAction> = this.actions$.pipe(
-    ofType<FetchLogbooksAction>(ActionTypes.FETCH_LOGBOOKS),
-    mergeMap(() =>
-      this.logbookApi.findAll().pipe(
-        map(logbooks => new FetchLogbooksCompleteAction(logbooks)),
-        catchError(() => of(new FetchLogbooksFailedAction()))
+export class LogbookEffects {
+  fetchLogbooks$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(fromActions.fetchLogbooksAction),
+      mergeMap(() =>
+        this.logbookApi.findAll().pipe(
+          map(logbooks =>
+            fromActions.fetchLogbooksCompleteAction({ logbooks })
+          ),
+          catchError(() => of(fromActions.fetchLogbooksFailedAction()))
+        )
       )
     )
   );
 
-  @Effect()
-  getLogbook: Observable<FetchLogbookOutcomeAction> = this.actions$.pipe(
-    ofType<FetchLogbookAction>(ActionTypes.FETCH_LOGBOOK),
-    mergeMap(action =>
-      this.logbookApi.findByName(action.name).pipe(
-        map(logbook => new FetchLogbookCompleteAction(logbook)),
-        catchError(() => of(new FetchLogbookFailedAction()))
+  fetchLogbook$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(fromActions.fetchLogbookAction),
+      mergeMap(action =>
+        this.logbookApi.findByName(action.name).pipe(
+          map(logbook => fromActions.fetchLogbookCompleteAction({ logbook })),
+          catchError(() => of(fromActions.fetchLogbookFailedAction()))
+        )
       )
     )
   );
 
-  @Effect()
-  getFilteredEntries: Observable<
-    FetchFilteredEntriesOutcomeActions
-  > = this.actions$.pipe(
-    ofType<FetchFilteredEntriesAction>(ActionTypes.FETCH_FILTERED_ENTRIES),
-    mergeMap(action => {
-      const filter = rison.encode_object(action.filter);
-      return this.logbookApi.filter(action.name, filter).pipe(
-        map(logbook => new FetchFilteredEntriesCompleteAction(logbook)),
-        catchError(() => of(new FetchFilteredEntriesFailedAction()))
-      );
-    })
+  fetchFilteredEntries$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(fromActions.fetchFilteredEntriesAction),
+      mergeMap(action => {
+        const filter = rison.encode_object(action.filters);
+        return this.logbookApi.filter(action.name, filter).pipe(
+          map(logbook =>
+            fromActions.fetchFilteredEntriesCompleteAction({ logbook })
+          ),
+          catchError(() => of(fromActions.fetchFilteredEntriesFailedAction()))
+        );
+      })
+    )
   );
 
   constructor(private actions$: Actions, private logbookApi: LogbookApi) {}

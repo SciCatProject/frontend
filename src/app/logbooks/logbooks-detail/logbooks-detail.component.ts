@@ -2,11 +2,8 @@ import { Component, OnInit, OnDestroy } from "@angular/core";
 import { select, Store } from "@ngrx/store";
 import { Subscription } from "rxjs";
 
-import { FetchLogbookAction } from "state-management/actions/logbooks.actions";
-import {
-  getLogbook,
-  getFilteredEntries
-} from "state-management/selectors/logbooks.selector";
+import { fetchLogbookAction } from "state-management/actions/logbooks.actions";
+import { getCurrentLogbook } from "state-management/selectors/logbooks.selector";
 import { Logbook } from "state-management/models";
 import { getCurrentDataset } from "state-management/selectors/datasets.selectors";
 import { ActivatedRoute } from "@angular/router";
@@ -21,7 +18,6 @@ export class LogbooksDetailComponent implements OnInit, OnDestroy {
 
   logbook: Logbook;
   logbookSubscription: Subscription;
-  filteredLogbookDescription: Subscription;
   displayedColumns: string[] = ["timestamp", "sender", "entry"];
 
   dataset: any;
@@ -33,13 +29,7 @@ export class LogbooksDetailComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.logbookSubscription = this.store
-      .pipe(select(getLogbook))
-      .subscribe(logbook => {
-        this.logbook = logbook;
-      });
-
-    this.filteredLogbookDescription = this.store
-      .pipe(select(getFilteredEntries))
+      .pipe(select(getCurrentLogbook))
       .subscribe(logbook => {
         this.logbook = logbook;
       });
@@ -60,12 +50,11 @@ export class LogbooksDetailComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.store.dispatch(new FetchLogbookAction(this.logbookName));
+    this.store.dispatch(fetchLogbookAction({ name: this.logbookName }));
   }
 
   ngOnDestroy() {
     this.logbookSubscription.unsubscribe();
-    this.filteredLogbookDescription.unsubscribe();
     this.datasetSubscription.unsubscribe();
     this.routeSubscription.unsubscribe();
   }

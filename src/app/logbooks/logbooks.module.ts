@@ -8,7 +8,8 @@ import {
   MatTableModule,
   MatCheckboxModule,
   MatExpansionModule,
-  MatDividerModule
+  MatDividerModule,
+  MatProgressSpinnerModule
 } from "@angular/material";
 import { AppConfigModule } from "app-config.module";
 import { FlexLayoutModule } from "@angular/flex-layout";
@@ -18,7 +19,7 @@ import { SharedCatanieModule } from "shared/shared.module";
 import { ContentSelectorComponent } from "./content-selector/content-selector.component";
 import { LogbooksDashboardComponent } from "./logbooks-dashboard/logbooks-dashboard.component";
 import { EffectsModule } from "@ngrx/effects";
-import { LogbookEffect } from "state-management/effects/logbooks.effects";
+import { LogbookEffects } from "state-management/effects/logbooks.effects";
 import { logbooksReducer } from "state-management/reducers/logbooks.reducer";
 import { StoreModule } from "@ngrx/store";
 
@@ -39,11 +40,12 @@ import { StoreModule } from "@ngrx/store";
     MatDividerModule,
     MatExpansionModule,
     MatIconModule,
+    MatProgressSpinnerModule,
     MatTableModule,
     RouterModule,
     SharedCatanieModule,
     StoreModule.forFeature("logbooks", logbooksReducer),
-    EffectsModule.forFeature([LogbookEffect])
+    EffectsModule.forFeature([LogbookEffects])
   ],
   providers: [],
   exports: [

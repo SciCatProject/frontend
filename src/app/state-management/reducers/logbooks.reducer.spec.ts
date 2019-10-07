@@ -1,36 +1,31 @@
 import { logbooksReducer, formatImageUrls } from "./logbooks.reducer";
 import { initialLogbookState } from "../state/logbooks.store";
-import * as logbooksActions from "../actions/logbooks.actions";
+import * as fromActions from "../actions/logbooks.actions";
 import { LogbookFilters, Logbook } from "../models";
 import { APP_DI_CONFIG } from "app-config.module";
 
 describe("LogbooksReducer", () => {
-  describe("default", () => {
-    it("should return the initial state", () => {
-      const filter: LogbookFilters = {
-        textSearch: "",
-        showBotMessages: true,
-        showImages: true,
-        showUserMessages: true
-      };
-      const noopAction = new logbooksActions.UpdateFilterAction(filter);
-      const state = logbooksReducer(undefined, noopAction);
+  describe("on fetchLogbooksAction", () => {
+    it("should set isLoading to true", () => {
+      const action = fromActions.fetchLogbooksAction();
+      const state = logbooksReducer(initialLogbookState, action);
 
-      expect(state).toEqual(initialLogbookState);
+      expect(state.isLoading).toEqual(true);
     });
   });
 
-  describe("FETCH_LOGBOOKS_COMPLETE", () => {
-    it("should set logbooks and reverse messages array", () => {
+  describe("on fetchLogbooksComplete", () => {
+    it("should set logbooks and set isLoading to false", () => {
       const logbooks = [new Logbook()];
       const firstTestMessage = { content: "First message" };
       const secondTestMessage = { content: "Second message" };
       logbooks.forEach(logbook => {
         logbook.messages = [firstTestMessage, secondTestMessage];
       });
-      const action = new logbooksActions.FetchLogbooksCompleteAction(logbooks);
+      const action = fromActions.fetchLogbooksCompleteAction({ logbooks });
       const state = logbooksReducer(initialLogbookState, action);
 
+      expect(state.isLoading).toEqual(false);
       expect(state.logbooks).toEqual(logbooks);
       state.logbooks.forEach(logbook => {
         expect(logbook.messages[0]).toEqual(secondTestMessage);
@@ -40,46 +35,105 @@ describe("LogbooksReducer", () => {
 
     it("should set logbooks even if the logbooks array is empty", () => {
       const logbooks = [];
-      const action = new logbooksActions.FetchLogbooksCompleteAction(logbooks);
+      const action = fromActions.fetchLogbooksCompleteAction({ logbooks });
       const state = logbooksReducer(initialLogbookState, action);
 
+      expect(state.isLoading).toEqual(false);
       expect(state.logbooks).toEqual([]);
     });
   });
 
-  describe("FETCH_LOGBOOK_COMPLETE", () => {
-    it("should set logbook", () => {
-      const logbook = new Logbook();
-      const action = new logbooksActions.FetchLogbookCompleteAction(logbook);
+  describe("on fetchLogbooksFailedAction", () => {
+    it("should set isLoading to false", () => {
+      const action = fromActions.fetchLogbooksFailedAction();
       const state = logbooksReducer(initialLogbookState, action);
 
-      expect(state.logbook).toEqual(logbook);
+      expect(state.isLoading).toEqual(false);
     });
   });
 
-  describe("FETCH_FILTERED_ENTRIES_COMPLETE", () => {
-    it("should set logbook", () => {
+  describe("on fetchLogbookAction", () => {
+    it("should set isLoading to true", () => {
+      const name = "test";
+      const action = fromActions.fetchLogbookAction({ name });
+      const state = logbooksReducer(initialLogbookState, action);
+
+      expect(state.isLoading).toEqual(true);
+    });
+  });
+
+  describe("on fetchLogbookCompleteAction", () => {
+    it("should set currentLogbook ans set isLoading to false", () => {
       const logbook = new Logbook();
-      const action = new logbooksActions.FetchFilteredEntriesCompleteAction(
+      const action = fromActions.fetchLogbookCompleteAction({ logbook });
+      const state = logbooksReducer(initialLogbookState, action);
+
+      expect(state.currentLogbook).toEqual(logbook);
+      expect(state.isLoading).toEqual(false);
+    });
+  });
+
+  describe("on fetchLogbookFailedAction", () => {
+    it("should set isLoading to false", () => {
+      const action = fromActions.fetchLogbookFailedAction();
+      const state = logbooksReducer(initialLogbookState, action);
+
+      expect(state.isLoading).toEqual(false);
+    });
+  });
+
+  describe("on fetchFilteredEntriesAction", () => {
+    it("should set isLoading to true", () => {
+      const name = "testName";
+      const filters: LogbookFilters = {
+        textSearch: "test",
+        showBotMessages: true,
+        showImages: true,
+        showUserMessages: true
+      };
+
+      const action = fromActions.fetchFilteredEntriesAction({ name, filters });
+      const state = logbooksReducer(initialLogbookState, action);
+
+      expect(state.isLoading).toEqual(true);
+    });
+  });
+
+  describe("on fetchFilteredEntriesCompleteAction", () => {
+    it("should set currentLogbook and set isLoading to false", () => {
+      const logbook = new Logbook();
+      const action = fromActions.fetchFilteredEntriesCompleteAction({
         logbook
-      );
+      });
       const state = logbooksReducer(initialLogbookState, action);
 
-      expect(state.logbook).toEqual(logbook);
+      expect(state.currentLogbook).toEqual(logbook);
+      expect(state.isLoading).toEqual(false);
     });
   });
 
-  describe("UPDATE_FILTER_COMPLETE", () => {
+  describe("on fetchFilteredEntriesFailedAction", () => {
+    it("should set isLoading to false", () => {
+      const action = fromActions.fetchFilteredEntriesFailedAction();
+      const state = logbooksReducer(initialLogbookState, action);
+
+      expect(state.isLoading).toEqual(false);
+    });
+  });
+
+  describe("on updateFilterAction", () => {
     it("should update the logbook filter", () => {
-      const filter: LogbookFilters = {
+      const filters: LogbookFilters = {
         textSearch: "",
         showBotMessages: true,
         showUserMessages: true,
         showImages: true
       };
-      const action = new logbooksActions.UpdateFilterAction(filter);
+
+      const action = fromActions.updateFilterAction({ filters });
       const state = logbooksReducer(initialLogbookState, action);
-      expect(state.filters).toEqual(filter);
+
+      expect(state.filters).toEqual(filters);
     });
   });
 
@@ -96,9 +150,9 @@ describe("LogbooksReducer", () => {
         }
       };
       logbook.messages = [inputMessage];
-      formatImageUrls(logbook);
+      const formattedLogbook = formatImageUrls(logbook);
 
-      logbook.messages.forEach(message => {
+      formattedLogbook.messages.forEach(message => {
         expect(message.content.url).toEqual(
           APP_DI_CONFIG.synapseBaseUrl + "/_matrix/media/r0/download/"
         );
@@ -110,16 +164,16 @@ describe("LogbooksReducer", () => {
 
     it("should do nothing if logbook is undefined", () => {
       const logbook = undefined;
-      formatImageUrls(logbook);
+      const formattedLogbook = formatImageUrls(logbook);
 
-      expect(logbook).toBe(undefined);
+      expect(formattedLogbook).toBe(undefined);
     });
 
     it("should do nothing if there are no messages", () => {
       const logbook = new Logbook();
-      formatImageUrls(logbook);
+      const formattedLogbook = formatImageUrls(logbook);
 
-      expect(logbook.messages).toBe(undefined);
+      expect(formattedLogbook.messages).toBe(undefined);
     });
 
     it("should do nothing if msgtype is not 'm.image'", () => {
@@ -134,9 +188,9 @@ describe("LogbooksReducer", () => {
         }
       };
       logbook.messages = [inputMessage];
-      formatImageUrls(logbook);
+      const formattedLogbook = formatImageUrls(logbook);
 
-      logbook.messages.forEach(message => {
+      formattedLogbook.messages.forEach(message => {
         expect(message.content.url).toEqual("mxc://");
         expect(message.content.info.thumbnail_url).toEqual("mxc://");
       });
@@ -152,9 +206,9 @@ describe("LogbooksReducer", () => {
         }
       };
       logbook.messages = [inputMessage];
-      formatImageUrls(logbook);
+      const formattedLogbook = formatImageUrls(logbook);
 
-      logbook.messages.forEach(message => {
+      formattedLogbook.messages.forEach(message => {
         expect(message.content.url).toEqual(
           APP_DI_CONFIG.synapseBaseUrl + "/_matrix/media/r0/download/"
         );
@@ -173,9 +227,9 @@ describe("LogbooksReducer", () => {
         }
       };
       logbook.messages = [inputMessage];
-      formatImageUrls(logbook);
+      const formattedLogbook = formatImageUrls(logbook);
 
-      logbook.messages.forEach(message => {
+      formattedLogbook.messages.forEach(message => {
         expect(message.content.url).toEqual(undefined);
         expect(message.content.info.thumbnail_url).toBe(
           APP_DI_CONFIG.synapseBaseUrl + "/_matrix/media/r0/download/"
@@ -192,9 +246,9 @@ describe("LogbooksReducer", () => {
         }
       };
       logbook.messages = [inputMessage];
-      formatImageUrls(logbook);
+      const formattedLogbook = formatImageUrls(logbook);
 
-      logbook.messages.forEach(message => {
+      formattedLogbook.messages.forEach(message => {
         expect(message.content.url).toEqual(undefined);
         expect(message.content.info.thumbnail_url).toBe(undefined);
       });

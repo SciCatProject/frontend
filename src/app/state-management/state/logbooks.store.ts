@@ -2,14 +2,18 @@ import { Logbook, LogbookFilters } from "state-management/models";
 
 export interface LogbookState {
   logbooks: Logbook[];
-  logbook: Logbook;
+  currentLogbook: Logbook;
+
+  isLoading: boolean;
 
   filters: LogbookFilters;
 }
 
 export const initialLogbookState: LogbookState = {
   logbooks: [],
-  logbook: null,
+  currentLogbook: null,
+
+  isLoading: false,
 
   filters: {
     textSearch: "",
