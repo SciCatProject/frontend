@@ -23,17 +23,17 @@ import { ScientificConditionDialogComponent } from "datasets/scientific-conditio
 import { APP_CONFIG } from "app-config.module";
 import { FacetCount } from "state-management/state/datasets.store";
 import {
-  SetSearchTermsAction,
-  AddLocationFilterAction,
-  RemoveLocationFilterAction,
-  AddGroupFilterAction,
-  RemoveGroupFilterAction,
-  AddKeywordFilterAction,
-  RemoveKeywordFilterAction,
-  AddTypeFilterAction,
-  RemoveTypeFilterAction,
-  ClearFacetsAction,
-  RemoveScientificConditionAction
+  setSearchTermsAction,
+  addLocationFilterAction,
+  removeLocationFilterAction,
+  addGroupFilterAction,
+  removeGroupFilterAction,
+  addKeywordFilterAction,
+  removeKeywordFilterAction,
+  addTypeFilterAction,
+  removeTypeFilterAction,
+  clearFacetsAction,
+  removeScientificConditionAction
 } from "state-management/actions/datasets.actions";
 
 describe("DatasetsFilterComponent", () => {
@@ -182,7 +182,7 @@ describe("DatasetsFilterComponent", () => {
       component.textSearchChanged(terms);
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
-      expect(dispatchSpy).toHaveBeenCalledWith(new SetSearchTermsAction(terms));
+      expect(dispatchSpy).toHaveBeenCalledWith(setSearchTermsAction({ terms }));
     });
   });
 
@@ -195,7 +195,7 @@ describe("DatasetsFilterComponent", () => {
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        new AddLocationFilterAction(location)
+        addLocationFilterAction({ location })
       );
     });
   });
@@ -209,7 +209,7 @@ describe("DatasetsFilterComponent", () => {
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        new RemoveLocationFilterAction(location)
+        removeLocationFilterAction({ location })
       );
     });
   });
@@ -222,7 +222,7 @@ describe("DatasetsFilterComponent", () => {
       component.groupSelected(group);
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
-      expect(dispatchSpy).toHaveBeenCalledWith(new AddGroupFilterAction(group));
+      expect(dispatchSpy).toHaveBeenCalledWith(addGroupFilterAction({ group }));
     });
   });
 
@@ -235,7 +235,7 @@ describe("DatasetsFilterComponent", () => {
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        new RemoveGroupFilterAction(group)
+        removeGroupFilterAction({ group })
       );
     });
   });
@@ -249,7 +249,7 @@ describe("DatasetsFilterComponent", () => {
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        new AddKeywordFilterAction(keyword)
+        addKeywordFilterAction({ keyword })
       );
     });
   });
@@ -263,7 +263,7 @@ describe("DatasetsFilterComponent", () => {
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        new RemoveKeywordFilterAction(keyword)
+        removeKeywordFilterAction({ keyword })
       );
     });
   });
@@ -272,11 +272,13 @@ describe("DatasetsFilterComponent", () => {
     it("should dispatch an AddTypeFilterAction", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
-      const type = "string";
-      component.typeSelected(type);
+      const datasetType = "string";
+      component.typeSelected(datasetType);
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
-      expect(dispatchSpy).toHaveBeenCalledWith(new AddTypeFilterAction(type));
+      expect(dispatchSpy).toHaveBeenCalledWith(
+        addTypeFilterAction({ datasetType })
+      );
     });
   });
 
@@ -284,18 +286,18 @@ describe("DatasetsFilterComponent", () => {
     it("should dispatch a RemoveTypeFilterAction", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
-      const type = "string";
-      component.typeRemoved(type);
+      const datasetType = "string";
+      component.typeRemoved(datasetType);
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        new RemoveTypeFilterAction(type)
+        removeTypeFilterAction({ datasetType })
       );
     });
   });
 
   describe("#dateChanged()", () => {
-    xit("should dispatch a SetDatRangeFilterAction", () => {});
+    xit("should dispatch a SetDateRangeFilterAction", () => {});
   });
 
   describe("#clearFacets()", () => {
@@ -305,7 +307,7 @@ describe("DatasetsFilterComponent", () => {
       component.clearFacets();
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
-      expect(dispatchSpy).toHaveBeenCalledWith(new ClearFacetsAction());
+      expect(dispatchSpy).toHaveBeenCalledWith(clearFacetsAction());
     });
   });
 
@@ -322,7 +324,7 @@ describe("DatasetsFilterComponent", () => {
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        new RemoveScientificConditionAction(index)
+        removeScientificConditionAction({ index })
       );
     });
   });

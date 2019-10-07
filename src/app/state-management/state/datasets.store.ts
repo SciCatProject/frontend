@@ -19,43 +19,31 @@ export interface DatasetState {
   datasets: Dataset[];
   selectedSets: Dataset[];
   currentSet: Dataset;
-  facetCounts: FacetCounts;
   totalCount: number;
-  datasetsLoading: boolean;
-  facetCountsLoading: boolean;
-  deletingAttachment: boolean;
-  addingAttachment: boolean;
-  hasPrefilledFilters: boolean;
+  isLoading: boolean;
 
+  facetCounts: FacetCounts;
+  hasPrefilledFilters: boolean;
   searchTerms: string;
   keywordsTerms: string;
   filters: DatasetFilters;
 
   batch: Dataset[];
 
-  result: object;
-  resultLoading: boolean;
+  openwhiskResult: object;
 }
 
 export const initialDatasetState: DatasetState = {
   datasets: [],
   selectedSets: [],
   currentSet: null,
-  facetCounts: {},
   totalCount: 0,
-  datasetsLoading: true,
-  deletingAttachment: false,
-  addingAttachment: false,
-  facetCountsLoading: false,
-  hasPrefilledFilters: false,
+  isLoading: true,
 
+  facetCounts: {},
+  hasPrefilledFilters: false,
   searchTerms: "",
   keywordsTerms: "",
-  batch: [],
-
-  result: {},
-  resultLoading: false,
-
   filters: {
     modeToggle: ArchViewMode.all,
     mode: {},
@@ -70,5 +58,9 @@ export const initialDatasetState: DatasetState = {
     keywords: [],
     scientific: [],
     isPublished: false
-  }
+  },
+
+  batch: [],
+
+  openwhiskResult: {}
 };

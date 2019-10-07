@@ -9,12 +9,12 @@ import { DatasetDetailsDashboardComponent } from "./dataset-details-dashboard.co
 import { MockStore, MockActivatedRoute, MockUserApi } from "shared/MockStubs";
 import { Store, StoreModule } from "@ngrx/store";
 import {
-  ClearFacetsAction,
-  AddKeywordFilterAction,
-  AddAttachment,
-  UpdateAttachmentCaptionAction,
-  DeleteAttachment,
-  SaveDatasetAction
+  clearFacetsAction,
+  addKeywordFilterAction,
+  addAttachmentAction,
+  updateAttachmentCaptionAction,
+  removeAttachmentAction,
+  saveDatasetAction
 } from "state-management/actions/datasets.actions";
 import { Dataset, UserApi, RawDataset } from "shared/sdk";
 import { ReadFile, ReadMode } from "ngx-file-helpers";
@@ -89,9 +89,9 @@ describe("DetailsDashboardComponent", () => {
       component.onClickKeyword(keyword);
 
       expect(dispatchSpy).toHaveBeenCalledTimes(2);
-      expect(dispatchSpy).toHaveBeenCalledWith(new ClearFacetsAction());
+      expect(dispatchSpy).toHaveBeenCalledWith(clearFacetsAction());
       expect(dispatchSpy).toHaveBeenCalledWith(
-        new AddKeywordFilterAction(keyword)
+        addKeywordFilterAction({ keyword })
       );
       expect(router.navigateByUrl).toHaveBeenCalledWith("/datasets");
     });
@@ -117,18 +117,18 @@ describe("DetailsDashboardComponent", () => {
     });
   });
 
-  describe("onSaveMetadata()", () => {
+  describe("#onSaveMetadata()", () => {
     it("should dispatch a SaveDatasetAction", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
       component.dataset = new RawDataset();
+      const saveDataset = { ...component.dataset } as RawDataset;
       const metadata = {};
       component.onSaveMetadata(metadata);
-      component.dataset.scientificMetadata = metadata;
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        new SaveDatasetAction(component.dataset)
+        saveDatasetAction({ dataset: saveDataset, metadata })
       );
     });
   });
@@ -200,7 +200,7 @@ describe("DetailsDashboardComponent", () => {
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        new AddAttachment(component.attachment)
+        addAttachmentAction({ attachment: component.attachment })
       );
     });
   });
@@ -218,11 +218,11 @@ describe("DetailsDashboardComponent", () => {
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        new UpdateAttachmentCaptionAction(
-          component.dataset.pid,
-          event.attachmentId,
-          event.caption
-        )
+        updateAttachmentCaptionAction({
+          datasetId: component.dataset.pid,
+          attachmentId: event.attachmentId,
+          caption: event.caption
+        })
       );
     });
   });
@@ -237,7 +237,10 @@ describe("DetailsDashboardComponent", () => {
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        new DeleteAttachment(component.dataset.pid, attachmentId)
+        removeAttachmentAction({
+          datasetId: component.dataset.pid,
+          attachmentId
+        })
       );
     });
   });

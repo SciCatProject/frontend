@@ -4,9 +4,9 @@ import { first, map, switchMap, mergeMap } from "rxjs/operators";
 
 import { getDatasetsInBatch } from "state-management/selectors/datasets.selectors";
 import {
-  ClearBatchAction,
-  PrefillBatchAction,
-  RemoveFromBatchAction
+  clearBatchAction,
+  prefillBatchAction,
+  removeFromBatchAction
 } from "state-management/actions/datasets.actions";
 import { Dataset, MessageType } from "state-management/models";
 import { ShowMessageAction } from "state-management/actions/user.actions";
@@ -92,7 +92,7 @@ export class BatchViewComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.store.dispatch(new PrefillBatchAction());
+    this.store.dispatch(prefillBatchAction());
     this.batch$.subscribe(result => {
       this.datasetList = result;
     });
@@ -107,7 +107,7 @@ export class BatchViewComponent implements OnInit {
   }
 
   onRemove(dataset: Dataset) {
-    this.store.dispatch(new RemoveFromBatchAction(dataset));
+    this.store.dispatch(removeFromBatchAction({ dataset }));
   }
 
   onPublish() {
@@ -195,6 +195,6 @@ export class BatchViewComponent implements OnInit {
   }
 
   private clearBatch() {
-    this.store.dispatch(new ClearBatchAction());
+    this.store.dispatch(clearBatchAction());
   }
 }
