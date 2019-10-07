@@ -20,8 +20,6 @@ import {
 import { Logbook, LogbookInterface } from "shared/sdk";
 import { LogbookFilters } from "state-management/models";
 
-const logbook = new Logbook();
-
 describe("DashboardComponent", () => {
   let component: LogbooksDashboardComponent;
   let fixture: ComponentFixture<LogbooksDashboardComponent>;
