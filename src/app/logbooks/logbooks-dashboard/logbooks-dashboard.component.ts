@@ -1,4 +1,11 @@
-import { Component, OnInit, OnDestroy, Inject } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  Inject,
+  ChangeDetectorRef,
+  AfterViewChecked
+} from "@angular/core";
 import { Store, select } from "@ngrx/store";
 import { Logbook } from "shared/sdk";
 import { Subscription } from "rxjs";
@@ -22,7 +29,8 @@ import { LogbookFilters } from "state-management/models";
   templateUrl: "./logbooks-dashboard.component.html",
   styleUrls: ["./logbooks-dashboard.component.scss"]
 })
-export class LogbooksDashboardComponent implements OnInit, OnDestroy {
+export class LogbooksDashboardComponent
+  implements OnInit, OnDestroy, AfterViewChecked {
   loading$ = this.store.pipe(select(getIsLoading));
 
   logbookName: string;
@@ -38,7 +46,24 @@ export class LogbooksDashboardComponent implements OnInit, OnDestroy {
 
   routeSubscription: Subscription;
 
+  onTextSearchChange(query: string) {
+    this.filters.textSearch = query;
+    this.store.dispatch(updateFilterAction({ filters: this.filters }));
+
+    this.store.dispatch(
+      fetchFilteredEntriesAction({
+        name: this.logbook.name,
+        filters: this.filters
+      })
+    );
+  }
+
+  reverseTimeline(): void {
+    this.logbook.messages.reverse();
+  }
+
   constructor(
+    private cdRef: ChangeDetectorRef,
     private route: ActivatedRoute,
     private store: Store<Logbook>,
     @Inject(APP_CONFIG) public appConfig: AppConfig
@@ -76,26 +101,14 @@ export class LogbooksDashboardComponent implements OnInit, OnDestroy {
     this.store.dispatch(fetchLogbookAction({ name: this.logbookName }));
   }
 
+  ngAfterViewChecked() {
+    this.cdRef.detectChanges();
+  }
+
   ngOnDestroy() {
     this.logbookSubscription.unsubscribe();
     this.filtersSubscription.unsubscribe();
     this.datasetSubscription.unsubscribe();
     this.routeSubscription.unsubscribe();
-  }
-
-  onTextSearchChange(query: string) {
-    this.filters.textSearch = query;
-    this.store.dispatch(updateFilterAction({ filters: this.filters }));
-
-    this.store.dispatch(
-      fetchFilteredEntriesAction({
-        name: this.logbook.name,
-        filters: this.filters
-      })
-    );
-  }
-
-  reverseTimeline(): void {
-    this.logbook.messages.reverse();
   }
 }

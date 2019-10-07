@@ -92,4 +92,15 @@ describe("DashboardComponent", () => {
       );
     });
   });
+
+  describe("#reverseTimeline()", () => {
+    it("should reverse the logbook messages array", () => {
+      component.logbook = logbook;
+      component.logbook.messages = [{ message: "test1" }, { message: "test2" }];
+
+      component.reverseTimeline();
+
+      expect(component.logbook.messages[0].message).toEqual("test2");
+    });
+  });
 });

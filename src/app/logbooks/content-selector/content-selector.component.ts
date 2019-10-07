@@ -21,10 +21,69 @@ import { LogbookFilters } from "state-management/models";
 export class ContentSelectorComponent implements OnInit, OnDestroy {
   logbook: Logbook;
   logbookSubscription: Subscription;
-  filter: LogbookFilters;
+
+  filters: LogbookFilters;
   filterSubscription: Subscription;
-  entry: string;
+
   public entries = ["Bot Messages", "User Messages", "Images"];
+
+  isSelected(entry: string): boolean {
+    return true;
+  }
+
+  onSelect(event: MatCheckboxChange, entry: string): void {
+    if (event.checked) {
+      switch (entry) {
+        case "Bot Messages": {
+          this.filters.showBotMessages = true;
+          break;
+        }
+        case "User Messages": {
+          this.filters.showUserMessages = true;
+          break;
+        }
+        case "Images": {
+          this.filters.showImages = true;
+          break;
+        }
+        default: {
+          break;
+        }
+      }
+      this.store.dispatch(updateFilterAction({ filters: this.filters }));
+      this.store.dispatch(
+        fetchFilteredEntriesAction({
+          name: this.logbook.name,
+          filters: this.filters
+        })
+      );
+    } else {
+      switch (entry) {
+        case "Bot Messages": {
+          this.filters.showBotMessages = false;
+          break;
+        }
+        case "User Messages": {
+          this.filters.showUserMessages = false;
+          break;
+        }
+        case "Images": {
+          this.filters.showImages = false;
+          break;
+        }
+        default: {
+          break;
+        }
+      }
+      this.store.dispatch(updateFilterAction({ filters: this.filters }));
+      this.store.dispatch(
+        fetchFilteredEntriesAction({
+          name: this.logbook.name,
+          filters: this.filters
+        })
+      );
+    }
+  }
 
   constructor(private store: Store<any>) {}
 
@@ -32,93 +91,14 @@ export class ContentSelectorComponent implements OnInit, OnDestroy {
     this.logbookSubscription = this.store
       .pipe(select(getCurrentLogbook))
       .subscribe(logbook => (this.logbook = logbook));
+
     this.filterSubscription = this.store
       .pipe(select(getFilters))
-      .subscribe(filter => (this.filter = filter));
+      .subscribe(filters => (this.filters = filters));
   }
 
   ngOnDestroy() {
     this.logbookSubscription.unsubscribe();
     this.filterSubscription.unsubscribe();
-  }
-
-  isSelected(entry: string): boolean {
-    // console.log("entry: " + entry);
-    return true;
-  }
-
-  onSelect(event: MatCheckboxChange, entry: string): void {
-    console.log("checked: " + entry);
-
-    if (event.checked) {
-      switch (entry) {
-        case "Bot Messages": {
-          this.filter.showBotMessages = true;
-          this.store.dispatch(updateFilterAction({ filters: this.filter }));
-
-          break;
-        }
-        case "User Messages": {
-          this.filter.showUserMessages = true;
-          this.store.dispatch(updateFilterAction({ filters: this.filter }));
-
-          break;
-        }
-        case "Images": {
-          this.filter.showImages = true;
-          this.store.dispatch(updateFilterAction({ filters: this.filter }));
-
-          break;
-        }
-        default: {
-          this.store.dispatch(updateFilterAction({ filters: this.filter }));
-
-          break;
-        }
-      }
-      console.log("filter", this.filter);
-      this.store.dispatch(
-        fetchFilteredEntriesAction({
-          name: this.logbook.name,
-          filters: this.filter
-        })
-      );
-    } else {
-      console.log("unchecked: " + entry);
-
-      switch (entry) {
-        case "Bot Messages": {
-          this.filter.showBotMessages = false;
-
-          this.store.dispatch(updateFilterAction({ filters: this.filter }));
-
-          break;
-        }
-        case "User Messages": {
-          this.filter.showUserMessages = false;
-          this.store.dispatch(updateFilterAction({ filters: this.filter }));
-
-          break;
-        }
-        case "Images": {
-          this.filter.showImages = false;
-          this.store.dispatch(updateFilterAction({ filters: this.filter }));
-
-          break;
-        }
-        default: {
-          this.store.dispatch(updateFilterAction({ filters: this.filter }));
-
-          break;
-        }
-      }
-      console.log("filter", this.filter);
-      this.store.dispatch(
-        fetchFilteredEntriesAction({
-          name: this.logbook.name,
-          filters: this.filter
-        })
-      );
-    }
   }
 }
