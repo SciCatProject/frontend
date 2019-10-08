@@ -42,7 +42,7 @@ import { SamplesEffects } from "./state-management/effects/samples.effects";
 import { ServiceWorkerModule } from "@angular/service-worker";
 import { environment } from "../environments/environment";
 import { LogbooksModule } from "./logbooks/logbooks.module";
-import { LogbookEffect } from "state-management/effects/logbooks.effects";
+import { LogbookEffects } from "state-management/effects/logbooks.effects";
 import { AboutModule } from "about/about.module";
 import { HelpModule } from "help/help.module";
 import { PublisheddataModule } from "publisheddata/publisheddata.module";
@@ -108,7 +108,7 @@ import { JobsModule } from "jobs/jobs.module";
       JobsEffects,
       PoliciesEffects,
       SamplesEffects,
-      LogbookEffect,
+      LogbookEffects,
       PublishedDataEffects
     ]),
     ServiceWorkerModule.register("ngsw-worker.js", {

@@ -2,7 +2,7 @@
   <div *ngFor="let entry of entries">
     <mat-checkbox
       [checked]="isSelected(entry)"
-      (change)="onSelect($event, entry)"
+      (change)="doSelect($event, entry)"
     >
       {{ entry }}
     </mat-checkbox>
