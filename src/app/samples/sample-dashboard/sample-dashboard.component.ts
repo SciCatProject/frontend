@@ -3,12 +3,10 @@ import { APP_CONFIG, AppConfig } from "app-config.module";
 import { Store, select } from "@ngrx/store";
 import { Sample } from "shared/sdk";
 import {
-  SearchSampleAction,
-  ChangePageAction,
-  FetchSamplesAction,
-  SampleSortByColumnAction,
-  FetchSampleAction,
-  FetchSampleCountAction
+  changePageAction,
+  fetchSamplesAction,
+  sortByColumnAction,
+  setTextFilterAction
 } from "state-management/actions/samples.actions";
 import {
   TableColumn,
@@ -17,8 +15,8 @@ import {
 } from "shared/modules/table/table.component";
 import { Subscription } from "rxjs";
 import {
-  getSamplesList,
-  getSampleCount,
+  getSamples,
+  getSamplesCount,
   getSamplesPerPage,
   getPage
 } from "state-management/selectors/samples.selectors";
@@ -33,10 +31,9 @@ import { SampleDialogComponent } from "samples/sample-dialog/sample-dialog.compo
   styleUrls: ["./sample-dashboard.component.scss"]
 })
 export class SampleDashboardComponent implements OnInit, OnDestroy {
-
   sampleSubscription: Subscription;
 
-  sampleCount$ = this.store.pipe(select(getSampleCount));
+  sampleCount$ = this.store.pipe(select(getSamplesCount));
   samplesPerPage$ = this.store.pipe(select(getSamplesPerPage));
   currentPage$ = this.store.pipe(select(getPage));
 
@@ -87,12 +84,15 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
   }
 
   onTextSearchChange(query) {
-    this.store.dispatch(new SearchSampleAction(query));
+    this.store.dispatch(setTextFilterAction({ text: query }));
+    this.store.dispatch(fetchSamplesAction());
   }
 
   onPageChange(event: PageChangeEvent) {
-    this.store.dispatch(new ChangePageAction(event.pageIndex, event.pageSize));
-    this.store.dispatch(new FetchSamplesAction());
+    this.store.dispatch(
+      changePageAction({ page: event.pageIndex, limit: event.pageSize })
+    );
+    this.store.dispatch(fetchSamplesAction());
   }
 
   onSortChange(event: SortChangeEvent) {
@@ -100,21 +100,20 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
       event.active = "createdAt";
     }
     this.store.dispatch(
-      new SampleSortByColumnAction(event.active, event.direction)
+      sortByColumnAction({ column: event.active, direction: event.direction })
     );
   }
 
   onRowClick(sample: Sample) {
-    this.store.dispatch(new FetchSampleAction(sample.sampleId));
-    this.router.navigateByUrl("/samples/" + sample.sampleId);
+    const id = encodeURIComponent(sample.sampleId);
+    this.router.navigateByUrl("/samples/" + id);
   }
 
   ngOnInit() {
-    this.store.dispatch(new FetchSamplesAction());
-    this.store.dispatch(new FetchSampleCountAction(0));
+    this.store.dispatch(fetchSamplesAction());
 
     this.sampleSubscription = this.store
-      .pipe(select(getSamplesList))
+      .pipe(select(getSamples))
       .subscribe(samples => {
         this.tableData = this.formatTableData(samples);
       });

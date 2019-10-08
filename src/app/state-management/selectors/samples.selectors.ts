@@ -1,97 +1,12 @@
-import { SampleState } from "../state/samples.store";
 import { createFeatureSelector, createSelector } from "@ngrx/store";
+import { SampleState } from "state-management/state/samples.store";
+import { text } from "@fortawesome/fontawesome-svg-core";
 
 export const getSampleState = createFeatureSelector<SampleState>("samples");
 
-export const getSelectedSampleId = createSelector(
-  getSampleState,
-  state => state.selectedId
-);
-
-const getSamples = createSelector(
+export const getSamples = createSelector(
   getSampleState,
   state => state.samples
-);
-
-export const getSampleFilters = createSelector(
-  getSampleState,
-  state => {
-    return state.filters.sortField;
-  }
-);
-
-export const getSampleCount = createSelector(
-  getSampleState,
-  state => {
-    return state.totalCount;
-  }
-);
-
-export const getDatasetsForSample = createSelector(
-  getSampleState,
-  state => {
-    return state.datasets;
-  }
-);
-
-export const getQuery = createSelector(
-  getSampleState,
-  state => {
-    const query = {
-      text: state.filters.text,
-      order: state.filters.sortField,
-      skip: state.filters.skip,
-      limit: state.filters.limit
-    };
-    return query;
-  }
-);
-
-export const getFullqueryParams = createSelector(
-  getSampleState,
-  state => {
-    const query = {
-      text: state.filters.text
-    };
-    const limits = {
-      order: state.filters.sortField,
-      skip: state.filters.skip,
-      limit: state.filters.limit
-    };
-    return {
-      query: JSON.stringify(query),
-      limits
-    };
-  }
-);
-
-export const getSamplesList = createSelector(
-  getSamples,
-  samples => Object.keys(samples).map(sampleId => samples[sampleId])
-);
-
-const getSamples2 = createSelector(
-  getSampleState,
-  state => state.samples
-);
-
-export const getSelectedSample = createSelector(
-  getSamples2,
-  getSelectedSampleId,
-  (samples, selectedId) => samples[selectedId] || null
-);
-
-export const getPage = createSelector(
-  getSampleState,
-  state => {
-    const { skip, limit } = state.filters;
-    return skip / limit;
-  }
-);
-
-export const getSamplesPerPage = createSelector(
-  getSampleState,
-  state => state.filters.limit
 );
 
 export const getCurrentSample = createSelector(
@@ -102,4 +17,46 @@ export const getCurrentSample = createSelector(
 export const getCurrentAttachments = createSelector(
   getCurrentSample,
   sample => sample.attachments
+);
+
+export const getSampleDatasets = createSelector(
+  getSampleState,
+  state => state.datasets
+);
+
+export const getSamplesCount = createSelector(
+  getSampleState,
+  state => state.totalCount
+);
+
+export const getIsLoading = createSelector(
+  getSampleState,
+  state => state.isLoading
+);
+
+export const getFilters = createSelector(
+  getSampleState,
+  state => state.filters
+);
+
+export const getPage = createSelector(
+  getFilters,
+  filters => {
+    const { skip, limit } = filters;
+    return skip / limit;
+  }
+);
+
+export const getSamplesPerPage = createSelector(
+  getFilters,
+  filters => filters.limit
+);
+
+export const getFullqueryParams = createSelector(
+  getFilters,
+  filters => {
+    const { text, sortField, skip, limit } = filters;
+    const limits = { order: sortField, skip, limit };
+    return { query: JSON.stringify({ text }), limits };
+  }
 );

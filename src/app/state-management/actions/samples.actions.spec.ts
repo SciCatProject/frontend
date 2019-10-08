@@ -1,107 +1,267 @@
-import {
-  FETCH_SAMPLES,
-  FETCH_SAMPLES_COMPLETE,
-  FETCH_SAMPLES_FAILED,
-  FetchSamplesAction,
-  FetchSamplesCompleteAction,
-  FetchSamplesFailedAction,
-  AddAttachmentAction,
-  ADD_ATTACHMENT,
-  DeleteAttachmentAction,
-  DELETE_ATTACHMENT,
-  UpdateAttachmentCaptionAction,
-  UPDATE_ATTACHMENT_CAPTION,
-  UpdateAttachmentCaptionCompleteAction,
-  UPDATE_ATTACHMENT_CAPTION_COMPLETE,
-  UpdateAttachmentCaptionFailedAction,
-  UPDATE_ATTACHMENT_CAPTION_FAILED
-} from "./samples.actions";
-import { Attachment, Sample } from "../../shared/sdk/models";
+import * as fromActions from "./samples.actions";
+import { Attachment, Sample, Dataset } from "../../shared/sdk/models";
 
-
-describe("FetchSamplesAction", () => {
-  it("should create an action", () => {
-    const action = new FetchSamplesAction();
-    expect({ ...action }).toEqual({ type: FETCH_SAMPLES });
-  });
-});
-
-describe("FetchSamplesCompleteAction", () => {
-  it("should create an action", () => {
-    const samples = [new Sample()];
-    const action = new FetchSamplesCompleteAction(samples);
-    expect({ ...action }).toEqual({
-      type: FETCH_SAMPLES_COMPLETE,
-      samples
+describe("Sample Actions", () => {
+  describe("fetchSamplesAction", () => {
+    it("should create an action", () => {
+      const action = fromActions.fetchSamplesAction();
+      expect({ ...action }).toEqual({ type: "[Sample] Fetch Samples" });
     });
   });
-});
 
-describe("FetchSamplesFailedAction", () => {
-  it("should create an action", () => {
-    const action = new FetchSamplesFailedAction();
-    expect({ ...action }).toEqual({ type: FETCH_SAMPLES_FAILED });
-  });
-});
-
-describe("AddAttachmentAction", () => {
-  it("should create an action", () => {
-    const attachment = new Attachment();
-    const action = new AddAttachmentAction(attachment);
-    expect({ ...action }).toEqual({ type: ADD_ATTACHMENT, attachment });
-  });
-});
-
-describe("DeleteAttachmentAction", () => {
-  it("should create an action", () => {
-    const sampleId = "123abc";
-    const attachmentId = "abc123";
-    const action = new DeleteAttachmentAction(sampleId, attachmentId);
-    expect({ ...action }).toEqual({
-      type: DELETE_ATTACHMENT,
-      sampleId,
-      attachmentId
+  describe("fetchSamplesCompleteAction", () => {
+    it("should create an action", () => {
+      const samples = [new Sample()];
+      const action = fromActions.fetchSamplesCompleteAction({ samples });
+      expect({ ...action }).toEqual({
+        type: "[Sample] Fetch Samples Complete",
+        samples
+      });
     });
   });
-});
 
-describe("UpdateAttachmentCaption", () => {
-  it("should create an action", () => {
-    const sampleId = "123abc";
-    const attachmentId = "abc123";
-    const caption = "New caption";
-    const action = new UpdateAttachmentCaptionAction(
-      sampleId,
-      attachmentId,
-      caption
-    );
-    expect({ ...action }).toEqual({
-      type: UPDATE_ATTACHMENT_CAPTION,
-      sampleId,
-      attachmentId,
-      caption
+  describe("fetchSamplesFailedAction", () => {
+    it("should create an action", () => {
+      const action = fromActions.fetchSamplesFailedAction();
+      expect({ ...action }).toEqual({ type: "[Sample] Fetch Samples Failed" });
     });
   });
-});
 
-describe("UpdateAttachmentCompleteCaption", () => {
-  it("should create an action", () => {
-    const attachment = new Attachment();
-    const action = new UpdateAttachmentCaptionCompleteAction(attachment);
-    expect({ ...action }).toEqual({
-      type: UPDATE_ATTACHMENT_CAPTION_COMPLETE,
-      attachment
+  describe("fetchSampleAction", () => {
+    it("should create an action", () => {
+      const sampleId = "testId";
+      const action = fromActions.fetchSampleAction({ sampleId });
+      expect({ ...action }).toEqual({
+        type: "[Sample] Fetch Sample",
+        sampleId
+      });
     });
   });
-});
 
-describe("UpdateAttachmentFailedCaption", () => {
-  it("should create an action", () => {
-    const error = new Error();
-    const action = new UpdateAttachmentCaptionFailedAction(error);
-    expect({ ...action }).toEqual({
-      type: UPDATE_ATTACHMENT_CAPTION_FAILED,
-      error
+  describe("fetchSampleCompleteAction", () => {
+    it("should create an action", () => {
+      const sample = new Sample();
+      const action = fromActions.fetchSampleCompleteAction({ sample });
+      expect({ ...action }).toEqual({
+        type: "[Sample] Fetch Sample Complete",
+        sample
+      });
+    });
+  });
+
+  describe("fetchSampleFailedAction", () => {
+    it("should create an action", () => {
+      const action = fromActions.fetchSampleFailedAction();
+      expect({ ...action }).toEqual({ type: "[Sample] Fetch Sample Failed" });
+    });
+  });
+
+  describe("fetchSampleDatasetsAction", () => {
+    it("should create an action", () => {
+      const sampleId = "testId";
+      const action = fromActions.fetchSampleDatasetsAction({ sampleId });
+      expect({ ...action }).toEqual({
+        type: "[Sample] Fetch Sample Datasets",
+        sampleId
+      });
+    });
+  });
+
+  describe("fetchSampleDatasetsCompleteAction", () => {
+    it("should create an action", () => {
+      const datasets = [new Dataset()];
+      const action = fromActions.fetchSampleDatasetsCompleteAction({
+        datasets
+      });
+      expect({ ...action }).toEqual({
+        type: "[Sample] Fetch Sample Datasets Complete",
+        datasets
+      });
+    });
+  });
+
+  describe("fetchSampleDatasetsFailedAction", () => {
+    it("should create an action", () => {
+      const action = fromActions.fetchSampleDatasetsFailedAction();
+      expect({ ...action }).toEqual({
+        type: "[Sample] Fetch Sample Datasets Failed"
+      });
+    });
+  });
+
+  describe("addSampleAction", () => {
+    it("should create an action", () => {
+      const sample = new Sample();
+      const action = fromActions.addSampleAction({ sample });
+      expect({ ...action }).toEqual({
+        type: "[Sample] Add Sample",
+        sample
+      });
+    });
+  });
+
+  describe("addSampleCompleteAction", () => {
+    it("should create an action", () => {
+      const sample = new Sample();
+      const action = fromActions.addSampleCompleteAction({ sample });
+      expect({ ...action }).toEqual({
+        type: "[Sample] Add Sample Complete",
+        sample
+      });
+    });
+  });
+
+  describe("addSampleFailedAction", () => {
+    it("should create an action", () => {
+      const action = fromActions.addSampleFailedAction();
+      expect({ ...action }).toEqual({ type: "[Sample] Add Sample Failed" });
+    });
+  });
+
+  describe("addAttachmentAction", () => {
+    it("should create an action", () => {
+      const attachment = new Attachment();
+      const action = fromActions.addAttachmentAction({ attachment });
+      expect({ ...action }).toEqual({
+        type: "[Sample] Add Attachment",
+        attachment
+      });
+    });
+  });
+
+  describe("addAttachmentCompleteAction", () => {
+    it("should create an action", () => {
+      const attachment = new Attachment();
+      const action = fromActions.addAttachmentCompleteAction({ attachment });
+      expect({ ...action }).toEqual({
+        type: "[Sample] Add Attachment Complete",
+        attachment
+      });
+    });
+  });
+
+  describe("addAttachmentAction", () => {
+    it("should create an action", () => {
+      const action = fromActions.addAttachmentFailedAction();
+      expect({ ...action }).toEqual({
+        type: "[Sample] Add Attachment Failed"
+      });
+    });
+  });
+
+  describe("updateAttachmentCaption", () => {
+    it("should create an action", () => {
+      const sampleId = "123abc";
+      const attachmentId = "abc123";
+      const caption = "New caption";
+      const action = fromActions.updateAttachmentCaptionAction({
+        sampleId,
+        attachmentId,
+        caption
+      });
+      expect({ ...action }).toEqual({
+        type: "[Sample] Update Attachment Caption",
+        sampleId,
+        attachmentId,
+        caption
+      });
+    });
+  });
+
+  describe("updateAttachmentCompleteCaption", () => {
+    it("should create an action", () => {
+      const attachment = new Attachment();
+      const action = fromActions.updateAttachmentCaptionCompleteAction({
+        attachment
+      });
+      expect({ ...action }).toEqual({
+        type: "[Sample] Update Attachment Caption Complete",
+        attachment
+      });
+    });
+  });
+
+  describe("updateAttachmentFailedCaption", () => {
+    it("should create an action", () => {
+      const action = fromActions.updateAttachmentCaptionFailedAction();
+      expect({ ...action }).toEqual({
+        type: "[Sample] Update Attachment Caption Failed"
+      });
+    });
+  });
+
+  describe("removeAttachmentAction", () => {
+    it("should create an action", () => {
+      const sampleId = "123abc";
+      const attachmentId = "abc123";
+      const action = fromActions.removeAttachmentAction({
+        sampleId,
+        attachmentId
+      });
+      expect({ ...action }).toEqual({
+        type: "[Sample] Remove Attachment",
+        sampleId,
+        attachmentId
+      });
+    });
+  });
+
+  describe("removeAttachmentCompleteAction", () => {
+    it("should create an action", () => {
+      const attachmentId = "abc123";
+      const action = fromActions.removeAttachmentCompleteAction({
+        attachmentId
+      });
+      expect({ ...action }).toEqual({
+        type: "[Sample] Remove Attachment Complete",
+        attachmentId
+      });
+    });
+  });
+
+  describe("removeAttachmentFailedAction", () => {
+    it("should create an action", () => {
+      const action = fromActions.removeAttachmentFailedAction();
+      expect({ ...action }).toEqual({
+        type: "[Sample] Remove Attachment Failed"
+      });
+    });
+  });
+
+  describe("changePageAction", () => {
+    it("should create an action", () => {
+      const page = 1;
+      const limit = 25;
+      const action = fromActions.changePageAction({ page, limit });
+      expect({ ...action }).toEqual({
+        type: "[Sample] Change Page",
+        page,
+        limit
+      });
+    });
+  });
+
+  describe("sortByColumnAction", () => {
+    it("should create an action", () => {
+      const column = "test";
+      const direction = "asc";
+      const action = fromActions.sortByColumnAction({ column, direction });
+      expect({ ...action }).toEqual({
+        type: "[Sample] Sort By Column",
+        column,
+        direction
+      });
+    });
+  });
+
+  describe("setTextFilterAction", () => {
+    it("should create an action", () => {
+      const text = "test";
+      const action = fromActions.setTextFilterAction({ text });
+      expect({ ...action }).toEqual({
+        type: "[Sample] Set Text Filter",
+        text
+      });
     });
   });
 });

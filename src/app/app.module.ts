@@ -38,7 +38,7 @@ import {
   MatSnackBarModule,
   MatToolbarModule
 } from "@angular/material";
-import { SamplesEffects } from "./state-management/effects/samples.effects";
+import { SampleEffects } from "./state-management/effects/samples.effects";
 import { ServiceWorkerModule } from "@angular/service-worker";
 import { environment } from "../environments/environment";
 import { LogbooksModule } from "./logbooks/logbooks.module";
@@ -107,7 +107,7 @@ import { JobsModule } from "jobs/jobs.module";
       UserEffects,
       JobsEffects,
       PoliciesEffects,
-      SamplesEffects,
+      SampleEffects,
       LogbookEffects,
       PublishedDataEffects
     ]),

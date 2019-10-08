@@ -5,8 +5,8 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { Sample } from "shared/sdk";
 import { Store, select } from "@ngrx/store";
 import {
-  AddSampleAction,
-  FetchSamplesAction
+  addSampleAction,
+  fetchSamplesAction
 } from "state-management/actions/samples.actions";
 import { getCurrentUser } from "state-management/selectors/users.selectors";
 
@@ -77,8 +77,8 @@ export class SampleDialogComponent implements OnInit {
       return console.log(res);
     });
 
-    this.store.dispatch(new AddSampleAction(this.sample));
-    this.store.dispatch(new FetchSamplesAction());
+    this.store.dispatch(addSampleAction({ sample: this.sample }));
+    this.store.dispatch(fetchSamplesAction());
   }
 
   close() {

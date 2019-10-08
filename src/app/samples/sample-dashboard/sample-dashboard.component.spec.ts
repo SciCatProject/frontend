@@ -13,11 +13,10 @@ import {
 } from "@angular/core/testing";
 import { rootReducer } from "state-management/reducers/root.reducer";
 import {
-  SearchSampleAction,
-  ChangePageAction,
-  FetchSamplesAction,
-  SampleSortByColumnAction,
-  FetchSampleAction
+  setTextFilterAction,
+  changePageAction,
+  fetchSamplesAction,
+  sortByColumnAction
 } from "state-management/actions/samples.actions";
 import { Sample } from "shared/sdk";
 import {
@@ -92,19 +91,22 @@ describe("SampleDashboardComponent", () => {
   });
 
   describe("#onTextSearchChange()", () => {
-    it("should dispatch a SearchSampleAction", () => {
+    it("should dispatch a SetTextFilterAction and a fetchSamplesAction", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
       const query = "test";
       component.onTextSearchChange(query);
 
-      expect(dispatchSpy).toHaveBeenCalledTimes(1);
-      expect(dispatchSpy).toHaveBeenCalledWith(new SearchSampleAction(query));
+      expect(dispatchSpy).toHaveBeenCalledTimes(2);
+      expect(dispatchSpy).toHaveBeenCalledWith(
+        setTextFilterAction({ text: query })
+      );
+      expect(dispatchSpy).toHaveBeenCalledWith(fetchSamplesAction());
     });
   });
 
   describe("#onPageChange()", () => {
-    it("should dispatch a ChangePageAction and a FetchSamplesAction", () => {
+    it("should dispatch a changePageAction and a fetchSamplesAction", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
       const event: PageChangeEvent = {
@@ -116,9 +118,9 @@ describe("SampleDashboardComponent", () => {
 
       expect(dispatchSpy).toHaveBeenCalledTimes(2);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        new ChangePageAction(event.pageIndex, event.pageSize)
+        changePageAction({ page: event.pageIndex, limit: event.pageSize })
       );
-      expect(dispatchSpy).toHaveBeenCalledWith(new FetchSamplesAction());
+      expect(dispatchSpy).toHaveBeenCalledWith(fetchSamplesAction());
     });
   });
 
@@ -134,25 +136,20 @@ describe("SampleDashboardComponent", () => {
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        new SampleSortByColumnAction(event.active, event.direction)
+        sortByColumnAction({ column: event.active, direction: event.direction })
       );
     });
   });
 
   describe("#onRowClick()", () => {
-    it("should dispatch a FetchSampleAction and navigate to a sample", () => {
-      dispatchSpy = spyOn(store, "dispatch");
-
+    it("should navigate to a sample", () => {
       const sample = new Sample();
+
       component.onRowClick(sample);
 
-      expect(dispatchSpy).toHaveBeenCalledTimes(1);
-      expect(dispatchSpy).toHaveBeenCalledWith(
-        new FetchSampleAction(sample.sampleId)
-      );
       expect(router.navigateByUrl).toHaveBeenCalledTimes(1);
       expect(router.navigateByUrl).toHaveBeenCalledWith(
-        "/samples/" + sample.sampleId
+        "/samples/" + encodeURIComponent(sample.sampleId)
       );
     });
   });
