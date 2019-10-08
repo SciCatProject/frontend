@@ -14,7 +14,7 @@ import { DatePipe, SlicePipe } from "@angular/common";
 import { FileSizePipe } from "shared/pipes/filesize.pipe";
 import { Dataset } from "shared/sdk";
 import { PageChangeEvent } from "datasets/dataset-table/dataset-table.component";
-import { ChangePageAction } from "state-management/actions/proposals.actions";
+import { changeDatasetsPageAction } from "state-management/actions/proposals.actions";
 
 describe("ViewProposalPageComponent", () => {
   let component: ViewProposalPageComponent;
@@ -78,7 +78,7 @@ describe("ViewProposalPageComponent", () => {
   });
 
   describe("#onPageChange()", () => {
-    it("should dispatch a ChangePageAction", () => {
+    it("should dispatch a changeDatasetsPageAction", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
       const event: PageChangeEvent = {
@@ -90,7 +90,10 @@ describe("ViewProposalPageComponent", () => {
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        new ChangePageAction(event.pageIndex, event.pageSize)
+        changeDatasetsPageAction({
+          page: event.pageIndex,
+          limit: event.pageSize
+        })
       );
     });
   });

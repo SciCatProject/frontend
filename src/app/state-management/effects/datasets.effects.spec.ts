@@ -66,9 +66,8 @@ describe("DatasetEffects", () => {
   });
 
   describe("fetchDatasets$", () => {
-    const datasets = [dataset];
-
     it("should result in a fetchDatasetsCompleteAction", () => {
+      const datasets = [dataset];
       const action = fromActions.fetchDatasetsAction();
       const outcome = fromActions.fetchDatasetsCompleteAction({ datasets });
 

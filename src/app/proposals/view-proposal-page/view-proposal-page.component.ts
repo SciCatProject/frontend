@@ -3,16 +3,16 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { Store, select } from "@ngrx/store";
 import { Subscription, Observable } from "rxjs";
 import {
-  SelectProposalAction,
-  FetchProposalAction,
-  FetchDatasetsForProposalAction,
-  ChangePageAction
+  fetchProposalAction,
+  fetchProposalDatasetsAction,
+  changeDatasetsPageAction
 } from "state-management/actions/proposals.actions";
 import {
   getCurrentProposal,
-  getSelectedProposalDatasets,
-  getPage,
-  getdatasetCount
+  getProposalDatasets,
+  getDatasetsPage,
+  getDatasetsCount,
+  getDatasetsPerPage
 } from "state-management/selectors/proposals.selectors";
 import { AppState } from "state-management/state/app.store";
 import { Dataset, Proposal } from "state-management/models";
@@ -21,7 +21,6 @@ import {
   PageChangeEvent
 } from "shared/modules/table/table.component";
 import { DatePipe, SlicePipe } from "@angular/common";
-import { getDatasetsPerPage } from "state-management/selectors/datasets.selectors";
 import { FileSizePipe } from "shared/pipes/filesize.pipe";
 
 @Component({
@@ -31,8 +30,8 @@ import { FileSizePipe } from "shared/pipes/filesize.pipe";
 })
 export class ViewProposalPageComponent implements OnInit, OnDestroy {
   proposal$: Observable<Proposal> = this.store.pipe(select(getCurrentProposal));
-  currentPage$ = this.store.pipe(select(getPage));
-  datasetCount$ = this.store.pipe(select(getdatasetCount));
+  currentPage$ = this.store.pipe(select(getDatasetsPage));
+  datasetCount$ = this.store.pipe(select(getDatasetsCount));
   itemsPerPage$ = this.store.pipe(select(getDatasetsPerPage));
 
   datasetsSubscription: Subscription;
@@ -70,7 +69,9 @@ export class ViewProposalPageComponent implements OnInit, OnDestroy {
   }
 
   onPageChange(event: PageChangeEvent) {
-    this.store.dispatch(new ChangePageAction(event.pageIndex, event.pageSize));
+    this.store.dispatch(
+      changeDatasetsPageAction({ page: event.pageIndex, limit: event.pageSize })
+    );
   }
 
   onRowClick(dataset: Dataset) {
@@ -89,13 +90,14 @@ export class ViewProposalPageComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.routeSubscription = this.route.params.subscribe(params => {
-      this.store.dispatch(new FetchProposalAction(params.id));
-      this.store.dispatch(new FetchDatasetsForProposalAction(params.id));
-      this.store.dispatch(new SelectProposalAction(params.id));
+      this.store.dispatch(fetchProposalAction({ proposalId: params.id }));
+      this.store.dispatch(
+        fetchProposalDatasetsAction({ proposalId: params.id })
+      );
     });
 
     this.datasetsSubscription = this.store
-      .pipe(select(getSelectedProposalDatasets))
+      .pipe(select(getProposalDatasets))
       .subscribe(datasets => {
         this.tableData = this.formatTableData(datasets);
       });
