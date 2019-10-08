@@ -60,7 +60,7 @@ const initialDatasetState: DatasetState = {
 };
 
 describe("DatasetsReducer", () => {
-  describe("on #fetchDatasetsAction()", () => {
+  describe("on fetchDatasetsAction", () => {
     it("should set isLoading to true", () => {
       const action = fromActions.fetchDatasetsAction();
       const state = fromDatasets.datasetsReducer(initialDatasetState, action);
@@ -69,7 +69,7 @@ describe("DatasetsReducer", () => {
     });
   });
 
-  describe("on #fetchDatasetsCompleteAction()", () => {
+  describe("on fetchDatasetsCompleteAction", () => {
     it("should set datasets property and set isLoading to false", () => {
       const datasets = [dataset];
       const action = fromActions.fetchDatasetsCompleteAction({ datasets });
@@ -80,7 +80,7 @@ describe("DatasetsReducer", () => {
     });
   });
 
-  describe("on #fetchDatasetsFailedAction()", () => {
+  describe("on fetchDatasetsFailedAction", () => {
     it("should set isLoading to false", () => {
       const action = fromActions.fetchDatasetsFailedAction();
       const state = fromDatasets.datasetsReducer(initialDatasetState, action);
@@ -89,7 +89,7 @@ describe("DatasetsReducer", () => {
     });
   });
 
-  describe("on #fetchFacetCountsAction()", () => {
+  describe("on fetchFacetCountsAction", () => {
     it("should set isLoading to true", () => {
       const action = fromActions.fetchFacetCountsAction();
       const state = fromDatasets.datasetsReducer(initialDatasetState, action);
@@ -98,7 +98,7 @@ describe("DatasetsReducer", () => {
     });
   });
 
-  describe("on #fetchFacetCountsCompleteAction()", () => {
+  describe("on fetchFacetCountsCompleteAction", () => {
     it("should set facetCounts and totalCount properties and set isLoading to false", () => {
       const facetCounts: FacetCounts = {};
       const allCounts = 0;
@@ -114,7 +114,7 @@ describe("DatasetsReducer", () => {
     });
   });
 
-  describe("on #fetchFacetCountsFailedAction()", () => {
+  describe("on fetchFacetCountsFailedAction", () => {
     it("should set isLoading to false", () => {
       const action = fromActions.fetchFacetCountsFailedAction();
       const state = fromDatasets.datasetsReducer(initialDatasetState, action);
@@ -123,7 +123,7 @@ describe("DatasetsReducer", () => {
     });
   });
 
-  describe("on #fetchDatasetAction()", () => {
+  describe("on fetchDatasetAction", () => {
     it("should set isLoading to true", () => {
       const pid = "testPid";
       const action = fromActions.fetchDatasetAction({ pid });
@@ -133,7 +133,7 @@ describe("DatasetsReducer", () => {
     });
   });
 
-  describe("on #fetchDatasetCompleteAction()", () => {
+  describe("on fetchDatasetCompleteAction", () => {
     it("should set currentSet property and set isLoading to false", () => {
       const action = fromActions.fetchDatasetCompleteAction({ dataset });
       const state = fromDatasets.datasetsReducer(initialDatasetState, action);
@@ -143,7 +143,7 @@ describe("DatasetsReducer", () => {
     });
   });
 
-  describe("on #fetchDatasetFailedAction()", () => {
+  describe("on fetchDatasetFailedAction", () => {
     it("should set isLoading to false", () => {
       const action = fromActions.fetchDatasetFailedAction();
       const state = fromDatasets.datasetsReducer(initialDatasetState, action);
@@ -152,7 +152,7 @@ describe("DatasetsReducer", () => {
     });
   });
 
-  describe("on #prefillBatchCompleteAction()", () => {
+  describe("on prefillBatchCompleteAction", () => {
     it("should set batch property", () => {
       const batch = [];
       const action = fromActions.prefillBatchCompleteAction({ batch });
@@ -162,7 +162,7 @@ describe("DatasetsReducer", () => {
     });
   });
 
-  describe("on #addToBatchAction()", () => {
+  describe("on addToBatchAction", () => {
     it("should update batch property with selectedSets", () => {
       const batchedPids = initialDatasetState.batch.map(
         batchSet => batchSet.pid
@@ -179,7 +179,7 @@ describe("DatasetsReducer", () => {
     });
   });
 
-  describe("on #removeFromBatchAction()", () => {
+  describe("on removeFromBatchAction", () => {
     it("should remove dataset from batch", () => {
       const action = fromActions.removeFromBatchAction({ dataset });
       const state = fromDatasets.datasetsReducer(initialDatasetState, action);
@@ -188,7 +188,7 @@ describe("DatasetsReducer", () => {
     });
   });
 
-  describe("on #clearBatchAction()", () => {
+  describe("on clearBatchAction", () => {
     it("should clear batch", () => {
       const initialBatch = initialDatasetState.batch;
       expect(initialBatch).toEqual([]);
@@ -204,7 +204,7 @@ describe("DatasetsReducer", () => {
     });
   });
 
-  describe("on #saveDatasetAction()", () => {
+  describe("on saveDatasetAction", () => {
     it("should set isLoading to true", () => {
       const rawDataset = new RawDataset();
       const metadata = {};
@@ -218,7 +218,7 @@ describe("DatasetsReducer", () => {
     });
   });
 
-  describe("on #saveDatasetCompleteAction()", () => {
+  describe("on saveDatasetCompleteAction", () => {
     it("should set currentSet property and set isLoading to false", () => {
       const action = fromActions.saveDatasetCompleteAction({ dataset });
       const state = fromDatasets.datasetsReducer(initialDatasetState, action);
@@ -228,7 +228,7 @@ describe("DatasetsReducer", () => {
     });
   });
 
-  describe("on #saveDatasetFailedAction()", () => {
+  describe("on saveDatasetFailedAction", () => {
     it("should set isLoading to false", () => {
       const action = fromActions.saveDatasetFailedAction();
       const state = fromDatasets.datasetsReducer(initialDatasetState, action);
@@ -237,7 +237,7 @@ describe("DatasetsReducer", () => {
     });
   });
 
-  describe("on #addAttachmentAction()", () => {
+  describe("on addAttachmentAction", () => {
     it("should set isLoading to true", () => {
       const attachment = new Attachment();
       const action = fromActions.addAttachmentAction({ attachment });
@@ -247,7 +247,7 @@ describe("DatasetsReducer", () => {
     });
   });
 
-  describe("on #addAttachmentCompleteAction()", () => {
+  describe("on addAttachmentCompleteAction", () => {
     it("should add attachment to currentSet property and set isLoading to false", () => {
       const attachment = new Attachment();
       const action = fromActions.addAttachmentCompleteAction({ attachment });
@@ -258,7 +258,7 @@ describe("DatasetsReducer", () => {
     });
   });
 
-  describe("on #addAttachmentFailedAction()", () => {
+  describe("on addAttachmentFailedAction", () => {
     it("should set isLoading to false", () => {
       const action = fromActions.addAttachmentFailedAction();
       const state = fromDatasets.datasetsReducer(initialDatasetState, action);
@@ -267,7 +267,7 @@ describe("DatasetsReducer", () => {
     });
   });
 
-  describe("on #updateAttachmentCaptionAction()", () => {
+  describe("on updateAttachmentCaptionAction", () => {
     it("should set isLoading to true", () => {
       const datasetId = "testPid";
       const attachmentId = "testId";
@@ -283,7 +283,7 @@ describe("DatasetsReducer", () => {
     });
   });
 
-  describe("on #updateAttachmentCaptionCompleteAction()", () => {
+  describe("on updateAttachmentCaptionCompleteAction", () => {
     it("should add new caption to an attachment and set isLoading to false", () => {
       const attachment = new Attachment();
       const action = fromActions.updateAttachmentCaptionCompleteAction({
@@ -296,7 +296,7 @@ describe("DatasetsReducer", () => {
     });
   });
 
-  describe("on #updateAttachmentCaptionFailedAction()", () => {
+  describe("on updateAttachmentCaptionFailedAction", () => {
     it("should set isLoading to false", () => {
       const action = fromActions.updateAttachmentCaptionFailedAction();
       const state = fromDatasets.datasetsReducer(initialDatasetState, action);
@@ -305,7 +305,7 @@ describe("DatasetsReducer", () => {
     });
   });
 
-  describe("on #removeAttachmentAction()", () => {
+  describe("on removeAttachmentAction", () => {
     it("should set isLoading to true", () => {
       const datasetId = "testPid";
       const attachmentId = "testId";
@@ -325,7 +325,7 @@ describe("DatasetsReducer", () => {
     });
   });
 
-  describe("on #removeAttachmentCompleteAction()", () => {
+  describe("on removeAttachmentCompleteAction", () => {
     it("should add attachment to currentSet property and set isLoading to false", () => {
       initialDatasetState.currentSet.pid = "testPid";
       const attachment = new Attachment();
@@ -343,7 +343,7 @@ describe("DatasetsReducer", () => {
     });
   });
 
-  describe("on #removeAttachmentFailedAction()", () => {
+  describe("on removeAttachmentFailedAction", () => {
     it("should set isLoading to false", () => {
       const action = fromActions.removeAttachmentFailedAction();
       const state = fromDatasets.datasetsReducer(initialDatasetState, action);
@@ -352,7 +352,7 @@ describe("DatasetsReducer", () => {
     });
   });
 
-  describe("on #selectDatasetAction()", () => {
+  describe("on selectDatasetAction", () => {
     it("should check if data is selected in selectedSets", () => {
       const action = fromActions.selectDatasetAction({ dataset });
       const state = fromDatasets.datasetsReducer(initialDatasetState, action);
@@ -361,7 +361,7 @@ describe("DatasetsReducer", () => {
     });
   });
 
-  describe("on #deselectDatasetAction()", () => {
+  describe("on deselectDatasetAction", () => {
     it("should check that data is not in selectedSets", () => {
       const action = fromActions.deselectDatasetAction({ dataset });
       const state = fromDatasets.datasetsReducer(initialDatasetState, action);
@@ -370,7 +370,7 @@ describe("DatasetsReducer", () => {
     });
   });
 
-  describe("on #selectAllDatasetsAction", () => {
+  describe("on selectAllDatasetsAction", () => {
     it("should set selectedSets", () => {
       initialDatasetState.datasets = [dataset];
 
@@ -381,7 +381,7 @@ describe("DatasetsReducer", () => {
     });
   });
 
-  describe("on #clearSelectionAction()", () => {
+  describe("on clearSelectionAction", () => {
     it("should set selectedSets to an empty array", () => {
       const action = fromActions.clearSelectionAction();
       const state = fromDatasets.datasetsReducer(initialDatasetState, action);
@@ -390,7 +390,7 @@ describe("DatasetsReducer", () => {
     });
   });
 
-  describe("on #changePageAction()", () => {
+  describe("on changePageAction", () => {
     it("should set filters limit and skip", () => {
       const page = 1;
       const limit = 1;
@@ -404,7 +404,7 @@ describe("DatasetsReducer", () => {
     });
   });
 
-  describe("on #sortByColumnAction()", () => {
+  describe("on sortByColumnAction", () => {
     it("should set sortField and set skip to 0", () => {
       const column = "test";
       const direction = "asc";
@@ -418,7 +418,7 @@ describe("DatasetsReducer", () => {
     });
   });
 
-  describe("on #setSearchTermsAction()", () => {
+  describe("on setSearchTermsAction", () => {
     it("should set searchTerms", () => {
       const terms = "abc";
 
@@ -429,7 +429,7 @@ describe("DatasetsReducer", () => {
     });
   });
 
-  describe("on #setArchiveViewModeAction", () => {
+  describe("on setArchiveViewModeAction", () => {
     it("should set mode to an empty object, set modetoggle, set skip to 0 and isLoading to true", () => {
       const modeToggle = ArchViewMode.all;
 
@@ -443,7 +443,7 @@ describe("DatasetsReducer", () => {
     });
   });
 
-  describe("on #setPublicViewMode()", () => {
+  describe("on setPublicViewMode", () => {
     it("should set isPublished", () => {
       const isPublished = true;
 
@@ -454,7 +454,7 @@ describe("DatasetsReducer", () => {
     });
   });
 
-  describe("on #prefillFiltersAction()", () => {
+  describe("on prefillFiltersAction", () => {
     it("should set searchTerms and set hasPrefilledFilters to true", () => {
       const values = {
         text: "test"
@@ -468,7 +468,7 @@ describe("DatasetsReducer", () => {
     });
   });
 
-  describe("on #clearFacetsAction()", () => {
+  describe("on clearFacetsAction", () => {
     it("should clear filters while saving the filters limit and set searchTerms to an empty string", () => {
       const limit = 10;
       const page = 1;
@@ -488,7 +488,7 @@ describe("DatasetsReducer", () => {
     });
   });
 
-  describe("on #setTextFilterAction()", () => {
+  describe("on setTextFilterAction", () => {
     it("should set text filter and set skip to 0", () => {
       const text = "test";
 
@@ -500,7 +500,7 @@ describe("DatasetsReducer", () => {
     });
   });
 
-  describe("on #addLocationFilterAction()", () => {
+  describe("on addLocationFilterAction", () => {
     it("should set location filter and set skip to 0", () => {
       const location = "test";
 
@@ -512,7 +512,7 @@ describe("DatasetsReducer", () => {
     });
   });
 
-  describe("on #removeLocationFilterAction()", () => {
+  describe("on removeLocationFilterAction", () => {
     it("should remove location filter and set skip to 0", () => {
       const location = "test";
 
@@ -524,7 +524,7 @@ describe("DatasetsReducer", () => {
     });
   });
 
-  describe("on #addGroupFilterAction()", () => {
+  describe("on addGroupFilterAction", () => {
     it("should set  ownergroup filter and set skip to 0", () => {
       const group = "test";
 
@@ -536,7 +536,7 @@ describe("DatasetsReducer", () => {
     });
   });
 
-  describe("on #removeGroupFilterAction()", () => {
+  describe("on removeGroupFilterAction", () => {
     it("should remove ownergroup filter and set skip to 0", () => {
       const group = "test";
 
@@ -548,7 +548,7 @@ describe("DatasetsReducer", () => {
     });
   });
 
-  describe("on #addTypeFilterAction()", () => {
+  describe("on addTypeFilterAction", () => {
     it("should set type filter and set skip to 0", () => {
       const datasetType = "test";
 
@@ -560,7 +560,7 @@ describe("DatasetsReducer", () => {
     });
   });
 
-  describe("on #removeTypeFilterAction()", () => {
+  describe("on removeTypeFilterAction", () => {
     it("should remove type filter and set skip to 0", () => {
       const datasetType = "test";
 
@@ -572,7 +572,7 @@ describe("DatasetsReducer", () => {
     });
   });
 
-  describe("on #addKeywordFilterAction()", () => {
+  describe("on addKeywordFilterAction", () => {
     it("should set keyword filter and set skip to 0", () => {
       const keyword = "test";
 
@@ -584,7 +584,7 @@ describe("DatasetsReducer", () => {
     });
   });
 
-  describe("on #removeKeywordFilterAction()", () => {
+  describe("on removeKeywordFilterAction", () => {
     it("should remove keyword filter and set skip to 0", () => {
       const keyword = "test";
 
@@ -596,7 +596,7 @@ describe("DatasetsReducer", () => {
     });
   });
 
-  describe("on #setDateRangeFilterAction()", () => {
+  describe("on setDateRangeFilterAction", () => {
     it("should set creationTime filter", () => {
       const begin = new Date(2018, 1, 2).toISOString();
       const end = new Date(2018, 1, 3).toISOString();
@@ -608,7 +608,7 @@ describe("DatasetsReducer", () => {
     });
   });
 
-  describe("on #addScientificConditionAction()", () => {
+  describe("on addScientificConditionAction", () => {
     it("should add scientific condition to scientific filter", () => {
       const condition: ScientificCondition = {
         lhs: "lhsTest",
@@ -623,7 +623,7 @@ describe("DatasetsReducer", () => {
     });
   });
 
-  describe("on #removeScientificConditionAction()", () => {
+  describe("on removeScientificConditionAction", () => {
     it("should remove scientific condition from scientific filter", () => {
       const condition: ScientificCondition = {
         lhs: "lhsTest",
