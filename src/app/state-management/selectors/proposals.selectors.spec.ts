@@ -1,7 +1,6 @@
 import * as fromSelectors from "./proposals.selectors";
 import {
   Proposal,
-  RawDataset,
   ProposalInterface,
   Attachment
 } from "../../shared/sdk/models";
