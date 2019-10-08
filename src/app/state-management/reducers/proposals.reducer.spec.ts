@@ -185,13 +185,16 @@ describe("ProposalsReducer", () => {
 
   describe("on updateAttachmentCaptionCompleteAction", () => {
     it("should set attachments of currentProposal and set isLoading to false", () => {
-      const attachment = new Attachment();
+      const attachmentId = "testId";
+      const attachment = new Attachment({ id: attachmentId, thumbnail: "" });
+      initialProposalsState.currentProposal.attachments = [attachment];
+
       const action = fromActions.updateAttachmentCaptionCompleteAction({
         attachment
       });
       const state = proposalsReducer(initialProposalsState, action);
 
-      expect(state.currentProposal.attachments.length).toEqual(1);
+      expect(state.currentProposal.attachments).toEqual([attachment]);
       expect(state.isLoading).toEqual(false);
     });
   });
