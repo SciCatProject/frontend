@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from "@angular/core";
+import { Component, Inject } from "@angular/core";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material";
 
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
@@ -22,7 +22,7 @@ export interface DialogData {
   templateUrl: "./sample-dialog.component.html",
   styleUrls: ["./sample-dialog.component.scss"]
 })
-export class SampleDialogComponent implements OnInit {
+export class SampleDialogComponent {
   public form: FormGroup;
   description: string;
   sample: Sample;
@@ -42,8 +42,6 @@ export class SampleDialogComponent implements OnInit {
       ownerGroup: [ownerGroup, Validators.required]
     });
   }
-
-  ngOnInit() {}
 
   getPreFill(field: any, multi: boolean): any {
     return field != null && !multi ? field.toString() : null;
