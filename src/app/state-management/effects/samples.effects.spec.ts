@@ -85,6 +85,35 @@ describe("SampleEffects", () => {
     });
   });
 
+  describe("fetchSamples$", () => {
+    it("should result in a fetchSamplesCountCompleteAction", () => {
+      const samples = [sample];
+      const action = fromActions.fetchSamplesAction();
+      const outcome = fromActions.fetchSamplesCountCompleteAction({
+        count: samples.length
+      });
+
+      actions = hot("-a", { a: action });
+      const response = cold("-a|", { a: samples });
+      sampleApi.fullquery.and.returnValue(response);
+
+      const expected = cold("--b", { b: outcome });
+      expect(effects.fetchCount$).toBeObservable(expected);
+    });
+
+    it("should result in a fetchSamplesCountFailedAction", () => {
+      const action = fromActions.fetchSamplesAction();
+      const outcome = fromActions.fetchSamplesCountFailedAction();
+
+      actions = hot("-a", { a: action });
+      const response = cold("-#", {});
+      sampleApi.fullquery.and.returnValue(response);
+
+      const expected = cold("--b", { b: outcome });
+      expect(effects.fetchCount$).toBeObservable(expected);
+    });
+  });
+
   describe("fetchSample$", () => {
     const sampleId = "testId";
 

@@ -31,6 +31,24 @@ export class SampleEffects {
     )
   );
 
+  fetchCount$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(fromActions.fetchSamplesAction),
+      withLatestFrom(this.fullqueryParams$),
+      map(([action, params]) => params),
+      mergeMap(({ query, limits }) =>
+        this.sampleApi.fullquery(query).pipe(
+          map(samples =>
+            fromActions.fetchSamplesCountCompleteAction({
+              count: samples.length
+            })
+          ),
+          catchError(() => of(fromActions.fetchSamplesCountFailedAction()))
+        )
+      )
+    )
+  );
+
   fetchSample$ = createEffect(() =>
     this.actions$.pipe(
       ofType(fromActions.fetchSampleAction),

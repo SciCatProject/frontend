@@ -39,13 +39,12 @@ describe("SamplesReducer", () => {
   });
 
   describe("on fetchSamplesCompleteAction", () => {
-    it("should set samples, totalCount and set isLoading to false", () => {
+    it("should set samples and set isLoading to false", () => {
       const samples = [sample];
       const action = fromActions.fetchSamplesCompleteAction({ samples });
       const state = samplesReducer(initialSampleState, action);
 
       expect(state.samples).toEqual(samples);
-      expect(state.totalCount).toEqual(samples.length);
       expect(state.isLoading).toEqual(false);
     });
   });
@@ -56,6 +55,26 @@ describe("SamplesReducer", () => {
       const state = samplesReducer(initialSampleState, action);
 
       expect(state.isLoading).toBe(false);
+    });
+  });
+
+  describe("on fetchSamplesCountCompleteAction", () => {
+    it("should set totalCount and set isLoading to false", () => {
+      const count = 100;
+      const action = fromActions.fetchSamplesCountCompleteAction({ count });
+      const state = samplesReducer(initialSampleState, action);
+
+      expect(state.totalCount).toEqual(count);
+      expect(state.isLoading).toEqual(false);
+    });
+  });
+
+  describe("on fetchSamplesCountFailedAction", () => {
+    it("should set isLoading to false", () => {
+      const action = fromActions.fetchSamplesCountFailedAction();
+      const state = samplesReducer(initialSampleState, action);
+
+      expect(state.isLoading).toEqual(false);
     });
   });
 

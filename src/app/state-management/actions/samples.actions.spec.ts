@@ -27,6 +27,26 @@ describe("Sample Actions", () => {
     });
   });
 
+  describe("fetchSamplesCountCompleteAction", () => {
+    it("should create an action", () => {
+      const count = 100;
+      const action = fromActions.fetchSamplesCountCompleteAction({ count });
+      expect({ ...action }).toEqual({
+        type: "[Sample] Fetch Samples Count Complete",
+        count
+      });
+    });
+  });
+
+  describe("fetchSamplesCountFailedAction", () => {
+    it("should create an action", () => {
+      const action = fromActions.fetchSamplesCountFailedAction();
+      expect({ ...action }).toEqual({
+        type: "[Sample] Fetch Samples Count Failed"
+      });
+    });
+  });
+
   describe("fetchSampleAction", () => {
     it("should create an action", () => {
       const sampleId = "testId";

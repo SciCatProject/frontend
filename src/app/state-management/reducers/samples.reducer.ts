@@ -8,11 +8,22 @@ import * as fromActions from "state-management/actions/samples.actions";
 const reducer = createReducer(
   initialSampleState,
   on(fromActions.fetchSamplesAction, state => ({ ...state, isLoading: true })),
-  on(fromActions.fetchSamplesCompleteAction, (state, { samples }) => {
-    const totalCount = samples.length;
-    return { ...state, samples, totalCount, isLoading: false };
-  }),
+  on(fromActions.fetchSamplesCompleteAction, (state, { samples }) => ({
+    ...state,
+    samples,
+    isLoading: false
+  })),
   on(fromActions.fetchSamplesFailedAction, state => ({
+    ...state,
+    isLoading: false
+  })),
+
+  on(fromActions.fetchSamplesCountCompleteAction, (state, { count }) => ({
+    ...state,
+    totalCount: count,
+    isLoading: false
+  })),
+  on(fromActions.fetchSamplesCountFailedAction, state => ({
     ...state,
     isLoading: false
   })),
