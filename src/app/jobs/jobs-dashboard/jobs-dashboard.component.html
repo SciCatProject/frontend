@@ -15,8 +15,9 @@
       [data]="jobs"
       [columns]="tableColumns"
       [paginate]="paginate"
+      [currentPage]="currentPage$ | async"
       [dataCount]="jobsCount$ | async"
-      [dataPerPage]="filters ? filters.limit : 25"
+      [dataPerPage]="jobsPerPage$ | async"
       (pageChange)="onPageChange($event)"
       (rowClick)="onRowClick($event)"
     ></app-table>

@@ -41,6 +41,20 @@ export class ProposalEffects {
     )
   );
 
+  fetchCount$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(fromActions.fetchProposalsAction),
+      switchMap(() =>
+        this.proposalApi.count().pipe(
+          map(res =>
+            fromActions.fetchCountCompleteAction({ count: res.count })
+          ),
+          catchError(() => of(fromActions.fetchCountFailedAction()))
+        )
+      )
+    )
+  );
+
   fetchProposal$ = createEffect(() =>
     this.actions$.pipe(
       ofType(fromActions.fetchProposalAction),
@@ -75,6 +89,24 @@ export class ProposalEffects {
               of(fromActions.fetchProposalDatasetsFailedAction())
             )
           )
+      )
+    )
+  );
+
+  fetchProposalDatasetsCount$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(fromActions.fetchProposalDatasetsAction),
+      switchMap(({ proposalId }) =>
+        this.datasetApi.count({ where: { proposalId } }).pipe(
+          map(res =>
+            fromActions.fetchProposalDatasetsCountCompleteAction({
+              count: res.count
+            })
+          ),
+          catchError(() =>
+            of(fromActions.fetchProposalDatasetsCountFailedAction())
+          )
+        )
       )
     )
   );

@@ -1,20 +1,64 @@
 import { createFeatureSelector, createSelector } from "@ngrx/store";
-import { JobsState } from "../state/jobs.store";
+import { JobsState } from "state-management/state/jobs.store";
 
 export const getJobState = createFeatureSelector<JobsState>("jobs");
 
-export const getJobsCount = createSelector(getJobState, state => state.totalJobNumber);
+export const getJobs = createSelector(
+  getJobState,
+  state => state.jobs
+);
 
-export const getError = createSelector(getJobState, state => state.error);
+export const getCurrentJob = createSelector(
+  getJobState,
+  state => state.currentJob
+);
 
-export const getLoading = createSelector(getJobState, state => state.loading);
+export const getJobsCount = createSelector(
+  getJobState,
+  state => state.totalCount
+);
 
-export const getJobs = createSelector(getJobState, state => state.currentJobs);
+export const getIsLoading = createSelector(
+  getJobState,
+  state => state.isLoading
+);
 
-export const getFilters = createSelector(getJobState, state => state.filters);
+export const getSubmitError = createSelector(
+  getJobState,
+  state => state.submitError
+);
 
-export const submitJob = createSelector(getJobState, state => state.jobSubmission);
+export const getFilters = createSelector(
+  getJobState,
+  state => state.filters
+);
 
-export const getCurrentJob = (state: any) => state.root.jobs.currentSet;
+export const getJobViewMode = createSelector(
+  getFilters,
+  filters => filters.mode
+);
 
-export const getUI = (state: any) => state.root.jobs.ui;
+export const getPage = createSelector(
+  getFilters,
+  filters => {
+    const { skip, limit } = filters;
+    return skip / limit;
+  }
+);
+
+export const getJobsPerPage = createSelector(
+  getFilters,
+  filters => filters.limit
+);
+
+export const getQueryParams = createSelector(
+  getFilters,
+  filters => {
+    const { mode, sortField, skip, limit } = filters;
+    if (mode) {
+      return { where: mode, order: sortField, skip, limit };
+    } else {
+      return { order: sortField, skip, limit };
+    }
+  }
+);
