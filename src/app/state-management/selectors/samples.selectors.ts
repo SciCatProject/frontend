@@ -1,6 +1,5 @@
 import { createFeatureSelector, createSelector } from "@ngrx/store";
 import { SampleState } from "state-management/state/samples.store";
-import { text } from "@fortawesome/fontawesome-svg-core";
 
 export const getSampleState = createFeatureSelector<SampleState>("samples");
 
