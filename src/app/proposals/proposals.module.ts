@@ -11,7 +11,7 @@ import { ProposalDetailComponent } from "./proposal-detail/proposal-detail.compo
 import { ViewProposalPageComponent } from "./view-proposal-page/view-proposal-page.component";
 
 import { proposalsReducer } from "../state-management/reducers/proposals.reducer";
-import { ProposalsEffects } from "../state-management/effects/proposals.effects";
+import { ProposalEffects } from "../state-management/effects/proposals.effects";
 
 import {
   MatTableModule,
@@ -31,7 +31,7 @@ import { FileSizePipe } from "shared/pipes/filesize.pipe";
 @NgModule({
   imports: [
     CommonModule,
-    EffectsModule.forFeature([ProposalsEffects]),
+    EffectsModule.forFeature([ProposalEffects]),
     FlexLayoutModule,
     MatButtonModule,
     MatCardModule,

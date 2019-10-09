@@ -34,10 +34,10 @@ import {
   SortChangeEvent
 } from "shared/modules/table/table.component";
 import {
-  ChangePageAction,
-  SortProposalByColumnAction,
-  FetchProposalAction,
-  SearchProposalAction
+  changePageAction,
+  sortByColumnAction,
+  setTextFilterAction,
+  fetchProposalsAction
 } from "state-management/actions/proposals.actions";
 
 describe("ProposalDashboardComponent", () => {
@@ -117,19 +117,22 @@ describe("ProposalDashboardComponent", () => {
   });
 
   describe("#onTextSearchChange()", () => {
-    it("should dispatch a SearchProposalAction", () => {
+    it("should dispatch a setTextFilterAction and a fetchProposalsAction", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
       const query = "test";
       component.onTextSearchChange(query);
 
-      expect(dispatchSpy).toHaveBeenCalledTimes(1);
-      expect(dispatchSpy).toHaveBeenCalledWith(new SearchProposalAction(query));
+      expect(dispatchSpy).toHaveBeenCalledTimes(2);
+      expect(dispatchSpy).toHaveBeenCalledWith(
+        setTextFilterAction({ text: query })
+      );
+      expect(dispatchSpy).toHaveBeenCalledWith(fetchProposalsAction());
     });
   });
 
   describe("#onPageChange()", () => {
-    it("should dispatch a ChangePageAction", () => {
+    it("should dispatch a changePageAction", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
       const event: PageChangeEvent = {
@@ -142,13 +145,13 @@ describe("ProposalDashboardComponent", () => {
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        new ChangePageAction(event.pageIndex, event.pageSize)
+        changePageAction({ page: event.pageIndex, limit: event.pageSize })
       );
     });
   });
 
   describe("onSortChange()", () => {
-    it("should dispatch a SortProposalByColumnAction", () => {
+    it("should dispatch a sortByColumnAction", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
       const event: SortChangeEvent = {
@@ -160,22 +163,16 @@ describe("ProposalDashboardComponent", () => {
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        new SortProposalByColumnAction(event.active, event.direction)
+        sortByColumnAction({ column: event.active, direction: event.direction })
       );
     });
   });
 
-  describe("onRowSelect()", () => {
-    it("should dispatch a FetchProposalAction and navigate to a proposal", () => {
-      dispatchSpy = spyOn(store, "dispatch");
-
+  describe("onRowClick()", () => {
+    it("should navigate to a proposal", () => {
       const proposal = new Proposal();
       component.onRowClick(proposal);
 
-      expect(dispatchSpy).toHaveBeenCalledTimes(1);
-      expect(dispatchSpy).toHaveBeenCalledWith(
-        new FetchProposalAction(proposal.proposalId)
-      );
       expect(router.navigateByUrl).toHaveBeenCalledTimes(1);
       expect(router.navigateByUrl).toHaveBeenCalledWith(
         "/proposals/" + proposal.proposalId

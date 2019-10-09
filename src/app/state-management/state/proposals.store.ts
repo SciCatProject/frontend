@@ -1,4 +1,4 @@
-import { Proposal } from "../models";
+import { Proposal, Dataset } from "../models";
 
 export interface ProposalFilters {
   text: string;
@@ -8,43 +8,40 @@ export interface ProposalFilters {
 }
 
 export interface ProposalsState {
-  proposals: { [proposalId: string]: Proposal };
+  proposals: Proposal[];
   currentProposal: Proposal;
-  datasets: { [datasetId: string]: any };
-  hasFetched: boolean;
-  selectedId: string;
-  datasetCount: number;
-  proposalCount: number;
-  filters: ProposalFilters;
-  propFilters: ProposalFilters;
-  proposalsLoading: boolean;
+  datasets: Dataset[];
 
-  addingAttachment: boolean;
-  deletingAttachment: boolean;
+  proposalsCount: number;
+  datasetsCount: number;
+
+  isLoading: boolean;
+
+  proposalFilters: ProposalFilters;
+  datasetFilters: ProposalFilters;
 }
 
 export const initialProposalsState: ProposalsState = {
-  proposals: {},
+  proposals: [],
   currentProposal: null,
-  datasets: {},
-  hasFetched: false,
-  selectedId: null,
-  datasetCount: null,
-  proposalCount: null,
-  filters: {
+  datasets: [],
+
+  proposalsCount: null,
+  datasetsCount: null,
+
+  isLoading: false,
+
+  proposalFilters: {
     text: "",
     skip: 0,
     limit: 25,
     sortField: "createdAt desc"
   },
-  propFilters: {
+
+  datasetFilters: {
     text: "",
     skip: 0,
-    limit: 30,
+    limit: 25,
     sortField: "createdAt desc"
-  },
-  proposalsLoading: false,
-
-  addingAttachment: false,
-  deletingAttachment: false
+  }
 };

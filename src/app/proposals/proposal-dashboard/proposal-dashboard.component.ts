@@ -6,11 +6,10 @@ import { Store, select } from "@ngrx/store";
 import { Proposal } from "shared/sdk";
 import { Subscription } from "rxjs";
 import {
-  getHasFetched,
-  getProposalPage,
-  getProposalCount,
+  getPage,
+  getProposalsCount,
   getProposalsPerPage,
-  getProposalList
+  getProposals
 } from "state-management/selectors/proposals.selectors";
 import {
   TableColumn,
@@ -18,13 +17,11 @@ import {
   SortChangeEvent
 } from "shared/modules/table/table.component";
 import {
-  ChangePageAction,
-  SortProposalByColumnAction,
-  FetchProposalAction,
-  FetchProposalsAction,
-  SearchProposalAction
+  changePageAction,
+  sortByColumnAction,
+  fetchProposalsAction,
+  setTextFilterAction
 } from "state-management/actions/proposals.actions";
-import { distinctUntilChanged, map } from "rxjs/operators";
 
 @Component({
   selector: "proposal-dashboard",
@@ -32,14 +29,11 @@ import { distinctUntilChanged, map } from "rxjs/operators";
   styleUrls: ["./proposal-dashboard.component.scss"]
 })
 export class ProposalDashboardComponent implements OnInit, OnDestroy {
+  private proposalsSubscription: Subscription;
 
-  private proposalSubscription: Subscription;
-  private hasFetchedSubscription: Subscription;
-
-  private hasFetched$ = this.store.pipe(select(getHasFetched));
-  currentPage$ = this.store.pipe(select(getProposalPage));
-  dataCount$ = this.store.pipe(select(getProposalCount));
-  dataPerPage$ = this.store.pipe(select(getProposalsPerPage));
+  currentPage$ = this.store.pipe(select(getPage));
+  proposalsCount$ = this.store.pipe(select(getProposalsCount));
+  proposalsPerPage$ = this.store.pipe(select(getProposalsPerPage));
 
   tableData: any[];
   tableColumns: TableColumn[] = [
@@ -94,11 +88,14 @@ export class ProposalDashboardComponent implements OnInit, OnDestroy {
   }
 
   onTextSearchChange(query: string) {
-    this.store.dispatch(new SearchProposalAction(query));
+    this.store.dispatch(setTextFilterAction({ text: query }));
+    this.store.dispatch(fetchProposalsAction());
   }
 
   onPageChange(event: PageChangeEvent) {
-    this.store.dispatch(new ChangePageAction(event.pageIndex, event.pageSize));
+    this.store.dispatch(
+      changePageAction({ page: event.pageIndex, limit: event.pageSize })
+    );
   }
 
   onSortChange(event: SortChangeEvent) {
@@ -106,32 +103,25 @@ export class ProposalDashboardComponent implements OnInit, OnDestroy {
       event.active = "firstname";
     }
     this.store.dispatch(
-      new SortProposalByColumnAction(event.active, event.direction)
+      sortByColumnAction({ column: event.active, direction: event.direction })
     );
   }
 
   onRowClick(proposal: Proposal) {
-    this.store.dispatch(new FetchProposalAction(proposal.proposalId));
     this.router.navigateByUrl("/proposals/" + proposal.proposalId);
   }
 
   ngOnInit() {
-    this.hasFetchedSubscription = this.hasFetched$
-      .pipe(
-        distinctUntilChanged(),
-        map(() => new FetchProposalsAction())
-      )
-      .subscribe(this.store);
+    this.store.dispatch(fetchProposalsAction());
 
-    this.proposalSubscription = this.store
-      .pipe(select(getProposalList))
+    this.proposalsSubscription = this.store
+      .pipe(select(getProposals))
       .subscribe(proposals => {
         this.tableData = this.formatTableData(proposals);
       });
   }
 
   ngOnDestroy() {
-    this.proposalSubscription.unsubscribe();
-    this.hasFetchedSubscription.unsubscribe();
+    this.proposalsSubscription.unsubscribe();
   }
 }

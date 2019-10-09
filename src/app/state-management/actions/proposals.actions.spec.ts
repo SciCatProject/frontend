@@ -1,180 +1,255 @@
 import { Attachment, Dataset, Proposal } from "../models";
-import {
-  FETCH_DATASETS_FOR_PROPOSAL,
-  FETCH_DATASETS_FOR_PROPOSAL_COMPLETE,
-  FETCH_DATASETS_FOR_PROPOSAL_FAILED,
-  FETCH_PROPOSAL,
-  FETCH_PROPOSAL_COMPLETE,
-  FETCH_PROPOSAL_FAILED,
-  FETCH_PROPOSALS,
-  FETCH_PROPOSALS_COMPLETE,
-  FETCH_PROPOSALS_FAILED,
-  FetchDatasetsForProposalAction,
-  FetchDatasetsForProposalCompleteAction,
-  FetchDatasetsForProposalFailedAction,
-  FetchProposalAction,
-  FetchProposalCompleteAction,
-  FetchProposalFailedAction,
-  FetchProposalsAction,
-  FetchProposalsCompleteAction,
-  FetchProposalsFailedAction,
-  SELECT_PROPOSAL,
-  SelectProposalAction,
-  AddAttachmentAction,
-  ADD_ATTACHMENT,
-  DeleteAttachmentAction,
-  DELETE_ATTACHMENT,
-  UpdateAttachmentCaptionAction,
-  UPDATE_ATTACHMENT_CAPTION,
-  UpdateAttachmentCaptionCompleteAction,
-  UPDATE_ATTACHMENT_CAPTION_COMPLETE,
-  UpdateAttachmentCaptionFailedAction,
-  UPDATE_ATTACHMENT_CAPTION_FAILED
-} from "./proposals.actions";
+import * as fromActions from "./proposals.actions";
 
-describe("SelectProposalAction", () => {
-  it("should create an action", () => {
-    const proposalId = "string";
-    const action = new SelectProposalAction(proposalId);
-    expect({ ...action }).toEqual({ type: SELECT_PROPOSAL, proposalId });
-  });
-});
-
-describe("FetchProposalsAction", () => {
-  it("should create an action", () => {
-    const action = new FetchProposalsAction();
-    expect({ ...action }).toEqual({ type: FETCH_PROPOSALS });
-  });
-});
-
-describe("FetchProposalsCompleteAction", () => {
-  it("should create an action", () => {
-    const proposals = [new Proposal()];
-    const action = new FetchProposalsCompleteAction(proposals);
-    expect({ ...action }).toEqual({
-      type: FETCH_PROPOSALS_COMPLETE,
-      proposals
+describe("Proposal Actions", () => {
+  describe("#fetchProposalsAction()", () => {
+    it("should create an action", () => {
+      const action = fromActions.fetchProposalsAction();
+      expect({ ...action }).toEqual({ type: "[Proposal] Fetch Proposals" });
     });
   });
-});
 
-describe("FetchProposalsFailedAction", () => {
-  it("should create an action", () => {
-    const action = new FetchProposalsFailedAction();
-    expect({ ...action }).toEqual({ type: FETCH_PROPOSALS_FAILED });
-  });
-});
-
-describe("FetchProposalAction", () => {
-  it("should create an action", () => {
-    const proposalId = "string";
-    const action = new FetchProposalAction(proposalId);
-    expect({ ...action }).toEqual({ type: FETCH_PROPOSAL, proposalId });
-  });
-});
-
-describe("FetchProposalCompleteAction", () => {
-  it("should create an action", () => {
-    const proposal = new Proposal();
-    const action = new FetchProposalCompleteAction(proposal);
-    expect({ ...action }).toEqual({ type: FETCH_PROPOSAL_COMPLETE, proposal });
-  });
-});
-
-describe("FetchProposalFailedAction", () => {
-  it("should create an action", () => {
-    const action = new FetchProposalFailedAction();
-    expect({ ...action }).toEqual({ type: FETCH_PROPOSAL_FAILED });
-  });
-});
-
-describe("FetchDatasetsForProposalAction", () => {
-  it("should create an action", () => {
-    const proposalId = "string";
-    const action = new FetchDatasetsForProposalAction(proposalId);
-    expect({ ...action }).toEqual({
-      type: FETCH_DATASETS_FOR_PROPOSAL,
-      proposalId
+  describe("#fetchProposalsCompleteAction()", () => {
+    it("should create an action", () => {
+      const proposals = [new Proposal()];
+      const action = fromActions.fetchProposalsCompleteAction({ proposals });
+      expect({ ...action }).toEqual({
+        type: "[Proposal] Fetch Proposals Complete",
+        proposals
+      });
     });
   });
-});
 
-describe("FetchDatasetsForProposalCompleteAction", () => {
-  it("should create an action", () => {
-    const datasets = [new Dataset()];
-    const action = new FetchDatasetsForProposalCompleteAction(datasets);
-    expect({ ...action }).toEqual({
-      type: FETCH_DATASETS_FOR_PROPOSAL_COMPLETE,
-      datasets
+  describe("#fetchProposalsFailedAction()", () => {
+    it("should create an action", () => {
+      const action = fromActions.fetchProposalsFailedAction();
+      expect({ ...action }).toEqual({
+        type: "[Proposal] Fetch Proposals Failed"
+      });
     });
   });
-});
 
-describe("FetchDatasetsForProposalFailedAction", () => {
-  it("should create an action", () => {
-    const action = new FetchDatasetsForProposalFailedAction();
-    expect({ ...action }).toEqual({ type: FETCH_DATASETS_FOR_PROPOSAL_FAILED });
-  });
-});
-
-describe("AddAttachmentAction", () => {
-  it("should create an action", () => {
-    const attachment = new Attachment();
-    const action = new AddAttachmentAction(attachment);
-    expect({ ...action }).toEqual({ type: ADD_ATTACHMENT, attachment });
-  });
-});
-
-describe("DeleteAttachmentAction", () => {
-  it("should create an action", () => {
-    const proposalId = "123abc";
-    const attachmentId = "abc123";
-    const action = new DeleteAttachmentAction(proposalId, attachmentId);
-    expect({ ...action }).toEqual({
-      type: DELETE_ATTACHMENT,
-      proposalId,
-      attachmentId
+  describe("#fetchProposalAction()", () => {
+    it("should create an action", () => {
+      const proposalId = "string";
+      const action = fromActions.fetchProposalAction({ proposalId });
+      expect({ ...action }).toEqual({
+        type: "[Proposal] Fetch Proposal",
+        proposalId
+      });
     });
   });
-});
 
-describe("UpdateAttachmentCaption", () => {
-  it("should create an action", () => {
-    const proposalId = "123abc";
-    const attachmentId = "abc123";
-    const caption = "New caption";
-    const action = new UpdateAttachmentCaptionAction(
-      proposalId,
-      attachmentId,
-      caption
-    );
-    expect({ ...action }).toEqual({
-      type: UPDATE_ATTACHMENT_CAPTION,
-      proposalId,
-      attachmentId,
-      caption
+  describe("#fetchProposalCompleteAction()", () => {
+    it("should create an action", () => {
+      const proposal = new Proposal();
+      const action = fromActions.fetchProposalCompleteAction({ proposal });
+      expect({ ...action }).toEqual({
+        type: "[Proposal] Fetch Proposal Complete",
+        proposal
+      });
     });
   });
-});
 
-describe("UpdateAttachmentCompleteCaption", () => {
-  it("should create an action", () => {
-    const attachment = new Attachment();
-    const action = new UpdateAttachmentCaptionCompleteAction(attachment);
-    expect({ ...action }).toEqual({
-      type: UPDATE_ATTACHMENT_CAPTION_COMPLETE,
-      attachment
+  describe("#fetchProposalFailedAction()", () => {
+    it("should create an action", () => {
+      const action = fromActions.fetchProposalFailedAction();
+      expect({ ...action }).toEqual({
+        type: "[Proposal] Fetch Proposal Failed"
+      });
     });
   });
-});
 
-describe("UpdateAttachmentFailedCaption", () => {
-  it("should create an action", () => {
-    const error = new Error();
-    const action = new UpdateAttachmentCaptionFailedAction(error);
-    expect({ ...action }).toEqual({
-      type: UPDATE_ATTACHMENT_CAPTION_FAILED,
-      error
+  describe("#fetchProposalDatasetsAction()", () => {
+    it("should create an action", () => {
+      const proposalId = "string";
+      const action = fromActions.fetchProposalDatasetsAction({ proposalId });
+      expect({ ...action }).toEqual({
+        type: "[Proposal] Fetch Proposal Datasets",
+        proposalId
+      });
+    });
+  });
+
+  describe("#fetchProposalDatasetsCompleteAction()", () => {
+    it("should create an action", () => {
+      const datasets = [new Dataset()];
+      const action = fromActions.fetchProposalDatasetsCompleteAction({
+        datasets
+      });
+      expect({ ...action }).toEqual({
+        type: "[Proposal] Fetch Proposal Datasets Complete",
+        datasets
+      });
+    });
+  });
+
+  describe("#fetchProposalDatasetsFailedAction()", () => {
+    it("should create an action", () => {
+      const action = fromActions.fetchProposalDatasetsFailedAction();
+      expect({ ...action }).toEqual({
+        type: "[Proposal] Fetch Proposal Datasets Failed"
+      });
+    });
+  });
+
+  describe("#addAttachmentAction()", () => {
+    it("should create an action", () => {
+      const attachment = new Attachment();
+      const action = fromActions.addAttachmentAction({ attachment });
+      expect({ ...action }).toEqual({
+        type: "[Proposal] Add Attachment",
+        attachment
+      });
+    });
+  });
+
+  describe("#addAttachmentCompleteAction()", () => {
+    it("should create an action", () => {
+      const attachment = new Attachment();
+      const action = fromActions.addAttachmentCompleteAction({ attachment });
+      expect({ ...action }).toEqual({
+        type: "[Proposal] Add Attachment Complete",
+        attachment
+      });
+    });
+  });
+
+  describe("#addAttachmentFailedAction()", () => {
+    it("should create an action", () => {
+      const action = fromActions.addAttachmentFailedAction();
+      expect({ ...action }).toEqual({
+        type: "[Proposal] Add Attachment Failed"
+      });
+    });
+  });
+
+  describe("#updateAttachmentCaptionAction()", () => {
+    it("should create an action", () => {
+      const proposalId = "123abc";
+      const attachmentId = "abc123";
+      const caption = "New caption";
+      const action = fromActions.updateAttachmentCaptionAction({
+        proposalId,
+        attachmentId,
+        caption
+      });
+      expect({ ...action }).toEqual({
+        type: "[Proposal] Update Attachment Caption",
+        proposalId,
+        attachmentId,
+        caption
+      });
+    });
+  });
+
+  describe("#updateAttachmentCompleteCaption()", () => {
+    it("should create an action", () => {
+      const attachment = new Attachment();
+      const action = fromActions.updateAttachmentCaptionCompleteAction({
+        attachment
+      });
+      expect({ ...action }).toEqual({
+        type: "[Proposal] Update Attachment Caption Complete",
+        attachment
+      });
+    });
+  });
+
+  describe("#updateAttachmentFailedCaption()", () => {
+    it("should create an action", () => {
+      const action = fromActions.updateAttachmentCaptionFailedAction();
+      expect({ ...action }).toEqual({
+        type: "[Proposal] Update Attachment Caption Failed"
+      });
+    });
+  });
+
+  describe("#removeAttachmentAction()", () => {
+    it("should create an action", () => {
+      const proposalId = "123abc";
+      const attachmentId = "abc123";
+      const action = fromActions.removeAttachmentAction({
+        proposalId,
+        attachmentId
+      });
+      expect({ ...action }).toEqual({
+        type: "[Proposal] Remove Attachment",
+        proposalId,
+        attachmentId
+      });
+    });
+  });
+
+  describe("#removeAttachmentCompleteAction()", () => {
+    it("should create an action", () => {
+      const attachmentId = "abc123";
+      const action = fromActions.removeAttachmentCompleteAction({
+        attachmentId
+      });
+      expect({ ...action }).toEqual({
+        type: "[Proposal] Remove Attachment Complete",
+        attachmentId
+      });
+    });
+  });
+
+  describe("#removeAttachmentFailedAction()", () => {
+    it("should create an action", () => {
+      const action = fromActions.removeAttachmentFailedAction();
+      expect({ ...action }).toEqual({
+        type: "[Proposal] Remove Attachment Failed"
+      });
+    });
+  });
+
+  describe("#setTextFilterAction()", () => {
+    it("should create an action", () => {
+      const text = "test";
+      const action = fromActions.setTextFilterAction({ text });
+      expect({ ...action }).toEqual({
+        type: "[Proposal] Set Text Filter",
+        text
+      });
+    });
+  });
+
+  describe("#changePageAction()", () => {
+    it("should create an action", () => {
+      const page = 0;
+      const limit = 25;
+      const action = fromActions.changePageAction({ page, limit });
+      expect({ ...action }).toEqual({
+        type: "[Proposal] Change Page",
+        page,
+        limit
+      });
+    });
+  });
+
+  describe("#changeDatasetsPageAction()", () => {
+    it("should create an action", () => {
+      const page = 0;
+      const limit = 25;
+      const action = fromActions.changeDatasetsPageAction({ page, limit });
+      expect({ ...action }).toEqual({
+        type: "[Proposal] Change Datasets Page",
+        page,
+        limit
+      });
+    });
+  });
+
+  describe("#sortByColumnAction()", () => {
+    it("should create an action", () => {
+      const column = "test";
+      const direction = "asc";
+      const action = fromActions.sortByColumnAction({ column, direction });
+      expect({ ...action }).toEqual({
+        type: "[Proposal] Sort By Column",
+        column,
+        direction
+      });
     });
   });
 });
