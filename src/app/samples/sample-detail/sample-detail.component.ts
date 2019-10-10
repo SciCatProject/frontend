@@ -4,12 +4,12 @@ import { Subscription } from "rxjs";
 import { Sample } from "../../shared/sdk/models";
 import {
   getCurrentSample,
-  getDatasetsForSample
+  getSampleDatasets
 } from "../../state-management/selectors/samples.selectors";
 import { select, Store } from "@ngrx/store";
 import {
-  FetchSampleAction,
-  FetchDatasetsForSample
+  fetchSampleAction,
+  fetchSampleDatasetsAction
 } from "../../state-management/actions/samples.actions";
 
 @Component({
@@ -19,7 +19,7 @@ import {
 })
 export class SampleDetailComponent implements OnInit, OnDestroy {
   sample$ = this.store.pipe(select(getCurrentSample));
-  datasets$ = this.store.pipe(select(getDatasetsForSample));
+  datasets$ = this.store.pipe(select(getSampleDatasets));
   routeSubscription: Subscription;
 
   constructor(
@@ -28,15 +28,15 @@ export class SampleDetailComponent implements OnInit, OnDestroy {
     private store: Store<Sample>
   ) {}
 
-  onClickDataset(proposalId: string): void {
-    const id = encodeURIComponent(proposalId);
+  onClickDataset(datasetId: string): void {
+    const id = encodeURIComponent(datasetId);
     this.router.navigateByUrl("/datasets/" + id);
   }
 
   ngOnInit() {
     this.routeSubscription = this.route.params.subscribe(params => {
-      this.store.dispatch(new FetchSampleAction(params.id));
-      this.store.dispatch(new FetchDatasetsForSample(params.id));
+      this.store.dispatch(fetchSampleAction({ sampleId: params.id }));
+      this.store.dispatch(fetchSampleDatasetsAction({ sampleId: params.id }));
     });
   }
 

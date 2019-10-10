@@ -1,14 +1,14 @@
 import { Logbook, LogbookFilters } from "../models";
 import * as fromActions from "./logbooks.actions";
 
-describe("FetchLogbooksAction", () => {
+describe("fetchLogbooksAction", () => {
   it("should create an action", () => {
     const action = fromActions.fetchLogbooksAction();
     expect({ ...action }).toEqual({ type: "[Logbook] Fetch Logbooks" });
   });
 });
 
-describe("FetchLogbooksCompleteAction", () => {
+describe("fetchLogbooksCompleteAction", () => {
   it("should create an action", () => {
     const logbooks = [new Logbook()];
     const action = fromActions.fetchLogbooksCompleteAction({ logbooks });
@@ -19,14 +19,14 @@ describe("FetchLogbooksCompleteAction", () => {
   });
 });
 
-describe("FetchLogbooksFailedAction", () => {
+describe("fetchLogbooksFailedAction", () => {
   it("should create an action", () => {
     const action = fromActions.fetchLogbooksFailedAction();
     expect({ ...action }).toEqual({ type: "[Logbook] Fetch Logbooks Failed" });
   });
 });
 
-describe("FetchLogbookAction", () => {
+describe("fetchLogbookAction", () => {
   it("should create an action", () => {
     const name = "testName";
     const action = fromActions.fetchLogbookAction({ name });
@@ -34,7 +34,7 @@ describe("FetchLogbookAction", () => {
   });
 });
 
-describe("FetchLogbookCompleteAction", () => {
+describe("fetchLogbookCompleteAction", () => {
   it("should create an action", () => {
     const logbook = new Logbook();
     const action = fromActions.fetchLogbookCompleteAction({ logbook });
@@ -45,14 +45,14 @@ describe("FetchLogbookCompleteAction", () => {
   });
 });
 
-describe("FetchLogbookFailedAction", () => {
+describe("fetchLogbookFailedAction", () => {
   it("should create an action", () => {
     const action = fromActions.fetchLogbookFailedAction();
     expect({ ...action }).toEqual({ type: "[Logbook] Fetch Logbook Failed" });
   });
 });
 
-describe("FetchFilteredEntriesAction", () => {
+describe("fetchFilteredEntriesAction", () => {
   it("should create an action", () => {
     const name = "testName";
     const filters: LogbookFilters = {
@@ -70,7 +70,7 @@ describe("FetchFilteredEntriesAction", () => {
   });
 });
 
-describe("FetchFilteredEntriesCompleteAction", () => {
+describe("fetchFilteredEntriesCompleteAction", () => {
   it("should create an action", () => {
     const logbook = new Logbook();
     const action = fromActions.fetchFilteredEntriesCompleteAction({ logbook });
@@ -81,7 +81,7 @@ describe("FetchFilteredEntriesCompleteAction", () => {
   });
 });
 
-describe("FetchFilteredEntriesFailedAction", () => {
+describe("fetchFilteredEntriesFailedAction", () => {
   it("should create an action", () => {
     const action = fromActions.fetchFilteredEntriesFailedAction();
     expect({ ...action }).toEqual({
@@ -90,7 +90,7 @@ describe("FetchFilteredEntriesFailedAction", () => {
   });
 });
 
-describe("UpdateFilterAction", () => {
+describe("updateFilterAction", () => {
   it("should create an action", () => {
     const filters: LogbookFilters = {
       textSearch: "test",

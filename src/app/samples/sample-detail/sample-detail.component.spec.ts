@@ -4,7 +4,6 @@ import { MatCardModule } from "@angular/material";
 import {
   MockActivatedRoute,
   MockHttp,
-  MockRouter,
   MockStore
 } from "../../shared/MockStubs";
 import { SampleDetailComponent } from "./sample-detail.component";
@@ -16,6 +15,10 @@ describe("SampleDetailComponent", () => {
   let component: SampleDetailComponent;
   let fixture: ComponentFixture<SampleDetailComponent>;
 
+  const router = {
+    navigateByUrl: jasmine.createSpy("navigateByUrl")
+  };
+
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [SampleDetailComponent],
@@ -25,7 +28,7 @@ describe("SampleDetailComponent", () => {
       set: {
         providers: [
           { provide: HttpClient, useClass: MockHttp },
-          { provide: Router, useClass: MockRouter },
+          { provide: Router, useValue: router },
           { provide: ActivatedRoute, useClass: MockActivatedRoute },
           { provide: Store, useClass: MockStore }
         ]
@@ -42,5 +45,18 @@ describe("SampleDetailComponent", () => {
 
   it("should create", () => {
     expect(component).toBeTruthy();
+  });
+
+  describe("#onClickDataset()", () => {
+    it("should navigate to a dataset", () => {
+      const datasetId = "testId";
+
+      component.onClickDataset(datasetId);
+
+      expect(router.navigateByUrl).toHaveBeenCalledTimes(1);
+      expect(router.navigateByUrl).toHaveBeenCalledWith(
+        "/datasets/" + datasetId
+      );
+    });
   });
 });
