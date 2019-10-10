@@ -1,105 +1,124 @@
 import { Job } from "shared/sdk/models";
-import {
-  SubmitAction,
-  SUBMIT,
-  SubmitCompleteAction,
-  SUBMIT_COMPLETE,
-  FailedAction,
-  FAILED,
-  RetrieveCompleteAction,
-  RETRIEVE_COMPLETE,
-  SearchIDAction,
-  SEARCH_ID,
-  SearchIDCompleteAction,
-  SEARCH_ID_COMPLETE,
-  SearchIDFailedAction,
-  SEARCH_ID_FAILED,
-  CurrentJobAction,
-  SELECT_CURRENT,
-  SortUpdateAction,
-  SORT_UPDATE,
-  GetCountCompleteAction,
-  GET_COUNT_COMPLETE
-} from "./jobs.actions";
+import * as fromActions from "./jobs.actions";
 
-describe("SubmitAction", () => {
-  it("should create an action", () => {
-    const job = new Job();
-    const action = new SubmitAction(job);
-    expect({ ...action }).toEqual({ type: SUBMIT, job });
+describe("Job Actions", () => {
+  describe("fetchJobsAction", () => {
+    it("should create an action", () => {
+      const action = fromActions.fetchJobsAction();
+      expect({ ...action }).toEqual({ type: "[Job] Fetch Jobs" });
+    });
   });
-});
 
-describe("SubmitCompleteAction", () => {
-  it("should create an action", () => {
-    const job = new Job();
-    const action = new SubmitCompleteAction(job);
-    expect({ ...action }).toEqual({ type: SUBMIT_COMPLETE, job });
+  describe("fetchJobsCompleteAction", () => {
+    it("should create an action", () => {
+      const jobs = [new Job()];
+      const action = fromActions.fetchJobsCompleteAction({ jobs });
+      expect({ ...action }).toEqual({
+        type: "[Job] Fetch Jobs Complete",
+        jobs
+      });
+    });
   });
-});
 
-describe("FailedAction", () => {
-  it("should create an action", () => {
-    const error = new Error();
-    const action = new FailedAction(error);
-    expect({ ...action }).toEqual({ type: FAILED, error });
+  describe("fetchJobsFailedAction", () => {
+    it("should create an action", () => {
+      const action = fromActions.fetchJobsFailedAction();
+      expect({ ...action }).toEqual({ type: "[Job] Fetch Jobs Failed" });
+    });
   });
-});
 
-describe("RetrieveCompleteAction", () => {
-  it("should create an action", () => {
-    const jobsets = [new Job()];
-    const action = new RetrieveCompleteAction(jobsets);
-    expect({ ...action }).toEqual({ type: RETRIEVE_COMPLETE, jobsets });
+  describe("fetchJobsCountCompleteAction", () => {
+    it("should create an action", () => {
+      const count = 100;
+      const action = fromActions.fetchCountCompleteAction({ count });
+      expect({ ...action }).toEqual({
+        type: "[Job] Fetch Count Complete",
+        count
+      });
+    });
   });
-});
 
-describe("GetCountCompleteAction", () => {
-  it("should create an action", () => {
-    const totalJobNumber = 1;
-    const action = new GetCountCompleteAction(totalJobNumber);
-    expect({ ...action }).toEqual({ type: GET_COUNT_COMPLETE, totalJobNumber });
+  describe("fetchCountFailedAction", () => {
+    it("should create an action", () => {
+      const action = fromActions.fetchCountFailedAction();
+      expect({ ...action }).toEqual({ type: "[Job] Fetch Count Failed" });
+    });
   });
-});
 
-describe("SearchIDAction", () => {
-  it("should create an action", () => {
-    const id = "expectedstring";
-    const action = new SearchIDAction(id);
-    expect({ ...action }).toEqual({ type: SEARCH_ID, id });
+  describe("fetchJobAction", () => {
+    it("should create an action", () => {
+      const jobId = "testId";
+      const action = fromActions.fetchJobAction({ jobId });
+      expect({ ...action }).toEqual({ type: "[Job] Fetch Job", jobId });
+    });
   });
-});
 
-describe("SearchIDCompleteAction", () => {
-  it("should create an action", () => {
-    const jobset = [{ id: 1 }];
-    const action = new SearchIDCompleteAction(jobset);
-    expect({ ...action }).toEqual({ type: SEARCH_ID_COMPLETE, jobset });
+  describe("fetchJobCompleteAction", () => {
+    it("should create an action", () => {
+      const job = new Job();
+      const action = fromActions.fetchJobCompleteAction({ job });
+      expect({ ...action }).toEqual({ type: "[Job] Fetch Job Complete", job });
+    });
   });
-});
 
-describe("SearchIDFailedAction", () => {
-  it("should create an action", () => {
-    const error = new Error();
-    const action = new SearchIDFailedAction(error);
-    expect({ ...action }).toEqual({ type: SEARCH_ID_FAILED, error });
+  describe("fetchJobFailedAction", () => {
+    it("should create an action", () => {
+      const action = fromActions.fetchJobFailedAction();
+      expect({ ...action }).toEqual({ type: "[Job] Fetch Job Failed" });
+    });
   });
-});
 
-describe("CurrentJobAction", () => {
-  it("should create an action", () => {
-    const job = new Job();
-    const action = new CurrentJobAction(job);
-    expect({ ...action }).toEqual({ type: SELECT_CURRENT, job });
+  describe("submitJobAction", () => {
+    it("should create an action", () => {
+      const job = new Job();
+      const action = fromActions.submitJobAction({ job });
+      expect({ ...action }).toEqual({ type: "[Job] Submit Job", job });
+    });
   });
-});
 
-describe("SortUpdateAction", () => {
-  it("should create an action", () => {
-    const limit = 0;
-    const skip = 0;
-    const mode = null;
-    const action = new SortUpdateAction(skip, limit, mode);
-    expect({ ...action }).toEqual({ type: SORT_UPDATE, skip, limit, mode });
+  describe("submitJobCompleteAction", () => {
+    it("should create an action", () => {
+      const job = new Job();
+      const action = fromActions.submitJobCompleteAction({ job });
+      expect({ ...action }).toEqual({ type: "[Job] Submit Job Complete", job });
+    });
+  });
+
+  describe("submitJobFailedAction", () => {
+    it("should create an action", () => {
+      const err = new Error();
+      const action = fromActions.submitJobFailedAction({ err });
+      expect({ ...action }).toEqual({ type: "[Job] Submit Job Failed", err });
+    });
+  });
+
+  describe("setJobViewModeAction", () => {
+    it("should create an action", () => {
+      const mode = null;
+      const action = fromActions.setJobViewModeAction({ mode });
+      expect({ ...action }).toEqual({ type: "[Job] Set Mode Filter", mode });
+    });
+  });
+
+  describe("changePageAction", () => {
+    it("should create an action", () => {
+      const page = 1;
+      const limit = 25;
+      const action = fromActions.changePageAction({ page, limit });
+      expect({ ...action }).toEqual({ type: "[Job] Change Page", page, limit });
+    });
+  });
+
+  describe("sortByColumnAction", () => {
+    it("should create an action", () => {
+      const column = "test";
+      const direction = "desc";
+      const action = fromActions.sortByColumnAction({ column, direction });
+      expect({ ...action }).toEqual({
+        type: "[Job] Sort By Column",
+        column,
+        direction
+      });
+    });
   });
 });

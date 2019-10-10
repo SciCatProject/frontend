@@ -23,7 +23,12 @@ const reducer = createReducer(
 
   on(fromActions.fetchCountCompleteAction, (state, { count }) => ({
     ...state,
+    isLoading: false,
     proposalsCount: count
+  })),
+  on(fromActions.fetchCountFailedAction, state => ({
+    ...state,
+    isLoading: false
   })),
 
   on(fromActions.fetchProposalAction, state => ({ ...state, isLoading: true })),
@@ -52,8 +57,12 @@ const reducer = createReducer(
 
   on(
     fromActions.fetchProposalDatasetsCountCompleteAction,
-    (state, { count }) => ({ ...state, datasetsCount: count })
+    (state, { count }) => ({ ...state, isLoading: false, datasetsCount: count })
   ),
+  on(fromActions.fetchProposalDatasetsCountFailedAction, state => ({
+    ...state,
+    isLoading: false
+  })),
 
   on(fromActions.addAttachmentAction, state => ({ ...state, isLoading: true })),
   on(fromActions.addAttachmentCompleteAction, (state, { attachment }) => {

@@ -5,7 +5,6 @@ import { Job } from "shared/sdk";
 import { Subscription } from "rxjs";
 import {
   getJobs,
-  getFilters,
   getJobsCount,
   getJobsPerPage,
   getPage
@@ -15,13 +14,12 @@ import {
   TableColumn,
   PageChangeEvent
 } from "shared/modules/table/table.component";
-import { JobViewMode, JobFilters } from "state-management/models";
+import { JobViewMode } from "state-management/models";
 import {
   changePageAction,
-  sortByColumnAction,
-  fetchJobAction,
   setJobViewModeAction,
-  fetchJobsAction
+  fetchJobsAction,
+  fetchJobAction
 } from "state-management/actions/jobs.actions";
 import {
   getCurrentUser,
@@ -40,9 +38,6 @@ export class JobsDashboardComponent implements OnInit, OnDestroy {
 
   jobs: any[] = [];
   jobsSubscription: Subscription;
-
-  // filters: JobFilters;
-  // filtersSubscription: Subscription;
 
   profile: any;
   email: string;
@@ -103,12 +98,14 @@ export class JobsDashboardComponent implements OnInit, OnDestroy {
       }
     }
     this.store.dispatch(setJobViewModeAction({ mode: viewMode }));
+    this.store.dispatch(fetchJobsAction());
   }
 
   onPageChange(event: PageChangeEvent) {
     this.store.dispatch(
       changePageAction({ page: event.pageIndex, limit: event.pageSize })
     );
+    this.store.dispatch(fetchJobsAction());
   }
 
   onRowClick(job: Job) {
@@ -123,12 +120,6 @@ export class JobsDashboardComponent implements OnInit, OnDestroy {
     this.jobsSubscription = this.store.pipe(select(getJobs)).subscribe(jobs => {
       this.jobs = this.formatTableData(jobs);
     });
-
-    // this.filtersSubscription = this.store
-    //   .pipe(select(getFilters))
-    //   .subscribe(filters => {
-    //     this.filters = filters;
-    //   });
 
     this.userSubscription = this.store
       .pipe(select(getCurrentUser))
@@ -153,7 +144,6 @@ export class JobsDashboardComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.jobsSubscription.unsubscribe();
-    // this.filtersSubscription.unsubscribe();
     this.userSubscription.unsubscribe();
   }
 }

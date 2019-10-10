@@ -47,13 +47,12 @@ describe("ProposalsReducer", () => {
   });
 
   describe("on fetchProposalsCompleteAction", () => {
-    it("should set proposals, proposalsCount and set isLoading to false", () => {
+    it("should set proposals and set isLoading to false", () => {
       const proposals = [proposal];
       const action = fromActions.fetchProposalsCompleteAction({ proposals });
       const state = proposalsReducer(initialProposalsState, action);
 
       expect(state.proposals).toEqual(proposals);
-      expect(state.proposalsCount).toEqual(proposals.length);
       expect(state.isLoading).toEqual(false);
     });
   });
@@ -61,6 +60,26 @@ describe("ProposalsReducer", () => {
   describe("on fetchProposalsFailedAction", () => {
     it("should set isLoading to false", () => {
       const action = fromActions.fetchProposalsFailedAction();
+      const state = proposalsReducer(initialProposalsState, action);
+
+      expect(state.isLoading).toEqual(false);
+    });
+  });
+
+  describe("on fetchCountCompletAction", () => {
+    it("should set proposalsCount and set isLoading to false", () => {
+      const count = 100;
+      const action = fromActions.fetchCountCompleteAction({ count });
+      const state = proposalsReducer(initialProposalsState, action);
+
+      expect(state.proposalsCount).toEqual(count);
+      expect(state.isLoading).toEqual(false);
+    });
+  });
+
+  describe("on fetchCountFailedAction", () => {
+    it("should set isLoading to false", () => {
+      const action = fromActions.fetchCountFailedAction();
       const state = proposalsReducer(initialProposalsState, action);
 
       expect(state.isLoading).toEqual(false);
@@ -107,7 +126,7 @@ describe("ProposalsReducer", () => {
   });
 
   describe("on fetchProposalDatasetsCompleteAction", () => {
-    it("should set datasets, datasetsCount and set isLoading to false", () => {
+    it("should set datasets and set isLoading to false", () => {
       const data: DatasetInterface = {
         ownerGroup: "testGroup",
         owner: "testOwner",
@@ -123,7 +142,6 @@ describe("ProposalsReducer", () => {
       const state = proposalsReducer(initialProposalsState, action);
 
       expect(state.datasets).toEqual(datasets);
-      expect(state.datasetsCount).toEqual(datasets.length);
       expect(state.isLoading).toEqual(false);
     });
   });
@@ -131,6 +149,28 @@ describe("ProposalsReducer", () => {
   describe("on fetchProposalDatasetsFailedAction", () => {
     it("should set isLoading to false", () => {
       const action = fromActions.fetchProposalDatasetsFailedAction();
+      const state = proposalsReducer(initialProposalsState, action);
+
+      expect(state.isLoading).toEqual(false);
+    });
+  });
+
+  describe("on fetchProposalDatasetsCountCompletAction", () => {
+    it("should set datasetsCount and set isLoading to false", () => {
+      const count = 100;
+      const action = fromActions.fetchProposalDatasetsCountCompleteAction({
+        count
+      });
+      const state = proposalsReducer(initialProposalsState, action);
+
+      expect(state.datasetsCount).toEqual(count);
+      expect(state.isLoading).toEqual(false);
+    });
+  });
+
+  describe("on fetchProposalDatasetsCountFailedAction", () => {
+    it("should set isLoading to false", () => {
+      const action = fromActions.fetchProposalDatasetsCountFailedAction();
       const state = proposalsReducer(initialProposalsState, action);
 
       expect(state.isLoading).toEqual(false);

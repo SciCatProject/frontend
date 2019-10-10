@@ -16,12 +16,7 @@ export class JobEffects {
 
   fetchJobs$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(
-        fromActions.fetchJobsAction,
-        fromActions.changePageAction,
-        fromActions.sortByColumnAction,
-        fromActions.setJobViewModeAction
-      ),
+      ofType(fromActions.fetchJobsAction),
       withLatestFrom(this.queryParams$),
       map(([action, params]) => params),
       switchMap(params =>

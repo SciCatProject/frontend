@@ -17,7 +17,12 @@ const reducer = createReducer(
 
   on(fromActions.fetchCountCompleteAction, (state, { count }) => ({
     ...state,
+    isLoading: false,
     totalCount: count
+  })),
+  on(fromActions.fetchCountFailedAction, state => ({
+    ...state,
+    isLoading: false
   })),
 
   on(fromActions.fetchJobAction, state => ({ ...state, isLoading: true })),
