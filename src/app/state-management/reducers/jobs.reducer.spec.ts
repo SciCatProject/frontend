@@ -119,10 +119,11 @@ describe("jobsReducer", () => {
   });
 
   describe("on submitJobCompleteAction", () => {
-    it("should set isLoading to false", () => {
+    it("should set submitError to undefined and set isLoading to false", () => {
       const action = fromActions.submitJobCompleteAction({ job });
       const state = jobsReducer(initialJobsState, action);
 
+      expect(state.submitError).toBeUndefined();
       expect(state.isLoading).toEqual(false);
     });
   });

@@ -39,6 +39,7 @@ const reducer = createReducer(
   on(fromActions.submitJobAction, state => ({ ...state, isLoading: true })),
   on(fromActions.submitJobCompleteAction, state => ({
     ...state,
+    submitError: undefined,
     isLoading: false
   })),
   on(fromActions.submitJobFailedAction, (state, { err }) => ({

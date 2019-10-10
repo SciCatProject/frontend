@@ -33,9 +33,6 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { Subscription, Observable } from "rxjs";
 import { pluck, take } from "rxjs/operators";
 import { APP_CONFIG, AppConfig } from "app-config.module";
-import { Message, MessageType } from "state-management/models";
-import { getSubmitError } from "state-management/selectors/jobs.selectors";
-import { ShowMessageAction } from "state-management/actions/user.actions";
 import {
   clearFacetsAction,
   addKeywordFilterAction,
@@ -173,8 +170,6 @@ export class DatasetDetailsDashboardComponent
   ) {}
 
   ngOnInit() {
-    // const message = new Message();
-
     this.subscriptions.push(
       this.route.params.pipe(pluck("id")).subscribe((id: string) => {
         if (id) {
@@ -201,32 +196,6 @@ export class DatasetDetailsDashboardComponent
           }
         })
     );
-
-    // this.subscriptions.push(
-    //   this.store.pipe(select(submitJob)).subscribe(
-    //     ret => {
-    //       if (ret && Array.isArray(ret)) {
-    //         console.log(ret);
-    //       }
-    //     },
-    //     error => {
-    //       console.log(error);
-    //       message.type = MessageType.Error;
-    //       message.content = "Job not Submitted";
-    //       this.store.dispatch(new ShowMessageAction(message));
-    //     }
-    //   )
-    // );
-
-    // this.subscriptions.push(
-    //   this.store.pipe(select(getError)).subscribe(err => {
-    //     if (err) {
-    //       message.type = MessageType.Error;
-    //       message.content = err.message;
-    //       this.store.dispatch(new ShowMessageAction(message));
-    //     }
-    //   })
-    // );
 
     this.subscriptions.push(
       this.store.pipe(select(getPublicViewMode)).subscribe(viewPublic => {

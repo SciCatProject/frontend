@@ -8,7 +8,6 @@ import { withLatestFrom, map, switchMap, catchError } from "rxjs/operators";
 import { of } from "rxjs";
 import { MessageType } from "state-management/models";
 import { ShowMessageAction } from "state-management/actions/user.actions";
-import { clearSelectionAction } from "state-management/actions/datasets.actions";
 
 @Injectable()
 export class JobEffects {
@@ -77,7 +76,6 @@ export class JobEffects {
           content: "Job Created Successfully",
           duration: 5000
         };
-        this.store.dispatch(clearSelectionAction());
         return of(new ShowMessageAction(message));
       })
     )
@@ -89,7 +87,7 @@ export class JobEffects {
       switchMap(({ err }) => {
         const message = {
           type: MessageType.Error,
-          content: "Job Not Submitted: " + err,
+          content: "Job Not Submitted: " + err.message,
           duration: 5000
         };
         return of(new ShowMessageAction(message));
