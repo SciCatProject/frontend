@@ -108,7 +108,8 @@ export class ProposalDashboardComponent implements OnInit, OnDestroy {
   }
 
   onRowClick(proposal: Proposal) {
-    this.router.navigateByUrl("/proposals/" + proposal.proposalId);
+    const id = encodeURIComponent(proposal.proposalId);
+    this.router.navigateByUrl("/proposals/" + id);
   }
 
   ngOnInit() {

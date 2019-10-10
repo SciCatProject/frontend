@@ -150,7 +150,7 @@ describe("ProposalDashboardComponent", () => {
     });
   });
 
-  describe("onSortChange()", () => {
+  describe("#onSortChange()", () => {
     it("should dispatch a sortByColumnAction", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
@@ -168,14 +168,14 @@ describe("ProposalDashboardComponent", () => {
     });
   });
 
-  describe("onRowClick()", () => {
+  describe("#onRowClick()", () => {
     it("should navigate to a proposal", () => {
       const proposal = new Proposal();
       component.onRowClick(proposal);
 
       expect(router.navigateByUrl).toHaveBeenCalledTimes(1);
       expect(router.navigateByUrl).toHaveBeenCalledWith(
-        "/proposals/" + proposal.proposalId
+        "/proposals/" + encodeURIComponent(proposal.proposalId)
       );
     });
   });
