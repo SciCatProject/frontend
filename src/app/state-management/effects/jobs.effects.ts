@@ -33,8 +33,8 @@ export class JobEffects {
       ofType(fromActions.fetchJobsAction),
       withLatestFrom(this.queryParams$),
       map(([action, params]) => params),
-      switchMap(params =>
-        this.jobApi.count(params.where).pipe(
+      switchMap(({ where }) =>
+        this.jobApi.count(where).pipe(
           map(res =>
             fromActions.fetchCountCompleteAction({ count: res.count })
           ),

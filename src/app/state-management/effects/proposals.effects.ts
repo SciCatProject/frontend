@@ -44,10 +44,12 @@ export class ProposalEffects {
   fetchCount$ = createEffect(() =>
     this.actions$.pipe(
       ofType(fromActions.fetchProposalsAction),
-      switchMap(() =>
-        this.proposalApi.count().pipe(
-          map(res =>
-            fromActions.fetchCountCompleteAction({ count: res.count })
+      withLatestFrom(this.fullqueryParams$),
+      map(([action, params]) => params),
+      switchMap(({ query }) =>
+        this.proposalApi.fullquery(query).pipe(
+          map(proposals =>
+            fromActions.fetchCountCompleteAction({ count: proposals.length })
           ),
           catchError(() => of(fromActions.fetchCountFailedAction()))
         )

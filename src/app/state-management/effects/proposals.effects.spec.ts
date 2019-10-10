@@ -53,7 +53,6 @@ describe("ProposalEffects", () => {
           provide: ProposalApi,
           useValue: jasmine.createSpyObj("proposalApi", [
             "fullquery",
-            "count",
             "findById",
             "createAttachments",
             "updateByIdAttachments",
@@ -101,13 +100,15 @@ describe("ProposalEffects", () => {
 
   describe("fetchCount$", () => {
     it("should result in a fetchCountCompleteAction", () => {
-      const count = 100;
+      const proposals = [proposal];
       const action = fromActions.fetchProposalsAction();
-      const outcome = fromActions.fetchCountCompleteAction({ count });
+      const outcome = fromActions.fetchCountCompleteAction({
+        count: proposals.length
+      });
 
       actions = hot("-a", { a: action });
-      const response = cold("-a|", { a: { count } });
-      proposalApi.count.and.returnValue(response);
+      const response = cold("-a|", { a: proposals });
+      proposalApi.fullquery.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchCount$).toBeObservable(expected);
@@ -119,7 +120,7 @@ describe("ProposalEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-#", {});
-      proposalApi.count.and.returnValue(response);
+      proposalApi.fullquery.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchCount$).toBeObservable(expected);
