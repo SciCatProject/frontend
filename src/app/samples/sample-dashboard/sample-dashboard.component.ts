@@ -102,6 +102,7 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
     this.store.dispatch(
       sortByColumnAction({ column: event.active, direction: event.direction })
     );
+    this.store.dispatch(fetchSamplesAction());
   }
 
   onRowClick(sample: Sample) {

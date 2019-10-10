@@ -85,7 +85,7 @@ describe("SampleEffects", () => {
     });
   });
 
-  describe("fetchSamples$", () => {
+  describe("fetchCount$", () => {
     it("should result in a fetchSamplesCountCompleteAction", () => {
       const samples = [sample];
       const action = fromActions.fetchSamplesAction();

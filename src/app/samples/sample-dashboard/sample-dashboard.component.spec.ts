@@ -125,7 +125,7 @@ describe("SampleDashboardComponent", () => {
   });
 
   describe("#onSortChange()", () => {
-    it("should dispatch a SampleSortByColumnAction", () => {
+    it("should dispatch a SampleSortByColumnAction and a fetchSamplesAction", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
       const event: SortChangeEvent = {
@@ -134,10 +134,11 @@ describe("SampleDashboardComponent", () => {
       };
       component.onSortChange(event);
 
-      expect(dispatchSpy).toHaveBeenCalledTimes(1);
+      expect(dispatchSpy).toHaveBeenCalledTimes(2);
       expect(dispatchSpy).toHaveBeenCalledWith(
         sortByColumnAction({ column: event.active, direction: event.direction })
       );
+      expect(dispatchSpy).toHaveBeenCalledWith(fetchSamplesAction());
     });
   });
 
