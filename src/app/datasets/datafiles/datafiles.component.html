@@ -61,15 +61,16 @@
   ></mat-paginator>
 
   <mat-table #table [dataSource]="dataSource">
-    <ng-container matColumnDef="select"
-    style="color:#000000">
+    <ng-container matColumnDef="select" style="color:#000000">
       <mat-header-cell *matHeaderCellDef>
         <mat-checkbox
           [checked]="areAllSelected"
           (change)="onSelectAll($event)"
           [disabled]="
             maxFileSize &&
-            (totalFileSize > maxFileSize || selectedFileSize > maxFileSize || tooLargeFile)
+            (totalFileSize > maxFileSize ||
+              selectedFileSize > maxFileSize ||
+              tooLargeFile)
           "
         >
         </mat-checkbox>
@@ -88,16 +89,31 @@
     <ng-container matColumnDef="name">
       <mat-header-cell *matHeaderCellDef>Path</mat-header-cell>
       <mat-cell *matCellDef="let file" matTooltip="{{ file.path }}">
-        <a
-          *ngIf="
-            (urlPrefix && file.size <= maxFileSize) ||
-              (urlPrefix && !maxFileSize);
-            else noLink
-          "
-          href="{{ urlPrefix }}/{{ file.path }}"
+        <ng-template
+          ngIf="(urlPrefix && file.size <= maxFileSize) ||
+        (urlPrefix && !maxFileSize)"
+          [ngIfElse]="noLink"
         >
-          {{ file.path | filePathTruncate }}
-        </a>
+          <form
+            *ngIf="multipleDownloadEnabled && multipleDownloadAction && jwt"
+            ngNoForm
+            method="POST"
+            [action]="multipleDownloadAction"
+            target="_blank"
+          >
+            <input type="hidden" name="jwt" [value]="jwt?.jwt" />
+            <input type="hidden" name="base" [value]="dataset.sourceFolder" />
+            <input type="hidden" [name]="file.path" [value]="file.path" />
+            <button
+              class="single-file-download no-hover-effect"
+              mat-button
+              type="submit"
+            >
+              {{ file.path | filePathTruncate }}
+            </button>
+          </form>
+        </ng-template>
+
         <ng-template #noLink>
           {{ file.path | filePathTruncate }}
         </ng-template>

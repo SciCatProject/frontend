@@ -19,14 +19,10 @@ import {
 })
 export class DatafilesComponent
   implements OnInit, AfterViewInit, AfterViewChecked {
-  @Input()
-  datablocks: Array<OrigDatablock>;
-
-  @Input("data")
-  dataset: Dataset;
-
-  @Input()
-  jwt: any;
+  @Input() datablocks: Array<OrigDatablock>;
+  // tslint:disable-next-line:no-input-rename
+  @Input("data") dataset: Dataset;
+  @Input() jwt: any;
 
   count = 0;
   files: Array<any> = [];
@@ -50,26 +46,6 @@ export class DatafilesComponent
   dataSource: MatTableDataSource<any> | null;
   @ViewChild(MatPaginator, { static: false })
   paginator: MatPaginator;
-
-  constructor(
-    private cdRef: ChangeDetectorRef,
-    @Inject(APP_CONFIG) private appConfig: AppConfig
-  ) {}
-
-  ngOnInit() {}
-
-  ngAfterViewInit() {
-    this.dataSource = new MatTableDataSource();
-    this.dataSource.paginator = this.paginator;
-    if (this.datablocks) {
-      this.getDatafiles(this.datablocks);
-    }
-  }
-
-  ngAfterViewChecked() {
-    this.count = this.files.length;
-    this.cdRef.detectChanges();
-  }
 
   /**
    * Load datafiles and add to source for table viewing
@@ -152,9 +128,23 @@ export class DatafilesComponent
     }
   }
 
-  // onDownload() {
-  //   const base = this.dataset.sourceFolder;
-  //   const selected = this.dataSource.data.filter(file => file.selected);
-  //   alert(selected.map(file => base + "/" + file.path).join("\n"));
-  // }
+  constructor(
+    private cdRef: ChangeDetectorRef,
+    @Inject(APP_CONFIG) private appConfig: AppConfig
+  ) {}
+
+  ngOnInit() {}
+
+  ngAfterViewInit() {
+    this.dataSource = new MatTableDataSource();
+    this.dataSource.paginator = this.paginator;
+    if (this.datablocks) {
+      this.getDatafiles(this.datablocks);
+    }
+  }
+
+  ngAfterViewChecked() {
+    this.count = this.files.length;
+    this.cdRef.detectChanges();
+  }
 }
