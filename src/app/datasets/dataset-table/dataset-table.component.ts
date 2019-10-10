@@ -15,7 +15,7 @@ import {
   getDisplayedColumns,
   getConfigurableColumns
 } from "../../state-management/selectors/users.selectors";
-import { getError, submitJob } from "state-management/selectors/jobs.selectors";
+import { getSubmitError } from "state-management/selectors/jobs.selectors";
 import { select, Store } from "@ngrx/store";
 import {
   clearSelectionAction,
@@ -101,7 +101,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     this.currentMode = mode;
   });
   // and eventually be removed.
-  private submitJobSubscription: Subscription;
   private jobErrorSubscription: Subscription;
   dispColumns$ = this.store.pipe(select(getDisplayedColumns));
 
@@ -130,35 +129,11 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.submitJobSubscription = this.store.pipe(select(submitJob)).subscribe(
-      ret => {
-        if (ret && Array.isArray(ret)) {
-          console.log(ret);
-          this.store.dispatch(clearSelectionAction());
-        }
-      },
-      error => {
-        this.store.dispatch(
-          new ShowMessageAction({
-            type: MessageType.Error,
-            content: "Job not Submitted",
-            duration: 5000
-          })
-        );
-      }
-    );
-
     this.jobErrorSubscription = this.store
-      .pipe(select(getError))
+      .pipe(select(getSubmitError))
       .subscribe(err => {
-        if (err) {
-          this.store.dispatch(
-            new ShowMessageAction({
-              type: MessageType.Error,
-              content: err.message,
-              duration: 5000
-            })
-          );
+        if (!err) {
+          this.store.dispatch(clearSelectionAction());
         }
       });
 
@@ -194,7 +169,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.modeSubscription.unsubscribe();
     this.selectedSetsSubscription.unsubscribe();
-    this.submitJobSubscription.unsubscribe();
     this.jobErrorSubscription.unsubscribe();
     this.selectedPidsSubscription.unsubscribe();
     this.datasetsSubscription.unsubscribe();

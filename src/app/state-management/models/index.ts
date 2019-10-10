@@ -114,7 +114,8 @@ export interface LogbookFilters {
 }
 
 export interface JobFilters {
+  mode: object;
+  sortField: string;
   skip: number;
   limit: number;
-  mode?: string | object;
 }

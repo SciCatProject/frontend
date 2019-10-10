@@ -61,7 +61,7 @@ describe("ProposalEffects", () => {
         },
         {
           provide: DatasetApi,
-          useValue: jasmine.createSpyObj("datasetApi", ["find"])
+          useValue: jasmine.createSpyObj("datasetApi", ["find", "count"])
         }
       ]
     });
@@ -98,10 +98,39 @@ describe("ProposalEffects", () => {
     });
   });
 
+  describe("fetchCount$", () => {
+    it("should result in a fetchCountCompleteAction", () => {
+      const proposals = [proposal];
+      const action = fromActions.fetchProposalsAction();
+      const outcome = fromActions.fetchCountCompleteAction({
+        count: proposals.length
+      });
+
+      actions = hot("-a", { a: action });
+      const response = cold("-a|", { a: proposals });
+      proposalApi.fullquery.and.returnValue(response);
+
+      const expected = cold("--b", { b: outcome });
+      expect(effects.fetchCount$).toBeObservable(expected);
+    });
+
+    it("should result in a fetchProposalsFailedAction", () => {
+      const action = fromActions.fetchProposalsAction();
+      const outcome = fromActions.fetchCountFailedAction();
+
+      actions = hot("-a", { a: action });
+      const response = cold("-#", {});
+      proposalApi.fullquery.and.returnValue(response);
+
+      const expected = cold("--b", { b: outcome });
+      expect(effects.fetchCount$).toBeObservable(expected);
+    });
+  });
+
   describe("fetchProposal$", () => {
     const proposalId = "testId";
 
-    it("should result in a fetchProposalCompleteAction", () => {
+    it("should result in a fetchCountCompleteAction", () => {
       const action = fromActions.fetchProposalAction({ proposalId });
       const outcome = fromActions.fetchProposalCompleteAction({ proposal });
 
@@ -154,6 +183,37 @@ describe("ProposalEffects", () => {
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchProposalDatasets$).toBeObservable(expected);
+    });
+  });
+
+  describe("fetchProposalDatasetsCount$", () => {
+    const proposalId = "testId";
+
+    it("should result in a fetchProposalDatasetsCountCompleteAction", () => {
+      const count = 100;
+      const action = fromActions.fetchProposalDatasetsAction({ proposalId });
+      const outcome = fromActions.fetchProposalDatasetsCountCompleteAction({
+        count
+      });
+
+      actions = hot("-a", { a: action });
+      const response = cold("-a|", { a: { count } });
+      datasetApi.count.and.returnValue(response);
+
+      const expected = cold("--b", { b: outcome });
+      expect(effects.fetchProposalDatasetsCount$).toBeObservable(expected);
+    });
+
+    it("should result in a fetchProposalDatasetsCountFailedAction", () => {
+      const action = fromActions.fetchProposalDatasetsAction({ proposalId });
+      const outcome = fromActions.fetchProposalDatasetsCountFailedAction();
+
+      actions = hot("-a", { a: action });
+      const response = cold("-#", {});
+      datasetApi.count.and.returnValue(response);
+
+      const expected = cold("--b", { b: outcome });
+      expect(effects.fetchProposalDatasetsCount$).toBeObservable(expected);
     });
   });
 

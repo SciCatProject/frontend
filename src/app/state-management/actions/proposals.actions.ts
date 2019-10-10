@@ -10,6 +10,14 @@ export const fetchProposalsFailedAction = createAction(
   "[Proposal] Fetch Proposals Failed"
 );
 
+export const fetchCountCompleteAction = createAction(
+  "[Proposal] Fetch Count Complete",
+  props<{ count: number }>()
+);
+export const fetchCountFailedAction = createAction(
+  "[Proposal] Fetch Count Failed"
+);
+
 export const fetchProposalAction = createAction(
   "[Proposal] Fetch Proposal",
   props<{ proposalId: string }>()
@@ -32,6 +40,14 @@ export const fetchProposalDatasetsCompleteAction = createAction(
 );
 export const fetchProposalDatasetsFailedAction = createAction(
   "[Proposal] Fetch Proposal Datasets Failed"
+);
+
+export const fetchProposalDatasetsCountCompleteAction = createAction(
+  "[Proposal] Fetch Proposal Dataset Count Complete",
+  props<{ count: number }>()
+);
+export const fetchProposalDatasetsCountFailedAction = createAction(
+  "[Proposal] Fetch Proposal Dataset Count Failed"
 );
 
 export const addAttachmentAction = createAction(

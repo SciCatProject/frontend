@@ -11,7 +11,7 @@ import { EffectsModule } from "@ngrx/effects";
 import { FlexLayoutModule } from "@angular/flex-layout";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { HttpClientModule } from "@angular/common/http";
-import { JobsEffects } from "state-management/effects/jobs.effects";
+import { JobEffects } from "state-management/effects/jobs.effects";
 import { NgModule } from "@angular/core";
 import { NguiDatetimePickerModule } from "@ngui/datetime-picker";
 import { PoliciesEffects } from "state-management/effects/policies.effects";
@@ -105,7 +105,7 @@ import { JobsModule } from "jobs/jobs.module";
     EffectsModule.forRoot([
       DatasetEffects,
       UserEffects,
-      JobsEffects,
+      JobEffects,
       PoliciesEffects,
       SampleEffects,
       LogbookEffects,

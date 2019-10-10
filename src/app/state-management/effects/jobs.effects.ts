@@ -1,85 +1,103 @@
-// import all rxjs operators that are needed
-
 import { Injectable } from "@angular/core";
-import { Actions, Effect, ofType } from "@ngrx/effects";
-import { Action } from "@ngrx/store";
-import { Observable, of } from "rxjs";
-import * as lb from "shared/sdk/services";
-import * as JobActions from "state-management/actions/jobs.actions";
-import * as UserActions from "state-management/actions/user.actions";
-import { MessageType, Job } from "state-management/models";
-import { map, switchMap, catchError, mergeMap } from "rxjs/operators";
-
-// import store state interface
+import { Actions, createEffect, ofType } from "@ngrx/effects";
+import { JobApi, Job } from "shared/sdk";
+import { Store, select } from "@ngrx/store";
+import { getQueryParams } from "state-management/selectors/jobs.selectors";
+import * as fromActions from "state-management/actions/jobs.actions";
+import { withLatestFrom, map, switchMap, catchError } from "rxjs/operators";
+import { of } from "rxjs";
+import { MessageType } from "state-management/models";
+import { ShowMessageAction } from "state-management/actions/user.actions";
 
 @Injectable()
-export class JobsEffects {
-  @Effect()
-  protected getJob$: Observable<Action> = this.action$.pipe(
-    ofType(JobActions.SEARCH_ID),
-    map((action: JobActions.SearchIDAction) => action.id),
-    switchMap(id =>
-      this.jobSrv.findById(encodeURIComponent(id)).pipe(
-        map(jobset => new JobActions.SearchIDCompleteAction(jobset)),
-        catchError(err => of(new JobActions.SearchIDFailedAction(err)))
+export class JobEffects {
+  private queryParams$ = this.store.pipe(select(getQueryParams));
+
+  fetchJobs$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(fromActions.fetchJobsAction),
+      withLatestFrom(this.queryParams$),
+      map(([action, params]) => params),
+      switchMap(params =>
+        this.jobApi.find(params).pipe(
+          map((jobs: Job[]) => fromActions.fetchJobsCompleteAction({ jobs })),
+          catchError(() => of(fromActions.fetchJobsFailedAction()))
+        )
       )
     )
   );
 
-  @Effect()
-  protected submit$: Observable<Action> = this.action$.pipe(
-    ofType(JobActions.SUBMIT),
-    map((action: JobActions.SubmitAction) => action.job),
-    switchMap(job =>
-      this.jobSrv.create(job).pipe(
-        map(res => new JobActions.SubmitCompleteAction(res)),
-        catchError(err => of(new JobActions.FailedAction(err)))
+  fetchCount$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(fromActions.fetchJobsAction),
+      withLatestFrom(this.queryParams$),
+      map(([action, params]) => params),
+      switchMap(({ where }) =>
+        this.jobApi.count(where).pipe(
+          map(res =>
+            fromActions.fetchCountCompleteAction({ count: res.count })
+          ),
+          catchError(() => of(fromActions.fetchCountFailedAction()))
+        )
       )
     )
   );
 
-  @Effect()
-  protected submitMessage$: Observable<Action> = this.action$.pipe(
-    ofType(JobActions.SUBMIT_COMPLETE),
-    switchMap(res => {
-      const msg = {
-        type: MessageType.Success,
-        content: "Job Created Successfully",
-        duration: 5000
-      };
-      return of(new UserActions.ShowMessageAction(msg));
-    })
+  fetchJob$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(fromActions.fetchJobAction),
+      switchMap(({ jobId }) =>
+        this.jobApi.findById(jobId).pipe(
+          map((job: Job) => fromActions.fetchJobCompleteAction({ job })),
+          catchError(() => of(fromActions.fetchJobFailedAction()))
+        )
+      )
+    )
   );
 
-  @Effect()
-  // this is the jobs view get effect
-  protected get_updated_sort$: Observable<Action> = this.action$.pipe(
-    ofType(JobActions.SORT_UPDATE),
-    switchMap((action: JobActions.SortUpdateAction) => {
-      const filter = {};
-      if (action.mode) {
-        filter["where"] = action.mode;
-      }
-      filter["skip"] = action.skip;
-      filter["limit"] = action.limit; // items per page
-      filter["order"] = "creationTime DESC";
-      return this.jobSrv.find(filter).pipe(
-        map((jobsets: Job[]) => new JobActions.RetrieveCompleteAction(jobsets)),
-        catchError(err => of(new JobActions.FailedAction(err)))
-      );
-    })
+  submitJob$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(fromActions.submitJobAction),
+      switchMap(({ job }) =>
+        this.jobApi.create(job).pipe(
+          map(job => fromActions.submitJobCompleteAction({ job })),
+          catchError(err => of(fromActions.submitJobFailedAction({ err })))
+        )
+      )
+    )
   );
 
-  @Effect()
-  private getCount$: Observable<Action> = this.action$.pipe(
-    ofType(JobActions.SORT_UPDATE),
-    mergeMap((action: JobActions.SortUpdateAction) => {
-      return this.jobSrv.count(action.mode).pipe(
-        map(jobCount => new JobActions.GetCountCompleteAction(jobCount.count)),
-        catchError(err => of(new JobActions.FailedAction(err)))
-      );
-    })
+  submitJobCompleteMessage$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(fromActions.submitJobCompleteAction),
+      switchMap(() => {
+        const message = {
+          type: MessageType.Success,
+          content: "Job Created Successfully",
+          duration: 5000
+        };
+        return of(new ShowMessageAction(message));
+      })
+    )
   );
 
-  constructor(private action$: Actions, private jobSrv: lb.JobApi) {}
+  submitJobFailedMessage$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(fromActions.submitJobFailedAction),
+      switchMap(({ err }) => {
+        const message = {
+          type: MessageType.Error,
+          content: "Job Not Submitted: " + err.message,
+          duration: 5000
+        };
+        return of(new ShowMessageAction(message));
+      })
+    )
+  );
+
+  constructor(
+    private actions$: Actions,
+    private jobApi: JobApi,
+    private store: Store<Job>
+  ) {}
 }

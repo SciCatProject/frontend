@@ -5,18 +5,21 @@ import { Job } from "shared/sdk";
 import { Subscription } from "rxjs";
 import {
   getJobs,
-  getFilters,
-  getJobsCount
+  getJobsCount,
+  getJobsPerPage,
+  getPage
 } from "state-management/selectors/jobs.selectors";
 import { DatePipe } from "@angular/common";
 import {
   TableColumn,
   PageChangeEvent
 } from "shared/modules/table/table.component";
-import { JobViewMode, JobFilters } from "state-management/models";
+import { JobViewMode } from "state-management/models";
 import {
-  SortUpdateAction,
-  CurrentJobAction
+  changePageAction,
+  setJobViewModeAction,
+  fetchJobsAction,
+  fetchJobAction
 } from "state-management/actions/jobs.actions";
 import {
   getCurrentUser,
@@ -29,12 +32,12 @@ import {
   styleUrls: ["./jobs-dashboard.component.scss"]
 })
 export class JobsDashboardComponent implements OnInit, OnDestroy {
+  jobsCount$ = this.store.pipe(select(getJobsCount));
+  jobsPerPage$ = this.store.pipe(select(getJobsPerPage));
+  currentPage$ = this.store.pipe(select(getPage));
 
   jobs: any[] = [];
   jobsSubscription: Subscription;
-
-  filters: JobFilters;
-  filtersSubscription: Subscription;
 
   profile: any;
   email: string;
@@ -44,7 +47,6 @@ export class JobsDashboardComponent implements OnInit, OnDestroy {
   currentMode = JobViewMode.myJobs;
 
   paginate = true;
-  jobsCount$ = this.store.pipe(select(getJobsCount));
 
   tableColumns: TableColumn[] = [
     { name: "initiator", icon: "mail", sort: false, inList: true },
@@ -81,57 +83,43 @@ export class JobsDashboardComponent implements OnInit, OnDestroy {
   }
 
   onModeChange(event: any, mode: JobViewMode) {
+    let viewMode: object;
     switch (mode) {
       case JobViewMode.allJobs: {
-        this.filters.mode = "";
+        viewMode = null;
         break;
       }
       case JobViewMode.myJobs: {
-        this.filters.mode = { emailJobInitiator: this.email };
+        viewMode = { emailJobInitiator: this.email };
         break;
       }
       default: {
         break;
       }
     }
-    this.filters.skip = 0;
-    this.store.dispatch(
-      new SortUpdateAction(
-        this.filters.skip,
-        this.filters.limit,
-        this.filters.mode
-      )
-    );
+    this.store.dispatch(setJobViewModeAction({ mode: viewMode }));
+    this.store.dispatch(fetchJobsAction());
   }
 
   onPageChange(event: PageChangeEvent) {
-    this.filters.skip = event.pageIndex * event.pageSize;
-    this.filters.limit = event.pageSize;
     this.store.dispatch(
-      new SortUpdateAction(
-        this.filters.skip,
-        this.filters.limit,
-        this.filters.mode
-      )
+      changePageAction({ page: event.pageIndex, limit: event.pageSize })
     );
+    this.store.dispatch(fetchJobsAction());
   }
 
   onRowClick(job: Job) {
-    this.store.dispatch(new CurrentJobAction(job));
+    this.store.dispatch(fetchJobAction({ jobId: job.id }));
     const id = encodeURIComponent(job.id);
     this.router.navigateByUrl("/user/jobs/" + id);
   }
 
   ngOnInit() {
+    this.store.dispatch(fetchJobsAction());
+
     this.jobsSubscription = this.store.pipe(select(getJobs)).subscribe(jobs => {
       this.jobs = this.formatTableData(jobs);
     });
-
-    this.filtersSubscription = this.store
-      .pipe(select(getFilters))
-      .subscribe(filters => {
-        this.filters = filters;
-      });
 
     this.userSubscription = this.store
       .pipe(select(getCurrentUser))
@@ -156,7 +144,6 @@ export class JobsDashboardComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.jobsSubscription.unsubscribe();
-    this.filtersSubscription.unsubscribe();
     this.userSubscription.unsubscribe();
   }
 }

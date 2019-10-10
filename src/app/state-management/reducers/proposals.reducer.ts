@@ -11,16 +11,22 @@ const reducer = createReducer(
     ...state,
     isLoading: true
   })),
-  on(fromActions.fetchProposalsCompleteAction, (state, { proposals }) => {
-    const proposalsCount = proposals.length;
-    return {
-      ...state,
-      proposals,
-      proposalsCount,
-      isLoading: false
-    };
-  }),
+  on(fromActions.fetchProposalsCompleteAction, (state, { proposals }) => ({
+    ...state,
+    proposals,
+    isLoading: false
+  })),
   on(fromActions.fetchProposalsFailedAction, state => ({
+    ...state,
+    isLoading: false
+  })),
+
+  on(fromActions.fetchCountCompleteAction, (state, { count }) => ({
+    ...state,
+    isLoading: false,
+    proposalsCount: count
+  })),
+  on(fromActions.fetchCountFailedAction, state => ({
     ...state,
     isLoading: false
   })),
@@ -40,11 +46,20 @@ const reducer = createReducer(
     ...state,
     isLoading: true
   })),
-  on(fromActions.fetchProposalDatasetsCompleteAction, (state, { datasets }) => {
-    const datasetsCount = datasets.length;
-    return { ...state, datasets, datasetsCount, isLoading: false };
-  }),
+  on(
+    fromActions.fetchProposalDatasetsCompleteAction,
+    (state, { datasets }) => ({ ...state, datasets, isLoading: false })
+  ),
   on(fromActions.fetchProposalDatasetsFailedAction, state => ({
+    ...state,
+    isLoading: false
+  })),
+
+  on(
+    fromActions.fetchProposalDatasetsCountCompleteAction,
+    (state, { count }) => ({ ...state, isLoading: false, datasetsCount: count })
+  ),
+  on(fromActions.fetchProposalDatasetsCountFailedAction, state => ({
     ...state,
     isLoading: false
   })),

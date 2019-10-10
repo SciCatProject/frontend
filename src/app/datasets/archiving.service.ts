@@ -5,7 +5,7 @@ import { combineLatest, Observable } from "rxjs";
 import { first, map } from "rxjs/operators";
 
 import { Dataset, Job, User } from "state-management/models";
-import { SubmitAction } from "state-management/actions/jobs.actions";
+import { submitJobAction } from "state-management/actions/jobs.actions";
 import {
   getCurrentUser,
   getTapeCopies,
@@ -83,7 +83,7 @@ export class ArchivingService {
 
         const job = this.createJob(user, datasets, archive, destPath);
 
-        this.store.dispatch(new SubmitAction(job));
+        this.store.dispatch(submitJobAction({ job }));
       })
     );
   }

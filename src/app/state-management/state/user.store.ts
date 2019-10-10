@@ -33,7 +33,7 @@ export const initialUserState: UserState = {
   settings: {
     tapeCopies: "one",
     datasetCount: 25,
-    jobCount: 30,
+    jobCount: 25,
     darkTheme: false
   }, // TODO sync with server settings?
   isLoggedIn: false,
