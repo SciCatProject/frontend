@@ -10,7 +10,8 @@ export const LOGOUT = "[User] Logout";
 export const LOGOUT_COMPLETE = "[User] Logout Complete";
 
 export const AD_LOGIN = "[User] Active Directory Login";
-export const AD_LOGIN_COMPLETE = "[User] Active Directory Login Complete";
+export const AD_LOGIN_SUCCESS = "[User] Active Directory Login Success";
+export const AD_LOGIN_FAILED = "[User] Active Directory Login Failed";
 
 export const RETRIEVE_USER = "[User] Retrieve User";
 export const RETRIEVE_USER_COMPLETE = "[User] Retrieve User Complete";
@@ -46,15 +47,29 @@ export const DESELECT_COLUMN = "[User] Deselect Column";
 export const DESELECT_COLUMN_COMPLETE = "[User] Deselect Column Complete";
 export const DESELECT_COLUMN_FAILED = "[User] Deselect Column Failed";
 
-export class LoginAction implements Action {
-  readonly type = LOGIN;
+export class ActiveDirLoginAction implements Action {
+  readonly type = AD_LOGIN;
   constructor(
     public form: { username: string; password: string; rememberMe: boolean }
   ) {}
 }
 
-export class ActiveDirLoginAction implements Action {
-  readonly type = AD_LOGIN;
+export class ActiveDirLoginSuccessAction implements Action {
+  readonly type = AD_LOGIN_SUCCESS;
+  constructor(readonly response: any) {}
+}
+
+export class ActiveDirLoginFailedAction implements Action {
+  readonly type = AD_LOGIN_FAILED;
+  constructor(
+    readonly username: string,
+    readonly password: string,
+    readonly rememberMe: boolean
+  ) {}
+}
+
+export class LoginAction implements Action {
+  readonly type = LOGIN;
   constructor(
     public form: { username: string; password: string; rememberMe: boolean }
   ) {}

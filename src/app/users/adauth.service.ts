@@ -18,7 +18,7 @@ export interface AccessToken {
 @Injectable()
 export class ADAuthService {
   constructor(
-    public http: HttpClient,
+    private http: HttpClient,
     @Inject(APP_CONFIG) private config: AppConfig
   ) {}
 
