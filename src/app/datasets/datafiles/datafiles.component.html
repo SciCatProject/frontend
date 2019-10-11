@@ -103,7 +103,7 @@
           >
             <input type="hidden" name="jwt" [value]="jwt?.jwt" />
             <input type="hidden" name="base" [value]="dataset.sourceFolder" />
-            <input type="hidden" [name]="file.path" [value]="file.path" />
+            <input type="hidden" [name]="'files[0]'" [value]="file.path" />
             <button
               class="single-file-download no-hover-effect"
               mat-button
