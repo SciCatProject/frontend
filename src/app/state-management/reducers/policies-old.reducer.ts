@@ -21,12 +21,12 @@ import {
   FETCH_EDITABLE_POLICIES_COMPLETE,
   FETCH_EDITABLE_POLICIES,
   FetchEditablePoliciesComplete
-} from "state-management/actions/policies.actions";
+} from "state-management/actions/policies-old.actions";
 
 import {
   initialPolicyState,
   PolicyState
-} from "state-management/state/policies.store";
+} from "state-management/state/policies-old.store";
 
 export function policiesReducer(
   state: PolicyState = initialPolicyState,

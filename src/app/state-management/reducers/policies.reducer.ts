@@ -18,6 +18,7 @@ const reducer = createReducer(
     isLoading: false
   })),
 
+  on(fromActions.fetchCountAction, state => ({ ...state, isLoading: true })),
   on(fromActions.fetchCountCompleteAction, (state, { count }) => ({
     ...state,
     totalCount: count,
@@ -32,16 +33,29 @@ const reducer = createReducer(
     ...state,
     isLoading: true
   })),
-  on(fromActions.fetchEditablePoliciesCompleteAction, (state, { policies }) => {
-    const editableCount = policies.length;
-    return {
+  on(
+    fromActions.fetchEditablePoliciesCompleteAction,
+    (state, { policies }) => ({
       ...state,
       editablePolicies: policies,
-      editableCount,
       isLoading: false
-    };
-  }),
+    })
+  ),
   on(fromActions.fetchEditablePoliciesFailedAction, state => ({
+    ...state,
+    isLoading: false
+  })),
+
+  on(fromActions.fetchEditableCountAction, state => ({
+    ...state,
+    isLoading: true
+  })),
+  on(fromActions.fetchEditableCountCompleteAction, (state, { count }) => ({
+    ...state,
+    editableCount: count,
+    isLoading: false
+  })),
+  on(fromActions.fetchEditableCountFailedAction, state => ({
     ...state,
     isLoading: false
   })),
@@ -74,7 +88,7 @@ const reducer = createReducer(
     return { ...state, selectedPolicies };
   }),
 
-  on(fromActions.selectAllPolicies, state => {
+  on(fromActions.selectAllPoliciesAction, state => {
     const selectedPolicies = state.editablePolicies;
     return { ...state, selectedPolicies };
   }),
@@ -85,12 +99,24 @@ const reducer = createReducer(
 
   on(fromActions.changePageAction, (state, { page, limit }) => {
     const skip = page * limit;
-    return { ...state, filters: { ...state.filters, skip, limit } };
+    const policiesFilters = { ...state.policiesFilters, skip, limit };
+    return { ...state, policiesFilters };
+  }),
+  on(fromActions.changeEditablePageAction, (state, { page, limit }) => {
+    const skip = page * limit;
+    const editableFilters = { ...state.editableFilters, skip, limit };
+    return { ...state, editableFilters };
   }),
 
   on(fromActions.sortByColumnAction, (state, { column, direction }) => {
     const sortField = column + (direction ? " " + direction : "");
-    return { ...state, filters: { ...state.filters, sortField, skip: 0 } };
+    const policiesFilters = { ...state.policiesFilters, sortField, skip: 0 };
+    return { ...state, policiesFilters };
+  }),
+  on(fromActions.sortEditableByColumnAction, (state, { column, direction }) => {
+    const sortField = column + (direction ? " " + direction : "");
+    const editableFilters = { ...state.editableFilters, sortField, skip: 0 };
+    return { ...state, editableFilters };
   })
 );
 

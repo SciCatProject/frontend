@@ -19,8 +19,8 @@ import {
   FetchEditablePoliciesComplete,
   FetchEditablePolicies,
   SORT_BY_COLUMN
-} from "../actions/policies.actions";
-import { getQueryParams, getPolicies } from "../selectors/policies.selectors";
+} from "../actions/policies-old.actions";
+import { getQueryParams, getPolicies } from "../selectors/policies-old.selectors";
 import {
   catchError,
   map,

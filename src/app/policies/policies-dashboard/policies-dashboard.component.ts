@@ -15,7 +15,9 @@ import {
   getPolicies,
   getEditablePolicies,
   getSelectedPolicies,
-  getEditablePoliciesCount
+  getEditablePoliciesCount,
+  getEditablePoliciesPerPage,
+  getEditablePage
 } from "state-management/selectors/policies.selectors";
 import {
   MatCheckboxChange,
@@ -30,7 +32,9 @@ import {
   submitPolicyAction,
   clearSelectionAction,
   fetchPoliciesAction,
-  selectAllPolicies
+  selectAllPoliciesAction,
+  changeEditablePageAction,
+  sortEditableByColumnAction
 } from "state-management/actions/policies.actions";
 import { EditDialogComponent } from "policies/edit-dialog/edit-dialog.component";
 import { map } from "rxjs/operators";
@@ -42,14 +46,21 @@ import { map } from "rxjs/operators";
 })
 export class PoliciesDashboardComponent implements OnInit, OnDestroy {
   policies$: Observable<Policy[]> = this.store.pipe(select(getPolicies));
-  editablePolicies$: Observable<Policy[]> = this.store.pipe(
-    select(getEditablePolicies)
-  );
   policiesPerPage$: Observable<number> = this.store.pipe(
     select(getPoliciesPerPage)
   );
   currentPage$: Observable<number> = this.store.pipe(select(getPage));
   policyCount$: Observable<number> = this.store.pipe(select(getPoliciesCount));
+
+  editablePolicies$: Observable<Policy[]> = this.store.pipe(
+    select(getEditablePolicies)
+  );
+  editablePoliciesPerPage$: Observable<number> = this.store.pipe(
+    select(getEditablePoliciesPerPage)
+  );
+  currentEditablePage$: Observable<number> = this.store.pipe(
+    select(getEditablePage)
+  );
   editableCount$: Observable<number> = this.store.pipe(
     select(getEditablePoliciesCount)
   );
@@ -96,21 +107,36 @@ export class PoliciesDashboardComponent implements OnInit, OnDestroy {
     }
   ];
 
-  onPageChange(event: PageChangeEvent) {
+  onPoliciesPageChange(event: PageChangeEvent) {
     this.store.dispatch(
       changePageAction({ page: event.pageIndex, limit: event.pageSize })
     );
   }
 
-  onSortChange(event: SortChangeEvent) {
+  onEditablePoliciesPageChange(event: PageChangeEvent) {
+    this.store.dispatch(
+      changeEditablePageAction({ page: event.pageIndex, limit: event.pageSize })
+    );
+  }
+
+  onPoliciesSortChange(event: SortChangeEvent) {
     this.store.dispatch(
       sortByColumnAction({ column: event.active, direction: event.direction })
     );
   }
 
+  onEditablePoliciesSortChange(event: SortChangeEvent) {
+    this.store.dispatch(
+      sortEditableByColumnAction({
+        column: event.active,
+        direction: event.direction
+      })
+    );
+  }
+
   onSelectAll(event: MatCheckboxChange) {
     if (event.checked) {
-      this.store.dispatch(selectAllPolicies());
+      this.store.dispatch(selectAllPoliciesAction());
     } else {
       this.store.dispatch(clearSelectionAction());
     }

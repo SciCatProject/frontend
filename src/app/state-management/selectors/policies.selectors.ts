@@ -35,11 +35,24 @@ export const getIsLoading = createSelector(
 
 export const getFilters = createSelector(
   getPolicyState,
-  state => state.filters
+  state => state.policiesFilters
+);
+
+export const getEditableFilters = createSelector(
+  getPolicyState,
+  state => state.editableFilters
 );
 
 export const getPage = createSelector(
   getFilters,
+  filters => {
+    const { skip, limit } = filters;
+    return skip / limit;
+  }
+);
+
+export const getEditablePage = createSelector(
+  getEditableFilters,
   filters => {
     const { skip, limit } = filters;
     return skip / limit;
@@ -51,8 +64,21 @@ export const getPoliciesPerPage = createSelector(
   filters => filters.limit
 );
 
+export const getEditablePoliciesPerPage = createSelector(
+  getEditableFilters,
+  filters => filters.limit
+);
+
 export const getQueryParams = createSelector(
   getFilters,
+  filters => {
+    const { skip, limit, sortField } = filters;
+    return { order: sortField, skip, limit };
+  }
+);
+
+export const getEditableQueryParams = createSelector(
+  getEditableFilters,
   filters => {
     const { skip, limit, sortField } = filters;
     return { order: sortField, skip, limit };

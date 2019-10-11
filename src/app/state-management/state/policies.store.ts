@@ -10,7 +10,8 @@ export interface PolicyState {
 
   isLoading: boolean;
 
-  filters: PolicyFilters;
+  policiesFilters: PolicyFilters;
+  editableFilters: PolicyFilters;
 }
 
 export const initialPolicyState: PolicyState = {
@@ -23,7 +24,13 @@ export const initialPolicyState: PolicyState = {
 
   isLoading: true,
 
-  filters: {
+  policiesFilters: {
+    skip: 0,
+    limit: 25,
+    sortField: "ownerGroup desc"
+  },
+
+  editableFilters: {
     skip: 0,
     limit: 25,
     sortField: "ownerGroup desc"

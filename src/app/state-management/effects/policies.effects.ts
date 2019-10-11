@@ -4,7 +4,7 @@ import { PolicyApi, Policy } from "shared/sdk";
 import { Store, select } from "@ngrx/store";
 import {
   getQueryParams,
-  getPolicies
+  getEditableQueryParams
 } from "state-management/selectors/policies.selectors";
 import * as fromActions from "state-management/actions/policies.actions";
 import {
@@ -20,7 +20,9 @@ import { getProfile } from "state-management/selectors/users.selectors";
 @Injectable()
 export class PolicyEffects {
   private queryParams$ = this.store.pipe(select(getQueryParams));
-  private policies$ = this.store.pipe(select(getPolicies));
+  private editableQueryParams$ = this.store.pipe(
+    select(getEditableQueryParams)
+  );
   private userProfile$ = this.store.pipe(select(getProfile));
 
   fetchPolicies$ = createEffect(() =>
@@ -36,6 +38,7 @@ export class PolicyEffects {
         this.policyApi.find(params).pipe(
           mergeMap((policies: Policy[]) => [
             fromActions.fetchPoliciesCompleteAction({ policies }),
+            fromActions.fetchCountAction(),
             fromActions.fetchEditablePoliciesAction()
           ]),
           catchError(() => of(fromActions.fetchPoliciesFailedAction()))
@@ -46,7 +49,7 @@ export class PolicyEffects {
 
   fetchCount$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(fromActions.fetchPoliciesAction),
+      ofType(fromActions.fetchCountAction),
       switchMap(() =>
         this.policyApi.count().pipe(
           map(({ count }) => fromActions.fetchCountCompleteAction({ count })),
@@ -58,27 +61,47 @@ export class PolicyEffects {
 
   fetchEditablePolicies$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(fromActions.fetchEditablePoliciesAction),
-      withLatestFrom(this.userProfile$, this.policies$),
-      map(([action, profile, allPolicies]) => {
-        const editablePolicies = [];
+      ofType(
+        fromActions.fetchEditablePoliciesAction,
+        fromActions.changeEditablePageAction,
+        fromActions.sortEditableByColumnAction
+      ),
+      withLatestFrom(this.userProfile$, this.editableQueryParams$),
+      switchMap(([action, profile, params]) => {
         if (!profile) {
-          return fromActions.fetchEditablePoliciesCompleteAction({
-            policies: allPolicies
-          });
+          // allow functional users
+          return this.policyApi.find(params);
         } else {
           const email = profile.email.toLowerCase();
-          allPolicies.forEach(policy => {
-            if (policy.manager.indexOf(email) !== -1) {
-              editablePolicies.push(policy);
-            }
-          });
-          return fromActions.fetchEditablePoliciesCompleteAction({
-            policies: editablePolicies
-          });
+          const { order, skip, limit } = params;
+          const filter = { where: { manager: email }, order, skip, limit };
+          return this.policyApi.find(filter);
         }
       }),
+      mergeMap((policies: Policy[]) => [
+        fromActions.fetchEditablePoliciesCompleteAction({ policies }),
+        fromActions.fetchEditableCountAction()
+      ]),
       catchError(() => of(fromActions.fetchEditablePoliciesFailedAction()))
+    )
+  );
+
+  fetchEditableCount$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(fromActions.fetchEditableCountAction),
+      withLatestFrom(this.userProfile$),
+      switchMap(([action, profile]) => {
+        if (!profile) {
+          return this.policyApi.count();
+        } else {
+          const email = profile.email.toLowerCase();
+          return this.policyApi.count({ where: { manager: email } });
+        }
+      }),
+      map(({ count }) =>
+        fromActions.fetchEditableCountCompleteAction({ count })
+      ),
+      catchError(() => of(fromActions.fetchEditableCountFailedAction()))
     )
   );
 

@@ -10,6 +10,7 @@ export const fetchPoliciesFailedAction = createAction(
   "[Policy] Fetch Policies Failed"
 );
 
+export const fetchCountAction = createAction("[Policy] Fetch Count");
 export const fetchCountCompleteAction = createAction(
   "[Policy] Fetch Count Complete",
   props<{ count: number }>()
@@ -27,6 +28,17 @@ export const fetchEditablePoliciesCompleteAction = createAction(
 );
 export const fetchEditablePoliciesFailedAction = createAction(
   "[Policy] Fetch Editable Policies Failed"
+);
+
+export const fetchEditableCountAction = createAction(
+  "[Policy] Fetch Editable Policies Count"
+);
+export const fetchEditableCountCompleteAction = createAction(
+  "[Policy] Fetch Editable Policies Count Complete",
+  props<{ count: number }>()
+);
+export const fetchEditableCountFailedAction = createAction(
+  "[Policy] Fetch Editable Policies Count Failed"
 );
 
 export const submitPolicyAction = createAction(
@@ -50,15 +62,23 @@ export const deselectPolicyAction = createAction(
   props<{ policy: Policy }>()
 );
 
-export const selectAllPolicies = createAction("[Policy] Select all");
+export const selectAllPoliciesAction = createAction("[Policy] Select all");
 export const clearSelectionAction = createAction("[Policy] Clear Selection");
 
 export const changePageAction = createAction(
   "[Policy] Change Page",
   props<{ page: number; limit: number }>()
 );
+export const changeEditablePageAction = createAction(
+  "[Policy] Change Editable Page",
+  props<{ page: number; limit: number }>()
+);
 
 export const sortByColumnAction = createAction(
   "[Policy] Sort By Column",
+  props<{ column: string; direction: string }>()
+);
+export const sortEditableByColumnAction = createAction(
+  "[Policy] Sort Editable By Column",
   props<{ column: string; direction: string }>()
 );
