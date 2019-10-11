@@ -14,7 +14,7 @@
           [paginate]="paginate"
           [currentPage]="currentPage$ | async"
           [dataCount]="policyCount$ | async"
-          [dataPerPage]="itemsPerPage$ | async"
+          [dataPerPage]="policiesPerPage$ | async"
           (pageChange)="onPageChange($event)"
           (sortChange)="onSortChange($event)"
           (selectAll)="onSelectAll($event)"

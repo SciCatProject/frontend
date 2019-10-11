@@ -18,12 +18,12 @@ import {
   CheckboxEvent
 } from "shared/modules/table/table.component";
 import {
-  ChangePageAction,
-  SortByColumnAction,
-  SelectPolicyAction,
-  DeselectPolicyAction,
-  SubmitPolicyAction,
-  ClearSelectionAction
+  changePageAction,
+  sortByColumnAction,
+  selectPolicyAction,
+  deselectPolicyAction,
+  submitPolicyAction,
+  clearSelectionAction
 } from "state-management/actions/policies.actions";
 import { MatCheckboxChange } from "@angular/material";
 

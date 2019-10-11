@@ -9,13 +9,13 @@ import {
   CheckboxEvent
 } from "shared/modules/table/table.component";
 import {
-  getItemsPerPage,
+  getPoliciesPerPage,
   getPage,
-  getTotalCount,
+  getPoliciesCount,
   getPolicies,
   getEditablePolicies,
   getSelectedPolicies,
-  getEditableCount
+  getEditablePoliciesCount
 } from "state-management/selectors/policies.selectors";
 import {
   MatCheckboxChange,
@@ -23,13 +23,14 @@ import {
   MatDialog
 } from "@angular/material";
 import {
-  ChangePageAction,
-  SortByColumnAction,
-  SelectPolicyAction,
-  DeselectPolicyAction,
-  SubmitPolicyAction,
-  ClearSelectionAction,
-  FetchPoliciesAction
+  changePageAction,
+  sortByColumnAction,
+  selectPolicyAction,
+  deselectPolicyAction,
+  submitPolicyAction,
+  clearSelectionAction,
+  fetchPoliciesAction,
+  selectAllPolicies
 } from "state-management/actions/policies.actions";
 import { EditDialogComponent } from "policies/edit-dialog/edit-dialog.component";
 import { map } from "rxjs/operators";
@@ -40,16 +41,17 @@ import { map } from "rxjs/operators";
   styleUrls: ["./policies-dashboard.component.scss"]
 })
 export class PoliciesDashboardComponent implements OnInit, OnDestroy {
-
   policies$: Observable<Policy[]> = this.store.pipe(select(getPolicies));
   editablePolicies$: Observable<Policy[]> = this.store.pipe(
     select(getEditablePolicies)
   );
-  itemsPerPage$: Observable<number> = this.store.pipe(select(getItemsPerPage));
+  policiesPerPage$: Observable<number> = this.store.pipe(
+    select(getPoliciesPerPage)
+  );
   currentPage$: Observable<number> = this.store.pipe(select(getPage));
-  policyCount$: Observable<number> = this.store.pipe(select(getTotalCount));
+  policyCount$: Observable<number> = this.store.pipe(select(getPoliciesCount));
   editableCount$: Observable<number> = this.store.pipe(
-    select(getEditableCount)
+    select(getEditablePoliciesCount)
   );
 
   multiSelect = false;
@@ -93,36 +95,33 @@ export class PoliciesDashboardComponent implements OnInit, OnDestroy {
       inList: true
     }
   ];
-  constructor(
-    private datasetApi: DatasetApi,
-    public dialog: MatDialog,
-    private store: Store<Policy>
-  ) {}
 
   onPageChange(event: PageChangeEvent) {
-    this.store.dispatch(new ChangePageAction(event.pageIndex, event.pageSize));
+    this.store.dispatch(
+      changePageAction({ page: event.pageIndex, limit: event.pageSize })
+    );
   }
 
   onSortChange(event: SortChangeEvent) {
-    this.store.dispatch(new SortByColumnAction(event.active, event.direction));
+    this.store.dispatch(
+      sortByColumnAction({ column: event.active, direction: event.direction })
+    );
   }
 
   onSelectAll(event: MatCheckboxChange) {
-    this.policies$
-      .subscribe(policies => {
-        policies.forEach(policy => {
-          this.onSelectOne({ event, row: policy });
-        });
-      })
-      .unsubscribe();
+    if (event.checked) {
+      this.store.dispatch(selectAllPolicies());
+    } else {
+      this.store.dispatch(clearSelectionAction());
+    }
   }
 
   onSelectOne(checkboxEvent: CheckboxEvent) {
     const { event, row } = checkboxEvent;
     if (event.checked) {
-      this.store.dispatch(new SelectPolicyAction(row));
+      this.store.dispatch(selectPolicyAction({ policy: row }));
     } else {
-      this.store.dispatch(new DeselectPolicyAction(row));
+      this.store.dispatch(deselectPolicyAction({ policy: row }));
     }
   }
 
@@ -142,7 +141,9 @@ export class PoliciesDashboardComponent implements OnInit, OnDestroy {
 
   onDialogClose(result: any) {
     if (result) {
-      this.store.dispatch(new SubmitPolicyAction(this.selectedGroups, result));
+      this.store.dispatch(
+        submitPolicyAction({ ownerList: this.selectedGroups, policy: result })
+      );
       // if datasets already exist
       this.selectedGroups.forEach(group => {
         this.datasetApi
@@ -167,14 +168,20 @@ export class PoliciesDashboardComponent implements OnInit, OnDestroy {
             })
           )
           .subscribe();
-        this.store.dispatch(new ClearSelectionAction());
+        this.store.dispatch(clearSelectionAction());
       });
     }
   }
 
+  constructor(
+    private datasetApi: DatasetApi,
+    public dialog: MatDialog,
+    private store: Store<Policy>
+  ) {}
+
   ngOnInit() {
-    this.store.dispatch(new ClearSelectionAction());
-    this.store.dispatch(new FetchPoliciesAction());
+    this.store.dispatch(clearSelectionAction());
+    this.store.dispatch(fetchPoliciesAction());
 
     this.selectedPoliciesSubscription = this.store
       .pipe(select(getSelectedPolicies))
