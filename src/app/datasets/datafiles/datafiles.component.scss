@@ -18,9 +18,6 @@ mat-header-row {
   background: mat-color($primary);
 }
 
-
-
-
 .download-button {
   background-color: #0ea432;
   color: #ffffff;
@@ -33,4 +30,11 @@ mat-header-row {
   transform: translateY(50%);
   margin-bottom: 1em;
   font-size: larger;
+}
+
+.single-file-download {
+  padding: 0;
+  color: mat-color($primary);
+  font-weight: normal;
+  text-align: start;
 }
