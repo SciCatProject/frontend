@@ -24,7 +24,8 @@ import {
   RETRIEVE_USER_IDENTITY_COMPLETE,
   RetrieveUserIdentCompleteAction,
   FETCH_CATAMEL_TOKEN_COMPLETE,
-  FetchCatamelTokenCompleteAction
+  FetchCatamelTokenCompleteAction,
+  AD_LOGIN
 } from "state-management/actions/user.actions";
 
 export function userReducer(
@@ -36,6 +37,10 @@ export function userReducer(
   }
 
   switch (action.type) {
+    case AD_LOGIN: {
+      return { ...state, isLoggingIn: true };
+    }
+
     case RETRIEVE_USER_COMPLETE: {
       const currentUser = (action as RetrieveUserCompleteAction).user;
       const isLoggedIn = true;

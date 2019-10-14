@@ -104,6 +104,6 @@ export class LoginComponent implements OnInit, OnDestroy {
    */
   onLogin(event) {
     const form: LoginForm = this.loginForm.value;
-    this.store.dispatch(new ua.LoginAction(form));
+    this.store.dispatch(new ua.ActiveDirLoginAction(form));
   }
 }

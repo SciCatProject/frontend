@@ -11,33 +11,101 @@ import {
   map,
   switchMap,
   tap,
-  concatMap,
-  mergeMap
+  concatMap
 } from "rxjs/operators";
 
 import * as UserActions from "state-management/actions/user.actions";
 import { MessageType } from "state-management/models";
 
-import { LoginService } from "users/login.service";
-import { UserApi, AccessToken } from "shared/sdk";
+import {
+  UserApi,
+  AccessToken,
+  LoopBackAuth,
+  SDKToken,
+  User,
+  UserIdentityApi,
+  UserIdentity
+} from "shared/sdk";
+import { ADAuthService } from "users/adauth.service";
 
 @Injectable()
 export class UserEffects {
+  /**
+   * First, try AD login
+   * If succesful, go to fetchUser$
+   * If error, go to funcLogin$
+   */
   @Effect()
-  protected login$ = this.action$.pipe(
-    ofType<UserActions.LoginAction>(UserActions.LOGIN),
+  protected adLogin$ = this.action$.pipe(
+    ofType<UserActions.ActiveDirLoginAction>(UserActions.AD_LOGIN),
     map(action => action.form),
-    switchMap(({ username, password, rememberMe }) => {
-      return this.loginSrv.login$(username, password, rememberMe).pipe(
-        mergeMap((res: any) => [
-          new UserActions.LoginCompleteAction(res.user, res.accountType),
-          res.user.accountType !== "functional"
-            ? new UserActions.RetrieveUserIdentAction(res.user.id)
-            : null
-        ]),
-        catchError(err => of(new UserActions.LoginFailedAction()))
+    switchMap(({ username, password, rememberMe }) =>
+      this.activeDirSrv.login(username, password).pipe(
+        map(({ body }) => new UserActions.ActiveDirLoginSuccessAction(body)),
+        catchError(() =>
+          of(
+            new UserActions.ActiveDirLoginFailedAction(
+              username,
+              password,
+              rememberMe
+            )
+          )
+        )
+      )
+    )
+  );
+
+  /**
+   * Set access token and try to find the AD user in catamel
+   * If succesful, trigger a LoginCompleteAction
+   * If error, trigger a LoginFailedAction
+   */
+  @Effect()
+  protected fetchUser$ = this.action$.pipe(
+    ofType<UserActions.ActiveDirLoginSuccessAction>(
+      UserActions.AD_LOGIN_SUCCESS
+    ),
+    switchMap(({ response }) => {
+      const token = new SDKToken({
+        id: response.access_token,
+        userId: response.userId
+      });
+      this.lbAuth.setToken(token);
+      return this.userApi.findById(response.userId).pipe(
+        map(
+          (user: User) => new UserActions.LoginCompleteAction(user, "external")
+        ),
+        catchError(() => of(new UserActions.LoginFailedAction()))
       );
     })
+  );
+
+  @Effect()
+  protected loginRedirect$ = this.action$.pipe(
+    ofType<UserActions.ActiveDirLoginFailedAction>(UserActions.AD_LOGIN_FAILED),
+    map(
+      ({ username, password, rememberMe }) =>
+        new UserActions.LoginAction({ username, password, rememberMe })
+    )
+  );
+
+  /**
+   * Try to login with a functional account
+   * If succesful, trigger a LoginCompleteAction
+   * If error, trigger a LoginFailedAction
+   */
+  @Effect()
+  protected funcLogin$ = this.action$.pipe(
+    ofType<UserActions.LoginAction>(UserActions.LOGIN),
+    map(action => action.form),
+    switchMap(({ username, password, rememberMe }) =>
+      this.userApi.login({ username, password, rememberMe }).pipe(
+        map(
+          ({ user }) => new UserActions.LoginCompleteAction(user, "functional")
+        ),
+        catchError(() => of(new UserActions.LoginFailedAction()))
+      )
+    )
   );
 
   @Effect()
@@ -114,9 +182,12 @@ export class UserEffects {
   protected retrieveUserIdentity$: Observable<Action> = this.action$.pipe(
     ofType(UserActions.RETRIEVE_USER_IDENTITY),
     switchMap((action: UserActions.RetrieveUserIdentAction) =>
-      this.loginSrv.getUserIdent$(action.id)
+      this.userIdentityApi.findOne({ where: { userId: action.id } })
     ),
-    map(res => new UserActions.RetrieveUserIdentCompleteAction(res)),
+    map(
+      (userIdentity: UserIdentity) =>
+        new UserActions.RetrieveUserIdentCompleteAction(userIdentity)
+    ),
     catchError(err =>
       of(
         new UserActions.RetrieveUserFailedAction(
@@ -138,8 +209,10 @@ export class UserEffects {
 
   constructor(
     private action$: Actions,
+    private activeDirSrv: ADAuthService,
     private router: Router,
     private userApi: UserApi,
-    private loginSrv: LoginService
+    private userIdentityApi: UserIdentityApi,
+    private lbAuth: LoopBackAuth
   ) {}
 }
