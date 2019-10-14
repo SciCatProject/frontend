@@ -68,21 +68,23 @@ export class PolicyEffects {
       ),
       withLatestFrom(this.userProfile$, this.editableQueryParams$),
       switchMap(([action, profile, params]) => {
+        let filter;
         if (!profile) {
           // allow functional users
-          return this.policyApi.find(params);
+          filter = params;
         } else {
           const email = profile.email.toLowerCase();
           const { order, skip, limit } = params;
-          const filter = { where: { manager: email }, order, skip, limit };
-          return this.policyApi.find(filter);
+          filter = { where: { manager: email }, order, skip, limit };
         }
-      }),
-      mergeMap((policies: Policy[]) => [
-        fromActions.fetchEditablePoliciesCompleteAction({ policies }),
-        fromActions.fetchEditableCountAction()
-      ]),
-      catchError(() => of(fromActions.fetchEditablePoliciesFailedAction()))
+        return this.policyApi.find(filter).pipe(
+          mergeMap((policies: Policy[]) => [
+            fromActions.fetchEditablePoliciesCompleteAction({ policies }),
+            fromActions.fetchEditableCountAction()
+          ]),
+          catchError(() => of(fromActions.fetchEditablePoliciesFailedAction()))
+        );
+      })
     )
   );
 
@@ -91,17 +93,20 @@ export class PolicyEffects {
       ofType(fromActions.fetchEditableCountAction),
       withLatestFrom(this.userProfile$),
       switchMap(([action, profile]) => {
+        let filter;
         if (!profile) {
-          return this.policyApi.count();
+          filter = {};
         } else {
           const email = profile.email.toLowerCase();
-          return this.policyApi.count({ where: { manager: email } });
+          filter = { where: { manager: email } };
         }
-      }),
-      map(({ count }) =>
-        fromActions.fetchEditableCountCompleteAction({ count })
-      ),
-      catchError(() => of(fromActions.fetchEditableCountFailedAction()))
+        return this.policyApi.count(filter).pipe(
+          map(({ count }) =>
+            fromActions.fetchEditableCountCompleteAction({ count })
+          ),
+          catchError(() => of(fromActions.fetchEditableCountFailedAction()))
+        );
+      })
     )
   );
 
