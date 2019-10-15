@@ -1,127 +1,84 @@
-import { Action } from "@ngrx/store";
-import { Policy } from "shared/sdk/models";
+import { createAction, props } from "@ngrx/store";
+import { Policy } from "state-management/models";
 
-export const SELECT_POLICY = "[Policy] Select Policy";
-export const DESELECT_POLICY = "[Policy] Deselect Policy";
-export const CLEAR_SELECTION = "[Policy] Clear Selection";
+export const fetchPoliciesAction = createAction("[Policy] Fetch Policies");
+export const fetchPoliciesCompleteAction = createAction(
+  "[Policy] Fetch Policies Complete",
+  props<{ policies: Policy[] }>()
+);
+export const fetchPoliciesFailedAction = createAction(
+  "[Policy] Fetch Policies Failed"
+);
 
-export const FETCH_POLICIES = "[Policy] Fetch Policies";
-export const FETCH_POLICIES_COMPLETE = "[Policy] Fetch Policies Complete";
-export const FETCH_POLICIES_FAILED = "[Policy] Fetch Policies Failed";
+export const fetchCountAction = createAction("[Policy] Fetch Count");
+export const fetchCountCompleteAction = createAction(
+  "[Policy] Fetch Count Complete",
+  props<{ count: number }>()
+);
+export const fetchCountFailedAction = createAction(
+  "[Policy] Fetch Count Failed"
+);
 
-export const SUBMIT_POLICY = "[Policy] Submit policy settings";
-export const SUBMIT_POLICY_COMPLETE =
-  "[Policy] Submit policy settings complete";
-export const SUBMIT_POLICY_FAILED = "[Policy] Submit failed";
+export const fetchEditablePoliciesAction = createAction(
+  "[Policy] Fetch Editable Policies"
+);
+export const fetchEditablePoliciesCompleteAction = createAction(
+  "[Policy] Fetch Editable Policies Complete",
+  props<{ policies: Policy[] }>()
+);
+export const fetchEditablePoliciesFailedAction = createAction(
+  "[Policy] Fetch Editable Policies Failed"
+);
 
-export const CHANGE_PAGE = "[Policy] Change Page";
-export const SORT_BY_COLUMN = "[Policy] Sort by Column";
+export const fetchEditableCountAction = createAction(
+  "[Policy] Fetch Editable Policies Count"
+);
+export const fetchEditableCountCompleteAction = createAction(
+  "[Policy] Fetch Editable Policies Count Complete",
+  props<{ count: number }>()
+);
+export const fetchEditableCountFailedAction = createAction(
+  "[Policy] Fetch Editable Policies Count Failed"
+);
 
-export const FETCH_COUNT_POLICIES = "[Policy] Fetch count";
-export const FAILED_POLICIES = "[Policy] Failed policies action";
-export const FETCH_EDITABLE_POLICIES = "[Policy] Fetch editable policies";
-export const FETCH_EDITABLE_POLICIES_COMPLETE =
-  "[Policy] Fetch editable policies complete";
+export const submitPolicyAction = createAction(
+  "[Policy] Submit Policy",
+  props<{ ownerList: string[]; policy: Policy }>()
+);
+export const submitPolicyCompleteAction = createAction(
+  "[Policy] Submit Policy Complete",
+  props<{ policy: Policy }>()
+);
+export const submitPolicyFailedAction = createAction(
+  "[Policy] Submit Policy Failed"
+);
 
-export class SubmitPolicyAction implements Action {
-  readonly type = SUBMIT_POLICY;
-  constructor(
-    readonly ownerList: string[],
-    readonly policyAttributes: Policy
-  ) {}
-}
+export const selectPolicyAction = createAction(
+  "[Policy] Select Policy",
+  props<{ policy: Policy }>()
+);
+export const deselectPolicyAction = createAction(
+  "[Policy] Deselect Policy",
+  props<{ policy: Policy }>()
+);
 
-export class SubmitPolicyCompleteAction implements Action {
-  readonly type = SUBMIT_POLICY_COMPLETE;
-  constructor(readonly submissionResponse: Policy) {}
-}
+export const selectAllPoliciesAction = createAction("[Policy] Select all");
+export const clearSelectionAction = createAction("[Policy] Clear Selection");
 
-export class SubmitPolicyFailedAction implements Action {
-  readonly type = SUBMIT_POLICY_FAILED;
-  constructor(readonly error: Error) {}
-}
+export const changePageAction = createAction(
+  "[Policy] Change Page",
+  props<{ page: number; limit: number }>()
+);
+export const changeEditablePageAction = createAction(
+  "[Policy] Change Editable Page",
+  props<{ page: number; limit: number }>()
+);
 
-export class SelectPolicyAction implements Action {
-  readonly type = SELECT_POLICY;
-  constructor(readonly policy: Policy) {}
-}
-
-export class DeselectPolicyAction implements Action {
-  readonly type = DESELECT_POLICY;
-  constructor(readonly policy: Policy) {}
-}
-
-export class ClearSelectionAction implements Action {
-  readonly type = CLEAR_SELECTION;
-}
-
-export class FetchPoliciesAction implements Action {
-  readonly type = FETCH_POLICIES;
-}
-
-export class FetchPoliciesCompleteAction implements Action {
-  readonly type = FETCH_POLICIES_COMPLETE;
-  constructor(readonly policies: Policy[]) {}
-}
-
-export class FetchPoliciesFailedAction implements Action {
-  readonly type = FETCH_POLICIES_FAILED;
-}
-
-export class ChangePageAction implements Action {
-  readonly type = CHANGE_PAGE;
-  constructor(readonly page: number, readonly limit: number) {}
-}
-
-export class SortByColumnAction implements Action {
-  readonly type = SORT_BY_COLUMN;
-  constructor(readonly column: string, readonly direction: string) {}
-}
-
-export class FetchCountPolicies implements Action {
-  readonly type = FETCH_COUNT_POLICIES;
-  constructor(readonly count: number) {}
-}
-
-export class FailedPoliciesAction implements Action {
-  readonly type = FAILED_POLICIES;
-  constructor(err: string) {}
-}
-
-export class FetchEditablePolicies implements Action {
-  readonly type = FETCH_EDITABLE_POLICIES;
-  constructor() {}
-}
-
-export class FetchEditablePoliciesComplete implements Action {
-  readonly type = FETCH_EDITABLE_POLICIES_COMPLETE;
-  constructor(readonly editablePolicies: Policy[]) {}
-}
-
-/*export type FetchPoliciesOutcomeAction =
-  | FetchPoliciesCompleteAction
-  | FetchPoliciesFailedAction
-  | FetchEditablePoliciesComplete;
-
-export type SubmitPoliciesOutcomeAction =
-  | SubmitPolicyCompleteAction
-  | SubmitPolicyFailedAction;*/
-
-export type PoliciesActions =
-  | SelectPolicyAction
-  | DeselectPolicyAction
-  | FetchPoliciesAction
-  | FetchPoliciesCompleteAction
-  | FetchPoliciesFailedAction
-  | ClearSelectionAction
-  | SubmitPolicyAction
-  | SubmitPolicyCompleteAction
-  | SubmitPolicyFailedAction
-  | ChangePageAction
-  | SortByColumnAction
-  | FetchCountPolicies
-  | FailedPoliciesAction
-  | FetchEditablePolicies
-  | FetchEditablePoliciesComplete;
-
-// New filtering actions
+export const sortByColumnAction = createAction(
+  "[Policy] Sort By Column",
+  props<{ column: string; direction: string }>()
+);
+export const sortEditableByColumnAction = createAction(
+  "[Policy] Sort Editable By Column",
+  props<{ column: string; direction: string }>()
+);

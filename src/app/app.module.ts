@@ -14,7 +14,7 @@ import { HttpClientModule } from "@angular/common/http";
 import { JobEffects } from "state-management/effects/jobs.effects";
 import { NgModule } from "@angular/core";
 import { NguiDatetimePickerModule } from "@ngui/datetime-picker";
-import { PoliciesEffects } from "state-management/effects/policies.effects";
+import { PolicyEffects } from "state-management/effects/policies.effects";
 import { PoliciesModule } from "policies/policies.module";
 import { ProposalsModule } from "proposals/proposals.module";
 import { RouterModule } from "@angular/router";
@@ -106,7 +106,7 @@ import { JobsModule } from "jobs/jobs.module";
       DatasetEffects,
       UserEffects,
       JobEffects,
-      PoliciesEffects,
+      PolicyEffects,
       SampleEffects,
       LogbookEffects,
       PublishedDataEffects

@@ -14,11 +14,9 @@
           [paginate]="paginate"
           [currentPage]="currentPage$ | async"
           [dataCount]="policyCount$ | async"
-          [dataPerPage]="itemsPerPage$ | async"
-          (pageChange)="onPageChange($event)"
-          (sortChange)="onSortChange($event)"
-          (selectAll)="onSelectAll($event)"
-          (selectOne)="onSelectOne($event)"
+          [dataPerPage]="policiesPerPage$ | async"
+          (pageChange)="onPoliciesPageChange($event)"
+          (sortChange)="onPoliciesSortChange($event)"
         ></app-table>
       </div>
       <div fxFlex="1"></div>
@@ -51,11 +49,11 @@
           [columns]="tableColumns"
           [select]="editEnabled"
           [paginate]="paginate"
-          [currentPage]="currentPage$ | async"
+          [currentPage]="currentEditablePage$ | async"
           [dataCount]="editableCount$ | async"
-          [dataPerPage]="itemsPerPage$ | async"
-          (pageChange)="onPageChange($event)"
-          (sortChange)="onSortChange($event)"
+          [dataPerPage]="editablePoliciesPerPage$ | async"
+          (pageChange)="onEditablePoliciesPageChange($event)"
+          (sortChange)="onEditablePoliciesSortChange($event)"
           (selectAll)="onSelectAll($event)"
           (selectOne)="onSelectOne($event)"
         ></app-table>

@@ -1,135 +1,131 @@
-import {
-  CHANGE_PAGE,
-  ChangePageAction,
-  CLEAR_SELECTION,
-  DESELECT_POLICY,
-  DeselectPolicyAction,
-  FETCH_POLICIES,
-  FETCH_POLICIES_COMPLETE,
-  FETCH_POLICIES_FAILED,
-  FetchPoliciesCompleteAction,
-  PoliciesActions,
-  SELECT_POLICY,
-  SelectPolicyAction,
-  SORT_BY_COLUMN,
-  SortByColumnAction,
-  SUBMIT_POLICY_COMPLETE,
-  SUBMIT_POLICY_FAILED,
-  SubmitPolicyCompleteAction,
-  SubmitPolicyFailedAction,
-  FETCH_COUNT_POLICIES,
-  FETCH_EDITABLE_POLICIES_COMPLETE,
-  FETCH_EDITABLE_POLICIES,
-  FetchEditablePoliciesComplete
-} from "state-management/actions/policies.actions";
-
+import { createReducer, on, Action } from "@ngrx/store";
 import {
   initialPolicyState,
   PolicyState
 } from "state-management/state/policies.store";
+import * as fromActions from "state-management/actions/policies.actions";
+
+const reducer = createReducer(
+  initialPolicyState,
+  on(fromActions.fetchPoliciesAction, state => ({ ...state, isLoading: true })),
+  on(fromActions.fetchPoliciesCompleteAction, (state, { policies }) => ({
+    ...state,
+    policies,
+    isLoading: false
+  })),
+  on(fromActions.fetchPoliciesFailedAction, state => ({
+    ...state,
+    isLoading: false
+  })),
+
+  on(fromActions.fetchCountAction, state => ({ ...state, isLoading: true })),
+  on(fromActions.fetchCountCompleteAction, (state, { count }) => ({
+    ...state,
+    totalCount: count,
+    isLoading: false
+  })),
+  on(fromActions.fetchCountFailedAction, state => ({
+    ...state,
+    isLoading: false
+  })),
+
+  on(fromActions.fetchEditablePoliciesAction, state => ({
+    ...state,
+    isLoading: true
+  })),
+  on(
+    fromActions.fetchEditablePoliciesCompleteAction,
+    (state, { policies }) => ({
+      ...state,
+      editablePolicies: policies,
+      isLoading: false
+    })
+  ),
+  on(fromActions.fetchEditablePoliciesFailedAction, state => ({
+    ...state,
+    isLoading: false
+  })),
+
+  on(fromActions.fetchEditableCountAction, state => ({
+    ...state,
+    isLoading: true
+  })),
+  on(fromActions.fetchEditableCountCompleteAction, (state, { count }) => ({
+    ...state,
+    editableCount: count,
+    isLoading: false
+  })),
+  on(fromActions.fetchEditableCountFailedAction, state => ({
+    ...state,
+    isLoading: false
+  })),
+
+  on(fromActions.submitPolicyAction, state => ({ ...state, isLoading: true })),
+  on(fromActions.submitPolicyCompleteAction, state => ({
+    ...state,
+    isLoading: false
+  })),
+  on(fromActions.submitPolicyFailedAction, state => ({
+    ...state,
+    isLoading: false
+  })),
+
+  on(fromActions.selectPolicyAction, (state, { policy }) => {
+    const alreadySelected = state.selectedPolicies.find(
+      existing => existing.id === policy.id
+    );
+    if (alreadySelected) {
+      return state;
+    } else {
+      const selectedPolicies = state.selectedPolicies.concat(policy);
+      return { ...state, selectedPolicies };
+    }
+  }),
+  on(fromActions.deselectPolicyAction, (state, { policy }) => {
+    const selectedPolicies = state.selectedPolicies.filter(
+      selectedPolicy => selectedPolicy.id !== policy.id
+    );
+    return { ...state, selectedPolicies };
+  }),
+
+  on(fromActions.selectAllPoliciesAction, state => {
+    const selectedPolicies = state.editablePolicies;
+    return { ...state, selectedPolicies };
+  }),
+  on(fromActions.clearSelectionAction, state => ({
+    ...state,
+    selectedPolicies: []
+  })),
+
+  on(fromActions.changePageAction, (state, { page, limit }) => {
+    const skip = page * limit;
+    const policiesFilters = { ...state.policiesFilters, skip, limit };
+    return { ...state, policiesFilters };
+  }),
+  on(fromActions.changeEditablePageAction, (state, { page, limit }) => {
+    const skip = page * limit;
+    const editableFilters = { ...state.editableFilters, skip, limit };
+    return { ...state, editableFilters };
+  }),
+
+  on(fromActions.sortByColumnAction, (state, { column, direction }) => {
+    const sortField = column + (direction ? " " + direction : "");
+    const policiesFilters = { ...state.policiesFilters, sortField, skip: 0 };
+    return { ...state, policiesFilters };
+  }),
+  on(fromActions.sortEditableByColumnAction, (state, { column, direction }) => {
+    const sortField = column + (direction ? " " + direction : "");
+    const editableFilters = { ...state.editableFilters, sortField, skip: 0 };
+    return { ...state, editableFilters };
+  })
+);
 
 export function policiesReducer(
-  state: PolicyState = initialPolicyState,
-  action: PoliciesActions
-): PolicyState {
+  state: PolicyState | undefined,
+  action: Action
+) {
   if (action.type.indexOf("[Policy]") !== -1) {
     console.log("Action came in! " + action.type);
   }
-
-  switch (action.type) {
-    case SUBMIT_POLICY_COMPLETE: {
-      const submissionResponse = (action as SubmitPolicyCompleteAction)
-        .submissionResponse;
-      return { ...state, submissionResponse };
-    }
-
-    case SUBMIT_POLICY_FAILED: {
-      const error = (action as SubmitPolicyFailedAction).error;
-      return { ...state, error, policySubmission: null };
-    }
-
-    case FETCH_POLICIES: {
-      return { ...state, policiesLoading: true };
-    }
-
-    case FETCH_POLICIES_COMPLETE: {
-      const policies = (action as FetchPoliciesCompleteAction).policies;
-      return { ...state, policies, policiesLoading: false };
-    }
-
-    case FETCH_EDITABLE_POLICIES: {
-      return { ...state, policiesLoading: true };
-    }
-
-    case FETCH_EDITABLE_POLICIES_COMPLETE: {
-      const editablePolicies = (action as FetchEditablePoliciesComplete)
-        .editablePolicies;
-      return {
-        ...state,
-        editablePolicies,
-        editableCount: editablePolicies.length,
-        policiesLoading: false
-      };
-    }
-
-    case FETCH_POLICIES_FAILED: {
-      return { ...state, policiesLoading: false };
-    }
-
-    case SELECT_POLICY: {
-      const policy = (action as SelectPolicyAction).policy;
-      const alreadySelected = state.selectedPolicies.find(
-        existing => policy.id === existing.id
-      );
-      if (alreadySelected) {
-        return state;
-      } else {
-        const selectedPolicies = state.selectedPolicies.concat(policy);
-        return { ...state, selectedPolicies };
-      }
-    }
-
-    case DESELECT_POLICY: {
-      const policy = (action as DeselectPolicyAction).policy;
-      const selectedPolicies = state.selectedPolicies.filter(
-        selectedPolicy => selectedPolicy.id !== policy.id
-      );
-      return { ...state, selectedPolicies };
-    }
-
-    case CLEAR_SELECTION: {
-      return { ...state, selectedPolicies: [] };
-    }
-
-    case CHANGE_PAGE: {
-      const { page, limit } = action as ChangePageAction;
-      const skip = page * limit;
-      const filters = { ...state.filters, skip, limit };
-      return {
-        ...state,
-        policiesLoading: true,
-        filters
-      };
-    }
-
-    case SORT_BY_COLUMN: {
-      const { column, direction } = action as SortByColumnAction;
-      let sortField = "";
-      if (direction) {
-        sortField = column + " " + direction;
-      }
-
-      const filters = { ...state.filters, sortField, skip: 0 };
-      return { ...state, filters, policiesLoading: true };
-    }
-
-    case FETCH_COUNT_POLICIES: {
-      const count = action.count;
-      return { ...state, totalCount: count };
-    }
-
-    default: {
-      return state;
-    }
-  }
+  return reducer(state, action);
 }
