@@ -1,12 +1,7 @@
-import { createSelector, createFeatureSelector } from "@ngrx/store";
-import { PolicyState } from "../state/policies.store";
+import { createFeatureSelector, createSelector } from "@ngrx/store";
+import { PolicyState } from "state-management/state/policies.store";
 
 export const getPolicyState = createFeatureSelector<PolicyState>("policies");
-
-export const getCurrentPolicy = createSelector(
-  getPolicyState,
-  state => state.currentPolicy
-);
 
 export const getPolicies = createSelector(
   getPolicyState,
@@ -23,51 +18,69 @@ export const getSelectedPolicies = createSelector(
   state => state.selectedPolicies
 );
 
-export const isEmptySelection = createSelector(
-  getSelectedPolicies,
-  sets => sets.length === 0
-);
-
-export const getPoliciesPerPage = createSelector(
-  getPolicyState,
-  state => state
-);
-
-export const getPage = createSelector(
-  getPolicyState,
-  state => {
-    const { skip, limit } = state.filters;
-    return skip / limit;
-  }
-);
-
-export const getTotalCount = createSelector(
+export const getPoliciesCount = createSelector(
   getPolicyState,
   state => state.totalCount
 );
 
-export const getEditableCount = createSelector(
+export const getEditablePoliciesCount = createSelector(
   getPolicyState,
   state => state.editableCount
 );
 
+export const getIsLoading = createSelector(
+  getPolicyState,
+  state => state.isLoading
+);
+
 export const getFilters = createSelector(
   getPolicyState,
-  state => state.filters
+  state => state.policiesFilters
+);
+
+export const getEditableFilters = createSelector(
+  getPolicyState,
+  state => state.editableFilters
+);
+
+export const getPage = createSelector(
+  getFilters,
+  filters => {
+    const { skip, limit } = filters;
+    return skip / limit;
+  }
+);
+
+export const getEditablePage = createSelector(
+  getEditableFilters,
+  filters => {
+    const { skip, limit } = filters;
+    return skip / limit;
+  }
+);
+
+export const getPoliciesPerPage = createSelector(
+  getFilters,
+  filters => filters.limit
+);
+
+export const getEditablePoliciesPerPage = createSelector(
+  getEditableFilters,
+  filters => filters.limit
 );
 
 export const getQueryParams = createSelector(
   getFilters,
-  filter => {
-    const { skip, limit, sortField } = filter;
-    const limits = { skip, limit, order: sortField };
-    return {
-      limits
-    };
+  filters => {
+    const { skip, limit, sortField } = filters;
+    return { order: sortField, skip, limit };
   }
 );
 
-export const getItemsPerPage = createSelector(
-  getPolicyState,
-  state => state.filters.limit
+export const getEditableQueryParams = createSelector(
+  getEditableFilters,
+  filters => {
+    const { skip, limit, sortField } = filters;
+    return { order: sortField, skip, limit };
+  }
 );

@@ -18,12 +18,15 @@ import {
   CheckboxEvent
 } from "shared/modules/table/table.component";
 import {
-  ChangePageAction,
-  SortByColumnAction,
-  SelectPolicyAction,
-  DeselectPolicyAction,
-  SubmitPolicyAction,
-  ClearSelectionAction
+  changePageAction,
+  sortByColumnAction,
+  selectPolicyAction,
+  deselectPolicyAction,
+  submitPolicyAction,
+  clearSelectionAction,
+  selectAllPoliciesAction,
+  changeEditablePageAction,
+  sortEditableByColumnAction
 } from "state-management/actions/policies.actions";
 import { MatCheckboxChange } from "@angular/material";
 
@@ -66,8 +69,8 @@ describe("PoliciesDashboardComponent", () => {
     expect(component).toBeTruthy();
   });
 
-  describe("#onPageChange()", () => {
-    it("should dispatch a ChangePageAction", () => {
+  describe("#onPoliciesPageChange()", () => {
+    it("should dispatch a changePageAction", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
       const event: PageChangeEvent = {
@@ -75,34 +78,99 @@ describe("PoliciesDashboardComponent", () => {
         pageSize: 25,
         length: 25
       };
-      component.onPageChange(event);
+      component.onPoliciesPageChange(event);
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        new ChangePageAction(event.pageIndex, event.pageSize)
+        changePageAction({ page: event.pageIndex, limit: event.pageSize })
       );
     });
   });
 
-  describe("#onSortChange()", () => {
-    it("should dispatch a SortByColumnAction", () => {
+  describe("#onEditablePoliciesPageChange()", () => {
+    it("should dispatch a changeEditablePageAction", () => {
+      dispatchSpy = spyOn(store, "dispatch");
+
+      const event: PageChangeEvent = {
+        pageIndex: 0,
+        pageSize: 25,
+        length: 25
+      };
+      component.onEditablePoliciesPageChange(event);
+
+      expect(dispatchSpy).toHaveBeenCalledTimes(1);
+      expect(dispatchSpy).toHaveBeenCalledWith(
+        changeEditablePageAction({
+          page: event.pageIndex,
+          limit: event.pageSize
+        })
+      );
+    });
+  });
+
+  describe("#onPoliciesSortChange()", () => {
+    it("should dispatch a sortByColumnAction", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
       const event: SortChangeEvent = {
         active: "test",
         direction: "asc"
       };
-      component.onSortChange(event);
+      component.onPoliciesSortChange(event);
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        new SortByColumnAction(event.active, event.direction)
+        sortByColumnAction({ column: event.active, direction: event.direction })
       );
     });
   });
 
+  describe("#onEditablePoliciesSortChange()", () => {
+    it("should dispatch a sortEditableByColumnAction", () => {
+      dispatchSpy = spyOn(store, "dispatch");
+
+      const event: SortChangeEvent = {
+        active: "test",
+        direction: "asc"
+      };
+      component.onEditablePoliciesSortChange(event);
+
+      expect(dispatchSpy).toHaveBeenCalledTimes(1);
+      expect(dispatchSpy).toHaveBeenCalledWith(
+        sortEditableByColumnAction({
+          column: event.active,
+          direction: event.direction
+        })
+      );
+    });
+  });
+
+  describe("#onSelectAll()", () => {
+    it("should dispatch a selectAllPoliciesAction if checked is true", () => {
+      dispatchSpy = spyOn(store, "dispatch");
+
+      const event = new MatCheckboxChange();
+      event.checked = true;
+      component.onSelectAll(event);
+
+      expect(dispatchSpy).toHaveBeenCalledTimes(1);
+      expect(dispatchSpy).toHaveBeenCalledWith(selectAllPoliciesAction());
+    });
+
+    it("should dispatch a clearSelectionAction if checked is false", () => {
+      dispatchSpy = spyOn(store, "dispatch");
+
+      const event = new MatCheckboxChange();
+      event.checked = false;
+      component.onSelectAll(event);
+
+      expect(dispatchSpy).toHaveBeenCalledTimes(1);
+      expect(dispatchSpy).toHaveBeenCalledWith(clearSelectionAction());
+    });
+  });
+
   describe("#onSelectOne()", () => {
-    it("should dispatch a SelectPolicyAction if checked is true", () => {
+    it("should dispatch a selectPolicyAction if checked is true", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
       const checkboxEvent: CheckboxEvent = {
@@ -114,11 +182,11 @@ describe("PoliciesDashboardComponent", () => {
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        new SelectPolicyAction(checkboxEvent.row)
+        selectPolicyAction({ policy: checkboxEvent.row })
       );
     });
 
-    it("should dispatch a DeselectPolicyAction if checked is false", () => {
+    it("should dispatch a deselectPolicyAction if checked is false", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
       const checkboxEvent: CheckboxEvent = {
@@ -130,7 +198,7 @@ describe("PoliciesDashboardComponent", () => {
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        new DeselectPolicyAction(checkboxEvent.row)
+        deselectPolicyAction({ policy: checkboxEvent.row })
       );
     });
   });
@@ -148,7 +216,7 @@ describe("PoliciesDashboardComponent", () => {
       expect(dispatchSpy).toHaveBeenCalledTimes(0);
     });
 
-    it("should dispatch a SubmitPolicyAction and a ClearSelectionAction if there is a result", () => {
+    it("should dispatch a submitPolicyAction and a clearSelectionAction if there is a result", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
       const result = new Policy();
@@ -157,9 +225,12 @@ describe("PoliciesDashboardComponent", () => {
 
       expect(dispatchSpy).toHaveBeenCalledTimes(2);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        new SubmitPolicyAction(component.selectedGroups, result)
+        submitPolicyAction({
+          ownerList: component.selectedGroups,
+          policy: result
+        })
       );
-      expect(dispatchSpy).toHaveBeenCalledWith(new ClearSelectionAction());
+      expect(dispatchSpy).toHaveBeenCalledWith(clearSelectionAction());
     });
   });
 });
