@@ -1,114 +1,96 @@
+import { createReducer, Action, on } from "@ngrx/store";
 import {
-  PublishedDataActions,
-  PublishedDataActionTypes
-} from "../actions/published-data.actions";
-import { adapter, PublishedDataState, initialPublishedDataState } from "../state/publishedData.store";
+  initialPublishedDataState,
+  PublishedDataState
+} from "state-management/state/published-data.store";
+import * as fromActions from "state-management/actions/published-data.actions";
+
+const reducer = createReducer(
+  initialPublishedDataState,
+  on(fromActions.fetchAllPublishedDataAction, state => ({
+    ...state,
+    isLoading: true
+  })),
+  on(
+    fromActions.fetchAllPublishedDataCompleteAction,
+    (state, { publishedData }) => ({
+      ...state,
+      publishedData,
+      isLoading: false
+    })
+  ),
+  on(fromActions.fetchAllPublishedDataFailedAction, state => ({
+    ...state,
+    isLoading: false
+  })),
+
+  on(fromActions.fetchCountAction, state => ({ ...state, isLoading: true })),
+  on(fromActions.fetchCountCompleteAction, (state, { count }) => ({
+    ...state,
+    totalCount: count,
+    isLoading: false
+  })),
+  on(fromActions.fetchCountFailedAction, state => ({
+    ...state,
+    isLoading: false
+  })),
+
+  on(fromActions.fetchPublishedDataAction, state => ({
+    ...state,
+    isLoading: true
+  })),
+  on(
+    fromActions.fetchPublishedDataCompleteAction,
+    (state, { publishedData }) => ({
+      ...state,
+      currentPublishedData: publishedData,
+      isLoading: false
+    })
+  ),
+  on(fromActions.fetchPublishedDataFailedAction, state => ({
+    ...state,
+    isLoading: false
+  })),
+
+  on(fromActions.publishDatasetAction, state => ({
+    ...state,
+    isLoading: true
+  })),
+  on(fromActions.publishDatasetCompleteAction, state => ({
+    ...state,
+    isLoading: false
+  })),
+  on(fromActions.publishDatasetFailedAction, state => ({
+    ...state,
+    isLoading: false
+  })),
+
+  on(fromActions.registerPublishedDataAction, state => ({
+    ...state,
+    isLoading: true
+  })),
+  on(fromActions.registerPublishedDataCompleteAction, state => ({
+    ...state,
+    isLoading: false
+  })),
+  on(fromActions.registerPublishedDataFailedAction, state => ({
+    ...state,
+    isLoading: false
+  })),
+
+  on(fromActions.changePageAction, (state, { page, limit }) => {
+    const skip = page * limit;
+    const filters = { ...state.filters, skip, limit };
+    return { ...state, filters };
+  })
+);
 
 export function publishedDataReducer(
-  state = initialPublishedDataState,
-  action: PublishedDataActions
-): PublishedDataState {
-  // action.type is an enum in this case
-  if (action.type && action.type.indexOf("[PublishedData]") !== -1) {
+  state: PublishedDataState | undefined,
+  action: Action
+) {
+  if (action.type.indexOf("[PublishedData]") !== -1) {
     console.log("Action came in! " + action.type);
   }
-  switch (action.type) {
-    case PublishedDataActionTypes.AddPublishedData: {
-      return adapter.addOne(action.payload.publishedData, state);
-    }
-
-    case PublishedDataActionTypes.LoadCurrentPublishedData: {
-      const currentPublishedData = action.payload.publishedData;
-      return {...state, currentPublishedData};
-    }
-
-    case PublishedDataActionTypes.UpsertPublishedData: {
-      return adapter.upsertOne(action.payload.publishedData, state);
-    }
-
-    // the same as upsert but it needs doi to be defined else it cant add it to store
-    case PublishedDataActionTypes.UpsertWaitPublishedData: {
-      if (action.payload.publishedData && action.payload.publishedData.doi) {
-        return adapter.upsertOne(action.payload.publishedData, state);
-      }
-      // else do nothing but trigger an effect
-      return state;
-    }
-
-    case PublishedDataActionTypes.AddPublishedDatas: {
-      return adapter.addMany(action.payload.publishedDatas, state);
-    }
-
-    case PublishedDataActionTypes.UpsertPublishedDatas: {
-      return adapter.upsertMany(action.payload.publishedDatas, state);
-    }
-
-    case PublishedDataActionTypes.UpdatePublishedData: {
-      return adapter.updateOne(action.payload.publishedData, state);
-    }
-
-    case PublishedDataActionTypes.UpdatePublishedDatas: {
-      return adapter.updateMany(action.payload.publishedDatas, state);
-    }
-
-    case PublishedDataActionTypes.DeletePublishedData: {
-      return adapter.removeOne(action.payload.id, state);
-    }
-
-    case PublishedDataActionTypes.DeletePublishedDatas: {
-      return adapter.removeMany(action.payload.ids, state);
-    }
-
-    case PublishedDataActionTypes.LoadPublishedDatas: {
-      return adapter.addAll(action.payload.publishedDatas, state);
-    }
-
-    case PublishedDataActionTypes.ClearPublishedDatas: {
-      return adapter.removeAll(state);
-    }
-
-    case PublishedDataActionTypes.ChangePagePub: {
-      const limit = action.payload.limit;
-      const skip = action.payload.page * limit;
-      const filters = { ...state.filters, skip, limit };
-      return {...state, filters};
-    }
-
-    case PublishedDataActionTypes.FetchCountPublishedData: {
-      const count = action.payload.count;
-      return {...state, count};
-    }
-
-    case PublishedDataActionTypes.FetchPublishedData: {
-      const id = action.payload.id;
-      const currentPublishedData = state.entities[id];
-      return {...state, currentPublishedData};
-    }
-
-
-    default: {
-      return state;
-    }
-  }
+  return reducer(state, action);
 }
-
-export const getSelectedPublishedDataId = (state: PublishedDataState) => state.currentPublishedData.doi;
-
-export const {
-  selectIds,
-  selectEntities,
-  selectAll,
-  selectTotal
-} = adapter.getSelectors();
-
-// select the array of user ids
-export const selectPublishedDataIds = selectIds;
-
-// select the dictionary of user entities
-export const selectPublishedDataEntities = selectEntities;
-
-// select the array of users
-export const selectAllPublishedData = selectAll;
-
-// select the total user count
-export const selectPublishedDataTotal = selectTotal;

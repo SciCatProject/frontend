@@ -87,7 +87,6 @@ export class MockActivatedRoute {
 }
 
 export class MockRouter {
-
   events = new Observable(observer => {
     observer.next();
     observer.complete();
@@ -254,5 +253,9 @@ export class MockPublishedDataApi {
         authorList: "string"
       }
     ]);
+  }
+
+  formPopulate() {
+    return of({});
   }
 }

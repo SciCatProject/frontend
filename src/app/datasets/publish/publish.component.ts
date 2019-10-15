@@ -1,35 +1,35 @@
-import { Component, Inject, OnInit } from "@angular/core";
+import { Component, Inject, OnInit, OnDestroy } from "@angular/core";
 import { COMMA, ENTER } from "@angular/cdk/keycodes";
 
 import { select, Store, ActionsSubject } from "@ngrx/store";
-import { map, first, tap } from "rxjs/operators";
+import { first, tap } from "rxjs/operators";
 
 import { getDatasetsInBatch } from "state-management/selectors/datasets.selectors";
 import { prefillBatchAction } from "state-management/actions/datasets.actions";
 import {
-  UpsertWaitPublishedData,
-  PublishedDataActionTypes,
-  CustomAction
+  publishDatasetAction,
+  publishDatasetCompleteAction
 } from "state-management/actions/published-data.actions";
 import { APP_CONFIG } from "app-config.module";
 
 import { PublishedDataApi } from "../../shared/sdk/services/custom";
 import { PublishedData } from "../../shared/sdk/models";
 import { formatDate } from "@angular/common";
-import { MessageType } from "state-management/models";
-import { ShowMessageAction } from "state-management/actions/user.actions";
 import { Router } from "@angular/router";
+import { getCurrentPublishedData } from "state-management/selectors/published-data.selectors";
+import { Subscription } from "rxjs";
 
 @Component({
   selector: "publish",
   templateUrl: "./publish.component.html",
   styleUrls: ["./publish.component.scss"]
 })
-export class PublishComponent implements OnInit {
+export class PublishComponent implements OnInit, OnDestroy {
   public separatorKeysCodes: number[] = [ENTER, COMMA];
 
   private datasets$ = this.store.pipe(select(getDatasetsInBatch));
-  public datasetCount$ = this.datasets$.pipe(map(datasets => datasets.length));
+  public datasetCount: number;
+  private countSubscription: Subscription;
   today: number = Date.now();
 
   public form = {
@@ -51,7 +51,33 @@ export class PublishComponent implements OnInit {
   };
 
   public formData = null;
-  subsc = null;
+  actionSubjectSubscription: Subscription;
+
+  addAuthor(event) {
+    this.form.authors.push(event.value);
+    event.input.value = "";
+  }
+
+  removeAuthor(author) {
+    const index = this.form.authors.indexOf(author);
+    this.form.authors.splice(index, 1);
+  }
+
+  public formIsValid() {
+    if (!Object.values(this.form).includes(undefined)) {
+      return (
+        this.form.title.length > 0 &&
+        this.form.authors.length > 0 &&
+        this.form.affiliation.length > 0 &&
+        this.form.publisher.length > 0 &&
+        this.form.resourceType.length > 0 &&
+        this.form.description.length > 0 &&
+        this.form.abstract.length > 0
+      );
+    } else {
+      return false;
+    }
+  }
 
   constructor(
     private store: Store<any>,
@@ -59,50 +85,33 @@ export class PublishComponent implements OnInit {
     private publishedDataApi: PublishedDataApi,
     private actionsSubj: ActionsSubject,
     private router: Router
-  ) {
-    this.subsc = this.actionsSubj.subscribe(data => {
-      if (data.type === PublishedDataActionTypes.AddPublishedData) {
-        this.store.dispatch(
-          new ShowMessageAction({
-            type: MessageType.Success,
-            content: "Publication Successful",
-            duration: 5000
-          })
-        );
-        const pub = data as CustomAction;
-        const doi = encodeURIComponent(pub.payload.publishedData.doi);
-        this.router.navigateByUrl("/publishedDataset/" + doi);
-      } else if (
-        data.type === PublishedDataActionTypes.FailedPublishedDataAction
-      ) {
-        this.store.dispatch(
-          new ShowMessageAction({
-            type: MessageType.Error,
-            content: "Publication Failed",
-            duration: 5000
-          })
-        );
-      }
-    });
-  }
+  ) {}
 
-  public ngOnInit() {
+  ngOnInit() {
     this.store.dispatch(prefillBatchAction());
 
     this.datasets$
       .pipe(
         first(),
         tap(datasets => {
-          const authors = datasets.map(dataset => dataset.owner);
-          const unique = authors.filter(
-            (author, i) => authors.indexOf(author) === i
-          );
-          this.form.authors = unique;
-          this.form.creator = unique.join(",");
-          this.form.pidArray = datasets.map(dataset => dataset.pid);
+          if (datasets) {
+            const authors = datasets.map(dataset => dataset.owner);
+            const unique = authors.filter(
+              (author, i) => authors.indexOf(author) === i
+            );
+            this.form.authors = unique;
+            this.form.creator = unique.join(",");
+            this.form.pidArray = datasets.map(dataset => dataset.pid);
+          }
         })
       )
       .subscribe();
+
+    this.countSubscription = this.datasets$.subscribe(datasets => {
+      if (datasets) {
+        this.datasetCount = datasets.length;
+      }
+    });
 
     this.publishedDataApi
       .formPopulate(this.form.pidArray[0])
@@ -112,6 +121,23 @@ export class PublishComponent implements OnInit {
         this.form.description = result.description;
         this.form.resourceType = result.resourceType;
       });
+
+    this.actionSubjectSubscription = this.actionsSubj.subscribe(data => {
+      if (data.type === publishDatasetCompleteAction.type) {
+        this.store
+          .pipe(select(getCurrentPublishedData))
+          .subscribe(publishedData => {
+            const doi = encodeURIComponent(publishedData.doi);
+            this.router.navigateByUrl("/publishedDatasets/" + doi);
+          })
+          .unsubscribe();
+      }
+    });
+  }
+
+  ngOnDestroy() {
+    this.actionSubjectSubscription.unsubscribe();
+    this.countSubscription.unsubscribe();
   }
 
   public onPublish() {
@@ -135,28 +161,6 @@ export class PublishComponent implements OnInit {
     publishedData.numberOfFiles = this.form.numberOfFiles;
     publishedData.sizeOfArchive = this.form.sizeOfArchive;
 
-    this.store.dispatch(new UpsertWaitPublishedData({ publishedData }));
-  }
-
-  addAuthor(event) {
-    this.form.authors.push(event.value);
-    event.input.value = "";
-  }
-
-  removeAuthor(author) {
-    const index = this.form.authors.indexOf(author);
-    this.form.authors.splice(index, 1);
-  }
-
-  public formIsValid() {
-    return (
-      this.form.title.length > 0 &&
-      this.form.authors.length > 0 &&
-      this.form.affiliation.length > 0 &&
-      this.form.publisher.length > 0 &&
-      this.form.resourceType.length > 0 &&
-      this.form.description.length > 0 &&
-      this.form.abstract.length > 0
-    );
+    this.store.dispatch(publishDatasetAction({ data: publishedData }));
   }
 }

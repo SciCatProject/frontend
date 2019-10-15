@@ -1,86 +1,52 @@
-import {
-  createSelector,
-  createFeatureSelector,
-  ActionReducerMap
-} from "@ngrx/store";
-import * as fromPublishedData from "../reducers/published-data.reducer";
-import { PublishedDataState } from "../state/publishedData.store";
+import { createFeatureSelector, createSelector } from "@ngrx/store";
+import { PublishedDataState } from "state-management/state/published-data.store";
 
-export interface State {
-  PublishedData: PublishedDataState;
-}
-
-export const reducers: ActionReducerMap<State> = {
-  PublishedData: fromPublishedData.publishedDataReducer
-};
-
-export const selectPublishedDataState = createFeatureSelector<
-  PublishedDataState
->("PublishedData");
-
-export const selectPublishedDataIds = createSelector(
-  selectPublishedDataState,
-  fromPublishedData.selectPublishedDataIds
-);
-export const selectPublishedDataEntities = createSelector(
-  selectPublishedDataState,
-  fromPublishedData.selectPublishedDataEntities
-);
-export const selectAllPublished = createSelector(
-  selectPublishedDataState,
-  fromPublishedData.selectAllPublishedData
+export const getPublishedDataState = createFeatureSelector<PublishedDataState>(
+  "publishedData"
 );
 
-export const selectFilteredPublished = createSelector(
-  selectPublishedDataState,
-  selectAllPublished,
-  (state, data) => {
-    return data.slice(
-      state.filters.skip,
-      state.filters.skip + state.filters.limit
-    );
-  }
+export const getAllPublishedData = createSelector(
+  getPublishedDataState,
+  state => state.publishedData
 );
 
-export const selectPublishedDataTotal = createSelector(
-  selectPublishedDataState,
-  fromPublishedData.selectPublishedDataTotal
-);
-export const selectCurrentPublishedDataId = createSelector(
-  selectPublishedDataState,
-  fromPublishedData.getSelectedPublishedDataId
-);
-
-export const selectCurrentPublishedData = createSelector(
-  selectPublishedDataState,
+export const getCurrentPublishedData = createSelector(
+  getPublishedDataState,
   state => state.currentPublishedData
 );
 
+export const getPublishedDataCount = createSelector(
+  getPublishedDataState,
+  state => state.totalCount
+);
+
+export const getIsLoading = createSelector(
+  getPublishedDataState,
+  state => state.isLoading
+);
+
 export const getFilters = createSelector(
-  selectPublishedDataState,
-  state => {
-    const { skip, limit, sortField } = state.filters;
-    const limits = { skip, limit, order: sortField };
-    return { limits };
-  }
+  getPublishedDataState,
+  state => state.filters
 );
 
 export const getPage = createSelector(
-  selectPublishedDataState,
-  state => {
-    const { skip, limit } = state.filters;
+  getFilters,
+  filters => {
+    const { skip, limit } = filters;
     return skip / limit;
   }
 );
 
-export const getItemsPerPage = createSelector(
-  selectPublishedDataState,
-  state => state.filters.limit
+export const getPublishedDataPerPage = createSelector(
+  getFilters,
+  filters => filters.limit
 );
 
-export const getCount = createSelector(
-  selectPublishedDataState,
-  state => {
-    return state.count;
+export const getQueryParams = createSelector(
+  getFilters,
+  filters => {
+    const { sortField, skip, limit } = filters;
+    return { order: sortField, skip, limit };
   }
 );

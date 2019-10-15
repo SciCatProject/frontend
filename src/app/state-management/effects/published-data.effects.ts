@@ -1,87 +1,131 @@
 import { Injectable } from "@angular/core";
-import { of } from "rxjs";
-import { Actions, Effect, ofType } from "@ngrx/effects";
-import { PublishedDataApi } from "shared/sdk/services";
-import { select, Store } from "@ngrx/store";
-
-
+import { Actions, createEffect, ofType } from "@ngrx/effects";
+import { PublishedDataApi, PublishedData } from "shared/sdk";
+import { Store, select } from "@ngrx/store";
+import { getQueryParams } from "state-management/selectors/published-data.selectors";
+import * as fromActions from "state-management/actions/published-data.actions";
 import {
-  FailedPublishedDataAction,
-  LoadPublishedDatas,
-  FetchAllPublishedData,
-  FetchCountPublishedData,
-  FetchPublishedData,
-  PublishedDataActionTypes,
-  UpsertWaitPublishedData,
-  LoadCurrentPublishedData,
-  AddPublishedData,
-  RegisterPublishedData,
-  SuccessPublishedData
-} from "../actions/published-data.actions";
-
-import {
-  catchError,
-  map,
-  switchMap,
-  mergeMap,
   withLatestFrom,
+  mergeMap,
+  map,
+  catchError,
+  switchMap
 } from "rxjs/operators";
-import { PublishedData } from "shared/sdk/models";
-import { getFilters } from "state-management/selectors/published-data.selectors";
+import { of } from "rxjs";
+import { MessageType } from "state-management/models";
+import { ShowMessageAction } from "state-management/actions/user.actions";
 
 @Injectable()
 export class PublishedDataEffects {
+  private queryParams$ = this.store.pipe(select(getQueryParams));
 
-  // to fullfill the expectations of the upsert name, the create api call is insufficient
-  @Effect()
-  UpsertWaitPublishedData$ = this.actions$.pipe(
-    ofType<UpsertWaitPublishedData>(PublishedDataActionTypes.UpsertWaitPublishedData),
-    switchMap(action => this.publishedDataApi.create(action.payload.publishedData)
-    .pipe(mergeMap((data: PublishedData) => [ new AddPublishedData({ publishedData: data }),
-    new RegisterPublishedData({doi: data.doi})]),
-    catchError(err => of(new FailedPublishedDataAction(err)))))
+  fetchAllPublishedData$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(
+        fromActions.fetchAllPublishedDataAction,
+        fromActions.changePageAction
+      ),
+      withLatestFrom(this.queryParams$),
+      map(([action, params]) => params),
+      mergeMap(params =>
+        this.publishedDataApi.find(params).pipe(
+          mergeMap((publishedData: PublishedData[]) => [
+            fromActions.fetchAllPublishedDataCompleteAction({ publishedData }),
+            fromActions.fetchCountAction()
+          ]),
+          catchError(() => of(fromActions.fetchAllPublishedDataFailedAction()))
+        )
+      )
+    )
   );
 
-  @Effect()
-  RegisterPublishedData$ = this.actions$.pipe(
-    ofType<RegisterPublishedData>(PublishedDataActionTypes.RegisterPublishedData),
-    switchMap(action => this.publishedDataApi.register(encodeURIComponent( action.payload.doi))
-    .pipe(map(( resp ) => new SuccessPublishedData({ data: resp })),
-    catchError(err => of(new FailedPublishedDataAction(err)))))
+  fetchCount$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(fromActions.fetchCountAction),
+      switchMap(() =>
+        this.publishedDataApi.count().pipe(
+          map(({ count }) => fromActions.fetchCountCompleteAction({ count })),
+          catchError(() => of(fromActions.fetchCountFailedAction()))
+        )
+      )
+    )
   );
 
-  // add referes to adding to the store, not mongo
-  @Effect()
-  AddPublishedData$ = this.actions$.pipe(
-    ofType<FetchPublishedData>(PublishedDataActionTypes.FetchPublishedData),
-    switchMap(action => this.publishedDataApi.findById(encodeURIComponent(action.payload.id))
-    .pipe(map((data: PublishedData) => new LoadCurrentPublishedData({ publishedData: data })),
-    catchError(err => of(new FailedPublishedDataAction(err)))))
+  fetchPublishedData$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(fromActions.fetchPublishedDataAction),
+      switchMap(({ id }) =>
+        this.publishedDataApi.findById(encodeURIComponent(id)).pipe(
+          map((publishedData: PublishedData) =>
+            fromActions.fetchPublishedDataCompleteAction({ publishedData })
+          ),
+          catchError(() => of(fromActions.fetchPublishedDataFailedAction()))
+        )
+      )
+    )
   );
 
-  @Effect({ dispatch: false })
-  private queryParams$ = this.store.pipe(select(getFilters));
+  publishDataset$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(fromActions.publishDatasetAction),
+      switchMap(({ data }) =>
+        this.publishedDataApi.create(data).pipe(
+          mergeMap((publishedData: PublishedData) => [
+            fromActions.publishDatasetCompleteAction({ publishedData }),
+            fromActions.fetchPublishedDataAction({ id: publishedData.doi }),
+            fromActions.registerPublishedDataAction({ doi: publishedData.doi })
+          ]),
+          catchError(() => of(fromActions.publishDatasetFailedAction()))
+        )
+      )
+    )
+  );
 
-  @Effect()
-  FetchFilteredPublishedData$ = this.actions$.pipe(
-    ofType<FetchAllPublishedData>(PublishedDataActionTypes.FetchAllPublishedData, PublishedDataActionTypes.ChangePagePub),
-    withLatestFrom(this.queryParams$),
-    map(([action, params]) => params),
-    mergeMap(({ limits }) => this.publishedDataApi.find(limits)
-    .pipe(map((data: PublishedData[]) => new LoadPublishedDatas({ publishedDatas: data })),
-    catchError(err => of(new FailedPublishedDataAction(err))))));
+  publishDatasetCompleteMessage$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(fromActions.publishDatasetCompleteAction),
+      switchMap(() => {
+        const message = {
+          type: MessageType.Success,
+          content: "Publication Successful",
+          duration: 5000
+        };
+        return of(new ShowMessageAction(message));
+      })
+    )
+  );
 
-    @Effect()
-    FetchCountPublishedData$ = this.actions$.pipe(
-      ofType<FetchAllPublishedData>(PublishedDataActionTypes.FetchAllPublishedData),
-      switchMap(action => this.publishedDataApi.count()
-      .pipe(map((count) => new FetchCountPublishedData(count)),
-      catchError(err => of(new FailedPublishedDataAction(err)))))
-    );
+  publishDatasetFailedMessage$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(fromActions.publishDatasetFailedAction),
+      switchMap(() => {
+        const message = {
+          type: MessageType.Error,
+          content: "Publication Failed",
+          duration: 5000
+        };
+        return of(new ShowMessageAction(message));
+      })
+    )
+  );
+
+  registerPublishedData$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(fromActions.registerPublishedDataAction),
+      switchMap(({ doi }) =>
+        this.publishedDataApi.register(encodeURIComponent(doi)).pipe(
+          map(publishedData =>
+            fromActions.registerPublishedDataCompleteAction({ publishedData })
+          ),
+          catchError(() => of(fromActions.registerPublishedDataFailedAction()))
+        )
+      )
+    )
+  );
 
   constructor(
-    private store: Store<any>,
     private actions$: Actions,
-    private publishedDataApi: PublishedDataApi
+    private publishedDataApi: PublishedDataApi,
+    private store: Store<PublishedData>
   ) {}
 }

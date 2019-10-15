@@ -1,7 +1,4 @@
-<div
-  class="publishedData-detail"
-  *ngIf="(currentData$ | async) as publishedData"
->
+<div class="publishedData-detail" *ngIf="currentData$ | async as publishedData">
   <mat-card class="matcarddetails">
     <div class="details">
       <mat-card-header style="background:#7de1ff;">
@@ -106,7 +103,7 @@
     </div>
   </mat-card>
   <mat-card class="matcarddetails">
-    <button (click)="show = !show">
+    <button mat-stroked-button (click)="show = !show">
       {{ show ? "Hide MetaData" : "Show Metadata" }}
     </button>
     <br />

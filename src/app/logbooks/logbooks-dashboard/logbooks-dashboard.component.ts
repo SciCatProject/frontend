@@ -13,7 +13,7 @@ import {
   getCurrentLogbook,
   getFilters,
   getIsLoading
-} from "state-management/selectors/logbooks.selector";
+} from "state-management/selectors/logbooks.selectors";
 import { getCurrentDataset } from "state-management/selectors/datasets.selectors";
 import {
   fetchLogbookAction,

@@ -1,7 +1,7 @@
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { PublisheddataDetailsComponent } from "./publisheddata-details/publisheddata-details.component";
-import { MatCardModule } from "@angular/material";
+import { MatCardModule, MatButtonModule } from "@angular/material";
 import { SharedCatanieModule } from "shared/shared.module";
 import { LinkyModule } from "ngx-linky";
 import { NgxJsonViewerModule } from "ngx-json-viewer";
@@ -20,10 +20,11 @@ import { FlexLayoutModule } from "@angular/flex-layout";
     CommonModule,
     FlexLayoutModule,
     LinkyModule,
+    MatButtonModule,
     MatCardModule,
     NgxJsonViewerModule,
     SharedCatanieModule,
-    StoreModule.forFeature("PublishedData", publishedDataReducer)
+    StoreModule.forFeature("publishedData", publishedDataReducer)
   ]
 })
 export class PublisheddataModule {}

@@ -3,14 +3,14 @@ import { Store, select } from "@ngrx/store";
 import { PublishedData } from "shared/sdk";
 import { Router } from "@angular/router";
 import {
-  selectAllPublished,
-  getCount,
+  getAllPublishedData,
+  getPublishedDataCount,
   getPage,
-  getItemsPerPage
+  getPublishedDataPerPage
 } from "state-management/selectors/published-data.selectors";
 import {
-  FetchAllPublishedData,
-  ChangePagePub
+  fetchAllPublishedDataAction,
+  changePageAction
 } from "state-management/actions/published-data.actions";
 import {
   PageChangeEvent,
@@ -23,11 +23,10 @@ import {
   styleUrls: ["./publisheddata-dashboard.component.scss"]
 })
 export class PublisheddataDashboardComponent implements OnInit {
-
-  public publishedData$ = this.store.pipe(select(selectAllPublished));
-  public count$ = this.store.pipe(select(getCount));
+  public publishedData$ = this.store.pipe(select(getAllPublishedData));
+  public count$ = this.store.pipe(select(getPublishedDataCount));
   public currentPage$ = this.store.pipe(select(getPage));
-  public itemsPerPage$ = this.store.pipe(select(getItemsPerPage));
+  public itemsPerPage$ = this.store.pipe(select(getPublishedDataPerPage));
 
   columns: TableColumn[] = [
     { name: "doi", icon: "fingerprint", sort: false, inList: false },
@@ -36,11 +35,10 @@ export class PublisheddataDashboardComponent implements OnInit {
     { name: "publicationYear", icon: "date_range", sort: false, inList: true }
   ];
   paginate = true;
-  constructor(private router: Router, private store: Store<PublishedData>) {}
 
   onPageChange(event: PageChangeEvent) {
     this.store.dispatch(
-      new ChangePagePub({ page: event.pageIndex, limit: event.pageSize })
+      changePageAction({ page: event.pageIndex, limit: event.pageSize })
     );
   }
 
@@ -49,7 +47,9 @@ export class PublisheddataDashboardComponent implements OnInit {
     this.router.navigateByUrl("/publishedDatasets/" + id);
   }
 
+  constructor(private router: Router, private store: Store<PublishedData>) {}
+
   ngOnInit() {
-    this.store.dispatch(new FetchAllPublishedData());
+    this.store.dispatch(fetchAllPublishedDataAction());
   }
 }
