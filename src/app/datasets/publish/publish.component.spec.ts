@@ -70,4 +70,63 @@ describe("PublishComponent", () => {
   it("should create", () => {
     expect(component).toBeTruthy();
   });
+
+  describe("#addAuthor()", () => {
+    it("should push an author to the authors property in the form", () => {
+      const event = {
+        input: {
+          value: ""
+        },
+        value: "test author"
+      };
+      component.addAuthor(event);
+
+      expect(component.form.authors).toContain(event.value);
+    });
+  });
+
+  describe("#removeAuthor()", () => {
+    it("should remove an author from the authors property in the form", () => {
+      const author = "testAuthor";
+      component.form.authors = [author];
+
+      component.removeAuthor(author);
+
+      expect(component.form.authors).not.toContain(author);
+    });
+  });
+
+  describe("#formIsValid()", () => {
+    it("should return false if form has undefined properties", () => {
+      component.form.title = undefined;
+
+      const isValid = component.formIsValid();
+
+      expect(isValid).toEqual(false);
+    });
+
+    it("should return true if form has no undefined properties and their lengths > 0", () => {
+      component.form = {
+        title: "testTitle",
+        creator: "testCreator",
+        authors: ["testAuthor"],
+        affiliation: "testAffiliation",
+        publisher: "testPublisher",
+        resourceType: "testType",
+        description: "testDescription",
+        abstract: "testAbstract",
+        pidArray: ["testPid"],
+        publicationYear: 2019,
+        url: "testUrl",
+        dataDescription: "testDataDescription",
+        thumbnail: "testThumbnail",
+        numberOfFiles: 1,
+        sizeOfArchive: 100
+      };
+
+      const isValid = component.formIsValid();
+
+      expect(isValid).toEqual(true);
+    });
+  });
 });
