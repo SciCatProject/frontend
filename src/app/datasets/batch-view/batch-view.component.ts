@@ -13,7 +13,7 @@ import { showMessageAction } from "state-management/actions/user.actions";
 
 import { Router } from "@angular/router";
 import { ArchivingService } from "../archiving.service";
-import { Observable, Subscription } from "rxjs";
+import { Observable } from "rxjs";
 import { ShareGroupApi } from "shared/sdk/services/custom/ShareGroup";
 import { DatasetApi } from "shared/sdk/services/custom/Dataset";
 import { ShareGroup } from "shared/sdk/models/ShareGroup";

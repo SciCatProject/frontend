@@ -2,16 +2,8 @@ import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 import { ReactiveFormsModule } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Store } from "@ngrx/store";
-import {
-  MockActivatedRoute,
-  MockAuthService,
-  MockLoopBackAuth,
-  MockRouter,
-  MockStore
-} from "shared/MockStubs";
-import { LoopBackAuth } from "shared/sdk/services";
+import { MockActivatedRoute, MockRouter, MockStore } from "shared/MockStubs";
 
-import { ADAuthService } from "../adauth.service";
 import { LoginComponent } from "./login.component";
 import {
   MatCheckboxModule,
