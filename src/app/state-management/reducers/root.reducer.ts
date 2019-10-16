@@ -18,7 +18,7 @@ import {
   initialSampleState,
   SampleState
 } from "state-management/state/samples.store";
-import * as ua from "state-management/actions/user.actions";
+import { logoutCompleteAction } from "state-management/actions/user.actions";
 import {
   initialPublishedDataState,
   PublishedDataState
@@ -61,7 +61,7 @@ const appReducer = combineReducers({
 });
 
 export function rootReducer(state, action) {
-  if (action.type === ua.LOGOUT_COMPLETE) {
+  if (action.type === logoutCompleteAction.type) {
     state = undefined;
   }
 

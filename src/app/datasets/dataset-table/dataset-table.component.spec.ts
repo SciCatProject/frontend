@@ -13,7 +13,6 @@ import {
 } from "@angular/material";
 import {
   MockHttp,
-  MockLoginService,
   MockDatasetApi,
   MockArchivingService,
   MockAttachmentApi,
@@ -30,12 +29,11 @@ import {
 import { combineReducers, StoreModule, Store } from "@ngrx/store";
 import { datasetsReducer } from "state-management/reducers/datasets.reducer";
 import { jobsReducer } from "state-management/reducers/jobs.reducer";
-import { LoginService } from "../../users/login.service";
 import { AttachmentApi, DatasetApi, Dataset } from "shared/sdk";
 import { SharedCatanieModule } from "shared/shared.module";
 import {
-  SelectColumnAction,
-  DeselectColumnAction
+  selectColumnAction,
+  deselectColumnAction
 } from "state-management/actions/user.actions";
 import { ArchViewMode } from "state-management/models";
 import {
@@ -91,8 +89,7 @@ describe("DatasetTableComponent", () => {
               archiveWorkflowEnabled: true
             }
           },
-          { provide: ArchivingService, useClass: MockArchivingService },
-          { provide: LoginService, useClass: MockLoginService }
+          { provide: ArchivingService, useClass: MockArchivingService }
         ]
       }
     });
@@ -148,7 +145,7 @@ describe("DatasetTableComponent", () => {
       expect(dispatchSpy).toHaveBeenCalledTimes(0);
     });
 
-    it("should dispatch a SelectColumnAction if both isUserInput and selected are true", () => {
+    it("should dispatch a selectColumnAction if both isUserInput and selected are true", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
       const event = {
@@ -163,11 +160,11 @@ describe("DatasetTableComponent", () => {
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        new SelectColumnAction(event.source.value)
+        selectColumnAction({ column: event.source.value })
       );
     });
 
-    it("should dispatch a DeselectColumnAction if isUserInput is true and selected is false", () => {
+    it("should dispatch a deselectColumnAction if isUserInput is true and selected is false", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
       const event = {
@@ -182,7 +179,7 @@ describe("DatasetTableComponent", () => {
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        new DeselectColumnAction(event.source.value)
+        deselectColumnAction({ column: event.source.value })
       );
     });
   });
@@ -444,7 +441,7 @@ describe("DatasetTableComponent", () => {
   });
 
   describe("#onSelect()", () => {
-    it("should dispatch a SelectDatasetAction if checked is true", () => {
+    it("should dispatch a selectDatasetAction if checked is true", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
       const event = new MatCheckboxChange();
@@ -458,7 +455,7 @@ describe("DatasetTableComponent", () => {
       );
     });
 
-    it("should dispatch a DeselectDatasetAction if checked is false", () => {
+    it("should dispatch a deselectDatasetAction if checked is false", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
       const event = new MatCheckboxChange();
@@ -474,7 +471,7 @@ describe("DatasetTableComponent", () => {
   });
 
   describe("#onSelectAll()", () => {
-    it("should dispatch a SelectAllDatasetsAction if checked is true", () => {
+    it("should dispatch a selectAllDatasetsAction if checked is true", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
       const event = new MatCheckboxChange();
@@ -485,7 +482,7 @@ describe("DatasetTableComponent", () => {
       expect(dispatchSpy).toHaveBeenCalledWith(selectAllDatasetsAction());
     });
 
-    it("should dispatch a ClearSelectionAction if checked is false", () => {
+    it("should dispatch a clearSelectionAction if checked is false", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
       const event = new MatCheckboxChange();
@@ -498,7 +495,7 @@ describe("DatasetTableComponent", () => {
   });
 
   describe("#onPageChange()", () => {
-    it("should dispatch a ChangePangeAction", () => {
+    it("should dispatch a changePangeAction", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
       const event: PageChangeEvent = {
@@ -516,7 +513,7 @@ describe("DatasetTableComponent", () => {
   });
 
   describe("#onSortChange()", () => {
-    it("should dispatch a SortByColumnAction", () => {
+    it("should dispatch a sortByColumnAction", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
       const event: SortChangeEvent = {
@@ -533,7 +530,7 @@ describe("DatasetTableComponent", () => {
   });
 
   describe("#onAddToBatch()", () => {
-    it("should dispatch an AddToBatchAction and a ClearSelectionAction", () => {
+    it("should dispatch an addToBatchAction and a clearSelectionAction", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
       component.onAddToBatch();

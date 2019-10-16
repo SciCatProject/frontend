@@ -17,7 +17,7 @@ import { PublishedDataApi } from "../../shared/sdk/services/custom";
 import { PublishedData } from "../../shared/sdk/models";
 import { formatDate } from "@angular/common";
 import { MessageType } from "state-management/models";
-import { ShowMessageAction } from "state-management/actions/user.actions";
+import { showMessageAction } from "state-management/actions/user.actions";
 import { Router } from "@angular/router";
 
 @Component({
@@ -63,10 +63,12 @@ export class PublishComponent implements OnInit {
     this.subsc = this.actionsSubj.subscribe(data => {
       if (data.type === PublishedDataActionTypes.AddPublishedData) {
         this.store.dispatch(
-          new ShowMessageAction({
-            type: MessageType.Success,
-            content: "Publication Successful",
-            duration: 5000
+          showMessageAction({
+            message: {
+              type: MessageType.Success,
+              content: "Publication Successful",
+              duration: 5000
+            }
           })
         );
         const pub = data as CustomAction;
@@ -76,10 +78,12 @@ export class PublishComponent implements OnInit {
         data.type === PublishedDataActionTypes.FailedPublishedDataAction
       ) {
         this.store.dispatch(
-          new ShowMessageAction({
-            type: MessageType.Error,
-            content: "Publication Failed",
-            duration: 5000
+          showMessageAction({
+            message: {
+              type: MessageType.Error,
+              content: "Publication Failed",
+              duration: 5000
+            }
           })
         );
       }

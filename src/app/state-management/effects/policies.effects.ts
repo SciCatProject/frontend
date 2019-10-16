@@ -15,7 +15,7 @@ import {
   mergeMap
 } from "rxjs/operators";
 import { of } from "rxjs";
-import { getProfile } from "state-management/selectors/users.selectors";
+import { getProfile } from "state-management/selectors/user.selectors";
 
 @Injectable()
 export class PolicyEffects {

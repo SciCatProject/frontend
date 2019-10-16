@@ -87,7 +87,6 @@ export class MockActivatedRoute {
 }
 
 export class MockRouter {
-
   events = new Observable(observer => {
     observer.next();
     observer.complete();
@@ -214,8 +213,6 @@ export class MockArchivingService {
   }
 }
 
-export class MockLoginService {}
-
 export class MockLogbookApi {
   logbook: Logbook;
   findByName(name: string): Observable<Logbook> {
@@ -254,5 +251,11 @@ export class MockPublishedDataApi {
         authorList: "string"
       }
     ]);
+  }
+}
+
+export class MockShareGroupApi {
+  upsert(obj) {
+    return of({});
   }
 }

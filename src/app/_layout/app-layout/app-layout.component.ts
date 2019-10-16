@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { Store, select } from "@ngrx/store";
-import * as selectors from "state-management/selectors";
+import { getTheme } from "state-management/selectors/user.selectors";
 import { Observable } from "rxjs";
 
 @Component({
@@ -11,9 +11,9 @@ import { Observable } from "rxjs";
 export class AppLayoutComponent implements OnInit {
   darkTheme$: Observable<any>;
 
-  constructor(private store: Store<any>) {
-    this.darkTheme$ = this.store.pipe(select(selectors.users.getTheme));
-  }
+  constructor(private store: Store<any>) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.darkTheme$ = this.store.pipe(select(getTheme));
+  }
 }

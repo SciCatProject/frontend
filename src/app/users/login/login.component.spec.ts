@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 import { ReactiveFormsModule } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
-import { Store, StoreModule } from "@ngrx/store";
+import { Store } from "@ngrx/store";
 import {
   MockActivatedRoute,
   MockAuthService,
@@ -20,18 +20,27 @@ import {
 } from "@angular/material";
 import { APP_CONFIG, AppConfigModule } from "app-config.module";
 
-/* tslint:disable:no-unused-variable */
 describe("LoginComponent", () => {
   let component: LoginComponent;
   let fixture: ComponentFixture<LoginComponent>;
 
   beforeEach(async(() => {
+    TestBed.configureTestingModule({
+      imports: [
+        AppConfigModule,
+        ReactiveFormsModule,
+        MatCheckboxModule,
+        MatCardModule,
+        MatGridListModule
+      ],
+      declarations: [LoginComponent]
+    });
     TestBed.overrideComponent(LoginComponent, {
       set: {
         // These should sync up with what is in the constructor, they do NOT need to be provided in the config for the testing module
         providers: [
-          { provide: ADAuthService, useClass: MockAuthService },
-          { provide: LoopBackAuth, useClass: MockLoopBackAuth },
+          // { provide: ADAuthService, useClass: MockAuthService },
+          // { provide: LoopBackAuth, useClass: MockLoopBackAuth },
           {
             provide: APP_CONFIG,
             useValue: {
@@ -44,17 +53,6 @@ describe("LoginComponent", () => {
           { provide: Store, useClass: MockStore }
         ]
       }
-    });
-    TestBed.configureTestingModule({
-      imports: [
-        AppConfigModule,
-        ReactiveFormsModule,
-        StoreModule.forRoot({}),
-        MatCheckboxModule,
-        MatCardModule,
-        MatGridListModule
-      ],
-      declarations: [LoginComponent]
     });
     TestBed.compileComponents();
   }));

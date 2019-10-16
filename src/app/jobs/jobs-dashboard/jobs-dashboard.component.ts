@@ -24,7 +24,7 @@ import {
 import {
   getCurrentUser,
   getProfile
-} from "state-management/selectors/users.selectors";
+} from "state-management/selectors/user.selectors";
 
 @Component({
   selector: "app-jobs-dashboard",
