@@ -11,7 +11,10 @@ import {
 import { TestBed } from "@angular/core/testing";
 import { provideMockActions } from "@ngrx/effects/testing";
 import { provideMockStore } from "@ngrx/store/testing";
-import { getFullqueryParams } from "state-management/selectors/samples.selectors";
+import {
+  getFullqueryParams,
+  getDatasetsQueryParams
+} from "state-management/selectors/samples.selectors";
 import * as fromActions from "state-management/actions/samples.actions";
 import { hot, cold } from "jasmine-marbles";
 
@@ -33,7 +36,10 @@ describe("SampleEffects", () => {
         SampleEffects,
         provideMockActions(() => actions),
         provideMockStore({
-          selectors: [{ selector: getFullqueryParams, value: {} }]
+          selectors: [
+            { selector: getFullqueryParams, value: {} },
+            { selector: getDatasetsQueryParams, value: {} }
+          ]
         }),
         {
           provide: SampleApi,
@@ -145,18 +151,19 @@ describe("SampleEffects", () => {
   describe("fetchSampleDatasets$", () => {
     const sampleId = "testId";
 
-    it("should result in a fetchSampleDatasetsCompleteAction", () => {
+    it("should result in a fetchSampleDatasetsCompleteAction and a fetchSampleDatasetsCountAction", () => {
       const datasets = [new Dataset()];
       const action = fromActions.fetchSampleDatasetsAction({ sampleId });
-      const outcome = fromActions.fetchSampleDatasetsCompleteAction({
+      const outcome1 = fromActions.fetchSampleDatasetsCompleteAction({
         datasets
       });
+      const outcome2 = fromActions.fetchSampleDatasetsCountAction({ sampleId });
 
       actions = hot("-a", { a: action });
       const response = cold("-a|", { a: datasets });
       datasetApi.find.and.returnValue(response);
 
-      const expected = cold("--b", { b: outcome });
+      const expected = cold("--(bc)", { b: outcome1, c: outcome2 });
       expect(effects.fetchSampleDatasets$).toBeObservable(expected);
     });
 
@@ -170,6 +177,38 @@ describe("SampleEffects", () => {
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchSampleDatasets$).toBeObservable(expected);
+    });
+  });
+
+  describe("fetchSampleDatasetsCount$", () => {
+    const sampleId = "testId";
+
+    it("should result in a fetchSampleDatasetsCountCompleteAction", () => {
+      const count = 1;
+      const datasets = [new Dataset()];
+      const action = fromActions.fetchSampleDatasetsCountAction({ sampleId });
+      const outcome = fromActions.fetchSampleDatasetsCountCompleteAction({
+        count
+      });
+
+      actions = hot("-a", { a: action });
+      const response = cold("-a|", { a: datasets });
+      datasetApi.find.and.returnValue(response);
+
+      const expected = cold("--b", { b: outcome });
+      expect(effects.fetchSampleDatasetsCount$).toBeObservable(expected);
+    });
+
+    it("should result in a fetchSampleDatasetsCountFailedAction", () => {
+      const action = fromActions.fetchSampleDatasetsCountAction({ sampleId });
+      const outcome = fromActions.fetchSampleDatasetsCountFailedAction();
+
+      actions = hot("-a", { a: action });
+      const response = cold("-#", {});
+      datasetApi.find.and.returnValue(response);
+
+      const expected = cold("--b", { b: outcome });
+      expect(effects.fetchSampleDatasetsCount$).toBeObservable(expected);
     });
   });
 

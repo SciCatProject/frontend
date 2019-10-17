@@ -1,62 +1,71 @@
-<div class="sample-detail" *ngIf="sample$ | async as sample">
-  <mat-card class="scicat-card">
-    <mat-card-header>
-      Sample Details
-    </mat-card-header>
-    <div class="details">
-      <table>
-        <tr *ngIf="sample.description as value">
-          <th><i class="material-icons"> description </i>Description</th>
-          <td>{{ value }}</td>
-        </tr>
-        <tr *ngIf="sample.createdAt as value">
-          <th><i class="material-icons"> event </i>Creation Time</th>
-          <td>{{ value | date: "yyyy-MM-dd HH:mm" }}</td>
-        </tr>
-        <tr *ngIf="sample.owner as value">
-          <th><i class="material-icons"> person </i>Sample Owner</th>
-          <td>{{ value }}</td>
-        </tr>
-        <tr *ngIf="sample.ownerGroup as value">
-          <th><i class="material-icons"> group </i>Owner Group</th>
-          <td>{{ value }}</td>
-        </tr>
-        <tr *ngIf="sample.sampleId as value">
-          <th><i class="material-icons"> fingerprint </i>Sample ID</th>
-          <td>{{ value }}</td>
-        </tr>
-        <tr
-          *ngIf="
-            (datasets$ | async).length > 0 && datasets$ | async as datasets
-          "
-        >
-          <th><i class="material-icons"> save </i>Datasets</th>
-          <td>
-            <ul>
-              <li *ngFor="let value of datasets">
-                <a
-                  class="dropdown-item btn-sm"
-                  (click)="onClickDataset(value.pid)"
-                  >{{ value.pid }}</a
-                >
-              </li>
-            </ul>
-          </td>
-        </tr>
-      </table>
+<div *ngIf="sample">
+  <mat-tab-group>
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon> details </mat-icon> Details
+      </ng-template>
 
-      <div *ngIf="sample.sampleCharacteristics as value">
-        <h3>Sample Characteristics</h3>
-        <pre>{{ value | json }}</pre>
+      <mat-card>
+        <mat-card-header>
+          Sample Details
+        </mat-card-header>
+        <div class="details">
+          <table>
+            <tr *ngIf="sample.description as value">
+              <th><i class="material-icons"> description </i>Description</th>
+              <td>{{ value }}</td>
+            </tr>
+            <tr *ngIf="sample.createdAt as value">
+              <th><i class="material-icons"> event </i>Creation Time</th>
+              <td>{{ value | date: "yyyy-MM-dd HH:mm" }}</td>
+            </tr>
+            <tr *ngIf="sample.owner as value">
+              <th><i class="material-icons"> person </i>Sample Owner</th>
+              <td>{{ value }}</td>
+            </tr>
+            <tr *ngIf="sample.ownerGroup as value">
+              <th><i class="material-icons"> group </i>Owner Group</th>
+              <td>{{ value }}</td>
+            </tr>
+            <tr *ngIf="sample.sampleId as value">
+              <th><i class="material-icons"> fingerprint </i>Sample ID</th>
+              <td>{{ value }}</td>
+            </tr>
+          </table>
+
+          <div *ngIf="sample.sampleCharacteristics as value">
+            <h3>Sample Characteristics</h3>
+            <pre>{{ value | json }}</pre>
+          </div>
+        </div>
+
+        <button mat-stroked-button (click)="show = !show">
+          {{ show ? "Hide MetaData" : "Show Metadata" }}
+        </button>
+        <br />
+        <div *ngIf="show">
+          <ngx-json-viewer [json]="sample" [expanded]="false"></ngx-json-viewer>
+        </div>
+      </mat-card>
+    </mat-tab>
+
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon> folder </mat-icon> Datasets
+      </ng-template>
+
+      <div class="datasets-table">
+        <app-table
+          [data]="tableData"
+          [columns]="tableColumns"
+          [paginate]="tablePaginate"
+          [currentPage]="datasetsPage$ | async"
+          [dataCount]="datasetsCount$ | async"
+          [dataPerPage]="datasetsPerPage$ | async"
+          (pageChange)="onPageChange($event)"
+          (rowClick)="onRowClick($event)"
+        ></app-table>
       </div>
-    </div>
-
-    <button (click)="show = !show">
-      {{ show ? "Hide MetaData" : "Show Metadata" }}
-    </button>
-    <br />
-    <div *ngIf="show">
-      <ngx-json-viewer [json]="sample" [expanded]="false"></ngx-json-viewer>
-    </div>
-  </mat-card>
+    </mat-tab>
+  </mat-tab-group>
 </div>

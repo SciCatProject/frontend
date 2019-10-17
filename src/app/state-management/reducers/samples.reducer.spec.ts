@@ -16,13 +16,20 @@ const initialSampleState: SampleState = {
   currentSample: sample,
   datasets: [],
 
-  totalCount: 0,
+  samplesCount: 0,
+  datasetsCount: 0,
 
   isLoading: false,
 
-  filters: {
+  samplefilters: {
     text: "",
     sortField: "creationTime:desc",
+    skip: 0,
+    limit: 25
+  },
+  datasetFilters: {
+    text: "",
+    sortField: "createdAt:desc",
     skip: 0,
     limit: 25
   }
@@ -64,7 +71,7 @@ describe("SamplesReducer", () => {
       const action = fromActions.fetchSamplesCountCompleteAction({ count });
       const state = samplesReducer(initialSampleState, action);
 
-      expect(state.totalCount).toEqual(count);
+      expect(state.samplesCount).toEqual(count);
       expect(state.isLoading).toEqual(false);
     });
   });
@@ -133,6 +140,38 @@ describe("SamplesReducer", () => {
   describe("on fetchSampleDatasetsFailedAction", () => {
     it("should set isLoading to false", () => {
       const action = fromActions.fetchSampleDatasetsFailedAction();
+      const state = samplesReducer(initialSampleState, action);
+
+      expect(state.isLoading).toBe(false);
+    });
+  });
+
+  describe("on fetchSampleDatasetsCountAction", () => {
+    it("should set isLoading to true", () => {
+      const sampleId = "testId";
+      const action = fromActions.fetchSampleDatasetsCountAction({ sampleId });
+      const state = samplesReducer(initialSampleState, action);
+
+      expect(state.isLoading).toBe(true);
+    });
+  });
+
+  describe("on fetchSampleDatasetsCountCompleteAction", () => {
+    it("should set datasetsCount and set isLoading to false", () => {
+      const count = 100;
+      const action = fromActions.fetchSampleDatasetsCountCompleteAction({
+        count
+      });
+      const state = samplesReducer(initialSampleState, action);
+
+      expect(state.datasetsCount).toEqual(count);
+      expect(state.isLoading).toBe(false);
+    });
+  });
+
+  describe("on fetchSampleDatasetsCountFailedAction", () => {
+    it("should set isLoading to false", () => {
+      const action = fromActions.fetchSampleDatasetsCountFailedAction();
       const state = samplesReducer(initialSampleState, action);
 
       expect(state.isLoading).toBe(false);
@@ -275,38 +314,51 @@ describe("SamplesReducer", () => {
   });
 
   describe("on changePageAction", () => {
-    it("should set skip and limit filters", () => {
+    it("should set skip and limit sampleFilters", () => {
       const page = 2;
       const limit = 25;
       const skip = page * limit;
       const action = fromActions.changePageAction({ page, limit });
       const state = samplesReducer(initialSampleState, action);
 
-      expect(state.filters.limit).toEqual(limit);
-      expect(state.filters.skip).toEqual(skip);
+      expect(state.samplefilters.limit).toEqual(limit);
+      expect(state.samplefilters.skip).toEqual(skip);
+    });
+  });
+
+  describe("on changeDatasetsPageAction", () => {
+    it("should set skip and limit datasetFilters", () => {
+      const page = 2;
+      const limit = 25;
+      const skip = page * limit;
+      const action = fromActions.changeDatasetsPageAction({ page, limit });
+      const state = samplesReducer(initialSampleState, action);
+
+      expect(state.datasetFilters.limit).toEqual(limit);
+      expect(state.datasetFilters.skip).toEqual(skip);
     });
   });
 
   describe("on sortByColumnAction", () => {
-    it("should set sortField filter and set skip to 0", () => {
+    it("should set sortField sample filter and set skip to 0", () => {
       const column = "test";
       const direction = "asc";
       const sortField = column + (direction ? ":" + direction : "");
       const action = fromActions.sortByColumnAction({ column, direction });
       const state = samplesReducer(initialSampleState, action);
 
-      expect(state.filters.sortField).toEqual(sortField);
-      expect(state.filters.skip).toEqual(0);
+      expect(state.samplefilters.sortField).toEqual(sortField);
+      expect(state.samplefilters.skip).toEqual(0);
     });
   });
 
   describe("on setTextFilterAction", () => {
-    it("should set text filter", () => {
+    it("should set text sample filter", () => {
       const text = "test";
       const action = fromActions.setTextFilterAction({ text });
       const state = samplesReducer(initialSampleState, action);
 
-      expect(state.filters.text).toEqual(text);
+      expect(state.samplefilters.text).toEqual(text);
     });
   });
 });
