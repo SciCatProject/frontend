@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Store, select } from "@ngrx/store";
-import { Subscription, Observable } from "rxjs";
+import { Subscription } from "rxjs";
 import {
   fetchProposalAction,
   fetchProposalDatasetsAction,

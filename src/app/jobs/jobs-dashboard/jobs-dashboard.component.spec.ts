@@ -18,9 +18,7 @@ import { rootReducer } from "state-management/reducers/root.reducer";
 import { JobViewMode } from "state-management/models";
 import {
   setJobViewModeAction,
-  fetchJobsAction,
-  changePageAction,
-  fetchJobAction
+  changePageAction
 } from "state-management/actions/jobs.actions";
 import { PageChangeEvent } from "shared/modules/table/table.component";
 
