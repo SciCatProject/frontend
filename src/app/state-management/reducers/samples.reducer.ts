@@ -20,7 +20,7 @@ const reducer = createReducer(
 
   on(fromActions.fetchSamplesCountCompleteAction, (state, { count }) => ({
     ...state,
-    totalCount: count,
+    samplesCount: count,
     isLoading: false
   })),
   on(fromActions.fetchSamplesCountFailedAction, state => ({
@@ -49,6 +49,19 @@ const reducer = createReducer(
     isLoading: false
   })),
   on(fromActions.fetchSampleDatasetsFailedAction, state => ({
+    ...state,
+    isLoading: false
+  })),
+
+  on(fromActions.fetchSampleDatasetsCountAction, state => ({
+    ...state,
+    isLoading: true
+  })),
+  on(
+    fromActions.fetchSampleDatasetsCountCompleteAction,
+    (state, { count }) => ({ ...state, datasetsCount: count, isLoading: false })
+  ),
+  on(fromActions.fetchSampleDatasetsCountFailedAction, state => ({
     ...state,
     isLoading: false
   })),
@@ -123,17 +136,25 @@ const reducer = createReducer(
 
   on(fromActions.changePageAction, (state, { page, limit }) => {
     const skip = page * limit;
-    return { ...state, filters: { ...state.filters, skip, limit } };
+    const samplefilters = { ...state.samplefilters, skip, limit };
+    return { ...state, samplefilters };
+  }),
+
+  on(fromActions.changeDatasetsPageAction, (state, { page, limit }) => {
+    const skip = page * limit;
+    const datasetFilters = { ...state.datasetFilters, skip, limit };
+    return { ...state, datasetFilters };
   }),
 
   on(fromActions.sortByColumnAction, (state, { column, direction }) => {
     const sortField = column + (direction ? ":" + direction : "");
-    return { ...state, filters: { ...state.filters, sortField, skip: 0 } };
+    const samplefilters = { ...state.samplefilters, sortField, skip: 0 };
+    return { ...state, samplefilters };
   }),
 
   on(fromActions.setTextFilterAction, (state, { text }) => ({
     ...state,
-    filters: { ...state.filters, text }
+    samplefilters: { ...state.samplefilters, text }
   }))
 );
 

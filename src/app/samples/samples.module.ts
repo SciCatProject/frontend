@@ -5,7 +5,8 @@ import {
   MatFormFieldModule,
   MatIconModule,
   MatInputModule,
-  MatButtonModule
+  MatButtonModule,
+  MatTabsModule
 } from "@angular/material";
 import { NgModule } from "@angular/core";
 import { SampleDetailComponent } from "./sample-detail/sample-detail.component";
@@ -31,6 +32,7 @@ import { TableModule } from "shared/modules/table/table.module";
     MatFormFieldModule,
     MatInputModule,
     MatDialogModule,
+    MatTabsModule,
     NgxJsonViewerModule,
     ReactiveFormsModule,
     SearchBarModule,

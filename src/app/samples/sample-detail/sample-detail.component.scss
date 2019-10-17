@@ -1,35 +1,40 @@
-.sample-detail .details {
-  padding: 1em;
+mat-card {
+  margin: 1em;
 
-  table {
-    tr {
-      td {
-        padding: 0.9em;
-        vertical-align: middle;
-      }
+  .mat-card-header {
+    background-color: #7de1ff;
+  }
+  .details {
+    padding: 1em;
 
-      th {
-        text-align: left;
-        padding-right: 0.5em;
-        material-icons {
+    table {
+      tr {
+        th {
+          text-align: left;
+          padding-right: 0.5em;
+          material-icons {
+            vertical-align: middle;
+          }
+        }
+
+        td {
+          padding: 0.9em;
           vertical-align: middle;
         }
       }
     }
-  }
 
-  h3 {
-    margin-top: 1em;
+    h3 {
+      margin-top: 1em;
+    }
+
+    .material-icons {
+      vertical-align: middle;
+      color: black;
+    }
   }
 }
 
-.mat-card-header {
-  background-color: #7de1ff;
-}
-
-
-
-.material-icons {
-	vertical-align: middle;
-	color: black;
+.datasets-table {
+  margin: 1em;
 }

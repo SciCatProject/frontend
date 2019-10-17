@@ -5,25 +5,36 @@ export interface SampleState {
   currentSample: Sample;
   datasets: Dataset[];
 
-  totalCount: number;
+  samplesCount: number;
+  datasetsCount: number;
 
   isLoading: boolean;
 
-  filters: SampleFilters;
+  samplefilters: SampleFilters;
+
+  datasetFilters: SampleFilters;
 }
 
 export const initialSampleState: SampleState = {
   samples: [],
-  datasets: [],
   currentSample: null,
+  datasets: [],
 
-  totalCount: 0,
+  samplesCount: 0,
+  datasetsCount: 0,
 
   isLoading: true,
 
-  filters: {
+  samplefilters: {
     text: "",
     sortField: "creationTime:desc",
+    skip: 0,
+    limit: 25
+  },
+
+  datasetFilters: {
+    text: "",
+    sortField: "createdAt:desc",
     skip: 0,
     limit: 25
   }
