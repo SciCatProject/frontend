@@ -4,13 +4,13 @@ import * as fromActions from "../actions/proposals.actions";
 import { Attachment, Dataset, DatasetInterface, Proposal } from "../models";
 import { ProposalInterface } from "shared/sdk";
 
-const data: ProposalInterface = {
+const proposalData: ProposalInterface = {
   proposalId: "testId",
   email: "testEmail",
   ownerGroup: "testGroup",
   attachments: []
 };
-const proposal = new Proposal(data);
+const proposal = new Proposal(proposalData);
 
 const initialProposalsState: ProposalsState = {
   proposals: [],
@@ -24,13 +24,13 @@ const initialProposalsState: ProposalsState = {
 
   proposalFilters: {
     text: "test",
-    sortField: "test asc",
+    sortField: "test:asc",
     skip: 0,
     limit: 25
   },
   datasetFilters: {
     text: "test",
-    sortField: "test asc",
+    sortField: "test:asc",
     skip: 0,
     limit: 25
   }
@@ -63,6 +63,15 @@ describe("ProposalsReducer", () => {
       const state = proposalsReducer(initialProposalsState, action);
 
       expect(state.isLoading).toEqual(false);
+    });
+  });
+
+  describe("on fetchCountAction", () => {
+    it("should set isLoading to true", () => {
+      const action = fromActions.fetchCountAction();
+      const state = proposalsReducer(initialProposalsState, action);
+
+      expect(state.isLoading).toEqual(true);
     });
   });
 
@@ -152,6 +161,18 @@ describe("ProposalsReducer", () => {
       const state = proposalsReducer(initialProposalsState, action);
 
       expect(state.isLoading).toEqual(false);
+    });
+  });
+
+  describe("on fetchProposalDatasetsCountAction", () => {
+    it("should set isLoading to true", () => {
+      const proposalId = "testId";
+      const action = fromActions.fetchProposalDatasetsCountAction({
+        proposalId
+      });
+      const state = proposalsReducer(initialProposalsState, action);
+
+      expect(state.isLoading).toEqual(true);
     });
   });
 
@@ -327,7 +348,7 @@ describe("ProposalsReducer", () => {
     it("should set sortField filter and set skip to 0", () => {
       const column = "test";
       const direction = "asc";
-      const sortField = column + " " + direction;
+      const sortField = column + ":" + direction;
       const action = fromActions.sortByColumnAction({ column, direction });
       const state = proposalsReducer(initialProposalsState, action);
 

@@ -27,7 +27,13 @@ export const getCurrentUserName = createSelector(
   getProfile,
   getCurrentUser,
   (profile, user) => {
-    return profile.username || user.username || null;
+    if (profile) {
+      return profile.username;
+    } else if (user) {
+      return user.username;
+    } else {
+      return null;
+    }
   }
 );
 

@@ -18,8 +18,7 @@ import { JobViewMode } from "state-management/models";
 import {
   changePageAction,
   setJobViewModeAction,
-  fetchJobsAction,
-  fetchJobAction
+  fetchJobsAction
 } from "state-management/actions/jobs.actions";
 import {
   getCurrentUser,
@@ -59,11 +58,6 @@ export class JobsDashboardComponent implements OnInit, OnDestroy {
     },
     { name: "statusMessage", icon: "comment", sort: false, inList: true }
   ];
-  constructor(
-    private datePipe: DatePipe,
-    private router: Router,
-    private store: Store<Job>
-  ) {}
 
   formatTableData(jobs: Job[]): any[] {
     if (jobs) {
@@ -98,21 +92,24 @@ export class JobsDashboardComponent implements OnInit, OnDestroy {
       }
     }
     this.store.dispatch(setJobViewModeAction({ mode: viewMode }));
-    this.store.dispatch(fetchJobsAction());
   }
 
   onPageChange(event: PageChangeEvent) {
     this.store.dispatch(
       changePageAction({ page: event.pageIndex, limit: event.pageSize })
     );
-    this.store.dispatch(fetchJobsAction());
   }
 
   onRowClick(job: Job) {
-    this.store.dispatch(fetchJobAction({ jobId: job.id }));
     const id = encodeURIComponent(job.id);
     this.router.navigateByUrl("/user/jobs/" + id);
   }
+
+  constructor(
+    private datePipe: DatePipe,
+    private router: Router,
+    private store: Store<Job>
+  ) {}
 
   ngOnInit() {
     this.store.dispatch(fetchJobsAction());

@@ -1,7 +1,7 @@
 import { DatasetState } from "state-management/state/datasets.store";
 import { createFeatureSelector, createSelector } from "@ngrx/store";
 
-export const getDatasetState = createFeatureSelector<DatasetState>("datasets");
+const getDatasetState = createFeatureSelector<DatasetState>("datasets");
 
 export const getDatasets = createSelector(
   getDatasetState,

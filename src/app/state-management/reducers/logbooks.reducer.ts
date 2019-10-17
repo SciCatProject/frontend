@@ -47,7 +47,7 @@ const reducer = createReducer(
     isLoading: false
   })),
 
-  on(fromActions.updateFilterAction, (state, { filters }) => ({
+  on(fromActions.setFilterAction, (state, { filters }) => ({
     ...state,
     filters
   }))

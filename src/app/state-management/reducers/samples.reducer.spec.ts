@@ -65,6 +65,15 @@ describe("SamplesReducer", () => {
     });
   });
 
+  describe("on fetchSamplesCountAction", () => {
+    it("should set isLoading to true", () => {
+      const action = fromActions.fetchSamplesCountAction();
+      const state = samplesReducer(initialSampleState, action);
+
+      expect(state.isLoading).toEqual(true);
+    });
+  });
+
   describe("on fetchSamplesCountCompleteAction", () => {
     it("should set totalCount and set isLoading to false", () => {
       const count = 100;

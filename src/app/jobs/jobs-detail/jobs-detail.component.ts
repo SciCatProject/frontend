@@ -4,6 +4,7 @@ import { Job } from "shared/sdk/models";
 import { select, Store } from "@ngrx/store";
 import { ActivatedRoute } from "@angular/router";
 import { getCurrentJob } from "state-management/selectors/jobs.selectors";
+import { Subscription } from "rxjs";
 
 @Component({
   selector: "app-jobs-detail",
@@ -12,29 +13,17 @@ import { getCurrentJob } from "state-management/selectors/jobs.selectors";
 })
 export class JobsDetailComponent implements OnInit, OnDestroy {
   job$ = this.store.pipe(select(getCurrentJob));
-  job: Job = undefined;
-  subscriptions = [];
+  routeSubscription: Subscription;
 
-  constructor(private route: ActivatedRoute, private store: Store<any>) {}
+  constructor(private route: ActivatedRoute, private store: Store<Job>) {}
 
   ngOnInit() {
-    this.subscriptions.push(
-      this.store.pipe(select(getCurrentJob)).subscribe(job => {
-        if (job && Object.keys(job).length > 0) {
-          this.job = <Job>job;
-        } else {
-          console.log("Searching from URL params");
-          this.route.params.subscribe(params => {
-            this.store.dispatch(fetchJobAction({ jobId: params.id }));
-          });
-        }
-      })
-    );
+    this.routeSubscription = this.route.params.subscribe(params => {
+      this.store.dispatch(fetchJobAction({ jobId: params.id }));
+    });
   }
 
   ngOnDestroy() {
-    for (let i = 0; i < this.subscriptions.length; i++) {
-      this.subscriptions[i].unsubscribe();
-    }
+    this.routeSubscription.unsubscribe();
   }
 }

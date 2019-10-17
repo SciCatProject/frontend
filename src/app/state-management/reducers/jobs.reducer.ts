@@ -15,6 +15,7 @@ const reducer = createReducer(
     isLoading: false
   })),
 
+  on(fromActions.fetchCountAction, state => ({ ...state, isLoading: true })),
   on(fromActions.fetchCountCompleteAction, (state, { count }) => ({
     ...state,
     isLoading: false,
@@ -55,12 +56,14 @@ const reducer = createReducer(
 
   on(fromActions.changePageAction, (state, { page, limit }) => {
     const skip = page * limit;
-    return { ...state, filters: { ...state.filters, skip, limit } };
+    const filters = { ...state.filters, skip, limit };
+    return { ...state, filters };
   }),
 
   on(fromActions.sortByColumnAction, (state, { column, direction }) => {
-    const sortField = column + (direction ? " " + direction : "");
-    return { ...state, filters: { ...state.filters, sortField, skip: 0 } };
+    const sortField = column + (direction ? ":" + direction : "");
+    const filters = { ...state.filters, sortField, skip: 0 };
+    return { ...state, filters };
   })
 );
 

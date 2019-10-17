@@ -18,7 +18,7 @@ import { getCurrentDataset } from "state-management/selectors/datasets.selectors
 import {
   fetchLogbookAction,
   fetchFilteredEntriesAction,
-  updateFilterAction
+  setFilterAction
 } from "state-management/actions/logbooks.actions";
 import { ActivatedRoute } from "@angular/router";
 import { APP_CONFIG, AppConfig } from "app-config.module";
@@ -46,7 +46,7 @@ export class LogbooksDashboardComponent
 
   onTextSearchChange(query: string) {
     this.filters.textSearch = query;
-    this.store.dispatch(updateFilterAction({ filters: this.filters }));
+    this.store.dispatch(setFilterAction({ filters: this.filters }));
     this.store.dispatch(
       fetchFilteredEntriesAction({
         name: this.logbook.name,
@@ -57,7 +57,7 @@ export class LogbooksDashboardComponent
 
   onFilterSelect(filters: LogbookFilters) {
     this.filters = filters;
-    this.store.dispatch(updateFilterAction({ filters: this.filters }));
+    this.store.dispatch(setFilterAction({ filters: this.filters }));
     this.store.dispatch(
       fetchFilteredEntriesAction({
         name: this.logbook.name,

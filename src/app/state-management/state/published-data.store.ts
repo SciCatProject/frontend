@@ -20,7 +20,7 @@ export const initialPublishedDataState: PublishedDataState = {
   isLoading: false,
 
   filters: {
-    sortField: "publicationYear desc",
+    sortField: "publicationYear:desc",
     skip: 0,
     limit: 25
   }

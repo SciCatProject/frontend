@@ -2,14 +2,14 @@ import { Attachment, Dataset, Proposal } from "../models";
 import * as fromActions from "./proposals.actions";
 
 describe("Proposal Actions", () => {
-  describe("#fetchProposalsAction()", () => {
+  describe("fetchProposalsAction", () => {
     it("should create an action", () => {
       const action = fromActions.fetchProposalsAction();
       expect({ ...action }).toEqual({ type: "[Proposal] Fetch Proposals" });
     });
   });
 
-  describe("#fetchProposalsCompleteAction()", () => {
+  describe("fetchProposalsCompleteAction", () => {
     it("should create an action", () => {
       const proposals = [new Proposal()];
       const action = fromActions.fetchProposalsCompleteAction({ proposals });
@@ -20,7 +20,7 @@ describe("Proposal Actions", () => {
     });
   });
 
-  describe("#fetchProposalsFailedAction()", () => {
+  describe("fetchProposalsFailedAction", () => {
     it("should create an action", () => {
       const action = fromActions.fetchProposalsFailedAction();
       expect({ ...action }).toEqual({
@@ -29,7 +29,32 @@ describe("Proposal Actions", () => {
     });
   });
 
-  describe("#fetchProposalAction()", () => {
+  describe("fetchCountAction", () => {
+    it("should create an action", () => {
+      const action = fromActions.fetchCountAction();
+      expect({ ...action }).toEqual({ type: "[Proposal] Fetch Count" });
+    });
+  });
+
+  describe("fetchCountCompleteAction", () => {
+    it("should create an action", () => {
+      const count = 100;
+      const action = fromActions.fetchCountCompleteAction({ count });
+      expect({ ...action }).toEqual({
+        type: "[Proposal] Fetch Count Complete",
+        count
+      });
+    });
+  });
+
+  describe("fetchCountFailedAction", () => {
+    it("should create an action", () => {
+      const action = fromActions.fetchCountFailedAction();
+      expect({ ...action }).toEqual({ type: "[Proposal] Fetch Count Failed" });
+    });
+  });
+
+  describe("fetchProposalAction", () => {
     it("should create an action", () => {
       const proposalId = "string";
       const action = fromActions.fetchProposalAction({ proposalId });
@@ -40,7 +65,7 @@ describe("Proposal Actions", () => {
     });
   });
 
-  describe("#fetchProposalCompleteAction()", () => {
+  describe("fetchProposalCompleteAction", () => {
     it("should create an action", () => {
       const proposal = new Proposal();
       const action = fromActions.fetchProposalCompleteAction({ proposal });
@@ -51,7 +76,7 @@ describe("Proposal Actions", () => {
     });
   });
 
-  describe("#fetchProposalFailedAction()", () => {
+  describe("fetchProposalFailedAction", () => {
     it("should create an action", () => {
       const action = fromActions.fetchProposalFailedAction();
       expect({ ...action }).toEqual({
@@ -60,40 +85,75 @@ describe("Proposal Actions", () => {
     });
   });
 
-  describe("#fetchProposalDatasetsAction()", () => {
+  describe("fetchProposalDatasetsAction", () => {
     it("should create an action", () => {
       const proposalId = "string";
       const action = fromActions.fetchProposalDatasetsAction({ proposalId });
       expect({ ...action }).toEqual({
-        type: "[Proposal] Fetch Proposal Datasets",
+        type: "[Proposal] Fetch Datasets",
         proposalId
       });
     });
   });
 
-  describe("#fetchProposalDatasetsCompleteAction()", () => {
+  describe("fetchProposalDatasetsCompleteAction", () => {
     it("should create an action", () => {
       const datasets = [new Dataset()];
       const action = fromActions.fetchProposalDatasetsCompleteAction({
         datasets
       });
       expect({ ...action }).toEqual({
-        type: "[Proposal] Fetch Proposal Datasets Complete",
+        type: "[Proposal] Fetch Datasets Complete",
         datasets
       });
     });
   });
 
-  describe("#fetchProposalDatasetsFailedAction()", () => {
+  describe("fetchProposalDatasetsFailedAction", () => {
     it("should create an action", () => {
       const action = fromActions.fetchProposalDatasetsFailedAction();
       expect({ ...action }).toEqual({
-        type: "[Proposal] Fetch Proposal Datasets Failed"
+        type: "[Proposal] Fetch Datasets Failed"
       });
     });
   });
 
-  describe("#addAttachmentAction()", () => {
+  describe("fetchProposalDatasetsCountAction", () => {
+    it("should create an action", () => {
+      const proposalId = "testId";
+      const action = fromActions.fetchProposalDatasetsCountAction({
+        proposalId
+      });
+      expect({ ...action }).toEqual({
+        type: "[Proposal] Fetch Datasets Count",
+        proposalId
+      });
+    });
+  });
+
+  describe("fetchProposalDatasetsCountCompleteAction", () => {
+    it("should create an action", () => {
+      const count = 100;
+      const action = fromActions.fetchProposalDatasetsCountCompleteAction({
+        count
+      });
+      expect({ ...action }).toEqual({
+        type: "[Proposal] Fetch Datasets Count Complete",
+        count
+      });
+    });
+  });
+
+  describe("fetchProposalDatasetsCountFailedAction", () => {
+    it("should create an action", () => {
+      const action = fromActions.fetchProposalDatasetsCountFailedAction();
+      expect({ ...action }).toEqual({
+        type: "[Proposal] Fetch Datasets Count Failed"
+      });
+    });
+  });
+
+  describe("addAttachmentAction", () => {
     it("should create an action", () => {
       const attachment = new Attachment();
       const action = fromActions.addAttachmentAction({ attachment });
@@ -104,7 +164,7 @@ describe("Proposal Actions", () => {
     });
   });
 
-  describe("#addAttachmentCompleteAction()", () => {
+  describe("addAttachmentCompleteAction", () => {
     it("should create an action", () => {
       const attachment = new Attachment();
       const action = fromActions.addAttachmentCompleteAction({ attachment });
@@ -115,7 +175,7 @@ describe("Proposal Actions", () => {
     });
   });
 
-  describe("#addAttachmentFailedAction()", () => {
+  describe("addAttachmentFailedAction", () => {
     it("should create an action", () => {
       const action = fromActions.addAttachmentFailedAction();
       expect({ ...action }).toEqual({
@@ -124,7 +184,7 @@ describe("Proposal Actions", () => {
     });
   });
 
-  describe("#updateAttachmentCaptionAction()", () => {
+  describe("updateAttachmentCaptionAction", () => {
     it("should create an action", () => {
       const proposalId = "123abc";
       const attachmentId = "abc123";
@@ -143,7 +203,7 @@ describe("Proposal Actions", () => {
     });
   });
 
-  describe("#updateAttachmentCompleteCaption()", () => {
+  describe("updateAttachmentCompleteCaption", () => {
     it("should create an action", () => {
       const attachment = new Attachment();
       const action = fromActions.updateAttachmentCaptionCompleteAction({
@@ -156,7 +216,7 @@ describe("Proposal Actions", () => {
     });
   });
 
-  describe("#updateAttachmentFailedCaption()", () => {
+  describe("updateAttachmentFailedCaption", () => {
     it("should create an action", () => {
       const action = fromActions.updateAttachmentCaptionFailedAction();
       expect({ ...action }).toEqual({
@@ -165,7 +225,7 @@ describe("Proposal Actions", () => {
     });
   });
 
-  describe("#removeAttachmentAction()", () => {
+  describe("removeAttachmentAction", () => {
     it("should create an action", () => {
       const proposalId = "123abc";
       const attachmentId = "abc123";
@@ -181,7 +241,7 @@ describe("Proposal Actions", () => {
     });
   });
 
-  describe("#removeAttachmentCompleteAction()", () => {
+  describe("removeAttachmentCompleteAction", () => {
     it("should create an action", () => {
       const attachmentId = "abc123";
       const action = fromActions.removeAttachmentCompleteAction({
@@ -194,7 +254,7 @@ describe("Proposal Actions", () => {
     });
   });
 
-  describe("#removeAttachmentFailedAction()", () => {
+  describe("removeAttachmentFailedAction", () => {
     it("should create an action", () => {
       const action = fromActions.removeAttachmentFailedAction();
       expect({ ...action }).toEqual({
@@ -203,7 +263,7 @@ describe("Proposal Actions", () => {
     });
   });
 
-  describe("#setTextFilterAction()", () => {
+  describe("setTextFilterAction", () => {
     it("should create an action", () => {
       const text = "test";
       const action = fromActions.setTextFilterAction({ text });
@@ -214,7 +274,7 @@ describe("Proposal Actions", () => {
     });
   });
 
-  describe("#changePageAction()", () => {
+  describe("changePageAction", () => {
     it("should create an action", () => {
       const page = 0;
       const limit = 25;
@@ -227,7 +287,7 @@ describe("Proposal Actions", () => {
     });
   });
 
-  describe("#changeDatasetsPageAction()", () => {
+  describe("changeDatasetsPageAction", () => {
     it("should create an action", () => {
       const page = 0;
       const limit = 25;
@@ -240,7 +300,7 @@ describe("Proposal Actions", () => {
     });
   });
 
-  describe("#sortByColumnAction()", () => {
+  describe("sortByColumnAction", () => {
     it("should create an action", () => {
       const column = "test";
       const direction = "asc";

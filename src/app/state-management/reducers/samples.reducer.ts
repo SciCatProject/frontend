@@ -18,6 +18,10 @@ const reducer = createReducer(
     isLoading: false
   })),
 
+  on(fromActions.fetchSamplesCountAction, state => ({
+    ...state,
+    isLoading: true
+  })),
   on(fromActions.fetchSamplesCountCompleteAction, (state, { count }) => ({
     ...state,
     samplesCount: count,
@@ -81,11 +85,8 @@ const reducer = createReducer(
   on(fromActions.addAttachmentCompleteAction, (state, { attachment }) => {
     const attachments = state.currentSample.attachments;
     attachments.push(attachment);
-    return {
-      ...state,
-      currentSample: { ...state.currentSample, attachments },
-      isLoading: false
-    };
+    const currentSample = { ...state.currentSample, attachments };
+    return { ...state, currentSample, isLoading: false };
   }),
   on(fromActions.addAttachmentFailedAction, state => ({
     ...state,
@@ -103,11 +104,8 @@ const reducer = createReducer(
         existingAttachment => existingAttachment.id !== attachment.id
       );
       attachments.push(attachment);
-      return {
-        ...state,
-        currentSample: { ...state.currentSample, attachments },
-        isLoading: false
-      };
+      const currentSample = { ...state.currentSample, attachments };
+      return { ...state, currentSample, isLoading: false };
     }
   ),
   on(fromActions.updateAttachmentCaptionFailedAction, state => ({
@@ -123,11 +121,8 @@ const reducer = createReducer(
     const attachments = state.currentSample.attachments.filter(
       attachment => attachment.id !== attachmentId
     );
-    return {
-      ...state,
-      currentSample: { ...state.currentSample, attachments },
-      isLoading: false
-    };
+    const currentSample = { ...state.currentSample, attachments };
+    return { ...state, currentSample, isLoading: false };
   }),
   on(fromActions.removeAttachmentFailedAction, state => ({
     ...state,

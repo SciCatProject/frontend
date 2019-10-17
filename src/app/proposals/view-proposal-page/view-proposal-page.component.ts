@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Store, select } from "@ngrx/store";
-import { Subscription, Observable } from "rxjs";
+import { Subscription } from "rxjs";
 import {
   fetchProposalAction,
   fetchProposalDatasetsAction,
@@ -29,11 +29,12 @@ import { FileSizePipe } from "shared/pipes/filesize.pipe";
   styleUrls: ["view-proposal-page.component.scss"]
 })
 export class ViewProposalPageComponent implements OnInit, OnDestroy {
-  proposal$: Observable<Proposal> = this.store.pipe(select(getCurrentProposal));
   currentPage$ = this.store.pipe(select(getDatasetsPage));
   datasetCount$ = this.store.pipe(select(getDatasetsCount));
   itemsPerPage$ = this.store.pipe(select(getDatasetsPerPage));
 
+  proposal: Proposal;
+  proposalSubcsription: Subscription;
   datasetsSubscription: Subscription;
   routeSubscription: Subscription;
 
@@ -72,6 +73,9 @@ export class ViewProposalPageComponent implements OnInit, OnDestroy {
     this.store.dispatch(
       changeDatasetsPageAction({ page: event.pageIndex, limit: event.pageSize })
     );
+    this.store.dispatch(
+      fetchProposalDatasetsAction({ proposalId: this.proposal.proposalId })
+    );
   }
 
   onRowClick(dataset: Dataset) {
@@ -89,6 +93,12 @@ export class ViewProposalPageComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
+    this.proposalSubcsription = this.store
+      .pipe(select(getCurrentProposal))
+      .subscribe(proposal => {
+        this.proposal = proposal;
+      });
+
     this.routeSubscription = this.route.params.subscribe(params => {
       this.store.dispatch(fetchProposalAction({ proposalId: params.id }));
       this.store.dispatch(
@@ -104,6 +114,7 @@ export class ViewProposalPageComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.proposalSubcsription.unsubscribe();
     this.datasetsSubscription.unsubscribe();
     this.routeSubscription.unsubscribe();
   }

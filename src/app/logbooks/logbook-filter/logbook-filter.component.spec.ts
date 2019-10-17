@@ -49,7 +49,7 @@ describe("LogbookFilterComponent", () => {
   });
 
   describe("#doSelect()", () => {
-    it("should dispatch an updateFilterAction and a fetchFilteredEntriesAction with showBotMessages set to true", () => {
+    it("should emit the new filter", () => {
       spyOn(component.onSelect, "emit");
 
       component.logbook = logbook;
@@ -71,7 +71,7 @@ describe("LogbookFilterComponent", () => {
       expect(component.onSelect.emit).toHaveBeenCalledWith(component.filters);
     });
 
-    it("should dispatch an updateFilterAction and a fetchFilteredEntriesAction with showImages set to true", () => {
+    it("should emit the new filter", () => {
       spyOn(component.onSelect, "emit");
 
       component.logbook = logbook;
@@ -94,7 +94,7 @@ describe("LogbookFilterComponent", () => {
       expect(component.onSelect.emit).toHaveBeenCalledWith(component.filters);
     });
 
-    it("should dispatch an updateFilterAction and a fetchFilteredEntriesAction with showUserMessages set to true", () => {
+    it("should emit the new filter", () => {
       spyOn(component.onSelect, "emit");
 
       component.logbook = logbook;
@@ -117,7 +117,7 @@ describe("LogbookFilterComponent", () => {
       expect(component.onSelect.emit).toHaveBeenCalledWith(component.filters);
     });
 
-    it("should dispatch an updateFilterAction and a fetchFilteredEntriesAction with showBotMessages set to false", () => {
+    it("should emit the new filter", () => {
       spyOn(component.onSelect, "emit");
 
       component.logbook = logbook;
@@ -140,7 +140,7 @@ describe("LogbookFilterComponent", () => {
       expect(component.onSelect.emit).toHaveBeenCalledWith(component.filters);
     });
 
-    it("should dispatch an updateFilterAction and a fetchFilteredEntriesAction with showImages set to false", () => {
+    it("should emit the new filter", () => {
       spyOn(component.onSelect, "emit");
 
       component.logbook = logbook;
@@ -163,7 +163,7 @@ describe("LogbookFilterComponent", () => {
       expect(component.onSelect.emit).toHaveBeenCalledWith(component.filters);
     });
 
-    it("should dispatch an updateFilterAction and a fetchFilteredEntriesAction with showUserMessages set to false", () => {
+    it("should emit the new filter", () => {
       spyOn(component.onSelect, "emit");
 
       component.logbook = logbook;

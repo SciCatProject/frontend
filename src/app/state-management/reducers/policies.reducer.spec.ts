@@ -14,13 +14,13 @@ const initialPolicyState: PolicyState = {
   isLoading: false,
 
   policiesFilters: {
-    sortField: "test desc",
+    sortField: "test:desc",
     skip: 0,
     limit: 25
   },
 
   editableFilters: {
-    sortField: "test desc",
+    sortField: "test:desc",
     skip: 0,
     limit: 25
   }
@@ -284,7 +284,7 @@ describe("PoliciesReducer", () => {
     it("should set sortField policies filter and set skip to 0", () => {
       const column = "test";
       const direction = "desc";
-      const sortField = column + " " + direction;
+      const sortField = column + ":" + direction;
       const action = fromActions.sortByColumnAction({ column, direction });
       const state = policiesReducer(initialPolicyState, action);
 
@@ -297,7 +297,7 @@ describe("PoliciesReducer", () => {
     it("should set sortField editable filter and set skip to 0", () => {
       const column = "test";
       const direction = "desc";
-      const sortField = column + " " + direction;
+      const sortField = column + ":" + direction;
       const action = fromActions.sortEditableByColumnAction({
         column,
         direction

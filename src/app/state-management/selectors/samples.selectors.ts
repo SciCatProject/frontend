@@ -1,7 +1,7 @@
 import { createFeatureSelector, createSelector } from "@ngrx/store";
 import { SampleState } from "state-management/state/samples.store";
 
-export const getSampleState = createFeatureSelector<SampleState>("samples");
+const getSampleState = createFeatureSelector<SampleState>("samples");
 
 export const getSamples = createSelector(
   getSampleState,

@@ -68,10 +68,10 @@ export class DatasetEffects {
   fetchDataset$ = createEffect(() =>
     this.actions$.pipe(
       ofType(fromActions.fetchDatasetAction),
-      switchMap(action => {
+      switchMap(({ pid, filters }) => {
         const datasetFilter = {
           where: {
-            pid: action.pid
+            pid: pid
           },
           include: [
             { relation: "origdatablocks" },
@@ -80,9 +80,9 @@ export class DatasetEffects {
           ]
         };
 
-        if (action.filter) {
-          Object.keys(action.filter).forEach(key => {
-            datasetFilter.where[key] = action.filter[key];
+        if (filters) {
+          Object.keys(filters).forEach(key => {
+            datasetFilter.where[key] = filters[key];
           });
         }
 
@@ -99,11 +99,10 @@ export class DatasetEffects {
   saveDataset$ = createEffect(() =>
     this.actions$.pipe(
       ofType(fromActions.saveDatasetAction),
-      mergeMap(action => {
-        const saveDataset = action.dataset;
-        saveDataset.scientificMetadata = action.metadata;
-        return this.datasetApi.updateScientificMetadata(saveDataset).pipe(
-          map(dataset => fromActions.saveDatasetCompleteAction({ dataset })),
+      mergeMap(({ dataset, metadata }) => {
+        dataset.scientificMetadata = metadata;
+        return this.datasetApi.updateScientificMetadata(dataset).pipe(
+          map(res => fromActions.saveDatasetCompleteAction({ dataset: res })),
           catchError(() => of(fromActions.saveDatasetFailedAction()))
         );
       })
@@ -113,8 +112,7 @@ export class DatasetEffects {
   addAttachment$ = createEffect(() =>
     this.actions$.pipe(
       ofType(fromActions.addAttachmentAction),
-      map(action => action.attachment),
-      switchMap(attachment => {
+      switchMap(({ attachment }) => {
         delete attachment.id;
         delete attachment.rawDatasetId;
         delete attachment.derivedDatasetId;
@@ -135,13 +133,13 @@ export class DatasetEffects {
   updateAttchmentCaption$ = createEffect(() =>
     this.actions$.pipe(
       ofType(fromActions.updateAttachmentCaptionAction),
-      switchMap(action => {
-        const newCaption = { caption: action.caption };
+      switchMap(({ datasetId, attachmentId, caption }) => {
+        const data = { caption };
         return this.datasetApi
           .updateByIdAttachments(
-            encodeURIComponent(action.datasetId),
-            encodeURIComponent(action.attachmentId),
-            newCaption
+            encodeURIComponent(datasetId),
+            encodeURIComponent(attachmentId),
+            data
           )
           .pipe(
             map(attachment =>
@@ -158,15 +156,15 @@ export class DatasetEffects {
   removeAttachment$ = createEffect(() =>
     this.actions$.pipe(
       ofType(fromActions.removeAttachmentAction),
-      switchMap(action =>
+      switchMap(({ datasetId, attachmentId }) =>
         this.datasetApi
           .destroyByIdAttachments(
-            encodeURIComponent(action.datasetId),
-            encodeURIComponent(action.attachmentId)
+            encodeURIComponent(datasetId),
+            encodeURIComponent(attachmentId)
           )
           .pipe(
-            map(attachmentId =>
-              fromActions.removeAttachmentCompleteAction({ attachmentId })
+            map(res =>
+              fromActions.removeAttachmentCompleteAction({ attachmentId: res })
             ),
             catchError(() => of(fromActions.removeAttachmentFailedAction()))
           )
@@ -177,8 +175,8 @@ export class DatasetEffects {
   reduceDataset$ = createEffect(() =>
     this.actions$.pipe(
       ofType(fromActions.reduceDatasetAction),
-      mergeMap(action =>
-        this.datasetApi.reduceDataset(action.dataset).pipe(
+      mergeMap(({ dataset }) =>
+        this.datasetApi.reduceDataset(dataset).pipe(
           map(result => fromActions.reduceDatasetCompleteAction({ result })),
           catchError(() => of(fromActions.reduceDatasetFailedAction()))
         )

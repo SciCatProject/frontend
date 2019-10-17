@@ -177,7 +177,7 @@ export class DatasetDetailsDashboardComponent
             this.store.dispatch(
               fetchDatasetAction({
                 pid: id,
-                filter: { isPublished: this.viewPublic }
+                filters: { isPublished: this.viewPublic }
               })
             );
           } else {

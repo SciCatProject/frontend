@@ -72,7 +72,6 @@ export class SampleDetailComponent implements OnInit, OnDestroy {
     this.store.dispatch(
       changeDatasetsPageAction({ page: event.pageIndex, limit: event.pageSize })
     );
-
     this.store.dispatch(
       fetchSampleDatasetsAction({ sampleId: this.sample.sampleId })
     );

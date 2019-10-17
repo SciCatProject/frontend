@@ -25,12 +25,20 @@ export class SampleEffects {
 
   fetchSamples$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(fromActions.fetchSamplesAction),
+      ofType(
+        fromActions.fetchSamplesAction,
+        fromActions.changePageAction,
+        fromActions.sortByColumnAction,
+        fromActions.setTextFilterAction
+      ),
       withLatestFrom(this.fullqueryParams$),
       map(([action, params]) => params),
       mergeMap(({ query, limits }) =>
         this.sampleApi.fullquery(query, limits).pipe(
-          map(samples => fromActions.fetchSamplesCompleteAction({ samples })),
+          mergeMap(samples => [
+            fromActions.fetchSamplesCompleteAction({ samples }),
+            fromActions.fetchSamplesCountAction()
+          ]),
           catchError(() => of(fromActions.fetchSamplesFailedAction()))
         )
       )
@@ -39,10 +47,10 @@ export class SampleEffects {
 
   fetchCount$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(fromActions.fetchSamplesAction),
+      ofType(fromActions.fetchSamplesCountAction),
       withLatestFrom(this.fullqueryParams$),
       map(([action, params]) => params),
-      mergeMap(({ query, limits }) =>
+      mergeMap(({ query }) =>
         this.sampleApi.fullquery(query).pipe(
           map(samples =>
             fromActions.fetchSamplesCountCompleteAction({

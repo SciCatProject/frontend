@@ -27,6 +27,13 @@ describe("Sample Actions", () => {
     });
   });
 
+  describe("fetchSamplesCountAction", () => {
+    it("should create an action", () => {
+      const action = fromActions.fetchSamplesCountAction();
+      expect({ ...action }).toEqual({ type: "[Sample] Fetch Samples Count" });
+    });
+  });
+
   describe("fetchSamplesCountCompleteAction", () => {
     it("should create an action", () => {
       const count = 100;

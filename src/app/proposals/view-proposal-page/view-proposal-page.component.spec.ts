@@ -12,9 +12,12 @@ import { StoreModule, Store } from "@ngrx/store";
 import { rootReducer } from "state-management/reducers/root.reducer";
 import { DatePipe, SlicePipe } from "@angular/common";
 import { FileSizePipe } from "shared/pipes/filesize.pipe";
-import { Dataset } from "shared/sdk";
+import { Dataset, Proposal } from "shared/sdk";
 import { PageChangeEvent } from "datasets/dataset-table/dataset-table.component";
-import { changeDatasetsPageAction } from "state-management/actions/proposals.actions";
+import {
+  changeDatasetsPageAction,
+  fetchProposalDatasetsAction
+} from "state-management/actions/proposals.actions";
 
 describe("ViewProposalPageComponent", () => {
   let component: ViewProposalPageComponent;
@@ -78,9 +81,12 @@ describe("ViewProposalPageComponent", () => {
   });
 
   describe("#onPageChange()", () => {
-    it("should dispatch a changeDatasetsPageAction", () => {
+    it("should dispatch a changeDatasetsPageAction and a fetchProposalDatasetsAction", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
+      const proposal = new Proposal();
+      proposal.proposalId = "testId";
+      component.proposal = proposal;
       const event: PageChangeEvent = {
         pageIndex: 0,
         pageSize: 25,
@@ -88,12 +94,15 @@ describe("ViewProposalPageComponent", () => {
       };
       component.onPageChange(event);
 
-      expect(dispatchSpy).toHaveBeenCalledTimes(1);
+      expect(dispatchSpy).toHaveBeenCalledTimes(2);
       expect(dispatchSpy).toHaveBeenCalledWith(
         changeDatasetsPageAction({
           page: event.pageIndex,
           limit: event.pageSize
         })
+      );
+      expect(dispatchSpy).toHaveBeenCalledWith(
+        fetchProposalDatasetsAction({ proposalId: proposal.proposalId })
       );
     });
   });
