@@ -60,6 +60,15 @@ describe("jobsReducer", () => {
     });
   });
 
+  describe("on fetchCountAction", () => {
+    it("should set isLoading to true", () => {
+      const action = fromActions.fetchCountAction();
+      const state = jobsReducer(initialJobsState, action);
+
+      expect(state.isLoading).toEqual(true);
+    });
+  });
+
   describe("on fetchCountCompleteAction", () => {
     it("should set totalCount and set isLoading to false", () => {
       const count = 100;
@@ -167,7 +176,7 @@ describe("jobsReducer", () => {
     it("should set sortField filter and set skip filter to 0", () => {
       const column = "test";
       const direction = "asc";
-      const sortField = column + " " + direction;
+      const sortField = column + ":" + direction;
       const action = fromActions.sortByColumnAction({ column, direction });
       const state = jobsReducer(initialJobsState, action);
 

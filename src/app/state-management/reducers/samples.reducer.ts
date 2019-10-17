@@ -18,6 +18,10 @@ const reducer = createReducer(
     isLoading: false
   })),
 
+  on(fromActions.fetchSamplesCountAction, state => ({
+    ...state,
+    isLoading: true
+  })),
   on(fromActions.fetchSamplesCountCompleteAction, (state, { count }) => ({
     ...state,
     totalCount: count,
@@ -68,11 +72,8 @@ const reducer = createReducer(
   on(fromActions.addAttachmentCompleteAction, (state, { attachment }) => {
     const attachments = state.currentSample.attachments;
     attachments.push(attachment);
-    return {
-      ...state,
-      currentSample: { ...state.currentSample, attachments },
-      isLoading: false
-    };
+    const currentSample = { ...state.currentSample, attachments };
+    return { ...state, currentSample, isLoading: false };
   }),
   on(fromActions.addAttachmentFailedAction, state => ({
     ...state,
@@ -90,11 +91,8 @@ const reducer = createReducer(
         existingAttachment => existingAttachment.id !== attachment.id
       );
       attachments.push(attachment);
-      return {
-        ...state,
-        currentSample: { ...state.currentSample, attachments },
-        isLoading: false
-      };
+      const currentSample = { ...state.currentSample, attachments };
+      return { ...state, currentSample, isLoading: false };
     }
   ),
   on(fromActions.updateAttachmentCaptionFailedAction, state => ({
@@ -110,11 +108,8 @@ const reducer = createReducer(
     const attachments = state.currentSample.attachments.filter(
       attachment => attachment.id !== attachmentId
     );
-    return {
-      ...state,
-      currentSample: { ...state.currentSample, attachments },
-      isLoading: false
-    };
+    const currentSample = { ...state.currentSample, attachments };
+    return { ...state, currentSample, isLoading: false };
   }),
   on(fromActions.removeAttachmentFailedAction, state => ({
     ...state,
@@ -123,12 +118,14 @@ const reducer = createReducer(
 
   on(fromActions.changePageAction, (state, { page, limit }) => {
     const skip = page * limit;
-    return { ...state, filters: { ...state.filters, skip, limit } };
+    const filters = { ...state.filters, skip, limit };
+    return { ...state, filters };
   }),
 
   on(fromActions.sortByColumnAction, (state, { column, direction }) => {
     const sortField = column + (direction ? ":" + direction : "");
-    return { ...state, filters: { ...state.filters, sortField, skip: 0 } };
+    const filters = { ...state.filters, sortField, skip: 0 };
+    return { ...state, filters };
   }),
 
   on(fromActions.setTextFilterAction, (state, { text }) => ({

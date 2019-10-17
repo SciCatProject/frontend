@@ -10,6 +10,7 @@ export const fetchProposalsFailedAction = createAction(
   "[Proposal] Fetch Proposals Failed"
 );
 
+export const fetchCountAction = createAction("[Proposal] Fetch Count");
 export const fetchCountCompleteAction = createAction(
   "[Proposal] Fetch Count Complete",
   props<{ count: number }>()
@@ -31,23 +32,27 @@ export const fetchProposalFailedAction = createAction(
 );
 
 export const fetchProposalDatasetsAction = createAction(
-  "[Proposal] Fetch Proposal Datasets",
+  "[Proposal] Fetch Datasets",
   props<{ proposalId: string }>()
 );
 export const fetchProposalDatasetsCompleteAction = createAction(
-  "[Proposal] Fetch Proposal Datasets Complete",
+  "[Proposal] Fetch Datasets Complete",
   props<{ datasets: Dataset[] }>()
 );
 export const fetchProposalDatasetsFailedAction = createAction(
-  "[Proposal] Fetch Proposal Datasets Failed"
+  "[Proposal] Fetch Datasets Failed"
 );
 
+export const fetchProposalDatasetsCountAction = createAction(
+  "[Proposal] Fetch Datasets Count",
+  props<{ proposalId: string }>()
+);
 export const fetchProposalDatasetsCountCompleteAction = createAction(
-  "[Proposal] Fetch Proposal Dataset Count Complete",
+  "[Proposal] Fetch Datasets Count Complete",
   props<{ count: number }>()
 );
 export const fetchProposalDatasetsCountFailedAction = createAction(
-  "[Proposal] Fetch Proposal Dataset Count Failed"
+  "[Proposal] Fetch Datasets Count Failed"
 );
 
 export const addAttachmentAction = createAction(

@@ -15,12 +15,20 @@ export class JobEffects {
 
   fetchJobs$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(fromActions.fetchJobsAction),
+      ofType(
+        fromActions.fetchJobsAction,
+        fromActions.changePageAction,
+        fromActions.sortByColumnAction,
+        fromActions.setJobViewModeAction
+      ),
       withLatestFrom(this.queryParams$),
       map(([action, params]) => params),
       switchMap(params =>
         this.jobApi.find(params).pipe(
-          map((jobs: Job[]) => fromActions.fetchJobsCompleteAction({ jobs })),
+          switchMap((jobs: Job[]) => [
+            fromActions.fetchJobsCompleteAction({ jobs }),
+            fromActions.fetchCountAction()
+          ]),
           catchError(() => of(fromActions.fetchJobsFailedAction()))
         )
       )
@@ -29,7 +37,7 @@ export class JobEffects {
 
   fetchCount$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(fromActions.fetchJobsAction),
+      ofType(fromActions.fetchCountAction),
       withLatestFrom(this.queryParams$),
       map(([action, params]) => params),
       switchMap(({ where }) =>

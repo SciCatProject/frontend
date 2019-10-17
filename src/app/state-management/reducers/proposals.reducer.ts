@@ -21,6 +21,7 @@ const reducer = createReducer(
     isLoading: false
   })),
 
+  on(fromActions.fetchCountAction, state => ({ ...state, isLoading: true })),
   on(fromActions.fetchCountCompleteAction, (state, { count }) => ({
     ...state,
     isLoading: false,
@@ -55,6 +56,10 @@ const reducer = createReducer(
     isLoading: false
   })),
 
+  on(fromActions.fetchProposalDatasetsCountAction, state => ({
+    ...state,
+    isLoading: true
+  })),
   on(
     fromActions.fetchProposalDatasetsCountCompleteAction,
     (state, { count }) => ({ ...state, isLoading: false, datasetsCount: count })
@@ -68,11 +73,8 @@ const reducer = createReducer(
   on(fromActions.addAttachmentCompleteAction, (state, { attachment }) => {
     const attachments = state.currentProposal.attachments;
     attachments.push(attachment);
-    return {
-      ...state,
-      currentProposal: { ...state.currentProposal, attachments },
-      isLoading: false
-    };
+    const currentProposal = { ...state.currentProposal, attachments };
+    return { ...state, currentProposal, isLoading: false };
   }),
   on(fromActions.addAttachmentFailedAction, state => ({
     ...state,
@@ -90,11 +92,8 @@ const reducer = createReducer(
         existingAttachment => existingAttachment.id !== attachment.id
       );
       attachments.push(attachment);
-      return {
-        ...state,
-        currentProposal: { ...state.currentProposal, attachments },
-        isLoading: false
-      };
+      const currentProposal = { ...state.currentProposal, attachments };
+      return { ...state, currentProposal, isLoading: false };
     }
   ),
   on(fromActions.updateAttachmentCaptionFailedAction, state => ({
@@ -110,11 +109,8 @@ const reducer = createReducer(
     const attachments = state.currentProposal.attachments.filter(
       attachment => attachment.id !== attachmentId
     );
-    return {
-      ...state,
-      currentProposal: { ...state.currentProposal, attachments },
-      isLoading: false
-    };
+    const currentProposal = { ...state.currentProposal, attachments };
+    return { ...state, currentProposal, isLoading: false };
   }),
 
   on(fromActions.setTextFilterAction, (state, { text }) => {
@@ -134,7 +130,7 @@ const reducer = createReducer(
   }),
 
   on(fromActions.sortByColumnAction, (state, { column, direction }) => {
-    const sortField = column + (direction ? " " + direction : "");
+    const sortField = column + (direction ? ":" + direction : "");
     const proposalFilters = { ...state.proposalFilters, sortField, skip: 0 };
     return { ...state, proposalFilters };
   })
@@ -144,7 +140,7 @@ export function proposalsReducer(
   state: ProposalsState | undefined,
   action: Action
 ) {
-  if (action.type.indexOf("[Proposals]") !== -1) {
+  if (action.type.indexOf("[Proposal]") !== -1) {
     console.log("Action came in! " + action.type);
   }
   return reducer(state, action);

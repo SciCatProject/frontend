@@ -32,9 +32,10 @@ export class ProposalEffects {
       map(([action, params]) => params),
       mergeMap(({ query, limits }) =>
         this.proposalApi.fullquery(query, limits).pipe(
-          map(proposals =>
-            fromActions.fetchProposalsCompleteAction({ proposals })
-          ),
+          mergeMap(proposals => [
+            fromActions.fetchProposalsCompleteAction({ proposals }),
+            fromActions.fetchCountAction()
+          ]),
           catchError(() => of(fromActions.fetchProposalsFailedAction()))
         )
       )
@@ -43,7 +44,7 @@ export class ProposalEffects {
 
   fetchCount$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(fromActions.fetchProposalsAction),
+      ofType(fromActions.fetchCountAction),
       withLatestFrom(this.fullqueryParams$),
       map(([action, params]) => params),
       switchMap(({ query }) =>
@@ -60,8 +61,8 @@ export class ProposalEffects {
   fetchProposal$ = createEffect(() =>
     this.actions$.pipe(
       ofType(fromActions.fetchProposalAction),
-      switchMap(action =>
-        this.proposalApi.findById(action.proposalId).pipe(
+      switchMap(({ proposalId }) =>
+        this.proposalApi.findById(proposalId).pipe(
           map((proposal: Proposal) =>
             fromActions.fetchProposalCompleteAction({ proposal })
           ),
@@ -75,18 +76,19 @@ export class ProposalEffects {
     this.actions$.pipe(
       ofType(fromActions.fetchProposalDatasetsAction),
       withLatestFrom(this.datasetQueryParams$),
-      switchMap(([action, { query, limits }]) =>
+      switchMap(([{ proposalId }, { limits }]) =>
         this.datasetApi
           .find({
-            where: { proposalId: action.proposalId },
+            where: { proposalId },
             skip: limits.skip,
             limit: limits.limit,
             order: limits.order
           })
           .pipe(
-            map((datasets: Dataset[]) =>
-              fromActions.fetchProposalDatasetsCompleteAction({ datasets })
-            ),
+            mergeMap((datasets: Dataset[]) => [
+              fromActions.fetchProposalDatasetsCompleteAction({ datasets }),
+              fromActions.fetchProposalDatasetsCountAction({ proposalId })
+            ]),
             catchError(() =>
               of(fromActions.fetchProposalDatasetsFailedAction())
             )
@@ -97,12 +99,12 @@ export class ProposalEffects {
 
   fetchProposalDatasetsCount$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(fromActions.fetchProposalDatasetsAction),
+      ofType(fromActions.fetchProposalDatasetsCountAction),
       switchMap(({ proposalId }) =>
-        this.datasetApi.count({ where: { proposalId } }).pipe(
-          map(res =>
+        this.datasetApi.find({ where: { proposalId } }).pipe(
+          map(datasets =>
             fromActions.fetchProposalDatasetsCountCompleteAction({
-              count: res.count
+              count: datasets.length
             })
           ),
           catchError(() =>
@@ -116,8 +118,7 @@ export class ProposalEffects {
   addAttachment$ = createEffect(() =>
     this.actions$.pipe(
       ofType(fromActions.addAttachmentAction),
-      map(action => action.attachment),
-      switchMap(attachment => {
+      switchMap(({ attachment }) => {
         delete attachment.id;
         delete attachment.rawDatasetId;
         delete attachment.derivedDatasetId;
@@ -140,18 +141,18 @@ export class ProposalEffects {
   updateAttachmentCaption$ = createEffect(() =>
     this.actions$.pipe(
       ofType(fromActions.updateAttachmentCaptionAction),
-      switchMap(action => {
-        const newCaption = { caption: action.caption };
+      switchMap(({ proposalId, attachmentId, caption }) => {
+        const newCaption = { caption };
         return this.proposalApi
           .updateByIdAttachments(
-            encodeURIComponent(action.proposalId),
-            encodeURIComponent(action.attachmentId),
+            encodeURIComponent(proposalId),
+            encodeURIComponent(attachmentId),
             newCaption
           )
           .pipe(
-            map(res =>
+            map(attachment =>
               fromActions.updateAttachmentCaptionCompleteAction({
-                attachment: res
+                attachment
               })
             ),
             catchError(() =>
@@ -165,11 +166,11 @@ export class ProposalEffects {
   removeAttachment$ = createEffect(() =>
     this.actions$.pipe(
       ofType(fromActions.removeAttachmentAction),
-      switchMap(action =>
+      switchMap(({ proposalId, attachmentId }) =>
         this.proposalApi
           .destroyByIdAttachments(
-            encodeURIComponent(action.proposalId),
-            encodeURIComponent(action.attachmentId)
+            encodeURIComponent(proposalId),
+            encodeURIComponent(attachmentId)
           )
           .pipe(
             map(res =>

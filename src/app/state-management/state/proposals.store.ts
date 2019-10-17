@@ -35,13 +35,13 @@ export const initialProposalsState: ProposalsState = {
     text: "",
     skip: 0,
     limit: 25,
-    sortField: "createdAt desc"
+    sortField: "createdAt:desc"
   },
 
   datasetFilters: {
     text: "",
     skip: 0,
     limit: 25,
-    sortField: "createdAt desc"
+    sortField: "creationTime:desc"
   }
 };

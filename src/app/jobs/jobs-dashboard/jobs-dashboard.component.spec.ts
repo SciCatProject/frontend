@@ -91,7 +91,7 @@ describe("JobsDashboardComponent", () => {
   });
 
   describe("#onModeChange()", () => {
-    it("should dispatch a setJobViewModeAction with an object on myJobs and a fetchJobsAction", () => {
+    it("should dispatch a setJobViewModeAction with an object on myJobs", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
       const event = "test";
@@ -100,14 +100,13 @@ describe("JobsDashboardComponent", () => {
       const viewMode = { emailJobInitiator: component.email };
       component.onModeChange(event, mode);
 
-      expect(dispatchSpy).toHaveBeenCalledTimes(2);
+      expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
         setJobViewModeAction({ mode: viewMode })
       );
-      expect(dispatchSpy).toHaveBeenCalledWith(fetchJobsAction());
     });
 
-    it("should dispatch a setJobViewModeAction with null on allJobs and a fetchJobsAction", () => {
+    it("should dispatch a setJobViewModeAction with null on allJobs", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
       const event = "test";
@@ -115,16 +114,15 @@ describe("JobsDashboardComponent", () => {
       const viewMode = null;
       component.onModeChange(event, mode);
 
-      expect(dispatchSpy).toHaveBeenCalledTimes(2);
+      expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
         setJobViewModeAction({ mode: viewMode })
       );
-      expect(dispatchSpy).toHaveBeenCalledWith(fetchJobsAction());
     });
   });
 
   describe("#onPageChange()", () => {
-    it("should dispatch a changePageAction and a fetchJobsAction", () => {
+    it("should dispatch a changePageAction", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
       const event: PageChangeEvent = {
@@ -134,26 +132,19 @@ describe("JobsDashboardComponent", () => {
       };
       component.onPageChange(event);
 
-      expect(dispatchSpy).toHaveBeenCalledTimes(2);
+      expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
         changePageAction({ page: event.pageIndex, limit: event.pageSize })
       );
-      expect(dispatchSpy).toHaveBeenCalledWith(fetchJobsAction());
     });
   });
 
   describe("#onRowClick()", () => {
-    it("should dispatch a fetchJobAction and navigate to a job", () => {
-      dispatchSpy = spyOn(store, "dispatch");
-
+    it("should navigate to a job", () => {
       const job = new Job();
       job.id = "test";
       component.onRowClick(job);
 
-      expect(dispatchSpy).toHaveBeenCalledTimes(1);
-      expect(dispatchSpy).toHaveBeenCalledWith(
-        fetchJobAction({ jobId: job.id })
-      );
       expect(router.navigateByUrl).toHaveBeenCalledTimes(1);
       expect(router.navigateByUrl).toHaveBeenCalledWith(
         "/user/jobs/" + encodeURIComponent(job.id)

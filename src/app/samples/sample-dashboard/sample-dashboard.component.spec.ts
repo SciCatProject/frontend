@@ -15,7 +15,6 @@ import { rootReducer } from "state-management/reducers/root.reducer";
 import {
   setTextFilterAction,
   changePageAction,
-  fetchSamplesAction,
   sortByColumnAction
 } from "state-management/actions/samples.actions";
 import { Sample } from "shared/sdk";
@@ -91,22 +90,21 @@ describe("SampleDashboardComponent", () => {
   });
 
   describe("#onTextSearchChange()", () => {
-    it("should dispatch a SetTextFilterAction and a fetchSamplesAction", () => {
+    it("should dispatch a setTextFilterAction", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
       const query = "test";
       component.onTextSearchChange(query);
 
-      expect(dispatchSpy).toHaveBeenCalledTimes(2);
+      expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
         setTextFilterAction({ text: query })
       );
-      expect(dispatchSpy).toHaveBeenCalledWith(fetchSamplesAction());
     });
   });
 
   describe("#onPageChange()", () => {
-    it("should dispatch a changePageAction and a fetchSamplesAction", () => {
+    it("should dispatch a changePageAction", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
       const event: PageChangeEvent = {
@@ -116,16 +114,15 @@ describe("SampleDashboardComponent", () => {
       };
       component.onPageChange(event);
 
-      expect(dispatchSpy).toHaveBeenCalledTimes(2);
+      expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
         changePageAction({ page: event.pageIndex, limit: event.pageSize })
       );
-      expect(dispatchSpy).toHaveBeenCalledWith(fetchSamplesAction());
     });
   });
 
   describe("#onSortChange()", () => {
-    it("should dispatch a SampleSortByColumnAction and a fetchSamplesAction", () => {
+    it("should dispatch a SampleSortByColumnAction", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
       const event: SortChangeEvent = {
@@ -134,11 +131,10 @@ describe("SampleDashboardComponent", () => {
       };
       component.onSortChange(event);
 
-      expect(dispatchSpy).toHaveBeenCalledTimes(2);
+      expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
         sortByColumnAction({ column: event.active, direction: event.direction })
       );
-      expect(dispatchSpy).toHaveBeenCalledWith(fetchSamplesAction());
     });
   });
 

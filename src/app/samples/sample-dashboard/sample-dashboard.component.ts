@@ -85,14 +85,12 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
 
   onTextSearchChange(query) {
     this.store.dispatch(setTextFilterAction({ text: query }));
-    this.store.dispatch(fetchSamplesAction());
   }
 
   onPageChange(event: PageChangeEvent) {
     this.store.dispatch(
       changePageAction({ page: event.pageIndex, limit: event.pageSize })
     );
-    this.store.dispatch(fetchSamplesAction());
   }
 
   onSortChange(event: SortChangeEvent) {
@@ -102,7 +100,6 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
     this.store.dispatch(
       sortByColumnAction({ column: event.active, direction: event.direction })
     );
-    this.store.dispatch(fetchSamplesAction());
   }
 
   onRowClick(sample: Sample) {

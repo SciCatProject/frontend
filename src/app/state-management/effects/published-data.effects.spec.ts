@@ -229,6 +229,7 @@ describe("PublishedDataEffects", () => {
       const outcome = showMessageAction({ message });
 
       actions = hot("-a", { a: action });
+
       const expected = cold("-b", { b: outcome });
       expect(effects.publishDatasetCompleteMessage$).toBeObservable(expected);
     });
@@ -245,6 +246,7 @@ describe("PublishedDataEffects", () => {
       const outcome = showMessageAction({ message });
 
       actions = hot("-a", { a: action });
+
       const expected = cold("-b", { b: outcome });
       expect(effects.publishDatasetFailedMessage$).toBeObservable(expected);
     });

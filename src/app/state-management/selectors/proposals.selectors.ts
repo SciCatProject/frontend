@@ -1,9 +1,7 @@
 import { createSelector, createFeatureSelector } from "@ngrx/store";
 import { ProposalsState } from "../state/proposals.store";
 
-export const getProposalsState = createFeatureSelector<ProposalsState>(
-  "proposals"
-);
+const getProposalsState = createFeatureSelector<ProposalsState>("proposals");
 
 export const getProposals = createSelector(
   getProposalsState,

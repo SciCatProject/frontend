@@ -7,6 +7,8 @@ import { provideMockStore } from "@ngrx/store/testing";
 import { getQueryParams } from "state-management/selectors/jobs.selectors";
 import * as fromActions from "state-management/actions/jobs.actions";
 import { hot, cold } from "jasmine-marbles";
+import { showMessageAction } from "state-management/actions/user.actions";
+import { MessageType } from "state-management/models";
 
 const data: JobInterface = {
   id: "testId",
@@ -46,36 +48,131 @@ describe("JobEffects", () => {
   });
 
   describe("fetchJobs$", () => {
-    it("should result in a fetchJobsCompleteAction", () => {
-      const jobs = [job];
-      const action = fromActions.fetchJobsAction();
-      const outcome = fromActions.fetchJobsCompleteAction({ jobs });
+    describe("on fetchJobsAction", () => {
+      it("should result in a fetchJobsCompleteAction and a fetchCountAction", () => {
+        const jobs = [job];
+        const action = fromActions.fetchJobsAction();
+        const outcome1 = fromActions.fetchJobsCompleteAction({ jobs });
+        const outcome2 = fromActions.fetchCountAction();
 
-      actions = hot("-a", { a: action });
-      const response = cold("-a|", { a: jobs });
-      jobApi.find.and.returnValue(response);
+        actions = hot("-a", { a: action });
+        const response = cold("-a|", { a: jobs });
+        jobApi.find.and.returnValue(response);
 
-      const expected = cold("--b", { b: outcome });
-      expect(effects.fetchJobs$).toBeObservable(expected);
+        const expected = cold("--(bc)", { b: outcome1, c: outcome2 });
+        expect(effects.fetchJobs$).toBeObservable(expected);
+      });
+
+      it("should result in a fetchJobsFailedAction", () => {
+        const action = fromActions.fetchJobsAction();
+        const outcome = fromActions.fetchJobsFailedAction();
+
+        actions = hot("-a", { a: action });
+        const response = cold("-#", {});
+        jobApi.find.and.returnValue(response);
+
+        const expected = cold("--b", { b: outcome });
+        expect(effects.fetchJobs$).toBeObservable(expected);
+      });
     });
 
-    it("should result in a fetchJobsFailedAction", () => {
-      const action = fromActions.fetchJobsAction();
-      const outcome = fromActions.fetchJobsFailedAction();
+    describe("on changePageAction", () => {
+      const page = 1;
+      const limit = 25;
 
-      actions = hot("-a", { a: action });
-      const response = cold("-#", {});
-      jobApi.find.and.returnValue(response);
+      it("should result in a fetchJobsCompleteAction and a fetchCountAction", () => {
+        const jobs = [job];
+        const action = fromActions.changePageAction({ page, limit });
+        const outcome1 = fromActions.fetchJobsCompleteAction({ jobs });
+        const outcome2 = fromActions.fetchCountAction();
 
-      const expected = cold("--b", { b: outcome });
-      expect(effects.fetchJobs$).toBeObservable(expected);
+        actions = hot("-a", { a: action });
+        const response = cold("-a|", { a: jobs });
+        jobApi.find.and.returnValue(response);
+
+        const expected = cold("--(bc)", { b: outcome1, c: outcome2 });
+        expect(effects.fetchJobs$).toBeObservable(expected);
+      });
+
+      it("should result in a fetchJobsFailedAction", () => {
+        const action = fromActions.changePageAction({ page, limit });
+        const outcome = fromActions.fetchJobsFailedAction();
+
+        actions = hot("-a", { a: action });
+        const response = cold("-#", {});
+        jobApi.find.and.returnValue(response);
+
+        const expected = cold("--b", { b: outcome });
+        expect(effects.fetchJobs$).toBeObservable(expected);
+      });
+    });
+
+    describe("on sortByColumnAction", () => {
+      const column = "test";
+      const direction = "desc";
+
+      it("should result in a fetchJobsCompleteAction and a fetchCountAction", () => {
+        const jobs = [job];
+        const action = fromActions.sortByColumnAction({ column, direction });
+        const outcome1 = fromActions.fetchJobsCompleteAction({ jobs });
+        const outcome2 = fromActions.fetchCountAction();
+
+        actions = hot("-a", { a: action });
+        const response = cold("-a|", { a: jobs });
+        jobApi.find.and.returnValue(response);
+
+        const expected = cold("--(bc)", { b: outcome1, c: outcome2 });
+        expect(effects.fetchJobs$).toBeObservable(expected);
+      });
+
+      it("should result in a fetchJobsFailedAction", () => {
+        const action = fromActions.sortByColumnAction({ column, direction });
+        const outcome = fromActions.fetchJobsFailedAction();
+
+        actions = hot("-a", { a: action });
+        const response = cold("-#", {});
+        jobApi.find.and.returnValue(response);
+
+        const expected = cold("--b", { b: outcome });
+        expect(effects.fetchJobs$).toBeObservable(expected);
+      });
+    });
+
+    describe("on sortByColumnAction", () => {
+      const mode = null;
+
+      it("should result in a fetchJobsCompleteAction and a fetchCountAction", () => {
+        const jobs = [job];
+        const action = fromActions.setJobViewModeAction({ mode });
+        const outcome1 = fromActions.fetchJobsCompleteAction({ jobs });
+        const outcome2 = fromActions.fetchCountAction();
+
+        actions = hot("-a", { a: action });
+        const response = cold("-a|", { a: jobs });
+        jobApi.find.and.returnValue(response);
+
+        const expected = cold("--(bc)", { b: outcome1, c: outcome2 });
+        expect(effects.fetchJobs$).toBeObservable(expected);
+      });
+
+      it("should result in a fetchJobsFailedAction", () => {
+        const action = fromActions.setJobViewModeAction({ mode });
+        const outcome = fromActions.fetchJobsFailedAction();
+
+        actions = hot("-a", { a: action });
+        const response = cold("-#", {});
+        jobApi.find.and.returnValue(response);
+
+        const expected = cold("--b", { b: outcome });
+        expect(effects.fetchJobs$).toBeObservable(expected);
+      });
     });
   });
 
   describe("fetchCount$", () => {
     it("should result in a fetchCountCompleteAction", () => {
       const count = 100;
-      const action = fromActions.fetchJobsAction();
+      const action = fromActions.fetchCountAction();
       const outcome = fromActions.fetchCountCompleteAction({ count });
 
       actions = hot("-a", { a: action });
@@ -87,7 +184,7 @@ describe("JobEffects", () => {
     });
 
     it("should result in a fetchCountFailedAction", () => {
-      const action = fromActions.fetchJobsAction();
+      const action = fromActions.fetchCountAction();
       const outcome = fromActions.fetchCountFailedAction();
 
       actions = hot("-a", { a: action });
@@ -138,6 +235,41 @@ describe("JobEffects", () => {
 
       const expected = cold("--b", { b: outcome });
       expect(effects.submitJob$).toBeObservable(expected);
+    });
+  });
+
+  describe("submitJobCompleteMessage$", () => {
+    it("should dispatch a showMessageAction", () => {
+      const message = {
+        type: MessageType.Success,
+        content: "Job Created Successfully",
+        duration: 5000
+      };
+      const action = fromActions.submitJobCompleteAction({ job });
+      const outcome = showMessageAction({ message });
+
+      actions = hot("-a", { a: action });
+
+      const expected = cold("-b", { b: outcome });
+      expect(effects.submitJobCompleteMessage$).toBeObservable(expected);
+    });
+  });
+
+  describe("submitJobFailed$", () => {
+    it("should dispatch a showMessageAction", () => {
+      const err = new Error("Test");
+      const message = {
+        type: MessageType.Error,
+        content: "Job Not Submitted: " + err.message,
+        duration: 5000
+      };
+      const action = fromActions.submitJobFailedAction({ err });
+      const outcome = showMessageAction({ message });
+
+      actions = hot("-a", { a: action });
+
+      const expected = cold("-b", { b: outcome });
+      expect(effects.submitJobFailedMessage$).toBeObservable(expected);
     });
   });
 });

@@ -14,7 +14,7 @@ import { MockStore, MockActivatedRoute } from "shared/MockStubs";
 import { ActivatedRoute } from "@angular/router";
 import { AppConfigModule } from "app-config.module";
 import {
-  updateFilterAction,
+  setFilterAction,
   fetchFilteredEntriesAction
 } from "state-management/actions/logbooks.actions";
 import { Logbook, LogbookInterface } from "shared/sdk";
@@ -72,7 +72,7 @@ describe("DashboardComponent", () => {
   });
 
   describe("#onTextSearchChange()", () => {
-    it("should dispatch an updateFilterAction and a fetchFilterEntriesAction", () => {
+    it("should dispatch an setFilterAction and a fetchFilterEntriesAction", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
       component.logbook = logbook;
@@ -88,7 +88,7 @@ describe("DashboardComponent", () => {
 
       expect(dispatchSpy).toHaveBeenCalledTimes(2);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        updateFilterAction({ filters: component.filters })
+        setFilterAction({ filters: component.filters })
       );
       expect(dispatchSpy).toHaveBeenCalledWith(
         fetchFilteredEntriesAction({
@@ -100,7 +100,7 @@ describe("DashboardComponent", () => {
   });
 
   describe("onFilterSelect()", () => {
-    it("should dispatch an updateFilterAction and a fetchFilteredEntriesAction", () => {
+    it("should dispatch an setFilterAction and a fetchFilteredEntriesAction", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
       component.logbook = logbook;
@@ -123,7 +123,7 @@ describe("DashboardComponent", () => {
 
       expect(dispatchSpy).toHaveBeenCalledTimes(2);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        updateFilterAction({ filters: component.filters })
+        setFilterAction({ filters: component.filters })
       );
       expect(dispatchSpy).toHaveBeenCalledWith(
         fetchFilteredEntriesAction({

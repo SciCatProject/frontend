@@ -1,7 +1,7 @@
 import { createFeatureSelector, createSelector } from "@ngrx/store";
 import { PublishedDataState } from "state-management/state/published-data.store";
 
-export const getPublishedDataState = createFeatureSelector<PublishedDataState>(
+const getPublishedDataState = createFeatureSelector<PublishedDataState>(
   "publishedData"
 );
 

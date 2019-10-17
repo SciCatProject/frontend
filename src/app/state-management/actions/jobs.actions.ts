@@ -8,6 +8,7 @@ export const fetchJobsCompleteAction = createAction(
 );
 export const fetchJobsFailedAction = createAction("[Job] Fetch Jobs Failed");
 
+export const fetchCountAction = createAction("[Job] Fetch Count");
 export const fetchCountCompleteAction = createAction(
   "[Job] Fetch Count Complete",
   props<{ count: number }>()

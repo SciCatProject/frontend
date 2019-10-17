@@ -10,6 +10,9 @@ export const fetchSamplesFailedAction = createAction(
   "[Sample] Fetch Samples Failed"
 );
 
+export const fetchSamplesCountAction = createAction(
+  "[Sample] Fetch Samples Count"
+);
 export const fetchSamplesCountCompleteAction = createAction(
   "[Sample] Fetch Samples Count Complete",
   props<{ count: number }>()

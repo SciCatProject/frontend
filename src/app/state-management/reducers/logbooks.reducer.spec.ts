@@ -121,7 +121,7 @@ describe("LogbooksReducer", () => {
     });
   });
 
-  describe("on updateFilterAction", () => {
+  describe("on setFilterAction", () => {
     it("should update the logbook filter", () => {
       const filters: LogbookFilters = {
         textSearch: "",
@@ -130,7 +130,7 @@ describe("LogbooksReducer", () => {
         showImages: true
       };
 
-      const action = fromActions.updateFilterAction({ filters });
+      const action = fromActions.setFilterAction({ filters });
       const state = logbooksReducer(initialLogbookState, action);
 
       expect(state.filters).toEqual(filters);

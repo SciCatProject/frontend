@@ -25,8 +25,8 @@ export class LogbookEffects {
   fetchLogbook$ = createEffect(() =>
     this.actions$.pipe(
       ofType(fromActions.fetchLogbookAction),
-      mergeMap(action =>
-        this.logbookApi.findByName(action.name).pipe(
+      mergeMap(({ name }) =>
+        this.logbookApi.findByName(name).pipe(
           map(logbook => fromActions.fetchLogbookCompleteAction({ logbook })),
           catchError(() => of(fromActions.fetchLogbookFailedAction()))
         )
@@ -37,9 +37,9 @@ export class LogbookEffects {
   fetchFilteredEntries$ = createEffect(() =>
     this.actions$.pipe(
       ofType(fromActions.fetchFilteredEntriesAction),
-      mergeMap(action => {
-        const filter = rison.encode_object(action.filters);
-        return this.logbookApi.filter(action.name, filter).pipe(
+      mergeMap(({ name, filters }) => {
+        const logbookFilter = rison.encode_object(filters);
+        return this.logbookApi.filter(name, logbookFilter).pipe(
           map(logbook =>
             fromActions.fetchFilteredEntriesCompleteAction({ logbook })
           ),

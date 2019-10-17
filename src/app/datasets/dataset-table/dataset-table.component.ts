@@ -120,60 +120,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   viewPublic = false;
   viewPublicSubscription: Subscription;
 
-  constructor(
-    private router: Router,
-    private store: Store<any>,
-    private archivingSrv: ArchivingService,
-    public dialog: MatDialog,
-    @Inject(APP_CONFIG) public appConfig: AppConfig
-  ) {}
-
-  ngOnInit() {
-    this.jobErrorSubscription = this.store
-      .pipe(select(getSubmitError))
-      .subscribe(err => {
-        if (!err) {
-          this.store.dispatch(clearSelectionAction());
-        }
-      });
-
-    this.datasetsSubscription = this.store
-      .pipe(select(getDatasets))
-      .subscribe(datasets => {
-        this.datasetPids = datasets.map(dataset => {
-          return dataset.pid;
-        });
-        this.derivationMapPids = this.datasetDerivationsMaps.map(
-          datasetderivationMap => {
-            return datasetderivationMap.datasetPid;
-          }
-        );
-        datasets.forEach(dataset => {
-          if (!this.derivationMapPids.includes(dataset.pid)) {
-            const map: DatasetDerivationsMap = {
-              datasetPid: dataset.pid,
-              derivedDatasetsNum: this.countDerivedDatasets(dataset)
-            };
-            this.datasetDerivationsMaps.push(map);
-          }
-        });
-      });
-
-    this.viewPublicSubscription = this.store
-      .pipe(select(getPublicViewMode))
-      .subscribe(viewPublic => {
-        this.viewPublic = viewPublic;
-      });
-  }
-
-  ngOnDestroy() {
-    this.modeSubscription.unsubscribe();
-    this.selectedSetsSubscription.unsubscribe();
-    this.jobErrorSubscription.unsubscribe();
-    this.selectedPidsSubscription.unsubscribe();
-    this.datasetsSubscription.unsubscribe();
-  }
-
   onSelectColumn(event: any): void {
     const column = event.source.value;
     if (event.isUserInput) {
@@ -383,5 +329,59 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
       });
     }
     return derivedDatasetsNum;
+  }
+
+  constructor(
+    private router: Router,
+    private store: Store<any>,
+    private archivingSrv: ArchivingService,
+    public dialog: MatDialog,
+    @Inject(APP_CONFIG) public appConfig: AppConfig
+  ) {}
+
+  ngOnInit() {
+    this.jobErrorSubscription = this.store
+      .pipe(select(getSubmitError))
+      .subscribe(err => {
+        if (!err) {
+          this.store.dispatch(clearSelectionAction());
+        }
+      });
+
+    this.datasetsSubscription = this.store
+      .pipe(select(getDatasets))
+      .subscribe(datasets => {
+        this.datasetPids = datasets.map(dataset => {
+          return dataset.pid;
+        });
+        this.derivationMapPids = this.datasetDerivationsMaps.map(
+          datasetderivationMap => {
+            return datasetderivationMap.datasetPid;
+          }
+        );
+        datasets.forEach(dataset => {
+          if (!this.derivationMapPids.includes(dataset.pid)) {
+            const map: DatasetDerivationsMap = {
+              datasetPid: dataset.pid,
+              derivedDatasetsNum: this.countDerivedDatasets(dataset)
+            };
+            this.datasetDerivationsMaps.push(map);
+          }
+        });
+      });
+
+    this.viewPublicSubscription = this.store
+      .pipe(select(getPublicViewMode))
+      .subscribe(viewPublic => {
+        this.viewPublic = viewPublic;
+      });
+  }
+
+  ngOnDestroy() {
+    this.modeSubscription.unsubscribe();
+    this.selectedSetsSubscription.unsubscribe();
+    this.jobErrorSubscription.unsubscribe();
+    this.selectedPidsSubscription.unsubscribe();
+    this.datasetsSubscription.unsubscribe();
   }
 }

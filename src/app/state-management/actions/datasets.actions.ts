@@ -31,7 +31,7 @@ export const fetchFacetCountsFailedAction = createAction(
 
 export const fetchDatasetAction = createAction(
   "[Dataset] Fetch Dataset",
-  props<{ pid: string; filter?: any }>()
+  props<{ pid: string; filters?: any }>()
 );
 export const fetchDatasetCompleteAction = createAction(
   "[Dataset] Fetch Dataset Complete",

@@ -35,7 +35,7 @@ export const fetchFilteredEntriesFailedAction = createAction(
   "[Logbook] Fetch Filtered Entries Failed"
 );
 
-export const updateFilterAction = createAction(
+export const setFilterAction = createAction(
   "[Logbook] Update Filter",
   props<{ filters: LogbookFilters }>()
 );

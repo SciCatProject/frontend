@@ -27,7 +27,14 @@ describe("Job Actions", () => {
     });
   });
 
-  describe("fetchJobsCountCompleteAction", () => {
+  describe("fetchCountCompleteAction", () => {
+    it("should create an action", () => {
+      const action = fromActions.fetchCountAction();
+      expect({ ...action }).toEqual({ type: "[Job] Fetch Count" });
+    });
+  });
+
+  describe("fetchCountCompleteAction", () => {
     it("should create an action", () => {
       const count = 100;
       const action = fromActions.fetchCountCompleteAction({ count });

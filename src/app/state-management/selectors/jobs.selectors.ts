@@ -1,7 +1,7 @@
 import { createFeatureSelector, createSelector } from "@ngrx/store";
 import { JobsState } from "state-management/state/jobs.store";
 
-export const getJobState = createFeatureSelector<JobsState>("jobs");
+const getJobState = createFeatureSelector<JobsState>("jobs");
 
 export const getJobs = createSelector(
   getJobState,
