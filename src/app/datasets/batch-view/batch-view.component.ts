@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, TemplateRef } from "@angular/core";
 import { select, Store } from "@ngrx/store";
-import { first, map, switchMap, mergeMap } from "rxjs/operators";
+import { first, switchMap, mergeMap } from "rxjs/operators";
 
 import { getDatasetsInBatch } from "state-management/selectors/datasets.selectors";
 import {
@@ -9,7 +9,7 @@ import {
   removeFromBatchAction
 } from "state-management/actions/datasets.actions";
 import { Dataset, MessageType } from "state-management/models";
-import { ShowMessageAction } from "state-management/actions/user.actions";
+import { showMessageAction } from "state-management/actions/user.actions";
 
 import { Router } from "@angular/router";
 import { ArchivingService } from "../archiving.service";
@@ -51,19 +51,7 @@ export class BatchViewComponent implements OnInit {
   private batch$: Observable<Dataset[]> = this.store.pipe(
     select(getDatasetsInBatch)
   );
-  public hasBatch$: Observable<boolean> = this.batch$.pipe(
-    map(batch => batch.length > 0)
-  );
-  subsc = null;
-
-  constructor(
-    private store: Store<any>,
-    private archivingSrv: ArchivingService,
-    private router: Router,
-    private shareGroupApi: ShareGroupApi,
-    private datasetApi: DatasetApi,
-    private dialog: MatDialog
-  ) {}
+  public hasBatch: boolean;
 
   add(event: MatChipInputEvent): void {
     const input = event.input;
@@ -89,13 +77,6 @@ export class BatchViewComponent implements OnInit {
 
   openDialogWithoutRef() {
     this.dialog.open(this.secondDialog);
-  }
-
-  ngOnInit() {
-    this.store.dispatch(prefillBatchAction());
-    this.batch$.subscribe(result => {
-      this.datasetList = result;
-    });
   }
 
   onEmpty() {
@@ -135,19 +116,23 @@ export class BatchViewComponent implements OnInit {
       .subscribe(
         success => {
           this.store.dispatch(
-            new ShowMessageAction({
-              type: MessageType.Success,
-              content: "Share Successful",
-              duration: 5000
+            showMessageAction({
+              message: {
+                type: MessageType.Success,
+                content: "Share Successful",
+                duration: 5000
+              }
             })
           );
         },
         err => {
           return this.store.dispatch(
-            new ShowMessageAction({
-              type: MessageType.Error,
-              content: "Share Failed",
-              duration: 5000
+            showMessageAction({
+              message: {
+                type: MessageType.Error,
+                content: "Share Failed",
+                duration: 5000
+              }
             })
           );
         }
@@ -164,10 +149,12 @@ export class BatchViewComponent implements OnInit {
         () => this.clearBatch(),
         err =>
           this.store.dispatch(
-            new ShowMessageAction({
-              type: MessageType.Error,
-              content: err.message,
-              duration: 5000
+            showMessageAction({
+              message: {
+                type: MessageType.Error,
+                content: err.message,
+                duration: 5000
+              }
             })
           )
       );
@@ -185,10 +172,12 @@ export class BatchViewComponent implements OnInit {
         () => this.clearBatch(),
         err =>
           this.store.dispatch(
-            new ShowMessageAction({
-              type: MessageType.Error,
-              content: err.message,
-              duration: 5000
+            showMessageAction({
+              message: {
+                type: MessageType.Error,
+                content: err.message,
+                duration: 5000
+              }
             })
           )
       );
@@ -196,5 +185,24 @@ export class BatchViewComponent implements OnInit {
 
   private clearBatch() {
     this.store.dispatch(clearBatchAction());
+  }
+
+  constructor(
+    private store: Store<any>,
+    private archivingSrv: ArchivingService,
+    private router: Router,
+    private shareGroupApi: ShareGroupApi,
+    private datasetApi: DatasetApi,
+    private dialog: MatDialog
+  ) {}
+
+  ngOnInit() {
+    this.store.dispatch(prefillBatchAction());
+    this.batch$.subscribe(result => {
+      if (result) {
+        this.datasetList = result;
+        this.hasBatch = result.length > 0;
+      }
+    });
   }
 }

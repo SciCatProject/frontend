@@ -8,7 +8,7 @@ import {
   addSampleAction,
   fetchSamplesAction
 } from "state-management/actions/samples.actions";
-import { getCurrentUser } from "state-management/selectors/users.selectors";
+import { getCurrentUser } from "state-management/selectors/user.selectors";
 
 const shortid = require("shortid");
 

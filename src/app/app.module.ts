@@ -30,7 +30,6 @@ import { UsersModule } from "users/users.module";
 import { PublishedDataEffects } from "state-management/effects/published-data.effects";
 import { rootReducer } from "state-management/reducers/root.reducer";
 import { routerReducer } from "@ngrx/router-store";
-import { LoginService } from "users/login.service";
 
 import {
   MatMenuModule,
@@ -122,7 +121,6 @@ import { JobsModule } from "jobs/jobs.module";
     SampleApi,
     Title,
     MatNativeDateModule,
-    LoginService,
     RedirectGuard
   ],
   bootstrap: [AppComponent]

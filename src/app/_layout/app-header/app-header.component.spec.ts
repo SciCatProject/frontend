@@ -8,12 +8,11 @@ import {
 import { AppHeaderComponent } from "./app-header.component";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { MatMenuModule, MatToolbarModule } from "@angular/material";
-import { LoginService } from "users/login.service";
-import { MockLoginService, MockStore } from "shared/MockStubs";
+import { MockStore } from "shared/MockStubs";
 import { Store, StoreModule } from "@ngrx/store";
 import { APP_CONFIG } from "app-config.module";
 import { rootReducer } from "state-management/reducers/root.reducer";
-import { LogoutAction } from "state-management/actions/user.actions";
+import { logoutAction } from "state-management/actions/user.actions";
 
 describe("AppHeaderComponent", () => {
   let component: AppHeaderComponent;
@@ -34,10 +33,7 @@ describe("AppHeaderComponent", () => {
     });
     TestBed.overrideComponent(AppHeaderComponent, {
       set: {
-        providers: [
-          { provide: LoginService, useClass: MockLoginService },
-          { provide: APP_CONFIG, useValue: { facility: "ESS" } }
-        ]
+        providers: [{ provide: APP_CONFIG, useValue: { facility: "ESS" } }]
       }
     });
     TestBed.compileComponents();
@@ -68,7 +64,7 @@ describe("AppHeaderComponent", () => {
       component.logout();
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
-      expect(dispatchSpy).toHaveBeenCalledWith(new LogoutAction());
+      expect(dispatchSpy).toHaveBeenCalledWith(logoutAction());
     });
   });
 });

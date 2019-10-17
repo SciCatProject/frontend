@@ -6,15 +6,15 @@ import { DialogComponent } from "shared/modules/dialog/dialog.component";
 import { MatCheckboxChange, MatDialog } from "@angular/material";
 import { Router } from "@angular/router";
 import {
-  ShowMessageAction,
-  SelectColumnAction,
-  DeselectColumnAction
+  showMessageAction,
+  selectColumnAction,
+  deselectColumnAction
 } from "state-management/actions/user.actions";
 import { Subscription } from "rxjs";
 import {
   getDisplayedColumns,
   getConfigurableColumns
-} from "../../state-management/selectors/users.selectors";
+} from "../../state-management/selectors/user.selectors";
 import { getSubmitError } from "state-management/selectors/jobs.selectors";
 import { select, Store } from "@ngrx/store";
 import {
@@ -178,9 +178,9 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     const column = event.source.value;
     if (event.isUserInput) {
       if (event.source.selected) {
-        this.store.dispatch(new SelectColumnAction(column));
+        this.store.dispatch(selectColumnAction({ column }));
       } else if (!event.source.selected) {
-        this.store.dispatch(new DeselectColumnAction(column));
+        this.store.dispatch(deselectColumnAction({ column }));
       }
     }
   }
@@ -219,10 +219,12 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
           () => this.store.dispatch(clearSelectionAction()),
           err =>
             this.store.dispatch(
-              new ShowMessageAction({
-                type: MessageType.Error,
-                content: err.message,
-                duration: 5000
+              showMessageAction({
+                message: {
+                  type: MessageType.Error,
+                  content: err.message,
+                  duration: 5000
+                }
               })
             )
         );
@@ -252,10 +254,12 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
           () => this.store.dispatch(clearSelectionAction()),
           err =>
             this.store.dispatch(
-              new ShowMessageAction({
-                type: MessageType.Error,
-                content: err.message,
-                duration: 5000
+              showMessageAction({
+                message: {
+                  type: MessageType.Error,
+                  content: err.message,
+                  duration: 5000
+                }
               })
             )
         );

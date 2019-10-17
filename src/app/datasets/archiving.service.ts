@@ -10,7 +10,7 @@ import {
   getCurrentUser,
   getTapeCopies,
   getProfile
-} from "state-management/selectors/users.selectors";
+} from "state-management/selectors/user.selectors";
 
 @Injectable()
 export class ArchivingService {

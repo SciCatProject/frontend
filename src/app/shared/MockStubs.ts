@@ -213,8 +213,6 @@ export class MockArchivingService {
   }
 }
 
-export class MockLoginService {}
-
 export class MockLogbookApi {
   logbook: Logbook;
   findByName(name: string): Observable<Logbook> {
@@ -256,6 +254,12 @@ export class MockPublishedDataApi {
   }
 
   formPopulate() {
+    return of({});
+  }
+}
+
+export class MockShareGroupApi {
+  upsert(obj) {
     return of({});
   }
 }

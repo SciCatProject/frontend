@@ -8,7 +8,10 @@ import {
 } from "@angular/core";
 import { select, Store } from "@ngrx/store";
 import { LoopBackConfig } from "shared/sdk";
-import * as ua from "state-management/actions/user.actions";
+import {
+  clearMessageAction,
+  logoutAction
+} from "state-management/actions/user.actions";
 import { MatSnackBar } from "@angular/material";
 import { Meta, Title } from "@angular/platform-browser";
 import { environment } from "../environments/environment";
@@ -75,7 +78,7 @@ export class AppComponent implements OnDestroy, OnInit {
           this.snackBar.open(current.content, undefined, {
             duration: current.duration
           });
-          this.store.dispatch(new ua.ClearMessageAction());
+          this.store.dispatch(clearMessageAction());
         }
       });
   }
@@ -85,6 +88,6 @@ export class AppComponent implements OnDestroy, OnInit {
   }
 
   logout(): void {
-    this.store.dispatch(new ua.LogoutAction());
+    this.store.dispatch(logoutAction());
   }
 }

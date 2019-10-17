@@ -1,14 +1,17 @@
 import { Component, OnInit, Inject, OnDestroy } from "@angular/core";
 import { APP_CONFIG, AppConfig } from "app-config.module";
 import { Store, select } from "@ngrx/store";
-import * as selectors from "state-management/selectors";
-import * as ua from "state-management/actions/user.actions";
+import {
+  fetchCurrentUserAction,
+  logoutAction
+} from "state-management/actions/user.actions";
 import { Subscription, Observable } from "rxjs";
 import {
   getCurrentUserAccountType,
   getCurrentUser,
-  getProfile
-} from "state-management/selectors/users.selectors";
+  getProfile,
+  getTheme
+} from "state-management/selectors/user.selectors";
 
 @Component({
   selector: "app-app-header",
@@ -30,7 +33,7 @@ export class AppHeaderComponent implements OnInit, OnDestroy {
     private store: Store<any>,
     @Inject(APP_CONFIG) public appConfig: AppConfig
   ) {
-    this.darkTheme$ = this.store.pipe(select(selectors.users.getTheme));
+    this.darkTheme$ = this.store.pipe(select(getTheme));
     this.facility = appConfig.facility;
     if (appConfig.production === true) {
       this.status = "";
@@ -42,7 +45,7 @@ export class AppHeaderComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.store.dispatch(new ua.RetrieveUserAction());
+    this.store.dispatch(fetchCurrentUserAction());
 
     this.accountTypeSubscription = this.store
       .pipe(select(getCurrentUserAccountType))
@@ -78,6 +81,6 @@ export class AppHeaderComponent implements OnInit, OnDestroy {
   }
 
   logout(): void {
-    this.store.dispatch(new ua.LogoutAction());
+    this.store.dispatch(logoutAction());
   }
 }

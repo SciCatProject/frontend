@@ -13,7 +13,7 @@ import {
 } from "rxjs/operators";
 import { of } from "rxjs";
 import { MessageType } from "state-management/models";
-import { ShowMessageAction } from "state-management/actions/user.actions";
+import { showMessageAction } from "state-management/actions/user.actions";
 
 @Injectable()
 export class PublishedDataEffects {
@@ -90,7 +90,7 @@ export class PublishedDataEffects {
           content: "Publication Successful",
           duration: 5000
         };
-        return of(new ShowMessageAction(message));
+        return of(showMessageAction({ message }));
       })
     )
   );
@@ -104,7 +104,7 @@ export class PublishedDataEffects {
           content: "Publication Failed",
           duration: 5000
         };
-        return of(new ShowMessageAction(message));
+        return of(showMessageAction({ message }));
       })
     )
   );

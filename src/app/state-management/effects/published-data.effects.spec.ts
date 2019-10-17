@@ -12,7 +12,7 @@ import { getQueryParams } from "state-management/selectors/published-data.select
 import * as fromActions from "state-management/actions/published-data.actions";
 import { hot, cold } from "jasmine-marbles";
 import { MessageType } from "state-management/models";
-import { ShowMessageAction } from "state-management/actions/user.actions";
+import { showMessageAction } from "state-management/actions/user.actions";
 
 const data: PublishedDataInterface = {
   doi: "testDOI",
@@ -226,7 +226,7 @@ describe("PublishedDataEffects", () => {
       const action = fromActions.publishDatasetCompleteAction({
         publishedData
       });
-      const outcome = new ShowMessageAction(message);
+      const outcome = showMessageAction({ message });
 
       actions = hot("-a", { a: action });
       const expected = cold("-b", { b: outcome });
@@ -242,7 +242,7 @@ describe("PublishedDataEffects", () => {
         duration: 5000
       };
       const action = fromActions.publishDatasetFailedAction();
-      const outcome = new ShowMessageAction(message);
+      const outcome = showMessageAction({ message });
 
       actions = hot("-a", { a: action });
       const expected = cold("-b", { b: outcome });

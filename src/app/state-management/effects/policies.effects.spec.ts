@@ -8,7 +8,7 @@ import {
   getQueryParams,
   getEditableQueryParams
 } from "state-management/selectors/policies.selectors";
-import { getProfile } from "state-management/selectors/users.selectors";
+import { getProfile } from "state-management/selectors/user.selectors";
 import * as fromActions from "state-management/actions/policies.actions";
 import { hot, cold } from "jasmine-marbles";
 

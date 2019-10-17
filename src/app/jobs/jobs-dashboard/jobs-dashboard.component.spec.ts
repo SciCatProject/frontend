@@ -6,7 +6,7 @@ import {
 } from "@angular/core/testing";
 
 import { JobsDashboardComponent } from "./jobs-dashboard.component";
-import { MockStore, MockLoginService } from "shared/MockStubs";
+import { MockStore } from "shared/MockStubs";
 import { Router } from "@angular/router";
 import { Store, StoreModule } from "@ngrx/store";
 import { Job } from "shared/sdk";
@@ -14,7 +14,6 @@ import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { MatButtonToggleModule } from "@angular/material";
 import { SharedCatanieModule } from "shared/shared.module";
 import { DatePipe } from "@angular/common";
-import { LoginService } from "users/login.service";
 import { rootReducer } from "state-management/reducers/root.reducer";
 import { JobViewMode } from "state-management/models";
 import {
@@ -48,10 +47,7 @@ describe("JobsDashboardComponent", () => {
     });
     TestBed.overrideComponent(JobsDashboardComponent, {
       set: {
-        providers: [
-          { provide: LoginService, useClass: MockLoginService },
-          { provide: Router, useValue: router }
-        ]
+        providers: [{ provide: Router, useValue: router }]
       }
     });
     TestBed.compileComponents();

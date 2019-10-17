@@ -28,7 +28,7 @@ import {
 import {
   getIsAdmin,
   getCurrentUser
-} from "state-management/selectors/users.selectors";
+} from "state-management/selectors/user.selectors";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Subscription, Observable } from "rxjs";
 import { pluck, take } from "rxjs/operators";

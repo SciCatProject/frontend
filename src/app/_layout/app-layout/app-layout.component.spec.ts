@@ -6,13 +6,7 @@ import { BreadcrumbModule } from "shared/modules/breadcrumb/breadcrumb.module";
 import { AppHeaderComponent } from "_layout/app-header/app-header.component";
 import { RouterTestingModule } from "@angular/router/testing";
 import { MatMenuModule, MatToolbarModule } from "@angular/material";
-import { LoginService } from "users/login.service";
-import {
-  MockLoginService,
-  MockStore,
-  MockActivatedRoute,
-  MockRouter
-} from "shared/MockStubs";
+import { MockStore, MockActivatedRoute, MockRouter } from "shared/MockStubs";
 import { Store } from "@ngrx/store";
 import { ActivatedRoute, Router } from "@angular/router";
 import { APP_CONFIG } from "app-config.module";
@@ -34,10 +28,7 @@ describe("AppLayoutComponent", () => {
     });
     TestBed.overrideComponent(AppHeaderComponent, {
       set: {
-        providers: [
-          { provide: APP_CONFIG, useValue: { facility: "ESS" } },
-          { provide: LoginService, useClass: MockLoginService }
-        ]
+        providers: [{ provide: APP_CONFIG, useValue: { facility: "ESS" } }]
       }
     });
     TestBed.overrideComponent(AppLayoutComponent, {

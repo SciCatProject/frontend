@@ -18,8 +18,8 @@ import {
   filter
 } from "rxjs/operators";
 import { of } from "rxjs";
-import { getCurrentUser } from "state-management/selectors/users.selectors";
-import { LOGOUT_COMPLETE } from "state-management/actions/user.actions";
+import { getCurrentUser } from "state-management/selectors/user.selectors";
+import { logoutCompleteAction } from "state-management/actions/user.actions";
 
 @Injectable()
 export class DatasetEffects {
@@ -213,7 +213,7 @@ export class DatasetEffects {
   protected clearBatchOnLogout$ = createEffect(
     () =>
       this.actions$.pipe(
-        ofType(LOGOUT_COMPLETE),
+        ofType(logoutCompleteAction),
         tap(() => this.storeBatch([], null))
       ),
     { dispatch: false }

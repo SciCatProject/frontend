@@ -7,7 +7,7 @@ import * as fromActions from "state-management/actions/jobs.actions";
 import { withLatestFrom, map, switchMap, catchError } from "rxjs/operators";
 import { of } from "rxjs";
 import { MessageType } from "state-management/models";
-import { ShowMessageAction } from "state-management/actions/user.actions";
+import { showMessageAction } from "state-management/actions/user.actions";
 
 @Injectable()
 export class JobEffects {
@@ -60,7 +60,7 @@ export class JobEffects {
       ofType(fromActions.submitJobAction),
       switchMap(({ job }) =>
         this.jobApi.create(job).pipe(
-          map(job => fromActions.submitJobCompleteAction({ job })),
+          map(res => fromActions.submitJobCompleteAction({ job: res })),
           catchError(err => of(fromActions.submitJobFailedAction({ err })))
         )
       )
@@ -76,7 +76,7 @@ export class JobEffects {
           content: "Job Created Successfully",
           duration: 5000
         };
-        return of(new ShowMessageAction(message));
+        return of(showMessageAction({ message }));
       })
     )
   );
@@ -90,7 +90,7 @@ export class JobEffects {
           content: "Job Not Submitted: " + err.message,
           duration: 5000
         };
-        return of(new ShowMessageAction(message));
+        return of(showMessageAction({ message }));
       })
     )
   );
