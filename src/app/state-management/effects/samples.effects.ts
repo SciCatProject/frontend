@@ -2,7 +2,10 @@ import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { DatasetApi, SampleApi, Sample, Dataset } from "shared/sdk";
 import { Store, select } from "@ngrx/store";
-import { getFullqueryParams } from "state-management/selectors/samples.selectors";
+import {
+  getFullqueryParams,
+  getDatasetsQueryParams
+} from "state-management/selectors/samples.selectors";
 import * as fromActions from "state-management/actions/samples.actions";
 import {
   withLatestFrom,
@@ -16,6 +19,9 @@ import { of } from "rxjs";
 @Injectable()
 export class SampleEffects {
   private fullqueryParams$ = this.store.pipe(select(getFullqueryParams));
+  private datasetsQueryParams$ = this.store.pipe(
+    select(getDatasetsQueryParams)
+  );
 
   fetchSamples$ = createEffect(() =>
     this.actions$.pipe(
@@ -74,12 +80,32 @@ export class SampleEffects {
   fetchSampleDatasets$ = createEffect(() =>
     this.actions$.pipe(
       ofType(fromActions.fetchSampleDatasetsAction),
-      mergeMap(({ sampleId }) =>
-        this.datasetApi.find({ where: { sampleId } }).pipe(
-          map((datasets: Dataset[]) =>
-            fromActions.fetchSampleDatasetsCompleteAction({ datasets })
-          ),
+      withLatestFrom(this.datasetsQueryParams$),
+      mergeMap(([{ sampleId }, { order, skip, limit }]) =>
+        this.datasetApi.find({ where: { sampleId }, order, skip, limit }).pipe(
+          mergeMap((datasets: Dataset[]) => [
+            fromActions.fetchSampleDatasetsCompleteAction({ datasets }),
+            fromActions.fetchSampleDatasetsCountAction({ sampleId })
+          ]),
           catchError(() => of(fromActions.fetchSampleDatasetsFailedAction()))
+        )
+      )
+    )
+  );
+
+  fetchSampleDatasetsCount$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(fromActions.fetchSampleDatasetsCountAction),
+      switchMap(({ sampleId }) =>
+        this.datasetApi.find({ where: { sampleId } }).pipe(
+          map(datasets =>
+            fromActions.fetchSampleDatasetsCountCompleteAction({
+              count: datasets.length
+            })
+          ),
+          catchError(() =>
+            of(fromActions.fetchSampleDatasetsCountFailedAction())
+          )
         )
       )
     )

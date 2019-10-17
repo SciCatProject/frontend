@@ -88,7 +88,7 @@ describe("Sample Actions", () => {
       const sampleId = "testId";
       const action = fromActions.fetchSampleDatasetsAction({ sampleId });
       expect({ ...action }).toEqual({
-        type: "[Sample] Fetch Sample Datasets",
+        type: "[Sample] Fetch Datasets",
         sampleId
       });
     });
@@ -101,7 +101,7 @@ describe("Sample Actions", () => {
         datasets
       });
       expect({ ...action }).toEqual({
-        type: "[Sample] Fetch Sample Datasets Complete",
+        type: "[Sample] Fetch Datasets Complete",
         datasets
       });
     });
@@ -111,7 +111,40 @@ describe("Sample Actions", () => {
     it("should create an action", () => {
       const action = fromActions.fetchSampleDatasetsFailedAction();
       expect({ ...action }).toEqual({
-        type: "[Sample] Fetch Sample Datasets Failed"
+        type: "[Sample] Fetch Datasets Failed"
+      });
+    });
+  });
+
+  describe("fetchSampleDatasetsCountAction", () => {
+    it("should create an action", () => {
+      const sampleId = "testId";
+      const action = fromActions.fetchSampleDatasetsCountAction({ sampleId });
+      expect({ ...action }).toEqual({
+        type: "[Sample] Fetch Datasets Count",
+        sampleId
+      });
+    });
+  });
+
+  describe("fetchSampleDatasetsCountCompleteAction", () => {
+    it("should create an action", () => {
+      const count = 100;
+      const action = fromActions.fetchSampleDatasetsCountCompleteAction({
+        count
+      });
+      expect({ ...action }).toEqual({
+        type: "[Sample] Fetch Datasets Count Complete",
+        count
+      });
+    });
+  });
+
+  describe("fetchSampleDatasetsCountFailedAction", () => {
+    it("should create an action", () => {
+      const action = fromActions.fetchSampleDatasetsCountFailedAction();
+      expect({ ...action }).toEqual({
+        type: "[Sample] Fetch Datasets Count Failed"
       });
     });
   });
@@ -262,6 +295,19 @@ describe("Sample Actions", () => {
       const action = fromActions.changePageAction({ page, limit });
       expect({ ...action }).toEqual({
         type: "[Sample] Change Page",
+        page,
+        limit
+      });
+    });
+  });
+
+  describe("changeDatasetsPageAction", () => {
+    it("should create an action", () => {
+      const page = 1;
+      const limit = 25;
+      const action = fromActions.changeDatasetsPageAction({ page, limit });
+      expect({ ...action }).toEqual({
+        type: "[Sample] Change Datasets Page",
         page,
         limit
       });

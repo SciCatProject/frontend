@@ -34,15 +34,27 @@ export const fetchSampleFailedAction = createAction(
 );
 
 export const fetchSampleDatasetsAction = createAction(
-  "[Sample] Fetch Sample Datasets",
+  "[Sample] Fetch Datasets",
   props<{ sampleId: string }>()
 );
 export const fetchSampleDatasetsCompleteAction = createAction(
-  "[Sample] Fetch Sample Datasets Complete",
+  "[Sample] Fetch Datasets Complete",
   props<{ datasets: Dataset[] }>()
 );
 export const fetchSampleDatasetsFailedAction = createAction(
-  "[Sample] Fetch Sample Datasets Failed"
+  "[Sample] Fetch Datasets Failed"
+);
+
+export const fetchSampleDatasetsCountAction = createAction(
+  "[Sample] Fetch Datasets Count",
+  props<{ sampleId: string }>()
+);
+export const fetchSampleDatasetsCountCompleteAction = createAction(
+  "[Sample] Fetch Datasets Count Complete",
+  props<{ count: number }>()
+);
+export const fetchSampleDatasetsCountFailedAction = createAction(
+  "[Sample] Fetch Datasets Count Failed"
 );
 
 export const addSampleAction = createAction(
@@ -93,6 +105,11 @@ export const removeAttachmentFailedAction = createAction(
 
 export const changePageAction = createAction(
   "[Sample] Change Page",
+  props<{ page: number; limit: number }>()
+);
+
+export const changeDatasetsPageAction = createAction(
+  "[Sample] Change Datasets Page",
   props<{ page: number; limit: number }>()
 );
 

@@ -18,14 +18,19 @@ export const getCurrentAttachments = createSelector(
   sample => sample.attachments
 );
 
-export const getSampleDatasets = createSelector(
+export const getDatasets = createSelector(
   getSampleState,
   state => state.datasets
 );
 
 export const getSamplesCount = createSelector(
   getSampleState,
-  state => state.totalCount
+  state => state.samplesCount
+);
+
+export const getDatasetsCount = createSelector(
+  getSampleState,
+  state => state.datasetsCount
 );
 
 export const getIsLoading = createSelector(
@@ -35,11 +40,24 @@ export const getIsLoading = createSelector(
 
 export const getFilters = createSelector(
   getSampleState,
-  state => state.filters
+  state => state.samplefilters
+);
+
+export const getDatasetFilters = createSelector(
+  getSampleState,
+  state => state.datasetFilters
 );
 
 export const getPage = createSelector(
   getFilters,
+  filters => {
+    const { skip, limit } = filters;
+    return skip / limit;
+  }
+);
+
+export const getDatasetsPage = createSelector(
+  getDatasetFilters,
   filters => {
     const { skip, limit } = filters;
     return skip / limit;
@@ -51,11 +69,24 @@ export const getSamplesPerPage = createSelector(
   filters => filters.limit
 );
 
+export const getDatasetsPerPage = createSelector(
+  getDatasetFilters,
+  filters => filters.limit
+);
+
 export const getFullqueryParams = createSelector(
   getFilters,
   filters => {
     const { text, sortField, skip, limit } = filters;
     const limits = { order: sortField, skip, limit };
     return { query: JSON.stringify({ text }), limits };
+  }
+);
+
+export const getDatasetsQueryParams = createSelector(
+  getDatasetFilters,
+  filters => {
+    const { sortField, skip, limit } = filters;
+    return { order: sortField, skip, limit };
   }
 );
