@@ -1,10 +1,21 @@
-import { DatasetState, initialDatasetState } from "state-management/state/datasets.store";
+import {
+  DatasetState,
+  initialDatasetState
+} from "state-management/state/datasets.store";
 import { initialUserState, UserState } from "state-management/state/user.store";
 import { initialJobsState, JobsState } from "state-management/state/jobs.store";
-import { initialPolicyState, PolicyState } from "state-management/state/policies.store";
-import { initialSampleState, SampleState } from "state-management/state/samples.store";
-import { PublishedDataState, initialPublishedDataState } from "./publishedData.store";
-
+import {
+  initialPolicyState,
+  PolicyState
+} from "state-management/state/policies.store";
+import {
+  initialSampleState,
+  SampleState
+} from "state-management/state/samples.store";
+import {
+  PublishedDataState,
+  initialPublishedDataState
+} from "./published-data.store";
 
 export interface AppState {
   datasets: DatasetState;

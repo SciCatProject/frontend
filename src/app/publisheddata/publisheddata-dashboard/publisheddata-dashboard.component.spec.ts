@@ -12,7 +12,7 @@ import { StoreModule, Store } from "@ngrx/store";
 import { rootReducer } from "state-management/reducers/root.reducer";
 import { Router } from "@angular/router";
 import { PageChangeEvent } from "shared/modules/table/table.component";
-import { ChangePagePub } from "state-management/actions/published-data.actions";
+import { changePageAction } from "state-management/actions/published-data.actions";
 import { PublishedData } from "shared/sdk";
 
 describe("PublisheddataDashboardComponent", () => {
@@ -58,7 +58,7 @@ describe("PublisheddataDashboardComponent", () => {
   });
 
   describe("#onPageChange()", () => {
-    it("should dispatch a ChangePagePub action", () => {
+    it("should dispatch a changePageAction action", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
       const event: PageChangeEvent = {
@@ -70,7 +70,7 @@ describe("PublisheddataDashboardComponent", () => {
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        new ChangePagePub({ page: event.pageIndex, limit: event.pageSize })
+        changePageAction({ page: event.pageIndex, limit: event.pageSize })
       );
     });
   });
