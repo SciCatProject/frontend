@@ -1,233 +1,202 @@
-import {
-  publishedDataReducer,
-  getSelectedPublishedDataId
-} from "./published-data.reducer";
-import { initialPublishedDataState } from "../state/publishedData.store";
-import {
-  AddPublishedData,
-  ChangePagePub,
-  FetchPublishedData,
-  FetchCountPublishedData,
-  LoadCurrentPublishedData,
-  UpsertPublishedData,
-  UpsertWaitPublishedData,
-  AddPublishedDatas,
-  UpsertPublishedDatas,
-  UpdatePublishedData,
-  UpdatePublishedDatas,
-  DeletePublishedData,
-  DeletePublishedDatas,
-  LoadPublishedDatas,
-  ClearPublishedDatas
-} from "state-management/actions/published-data.actions";
-import { PublishedData } from "shared/sdk";
-import { Update } from "@ngrx/entity";
+import { PublishedDataState } from "state-management/state/published-data.store";
+import * as fromActions from "state-management/actions/published-data.actions";
+import { publishedDataReducer } from "./published-data.reducer";
+import { PublishedData, PublishedDataInterface } from "shared/sdk";
+import { PublishedDataFilters } from "state-management/models";
+
+const data: PublishedDataInterface = {
+  doi: "testDOI",
+  affiliation: "test affiliation",
+  creator: "test creator",
+  publisher: "test publisher",
+  publicationYear: 2019,
+  title: "test title",
+  abstract: "test abstract",
+  dataDescription: "test description",
+  resourceType: "test type",
+  pidArray: ["testPid"],
+  authors: ["test author"]
+};
+const publishedData = new PublishedData(data);
+
+const filters: PublishedDataFilters = {
+  sortField: "publicationYear desc",
+  skip: 0,
+  limit: 25
+};
+
+const initialPublishedDataState: PublishedDataState = {
+  publishedData: [],
+  currentPublishedData: publishedData,
+
+  totalCount: 0,
+
+  isLoading: false,
+
+  filters
+};
 
 describe("PublishedData Reducer", () => {
-  describe("default", () => {
-    it("should return the initial state", () => {
-      const action = {} as any;
+  describe("on fetchAllPublishedDataAction", () => {
+    it("should set isLoading to true", () => {
+      const action = fromActions.fetchAllPublishedDataAction();
       const state = publishedDataReducer(initialPublishedDataState, action);
 
-      expect(state).toBe(initialPublishedDataState);
+      expect(state.isLoading).toEqual(true);
     });
   });
 
-  describe("AddPublishedData", () => {
-    xit("should return the initial state", () => {
-      const payload = {
-        publishedData: new PublishedData()
-      };
-      const action = new AddPublishedData(payload);
+  describe("on fetchAllPublishedDataCompleteAction", () => {
+    it("should set publishedData and set isLoading to false", () => {
+      const allPublishedData = [publishedData];
+      const action = fromActions.fetchAllPublishedDataCompleteAction({
+        publishedData: allPublishedData
+      });
       const state = publishedDataReducer(initialPublishedDataState, action);
+
+      expect(state.publishedData).toEqual(allPublishedData);
+      expect(state.isLoading).toEqual(false);
     });
   });
 
-  describe("LoadCurrentPublishedData", () => {
-    it("should set currentPublishedData", () => {
-      const payload = {
-        publishedData: new PublishedData()
-      };
-      const action = new LoadCurrentPublishedData(payload);
+  describe("on fetchAllPublishedDataFailedAction", () => {
+    it("should set isLoading to false", () => {
+      const action = fromActions.fetchAllPublishedDataFailedAction();
       const state = publishedDataReducer(initialPublishedDataState, action);
 
-      expect(state.currentPublishedData).toEqual(payload.publishedData);
+      expect(state.isLoading).toEqual(false);
     });
   });
 
-  describe("UpsertPublishedData", () => {
-    xit("should ...", () => {
-      const payload = {
-        publishedData: new PublishedData()
-      };
-      const action = new UpsertPublishedData(payload);
+  describe("on fetchCountAction", () => {
+    it("should set isLoading to true", () => {
+      const action = fromActions.fetchCountAction();
       const state = publishedDataReducer(initialPublishedDataState, action);
+
+      expect(state.isLoading).toEqual(true);
     });
   });
 
-  describe("UpsertWaitPublishedData", () => {
-    it("should return the initial state", () => {
-      const payload = {
-        publishedData: new PublishedData()
-      };
-      const action = new UpsertWaitPublishedData(payload);
+  describe("on fetchCountCompleteAction", () => {
+    it("should set totalCount and set isLoading to false", () => {
+      const count = 100;
+      const action = fromActions.fetchCountCompleteAction({ count });
       const state = publishedDataReducer(initialPublishedDataState, action);
 
-      expect(state).toEqual(initialPublishedDataState);
+      expect(state.totalCount).toEqual(count);
+      expect(state.isLoading).toEqual(false);
     });
   });
 
-  describe("AddPublishedDatas", () => {
-    xit("should ...", () => {
-      const payload = {
-        publishedDatas: [new PublishedData()]
-      };
-      const action = new AddPublishedDatas(payload);
+  describe("on fetchCountFailedAction", () => {
+    it("should set isLoading to false", () => {
+      const action = fromActions.fetchCountFailedAction();
       const state = publishedDataReducer(initialPublishedDataState, action);
+
+      expect(state.isLoading).toEqual(false);
     });
   });
 
-  describe("UpsertPublishedDatas", () => {
-    xit("should ...", () => {
-      const payload = {
-        publishedDatas: [new PublishedData()]
-      };
-      const action = new UpsertPublishedDatas(payload);
+  describe("on fetchPublishedDataAction", () => {
+    it("should set isLoading to true", () => {
+      const id = "testId";
+      const action = fromActions.fetchPublishedDataAction({ id });
       const state = publishedDataReducer(initialPublishedDataState, action);
+
+      expect(state.isLoading).toEqual(true);
     });
   });
 
-  describe("UpdatePublishedData", () => {
-    xit("should ...", () => {
-      const update: Update<PublishedData> = null;
-      const payload = {
-        publishedData: update
-      };
-      const action = new UpdatePublishedData(payload);
+  describe("on fetchPublishedDataCompleteAction", () => {
+    it("should set currentPublishedData and set isLoading to false", () => {
+      const action = fromActions.fetchPublishedDataCompleteAction({
+        publishedData
+      });
       const state = publishedDataReducer(initialPublishedDataState, action);
+
+      expect(state.currentPublishedData).toEqual(publishedData);
+      expect(state.isLoading).toEqual(false);
     });
   });
 
-  describe("UpdatePublishedDatas", () => {
-    it("should return the initial state", () => {
-      const updates: Update<PublishedData>[] = [];
-      const payload = {
-        publishedDatas: updates
-      };
-      const action = new UpdatePublishedDatas(payload);
+  describe("on fetchPublishedDataFailedAction", () => {
+    it("should set isLoading to false", () => {
+      const action = fromActions.fetchPublishedDataFailedAction();
       const state = publishedDataReducer(initialPublishedDataState, action);
 
-      expect(state).toEqual(initialPublishedDataState);
+      expect(state.isLoading).toEqual(false);
     });
   });
 
-  describe("DeletePublishedData", () => {
-    it("should return the initial state", () => {
-      const payload = {
-        id: "abc123"
-      };
-      const action = new DeletePublishedData(payload);
+  describe("on publishDatasetAction", () => {
+    it("should set isLoading to true", () => {
+      const action = fromActions.publishDatasetAction({ data: publishedData });
       const state = publishedDataReducer(initialPublishedDataState, action);
 
-      expect(state).toEqual(initialPublishedDataState);
+      expect(state.isLoading).toEqual(true);
     });
   });
 
-  describe("DeletePublishedDatas", () => {
-    it("should return the initial state", () => {
-      const payload = {
-        ids: ["abc123"]
-      };
-      const action = new DeletePublishedDatas(payload);
+  describe("on publishDatasetCompleteAction", () => {
+    it("should set isLoading to false", () => {
+      const action = fromActions.publishDatasetCompleteAction({
+        publishedData
+      });
       const state = publishedDataReducer(initialPublishedDataState, action);
 
-      expect(state).toEqual(initialPublishedDataState);
+      expect(state.isLoading).toEqual(false);
     });
   });
 
-  describe("LoadPublishedDatas", () => {
-    xit("should ...", () => {
-      const payload = {
-        publishedDatas: [new PublishedData()]
-      };
-      const action = new LoadPublishedDatas(payload);
+  describe("on publishDatasetFailedAction", () => {
+    it("should set isLoading to false", () => {
+      const action = fromActions.publishDatasetFailedAction();
       const state = publishedDataReducer(initialPublishedDataState, action);
+
+      expect(state.isLoading).toEqual(false);
     });
   });
 
-  describe("ClearPublishedDatas", () => {
-    it("should return the initial state", () => {
-      const action = new ClearPublishedDatas();
+  describe("on registerPublishedDataAction", () => {
+    it("should set isLoading to true", () => {
+      const doi = "testDOI";
+      const action = fromActions.registerPublishedDataAction({ doi });
       const state = publishedDataReducer(initialPublishedDataState, action);
 
-      expect(state).toEqual(initialPublishedDataState);
+      expect(state.isLoading).toEqual(true);
     });
   });
 
-  describe("ChangePagePub", () => {
-    it("should set filters", () => {
-      const payload = {
-        page: 2,
-        limit: 25
-      };
-      const action = new ChangePagePub(payload);
+  describe("on registerPublishedDataCompleteAction", () => {
+    it("should set isLoading to false", () => {
+      const action = fromActions.registerPublishedDataCompleteAction({
+        publishedData
+      });
       const state = publishedDataReducer(initialPublishedDataState, action);
 
-      expect(state.filters.limit).toEqual(payload.limit);
-      expect(state.filters.skip).toEqual(payload.page * payload.limit);
+      expect(state.isLoading).toEqual(false);
     });
   });
 
-  describe("FetchCountPublishedData", () => {
-    it("should set the count", () => {
-      const payload = {
-        count: 100
-      };
-      const action = new FetchCountPublishedData(payload);
+  describe("on registerPublishedDataFailedAction", () => {
+    it("should set isLoading to false", () => {
+      const action = fromActions.registerPublishedDataFailedAction();
       const state = publishedDataReducer(initialPublishedDataState, action);
 
-      expect(state.count).toEqual(payload.count);
+      expect(state.isLoading).toEqual(false);
     });
   });
 
-  describe("FetchPublishedData", () => {
-    it("should set currentPublishedData", () => {
-      const payload = {
-        id: "abc123"
-      };
-      const action = new FetchPublishedData(payload);
+  describe("on changePageAction", () => {
+    it("should set skip and limit filters", () => {
+      const page = 1;
+      const limit = 25;
+      const skip = page * limit;
+      const action = fromActions.changePageAction({ page, limit });
       const state = publishedDataReducer(initialPublishedDataState, action);
 
-      expect(state.currentPublishedData).toEqual(state.entities[payload.id]);
+      expect(state.filters.limit).toEqual(limit);
+      expect(state.filters.skip).toEqual(skip);
     });
-  });
-
-  describe("#getSelectedPublishedDataId()", () => {
-    it("should return the doi of currentPublishedData", () => {
-      const payload = {
-        publishedData: new PublishedData()
-      };
-      const action = new LoadCurrentPublishedData(payload);
-      const state = publishedDataReducer(initialPublishedDataState, action);
-      const doi = getSelectedPublishedDataId(state);
-
-      expect(doi).toEqual(state.currentPublishedData.doi);
-    });
-  });
-
-  describe("selectPublishedDataIds", () => {
-    it("", () => {});
-  });
-
-  describe("selectPublishedDataEntities", () => {
-    it("", () => {});
-  });
-
-  describe("selectAllPublishedData", () => {
-    it("", () => {});
-  });
-
-  describe("selectPublishedDataTotal", () => {
-    it("", () => {});
   });
 });

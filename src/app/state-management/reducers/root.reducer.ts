@@ -22,7 +22,7 @@ import { logoutCompleteAction } from "state-management/actions/user.actions";
 import {
   initialPublishedDataState,
   PublishedDataState
-} from "state-management/state/publishedData.store";
+} from "state-management/state/published-data.store";
 import { publishedDataReducer } from "state-management/reducers/published-data.reducer";
 import { logbooksReducer } from "./logbooks.reducer";
 import {

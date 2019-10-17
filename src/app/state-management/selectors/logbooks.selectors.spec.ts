@@ -1,4 +1,4 @@
-import * as fromSelectors from "./logbooks.selector";
+import * as fromSelectors from "./logbooks.selectors";
 import { LogbookFilters, Logbook } from "state-management/models";
 import { LogbookState } from "state-management/state/logbooks.store";
 

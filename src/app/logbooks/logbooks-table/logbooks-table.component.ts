@@ -7,7 +7,7 @@ import { fetchLogbooksAction } from "state-management/actions/logbooks.actions";
 import {
   getLogbooks,
   getIsLoading
-} from "state-management/selectors/logbooks.selector";
+} from "state-management/selectors/logbooks.selectors";
 import { Logbook } from "state-management/models";
 
 @Component({

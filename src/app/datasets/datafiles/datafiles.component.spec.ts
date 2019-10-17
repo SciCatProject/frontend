@@ -292,8 +292,4 @@ describe("DatafilesComponent", () => {
       expect(tooLargeFile).toEqual(true);
     });
   });
-
-  describe("onDownload()", () => {
-    xit("should ...", () => {});
-  });
 });
