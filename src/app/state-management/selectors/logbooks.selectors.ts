@@ -13,11 +13,6 @@ export const getCurrentLogbook = createSelector(
   state => state.currentLogbook
 );
 
-export const getIsLoading = createSelector(
-  getLogbookState,
-  state => state.isLoading
-);
-
 export const getFilters = createSelector(
   getLogbookState,
   state => state.filters

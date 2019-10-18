@@ -9,7 +9,6 @@ import { APP_DI_CONFIG } from "app-config.module";
 
 const reducer = createReducer(
   initialLogbookState,
-  on(fromActions.fetchLogbooksAction, state => ({ ...state, isLoading: true })),
   on(fromActions.fetchLogbooksCompleteAction, (state, { logbooks }) => {
     if (logbooks) {
       logbooks.forEach(logbook => {
@@ -17,35 +16,18 @@ const reducer = createReducer(
         logbook.messages = descendingMessages;
       });
     }
-    return { ...state, logbooks, isLoading: false };
+    return { ...state, logbooks };
   }),
-  on(fromActions.fetchLogbooksFailedAction, state => ({
-    ...state,
-    isLoading: false
-  })),
 
-  on(fromActions.fetchLogbookAction, state => ({ ...state, isLoading: true })),
   on(fromActions.fetchLogbookCompleteAction, (state, { logbook }) => {
     const currentLogbook = formatImageUrls(logbook);
-    return { ...state, currentLogbook, isLoading: false };
+    return { ...state, currentLogbook };
   }),
-  on(fromActions.fetchLogbookFailedAction, state => ({
-    ...state,
-    isLoading: false
-  })),
 
-  on(fromActions.fetchFilteredEntriesAction, state => ({
-    ...state,
-    isLoading: true
-  })),
   on(fromActions.fetchFilteredEntriesCompleteAction, (state, { logbook }) => {
     const currentLogbook = formatImageUrls(logbook);
-    return { ...state, currentLogbook, isLoading: false };
+    return { ...state, currentLogbook };
   }),
-  on(fromActions.fetchFilteredEntriesFailedAction, state => ({
-    ...state,
-    isLoading: false
-  })),
 
   on(fromActions.setFilterAction, (state, { filters }) => ({
     ...state,

@@ -4,10 +4,7 @@ import { select, Store } from "@ngrx/store";
 import { Subscription } from "rxjs";
 
 import { fetchLogbooksAction } from "state-management/actions/logbooks.actions";
-import {
-  getLogbooks,
-  getIsLoading
-} from "state-management/selectors/logbooks.selectors";
+import { getLogbooks } from "state-management/selectors/logbooks.selectors";
 import { Logbook } from "state-management/models";
 
 @Component({
@@ -16,8 +13,6 @@ import { Logbook } from "state-management/models";
   styleUrls: ["./logbooks-table.component.scss"]
 })
 export class LogbooksTableComponent implements OnInit, OnDestroy {
-  loading$ = this.store.pipe(select(getIsLoading));
-
   logbooks: Logbook[];
   logbooksSubscription: Subscription;
 

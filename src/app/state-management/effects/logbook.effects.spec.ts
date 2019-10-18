@@ -6,6 +6,7 @@ import { LogbookEffects } from "./logbooks.effects";
 import { LogbookApi, Logbook } from "shared/sdk";
 import * as fromActions from "state-management/actions/logbooks.actions";
 import { LogbookFilters } from "state-management/models";
+import { setLoadingStatusAction } from "state-management/actions/user.actions";
 
 const logbook = new Logbook();
 
@@ -122,6 +123,141 @@ describe("LogbookEffects", () => {
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchFilteredEntries$).toBeObservable(expected);
+    });
+  });
+
+  describe("isLoading$", () => {
+    describe("ofType fetchLogbooksAction", () => {
+      it("should dispatch a setLoadingStatusAction with value true", () => {
+        const value = true;
+        const action = fromActions.fetchLogbooksAction();
+        const outcome = setLoadingStatusAction({ value });
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.isLoading$).toBeObservable(expected);
+      });
+    });
+
+    describe("ofType fetchLogbookAction", () => {
+      it("should dispatch a setLoadingStatusAction with value true", () => {
+        const name = "test";
+        const value = true;
+        const action = fromActions.fetchLogbookAction({ name });
+        const outcome = setLoadingStatusAction({ value });
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.isLoading$).toBeObservable(expected);
+      });
+    });
+
+    describe("ofType fetchFilteredEntriesAction", () => {
+      it("should dispatch a setLoadingStatusAction with value true", () => {
+        const name = "test";
+        const filters: LogbookFilters = {
+          textSearch: "test",
+          showBotMessages: true,
+          showImages: true,
+          showUserMessages: true
+        };
+        const value = true;
+        const action = fromActions.fetchFilteredEntriesAction({
+          name,
+          filters
+        });
+        const outcome = setLoadingStatusAction({ value });
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.isLoading$).toBeObservable(expected);
+      });
+    });
+  });
+
+  describe("isNotLoading$", () => {
+    describe("ofType fetchLogbooksCompleteAction", () => {
+      it("should dispatch a setLoadingStatusAction with value false", () => {
+        const logbooks = [logbook];
+        const value = false;
+        const action = fromActions.fetchLogbooksCompleteAction({ logbooks });
+        const outcome = setLoadingStatusAction({ value });
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.isNotLoading$).toBeObservable(expected);
+      });
+    });
+
+    describe("ofType fetchLogbooksFailedAction", () => {
+      it("should dispatch a setLoadingStatusAction with value false", () => {
+        const value = false;
+        const action = fromActions.fetchLogbooksFailedAction();
+        const outcome = setLoadingStatusAction({ value });
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.isNotLoading$).toBeObservable(expected);
+      });
+    });
+
+    describe("ofType fetchLogbookCompleteAction", () => {
+      it("should dispatch a setLoadingStatusAction with value false", () => {
+        const value = false;
+        const action = fromActions.fetchLogbookCompleteAction({ logbook });
+        const outcome = setLoadingStatusAction({ value });
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.isNotLoading$).toBeObservable(expected);
+      });
+    });
+
+    describe("ofType fetchLogbookFailedAction", () => {
+      it("should dispatch a setLoadingStatusAction with value false", () => {
+        const value = false;
+        const action = fromActions.fetchLogbookFailedAction();
+        const outcome = setLoadingStatusAction({ value });
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.isNotLoading$).toBeObservable(expected);
+      });
+    });
+
+    describe("ofType fetchFilteredEntriesCompleteAction", () => {
+      it("should dispatch a setLoadingStatusAction with value false", () => {
+        const value = false;
+        const action = fromActions.fetchFilteredEntriesCompleteAction({
+          logbook
+        });
+        const outcome = setLoadingStatusAction({ value });
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.isNotLoading$).toBeObservable(expected);
+      });
+    });
+
+    describe("ofType fetchFilteredEntriesFailedAction", () => {
+      it("should dispatch a setLoadingStatusAction with value false", () => {
+        const value = false;
+        const action = fromActions.fetchFilteredEntriesFailedAction();
+        const outcome = setLoadingStatusAction({ value });
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.isNotLoading$).toBeObservable(expected);
+      });
     });
   });
 });

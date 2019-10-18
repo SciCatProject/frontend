@@ -15,8 +15,6 @@ const initialLogbookState: LogbookState = {
   logbooks: [],
   currentLogbook: logbook,
 
-  isLoading: false,
-
   filters: logbookFilters
 };
 
@@ -37,17 +35,11 @@ describe("Logbook Selectors", () => {
     });
   });
 
-  describe("getIsLoading", () => {
-    it("should get isLoading", () => {
-      expect(fromSelectors.getIsLoading.projector(initialLogbookState)).toEqual(
-        false
+  describe("getFilters", () => {
+    it("should get filters", () => {
+      expect(fromSelectors.getFilters.projector(initialLogbookState)).toEqual(
+        logbookFilters
       );
     });
-  });
-
-  it("should get filters", () => {
-    expect(fromSelectors.getFilters.projector(initialLogbookState)).toEqual(
-      logbookFilters
-    );
   });
 });

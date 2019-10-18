@@ -11,8 +11,7 @@ import { Logbook } from "shared/sdk";
 import { Subscription } from "rxjs";
 import {
   getCurrentLogbook,
-  getFilters,
-  getIsLoading
+  getFilters
 } from "state-management/selectors/logbooks.selectors";
 import { getCurrentDataset } from "state-management/selectors/datasets.selectors";
 import {
@@ -31,8 +30,6 @@ import { LogbookFilters } from "state-management/models";
 })
 export class LogbooksDashboardComponent
   implements OnInit, OnDestroy, AfterViewChecked {
-  loading$ = this.store.pipe(select(getIsLoading));
-
   logbook: Logbook;
   logbookSubscription: Subscription;
 
