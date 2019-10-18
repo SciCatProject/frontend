@@ -65,6 +65,8 @@ const initialUserState: UserState = {
   isLoggingIn: false,
   isLoggedIn: false,
 
+  isLoading: false,
+
   columns: ["datasetName"],
   displayedColumns: ["datasetName"]
 };
@@ -167,6 +169,14 @@ describe("User Selectors", () => {
   describe("getIsLoggedIn", () => {
     it("should get isLoggedIn", () => {
       expect(fromSelectors.getIsLoggedIn.projector(initialUserState)).toEqual(
+        false
+      );
+    });
+  });
+
+  describe("getIsLoading", () => {
+    it("should get isLoading", () => {
+      expect(fromSelectors.getIsLoading.projector(initialUserState)).toEqual(
         false
       );
     });

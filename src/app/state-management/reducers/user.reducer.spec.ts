@@ -140,7 +140,18 @@ describe("UserReducer", () => {
       };
       const action = fromActions.saveSettingsAction({ settings });
       const state = userReducer(initialUserState, action);
+
       expect(state.settings).toEqual(settings);
+    });
+  });
+
+  describe("on setLoadingStatusAction", () => {
+    it("should set isLoading", () => {
+      const value = true;
+      const action = fromActions.setLoadingStatusAction({ value });
+      const state = userReducer(initialUserState, action);
+
+      expect(state.isLoading).toEqual(value);
     });
   });
 });

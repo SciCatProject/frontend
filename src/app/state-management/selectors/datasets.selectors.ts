@@ -220,18 +220,6 @@ export const getKeywordsTerms = createSelector(
   state => state.keywordsTerms
 );
 
-export const getSearchCaughtUp = createSelector(
-  getSearchTerms,
-  getTextFilter,
-  (terms, text) => terms === text
-);
-
-export const getIsLoading = createSelector(
-  getDatasetState,
-  getSearchCaughtUp,
-  (state, caughtUp) => state.isLoading || !caughtUp
-);
-
 export const getHasPrefilledFilters = createSelector(
   getDatasetState,
   state => state.hasPrefilledFilters

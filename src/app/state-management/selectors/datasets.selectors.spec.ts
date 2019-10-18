@@ -11,7 +11,6 @@ const initialDatasetState: DatasetState = {
   facetCounts: {},
   totalCount: 0,
 
-  isLoading: true,
   hasPrefilledFilters: false,
 
   searchTerms: "run",
@@ -313,25 +312,6 @@ describe("test dataset selectors", () => {
       expect(
         fromDatasetSelectors.getKeywordsTerms.projector(initialDatasetState)
       ).toEqual("");
-    });
-  });
-
-  describe("getSearchCaughtUp", () => {
-    it("should return false if search terms does not equal text filter", () => {
-      expect(
-        fromDatasetSelectors.getSearchCaughtUp.projector(
-          initialDatasetState.searchTerms,
-          initialDatasetState.filters.text
-        )
-      ).toEqual(false);
-    });
-  });
-
-  describe("getIsLoading", () => {
-    it("should return the current state of isLoading", () => {
-      expect(
-        fromDatasetSelectors.getIsLoading.projector(initialDatasetState, false)
-      ).toEqual(true);
     });
   });
 

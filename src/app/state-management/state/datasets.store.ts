@@ -20,7 +20,6 @@ export interface DatasetState {
   selectedSets: Dataset[];
   currentSet: Dataset;
   totalCount: number;
-  isLoading: boolean;
 
   facetCounts: FacetCounts;
   hasPrefilledFilters: boolean;
@@ -38,7 +37,6 @@ export const initialDatasetState: DatasetState = {
   selectedSets: [],
   currentSet: null,
   totalCount: 0,
-  isLoading: true,
 
   facetCounts: {},
   hasPrefilledFilters: false,

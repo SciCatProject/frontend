@@ -35,10 +35,6 @@
     </div>
   </ng-template>
 
-  <div *ngIf="loading$ | async" class="spinner">
-    <mat-spinner></mat-spinner>
-  </div>
-
   <div class="action-container" [class.hidden]="loading$ | async">
     <button
       mat-button
@@ -127,10 +123,7 @@
     <!-- Select Column -->
     <ng-container matColumnDef="select">
       <mat-header-cell *matHeaderCellDef>
-        <mat-checkbox
-          color="#ffffff"
-          (change)="onSelectAll($event)"
-        >
+        <mat-checkbox color="#ffffff" (change)="onSelectAll($event)">
         </mat-checkbox>
       </mat-header-cell>
 
@@ -190,12 +183,16 @@
           <div class="table_column">Run&nbsp;No.</div>
         </div>
       </mat-header-cell>
-      <mat-cell
-        *matCellDef="let dataset"
-      >
-      <div *ngIf="dataset.scientificMetadata && dataset.scientificMetadata.runNumber && dataset.scientificMetadata.runNumber.value ">
-        {{ dataset.scientificMetadata.runNumber.value }}
-      </div>
+      <mat-cell *matCellDef="let dataset">
+        <div
+          *ngIf="
+            dataset.scientificMetadata &&
+            dataset.scientificMetadata.runNumber &&
+            dataset.scientificMetadata.runNumber.value
+          "
+        >
+          {{ dataset.scientificMetadata.runNumber.value }}
+        </div>
       </mat-cell>
     </ng-container>
 

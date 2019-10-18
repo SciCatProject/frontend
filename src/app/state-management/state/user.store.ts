@@ -17,6 +17,8 @@ export interface UserState {
   isLoggingIn: boolean;
   isLoggedIn: boolean;
 
+  isLoading: boolean;
+
   columns: string[];
   displayedColumns: string[];
 }
@@ -38,6 +40,8 @@ export const initialUserState: UserState = {
 
   isLoggingIn: false,
   isLoggedIn: false,
+
+  isLoading: false,
 
   columns: [
     "select",

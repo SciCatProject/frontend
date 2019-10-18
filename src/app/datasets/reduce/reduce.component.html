@@ -10,10 +10,6 @@
           <tr>
             <th><i class="material-icons">info</i> Status</th>
             <td>
-              <div *ngIf="resultLoading">
-                Dataset reduction in progress...
-              </div>
-
               <div *ngIf="result && result.hasOwnProperty('message')">
                 {{ result.message }}
               </div>
@@ -27,7 +23,6 @@
                   result &&
                   !result.hasOwnProperty('message') &&
                   !result.hasOwnProperty('errno') &&
-                  !resultLoading &&
                   datasetHistory
                 "
               >

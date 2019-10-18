@@ -19,7 +19,10 @@ import {
 } from "rxjs/operators";
 import { of } from "rxjs";
 import { getCurrentUser } from "state-management/selectors/user.selectors";
-import { logoutCompleteAction } from "state-management/actions/user.actions";
+import {
+  logoutCompleteAction,
+  setLoadingStatusAction
+} from "state-management/actions/user.actions";
 
 @Injectable()
 export class DatasetEffects {
@@ -181,6 +184,43 @@ export class DatasetEffects {
           catchError(() => of(fromActions.reduceDatasetFailedAction()))
         )
       )
+    )
+  );
+
+  isLoading$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(
+        fromActions.fetchDatasetsAction,
+        fromActions.fetchFacetCountsAction,
+        fromActions.fetchDatasetAction,
+        fromActions.saveDatasetAction,
+        fromActions.addAttachmentAction,
+        fromActions.updateAttachmentCaptionAction,
+        fromActions.removeAttachmentAction
+      ),
+      switchMap(() => of(setLoadingStatusAction({ value: true })))
+    )
+  );
+
+  isNotLoading$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(
+        fromActions.fetchDatasetsCompleteAction,
+        fromActions.fetchDatasetsFailedAction,
+        fromActions.fetchFacetCountsCompleteAction,
+        fromActions.fetchFacetCountsFailedAction,
+        fromActions.fetchDatasetCompleteAction,
+        fromActions.fetchDatasetFailedAction,
+        fromActions.saveDatasetCompleteAction,
+        fromActions.saveDatasetFailedAction,
+        fromActions.addAttachmentCompleteAction,
+        fromActions.addAttachmentFailedAction,
+        fromActions.updateAttachmentCaptionCompleteAction,
+        fromActions.updateAttachmentCaptionFailedAction,
+        fromActions.removeAttachmentCompleteAction,
+        fromActions.removeAttachmentFailedAction
+      ),
+      switchMap(() => of(setLoadingStatusAction({ value: false })))
     )
   );
 

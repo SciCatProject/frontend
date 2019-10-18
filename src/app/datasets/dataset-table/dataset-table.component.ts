@@ -32,7 +32,6 @@ import {
 import {
   getDatasets,
   getDatasetsPerPage,
-  getIsLoading,
   getPage,
   getSelectedDatasets,
   getTotalSets,
@@ -67,7 +66,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   currentPage$ = this.store.pipe(select(getPage));
   datasetsPerPage$ = this.store.pipe(select(getDatasetsPerPage));
   datasetCount$ = this.store.select(getTotalSets);
-  loading$ = this.store.pipe(select(getIsLoading));
 
   datasetsSubscription: Subscription;
   datasetPids: string[] = [];

@@ -22,8 +22,7 @@ import {
   getCurrentOrigDatablocks,
   getCurrentDatablocks,
   getCurrentAttachments,
-  getPublicViewMode,
-  getIsLoading
+  getPublicViewMode
 } from "state-management/selectors/datasets.selectors";
 import {
   getIsAdmin,
@@ -58,7 +57,6 @@ export class DatasetDetailsDashboardComponent
   datablocks$ = this.store.pipe(select(getCurrentDatablocks));
   attachments$ = this.store.pipe(select(getCurrentAttachments));
   isAdmin$ = this.store.pipe(select(getIsAdmin));
-  loading$ = this.store.pipe(select(getIsLoading));
   jwt$: Observable<any>;
 
   dataset: RawDataset | DerivedDataset;

@@ -1,11 +1,6 @@
 import * as fromDatasets from "./datasets.reducer";
 import * as fromActions from "../actions/datasets.actions";
-import {
-  Dataset,
-  DatasetInterface,
-  Attachment,
-  RawDataset
-} from "shared/sdk/models";
+import { Dataset, DatasetInterface, Attachment } from "shared/sdk/models";
 import {
   FacetCounts,
   DatasetState
@@ -30,7 +25,6 @@ const initialDatasetState: DatasetState = {
   facetCounts: {},
   totalCount: 0,
 
-  isLoading: true,
   hasPrefilledFilters: false,
 
   searchTerms: "run",
@@ -60,46 +54,18 @@ const initialDatasetState: DatasetState = {
 };
 
 describe("DatasetsReducer", () => {
-  describe("on fetchDatasetsAction", () => {
-    it("should set isLoading to true", () => {
-      const action = fromActions.fetchDatasetsAction();
-      const state = fromDatasets.datasetsReducer(initialDatasetState, action);
-
-      expect(state.isLoading).toEqual(true);
-    });
-  });
-
   describe("on fetchDatasetsCompleteAction", () => {
-    it("should set datasets property and set isLoading to false", () => {
+    it("should set datasets property", () => {
       const datasets = [dataset];
       const action = fromActions.fetchDatasetsCompleteAction({ datasets });
       const state = fromDatasets.datasetsReducer(initialDatasetState, action);
 
       expect(state.datasets).toEqual(datasets);
-      expect(state.isLoading).toEqual(false);
-    });
-  });
-
-  describe("on fetchDatasetsFailedAction", () => {
-    it("should set isLoading to false", () => {
-      const action = fromActions.fetchDatasetsFailedAction();
-      const state = fromDatasets.datasetsReducer(initialDatasetState, action);
-
-      expect(state.isLoading).toEqual(false);
-    });
-  });
-
-  describe("on fetchFacetCountsAction", () => {
-    it("should set isLoading to true", () => {
-      const action = fromActions.fetchFacetCountsAction();
-      const state = fromDatasets.datasetsReducer(initialDatasetState, action);
-
-      expect(state.isLoading).toEqual(true);
     });
   });
 
   describe("on fetchFacetCountsCompleteAction", () => {
-    it("should set facetCounts and totalCount properties and set isLoading to false", () => {
+    it("should set facetCounts and totalCount properties", () => {
       const facetCounts: FacetCounts = {};
       const allCounts = 0;
       const action = fromActions.fetchFacetCountsCompleteAction({
@@ -110,45 +76,15 @@ describe("DatasetsReducer", () => {
 
       expect(state.facetCounts).toEqual(facetCounts);
       expect(state.totalCount).toEqual(allCounts);
-      expect(state.isLoading).toEqual(false);
-    });
-  });
-
-  describe("on fetchFacetCountsFailedAction", () => {
-    it("should set isLoading to false", () => {
-      const action = fromActions.fetchFacetCountsFailedAction();
-      const state = fromDatasets.datasetsReducer(initialDatasetState, action);
-
-      expect(state.isLoading).toEqual(false);
-    });
-  });
-
-  describe("on fetchDatasetAction", () => {
-    it("should set isLoading to true", () => {
-      const pid = "testPid";
-      const action = fromActions.fetchDatasetAction({ pid });
-      const state = fromDatasets.datasetsReducer(initialDatasetState, action);
-
-      expect(state.isLoading).toEqual(true);
     });
   });
 
   describe("on fetchDatasetCompleteAction", () => {
-    it("should set currentSet property and set isLoading to false", () => {
+    it("should set currentSet property", () => {
       const action = fromActions.fetchDatasetCompleteAction({ dataset });
       const state = fromDatasets.datasetsReducer(initialDatasetState, action);
 
       expect(state.currentSet).toEqual(dataset);
-      expect(state.isLoading).toEqual(false);
-    });
-  });
-
-  describe("on fetchDatasetFailedAction", () => {
-    it("should set isLoading to false", () => {
-      const action = fromActions.fetchDatasetFailedAction();
-      const state = fromDatasets.datasetsReducer(initialDatasetState, action);
-
-      expect(state.isLoading).toEqual(false);
     });
   });
 
@@ -204,87 +140,27 @@ describe("DatasetsReducer", () => {
     });
   });
 
-  describe("on saveDatasetAction", () => {
-    it("should set isLoading to true", () => {
-      const rawDataset = new RawDataset();
-      const metadata = {};
-      const action = fromActions.saveDatasetAction({
-        dataset: rawDataset,
-        metadata
-      });
-      const state = fromDatasets.datasetsReducer(initialDatasetState, action);
-
-      expect(state.isLoading).toEqual(true);
-    });
-  });
-
   describe("on saveDatasetCompleteAction", () => {
-    it("should set currentSet property and set isLoading to false", () => {
+    it("should set currentSet property", () => {
       const action = fromActions.saveDatasetCompleteAction({ dataset });
       const state = fromDatasets.datasetsReducer(initialDatasetState, action);
 
       expect(state.currentSet).toEqual(dataset);
-      expect(state.isLoading).toEqual(false);
-    });
-  });
-
-  describe("on saveDatasetFailedAction", () => {
-    it("should set isLoading to false", () => {
-      const action = fromActions.saveDatasetFailedAction();
-      const state = fromDatasets.datasetsReducer(initialDatasetState, action);
-
-      expect(state.isLoading).toEqual(false);
-    });
-  });
-
-  describe("on addAttachmentAction", () => {
-    it("should set isLoading to true", () => {
-      const attachment = new Attachment();
-      const action = fromActions.addAttachmentAction({ attachment });
-      const state = fromDatasets.datasetsReducer(initialDatasetState, action);
-
-      expect(state.isLoading).toEqual(true);
     });
   });
 
   describe("on addAttachmentCompleteAction", () => {
-    it("should add attachment to currentSet property and set isLoading to false", () => {
+    it("should add attachment to currentSet property", () => {
       const attachment = new Attachment();
       const action = fromActions.addAttachmentCompleteAction({ attachment });
       const state = fromDatasets.datasetsReducer(initialDatasetState, action);
 
       expect(state.currentSet.attachments).toContain(attachment);
-      expect(state.isLoading).toEqual(false);
-    });
-  });
-
-  describe("on addAttachmentFailedAction", () => {
-    it("should set isLoading to false", () => {
-      const action = fromActions.addAttachmentFailedAction();
-      const state = fromDatasets.datasetsReducer(initialDatasetState, action);
-
-      expect(state.isLoading).toEqual(false);
-    });
-  });
-
-  describe("on updateAttachmentCaptionAction", () => {
-    it("should set isLoading to true", () => {
-      const datasetId = "testPid";
-      const attachmentId = "testId";
-      const caption = "test";
-      const action = fromActions.updateAttachmentCaptionAction({
-        datasetId,
-        attachmentId,
-        caption
-      });
-      const state = fromDatasets.datasetsReducer(initialDatasetState, action);
-
-      expect(state.isLoading).toEqual(true);
     });
   });
 
   describe("on updateAttachmentCaptionCompleteAction", () => {
-    it("should add new caption to an attachment and set isLoading to false", () => {
+    it("should add new caption to an attachment", () => {
       const attachment = new Attachment();
       const action = fromActions.updateAttachmentCaptionCompleteAction({
         attachment
@@ -292,41 +168,11 @@ describe("DatasetsReducer", () => {
       const state = fromDatasets.datasetsReducer(initialDatasetState, action);
 
       expect(state.currentSet.attachments).toContain(attachment);
-      expect(state.isLoading).toEqual(false);
-    });
-  });
-
-  describe("on updateAttachmentCaptionFailedAction", () => {
-    it("should set isLoading to false", () => {
-      const action = fromActions.updateAttachmentCaptionFailedAction();
-      const state = fromDatasets.datasetsReducer(initialDatasetState, action);
-
-      expect(state.isLoading).toEqual(false);
-    });
-  });
-
-  describe("on removeAttachmentAction", () => {
-    it("should set isLoading to true", () => {
-      const datasetId = "testPid";
-      const attachmentId = "testId";
-
-      initialDatasetState.currentSet.pid = datasetId;
-      const attachment = new Attachment();
-      attachment.id = attachmentId;
-      initialDatasetState.currentSet.attachments = [attachment];
-
-      const action = fromActions.removeAttachmentAction({
-        datasetId,
-        attachmentId
-      });
-      const state = fromDatasets.datasetsReducer(initialDatasetState, action);
-
-      expect(state.isLoading).toEqual(true);
     });
   });
 
   describe("on removeAttachmentCompleteAction", () => {
-    it("should add attachment to currentSet property and set isLoading to false", () => {
+    it("should add attachment to currentSet property", () => {
       initialDatasetState.currentSet.pid = "testPid";
       const attachment = new Attachment();
       const attachmentId = "testId";
@@ -339,16 +185,6 @@ describe("DatasetsReducer", () => {
       const state = fromDatasets.datasetsReducer(initialDatasetState, action);
 
       expect(state.currentSet.attachments).toEqual([]);
-      expect(state.isLoading).toEqual(false);
-    });
-  });
-
-  describe("on removeAttachmentFailedAction", () => {
-    it("should set isLoading to false", () => {
-      const action = fromActions.removeAttachmentFailedAction();
-      const state = fromDatasets.datasetsReducer(initialDatasetState, action);
-
-      expect(state.isLoading).toEqual(false);
     });
   });
 
@@ -430,7 +266,7 @@ describe("DatasetsReducer", () => {
   });
 
   describe("on setArchiveViewModeAction", () => {
-    it("should set mode to an empty object, set modetoggle, set skip to 0 and isLoading to true", () => {
+    it("should set mode to an empty object, set modetoggle and set skip to 0", () => {
       const modeToggle = ArchViewMode.all;
 
       const action = fromActions.setArchiveViewModeAction({ modeToggle });
@@ -439,7 +275,6 @@ describe("DatasetsReducer", () => {
       expect(state.filters.mode).toEqual({});
       expect(state.filters.modeToggle).toEqual(modeToggle);
       expect(state.filters.skip).toEqual(0);
-      expect(state.isLoading).toEqual(true);
     });
   });
 
