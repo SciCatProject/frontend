@@ -9,7 +9,8 @@ import { of } from "rxjs";
 import { MessageType } from "state-management/models";
 import {
   showMessageAction,
-  setLoadingStatusAction
+  loadingAction,
+  loadingCompleteAction
 } from "state-management/actions/user.actions";
 
 @Injectable()
@@ -106,7 +107,7 @@ export class JobEffects {
     )
   );
 
-  isLoading$ = createEffect(() =>
+  loading$ = createEffect(() =>
     this.actions$.pipe(
       ofType(
         fromActions.fetchJobsAction,
@@ -114,11 +115,11 @@ export class JobEffects {
         fromActions.fetchJobAction,
         fromActions.submitJobAction
       ),
-      switchMap(() => of(setLoadingStatusAction({ value: true })))
+      switchMap(() => of(loadingAction()))
     )
   );
 
-  isNotLoading$ = createEffect(() =>
+  loadingComplete$ = createEffect(() =>
     this.actions$.pipe(
       ofType(
         fromActions.fetchJobsCompleteAction,
@@ -130,7 +131,7 @@ export class JobEffects {
         fromActions.submitJobCompleteAction,
         fromActions.submitJobFailedAction
       ),
-      switchMap(() => of(setLoadingStatusAction({ value: false })))
+      switchMap(() => of(loadingCompleteAction()))
     )
   );
 

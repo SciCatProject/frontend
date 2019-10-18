@@ -16,7 +16,10 @@ import {
 } from "rxjs/operators";
 import { of } from "rxjs";
 import { getProfile } from "state-management/selectors/user.selectors";
-import { setLoadingStatusAction } from "state-management/actions/user.actions";
+import {
+  loadingAction,
+  loadingCompleteAction
+} from "state-management/actions/user.actions";
 
 @Injectable()
 export class PolicyEffects {
@@ -137,7 +140,7 @@ export class PolicyEffects {
         fromActions.fetchEditableCountAction,
         fromActions.submitPolicyAction
       ),
-      switchMap(() => of(setLoadingStatusAction({ value: true })))
+      switchMap(() => of(loadingAction()))
     )
   );
 
@@ -155,7 +158,7 @@ export class PolicyEffects {
         fromActions.submitPolicyCompleteAction,
         fromActions.submitPolicyFailedAction
       ),
-      switchMap(() => of(setLoadingStatusAction({ value: false })))
+      switchMap(() => of(loadingCompleteAction()))
     )
   );
 

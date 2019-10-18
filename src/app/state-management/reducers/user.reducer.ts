@@ -75,9 +75,13 @@ const reducer = createReducer(
     settings
   })),
 
-  on(fromActions.setLoadingStatusAction, (state, { value }) => ({
+  on(fromActions.loadingAction, state => ({
     ...state,
-    isLoading: value
+    isLoading: true
+  })),
+  on(fromActions.loadingCompleteAction, state => ({
+    ...state,
+    isLoading: false
   }))
 );
 

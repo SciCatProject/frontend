@@ -100,7 +100,5 @@ export const saveSettingsAction = createAction(
   props<{ settings: Settings }>()
 );
 
-export const setLoadingStatusAction = createAction(
-  "[User] Set Loading Status",
-  props<{ value: boolean }>()
-);
+export const loadingAction = createAction("[User] Loading");
+export const loadingCompleteAction = createAction("[User] Loading Complete");

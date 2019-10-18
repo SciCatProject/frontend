@@ -300,13 +300,20 @@ describe("User Aactions", () => {
     });
   });
 
-  describe("setLoadingStatus", () => {
+  describe("loadingAction", () => {
     it("should create an action", () => {
-      const value = true;
-      const action = fromActions.setLoadingStatusAction({ value });
+      const action = fromActions.loadingAction();
       expect({ ...action }).toEqual({
-        type: "[User] Set Loading Status",
-        value
+        type: "[User] Loading"
+      });
+    });
+  });
+
+  describe("loadingCompleteAction", () => {
+    it("should create an action", () => {
+      const action = fromActions.loadingCompleteAction();
+      expect({ ...action }).toEqual({
+        type: "[User] Loading Complete"
       });
     });
   });

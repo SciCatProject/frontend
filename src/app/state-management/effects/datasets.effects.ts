@@ -21,7 +21,8 @@ import { of } from "rxjs";
 import { getCurrentUser } from "state-management/selectors/user.selectors";
 import {
   logoutCompleteAction,
-  setLoadingStatusAction
+  loadingAction,
+  loadingCompleteAction
 } from "state-management/actions/user.actions";
 
 @Injectable()
@@ -187,7 +188,7 @@ export class DatasetEffects {
     )
   );
 
-  isLoading$ = createEffect(() =>
+  loading$ = createEffect(() =>
     this.actions$.pipe(
       ofType(
         fromActions.fetchDatasetsAction,
@@ -198,11 +199,11 @@ export class DatasetEffects {
         fromActions.updateAttachmentCaptionAction,
         fromActions.removeAttachmentAction
       ),
-      switchMap(() => of(setLoadingStatusAction({ value: true })))
+      switchMap(() => of(loadingAction()))
     )
   );
 
-  isNotLoading$ = createEffect(() =>
+  loadingComplete$ = createEffect(() =>
     this.actions$.pipe(
       ofType(
         fromActions.fetchDatasetsCompleteAction,
@@ -220,7 +221,7 @@ export class DatasetEffects {
         fromActions.removeAttachmentCompleteAction,
         fromActions.removeAttachmentFailedAction
       ),
-      switchMap(() => of(setLoadingStatusAction({ value: false })))
+      switchMap(() => of(loadingCompleteAction()))
     )
   );
 

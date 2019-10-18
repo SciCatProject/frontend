@@ -9,7 +9,8 @@ import * as fromActions from "state-management/actions/jobs.actions";
 import { hot, cold } from "jasmine-marbles";
 import {
   showMessageAction,
-  setLoadingStatusAction
+  loadingAction,
+  loadingCompleteAction
 } from "state-management/actions/user.actions";
 import { MessageType } from "state-management/models";
 
@@ -276,166 +277,154 @@ describe("JobEffects", () => {
     });
   });
 
-  describe("isLoading$", () => {
+  describe("loading$", () => {
     describe("ofType fetchJobsAction", () => {
-      it("should dispatch a setLoadingStatusAction with value true", () => {
-        const value = true;
+      it("should dispatch a loadingAction", () => {
         const action = fromActions.fetchJobsAction();
-        const outcome = setLoadingStatusAction({ value });
+        const outcome = loadingAction();
 
         actions = hot("-a", { a: action });
 
         const expected = cold("-b", { b: outcome });
-        expect(effects.isLoading$).toBeObservable(expected);
+        expect(effects.loading$).toBeObservable(expected);
       });
     });
 
     describe("ofType fetchCountAction", () => {
-      it("should dispatch a setLoadingStatusAction with value true", () => {
-        const value = true;
+      it("should dispatch a loadingAction", () => {
         const action = fromActions.fetchCountAction();
-        const outcome = setLoadingStatusAction({ value });
+        const outcome = loadingAction();
 
         actions = hot("-a", { a: action });
 
         const expected = cold("-b", { b: outcome });
-        expect(effects.isLoading$).toBeObservable(expected);
+        expect(effects.loading$).toBeObservable(expected);
       });
     });
 
     describe("ofType fetchJobAction", () => {
-      it("should dispatch a setLoadingStatusAction with value true", () => {
+      it("should dispatch a loadingAction", () => {
         const jobId = "testId";
-        const value = true;
         const action = fromActions.fetchJobAction({ jobId });
-        const outcome = setLoadingStatusAction({ value });
+        const outcome = loadingAction();
 
         actions = hot("-a", { a: action });
 
         const expected = cold("-b", { b: outcome });
-        expect(effects.isLoading$).toBeObservable(expected);
+        expect(effects.loading$).toBeObservable(expected);
       });
     });
 
     describe("ofType submitJobAction", () => {
-      it("should dispatch a setLoadingStatusAction with value true", () => {
-        const value = true;
+      it("should dispatch a loadingAction", () => {
         const action = fromActions.submitJobAction({ job });
-        const outcome = setLoadingStatusAction({ value });
+        const outcome = loadingAction();
 
         actions = hot("-a", { a: action });
 
         const expected = cold("-b", { b: outcome });
-        expect(effects.isLoading$).toBeObservable(expected);
+        expect(effects.loading$).toBeObservable(expected);
       });
     });
   });
 
-  describe("isNotLoading$", () => {
+  describe("loadingComplete$", () => {
     describe("ofType fetchJobsCompleteAction", () => {
-      it("should dispatch a setLoadingStatusAction with value false", () => {
+      it("should dispatch a loadingCompleteAction", () => {
         const jobs = [job];
-        const value = false;
         const action = fromActions.fetchJobsCompleteAction({ jobs });
-        const outcome = setLoadingStatusAction({ value });
+        const outcome = loadingCompleteAction();
 
         actions = hot("-a", { a: action });
 
         const expected = cold("-b", { b: outcome });
-        expect(effects.isNotLoading$).toBeObservable(expected);
+        expect(effects.loadingComplete$).toBeObservable(expected);
       });
     });
 
     describe("ofType fetchJobsFailedAction", () => {
-      it("should dispatch a setLoadingStatusAction with value false", () => {
-        const value = false;
+      it("should dispatch a loadingCompleteAction", () => {
         const action = fromActions.fetchJobsFailedAction();
-        const outcome = setLoadingStatusAction({ value });
+        const outcome = loadingCompleteAction();
 
         actions = hot("-a", { a: action });
 
         const expected = cold("-b", { b: outcome });
-        expect(effects.isNotLoading$).toBeObservable(expected);
+        expect(effects.loadingComplete$).toBeObservable(expected);
       });
     });
 
     describe("ofType fetchCountCompleteAction", () => {
-      it("should dispatch a setLoadingStatusAction with value false", () => {
+      it("should dispatch a loadingCompleteAction", () => {
         const count = 100;
-        const value = false;
         const action = fromActions.fetchCountCompleteAction({ count });
-        const outcome = setLoadingStatusAction({ value });
+        const outcome = loadingCompleteAction();
 
         actions = hot("-a", { a: action });
 
         const expected = cold("-b", { b: outcome });
-        expect(effects.isNotLoading$).toBeObservable(expected);
+        expect(effects.loadingComplete$).toBeObservable(expected);
       });
     });
 
     describe("ofType fetchCountFailedAction", () => {
-      it("should dispatch a setLoadingStatusAction with value false", () => {
-        const value = false;
+      it("should dispatch a loadingCompleteAction", () => {
         const action = fromActions.fetchCountFailedAction();
-        const outcome = setLoadingStatusAction({ value });
+        const outcome = loadingCompleteAction();
 
         actions = hot("-a", { a: action });
 
         const expected = cold("-b", { b: outcome });
-        expect(effects.isNotLoading$).toBeObservable(expected);
+        expect(effects.loadingComplete$).toBeObservable(expected);
       });
     });
 
     describe("ofType fetchJobCompleteAction", () => {
-      it("should dispatch a setLoadingStatusAction with value false", () => {
-        const value = false;
+      it("sshould dispatch a loadingCompleteAction", () => {
         const action = fromActions.fetchJobCompleteAction({ job });
-        const outcome = setLoadingStatusAction({ value });
+        const outcome = loadingCompleteAction();
 
         actions = hot("-a", { a: action });
 
         const expected = cold("-b", { b: outcome });
-        expect(effects.isNotLoading$).toBeObservable(expected);
+        expect(effects.loadingComplete$).toBeObservable(expected);
       });
     });
 
     describe("ofType fetchJobFailedAction", () => {
-      it("should dispatch a setLoadingStatusAction with value false", () => {
-        const value = false;
+      it("should dispatch a loadingCompleteAction", () => {
         const action = fromActions.fetchJobFailedAction();
-        const outcome = setLoadingStatusAction({ value });
+        const outcome = loadingCompleteAction();
 
         actions = hot("-a", { a: action });
 
         const expected = cold("-b", { b: outcome });
-        expect(effects.isNotLoading$).toBeObservable(expected);
+        expect(effects.loadingComplete$).toBeObservable(expected);
       });
     });
 
     describe("ofType submitJobCompleteAction", () => {
-      it("should dispatch a setLoadingStatusAction with value false", () => {
-        const value = false;
+      it("should dispatch a loadingCompleteAction", () => {
         const action = fromActions.submitJobCompleteAction({ job });
-        const outcome = setLoadingStatusAction({ value });
+        const outcome = loadingCompleteAction();
 
         actions = hot("-a", { a: action });
 
         const expected = cold("-b", { b: outcome });
-        expect(effects.isNotLoading$).toBeObservable(expected);
+        expect(effects.loadingComplete$).toBeObservable(expected);
       });
     });
 
     describe("ofType submitJobFailedAction", () => {
-      it("should dispatch a setLoadingStatusAction with value false", () => {
+      it("should dispatch a loadingCompleteAction", () => {
         const err = new Error("test");
-        const value = false;
         const action = fromActions.submitJobFailedAction({ err });
-        const outcome = setLoadingStatusAction({ value });
+        const outcome = loadingCompleteAction();
 
         actions = hot("-a", { a: action });
 
         const expected = cold("-b", { b: outcome });
-        expect(effects.isNotLoading$).toBeObservable(expected);
+        expect(effects.loadingComplete$).toBeObservable(expected);
       });
     });
   });

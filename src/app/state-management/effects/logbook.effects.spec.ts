@@ -6,7 +6,10 @@ import { LogbookEffects } from "./logbooks.effects";
 import { LogbookApi, Logbook } from "shared/sdk";
 import * as fromActions from "state-management/actions/logbooks.actions";
 import { LogbookFilters } from "state-management/models";
-import { setLoadingStatusAction } from "state-management/actions/user.actions";
+import {
+  loadingAction,
+  loadingCompleteAction
+} from "state-management/actions/user.actions";
 
 const logbook = new Logbook();
 
@@ -126,36 +129,34 @@ describe("LogbookEffects", () => {
     });
   });
 
-  describe("isLoading$", () => {
+  describe("loading$", () => {
     describe("ofType fetchLogbooksAction", () => {
-      it("should dispatch a setLoadingStatusAction with value true", () => {
-        const value = true;
+      it("should dispatch a loadingAction", () => {
         const action = fromActions.fetchLogbooksAction();
-        const outcome = setLoadingStatusAction({ value });
+        const outcome = loadingAction();
 
         actions = hot("-a", { a: action });
 
         const expected = cold("-b", { b: outcome });
-        expect(effects.isLoading$).toBeObservable(expected);
+        expect(effects.loading$).toBeObservable(expected);
       });
     });
 
     describe("ofType fetchLogbookAction", () => {
-      it("should dispatch a setLoadingStatusAction with value true", () => {
+      it("should dispatch a loadingAction", () => {
         const name = "test";
-        const value = true;
         const action = fromActions.fetchLogbookAction({ name });
-        const outcome = setLoadingStatusAction({ value });
+        const outcome = loadingAction();
 
         actions = hot("-a", { a: action });
 
         const expected = cold("-b", { b: outcome });
-        expect(effects.isLoading$).toBeObservable(expected);
+        expect(effects.loading$).toBeObservable(expected);
       });
     });
 
     describe("ofType fetchFilteredEntriesAction", () => {
-      it("should dispatch a setLoadingStatusAction with value true", () => {
+      it("should dispatch a loadingAction", () => {
         const name = "test";
         const filters: LogbookFilters = {
           textSearch: "test",
@@ -163,100 +164,93 @@ describe("LogbookEffects", () => {
           showImages: true,
           showUserMessages: true
         };
-        const value = true;
         const action = fromActions.fetchFilteredEntriesAction({
           name,
           filters
         });
-        const outcome = setLoadingStatusAction({ value });
+        const outcome = loadingAction();
 
         actions = hot("-a", { a: action });
 
         const expected = cold("-b", { b: outcome });
-        expect(effects.isLoading$).toBeObservable(expected);
+        expect(effects.loading$).toBeObservable(expected);
       });
     });
   });
 
-  describe("isNotLoading$", () => {
+  describe("loadingComplete$", () => {
     describe("ofType fetchLogbooksCompleteAction", () => {
-      it("should dispatch a setLoadingStatusAction with value false", () => {
+      it("should dispatch a loadingCompleteAction", () => {
         const logbooks = [logbook];
-        const value = false;
         const action = fromActions.fetchLogbooksCompleteAction({ logbooks });
-        const outcome = setLoadingStatusAction({ value });
+        const outcome = loadingCompleteAction();
 
         actions = hot("-a", { a: action });
 
         const expected = cold("-b", { b: outcome });
-        expect(effects.isNotLoading$).toBeObservable(expected);
+        expect(effects.loadingComplete$).toBeObservable(expected);
       });
     });
 
     describe("ofType fetchLogbooksFailedAction", () => {
-      it("should dispatch a setLoadingStatusAction with value false", () => {
-        const value = false;
+      it("should dispatch a loadingCompleteAction", () => {
         const action = fromActions.fetchLogbooksFailedAction();
-        const outcome = setLoadingStatusAction({ value });
+        const outcome = loadingCompleteAction();
 
         actions = hot("-a", { a: action });
 
         const expected = cold("-b", { b: outcome });
-        expect(effects.isNotLoading$).toBeObservable(expected);
+        expect(effects.loadingComplete$).toBeObservable(expected);
       });
     });
 
     describe("ofType fetchLogbookCompleteAction", () => {
-      it("should dispatch a setLoadingStatusAction with value false", () => {
-        const value = false;
+      it("should dispatch a loadingCompleteAction", () => {
         const action = fromActions.fetchLogbookCompleteAction({ logbook });
-        const outcome = setLoadingStatusAction({ value });
+        const outcome = loadingCompleteAction();
 
         actions = hot("-a", { a: action });
 
         const expected = cold("-b", { b: outcome });
-        expect(effects.isNotLoading$).toBeObservable(expected);
+        expect(effects.loadingComplete$).toBeObservable(expected);
       });
     });
 
     describe("ofType fetchLogbookFailedAction", () => {
-      it("should dispatch a setLoadingStatusAction with value false", () => {
-        const value = false;
+      it("should dispatch a loadingCompleteAction", () => {
         const action = fromActions.fetchLogbookFailedAction();
-        const outcome = setLoadingStatusAction({ value });
+        const outcome = loadingCompleteAction();
 
         actions = hot("-a", { a: action });
 
         const expected = cold("-b", { b: outcome });
-        expect(effects.isNotLoading$).toBeObservable(expected);
+        expect(effects.loadingComplete$).toBeObservable(expected);
       });
     });
 
     describe("ofType fetchFilteredEntriesCompleteAction", () => {
-      it("should dispatch a setLoadingStatusAction with value false", () => {
-        const value = false;
+      it("should dispatch a loadingCompleteAction", () => {
         const action = fromActions.fetchFilteredEntriesCompleteAction({
           logbook
         });
-        const outcome = setLoadingStatusAction({ value });
+        const outcome = loadingCompleteAction();
 
         actions = hot("-a", { a: action });
 
         const expected = cold("-b", { b: outcome });
-        expect(effects.isNotLoading$).toBeObservable(expected);
+        expect(effects.loadingComplete$).toBeObservable(expected);
       });
     });
 
     describe("ofType fetchFilteredEntriesFailedAction", () => {
-      it("should dispatch a setLoadingStatusAction with value false", () => {
-        const value = false;
+      it("should dispatch a loadingCompleteAction", () => {
         const action = fromActions.fetchFilteredEntriesFailedAction();
-        const outcome = setLoadingStatusAction({ value });
+        const outcome = loadingCompleteAction();
 
         actions = hot("-a", { a: action });
 
         const expected = cold("-b", { b: outcome });
-        expect(effects.isNotLoading$).toBeObservable(expected);
+        expect(effects.loadingComplete$).toBeObservable(expected);
       });
     });
   });

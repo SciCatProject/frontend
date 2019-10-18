@@ -145,13 +145,21 @@ describe("UserReducer", () => {
     });
   });
 
-  describe("on setLoadingStatusAction", () => {
-    it("should set isLoading", () => {
-      const value = true;
-      const action = fromActions.setLoadingStatusAction({ value });
+  describe("on loadingAction", () => {
+    it("should set isLoading to true", () => {
+      const action = fromActions.loadingAction();
       const state = userReducer(initialUserState, action);
 
-      expect(state.isLoading).toEqual(value);
+      expect(state.isLoading).toEqual(true);
+    });
+  });
+
+  describe("on loadingCompleteAction", () => {
+    it("should set isLoading to false", () => {
+      const action = fromActions.loadingCompleteAction();
+      const state = userReducer(initialUserState, action);
+
+      expect(state.isLoading).toEqual(false);
     });
   });
 });

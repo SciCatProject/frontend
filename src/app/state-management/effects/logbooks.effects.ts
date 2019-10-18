@@ -5,7 +5,10 @@ import * as fromActions from "state-management/actions/logbooks.actions";
 import { mergeMap, catchError, map } from "rxjs/operators";
 import { of } from "rxjs";
 import * as rison from "rison";
-import { setLoadingStatusAction } from "state-management/actions/user.actions";
+import {
+  loadingAction,
+  loadingCompleteAction
+} from "state-management/actions/user.actions";
 
 @Injectable()
 export class LogbookEffects {
@@ -50,18 +53,18 @@ export class LogbookEffects {
     )
   );
 
-  isLoading$ = createEffect(() =>
+  loading$ = createEffect(() =>
     this.actions$.pipe(
       ofType(
         fromActions.fetchLogbooksAction,
         fromActions.fetchLogbookAction,
         fromActions.fetchFilteredEntriesAction
       ),
-      mergeMap(() => of(setLoadingStatusAction({ value: true })))
+      mergeMap(() => of(loadingAction()))
     )
   );
 
-  isNotLoading$ = createEffect(() =>
+  loadingComplete$ = createEffect(() =>
     this.actions$.pipe(
       ofType(
         fromActions.fetchLogbooksCompleteAction,
@@ -71,7 +74,7 @@ export class LogbookEffects {
         fromActions.fetchFilteredEntriesCompleteAction,
         fromActions.fetchFilteredEntriesFailedAction
       ),
-      mergeMap(() => of(setLoadingStatusAction({ value: false })))
+      mergeMap(() => of(loadingCompleteAction()))
     )
   );
 
