@@ -131,7 +131,7 @@ export class PolicyEffects {
     )
   );
 
-  isLoading$ = createEffect(() =>
+  loading$ = createEffect(() =>
     this.actions$.pipe(
       ofType(
         fromActions.fetchPoliciesAction,
@@ -144,7 +144,7 @@ export class PolicyEffects {
     )
   );
 
-  isNotLoading$ = createEffect(() =>
+  loadingComplete$ = createEffect(() =>
     this.actions$.pipe(
       ofType(
         fromActions.fetchPoliciesCompleteAction,

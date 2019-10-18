@@ -352,7 +352,7 @@ describe("PolicyEffects", () => {
     });
   });
 
-  describe("isLoading$", () => {
+  describe("loading$", () => {
     describe("ofType fetchPoliciesAction", () => {
       it("should dispatch a loadingAction", () => {
         const action = fromActions.fetchPoliciesAction();
@@ -361,7 +361,7 @@ describe("PolicyEffects", () => {
         actions = hot("-a", { a: action });
 
         const expected = cold("-b", { b: outcome });
-        expect(effects.isLoading$).toBeObservable(expected);
+        expect(effects.loading$).toBeObservable(expected);
       });
     });
 
@@ -373,7 +373,7 @@ describe("PolicyEffects", () => {
         actions = hot("-a", { a: action });
 
         const expected = cold("-b", { b: outcome });
-        expect(effects.isLoading$).toBeObservable(expected);
+        expect(effects.loading$).toBeObservable(expected);
       });
     });
 
@@ -385,7 +385,7 @@ describe("PolicyEffects", () => {
         actions = hot("-a", { a: action });
 
         const expected = cold("-b", { b: outcome });
-        expect(effects.isLoading$).toBeObservable(expected);
+        expect(effects.loading$).toBeObservable(expected);
       });
     });
 
@@ -397,7 +397,7 @@ describe("PolicyEffects", () => {
         actions = hot("-a", { a: action });
 
         const expected = cold("-b", { b: outcome });
-        expect(effects.isLoading$).toBeObservable(expected);
+        expect(effects.loading$).toBeObservable(expected);
       });
     });
 
@@ -410,12 +410,12 @@ describe("PolicyEffects", () => {
         actions = hot("-a", { a: action });
 
         const expected = cold("-b", { b: outcome });
-        expect(effects.isLoading$).toBeObservable(expected);
+        expect(effects.loading$).toBeObservable(expected);
       });
     });
   });
 
-  describe("isNotLoading$", () => {
+  describe("loadingComplete$", () => {
     describe("ofType fetchPoliciesCompleteAction", () => {
       it("should dispatch a loadingCompleteAction", () => {
         const policies = [policy];
@@ -425,7 +425,7 @@ describe("PolicyEffects", () => {
         actions = hot("-a", { a: action });
 
         const expected = cold("-b", { b: outcome });
-        expect(effects.isNotLoading$).toBeObservable(expected);
+        expect(effects.loadingComplete$).toBeObservable(expected);
       });
     });
 
@@ -437,7 +437,7 @@ describe("PolicyEffects", () => {
         actions = hot("-a", { a: action });
 
         const expected = cold("-b", { b: outcome });
-        expect(effects.isNotLoading$).toBeObservable(expected);
+        expect(effects.loadingComplete$).toBeObservable(expected);
       });
     });
 
@@ -450,7 +450,7 @@ describe("PolicyEffects", () => {
         actions = hot("-a", { a: action });
 
         const expected = cold("-b", { b: outcome });
-        expect(effects.isNotLoading$).toBeObservable(expected);
+        expect(effects.loadingComplete$).toBeObservable(expected);
       });
     });
 
@@ -462,7 +462,7 @@ describe("PolicyEffects", () => {
         actions = hot("-a", { a: action });
 
         const expected = cold("-b", { b: outcome });
-        expect(effects.isNotLoading$).toBeObservable(expected);
+        expect(effects.loadingComplete$).toBeObservable(expected);
       });
     });
 
@@ -477,7 +477,7 @@ describe("PolicyEffects", () => {
         actions = hot("-a", { a: action });
 
         const expected = cold("-b", { b: outcome });
-        expect(effects.isNotLoading$).toBeObservable(expected);
+        expect(effects.loadingComplete$).toBeObservable(expected);
       });
     });
 
@@ -489,7 +489,7 @@ describe("PolicyEffects", () => {
         actions = hot("-a", { a: action });
 
         const expected = cold("-b", { b: outcome });
-        expect(effects.isNotLoading$).toBeObservable(expected);
+        expect(effects.loadingComplete$).toBeObservable(expected);
       });
     });
 
@@ -502,7 +502,7 @@ describe("PolicyEffects", () => {
         actions = hot("-a", { a: action });
 
         const expected = cold("-b", { b: outcome });
-        expect(effects.isNotLoading$).toBeObservable(expected);
+        expect(effects.loadingComplete$).toBeObservable(expected);
       });
     });
 
@@ -514,7 +514,7 @@ describe("PolicyEffects", () => {
         actions = hot("-a", { a: action });
 
         const expected = cold("-b", { b: outcome });
-        expect(effects.isNotLoading$).toBeObservable(expected);
+        expect(effects.loadingComplete$).toBeObservable(expected);
       });
     });
 
@@ -526,7 +526,7 @@ describe("PolicyEffects", () => {
         actions = hot("-a", { a: action });
 
         const expected = cold("-b", { b: outcome });
-        expect(effects.isNotLoading$).toBeObservable(expected);
+        expect(effects.loadingComplete$).toBeObservable(expected);
       });
     });
 
@@ -538,7 +538,7 @@ describe("PolicyEffects", () => {
         actions = hot("-a", { a: action });
 
         const expected = cold("-b", { b: outcome });
-        expect(effects.isNotLoading$).toBeObservable(expected);
+        expect(effects.loadingComplete$).toBeObservable(expected);
       });
     });
   });
