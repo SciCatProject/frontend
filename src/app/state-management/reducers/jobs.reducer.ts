@@ -4,49 +4,28 @@ import * as fromActions from "state-management/actions/jobs.actions";
 
 const reducer = createReducer(
   initialJobsState,
-  on(fromActions.fetchJobsAction, state => ({ ...state, isLoading: true })),
   on(fromActions.fetchJobsCompleteAction, (state, { jobs }) => ({
     ...state,
-    jobs,
-    isLoading: false
-  })),
-  on(fromActions.fetchJobsFailedAction, state => ({
-    ...state,
-    isLoading: false
+    jobs
   })),
 
-  on(fromActions.fetchCountAction, state => ({ ...state, isLoading: true })),
   on(fromActions.fetchCountCompleteAction, (state, { count }) => ({
     ...state,
-    isLoading: false,
     totalCount: count
   })),
-  on(fromActions.fetchCountFailedAction, state => ({
-    ...state,
-    isLoading: false
-  })),
 
-  on(fromActions.fetchJobAction, state => ({ ...state, isLoading: true })),
   on(fromActions.fetchJobCompleteAction, (state, { job }) => ({
     ...state,
-    currentJob: job,
-    isLoading: false
-  })),
-  on(fromActions.fetchJobFailedAction, state => ({
-    ...state,
-    isLoading: false
+    currentJob: job
   })),
 
-  on(fromActions.submitJobAction, state => ({ ...state, isLoading: true })),
   on(fromActions.submitJobCompleteAction, state => ({
     ...state,
-    submitError: undefined,
-    isLoading: false
+    submitError: undefined
   })),
   on(fromActions.submitJobFailedAction, (state, { err }) => ({
     ...state,
-    submitError: err,
-    isLoading: false
+    submitError: err
   })),
 
   on(fromActions.setJobViewModeAction, (state, { mode }) => ({

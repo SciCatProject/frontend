@@ -7,7 +7,10 @@ import * as fromActions from "state-management/actions/jobs.actions";
 import { withLatestFrom, map, switchMap, catchError } from "rxjs/operators";
 import { of } from "rxjs";
 import { MessageType } from "state-management/models";
-import { showMessageAction } from "state-management/actions/user.actions";
+import {
+  showMessageAction,
+  setLoadingStatusAction
+} from "state-management/actions/user.actions";
 
 @Injectable()
 export class JobEffects {
@@ -100,6 +103,34 @@ export class JobEffects {
         };
         return of(showMessageAction({ message }));
       })
+    )
+  );
+
+  isLoading$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(
+        fromActions.fetchJobsAction,
+        fromActions.fetchCountAction,
+        fromActions.fetchJobAction,
+        fromActions.submitJobAction
+      ),
+      switchMap(() => of(setLoadingStatusAction({ value: true })))
+    )
+  );
+
+  isNotLoading$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(
+        fromActions.fetchJobsCompleteAction,
+        fromActions.fetchJobsFailedAction,
+        fromActions.fetchCountCompleteAction,
+        fromActions.fetchCountFailedAction,
+        fromActions.fetchJobCompleteAction,
+        fromActions.fetchJobFailedAction,
+        fromActions.submitJobCompleteAction,
+        fromActions.submitJobFailedAction
+      ),
+      switchMap(() => of(setLoadingStatusAction({ value: false })))
     )
   );
 

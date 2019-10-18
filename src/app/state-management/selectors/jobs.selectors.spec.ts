@@ -24,7 +24,6 @@ const initialJobsState: JobsState = {
 
   totalCount: 0,
 
-  isLoading: false,
   submitError: undefined,
 
   filters: jobFilters
@@ -48,14 +47,6 @@ describe("Job Selectors", () => {
   describe("getJobsCount", () => {
     it("should get the total jobs count", () => {
       expect(fromSelectors.getJobsCount.projector(initialJobsState)).toEqual(0);
-    });
-  });
-
-  describe("getIsLoading", () => {
-    it("should get isLoading", () => {
-      expect(fromSelectors.getIsLoading.projector(initialJobsState)).toEqual(
-        false
-      );
     });
   });
 

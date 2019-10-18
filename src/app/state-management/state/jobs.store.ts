@@ -7,7 +7,6 @@ export interface JobsState {
 
   totalCount: number;
 
-  isLoading: boolean;
   submitError: Error;
 
   filters: JobFilters;
@@ -19,7 +18,6 @@ export const initialJobsState: JobsState = {
 
   totalCount: 0,
 
-  isLoading: false,
   submitError: undefined,
 
   filters: {
