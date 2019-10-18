@@ -13,7 +13,8 @@ import {
 import { Subscription } from "rxjs";
 import {
   getDisplayedColumns,
-  getConfigurableColumns
+  getConfigurableColumns,
+  getIsLoading
 } from "../../state-management/selectors/user.selectors";
 import { getSubmitError } from "state-management/selectors/jobs.selectors";
 import { select, Store } from "@ngrx/store";
@@ -66,6 +67,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   currentPage$ = this.store.pipe(select(getPage));
   datasetsPerPage$ = this.store.pipe(select(getDatasetsPerPage));
   datasetCount$ = this.store.select(getTotalSets);
+  loading$ = this.store.pipe(select(getIsLoading));
 
   datasetsSubscription: Subscription;
   datasetPids: string[] = [];
