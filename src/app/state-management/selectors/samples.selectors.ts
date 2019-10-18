@@ -33,11 +33,6 @@ export const getDatasetsCount = createSelector(
   state => state.datasetsCount
 );
 
-export const getIsLoading = createSelector(
-  getSampleState,
-  state => state.isLoading
-);
-
 export const getFilters = createSelector(
   getSampleState,
   state => state.samplefilters

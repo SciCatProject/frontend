@@ -8,8 +8,6 @@ export interface SampleState {
   samplesCount: number;
   datasetsCount: number;
 
-  isLoading: boolean;
-
   samplefilters: SampleFilters;
 
   datasetFilters: SampleFilters;
@@ -22,8 +20,6 @@ export const initialSampleState: SampleState = {
 
   samplesCount: 0,
   datasetsCount: 0,
-
-  isLoading: true,
 
   samplefilters: {
     text: "",
