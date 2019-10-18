@@ -86,7 +86,9 @@ export class UserSettingsComponent implements OnInit, OnDestroy {
 
     this.subscriptions.push(
       this.store.pipe(select(getCatamelToken)).subscribe(catamelToken => {
-        this.catamelToken = catamelToken.id;
+        if (catamelToken) {
+          this.catamelToken = catamelToken.id;
+        }
       })
     );
   }

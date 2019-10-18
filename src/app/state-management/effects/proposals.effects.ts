@@ -15,6 +15,10 @@ import {
   switchMap
 } from "rxjs/operators";
 import { of } from "rxjs";
+import {
+  loadingAction,
+  loadingCompleteAction
+} from "state-management/actions/user.actions";
 
 @Injectable()
 export class ProposalEffects {
@@ -179,6 +183,46 @@ export class ProposalEffects {
             catchError(() => of(fromActions.removeAttachmentFailedAction()))
           )
       )
+    )
+  );
+
+  loading$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(
+        fromActions.fetchProposalsAction,
+        fromActions.fetchCountAction,
+        fromActions.fetchProposalAction,
+        fromActions.fetchProposalDatasetsAction,
+        fromActions.fetchProposalDatasetsCountAction,
+        fromActions.addAttachmentAction,
+        fromActions.updateAttachmentCaptionAction,
+        fromActions.removeAttachmentAction
+      ),
+      switchMap(() => of(loadingAction()))
+    )
+  );
+
+  loadingComplete$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(
+        fromActions.fetchProposalsCompleteAction,
+        fromActions.fetchProposalsFailedAction,
+        fromActions.fetchCountCompleteAction,
+        fromActions.fetchCountFailedAction,
+        fromActions.fetchProposalCompleteAction,
+        fromActions.fetchProposalFailedAction,
+        fromActions.fetchProposalDatasetsCompleteAction,
+        fromActions.fetchProposalDatasetsFailedAction,
+        fromActions.fetchProposalDatasetsCountCompleteAction,
+        fromActions.fetchProposalDatasetsCountFailedAction,
+        fromActions.addAttachmentCompleteAction,
+        fromActions.addAttachmentFailedAction,
+        fromActions.updateAttachmentCaptionCompleteAction,
+        fromActions.updateAttachmentCaptionFailedAction,
+        fromActions.removeAttachmentCompleteAction,
+        fromActions.removeAttachmentFailedAction
+      ),
+      switchMap(() => of(loadingCompleteAction()))
     )
   );
 

@@ -7,84 +7,39 @@ import * as fromActions from "../actions/proposals.actions";
 
 const reducer = createReducer(
   initialProposalsState,
-  on(fromActions.fetchProposalsAction, state => ({
-    ...state,
-    isLoading: true
-  })),
+
   on(fromActions.fetchProposalsCompleteAction, (state, { proposals }) => ({
     ...state,
-    proposals,
-    isLoading: false
-  })),
-  on(fromActions.fetchProposalsFailedAction, state => ({
-    ...state,
-    isLoading: false
+    proposals
   })),
 
-  on(fromActions.fetchCountAction, state => ({ ...state, isLoading: true })),
   on(fromActions.fetchCountCompleteAction, (state, { count }) => ({
     ...state,
-    isLoading: false,
     proposalsCount: count
   })),
-  on(fromActions.fetchCountFailedAction, state => ({
-    ...state,
-    isLoading: false
-  })),
 
-  on(fromActions.fetchProposalAction, state => ({ ...state, isLoading: true })),
   on(fromActions.fetchProposalCompleteAction, (state, { proposal }) => ({
     ...state,
-    currentProposal: proposal,
-    isLoading: false
-  })),
-  on(fromActions.fetchProposalFailedAction, state => ({
-    ...state,
-    isLoading: false
+    currentProposal: proposal
   })),
 
-  on(fromActions.fetchProposalDatasetsAction, state => ({
-    ...state,
-    isLoading: true
-  })),
   on(
     fromActions.fetchProposalDatasetsCompleteAction,
-    (state, { datasets }) => ({ ...state, datasets, isLoading: false })
+    (state, { datasets }) => ({ ...state, datasets })
   ),
-  on(fromActions.fetchProposalDatasetsFailedAction, state => ({
-    ...state,
-    isLoading: false
-  })),
 
-  on(fromActions.fetchProposalDatasetsCountAction, state => ({
-    ...state,
-    isLoading: true
-  })),
   on(
     fromActions.fetchProposalDatasetsCountCompleteAction,
-    (state, { count }) => ({ ...state, isLoading: false, datasetsCount: count })
+    (state, { count }) => ({ ...state, datasetsCount: count })
   ),
-  on(fromActions.fetchProposalDatasetsCountFailedAction, state => ({
-    ...state,
-    isLoading: false
-  })),
 
-  on(fromActions.addAttachmentAction, state => ({ ...state, isLoading: true })),
   on(fromActions.addAttachmentCompleteAction, (state, { attachment }) => {
     const attachments = state.currentProposal.attachments;
     attachments.push(attachment);
     const currentProposal = { ...state.currentProposal, attachments };
-    return { ...state, currentProposal, isLoading: false };
+    return { ...state, currentProposal };
   }),
-  on(fromActions.addAttachmentFailedAction, state => ({
-    ...state,
-    isLoading: false
-  })),
 
-  on(fromActions.updateAttachmentCaptionAction, state => ({
-    ...state,
-    isLoading: true
-  })),
   on(
     fromActions.updateAttachmentCaptionCompleteAction,
     (state, { attachment }) => {
@@ -93,24 +48,16 @@ const reducer = createReducer(
       );
       attachments.push(attachment);
       const currentProposal = { ...state.currentProposal, attachments };
-      return { ...state, currentProposal, isLoading: false };
+      return { ...state, currentProposal };
     }
   ),
-  on(fromActions.updateAttachmentCaptionFailedAction, state => ({
-    ...state,
-    isLoading: false
-  })),
 
-  on(fromActions.removeAttachmentAction, state => ({
-    ...state,
-    isLoading: true
-  })),
   on(fromActions.removeAttachmentCompleteAction, (state, { attachmentId }) => {
     const attachments = state.currentProposal.attachments.filter(
       attachment => attachment.id !== attachmentId
     );
     const currentProposal = { ...state.currentProposal, attachments };
-    return { ...state, currentProposal, isLoading: false };
+    return { ...state, currentProposal };
   }),
 
   on(fromActions.setTextFilterAction, (state, { text }) => {
