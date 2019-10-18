@@ -22,8 +22,6 @@ const initialPolicyState: PolicyState = {
   totalCount: 0,
   editableCount: 0,
 
-  isLoading: false,
-
   policiesFilters,
 
   editableFilters
@@ -67,14 +65,6 @@ describe("Policies Selectors", () => {
       expect(
         fromSelectors.getEditablePoliciesCount.projector(initialPolicyState)
       ).toEqual(0);
-    });
-  });
-
-  describe("getIsLoading", () => {
-    it("should get isLoading", () => {
-      expect(fromSelectors.getIsLoading.projector(initialPolicyState)).toEqual(
-        false
-      );
     });
   });
 

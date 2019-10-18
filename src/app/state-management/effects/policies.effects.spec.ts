@@ -11,6 +11,7 @@ import {
 import { getProfile } from "state-management/selectors/user.selectors";
 import * as fromActions from "state-management/actions/policies.actions";
 import { hot, cold } from "jasmine-marbles";
+import { setLoadingStatusAction } from "state-management/actions/user.actions";
 
 const data: PolicyInterface = {
   id: "testId",
@@ -345,6 +346,212 @@ describe("PolicyEffects", () => {
 
       const expected = cold("--b", { b: outcome });
       expect(effects.submitPolicy$).toBeObservable(expected);
+    });
+  });
+
+  describe("isLoading$", () => {
+    describe("ofType fetchPoliciesAction", () => {
+      it("should dispatch a setLoadingStatusAction with value true", () => {
+        const value = true;
+        const action = fromActions.fetchPoliciesAction();
+        const outcome = setLoadingStatusAction({ value });
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.isLoading$).toBeObservable(expected);
+      });
+    });
+
+    describe("ofType fetchCountAction", () => {
+      it("should dispatch a setLoadingStatusAction with value true", () => {
+        const value = true;
+        const action = fromActions.fetchCountAction();
+        const outcome = setLoadingStatusAction({ value });
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.isLoading$).toBeObservable(expected);
+      });
+    });
+
+    describe("ofType fetchEditablePoliciesAction", () => {
+      it("should dispatch a setLoadingStatusAction with value true", () => {
+        const value = true;
+        const action = fromActions.fetchEditablePoliciesAction();
+        const outcome = setLoadingStatusAction({ value });
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.isLoading$).toBeObservable(expected);
+      });
+    });
+
+    describe("ofType fetchEditableCountAction", () => {
+      it("should dispatch a setLoadingStatusAction with value true", () => {
+        const value = true;
+        const action = fromActions.fetchEditableCountAction();
+        const outcome = setLoadingStatusAction({ value });
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.isLoading$).toBeObservable(expected);
+      });
+    });
+
+    describe("ofType submitPolicyAction", () => {
+      it("should dispatch a setLoadingStatusAction with value true", () => {
+        const ownerList = ["test"];
+        const value = true;
+        const action = fromActions.submitPolicyAction({ ownerList, policy });
+        const outcome = setLoadingStatusAction({ value });
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.isLoading$).toBeObservable(expected);
+      });
+    });
+  });
+
+  describe("isNotLoading$", () => {
+    describe("ofType fetchPoliciesCompleteAction", () => {
+      it("should dispatch a setLoadingStatusAction with value false", () => {
+        const policies = [policy];
+        const value = false;
+        const action = fromActions.fetchPoliciesCompleteAction({ policies });
+        const outcome = setLoadingStatusAction({ value });
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.isNotLoading$).toBeObservable(expected);
+      });
+    });
+
+    describe("ofType fetchPoliciesFailedAction", () => {
+      it("should dispatch a setLoadingStatusAction with value false", () => {
+        const value = false;
+        const action = fromActions.fetchPoliciesFailedAction();
+        const outcome = setLoadingStatusAction({ value });
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.isNotLoading$).toBeObservable(expected);
+      });
+    });
+
+    describe("ofType fetchCountCompleteAction", () => {
+      it("should dispatch a setLoadingStatusAction with value false", () => {
+        const count = 100;
+        const value = false;
+        const action = fromActions.fetchCountCompleteAction({ count });
+        const outcome = setLoadingStatusAction({ value });
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.isNotLoading$).toBeObservable(expected);
+      });
+    });
+
+    describe("ofType fetchCountFailedAction", () => {
+      it("should dispatch a setLoadingStatusAction with value false", () => {
+        const value = false;
+        const action = fromActions.fetchCountFailedAction();
+        const outcome = setLoadingStatusAction({ value });
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.isNotLoading$).toBeObservable(expected);
+      });
+    });
+
+    describe("ofType fetchEditablePoliciesCompleteAction", () => {
+      it("should dispatch a setLoadingStatusAction with value false", () => {
+        const policies = [policy];
+        const value = false;
+        const action = fromActions.fetchEditablePoliciesCompleteAction({
+          policies
+        });
+        const outcome = setLoadingStatusAction({ value });
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.isNotLoading$).toBeObservable(expected);
+      });
+    });
+
+    describe("ofType fetchEditablePoliciesFailedAction", () => {
+      it("should dispatch a setLoadingStatusAction with value false", () => {
+        const value = false;
+        const action = fromActions.fetchEditablePoliciesFailedAction();
+        const outcome = setLoadingStatusAction({ value });
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.isNotLoading$).toBeObservable(expected);
+      });
+    });
+
+    describe("ofType fetchEditableCountCompleteAction", () => {
+      it("should dispatch a setLoadingStatusAction with value false", () => {
+        const count = 100;
+        const value = false;
+        const action = fromActions.fetchEditableCountCompleteAction({ count });
+        const outcome = setLoadingStatusAction({ value });
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.isNotLoading$).toBeObservable(expected);
+      });
+    });
+
+    describe("ofType fetchEditableCountFailedAction", () => {
+      it("should dispatch a setLoadingStatusAction with value false", () => {
+        const value = false;
+        const action = fromActions.fetchEditableCountFailedAction();
+        const outcome = setLoadingStatusAction({ value });
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.isNotLoading$).toBeObservable(expected);
+      });
+    });
+
+    describe("ofType submitPolicyCompleteAction", () => {
+      it("should dispatch a setLoadingStatusAction with value false", () => {
+        const value = false;
+        const action = fromActions.submitPolicyCompleteAction({ policy });
+        const outcome = setLoadingStatusAction({ value });
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.isNotLoading$).toBeObservable(expected);
+      });
+    });
+
+    describe("ofType submitPolicyFailedAction", () => {
+      it("should dispatch a setLoadingStatusAction with value false", () => {
+        const value = false;
+        const action = fromActions.submitPolicyFailedAction();
+        const outcome = setLoadingStatusAction({ value });
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.isNotLoading$).toBeObservable(expected);
+      });
     });
   });
 });

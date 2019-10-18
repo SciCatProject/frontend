@@ -28,11 +28,6 @@ export const getEditablePoliciesCount = createSelector(
   state => state.editableCount
 );
 
-export const getIsLoading = createSelector(
-  getPolicyState,
-  state => state.isLoading
-);
-
 export const getFilters = createSelector(
   getPolicyState,
   state => state.policiesFilters
