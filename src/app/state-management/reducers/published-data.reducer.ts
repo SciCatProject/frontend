@@ -7,76 +7,27 @@ import * as fromActions from "state-management/actions/published-data.actions";
 
 const reducer = createReducer(
   initialPublishedDataState,
-  on(fromActions.fetchAllPublishedDataAction, state => ({
-    ...state,
-    isLoading: true
-  })),
+
   on(
     fromActions.fetchAllPublishedDataCompleteAction,
     (state, { publishedData }) => ({
       ...state,
-      publishedData,
-      isLoading: false
+      publishedData
     })
   ),
-  on(fromActions.fetchAllPublishedDataFailedAction, state => ({
-    ...state,
-    isLoading: false
-  })),
 
-  on(fromActions.fetchCountAction, state => ({ ...state, isLoading: true })),
   on(fromActions.fetchCountCompleteAction, (state, { count }) => ({
     ...state,
-    totalCount: count,
-    isLoading: false
-  })),
-  on(fromActions.fetchCountFailedAction, state => ({
-    ...state,
-    isLoading: false
+    totalCount: count
   })),
 
-  on(fromActions.fetchPublishedDataAction, state => ({
-    ...state,
-    isLoading: true
-  })),
   on(
     fromActions.fetchPublishedDataCompleteAction,
     (state, { publishedData }) => ({
       ...state,
-      currentPublishedData: publishedData,
-      isLoading: false
+      currentPublishedData: publishedData
     })
   ),
-  on(fromActions.fetchPublishedDataFailedAction, state => ({
-    ...state,
-    isLoading: false
-  })),
-
-  on(fromActions.publishDatasetAction, state => ({
-    ...state,
-    isLoading: true
-  })),
-  on(fromActions.publishDatasetCompleteAction, state => ({
-    ...state,
-    isLoading: false
-  })),
-  on(fromActions.publishDatasetFailedAction, state => ({
-    ...state,
-    isLoading: false
-  })),
-
-  on(fromActions.registerPublishedDataAction, state => ({
-    ...state,
-    isLoading: true
-  })),
-  on(fromActions.registerPublishedDataCompleteAction, state => ({
-    ...state,
-    isLoading: false
-  })),
-  on(fromActions.registerPublishedDataFailedAction, state => ({
-    ...state,
-    isLoading: false
-  })),
 
   on(fromActions.changePageAction, (state, { page, limit }) => {
     const skip = page * limit;

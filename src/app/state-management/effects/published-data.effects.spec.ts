@@ -12,7 +12,11 @@ import { getQueryParams } from "state-management/selectors/published-data.select
 import * as fromActions from "state-management/actions/published-data.actions";
 import { hot, cold } from "jasmine-marbles";
 import { MessageType } from "state-management/models";
-import { showMessageAction } from "state-management/actions/user.actions";
+import {
+  showMessageAction,
+  loadingAction,
+  loadingCompleteAction
+} from "state-management/actions/user.actions";
 
 const data: PublishedDataInterface = {
   doi: "testDOI",
@@ -279,6 +283,154 @@ describe("PublishedDataEffects", () => {
 
       const expected = cold("--b", { b: outcome });
       expect(effects.registerPublishedData$).toBeObservable(expected);
+    });
+  });
+
+  describe("loading$", () => {
+    describe("ofType fetchAllPublishedDataAction", () => {
+      it("should dispatch a loadingAction", () => {
+        const action = fromActions.fetchAllPublishedDataAction();
+        const outcome = loadingAction();
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.loading$).toBeObservable(expected);
+      });
+    });
+
+    describe("ofType fetchCountAction", () => {
+      it("should dispatch a loadingAction", () => {
+        const action = fromActions.fetchCountAction();
+        const outcome = loadingAction();
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.loading$).toBeObservable(expected);
+      });
+    });
+
+    describe("ofType fetchPublishedDataAction", () => {
+      it("should dispatch a loadingAction", () => {
+        const id = "testId";
+        const action = fromActions.fetchPublishedDataAction({ id });
+        const outcome = loadingAction();
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.loading$).toBeObservable(expected);
+      });
+    });
+
+    describe("ofType publishedDatasetAction", () => {
+      it("should dispatch a loadingAction", () => {
+        const id = "testId";
+        const action = fromActions.publishDatasetAction({
+          data: publishedData
+        });
+        const outcome = loadingAction();
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.loading$).toBeObservable(expected);
+      });
+    });
+
+    describe("ofType registerPublishedDataAction", () => {
+      it("should dispatch a loadingAction", () => {
+        const doi = "testDOI";
+        const action = fromActions.registerPublishedDataAction({ doi });
+        const outcome = loadingAction();
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.loading$).toBeObservable(expected);
+      });
+    });
+  });
+
+  describe("loadingComplete$", () => {
+    describe("ofType fetchAllPublishedDataCompleteAction", () => {
+      it("should dispatch a loadingCompleteAction", () => {
+        const allPublishedData = [publishedData];
+        const action = fromActions.fetchAllPublishedDataCompleteAction({
+          publishedData: allPublishedData
+        });
+        const outcome = loadingCompleteAction();
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.loadingComplete$).toBeObservable(expected);
+      });
+    });
+
+    describe("ofType fetchAllPublishedDataFailedAction", () => {
+      it("should dispatch a loadingCompleteAction", () => {
+        const action = fromActions.fetchAllPublishedDataFailedAction();
+        const outcome = loadingCompleteAction();
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.loadingComplete$).toBeObservable(expected);
+      });
+    });
+
+    describe("ofType publishDatasetCompleteAction", () => {
+      it("should dispatch a loadingCompleteAction", () => {
+        const action = fromActions.publishDatasetCompleteAction({
+          publishedData
+        });
+        const outcome = loadingCompleteAction();
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.loadingComplete$).toBeObservable(expected);
+      });
+    });
+
+    describe("ofType publishDatasetFailedAction", () => {
+      it("should dispatch a loadingCompleteAction", () => {
+        const action = fromActions.publishDatasetFailedAction();
+        const outcome = loadingCompleteAction();
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.loadingComplete$).toBeObservable(expected);
+      });
+    });
+
+    describe("ofType registerPublishedDataCompleteAction", () => {
+      it("should dispatch a loadingCompleteAction", () => {
+        const action = fromActions.registerPublishedDataCompleteAction({
+          publishedData
+        });
+        const outcome = loadingCompleteAction();
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.loadingComplete$).toBeObservable(expected);
+      });
+    });
+
+    describe("ofType registerPublishedDataFailedAction", () => {
+      it("should dispatch a loadingCompleteAction", () => {
+        const action = fromActions.registerPublishedDataFailedAction();
+        const outcome = loadingCompleteAction();
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.loadingComplete$).toBeObservable(expected);
+      });
     });
   });
 });
