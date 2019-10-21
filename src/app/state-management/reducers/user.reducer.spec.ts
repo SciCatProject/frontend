@@ -45,12 +45,13 @@ describe("UserReducer", () => {
   });
 
   describe("on fetchCurrentUserCompleteAction", () => {
-    it("should set currentUser", () => {
+    it("should set currentUser and set isLoggedIn to true", () => {
       const user = new User();
       const action = fromActions.fetchCurrentUserCompleteAction({ user });
       const state = userReducer(initialUserState, action);
 
       expect(state.currentUser).toEqual(user);
+      expect(state.isLoggedIn).toEqual(true);
     });
   });
 
@@ -86,24 +87,31 @@ describe("UserReducer", () => {
   });
 
   describe("on selectColumnAction", () => {
-    it("should add a column to displayedColumns", () => {
-      const column = "test";
+    it("should set enabled to true for a column in columns", () => {
+      const column = "dataStatus";
       const action = fromActions.selectColumnAction({ column });
       const state = userReducer(initialUserState, action);
 
-      expect(state.displayedColumns).toContain(column);
+      state.columns.forEach(item => {
+        if (item.name === column) {
+          expect(item.enabled).toEqual(true);
+        }
+      });
     });
   });
 
   describe("on deselectColumnAction", () => {
-    it("should add a column to displayedColumns", () => {
-      const column = "test";
-      initialUserState.displayedColumns.push(column);
+    it("should set enabled to false for a column in columns", () => {
+      const column = "datasetName";
 
       const action = fromActions.deselectColumnAction({ column });
       const state = userReducer(initialUserState, action);
 
-      expect(state.displayedColumns).not.toContain(column);
+      state.columns.forEach(item => {
+        if (item.name === column) {
+          expect(item.enabled).toEqual(false);
+        }
+      });
     });
   });
 

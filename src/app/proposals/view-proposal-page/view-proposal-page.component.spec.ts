@@ -13,11 +13,11 @@ import { rootReducer } from "state-management/reducers/root.reducer";
 import { DatePipe, SlicePipe } from "@angular/common";
 import { FileSizePipe } from "shared/pipes/filesize.pipe";
 import { Dataset, Proposal } from "shared/sdk";
-import { PageChangeEvent } from "datasets/dataset-table/dataset-table.component";
 import {
   changeDatasetsPageAction,
   fetchProposalDatasetsAction
 } from "state-management/actions/proposals.actions";
+import { PageChangeEvent } from "shared/modules/table/table.component";
 
 describe("ViewProposalPageComponent", () => {
   let component: ViewProposalPageComponent;

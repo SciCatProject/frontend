@@ -2,7 +2,6 @@ import { APP_CONFIG, AppConfigModule } from "app-config.module";
 import { ArchivingService } from "../archiving.service";
 import {
   DatasetTableComponent,
-  PageChangeEvent,
   SortChangeEvent
 } from "./dataset-table.component";
 import { HttpClient } from "@angular/common/http";
@@ -47,6 +46,7 @@ import {
   sortByColumnAction,
   addToBatchAction
 } from "state-management/actions/datasets.actions";
+import { PageChangeEvent } from "shared/modules/table/table.component";
 
 describe("DatasetTableComponent", () => {
   let component: DatasetTableComponent;

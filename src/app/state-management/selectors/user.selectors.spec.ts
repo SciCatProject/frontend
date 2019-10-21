@@ -65,8 +65,7 @@ const initialUserState: UserState = {
   isLoggingIn: false,
   isLoggedIn: false,
 
-  columns: ["datasetName"],
-  displayedColumns: ["datasetName"]
+  columns: [{ name: "datasetName", order: 1, enabled: true }]
 };
 
 describe("User Selectors", () => {
@@ -172,38 +171,11 @@ describe("User Selectors", () => {
     });
   });
 
-  describe("getConfigurableColumns", () => {
+  describe("getColumns", () => {
     it("should get columns", () => {
-      expect(
-        fromSelectors.getConfigurableColumns.projector(initialUserState)
-      ).toEqual(["datasetName"]);
-    });
-  });
-
-  describe("getDisplayedColumns", () => {
-    it("should get displayedColumns", () => {
-      expect(
-        fromSelectors.getDisplayedColumns.projector(initialUserState)
-      ).toEqual(["datasetName"]);
-    });
-  });
-
-  describe("getColumnOrder", () => {
-    it("should return the ordering object", () => {
-      const ordering = fromSelectors.getColumnOrder();
-      expect(ordering).toEqual({
-        datasetName: 2,
-        runNumber: 3,
-        sourceFolder: 4,
-        size: 5,
-        creationTime: 6,
-        type: 7,
-        image: 8,
-        metadata: 9,
-        proposalId: 10,
-        ownerGroup: 11,
-        dataStatus: 12
-      });
+      expect(fromSelectors.getColumns.projector(initialUserState)).toEqual([
+        { name: "datasetName", order: 1, enabled: true }
+      ]);
     });
   });
 });

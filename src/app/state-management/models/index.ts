@@ -35,6 +35,12 @@ export interface Settings {
   darkTheme: false;
 }
 
+export interface TableColumn {
+  name: string;
+  order: number;
+  enabled: boolean;
+}
+
 export enum MessageType {
   Success = "success",
   Error = "error"

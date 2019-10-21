@@ -1,4 +1,4 @@
-import { Settings, Message, User } from "../models";
+import { Settings, Message, User, TableColumn } from "../models";
 import { AccessToken } from "shared/sdk";
 import { APP_DI_CONFIG } from "app-config.module";
 
@@ -17,8 +17,7 @@ export interface UserState {
   isLoggingIn: boolean;
   isLoggedIn: boolean;
 
-  columns: string[];
-  displayedColumns: string[];
+  columns: TableColumn[];
 }
 
 export const initialUserState: UserState = {
@@ -39,42 +38,5 @@ export const initialUserState: UserState = {
   isLoggingIn: false,
   isLoggedIn: false,
 
-  columns: [
-    "select",
-    "datasetName",
-    "runNumber",
-    "sourceFolder",
-    "size",
-    "creationTime",
-    "type",
-    "image",
-    "metadata",
-    "proposalId",
-    "ownerGroup",
-    "dataStatus",
-    "derivedDatasetsNum"
-  ],
-  displayedColumns: getColumns()
+  columns: APP_DI_CONFIG.localColumns
 };
-
-function getColumns() {
-  let columns = [
-    "select",
-    "datasetName",
-    "runNumber",
-    "sourceFolder",
-    "size",
-    "creationTime",
-    "type",
-    "image",
-    "metadata",
-    "proposalId",
-    "ownerGroup",
-    "dataStatus",
-    "derivedDatasetsNum"
-  ];
-  if (APP_DI_CONFIG.facility === "ESS") {
-    columns = APP_DI_CONFIG.localColumns;
-  }
-  return columns;
-}
