@@ -1,7 +1,6 @@
 import { UserState, initialUserState } from "state-management/state/user.store";
 import { Action, createReducer, on } from "@ngrx/store";
 import * as fromActions from "state-management/actions/user.actions";
-// import { getColumnOrder } from "state-management/selectors/user.selectors";
 
 const reducer = createReducer(
   initialUserState,
