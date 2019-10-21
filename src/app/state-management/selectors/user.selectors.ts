@@ -75,38 +75,7 @@ export const getIsLoggedIn = createSelector(
   state => state.isLoggedIn
 );
 
-export const getConfigurableColumns = createSelector(
+export const getColumns = createSelector(
   getUserState,
-  state => {
-    const columns = [...state.columns];
-    const index = columns.indexOf("select");
-    if (index > -1) {
-      columns.splice(index, 1);
-    }
-    return columns;
-  }
+  state => state.columns
 );
-
-export const getDisplayedColumns = createSelector(
-  getUserState,
-  state => state.displayedColumns
-);
-
-export const getColumnOrder = () => {
-  // not ideal place for this, move to config file
-  // logic may need to be made more robust
-  const ordering = {
-    datasetName: 2,
-    runNumber: 3,
-    sourceFolder: 4,
-    size: 5,
-    creationTime: 6,
-    type: 7,
-    image: 8,
-    metadata: 9,
-    proposalId: 10,
-    ownerGroup: 11,
-    dataStatus: 12
-  };
-  return ordering;
-};

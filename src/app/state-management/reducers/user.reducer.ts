@@ -1,7 +1,7 @@
 import { UserState, initialUserState } from "state-management/state/user.store";
 import { Action, createReducer, on } from "@ngrx/store";
 import * as fromActions from "state-management/actions/user.actions";
-import { getColumnOrder } from "state-management/selectors/user.selectors";
+// import { getColumnOrder } from "state-management/selectors/user.selectors";
 
 const reducer = createReducer(
   initialUserState,
@@ -26,7 +26,8 @@ const reducer = createReducer(
 
   on(fromActions.fetchCurrentUserCompleteAction, (state, { user }) => ({
     ...state,
-    currentUser: user
+    currentUser: user,
+    isLoggedIn: true
   })),
 
   on(
@@ -47,18 +48,22 @@ const reducer = createReducer(
   })),
 
   on(fromActions.selectColumnAction, (state, { column }) => {
-    const currentColumns = state.displayedColumns;
-    const displayedColumns = currentColumns.concat(column);
-    const ordering = getColumnOrder();
-    displayedColumns.sort((a, b) => ordering[a] - ordering[b]);
-    return { ...state, displayedColumns };
+    const columns = [...state.columns];
+    columns.forEach(item => {
+      if (item.name === column) {
+        item.enabled = true;
+      }
+    });
+    return { ...state, columns };
   }),
   on(fromActions.deselectColumnAction, (state, { column }) => {
-    const currentColumns = state.displayedColumns;
-    const displayedColumns = currentColumns.filter(
-      existingColumn => existingColumn !== column
-    );
-    return { ...state, displayedColumns };
+    const columns = [...state.columns];
+    columns.forEach(item => {
+      if (item.name === column) {
+        item.enabled = false;
+      }
+    });
+    return { ...state, columns };
   }),
 
   on(fromActions.showMessageAction, (state, { message }) => ({
