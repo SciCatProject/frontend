@@ -2,7 +2,6 @@ import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 import { ReactiveFormsModule } from "@angular/forms";
 import { Store } from "@ngrx/store";
-import { NguiDatetimePickerModule } from "@ngui/datetime-picker";
 import { MockConfigService, MockStore, MockUserApi } from "shared/MockStubs";
 import { UserApi } from "shared/sdk/services";
 import { ConfigService } from "../../shared/services";
@@ -19,7 +18,6 @@ describe("UserSettingsComponent", () => {
       schemas: [NO_ERRORS_SCHEMA],
       imports: [
         ReactiveFormsModule,
-        NguiDatetimePickerModule,
         SharedCatanieModule
       ],
       declarations: [UserSettingsComponent]

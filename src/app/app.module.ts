@@ -12,7 +12,6 @@ import { FlexLayoutModule } from "@angular/flex-layout";
 import { HttpClientModule } from "@angular/common/http";
 import { JobEffects } from "state-management/effects/jobs.effects";
 import { NgModule } from "@angular/core";
-import { NguiDatetimePickerModule } from "@ngui/datetime-picker";
 import { PolicyEffects } from "state-management/effects/policies.effects";
 import { PoliciesModule } from "policies/policies.module";
 import { ProposalsModule } from "proposals/proposals.module";
@@ -75,7 +74,6 @@ import { JobsModule } from "jobs/jobs.module";
     MatProgressSpinnerModule,
     MatSnackBarModule,
     MatToolbarModule,
-    NguiDatetimePickerModule,
     PoliciesModule,
     ProposalsModule,
     PublisheddataModule,
