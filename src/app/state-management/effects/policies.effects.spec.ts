@@ -11,6 +11,10 @@ import {
 import { getProfile } from "state-management/selectors/user.selectors";
 import * as fromActions from "state-management/actions/policies.actions";
 import { hot, cold } from "jasmine-marbles";
+import {
+  loadingAction,
+  loadingCompleteAction
+} from "state-management/actions/user.actions";
 
 const data: PolicyInterface = {
   id: "testId",
@@ -345,6 +349,197 @@ describe("PolicyEffects", () => {
 
       const expected = cold("--b", { b: outcome });
       expect(effects.submitPolicy$).toBeObservable(expected);
+    });
+  });
+
+  describe("loading$", () => {
+    describe("ofType fetchPoliciesAction", () => {
+      it("should dispatch a loadingAction", () => {
+        const action = fromActions.fetchPoliciesAction();
+        const outcome = loadingAction();
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.loading$).toBeObservable(expected);
+      });
+    });
+
+    describe("ofType fetchCountAction", () => {
+      it("should dispatch a loadingAction", () => {
+        const action = fromActions.fetchCountAction();
+        const outcome = loadingAction();
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.loading$).toBeObservable(expected);
+      });
+    });
+
+    describe("ofType fetchEditablePoliciesAction", () => {
+      it("should dispatch a loadingAction", () => {
+        const action = fromActions.fetchEditablePoliciesAction();
+        const outcome = loadingAction();
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.loading$).toBeObservable(expected);
+      });
+    });
+
+    describe("ofType fetchEditableCountAction", () => {
+      it("should dispatch a loadingAction", () => {
+        const action = fromActions.fetchEditableCountAction();
+        const outcome = loadingAction();
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.loading$).toBeObservable(expected);
+      });
+    });
+
+    describe("ofType submitPolicyAction", () => {
+      it("should dispatch a loadingAction", () => {
+        const ownerList = ["test"];
+        const action = fromActions.submitPolicyAction({ ownerList, policy });
+        const outcome = loadingAction();
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.loading$).toBeObservable(expected);
+      });
+    });
+  });
+
+  describe("loadingComplete$", () => {
+    describe("ofType fetchPoliciesCompleteAction", () => {
+      it("should dispatch a loadingCompleteAction", () => {
+        const policies = [policy];
+        const action = fromActions.fetchPoliciesCompleteAction({ policies });
+        const outcome = loadingCompleteAction();
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.loadingComplete$).toBeObservable(expected);
+      });
+    });
+
+    describe("ofType fetchPoliciesFailedAction", () => {
+      it("should dispatch a loadingCompleteAction", () => {
+        const action = fromActions.fetchPoliciesFailedAction();
+        const outcome = loadingCompleteAction();
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.loadingComplete$).toBeObservable(expected);
+      });
+    });
+
+    describe("ofType fetchCountCompleteAction", () => {
+      it("should dispatch a loadingCompleteAction", () => {
+        const count = 100;
+        const action = fromActions.fetchCountCompleteAction({ count });
+        const outcome = loadingCompleteAction();
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.loadingComplete$).toBeObservable(expected);
+      });
+    });
+
+    describe("ofType fetchCountFailedAction", () => {
+      it("should dispatch a loadingCompleteAction", () => {
+        const action = fromActions.fetchCountFailedAction();
+        const outcome = loadingCompleteAction();
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.loadingComplete$).toBeObservable(expected);
+      });
+    });
+
+    describe("ofType fetchEditablePoliciesCompleteAction", () => {
+      it("should dispatch a loadingCompleteAction", () => {
+        const policies = [policy];
+        const action = fromActions.fetchEditablePoliciesCompleteAction({
+          policies
+        });
+        const outcome = loadingCompleteAction();
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.loadingComplete$).toBeObservable(expected);
+      });
+    });
+
+    describe("ofType fetchEditablePoliciesFailedAction", () => {
+      it("should dispatch a loadingCompleteAction", () => {
+        const action = fromActions.fetchEditablePoliciesFailedAction();
+        const outcome = loadingCompleteAction();
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.loadingComplete$).toBeObservable(expected);
+      });
+    });
+
+    describe("ofType fetchEditableCountCompleteAction", () => {
+      it("should dispatch a loadingCompleteAction", () => {
+        const count = 100;
+        const action = fromActions.fetchEditableCountCompleteAction({ count });
+        const outcome = loadingCompleteAction();
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.loadingComplete$).toBeObservable(expected);
+      });
+    });
+
+    describe("ofType fetchEditableCountFailedAction", () => {
+      it("should dispatch a loadingCompleteAction", () => {
+        const action = fromActions.fetchEditableCountFailedAction();
+        const outcome = loadingCompleteAction();
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.loadingComplete$).toBeObservable(expected);
+      });
+    });
+
+    describe("ofType submitPolicyCompleteAction", () => {
+      it("should dispatch a loadingCompleteAction", () => {
+        const action = fromActions.submitPolicyCompleteAction({ policy });
+        const outcome = loadingCompleteAction();
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.loadingComplete$).toBeObservable(expected);
+      });
+    });
+
+    describe("ofType submitPolicyFailedAction", () => {
+      it("should dispatch a loadingCompleteAction", () => {
+        const action = fromActions.submitPolicyFailedAction();
+        const outcome = loadingCompleteAction();
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.loadingComplete$).toBeObservable(expected);
+      });
     });
   });
 });

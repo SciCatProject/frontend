@@ -7,96 +7,44 @@ import * as fromActions from "state-management/actions/samples.actions";
 
 const reducer = createReducer(
   initialSampleState,
-  on(fromActions.fetchSamplesAction, state => ({ ...state, isLoading: true })),
   on(fromActions.fetchSamplesCompleteAction, (state, { samples }) => ({
     ...state,
-    samples,
-    isLoading: false
-  })),
-  on(fromActions.fetchSamplesFailedAction, state => ({
-    ...state,
-    isLoading: false
+    samples
   })),
 
-  on(fromActions.fetchSamplesCountAction, state => ({
-    ...state,
-    isLoading: true
-  })),
   on(fromActions.fetchSamplesCountCompleteAction, (state, { count }) => ({
     ...state,
-    samplesCount: count,
-    isLoading: false
-  })),
-  on(fromActions.fetchSamplesCountFailedAction, state => ({
-    ...state,
-    isLoading: false
+    samplesCount: count
   })),
 
-  on(fromActions.fetchSampleAction, state => ({ ...state, isLoading: true })),
   on(fromActions.fetchSampleCompleteAction, (state, { sample }) => ({
     ...state,
-    currentSample: sample,
-    isLoading: false
-  })),
-  on(fromActions.fetchSampleFailedAction, state => ({
-    ...state,
-    isLoading: false
+    currentSample: sample
   })),
 
-  on(fromActions.fetchSampleDatasetsAction, state => ({
-    ...state,
-    isLoading: true
-  })),
   on(fromActions.fetchSampleDatasetsCompleteAction, (state, { datasets }) => ({
     ...state,
-    datasets,
-    isLoading: false
-  })),
-  on(fromActions.fetchSampleDatasetsFailedAction, state => ({
-    ...state,
-    isLoading: false
+    datasets
   })),
 
-  on(fromActions.fetchSampleDatasetsCountAction, state => ({
-    ...state,
-    isLoading: true
-  })),
   on(
     fromActions.fetchSampleDatasetsCountCompleteAction,
-    (state, { count }) => ({ ...state, datasetsCount: count, isLoading: false })
+    (state, { count }) => ({ ...state, datasetsCount: count })
   ),
-  on(fromActions.fetchSampleDatasetsCountFailedAction, state => ({
-    ...state,
-    isLoading: false
-  })),
 
-  on(fromActions.addSampleAction, state => ({ ...state, isLoading: true })),
   on(fromActions.addSampleCompleteAction, (state, { sample }) => {
     const samples = state.samples;
     samples.push(sample);
-    return { ...state, samples, isLoading: false };
+    return { ...state, samples };
   }),
-  on(fromActions.addSampleFailedAction, state => ({
-    ...state,
-    isLoading: false
-  })),
 
-  on(fromActions.addAttachmentAction, state => ({ ...state, isLoading: true })),
   on(fromActions.addAttachmentCompleteAction, (state, { attachment }) => {
     const attachments = state.currentSample.attachments;
     attachments.push(attachment);
     const currentSample = { ...state.currentSample, attachments };
-    return { ...state, currentSample, isLoading: false };
+    return { ...state, currentSample };
   }),
-  on(fromActions.addAttachmentFailedAction, state => ({
-    ...state,
-    isLoading: false
-  })),
 
-  on(fromActions.updateAttachmentCaptionAction, state => ({
-    ...state,
-    isLoading: true
-  })),
   on(
     fromActions.updateAttachmentCaptionCompleteAction,
     (state, { attachment }) => {
@@ -105,29 +53,17 @@ const reducer = createReducer(
       );
       attachments.push(attachment);
       const currentSample = { ...state.currentSample, attachments };
-      return { ...state, currentSample, isLoading: false };
+      return { ...state, currentSample };
     }
   ),
-  on(fromActions.updateAttachmentCaptionFailedAction, state => ({
-    ...state,
-    isLoading: false
-  })),
 
-  on(fromActions.removeAttachmentAction, state => ({
-    ...state,
-    isLoading: true
-  })),
   on(fromActions.removeAttachmentCompleteAction, (state, { attachmentId }) => {
     const attachments = state.currentSample.attachments.filter(
       attachment => attachment.id !== attachmentId
     );
     const currentSample = { ...state.currentSample, attachments };
-    return { ...state, currentSample, isLoading: false };
+    return { ...state, currentSample };
   }),
-  on(fromActions.removeAttachmentFailedAction, state => ({
-    ...state,
-    isLoading: false
-  })),
 
   on(fromActions.changePageAction, (state, { page, limit }) => {
     const skip = page * limit;

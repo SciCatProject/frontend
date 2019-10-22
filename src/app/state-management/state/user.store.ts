@@ -17,6 +17,8 @@ export interface UserState {
   isLoggingIn: boolean;
   isLoggedIn: boolean;
 
+  isLoading: boolean;
+
   columns: TableColumn[];
 }
 
@@ -37,6 +39,8 @@ export const initialUserState: UserState = {
 
   isLoggingIn: false,
   isLoggedIn: false,
+
+  isLoading: false,
 
   columns: APP_DI_CONFIG.localColumns
 };

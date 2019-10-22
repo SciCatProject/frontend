@@ -17,8 +17,6 @@ const initialSampleState: SampleState = {
   samplesCount: 0,
   datasetsCount: 0,
 
-  isLoading: false,
-
   samplefilters: {
     text: "",
     sortField: "creationTime:desc",
@@ -82,14 +80,6 @@ describe("Sample Selectors", () => {
       expect(
         fromSelectors.getDatasetsCount.projector(initialSampleState)
       ).toEqual(0);
-    });
-  });
-
-  describe("getIsLoading", () => {
-    it("should get isLoading", () => {
-      expect(fromSelectors.getIsLoading.projector(initialSampleState)).toEqual(
-        false
-      );
     });
   });
 

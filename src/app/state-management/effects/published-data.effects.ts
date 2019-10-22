@@ -13,7 +13,11 @@ import {
 } from "rxjs/operators";
 import { of } from "rxjs";
 import { MessageType } from "state-management/models";
-import { showMessageAction } from "state-management/actions/user.actions";
+import {
+  showMessageAction,
+  loadingAction,
+  loadingCompleteAction
+} from "state-management/actions/user.actions";
 
 @Injectable()
 export class PublishedDataEffects {
@@ -120,6 +124,35 @@ export class PublishedDataEffects {
           catchError(() => of(fromActions.registerPublishedDataFailedAction()))
         )
       )
+    )
+  );
+
+  loading$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(
+        fromActions.fetchAllPublishedDataAction,
+        fromActions.fetchCountAction,
+        fromActions.fetchPublishedDataAction,
+        fromActions.publishDatasetAction,
+        fromActions.registerPublishedDataAction
+      ),
+      switchMap(() => of(loadingAction()))
+    )
+  );
+
+  loadingComplete$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(
+        fromActions.fetchAllPublishedDataCompleteAction,
+        fromActions.fetchAllPublishedDataFailedAction,
+        fromActions.fetchPublishedDataCompleteAction,
+        fromActions.fetchPublishedDataFailedAction,
+        fromActions.publishDatasetCompleteAction,
+        fromActions.publishDatasetFailedAction,
+        fromActions.registerPublishedDataCompleteAction,
+        fromActions.registerPublishedDataFailedAction
+      ),
+      switchMap(() => of(loadingCompleteAction()))
     )
   );
 

@@ -8,44 +8,23 @@ import { ArchViewMode } from "state-management/models";
 
 const reducer = createReducer(
   initialDatasetState,
-  on(fromActions.fetchDatasetsAction, state => ({ ...state, isLoading: true })),
   on(fromActions.fetchDatasetsCompleteAction, (state, { datasets }) => ({
     ...state,
-    datasets,
-    isLoading: false
-  })),
-  on(fromActions.fetchDatasetsFailedAction, state => ({
-    ...state,
-    isLoading: false
+    datasets
   })),
 
-  on(fromActions.fetchFacetCountsAction, state => ({
-    ...state,
-    isLoading: true
-  })),
   on(
     fromActions.fetchFacetCountsCompleteAction,
     (state, { facetCounts, allCounts }) => ({
       ...state,
       facetCounts,
-      totalCount: allCounts,
-      isLoading: false
+      totalCount: allCounts
     })
   ),
-  on(fromActions.fetchFacetCountsFailedAction, state => ({
-    ...state,
-    isLoading: false
-  })),
 
-  on(fromActions.fetchDatasetAction, state => ({ ...state, isLoading: true })),
   on(fromActions.fetchDatasetCompleteAction, (state, { dataset }) => ({
     ...state,
-    currentSet: dataset,
-    isLoading: false
-  })),
-  on(fromActions.fetchDatasetFailedAction, state => ({
-    ...state,
-    isLoading: false
+    currentSet: dataset
   })),
 
   on(fromActions.prefillBatchCompleteAction, (state, { batch }) => ({
@@ -68,33 +47,18 @@ const reducer = createReducer(
   }),
   on(fromActions.clearBatchAction, state => ({ ...state, batch: [] })),
 
-  on(fromActions.saveDatasetAction, state => ({ ...state, isLoading: true })),
   on(fromActions.saveDatasetCompleteAction, (state, { dataset }) => ({
     ...state,
-    currentSet: dataset,
-    isLoading: false
-  })),
-  on(fromActions.saveDatasetFailedAction, state => ({
-    ...state,
-    isLoading: false
+    currentSet: dataset
   })),
 
-  on(fromActions.addAttachmentAction, state => ({ ...state, isLoading: true })),
   on(fromActions.addAttachmentCompleteAction, (state, { attachment }) => {
     const attachments = state.currentSet.attachments;
     attachments.push(attachment);
     const currentSet = { ...state.currentSet, attachments };
-    return { ...state, currentSet, isLoading: false };
+    return { ...state, currentSet };
   }),
-  on(fromActions.addAttachmentFailedAction, state => ({
-    ...state,
-    isLoading: false
-  })),
 
-  on(fromActions.updateAttachmentCaptionAction, state => ({
-    ...state,
-    isLoading: true
-  })),
   on(
     fromActions.updateAttachmentCaptionCompleteAction,
     (state, { attachment }) => {
@@ -103,29 +67,17 @@ const reducer = createReducer(
       );
       attachments.push(attachment);
       const currentSet = { ...state.currentSet, attachments };
-      return { ...state, currentSet, isLoading: false };
+      return { ...state, currentSet };
     }
   ),
-  on(fromActions.updateAttachmentCaptionFailedAction, state => ({
-    ...state,
-    isLoading: false
-  })),
 
-  on(fromActions.removeAttachmentAction, state => ({
-    ...state,
-    isLoading: true
-  })),
   on(fromActions.removeAttachmentCompleteAction, (state, { attachmentId }) => {
     const attachments = state.currentSet.attachments.filter(
       attachment => attachment.id !== attachmentId
     );
     const currentSet = { ...state.currentSet, attachments };
-    return { ...state, currentSet, isLoading: false };
+    return { ...state, currentSet };
   }),
-  on(fromActions.removeAttachmentFailedAction, state => ({
-    ...state,
-    isLoading: false
-  })),
 
   on(fromActions.selectDatasetAction, (state, { dataset }) => {
     const alreadySelected = state.selectedSets.find(
@@ -236,7 +188,7 @@ const reducer = createReducer(
       }
     }
     const filters = { ...state.filters, skip: 0, mode, modeToggle };
-    return { ...state, filters, datasetsLoading: true };
+    return { ...state, filters };
   }),
   on(fromActions.setPublicViewModeAction, (state, { isPublished }) => ({
     ...state,

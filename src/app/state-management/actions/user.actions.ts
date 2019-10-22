@@ -99,3 +99,6 @@ export const saveSettingsAction = createAction(
   "[User] Save Settings",
   props<{ settings: Settings }>()
 );
+
+export const loadingAction = createAction("[User] Loading");
+export const loadingCompleteAction = createAction("[User] Loading Complete");

@@ -11,7 +11,10 @@ import {
   deselectColumnAction
 } from "state-management/actions/user.actions";
 import { Subscription } from "rxjs";
-import { getColumns } from "../../state-management/selectors/user.selectors";
+import {
+  getColumns,
+  getIsLoading
+} from "../../state-management/selectors/user.selectors";
 import { getSubmitError } from "state-management/selectors/jobs.selectors";
 import { select, Store } from "@ngrx/store";
 import {
@@ -29,7 +32,6 @@ import {
 import {
   getDatasets,
   getDatasetsPerPage,
-  getIsLoading,
   getPage,
   getSelectedDatasets,
   getTotalSets,

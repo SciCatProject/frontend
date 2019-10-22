@@ -8,8 +8,6 @@ export interface PolicyState {
   totalCount: number;
   editableCount: number;
 
-  isLoading: boolean;
-
   policiesFilters: PolicyFilters;
   editableFilters: PolicyFilters;
 }
@@ -21,8 +19,6 @@ export const initialPolicyState: PolicyState = {
 
   totalCount: 0,
   editableCount: 0,
-
-  isLoading: true,
 
   policiesFilters: {
     skip: 0,

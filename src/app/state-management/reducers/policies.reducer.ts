@@ -7,67 +7,27 @@ import * as fromActions from "state-management/actions/policies.actions";
 
 const reducer = createReducer(
   initialPolicyState,
-  on(fromActions.fetchPoliciesAction, state => ({ ...state, isLoading: true })),
   on(fromActions.fetchPoliciesCompleteAction, (state, { policies }) => ({
     ...state,
-    policies,
-    isLoading: false
-  })),
-  on(fromActions.fetchPoliciesFailedAction, state => ({
-    ...state,
-    isLoading: false
+    policies
   })),
 
-  on(fromActions.fetchCountAction, state => ({ ...state, isLoading: true })),
   on(fromActions.fetchCountCompleteAction, (state, { count }) => ({
     ...state,
-    totalCount: count,
-    isLoading: false
-  })),
-  on(fromActions.fetchCountFailedAction, state => ({
-    ...state,
-    isLoading: false
+    totalCount: count
   })),
 
-  on(fromActions.fetchEditablePoliciesAction, state => ({
-    ...state,
-    isLoading: true
-  })),
   on(
     fromActions.fetchEditablePoliciesCompleteAction,
     (state, { policies }) => ({
       ...state,
-      editablePolicies: policies,
-      isLoading: false
+      editablePolicies: policies
     })
   ),
-  on(fromActions.fetchEditablePoliciesFailedAction, state => ({
-    ...state,
-    isLoading: false
-  })),
 
-  on(fromActions.fetchEditableCountAction, state => ({
-    ...state,
-    isLoading: true
-  })),
   on(fromActions.fetchEditableCountCompleteAction, (state, { count }) => ({
     ...state,
-    editableCount: count,
-    isLoading: false
-  })),
-  on(fromActions.fetchEditableCountFailedAction, state => ({
-    ...state,
-    isLoading: false
-  })),
-
-  on(fromActions.submitPolicyAction, state => ({ ...state, isLoading: true })),
-  on(fromActions.submitPolicyCompleteAction, state => ({
-    ...state,
-    isLoading: false
-  })),
-  on(fromActions.submitPolicyFailedAction, state => ({
-    ...state,
-    isLoading: false
+    editableCount: count
   })),
 
   on(fromActions.selectPolicyAction, (state, { policy }) => {

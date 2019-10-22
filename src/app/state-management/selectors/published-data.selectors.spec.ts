@@ -30,8 +30,6 @@ const initialPublishedDataState: PublishedDataState = {
 
   totalCount: 0,
 
-  isLoading: false,
-
   filters
 };
 
@@ -59,14 +57,6 @@ describe("Published Data Selectors", () => {
       expect(
         fromSelectors.getPublishedDataCount.projector(initialPublishedDataState)
       ).toEqual(0);
-    });
-  });
-
-  describe("getIsLoading", () => {
-    it("should get isLoading", () => {
-      expect(
-        fromSelectors.getIsLoading.projector(initialPublishedDataState)
-      ).toEqual(false);
     });
   });
 

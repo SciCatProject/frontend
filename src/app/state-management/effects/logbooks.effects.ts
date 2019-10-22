@@ -5,6 +5,10 @@ import * as fromActions from "state-management/actions/logbooks.actions";
 import { mergeMap, catchError, map } from "rxjs/operators";
 import { of } from "rxjs";
 import * as rison from "rison";
+import {
+  loadingAction,
+  loadingCompleteAction
+} from "state-management/actions/user.actions";
 
 @Injectable()
 export class LogbookEffects {
@@ -46,6 +50,31 @@ export class LogbookEffects {
           catchError(() => of(fromActions.fetchFilteredEntriesFailedAction()))
         );
       })
+    )
+  );
+
+  loading$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(
+        fromActions.fetchLogbooksAction,
+        fromActions.fetchLogbookAction,
+        fromActions.fetchFilteredEntriesAction
+      ),
+      mergeMap(() => of(loadingAction()))
+    )
+  );
+
+  loadingComplete$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(
+        fromActions.fetchLogbooksCompleteAction,
+        fromActions.fetchLogbooksFailedAction,
+        fromActions.fetchLogbookCompleteAction,
+        fromActions.fetchLogbookFailedAction,
+        fromActions.fetchFilteredEntriesCompleteAction,
+        fromActions.fetchFilteredEntriesFailedAction
+      ),
+      mergeMap(() => of(loadingCompleteAction()))
     )
   );
 

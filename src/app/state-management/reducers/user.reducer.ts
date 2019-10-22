@@ -77,6 +77,15 @@ const reducer = createReducer(
   on(fromActions.saveSettingsAction, (state, { settings }) => ({
     ...state,
     settings
+  })),
+
+  on(fromActions.loadingAction, state => ({
+    ...state,
+    isLoading: true
+  })),
+  on(fromActions.loadingCompleteAction, state => ({
+    ...state,
+    isLoading: false
   }))
 );
 

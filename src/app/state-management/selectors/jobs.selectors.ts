@@ -18,11 +18,6 @@ export const getJobsCount = createSelector(
   state => state.totalCount
 );
 
-export const getIsLoading = createSelector(
-  getJobState,
-  state => state.isLoading
-);
-
 export const getSubmitError = createSelector(
   getJobState,
   state => state.submitError

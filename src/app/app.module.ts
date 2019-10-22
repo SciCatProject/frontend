@@ -35,7 +35,8 @@ import {
   MatMenuModule,
   MatNativeDateModule,
   MatSnackBarModule,
-  MatToolbarModule
+  MatToolbarModule,
+  MatProgressSpinnerModule
 } from "@angular/material";
 import { SampleEffects } from "./state-management/effects/samples.effects";
 import { ServiceWorkerModule } from "@angular/service-worker";
@@ -73,6 +74,7 @@ import { JobsModule } from "jobs/jobs.module";
     JobsModule,
     LogbooksModule,
     MatMenuModule,
+    MatProgressSpinnerModule,
     MatSnackBarModule,
     MatToolbarModule,
     NguiDatetimePickerModule,

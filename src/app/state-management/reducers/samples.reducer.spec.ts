@@ -19,8 +19,6 @@ const initialSampleState: SampleState = {
   samplesCount: 0,
   datasetsCount: 0,
 
-  isLoading: false,
-
   samplefilters: {
     text: "",
     sortField: "creationTime:desc",
@@ -36,105 +34,37 @@ const initialSampleState: SampleState = {
 };
 
 describe("SamplesReducer", () => {
-  describe("on fetchSamplesAction", () => {
-    it("should set isLoading to true", () => {
-      const action = fromActions.fetchSamplesAction();
-      const state = samplesReducer(initialSampleState, action);
-
-      expect(state.isLoading).toBe(true);
-    });
-  });
-
   describe("on fetchSamplesCompleteAction", () => {
-    it("should set samples and set isLoading to false", () => {
+    it("should set samples", () => {
       const samples = [sample];
       const action = fromActions.fetchSamplesCompleteAction({ samples });
       const state = samplesReducer(initialSampleState, action);
 
       expect(state.samples).toEqual(samples);
-      expect(state.isLoading).toEqual(false);
-    });
-  });
-
-  describe("on fetchSamplesFailedAction", () => {
-    it("should set isLoading to false", () => {
-      const action = fromActions.fetchSamplesFailedAction();
-      const state = samplesReducer(initialSampleState, action);
-
-      expect(state.isLoading).toBe(false);
-    });
-  });
-
-  describe("on fetchSamplesCountAction", () => {
-    it("should set isLoading to true", () => {
-      const action = fromActions.fetchSamplesCountAction();
-      const state = samplesReducer(initialSampleState, action);
-
-      expect(state.isLoading).toEqual(true);
     });
   });
 
   describe("on fetchSamplesCountCompleteAction", () => {
-    it("should set totalCount and set isLoading to false", () => {
+    it("should set totalCount", () => {
       const count = 100;
       const action = fromActions.fetchSamplesCountCompleteAction({ count });
       const state = samplesReducer(initialSampleState, action);
 
       expect(state.samplesCount).toEqual(count);
-      expect(state.isLoading).toEqual(false);
-    });
-  });
-
-  describe("on fetchSamplesCountFailedAction", () => {
-    it("should set isLoading to false", () => {
-      const action = fromActions.fetchSamplesCountFailedAction();
-      const state = samplesReducer(initialSampleState, action);
-
-      expect(state.isLoading).toEqual(false);
-    });
-  });
-
-  describe("on fetchSampleAction", () => {
-    it("should set isLoading to true", () => {
-      const sampleId = "testId";
-      const action = fromActions.fetchSampleAction({ sampleId });
-      const state = samplesReducer(initialSampleState, action);
-
-      expect(state.isLoading).toBe(true);
     });
   });
 
   describe("on fetchSampleCompleteAction", () => {
-    it("should set currentSample and set isLoading to false", () => {
+    it("should set currentSample", () => {
       const action = fromActions.fetchSampleCompleteAction({ sample });
       const state = samplesReducer(initialSampleState, action);
 
       expect(state.currentSample).toEqual(sample);
-      expect(state.isLoading).toBe(false);
-    });
-  });
-
-  describe("on fetchSampleFailedAction", () => {
-    it("should set samplesLoading to false", () => {
-      const action = fromActions.fetchSampleFailedAction();
-      const state = samplesReducer(initialSampleState, action);
-
-      expect(state.isLoading).toBe(false);
-    });
-  });
-
-  describe("on fetchSampleDatasetsAction", () => {
-    it("should set isLoading to true", () => {
-      const sampleId = "testId";
-      const action = fromActions.fetchSampleDatasetsAction({ sampleId });
-      const state = samplesReducer(initialSampleState, action);
-
-      expect(state.isLoading).toBe(true);
     });
   });
 
   describe("on fetchSampleDatasetsCompleteAction", () => {
-    it("should set datasets and set isLoading to false", () => {
+    it("should set datasets", () => {
       const datasets = [new Dataset()];
       const action = fromActions.fetchSampleDatasetsCompleteAction({
         datasets
@@ -142,31 +72,11 @@ describe("SamplesReducer", () => {
       const state = samplesReducer(initialSampleState, action);
 
       expect(state.datasets).toEqual(datasets);
-      expect(state.isLoading).toBe(false);
-    });
-  });
-
-  describe("on fetchSampleDatasetsFailedAction", () => {
-    it("should set isLoading to false", () => {
-      const action = fromActions.fetchSampleDatasetsFailedAction();
-      const state = samplesReducer(initialSampleState, action);
-
-      expect(state.isLoading).toBe(false);
-    });
-  });
-
-  describe("on fetchSampleDatasetsCountAction", () => {
-    it("should set isLoading to true", () => {
-      const sampleId = "testId";
-      const action = fromActions.fetchSampleDatasetsCountAction({ sampleId });
-      const state = samplesReducer(initialSampleState, action);
-
-      expect(state.isLoading).toBe(true);
     });
   });
 
   describe("on fetchSampleDatasetsCountCompleteAction", () => {
-    it("should set datasetsCount and set isLoading to false", () => {
+    it("should set datasetsCount", () => {
       const count = 100;
       const action = fromActions.fetchSampleDatasetsCountCompleteAction({
         count
@@ -174,30 +84,11 @@ describe("SamplesReducer", () => {
       const state = samplesReducer(initialSampleState, action);
 
       expect(state.datasetsCount).toEqual(count);
-      expect(state.isLoading).toBe(false);
-    });
-  });
-
-  describe("on fetchSampleDatasetsCountFailedAction", () => {
-    it("should set isLoading to false", () => {
-      const action = fromActions.fetchSampleDatasetsCountFailedAction();
-      const state = samplesReducer(initialSampleState, action);
-
-      expect(state.isLoading).toBe(false);
-    });
-  });
-
-  describe("on addSampleAction", () => {
-    it("should set isLoading to true", () => {
-      const action = fromActions.addSampleAction({ sample });
-      const state = samplesReducer(initialSampleState, action);
-
-      expect(state.isLoading).toEqual(true);
     });
   });
 
   describe("on addSampleCompleteAction", () => {
-    it("should add the new sample to samples and set isLoading to false", () => {
+    it("should add the new sample to samples", () => {
       const action = fromActions.addSampleCompleteAction({ sample });
       const state = samplesReducer(initialSampleState, action);
 
@@ -205,27 +96,8 @@ describe("SamplesReducer", () => {
     });
   });
 
-  describe("on addSampleFailedAction", () => {
-    it("should set isLoading to false", () => {
-      const action = fromActions.addSampleFailedAction();
-      const state = samplesReducer(initialSampleState, action);
-
-      expect(state.isLoading).toEqual(false);
-    });
-  });
-
-  describe("on addAttachmentAction", () => {
-    it("should set isLoading to true", () => {
-      const attachment = new Attachment();
-      const action = fromActions.addAttachmentAction({ attachment });
-      const state = samplesReducer(initialSampleState, action);
-
-      expect(state.isLoading).toEqual(true);
-    });
-  });
-
   describe("on addAttachmentCompleteAction", () => {
-    it("should set attachments for currentSample and set isLoading to false", () => {
+    it("should set attachments for currentSample", () => {
       const attachment = new Attachment();
       const action = fromActions.addAttachmentCompleteAction({
         attachment
@@ -236,33 +108,8 @@ describe("SamplesReducer", () => {
     });
   });
 
-  describe("on addAttachmentFailedAction", () => {
-    it("should set isLoading to false", () => {
-      const action = fromActions.addAttachmentFailedAction();
-      const state = samplesReducer(initialSampleState, action);
-
-      expect(state.isLoading).toEqual(false);
-    });
-  });
-
-  describe("on updateAttachmentCaptionAction", () => {
-    it("should set isLoading to true", () => {
-      const sampleId = "testId";
-      const attachmentId = "testId";
-      const caption = "test";
-      const action = fromActions.updateAttachmentCaptionAction({
-        sampleId,
-        attachmentId,
-        caption
-      });
-      const state = samplesReducer(initialSampleState, action);
-
-      expect(state.isLoading).toEqual(true);
-    });
-  });
-
   describe("on updateAttachmentCaptionCompleteAction", () => {
-    it("should set attachments for currentSample and set isLoading to false", () => {
+    it("should set attachments for currentSample", () => {
       const attachment = new Attachment();
       const action = fromActions.updateAttachmentCaptionCompleteAction({
         attachment
@@ -270,34 +117,11 @@ describe("SamplesReducer", () => {
       const state = samplesReducer(initialSampleState, action);
 
       expect(state.currentSample.attachments).toContain(attachment);
-      expect(state.isLoading).toEqual(false);
-    });
-  });
-
-  describe("on updateAttachmentCaptionFailedAction", () => {
-    it("should set isLoading to false", () => {
-      const action = fromActions.updateAttachmentCaptionFailedAction();
-      const state = samplesReducer(initialSampleState, action);
-
-      expect(state.isLoading).toEqual(false);
-    });
-  });
-
-  describe("on removeAttachmentAction", () => {
-    it("should set isLoading to true", () => {
-      const sampleId = "testId";
-      const attachmentId = "testId";
-      const action = fromActions.removeAttachmentAction({
-        sampleId,
-        attachmentId
-      });
-      const state = samplesReducer(initialSampleState, action);
-      expect(state.isLoading).toEqual(true);
     });
   });
 
   describe("on removeAttachmentCompleteAction", () => {
-    it("should set attachments for currentSample and set isLoading to false", () => {
+    it("should set attachments for currentSample", () => {
       const attachment = new Attachment();
       const attachmentId = "testId";
       attachment.id = attachmentId;
@@ -309,16 +133,6 @@ describe("SamplesReducer", () => {
       const state = samplesReducer(initialSampleState, action);
 
       expect(state.currentSample.attachments).toEqual([]);
-      expect(state.isLoading).toEqual(false);
-    });
-  });
-
-  describe("on removeAttachmentFailedAction", () => {
-    it("should set isLoading to false", () => {
-      const action = fromActions.removeAttachmentFailedAction();
-      const state = samplesReducer(initialSampleState, action);
-
-      expect(state.isLoading).toEqual(false);
     });
   });
 

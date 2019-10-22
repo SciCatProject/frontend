@@ -148,7 +148,26 @@ describe("UserReducer", () => {
       };
       const action = fromActions.saveSettingsAction({ settings });
       const state = userReducer(initialUserState, action);
+
       expect(state.settings).toEqual(settings);
+    });
+  });
+
+  describe("on loadingAction", () => {
+    it("should set isLoading to true", () => {
+      const action = fromActions.loadingAction();
+      const state = userReducer(initialUserState, action);
+
+      expect(state.isLoading).toEqual(true);
+    });
+  });
+
+  describe("on loadingCompleteAction", () => {
+    it("should set isLoading to false", () => {
+      const action = fromActions.loadingCompleteAction();
+      const state = userReducer(initialUserState, action);
+
+      expect(state.isLoading).toEqual(false);
     });
   });
 });

@@ -15,6 +15,10 @@ import {
   switchMap
 } from "rxjs/operators";
 import { of } from "rxjs";
+import {
+  loadingAction,
+  loadingCompleteAction
+} from "state-management/actions/user.actions";
 
 @Injectable()
 export class SampleEffects {
@@ -187,6 +191,49 @@ export class SampleEffects {
             catchError(() => of(fromActions.removeAttachmentFailedAction()))
           )
       )
+    )
+  );
+
+  loading$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(
+        fromActions.fetchSamplesAction,
+        fromActions.fetchSamplesCountAction,
+        fromActions.fetchSampleAction,
+        fromActions.fetchSampleDatasetsAction,
+        fromActions.fetchSampleDatasetsCountAction,
+        fromActions.addSampleAction,
+        fromActions.addAttachmentAction,
+        fromActions.updateAttachmentCaptionAction,
+        fromActions.removeAttachmentAction
+      ),
+      switchMap(() => of(loadingAction()))
+    )
+  );
+
+  loadingComplete$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(
+        fromActions.fetchSamplesCompleteAction,
+        fromActions.fetchSamplesFailedAction,
+        fromActions.fetchSamplesCountCompleteAction,
+        fromActions.fetchSamplesCountFailedAction,
+        fromActions.fetchSampleCompleteAction,
+        fromActions.fetchSampleFailedAction,
+        fromActions.fetchSampleDatasetsCompleteAction,
+        fromActions.fetchSampleDatasetsFailedAction,
+        fromActions.fetchSampleDatasetsCountCompleteAction,
+        fromActions.fetchSampleDatasetsCountFailedAction,
+        fromActions.addSampleCompleteAction,
+        fromActions.addSampleFailedAction,
+        fromActions.addAttachmentCompleteAction,
+        fromActions.addAttachmentFailedAction,
+        fromActions.updateAttachmentCaptionCompleteAction,
+        fromActions.updateAttachmentCaptionFailedAction,
+        fromActions.removeAttachmentCompleteAction,
+        fromActions.removeAttachmentFailedAction
+      ),
+      switchMap(() => of(loadingCompleteAction()))
     )
   );
 

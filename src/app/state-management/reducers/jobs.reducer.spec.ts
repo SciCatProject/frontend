@@ -24,127 +24,57 @@ const initialJobsState: JobsState = {
 
   totalCount: 0,
 
-  isLoading: false,
   submitError: undefined,
 
   filters: jobFilters
 };
 
 describe("jobsReducer", () => {
-  describe("on fetchJobsAction", () => {
-    it("should set isLoading to true", () => {
-      const action = fromActions.fetchJobsAction();
-      const state = jobsReducer(initialJobsState, action);
-
-      expect(state.isLoading).toEqual(true);
-    });
-  });
-
   describe("on fetchJobsCompleteAction", () => {
-    it("should set jobs and set isLoading to false", () => {
+    it("should set jobs", () => {
       const jobs = [job];
       const action = fromActions.fetchJobsCompleteAction({ jobs });
       const state = jobsReducer(initialJobsState, action);
 
       expect(state.jobs).toEqual(jobs);
-      expect(state.isLoading).toEqual(false);
-    });
-  });
-
-  describe("on fetchJobsFailedAction", () => {
-    it("should set isLoading to false", () => {
-      const action = fromActions.fetchJobsFailedAction();
-      const state = jobsReducer(initialJobsState, action);
-
-      expect(state.isLoading).toEqual(false);
-    });
-  });
-
-  describe("on fetchCountAction", () => {
-    it("should set isLoading to true", () => {
-      const action = fromActions.fetchCountAction();
-      const state = jobsReducer(initialJobsState, action);
-
-      expect(state.isLoading).toEqual(true);
     });
   });
 
   describe("on fetchCountCompleteAction", () => {
-    it("should set totalCount and set isLoading to false", () => {
+    it("should set totalCount", () => {
       const count = 100;
       const action = fromActions.fetchCountCompleteAction({ count });
       const state = jobsReducer(initialJobsState, action);
 
       expect(state.totalCount).toEqual(count);
-      expect(state.isLoading).toEqual(false);
-    });
-  });
-
-  describe("on fetchCountFailedAction", () => {
-    it("should set isLoading to false", () => {
-      const action = fromActions.fetchCountFailedAction();
-      const state = jobsReducer(initialJobsState, action);
-
-      expect(state.isLoading).toEqual(false);
-    });
-  });
-
-  describe("on fetchJobAction", () => {
-    it("should set isLoading to true", () => {
-      const jobId = job.id;
-      const action = fromActions.fetchJobAction({ jobId });
-      const state = jobsReducer(initialJobsState, action);
-
-      expect(state.isLoading).toEqual(true);
     });
   });
 
   describe("on fetchJobCompleteAction", () => {
-    it("should set currentJob and set isLoading to false", () => {
+    it("should set currentJob", () => {
       const action = fromActions.fetchJobCompleteAction({ job });
       const state = jobsReducer(initialJobsState, action);
 
       expect(state.currentJob).toEqual(job);
-      expect(state.isLoading).toEqual(false);
-    });
-  });
-
-  describe("on fetchJobFailedAction", () => {
-    it("should set isLoading to false", () => {
-      const action = fromActions.fetchJobFailedAction();
-      const state = jobsReducer(initialJobsState, action);
-
-      expect(state.isLoading).toEqual(false);
-    });
-  });
-
-  describe("on submitJobAction", () => {
-    it("should set isLoading to true", () => {
-      const action = fromActions.submitJobAction({ job });
-      const state = jobsReducer(initialJobsState, action);
-
-      expect(state.isLoading).toEqual(true);
     });
   });
 
   describe("on submitJobCompleteAction", () => {
-    it("should set submitError to undefined and set isLoading to false", () => {
+    it("should set submitError to undefined", () => {
       const action = fromActions.submitJobCompleteAction({ job });
       const state = jobsReducer(initialJobsState, action);
 
       expect(state.submitError).toBeUndefined();
-      expect(state.isLoading).toEqual(false);
     });
   });
 
   describe("on submitJobFailedAction", () => {
-    it("should set submitError and set isLoading to false", () => {
+    it("should set submitError", () => {
       const err = new Error();
       const action = fromActions.submitJobFailedAction({ err });
       const state = jobsReducer(initialJobsState, action);
 
       expect(state.submitError).toEqual(err);
-      expect(state.isLoading).toEqual(false);
     });
   });
 

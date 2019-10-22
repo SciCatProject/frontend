@@ -299,4 +299,22 @@ describe("User Aactions", () => {
       expect({ ...action }).toEqual({ type: "[User] Save Settings", settings });
     });
   });
+
+  describe("loadingAction", () => {
+    it("should create an action", () => {
+      const action = fromActions.loadingAction();
+      expect({ ...action }).toEqual({
+        type: "[User] Loading"
+      });
+    });
+  });
+
+  describe("loadingCompleteAction", () => {
+    it("should create an action", () => {
+      const action = fromActions.loadingCompleteAction();
+      expect({ ...action }).toEqual({
+        type: "[User] Loading Complete"
+      });
+    });
+  });
 });

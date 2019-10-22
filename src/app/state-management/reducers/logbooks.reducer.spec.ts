@@ -5,17 +5,8 @@ import { LogbookFilters, Logbook } from "../models";
 import { APP_DI_CONFIG } from "app-config.module";
 
 describe("LogbooksReducer", () => {
-  describe("on fetchLogbooksAction", () => {
-    it("should set isLoading to true", () => {
-      const action = fromActions.fetchLogbooksAction();
-      const state = logbooksReducer(initialLogbookState, action);
-
-      expect(state.isLoading).toEqual(true);
-    });
-  });
-
   describe("on fetchLogbooksComplete", () => {
-    it("should set logbooks and set isLoading to false", () => {
+    it("should set logbooks", () => {
       const logbooks = [new Logbook()];
       const firstTestMessage = { content: "First message" };
       const secondTestMessage = { content: "Second message" };
@@ -25,7 +16,6 @@ describe("LogbooksReducer", () => {
       const action = fromActions.fetchLogbooksCompleteAction({ logbooks });
       const state = logbooksReducer(initialLogbookState, action);
 
-      expect(state.isLoading).toEqual(false);
       expect(state.logbooks).toEqual(logbooks);
       state.logbooks.forEach(logbook => {
         expect(logbook.messages[0]).toEqual(secondTestMessage);
@@ -38,69 +28,22 @@ describe("LogbooksReducer", () => {
       const action = fromActions.fetchLogbooksCompleteAction({ logbooks });
       const state = logbooksReducer(initialLogbookState, action);
 
-      expect(state.isLoading).toEqual(false);
       expect(state.logbooks).toEqual([]);
     });
   });
 
-  describe("on fetchLogbooksFailedAction", () => {
-    it("should set isLoading to false", () => {
-      const action = fromActions.fetchLogbooksFailedAction();
-      const state = logbooksReducer(initialLogbookState, action);
-
-      expect(state.isLoading).toEqual(false);
-    });
-  });
-
-  describe("on fetchLogbookAction", () => {
-    it("should set isLoading to true", () => {
-      const name = "test";
-      const action = fromActions.fetchLogbookAction({ name });
-      const state = logbooksReducer(initialLogbookState, action);
-
-      expect(state.isLoading).toEqual(true);
-    });
-  });
-
   describe("on fetchLogbookCompleteAction", () => {
-    it("should set currentLogbook ans set isLoading to false", () => {
+    it("should set currentLogbook", () => {
       const logbook = new Logbook();
       const action = fromActions.fetchLogbookCompleteAction({ logbook });
       const state = logbooksReducer(initialLogbookState, action);
 
       expect(state.currentLogbook).toEqual(logbook);
-      expect(state.isLoading).toEqual(false);
-    });
-  });
-
-  describe("on fetchLogbookFailedAction", () => {
-    it("should set isLoading to false", () => {
-      const action = fromActions.fetchLogbookFailedAction();
-      const state = logbooksReducer(initialLogbookState, action);
-
-      expect(state.isLoading).toEqual(false);
-    });
-  });
-
-  describe("on fetchFilteredEntriesAction", () => {
-    it("should set isLoading to true", () => {
-      const name = "testName";
-      const filters: LogbookFilters = {
-        textSearch: "test",
-        showBotMessages: true,
-        showImages: true,
-        showUserMessages: true
-      };
-
-      const action = fromActions.fetchFilteredEntriesAction({ name, filters });
-      const state = logbooksReducer(initialLogbookState, action);
-
-      expect(state.isLoading).toEqual(true);
     });
   });
 
   describe("on fetchFilteredEntriesCompleteAction", () => {
-    it("should set currentLogbook and set isLoading to false", () => {
+    it("should set currentLogbook", () => {
       const logbook = new Logbook();
       const action = fromActions.fetchFilteredEntriesCompleteAction({
         logbook
@@ -108,16 +51,6 @@ describe("LogbooksReducer", () => {
       const state = logbooksReducer(initialLogbookState, action);
 
       expect(state.currentLogbook).toEqual(logbook);
-      expect(state.isLoading).toEqual(false);
-    });
-  });
-
-  describe("on fetchFilteredEntriesFailedAction", () => {
-    it("should set isLoading to false", () => {
-      const action = fromActions.fetchFilteredEntriesFailedAction();
-      const state = logbooksReducer(initialLogbookState, action);
-
-      expect(state.isLoading).toEqual(false);
     });
   });
 

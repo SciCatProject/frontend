@@ -15,8 +15,6 @@ export interface ProposalsState {
   proposalsCount: number;
   datasetsCount: number;
 
-  isLoading: boolean;
-
   proposalFilters: ProposalFilters;
   datasetFilters: ProposalFilters;
 }
@@ -28,8 +26,6 @@ export const initialProposalsState: ProposalsState = {
 
   proposalsCount: null,
   datasetsCount: null,
-
-  isLoading: false,
 
   proposalFilters: {
     text: "",

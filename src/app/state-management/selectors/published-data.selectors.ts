@@ -20,11 +20,6 @@ export const getPublishedDataCount = createSelector(
   state => state.totalCount
 );
 
-export const getIsLoading = createSelector(
-  getPublishedDataState,
-  state => state.isLoading
-);
-
 export const getFilters = createSelector(
   getPublishedDataState,
   state => state.filters

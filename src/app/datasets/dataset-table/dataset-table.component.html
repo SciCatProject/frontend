@@ -35,10 +35,6 @@
     </div>
   </ng-template>
 
-  <div *ngIf="loading$ | async" class="spinner">
-    <mat-spinner></mat-spinner>
-  </div>
-
   <div class="action-container" [class.hidden]="loading$ | async">
     <button
       mat-button

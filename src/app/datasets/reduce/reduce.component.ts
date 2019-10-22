@@ -6,7 +6,6 @@ import { Subscription } from "rxjs";
 import {
   getCurrentDataset,
   getOpenwhiskResult,
-  getIsLoading,
   getDatasets
 } from "state-management/selectors/datasets.selectors";
 import {
@@ -31,8 +30,6 @@ export class ReduceComponent implements OnInit, OnDestroy {
 
   result: Object;
   resultSubscription: Subscription;
-  resultLoading: boolean;
-  resultLoadingSubscription: Subscription;
 
   show: boolean;
   columnsToDisplay: string[] = ["timestamp", "name", "pid", "software"];
@@ -100,20 +97,12 @@ export class ReduceComponent implements OnInit, OnDestroy {
       .subscribe(result => {
         this.result = result;
       });
-
-    this.resultLoadingSubscription = this.store
-      .pipe(select(getIsLoading))
-      .subscribe(resultLoading => {
-        this.resultLoading = resultLoading;
-        // this.store.dispatch(fetchDatasetsAction());
-      });
   }
 
   ngOnDestroy() {
     this.datasetSubscription.unsubscribe();
     this.datasetsSubscription.unsubscribe();
     this.resultSubscription.unsubscribe();
-    this.resultLoadingSubscription.unsubscribe();
   }
 
   updateHistory(): void {

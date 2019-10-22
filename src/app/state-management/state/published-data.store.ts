@@ -6,8 +6,6 @@ export interface PublishedDataState {
 
   totalCount: number;
 
-  isLoading: boolean;
-
   filters: PublishedDataFilters;
 }
 
@@ -16,8 +14,6 @@ export const initialPublishedDataState: PublishedDataState = {
   currentPublishedData: null,
 
   totalCount: 0,
-
-  isLoading: false,
 
   filters: {
     sortField: "publicationYear:desc",

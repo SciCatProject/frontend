@@ -17,6 +17,10 @@ import {
   getFullqueryParams,
   getFullfacetParams
 } from "state-management/selectors/datasets.selectors";
+import {
+  loadingAction,
+  loadingCompleteAction
+} from "state-management/actions/user.actions";
 
 const data: DatasetInterface = {
   owner: "",
@@ -331,6 +335,287 @@ describe("DatasetEffects", () => {
 
       const expected = cold("--b", { b: outcome });
       expect(effects.reduceDataset$).toBeObservable(expected);
+    });
+  });
+
+  describe("loading$", () => {
+    describe("ofType fetchDatasetsAction", () => {
+      it("should dispatch a loadingAction", () => {
+        const action = fromActions.fetchDatasetsAction();
+        const outcome = loadingAction();
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.loading$).toBeObservable(expected);
+      });
+    });
+
+    describe("ofType fetchFacetCountsAction", () => {
+      it("should dispatch a loadingAction", () => {
+        const action = fromActions.fetchFacetCountsAction();
+        const outcome = loadingAction();
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.loading$).toBeObservable(expected);
+      });
+    });
+
+    describe("ofType fetchDatasetAction", () => {
+      it("should dispatch a loadingAction", () => {
+        const pid = "testPid";
+        const action = fromActions.fetchDatasetAction({ pid });
+        const outcome = loadingAction();
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.loading$).toBeObservable(expected);
+      });
+    });
+
+    describe("ofType saveDatasetAction", () => {
+      it("should dispatch a loadingAction", () => {
+        const rawDataset = new RawDataset();
+        const metadata = {};
+        const action = fromActions.saveDatasetAction({
+          dataset: rawDataset,
+          metadata
+        });
+        const outcome = loadingAction();
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.loading$).toBeObservable(expected);
+      });
+    });
+
+    describe("ofType addAttachmentAction", () => {
+      it("should dispatch a loadingAction", () => {
+        const attachment = new Attachment();
+        const action = fromActions.addAttachmentAction({ attachment });
+        const outcome = loadingAction();
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.loading$).toBeObservable(expected);
+      });
+    });
+
+    describe("ofType updateAttachmentCaptionAction", () => {
+      it("should dispatch a loadingAction", () => {
+        const datasetId = "testId";
+        const attachmentId = "testId";
+        const caption = "test";
+        const action = fromActions.updateAttachmentCaptionAction({
+          datasetId,
+          attachmentId,
+          caption
+        });
+        const outcome = loadingAction();
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.loading$).toBeObservable(expected);
+      });
+    });
+
+    describe("ofType removeAttachmentAction", () => {
+      it("should dispatch a loadingAction", () => {
+        const datasetId = "testId";
+        const attachmentId = "testId";
+        const action = fromActions.removeAttachmentAction({
+          datasetId,
+          attachmentId
+        });
+        const outcome = loadingAction();
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.loading$).toBeObservable(expected);
+      });
+    });
+  });
+
+  describe("loadingComplete$", () => {
+    describe("ofType fetchDatasetsCompleteAction", () => {
+      it("should dispatch a loadingCompleteAction", () => {
+        const datasets = [dataset];
+        const action = fromActions.fetchDatasetsCompleteAction({ datasets });
+        const outcome = loadingCompleteAction();
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.loadingComplete$).toBeObservable(expected);
+      });
+    });
+    describe("ofType fetchDatasetsFailedAction", () => {
+      it("should dispatch a loadingCompleteAction", () => {
+        const action = fromActions.fetchDatasetsFailedAction();
+        const outcome = loadingCompleteAction();
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.loadingComplete$).toBeObservable(expected);
+      });
+    });
+    describe("ofType fetchFacetCountsCompleteAction", () => {
+      it("should dispatch a loadingCompleteAction", () => {
+        const facetCounts: FacetCounts = {
+          creationLocation: [{ count: 0 }],
+          creationTime: [{ count: 0 }],
+          keywords: [{ count: 0 }],
+          ownerGroup: [{ count: 0 }],
+          type: [{ count: 0 }]
+        };
+        const allCounts = 0;
+        const action = fromActions.fetchFacetCountsCompleteAction({
+          facetCounts,
+          allCounts
+        });
+        const outcome = loadingCompleteAction();
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.loadingComplete$).toBeObservable(expected);
+      });
+    });
+    describe("ofType fetchFacetCountsFailedAction", () => {
+      it("should dispatch a loadingCompleteAction", () => {
+        const action = fromActions.fetchFacetCountsFailedAction();
+        const outcome = loadingCompleteAction();
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.loadingComplete$).toBeObservable(expected);
+      });
+    });
+    describe("ofType fetchDatasetCompleteAction", () => {
+      it("should dispatch a loadingCompleteAction", () => {
+        const action = fromActions.fetchDatasetCompleteAction({ dataset });
+        const outcome = loadingCompleteAction();
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.loadingComplete$).toBeObservable(expected);
+      });
+    });
+    describe("ofType fetchDatasetFailedAction", () => {
+      it("should dispatch a loadingCompleteAction", () => {
+        const action = fromActions.fetchDatasetFailedAction();
+        const outcome = loadingCompleteAction();
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.loadingComplete$).toBeObservable(expected);
+      });
+    });
+    describe("ofType saveDatasetCompleteAction", () => {
+      it("should dispatch a loadingCompleteAction", () => {
+        const action = fromActions.saveDatasetCompleteAction({ dataset });
+        const outcome = loadingCompleteAction();
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.loadingComplete$).toBeObservable(expected);
+      });
+    });
+    describe("ofType saveDatasetFailedAction", () => {
+      it("should dispatch a loadingCompleteAction", () => {
+        const action = fromActions.saveDatasetFailedAction();
+        const outcome = loadingCompleteAction();
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.loadingComplete$).toBeObservable(expected);
+      });
+    });
+    describe("ofType addAttachmentCompleteAction", () => {
+      it("should dispatch a loadingCompleteAction", () => {
+        const attachment = new Attachment();
+        const action = fromActions.addAttachmentCompleteAction({ attachment });
+        const outcome = loadingCompleteAction();
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.loadingComplete$).toBeObservable(expected);
+      });
+    });
+    describe("ofType addAttachmentFailedAction", () => {
+      it("should dispatch a loadingCompleteAction", () => {
+        const action = fromActions.addAttachmentFailedAction();
+        const outcome = loadingCompleteAction();
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.loadingComplete$).toBeObservable(expected);
+      });
+    });
+    describe("ofType updateAttachmentCaptionCompleteAction", () => {
+      it("should dispatch a loadingCompleteAction", () => {
+        const attachment = new Attachment();
+        const action = fromActions.updateAttachmentCaptionCompleteAction({
+          attachment
+        });
+        const outcome = loadingCompleteAction();
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.loadingComplete$).toBeObservable(expected);
+      });
+    });
+    describe("ofType updateAttachmentCaptionFailedAction", () => {
+      it("should dispatch a loadingCompleteAction", () => {
+        const action = fromActions.updateAttachmentCaptionFailedAction();
+        const outcome = loadingCompleteAction();
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.loadingComplete$).toBeObservable(expected);
+      });
+    });
+    describe("ofType removeAttachmentCompleteAction", () => {
+      it("should dispatch a loadingCompleteAction", () => {
+        const attachmentId = "testId";
+        const action = fromActions.removeAttachmentCompleteAction({
+          attachmentId
+        });
+        const outcome = loadingCompleteAction();
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.loadingComplete$).toBeObservable(expected);
+      });
+    });
+    describe("ofType removeAttachmentFailedAction", () => {
+      it("should dispatch a loadingCompleteAction", () => {
+        const action = fromActions.removeAttachmentFailedAction();
+        const outcome = loadingCompleteAction();
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.loadingComplete$).toBeObservable(expected);
+      });
     });
   });
 });

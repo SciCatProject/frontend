@@ -23,8 +23,6 @@ const initialProposalsState: ProposalsState = {
   proposalsCount: 0,
   datasetsCount: 0,
 
-  isLoading: false,
-
   proposalFilters: {
     text: "test",
     sortField: "test asc",
@@ -87,14 +85,6 @@ describe("Proposal Selectors", () => {
       expect(
         fromSelectors.getDatasetsCount.projector(initialProposalsState)
       ).toEqual(0);
-    });
-  });
-
-  describe("getIsLoading", () => {
-    it("should get isLoading", () => {
-      expect(
-        fromSelectors.getIsLoading.projector(initialProposalsState)
-      ).toEqual(false);
     });
   });
 
