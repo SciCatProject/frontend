@@ -9,7 +9,6 @@ import { DatasetEffects } from "state-management/effects/datasets.effects";
 import { DatasetsModule } from "datasets/datasets.module";
 import { EffectsModule } from "@ngrx/effects";
 import { FlexLayoutModule } from "@angular/flex-layout";
-import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { HttpClientModule } from "@angular/common/http";
 import { JobEffects } from "state-management/effects/jobs.effects";
 import { NgModule } from "@angular/core";
@@ -68,7 +67,6 @@ import { JobsModule } from "jobs/jobs.module";
     BrowserModule,
     DatasetsModule,
     FlexLayoutModule,
-    FontAwesomeModule,
     HelpModule,
     HttpClientModule,
     JobsModule,

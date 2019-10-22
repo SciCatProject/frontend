@@ -145,6 +145,8 @@ export class PublishedDataEffects {
       ofType(
         fromActions.fetchAllPublishedDataCompleteAction,
         fromActions.fetchAllPublishedDataFailedAction,
+        fromActions.fetchCountCompleteAction,
+        fromActions.fetchCountFailedAction,
         fromActions.fetchPublishedDataCompleteAction,
         fromActions.fetchPublishedDataFailedAction,
         fromActions.publishDatasetCompleteAction,
