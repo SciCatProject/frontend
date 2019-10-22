@@ -1,5 +1,6 @@
 import { NgModule, InjectionToken } from "@angular/core";
 import { environment } from "../environments/environment";
+import { TableColumn } from "state-management/models";
 
 export const APP_CONFIG = new InjectionToken<AppConfig>("app.config");
 
@@ -19,7 +20,7 @@ export class AppConfig {
   fileColorEnabled: boolean;
   gettingStarted: string;
   ingestManual: string;
-  localColumns: string[];
+  localColumns: TableColumn[];
   logbookEnabled: boolean;
   maxDirectDownloadSize: number;
   metadataPreviewEnabled: boolean;
@@ -53,17 +54,19 @@ export const APP_DI_CONFIG: AppConfig = {
   ingestManual: environment["ingestManual"] || null,
   logbookEnabled: environment["logbookEnabled"] || false,
   localColumns: environment["localColumns"] || [
-    "select",
-    "datasetName",
-    "sourceFolder",
-    "size",
-    "creationTime",
-    "type",
-    "image",
-    "metadata",
-    "proposalId",
-    "ownerGroup",
-    "dataStatus",
+    { name: "select", order: 0, enabled: true },
+    { name: "datasetName", order: 1, enabled: true },
+    { name: "runNumber", order: 2, enabled: true },
+    { name: "sourceFolder", order: 3, enabled: true },
+    { name: "size", order: 4, enabled: true },
+    { name: "creationTime", order: 5, enabled: true },
+    { name: "type", order: 6, enabled: true },
+    { name: "image", order: 7, enabled: true },
+    { name: "metadata", order: 8, enabled: true },
+    { name: "proposalId", order: 9, enabled: true },
+    { name: "ownerGroup", order: 10, enabled: true },
+    { name: "dataStatus", order: 11, enabled: true },
+    { name: "derivedDatasetsNum", order: 12, enabled: false }
   ],
   maxDirectDownloadSize: environment["maxDirectDownloadSize"] || null,
   metadataPreviewEnabled: environment["metadataPreviewEnabled"] || false,

@@ -12,8 +12,7 @@ import {
 } from "state-management/actions/user.actions";
 import { Subscription } from "rxjs";
 import {
-  getDisplayedColumns,
-  getConfigurableColumns,
+  getColumns,
   getIsLoading
 } from "../../state-management/selectors/user.selectors";
 import { getSubmitError } from "state-management/selectors/jobs.selectors";
@@ -40,19 +39,14 @@ import {
   getPublicViewMode
 } from "state-management/selectors/datasets.selectors";
 import { FormControl } from "@angular/forms";
-
-export interface PageChangeEvent {
-  pageIndex: number;
-  pageSize: number;
-  length: number;
-}
+import { PageChangeEvent } from "shared/modules/table/table.component";
 
 export interface SortChangeEvent {
   active: keyof Dataset;
   direction: "asc" | "desc" | "";
 }
 
-export interface DatasetDerivationsMap {
+interface DatasetDerivationsMap {
   datasetPid: string;
   derivedDatasetsNum: number;
 }
@@ -69,19 +63,17 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   datasetCount$ = this.store.select(getTotalSets);
   loading$ = this.store.pipe(select(getIsLoading));
 
-  datasetsSubscription: Subscription;
-  datasetPids: string[] = [];
-  datasetDerivationsMaps: DatasetDerivationsMap[] = [];
-  derivationMapPids: string[] = [];
+  private subscriptions: Subscription[] = [];
 
-  public currentMode: ArchViewMode;
-  private selectedSets$ = this.store.pipe(select(getSelectedDatasets));
-  private mode$ = this.store.pipe(select(getArchiveViewMode));
+  configForm = new FormControl();
+  configColumns: string[] = [];
+  displayedColumns: string[] = [];
+
   private selectedPids: string[] = [];
-  private selectedPidsSubscription = this.selectedSets$.subscribe(datasets => {
-    this.selectedPids = datasets.map(dataset => dataset.pid);
-  });
+  private selectedSets: Dataset[] = [];
   private inBatchPids: string[] = [];
+
+  public currentArchViewMode: ArchViewMode;
   public viewModes = ArchViewMode;
   private modes = [
     ArchViewMode.all,
@@ -92,33 +84,12 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     ArchViewMode.user_error
   ];
 
-  // compatibility analogs of observables
-  private selectedSets: Dataset[] = [];
-  private selectedSetsSubscription = this.selectedSets$.subscribe(
-    selectedSets => (this.selectedSets = selectedSets)
-  );
-  private modeSubscription = this.mode$.subscribe((mode: ArchViewMode) => {
-    this.currentMode = mode;
-  });
-  // and eventually be removed.
-  private jobErrorSubscription: Subscription;
-  dispColumns$ = this.store.pipe(select(getDisplayedColumns));
-
-  configCols$ = this.store.pipe(select(getConfigurableColumns));
-  configForm = new FormControl();
-  $ = this.store.pipe(select(getConfigurableColumns)).subscribe(ret => {
-    // this is required to set all columns check to true
-    // param must match the type defined by the ngFor in template
-    // setTrue can be used to filter out columns that should be false by default
-    const setTrue = ret.filter(item => {
-      return item !== "derivedDatasetsNum";
-    });
-    this.configForm.setValue(setTrue);
-  });
-
   searchPublicDataEnabled = this.appConfig.searchPublicDataEnabled;
-  viewPublic = false;
-  viewPublicSubscription: Subscription;
+  currentPublicViewMode = false;
+
+  datasetPids: string[] = [];
+  datasetDerivationsMaps: DatasetDerivationsMap[] = [];
+  derivationMapPids: string[] = [];
 
   onSelectColumn(event: any): void {
     const column = event.source.value;
@@ -141,9 +112,9 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   }
 
   onViewPublicChange(value: boolean): void {
-    this.viewPublic = value;
+    this.currentPublicViewMode = value;
     this.store.dispatch(
-      setPublicViewModeAction({ isPublished: this.viewPublic })
+      setPublicViewModeAction({ isPublished: this.currentPublicViewMode })
     );
   }
 
@@ -175,7 +146,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
             )
         );
       }
-      // this.onClose.emit(result);
     });
   }
 
@@ -340,24 +310,38 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.jobErrorSubscription = this.store
-      .pipe(select(getSubmitError))
-      .subscribe(err => {
+    this.subscriptions.push(
+      this.store.pipe(select(getSubmitError)).subscribe(err => {
         if (!err) {
           this.store.dispatch(clearSelectionAction());
         }
-      });
+      })
+    );
 
-    this.datasetsSubscription = this.store
-      .pipe(select(getDatasets))
-      .subscribe(datasets => {
-        this.datasetPids = datasets.map(dataset => {
-          return dataset.pid;
-        });
+    this.subscriptions.push(
+      this.store.pipe(select(getColumns)).subscribe(tableColumns => {
+        this.configColumns = tableColumns
+          .filter(column => column.name !== "select")
+          .map(column => column.name);
+
+        const setTrue = tableColumns
+          .filter(column => column.enabled)
+          .filter(column => column.name !== "select")
+          .map(column => column.name);
+
+        this.displayedColumns = tableColumns
+          .filter(column => column.enabled)
+          .map(column => column.name);
+
+        this.configForm.setValue(setTrue);
+      })
+    );
+
+    this.subscriptions.push(
+      this.store.pipe(select(getDatasets)).subscribe(datasets => {
+        this.datasetPids = datasets.map(dataset => dataset.pid);
         this.derivationMapPids = this.datasetDerivationsMaps.map(
-          datasetderivationMap => {
-            return datasetderivationMap.datasetPid;
-          }
+          datasetderivationMap => datasetderivationMap.datasetPid
         );
         datasets.forEach(dataset => {
           if (!this.derivationMapPids.includes(dataset.pid)) {
@@ -368,20 +352,32 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
             this.datasetDerivationsMaps.push(map);
           }
         });
-      });
+      })
+    );
 
-    this.viewPublicSubscription = this.store
-      .pipe(select(getPublicViewMode))
-      .subscribe(viewPublic => {
-        this.viewPublic = viewPublic;
-      });
+    this.subscriptions.push(
+      this.store.pipe(select(getSelectedDatasets)).subscribe(selectedSets => {
+        this.selectedSets = selectedSets;
+        this.selectedPids = selectedSets.map(dataset => dataset.pid);
+      })
+    );
+
+    this.subscriptions.push(
+      this.store
+        .pipe(select(getArchiveViewMode))
+        .subscribe((mode: ArchViewMode) => {
+          this.currentArchViewMode = mode;
+        })
+    );
+
+    this.subscriptions.push(
+      this.store.pipe(select(getPublicViewMode)).subscribe(publicViewMode => {
+        this.currentPublicViewMode = publicViewMode;
+      })
+    );
   }
 
   ngOnDestroy() {
-    this.modeSubscription.unsubscribe();
-    this.selectedSetsSubscription.unsubscribe();
-    this.jobErrorSubscription.unsubscribe();
-    this.selectedPidsSubscription.unsubscribe();
-    this.datasetsSubscription.unsubscribe();
+    this.subscriptions.forEach(subscription => subscription.unsubscribe());
   }
 }

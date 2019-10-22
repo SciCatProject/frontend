@@ -2,7 +2,7 @@
   <div class="mode-container">
     <mat-button-toggle-group
       class="public-toggle"
-      [value]="viewPublic"
+      [value]="currentPublicViewMode"
       *ngIf="searchPublicDataEnabled"
     >
       <mat-button-toggle [value]="false" (click)="onViewPublicChange(false)">
@@ -13,7 +13,7 @@
       </mat-button-toggle>
     </mat-button-toggle-group>
     <mat-button-toggle-group
-      [value]="currentMode"
+      [value]="currentArchViewMode"
       *ngIf="appConfig.archiveWorkflowEnabled"
     >
       <mat-button-toggle
@@ -39,7 +39,7 @@
     <button
       mat-button
       [disabled]="isEmptySelection$ | async"
-      *ngIf="currentMode === viewModes.archivable"
+      *ngIf="currentArchViewMode === viewModes.archivable"
       class="ui button archive-action-btn"
       (click)="archiveClickHandle($event)"
       color="primary"
@@ -50,7 +50,7 @@
     <button
       mat-button
       [disabled]="isEmptySelection$ | async"
-      *ngIf="currentMode === viewModes.retrievable"
+      *ngIf="currentArchViewMode === viewModes.retrievable"
       class="ui button retrieve-action-btn"
       (click)="retrieveClickHandle($event)"
       color="primary"
@@ -102,7 +102,7 @@
         multiple
       >
         <mat-option
-          *ngFor="let column of configCols$ | async"
+          *ngFor="let column of configColumns"
           [value]="column"
           (onSelectionChange)="onSelectColumn($event)"
         >
@@ -464,13 +464,13 @@
 
     <mat-header-row
       class="datasets-header"
-      *matHeaderRowDef="dispColumns$ | async; sticky: true"
+      *matHeaderRowDef="displayedColumns; sticky: true"
     >
     </mat-header-row>
 
     <mat-row
       class="row-generic"
-      *matRowDef="let dataset; columns: dispColumns$ | async"
+      *matRowDef="let dataset; columns: displayedColumns"
       (click)="onClick(dataset)"
     >
     </mat-row>
