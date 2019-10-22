@@ -87,7 +87,7 @@
     "source-map-support": "^0.5.13",
     "ts-helpers": "^1.1.2",
     "ts-node": "^8.4.1",
-    "ts-prune": "^0.2.3",
+    "ts-prune": "^0.3.0",
     "tslint": "^5.20.0",
     "typescript": "3.4.5",
     "uglify-js": "^3.6.0",
