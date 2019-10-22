@@ -5,7 +5,6 @@ import { BatchCardComponent } from "./batch-card/batch-card.component";
 import { BatchViewComponent } from "./batch-view/batch-view.component";
 import { CommonModule } from "@angular/common";
 import { FlexLayoutModule } from "@angular/flex-layout";
-import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MatButtonToggleModule } from "@angular/material/button-toggle";
 import { MatChipsModule } from "@angular/material/chips";
@@ -59,7 +58,6 @@ import { DatasetsFilterComponent } from "./datasets-filter/datasets-filter.compo
     AppConfigModule,
     CommonModule,
     FlexLayoutModule,
-    FontAwesomeModule,
     FormsModule,
     LinkyModule,
     MatAutocompleteModule,
