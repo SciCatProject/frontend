@@ -34,6 +34,7 @@ export class AppConfig {
   shoppingCartEnabled: boolean;
   tableSciDataEnabled: boolean;
   userProfileImageEnabled: boolean;
+  landingPage: string;
 }
 
 export const APP_DI_CONFIG: AppConfig = {
@@ -79,7 +80,8 @@ export const APP_DI_CONFIG: AppConfig = {
   sftpHost: environment["sftpHost"] || null,
   shoppingCartEnabled: environment["shoppingCartEnabled"] || false,
   tableSciDataEnabled: environment["tableSciDataEnabled"] || false,
-  userProfileImageEnabled: environment["userProfileImageEnabled"] || false
+  userProfileImageEnabled: environment["userProfileImageEnabled"] || false,
+  landingPage: environment["landingPage"] || null
 };
 
 @NgModule({

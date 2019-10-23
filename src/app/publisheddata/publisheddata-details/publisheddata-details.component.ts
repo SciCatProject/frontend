@@ -1,4 +1,5 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
+import { APP_CONFIG, AppConfig } from "app-config.module";
+import { Component, OnInit, OnDestroy, Inject } from "@angular/core";
 import { PublishedData } from "shared/sdk";
 import { Store, select } from "@ngrx/store";
 import { ActivatedRoute } from "@angular/router";
@@ -16,11 +17,13 @@ export class PublisheddataDetailsComponent implements OnInit, OnDestroy {
   currentData$ = this.store.pipe(select(getCurrentPublishedData));
 
   routeSubscription: Subscription;
+  landingPageUrl = "";
 
   constructor(
     private route: ActivatedRoute,
-    private store: Store<PublishedData>
-  ) {}
+    private store: Store<PublishedData>,
+    @Inject(APP_CONFIG) public appConfig: AppConfig
+  ) { }
 
   ngOnInit() {
     this.routeSubscription = this.route.params
@@ -28,6 +31,13 @@ export class PublisheddataDetailsComponent implements OnInit, OnDestroy {
       .subscribe((id: string) =>
         this.store.dispatch(fetchPublishedDataAction({ id }))
       );
+
+    this.currentData$
+      .subscribe(data => {
+        if (data) {
+          this.landingPageUrl = this.appConfig.landingPage + encodeURIComponent(data.doi);
+        }
+      });
   }
 
   ngOnDestroy() {
