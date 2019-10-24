@@ -18,5 +18,6 @@ export const environment = {
   tableSciDataEnabled: false,
   metadataPreviewEnabled: false,
   datasetReduceEnabled: false,
-  fileColorEnabled: false
+  fileColorEnabled: false,
+  landingPage: "doi.psi.ch/detail/"
 };

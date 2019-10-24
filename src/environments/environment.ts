@@ -45,5 +45,6 @@ export const environment = {
   shoppingCartEnabled: true,
   tableSciDataEnabled: true,
   userProfileImageEnabled: true,
-  searchPublicDataEnabled: true
+  searchPublicDataEnabled: true,
+  landingPage: "doi2.psi.ch/detail/"
 };

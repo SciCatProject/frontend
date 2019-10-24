@@ -1,5 +1,5 @@
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
-
+import { APP_CONFIG, AppConfigModule } from "app-config.module";
 import { PublisheddataDetailsComponent } from "./publisheddata-details.component";
 import { MockStore, MockPublishedDataApi, MockRouter, MockActivatedRoute } from "shared/MockStubs";
 import { Store } from "@ngrx/store";
@@ -17,7 +17,7 @@ describe("PublisheddataDetailsComponent", () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [PublisheddataDetailsComponent],
-      imports: [MatCardModule, NgxJsonViewerModule, LinkyModule, SharedCatanieModule]
+      imports: [AppConfigModule, MatCardModule, NgxJsonViewerModule, LinkyModule, SharedCatanieModule]
     });
     TestBed.overrideComponent(PublisheddataDetailsComponent, {
       set: {
@@ -25,7 +25,13 @@ describe("PublisheddataDetailsComponent", () => {
           { provide: Store, useClass: MockStore },
           { provide: Router, useClass: MockRouter },
           { provide: ActivatedRoute, useClass: MockActivatedRoute },
-          { provide: PublishedDataApi, useClass: MockPublishedDataApi }
+          { provide: PublishedDataApi, useClass: MockPublishedDataApi },
+          {
+            provide: APP_CONFIG,
+            useValue: {
+              editMetadataEnabled: true
+            }
+          }
         ]
       }
     });
