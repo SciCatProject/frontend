@@ -33,6 +33,7 @@ export const environment = {
     { name: "dataStatus", order: 11, enabled: false },
     { name: "derivedDatasetsNum", order: 12, enabled: false }
   ],
+  landingPage: "doi2.psi.ch/detail/",
   logbookEnabled: true,
   metadataPreviewEnabled: true,
   multipleDownloadEnabled: true,
@@ -40,11 +41,11 @@ export const environment = {
   multipleDownloadAction: "http://localhost:3011/zip",
   scienceSearchEnabled: true,
   searchProposals: true,
+  searchPublicDataEnabled: true,
   searchSamples: true,
   sftpHost: "login.esss.dk",
   shoppingCartEnabled: true,
   tableSciDataEnabled: true,
-  userProfileImageEnabled: true,
-  searchPublicDataEnabled: true,
-  landingPage: "doi2.psi.ch/detail/"
+  userNamePromptEnabled: true,
+  userProfileImageEnabled: true
 };

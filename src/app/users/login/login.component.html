@@ -14,7 +14,12 @@
         class="ui form"
       >
         <div class="field">
-          <label for="emailInput">Username:</label>
+          <label for="emailInput">
+            Username:
+            <div *ngIf="appConfig.userNamePromptEnabled">
+              <i>(firstnamelastname)</i>
+            </div>
+          </label>
           <input
             id="emailInput"
             formControlName="username"
