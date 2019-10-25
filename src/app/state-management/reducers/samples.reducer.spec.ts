@@ -96,6 +96,15 @@ describe("SamplesReducer", () => {
     });
   });
 
+  describe("on saveCharacteristicsCompleteAction", () => {
+    it("should set currentSample", () => {
+      const action = fromActions.saveCharacteristicsCompleteAction({ sample });
+      const state = samplesReducer(initialSampleState, action);
+
+      expect(state.currentSample).toEqual(sample);
+    });
+  });
+
   describe("on addAttachmentCompleteAction", () => {
     it("should set attachments for currentSample", () => {
       const attachment = new Attachment();

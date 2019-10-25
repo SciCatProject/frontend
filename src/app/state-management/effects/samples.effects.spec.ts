@@ -50,6 +50,7 @@ describe("SampleEffects", () => {
           useValue: jasmine.createSpyObj("sampleApi", [
             "fullquery",
             "findById",
+            "patchAttributes",
             "create",
             "createAttachments",
             "updateByIdAttachments",
@@ -337,6 +338,42 @@ describe("SampleEffects", () => {
     });
   });
 
+  describe("saveCharacteristics$", () => {
+    it("should result in a saveCharacteristicsCompleteAction", () => {
+      const sampleId = "testId";
+      const characteristics = {};
+      const action = fromActions.saveCharacteristicsAction({
+        sampleId,
+        characteristics
+      });
+      const outcome = fromActions.saveCharacteristicsCompleteAction({ sample });
+
+      actions = hot("-a", { a: action });
+      const response = cold("-a|", { a: sample });
+      sampleApi.patchAttributes.and.returnValue(response);
+
+      const expected = cold("--b", { b: outcome });
+      expect(effects.saveCharacteristics$).toBeObservable(expected);
+    });
+
+    it("should result in a saveCharacteristicsFailedAction", () => {
+      const sampleId = "testId";
+      const characteristics = {};
+      const action = fromActions.saveCharacteristicsAction({
+        sampleId,
+        characteristics
+      });
+      const outcome = fromActions.saveCharacteristicsFailedAction();
+
+      actions = hot("-a", { a: action });
+      const response = cold("-#", {});
+      sampleApi.patchAttributes.and.returnValue(response);
+
+      const expected = cold("--b", { b: outcome });
+      expect(effects.saveCharacteristics$).toBeObservable(expected);
+    });
+  });
+
   describe("addAttachment$", () => {
     const attachment = new Attachment();
 
@@ -510,6 +547,23 @@ describe("SampleEffects", () => {
     describe("ofType addSampleAction", () => {
       it("should dispatch a loadingAction", () => {
         const action = fromActions.addSampleAction({ sample });
+        const outcome = loadingAction();
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.loading$).toBeObservable(expected);
+      });
+    });
+
+    describe("ofType saveCharacteristicsAction", () => {
+      it("should dispatch a loadingAction", () => {
+        const sampleId = "testId";
+        const characteristics = {};
+        const action = fromActions.saveCharacteristicsAction({
+          sampleId,
+          characteristics
+        });
         const outcome = loadingAction();
 
         actions = hot("-a", { a: action });
@@ -713,6 +767,32 @@ describe("SampleEffects", () => {
     describe("ofType addSampleFailedAction", () => {
       it("should dispatch a loadingCompleteAction", () => {
         const action = fromActions.addSampleFailedAction();
+        const outcome = loadingCompleteAction();
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.loadingComplete$).toBeObservable(expected);
+      });
+    });
+
+    describe("ofType saveCharacteristicsCompleteAction", () => {
+      it("should dispatch a loadingCompleteAction", () => {
+        const action = fromActions.saveCharacteristicsCompleteAction({
+          sample
+        });
+        const outcome = loadingCompleteAction();
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.loadingComplete$).toBeObservable(expected);
+      });
+    });
+
+    describe("ofType saveCharacteristicsFailedAction", () => {
+      it("should dispatch a loadingCompleteAction", () => {
+        const action = fromActions.saveCharacteristicsFailedAction();
         const outcome = loadingCompleteAction();
 
         actions = hot("-a", { a: action });

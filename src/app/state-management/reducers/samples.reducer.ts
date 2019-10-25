@@ -38,6 +38,11 @@ const reducer = createReducer(
     return { ...state, samples };
   }),
 
+  on(fromActions.saveCharacteristicsCompleteAction, (state, { sample }) => ({
+    ...state,
+    currentSample: sample
+  })),
+
   on(fromActions.addAttachmentCompleteAction, (state, { attachment }) => {
     const attachments = state.currentSample.attachments;
     attachments.push(attachment);

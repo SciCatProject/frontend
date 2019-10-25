@@ -18,8 +18,7 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { SampleDashboardComponent } from "./sample-dashboard/sample-dashboard.component";
 import { FlexLayoutModule } from "@angular/flex-layout";
 import { NgxJsonViewerModule } from "ngx-json-viewer";
-import { SearchBarModule } from "shared/modules/search-bar/search-bar.module";
-import { TableModule } from "shared/modules/table/table.module";
+import { SharedCatanieModule } from "shared/shared.module";
 
 @NgModule({
   imports: [
@@ -30,14 +29,14 @@ import { TableModule } from "shared/modules/table/table.module";
     MatCardModule,
     MatIconModule,
     MatFormFieldModule,
+    MatIconModule,
     MatInputModule,
     MatDialogModule,
     MatTabsModule,
     NgxJsonViewerModule,
     ReactiveFormsModule,
-    SearchBarModule,
-    StoreModule.forFeature("samples", samplesReducer),
-    TableModule
+    SharedCatanieModule,
+    StoreModule.forFeature("samples", samplesReducer)
   ],
   exports: [
     SampleDetailComponent,

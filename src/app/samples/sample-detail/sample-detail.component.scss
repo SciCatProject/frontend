@@ -1,9 +1,16 @@
+@import "../../../theme.scss";
+
 mat-card {
   margin: 1em;
 
-  .mat-card-header {
-    background-color: #7de1ff;
+  .first-header {
+    background-color: mat-color($primary, lighter);
   }
+
+  .second-header {
+    background-color: mat-color($accent, lighter);
+  }
+
   .details {
     padding: 1em;
 
@@ -12,25 +19,16 @@ mat-card {
         th {
           text-align: left;
           padding-right: 0.5em;
-          material-icons {
+
+          mat-icon {
             vertical-align: middle;
           }
         }
 
         td {
-          padding: 0.9em;
-          vertical-align: middle;
+          padding: 0.5em;
         }
       }
-    }
-
-    h3 {
-      margin-top: 1em;
-    }
-
-    .material-icons {
-      vertical-align: middle;
-      color: black;
     }
   }
 }

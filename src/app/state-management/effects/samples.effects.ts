@@ -115,6 +115,24 @@ export class SampleEffects {
     )
   );
 
+  saveCharacteristics$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(fromActions.saveCharacteristicsAction),
+      switchMap(({ sampleId, characteristics }) =>
+        this.sampleApi
+          .patchAttributes(sampleId, {
+            sampleCharacteristics: characteristics
+          })
+          .pipe(
+            map((sample: Sample) =>
+              fromActions.saveCharacteristicsCompleteAction({ sample })
+            ),
+            catchError(() => of(fromActions.saveCharacteristicsFailedAction()))
+          )
+      )
+    )
+  );
+
   addSample$ = createEffect(() =>
     this.actions$.pipe(
       ofType(fromActions.addSampleAction),
@@ -203,6 +221,7 @@ export class SampleEffects {
         fromActions.fetchSampleDatasetsAction,
         fromActions.fetchSampleDatasetsCountAction,
         fromActions.addSampleAction,
+        fromActions.saveCharacteristicsAction,
         fromActions.addAttachmentAction,
         fromActions.updateAttachmentCaptionAction,
         fromActions.removeAttachmentAction
@@ -226,6 +245,8 @@ export class SampleEffects {
         fromActions.fetchSampleDatasetsCountFailedAction,
         fromActions.addSampleCompleteAction,
         fromActions.addSampleFailedAction,
+        fromActions.saveCharacteristicsCompleteAction,
+        fromActions.saveCharacteristicsFailedAction,
         fromActions.addAttachmentCompleteAction,
         fromActions.addAttachmentFailedAction,
         fromActions.updateAttachmentCaptionCompleteAction,

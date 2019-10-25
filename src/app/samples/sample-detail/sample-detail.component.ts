@@ -1,5 +1,5 @@
 import { ActivatedRoute, Router } from "@angular/router";
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit, Inject } from "@angular/core";
 import { Subscription } from "rxjs";
 import { Sample, Dataset } from "../../shared/sdk/models";
 import {
@@ -13,7 +13,8 @@ import { select, Store } from "@ngrx/store";
 import {
   fetchSampleAction,
   fetchSampleDatasetsAction,
-  changeDatasetsPageAction
+  changeDatasetsPageAction,
+  saveCharacteristicsAction
 } from "../../state-management/actions/samples.actions";
 import { DatePipe, SlicePipe } from "@angular/common";
 import { FileSizePipe } from "shared/pipes/filesize.pipe";
@@ -21,6 +22,7 @@ import {
   TableColumn,
   PageChangeEvent
 } from "shared/modules/table/table.component";
+import { APP_CONFIG, AppConfig } from "app-config.module";
 
 @Component({
   selector: "app-sample-detail",
@@ -68,6 +70,15 @@ export class SampleDetailComponent implements OnInit, OnDestroy {
     }
   }
 
+  onSaveCharacteristics(characteristics: object) {
+    this.store.dispatch(
+      saveCharacteristicsAction({
+        sampleId: this.sample.sampleId,
+        characteristics
+      })
+    );
+  }
+
   onPageChange(event: PageChangeEvent) {
     this.store.dispatch(
       changeDatasetsPageAction({ page: event.pageIndex, limit: event.pageSize })
@@ -83,6 +94,7 @@ export class SampleDetailComponent implements OnInit, OnDestroy {
   }
 
   constructor(
+    @Inject(APP_CONFIG) public appConfig: AppConfig,
     private datePipe: DatePipe,
     private filesizePipe: FileSizePipe,
     private router: Router,
