@@ -4,17 +4,14 @@ import {
   DatasetTableComponent,
   SortChangeEvent
 } from "./dataset-table.component";
-import { HttpClient } from "@angular/common/http";
 import {
   MatDialogModule,
   MatTableModule,
   MatCheckboxChange
 } from "@angular/material";
 import {
-  MockHttp,
   MockDatasetApi,
   MockArchivingService,
-  MockAttachmentApi,
   MockStore
 } from "shared/MockStubs";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
@@ -28,7 +25,7 @@ import {
 import { combineReducers, StoreModule, Store } from "@ngrx/store";
 import { datasetsReducer } from "state-management/reducers/datasets.reducer";
 import { jobsReducer } from "state-management/reducers/jobs.reducer";
-import { AttachmentApi, DatasetApi, Dataset } from "shared/sdk";
+import { DatasetApi, Dataset } from "shared/sdk";
 import { SharedCatanieModule } from "shared/shared.module";
 import {
   selectColumnAction,
@@ -78,9 +75,7 @@ describe("DatasetTableComponent", () => {
     TestBed.overrideComponent(DatasetTableComponent, {
       set: {
         providers: [
-          { provide: HttpClient, useClass: MockHttp },
           { provide: Router, useValue: router },
-          { provide: AttachmentApi, useClass: MockAttachmentApi },
           { provide: DatasetApi, useClass: MockDatasetApi },
           {
             provide: APP_CONFIG,

@@ -1,11 +1,8 @@
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { HttpClient } from "@angular/common/http";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Store, StoreModule } from "@ngrx/store";
-import { UserApi } from "shared/sdk/services";
-import { ConfigService } from "shared/services/config.service";
 import { rootReducer } from "state-management/reducers/root.reducer";
 import {
   MatAutocompleteModule,
@@ -14,11 +11,8 @@ import {
 } from "@angular/material";
 import {
   MockActivatedRoute,
-  MockConfigService,
-  MockHttp,
   MockRouter,
-  MockStore,
-  MockUserApi
+  MockStore
 } from "../../shared/MockStubs";
 import { DashboardComponent } from "./dashboard.component";
 
@@ -45,10 +39,7 @@ describe("DashboardComponent", () => {
         providers: [
           { provide: ActivatedRoute, useClass: MockActivatedRoute },
           { provide: Router, useClass: MockRouter },
-          { provide: Store, useClass: MockStore },
-          { provide: UserApi, useClass: MockUserApi },
-          { provide: HttpClient, useClass: MockHttp },
-          { provide: ConfigService, useClass: MockConfigService }
+          { provide: Store, useClass: MockStore }
         ]
       }
     });
