@@ -21,14 +21,11 @@ mat-header-row {
 .download-button {
   background-color: #0ea432;
   color: #ffffff;
-  margin-bottom: 1em;
+  margin: 0 0 1em 1em;
   float: right;
 }
 
 .nbr-of-files {
-  float: left;
-  transform: translateY(50%);
-  margin-bottom: 1em;
   font-size: larger;
 }
 
