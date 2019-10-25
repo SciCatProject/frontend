@@ -1,26 +1,26 @@
 @import "../../../theme.scss";
 
-.mat-column-select {
-  flex-grow: 0;
-  overflow: visible; /* Needed to prevent offsetting of the checkbox when clicking */
-  color: #000000;
-  padding-right: 1.5em;
-}
-
 .mat-header-cell {
-  color: white;
-  background: mat-color($primary);
-  justify-content: left;
+  color: mat-color($primary, default-contrast);
+
+  ::ng-deep .mat-checkbox .mat-checkbox-frame {
+    border-color: mat-color($primary, default-contrast);
+  }
 }
 
 mat-header-row {
-  color: white;
   background: mat-color($primary);
 }
 
+.mat-column-select {
+  flex-grow: 0;
+  overflow: visible; /* Needed to prevent offsetting of the checkbox when clicking */
+  padding-right: 1.5em;
+}
+
 .download-button {
-  background-color: #0ea432;
-  color: #ffffff;
+  background-color: mat-color($accent);
+  color: mat-color($accent, default-contrast);
   margin: 0 0 1em 1em;
   float: right;
 }
