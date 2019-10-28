@@ -81,7 +81,9 @@ export class SampleDialogComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.subscriptions.push(
       this.store.pipe(select(getCurrentUser)).subscribe(user => {
-        this.username = user.username;
+        if (user) {
+          this.username = user.username;
+        }
       })
     );
 
