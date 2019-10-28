@@ -67,6 +67,18 @@ export const addSampleCompleteAction = createAction(
 );
 export const addSampleFailedAction = createAction("[Sample] Add Sample Failed");
 
+export const saveCharacteristicsAction = createAction(
+  "[Sample] Save Characteristics",
+  props<{ sampleId: string; characteristics: object }>()
+);
+export const saveCharacteristicsCompleteAction = createAction(
+  "[Sample] Save Characteristics Complete",
+  props<{ sample: Sample }>()
+);
+export const saveCharacteristicsFailedAction = createAction(
+  "[Sample] Save Characteristics Failed"
+);
+
 export const addAttachmentAction = createAction(
   "[Sample] Add Attachment",
   props<{ attachment: Attachment }>()

@@ -178,6 +178,42 @@ describe("Sample Actions", () => {
     });
   });
 
+  describe("saveCharacteristicsAction", () => {
+    it("should create an action", () => {
+      const sampleId = "testId";
+      const characteristics = {};
+      const action = fromActions.saveCharacteristicsAction({
+        sampleId,
+        characteristics
+      });
+      expect({ ...action }).toEqual({
+        type: "[Sample] Save Characteristics",
+        sampleId,
+        characteristics
+      });
+    });
+  });
+
+  describe("saveCharacteristicsCompleteAction", () => {
+    it("should create an action", () => {
+      const sample = new Sample();
+      const action = fromActions.saveCharacteristicsCompleteAction({ sample });
+      expect({ ...action }).toEqual({
+        type: "[Sample] Save Characteristics Complete",
+        sample
+      });
+    });
+  });
+
+  describe("saveCharacteristicsFailedAction", () => {
+    it("should create an action", () => {
+      const action = fromActions.saveCharacteristicsFailedAction();
+      expect({ ...action }).toEqual({
+        type: "[Sample] Save Characteristics Failed"
+      });
+    });
+  });
+
   describe("addAttachmentAction", () => {
     it("should create an action", () => {
       const attachment = new Attachment();

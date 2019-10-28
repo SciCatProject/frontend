@@ -15,7 +15,15 @@
     />
     <mat-hint align="end">Can be JSON &#123; "mass":"5g" &#125; </mat-hint>
   </mat-form-field>
-  <mat-form-field>
+  <mat-form-field *ngIf="userGroups">
+    <mat-label>Owner Group</mat-label>
+    <mat-select formControlName="ownerGroup">
+      <mat-option *ngFor="let group of userGroups" [value]="group">
+        {{ group }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field *ngIf="!userGroups">
     <input matInput placeholder="Owner Group" formControlName="ownerGroup" />
     <mat-hint align="end">Use a group you have access to</mat-hint>
   </mat-form-field>

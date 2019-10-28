@@ -55,7 +55,7 @@ export class MetadataEditComponent implements OnInit {
     if (this.metadata) {
       Object.keys(this.metadata).forEach(key => {
         let field = {};
-        if ("type" in this.metadata[key]) {
+        if (this.metadata[key]["type"]) {
           field = {
             fieldName: key,
             fieldType: this.metadata[key].type,

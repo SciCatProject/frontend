@@ -6,39 +6,71 @@
       </ng-template>
 
       <mat-card>
-        <mat-card-header>
+        <mat-card-header class="first-header">
           Sample Details
         </mat-card-header>
         <div class="details">
           <table>
             <tr *ngIf="sample.description as value">
-              <th><i class="material-icons"> description </i>Description</th>
+              <th><mat-icon> description </mat-icon>Description</th>
               <td>{{ value }}</td>
             </tr>
             <tr *ngIf="sample.createdAt as value">
-              <th><i class="material-icons"> event </i>Creation Time</th>
+              <th><mat-icon> event </mat-icon>Creation Time</th>
               <td>{{ value | date: "yyyy-MM-dd HH:mm" }}</td>
             </tr>
             <tr *ngIf="sample.owner as value">
-              <th><i class="material-icons"> person </i>Sample Owner</th>
+              <th><mat-icon> person </mat-icon>Sample Owner</th>
               <td>{{ value }}</td>
             </tr>
             <tr *ngIf="sample.ownerGroup as value">
-              <th><i class="material-icons"> group </i>Owner Group</th>
+              <th><mat-icon> group </mat-icon>Owner Group</th>
               <td>{{ value }}</td>
             </tr>
             <tr *ngIf="sample.sampleId as value">
-              <th><i class="material-icons"> fingerprint </i>Sample ID</th>
+              <th><mat-icon> fingerprint </mat-icon>Sample ID</th>
               <td>{{ value }}</td>
             </tr>
           </table>
-
-          <div *ngIf="sample.sampleCharacteristics as value">
-            <h3>Sample Characteristics</h3>
-            <pre>{{ value | json }}</pre>
-          </div>
         </div>
+      </mat-card>
 
+      <mat-card *ngIf="sample.sampleCharacteristics as value">
+        <mat-card-header class="second-header">
+          Characteristics
+        </mat-card-header>
+
+        <ng-template
+          [ngIf]="appConfig.tableSciDataEnabled"
+          [ngIfElse]="jsonView"
+        >
+          <mat-tab-group>
+            <mat-tab>
+              <ng-template mat-tab-label>
+                <mat-icon> list </mat-icon> View
+              </ng-template>
+
+              <metadata-view [metadata]="value"></metadata-view>
+            </mat-tab>
+            <mat-tab>
+              <ng-template mat-tab-label>
+                <mat-icon> edit </mat-icon> Edit
+              </ng-template>
+
+              <metadata-edit
+                [metadata]="value"
+                (save)="onSaveCharacteristics($event)"
+              ></metadata-edit>
+            </mat-tab>
+          </mat-tab-group>
+        </ng-template>
+
+        <ng-template #jsonView>
+          <ngx-json-viewer [json]="value" [expanded]="false"></ngx-json-viewer>
+        </ng-template>
+      </mat-card>
+
+      <mat-card>
         <button mat-stroked-button (click)="show = !show">
           {{ show ? "Hide MetaData" : "Show Metadata" }}
         </button>

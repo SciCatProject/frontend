@@ -1,16 +1,11 @@
 import { ActivatedRoute, Router } from "@angular/router";
-import { HttpClient } from "@angular/common/http";
 import {
   MatCardModule,
   MatTabsModule,
   MatButtonModule,
   MatIconModule
 } from "@angular/material";
-import {
-  MockActivatedRoute,
-  MockHttp,
-  MockStore
-} from "../../shared/MockStubs";
+import { MockActivatedRoute, MockStore } from "../../shared/MockStubs";
 import { SampleDetailComponent } from "./sample-detail.component";
 import { Store, StoreModule } from "@ngrx/store";
 import {
@@ -24,13 +19,15 @@ import { rootReducer } from "state-management/reducers/root.reducer";
 import { PageChangeEvent } from "shared/modules/table/table.component";
 import {
   changeDatasetsPageAction,
-  fetchSampleDatasetsAction
+  fetchSampleDatasetsAction,
+  saveCharacteristicsAction
 } from "state-management/actions/samples.actions";
 import { Dataset, Sample } from "shared/sdk";
 import { SharedCatanieModule } from "shared/shared.module";
 import { DatePipe, SlicePipe } from "@angular/common";
 import { FileSizePipe } from "shared/pipes/filesize.pipe";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { APP_CONFIG } from "app-config.module";
 
 describe("SampleDetailComponent", () => {
   let component: SampleDetailComponent;
@@ -60,7 +57,12 @@ describe("SampleDetailComponent", () => {
     TestBed.overrideComponent(SampleDetailComponent, {
       set: {
         providers: [
-          { provide: HttpClient, useClass: MockHttp },
+          {
+            provide: APP_CONFIG,
+            useValue: {
+              editMetadataEnabled: true
+            }
+          },
           { provide: Router, useValue: router },
           { provide: ActivatedRoute, useClass: MockActivatedRoute }
         ]
@@ -99,6 +101,27 @@ describe("SampleDetailComponent", () => {
       const data = component.formatTableData(datasets);
 
       expect(data.length).toEqual(1);
+    });
+  });
+
+  describe("#onSaveCharacteristics()", () => {
+    it("should dispatch a saveCharacteristicsAction", () => {
+      dispatchSpy = spyOn(store, "dispatch");
+
+      const sample = new Sample();
+      sample.sampleId = "testId";
+      component.sample = sample;
+      const characteristics = {};
+
+      component.onSaveCharacteristics(characteristics);
+
+      expect(dispatchSpy).toHaveBeenCalledTimes(1);
+      expect(dispatchSpy).toHaveBeenCalledWith(
+        saveCharacteristicsAction({
+          sampleId: sample.sampleId,
+          characteristics
+        })
+      );
     });
   });
 
