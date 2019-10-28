@@ -6,7 +6,8 @@ import {
   MatIconModule,
   MatInputModule,
   MatButtonModule,
-  MatTabsModule
+  MatTabsModule,
+  MatSelectModule
 } from "@angular/material";
 import { NgModule } from "@angular/core";
 import { SampleDetailComponent } from "./sample-detail/sample-detail.component";
@@ -27,11 +28,11 @@ import { SharedCatanieModule } from "shared/shared.module";
     FormsModule,
     MatButtonModule,
     MatCardModule,
-    MatIconModule,
+    MatDialogModule,
     MatFormFieldModule,
     MatIconModule,
     MatInputModule,
-    MatDialogModule,
+    MatSelectModule,
     MatTabsModule,
     NgxJsonViewerModule,
     ReactiveFormsModule,
