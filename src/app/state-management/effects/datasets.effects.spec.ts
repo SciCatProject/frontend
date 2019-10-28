@@ -55,7 +55,7 @@ describe("DatasetEffects", () => {
             "fullquery",
             "fullfacet",
             "findOne",
-            "updateScientificMetadata",
+            "updateAttributes",
             "createAttachments",
             "updateByIdAttachments",
             "destroyByIdAttachments",
@@ -171,37 +171,38 @@ describe("DatasetEffects", () => {
     });
   });
 
-  describe("saveDataset$", () => {
+  describe("updateProperty$", () => {
     const rawDataset = new RawDataset();
-    const metadata = {};
-    it("should result in a saveDatasetCompleteAction", () => {
-      const action = fromActions.saveDatasetAction({
+    const property = { isPublished: true };
+    it("should result in a updatePropertyCompleteAction and a fetchDatasetAction", () => {
+      const action = fromActions.updatePropertyAction({
         dataset: rawDataset,
-        metadata
+        property
       });
-      const outcome = fromActions.saveDatasetCompleteAction({ dataset });
+      const outcome1 = fromActions.updatePropertyCompleteAction();
+      const outcome2 = fromActions.fetchDatasetAction({ pid: rawDataset.pid });
 
       actions = hot("-a", { a: action });
       const response = cold("-a|", { a: dataset });
-      datasetApi.updateScientificMetadata.and.returnValue(response);
+      datasetApi.updateAttributes.and.returnValue(response);
 
-      const expected = cold("--b", { b: outcome });
-      expect(effects.saveDataset$).toBeObservable(expected);
+      const expected = cold("--(bc)", { b: outcome1, c: outcome2 });
+      expect(effects.updateProperty$).toBeObservable(expected);
     });
 
-    it("should result in a saveDatasetFailedAction", () => {
-      const action = fromActions.saveDatasetAction({
+    it("should result in a updatePropertyFailedAction", () => {
+      const action = fromActions.updatePropertyAction({
         dataset: rawDataset,
-        metadata
+        property
       });
-      const outcome = fromActions.saveDatasetFailedAction();
+      const outcome = fromActions.updatePropertyFailedAction();
 
       actions = hot("-a", { a: action });
       const response = cold("-#", {});
-      datasetApi.updateScientificMetadata.and.returnValue(response);
+      datasetApi.updateAttributes.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
-      expect(effects.saveDataset$).toBeObservable(expected);
+      expect(effects.updateProperty$).toBeObservable(expected);
     });
   });
 
@@ -376,13 +377,13 @@ describe("DatasetEffects", () => {
       });
     });
 
-    describe("ofType saveDatasetAction", () => {
+    describe("ofType updatePropertyAction", () => {
       it("should dispatch a loadingAction", () => {
         const rawDataset = new RawDataset();
-        const metadata = {};
-        const action = fromActions.saveDatasetAction({
+        const property = { isPublished: true };
+        const action = fromActions.updatePropertyAction({
           dataset: rawDataset,
-          metadata
+          property
         });
         const outcome = loadingAction();
 
@@ -456,6 +457,7 @@ describe("DatasetEffects", () => {
         expect(effects.loadingComplete$).toBeObservable(expected);
       });
     });
+
     describe("ofType fetchDatasetsFailedAction", () => {
       it("should dispatch a loadingCompleteAction", () => {
         const action = fromActions.fetchDatasetsFailedAction();
@@ -467,6 +469,7 @@ describe("DatasetEffects", () => {
         expect(effects.loadingComplete$).toBeObservable(expected);
       });
     });
+
     describe("ofType fetchFacetCountsCompleteAction", () => {
       it("should dispatch a loadingCompleteAction", () => {
         const facetCounts: FacetCounts = {
@@ -489,6 +492,7 @@ describe("DatasetEffects", () => {
         expect(effects.loadingComplete$).toBeObservable(expected);
       });
     });
+
     describe("ofType fetchFacetCountsFailedAction", () => {
       it("should dispatch a loadingCompleteAction", () => {
         const action = fromActions.fetchFacetCountsFailedAction();
@@ -500,6 +504,7 @@ describe("DatasetEffects", () => {
         expect(effects.loadingComplete$).toBeObservable(expected);
       });
     });
+
     describe("ofType fetchDatasetCompleteAction", () => {
       it("should dispatch a loadingCompleteAction", () => {
         const action = fromActions.fetchDatasetCompleteAction({ dataset });
@@ -511,6 +516,7 @@ describe("DatasetEffects", () => {
         expect(effects.loadingComplete$).toBeObservable(expected);
       });
     });
+
     describe("ofType fetchDatasetFailedAction", () => {
       it("should dispatch a loadingCompleteAction", () => {
         const action = fromActions.fetchDatasetFailedAction();
@@ -522,9 +528,10 @@ describe("DatasetEffects", () => {
         expect(effects.loadingComplete$).toBeObservable(expected);
       });
     });
-    describe("ofType saveDatasetCompleteAction", () => {
+
+    describe("ofType updatePropertyCompleteAction", () => {
       it("should dispatch a loadingCompleteAction", () => {
-        const action = fromActions.saveDatasetCompleteAction({ dataset });
+        const action = fromActions.updatePropertyCompleteAction();
         const outcome = loadingCompleteAction();
 
         actions = hot("-a", { a: action });
@@ -533,9 +540,10 @@ describe("DatasetEffects", () => {
         expect(effects.loadingComplete$).toBeObservable(expected);
       });
     });
-    describe("ofType saveDatasetFailedAction", () => {
+
+    describe("ofType updatePropertyFailedAction", () => {
       it("should dispatch a loadingCompleteAction", () => {
-        const action = fromActions.saveDatasetFailedAction();
+        const action = fromActions.updatePropertyFailedAction();
         const outcome = loadingCompleteAction();
 
         actions = hot("-a", { a: action });
@@ -544,6 +552,7 @@ describe("DatasetEffects", () => {
         expect(effects.loadingComplete$).toBeObservable(expected);
       });
     });
+
     describe("ofType addAttachmentCompleteAction", () => {
       it("should dispatch a loadingCompleteAction", () => {
         const attachment = new Attachment();
@@ -556,6 +565,7 @@ describe("DatasetEffects", () => {
         expect(effects.loadingComplete$).toBeObservable(expected);
       });
     });
+
     describe("ofType addAttachmentFailedAction", () => {
       it("should dispatch a loadingCompleteAction", () => {
         const action = fromActions.addAttachmentFailedAction();
@@ -567,6 +577,7 @@ describe("DatasetEffects", () => {
         expect(effects.loadingComplete$).toBeObservable(expected);
       });
     });
+
     describe("ofType updateAttachmentCaptionCompleteAction", () => {
       it("should dispatch a loadingCompleteAction", () => {
         const attachment = new Attachment();
@@ -581,6 +592,7 @@ describe("DatasetEffects", () => {
         expect(effects.loadingComplete$).toBeObservable(expected);
       });
     });
+
     describe("ofType updateAttachmentCaptionFailedAction", () => {
       it("should dispatch a loadingCompleteAction", () => {
         const action = fromActions.updateAttachmentCaptionFailedAction();
@@ -592,6 +604,7 @@ describe("DatasetEffects", () => {
         expect(effects.loadingComplete$).toBeObservable(expected);
       });
     });
+
     describe("ofType removeAttachmentCompleteAction", () => {
       it("should dispatch a loadingCompleteAction", () => {
         const attachmentId = "testId";
@@ -606,6 +619,7 @@ describe("DatasetEffects", () => {
         expect(effects.loadingComplete$).toBeObservable(expected);
       });
     });
+
     describe("ofType removeAttachmentFailedAction", () => {
       it("should dispatch a loadingCompleteAction", () => {
         const action = fromActions.removeAttachmentFailedAction();

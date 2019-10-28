@@ -4,6 +4,18 @@
       <ng-template mat-tab-label>
         <mat-icon> details </mat-icon> Details
       </ng-template>
+
+      <mat-slide-toggle
+        class="public-toggle"
+        [checked]="dataset.isPublished"
+        [disabled]="!isPI()"
+        (change)="onSlidePublic($event)"
+      >
+        Public
+      </mat-slide-toggle>
+
+      <div style="clear: both;"></div>
+
       <dataset-detail
         [data]="dataset"
         [datasetWithout]="datasetWithout$ | async"

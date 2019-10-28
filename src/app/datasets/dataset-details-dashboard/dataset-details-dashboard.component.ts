@@ -35,7 +35,7 @@ import { APP_CONFIG, AppConfig } from "app-config.module";
 import {
   clearFacetsAction,
   addKeywordFilterAction,
-  saveDatasetAction,
+  updatePropertyAction,
   updateAttachmentCaptionAction,
   removeAttachmentAction,
   fetchDatasetAction,
@@ -44,6 +44,7 @@ import {
 import { submitJobAction } from "state-management/actions/jobs.actions";
 import { ReadFile } from "ngx-file-helpers";
 import { SubmitCaptionEvent } from "shared/modules/file-uploader/file-uploader.component";
+import { MatSlideToggleChange } from "@angular/material";
 
 @Component({
   selector: "dataset-details-dashboard",
@@ -60,11 +61,34 @@ export class DatasetDetailsDashboardComponent
   jwt$: Observable<any>;
 
   dataset: RawDataset | DerivedDataset;
-  viewPublic: boolean;
+  user: User;
   pickedFile: ReadFile;
   attachment: Attachment;
 
   private subscriptions: Subscription[] = [];
+
+  isPI(): boolean {
+    if (this.dataset.type === "raw") {
+      return (
+        this.user.email.toLowerCase() ===
+        (this.dataset as RawDataset).principalInvestigator.toLowerCase()
+      );
+    } else if (this.dataset.type === "derived") {
+      return (
+        this.user.email.toLowerCase() ===
+        (this.dataset as DerivedDataset).investigator.toLowerCase()
+      );
+    } else {
+      return false;
+    }
+  }
+
+  onSlidePublic(event: MatSlideToggleChange) {
+    const property = { isPublished: event.checked };
+    this.store.dispatch(
+      updatePropertyAction({ dataset: this.dataset, property })
+    );
+  }
 
   onClickKeyword(keyword: string) {
     this.store.dispatch(clearFacetsAction());
@@ -83,8 +107,10 @@ export class DatasetDetailsDashboardComponent
   }
 
   onSaveMetadata(metadata: object) {
-    const saveDataset = { ...this.dataset } as RawDataset;
-    this.store.dispatch(saveDatasetAction({ dataset: saveDataset, metadata }));
+    const property = { scientificMetadata: metadata };
+    this.store.dispatch(
+      updatePropertyAction({ dataset: this.dataset, property })
+    );
   }
 
   resetDataset(dataset: Dataset) {
@@ -171,16 +197,21 @@ export class DatasetDetailsDashboardComponent
     this.subscriptions.push(
       this.route.params.pipe(pluck("id")).subscribe((id: string) => {
         if (id) {
-          if (this.viewPublic) {
-            this.store.dispatch(
-              fetchDatasetAction({
-                pid: id,
-                filters: { isPublished: this.viewPublic }
-              })
-            );
-          } else {
-            this.store.dispatch(fetchDatasetAction({ pid: id }));
-          }
+          this.store
+            .pipe(select(getPublicViewMode))
+            .subscribe(viewPublic => {
+              if (viewPublic) {
+                this.store.dispatch(
+                  fetchDatasetAction({
+                    pid: id,
+                    filters: { isPublished: viewPublic }
+                  })
+                );
+              } else {
+                this.store.dispatch(fetchDatasetAction({ pid: id }));
+              }
+            })
+            .unsubscribe();
         }
       })
     );
@@ -196,8 +227,10 @@ export class DatasetDetailsDashboardComponent
     );
 
     this.subscriptions.push(
-      this.store.pipe(select(getPublicViewMode)).subscribe(viewPublic => {
-        this.viewPublic = viewPublic;
+      this.store.pipe(select(getCurrentUser)).subscribe(user => {
+        if (user) {
+          this.user = user;
+        }
       })
     );
 

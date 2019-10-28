@@ -138,35 +138,33 @@ describe("Dataset Actions", () => {
     });
   });
 
-  describe("saveDataset", () => {
+  describe("updatePropertyAction", () => {
     it("should create an action", () => {
       const dataset = new RawDataset();
-      const metadata = {};
-      const action = fromActions.saveDatasetAction({ dataset, metadata });
+      const property = { isPublished: true };
+      const action = fromActions.updatePropertyAction({ dataset, property });
       expect({ ...action }).toEqual({
-        type: "[Dataset] Save Dataset",
+        type: "[Dataset] Update Property",
         dataset,
-        metadata
+        property
       });
     });
   });
 
-  describe("saveDatasetComplete", () => {
+  describe("updatePropertyCompleteAction", () => {
     it("should create an action", () => {
-      const dataset = new Dataset();
-      const action = fromActions.saveDatasetCompleteAction({ dataset });
+      const action = fromActions.updatePropertyCompleteAction();
       expect({ ...action }).toEqual({
-        type: "[Dataset] Save Dataset Complete",
-        dataset
+        type: "[Dataset] Update Property Complete"
       });
     });
   });
 
-  describe("saveDatasetFailed", () => {
+  describe("updatePropertyFailedAction", () => {
     it("should create an action", () => {
-      const action = fromActions.saveDatasetFailedAction();
+      const action = fromActions.updatePropertyFailedAction();
       expect({ ...action }).toEqual({
-        type: "[Dataset] Save Dataset Failed"
+        type: "[Dataset] Update Property Failed"
       });
     });
   });
