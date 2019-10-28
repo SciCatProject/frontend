@@ -4,6 +4,16 @@
       <ng-template mat-tab-label>
         <mat-icon> details </mat-icon> Details
       </ng-template>
+      <a
+        mat-raised-button
+        href="{{ appConfig.jupyterHubUrl }}"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="jupyter-button"
+        *ngIf="appConfig.jupyterHubUrl"
+      >
+        Jupyter Hub
+      </a>
       <dataset-detail
         [data]="dataset"
         [datasetWithout]="datasetWithout$ | async"

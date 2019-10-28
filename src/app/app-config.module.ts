@@ -9,6 +9,7 @@ export class AppConfig {
   fileserverBaseURL: string;
   synapseBaseUrl: string;
   riotBaseUrl: string;
+  jupyterHubUrl: string;
   production: boolean;
   disabledDatasetColumns: string[];
   archiveWorkflowEnabled: boolean;
@@ -43,6 +44,7 @@ export const APP_DI_CONFIG: AppConfig = {
   fileserverBaseURL: environment["fileserverBaseURL"] || null,
   synapseBaseUrl: environment["synapseBaseUrl"] || null,
   riotBaseUrl: environment["riotBaseUrl"] || null,
+  jupyterHubUrl: environment["jupyterHubUrl"] || null,
   production: environment.production,
   archiveWorkflowEnabled: environment["archiveWorkflowEnabled"] || null,
   columnSelectEnabled: environment["columnSelectEnabled"] || false,
