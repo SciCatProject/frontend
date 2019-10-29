@@ -34,7 +34,7 @@ export class PublisheddataDetailsComponent implements OnInit, OnDestroy {
 
     this.currentData$
       .subscribe(data => {
-        if (data) {
+        if (data && this.appConfig.landingPage) {
           this.landingPageUrl = this.appConfig.landingPage + encodeURIComponent(data.doi);
         }
       });
