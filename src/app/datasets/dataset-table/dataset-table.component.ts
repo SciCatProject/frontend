@@ -57,7 +57,7 @@ interface DatasetDerivationsMap {
   styleUrls: ["dataset-table.component.scss"]
 })
 export class DatasetTableComponent implements OnInit, OnDestroy {
-  datasets$ = this.store.pipe(select(getDatasets));
+  datasets: Dataset[];
   currentPage$ = this.store.pipe(select(getPage));
   datasetsPerPage$ = this.store.pipe(select(getDatasetsPerPage));
   datasetCount$ = this.store.select(getTotalSets);
@@ -250,6 +250,12 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     return this.selectedPids.indexOf(dataset.pid) !== -1;
   }
 
+  isAllSelected(): boolean {
+    const numSelected = this.selectedSets ? this.selectedSets.length : 0;
+    const numRows = this.datasets ? this.datasets.length : 0;
+    return numSelected === numRows;
+  }
+
   isInBatch(dataset: Dataset): boolean {
     return this.inBatchPids.indexOf(dataset.pid) !== -1;
   }
@@ -310,6 +316,12 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
+    this.subscriptions.push(
+      this.store.pipe(select(getDatasets)).subscribe(datasets => {
+        this.datasets = datasets;
+      })
+    );
+
     this.subscriptions.push(
       this.store.pipe(select(getSubmitError)).subscribe(err => {
         if (!err) {

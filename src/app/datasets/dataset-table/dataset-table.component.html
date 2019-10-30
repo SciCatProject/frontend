@@ -113,7 +113,7 @@
   </div>
 
   <mat-table
-    [dataSource]="datasets$"
+    [dataSource]="datasets"
     class="dataset-table mat-elevation-z2"
     matSort
     (matSortChange)="onSortChange($event)"
@@ -123,7 +123,11 @@
     <!-- Select Column -->
     <ng-container matColumnDef="select">
       <mat-header-cell *matHeaderCellDef>
-        <mat-checkbox color="#ffffff" (change)="onSelectAll($event)">
+        <mat-checkbox
+          [checked]="selectedSets.length > 0 && isAllSelected()"
+          [indeterminate]="selectedSets.length > 0 && !isAllSelected()"
+          (change)="onSelectAll($event)"
+        >
         </mat-checkbox>
       </mat-header-cell>
 
@@ -174,6 +178,7 @@
       </mat-cell>
     </ng-container>
 
+    <!-- Run Number Column -->
     <ng-container matColumnDef="runNumber">
       <mat-header-cell *matHeaderCellDef mat-sort-header>
         <div fxLayout="column" style="align-items: center">
@@ -400,44 +405,6 @@
           <i class="material-icons" style="color: black;">build</i>
           &nbsp;user error</ng-template
         >
-      </mat-cell>
-    </ng-container>
-
-    <!-- Archive Status Column -->
-    <ng-container matColumnDef="archiveStatus">
-      <mat-header-cell *matHeaderCellDef mat-sort-header>
-        <div fxLayout="column" style="align-items: center">
-          <div>
-            <i class="material-icons">archive</i>
-          </div>
-          <div class="table_column">Archive&nbsp;Status</div>
-        </div>
-      </mat-header-cell>
-      <mat-cell
-        *matCellDef="let dataset"
-        matTooltip="{{ (dataset.datasetlifecycle || {}).archiveStatusMessage }}"
-      >
-        {{ (dataset.datasetlifecycle || {}).archiveStatusMessage }}
-      </mat-cell>
-    </ng-container>
-
-    <!-- Retrieve Status Column -->
-    <ng-container matColumnDef="retrieveStatus">
-      <mat-header-cell *matHeaderCellDef mat-sort-header>
-        <div fxLayout="column" style="align-items: center">
-          <div>
-            <i class="material-icons">cloud_upload</i>
-          </div>
-          <div class="table_column">Retrieve&nbsp;Status</div>
-        </div>
-      </mat-header-cell>
-      <mat-cell
-        *matCellDef="let dataset"
-        matTooltip="{{
-          (dataset.datasetlifecycle || {}).retrieveStatusMessage
-        }}"
-      >
-        {{ (dataset.datasetlifecycle || {}).retrieveStatusMessage }}
       </mat-cell>
     </ng-container>
 

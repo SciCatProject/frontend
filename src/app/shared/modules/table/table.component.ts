@@ -47,11 +47,11 @@ export class TableComponent implements OnInit {
   @Input() dataPerPage?: number;
   pageSizeOptions = [10, 25, 50, 100, 500, 1000];
 
-  @Output() pageChange ? = new EventEmitter<PageChangeEvent>();
-  @Output() sortChange ? = new EventEmitter<SortChangeEvent>();
-  @Output() rowClick ? = new EventEmitter<any>();
-  @Output() selectAll ? = new EventEmitter<MatCheckboxChange>();
-  @Output() selectOne ? = new EventEmitter<CheckboxEvent>();
+  @Output() pageChange = new EventEmitter<PageChangeEvent>();
+  @Output() sortChange = new EventEmitter<SortChangeEvent>();
+  @Output() rowClick = new EventEmitter<any>();
+  @Output() selectAll = new EventEmitter<MatCheckboxChange>();
+  @Output() selectOne = new EventEmitter<CheckboxEvent>();
 
   constructor() {}
 
