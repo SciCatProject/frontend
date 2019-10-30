@@ -1,5 +1,5 @@
 import { createAction, props } from "@ngrx/store";
-import { Dataset, Attachment, RawDataset, DerivedDataset } from "shared/sdk";
+import { Dataset, Attachment } from "shared/sdk";
 import { FacetCounts } from "state-management/state/datasets.store";
 import {
   ArchViewMode,

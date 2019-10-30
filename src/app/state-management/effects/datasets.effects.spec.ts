@@ -2,13 +2,7 @@ import { TestBed } from "@angular/core/testing";
 import { provideMockActions } from "@ngrx/effects/testing";
 import { provideMockStore } from "@ngrx/store/testing";
 import { cold, hot } from "jasmine-marbles";
-import {
-  DatasetInterface,
-  Dataset,
-  DatasetApi,
-  Attachment,
-  RawDataset
-} from "shared/sdk";
+import { DatasetInterface, Dataset, DatasetApi, Attachment } from "shared/sdk";
 import * as fromActions from "../actions/datasets.actions";
 import { Observable } from "rxjs";
 import { DatasetEffects } from "./datasets.effects";

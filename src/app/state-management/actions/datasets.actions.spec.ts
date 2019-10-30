@@ -1,5 +1,5 @@
 import * as fromActions from "./datasets.actions";
-import { Dataset, Attachment, RawDataset } from "shared/sdk";
+import { Dataset, Attachment } from "shared/sdk";
 import { FacetCounts } from "state-management/state/datasets.store";
 import {
   ArchViewMode,
