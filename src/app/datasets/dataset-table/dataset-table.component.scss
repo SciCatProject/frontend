@@ -19,124 +19,115 @@
 
   .tableSettings {
     margin-bottom: 0.5em;
-    color: #969696;
+    color: mat-color($grey, 100);
+
+    ::ng-deep .tblSettingSelect div.mat-select-arrow-wrapper {
+      display: none;
+    }
+
+    ::ng-deep .tblSettingSelect.mat-select {
+      display: inline;
+    }
   }
 
-  mat-header-cell {
-    color: white;
-    background: mat-color($primary);
-    justify-content: center;
+  mat-table {
+    overflow: scroll;
+
+    mat-header-row {
+      min-width: 1290px;
+      background: mat-color($primary);
+    }
+
+    ::ng-deep .mat-sort-header-arrow {
+      color: mat-color($primary, default-contrast);
+    }
+
+    mat-header-cell {
+      color: mat-color($primary, default-contrast);
+      justify-content: center;
+
+      ::ng-deep .mat-checkbox .mat-checkbox-frame {
+        border-color: mat-color($primary, default-contrast);
+      }
+    }
+
+    mat-header-cell:nth-child(-n + 2) {
+      justify-content: left;
+    }
+
+    mat-header-cell:nth-child(n + 3) {
+      justify-content: center;
+    }
+
+    mat-cell:nth-child(-n + 2) {
+      justify-content: left;
+    }
+
+    mat-cell:nth-child(n + 3) {
+      justify-content: center;
+    }
+
+    mat-row {
+      min-width: 1290px;
+    }
+
+    mat-row:hover {
+      background-color: rgba(0, 0, 0, 0.1);
+      cursor: pointer;
+    }
+
+    .mat-column-select {
+      min-width: 55px;
+      max-width: 55px;
+    }
+
+    .mat-column-datasetName {
+      min-width: 200px;
+    }
+
+    .mat-column-runNumber {
+      min-width: 70px;
+    }
+
+    .mat-column-sourceFolder {
+      min-width: 100px;
+    }
+
+    .mat-column-size {
+      min-width: 65px;
+    }
+
+    .mat-column-creationTime {
+      min-width: 80px;
+    }
+
+    .mat-column-type {
+      min-width: 50px;
+    }
+
+    .mat-column-image {
+      min-width: 60px;
+      max-width: 60px;
+    }
+
+    .mat-column-metadata {
+      min-width: 200px;
+    }
+
+    .mat-column-proposalId {
+      min-width: 90px;
+    }
+
+    .mat-column-ownerGroup {
+      min-width: 80px;
+    }
+
+    .mat-column-dataStatus {
+      min-width: 140px;
+    }
+
+    .mat-column-derivedDatasetsNum {
+      min-width: 100px;
+    }
   }
-
-  mat-header-row {
-    color: white;
-    background: mat-color($primary);
-  }
-
-  i {
-    color: white;
-  }
-
-  .mat-column-select {
-    overflow: visible; /* Needed to prevent offsetting of the checkbox when clicking */
-    flex-shrink: 0;
-    flex-grow: 0;
-    padding-right: 10px;
-  }
-
-  .mat-column-datasetName {
-    flex: 1 0 200px;
-    justify-content: left !important;
-  }
-
-  .mat-column-sourceFolder {
-    flex: 1 0 120px;
-    justify-content: center !important;
-  }
-
-  .mat-column-runNumber {
-    flex: 1 0 50px;
-    justify-content: center !important;
-  }
-
-  .mat-column-size {
-    flex: 1 0 50px;
-    justify-content: center !important;
-  }
-
-  .mat-column-creationTime {
-    flex: 1 0 80px;
-    justify-content: center !important;
-  }
-
-  .mat-column-type {
-    flex: 0 0 50px;
-    justify-content: center !important;
-  }
-
-  .mat-column-derivedDatasetsNum {
-    flex: 0 0 100px;
-    justify-content: center !important;
-  }
-
-  .mat-column-image {
-    flex: 0 0 60px;
-    justify-content: center !important;
-  }
-
-  .mat-column-metadata {
-    flex: 2 0 100px;
-    justify-content: center !important;
-  }
-
-  .mat-column-proposalId {
-    flex: 1 0 70px;
-    justify-content: center !important;
-  }
-
-  .mat-column-ownerGroup {
-    flex: 0 0 80px;
-    justify-content: center !important;
-  }
-
-  .mat-column-archiveStatus {
-    flex: 1 0 150px;
-    justify-content: center !important;
-  }
-
-  .mat-column-retrieveStatus {
-    flex: 1 0 130px;
-    justify-content: center !important;
-  }
-
-  .mat-column-dataStatus {
-    flex: 1 0 130px;
-    justify-content: center !important;
-  }
-}
-
-:host ::ng-deep .disabled-row {
-  pointer-events: none;
-  opacity: 0.2 !important;
-}
-
-:host ::ng-deep .mat-row:hover {
-  background-color: rgba(0, 0, 0, 0.1);
-  cursor: pointer;
-}
-
-:host ::ng-deep .mat-paginator {
-  background-color: unset !important;
-}
-
-::ng-deep mat-header-cell .mat-checkbox-frame {
-  border-color: white;
-}
-
-::ng-deep .tblSettingSelect div.mat-select-arrow-wrapper {
-  display: none;
-}
-
-::ng-deep .tblSettingSelect.mat-select {
-  display: inline;
 }
