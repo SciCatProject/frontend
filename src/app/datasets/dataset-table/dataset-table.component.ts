@@ -70,7 +70,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   displayedColumns: string[] = [];
 
   private selectedPids: string[] = [];
-  private selectedSets: Dataset[] = [];
+  selectedSets: Dataset[] = [];
   private inBatchPids: string[] = [];
 
   public currentArchViewMode: ArchViewMode;
