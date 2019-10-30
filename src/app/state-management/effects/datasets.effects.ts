@@ -100,16 +100,20 @@ export class DatasetEffects {
     )
   );
 
-  saveDataset$ = createEffect(() =>
+  updateProperty$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(fromActions.saveDatasetAction),
-      mergeMap(({ dataset, metadata }) => {
-        dataset.scientificMetadata = metadata;
-        return this.datasetApi.updateScientificMetadata(dataset).pipe(
-          map(res => fromActions.saveDatasetCompleteAction({ dataset: res })),
-          catchError(() => of(fromActions.saveDatasetFailedAction()))
-        );
-      })
+      ofType(fromActions.updatePropertyAction),
+      switchMap(({ dataset, property }) =>
+        this.datasetApi
+          .updateAttributes(encodeURIComponent(dataset.pid), property)
+          .pipe(
+            switchMap(() => [
+              fromActions.updatePropertyCompleteAction(),
+              fromActions.fetchDatasetAction({ pid: dataset.pid })
+            ]),
+            catchError(() => of(fromActions.updatePropertyFailedAction()))
+          )
+      )
     )
   );
 
@@ -194,7 +198,7 @@ export class DatasetEffects {
         fromActions.fetchDatasetsAction,
         fromActions.fetchFacetCountsAction,
         fromActions.fetchDatasetAction,
-        fromActions.saveDatasetAction,
+        fromActions.updatePropertyAction,
         fromActions.addAttachmentAction,
         fromActions.updateAttachmentCaptionAction,
         fromActions.removeAttachmentAction
@@ -212,8 +216,8 @@ export class DatasetEffects {
         fromActions.fetchFacetCountsFailedAction,
         fromActions.fetchDatasetCompleteAction,
         fromActions.fetchDatasetFailedAction,
-        fromActions.saveDatasetCompleteAction,
-        fromActions.saveDatasetFailedAction,
+        fromActions.updatePropertyCompleteAction,
+        fromActions.updatePropertyFailedAction,
         fromActions.addAttachmentCompleteAction,
         fromActions.addAttachmentFailedAction,
         fromActions.updateAttachmentCaptionCompleteAction,

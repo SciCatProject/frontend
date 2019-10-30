@@ -140,15 +140,6 @@ describe("DatasetsReducer", () => {
     });
   });
 
-  describe("on saveDatasetCompleteAction", () => {
-    it("should set currentSet property", () => {
-      const action = fromActions.saveDatasetCompleteAction({ dataset });
-      const state = fromDatasets.datasetsReducer(initialDatasetState, action);
-
-      expect(state.currentSet).toEqual(dataset);
-    });
-  });
-
   describe("on addAttachmentCompleteAction", () => {
     it("should add attachment to currentSet property", () => {
       const attachment = new Attachment();

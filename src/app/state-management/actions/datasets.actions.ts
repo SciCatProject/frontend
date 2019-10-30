@@ -53,16 +53,15 @@ export const removeFromBatchAction = createAction(
 );
 export const clearBatchAction = createAction("[Dataset] Clear Batch");
 
-export const saveDatasetAction = createAction(
-  "[Dataset] Save Dataset",
-  props<{ dataset: RawDataset | DerivedDataset; metadata: object }>()
+export const updatePropertyAction = createAction(
+  "[Dataset] Update Property",
+  props<{ dataset: RawDataset | DerivedDataset; property: object }>()
 );
-export const saveDatasetCompleteAction = createAction(
-  "[Dataset] Save Dataset Complete",
-  props<{ dataset: Dataset }>()
+export const updatePropertyCompleteAction = createAction(
+  "[Dataset] Update Property Complete"
 );
-export const saveDatasetFailedAction = createAction(
-  "[Dataset] Save Dataset Failed"
+export const updatePropertyFailedAction = createAction(
+  "[Dataset] Update Property Failed"
 );
 
 export const addAttachmentAction = createAction(

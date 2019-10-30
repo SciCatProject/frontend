@@ -4,16 +4,34 @@
       <ng-template mat-tab-label>
         <mat-icon> details </mat-icon> Details
       </ng-template>
-      <a
-        mat-raised-button
-        href="{{ appConfig.jupyterHubUrl }}"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="jupyter-button"
-        *ngIf="appConfig.jupyterHubUrl"
-      >
-        Jupyter Hub
-      </a>
+
+      <div fxLayout="row">
+        <div fxFlex="auto">
+          <a
+            mat-raised-button
+            href="{{ appConfig.jupyterHubUrl }}"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="jupyter-button"
+            *ngIf="appConfig.jupyterHubUrl"
+          >
+            Jupyter Hub
+          </a>
+        </div>
+        <div fxFlex="auto">
+          <mat-slide-toggle
+            class="public-toggle"
+            [checked]="dataset.isPublished"
+            [disabled]="!isPI()"
+            (change)="onSlidePublic($event)"
+          >
+            Public
+          </mat-slide-toggle>
+        </div>
+      </div>
+
+      <div style="clear: both;"></div>
+
       <dataset-detail
         [data]="dataset"
         [datasetWithout]="datasetWithout$ | async"

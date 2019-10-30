@@ -47,11 +47,6 @@ const reducer = createReducer(
   }),
   on(fromActions.clearBatchAction, state => ({ ...state, batch: [] })),
 
-  on(fromActions.saveDatasetCompleteAction, (state, { dataset }) => ({
-    ...state,
-    currentSet: dataset
-  })),
-
   on(fromActions.addAttachmentCompleteAction, (state, { attachment }) => {
     const attachments = state.currentSet.attachments;
     attachments.push(attachment);
