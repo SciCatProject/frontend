@@ -426,6 +426,22 @@ describe("DatasetTableComponent", () => {
     });
   });
 
+  describe("#isAllSelected()", () => {
+    it("should return false if length of datasets and length of selectedSets are not equal", () => {
+      component.datasets = [new Dataset()];
+
+      const allSelected = component.isAllSelected();
+
+      expect(allSelected).toEqual(false);
+    });
+
+    it("should return true if length of datasets and length of selectedSets are equal", () => {
+      const allSelected = component.isAllSelected();
+
+      expect(allSelected).toEqual(true);
+    });
+  });
+
   describe("#isInBatch()", () => {
     it("should return false if dataset is not in batch", () => {
       const dataset = new Dataset();

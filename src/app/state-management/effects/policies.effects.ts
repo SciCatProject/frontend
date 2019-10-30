@@ -102,7 +102,7 @@ export class PolicyEffects {
           filter = {};
         } else {
           const email = profile.email.toLowerCase();
-          filter = { where: { manager: email } };
+          filter = { manager: email };
         }
         return this.policyApi.count(filter).pipe(
           map(({ count }) =>
