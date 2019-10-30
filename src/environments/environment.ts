@@ -9,6 +9,7 @@ export const environment = {
   fileserverBaseURL: "http://127.0.0.1:8889",
   synapseBaseUrl: "https://scitest.esss.lu.se",
   riotBaseUrl: "http://scitest.esss.lu.se/riot",
+  jupyterHubUrl: "https://jupyterhub.esss.lu.se/",
   externalAuthEndpoint: "/auth/msad",
   archiveWorkflowEnabled: false,
   columnSelectEnabled: true,

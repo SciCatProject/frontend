@@ -19,10 +19,10 @@ export class MetadataViewComponent implements OnInit, OnChanges {
   columnsToDisplay: string[] = ["name", "value", "unit"];
 
   createMetadataArray(metadata: object): ScientificMetaData[] {
-    let metadataArray = [];
-    for (const key in metadata) {
+    const metadataArray = [];
+    Object.keys(metadata).forEach(key => {
       let metadataObject: ScientificMetaData;
-      if ("type" in metadata[key]) {
+      if (metadata[key]["type"]) {
         metadataObject = {
           name: key,
           type: metadata[key].type,
@@ -38,7 +38,7 @@ export class MetadataViewComponent implements OnInit, OnChanges {
         };
       }
       metadataArray.push(metadataObject);
-    }
+    });
     return metadataArray;
   }
 

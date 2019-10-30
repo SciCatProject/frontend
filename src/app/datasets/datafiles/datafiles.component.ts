@@ -107,7 +107,7 @@ export class DatafilesComponent
       if (event.checked) {
         this.selectedFileSize += file.size;
       } else {
-        this.selectedFileSize -= file.size;
+        this.selectedFileSize = 0;
       }
     }
     this.updateSelectionStatus();
