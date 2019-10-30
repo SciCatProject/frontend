@@ -31,7 +31,7 @@
           </th>
           <td>{{ value }}</td>
         </tr>
-        <tr *ngIf="publishedData.doi">
+        <tr *ngIf="landingPageUrl">
           <th><i class="material-icons"> link </i> URL</th>
           <td><span [innerHTML]="landingPageUrl | linky"></span></td>
         </tr>

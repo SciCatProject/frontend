@@ -18,6 +18,8 @@ export interface PublishedDataInterface {
   "pidArray": Array<any>;
   "authors": Array<any>;
   "doiRegisteredSuccessfullyTime"?: Date;
+  "creationTime"?: Date;
+  "status"?: string;
 }
 
 export class PublishedData implements PublishedDataInterface {
@@ -37,6 +39,8 @@ export class PublishedData implements PublishedDataInterface {
   "pidArray": Array<any>;
   "authors": Array<any>;
   "doiRegisteredSuccessfullyTime": Date;
+  "creationTime": Date;
+  "status": string;
   constructor(data?: PublishedDataInterface) {
     Object.assign(this, data);
   }
@@ -133,6 +137,14 @@ export class PublishedData implements PublishedDataInterface {
         "doiRegisteredSuccessfullyTime": {
           name: 'doiRegisteredSuccessfullyTime',
           type: 'Date'
+        },
+        "creationTime": {
+          name: 'creationTime',
+          type: 'Date'
+        },
+        "status": {
+          name: 'status',
+          type: 'string'
         },
       },
       relations: {
