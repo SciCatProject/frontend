@@ -140,12 +140,12 @@ describe("Dataset Actions", () => {
 
   describe("updatePropertyAction", () => {
     it("should create an action", () => {
-      const dataset = new RawDataset();
+      const pid = "testPid";
       const property = { isPublished: true };
-      const action = fromActions.updatePropertyAction({ dataset, property });
+      const action = fromActions.updatePropertyAction({ pid, property });
       expect({ ...action }).toEqual({
         type: "[Dataset] Update Property",
-        dataset,
+        pid,
         property
       });
     });

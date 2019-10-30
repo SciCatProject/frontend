@@ -103,13 +103,13 @@ export class DatasetEffects {
   updateProperty$ = createEffect(() =>
     this.actions$.pipe(
       ofType(fromActions.updatePropertyAction),
-      switchMap(({ dataset, property }) =>
+      switchMap(({ pid, property }) =>
         this.datasetApi
-          .updateAttributes(encodeURIComponent(dataset.pid), property)
+          .updateAttributes(encodeURIComponent(pid), property)
           .pipe(
             switchMap(() => [
               fromActions.updatePropertyCompleteAction(),
-              fromActions.fetchDatasetAction({ pid: dataset.pid })
+              fromActions.fetchDatasetAction({ pid })
             ]),
             catchError(() => of(fromActions.updatePropertyFailedAction()))
           )
