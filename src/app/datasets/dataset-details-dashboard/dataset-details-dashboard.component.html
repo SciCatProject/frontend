@@ -37,6 +37,8 @@
         [datasetWithout]="datasetWithout$ | async"
         [attachments]="attachments$ | async"
         (clickKeyword)="onClickKeyword($event)"
+        (addKeyword)="onAddKeyword($event)"
+        (removeKeyword)="onRemoveKeyword($event)"
         (clickProposal)="onClickProposal($event)"
         (clickSample)="onClickSample($event)"
         (saveMetadata)="onSaveMetadata($event)"

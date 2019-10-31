@@ -2,13 +2,7 @@ import { TestBed } from "@angular/core/testing";
 import { provideMockActions } from "@ngrx/effects/testing";
 import { provideMockStore } from "@ngrx/store/testing";
 import { cold, hot } from "jasmine-marbles";
-import {
-  DatasetInterface,
-  Dataset,
-  DatasetApi,
-  Attachment,
-  RawDataset
-} from "shared/sdk";
+import { DatasetInterface, Dataset, DatasetApi, Attachment } from "shared/sdk";
 import * as fromActions from "../actions/datasets.actions";
 import { Observable } from "rxjs";
 import { DatasetEffects } from "./datasets.effects";
@@ -172,15 +166,15 @@ describe("DatasetEffects", () => {
   });
 
   describe("updateProperty$", () => {
-    const rawDataset = new RawDataset();
+    const pid = "testPid";
     const property = { isPublished: true };
     it("should result in a updatePropertyCompleteAction and a fetchDatasetAction", () => {
       const action = fromActions.updatePropertyAction({
-        dataset: rawDataset,
+        pid,
         property
       });
       const outcome1 = fromActions.updatePropertyCompleteAction();
-      const outcome2 = fromActions.fetchDatasetAction({ pid: rawDataset.pid });
+      const outcome2 = fromActions.fetchDatasetAction({ pid });
 
       actions = hot("-a", { a: action });
       const response = cold("-a|", { a: dataset });
@@ -192,7 +186,7 @@ describe("DatasetEffects", () => {
 
     it("should result in a updatePropertyFailedAction", () => {
       const action = fromActions.updatePropertyAction({
-        dataset: rawDataset,
+        pid,
         property
       });
       const outcome = fromActions.updatePropertyFailedAction();
@@ -379,10 +373,10 @@ describe("DatasetEffects", () => {
 
     describe("ofType updatePropertyAction", () => {
       it("should dispatch a loadingAction", () => {
-        const rawDataset = new RawDataset();
+        const pid = "testPid";
         const property = { isPublished: true };
         const action = fromActions.updatePropertyAction({
-          dataset: rawDataset,
+          pid,
           property
         });
         const outcome = loadingAction();

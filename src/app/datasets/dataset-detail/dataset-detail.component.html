@@ -5,7 +5,7 @@
         About the data
       </mat-card-header>
 
-      <table>
+      <table class="about-table">
         <tr *ngIf="dataset.datasetName as value">
           <th><mat-icon> fingerprint </mat-icon> Name</th>
           <td>{{ value }}</td>
@@ -18,23 +18,6 @@
           <th><mat-icon> person </mat-icon> Owner</th>
           <td>{{ value }}</td>
         </tr>
-        <tr *ngIf="dataset.keywords as keywords">
-          <th><mat-icon> vpn_key </mat-icon> Keywords</th>
-          <td>
-            <mat-chip-list>
-              <div *ngIf="keywords.length > 0">
-                <span *ngFor="let keyword of keywords">
-                  <mat-chip (click)="onClickKeyword(keyword)">
-                    {{ keyword }}
-                  </mat-chip>
-                </span>
-              </div>
-              <div *ngIf="keywords.length === 0">
-                <mat-chip disabled>No Keywords</mat-chip>
-              </div>
-            </mat-chip-list>
-          </td>
-        </tr>
         <tr>
           <th><mat-icon> perm_contact_calendar </mat-icon> PID</th>
           <td>{{ dataset.pid }}</td>
@@ -42,6 +25,53 @@
         <tr *ngIf="dataset.sourceFolder as value">
           <th><mat-icon> folder </mat-icon> Source Folder</th>
           <td>{{ value }}</td>
+        </tr>
+        <tr class="keywords-row" *ngIf="dataset.keywords as keywords">
+          <th><mat-icon> vpn_key </mat-icon> Keywords</th>
+          <td *ngIf="!editEnabled">
+            <mat-chip-list *ngIf="keywords.length > 0" #keywordChips>
+              <mat-chip
+                *ngFor="let keyword of keywords"
+                [removable]="true"
+                (removed)="onRemoveKeyword(keyword)"
+                (click)="onClickKeyword(keyword)"
+              >
+                {{ keyword }}
+                <mat-icon matChipRemove>cancel</mat-icon>
+              </mat-chip>
+              <mat-chip class="add-keyword-chip" (click)="editEnabled = true">
+                Add Keyword <mat-icon>add</mat-icon>
+              </mat-chip>
+            </mat-chip-list>
+          </td>
+          <td *ngIf="editEnabled">
+            <mat-form-field>
+              <mat-chip-list *ngIf="keywords.length > 0" #keywordChips>
+                <mat-chip
+                  *ngFor="let keyword of keywords"
+                  [removable]="true"
+                  (removed)="onRemoveKeyword(keyword)"
+                  (click)="onClickKeyword(keyword)"
+                >
+                  {{ keyword }}
+                  <mat-icon matChipRemove>cancel</mat-icon>
+                </mat-chip>
+                <input
+                  [matChipInputFor]="keywordChips"
+                  [matChipInputSeparatorKeyCodes]="separatorKeyCodes"
+                  [matChipInputAddOnBlur]="true"
+                  (matChipInputTokenEnd)="onAddKeyword($event)"
+                />
+              </mat-chip-list>
+            </mat-form-field>
+            <button
+              mat-raised-button
+              class="done-edit-button"
+              (click)="editEnabled = false"
+            >
+              Done
+            </button>
+          </td>
         </tr>
       </table>
     </mat-card>
