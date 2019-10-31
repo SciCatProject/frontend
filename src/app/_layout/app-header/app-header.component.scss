@@ -10,38 +10,39 @@
     height: 5vh;
 
     a {
-      color: mat-color($primary);
+      color: mat-color($primary, default-contrast);
     }
 
-    a:hover {
-      color: mat-color($accent);
+    .logo {
+      height: 4vh;
+      margin-right: 1em;
+      padding-top: 0.5vh;
     }
 
-    .material-icons {
-      vertical-align: middle;
-    }
-
-    .app-title {
-      margin-left: 2%;
-    }
-
-    .example-spacer {
+    .spacer {
       flex: 1 1 auto;
     }
 
     .toplink {
-      color: #ffffff;
       padding: 10px;
       font: bold;
       font-size: 11pt;
+
+      mat-icon {
+        vertical-align: middle;
+      }
     }
 
-    .userButton {
+    .user-button {
       margin-top: 3px;
       background-color: transparent;
       border: none;
       font-size: 10px;
       line-height: 20px;
+
+      .user-image {
+        height: 3vh;
+      }
     }
   }
 }

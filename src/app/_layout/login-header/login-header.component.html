@@ -1,24 +1,38 @@
 <mat-toolbar class="mat-elevation-z1" color="primary">
-  <mat-toolbar-row>
-    <h3 class="app-title">
-      <a style="color:#ffffff;" [routerLink]="['/']"> {{ title }}</a>
+  <a [routerLink]="['/']">
+    <img class="logo" src="../../../assets/images/scicat-logo-white.png" />
+  </a>
+  <a [routerLink]="['/']">
+    <ng-template [ngIf]="facility === 'ESS'" [ngIfElse]="otherFacility">
+      <img class="logo" src="../../../assets/images/esslogo-white.png" />
+    </ng-template>
+    <ng-template #otherFacility>
+      <img class="logo" src="../../../assets/images/esslogo.png" />
+    </ng-template>
+  </a>
+  <a [routerLink]="['/']">
+    <h3>
+      {{ status }}
     </h3>
-    <span class="example-spacer"></span>
-    <div>
-      <h6>
-        <a class="toplink" [routerLink]="['/login/help']">
-          <i class="material-icons"> help </i>
-          <span class="large-screen-text">Help</span></a
-        >
-      </h6>
-    </div>
-    <div>
-      <h6>
-        <a class="toplink" [routerLink]="['/login/about']">
-          <i class="material-icons"> info </i>
-          <span class="large-screen-text">About</span></a
-        >
-      </h6>
-    </div>
-  </mat-toolbar-row>
+  </a>
+
+  <span class="spacer"></span>
+
+  <span>
+    <h6>
+      <a class="toplink" [routerLink]="['/login/help']">
+        <mat-icon> help </mat-icon>
+        <span class="large-screen-text">Help</span></a
+      >
+    </h6>
+  </span>
+
+  <span>
+    <h6>
+      <a class="toplink" [routerLink]="['/login/about']">
+        <mat-icon> info </mat-icon>
+        <span class="large-screen-text">About</span></a
+      >
+    </h6>
+  </span>
 </mat-toolbar>

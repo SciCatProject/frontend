@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject } from "@angular/core";
+import { Component, Inject } from "@angular/core";
 import { APP_CONFIG, AppConfig } from "app-config.module";
 
 @Component({
@@ -6,8 +6,7 @@ import { APP_CONFIG, AppConfig } from "app-config.module";
   templateUrl: "./login-header.component.html",
   styleUrls: ["./login-header.component.scss"]
 })
-export class LoginHeaderComponent implements OnInit {
-  title: string;
+export class LoginHeaderComponent {
   facility: string;
   status: string;
 
@@ -18,8 +17,5 @@ export class LoginHeaderComponent implements OnInit {
     } else {
       this.status = "test";
     }
-    this.title = "SciCat " + this.facility + " " + this.status;
   }
-
-  ngOnInit() {}
 }
