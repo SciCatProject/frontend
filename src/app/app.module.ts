@@ -34,7 +34,8 @@ import {
   MatNativeDateModule,
   MatSnackBarModule,
   MatToolbarModule,
-  MatProgressSpinnerModule
+  MatProgressSpinnerModule,
+  MatIconModule
 } from "@angular/material";
 import { SampleEffects } from "./state-management/effects/samples.effects";
 import { ServiceWorkerModule } from "@angular/service-worker";
@@ -70,6 +71,7 @@ import { JobsModule } from "jobs/jobs.module";
     HttpClientModule,
     JobsModule,
     LogbooksModule,
+    MatIconModule,
     MatMenuModule,
     MatProgressSpinnerModule,
     MatSnackBarModule,

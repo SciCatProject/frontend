@@ -9,30 +9,27 @@ mat-toolbar {
   height: 5vh;
 
   a {
-    color: mat-color($primary);
+    color: mat-color($primary, default-contrast);
   }
 
-  a:hover {
-    color: mat-color($accent);
+  .logo {
+    height: 4vh;
+    margin-right: 1em;
+    padding-top: 0.5vh;
   }
 
-  .app-title {
-    margin-left: 2%;
-  }
-
-  .example-spacer {
+  .spacer {
     flex: 1 1 auto;
   }
 
   .toplink {
-    color: #ffffff;
     padding: 10px;
     font: bold;
     font-size: 11pt;
-  }
 
-  .material-icons {
-    vertical-align: middle;
+    mat-icon {
+      vertical-align: middle;
+    }
   }
 }
 
