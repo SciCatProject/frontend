@@ -174,14 +174,16 @@ describe("DetailsDashboardComponent", () => {
   describe("#onSlidePublic()", () => {
     it("should dispatch a updatePropertyAction", () => {
       dispatchSpy = spyOn(store, "dispatch");
+      const pid = "testPid";
       component.dataset = new RawDataset();
+      component.dataset.pid = pid;
       const event = new MatSlideToggleChange({} as MatSlideToggle, true);
       const property = { isPublished: true };
       component.onSlidePublic(event);
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        updatePropertyAction({ dataset: component.dataset, property })
+        updatePropertyAction({ pid, property })
       );
     });
   });
@@ -198,6 +200,66 @@ describe("DetailsDashboardComponent", () => {
         addKeywordFilterAction({ keyword })
       );
       expect(router.navigateByUrl).toHaveBeenCalledWith("/datasets");
+    });
+  });
+
+  describe("#onAddKeyword()", () => {
+    it("should do nothing if keyword already exists", () => {
+      dispatchSpy = spyOn(store, "dispatch");
+
+      const keyword = "test";
+      component.dataset = new RawDataset();
+      component.dataset.keywords = [keyword];
+      component.onAddKeyword(keyword);
+
+      expect(dispatchSpy).toHaveBeenCalledTimes(0);
+    });
+
+    it("should dispatch an updatePropertyAction if the keyword does not exist", () => {
+      dispatchSpy = spyOn(store, "dispatch");
+
+      const keyword = "test";
+      const pid = "testPid";
+      component.dataset = new RawDataset();
+      component.dataset.pid = pid;
+      component.dataset.keywords = [];
+      const property = { keywords: [keyword] };
+      component.onAddKeyword(keyword);
+
+      expect(dispatchSpy).toHaveBeenCalledTimes(1);
+      expect(dispatchSpy).toHaveBeenCalledWith(
+        updatePropertyAction({ pid, property })
+      );
+    });
+  });
+
+  describe("#onRemoveKeyword()", () => {
+    it("should do nothing if the keyword does not exist", () => {
+      dispatchSpy = spyOn(store, "dispatch");
+
+      const keyword = "test";
+      component.dataset = new RawDataset();
+      component.dataset.keywords = [];
+      component.onRemoveKeyword(keyword);
+
+      expect(dispatchSpy).toHaveBeenCalledTimes(0);
+    });
+
+    it("should dispatch an updatePropertyAction if the keyword does exist", () => {
+      dispatchSpy = spyOn(store, "dispatch");
+
+      const keyword = "test";
+      const pid = "testPid";
+      component.dataset = new RawDataset();
+      component.dataset.pid = pid;
+      component.dataset.keywords = [keyword];
+      const property = { keywords: [] };
+      component.onRemoveKeyword(keyword);
+
+      expect(dispatchSpy).toHaveBeenCalledTimes(1);
+      expect(dispatchSpy).toHaveBeenCalledWith(
+        updatePropertyAction({ pid, property })
+      );
     });
   });
 
@@ -225,14 +287,16 @@ describe("DetailsDashboardComponent", () => {
     it("should dispatch a SaveDatasetAction", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
+      const pid = "testPid";
       component.dataset = new RawDataset();
+      component.dataset.pid = pid;
       const metadata = {};
       const property = { scientificMetadata: metadata };
       component.onSaveMetadata(metadata);
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        updatePropertyAction({ dataset: component.dataset, property })
+        updatePropertyAction({ pid, property })
       );
     });
   });

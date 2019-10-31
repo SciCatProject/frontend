@@ -1,9 +1,16 @@
+@import "../../../theme.scss";
+
 mat-card {
   mat-icon {
     vertical-align: middle;
   }
 
   table {
+    th {
+      text-align: left;
+      padding-right: 0.5em;
+    }
+
     td {
       padding: 0.5em;
 
@@ -11,10 +18,31 @@ mat-card {
         cursor: pointer;
       }
     }
+  }
 
+  .about-table {
     th {
-      text-align: left;
-      padding-right: 0.5em;
+      min-width: 10em;
+    }
+
+    td {
+      width: 100%;
+    }
+
+    .keywords-row {
+      .add-keyword-chip:hover {
+        cursor: pointer;
+      }
+
+      mat-form-field {
+        width: 92%;
+      }
+
+      .done-edit-button {
+        margin-left: 1em;
+        background-color: mat-color($accent);
+        color: mat-color($accent, default-contrast);
+      }
     }
   }
 }

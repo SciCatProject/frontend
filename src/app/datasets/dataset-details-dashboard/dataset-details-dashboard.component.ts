@@ -84,16 +84,35 @@ export class DatasetDetailsDashboardComponent
   }
 
   onSlidePublic(event: MatSlideToggleChange) {
+    const pid = this.dataset.pid;
     const property = { isPublished: event.checked };
-    this.store.dispatch(
-      updatePropertyAction({ dataset: this.dataset, property })
-    );
+    this.store.dispatch(updatePropertyAction({ pid, property }));
   }
 
   onClickKeyword(keyword: string) {
     this.store.dispatch(clearFacetsAction());
     this.store.dispatch(addKeywordFilterAction({ keyword }));
     this.router.navigateByUrl("/datasets");
+  }
+
+  onAddKeyword(keyword: string) {
+    if (this.dataset.keywords.indexOf(keyword) === -1) {
+      const pid = this.dataset.pid;
+      const keywords = [...this.dataset.keywords].concat(keyword);
+      const property = { keywords };
+      this.store.dispatch(updatePropertyAction({ pid, property }));
+    }
+  }
+
+  onRemoveKeyword(keyword: string) {
+    const index = this.dataset.keywords.indexOf(keyword);
+    if (index >= 0) {
+      const pid = this.dataset.pid;
+      const keywords = [...this.dataset.keywords];
+      keywords.splice(index, 1);
+      const property = { keywords };
+      this.store.dispatch(updatePropertyAction({ pid, property }));
+    }
   }
 
   onClickProposal(proposalId: string) {
@@ -107,10 +126,9 @@ export class DatasetDetailsDashboardComponent
   }
 
   onSaveMetadata(metadata: object) {
+    const pid = this.dataset.pid;
     const property = { scientificMetadata: metadata };
-    this.store.dispatch(
-      updatePropertyAction({ dataset: this.dataset, property })
-    );
+    this.store.dispatch(updatePropertyAction({ pid, property }));
   }
 
   resetDataset(dataset: Dataset) {
