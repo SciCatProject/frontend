@@ -15,6 +15,7 @@ import {
   MatButtonModule
 } from "@angular/material";
 import { APP_CONFIG, AppConfigModule } from "app-config.module";
+import { BrowserAnimationsModule, NoopAnimationsModule } from "@angular/platform-browser/animations";
 
 describe("LoginComponent", () => {
   let component: LoginComponent;
@@ -24,6 +25,7 @@ describe("LoginComponent", () => {
     TestBed.configureTestingModule({
       imports: [
         AppConfigModule,
+        BrowserAnimationsModule,
         FormsModule,
         ReactiveFormsModule,
         MatButtonModule,
@@ -32,7 +34,8 @@ describe("LoginComponent", () => {
         MatFormFieldModule,
         MatGridListModule,
         MatIconModule,
-        MatInputModule
+        MatInputModule,
+        NoopAnimationsModule
       ],
       declarations: [LoginComponent]
     });
