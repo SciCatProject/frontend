@@ -10,7 +10,8 @@ import {
   MatCardModule,
   MatGridListModule,
   MatInputModule,
-  MatIconModule
+  MatIconModule,
+  MatFormFieldModule
 } from "@angular/material";
 import { APP_CONFIG, AppConfigModule } from "app-config.module";
 
@@ -25,6 +26,7 @@ describe("LoginComponent", () => {
         ReactiveFormsModule,
         MatCheckboxModule,
         MatCardModule,
+        MatFormFieldModule,
         MatGridListModule,
         MatIconModule,
         MatInputModule
