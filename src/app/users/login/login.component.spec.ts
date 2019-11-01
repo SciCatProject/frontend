@@ -1,5 +1,5 @@
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
-import { ReactiveFormsModule } from "@angular/forms";
+import { ReactiveFormsModule, FormsModule } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Store } from "@ngrx/store";
 import { MockActivatedRoute, MockRouter, MockStore } from "shared/MockStubs";
@@ -11,7 +11,8 @@ import {
   MatGridListModule,
   MatInputModule,
   MatIconModule,
-  MatFormFieldModule
+  MatFormFieldModule,
+  MatButtonModule
 } from "@angular/material";
 import { APP_CONFIG, AppConfigModule } from "app-config.module";
 
@@ -23,7 +24,9 @@ describe("LoginComponent", () => {
     TestBed.configureTestingModule({
       imports: [
         AppConfigModule,
+        FormsModule,
         ReactiveFormsModule,
+        MatButtonModule,
         MatCheckboxModule,
         MatCardModule,
         MatFormFieldModule,
@@ -71,3 +74,4 @@ describe("LoginComponent", () => {
     expect(compiled.querySelector("form").textContent).toContain("Password");
   });
 });
+,
