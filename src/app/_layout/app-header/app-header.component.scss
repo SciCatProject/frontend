@@ -1,13 +1,18 @@
 @import "src/theme.scss";
 
+.large-screen-text {
+  color: white;
+}
+
 .header {
   position: sticky;
   position: -webkit-sticky;
   top: 0;
   z-index: 1000;
+  padding: 0;
 
   mat-toolbar {
-    height: 5vh;
+    height: 7vh;
 
     a {
       color: mat-color($primary, default-contrast);
@@ -27,7 +32,7 @@
       padding: 10px;
       font: bold;
       font-size: 11pt;
-      text-decoration: none; 
+      text-decoration: none;
 
       mat-icon {
         vertical-align: middle;
