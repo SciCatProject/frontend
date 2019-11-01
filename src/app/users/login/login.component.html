@@ -20,7 +20,6 @@
             <button mat-button matPrefix mat-icon-button>
               <mat-icon>person</mat-icon>
             </button>
-            <mat-hint align="end">hint</mat-hint>
           </mat-form-field>
 
           <mat-form-field hintLabel="ESS account password">
@@ -28,7 +27,7 @@
               matInput
               formControlName="password"
               placeholder="password"
-              type="password"
+              [type]="hide ? 'password' : 'text'"
             />
             <mat-label> <b> Password</b> </mat-label>
             <button mat-button matPrefix mat-icon-button>
@@ -43,7 +42,6 @@
             >
               <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
             </button>
-            <mat-hint align="end">hint</mat-hint>
           </mat-form-field>
           <button
             mat-button
