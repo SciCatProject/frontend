@@ -1,5 +1,23 @@
+.clear-button {
+  float: right;
+  transform: translateY(-25%);
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+.no-proposals-message {
+  margin-top: 4em;
+  text-align: center;
+
+  mat-icon {
+    vertical-align: middle;
+  }
+}
+
 @media only screen and (min-width: 1280px) {
-  .bigSearch {
+  .big-filters {
     margin: 4em 1em 1em 0;
 
     .title {
@@ -7,17 +25,17 @@
     }
   }
 
-  .smallSearch {
+  .small-filters {
     display: none;
   }
 }
 
 @media only screen and (max-width: 1279px) {
-  .bigSearch {
+  .big-filters {
     display: none;
   }
 
-  .smallSearch {
+  .small-filters {
     margin: 1em 0;
   }
 }

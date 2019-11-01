@@ -1295,32 +1295,6 @@ export class DatasetApi extends BaseLoopBackApi {
   }
 
   /**
-   * Update a single attribute of a dataset
-   *
-   * @param {object} data Request data.
-   *
-   *  - `dataset` – `{Dataset}` - The dataset for which to update scientificMetadata
-   *
-   * @returns {object} An empty reference that will be
-   *   populated with the actual data once the response is returned
-   *   from the server.
-   *
-   * The updated Dataset
-   */
-  public updateScientificMetadata(dataset: any, customHeaders?: Function): Observable<any> {
-    let _method: string = "PUT";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/Datasets/updateScientificMetadata";
-    let _routeParams: any = {};
-    let _postBody: any = {
-      dataset: dataset
-    };
-    let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
-    return result;
-  }
-
-  /**
    * Creates a new instance in datasetLifecycle of this model.
    *
    * @param {any} id Dataset id

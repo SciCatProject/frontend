@@ -19,7 +19,8 @@ import {
   MatCardModule,
   MatListModule,
   MatDividerModule,
-  MatIconModule
+  MatIconModule,
+  MatDatepickerInputEvent
 } from "@angular/material";
 import {
   BrowserAnimationsModule,
@@ -37,8 +38,12 @@ import {
   changePageAction,
   sortByColumnAction,
   setTextFilterAction,
-  fetchProposalsAction
+  fetchProposalsAction,
+  clearFacetsAction,
+  setDateRangeFilterAction
 } from "state-management/actions/proposals.actions";
+import { SatDatepickerModule } from "saturn-datepicker";
+import { DateRange } from "datasets/datasets-filter/datasets-filter.component";
 
 describe("ProposalDashboardComponent", () => {
   let component: ProposalDashboardComponent;
@@ -66,6 +71,7 @@ describe("ProposalDashboardComponent", () => {
         MatTableModule,
         NoopAnimationsModule,
         ReactiveFormsModule,
+        SatDatepickerModule,
         SharedCatanieModule,
         StoreModule.forRoot({ rootReducer })
       ],
@@ -116,6 +122,17 @@ describe("ProposalDashboardComponent", () => {
     });
   });
 
+  describe("#onClear()", () => {
+    it("should dispatch a clearFacetsAction", () => {
+      dispatchSpy = spyOn(store, "dispatch");
+
+      component.onClear();
+
+      expect(dispatchSpy).toHaveBeenCalledTimes(1);
+      expect(dispatchSpy).toHaveBeenCalledWith(clearFacetsAction());
+    });
+  });
+
   describe("#onTextSearchChange()", () => {
     it("should dispatch a setTextFilterAction and a fetchProposalsAction", () => {
       dispatchSpy = spyOn(store, "dispatch");
@@ -126,6 +143,41 @@ describe("ProposalDashboardComponent", () => {
       expect(dispatchSpy).toHaveBeenCalledTimes(2);
       expect(dispatchSpy).toHaveBeenCalledWith(
         setTextFilterAction({ text: query })
+      );
+      expect(dispatchSpy).toHaveBeenCalledWith(fetchProposalsAction());
+    });
+  });
+
+  describe("#onDateChange()", () => {
+    it("should dispatch a setDateRangeFilterAction with begin and end dates and a fetchProposalsAction if event has value", () => {
+      dispatchSpy = spyOn(store, "dispatch");
+
+      const event = {
+        value: {
+          begin: new Date(),
+          end: new Date()
+        }
+      };
+      component.onDateChange(event as MatDatepickerInputEvent<DateRange>);
+
+      expect(dispatchSpy).toHaveBeenCalledTimes(2);
+      expect(dispatchSpy).toHaveBeenCalledWith(
+        setDateRangeFilterAction({
+          begin: event.value.begin.toISOString(),
+          end: event.value.end.toISOString()
+        })
+      );
+      expect(dispatchSpy).toHaveBeenCalledWith(fetchProposalsAction());
+    });
+    it("should dispatch a setDateRangeFilterAction with null and a fetchProposalsAction if event does not have value", () => {
+      dispatchSpy = spyOn(store, "dispatch");
+
+      const event = {};
+      component.onDateChange(event as MatDatepickerInputEvent<DateRange>);
+
+      expect(dispatchSpy).toHaveBeenCalledTimes(2);
+      expect(dispatchSpy).toHaveBeenCalledWith(
+        setDateRangeFilterAction({ begin: null, end: null })
       );
       expect(dispatchSpy).toHaveBeenCalledWith(fetchProposalsAction());
     });

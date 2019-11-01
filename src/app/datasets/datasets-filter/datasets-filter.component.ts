@@ -201,13 +201,17 @@ export class DatasetsFilterComponent {
   }
 
   dateChanged(event: MatDatepickerInputEvent<DateRange>) {
-    const { begin, end } = event.value;
-    this.store.dispatch(
-      setDateRangeFilterAction({
-        begin: begin.toISOString(),
-        end: end.toISOString()
-      })
-    );
+    if (event.value) {
+      const { begin, end } = event.value;
+      this.store.dispatch(
+        setDateRangeFilterAction({
+          begin: begin.toISOString(),
+          end: end.toISOString()
+        })
+      );
+    } else {
+      this.store.dispatch(setDateRangeFilterAction({ begin: null, end: null }));
+    }
   }
 
   clearFacets() {

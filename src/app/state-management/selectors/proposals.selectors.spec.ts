@@ -25,6 +25,10 @@ const initialProposalsState: ProposalsState = {
 
   proposalFilters: {
     text: "test",
+    dateRange: {
+      begin: new Date(2019, 11, 1).toISOString(),
+      end: new Date(2019, 11, 2).toISOString()
+    },
     sortField: "test asc",
     skip: 0,
     limit: 25
@@ -96,6 +100,29 @@ describe("Proposal Selectors", () => {
     });
   });
 
+  describe("getDateRangeFilter", () => {
+    it("should get dateRange from proposalFilters", () => {
+      expect(
+        fromSelectors.getDateRangeFilter.projector(
+          initialProposalsState.proposalFilters
+        )
+      ).toEqual({
+        begin: new Date(2019, 11, 1).toISOString(),
+        end: new Date(2019, 11, 2).toISOString()
+      });
+    });
+  });
+
+  describe("getHasAppliedFilters", () => {
+    it("should return true if text or dateRange filter has value", () => {
+      expect(
+        fromSelectors.getHasAppliedFilters.projector(
+          initialProposalsState.proposalFilters
+        )
+      ).toEqual(true);
+    });
+  });
+
   describe("getDatasetFilters", () => {
     it("should get the dataset filters", () => {
       expect(
@@ -150,19 +177,12 @@ describe("Proposal Selectors", () => {
 
   describe("getFullqueryParams", () => {
     it("should get query params for proposals", () => {
-      const {
-        text,
-        skip,
-        limit,
-        sortField
-      } = initialProposalsState.proposalFilters;
-      const limits = { order: sortField, skip, limit };
-      const params = { query: JSON.stringify({ text }), limits };
-      expect(
+      const fullqueryKeys = Object.keys(
         fromSelectors.getFullqueryParams.projector(
           initialProposalsState.proposalFilters
         )
-      ).toEqual(params);
+      );
+      expect(fullqueryKeys).toContain("query");
     });
   });
 

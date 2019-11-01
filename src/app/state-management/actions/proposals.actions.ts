@@ -95,6 +95,12 @@ export const setTextFilterAction = createAction(
   "[Proposal] Set Text Filter",
   props<{ text: string }>()
 );
+export const setDateRangeFilterAction = createAction(
+  "[Proposal] Set Date Range Filter",
+  props<{ begin: string; end: string }>()
+);
+
+export const clearFacetsAction = createAction("[Proposal] Clear Facets");
 
 export const changePageAction = createAction(
   "[Proposal] Change Page",

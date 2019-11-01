@@ -30,7 +30,8 @@ export class ProposalEffects {
       ofType(
         fromActions.fetchProposalsAction,
         fromActions.changePageAction,
-        fromActions.sortByColumnAction
+        fromActions.sortByColumnAction,
+        fromActions.clearFacetsAction
       ),
       withLatestFrom(this.fullqueryParams$),
       map(([action, params]) => params),
