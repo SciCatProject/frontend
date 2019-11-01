@@ -4,7 +4,7 @@
   margin-top: 1em;
 
   mat-card {
-    background-color: rgba(255, 255, 255, 0.9);
+    background-color: rgba(25, 255, 255, 0.9);
 
     mat-card-header {
       .facility_logo {
@@ -14,9 +14,6 @@
     }
 
     mat-card-content {
-      .field {
-        max-width: 20em;
-      }
 
       mat-checkbox {
         margin-left: 1em;
@@ -25,7 +22,25 @@
   }
 }
 
-// Needed to maintin logo aspect ratio in iOS browsers
+.example-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.example-container > * {
+  width: 100%;
+}
+mat-form-field {
+  width: 100%;
+}
+
+
+.mat-icon {
+  vertical-align: middle;
+}
+
+
+// Needed to maintain logo aspect ratio in iOS browsers
 @media not all and (min-resolution: 0.001dpcm) {
   @supports (-webkit-appearance: none) {
     .login-container {

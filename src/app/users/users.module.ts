@@ -13,7 +13,9 @@ import {
   MatCheckboxModule,
   MatGridListModule,
   MatButtonModule,
-  MatIconModule
+  MatIconModule,
+  MatFormFieldModule,
+  MatInputModule
 } from "@angular/material";
 
 @NgModule({
@@ -24,8 +26,10 @@ import {
     MatButtonModule,
     MatCardModule,
     MatCheckboxModule,
+    MatFormFieldModule,
     MatGridListModule,
     MatIconModule,
+    MatInputModule,
     ReactiveFormsModule,
     SharedCatanieModule,
     StoreModule.forFeature("users", userReducer)
