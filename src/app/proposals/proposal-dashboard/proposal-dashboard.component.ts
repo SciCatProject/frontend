@@ -107,9 +107,9 @@ export class ProposalDashboardComponent implements OnInit, OnDestroy {
     this.store.dispatch(fetchProposalsAction());
   }
 
-  onDateChange(event: MatDatepickerInputEvent<DateRange>) {
-    if (event.value) {
-      const { begin, end } = event.value;
+  onDateChange(event: DateRange) {
+    if (event) {
+      const { begin, end } = event;
       this.store.dispatch(
         setDateRangeFilterAction({
           begin: begin.toISOString(),

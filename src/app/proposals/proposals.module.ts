@@ -31,6 +31,7 @@ import { ProposalDashboardComponent } from "./proposal-dashboard/proposal-dashbo
 import { FlexLayoutModule } from "@angular/flex-layout";
 import { FileSizePipe } from "shared/pipes/filesize.pipe";
 import { SatDatepickerModule } from "saturn-datepicker";
+import { ProposalFilterComponent } from './proposal-filter/proposal-filter.component';
 
 @NgModule({
   imports: [
@@ -57,7 +58,8 @@ import { SatDatepickerModule } from "saturn-datepicker";
   declarations: [
     ViewProposalPageComponent,
     ProposalDetailComponent,
-    ProposalDashboardComponent
+    ProposalDashboardComponent,
+    ProposalFilterComponent
   ],
   exports: [],
   providers: [DatePipe, FileSizePipe, SlicePipe]

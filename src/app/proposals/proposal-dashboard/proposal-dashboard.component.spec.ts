@@ -1,5 +1,4 @@
 import { APP_CONFIG } from "app-config.module";
-import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MockStore } from "shared/MockStubs";
 import { ProposalDashboardComponent } from "./proposal-dashboard.component";
 import { Router } from "@angular/router";
@@ -10,22 +9,6 @@ import {
   TestBed,
   inject
 } from "@angular/core/testing";
-import {
-  MatDialog,
-  MatPaginatorModule,
-  MatInputModule,
-  MatFormFieldModule,
-  MatTableModule,
-  MatCardModule,
-  MatListModule,
-  MatDividerModule,
-  MatIconModule,
-  MatDatepickerInputEvent
-} from "@angular/material";
-import {
-  BrowserAnimationsModule,
-  NoopAnimationsModule
-} from "@angular/platform-browser/animations";
 import { rootReducer } from "state-management/reducers/root.reducer";
 import { SharedCatanieModule } from "shared/shared.module";
 import { DatePipe } from "@angular/common";
@@ -42,8 +25,8 @@ import {
   clearFacetsAction,
   setDateRangeFilterAction
 } from "state-management/actions/proposals.actions";
-import { SatDatepickerModule } from "saturn-datepicker";
 import { DateRange } from "datasets/datasets-filter/datasets-filter.component";
+import { NO_ERRORS_SCHEMA } from "@angular/core";
 
 describe("ProposalDashboardComponent", () => {
   let component: ProposalDashboardComponent;
@@ -57,31 +40,15 @@ describe("ProposalDashboardComponent", () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
+      schemas: [NO_ERRORS_SCHEMA],
       declarations: [ProposalDashboardComponent],
-      imports: [
-        BrowserAnimationsModule,
-        FormsModule,
-        MatCardModule,
-        MatDividerModule,
-        MatIconModule,
-        MatListModule,
-        MatFormFieldModule,
-        MatInputModule,
-        MatPaginatorModule,
-        MatTableModule,
-        NoopAnimationsModule,
-        ReactiveFormsModule,
-        SatDatepickerModule,
-        SharedCatanieModule,
-        StoreModule.forRoot({ rootReducer })
-      ],
+      imports: [SharedCatanieModule, StoreModule.forRoot({ rootReducer })],
       providers: [DatePipe]
     });
     TestBed.overrideComponent(ProposalDashboardComponent, {
       set: {
         providers: [
           { provide: APP_CONFIG, useValue: { editSampleEnabled: true } },
-          { provide: MatDialog, useValue: {} },
           { provide: Router, useValue: router }
         ]
       }
@@ -152,19 +119,17 @@ describe("ProposalDashboardComponent", () => {
     it("should dispatch a setDateRangeFilterAction with begin and end dates and a fetchProposalsAction if event has value", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
-      const event = {
-        value: {
-          begin: new Date(),
-          end: new Date()
-        }
+      const event: DateRange = {
+        begin: new Date(),
+        end: new Date()
       };
-      component.onDateChange(event as MatDatepickerInputEvent<DateRange>);
+      component.onDateChange(event);
 
       expect(dispatchSpy).toHaveBeenCalledTimes(2);
       expect(dispatchSpy).toHaveBeenCalledWith(
         setDateRangeFilterAction({
-          begin: event.value.begin.toISOString(),
-          end: event.value.end.toISOString()
+          begin: event.begin.toISOString(),
+          end: event.end.toISOString()
         })
       );
       expect(dispatchSpy).toHaveBeenCalledWith(fetchProposalsAction());
@@ -172,8 +137,8 @@ describe("ProposalDashboardComponent", () => {
     it("should dispatch a setDateRangeFilterAction with null and a fetchProposalsAction if event does not have value", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
-      const event = {};
-      component.onDateChange(event as MatDatepickerInputEvent<DateRange>);
+      const event = null;
+      component.onDateChange(event);
 
       expect(dispatchSpy).toHaveBeenCalledTimes(2);
       expect(dispatchSpy).toHaveBeenCalledWith(
