@@ -8,7 +8,8 @@ import { LoginComponent } from "./login.component";
 import {
   MatCheckboxModule,
   MatCardModule,
-  MatGridListModule
+  MatGridListModule,
+  MatInputModule
 } from "@angular/material";
 import { APP_CONFIG, AppConfigModule } from "app-config.module";
 
@@ -23,7 +24,8 @@ describe("LoginComponent", () => {
         ReactiveFormsModule,
         MatCheckboxModule,
         MatCardModule,
-        MatGridListModule
+        MatGridListModule,
+        MatInputModule
       ],
       declarations: [LoginComponent]
     });
