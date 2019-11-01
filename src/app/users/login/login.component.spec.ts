@@ -74,4 +74,4 @@ describe("LoginComponent", () => {
     expect(compiled.querySelector("form").textContent).toContain("Password");
   });
 });
-,
+
