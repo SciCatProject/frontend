@@ -60,7 +60,7 @@
         class="date-input"
         name="range-picker"
         [satDatepicker]="smallPicker"
-        [value]="dateRangeFilter$ | async"
+        [value]="dateRangeValue"
         (dateChange)="doDateChange($event)"
       />
       <sat-datepicker-toggle matSuffix [for]="smallPicker">
