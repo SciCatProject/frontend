@@ -1,23 +1,8 @@
-@media only screen and (min-width: 1280px) {
-  .bigSearch {
-    margin: 4em 1em 1em 0;
+.no-proposals-message {
+  margin-top: 4em;
+  text-align: center;
 
-    .title {
-      font-size: 1.25em;
-    }
-  }
-
-  .smallSearch {
-    display: none;
-  }
-}
-
-@media only screen and (max-width: 1279px) {
-  .bigSearch {
-    display: none;
-  }
-
-  .smallSearch {
-    margin: 1em 0;
+  mat-icon {
+    vertical-align: middle;
   }
 }

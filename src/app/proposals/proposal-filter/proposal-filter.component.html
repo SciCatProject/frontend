@@ -1,0 +1,72 @@
+<mat-card class="big-filters">
+  <span class="title">Search</span>
+  <button
+    mat-button
+    class="clear-button"
+    color="primary"
+    [disabled]="!hasAppliedFilters"
+    (click)="doClear()"
+  >
+    <mat-icon>clear_all</mat-icon> Clear
+  </button>
+  <div style="clear: both;"></div>
+  <app-search-bar
+    [clear]="clearSearchBar"
+    (onSearch)="doSearchChange($event)"
+    (onFocus)="doSearchChange($event)"
+  ></app-search-bar>
+  <mat-form-field>
+    <mat-icon matPrefix>date_range</mat-icon>
+    <input
+      matInput
+      class="date-input"
+      name="range-picker"
+      [satDatepicker]="largePicker"
+      [value]="dateRangeValue"
+      (dateChange)="doDateChange($event)"
+    />
+    <sat-datepicker-toggle matSuffix [for]="largePicker">
+      <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+    </sat-datepicker-toggle>
+    <sat-datepicker #largePicker [rangeMode]="true"></sat-datepicker>
+  </mat-form-field>
+</mat-card>
+<div class="small-filters">
+  <button
+    mat-button
+    class="clear-button"
+    color="primary"
+    [disabled]="!hasAppliedFilters"
+    (click)="doClear()"
+  >
+    <mat-icon>clear_all</mat-icon> Clear
+  </button>
+  <div style="clear: both;"></div>
+  <app-search-bar
+    [clear]="clearSearchBar"
+    (onSearch)="doSearchChange($event)"
+    (onFocus)="doSearchChange($event)"
+  ></app-search-bar>
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Filters
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <mat-form-field>
+      <mat-icon matPrefix>date_range</mat-icon>
+      <input
+        matInput
+        class="date-input"
+        name="range-picker"
+        [satDatepicker]="smallPicker"
+        [value]="dateRangeValue"
+        (dateChange)="doDateChange($event)"
+      />
+      <sat-datepicker-toggle matSuffix [for]="smallPicker">
+        <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+      </sat-datepicker-toggle>
+      <sat-datepicker #smallPicker [rangeMode]="true"></sat-datepicker>
+    </mat-form-field>
+  </mat-expansion-panel>
+</div>

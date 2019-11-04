@@ -64,6 +64,22 @@ const reducer = createReducer(
     const proposalFilters = { ...state.proposalFilters, text, skip: 0 };
     return { ...state, proposalFilters };
   }),
+  on(fromActions.setDateRangeFilterAction, (state, { begin, end }) => {
+    const oldTime = state.proposalFilters.dateRange;
+    const dateRange = { ...oldTime, begin, end };
+    const proposalFilters = { ...state.proposalFilters, dateRange };
+    return { ...state, proposalFilters };
+  }),
+
+  on(fromActions.clearFacetsAction, state => {
+    const limit = state.proposalFilters.limit; // Save limit
+    const proposalFilters = {
+      ...initialProposalsState.proposalFilters,
+      skip: 0,
+      limit
+    };
+    return { ...state, proposalFilters };
+  }),
 
   on(fromActions.changePageAction, (state, { page, limit }) => {
     const skip = page * limit;

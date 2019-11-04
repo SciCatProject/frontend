@@ -14,6 +14,8 @@ export interface ProposalInterface {
   "lastname"?: string;
   "title"?: string;
   "abstract"?: string;
+  "startTime"?: Date;
+  "endTime"?: Date;
   "ownerGroup": string;
   "accessGroups"?: Array<any>;
   "createdBy"?: string;
@@ -35,6 +37,8 @@ export class Proposal implements ProposalInterface {
   "lastname": string;
   "title": string;
   "abstract": string;
+  "startTime": Date;
+  "endTime": Date;
   "ownerGroup": string;
   "accessGroups": Array<any>;
   "createdBy": string;
@@ -112,6 +116,14 @@ export class Proposal implements ProposalInterface {
         "abstract": {
           name: 'abstract',
           type: 'string'
+        },
+        "startTime": {
+          name: 'startTime',
+          type: 'Date'
+        },
+        "endTime": {
+          name: 'endTime',
+          type: 'Date'
         },
         "ownerGroup": {
           name: 'ownerGroup',

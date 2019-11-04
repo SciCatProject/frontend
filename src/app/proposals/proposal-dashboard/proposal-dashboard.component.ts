@@ -9,7 +9,9 @@ import {
   getPage,
   getProposalsCount,
   getProposalsPerPage,
-  getProposals
+  getProposals,
+  getDateRangeFilter,
+  getHasAppliedFilters
 } from "state-management/selectors/proposals.selectors";
 import {
   TableColumn,
@@ -20,8 +22,12 @@ import {
   changePageAction,
   sortByColumnAction,
   fetchProposalsAction,
-  setTextFilterAction
+  setTextFilterAction,
+  setDateRangeFilterAction,
+  clearFacetsAction
 } from "state-management/actions/proposals.actions";
+import { MatDatepickerInputEvent } from "@angular/material";
+import { DateRange } from "datasets/datasets-filter/datasets-filter.component";
 
 @Component({
   selector: "proposal-dashboard",
@@ -30,7 +36,10 @@ import {
 })
 export class ProposalDashboardComponent implements OnInit, OnDestroy {
   private proposalsSubscription: Subscription;
+  clearSearchBar: boolean;
 
+  hasAppliedFilters$ = this.store.pipe(select(getHasAppliedFilters));
+  dateRangeFilter$ = this.store.pipe(select(getDateRangeFilter));
   currentPage$ = this.store.pipe(select(getPage));
   proposalsCount$ = this.store.pipe(select(getProposalsCount));
   proposalsPerPage$ = this.store.pipe(select(getProposalsPerPage));
@@ -45,16 +54,10 @@ export class ProposalDashboardComponent implements OnInit, OnDestroy {
     },
     { name: "title", icon: "fingerprint", sort: true, inList: true },
     { name: "author", icon: "face", sort: true, inList: true },
-    { name: "start", icon: "timer", sort: false, inList: true },
-    { name: "end", icon: "timer_off", sort: false, inList: true }
+    { name: "start", icon: "timer", sort: true, inList: true },
+    { name: "end", icon: "timer_off", sort: true, inList: true }
   ];
   tablePaginate = true;
-  constructor(
-    @Inject(APP_CONFIG) public appConfig: AppConfig,
-    private datePipe: DatePipe,
-    private router: Router,
-    private store: Store<Proposal>
-  ) {}
 
   formatTableData(proposals: Proposal[]): any[] {
     if (proposals) {
@@ -64,7 +67,13 @@ export class ProposalDashboardComponent implements OnInit, OnDestroy {
           title: proposal.title,
           author: proposal.firstname + " " + proposal.lastname
         };
-        if (
+        if (proposal.startTime && proposal.endTime) {
+          data.start = this.datePipe.transform(
+            proposal.startTime,
+            "yyyy-MM-dd"
+          );
+          data.end = this.datePipe.transform(proposal.endTime, "yyyy-MM-dd");
+        } else if (
           proposal.MeasurementPeriodList &&
           proposal.MeasurementPeriodList.length > 0
         ) {
@@ -87,8 +96,34 @@ export class ProposalDashboardComponent implements OnInit, OnDestroy {
     }
   }
 
+  onClear() {
+    this.clearSearchBar = true;
+    this.store.dispatch(clearFacetsAction());
+  }
+
   onTextSearchChange(query: string) {
+    this.clearSearchBar = false;
     this.store.dispatch(setTextFilterAction({ text: query }));
+    this.store.dispatch(fetchProposalsAction());
+  }
+
+  onDateChange(event: DateRange) {
+    if (event) {
+      const { begin, end } = event;
+      this.store.dispatch(
+        setDateRangeFilterAction({
+          begin: begin.toISOString(),
+          end: end.toISOString()
+        })
+      );
+    } else {
+      this.store.dispatch(
+        setDateRangeFilterAction({
+          begin: null,
+          end: null
+        })
+      );
+    }
     this.store.dispatch(fetchProposalsAction());
   }
 
@@ -99,8 +134,22 @@ export class ProposalDashboardComponent implements OnInit, OnDestroy {
   }
 
   onSortChange(event: SortChangeEvent) {
-    if (event.active === "author") {
-      event.active = "firstname";
+    switch (event.active) {
+      case "author": {
+        event.active = "firstname";
+        break;
+      }
+      case "start": {
+        event.active = "startTime";
+        break;
+      }
+      case "end": {
+        event.active = "endTime";
+        break;
+      }
+      default: {
+        break;
+      }
     }
     this.store.dispatch(
       sortByColumnAction({ column: event.active, direction: event.direction })
@@ -111,6 +160,13 @@ export class ProposalDashboardComponent implements OnInit, OnDestroy {
     const id = encodeURIComponent(proposal.proposalId);
     this.router.navigateByUrl("/proposals/" + id);
   }
+
+  constructor(
+    @Inject(APP_CONFIG) public appConfig: AppConfig,
+    private datePipe: DatePipe,
+    private router: Router,
+    private store: Store<Proposal>
+  ) {}
 
   ngOnInit() {
     this.store.dispatch(fetchProposalsAction());

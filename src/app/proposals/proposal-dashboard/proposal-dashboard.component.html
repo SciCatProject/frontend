@@ -1,21 +1,21 @@
 <div fxLayout="row" fxLayout.lt-lg="column">
-  <div fxFlex="14" fxFlex.lt-xl="20">
-    <div *ngIf="appConfig.searchProposals">
-      <mat-card class="bigSearch">
-        <div class="title">Search</div>
-        <app-search-bar
-          (onSearch)="onTextSearchChange($event)"
-          (onFocus)="onTextSearchChange($event)"
-        ></app-search-bar>
-      </mat-card>
-      <div class="smallSearch">
-        <app-search-bar
-          (onSearch)="onTextSearchChange($event)"
-          (onFocus)="onTextSearchChange($event)"
-        ></app-search-bar>
-      </div>
-    </div>
+  <div
+    fxFlex="14"
+    fxFlex.lt-xl="20"
+    *ngIf="appConfig.searchProposals; else spacer"
+  >
+    <proposal-filter
+      [hasAppliedFilters]="hasAppliedFilters$ | async"
+      [clearSearchBar]="clearSearchBar"
+      [dateRangeValue]="dateRangeFilter$ | async"
+      (onClear)="onClear()"
+      (onSearchChange)="onTextSearchChange($event)"
+      (onDateChange)="onDateChange($event)"
+    ></proposal-filter>
   </div>
+  <ng-template #spacer>
+    <div fxFlex="20" fxFlex.lt-xl="10"></div>
+  </ng-template>
   <div fxFlex="63" fxFlex.lt-xl="80">
     <app-table
       [data]="tableData"
@@ -29,7 +29,9 @@
       (rowClick)="onRowClick($event)"
     ></app-table>
     <ng-template [ngIf]="tableData && tableData.length === 0">
-      {{ (hasFetched$ | async) ? "No proposals." : "Loading..." }}
+      <mat-card class="no-proposals-message">
+        <mat-icon>info</mat-icon> No proposals available.
+      </mat-card>
     </ng-template>
   </div>
 </div>

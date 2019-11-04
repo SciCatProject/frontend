@@ -5,6 +5,17 @@ export interface ProposalFilters {
   skip: number;
   limit: number;
   sortField: string;
+  dateRange: {
+    begin: string;
+    end: string;
+  };
+}
+
+export interface ProposalDatesetFilters {
+  text: string;
+  skip: number;
+  limit: number;
+  sortField: string;
 }
 
 export interface ProposalsState {
@@ -16,7 +27,7 @@ export interface ProposalsState {
   datasetsCount: number;
 
   proposalFilters: ProposalFilters;
-  datasetFilters: ProposalFilters;
+  datasetFilters: ProposalDatesetFilters;
 }
 
 export const initialProposalsState: ProposalsState = {
@@ -31,7 +42,8 @@ export const initialProposalsState: ProposalsState = {
     text: "",
     skip: 0,
     limit: 25,
-    sortField: "createdAt:desc"
+    sortField: "createdAt:desc",
+    dateRange: null
   },
 
   datasetFilters: {

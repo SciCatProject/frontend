@@ -173,6 +173,36 @@ describe("ProposalEffects", () => {
         expect(effects.fetchProposals$).toBeObservable(expected);
       });
     });
+
+    describe("ofType clearFacetsAction", () => {
+      it("should result in a fetchProposalsCompleteAction and a fetchCountAction", () => {
+        const proposals = [proposal];
+        const action = fromActions.clearFacetsAction();
+        const outcome1 = fromActions.fetchProposalsCompleteAction({
+          proposals
+        });
+        const outcome2 = fromActions.fetchCountAction();
+
+        actions = hot("-a", { a: action });
+        const response = cold("-a|", { a: proposals });
+        proposalApi.fullquery.and.returnValue(response);
+
+        const expected = cold("--(bc)", { b: outcome1, c: outcome2 });
+        expect(effects.fetchProposals$).toBeObservable(expected);
+      });
+
+      it("should result in a fetchProposalsFailedAction", () => {
+        const action = fromActions.clearFacetsAction();
+        const outcome = fromActions.fetchProposalsFailedAction();
+
+        actions = hot("-a", { a: action });
+        const response = cold("-#", {});
+        proposalApi.fullquery.and.returnValue(response);
+
+        const expected = cold("--b", { b: outcome });
+        expect(effects.fetchProposals$).toBeObservable(expected);
+      });
+    });
   });
 
   describe("fetchCount$", () => {

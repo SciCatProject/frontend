@@ -274,6 +274,29 @@ describe("Proposal Actions", () => {
     });
   });
 
+  describe("setDateRangeFilterAction", () => {
+    it("should create an action", () => {
+      const begin = new Date().toISOString();
+      const end = new Date().toISOString();
+      const action = fromActions.setDateRangeFilterAction({
+        begin,
+        end
+      });
+      expect({ ...action }).toEqual({
+        type: "[Proposal] Set Date Range Filter",
+        begin,
+        end
+      });
+    });
+  });
+
+  describe("clearFacetsAction", () => {
+    it("should create an action", () => {
+      const action = fromActions.clearFacetsAction();
+      expect({ ...action }).toEqual({ type: "[Proposal] Clear Facets" });
+    });
+  });
+
   describe("changePageAction", () => {
     it("should create an action", () => {
       const page = 0;
