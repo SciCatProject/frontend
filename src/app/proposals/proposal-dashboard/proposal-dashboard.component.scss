@@ -1,41 +1,8 @@
-.clear-button {
-  float: right;
-  transform: translateY(-25%);
-}
-
-mat-form-field {
-  width: 100%;
-}
-
 .no-proposals-message {
   margin-top: 4em;
   text-align: center;
 
   mat-icon {
     vertical-align: middle;
-  }
-}
-
-@media only screen and (min-width: 1280px) {
-  .big-filters {
-    margin: 4em 1em 1em 0;
-
-    .title {
-      font-size: 1.25em;
-    }
-  }
-
-  .small-filters {
-    display: none;
-  }
-}
-
-@media only screen and (max-width: 1279px) {
-  .big-filters {
-    display: none;
-  }
-
-  .small-filters {
-    margin: 1em 0;
   }
 }

@@ -1,16 +1,21 @@
 <div fxLayout="row" fxLayout.lt-lg="column">
-  <div fxFlex="14" fxFlex.lt-xl="20">
-    <div *ngIf="appConfig.searchProposals">
-      <proposal-filter
-        [hasAppliedFilters]="hasAppliedFilters$ | async"
-        [clearSearchBar]="clearSearchBar"
-        [dateRangeValue]="dateRangeFilter$ | async"
-        (onClear)="onClear()"
-        (onSearchChange)="onTextSearchChange($event)"
-        (onDateChange)="onDateChange($event)"
-      ></proposal-filter>
-    </div>
+  <div
+    fxFlex="14"
+    fxFlex.lt-xl="20"
+    *ngIf="appConfig.searchProposals; else spacer"
+  >
+    <proposal-filter
+      [hasAppliedFilters]="hasAppliedFilters$ | async"
+      [clearSearchBar]="clearSearchBar"
+      [dateRangeValue]="dateRangeFilter$ | async"
+      (onClear)="onClear()"
+      (onSearchChange)="onTextSearchChange($event)"
+      (onDateChange)="onDateChange($event)"
+    ></proposal-filter>
   </div>
+  <ng-template #spacer>
+    <div fxFlex="20" fxFlex.lt-xl="10"></div>
+  </ng-template>
   <div fxFlex="63" fxFlex.lt-xl="80">
     <app-table
       [data]="tableData"
