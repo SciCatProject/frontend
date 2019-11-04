@@ -85,7 +85,7 @@
 
       <div class="file-uploader">
         <app-file-uploader
-          [attachments]="attachments$ | async"
+          [attachments]="attachments"
           (filePicked)="onFileUploaderFilePicked($event)"
           (readEnd)="onFileUploaderReadEnd($event)"
           (submitCaption)="updateCaption($event)"
