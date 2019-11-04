@@ -5,12 +5,11 @@ import {
   fetchCurrentUserAction,
   logoutAction
 } from "state-management/actions/user.actions";
-import { Subscription, Observable } from "rxjs";
+import { Subscription } from "rxjs";
 import {
   getCurrentUserAccountType,
   getCurrentUser,
-  getProfile,
-  getTheme
+  getProfile
 } from "state-management/selectors/user.selectors";
 
 @Component({
@@ -19,11 +18,9 @@ import {
   styleUrls: ["./app-header.component.scss"]
 })
 export class AppHeaderComponent implements OnInit, OnDestroy {
-  title: string;
   facility: string;
   status: string;
 
-  darkTheme$: Observable<any>;
   username: string;
   profileImage: string;
   userSubscription: Subscription;
@@ -33,14 +30,12 @@ export class AppHeaderComponent implements OnInit, OnDestroy {
     private store: Store<any>,
     @Inject(APP_CONFIG) public appConfig: AppConfig
   ) {
-    this.darkTheme$ = this.store.pipe(select(getTheme));
     this.facility = appConfig.facility;
     if (appConfig.production === true) {
       this.status = "";
     } else {
       this.status = "test";
     }
-    this.title = "SciCat " + this.facility + " " + this.status;
     this.profileImage = "assets/images/user.png";
   }
 
