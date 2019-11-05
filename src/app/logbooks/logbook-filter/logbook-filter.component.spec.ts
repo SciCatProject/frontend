@@ -11,8 +11,7 @@ describe("LogbookFilterComponent", () => {
   const logbookData: LogbookInterface = {
     name: "tesName",
     roomId: "testId",
-    messages: [{ message: "test1" }, { message: "test2" }],
-    id: 0
+    messages: [{ message: "test1" }, { message: "test2" }]
   };
   const logbook = new Logbook(logbookData);
   const event = new MatCheckboxChange();

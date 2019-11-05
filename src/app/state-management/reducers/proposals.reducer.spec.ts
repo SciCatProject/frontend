@@ -1,5 +1,5 @@
 import { proposalsReducer } from "./proposals.reducer";
-import { ProposalsState } from "../state/proposals.store";
+import { initialProposalsState } from "../state/proposals.store";
 import * as fromActions from "../actions/proposals.actions";
 import { Attachment, Dataset, DatasetInterface, Proposal } from "../models";
 import { ProposalInterface } from "shared/sdk";
@@ -11,28 +11,6 @@ const proposalData: ProposalInterface = {
   attachments: []
 };
 const proposal = new Proposal(proposalData);
-
-const initialProposalsState: ProposalsState = {
-  proposals: [],
-  currentProposal: proposal,
-  datasets: [],
-
-  proposalsCount: 0,
-  datasetsCount: 0,
-
-  proposalFilters: {
-    text: "test",
-    sortField: "test:asc",
-    skip: 0,
-    limit: 25
-  },
-  datasetFilters: {
-    text: "test",
-    sortField: "test:asc",
-    skip: 0,
-    limit: 25
-  }
-};
 
 describe("ProposalsReducer", () => {
   describe("on fetchProposalsCompleteAction", () => {
@@ -98,6 +76,7 @@ describe("ProposalsReducer", () => {
 
   describe("on addAttachmentCompleteAction", () => {
     it("should set attachments of currentProposal", () => {
+      initialProposalsState.currentProposal = proposal;
       const attachment = new Attachment();
       const action = fromActions.addAttachmentCompleteAction({ attachment });
       const state = proposalsReducer(initialProposalsState, action);
@@ -110,6 +89,7 @@ describe("ProposalsReducer", () => {
     it("should set attachments of currentProposal", () => {
       const attachmentId = "testId";
       const attachment = new Attachment({ id: attachmentId, thumbnail: "" });
+      initialProposalsState.currentProposal = proposal;
       initialProposalsState.currentProposal.attachments = [attachment];
 
       const action = fromActions.updateAttachmentCaptionCompleteAction({
@@ -125,6 +105,7 @@ describe("ProposalsReducer", () => {
     it("should remove an attachment from currentProposal", () => {
       const attachmentId = "testId";
       const attachment = new Attachment({ id: attachmentId, thumbnail: "" });
+      initialProposalsState.currentProposal = proposal;
       initialProposalsState.currentProposal.attachments = [attachment];
 
       const action = fromActions.removeAttachmentCompleteAction({
@@ -143,6 +124,41 @@ describe("ProposalsReducer", () => {
       const state = proposalsReducer(initialProposalsState, action);
 
       expect(state.proposalFilters.text).toEqual(text);
+    });
+  });
+
+  describe("on setDateRangeFilterAction", () => {
+    it("should set dateRange filter", () => {
+      const begin = new Date().toISOString();
+      const end = new Date().toISOString();
+      const action = fromActions.setDateRangeFilterAction({
+        begin,
+        end
+      });
+      const state = proposalsReducer(initialProposalsState, action);
+
+      expect(state.proposalFilters.dateRange.begin).toEqual(begin);
+      expect(state.proposalFilters.dateRange.end).toEqual(end);
+    });
+  });
+
+  describe("on clearFacetsAction", () => {
+    it("should clear filters while saving the filters limit", () => {
+      const limit = 10;
+      const page = 1;
+      const skip = limit * page;
+
+      const act = fromActions.changePageAction({ page, limit });
+      const sta = proposalsReducer(initialProposalsState, act);
+
+      expect(sta.proposalFilters.skip).toEqual(skip);
+
+      const action = fromActions.clearFacetsAction();
+      const state = proposalsReducer(sta, action);
+
+      expect(state.proposalFilters.skip).toEqual(0);
+      expect(state.proposalFilters.limit).toEqual(limit);
+      expect(state.proposalFilters.text).toEqual("");
     });
   });
 
