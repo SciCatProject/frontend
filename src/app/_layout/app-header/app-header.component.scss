@@ -1,15 +1,10 @@
 @import "src/theme.scss";
 
-.large-screen-text {
-  color: white;
-}
-
 .header {
   position: sticky;
   position: -webkit-sticky;
   top: 0;
   z-index: 1000;
-  padding: 0;
 
   mat-toolbar {
     height: 7vh;
@@ -32,7 +27,6 @@
       padding: 10px;
       font: bold;
       font-size: 11pt;
-      text-decoration: none;
 
       mat-icon {
         vertical-align: middle;
@@ -41,8 +35,9 @@
 
     .user-button {
       margin-top: 3px;
-      background-color: transparent;
       border: none;
+      background-color: transparent;
+      color: mat-color($primary, default-contrast);
       font-size: 10px;
       line-height: 20px;
 

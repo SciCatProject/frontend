@@ -1,19 +1,33 @@
 @import "../../../theme.scss";
 
 .login-container {
-  margin-top: 1em;
+  padding-top: 10em;
 
   mat-card {
-    background-color: rgba(255, 255, 255, 0.7);
+    max-width: 300px;
+    background-color: rgba(255, 255, 255, 0.8);
 
     mat-card-header {
-      .facility_logo {
+      .facility-logo {
         max-width: 200px;
         margin: 20px 31px 36px 0;
       }
     }
 
     mat-card-content {
+      mat-form-field {
+        width: 100%;
+
+        mat-icon {
+          vertical-align: middle;
+        }
+      }
+
+      .login-button {
+        margin-top: 1em;
+        background-color: mat-color($accent);
+        color: mat-color($accent, default-contrast);
+      }
 
       mat-checkbox {
         margin-left: 1em;
@@ -21,24 +35,6 @@
     }
   }
 }
-
-.example-container {
-  display: flex;
-  flex-direction: column;
-}
-
-.example-container > * {
-  width: 100%;
-}
-mat-form-field {
-  width: 100%;
-}
-
-
-.mat-icon {
-  vertical-align: middle;
-}
-
 
 // Needed to maintain logo aspect ratio in iOS browsers
 @media not all and (min-resolution: 0.001dpcm) {

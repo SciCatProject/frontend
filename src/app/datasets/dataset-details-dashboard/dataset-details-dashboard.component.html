@@ -138,7 +138,11 @@
       </ng-template>
 
       <mat-card style="margin: 1em">
-        <button (click)="resetDataset(dataset)" class="ui yellow button">
+        <button
+          mat-raised-button
+          class="reset-button"
+          (click)="resetDataset(dataset)"
+        >
           Reset Status
         </button>
         <ng-container *ngIf="datablocks$ | async as datablocks">

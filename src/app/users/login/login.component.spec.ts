@@ -8,14 +8,13 @@ import { LoginComponent } from "./login.component";
 import {
   MatCheckboxModule,
   MatCardModule,
-  MatGridListModule,
   MatInputModule,
   MatIconModule,
   MatFormFieldModule,
   MatButtonModule
 } from "@angular/material";
 import { APP_CONFIG, AppConfigModule } from "app-config.module";
-import { BrowserAnimationsModule, NoopAnimationsModule } from "@angular/platform-browser/animations";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
 describe("LoginComponent", () => {
   let component: LoginComponent;
@@ -32,10 +31,8 @@ describe("LoginComponent", () => {
         MatCheckboxModule,
         MatCardModule,
         MatFormFieldModule,
-        MatGridListModule,
         MatIconModule,
-        MatInputModule,
-        NoopAnimationsModule
+        MatInputModule
       ],
       declarations: [LoginComponent]
     });
@@ -43,8 +40,6 @@ describe("LoginComponent", () => {
       set: {
         // These should sync up with what is in the constructor, they do NOT need to be provided in the config for the testing module
         providers: [
-          // { provide: ADAuthService, useClass: MockAuthService },
-          // { provide: LoopBackAuth, useClass: MockLoopBackAuth },
           {
             provide: APP_CONFIG,
             useValue: {
@@ -77,4 +72,3 @@ describe("LoginComponent", () => {
     expect(compiled.querySelector("form").textContent).toContain("Password");
   });
 });
-
