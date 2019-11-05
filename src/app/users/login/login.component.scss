@@ -7,10 +7,11 @@
     max-width: 300px;
     background-color: rgba(255, 255, 255, 0.8);
 
-    mat-card-header {
-      .facility-logo {
+    .facility-logo {
+      margin: 2em 0;
+
+      img {
         max-width: 200px;
-        margin: 20px 31px 36px 0;
       }
     }
 
@@ -25,28 +26,12 @@
 
       .login-button {
         margin-top: 1em;
-        background-color: mat-color($accent);
-        color: mat-color($accent, default-contrast);
+        background-color: mat-color($primary);
+        color: mat-color($primary, default-contrast);
       }
 
       mat-checkbox {
         margin-left: 1em;
-      }
-    }
-  }
-}
-
-// Needed to maintain logo aspect ratio in iOS browsers
-@media not all and (min-resolution: 0.001dpcm) {
-  @supports (-webkit-appearance: none) {
-    .login-container {
-      mat-card {
-        mat-card-header {
-          .facility_logo {
-            object-fit: contain;
-            margin: 0 31px 0 0;
-          }
-        }
       }
     }
   }

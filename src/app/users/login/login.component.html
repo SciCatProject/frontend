@@ -1,12 +1,12 @@
 <div class="login-container" fxLayoutAlign="center center">
   <mat-card>
-    <mat-card-header>
-      <img
-        mat-card-image
-        class="facility-logo"
-        src="assets/images/esslogo.png"
-      />
-    </mat-card-header>
+    <div fxLayout="row" class="facility-logo">
+      <div fxFlex="auto"></div>
+      <div fxFlex="200px">
+        <img src="assets/images/esslogo.png" />
+      </div>
+      <div fxFlex="auto"></div>
+    </div>
     <mat-card-content>
       <form [formGroup]="loginForm" (ngSubmit)="onLogin($event)">
         <mat-form-field hintLabel="firstnamelastname">
