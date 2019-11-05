@@ -70,9 +70,14 @@ export class BreadcrumbComponent implements OnInit {
   setBreadcrumbs(): void {
     this.breadcrumbs = [];
     this.route.children.forEach(root => {
+      let param;
+      Object.keys(root.snapshot.params).forEach(key => {
+        param = root.snapshot.params[key];
+      });
       root.snapshot.url.forEach(url => {
+        console.log("bc url", url);
         const crumb: Breadcrumb = {
-          label: this.sanitise(url.path),
+          label: this.sanitise(url.path, param),
           path: url.path,
           params: url.parameters,
           url: "/" + encodeURIComponent(url.path),
@@ -90,9 +95,12 @@ export class BreadcrumbComponent implements OnInit {
    * @returns Sanitised path for breadcrumb label
    * @memberof BreadcrumbComponent
    */
-  sanitise(path: string): string {
+  sanitise(path: string, param: string): string {
+    console.log("bc param", param);
     path = path.replace(new RegExp("_", "g"), " ");
-    path = new TitleCasePipe().transform(path);
+    if (path !== param) {
+      path = new TitleCasePipe().transform(path);
+    }
     return path;
   }
 

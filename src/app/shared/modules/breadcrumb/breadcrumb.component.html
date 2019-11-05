@@ -2,14 +2,13 @@
   class="breadcrumb"
   *ngIf="(shouldDisplay$ | async) && breadcrumbs && breadcrumbs.length > 0"
 >
-  <hr />
-  <ng-container *ngFor="let breadcrumb of breadcrumbs; let i = index">
+  <span class="container" *ngFor="let breadcrumb of breadcrumbs; let i = index">
     <a
       [ngClass]="{ active: i === breadcrumbs.length - 1 }"
       class="section"
       (click)="crumbClick(i, breadcrumb)"
       >{{ breadcrumb.label }}</a
-    >/
-  </ng-container>
-  <hr />
+    >
+    <span class="delimiter">&nbsp;/&nbsp;</span>
+  </span>
 </div>

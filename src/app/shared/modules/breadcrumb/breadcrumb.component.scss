@@ -1,0 +1,19 @@
+@import "../../../../theme.scss";
+
+.breadcrumb {
+  margin: 1em 0;
+
+  .container {
+    border-top: 1px solid mat-color($grey, 100);
+    border-bottom: 1px solid mat-color($grey, 100);
+    padding: 0.3em 0;
+
+    .delimiter {
+      color: mat-color($grey, 50);
+    }
+
+    .active {
+      font-weight: bold;
+    }
+  }
+}
