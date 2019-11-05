@@ -2,40 +2,25 @@
 
 @media only screen and (min-width: 1280px) {
   .largeDetails {
-    mat-header-cell {
-      color: white;
-      background: mat-color($primary);
-      justify-content: center;
-
-      i {
-        color: white;
-      }
-    }
-
     mat-header-row {
-      color: white;
       background: mat-color($primary);
     }
 
-    .table_column {
-      color: white;
+    mat-header-cell {
+      color: mat-color($primary, default-contrast);
+      justify-content: left;
+    }
+
+    mat-cell {
+      justify-content: left;
     }
 
     .mat-column-timestamp {
-      flex: 1 0 100px;
       max-width: 200px;
-      justify-content: left !important;
     }
 
     .mat-column-sender {
-      flex: 1 0 100px;
       max-width: 200px;
-      justify-content: left !important;
-    }
-
-    .mat-column-entry {
-      flex: 1 0 100px;
-      justify-content: left !important;
     }
   }
 

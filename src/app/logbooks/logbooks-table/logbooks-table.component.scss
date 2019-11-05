@@ -3,55 +3,37 @@
 .logbooks-table {
   margin-top: 1em;
 
-  mat-header-cell {
-    color: white;
-    background: mat-color($primary);
-    justify-content: center;
-
-    i {
-      color: white;
-    }
-  }
-
   mat-header-row {
-    color: white;
     background: mat-color($primary);
   }
 
-  .table_column {
-    color: white;
+  mat-header-cell {
+    color: mat-color($primary, default-contrast);
+    justify-content: left;
+  }
+
+  mat-cell {
+    justify-content: left;
   }
 
   .mat-column-name {
-    flex: 1 0 100px;
     max-width: 300px;
-    justify-content: left !important;
   }
 
   .mat-column-latestEntry {
-    flex: 1 0 100px;
     max-width: 300px;
-    justify-content: left !important;
   }
 
   .mat-column-sender {
-    flex: 1 0 100px;
     max-width: 300px;
-    justify-content: left !important;
   }
 
   .mat-column-entry {
-    flex: 1 0 100px;
-    justify-content: left !important;
+    min-width: 500px;
   }
 }
 
-:host ::ng-deep .disabled-row {
-  pointer-events: none;
-  opacity: 0.2 !important;
-}
-
-:host ::ng-deep .mat-row:hover {
+mat-row:hover {
   background-color: rgba(0, 0, 0, 0.1);
   cursor: pointer;
 }
