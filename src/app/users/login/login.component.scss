@@ -1,5 +1,3 @@
-@import "../../../theme.scss";
-
 .login-container {
   padding-top: 10em;
 
@@ -26,8 +24,6 @@
 
       .login-button {
         margin-top: 1em;
-        background-color: mat-color($primary);
-        color: mat-color($primary, default-contrast);
       }
 
       mat-checkbox {
