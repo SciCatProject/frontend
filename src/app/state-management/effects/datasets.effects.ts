@@ -172,7 +172,7 @@ export class DatasetEffects {
           )
           .pipe(
             map(res =>
-              fromActions.removeAttachmentCompleteAction({ attachmentId: res })
+              fromActions.removeAttachmentCompleteAction({ attachmentId })
             ),
             catchError(() => of(fromActions.removeAttachmentFailedAction()))
           )
