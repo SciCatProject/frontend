@@ -1,7 +1,7 @@
 <div *ngIf="logbook">
   <div fxLayout="row" fxLayout.lt-lg="column">
-    <div fxFlex="14" style="margin-right: 1em">
-      <mat-card class="bigFilter" style="margin: 1em">
+    <div fxFlex="14">
+      <mat-card class="bigFilter">
         <div class="title">Filter</div>
         <app-search-bar
           (onSearch)="onTextSearchChange($event)"
@@ -34,7 +34,7 @@
         </mat-expansion-panel>
       </div>
       <div fxLayout="column" fxLayout.lt-lg="row">
-        <div fxFlex="50">
+        <div fxFlex="49">
           <a
             href="{{ appConfig.riotBaseUrl }}/#/room/{{ logbook.roomId }}"
             target="_blank"
@@ -45,20 +45,22 @@
             </mat-card>
           </a>
         </div>
-        <div class="reverseCard" fxFlex="50">
+        <div fxFlex="auto"></div>
+        <div class="reverseCard" fxFlex="49">
           <mat-card class="cardButton" (click)="reverseTimeline()">
             <i class="material-icons"> swap_vert </i> Reverse
           </mat-card>
         </div>
       </div>
     </div>
-    <div fxFlex="85">
-      <mat-card style="margin: 1em; padding: 0">
-        <app-logbooks-detail [logbook]="logbook"></app-logbooks-detail>
-      </mat-card>
+    <div fxFlex="85" class="details-container">
+      <app-logbooks-detail [logbook]="logbook"></app-logbooks-detail>
     </div>
   </div>
 </div>
-<div style="margin: 1em" *ngIf="!logbook">
-  Logbook not available.
-</div>
+
+<ng-template [ngIf]="!logbook">
+  <mat-card class="no-logbook-message">
+    <mat-icon>info</mat-icon> No logbook available.
+  </mat-card>
+</ng-template>
