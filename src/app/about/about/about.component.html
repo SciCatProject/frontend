@@ -1,32 +1,40 @@
 <div fxLayout="row" fxLayout.xs="column">
   <div fxFlex="80%">
     <mat-card class="example-card">
-      <mat-card-header style="background: #ffffff;">
+      <mat-card-header>
         <mat-card-title>About SciCat</mat-card-title>
       </mat-card-header>
       <span [innerHTML]="aboutText | linky"></span>
-      <br/><br/>
-      <ul style="list-style-type:disc;">
-          <li><a *ngIf="facility=='PSI'" href="{{SciCatGitHub}}" target="blank">SciCat Github Project.</a></li>
+      <br /><br />
+      <ul>
+        <li>
+          <a *ngIf="facility == 'PSI'" href="{{ SciCatGitHub }}" target="blank"
+            >SciCat Github Project.</a
+          >
+        </li>
       </ul>
     </mat-card>
 
     <mat-card class="example-card">
-      <mat-card-header style="background: #ffffff;">
+      <mat-card-header>
         <mat-card-title>Access Conditions</mat-card-title>
       </mat-card-header>
       {{ accessText }}
     </mat-card>
 
     <mat-card class="example-card">
-      <mat-card-header style="background:#ffffff;">
+      <mat-card-header>
         <mat-card-title>Terms of Use</mat-card-title>
       </mat-card-header>
       {{ termsText }}
-      <a *ngIf="facility=='PSI'" href="{{SNFLink}}" target="blank">Open Research Data.</a>
-      <br/><br/>
+      <a *ngIf="facility == 'PSI'" href="{{ SNFLink }}" target="blank"
+        >Open Research Data.</a
+      >
+      <br /><br />
       {{ termsTextContinued }}
-      <a *ngIf="facility=='PSI'" href="{{PSIDataPolicy}}" target="blank">Data Policy.</a>
+      <a *ngIf="facility == 'PSI'" href="{{ PSIDataPolicy }}" target="blank"
+        >Data Policy.</a
+      >
     </mat-card>
   </div>
 </div>

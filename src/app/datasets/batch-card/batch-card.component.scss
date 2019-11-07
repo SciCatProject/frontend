@@ -1,21 +1,23 @@
 mat-card {
+  margin-top: 1em;
+
+  /* Duplicate class from filters */
+  .title {
+    font-size: 1.25em;
+  }
+
+  .count {
     margin-top: 1em;
+  }
 
-    /* Duplicate class from filters */
-    .title {
-        font-size: 1.25em;
-    }
+  mat-card-footer {
+    .button {
+      margin: 0 0.5em 1em 0.5em;
 
-    .count {
-        margin-top: 1em;
-    }
-
-    mat-card-footer {
+      // NO idea why this is needed, but otherwise the icon will be wrongly aligned
+      mat-icon {
         vertical-align: middle;
+      }
     }
-
-    // NO idea why this is needed, but otherwise the icon will be wrongly aligned
-    .mat-button i {
-        vertical-align: unset;
-    }
+  }
 }
