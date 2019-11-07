@@ -12,15 +12,17 @@
       vertical-align: middle;
     }
 
-    td,
-    th {
-      padding: 0.3em;
-    }
+    table {
+      td,
+      th {
+        padding: 0.3em;
+      }
 
-    th {
-      text-align: left;
-      vertical-align: top;
-      min-width: 15em;
+      th {
+        text-align: left;
+        vertical-align: top;
+        min-width: 15em;
+      }
     }
   }
 }
