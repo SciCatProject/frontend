@@ -9,7 +9,7 @@
     }
 
     ::ng-deep .mat-sort-header-arrow {
-      color: white;
+      color: mat-color($primary, default-contrast);
     }
 
     .mat-column-select {
@@ -17,10 +17,10 @@
     }
 
     mat-header-cell {
-      color: white;
+      color: mat-color($primary, default-contrast);
 
       ::ng-deep .mat-checkbox .mat-checkbox-frame {
-        border-color: white;
+        border-color: mat-color($primary, default-contrast);
       }
     }
 

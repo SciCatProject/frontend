@@ -15,9 +15,9 @@
     <div class="instructions">or</div>
     <div class="instructions">
       <button
-        class="browse-button"
+        mat-raised-button
         type="button"
-        mat-button
+        color="accent"
         ngxFilePicker
         [readMode]="readMode"
         multiple
@@ -36,9 +36,9 @@
   <div class="mat-title">Choose an image to upload</div>
 
   <button
-    class="browse-button"
+    mat-raised-button
     type="button"
-    mat-button
+    color="accent"
     ngxFilePicker
     [readMode]="readMode"
     multiple
@@ -65,7 +65,7 @@
             #caption
           />
         </mat-form-field>
-        <button mat-button type="submit" class="submit-button">
+        <button mat-button type="submit" color="primary" class="submit-button">
           Submit
         </button>
       </form>
