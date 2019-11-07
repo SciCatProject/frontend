@@ -4,31 +4,19 @@
     <img src="{{ profileImage }}" height="100px" alt="profile photo" />
     <table>
       <tr *ngIf="displayName as value">
-        <th>
-          <i class="material-icons"> person </i>
-          Name
-        </th>
+        <th><mat-icon> person </mat-icon> Name</th>
         <td>{{ value }}</td>
       </tr>
       <tr *ngIf="user.email as value">
-        <th>
-          <i class="material-icons"> mail </i>
-          Email
-        </th>
+        <th><mat-icon> mail </mat-icon> Email</th>
         <td>{{ value }}</td>
       </tr>
       <tr *ngIf="id as value">
-        <th>
-          <i class="material-icons"> person </i>
-          Id
-        </th>
+        <th><mat-icon> person </mat-icon> Id</th>
         <td>{{ value }}</td>
       </tr>
       <tr *ngIf="catamelToken as value">
-        <th>
-          <i class="material-icons"> vpn_key </i>
-          Catamel Token
-        </th>
+        <th><mat-icon> vpn_key </mat-icon> Catamel Token</th>
         <td>
           <span id="token" contenteditable="false">
             {{ value }}
@@ -39,24 +27,15 @@
         </td>
       </tr>
       <tr *ngIf="datasetCount as value">
-        <th>
-          <i class="material-icons"> save </i>
-          Dataset Count
-        </th>
+        <th><mat-icon> save </mat-icon> Dataset Count</th>
         <td>{{ value }}</td>
       </tr>
       <tr *ngIf="jobCount as value">
-        <th>
-          <i class="material-icons"> transfer_within_a_station </i>
-          Job Count
-        </th>
+        <th><mat-icon> transfer_within_a_station </mat-icon> Job Count</th>
         <td>{{ value }}</td>
       </tr>
       <tr *ngIf="groups as value">
-        <th>
-          <i class="material-icons"> group_work </i>
-          Groups
-        </th>
+        <th><mat-icon> group_work </mat-icon> Groups</th>
         <td>
           <ul>
             <li *ngFor="let group of value">

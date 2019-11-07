@@ -1,14 +1,14 @@
 table {
-    td {
-      padding: 0.5em;
-    }
-
-    th {
-      text-align: left;
-      padding-right: 0.5em;
-    }
+  td {
+    padding: 0.3em;
   }
 
-  .material-icons {
-    vertical-align: middle;
+  th {
+    text-align: left;
+    padding-right: 0.5em;
+
+    mat-icon {
+      vertical-align: middle;
+    }
   }
+}
