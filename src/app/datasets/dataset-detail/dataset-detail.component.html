@@ -128,7 +128,7 @@
         </tr>
         <tr *ngIf="dataset.principalInvestigator as value">
           <th><mat-icon> brightness_5 </mat-icon> Principal Investigator</th>
-          <td>{{ value }}</td>
+          <td><span [innerHTML]="value | linky"></span></td>
         </tr>
         <tr *ngIf="dataset.creationLocation as value">
           <th><mat-icon> map </mat-icon> Creation Location</th>
@@ -136,6 +136,10 @@
         </tr>
         <tr *ngIf="dataset.ownerGroup as value">
           <th><mat-icon> group </mat-icon> Owner Group</th>
+          <td>{{ value }}</td>
+        </tr>
+        <tr *ngIf="dataset.accessGroups as value">
+          <th><mat-icon> supervisor_account </mat-icon> Access Groups</th>
           <td>{{ value }}</td>
         </tr>
         <tr *ngIf="dataset.contactEmail as value">
