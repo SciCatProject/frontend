@@ -13,6 +13,7 @@
             target="_blank"
             rel="noopener noreferrer"
             class="jupyter-button"
+            color="accent"
             *ngIf="appConfig.jupyterHubUrl"
           >
             Jupyter Hub
@@ -49,7 +50,7 @@
       <ng-template mat-tab-label>
         <mat-icon> cloud_download </mat-icon> Datafiles
       </ng-template>
-      <mat-card style="margin: 1em">
+      <mat-card>
         <datafiles
           [datablocks]="origDatablocks$ | async"
           [data]="dataset"
@@ -107,8 +108,8 @@
       </ng-template>
 
       <div fxFlex="80%">
-        <mat-card style="margin: 1em">
-          <mat-card-header style="background:#7de1ff;">
+        <mat-card>
+          <mat-card-header class="lifecycle-header">
             Lifecycle
           </mat-card-header>
           <div class="details">
@@ -137,7 +138,7 @@
         <mat-icon> settings </mat-icon> Admin
       </ng-template>
 
-      <mat-card style="margin: 1em">
+      <mat-card>
         <button
           mat-raised-button
           class="reset-button"

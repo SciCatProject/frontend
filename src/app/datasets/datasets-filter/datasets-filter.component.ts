@@ -54,7 +54,7 @@ export interface DateRange {
 @Component({
   selector: "datasets-filter",
   templateUrl: "datasets-filter.component.html",
-  styleUrls: ["datasets-filter.component.css"]
+  styleUrls: ["datasets-filter.component.scss"]
 })
 export class DatasetsFilterComponent {
   locationFacetCounts$ = this.store.pipe(select(getLocationFacetCounts));

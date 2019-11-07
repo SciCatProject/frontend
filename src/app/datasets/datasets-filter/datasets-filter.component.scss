@@ -1,0 +1,41 @@
+mat-card {
+  margin-top: 1.5em;
+
+  .options {
+    background-color: #ffffff;
+    width: 100%;
+  }
+
+  .mat-form-field {
+    width: 100%;
+  }
+
+  .section-container {
+    font-size: 1.25em;
+    font-weight: 425;
+    margin-bottom: 0.5em;
+    position: relative;
+    margin-top: 1em;
+  }
+
+  .section-container:first-child {
+    margin-top: unset;
+  }
+
+  .clear-button {
+    float: right;
+    transform: translateY(-25%);
+  }
+
+  .title {
+    float: left;
+  }
+
+  .scientific-todo-move input {
+    max-width: 3em;
+  }
+
+  .keyword-chip-list {
+    width: 100%;
+  }
+}

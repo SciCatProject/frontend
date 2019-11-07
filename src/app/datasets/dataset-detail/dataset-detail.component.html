@@ -1,7 +1,7 @@
 <div fxLayout="row" fxLayout.xs="column" *ngIf="dataset">
   <div fxFlex="80%">
-    <mat-card style="margin: 1em">
-      <mat-card-header style="background:#7de1ff;">
+    <mat-card>
+      <mat-card-header class="about-header">
         About the data
       </mat-card-header>
 
@@ -67,6 +67,7 @@
             <button
               mat-raised-button
               class="done-edit-button"
+              color="accent"
               (click)="editEnabled = false"
             >
               Done
@@ -76,8 +77,8 @@
       </table>
     </mat-card>
 
-    <mat-card style="margin: 1em">
-      <mat-card-header style="background:#d2f082;">
+    <mat-card>
+      <mat-card-header class="structural-header">
         Structural information
       </mat-card-header>
 
@@ -116,8 +117,8 @@
       </table>
     </mat-card>
 
-    <mat-card style="margin: 1em">
-      <mat-card-header style="background:#ff6e6e;">
+    <mat-card>
+      <mat-card-header class="admin-header">
         Administrative information
       </mat-card-header>
 
@@ -149,8 +150,8 @@
       </table>
     </mat-card>
 
-    <mat-card style="margin:1em" *ngIf="dataset.investigator">
-      <mat-card-header style="background:#d2b478;">
+    <mat-card *ngIf="dataset.investigator">
+      <mat-card-header class="derived-header">
         Derived Data
       </mat-card-header>
 
@@ -189,8 +190,8 @@
       </table>
     </mat-card>
 
-    <mat-card style="margin:1em">
-      <mat-card-header style="background:#ff96fa;">
+    <mat-card>
+      <mat-card-header class="scientific-header">
         Scientific Metadata
       </mat-card-header>
 
@@ -224,7 +225,7 @@
       </ng-template>
     </mat-card>
 
-    <mat-card style="margin:1em">
+    <mat-card>
       <button mat-stroked-button (click)="show = !show">
         {{ show ? "Hide MetaData" : "Show Metadata" }}
       </button>
@@ -242,7 +243,7 @@
 
   <div fxFlex="30%" *ngIf="attachments">
     <ng-container *ngFor="let da of attachments">
-      <mat-card style="margin: 1em">
+      <mat-card>
         <img mat-card-image src="{{ da.thumbnail }}" />
         <p>{{ da.caption }}</p>
       </mat-card>

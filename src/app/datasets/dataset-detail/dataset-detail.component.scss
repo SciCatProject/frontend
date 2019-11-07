@@ -1,6 +1,28 @@
 @import "../../../theme.scss";
 
 mat-card {
+  margin: 1em;
+
+  .about-header {
+    background-color: mat-color($primary, lighter);
+  }
+
+  .structural-header {
+    background-color: mat-color($accent, lighter);
+  }
+
+  .admin-header {
+    background-color: mat-color($warn, lighter);
+  }
+
+  .derived-header {
+    background-color: mat-color($brown, 50);
+  }
+
+  .scientific-header {
+    background-color: mat-color($violet, 50);
+  }
+
   mat-icon {
     vertical-align: middle;
   }
@@ -40,8 +62,6 @@ mat-card {
 
       .done-edit-button {
         margin-left: 1em;
-        background-color: mat-color($accent);
-        color: mat-color($accent, default-contrast);
       }
     }
   }
