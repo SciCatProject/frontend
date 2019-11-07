@@ -7,6 +7,7 @@
     "ng": "./node_modules/@angular/cli/bin/ng",
     "start": "./node_modules/@angular/cli/bin/ng serve --host $HOST",
     "test": "./node_modules/@angular/cli/bin/ng test --watch=false --source-map=false --code-coverage",
+    "cypress:open": "./node_modules/.bin/cypress open",
     "e2e": "ng e2e --project=catanie-e2e",
     "lint": "./node_modules/tslint/bin/tslint --project tslint.json --force --fix",
     "prune": "./node_modules/ts-prune/lib/index.js -p ./src/tsconfig.json | grep -v -e ./src/app/shared -e ./src/environments"
@@ -59,6 +60,7 @@
     "codelyzer": "^5.1.2",
     "common-tags": "^1.8.0",
     "coveralls": "^3.0.6",
+    "cypress": "^3.6.0",
     "jasmine": "^3.5.0",
     "jasmine-core": "^3.5.0",
     "jasmine-marbles": "^0.6.0",
