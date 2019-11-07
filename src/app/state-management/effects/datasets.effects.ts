@@ -127,7 +127,10 @@ export class DatasetEffects {
         delete attachment.proposalId;
         delete attachment.sampleId;
         return this.datasetApi
-          .createAttachments(encodeURIComponent(attachment.datasetId), attachment)
+          .createAttachments(
+            encodeURIComponent(attachment.datasetId),
+            attachment
+          )
           .pipe(
             map(res =>
               fromActions.addAttachmentCompleteAction({ attachment: res })
@@ -166,12 +169,9 @@ export class DatasetEffects {
       ofType(fromActions.removeAttachmentAction),
       switchMap(({ datasetId, attachmentId }) =>
         this.datasetApi
-          .destroyByIdAttachments(
-            encodeURIComponent(datasetId),
-            attachmentId
-          )
+          .destroyByIdAttachments(encodeURIComponent(datasetId), attachmentId)
           .pipe(
-            map(res =>
+            map(() =>
               fromActions.removeAttachmentCompleteAction({ attachmentId })
             ),
             catchError(() => of(fromActions.removeAttachmentFailedAction()))
