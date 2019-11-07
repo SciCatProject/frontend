@@ -8,7 +8,7 @@
       <div class="details">
         <table>
           <tr>
-            <th><i class="material-icons">info</i> Status</th>
+            <th><mat-icon>info</mat-icon> Status</th>
             <td>
               <div *ngIf="result && result.hasOwnProperty('message')">
                 {{ result.message }}
@@ -190,9 +190,9 @@
             <mat-header-cell *matHeaderCellDef>
               <div fxLayout="column" style="align-items: center">
                 <div>
-                  <i class="material-icons">calendar_today</i>
+                  <mat-icon>calendar_today</mat-icon>
                 </div>
-                <div class="table_column">Creation Time</div>
+                <div>Creation Time</div>
               </div>
             </mat-header-cell>
             <mat-cell *matCellDef="let entry">
@@ -212,9 +212,9 @@
             <mat-header-cell *matHeaderCellDef>
               <div fxLayout="column" style="align-items: center">
                 <div>
-                  <i class="material-icons">fingerprint</i>
+                  <mat-icon>fingerprint</mat-icon>
                 </div>
-                <div class="table_column">Name</div>
+                <div>Name</div>
               </div>
             </mat-header-cell>
             <mat-cell *matCellDef="let entry">
@@ -227,9 +227,9 @@
             <mat-header-cell *matHeaderCellDef>
               <div fxLayout="column" style="align-items: center">
                 <div>
-                  <i class="material-icons"> perm_contact_calendar </i>
+                  <mat-icon> perm_contact_calendar </mat-icon>
                 </div>
-                <div class="table_column">PID</div>
+                <div>PID</div>
               </div>
             </mat-header-cell>
             <mat-cell *matCellDef="let entry">
@@ -242,9 +242,9 @@
             <mat-header-cell *matHeaderCellDef>
               <div fxLayout="column" style="align-items: center">
                 <div>
-                  <i class="material-icons"> screen_share</i>
+                  <mat-icon> screen_share</mat-icon>
                 </div>
-                <div class="table_column">Software Used</div>
+                <div>Software Used</div>
               </div>
             </mat-header-cell>
             <mat-cell *matCellDef="let entry">

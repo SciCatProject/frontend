@@ -1,5 +1,9 @@
 mat-card {
   margin: 1em;
+
+  mat-icon {
+    vertical-align: middle;
+  }
 }
 
 .title {
@@ -9,10 +13,6 @@ mat-card {
 .cardButton {
   margin: 1em;
   text-align: center;
-
-  .material-icons {
-    vertical-align: middle;
-  }
 }
 
 .cardButton:hover {
@@ -26,10 +26,6 @@ mat-card {
   .no-logbook-message {
     margin-top: 4em;
     text-align: center;
-
-    mat-icon {
-      vertical-align: middle;
-    }
   }
 }
 
@@ -49,10 +45,10 @@ mat-card {
   }
 
   .smallFilter {
-    margin: 1em 0 1em 0;
+    margin: 1em 1em 1em 1em;
   }
 
   .cardButton {
-    margin: 1em 0 1em 0;
+    margin: 1em 1em 1em 1em;
   }
 }

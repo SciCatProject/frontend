@@ -1,74 +1,71 @@
-<div *ngIf="(job$ | async) as job" class="job-detail">
-  <mat-card style="margin: 1em">
-    <div class="details">
-      <table>
-        <tr>
-          <th>
-            <i class="material-icons"> mail </i> 
-            Email Job Initiator
-          </th>
-          <td>{{ job.emailJobInitiator }}</td>
-        </tr>
-        <tr *ngIf="job.type as value">
-          <th>
-            <i class="material-icons"> bubble_chart </i> 
-            Type
-          </th>
-          <td>{{ value }}</td>
-        </tr>
-        <tr *ngIf="job.creationTime as value">
-          <th>
-            <i class="material-icons"> brightness_high </i> 
-            Creation Time
-          </th>
-          <td>{{ value | date: 'yyyy-MM-dd HH:mm'}}</td>
-        </tr>
-        <tr *ngIf="job.executionTime as value">
-          <th>
-            <i class="material-icons"> gavel </i> 
-            Execution Time
-          </th>
-          <td>{{ value | date: 'yyyy-MM-dd HH:mm'}}</td>
-        </tr>
-        <tr *ngIf="job.jobParams as value">
-          <th>
-            <i class="material-icons"> settings </i> 
-            Job Params
-          </th>
-          <td>{{ value | json }}</td>
-        </tr>
-        <tr *ngIf="job.dateOfLastMessage as value">
-          <th>
-            <i class="material-icons"> markunread </i> 
-            Date Of Last Message
-          </th>
-          <td>{{ value | date: 'yyyy-MM-dd HH:mm' }}</td>
-        </tr>
-        <tr *ngIf="job.datasetList as value">
-          <th>
-            <i class="material-icons"> folder </i> 
-            Dataset List
-          </th>
-          <div *ngFor="let daSet of value">
-            {{daSet.pid | json }}
-          </div>
-
-        </tr>
-        <tr *ngIf="job.createdAt as value">
-          <th>
-            <i class="material-icons"> calendar_today </i> 
-            Created At
-          </th>
-          <td>{{ value | date: 'yyyy-MM-dd HH:mm' }}</td>
-        </tr>
-        <tr *ngIf="job.updatedAt as value">
-          <th>
-            <i class="material-icons"> calendar_today </i> 
-            Updated At
-          </th>
-          <td>{{ value | date: 'yyyy-MM-dd HH:mm' }}</td>
-        </tr>
-      </table>
-    </div>
+<div *ngIf="job$ | async as job" class="job-detail">
+  <mat-card>
+    <table>
+      <tr>
+        <th>
+          <mat-icon> mail </mat-icon>
+          Email Job Initiator
+        </th>
+        <td>{{ job.emailJobInitiator }}</td>
+      </tr>
+      <tr *ngIf="job.type as value">
+        <th>
+          <mat-icon> bubble_chart </mat-icon>
+          Type
+        </th>
+        <td>{{ value }}</td>
+      </tr>
+      <tr *ngIf="job.creationTime as value">
+        <th>
+          <mat-icon> brightness_high </mat-icon>
+          Creation Time
+        </th>
+        <td>{{ value | date: "yyyy-MM-dd HH:mm" }}</td>
+      </tr>
+      <tr *ngIf="job.executionTime as value">
+        <th>
+          <mat-icon> gavel </mat-icon>
+          Execution Time
+        </th>
+        <td>{{ value | date: "yyyy-MM-dd HH:mm" }}</td>
+      </tr>
+      <tr *ngIf="job.jobParams as value">
+        <th>
+          <mat-icon> settings </mat-icon>
+          Job Params
+        </th>
+        <td>{{ value | json }}</td>
+      </tr>
+      <tr *ngIf="job.dateOfLastMessage as value">
+        <th>
+          <mat-icon> markunread </mat-icon>
+          Date Of Last Message
+        </th>
+        <td>{{ value | date: "yyyy-MM-dd HH:mm" }}</td>
+      </tr>
+      <tr *ngIf="job.datasetList as value">
+        <th>
+          <mat-icon> folder </mat-icon>
+          Dataset List
+        </th>
+        <div *ngFor="let daSet of value">
+          {{ daSet.pid | json }}
+        </div>
+      </tr>
+      <tr *ngIf="job.createdAt as value">
+        <th>
+          <mat-icon> calendar_today </mat-icon>
+          Created At
+        </th>
+        <td>{{ value | date: "yyyy-MM-dd HH:mm" }}</td>
+      </tr>
+      <tr *ngIf="job.updatedAt as value">
+        <th>
+          <mat-icon> calendar_today </mat-icon>
+          Updated At
+        </th>
+        <td>{{ value | date: "yyyy-MM-dd HH:mm" }}</td>
+      </tr>
+    </table>
   </mat-card>
 </div>
