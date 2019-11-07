@@ -48,7 +48,9 @@ const reducer = createReducer(
   on(fromActions.clearBatchAction, state => ({ ...state, batch: [] })),
 
   on(fromActions.addAttachmentCompleteAction, (state, { attachment }) => {
-    const attachments = state.currentSet.attachments;
+    const attachments = state.currentSet.attachments.filter(
+      existingAttachment => existingAttachment.id !== attachment.id
+    );
     attachments.push(attachment);
     const currentSet = { ...state.currentSet, attachments };
     return { ...state, currentSet };
