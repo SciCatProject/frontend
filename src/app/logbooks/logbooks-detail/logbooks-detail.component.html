@@ -1,5 +1,8 @@
 <div *ngIf="logbook && logbook.messages">
-  <mat-table [dataSource]="logbook.messages" class="largeDetails mat-elevation-z2">
+  <mat-table
+    [dataSource]="logbook.messages"
+    class="largeDetails mat-elevation-z2"
+  >
     <!-- Column Definitions -->
 
     <!-- Timestamp Column -->
@@ -9,7 +12,7 @@
           <div>
             <i class="material-icons">schedule</i>
           </div>
-          <div class="table_column">Timestamp</div>
+          <div>Timestamp</div>
         </div>
       </mat-header-cell>
       <mat-cell *matCellDef="let message">
@@ -24,7 +27,7 @@
           <div>
             <i class="material-icons">person</i>
           </div>
-          <div class="table_column">Sender</div>
+          <div>Sender</div>
         </div>
       </mat-header-cell>
       <mat-cell *matCellDef="let message">
@@ -39,7 +42,7 @@
           <div>
             <i class="material-icons">comment</i>
           </div>
-          <div class="table_column">Entry</div>
+          <div>Entry</div>
         </div>
       </mat-header-cell>
       <mat-cell *matCellDef="let message">

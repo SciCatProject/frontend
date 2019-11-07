@@ -92,7 +92,7 @@
     <p><em>*insert user emails to share datasets with*</em></p>
   </mat-dialog-content>
   <mat-form-field class="chip-list">
-    <mat-chip-list #chipList aria-label="Fruit selection">
+    <mat-chip-list #chipList>
       <mat-chip
         *ngFor="let share of shareEmails"
         [selectable]="selectable"

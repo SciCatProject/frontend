@@ -7,7 +7,7 @@
   z-index: 1000;
 
   mat-toolbar {
-    height: 5vh;
+    height: 7vh;
 
     a {
       color: mat-color($primary, default-contrast);
@@ -35,8 +35,9 @@
 
     .user-button {
       margin-top: 3px;
-      background-color: transparent;
       border: none;
+      background-color: transparent;
+      color: mat-color($primary, default-contrast);
       font-size: 10px;
       line-height: 20px;
 

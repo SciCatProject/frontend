@@ -1,5 +1,5 @@
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
-import { ReactiveFormsModule } from "@angular/forms";
+import { ReactiveFormsModule, FormsModule } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Store } from "@ngrx/store";
 import { MockActivatedRoute, MockRouter, MockStore } from "shared/MockStubs";
@@ -8,9 +8,13 @@ import { LoginComponent } from "./login.component";
 import {
   MatCheckboxModule,
   MatCardModule,
-  MatGridListModule
+  MatInputModule,
+  MatIconModule,
+  MatFormFieldModule,
+  MatButtonModule
 } from "@angular/material";
 import { APP_CONFIG, AppConfigModule } from "app-config.module";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
 describe("LoginComponent", () => {
   let component: LoginComponent;
@@ -20,10 +24,15 @@ describe("LoginComponent", () => {
     TestBed.configureTestingModule({
       imports: [
         AppConfigModule,
+        BrowserAnimationsModule,
+        FormsModule,
         ReactiveFormsModule,
+        MatButtonModule,
         MatCheckboxModule,
         MatCardModule,
-        MatGridListModule
+        MatFormFieldModule,
+        MatIconModule,
+        MatInputModule
       ],
       declarations: [LoginComponent]
     });
@@ -31,8 +40,6 @@ describe("LoginComponent", () => {
       set: {
         // These should sync up with what is in the constructor, they do NOT need to be provided in the config for the testing module
         providers: [
-          // { provide: ADAuthService, useClass: MockAuthService },
-          // { provide: LoopBackAuth, useClass: MockLoopBackAuth },
           {
             provide: APP_CONFIG,
             useValue: {

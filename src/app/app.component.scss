@@ -1,5 +1,9 @@
 @import "src/theme.scss";
 
+a {
+  color: mat-color($primary);
+}
+
 .mat-snack-bar-container {
   background-color: mat-color($primary);
 }

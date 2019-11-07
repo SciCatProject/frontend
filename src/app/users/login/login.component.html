@@ -1,49 +1,45 @@
 <div class="login-container" fxLayoutAlign="center center">
   <mat-card>
-    <mat-card-header>
-      <img
-        mat-card-image
-        class="facility_logo"
-        src="assets/images/esslogo.png"
-      />
-    </mat-card-header>
+    <div fxLayout="row" class="facility-logo">
+      <div fxFlex="auto"></div>
+      <div fxFlex="200px">
+        <img src="assets/images/esslogo.png" />
+      </div>
+      <div fxFlex="auto"></div>
+    </div>
     <mat-card-content>
-      <form
-        [formGroup]="loginForm"
-        (ngSubmit)="onLogin($event)"
-        class="ui form"
-      >
-        <div class="field">
-          <label for="emailInput">
-            {{
-              appConfig.userNamePromptEnabled
-                ? "Username (firstnamelastname):"
-                : "Username:"
-            }}
-          </label>
+      <form [formGroup]="loginForm" (ngSubmit)="onLogin($event)">
+        <mat-form-field hintLabel="firstnamelastname">
+          <mat-label> <b> Username</b> </mat-label>
+          <span matPrefix> <mat-icon>person</mat-icon> &nbsp; </span>
+          <input matInput formControlName="username" />
+        </mat-form-field>
+
+        <mat-form-field hintLabel="ESS account password">
+          <mat-label> <b> Password</b> </mat-label>
+          <span matPrefix> <mat-icon>vpn_key</mat-icon> &nbsp; </span>
           <input
-            id="emailInput"
-            formControlName="username"
-            class="form-control"
-            type="text"
-            placeholder="Username"
-          />
-        </div>
-        <div class="field">
-          <label for="pwdInput">Password:</label>
-          <input
-            id="pwdInput"
+            matInput
             formControlName="password"
-            type="password"
-            class="form-control"
-            placeholder="Password"
+            [type]="hide ? 'password' : 'text'"
           />
-        </div>
+          <button
+            mat-icon-button
+            matSuffix
+            type="button"
+            (click)="hide = !hide"
+            [attr.aria-label]="'Hide password'"
+            [attr.aria-pressed]="hide"
+          >
+            <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
+          </button>
+        </mat-form-field>
         <button
+          mat-raised-button
+          class="login-button"
           type="submit"
+          color="primary"
           [ngClass]="{ loading: loading$ | async }"
-          class="ui button login-btn"
-          id="login-btn"
         >
           Log in
         </button>

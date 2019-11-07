@@ -1,6 +1,19 @@
-@import 'src/theme.scss';
+@import "../../../../theme.scss";
 
-/* Why does this need to be specifically defined? */
-.breadcrumb a {
-    color: mat-color($primary);
+.breadcrumb {
+  margin: 1em 0;
+
+  .container {
+    border-top: 1px solid mat-color($grey, 100);
+    border-bottom: 1px solid mat-color($grey, 100);
+    padding: 0.3em 0;
+
+    .delimiter {
+      color: mat-color($grey, 50);
+    }
+
+    .active {
+      font-weight: bold;
+    }
+  }
 }
