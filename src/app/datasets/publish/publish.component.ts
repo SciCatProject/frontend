@@ -8,7 +8,6 @@ import { getDatasetsInBatch } from "state-management/selectors/datasets.selector
 import { prefillBatchAction } from "state-management/actions/datasets.actions";
 import {
   publishDatasetAction,
-  publishDatasetCompleteAction,
   fetchPublishedDataCompleteAction
 } from "state-management/actions/published-data.actions";
 import { APP_CONFIG } from "app-config.module";
