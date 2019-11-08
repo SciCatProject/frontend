@@ -8,7 +8,7 @@ import { getDatasetsInBatch } from "state-management/selectors/datasets.selector
 import { prefillBatchAction } from "state-management/actions/datasets.actions";
 import {
   publishDatasetAction,
-  publishDatasetCompleteAction
+  fetchPublishedDataCompleteAction
 } from "state-management/actions/published-data.actions";
 import { APP_CONFIG } from "app-config.module";
 
@@ -123,7 +123,7 @@ export class PublishComponent implements OnInit, OnDestroy {
       });
 
     this.actionSubjectSubscription = this.actionsSubj.subscribe(data => {
-      if (data.type === publishDatasetCompleteAction.type) {
+      if (data.type === fetchPublishedDataCompleteAction.type) {
         this.store
           .pipe(select(getCurrentPublishedData))
           .subscribe(publishedData => {
