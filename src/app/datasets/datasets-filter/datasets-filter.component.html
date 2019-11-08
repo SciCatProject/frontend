@@ -43,9 +43,8 @@
       [matAutocomplete]="loc"
     />
 
-    <mat-autocomplete autoActiveFirstOption #loc="matAutocomplete">
+    <mat-autocomplete #loc="matAutocomplete">
       <mat-option
-        class="options"
         (onSelectionChange)="locationSelected(getFacetId(fc))"
         *ngFor="let fc of locationSuggestions$ | async"
       >
@@ -75,9 +74,8 @@
       [matAutocomplete]="grp"
     />
 
-    <mat-autocomplete autoActiveFirstOption #grp="matAutocomplete">
+    <mat-autocomplete #grp="matAutocomplete">
       <mat-option
-        class="options"
         (onSelectionChange)="groupSelected(getFacetId(fc))"
         *ngFor="let fc of groupSuggestions$ | async"
       >
@@ -107,9 +105,8 @@
       [matAutocomplete]="type"
     />
 
-    <mat-autocomplete autoActiveFirstOption #type="matAutocomplete">
+    <mat-autocomplete #type="matAutocomplete">
       <mat-option
-        class="options"
         (onSelectionChange)="typeSelected(getFacetId(fc))"
         *ngFor="let fc of typeSuggestions$ | async"
       >
@@ -119,7 +116,7 @@
     </mat-autocomplete>
   </mat-form-field>
 
-  <mat-form-field class="keyword-chip-list">
+  <mat-form-field>
     <mat-chip-list #keywordChipList>
       <mat-chip
         *ngFor="let keyword of keywordsFilter$ | async"
@@ -138,9 +135,8 @@
       aria-label="Keywords"
       [matAutocomplete]="kw"
     />
-    <mat-autocomplete autoActiveFirstOption #kw="matAutocomplete">
+    <mat-autocomplete #kw="matAutocomplete">
       <mat-option
-        class="options"
         (onSelectionChange)="keywordSelected(getFacetId(fc))"
         *ngFor="let fc of keywordsSuggestions$ | async"
       >

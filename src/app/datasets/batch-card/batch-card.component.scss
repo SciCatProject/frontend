@@ -9,15 +9,4 @@ mat-card {
   .count {
     margin-top: 1em;
   }
-
-  mat-card-footer {
-    .button {
-      margin: 0 0.5em 1em 0.5em;
-
-      // NO idea why this is needed, but otherwise the icon will be wrongly aligned
-      mat-icon {
-        vertical-align: middle;
-      }
-    }
-  }
 }
