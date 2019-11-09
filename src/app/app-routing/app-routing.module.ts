@@ -14,8 +14,6 @@ import { ErrorPageComponent } from "../shared/modules/error-page/error-page.comp
 import { LoginComponent } from "../users/login/login.component";
 import { UserSettingsComponent } from "../users/user-settings/user-settings.component";
 
-import { SampleDataFormComponent } from "../samples/sample-data-form/sample-data-form.component";
-
 import { ViewProposalPageComponent } from "../proposals/view-proposal-page/view-proposal-page.component";
 
 import { PublishComponent } from "datasets/publish/publish.component";
@@ -162,11 +160,6 @@ export const routes: Routes = [
       {
         path: "help",
         component: HelpComponent
-      },
-      {
-        path: "sample-data/add",
-        component: SampleDataFormComponent,
-        canActivate: [AuthCheck]
       },
       {
         path: "logbooks",

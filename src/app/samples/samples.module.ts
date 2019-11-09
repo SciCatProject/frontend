@@ -11,7 +11,6 @@ import {
 } from "@angular/material";
 import { NgModule } from "@angular/core";
 import { SampleDetailComponent } from "./sample-detail/sample-detail.component";
-import { SampleDataFormComponent } from "./sample-data-form/sample-data-form.component";
 import { StoreModule } from "@ngrx/store";
 import { samplesReducer } from "../state-management/reducers/samples.reducer";
 import { SampleDialogComponent } from "./sample-dialog/sample-dialog.component";
@@ -39,14 +38,9 @@ import { SharedCatanieModule } from "shared/shared.module";
     SharedCatanieModule,
     StoreModule.forFeature("samples", samplesReducer)
   ],
-  exports: [
-    SampleDetailComponent,
-    SampleDataFormComponent,
-    SampleDialogComponent
-  ],
+  exports: [SampleDetailComponent, SampleDialogComponent],
   declarations: [
     SampleDetailComponent,
-    SampleDataFormComponent,
     SampleDialogComponent,
     SampleDashboardComponent
   ],
