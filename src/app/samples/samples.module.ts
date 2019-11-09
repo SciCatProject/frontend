@@ -1,3 +1,5 @@
+import { SampleEffects } from './../state-management/effects/samples.effects';
+import { EffectsModule } from '@ngrx/effects';
 import { CommonModule } from "@angular/common";
 import {
   MatCardModule,
@@ -23,6 +25,7 @@ import { SharedCatanieModule } from "shared/shared.module";
 @NgModule({
   imports: [
     CommonModule,
+    EffectsModule.forFeature([SampleEffects]),
     FlexLayoutModule,
     FormsModule,
     MatButtonModule,

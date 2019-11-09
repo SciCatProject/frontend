@@ -1,3 +1,5 @@
+import { EffectsModule } from '@ngrx/effects';
+import { PublishedDataEffects } from './../state-management/effects/published-data.effects';
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { PublisheddataDetailsComponent } from "./publisheddata-details/publisheddata-details.component";
@@ -22,6 +24,7 @@ import { FlexLayoutModule } from "@angular/flex-layout";
   ],
   imports: [
     CommonModule,
+    EffectsModule.forFeature([ PublishedDataEffects]),
     FlexLayoutModule,
     LinkyModule,
     MatButtonModule,

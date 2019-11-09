@@ -1,3 +1,5 @@
+import { JobEffects } from './../state-management/effects/jobs.effects';
+import { EffectsModule } from '@ngrx/effects';
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { JobsDashboardComponent } from "./jobs-dashboard/jobs-dashboard.component";
@@ -16,6 +18,7 @@ import { SharedCatanieModule } from "shared/shared.module";
   declarations: [JobsDetailComponent, JobsDashboardComponent],
   imports: [
     CommonModule,
+    EffectsModule.forFeature([JobEffects]),
     FlexLayoutModule,
     MatButtonToggleModule,
     MatCardModule,

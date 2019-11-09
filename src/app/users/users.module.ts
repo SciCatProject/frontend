@@ -1,3 +1,5 @@
+import { UserEffects } from './../state-management/effects/user.effects';
+import { EffectsModule } from '@ngrx/effects';
 import { ADAuthService } from "./adauth.service";
 import { CommonModule } from "@angular/common";
 import { FlexLayoutModule } from "@angular/flex-layout";
@@ -21,6 +23,7 @@ import {
 @NgModule({
   imports: [
     CommonModule,
+    EffectsModule.forFeature([UserEffects]),
     FlexLayoutModule,
     FormsModule,
     MatButtonModule,
