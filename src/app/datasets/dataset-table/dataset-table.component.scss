@@ -1,6 +1,8 @@
 @import "../../../theme.scss";
 
 .dataset-table {
+  min-width: 1060px;
+
   .mode-container {
     float: left;
 
@@ -11,6 +13,12 @@
 
   .action-container {
     float: right;
+
+    button {
+      mat-icon {
+        color: black;
+      }
+    }
   }
 
   .action-container.hidden {

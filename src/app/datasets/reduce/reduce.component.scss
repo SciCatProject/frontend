@@ -1,4 +1,16 @@
+@import "../../../theme.scss";
+
 mat-card {
+  margin: 1em;
+
+  .action-header {
+    background-color: mat-color($primary, lighter);
+  }
+
+  .derived-header {
+    background-color: mat-color($accent, lighter);
+  }
+
   .details {
     padding-left: 1em;
 
@@ -17,7 +29,7 @@ mat-card {
         text-align: left;
         padding-right: 0.5em;
 
-        .material-icons {
+        mat-icon {
           vertical-align: middle;
         }
       }
@@ -71,11 +83,6 @@ mat-card {
 
     button {
       margin-top: 2em;
-    }
-
-    .reduce-btn {
-      color: #ffffff;
-      background: #0ea432;
     }
   }
 

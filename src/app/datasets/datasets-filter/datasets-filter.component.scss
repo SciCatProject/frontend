@@ -1,0 +1,28 @@
+mat-card {
+  margin-top: 1.5em;
+
+  .mat-form-field {
+    width: 100%;
+  }
+
+  .section-container {
+    font-size: 1.25em;
+    font-weight: 425;
+    margin-bottom: 0.5em;
+    position: relative;
+    margin-top: 1em;
+
+    .title {
+      float: left;
+    }
+
+    .clear-button {
+      float: right;
+      transform: translateY(-25%);
+    }
+  }
+
+  .section-container:first-child {
+    margin-top: unset;
+  }
+}

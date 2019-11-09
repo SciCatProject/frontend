@@ -1,6 +1,6 @@
 <div *ngIf="proposal" class="tab-content">
   <mat-card>
-    <mat-card-header>
+    <mat-card-header class="about-header">
       About the proposal
     </mat-card-header>
 
@@ -94,13 +94,14 @@
       </tr>
     </table>
   </mat-card>
+
+  <mat-card>
+    <button mat-stroked-button (click)="show = !show">
+      {{ show ? "Hide MetaData" : "Show Metadata" }}
+    </button>
+    <br />
+    <div *ngIf="show">
+      <ngx-json-viewer [json]="proposal" [expanded]="false"></ngx-json-viewer>
+    </div>
+  </mat-card>
 </div>
-<mat-card style="margin:1em">
-  <button mat-stroked-button (click)="show = !show">
-    {{ show ? "Hide MetaData" : "Show Metadata" }}
-  </button>
-  <br />
-  <div *ngIf="show">
-    <ngx-json-viewer [json]="proposal" [expanded]="false"></ngx-json-viewer>
-  </div>
-</mat-card>

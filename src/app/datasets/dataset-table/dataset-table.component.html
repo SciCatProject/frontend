@@ -1,4 +1,4 @@
-<div class="dataset-table" style="min-width: 1060px">
+<div class="dataset-table">
   <div class="mode-container">
     <mat-button-toggle-group
       class="public-toggle"
@@ -44,7 +44,7 @@
       (click)="archiveClickHandle($event)"
       color="primary"
     >
-      <i class="archive icon" style="color: black"></i> Archive
+      <mat-icon> archive </mat-icon> Archive
     </button>
 
     <button
@@ -55,7 +55,7 @@
       (click)="retrieveClickHandle($event)"
       color="primary"
     >
-      <i class="upload icon" style="color: black"></i> Retrieve
+      <mat-icon> cloud_upload </mat-icon> Retrieve
     </button>
 
     <button
@@ -66,7 +66,7 @@
       (click)="onAddToBatch()"
       color="primary"
     >
-      <i class="shopping cart icon" style="color: black"></i> Add to Cart
+      <mat-icon> shopping_cart </mat-icon> Add to Cart
     </button>
   </div>
 
@@ -140,7 +140,7 @@
         >
         </mat-checkbox>
         <ng-template #in_batch>
-          <i class="shopping cart icon" style="color: black"></i>
+          <mat-icon> shopping_cart </mat-icon>
         </ng-template>
       </mat-cell>
     </ng-container>
@@ -150,9 +150,9 @@
       <mat-header-cell *matHeaderCellDef mat-sort-header>
         <div fxLayout="column" style="align-items: center">
           <div>
-            <i class="material-icons">fingerprint</i>
+            <mat-icon>fingerprint</mat-icon>
           </div>
-          <div class="table_column">Name</div>
+          <div>Name</div>
         </div>
       </mat-header-cell>
       <mat-cell class="datasetName" *matCellDef="let dataset">
@@ -165,9 +165,9 @@
       <mat-header-cell *matHeaderCellDef mat-sort-header>
         <div fxLayout="column" style="align-items: center">
           <div>
-            <i class="material-icons">explore</i>
+            <mat-icon>explore</mat-icon>
           </div>
-          <div class="table_column">Source&nbsp;Folder</div>
+          <div>Source&nbsp;Folder</div>
         </div>
       </mat-header-cell>
       <mat-cell
@@ -183,9 +183,9 @@
       <mat-header-cell *matHeaderCellDef mat-sort-header>
         <div fxLayout="column" style="align-items: center">
           <div>
-            <i class="material-icons">directions_run</i>
+            <mat-icon>directions_run</mat-icon>
           </div>
-          <div class="table_column">Run&nbsp;No.</div>
+          <div>Run&nbsp;No.</div>
         </div>
       </mat-header-cell>
       <mat-cell *matCellDef="let dataset">
@@ -206,9 +206,9 @@
       <mat-header-cell *matHeaderCellDef mat-sort-header>
         <div fxLayout="column" style="align-items: center">
           <div>
-            <i class="material-icons">save</i>
+            <mat-icon>save</mat-icon>
           </div>
-          <div class="table_column">Size</div>
+          <div>Size</div>
         </div>
       </mat-header-cell>
       <mat-cell *matCellDef="let dataset">
@@ -236,9 +236,9 @@
       <mat-header-cell *matHeaderCellDef mat-sort-header>
         <div fxLayout="column" style="align-items: center">
           <div>
-            <i class="material-icons">calendar_today</i>
+            <mat-icon>calendar_today</mat-icon>
           </div>
-          <div class="table_column">Start&nbsp;Time</div>
+          <div>Start&nbsp;Time</div>
         </div>
       </mat-header-cell>
       <mat-cell *matCellDef="let dataset">
@@ -254,9 +254,9 @@
       <mat-header-cell *matHeaderCellDef>
         <div fxLayout="column" style="align-items: center">
           <div>
-            <i class="material-icons">bubble_chart</i>
+            <mat-icon>bubble_chart</mat-icon>
           </div>
-          <div class="table_column">Type</div>
+          <div>Type</div>
         </div>
       </mat-header-cell>
       <mat-cell *matCellDef="let dataset">{{ dataset.type }}</mat-cell>
@@ -267,9 +267,9 @@
       <mat-header-cell *matHeaderCellDef>
         <div fxLayout="column" style="align-items: center">
           <div>
-            <i class="material-icons">camera_alt</i>
+            <mat-icon>camera_alt</mat-icon>
           </div>
-          <div class="table_column">Image</div>
+          <div>Image</div>
         </div>
       </mat-header-cell>
       <mat-cell *matCellDef="let dataset">
@@ -286,9 +286,9 @@
       <mat-header-cell *matHeaderCellDef>
         <div fxLayout="column" style="align-items: center">
           <div>
-            <i class="material-icons">assessment</i>
+            <mat-icon>assessment</mat-icon>
           </div>
-          <div class="table_column">Science&nbsp;Metadata</div>
+          <div>Science&nbsp;Metadata</div>
         </div>
       </mat-header-cell>
       <mat-cell
@@ -318,9 +318,9 @@
       <mat-header-cell *matHeaderCellDef mat-sort-header>
         <div fxLayout="column" style="align-items: center">
           <div>
-            <i class="material-icons">spa</i>
+            <mat-icon>spa</mat-icon>
           </div>
-          <div class="table_column">Proposal&nbsp;ID</div>
+          <div>Proposal&nbsp;ID</div>
         </div>
       </mat-header-cell>
       <mat-cell *matCellDef="let dataset">{{
@@ -333,9 +333,9 @@
       <mat-header-cell *matHeaderCellDef mat-sort-header>
         <div fxLayout="column" style="align-items: center">
           <div>
-            <i class="material-icons">group</i>
+            <mat-icon>group</mat-icon>
           </div>
-          <div class="table_column">Group</div>
+          <div>Group</div>
         </div>
       </mat-header-cell>
       <mat-cell *matCellDef="let dataset">{{ dataset.ownerGroup }}</mat-cell>
@@ -346,9 +346,9 @@
       <mat-header-cell *matHeaderCellDef>
         <div fxLayout="column" style="align-items: center">
           <div>
-            <i class="material-icons">archive&#47;&nbsp;cloud_upload</i>
+            <mat-icon>archive&#47;&nbsp;cloud_upload</mat-icon>
           </div>
-          <div class="table_column">Data&nbsp;Status</div>
+          <div>Data&nbsp;Status</div>
         </div>
       </mat-header-cell>
 
@@ -366,8 +366,8 @@
         ></ng-container>
 
         <ng-template #wip
-          ><i class="material-icons" style="color: black;">hourglass_empty</i>
-          &nbsp;work in progress</ng-template
+          ><mat-icon> hourglass_empty </mat-icon> &nbsp;work in
+          progress</ng-template
         >
         <ng-template #second>
           <ng-container
@@ -375,7 +375,7 @@
           ></ng-container>
         </ng-template>
         <ng-template #arch>
-          <i class="material-icons" style="color: black;">archive</i>
+          <mat-icon> archive </mat-icon>
           &nbsp;archivable</ng-template
         >
         <ng-template #third>
@@ -384,7 +384,7 @@
           ></ng-container>
         </ng-template>
         <ng-template #ret>
-          <i class="material-icons" style="color: black;">cloud_upload</i>
+          <mat-icon> cloud_upload </mat-icon>
           &nbsp;retrievable</ng-template
         >
         <ng-template #fourth>
@@ -393,7 +393,7 @@
           ></ng-container>
         </ng-template>
         <ng-template #sysErr>
-          <i class="material-icons" style="color: black;">error</i>
+          <mat-icon> error </mat-icon>
           &nbsp;system error</ng-template
         >
         <ng-template #fifth>
@@ -402,7 +402,7 @@
           ></ng-container>
         </ng-template>
         <ng-template #userErr>
-          <i class="material-icons" style="color: black;">build</i>
+          <mat-icon> build </mat-icon>
           &nbsp;user error</ng-template
         >
       </mat-cell>
@@ -413,9 +413,9 @@
       <mat-header-cell *matHeaderCellDef>
         <div fxLayout="column" style="align-items: center">
           <div>
-            <i class="material-icons">layers</i>
+            <mat-icon>layers</mat-icon>
           </div>
-          <div class="table_column">Derivations</div>
+          <div>Derivations</div>
         </div>
       </mat-header-cell>
       <mat-cell *matCellDef="let dataset">

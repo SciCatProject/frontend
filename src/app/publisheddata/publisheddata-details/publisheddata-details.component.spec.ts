@@ -1,10 +1,15 @@
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 import { APP_CONFIG, AppConfigModule } from "app-config.module";
 import { PublisheddataDetailsComponent } from "./publisheddata-details.component";
-import { MockStore, MockPublishedDataApi, MockRouter, MockActivatedRoute } from "shared/MockStubs";
+import {
+  MockStore,
+  MockPublishedDataApi,
+  MockRouter,
+  MockActivatedRoute
+} from "shared/MockStubs";
 import { Store } from "@ngrx/store";
 import { PublishedDataApi } from "shared/sdk";
-import { MatCardModule } from "@angular/material";
+import { MatCardModule, MatIconModule } from "@angular/material";
 import { NgxJsonViewerModule } from "ngx-json-viewer";
 import { Router, ActivatedRoute } from "@angular/router";
 import { LinkyModule } from "ngx-linky";
@@ -17,7 +22,14 @@ describe("PublisheddataDetailsComponent", () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [PublisheddataDetailsComponent],
-      imports: [AppConfigModule, MatCardModule, NgxJsonViewerModule, LinkyModule, SharedCatanieModule]
+      imports: [
+        AppConfigModule,
+        MatCardModule,
+        MatIconModule,
+        NgxJsonViewerModule,
+        LinkyModule,
+        SharedCatanieModule
+      ]
     });
     TestBed.overrideComponent(PublisheddataDetailsComponent, {
       set: {

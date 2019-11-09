@@ -1,125 +1,199 @@
 <mat-card>
-    <div class="section-container">
-      <span class="title">Search</span>
-      <button [disabled]="!(hasAppliedFilters$ | async)" mat-button class="clear-button" color="primary" (click)="clearFacets()">
-        <mat-icon>clear_all</mat-icon> Clear
-      </button>
-      <div style="clear: both"></div>
-    </div>
+  <div class="section-container">
+    <span class="title">Search</span>
+    <button
+      [disabled]="!(hasAppliedFilters$ | async)"
+      mat-button
+      class="clear-button"
+      color="primary"
+      (click)="clearFacets()"
+    >
+      <mat-icon>clear_all</mat-icon> Clear
+    </button>
+    <div style="clear: both"></div>
+  </div>
 
-    <app-search-bar
-      #searchBar
-      [placeholder]="'Text Search'"
-      [clear]="clearSearchBar"
-      (onSearch)="textSearchChanged($event)"
-      (onFocus)="textSearchChanged($event)"
+  <app-search-bar
+    #searchBar
+    [placeholder]="'Text Search'"
+    [clear]="clearSearchBar"
+    (onSearch)="textSearchChanged($event)"
+    (onFocus)="textSearchChanged($event)"
+  >
+  </app-search-bar>
+
+  <mat-form-field>
+    <mat-chip-list #locationChipList>
+      <mat-chip
+        *ngFor="let location of locationFilter$ | async"
+        [removable]="true"
+        (removed)="locationRemoved(location)"
+        >{{ location || "No Location" }}
+        <mat-icon matChipRemove>cancel</mat-icon>
+      </mat-chip>
+    </mat-chip-list>
+    <input
+      (input)="locationInput$.next($event.target.value)"
+      [value]="locationInput$ | async"
+      matInput
+      class="location-input"
+      [matChipInputFor]="locationChipList"
+      placeholder="Location"
+      aria-label="Location"
+      [matAutocomplete]="loc"
+    />
+
+    <mat-autocomplete #loc="matAutocomplete">
+      <mat-option
+        (onSelectionChange)="locationSelected(getFacetId(fc))"
+        *ngFor="let fc of locationSuggestions$ | async"
       >
-    </app-search-bar>
+        <span>{{ getFacetId(fc, "No Location") }} | </span>
+        <small>{{ getFacetCount(fc) }}</small>
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
 
-    <mat-form-field>
-      <mat-chip-list #locationChipList>
-        <mat-chip *ngFor="let location of locationFilter$ | async" [removable]="true" (removed)="locationRemoved(location)">{{
-          location || 'No Location'
-          }} <mat-icon matChipRemove>cancel</mat-icon>
-        </mat-chip>
-      </mat-chip-list>
-      <input (input)="locationInput$.next($event.target.value)" [value]="locationInput$ | async" matInput class="location-input" [matChipInputFor]="locationChipList" placeholder="Location" aria-label="Location" [matAutocomplete]="loc">
+  <mat-form-field>
+    <mat-chip-list #groupChipList>
+      <mat-chip
+        *ngFor="let group of groupFilter$ | async"
+        [removable]="true"
+        (removed)="groupRemoved(group)"
+        >{{ group }}<mat-icon matChipRemove>cancel</mat-icon>
+      </mat-chip>
+    </mat-chip-list>
+    <input
+      (input)="groupInput$.next($event.target.value)"
+      [value]="groupInput$ | async"
+      matInput
+      class="group-input"
+      [matChipInputFor]="groupChipList"
+      placeholder="Group"
+      aria-label="Group"
+      [matAutocomplete]="grp"
+    />
 
-      <mat-autocomplete autoActiveFirstOption #loc="matAutocomplete">
-        <mat-option class="options" (onSelectionChange)="locationSelected(getFacetId(fc))" *ngFor="let fc of locationSuggestions$ | async">
-          <span>{{ getFacetId(fc, 'No Location') }} | </span>
-          <small>{{ getFacetCount(fc) }}</small>
-        </mat-option>
-      </mat-autocomplete>
-    </mat-form-field>
-
-    <mat-form-field>
-      <mat-chip-list #groupChipList>
-        <mat-chip *ngFor="let group of groupFilter$ | async" [removable]="true" (removed)="groupRemoved(group)">{{
-          group
-          }}<mat-icon matChipRemove>cancel</mat-icon>
-        </mat-chip>
-      </mat-chip-list>
-      <input (input)="groupInput$.next($event.target.value)" [value]="groupInput$ | async" matInput class="group-input" [matChipInputFor]="groupChipList" placeholder="Group" aria-label="Group" [matAutocomplete]="grp">
-
-      <mat-autocomplete autoActiveFirstOption #grp="matAutocomplete">
-        <mat-option class="options" (onSelectionChange)="groupSelected(getFacetId(fc))" *ngFor="let fc of groupSuggestions$ | async">
-          <span>{{ getFacetId(fc, 'No Group') }}</span> |
-          <small>{{ getFacetCount(fc) }}</small>
-        </mat-option>
-      </mat-autocomplete>
-    </mat-form-field>
-
-    <mat-form-field>
-      <mat-chip-list #typeChipList>
-        <mat-chip *ngFor="let type of typeFilter$ | async" [removable]="true" (removed)="typeRemoved(type)">{{
-          type
-          }}<mat-icon matChipRemove>cancel</mat-icon>
-        </mat-chip>
-      </mat-chip-list>
-      <input (input)="typeInput$.next($event.target.value)" [value]="typeInput$ | async" matInput class="type-input" [matChipInputFor]="typeChipList" placeholder="Type" aria-label="Type" [matAutocomplete]="type">
-
-      <mat-autocomplete autoActiveFirstOption #type="matAutocomplete">
-        <mat-option class="options" (onSelectionChange)="typeSelected(getFacetId(fc))" *ngFor="let fc of typeSuggestions$ | async">
-          <span>{{ getFacetId(fc, 'No Type') }}</span> |
-          <small>{{ getFacetCount(fc) }}</small>
-        </mat-option>
-      </mat-autocomplete>
-    </mat-form-field>
-
-    <mat-form-field class="keyword-chip-list">
-      <mat-chip-list #keywordChipList style="width: 100%">
-        <mat-chip *ngFor="let keyword of keywordsFilter$ | async" [removable]="true" (removed)="keywordRemoved(keyword)" >{{
-          keyword
-          }}<mat-icon matChipRemove>cancel</mat-icon>
-        </mat-chip>
-      </mat-chip-list>
-      <input (input)="keywordsInput$.next($event.target.value)" [value]="keywordsInput$ | async" matInput class="keyword-input" [matChipInputFor]="keywordChipList" placeholder="Keywords" aria-label="Keywords"  [matAutocomplete]="kw">
-      <mat-autocomplete autoActiveFirstOption #kw="matAutocomplete">
-        <mat-option class="options" (onSelectionChange)="keywordSelected(getFacetId(fc))" *ngFor="let fc of keywordsSuggestions$ | async">
-          <span>{{ getFacetId(fc, 'No Keywords') }}</span>
-          <small>: {{ getFacetCount(fc) }}</small>
-        </mat-option>
-      </mat-autocomplete>
-    </mat-form-field>
-
-    <mat-form-field>
-      <input
-        matInput
-        class="date-input"
-        placeholder="Select a date range"
-        name="range-picker"
-        [satDatepicker]="picker"
-        [value]="creationTimeFilter$ | async"
-        (dateChange)="dateChanged($event)"
+    <mat-autocomplete #grp="matAutocomplete">
+      <mat-option
+        (onSelectionChange)="groupSelected(getFacetId(fc))"
+        *ngFor="let fc of groupSuggestions$ | async"
       >
-      <sat-datepicker-toggle matSuffix [for]="picker">
-        <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
-      </sat-datepicker-toggle>
-      <sat-datepicker #picker [rangeMode]="true"></sat-datepicker>
-    </mat-form-field>
+        <span>{{ getFacetId(fc, "No Group") }}</span> |
+        <small>{{ getFacetCount(fc) }}</small>
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
 
-    <div class="section-container" *ngIf="appConfig.scienceSearchEnabled" >
-      <span class="title">Scientific Conditions</span>
-      <button mat-button class="clear-button" color="primary" (click)="showAddConditionDialog()">
-        <mat-icon>add</mat-icon> Add
-      </button>
+  <mat-form-field>
+    <mat-chip-list #typeChipList>
+      <mat-chip
+        *ngFor="let type of typeFilter$ | async"
+        [removable]="true"
+        (removed)="typeRemoved(type)"
+        >{{ type }}<mat-icon matChipRemove>cancel</mat-icon>
+      </mat-chip>
+    </mat-chip-list>
+    <input
+      (input)="typeInput$.next($event.target.value)"
+      [value]="typeInput$ | async"
+      matInput
+      class="type-input"
+      [matChipInputFor]="typeChipList"
+      placeholder="Type"
+      aria-label="Type"
+      [matAutocomplete]="type"
+    />
 
-      <div style="clear: both"></div>
+    <mat-autocomplete #type="matAutocomplete">
+      <mat-option
+        (onSelectionChange)="typeSelected(getFacetId(fc))"
+        *ngFor="let fc of typeSuggestions$ | async"
+      >
+        <span>{{ getFacetId(fc, "No Type") }}</span> |
+        <small>{{ getFacetCount(fc) }}</small>
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
 
-      <mat-chip-list>
-        <mat-chip *ngFor="let condition of (scientificConditions$ | async); index as i">
-          {{condition.lhs}}
-          <ng-container [ngSwitch]="condition.relation">
-            <ng-container *ngSwitchCase="'EQUAL_TO_NUMERIC'">=</ng-container>
-            <ng-container *ngSwitchCase="'EQUAL_TO_STRING'">=</ng-container>
-            <ng-container *ngSwitchCase="'LESS_THAN'">&lt;</ng-container>
-            <ng-container *ngSwitchCase="'GREATER_THAN'">&gt;</ng-container>
-          </ng-container>
+  <mat-form-field>
+    <mat-chip-list #keywordChipList>
+      <mat-chip
+        *ngFor="let keyword of keywordsFilter$ | async"
+        [removable]="true"
+        (removed)="keywordRemoved(keyword)"
+        >{{ keyword }}<mat-icon matChipRemove>cancel</mat-icon>
+      </mat-chip>
+    </mat-chip-list>
+    <input
+      (input)="keywordsInput$.next($event.target.value)"
+      [value]="keywordsInput$ | async"
+      matInput
+      class="keyword-input"
+      [matChipInputFor]="keywordChipList"
+      placeholder="Keywords"
+      aria-label="Keywords"
+      [matAutocomplete]="kw"
+    />
+    <mat-autocomplete #kw="matAutocomplete">
+      <mat-option
+        (onSelectionChange)="keywordSelected(getFacetId(fc))"
+        *ngFor="let fc of keywordsSuggestions$ | async"
+      >
+        <span>{{ getFacetId(fc, "No Keywords") }}</span>
+        <small>: {{ getFacetCount(fc) }}</small>
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
 
-          {{ condition.relation === "EQUAL_TO_STRING" ? '"' + condition.rhs + '"' : condition.rhs }}
-          <mat-icon matChipRemove (click)="removeCondition(i)">cancel</mat-icon>
-        </mat-chip>
-      </mat-chip-list>
-    </div>
+  <mat-form-field>
+    <input
+      matInput
+      class="date-input"
+      placeholder="Select a date range"
+      name="range-picker"
+      [satDatepicker]="picker"
+      [value]="creationTimeFilter$ | async"
+      (dateChange)="dateChanged($event)"
+    />
+    <sat-datepicker-toggle matSuffix [for]="picker">
+      <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+    </sat-datepicker-toggle>
+    <sat-datepicker #picker [rangeMode]="true"></sat-datepicker>
+  </mat-form-field>
+
+  <div class="section-container" *ngIf="appConfig.scienceSearchEnabled">
+    <span class="title">Scientific Conditions</span>
+    <button
+      mat-button
+      class="clear-button"
+      color="primary"
+      (click)="showAddConditionDialog()"
+    >
+      <mat-icon>add</mat-icon> Add
+    </button>
+
+    <div style="clear: both"></div>
+
+    <mat-chip-list>
+      <mat-chip
+        *ngFor="let condition of scientificConditions$ | async; index as i"
+      >
+        {{ condition.lhs }}
+        <ng-container [ngSwitch]="condition.relation">
+          <ng-container *ngSwitchCase="'EQUAL_TO_NUMERIC'">=</ng-container>
+          <ng-container *ngSwitchCase="'EQUAL_TO_STRING'">=</ng-container>
+          <ng-container *ngSwitchCase="'LESS_THAN'">&lt;</ng-container>
+          <ng-container *ngSwitchCase="'GREATER_THAN'">&gt;</ng-container>
+        </ng-container>
+
+        {{
+          condition.relation === "EQUAL_TO_STRING"
+            ? '"' + condition.rhs + '"'
+            : condition.rhs
+        }}
+        <mat-icon matChipRemove (click)="removeCondition(i)">cancel</mat-icon>
+      </mat-chip>
+    </mat-chip-list>
+  </div>
 </mat-card>

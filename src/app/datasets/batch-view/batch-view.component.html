@@ -2,11 +2,11 @@
   <div *ngIf="hasBatch; else empty_batch">
     <div style="text-align: right; margin-bottom: 1em">
       <button (click)="onEmpty()" mat-button class="button" color="primary">
-        <i class="material-icons"> remove_circle </i>
+        <mat-icon> remove_circle </mat-icon>
         Empty Cart
       </button>
       <button mat-button (click)="onPublish()" class="button" color="primary">
-        <i class="material-icons"> school </i>
+        <mat-icon> school </mat-icon>
         Publish
       </button>
       <button
@@ -15,15 +15,15 @@
         class="button"
         color="primary"
       >
-        <i class="material-icons"> group_add </i>
+        <mat-icon> group_add </mat-icon>
         Share
       </button>
       <button mat-button (click)="onArchive()" class="button" color="primary">
-        <i class="material-icons"> archive </i>
+        <mat-icon> archive </mat-icon>
         Archive
       </button>
       <button mat-button (click)="onRetrieve()" class="button" color="primary">
-        <i class="material-icons"> cloud_download </i>
+        <mat-icon> cloud_download </mat-icon>
         Retrieve
       </button>
     </div>
@@ -37,13 +37,13 @@
         <mat-header-cell *matHeaderCellDef>
           <!-- Quite terrible hack to ensure column header and regular cells have same width -->
           <button mat-button>
-            <i class="material-icons"> remove_circle </i>
+            <mat-icon> remove_circle </mat-icon>
           </button>
         </mat-header-cell>
 
         <mat-cell *matCellDef="let dataset">
           <button mat-button (click)="onRemove(dataset)">
-            <i class="material-icons"> remove_circle </i>
+            <mat-icon> remove_circle </mat-icon>
           </button>
         </mat-cell>
       </ng-container>

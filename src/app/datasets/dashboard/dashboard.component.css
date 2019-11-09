@@ -1,3 +1,7 @@
-dataset-table {
-    margin-left: 20%;
+.action-column {
+  margin-right: 1em;
+}
+
+.table-column {
+  margin-top: 1.5em;
 }

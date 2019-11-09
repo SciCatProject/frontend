@@ -1,14 +1,14 @@
 <div fxLayout="row" fxLayout.xs="column">
   <div fxFlex="70%">
-    <mat-card style="margin: 1em">
-      <mat-card-header style="background:#7de1ff;">
+    <mat-card>
+      <mat-card-header class="action-header">
         New Action
       </mat-card-header>
 
       <div class="details">
         <table>
           <tr>
-            <th><i class="material-icons">info</i> Status</th>
+            <th><mat-icon>info</mat-icon> Status</th>
             <td>
               <div *ngIf="result && result.hasOwnProperty('message')">
                 {{ result.message }}
@@ -165,7 +165,7 @@
               </button>
               <button
                 mat-flat-button
-                class="reduce-btn"
+                color="primary"
                 (click)="reduceDataset(dataset)"
               >
                 Run Action
@@ -174,169 +174,10 @@
           </mat-step>
         </mat-horizontal-stepper>
       </div>
-
-      <!-- <div>
-    <mat-form-field>
-      <mat-label>Reduce script</mat-label>
-      <mat-select [(formControl)]="selectedScript" required>
-        <mat-option
-          *ngFor="let script of reduceScripts"
-          [value]="script.value"
-          >{{ script.viewValue }}</mat-option
-        >
-      </mat-select>
-      <mat-error *ngIf="selectedScript.hasError('required')"
-        >Please choose a script</mat-error
-      >
-    </mat-form-field>
-  </div>
-
-  <button mat-flat-button class="reduce-btn" (click)="reduceDataset(dataset)">
-    Reduce
-  </button> -->
     </mat-card>
 
-    <!-- <mat-card style="margin: 1em">
-      <mat-card-header style="background:#d2f082;">
-        Available Derived Dataset
-      </mat-card-header>
-
-      <div *ngIf="result && result.hasOwnProperty('derivedDataset')">
-        <div class="details" *ngIf="result.derivedDataset as dataset">
-          <table>
-            <tr>
-              <th><i class="material-icons"> fingerprint </i> Name</th>
-              <td>
-                {{ dataset.datasetName }}
-              </td>
-            </tr>
-            <tr>
-              <th><i class="material-icons"> description </i> Description</th>
-              <td>
-                {{ dataset.description }}
-              </td>
-            </tr>
-            <tr>
-              <th><i class="material-icons"> person </i> Owner</th>
-              <td>
-                {{ dataset.owner }}
-              </td>
-            </tr>
-            <tr>
-              <th><i class="material-icons"> vpn_key </i> Keywords</th>
-              <td>
-                {{ dataset.keywords | json }}
-              </td>
-            </tr>
-            <tr>
-              <th><i class="material-icons"> perm_contact_calendar </i> PID</th>
-              <td>
-                <a (click)="goTo(entry.derivedDataset)">
-                  {{ dataset.pid }}
-                </a>
-              </td>
-            </tr>
-            <tr>
-              <th><i class="material-icons"> folder </i> Source Folder</th>
-              <td>
-                {{ dataset.sourceFolder }}
-              </td>
-            </tr>
-          </table>
-        </div>
-
-        <div *ngIf="result.derivedDataset as dataset">
-          <button mat-stroked-button (click)="show = !show">
-            {{ show ? "Hide Metadata" : "Show Metadata" }}
-          </button>
-          <br />
-          <div *ngIf="show">
-            <ngx-json-viewer
-              [json]="dataset"
-              [expanded]="false"
-            ></ngx-json-viewer>
-          </div>
-        </div>
-      </div>
-
-      <div
-        *ngIf="
-          result && !result.hasOwnProperty('derivedDataset') && datasetHistory
-        "
-      >
-        <div *ngFor="let entry of datasetHistory">
-          <div
-            *ngIf="
-              entry.derivedDataset &&
-              datasetPids.includes(entry.derivedDataset.pid)
-            "
-          >
-            <div class="details">
-              <table>
-                <tr *ngIf="result.derivedDataset as dataset">
-                  <th><i class="material-icons"> fingerprint </i> Name</th>
-                  <td>
-                    {{ dataset.datasetName }}
-                  </td>
-                </tr>
-                <tr>
-                  <th>
-                    <i class="material-icons"> description </i> Description
-                  </th>
-                  <td>
-                    {{ dataset.description }}
-                  </td>
-                </tr>
-                <tr>
-                  <th><i class="material-icons"> person </i> Owner</th>
-                  <td>
-                    {{ dataset.owner }}
-                  </td>
-                </tr>
-                <tr>
-                  <th><i class="material-icons"> vpn_key </i> Keywords</th>
-                  <td>
-                    {{ dataset.keywords | json }}
-                  </td>
-                </tr>
-                <tr>
-                  <th>
-                    <i class="material-icons"> perm_contact_calendar </i> PID
-                  </th>
-                  <td>
-                    <a (click)="goTo(entry.derivedDataset)">
-                      {{ dataset.pid }}
-                    </a>
-                  </td>
-                </tr>
-                <tr>
-                  <th><i class="material-icons"> folder </i> Source Folder</th>
-                  <td>
-                    {{ dataset.sourceFolder }}
-                  </td>
-                </tr>
-              </table>
-            </div>
-
-            <div *ngIf="result.derivedDataset as dataset">
-              <button mat-stroked-button (click)="show = !show">
-                {{ show ? "Hide Metadata" : "Show Metadata" }}
-              </button>
-              <br />
-              <div *ngIf="show">
-                <ngx-json-viewer
-                  [json]="dataset"
-                  [expanded]="false"
-                ></ngx-json-viewer>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </mat-card> -->
-
-    <mat-card style="margin: 1em">
-      <mat-card-header style="background:#d2f082;">
+    <mat-card>
+      <mat-card-header class="derived-header">
         Derived Datasets
       </mat-card-header>
 
@@ -349,9 +190,9 @@
             <mat-header-cell *matHeaderCellDef>
               <div fxLayout="column" style="align-items: center">
                 <div>
-                  <i class="material-icons">calendar_today</i>
+                  <mat-icon>calendar_today</mat-icon>
                 </div>
-                <div class="table_column">Creation Time</div>
+                <div>Creation Time</div>
               </div>
             </mat-header-cell>
             <mat-cell *matCellDef="let entry">
@@ -371,9 +212,9 @@
             <mat-header-cell *matHeaderCellDef>
               <div fxLayout="column" style="align-items: center">
                 <div>
-                  <i class="material-icons">fingerprint</i>
+                  <mat-icon>fingerprint</mat-icon>
                 </div>
-                <div class="table_column">Name</div>
+                <div>Name</div>
               </div>
             </mat-header-cell>
             <mat-cell *matCellDef="let entry">
@@ -386,9 +227,9 @@
             <mat-header-cell *matHeaderCellDef>
               <div fxLayout="column" style="align-items: center">
                 <div>
-                  <i class="material-icons"> perm_contact_calendar </i>
+                  <mat-icon> perm_contact_calendar </mat-icon>
                 </div>
-                <div class="table_column">PID</div>
+                <div>PID</div>
               </div>
             </mat-header-cell>
             <mat-cell *matCellDef="let entry">
@@ -401,9 +242,9 @@
             <mat-header-cell *matHeaderCellDef>
               <div fxLayout="column" style="align-items: center">
                 <div>
-                  <i class="material-icons"> screen_share</i>
+                  <mat-icon> screen_share</mat-icon>
                 </div>
-                <div class="table_column">Software Used</div>
+                <div>Software Used</div>
               </div>
             </mat-header-cell>
             <mat-cell *matCellDef="let entry">

@@ -75,7 +75,6 @@ export class BreadcrumbComponent implements OnInit {
         param = root.snapshot.params[key];
       });
       root.snapshot.url.forEach(url => {
-        console.log("bc url", url);
         const crumb: Breadcrumb = {
           label: this.sanitise(url.path, param),
           path: url.path,
@@ -96,7 +95,6 @@ export class BreadcrumbComponent implements OnInit {
    * @memberof BreadcrumbComponent
    */
   sanitise(path: string, param: string): string {
-    console.log("bc param", param);
     path = path.replace(new RegExp("_", "g"), " ");
     if (path !== param) {
       path = new TitleCasePipe().transform(path);

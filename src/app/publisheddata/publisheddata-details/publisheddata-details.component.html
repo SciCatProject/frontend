@@ -1,108 +1,75 @@
 <div class="publishedData-detail" *ngIf="currentData$ | async as publishedData">
-  <mat-card class="matcarddetails">
-    <div class="details">
-      <mat-card-header style="background:#7de1ff;">
-        About the published data
-      </mat-card-header>
-      <table class="details-table">
-        <tr *ngIf="publishedData.title as value">
-          <th><i class="material-icons"> label </i> Title</th>
-          <td>{{ value }}</td>
-        </tr>
-        <tr *ngIf="publishedData.authors as value">
-          <th><i class="material-icons"> group </i> Author List</th>
-          <td>{{ value }}</td>
-        </tr>
-        <tr *ngIf="publishedData.abstract as value">
-          <th>
-            <i class="material-icons">
-              description
-            </i>
-            Abstract
-          </th>
-          <td>{{ value }}</td>
-        </tr>
-        <tr *ngIf="publishedData.doi as value">
-          <th>
-            <i class="material-icons">
-              fingerprint
-            </i>
-            DOI
-          </th>
-          <td>{{ value }}</td>
-        </tr>
-        <tr *ngIf="landingPageUrl">
-          <th><i class="material-icons"> link </i> URL</th>
-          <td><span [innerHTML]="landingPageUrl | linky"></span></td>
-        </tr>
-      </table>
-    </div>
+  <mat-card>
+    <mat-card-header class="about-header">
+      About the published data
+    </mat-card-header>
+
+    <table>
+      <tr *ngIf="publishedData.title as value">
+        <th><mat-icon> label </mat-icon> Title</th>
+        <td>{{ value }}</td>
+      </tr>
+      <tr *ngIf="publishedData.authors as value">
+        <th><mat-icon> group </mat-icon> Author List</th>
+        <td>{{ value }}</td>
+      </tr>
+      <tr *ngIf="publishedData.abstract as value">
+        <th><mat-icon> description </mat-icon> Abstract</th>
+        <td>{{ value }}</td>
+      </tr>
+      <tr *ngIf="publishedData.doi as value">
+        <th><mat-icon> fingerprint </mat-icon> DOI</th>
+        <td>{{ value }}</td>
+      </tr>
+      <tr *ngIf="landingPageUrl">
+        <th><mat-icon> link </mat-icon> URL</th>
+        <td><span [innerHTML]="landingPageUrl | linky"></span></td>
+      </tr>
+    </table>
   </mat-card>
-  <mat-card class="matcarddetails">
-    <div class="details">
-      <mat-card-header style="background:#d2f082;">
-        Administrative metadata
-      </mat-card-header>
-      <table class="details-table">
-        <tr *ngIf="publishedData.creator as value">
-          <th><i class="material-icons"> person </i> Creator</th>
-          <td>{{ value }}</td>
-        </tr>
-        <tr *ngIf="publishedData.sizeOfArchive as value">
-          <th>
-            <i class="material-icons">
-              sd_storage
-            </i>
-            Size
-          </th>
-          <td>{{ value | filesize }}</td>
-        </tr>
-        <tr *ngIf="publishedData.numberOfFiles as value">
-          <th>
-            <i class="material-icons">
-              toll
-            </i>
-            Number of Files
-          </th>
-          <td>{{ value }}</td>
-        </tr>
-        <tr *ngIf="publishedData.dataDescription as value">
-          <th>
-            <i class="material-icons">
-              language
-            </i>
-            Data Description
-          </th>
-          <td><span [innerHTML]="value | linky"></span></td>
-        </tr>
-        <tr *ngIf="publishedData.pidArray as value">
-          <th><i class="material-icons"> file_copy </i>Dataset IDs</th>
-          <td>{{ value }}</td>
-        </tr>
-        <tr *ngIf="publishedData.affiliation as value">
-          <th><i class="material-icons"> home </i> Affiliation</th>
-          <td>{{ value }}</td>
-        </tr>
-        <tr *ngIf="publishedData.publisher as value">
-          <th>
-            <i class="material-icons"> account_balance </i>
-            Publisher
-          </th>
-          <td>{{ value }}</td>
-        </tr>
-        <tr *ngIf="publishedData.resourceType as value">
-          <th>
-            <i class="material-icons">
-              local_offer
-            </i>
-            Resource Type
-          </th>
-          <td>{{ value }}</td>
-        </tr>
-      </table>
-    </div>
+
+  <mat-card>
+    <mat-card-header class="admin-header">
+      Administrative metadata
+    </mat-card-header>
+
+    <table>
+      <tr *ngIf="publishedData.creator as value">
+        <th><mat-icon> person </mat-icon> Creator</th>
+        <td>{{ value }}</td>
+      </tr>
+      <tr *ngIf="publishedData.sizeOfArchive as value">
+        <th><mat-icon> sd_storage </mat-icon> Size</th>
+        <td>{{ value | filesize }}</td>
+      </tr>
+      <tr *ngIf="publishedData.numberOfFiles as value">
+        <th><mat-icon> toll </mat-icon> Number of Files</th>
+        <td>{{ value }}</td>
+      </tr>
+      <tr *ngIf="publishedData.dataDescription as value">
+        <th><mat-icon> language </mat-icon> Data Description</th>
+        <td><span [innerHTML]="value | linky"></span></td>
+      </tr>
+      <tr *ngIf="publishedData.pidArray as value">
+        <th><mat-icon> file_copy </mat-icon> Dataset IDs</th>
+        <td>{{ value }}</td>
+      </tr>
+      <tr *ngIf="publishedData.affiliation as value">
+        <th><mat-icon> home </mat-icon> Affiliation</th>
+        <td>{{ value }}</td>
+      </tr>
+      <tr *ngIf="publishedData.publisher as value">
+        <th><mat-icon> account_balance </mat-icon> Publisher</th>
+        <td>{{ value }}</td>
+      </tr>
+      <tr *ngIf="publishedData.resourceType as value">
+        <th><mat-icon> local_offer </mat-icon> Resource Type</th>
+        <td>{{ value }}</td>
+      </tr>
+    </table>
   </mat-card>
-  <mat-card class="matcarddetails">
+
+  <mat-card>
     <button mat-stroked-button (click)="show = !show">
       {{ show ? "Hide MetaData" : "Show Metadata" }}
     </button>

@@ -1,33 +1,23 @@
-// NO idea why this is needed, but otherwise the icon will be wrongly aligned
-.mat-button i {
-    vertical-align: unset;
-}
-
-
 .mat-column-remove {
-    overflow: visible; /* Needed to prevent offsetting of the checkbox when clicking */
-    flex-grow: 0;
-    padding-right: 2em;
+  overflow: visible; /* Needed to prevent offsetting of the checkbox when clicking */
+  flex-grow: 0;
+  padding-right: 2em;
 
-    // Hacky, but only way I could find to give the button reasonable width
-    button {
-        padding {
-            right: 1em;
-            left: 1em;
-        }
-        min-width: unset;
+  // Hacky, but only way I could find to give the button reasonable width
+  button {
+    padding {
+      right: 1em;
+      left: 1em;
     }
+    min-width: unset;
+  }
 
-    // Quite terrible hack to ensure column header and regular cells have same width
-    &.mat-header-cell {
-        visibility: hidden;
-    }
+  // Quite terrible hack to ensure column header and regular cells have same width
+  &.mat-header-cell {
+    visibility: hidden;
+  }
 }
 
 .mat-column-pid {
-    padding-right: 1em;
-}
-
-.material-icons {
-    vertical-align: middle;
+  padding-right: 1em;
 }

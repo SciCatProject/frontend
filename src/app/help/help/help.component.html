@@ -1,6 +1,6 @@
 <p>
   <mat-card class="help-card" *ngIf="gettingStarted">
-    <mat-card-header style="background: #ffffff;">
+    <mat-card-header>
       <mat-card-title>How to get started</mat-card-title>
     </mat-card-header>
     The
@@ -11,7 +11,7 @@
 
 <p>
   <mat-card class="help-card" *ngIf="facility != 'PSI'">
-    <mat-card-header style="background: #ffffff;">
+    <mat-card-header>
       <mat-card-title>Where is my data?</mat-card-title>
     </mat-card-header>
     Your data is stored and can be accessed by logging into {{ facility }} using
@@ -23,7 +23,7 @@
 
 <p>
   <mat-card class="help-card" *ngIf="facility == 'PSI'">
-    <mat-card-header style="background: #ffffff;">
+    <mat-card-header>
       <mat-card-title>Where is my data?</mat-card-title>
     </mat-card-header>
     Firstly, the ingestion process makes data on PSI central servers, known to
@@ -35,7 +35,7 @@
 
 <p>
   <mat-card class="help-card" *ngIf="shoppingCartEnabled">
-    <mat-card-header style="background: #ffffff;">
+    <mat-card-header>
       <mat-card-title>How can I publish a dataset?</mat-card-title>
     </mat-card-header>
     Select datasets in the dataset table and add to <b>Cart</b>. Once in
@@ -45,7 +45,7 @@
 
 <p>
   <mat-card class="help-card" *ngIf="ingestManual">
-    <mat-card-header style="background: #ffffff;">
+    <mat-card-header>
       <mat-card-title>Ingest Manual</mat-card-title>
     </mat-card-header>
     The
@@ -57,7 +57,7 @@
 
 <p>
   <mat-card class="help-card">
-    <mat-card-header style="background: #ffffff;">
+    <mat-card-header>
       <mat-card-title>
         Where are my proposals?
       </mat-card-title>
@@ -67,10 +67,9 @@
   </mat-card>
 </p>
 
-
 <p>
   <mat-card class="help-card">
-    <mat-card-header style="background: #ffffff;">
+    <mat-card-header>
       <mat-card-title>
         Where are my samples?
       </mat-card-title>

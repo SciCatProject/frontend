@@ -2,8 +2,6 @@
 
 .jupyter-button {
   margin: 1em 0 0 1em;
-  background-color: mat-color($accent);
-  color: mat-color($accent, default-contrast);
 }
 
 .public-toggle {
@@ -12,6 +10,12 @@
 }
 
 mat-card {
+  margin: 1em;
+
+  .lifecycle-header {
+    background-color: mat-color($primary, lighter);
+  }
+
   mat-icon {
     vertical-align: middle;
   }

@@ -1,23 +1,25 @@
-<mat-card *ngIf="nonEmpty$ | async">
-    <div class="title">Cart</div>
+<mat-card *ngIf="nonEmpty$ | async">
+  <div class="title">Cart</div>
 
-    <mat-card-content>
-        <div class="count" [ngPlural]="batchSize$ | async">
-            <ng-template ngPluralCase="=0">No datasets.</ng-template>
-            <ng-template ngPluralCase="=1">1 dataset.</ng-template>
-            <ng-template ngPluralCase="other">{{ batchSize$ | async }} datasets.</ng-template>
-        </div>
-    </mat-card-content>
+  <mat-card-content>
+    <div class="count" [ngPlural]="batchSize$ | async">
+      <ng-template ngPluralCase="=0">No datasets.</ng-template>
+      <ng-template ngPluralCase="=1">1 dataset.</ng-template>
+      <ng-template ngPluralCase="other"
+        >{{ batchSize$ | async }} datasets.</ng-template
+      >
+    </div>
+  </mat-card-content>
 
-    <mat-card-footer style="text-align: right">
-        <button mat-button class="button" color="primary" (click)="clear()">
-            <i class="eraser icon"></i>
-            Remove All
-        </button>
+  <mat-card-actions>
+    <button mat-button class="button" color="primary" (click)="clear()">
+      <mat-icon> remove_shopping_cart </mat-icon>
+      Remove All
+    </button>
 
-        <a mat-button routerLink="/datasets/batch" class="button" color="primary">
-            <i class="arrow circle right icon"></i>
-            Actions
-        </a>
-    </mat-card-footer>
+    <a mat-button routerLink="/datasets/batch" class="button" color="primary">
+      <mat-icon> play_circle_filled </mat-icon>
+      Actions
+    </a>
+  </mat-card-actions>
 </mat-card>

@@ -1,8 +1,6 @@
 <ng-template [ngIf]="maxFileSize && tooLargeFile">
   <span>
-    <i class="material-icons" style="color: #ffbe00; vertical-align: middle"
-      >warning</i
-    >
+    <mat-icon class="warning-icon"> warning </mat-icon>
     One or more files are too large to be downloaded directly.
     {{
       sftpHost
@@ -35,9 +33,10 @@
     <input type="hidden" name="base" [value]="dataset.sourceFolder" />
     <input type="hidden" [name]="'files'" [value]="files" />
     <button
+      mat-raised-button
       class="download-button"
       type="submit"
-      mat-flat-button
+      color="accent"
       [disabled]="totalFileSize > maxFileSize"
     >
       Download All
@@ -61,9 +60,10 @@
       [value]="file"
     />
     <button
+      mat-raised-button
       class="download-button"
       type="submit"
-      mat-flat-button
+      color="accent"
       [disabled]="
         isNoneSelected || (maxFileSize && selectedFileSize > maxFileSize)
       "
@@ -140,8 +140,9 @@
               [value]="file.path"
             />
             <button
-              class="single-file-download no-hover-effect"
               mat-button
+              class="single-file-download no-hover-effect"
+              color="primary"
               type="submit"
             >
               {{ file.path | filePathTruncate }}

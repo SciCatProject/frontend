@@ -1,3 +1,11 @@
+mat-card {
+  margin: 1em;
+
+  mat-icon {
+    vertical-align: middle;
+  }
+}
+
 .title {
   font-size: 1.25em;
 }
@@ -5,15 +13,20 @@
 .cardButton {
   margin: 1em;
   text-align: center;
-
-  .material-icons {
-    vertical-align: middle;
-  }
 }
 
 .cardButton:hover {
   cursor: pointer;
   background-color: rgba(0, 0, 0, 0.1);
+}
+
+.details-container {
+  margin-top: 1em;
+
+  .no-logbook-message {
+    margin-top: 4em;
+    text-align: center;
+  }
 }
 
 @media only screen and (min-width: 1280px) {
@@ -32,10 +45,10 @@
   }
 
   .smallFilter {
-    margin: 1em 0 1em 1em;
+    margin: 1em 1em 1em 1em;
   }
 
   .cardButton {
-    margin-right: 0;
+    margin: 1em 1em 1em 1em;
   }
 }

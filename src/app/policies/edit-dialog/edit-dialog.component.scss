@@ -1,13 +1,9 @@
-@import '../../../theme.scss';
-
-.mat-form-field {
-  width: 100%;
-   
-}
-
 form {
-  background-color: rgba(255, 255, 255, 1);
   cursor: pointer;
   min-width: 50%;
-  width: 100%
+  width: 100%;
+
+  .mat-form-field {
+    width: 100%;
+  }
 }

@@ -1,5 +1,10 @@
 @import "../../../theme.scss";
 
+.warning-icon {
+  color: mat-color($yellow, 100);
+  vertical-align: middle;
+}
+
 .mat-header-cell {
   color: mat-color($primary, default-contrast);
 
@@ -19,8 +24,6 @@ mat-header-row {
 }
 
 .download-button {
-  background-color: mat-color($accent);
-  color: mat-color($accent, default-contrast);
   margin: 0 0 1em 1em;
   float: right;
 }
@@ -31,7 +34,6 @@ mat-header-row {
 
 .single-file-download {
   padding: 0;
-  color: mat-color($primary);
   font-weight: normal;
   text-align: start;
 }
