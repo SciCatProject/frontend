@@ -51,12 +51,6 @@ export const initialState: AppState = {
 };
 
 const appReducer = combineReducers({
-  user: userReducer,
-  datasets: datasetsReducer,
-  jobs: jobsReducer,
-  policies: policiesReducer,
-  samples: samplesReducer,
-  publishedData: publishedDataReducer,
   logbook: logbooksReducer
 });
 

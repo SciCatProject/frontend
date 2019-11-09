@@ -80,7 +80,9 @@ import { JobsModule } from "jobs/jobs.module";
 
     SDKBrowserModule.forRoot(),
     StoreModule.forRoot(
-      { router: routerReducer, root: rootReducer },
+      { router: routerReducer,
+        root: rootReducer
+      },
       {
         runtimeChecks: {
           strictStateImmutability: false,
@@ -92,7 +94,8 @@ import { JobsModule } from "jobs/jobs.module";
     ),
     RouterModule.forRoot(routes, { useHash: false }),
     StoreDevtoolsModule.instrument({
-      maxAge: 25 //  Retains last 25 states
+      maxAge: 25, //  Retains last 25 states
+      logOnly: environment.production, // Restrict extension to log-only mode
     }),
     EffectsModule.forRoot([ ]),
     ServiceWorkerModule.register("ngsw-worker.js", {
