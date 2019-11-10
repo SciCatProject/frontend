@@ -77,7 +77,6 @@ import { JobsModule } from "jobs/jobs.module";
     SatNativeDateModule,
     SharedCatanieModule,
     UsersModule,
-
     SDKBrowserModule.forRoot(),
     StoreModule.forRoot(
       { router: routerReducer,

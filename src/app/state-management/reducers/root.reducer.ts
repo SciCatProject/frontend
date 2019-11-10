@@ -51,7 +51,7 @@ export const initialState: AppState = {
 };
 
 const appReducer = combineReducers({
-  logbook: logbooksReducer
+  user: userReducer
 });
 
 export function rootReducer(state, action) {
