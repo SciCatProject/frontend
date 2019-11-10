@@ -1,9 +1,5 @@
 import { combineReducers } from "@ngrx/store";
-import { datasetsReducer } from "state-management/reducers/datasets.reducer";
-import { jobsReducer } from "state-management/reducers/jobs.reducer";
 import { userReducer } from "state-management/reducers/user.reducer";
-import { policiesReducer } from "state-management/reducers/policies.reducer";
-import { samplesReducer } from "state-management/reducers/samples.reducer";
 import {
   DatasetState,
   initialDatasetState
@@ -23,8 +19,6 @@ import {
   initialPublishedDataState,
   PublishedDataState
 } from "state-management/state/published-data.store";
-import { publishedDataReducer } from "state-management/reducers/published-data.reducer";
-import { logbooksReducer } from "./logbooks.reducer";
 import {
   initialLogbookState,
   LogbookState
