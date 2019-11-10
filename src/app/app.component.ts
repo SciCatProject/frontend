@@ -78,7 +78,7 @@ export class AppComponent implements OnDestroy, OnInit, AfterViewChecked {
     }
 
     this.userMessageSubscription = this.store
-      .pipe(select(state => state.root.user.message))
+      .pipe(select(state => state.users.message))
       .subscribe(current => {
         if (current.content !== undefined) {
           this.snackBar.open(current.content, undefined, {

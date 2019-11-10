@@ -1,3 +1,4 @@
+import { userReducer } from 'state-management/reducers/user.reducer';
 import { AppComponent } from "./app.component";
 import { AppConfigModule } from "app-config.module";
 import { AppRoutingModule, routes } from "app-routing/app-routing.module";
@@ -80,7 +81,7 @@ import { JobsModule } from "jobs/jobs.module";
     SDKBrowserModule.forRoot(),
     StoreModule.forRoot(
       { router: routerReducer,
-        root: rootReducer
+        users: userReducer
       },
       {
         runtimeChecks: {
