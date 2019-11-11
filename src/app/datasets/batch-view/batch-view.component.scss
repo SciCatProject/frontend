@@ -1,23 +1,29 @@
-.mat-column-remove {
-  overflow: visible; /* Needed to prevent offsetting of the checkbox when clicking */
-  flex-grow: 0;
-  padding-right: 2em;
+@import "../../../theme.scss";
 
-  // Hacky, but only way I could find to give the button reasonable width
-  button {
-    padding {
-      right: 1em;
-      left: 1em;
-    }
-    min-width: unset;
+mat-table {
+  mat-header-row {
+    background: mat-color($primary);
   }
 
-  // Quite terrible hack to ensure column header and regular cells have same width
-  &.mat-header-cell {
-    visibility: hidden;
+  mat-header-cell {
+    color: mat-color($primary, default-contrast);
+  }
+
+  mat-header-cell:first-child {
+    min-width: 75px;
+    max-width: 75px;
+  }
+
+  mat-cell:first-child {
+    min-width: 75px;
+    max-width: 75px;
   }
 }
 
-.mat-column-pid {
-  padding-right: 1em;
+.empty-batch-message {
+  text-align: center;
+
+  mat-icon {
+    vertical-align: middle;
+  }
 }
