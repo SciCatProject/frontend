@@ -2,18 +2,11 @@ import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 import { MatCheckboxModule, MatCheckboxChange } from "@angular/material";
 import { LogbookFilterComponent } from "./logbook-filter.component";
-import { Logbook, LogbookInterface } from "shared/sdk";
 
 describe("LogbookFilterComponent", () => {
   let component: LogbookFilterComponent;
   let fixture: ComponentFixture<LogbookFilterComponent>;
 
-  const logbookData: LogbookInterface = {
-    name: "tesName",
-    roomId: "testId",
-    messages: [{ message: "test1" }, { message: "test2" }]
-  };
-  const logbook = new Logbook(logbookData);
   const event = new MatCheckboxChange();
 
   beforeEach(async(() => {
@@ -51,7 +44,6 @@ describe("LogbookFilterComponent", () => {
     it("should emit the new filter", () => {
       spyOn(component.onSelect, "emit");
 
-      component.logbook = logbook;
       component.filters = {
         textSearch: "test",
         showBotMessages: true,
@@ -73,8 +65,6 @@ describe("LogbookFilterComponent", () => {
     it("should emit the new filter", () => {
       spyOn(component.onSelect, "emit");
 
-      component.logbook = logbook;
-
       component.filters = {
         textSearch: "test",
         showBotMessages: true,
@@ -95,8 +85,6 @@ describe("LogbookFilterComponent", () => {
 
     it("should emit the new filter", () => {
       spyOn(component.onSelect, "emit");
-
-      component.logbook = logbook;
 
       component.filters = {
         textSearch: "test",
@@ -119,8 +107,6 @@ describe("LogbookFilterComponent", () => {
     it("should emit the new filter", () => {
       spyOn(component.onSelect, "emit");
 
-      component.logbook = logbook;
-
       component.filters = {
         textSearch: "test",
         showBotMessages: false,
@@ -142,8 +128,6 @@ describe("LogbookFilterComponent", () => {
     it("should emit the new filter", () => {
       spyOn(component.onSelect, "emit");
 
-      component.logbook = logbook;
-
       component.filters = {
         textSearch: "test",
         showBotMessages: false,
@@ -164,8 +148,6 @@ describe("LogbookFilterComponent", () => {
 
     it("should emit the new filter", () => {
       spyOn(component.onSelect, "emit");
-
-      component.logbook = logbook;
 
       component.filters = {
         textSearch: "test",
