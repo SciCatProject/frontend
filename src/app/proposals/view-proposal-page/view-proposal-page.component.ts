@@ -84,7 +84,7 @@ export class ViewProposalPageComponent implements OnInit, OnDestroy {
   }
 
   constructor(
-    @Inject(APP_CONFIG) private appConfig: AppConfig,
+    @Inject(APP_CONFIG) public appConfig: AppConfig,
     private datePipe: DatePipe,
     private filesizePipe: FileSizePipe,
     private route: ActivatedRoute,
