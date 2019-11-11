@@ -20,7 +20,10 @@ import { PageChangeEvent } from "shared/modules/table/table.component";
 import {
   changeDatasetsPageAction,
   fetchSampleDatasetsAction,
-  saveCharacteristicsAction
+  saveCharacteristicsAction,
+  updateAttachmentCaptionAction,
+  removeAttachmentAction,
+  addAttachmentAction
 } from "state-management/actions/samples.actions";
 import { Dataset, Sample } from "shared/sdk";
 import { SharedCatanieModule } from "shared/shared.module";
@@ -28,6 +31,8 @@ import { DatePipe, SlicePipe } from "@angular/common";
 import { FileSizePipe } from "shared/pipes/filesize.pipe";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { APP_CONFIG } from "app-config.module";
+import { SubmitCaptionEvent } from "shared/modules/file-uploader/file-uploader.component";
+import { ReadMode, ReadFile } from "ngx-file-helpers";
 
 describe("SampleDetailComponent", () => {
   let component: SampleDetailComponent;
@@ -121,6 +126,106 @@ describe("SampleDetailComponent", () => {
           sampleId: sample.sampleId,
           characteristics
         })
+      );
+    });
+  });
+
+  describe("#onFilePicked()", () => {
+    it("should set the value of pickedFile", () => {
+      expect(component.pickedFile).toBeUndefined();
+      const file: ReadFile = {
+        name: "test",
+        size: 100,
+        type: "image/png",
+        readMode: ReadMode.dataURL,
+        content: "abc123",
+        underlyingFile: {
+          lastModified: 123,
+          name: "test",
+          size: 100,
+          type: "image/png",
+          slice: () => new Blob().slice()
+        }
+      };
+      component.onFilePicked(file);
+
+      expect(component.pickedFile).toEqual(file);
+    });
+  });
+
+  describe("#onReadEnd()", () => {
+    it("should do nothing if filecount = 0", () => {
+      dispatchSpy = spyOn(store, "dispatch");
+
+      component.onReadEnd(0);
+
+      expect(dispatchSpy).toHaveBeenCalledTimes(0);
+    });
+
+    it("should dispatch an addAttachmentAction if filecount > 0", () => {
+      dispatchSpy = spyOn(store, "dispatch");
+
+      component.sample = new Sample();
+      component.pickedFile = {
+        name: "test",
+        size: 100,
+        type: "image/png",
+        readMode: ReadMode.dataURL,
+        content: "abc123",
+        underlyingFile: {
+          lastModified: 123,
+          name: "test",
+          size: 100,
+          type: "image/png",
+          slice: () => new Blob().slice()
+        }
+      };
+      component.onReadEnd(1);
+
+      expect(dispatchSpy).toHaveBeenCalledTimes(1);
+      expect(dispatchSpy).toHaveBeenCalledWith(
+        addAttachmentAction({ attachment: component.attachment })
+      );
+    });
+  });
+
+  describe("#updateCaption()", () => {
+    it("should dispatch an updateAttachmentCaptionAction", () => {
+      dispatchSpy = spyOn(store, "dispatch");
+
+      component.sample = new Sample();
+      const sampleId = "testId";
+      component.sample.sampleId = sampleId;
+      const event: SubmitCaptionEvent = {
+        attachmentId: "testId",
+        caption: "test"
+      };
+      component.updateCaption(event);
+
+      expect(dispatchSpy).toHaveBeenCalledTimes(1);
+      expect(dispatchSpy).toHaveBeenCalledWith(
+        updateAttachmentCaptionAction({
+          sampleId,
+          attachmentId: event.attachmentId,
+          caption: event.caption
+        })
+      );
+    });
+  });
+
+  describe("#deleteAttachment()", () => {
+    it("should dispatch a removeAttachmentAction", () => {
+      dispatchSpy = spyOn(store, "dispatch");
+
+      component.sample = new Sample();
+      const sampleId = "testId";
+      component.sample.sampleId = sampleId;
+      const attachmentId = "testId";
+      component.deleteAttachment(attachmentId);
+
+      expect(dispatchSpy).toHaveBeenCalledTimes(1);
+      expect(dispatchSpy).toHaveBeenCalledWith(
+        removeAttachmentAction({ sampleId, attachmentId })
       );
     });
   });

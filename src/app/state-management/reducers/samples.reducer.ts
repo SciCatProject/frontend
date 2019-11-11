@@ -44,7 +44,9 @@ const reducer = createReducer(
   })),
 
   on(fromActions.addAttachmentCompleteAction, (state, { attachment }) => {
-    const attachments = state.currentSample.attachments;
+    const attachments = state.currentSample.attachments.filter(
+      existingAttachment => existingAttachment.id !== attachment.id
+    );
     attachments.push(attachment);
     const currentSample = { ...state.currentSample, attachments };
     return { ...state, currentSample };
