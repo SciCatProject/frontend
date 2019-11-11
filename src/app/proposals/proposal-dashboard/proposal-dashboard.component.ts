@@ -26,7 +26,6 @@ import {
   setDateRangeFilterAction,
   clearFacetsAction
 } from "state-management/actions/proposals.actions";
-import { MatDatepickerInputEvent } from "@angular/material";
 import { DateRange } from "datasets/datasets-filter/datasets-filter.component";
 
 @Component({

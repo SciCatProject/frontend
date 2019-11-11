@@ -26,4 +26,13 @@
       ></app-table>
     </div>
   </mat-tab>
+
+  <mat-tab *ngIf="appConfig.logbookEnabled">
+    <ng-template mat-tab-label>
+      <mat-icon> book </mat-icon>
+      Logbook
+    </ng-template>
+
+    <app-logbooks-dashboard></app-logbooks-dashboard>
+  </mat-tab>
 </mat-tab-group>

@@ -6,7 +6,6 @@ import {
   getArchiveViewMode,
   getFilters
 } from "state-management/selectors/datasets.selectors";
-import { AppState } from "state-management/state/app.store";
 import { take, filter, map } from "rxjs/operators";
 import { TitleCasePipe } from "shared/pipes/title-case.pipe";
 
@@ -47,7 +46,7 @@ export class BreadcrumbComponent implements OnInit {
   );
 
   constructor(
-    private store: Store<AppState>,
+    private store: Store<any>,
     private route: ActivatedRoute,
     private router: Router
   ) {}

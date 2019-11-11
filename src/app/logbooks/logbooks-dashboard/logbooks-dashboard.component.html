@@ -8,7 +8,6 @@
           (onFocus)="onTextSearchChange($event)"
         ></app-search-bar>
         <logbook-filter
-          [logbook]="logbook"
           [filters]="filters"
           (onSelect)="onFilterSelect($event)"
         ></logbook-filter>
@@ -27,7 +26,6 @@
             </mat-panel-title>
           </mat-expansion-panel-header>
           <logbook-filter
-            [logbook]="logbook"
             [filters]="filters"
             (onSelect)="onFilterSelect($event)"
           ></logbook-filter>

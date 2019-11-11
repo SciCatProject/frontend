@@ -45,6 +45,7 @@ import { submitJobAction } from "state-management/actions/jobs.actions";
 import { ReadFile } from "ngx-file-helpers";
 import { SubmitCaptionEvent } from "shared/modules/file-uploader/file-uploader.component";
 import { MatSlideToggleChange } from "@angular/material";
+import { fetchLogbookAction } from "state-management/actions/logbooks.actions";
 
 @Component({
   selector: "dataset-details-dashboard",
@@ -240,6 +241,11 @@ export class DatasetDetailsDashboardComponent
         .subscribe((dataset: RawDataset | DerivedDataset) => {
           if (dataset) {
             this.dataset = dataset;
+            if ("proposalId" in dataset) {
+              this.store.dispatch(
+                fetchLogbookAction({ name: this.dataset["proposalId"] })
+              );
+            }
           }
         })
     );

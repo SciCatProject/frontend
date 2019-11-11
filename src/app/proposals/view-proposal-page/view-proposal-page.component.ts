@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
+import { Component, OnInit, OnDestroy, Inject } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Store, select } from "@ngrx/store";
 import { Subscription } from "rxjs";
@@ -14,7 +14,6 @@ import {
   getDatasetsCount,
   getDatasetsPerPage
 } from "state-management/selectors/proposals.selectors";
-import { AppState } from "state-management/state/app.store";
 import { Dataset, Proposal } from "state-management/models";
 import {
   TableColumn,
@@ -22,6 +21,8 @@ import {
 } from "shared/modules/table/table.component";
 import { DatePipe, SlicePipe } from "@angular/common";
 import { FileSizePipe } from "shared/pipes/filesize.pipe";
+import { fetchLogbookAction } from "state-management/actions/logbooks.actions";
+import { APP_CONFIG, AppConfig } from "app-config.module";
 
 @Component({
   selector: "view-proposal-page",
@@ -34,9 +35,8 @@ export class ViewProposalPageComponent implements OnInit, OnDestroy {
   itemsPerPage$ = this.store.pipe(select(getDatasetsPerPage));
 
   proposal: Proposal;
-  proposalSubcsription: Subscription;
-  datasetsSubscription: Subscription;
-  routeSubscription: Subscription;
+
+  subscriptions: Subscription[] = [];
 
   tablePaginate = true;
   tableData: any[];
@@ -84,38 +84,46 @@ export class ViewProposalPageComponent implements OnInit, OnDestroy {
   }
 
   constructor(
+    @Inject(APP_CONFIG) private appConfig: AppConfig,
     private datePipe: DatePipe,
     private filesizePipe: FileSizePipe,
     private route: ActivatedRoute,
     private router: Router,
     private slicePipe: SlicePipe,
-    private store: Store<AppState>
+    private store: Store<any>
   ) {}
 
   ngOnInit() {
-    this.proposalSubcsription = this.store
-      .pipe(select(getCurrentProposal))
-      .subscribe(proposal => {
-        this.proposal = proposal;
-      });
+    this.subscriptions.push(
+      this.store.pipe(select(getCurrentProposal)).subscribe(proposal => {
+        if (proposal) {
+          this.proposal = proposal;
+          if (this.appConfig.logbookEnabled) {
+            this.store.dispatch(
+              fetchLogbookAction({ name: this.proposal.proposalId })
+            );
+          }
+        }
+      })
+    );
 
-    this.routeSubscription = this.route.params.subscribe(params => {
-      this.store.dispatch(fetchProposalAction({ proposalId: params.id }));
-      this.store.dispatch(
-        fetchProposalDatasetsAction({ proposalId: params.id })
-      );
-    });
+    this.subscriptions.push(
+      this.route.params.subscribe(params => {
+        this.store.dispatch(fetchProposalAction({ proposalId: params.id }));
+        this.store.dispatch(
+          fetchProposalDatasetsAction({ proposalId: params.id })
+        );
+      })
+    );
 
-    this.datasetsSubscription = this.store
-      .pipe(select(getProposalDatasets))
-      .subscribe(datasets => {
+    this.subscriptions.push(
+      this.store.pipe(select(getProposalDatasets)).subscribe(datasets => {
         this.tableData = this.formatTableData(datasets);
-      });
+      })
+    );
   }
 
   ngOnDestroy() {
-    this.proposalSubcsription.unsubscribe();
-    this.datasetsSubscription.unsubscribe();
-    this.routeSubscription.unsubscribe();
+    this.subscriptions.forEach(subscription => subscription.unsubscribe());
   }
 }
