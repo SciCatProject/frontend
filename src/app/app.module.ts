@@ -22,7 +22,6 @@ import { StoreDevtoolsModule } from "@ngrx/store-devtools";
 import { StoreModule } from "@ngrx/store";
 import { UserApi } from "shared/sdk/services";
 import { UsersModule } from "users/users.module";
-import { rootReducer } from "state-management/reducers/root.reducer";
 import { routerReducer } from "@ngrx/router-store";
 
 import {
