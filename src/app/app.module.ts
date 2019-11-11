@@ -1,3 +1,4 @@
+import { userReducer } from 'state-management/reducers/user.reducer';
 import { AppComponent } from "./app.component";
 import { AppConfigModule } from "app-config.module";
 import { AppRoutingModule, routes } from "app-routing/app-routing.module";
@@ -5,14 +6,11 @@ import { RedirectGuard } from "app-routing/redirect-guard";
 import { AuthCheck } from "./AuthCheck";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { BrowserModule, Title } from "@angular/platform-browser";
-import { DatasetEffects } from "state-management/effects/datasets.effects";
 import { DatasetsModule } from "datasets/datasets.module";
 import { EffectsModule } from "@ngrx/effects";
 import { FlexLayoutModule } from "@angular/flex-layout";
 import { HttpClientModule } from "@angular/common/http";
-import { JobEffects } from "state-management/effects/jobs.effects";
 import { NgModule } from "@angular/core";
-import { PolicyEffects } from "state-management/effects/policies.effects";
 import { PoliciesModule } from "policies/policies.module";
 import { ProposalsModule } from "proposals/proposals.module";
 import { RouterModule } from "@angular/router";
@@ -23,10 +21,7 @@ import { SharedCatanieModule } from "shared/shared.module";
 import { StoreDevtoolsModule } from "@ngrx/store-devtools";
 import { StoreModule } from "@ngrx/store";
 import { UserApi } from "shared/sdk/services";
-import { UserEffects } from "state-management/effects/user.effects";
 import { UsersModule } from "users/users.module";
-import { PublishedDataEffects } from "state-management/effects/published-data.effects";
-import { rootReducer } from "state-management/reducers/root.reducer";
 import { routerReducer } from "@ngrx/router-store";
 
 import {
@@ -37,11 +32,9 @@ import {
   MatProgressSpinnerModule,
   MatIconModule
 } from "@angular/material";
-import { SampleEffects } from "./state-management/effects/samples.effects";
 import { ServiceWorkerModule } from "@angular/service-worker";
 import { environment } from "../environments/environment";
 import { LogbooksModule } from "./logbooks/logbooks.module";
-import { LogbookEffects } from "state-management/effects/logbooks.effects";
 import { AboutModule } from "about/about.module";
 import { HelpModule } from "help/help.module";
 import { PublisheddataModule } from "publisheddata/publisheddata.module";
@@ -84,10 +77,11 @@ import { JobsModule } from "jobs/jobs.module";
     SatNativeDateModule,
     SharedCatanieModule,
     UsersModule,
-
     SDKBrowserModule.forRoot(),
     StoreModule.forRoot(
-      { router: routerReducer, root: rootReducer },
+      { router: routerReducer,
+        users: userReducer
+      },
       {
         runtimeChecks: {
           strictStateImmutability: false,
@@ -99,17 +93,10 @@ import { JobsModule } from "jobs/jobs.module";
     ),
     RouterModule.forRoot(routes, { useHash: false }),
     StoreDevtoolsModule.instrument({
-      maxAge: 25 //  Retains last 25 states
+      maxAge: 25, //  Retains last 25 states
+      logOnly: environment.production, // Restrict extension to log-only mode
     }),
-    EffectsModule.forRoot([
-      DatasetEffects,
-      UserEffects,
-      JobEffects,
-      PolicyEffects,
-      SampleEffects,
-      LogbookEffects,
-      PublishedDataEffects
-    ]),
+    EffectsModule.forRoot([ ]),
     ServiceWorkerModule.register("ngsw-worker.js", {
       enabled: environment.production
     })

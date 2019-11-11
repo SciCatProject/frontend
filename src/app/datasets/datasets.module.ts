@@ -1,3 +1,5 @@
+import { DatasetEffects } from './../state-management/effects/datasets.effects';
+import { EffectsModule } from '@ngrx/effects';
 import { AppConfigModule } from "app-config.module";
 import { LinkyModule } from "ngx-linky";
 import { ArchivingService } from "./archiving.service";
@@ -58,6 +60,7 @@ import { DatasetsFilterComponent } from "./datasets-filter/datasets-filter.compo
   imports: [
     AppConfigModule,
     CommonModule,
+    EffectsModule.forFeature([DatasetEffects]),
     FlexLayoutModule,
     FormsModule,
     LinkyModule,

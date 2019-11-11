@@ -33,6 +33,7 @@ import { StoreModule } from "@ngrx/store";
   imports: [
     AppConfigModule,
     CommonModule,
+    EffectsModule.forFeature([LogbookEffects]),
     FlexLayoutModule,
     LinkyModule,
     MatCardModule,
@@ -44,8 +45,7 @@ import { StoreModule } from "@ngrx/store";
     MatTableModule,
     RouterModule,
     SharedCatanieModule,
-    StoreModule.forFeature("logbooks", logbooksReducer),
-    EffectsModule.forFeature([LogbookEffects])
+    StoreModule.forFeature("logbooks", logbooksReducer)
   ],
   providers: [],
   exports: [
