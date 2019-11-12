@@ -10,6 +10,8 @@ import {
   getIsLoggingIn
 } from "state-management/selectors/user.selectors";
 import { APP_CONFIG, AppConfig } from "app-config.module";
+import { MatDialog } from "@angular/material";
+import { PrivacyDialogComponent } from "users/privacy-dialog/privacy-dialog.component";
 
 interface LoginForm {
   username: string;
@@ -44,7 +46,23 @@ export class LoginComponent implements OnInit, OnDestroy {
     filter(is => is)
   );
 
-  private proceedSubscription: Subscription = null;
+  private proceedSubscription: Subscription;
+
+  openPrivacyDialog() {
+    this.dialog.open(PrivacyDialogComponent, {
+      width: "auto"
+    });
+  }
+
+  /**
+   * Default to an Active directory login attempt initially. Fallback to `local`
+   * accounts if fails
+   * @memberof LoginComponent
+   */
+  onLogin() {
+    const form: LoginForm = this.loginForm.value;
+    this.store.dispatch(loginAction({ form }));
+  }
 
   /**
    * Creates an instance of LoginComponent.
@@ -55,6 +73,7 @@ export class LoginComponent implements OnInit, OnDestroy {
    * @memberof LoginComponent
    */
   constructor(
+    public dialog: MatDialog,
     public fb: FormBuilder,
     private router: Router,
     private route: ActivatedRoute,
@@ -73,16 +92,5 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.proceedSubscription.unsubscribe();
-  }
-
-  /**
-   * Default to an Active directory login attempt initially. Fallback to `local`
-   * accounts if fails
-   * @param {any} event - form submission event (not currently used)
-   * @memberof LoginComponent
-   */
-  onLogin(event) {
-    const form: LoginForm = this.loginForm.value;
-    this.store.dispatch(loginAction({ form }));
   }
 }

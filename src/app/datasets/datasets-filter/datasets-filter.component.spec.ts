@@ -18,7 +18,8 @@ import {
   MatInputModule,
   MatSelectModule,
   MatDialogModule,
-  MatDatepickerInputEvent
+  MatDatepickerInputEvent,
+  MatDialog
 } from "@angular/material";
 
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
@@ -38,8 +39,19 @@ import {
   removeTypeFilterAction,
   clearFacetsAction,
   removeScientificConditionAction,
-  setDateRangeFilterAction
+  setDateRangeFilterAction,
+  addScientificConditionAction
 } from "state-management/actions/datasets.actions";
+import { of } from "rxjs";
+
+export class MockMatDialog {
+  open() {
+    return {
+      afterClosed: () =>
+        of({ data: { lhs: "", rhs: "", relation: "EQUAL_TO_STRING" } })
+    };
+  }
+}
 
 describe("DatasetsFilterComponent", () => {
   let component: DatasetsFilterComponent;
@@ -75,7 +87,8 @@ describe("DatasetsFilterComponent", () => {
             useValue: {
               scienceSearchEnabled: false
             }
-          }
+          },
+          { provide: MatDialog, useClass: MockMatDialog }
         ]
       }
     });
@@ -346,7 +359,20 @@ describe("DatasetsFilterComponent", () => {
   });
 
   describe("#showAddConditionDialog()", () => {
-    xit("should dispatch an AddScientificConditionAction if dialog returns data", () => {});
+    it("should open ScientificConditionDialogComponent and dispatch an AddScientificConditionAction if dialog returns data", () => {
+      spyOn(component.dialog, "open").and.callThrough();
+      dispatchSpy = spyOn(store, "dispatch");
+
+      component.showAddConditionDialog();
+
+      expect(component.dialog.open).toHaveBeenCalled();
+      expect(dispatchSpy).toHaveBeenCalledTimes(1);
+      expect(dispatchSpy).toHaveBeenCalledWith(
+        addScientificConditionAction({
+          condition: { lhs: "", rhs: "", relation: "EQUAL_TO_STRING" }
+        })
+      );
+    });
   });
 
   describe("#removeCondition()", () => {

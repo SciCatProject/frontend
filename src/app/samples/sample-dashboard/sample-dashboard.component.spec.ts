@@ -1,5 +1,9 @@
 import { APP_CONFIG } from "app-config.module";
-import { MatTableModule, MatDialog, MatCardModule } from "@angular/material";
+import {
+  MatTableModule,
+  MatCardModule,
+  MatDialogModule
+} from "@angular/material";
 import { MockStore } from "shared/MockStubs";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { Router } from "@angular/router";
@@ -23,6 +27,7 @@ import {
   SortChangeEvent
 } from "shared/modules/table/table.component";
 import { DatePipe } from "@angular/common";
+import { SampleDialogComponent } from "samples/sample-dialog/sample-dialog.component";
 
 describe("SampleDashboardComponent", () => {
   let component: SampleDashboardComponent;
@@ -39,6 +44,7 @@ describe("SampleDashboardComponent", () => {
       schemas: [NO_ERRORS_SCHEMA],
       imports: [
         MatCardModule,
+        MatDialogModule,
         MatTableModule,
         StoreModule.forRoot({ rootReducer })
       ],
@@ -49,7 +55,6 @@ describe("SampleDashboardComponent", () => {
       set: {
         providers: [
           { provide: APP_CONFIG, useValue: { editSampleEnabled: true } },
-          { provide: MatDialog, useValue: {} },
           { provide: Router, useValue: router }
         ]
       }
@@ -86,7 +91,23 @@ describe("SampleDashboardComponent", () => {
   });
 
   describe("#openDialog()", () => {
-    xit("should...", () => {});
+    it("should open the sample dialog", () => {
+      spyOn(component.dialog, "open");
+
+      component.name = "test";
+      component.description = "test";
+
+      component.openDialog();
+
+      expect(component.dialog.open).toHaveBeenCalledTimes(1);
+      expect(component.dialog.open).toHaveBeenCalledWith(
+        SampleDialogComponent,
+        {
+          width: "250px",
+          data: { name: component.name, description: component.description }
+        }
+      );
+    });
   });
 
   describe("#onTextSearchChange()", () => {
