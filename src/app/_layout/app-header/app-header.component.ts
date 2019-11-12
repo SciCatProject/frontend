@@ -11,6 +11,7 @@ import {
   getCurrentUser,
   getProfile
 } from "state-management/selectors/user.selectors";
+import { getDatasetsInBatch } from "state-management/selectors/datasets.selectors";
 
 @Component({
   selector: "app-app-header",
@@ -18,6 +19,7 @@ import {
   styleUrls: ["./app-header.component.scss"]
 })
 export class AppHeaderComponent implements OnInit, OnDestroy {
+  private subscriptions: Subscription[] = [];
   facility: string;
   status: string;
 
@@ -25,6 +27,11 @@ export class AppHeaderComponent implements OnInit, OnDestroy {
   profileImage: string;
   userSubscription: Subscription;
   accountTypeSubscription: Subscription;
+  batch$ = this.store.pipe(select(getDatasetsInBatch));
+  inBatchPids: string[] = [];
+  inBatchCount: number;
+  inBatchtIndicator: string;
+
 
   constructor(
     private store: Store<any>,
@@ -41,6 +48,14 @@ export class AppHeaderComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.store.dispatch(fetchCurrentUserAction());
+
+    this.subscriptions.push(
+      this.batch$.subscribe(datasets => {
+        this.inBatchPids = datasets.map(dataset => dataset.pid);
+        this.inBatchCount = this.inBatchPids.length;
+        this.inBatchtIndicator = (this.inBatchCount > 99) ? "99+" : this.inBatchCount + "";
+      })
+    );
 
     this.accountTypeSubscription = this.store
       .pipe(select(getCurrentUserAccountType))
@@ -73,6 +88,7 @@ export class AppHeaderComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.userSubscription.unsubscribe();
     this.accountTypeSubscription.unsubscribe();
+    this.subscriptions.forEach(subscription => subscription.unsubscribe());
   }
 
   logout(): void {
