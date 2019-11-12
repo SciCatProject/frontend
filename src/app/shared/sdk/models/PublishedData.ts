@@ -20,6 +20,7 @@ export interface PublishedDataInterface {
   "doiRegisteredSuccessfullyTime"?: Date;
   "creationTime"?: Date;
   "status"?: string;
+  "scicatUser"?: string;
 }
 
 export class PublishedData implements PublishedDataInterface {
@@ -41,6 +42,7 @@ export class PublishedData implements PublishedDataInterface {
   "doiRegisteredSuccessfullyTime": Date;
   "creationTime": Date;
   "status": string;
+  "scicatUser": string;
   constructor(data?: PublishedDataInterface) {
     Object.assign(this, data);
   }
@@ -144,6 +146,10 @@ export class PublishedData implements PublishedDataInterface {
         },
         "status": {
           name: 'status',
+          type: 'string'
+        },
+        "scicatUser": {
+          name: 'scicatUser',
           type: 'string'
         },
       },
