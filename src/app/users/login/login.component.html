@@ -34,6 +34,11 @@
             <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
           </button>
         </mat-form-field>
+        <p class="privacy-notice" *ngIf="appConfig.facility === 'ESS'">
+          <small>
+            <a (click)="openPrivacyDialog()">SciCat Privacy Notice</a>
+          </small>
+        </p>
         <button
           mat-raised-button
           class="login-button"
