@@ -57,3 +57,25 @@
     display: none;
   }
 }
+
+.cart {
+  
+  margin-top: 3px;
+  border: none;
+  background-color: transparent;
+  color: mat-color($primary, default-contrast);
+  line-height: 20px;
+}
+
+.icon {
+
+  mat-icon {
+    vertical-align: middle;
+  }
+  margin-top: 3px;
+  border: none;
+  background-color: transparent;
+  color: mat-color($primary, default-contrast);
+  transform: scale(2);
+  line-height: 20px;
+}

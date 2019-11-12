@@ -80,11 +80,27 @@
         >
       </h6>
     </span>
+
+    <span style=" padding: 0 15px 0 15px;" >
+        <button mat-fab class="cart" matBadge="22" matBadgePosition="above after" matBadgeColor="accent" >
+        <mat-icon class="icon" > shopping_cart </mat-icon>
+     </button>
+    </span>
+
+    <div *ngTemplateOutlet="basketDialog">
+      </div>
+
     <span>
       <button class="user-button" [matMenuTriggerFor]="userMenu">
         <img class="user-image" src="{{ profileImage }}" />
         <div class="large-screen-text">{{ username }}</div>
       </button>
     </span>
+
+
   </mat-toolbar>
 </div>
+
+<ng-template #basketDialog>
+
+  </ng-template>

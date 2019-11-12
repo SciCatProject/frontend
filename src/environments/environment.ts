@@ -11,7 +11,7 @@ export const environment = {
   riotBaseUrl: "http://scitest.esss.lu.se/riot",
   jupyterHubUrl: "https://jupyterhub.esss.lu.se/",
   externalAuthEndpoint: "/auth/msad",
-  archiveWorkflowEnabled: false,
+  archiveWorkflowEnabled: true,
   columnSelectEnabled: true,
   datasetReduceEnabled: true,
   disabledDatasetColumns: [],

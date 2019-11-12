@@ -30,7 +30,8 @@ import {
   MatSnackBarModule,
   MatToolbarModule,
   MatProgressSpinnerModule,
-  MatIconModule
+  MatIconModule,
+  MatBadgeModule
 } from "@angular/material";
 import { ServiceWorkerModule } from "@angular/service-worker";
 import { environment } from "../environments/environment";
@@ -64,6 +65,7 @@ import { JobsModule } from "jobs/jobs.module";
     HttpClientModule,
     JobsModule,
     LogbooksModule,
+    MatBadgeModule,
     MatIconModule,
     MatMenuModule,
     MatProgressSpinnerModule,
