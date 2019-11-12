@@ -81,14 +81,17 @@
       </h6>
     </span>
 
-    <span  style="padding: 0 15px 0 15px;" >
+    <span  style="padding: 0 15px 0 15px;" [matMenuTriggerFor]="cartMenu">
         <button mat-fab class="cart" matBadge={{inBatchtIndicator}} matBadgePosition="above after" matBadgeColor="accent" matBadgeSize="large" >
         <mat-icon class="icon" > shopping_cart </mat-icon>
      </button>
     </span>
 
+    <mat-menu #cartMenu="matMenu">
     <div *ngTemplateOutlet="basketDialog">
       </div>
+    </mat-menu>
+
 
     <span>
       <button class="user-button" [matMenuTriggerFor]="userMenu">
@@ -98,9 +101,11 @@
     </span>
 
 
+
   </mat-toolbar>
 </div>
 
 <ng-template #basketDialog>
-
+  <batch-card></batch-card>
+      
   </ng-template>

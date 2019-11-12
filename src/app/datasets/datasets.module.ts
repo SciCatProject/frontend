@@ -119,7 +119,8 @@ import { DatasetsFilterComponent } from "./datasets-filter/datasets-filter.compo
     DatafilesComponent,
     DatasetDetailComponent,
     DatasetTableComponent,
-    DatasetsFilterComponent
+    DatasetsFilterComponent,
+    BatchCardComponent
   ]
 })
 export class DatasetsModule {}

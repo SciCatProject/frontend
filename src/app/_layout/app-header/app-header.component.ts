@@ -12,6 +12,7 @@ import {
   getProfile
 } from "state-management/selectors/user.selectors";
 import { getDatasetsInBatch } from "state-management/selectors/datasets.selectors";
+import { map } from "rxjs/operators";
 
 @Component({
   selector: "app-app-header",
