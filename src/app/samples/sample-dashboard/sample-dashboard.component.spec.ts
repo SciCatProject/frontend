@@ -11,7 +11,6 @@ import {
   TestBed,
   inject
 } from "@angular/core/testing";
-import { rootReducer } from "state-management/reducers/root.reducer";
 import {
   setTextFilterAction,
   changePageAction,
@@ -37,11 +36,7 @@ describe("SampleDashboardComponent", () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
-      imports: [
-        MatCardModule,
-        MatTableModule,
-        StoreModule.forRoot({ rootReducer })
-      ],
+      imports: [MatCardModule, MatTableModule, StoreModule.forRoot({})],
       declarations: [SampleDashboardComponent],
       providers: [DatePipe]
     });

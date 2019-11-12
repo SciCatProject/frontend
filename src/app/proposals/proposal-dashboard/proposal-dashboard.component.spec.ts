@@ -9,7 +9,6 @@ import {
   TestBed,
   inject
 } from "@angular/core/testing";
-import { rootReducer } from "state-management/reducers/root.reducer";
 import { SharedCatanieModule } from "shared/shared.module";
 import { DatePipe } from "@angular/common";
 import { Proposal } from "shared/sdk";
@@ -42,7 +41,7 @@ describe("ProposalDashboardComponent", () => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
       declarations: [ProposalDashboardComponent],
-      imports: [SharedCatanieModule, StoreModule.forRoot({ rootReducer })],
+      imports: [SharedCatanieModule, StoreModule.forRoot({})],
       providers: [DatePipe]
     });
     TestBed.overrideComponent(ProposalDashboardComponent, {

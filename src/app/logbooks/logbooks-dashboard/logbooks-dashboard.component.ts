@@ -18,9 +18,10 @@ import {
   fetchFilteredEntriesAction,
   setFilterAction
 } from "state-management/actions/logbooks.actions";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { APP_CONFIG, AppConfig } from "app-config.module";
 import { LogbookFilters } from "state-management/models";
+import * as rison from "rison";
 
 @Component({
   selector: "app-logbooks-dashboard",
@@ -34,6 +35,14 @@ export class LogbooksDashboardComponent
 
   subscriptions: Subscription[] = [];
 
+  applyRouterState() {
+    if (this.logbook && this.filters) {
+      this.router.navigate(["/logbooks", this.logbook.name], {
+        queryParams: { args: rison.encode(this.filters) }
+      });
+    }
+  }
+
   onTextSearchChange(query: string) {
     this.filters.textSearch = query;
     this.store.dispatch(setFilterAction({ filters: this.filters }));
@@ -43,6 +52,7 @@ export class LogbooksDashboardComponent
         filters: this.filters
       })
     );
+    this.applyRouterState();
   }
 
   onFilterSelect(filters: LogbookFilters) {
@@ -54,6 +64,7 @@ export class LogbooksDashboardComponent
         filters: this.filters
       })
     );
+    this.applyRouterState();
   }
 
   reverseTimeline(): void {
@@ -63,6 +74,7 @@ export class LogbooksDashboardComponent
   constructor(
     private cdRef: ChangeDetectorRef,
     private route: ActivatedRoute,
+    private router: Router,
     private store: Store<Logbook>,
     @Inject(APP_CONFIG) public appConfig: AppConfig
   ) {}
@@ -75,8 +87,8 @@ export class LogbooksDashboardComponent
     );
 
     this.subscriptions.push(
-      this.store.pipe(select(getFilters)).subscribe(filter => {
-        this.filters = filter;
+      this.store.pipe(select(getFilters)).subscribe(filters => {
+        this.filters = filters;
       })
     );
 
@@ -88,6 +100,8 @@ export class LogbooksDashboardComponent
         }
       })
     );
+
+    this.applyRouterState();
   }
 
   ngAfterViewChecked() {

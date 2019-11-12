@@ -9,9 +9,8 @@ import { PoliciesDashboardComponent } from "./policies-dashboard.component";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { SharedCatanieModule } from "shared/shared.module";
 import { DatasetApi, Policy } from "shared/sdk";
-import { MockDatasetApi, MockStore } from "shared/MockStubs";
+import { MockDatasetApi, MockStore, MockRouter } from "shared/MockStubs";
 import { StoreModule, Store } from "@ngrx/store";
-import { rootReducer } from "state-management/reducers/root.reducer";
 import {
   PageChangeEvent,
   SortChangeEvent,
@@ -28,12 +27,26 @@ import {
   changeEditablePageAction,
   sortEditableByColumnAction
 } from "state-management/actions/policies.actions";
-import { MatCheckboxChange } from "@angular/material";
+import {
+  MatCheckboxChange,
+  MatTabChangeEvent,
+  MatTab
+} from "@angular/material";
+import { Router } from "@angular/router";
+import { PolicyFilters } from "state-management/models";
+import * as rison from "rison";
+import { RouterTestingModule } from "@angular/router/testing";
+import { provideMockStore } from "@ngrx/store/testing";
+import {
+  getFilters,
+  getEditableFilters
+} from "state-management/selectors/policies.selectors";
 
 describe("PoliciesDashboardComponent", () => {
   let component: PoliciesDashboardComponent;
   let fixture: ComponentFixture<PoliciesDashboardComponent>;
 
+  let router: Router;
   let store: MockStore;
   let dispatchSpy;
 
@@ -41,7 +54,19 @@ describe("PoliciesDashboardComponent", () => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
       declarations: [PoliciesDashboardComponent],
-      imports: [SharedCatanieModule, StoreModule.forRoot({ rootReducer })]
+      imports: [
+        RouterTestingModule.withRoutes([]),
+        SharedCatanieModule,
+        StoreModule.forRoot({})
+      ],
+      providers: [
+        provideMockStore({
+          selectors: [
+            { selector: getFilters, value: {} },
+            { selector: getEditableFilters, value: {} }
+          ]
+        })
+      ]
     });
     TestBed.overrideComponent(PoliciesDashboardComponent, {
       set: {
@@ -49,6 +74,8 @@ describe("PoliciesDashboardComponent", () => {
       }
     });
     TestBed.compileComponents();
+
+    router = TestBed.get(Router);
   }));
 
   beforeEach(() => {
@@ -67,6 +94,70 @@ describe("PoliciesDashboardComponent", () => {
 
   it("should create", () => {
     expect(component).toBeTruthy();
+  });
+
+  describe("#onTabChange()", () => {
+    it("should call #updatePoliciesRouterState() if index = 0", () => {
+      const methodSpy = spyOn(component, "updatePoliciesRouterState");
+
+      const event: MatTabChangeEvent = {
+        index: 0,
+        tab: {} as MatTab
+      };
+      component.onTabChange(event);
+
+      expect(methodSpy).toHaveBeenCalled();
+    });
+
+    it("should call #updateEditableRouterState() if index = 1", () => {
+      const methodSpy = spyOn(component, "updateEditableRouterState");
+
+      const event: MatTabChangeEvent = {
+        index: 1,
+        tab: {} as MatTab
+      };
+      component.onTabChange(event);
+
+      expect(methodSpy).toHaveBeenCalled();
+    });
+  });
+
+  describe("#updatePoliciesRouterState()", () => {
+    it("should call #addToQueryParams()", () => {
+      const methodSpy = spyOn(component, "addToQueryParams");
+
+      component.updatePoliciesRouterState();
+
+      expect(methodSpy).toHaveBeenCalled();
+    });
+  });
+
+  describe("#updateEditableRouterState()", () => {
+    it("should call #addToQueryParams()", () => {
+      const methodSpy = spyOn(component, "addToQueryParams");
+
+      component.updateEditableRouterState();
+
+      expect(methodSpy).toHaveBeenCalled();
+    });
+  });
+
+  describe("#addToQueryParams()", () => {
+    it("should call router.navigate", () => {
+      const navigateSpy = spyOn(router, "navigate");
+
+      const filters: PolicyFilters = {
+        sortField: "test asc",
+        skip: 0,
+        limit: 25
+      };
+      component.addToQueryParams(filters);
+
+      expect(navigateSpy).toHaveBeenCalledTimes(1);
+      expect(navigateSpy).toHaveBeenCalledWith(["/policies"], {
+        queryParams: { args: rison.encode(filters) }
+      });
+    });
   });
 
   describe("#onPoliciesPageChange()", () => {

@@ -7,7 +7,8 @@ import {
   getJobs,
   getJobsCount,
   getJobsPerPage,
-  getPage
+  getPage,
+  getFilters
 } from "state-management/selectors/jobs.selectors";
 import { DatePipe } from "@angular/common";
 import {
@@ -24,6 +25,7 @@ import {
   getCurrentUser,
   getProfile
 } from "state-management/selectors/user.selectors";
+import * as rison from "rison";
 
 @Component({
   selector: "app-jobs-dashboard",
@@ -36,11 +38,10 @@ export class JobsDashboardComponent implements OnInit, OnDestroy {
   currentPage$ = this.store.pipe(select(getPage));
 
   jobs: any[] = [];
-  jobsSubscription: Subscription;
-
   profile: any;
   email: string;
-  userSubscription: Subscription;
+
+  subscriptions: Subscription[] = [];
 
   modes = Object.keys(JobViewMode).map(key => JobViewMode[key]);
   currentMode = JobViewMode.myJobs;
@@ -114,13 +115,14 @@ export class JobsDashboardComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.store.dispatch(fetchJobsAction());
 
-    this.jobsSubscription = this.store.pipe(select(getJobs)).subscribe(jobs => {
-      this.jobs = this.formatTableData(jobs);
-    });
+    this.subscriptions.push(
+      this.store.pipe(select(getJobs)).subscribe(jobs => {
+        this.jobs = this.formatTableData(jobs);
+      })
+    );
 
-    this.userSubscription = this.store
-      .pipe(select(getCurrentUser))
-      .subscribe(current => {
+    this.subscriptions.push(
+      this.store.pipe(select(getCurrentUser)).subscribe(current => {
         if (current) {
           this.email = current.email;
 
@@ -136,11 +138,19 @@ export class JobsDashboardComponent implements OnInit, OnDestroy {
             this.onModeChange(null, JobViewMode.myJobs);
           }
         }
-      });
+      })
+    );
+
+    this.subscriptions.push(
+      this.store.pipe(select(getFilters)).subscribe(filters => {
+        this.router.navigate(["/user/jobs"], {
+          queryParams: { args: rison.encode(filters) }
+        });
+      })
+    );
   }
 
   ngOnDestroy() {
-    this.jobsSubscription.unsubscribe();
-    this.userSubscription.unsubscribe();
+    this.subscriptions.forEach(subscription => subscription.unsubscribe());
   }
 }

@@ -17,12 +17,15 @@ import {
   getSelectedPolicies,
   getEditablePoliciesCount,
   getEditablePoliciesPerPage,
-  getEditablePage
+  getEditablePage,
+  getFilters,
+  getEditableFilters
 } from "state-management/selectors/policies.selectors";
 import {
   MatCheckboxChange,
   MatDialogConfig,
-  MatDialog
+  MatDialog,
+  MatTabChangeEvent
 } from "@angular/material";
 import {
   changePageAction,
@@ -38,6 +41,9 @@ import {
 } from "state-management/actions/policies.actions";
 import { EditDialogComponent } from "policies/edit-dialog/edit-dialog.component";
 import { map } from "rxjs/operators";
+import { Router } from "@angular/router";
+import * as rison from "rison";
+import { PolicyFilters } from "state-management/models";
 
 @Component({
   selector: "app-policies-dashboard",
@@ -107,22 +113,70 @@ export class PoliciesDashboardComponent implements OnInit, OnDestroy {
     }
   ];
 
+  onTabChange(event: MatTabChangeEvent) {
+    console.log("Click!", event);
+    switch (event.index) {
+      case 0: {
+        this.updatePoliciesRouterState();
+        break;
+      }
+      case 1: {
+        this.updateEditableRouterState();
+        break;
+      }
+      default: {
+        break;
+      }
+    }
+  }
+
+  updatePoliciesRouterState() {
+    this.store
+      .pipe(select(getFilters))
+      .subscribe(filters => {
+        if (filters) {
+          this.addToQueryParams(filters);
+        }
+      })
+      .unsubscribe();
+  }
+
+  updateEditableRouterState() {
+    this.store
+      .pipe(select(getEditableFilters))
+      .subscribe(filters => {
+        if (filters) {
+          this.addToQueryParams(filters);
+        }
+      })
+      .unsubscribe();
+  }
+
+  addToQueryParams(filters: PolicyFilters) {
+    this.router.navigate(["/policies"], {
+      queryParams: { args: rison.encode(filters) }
+    });
+  }
+
   onPoliciesPageChange(event: PageChangeEvent) {
     this.store.dispatch(
       changePageAction({ page: event.pageIndex, limit: event.pageSize })
     );
+    this.updatePoliciesRouterState();
   }
 
   onEditablePoliciesPageChange(event: PageChangeEvent) {
     this.store.dispatch(
       changeEditablePageAction({ page: event.pageIndex, limit: event.pageSize })
     );
+    this.updateEditableRouterState();
   }
 
   onPoliciesSortChange(event: SortChangeEvent) {
     this.store.dispatch(
       sortByColumnAction({ column: event.active, direction: event.direction })
     );
+    this.updatePoliciesRouterState();
   }
 
   onEditablePoliciesSortChange(event: SortChangeEvent) {
@@ -132,6 +186,7 @@ export class PoliciesDashboardComponent implements OnInit, OnDestroy {
         direction: event.direction
       })
     );
+    this.updateEditableRouterState();
   }
 
   onSelectAll(event: MatCheckboxChange) {
@@ -202,6 +257,7 @@ export class PoliciesDashboardComponent implements OnInit, OnDestroy {
   constructor(
     private datasetApi: DatasetApi,
     public dialog: MatDialog,
+    private router: Router,
     private store: Store<Policy>
   ) {}
 
@@ -224,6 +280,8 @@ export class PoliciesDashboardComponent implements OnInit, OnDestroy {
           });
         }
       });
+
+    this.updatePoliciesRouterState();
   }
 
   ngOnDestroy() {
