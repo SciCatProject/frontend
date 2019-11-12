@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, Input } from "@angular/core";
 import { Proposal } from "state-management/models";
 
 @Component({
@@ -6,12 +6,8 @@ import { Proposal } from "state-management/models";
   templateUrl: "proposal-detail.component.html",
   styleUrls: ["proposal-detail.component.scss"]
 })
-export class ProposalDetailComponent implements OnInit {
+export class ProposalDetailComponent {
   @Input() proposal: Proposal;
 
   show = false;
-
-  constructor() {}
-
-  ngOnInit() {}
 }

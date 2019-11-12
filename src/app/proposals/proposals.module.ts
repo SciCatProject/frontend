@@ -31,13 +31,15 @@ import { ProposalDashboardComponent } from "./proposal-dashboard/proposal-dashbo
 import { FlexLayoutModule } from "@angular/flex-layout";
 import { FileSizePipe } from "shared/pipes/filesize.pipe";
 import { SatDatepickerModule } from "saturn-datepicker";
-import { ProposalFilterComponent } from './proposal-filter/proposal-filter.component';
+import { ProposalFilterComponent } from "./proposal-filter/proposal-filter.component";
+import { LogbooksModule } from "logbooks/logbooks.module";
 
 @NgModule({
   imports: [
     CommonModule,
     EffectsModule.forFeature([ProposalEffects]),
     FlexLayoutModule,
+    LogbooksModule,
     MatButtonModule,
     MatCardModule,
     MatExpansionModule,

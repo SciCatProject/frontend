@@ -13,7 +13,6 @@ import {
   getCurrentLogbook,
   getFilters
 } from "state-management/selectors/logbooks.selectors";
-import { getCurrentDataset } from "state-management/selectors/datasets.selectors";
 import {
   fetchLogbookAction,
   fetchFilteredEntriesAction,
@@ -31,15 +30,9 @@ import { LogbookFilters } from "state-management/models";
 export class LogbooksDashboardComponent
   implements OnInit, OnDestroy, AfterViewChecked {
   logbook: Logbook;
-  logbookSubscription: Subscription;
-
   filters: LogbookFilters;
-  filtersSubscription: Subscription;
 
-  dataset: any;
-  datasetSubscription: Subscription;
-
-  routeSubscription: Subscription;
+  subscriptions: Subscription[] = [];
 
   onTextSearchChange(query: string) {
     this.filters.textSearch = query;
@@ -75,35 +68,26 @@ export class LogbooksDashboardComponent
   ) {}
 
   ngOnInit() {
-    this.logbookSubscription = this.store
-      .pipe(select(getCurrentLogbook))
-      .subscribe(logbook => {
+    this.subscriptions.push(
+      this.store.pipe(select(getCurrentLogbook)).subscribe(logbook => {
         this.logbook = logbook;
-      });
+      })
+    );
 
-    this.filtersSubscription = this.store
-      .pipe(select(getFilters))
-      .subscribe(filter => {
+    this.subscriptions.push(
+      this.store.pipe(select(getFilters)).subscribe(filter => {
         this.filters = filter;
-      });
+      })
+    );
 
-    this.datasetSubscription = this.store
-      .pipe(select(getCurrentDataset))
-      .subscribe(dataset => {
-        this.dataset = dataset;
-      });
-
-    this.routeSubscription = this.route.params.subscribe(params => {
-      if (params.hasOwnProperty("name")) {
-        const logbookName = params["name"];
-        this.store.dispatch(fetchLogbookAction({ name: logbookName }));
-      } else {
-        if (this.dataset.hasOwnProperty("proposalId")) {
-          const logbookName = this.dataset.proposalId;
-          this.store.dispatch(fetchLogbookAction({ name: logbookName }));
+    this.subscriptions.push(
+      this.route.params.subscribe(params => {
+        if (params.hasOwnProperty("name")) {
+          const name = params["name"];
+          this.store.dispatch(fetchLogbookAction({ name }));
         }
-      }
-    });
+      })
+    );
   }
 
   ngAfterViewChecked() {
@@ -111,9 +95,6 @@ export class LogbooksDashboardComponent
   }
 
   ngOnDestroy() {
-    this.logbookSubscription.unsubscribe();
-    this.filtersSubscription.unsubscribe();
-    this.datasetSubscription.unsubscribe();
-    this.routeSubscription.unsubscribe();
+    this.subscriptions.forEach(subscription => subscription.unsubscribe());
   }
 }
