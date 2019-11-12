@@ -318,10 +318,11 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-
-    this.subscriptions.push( this.batch$.subscribe(datasets => {
+    this.subscriptions.push(
+      this.batch$.subscribe(datasets => {
         this.inBatchPids = datasets.map(dataset => dataset.pid);
-      }));
+      })
+    );
 
     this.subscriptions.push(
       this.store.pipe(select(getDatasets)).subscribe(datasets => {
