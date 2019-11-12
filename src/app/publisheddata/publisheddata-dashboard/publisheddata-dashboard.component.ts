@@ -32,7 +32,9 @@ export class PublisheddataDashboardComponent implements OnInit {
     { name: "doi", icon: "fingerprint", sort: false, inList: false },
     { name: "title", icon: "description", sort: false, inList: true },
     { name: "creator", icon: "face", sort: false, inList: true },
-    { name: "publicationYear", icon: "date_range", sort: false, inList: true }
+    { name: "publicationYear", icon: "date_range", sort: false, inList: true },
+    { name: "scicatUser", icon: "account_circle", sort: false, inList: true }
+
   ];
   paginate = true;
 

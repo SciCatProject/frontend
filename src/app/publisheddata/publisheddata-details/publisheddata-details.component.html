@@ -34,6 +34,10 @@
     </mat-card-header>
 
     <table>
+      <tr *ngIf="publishedData.scicatUser as value">
+        <th><mat-icon> account_circle </mat-icon> Scicat User </th>
+        <td>{{ value }}</td>
+      </tr>
       <tr *ngIf="publishedData.creator as value">
         <th><mat-icon> person </mat-icon> Creator</th>
         <td>{{ value }}</td>

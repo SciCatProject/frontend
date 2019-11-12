@@ -41,7 +41,7 @@ export class BatchViewComponent implements OnInit {
   shareEmails: Share[] = [];
   datasetList = [];
 
-  private visibleColumns: [string, string, string, string] = [
+  private visibleColumns: string[] = [
     "remove",
     "pid",
     "sourceFolder",

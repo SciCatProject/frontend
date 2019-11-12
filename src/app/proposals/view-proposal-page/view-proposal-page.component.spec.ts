@@ -18,6 +18,7 @@ import {
   fetchProposalDatasetsAction
 } from "state-management/actions/proposals.actions";
 import { PageChangeEvent } from "shared/modules/table/table.component";
+import { APP_CONFIG } from "app-config.module";
 
 describe("ViewProposalPageComponent", () => {
   let component: ViewProposalPageComponent;
@@ -40,7 +41,8 @@ describe("ViewProposalPageComponent", () => {
       set: {
         providers: [
           { provide: Router, useValue: router },
-          { provide: ActivatedRoute, useClass: MockActivatedRoute }
+          { provide: ActivatedRoute, useClass: MockActivatedRoute },
+          { provide: APP_CONFIG, useValue: { logbookEnabled: true } }
         ]
       }
     });
