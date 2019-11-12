@@ -9,7 +9,7 @@ import { PoliciesDashboardComponent } from "./policies-dashboard.component";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { SharedCatanieModule } from "shared/shared.module";
 import { DatasetApi, Policy } from "shared/sdk";
-import { MockDatasetApi, MockStore, MockRouter } from "shared/MockStubs";
+import { MockDatasetApi, MockStore } from "shared/MockStubs";
 import { StoreModule, Store } from "@ngrx/store";
 import {
   PageChangeEvent,
