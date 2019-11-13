@@ -32,7 +32,6 @@ export class AppHeaderComponent implements OnInit, OnDestroy {
   inBatchCount: number;
   inBatchtIndicator: string;
 
-
   constructor(
     private store: Store<any>,
     @Inject(APP_CONFIG) public appConfig: AppConfig
@@ -51,9 +50,12 @@ export class AppHeaderComponent implements OnInit, OnDestroy {
 
     this.subscriptions.push(
       this.batch$.subscribe(datasets => {
-        this.inBatchPids = datasets.map(dataset => dataset.pid);
-        this.inBatchCount = this.inBatchPids.length;
-        this.inBatchtIndicator = (this.inBatchCount > 99) ? "99+" : this.inBatchCount + "";
+        if (datasets) {
+          this.inBatchPids = datasets.map(dataset => dataset.pid);
+          this.inBatchCount = this.inBatchPids.length;
+          this.inBatchtIndicator =
+            this.inBatchCount > 99 ? "99+" : this.inBatchCount + "";
+        }
       })
     );
 
