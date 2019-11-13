@@ -17,7 +17,7 @@ export class BatchCardComponent {
 
   constructor(private store: Store<any>) {}
 
-  private clear(): void {
+  public clear(): void {
     this.store.dispatch(clearBatchAction());
   }
 }
