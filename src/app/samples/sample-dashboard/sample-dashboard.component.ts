@@ -18,12 +18,14 @@ import {
   getSamples,
   getSamplesCount,
   getSamplesPerPage,
-  getPage
+  getPage,
+  getFilters
 } from "state-management/selectors/samples.selectors";
 import { DatePipe } from "@angular/common";
 import { Router } from "@angular/router";
 import { MatDialogConfig, MatDialog } from "@angular/material";
 import { SampleDialogComponent } from "samples/sample-dialog/sample-dialog.component";
+import * as rison from "rison";
 
 @Component({
   selector: "sample-dashboard",
@@ -31,11 +33,11 @@ import { SampleDialogComponent } from "samples/sample-dialog/sample-dialog.compo
   styleUrls: ["./sample-dashboard.component.scss"]
 })
 export class SampleDashboardComponent implements OnInit, OnDestroy {
-  sampleSubscription: Subscription;
-
   sampleCount$ = this.store.pipe(select(getSamplesCount));
   samplesPerPage$ = this.store.pipe(select(getSamplesPerPage));
   currentPage$ = this.store.pipe(select(getPage));
+
+  subscriptions: Subscription[] = [];
 
   tableData: any[];
   tableColumns: TableColumn[] = [
@@ -50,6 +52,7 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
   dialogConfig: MatDialogConfig;
   name: string;
   description: string;
+
   constructor(
     @Inject(APP_CONFIG) public appConfig: AppConfig,
     private datePipe: DatePipe,
@@ -110,14 +113,22 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.store.dispatch(fetchSamplesAction());
 
-    this.sampleSubscription = this.store
-      .pipe(select(getSamples))
-      .subscribe(samples => {
+    this.subscriptions.push(
+      this.store.pipe(select(getSamples)).subscribe(samples => {
         this.tableData = this.formatTableData(samples);
-      });
+      })
+    );
+
+    this.subscriptions.push(
+      this.store.pipe(select(getFilters)).subscribe(filters => {
+        this.router.navigate(["/samples"], {
+          queryParams: { args: rison.encode(filters) }
+        });
+      })
+    );
   }
 
   ngOnDestroy() {
-    this.sampleSubscription.unsubscribe();
+    this.subscriptions.forEach(subscription => subscription.unsubscribe());
   }
 }

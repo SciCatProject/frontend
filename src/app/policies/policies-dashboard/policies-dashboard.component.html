@@ -1,7 +1,9 @@
-<mat-tab-group>
+<mat-tab-group (selectedTabChange)="onTabChange($event)">
   <mat-tab>
     <ng-template mat-tab-label>
-      Readable
+      <ng-container>
+        Readable
+      </ng-container>
     </ng-template>
 
     <div fxLayout="row">

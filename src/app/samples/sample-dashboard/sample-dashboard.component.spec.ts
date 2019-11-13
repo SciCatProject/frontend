@@ -15,7 +15,6 @@ import {
   TestBed,
   inject
 } from "@angular/core/testing";
-import { rootReducer } from "state-management/reducers/root.reducer";
 import {
   setTextFilterAction,
   changePageAction,
@@ -46,7 +45,7 @@ describe("SampleDashboardComponent", () => {
         MatCardModule,
         MatDialogModule,
         MatTableModule,
-        StoreModule.forRoot({ rootReducer })
+        StoreModule.forRoot({})
       ],
       declarations: [SampleDashboardComponent],
       providers: [DatePipe]

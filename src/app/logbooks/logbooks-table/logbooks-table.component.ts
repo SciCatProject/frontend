@@ -18,6 +18,10 @@ export class LogbooksTableComponent implements OnInit, OnDestroy {
 
   columnsToDisplay: string[] = ["name", "latestEntry", "sender", "entry"];
 
+  onClick(logbook: Logbook): void {
+    this.router.navigateByUrl("/logbooks/" + logbook.name);
+  }
+
   constructor(private router: Router, private store: Store<Logbook[]>) {}
 
   ngOnInit() {
@@ -35,9 +39,5 @@ export class LogbooksTableComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.logbooksSubscription.unsubscribe();
-  }
-
-  onClick(logbook: Logbook): void {
-    this.router.navigateByUrl("/logbooks/" + logbook.name);
   }
 }
