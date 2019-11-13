@@ -1,3 +1,4 @@
+import { APP_CONFIG } from "app-config.module";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
@@ -37,6 +38,7 @@ describe("DashboardComponent", () => {
     TestBed.overrideComponent(DashboardComponent, {
       set: {
         providers: [
+          { provide: APP_CONFIG, useValue: { shoppingCartOnHeader: "true" } },
           { provide: ActivatedRoute, useClass: MockActivatedRoute },
           { provide: Router, useClass: MockRouter },
           { provide: Store, useClass: MockStore }
