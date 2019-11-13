@@ -59,6 +59,11 @@
 }
 
 
+  ::ng-deep .custom-menu .mat-menu-content:not(:empty) {
+    padding-top: 1px;
+    padding-bottom: 1px;
+   }
+   
 .cart {
   .mat-badge-content {
     width: fit-content;
