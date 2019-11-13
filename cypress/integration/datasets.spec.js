@@ -25,7 +25,9 @@ describe("Datasets", () => {
         .children()
         .should("contain.text", "cypresskey");
     });
+  });
 
+  describe("Remove keyword from dataset", () => {
     it("should go to dataset details and remove the added keyword", () => {
       cy.url().should("include", "/datasets");
 
