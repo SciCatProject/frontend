@@ -1,5 +1,5 @@
-import { DatasetEffects } from './../state-management/effects/datasets.effects';
-import { EffectsModule } from '@ngrx/effects';
+import { DatasetEffects } from "./../state-management/effects/datasets.effects";
+import { EffectsModule } from "@ngrx/effects";
 import { AppConfigModule } from "app-config.module";
 import { LinkyModule } from "ngx-linky";
 import { ArchivingService } from "./archiving.service";
