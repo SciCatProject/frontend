@@ -52,4 +52,26 @@ describe("Datasets", () => {
         .should("not.contain", "cypresskey");
     });
   });
+
+  describe("Make dataset public", () => {
+    it("should go to dataset details and toggle public", () => {
+      cy.visit("/datasets");
+
+      cy.get(".mat-row")
+        .contains("Cypress Dataset")
+        .click();
+
+      cy.get(".mat-slide-toggle-label")
+        .contains("Public")
+        .as("publicToggle");
+
+      cy.get("mat-slide-toggle").should("not.have.class", "mat-checked");
+
+      cy.get("@publicToggle").click();
+
+      cy.wait("@request");
+
+      cy.get("mat-slide-toggle").should("have.class", "mat-checked");
+    });
+  });
 });
