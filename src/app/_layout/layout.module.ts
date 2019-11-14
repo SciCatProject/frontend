@@ -5,7 +5,8 @@ import {
   MatMenuModule,
   MatIconModule,
   MatBadgeModule,
-  MatToolbarModule
+  MatToolbarModule,
+  MatButtonModule
 } from "@angular/material";
 import { RouterModule } from "@angular/router";
 import { DatasetsModule } from "datasets/datasets.module";
@@ -14,12 +15,13 @@ import { DatasetsModule } from "datasets/datasets.module";
   declarations: [AppHeaderComponent],
   imports: [
     CommonModule,
-    MatMenuModule,
-    MatIconModule,
-    RouterModule,
+    DatasetsModule,
     MatBadgeModule,
+    MatButtonModule,
+    MatIconModule,
+    MatMenuModule,
     MatToolbarModule,
-    DatasetsModule
+    RouterModule
   ],
   exports: [AppHeaderComponent]
 })

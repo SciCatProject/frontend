@@ -81,20 +81,15 @@
       </h6>
     </span>
 
-    <span
-      *ngIf="appConfig.shoppingCartOnHeader"
-      style="padding: 0 15px 0 15px;"
-      [matMenuTriggerFor]="cartMenu"
-    >
+    <span *ngIf="appConfig.shoppingCartOnHeader" [matMenuTriggerFor]="cartMenu">
       <button
-        mat-fab
-        class="cart"
-        matBadge="{{ inBatchtIndicator }}"
-        matBadgePosition="above after"
+        mat-icon-button
+        matBadge="{{ inBatchIndicator }}"
+        matBadgePosition="after"
         matBadgeColor="accent"
-        matBadgeSize="large"
+        matBadgeSize="medium"
       >
-        <mat-icon class="icon"> shopping_cart </mat-icon>
+        <mat-icon> shopping_cart </mat-icon>
       </button>
     </span>
 
@@ -103,7 +98,7 @@
     </mat-menu>
 
     <span>
-      <button class="user-button" [matMenuTriggerFor]="userMenu">
+      <button mat-button class="user-button" [matMenuTriggerFor]="userMenu">
         <img class="user-image" src="{{ profileImage }}" />
         <div class="large-screen-text">{{ username }}</div>
       </button>
