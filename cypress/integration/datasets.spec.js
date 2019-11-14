@@ -3,9 +3,6 @@
 describe("Datasets", () => {
   beforeEach(() => {
     cy.login(Cypress.config("username"), Cypress.config("password"));
-
-    cy.server();
-    cy.route("/api/v3/Datasets/*").as("request");
   });
 
   after(() => {
@@ -26,8 +23,6 @@ describe("Datasets", () => {
 
       cy.get("#keywordInput").type("cypresskey{enter}");
 
-      cy.wait("@request");
-
       cy.get(".done-edit-button").click();
 
       cy.get(".mat-chip-list")
@@ -47,8 +42,6 @@ describe("Datasets", () => {
       cy.contains("cypresskey")
         .children(".mat-chip-remove")
         .click();
-
-      cy.wait("@request");
 
       cy.get(".mat-chip-list")
         .children()
@@ -76,6 +69,9 @@ describe("Datasets", () => {
 
   describe("Make dataset public", () => {
     it("should go to dataset details and toggle public", () => {
+      cy.server();
+      cy.route("PUT", "/api/v3/Datasets/**/*").as("change");
+
       cy.visit("/datasets");
 
       cy.get(".mat-row")
@@ -90,7 +86,10 @@ describe("Datasets", () => {
 
       cy.get("@publicToggle").click();
 
-      cy.wait("@request");
+      cy.wait("@change").then(response => {
+        expect(response.method).to.eq("PUT");
+        expect(response.status).to.eq(200);
+      });
 
       cy.get("mat-slide-toggle").should("have.class", "mat-checked");
     });
