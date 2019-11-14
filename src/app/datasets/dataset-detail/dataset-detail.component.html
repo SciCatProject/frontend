@@ -29,7 +29,7 @@
         <tr class="keywords-row" *ngIf="dataset.keywords as keywords">
           <th><mat-icon> vpn_key </mat-icon> Keywords</th>
           <td *ngIf="!editEnabled">
-            <mat-chip-list *ngIf="keywords.length > 0" #keywordChips>
+            <mat-chip-list #keywordChips>
               <mat-chip
                 *ngFor="let keyword of keywords"
                 [removable]="true"
@@ -46,7 +46,7 @@
           </td>
           <td *ngIf="editEnabled">
             <mat-form-field>
-              <mat-chip-list *ngIf="keywords.length > 0" #keywordChips>
+              <mat-chip-list #keywordChips>
                 <mat-chip
                   *ngFor="let keyword of keywords"
                   [removable]="true"

@@ -69,18 +69,22 @@ export class DatasetDetailsDashboardComponent
   private subscriptions: Subscription[] = [];
 
   isPI(): boolean {
-    if (this.dataset.type === "raw") {
-      return (
-        this.user.email.toLowerCase() ===
-        (this.dataset as RawDataset).principalInvestigator.toLowerCase()
-      );
-    } else if (this.dataset.type === "derived") {
-      return (
-        this.user.email.toLowerCase() ===
-        (this.dataset as DerivedDataset).investigator.toLowerCase()
-      );
+    if (this.user.username === "admin") {
+      return true;
     } else {
-      return false;
+      if (this.dataset.type === "raw") {
+        return (
+          this.user.email.toLowerCase() ===
+          (this.dataset as RawDataset).principalInvestigator.toLowerCase()
+        );
+      } else if (this.dataset.type === "derived") {
+        return (
+          this.user.email.toLowerCase() ===
+          (this.dataset as DerivedDataset).investigator.toLowerCase()
+        );
+      } else {
+        return false;
+      }
     }
   }
 
