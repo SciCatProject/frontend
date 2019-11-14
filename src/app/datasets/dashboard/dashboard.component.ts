@@ -1,6 +1,6 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit, Inject } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-
+import { APP_CONFIG, AppConfig } from "app-config.module";
 import { select, Store } from "@ngrx/store";
 
 import * as rison from "rison";
@@ -21,7 +21,8 @@ import {
   getFilters,
   getHasPrefilledFilters,
   getSearchTerms,
-  getSelectedDatasets
+  getSelectedDatasets,
+  getDatasetsInBatch
 } from "state-management/selectors/datasets.selectors";
 import {
   combineLatest,
@@ -39,6 +40,9 @@ import {
   styleUrls: ["dashboard.component.css"]
 })
 export class DashboardComponent implements OnInit, OnDestroy {
+  private batch$ = this.store.pipe(select(getDatasetsInBatch));
+  public batchSize$ = this.batch$.pipe(map(batch => batch.length));
+  public nonEmpty$ = this.batchSize$.pipe(map(size => size > 0));
   selectedDatasets$ = this.store.pipe(select(getSelectedDatasets));
   private filters$ = this.store.pipe(select(getFilters));
   private searchTerms$ = this.store.pipe(select(getSearchTerms));
@@ -79,6 +83,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     });
 
   constructor(
+    @Inject(APP_CONFIG) public appConfig: AppConfig,
     private store: Store<any>,
     private router: Router,
     private route: ActivatedRoute

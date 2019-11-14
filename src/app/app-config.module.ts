@@ -33,6 +33,7 @@ export class AppConfig {
   searchSamples: boolean;
   sftpHost: string;
   shoppingCartEnabled: boolean;
+  shoppingCartOnHeader: boolean;
   tableSciDataEnabled: boolean;
   userProfileImageEnabled: boolean;
   userNamePromptEnabled: boolean;
@@ -82,6 +83,7 @@ export const APP_DI_CONFIG: AppConfig = {
   searchSamples: environment["searchSamples"] || false,
   sftpHost: environment["sftpHost"] || null,
   shoppingCartEnabled: environment["shoppingCartEnabled"] || false,
+  shoppingCartOnHeader: environment["shoppingCartOnHeader"] || false,
   tableSciDataEnabled: environment["tableSciDataEnabled"] || false,
   userProfileImageEnabled: environment["userProfileImageEnabled"] || false,
   userNamePromptEnabled: environment["userNamePromptEnabled"] || false,
