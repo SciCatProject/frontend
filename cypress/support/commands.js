@@ -25,10 +25,26 @@
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 
 Cypress.Commands.add("login", (username, password) => {
-  cy.visit("/login");
+  cy.request(
+    "POST",
+    Cypress.config("lbBaseUrl") + "/Users/login?include=user",
+    {
+      username,
+      password,
+      rememberMe: true
+    }
+  )
+    .its("body")
+    .as("user");
 
-  cy.get("#usernameInput").type(username);
-  cy.get("#passwordInput").type(password);
-
-  cy.get("button[type=submit]").click();
+  cy.get("@user").then(user => {
+    cy.setCookie("$LoopBackSDK$created", user.created);
+    cy.setCookie("$LoopBackSDK$id", user.id);
+    cy.setCookie("$LoopBackSDK$ttl", user.ttl.toString());
+    cy.setCookie(
+      "$LoopBackSDK$user",
+      encodeURIComponent(JSON.stringify(user.user))
+    );
+    cy.setCookie("$LoopBackSDK$userId", user.userId);
+  });
 });

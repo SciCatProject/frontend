@@ -10,7 +10,7 @@ describe("Datasets", () => {
 
   describe("Add keyword to dataset", () => {
     it("should go to dataset details and add a keyword", () => {
-      cy.url().should("include", "/datasets");
+      cy.visit("/datasets");
 
       cy.get(".mat-row")
         .first()
@@ -29,7 +29,7 @@ describe("Datasets", () => {
 
   describe("Remove keyword from dataset", () => {
     it("should go to dataset details and remove the added keyword", () => {
-      cy.url().should("include", "/datasets");
+      cy.visit("/datasets");
 
       cy.get(".mat-row")
         .first()
