@@ -144,7 +144,10 @@ export class SampleEffects {
       ofType(fromActions.addSampleAction),
       mergeMap(({ sample }) =>
         this.sampleApi.create(sample).pipe(
-          map(res => fromActions.addSampleCompleteAction({ sample: res })),
+          mergeMap(res => [
+            fromActions.addSampleCompleteAction({ sample: res }),
+            fromActions.fetchSamplesAction()
+          ]),
           catchError(() => of(fromActions.addSampleFailedAction()))
         )
       )
