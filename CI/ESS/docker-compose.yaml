@@ -1,0 +1,69 @@
+version: "3"
+services:
+  mongodb:
+    image: 'bitnami/mongodb:latest'
+    ports:
+      - "27017:27017"
+    volumes:
+      - 'mongodb_data:/bitnami'
+  catanie:
+    build:
+      context: .
+      dockerfile: CI/ESS/Dockerfile
+    image: garethcmurphy/catanie
+    ports:
+      - '3000:3000'
+  catamel:
+    image: "dacat/catamel"
+    depends_on:
+      - mongodb
+      - openldap-seed
+      - scichat-loopback
+    links:
+      - mongodb
+      - openldap
+      - openldap-seed
+      - scichat-loopback
+  openldap:
+      image: osixia/openldap
+      container_name: openldap
+      hostname: openldap
+      environment:
+          LDAP_ORGANISATION: "LDAP Catamel Auth"
+          LDAP_SSL_HELPER_PREFIX: "ldap"
+          LDAP_TLS_VERIFY_CLIENT: "never"
+          LDAP_LOG_LEVEL: 256
+          LDAP_ADMIN_PASSWORD: "admin"
+      ports:
+      - "389:389"
+  openldap-seed:
+      image: osixia/openldap
+      volumes:
+      - ./CI/ESS/ldif_files:/ldif_files
+      links:
+      - openldap
+      entrypoint: sh -c '/ldif_files/addAll.sh'
+  openldap-admin:
+      image: osixia/phpldapadmin
+      container_name: openldap-admin
+      hostname: openldap-admin
+      environment:
+          PHPLDAPADMIN_HTTPS=false:
+          PHPLDAPADMIN_LDAP_HOSTS: "openldap"
+      ports:
+      - "8080:80"
+      links:
+      - "openldap:openldap"
+      depends_on:
+      - openldap
+  scichat-loopback:
+    image: dacat/scichat-loopback:latest
+    ports:
+    - "3030:3030"
+    depends_on:
+    - mongodb
+    links:
+    - mongodb
+volumes:
+    mongodb_data:
+        driver: local
