@@ -45,6 +45,16 @@ services:
   cataniecypress:
     image: "dacat/catanie:cypress"
     command: ["npx", "cypress", "run"]
+    depends_on:
+      - mongodb
+      - catamel
+      - catanie
+      - openldap-seed
+    links:
+      - mongodb
+      - catamel
+      - catanie
+      - openldap
   catamel:
     image: "dacat/catamel"
     ports:
