@@ -6,19 +6,6 @@ services:
       - "27017:27017"
     volumes:
       - 'mongodb_data:/bitnami'
-  catamel:
-    image: "dacat/catamel"
-    ports:
-      - '3000:3000'
-    depends_on:
-      - mongodb
-      - openldap-seed
-      - scichat-loopback
-    links:
-      - mongodb
-      - openldap
-      - openldap-seed
-      - scichat-loopback
   openldap:
       image: osixia/openldap
       container_name: openldap
@@ -51,14 +38,17 @@ services:
       - "openldap:openldap"
       depends_on:
       - openldap
-  scichat-loopback:
-    image: dacat/scichat-loopback:latest
+  catamel:
+    image: "dacat/catamel"
     ports:
-    - "3030:3030"
+      - '3000:3000'
     depends_on:
-    - mongodb
+      - mongodb
+      - openldap-seed
     links:
-    - mongodb
+      - mongodb
+      - openldap
+      - openldap-seed
 volumes:
     mongodb_data:
         driver: local
