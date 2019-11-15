@@ -1,4 +1,12 @@
-import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  Input,
+  Output,
+  EventEmitter,
+  OnChanges,
+  SimpleChange
+} from "@angular/core";
 import { FormBuilder, FormGroup, FormArray } from "@angular/forms";
 
 @Component({
@@ -6,7 +14,7 @@ import { FormBuilder, FormGroup, FormArray } from "@angular/forms";
   templateUrl: "./metadata-edit.component.html",
   styleUrls: ["./metadata-edit.component.scss"]
 })
-export class MetadataEditComponent implements OnInit {
+export class MetadataEditComponent implements OnInit, OnChanges {
   metadataForm: FormGroup;
   typeValues: string[] = ["date", "measurement", "number", "string"];
 
@@ -136,5 +144,19 @@ export class MetadataEditComponent implements OnInit {
     });
 
     this.addCurrentMetadata();
+  }
+
+  ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
+    for (const propName in changes) {
+      if (propName === "metadata") {
+        this.metadata = changes[propName].currentValue;
+
+        this.metadataForm = this.formBuilder.group({
+          items: this.formBuilder.array([])
+        });
+
+        this.addCurrentMetadata();
+      }
+    }
   }
 }
