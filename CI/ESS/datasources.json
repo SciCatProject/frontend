@@ -1,12 +1,18 @@
 {
-    "mongo": {
+  "db": {
+    "name": "db",
+    "connector": "memory"
+  },
+  "mongo": {
     "host": "localhost",
     "port": 27017,
     "url": "",
     "database": "dacat",
+    "password": "",
     "name": "mongo",
-"useNewUrlParser": true,
-    "connector": "mongodb"
+    "user": "",
+    "connector": "mongodb",
+    "useNewUrlParser": "true"
   },
   "transient": {
     "name": "transient",
