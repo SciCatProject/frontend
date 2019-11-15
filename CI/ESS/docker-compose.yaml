@@ -53,9 +53,6 @@ services:
       - mongodb
       - openldap
       - openldap-seed
-    volumes:
-      - /catanie/CI/ESS/datasources.json:/usr/src/app/server/datasources.json
-      - /catanie/ESS/providers.json:/usr/src/app/server/providers.json
 volumes:
     mongodb_data:
         driver: local
