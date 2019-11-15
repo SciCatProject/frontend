@@ -1,3 +1,5 @@
+/// <reference types="Cypress" />
+
 describe("Datasets", () => {
   beforeEach(() => {
     cy.login(Cypress.config("username"), Cypress.config("password"));
