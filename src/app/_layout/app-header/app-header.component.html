@@ -80,8 +80,25 @@
         >
       </h6>
     </span>
+
+    <span *ngIf="appConfig.shoppingCartOnHeader" [matMenuTriggerFor]="cartMenu">
+      <button
+        mat-icon-button
+        matBadge="{{ inBatchIndicator }}"
+        matBadgePosition="after"
+        matBadgeColor="accent"
+        matBadgeSize="medium"
+      >
+        <mat-icon> shopping_cart </mat-icon>
+      </button>
+    </span>
+
+    <mat-menu class="custom-menu" #cartMenu="matMenu">
+      <batch-card></batch-card>
+    </mat-menu>
+
     <span>
-      <button class="user-button" [matMenuTriggerFor]="userMenu">
+      <button mat-button class="user-button" [matMenuTriggerFor]="userMenu">
         <img class="user-image" src="{{ profileImage }}" />
         <div class="large-screen-text">{{ username }}</div>
       </button>

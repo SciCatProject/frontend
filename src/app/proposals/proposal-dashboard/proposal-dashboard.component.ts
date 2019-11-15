@@ -11,7 +11,8 @@ import {
   getProposalsPerPage,
   getProposals,
   getDateRangeFilter,
-  getHasAppliedFilters
+  getHasAppliedFilters,
+  getFilters
 } from "state-management/selectors/proposals.selectors";
 import {
   TableColumn,
@@ -26,8 +27,8 @@ import {
   setDateRangeFilterAction,
   clearFacetsAction
 } from "state-management/actions/proposals.actions";
-import { MatDatepickerInputEvent } from "@angular/material";
 import { DateRange } from "datasets/datasets-filter/datasets-filter.component";
+import * as rison from "rison";
 
 @Component({
   selector: "proposal-dashboard",
@@ -35,14 +36,14 @@ import { DateRange } from "datasets/datasets-filter/datasets-filter.component";
   styleUrls: ["./proposal-dashboard.component.scss"]
 })
 export class ProposalDashboardComponent implements OnInit, OnDestroy {
-  private proposalsSubscription: Subscription;
-  clearSearchBar: boolean;
-
   hasAppliedFilters$ = this.store.pipe(select(getHasAppliedFilters));
   dateRangeFilter$ = this.store.pipe(select(getDateRangeFilter));
   currentPage$ = this.store.pipe(select(getPage));
   proposalsCount$ = this.store.pipe(select(getProposalsCount));
   proposalsPerPage$ = this.store.pipe(select(getProposalsPerPage));
+
+  clearSearchBar: boolean;
+  subscriptions: Subscription[] = [];
 
   tableData: any[];
   tableColumns: TableColumn[] = [
@@ -171,14 +172,22 @@ export class ProposalDashboardComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.store.dispatch(fetchProposalsAction());
 
-    this.proposalsSubscription = this.store
-      .pipe(select(getProposals))
-      .subscribe(proposals => {
+    this.subscriptions.push(
+      this.store.pipe(select(getProposals)).subscribe(proposals => {
         this.tableData = this.formatTableData(proposals);
-      });
+      })
+    );
+
+    this.subscriptions.push(
+      this.store.pipe(select(getFilters)).subscribe(filters => {
+        this.router.navigate(["/proposals"], {
+          queryParams: { args: rison.encode(filters) }
+        });
+      })
+    );
   }
 
   ngOnDestroy() {
-    this.proposalsSubscription.unsubscribe();
+    this.subscriptions.forEach(subscription => subscription.unsubscribe());
   }
 }

@@ -70,14 +70,20 @@ export class SampleEffects {
   fetchSample$ = createEffect(() =>
     this.actions$.pipe(
       ofType(fromActions.fetchSampleAction),
-      switchMap(({ sampleId }) =>
-        this.sampleApi.findById(sampleId).pipe(
+      switchMap(({ sampleId }) => {
+        const sampleFilter = {
+          where: {
+            sampleId
+          },
+          include: [{ relation: "attachments" }]
+        };
+        return this.sampleApi.findOne(sampleFilter).pipe(
           map((sample: Sample) =>
             fromActions.fetchSampleCompleteAction({ sample })
           ),
           catchError(() => of(fromActions.fetchSampleFailedAction()))
-        )
-      )
+        );
+      })
     )
   );
 
@@ -203,8 +209,8 @@ export class SampleEffects {
             encodeURIComponent(attachmentId)
           )
           .pipe(
-            map(res =>
-              fromActions.removeAttachmentCompleteAction({ attachmentId: res })
+            map(() =>
+              fromActions.removeAttachmentCompleteAction({ attachmentId })
             ),
             catchError(() => of(fromActions.removeAttachmentFailedAction()))
           )

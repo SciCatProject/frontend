@@ -11,6 +11,7 @@ import {
   getCurrentUser,
   getProfile
 } from "state-management/selectors/user.selectors";
+import { getDatasetsInBatch } from "state-management/selectors/datasets.selectors";
 
 @Component({
   selector: "app-app-header",
@@ -18,13 +19,20 @@ import {
   styleUrls: ["./app-header.component.scss"]
 })
 export class AppHeaderComponent implements OnInit, OnDestroy {
+  private subscriptions: Subscription[] = [];
   facility: string;
   status: string;
 
   username: string;
   profileImage: string;
-  userSubscription: Subscription;
-  accountTypeSubscription: Subscription;
+  batch$ = this.store.pipe(select(getDatasetsInBatch));
+  inBatchPids: string[] = [];
+  inBatchCount: number;
+  inBatchIndicator: string;
+
+  logout(): void {
+    this.store.dispatch(logoutAction());
+  }
 
   constructor(
     private store: Store<any>,
@@ -42,17 +50,27 @@ export class AppHeaderComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.store.dispatch(fetchCurrentUserAction());
 
-    this.accountTypeSubscription = this.store
-      .pipe(select(getCurrentUserAccountType))
-      .subscribe(type => {
+    this.subscriptions.push(
+      this.batch$.subscribe(datasets => {
+        if (datasets) {
+          this.inBatchPids = datasets.map(dataset => dataset.pid);
+          this.inBatchCount = this.inBatchPids.length;
+          this.inBatchIndicator =
+            this.inBatchCount > 99 ? "99+" : this.inBatchCount + "";
+        }
+      })
+    );
+
+    this.subscriptions.push(
+      this.store.pipe(select(getCurrentUserAccountType)).subscribe(type => {
         if (type === "functional") {
           this.profileImage = "assets/images/user.png";
         }
-      });
+      })
+    );
 
-    this.userSubscription = this.store
-      .pipe(select(getCurrentUser))
-      .subscribe(current => {
+    this.subscriptions.push(
+      this.store.pipe(select(getCurrentUser)).subscribe(current => {
         console.log("current: ", current);
         if (current) {
           this.username = current.username.replace("ms-ad.", "");
@@ -67,15 +85,11 @@ export class AppHeaderComponent implements OnInit, OnDestroy {
             });
           }
         }
-      });
+      })
+    );
   }
 
   ngOnDestroy() {
-    this.userSubscription.unsubscribe();
-    this.accountTypeSubscription.unsubscribe();
-  }
-
-  logout(): void {
-    this.store.dispatch(logoutAction());
+    this.subscriptions.forEach(subscription => subscription.unsubscribe());
   }
 }

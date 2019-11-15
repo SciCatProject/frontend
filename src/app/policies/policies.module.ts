@@ -1,5 +1,5 @@
-import { PolicyEffects } from './../state-management/effects/policies.effects';
-import { EffectsModule } from '@ngrx/effects';
+import { PolicyEffects } from "./../state-management/effects/policies.effects";
+import { EffectsModule } from "@ngrx/effects";
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";

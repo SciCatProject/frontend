@@ -30,7 +30,8 @@ import {
   MatSnackBarModule,
   MatToolbarModule,
   MatProgressSpinnerModule,
-  MatIconModule
+  MatIconModule,
+  MatBadgeModule
 } from "@angular/material";
 import { ServiceWorkerModule } from "@angular/service-worker";
 import { environment } from "../environments/environment";
@@ -38,8 +39,8 @@ import { LogbooksModule } from "./logbooks/logbooks.module";
 import { AboutModule } from "about/about.module";
 import { HelpModule } from "help/help.module";
 import { PublisheddataModule } from "publisheddata/publisheddata.module";
+import { LayoutModule } from "_layout/layout.module";
 import { AppLayoutComponent } from "./_layout/app-layout/app-layout.component";
-import { AppHeaderComponent } from "./_layout/app-header/app-header.component";
 import { LoginHeaderComponent } from "./_layout/login-header/login-header.component";
 import { LoginLayoutComponent } from "./_layout/login-layout/login-layout.component";
 import { JobsModule } from "jobs/jobs.module";
@@ -48,7 +49,6 @@ import { JobsModule } from "jobs/jobs.module";
   declarations: [
     AppComponent,
     AppLayoutComponent,
-    AppHeaderComponent,
     LoginHeaderComponent,
     LoginLayoutComponent
   ],
@@ -64,6 +64,8 @@ import { JobsModule } from "jobs/jobs.module";
     HttpClientModule,
     JobsModule,
     LogbooksModule,
+    LayoutModule,
+    MatBadgeModule,
     MatIconModule,
     MatMenuModule,
     MatProgressSpinnerModule,

@@ -5,13 +5,12 @@ import {
   TestBed,
   inject
 } from "@angular/core/testing";
-import { rootReducer } from "state-management/reducers/root.reducer";
 import { MatCardModule, MatIconModule } from "@angular/material";
 
 import { LogbooksDashboardComponent } from "./logbooks-dashboard.component";
 import { Store, StoreModule } from "@ngrx/store";
 import { MockStore, MockActivatedRoute } from "shared/MockStubs";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { AppConfigModule } from "app-config.module";
 import {
   setFilterAction,
@@ -19,11 +18,14 @@ import {
 } from "state-management/actions/logbooks.actions";
 import { Logbook, LogbookInterface } from "shared/sdk";
 import { LogbookFilters } from "state-management/models";
+import { RouterTestingModule } from "@angular/router/testing";
+import * as rison from "rison";
 
 describe("DashboardComponent", () => {
   let component: LogbooksDashboardComponent;
   let fixture: ComponentFixture<LogbooksDashboardComponent>;
 
+  let router: Router;
   let store: MockStore;
   let dispatchSpy;
 
@@ -42,7 +44,8 @@ describe("DashboardComponent", () => {
         AppConfigModule,
         MatCardModule,
         MatIconModule,
-        StoreModule.forRoot({ rootReducer })
+        RouterTestingModule.withRoutes([]),
+        StoreModule.forRoot({})
       ]
     });
     TestBed.overrideComponent(LogbooksDashboardComponent, {
@@ -50,6 +53,8 @@ describe("DashboardComponent", () => {
         providers: [{ provide: ActivatedRoute, useClass: MockActivatedRoute }]
       }
     }).compileComponents();
+
+    router = TestBed.get(Router);
   }));
 
   beforeEach(() => {
@@ -70,9 +75,41 @@ describe("DashboardComponent", () => {
     expect(component).toBeTruthy();
   });
 
+  describe("#applyRouterState()", () => {
+    it("should do nothing if properties logbook and filters are undefined", () => {
+      const navigateSpy = spyOn(router, "navigate");
+
+      component.applyRouterState();
+
+      expect(navigateSpy).toHaveBeenCalledTimes(0);
+    });
+
+    it("should call router.navigate if properties logbook and filters are defined", () => {
+      const navigateSpy = spyOn(router, "navigate");
+
+      component.logbook = logbook;
+      component.filters = {
+        textSearch: "",
+        showBotMessages: true,
+        showImages: true,
+        showUserMessages: true
+      };
+      component.applyRouterState();
+
+      expect(navigateSpy).toHaveBeenCalledTimes(1);
+      expect(navigateSpy).toHaveBeenCalledWith(
+        ["/logbooks", component.logbook.name],
+        {
+          queryParams: { args: rison.encode(component.filters) }
+        }
+      );
+    });
+  });
+
   describe("#onTextSearchChange()", () => {
-    it("should dispatch an setFilterAction and a fetchFilterEntriesAction", () => {
+    it("should dispatch a setFilterAction and a fetchFilterEntriesAction, and call #applyRouterState()", () => {
       dispatchSpy = spyOn(store, "dispatch");
+      const methodSpy = spyOn(component, "applyRouterState");
 
       component.logbook = logbook;
       component.filters = {
@@ -95,12 +132,14 @@ describe("DashboardComponent", () => {
           filters: component.filters
         })
       );
+      expect(methodSpy).toHaveBeenCalled();
     });
   });
 
   describe("onFilterSelect()", () => {
-    it("should dispatch an setFilterAction and a fetchFilteredEntriesAction", () => {
+    it("should dispatch a setFilterAction and a fetchFilteredEntriesAction, and call #applyRouterState()", () => {
       dispatchSpy = spyOn(store, "dispatch");
+      const methodSpy = spyOn(component, "applyRouterState");
 
       component.logbook = logbook;
       component.filters = {
@@ -130,6 +169,7 @@ describe("DashboardComponent", () => {
           filters: component.filters
         })
       );
+      expect(methodSpy).toHaveBeenCalled();
     });
   });
 

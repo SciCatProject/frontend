@@ -18,6 +18,7 @@ import { formatDate } from "@angular/common";
 import { Router } from "@angular/router";
 import { getCurrentPublishedData } from "state-management/selectors/published-data.selectors";
 import { Subscription } from "rxjs";
+import { getCurrentUserName } from "state-management/selectors/user.selectors";
 
 @Component({
   selector: "publish",
@@ -28,6 +29,7 @@ export class PublishComponent implements OnInit, OnDestroy {
   public separatorKeysCodes: number[] = [ENTER, COMMA];
 
   private datasets$ = this.store.pipe(select(getDatasetsInBatch));
+  private userName$ = this.store.pipe(select(getCurrentUserName));
   public datasetCount: number;
   private countSubscription: Subscription;
   today: number = Date.now();
@@ -160,6 +162,9 @@ export class PublishComponent implements OnInit, OnDestroy {
     publishedData.thumbnail = this.form.thumbnail;
     publishedData.numberOfFiles = this.form.numberOfFiles;
     publishedData.sizeOfArchive = this.form.sizeOfArchive;
+    this.userName$.subscribe( name => {
+      publishedData.scicatUser = name;
+    } );
 
     this.store.dispatch(publishDatasetAction({ data: publishedData }));
   }

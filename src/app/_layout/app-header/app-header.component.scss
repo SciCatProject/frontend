@@ -33,21 +33,17 @@
       }
     }
 
+    button {
+      vertical-align: middle;
+    }
+
     .user-button {
-      margin-top: 3px;
-      border: none;
-      background-color: transparent;
-      color: mat-color($primary, default-contrast);
-      font-size: 10px;
+      font-size: 11px;
       line-height: 20px;
 
       .user-image {
         height: 3vh;
       }
-    }
-
-    .user-button:hover {
-      cursor: pointer;
     }
   }
 }
@@ -56,4 +52,9 @@
   .large-screen-text {
     display: none;
   }
+}
+
+::ng-deep .custom-menu .mat-menu-content:not(:empty) {
+  padding-top: 1px;
+  padding-bottom: 1px;
 }

@@ -7,11 +7,11 @@ describe("Login Page", () => {
 
     cy.url().should("include", "/login");
 
-    cy.get("#emailInput")
+    cy.get("#usernameInput")
       .type(username)
       .should("have.value", username);
 
-    cy.get("#pwdInput")
+    cy.get("#passwordInput")
       .type("invalid")
       .should("have.value", "invalid");
 
@@ -25,11 +25,11 @@ describe("Login Page", () => {
 
     cy.url().should("include", "/login");
 
-    cy.get("#emailInput")
+    cy.get("#usernameInput")
       .type(username)
       .should("have.value", username);
 
-    cy.get("#pwdInput")
+    cy.get("#passwordInput")
       .type(password)
       .should("have.value", password);
 

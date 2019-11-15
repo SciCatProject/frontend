@@ -14,7 +14,6 @@ import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { MatButtonToggleModule } from "@angular/material";
 import { SharedCatanieModule } from "shared/shared.module";
 import { DatePipe } from "@angular/common";
-import { rootReducer } from "state-management/reducers/root.reducer";
 import { JobViewMode } from "state-management/models";
 import {
   setJobViewModeAction,
@@ -39,7 +38,7 @@ describe("JobsDashboardComponent", () => {
       imports: [
         MatButtonToggleModule,
         SharedCatanieModule,
-        StoreModule.forRoot({ rootReducer })
+        StoreModule.forRoot({})
       ],
       providers: [DatePipe]
     });

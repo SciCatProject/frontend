@@ -8,11 +8,11 @@
       <div fxFlex="auto"></div>
     </div>
     <mat-card-content>
-      <form [formGroup]="loginForm" (ngSubmit)="onLogin($event)">
+      <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
         <mat-form-field hintLabel="firstnamelastname">
           <mat-label> <b> Username</b> </mat-label>
           <span matPrefix> <mat-icon>person</mat-icon> &nbsp; </span>
-          <input matInput formControlName="username" />
+          <input matInput id="usernameInput" formControlName="username" />
         </mat-form-field>
 
         <mat-form-field hintLabel="ESS account password">
@@ -20,6 +20,7 @@
           <span matPrefix> <mat-icon>vpn_key</mat-icon> &nbsp; </span>
           <input
             matInput
+            id="passwordInput"
             formControlName="password"
             [type]="hide ? 'password' : 'text'"
           />
@@ -34,6 +35,11 @@
             <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
           </button>
         </mat-form-field>
+        <p class="privacy-notice" *ngIf="appConfig.facility === 'ESS'">
+          <small>
+            <a (click)="openPrivacyDialog()">SciCat Privacy Notice</a>
+          </small>
+        </p>
         <button
           mat-raised-button
           class="login-button"

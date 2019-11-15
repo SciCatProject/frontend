@@ -1,6 +1,5 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
 import { MatCheckboxChange } from "@angular/material";
-import { Logbook } from "shared/sdk";
 import { LogbookFilters } from "state-management/models";
 
 @Component({
@@ -9,7 +8,6 @@ import { LogbookFilters } from "state-management/models";
   styleUrls: ["./logbook-filter.component.scss"]
 })
 export class LogbookFilterComponent {
-  @Input() logbook: Logbook;
   @Input() filters: LogbookFilters;
 
   @Output() onSelect = new EventEmitter<LogbookFilters>();

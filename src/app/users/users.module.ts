@@ -1,5 +1,5 @@
-import { UserEffects } from './../state-management/effects/user.effects';
-import { EffectsModule } from '@ngrx/effects';
+import { UserEffects } from "./../state-management/effects/user.effects";
+import { EffectsModule } from "@ngrx/effects";
 import { ADAuthService } from "./adauth.service";
 import { CommonModule } from "@angular/common";
 import { FlexLayoutModule } from "@angular/flex-layout";
@@ -17,8 +17,10 @@ import {
   MatButtonModule,
   MatIconModule,
   MatFormFieldModule,
-  MatInputModule
+  MatInputModule,
+  MatDialogModule
 } from "@angular/material";
+import { PrivacyDialogComponent } from "./privacy-dialog/privacy-dialog.component";
 
 @NgModule({
   imports: [
@@ -29,6 +31,7 @@ import {
     MatButtonModule,
     MatCardModule,
     MatCheckboxModule,
+    MatDialogModule,
     MatFormFieldModule,
     MatGridListModule,
     MatIconModule,
@@ -37,7 +40,8 @@ import {
     SharedCatanieModule,
     StoreModule.forFeature("users", userReducer)
   ],
-  declarations: [LoginComponent, UserSettingsComponent],
+  declarations: [LoginComponent, UserSettingsComponent, PrivacyDialogComponent],
+  entryComponents: [PrivacyDialogComponent],
   providers: [ADAuthService]
 })
 export class UsersModule {}

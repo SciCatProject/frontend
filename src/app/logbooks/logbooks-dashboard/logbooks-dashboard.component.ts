@@ -13,15 +13,15 @@ import {
   getCurrentLogbook,
   getFilters
 } from "state-management/selectors/logbooks.selectors";
-import { getCurrentDataset } from "state-management/selectors/datasets.selectors";
 import {
   fetchLogbookAction,
   fetchFilteredEntriesAction,
   setFilterAction
 } from "state-management/actions/logbooks.actions";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { APP_CONFIG, AppConfig } from "app-config.module";
 import { LogbookFilters } from "state-management/models";
+import * as rison from "rison";
 
 @Component({
   selector: "app-logbooks-dashboard",
@@ -31,15 +31,17 @@ import { LogbookFilters } from "state-management/models";
 export class LogbooksDashboardComponent
   implements OnInit, OnDestroy, AfterViewChecked {
   logbook: Logbook;
-  logbookSubscription: Subscription;
-
   filters: LogbookFilters;
-  filtersSubscription: Subscription;
 
-  dataset: any;
-  datasetSubscription: Subscription;
+  subscriptions: Subscription[] = [];
 
-  routeSubscription: Subscription;
+  applyRouterState() {
+    if (this.logbook && this.filters) {
+      this.router.navigate(["/logbooks", this.logbook.name], {
+        queryParams: { args: rison.encode(this.filters) }
+      });
+    }
+  }
 
   onTextSearchChange(query: string) {
     this.filters.textSearch = query;
@@ -50,6 +52,7 @@ export class LogbooksDashboardComponent
         filters: this.filters
       })
     );
+    this.applyRouterState();
   }
 
   onFilterSelect(filters: LogbookFilters) {
@@ -61,6 +64,7 @@ export class LogbooksDashboardComponent
         filters: this.filters
       })
     );
+    this.applyRouterState();
   }
 
   reverseTimeline(): void {
@@ -70,40 +74,34 @@ export class LogbooksDashboardComponent
   constructor(
     private cdRef: ChangeDetectorRef,
     private route: ActivatedRoute,
+    private router: Router,
     private store: Store<Logbook>,
     @Inject(APP_CONFIG) public appConfig: AppConfig
   ) {}
 
   ngOnInit() {
-    this.logbookSubscription = this.store
-      .pipe(select(getCurrentLogbook))
-      .subscribe(logbook => {
+    this.subscriptions.push(
+      this.store.pipe(select(getCurrentLogbook)).subscribe(logbook => {
         this.logbook = logbook;
-      });
+      })
+    );
 
-    this.filtersSubscription = this.store
-      .pipe(select(getFilters))
-      .subscribe(filter => {
-        this.filters = filter;
-      });
+    this.subscriptions.push(
+      this.store.pipe(select(getFilters)).subscribe(filters => {
+        this.filters = filters;
+      })
+    );
 
-    this.datasetSubscription = this.store
-      .pipe(select(getCurrentDataset))
-      .subscribe(dataset => {
-        this.dataset = dataset;
-      });
-
-    this.routeSubscription = this.route.params.subscribe(params => {
-      if (params.hasOwnProperty("name")) {
-        const logbookName = params["name"];
-        this.store.dispatch(fetchLogbookAction({ name: logbookName }));
-      } else {
-        if (this.dataset.hasOwnProperty("proposalId")) {
-          const logbookName = this.dataset.proposalId;
-          this.store.dispatch(fetchLogbookAction({ name: logbookName }));
+    this.subscriptions.push(
+      this.route.params.subscribe(params => {
+        if (params.hasOwnProperty("name")) {
+          const name = params["name"];
+          this.store.dispatch(fetchLogbookAction({ name }));
         }
-      }
-    });
+      })
+    );
+
+    this.applyRouterState();
   }
 
   ngAfterViewChecked() {
@@ -111,9 +109,6 @@ export class LogbooksDashboardComponent
   }
 
   ngOnDestroy() {
-    this.logbookSubscription.unsubscribe();
-    this.filtersSubscription.unsubscribe();
-    this.datasetSubscription.unsubscribe();
-    this.routeSubscription.unsubscribe();
+    this.subscriptions.forEach(subscription => subscription.unsubscribe());
   }
 }

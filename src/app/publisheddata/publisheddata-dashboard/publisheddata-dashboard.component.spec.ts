@@ -9,7 +9,6 @@ import { PublisheddataDashboardComponent } from "./publisheddata-dashboard.compo
 import { MockStore } from "shared/MockStubs";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { StoreModule, Store } from "@ngrx/store";
-import { rootReducer } from "state-management/reducers/root.reducer";
 import { Router } from "@angular/router";
 import { PageChangeEvent } from "shared/modules/table/table.component";
 import { changePageAction } from "state-management/actions/published-data.actions";
@@ -29,7 +28,7 @@ describe("PublisheddataDashboardComponent", () => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
       declarations: [PublisheddataDashboardComponent],
-      imports: [StoreModule.forRoot({ rootReducer })]
+      imports: [StoreModule.forRoot({})]
     });
     TestBed.overrideComponent(PublisheddataDashboardComponent, {
       set: {

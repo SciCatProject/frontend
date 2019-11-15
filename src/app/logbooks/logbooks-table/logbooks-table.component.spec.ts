@@ -12,7 +12,7 @@ describe("LogbooksTableComponent", () => {
   let component: LogbooksTableComponent;
   let fixture: ComponentFixture<LogbooksTableComponent>;
 
-  let router = {
+  const router = {
     navigateByUrl: jasmine.createSpy("navigateByUrl")
   };
 
