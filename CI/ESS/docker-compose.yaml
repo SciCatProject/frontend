@@ -39,7 +39,7 @@ services:
       depends_on:
       - openldap
   catanie:
-    image: "dacat/catanie"
+    image: "dacat/catanie:latest"
     ports:
       - '4200:80'
   cataniecypress:
