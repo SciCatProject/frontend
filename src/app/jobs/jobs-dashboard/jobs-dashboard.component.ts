@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
-import { Router } from "@angular/router";
+import { Router, ActivatedRoute } from "@angular/router";
 import { Store, select } from "@ngrx/store";
 import { Job } from "shared/sdk";
 import { Subscription } from "rxjs";
@@ -8,24 +8,34 @@ import {
   getJobsCount,
   getJobsPerPage,
   getPage,
-  getFilters
+  getFilters,
+  getHasPrefilledFilters
 } from "state-management/selectors/jobs.selectors";
 import { DatePipe } from "@angular/common";
 import {
   TableColumn,
   PageChangeEvent
 } from "shared/modules/table/table.component";
-import { JobViewMode } from "state-management/models";
+import { JobViewMode, JobFilters } from "state-management/models";
 import {
   changePageAction,
   setJobViewModeAction,
-  fetchJobsAction
+  fetchJobsAction,
+  prefillFiltersAction
 } from "state-management/actions/jobs.actions";
 import {
   getCurrentUser,
   getProfile
 } from "state-management/selectors/user.selectors";
 import * as rison from "rison";
+import {
+  map,
+  take,
+  filter,
+  combineLatest,
+  distinctUntilChanged
+} from "rxjs/operators";
+import * as deepEqual from "deep-equal";
 
 @Component({
   selector: "app-jobs-dashboard",
@@ -36,6 +46,10 @@ export class JobsDashboardComponent implements OnInit, OnDestroy {
   jobsCount$ = this.store.pipe(select(getJobsCount));
   jobsPerPage$ = this.store.pipe(select(getJobsPerPage));
   currentPage$ = this.store.pipe(select(getPage));
+  readyToFetch$ = this.store.pipe(
+    select(getHasPrefilledFilters),
+    filter(has => has)
+  );
 
   jobs: any[] = [];
   profile: any;
@@ -108,6 +122,7 @@ export class JobsDashboardComponent implements OnInit, OnDestroy {
 
   constructor(
     private datePipe: DatePipe,
+    private route: ActivatedRoute,
     private router: Router,
     private store: Store<Job>
   ) {}
@@ -142,11 +157,30 @@ export class JobsDashboardComponent implements OnInit, OnDestroy {
     );
 
     this.subscriptions.push(
-      this.store.pipe(select(getFilters)).subscribe(filters => {
-        this.router.navigate(["/user/jobs"], {
-          queryParams: { args: rison.encode(filters) }
-        });
-      })
+      this.store
+        .pipe(select(getFilters))
+        .pipe(
+          combineLatest(this.readyToFetch$),
+          map(([filters, _]) => filters),
+          distinctUntilChanged(deepEqual)
+        )
+        .subscribe(filters => {
+          this.router.navigate(["/user/jobs"], {
+            queryParams: { args: rison.encode(filters) }
+          });
+        })
+    );
+
+    this.subscriptions.push(
+      this.route.queryParams
+        .pipe(
+          map(params => params.args as string),
+          take(1),
+          map(args => (args ? rison.decode<JobFilters>(args) : {}))
+        )
+        .subscribe(filters =>
+          this.store.dispatch(prefillFiltersAction({ values: filters }))
+        )
     );
   }
 

@@ -28,6 +28,11 @@ const reducer = createReducer(
     submitError: err
   })),
 
+  on(fromActions.prefillFiltersAction, (state, { values }) => {
+    const filters = { ...state.filters, ...values };
+    return { ...state, filters, hasPrefilledFilters: true };
+  }),
+
   on(fromActions.setJobViewModeAction, (state, { mode }) => ({
     ...state,
     filters: { ...state.filters, mode, skip: 0 }

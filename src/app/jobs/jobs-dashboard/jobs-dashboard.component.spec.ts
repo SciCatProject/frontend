@@ -6,8 +6,8 @@ import {
 } from "@angular/core/testing";
 
 import { JobsDashboardComponent } from "./jobs-dashboard.component";
-import { MockStore } from "shared/MockStubs";
-import { Router } from "@angular/router";
+import { MockStore, MockActivatedRoute } from "shared/MockStubs";
+import { Router, ActivatedRoute } from "@angular/router";
 import { Store, StoreModule } from "@ngrx/store";
 import { Job } from "shared/sdk";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
@@ -44,7 +44,10 @@ describe("JobsDashboardComponent", () => {
     });
     TestBed.overrideComponent(JobsDashboardComponent, {
       set: {
-        providers: [{ provide: Router, useValue: router }]
+        providers: [
+          { provide: Router, useValue: router },
+          { provide: ActivatedRoute, useClass: MockActivatedRoute }
+        ]
       }
     });
     TestBed.compileComponents();

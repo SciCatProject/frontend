@@ -8,14 +8,14 @@ import {
 } from "state-management/models";
 
 describe("Dataset Actions", () => {
-  describe("fetchDatasets", () => {
+  describe("fetchDatasetsAction", () => {
     it("should create an action", () => {
       const action = fromActions.fetchDatasetsAction();
       expect({ ...action }).toEqual({ type: "[Dataset] Fetch Datasets" });
     });
   });
 
-  describe("fetchDatasetsComplete", () => {
+  describe("fetchDatasetsCompleteAction", () => {
     it("should create an action", () => {
       const datasets = [new Dataset()];
       const action = fromActions.fetchDatasetsCompleteAction({ datasets });
@@ -26,7 +26,7 @@ describe("Dataset Actions", () => {
     });
   });
 
-  describe("fetchDatasetsFailed", () => {
+  describe("fetchDatasetsFailedAction", () => {
     it("should create an action", () => {
       const action = fromActions.fetchDatasetsFailedAction();
       expect({ ...action }).toEqual({
@@ -35,14 +35,14 @@ describe("Dataset Actions", () => {
     });
   });
 
-  describe("fetchFacetCounts", () => {
+  describe("fetchFacetCountsAction", () => {
     it("should create an action", () => {
       const action = fromActions.fetchFacetCountsAction();
       expect({ ...action }).toEqual({ type: "[Dataset] Fetch Facet Counts" });
     });
   });
 
-  describe("fetchFacetCountsComplete", () => {
+  describe("fetchFacetCountsCompleteAction", () => {
     it("should create an action", () => {
       const facetCounts: FacetCounts = {};
       const allCounts = 0;
@@ -58,7 +58,7 @@ describe("Dataset Actions", () => {
     });
   });
 
-  describe("fetchFacetCountsFailed", () => {
+  describe("fetchFacetCountsFailedAction", () => {
     it("should create an action", () => {
       const action = fromActions.fetchFacetCountsFailedAction();
       expect({ ...action }).toEqual({
@@ -67,7 +67,7 @@ describe("Dataset Actions", () => {
     });
   });
 
-  describe("fetchDataset", () => {
+  describe("fetchDatasetAction", () => {
     it("should create an action", () => {
       const pid = "test";
       const action = fromActions.fetchDatasetAction({ pid });
@@ -75,7 +75,7 @@ describe("Dataset Actions", () => {
     });
   });
 
-  describe("fetchDatasetComplete", () => {
+  describe("fetchDatasetCompleteAction", () => {
     it("should create an action", () => {
       const dataset = new Dataset();
       const action = fromActions.fetchDatasetCompleteAction({ dataset });
@@ -86,7 +86,7 @@ describe("Dataset Actions", () => {
     });
   });
 
-  describe("fetchDatasetFailed", () => {
+  describe("fetchDatasetFailedAction", () => {
     it("should create an action", () => {
       const action = fromActions.fetchDatasetFailedAction();
       expect({ ...action }).toEqual({
@@ -95,14 +95,14 @@ describe("Dataset Actions", () => {
     });
   });
 
-  describe("prefillBatch", () => {
+  describe("prefillBatchAction", () => {
     it("should create an action", () => {
       const action = fromActions.prefillBatchAction();
       expect({ ...action }).toEqual({ type: "[Dataset] Prefill Batch" });
     });
   });
 
-  describe("prefillBatchComplete", () => {
+  describe("prefillBatchCompleteAction", () => {
     it("should create an action", () => {
       const batch = [new Dataset()];
       const action = fromActions.prefillBatchCompleteAction({ batch });
@@ -113,14 +113,14 @@ describe("Dataset Actions", () => {
     });
   });
 
-  describe("addToBatch", () => {
+  describe("addToBatchAction", () => {
     it("should create an action", () => {
       const action = fromActions.addToBatchAction();
       expect({ ...action }).toEqual({ type: "[Dataset] Add To Batch" });
     });
   });
 
-  describe("removeFromBatch", () => {
+  describe("removeFromBatchAction", () => {
     it("should create an action", () => {
       const dataset = new Dataset();
       const action = fromActions.removeFromBatchAction({ dataset });
@@ -131,7 +131,7 @@ describe("Dataset Actions", () => {
     });
   });
 
-  describe("clearBatch", () => {
+  describe("clearBatchAction", () => {
     it("should create an action", () => {
       const action = fromActions.clearBatchAction();
       expect({ ...action }).toEqual({ type: "[Dataset] Clear Batch" });
@@ -169,7 +169,7 @@ describe("Dataset Actions", () => {
     });
   });
 
-  describe("addAttachment", () => {
+  describe("addAttachmentAction", () => {
     it("should create an action", () => {
       const attachment = new Attachment();
       const action = fromActions.addAttachmentAction({ attachment });
@@ -180,7 +180,7 @@ describe("Dataset Actions", () => {
     });
   });
 
-  describe("addAttachmentComplete", () => {
+  describe("addAttachmentCompleteAction", () => {
     it("should create an action", () => {
       const attachment = new Attachment();
       const action = fromActions.addAttachmentCompleteAction({ attachment });
@@ -191,7 +191,7 @@ describe("Dataset Actions", () => {
     });
   });
 
-  describe("addAttachmentFailed", () => {
+  describe("addAttachmentFailedAction", () => {
     it("should create an action", () => {
       const action = fromActions.addAttachmentFailedAction();
       expect({ ...action }).toEqual({
@@ -200,7 +200,7 @@ describe("Dataset Actions", () => {
     });
   });
 
-  describe("updateAttachmentCaption", () => {
+  describe("updateAttachmentCaptionAction", () => {
     it("should create an action", () => {
       const datasetId = "testId";
       const attachmentId = "testId";
@@ -219,7 +219,7 @@ describe("Dataset Actions", () => {
     });
   });
 
-  describe("updateAttachmentCaptionComplete", () => {
+  describe("updateAttachmentCaptionCompleteAction", () => {
     it("should create an action", () => {
       const attachment = new Attachment();
       const action = fromActions.updateAttachmentCaptionCompleteAction({
@@ -232,7 +232,7 @@ describe("Dataset Actions", () => {
     });
   });
 
-  describe("updateAttachmentCaptionFailed", () => {
+  describe("updateAttachmentCaptionFailedAction", () => {
     it("should create an action", () => {
       const action = fromActions.updateAttachmentCaptionFailedAction();
       expect({ ...action }).toEqual({
@@ -241,7 +241,7 @@ describe("Dataset Actions", () => {
     });
   });
 
-  describe("removeAttachment", () => {
+  describe("removeAttachmentAction", () => {
     it("should create an action", () => {
       const datasetId = "testId";
       const attachmentId = "testId";
@@ -257,7 +257,7 @@ describe("Dataset Actions", () => {
     });
   });
 
-  describe("removeAttachmentComplete", () => {
+  describe("removeAttachmentCompleteAction", () => {
     it("should create an action", () => {
       const attachmentId = "testId";
       const action = fromActions.removeAttachmentCompleteAction({
@@ -270,7 +270,7 @@ describe("Dataset Actions", () => {
     });
   });
 
-  describe("removeAttachmentFailed", () => {
+  describe("removeAttachmentFailedAction", () => {
     it("should create an action", () => {
       const action = fromActions.removeAttachmentFailedAction();
       expect({ ...action }).toEqual({
@@ -279,7 +279,7 @@ describe("Dataset Actions", () => {
     });
   });
 
-  describe("reduceDataset", () => {
+  describe("reduceDatasetAction", () => {
     it("should create an action", () => {
       const dataset = new Dataset();
       const action = fromActions.reduceDatasetAction({ dataset });
@@ -290,7 +290,7 @@ describe("Dataset Actions", () => {
     });
   });
 
-  describe("reduceDatasetComplete", () => {
+  describe("reduceDatasetCompleteAction", () => {
     it("should create an action", () => {
       const result = {};
       const action = fromActions.reduceDatasetCompleteAction({ result });
@@ -301,7 +301,7 @@ describe("Dataset Actions", () => {
     });
   });
 
-  describe("reduceDatasetFailed", () => {
+  describe("reduceDatasetFailedAction", () => {
     it("should create an action", () => {
       const action = fromActions.reduceDatasetFailedAction();
       expect({ ...action }).toEqual({
@@ -310,7 +310,7 @@ describe("Dataset Actions", () => {
     });
   });
 
-  describe("selectDataset", () => {
+  describe("selectDatasetAction", () => {
     it("should create an action", () => {
       const dataset = new Dataset();
       const action = fromActions.selectDatasetAction({ dataset });
@@ -321,7 +321,7 @@ describe("Dataset Actions", () => {
     });
   });
 
-  describe("deselectDataset", () => {
+  describe("deselectDatasetAction", () => {
     it("should create an action", () => {
       const dataset = new Dataset();
       const action = fromActions.deselectDatasetAction({ dataset });
@@ -332,7 +332,7 @@ describe("Dataset Actions", () => {
     });
   });
 
-  describe("selectAllDatasets", () => {
+  describe("selectAllDatasetsAction", () => {
     it("should create an action", () => {
       const action = fromActions.selectAllDatasetsAction();
       expect({ ...action }).toEqual({
@@ -341,7 +341,7 @@ describe("Dataset Actions", () => {
     });
   });
 
-  describe("clearSelection", () => {
+  describe("clearSelectionAction", () => {
     it("should create an action", () => {
       const action = fromActions.clearSelectionAction();
       expect({ ...action }).toEqual({
@@ -350,7 +350,7 @@ describe("Dataset Actions", () => {
     });
   });
 
-  describe("changePage", () => {
+  describe("changePageAction", () => {
     it("should create an action", () => {
       const page = 0;
       const limit = 25;
@@ -363,7 +363,7 @@ describe("Dataset Actions", () => {
     });
   });
 
-  describe("sortByColumn", () => {
+  describe("sortByColumnAction", () => {
     it("should create an action", () => {
       const column = "test";
       const direction = "asc";
@@ -376,7 +376,7 @@ describe("Dataset Actions", () => {
     });
   });
 
-  describe("setSearchTerms", () => {
+  describe("setSearchTermsAction", () => {
     it("should create an action", () => {
       const terms = "test";
       const action = fromActions.setSearchTermsAction({ terms });
@@ -387,7 +387,7 @@ describe("Dataset Actions", () => {
     });
   });
 
-  describe("setArchViewMode", () => {
+  describe("setArchViewModeAction", () => {
     it("should create an action", () => {
       const modeToggle = ArchViewMode.all;
       const action = fromActions.setArchiveViewModeAction({ modeToggle });
@@ -398,7 +398,7 @@ describe("Dataset Actions", () => {
     });
   });
 
-  describe("setPublicViewMode", () => {
+  describe("setPublicViewModeAction", () => {
     it("should create an action", () => {
       const isPublished = false;
       const action = fromActions.setPublicViewModeAction({ isPublished });
@@ -409,7 +409,7 @@ describe("Dataset Actions", () => {
     });
   });
 
-  describe("prefillFilters", () => {
+  describe("prefillFiltersAction", () => {
     it("should create an action", () => {
       const values: Partial<DatasetFilters> = {};
       const action = fromActions.prefillFiltersAction({ values });
@@ -420,7 +420,7 @@ describe("Dataset Actions", () => {
     });
   });
 
-  describe("clearFacets", () => {
+  describe("clearFacetsAction", () => {
     it("should create an action", () => {
       const action = fromActions.clearFacetsAction();
       expect({ ...action }).toEqual({
@@ -429,7 +429,7 @@ describe("Dataset Actions", () => {
     });
   });
 
-  describe("setTextFilter", () => {
+  describe("setTextFilterAction", () => {
     it("should create an action", () => {
       const text = "test";
       const action = fromActions.setTextFilterAction({ text });
@@ -440,7 +440,7 @@ describe("Dataset Actions", () => {
     });
   });
 
-  describe("addLocationFilter", () => {
+  describe("addLocationFilterAction", () => {
     it("should create an action", () => {
       const location = "test";
       const action = fromActions.addLocationFilterAction({ location });
@@ -451,7 +451,7 @@ describe("Dataset Actions", () => {
     });
   });
 
-  describe("removeLocationFilter", () => {
+  describe("removeLocationFilterAction", () => {
     it("should create an action", () => {
       const location = "test";
       const action = fromActions.removeLocationFilterAction({ location });
@@ -462,7 +462,7 @@ describe("Dataset Actions", () => {
     });
   });
 
-  describe("addGroupFilter", () => {
+  describe("addGroupFilterAction", () => {
     it("should create an action", () => {
       const group = "test";
       const action = fromActions.addGroupFilterAction({ group });
@@ -473,7 +473,7 @@ describe("Dataset Actions", () => {
     });
   });
 
-  describe("removeGroupFilter", () => {
+  describe("removeGroupFilterAction", () => {
     it("should create an action", () => {
       const group = "test";
       const action = fromActions.removeGroupFilterAction({ group });
@@ -484,7 +484,7 @@ describe("Dataset Actions", () => {
     });
   });
 
-  describe("addTypeFilter", () => {
+  describe("addTypeFilterAction", () => {
     it("should create an action", () => {
       const datasetType = "test";
       const action = fromActions.addTypeFilterAction({ datasetType });
@@ -495,7 +495,7 @@ describe("Dataset Actions", () => {
     });
   });
 
-  describe("removeTypeFilter", () => {
+  describe("removeTypeFilterAction", () => {
     it("should create an action", () => {
       const datasetType = "test";
       const action = fromActions.removeTypeFilterAction({ datasetType });
@@ -506,7 +506,7 @@ describe("Dataset Actions", () => {
     });
   });
 
-  describe("addKeywordFilter", () => {
+  describe("addKeywordFilterAction", () => {
     it("should create an action", () => {
       const keyword = "test";
       const action = fromActions.addKeywordFilterAction({ keyword });
@@ -517,7 +517,7 @@ describe("Dataset Actions", () => {
     });
   });
 
-  describe("removeKeywordFilter", () => {
+  describe("removeKeywordFilterAction", () => {
     it("should create an action", () => {
       const keyword = "test";
       const action = fromActions.removeKeywordFilterAction({ keyword });
@@ -528,7 +528,7 @@ describe("Dataset Actions", () => {
     });
   });
 
-  describe("setDateRangeFilter", () => {
+  describe("setDateRangeFilterAction", () => {
     it("should create an action", () => {
       const begin = "testBegin";
       const end = "testEnd";
@@ -541,7 +541,7 @@ describe("Dataset Actions", () => {
     });
   });
 
-  describe("addScientificCondition", () => {
+  describe("addScientificConditionAction", () => {
     it("should create an action", () => {
       const condition: ScientificCondition = {
         lhs: "lhsTest",
@@ -556,7 +556,7 @@ describe("Dataset Actions", () => {
     });
   });
 
-  describe("removeScientificCondition", () => {
+  describe("removeScientificConditionAction", () => {
     it("should create an action", () => {
       const index = 0;
       const action = fromActions.removeScientificConditionAction({ index });

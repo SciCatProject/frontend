@@ -1,5 +1,6 @@
 import { createAction, props } from "@ngrx/store";
 import { Job } from "shared/sdk";
+import { JobFilters } from "state-management/models";
 
 export const fetchJobsAction = createAction("[Job] Fetch Jobs");
 export const fetchJobsCompleteAction = createAction(
@@ -36,6 +37,11 @@ export const submitJobCompleteAction = createAction(
 export const submitJobFailedAction = createAction(
   "[Job] Submit Job Failed",
   props<{ err: Error }>()
+);
+
+export const prefillFiltersAction = createAction(
+  "[Job] Prefill Filters",
+  props<{ values: Partial<JobFilters> }>()
 );
 
 export const setJobViewModeAction = createAction(

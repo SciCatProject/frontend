@@ -197,6 +197,7 @@ const reducer = createReducer(
     const searchTerms = filters.text || "";
     return { ...state, searchTerms, filters, hasPrefilledFilters: true };
   }),
+
   on(fromActions.clearFacetsAction, state => {
     const limit = state.filters.limit; // Save limit
     const filters = { ...initialDatasetState.filters, skip: 0, limit };

@@ -1,5 +1,6 @@
 import { Job } from "shared/sdk/models";
 import * as fromActions from "./jobs.actions";
+import { JobFilters } from "state-management/models";
 
 describe("Job Actions", () => {
   describe("fetchJobsAction", () => {
@@ -96,6 +97,14 @@ describe("Job Actions", () => {
       const err = new Error();
       const action = fromActions.submitJobFailedAction({ err });
       expect({ ...action }).toEqual({ type: "[Job] Submit Job Failed", err });
+    });
+  });
+
+  describe("prefillFiltersAction", () => {
+    it("should create an action", () => {
+      const values: Partial<JobFilters> = {};
+      const action = fromActions.prefillFiltersAction({ values });
+      expect({ ...action }).toEqual({ type: "[Job] Prefill Filters", values });
     });
   });
 

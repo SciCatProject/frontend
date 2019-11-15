@@ -26,6 +26,7 @@ const initialJobsState: JobsState = {
 
   submitError: undefined,
 
+  hasPrefilledFilters: true,
   filters: jobFilters
 };
 
@@ -55,6 +56,14 @@ describe("Job Selectors", () => {
       expect(
         fromSelectors.getSubmitError.projector(initialJobsState)
       ).toBeUndefined();
+    });
+  });
+
+  describe("getHasPrefilledFilters", () => {
+    it("should get hasPrefilledFilters", () => {
+      expect(
+        fromSelectors.getHasPrefilledFilters.projector(initialJobsState)
+      ).toEqual(true);
     });
   });
 
