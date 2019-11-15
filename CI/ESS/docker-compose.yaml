@@ -6,15 +6,10 @@ services:
       - "27017:27017"
     volumes:
       - 'mongodb_data:/bitnami'
-  catanie:
-    build:
-      context: .
-      dockerfile: CI/ESS/Dockerfile
-    image: garethcmurphy/catanie
-    ports:
-      - '3000:3000'
   catamel:
     image: "dacat/catamel"
+    ports:
+      - '3000:3000'
     depends_on:
       - mongodb
       - openldap-seed
