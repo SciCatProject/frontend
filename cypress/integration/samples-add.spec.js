@@ -1,6 +1,3 @@
-/// <reference types="Cypress" />
-const lbBaseUrl = Cypress.config("lbBaseUrl");
-
 describe("Samples", function() {
   beforeEach(function() {
     cy.login(Cypress.config("username"), Cypress.config("password"));

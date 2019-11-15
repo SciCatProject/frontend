@@ -1,5 +1,3 @@
-/// <reference types="Cypress" />
-
 describe("Datasets", () => {
   beforeEach(() => {
     cy.login(Cypress.config("username"), Cypress.config("password"));
@@ -9,7 +7,7 @@ describe("Datasets", () => {
     cy.removeDatasets();
   });
 
-  describe("Add keyword to dataset", () => {
+  describe("Add keyword", () => {
     it("should go to dataset details and add a keyword", () => {
       cy.createDataset("raw");
 
@@ -31,7 +29,7 @@ describe("Datasets", () => {
     });
   });
 
-  describe("Remove keyword from dataset", () => {
+  describe("Remove keyword", () => {
     it("should go to dataset details and remove the added keyword", () => {
       cy.visit("/datasets");
 
@@ -64,34 +62,6 @@ describe("Datasets", () => {
       cy.get("button")
         .contains("Browse")
         .click();
-    });
-  });
-
-  describe("Make dataset public", () => {
-    it("should go to dataset details and toggle public", () => {
-      cy.server();
-      cy.route("PUT", "/api/v3/Datasets/**/*").as("change");
-
-      cy.visit("/datasets");
-
-      cy.get(".mat-row")
-        .contains("Cypress Dataset")
-        .click();
-
-      cy.get(".mat-slide-toggle-label")
-        .contains("Public")
-        .as("publicToggle");
-
-      cy.get("mat-slide-toggle").should("not.have.class", "mat-checked");
-
-      cy.get("@publicToggle").click();
-
-      cy.wait("@change").then(response => {
-        expect(response.method).to.eq("PUT");
-        expect(response.status).to.eq(200);
-      });
-
-      cy.get("mat-slide-toggle").should("have.class", "mat-checked");
     });
   });
 });
