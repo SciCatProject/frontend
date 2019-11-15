@@ -4,7 +4,7 @@
     "connector": "memory"
   },
   "mongo": {
-    "host": "localhost",
+    "host": "mongodb",
     "port": 27017,
     "url": "",
     "database": "dacat",

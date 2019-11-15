@@ -51,6 +51,7 @@ services:
       - openldap-seed
     volumes:
       - ./CI/ESS/datasources.json:/usr/src/app/server/datasources.json
+      - ./CI/ESS/providers.json:/usr/src/app/server/providers.json
 volumes:
     mongodb_data:
         driver: local
