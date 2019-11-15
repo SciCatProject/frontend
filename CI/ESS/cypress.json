@@ -1,5 +1,5 @@
 {
-  "baseUrl": "http://catanie",
+  "baseUrl": "http://catanie:80",
   "lbBaseUrl": "http://catamel:3000/api/v3",
   "viewportWidth": 1280,
   "username": "admin",
