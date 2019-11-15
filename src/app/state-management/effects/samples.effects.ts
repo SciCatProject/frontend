@@ -159,6 +159,7 @@ export class SampleEffects {
       ofType(fromActions.addAttachmentAction),
       switchMap(({ attachment }) => {
         delete attachment.id;
+        delete attachment.datasetId;
         delete attachment.rawDatasetId;
         delete attachment.derivedDatasetId;
         delete attachment.proposalId;

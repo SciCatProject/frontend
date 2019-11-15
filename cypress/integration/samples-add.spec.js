@@ -5,7 +5,7 @@ describe("Samples", function() {
     cy.login(Cypress.config("username"), Cypress.config("password"));
 
     cy.server();
-    cy.route("/api/v3/Samples/*").as("request");
+    cy.route("POST", "/api/v3/Samples").as("add");
   });
 
   after(function() {
@@ -29,7 +29,10 @@ describe("Samples", function() {
         .contains("Save")
         .click();
 
-      cy.wait("@request");
+      cy.wait("@add").then(response => {
+        expect(response.method).to.eq("POST");
+        expect(response.status).to.eq(200);
+      });
 
       cy.get(".mat-table")
         .children()

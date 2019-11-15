@@ -3,6 +3,9 @@
 describe("Datasets", () => {
   beforeEach(() => {
     cy.login(Cypress.config("username"), Cypress.config("password"));
+
+    cy.server();
+    cy.route("PUT", "/api/v3/Datasets/**/*").as("keyword");
   });
 
   after(() => {
@@ -25,6 +28,11 @@ describe("Datasets", () => {
 
       cy.get(".done-edit-button").click();
 
+      cy.wait("@keyword").then(response => {
+        expect(response.method).to.eq("PUT");
+        expect(response.status).to.eq(200);
+      });
+
       cy.get(".mat-chip-list")
         .children()
         .should("contain.text", "cypresskey");
@@ -42,6 +50,11 @@ describe("Datasets", () => {
       cy.contains("cypresskey")
         .children(".mat-chip-remove")
         .click();
+
+      cy.wait("@keyword").then(response => {
+        expect(response.method).to.eq("PUT");
+        expect(response.status).to.eq(200);
+      });
 
       cy.get(".mat-chip-list")
         .children()
