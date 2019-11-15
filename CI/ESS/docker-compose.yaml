@@ -38,6 +38,10 @@ services:
       - "openldap:openldap"
       depends_on:
       - openldap
+  catanie:
+    image: "dacat/catanie"
+    ports:
+      - '4200:80'
   catamel:
     image: "dacat/catamel"
     ports:
