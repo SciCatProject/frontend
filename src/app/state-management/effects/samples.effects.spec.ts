@@ -313,15 +313,16 @@ describe("SampleEffects", () => {
   });
 
   describe("addSample$", () => {
-    it("should result in a addSampleCompleteAction", () => {
+    it("should result in a addSampleCompleteAction and a fetchSamplesAction", () => {
       const action = fromActions.addSampleAction({ sample });
-      const outcome = fromActions.addSampleCompleteAction({ sample });
+      const outcome1 = fromActions.addSampleCompleteAction({ sample });
+      const outcome2 = fromActions.fetchSamplesAction();
 
       actions = hot("-a", { a: action });
       const response = cold("-a|", { a: sample });
       sampleApi.create.and.returnValue(response);
 
-      const expected = cold("--b", { b: outcome });
+      const expected = cold("--(bc)", { b: outcome1, c: outcome2 });
       expect(effects.addSample$).toBeObservable(expected);
     });
 

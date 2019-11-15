@@ -144,7 +144,10 @@ export class SampleEffects {
       ofType(fromActions.addSampleAction),
       mergeMap(({ sample }) =>
         this.sampleApi.create(sample).pipe(
-          map(res => fromActions.addSampleCompleteAction({ sample: res })),
+          mergeMap(res => [
+            fromActions.addSampleCompleteAction({ sample: res }),
+            fromActions.fetchSamplesAction()
+          ]),
           catchError(() => of(fromActions.addSampleFailedAction()))
         )
       )
@@ -156,6 +159,7 @@ export class SampleEffects {
       ofType(fromActions.addAttachmentAction),
       switchMap(({ attachment }) => {
         delete attachment.id;
+        delete attachment.datasetId;
         delete attachment.rawDatasetId;
         delete attachment.derivedDatasetId;
         delete attachment.proposalId;

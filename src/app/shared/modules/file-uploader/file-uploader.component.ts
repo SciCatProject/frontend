@@ -1,6 +1,5 @@
 import {
   Component,
-  OnInit,
   Output,
   EventEmitter,
   ViewChild,
@@ -19,9 +18,8 @@ export interface SubmitCaptionEvent {
   templateUrl: "./file-uploader.component.html",
   styleUrls: ["./file-uploader.component.scss"]
 })
-export class FileUploaderComponent implements OnInit {
+export class FileUploaderComponent {
   @Input() attachments: Attachment[];
-  attachment: Attachment;
 
   @Output() filePicked = new EventEmitter<ReadFile>();
   @Output() readEnd = new EventEmitter<number>();
@@ -30,6 +28,7 @@ export class FileUploaderComponent implements OnInit {
 
   public readMode = ReadMode.dataURL;
   public status: string;
+
   @ViewChild(FilePickerDirective, { static: false })
   private filePicker: FilePickerDirective;
 
@@ -54,8 +53,8 @@ export class FileUploaderComponent implements OnInit {
 
   onSubmitCaption(attachmentId: string, caption: string) {
     const event: SubmitCaptionEvent = {
-      attachmentId: attachmentId,
-      caption: caption
+      attachmentId,
+      caption
     };
     this.submitCaption.emit(event);
   }
@@ -63,8 +62,4 @@ export class FileUploaderComponent implements OnInit {
   onDeleteAttachment(attachmentId: string) {
     this.deleteAttachment.emit(attachmentId);
   }
-
-  constructor() {}
-
-  ngOnInit() {}
 }

@@ -1,4 +1,6 @@
-describe("Login Page", () => {
+/// <reference types="Cypress" />
+
+describe("Users Login", () => {
   const username = Cypress.config("username");
   const password = Cypress.config("password");
 
