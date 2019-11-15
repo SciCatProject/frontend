@@ -14,6 +14,7 @@ node('docker') {
       def IMAGE_ID = sh ( script: 'git rev-parse HEAD',returnStdout: true).trim()
       sh "docker build --file CI/ESS/Dockerfile.dmscdev  . --tag dacat/catanie:latest --tag dacat/catanie:latestdev  -t dacat/catanie:${IMAGE_ID}dmscdev --build-arg env=dmscdev"
       sh "docker push dacat/catanie:${IMAGE_ID}dmscdev"
+      sh "docker push dacat/catanie:latest"
       echo "Git image id : ${IMAGE_ID}"
       sh "docker rmi dacat/catanie:${IMAGE_ID}dmscdev"
     }
