@@ -76,7 +76,7 @@ describe("DashboardComponent", () => {
   });
 
   describe("#applyRouterState()", () => {
-    it("should do nothing if properties logbook and filters are undefined", () => {
+    it("should do nothing if properties logbook and filters are undefined and url path does not contain `logbook`", () => {
       const navigateSpy = spyOn(router, "navigate");
 
       component.applyRouterState();
@@ -84,7 +84,7 @@ describe("DashboardComponent", () => {
       expect(navigateSpy).toHaveBeenCalledTimes(0);
     });
 
-    it("should call router.navigate if properties logbook and filters are defined", () => {
+    it("should call router.navigate if properties logbook and filters are defined  and url path contains `logbook`", () => {
       const navigateSpy = spyOn(router, "navigate");
 
       component.logbook = logbook;

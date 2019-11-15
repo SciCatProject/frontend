@@ -36,7 +36,11 @@ export class LogbooksDashboardComponent
   subscriptions: Subscription[] = [];
 
   applyRouterState() {
-    if (this.logbook && this.filters) {
+    if (
+      this.logbook &&
+      this.filters &&
+      this.route.snapshot.url[0].path === "logbooks"
+    ) {
       this.router.navigate(["/logbooks", this.logbook.name], {
         queryParams: { args: rison.encode(this.filters) }
       });
