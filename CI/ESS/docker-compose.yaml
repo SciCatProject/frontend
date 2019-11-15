@@ -42,6 +42,9 @@ services:
     image: "dacat/catanie"
     ports:
       - '4200:80'
+  cataniecypress:
+    image: "dacat/catanie:cypress"
+    command: ["npx", "cypress", "run"]
   catamel:
     image: "dacat/catamel"
     ports:
