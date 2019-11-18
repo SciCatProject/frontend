@@ -1,5 +1,6 @@
 import * as fromActions from "./samples.actions";
 import { Attachment, Sample, Dataset } from "../../shared/sdk/models";
+import { SampleFilters } from "state-management/models";
 
 describe("Sample Actions", () => {
   describe("fetchSamplesAction", () => {
@@ -359,6 +360,19 @@ describe("Sample Actions", () => {
         type: "[Sample] Sort By Column",
         column,
         direction
+      });
+    });
+  });
+
+  describe("prefillFiltersAction", () => {
+    it("should create an action", () => {
+      const values: Partial<SampleFilters> = {
+        text: "test"
+      };
+      const action = fromActions.prefillFiltersAction({ values });
+      expect({ ...action }).toEqual({
+        type: "[Sample] Prefill Filters",
+        values
       });
     });
   });

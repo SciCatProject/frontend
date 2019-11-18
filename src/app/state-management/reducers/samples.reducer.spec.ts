@@ -1,7 +1,7 @@
 import { samplesReducer } from "./samples.reducer";
 import { SampleState } from "../state/samples.store";
 import * as fromActions from "../actions/samples.actions";
-import { Attachment, Sample, Dataset } from "../models";
+import { Attachment, Sample, Dataset, SampleFilters } from "../models";
 import { SampleInterface } from "shared/sdk";
 
 const data: SampleInterface = {
@@ -19,7 +19,9 @@ const initialSampleState: SampleState = {
   samplesCount: 0,
   datasetsCount: 0,
 
-  samplefilters: {
+  hasPrefilledFilters: false,
+
+  sampleFilters: {
     text: "",
     sortField: "creationTime:desc",
     skip: 0,
@@ -153,8 +155,8 @@ describe("SamplesReducer", () => {
       const action = fromActions.changePageAction({ page, limit });
       const state = samplesReducer(initialSampleState, action);
 
-      expect(state.samplefilters.limit).toEqual(limit);
-      expect(state.samplefilters.skip).toEqual(skip);
+      expect(state.sampleFilters.limit).toEqual(limit);
+      expect(state.sampleFilters.skip).toEqual(skip);
     });
   });
 
@@ -179,8 +181,21 @@ describe("SamplesReducer", () => {
       const action = fromActions.sortByColumnAction({ column, direction });
       const state = samplesReducer(initialSampleState, action);
 
-      expect(state.samplefilters.sortField).toEqual(sortField);
-      expect(state.samplefilters.skip).toEqual(0);
+      expect(state.sampleFilters.sortField).toEqual(sortField);
+      expect(state.sampleFilters.skip).toEqual(0);
+    });
+  });
+
+  describe("on prefillFiltersAction", () => {
+    it("should set sampleFilters and set hasPrefilledFilters to true", () => {
+      const values: Partial<SampleFilters> = {
+        text: "test"
+      };
+      const action = fromActions.prefillFiltersAction({ values });
+      const state = samplesReducer(initialSampleState, action);
+
+      expect(state.sampleFilters.text).toEqual(values.text);
+      expect(state.hasPrefilledFilters).toEqual(true);
     });
   });
 
@@ -190,7 +205,7 @@ describe("SamplesReducer", () => {
       const action = fromActions.setTextFilterAction({ text });
       const state = samplesReducer(initialSampleState, action);
 
-      expect(state.samplefilters.text).toEqual(text);
+      expect(state.sampleFilters.text).toEqual(text);
     });
   });
 });

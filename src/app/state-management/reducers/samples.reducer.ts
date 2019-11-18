@@ -74,8 +74,8 @@ const reducer = createReducer(
 
   on(fromActions.changePageAction, (state, { page, limit }) => {
     const skip = page * limit;
-    const samplefilters = { ...state.samplefilters, skip, limit };
-    return { ...state, samplefilters };
+    const sampleFilters = { ...state.sampleFilters, skip, limit };
+    return { ...state, sampleFilters };
   }),
 
   on(fromActions.changeDatasetsPageAction, (state, { page, limit }) => {
@@ -86,13 +86,18 @@ const reducer = createReducer(
 
   on(fromActions.sortByColumnAction, (state, { column, direction }) => {
     const sortField = column + (direction ? ":" + direction : "");
-    const samplefilters = { ...state.samplefilters, sortField, skip: 0 };
-    return { ...state, samplefilters };
+    const sampleFilters = { ...state.sampleFilters, sortField, skip: 0 };
+    return { ...state, sampleFilters };
+  }),
+
+  on(fromActions.prefillFiltersAction, (state, { values }) => {
+    const sampleFilters = { ...state.sampleFilters, ...values };
+    return { ...state, sampleFilters, hasPrefilledFilters: true };
   }),
 
   on(fromActions.setTextFilterAction, (state, { text }) => ({
     ...state,
-    samplefilters: { ...state.samplefilters, text }
+    sampleFilters: { ...state.sampleFilters, text }
   }))
 );
 

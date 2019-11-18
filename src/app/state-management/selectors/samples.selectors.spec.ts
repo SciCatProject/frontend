@@ -17,8 +17,10 @@ const initialSampleState: SampleState = {
   samplesCount: 0,
   datasetsCount: 0,
 
-  samplefilters: {
-    text: "",
+  hasPrefilledFilters: false,
+
+  sampleFilters: {
+    text: "test",
     sortField: "creationTime:desc",
     skip: 0,
     limit: 25
@@ -83,11 +85,27 @@ describe("Sample Selectors", () => {
     });
   });
 
+  describe("getHasPrefilledFilters", () => {
+    it("should get hasPrefilledFilters", () => {
+      expect(
+        fromSelectors.getHasPrefilledFilters.projector(initialSampleState)
+      ).toEqual(false);
+    });
+  });
+
   describe("getFilters", () => {
     it("should get sampleFilters", () => {
       expect(fromSelectors.getFilters.projector(initialSampleState)).toEqual(
-        initialSampleState.samplefilters
+        initialSampleState.sampleFilters
       );
+    });
+  });
+
+  describe("getTextFilter", () => {
+    it("should get text filter from sampleFilters", () => {
+      expect(
+        fromSelectors.getTextFilter.projector(initialSampleState.sampleFilters)
+      ).toEqual("test");
     });
   });
 
@@ -101,10 +119,10 @@ describe("Sample Selectors", () => {
 
   describe("getPage", () => {
     it("should get the current samples page", () => {
-      const { skip, limit } = initialSampleState.samplefilters;
+      const { skip, limit } = initialSampleState.sampleFilters;
       const page = skip / limit;
       expect(
-        fromSelectors.getPage.projector(initialSampleState.samplefilters)
+        fromSelectors.getPage.projector(initialSampleState.sampleFilters)
       ).toEqual(page);
     });
   });
@@ -125,7 +143,7 @@ describe("Sample Selectors", () => {
     it("should get limit from sampleFilters", () => {
       expect(
         fromSelectors.getSamplesPerPage.projector(
-          initialSampleState.samplefilters
+          initialSampleState.sampleFilters
         )
       ).toEqual(25);
     });
@@ -143,12 +161,12 @@ describe("Sample Selectors", () => {
 
   describe("getFullqueryParams", () => {
     it("should get the fullquery params", () => {
-      const { text, sortField, skip, limit } = initialSampleState.samplefilters;
+      const { text, sortField, skip, limit } = initialSampleState.sampleFilters;
       const limits = { order: sortField, skip, limit };
       const params = { query: JSON.stringify({ text }), limits };
       expect(
         fromSelectors.getFullqueryParams.projector(
-          initialSampleState.samplefilters
+          initialSampleState.sampleFilters
         )
       ).toEqual(params);
     });

@@ -4,9 +4,9 @@ import {
   MatCardModule,
   MatDialogModule
 } from "@angular/material";
-import { MockStore } from "shared/MockStubs";
+import { MockStore, MockActivatedRoute } from "shared/MockStubs";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
-import { Router } from "@angular/router";
+import { Router, ActivatedRoute } from "@angular/router";
 import { SampleDashboardComponent } from "./sample-dashboard.component";
 import { Store, StoreModule } from "@ngrx/store";
 import {
@@ -54,7 +54,8 @@ describe("SampleDashboardComponent", () => {
       set: {
         providers: [
           { provide: APP_CONFIG, useValue: { editSampleEnabled: true } },
-          { provide: Router, useValue: router }
+          { provide: Router, useValue: router },
+          { provide: ActivatedRoute, useClass: MockActivatedRoute }
         ]
       }
     });
