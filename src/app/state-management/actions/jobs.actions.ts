@@ -1,6 +1,5 @@
 import { createAction, props } from "@ngrx/store";
 import { Job } from "shared/sdk";
-import { JobFilters } from "state-management/models";
 
 export const fetchJobsAction = createAction("[Job] Fetch Jobs");
 export const fetchJobsCompleteAction = createAction(
