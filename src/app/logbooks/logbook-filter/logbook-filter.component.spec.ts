@@ -80,6 +80,20 @@ describe("LogbookFilterComponent", () => {
 
       expect(selected).toEqual(false);
     });
+
+    it("should return true if entry does not match any filter property", () => {
+      component.filters = {
+        textSearch: "",
+        showBotMessages: true,
+        showImages: true,
+        showUserMessages: false
+      };
+
+      const entry = "Test";
+      const selected = component.isSelected(entry);
+
+      expect(selected).toEqual(true);
+    });
   });
 
   describe("#doSelect()", () => {
