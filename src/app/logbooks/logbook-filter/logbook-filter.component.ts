@@ -15,7 +15,20 @@ export class LogbookFilterComponent {
   public entries = ["Bot Messages", "User Messages", "Images"];
 
   isSelected(entry: string): boolean {
-    return true;
+    switch (entry) {
+      case "Bot Messages": {
+        return this.filters.showBotMessages;
+      }
+      case "User Messages": {
+        return this.filters.showUserMessages;
+      }
+      case "Images": {
+        return this.filters.showImages;
+      }
+      default: {
+        return true;
+      }
+    }
   }
 
   doSelect(event: MatCheckboxChange, entry: string): void {

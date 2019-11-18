@@ -21,8 +21,10 @@ export class SearchBarComponent implements OnChanges {
   searchSubject = new Subject<string>();
 
   @ViewChild("searchBar", { static: true }) searchBar: ElementRef;
+  @Input() prefilledValue: string;
   @Input() placeholder?: string;
   @Input() clear?: boolean;
+
   @Output() onSearch = this.searchSubject.pipe(
     distinctUntilChanged(),
     debounceTime(this.searchDebounce)

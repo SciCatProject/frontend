@@ -5,11 +5,12 @@ import { Observable } from "rxjs";
 import { LogbookEffects } from "./logbooks.effects";
 import { LogbookApi, Logbook } from "shared/sdk";
 import * as fromActions from "state-management/actions/logbooks.actions";
-import { LogbookFilters } from "state-management/models";
 import {
   loadingAction,
   loadingCompleteAction
 } from "state-management/actions/user.actions";
+import { provideMockStore } from "@ngrx/store/testing";
+import { getFilters } from "state-management/selectors/logbooks.selectors";
 
 const logbook = new Logbook();
 
@@ -23,13 +24,22 @@ describe("LogbookEffects", () => {
       providers: [
         LogbookEffects,
         provideMockActions(() => actions),
+        provideMockStore({
+          selectors: [
+            {
+              selector: getFilters,
+              value: {
+                textSearch: "",
+                showBotMessages: true,
+                showImages: true,
+                showUserMessages: true
+              }
+            }
+          ]
+        }),
         {
           provide: LogbookApi,
-          useValue: jasmine.createSpyObj("logbookApi", [
-            "findAll",
-            "findByName",
-            "filter"
-          ])
+          useValue: jasmine.createSpyObj("logbookApi", ["findAll", "filter"])
         }
       ]
     });
@@ -74,7 +84,7 @@ describe("LogbookEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-a|", { a: logbook });
-      logbookApi.findByName.and.returnValue(response);
+      logbookApi.filter.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchLogbook$).toBeObservable(expected);
@@ -86,46 +96,10 @@ describe("LogbookEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-#", {});
-      logbookApi.findByName.and.returnValue(response);
+      logbookApi.filter.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchLogbook$).toBeObservable(expected);
-    });
-  });
-
-  describe("fetchFilteredEntries$", () => {
-    const name = "testName";
-    const filters: LogbookFilters = {
-      textSearch: "test",
-      showBotMessages: true,
-      showImages: true,
-      showUserMessages: true
-    };
-
-    it("should result in a fetchFilteredEntriesCompleteAction", () => {
-      const action = fromActions.fetchFilteredEntriesAction({ name, filters });
-      const outcome = fromActions.fetchFilteredEntriesCompleteAction({
-        logbook
-      });
-
-      actions = hot("-a", { a: action });
-      const response = cold("-a|", { a: logbook });
-      logbookApi.filter.and.returnValue(response);
-
-      const expected = cold("--b", { b: outcome });
-      expect(effects.fetchFilteredEntries$).toBeObservable(expected);
-    });
-
-    it("should result in a fetchFilteredEntriesFailedAction", () => {
-      const action = fromActions.fetchFilteredEntriesAction({ name, filters });
-      const outcome = fromActions.fetchFilteredEntriesFailedAction();
-
-      actions = hot("-a", { a: action });
-      const response = cold("-#", {});
-      logbookApi.filter.and.returnValue(response);
-
-      const expected = cold("--b", { b: outcome });
-      expect(effects.fetchFilteredEntries$).toBeObservable(expected);
     });
   });
 
@@ -146,28 +120,6 @@ describe("LogbookEffects", () => {
       it("should dispatch a loadingAction", () => {
         const name = "test";
         const action = fromActions.fetchLogbookAction({ name });
-        const outcome = loadingAction();
-
-        actions = hot("-a", { a: action });
-
-        const expected = cold("-b", { b: outcome });
-        expect(effects.loading$).toBeObservable(expected);
-      });
-    });
-
-    describe("ofType fetchFilteredEntriesAction", () => {
-      it("should dispatch a loadingAction", () => {
-        const name = "test";
-        const filters: LogbookFilters = {
-          textSearch: "test",
-          showBotMessages: true,
-          showImages: true,
-          showUserMessages: true
-        };
-        const action = fromActions.fetchFilteredEntriesAction({
-          name,
-          filters
-        });
         const outcome = loadingAction();
 
         actions = hot("-a", { a: action });
@@ -219,32 +171,6 @@ describe("LogbookEffects", () => {
     describe("ofType fetchLogbookFailedAction", () => {
       it("should dispatch a loadingCompleteAction", () => {
         const action = fromActions.fetchLogbookFailedAction();
-        const outcome = loadingCompleteAction();
-
-        actions = hot("-a", { a: action });
-
-        const expected = cold("-b", { b: outcome });
-        expect(effects.loadingComplete$).toBeObservable(expected);
-      });
-    });
-
-    describe("ofType fetchFilteredEntriesCompleteAction", () => {
-      it("should dispatch a loadingCompleteAction", () => {
-        const action = fromActions.fetchFilteredEntriesCompleteAction({
-          logbook
-        });
-        const outcome = loadingCompleteAction();
-
-        actions = hot("-a", { a: action });
-
-        const expected = cold("-b", { b: outcome });
-        expect(effects.loadingComplete$).toBeObservable(expected);
-      });
-    });
-
-    describe("ofType fetchFilteredEntriesFailedAction", () => {
-      it("should dispatch a loadingCompleteAction", () => {
-        const action = fromActions.fetchFilteredEntriesFailedAction();
         const outcome = loadingCompleteAction();
 
         actions = hot("-a", { a: action });

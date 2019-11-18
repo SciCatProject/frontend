@@ -5,6 +5,7 @@
     class="search-input"
     type="search"
     aria-label="Search"
+    [value]="prefilledValue ? prefilledValue : ''"
     [placeholder]="placeholder"
     (click)="doSearch()"
     (input)="doSearch()"

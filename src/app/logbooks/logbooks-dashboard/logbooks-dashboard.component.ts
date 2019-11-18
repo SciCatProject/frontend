@@ -11,17 +11,27 @@ import { Logbook } from "shared/sdk";
 import { Subscription } from "rxjs";
 import {
   getCurrentLogbook,
-  getFilters
+  getFilters,
+  getHasPrefilledFilters
 } from "state-management/selectors/logbooks.selectors";
 import {
   fetchLogbookAction,
-  fetchFilteredEntriesAction,
-  setFilterAction
+  prefillFiltersAction,
+  setTextFilterAction,
+  setDisplayFiltersAction
 } from "state-management/actions/logbooks.actions";
 import { ActivatedRoute, Router } from "@angular/router";
 import { APP_CONFIG, AppConfig } from "app-config.module";
 import { LogbookFilters } from "state-management/models";
 import * as rison from "rison";
+import {
+  map,
+  take,
+  filter,
+  combineLatest,
+  distinctUntilChanged
+} from "rxjs/operators";
+import * as deepEqual from "deep-equal";
 
 @Component({
   selector: "app-logbooks-dashboard",
@@ -31,44 +41,35 @@ import * as rison from "rison";
 export class LogbooksDashboardComponent
   implements OnInit, OnDestroy, AfterViewChecked {
   logbook: Logbook;
-  filters: LogbookFilters;
+
+  filters$ = this.store.pipe(select(getFilters));
+  readyToFetch$ = this.store.pipe(
+    select(getHasPrefilledFilters),
+    filter(has => has)
+  );
 
   subscriptions: Subscription[] = [];
 
-  applyRouterState() {
-    if (
-      this.logbook &&
-      this.filters &&
-      this.route.snapshot.url[0].path === "logbooks"
-    ) {
-      this.router.navigate(["/logbooks", this.logbook.name], {
-        queryParams: { args: rison.encode(this.filters) }
+  applyRouterState(name: string, filters: LogbookFilters) {
+    if (this.route.snapshot.url[0].path === "logbooks") {
+      this.router.navigate(["/logbooks", name], {
+        queryParams: { args: rison.encode(filters) }
       });
     }
   }
 
   onTextSearchChange(query: string) {
-    this.filters.textSearch = query;
-    this.store.dispatch(setFilterAction({ filters: this.filters }));
-    this.store.dispatch(
-      fetchFilteredEntriesAction({
-        name: this.logbook.name,
-        filters: this.filters
-      })
-    );
-    this.applyRouterState();
+    this.store.dispatch(setTextFilterAction({ textSearch: query }));
+    this.store.dispatch(fetchLogbookAction({ name: this.logbook.name }));
   }
 
   onFilterSelect(filters: LogbookFilters) {
-    this.filters = filters;
-    this.store.dispatch(setFilterAction({ filters: this.filters }));
+    const { showBotMessages, showImages, showUserMessages } = filters;
     this.store.dispatch(
-      fetchFilteredEntriesAction({
-        name: this.logbook.name,
-        filters: this.filters
-      })
+      setDisplayFiltersAction({ showBotMessages, showImages, showUserMessages })
     );
-    this.applyRouterState();
+    this.store.dispatch(fetchLogbookAction({ name: this.logbook.name }));
+    this.applyRouterState(this.logbook.name, filters);
   }
 
   reverseTimeline(): void {
@@ -91,21 +92,31 @@ export class LogbooksDashboardComponent
     );
 
     this.subscriptions.push(
-      this.store.pipe(select(getFilters)).subscribe(filters => {
-        this.filters = filters;
-      })
+      this.route.params
+        .pipe(
+          combineLatest(this.filters$, this.readyToFetch$),
+          map(([params, filters, _]) => [params, filters]),
+          distinctUntilChanged(deepEqual)
+        )
+        .subscribe(([{ name }, filters]) => {
+          if (name) {
+            this.store.dispatch(fetchLogbookAction({ name }));
+            this.applyRouterState(name, filters as LogbookFilters);
+          }
+        })
     );
 
     this.subscriptions.push(
-      this.route.params.subscribe(params => {
-        if (params.hasOwnProperty("name")) {
-          const name = params["name"];
-          this.store.dispatch(fetchLogbookAction({ name }));
-        }
-      })
+      this.route.queryParams
+        .pipe(
+          map(params => params.args as string),
+          take(1),
+          map(args => (args ? rison.decode<LogbookFilters>(args) : {}))
+        )
+        .subscribe(filters =>
+          this.store.dispatch(prefillFiltersAction({ values: filters }))
+        )
     );
-
-    this.applyRouterState();
   }
 
   ngAfterViewChecked() {

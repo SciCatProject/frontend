@@ -1,7 +1,7 @@
 import { logbooksReducer, formatImageUrls } from "./logbooks.reducer";
 import { initialLogbookState } from "../state/logbooks.store";
 import * as fromActions from "../actions/logbooks.actions";
-import { LogbookFilters, Logbook } from "../models";
+import { Logbook, LogbookFilters } from "../models";
 import { APP_DI_CONFIG } from "app-config.module";
 
 describe("LogbooksReducer", () => {
@@ -42,31 +42,43 @@ describe("LogbooksReducer", () => {
     });
   });
 
-  describe("on fetchFilteredEntriesCompleteAction", () => {
-    it("should set currentLogbook", () => {
-      const logbook = new Logbook();
-      const action = fromActions.fetchFilteredEntriesCompleteAction({
-        logbook
-      });
+  describe("on prefillFiltersAction", () => {
+    it("should set filters", () => {
+      const values: Partial<LogbookFilters> = {
+        textSearch: "test"
+      };
+      const action = fromActions.prefillFiltersAction({ values });
       const state = logbooksReducer(initialLogbookState, action);
 
-      expect(state.currentLogbook).toEqual(logbook);
+      expect(state.filters.textSearch).toEqual(values.textSearch);
     });
   });
 
-  describe("on setFilterAction", () => {
-    it("should update the logbook filter", () => {
-      const filters: LogbookFilters = {
-        textSearch: "",
-        showBotMessages: true,
-        showUserMessages: true,
-        showImages: true
-      };
-
-      const action = fromActions.setFilterAction({ filters });
+  describe("on setTextFilterAction", () => {
+    it("should set textSearch filter", () => {
+      const textSearch = "test";
+      const action = fromActions.setTextFilterAction({ textSearch });
       const state = logbooksReducer(initialLogbookState, action);
 
-      expect(state.filters).toEqual(filters);
+      expect(state.filters.textSearch).toEqual(textSearch);
+    });
+  });
+
+  describe("on setDisplayFiltersAction", () => {
+    it("should set showBotMessages, showImages and showUserMessages filters", () => {
+      const showBotMessages = true;
+      const showImages = true;
+      const showUserMessages = false;
+      const action = fromActions.setDisplayFiltersAction({
+        showBotMessages,
+        showImages,
+        showUserMessages
+      });
+      const state = logbooksReducer(initialLogbookState, action);
+
+      expect(state.filters.showBotMessages).toEqual(showBotMessages);
+      expect(state.filters.showImages).toEqual(showImages);
+      expect(state.filters.showUserMessages).toEqual(showUserMessages);
     });
   });
 

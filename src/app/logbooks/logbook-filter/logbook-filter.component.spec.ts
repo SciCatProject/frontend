@@ -20,6 +20,13 @@ describe("LogbookFilterComponent", () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(LogbookFilterComponent);
     component = fixture.componentInstance;
+    component.filters = {
+      textSearch: "",
+      showBotMessages: true,
+      showImages: true,
+      showUserMessages: true
+    };
+
     fixture.detectChanges();
   });
 
@@ -32,11 +39,46 @@ describe("LogbookFilterComponent", () => {
   });
 
   describe("#isSelected()", () => {
-    it("should return true", () => {
-      const entry = "test";
+    it("should return the value of showBotMessages", () => {
+      component.filters = {
+        textSearch: "",
+        showBotMessages: true,
+        showImages: true,
+        showUserMessages: false
+      };
+
+      const entry = "Bot Messages";
       const selected = component.isSelected(entry);
 
       expect(selected).toEqual(true);
+    });
+
+    it("should return the value of showImages", () => {
+      component.filters = {
+        textSearch: "",
+        showBotMessages: true,
+        showImages: true,
+        showUserMessages: false
+      };
+
+      const entry = "Images";
+      const selected = component.isSelected(entry);
+
+      expect(selected).toEqual(true);
+    });
+
+    it("should return the value of showUserMessages", () => {
+      component.filters = {
+        textSearch: "",
+        showBotMessages: true,
+        showImages: true,
+        showUserMessages: false
+      };
+
+      const entry = "User Messages";
+      const selected = component.isSelected(entry);
+
+      expect(selected).toEqual(false);
     });
   });
 

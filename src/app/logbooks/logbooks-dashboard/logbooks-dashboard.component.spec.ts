@@ -13,8 +13,9 @@ import { MockStore, MockActivatedRoute } from "shared/MockStubs";
 import { ActivatedRoute, Router } from "@angular/router";
 import { AppConfigModule } from "app-config.module";
 import {
-  setFilterAction,
-  fetchFilteredEntriesAction
+  setTextFilterAction,
+  fetchLogbookAction,
+  setDisplayFiltersAction
 } from "state-management/actions/logbooks.actions";
 import { Logbook, LogbookInterface } from "shared/sdk";
 import { LogbookFilters } from "state-management/models";
@@ -76,97 +77,75 @@ describe("DashboardComponent", () => {
   });
 
   describe("#applyRouterState()", () => {
-    it("should do nothing if properties logbook and filters are undefined and url path does not contain `logbook`", () => {
-      const navigateSpy = spyOn(router, "navigate");
-
-      component.applyRouterState();
-
-      expect(navigateSpy).toHaveBeenCalledTimes(0);
-    });
-
-    it("should call router.navigate if properties logbook and filters are defined  and url path contains `logbook`", () => {
+    it("should call router.navigate if url path contains `logbook`", () => {
       const navigateSpy = spyOn(router, "navigate");
 
       component.logbook = logbook;
-      component.filters = {
+      const filters = {
         textSearch: "",
         showBotMessages: true,
         showImages: true,
         showUserMessages: true
       };
-      component.applyRouterState();
+      component.applyRouterState(logbook.name, filters);
 
       expect(navigateSpy).toHaveBeenCalledTimes(1);
       expect(navigateSpy).toHaveBeenCalledWith(
         ["/logbooks", component.logbook.name],
         {
-          queryParams: { args: rison.encode(component.filters) }
+          queryParams: { args: rison.encode(filters) }
         }
       );
     });
   });
 
   describe("#onTextSearchChange()", () => {
-    it("should dispatch a setFilterAction and a fetchFilterEntriesAction, and call #applyRouterState()", () => {
+    it("should dispatch a setTextFilterAction and a fetchLogbookAction", () => {
       dispatchSpy = spyOn(store, "dispatch");
-      const methodSpy = spyOn(component, "applyRouterState");
 
       component.logbook = logbook;
-      component.filters = {
-        textSearch: "",
-        showBotMessages: true,
-        showImages: true,
-        showUserMessages: true
-      };
-      const query = "test";
-      component.filters.textSearch = query;
-      component.onTextSearchChange(query);
+      const textSearch = "test";
+      component.onTextSearchChange(textSearch);
 
       expect(dispatchSpy).toHaveBeenCalledTimes(2);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        setFilterAction({ filters: component.filters })
+        setTextFilterAction({ textSearch })
       );
       expect(dispatchSpy).toHaveBeenCalledWith(
-        fetchFilteredEntriesAction({
-          name: component.logbook.name,
-          filters: component.filters
+        fetchLogbookAction({
+          name: component.logbook.name
         })
       );
-      expect(methodSpy).toHaveBeenCalled();
     });
   });
 
-  describe("onFilterSelect()", () => {
+  describe("#onFilterSelect()", () => {
     it("should dispatch a setFilterAction and a fetchFilteredEntriesAction, and call #applyRouterState()", () => {
       dispatchSpy = spyOn(store, "dispatch");
       const methodSpy = spyOn(component, "applyRouterState");
 
       component.logbook = logbook;
-      component.filters = {
-        textSearch: "",
-        showBotMessages: true,
-        showImages: true,
-        showUserMessages: true
-      };
-      const updatedFilters: LogbookFilters = {
+      const filters: LogbookFilters = {
         textSearch: "",
         showBotMessages: false,
         showImages: true,
         showUserMessages: true
       };
+      const { showBotMessages, showImages, showUserMessages } = filters;
 
-      component.onFilterSelect(updatedFilters);
-
-      component.filters = updatedFilters;
+      component.onFilterSelect(filters);
 
       expect(dispatchSpy).toHaveBeenCalledTimes(2);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        setFilterAction({ filters: component.filters })
+        setDisplayFiltersAction({
+          showBotMessages,
+          showImages,
+          showUserMessages
+        })
       );
       expect(dispatchSpy).toHaveBeenCalledWith(
-        fetchFilteredEntriesAction({
-          name: component.logbook.name,
-          filters: component.filters
+        fetchLogbookAction({
+          name: component.logbook.name
         })
       );
       expect(methodSpy).toHaveBeenCalled();

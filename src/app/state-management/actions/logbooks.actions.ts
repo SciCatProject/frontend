@@ -23,19 +23,21 @@ export const fetchLogbookFailedAction = createAction(
   "[Logbook] Fetch Logbook Failed"
 );
 
-export const fetchFilteredEntriesAction = createAction(
-  "[Logbook] Fetch Filtered Entries",
-  props<{ name: string; filters: LogbookFilters }>()
-);
-export const fetchFilteredEntriesCompleteAction = createAction(
-  "[Logbook] Fetch Filtered Entries Complete",
-  props<{ logbook: Logbook }>()
-);
-export const fetchFilteredEntriesFailedAction = createAction(
-  "[Logbook] Fetch Filtered Entries Failed"
+export const prefillFiltersAction = createAction(
+  "[Logbook] Prefill Filters",
+  props<{ values: Partial<LogbookFilters> }>()
 );
 
-export const setFilterAction = createAction(
-  "[Logbook] Update Filter",
-  props<{ filters: LogbookFilters }>()
+export const setTextFilterAction = createAction(
+  "[Logbook] Set Text Filter",
+  props<{ textSearch: string }>()
+);
+
+export const setDisplayFiltersAction = createAction(
+  "[Logbook] Set Display Filters",
+  props<{
+    showBotMessages: boolean;
+    showImages: boolean;
+    showUserMessages: boolean;
+  }>()
 );

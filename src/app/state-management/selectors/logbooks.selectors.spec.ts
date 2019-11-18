@@ -15,6 +15,7 @@ const initialLogbookState: LogbookState = {
   logbooks: [],
   currentLogbook: logbook,
 
+  hasPrefilledFilters: false,
   filters: logbookFilters
 };
 
@@ -32,6 +33,14 @@ describe("Logbook Selectors", () => {
       expect(
         fromSelectors.getCurrentLogbook.projector(initialLogbookState)
       ).toEqual(logbook);
+    });
+  });
+
+  describe("getHasPrefilledFilters", () => {
+    it("should return hasPrefilledFilters", () => {
+      expect(
+        fromSelectors.getHasPrefilledFilters.projector(initialLogbookState)
+      ).toEqual(false);
     });
   });
 
