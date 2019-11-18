@@ -1,5 +1,6 @@
 import { Attachment, Dataset, Proposal } from "../models";
 import * as fromActions from "./proposals.actions";
+import { ProposalFilters } from "state-management/state/proposals.store";
 
 describe("Proposal Actions", () => {
   describe("fetchProposalsAction", () => {
@@ -259,6 +260,19 @@ describe("Proposal Actions", () => {
       const action = fromActions.removeAttachmentFailedAction();
       expect({ ...action }).toEqual({
         type: "[Proposal] Remove Attachment Failed"
+      });
+    });
+  });
+
+  describe("prefillFiltersAction", () => {
+    it("should create an action", () => {
+      const values: Partial<ProposalFilters> = {
+        text: "test"
+      };
+      const action = fromActions.prefillFiltersAction({ values });
+      expect({ ...action }).toEqual({
+        type: "[Proposal] Prefill Filters",
+        values
       });
     });
   });

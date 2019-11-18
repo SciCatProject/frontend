@@ -43,7 +43,7 @@ describe("LogbooksReducer", () => {
   });
 
   describe("on prefillFiltersAction", () => {
-    it("should set filters", () => {
+    it("should set filters and set hasPrefilledFilters to true", () => {
       const values: Partial<LogbookFilters> = {
         textSearch: "test"
       };
@@ -51,6 +51,7 @@ describe("LogbooksReducer", () => {
       const state = logbooksReducer(initialLogbookState, action);
 
       expect(state.filters.textSearch).toEqual(values.textSearch);
+      expect(state.hasPrefilledFilters).toEqual(true);
     });
   });
 

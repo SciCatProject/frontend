@@ -1,7 +1,7 @@
 import { Component, OnInit, Inject, OnDestroy } from "@angular/core";
 import { APP_CONFIG, AppConfig } from "app-config.module";
 import { DatePipe } from "@angular/common";
-import { Router } from "@angular/router";
+import { Router, ActivatedRoute } from "@angular/router";
 import { Store, select } from "@ngrx/store";
 import { Proposal } from "shared/sdk";
 import { Subscription } from "rxjs";
@@ -12,7 +12,9 @@ import {
   getProposals,
   getDateRangeFilter,
   getHasAppliedFilters,
-  getFilters
+  getFilters,
+  getHasPrefilledFilters,
+  getTextFilter
 } from "state-management/selectors/proposals.selectors";
 import {
   TableColumn,
@@ -25,10 +27,20 @@ import {
   fetchProposalsAction,
   setTextFilterAction,
   setDateRangeFilterAction,
-  clearFacetsAction
+  clearFacetsAction,
+  prefillFiltersAction
 } from "state-management/actions/proposals.actions";
 import { DateRange } from "datasets/datasets-filter/datasets-filter.component";
 import * as rison from "rison";
+import {
+  filter,
+  combineLatest,
+  map,
+  distinctUntilChanged,
+  take
+} from "rxjs/operators";
+import * as deepEqual from "deep-equal";
+import { ProposalFilters } from "state-management/state/proposals.store";
 
 @Component({
   selector: "proposal-dashboard",
@@ -37,7 +49,12 @@ import * as rison from "rison";
 })
 export class ProposalDashboardComponent implements OnInit, OnDestroy {
   hasAppliedFilters$ = this.store.pipe(select(getHasAppliedFilters));
+  textFilter$ = this.store.pipe(select(getTextFilter));
   dateRangeFilter$ = this.store.pipe(select(getDateRangeFilter));
+  readyToFetch$ = this.store.pipe(
+    select(getHasPrefilledFilters),
+    filter(has => has)
+  );
   currentPage$ = this.store.pipe(select(getPage));
   proposalsCount$ = this.store.pipe(select(getProposalsCount));
   proposalsPerPage$ = this.store.pipe(select(getProposalsPerPage));
@@ -165,13 +182,12 @@ export class ProposalDashboardComponent implements OnInit, OnDestroy {
   constructor(
     @Inject(APP_CONFIG) public appConfig: AppConfig,
     private datePipe: DatePipe,
+    private route: ActivatedRoute,
     private router: Router,
     private store: Store<Proposal>
   ) {}
 
   ngOnInit() {
-    this.store.dispatch(fetchProposalsAction());
-
     this.subscriptions.push(
       this.store.pipe(select(getProposals)).subscribe(proposals => {
         this.tableData = this.formatTableData(proposals);
@@ -179,11 +195,31 @@ export class ProposalDashboardComponent implements OnInit, OnDestroy {
     );
 
     this.subscriptions.push(
-      this.store.pipe(select(getFilters)).subscribe(filters => {
-        this.router.navigate(["/proposals"], {
-          queryParams: { args: rison.encode(filters) }
-        });
-      })
+      this.store
+        .pipe(select(getFilters))
+        .pipe(
+          combineLatest(this.readyToFetch$),
+          map(([filters, _]) => filters),
+          distinctUntilChanged(deepEqual)
+        )
+        .subscribe(filters => {
+          this.store.dispatch(fetchProposalsAction());
+          this.router.navigate(["/proposals"], {
+            queryParams: { args: rison.encode(filters) }
+          });
+        })
+    );
+
+    this.subscriptions.push(
+      this.route.queryParams
+        .pipe(
+          map(params => params.args as string),
+          take(1),
+          map(args => (args ? rison.decode<ProposalFilters>(args) : {}))
+        )
+        .subscribe(filters =>
+          this.store.dispatch(prefillFiltersAction({ values: filters }))
+        )
     );
   }
 

@@ -9,6 +9,7 @@ import { MatDatepickerInputEvent } from "@angular/material";
 })
 export class ProposalFilterComponent {
   @Input() hasAppliedFilters: boolean;
+  @Input() searchBarValue: string;
   @Input() clearSearchBar: boolean;
   @Input() dateRangeValue: DateRange;
 

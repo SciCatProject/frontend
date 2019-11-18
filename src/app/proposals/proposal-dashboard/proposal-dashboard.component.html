@@ -6,6 +6,7 @@
   >
     <proposal-filter
       [hasAppliedFilters]="hasAppliedFilters$ | async"
+      [searchBarValue]="textFilter$ | async"
       [clearSearchBar]="clearSearchBar"
       [dateRangeValue]="dateRangeFilter$ | async"
       (onClear)="onClear()"
