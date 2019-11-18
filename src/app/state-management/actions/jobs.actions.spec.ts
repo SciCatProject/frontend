@@ -1,6 +1,5 @@
 import { Job } from "shared/sdk/models";
 import * as fromActions from "./jobs.actions";
-import { JobFilters } from "state-management/models";
 
 describe("Job Actions", () => {
   describe("fetchJobsAction", () => {

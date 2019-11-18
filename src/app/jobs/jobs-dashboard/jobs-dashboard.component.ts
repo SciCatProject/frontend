@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
-import { Router, ActivatedRoute } from "@angular/router";
+import { Router } from "@angular/router";
 import { Store, select } from "@ngrx/store";
 import { Job } from "shared/sdk";
 import { Subscription } from "rxjs";
@@ -15,7 +15,7 @@ import {
   TableColumn,
   PageChangeEvent
 } from "shared/modules/table/table.component";
-import { JobViewMode, JobFilters } from "state-management/models";
+import { JobViewMode } from "state-management/models";
 import {
   changePageAction,
   setJobViewModeAction,
@@ -26,14 +26,6 @@ import {
   getProfile
 } from "state-management/selectors/user.selectors";
 import * as rison from "rison";
-import {
-  map,
-  take,
-  filter,
-  combineLatest,
-  distinctUntilChanged
-} from "rxjs/operators";
-import * as deepEqual from "deep-equal";
 
 @Component({
   selector: "app-jobs-dashboard",
@@ -116,7 +108,6 @@ export class JobsDashboardComponent implements OnInit, OnDestroy {
 
   constructor(
     private datePipe: DatePipe,
-    private route: ActivatedRoute,
     private router: Router,
     private store: Store<Job>
   ) {}
