@@ -8,7 +8,8 @@ export interface SampleState {
   samplesCount: number;
   datasetsCount: number;
 
-  samplefilters: SampleFilters;
+  hasPrefilledFilters: boolean;
+  sampleFilters: SampleFilters;
 
   datasetFilters: SampleFilters;
 }
@@ -21,7 +22,9 @@ export const initialSampleState: SampleState = {
   samplesCount: 0,
   datasetsCount: 0,
 
-  samplefilters: {
+  hasPrefilledFilters: false,
+
+  sampleFilters: {
     text: "",
     sortField: "creationTime:desc",
     skip: 0,

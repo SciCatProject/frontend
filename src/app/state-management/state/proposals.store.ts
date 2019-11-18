@@ -26,6 +26,7 @@ export interface ProposalsState {
   proposalsCount: number;
   datasetsCount: number;
 
+  hasPrefilledFilters: boolean;
   proposalFilters: ProposalFilters;
   datasetFilters: ProposalDatesetFilters;
 }
@@ -37,6 +38,8 @@ export const initialProposalsState: ProposalsState = {
 
   proposalsCount: null,
   datasetsCount: null,
+
+  hasPrefilledFilters: false,
 
   proposalFilters: {
     text: "",

@@ -24,15 +24,28 @@ const reducer = createReducer(
     return { ...state, currentLogbook };
   }),
 
-  on(fromActions.fetchFilteredEntriesCompleteAction, (state, { logbook }) => {
-    const currentLogbook = formatImageUrls(logbook);
-    return { ...state, currentLogbook };
+  on(fromActions.prefillFiltersAction, (state, { values }) => {
+    const filters = { ...state.filters, ...values };
+    return { ...state, filters, hasPrefilledFilters: true };
   }),
 
-  on(fromActions.setFilterAction, (state, { filters }) => ({
-    ...state,
-    filters
-  }))
+  on(fromActions.setTextFilterAction, (state, { textSearch }) => {
+    const filters = { ...state.filters, textSearch };
+    return { ...state, filters };
+  }),
+
+  on(
+    fromActions.setDisplayFiltersAction,
+    (state, { showBotMessages, showImages, showUserMessages }) => {
+      const filters = {
+        ...state.filters,
+        showBotMessages,
+        showImages,
+        showUserMessages
+      };
+      return { ...state, filters };
+    }
+  )
 );
 
 export function logbooksReducer(

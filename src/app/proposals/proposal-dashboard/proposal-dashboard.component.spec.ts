@@ -1,7 +1,7 @@
 import { APP_CONFIG } from "app-config.module";
-import { MockStore } from "shared/MockStubs";
+import { MockStore, MockActivatedRoute } from "shared/MockStubs";
 import { ProposalDashboardComponent } from "./proposal-dashboard.component";
-import { Router } from "@angular/router";
+import { Router, ActivatedRoute } from "@angular/router";
 import { Store, StoreModule } from "@ngrx/store";
 import {
   async,
@@ -48,7 +48,8 @@ describe("ProposalDashboardComponent", () => {
       set: {
         providers: [
           { provide: APP_CONFIG, useValue: { editSampleEnabled: true } },
-          { provide: Router, useValue: router }
+          { provide: Router, useValue: router },
+          { provide: ActivatedRoute, useClass: MockActivatedRoute }
         ]
       }
     });

@@ -15,6 +15,7 @@
 
   <app-search-bar
     #searchBar
+    [prefilledValue]="searchTerms$ | async"
     [placeholder]="'Text Search'"
     [clear]="clearSearchBar"
     (onSearch)="textSearchChanged($event)"

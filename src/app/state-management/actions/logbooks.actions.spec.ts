@@ -55,58 +55,45 @@ describe("Logbook Actions", () => {
     });
   });
 
-  describe("fetchFilteredEntriesAction", () => {
+  describe("prefillFiltersAction", () => {
     it("should create an action", () => {
-      const name = "testName";
-      const filters: LogbookFilters = {
-        textSearch: "test",
-        showBotMessages: true,
-        showUserMessages: true,
-        showImages: true
+      const values: Partial<LogbookFilters> = {
+        textSearch: "test"
       };
-      const action = fromActions.fetchFilteredEntriesAction({ name, filters });
+      const action = fromActions.prefillFiltersAction({ values });
       expect({ ...action }).toEqual({
-        type: "[Logbook] Fetch Filtered Entries",
-        name,
-        filters
+        type: "[Logbook] Prefill Filters",
+        values
       });
     });
   });
 
-  describe("fetchFilteredEntriesCompleteAction", () => {
+  describe("setTextFilterAction", () => {
     it("should create an action", () => {
-      const logbook = new Logbook();
-      const action = fromActions.fetchFilteredEntriesCompleteAction({
-        logbook
-      });
+      const textSearch = "test";
+      const action = fromActions.setTextFilterAction({ textSearch });
       expect({ ...action }).toEqual({
-        type: "[Logbook] Fetch Filtered Entries Complete",
-        logbook
+        type: "[Logbook] Set Text Filter",
+        textSearch
       });
     });
   });
 
-  describe("fetchFilteredEntriesFailedAction", () => {
+  describe("setDisplayFiltersAction", () => {
     it("should create an action", () => {
-      const action = fromActions.fetchFilteredEntriesFailedAction();
-      expect({ ...action }).toEqual({
-        type: "[Logbook] Fetch Filtered Entries Failed"
+      const showBotMessages = true;
+      const showImages = true;
+      const showUserMessages = false;
+      const action = fromActions.setDisplayFiltersAction({
+        showBotMessages,
+        showImages,
+        showUserMessages
       });
-    });
-  });
-
-  describe("setFilterAction", () => {
-    it("should create an action", () => {
-      const filters: LogbookFilters = {
-        textSearch: "test",
-        showBotMessages: true,
-        showUserMessages: true,
-        showImages: true
-      };
-      const action = fromActions.setFilterAction({ filters });
       expect({ ...action }).toEqual({
-        type: "[Logbook] Update Filter",
-        filters
+        type: "[Logbook] Set Display Filters",
+        showBotMessages,
+        showImages,
+        showUserMessages
       });
     });
   });

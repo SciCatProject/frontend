@@ -6,7 +6,8 @@ import {
   changePageAction,
   fetchSamplesAction,
   sortByColumnAction,
-  setTextFilterAction
+  setTextFilterAction,
+  prefillFiltersAction
 } from "state-management/actions/samples.actions";
 import {
   TableColumn,
@@ -19,13 +20,24 @@ import {
   getSamplesCount,
   getSamplesPerPage,
   getPage,
-  getFilters
+  getFilters,
+  getHasPrefilledFilters,
+  getTextFilter
 } from "state-management/selectors/samples.selectors";
 import { DatePipe } from "@angular/common";
-import { Router } from "@angular/router";
+import { Router, ActivatedRoute } from "@angular/router";
 import { MatDialogConfig, MatDialog } from "@angular/material";
 import { SampleDialogComponent } from "samples/sample-dialog/sample-dialog.component";
 import * as rison from "rison";
+import * as deepEqual from "deep-equal";
+import {
+  filter,
+  combineLatest,
+  map,
+  distinctUntilChanged,
+  take
+} from "rxjs/operators";
+import { SampleFilters } from "state-management/models";
 
 @Component({
   selector: "sample-dashboard",
@@ -36,6 +48,11 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
   sampleCount$ = this.store.pipe(select(getSamplesCount));
   samplesPerPage$ = this.store.pipe(select(getSamplesPerPage));
   currentPage$ = this.store.pipe(select(getPage));
+  textFilter$ = this.store.pipe(select(getTextFilter));
+  readyToFetch$ = this.store.pipe(
+    select(getHasPrefilledFilters),
+    filter(has => has)
+  );
 
   subscriptions: Subscription[] = [];
 
@@ -57,6 +74,7 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
     @Inject(APP_CONFIG) public appConfig: AppConfig,
     private datePipe: DatePipe,
     public dialog: MatDialog,
+    private route: ActivatedRoute,
     private router: Router,
     private store: Store<Sample>
   ) {}
@@ -111,8 +129,6 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.store.dispatch(fetchSamplesAction());
-
     this.subscriptions.push(
       this.store.pipe(select(getSamples)).subscribe(samples => {
         this.tableData = this.formatTableData(samples);
@@ -120,11 +136,31 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
     );
 
     this.subscriptions.push(
-      this.store.pipe(select(getFilters)).subscribe(filters => {
-        this.router.navigate(["/samples"], {
-          queryParams: { args: rison.encode(filters) }
-        });
-      })
+      this.store
+        .pipe(select(getFilters))
+        .pipe(
+          combineLatest(this.readyToFetch$),
+          map(([filters, _]) => filters),
+          distinctUntilChanged(deepEqual)
+        )
+        .subscribe(filters => {
+          this.store.dispatch(fetchSamplesAction());
+          this.router.navigate(["/samples"], {
+            queryParams: { args: rison.encode(filters) }
+          });
+        })
+    );
+
+    this.subscriptions.push(
+      this.route.queryParams
+        .pipe(
+          map(params => params.args as string),
+          take(1),
+          map(args => (args ? rison.decode<SampleFilters>(args) : {}))
+        )
+        .subscribe(filters =>
+          this.store.dispatch(prefillFiltersAction({ values: filters }))
+        )
     );
   }
 

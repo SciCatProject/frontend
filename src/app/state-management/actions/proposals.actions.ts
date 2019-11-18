@@ -1,5 +1,6 @@
 import { createAction, props } from "@ngrx/store";
 import { Proposal, Dataset, Attachment } from "shared/sdk";
+import { ProposalFilters } from "state-management/state/proposals.store";
 
 export const fetchProposalsAction = createAction("[Proposal] Fetch Proposals");
 export const fetchProposalsCompleteAction = createAction(
@@ -89,6 +90,11 @@ export const removeAttachmentCompleteAction = createAction(
 );
 export const removeAttachmentFailedAction = createAction(
   "[Proposal] Remove Attachment Failed"
+);
+
+export const prefillFiltersAction = createAction(
+  "[Proposal] Prefill Filters",
+  props<{ values: Partial<ProposalFilters> }>()
 );
 
 export const setTextFilterAction = createAction(

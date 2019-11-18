@@ -60,6 +60,11 @@ const reducer = createReducer(
     return { ...state, currentProposal };
   }),
 
+  on(fromActions.prefillFiltersAction, (state, { values }) => {
+    const proposalFilters = { ...state.proposalFilters, ...values };
+    return { ...state, proposalFilters, hasPrefilledFilters: true };
+  }),
+
   on(fromActions.setTextFilterAction, (state, { text }) => {
     const proposalFilters = { ...state.proposalFilters, text, skip: 0 };
     return { ...state, proposalFilters };

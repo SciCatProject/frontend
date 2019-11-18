@@ -23,6 +23,8 @@ const initialProposalsState: ProposalsState = {
   proposalsCount: 0,
   datasetsCount: 0,
 
+  hasPrefilledFilters: true,
+
   proposalFilters: {
     text: "test",
     dateRange: {
@@ -92,11 +94,29 @@ describe("Proposal Selectors", () => {
     });
   });
 
+  describe("getHasPrefilledFilters", () => {
+    it("should get hasPrefilledFilters", () => {
+      expect(
+        fromSelectors.getHasPrefilledFilters.projector(initialProposalsState)
+      ).toEqual(true);
+    });
+  });
+
   describe("getFilters", () => {
     it("should get the proposal filters", () => {
       expect(fromSelectors.getFilters.projector(initialProposalsState)).toEqual(
         initialProposalsState.proposalFilters
       );
+    });
+  });
+
+  describe("getTextFilter", () => {
+    it("should get the proposal text filter", () => {
+      expect(
+        fromSelectors.getTextFilter.projector(
+          initialProposalsState.proposalFilters
+        )
+      ).toEqual("test");
     });
   });
 

@@ -11,6 +11,7 @@
   </button>
   <div style="clear: both;"></div>
   <app-search-bar
+    [prefilledValue]="searchBarValue"
     [clear]="clearSearchBar"
     (onSearch)="doSearchChange($event)"
     (onFocus)="doSearchChange($event)"
@@ -43,6 +44,7 @@
   </button>
   <div style="clear: both;"></div>
   <app-search-bar
+    [prefilledValue]="searchBarValue"
     [clear]="clearSearchBar"
     (onSearch)="doSearchChange($event)"
     (onFocus)="doSearchChange($event)"

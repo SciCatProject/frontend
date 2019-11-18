@@ -1,5 +1,5 @@
-import { JobEffects } from './../state-management/effects/jobs.effects';
-import { EffectsModule } from '@ngrx/effects';
+import { JobEffects } from "./../state-management/effects/jobs.effects";
+import { EffectsModule } from "@ngrx/effects";
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { JobsDashboardComponent } from "./jobs-dashboard/jobs-dashboard.component";

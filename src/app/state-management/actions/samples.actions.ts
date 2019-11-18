@@ -1,5 +1,6 @@
 import { createAction, props } from "@ngrx/store";
 import { Sample, Dataset, Attachment } from "shared/sdk";
+import { SampleFilters } from "state-management/models";
 
 export const fetchSamplesAction = createAction("[Sample] Fetch Samples");
 export const fetchSamplesCompleteAction = createAction(
@@ -128,6 +129,11 @@ export const changeDatasetsPageAction = createAction(
 export const sortByColumnAction = createAction(
   "[Sample] Sort By Column",
   props<{ column: string; direction: string }>()
+);
+
+export const prefillFiltersAction = createAction(
+  "[Sample] Prefill Filters",
+  props<{ values: Partial<SampleFilters> }>()
 );
 
 export const setTextFilterAction = createAction(

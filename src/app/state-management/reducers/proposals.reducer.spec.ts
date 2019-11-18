@@ -1,5 +1,8 @@
 import { proposalsReducer } from "./proposals.reducer";
-import { initialProposalsState } from "../state/proposals.store";
+import {
+  initialProposalsState,
+  ProposalFilters
+} from "../state/proposals.store";
 import * as fromActions from "../actions/proposals.actions";
 import { Attachment, Dataset, DatasetInterface, Proposal } from "../models";
 import { ProposalInterface } from "shared/sdk";
@@ -114,6 +117,19 @@ describe("ProposalsReducer", () => {
       const state = proposalsReducer(initialProposalsState, action);
 
       expect(state.currentProposal.attachments.length).toEqual(0);
+    });
+  });
+
+  describe("on prefillFiltersAction", () => {
+    it("should set filters and set hasPrefilledFilters to true", () => {
+      const values: Partial<ProposalFilters> = {
+        text: "test"
+      };
+      const action = fromActions.prefillFiltersAction({ values });
+      const state = proposalsReducer(initialProposalsState, action);
+
+      expect(state.proposalFilters.text).toEqual(values.text);
+      expect(state.hasPrefilledFilters).toEqual(true);
     });
   });
 
