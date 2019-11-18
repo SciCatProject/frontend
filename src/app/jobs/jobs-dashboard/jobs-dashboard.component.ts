@@ -8,8 +8,7 @@ import {
   getJobsCount,
   getJobsPerPage,
   getPage,
-  getFilters,
-  getHasPrefilledFilters
+  getFilters
 } from "state-management/selectors/jobs.selectors";
 import { DatePipe } from "@angular/common";
 import {
@@ -20,8 +19,7 @@ import { JobViewMode, JobFilters } from "state-management/models";
 import {
   changePageAction,
   setJobViewModeAction,
-  fetchJobsAction,
-  prefillFiltersAction
+  fetchJobsAction
 } from "state-management/actions/jobs.actions";
 import {
   getCurrentUser,
@@ -46,10 +44,6 @@ export class JobsDashboardComponent implements OnInit, OnDestroy {
   jobsCount$ = this.store.pipe(select(getJobsCount));
   jobsPerPage$ = this.store.pipe(select(getJobsPerPage));
   currentPage$ = this.store.pipe(select(getPage));
-  readyToFetch$ = this.store.pipe(
-    select(getHasPrefilledFilters),
-    filter(has => has)
-  );
 
   jobs: any[] = [];
   profile: any;
@@ -157,30 +151,11 @@ export class JobsDashboardComponent implements OnInit, OnDestroy {
     );
 
     this.subscriptions.push(
-      this.store
-        .pipe(select(getFilters))
-        .pipe(
-          combineLatest(this.readyToFetch$),
-          map(([filters, _]) => filters),
-          distinctUntilChanged(deepEqual)
-        )
-        .subscribe(filters => {
-          this.router.navigate(["/user/jobs"], {
-            queryParams: { args: rison.encode(filters) }
-          });
-        })
-    );
-
-    this.subscriptions.push(
-      this.route.queryParams
-        .pipe(
-          map(params => params.args as string),
-          take(1),
-          map(args => (args ? rison.decode<JobFilters>(args) : {}))
-        )
-        .subscribe(filters =>
-          this.store.dispatch(prefillFiltersAction({ values: filters }))
-        )
+      this.store.pipe(select(getFilters)).subscribe(filters => {
+        this.router.navigate(["/user/jobs"], {
+          queryParams: { args: rison.encode(filters) }
+        });
+      })
     );
   }
 

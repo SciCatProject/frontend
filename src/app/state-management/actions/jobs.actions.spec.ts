@@ -100,14 +100,6 @@ describe("Job Actions", () => {
     });
   });
 
-  describe("prefillFiltersAction", () => {
-    it("should create an action", () => {
-      const values: Partial<JobFilters> = {};
-      const action = fromActions.prefillFiltersAction({ values });
-      expect({ ...action }).toEqual({ type: "[Job] Prefill Filters", values });
-    });
-  });
-
   describe("setJobViewModeAction", () => {
     it("should create an action", () => {
       const mode = null;

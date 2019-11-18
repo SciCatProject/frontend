@@ -26,7 +26,6 @@ const initialJobsState: JobsState = {
 
   submitError: undefined,
 
-  hasPrefilledFilters: false,
   filters: jobFilters
 };
 
@@ -76,19 +75,6 @@ describe("jobsReducer", () => {
       const state = jobsReducer(initialJobsState, action);
 
       expect(state.submitError).toEqual(err);
-    });
-  });
-
-  describe("on prefillFiltersAction", () => {
-    it("should set filters and set hasPrefilledFilters to true", () => {
-      const values = {
-        limit: 25
-      };
-      const action = fromActions.prefillFiltersAction({ values });
-      const state = jobsReducer(initialJobsState, action);
-
-      expect(state.filters.limit).toEqual(values.limit);
-      expect(state.hasPrefilledFilters).toEqual(true);
     });
   });
 

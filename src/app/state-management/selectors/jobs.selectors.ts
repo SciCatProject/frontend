@@ -20,11 +20,6 @@ export const getSubmitError = createSelector(
   state => state.submitError
 );
 
-export const getHasPrefilledFilters = createSelector(
-  getJobState,
-  state => state.hasPrefilledFilters
-);
-
 export const getFilters = createSelector(getJobState, state => state.filters);
 
 export const getJobViewMode = createSelector(

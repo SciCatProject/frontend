@@ -9,7 +9,6 @@ export interface JobsState {
 
   submitError: Error;
 
-  hasPrefilledFilters: boolean;
   filters: JobFilters;
 }
 
@@ -21,7 +20,6 @@ export const initialJobsState: JobsState = {
 
   submitError: undefined,
 
-  hasPrefilledFilters: false,
   filters: {
     mode: null,
     sortField: "creationTime:desc",

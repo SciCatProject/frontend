@@ -39,11 +39,6 @@ export const submitJobFailedAction = createAction(
   props<{ err: Error }>()
 );
 
-export const prefillFiltersAction = createAction(
-  "[Job] Prefill Filters",
-  props<{ values: Partial<JobFilters> }>()
-);
-
 export const setJobViewModeAction = createAction(
   "[Job] Set Mode Filter",
   props<{ mode: object }>()
