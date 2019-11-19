@@ -35,6 +35,7 @@ export const environment = {
     { name: "dataStatus", order: 11, enabled: false },
     { name: "derivedDatasetsNum", order: 12, enabled: false }
   ],
+  landingPage: "doi.esss.se/detail/",
   logbookEnabled: true,
   maxDirectDownloadSize: 5000000000,
   metadataPreviewEnabled: true,
