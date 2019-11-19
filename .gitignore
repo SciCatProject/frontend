@@ -44,3 +44,7 @@ test-results.xml
 
 e2e/Datasets_01.csv
 .angulardoc.json
+
+cypress/screenshots/*
+cypress/videos/*
+*.mp4
