@@ -2,7 +2,7 @@ version: "3"
 services:
   reverse-proxy:
     image: traefik
-    command: --api --docker
+    command: ["--api", "--docker"]
     ports:
       - "80:80"
       - "8080:8080"
@@ -41,15 +41,13 @@ services:
       PHPLDAPADMIN_HTTPS=false:
       PHPLDAPADMIN_LDAP_HOSTS: "openldap"
     ports:
-      - "8080:80"
+      - "8081:80"
     links:
       - "openldap:openldap"
     depends_on:
       - openldap
   catanie:
     image: "dacat/catanie:latest"
-    ports:
-      - "4200:80"
     labels:
       - "traefik.frontend.rule=PathPrefix:/"
       - "traefik.port=80"
@@ -68,8 +66,6 @@ services:
       - openldap
   catamel:
     image: "dacat/catamel"
-    ports:
-      - "3000:3000"
     depends_on:
       - mongodb
       - openldap-seed
