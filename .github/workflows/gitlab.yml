@@ -1,0 +1,14 @@
+name: CI
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Trigger GitLab CI
+        uses: appleboy/gitlab-ci-action@0.0.1
+
+
