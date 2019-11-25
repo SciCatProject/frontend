@@ -1,44 +1,23 @@
-FROM node:stretch
+FROM node:12.6.0-alpine as builder
+LABEL maintainer="gareth.murphy@esss.se"
+RUN sed -i -e 's/^root::/root:!:/' /etc/shadow
+RUN apk update && apk upgrade && \
+    apk add --no-cache bash git openssh
 
-ENV http_proxy  http://192.168.1.1:8123/
-ENV https_proxy  ${http_proxy}
-
-
-RUN apt-get update && \
-    DEBIAN_FRONTEND="noninteractive" \
-    apt-get install -y --no-install-recommends \
-    chromium \
-    libgconf-2-4 \
-    openjdk-8-jre-headless \
-    && rm -rf /var/lib/apt/lists/*
-
-ENV CHROME_BIN /usr/bin/chromium
-
-
-WORKDIR /project
-
-
-RUN git config --global http.proxy   ${http_proxy}
-RUN git clone https://www.github.com/SciCatProject/catanie
-
-WORKDIR /project/catanie
-
-RUN npm config set proxy   ${http_proxy}
-RUN npm config set https-proxy   ${http_proxy}
 RUN npm config set registry http://registry.npmjs.org/
 RUN npm config set strict-ssl false
-
+ARG env=e2e
+WORKDIR /catanie
+COPY package.json  /catanie
 RUN npm install
+COPY . /catanie/
+RUN ./CI/ESS/copyimages.sh
+RUN npx ng build --configuration=${env}
 
-RUN npm run ng build
-RUN npm install -g protractor
-
-COPY CI/ESS/rune2e.sh /entrypoint.sh
-
-
-COPY CI/ESS/protractor.conf.js /project/catanie/
-
-RUN ls
-
-CMD /entrypoint.sh
-
+FROM nginx:alpine
+RUN sed -i -e 's/^root::/root:!:/' /etc/shadow
+RUN rm -rf /usr/share/nginx/html/*
+COPY --from=builder /catanie/dist/ /usr/share/nginx/html
+COPY scripts/nginx.conf /etc/nginx/nginx.conf
+COPY CI/ESS/google43e14584df796f63.html   /usr/share/nginx/html
+EXPOSE 80

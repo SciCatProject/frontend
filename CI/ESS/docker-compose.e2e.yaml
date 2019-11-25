@@ -1,0 +1,39 @@
+version: "3.2"
+services:
+  mongodb:
+    image: "bitnami/mongodb:latest"
+    volumes:
+      - "mongodb_data:/bitnami"
+  openldap:
+    image: osixia/openldap
+    container_name: openldap
+    hostname: openldap
+    environment:
+      LDAP_ORGANISATION: "LDAP Catamel Auth"
+      LDAP_SSL_HELPER_PREFIX: "ldap"
+      LDAP_TLS_VERIFY_CLIENT: "never"
+      LDAP_LOG_LEVEL: 256
+      LDAP_ADMIN_PASSWORD: "admin"
+  openldap-seed:
+    image: osixia/openldap
+    volumes:
+      - ./CI/ESS/ldif_files:/ldif_files
+    entrypoint: sh -c '/ldif_files/addAll.sh'
+  catanie:
+    image: "dacat/catanie:e2e"
+  cypress:
+    image: "dacat/catanie:cypress"
+    command: npx cypress run
+    depends_on:
+      - mongodb
+      - catamel
+      - catanie
+      - openldap-seed
+  catamel:
+    image: "dacat/catamel"
+    depends_on:
+      - mongodb
+      - openldap-seed
+volumes:
+  mongodb_data:
+    driver: local

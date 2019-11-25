@@ -1,8 +1,8 @@
-version: "3"
+version: "3.2"
 services:
   reverse-proxy:
-    image: traefik
-    command: ["--api", "--docker"]
+    image: traefik:v2.0
+    command: --api.insecure=true --providers.docker=true --entrypoints.web.address=:80
     ports:
       - "80:80"
       - "8080:8080"
@@ -10,8 +10,6 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
   mongodb:
     image: "bitnami/mongodb:latest"
-    ports:
-      - "27017:27017"
     volumes:
       - "mongodb_data:/bitnami"
   openldap:
@@ -24,8 +22,6 @@ services:
       LDAP_TLS_VERIFY_CLIENT: "never"
       LDAP_LOG_LEVEL: 256
       LDAP_ADMIN_PASSWORD: "admin"
-    ports:
-      - "389:389"
   openldap-seed:
     image: osixia/openldap
     volumes:
@@ -40,8 +36,6 @@ services:
     environment:
       PHPLDAPADMIN_HTTPS=false:
       PHPLDAPADMIN_LDAP_HOSTS: "openldap"
-    ports:
-      - "8081:80"
     links:
       - "openldap:openldap"
     depends_on:
@@ -49,8 +43,9 @@ services:
   catanie:
     image: "dacat/catanie:latest"
     labels:
-      - "traefik.frontend.rule=PathPrefix:/"
-      - "traefik.port=80"
+      - "traefik.http.routers.catanie.rule=Host(`scicat.com`)"
+      - "traefik.http.routers.catanie.rule=PathPrefix(`/`)"
+      - "traefik.http.routers.catanie.entrypoints=web"
   cataniecypress:
     image: "dacat/catanie:cypress"
     command: ["npx", "cypress", "run"]
@@ -74,8 +69,9 @@ services:
       - openldap
       - openldap-seed
     labels:
-      - "traefik.frontend.rule=PathPrefix:/api, /auth"
-      - "traefik.port=3000"
+      - "traefik.http.routers.catamel.rule=Host(`scicat.com`)"
+      - "traefik.http.routers.catamel.rule=PathPrefix(`/api`, `/auth`)"
+      - "traefik.http.routers.catamel.entrypoints=web"
 volumes:
   mongodb_data:
     driver: local
