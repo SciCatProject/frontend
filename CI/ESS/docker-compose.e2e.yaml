@@ -22,13 +22,21 @@ services:
   catanie:
     image: "dacat/catanie:e2e"
   cypress:
-    image: "dacat/catanie:cypress"
-    command: npx cypress run
+    image: "cypress/included:3.2.0"
     depends_on:
       - mongodb
       - catamel
       - catanie
       - openldap-seed
+    environment:
+      - CYPRESS_baseUrl=http://catanie:80
+      - CYPRESS_lbBaseUrl=http://catamel:3000/api/v3
+      - CYPRESS_viewportWidth=1280
+      - CYPRESS_username="admin"
+      - CYPRESS_password="2jf70TPNZsS"
+    working_dir: /e2e
+    volumes:
+      - ./:/e2e
   catamel:
     image: "dacat/catamel"
     depends_on:
