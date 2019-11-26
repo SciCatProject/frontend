@@ -21,7 +21,7 @@ describe("Datasets", () => {
 
       cy.visit("/datasets");
 
-      cy.wait("@fetch");
+      cy.wait(5000);
 
       cy.get(".mat-row")
         .contains("Cypress Dataset")
@@ -38,7 +38,7 @@ describe("Datasets", () => {
         expect(response.status).to.eq(200);
       });
 
-      cy.wait("@fetch");
+      cy.wait(5000);
 
       cy.get(".done-edit-button").click();
 
@@ -52,7 +52,7 @@ describe("Datasets", () => {
     it("should go to dataset details and remove the added keyword", () => {
       cy.visit("/datasets");
 
-      cy.wait("@fetch");
+      cy.wait(5000);
 
       cy.get(".mat-row")
         .contains("Cypress Dataset")

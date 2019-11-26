@@ -21,7 +21,7 @@ describe("Datasets", () => {
     it("should go to dataset details and add an attachment using the dropzone", () => {
       cy.visit("/datasets");
 
-      cy.wait("@fetch");
+      cy.wait(5000);
 
       cy.get(".mat-row")
         .contains("Cypress Dataset")
