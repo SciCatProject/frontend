@@ -26,6 +26,8 @@ describe("Datasets", () => {
         .contains("Cypress Dataset")
         .click();
 
+      cy.wait(5000);
+
       cy.get(".add-keyword-chip").click();
 
       cy.get("#keywordInput").type("cypresskey{enter}");
