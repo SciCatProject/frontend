@@ -5,6 +5,12 @@ describe("Datasets", () => {
     cy.wait(5000);
 
     cy.login(Cypress.config("username"), Cypress.config("password"));
+
+    cy.createDataset("raw");
+
+    cy.server();
+    cy.route("PUT", "/api/v3/Datasets/**/*").as("change");
+    cy.route("GET", "*").as("fetch");
   });
 
   after(() => {
@@ -13,16 +19,15 @@ describe("Datasets", () => {
 
   describe("Make dataset public", () => {
     it("should go to dataset details and toggle public", () => {
-      cy.createDataset("raw");
-
-      cy.server();
-      cy.route("PUT", "/api/v3/Datasets/**/*").as("change");
-
       cy.visit("/datasets");
+
+      cy.wait("@fetch");
 
       cy.get(".mat-row")
         .contains("Cypress Dataset")
         .click();
+
+      cy.wait("@fetch");
 
       cy.get(".mat-slide-toggle-label")
         .contains("Public")

@@ -8,6 +8,7 @@ describe("Samples", function() {
 
     cy.server();
     cy.route("POST", "/api/v3/Samples").as("add");
+    cy.route("GET", "*").as("fetch");
   });
 
   after(function() {
@@ -17,6 +18,8 @@ describe("Samples", function() {
   describe("Add sample", function() {
     it("should add a new sample", function() {
       cy.visit("/samples");
+
+      cy.wait("@fetch");
 
       cy.get("mat-card")
         .contains("Add Sample")

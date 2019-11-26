@@ -8,6 +8,7 @@ describe("Datasets", () => {
 
     cy.server();
     cy.route("PUT", "/api/v3/Datasets/**/*").as("keyword");
+    cy.route("GET", "*").as("fetch");
   });
 
   after(() => {
@@ -20,26 +21,24 @@ describe("Datasets", () => {
 
       cy.visit("/datasets");
 
-      cy.wait(5000);
+      cy.wait("@fetch");
 
       cy.get(".mat-row")
         .contains("Cypress Dataset")
         .click();
 
-      cy.wait(5000);
+      cy.wait("@fetch");
 
       cy.get(".add-keyword-chip").click();
 
       cy.get("#keywordInput").type("cypresskey{enter}");
 
-      cy.wait(5000);
-
-      cy.get(".done-edit-button").click();
-
       cy.wait("@keyword").then(response => {
         expect(response.method).to.eq("PUT");
         expect(response.status).to.eq(200);
       });
+
+      cy.get(".done-edit-button").click();
 
       cy.get(".mat-chip-list")
         .children()
@@ -51,11 +50,13 @@ describe("Datasets", () => {
     it("should go to dataset details and remove the added keyword", () => {
       cy.visit("/datasets");
 
-      cy.wait(5000);
+      cy.wait("@fetch");
 
       cy.get(".mat-row")
         .contains("Cypress Dataset")
         .click();
+
+      cy.wait("@fetch");
 
       cy.contains("cypresskey")
         .children(".mat-chip-remove")
