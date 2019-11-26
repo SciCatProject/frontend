@@ -2,6 +2,8 @@
 
 describe("Samples", function() {
   beforeEach(function() {
+    cy.wait(5000);
+
     cy.login(Cypress.config("username"), Cypress.config("password"));
 
     cy.server();
