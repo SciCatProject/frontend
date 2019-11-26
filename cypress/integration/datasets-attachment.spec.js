@@ -32,6 +32,8 @@ describe("Datasets", () => {
         .contains("Attachments")
         .click();
 
+      cy.wait(5000);
+
       cy.fixture("attachment-image").then(file => {
         cy.get(".dropzone").upload(
           {

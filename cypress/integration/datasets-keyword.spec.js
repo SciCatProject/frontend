@@ -58,7 +58,7 @@ describe("Datasets", () => {
         .contains("Cypress Dataset")
         .click();
 
-      cy.wait("@fetch");
+      cy.wait(5000);
 
       cy.contains("cypresskey")
         .children(".mat-chip-remove")
