@@ -40,7 +40,7 @@ describe("Datasets", () => {
 
       cy.wait(5000);
 
-      cy.get(".done-edit-button").click();
+      cy.get(".done-edit-button").click({ force: true });
 
       cy.get(".mat-chip-list")
         .children()

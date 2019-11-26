@@ -10,7 +10,6 @@ describe("Datasets", () => {
 
     cy.server();
     cy.route("POST", "/api/v3/Datasets/**/*").as("upload");
-    cy.route("GET", "*").as("fetch");
   });
 
   afterEach(() => {
@@ -27,7 +26,7 @@ describe("Datasets", () => {
         .contains("Cypress Dataset")
         .click();
 
-      cy.wait("@fetch");
+      cy.wait(5000);
 
       cy.get(".mat-tab-label")
         .contains("Attachments")
