@@ -20,6 +20,8 @@ describe("Datasets", () => {
 
       cy.visit("/datasets");
 
+      cy.wait(5000);
+
       cy.get(".mat-row")
         .contains("Cypress Dataset")
         .click();
@@ -44,6 +46,8 @@ describe("Datasets", () => {
   describe("Remove keyword", () => {
     it("should go to dataset details and remove the added keyword", () => {
       cy.visit("/datasets");
+
+      cy.wait(5000);
 
       cy.get(".mat-row")
         .contains("Cypress Dataset")
