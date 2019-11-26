@@ -32,6 +32,8 @@ describe("Datasets", () => {
 
       cy.get("#keywordInput").type("cypresskey{enter}");
 
+      cy.wait(5000);
+
       cy.get(".done-edit-button").click();
 
       cy.wait("@keyword").then(response => {
