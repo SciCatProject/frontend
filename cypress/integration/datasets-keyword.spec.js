@@ -38,6 +38,8 @@ describe("Datasets", () => {
         expect(response.status).to.eq(200);
       });
 
+      cy.wait("@fetch");
+
       cy.get(".done-edit-button").click();
 
       cy.get(".mat-chip-list")
