@@ -79,20 +79,20 @@ describe("PublishComponent", () => {
         },
         value: "test author"
       };
-      component.addAuthor(event);
+      component.addCreator(event);
 
-      expect(component.form.authors).toContain(event.value);
+      expect(component.form.creators).toContain(event.value);
     });
   });
 
   describe("#removeAuthor()", () => {
     it("should remove an author from the authors property in the form", () => {
-      const author = "testAuthor";
-      component.form.authors = [author];
+      const creator = "testAuthor";
+      component.form.creators = [creator];
 
-      component.removeAuthor(author);
+      component.removeCreator(creator);
 
-      expect(component.form.authors).not.toContain(author);
+      expect(component.form.creators).not.toContain(creator);
     });
   });
 
@@ -108,8 +108,7 @@ describe("PublishComponent", () => {
     it("should return true if form has no undefined properties and their lengths > 0", () => {
       component.form = {
         title: "testTitle",
-        creator: "testCreator",
-        authors: ["testAuthor"],
+        creators: ["testCreator"],
         affiliation: "testAffiliation",
         publisher: "testPublisher",
         resourceType: "testType",

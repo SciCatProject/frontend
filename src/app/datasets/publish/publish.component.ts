@@ -36,8 +36,7 @@ export class PublishComponent implements OnInit, OnDestroy {
 
   public form = {
     title: "",
-    creator: "",
-    authors: [],
+    creators: [],
     affiliation: this.appConfig.facility,
     publisher: this.appConfig.facility,
     resourceType: "",
@@ -55,21 +54,21 @@ export class PublishComponent implements OnInit, OnDestroy {
   public formData = null;
   actionSubjectSubscription: Subscription;
 
-  addAuthor(event) {
-    this.form.authors.push(event.value);
+  addCreator(event) {
+    this.form.creators.push(event.value);
     event.input.value = "";
   }
 
-  removeAuthor(author) {
-    const index = this.form.authors.indexOf(author);
-    this.form.authors.splice(index, 1);
+  removeCreator(creator) {
+    const index = this.form.creators.indexOf(creator);
+    this.form.creators.splice(index, 1);
   }
 
   public formIsValid() {
     if (!Object.values(this.form).includes(undefined)) {
       return (
         this.form.title.length > 0 &&
-        this.form.authors.length > 0 &&
+        this.form.creators.length > 0 &&
         this.form.affiliation.length > 0 &&
         this.form.publisher.length > 0 &&
         this.form.resourceType.length > 0 &&
@@ -97,12 +96,11 @@ export class PublishComponent implements OnInit, OnDestroy {
         first(),
         tap(datasets => {
           if (datasets) {
-            const authors = datasets.map(dataset => dataset.owner);
-            const unique = authors.filter(
-              (author, i) => authors.indexOf(author) === i
+            const creator = datasets.map(dataset => dataset.owner);
+            const unique = creator.filter(
+              (item, i) => creator.indexOf(item) === i
             );
-            this.form.authors = unique;
-            this.form.creator = unique.join(",");
+            this.form.creators = unique;
             this.form.pidArray = datasets.map(dataset => dataset.pid);
           }
         })
@@ -149,9 +147,8 @@ export class PublishComponent implements OnInit, OnDestroy {
     publishedData.dataDescription = this.form.description;
     publishedData.resourceType = this.form.resourceType;
 
-    publishedData.creator = this.form.creator;
     publishedData.affiliation = this.form.affiliation;
-    publishedData.authors = this.form.authors;
+    publishedData.creator = this.form.creators;
     publishedData.pidArray = this.form.pidArray;
     publishedData.publisher = this.form.publisher;
     publishedData.publicationYear = parseInt(

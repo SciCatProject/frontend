@@ -28,20 +28,21 @@
     </mat-form-field>
 
     <mat-form-field>
-      <mat-chip-list #chipList>
+      <mat-chip-list required #chipList>
         <mat-chip
-          *ngFor="let name of form.authors"
-          (removed)="removeAuthor(name)"
+          *ngFor="let name of form.creators"
+          (removed)="removeCreator(name)"
         >
           {{ name }}
           <mat-icon matChipRemove>cancel</mat-icon>
         </mat-chip>
         <input
-          placeholder="Authors *"
+          
+          placeholder="Creators"
           [matChipInputFor]="chipList"
           [matChipInputAddOnBlur]="true"
           [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-          (matChipInputTokenEnd)="addAuthor($event)"
+          (matChipInputTokenEnd)="addCreator($event)"
         />
       </mat-chip-list>
     </mat-form-field>
@@ -69,14 +70,20 @@
     </mat-form-field>
 
     <mat-form-field>
-      <input
+      <mat-select
         required
         matInput
         placeholder="Resource Type"
-        autocomplete="off"
-        [(ngModel)]="form.resourceType"
         name="resourceType"
-      />
+        [(ngModel)]="form.resource_type"
+      >
+        <mat-option value="raw">
+          raw
+        </mat-option>
+        <mat-option value="derived">
+          derived
+        </mat-option>
+      </mat-select>
     </mat-form-field>
 
     <mat-form-field>

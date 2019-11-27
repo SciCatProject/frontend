@@ -6,7 +6,7 @@ import * as fromSelectors from "./published-data.selectors";
 const data: PublishedDataInterface = {
   doi: "testDOI",
   affiliation: "test affiliation",
-  creator: "test creator",
+  creator: ["test creator"],
   publisher: "test publisher",
   publicationYear: 2019,
   title: "test title",
