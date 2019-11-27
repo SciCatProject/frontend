@@ -37,7 +37,6 @@ export class PublishComponent implements OnInit, OnDestroy {
   public form = {
     title: "",
     creators: [],
-    affiliation: this.appConfig.facility,
     publisher: this.appConfig.facility,
     resourceType: "",
     description: "",
@@ -69,7 +68,6 @@ export class PublishComponent implements OnInit, OnDestroy {
       return (
         this.form.title.length > 0 &&
         this.form.creators.length > 0 &&
-        this.form.affiliation.length > 0 &&
         this.form.publisher.length > 0 &&
         this.form.resourceType.length > 0 &&
         this.form.description.length > 0 &&
@@ -147,7 +145,6 @@ export class PublishComponent implements OnInit, OnDestroy {
     publishedData.dataDescription = this.form.description;
     publishedData.resourceType = this.form.resourceType;
 
-    publishedData.affiliation = this.form.affiliation;
     publishedData.creator = this.form.creators;
     publishedData.pidArray = this.form.pidArray;
     publishedData.publisher = this.form.publisher;
