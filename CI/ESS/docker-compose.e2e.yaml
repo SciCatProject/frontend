@@ -8,7 +8,6 @@ services:
     image: "dacat/catamel"
     depends_on:
       - mongodb
-      - openldap-seed
   catanie:
     image: "dacat/catanie:e2e"
     command: ["./wait-for-it.sh", "catamel:3000", "--", "nginx", "-g", "daemon off;"]
