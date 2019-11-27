@@ -41,7 +41,7 @@ describe("Datasets", () => {
             fileName: file.name,
             mimeType: file.mimeType
           },
-          { subjectType: "drag-n-drop" }
+          { subjectType: "drag-n-drop", force: true }
         );
       });
 
