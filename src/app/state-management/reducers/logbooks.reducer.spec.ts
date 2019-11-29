@@ -7,12 +7,16 @@ import { APP_DI_CONFIG } from "app-config.module";
 describe("LogbooksReducer", () => {
   describe("on fetchLogbooksComplete", () => {
     it("should set logbooks", () => {
-      const logbooks = [new Logbook()];
       const firstTestMessage = { content: "First message" };
       const secondTestMessage = { content: "Second message" };
-      logbooks.forEach(logbook => {
-        logbook.messages = [firstTestMessage, secondTestMessage];
-      });
+      const logbooks = [
+        new Logbook({
+          roomId: "testId",
+          name: "testName",
+          messages: [firstTestMessage, secondTestMessage]
+        })
+      ];
+
       const action = fromActions.fetchLogbooksCompleteAction({ logbooks });
       const state = logbooksReducer(initialLogbookState, action);
 

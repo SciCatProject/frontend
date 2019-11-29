@@ -76,7 +76,24 @@
       </mat-header-cell>
       <mat-cell *matCellDef="let logbook">
         <div fxLayout="column" *ngIf="logbook.messages.length > 0">
-          {{ logbook.messages[0].content.body }}
+          <div *ngIf="logbook.messages[0].content.msgtype !== 'm.image'">
+            <div
+              *ngIf="!logbook.messages[0].content.formatted_body"
+              style="white-space:pre-wrap"
+              [innerHTML]="logbook.messages[0].content.body"
+            ></div>
+            <div
+              *ngIf="logbook.messages[0].content.formatted_body"
+              [innerHTML]="logbook.messages[0].content.formatted_body"
+            ></div>
+          </div>
+          <div *ngIf="logbook.messages[0].content.msgtype === 'm.image'">
+            <img
+              src="{{ logbook.messages[0].content.url }}"
+              alt="{{ logbook.messages[0].content.body }}"
+              height="60px"
+            />
+          </div>
         </div>
         <div fxLayout="column" *ngIf="logbook.messages.length === 0">
           --

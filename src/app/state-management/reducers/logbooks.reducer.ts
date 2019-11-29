@@ -10,13 +10,12 @@ import { APP_DI_CONFIG } from "app-config.module";
 const reducer = createReducer(
   initialLogbookState,
   on(fromActions.fetchLogbooksCompleteAction, (state, { logbooks }) => {
-    if (logbooks) {
-      logbooks.forEach(logbook => {
-        const descendingMessages = logbook.messages.reverse();
-        logbook.messages = descendingMessages;
-      });
-    }
-    return { ...state, logbooks };
+    const formattedLogbooks = logbooks.map(logbook => {
+      const descendingMessages = logbook.messages.reverse();
+      logbook.messages = descendingMessages;
+      return formatImageUrls(logbook);
+    });
+    return { ...state, logbooks: formattedLogbooks };
   }),
 
   on(fromActions.fetchLogbookCompleteAction, (state, { logbook }) => {
@@ -60,10 +59,9 @@ export function logbooksReducer(
 
 export function formatImageUrls(logbook: Logbook): Logbook {
   if (logbook && logbook.messages) {
-    const logbookCopy = { ...logbook } as Logbook;
-    logbookCopy.messages.forEach(message => {
+    logbook.messages.forEach(message => {
       if (message.content.msgtype === "m.image") {
-        if (message.content.info.hasOwnProperty("thumbnail_url")) {
+        if (message.content.info && message.content.info.hasOwnProperty("thumbnail_url")) {
           const externalThumbnailUrl = message.content.info.thumbnail_url.replace(
             "mxc://",
             `${APP_DI_CONFIG.synapseBaseUrl}/_matrix/media/r0/download/`
@@ -79,8 +77,6 @@ export function formatImageUrls(logbook: Logbook): Logbook {
         }
       }
     });
-    return logbookCopy;
-  } else {
-    return logbook;
   }
+  return logbook;
 }
