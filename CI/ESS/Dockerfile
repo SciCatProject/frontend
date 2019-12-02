@@ -11,7 +11,6 @@ WORKDIR /catanie
 COPY package.json  /catanie
 RUN npm install
 COPY . /catanie/
-RUN ./CI/ESS/copyimages.sh
 RUN npx ng build --configuration=${env}
 
 FROM nginx:alpine
