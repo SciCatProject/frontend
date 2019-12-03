@@ -78,7 +78,6 @@ export class PublishComponent implements OnInit, OnDestroy {
         this.form.resourceType.length > 0 &&
         this.form.creators.length > 0 &&
         this.form.publisher.length > 0 &&
-        this.form.resourceType.length > 0 &&
         this.form.description.length > 0 &&
         this.form.abstract.length > 0
       );
