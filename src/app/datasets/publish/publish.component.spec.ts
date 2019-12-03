@@ -71,13 +71,13 @@ describe("PublishComponent", () => {
     expect(component).toBeTruthy();
   });
 
-  describe("#addAuthor()", () => {
-    it("should push an author to the authors property in the form", () => {
+  describe("#addCreator()", () => {
+    it("should push a creator to the creator property in the form", () => {
       const event = {
         input: {
           value: ""
         },
-        value: "test author"
+        value: "testCreator"
       };
       component.addCreator(event);
 
@@ -85,9 +85,9 @@ describe("PublishComponent", () => {
     });
   });
 
-  describe("#removeAuthor()", () => {
-    it("should remove an author from the authors property in the form", () => {
-      const creator = "testAuthor";
+  describe("#removeCreator()", () => {
+    it("should remove a creator from the creator property in the form", () => {
+      const creator = "testCreator";
       component.form.creators = [creator];
 
       component.removeCreator(creator);
@@ -109,7 +109,6 @@ describe("PublishComponent", () => {
       component.form = {
         title: "testTitle",
         creators: ["testCreator"],
-        affiliation: "testAffiliation",
         publisher: "testPublisher",
         resourceType: "testType",
         description: "testDescription",

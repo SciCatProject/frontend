@@ -14,7 +14,6 @@ const data: PublishedDataInterface = {
   dataDescription: "test description",
   resourceType: "test type",
   pidArray: ["testPid"],
-  authors: ["test author"]
 };
 const publishedData = new PublishedData(data);
 

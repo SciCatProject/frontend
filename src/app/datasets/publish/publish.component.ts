@@ -54,19 +54,28 @@ export class PublishComponent implements OnInit, OnDestroy {
   actionSubjectSubscription: Subscription;
 
   addCreator(event) {
-    this.form.creators.push(event.value);
-    event.input.value = "";
+    if ((event.value || "").trim()) {
+      this.form.creators.push(event.value);
+    }
+
+    if (event.input) {
+      event.input.value = "";
+    }
   }
 
   removeCreator(creator) {
     const index = this.form.creators.indexOf(creator);
-    this.form.creators.splice(index, 1);
+
+    if (index >= 0) {
+      this.form.creators.splice(index, 1);
+    }
   }
 
   public formIsValid() {
     if (!Object.values(this.form).includes(undefined)) {
       return (
         this.form.title.length > 0 &&
+        this.form.resourceType.length > 0 &&
         this.form.creators.length > 0 &&
         this.form.publisher.length > 0 &&
         this.form.resourceType.length > 0 &&
@@ -117,7 +126,8 @@ export class PublishComponent implements OnInit, OnDestroy {
         this.form.abstract = result.abstract;
         this.form.title = result.title;
         this.form.description = result.description;
-        this.form.resourceType = result.resourceType;
+        this.form.resourceType = "raw";
+        this.form.thumbnail = result.thumbnail;
       });
 
     this.actionSubjectSubscription = this.actionsSubj.subscribe(data => {
@@ -156,9 +166,9 @@ export class PublishComponent implements OnInit, OnDestroy {
     publishedData.thumbnail = this.form.thumbnail;
     publishedData.numberOfFiles = this.form.numberOfFiles;
     publishedData.sizeOfArchive = this.form.sizeOfArchive;
-    this.userName$.subscribe( name => {
+    this.userName$.subscribe(name => {
       publishedData.scicatUser = name;
-    } );
+    });
 
     this.store.dispatch(publishDatasetAction({ data: publishedData }));
   }

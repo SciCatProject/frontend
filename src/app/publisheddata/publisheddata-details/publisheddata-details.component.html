@@ -1,32 +1,36 @@
 <div class="publishedData-detail" *ngIf="currentData$ | async as publishedData">
-  <mat-card>
-    <mat-card-header class="about-header">
-      About the published data
-    </mat-card-header>
+  <div fxLayout="row">
 
-    <table>
-      <tr *ngIf="publishedData.title as value">
-        <th><mat-icon> label </mat-icon> Title</th>
-        <td>{{ value }}</td>
-      </tr>
-      <tr *ngIf="publishedData.authors as value">
-        <th><mat-icon> group </mat-icon> Author List</th>
-        <td>{{ value }}</td>
-      </tr>
-      <tr *ngIf="publishedData.abstract as value">
-        <th><mat-icon> description </mat-icon> Abstract</th>
-        <td>{{ value }}</td>
-      </tr>
-      <tr *ngIf="publishedData.doi as value">
-        <th><mat-icon> fingerprint </mat-icon> DOI</th>
-        <td>{{ value }}</td>
-      </tr>
-      <tr *ngIf="landingPageUrl">
-        <th><mat-icon> link </mat-icon> URL</th>
-        <td><span [innerHTML]="landingPageUrl | linky"></span></td>
-      </tr>
-    </table>
-  </mat-card>
+  <div fxLayout="column">
+    <mat-card>
+      <mat-card-header class="about-header">
+        About the published data
+      </mat-card-header>
+
+      <table>
+        <tr *ngIf="publishedData.title as value">
+          <th><mat-icon> label </mat-icon> Title</th>
+          <td>{{ value }}</td>
+        </tr>
+        <tr *ngIf="publishedData.creator as value">
+          <th><mat-icon> group </mat-icon> Creator List</th>
+          <td>{{ value }}</td>
+        </tr>
+        <tr *ngIf="publishedData.abstract as value">
+          <th><mat-icon> description </mat-icon> Abstract</th>
+          <td>{{ value }}</td>
+        </tr>
+        <tr *ngIf="publishedData.doi as value">
+          <th><mat-icon> fingerprint </mat-icon> DOI</th>
+          <td>{{ value }}</td>
+        </tr>
+        <tr *ngIf="landingPageUrl">
+          <th><mat-icon> link </mat-icon> URL</th>
+          <td><span [innerHTML]="landingPageUrl | linky"></span></td>
+        </tr>
+      </table>
+    </mat-card>
+
 
   <mat-card>
     <mat-card-header class="admin-header">
@@ -35,7 +39,7 @@
 
     <table>
       <tr *ngIf="publishedData.scicatUser as value">
-        <th><mat-icon> account_circle </mat-icon> Scicat User </th>
+        <th><mat-icon> account_circle </mat-icon> Scicat User</th>
         <td>{{ value }}</td>
       </tr>
       <tr *ngIf="publishedData.creator as value">
@@ -85,4 +89,11 @@
       ></ngx-json-viewer>
     </div>
   </mat-card>
+
+  </div>
+  <mat-card>
+      <img mat-card-image src="{{ publishedData.thumbnail }}" />
+    </mat-card>
+  </div>
+
 </div>

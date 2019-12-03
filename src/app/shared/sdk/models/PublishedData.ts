@@ -3,7 +3,7 @@
 declare var Object: any;
 export interface PublishedDataInterface {
   "doi"?: string;
-  "affiliation": string;
+  "affiliation"?: string;
   "creator": Array<any>;
   "publisher": string;
   "publicationYear": number;
