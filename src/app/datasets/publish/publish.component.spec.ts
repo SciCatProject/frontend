@@ -5,7 +5,8 @@ import {
   MatIconModule,
   MatChipsModule,
   MatCardModule,
-  MatInputModule
+  MatInputModule,
+  MatSelectModule
 } from "@angular/material";
 import { Router } from "@angular/router";
 import { MockRouter, MockStore, MockPublishedDataApi } from "shared/MockStubs";
@@ -36,6 +37,7 @@ describe("PublishComponent", () => {
         MatFormFieldModule,
         MatIconModule,
         MatInputModule,
+        MatSelectModule,
         ReactiveFormsModule
       ],
       providers: [

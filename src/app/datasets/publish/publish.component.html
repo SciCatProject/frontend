@@ -1,103 +1,104 @@
 <div fxLayout="row" fxLayoutGap="50px">
-    <mat-card>
-      <p>You are about to publish {{ datasetCount }} datasets.</p>
+  <mat-card>
+    <p>You are about to publish {{ datasetCount }} datasets.</p>
 
-      <form>
-        <mat-form-field>
-          <input
-            required
-            matInput
-            placeholder="Title"
-            autocomplete="off"
-            [(ngModel)]="form.title"
-            name="title"
-          />
-        </mat-form-field>
+    <form>
+      <mat-form-field>
+        <input
+          required
+          matInput
+          placeholder="Title"
+          autocomplete="off"
+          [(ngModel)]="form.title"
+          name="title"
+        />
+      </mat-form-field>
 
-        <mat-form-field>
-          <mat-chip-list required #chipList>
-            <mat-chip
-              *ngFor="let name of form.creators"
-              (removed)="removeCreator(name)"
-            >
-              {{ name }}
-              <mat-icon matChipRemove>cancel</mat-icon>
-            </mat-chip>
-            <input
-              placeholder="Creators"
-              [matChipInputFor]="chipList"
-              [matChipInputAddOnBlur]="true"
-              [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-              (matChipInputTokenEnd)="addCreator($event)"
-            />
-          </mat-chip-list>
-        </mat-form-field>
-
-        <mat-form-field>
-          <input
-            required
-            matInput
-            placeholder="Publisher"
-            autocomplete="off"
-            [(ngModel)]="form.publisher"
-            name="publisher"
-          />
-        </mat-form-field>
-
-        <mat-form-field>
-          <mat-select
-            required
-            matInput
-            placeholder="Resource Type"
-            name="resourceType"
-            [(ngModel)]="form.resourceType"
+      <mat-form-field>
+        <mat-chip-list required #chipList>
+          <mat-chip
+            *ngFor="let name of form.creators"
+            (removed)="removeCreator(name)"
           >
-            <mat-option matInput value="raw">
-              raw
-            </mat-option>
-            <mat-option matInput value="derived">
-              derived
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-
-        <mat-form-field>
-          <textarea
-            required
+            {{ name }}
+            <mat-icon matChipRemove>cancel</mat-icon>
+          </mat-chip>
+          <input
             matInput
-            placeholder="Description"
-            autocomplete="off"
-            [(ngModel)]="form.description"
-            name="Description"
-            rows="5"
-          ></textarea>
-        </mat-form-field>
+            placeholder="Creators"
+            [matChipInputFor]="chipList"
+            [matChipInputAddOnBlur]="true"
+            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+            (matChipInputTokenEnd)="addCreator($event)"
+          />
+        </mat-chip-list>
+      </mat-form-field>
 
-        <mat-form-field>
-          <textarea
-            required
-            matInput
-            placeholder="Abstract"
-            autocomplete="off"
-            [(ngModel)]="form.abstract"
-            name="abstract"
-            rows="5"
-          ></textarea>
-        </mat-form-field>
+      <mat-form-field>
+        <input
+          required
+          matInput
+          placeholder="Publisher"
+          autocomplete="off"
+          [(ngModel)]="form.publisher"
+          name="publisher"
+        />
+      </mat-form-field>
 
-        <button
-          (click)="onPublish()"
-          mat-raised-button
-          color="primary"
-          [disabled]="!formIsValid()"
+      <mat-form-field>
+        <mat-select
+          required
+          matInput
+          placeholder="Resource Type"
+          name="resourceType"
+          [(ngModel)]="form.resourceType"
         >
-          Publish
-        </button>
-      </form>
-    </mat-card>
+          <mat-option value="raw">
+            raw
+          </mat-option>
+          <mat-option value="derived">
+            derived
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
 
-    <mat-card>
-      <img mat-card-image src="{{ form.thumbnail }}" />
-      <p>{{ form.caption }}</p>
-    </mat-card>
+      <mat-form-field>
+        <textarea
+          required
+          matInput
+          placeholder="Description"
+          autocomplete="off"
+          [(ngModel)]="form.description"
+          name="Description"
+          rows="5"
+        ></textarea>
+      </mat-form-field>
+
+      <mat-form-field>
+        <textarea
+          required
+          matInput
+          placeholder="Abstract"
+          autocomplete="off"
+          [(ngModel)]="form.abstract"
+          name="abstract"
+          rows="5"
+        ></textarea>
+      </mat-form-field>
+
+      <button
+        (click)="onPublish()"
+        mat-raised-button
+        color="primary"
+        [disabled]="!formIsValid()"
+      >
+        Publish
+      </button>
+    </form>
+  </mat-card>
+
+  <mat-card>
+    <img mat-card-image src="{{ form.thumbnail }}" />
+    <p>{{ form.caption }}</p>
+  </mat-card>
 </div>
