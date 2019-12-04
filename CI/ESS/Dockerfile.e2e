@@ -13,7 +13,6 @@ RUN npm install
 RUN wget https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh
 RUN chmod +x wait-for-it.sh
 COPY . /catanie/
-RUN ./CI/ESS/copyimages.sh
 RUN npx ng build --configuration=${env}
 
 FROM nginx:alpine

@@ -59,6 +59,14 @@
                 {
                   "replace": "src/assets/images/ess-site.png",
                   "with": "CI/ESS/ess-site.png"
+                },
+                {
+                  "replace": "src/assets/images/esslogo.png",
+                  "with": "CI/ESS/esslogo.png"
+                },
+                {
+                  "replace": "src/favicon.ico",
+                  "with": "CI/ESS/favicon.ico"
                 }
               ],
               "serviceWorker": true
@@ -81,6 +89,14 @@
                 {
                   "replace": "src/assets/images/ess-site.png",
                   "with": "CI/ESS/ess-site.png"
+                },
+                {
+                  "replace": "src/assets/images/esslogo.png",
+                  "with": "CI/ESS/esslogo.png"
+                },
+                {
+                  "replace": "src/favicon.ico",
+                  "with": "CI/ESS/favicon.ico"
                 }
               ],
               "serviceWorker": true
