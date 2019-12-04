@@ -97,7 +97,7 @@
     </form>
   </mat-card>
 
-  <mat-card>
+  <mat-card *ngIf="form.thumbnail">
     <img mat-card-image src="{{ form.thumbnail }}" />
   </mat-card>
 </div>

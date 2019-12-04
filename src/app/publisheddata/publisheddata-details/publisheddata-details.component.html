@@ -91,7 +91,7 @@
   </mat-card>
 
   </div>
-  <mat-card>
+  <mat-card *ngIf="publishedData.thumbnail">
       <img mat-card-image src="{{ publishedData.thumbnail }}" />
     </mat-card>
   </div>
