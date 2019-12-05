@@ -10,6 +10,7 @@ export const environment = {
   facility: "PSI",
   multipleDownloadEnabled: false,
   shoppingCartEnabled: true,
+  shoppingCartOnHeader: true,
   columnSelectEnabled: true,
   ingestManual: "https://melanie.gitpages.psi.ch/SciCatPages/",
   gettingStarted: "https://melanie.gitpages.psi.ch/SciCatPages/SciCatGettingStartedSLSSummary.pdf",
