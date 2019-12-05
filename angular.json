@@ -67,6 +67,10 @@
                 {
                   "replace": "src/favicon.ico",
                   "with": "CI/ESS/favicon.ico"
+                },
+                {
+                  "replace": "src/theme.scss",
+                  "with": "CI/ESS/theme.scss"
                 }
               ],
               "serviceWorker": true
@@ -97,6 +101,10 @@
                 {
                   "replace": "src/favicon.ico",
                   "with": "CI/ESS/favicon.ico"
+                },
+                {
+                  "replace": "src/theme.scss",
+                  "with": "CI/ESS/theme.scss"
                 }
               ],
               "serviceWorker": true
