@@ -3,8 +3,8 @@
 declare var Object: any;
 export interface PublishedDataInterface {
   "doi"?: string;
-  "affiliation": string;
-  "creator": string;
+  "affiliation"?: string;
+  "creator": Array<any>;
   "publisher": string;
   "publicationYear": number;
   "title": string;
@@ -16,7 +16,7 @@ export interface PublishedDataInterface {
   "numberOfFiles"?: number;
   "sizeOfArchive"?: number;
   "pidArray": Array<any>;
-  "authors": Array<any>;
+  "authors"?: Array<any>;
   "doiRegisteredSuccessfullyTime"?: Date;
   "creationTime"?: Date;
   "status"?: string;
@@ -26,7 +26,7 @@ export interface PublishedDataInterface {
 export class PublishedData implements PublishedDataInterface {
   "doi": string;
   "affiliation": string;
-  "creator": string;
+  "creator": Array<any>;
   "publisher": string;
   "publicationYear": number;
   "title": string;
@@ -86,7 +86,7 @@ export class PublishedData implements PublishedDataInterface {
         },
         "creator": {
           name: 'creator',
-          type: 'string'
+          type: 'Array&lt;any&gt;'
         },
         "publisher": {
           name: 'publisher',
