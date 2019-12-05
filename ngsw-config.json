@@ -6,6 +6,7 @@
       "urls": [
         "/api",
         "/explorer",
+        "/scichatexplorer",
         "/scicat",
         "/panosc",
         "/auth",
