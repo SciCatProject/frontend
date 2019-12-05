@@ -115,7 +115,7 @@ $theme: mat-light-theme($primary, $accent, $warn);
 @include angular-material-theme($theme);
 
 .dark-theme {
-  $primary: mat-palette($blue, 600, 400, 800);
+  $primary: mat-palette($red, 600, 400, 800);
   $accent: mat-palette($green, 100, 50, 200);
   $warn: mat-palette($red, 100, 50, 200);
 
