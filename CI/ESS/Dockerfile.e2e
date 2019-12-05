@@ -2,7 +2,7 @@ FROM node:12.6.0-alpine as builder
 LABEL maintainer="gareth.murphy@esss.se"
 RUN sed -i -e 's/^root::/root:!:/' /etc/shadow
 RUN apk update && apk upgrade && \
-    apk add --no-cache bash git openssh
+    apk add --no-cache bash git openssh wget
 
 RUN npm config set registry http://registry.npmjs.org/
 RUN npm config set strict-ssl false
@@ -10,14 +10,18 @@ ARG env=e2e
 WORKDIR /catanie
 COPY package.json  /catanie
 RUN npm install
+RUN wget https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh
+RUN chmod +x wait-for-it.sh
 COPY . /catanie/
-RUN ./CI/ESS/copyimages.sh
 RUN npx ng build --configuration=${env}
 
 FROM nginx:alpine
 RUN sed -i -e 's/^root::/root:!:/' /etc/shadow
+RUN apk update && apk upgrade && \
+    apk add --no-cache bash
 RUN rm -rf /usr/share/nginx/html/*
 COPY --from=builder /catanie/dist/ /usr/share/nginx/html
+COPY --from=builder /catanie/wait-for-it.sh /
 COPY scripts/nginx.conf /etc/nginx/nginx.conf
 COPY CI/ESS/google43e14584df796f63.html   /usr/share/nginx/html
 EXPOSE 80

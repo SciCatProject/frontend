@@ -5,7 +5,8 @@ import {
   MatIconModule,
   MatChipsModule,
   MatCardModule,
-  MatInputModule
+  MatInputModule,
+  MatSelectModule
 } from "@angular/material";
 import { Router } from "@angular/router";
 import { MockRouter, MockStore, MockPublishedDataApi } from "shared/MockStubs";
@@ -36,6 +37,7 @@ describe("PublishComponent", () => {
         MatFormFieldModule,
         MatIconModule,
         MatInputModule,
+        MatSelectModule,
         ReactiveFormsModule
       ],
       providers: [
@@ -71,28 +73,28 @@ describe("PublishComponent", () => {
     expect(component).toBeTruthy();
   });
 
-  describe("#addAuthor()", () => {
-    it("should push an author to the authors property in the form", () => {
+  describe("#addCreator()", () => {
+    it("should push a creator to the creator property in the form", () => {
       const event = {
         input: {
           value: ""
         },
-        value: "test author"
+        value: "testCreator"
       };
-      component.addAuthor(event);
+      component.addCreator(event);
 
-      expect(component.form.authors).toContain(event.value);
+      expect(component.form.creators).toContain(event.value);
     });
   });
 
-  describe("#removeAuthor()", () => {
-    it("should remove an author from the authors property in the form", () => {
-      const author = "testAuthor";
-      component.form.authors = [author];
+  describe("#removeCreator()", () => {
+    it("should remove a creator from the creator property in the form", () => {
+      const creator = "testCreator";
+      component.form.creators = [creator];
 
-      component.removeAuthor(author);
+      component.removeCreator(creator);
 
-      expect(component.form.authors).not.toContain(author);
+      expect(component.form.creators).not.toContain(creator);
     });
   });
 
@@ -108,9 +110,7 @@ describe("PublishComponent", () => {
     it("should return true if form has no undefined properties and their lengths > 0", () => {
       component.form = {
         title: "testTitle",
-        creator: "testCreator",
-        authors: ["testAuthor"],
-        affiliation: "testAffiliation",
+        creators: ["testCreator"],
         publisher: "testPublisher",
         resourceType: "testType",
         description: "testDescription",

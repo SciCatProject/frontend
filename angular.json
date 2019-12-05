@@ -25,11 +25,16 @@
               "src/robots.txt",
               "src/app/loopback_form",
               "src/assets/icons/android-chrome-192x192.png",
-              "src/assets/icons/apple-touch-icon-180x180.png",
+              "src/assets/icons/android-chrome-512x512.svg",
+              "src/assets/icons/apple-touch-icon-precomposed.png",
+              "src/assets/icons/apple-touch-icon.png",
               "src/assets/icons/favicon-16x16.png",
               "src/assets/icons/favicon-32x32.png",
+              "src/assets/icons/mstile-70x70.png",
               "src/assets/icons/mstile-150x150.png",
-              "src/assets/icons/safari-pinned-tab-250x250.svg",
+              "src/assets/icons/mstile-310x150.png",
+              "src/assets/icons/mstile-310x310.png",
+              "src/assets/icons/safari-pinned-tab.svg",
               "src/manifest.json"
             ],
             "styles": ["src/styles.css", "src/theme.scss"],
@@ -54,6 +59,18 @@
                 {
                   "replace": "src/assets/images/ess-site.png",
                   "with": "CI/ESS/ess-site.png"
+                },
+                {
+                  "replace": "src/assets/images/esslogo.png",
+                  "with": "CI/ESS/esslogo.png"
+                },
+                {
+                  "replace": "src/favicon.ico",
+                  "with": "CI/ESS/favicon.ico"
+                },
+                {
+                  "replace": "src/theme.scss",
+                  "with": "CI/ESS/theme.scss"
                 }
               ],
               "serviceWorker": true
@@ -76,6 +93,18 @@
                 {
                   "replace": "src/assets/images/ess-site.png",
                   "with": "CI/ESS/ess-site.png"
+                },
+                {
+                  "replace": "src/assets/images/esslogo.png",
+                  "with": "CI/ESS/esslogo.png"
+                },
+                {
+                  "replace": "src/favicon.ico",
+                  "with": "CI/ESS/favicon.ico"
+                },
+                {
+                  "replace": "src/theme.scss",
+                  "with": "CI/ESS/theme.scss"
                 }
               ],
               "serviceWorker": true
@@ -240,13 +269,19 @@
             "assets": [
               "src/assets",
               "src/favicon.ico",
+              "src/robots.txt",
               "src/app/loopback_form",
               "src/assets/icons/android-chrome-192x192.png",
-              "src/assets/icons/apple-touch-icon-180x180.png",
+              "src/assets/icons/android-chrome-512x512.svg",
+              "src/assets/icons/apple-touch-icon-precomposed.png",
+              "src/assets/icons/apple-touch-icon.png",
               "src/assets/icons/favicon-16x16.png",
               "src/assets/icons/favicon-32x32.png",
+              "src/assets/icons/mstile-70x70.png",
               "src/assets/icons/mstile-150x150.png",
-              "src/assets/icons/safari-pinned-tab-250x250.svg",
+              "src/assets/icons/mstile-310x150.png",
+              "src/assets/icons/mstile-310x310.png",
+              "src/assets/icons/safari-pinned-tab.svg",
               "src/manifest.json"
             ],
             "codeCoverageExclude": [

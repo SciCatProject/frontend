@@ -2,6 +2,8 @@
 
 describe("Datasets", () => {
   beforeEach(() => {
+    cy.wait(5000);
+
     cy.login(Cypress.config("username"), Cypress.config("password"));
 
     cy.createDataset("raw");
@@ -18,13 +20,19 @@ describe("Datasets", () => {
     it("should go to dataset details and add an attachment using the dropzone", () => {
       cy.visit("/datasets");
 
+      cy.wait(5000);
+
       cy.get(".mat-row")
         .contains("Cypress Dataset")
         .click();
 
+      cy.wait(5000);
+
       cy.get(".mat-tab-label")
         .contains("Attachments")
         .click();
+
+      cy.wait(5000);
 
       cy.fixture("attachment-image").then(file => {
         cy.get(".dropzone").upload(
@@ -33,7 +41,7 @@ describe("Datasets", () => {
             fileName: file.name,
             mimeType: file.mimeType
           },
-          { subjectType: "drag-n-drop" }
+          { subjectType: "drag-n-drop", force: true }
         );
       });
 

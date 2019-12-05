@@ -5,6 +5,8 @@ describe("Users Login", () => {
   const password = Cypress.config("password");
 
   it("visits login page and tries to log in with the wrong password", () => {
+    cy.wait(5000);
+
     cy.visit("/");
 
     cy.url().should("include", "/login");
@@ -23,6 +25,8 @@ describe("Users Login", () => {
   });
 
   it("visits login page and logs in with a functional account", () => {
+    cy.wait(5000);
+
     cy.visit("/");
 
     cy.url().should("include", "/login");

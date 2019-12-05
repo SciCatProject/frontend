@@ -4,44 +4,20 @@ services:
     image: "bitnami/mongodb:latest"
     volumes:
       - "mongodb_data:/bitnami"
-  openldap:
-    image: osixia/openldap
-    container_name: openldap
-    hostname: openldap
-    environment:
-      LDAP_ORGANISATION: "LDAP Catamel Auth"
-      LDAP_SSL_HELPER_PREFIX: "ldap"
-      LDAP_TLS_VERIFY_CLIENT: "never"
-      LDAP_LOG_LEVEL: 256
-      LDAP_ADMIN_PASSWORD: "admin"
-  openldap-seed:
-    image: osixia/openldap
-    volumes:
-      - ./CI/ESS/ldif_files:/ldif_files
-    entrypoint: sh -c '/ldif_files/addAll.sh'
-  catanie:
-    image: "dacat/catanie:e2e"
-  cypress:
-    image: "cypress/included:3.2.0"
-    depends_on:
-      - mongodb
-      - catamel
-      - catanie
-      - openldap-seed
-    environment:
-      - CYPRESS_baseUrl=http://catanie:80
-      - CYPRESS_lbBaseUrl=http://catamel:3000/api/v3
-      - CYPRESS_viewportWidth=1280
-      - CYPRESS_username="admin"
-      - CYPRESS_password="2jf70TPNZsS"
-    working_dir: /e2e
-    volumes:
-      - ./:/e2e
   catamel:
     image: "dacat/catamel"
     depends_on:
       - mongodb
-      - openldap-seed
+  catanie:
+    image: "dacat/catanie:e2e"
+    command: ["./wait-for-it.sh", "catamel:3000", "--", "nginx", "-g", "daemon off;"]
+    depends_on:
+      - catamel
+  cypress:
+    image: "dacat/catanie:cypress"
+    command: ["./wait-for-it.sh", "catanie:80", "--", "npx", "cypress", "run"]
+    depends_on:
+      - catanie
 volumes:
   mongodb_data:
     driver: local

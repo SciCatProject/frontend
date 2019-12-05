@@ -21,7 +21,7 @@ import {
 const data: PublishedDataInterface = {
   doi: "testDOI",
   affiliation: "test affiliation",
-  creator: "test creator",
+  creator: ["test creator"],
   publisher: "test publisher",
   publicationYear: 2019,
   title: "test title",
@@ -29,7 +29,6 @@ const data: PublishedDataInterface = {
   dataDescription: "test description",
   resourceType: "test type",
   pidArray: ["testPid"],
-  authors: ["test author"]
 };
 const publishedData = new PublishedData(data);
 
