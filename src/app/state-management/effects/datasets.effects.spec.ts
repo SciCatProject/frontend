@@ -175,16 +175,21 @@ describe("DatasetEffects", () => {
   describe("addDataset$", () => {
     const derivedDataset = new DerivedDataset();
 
-    it("should result in an addDatasetCompleteAction and a fetchDatasetsAction", () => {
+    it("should result in an addDatasetCompleteAction, a fetchDatasetsAction and a fetchDatasetAction", () => {
       const action = fromActions.addDatasetAction({ dataset: derivedDataset });
       const outcome1 = fromActions.addDatasetCompleteAction({ dataset });
       const outcome2 = fromActions.fetchDatasetsAction();
+      const outcome3 = fromActions.fetchDatasetAction({ pid: dataset.pid });
 
       actions = hot("-a", { a: action });
       const response = cold("-a|", { a: dataset });
       datasetApi.create.and.returnValue(response);
 
-      const expected = cold("--(bc)", { b: outcome1, c: outcome2 });
+      const expected = cold("--(bcd)", {
+        b: outcome1,
+        c: outcome2,
+        d: outcome3
+      });
       expect(effects.addDataset$).toBeObservable(expected);
     });
 

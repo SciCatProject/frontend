@@ -107,7 +107,8 @@ export class DatasetEffects {
         this.datasetApi.create(dataset).pipe(
           mergeMap(res => [
             fromActions.addDatasetCompleteAction({ dataset: res }),
-            fromActions.fetchDatasetsAction()
+            fromActions.fetchDatasetsAction(),
+            fromActions.fetchDatasetAction({ pid: res.pid })
           ]),
           catchError(() => of(fromActions.addDatasetFailedAction()))
         )

@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit, Inject } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { APP_CONFIG, AppConfig } from "app-config.module";
-import { select, Store } from "@ngrx/store";
+import { select, Store, ActionsSubject } from "@ngrx/store";
 
 import * as rison from "rison";
 import * as deepEqual from "deep-equal";
@@ -13,13 +13,15 @@ import {
   fetchFacetCountsAction,
   prefillBatchAction,
   prefillFiltersAction,
-  addDatasetAction
+  addDatasetAction,
+  fetchDatasetCompleteAction
 } from "state-management/actions/datasets.actions";
 
 import {
   getFilters,
   getHasPrefilledFilters,
-  getDatasetsInBatch
+  getDatasetsInBatch,
+  getCurrentDataset
 } from "state-management/selectors/datasets.selectors";
 import {
   combineLatest,
@@ -99,6 +101,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   constructor(
     @Inject(APP_CONFIG) public appConfig: AppConfig,
+    private actionsSubj: ActionsSubject,
     public dialog: MatDialog,
     private store: Store<any>,
     private router: Router,
@@ -146,6 +149,20 @@ export class DashboardComponent implements OnInit, OnDestroy {
       this.store.pipe(select(getProfile)).subscribe(profile => {
         if (profile) {
           this.userGroups = profile.accessGroups;
+        }
+      })
+    );
+
+    this.subscriptions.push(
+      this.actionsSubj.subscribe(data => {
+        if (data.type === fetchDatasetCompleteAction.type) {
+          this.store
+            .pipe(select(getCurrentDataset))
+            .subscribe(dataset => {
+              const pid = encodeURIComponent(dataset.pid);
+              this.router.navigateByUrl("/datasets/" + pid);
+            })
+            .unsubscribe();
         }
       })
     );

@@ -1,15 +1,10 @@
 import { APP_CONFIG } from "app-config.module";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
-import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Store, StoreModule } from "@ngrx/store";
 import { rootReducer } from "state-management/reducers/root.reducer";
-import {
-  MatAutocompleteModule,
-  MatTableModule,
-  MatDialogModule
-} from "@angular/material";
+import { MatDialogModule } from "@angular/material";
 import {
   MockActivatedRoute,
   MockRouter,
@@ -17,7 +12,6 @@ import {
 } from "../../shared/MockStubs";
 import { DashboardComponent } from "./dashboard.component";
 
-/* tslint:disable:no-unused-variable */
 describe("DashboardComponent", () => {
   let component: DashboardComponent;
   let fixture: ComponentFixture<DashboardComponent>;
@@ -25,14 +19,7 @@ describe("DashboardComponent", () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
-      imports: [
-        MatAutocompleteModule,
-        MatTableModule,
-        MatDialogModule,
-        FormsModule,
-        ReactiveFormsModule,
-        StoreModule.forRoot({ rootReducer })
-      ],
+      imports: [MatDialogModule, StoreModule.forRoot({ rootReducer })],
       declarations: [DashboardComponent]
     });
     TestBed.overrideComponent(DashboardComponent, {
