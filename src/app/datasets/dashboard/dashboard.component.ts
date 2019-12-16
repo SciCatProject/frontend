@@ -35,7 +35,7 @@ import {
   getProfile,
   getCurrentUser
 } from "state-management/selectors/user.selectors";
-import { DerivedDatasetInterface, DerivedDataset } from "shared/sdk";
+import { DerivedDataset } from "shared/sdk";
 
 @Component({
   selector: "dashboard",
@@ -59,36 +59,39 @@ export class DashboardComponent implements OnInit, OnDestroy {
   userGroups: string[];
 
   openDialog(): void {
-    const { username, email } = this.currentUser;
-    const datasetInterface: DerivedDatasetInterface = {
-      accessGroups: [],
-      contactEmail: email,
-      createdBy: username,
-      creationTime: new Date(),
-      isPublished: false,
-      keywords: [],
-      owner: username.replace("ldap.", ""),
-      ownerEmail: email,
-      ownerGroup: "",
-      packedSize: 0,
-      inputDatasets: [],
-      investigator: email,
-      scientificMetadata: {},
-      size: 0,
-      sourceFolder: "/nfs/",
-      type: "derived",
-      usedSoftware: []
-    };
     const dialogRef = this.dialog.open(AddDatasetDialogComponent, {
       width: "500px",
-      data: { dataset: datasetInterface, userGroups: this.userGroups }
+      data: { userGroups: this.userGroups }
     });
 
     dialogRef.afterClosed().subscribe(res => {
       if (res) {
-        const dataset = new DerivedDataset(
-          res.dataset as DerivedDatasetInterface
-        );
+        const { username, email } = this.currentUser;
+        const dataset = new DerivedDataset({
+          accessGroups: [],
+          contactEmail: email, // Required
+          createdBy: username,
+          creationTime: new Date(), // Required
+          datasetName: res.datasetName,
+          description: res.description,
+          inputDatasets: [], // Required
+          investigator: email, // Required
+          isPublished: false,
+          keywords: [],
+          owner: username.replace("ldap.", ""), // Required
+          ownerEmail: email,
+          ownerGroup: res.ownerGroup, // Required
+          packedSize: 0,
+          scientificMetadata: {},
+          size: 0,
+          sourceFolder: res.sourceFolder, // Required
+          type: "derived", // Required
+          usedSoftware: res.usedSoftware
+            .split(",")
+            .map((entry: string) => entry.trim())
+            .filter((entry: string) => entry !== "") // Required
+        });
+        console.log("dataset", dataset);
         this.store.dispatch(addDatasetAction({ dataset }));
       }
     });

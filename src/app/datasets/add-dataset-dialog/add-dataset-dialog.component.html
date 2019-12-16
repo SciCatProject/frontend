@@ -1,9 +1,9 @@
 <h1 mat-dialog-title>Add Dataset</h1>
-<mat-dialog-content>
+<mat-dialog-content [formGroup]="dataset">
   <mat-form-field>
     <input
       matInput
-      [(ngModel)]="data.dataset.datasetName"
+      formControlName="datasetName"
       type="text"
       placeholder="Name"
     />
@@ -11,14 +11,14 @@
   <mat-form-field>
     <textarea
       matInput
-      [(ngModel)]="data.dataset.description"
+      formControlName="description"
       placeholder="Description"
       rows="5"
     ></textarea>
   </mat-form-field>
   <mat-form-field *ngIf="data.userGroups">
     <mat-label>Owner Group</mat-label>
-    <mat-select [(ngModel)]="data.dataset.ownerGroup">
+    <mat-select formControlName="ownerGroup" required>
       <mat-option *ngFor="let group of data.userGroups" [value]="group">
         {{ group }}
       </mat-option>
@@ -27,22 +27,26 @@
   <mat-form-field>
     <input
       matInput
-      [(ngModel)]="data.dataset.sourceFolder"
+      formControlName="sourceFolder"
       type="text"
       placeholder="Source Folder"
-      value="data.dataset.sourceFolder"
+      required
     />
   </mat-form-field>
   <mat-form-field>
     <input
       matInput
-      [(ngModel)]="data.dataset.usedSoftware"
+      formControlName="usedSoftware"
       type="text"
       placeholder="Software Used"
+      required
     />
+    <mat-hint align="end">Use a comma to separate multiple entries</mat-hint>
   </mat-form-field>
 </mat-dialog-content>
 <mat-dialog-actions>
   <button mat-button (click)="onClose()">Close</button>
-  <button mat-button [mat-dialog-close]="data">Save</button>
+  <button mat-button (click)="onSave()" [disabled]="!dataset.valid">
+    Save
+  </button>
 </mat-dialog-actions>
