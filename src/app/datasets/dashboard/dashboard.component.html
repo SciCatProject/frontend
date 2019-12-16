@@ -1,7 +1,11 @@
 <div fxLayout="row" fxLayout.xs="column">
   <div class="action-column" fxFlex="14">
     <datasets-filter></datasets-filter>
-    <mat-card class="add-card" (click)="openDialog()">
+    <mat-card
+      *ngIf="appConfig.addDatasetEnabled"
+      class="add-card"
+      (click)="openDialog()"
+    >
       <mat-icon> add_circle </mat-icon>
       Add Dataset
     </mat-card>
