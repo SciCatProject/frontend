@@ -33,7 +33,7 @@
     "@ngrx/schematics": "^8.5.0",
     "@ngrx/store": "^8.5.0",
     "autolinker": "^3.11.1",
-    "deep-equal": "^1.1.0",
+    "deep-equal": "^2.0.1",
     "filesize": "^6.0.1",
     "hammerjs": "^2.0.8",
     "ngx-file-helpers": "^2.0.0",
