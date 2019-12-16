@@ -89,8 +89,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         const dataset = new DerivedDataset(
           res.dataset as DerivedDatasetInterface
         );
-        console.log("dataset", dataset);
-        // this.store.dispatch(addDatasetAction({ dataset }));
+        this.store.dispatch(addDatasetAction({ dataset }));
       }
     });
   }
