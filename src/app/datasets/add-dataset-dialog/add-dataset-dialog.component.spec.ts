@@ -10,7 +10,7 @@ import {
   MAT_DIALOG_DATA
 } from "@angular/material";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
-import { FormsModule } from "@angular/forms";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MockMatDialogRef } from "shared/MockStubs";
 import { DerivedDataset } from "shared/sdk";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
@@ -29,7 +29,8 @@ describe("AddDatasetDialogComponent", () => {
         MatDialogModule,
         MatFormFieldModule,
         MatInputModule,
-        MatSelectModule
+        MatSelectModule,
+        ReactiveFormsModule
       ]
     });
     TestBed.overrideComponent(AddDatasetDialogComponent, {
