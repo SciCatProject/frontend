@@ -55,6 +55,7 @@ import { DatafilesComponent } from "./datafiles/datafiles.component";
 import { DatasetDetailComponent } from "./dataset-detail/dataset-detail.component";
 import { DatasetTableComponent } from "./dataset-table/dataset-table.component";
 import { DatasetsFilterComponent } from "./datasets-filter/datasets-filter.component";
+import { AddDatasetDialogComponent } from "./add-dataset-dialog/add-dataset-dialog.component";
 
 @NgModule({
   imports: [
@@ -109,9 +110,13 @@ import { DatasetsFilterComponent } from "./datasets-filter/datasets-filter.compo
     PublishComponent,
     ScientificConditionDialogComponent,
     ReduceComponent,
-    DatasetDetailsDashboardComponent
+    DatasetDetailsDashboardComponent,
+    AddDatasetDialogComponent
   ],
-  entryComponents: [ScientificConditionDialogComponent],
+  entryComponents: [
+    AddDatasetDialogComponent,
+    ScientificConditionDialogComponent
+  ],
   providers: [ArchivingService],
   exports: [
     DashboardComponent,

@@ -47,6 +47,11 @@ const reducer = createReducer(
   }),
   on(fromActions.clearBatchAction, state => ({ ...state, batch: [] })),
 
+  on(fromActions.addDatasetCompleteAction, (state, { dataset }) => ({
+    ...state,
+    currentSet: dataset
+  })),
+
   on(fromActions.addAttachmentCompleteAction, (state, { attachment }) => {
     const attachments = state.currentSet.attachments.filter(
       existingAttachment => existingAttachment.id !== attachment.id

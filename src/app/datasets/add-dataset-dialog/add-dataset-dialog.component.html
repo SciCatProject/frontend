@@ -1,0 +1,48 @@
+<h1 mat-dialog-title>Add Dataset</h1>
+<mat-dialog-content>
+  <mat-form-field>
+    <input
+      matInput
+      [(ngModel)]="data.dataset.datasetName"
+      type="text"
+      placeholder="Name"
+    />
+  </mat-form-field>
+  <mat-form-field>
+    <textarea
+      matInput
+      [(ngModel)]="data.dataset.description"
+      placeholder="Description"
+      rows="5"
+    ></textarea>
+  </mat-form-field>
+  <mat-form-field *ngIf="data.userGroups">
+    <mat-label>Owner Group</mat-label>
+    <mat-select [(ngModel)]="data.dataset.ownerGroup">
+      <mat-option *ngFor="let group of data.userGroups" [value]="group">
+        {{ group }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field>
+    <input
+      matInput
+      [(ngModel)]="data.dataset.sourceFolder"
+      type="text"
+      placeholder="Source Folder"
+      value="data.dataset.sourceFolder"
+    />
+  </mat-form-field>
+  <mat-form-field>
+    <input
+      matInput
+      [(ngModel)]="data.dataset.usedSoftware"
+      type="text"
+      placeholder="Software Used"
+    />
+  </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button (click)="onClose()">Close</button>
+  <button mat-button [mat-dialog-close]="data">Save</button>
+</mat-dialog-actions>

@@ -100,6 +100,21 @@ export class DatasetEffects {
     )
   );
 
+  addDataset$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(fromActions.addDatasetAction),
+      mergeMap(({ dataset }) =>
+        this.datasetApi.create(dataset).pipe(
+          mergeMap(res => [
+            fromActions.addDatasetCompleteAction({ dataset: res }),
+            fromActions.fetchDatasetsAction()
+          ]),
+          catchError(() => of(fromActions.addDatasetFailedAction()))
+        )
+      )
+    )
+  );
+
   updateProperty$ = createEffect(() =>
     this.actions$.pipe(
       ofType(fromActions.updatePropertyAction),
@@ -198,6 +213,7 @@ export class DatasetEffects {
         fromActions.fetchDatasetsAction,
         fromActions.fetchFacetCountsAction,
         fromActions.fetchDatasetAction,
+        fromActions.addDatasetAction,
         fromActions.updatePropertyAction,
         fromActions.addAttachmentAction,
         fromActions.updateAttachmentCaptionAction,
@@ -216,6 +232,8 @@ export class DatasetEffects {
         fromActions.fetchFacetCountsFailedAction,
         fromActions.fetchDatasetCompleteAction,
         fromActions.fetchDatasetFailedAction,
+        fromActions.addDatasetCompleteAction,
+        fromActions.addDatasetFailedAction,
         fromActions.updatePropertyCompleteAction,
         fromActions.updatePropertyFailedAction,
         fromActions.addAttachmentCompleteAction,

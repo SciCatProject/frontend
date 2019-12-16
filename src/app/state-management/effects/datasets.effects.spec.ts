@@ -2,7 +2,13 @@ import { TestBed } from "@angular/core/testing";
 import { provideMockActions } from "@ngrx/effects/testing";
 import { provideMockStore } from "@ngrx/store/testing";
 import { cold, hot } from "jasmine-marbles";
-import { DatasetInterface, Dataset, DatasetApi, Attachment } from "shared/sdk";
+import {
+  DatasetInterface,
+  Dataset,
+  DatasetApi,
+  Attachment,
+  DerivedDataset
+} from "shared/sdk";
 import * as fromActions from "../actions/datasets.actions";
 import { Observable } from "rxjs";
 import { DatasetEffects } from "./datasets.effects";
@@ -46,6 +52,7 @@ describe("DatasetEffects", () => {
         {
           provide: DatasetApi,
           useValue: jasmine.createSpyObj("datasetApi", [
+            "create",
             "fullquery",
             "fullfacet",
             "findOne",
@@ -165,10 +172,39 @@ describe("DatasetEffects", () => {
     });
   });
 
+  describe("addDataset$", () => {
+    const derivedDataset = new DerivedDataset();
+
+    it("should result in an addDatasetCompleteAction and a fetchDatasetsAction", () => {
+      const action = fromActions.addDatasetAction({ dataset: derivedDataset });
+      const outcome1 = fromActions.addDatasetCompleteAction({ dataset });
+      const outcome2 = fromActions.fetchDatasetsAction();
+
+      actions = hot("-a", { a: action });
+      const response = cold("-a|", { a: dataset });
+      datasetApi.create.and.returnValue(response);
+
+      const expected = cold("--(bc)", { b: outcome1, c: outcome2 });
+      expect(effects.addDataset$).toBeObservable(expected);
+    });
+
+    it("should result in an addDatasetFailedAction", () => {
+      const action = fromActions.addDatasetAction({ dataset: derivedDataset });
+      const outcome = fromActions.addDatasetFailedAction();
+
+      actions = hot("-a", { a: action });
+      const response = cold("-#", {});
+      datasetApi.create.and.returnValue(response);
+
+      const expected = cold("--b", { b: outcome });
+      expect(effects.addDataset$).toBeObservable(expected);
+    });
+  });
+
   describe("updateProperty$", () => {
     const pid = "testPid";
     const property = { isPublished: true };
-    it("should result in a updatePropertyCompleteAction and a fetchDatasetAction", () => {
+    it("should result in an updatePropertyCompleteAction and a fetchDatasetAction", () => {
       const action = fromActions.updatePropertyAction({
         pid,
         property
@@ -371,6 +407,21 @@ describe("DatasetEffects", () => {
       });
     });
 
+    describe("ofType addDatasetAction", () => {
+      it("should dispatch a loadingAction", () => {
+        const derivedDataset = new DerivedDataset();
+        const action = fromActions.addDatasetAction({
+          dataset: derivedDataset
+        });
+        const outcome = loadingAction();
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.loading$).toBeObservable(expected);
+      });
+    });
+
     describe("ofType updatePropertyAction", () => {
       it("should dispatch a loadingAction", () => {
         const pid = "testPid";
@@ -514,6 +565,30 @@ describe("DatasetEffects", () => {
     describe("ofType fetchDatasetFailedAction", () => {
       it("should dispatch a loadingCompleteAction", () => {
         const action = fromActions.fetchDatasetFailedAction();
+        const outcome = loadingCompleteAction();
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.loadingComplete$).toBeObservable(expected);
+      });
+    });
+
+    describe("ofType addDatasetCompleteAction", () => {
+      it("should dispatch a loadingCompleteAction", () => {
+        const action = fromActions.addDatasetCompleteAction({ dataset });
+        const outcome = loadingCompleteAction();
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.loadingComplete$).toBeObservable(expected);
+      });
+    });
+
+    describe("ofType addDatasetFailedAction", () => {
+      it("should dispatch a loadingCompleteAction", () => {
+        const action = fromActions.addDatasetFailedAction();
         const outcome = loadingCompleteAction();
 
         actions = hot("-a", { a: action });

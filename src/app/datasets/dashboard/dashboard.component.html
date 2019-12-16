@@ -1,7 +1,13 @@
 <div fxLayout="row" fxLayout.xs="column">
   <div class="action-column" fxFlex="14">
     <datasets-filter></datasets-filter>
-    <div *ngIf="!appConfig.shoppingCartOnHeader && nonEmpty$ | async"><batch-card></batch-card></div>
+    <mat-card class="add-card" (click)="openDialog()">
+      <mat-icon> add_circle </mat-icon>
+      Add Dataset
+    </mat-card>
+    <div *ngIf="!appConfig.shoppingCartOnHeader && nonEmpty$ | async">
+      <batch-card></batch-card>
+    </div>
   </div>
   <div class="table-column" fxFlex="85">
     <dataset-table></dataset-table>

@@ -1,0 +1,21 @@
+.action-column {
+  margin-right: 1em;
+
+  .add-card {
+    margin: 1em 0 1em;
+    text-align: center;
+
+    mat-icon {
+      vertical-align: middle;
+    }
+  }
+
+  .add-card:hover {
+    cursor: pointer;
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+}
+
+.table-column {
+  margin-top: 1.5em;
+}

@@ -44,6 +44,11 @@ import {
   addToBatchAction
 } from "state-management/actions/datasets.actions";
 import { PageChangeEvent } from "shared/modules/table/table.component";
+import { provideMockStore } from "@ngrx/store/testing";
+import {
+  getDatasets,
+  getSelectedDatasets
+} from "state-management/selectors/datasets.selectors";
 
 describe("DatasetTableComponent", () => {
   let component: DatasetTableComponent;
@@ -69,6 +74,14 @@ describe("DatasetTableComponent", () => {
           })
         }),
         AppConfigModule
+      ],
+      providers: [
+        provideMockStore({
+          selectors: [
+            { selector: getDatasets, value: [] },
+            { selector: getSelectedDatasets, value: [] }
+          ]
+        })
       ],
       declarations: [DatasetTableComponent]
     });
