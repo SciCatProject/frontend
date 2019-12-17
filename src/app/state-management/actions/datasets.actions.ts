@@ -1,5 +1,5 @@
 import { createAction, props } from "@ngrx/store";
-import { Dataset, Attachment } from "shared/sdk";
+import { Dataset, Attachment, DerivedDataset } from "shared/sdk";
 import { FacetCounts } from "state-management/state/datasets.store";
 import {
   ArchViewMode,
@@ -52,6 +52,18 @@ export const removeFromBatchAction = createAction(
   props<{ dataset: Dataset }>()
 );
 export const clearBatchAction = createAction("[Dataset] Clear Batch");
+
+export const addDatasetAction = createAction(
+  "[Dataset] Add Dataset",
+  props<{ dataset: DerivedDataset }>()
+);
+export const addDatasetCompleteAction = createAction(
+  "[Dataset] Add Dataset Complete",
+  props<{ dataset: Dataset }>()
+);
+export const addDatasetFailedAction = createAction(
+  "[Dataset] Add Dataset Failed"
+);
 
 export const updatePropertyAction = createAction(
   "[Dataset] Update Property",

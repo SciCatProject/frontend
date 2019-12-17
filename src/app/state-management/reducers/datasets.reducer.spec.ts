@@ -3,7 +3,7 @@ import * as fromActions from "../actions/datasets.actions";
 import { Dataset, DatasetInterface, Attachment } from "shared/sdk/models";
 import {
   FacetCounts,
-  DatasetState
+  initialDatasetState
 } from "state-management/state/datasets.store";
 import { ArchViewMode, ScientificCondition } from "../models";
 
@@ -17,41 +17,6 @@ const data: DatasetInterface = {
   attachments: []
 };
 const dataset = new Dataset({ pid: "testPid", ...data });
-
-const initialDatasetState: DatasetState = {
-  datasets: [],
-  selectedSets: [],
-  currentSet: dataset,
-  facetCounts: {},
-  totalCount: 0,
-
-  hasPrefilledFilters: false,
-
-  searchTerms: "run",
-  keywordsTerms: "",
-  batch: [],
-
-  openwhiskResult: {},
-
-  filters: {
-    mode: {},
-    modeToggle: ArchViewMode.all,
-    text: "",
-    creationTime: {
-      begin: "2019-10-03",
-      end: "2019-10-04"
-    },
-    type: [],
-    creationLocation: [],
-    ownerGroup: [],
-    skip: 0,
-    limit: 25,
-    sortField: "creationTime:desc",
-    keywords: [],
-    scientific: [],
-    isPublished: false
-  }
-};
 
 describe("DatasetsReducer", () => {
   describe("on fetchDatasetsCompleteAction", () => {
@@ -140,8 +105,19 @@ describe("DatasetsReducer", () => {
     });
   });
 
+  describe("on addDatasetCompleteAction", () => {
+    it("should set currentSet", () => {
+      const action = fromActions.addDatasetCompleteAction({ dataset });
+      const state = fromDatasets.datasetsReducer(initialDatasetState, action);
+
+      expect(state.currentSet).toEqual(dataset);
+    });
+  });
+
   describe("on addAttachmentCompleteAction", () => {
     it("should add attachment to currentSet property", () => {
+      initialDatasetState.currentSet = dataset;
+
       const attachment = new Attachment();
       const action = fromActions.addAttachmentCompleteAction({ attachment });
       const state = fromDatasets.datasetsReducer(initialDatasetState, action);
@@ -152,6 +128,8 @@ describe("DatasetsReducer", () => {
 
   describe("on updateAttachmentCaptionCompleteAction", () => {
     it("should add new caption to an attachment", () => {
+      initialDatasetState.currentSet = dataset;
+
       const attachment = new Attachment();
       const action = fromActions.updateAttachmentCaptionCompleteAction({
         attachment
@@ -164,7 +142,8 @@ describe("DatasetsReducer", () => {
 
   describe("on removeAttachmentCompleteAction", () => {
     it("should add attachment to currentSet property", () => {
-      initialDatasetState.currentSet.pid = "testPid";
+      initialDatasetState.currentSet = dataset;
+
       const attachment = new Attachment();
       const attachmentId = "testId";
       attachment.id = attachmentId;

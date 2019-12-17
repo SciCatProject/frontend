@@ -1,5 +1,5 @@
 import * as fromActions from "./datasets.actions";
-import { Dataset, Attachment } from "shared/sdk";
+import { Dataset, Attachment, DerivedDataset } from "shared/sdk";
 import { FacetCounts } from "state-management/state/datasets.store";
 import {
   ArchViewMode,
@@ -135,6 +135,32 @@ describe("Dataset Actions", () => {
     it("should create an action", () => {
       const action = fromActions.clearBatchAction();
       expect({ ...action }).toEqual({ type: "[Dataset] Clear Batch" });
+    });
+  });
+
+  describe("addDatasetAction", () => {
+    it("should create an action", () => {
+      const dataset = new DerivedDataset();
+      const action = fromActions.addDatasetAction({ dataset });
+      expect({ ...action }).toEqual({ type: "[Dataset] Add Dataset", dataset });
+    });
+  });
+
+  describe("addDatasetCompleteAction", () => {
+    it("should create an action", () => {
+      const dataset = new Dataset();
+      const action = fromActions.addDatasetCompleteAction({ dataset });
+      expect({ ...action }).toEqual({
+        type: "[Dataset] Add Dataset Complete",
+        dataset
+      });
+    });
+  });
+
+  describe("addDatasetFailedAction", () => {
+    it("should create an action", () => {
+      const action = fromActions.addDatasetFailedAction();
+      expect({ ...action }).toEqual({ type: "[Dataset] Add Dataset Failed" });
     });
   });
 

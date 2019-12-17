@@ -12,6 +12,7 @@ export class AppConfig {
   jupyterHubUrl: string;
   production: boolean;
   disabledDatasetColumns: string[];
+  addDatasetEnabled: boolean;
   archiveWorkflowEnabled: boolean;
   columnSelectEnabled: boolean;
   datasetReduceEnabled: boolean;
@@ -47,6 +48,7 @@ export const APP_DI_CONFIG: AppConfig = {
   riotBaseUrl: environment["riotBaseUrl"] || null,
   jupyterHubUrl: environment["jupyterHubUrl"] || null,
   production: environment.production,
+  addDatasetEnabled: environment["addDatasetEnabled"] || false,
   archiveWorkflowEnabled: environment["archiveWorkflowEnabled"] || null,
   columnSelectEnabled: environment["columnSelectEnabled"] || false,
   datasetReduceEnabled: environment["datasetReduceEnabled"] || false,

@@ -11,6 +11,7 @@ export const environment = {
   riotBaseUrl: "http://scitest.esss.lu.se/riot",
   jupyterHubUrl: "https://jupyterhub.esss.lu.se/",
   externalAuthEndpoint: "/auth/msad",
+  addDatasetEnabled: true,
   archiveWorkflowEnabled: false,
   columnSelectEnabled: true,
   csvEnabled: false,
