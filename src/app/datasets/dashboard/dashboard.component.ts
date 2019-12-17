@@ -93,7 +93,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
             .map((entry: string) => entry.trim())
             .filter((entry: string) => entry !== "") // Required
         });
-        console.log("dataset", dataset);
         this.store.dispatch(addDatasetAction({ dataset }));
       }
     });
