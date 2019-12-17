@@ -12,7 +12,6 @@ import {
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MockMatDialogRef } from "shared/MockStubs";
-import { DerivedDataset } from "shared/sdk";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
 describe("AddDatasetDialogComponent", () => {
@@ -39,7 +38,7 @@ describe("AddDatasetDialogComponent", () => {
           { provide: MatDialogRef, useClass: MockMatDialogRef },
           {
             provide: MAT_DIALOG_DATA,
-            useValue: { dataset: new DerivedDataset(), userGroups: [] }
+            useValue: { userGroups: [] }
           }
         ]
       }
@@ -55,5 +54,36 @@ describe("AddDatasetDialogComponent", () => {
 
   it("should create", () => {
     expect(component).toBeTruthy();
+  });
+
+  describe("#onSave()", () => {
+    it("should close the dialog and emit the form data", () => {
+      const closeSpy = spyOn(component.dialogRef, "close");
+
+      const formValues = {
+        datasetName: "Test Name",
+        description: "Test description",
+        ownerGroup: "test",
+        sourceFolder: "/nfs/test",
+        usedSoftware: "test software"
+      };
+
+      component.form.setValue(formValues);
+      component.onSave();
+
+      expect(closeSpy).toHaveBeenCalledTimes(1);
+      expect(closeSpy).toHaveBeenCalledWith(formValues);
+    });
+  });
+
+  describe("#onClose()", () => {
+    it("should close the dialog without emitting any data", () => {
+      const closeSpy = spyOn(component.dialogRef, "close");
+
+      component.onClose();
+
+      expect(closeSpy).toHaveBeenCalledTimes(1);
+      expect(closeSpy).toHaveBeenCalledWith();
+    });
   });
 });

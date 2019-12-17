@@ -13,7 +13,7 @@ import {
   styleUrls: ["./add-dataset-dialog.component.scss"]
 })
 export class AddDatasetDialogComponent {
-  dataset: FormGroup;
+  form: FormGroup;
   datasetName = new FormControl("", []);
   description = new FormControl("", []);
   ownerGroup = new FormControl("", [Validators.required]);
@@ -27,7 +27,7 @@ export class AddDatasetDialogComponent {
   ]);
 
   onSave(): void {
-    this.dialogRef.close(this.dataset.value);
+    this.dialogRef.close(this.form.value);
   }
 
   onClose(): void {
@@ -35,11 +35,11 @@ export class AddDatasetDialogComponent {
   }
 
   constructor(
+    @Inject(MAT_DIALOG_DATA) public data: { userGroups: string[] },
     public dialogRef: MatDialogRef<AddDatasetDialogComponent>,
-    private fb: FormBuilder,
-    @Inject(MAT_DIALOG_DATA) public data: { userGroups: string[] }
+    private fb: FormBuilder
   ) {
-    this.dataset = this.fb.group({
+    this.form = this.fb.group({
       datasetName: this.datasetName,
       description: this.description,
       ownerGroup: this.ownerGroup,

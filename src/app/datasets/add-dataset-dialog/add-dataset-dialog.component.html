@@ -1,5 +1,5 @@
 <h1 mat-dialog-title>Add Dataset</h1>
-<mat-dialog-content [formGroup]="dataset">
+<mat-dialog-content [formGroup]="form">
   <mat-form-field>
     <input
       matInput
@@ -41,12 +41,17 @@
       placeholder="Software Used"
       required
     />
-    <mat-hint align="end">Use a comma to separate multiple entries</mat-hint>
+    <mat-hint align="end">Use comma to separate multiple entries</mat-hint>
   </mat-form-field>
 </mat-dialog-content>
 <mat-dialog-actions>
   <button mat-button (click)="onClose()">Close</button>
-  <button mat-button (click)="onSave()" [disabled]="!dataset.valid">
+  <button
+    mat-button
+    color="primary"
+    (click)="onSave()"
+    [disabled]="!form.valid"
+  >
     Save
   </button>
 </mat-dialog-actions>

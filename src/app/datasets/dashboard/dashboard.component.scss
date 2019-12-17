@@ -1,3 +1,5 @@
+@import "../../../theme.scss";
+
 .action-column {
   margin-right: 1em;
 
@@ -7,6 +9,7 @@
 
     mat-icon {
       vertical-align: middle;
+      color: mat-color($accent);
     }
   }
 
