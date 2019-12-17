@@ -110,6 +110,9 @@
         >
       </mat-select>
     </button>
+    <button mat-icon-button class="tableSettings">
+      <mat-icon>star</mat-icon>
+    </button>
   </div>
 
   <mat-table
@@ -416,6 +419,25 @@
             <mat-icon>layers</mat-icon>
           </div>
           <div>Derivations</div>
+        </div>
+      </mat-header-cell>
+      <mat-cell *matCellDef="let dataset">
+        <div *ngFor="let map of datasetDerivationsMaps">
+          <div *ngIf="dataset.pid === map.datasetPid">
+            {{ map.derivedDatasetsNum }}
+          </div>
+        </div>
+      </mat-cell>
+    </ng-container>
+
+    <!-- Custom Column -->
+    <ng-container matColumnDef="custom">
+      <mat-header-cell *matHeaderCellDef>
+        <div fxLayout="column" style="align-items: center">
+          <div>
+            <mat-icon>star</mat-icon>
+          </div>
+          <div>Custom</div>
         </div>
       </mat-header-cell>
       <mat-cell *matCellDef="let dataset">
