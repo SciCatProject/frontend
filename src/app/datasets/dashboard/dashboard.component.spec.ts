@@ -71,6 +71,7 @@ describe("DashboardComponent", () => {
   }));
 
   afterEach(() => {
+    jasmine.clock().uninstall();
     fixture.destroy();
   });
 
@@ -80,6 +81,9 @@ describe("DashboardComponent", () => {
 
   describe("#openDialog()", () => {
     it("should dispatch an addDatasetAction when dialog returns a value", () => {
+      jasmine.clock().install();
+      jasmine.clock().mockDate(new Date(2019, 12, 17, 12, 0, 0));
+
       dispatchSpy = spyOn(store, "dispatch");
 
       const currentUser = {
