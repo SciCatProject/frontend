@@ -44,6 +44,18 @@ describe("DatasetsReducer", () => {
     });
   });
 
+  describe("on fetchMetadataKeysCompleteAction", () => {
+    it("should set metadataKeys property", () => {
+      const metadataKeys = ["test"];
+      const action = fromActions.fetchMetadataKeysCompleteAction({
+        metadataKeys
+      });
+      const state = fromDatasets.datasetsReducer(initialDatasetState, action);
+
+      expect(state.metadataKeys).toEqual(metadataKeys);
+    });
+  });
+
   describe("on fetchDatasetCompleteAction", () => {
     it("should set currentSet property", () => {
       const action = fromActions.fetchDatasetCompleteAction({ dataset });

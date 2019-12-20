@@ -29,6 +29,17 @@ export const fetchFacetCountsFailedAction = createAction(
   "[Dataset] Fetch Facet Counts Failed"
 );
 
+export const fetchMetadataKeysAction = createAction(
+  "[Dataset] Fetch Metadata Keys"
+);
+export const fetchMetadataKeysCompleteAction = createAction(
+  "[Dataset] Fetch Metadata Keys Complete",
+  props<{ metadataKeys: string[] }>()
+);
+export const fetchMetadataKeysFailedAction = createAction(
+  "[Dataset] Fetch Metadata Keys Failed"
+);
+
 export const fetchDatasetAction = createAction(
   "[Dataset] Fetch Dataset",
   props<{ pid: string; filters?: any }>()

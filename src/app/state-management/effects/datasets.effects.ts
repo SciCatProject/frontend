@@ -37,14 +37,14 @@ export class DatasetEffects {
       ofType(fromActions.fetchDatasetsAction),
       withLatestFrom(this.fullqueryParams$),
       map(([action, params]) => params),
-      mergeMap(({ query, limits }) => {
-        return this.datasetApi.fullquery(query, limits).pipe(
+      mergeMap(({ query, limits }) =>
+        this.datasetApi.fullquery(query, limits).pipe(
           map(datasets =>
             fromActions.fetchDatasetsCompleteAction({ datasets })
           ),
           catchError(() => of(fromActions.fetchDatasetsFailedAction()))
-        );
-      })
+        )
+      )
     )
   );
 
@@ -53,8 +53,8 @@ export class DatasetEffects {
       ofType(fromActions.fetchFacetCountsAction),
       withLatestFrom(this.fullfacetParams$),
       map(([action, params]) => params),
-      mergeMap(({ fields, facets }) => {
-        return this.datasetApi.fullfacet(fields, facets).pipe(
+      mergeMap(({ fields, facets }) =>
+        this.datasetApi.fullfacet(fields, facets).pipe(
           map(res => {
             const { all, ...facetCounts } = res[0];
             const allCounts = all && all.length > 0 ? all[0].totalSets : 0;
@@ -64,8 +64,24 @@ export class DatasetEffects {
             });
           }),
           catchError(() => of(fromActions.fetchFacetCountsFailedAction()))
-        );
-      })
+        )
+      )
+    )
+  );
+
+  fetchMetadataKeys$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(fromActions.fetchMetadataKeysAction),
+      withLatestFrom(this.fullqueryParams$),
+      map(([action, params]) => params),
+      mergeMap(({ query, limits }) =>
+        this.datasetApi.metadataKeys(query, limits).pipe(
+          map(metadataKeys =>
+            fromActions.fetchMetadataKeysCompleteAction({ metadataKeys })
+          ),
+          catchError(() => of(fromActions.fetchMetadataKeysFailedAction()))
+        )
+      )
     )
   );
 
@@ -213,6 +229,7 @@ export class DatasetEffects {
       ofType(
         fromActions.fetchDatasetsAction,
         fromActions.fetchFacetCountsAction,
+        fromActions.fetchMetadataKeysAction,
         fromActions.fetchDatasetAction,
         fromActions.addDatasetAction,
         fromActions.updatePropertyAction,
@@ -231,6 +248,8 @@ export class DatasetEffects {
         fromActions.fetchDatasetsFailedAction,
         fromActions.fetchFacetCountsCompleteAction,
         fromActions.fetchFacetCountsFailedAction,
+        fromActions.fetchMetadataKeysCompleteAction,
+        fromActions.fetchMetadataKeysFailedAction,
         fromActions.fetchDatasetCompleteAction,
         fromActions.fetchDatasetFailedAction,
         fromActions.addDatasetCompleteAction,

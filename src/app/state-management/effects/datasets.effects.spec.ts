@@ -55,6 +55,7 @@ describe("DatasetEffects", () => {
             "create",
             "fullquery",
             "fullfacet",
+            "metadataKeys",
             "findOne",
             "updateAttributes",
             "createAttachments",
@@ -141,6 +142,35 @@ describe("DatasetEffects", () => {
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchFacetCounts$).toBeObservable(expected);
+    });
+  });
+
+  describe("fetchMetadataKeys$", () => {
+    it("should result in a fetchMetadataKeysCompleteAction", () => {
+      const metadataKeys = ["test"];
+      const action = fromActions.fetchMetadataKeysAction();
+      const outcome = fromActions.fetchMetadataKeysCompleteAction({
+        metadataKeys
+      });
+
+      actions = hot("-a", { a: action });
+      const response = cold("-a|", { a: metadataKeys });
+      datasetApi.metadataKeys.and.returnValue(response);
+
+      const expected = cold("--b", { b: outcome });
+      expect(effects.fetchMetadataKeys$).toBeObservable(expected);
+    });
+
+    it("should result in a fetchMetadataKeysFailedAction", () => {
+      const action = fromActions.fetchMetadataKeysAction();
+      const outcome = fromActions.fetchMetadataKeysFailedAction();
+
+      actions = hot("-a", { a: action });
+      const response = cold("-#", {});
+      datasetApi.metadataKeys.and.returnValue(response);
+
+      const expected = cold("--b", { b: outcome });
+      expect(effects.fetchMetadataKeys$).toBeObservable(expected);
     });
   });
 
@@ -399,6 +429,18 @@ describe("DatasetEffects", () => {
       });
     });
 
+    describe("ofType fetchMetadataKeysAction", () => {
+      it("should dispatch a loadingAction", () => {
+        const action = fromActions.fetchMetadataKeysAction();
+        const outcome = loadingAction();
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.loading$).toBeObservable(expected);
+      });
+    });
+
     describe("ofType fetchDatasetAction", () => {
       it("should dispatch a loadingAction", () => {
         const pid = "testPid";
@@ -546,6 +588,33 @@ describe("DatasetEffects", () => {
     describe("ofType fetchFacetCountsFailedAction", () => {
       it("should dispatch a loadingCompleteAction", () => {
         const action = fromActions.fetchFacetCountsFailedAction();
+        const outcome = loadingCompleteAction();
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.loadingComplete$).toBeObservable(expected);
+      });
+    });
+
+    describe("ofType fetchMetadataKeysCompleteAction", () => {
+      it("should dispatch a loadingCompleteAction", () => {
+        const metadataKeys = ["test"];
+        const action = fromActions.fetchMetadataKeysCompleteAction({
+          metadataKeys
+        });
+        const outcome = loadingCompleteAction();
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.loadingComplete$).toBeObservable(expected);
+      });
+    });
+
+    describe("ofType fetchMetadataKeysFailedAction", () => {
+      it("should dispatch a loadingCompleteAction", () => {
+        const action = fromActions.fetchMetadataKeysFailedAction();
         const outcome = loadingCompleteAction();
 
         actions = hot("-a", { a: action });
