@@ -14,7 +14,8 @@ import {
   prefillBatchAction,
   prefillFiltersAction,
   addDatasetAction,
-  fetchDatasetCompleteAction
+  fetchDatasetCompleteAction,
+  fetchMetadataKeysAction
 } from "state-management/actions/datasets.actions";
 
 import {
@@ -109,6 +110,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.store.dispatch(prefillBatchAction());
+    this.store.dispatch(fetchMetadataKeysAction());
 
     this.subscriptions.push(
       this.filters$

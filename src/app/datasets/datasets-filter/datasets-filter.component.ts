@@ -24,7 +24,8 @@ import {
   getSearchTerms,
   getTypeFacetCounts,
   getTypeFilter,
-  getKeywordsTerms
+  getKeywordsTerms,
+  getMetadataKeys
 } from "state-management/selectors/datasets.selectors";
 
 import {
@@ -70,6 +71,7 @@ export class DatasetsFilterComponent {
   keywordsFilter$ = this.store.pipe(select(getKeywordsFilter));
   creationTimeFilter$ = this.store.pipe(select(getCreationTimeFilter));
   scientificConditions$ = this.store.pipe(select(getScientificConditions));
+  metadataKeys$ = this.store.pipe(select(getMetadataKeys));
 
   locationInput$ = new BehaviorSubject<string>("");
   groupInput$ = new BehaviorSubject<string>("");
@@ -143,12 +145,6 @@ export class DatasetsFilterComponent {
     );
   }
 
-  constructor(
-    public dialog: MatDialog,
-    private store: Store<any>,
-    @Inject(APP_CONFIG) public appConfig: AppConfig
-  ) {}
-
   getFacetId(facetCount: FacetCount, fallback: string = null): string {
     const id = facetCount._id;
     return id ? String(id) : fallback;
@@ -221,7 +217,9 @@ export class DatasetsFilterComponent {
 
   showAddConditionDialog() {
     this.dialog
-      .open(ScientificConditionDialogComponent)
+      .open(ScientificConditionDialogComponent, {
+        data: { metadataKeys$: this.metadataKeys$ }
+      })
       .afterClosed()
       .subscribe(({ data }) => {
         if (data != null) {
@@ -235,4 +233,10 @@ export class DatasetsFilterComponent {
   removeCondition(index: number) {
     this.store.dispatch(removeScientificConditionAction({ index }));
   }
+
+  constructor(
+    public dialog: MatDialog,
+    private store: Store<any>,
+    @Inject(APP_CONFIG) public appConfig: AppConfig
+  ) {}
 }

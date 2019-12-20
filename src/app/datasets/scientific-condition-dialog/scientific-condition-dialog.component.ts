@@ -1,5 +1,6 @@
 import { Inject, Component } from "@angular/core";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material";
+import { Observable } from "rxjs";
 
 @Component({
   selector: "scientific-condition-dialog",
@@ -12,7 +13,8 @@ export class ScientificConditionDialogComponent {
 
   constructor(
     public dialogRef: MatDialogRef<ScientificConditionDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: {}
+    @Inject(MAT_DIALOG_DATA)
+    public data: { metadataKeys$: Observable<string[]> }
   ) {}
 
   add() {
