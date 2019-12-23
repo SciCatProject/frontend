@@ -30,7 +30,8 @@ export const fetchFacetCountsFailedAction = createAction(
 );
 
 export const fetchMetadataKeysAction = createAction(
-  "[Dataset] Fetch Metadata Keys"
+  "[Dataset] Fetch Metadata Keys",
+  props<{ metadataKey: string }>()
 );
 export const fetchMetadataKeysCompleteAction = createAction(
   "[Dataset] Fetch Metadata Keys Complete",

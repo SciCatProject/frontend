@@ -73,15 +73,18 @@ export class DatasetEffects {
     this.actions$.pipe(
       ofType(fromActions.fetchMetadataKeysAction),
       withLatestFrom(this.fullqueryParams$),
-      map(([action, params]) => params),
-      mergeMap(({ query, limits }) =>
-        this.datasetApi.metadataKeys(query, limits).pipe(
-          map(metadataKeys =>
-            fromActions.fetchMetadataKeysCompleteAction({ metadataKeys })
-          ),
-          catchError(() => of(fromActions.fetchMetadataKeysFailedAction()))
-        )
-      )
+      mergeMap(([{ metadataKey }, { query, limits }]) => {
+        const parsedQuery = JSON.parse(query);
+        parsedQuery.metadataKey = metadataKey;
+        return this.datasetApi
+          .metadataKeys(JSON.stringify(parsedQuery), limits)
+          .pipe(
+            map(metadataKeys =>
+              fromActions.fetchMetadataKeysCompleteAction({ metadataKeys })
+            ),
+            catchError(() => of(fromActions.fetchMetadataKeysFailedAction()))
+          );
+      })
     )
   );
 

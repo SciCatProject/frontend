@@ -45,7 +45,13 @@ describe("DatasetEffects", () => {
         provideMockActions(() => actions),
         provideMockStore({
           selectors: [
-            { selector: getFullqueryParams, value: {} },
+            {
+              selector: getFullqueryParams,
+              value: {
+                query: JSON.stringify({ isPublished: false }),
+                limits: { skip: 0, limit: 25, order: "test asc" }
+              }
+            },
             { selector: getFullfacetParams, value: {} }
           ]
         }),
@@ -146,9 +152,11 @@ describe("DatasetEffects", () => {
   });
 
   describe("fetchMetadataKeys$", () => {
+    const metadataKey = "test";
+
     it("should result in a fetchMetadataKeysCompleteAction", () => {
       const metadataKeys = ["test"];
-      const action = fromActions.fetchMetadataKeysAction();
+      const action = fromActions.fetchMetadataKeysAction({ metadataKey });
       const outcome = fromActions.fetchMetadataKeysCompleteAction({
         metadataKeys
       });
@@ -162,7 +170,7 @@ describe("DatasetEffects", () => {
     });
 
     it("should result in a fetchMetadataKeysFailedAction", () => {
-      const action = fromActions.fetchMetadataKeysAction();
+      const action = fromActions.fetchMetadataKeysAction({ metadataKey });
       const outcome = fromActions.fetchMetadataKeysFailedAction();
 
       actions = hot("-a", { a: action });
@@ -431,7 +439,8 @@ describe("DatasetEffects", () => {
 
     describe("ofType fetchMetadataKeysAction", () => {
       it("should dispatch a loadingAction", () => {
-        const action = fromActions.fetchMetadataKeysAction();
+        const metadataKey = "test";
+        const action = fromActions.fetchMetadataKeysAction({ metadataKey });
         const outcome = loadingAction();
 
         actions = hot("-a", { a: action });

@@ -11,6 +11,8 @@
       placeholder="Field"
       [(ngModel)]="lhs"
       [matAutocomplete]="metadataKeys"
+      (input)="onChange(lhs)"
+      (keyUp)="onChange(lhs)"
     />
     <mat-autocomplete #metadataKeys="matAutocomplete">
       <mat-option *ngFor="let key of data.metadataKeys$ | async" [value]="key">

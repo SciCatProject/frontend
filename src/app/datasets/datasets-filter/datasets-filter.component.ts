@@ -221,8 +221,9 @@ export class DatasetsFilterComponent {
         data: { metadataKeys$: this.metadataKeys$ }
       })
       .afterClosed()
-      .subscribe(({ data }) => {
-        if (data != null) {
+      .subscribe(res => {
+        if (res) {
+          const { data } = res;
           this.store.dispatch(
             addScientificConditionAction({ condition: data })
           );
