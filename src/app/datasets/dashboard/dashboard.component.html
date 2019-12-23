@@ -1,5 +1,5 @@
 <div fxLayout="row" fxLayout.xs="column">
-  <div class="action-column" fxFlex="14">
+  <div class="action-column" fxFlex="14" fxFlex.lt-xl="20">
     <datasets-filter></datasets-filter>
     <mat-card
       *ngIf="appConfig.addDatasetEnabled"
@@ -13,7 +13,7 @@
       <batch-card></batch-card>
     </div>
   </div>
-  <div class="table-column" fxFlex="85">
+  <div class="table-column" fxFlex="85" fxFlex.lt-xl="80">
     <dataset-table></dataset-table>
   </div>
 </div>
