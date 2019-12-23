@@ -256,6 +256,19 @@ describe("User Aactions", () => {
     });
   });
 
+  describe("addColumnAction", () => {
+    it("should create an action", () => {
+      const name = "test";
+      const enabled = false;
+      const action = fromActions.addColumnAction({ name, enabled });
+      expect({ ...action }).toEqual({
+        type: "[User] Add Column",
+        name,
+        enabled
+      });
+    });
+  });
+
   describe("selectColumnAction", () => {
     it("should create an action", () => {
       const column = "test";

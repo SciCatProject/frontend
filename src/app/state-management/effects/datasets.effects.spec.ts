@@ -19,7 +19,8 @@ import {
 } from "state-management/selectors/datasets.selectors";
 import {
   loadingAction,
-  loadingCompleteAction
+  loadingCompleteAction,
+  addColumnAction
 } from "state-management/actions/user.actions";
 
 const data: DatasetInterface = {
@@ -179,6 +180,21 @@ describe("DatasetEffects", () => {
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchMetadataKeys$).toBeObservable(expected);
+    });
+  });
+
+  describe("addMetadataColumns$", () => {
+    it("should dispatch an addColumnAction", () => {
+      const metadataKeys = ["test"];
+      const action = fromActions.fetchMetadataKeysCompleteAction({
+        metadataKeys
+      });
+      const outcome = addColumnAction({ name: "test", enabled: false });
+
+      actions = hot("-a", { a: action });
+
+      const expected = cold("-b", { b: outcome });
+      expect(effects.addMetadataColumns$).toBeObservable(expected);
     });
   });
 

@@ -22,7 +22,8 @@ import { getCurrentUser } from "state-management/selectors/user.selectors";
 import {
   logoutCompleteAction,
   loadingAction,
-  loadingCompleteAction
+  loadingCompleteAction,
+  addColumnAction
 } from "state-management/actions/user.actions";
 
 @Injectable()
@@ -85,6 +86,15 @@ export class DatasetEffects {
             catchError(() => of(fromActions.fetchMetadataKeysFailedAction()))
           );
       })
+    )
+  );
+
+  addMetadataColumns$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(fromActions.fetchMetadataKeysCompleteAction),
+      switchMap(({ metadataKeys }) =>
+        metadataKeys.map(name => addColumnAction({ name, enabled: false }))
+      )
     )
   );
 
