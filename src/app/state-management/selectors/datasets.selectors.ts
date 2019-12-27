@@ -156,7 +156,7 @@ function restrictFilter(filter: object, allowedKeys?: string[]) {
 
 export const getFullqueryParams = createSelector(getFilters, filter => {
   // don't query with modeToggle, it's only in filters for persistent routing
-  const { skip, limit, sortField, scientific, modeToggle, ...theRest } = filter;
+  const { skip, limit, sortField, modeToggle, ...theRest } = filter;
   const limits = { skip, limit, order: sortField };
   const query = restrictFilter(theRest);
   return { query: JSON.stringify(query), limits };
