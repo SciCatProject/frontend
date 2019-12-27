@@ -351,6 +351,17 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.store.pipe(select(getDatasets)).subscribe(datasets => {
         this.datasets = datasets;
+
+        this.datasetPids = datasets.map(dataset => dataset.pid);
+        this.derivationMapPids = this.datasetDerivationsMaps.map(
+          datasetderivationMap => datasetderivationMap.datasetPid
+        );
+        this.datasetDerivationsMaps = datasets
+          .filter(({ pid }) => !this.derivationMapPids.includes(pid))
+          .map(dataset => ({
+            datasetPid: dataset.pid,
+            derivedDatasetsNum: this.countDerivedDatasets(dataset)
+          }));
       })
     );
 
@@ -371,24 +382,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
         this.displayedColumns = tableColumns
           .filter(column => column.enabled)
           .map(column => column.name);
-      })
-    );
-
-    this.subscriptions.push(
-      this.store.pipe(select(getDatasets)).subscribe(datasets => {
-        this.datasetPids = datasets.map(dataset => dataset.pid);
-        this.derivationMapPids = this.datasetDerivationsMaps.map(
-          datasetderivationMap => datasetderivationMap.datasetPid
-        );
-        datasets.forEach(dataset => {
-          if (!this.derivationMapPids.includes(dataset.pid)) {
-            const derivationMap: DatasetDerivationsMap = {
-              datasetPid: dataset.pid,
-              derivedDatasetsNum: this.countDerivedDatasets(dataset)
-            };
-            this.datasetDerivationsMaps.push(derivationMap);
-          }
-        });
       })
     );
 
