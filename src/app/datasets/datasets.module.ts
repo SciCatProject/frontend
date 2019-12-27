@@ -40,7 +40,8 @@ import {
   MatTableModule,
   MatTabsModule,
   MatTooltipModule,
-  MatStepperModule
+  MatStepperModule,
+  MatSidenavModule
 } from "@angular/material";
 
 import { PublishComponent } from "./publish/publish.component";
@@ -83,6 +84,7 @@ import { AddDatasetDialogComponent } from "./add-dataset-dialog/add-dataset-dial
     MatProgressSpinnerModule,
     MatRadioModule,
     MatSelectModule,
+    MatSidenavModule,
     MatSlideToggleModule,
     MatSortModule,
     MatStepperModule,

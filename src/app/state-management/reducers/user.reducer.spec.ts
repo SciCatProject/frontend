@@ -88,13 +88,12 @@ describe("UserReducer", () => {
 
   describe("on addColumnAction", () => {
     it("should append a new column to the columns property", () => {
-      const name = "test";
-      const enabled = false;
-      const action = fromActions.addColumnAction({ name, enabled });
+      const names = ["test"];
+      const action = fromActions.addColumnsAction({ names });
       const state = userReducer(initialUserState, action);
 
       expect(state.columns[state.columns.length - 1].name).toEqual(name);
-      expect(state.columns[state.columns.length - 1].enabled).toEqual(enabled);
+      expect(state.columns[state.columns.length - 1].enabled).toEqual(false);
     });
   });
 

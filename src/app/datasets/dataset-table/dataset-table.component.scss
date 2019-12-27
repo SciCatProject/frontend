@@ -1,141 +1,152 @@
 @import "../../../theme.scss";
 
-.dataset-table {
-  min-width: 1060px;
+mat-sidenav-container {
+  mat-sidenav-content {
+    padding: 0.5em;
+    background-color: #ffffff;
 
-  .mode-container {
-    float: left;
+    .dataset-table {
+      min-width: 1060px;
 
-    .public-toggle {
-      margin-right: 1em;
-    }
-  }
+      .mode-container {
+        float: left;
 
-  .action-container {
-    float: right;
+        .public-toggle {
+          margin-right: 1em;
+        }
+      }
 
-    button {
-      mat-icon {
-        color: black;
+      .action-container {
+        float: right;
+
+        button {
+          mat-icon {
+            color: black;
+          }
+        }
+      }
+
+      .action-container.hidden {
+        visibility: hidden;
+      }
+
+      .tableSettings {
+        margin-bottom: 0.5em;
+        color: mat-color($grey, 100);
+
+        ::ng-deep .tblSettingSelect div.mat-select-arrow-wrapper {
+          display: none;
+        }
+
+        ::ng-deep .tblSettingSelect.mat-select {
+          display: inline;
+        }
+      }
+
+      mat-table {
+        overflow-x: scroll;
+
+        mat-header-row {
+          min-width: 1290px;
+          background: mat-color($primary);
+        }
+
+        ::ng-deep .mat-sort-header-arrow {
+          color: mat-color($primary, default-contrast);
+        }
+
+        mat-header-cell {
+          color: mat-color($primary, default-contrast);
+          justify-content: center;
+
+          ::ng-deep .mat-checkbox .mat-checkbox-frame {
+            border-color: mat-color($primary, default-contrast);
+          }
+        }
+
+        mat-header-cell:nth-child(-n + 2) {
+          justify-content: left;
+        }
+
+        mat-header-cell:nth-child(n + 3) {
+          justify-content: center;
+        }
+
+        mat-cell:nth-child(-n + 2) {
+          justify-content: left;
+        }
+
+        mat-cell:nth-child(n + 3) {
+          justify-content: center;
+        }
+
+        mat-row {
+          min-width: 1290px;
+        }
+
+        mat-row:hover {
+          background-color: rgba(0, 0, 0, 0.1);
+          cursor: pointer;
+        }
+
+        .mat-column-select {
+          min-width: 55px;
+          max-width: 55px;
+        }
+
+        .mat-column-datasetName {
+          min-width: 200px;
+        }
+
+        .mat-column-runNumber {
+          min-width: 70px;
+        }
+
+        .mat-column-sourceFolder {
+          min-width: 100px;
+        }
+
+        .mat-column-size {
+          min-width: 65px;
+        }
+
+        .mat-column-creationTime {
+          min-width: 80px;
+        }
+
+        .mat-column-type {
+          min-width: 50px;
+        }
+
+        .mat-column-image {
+          min-width: 60px;
+          max-width: 60px;
+        }
+
+        .mat-column-metadata {
+          min-width: 200px;
+        }
+
+        .mat-column-proposalId {
+          min-width: 90px;
+        }
+
+        .mat-column-ownerGroup {
+          min-width: 80px;
+        }
+
+        .mat-column-dataStatus {
+          min-width: 140px;
+        }
+
+        .mat-column-derivedDatasetsNum {
+          min-width: 100px;
+        }
       }
     }
   }
-
-  .action-container.hidden {
-    visibility: hidden;
-  }
-
-  .tableSettings {
-    margin-bottom: 0.5em;
-    color: mat-color($grey, 100);
-
-    ::ng-deep .tblSettingSelect div.mat-select-arrow-wrapper {
-      display: none;
-    }
-
-    ::ng-deep .tblSettingSelect.mat-select {
-      display: inline;
-    }
-  }
-
-  mat-table {
-    overflow-x: scroll;
-
-    mat-header-row {
-      min-width: 1290px;
-      background: mat-color($primary);
-    }
-
-    ::ng-deep .mat-sort-header-arrow {
-      color: mat-color($primary, default-contrast);
-    }
-
-    mat-header-cell {
-      color: mat-color($primary, default-contrast);
-      justify-content: center;
-
-      ::ng-deep .mat-checkbox .mat-checkbox-frame {
-        border-color: mat-color($primary, default-contrast);
-      }
-    }
-
-    mat-header-cell:nth-child(-n + 2) {
-      justify-content: left;
-    }
-
-    mat-header-cell:nth-child(n + 3) {
-      justify-content: center;
-    }
-
-    mat-cell:nth-child(-n + 2) {
-      justify-content: left;
-    }
-
-    mat-cell:nth-child(n + 3) {
-      justify-content: center;
-    }
-
-    mat-row {
-      min-width: 1290px;
-    }
-
-    mat-row:hover {
-      background-color: rgba(0, 0, 0, 0.1);
-      cursor: pointer;
-    }
-
-    .mat-column-select {
-      min-width: 55px;
-      max-width: 55px;
-    }
-
-    .mat-column-datasetName {
-      min-width: 200px;
-    }
-
-    .mat-column-runNumber {
-      min-width: 70px;
-    }
-
-    .mat-column-sourceFolder {
-      min-width: 100px;
-    }
-
-    .mat-column-size {
-      min-width: 65px;
-    }
-
-    .mat-column-creationTime {
-      min-width: 80px;
-    }
-
-    .mat-column-type {
-      min-width: 50px;
-    }
-
-    .mat-column-image {
-      min-width: 60px;
-      max-width: 60px;
-    }
-
-    .mat-column-metadata {
-      min-width: 200px;
-    }
-
-    .mat-column-proposalId {
-      min-width: 90px;
-    }
-
-    .mat-column-ownerGroup {
-      min-width: 80px;
-    }
-
-    .mat-column-dataStatus {
-      min-width: 140px;
-    }
-
-    .mat-column-derivedDatasetsNum {
-      min-width: 100px;
-    }
-  }
+}
+mat-sidenav.mat-drawer-opened,
+mat-sidenav.mat-drawer-opening {
+  box-shadow: 0 0 0 0 !important;
 }

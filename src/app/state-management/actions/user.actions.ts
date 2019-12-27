@@ -80,9 +80,9 @@ export const logoutAction = createAction("[User] Logout");
 export const logoutCompleteAction = createAction("[User] Logout Complete");
 export const logoutFailedAction = createAction("[User] Logout Failed");
 
-export const addColumnAction = createAction(
+export const addColumnsAction = createAction(
   "[User] Add Column",
-  props<{ name: string; enabled: boolean }>()
+  props<{ names: string[] }>()
 );
 
 export const selectColumnAction = createAction(

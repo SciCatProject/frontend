@@ -23,7 +23,7 @@ import {
   logoutCompleteAction,
   loadingAction,
   loadingCompleteAction,
-  addColumnAction
+  addColumnsAction
 } from "state-management/actions/user.actions";
 
 @Injectable()
@@ -93,7 +93,7 @@ export class DatasetEffects {
     this.actions$.pipe(
       ofType(fromActions.fetchMetadataKeysCompleteAction),
       switchMap(({ metadataKeys }) =>
-        metadataKeys.map(name => addColumnAction({ name, enabled: false }))
+        of(addColumnsAction({ names: metadataKeys }))
       )
     )
   );

@@ -46,9 +46,14 @@ const reducer = createReducer(
     ...initialUserState
   })),
 
-  on(fromActions.addColumnAction, (state, { name, enabled }) => {
-    const column = { name, order: state.columns.length, enabled };
-    const columns = [...state.columns].concat(column);
+  on(fromActions.addColumnsAction, (state, { names }) => {
+    let order = state.columns.length;
+    const customColumns = names.map(name => {
+      const column = { name, order, enabled: false };
+      order++;
+      return column;
+    });
+    const columns = [...initialUserState.columns].concat(customColumns);
     return { ...state, columns };
   }),
 

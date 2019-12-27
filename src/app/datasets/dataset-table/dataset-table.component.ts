@@ -10,7 +10,7 @@ import {
   selectColumnAction,
   deselectColumnAction
 } from "state-management/actions/user.actions";
-import { Subscription } from "rxjs";
+import { Subscription, Observable } from "rxjs";
 import {
   getColumns,
   getIsLoading
@@ -26,7 +26,8 @@ import {
   selectAllDatasetsAction,
   changePageAction,
   sortByColumnAction,
-  addToBatchAction
+  addToBatchAction,
+  fetchMetadataKeysAction
 } from "state-management/actions/datasets.actions";
 
 import {
@@ -37,10 +38,12 @@ import {
   getTotalSets,
   getArchiveViewMode,
   getPublicViewMode,
-  getDatasetsInBatch
+  getDatasetsInBatch,
+  getMetadataKeys
 } from "state-management/selectors/datasets.selectors";
 import { FormControl } from "@angular/forms";
 import { PageChangeEvent } from "shared/modules/table/table.component";
+import { startWith, map } from "rxjs/operators";
 
 export interface SortChangeEvent {
   active: keyof Dataset;
@@ -64,12 +67,16 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   datasetCount$ = this.store.select(getTotalSets);
   loading$ = this.store.pipe(select(getIsLoading));
   batch$ = this.store.pipe(select(getDatasetsInBatch));
+  metadataKeys$ = this.store.pipe(select(getMetadataKeys));
 
   private subscriptions: Subscription[] = [];
 
   configForm = new FormControl();
   configColumns: string[] = [];
   displayedColumns: string[] = [];
+  tableColumns: any[];
+  filteredColumns$: Observable<object[]>;
+  columnSearch = new FormControl();
 
   private selectedPids: string[] = [];
   selectedSets: Dataset[] = [];
@@ -101,6 +108,14 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
       } else if (!event.source.selected) {
         this.store.dispatch(deselectColumnAction({ column }));
       }
+    }
+  }
+
+  onColumnSelect(event: MatCheckboxChange, column: string): void {
+    if (event.checked) {
+      this.store.dispatch(selectColumnAction({ column }));
+    } else if (!event.checked) {
+      this.store.dispatch(deselectColumnAction({ column }));
     }
   }
 
@@ -318,6 +333,8 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
+    this.store.dispatch(fetchMetadataKeysAction({ metadataKey: "" }));
+
     this.subscriptions.push(
       this.batch$.subscribe(datasets => {
         this.inBatchPids = datasets.map(dataset => dataset.pid);
@@ -343,6 +360,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
         this.configColumns = tableColumns
           .filter(column => column.name !== "select")
           .map(column => column.name);
+        console.log("configColumns", this.configColumns);
 
         const setTrue = tableColumns
           .filter(column => column.enabled)
@@ -353,7 +371,23 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
           .filter(column => column.enabled)
           .map(column => column.name);
 
+        this.tableColumns = tableColumns.filter(
+          column => column.name !== "select"
+        );
+        console.log("tableColumns", this.tableColumns);
+
         this.configForm.setValue(setTrue);
+      })
+    );
+
+    this.filteredColumns$ = this.columnSearch.valueChanges.pipe(
+      startWith(""),
+      map(value => {
+        console.log("filter tableColumns", this.tableColumns);
+        const filterValue = value.toLowerCase();
+        return this.tableColumns.filter(option =>
+          option.name.toLowerCase().includes(filterValue)
+        );
       })
     );
 

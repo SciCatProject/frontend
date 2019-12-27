@@ -256,15 +256,13 @@ describe("User Aactions", () => {
     });
   });
 
-  describe("addColumnAction", () => {
+  describe("addColumnsAction", () => {
     it("should create an action", () => {
-      const name = "test";
-      const enabled = false;
-      const action = fromActions.addColumnAction({ name, enabled });
+      const names = ["test"];
+      const action = fromActions.addColumnsAction({ names });
       expect({ ...action }).toEqual({
         type: "[User] Add Column",
-        name,
-        enabled
+        names
       });
     });
   });
