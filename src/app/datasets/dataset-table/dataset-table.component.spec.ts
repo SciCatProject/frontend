@@ -49,6 +49,7 @@ import {
   getDatasets,
   getSelectedDatasets
 } from "state-management/selectors/datasets.selectors";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
 describe("DatasetTableComponent", () => {
   let component: DatasetTableComponent;
@@ -64,6 +65,7 @@ describe("DatasetTableComponent", () => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
       imports: [
+        BrowserAnimationsModule,
         MatTableModule,
         MatDialogModule,
         SharedCatanieModule,

@@ -1,7 +1,12 @@
 import { APP_CONFIG, AppConfig } from "app-config.module";
 import { ArchivingService } from "../archiving.service";
 import { Component, Inject, OnDestroy, OnInit } from "@angular/core";
-import { Dataset, MessageType, ArchViewMode } from "state-management/models";
+import {
+  Dataset,
+  MessageType,
+  ArchViewMode,
+  TableColumn
+} from "state-management/models";
 import { DialogComponent } from "shared/modules/dialog/dialog.component";
 import { MatCheckboxChange, MatDialog } from "@angular/material";
 import { Router } from "@angular/router";
@@ -10,7 +15,7 @@ import {
   selectColumnAction,
   deselectColumnAction
 } from "state-management/actions/user.actions";
-import { Subscription, Observable } from "rxjs";
+import { Subscription } from "rxjs";
 import {
   getColumns,
   getIsLoading
@@ -41,9 +46,7 @@ import {
   getDatasetsInBatch,
   getMetadataKeys
 } from "state-management/selectors/datasets.selectors";
-import { FormControl } from "@angular/forms";
 import { PageChangeEvent } from "shared/modules/table/table.component";
-import { startWith, map } from "rxjs/operators";
 
 export interface SortChangeEvent {
   active: keyof Dataset;
@@ -71,12 +74,9 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
 
   private subscriptions: Subscription[] = [];
 
-  configForm = new FormControl();
-  configColumns: string[] = [];
-  displayedColumns: string[] = [];
-  tableColumns: any[];
-  filteredColumns$: Observable<object[]>;
-  columnSearch = new FormControl();
+  displayedColumns: string[];
+  tableColumns: TableColumn[];
+  filteredColumns: TableColumn[];
 
   private selectedPids: string[] = [];
   selectedSets: Dataset[] = [];
@@ -324,6 +324,13 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     return derivedDatasetsNum;
   }
 
+  searchColumns(value: string) {
+    const filterValue = value.toLowerCase();
+    this.filteredColumns = this.tableColumns.filter(({ name }) =>
+      name.toLowerCase().includes(filterValue)
+    );
+  }
+
   constructor(
     private router: Router,
     private store: Store<any>,
@@ -357,37 +364,13 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
 
     this.subscriptions.push(
       this.store.pipe(select(getColumns)).subscribe(tableColumns => {
-        this.configColumns = tableColumns
-          .filter(column => column.name !== "select")
-          .map(column => column.name);
-        console.log("configColumns", this.configColumns);
-
-        const setTrue = tableColumns
-          .filter(column => column.enabled)
-          .filter(column => column.name !== "select")
-          .map(column => column.name);
+        this.tableColumns = tableColumns.filter(
+          column => column.name !== "select"
+        );
 
         this.displayedColumns = tableColumns
           .filter(column => column.enabled)
           .map(column => column.name);
-
-        this.tableColumns = tableColumns.filter(
-          column => column.name !== "select"
-        );
-        console.log("tableColumns", this.tableColumns);
-
-        this.configForm.setValue(setTrue);
-      })
-    );
-
-    this.filteredColumns$ = this.columnSearch.valueChanges.pipe(
-      startWith(""),
-      map(value => {
-        console.log("filter tableColumns", this.tableColumns);
-        const filterValue = value.toLowerCase();
-        return this.tableColumns.filter(option =>
-          option.name.toLowerCase().includes(filterValue)
-        );
       })
     );
 
@@ -399,11 +382,11 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
         );
         datasets.forEach(dataset => {
           if (!this.derivationMapPids.includes(dataset.pid)) {
-            const map: DatasetDerivationsMap = {
+            const derivationMap: DatasetDerivationsMap = {
               datasetPid: dataset.pid,
               derivedDatasetsNum: this.countDerivedDatasets(dataset)
             };
-            this.datasetDerivationsMaps.push(map);
+            this.datasetDerivationsMaps.push(derivationMap);
           }
         });
       })

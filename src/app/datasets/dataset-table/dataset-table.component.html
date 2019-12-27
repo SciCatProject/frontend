@@ -94,33 +94,10 @@
         <button
           mat-icon-button
           class="tableSettings"
-          color="primary"
           matTooltip="Table Settings"
-          (click)="select.open()"
+          (click)="settings.toggle()"
         >
           <mat-icon>settings</mat-icon>
-          <mat-select
-            #select
-            class="tblSettingSelect"
-            panelClass="tblSettingSelectPanel"
-            [formControl]="configForm"
-            multiple
-          >
-            <mat-option
-              *ngFor="let column of configColumns"
-              [value]="column"
-              (onSelectionChange)="onSelectColumn($event)"
-            >
-              {{ column }}</mat-option
-            >
-          </mat-select>
-        </button>
-        <button
-          mat-icon-button
-          class="tableSettings"
-          (click)="columnSettings.toggle()"
-        >
-          <mat-icon>star</mat-icon>
         </button>
       </div>
 
@@ -481,16 +458,14 @@
       </mat-table>
     </div>
   </mat-sidenav-content>
-  <mat-sidenav #columnSettings position="end" mode="push">
+  <mat-sidenav #settings position="end" mode="push">
     <h3>Columns</h3>
-    <form>
-      <mat-form-field style="width: 100%;">
-        <input matInput type="text" [formControl]="columnSearch" />
-        <mat-icon matSuffix>search</mat-icon>
-      </mat-form-field>
-    </form>
+    <app-search-bar
+      (onSearch)="searchColumns($event)"
+      (onFocus)="searchColumns($event)"
+    ></app-search-bar>
     <table>
-      <tr *ngFor="let column of filteredColumns$ | async">
+      <tr *ngFor="let column of filteredColumns">
         <td>
           <mat-checkbox
             [checked]="column.enabled"
