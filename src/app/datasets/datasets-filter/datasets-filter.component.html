@@ -193,7 +193,9 @@
             ? '"' + condition.rhs + '"'
             : condition.rhs
         }}
-        <mat-icon matChipRemove (click)="removeCondition(i)">cancel</mat-icon>
+        <mat-icon matChipRemove (click)="removeCondition(condition, i)"
+          >cancel</mat-icon
+        >
       </mat-chip>
     </mat-chip-list>
   </div>

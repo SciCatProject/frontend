@@ -46,6 +46,11 @@ import {
 } from "state-management/actions/datasets.actions";
 import { ScientificConditionDialogComponent } from "datasets/scientific-condition-dialog/scientific-condition-dialog.component";
 import { combineLatest, BehaviorSubject, Observable } from "rxjs";
+import {
+  selectColumnAction,
+  deselectColumnAction
+} from "state-management/actions/user.actions";
+import { ScientificCondition } from "state-management/models";
 
 export interface DateRange {
   begin: Date;
@@ -227,12 +232,14 @@ export class DatasetsFilterComponent {
           this.store.dispatch(
             addScientificConditionAction({ condition: data })
           );
+          this.store.dispatch(selectColumnAction({ column: data.lhs }));
         }
       });
   }
 
-  removeCondition(index: number) {
+  removeCondition(condition: ScientificCondition, index: number) {
     this.store.dispatch(removeScientificConditionAction({ index }));
+    this.store.dispatch(deselectColumnAction({ column: condition.lhs }));
   }
 
   constructor(

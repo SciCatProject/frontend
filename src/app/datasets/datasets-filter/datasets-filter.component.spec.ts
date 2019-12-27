@@ -43,6 +43,11 @@ import {
   addScientificConditionAction
 } from "state-management/actions/datasets.actions";
 import { of } from "rxjs";
+import {
+  selectColumnAction,
+  deselectColumnAction
+} from "state-management/actions/user.actions";
+import { ScientificCondition } from "state-management/models";
 
 export class MockMatDialog {
   open() {
@@ -359,32 +364,43 @@ describe("DatasetsFilterComponent", () => {
   });
 
   describe("#showAddConditionDialog()", () => {
-    it("should open ScientificConditionDialogComponent and dispatch an AddScientificConditionAction if dialog returns data", () => {
+    it("should open ScientificConditionDialogComponent and dispatch an addScientificConditionAction and a selectColumnAction if dialog returns data", () => {
       spyOn(component.dialog, "open").and.callThrough();
       dispatchSpy = spyOn(store, "dispatch");
 
       component.showAddConditionDialog();
 
       expect(component.dialog.open).toHaveBeenCalled();
-      expect(dispatchSpy).toHaveBeenCalledTimes(1);
+      expect(dispatchSpy).toHaveBeenCalledTimes(2);
       expect(dispatchSpy).toHaveBeenCalledWith(
         addScientificConditionAction({
           condition: { lhs: "", rhs: "", relation: "EQUAL_TO_STRING" }
         })
       );
+      expect(dispatchSpy).toHaveBeenCalledWith(
+        selectColumnAction({ column: "" })
+      );
     });
   });
 
   describe("#removeCondition()", () => {
-    it("should dispatch a RemoveScientificConditionAction", () => {
+    it("should dispatch a removeScientificConditionAction and a deselectColumnAction", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
+      const condition: ScientificCondition = {
+        lhs: "test",
+        relation: "EQUAL_TO_NUMERIC",
+        rhs: 5
+      };
       const index = 0;
-      component.removeCondition(index);
+      component.removeCondition(condition, index);
 
-      expect(dispatchSpy).toHaveBeenCalledTimes(1);
+      expect(dispatchSpy).toHaveBeenCalledTimes(2);
       expect(dispatchSpy).toHaveBeenCalledWith(
         removeScientificConditionAction({ index })
+      );
+      expect(dispatchSpy).toHaveBeenCalledWith(
+        deselectColumnAction({ column: condition.lhs })
       );
     });
   });
