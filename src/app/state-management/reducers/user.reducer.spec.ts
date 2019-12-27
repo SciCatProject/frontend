@@ -92,7 +92,7 @@ describe("UserReducer", () => {
       const action = fromActions.addColumnsAction({ names });
       const state = userReducer(initialUserState, action);
 
-      expect(state.columns[state.columns.length - 1].name).toEqual(name);
+      expect(state.columns[state.columns.length - 1].name).toEqual("test");
       expect(state.columns[state.columns.length - 1].enabled).toEqual(false);
     });
   });
