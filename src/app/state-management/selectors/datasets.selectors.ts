@@ -101,6 +101,7 @@ export const getHasAppliedFilters = createSelector(
     filters.ownerGroup.length > 0 ||
     filters.type.length > 0 ||
     filters.keywords.length > 0 ||
+    filters.scientific.length > 0 ||
     (filters.creationTime &&
       (filters.creationTime.begin !== null ||
         filters.creationTime.end !== null))

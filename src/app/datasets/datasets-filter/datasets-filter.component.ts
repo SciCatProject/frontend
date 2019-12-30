@@ -48,7 +48,8 @@ import { ScientificConditionDialogComponent } from "datasets/scientific-conditio
 import { combineLatest, BehaviorSubject, Observable } from "rxjs";
 import {
   selectColumnAction,
-  deselectColumnAction
+  deselectColumnAction,
+  deselectAllCustomColumnsAction
 } from "state-management/actions/user.actions";
 import { ScientificCondition } from "state-management/models";
 
@@ -218,6 +219,7 @@ export class DatasetsFilterComponent {
   clearFacets() {
     this.clearSearchBar = true;
     this.store.dispatch(clearFacetsAction());
+    this.store.dispatch(deselectAllCustomColumnsAction());
   }
 
   showAddConditionDialog() {

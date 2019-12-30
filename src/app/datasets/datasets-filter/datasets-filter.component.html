@@ -176,18 +176,25 @@
 
     <div style="clear: both"></div>
 
-    <mat-chip-list>
+    <mat-chip-list class="scientific-chips" aria-orientation="vertical">
       <mat-chip
         *ngFor="let condition of scientificConditions$ | async; index as i"
       >
         {{ condition.lhs }}
         <ng-container [ngSwitch]="condition.relation">
-          <ng-container *ngSwitchCase="'EQUAL_TO_NUMERIC'">=</ng-container>
-          <ng-container *ngSwitchCase="'EQUAL_TO_STRING'">=</ng-container>
-          <ng-container *ngSwitchCase="'LESS_THAN'">&lt;</ng-container>
-          <ng-container *ngSwitchCase="'GREATER_THAN'">&gt;</ng-container>
+          <ng-container *ngSwitchCase="'EQUAL_TO_NUMERIC'">
+            &nbsp;=&nbsp;
+          </ng-container>
+          <ng-container *ngSwitchCase="'EQUAL_TO_STRING'">
+            &nbsp;=&nbsp;
+          </ng-container>
+          <ng-container *ngSwitchCase="'LESS_THAN'">
+            &nbsp;&lt;&nbsp;
+          </ng-container>
+          <ng-container *ngSwitchCase="'GREATER_THAN'">
+            &nbsp;&gt;&nbsp;
+          </ng-container>
         </ng-container>
-
         {{
           condition.relation === "EQUAL_TO_STRING"
             ? '"' + condition.rhs + '"'

@@ -129,6 +129,32 @@ describe("UserReducer", () => {
     });
   });
 
+  describe("on deselectAllCustomColumnsAction", () => {
+    it("should set enabled to false for all custom columns", () => {
+      const names = ["test"];
+      const addColumnsAction = fromActions.addColumnsAction({ names });
+      const firstState = userReducer(initialUserState, addColumnsAction);
+      const selectColumnAction = fromActions.selectColumnAction({
+        column: "test"
+      });
+      const secondState = userReducer(firstState, selectColumnAction);
+      secondState.columns.forEach(column => {
+        if (column.name === "test") {
+          expect(column.enabled).toEqual(true);
+        }
+      });
+
+      const action = fromActions.deselectAllCustomColumnsAction();
+      const state = userReducer(secondState, action);
+
+      state.columns.forEach(column => {
+        if (column.name === "test") {
+          expect(column.enabled).toEqual(false);
+        }
+      });
+    });
+  });
+
   describe("on showMessageAction", () => {
     it("should set message", () => {
       const message: Message = {

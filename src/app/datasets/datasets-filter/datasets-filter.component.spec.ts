@@ -45,7 +45,8 @@ import {
 import { of } from "rxjs";
 import {
   selectColumnAction,
-  deselectColumnAction
+  deselectColumnAction,
+  deselectAllCustomColumnsAction
 } from "state-management/actions/user.actions";
 import { ScientificCondition } from "state-management/models";
 
@@ -353,13 +354,16 @@ describe("DatasetsFilterComponent", () => {
   });
 
   describe("#clearFacets()", () => {
-    it("should dispatch a ClearFacetsAction", () => {
+    it("should dispatch a ClearFacetsAction and a deselectAllCustomColumnsAction", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
       component.clearFacets();
 
-      expect(dispatchSpy).toHaveBeenCalledTimes(1);
+      expect(dispatchSpy).toHaveBeenCalledTimes(2);
       expect(dispatchSpy).toHaveBeenCalledWith(clearFacetsAction());
+      expect(dispatchSpy).toHaveBeenCalledWith(
+        deselectAllCustomColumnsAction()
+      );
     });
   });
 

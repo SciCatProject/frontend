@@ -93,6 +93,9 @@ export const deselectColumnAction = createAction(
   "[User] Deselect Column",
   props<{ column: string }>()
 );
+export const deselectAllCustomColumnsAction = createAction(
+  "[User] Deselect All Custom Columns"
+);
 
 export const showMessageAction = createAction(
   "[User] Show Message",
