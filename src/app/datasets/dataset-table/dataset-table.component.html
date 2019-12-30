@@ -427,7 +427,7 @@
                   <div>
                     <mat-icon>star</mat-icon>
                   </div>
-                  <div>{{ column | titleCase }}</div>
+                  <div>{{ column | replaceUnderscore | titlecase }}</div>
                 </div>
               </mat-header-cell>
               <mat-cell *matCellDef="let dataset">
