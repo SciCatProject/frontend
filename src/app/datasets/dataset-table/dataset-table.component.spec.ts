@@ -370,10 +370,10 @@ describe("DatasetTableComponent", () => {
     });
   });
 
-  describe("#onClick()", () => {
+  describe("#onRowClick()", () => {
     it("should navigate to a dataset", () => {
       const dataset = new Dataset();
-      component.onClick(dataset);
+      component.onRowClick(dataset);
 
       expect(router.navigateByUrl).toHaveBeenCalledTimes(1);
       expect(router.navigateByUrl).toHaveBeenCalledWith(

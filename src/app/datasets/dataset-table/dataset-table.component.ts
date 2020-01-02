@@ -237,7 +237,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     return false;
   }
 
-  onClick(dataset: Dataset): void {
+  onRowClick(dataset: Dataset): void {
     const pid = encodeURIComponent(dataset.pid);
     this.router.navigateByUrl("/datasets/" + pid);
   }
