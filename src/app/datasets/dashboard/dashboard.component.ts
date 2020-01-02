@@ -22,7 +22,8 @@ import {
   getFilters,
   getHasPrefilledFilters,
   getDatasetsInBatch,
-  getCurrentDataset
+  getCurrentDataset,
+  getMetadataKeys
 } from "state-management/selectors/datasets.selectors";
 import {
   combineLatest,
@@ -31,7 +32,7 @@ import {
   map,
   take
 } from "rxjs/operators";
-import { MatDialog, MatSidenav, MatCheckboxChange } from "@angular/material";
+import { MatDialog, MatSidenav } from "@angular/material";
 import { AddDatasetDialogComponent } from "datasets/add-dataset-dialog/add-dataset-dialog.component";
 import { Subscription } from "rxjs";
 import {
@@ -44,6 +45,7 @@ import {
   selectColumnAction,
   deselectColumnAction
 } from "state-management/actions/user.actions";
+import { SelectColumnEvent } from "datasets/dataset-table-settings/dataset-table-settings.component";
 
 @Component({
   selector: "dashboard",
@@ -51,6 +53,7 @@ import {
   styleUrls: ["dashboard.component.scss"]
 })
 export class DashboardComponent implements OnInit, OnDestroy {
+  metadataKeys$ = this.store.pipe(select(getMetadataKeys));
   private filters$ = this.store.pipe(select(getFilters));
   private readyToFetch$ = this.store.pipe(
     select(getHasPrefilledFilters),
@@ -68,7 +71,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   displayedColumns: string[];
   tableColumns: TableColumn[];
-  filteredColumns: TableColumn[];
 
   @ViewChild(MatSidenav, { static: false }) sideNav: MatSidenav;
 
@@ -76,17 +78,15 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.sideNav.toggle();
   }
 
-  searchColumns(value: string): void {
-    const filterValue = value.toLowerCase();
-    this.filteredColumns = this.tableColumns.filter(({ name }) =>
-      name.toLowerCase().includes(filterValue)
-    );
+  onCloseClick(): void {
+    this.sideNav.close();
   }
 
-  onSelectColumn(event: MatCheckboxChange, column: string): void {
-    if (event.checked) {
+  onSelectColumn(event: SelectColumnEvent): void {
+    const { checkBoxChange, column } = event;
+    if (checkBoxChange.checked) {
       this.store.dispatch(selectColumnAction({ column }));
-    } else if (!event.checked) {
+    } else if (!checkBoxChange.checked) {
       this.store.dispatch(deselectColumnAction({ column }));
     }
   }

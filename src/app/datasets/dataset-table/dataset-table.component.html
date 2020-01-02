@@ -87,9 +87,8 @@
     </mat-paginator>
 
     <button
-      #settingsButton
       mat-icon-button
-      class="tableSettings"
+      class="settings-button"
       matTooltip="Table Settings"
       (click)="doSettingsClick($event)"
     >
@@ -414,7 +413,7 @@
 
     <!-- Custom Columns -->
     <ng-template ngFor let-column [ngForOf]="displayedColumns">
-      <ng-template [ngIf]="(metadataKeys$ | async).includes(column)">
+      <ng-template [ngIf]="metadataKeys.includes(column)">
         <ng-container matColumnDef="{{ column }}">
           <mat-header-cell *matHeaderCellDef>
             <div fxLayout="column" style="align-items: center">

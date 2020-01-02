@@ -3,6 +3,7 @@
     <div fxLayout="row" fxLayout.xs="column">
       <div class="action-column" fxFlex="14" fxFlex.lt-xl="20">
         <datasets-filter></datasets-filter>
+
         <mat-card
           *ngIf="appConfig.addDatasetEnabled"
           class="add-card"
@@ -11,49 +12,27 @@
           <mat-icon> add_circle </mat-icon>
           Add Dataset
         </mat-card>
+
         <div *ngIf="!appConfig.shoppingCartOnHeader && nonEmpty$ | async">
           <batch-card></batch-card>
         </div>
       </div>
+
       <div class="table-column" fxFlex="85" fxFlex.lt-xl="80">
         <dataset-table
           [displayedColumns]="displayedColumns"
+          [metadataKeys]="metadataKeys$ | async"
           (settingsClick)="onSettingsClick()"
         ></dataset-table>
       </div>
     </div>
   </mat-sidenav-content>
+
   <mat-sidenav #settings position="end" mode="push">
-    <h3 class="title">Columns</h3>
-
-    <button
-      mat-icon-button
-      tabindex="-1"
-      matTooltip="Close"
-      class="close-button"
-      (click)="settings.close()"
-    >
-      <mat-icon>clear</mat-icon>
-    </button>
-
-    <div style="clear: both"></div>
-
-    <app-search-bar
-      (onSearch)="searchColumns($event)"
-      (onFocus)="searchColumns($event)"
-    ></app-search-bar>
-
-    <table>
-      <tr *ngFor="let column of filteredColumns">
-        <td>
-          <mat-checkbox
-            [checked]="column.enabled"
-            (change)="onSelectColumn($event, column.name)"
-          >
-            {{ column.name }}
-          </mat-checkbox>
-        </td>
-      </tr>
-    </table>
+    <dataset-table-settings
+      [tableColumns]="tableColumns"
+      (closeClick)="onCloseClick()"
+      (selectColumn)="onSelectColumn($event)"
+    ></dataset-table-settings>
   </mat-sidenav>
 </mat-sidenav-container>

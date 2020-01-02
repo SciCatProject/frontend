@@ -38,8 +38,7 @@ import {
   getTotalSets,
   getArchiveViewMode,
   getPublicViewMode,
-  getDatasetsInBatch,
-  getMetadataKeys
+  getDatasetsInBatch
 } from "state-management/selectors/datasets.selectors";
 import { PageChangeEvent } from "shared/modules/table/table.component";
 
@@ -65,11 +64,11 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   datasetCount$ = this.store.select(getTotalSets);
   loading$ = this.store.pipe(select(getIsLoading));
   batch$ = this.store.pipe(select(getDatasetsInBatch));
-  metadataKeys$ = this.store.pipe(select(getMetadataKeys));
 
   private subscriptions: Subscription[] = [];
 
   @Input() displayedColumns: string[];
+  @Input() metadataKeys: string[];
 
   private selectedPids: string[] = [];
   selectedSets: Dataset[] = [];

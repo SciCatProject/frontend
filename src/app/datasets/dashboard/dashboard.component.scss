@@ -30,18 +30,6 @@ mat-sidenav-container {
     }
   }
 
-  mat-sidenav {
-    .title {
-      float: left;
-      transform: translateY(25%);
-    }
-
-    .close-button {
-      float: right;
-      color: mat-color($grey, 100);
-    }
-  }
-
   mat-sidenav.mat-drawer-opened,
   mat-sidenav.mat-drawer-opening {
     box-shadow: 0 0 0 0 !important;

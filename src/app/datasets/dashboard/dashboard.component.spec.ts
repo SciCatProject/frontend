@@ -28,6 +28,7 @@ import {
   deselectColumnAction
 } from "state-management/actions/user.actions";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { SelectColumnEvent } from "datasets/dataset-table-settings/dataset-table-settings.component";
 
 class MockMatDialog {
   open() {
@@ -103,43 +104,50 @@ describe("DashboardComponent", () => {
     });
   });
 
-  describe("#searchColumns()", () => {
-    it("should set filteredColumns based on the input value", () => {
-      component.tableColumns = [
-        { name: "test", order: 0, enabled: true },
-        { name: "filter", order: 1, enabled: true }
-      ];
+  describe("#onCloseClick()", () => {
+    it("should close the sideNav", () => {
+      const closeSpy = spyOn(component.sideNav, "close");
 
-      component.searchColumns("test");
+      component.onCloseClick();
 
-      expect(component.filteredColumns.length).toEqual(1);
+      expect(closeSpy).toHaveBeenCalled();
     });
   });
 
   describe("#onSelectColumn()", () => {
     const column = "test";
 
-    it("should dispatch a selectColumnAction if event.checked is true", () => {
+    it("should dispatch a selectColumnAction if checkBoxChange.checked is true", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
-      const event = {
+      const checkBoxChange = {
         checked: true
       } as MatCheckboxChange;
 
-      component.onSelectColumn(event, column);
+      const event: SelectColumnEvent = {
+        checkBoxChange,
+        column
+      };
+
+      component.onSelectColumn(event);
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(selectColumnAction({ column }));
     });
 
-    it("should dispatch a deselectColumnAction if event.checked is false", () => {
+    it("should dispatch a deselectColumnAction if checkBoxChange.checked is false", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
-      const event = {
+      const checkBoxChange = {
         checked: false
       } as MatCheckboxChange;
 
-      component.onSelectColumn(event, column);
+      const event: SelectColumnEvent = {
+        checkBoxChange,
+        column
+      };
+
+      component.onSelectColumn(event);
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(

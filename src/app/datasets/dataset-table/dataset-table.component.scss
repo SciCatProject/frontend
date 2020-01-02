@@ -1,8 +1,6 @@
 @import "../../../theme.scss";
 
 .dataset-table {
-  min-width: 1060px;
-
   .mode-container {
     float: left;
 
@@ -25,17 +23,9 @@
     visibility: hidden;
   }
 
-  .tableSettings {
+  .settings-button {
     margin-bottom: 0.5em;
     color: mat-color($grey, 100);
-
-    ::ng-deep .tblSettingSelect div.mat-select-arrow-wrapper {
-      display: none;
-    }
-
-    ::ng-deep .tblSettingSelect.mat-select {
-      display: inline;
-    }
   }
 
   mat-table {
