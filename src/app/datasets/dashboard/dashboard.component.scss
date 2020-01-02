@@ -1,24 +1,49 @@
 @import "../../../theme.scss";
 
-.action-column {
-  margin-right: 1em;
+mat-sidenav-container {
+  height: 97%;
+  mat-sidenav-content {
+    padding: 0.5em;
+    background-color: #ffffff;
 
-  .add-card {
-    margin: 1em 0 1em;
-    text-align: center;
+    .action-column {
+      margin-right: 1em;
 
-    mat-icon {
-      vertical-align: middle;
-      color: mat-color($accent);
+      .add-card {
+        margin: 1em 0 1em;
+        text-align: center;
+
+        mat-icon {
+          vertical-align: middle;
+          color: mat-color($accent);
+        }
+      }
+
+      .add-card:hover {
+        cursor: pointer;
+        background-color: rgba(0, 0, 0, 0.1);
+      }
+    }
+
+    .table-column {
+      margin-top: 1.5em;
     }
   }
 
-  .add-card:hover {
-    cursor: pointer;
-    background-color: rgba(0, 0, 0, 0.1);
-  }
-}
+  mat-sidenav {
+    .title {
+      float: left;
+      transform: translateY(25%);
+    }
 
-.table-column {
-  margin-top: 1.5em;
+    .close-button {
+      float: right;
+      color: mat-color($grey, 100);
+    }
+  }
+
+  mat-sidenav.mat-drawer-opened,
+  mat-sidenav.mat-drawer-opening {
+    box-shadow: 0 0 0 0 !important;
+  }
 }

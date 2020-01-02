@@ -27,10 +27,6 @@ import { datasetsReducer } from "state-management/reducers/datasets.reducer";
 import { jobsReducer } from "state-management/reducers/jobs.reducer";
 import { DatasetApi, Dataset } from "shared/sdk";
 import { SharedCatanieModule } from "shared/shared.module";
-import {
-  selectColumnAction,
-  deselectColumnAction
-} from "state-management/actions/user.actions";
 import { ArchViewMode } from "state-management/models";
 import {
   setArchiveViewModeAction,
@@ -49,7 +45,6 @@ import {
   getDatasets,
   getSelectedDatasets
 } from "state-management/selectors/datasets.selectors";
-import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
 describe("DatasetTableComponent", () => {
   let component: DatasetTableComponent;
@@ -65,17 +60,16 @@ describe("DatasetTableComponent", () => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
       imports: [
-        BrowserAnimationsModule,
-        MatTableModule,
+        AppConfigModule,
         MatDialogModule,
+        MatTableModule,
         SharedCatanieModule,
         StoreModule.forRoot({
           datasets: datasetsReducer,
           root: combineReducers({
             jobs: jobsReducer
           })
-        }),
-        AppConfigModule
+        })
       ],
       providers: [
         provideMockStore({
@@ -138,59 +132,15 @@ describe("DatasetTableComponent", () => {
     expect(compiled.querySelector(".all").textContent).toContain("All");
   });
 
-  describe("#onSelectColumn()", () => {
-    it("should do nothing if isUserInput is false", () => {
-      dispatchSpy = spyOn(store, "dispatch");
+  describe("#doSettingsClick()", () => {
+    it("should emit a MouseEvent on click", () => {
+      const emitSpy = spyOn(component.settingsClick, "emit");
 
-      const event = {
-        isUserInput: false,
-        source: {
-          selected: true,
-          value: "test"
-        }
-      };
+      const event = {} as MouseEvent;
+      component.doSettingsClick(event);
 
-      component.onSelectColumn(event);
-
-      expect(dispatchSpy).toHaveBeenCalledTimes(0);
-    });
-
-    it("should dispatch a selectColumnAction if both isUserInput and selected are true", () => {
-      dispatchSpy = spyOn(store, "dispatch");
-
-      const event = {
-        isUserInput: true,
-        source: {
-          selected: true,
-          value: "test"
-        }
-      };
-
-      component.onSelectColumn(event);
-
-      expect(dispatchSpy).toHaveBeenCalledTimes(1);
-      expect(dispatchSpy).toHaveBeenCalledWith(
-        selectColumnAction({ column: event.source.value })
-      );
-    });
-
-    it("should dispatch a deselectColumnAction if isUserInput is true and selected is false", () => {
-      dispatchSpy = spyOn(store, "dispatch");
-
-      const event = {
-        isUserInput: true,
-        source: {
-          selected: false,
-          value: "test"
-        }
-      };
-
-      component.onSelectColumn(event);
-
-      expect(dispatchSpy).toHaveBeenCalledTimes(1);
-      expect(dispatchSpy).toHaveBeenCalledWith(
-        deselectColumnAction({ column: event.source.value })
-      );
+      expect(emitSpy).toHaveBeenCalledTimes(1);
+      expect(emitSpy).toHaveBeenCalledWith(event);
     });
   });
 

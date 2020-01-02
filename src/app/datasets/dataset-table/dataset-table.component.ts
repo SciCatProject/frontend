@@ -1,25 +1,21 @@
 import { APP_CONFIG, AppConfig } from "app-config.module";
 import { ArchivingService } from "../archiving.service";
-import { Component, Inject, OnDestroy, OnInit } from "@angular/core";
 import {
-  Dataset,
-  MessageType,
-  ArchViewMode,
-  TableColumn
-} from "state-management/models";
+  Component,
+  Inject,
+  OnDestroy,
+  OnInit,
+  Output,
+  EventEmitter,
+  Input
+} from "@angular/core";
+import { Dataset, MessageType, ArchViewMode } from "state-management/models";
 import { DialogComponent } from "shared/modules/dialog/dialog.component";
 import { MatCheckboxChange, MatDialog } from "@angular/material";
 import { Router } from "@angular/router";
-import {
-  showMessageAction,
-  selectColumnAction,
-  deselectColumnAction
-} from "state-management/actions/user.actions";
+import { showMessageAction } from "state-management/actions/user.actions";
 import { Subscription } from "rxjs";
-import {
-  getColumns,
-  getIsLoading
-} from "../../state-management/selectors/user.selectors";
+import { getIsLoading } from "../../state-management/selectors/user.selectors";
 import { getSubmitError } from "state-management/selectors/jobs.selectors";
 import { select, Store } from "@ngrx/store";
 import {
@@ -31,8 +27,7 @@ import {
   selectAllDatasetsAction,
   changePageAction,
   sortByColumnAction,
-  addToBatchAction,
-  fetchMetadataKeysAction
+  addToBatchAction
 } from "state-management/actions/datasets.actions";
 
 import {
@@ -74,9 +69,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
 
   private subscriptions: Subscription[] = [];
 
-  displayedColumns: string[];
-  tableColumns: TableColumn[];
-  filteredColumns: TableColumn[];
+  @Input() displayedColumns: string[];
 
   private selectedPids: string[] = [];
   selectedSets: Dataset[] = [];
@@ -100,23 +93,10 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   datasetDerivationsMaps: DatasetDerivationsMap[] = [];
   derivationMapPids: string[] = [];
 
-  onSelectColumn(event: any): void {
-    const column = event.source.value;
-    if (event.isUserInput) {
-      if (event.source.selected) {
-        this.store.dispatch(selectColumnAction({ column }));
-      } else if (!event.source.selected) {
-        this.store.dispatch(deselectColumnAction({ column }));
-      }
-    }
-  }
+  @Output() settingsClick = new EventEmitter<MouseEvent>();
 
-  onColumnSelect(event: MatCheckboxChange, column: string): void {
-    if (event.checked) {
-      this.store.dispatch(selectColumnAction({ column }));
-    } else if (!event.checked) {
-      this.store.dispatch(deselectColumnAction({ column }));
-    }
+  doSettingsClick(event: MouseEvent) {
+    this.settingsClick.emit(event);
   }
 
   /**
@@ -285,7 +265,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     }
   }
 
-  onSelectAll(event: MatCheckboxChange) {
+  onSelectAll(event: MatCheckboxChange): void {
     if (event.checked) {
       this.store.dispatch(selectAllDatasetsAction());
     } else {
@@ -324,13 +304,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     return derivedDatasetsNum;
   }
 
-  searchColumns(value: string) {
-    const filterValue = value.toLowerCase();
-    this.filteredColumns = this.tableColumns.filter(({ name }) =>
-      name.toLowerCase().includes(filterValue)
-    );
-  }
-
   constructor(
     private router: Router,
     private store: Store<any>,
@@ -340,8 +313,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.store.dispatch(fetchMetadataKeysAction({ metadataKey: "" }));
-
     this.subscriptions.push(
       this.batch$.subscribe(datasets => {
         this.inBatchPids = datasets.map(dataset => dataset.pid);
@@ -370,18 +341,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
         if (!err) {
           this.store.dispatch(clearSelectionAction());
         }
-      })
-    );
-
-    this.subscriptions.push(
-      this.store.pipe(select(getColumns)).subscribe(tableColumns => {
-        this.tableColumns = tableColumns.filter(
-          column => column.name !== "select"
-        );
-
-        this.displayedColumns = tableColumns
-          .filter(column => column.enabled)
-          .map(column => column.name);
       })
     );
 
