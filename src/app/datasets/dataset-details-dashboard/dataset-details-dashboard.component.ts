@@ -246,7 +246,7 @@ export class DatasetDetailsDashboardComponent
         .subscribe((dataset: RawDataset | DerivedDataset) => {
           if (dataset) {
             this.dataset = dataset;
-            if ("proposalId" in dataset) {
+            if (dataset.type === "raw" && "proposalId" in dataset) {
               this.store.dispatch(
                 fetchProposalAction({ proposalId: dataset["proposalId"] })
               );
