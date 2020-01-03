@@ -48,6 +48,8 @@ import { MatSlideToggleChange } from "@angular/material";
 import { fetchLogbookAction } from "state-management/actions/logbooks.actions";
 import { fetchProposalAction } from "state-management/actions/proposals.actions";
 import { getCurrentProposal } from "state-management/selectors/proposals.selectors";
+import { fetchSampleAction } from "state-management/actions/samples.actions";
+import { getCurrentSample } from "state-management/selectors/samples.selectors";
 
 @Component({
   selector: "dataset-details-dashboard",
@@ -61,6 +63,7 @@ export class DatasetDetailsDashboardComponent
   datablocks$ = this.store.pipe(select(getCurrentDatablocks));
   attachments$ = this.store.pipe(select(getCurrentAttachments));
   proposal$ = this.store.pipe(select(getCurrentProposal));
+  sample$ = this.store.pipe(select(getCurrentSample));
   isAdmin$ = this.store.pipe(select(getIsAdmin));
   jwt$: Observable<any>;
 
@@ -249,6 +252,11 @@ export class DatasetDetailsDashboardComponent
               );
               this.store.dispatch(
                 fetchLogbookAction({ name: dataset["proposalId"] })
+              );
+            }
+            if ("sampleId" in dataset) {
+              this.store.dispatch(
+                fetchSampleAction({ sampleId: dataset["sampleId"] })
               );
             }
           }

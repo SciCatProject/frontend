@@ -98,10 +98,10 @@
             <a class="related-link">{{ proposal.title }}</a>
           </td>
         </tr>
-        <tr *ngIf="dataset.sampleId as value" (click)="onClickSample(value)">
+        <tr *ngIf="sample" (click)="onClickSample(sample.sampleId)">
           <th><mat-icon> center_focus_weak </mat-icon> Sample</th>
           <td>
-            <a class="related-link">{{ value }}</a>
+            <a class="related-link">{{ sample.description }}</a>
           </td>
         </tr>
         <tr *ngIf="dataset.size as value">

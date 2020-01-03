@@ -1,5 +1,5 @@
 import { Component, Inject, Input, Output, EventEmitter } from "@angular/core";
-import { Attachment, Dataset, Proposal } from "shared/sdk/models";
+import { Attachment, Dataset, Proposal, Sample } from "shared/sdk/models";
 import { APP_CONFIG, AppConfig } from "app-config.module";
 import { ENTER, COMMA, SPACE } from "@angular/cdk/keycodes";
 import { MatChipInputEvent } from "@angular/material";
@@ -20,6 +20,7 @@ export class DatasetDetailComponent {
   @Input() datasetWithout: any;
   @Input() attachments: Attachment[];
   @Input() proposal: Proposal;
+  @Input() sample: Sample;
 
   @Output() clickKeyword = new EventEmitter<string>();
   @Output() addKeyword = new EventEmitter<string>();
