@@ -1,7 +1,6 @@
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { async, TestBed } from "@angular/core/testing";
 import { Store, StoreModule } from "@ngrx/store";
-import { rootReducer } from "state-management/reducers/root.reducer";
 import { MatSnackBarModule } from "@angular/material";
 import { AppComponent } from "./app.component";
 import { MockStore } from "./shared/MockStubs";
@@ -13,7 +12,7 @@ describe("AppComponent", () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
-      imports: [MatSnackBarModule, StoreModule.forRoot({ rootReducer })],
+      imports: [MatSnackBarModule, StoreModule.forRoot({})],
       declarations: [AppComponent]
     });
     TestBed.overrideComponent(AppComponent, {

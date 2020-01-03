@@ -15,7 +15,6 @@ import {
   inject
 } from "@angular/core/testing";
 import { NgxJsonViewerModule } from "ngx-json-viewer";
-import { rootReducer } from "state-management/reducers/root.reducer";
 import { PageChangeEvent } from "shared/modules/table/table.component";
 import {
   changeDatasetsPageAction,
@@ -55,7 +54,7 @@ describe("SampleDetailComponent", () => {
         MatTabsModule,
         NgxJsonViewerModule,
         SharedCatanieModule,
-        StoreModule.forRoot({ rootReducer })
+        StoreModule.forRoot({})
       ],
       providers: [DatePipe, FileSizePipe, SlicePipe]
     });

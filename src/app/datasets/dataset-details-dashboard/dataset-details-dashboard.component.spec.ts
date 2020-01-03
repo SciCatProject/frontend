@@ -21,7 +21,6 @@ import { ReadFile, ReadMode } from "ngx-file-helpers";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { AppConfigModule, APP_CONFIG } from "app-config.module";
 import { SharedCatanieModule } from "shared/shared.module";
-import { rootReducer } from "state-management/reducers/root.reducer";
 import { Router, ActivatedRoute } from "@angular/router";
 import { SubmitCaptionEvent } from "shared/modules/file-uploader/file-uploader.component";
 import { MatSlideToggleChange, MatSlideToggle } from "@angular/material";
@@ -41,11 +40,7 @@ describe("DetailsDashboardComponent", () => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
       declarations: [DatasetDetailsDashboardComponent],
-      imports: [
-        AppConfigModule,
-        SharedCatanieModule,
-        StoreModule.forRoot({ rootReducer })
-      ]
+      imports: [AppConfigModule, SharedCatanieModule, StoreModule.forRoot({})]
     });
     TestBed.overrideComponent(DatasetDetailsDashboardComponent, {
       set: {
