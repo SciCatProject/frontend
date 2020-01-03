@@ -8,20 +8,14 @@ export const getCurrentUser = createSelector(
   state => state.currentUser
 );
 
-export const getCurrentUserId = createSelector(
-  getCurrentUser,
-  user => user.id
-);
+export const getCurrentUserId = createSelector(getCurrentUser, user => user.id);
 
 export const getCurrentUserAccountType = createSelector(
   getUserState,
   state => state.accountType
 );
 
-export const getProfile = createSelector(
-  getUserState,
-  state => state.profile
-);
+export const getProfile = createSelector(getUserState, state => state.profile);
 
 export const getCurrentUserName = createSelector(
   getProfile,
@@ -48,6 +42,11 @@ export const getIsAdmin = createSelector(
 export const getCatamelToken = createSelector(
   getUserState,
   state => state.catamelToken
+);
+
+export const getUserMessage = createSelector(
+  getUserState,
+  state => state.message
 );
 
 export const getSettings = createSelector(
@@ -80,7 +79,4 @@ export const getIsLoading = createSelector(
   state => state.isLoading
 );
 
-export const getColumns = createSelector(
-  getUserState,
-  state => state.columns
-);
+export const getColumns = createSelector(getUserState, state => state.columns);
