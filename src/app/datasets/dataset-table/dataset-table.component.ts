@@ -63,7 +63,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   datasetsPerPage$ = this.store.pipe(select(getDatasetsPerPage));
   datasetCount$ = this.store.select(getTotalSets);
   loading$ = this.store.pipe(select(getIsLoading));
-  batch$ = this.store.pipe(select(getDatasetsInBatch));
 
   private subscriptions: Subscription[] = [];
 
@@ -313,7 +312,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.subscriptions.push(
-      this.batch$.subscribe(datasets => {
+      this.store.pipe(select(getDatasetsInBatch)).subscribe(datasets => {
         this.inBatchPids = datasets.map(dataset => dataset.pid);
       })
     );
