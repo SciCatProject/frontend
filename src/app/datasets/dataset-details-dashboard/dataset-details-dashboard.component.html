@@ -34,9 +34,10 @@
       <div style="clear: both;"></div>
 
       <dataset-detail
-        [data]="dataset"
+        [dataset]="dataset"
         [datasetWithout]="datasetWithout$ | async"
         [attachments]="attachments$ | async"
+        [proposal]="proposal$ | async"
         (clickKeyword)="onClickKeyword($event)"
         (addKeyword)="onAddKeyword($event)"
         (removeKeyword)="onRemoveKeyword($event)"

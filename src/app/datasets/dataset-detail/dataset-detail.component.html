@@ -92,13 +92,10 @@
           <th><mat-icon> map </mat-icon> Version</th>
           <td>{{ value }}</td>
         </tr>
-        <tr
-          *ngIf="dataset.proposalId as value"
-          (click)="onClickProposal(value)"
-        >
+        <tr *ngIf="proposal" (click)="onClickProposal(proposal.proposalId)">
           <th><mat-icon> spa </mat-icon> Proposal</th>
           <td>
-            <a class="related-link">{{ value }}</a>
+            <a class="related-link">{{ proposal.title }}</a>
           </td>
         </tr>
         <tr *ngIf="dataset.sampleId as value" (click)="onClickSample(value)">
