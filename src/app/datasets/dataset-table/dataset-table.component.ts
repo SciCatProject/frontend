@@ -1,5 +1,4 @@
 import { APP_CONFIG, AppConfig } from "app-config.module";
-import { ArchivingService } from "../archiving.service";
 import {
   Component,
   Inject,
@@ -9,38 +8,33 @@ import {
   EventEmitter,
   Input
 } from "@angular/core";
-import { Dataset, MessageType, ArchViewMode } from "state-management/models";
-import { DialogComponent } from "shared/modules/dialog/dialog.component";
-import { MatCheckboxChange, MatDialog } from "@angular/material";
+import { Dataset } from "state-management/models";
+import { MatCheckboxChange } from "@angular/material";
 import { Router } from "@angular/router";
-import { showMessageAction } from "state-management/actions/user.actions";
 import { Subscription } from "rxjs";
-import { getIsLoading } from "../../state-management/selectors/user.selectors";
-import { getSubmitError } from "state-management/selectors/jobs.selectors";
 import { select, Store } from "@ngrx/store";
 import {
   clearSelectionAction,
-  setArchiveViewModeAction,
-  setPublicViewModeAction,
   selectDatasetAction,
   deselectDatasetAction,
   selectAllDatasetsAction,
   changePageAction,
-  sortByColumnAction,
-  addToBatchAction
+  sortByColumnAction
 } from "state-management/actions/datasets.actions";
 
 import {
   getDatasets,
   getDatasetsPerPage,
   getPage,
-  getSelectedDatasets,
   getTotalSets,
-  getArchiveViewMode,
-  getPublicViewMode,
-  getDatasetsInBatch
+  getDatasetsInBatch,
+  getMetadataKeys
 } from "state-management/selectors/datasets.selectors";
 import { PageChangeEvent } from "shared/modules/table/table.component";
+import {
+  selectColumnAction,
+  deselectColumnAction
+} from "state-management/actions/user.actions";
 
 export interface SortChangeEvent {
   active: keyof Dataset;
@@ -58,124 +52,26 @@ interface DatasetDerivationsMap {
   styleUrls: ["dataset-table.component.scss"]
 })
 export class DatasetTableComponent implements OnInit, OnDestroy {
-  datasets: Dataset[];
   currentPage$ = this.store.pipe(select(getPage));
   datasetsPerPage$ = this.store.pipe(select(getDatasetsPerPage));
   datasetCount$ = this.store.select(getTotalSets);
-  loading$ = this.store.pipe(select(getIsLoading));
-
-  private subscriptions: Subscription[] = [];
+  metadataKeys$ = this.store.pipe(select(getMetadataKeys));
 
   @Input() displayedColumns: string[];
-  @Input() metadataKeys: string[];
+  @Input() selectedSets: Dataset[] = [];
 
-  private selectedPids: string[] = [];
-  selectedSets: Dataset[] = [];
   private inBatchPids: string[] = [];
 
-  public currentArchViewMode: ArchViewMode;
-  public viewModes = ArchViewMode;
-  private modes = [
-    ArchViewMode.all,
-    ArchViewMode.archivable,
-    ArchViewMode.retrievable,
-    ArchViewMode.work_in_progress,
-    ArchViewMode.system_error,
-    ArchViewMode.user_error
-  ];
-
-  searchPublicDataEnabled = this.appConfig.searchPublicDataEnabled;
-  currentPublicViewMode = false;
-
-  datasetPids: string[] = [];
+  datasets: Dataset[];
   datasetDerivationsMaps: DatasetDerivationsMap[] = [];
   derivationMapPids: string[] = [];
+
+  private subscriptions: Subscription[] = [];
 
   @Output() settingsClick = new EventEmitter<MouseEvent>();
 
   doSettingsClick(event: MouseEvent) {
     this.settingsClick.emit(event);
-  }
-
-  /**
-   * Handle changing of view mode and disabling selected rows
-   * @param event
-   * @param mode
-   */
-  onModeChange(event, mode: ArchViewMode): void {
-    this.store.dispatch(setArchiveViewModeAction({ modeToggle: mode }));
-  }
-
-  onViewPublicChange(value: boolean): void {
-    this.currentPublicViewMode = value;
-    this.store.dispatch(
-      setPublicViewModeAction({ isPublished: this.currentPublicViewMode })
-    );
-  }
-
-  /**
-   * Sends archive command for selected datasets (default includes all
-   * datablocks for now) to Dacat API
-   * @param {any} event - click handler (not currently used)
-   * @memberof DashboardComponent
-   */
-  archiveClickHandle(event): void {
-    const dialogRef = this.dialog.open(DialogComponent, {
-      width: "auto",
-      data: { title: "Really archive?", question: "" }
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.archivingSrv.archive(this.selectedSets).subscribe(
-          () => this.store.dispatch(clearSelectionAction()),
-          err =>
-            this.store.dispatch(
-              showMessageAction({
-                message: {
-                  type: MessageType.Error,
-                  content: err.message,
-                  duration: 5000
-                }
-              })
-            )
-        );
-      }
-    });
-  }
-
-  /**
-   * Sends retrieve command for selected datasets
-   * @param {any} event - click handler (not currently used)
-   * @memberof DashboardComponent
-   */
-  retrieveClickHandle(event): void {
-    const destPath = "/archive/retrieve";
-    const dialogRef = this.dialog.open(DialogComponent, {
-      width: "auto",
-      data: {
-        title: "Really retrieve?",
-        question: ""
-      }
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.archivingSrv.retrieve(this.selectedSets, destPath).subscribe(
-          () => this.store.dispatch(clearSelectionAction()),
-          err =>
-            this.store.dispatch(
-              showMessageAction({
-                message: {
-                  type: MessageType.Error,
-                  content: err.message,
-                  duration: 5000
-                }
-              })
-            )
-        );
-      }
-    });
   }
 
   // conditional to asses dataset status and assign correct icon ArchViewMode.work_in_progress
@@ -242,7 +138,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   }
 
   isSelected(dataset: Dataset): boolean {
-    return this.selectedPids.indexOf(dataset.pid) !== -1;
+    return this.selectedSets.map(set => set.pid).indexOf(dataset.pid) !== -1;
   }
 
   isAllSelected(): boolean {
@@ -275,16 +171,16 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     this.store.dispatch(
       changePageAction({ page: event.pageIndex, limit: event.pageSize })
     );
+    if (event.pageSize < 50) {
+      this.store.dispatch(selectColumnAction({ column: "image" }));
+    } else {
+      this.store.dispatch(deselectColumnAction({ column: "image" }));
+    }
   }
 
   onSortChange(event: SortChangeEvent): void {
     const { active: column, direction } = event;
     this.store.dispatch(sortByColumnAction({ column, direction }));
-  }
-
-  onAddToBatch(): void {
-    this.store.dispatch(addToBatchAction());
-    this.store.dispatch(clearSelectionAction());
   }
 
   countDerivedDatasets(dataset: Dataset): number {
@@ -293,7 +189,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
       dataset.history.forEach(item => {
         if (
           item.hasOwnProperty("derivedDataset") &&
-          this.datasetPids.includes(item.derivedDataset.pid)
+          this.datasets.map(set => set.pid).includes(item.derivedDataset.pid)
         ) {
           derivedDatasetsNum++;
         }
@@ -303,11 +199,9 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   }
 
   constructor(
+    @Inject(APP_CONFIG) public appConfig: AppConfig,
     private router: Router,
-    private store: Store<any>,
-    private archivingSrv: ArchivingService,
-    public dialog: MatDialog,
-    @Inject(APP_CONFIG) public appConfig: AppConfig
+    private store: Store<any>
   ) {}
 
   ngOnInit() {
@@ -321,7 +215,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
       this.store.pipe(select(getDatasets)).subscribe(datasets => {
         this.datasets = datasets;
 
-        this.datasetPids = datasets.map(dataset => dataset.pid);
         this.derivationMapPids = this.datasetDerivationsMaps.map(
           datasetderivationMap => datasetderivationMap.datasetPid
         );
@@ -331,35 +224,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
             datasetPid: dataset.pid,
             derivedDatasetsNum: this.countDerivedDatasets(dataset)
           }));
-      })
-    );
-
-    this.subscriptions.push(
-      this.store.pipe(select(getSubmitError)).subscribe(err => {
-        if (!err) {
-          this.store.dispatch(clearSelectionAction());
-        }
-      })
-    );
-
-    this.subscriptions.push(
-      this.store.pipe(select(getSelectedDatasets)).subscribe(selectedSets => {
-        this.selectedSets = selectedSets;
-        this.selectedPids = selectedSets.map(dataset => dataset.pid);
-      })
-    );
-
-    this.subscriptions.push(
-      this.store
-        .pipe(select(getArchiveViewMode))
-        .subscribe((mode: ArchViewMode) => {
-          this.currentArchViewMode = mode;
-        })
-    );
-
-    this.subscriptions.push(
-      this.store.pipe(select(getPublicViewMode)).subscribe(publicViewMode => {
-        this.currentPublicViewMode = publicViewMode;
       })
     );
   }

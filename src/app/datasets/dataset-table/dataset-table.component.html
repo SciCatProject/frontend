@@ -1,77 +1,4 @@
 <div class="dataset-table">
-  <div class="mode-container">
-    <mat-button-toggle-group
-      class="public-toggle"
-      [value]="currentPublicViewMode"
-      *ngIf="searchPublicDataEnabled"
-    >
-      <mat-button-toggle [value]="false" (click)="onViewPublicChange(false)">
-        My Data
-      </mat-button-toggle>
-      <mat-button-toggle [value]="true" (click)="onViewPublicChange(true)">
-        Public Data
-      </mat-button-toggle>
-    </mat-button-toggle-group>
-    <mat-button-toggle-group
-      [value]="currentArchViewMode"
-      *ngIf="appConfig.archiveWorkflowEnabled"
-    >
-      <mat-button-toggle
-        *ngFor="let mode of modes"
-        (click)="onModeChange($event, mode)"
-        [value]="mode"
-        [ngClass]="mode"
-      >
-        {{ mode | titlecase }}
-      </mat-button-toggle>
-    </mat-button-toggle-group>
-  </div>
-
-  <ng-template *ngIf="datasetCount$ | async as count">
-    <div class="raised" [ngPlural]="count">
-      <ng-template ngPluralCase="=0">No datasets.</ng-template>
-      <ng-template ngPluralCase="=1">1 dataset.</ng-template>
-      <ng-template ngPluralCase="other">{{ count }} datasets.</ng-template>
-    </div>
-  </ng-template>
-
-  <div class="action-container" [class.hidden]="loading$ | async">
-    <button
-      mat-button
-      [disabled]="isEmptySelection$ | async"
-      *ngIf="currentArchViewMode === viewModes.archivable"
-      class="archive-action-btn"
-      (click)="archiveClickHandle($event)"
-      color="primary"
-    >
-      <mat-icon> archive </mat-icon> Archive
-    </button>
-
-    <button
-      mat-button
-      [disabled]="isEmptySelection$ | async"
-      *ngIf="currentArchViewMode === viewModes.retrievable"
-      class="retrieve-action-btn"
-      (click)="retrieveClickHandle($event)"
-      color="primary"
-    >
-      <mat-icon> cloud_upload </mat-icon> Retrieve
-    </button>
-
-    <button
-      mat-button
-      [disabled]="isEmptySelection$ | async"
-      *ngIf="appConfig.shoppingCartEnabled"
-      class="add-batch"
-      (click)="onAddToBatch()"
-      color="primary"
-    >
-      <mat-icon> shopping_cart </mat-icon> Add to Cart
-    </button>
-  </div>
-
-  <div style="clear: both"></div>
-
   <!--https://tburleson-layouts-demos.firebaseapp.com/#/docs-->
   <div fxLayout="row" fxLayoutAlign="space-evenly end">
     <div style="flex: 1"></div>
@@ -98,7 +25,7 @@
 
   <mat-table
     [dataSource]="datasets"
-    class="dataset-table mat-elevation-z2"
+    class="mat-elevation-z2"
     matSort
     (matSortChange)="onSortChange($event)"
   >
@@ -413,7 +340,7 @@
 
     <!-- Custom Columns -->
     <ng-template ngFor let-column [ngForOf]="displayedColumns">
-      <ng-template [ngIf]="metadataKeys.includes(column)">
+      <ng-template [ngIf]="(metadataKeys$ | async).includes(column)">
         <ng-container matColumnDef="{{ column }}">
           <mat-header-cell *matHeaderCellDef>
             <div fxLayout="column" style="align-items: center">

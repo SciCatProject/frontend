@@ -19,9 +19,13 @@
       </div>
 
       <div class="table-column" fxFlex="85" fxFlex.lt-xl="80">
+        <dataset-table-actions
+          [selectedSets]="selectedSets$ | async"
+        ></dataset-table-actions>
+
         <dataset-table
           [displayedColumns]="displayedColumns"
-          [metadataKeys]="metadataKeys$ | async"
+          [selectedSets]="selectedSets$ | async"
           (settingsClick)="onSettingsClick()"
         ></dataset-table>
       </div>

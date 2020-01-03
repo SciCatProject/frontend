@@ -23,7 +23,7 @@ import {
   getHasPrefilledFilters,
   getDatasetsInBatch,
   getCurrentDataset,
-  getMetadataKeys
+  getSelectedDatasets
 } from "state-management/selectors/datasets.selectors";
 import {
   combineLatest,
@@ -53,7 +53,7 @@ import { SelectColumnEvent } from "datasets/dataset-table-settings/dataset-table
   styleUrls: ["dashboard.component.scss"]
 })
 export class DashboardComponent implements OnInit, OnDestroy {
-  metadataKeys$ = this.store.pipe(select(getMetadataKeys));
+  selectedSets$ = this.store.pipe(select(getSelectedDatasets));
   private filters$ = this.store.pipe(select(getFilters));
   private readyToFetch$ = this.store.pipe(
     select(getHasPrefilledFilters),

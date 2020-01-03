@@ -1,28 +1,6 @@
 @import "../../../theme.scss";
 
 .dataset-table {
-  .mode-container {
-    float: left;
-
-    .public-toggle {
-      margin-right: 1em;
-    }
-  }
-
-  .action-container {
-    float: right;
-
-    button {
-      mat-icon {
-        color: black;
-      }
-    }
-  }
-
-  .action-container.hidden {
-    visibility: hidden;
-  }
-
   .settings-button {
     margin-bottom: 0.5em;
     color: mat-color($grey, 100);
@@ -32,7 +10,7 @@
     overflow-x: scroll;
 
     mat-header-row {
-      min-width: 1290px;
+      min-width: 1275px;
       background: mat-color($primary);
     }
 
@@ -66,7 +44,7 @@
     }
 
     mat-row {
-      min-width: 1290px;
+      min-width: 1275px;
     }
 
     mat-row:hover {
@@ -75,8 +53,8 @@
     }
 
     .mat-column-select {
-      min-width: 55px;
-      max-width: 55px;
+      min-width: 40px;
+      max-width: 40px;
     }
 
     .mat-column-datasetName {

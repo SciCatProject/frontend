@@ -29,6 +29,8 @@ import {
 } from "state-management/actions/user.actions";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { SelectColumnEvent } from "datasets/dataset-table-settings/dataset-table-settings.component";
+import { provideMockStore } from "@ngrx/store/testing";
+import { getSelectedDatasets } from "state-management/selectors/datasets.selectors";
 
 class MockMatDialog {
   open() {
@@ -60,7 +62,12 @@ describe("DashboardComponent", () => {
         MatDialogModule,
         StoreModule.forRoot({})
       ],
-      declarations: [DashboardComponent, MatSidenav]
+      declarations: [DashboardComponent, MatSidenav],
+      providers: [
+        provideMockStore({
+          selectors: [{ selector: getSelectedDatasets, value: [] }]
+        })
+      ]
     });
     TestBed.overrideComponent(DashboardComponent, {
       set: {
