@@ -147,11 +147,9 @@ export class PolicyEffects {
   loadingComplete$ = createEffect(() =>
     this.actions$.pipe(
       ofType(
-        fromActions.fetchPoliciesCompleteAction,
         fromActions.fetchPoliciesFailedAction,
         fromActions.fetchCountCompleteAction,
         fromActions.fetchCountFailedAction,
-        fromActions.fetchEditablePoliciesCompleteAction,
         fromActions.fetchEditablePoliciesFailedAction,
         fromActions.fetchEditableCountCompleteAction,
         fromActions.fetchEditableCountFailedAction,
