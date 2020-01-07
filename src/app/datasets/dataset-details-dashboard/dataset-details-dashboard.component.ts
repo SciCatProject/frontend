@@ -46,6 +46,10 @@ import { ReadFile } from "ngx-file-helpers";
 import { SubmitCaptionEvent } from "shared/modules/file-uploader/file-uploader.component";
 import { MatSlideToggleChange } from "@angular/material";
 import { fetchLogbookAction } from "state-management/actions/logbooks.actions";
+import { fetchProposalAction } from "state-management/actions/proposals.actions";
+import { getCurrentProposal } from "state-management/selectors/proposals.selectors";
+import { fetchSampleAction } from "state-management/actions/samples.actions";
+import { getCurrentSample } from "state-management/selectors/samples.selectors";
 
 @Component({
   selector: "dataset-details-dashboard",
@@ -58,6 +62,8 @@ export class DatasetDetailsDashboardComponent
   origDatablocks$ = this.store.pipe(select(getCurrentOrigDatablocks));
   datablocks$ = this.store.pipe(select(getCurrentDatablocks));
   attachments$ = this.store.pipe(select(getCurrentAttachments));
+  proposal$ = this.store.pipe(select(getCurrentProposal));
+  sample$ = this.store.pipe(select(getCurrentSample));
   isAdmin$ = this.store.pipe(select(getIsAdmin));
   jwt$: Observable<any>;
 
@@ -140,31 +146,26 @@ export class DatasetDetailsDashboardComponent
     if (!confirm("Reset datablocks?")) {
       return null;
     }
-    this.store
-      .pipe(
-        select(getCurrentUser),
-        take(1)
-      )
-      .subscribe((user: User) => {
-        const job = new Job();
-        job.emailJobInitiator = user.email;
-        job.jobParams = {};
-        job.jobParams["username"] = user.username;
-        job.creationTime = new Date();
-        job.type = "reset";
-        const fileObj = {};
-        const fileList = [];
-        fileObj["pid"] = dataset["pid"];
-        if (dataset["datablocks"]) {
-          dataset["datablocks"].map(d => {
-            fileList.push(d["archiveId"]);
-          });
-        }
-        fileObj["files"] = fileList;
-        job.datasetList = [fileObj];
-        console.log(job);
-        this.store.dispatch(submitJobAction({ job }));
-      });
+    this.store.pipe(select(getCurrentUser), take(1)).subscribe((user: User) => {
+      const job = new Job();
+      job.emailJobInitiator = user.email;
+      job.jobParams = {};
+      job.jobParams["username"] = user.username;
+      job.creationTime = new Date();
+      job.type = "reset";
+      const fileObj = {};
+      const fileList = [];
+      fileObj["pid"] = dataset["pid"];
+      if (dataset["datablocks"]) {
+        dataset["datablocks"].map(d => {
+          fileList.push(d["archiveId"]);
+        });
+      }
+      fileObj["files"] = fileList;
+      job.datasetList = [fileObj];
+      console.log(job);
+      this.store.dispatch(submitJobAction({ job }));
+    });
   }
 
   onFileUploaderFilePicked(file: ReadFile) {
@@ -245,9 +246,17 @@ export class DatasetDetailsDashboardComponent
         .subscribe((dataset: RawDataset | DerivedDataset) => {
           if (dataset) {
             this.dataset = dataset;
-            if ("proposalId" in dataset) {
+            if (dataset.type === "raw" && "proposalId" in dataset) {
               this.store.dispatch(
-                fetchLogbookAction({ name: this.dataset["proposalId"] })
+                fetchProposalAction({ proposalId: dataset["proposalId"] })
+              );
+              this.store.dispatch(
+                fetchLogbookAction({ name: dataset["proposalId"] })
+              );
+            }
+            if ("sampleId" in dataset) {
+              this.store.dispatch(
+                fetchSampleAction({ sampleId: dataset["sampleId"] })
               );
             }
           }
