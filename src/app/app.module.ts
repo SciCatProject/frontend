@@ -1,4 +1,4 @@
-import { userReducer } from 'state-management/reducers/user.reducer';
+import { userReducer } from "state-management/reducers/user.reducer";
 import { AppComponent } from "./app.component";
 import { AppConfigModule } from "app-config.module";
 import { AppRoutingModule, routes } from "app-routing/app-routing.module";
@@ -23,7 +23,6 @@ import { StoreModule } from "@ngrx/store";
 import { UserApi } from "shared/sdk/services";
 import { UsersModule } from "users/users.module";
 import { routerReducer } from "@ngrx/router-store";
-
 
 import {
   MatMenuModule,
@@ -82,9 +81,7 @@ import { JobsModule } from "jobs/jobs.module";
     UsersModule,
     SDKBrowserModule.forRoot(),
     StoreModule.forRoot(
-      { router: routerReducer,
-        users: userReducer
-      },
+      { router: routerReducer, users: userReducer },
       {
         runtimeChecks: {
           strictStateImmutability: false,
@@ -97,9 +94,9 @@ import { JobsModule } from "jobs/jobs.module";
     RouterModule.forRoot(routes, { useHash: false }),
     StoreDevtoolsModule.instrument({
       maxAge: 25, //  Retains last 25 states
-      logOnly: environment.production, // Restrict extension to log-only mode
+      logOnly: environment.production // Restrict extension to log-only mode
     }),
-    EffectsModule.forRoot([ ]),
+    EffectsModule.forRoot([]),
     ServiceWorkerModule.register("ngsw-worker.js", {
       enabled: environment.production
     })

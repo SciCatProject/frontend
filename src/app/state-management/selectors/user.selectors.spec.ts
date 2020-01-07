@@ -133,6 +133,16 @@ describe("User Selectors", () => {
     });
   });
 
+  describe("getUserMessage", () => {
+    it("should get message", () => {
+      expect(fromSelectors.getUserMessage.projector(initialUserState)).toEqual({
+        content: undefined,
+        type: undefined,
+        duration: undefined
+      });
+    });
+  });
+
   describe("getSettings", () => {
     it("should get settings", () => {
       expect(fromSelectors.getSettings.projector(initialUserState)).toEqual(

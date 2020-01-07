@@ -11,7 +11,6 @@ import { MatMenuModule, MatToolbarModule } from "@angular/material";
 import { MockStore } from "shared/MockStubs";
 import { Store, StoreModule } from "@ngrx/store";
 import { APP_CONFIG } from "app-config.module";
-import { rootReducer } from "state-management/reducers/root.reducer";
 import { logoutAction } from "state-management/actions/user.actions";
 
 describe("AppHeaderComponent", () => {
@@ -25,11 +24,7 @@ describe("AppHeaderComponent", () => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
       declarations: [AppHeaderComponent],
-      imports: [
-        MatMenuModule,
-        MatToolbarModule,
-        StoreModule.forRoot({ rootReducer })
-      ]
+      imports: [MatMenuModule, MatToolbarModule, StoreModule.forRoot({})]
     });
     TestBed.overrideComponent(AppHeaderComponent, {
       set: {

@@ -18,7 +18,10 @@ import { MatSnackBar } from "@angular/material";
 import { Meta, Title } from "@angular/platform-browser";
 import { environment } from "../environments/environment";
 import { Subscription } from "rxjs";
-import { getIsLoading } from "state-management/selectors/user.selectors";
+import {
+  getIsLoading,
+  getUserMessage
+} from "state-management/selectors/user.selectors";
 
 const { version: appVersion } = require("../../package.json");
 
@@ -78,7 +81,7 @@ export class AppComponent implements OnDestroy, OnInit, AfterViewChecked {
     }
 
     this.userMessageSubscription = this.store
-      .pipe(select(state => state.users.message))
+      .pipe(select(getUserMessage))
       .subscribe(current => {
         if (current.content !== undefined) {
           this.snackBar.open(current.content, undefined, {

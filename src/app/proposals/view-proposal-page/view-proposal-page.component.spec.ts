@@ -9,7 +9,6 @@ import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { MockStore, MockActivatedRoute } from "shared/MockStubs";
 import { Router, ActivatedRoute } from "@angular/router";
 import { StoreModule, Store } from "@ngrx/store";
-import { rootReducer } from "state-management/reducers/root.reducer";
 import { DatePipe, SlicePipe } from "@angular/common";
 import { FileSizePipe } from "shared/pipes/filesize.pipe";
 import { Dataset, Proposal } from "shared/sdk";
@@ -34,7 +33,7 @@ describe("ViewProposalPageComponent", () => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
       declarations: [ViewProposalPageComponent],
-      imports: [StoreModule.forRoot({ rootReducer })],
+      imports: [StoreModule.forRoot({})],
       providers: [DatePipe, FileSizePipe, SlicePipe]
     });
     TestBed.overrideComponent(ViewProposalPageComponent, {

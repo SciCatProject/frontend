@@ -5,7 +5,6 @@ import { Store, StoreModule } from "@ngrx/store";
 import { MockActivatedRoute, MockStore } from "../../shared/MockStubs";
 
 import { JobsDetailComponent } from "./jobs-detail.component";
-import { rootReducer } from "state-management/reducers/root.reducer";
 import { ActivatedRoute } from "@angular/router";
 
 describe("JobsDetailComponent", () => {
@@ -15,7 +14,7 @@ describe("JobsDetailComponent", () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
-      imports: [ReactiveFormsModule, StoreModule.forRoot({ rootReducer })],
+      imports: [ReactiveFormsModule, StoreModule.forRoot({})],
       declarations: [JobsDetailComponent]
     });
     TestBed.overrideComponent(JobsDetailComponent, {

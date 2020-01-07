@@ -6,7 +6,6 @@ import {
   inject
 } from "@angular/core/testing";
 import { Store, StoreModule } from "@ngrx/store";
-import { rootReducer } from "state-management/reducers/root.reducer";
 import {
   DatasetsFilterComponent,
   DateRange
@@ -72,7 +71,7 @@ describe("DatasetsFilterComponent", () => {
         FormsModule,
         ReactiveFormsModule,
         BrowserAnimationsModule,
-        StoreModule.forRoot({ rootReducer })
+        StoreModule.forRoot({})
       ],
       declarations: [
         DatasetsFilterComponent,
