@@ -329,19 +329,6 @@ describe("JobEffects", () => {
   });
 
   describe("loadingComplete$", () => {
-    describe("ofType fetchJobsCompleteAction", () => {
-      it("should dispatch a loadingCompleteAction", () => {
-        const jobs = [job];
-        const action = fromActions.fetchJobsCompleteAction({ jobs });
-        const outcome = loadingCompleteAction();
-
-        actions = hot("-a", { a: action });
-
-        const expected = cold("-b", { b: outcome });
-        expect(effects.loadingComplete$).toBeObservable(expected);
-      });
-    });
-
     describe("ofType fetchJobsFailedAction", () => {
       it("should dispatch a loadingCompleteAction", () => {
         const action = fromActions.fetchJobsFailedAction();
@@ -370,18 +357,6 @@ describe("JobEffects", () => {
     describe("ofType fetchCountFailedAction", () => {
       it("should dispatch a loadingCompleteAction", () => {
         const action = fromActions.fetchCountFailedAction();
-        const outcome = loadingCompleteAction();
-
-        actions = hot("-a", { a: action });
-
-        const expected = cold("-b", { b: outcome });
-        expect(effects.loadingComplete$).toBeObservable(expected);
-      });
-    });
-
-    describe("ofType fetchJobCompleteAction", () => {
-      it("sshould dispatch a loadingCompleteAction", () => {
-        const action = fromActions.fetchJobCompleteAction({ job });
         const outcome = loadingCompleteAction();
 
         actions = hot("-a", { a: action });
