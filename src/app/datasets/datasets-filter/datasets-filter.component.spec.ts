@@ -382,7 +382,7 @@ describe("DatasetsFilterComponent", () => {
         })
       );
       expect(dispatchSpy).toHaveBeenCalledWith(
-        selectColumnAction({ column: "" })
+        selectColumnAction({ name: "", columnType: "custom" })
       );
     });
   });
@@ -404,7 +404,7 @@ describe("DatasetsFilterComponent", () => {
         removeScientificConditionAction({ index })
       );
       expect(dispatchSpy).toHaveBeenCalledWith(
-        deselectColumnAction({ column: condition.lhs })
+        deselectColumnAction({ name: condition.lhs, columnType: "custom" })
       );
     });
   });

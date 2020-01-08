@@ -13,6 +13,7 @@ import {
 } from "@angular/material";
 import { SearchBarModule } from "shared/modules/search-bar/search-bar.module";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { TableColumn } from "state-management/models";
 
 describe("DatasetTableSettingsComponent", () => {
   let component: DatasetTableSettingsComponent;
@@ -62,7 +63,12 @@ describe("DatasetTableSettingsComponent", () => {
       emitSpy = spyOn(component.selectColumn, "emit");
 
       const event = {} as MatCheckboxChange;
-      const column = "test";
+      const column: TableColumn = {
+        name: "test",
+        order: 0,
+        type: "standard",
+        enabled: true
+      };
 
       const emittedEvent: SelectColumnEvent = {
         checkBoxChange: event,
@@ -78,9 +84,9 @@ describe("DatasetTableSettingsComponent", () => {
 
   describe("#searchColumns()", () => {
     it("should set filteredColumns based on the input value", () => {
-      component.tableColumns = [
-        { name: "test", order: 0, enabled: true },
-        { name: "filter", order: 1, enabled: true }
+      component.selectableColumns = [
+        { name: "test", order: 0, type: "standard", enabled: true },
+        { name: "filter", order: 1, type: "custom", enabled: true }
       ];
 
       component.searchColumns("test");

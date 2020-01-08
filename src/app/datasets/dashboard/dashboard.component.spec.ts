@@ -31,6 +31,8 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { SelectColumnEvent } from "datasets/dataset-table-settings/dataset-table-settings.component";
 import { provideMockStore } from "@ngrx/store/testing";
 import { getSelectedDatasets } from "state-management/selectors/datasets.selectors";
+import { TableColumn } from "state-management/models";
+import { getColumns } from "state-management/selectors/user.selectors";
 
 class MockMatDialog {
   open() {
@@ -65,7 +67,10 @@ describe("DashboardComponent", () => {
       declarations: [DashboardComponent, MatSidenav],
       providers: [
         provideMockStore({
-          selectors: [{ selector: getSelectedDatasets, value: [] }]
+          selectors: [
+            { selector: getSelectedDatasets, value: [] },
+            { selector: getColumns, value: [] }
+          ]
         })
       ]
     });
@@ -122,7 +127,12 @@ describe("DashboardComponent", () => {
   });
 
   describe("#onSelectColumn()", () => {
-    const column = "test";
+    const column: TableColumn = {
+      name: "test",
+      order: 0,
+      type: "standard",
+      enabled: false
+    };
 
     it("should dispatch a selectColumnAction if checkBoxChange.checked is true", () => {
       dispatchSpy = spyOn(store, "dispatch");
@@ -139,7 +149,9 @@ describe("DashboardComponent", () => {
       component.onSelectColumn(event);
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
-      expect(dispatchSpy).toHaveBeenCalledWith(selectColumnAction({ column }));
+      expect(dispatchSpy).toHaveBeenCalledWith(
+        selectColumnAction({ name: column.name, columnType: column.type })
+      );
     });
 
     it("should dispatch a deselectColumnAction if checkBoxChange.checked is false", () => {
@@ -158,7 +170,7 @@ describe("DashboardComponent", () => {
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        deselectColumnAction({ column })
+        deselectColumnAction({ name: column.name, columnType: column.type })
       );
     });
   });

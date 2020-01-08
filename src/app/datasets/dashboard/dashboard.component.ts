@@ -6,7 +6,7 @@ import { select, Store, ActionsSubject } from "@ngrx/store";
 import * as rison from "rison";
 import * as deepEqual from "deep-equal";
 
-import { DatasetFilters, User, TableColumn } from "state-management/models";
+import { DatasetFilters, User } from "state-management/models";
 
 import {
   fetchDatasetsAction,
@@ -54,6 +54,10 @@ import { SelectColumnEvent } from "datasets/dataset-table-settings/dataset-table
 })
 export class DashboardComponent implements OnInit, OnDestroy {
   selectedSets$ = this.store.pipe(select(getSelectedDatasets));
+  tableColumns$ = this.store.pipe(select(getColumns));
+  selectableColumns$ = this.tableColumns$.pipe(
+    map(columns => columns.filter(column => column.name !== "select"))
+  );
   private filters$ = this.store.pipe(select(getFilters));
   private readyToFetch$ = this.store.pipe(
     select(getHasPrefilledFilters),
@@ -69,9 +73,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   currentUser: User;
   userGroups: string[];
 
-  displayedColumns: string[];
-  tableColumns: TableColumn[];
-
   @ViewChild(MatSidenav, { static: false }) sideNav: MatSidenav;
 
   onSettingsClick(): void {
@@ -85,9 +86,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
   onSelectColumn(event: SelectColumnEvent): void {
     const { checkBoxChange, column } = event;
     if (checkBoxChange.checked) {
-      this.store.dispatch(selectColumnAction({ column }));
+      this.store.dispatch(
+        selectColumnAction({ name: column.name, columnType: column.type })
+      );
     } else if (!checkBoxChange.checked) {
-      this.store.dispatch(deselectColumnAction({ column }));
+      this.store.dispatch(
+        deselectColumnAction({ name: column.name, columnType: column.type })
+      );
     }
   }
 
@@ -181,18 +186,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
         if (profile) {
           this.userGroups = profile.accessGroups;
         }
-      })
-    );
-
-    this.subscriptions.push(
-      this.store.pipe(select(getColumns)).subscribe(tableColumns => {
-        this.displayedColumns = tableColumns
-          .filter(column => column.enabled)
-          .map(column => column.name);
-
-        this.tableColumns = tableColumns.filter(
-          column => column.name !== "select"
-        );
       })
     );
 

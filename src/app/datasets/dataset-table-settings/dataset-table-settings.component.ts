@@ -4,7 +4,7 @@ import { MatCheckboxChange } from "@angular/material";
 
 export interface SelectColumnEvent {
   checkBoxChange: MatCheckboxChange;
-  column: string;
+  column: TableColumn;
 }
 
 @Component({
@@ -13,7 +13,7 @@ export interface SelectColumnEvent {
   styleUrls: ["./dataset-table-settings.component.scss"]
 })
 export class DatasetTableSettingsComponent {
-  @Input() tableColumns: TableColumn[] = [];
+  @Input() selectableColumns: TableColumn[] = [];
   filteredColumns: TableColumn[];
 
   @Output() closeClick = new EventEmitter<MouseEvent>();
@@ -23,7 +23,7 @@ export class DatasetTableSettingsComponent {
     this.closeClick.emit(event);
   }
 
-  doSelectColumn(event: MatCheckboxChange, column: string): void {
+  doSelectColumn(event: MatCheckboxChange, column: TableColumn): void {
     const selectColumnEvent: SelectColumnEvent = {
       checkBoxChange: event,
       column
@@ -33,7 +33,7 @@ export class DatasetTableSettingsComponent {
 
   searchColumns(value: string): void {
     const filterValue = value.toLowerCase();
-    this.filteredColumns = this.tableColumns.filter(({ name }) =>
+    this.filteredColumns = this.selectableColumns.filter(({ name }) =>
       name.toLowerCase().includes(filterValue)
     );
   }

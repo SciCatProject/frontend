@@ -24,7 +24,7 @@
         ></dataset-table-actions>
 
         <dataset-table
-          [displayedColumns]="displayedColumns"
+          [tableColumns]="tableColumns$ | async"
           [selectedSets]="selectedSets$ | async"
           (settingsClick)="onSettingsClick()"
         ></dataset-table>
@@ -34,7 +34,7 @@
 
   <mat-sidenav #settings position="end" mode="push">
     <dataset-table-settings
-      [tableColumns]="tableColumns"
+      [selectableColumns]="selectableColumns$ | async"
       (closeClick)="onCloseClick()"
       (selectColumn)="onSelectColumn($event)"
     ></dataset-table-settings>

@@ -234,14 +234,18 @@ export class DatasetsFilterComponent {
           this.store.dispatch(
             addScientificConditionAction({ condition: data })
           );
-          this.store.dispatch(selectColumnAction({ column: data.lhs }));
+          this.store.dispatch(
+            selectColumnAction({ name: data.lhs, columnType: "custom" })
+          );
         }
       });
   }
 
   removeCondition(condition: ScientificCondition, index: number) {
     this.store.dispatch(removeScientificConditionAction({ index }));
-    this.store.dispatch(deselectColumnAction({ column: condition.lhs }));
+    this.store.dispatch(
+      deselectColumnAction({ name: condition.lhs, columnType: "custom" })
+    );
   }
 
   constructor(

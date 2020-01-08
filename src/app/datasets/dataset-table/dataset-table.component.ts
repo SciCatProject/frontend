@@ -6,9 +6,11 @@ import {
   OnInit,
   Output,
   EventEmitter,
-  Input
+  Input,
+  OnChanges,
+  SimpleChange
 } from "@angular/core";
-import { Dataset } from "state-management/models";
+import { Dataset, TableColumn } from "state-management/models";
 import { MatCheckboxChange } from "@angular/material";
 import { Router } from "@angular/router";
 import { Subscription } from "rxjs";
@@ -51,13 +53,14 @@ interface DatasetDerivationsMap {
   templateUrl: "dataset-table.component.html",
   styleUrls: ["dataset-table.component.scss"]
 })
-export class DatasetTableComponent implements OnInit, OnDestroy {
+export class DatasetTableComponent implements OnInit, OnDestroy, OnChanges {
   currentPage$ = this.store.pipe(select(getPage));
   datasetsPerPage$ = this.store.pipe(select(getDatasetsPerPage));
   datasetCount$ = this.store.select(getTotalSets);
   metadataKeys$ = this.store.pipe(select(getMetadataKeys));
 
-  @Input() displayedColumns: string[];
+  @Input() tableColumns: TableColumn[];
+  displayedColumns: string[];
   @Input() selectedSets: Dataset[] = [];
 
   private inBatchPids: string[] = [];
@@ -172,9 +175,13 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
       changePageAction({ page: event.pageIndex, limit: event.pageSize })
     );
     if (event.pageSize < 50) {
-      this.store.dispatch(selectColumnAction({ column: "image" }));
+      this.store.dispatch(
+        selectColumnAction({ name: "image", columnType: "standard" })
+      );
     } else {
-      this.store.dispatch(deselectColumnAction({ column: "image" }));
+      this.store.dispatch(
+        deselectColumnAction({ name: "image", columnType: "standard" })
+      );
     }
   }
 
@@ -211,6 +218,10 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
       })
     );
 
+    this.displayedColumns = this.tableColumns
+      .filter(column => column.enabled)
+      .map(column => column.type + "_" + column.name);
+
     this.subscriptions.push(
       this.store.pipe(select(getDatasets)).subscribe(datasets => {
         this.datasets = datasets;
@@ -226,6 +237,17 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
           }));
       })
     );
+  }
+
+  ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
+    for (const propName in changes) {
+      if (propName === "tableColumns") {
+        this.tableColumns = changes[propName].currentValue;
+        this.displayedColumns = changes[propName].currentValue
+          .filter(column => column.enabled)
+          .map(column => column.type + "_" + column.name);
+      }
+    }
   }
 
   ngOnDestroy() {

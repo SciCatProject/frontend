@@ -76,6 +76,7 @@ describe("DatasetTableComponent", () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(DatasetTableComponent);
     component = fixture.componentInstance;
+    component.tableColumns = [];
     fixture.detectChanges();
   });
 
@@ -392,7 +393,8 @@ describe("DatasetTableComponent", () => {
   });
 
   describe("#onPageChange()", () => {
-    const column = "image";
+    const name = "image";
+    const columnType = "standard";
 
     it("should dispatch a changePangeAction and a selectColumnAction if pageSize is less than 50", () => {
       dispatchSpy = spyOn(store, "dispatch");
@@ -408,7 +410,9 @@ describe("DatasetTableComponent", () => {
       expect(dispatchSpy).toHaveBeenCalledWith(
         changePageAction({ page: event.pageIndex, limit: event.pageSize })
       );
-      expect(dispatchSpy).toHaveBeenCalledWith(selectColumnAction({ column }));
+      expect(dispatchSpy).toHaveBeenCalledWith(
+        selectColumnAction({ name, columnType })
+      );
     });
 
     it("should dispatch a changePangeAction and a deselectColumnAction if pageSize is larger than or equal to 50", () => {
@@ -426,7 +430,7 @@ describe("DatasetTableComponent", () => {
         changePageAction({ page: event.pageIndex, limit: event.pageSize })
       );
       expect(dispatchSpy).toHaveBeenCalledWith(
-        deselectColumnAction({ column })
+        deselectColumnAction({ name, columnType })
       );
     });
   });

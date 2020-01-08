@@ -1,6 +1,7 @@
 import { UserState, initialUserState } from "state-management/state/user.store";
 import { Action, createReducer, on } from "@ngrx/store";
 import * as fromActions from "state-management/actions/user.actions";
+import { TableColumn } from "state-management/models";
 
 const reducer = createReducer(
   initialUserState,
@@ -48,13 +49,20 @@ const reducer = createReducer(
 
   on(fromActions.addColumnsAction, (state, { names }) => {
     const existingColumns = [...state.columns];
-    const existingColumnNames = existingColumns.map(column => column.name);
+    const existingColumnNames = existingColumns
+      .filter(column => column.type === "custom")
+      .map(column => column.name);
 
     let order = existingColumns.length;
     const newColumns = names
       .filter(name => !existingColumnNames.includes(name))
       .map(name => {
-        const column = { name, order, enabled: false };
+        const column: TableColumn = {
+          name,
+          order,
+          type: "custom",
+          enabled: false
+        };
         order++;
         return column;
       });
@@ -63,19 +71,19 @@ const reducer = createReducer(
     return { ...state, columns };
   }),
 
-  on(fromActions.selectColumnAction, (state, { column }) => {
+  on(fromActions.selectColumnAction, (state, { name, columnType }) => {
     const columns = [...state.columns];
     columns.forEach(item => {
-      if (item.name === column) {
+      if (item.name === name && item.type === columnType) {
         item.enabled = true;
       }
     });
     return { ...state, columns };
   }),
-  on(fromActions.deselectColumnAction, (state, { column }) => {
+  on(fromActions.deselectColumnAction, (state, { name, columnType }) => {
     const columns = [...state.columns];
     columns.forEach(item => {
-      if (item.name === column) {
+      if (item.name === name && item.type === columnType) {
         item.enabled = false;
       }
     });

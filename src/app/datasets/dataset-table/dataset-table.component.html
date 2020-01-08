@@ -32,7 +32,7 @@
     <!-- Column Definitions -->
 
     <!-- Select Column -->
-    <ng-container matColumnDef="select">
+    <ng-container matColumnDef="standard_select">
       <mat-header-cell *matHeaderCellDef>
         <mat-checkbox
           [checked]="selectedSets.length > 0 && isAllSelected()"
@@ -57,7 +57,10 @@
     </ng-container>
 
     <!-- Name Column -->
-    <ng-container matColumnDef="datasetName" style="align-content: center">
+    <ng-container
+      matColumnDef="standard_datasetName"
+      style="align-content: center"
+    >
       <mat-header-cell *matHeaderCellDef mat-sort-header>
         <div fxLayout="column" style="align-items: center">
           <div>
@@ -72,7 +75,7 @@
     </ng-container>
 
     <!-- Source Folder Column -->
-    <ng-container matColumnDef="sourceFolder">
+    <ng-container matColumnDef="standard_sourceFolder">
       <mat-header-cell *matHeaderCellDef mat-sort-header>
         <div fxLayout="column" style="align-items: center">
           <div>
@@ -90,7 +93,7 @@
     </ng-container>
 
     <!-- Run Number Column -->
-    <ng-container matColumnDef="runNumber">
+    <ng-container matColumnDef="standard_runNumber">
       <mat-header-cell *matHeaderCellDef mat-sort-header>
         <div fxLayout="column" style="align-items: center">
           <div>
@@ -113,7 +116,7 @@
     </ng-container>
 
     <!-- Size Column -->
-    <ng-container matColumnDef="size">
+    <ng-container matColumnDef="standard_size">
       <mat-header-cell *matHeaderCellDef mat-sort-header>
         <div fxLayout="column" style="align-items: center">
           <div>
@@ -143,7 +146,7 @@
     </ng-container>
 
     <!-- Start Time Column -->
-    <ng-container matColumnDef="creationTime">
+    <ng-container matColumnDef="standard_creationTime">
       <mat-header-cell *matHeaderCellDef mat-sort-header>
         <div fxLayout="column" style="align-items: center">
           <div>
@@ -161,7 +164,7 @@
     </ng-container>
 
     <!-- Type Column -->
-    <ng-container matColumnDef="type">
+    <ng-container matColumnDef="standard_type">
       <mat-header-cell *matHeaderCellDef>
         <div fxLayout="column" style="align-items: center">
           <div>
@@ -174,7 +177,7 @@
     </ng-container>
 
     <!-- Image Column -->
-    <ng-container matColumnDef="image">
+    <ng-container matColumnDef="standard_image">
       <mat-header-cell *matHeaderCellDef>
         <div fxLayout="column" style="align-items: center">
           <div>
@@ -193,7 +196,7 @@
     </ng-container>
 
     <!-- Metadata Column -->
-    <ng-container matColumnDef="metadata">
+    <ng-container matColumnDef="standard_metadata">
       <mat-header-cell *matHeaderCellDef>
         <div fxLayout="column" style="align-items: center">
           <div>
@@ -225,7 +228,7 @@
     </ng-container>
 
     <!-- Proposal ID Column -->
-    <ng-container matColumnDef="proposalId">
+    <ng-container matColumnDef="standard_proposalId">
       <mat-header-cell *matHeaderCellDef mat-sort-header>
         <div fxLayout="column" style="align-items: center">
           <div>
@@ -240,7 +243,7 @@
     </ng-container>
 
     <!-- Group Column -->
-    <ng-container matColumnDef="ownerGroup">
+    <ng-container matColumnDef="standard_ownerGroup">
       <mat-header-cell *matHeaderCellDef mat-sort-header>
         <div fxLayout="column" style="align-items: center">
           <div>
@@ -253,7 +256,7 @@
     </ng-container>
 
     <!-- Data Status Column -->
-    <ng-container matColumnDef="dataStatus">
+    <ng-container matColumnDef="standard_dataStatus">
       <mat-header-cell *matHeaderCellDef>
         <div fxLayout="column" style="align-items: center">
           <div>
@@ -320,7 +323,7 @@
     </ng-container>
 
     <!-- Derived Datasets Column -->
-    <ng-container matColumnDef="derivedDatasetsNum">
+    <ng-container matColumnDef="standard_derivedDatasetsNum">
       <mat-header-cell *matHeaderCellDef>
         <div fxLayout="column" style="align-items: center">
           <div>
@@ -339,21 +342,26 @@
     </ng-container>
 
     <!-- Custom Columns -->
-    <ng-template ngFor let-column [ngForOf]="displayedColumns">
-      <ng-template [ngIf]="(metadataKeys$ | async).includes(column)">
-        <ng-container matColumnDef="{{ column }}">
+    <ng-template ngFor let-column [ngForOf]="tableColumns">
+      <ng-template
+        [ngIf]="
+          (metadataKeys$ | async).includes(column.name) &&
+          column.type === 'custom'
+        "
+      >
+        <ng-container matColumnDef="{{ column.type + '_' + column.name }}">
           <mat-header-cell *matHeaderCellDef>
             <div fxLayout="column" style="align-items: center">
               <div>
                 <mat-icon>star</mat-icon>
               </div>
-              <div>{{ column | replaceUnderscore | titlecase }}</div>
+              <div>{{ column.name | replaceUnderscore | titlecase }}</div>
             </div>
           </mat-header-cell>
           <mat-cell *matCellDef="let dataset">
-            <div *ngIf="dataset.scientificMetadata[column]">
-              {{ dataset.scientificMetadata[column].value }}&nbsp;{{
-                dataset.scientificMetadata[column].unit
+            <div *ngIf="dataset.scientificMetadata[column.name]">
+              {{ dataset.scientificMetadata[column.name].value }}&nbsp;{{
+                dataset.scientificMetadata[column.name].unit
               }}
             </div>
           </mat-cell>

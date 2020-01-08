@@ -102,13 +102,15 @@ describe("UserReducer", () => {
 
   describe("on selectColumnAction", () => {
     it("should set enabled to true for a column in columns", () => {
-      const column = "dataStatus";
-      const action = fromActions.selectColumnAction({ column });
+      const name = "dataStatus";
+      const columnType = "standard";
+
+      const action = fromActions.selectColumnAction({ name, columnType });
       const state = userReducer(initialUserState, action);
 
-      state.columns.forEach(item => {
-        if (item.name === column) {
-          expect(item.enabled).toEqual(true);
+      state.columns.forEach(column => {
+        if (column.name === name && column.type === columnType) {
+          expect(column.enabled).toEqual(true);
         }
       });
     });
@@ -116,14 +118,15 @@ describe("UserReducer", () => {
 
   describe("on deselectColumnAction", () => {
     it("should set enabled to false for a column in columns", () => {
-      const column = "datasetName";
+      const name = "datasetName";
+      const columnType = "standard";
 
-      const action = fromActions.deselectColumnAction({ column });
+      const action = fromActions.deselectColumnAction({ name, columnType });
       const state = userReducer(initialUserState, action);
 
-      state.columns.forEach(item => {
-        if (item.name === column) {
-          expect(item.enabled).toEqual(false);
+      state.columns.forEach(column => {
+        if (column.name === name && column.type === columnType) {
+          expect(column.enabled).toEqual(false);
         }
       });
     });
@@ -135,7 +138,8 @@ describe("UserReducer", () => {
       const addColumnsAction = fromActions.addColumnsAction({ names });
       const firstState = userReducer(initialUserState, addColumnsAction);
       const selectColumnAction = fromActions.selectColumnAction({
-        column: "test"
+        name: "test",
+        columnType: "custom"
       });
       const secondState = userReducer(firstState, selectColumnAction);
       secondState.columns.forEach(column => {

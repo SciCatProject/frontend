@@ -269,17 +269,27 @@ describe("User Aactions", () => {
 
   describe("selectColumnAction", () => {
     it("should create an action", () => {
-      const column = "test";
-      const action = fromActions.selectColumnAction({ column });
-      expect({ ...action }).toEqual({ type: "[User] Select Column", column });
+      const name = "test";
+      const columnType = "standard";
+      const action = fromActions.selectColumnAction({ name, columnType });
+      expect({ ...action }).toEqual({
+        type: "[User] Select Column",
+        name,
+        columnType
+      });
     });
   });
 
   describe("deselectColumnAction", () => {
     it("should create an action", () => {
-      const column = "test";
-      const action = fromActions.deselectColumnAction({ column });
-      expect({ ...action }).toEqual({ type: "[User] Deselect Column", column });
+      const name = "test";
+      const columnType = "standard";
+      const action = fromActions.deselectColumnAction({ name, columnType });
+      expect({ ...action }).toEqual({
+        type: "[User] Deselect Column",
+        name,
+        columnType
+      });
     });
   });
 
