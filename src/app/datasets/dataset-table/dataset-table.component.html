@@ -1,77 +1,4 @@
 <div class="dataset-table">
-  <div class="mode-container">
-    <mat-button-toggle-group
-      class="public-toggle"
-      [value]="currentPublicViewMode"
-      *ngIf="searchPublicDataEnabled"
-    >
-      <mat-button-toggle [value]="false" (click)="onViewPublicChange(false)">
-        My Data
-      </mat-button-toggle>
-      <mat-button-toggle [value]="true" (click)="onViewPublicChange(true)">
-        Public Data
-      </mat-button-toggle>
-    </mat-button-toggle-group>
-    <mat-button-toggle-group
-      [value]="currentArchViewMode"
-      *ngIf="appConfig.archiveWorkflowEnabled"
-    >
-      <mat-button-toggle
-        *ngFor="let mode of modes"
-        (click)="onModeChange($event, mode)"
-        [value]="mode"
-        [ngClass]="mode"
-      >
-        {{ mode | titlecase }}
-      </mat-button-toggle>
-    </mat-button-toggle-group>
-  </div>
-
-  <ng-template *ngIf="datasetCount$ | async as count">
-    <div class="raised" [ngPlural]="count">
-      <ng-template ngPluralCase="=0">No datasets.</ng-template>
-      <ng-template ngPluralCase="=1">1 dataset.</ng-template>
-      <ng-template ngPluralCase="other">{{ count }} datasets.</ng-template>
-    </div>
-  </ng-template>
-
-  <div class="action-container" [class.hidden]="loading$ | async">
-    <button
-      mat-button
-      [disabled]="isEmptySelection$ | async"
-      *ngIf="currentArchViewMode === viewModes.archivable"
-      class="archive-action-btn"
-      (click)="archiveClickHandle($event)"
-      color="primary"
-    >
-      <mat-icon> archive </mat-icon> Archive
-    </button>
-
-    <button
-      mat-button
-      [disabled]="isEmptySelection$ | async"
-      *ngIf="currentArchViewMode === viewModes.retrievable"
-      class="retrieve-action-btn"
-      (click)="retrieveClickHandle($event)"
-      color="primary"
-    >
-      <mat-icon> cloud_upload </mat-icon> Retrieve
-    </button>
-
-    <button
-      mat-button
-      [disabled]="isEmptySelection$ | async"
-      *ngIf="appConfig.shoppingCartEnabled"
-      class="add-batch"
-      (click)="onAddToBatch()"
-      color="primary"
-    >
-      <mat-icon> shopping_cart </mat-icon> Add to Cart
-    </button>
-  </div>
-
-  <div style="clear: both"></div>
-
   <!--https://tburleson-layouts-demos.firebaseapp.com/#/docs-->
   <div fxLayout="row" fxLayoutAlign="space-evenly end">
     <div style="flex: 1"></div>
@@ -88,40 +15,24 @@
 
     <button
       mat-icon-button
-      class="tableSettings"
-      color="primary"
+      class="settings-button"
       matTooltip="Table Settings"
-      (click)="select.open()"
+      (click)="doSettingsClick($event)"
     >
       <mat-icon>settings</mat-icon>
-      <mat-select
-        #select
-        class="tblSettingSelect"
-        panelClass="tblSettingSelectPanel"
-        [formControl]="configForm"
-        multiple
-      >
-        <mat-option
-          *ngFor="let column of configColumns"
-          [value]="column"
-          (onSelectionChange)="onSelectColumn($event)"
-        >
-          {{ column }}</mat-option
-        >
-      </mat-select>
     </button>
   </div>
 
   <mat-table
     [dataSource]="datasets"
-    class="dataset-table mat-elevation-z2"
+    class="mat-elevation-z2"
     matSort
     (matSortChange)="onSortChange($event)"
   >
     <!-- Column Definitions -->
 
     <!-- Select Column -->
-    <ng-container matColumnDef="select">
+    <ng-container matColumnDef="standard_select">
       <mat-header-cell *matHeaderCellDef>
         <mat-checkbox
           [checked]="selectedSets.length > 0 && isAllSelected()"
@@ -146,7 +57,10 @@
     </ng-container>
 
     <!-- Name Column -->
-    <ng-container matColumnDef="datasetName" style="align-content: center">
+    <ng-container
+      matColumnDef="standard_datasetName"
+      style="align-content: center"
+    >
       <mat-header-cell *matHeaderCellDef mat-sort-header>
         <div fxLayout="column" style="align-items: center">
           <div>
@@ -161,7 +75,7 @@
     </ng-container>
 
     <!-- Source Folder Column -->
-    <ng-container matColumnDef="sourceFolder">
+    <ng-container matColumnDef="standard_sourceFolder">
       <mat-header-cell *matHeaderCellDef mat-sort-header>
         <div fxLayout="column" style="align-items: center">
           <div>
@@ -179,7 +93,7 @@
     </ng-container>
 
     <!-- Run Number Column -->
-    <ng-container matColumnDef="runNumber">
+    <ng-container matColumnDef="standard_runNumber">
       <mat-header-cell *matHeaderCellDef mat-sort-header>
         <div fxLayout="column" style="align-items: center">
           <div>
@@ -202,7 +116,7 @@
     </ng-container>
 
     <!-- Size Column -->
-    <ng-container matColumnDef="size">
+    <ng-container matColumnDef="standard_size">
       <mat-header-cell *matHeaderCellDef mat-sort-header>
         <div fxLayout="column" style="align-items: center">
           <div>
@@ -232,7 +146,7 @@
     </ng-container>
 
     <!-- Start Time Column -->
-    <ng-container matColumnDef="creationTime">
+    <ng-container matColumnDef="standard_creationTime">
       <mat-header-cell *matHeaderCellDef mat-sort-header>
         <div fxLayout="column" style="align-items: center">
           <div>
@@ -250,7 +164,7 @@
     </ng-container>
 
     <!-- Type Column -->
-    <ng-container matColumnDef="type">
+    <ng-container matColumnDef="standard_type">
       <mat-header-cell *matHeaderCellDef>
         <div fxLayout="column" style="align-items: center">
           <div>
@@ -263,7 +177,7 @@
     </ng-container>
 
     <!-- Image Column -->
-    <ng-container matColumnDef="image">
+    <ng-container matColumnDef="standard_image">
       <mat-header-cell *matHeaderCellDef>
         <div fxLayout="column" style="align-items: center">
           <div>
@@ -282,7 +196,7 @@
     </ng-container>
 
     <!-- Metadata Column -->
-    <ng-container matColumnDef="metadata">
+    <ng-container matColumnDef="standard_metadata">
       <mat-header-cell *matHeaderCellDef>
         <div fxLayout="column" style="align-items: center">
           <div>
@@ -314,7 +228,7 @@
     </ng-container>
 
     <!-- Proposal ID Column -->
-    <ng-container matColumnDef="proposalId">
+    <ng-container matColumnDef="standard_proposalId">
       <mat-header-cell *matHeaderCellDef mat-sort-header>
         <div fxLayout="column" style="align-items: center">
           <div>
@@ -329,7 +243,7 @@
     </ng-container>
 
     <!-- Group Column -->
-    <ng-container matColumnDef="ownerGroup">
+    <ng-container matColumnDef="standard_ownerGroup">
       <mat-header-cell *matHeaderCellDef mat-sort-header>
         <div fxLayout="column" style="align-items: center">
           <div>
@@ -342,7 +256,7 @@
     </ng-container>
 
     <!-- Data Status Column -->
-    <ng-container matColumnDef="dataStatus">
+    <ng-container matColumnDef="standard_dataStatus">
       <mat-header-cell *matHeaderCellDef>
         <div fxLayout="column" style="align-items: center">
           <div>
@@ -409,7 +323,7 @@
     </ng-container>
 
     <!-- Derived Datasets Column -->
-    <ng-container matColumnDef="derivedDatasetsNum">
+    <ng-container matColumnDef="standard_derivedDatasetsNum">
       <mat-header-cell *matHeaderCellDef>
         <div fxLayout="column" style="align-items: center">
           <div>
@@ -427,6 +341,34 @@
       </mat-cell>
     </ng-container>
 
+    <!-- Custom Columns -->
+    <ng-template ngFor let-column [ngForOf]="tableColumns">
+      <ng-template
+        [ngIf]="
+          (metadataKeys$ | async).includes(column.name) &&
+          column.type === 'custom'
+        "
+      >
+        <ng-container matColumnDef="{{ column.type + '_' + column.name }}">
+          <mat-header-cell *matHeaderCellDef>
+            <div fxLayout="column" style="align-items: center">
+              <div>
+                <mat-icon>star</mat-icon>
+              </div>
+              <div>{{ column.name | replaceUnderscore | titlecase }}</div>
+            </div>
+          </mat-header-cell>
+          <mat-cell *matCellDef="let dataset">
+            <div *ngIf="dataset.scientificMetadata[column.name]">
+              {{ dataset.scientificMetadata[column.name].value }}&nbsp;{{
+                dataset.scientificMetadata[column.name].unit
+              }}
+            </div>
+          </mat-cell>
+        </ng-container>
+      </ng-template>
+    </ng-template>
+
     <!-- End of Column Definitions -->
 
     <mat-header-row
@@ -438,7 +380,7 @@
     <mat-row
       class="row-generic"
       *matRowDef="let dataset; columns: displayedColumns"
-      (click)="onClick(dataset)"
+      (click)="onRowClick(dataset)"
     >
     </mat-row>
   </mat-table>

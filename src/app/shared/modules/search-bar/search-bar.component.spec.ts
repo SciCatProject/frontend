@@ -6,7 +6,8 @@ import { FormsModule } from "@angular/forms";
 import {
   MatFormFieldModule,
   MatIconModule,
-  MatInputModule
+  MatInputModule,
+  MatAutocompleteModule
 } from "@angular/material";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
@@ -21,6 +22,7 @@ describe("SearchBarComponent", () => {
       imports: [
         BrowserAnimationsModule,
         FormsModule,
+        MatAutocompleteModule,
         MatFormFieldModule,
         MatIconModule,
         MatInputModule

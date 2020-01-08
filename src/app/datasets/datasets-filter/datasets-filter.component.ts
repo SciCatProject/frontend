@@ -24,7 +24,8 @@ import {
   getSearchTerms,
   getTypeFacetCounts,
   getTypeFilter,
-  getKeywordsTerms
+  getKeywordsTerms,
+  getMetadataKeys
 } from "state-management/selectors/datasets.selectors";
 
 import {
@@ -45,6 +46,12 @@ import {
 } from "state-management/actions/datasets.actions";
 import { ScientificConditionDialogComponent } from "datasets/scientific-condition-dialog/scientific-condition-dialog.component";
 import { combineLatest, BehaviorSubject, Observable } from "rxjs";
+import {
+  selectColumnAction,
+  deselectColumnAction,
+  deselectAllCustomColumnsAction
+} from "state-management/actions/user.actions";
+import { ScientificCondition } from "state-management/models";
 
 export interface DateRange {
   begin: Date;
@@ -70,6 +77,7 @@ export class DatasetsFilterComponent {
   keywordsFilter$ = this.store.pipe(select(getKeywordsFilter));
   creationTimeFilter$ = this.store.pipe(select(getCreationTimeFilter));
   scientificConditions$ = this.store.pipe(select(getScientificConditions));
+  metadataKeys$ = this.store.pipe(select(getMetadataKeys));
 
   locationInput$ = new BehaviorSubject<string>("");
   groupInput$ = new BehaviorSubject<string>("");
@@ -143,12 +151,6 @@ export class DatasetsFilterComponent {
     );
   }
 
-  constructor(
-    public dialog: MatDialog,
-    private store: Store<any>,
-    @Inject(APP_CONFIG) public appConfig: AppConfig
-  ) {}
-
   getFacetId(facetCount: FacetCount, fallback: string = null): string {
     const id = facetCount._id;
     return id ? String(id) : fallback;
@@ -217,22 +219,38 @@ export class DatasetsFilterComponent {
   clearFacets() {
     this.clearSearchBar = true;
     this.store.dispatch(clearFacetsAction());
+    this.store.dispatch(deselectAllCustomColumnsAction());
   }
 
   showAddConditionDialog() {
     this.dialog
-      .open(ScientificConditionDialogComponent)
+      .open(ScientificConditionDialogComponent, {
+        data: { metadataKeys$: this.metadataKeys$ }
+      })
       .afterClosed()
-      .subscribe(({ data }) => {
-        if (data != null) {
+      .subscribe(res => {
+        if (res) {
+          const { data } = res;
           this.store.dispatch(
             addScientificConditionAction({ condition: data })
+          );
+          this.store.dispatch(
+            selectColumnAction({ name: data.lhs, columnType: "custom" })
           );
         }
       });
   }
 
-  removeCondition(index: number) {
+  removeCondition(condition: ScientificCondition, index: number) {
     this.store.dispatch(removeScientificConditionAction({ index }));
+    this.store.dispatch(
+      deselectColumnAction({ name: condition.lhs, columnType: "custom" })
+    );
   }
+
+  constructor(
+    public dialog: MatDialog,
+    private store: Store<any>,
+    @Inject(APP_CONFIG) public appConfig: AppConfig
+  ) {}
 }

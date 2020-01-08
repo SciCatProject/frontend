@@ -1,48 +1,16 @@
 @import "../../../theme.scss";
 
 .dataset-table {
-  min-width: 1060px;
-
-  .mode-container {
-    float: left;
-
-    .public-toggle {
-      margin-right: 1em;
-    }
-  }
-
-  .action-container {
-    float: right;
-
-    button {
-      mat-icon {
-        color: black;
-      }
-    }
-  }
-
-  .action-container.hidden {
-    visibility: hidden;
-  }
-
-  .tableSettings {
+  .settings-button {
     margin-bottom: 0.5em;
     color: mat-color($grey, 100);
-
-    ::ng-deep .tblSettingSelect div.mat-select-arrow-wrapper {
-      display: none;
-    }
-
-    ::ng-deep .tblSettingSelect.mat-select {
-      display: inline;
-    }
   }
 
   mat-table {
     overflow-x: scroll;
 
     mat-header-row {
-      min-width: 1290px;
+      min-width: 1275px;
       background: mat-color($primary);
     }
 
@@ -76,7 +44,7 @@
     }
 
     mat-row {
-      min-width: 1290px;
+      min-width: 1275px;
     }
 
     mat-row:hover {
@@ -84,57 +52,57 @@
       cursor: pointer;
     }
 
-    .mat-column-select {
-      min-width: 55px;
-      max-width: 55px;
+    .mat-column-standard_select {
+      min-width: 40px;
+      max-width: 40px;
     }
 
-    .mat-column-datasetName {
+    .mat-column-standard_datasetName {
       min-width: 200px;
     }
 
-    .mat-column-runNumber {
+    .mat-column-standard_runNumber {
       min-width: 70px;
     }
 
-    .mat-column-sourceFolder {
+    .mat-column-standard_sourceFolder {
       min-width: 100px;
     }
 
-    .mat-column-size {
+    .mat-column-standard_size {
       min-width: 65px;
     }
 
-    .mat-column-creationTime {
+    .mat-column-standard_creationTime {
       min-width: 80px;
     }
 
-    .mat-column-type {
+    .mat-column-standard_type {
       min-width: 50px;
     }
 
-    .mat-column-image {
+    .mat-column-standard_image {
       min-width: 60px;
       max-width: 60px;
     }
 
-    .mat-column-metadata {
+    .mat-column-standard_metadata {
       min-width: 200px;
     }
 
-    .mat-column-proposalId {
+    .mat-column-standard_proposalId {
       min-width: 90px;
     }
 
-    .mat-column-ownerGroup {
+    .mat-column-standard_ownerGroup {
       min-width: 80px;
     }
 
-    .mat-column-dataStatus {
+    .mat-column-standard_dataStatus {
       min-width: 140px;
     }
 
-    .mat-column-derivedDatasetsNum {
+    .mat-column-standard_derivedDatasetsNum {
       min-width: 100px;
     }
   }
