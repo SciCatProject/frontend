@@ -24,7 +24,9 @@ describe("LogbookFilterComponent", () => {
       textSearch: "",
       showBotMessages: true,
       showImages: true,
-      showUserMessages: true
+      showUserMessages: true,
+      skip: 0,
+      limit: 25
     };
 
     fixture.detectChanges();
@@ -44,7 +46,9 @@ describe("LogbookFilterComponent", () => {
         textSearch: "",
         showBotMessages: true,
         showImages: true,
-        showUserMessages: false
+        showUserMessages: false,
+        skip: 0,
+        limit: 25
       };
 
       const entry = "Bot Messages";
@@ -58,7 +62,9 @@ describe("LogbookFilterComponent", () => {
         textSearch: "",
         showBotMessages: true,
         showImages: true,
-        showUserMessages: false
+        showUserMessages: false,
+        skip: 0,
+        limit: 25
       };
 
       const entry = "Images";
@@ -72,7 +78,9 @@ describe("LogbookFilterComponent", () => {
         textSearch: "",
         showBotMessages: true,
         showImages: true,
-        showUserMessages: false
+        showUserMessages: false,
+        skip: 0,
+        limit: 25
       };
 
       const entry = "User Messages";
@@ -86,7 +94,9 @@ describe("LogbookFilterComponent", () => {
         textSearch: "",
         showBotMessages: true,
         showImages: true,
-        showUserMessages: false
+        showUserMessages: false,
+        skip: 0,
+        limit: 25
       };
 
       const entry = "Test";
@@ -104,7 +114,9 @@ describe("LogbookFilterComponent", () => {
         textSearch: "test",
         showBotMessages: true,
         showImages: true,
-        showUserMessages: true
+        showUserMessages: true,
+        skip: 0,
+        limit: 25
       };
 
       const entry = "Bot Messages";
@@ -125,7 +137,9 @@ describe("LogbookFilterComponent", () => {
         textSearch: "test",
         showBotMessages: true,
         showImages: true,
-        showUserMessages: true
+        showUserMessages: true,
+        skip: 0,
+        limit: 25
       };
 
       const entry = "Images";
@@ -146,7 +160,9 @@ describe("LogbookFilterComponent", () => {
         textSearch: "test",
         showBotMessages: true,
         showImages: true,
-        showUserMessages: true
+        showUserMessages: true,
+        skip: 0,
+        limit: 25
       };
 
       const entry = "User Messages";
@@ -167,7 +183,9 @@ describe("LogbookFilterComponent", () => {
         textSearch: "test",
         showBotMessages: false,
         showImages: false,
-        showUserMessages: false
+        showUserMessages: false,
+        skip: 0,
+        limit: 25
       };
 
       const entry = "Bot Messages";
@@ -188,7 +206,9 @@ describe("LogbookFilterComponent", () => {
         textSearch: "test",
         showBotMessages: false,
         showImages: false,
-        showUserMessages: false
+        showUserMessages: false,
+        skip: 0,
+        limit: 25
       };
 
       const entry = "Images";
@@ -209,7 +229,9 @@ describe("LogbookFilterComponent", () => {
         textSearch: "test",
         showBotMessages: false,
         showImages: false,
-        showUserMessages: false
+        showUserMessages: false,
+        skip: 0,
+        limit: 25
       };
 
       const entry = "User Messages";

@@ -55,6 +55,32 @@ describe("Logbook Actions", () => {
     });
   });
 
+  describe("fetchCountAction", () => {
+    it("should create an action", () => {
+      const name = "test";
+      const action = fromActions.fetchCountAction({ name });
+      expect({ ...action }).toEqual({ type: "[Logbook] Fetch Count", name });
+    });
+  });
+
+  describe("fetchCountCompleteAction", () => {
+    it("should create an action", () => {
+      const count = 0;
+      const action = fromActions.fetchCountCompleteAction({ count });
+      expect({ ...action }).toEqual({
+        type: "[Logbook] Fetch Count Complete",
+        count
+      });
+    });
+  });
+
+  describe("fetchCountFailedAction", () => {
+    it("should create an action", () => {
+      const action = fromActions.fetchCountFailedAction();
+      expect({ ...action }).toEqual({ type: "[Logbook] Fetch Count Failed" });
+    });
+  });
+
   describe("prefillFiltersAction", () => {
     it("should create an action", () => {
       const values: Partial<LogbookFilters> = {

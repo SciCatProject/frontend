@@ -54,7 +54,13 @@
       </div>
     </div>
     <div fxFlex="85" class="details-container">
-      <app-logbooks-detail [logbook]="logbook"></app-logbooks-detail>
+      <app-logbooks-detail
+        [logbook]="logbook"
+        [entriesCount]="entriesCount$ | async"
+        [entriesPerPage]="entriesPerPage$ | async"
+        [currentPage]="currentPage$ | async"
+        (pageChange)="onPageChange($event)"
+      ></app-logbooks-detail>
     </div>
   </div>
 </div>
