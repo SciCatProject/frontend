@@ -416,7 +416,7 @@ describe("PolicyEffects", () => {
   });
 
   describe("loadingComplete$", () => {
-    describe("ofType fetchPoliciesCompleteAction", () => {
+    /*describe("ofType fetchPoliciesCompleteAction", () => {
       it("should dispatch a loadingCompleteAction", () => {
         const policies = [policy];
         const action = fromActions.fetchPoliciesCompleteAction({ policies });
@@ -427,7 +427,7 @@ describe("PolicyEffects", () => {
         const expected = cold("-b", { b: outcome });
         expect(effects.loadingComplete$).toBeObservable(expected);
       });
-    });
+    });*/
 
     describe("ofType fetchPoliciesFailedAction", () => {
       it("should dispatch a loadingCompleteAction", () => {
@@ -457,21 +457,6 @@ describe("PolicyEffects", () => {
     describe("ofType fetchCountFailedAction", () => {
       it("should dispatch a loadingCompleteAction", () => {
         const action = fromActions.fetchCountFailedAction();
-        const outcome = loadingCompleteAction();
-
-        actions = hot("-a", { a: action });
-
-        const expected = cold("-b", { b: outcome });
-        expect(effects.loadingComplete$).toBeObservable(expected);
-      });
-    });
-
-    describe("ofType fetchEditablePoliciesCompleteAction", () => {
-      it("should dispatch a loadingCompleteAction", () => {
-        const policies = [policy];
-        const action = fromActions.fetchEditablePoliciesCompleteAction({
-          policies
-        });
         const outcome = loadingCompleteAction();
 
         actions = hot("-a", { a: action });

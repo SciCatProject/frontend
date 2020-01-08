@@ -13,13 +13,15 @@ import {
 import { DatePipe } from "@angular/common";
 import {
   TableColumn,
-  PageChangeEvent
+  PageChangeEvent,
+  SortChangeEvent
 } from "shared/modules/table/table.component";
 import { JobViewMode } from "state-management/models";
 import {
   changePageAction,
   setJobViewModeAction,
-  fetchJobsAction
+  fetchJobsAction,
+  sortByColumnAction
 } from "state-management/actions/jobs.actions";
 import {
   getCurrentUser,
@@ -49,15 +51,25 @@ export class JobsDashboardComponent implements OnInit, OnDestroy {
   paginate = true;
 
   tableColumns: TableColumn[] = [
-    { name: "initiator", icon: "mail", sort: false, inList: true },
-    { name: "type", icon: "bubble_chart", sort: false, inList: true },
+    {
+      name: "initiator",
+      icon: "mail",
+      sort: true,
+      inList: true
+    },
+    { name: "type", icon: "bubble_chart", sort: true, inList: true },
     {
       name: "createdAt",
       icon: "brightness_high",
-      sort: false,
+      sort: true,
       inList: true
     },
-    { name: "statusMessage", icon: "comment", sort: false, inList: true }
+    {
+      name: "statusMessage",
+      icon: "comment",
+      sort: true,
+      inList: true
+    }
   ];
 
   formatTableData(jobs: Job[]): any[] {
@@ -104,6 +116,26 @@ export class JobsDashboardComponent implements OnInit, OnDestroy {
   onRowClick(job: Job) {
     const id = encodeURIComponent(job.id);
     this.router.navigateByUrl("/user/jobs/" + id);
+  }
+
+  onSortChange(event: SortChangeEvent) {
+    let { active: column, direction } = event;
+    // map column names back to original names
+    switch (column) {
+      case "statusMessage": {
+        column = "jobStatusMessage";
+        break;
+      }
+      case "initiator": {
+        column = "emailJobInitiator";
+        break;
+      }
+      default: {
+        break;
+      }
+    }
+
+    this.store.dispatch(sortByColumnAction({ column, direction }));
   }
 
   constructor(
