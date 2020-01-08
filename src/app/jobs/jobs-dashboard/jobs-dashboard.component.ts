@@ -51,15 +51,25 @@ export class JobsDashboardComponent implements OnInit, OnDestroy {
   paginate = true;
 
   tableColumns: TableColumn[] = [
-    { name: "initiator", icon: "mail", sort: false, inList: true },
-    { name: "type", icon: "bubble_chart", sort: false, inList: true },
+    {
+      name: "initiator",
+      icon: "mail",
+      sort: true,
+      inList: true
+    },
+    { name: "type", icon: "bubble_chart", sort: true, inList: true },
     {
       name: "createdAt",
       icon: "brightness_high",
       sort: true,
       inList: true
     },
-    { name: "statusMessage", icon: "comment", sort: false, inList: true }
+    {
+      name: "statusMessage",
+      icon: "comment",
+      sort: true,
+      inList: true
+    }
   ];
 
   formatTableData(jobs: Job[]): any[] {
@@ -109,9 +119,23 @@ export class JobsDashboardComponent implements OnInit, OnDestroy {
   }
 
   onSortChange(event: SortChangeEvent) {
-    this.store.dispatch(
-      sortByColumnAction({ column: event.active, direction: event.direction })
-    );
+    let { active: column, direction } = event;
+    // map column names back to original names
+    switch (column) {
+      case "statusMessage": {
+        column = "jobStatusMessage";
+        break;
+      }
+      case "initiator": {
+        column = "emailJobInitiator";
+        break;
+      }
+      default: {
+        break;
+      }
+    }
+
+    this.store.dispatch(sortByColumnAction({ column, direction }));
   }
 
   constructor(
