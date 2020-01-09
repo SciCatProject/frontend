@@ -32,7 +32,6 @@ import {
   MatNativeDateModule,
   MatOptionModule,
   MatPaginatorModule,
-  MatProgressSpinnerModule,
   MatRadioModule,
   MatSelectModule,
   MatSlideToggleModule,
@@ -40,7 +39,8 @@ import {
   MatTableModule,
   MatTabsModule,
   MatTooltipModule,
-  MatStepperModule
+  MatStepperModule,
+  MatSidenavModule
 } from "@angular/material";
 
 import { PublishComponent } from "./publish/publish.component";
@@ -56,6 +56,8 @@ import { DatasetDetailComponent } from "./dataset-detail/dataset-detail.componen
 import { DatasetTableComponent } from "./dataset-table/dataset-table.component";
 import { DatasetsFilterComponent } from "./datasets-filter/datasets-filter.component";
 import { AddDatasetDialogComponent } from "./add-dataset-dialog/add-dataset-dialog.component";
+import { DatasetTableSettingsComponent } from "./dataset-table-settings/dataset-table-settings.component";
+import { DatasetTableActionsComponent } from "./dataset-table-actions/dataset-table-actions.component";
 
 @NgModule({
   imports: [
@@ -80,9 +82,9 @@ import { AddDatasetDialogComponent } from "./add-dataset-dialog/add-dataset-dial
     MatNativeDateModule,
     MatOptionModule,
     MatPaginatorModule,
-    MatProgressSpinnerModule,
     MatRadioModule,
     MatSelectModule,
+    MatSidenavModule,
     MatSlideToggleModule,
     MatSortModule,
     MatStepperModule,
@@ -111,7 +113,9 @@ import { AddDatasetDialogComponent } from "./add-dataset-dialog/add-dataset-dial
     ScientificConditionDialogComponent,
     ReduceComponent,
     DatasetDetailsDashboardComponent,
-    AddDatasetDialogComponent
+    AddDatasetDialogComponent,
+    DatasetTableSettingsComponent,
+    DatasetTableActionsComponent
   ],
   entryComponents: [
     AddDatasetDialogComponent,

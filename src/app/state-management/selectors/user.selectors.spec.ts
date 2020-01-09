@@ -67,7 +67,7 @@ const initialUserState: UserState = {
 
   isLoading: false,
 
-  columns: [{ name: "datasetName", order: 1, enabled: true }]
+  columns: [{ name: "datasetName", order: 1, type: "standard", enabled: true }]
 };
 
 describe("User Selectors", () => {
@@ -194,7 +194,7 @@ describe("User Selectors", () => {
   describe("getColumns", () => {
     it("should get columns", () => {
       expect(fromSelectors.getColumns.projector(initialUserState)).toEqual([
-        { name: "datasetName", order: 1, enabled: true }
+        { name: "datasetName", order: 1, type: "standard", enabled: true }
       ]);
     });
   });

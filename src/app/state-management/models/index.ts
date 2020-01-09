@@ -38,6 +38,7 @@ export interface Settings {
 export interface TableColumn {
   name: string;
   order: number;
+  type: "standard" | "custom";
   enabled: boolean;
 }
 
@@ -117,6 +118,8 @@ export interface LogbookFilters {
   showBotMessages: boolean;
   showUserMessages: boolean;
   showImages: boolean;
+  skip: number;
+  limit: number;
 }
 
 export interface JobFilters {

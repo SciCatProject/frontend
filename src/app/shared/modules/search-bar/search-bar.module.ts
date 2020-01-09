@@ -4,7 +4,8 @@ import { SearchBarComponent } from "./search-bar.component";
 import {
   MatIconModule,
   MatFormFieldModule,
-  MatInputModule
+  MatInputModule,
+  MatAutocompleteModule
 } from "@angular/material";
 import { FormsModule } from "@angular/forms";
 
@@ -13,6 +14,7 @@ import { FormsModule } from "@angular/forms";
   imports: [
     CommonModule,
     FormsModule,
+    MatAutocompleteModule,
     MatFormFieldModule,
     MatIconModule,
     MatInputModule

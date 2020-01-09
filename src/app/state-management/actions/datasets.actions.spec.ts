@@ -67,6 +67,39 @@ describe("Dataset Actions", () => {
     });
   });
 
+  describe("fetchMetadataKeysAction", () => {
+    it("should create an action", () => {
+      const metadataKey = "test";
+      const action = fromActions.fetchMetadataKeysAction({ metadataKey });
+      expect({ ...action }).toEqual({
+        type: "[Dataset] Fetch Metadata Keys",
+        metadataKey
+      });
+    });
+  });
+
+  describe("fetchMetadataKeysCompleteAction", () => {
+    it("should create an action", () => {
+      const metadataKeys = ["test"];
+      const action = fromActions.fetchMetadataKeysCompleteAction({
+        metadataKeys
+      });
+      expect({ ...action }).toEqual({
+        type: "[Dataset] Fetch Metadata Keys Complete",
+        metadataKeys
+      });
+    });
+  });
+
+  describe("fetchMetadataKeysAction", () => {
+    it("should create an action", () => {
+      const action = fromActions.fetchMetadataKeysFailedAction();
+      expect({ ...action }).toEqual({
+        type: "[Dataset] Fetch Metadata Keys Failed"
+      });
+    });
+  });
+
   describe("fetchDatasetAction", () => {
     it("should create an action", () => {
       const pid = "test";

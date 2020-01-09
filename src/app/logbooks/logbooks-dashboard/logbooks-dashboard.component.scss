@@ -10,12 +10,12 @@ mat-card {
   font-size: 1.25em;
 }
 
-.cardButton {
+.card-button {
   margin: 1em;
   text-align: center;
 }
 
-.cardButton:hover {
+.card-button:hover {
   cursor: pointer;
   background-color: rgba(0, 0, 0, 0.1);
 }
@@ -30,25 +30,29 @@ mat-card {
 }
 
 @media only screen and (min-width: 1280px) {
-  .smallFilter {
+  .big-filter {
+    margin-top: 5em;
+  }
+
+  .small-filter {
     display: none;
   }
 
-  .reverseCard {
+  .reverse-card {
     display: none;
   }
 }
 
 @media only screen and (max-width: 1279px) {
-  .bigFilter {
+  .big-filter {
     display: none;
   }
 
-  .smallFilter {
+  .small-filter {
     margin: 1em 1em 1em 1em;
   }
 
-  .cardButton {
+  .card-button {
     margin: 1em 1em 1em 1em;
   }
 }

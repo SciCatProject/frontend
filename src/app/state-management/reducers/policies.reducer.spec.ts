@@ -176,7 +176,7 @@ describe("PoliciesReducer", () => {
     it("should set sortField policies filter and set skip to 0", () => {
       const column = "test";
       const direction = "desc";
-      const sortField = column + ":" + direction;
+      const sortField = column + " " + direction;
       const action = fromActions.sortByColumnAction({ column, direction });
       const state = policiesReducer(initialPolicyState, action);
 
@@ -189,7 +189,7 @@ describe("PoliciesReducer", () => {
     it("should set sortField editable filter and set skip to 0", () => {
       const column = "test";
       const direction = "desc";
-      const sortField = column + ":" + direction;
+      const sortField = column + " " + direction;
       const action = fromActions.sortEditableByColumnAction({
         column,
         direction

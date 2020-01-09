@@ -12,7 +12,11 @@ import {
 import { provideMockStore } from "@ngrx/store/testing";
 import { getFilters } from "state-management/selectors/logbooks.selectors";
 
-const logbook = new Logbook();
+const logbook: Logbook = {
+  name: "test",
+  roomId: "!test@site",
+  messages: []
+};
 
 describe("LogbookEffects", () => {
   let actions: Observable<any>;
@@ -78,15 +82,16 @@ describe("LogbookEffects", () => {
   describe("fetchLogbook$", () => {
     const name = "test";
 
-    it("should result in a fetchLogbookCompleteAction", () => {
+    it("should result in a fetchLogbookCompleteAction and fetchCountAction", () => {
       const action = fromActions.fetchLogbookAction({ name });
-      const outcome = fromActions.fetchLogbookCompleteAction({ logbook });
+      const outcome1 = fromActions.fetchLogbookCompleteAction({ logbook });
+      const outcome2 = fromActions.fetchCountAction({ name });
 
       actions = hot("-a", { a: action });
       const response = cold("-a|", { a: logbook });
       logbookApi.filter.and.returnValue(response);
 
-      const expected = cold("--b", { b: outcome });
+      const expected = cold("--(bc)", { b: outcome1, c: outcome2 });
       expect(effects.fetchLogbook$).toBeObservable(expected);
     });
 
@@ -100,6 +105,34 @@ describe("LogbookEffects", () => {
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchLogbook$).toBeObservable(expected);
+    });
+  });
+
+  describe("fetchCount$", () => {
+    const name = "test";
+    it("should result in a fetchCountCompleteAction", () => {
+      const count = 0;
+      const action = fromActions.fetchCountAction({ name });
+      const outcome = fromActions.fetchCountCompleteAction({ count });
+
+      actions = hot("-a", { a: action });
+      const response = cold("-a|", { a: logbook });
+      logbookApi.filter.and.returnValue(response);
+
+      const expected = cold("--b", { b: outcome });
+      expect(effects.fetchCount$).toBeObservable(expected);
+    });
+
+    it("should result in a fetchCountFailedAction", () => {
+      const action = fromActions.fetchCountAction({ name });
+      const outcome = fromActions.fetchCountFailedAction();
+
+      actions = hot("-a", { a: action });
+      const response = cold("-#", {});
+      logbookApi.filter.and.returnValue(response);
+
+      const expected = cold("--b", { b: outcome });
+      expect(effects.fetchCount$).toBeObservable(expected);
     });
   });
 
@@ -120,6 +153,19 @@ describe("LogbookEffects", () => {
       it("should dispatch a loadingAction", () => {
         const name = "test";
         const action = fromActions.fetchLogbookAction({ name });
+        const outcome = loadingAction();
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.loading$).toBeObservable(expected);
+      });
+    });
+
+    describe("ofType fetchCountAction", () => {
+      it("should dispatch a loadingAction", () => {
+        const name = "test";
+        const action = fromActions.fetchCountAction({ name });
         const outcome = loadingAction();
 
         actions = hot("-a", { a: action });
@@ -171,6 +217,31 @@ describe("LogbookEffects", () => {
     describe("ofType fetchLogbookFailedAction", () => {
       it("should dispatch a loadingCompleteAction", () => {
         const action = fromActions.fetchLogbookFailedAction();
+        const outcome = loadingCompleteAction();
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.loadingComplete$).toBeObservable(expected);
+      });
+    });
+
+    describe("ofType fetchCountCompleteAction", () => {
+      it("should dispatch a loadingCompleteAction", () => {
+        const count = 100;
+        const action = fromActions.fetchCountCompleteAction({ count });
+        const outcome = loadingCompleteAction();
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.loadingComplete$).toBeObservable(expected);
+      });
+    });
+
+    describe("ofType fetchCountFailedAction", () => {
+      it("should dispatch a loadingCompleteAction", () => {
+        const action = fromActions.fetchCountFailedAction();
         const outcome = loadingCompleteAction();
 
         actions = hot("-a", { a: action });

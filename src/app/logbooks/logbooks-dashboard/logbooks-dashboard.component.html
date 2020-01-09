@@ -1,7 +1,7 @@
 <div *ngIf="logbook">
   <div fxLayout="row" fxLayout.lt-lg="column">
     <div fxFlex="14">
-      <mat-card class="bigFilter">
+      <mat-card class="big-filter">
         <div class="title">Filter</div>
         <app-search-bar
           [prefilledValue]="(filters$ | async).textSearch"
@@ -14,7 +14,7 @@
         ></logbook-filter>
       </mat-card>
 
-      <div class="smallFilter">
+      <div class="small-filter">
         <app-search-bar
           [prefilledValue]="(filters$ | async).textSearch"
           (onSearch)="onTextSearchChange($event)"
@@ -40,21 +40,27 @@
             target="_blank"
             rel="noopener noreferrer"
           >
-            <mat-card class="cardButton">
+            <mat-card class="card-button">
               <mat-icon> chat_bubble_outline </mat-icon> Go to chat
             </mat-card>
           </a>
         </div>
         <div fxFlex="auto"></div>
-        <div class="reverseCard" fxFlex="49">
-          <mat-card class="cardButton" (click)="reverseTimeline()">
+        <div class="reverse-card" fxFlex="49">
+          <mat-card class="card-button" (click)="reverseTimeline()">
             <mat-icon> swap_vert </mat-icon> Reverse
           </mat-card>
         </div>
       </div>
     </div>
     <div fxFlex="85" class="details-container">
-      <app-logbooks-detail [logbook]="logbook"></app-logbooks-detail>
+      <app-logbooks-detail
+        [logbook]="logbook"
+        [entriesCount]="entriesCount$ | async"
+        [entriesPerPage]="entriesPerPage$ | async"
+        [currentPage]="currentPage$ | async"
+        (pageChange)="onPageChange($event)"
+      ></app-logbooks-detail>
     </div>
   </div>
 </div>

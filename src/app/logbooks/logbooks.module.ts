@@ -9,7 +9,7 @@ import {
   MatCheckboxModule,
   MatExpansionModule,
   MatDividerModule,
-  MatProgressSpinnerModule
+  MatPaginatorModule
 } from "@angular/material";
 import { AppConfigModule } from "app-config.module";
 import { FlexLayoutModule } from "@angular/flex-layout";
@@ -41,7 +41,7 @@ import { StoreModule } from "@ngrx/store";
     MatDividerModule,
     MatExpansionModule,
     MatIconModule,
-    MatProgressSpinnerModule,
+    MatPaginatorModule,
     MatTableModule,
     RouterModule,
     SharedCatanieModule,

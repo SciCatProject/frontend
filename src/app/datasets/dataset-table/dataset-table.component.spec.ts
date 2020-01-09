@@ -1,19 +1,10 @@
 import { APP_CONFIG, AppConfigModule } from "app-config.module";
-import { ArchivingService } from "../archiving.service";
 import {
   DatasetTableComponent,
   SortChangeEvent
 } from "./dataset-table.component";
-import {
-  MatDialogModule,
-  MatTableModule,
-  MatCheckboxChange
-} from "@angular/material";
-import {
-  MockDatasetApi,
-  MockArchivingService,
-  MockStore
-} from "shared/MockStubs";
+import { MatTableModule, MatCheckboxChange } from "@angular/material";
+import { MockStore, MockDatasetApi } from "shared/MockStubs";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { Router } from "@angular/router";
 import {
@@ -22,33 +13,24 @@ import {
   TestBed,
   inject
 } from "@angular/core/testing";
-import { combineReducers, StoreModule, Store } from "@ngrx/store";
-import { datasetsReducer } from "state-management/reducers/datasets.reducer";
-import { jobsReducer } from "state-management/reducers/jobs.reducer";
-import { DatasetApi, Dataset } from "shared/sdk";
+import { StoreModule, Store } from "@ngrx/store";
+import { Dataset, DatasetApi } from "shared/sdk";
 import { SharedCatanieModule } from "shared/shared.module";
 import {
-  selectColumnAction,
-  deselectColumnAction
-} from "state-management/actions/user.actions";
-import { ArchViewMode } from "state-management/models";
-import {
-  setArchiveViewModeAction,
-  setPublicViewModeAction,
   selectDatasetAction,
   deselectDatasetAction,
   selectAllDatasetsAction,
   clearSelectionAction,
   changePageAction,
-  sortByColumnAction,
-  addToBatchAction
+  sortByColumnAction
 } from "state-management/actions/datasets.actions";
 import { PageChangeEvent } from "shared/modules/table/table.component";
 import { provideMockStore } from "@ngrx/store/testing";
+import { getDatasets } from "state-management/selectors/datasets.selectors";
 import {
-  getDatasets,
-  getSelectedDatasets
-} from "state-management/selectors/datasets.selectors";
+  selectColumnAction,
+  deselectColumnAction
+} from "state-management/actions/user.actions";
 
 describe("DatasetTableComponent", () => {
   let component: DatasetTableComponent;
@@ -64,23 +46,14 @@ describe("DatasetTableComponent", () => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
       imports: [
+        AppConfigModule,
         MatTableModule,
-        MatDialogModule,
         SharedCatanieModule,
-        StoreModule.forRoot({
-          datasets: datasetsReducer,
-          root: combineReducers({
-            jobs: jobsReducer
-          })
-        }),
-        AppConfigModule
+        StoreModule.forRoot({})
       ],
       providers: [
         provideMockStore({
-          selectors: [
-            { selector: getDatasets, value: [] },
-            { selector: getSelectedDatasets, value: [] }
-          ]
+          selectors: [{ selector: getDatasets, value: [] }]
         })
       ],
       declarations: [DatasetTableComponent]
@@ -88,16 +61,12 @@ describe("DatasetTableComponent", () => {
     TestBed.overrideComponent(DatasetTableComponent, {
       set: {
         providers: [
-          { provide: Router, useValue: router },
-          { provide: DatasetApi, useClass: MockDatasetApi },
           {
             provide: APP_CONFIG,
-            useValue: {
-              disabledDatasetColumns: [],
-              archiveWorkflowEnabled: true
-            }
+            useValue: {}
           },
-          { provide: ArchivingService, useClass: MockArchivingService }
+          { provide: DatasetApi, useClass: MockDatasetApi },
+          { provide: Router, useValue: router }
         ]
       }
     });
@@ -107,6 +76,7 @@ describe("DatasetTableComponent", () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(DatasetTableComponent);
     component = fixture.componentInstance;
+    component.tableColumns = [];
     fixture.detectChanges();
   });
 
@@ -122,112 +92,16 @@ describe("DatasetTableComponent", () => {
     expect(component).toBeTruthy();
   });
 
-  it("should contain mode switching buttons", () => {
-    const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector(".archivable")).toBeTruthy();
-    expect(compiled.querySelector(".archivable").textContent).toContain(
-      "Archivable"
-    );
-    expect(compiled.querySelector(".retrievable")).toBeTruthy();
-    expect(compiled.querySelector(".retrievable").textContent).toContain(
-      "Retrievable"
-    );
-    expect(compiled.querySelector(".all")).toBeTruthy();
-    expect(compiled.querySelector(".all").textContent).toContain("All");
-  });
+  describe("#doSettingsClick()", () => {
+    it("should emit a MouseEvent on click", () => {
+      const emitSpy = spyOn(component.settingsClick, "emit");
 
-  describe("#onSelectColumn()", () => {
-    it("should do nothing if isUserInput is false", () => {
-      dispatchSpy = spyOn(store, "dispatch");
+      const event = {} as MouseEvent;
+      component.doSettingsClick(event);
 
-      const event = {
-        isUserInput: false,
-        source: {
-          selected: true,
-          value: "test"
-        }
-      };
-
-      component.onSelectColumn(event);
-
-      expect(dispatchSpy).toHaveBeenCalledTimes(0);
+      expect(emitSpy).toHaveBeenCalledTimes(1);
+      expect(emitSpy).toHaveBeenCalledWith(event);
     });
-
-    it("should dispatch a selectColumnAction if both isUserInput and selected are true", () => {
-      dispatchSpy = spyOn(store, "dispatch");
-
-      const event = {
-        isUserInput: true,
-        source: {
-          selected: true,
-          value: "test"
-        }
-      };
-
-      component.onSelectColumn(event);
-
-      expect(dispatchSpy).toHaveBeenCalledTimes(1);
-      expect(dispatchSpy).toHaveBeenCalledWith(
-        selectColumnAction({ column: event.source.value })
-      );
-    });
-
-    it("should dispatch a deselectColumnAction if isUserInput is true and selected is false", () => {
-      dispatchSpy = spyOn(store, "dispatch");
-
-      const event = {
-        isUserInput: true,
-        source: {
-          selected: false,
-          value: "test"
-        }
-      };
-
-      component.onSelectColumn(event);
-
-      expect(dispatchSpy).toHaveBeenCalledTimes(1);
-      expect(dispatchSpy).toHaveBeenCalledWith(
-        deselectColumnAction({ column: event.source.value })
-      );
-    });
-  });
-
-  describe("#onModeChange()", () => {
-    it("should dispatch a SetViewModeAction", () => {
-      dispatchSpy = spyOn(store, "dispatch");
-
-      const event = "test";
-      const modeToggle = ArchViewMode.all;
-
-      component.onModeChange(event, modeToggle);
-
-      expect(dispatchSpy).toHaveBeenCalledTimes(1);
-      expect(dispatchSpy).toHaveBeenCalledWith(
-        setArchiveViewModeAction({ modeToggle })
-      );
-    });
-  });
-
-  describe("#onViewPublicChange()", () => {
-    it("should dispatch a SetPublicViewModeAction", () => {
-      dispatchSpy = spyOn(store, "dispatch");
-
-      const viewPublic = false;
-      component.onViewPublicChange(viewPublic);
-
-      expect(dispatchSpy).toHaveBeenCalledTimes(1);
-      expect(dispatchSpy).toHaveBeenCalledWith(
-        setPublicViewModeAction({ isPublished: viewPublic })
-      );
-    });
-  });
-
-  describe("#archiveClickHandle()", () => {
-    xit("should...", () => {});
-  });
-
-  describe("#retrieveClickHandle()", () => {
-    xit("should...", () => {});
   });
 
   describe("#wipCondition()", () => {
@@ -418,10 +292,10 @@ describe("DatasetTableComponent", () => {
     });
   });
 
-  describe("#onClick()", () => {
+  describe("#onRowClick()", () => {
     it("should navigate to a dataset", () => {
       const dataset = new Dataset();
-      component.onClick(dataset);
+      component.onRowClick(dataset);
 
       expect(router.navigateByUrl).toHaveBeenCalledTimes(1);
       expect(router.navigateByUrl).toHaveBeenCalledWith(
@@ -519,7 +393,10 @@ describe("DatasetTableComponent", () => {
   });
 
   describe("#onPageChange()", () => {
-    it("should dispatch a changePangeAction", () => {
+    const name = "image";
+    const columnType = "standard";
+
+    it("should dispatch a changePangeAction and a selectColumnAction if pageSize is less than 50", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
       const event: PageChangeEvent = {
@@ -529,9 +406,31 @@ describe("DatasetTableComponent", () => {
       };
       component.onPageChange(event);
 
-      expect(dispatchSpy).toHaveBeenCalledTimes(1);
+      expect(dispatchSpy).toHaveBeenCalledTimes(2);
       expect(dispatchSpy).toHaveBeenCalledWith(
         changePageAction({ page: event.pageIndex, limit: event.pageSize })
+      );
+      expect(dispatchSpy).toHaveBeenCalledWith(
+        selectColumnAction({ name, columnType })
+      );
+    });
+
+    it("should dispatch a changePangeAction and a deselectColumnAction if pageSize is larger than or equal to 50", () => {
+      dispatchSpy = spyOn(store, "dispatch");
+
+      const event: PageChangeEvent = {
+        pageIndex: 0,
+        pageSize: 50,
+        length: 25
+      };
+      component.onPageChange(event);
+
+      expect(dispatchSpy).toHaveBeenCalledTimes(2);
+      expect(dispatchSpy).toHaveBeenCalledWith(
+        changePageAction({ page: event.pageIndex, limit: event.pageSize })
+      );
+      expect(dispatchSpy).toHaveBeenCalledWith(
+        deselectColumnAction({ name, columnType })
       );
     });
   });
@@ -550,18 +449,6 @@ describe("DatasetTableComponent", () => {
       expect(dispatchSpy).toHaveBeenCalledWith(
         sortByColumnAction({ column: event.active, direction: event.direction })
       );
-    });
-  });
-
-  describe("#onAddToBatch()", () => {
-    it("should dispatch an addToBatchAction and a clearSelectionAction", () => {
-      dispatchSpy = spyOn(store, "dispatch");
-
-      component.onAddToBatch();
-
-      expect(dispatchSpy).toHaveBeenCalledTimes(2);
-      expect(dispatchSpy).toHaveBeenCalledWith(addToBatchAction());
-      expect(dispatchSpy).toHaveBeenCalledWith(clearSelectionAction());
     });
   });
 

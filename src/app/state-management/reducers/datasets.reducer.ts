@@ -22,6 +22,11 @@ const reducer = createReducer(
     })
   ),
 
+  on(
+    fromActions.fetchMetadataKeysCompleteAction,
+    (state, { metadataKeys }) => ({ ...state, metadataKeys })
+  ),
+
   on(fromActions.fetchDatasetCompleteAction, (state, { dataset }) => ({
     ...state,
     currentSet: dataset

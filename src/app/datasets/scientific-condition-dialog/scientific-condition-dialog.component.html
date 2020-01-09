@@ -10,14 +10,18 @@
       name="lhs"
       placeholder="Field"
       [(ngModel)]="lhs"
+      [matAutocomplete]="metadataKeys"
+      (input)="onChange(lhs)"
     />
+    <mat-autocomplete #metadataKeys="matAutocomplete">
+      <mat-option *ngFor="let key of data.metadataKeys$ | async" [value]="key">
+        {{ key }}
+      </mat-option>
+    </mat-autocomplete>
   </mat-form-field>
 
   <mat-form-field>
-    <mat-select
-      name="operator"
-      [(ngModel)]="relation"
-    >
+    <mat-select name="operator" [(ngModel)]="relation">
       <mat-option value="EQUAL_TO_NUMERIC">is equal to (numeric)</mat-option>
       <mat-option value="EQUAL_TO_STRING">is equal to (string)</mat-option>
       <mat-option value="GREATER_THAN">is greater than</mat-option>
@@ -40,5 +44,7 @@
 </mat-dialog-content>
 <mat-dialog-actions [attr.align]="'end'">
   <button mat-button (click)="cancel()">Cancel</button>
-  <button mat-button (click)="add()" color="primary" [disabled]="isInvalid()">Add</button>
+  <button mat-button (click)="add()" color="primary" [disabled]="isInvalid()">
+    Add
+  </button>
 </mat-dialog-actions>

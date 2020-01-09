@@ -80,13 +80,21 @@ export const logoutAction = createAction("[User] Logout");
 export const logoutCompleteAction = createAction("[User] Logout Complete");
 export const logoutFailedAction = createAction("[User] Logout Failed");
 
+export const addColumnsAction = createAction(
+  "[User] Add Column",
+  props<{ names: string[] }>()
+);
+
 export const selectColumnAction = createAction(
   "[User] Select Column",
-  props<{ column: string }>()
+  props<{ name: string; columnType: "standard" | "custom" }>()
 );
 export const deselectColumnAction = createAction(
   "[User] Deselect Column",
-  props<{ column: string }>()
+  props<{ name: string; columnType: "standard" | "custom" }>()
+);
+export const deselectAllCustomColumnsAction = createAction(
+  "[User] Deselect All Custom Columns"
 );
 
 export const showMessageAction = createAction(

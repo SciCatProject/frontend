@@ -8,11 +8,11 @@ const initialDatasetState: DatasetState = {
   datasets: [],
   selectedSets: [],
   currentSet: dataset,
-  facetCounts: {},
   totalCount: 0,
 
+  facetCounts: {},
+  metadataKeys: ["test"],
   hasPrefilledFilters: false,
-
   searchTerms: "run",
   keywordsTerms: "",
   batch: [],
@@ -48,11 +48,19 @@ describe("test dataset selectors", () => {
     });
   });
 
-  describe("getSelectedSets", () => {
+  describe("getSelectedDatasets", () => {
     it("should get all selected datasets", () => {
       expect(
         fromDatasetSelectors.getSelectedDatasets.projector(initialDatasetState)
       ).toEqual([]);
+    });
+  });
+
+  describe("getMetadataKeys", () => {
+    it("should get the array of metadata keys", () => {
+      expect(
+        fromDatasetSelectors.getMetadataKeys.projector(initialDatasetState)
+      ).toEqual(["test"]);
     });
   });
 

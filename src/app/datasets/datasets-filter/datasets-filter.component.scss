@@ -20,6 +20,12 @@ mat-card {
       float: right;
       transform: translateY(-25%);
     }
+
+    .scientific-chips {
+      ::ng-deep .mat-chip-list-wrapper {
+        margin: 0;
+      }
+    }
   }
 
   .section-container:first-child {

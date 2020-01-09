@@ -122,7 +122,6 @@ export class JobEffects {
   loadingComplete$ = createEffect(() =>
     this.actions$.pipe(
       ofType(
-        fromActions.fetchJobsCompleteAction,
         fromActions.fetchJobsFailedAction,
         fromActions.fetchCountCompleteAction,
         fromActions.fetchCountFailedAction,

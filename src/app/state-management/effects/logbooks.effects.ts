@@ -36,16 +36,41 @@ export class LogbookEffects {
       withLatestFrom(this.filters$),
       mergeMap(([{ name }, filters]) =>
         this.logbookApi.filter(name, rison.encode_object(filters)).pipe(
-          map(logbook => fromActions.fetchLogbookCompleteAction({ logbook })),
+          mergeMap(logbook => [
+            fromActions.fetchLogbookCompleteAction({ logbook }),
+            fromActions.fetchCountAction({ name })
+          ]),
           catchError(() => of(fromActions.fetchLogbookFailedAction()))
         )
       )
     )
   );
 
+  fetchCount$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(fromActions.fetchCountAction),
+      withLatestFrom(this.filters$),
+      mergeMap(([{ name }, filters]) => {
+        const { skip, limit, ...theRest } = filters;
+        return this.logbookApi.filter(name, rison.encode_object(theRest)).pipe(
+          map((logbook: Logbook) =>
+            fromActions.fetchCountCompleteAction({
+              count: logbook.messages.length
+            })
+          ),
+          catchError(() => of(fromActions.fetchCountFailedAction()))
+        );
+      })
+    )
+  );
+
   loading$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(fromActions.fetchLogbooksAction, fromActions.fetchLogbookAction),
+      ofType(
+        fromActions.fetchLogbooksAction,
+        fromActions.fetchLogbookAction,
+        fromActions.fetchCountAction
+      ),
       mergeMap(() => of(loadingAction()))
     )
   );
@@ -56,7 +81,9 @@ export class LogbookEffects {
         fromActions.fetchLogbooksCompleteAction,
         fromActions.fetchLogbooksFailedAction,
         fromActions.fetchLogbookCompleteAction,
-        fromActions.fetchLogbookFailedAction
+        fromActions.fetchLogbookFailedAction,
+        fromActions.fetchCountCompleteAction,
+        fromActions.fetchCountFailedAction
       ),
       mergeMap(() => of(loadingCompleteAction()))
     )
