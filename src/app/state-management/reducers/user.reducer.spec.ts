@@ -86,15 +86,31 @@ describe("UserReducer", () => {
     });
   });
 
-  describe("on selectColumnAction", () => {
-    it("should set enabled to true for a column in columns", () => {
-      const column = "dataStatus";
-      const action = fromActions.selectColumnAction({ column });
+  describe("on addColumnAction", () => {
+    it("should append a new column to the columns property", () => {
+      const names = ["test"];
+      const action = fromActions.addColumnsAction({ names });
       const state = userReducer(initialUserState, action);
 
-      state.columns.forEach(item => {
-        if (item.name === column) {
-          expect(item.enabled).toEqual(true);
+      expect(state.columns[state.columns.length - 1].name).toEqual("test");
+      expect(state.columns[state.columns.length - 1].order).toEqual(
+        state.columns.length - 1
+      );
+      expect(state.columns[state.columns.length - 1].enabled).toEqual(false);
+    });
+  });
+
+  describe("on selectColumnAction", () => {
+    it("should set enabled to true for a column in columns", () => {
+      const name = "dataStatus";
+      const columnType = "standard";
+
+      const action = fromActions.selectColumnAction({ name, columnType });
+      const state = userReducer(initialUserState, action);
+
+      state.columns.forEach(column => {
+        if (column.name === name && column.type === columnType) {
+          expect(column.enabled).toEqual(true);
         }
       });
     });
@@ -102,14 +118,42 @@ describe("UserReducer", () => {
 
   describe("on deselectColumnAction", () => {
     it("should set enabled to false for a column in columns", () => {
-      const column = "datasetName";
+      const name = "datasetName";
+      const columnType = "standard";
 
-      const action = fromActions.deselectColumnAction({ column });
+      const action = fromActions.deselectColumnAction({ name, columnType });
       const state = userReducer(initialUserState, action);
 
-      state.columns.forEach(item => {
-        if (item.name === column) {
-          expect(item.enabled).toEqual(false);
+      state.columns.forEach(column => {
+        if (column.name === name && column.type === columnType) {
+          expect(column.enabled).toEqual(false);
+        }
+      });
+    });
+  });
+
+  describe("on deselectAllCustomColumnsAction", () => {
+    it("should set enabled to false for all custom columns", () => {
+      const names = ["test"];
+      const addColumnsAction = fromActions.addColumnsAction({ names });
+      const firstState = userReducer(initialUserState, addColumnsAction);
+      const selectColumnAction = fromActions.selectColumnAction({
+        name: "test",
+        columnType: "custom"
+      });
+      const secondState = userReducer(firstState, selectColumnAction);
+      secondState.columns.forEach(column => {
+        if (column.name === "test") {
+          expect(column.enabled).toEqual(true);
+        }
+      });
+
+      const action = fromActions.deselectAllCustomColumnsAction();
+      const state = userReducer(secondState, action);
+
+      state.columns.forEach(column => {
+        if (column.name === "test") {
+          expect(column.enabled).toEqual(false);
         }
       });
     });

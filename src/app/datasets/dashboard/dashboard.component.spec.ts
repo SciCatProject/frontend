@@ -8,7 +8,12 @@ import {
 } from "@angular/core/testing";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Store, StoreModule } from "@ngrx/store";
-import { MatDialogModule, MatDialog } from "@angular/material";
+import {
+  MatDialogModule,
+  MatDialog,
+  MatCheckboxChange,
+  MatSidenav
+} from "@angular/material";
 import {
   MockActivatedRoute,
   MockRouter,
@@ -18,6 +23,16 @@ import { DashboardComponent } from "./dashboard.component";
 import { of } from "rxjs";
 import { addDatasetAction } from "state-management/actions/datasets.actions";
 import { DerivedDataset } from "shared/sdk";
+import {
+  selectColumnAction,
+  deselectColumnAction
+} from "state-management/actions/user.actions";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { SelectColumnEvent } from "datasets/dataset-table-settings/dataset-table-settings.component";
+import { provideMockStore } from "@ngrx/store/testing";
+import { getSelectedDatasets } from "state-management/selectors/datasets.selectors";
+import { TableColumn } from "state-management/models";
+import { getColumns } from "state-management/selectors/user.selectors";
 
 class MockMatDialog {
   open() {
@@ -44,8 +59,20 @@ describe("DashboardComponent", () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
-      imports: [MatDialogModule, StoreModule.forRoot({})],
-      declarations: [DashboardComponent]
+      imports: [
+        BrowserAnimationsModule,
+        MatDialogModule,
+        StoreModule.forRoot({})
+      ],
+      declarations: [DashboardComponent, MatSidenav],
+      providers: [
+        provideMockStore({
+          selectors: [
+            { selector: getSelectedDatasets, value: [] },
+            { selector: getColumns, value: [] }
+          ]
+        })
+      ]
     });
     TestBed.overrideComponent(DashboardComponent, {
       set: {
@@ -77,6 +104,75 @@ describe("DashboardComponent", () => {
 
   it("should create", () => {
     expect(component).toBeTruthy();
+  });
+
+  describe("#onSettingsClick()", () => {
+    it("should toggle the sideNav", () => {
+      const toggleSpy = spyOn(component.sideNav, "toggle");
+
+      component.onSettingsClick();
+
+      expect(toggleSpy).toHaveBeenCalled();
+    });
+  });
+
+  describe("#onCloseClick()", () => {
+    it("should close the sideNav", () => {
+      const closeSpy = spyOn(component.sideNav, "close");
+
+      component.onCloseClick();
+
+      expect(closeSpy).toHaveBeenCalled();
+    });
+  });
+
+  describe("#onSelectColumn()", () => {
+    const column: TableColumn = {
+      name: "test",
+      order: 0,
+      type: "standard",
+      enabled: false
+    };
+
+    it("should dispatch a selectColumnAction if checkBoxChange.checked is true", () => {
+      dispatchSpy = spyOn(store, "dispatch");
+
+      const checkBoxChange = {
+        checked: true
+      } as MatCheckboxChange;
+
+      const event: SelectColumnEvent = {
+        checkBoxChange,
+        column
+      };
+
+      component.onSelectColumn(event);
+
+      expect(dispatchSpy).toHaveBeenCalledTimes(1);
+      expect(dispatchSpy).toHaveBeenCalledWith(
+        selectColumnAction({ name: column.name, columnType: column.type })
+      );
+    });
+
+    it("should dispatch a deselectColumnAction if checkBoxChange.checked is false", () => {
+      dispatchSpy = spyOn(store, "dispatch");
+
+      const checkBoxChange = {
+        checked: false
+      } as MatCheckboxChange;
+
+      const event: SelectColumnEvent = {
+        checkBoxChange,
+        column
+      };
+
+      component.onSelectColumn(event);
+
+      expect(dispatchSpy).toHaveBeenCalledTimes(1);
+      expect(dispatchSpy).toHaveBeenCalledWith(
+        deselectColumnAction({ name: column.name, columnType: column.type })
+      );
+    });
   });
 
   describe("#openDialog()", () => {

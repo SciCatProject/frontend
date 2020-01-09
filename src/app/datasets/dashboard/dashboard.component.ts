@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, Inject } from "@angular/core";
+import { Component, OnDestroy, OnInit, Inject, ViewChild } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { APP_CONFIG, AppConfig } from "app-config.module";
 import { select, Store, ActionsSubject } from "@ngrx/store";
@@ -14,14 +14,16 @@ import {
   prefillBatchAction,
   prefillFiltersAction,
   addDatasetAction,
-  fetchDatasetCompleteAction
+  fetchDatasetCompleteAction,
+  fetchMetadataKeysAction
 } from "state-management/actions/datasets.actions";
 
 import {
   getFilters,
   getHasPrefilledFilters,
   getDatasetsInBatch,
-  getCurrentDataset
+  getCurrentDataset,
+  getSelectedDatasets
 } from "state-management/selectors/datasets.selectors";
 import {
   combineLatest,
@@ -30,14 +32,20 @@ import {
   map,
   take
 } from "rxjs/operators";
-import { MatDialog } from "@angular/material";
+import { MatDialog, MatSidenav } from "@angular/material";
 import { AddDatasetDialogComponent } from "datasets/add-dataset-dialog/add-dataset-dialog.component";
 import { Subscription } from "rxjs";
 import {
   getProfile,
-  getCurrentUser
+  getCurrentUser,
+  getColumns
 } from "state-management/selectors/user.selectors";
 import { DerivedDataset } from "shared/sdk";
+import {
+  selectColumnAction,
+  deselectColumnAction
+} from "state-management/actions/user.actions";
+import { SelectColumnEvent } from "datasets/dataset-table-settings/dataset-table-settings.component";
 
 @Component({
   selector: "dashboard",
@@ -45,6 +53,11 @@ import { DerivedDataset } from "shared/sdk";
   styleUrls: ["dashboard.component.scss"]
 })
 export class DashboardComponent implements OnInit, OnDestroy {
+  selectedSets$ = this.store.pipe(select(getSelectedDatasets));
+  tableColumns$ = this.store.pipe(select(getColumns));
+  selectableColumns$ = this.tableColumns$.pipe(
+    map(columns => columns.filter(column => column.name !== "select"))
+  );
   private filters$ = this.store.pipe(select(getFilters));
   private readyToFetch$ = this.store.pipe(
     select(getHasPrefilledFilters),
@@ -59,6 +72,29 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   currentUser: User;
   userGroups: string[];
+
+  @ViewChild(MatSidenav, { static: false }) sideNav: MatSidenav;
+
+  onSettingsClick(): void {
+    this.sideNav.toggle();
+  }
+
+  onCloseClick(): void {
+    this.sideNav.close();
+  }
+
+  onSelectColumn(event: SelectColumnEvent): void {
+    const { checkBoxChange, column } = event;
+    if (checkBoxChange.checked) {
+      this.store.dispatch(
+        selectColumnAction({ name: column.name, columnType: column.type })
+      );
+    } else if (!checkBoxChange.checked) {
+      this.store.dispatch(
+        deselectColumnAction({ name: column.name, columnType: column.type })
+      );
+    }
+  }
 
   openDialog(): void {
     const dialogRef = this.dialog.open(AddDatasetDialogComponent, {
@@ -109,6 +145,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.store.dispatch(prefillBatchAction());
+    this.store.dispatch(fetchMetadataKeysAction({ metadataKey: "" }));
 
     this.subscriptions.push(
       this.filters$

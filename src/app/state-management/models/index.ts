@@ -38,6 +38,7 @@ export interface Settings {
 export interface TableColumn {
   name: string;
   order: number;
+  type: "standard" | "custom";
   enabled: boolean;
 }
 

@@ -19,6 +19,7 @@
       [dataCount]="jobsCount$ | async"
       [dataPerPage]="jobsPerPage$ | async"
       (pageChange)="onPageChange($event)"
+      (sortChange)="onSortChange($event)"
       (rowClick)="onRowClick($event)"
     ></app-table>
     <div class="no-jobs-message" *ngIf="jobs.length === 0">

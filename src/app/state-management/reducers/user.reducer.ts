@@ -1,6 +1,7 @@
 import { UserState, initialUserState } from "state-management/state/user.store";
 import { Action, createReducer, on } from "@ngrx/store";
 import * as fromActions from "state-management/actions/user.actions";
+import { TableColumn } from "state-management/models";
 
 const reducer = createReducer(
   initialUserState,
@@ -46,22 +47,61 @@ const reducer = createReducer(
     ...initialUserState
   })),
 
-  on(fromActions.selectColumnAction, (state, { column }) => {
+  on(fromActions.addColumnsAction, (state, { names }) => {
+    const existingColumns = [...state.columns];
+    const existingColumnNames = existingColumns
+      .filter(column => column.type === "custom")
+      .map(column => column.name);
+
+    let order = existingColumns.length;
+    const newColumns = names
+      .filter(name => !existingColumnNames.includes(name))
+      .map(name => {
+        const column: TableColumn = {
+          name,
+          order,
+          type: "custom",
+          enabled: false
+        };
+        order++;
+        return column;
+      });
+
+    const columns = existingColumns.concat(newColumns);
+    return { ...state, columns };
+  }),
+
+  on(fromActions.selectColumnAction, (state, { name, columnType }) => {
     const columns = [...state.columns];
     columns.forEach(item => {
-      if (item.name === column) {
+      if (item.name === name && item.type === columnType) {
         item.enabled = true;
       }
     });
     return { ...state, columns };
   }),
-  on(fromActions.deselectColumnAction, (state, { column }) => {
+  on(fromActions.deselectColumnAction, (state, { name, columnType }) => {
     const columns = [...state.columns];
     columns.forEach(item => {
-      if (item.name === column) {
+      if (item.name === name && item.type === columnType) {
         item.enabled = false;
       }
     });
+    return { ...state, columns };
+  }),
+  on(fromActions.deselectAllCustomColumnsAction, state => {
+    const initialColumnNames = [...initialUserState.columns].map(
+      column => column.name
+    );
+    const customColumns = [...state.columns].filter(
+      column => !initialColumnNames.includes(column.name)
+    );
+    customColumns.forEach(column => (column.enabled = false));
+    const customColumnNames = customColumns.map(column => column.name);
+
+    const columns = [...state.columns]
+      .filter(column => !customColumnNames.includes(column.name))
+      .concat(customColumns);
     return { ...state, columns };
   }),
 
