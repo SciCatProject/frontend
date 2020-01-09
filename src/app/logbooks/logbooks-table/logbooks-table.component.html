@@ -1,9 +1,11 @@
 <div
   class="logbooks-table"
-  style="min-width: 1060px"
-  *ngIf="logbooks && logbooks.length > 0"
+  *ngIf="(logbooks$ | async) && (logbooks$ | async).length > 0; else noLogbooks"
 >
-  <mat-table [dataSource]="logbooks" class="logbook-table mat-elevation-z2">
+  <mat-table
+    [dataSource]="logbooks$ | async"
+    class="logbook-table mat-elevation-z2"
+  >
     <!-- Column Definitions -->
 
     <!-- Name Column -->
@@ -110,3 +112,9 @@
     ></mat-row>
   </mat-table>
 </div>
+
+<ng-template #noLogbooks>
+  <mat-card class="no-logbooks-message">
+    <mat-icon>info</mat-icon> No logbooks available.
+  </mat-card>
+</ng-template>
