@@ -12,13 +12,17 @@ import { Subscription } from "rxjs";
 import {
   getCurrentLogbook,
   getFilters,
-  getHasPrefilledFilters
+  getHasPrefilledFilters,
+  getEntriesCount,
+  getEntriesPerPage,
+  getPage
 } from "state-management/selectors/logbooks.selectors";
 import {
   fetchLogbookAction,
   prefillFiltersAction,
   setTextFilterAction,
-  setDisplayFiltersAction
+  setDisplayFiltersAction,
+  changePageAction
 } from "state-management/actions/logbooks.actions";
 import { ActivatedRoute, Router } from "@angular/router";
 import { APP_CONFIG, AppConfig } from "app-config.module";
@@ -32,6 +36,7 @@ import {
   distinctUntilChanged
 } from "rxjs/operators";
 import * as deepEqual from "deep-equal";
+import { PageChangeEvent } from "shared/modules/table/table.component";
 
 @Component({
   selector: "app-logbooks-dashboard",
@@ -40,13 +45,16 @@ import * as deepEqual from "deep-equal";
 })
 export class LogbooksDashboardComponent
   implements OnInit, OnDestroy, AfterViewChecked {
-  logbook: Logbook;
-
+  entriesCount$ = this.store.pipe(select(getEntriesCount));
+  entriesPerPage$ = this.store.pipe(select(getEntriesPerPage));
+  currentPage$ = this.store.pipe(select(getPage));
   filters$ = this.store.pipe(select(getFilters));
   readyToFetch$ = this.store.pipe(
     select(getHasPrefilledFilters),
     filter(has => has)
   );
+
+  logbook: Logbook;
 
   subscriptions: Subscription[] = [];
 
@@ -70,6 +78,12 @@ export class LogbooksDashboardComponent
     );
     this.store.dispatch(fetchLogbookAction({ name: this.logbook.name }));
     this.applyRouterState(this.logbook.name, filters);
+  }
+
+  onPageChange(event: PageChangeEvent) {
+    this.store.dispatch(
+      changePageAction({ page: event.pageIndex, limit: event.pageSize })
+    );
   }
 
   reverseTimeline(): void {

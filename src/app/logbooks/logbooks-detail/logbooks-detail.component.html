@@ -1,4 +1,14 @@
 <div *ngIf="logbook && logbook.messages">
+  <mat-paginator
+    [pageSizeOptions]="[10, 25, 50, 100, 500]"
+    [pageIndex]="currentPage"
+    [length]="entriesCount"
+    [pageSize]="entriesPerPage"
+    (page)="doPageChange($event)"
+    showFirstLastButtons
+  >
+  </mat-paginator>
+
   <mat-table
     [dataSource]="logbook.messages"
     class="largeDetails mat-elevation-z2"

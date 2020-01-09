@@ -23,6 +23,18 @@ export const fetchLogbookFailedAction = createAction(
   "[Logbook] Fetch Logbook Failed"
 );
 
+export const fetchCountAction = createAction(
+  "[Logbook] Fetch Count",
+  props<{ name: string }>()
+);
+export const fetchCountCompleteAction = createAction(
+  "[Logbook] Fetch Count Complete",
+  props<{ count: number }>()
+);
+export const fetchCountFailedAction = createAction(
+  "[Logbook] Fetch Count Failed"
+);
+
 export const prefillFiltersAction = createAction(
   "[Logbook] Prefill Filters",
   props<{ values: Partial<LogbookFilters> }>()
@@ -40,4 +52,9 @@ export const setDisplayFiltersAction = createAction(
     showImages: boolean;
     showUserMessages: boolean;
   }>()
+);
+
+export const changePageAction = createAction(
+  "[Logbook] Change Page",
+  props<{ page: number; limit: number }>()
 );
