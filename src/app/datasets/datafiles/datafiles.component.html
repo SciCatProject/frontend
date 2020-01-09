@@ -74,7 +74,7 @@
   <div style="clear: both"></div>
 </div>
 
-<ng-template [ngIf]="true">
+<ng-template [ngIf]="datablocks && datablocks.length > 0">
   <div fxLayout="row" fxLayoutAlign="space-evenly end">
     <div fxFlex="auto" style="margin-bottom: 0.5em;">
       Selected: {{ selectedFileSize | filesize

@@ -53,7 +53,6 @@ export class DatafilesComponent
    */
   getDatafiles(datablocks: Array<OrigDatablock>) {
     datablocks.forEach(block => {
-      console.log("block.dataFileList", block.dataFileList)
       const selectable = block.dataFileList.map(file => {
         this.totalFileSize += file.size;
         return { ...file, selected: false };
