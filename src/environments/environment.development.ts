@@ -50,5 +50,6 @@ export const environment = {
   tableSciDataEnabled: true,
   userProfileImageEnabled: true,
   searchPublicDataEnabled: true,
-  landingPage: "doi2.psi.ch/detail/"
+  landingPage: "doi2.psi.ch/detail/",
+  fileDownloadEnabled: false
 };

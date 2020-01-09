@@ -74,7 +74,7 @@
   <div style="clear: both"></div>
 </div>
 
-<ng-template [ngIf]="datablocks && datablocks.length > 0">
+<ng-template [ngIf]="true">
   <div fxLayout="row" fxLayoutAlign="space-evenly end">
     <div fxFlex="auto" style="margin-bottom: 0.5em;">
       Selected: {{ selectedFileSize | filesize
@@ -121,9 +121,8 @@
       <mat-header-cell *matHeaderCellDef>Path</mat-header-cell>
       <mat-cell *matCellDef="let file" matTooltip="{{ file.path }}">
         <ng-template
-          ngIf="(urlPrefix && file.size <= maxFileSize) ||
-        (urlPrefix && !maxFileSize)"
-          [ngIfElse]="noLink"
+          *ngIf="fileDownloadEnabled && ((urlPrefix && file.size <= maxFileSize) ||
+        (urlPrefix && !maxFileSize)) else noLink"
         >
           <form
             *ngIf="multipleDownloadEnabled && multipleDownloadAction && jwt"

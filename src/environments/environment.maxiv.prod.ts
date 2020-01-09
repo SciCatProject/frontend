@@ -5,5 +5,6 @@ export const environment = {
   archiveWorkflowEnabled: false,
   disabledDatasetColumns: ["select", "archiveStatus", "retrieveStatus", "ownerGroup"],
   facility: "MAX IV",
-  shoppingCartEnabled: false
+  shoppingCartEnabled: false,
+  fileDownloadEnabled: true,
 };
