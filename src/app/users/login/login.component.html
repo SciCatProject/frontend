@@ -9,13 +9,13 @@
     </div>
     <mat-card-content>
       <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
-        <mat-form-field hintLabel="firstnamelastname">
+        <mat-form-field hintLabel="{{appConfig.facility}} account username">
           <mat-label> <b> Username</b> </mat-label>
           <span matPrefix> <mat-icon>person</mat-icon> &nbsp; </span>
           <input matInput id="usernameInput" formControlName="username" />
         </mat-form-field>
 
-        <mat-form-field hintLabel="ESS account password">
+        <mat-form-field hintLabel="{{appConfig.facility}} account password">
           <mat-label> <b> Password</b> </mat-label>
           <span matPrefix> <mat-icon>vpn_key</mat-icon> &nbsp; </span>
           <input
