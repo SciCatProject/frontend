@@ -53,5 +53,6 @@ export const environment = {
   shoppingCartOnHeader: true,
   tableSciDataEnabled: true,
   userNamePromptEnabled: true,
-  userProfileImageEnabled: true
+  userProfileImageEnabled: true,
+  fileDownloadEnabled: true,
 };
