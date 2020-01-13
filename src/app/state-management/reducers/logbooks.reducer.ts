@@ -23,6 +23,11 @@ const reducer = createReducer(
     return { ...state, currentLogbook };
   }),
 
+  on(fromActions.fetchCountCompleteAction, (state, { count }) => ({
+    ...state,
+    totalCount: count
+  })),
+
   on(fromActions.prefillFiltersAction, (state, { values }) => {
     const filters = { ...state.filters, ...values };
     return { ...state, filters, hasPrefilledFilters: true };
@@ -44,7 +49,13 @@ const reducer = createReducer(
       };
       return { ...state, filters };
     }
-  )
+  ),
+
+  on(fromActions.changePageAction, (state, { page, limit }) => {
+    const skip = page * limit;
+    const filters = { ...state.filters, skip, limit };
+    return { ...state, filters };
+  })
 );
 
 export function logbooksReducer(
@@ -61,7 +72,10 @@ export function formatImageUrls(logbook: Logbook): Logbook {
   if (logbook && logbook.messages) {
     logbook.messages.forEach(message => {
       if (message.content.msgtype === "m.image") {
-        if (message.content.info && message.content.info.hasOwnProperty("thumbnail_url")) {
+        if (
+          message.content.info &&
+          message.content.info.hasOwnProperty("thumbnail_url")
+        ) {
           const externalThumbnailUrl = message.content.info.thumbnail_url.replace(
             "mxc://",
             `${APP_DI_CONFIG.synapseBaseUrl}/_matrix/media/r0/download/`

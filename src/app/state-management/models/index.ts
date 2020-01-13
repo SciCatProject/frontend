@@ -118,6 +118,8 @@ export interface LogbookFilters {
   showBotMessages: boolean;
   showUserMessages: boolean;
   showImages: boolean;
+  skip: number;
+  limit: number;
 }
 
 export interface JobFilters {

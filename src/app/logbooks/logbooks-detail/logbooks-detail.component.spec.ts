@@ -3,6 +3,7 @@ import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 import { MatTableModule } from "@angular/material";
 import { LogbooksDetailComponent } from "./logbooks-detail.component";
 import { LinkyModule } from "ngx-linky";
+import { PageChangeEvent } from "shared/modules/table/table.component";
 
 describe("LogbooksDetailComponent", () => {
   let component: LogbooksDetailComponent;
@@ -28,5 +29,22 @@ describe("LogbooksDetailComponent", () => {
 
   it("should create", () => {
     expect(component).toBeTruthy();
+  });
+
+  describe("#doPageChange()", () => {
+    it("should emit a PageChangeEvent", () => {
+      const emitSpy = spyOn(component.pageChange, "emit");
+
+      const event: PageChangeEvent = {
+        pageIndex: 1,
+        pageSize: 25,
+        length: 100
+      };
+
+      component.doPageChange(event);
+
+      expect(emitSpy).toHaveBeenCalledTimes(1);
+      expect(emitSpy).toHaveBeenCalledWith(event);
+    });
   });
 });

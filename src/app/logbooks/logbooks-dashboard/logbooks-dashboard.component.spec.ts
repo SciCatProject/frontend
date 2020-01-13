@@ -15,12 +15,14 @@ import { AppConfigModule } from "app-config.module";
 import {
   setTextFilterAction,
   fetchLogbookAction,
-  setDisplayFiltersAction
+  setDisplayFiltersAction,
+  changePageAction
 } from "state-management/actions/logbooks.actions";
 import { Logbook, LogbookInterface } from "shared/sdk";
 import { LogbookFilters } from "state-management/models";
 import { RouterTestingModule } from "@angular/router/testing";
 import * as rison from "rison";
+import { PageChangeEvent } from "shared/modules/table/table.component";
 
 describe("DashboardComponent", () => {
   let component: LogbooksDashboardComponent;
@@ -81,11 +83,13 @@ describe("DashboardComponent", () => {
       const navigateSpy = spyOn(router, "navigate");
 
       component.logbook = logbook;
-      const filters = {
+      const filters: LogbookFilters = {
         textSearch: "",
         showBotMessages: true,
         showImages: true,
-        showUserMessages: true
+        showUserMessages: true,
+        skip: 0,
+        limit: 25
       };
       component.applyRouterState(logbook.name, filters);
 
@@ -129,7 +133,9 @@ describe("DashboardComponent", () => {
         textSearch: "",
         showBotMessages: false,
         showImages: true,
-        showUserMessages: true
+        showUserMessages: true,
+        skip: 0,
+        limit: 25
       };
       const { showBotMessages, showImages, showUserMessages } = filters;
 
@@ -149,6 +155,25 @@ describe("DashboardComponent", () => {
         })
       );
       expect(methodSpy).toHaveBeenCalled();
+    });
+  });
+
+  describe("#onPageChange()", () => {
+    it("should dispatch a changePageAction", () => {
+      dispatchSpy = spyOn(store, "dispatch");
+
+      const event: PageChangeEvent = {
+        pageIndex: 1,
+        pageSize: 25,
+        length: 100
+      };
+
+      component.onPageChange(event);
+
+      expect(dispatchSpy).toHaveBeenCalledTimes(1);
+      expect(dispatchSpy).toHaveBeenCalledWith(
+        changePageAction({ page: event.pageIndex, limit: event.pageSize })
+      );
     });
   });
 

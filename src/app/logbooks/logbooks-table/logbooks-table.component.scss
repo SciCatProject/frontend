@@ -31,9 +31,17 @@
   .mat-column-entry {
     min-width: 500px;
   }
+
+  mat-row:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+  }
 }
 
-mat-row:hover {
-  background-color: rgba(0, 0, 0, 0.1);
-  cursor: pointer;
+.no-logbooks-message {
+  text-align: center;
+
+  mat-icon {
+    vertical-align: middle;
+  }
 }

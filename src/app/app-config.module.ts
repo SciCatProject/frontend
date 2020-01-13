@@ -24,6 +24,7 @@ export class AppConfig {
   ingestManual: string;
   localColumns: TableColumn[];
   logbookEnabled: boolean;
+  fileDownloadEnabled: boolean;
   maxDirectDownloadSize: number;
   metadataPreviewEnabled: boolean;
   multipleDownloadAction?: string;
@@ -76,6 +77,7 @@ export const APP_DI_CONFIG: AppConfig = {
     { name: "derivedDatasetsNum", order: 12, type: "standard", enabled: false }
   ],
   maxDirectDownloadSize: environment["maxDirectDownloadSize"] || null,
+  fileDownloadEnabled: environment["fileDownloadEnabled"] || false,
   metadataPreviewEnabled: environment["metadataPreviewEnabled"] || false,
   multipleDownloadAction: environment["multipleDownloadAction"],
   multipleDownloadEnabled: environment["multipleDownloadEnabled"] || false,

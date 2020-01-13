@@ -121,9 +121,8 @@
       <mat-header-cell *matHeaderCellDef>Path</mat-header-cell>
       <mat-cell *matCellDef="let file" matTooltip="{{ file.path }}">
         <ng-template
-          ngIf="(urlPrefix && file.size <= maxFileSize) ||
-        (urlPrefix && !maxFileSize)"
-          [ngIfElse]="noLink"
+          *ngIf="fileDownloadEnabled && ((urlPrefix && file.size <= maxFileSize) ||
+        (urlPrefix && !maxFileSize)) else noLink"
         >
           <form
             *ngIf="multipleDownloadEnabled && multipleDownloadAction && jwt"

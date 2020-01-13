@@ -8,12 +8,16 @@ const logbookFilters: LogbookFilters = {
   textSearch: "test",
   showBotMessages: true,
   showUserMessages: true,
-  showImages: true
+  showImages: true,
+  skip: 0,
+  limit: 25
 };
 
 const initialLogbookState: LogbookState = {
   logbooks: [],
   currentLogbook: logbook,
+
+  totalCount: 0,
 
   hasPrefilledFilters: false,
   filters: logbookFilters
@@ -36,6 +40,14 @@ describe("Logbook Selectors", () => {
     });
   });
 
+  describe("getEntriesCount", () => {
+    it("should get totalCount", () => {
+      expect(
+        fromSelectors.getEntriesCount.projector(initialLogbookState)
+      ).toEqual(0);
+    });
+  });
+
   describe("getHasPrefilledFilters", () => {
     it("should return hasPrefilledFilters", () => {
       expect(
@@ -49,6 +61,25 @@ describe("Logbook Selectors", () => {
       expect(fromSelectors.getFilters.projector(initialLogbookState)).toEqual(
         logbookFilters
       );
+    });
+  });
+
+  describe("getEntriesPerPage", () => {
+    it("should get limit filter", () => {
+      expect(
+        fromSelectors.getEntriesPerPage.projector(initialLogbookState.filters)
+      ).toEqual(25);
+    });
+  });
+
+  describe("getPage", () => {
+    it("should get page from skip and limit filters", () => {
+      const { skip, limit } = initialLogbookState.filters;
+      const page = skip / limit;
+
+      expect(
+        fromSelectors.getPage.projector(initialLogbookState.filters)
+      ).toEqual(page);
     });
   });
 });

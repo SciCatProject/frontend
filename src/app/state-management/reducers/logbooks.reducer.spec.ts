@@ -46,6 +46,16 @@ describe("LogbooksReducer", () => {
     });
   });
 
+  describe("on fetchCountCompleteAction", () => {
+    it("should set totalCount", () => {
+      const count = 100;
+      const action = fromActions.fetchCountCompleteAction({ count });
+      const state = logbooksReducer(initialLogbookState, action);
+
+      expect(state.totalCount).toEqual(count);
+    });
+  });
+
   describe("on prefillFiltersAction", () => {
     it("should set filters and set hasPrefilledFilters to true", () => {
       const values: Partial<LogbookFilters> = {
@@ -84,6 +94,19 @@ describe("LogbooksReducer", () => {
       expect(state.filters.showBotMessages).toEqual(showBotMessages);
       expect(state.filters.showImages).toEqual(showImages);
       expect(state.filters.showUserMessages).toEqual(showUserMessages);
+    });
+  });
+
+  describe("on changePageAction", () => {
+    it("should set skip and limit filters", () => {
+      const page = 1;
+      const limit = 25;
+      const skip = page * limit;
+      const action = fromActions.changePageAction({ page, limit });
+      const state = logbooksReducer(initialLogbookState, action);
+
+      expect(state.filters.skip).toEqual(skip);
+      expect(state.filters.limit).toEqual(limit);
     });
   });
 
