@@ -11,11 +11,13 @@ import {
 } from "state-management/selectors/published-data.selectors";
 import {
   fetchAllPublishedDataAction,
-  changePageAction
+  changePageAction,
+  sortByColumnAction
 } from "state-management/actions/published-data.actions";
 import {
   PageChangeEvent,
-  TableColumn
+  TableColumn,
+  SortChangeEvent
 } from "shared/modules/table/table.component";
 import { Subscription } from "rxjs";
 import * as rison from "rison";
@@ -32,11 +34,11 @@ export class PublisheddataDashboardComponent implements OnInit, OnDestroy {
   public itemsPerPage$ = this.store.pipe(select(getPublishedDataPerPage));
 
   columns: TableColumn[] = [
-    { name: "doi", icon: "fingerprint", sort: false, inList: false },
-    { name: "title", icon: "description", sort: false, inList: true },
-    { name: "creator", icon: "face", sort: false, inList: true },
-    { name: "publicationYear", icon: "date_range", sort: false, inList: true },
-    { name: "scicatUser", icon: "account_circle", sort: false, inList: true }
+    { name: "doi", icon: "fingerprint", sort: true, inList: false },
+    { name: "title", icon: "description", sort: true, inList: true },
+    { name: "creator", icon: "face", sort: true, inList: true },
+    { name: "publicationYear", icon: "date_range", sort: true, inList: true },
+    { name: "scicatUser", icon: "account_circle", sort: true, inList: true }
   ];
   paginate = true;
 
@@ -46,6 +48,11 @@ export class PublisheddataDashboardComponent implements OnInit, OnDestroy {
     this.store.dispatch(
       changePageAction({ page: event.pageIndex, limit: event.pageSize })
     );
+  }
+
+  onSortChange(event: SortChangeEvent) {
+    const { active: column, direction } = event;
+    this.store.dispatch(sortByColumnAction({ column, direction }));
   }
 
   onRowClick(published: PublishedData) {
