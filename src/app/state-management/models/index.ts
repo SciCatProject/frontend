@@ -1,6 +1,7 @@
 import {
   User,
   UserIdentity,
+  UserSetting,
   Job,
   Dataset,
   RawDataset,
@@ -14,6 +15,7 @@ import {
 export {
   User,
   UserIdentity,
+  UserSetting,
   Job,
   Dataset,
   RawDataset,

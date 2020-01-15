@@ -1,5 +1,6 @@
 /* tslint:disable */
 import {
+  UserSetting,
   UserIdentity,
   UserCredential
 } from '../index';
@@ -13,6 +14,7 @@ export interface UserInterface {
   "id"?: any;
   "password"?: string;
   accessTokens?: any[];
+  settings?: UserSetting;
   identities?: UserIdentity[];
   credentials?: UserCredential[];
 }
@@ -25,6 +27,7 @@ export class User implements UserInterface {
   "id": any;
   "password": string;
   accessTokens: any[];
+  settings: UserSetting;
   identities: UserIdentity[];
   credentials: UserCredential[];
   constructor(data?: UserInterface) {
@@ -91,6 +94,14 @@ export class User implements UserInterface {
           type: 'any[]',
           model: '',
           relationType: 'hasMany',
+                  keyFrom: 'id',
+          keyTo: 'userId'
+        },
+        settings: {
+          name: 'settings',
+          type: 'UserSetting',
+          model: 'UserSetting',
+          relationType: 'hasOne',
                   keyFrom: 'id',
           keyTo: 'userId'
         },

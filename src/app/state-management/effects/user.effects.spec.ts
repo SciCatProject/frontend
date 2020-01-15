@@ -7,7 +7,8 @@ import {
   UserIdentity,
   AccessToken,
   LoopBackAuth,
-  SDKToken
+  SDKToken,
+  UserSetting
 } from "shared/sdk";
 import { ADAuthService } from "users/adauth.service";
 import { TestBed } from "@angular/core/testing";
@@ -47,6 +48,8 @@ describe("UserEffects", () => {
             "isAuthenticated",
             "logout",
             "getCurrent",
+            "getSettings",
+            "updateSettings",
             "getCurrentToken"
           ])
         },
@@ -326,18 +329,23 @@ describe("UserEffects", () => {
   });
 
   describe("fetchCurrentUser$", () => {
-    it("should result in a fetchCurrentUserCompleteAction and a fetchUserIdentityAction", () => {
+    it("should result in a fetchCurrentUserCompleteAction, a fetchUserIdentityAction, and a fetchUserSettingsAction", () => {
       const user = new User();
       user.id = "testId";
       const action = fromActions.fetchCurrentUserAction();
       const outcome1 = fromActions.fetchCurrentUserCompleteAction({ user });
       const outcome2 = fromActions.fetchUserIdentityAction({ id: user.id });
+      const outcome3 = fromActions.fetchUserSettingsAction({ id: user.id });
 
       actions = hot("-a", { a: action });
       const response = cold("-a|", { a: user });
       userApi.getCurrent.and.returnValue(response);
 
-      const expected = cold("--(bc)", { b: outcome1, c: outcome2 });
+      const expected = cold("--(bcd)", {
+        b: outcome1,
+        c: outcome2,
+        d: outcome3
+      });
       expect(effects.fetchCurrentUser$).toBeObservable(expected);
     });
 
@@ -382,6 +390,81 @@ describe("UserEffects", () => {
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchUserIdentity$).toBeObservable(expected);
+    });
+  });
+
+  describe("fetchUserSettings$", () => {
+    const id = "testId";
+
+    it("should result in a fetchUserSettingsCompleteAction", () => {
+      const userSettings = new UserSetting({
+        columns: [],
+        datasetCount: 25,
+        jobCount: 25,
+        userId: "testId",
+        id: "testId"
+      });
+      const action = fromActions.fetchUserSettingsAction({ id });
+      const outcome = fromActions.fetchUserSettingsCompleteAction({
+        userSettings
+      });
+
+      actions = hot("-a", { a: action });
+      const response = cold("-a|", { a: userSettings });
+      userApi.getSettings.and.returnValue(response);
+
+      const expected = cold("--b", { b: outcome });
+      expect(effects.fetchUserSettings$).toBeObservable(expected);
+    });
+
+    it("should result in a fetchUserSettingsFailedAction", () => {
+      const action = fromActions.fetchUserSettingsAction({ id });
+      const outcome = fromActions.fetchUserSettingsFailedAction();
+
+      actions = hot("-a", { a: action });
+      const response = cold("-#", {});
+      userApi.getSettings.and.returnValue(response);
+
+      const expected = cold("--b", { b: outcome });
+      expect(effects.fetchUserSettings$).toBeObservable(expected);
+    });
+  });
+
+  describe("updateUserSettings$", () => {
+    const id = "testId";
+    const property = { columns: [] };
+
+    it("should result in an updateUserSettingsCompleteAction", () => {
+      const userSettings = new UserSetting({
+        columns: [],
+        datasetCount: 25,
+        jobCount: 25,
+        userId: "testId",
+        id: "testId"
+      });
+      const action = fromActions.updateUserSettingsAction({ id, property });
+      const outcome = fromActions.updateUserSettingsCompleteAction({
+        userSettings
+      });
+
+      actions = hot("-a", { a: action });
+      const response = cold("-a|", { a: userSettings });
+      userApi.updateSettings.and.returnValue(response);
+
+      const expected = cold("--b", { b: outcome });
+      expect(effects.updateUserSettings$).toBeObservable(expected);
+    });
+
+    it("should result in an updateUserSettingsFailedAction", () => {
+      const action = fromActions.updateUserSettingsAction({ id, property });
+      const outcome = fromActions.updateUserSettingsFailedAction();
+
+      actions = hot("-a", { a: action });
+      const response = cold("-#", {});
+      userApi.updateSettings.and.returnValue(response);
+
+      const expected = cold("--b", { b: outcome });
+      expect(effects.updateUserSettings$).toBeObservable(expected);
     });
   });
 

@@ -4,7 +4,7 @@ import { UserState } from "../state/user.store";
 import { User, UserIdentity, Settings } from "../models";
 import { AccessToken } from "../../shared/sdk";
 
-const user: User = {
+const user = new User({
   id: "testId",
   realm: "testRealm",
   username: "testName",
@@ -14,7 +14,7 @@ const user: User = {
   accessTokens: [],
   identities: [],
   credentials: []
-};
+});
 
 const userIdentity: UserIdentity = {
   id: "testId",

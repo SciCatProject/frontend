@@ -154,7 +154,8 @@ export class UserEffects {
         this.userApi.getCurrent().pipe(
           switchMap(user => [
             fromActions.fetchCurrentUserCompleteAction({ user }),
-            fromActions.fetchUserIdentityAction({ id: user.id })
+            fromActions.fetchUserIdentityAction({ id: user.id }),
+            fromActions.fetchUserSettingsAction({ id: user.id })
           ]),
           catchError(() => of(fromActions.fetchCurrentUserFailedAction()))
         )
@@ -171,6 +172,34 @@ export class UserEffects {
             fromActions.fetchUserIdentityCompleteAction({ userIdentity })
           ),
           catchError(() => of(fromActions.fetchUserIdentityFailedAction()))
+        )
+      )
+    )
+  );
+
+  fetchUserSettings$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(fromActions.fetchUserSettingsAction),
+      switchMap(({ id }) =>
+        this.userApi.getSettings(id, null).pipe(
+          map(userSettings =>
+            fromActions.fetchUserSettingsCompleteAction({ userSettings })
+          ),
+          catchError(() => of(fromActions.fetchUserSettingsFailedAction()))
+        )
+      )
+    )
+  );
+
+  updateUserSettings$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(fromActions.updateUserSettingsAction),
+      switchMap(({ id, property }) =>
+        this.userApi.updateSettings(id, property).pipe(
+          map(userSettings =>
+            fromActions.updateUserSettingsCompleteAction({ userSettings })
+          ),
+          catchError(() => of(fromActions.updateUserSettingsFailedAction()))
         )
       )
     )

@@ -1,6 +1,6 @@
 import { Message, User, Settings, UserIdentity } from "../models";
 import * as fromActions from "./user.actions";
-import { AccessToken } from "shared/sdk";
+import { AccessToken, UserSetting } from "shared/sdk";
 
 describe("User Aactions", () => {
   describe("loginAction", () => {
@@ -204,6 +204,83 @@ describe("User Aactions", () => {
       const action = fromActions.fetchUserIdentityFailedAction();
       expect({ ...action }).toEqual({
         type: "[User] Fetch User Identity Failed"
+      });
+    });
+  });
+
+  describe("fetchUserSettingsAction", () => {
+    it("should create an action", () => {
+      const id = "testId";
+      const action = fromActions.fetchUserSettingsAction({ id });
+      expect({ ...action }).toEqual({ type: "[User] Fetch User Settings", id });
+    });
+  });
+
+  describe("fetchUserSettingsCompleteAction", () => {
+    it("should create an action", () => {
+      const userSettings = new UserSetting({
+        columns: [],
+        datasetCount: 25,
+        jobCount: 25,
+        userId: "testId",
+        id: "testId"
+      });
+      const action = fromActions.fetchUserSettingsCompleteAction({
+        userSettings
+      });
+      expect({ ...action }).toEqual({
+        type: "[User] Fetch User Settings Complete",
+        userSettings
+      });
+    });
+  });
+
+  describe("fetchUserSettingsFailedAction", () => {
+    it("should create an action", () => {
+      const action = fromActions.fetchUserSettingsFailedAction();
+      expect({ ...action }).toEqual({
+        type: "[User] Fetch User Settings Failed"
+      });
+    });
+  });
+
+  describe("updateUserSettingsAction", () => {
+    it("should create an action", () => {
+      const id = "testId";
+      const property = { columns: [] };
+      const action = fromActions.updateUserSettingsAction({ id, property });
+      expect({ ...action }).toEqual({
+        type: "[User] Update User Settings",
+        id,
+        property
+      });
+    });
+  });
+
+  describe("updateUserSettingsCompleteAction", () => {
+    it("should create an action", () => {
+      const userSettings = new UserSetting({
+        columns: [],
+        datasetCount: 25,
+        jobCount: 25,
+        userId: "testId",
+        id: "testId"
+      });
+      const action = fromActions.updateUserSettingsCompleteAction({
+        userSettings
+      });
+      expect({ ...action }).toEqual({
+        type: "[User] Update User Settings Complete",
+        userSettings
+      });
+    });
+  });
+
+  describe("updateUserSettingsFailedAction", () => {
+    it("should create an action", () => {
+      const action = fromActions.updateUserSettingsFailedAction();
+      expect({ ...action }).toEqual({
+        type: "[User] Update User Settings Failed"
       });
     });
   });
