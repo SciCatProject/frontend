@@ -61,3 +61,8 @@ export const changePageAction = createAction(
   "[PublishedData] Change Page",
   props<{ page: number; limit: number }>()
 );
+
+export const sortByColumnAction = createAction(
+  "[PublishedData] Sort By Column",
+  props<{ column: string; direction: string }>()
+);

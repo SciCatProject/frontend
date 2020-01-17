@@ -9,6 +9,7 @@
       [dataCount]="count$ | async"
       [dataPerPage]="itemsPerPage$ | async"
       (pageChange)="onPageChange($event)"
+      (sortChange)="onSortChange($event)"
       (rowClick)="onRowClick($event)"
     ></app-table>
   </div>

@@ -27,6 +27,7 @@ export class PublishedDataEffects {
     this.actions$.pipe(
       ofType(
         fromActions.fetchAllPublishedDataAction,
+        fromActions.sortByColumnAction,
         fromActions.changePageAction
       ),
       withLatestFrom(this.queryParams$),
@@ -132,6 +133,7 @@ export class PublishedDataEffects {
       ofType(
         fromActions.fetchAllPublishedDataAction,
         fromActions.fetchCountAction,
+        fromActions.sortByColumnAction,
         fromActions.fetchPublishedDataAction,
         fromActions.publishDatasetAction,
         fromActions.registerPublishedDataAction
