@@ -186,7 +186,8 @@ export class DatasetTableComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   onSortChange(event: SortChangeEvent): void {
-    const { active: column, direction } = event;
+    const { active, direction } = event;
+    const column = active.split("_")[1];
     this.store.dispatch(sortByColumnAction({ column, direction }));
   }
 

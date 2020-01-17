@@ -11,12 +11,27 @@ import {
 } from "shared/sdk";
 import { Router } from "@angular/router";
 import * as fromActions from "state-management/actions/user.actions";
-import { map, switchMap, catchError, filter, tap } from "rxjs/operators";
+import {
+  map,
+  switchMap,
+  catchError,
+  filter,
+  tap,
+  withLatestFrom
+} from "rxjs/operators";
 import { of } from "rxjs";
 import { MessageType } from "state-management/models";
+import { Store, select } from "@ngrx/store";
+import {
+  getColumns,
+  getCurrentUser
+} from "state-management/selectors/user.selectors";
 
 @Injectable()
 export class UserEffects {
+  user$ = this.store.pipe(select(getCurrentUser));
+  columns$ = this.store.pipe(select(getColumns));
+
   login$ = createEffect(() =>
     this.actions$.pipe(
       ofType(fromActions.loginAction),
@@ -191,10 +206,26 @@ export class UserEffects {
     )
   );
 
+  updateUserColumns$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(
+        fromActions.selectColumnAction,
+        fromActions.deselectColumnAction,
+        fromActions.deselectAllCustomColumnsAction
+      ),
+      withLatestFrom(this.columns$),
+      map(([action, columns]) => columns),
+      map(columns =>
+        fromActions.updateUserSettingsAction({ property: { columns } })
+      )
+    )
+  );
+
   updateUserSettings$ = createEffect(() =>
     this.actions$.pipe(
       ofType(fromActions.updateUserSettingsAction),
-      switchMap(({ id, property }) =>
+      withLatestFrom(this.user$),
+      switchMap(([{ property }, { id }]) =>
         this.userApi.updateSettings(id, property).pipe(
           map(userSettings =>
             fromActions.updateUserSettingsCompleteAction({ userSettings })
@@ -222,6 +253,7 @@ export class UserEffects {
     private activeDirAuthService: ADAuthService,
     private loopBackAuth: LoopBackAuth,
     private router: Router,
+    private store: Store<User>,
     private userApi: UserApi,
     private userIdentityApi: UserIdentityApi
   ) {}

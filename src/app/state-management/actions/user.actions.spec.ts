@@ -246,12 +246,10 @@ describe("User Aactions", () => {
 
   describe("updateUserSettingsAction", () => {
     it("should create an action", () => {
-      const id = "testId";
       const property = { columns: [] };
-      const action = fromActions.updateUserSettingsAction({ id, property });
+      const action = fromActions.updateUserSettingsAction({ property });
       expect({ ...action }).toEqual({
         type: "[User] Update User Settings",
-        id,
         property
       });
     });

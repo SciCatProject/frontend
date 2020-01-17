@@ -17,6 +17,11 @@ import * as fromActions from "state-management/actions/user.actions";
 import { hot, cold } from "jasmine-marbles";
 import { MessageType } from "state-management/models";
 import { Router } from "@angular/router";
+import { provideMockStore } from "@ngrx/store/testing";
+import {
+  getColumns,
+  getCurrentUser
+} from "state-management/selectors/user.selectors";
 
 describe("UserEffects", () => {
   let actions: Observable<any>;
@@ -32,6 +37,12 @@ describe("UserEffects", () => {
       providers: [
         UserEffects,
         provideMockActions(() => actions),
+        provideMockStore({
+          selectors: [
+            { selector: getCurrentUser, value: {} },
+            { selector: getColumns, value: [] }
+          ]
+        }),
         {
           provide: ADAuthService,
           useValue: jasmine.createSpyObj("activeDirAuthService", ["login"])
@@ -430,8 +441,50 @@ describe("UserEffects", () => {
     });
   });
 
+  describe("updateUserColumns$", () => {
+    const property = { columns: [] };
+    describe("ofType selectColumnAction", () => {
+      it("should dispatch an updateUserSettingsAction", () => {
+        const name = "test";
+        const columnType = "standard";
+        const action = fromActions.selectColumnAction({ name, columnType });
+        const outcome = fromActions.updateUserSettingsAction({ property });
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.updateUserColumns$).toBeObservable(expected);
+      });
+    });
+
+    describe("ofType deselectColumnAction", () => {
+      it("should dispatch an updateUserSettingsAction", () => {
+        const name = "test";
+        const columnType = "standard";
+        const action = fromActions.deselectColumnAction({ name, columnType });
+        const outcome = fromActions.updateUserSettingsAction({ property });
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.updateUserColumns$).toBeObservable(expected);
+      });
+    });
+
+    describe("ofType deselectAllCustomColumnsAction", () => {
+      it("should dispatch an updateUserSettingsAction", () => {
+        const action = fromActions.deselectAllCustomColumnsAction();
+        const outcome = fromActions.updateUserSettingsAction({ property });
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.updateUserColumns$).toBeObservable(expected);
+      });
+    });
+  });
+
   describe("updateUserSettings$", () => {
-    const id = "testId";
     const property = { columns: [] };
 
     it("should result in an updateUserSettingsCompleteAction", () => {
@@ -442,7 +495,7 @@ describe("UserEffects", () => {
         userId: "testId",
         id: "testId"
       });
-      const action = fromActions.updateUserSettingsAction({ id, property });
+      const action = fromActions.updateUserSettingsAction({ property });
       const outcome = fromActions.updateUserSettingsCompleteAction({
         userSettings
       });
@@ -456,7 +509,7 @@ describe("UserEffects", () => {
     });
 
     it("should result in an updateUserSettingsFailedAction", () => {
-      const action = fromActions.updateUserSettingsAction({ id, property });
+      const action = fromActions.updateUserSettingsAction({ property });
       const outcome = fromActions.updateUserSettingsFailedAction();
 
       actions = hot("-a", { a: action });
