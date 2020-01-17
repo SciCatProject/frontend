@@ -39,7 +39,7 @@ import {
 } from "state-management/actions/user.actions";
 
 export interface SortChangeEvent {
-  active: keyof Dataset;
+  active: string;
   direction: "asc" | "desc" | "";
 }
 
