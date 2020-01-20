@@ -219,9 +219,11 @@ export class DatasetTableComponent implements OnInit, OnDestroy, OnChanges {
       })
     );
 
-    this.displayedColumns = this.tableColumns
-      .filter(column => column.enabled)
-      .map(column => column.type + "_" + column.name);
+    if (this.tableColumns) {
+      this.displayedColumns = this.tableColumns
+        .filter(column => column.enabled)
+        .map(column => column.type + "_" + column.name);
+    }
 
     this.subscriptions.push(
       this.store.pipe(select(getDatasets)).subscribe(datasets => {
