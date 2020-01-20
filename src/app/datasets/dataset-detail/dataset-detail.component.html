@@ -92,6 +92,7 @@
           <th><mat-icon> map </mat-icon> Version</th>
           <td>{{ value }}</td>
         </tr>
+        <ng-template [ngIf]="dataset.type === 'raw'">
         <tr *ngIf="proposal" (click)="onClickProposal(proposal.proposalId)">
           <th><mat-icon> spa </mat-icon> Proposal</th>
           <td>
@@ -104,6 +105,7 @@
             <a class="related-link">{{ sample.description }}</a>
           </td>
         </tr>
+      </ng-template>
         <tr *ngIf="dataset.size as value">
           <th><mat-icon> save </mat-icon> Size</th>
           <td>{{ value | filesize }}</td>
