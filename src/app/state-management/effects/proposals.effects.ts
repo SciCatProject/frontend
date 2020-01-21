@@ -67,7 +67,7 @@ export class ProposalEffects {
     this.actions$.pipe(
       ofType(fromActions.fetchProposalAction),
       switchMap(({ proposalId }) =>
-        this.proposalApi.findById(proposalId).pipe(
+        this.proposalApi.findById(encodeURIComponent(proposalId)).pipe(
           map((proposal: Proposal) =>
             fromActions.fetchProposalCompleteAction({ proposal })
           ),
