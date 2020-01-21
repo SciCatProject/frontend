@@ -22,11 +22,6 @@ mat-card {
 
 .details-container {
   margin-top: 1em;
-
-  .no-logbook-message {
-    margin-top: 4em;
-    text-align: center;
-  }
 }
 
 @media only screen and (min-width: 1280px) {
@@ -55,4 +50,9 @@ mat-card {
   .card-button {
     margin: 1em 1em 1em 1em;
   }
+}
+
+.no-logbook-message {
+  margin-top: 4em;
+  text-align: center;
 }

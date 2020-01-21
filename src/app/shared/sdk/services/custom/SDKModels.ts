@@ -17,6 +17,7 @@ import { ShareGroup } from '../../models/ShareGroup';
 import { OrigDatablock } from '../../models/OrigDatablock';
 import { Logbook } from '../../models/Logbook';
 import { Attachment } from '../../models/Attachment';
+import { UserSetting } from '../../models/UserSetting';
 
 export interface Models { [name: string]: any }
 
@@ -41,6 +42,7 @@ export class SDKModels {
     OrigDatablock: OrigDatablock,
     Logbook: Logbook,
     Attachment: Attachment,
+    UserSetting: UserSetting,
     
   };
 

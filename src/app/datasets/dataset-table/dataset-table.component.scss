@@ -10,7 +10,7 @@
     overflow-x: scroll;
 
     mat-header-row {
-      min-width: 1275px;
+      min-width: 1200px;
       background: mat-color($primary);
     }
 
@@ -44,7 +44,7 @@
     }
 
     mat-row {
-      min-width: 1275px;
+      min-width: 1200px;
     }
 
     mat-row:hover {
@@ -53,57 +53,55 @@
     }
 
     .mat-column-standard_select {
-      min-width: 40px;
-      max-width: 40px;
+      flex: 0 0 40px;
     }
 
     .mat-column-standard_datasetName {
-      min-width: 200px;
+      flex: 1 0 200px;
     }
 
     .mat-column-standard_runNumber {
-      min-width: 70px;
+      flex: 0.5 0 60px;
     }
 
     .mat-column-standard_sourceFolder {
-      min-width: 100px;
+      flex: 0 1 90px;
     }
 
     .mat-column-standard_size {
-      min-width: 65px;
+      flex: 0.5 0 70px;
     }
 
     .mat-column-standard_creationTime {
-      min-width: 80px;
+      flex: 0 1 90px;
     }
 
     .mat-column-standard_type {
-      min-width: 50px;
+      flex: 0.5 0 70px;
     }
 
     .mat-column-standard_image {
-      min-width: 60px;
-      max-width: 60px;
+      flex: 0 0 60px;
     }
 
     .mat-column-standard_metadata {
-      min-width: 200px;
+      flex: 1 1 200px;
     }
 
     .mat-column-standard_proposalId {
-      min-width: 90px;
+      flex: 0 1 80px;
     }
 
     .mat-column-standard_ownerGroup {
-      min-width: 80px;
+      flex: 0 1 80px;
     }
 
     .mat-column-standard_dataStatus {
-      min-width: 140px;
+      flex: 1 1 120px;
     }
 
     .mat-column-standard_derivedDatasetsNum {
-      min-width: 100px;
+      flex: 0 1 80px;
     }
   }
 }

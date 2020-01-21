@@ -22,7 +22,7 @@ import {
 import { DashboardComponent } from "./dashboard.component";
 import { of } from "rxjs";
 import { addDatasetAction } from "state-management/actions/datasets.actions";
-import { DerivedDataset } from "shared/sdk";
+import { DerivedDataset, User } from "shared/sdk";
 import {
   selectColumnAction,
   deselectColumnAction
@@ -182,7 +182,7 @@ describe("DashboardComponent", () => {
 
       dispatchSpy = spyOn(store, "dispatch");
 
-      const currentUser = {
+      const currentUser = new User({
         id: "testId",
         username: "ldap.Test User",
         email: "test@email.com",
@@ -192,7 +192,7 @@ describe("DashboardComponent", () => {
         accessTokens: [],
         identities: [],
         credentials: []
-      };
+      });
 
       const dataset = new DerivedDataset({
         accessGroups: [],

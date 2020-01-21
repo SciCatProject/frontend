@@ -440,14 +440,15 @@ describe("DatasetTableComponent", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
       const event: SortChangeEvent = {
-        active: "datasetName",
+        active: "standard_datasetName",
         direction: "asc"
       };
+      const column = event.active.split("_")[1];
       component.onSortChange(event);
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        sortByColumnAction({ column: event.active, direction: event.direction })
+        sortByColumnAction({ column, direction: event.direction })
       );
     });
   });
