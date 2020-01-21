@@ -39,7 +39,7 @@ import {
 } from "state-management/actions/user.actions";
 
 export interface SortChangeEvent {
-  active: keyof Dataset;
+  active: string;
   direction: "asc" | "desc" | "";
 }
 
@@ -186,7 +186,8 @@ export class DatasetTableComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   onSortChange(event: SortChangeEvent): void {
-    const { active: column, direction } = event;
+    const { active, direction } = event;
+    const column = active.split("_")[1];
     this.store.dispatch(sortByColumnAction({ column, direction }));
   }
 
@@ -218,9 +219,11 @@ export class DatasetTableComponent implements OnInit, OnDestroy, OnChanges {
       })
     );
 
-    this.displayedColumns = this.tableColumns
-      .filter(column => column.enabled)
-      .map(column => column.type + "_" + column.name);
+    if (this.tableColumns) {
+      this.displayedColumns = this.tableColumns
+        .filter(column => column.enabled)
+        .map(column => column.type + "_" + column.name);
+    }
 
     this.subscriptions.push(
       this.store.pipe(select(getDatasets)).subscribe(datasets => {

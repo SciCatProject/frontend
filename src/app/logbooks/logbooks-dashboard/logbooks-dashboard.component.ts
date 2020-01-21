@@ -84,6 +84,7 @@ export class LogbooksDashboardComponent
     this.store.dispatch(
       changePageAction({ page: event.pageIndex, limit: event.pageSize })
     );
+    this.store.dispatch(fetchLogbookAction({ name: this.logbook.name }));
   }
 
   reverseTimeline(): void {

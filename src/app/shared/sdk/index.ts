@@ -65,6 +65,7 @@ import { ShareGroupApi } from './services/custom/ShareGroup';
 import { OrigDatablockApi } from './services/custom/OrigDatablock';
 import { LogbookApi } from './services/custom/Logbook';
 import { AttachmentApi } from './services/custom/Attachment';
+import { UserSettingApi } from './services/custom/UserSetting';
 /**
 * @module SDKBrowserModule
 * @description
@@ -112,6 +113,7 @@ export class SDKBrowserModule {
         OrigDatablockApi,
         LogbookApi,
         AttachmentApi,
+        UserSettingApi,
         internalStorageProvider,
         { provide: SDKStorage, useClass: StorageBrowser },
         { provide: SocketDriver, useClass: SocketBrowser }

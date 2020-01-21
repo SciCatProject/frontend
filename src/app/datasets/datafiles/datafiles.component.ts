@@ -33,7 +33,7 @@ export class DatafilesComponent
   areAllSelected = false;
   isNoneSelected = true;
 
-  urlPrefix: string = this.appConfig.fileserverBaseURL;
+  fileDownloadEnabled: boolean = this.appConfig.fileDownloadEnabled;
   multipleDownloadEnabled: boolean = this.appConfig.multipleDownloadEnabled;
   multipleDownloadAction: string = this.appConfig.multipleDownloadAction;
   maxFileSize: number = this.appConfig.maxDirectDownloadSize;

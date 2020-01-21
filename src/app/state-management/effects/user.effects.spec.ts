@@ -7,7 +7,8 @@ import {
   UserIdentity,
   AccessToken,
   LoopBackAuth,
-  SDKToken
+  SDKToken,
+  UserSetting
 } from "shared/sdk";
 import { ADAuthService } from "users/adauth.service";
 import { TestBed } from "@angular/core/testing";
@@ -16,6 +17,11 @@ import * as fromActions from "state-management/actions/user.actions";
 import { hot, cold } from "jasmine-marbles";
 import { MessageType } from "state-management/models";
 import { Router } from "@angular/router";
+import { provideMockStore } from "@ngrx/store/testing";
+import {
+  getColumns,
+  getCurrentUser
+} from "state-management/selectors/user.selectors";
 
 describe("UserEffects", () => {
   let actions: Observable<any>;
@@ -31,6 +37,12 @@ describe("UserEffects", () => {
       providers: [
         UserEffects,
         provideMockActions(() => actions),
+        provideMockStore({
+          selectors: [
+            { selector: getCurrentUser, value: {} },
+            { selector: getColumns, value: [] }
+          ]
+        }),
         {
           provide: ADAuthService,
           useValue: jasmine.createSpyObj("activeDirAuthService", ["login"])
@@ -47,6 +59,8 @@ describe("UserEffects", () => {
             "isAuthenticated",
             "logout",
             "getCurrent",
+            "getSettings",
+            "updateSettings",
             "getCurrentToken"
           ])
         },
@@ -326,18 +340,23 @@ describe("UserEffects", () => {
   });
 
   describe("fetchCurrentUser$", () => {
-    it("should result in a fetchCurrentUserCompleteAction and a fetchUserIdentityAction", () => {
+    it("should result in a fetchCurrentUserCompleteAction, a fetchUserIdentityAction, and a fetchUserSettingsAction", () => {
       const user = new User();
       user.id = "testId";
       const action = fromActions.fetchCurrentUserAction();
       const outcome1 = fromActions.fetchCurrentUserCompleteAction({ user });
       const outcome2 = fromActions.fetchUserIdentityAction({ id: user.id });
+      const outcome3 = fromActions.fetchUserSettingsAction({ id: user.id });
 
       actions = hot("-a", { a: action });
       const response = cold("-a|", { a: user });
       userApi.getCurrent.and.returnValue(response);
 
-      const expected = cold("--(bc)", { b: outcome1, c: outcome2 });
+      const expected = cold("--(bcd)", {
+        b: outcome1,
+        c: outcome2,
+        d: outcome3
+      });
       expect(effects.fetchCurrentUser$).toBeObservable(expected);
     });
 
@@ -382,6 +401,123 @@ describe("UserEffects", () => {
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchUserIdentity$).toBeObservable(expected);
+    });
+  });
+
+  describe("fetchUserSettings$", () => {
+    const id = "testId";
+
+    it("should result in a fetchUserSettingsCompleteAction", () => {
+      const userSettings = new UserSetting({
+        columns: [],
+        datasetCount: 25,
+        jobCount: 25,
+        userId: "testId",
+        id: "testId"
+      });
+      const action = fromActions.fetchUserSettingsAction({ id });
+      const outcome = fromActions.fetchUserSettingsCompleteAction({
+        userSettings
+      });
+
+      actions = hot("-a", { a: action });
+      const response = cold("-a|", { a: userSettings });
+      userApi.getSettings.and.returnValue(response);
+
+      const expected = cold("--b", { b: outcome });
+      expect(effects.fetchUserSettings$).toBeObservable(expected);
+    });
+
+    it("should result in a fetchUserSettingsFailedAction", () => {
+      const action = fromActions.fetchUserSettingsAction({ id });
+      const outcome = fromActions.fetchUserSettingsFailedAction();
+
+      actions = hot("-a", { a: action });
+      const response = cold("-#", {});
+      userApi.getSettings.and.returnValue(response);
+
+      const expected = cold("--b", { b: outcome });
+      expect(effects.fetchUserSettings$).toBeObservable(expected);
+    });
+  });
+
+  describe("updateUserColumns$", () => {
+    const property = { columns: [] };
+    describe("ofType selectColumnAction", () => {
+      it("should dispatch an updateUserSettingsAction", () => {
+        const name = "test";
+        const columnType = "standard";
+        const action = fromActions.selectColumnAction({ name, columnType });
+        const outcome = fromActions.updateUserSettingsAction({ property });
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.updateUserColumns$).toBeObservable(expected);
+      });
+    });
+
+    describe("ofType deselectColumnAction", () => {
+      it("should dispatch an updateUserSettingsAction", () => {
+        const name = "test";
+        const columnType = "standard";
+        const action = fromActions.deselectColumnAction({ name, columnType });
+        const outcome = fromActions.updateUserSettingsAction({ property });
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.updateUserColumns$).toBeObservable(expected);
+      });
+    });
+
+    describe("ofType deselectAllCustomColumnsAction", () => {
+      it("should dispatch an updateUserSettingsAction", () => {
+        const action = fromActions.deselectAllCustomColumnsAction();
+        const outcome = fromActions.updateUserSettingsAction({ property });
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.updateUserColumns$).toBeObservable(expected);
+      });
+    });
+  });
+
+  describe("updateUserSettings$", () => {
+    const property = { columns: [] };
+
+    it("should result in an updateUserSettingsCompleteAction", () => {
+      const userSettings = new UserSetting({
+        columns: [],
+        datasetCount: 25,
+        jobCount: 25,
+        userId: "testId",
+        id: "testId"
+      });
+      const action = fromActions.updateUserSettingsAction({ property });
+      const outcome = fromActions.updateUserSettingsCompleteAction({
+        userSettings
+      });
+
+      actions = hot("-a", { a: action });
+      const response = cold("-a|", { a: userSettings });
+      userApi.updateSettings.and.returnValue(response);
+
+      const expected = cold("--b", { b: outcome });
+      expect(effects.updateUserSettings$).toBeObservable(expected);
+    });
+
+    it("should result in an updateUserSettingsFailedAction", () => {
+      const action = fromActions.updateUserSettingsAction({ property });
+      const outcome = fromActions.updateUserSettingsFailedAction();
+
+      actions = hot("-a", { a: action });
+      const response = cold("-#", {});
+      userApi.updateSettings.and.returnValue(response);
+
+      const expected = cold("--b", { b: outcome });
+      expect(effects.updateUserSettings$).toBeObservable(expected);
     });
   });
 

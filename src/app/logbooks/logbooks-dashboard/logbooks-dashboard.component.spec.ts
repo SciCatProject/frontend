@@ -159,9 +159,10 @@ describe("DashboardComponent", () => {
   });
 
   describe("#onPageChange()", () => {
-    it("should dispatch a changePageAction", () => {
+    it("should dispatch a changePageAction and a fetchLogbookAction", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
+      component.logbook = logbook;
       const event: PageChangeEvent = {
         pageIndex: 1,
         pageSize: 25,
@@ -170,9 +171,12 @@ describe("DashboardComponent", () => {
 
       component.onPageChange(event);
 
-      expect(dispatchSpy).toHaveBeenCalledTimes(1);
+      expect(dispatchSpy).toHaveBeenCalledTimes(2);
       expect(dispatchSpy).toHaveBeenCalledWith(
         changePageAction({ page: event.pageIndex, limit: event.pageSize })
+      );
+      expect(dispatchSpy).toHaveBeenCalledWith(
+        fetchLogbookAction({ name: logbook.name })
       );
     });
   });

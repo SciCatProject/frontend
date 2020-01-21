@@ -1,5 +1,5 @@
 import { createAction, props } from "@ngrx/store";
-import { User, AccessToken, UserIdentity } from "shared/sdk";
+import { User, AccessToken, UserIdentity, UserSetting } from "shared/sdk";
 import { Message, Settings } from "state-management/models";
 
 export const loginAction = createAction(
@@ -63,6 +63,30 @@ export const fetchUserIdentityCompleteAction = createAction(
 );
 export const fetchUserIdentityFailedAction = createAction(
   "[User] Fetch User Identity Failed"
+);
+
+export const fetchUserSettingsAction = createAction(
+  "[User] Fetch User Settings",
+  props<{ id: string }>()
+);
+export const fetchUserSettingsCompleteAction = createAction(
+  "[User] Fetch User Settings Complete",
+  props<{ userSettings: UserSetting }>()
+);
+export const fetchUserSettingsFailedAction = createAction(
+  "[User] Fetch User Settings Failed"
+);
+
+export const updateUserSettingsAction = createAction(
+  "[User] Update User Settings",
+  props<{ property: object }>()
+);
+export const updateUserSettingsCompleteAction = createAction(
+  "[User] Update User Settings Complete",
+  props<{ userSettings: UserSetting }>()
+);
+export const updateUserSettingsFailedAction = createAction(
+  "[User] Update User Settings Failed"
 );
 
 export const fetchCatamelTokenAction = createAction(

@@ -18,7 +18,6 @@ export class LogbooksDetailComponent {
   displayedColumns: string[] = ["timestamp", "sender", "entry"];
 
   doPageChange(event: PageChangeEvent) {
-    console.log("PageChange", event);
     this.pageChange.emit(event);
   }
 }

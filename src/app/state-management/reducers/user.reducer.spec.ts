@@ -2,7 +2,7 @@ import { userReducer } from "./user.reducer";
 import { initialUserState } from "../state/user.store";
 import * as fromActions from "../actions/user.actions";
 import { User, MessageType, Message, Settings, UserIdentity } from "../models";
-import { AccessToken } from "shared/sdk";
+import { AccessToken, UserSetting } from "shared/sdk";
 
 describe("UserReducer", () => {
   describe("on loginAction", () => {
@@ -64,6 +64,82 @@ describe("UserReducer", () => {
       const state = userReducer(initialUserState, action);
 
       expect(state.profile).toEqual(userIdentity.profile);
+    });
+  });
+
+  describe("on fetchUserSettingsCompleteAction", () => {
+    it("should set jobCount and datasetCount settings, and columns if not empty", () => {
+      const userSettings = new UserSetting({
+        columns: [{ name: "test", order: 0, type: "standard", enabled: true }],
+        datasetCount: 50,
+        jobCount: 50,
+        userId: "testId",
+        id: "testId"
+      });
+      const action = fromActions.fetchUserSettingsCompleteAction({
+        userSettings
+      });
+      const state = userReducer(initialUserState, action);
+
+      expect(state.settings.datasetCount).toEqual(userSettings.datasetCount);
+      expect(state.settings.jobCount).toEqual(userSettings.jobCount);
+      expect(state.columns).toEqual(userSettings.columns);
+    });
+
+    it("should set jobCount and datasetCount settings, and not columns if empty", () => {
+      const userSettings = new UserSetting({
+        columns: [],
+        datasetCount: 50,
+        jobCount: 50,
+        userId: "testId",
+        id: "testId"
+      });
+      const action = fromActions.fetchUserSettingsCompleteAction({
+        userSettings
+      });
+      const state = userReducer(initialUserState, action);
+
+      expect(state.settings.datasetCount).toEqual(userSettings.datasetCount);
+      expect(state.settings.jobCount).toEqual(userSettings.jobCount);
+      expect(state.columns).toEqual(initialUserState.columns);
+    });
+  });
+
+  describe("on updateUserSettingsCompleteAction", () => {
+    it("should set jobCount and datasetCount settings, and columns if not empty", () => {
+      const userSettings = new UserSetting({
+        columns: [{ name: "test", order: 0, type: "standard", enabled: true }],
+        datasetCount: 50,
+        jobCount: 50,
+        userId: "testId",
+        id: "testId"
+      });
+      const action = fromActions.updateUserSettingsCompleteAction({
+        userSettings
+      });
+      const state = userReducer(initialUserState, action);
+
+      expect(state.settings.datasetCount).toEqual(userSettings.datasetCount);
+      expect(state.settings.jobCount).toEqual(userSettings.jobCount);
+      expect(state.columns).toEqual(userSettings.columns);
+    });
+
+    it("should set jobCount and datasetCount settings, and not columns if empty", () => {
+      const userSettings = new UserSetting({
+        columns: [],
+        datasetCount: 50,
+        jobCount: 50,
+        userId: "testId",
+        id: "testId"
+      });
+      const action = fromActions.updateUserSettingsCompleteAction({
+        userSettings
+      });
+      const state = userReducer(initialUserState, action);
+
+      expect(state.settings.datasetCount).toEqual(userSettings.datasetCount);
+      expect(state.settings.jobCount).toEqual(userSettings.jobCount);
+      expect(state.columns).toEqual(initialUserState.columns);
     });
   });
 
