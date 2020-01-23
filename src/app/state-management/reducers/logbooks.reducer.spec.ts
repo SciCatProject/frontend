@@ -70,17 +70,18 @@ describe("LogbooksReducer", () => {
   });
 
   describe("on setTextFilterAction", () => {
-    it("should set textSearch filter", () => {
+    it("should set textSearch filter and set skip filter to 0", () => {
       const textSearch = "test";
       const action = fromActions.setTextFilterAction({ textSearch });
       const state = logbooksReducer(initialLogbookState, action);
 
       expect(state.filters.textSearch).toEqual(textSearch);
+      expect(state.filters.skip).toEqual(0);
     });
   });
 
   describe("on setDisplayFiltersAction", () => {
-    it("should set showBotMessages, showImages and showUserMessages filters", () => {
+    it("should set showBotMessages, showImages and showUserMessages filters, and set skip filter to 0", () => {
       const showBotMessages = true;
       const showImages = true;
       const showUserMessages = false;
@@ -94,6 +95,7 @@ describe("LogbooksReducer", () => {
       expect(state.filters.showBotMessages).toEqual(showBotMessages);
       expect(state.filters.showImages).toEqual(showImages);
       expect(state.filters.showUserMessages).toEqual(showUserMessages);
+      expect(state.filters.skip).toEqual(0);
     });
   });
 
