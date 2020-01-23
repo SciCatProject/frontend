@@ -34,7 +34,7 @@ const reducer = createReducer(
   }),
 
   on(fromActions.setTextFilterAction, (state, { textSearch }) => {
-    const filters = { ...state.filters, textSearch };
+    const filters = { ...state.filters, textSearch, skip: 0 };
     return { ...state, filters };
   }),
 
@@ -45,7 +45,8 @@ const reducer = createReducer(
         ...state.filters,
         showBotMessages,
         showImages,
-        showUserMessages
+        showUserMessages,
+        skip: 0
       };
       return { ...state, filters };
     }
