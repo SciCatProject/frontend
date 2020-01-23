@@ -4,10 +4,20 @@ services:
     image: "bitnami/mongodb:latest"
     volumes:
       - "mongodb_data:/bitnami"
-  catamel:
-    image: "dacat/catamel"
+  scichat-loopback:
+    image: "dacat/scichat-loopback:latest"
+    environment: 
+      - SYNAPSE_BOT_NAME
+      - SYNAPSE_BOT_PASSWORD
     depends_on:
       - mongodb
+  catamel:
+    image: "dacat/catamel:latest"
+    environment: 
+      - SCICHAT_URL
+    depends_on:
+      - mongodb
+      - scichat-loopback
   catanie:
     image: "dacat/catanie:e2e"
     command: ["./wait-for-it.sh", "catamel:3000", "--", "nginx", "-g", "daemon off;"]

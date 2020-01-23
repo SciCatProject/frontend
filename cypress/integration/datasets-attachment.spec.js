@@ -13,6 +13,10 @@ describe("Datasets", () => {
   });
 
   afterEach(() => {
+    cy.login(
+      Cypress.config("secondaryUsername"),
+      Cypress.config("secondaryPassword")
+    );
     cy.removeDatasets();
   });
 

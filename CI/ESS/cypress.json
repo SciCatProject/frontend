@@ -3,5 +3,7 @@
   "lbBaseUrl": "http://catamel:3000/api/v3",
   "viewportWidth": 1280,
   "username": "admin",
-  "password": "2jf70TPNZsS"
+  "password": "2jf70TPNZsS",
+  "secondaryUsername": "archiveManager",
+  "secondaryPassword": "aman"
 }
