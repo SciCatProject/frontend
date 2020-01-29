@@ -12,7 +12,7 @@ import { fetchMetadataKeysAction } from "state-management/actions/datasets.actio
 export class ScientificConditionDialogComponent {
   public lhs = "";
   public rhs = "";
-  public relation = "EQUAL_TO_NUMERIC";
+  public relation = "GREATER_THAN";
 
   onChange(metadataKey: string) {
     this.store.dispatch(fetchMetadataKeysAction({ metadataKey }));
