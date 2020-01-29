@@ -164,17 +164,9 @@
   </mat-form-field>
 
   <div class="section-container" *ngIf="appConfig.scienceSearchEnabled">
-    <span class="title">Scientific Conditions</span>
-    <button
-      mat-button
-      class="clear-button"
-      color="primary"
-      (click)="showAddConditionDialog()"
-    >
-      <mat-icon>add</mat-icon> Add
+    <button mat-button color="primary" (click)="showAddConditionDialog()">
+      <mat-icon>add</mat-icon> Add Condition
     </button>
-
-    <div style="clear: both"></div>
 
     <mat-chip-list class="scientific-chips" aria-orientation="vertical">
       <mat-chip
