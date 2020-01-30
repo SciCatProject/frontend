@@ -441,6 +441,19 @@ describe("UserEffects", () => {
     });
   });
 
+  describe("addCustomColumns$", () => {
+    it("should result in an addCustomColumnsCompleteAction", () => {
+      const names = ["test"];
+      const action = fromActions.addCustomColumnsAction({ names });
+      const outcome = fromActions.addCustomColumnsCompleteAction();
+
+      actions = hot("-a", { a: action });
+
+      const expected = cold("-b", { b: outcome });
+      expect(effects.addCustomColumns$).toBeObservable(expected);
+    });
+  });
+
   describe("updateUserColumns$", () => {
     const property = { columns: [] };
     describe("ofType selectColumnAction", () => {
@@ -474,6 +487,18 @@ describe("UserEffects", () => {
     describe("ofType deselectAllCustomColumnsAction", () => {
       it("should dispatch an updateUserSettingsAction", () => {
         const action = fromActions.deselectAllCustomColumnsAction();
+        const outcome = fromActions.updateUserSettingsAction({ property });
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.updateUserColumns$).toBeObservable(expected);
+      });
+    });
+
+    describe("ofType addCustomColumnsCompleteAction", () => {
+      it("should dispatch an updateUserSettingsAction", () => {
+        const action = fromActions.addCustomColumnsCompleteAction();
         const outcome = fromActions.updateUserSettingsAction({ property });
 
         actions = hot("-a", { a: action });

@@ -22,6 +22,7 @@ import {
   loadingCompleteAction,
   addCustomColumnsAction
 } from "state-management/actions/user.actions";
+import { ScientificCondition } from "state-management/models";
 
 const data: DatasetInterface = {
   owner: "",
@@ -180,6 +181,57 @@ describe("DatasetEffects", () => {
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchMetadataKeys$).toBeObservable(expected);
+    });
+  });
+
+  describe("updateMetadataKeys$", () => {
+    describe("ofType addScientificConditionAction", () => {
+      it("should result in a fetchMetadataKeysAction", () => {
+        const condition: ScientificCondition = {
+          lhs: "test",
+          relation: "EQUAL_TO_NUMERIC",
+          rhs: 1000
+        };
+        const action = fromActions.addScientificConditionAction({ condition });
+        const outcome = fromActions.fetchMetadataKeysAction({
+          metadataKey: ""
+        });
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.updateMetadataKeys$).toBeObservable(expected);
+      });
+    });
+
+    describe("ofType removeScientificConditionAction", () => {
+      it("should result in a fetchMetadataKeysAction", () => {
+        const action = fromActions.removeScientificConditionAction({
+          index: 0
+        });
+        const outcome = fromActions.fetchMetadataKeysAction({
+          metadataKey: ""
+        });
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.updateMetadataKeys$).toBeObservable(expected);
+      });
+    });
+
+    describe("ofType clearFacetsAction", () => {
+      it("should result in a fetchMetadataKeysAction", () => {
+        const action = fromActions.clearFacetsAction();
+        const outcome = fromActions.fetchMetadataKeysAction({
+          metadataKey: ""
+        });
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.updateMetadataKeys$).toBeObservable(expected);
+      });
     });
   });
 

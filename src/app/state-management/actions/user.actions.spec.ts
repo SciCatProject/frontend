@@ -331,13 +331,22 @@ describe("User Aactions", () => {
     });
   });
 
-  describe("addColumnsAction", () => {
+  describe("addCustomColumnsAction", () => {
     it("should create an action", () => {
       const names = ["test"];
       const action = fromActions.addCustomColumnsAction({ names });
       expect({ ...action }).toEqual({
         type: "[User] Add Custom Columns",
         names
+      });
+    });
+  });
+
+  describe("addCustomColumnsCompleteAction", () => {
+    it("should create an action", () => {
+      const action = fromActions.addCustomColumnsCompleteAction();
+      expect({ ...action }).toEqual({
+        type: "[User] Add Custom Columns Complete"
       });
     });
   });
