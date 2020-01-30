@@ -70,6 +70,17 @@ export class DatasetEffects {
     )
   );
 
+  updateMetadataKeys$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(
+        fromActions.addScientificConditionAction,
+        fromActions.removeScientificConditionAction,
+        fromActions.clearFacetsAction
+      ),
+      map(() => fromActions.fetchMetadataKeysAction({ metadataKey: "" }))
+    )
+  );
+
   fetchMetadataKeys$ = createEffect(() =>
     this.actions$.pipe(
       ofType(fromActions.fetchMetadataKeysAction),

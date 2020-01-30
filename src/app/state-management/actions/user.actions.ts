@@ -1,6 +1,6 @@
 import { createAction, props } from "@ngrx/store";
 import { User, AccessToken, UserIdentity, UserSetting } from "shared/sdk";
-import { Message, Settings } from "state-management/models";
+import { Message, Settings, TableColumn } from "state-management/models";
 
 export const loginAction = createAction(
   "[User] Login",
@@ -107,6 +107,9 @@ export const logoutFailedAction = createAction("[User] Logout Failed");
 export const addCustomColumnsAction = createAction(
   "[User] Add Custom Columns",
   props<{ names: string[] }>()
+);
+export const addCustomColumnsCompleteAction = createAction(
+  "[User] Add Custom Columns Complete"
 );
 
 export const selectColumnAction = createAction(
