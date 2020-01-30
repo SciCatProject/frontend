@@ -77,18 +77,33 @@ const reducer = createReducer(
       column => column.type === "standard"
     );
 
+    let order = standardColumns.length;
+
     const enabledCustomColumns = existingColumns.filter(
       column => column.type === "custom" && column.enabled
     );
+
+    enabledCustomColumns.forEach(column => {
+      column.order = order;
+      order++;
+    });
+
     const enabledCustomColumnNames = enabledCustomColumns.map(
       column => column.name
     );
 
-    const order = existingColumns.length;
-
     const newColumns = names
       .filter(name => !enabledCustomColumnNames.includes(name))
-      .map(name => ({ name, order, type: "custom", enabled: false }));
+      .map(name => {
+        const column: TableColumn = {
+          name,
+          order,
+          type: "custom",
+          enabled: false
+        };
+        order++;
+        return column;
+      });
 
     const columns = standardColumns
       .concat(enabledCustomColumns)
