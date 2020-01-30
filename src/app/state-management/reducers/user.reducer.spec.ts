@@ -165,7 +165,7 @@ describe("UserReducer", () => {
   describe("on addColumnAction", () => {
     it("should append a new column to the columns property", () => {
       const names = ["test"];
-      const action = fromActions.addColumnsAction({ names });
+      const action = fromActions.addCustomColumnsAction({ names });
       const state = userReducer(initialUserState, action);
 
       expect(state.columns[state.columns.length - 1].name).toEqual("test");
@@ -211,7 +211,7 @@ describe("UserReducer", () => {
   describe("on deselectAllCustomColumnsAction", () => {
     it("should set enabled to false for all custom columns", () => {
       const names = ["test"];
-      const addColumnsAction = fromActions.addColumnsAction({ names });
+      const addColumnsAction = fromActions.addCustomColumnsAction({ names });
       const firstState = userReducer(initialUserState, addColumnsAction);
       const selectColumnAction = fromActions.selectColumnAction({
         name: "test",

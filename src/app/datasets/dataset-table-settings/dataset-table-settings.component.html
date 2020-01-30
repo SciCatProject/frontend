@@ -13,6 +13,7 @@
 <div style="clear: both"></div>
 
 <app-search-bar
+  [clear]="clearSearchBar"
   (onSearch)="searchColumns($event)"
   (onFocus)="searchColumns($event)"
 ></app-search-bar>

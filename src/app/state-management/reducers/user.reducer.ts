@@ -70,27 +70,30 @@ const reducer = createReducer(
     ...initialUserState
   })),
 
-  on(fromActions.addColumnsAction, (state, { names }) => {
+  on(fromActions.addCustomColumnsAction, (state, { names }) => {
     const existingColumns = [...state.columns];
-    const existingColumnNames = existingColumns
-      .filter(column => column.type === "custom")
-      .map(column => column.name);
 
-    let order = existingColumns.length;
+    const standardColumns = existingColumns.filter(
+      column => column.type === "standard"
+    );
+
+    const enabledCustomColumns = existingColumns.filter(
+      column => column.type === "custom" && column.enabled
+    );
+    const enabledCustomColumnNames = enabledCustomColumns.map(
+      column => column.name
+    );
+
+    const order = existingColumns.length;
+
     const newColumns = names
-      .filter(name => !existingColumnNames.includes(name))
-      .map(name => {
-        const column: TableColumn = {
-          name,
-          order,
-          type: "custom",
-          enabled: false
-        };
-        order++;
-        return column;
-      });
+      .filter(name => !enabledCustomColumnNames.includes(name))
+      .map(name => ({ name, order, type: "custom", enabled: false }));
 
-    const columns = existingColumns.concat(newColumns);
+    const columns = standardColumns
+      .concat(enabledCustomColumns)
+      .concat(newColumns);
+
     return { ...state, columns };
   }),
 

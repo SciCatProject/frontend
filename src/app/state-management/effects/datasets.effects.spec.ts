@@ -20,7 +20,7 @@ import {
 import {
   loadingAction,
   loadingCompleteAction,
-  addColumnsAction
+  addCustomColumnsAction
 } from "state-management/actions/user.actions";
 
 const data: DatasetInterface = {
@@ -189,7 +189,7 @@ describe("DatasetEffects", () => {
       const action = fromActions.fetchMetadataKeysCompleteAction({
         metadataKeys
       });
-      const outcome = addColumnsAction({ names: ["test"] });
+      const outcome = addCustomColumnsAction({ names: ["test"] });
 
       actions = hot("-a", { a: action });
 

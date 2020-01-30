@@ -334,9 +334,9 @@ describe("User Aactions", () => {
   describe("addColumnsAction", () => {
     it("should create an action", () => {
       const names = ["test"];
-      const action = fromActions.addColumnsAction({ names });
+      const action = fromActions.addCustomColumnsAction({ names });
       expect({ ...action }).toEqual({
-        type: "[User] Add Column",
+        type: "[User] Add Custom Columns",
         names
       });
     });

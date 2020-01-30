@@ -23,7 +23,7 @@ import {
   logoutCompleteAction,
   loadingAction,
   loadingCompleteAction,
-  addColumnsAction
+  addCustomColumnsAction
 } from "state-management/actions/user.actions";
 
 @Injectable()
@@ -74,17 +74,15 @@ export class DatasetEffects {
     this.actions$.pipe(
       ofType(fromActions.fetchMetadataKeysAction),
       withLatestFrom(this.fullqueryParams$),
-      mergeMap(([{ metadataKey }, { query, limits }]) => {
+      mergeMap(([{ metadataKey }, { query }]) => {
         const parsedQuery = JSON.parse(query);
         parsedQuery.metadataKey = metadataKey;
-        return this.datasetApi
-          .metadataKeys(JSON.stringify(parsedQuery), limits)
-          .pipe(
-            map(metadataKeys =>
-              fromActions.fetchMetadataKeysCompleteAction({ metadataKeys })
-            ),
-            catchError(() => of(fromActions.fetchMetadataKeysFailedAction()))
-          );
+        return this.datasetApi.metadataKeys(JSON.stringify(parsedQuery)).pipe(
+          map(metadataKeys =>
+            fromActions.fetchMetadataKeysCompleteAction({ metadataKeys })
+          ),
+          catchError(() => of(fromActions.fetchMetadataKeysFailedAction()))
+        );
       })
     )
   );
@@ -93,7 +91,7 @@ export class DatasetEffects {
     this.actions$.pipe(
       ofType(fromActions.fetchMetadataKeysCompleteAction),
       switchMap(({ metadataKeys }) =>
-        of(addColumnsAction({ names: metadataKeys }))
+        of(addCustomColumnsAction({ names: metadataKeys }))
       )
     )
   );

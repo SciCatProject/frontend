@@ -13,6 +13,7 @@ export interface SelectColumnEvent {
   styleUrls: ["./dataset-table-settings.component.scss"]
 })
 export class DatasetTableSettingsComponent {
+  @Input() clearSearchBar = false;
   @Input() selectableColumns: TableColumn[] = [];
   filteredColumns: TableColumn[];
 
