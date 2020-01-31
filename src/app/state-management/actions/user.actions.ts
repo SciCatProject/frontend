@@ -1,6 +1,6 @@
 import { createAction, props } from "@ngrx/store";
 import { User, AccessToken, UserIdentity, UserSetting } from "shared/sdk";
-import { Message, Settings, TableColumn } from "state-management/models";
+import { Message, Settings } from "state-management/models";
 
 export const loginAction = createAction(
   "[User] Login",
