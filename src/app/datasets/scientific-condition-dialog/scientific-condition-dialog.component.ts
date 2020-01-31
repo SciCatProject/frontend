@@ -13,7 +13,7 @@ export class ScientificConditionDialogComponent {
   metadataKeys$ = this.store.pipe(select(getMetadataKeys));
   public lhs = "";
   public rhs = "";
-  public relation = "EQUAL_TO_NUMERIC";
+  public relation = "GREATER_THAN";
 
   onChange(metadataKey: string) {
     this.store.dispatch(fetchMetadataKeysAction({ metadataKey }));
