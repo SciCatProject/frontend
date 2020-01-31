@@ -21,7 +21,10 @@ import {
 } from "../../shared/MockStubs";
 import { DashboardComponent } from "./dashboard.component";
 import { of } from "rxjs";
-import { addDatasetAction } from "state-management/actions/datasets.actions";
+import {
+  addDatasetAction,
+  fetchMetadataKeysAction
+} from "state-management/actions/datasets.actions";
 import { DerivedDataset, User } from "shared/sdk";
 import {
   selectColumnAction,
@@ -123,6 +126,20 @@ describe("DashboardComponent", () => {
       component.onCloseClick();
 
       expect(closeSpy).toHaveBeenCalled();
+    });
+  });
+
+  describe("#onColumnSearch()", () => {
+    it("should dispatch a fetchMetadataKeysAction", () => {
+      dispatchSpy = spyOn(store, "dispatch");
+
+      const metadataKey = "test";
+      component.onColumnSearch(metadataKey);
+
+      expect(dispatchSpy).toHaveBeenCalledTimes(1);
+      expect(dispatchSpy).toHaveBeenCalledWith(
+        fetchMetadataKeysAction({ metadataKey })
+      );
     });
   });
 
