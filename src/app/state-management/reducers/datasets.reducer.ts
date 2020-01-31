@@ -22,10 +22,10 @@ const reducer = createReducer(
     })
   ),
 
-  on(fromActions.fetchMetadataKeysCompleteAction, (state, { metadataKeys }) => {
-    console.log("metadataKeys count: ", metadataKeys.length);
-    return { ...state, metadataKeys };
-  }),
+  on(
+    fromActions.fetchMetadataKeysCompleteAction,
+    (state, { metadataKeys }) => ({ ...state, metadataKeys })
+  ),
 
   on(fromActions.fetchDatasetCompleteAction, (state, { dataset }) => ({
     ...state,

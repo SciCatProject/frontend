@@ -14,7 +14,7 @@
       (input)="onChange(lhs)"
     />
     <mat-autocomplete #metadataKeys="matAutocomplete">
-      <mat-option *ngFor="let key of data.metadataKeys$ | async" [value]="key">
+      <mat-option *ngFor="let key of metadataKeys$ | async" [value]="key">
         {{ key }}
       </mat-option>
     </mat-autocomplete>

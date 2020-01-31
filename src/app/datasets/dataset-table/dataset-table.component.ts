@@ -29,8 +29,7 @@ import {
   getDatasetsPerPage,
   getPage,
   getTotalSets,
-  getDatasetsInBatch,
-  getMetadataKeys
+  getDatasetsInBatch
 } from "state-management/selectors/datasets.selectors";
 import { PageChangeEvent } from "shared/modules/table/table.component";
 import {
@@ -57,7 +56,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy, OnChanges {
   currentPage$ = this.store.pipe(select(getPage));
   datasetsPerPage$ = this.store.pipe(select(getDatasetsPerPage));
   datasetCount$ = this.store.select(getTotalSets);
-  metadataKeys$ = this.store.pipe(select(getMetadataKeys));
 
   @Input() tableColumns: TableColumn[];
   displayedColumns: string[];

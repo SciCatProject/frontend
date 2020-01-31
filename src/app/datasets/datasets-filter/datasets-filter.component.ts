@@ -24,8 +24,7 @@ import {
   getSearchTerms,
   getTypeFacetCounts,
   getTypeFilter,
-  getKeywordsTerms,
-  getMetadataKeys
+  getKeywordsTerms
 } from "state-management/selectors/datasets.selectors";
 
 import {
@@ -77,7 +76,6 @@ export class DatasetsFilterComponent {
   keywordsFilter$ = this.store.pipe(select(getKeywordsFilter));
   creationTimeFilter$ = this.store.pipe(select(getCreationTimeFilter));
   scientificConditions$ = this.store.pipe(select(getScientificConditions));
-  metadataKeys$ = this.store.pipe(select(getMetadataKeys));
 
   locationInput$ = new BehaviorSubject<string>("");
   groupInput$ = new BehaviorSubject<string>("");
@@ -224,9 +222,7 @@ export class DatasetsFilterComponent {
 
   showAddConditionDialog() {
     this.dialog
-      .open(ScientificConditionDialogComponent, {
-        data: { metadataKeys$: this.metadataKeys$ }
-      })
+      .open(ScientificConditionDialogComponent)
       .afterClosed()
       .subscribe(res => {
         if (res) {
