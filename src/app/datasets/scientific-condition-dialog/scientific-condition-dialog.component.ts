@@ -1,15 +1,16 @@
-import { Inject, Component } from "@angular/core";
-import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material";
-import { Observable } from "rxjs";
-import { Store } from "@ngrx/store";
+import { Component } from "@angular/core";
+import { MatDialogRef } from "@angular/material";
+import { Store, select } from "@ngrx/store";
 import { Dataset } from "shared/sdk";
 import { fetchMetadataKeysAction } from "state-management/actions/datasets.actions";
+import { getMetadataKeys } from "state-management/selectors/datasets.selectors";
 
 @Component({
   selector: "scientific-condition-dialog",
   templateUrl: "scientific-condition-dialog.component.html"
 })
 export class ScientificConditionDialogComponent {
+  metadataKeys$ = this.store.pipe(select(getMetadataKeys));
   public lhs = "";
   public rhs = "";
   public relation = "GREATER_THAN";
@@ -39,10 +40,6 @@ export class ScientificConditionDialogComponent {
 
   constructor(
     public dialogRef: MatDialogRef<ScientificConditionDialogComponent>,
-    @Inject(MAT_DIALOG_DATA)
-    public data: { metadataKeys$: Observable<string[]> },
     private store: Store<Dataset>
-  ) {
-    this.store.dispatch(fetchMetadataKeysAction({ metadataKey: "" }));
-  }
+  ) {}
 }

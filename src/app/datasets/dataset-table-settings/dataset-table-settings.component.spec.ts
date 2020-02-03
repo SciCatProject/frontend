@@ -82,16 +82,19 @@ describe("DatasetTableSettingsComponent", () => {
     });
   });
 
-  describe("#searchColumns()", () => {
-    it("should set filteredColumns based on the input value", () => {
+  describe("#doSearch()", () => {
+    it("should set filteredColumns based on the input value and emit the value", () => {
+      emitSpy = spyOn(component.columnSearch, "emit");
       component.selectableColumns = [
         { name: "test", order: 0, type: "standard", enabled: true },
         { name: "filter", order: 1, type: "custom", enabled: true }
       ];
 
-      component.searchColumns("test");
+      component.doSearch("test");
 
       expect(component.filteredColumns.length).toEqual(1);
+      expect(emitSpy).toHaveBeenCalledTimes(1);
+      expect(emitSpy).toHaveBeenCalledWith("test");
     });
   });
 });

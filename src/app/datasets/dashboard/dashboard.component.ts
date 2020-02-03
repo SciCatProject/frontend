@@ -72,15 +72,26 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   currentUser: User;
   userGroups: string[];
+  clearColumnSearch = false;
 
   @ViewChild(MatSidenav, { static: false }) sideNav: MatSidenav;
 
   onSettingsClick(): void {
     this.sideNav.toggle();
+    if (this.sideNav.opened) {
+      this.clearColumnSearch = false;
+    } else {
+      this.clearColumnSearch = true;
+    }
   }
 
   onCloseClick(): void {
+    this.clearColumnSearch = true;
     this.sideNav.close();
+  }
+
+  onColumnSearch(metadataKey: string): void {
+    this.store.dispatch(fetchMetadataKeysAction({ metadataKey }));
   }
 
   onSelectColumn(event: SelectColumnEvent): void {

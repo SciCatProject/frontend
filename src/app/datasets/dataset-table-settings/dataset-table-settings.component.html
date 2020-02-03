@@ -13,8 +13,9 @@
 <div style="clear: both"></div>
 
 <app-search-bar
-  (onSearch)="searchColumns($event)"
-  (onFocus)="searchColumns($event)"
+  [clear]="clearSearchBar"
+  (onSearch)="doSearch($event)"
+  (onFocus)="doSearch($event)"
 ></app-search-bar>
 
 <table>

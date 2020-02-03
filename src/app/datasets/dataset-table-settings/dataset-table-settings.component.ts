@@ -13,11 +13,13 @@ export interface SelectColumnEvent {
   styleUrls: ["./dataset-table-settings.component.scss"]
 })
 export class DatasetTableSettingsComponent {
+  @Input() clearSearchBar = false;
   @Input() selectableColumns: TableColumn[] = [];
   filteredColumns: TableColumn[];
 
   @Output() closeClick = new EventEmitter<MouseEvent>();
   @Output() selectColumn = new EventEmitter<SelectColumnEvent>();
+  @Output() columnSearch = new EventEmitter<string>();
 
   doCloseClick(event: MouseEvent): void {
     this.closeClick.emit(event);
@@ -31,10 +33,11 @@ export class DatasetTableSettingsComponent {
     this.selectColumn.emit(selectColumnEvent);
   }
 
-  searchColumns(value: string): void {
+  doSearch(value: string): void {
     const filterValue = value.toLowerCase();
     this.filteredColumns = this.selectableColumns.filter(({ name }) =>
       name.toLowerCase().includes(filterValue)
     );
+    this.columnSearch.emit(value.trim());
   }
 }

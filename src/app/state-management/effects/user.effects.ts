@@ -17,7 +17,8 @@ import {
   catchError,
   filter,
   tap,
-  withLatestFrom
+  withLatestFrom,
+  distinctUntilChanged
 } from "rxjs/operators";
 import { of } from "rxjs";
 import { MessageType } from "state-management/models";
@@ -206,12 +207,22 @@ export class UserEffects {
     )
   );
 
+  addCustomColumns$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(fromActions.addCustomColumnsAction),
+      withLatestFrom(this.columns$),
+      distinctUntilChanged(),
+      map(() => fromActions.addCustomColumnsCompleteAction())
+    )
+  );
+
   updateUserColumns$ = createEffect(() =>
     this.actions$.pipe(
       ofType(
         fromActions.selectColumnAction,
         fromActions.deselectColumnAction,
-        fromActions.deselectAllCustomColumnsAction
+        fromActions.deselectAllCustomColumnsAction,
+        fromActions.addCustomColumnsCompleteAction
       ),
       withLatestFrom(this.columns$),
       map(([action, columns]) => columns),

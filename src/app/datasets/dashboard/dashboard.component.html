@@ -35,7 +35,9 @@
   <mat-sidenav #settings position="end" mode="push">
     <dataset-table-settings
       [selectableColumns]="selectableColumns$ | async"
+      [clearSearchBar]="clearColumnSearch"
       (closeClick)="onCloseClick()"
+      (columnSearch)="onColumnSearch($event)"
       (selectColumn)="onSelectColumn($event)"
     ></dataset-table-settings>
   </mat-sidenav>

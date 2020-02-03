@@ -104,9 +104,12 @@ export const logoutAction = createAction("[User] Logout");
 export const logoutCompleteAction = createAction("[User] Logout Complete");
 export const logoutFailedAction = createAction("[User] Logout Failed");
 
-export const addColumnsAction = createAction(
-  "[User] Add Column",
+export const addCustomColumnsAction = createAction(
+  "[User] Add Custom Columns",
   props<{ names: string[] }>()
+);
+export const addCustomColumnsCompleteAction = createAction(
+  "[User] Add Custom Columns Complete"
 );
 
 export const selectColumnAction = createAction(

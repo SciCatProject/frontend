@@ -164,7 +164,7 @@ export const getFullqueryParams = createSelector(getFilters, filter => {
 });
 
 export const getFullfacetParams = createSelector(getFilters, filter => {
-  const { skip, limit, sortField, scientific, modeToggle, ...theRest } = filter;
+  const { skip, limit, sortField, modeToggle, ...theRest } = filter;
   const fields = restrictFilter(theRest);
   const facets = [
     "type",

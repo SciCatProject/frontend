@@ -343,12 +343,7 @@
 
     <!-- Custom Columns -->
     <ng-template ngFor let-column [ngForOf]="tableColumns">
-      <ng-template
-        [ngIf]="
-          (metadataKeys$ | async).includes(column.name) &&
-          column.type === 'custom'
-        "
-      >
+      <ng-template [ngIf]="column.type === 'custom'">
         <ng-container matColumnDef="{{ column.type + '_' + column.name }}">
           <mat-header-cell *matHeaderCellDef>
             <div fxLayout="column" style="align-items: center">
