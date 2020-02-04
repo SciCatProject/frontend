@@ -1,7 +1,7 @@
 import { APP_CONFIG, AppConfig } from "app-config.module";
 import { Component, Inject } from "@angular/core";
 import { MatDatepickerInputEvent, MatDialog } from "@angular/material";
-import * as moment from "moment";
+import * as moment from "moment-timezone";
 import { select, Store } from "@ngrx/store";
 import {
   debounceTime,
@@ -205,10 +205,10 @@ export class DatasetsFilterComponent {
       const { begin, end } = event.value;
       this.store.dispatch(
         setDateRangeFilterAction({
-          begin: begin.toISOString(),
+          begin: moment(begin).tz("UTC").toISOString(),
           end: moment(end)
             .add(1, "days")
-            .toISOString()
+            .utc().format()
         })
       );
     } else {
