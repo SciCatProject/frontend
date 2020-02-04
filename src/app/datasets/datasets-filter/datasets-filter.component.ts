@@ -1,7 +1,7 @@
 import { APP_CONFIG, AppConfig } from "app-config.module";
 import { Component, Inject } from "@angular/core";
 import { MatDatepickerInputEvent, MatDialog } from "@angular/material";
-
+import * as moment from "moment";
 import { select, Store } from "@ngrx/store";
 import {
   debounceTime,
@@ -206,7 +206,9 @@ export class DatasetsFilterComponent {
       this.store.dispatch(
         setDateRangeFilterAction({
           begin: begin.toISOString(),
-          end: end.toISOString()
+          end: moment(end)
+            .add(1, "days")
+            .toISOString()
         })
       );
     } else {
