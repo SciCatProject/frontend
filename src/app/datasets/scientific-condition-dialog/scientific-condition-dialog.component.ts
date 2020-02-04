@@ -26,7 +26,6 @@ export class ScientificConditionDialogComponent {
   public units: string[] = ["K", "°C"];
 
   onChange(metadataKey: string) {
-    console.log("metadataKey", metadataKey);
     this.store.dispatch(fetchMetadataKeysAction({ metadataKey }));
   }
 
