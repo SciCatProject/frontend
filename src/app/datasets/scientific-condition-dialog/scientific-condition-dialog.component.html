@@ -1,50 +1,82 @@
 <h2 mat-dialog-title>Add Condition</h2>
-<mat-dialog-content>
-  <mat-form-field>
-    <input
-      matInput
-      autocomplete="off"
-      autocorrect="off"
-      autocapitalize="off"
-      spellcheck="false"
-      name="lhs"
-      placeholder="Field"
-      [(ngModel)]="lhs"
-      [matAutocomplete]="metadataKeys"
-      (input)="onChange(lhs)"
-    />
-    <mat-autocomplete #metadataKeys="matAutocomplete">
-      <mat-option *ngFor="let key of metadataKeys$ | async" [value]="key">
-        {{ key }}
-      </mat-option>
-    </mat-autocomplete>
-  </mat-form-field>
+<form [formGroup]="scientificForm">
+  <mat-dialog-content>
+    <mat-form-field>
+      <input
+        matInput
+        autocomplete="off"
+        autocorrect="off"
+        autocapitalize="off"
+        spellcheck="false"
+        name="lhs"
+        placeholder="Field"
+        formControlName="lhs"
+        [matAutocomplete]="metadataKeys"
+        (input)="onChange(lhs)"
+        (focus)="unitDisabled()"
+      />
+      <mat-autocomplete #metadataKeys="matAutocomplete">
+        <mat-option *ngFor="let key of metadataKeys$ | async" [value]="key">
+          {{ key }}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
 
-  <mat-form-field>
-    <mat-select name="operator" [(ngModel)]="relation">
-      <mat-option value="GREATER_THAN">is greater than</mat-option>
-      <mat-option value="LESS_THAN">is less than</mat-option>
-      <mat-option value="EQUAL_TO_NUMERIC">is equal to (numeric)</mat-option>
-      <mat-option value="EQUAL_TO_STRING">is equal to (string)</mat-option>
-    </mat-select>
-  </mat-form-field>
+    <mat-form-field>
+      <mat-select
+        name="operator"
+        formControlName="relation"
+        (selectionChange)="unitDisabled()"
+      >
+        <mat-option value="GREATER_THAN">is greater than</mat-option>
+        <mat-option value="LESS_THAN">is less than</mat-option>
+        <mat-option value="EQUAL_TO_NUMERIC">is equal to (numeric)</mat-option>
+        <mat-option value="EQUAL_TO_STRING">is equal to (string)</mat-option>
+      </mat-select>
+    </mat-form-field>
 
-  <mat-form-field>
-    <input
-      matInput
-      autocomplete="off"
-      autocorrect="off"
-      autocapitalize="off"
-      spellcheck="false"
-      name="rhs"
-      placeholder="Value"
-      [(ngModel)]="rhs"
-    />
-  </mat-form-field>
-</mat-dialog-content>
-<mat-dialog-actions [attr.align]="'end'">
-  <button mat-button (click)="cancel()">Cancel</button>
-  <button mat-button (click)="add()" color="primary" [disabled]="isInvalid()">
-    Add
-  </button>
-</mat-dialog-actions>
+    <mat-form-field>
+      <input
+        matInput
+        autocomplete="off"
+        autocorrect="off"
+        autocapitalize="off"
+        spellcheck="false"
+        name="rhs"
+        placeholder="Value"
+        formControlName="rhs"
+      />
+    </mat-form-field>
+
+    <mat-form-field>
+      <input
+        matInput
+        autocomplete="off"
+        autocorrect="off"
+        autocapitalize="off"
+        spellcheck="false"
+        name="rhsUnit"
+        placeholder="Unit"
+        formControlName="unit"
+        [matAutocomplete]="rhsUnits"
+      />
+      <mat-autocomplete #rhsUnits="matAutocomplete">
+        <mat-option *ngFor="let unit of units" [value]="unit">
+          {{ unit }}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+  </mat-dialog-content>
+  <mat-dialog-actions [attr.align]="'end'">
+    <button mat-button (click)="cancel()">Cancel</button>
+    <button
+      mat-button
+      type="submit"
+      (click)="add()"
+      color="primary"
+      [disabled]="isInvalid()"
+    >
+      Add
+    </button>
+  </mat-dialog-actions>
+</form>
