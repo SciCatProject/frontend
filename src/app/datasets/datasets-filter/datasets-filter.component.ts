@@ -1,7 +1,8 @@
 import { APP_CONFIG, AppConfig } from "app-config.module";
 import { Component, Inject } from "@angular/core";
 import { MatDatepickerInputEvent, MatDialog } from "@angular/material";
-import * as moment from "moment-timezone";
+import * as moment from "moment";
+import "moment-timezone";
 import { select, Store } from "@ngrx/store";
 import {
   debounceTime,

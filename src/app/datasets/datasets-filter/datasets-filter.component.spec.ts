@@ -20,6 +20,7 @@ import {
   MatDatepickerInputEvent,
   MatDialog
 } from "@angular/material";
+import * as moment from "moment";
 
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
@@ -330,12 +331,13 @@ describe("DatasetsFilterComponent", () => {
         }
       };
       component.dateChanged(event as MatDatepickerInputEvent<DateRange>);
+      const endplus1day = moment(event.value.end).add(1, "days");
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
         setDateRangeFilterAction({
           begin: event.value.begin.toISOString(),
-          end: event.value.end.toISOString()
+          end: endplus1day.toISOString()
         })
       );
     });
