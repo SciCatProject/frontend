@@ -61,7 +61,7 @@
         [matAutocomplete]="rhsUnits"
       />
       <mat-autocomplete #rhsUnits="matAutocomplete">
-        <mat-option *ngFor="let unit of units" [value]="unit">
+        <mat-option *ngFor="let unit of filteredUnits$ | async" [value]="unit">
           {{ unit }}
         </mat-option>
       </mat-autocomplete>
