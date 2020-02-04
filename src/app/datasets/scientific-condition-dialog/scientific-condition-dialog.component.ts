@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component } from "@angular/core";
 import { MatDialogRef } from "@angular/material";
 import { Store, select } from "@ngrx/store";
 import { Dataset } from "shared/sdk";
@@ -6,13 +6,12 @@ import { fetchMetadataKeysAction } from "state-management/actions/datasets.actio
 import { getMetadataKeys } from "state-management/selectors/datasets.selectors";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { startWith, map } from "rxjs/operators";
-import { Observable } from "rxjs";
 
 @Component({
   selector: "scientific-condition-dialog",
   templateUrl: "scientific-condition-dialog.component.html"
 })
-export class ScientificConditionDialogComponent implements OnInit {
+export class ScientificConditionDialogComponent {
   metadataKeys$ = this.store.pipe(select(getMetadataKeys));
 
   scientificForm = new FormGroup({
@@ -26,7 +25,15 @@ export class ScientificConditionDialogComponent implements OnInit {
   });
 
   units: string[] = ["K", "°C"];
-  filteredUnits$: Observable<string[]>;
+  filteredUnits$ = this.scientificForm.get("unit").valueChanges.pipe(
+    startWith(""),
+    map((value: string) => {
+      const filterValue = value.toLowerCase();
+      return this.units.filter(unit =>
+        unit.toLowerCase().includes(filterValue)
+      );
+    })
+  );
 
   onChange(metadataKey: string) {
     this.store.dispatch(fetchMetadataKeysAction({ metadataKey }));
@@ -79,16 +86,4 @@ export class ScientificConditionDialogComponent implements OnInit {
     public dialogRef: MatDialogRef<ScientificConditionDialogComponent>,
     private store: Store<Dataset>
   ) {}
-
-  ngOnInit() {
-    this.filteredUnits$ = this.scientificForm.get("unit").valueChanges.pipe(
-      startWith(""),
-      map((value: string) => {
-        const filterValue = value.toLowerCase();
-        return this.units.filter(unit =>
-          unit.toLowerCase().includes(filterValue)
-        );
-      })
-    );
-  }
 }
