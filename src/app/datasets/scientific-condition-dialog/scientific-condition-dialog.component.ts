@@ -69,6 +69,10 @@ export class ScientificConditionDialogComponent {
     }
   }
 
+  get lhs() {
+    return this.scientificForm.get("lhs").value;
+  }
+
   constructor(
     public dialogRef: MatDialogRef<ScientificConditionDialogComponent>,
     private store: Store<Dataset>
