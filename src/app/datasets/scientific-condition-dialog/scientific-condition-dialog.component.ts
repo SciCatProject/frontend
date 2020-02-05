@@ -6,6 +6,7 @@ import { fetchMetadataKeysAction } from "state-management/actions/datasets.actio
 import { getMetadataKeys } from "state-management/selectors/datasets.selectors";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { startWith, map } from "rxjs/operators";
+import * as Quantities from "js-quantities";
 
 @Component({
   selector: "scientific-condition-dialog",
@@ -24,10 +25,12 @@ export class ScientificConditionDialogComponent {
     unit: new FormControl("")
   });
 
-  units: string[] = ["K", "°C"];
+  units: string[] = ["K", "°C", "Hz", "s"];
   filteredUnits$ = this.scientificForm.get("unit").valueChanges.pipe(
     startWith(""),
     map((value: string) => {
+      const qty = Quantities("1.23 kHz");
+      console.log("qty", qty.format("Hz"));
       const filterValue = value.toLowerCase();
       return this.units.filter(unit =>
         unit.toLowerCase().includes(filterValue)
