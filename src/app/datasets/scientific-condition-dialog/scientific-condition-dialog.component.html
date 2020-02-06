@@ -13,7 +13,8 @@
         formControlName="lhs"
         [matAutocomplete]="metadataKeys"
         (input)="onChange(lhs)"
-        (focus)="unitDisabled()"
+        (blur)="getUnits(lhs)"
+        (focus)="toggleUnitField()"
       />
       <mat-autocomplete #metadataKeys="matAutocomplete">
         <mat-option *ngFor="let key of metadataKeys$ | async" [value]="key">
@@ -26,7 +27,8 @@
       <mat-select
         name="operator"
         formControlName="relation"
-        (selectionChange)="unitDisabled()"
+        (focus)="toggleUnitField()"
+        (selectionChange)="toggleUnitField()"
       >
         <mat-option value="GREATER_THAN">is greater than</mat-option>
         <mat-option value="LESS_THAN">is less than</mat-option>

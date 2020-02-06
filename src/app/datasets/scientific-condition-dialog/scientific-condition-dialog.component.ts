@@ -6,7 +6,7 @@ import { fetchMetadataKeysAction } from "state-management/actions/datasets.actio
 import { getMetadataKeys } from "state-management/selectors/datasets.selectors";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { startWith, map } from "rxjs/operators";
-import * as Quantities from "js-quantities";
+import { UnitsService } from "datasets/units.service";
 
 @Component({
   selector: "scientific-condition-dialog",
@@ -25,12 +25,10 @@ export class ScientificConditionDialogComponent {
     unit: new FormControl("")
   });
 
-  units: string[] = ["K", "°C", "Hz", "s"];
+  units: string[] = [];
   filteredUnits$ = this.scientificForm.get("unit").valueChanges.pipe(
     startWith(""),
     map((value: string) => {
-      const qty = Quantities("1.23 kHz");
-      console.log("qty", qty.format("Hz"));
       const filterValue = value.toLowerCase();
       return this.units.filter(unit =>
         unit.toLowerCase().includes(filterValue)
@@ -38,11 +36,11 @@ export class ScientificConditionDialogComponent {
     })
   );
 
-  onChange(metadataKey: string) {
+  onChange(metadataKey: string): void {
     this.store.dispatch(fetchMetadataKeysAction({ metadataKey }));
   }
 
-  add() {
+  add(): void {
     const { lhs, relation } = this.scientificForm.value;
     const rawRhs = this.scientificForm.get("rhs").value;
     const rhs =
@@ -52,22 +50,28 @@ export class ScientificConditionDialogComponent {
     this.dialogRef.close({ data: { lhs, rhs, relation } });
   }
 
-  cancel() {
+  cancel(): void {
     this.dialogRef.close();
   }
 
-  unitDisabled() {
+  getUnits(metadataKey: string): void {
+    this.units = this.unitsService.getUnits(metadataKey);
+    this.toggleUnitField();
+  }
+
+  toggleUnitField(): void {
     const lhsInvalid = this.scientificForm.get("lhs").invalid;
     const { relation } = this.scientificForm.value;
     const stringRelation = relation === "EQUAL_TO_STRING" ? true : false;
+    const unitField = this.scientificForm.get("unit");
     if (lhsInvalid || stringRelation) {
-      this.scientificForm.get("unit").disable();
+      unitField.disable();
     } else {
-      return this.scientificForm.get("unit").enable();
+      unitField.enable();
     }
   }
 
-  isInvalid() {
+  isInvalid(): boolean {
     const { invalid } = this.scientificForm;
     const { lhs, relation, rhs } = this.scientificForm.value;
     if (invalid) {
@@ -81,12 +85,13 @@ export class ScientificConditionDialogComponent {
     }
   }
 
-  get lhs() {
+  get lhs(): string {
     return this.scientificForm.get("lhs").value;
   }
 
   constructor(
     public dialogRef: MatDialogRef<ScientificConditionDialogComponent>,
-    private store: Store<Dataset>
+    private store: Store<Dataset>,
+    private unitsService: UnitsService
   ) {}
 }
