@@ -50,24 +50,29 @@
       />
     </mat-form-field>
 
-    <mat-form-field>
-      <input
-        matInput
-        autocomplete="off"
-        autocorrect="off"
-        autocapitalize="off"
-        spellcheck="false"
-        name="rhsUnit"
-        placeholder="Unit"
-        formControlName="unit"
-        [matAutocomplete]="rhsUnits"
-      />
-      <mat-autocomplete #rhsUnits="matAutocomplete">
-        <mat-option *ngFor="let unit of filteredUnits$ | async" [value]="unit">
-          {{ unit }}
-        </mat-option>
-      </mat-autocomplete>
-    </mat-form-field>
+    <ng-template [ngIf]="unitsEnabled">
+      <mat-form-field>
+        <input
+          matInput
+          autocomplete="off"
+          autocorrect="off"
+          autocapitalize="off"
+          spellcheck="false"
+          name="rhsUnit"
+          placeholder="Unit (experimental)"
+          formControlName="unit"
+          [matAutocomplete]="rhsUnits"
+        />
+        <mat-autocomplete #rhsUnits="matAutocomplete">
+          <mat-option
+            *ngFor="let unit of filteredUnits$ | async"
+            [value]="unit"
+          >
+            {{ unit }}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+    </ng-template>
   </mat-dialog-content>
   <mat-dialog-actions [attr.align]="'end'">
     <button mat-button (click)="cancel()">Cancel</button>

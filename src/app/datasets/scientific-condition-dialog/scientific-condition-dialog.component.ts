@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, Inject } from "@angular/core";
 import { MatDialogRef } from "@angular/material";
 import { Store, select } from "@ngrx/store";
 import { Dataset } from "shared/sdk";
@@ -7,6 +7,7 @@ import { getMetadataKeys } from "state-management/selectors/datasets.selectors";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { startWith, map } from "rxjs/operators";
 import { UnitsService } from "datasets/units.service";
+import { AppConfig, APP_CONFIG } from "app-config.module";
 
 @Component({
   selector: "scientific-condition-dialog",
@@ -24,6 +25,8 @@ export class ScientificConditionDialogComponent {
     rhs: new FormControl("", [Validators.required, Validators.minLength(1)]),
     unit: new FormControl("")
   });
+
+  unitsEnabled = this.appConfig.scienceSearchUnitsEnabled;
 
   units: string[] = [];
   filteredUnits$ = this.scientificForm.get("unit").valueChanges.pipe(
@@ -46,7 +49,6 @@ export class ScientificConditionDialogComponent {
     const rhs =
       relation === "EQUAL_TO_STRING" ? String(rawRhs) : Number(rawRhs);
     this.scientificForm.patchValue({ rhs });
-    console.log("form:", this.scientificForm.value);
     this.dialogRef.close({ data: { lhs, rhs, relation } });
   }
 
@@ -90,6 +92,7 @@ export class ScientificConditionDialogComponent {
   }
 
   constructor(
+    @Inject(APP_CONFIG) public appConfig: AppConfig,
     public dialogRef: MatDialogRef<ScientificConditionDialogComponent>,
     private store: Store<Dataset>,
     private unitsService: UnitsService
