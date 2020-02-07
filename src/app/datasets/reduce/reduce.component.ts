@@ -55,31 +55,15 @@ export class ReduceComponent implements OnInit, OnChanges {
 
   analyzeScripts: object[] = [
     {
-      value: "Analyze Option 1",
-      description: "Short description of the first analyze script."
-    },
-    {
-      value: "Analyze Option 2",
-      description: "Short description of the second analyze script."
-    },
-    {
-      value: "Analyze Option 3",
-      description: "Short description of the third analyze script."
+      value: "Plot",
+      description: "Create plot."
     }
   ];
 
   reduceScripts: object[] = [
     {
-      value: "Remove background",
-      description: "Remove background, filter noise."
-    },
-    {
-      value: "Reduce Option 2",
-      description: "Short description of the second reduce script."
-    },
-    {
-      value: "Reduce Option 3",
-      description: "Short description of the third reduce script."
+      value: "Noise Reduction",
+      description: "Remove background noise."
     }
   ];
 
