@@ -1,10 +1,14 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  Input,
+  OnChanges,
+  SimpleChange
+} from "@angular/core";
 import { Router } from "@angular/router";
 import { select, Store } from "@ngrx/store";
 import { Dataset, DerivedDataset } from "shared/sdk/models";
-import { Subscription } from "rxjs";
 import {
-  getCurrentDataset,
   getOpenwhiskResult,
   getDatasets
 } from "state-management/selectors/datasets.selectors";
@@ -12,32 +16,42 @@ import {
   reduceDatasetAction,
   fetchDatasetsAction
 } from "state-management/actions/datasets.actions";
-import { FormControl, Validators, FormGroup } from "@angular/forms";
+import { FormControl, Validators, FormBuilder } from "@angular/forms";
+import { map } from "rxjs/operators";
 
 @Component({
   selector: "reduce",
   templateUrl: "./reduce.component.html",
   styleUrls: ["./reduce.component.scss"]
 })
-export class ReduceComponent implements OnInit, OnDestroy {
-  dataset: Dataset;
-  datasetSubscription: Subscription;
-  datasetHistory: Object[];
+export class ReduceComponent implements OnInit, OnChanges {
+  @Input() dataset: Dataset;
 
-  datasets: Dataset[];
-  datasetPids: String[];
-  datasetsSubscription: Subscription;
+  derivedDatasets$ = this.store.pipe(
+    select(getDatasets),
+    map(datasets =>
+      datasets
+        .filter(dataset => dataset.type === "derived")
+        .filter((dataset: DerivedDataset) => {
+          return dataset.inputDatasets.includes(this.dataset.pid);
+        })
+    )
+  );
 
-  result: Object;
-  resultSubscription: Subscription;
+  result$ = this.store.pipe(select(getOpenwhiskResult));
 
-  show: boolean;
-  columnsToDisplay: string[] = ["timestamp", "name", "pid", "software"];
-
-  formGroup: FormGroup;
+  actionsForm = this.formBuilder.group({
+    formArray: this.formBuilder.array([
+      this.formBuilder.group({
+        actionForm: new FormControl("", Validators.required)
+      }),
+      this.formBuilder.group({
+        scriptForm: new FormControl("", Validators.required)
+      })
+    ])
+  });
 
   actions: string[] = ["Analyze", "Reduce"];
-  selectedAction = new FormControl("", [Validators.required]);
 
   analyzeScripts: object[] = [
     {
@@ -56,8 +70,8 @@ export class ReduceComponent implements OnInit, OnDestroy {
 
   reduceScripts: object[] = [
     {
-      value: "Reduce Option 1",
-      description: "Short description of the first reduce script."
+      value: "Remove background",
+      description: "Remove background, filter noise."
     },
     {
       value: "Reduce Option 2",
@@ -68,59 +82,55 @@ export class ReduceComponent implements OnInit, OnDestroy {
       description: "Short description of the third reduce script."
     }
   ];
-  selectedScript = new FormControl("", [Validators.required]);
 
-  constructor(private router: Router, private store: Store<any>) {}
-
-  ngOnInit() {
-    this.store.dispatch(fetchDatasetsAction());
-
-    this.datasetsSubscription = this.store
-      .pipe(select(getDatasets))
-      .subscribe(datasets => {
-        this.datasets = datasets;
-        this.datasetPids = datasets.map(dataset => {
-          return dataset.pid;
-        });
-        this.updateHistory();
-      });
-
-    this.datasetSubscription = this.store
-      .pipe(select(getCurrentDataset))
-      .subscribe(dataset => {
-        this.dataset = dataset;
-        this.updateHistory();
-      });
-
-    this.resultSubscription = this.store
-      .pipe(select(getOpenwhiskResult))
-      .subscribe(result => {
-        this.result = result;
-      });
-  }
-
-  ngOnDestroy() {
-    this.datasetSubscription.unsubscribe();
-    this.datasetsSubscription.unsubscribe();
-    this.resultSubscription.unsubscribe();
-  }
-
-  updateHistory(): void {
-    if (this.dataset) {
-      this.datasetHistory = this.dataset.history.filter(entry => {
-        if (entry.hasOwnProperty("derivedDataset")) {
-          return this.datasetPids.includes(entry.derivedDataset.pid);
-        }
-      });
-    }
-  }
+  columnsToDisplay: string[] = ["timestamp", "name", "pid", "software"];
 
   reduceDataset(dataset: Dataset): void {
     this.store.dispatch(reduceDatasetAction({ dataset }));
   }
 
-  goTo(dataset: DerivedDataset): void {
+  onRowClick(dataset: Dataset): void {
     const pid = encodeURIComponent(dataset.pid);
     this.router.navigateByUrl("/datasets/" + pid);
+  }
+
+  get formArray() {
+    return this.actionsForm.get("formArray");
+  }
+
+  get selectedAction() {
+    return this.formArray.get([0]).get("actionForm");
+  }
+
+  get selectedScript() {
+    return this.formArray.get([1]).get("scriptForm");
+  }
+
+  constructor(
+    private formBuilder: FormBuilder,
+    private router: Router,
+    private store: Store<any>
+  ) {}
+
+  ngOnInit() {
+    this.store.dispatch(fetchDatasetsAction());
+  }
+
+  ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
+    for (const propName in changes) {
+      if (propName === "dataset") {
+        this.dataset = changes[propName].currentValue;
+        this.derivedDatasets$ = this.store.pipe(
+          select(getDatasets),
+          map(datasets =>
+            datasets
+              .filter(dataset => dataset.type === "derived")
+              .filter((dataset: DerivedDataset) => {
+                return dataset.inputDatasets.includes(this.dataset.pid);
+              })
+          )
+        );
+      }
+    }
   }
 }
