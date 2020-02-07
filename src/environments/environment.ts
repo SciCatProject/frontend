@@ -44,6 +44,7 @@ export const environment = {
   maxDirectDownloadSize: 5000000000,
   multipleDownloadAction: "http://localhost:3011/zip",
   scienceSearchEnabled: true,
+  scienceSearchUnitsEnabled: true,
   searchProposals: true,
   searchPublicDataEnabled: true,
   searchSamples: true,

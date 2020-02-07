@@ -30,6 +30,7 @@ export class AppConfig {
   multipleDownloadAction?: string;
   multipleDownloadEnabled: boolean;
   scienceSearchEnabled: boolean;
+  scienceSearchUnitsEnabled: boolean;
   searchProposals: boolean;
   searchPublicDataEnabled: boolean;
   searchSamples: boolean;
@@ -82,6 +83,7 @@ export const APP_DI_CONFIG: AppConfig = {
   multipleDownloadAction: environment["multipleDownloadAction"],
   multipleDownloadEnabled: environment["multipleDownloadEnabled"] || false,
   scienceSearchEnabled: environment["scienceSearchEnabled"] || null,
+  scienceSearchUnitsEnabled: environment["scienceSearchUnitsEnabled"] || false,
   searchProposals: environment["searchProposals"] || false,
   searchPublicDataEnabled: environment["searchPublicDataEnabled"] || false,
   searchSamples: environment["searchSamples"] || false,
