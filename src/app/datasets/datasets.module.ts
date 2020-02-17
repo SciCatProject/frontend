@@ -137,7 +137,8 @@ import { DatasetTableActionsComponent } from "./dataset-table-actions/dataset-ta
       useClass: MomentDateAdapter,
       deps: [MAT_DATE_LOCALE]
     },
-    { provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS }
+    { provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS },
+    { provide: MAT_DATE_LOCALE, useValue: "sv-SE" }
   ],
   exports: [
     DashboardComponent,
