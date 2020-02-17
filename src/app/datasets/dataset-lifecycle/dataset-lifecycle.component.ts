@@ -43,6 +43,7 @@ export class DatasetLifecycleComponent implements OnInit, OnChanges {
   historyItems: HistoryItem[];
 
   pageSizeOptions = [10, 25, 50, 100, 500, 1000];
+  currentPage = 0;
   itemsPerPage = 10;
   historyItemsCount: number;
 
@@ -86,7 +87,10 @@ export class DatasetLifecycleComponent implements OnInit, OnChanges {
 
   ngOnInit() {
     this.historyItems = this.parseHistoryItems();
-    this.dataSource = this.historyItems;
+    this.dataSource = this.historyItems.slice(
+      this.currentPage,
+      this.itemsPerPage
+    );
     this.historyItemsCount = this.historyItems.length;
   }
 
@@ -95,7 +99,10 @@ export class DatasetLifecycleComponent implements OnInit, OnChanges {
       if (propName === "dataset") {
         this.dataset = changes[propName].currentValue;
         this.historyItems = this.parseHistoryItems();
-        this.dataSource = this.historyItems;
+        this.dataSource = this.historyItems.slice(
+          this.currentPage,
+          this.itemsPerPage
+        );
         this.historyItemsCount = this.historyItems.length;
       }
     }

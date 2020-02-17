@@ -30,6 +30,7 @@
 
         <mat-paginator
           [length]="historyItemsCount"
+          [pageIndex]="currentPage"
           [pageSize]="itemsPerPage"
           [pageSizeOptions]="pageSizeOptions"
           (page)="onPageChange($event)"
