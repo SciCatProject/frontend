@@ -78,7 +78,7 @@
       <ng-template mat-tab-label>
         <mat-icon> tune </mat-icon> Reduce
       </ng-template>
-      <reduce></reduce>
+      <reduce [dataset]="dataset"></reduce>
     </mat-tab>
 
     <mat-tab *ngIf="attachments$ | async as attachments">
