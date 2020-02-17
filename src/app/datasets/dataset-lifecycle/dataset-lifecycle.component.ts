@@ -14,6 +14,7 @@ import {
   animate
 } from "@angular/animations";
 import { DatePipe } from "@angular/common";
+import { PageEvent } from "@angular/material";
 
 export interface HistoryItem {
   property: string;
@@ -40,27 +41,42 @@ export interface HistoryItem {
 export class DatasetLifecycleComponent implements OnInit, OnChanges {
   @Input() dataset: Dataset;
   historyItems: HistoryItem[];
+
+  pageSizeOptions = [10, 25, 50, 100, 500, 1000];
+  itemsPerPage = 10;
+  historyItemsCount: number;
+
+  dataSource: HistoryItem[];
   displayedColumns = ["property", "updatedBy", "updatedAt"];
   expandedItem: any | null;
 
+  onPageChange(event: PageEvent) {
+    const { pageIndex, pageSize } = event;
+    const skip = pageIndex * pageSize;
+    const end = skip + pageSize;
+    this.dataSource = this.historyItems.slice(skip, end);
+  }
+
   private parseHistoryItems(): HistoryItem[] {
     if (this.dataset) {
-      return this.dataset.history.map(item => {
-        const property = Object.keys(item)
-          .filter(key => key !== "id")
-          .filter(key => !key.includes("updated"))
-          .pop();
+      return this.dataset.history
+        .map(item => {
+          const property = Object.keys(item)
+            .filter(key => key !== "id")
+            .filter(key => !key.includes("updated"))
+            .pop();
 
-        return {
-          property,
-          value: item[property],
-          updatedBy: item.updatedBy.replace("ldap.", ""),
-          updatedAt: this.datePipe.transform(
-            item.updatedAt,
-            "yyyy-MM-dd, EEE HH:mm"
-          )
-        };
-      });
+          return {
+            property,
+            value: item[property],
+            updatedBy: item.updatedBy.replace("ldap.", ""),
+            updatedAt: this.datePipe.transform(
+              item.updatedAt,
+              "yyyy-MM-dd HH:mm"
+            )
+          };
+        })
+        .reverse();
     }
   }
 
@@ -68,6 +84,8 @@ export class DatasetLifecycleComponent implements OnInit, OnChanges {
 
   ngOnInit() {
     this.historyItems = this.parseHistoryItems();
+    this.dataSource = this.historyItems;
+    this.historyItemsCount = this.historyItems.length;
   }
 
   ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
@@ -75,6 +93,8 @@ export class DatasetLifecycleComponent implements OnInit, OnChanges {
       if (propName === "dataset") {
         this.dataset = changes[propName].currentValue;
         this.historyItems = this.parseHistoryItems();
+        this.dataSource = this.historyItems;
+        this.historyItemsCount = this.historyItems.length;
       }
     }
   }

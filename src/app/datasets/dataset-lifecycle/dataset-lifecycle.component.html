@@ -23,14 +23,22 @@
         </div>
       </mat-card>
 
-      <mat-card>
+      <mat-card *ngIf="historyItemsCount > 0">
         <mat-card-header class="history-header">
           History
         </mat-card-header>
 
+        <mat-paginator
+          [length]="historyItemsCount"
+          [pageSize]="itemsPerPage"
+          [pageSizeOptions]="pageSizeOptions"
+          (page)="onPageChange($event)"
+          showFirstLastButtons
+        ></mat-paginator>
+
         <table
           mat-table
-          [dataSource]="historyItems"
+          [dataSource]="dataSource"
           class="history-table"
           multiTemplateDataRows
         >
