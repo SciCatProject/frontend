@@ -45,6 +45,7 @@ export const environment = {
   multipleDownloadEnabled: true,
   multipleDownloadAction: "https://scicatfileserver.esss.dk/zip",
   scienceSearchEnabled: false,
+  scienceSearchUnitsEnabled: true,
   searchProposals: true,
   searchPublicDataEnabled: true,
   searchSamples: true,
@@ -53,5 +54,5 @@ export const environment = {
   tableSciDataEnabled: true,
   userNamePromptEnabled: true,
   userProfileImageEnabled: true,
-  fileDownloadEnabled: true,
+  fileDownloadEnabled: true
 };

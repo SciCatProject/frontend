@@ -62,5 +62,5 @@ export const initialDatasetState: DatasetState = {
 
   batch: [],
 
-  openwhiskResult: {}
+  openwhiskResult: null
 };
