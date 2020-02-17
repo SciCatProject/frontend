@@ -59,6 +59,7 @@ import { AddDatasetDialogComponent } from "./add-dataset-dialog/add-dataset-dial
 import { DatasetTableSettingsComponent } from "./dataset-table-settings/dataset-table-settings.component";
 import { DatasetTableActionsComponent } from "./dataset-table-actions/dataset-table-actions.component";
 import { UnitsService } from "./units.service";
+import { DatasetLifecycleComponent } from "./dataset-lifecycle/dataset-lifecycle.component";
 
 @NgModule({
   imports: [
@@ -116,7 +117,8 @@ import { UnitsService } from "./units.service";
     DatasetDetailsDashboardComponent,
     AddDatasetDialogComponent,
     DatasetTableSettingsComponent,
-    DatasetTableActionsComponent
+    DatasetTableActionsComponent,
+    DatasetLifecycleComponent
   ],
   entryComponents: [
     AddDatasetDialogComponent,

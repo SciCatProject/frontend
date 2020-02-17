@@ -1,0 +1,57 @@
+@import "../../../theme.scss";
+
+mat-card {
+  margin: 1em;
+
+  .lifecycle-header {
+    background-color: mat-color($primary, lighter);
+  }
+
+  mat-icon {
+    vertical-align: middle;
+  }
+
+  .lifecycle-table {
+    td {
+      padding: 0.5em;
+    }
+
+    th {
+      text-align: left;
+      padding-right: 0.5em;
+    }
+  }
+
+  .history-header {
+    background-color: mat-color($accent, lighter);
+  }
+
+  .history-table {
+    width: 100%;
+
+    tr.detail-row {
+      height: 0;
+    }
+
+    tr.item-row:not(.expanded-row):hover {
+      background: mat-color($grey, 50);
+    }
+
+    tr.item-row:not(.expanded-row):active {
+      background: mat-color($primary, default-accent);
+    }
+
+    .item-row td {
+      border-bottom-width: 0;
+    }
+
+    .item-detail {
+      overflow: hidden;
+
+      .history-value {
+        max-width: 70vw;
+        padding-bottom: 1em;
+      }
+    }
+  }
+}
