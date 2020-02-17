@@ -35,10 +35,11 @@ describe("DatasetLifecycleComponent", () => {
   });
 
   describe("#parseHistoryItems()", () => {
-    it("should do nothing if dataset is undefined", () => {
+    it("should return empty array if dataset is undefined", () => {
       const historyItems = component["parseHistoryItems"]();
 
-      expect(historyItems).toBeUndefined();
+      expect(Array.isArray(historyItems)).toEqual(true);
+      expect(historyItems.length).toEqual(0);
     });
 
     it("should parse dataset.history into a HistoryItem array if dataset is defined", () => {

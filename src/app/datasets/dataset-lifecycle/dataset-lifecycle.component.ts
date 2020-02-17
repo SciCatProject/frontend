@@ -77,6 +77,8 @@ export class DatasetLifecycleComponent implements OnInit, OnChanges {
           };
         })
         .reverse();
+    } else {
+      return [];
     }
   }
 
