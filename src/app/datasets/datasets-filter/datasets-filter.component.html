@@ -192,6 +192,7 @@
             ? '"' + condition.rhs + '"'
             : condition.rhs
         }}
+        {{ condition.relation !== "EQUAL_TO_STRING" ? condition.unit : null }}
         <mat-icon matChipRemove (click)="removeCondition(condition, i)"
           >cancel</mat-icon
         >

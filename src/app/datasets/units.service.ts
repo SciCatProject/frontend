@@ -6,34 +6,17 @@ import { Injectable } from "@angular/core";
 export class UnitsService {
   private UNITS = {
     area: ["cm^2", "m^2", "mm^2"],
-    charge: ["coulomb"],
-    current: ["ampere"],
-    energy: ["joule"],
-    length: [
-      "angstrom",
-      "centimeter",
-      "decimeter",
-      "eV",
-      "keV",
-      "meter",
-      "micrometer",
-      "millimeter",
-      "nanometer"
-    ],
-    magnetism: ["gauss", "maxwell", "oersted", "tesla", "weber"],
-    mass: ["gram", "kilogram", "milligram"],
-    pressure: ["atm", "bar", "mmHg", "pascal"],
-    speed: ["hertz", "m/s"],
-    temperature: ["celsius", "kelvin"],
-    time: [
-      "hour",
-      "microsecond",
-      "millisecond",
-      "nanosecond",
-      "minute",
-      "second"
-    ],
-    volume: ["cm^3", "m^3", "mm^3"]
+    charge: ["C"],
+    current: ["A"],
+    energy: ["J"],
+    length: ["Å", "cm", "dm", "eV", "keV", "m", "µm", "mm", "nm"],
+    magnetism: ["G", "Mx", "Oe", "T", "Wb"],
+    mass: ["g", "kg", "mg"],
+    pressure: ["atm", "bar", "mmHg", "Pa"],
+    speed: ["Hz", "m/s"],
+    temperature: ["°C", "K"],
+    time: ["h", "µs", "ms", "ns", "m", "s"],
+    volume: ["cm^3", "dm^3", "m^3", "mm^3"]
   };
 
   getUnits(variable: string): string[] {
