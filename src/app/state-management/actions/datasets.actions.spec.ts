@@ -605,7 +605,8 @@ describe("Dataset Actions", () => {
       const condition: ScientificCondition = {
         lhs: "lhsTest",
         relation: "LESS_THAN",
-        rhs: "rhsTest"
+        rhs: 5,
+        unit: "s"
       };
       const action = fromActions.addScientificConditionAction({ condition });
       expect({ ...action }).toEqual({

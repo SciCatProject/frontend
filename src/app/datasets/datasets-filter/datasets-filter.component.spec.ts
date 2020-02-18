@@ -53,7 +53,9 @@ export class MockMatDialog {
   open() {
     return {
       afterClosed: () =>
-        of({ data: { lhs: "", rhs: "", relation: "EQUAL_TO_STRING" } })
+        of({
+          data: { lhs: "", rhs: "", relation: "EQUAL_TO_STRING", unit: "" }
+        })
     };
   }
 }
@@ -377,7 +379,7 @@ describe("DatasetsFilterComponent", () => {
       expect(dispatchSpy).toHaveBeenCalledTimes(2);
       expect(dispatchSpy).toHaveBeenCalledWith(
         addScientificConditionAction({
-          condition: { lhs: "", rhs: "", relation: "EQUAL_TO_STRING" }
+          condition: { lhs: "", rhs: "", relation: "EQUAL_TO_STRING", unit: "" }
         })
       );
       expect(dispatchSpy).toHaveBeenCalledWith(
@@ -393,7 +395,8 @@ describe("DatasetsFilterComponent", () => {
       const condition: ScientificCondition = {
         lhs: "test",
         relation: "EQUAL_TO_NUMERIC",
-        rhs: 5
+        rhs: 5,
+        unit: "s"
       };
       const index = 0;
       component.removeCondition(condition, index);
