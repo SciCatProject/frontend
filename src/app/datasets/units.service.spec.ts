@@ -21,7 +21,7 @@ describe("UnitsService", () => {
       const units = service.getUnits(kind);
 
       expect(Array.isArray(units)).toEqual(true);
-      expect(units.includes("Å")).toEqual(true);
+      expect(units.includes("angstrom")).toEqual(true);
     });
 
     it("should get a list of all units if `kind` does not exist", () => {
@@ -29,9 +29,9 @@ describe("UnitsService", () => {
       const units = service.getUnits(kind);
 
       expect(Array.isArray(units)).toEqual(true);
-      expect(units.includes("Å")).toEqual(true);
-      expect(units.includes("C")).toEqual(true);
-      expect(units.includes("Hz")).toEqual(true);
+      expect(units.includes("angstrom")).toEqual(true);
+      expect(units.includes("coulomb")).toEqual(true);
+      expect(units.includes("hertz")).toEqual(true);
     });
   });
 
