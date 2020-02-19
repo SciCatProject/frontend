@@ -6,16 +6,33 @@ import { Injectable } from "@angular/core";
 export class UnitsService {
   private UNITS = {
     area: ["cm^2", "m^2", "mm^2"],
-    charge: ["C"],
-    current: ["A"],
-    energy: ["J"],
-    length: ["Å", "cm", "dm", "eV", "keV", "m", "µm", "mm", "nm"],
-    magnetism: ["G", "Mx", "Oe", "T", "Wb"],
-    mass: ["g", "kg", "mg"],
+    charge: ["coulomb"],
+    current: ["ampere"],
+    energy: ["joule"],
+    length: [
+      "angstrom",
+      "centimeters",
+      "decimeters",
+      "eV",
+      "keV",
+      "meters",
+      "micrometers",
+      "millimeters",
+      "nanometers"
+    ],
+    magnetism: ["tesla", "weber"],
+    mass: ["grams", "kilograms", "milligrams"],
     pressure: ["atm", "bar", "mmHg", "Pa"],
-    speed: ["Hz", "m/s"],
-    temperature: ["°C", "K"],
-    time: ["h", "µs", "ms", "ns", "m", "s"],
+    speed: ["hertz", "m/s"],
+    temperature: ["celsius", "kelvin"],
+    time: [
+      "hours",
+      "microseconds",
+      "milliseconds",
+      "nanoseconds",
+      "minutes",
+      "seconds"
+    ],
     volume: ["cm^3", "dm^3", "m^3", "mm^3"]
   };
 
@@ -29,7 +46,9 @@ export class UnitsService {
           [],
           Object.keys(this.UNITS).map(key => this.UNITS[key])
         )
-        .sort();
+        .sort((a: string, b: string) =>
+          a.toLowerCase().localeCompare(b.toLowerCase())
+        );
     }
   }
 

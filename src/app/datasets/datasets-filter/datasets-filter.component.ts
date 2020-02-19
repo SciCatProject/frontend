@@ -226,7 +226,6 @@ export class DatasetsFilterComponent {
       .afterClosed()
       .subscribe(res => {
         if (res) {
-          console.log("res", res);
           const { data } = res;
           this.store.dispatch(
             addScientificConditionAction({ condition: data })
