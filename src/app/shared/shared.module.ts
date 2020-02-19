@@ -9,6 +9,7 @@ import { PipesModule } from "./pipes/pipes.module";
 import { TableModule } from "./modules/table/table.module";
 import { SearchBarModule } from "./modules/search-bar/search-bar.module";
 import { ScientificMetadataModule } from "./modules/scientific-metadata/scientific-metadata.module";
+import { UnitsService } from "./services/units.service";
 
 @NgModule({
   imports: [
@@ -24,7 +25,7 @@ import { ScientificMetadataModule } from "./modules/scientific-metadata/scientif
     TableModule
   ],
   declarations: [],
-  providers: [ConfigService],
+  providers: [ConfigService, UnitsService],
   exports: [
     BreadcrumbModule,
     FileUploaderModule,

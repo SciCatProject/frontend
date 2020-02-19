@@ -36,6 +36,38 @@ export class UnitsService {
     volume: ["cm^3", "dm^3", "m^3", "mm^3"]
   };
 
+  private SYMBOLS = {
+    coulomb: "C",
+    ampere: "A",
+    joule: "J",
+    angstrom: "Å",
+    centimeters: "cm",
+    decimeters: "dm",
+    meters: "m",
+    micrometers: "µm",
+    millimeters: "mm",
+    nanometers: "nm",
+    tesla: "T",
+    weber: "Wb",
+    grams: "g",
+    kilograms: "kg",
+    milligrams: "mg",
+    hertz: "Hz",
+    celsius: "°C",
+    kelvin: "K",
+    hours: "h",
+    microseconds: "µs",
+    milliseconds: "ms",
+    nanoseconds: "ns",
+    minutes: "min",
+    seconds: "s"
+  };
+
+  getSymbol(unit: string): string {
+    const symbol = this.SYMBOLS[unit];
+    return symbol ? symbol : unit;
+  }
+
   getUnits(variable: string): string[] {
     const kind = this.getKind(variable);
     if (kind) {

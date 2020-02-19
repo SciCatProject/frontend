@@ -48,6 +48,7 @@ import {
   deselectAllCustomColumnsAction
 } from "state-management/actions/user.actions";
 import { ScientificCondition } from "state-management/models";
+import { SharedCatanieModule } from "shared/shared.module";
 
 export class MockMatDialog {
   open() {
@@ -71,14 +72,15 @@ describe("DatasetsFilterComponent", () => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
       imports: [
+        BrowserAnimationsModule,
+        FormsModule,
         MatAutocompleteModule,
-        MatSelectModule,
+        MatDialogModule,
         MatFormFieldModule,
         MatInputModule,
-        MatDialogModule,
-        FormsModule,
+        MatSelectModule,
         ReactiveFormsModule,
-        BrowserAnimationsModule,
+        SharedCatanieModule,
         StoreModule.forRoot({})
       ],
       declarations: [

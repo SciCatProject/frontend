@@ -6,7 +6,7 @@ import { fetchMetadataKeysAction } from "state-management/actions/datasets.actio
 import { getMetadataKeys } from "state-management/selectors/datasets.selectors";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { startWith, map } from "rxjs/operators";
-import { UnitsService } from "datasets/units.service";
+import { UnitsService } from "shared/services/units.service";
 import { AppConfig, APP_CONFIG } from "app-config.module";
 
 @Component({
