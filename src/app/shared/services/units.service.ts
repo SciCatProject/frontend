@@ -37,6 +37,9 @@ export class UnitsService {
   };
 
   private SYMBOLS = {
+    "cm^2": "cm\u00B2",
+    "m^2": "m\u00B2",
+    "mm^2": "mm\u00B2",
     coulomb: "C",
     ampere: "A",
     joule: "J",
@@ -60,7 +63,11 @@ export class UnitsService {
     milliseconds: "ms",
     nanoseconds: "ns",
     minutes: "min",
-    seconds: "s"
+    seconds: "s",
+    "cm^3": "cm\u00B3",
+    "dm^3": "dm\u00B3",
+    "m^3": "m\u00B3",
+    "mm^3": "mm\u00B3"
   };
 
   getSymbol(unit: string): string {
