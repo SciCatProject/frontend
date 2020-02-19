@@ -5,9 +5,9 @@ import { UnitsService } from "shared/services/units.service";
   name: "prettyUnit"
 })
 export class PrettyUnitPipe implements PipeTransform {
-  transform(value: string): string {
-    const symbol = this.unitsService.getSymbol(value);
-    return symbol ? symbol : value;
+  transform(unit: string): string {
+    const symbol = this.unitsService.getSymbol(unit);
+    return symbol ? symbol : unit;
   }
 
   constructor(private unitsService: UnitsService) {}
