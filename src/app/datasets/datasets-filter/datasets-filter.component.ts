@@ -209,7 +209,7 @@ export class DatasetsFilterComponent {
           begin: moment(begin).tz("UTC").toISOString(),
           end: moment(end)
             .add(1, "days")
-            .utc().format()
+            .toISOString()
         })
       );
     } else {
