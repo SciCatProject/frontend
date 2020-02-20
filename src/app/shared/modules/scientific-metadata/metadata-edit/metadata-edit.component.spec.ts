@@ -141,6 +141,7 @@ describe("MetadataEditComponent", () => {
       expect(component.items.at(0).get("fieldName").value).toEqual("testName");
       expect(component.items.at(0).get("fieldType").value).toEqual("string");
       expect(component.items.at(0).get("fieldValue").value).toEqual(
+        // tslint:disable-next-line: quotemark
         '{"v":100,"u":"Hz"}'
       );
       expect(component.items.at(0).get("fieldUnit").status).toEqual("DISABLED");
