@@ -13,7 +13,7 @@ mat-card {
   margin: 1em;
 
   .reset-button {
-    background-color: mat-color($yellow, 100);
+    background-color: mat-color($warn);
     color: mat-color($accent, default-contrast);
   }
 }
