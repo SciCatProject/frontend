@@ -13,10 +13,19 @@ import { MatChipsModule } from "@angular/material/chips";
 import { NgModule } from "@angular/core";
 import { NgxJsonViewerModule } from "ngx-json-viewer";
 import { RouterModule } from "@angular/router";
-import { SatDatepickerModule } from "saturn-datepicker";
 import { SharedCatanieModule } from "shared/shared.module";
 import { StoreModule } from "@ngrx/store";
 import { datasetsReducer } from "state-management/reducers/datasets.reducer";
+import {
+  DateAdapter,
+  MAT_DATE_FORMATS,
+  MAT_DATE_LOCALE,
+  SatDatepickerModule
+} from "saturn-datepicker";
+import {
+  MAT_MOMENT_DATE_FORMATS,
+  MomentDateAdapter
+} from "@angular/material-moment-adapter";
 
 import {
   MatAutocompleteModule,
@@ -124,7 +133,17 @@ import { DatasetLifecycleComponent } from "./dataset-lifecycle/dataset-lifecycle
     AddDatasetDialogComponent,
     ScientificConditionDialogComponent
   ],
-  providers: [ArchivingService, UnitsService],
+  providers: [
+    ArchivingService,
+    UnitsService,
+    {
+      provide: DateAdapter,
+      useClass: MomentDateAdapter,
+      deps: [MAT_DATE_LOCALE]
+    },
+    { provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS },
+    { provide: MAT_DATE_LOCALE, useValue: "sv-SE" }
+  ],
   exports: [
     DashboardComponent,
     DatablocksComponent,
