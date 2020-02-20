@@ -21,13 +21,26 @@
           </div>
           <div class="formColumn">
             <mat-form-field class="inputField">
-              <input matInput formControlName="fieldName" placeholder="Name" />
+              <input
+                matInput
+                autocomplete="off"
+                autocorrect="off"
+                autocapitalize="off"
+                spellcheck="false"
+                formControlName="fieldName"
+                placeholder="Name"
+                (blur)="getUnits(i)"
+              />
             </mat-form-field>
           </div>
           <div class="formColumn">
             <mat-form-field class="inputField">
               <input
                 matInput
+                autocomplete="off"
+                autocorrect="off"
+                autocapitalize="off"
+                spellcheck="false"
                 formControlName="fieldValue"
                 placeholder="Value"
               />
@@ -35,7 +48,25 @@
           </div>
           <div class="formColumn">
             <mat-form-field class="inputField">
-              <input matInput formControlName="fieldUnit" placeholder="Unit" />
+              <input
+                matInput
+                autocomplete="off"
+                autocorrect="off"
+                autocapitalize="off"
+                spellcheck="false"
+                formControlName="fieldUnit"
+                placeholder="Unit"
+                [matAutocomplete]="metadataUnits"
+                (focus)="filterUnits(i)"
+              />
+              <mat-autocomplete #metadataUnits="matAutocomplete">
+                <mat-option
+                  *ngFor="let unit of filteredUnits$ | async"
+                  [value]="unit"
+                >
+                  {{ unit }}
+                </mat-option>
+              </mat-autocomplete>
             </mat-form-field>
           </div>
           <div class="formColumn" fxFlexAlign="end">
@@ -64,7 +95,13 @@
       Add row
     </button>
 
-    <button mat-flat-button type="submit" color="primary" (click)="doSave()">
+    <button
+      mat-flat-button
+      type="submit"
+      color="primary"
+      [disabled]="isInvalid()"
+      (click)="doSave()"
+    >
       <mat-icon> save </mat-icon>
       Save changes
     </button>

@@ -5,7 +5,8 @@ import { NO_ERRORS_SCHEMA } from "@angular/core";
 import {
   MatFormFieldModule,
   MatOptionModule,
-  MatSelectModule
+  MatSelectModule,
+  MatAutocompleteModule
 } from "@angular/material";
 import { FormBuilder } from "@angular/forms";
 
@@ -17,7 +18,12 @@ describe("MetadataEditComponent", () => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
       declarations: [MetadataEditComponent],
-      imports: [MatFormFieldModule, MatOptionModule, MatSelectModule],
+      imports: [
+        MatAutocompleteModule,
+        MatFormFieldModule,
+        MatOptionModule,
+        MatSelectModule
+      ],
       providers: [FormBuilder]
     }).compileComponents();
   }));
@@ -50,11 +56,11 @@ describe("MetadataEditComponent", () => {
         .get("fieldType")
         .setValue("measurement");
 
-      expect(component.items.at(0).get("fieldUnit").status).toEqual("VALID");
+      expect(component.items.at(0).get("fieldUnit").enabled).toEqual(true);
 
       component.detectType(0);
 
-      expect(component.items.at(0).get("fieldUnit").status).toEqual("VALID");
+      expect(component.items.at(0).get("fieldUnit").enabled).toEqual(true);
     });
 
     it("should disable fieldUnit if fieldType is not 'measurement'", () => {
@@ -64,7 +70,7 @@ describe("MetadataEditComponent", () => {
         .get("fieldType")
         .setValue("string");
 
-      expect(component.items.at(0).get("fieldUnit").status).toEqual("VALID");
+      expect(component.items.at(0).get("fieldUnit").enabled).toEqual(true);
 
       component.detectType(0);
 
@@ -297,5 +303,54 @@ describe("MetadataEditComponent", () => {
       expect(metadataObject["testName"].value).toEqual("test");
       expect(metadataObject["testName"].unit).toEqual("test");
     });
+  });
+
+  describe("#isInvalid()", () => {
+    it("should return true if the form is invalid", () => {
+      component.addMetadata();
+
+      const invalid = component.isInvalid();
+
+      expect(invalid).toEqual(true);
+    });
+
+    it("should return false if the form is valid", () => {
+      component.addMetadata();
+      component.items
+        .at(0)
+        .get("fieldType")
+        .setValue("string");
+      component.detectType(0);
+      component.items
+        .at(0)
+        .get("fieldName")
+        .setValue("test");
+      component.items
+        .at(0)
+        .get("fieldValue")
+        .setValue("testValue");
+
+      const invalid = component.isInvalid();
+
+      expect(invalid).toEqual(false);
+    });
+  });
+
+  describe("#getUnits()", () => {
+    it("should get an array of units based on the value of fieldName", () => {
+      component.addMetadata();
+      component.items
+        .at(0)
+        .get("fieldName")
+        .setValue("elapsed_time");
+
+      component.getUnits(0);
+
+      expect(component.units.includes("seconds")).toEqual(true);
+    });
+  });
+
+  describe("#filterUnits()", () => {
+    xit("should filter units based on the value of fieldUnit", () => {});
   });
 });
