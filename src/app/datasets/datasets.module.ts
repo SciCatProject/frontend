@@ -58,6 +58,7 @@ import { DatasetsFilterComponent } from "./datasets-filter/datasets-filter.compo
 import { AddDatasetDialogComponent } from "./add-dataset-dialog/add-dataset-dialog.component";
 import { DatasetTableSettingsComponent } from "./dataset-table-settings/dataset-table-settings.component";
 import { DatasetTableActionsComponent } from "./dataset-table-actions/dataset-table-actions.component";
+import { DatasetLifecycleComponent } from "./dataset-lifecycle/dataset-lifecycle.component";
 
 @NgModule({
   imports: [
@@ -115,7 +116,8 @@ import { DatasetTableActionsComponent } from "./dataset-table-actions/dataset-ta
     DatasetDetailsDashboardComponent,
     AddDatasetDialogComponent,
     DatasetTableSettingsComponent,
-    DatasetTableActionsComponent
+    DatasetTableActionsComponent,
+    DatasetLifecycleComponent
   ],
   entryComponents: [
     AddDatasetDialogComponent,

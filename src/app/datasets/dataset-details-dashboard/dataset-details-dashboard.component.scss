@@ -12,25 +12,6 @@
 mat-card {
   margin: 1em;
 
-  .lifecycle-header {
-    background-color: mat-color($primary, lighter);
-  }
-
-  mat-icon {
-    vertical-align: middle;
-  }
-
-  table {
-    td {
-      padding: 0.5em;
-    }
-
-    th {
-      text-align: left;
-      padding-right: 0.5em;
-    }
-  }
-
   .reset-button {
     background-color: mat-color($yellow, 100);
     color: mat-color($accent, default-contrast);
