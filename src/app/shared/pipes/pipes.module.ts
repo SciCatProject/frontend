@@ -8,6 +8,7 @@ import { ThumbnailPipe } from "./thumbnail.pipe";
 import { TitleCasePipe } from "./title-case.pipe";
 import { FileSizePipe } from "./filesize.pipe";
 import { FilePathTruncate } from "./file-path-truncate.pipe";
+import { PrettyUnitPipe } from "./pretty-unit.pipe";
 
 @NgModule({
   declarations: [
@@ -15,6 +16,7 @@ import { FilePathTruncate } from "./file-path-truncate.pipe";
     FilePathTruncate,
     JsonHeadPipe,
     ObjKeysPipe,
+    PrettyUnitPipe,
     ReplaceUnderscorePipe,
     StripProposalPrefixPipe,
     ThumbnailPipe,
@@ -26,6 +28,7 @@ import { FilePathTruncate } from "./file-path-truncate.pipe";
     FilePathTruncate,
     JsonHeadPipe,
     ObjKeysPipe,
+    PrettyUnitPipe,
     ReplaceUnderscorePipe,
     StripProposalPrefixPipe,
     ThumbnailPipe,

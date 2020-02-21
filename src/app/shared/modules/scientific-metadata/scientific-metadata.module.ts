@@ -8,7 +8,8 @@ import {
   MatOptionModule,
   MatSelectModule,
   MatInputModule,
-  MatButtonModule
+  MatButtonModule,
+  MatAutocompleteModule
 } from "@angular/material";
 import { MetadataViewComponent } from "./metadata-view/metadata-view.component";
 import { MetadataEditComponent } from "./metadata-edit/metadata-edit.component";
@@ -22,6 +23,7 @@ import { FlexModule } from "@angular/flex-layout";
     CommonModule,
     FlexModule,
     FormsModule,
+    MatAutocompleteModule,
     MatButtonModule,
     MatFormFieldModule,
     MatIconModule,

@@ -190,7 +190,8 @@ describe("DatasetEffects", () => {
         const condition: ScientificCondition = {
           lhs: "test",
           relation: "EQUAL_TO_NUMERIC",
-          rhs: 1000
+          rhs: 1000,
+          unit: "s"
         };
         const action = fromActions.addScientificConditionAction({ condition });
         const outcome = fromActions.fetchMetadataKeysAction({

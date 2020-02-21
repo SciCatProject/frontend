@@ -11,30 +11,69 @@ export class UnitsService {
     energy: ["joule"],
     length: [
       "angstrom",
-      "centimeter",
-      "decimeter",
+      "centimeters",
+      "decimeters",
       "eV",
       "keV",
-      "meter",
-      "micrometer",
-      "millimeter",
-      "nanometer"
+      "meters",
+      "micrometers",
+      "millimeters",
+      "nanometers"
     ],
-    magnetism: ["gauss", "maxwell", "oersted", "tesla", "weber"],
-    mass: ["gram", "kilogram", "milligram"],
-    pressure: ["atm", "bar", "mmHg", "pascal"],
+    magnetism: ["tesla", "weber"],
+    mass: ["grams", "kilograms", "milligrams"],
+    pressure: ["atm", "bar", "mmHg", "Pa"],
     speed: ["hertz", "m/s"],
     temperature: ["celsius", "kelvin"],
     time: [
-      "hour",
-      "microsecond",
-      "millisecond",
-      "nanosecond",
-      "minute",
-      "second"
+      "hours",
+      "microseconds",
+      "milliseconds",
+      "nanoseconds",
+      "minutes",
+      "seconds"
     ],
-    volume: ["cm^3", "m^3", "mm^3"]
+    volume: ["cm^3", "dm^3", "m^3", "mm^3"]
   };
+
+  private SYMBOLS = {
+    "cm^2": "cm\u00B2",
+    "m^2": "m\u00B2",
+    "mm^2": "mm\u00B2",
+    coulomb: "C",
+    ampere: "A",
+    joule: "J",
+    angstrom: "Å",
+    centimeters: "cm",
+    decimeters: "dm",
+    meters: "m",
+    micrometers: "µm",
+    millimeters: "mm",
+    nanometers: "nm",
+    tesla: "T",
+    weber: "Wb",
+    grams: "g",
+    kilograms: "kg",
+    milligrams: "mg",
+    hertz: "Hz",
+    celsius: "°C",
+    kelvin: "K",
+    hours: "h",
+    microseconds: "µs",
+    milliseconds: "ms",
+    nanoseconds: "ns",
+    minutes: "min",
+    seconds: "s",
+    "cm^3": "cm\u00B3",
+    "dm^3": "dm\u00B3",
+    "m^3": "m\u00B3",
+    "mm^3": "mm\u00B3"
+  };
+
+  getSymbol(unit: string): string {
+    const symbol = this.SYMBOLS[unit];
+    return symbol ? symbol : unit;
+  }
 
   getUnits(variable: string): string[] {
     const kind = this.getKind(variable);
@@ -46,7 +85,9 @@ export class UnitsService {
           [],
           Object.keys(this.UNITS).map(key => this.UNITS[key])
         )
-        .sort();
+        .sort((a: string, b: string) =>
+          a.toLowerCase().localeCompare(b.toLowerCase())
+        );
     }
   }
 

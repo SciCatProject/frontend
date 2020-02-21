@@ -78,6 +78,7 @@ export interface ScientificCondition {
   lhs: string;
   relation: ScientificConditionRelation;
   rhs: string | number;
+  unit: string;
 }
 
 export interface DatasetFilters {

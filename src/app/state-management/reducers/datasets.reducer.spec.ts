@@ -430,7 +430,8 @@ describe("DatasetsReducer", () => {
       const condition: ScientificCondition = {
         lhs: "lhsTest",
         relation: "EQUAL_TO_STRING",
-        rhs: "rhsTest"
+        rhs: "rhsTest",
+        unit: ""
       };
 
       const action = fromActions.addScientificConditionAction({ condition });
@@ -445,7 +446,8 @@ describe("DatasetsReducer", () => {
       const condition: ScientificCondition = {
         lhs: "lhsTest",
         relation: "EQUAL_TO_STRING",
-        rhs: "rhsTest"
+        rhs: "rhsTest",
+        unit: ""
       };
       const act = fromActions.addScientificConditionAction({ condition });
       const sta = fromDatasets.datasetsReducer(initialDatasetState, act);

@@ -356,7 +356,7 @@
           <mat-cell *matCellDef="let dataset">
             <div *ngIf="dataset.scientificMetadata[column.name]">
               {{ dataset.scientificMetadata[column.name].value }}&nbsp;{{
-                dataset.scientificMetadata[column.name].unit
+                dataset.scientificMetadata[column.name].unit | prettyUnit
               }}
             </div>
           </mat-cell>
