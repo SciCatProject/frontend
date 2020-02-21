@@ -41,7 +41,7 @@
       </mat-header-cell>
       <mat-cell *matCellDef="let metadata">
         <ng-template [ngIf]="metadata.unit.length > 0" [ngIfElse]="noUnit">
-          {{ metadata.unit }}
+          {{ metadata.unit | prettyUnit }}
         </ng-template>
         <ng-template #noUnit>
           --

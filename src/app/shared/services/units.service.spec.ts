@@ -15,6 +15,22 @@ describe("UnitsService", () => {
     expect(service).toBeTruthy();
   });
 
+  describe("#getSymbol()", () => {
+    it("should return the unit symbol if present in dictionary", () => {
+      const unit = "angstrom";
+      const symbol = service.getSymbol(unit);
+
+      expect(symbol).toEqual("Å");
+    });
+
+    it("should return the unit if unable to find symbol", () => {
+      const unit = "foo";
+      const symbol = service.getSymbol(unit);
+
+      expect(symbol).toEqual(unit);
+    });
+  });
+
   describe("#getUnits()", () => {
     it("should get a list of associated units if `kind` exists", () => {
       const kind = "length";

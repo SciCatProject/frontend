@@ -6,7 +6,7 @@ import { fetchMetadataKeysAction } from "state-management/actions/datasets.actio
 import { getMetadataKeys } from "state-management/selectors/datasets.selectors";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { startWith, map } from "rxjs/operators";
-import { UnitsService } from "datasets/units.service";
+import { UnitsService } from "shared/services/units.service";
 import { AppConfig, APP_CONFIG } from "app-config.module";
 
 @Component({
@@ -44,12 +44,12 @@ export class ScientificConditionDialogComponent {
   }
 
   add(): void {
-    const { lhs, relation } = this.scientificForm.value;
+    const { lhs, relation, unit } = this.scientificForm.value;
     const rawRhs = this.scientificForm.get("rhs").value;
     const rhs =
       relation === "EQUAL_TO_STRING" ? String(rawRhs) : Number(rawRhs);
     this.scientificForm.patchValue({ rhs });
-    this.dialogRef.close({ data: { lhs, rhs, relation } });
+    this.dialogRef.close({ data: { lhs, relation, rhs, unit } });
   }
 
   cancel(): void {

@@ -192,6 +192,7 @@
             ? '"' + condition.rhs + '"'
             : condition.rhs
         }}
+        {{ condition.unit | prettyUnit }}
         <mat-icon matChipRemove (click)="removeCondition(condition, i)"
           >cancel</mat-icon
         >
