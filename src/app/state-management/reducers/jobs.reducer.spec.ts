@@ -1,7 +1,7 @@
 import { jobsReducer } from "./jobs.reducer";
 import { JobInterface, Job } from "shared/sdk";
-import { JobsState } from "state-management/state/jobs.store";
 import * as fromActions from "../actions/jobs.actions";
+import { initialJobsState } from "state-management/state/jobs.store";
 
 const data: JobInterface = {
   id: "testId",
@@ -10,24 +10,6 @@ const data: JobInterface = {
   datasetList: {}
 };
 const job = new Job(data);
-
-const jobFilters = {
-  mode: null,
-  sortField: "creationTime:desc",
-  skip: 0,
-  limit: 50
-};
-
-const initialJobsState: JobsState = {
-  jobs: [],
-  currentJob: job,
-
-  totalCount: 0,
-
-  submitError: undefined,
-
-  filters: jobFilters
-};
 
 describe("jobsReducer", () => {
   describe("on fetchJobsCompleteAction", () => {
@@ -85,6 +67,17 @@ describe("jobsReducer", () => {
       const state = jobsReducer(initialJobsState, action);
 
       expect(state.filters.mode).toEqual(mode);
+      expect(state.filters.skip).toEqual(0);
+    });
+  });
+
+  describe("on setJobsLimitFilterAction", () => {
+    it("should set limit filter and set skip to 0", () => {
+      const limit = 10;
+      const action = fromActions.setJobsLimitFilterAction({ limit });
+      const state = jobsReducer(initialJobsState, action);
+
+      expect(state.filters.limit).toEqual(limit);
       expect(state.filters.skip).toEqual(0);
     });
   });

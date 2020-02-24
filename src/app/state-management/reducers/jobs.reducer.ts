@@ -33,6 +33,11 @@ const reducer = createReducer(
     filters: { ...state.filters, mode, skip: 0 }
   })),
 
+  on(fromActions.setJobsLimitFilterAction, (state, { limit }) => {
+    const filters = { ...state.filters, limit, skip: 0 };
+    return { ...state, filters };
+  }),
+
   on(fromActions.changePageAction, (state, { page, limit }) => {
     const skip = page * limit;
     const filters = { ...state.filters, skip, limit };

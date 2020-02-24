@@ -154,6 +154,11 @@ export const clearSelectionAction = createAction("[Dataset] Clear Selection");
 
 // === Dataset Table Filtering ===
 
+export const setDatasetsLimitFilterAction = createAction(
+  "[Dataset] Set Limit Filter",
+  props<{ limit: number }>()
+);
+
 export const changePageAction = createAction(
   "[Dataset] Change Page",
   props<{ page: number; limit: number }>()

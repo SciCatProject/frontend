@@ -10,7 +10,8 @@ import { hot, cold } from "jasmine-marbles";
 import {
   showMessageAction,
   loadingAction,
-  loadingCompleteAction
+  loadingCompleteAction,
+  updateUserSettingsAction
 } from "state-management/actions/user.actions";
 import { MessageType } from "state-management/models";
 
@@ -197,6 +198,21 @@ describe("JobEffects", () => {
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchCount$).toBeObservable(expected);
+    });
+  });
+
+  describe("updateUserJobsLimit$", () => {
+    it("should result in an updateUserSettingsAction", () => {
+      const page = 0;
+      const limit = 25;
+      const property = { jobCount: limit };
+      const action = fromActions.changePageAction({ page, limit });
+      const outcome = updateUserSettingsAction({ property });
+
+      actions = hot("-a", { a: action });
+
+      const expected = cold("-b", { b: outcome });
+      expect(effects.updateUserJobsLimit$).toBeObservable(expected);
     });
   });
 
