@@ -409,6 +409,17 @@ describe("Dataset Actions", () => {
     });
   });
 
+  describe("setDatasetsLimitFilterAction", () => {
+    it("should create an action", () => {
+      const limit = 25;
+      const action = fromActions.setDatasetsLimitFilterAction({ limit });
+      expect({ ...action }).toEqual({
+        type: "[Dataset] Set Limit Filter",
+        limit
+      });
+    });
+  });
+
   describe("changePageAction", () => {
     it("should create an action", () => {
       const page = 0;

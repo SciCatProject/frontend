@@ -22,6 +22,8 @@ import {
   getColumns,
   getCurrentUser
 } from "state-management/selectors/user.selectors";
+import { setDatasetsLimitFilterAction } from "state-management/actions/datasets.actions";
+import { setJobsLimitFilterAction } from "state-management/actions/jobs.actions";
 
 describe("UserEffects", () => {
   let actions: Observable<any>;
@@ -438,6 +440,30 @@ describe("UserEffects", () => {
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchUserSettings$).toBeObservable(expected);
+    });
+  });
+
+  describe("setLimitFilters$", () => {
+    it("should result in a setDatasetsLimitFilterAction and a setJobsLimitFilterAction", () => {
+      const userSettings = {
+        columns: [],
+        datasetCount: 10,
+        jobCount: 10
+      } as UserSetting;
+      const action = fromActions.fetchUserSettingsCompleteAction({
+        userSettings
+      });
+      const outcome1 = setDatasetsLimitFilterAction({
+        limit: userSettings.datasetCount
+      });
+      const outcome2 = setJobsLimitFilterAction({
+        limit: userSettings.jobCount
+      });
+
+      actions = hot("-a", { a: action });
+
+      const expected = cold("-(bc)", { b: outcome1, c: outcome2 });
+      expect(effects.setLimitFilters$).toBeObservable(expected);
     });
   });
 

@@ -208,6 +208,17 @@ describe("DatasetsReducer", () => {
     });
   });
 
+  describe("on setDatasetsLimitFilterAction", () => {
+    it("should set limit filter and set skip to 0", () => {
+      const limit = 10;
+      const action = fromActions.setDatasetsLimitFilterAction({ limit });
+      const state = fromDatasets.datasetsReducer(initialDatasetState, action);
+
+      expect(state.filters.limit).toEqual(limit);
+      expect(state.filters.skip).toEqual(0);
+    });
+  });
+
   describe("on changePageAction", () => {
     it("should set filters limit and skip", () => {
       const page = 1;

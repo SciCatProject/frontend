@@ -18,7 +18,8 @@ import {
   filter,
   tap,
   withLatestFrom,
-  distinctUntilChanged
+  distinctUntilChanged,
+  mergeMap
 } from "rxjs/operators";
 import { of } from "rxjs";
 import { MessageType } from "state-management/models";
@@ -27,6 +28,8 @@ import {
   getColumns,
   getCurrentUser
 } from "state-management/selectors/user.selectors";
+import { setDatasetsLimitFilterAction } from "state-management/actions/datasets.actions";
+import { setJobsLimitFilterAction } from "state-management/actions/jobs.actions";
 
 @Injectable()
 export class UserEffects {
@@ -204,6 +207,16 @@ export class UserEffects {
           catchError(() => of(fromActions.fetchUserSettingsFailedAction()))
         )
       )
+    )
+  );
+
+  setLimitFilters$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(fromActions.fetchUserSettingsCompleteAction),
+      mergeMap(({ userSettings }) => [
+        setDatasetsLimitFilterAction({ limit: userSettings.datasetCount }),
+        setJobsLimitFilterAction({ limit: userSettings.jobCount })
+      ])
     )
   );
 

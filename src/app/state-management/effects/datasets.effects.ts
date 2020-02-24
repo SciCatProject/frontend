@@ -23,7 +23,8 @@ import {
   logoutCompleteAction,
   loadingAction,
   loadingCompleteAction,
-  addCustomColumnsAction
+  addCustomColumnsAction,
+  updateUserSettingsAction
 } from "state-management/actions/user.actions";
 
 @Injectable()
@@ -84,6 +85,15 @@ export class DatasetEffects {
           catchError(() => of(fromActions.fetchMetadataKeysFailedAction()))
         );
       })
+    )
+  );
+
+  updateUserDatasetsLimit$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(fromActions.changePageAction),
+      map(({ limit }) =>
+        updateUserSettingsAction({ property: { datasetCount: limit } })
+      )
     )
   );
 

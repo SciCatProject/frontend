@@ -107,6 +107,14 @@ describe("Job Actions", () => {
     });
   });
 
+  describe("setJobsLimitFilterAction", () => {
+    it("should create an action", () => {
+      const limit = 25;
+      const action = fromActions.setJobsLimitFilterAction({ limit });
+      expect({ ...action }).toEqual({ type: "[Job] Set Limit Filter", limit });
+    });
+  });
+
   describe("changePageAction", () => {
     it("should create an action", () => {
       const page = 1;

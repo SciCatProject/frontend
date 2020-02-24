@@ -43,6 +43,11 @@ export const setJobViewModeAction = createAction(
   props<{ mode: object }>()
 );
 
+export const setJobsLimitFilterAction = createAction(
+  "[Job] Set Limit Filter",
+  props<{ limit: number }>()
+);
+
 export const changePageAction = createAction(
   "[Job] Change Page",
   props<{ page: number; limit: number }>()

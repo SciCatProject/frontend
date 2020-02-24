@@ -10,7 +10,8 @@ import { MessageType } from "state-management/models";
 import {
   showMessageAction,
   loadingAction,
-  loadingCompleteAction
+  loadingCompleteAction,
+  updateUserSettingsAction
 } from "state-management/actions/user.actions";
 
 @Injectable()
@@ -51,6 +52,15 @@ export class JobEffects {
           ),
           catchError(() => of(fromActions.fetchCountFailedAction()))
         )
+      )
+    )
+  );
+
+  updateUserJobsLimit$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(fromActions.changePageAction),
+      map(({ limit }) =>
+        updateUserSettingsAction({ property: { jobCount: limit } })
       )
     )
   );

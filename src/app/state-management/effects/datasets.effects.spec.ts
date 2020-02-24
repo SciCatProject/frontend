@@ -20,7 +20,8 @@ import {
 import {
   loadingAction,
   loadingCompleteAction,
-  addCustomColumnsAction
+  addCustomColumnsAction,
+  updateUserSettingsAction
 } from "state-management/actions/user.actions";
 import { ScientificCondition } from "state-management/models";
 
@@ -181,6 +182,21 @@ describe("DatasetEffects", () => {
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchMetadataKeys$).toBeObservable(expected);
+    });
+  });
+
+  describe("updateUserDatasetsLimit$", () => {
+    it("should result in an updateUserSettingsAction", () => {
+      const page = 0;
+      const limit = 25;
+      const property = { datasetCount: limit };
+      const action = fromActions.changePageAction({ page, limit });
+      const outcome = updateUserSettingsAction({ property });
+
+      actions = hot("-a", { a: action });
+
+      const expected = cold("-b", { b: outcome });
+      expect(effects.updateUserDatasetsLimit$).toBeObservable(expected);
     });
   });
 
