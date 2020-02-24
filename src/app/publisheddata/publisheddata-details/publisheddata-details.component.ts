@@ -3,7 +3,7 @@ import { Component, OnInit, OnDestroy, Inject } from "@angular/core";
 import { PublishedData } from "shared/sdk";
 import { Store, select } from "@ngrx/store";
 import { ActivatedRoute } from "@angular/router";
-import { fetchPublishedDataAction } from "state-management/actions/published-data.actions";
+import { fetchPublishedDataAction, registerPublishedDataAction } from "state-management/actions/published-data.actions";
 import { Subscription } from "rxjs";
 import { pluck } from "rxjs/operators";
 import { getCurrentPublishedData } from "state-management/selectors/published-data.selectors";
@@ -23,7 +23,7 @@ export class PublisheddataDetailsComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private store: Store<PublishedData>,
     @Inject(APP_CONFIG) public appConfig: AppConfig
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.routeSubscription = this.route.params
@@ -32,12 +32,16 @@ export class PublisheddataDetailsComponent implements OnInit, OnDestroy {
         this.store.dispatch(fetchPublishedDataAction({ id }))
       );
 
-    this.currentData$
-      .subscribe(data => {
-        if (data && this.appConfig.landingPage) {
-          this.landingPageUrl = this.appConfig.landingPage + encodeURIComponent(data.doi);
-        }
-      });
+    this.currentData$.subscribe(data => {
+      if (data && this.appConfig.landingPage) {
+        this.landingPageUrl =
+          this.appConfig.landingPage + encodeURIComponent(data.doi);
+      }
+    });
+  }
+
+  onRegisterClick(doi: string) {
+    this.store.dispatch(registerPublishedDataAction({ doi: doi }));
   }
 
   ngOnDestroy() {

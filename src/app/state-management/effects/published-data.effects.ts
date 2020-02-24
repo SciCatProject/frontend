@@ -78,7 +78,7 @@ export class PublishedDataEffects {
           mergeMap((publishedData: PublishedData) => [
             fromActions.publishDatasetCompleteAction({ publishedData }),
             fromActions.fetchPublishedDataAction({ id: publishedData.doi }),
-            fromActions.registerPublishedDataAction({ doi: publishedData.doi })
+            // fromActions.registerPublishedDataAction({ doi: publishedData.doi })
           ]),
           catchError(() => of(fromActions.publishDatasetFailedAction()))
         )

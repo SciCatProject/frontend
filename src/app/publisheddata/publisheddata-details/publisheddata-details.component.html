@@ -2,6 +2,28 @@
   <div fxLayout="row">
     <div fxLayout="column">
       <mat-card>
+        <mat-card-header class="status-header">
+          Publication Status
+        </mat-card-header>
+
+        <table>
+          <tr *ngIf="publishedData.status as value">
+            <th><mat-icon> label </mat-icon> Title</th>
+            <td>{{ value }}</td>
+          </tr>
+        </table>
+
+        <button
+          mat-raised-button
+          color="primary"
+         
+          (click)="onRegisterClick(publishedData.doi)"
+        >
+          Register
+        </button>
+      </mat-card>
+
+      <mat-card>
         <mat-card-header class="about-header">
           About the published data
         </mat-card-header>

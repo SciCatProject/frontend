@@ -3,6 +3,10 @@
 mat-card {
   margin: 1em;
 
+  .status-header {
+    background-color: mat-color($warn, lighter);
+  }
+
   .about-header {
     background-color: mat-color($primary, lighter);
   }
