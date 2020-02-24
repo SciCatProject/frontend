@@ -22,6 +22,7 @@ export const initialLogbookState: LogbookState = {
     showBotMessages: true,
     showUserMessages: true,
     showImages: true,
+    sortField: "timestamp:desc",
     skip: 0,
     limit: 25
   }

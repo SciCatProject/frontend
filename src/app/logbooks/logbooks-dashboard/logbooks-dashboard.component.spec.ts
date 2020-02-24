@@ -88,6 +88,7 @@ describe("DashboardComponent", () => {
         showBotMessages: true,
         showImages: true,
         showUserMessages: true,
+        sortField: "timestamp:desc",
         skip: 0,
         limit: 25
       };
@@ -134,6 +135,7 @@ describe("DashboardComponent", () => {
         showBotMessages: false,
         showImages: true,
         showUserMessages: true,
+        sortField: "timestamp:desc",
         skip: 0,
         limit: 25
       };

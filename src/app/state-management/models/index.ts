@@ -121,6 +121,7 @@ export interface LogbookFilters {
   showBotMessages: boolean;
   showUserMessages: boolean;
   showImages: boolean;
+  sortField: string;
   skip: number;
   limit: number;
 }
