@@ -3,7 +3,10 @@ import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 import { MatTableModule } from "@angular/material";
 import { LogbooksDetailComponent } from "./logbooks-detail.component";
 import { LinkyModule } from "ngx-linky";
-import { PageChangeEvent } from "shared/modules/table/table.component";
+import {
+  PageChangeEvent,
+  SortChangeEvent
+} from "shared/modules/table/table.component";
 
 describe("LogbooksDetailComponent", () => {
   let component: LogbooksDetailComponent;
@@ -42,6 +45,22 @@ describe("LogbooksDetailComponent", () => {
       };
 
       component.doPageChange(event);
+
+      expect(emitSpy).toHaveBeenCalledTimes(1);
+      expect(emitSpy).toHaveBeenCalledWith(event);
+    });
+  });
+
+  describe("#doSortChange()", () => {
+    it("should emit a SortChangeEvent", () => {
+      const emitSpy = spyOn(component.sortChange, "emit");
+
+      const event: SortChangeEvent = {
+        active: "test",
+        direction: "asc"
+      };
+
+      component.doSortChange(event);
 
       expect(emitSpy).toHaveBeenCalledTimes(1);
       expect(emitSpy).toHaveBeenCalledWith(event);

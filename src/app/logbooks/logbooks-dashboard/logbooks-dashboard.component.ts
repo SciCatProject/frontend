@@ -22,7 +22,8 @@ import {
   prefillFiltersAction,
   setTextFilterAction,
   setDisplayFiltersAction,
-  changePageAction
+  changePageAction,
+  sortByColumnAction
 } from "state-management/actions/logbooks.actions";
 import { ActivatedRoute, Router } from "@angular/router";
 import { APP_CONFIG, AppConfig } from "app-config.module";
@@ -36,7 +37,10 @@ import {
   distinctUntilChanged
 } from "rxjs/operators";
 import * as deepEqual from "deep-equal";
-import { PageChangeEvent } from "shared/modules/table/table.component";
+import {
+  PageChangeEvent,
+  SortChangeEvent
+} from "shared/modules/table/table.component";
 
 @Component({
   selector: "app-logbooks-dashboard",
@@ -84,6 +88,12 @@ export class LogbooksDashboardComponent
     this.store.dispatch(
       changePageAction({ page: event.pageIndex, limit: event.pageSize })
     );
+    this.store.dispatch(fetchLogbookAction({ name: this.logbook.name }));
+  }
+
+  onSortChange(event: SortChangeEvent) {
+    const { active: column, direction } = event;
+    this.store.dispatch(sortByColumnAction({ column, direction }));
     this.store.dispatch(fetchLogbookAction({ name: this.logbook.name }));
   }
 
