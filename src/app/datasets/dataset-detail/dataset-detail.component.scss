@@ -8,19 +8,19 @@ mat-card {
   }
 
   .structural-header {
-    background-color: mat-color($accent, lighter);
+    background-color: mat-color($navy, 400);
   }
 
   .admin-header {
-    background-color: mat-color($warn, lighter);
+    background-color: mat-color($accent, lighter);
   }
 
   .derived-header {
-    background-color: mat-color($brown, 50);
+    background-color: mat-color($forest, 400);
   }
 
   .scientific-header {
-    background-color: mat-color($violet, 50);
+    background-color: mat-color($purple, 400);
   }
 
   mat-icon {
