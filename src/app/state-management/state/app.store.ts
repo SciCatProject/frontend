@@ -16,6 +16,7 @@ import {
   PublishedDataState,
   initialPublishedDataState
 } from "./published-data.store";
+import { InstrumentState, initialInstrumentState } from "./instruments.store";
 
 export interface AppState {
   datasets: DatasetState;
@@ -24,6 +25,7 @@ export interface AppState {
   policies: PolicyState;
   samples: SampleState;
   publishedData: PublishedDataState;
+  instruments: InstrumentState;
 }
 
 export const initialState: AppState = {
@@ -32,5 +34,6 @@ export const initialState: AppState = {
   jobs: initialJobsState,
   policies: initialPolicyState,
   samples: initialSampleState,
-  publishedData: initialPublishedDataState
+  publishedData: initialPublishedDataState,
+  instruments: initialInstrumentState
 };

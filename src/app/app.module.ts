@@ -63,6 +63,7 @@ import { InstrumentsModule } from "./instruments/instruments.module";
     FlexLayoutModule,
     HelpModule,
     HttpClientModule,
+    InstrumentsModule,
     JobsModule,
     LogbooksModule,
     LayoutModule,
@@ -100,8 +101,7 @@ import { InstrumentsModule } from "./instruments/instruments.module";
     EffectsModule.forRoot([]),
     ServiceWorkerModule.register("ngsw-worker.js", {
       enabled: environment.production
-    }),
-    InstrumentsModule
+    })
   ],
   exports: [MatNativeDateModule],
   providers: [

@@ -1,5 +1,4 @@
-import { Job } from "shared/sdk/models";
-import { JobFilters } from "state-management/models";
+import { Job, JobFilters } from "state-management/models";
 
 export interface JobsState {
   jobs: Job[];

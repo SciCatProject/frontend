@@ -1,1 +1,6 @@
-<p>instruments-dashboard works!</p>
+<div fxLayout="row" fxLayout.lt-lg="column">
+  <div fxFlex="20" fxFlex.lt-xl="10"></div>
+  <div fxFlex="63" fxFlex.lt-xl="80">
+    <p>{{ instruments$ | async | json }}</p>
+  </div>
+</div>

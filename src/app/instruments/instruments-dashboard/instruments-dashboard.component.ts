@@ -1,4 +1,8 @@
 import { Component, OnInit } from "@angular/core";
+import { Store, select } from "@ngrx/store";
+import { Instrument } from "shared/sdk";
+import { fetchInstrumentsAction } from "state-management/actions/instruments.actions";
+import { getInstruments } from "state-management/selectors/instruments.selectors";
 
 @Component({
   selector: "app-instruments-dashboard",
@@ -6,7 +10,11 @@ import { Component, OnInit } from "@angular/core";
   styleUrls: ["./instruments-dashboard.component.scss"]
 })
 export class InstrumentsDashboardComponent implements OnInit {
-  constructor() {}
+  instruments$ = this.store.pipe(select(getInstruments));
 
-  ngOnInit() {}
+  constructor(private store: Store<Instrument>) {}
+
+  ngOnInit() {
+    this.store.dispatch(fetchInstrumentsAction());
+  }
 }
