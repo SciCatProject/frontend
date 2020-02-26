@@ -1,22 +1,23 @@
 <div class="publishedData-detail" *ngIf="currentData$ | async as publishedData">
   <div fxLayout="row">
-    <div fxFlex="120">
+    <div fxFlex="140">
       <mat-card>
         <mat-card-header class="status-header">
           Publication Status
         </mat-card-header>
-
+        <mat-card-content>
         <table>
           <tr *ngIf="publishedData.status as value">
             <th><mat-icon> public </mat-icon> Status</th>
             <td>{{ value }}</td>
           </tr>
         </table>
+      </mat-card-content>
 
         <button
           mat-raised-button
           color="primary"
-          *ngIf="publishedData.status !== pending_registration"
+          *ngIf="publishedData.status === 'pending_registration'"
           (click)="onRegisterClick(publishedData.doi)"
         >
           Register

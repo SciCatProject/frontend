@@ -128,6 +128,20 @@ export class PublishedDataEffects {
     )
   );
 
+  registerPublishedDataFailedMessage$ = createEffect(() =>
+  this.actions$.pipe(
+    ofType(fromActions.registerPublishedDataFailedAction),
+    switchMap(() => {
+      const message = {
+        type: MessageType.Error,
+        content: "Registration Failed",
+        duration: 5000
+      };
+      return of(showMessageAction({ message }));
+    })
+  )
+);
+
   loading$ = createEffect(() =>
     this.actions$.pipe(
       ofType(

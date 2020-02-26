@@ -38,7 +38,7 @@ export class PublisheddataDashboardComponent implements OnInit, OnDestroy {
     { name: "title", icon: "description", sort: true, inList: true },
     { name: "creator", icon: "face", sort: true, inList: true },
     { name: "publicationYear", icon: "date_range", sort: true, inList: true },
-    { name: "scicatUser", icon: "account_circle", sort: true, inList: true }
+    { name: "createdBy", icon: "account_circle", sort: true, inList: true }
   ];
   paginate = true;
 
