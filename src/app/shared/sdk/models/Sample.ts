@@ -1,5 +1,6 @@
 /* tslint:disable */
 import {
+  Dataset,
   Attachment
 } from '../index';
 
@@ -10,11 +11,17 @@ export interface SampleInterface {
   "description"?: string;
   "createdAt"?: Date;
   "sampleCharacteristics"?: any;
+  "isPublished"?: boolean;
   "ownerGroup": string;
   "accessGroups"?: Array<any>;
   "createdBy"?: string;
   "updatedBy"?: string;
+  "datasetsId"?: string;
+  "datasetId"?: string;
+  "rawDatasetId"?: string;
+  "derivedDatasetId"?: string;
   "updatedAt"?: Date;
+  datasets?: Dataset;
   attachments?: Attachment[];
 }
 
@@ -24,11 +31,17 @@ export class Sample implements SampleInterface {
   "description": string;
   "createdAt": Date;
   "sampleCharacteristics": any;
+  "isPublished": boolean;
   "ownerGroup": string;
   "accessGroups": Array<any>;
   "createdBy": string;
   "updatedBy": string;
+  "datasetsId": string;
+  "datasetId": string;
+  "rawDatasetId": string;
+  "derivedDatasetId": string;
   "updatedAt": Date;
+  datasets: Dataset;
   attachments: Attachment[];
   constructor(data?: SampleInterface) {
     Object.assign(this, data);
@@ -83,6 +96,10 @@ export class Sample implements SampleInterface {
           name: 'sampleCharacteristics',
           type: 'any'
         },
+        "isPublished": {
+          name: 'isPublished',
+          type: 'boolean'
+        },
         "ownerGroup": {
           name: 'ownerGroup',
           type: 'string'
@@ -99,12 +116,36 @@ export class Sample implements SampleInterface {
           name: 'updatedBy',
           type: 'string'
         },
+        "datasetsId": {
+          name: 'datasetsId',
+          type: 'string'
+        },
+        "datasetId": {
+          name: 'datasetId',
+          type: 'string'
+        },
+        "rawDatasetId": {
+          name: 'rawDatasetId',
+          type: 'string'
+        },
+        "derivedDatasetId": {
+          name: 'derivedDatasetId',
+          type: 'string'
+        },
         "updatedAt": {
           name: 'updatedAt',
           type: 'Date'
         },
       },
       relations: {
+        datasets: {
+          name: 'datasets',
+          type: 'Dataset',
+          model: 'Dataset',
+          relationType: 'belongsTo',
+                  keyFrom: 'datasetsId',
+          keyTo: 'pid'
+        },
         attachments: {
           name: 'attachments',
           type: 'Attachment[]',

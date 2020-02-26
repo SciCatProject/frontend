@@ -9,20 +9,20 @@ import { LoopBackFilter,  } from '../../models/BaseModels';
 import { ErrorHandler } from '../core/error.service';
 import { Observable, Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { PublishedData } from '../../models/PublishedData';
+import { Instrument } from '../../models/Instrument';
 import { SocketConnection } from '../../sockets/socket.connections';
 import { Dataset } from '../../models/Dataset';
 
 
 /**
- * Api services for the `PublishedData` model.
+ * Api services for the `Instrument` model.
  *
  * **Details**
  *
- * Stores the meta data information for an accessible, published and DOI-identified collection of datasets. It defines a list of mandatory and optional metadata fields to be included. DataCite mandatory fields, a full URL to the landing page and modification times are included.
+ * Stores metadata information for an instrument
  */
 @Injectable()
-export class PublishedDataApi extends BaseLoopBackApi {
+export class InstrumentApi extends BaseLoopBackApi {
 
   constructor(
     @Inject(HttpClient) protected http: HttpClient,
@@ -37,7 +37,7 @@ export class PublishedDataApi extends BaseLoopBackApi {
   /**
    * Find a related item by id for datasets.
    *
-   * @param {any} id PublishedData id
+   * @param {any} id Instrument id
    *
    * @param {any} fk Foreign key for datasets
    *
@@ -47,13 +47,13 @@ export class PublishedDataApi extends BaseLoopBackApi {
    *
    * <em>
    * (The remote method definition does not provide any description.
-   * This usually means the response is a `PublishedData` object.)
+   * This usually means the response is a `Instrument` object.)
    * </em>
    */
   public findByIdDatasets(id: any, fk: any, customHeaders?: Function): Observable<any> {
     let _method: string = "GET";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/PublishedData/:id/datasets/:fk";
+    "/Instruments/:id/datasets/:fk";
     let _routeParams: any = {
       id: id,
       fk: fk
@@ -67,7 +67,7 @@ export class PublishedDataApi extends BaseLoopBackApi {
   /**
    * Delete a related item by id for datasets.
    *
-   * @param {any} id PublishedData id
+   * @param {any} id Instrument id
    *
    * @param {any} fk Foreign key for datasets
    *
@@ -80,7 +80,7 @@ export class PublishedDataApi extends BaseLoopBackApi {
   public destroyByIdDatasets(id: any, fk: any, customHeaders?: Function): Observable<any> {
     let _method: string = "DELETE";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/PublishedData/:id/datasets/:fk";
+    "/Instruments/:id/datasets/:fk";
     let _routeParams: any = {
       id: id,
       fk: fk
@@ -94,7 +94,7 @@ export class PublishedDataApi extends BaseLoopBackApi {
   /**
    * Update a related item by id for datasets.
    *
-   * @param {any} id PublishedData id
+   * @param {any} id Instrument id
    *
    * @param {any} fk Foreign key for datasets
    *
@@ -108,13 +108,13 @@ export class PublishedDataApi extends BaseLoopBackApi {
    *
    * <em>
    * (The remote method definition does not provide any description.
-   * This usually means the response is a `PublishedData` object.)
+   * This usually means the response is a `Instrument` object.)
    * </em>
    */
   public updateByIdDatasets(id: any, fk: any, data: any = {}, customHeaders?: Function): Observable<any> {
     let _method: string = "PUT";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/PublishedData/:id/datasets/:fk";
+    "/Instruments/:id/datasets/:fk";
     let _routeParams: any = {
       id: id,
       fk: fk
@@ -128,9 +128,9 @@ export class PublishedDataApi extends BaseLoopBackApi {
   }
 
   /**
-   * Queries datasets of PublishedData.
+   * Queries datasets of Instrument.
    *
-   * @param {any} id PublishedData id
+   * @param {any} id Instrument id
    *
    * @param {object} filter 
    *
@@ -140,13 +140,13 @@ export class PublishedDataApi extends BaseLoopBackApi {
    *
    * <em>
    * (The remote method definition does not provide any description.
-   * This usually means the response is a `PublishedData` object.)
+   * This usually means the response is a `Instrument` object.)
    * </em>
    */
   public getDatasets(id: any, filter: LoopBackFilter = {}, customHeaders?: Function): Observable<any> {
     let _method: string = "GET";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/PublishedData/:id/datasets";
+    "/Instruments/:id/datasets";
     let _routeParams: any = {
       id: id
     };
@@ -160,7 +160,7 @@ export class PublishedDataApi extends BaseLoopBackApi {
   /**
    * Creates a new instance in datasets of this model.
    *
-   * @param {any} id PublishedData id
+   * @param {any} id Instrument id
    *
    * @param {object} data Request data.
    *
@@ -172,13 +172,13 @@ export class PublishedDataApi extends BaseLoopBackApi {
    *
    * <em>
    * (The remote method definition does not provide any description.
-   * This usually means the response is a `PublishedData` object.)
+   * This usually means the response is a `Instrument` object.)
    * </em>
    */
   public createDatasets(id: any, data: any = {}, customHeaders?: Function): Observable<any> {
     let _method: string = "POST";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/PublishedData/:id/datasets";
+    "/Instruments/:id/datasets";
     let _routeParams: any = {
       id: id
     };
@@ -193,7 +193,7 @@ export class PublishedDataApi extends BaseLoopBackApi {
   /**
    * Deletes all datasets of this model.
    *
-   * @param {any} id PublishedData id
+   * @param {any} id Instrument id
    *
    * @returns {object} An empty reference that will be
    *   populated with the actual data once the response is returned
@@ -204,7 +204,7 @@ export class PublishedDataApi extends BaseLoopBackApi {
   public deleteDatasets(id: any, customHeaders?: Function): Observable<any> {
     let _method: string = "DELETE";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/PublishedData/:id/datasets";
+    "/Instruments/:id/datasets";
     let _routeParams: any = {
       id: id
     };
@@ -215,9 +215,9 @@ export class PublishedDataApi extends BaseLoopBackApi {
   }
 
   /**
-   * Counts datasets of PublishedData.
+   * Counts datasets of Instrument.
    *
-   * @param {any} id PublishedData id
+   * @param {any} id Instrument id
    *
    * @param {object} where Criteria to match model instances
    *
@@ -232,7 +232,7 @@ export class PublishedDataApi extends BaseLoopBackApi {
   public countDatasets(id: any, where: any = {}, customHeaders?: Function): Observable<any> {
     let _method: string = "GET";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/PublishedData/:id/datasets/count";
+    "/Instruments/:id/datasets/count";
     let _routeParams: any = {
       id: id
     };
@@ -256,13 +256,13 @@ export class PublishedDataApi extends BaseLoopBackApi {
    *
    * <em>
    * (The remote method definition does not provide any description.
-   * This usually means the response is a `PublishedData` object.)
+   * This usually means the response is a `Instrument` object.)
    * </em>
    */
   public patchOrCreate(data: any = {}, customHeaders?: Function): Observable<any> {
     let _method: string = "PATCH";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/PublishedData";
+    "/Instruments";
     let _routeParams: any = {};
     let _postBody: any = {
       data: data
@@ -275,7 +275,7 @@ export class PublishedDataApi extends BaseLoopBackApi {
   /**
    * Patch attributes for a model instance and persist it into the data source.
    *
-   * @param {any} id PublishedData id
+   * @param {any} id Instrument id
    *
    * @param {object} data Request data.
    *
@@ -287,13 +287,13 @@ export class PublishedDataApi extends BaseLoopBackApi {
    *
    * <em>
    * (The remote method definition does not provide any description.
-   * This usually means the response is a `PublishedData` object.)
+   * This usually means the response is a `Instrument` object.)
    * </em>
    */
   public patchAttributes(id: any, data: any = {}, customHeaders?: Function): Observable<any> {
     let _method: string = "PATCH";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/PublishedData/:id";
+    "/Instruments/:id";
     let _routeParams: any = {
       id: id
     };
@@ -306,67 +306,9 @@ export class PublishedDataApi extends BaseLoopBackApi {
   }
 
   /**
-   * <em>
-         * (The remote method definition does not provide any description.)
-         * </em>
-   *
-   * @param {string} pid 
-   *
-   * @returns {object} An empty reference that will be
-   *   populated with the actual data once the response is returned
-   *   from the server.
-   *
-   * <em>
-   * (The remote method definition does not provide any description.
-   * This usually means the response is a `PublishedData` object.)
-   * </em>
-   */
-  public formPopulate(pid: any, customHeaders?: Function): Observable<any> {
-    let _method: string = "GET";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/PublishedData/formPopulate";
-    let _routeParams: any = {};
-    let _postBody: any = {};
-    let _urlParams: any = {};
-    if (typeof pid !== 'undefined' && pid !== null) _urlParams.pid = pid;
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
-    return result;
-  }
-
-  /**
-   * <em>
-         * (The remote method definition does not provide any description.)
-         * </em>
-   *
-   * @param {object} data Request data.
-   *
-   *  - `id` – `{string}` - 
-   *
-   * @returns {object} An empty reference that will be
-   *   populated with the actual data once the response is returned
-   *   from the server.
-   *
-   * Data properties:
-   *
-   *  - `doi` – `{string}` - 
-   */
-  public register(id: any, customHeaders?: Function): Observable<any> {
-    let _method: string = "POST";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/PublishedData/:id/register";
-    let _routeParams: any = {
-      id: id
-    };
-    let _postBody: any = {};
-    let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
-    return result;
-  }
-
-  /**
    * Creates a new instance in datasets of this model.
    *
-   * @param {any} id PublishedData id
+   * @param {any} id Instrument id
    *
    * @param {object} data Request data.
    *
@@ -378,13 +320,13 @@ export class PublishedDataApi extends BaseLoopBackApi {
    *
    * <em>
    * (The remote method definition does not provide any description.
-   * This usually means the response is a `PublishedData` object.)
+   * This usually means the response is a `Instrument` object.)
    * </em>
    */
   public createManyDatasets(id: any, data: any[] = [], customHeaders?: Function): Observable<any> {
     let _method: string = "POST";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/PublishedData/:id/datasets";
+    "/Instruments/:id/datasets";
     let _routeParams: any = {
       id: id
     };
@@ -398,9 +340,9 @@ export class PublishedDataApi extends BaseLoopBackApi {
 
   /**
    * The name of the model represented by this $resource,
-   * i.e. `PublishedData`.
+   * i.e. `Instrument`.
    */
   public getModelName() {
-    return "PublishedData";
+    return "Instrument";
   }
 }
