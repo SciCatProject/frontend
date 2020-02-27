@@ -12,7 +12,7 @@ export const initialInstrumentState: InstrumentState = {
   totalCount: 0,
 
   filters: {
-    sortField: "name:desc",
+    sortField: "name desc",
     skip: 0,
     limit: 25
   }

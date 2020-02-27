@@ -15,7 +15,18 @@ const reducer = createReducer(
   on(fromActions.fetchCountCompleteAction, (state, { count }) => ({
     ...state,
     totalCount: count
-  }))
+  })),
+  on(fromActions.changePageAction, (state, { page, limit }) => {
+    const skip = page * limit;
+    const filters = { ...state.filters, skip, limit };
+    return { ...state, filters };
+  }),
+
+  on(fromActions.sortByColumnAction, (state, { column, direction }) => {
+    const sortField = column + (direction ? " " + direction : "");
+    const filters = { ...state.filters, sortField, skip: 0 };
+    return { ...state, filters };
+  })
 );
 
 export function instrumentsReducer(

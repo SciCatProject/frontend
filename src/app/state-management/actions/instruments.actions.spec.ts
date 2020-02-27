@@ -65,4 +65,32 @@ describe("Instrument Actions", () => {
       });
     });
   });
+
+  describe("changePageAction", () => {
+    it("should create an action", () => {
+      const page = 0;
+      const limit = 25;
+      const action = fromActions.changePageAction({ page, limit });
+
+      expect({ ...action }).toEqual({
+        type: "[Instrument] Change Page",
+        page,
+        limit
+      });
+    });
+  });
+
+  describe("changePageAction", () => {
+    it("should create an action", () => {
+      const column = "test";
+      const direction = "desc";
+      const action = fromActions.sortByColumnAction({ column, direction });
+
+      expect({ ...action }).toEqual({
+        type: "[Instrument] Sort By Column",
+        column,
+        direction
+      });
+    });
+  });
 });

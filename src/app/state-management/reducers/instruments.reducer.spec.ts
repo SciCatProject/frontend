@@ -25,4 +25,30 @@ describe("InstrumentsReducer", () => {
       expect(state.totalCount).toEqual(count);
     });
   });
+
+  describe("on changePageAction", () => {
+    it("should set skip and limit filters", () => {
+      const page = 1;
+      const limit = 25;
+      const skip = page * limit;
+      const action = fromActions.changePageAction({ page, limit });
+      const state = instrumentsReducer(initialInstrumentState, action);
+
+      expect(state.filters.skip).toEqual(skip);
+      expect(state.filters.limit).toEqual(limit);
+    });
+  });
+
+  describe("on sortByColumnAction", () => {
+    it("should set sortField filter and set skip filter to 0", () => {
+      const column = "test";
+      const direction = "asc";
+      const sortField = column + " " + direction;
+      const action = fromActions.sortByColumnAction({ column, direction });
+      const state = instrumentsReducer(initialInstrumentState, action);
+
+      expect(state.filters.sortField).toEqual(sortField);
+      expect(state.filters.skip).toEqual(0);
+    });
+  });
 });

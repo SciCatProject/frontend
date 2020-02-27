@@ -1,17 +1,14 @@
-import {
-  InstrumentState,
-  initialInstrumentState
-} from "state-management/state/instruments.store";
+import { InstrumentState } from "state-management/state/instruments.store";
 import * as fromSelectors from "./instruments.selectors";
 import { InstrumentFilters } from "state-management/models";
 
 const instrumentFilters: InstrumentFilters = {
-  sortField: "name:desc",
+  sortField: "name desc",
   skip: 0,
   limit: 25
 };
 
-const initialInstrumentsState: InstrumentState = {
+const initialInstrumentState: InstrumentState = {
   instruments: [],
   totalCount: 0,
 

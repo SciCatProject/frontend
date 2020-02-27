@@ -20,3 +20,13 @@ export const fetchCountCompleteAction = createAction(
 export const fetchCountFailedAction = createAction(
   "[Instrument] Fetch Count Failed"
 );
+
+export const changePageAction = createAction(
+  "[Instrument] Change Page",
+  props<{ page: number; limit: number }>()
+);
+
+export const sortByColumnAction = createAction(
+  "[Instrument] Sort By Column",
+  props<{ column: string; direction: string }>()
+);

@@ -1,6 +1,16 @@
 <div fxLayout="row" fxLayout.lt-lg="column">
   <div fxFlex="20" fxFlex.lt-xl="10"></div>
   <div fxFlex="63" fxFlex.lt-xl="80">
-    <p>{{ instruments$ | async | json }}</p>
+    <app-table
+      [data]="instruments$ | async"
+      [columns]="tableColumns"
+      [paginate]="tablePaginate"
+      [currentPage]="currentPage$ | async"
+      [dataCount]="instrumentsCount$ | async"
+      [dataPerPage]="instrumentsPerPage$ | async"
+      (pageChange)="onPageChange($event)"
+      (sortChange)="onSortChange($event)"
+      (rowClick)="onRowClick($event)"
+    ></app-table>
   </div>
 </div>
