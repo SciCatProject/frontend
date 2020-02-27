@@ -36,6 +36,7 @@ import { LoginLayoutComponent } from "_layout/login-layout/login-layout.componen
 import { AppLayoutComponent } from "_layout/app-layout/app-layout.component";
 import { PoliciesDashboardComponent } from "policies/policies-dashboard/policies-dashboard.component";
 import { InstrumentsDashboardComponent } from "instruments/instruments-dashboard/instruments-dashboard.component";
+import { InstrumentDetailsComponent } from "instruments/instrument-details/instrument-details.component";
 
 export const routes: Routes = [
   {
@@ -100,6 +101,11 @@ export const routes: Routes = [
       {
         path: "instruments",
         component: InstrumentsDashboardComponent,
+        canActivate: [AuthCheck]
+      },
+      {
+        path: "instruments/:id",
+        component: InstrumentDetailsComponent,
         canActivate: [AuthCheck]
       },
       {

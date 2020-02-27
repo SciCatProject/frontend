@@ -19,6 +19,7 @@ import {
 } from "shared/modules/table/table.component";
 import { map } from "rxjs/operators";
 import { JsonHeadPipe } from "shared/pipes/json-head.pipe";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "app-instruments-dashboard",
@@ -56,12 +57,13 @@ export class InstrumentsDashboardComponent implements OnInit {
   }
 
   onRowClick(instrument: Instrument): void {
-    console.log("Row Click", instrument);
     const pid = encodeURIComponent(instrument.pid);
+    this.router.navigateByUrl("/instruments/" + pid);
   }
 
   constructor(
     private jsonHeadPipe: JsonHeadPipe,
+    private router: Router,
     private store: Store<Instrument>
   ) {}
 

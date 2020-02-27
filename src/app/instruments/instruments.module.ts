@@ -8,9 +8,10 @@ import { EffectsModule } from "@ngrx/effects";
 import { InstrumentEffects } from "state-management/effects/instruments.effects";
 import { SharedCatanieModule } from "shared/shared.module";
 import { JsonHeadPipe } from "shared/pipes/json-head.pipe";
+import { InstrumentDetailsComponent } from './instrument-details/instrument-details.component';
 
 @NgModule({
-  declarations: [InstrumentsDashboardComponent],
+  declarations: [InstrumentsDashboardComponent, InstrumentDetailsComponent],
   imports: [
     CommonModule,
     EffectsModule.forFeature([InstrumentEffects]),
