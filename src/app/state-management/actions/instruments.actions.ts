@@ -11,3 +11,12 @@ export const fetchInstrumentsCompleteAction = createAction(
 export const fetchInstrumentsFailedAction = createAction(
   "[Instrument] Fetch Instruments Failed"
 );
+
+export const fetchCountAction = createAction("[Instrument] Fetch Count");
+export const fetchCountCompleteAction = createAction(
+  "[Instrument] Fetch Count Complete",
+  props<{ count: number }>()
+);
+export const fetchCountFailedAction = createAction(
+  "[Instrument] Fetch Count Failed"
+);

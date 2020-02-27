@@ -15,4 +15,14 @@ describe("InstrumentsReducer", () => {
       expect(state.instruments).toEqual(instruments);
     });
   });
+
+  describe("on fetchCountCompleteAction", () => {
+    it("should set totalCount property", () => {
+      const count = 100;
+      const action = fromActions.fetchCountCompleteAction({ count });
+      const state = instrumentsReducer(initialInstrumentState, action);
+
+      expect(state.totalCount).toEqual(count);
+    });
+  });
 });

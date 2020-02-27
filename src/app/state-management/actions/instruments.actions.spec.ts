@@ -33,4 +33,36 @@ describe("Instrument Actions", () => {
       });
     });
   });
+
+  describe("fetchCountAction", () => {
+    it("should create an action", () => {
+      const action = fromActions.fetchCountAction();
+
+      expect({ ...action }).toEqual({
+        type: "[Instrument] Fetch Count"
+      });
+    });
+  });
+
+  describe("fetchCountCompleteAction", () => {
+    it("should create an action", () => {
+      const count = 100;
+      const action = fromActions.fetchCountCompleteAction({ count });
+
+      expect({ ...action }).toEqual({
+        type: "[Instrument] Fetch Count Complete",
+        count
+      });
+    });
+  });
+
+  describe("fetchCountFailedAction", () => {
+    it("should create an action", () => {
+      const action = fromActions.fetchCountFailedAction();
+
+      expect({ ...action }).toEqual({
+        type: "[Instrument] Fetch Count Failed"
+      });
+    });
+  });
 });

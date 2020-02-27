@@ -28,18 +28,19 @@ describe("InstrumentEffects", () => {
   });
 
   describe("fetchInstruments$", () => {
-    it("should result in a fetchInstrumentsCompleteAction", () => {
+    it("should result in a fetchInstrumentsCompleteAction and a fetchCountAction", () => {
       const instruments = [new Instrument()];
       const action = fromActions.fetchInstrumentsAction();
-      const outcome = fromActions.fetchInstrumentsCompleteAction({
+      const outcome1 = fromActions.fetchInstrumentsCompleteAction({
         instruments
       });
+      const outcome2 = fromActions.fetchCountAction();
 
       actions = hot("-a", { a: action });
       const response = cold("-a|", { a: instruments });
       instrumentApi.find.and.returnValue(response);
 
-      const expected = cold("--b", { b: outcome });
+      const expected = cold("--(bc)", { b: outcome1, c: outcome2 });
       expect(effects.fetchInstruments$).toBeObservable(expected);
     });
 
@@ -53,6 +54,35 @@ describe("InstrumentEffects", () => {
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchInstruments$).toBeObservable(expected);
+    });
+  });
+
+  describe("fetchCount$", () => {
+    it("should result in a fetchCountCompleteAction", () => {
+      const instruments = [new Instrument()];
+      const action = fromActions.fetchCountAction();
+      const outcome = fromActions.fetchCountCompleteAction({
+        count: instruments.length
+      });
+
+      actions = hot("-a", { a: action });
+      const response = cold("-a|", { a: instruments });
+      instrumentApi.find.and.returnValue(response);
+
+      const expected = cold("--b", { b: outcome });
+      expect(effects.fetchCount$).toBeObservable(expected);
+    });
+
+    it("should result in a fetchCountFailedAction", () => {
+      const action = fromActions.fetchCountAction();
+      const outcome = fromActions.fetchCountFailedAction();
+
+      actions = hot("-a", { a: action });
+      const response = cold("-#", {});
+      instrumentApi.find.and.returnValue(response);
+
+      const expected = cold("--b", { b: outcome });
+      expect(effects.fetchCount$).toBeObservable(expected);
     });
   });
 });

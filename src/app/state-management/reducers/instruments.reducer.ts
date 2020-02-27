@@ -10,6 +10,11 @@ const reducer = createReducer(
   on(fromActions.fetchInstrumentsCompleteAction, (state, { instruments }) => ({
     ...state,
     instruments
+  })),
+
+  on(fromActions.fetchCountCompleteAction, (state, { count }) => ({
+    ...state,
+    totalCount: count
   }))
 );
 
