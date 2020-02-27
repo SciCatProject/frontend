@@ -26,11 +26,16 @@ import {
   changePageAction,
   sortByColumnAction
 } from "state-management/actions/instruments.actions";
+import { Router } from "@angular/router";
+import { Instrument } from "shared/sdk";
 
 describe("InstrumentsDashboardComponent", () => {
   let component: InstrumentsDashboardComponent;
   let fixture: ComponentFixture<InstrumentsDashboardComponent>;
 
+  const router = {
+    navigateByUrl: jasmine.createSpy("navigateByUrl")
+  };
   let store: MockStore;
   let dispatchSpy;
 
@@ -50,7 +55,13 @@ describe("InstrumentsDashboardComponent", () => {
           ]
         })
       ]
-    }).compileComponents();
+    });
+    TestBed.overrideComponent(InstrumentsDashboardComponent, {
+      set: {
+        providers: [{ provide: Router, useValue: router }]
+      }
+    });
+    TestBed.compileComponents();
   }));
 
   beforeEach(() => {
@@ -109,6 +120,18 @@ describe("InstrumentsDashboardComponent", () => {
       expect(dispatchSpy).toHaveBeenCalledWith(
         sortByColumnAction({ column, direction })
       );
+    });
+  });
+
+  describe("#onRowClick()", () => {
+    it("should navigate to an instrument", () => {
+      const instrument = new Instrument();
+      const pid = encodeURIComponent(instrument.pid);
+
+      component.onRowClick(instrument);
+
+      expect(router.navigateByUrl).toHaveBeenCalledTimes(1);
+      expect(router.navigateByUrl).toHaveBeenCalledWith("/instruments/" + pid);
     });
   });
 });
