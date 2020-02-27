@@ -22,6 +22,11 @@ const reducer = createReducer(
     currentInstrument: instrument
   })),
 
+  on(fromActions.saveCustomMetadataCompleteAction, (state, { instrument }) => ({
+    ...state,
+    currentInstrument: instrument
+  })),
+
   on(fromActions.changePageAction, (state, { page, limit }) => {
     const skip = page * limit;
     const filters = { ...state.filters, skip, limit };

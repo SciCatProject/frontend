@@ -1,4 +1,12 @@
 import { Component, OnInit } from "@angular/core";
+import { ActivatedRoute } from "@angular/router";
+import { Store, select } from "@ngrx/store";
+import { Instrument } from "shared/sdk";
+import {
+  fetchInstrumentAction,
+  saveCustomMetadataAction
+} from "state-management/actions/instruments.actions";
+import { getCurrentInstrument } from "state-management/selectors/instruments.selectors";
 
 @Component({
   selector: "app-instrument-details",
@@ -6,7 +14,19 @@ import { Component, OnInit } from "@angular/core";
   styleUrls: ["./instrument-details.component.scss"]
 })
 export class InstrumentDetailsComponent implements OnInit {
-  constructor() {}
+  instrument$ = this.store.pipe(select(getCurrentInstrument));
 
-  ngOnInit() {}
+  onSaveCustomMetadata(pid: string, customMetadata: object): void {
+    this.store.dispatch(saveCustomMetadataAction({ pid, customMetadata }));
+  }
+
+  constructor(
+    private route: ActivatedRoute,
+    private store: Store<Instrument>
+  ) {}
+
+  ngOnInit() {
+    const pid = this.route.snapshot.paramMap.get("id");
+    this.store.dispatch(fetchInstrumentAction({ pid }));
+  }
 }

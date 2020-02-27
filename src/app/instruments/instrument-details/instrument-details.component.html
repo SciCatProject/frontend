@@ -1,1 +1,50 @@
-<p>instrument-details works!</p>
+<ng-container *ngIf="instrument$ | async as instrument">
+  <div fxLayout="row" fxLayout.xs="column">
+    <div fxFlex="80">
+      <mat-card>
+        <mat-card-header class="details-header">
+          Instrument Details
+        </mat-card-header>
+        <div class="details">
+          <table>
+            <tr *ngIf="instrument.name as value">
+              <th><mat-icon>scanner</mat-icon>Name</th>
+              <td>{{ value }}</td>
+            </tr>
+            <tr *ngIf="instrument.pid as value">
+              <th><mat-icon>perm_contact_calendar</mat-icon>PID</th>
+              <td>{{ value }}</td>
+            </tr>
+          </table>
+        </div>
+      </mat-card>
+
+      <mat-card *ngIf="instrument.customMetadata as value">
+        <mat-card-header class="customMetadata-header">
+          Custom Metadata
+        </mat-card-header>
+
+        <mat-tab-group>
+          <mat-tab>
+            <ng-template mat-tab-label>
+              <mat-icon>list</mat-icon> View
+            </ng-template>
+
+            <metadata-view [metadata]="value"></metadata-view>
+          </mat-tab>
+
+          <mat-tab>
+            <ng-template mat-tab-label>
+              <mat-icon>edit</mat-icon> Edit
+            </ng-template>
+
+            <metadata-edit
+              [metadata]="value"
+              (save)="onSaveCustomMetadata(instrument.pid, $event)"
+            ></metadata-edit>
+          </mat-tab>
+        </mat-tab-group>
+      </mat-card>
+    </div>
+  </div>
+</ng-container>

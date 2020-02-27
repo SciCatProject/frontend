@@ -32,7 +32,11 @@ describe("InstrumentEffects", () => {
         }),
         {
           provide: InstrumentApi,
-          useValue: jasmine.createSpyObj("instrumentApi", ["find", "findById"])
+          useValue: jasmine.createSpyObj("instrumentApi", [
+            "find",
+            "findById",
+            "patchAttributes"
+          ])
         }
       ]
     });
@@ -229,6 +233,44 @@ describe("InstrumentEffects", () => {
     });
   });
 
+  describe("saveCustomMetadata$", () => {
+    const pid = "testPid";
+    const customMetadata = {};
+
+    it("should result in a saveCustomMetadataCompleteAction", () => {
+      const instrument = new Instrument();
+      const action = fromActions.saveCustomMetadataAction({
+        pid,
+        customMetadata
+      });
+      const outcome = fromActions.saveCustomMetadataCompleteAction({
+        instrument
+      });
+
+      actions = hot("-a", { a: action });
+      const response = cold("-a|", { a: instrument });
+      instrumentApi.patchAttributes.and.returnValue(response);
+
+      const expected = cold("--b", { b: outcome });
+      expect(effects.saveCustomMetadata$).toBeObservable(expected);
+    });
+
+    it("should result in a saveCustomMetadataFailedAction", () => {
+      const action = fromActions.saveCustomMetadataAction({
+        pid,
+        customMetadata
+      });
+      const outcome = fromActions.saveCustomMetadataFailedAction();
+
+      actions = hot("-a", { a: action });
+      const response = cold("-#", {});
+      instrumentApi.patchAttributes.and.returnValue(response);
+
+      const expected = cold("--b", { b: outcome });
+      expect(effects.saveCustomMetadata$).toBeObservable(expected);
+    });
+  });
+
   describe("loading$", () => {
     describe("ofType fetchInstrumentsAction", () => {
       it("should dispatch a loadingAction", () => {
@@ -258,6 +300,23 @@ describe("InstrumentEffects", () => {
       it("should dispatch a loadingAction", () => {
         const pid = "testPid";
         const action = fromActions.fetchInstrumentAction({ pid });
+        const outcome = loadingAction();
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.loading$).toBeObservable(expected);
+      });
+    });
+
+    describe("ofType saveCustomMetadataAction", () => {
+      it("should dispatch a loadingAction", () => {
+        const pid = "testPid";
+        const customMetadata = {};
+        const action = fromActions.saveCustomMetadataAction({
+          pid,
+          customMetadata
+        });
         const outcome = loadingAction();
 
         actions = hot("-a", { a: action });
@@ -339,6 +398,33 @@ describe("InstrumentEffects", () => {
     describe("ofType fetchInstrumentFailedAction", () => {
       it("should dispatch a loadingCompleteAction", () => {
         const action = fromActions.fetchInstrumentFailedAction();
+        const outcome = loadingCompleteAction();
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.loadingComplete$).toBeObservable(expected);
+      });
+    });
+
+    describe("ofType saveCustomMetadataCompleteAction", () => {
+      it("should dispatch a loadingCompleteAction", () => {
+        const instrument = new Instrument();
+        const action = fromActions.saveCustomMetadataCompleteAction({
+          instrument
+        });
+        const outcome = loadingCompleteAction();
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.loadingComplete$).toBeObservable(expected);
+      });
+    });
+
+    describe("ofType saveCustomMetadataFailedAction", () => {
+      it("should dispatch a loadingCompleteAction", () => {
+        const action = fromActions.saveCustomMetadataFailedAction();
         const outcome = loadingCompleteAction();
 
         actions = hot("-a", { a: action });

@@ -33,6 +33,18 @@ export const fetchInstrumentFailedAction = createAction(
   "[Instrument] Fetch Instrument Failed"
 );
 
+export const saveCustomMetadataAction = createAction(
+  "[Instrument] Save Custom Metadata",
+  props<{ pid: string; customMetadata: object }>()
+);
+export const saveCustomMetadataCompleteAction = createAction(
+  "[Instrument] Save Custom Metadata Complete",
+  props<{ instrument: Instrument }>()
+);
+export const saveCustomMetadataFailedAction = createAction(
+  "[Instrument] Save Custom Metadata Failed"
+);
+
 export const changePageAction = createAction(
   "[Instrument] Change Page",
   props<{ page: number; limit: number }>()

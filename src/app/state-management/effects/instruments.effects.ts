@@ -60,7 +60,7 @@ export class InstrumentEffects {
     this.actions$.pipe(
       ofType(fromActions.fetchInstrumentAction),
       switchMap(({ pid }) =>
-        this.instrumentApi.findById(pid).pipe(
+        this.instrumentApi.findById(encodeURIComponent(pid)).pipe(
           map((instrument: Instrument) =>
             fromActions.fetchInstrumentCompleteAction({ instrument })
           ),
@@ -70,12 +70,29 @@ export class InstrumentEffects {
     )
   );
 
+  saveCustomMetadata$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(fromActions.saveCustomMetadataAction),
+      switchMap(({ pid, customMetadata }) =>
+        this.instrumentApi
+          .patchAttributes(encodeURIComponent(pid), { customMetadata })
+          .pipe(
+            map((instrument: Instrument) =>
+              fromActions.saveCustomMetadataCompleteAction({ instrument })
+            ),
+            catchError(() => of(fromActions.saveCustomMetadataFailedAction()))
+          )
+      )
+    )
+  );
+
   loading$ = createEffect(() =>
     this.actions$.pipe(
       ofType(
         fromActions.fetchInstrumentsAction,
         fromActions.fetchCountAction,
-        fromActions.fetchInstrumentAction
+        fromActions.fetchInstrumentAction,
+        fromActions.saveCustomMetadataAction
       ),
       switchMap(() => of(loadingAction()))
     )
@@ -89,7 +106,9 @@ export class InstrumentEffects {
         fromActions.fetchCountCompleteAction,
         fromActions.fetchCountFailedAction,
         fromActions.fetchInstrumentCompleteAction,
-        fromActions.fetchInstrumentFailedAction
+        fromActions.fetchInstrumentFailedAction,
+        fromActions.saveCustomMetadataCompleteAction,
+        fromActions.saveCustomMetadataFailedAction
       ),
       switchMap(() => of(loadingCompleteAction()))
     )

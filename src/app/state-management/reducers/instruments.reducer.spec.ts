@@ -38,6 +38,18 @@ describe("InstrumentsReducer", () => {
     });
   });
 
+  describe("on saveCustomMetadataCompleteAction", () => {
+    it("should set currentInstrument property", () => {
+      const instrument = new Instrument();
+      const action = fromActions.saveCustomMetadataCompleteAction({
+        instrument
+      });
+      const state = instrumentsReducer(initialInstrumentState, action);
+
+      expect(state.currentInstrument).toEqual(instrument);
+    });
+  });
+
   describe("on changePageAction", () => {
     it("should set skip and limit filters", () => {
       const page = 1;

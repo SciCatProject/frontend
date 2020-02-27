@@ -8,7 +8,8 @@ import { EffectsModule } from "@ngrx/effects";
 import { InstrumentEffects } from "state-management/effects/instruments.effects";
 import { SharedCatanieModule } from "shared/shared.module";
 import { JsonHeadPipe } from "shared/pipes/json-head.pipe";
-import { InstrumentDetailsComponent } from './instrument-details/instrument-details.component';
+import { InstrumentDetailsComponent } from "./instrument-details/instrument-details.component";
+import { MatCardModule, MatIconModule, MatTabsModule } from "@angular/material";
 
 @NgModule({
   declarations: [InstrumentsDashboardComponent, InstrumentDetailsComponent],
@@ -16,6 +17,9 @@ import { InstrumentDetailsComponent } from './instrument-details/instrument-deta
     CommonModule,
     EffectsModule.forFeature([InstrumentEffects]),
     FlexLayoutModule,
+    MatCardModule,
+    MatIconModule,
+    MatTabsModule,
     SharedCatanieModule,
     StoreModule.forFeature("instruments", instrumentsReducer)
   ],

@@ -102,6 +102,44 @@ describe("Instrument Actions", () => {
     });
   });
 
+  describe("saveCustomMetadataAction", () => {
+    it("should create an action", () => {
+      const pid = "testPid";
+      const customMetadata = {};
+      const action = fromActions.saveCustomMetadataAction({
+        pid,
+        customMetadata
+      });
+      expect({ ...action }).toEqual({
+        type: "[Instrument] Save Custom Metadata",
+        pid,
+        customMetadata
+      });
+    });
+  });
+
+  describe("saveCustomMetadataCompleteAction", () => {
+    it("should create an action", () => {
+      const instrument = new Instrument();
+      const action = fromActions.saveCustomMetadataCompleteAction({
+        instrument
+      });
+      expect({ ...action }).toEqual({
+        type: "[Instrument] Save Custom Metadata Complete",
+        instrument
+      });
+    });
+  });
+
+  describe("saveCustomMetadataFailedAction", () => {
+    it("should create an action", () => {
+      const action = fromActions.saveCustomMetadataFailedAction();
+      expect({ ...action }).toEqual({
+        type: "[Instrument] Save Custom Metadata Failed"
+      });
+    });
+  });
+
   describe("changePageAction", () => {
     it("should create an action", () => {
       const page = 0;
