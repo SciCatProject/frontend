@@ -16,6 +16,12 @@ const reducer = createReducer(
     ...state,
     totalCount: count
   })),
+
+  on(fromActions.fetchInstrumentCompleteAction, (state, { instrument }) => ({
+    ...state,
+    currentInstrument: instrument
+  })),
+
   on(fromActions.changePageAction, (state, { page, limit }) => {
     const skip = page * limit;
     const filters = { ...state.filters, skip, limit };

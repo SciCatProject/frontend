@@ -10,6 +10,11 @@ export const getInstruments = createSelector(
   state => state.instruments
 );
 
+export const getCurrentInstrument = createSelector(
+  getInstrumentState,
+  state => state.currentInstrument
+);
+
 export const getInstrumentsCount = createSelector(
   getInstrumentState,
   state => state.totalCount

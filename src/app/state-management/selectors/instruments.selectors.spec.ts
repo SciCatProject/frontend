@@ -1,6 +1,8 @@
 import { InstrumentState } from "state-management/state/instruments.store";
 import * as fromSelectors from "./instruments.selectors";
-import { InstrumentFilters } from "state-management/models";
+import { InstrumentFilters, Instrument } from "state-management/models";
+
+const instrument = new Instrument();
 
 const instrumentFilters: InstrumentFilters = {
   sortField: "name desc",
@@ -10,6 +12,7 @@ const instrumentFilters: InstrumentFilters = {
 
 const initialInstrumentState: InstrumentState = {
   instruments: [],
+  currentInstrument: instrument,
   totalCount: 0,
 
   filters: instrumentFilters
@@ -21,6 +24,14 @@ describe("Instrument Selectors", () => {
       expect(
         fromSelectors.getInstruments.projector(initialInstrumentState)
       ).toEqual([]);
+    });
+  });
+
+  describe("getCurrentInstrument", () => {
+    it("should get current instrument", () => {
+      expect(
+        fromSelectors.getCurrentInstrument.projector(initialInstrumentState)
+      ).toEqual(instrument);
     });
   });
 

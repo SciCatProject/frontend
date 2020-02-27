@@ -21,6 +21,18 @@ export const fetchCountFailedAction = createAction(
   "[Instrument] Fetch Count Failed"
 );
 
+export const fetchInstrumentAction = createAction(
+  "[Instrument] Fetch Instrument",
+  props<{ pid: string }>()
+);
+export const fetchInstrumentCompleteAction = createAction(
+  "[Instrument] Fetch Instrument Complete",
+  props<{ instrument: Instrument }>()
+);
+export const fetchInstrumentFailedAction = createAction(
+  "[Instrument] Fetch Instrument Failed"
+);
+
 export const changePageAction = createAction(
   "[Instrument] Change Page",
   props<{ page: number; limit: number }>()

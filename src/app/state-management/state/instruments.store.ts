@@ -2,6 +2,7 @@ import { Instrument, InstrumentFilters } from "../models";
 
 export interface InstrumentState {
   instruments: Instrument[];
+  currentInstrument: Instrument;
   totalCount: number;
 
   filters: InstrumentFilters;
@@ -9,6 +10,7 @@ export interface InstrumentState {
 
 export const initialInstrumentState: InstrumentState = {
   instruments: [],
+  currentInstrument: null,
   totalCount: 0,
 
   filters: {

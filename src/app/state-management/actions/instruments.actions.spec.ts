@@ -66,6 +66,42 @@ describe("Instrument Actions", () => {
     });
   });
 
+  describe("fetchInstrumentAction", () => {
+    it("should create an action", () => {
+      const pid = "testPid";
+      const action = fromActions.fetchInstrumentAction({ pid });
+
+      expect({ ...action }).toEqual({
+        type: "[Instrument] Fetch Instrument",
+        pid
+      });
+    });
+  });
+
+  describe("fetchInstrumentCompleteAction", () => {
+    it("should create an action", () => {
+      const instrument = new Instrument();
+      const action = fromActions.fetchInstrumentCompleteAction({
+        instrument
+      });
+
+      expect({ ...action }).toEqual({
+        type: "[Instrument] Fetch Instrument Complete",
+        instrument
+      });
+    });
+  });
+
+  describe("fetchInstrumentFailedAction", () => {
+    it("should create an action", () => {
+      const action = fromActions.fetchInstrumentFailedAction();
+
+      expect({ ...action }).toEqual({
+        type: "[Instrument] Fetch Instrument Failed"
+      });
+    });
+  });
+
   describe("changePageAction", () => {
     it("should create an action", () => {
       const page = 0;

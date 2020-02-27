@@ -7,6 +7,10 @@ import * as fromActions from "state-management/actions/instruments.actions";
 import { hot, cold } from "jasmine-marbles";
 import { provideMockStore } from "@ngrx/store/testing";
 import { getFilters } from "state-management/selectors/instruments.selectors";
+import {
+  loadingAction,
+  loadingCompleteAction
+} from "state-management/actions/user.actions";
 
 describe("InstrumentEffects", () => {
   let actions: Observable<any>;
@@ -28,7 +32,7 @@ describe("InstrumentEffects", () => {
         }),
         {
           provide: InstrumentApi,
-          useValue: jasmine.createSpyObj("instrumentApi", ["find"])
+          useValue: jasmine.createSpyObj("instrumentApi", ["find", "findById"])
         }
       ]
     });
@@ -193,6 +197,155 @@ describe("InstrumentEffects", () => {
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchCount$).toBeObservable(expected);
+    });
+  });
+
+  describe("fetchInstrument$", () => {
+    const pid = "testPid";
+
+    it("should result in a fetchInstrumentCompleteAction", () => {
+      const instrument = new Instrument();
+      const action = fromActions.fetchInstrumentAction({ pid });
+      const outcome = fromActions.fetchInstrumentCompleteAction({ instrument });
+
+      actions = hot("-a", { a: action });
+      const response = cold("-a|", { a: instrument });
+      instrumentApi.findById.and.returnValue(response);
+
+      const expected = cold("--b", { b: outcome });
+      expect(effects.fetchInstrument$).toBeObservable(expected);
+    });
+
+    it("should result in a fetchInstrumentFailedAction", () => {
+      const action = fromActions.fetchInstrumentAction({ pid });
+      const outcome = fromActions.fetchInstrumentFailedAction();
+
+      actions = hot("-a", { a: action });
+      const response = cold("-#", {});
+      instrumentApi.findById.and.returnValue(response);
+
+      const expected = cold("--b", { b: outcome });
+      expect(effects.fetchInstrument$).toBeObservable(expected);
+    });
+  });
+
+  describe("loading$", () => {
+    describe("ofType fetchInstrumentsAction", () => {
+      it("should dispatch a loadingAction", () => {
+        const action = fromActions.fetchInstrumentsAction();
+        const outcome = loadingAction();
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.loading$).toBeObservable(expected);
+      });
+    });
+
+    describe("ofType fetchCountAction", () => {
+      it("should dispatch a loadingAction", () => {
+        const action = fromActions.fetchCountAction();
+        const outcome = loadingAction();
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.loading$).toBeObservable(expected);
+      });
+    });
+
+    describe("ofType fetchInstrumentAction", () => {
+      it("should dispatch a loadingAction", () => {
+        const pid = "testPid";
+        const action = fromActions.fetchInstrumentAction({ pid });
+        const outcome = loadingAction();
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.loading$).toBeObservable(expected);
+      });
+    });
+  });
+
+  describe("loadingComplete$", () => {
+    describe("ofType fetchInstrumentsCompleteAction", () => {
+      it("should dispatch a loadingCompleteAction", () => {
+        const instruments = [new Instrument()];
+        const action = fromActions.fetchInstrumentsCompleteAction({
+          instruments
+        });
+        const outcome = loadingCompleteAction();
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.loadingComplete$).toBeObservable(expected);
+      });
+    });
+
+    describe("ofType fetchInstrumentsFailedAction", () => {
+      it("should dispatch a loadingCompleteAction", () => {
+        const action = fromActions.fetchInstrumentsFailedAction();
+        const outcome = loadingCompleteAction();
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.loadingComplete$).toBeObservable(expected);
+      });
+    });
+
+    describe("ofType fetchCountCompleteAction", () => {
+      it("should dispatch a loadingCompleteAction", () => {
+        const count = 100;
+        const action = fromActions.fetchCountCompleteAction({ count });
+        const outcome = loadingCompleteAction();
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.loadingComplete$).toBeObservable(expected);
+      });
+    });
+
+    describe("ofType fetchCountFailedAction", () => {
+      it("should dispatch a loadingCompleteAction", () => {
+        const action = fromActions.fetchCountFailedAction();
+        const outcome = loadingCompleteAction();
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.loadingComplete$).toBeObservable(expected);
+      });
+    });
+
+    describe("ofType fetchInstrumentCompleteAction", () => {
+      it("should dispatch a loadingCompleteAction", () => {
+        const instrument = new Instrument();
+        const action = fromActions.fetchInstrumentCompleteAction({
+          instrument
+        });
+        const outcome = loadingCompleteAction();
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.loadingComplete$).toBeObservable(expected);
+      });
+    });
+
+    describe("ofType fetchInstrumentFailedAction", () => {
+      it("should dispatch a loadingCompleteAction", () => {
+        const action = fromActions.fetchInstrumentFailedAction();
+        const outcome = loadingCompleteAction();
+
+        actions = hot("-a", { a: action });
+
+        const expected = cold("-b", { b: outcome });
+        expect(effects.loadingComplete$).toBeObservable(expected);
+      });
     });
   });
 });
