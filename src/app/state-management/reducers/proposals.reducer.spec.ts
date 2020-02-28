@@ -90,8 +90,7 @@ describe("ProposalsReducer", () => {
 
   describe("on updateAttachmentCaptionCompleteAction", () => {
     it("should set attachments of currentProposal", () => {
-      const attachmentId = "testId";
-      const attachment = new Attachment({ id: attachmentId, thumbnail: "" });
+      const attachment = new Attachment();
       initialProposalsState.currentProposal = proposal;
       initialProposalsState.currentProposal.attachments = [attachment];
 
@@ -107,7 +106,8 @@ describe("ProposalsReducer", () => {
   describe("on removeAttachmentCompleteAction", () => {
     it("should remove an attachment from currentProposal", () => {
       const attachmentId = "testId";
-      const attachment = new Attachment({ id: attachmentId, thumbnail: "" });
+      const attachment = new Attachment();
+      attachment.id = attachmentId;
       initialProposalsState.currentProposal = proposal;
       initialProposalsState.currentProposal.attachments = [attachment];
 

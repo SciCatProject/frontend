@@ -24,7 +24,7 @@ import {
   removeAttachmentAction,
   addAttachmentAction
 } from "state-management/actions/samples.actions";
-import { Dataset, Sample } from "shared/sdk";
+import { Dataset, Sample, User } from "shared/sdk";
 import { SharedCatanieModule } from "shared/shared.module";
 import { DatePipe, SlicePipe } from "@angular/common";
 import { FileSizePipe } from "shared/pipes/filesize.pipe";
@@ -164,6 +164,7 @@ describe("SampleDetailComponent", () => {
     it("should dispatch an addAttachmentAction if filecount > 0", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
+      component.user = new User();
       component.sample = new Sample();
       component.pickedFile = {
         name: "test",
