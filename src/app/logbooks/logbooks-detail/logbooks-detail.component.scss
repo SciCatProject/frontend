@@ -14,6 +14,10 @@
       background: mat-color($primary);
     }
 
+    ::ng-deep .mat-sort-header-arrow {
+      color: mat-color($primary, default-contrast);
+    }
+
     mat-header-cell {
       color: mat-color($primary, default-contrast);
       justify-content: left;
