@@ -1,4 +1,7 @@
 /* tslint:disable */
+import {
+  Dataset
+} from '../index';
 
 declare var Object: any;
 export interface PublishedDataInterface {
@@ -21,6 +24,11 @@ export interface PublishedDataInterface {
   "creationTime"?: Date;
   "status"?: string;
   "scicatUser"?: string;
+  "createdBy"?: string;
+  "updatedBy"?: string;
+  "createdAt"?: Date;
+  "updatedAt"?: Date;
+  datasets?: Dataset[];
 }
 
 export class PublishedData implements PublishedDataInterface {
@@ -43,6 +51,11 @@ export class PublishedData implements PublishedDataInterface {
   "creationTime": Date;
   "status": string;
   "scicatUser": string;
+  "createdBy": string;
+  "updatedBy": string;
+  "createdAt": Date;
+  "updatedAt": Date;
+  datasets: Dataset[];
   constructor(data?: PublishedDataInterface) {
     Object.assign(this, data);
   }
@@ -152,8 +165,32 @@ export class PublishedData implements PublishedDataInterface {
           name: 'scicatUser',
           type: 'string'
         },
+        "createdBy": {
+          name: 'createdBy',
+          type: 'string'
+        },
+        "updatedBy": {
+          name: 'updatedBy',
+          type: 'string'
+        },
+        "createdAt": {
+          name: 'createdAt',
+          type: 'Date'
+        },
+        "updatedAt": {
+          name: 'updatedAt',
+          type: 'Date'
+        },
       },
       relations: {
+        datasets: {
+          name: 'datasets',
+          type: 'Dataset[]',
+          model: 'Dataset',
+          relationType: 'hasMany',
+                  keyFrom: 'doi',
+          keyTo: 'publishedDataId'
+        },
       }
     }
   }

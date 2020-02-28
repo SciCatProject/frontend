@@ -7,15 +7,7 @@ import {
   AfterViewChecked
 } from "@angular/core";
 import { Store, select } from "@ngrx/store";
-import {
-  Dataset,
-  UserApi,
-  User,
-  Job,
-  Attachment,
-  RawDataset,
-  DerivedDataset
-} from "shared/sdk";
+import { Dataset, UserApi, User, Job, Attachment } from "shared/sdk";
 import {
   getCurrentDataset,
   getCurrentDatasetWithoutOrigData,
@@ -67,7 +59,7 @@ export class DatasetDetailsDashboardComponent
   isAdmin$ = this.store.pipe(select(getIsAdmin));
   jwt$: Observable<any>;
 
-  dataset: RawDataset | DerivedDataset;
+  dataset: Dataset;
   user: User;
   pickedFile: ReadFile;
   attachment: Attachment;
@@ -81,12 +73,12 @@ export class DatasetDetailsDashboardComponent
       if (this.dataset.type === "raw") {
         return (
           this.user.email.toLowerCase() ===
-          (this.dataset as RawDataset).principalInvestigator.toLowerCase()
+          this.dataset["principalInvestigator"].toLowerCase()
         );
       } else if (this.dataset.type === "derived") {
         return (
           this.user.email.toLowerCase() ===
-          (this.dataset as DerivedDataset).investigator.toLowerCase()
+          this.dataset["investigator"].toLowerCase()
         );
       } else {
         return false;
@@ -241,26 +233,24 @@ export class DatasetDetailsDashboardComponent
     );
 
     this.subscriptions.push(
-      this.store
-        .pipe(select(getCurrentDataset))
-        .subscribe((dataset: RawDataset | DerivedDataset) => {
-          if (dataset) {
-            this.dataset = dataset;
-            if (dataset.type === "raw" && "proposalId" in dataset) {
-              this.store.dispatch(
-                fetchProposalAction({ proposalId: dataset["proposalId"] })
-              );
-              this.store.dispatch(
-                fetchLogbookAction({ name: dataset["proposalId"] })
-              );
-            }
-            if ("sampleId" in dataset) {
-              this.store.dispatch(
-                fetchSampleAction({ sampleId: dataset["sampleId"] })
-              );
-            }
+      this.store.pipe(select(getCurrentDataset)).subscribe(dataset => {
+        if (dataset) {
+          this.dataset = dataset;
+          if (dataset.type === "raw" && "proposalId" in dataset) {
+            this.store.dispatch(
+              fetchProposalAction({ proposalId: dataset["proposalId"] })
+            );
+            this.store.dispatch(
+              fetchLogbookAction({ name: dataset["proposalId"] })
+            );
           }
-        })
+          if ("sampleId" in dataset) {
+            this.store.dispatch(
+              fetchSampleAction({ sampleId: dataset["sampleId"] })
+            );
+          }
+        }
+      })
     );
 
     this.subscriptions.push(
