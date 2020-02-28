@@ -16,7 +16,7 @@ import {
   removeAttachmentAction,
   updatePropertyAction
 } from "state-management/actions/datasets.actions";
-import { Dataset, UserApi, RawDataset, User, DerivedDataset } from "shared/sdk";
+import { Dataset, UserApi, User } from "shared/sdk";
 import { ReadFile, ReadMode } from "ngx-file-helpers";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { AppConfigModule, APP_CONFIG } from "app-config.module";
