@@ -169,7 +169,12 @@ export class DatasetDetailsDashboardComponent
       this.attachment = {
         thumbnail: this.pickedFile.content,
         caption: this.pickedFile.name,
-        creationTime: new Date(),
+        ownerGroup: this.dataset.ownerGroup,
+        accessGroups: this.dataset.accessGroups,
+        createdBy: this.user.username,
+        updatedBy: this.user.username,
+        createdAt: new Date(),
+        updatedAt: new Date(),
         id: null,
         dataset: this.dataset,
         datasetId: this.dataset.pid,

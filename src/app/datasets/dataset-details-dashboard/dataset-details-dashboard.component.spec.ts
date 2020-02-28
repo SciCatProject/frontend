@@ -350,6 +350,7 @@ describe("DetailsDashboardComponent", () => {
     it("should dispatch an AddAttchment action if fileCount is larger than zero", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
+      component.user = new User();
       component.dataset = new Dataset();
       component.pickedFile = {
         name: "test",
