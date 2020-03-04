@@ -112,6 +112,19 @@ describe("LogbooksReducer", () => {
     });
   });
 
+  describe("on sortByColumnAction", () => {
+    it("should set sortField filter and set skip filter to 0", () => {
+      const column = "test";
+      const direction = "asc";
+      const sortField = column + ":" + direction;
+      const action = fromActions.sortByColumnAction({ column, direction });
+      const state = logbooksReducer(initialLogbookState, action);
+
+      expect(state.filters.sortField).toEqual(sortField);
+      expect(state.filters.skip).toEqual(0);
+    });
+  });
+
   describe("#formatImageUrls", () => {
     it("should reformat 'mxc://' urls to 'http(s)://' urls", () => {
       const logbook = new Logbook();

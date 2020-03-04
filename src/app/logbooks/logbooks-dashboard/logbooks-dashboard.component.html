@@ -60,6 +60,7 @@
         [entriesPerPage]="entriesPerPage$ | async"
         [currentPage]="currentPage$ | async"
         (pageChange)="onPageChange($event)"
+        (sortChange)="onSortChange($event)"
       ></app-logbooks-detail>
     </div>
   </div>

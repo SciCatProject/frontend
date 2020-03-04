@@ -18,6 +18,7 @@ import { OrigDatablock } from '../../models/OrigDatablock';
 import { Logbook } from '../../models/Logbook';
 import { Attachment } from '../../models/Attachment';
 import { UserSetting } from '../../models/UserSetting';
+import { Instrument } from '../../models/Instrument';
 
 export interface Models { [name: string]: any }
 
@@ -43,6 +44,7 @@ export class SDKModels {
     Logbook: Logbook,
     Attachment: Attachment,
     UserSetting: UserSetting,
+    Instrument: Instrument,
     
   };
 

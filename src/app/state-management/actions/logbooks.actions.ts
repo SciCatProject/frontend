@@ -58,3 +58,8 @@ export const changePageAction = createAction(
   "[Logbook] Change Page",
   props<{ page: number; limit: number }>()
 );
+
+export const sortByColumnAction = createAction(
+  "[Logbook] Sort By Column",
+  props<{ column: string; direction: string }>()
+);

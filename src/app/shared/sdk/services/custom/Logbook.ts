@@ -80,7 +80,7 @@ export class LogbookApi extends BaseLoopBackApi {
    *
    * @param {string} name The name of the Logbook
    *
-   * @param {string} filter Filter JSON object, keys: textSearch, showBotMessages, showUserMessages, showImages
+   * @param {string} filters Filter rison object, keys: textSearch, showBotMessages, showUserMessages, showImages, skip, limit, sortField
    *
    * @returns {object} An empty reference that will be
    *   populated with the actual data once the response is returned
@@ -88,13 +88,13 @@ export class LogbookApi extends BaseLoopBackApi {
    *
    * Filtered Logbook model instance
    */
-  public filter(name: any, filter: any, customHeaders?: Function): Observable<any> {
+  public filter(name: any, filters: any, customHeaders?: Function): Observable<any> {
     let _method: string = "GET";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/Logbooks/:name/:filter";
+    "/Logbooks/:name/:filters";
     let _routeParams: any = {
       name: name,
-      filter: filter
+      filters: filters
     };
     let _postBody: any = {};
     let _urlParams: any = {};

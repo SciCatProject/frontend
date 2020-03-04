@@ -35,6 +35,8 @@ import { SampleDashboardComponent } from "samples/sample-dashboard/sample-dashbo
 import { LoginLayoutComponent } from "_layout/login-layout/login-layout.component";
 import { AppLayoutComponent } from "_layout/app-layout/app-layout.component";
 import { PoliciesDashboardComponent } from "policies/policies-dashboard/policies-dashboard.component";
+import { InstrumentsDashboardComponent } from "instruments/instruments-dashboard/instruments-dashboard.component";
+import { InstrumentDetailsComponent } from "instruments/instrument-details/instrument-details.component";
 
 export const routes: Routes = [
   {
@@ -94,6 +96,16 @@ export const routes: Routes = [
       {
         path: "datasets/:id/datafiles",
         component: DatafilesComponent,
+        canActivate: [AuthCheck]
+      },
+      {
+        path: "instruments",
+        component: InstrumentsDashboardComponent,
+        canActivate: [AuthCheck]
+      },
+      {
+        path: "instruments/:id",
+        component: InstrumentDetailsComponent,
         canActivate: [AuthCheck]
       },
       {

@@ -25,6 +25,7 @@ describe("LogbookFilterComponent", () => {
       showBotMessages: true,
       showImages: true,
       showUserMessages: true,
+      sortField: "timestamp:desc",
       skip: 0,
       limit: 25
     };
@@ -47,6 +48,7 @@ describe("LogbookFilterComponent", () => {
         showBotMessages: true,
         showImages: true,
         showUserMessages: false,
+        sortField: "timestamp:desc",
         skip: 0,
         limit: 25
       };
@@ -63,6 +65,7 @@ describe("LogbookFilterComponent", () => {
         showBotMessages: true,
         showImages: true,
         showUserMessages: false,
+        sortField: "timestamp:desc",
         skip: 0,
         limit: 25
       };
@@ -79,6 +82,7 @@ describe("LogbookFilterComponent", () => {
         showBotMessages: true,
         showImages: true,
         showUserMessages: false,
+        sortField: "timestamp:desc",
         skip: 0,
         limit: 25
       };
@@ -95,6 +99,7 @@ describe("LogbookFilterComponent", () => {
         showBotMessages: true,
         showImages: true,
         showUserMessages: false,
+        sortField: "timestamp:desc",
         skip: 0,
         limit: 25
       };
@@ -115,6 +120,7 @@ describe("LogbookFilterComponent", () => {
         showBotMessages: true,
         showImages: true,
         showUserMessages: true,
+        sortField: "timestamp:desc",
         skip: 0,
         limit: 25
       };
@@ -138,6 +144,7 @@ describe("LogbookFilterComponent", () => {
         showBotMessages: true,
         showImages: true,
         showUserMessages: true,
+        sortField: "timestamp:desc",
         skip: 0,
         limit: 25
       };
@@ -161,6 +168,7 @@ describe("LogbookFilterComponent", () => {
         showBotMessages: true,
         showImages: true,
         showUserMessages: true,
+        sortField: "timestamp:desc",
         skip: 0,
         limit: 25
       };
@@ -184,6 +192,7 @@ describe("LogbookFilterComponent", () => {
         showBotMessages: false,
         showImages: false,
         showUserMessages: false,
+        sortField: "timestamp:desc",
         skip: 0,
         limit: 25
       };
@@ -207,6 +216,7 @@ describe("LogbookFilterComponent", () => {
         showBotMessages: false,
         showImages: false,
         showUserMessages: false,
+        sortField: "timestamp:desc",
         skip: 0,
         limit: 25
       };
@@ -230,6 +240,7 @@ describe("LogbookFilterComponent", () => {
         showBotMessages: false,
         showImages: false,
         showUserMessages: false,
+        sortField: "timestamp:desc",
         skip: 0,
         limit: 25
       };
