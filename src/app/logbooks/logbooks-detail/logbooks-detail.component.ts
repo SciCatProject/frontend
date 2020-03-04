@@ -1,6 +1,9 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
 import { Logbook } from "state-management/models";
-import { PageChangeEvent } from "shared/modules/table/table.component";
+import {
+  PageChangeEvent,
+  SortChangeEvent
+} from "shared/modules/table/table.component";
 
 @Component({
   selector: "app-logbooks-detail",
@@ -14,10 +17,15 @@ export class LogbooksDetailComponent {
   @Input() currentPage: number;
 
   @Output() pageChange = new EventEmitter<PageChangeEvent>();
+  @Output() sortChange = new EventEmitter<SortChangeEvent>();
 
   displayedColumns: string[] = ["timestamp", "sender", "entry"];
 
   doPageChange(event: PageChangeEvent) {
     this.pageChange.emit(event);
+  }
+
+  doSortChange(event: SortChangeEvent) {
+    this.sortChange.emit(event);
   }
 }

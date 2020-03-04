@@ -1,5 +1,5 @@
 import * as fromActions from "./datasets.actions";
-import { Dataset, Attachment, DerivedDataset } from "shared/sdk";
+import { Dataset, Attachment } from "shared/sdk";
 import { FacetCounts } from "state-management/state/datasets.store";
 import {
   ArchViewMode,
@@ -173,7 +173,7 @@ describe("Dataset Actions", () => {
 
   describe("addDatasetAction", () => {
     it("should create an action", () => {
-      const dataset = new DerivedDataset();
+      const dataset = new Dataset();
       const action = fromActions.addDatasetAction({ dataset });
       expect({ ...action }).toEqual({ type: "[Dataset] Add Dataset", dataset });
     });

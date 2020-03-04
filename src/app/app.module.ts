@@ -44,6 +44,7 @@ import { AppLayoutComponent } from "./_layout/app-layout/app-layout.component";
 import { LoginHeaderComponent } from "./_layout/login-header/login-header.component";
 import { LoginLayoutComponent } from "./_layout/login-layout/login-layout.component";
 import { JobsModule } from "jobs/jobs.module";
+import { InstrumentsModule } from "./instruments/instruments.module";
 
 @NgModule({
   declarations: [
@@ -62,6 +63,7 @@ import { JobsModule } from "jobs/jobs.module";
     FlexLayoutModule,
     HelpModule,
     HttpClientModule,
+    InstrumentsModule,
     JobsModule,
     LogbooksModule,
     LayoutModule,

@@ -1,7 +1,7 @@
 import { ActivatedRoute, Router } from "@angular/router";
 import { Component, OnDestroy, OnInit, Inject } from "@angular/core";
 import { Subscription } from "rxjs";
-import { Sample, Dataset, Attachment } from "../../shared/sdk/models";
+import { Sample, Dataset, Attachment, User } from "../../shared/sdk/models";
 import {
   getCurrentSample,
   getDatasets,
@@ -29,6 +29,7 @@ import {
 import { APP_CONFIG, AppConfig } from "app-config.module";
 import { ReadFile } from "ngx-file-helpers";
 import { SubmitCaptionEvent } from "shared/modules/file-uploader/file-uploader.component";
+import { getCurrentUser } from "state-management/selectors/user.selectors";
 
 @Component({
   selector: "app-sample-detail",
@@ -42,6 +43,7 @@ export class SampleDetailComponent implements OnInit, OnDestroy {
   datasetsCount$ = this.store.pipe(select(getDatasetsCount));
 
   sample: Sample;
+  user: User;
   pickedFile: ReadFile;
   attachment: Attachment;
 
@@ -96,7 +98,12 @@ export class SampleDetailComponent implements OnInit, OnDestroy {
       this.attachment = {
         thumbnail: this.pickedFile.content,
         caption: this.pickedFile.name,
-        creationTime: new Date(),
+        ownerGroup: this.sample.ownerGroup,
+        accessGroups: this.sample.accessGroups,
+        createdBy: this.user.username,
+        updatedBy: this.user.username,
+        createdAt: new Date(),
+        updatedAt: new Date(),
         id: null,
         sample: this.sample,
         sampleId: this.sample.sampleId,
@@ -162,6 +169,12 @@ export class SampleDetailComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.store.pipe(select(getDatasets)).subscribe(datasets => {
         this.tableData = this.formatTableData(datasets);
+      })
+    );
+
+    this.subscriptions.push(
+      this.store.pipe(select(getCurrentUser)).subscribe(user => {
+        this.user = user;
       })
     );
 

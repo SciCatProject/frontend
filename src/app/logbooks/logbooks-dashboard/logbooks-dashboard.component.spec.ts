@@ -16,13 +16,17 @@ import {
   setTextFilterAction,
   fetchLogbookAction,
   setDisplayFiltersAction,
-  changePageAction
+  changePageAction,
+  sortByColumnAction
 } from "state-management/actions/logbooks.actions";
 import { Logbook, LogbookInterface } from "shared/sdk";
 import { LogbookFilters } from "state-management/models";
 import { RouterTestingModule } from "@angular/router/testing";
 import * as rison from "rison";
-import { PageChangeEvent } from "shared/modules/table/table.component";
+import {
+  PageChangeEvent,
+  SortChangeEvent
+} from "shared/modules/table/table.component";
 
 describe("DashboardComponent", () => {
   let component: LogbooksDashboardComponent;
@@ -88,6 +92,7 @@ describe("DashboardComponent", () => {
         showBotMessages: true,
         showImages: true,
         showUserMessages: true,
+        sortField: "timestamp:desc",
         skip: 0,
         limit: 25
       };
@@ -134,6 +139,7 @@ describe("DashboardComponent", () => {
         showBotMessages: false,
         showImages: true,
         showUserMessages: true,
+        sortField: "timestamp:desc",
         skip: 0,
         limit: 25
       };
@@ -174,6 +180,28 @@ describe("DashboardComponent", () => {
       expect(dispatchSpy).toHaveBeenCalledTimes(2);
       expect(dispatchSpy).toHaveBeenCalledWith(
         changePageAction({ page: event.pageIndex, limit: event.pageSize })
+      );
+      expect(dispatchSpy).toHaveBeenCalledWith(
+        fetchLogbookAction({ name: logbook.name })
+      );
+    });
+  });
+
+  describe("#onSortChange()", () => {
+    it("should dispatch a sortByColumnAction and a fetchLogbookAction", () => {
+      dispatchSpy = spyOn(store, "dispatch");
+
+      component.logbook = logbook;
+      const event: SortChangeEvent = {
+        active: "test",
+        direction: "asc"
+      };
+
+      component.onSortChange(event);
+
+      expect(dispatchSpy).toHaveBeenCalledTimes(2);
+      expect(dispatchSpy).toHaveBeenCalledWith(
+        sortByColumnAction({ column: event.active, direction: event.direction })
       );
       expect(dispatchSpy).toHaveBeenCalledWith(
         fetchLogbookAction({ name: logbook.name })

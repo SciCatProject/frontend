@@ -11,6 +11,8 @@
 
   <mat-table
     [dataSource]="logbook.messages"
+    matSort
+    (matSortChange)="doSortChange($event)"
     class="largeDetails mat-elevation-z2"
     *ngIf="logbook && logbook.messages.length > 0; else noEntries"
   >
@@ -18,7 +20,7 @@
 
     <!-- Timestamp Column -->
     <ng-container matColumnDef="timestamp">
-      <mat-header-cell *matHeaderCellDef>
+      <mat-header-cell *matHeaderCellDef mat-sort-header>
         <div fxLayout="column" style="align-items: center">
           <div>
             <mat-icon>schedule</mat-icon>
@@ -33,7 +35,7 @@
 
     <!-- Sender Column -->
     <ng-container matColumnDef="sender">
-      <mat-header-cell *matHeaderCellDef>
+      <mat-header-cell *matHeaderCellDef mat-sort-header>
         <div fxLayout="column" style="align-items: center">
           <div>
             <mat-icon>person</mat-icon>
@@ -48,7 +50,7 @@
 
     <!-- Entry Column -->
     <ng-container matColumnDef="entry">
-      <mat-header-cell *matHeaderCellDef>
+      <mat-header-cell *matHeaderCellDef mat-sort-header>
         <div fxLayout="column" style="align-items: center">
           <div>
             <mat-icon>comment</mat-icon>

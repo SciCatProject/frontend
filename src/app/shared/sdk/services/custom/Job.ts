@@ -104,6 +104,8 @@ export class JobApi extends BaseLoopBackApi {
    *
    * @param {object} include 
    *
+   * @param {object} includeFields 
+   *
    * @param {object} options 
    *
    * @returns {object} An empty reference that will be
@@ -115,7 +117,7 @@ export class JobApi extends BaseLoopBackApi {
    * This usually means the response is a `Job` object.)
    * </em>
    */
-  public datasetDetails(jobId: any = {}, datasetFields: any = {}, include: any = {}, customHeaders?: Function): Observable<any> {
+  public datasetDetails(jobId: any = {}, datasetFields: any = {}, include: any = {}, includeFields: any = {}, customHeaders?: Function): Observable<any> {
     let _method: string = "GET";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
     "/Jobs/datasetDetails";
@@ -125,6 +127,7 @@ export class JobApi extends BaseLoopBackApi {
     if (typeof jobId !== 'undefined' && jobId !== null) _urlParams.jobId = jobId;
     if (typeof datasetFields !== 'undefined' && datasetFields !== null) _urlParams.datasetFields = datasetFields;
     if (typeof include !== 'undefined' && include !== null) _urlParams.include = include;
+    if (typeof includeFields !== 'undefined' && includeFields !== null) _urlParams.includeFields = includeFields;
     let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
     return result;
   }
