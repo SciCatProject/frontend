@@ -7,7 +7,7 @@ import {
 } from "@angular/core";
 import { Router } from "@angular/router";
 import { select, Store } from "@ngrx/store";
-import { Dataset, DerivedDataset } from "shared/sdk/models";
+import { Dataset } from "shared/sdk/models";
 import {
   getOpenwhiskResult,
   getDatasets
@@ -32,9 +32,7 @@ export class ReduceComponent implements OnInit, OnChanges {
     map(datasets =>
       datasets
         .filter(dataset => dataset.type === "derived")
-        .filter((dataset: DerivedDataset) => {
-          return dataset.inputDatasets.includes(this.dataset.pid);
-        })
+        .filter(dataset => dataset["inputDatasets"].includes(this.dataset.pid))
     )
   );
 
@@ -109,9 +107,9 @@ export class ReduceComponent implements OnInit, OnChanges {
           map(datasets =>
             datasets
               .filter(dataset => dataset.type === "derived")
-              .filter((dataset: DerivedDataset) => {
-                return dataset.inputDatasets.includes(this.dataset.pid);
-              })
+              .filter(dataset =>
+                dataset["inputDatasets"].includes(this.dataset.pid)
+              )
           )
         );
       }
