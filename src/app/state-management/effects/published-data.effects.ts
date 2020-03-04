@@ -119,9 +119,10 @@ export class PublishedDataEffects {
       ofType(fromActions.registerPublishedDataAction),
       switchMap(({ doi }) =>
         this.publishedDataApi.register(encodeURIComponent(doi)).pipe(
-          map(publishedData =>
-            fromActions.registerPublishedDataCompleteAction({ publishedData })
-          ),
+          mergeMap((publishedData) => [
+            fromActions.registerPublishedDataCompleteAction({ publishedData }),
+            // fromActions.fetchPublishedDataAction({ id: encodeURIComponent(doi) }),
+          ]),
           catchError(() => of(fromActions.registerPublishedDataFailedAction()))
         )
       )
