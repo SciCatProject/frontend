@@ -2,8 +2,8 @@
   "viewportWidth": 1280,
   "baseUrl": "http://localhost:4200",
   "lbBaseUrl": "http://localhost:3000/api/v3",
-  "username": "admin",
-  "password": "2jf70TPNZsS",
+  "username": "ingestor",
+  "password": "aman",
   "secondaryUsername": "archiveManager",
   "secondaryPassword": "aman"
 }
