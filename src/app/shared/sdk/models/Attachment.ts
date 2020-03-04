@@ -9,13 +9,18 @@ declare var Object: any;
 export interface AttachmentInterface {
   "thumbnail": string;
   "caption"?: string;
-  "creationTime"?: Date;
+  "ownerGroup": string;
+  "accessGroups"?: Array<any>;
+  "createdBy"?: string;
+  "updatedBy"?: string;
   "id"?: any;
   "datasetId"?: string;
   "sampleId"?: string;
   "proposalId"?: string;
   "rawDatasetId"?: string;
   "derivedDatasetId"?: string;
+  "createdAt"?: Date;
+  "updatedAt"?: Date;
   dataset?: Dataset;
   sample?: Sample;
   proposal?: Proposal;
@@ -24,13 +29,18 @@ export interface AttachmentInterface {
 export class Attachment implements AttachmentInterface {
   "thumbnail": string;
   "caption": string;
-  "creationTime": Date;
+  "ownerGroup": string;
+  "accessGroups": Array<any>;
+  "createdBy": string;
+  "updatedBy": string;
   "id": any;
   "datasetId": string;
   "sampleId": string;
   "proposalId": string;
   "rawDatasetId": string;
   "derivedDatasetId": string;
+  "createdAt": Date;
+  "updatedAt": Date;
   dataset: Dataset;
   sample: Sample;
   proposal: Proposal;
@@ -77,9 +87,21 @@ export class Attachment implements AttachmentInterface {
           type: 'string',
           default: ''
         },
-        "creationTime": {
-          name: 'creationTime',
-          type: 'Date'
+        "ownerGroup": {
+          name: 'ownerGroup',
+          type: 'string'
+        },
+        "accessGroups": {
+          name: 'accessGroups',
+          type: 'Array&lt;any&gt;'
+        },
+        "createdBy": {
+          name: 'createdBy',
+          type: 'string'
+        },
+        "updatedBy": {
+          name: 'updatedBy',
+          type: 'string'
         },
         "id": {
           name: 'id',
@@ -104,6 +126,14 @@ export class Attachment implements AttachmentInterface {
         "derivedDatasetId": {
           name: 'derivedDatasetId',
           type: 'string'
+        },
+        "createdAt": {
+          name: 'createdAt',
+          type: 'Date'
+        },
+        "updatedAt": {
+          name: 'updatedAt',
+          type: 'Date'
         },
       },
       relations: {

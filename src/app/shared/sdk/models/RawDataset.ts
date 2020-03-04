@@ -2,9 +2,11 @@
 import {
   Sample,
   Proposal,
+  PublishedData,
   Datablock,
   OrigDatablock,
-  Attachment
+  Attachment,
+  Instrument
 } from '../index';
 
 declare var Object: any;
@@ -20,6 +22,7 @@ export interface RawDatasetInterface {
   "orcidOfOwner"?: string;
   "contactEmail": string;
   "sourceFolder": string;
+  "sourceFolderHost"?: string;
   "size"?: number;
   "packedSize"?: number;
   "creationTime": Date;
@@ -40,15 +43,22 @@ export interface RawDatasetInterface {
   "updatedAt"?: Date;
   "sampleId"?: string;
   "proposalId"?: string;
+  "publisheddataId"?: string;
   "datasetlifecycle"?: any;
   "history"?: Array<any>;
+  "instrumentId"?: string;
+  "techniques"?: Array<any>;
+  samples?: Sample[];
   sample?: Sample;
   proposal?: Proposal;
+  publisheddata?: PublishedData;
   datasetLifecycle?: any[];
   datablocks?: Datablock[];
   origdatablocks?: OrigDatablock[];
   historyList?: any[];
   attachments?: Attachment[];
+  instrument?: Instrument;
+  techniquesList?: any[];
 }
 
 export class RawDataset implements RawDatasetInterface {
@@ -63,6 +73,7 @@ export class RawDataset implements RawDatasetInterface {
   "orcidOfOwner": string;
   "contactEmail": string;
   "sourceFolder": string;
+  "sourceFolderHost": string;
   "size": number;
   "packedSize": number;
   "creationTime": Date;
@@ -83,15 +94,22 @@ export class RawDataset implements RawDatasetInterface {
   "updatedAt": Date;
   "sampleId": string;
   "proposalId": string;
+  "publisheddataId": string;
   "datasetlifecycle": any;
   "history": Array<any>;
+  "instrumentId": string;
+  "techniques": Array<any>;
+  samples: Sample[];
   sample: Sample;
   proposal: Proposal;
+  publisheddata: PublishedData;
   datasetLifecycle: any[];
   datablocks: Datablock[];
   origdatablocks: OrigDatablock[];
   historyList: any[];
   attachments: Attachment[];
+  instrument: Instrument;
+  techniquesList: any[];
   constructor(data?: RawDatasetInterface) {
     Object.assign(this, data);
   }
@@ -167,6 +185,10 @@ export class RawDataset implements RawDatasetInterface {
         },
         "sourceFolder": {
           name: 'sourceFolder',
+          type: 'string'
+        },
+        "sourceFolderHost": {
+          name: 'sourceFolderHost',
           type: 'string'
         },
         "size": {
@@ -249,6 +271,10 @@ export class RawDataset implements RawDatasetInterface {
           name: 'proposalId',
           type: 'string'
         },
+        "publisheddataId": {
+          name: 'publisheddataId',
+          type: 'string'
+        },
         "datasetlifecycle": {
           name: 'datasetlifecycle',
           type: 'any'
@@ -258,8 +284,25 @@ export class RawDataset implements RawDatasetInterface {
           type: 'Array&lt;any&gt;',
           default: <any>[]
         },
+        "instrumentId": {
+          name: 'instrumentId',
+          type: 'string'
+        },
+        "techniques": {
+          name: 'techniques',
+          type: 'Array&lt;any&gt;',
+          default: <any>[]
+        },
       },
       relations: {
+        samples: {
+          name: 'samples',
+          type: 'Sample[]',
+          model: 'Sample',
+          relationType: 'hasMany',
+                  keyFrom: 'pid',
+          keyTo: 'rawDatasetId'
+        },
         sample: {
           name: 'sample',
           type: 'Sample',
@@ -275,6 +318,14 @@ export class RawDataset implements RawDatasetInterface {
           relationType: 'belongsTo',
                   keyFrom: 'proposalId',
           keyTo: 'proposalId'
+        },
+        publisheddata: {
+          name: 'publisheddata',
+          type: 'PublishedData',
+          model: 'PublishedData',
+          relationType: 'belongsTo',
+                  keyFrom: 'publisheddataId',
+          keyTo: 'doi'
         },
         datasetLifecycle: {
           name: 'datasetLifecycle',
@@ -315,6 +366,22 @@ export class RawDataset implements RawDatasetInterface {
           relationType: 'hasMany',
                   keyFrom: 'pid',
           keyTo: 'rawDatasetId'
+        },
+        instrument: {
+          name: 'instrument',
+          type: 'Instrument',
+          model: 'Instrument',
+          relationType: 'belongsTo',
+                  keyFrom: 'instrumentId',
+          keyTo: 'pid'
+        },
+        techniquesList: {
+          name: 'techniquesList',
+          type: 'any[]',
+          model: '',
+          relationType: 'embedsMany',
+                  keyFrom: 'techniques',
+          keyTo: 'pid'
         },
       }
     }

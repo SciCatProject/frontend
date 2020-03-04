@@ -25,7 +25,7 @@ import {
   addDatasetAction,
   fetchMetadataKeysAction
 } from "state-management/actions/datasets.actions";
-import { DerivedDataset, User } from "shared/sdk";
+import { User, Dataset } from "shared/sdk";
 import {
   selectColumnAction,
   deselectColumnAction
@@ -211,27 +211,27 @@ describe("DashboardComponent", () => {
         credentials: []
       });
 
-      const dataset = new DerivedDataset({
+      const dataset = new Dataset({
         accessGroups: [],
         contactEmail: currentUser.email,
         createdBy: currentUser.username,
         creationTime: new Date(),
         datasetName: "Test Name",
         description: "Test description",
-        inputDatasets: [],
-        investigator: currentUser.email,
         isPublished: false,
         keywords: [],
         owner: currentUser.username.replace("ldap.", ""),
         ownerEmail: currentUser.email,
         ownerGroup: "test",
         packedSize: 0,
-        scientificMetadata: {},
         size: 0,
         sourceFolder: "/nfs/test",
-        type: "derived",
-        usedSoftware: ["test software"]
+        type: "derived"
       });
+      dataset["inputDatasets"] = [];
+      dataset["investigator"] = currentUser.email;
+      dataset["scientificMetadata"] = {};
+      dataset["usedSoftware"] = ["test software"];
 
       component.currentUser = currentUser;
       component.userGroups = ["test"];

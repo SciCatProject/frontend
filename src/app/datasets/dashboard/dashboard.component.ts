@@ -40,7 +40,7 @@ import {
   getCurrentUser,
   getColumns
 } from "state-management/selectors/user.selectors";
-import { DerivedDataset } from "shared/sdk";
+import { Dataset } from "shared/sdk";
 import {
   selectColumnAction,
   deselectColumnAction
@@ -116,30 +116,31 @@ export class DashboardComponent implements OnInit, OnDestroy {
     dialogRef.afterClosed().subscribe(res => {
       if (res) {
         const { username, email } = this.currentUser;
-        const dataset = new DerivedDataset({
+        const dataset = new Dataset({
           accessGroups: [],
           contactEmail: email, // Required
           createdBy: username,
           creationTime: new Date(), // Required
           datasetName: res.datasetName,
           description: res.description,
-          inputDatasets: [], // Required
-          investigator: email, // Required
           isPublished: false,
           keywords: [],
           owner: username.replace("ldap.", ""), // Required
           ownerEmail: email,
           ownerGroup: res.ownerGroup, // Required
           packedSize: 0,
-          scientificMetadata: {},
           size: 0,
           sourceFolder: res.sourceFolder, // Required
-          type: "derived", // Required
-          usedSoftware: res.usedSoftware
-            .split(",")
-            .map((entry: string) => entry.trim())
-            .filter((entry: string) => entry !== "") // Required
+          type: "derived" // Required
         });
+        dataset["inputDatasets"] = []; // Required
+        dataset["investigator"] = email; // Required
+        dataset["scientificMetadata"] = {};
+        dataset["usedSoftware"] = res.usedSoftware
+          .split(",")
+          .map((entry: string) => entry.trim())
+          .filter((entry: string) => entry !== ""); // Required
+
         this.store.dispatch(addDatasetAction({ dataset }));
       }
     });

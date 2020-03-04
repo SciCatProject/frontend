@@ -10,7 +10,8 @@ import {
   Sample,
   Logbook,
   PublishedData,
-  Attachment
+  Attachment,
+  Instrument
 } from "shared/sdk/models";
 export {
   User,
@@ -24,7 +25,8 @@ export {
   Sample,
   Logbook,
   PublishedData,
-  Attachment
+  Attachment,
+  Instrument
 };
 
 import { DatasetInterface } from "shared/sdk";
@@ -121,12 +123,19 @@ export interface LogbookFilters {
   showBotMessages: boolean;
   showUserMessages: boolean;
   showImages: boolean;
+  sortField: string;
   skip: number;
   limit: number;
 }
 
 export interface JobFilters {
   mode: object;
+  sortField: string;
+  skip: number;
+  limit: number;
+}
+
+export interface InstrumentFilters {
   sortField: string;
   skip: number;
   limit: number;
