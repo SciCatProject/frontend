@@ -73,7 +73,7 @@ export class SampleDialogComponent implements OnInit, OnDestroy {
 
     this.form = this.fb.group({
       description: [description, Validators.required],
-      sampleCharacteristics: [sampleCharacteristics, Validators.required],
+      sampleCharacteristics: [sampleCharacteristics],
       ownerGroup: [ownerGroup, Validators.required]
     });
   }
