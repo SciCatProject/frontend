@@ -26,12 +26,12 @@
           <th><mat-icon> folder </mat-icon> Source Folder</th>
           <td>{{ value }}</td>
         </tr>
-        <tr class="keywords-row" *ngIf="dataset.keywords as keywords">
+        <tr class="keywords-row">
           <th><mat-icon> vpn_key </mat-icon> Keywords</th>
           <td *ngIf="!editEnabled">
             <mat-chip-list #keywordChips>
               <mat-chip
-                *ngFor="let keyword of keywords"
+                *ngFor="let keyword of dataset.keywords"
                 [removable]="true"
                 (removed)="onRemoveKeyword(keyword)"
                 (click)="onClickKeyword(keyword)"
@@ -48,7 +48,7 @@
             <mat-form-field>
               <mat-chip-list #keywordChips>
                 <mat-chip
-                  *ngFor="let keyword of keywords"
+                  *ngFor="let keyword of dataset.keywords"
                   [removable]="true"
                   (removed)="onRemoveKeyword(keyword)"
                   (click)="onClickKeyword(keyword)"
