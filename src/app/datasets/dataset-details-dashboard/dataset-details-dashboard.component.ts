@@ -99,6 +99,10 @@ export class DatasetDetailsDashboardComponent
   }
 
   onAddKeyword(keyword: string) {
+    if (!this.dataset.hasOwnProperty("keywords")) {
+      const keywords: Array<string> = [];
+      this.dataset.keywords = keywords;
+    }
     if (this.dataset.keywords.indexOf(keyword) === -1) {
       const pid = this.dataset.pid;
       const keywords = [...this.dataset.keywords].concat(keyword);
