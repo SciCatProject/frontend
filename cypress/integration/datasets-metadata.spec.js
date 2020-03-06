@@ -34,12 +34,18 @@ describe("Datasets", () => {
       cy.wait("@fetch");
 
       //cy.get(".edit-metadata").click();
-      cy.contains('Edit').click()
-      cy.contains('Add row').click()
-      cy.get("#typeInput").type("some type{enter}");
+      cy.contains("Edit").click();
+      cy.contains("Add row").click();
+      cy.get("mat-select[formControlName=fieldType]")
+        .click()
+        .get("mat-option")
+        .contains("string")
+        .click();
       cy.get("#nameInput").type("some name{enter}");
       cy.get("#valueInput").type("some value{enter}");
-     // cy.get("#unitsInput").type("some_units{enter}");
+      cy.contains("Save changes").click();
+
+      //cy.get("#unitsInput").type("some_units{enter}");
 
       /*cy.get("#keywordInput").type("cypresskey{enter}");
 
@@ -58,8 +64,8 @@ describe("Datasets", () => {
     });
   });
 
-  /*describe("Remove keyword", () => {
-    it("should go to dataset details and remove the added keyword", () => {
+  describe("Remove keyword", () => {
+    it("should go to dataset details and remove a metatdata entry", () => {
       cy.visit("/datasets");
 
       cy.wait(5000);
@@ -70,18 +76,23 @@ describe("Datasets", () => {
 
       cy.wait(5000);
 
-      cy.contains("cypresskey")
-        .children(".mat-chip-remove")
-        .click();
+      cy.get('.formColumn').find('deleteButton')
 
-      cy.wait("@keyword").then(response => {
+      cy.get(".").click({ force: true });
+      
+
+      /*cy.contains("cypresskey")
+        .children(".mat-chip-remove")
+        .click();*/
+
+      /*cy.wait("@keyword").then(response => {
         expect(response.method).to.eq("PUT");
         expect(response.status).to.eq(200);
-      });
+      });*/
 
-      cy.get(".mat-chip-list")
+      /*cy.get(".mat-chip-list")
         .children()
-        .should("not.contain", "cypresskey");
+        .should("not.contain", "cypresskey");*/
     });
-  });*/
+  });
 });
