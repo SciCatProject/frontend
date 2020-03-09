@@ -63,7 +63,7 @@ describe("Datasets", () => {
         .should("contain.text", "cypresskey");*/
     });
   });
-
+  
   describe("Remove keyword", () => {
     it("should go to dataset details and remove a metatdata entry", () => {
       cy.visit("/datasets");
@@ -75,11 +75,14 @@ describe("Datasets", () => {
         .click();
 
       cy.wait(5000);
+      cy.contains("Edit").click();
 
-      cy.get('.formColumn').find('deleteButton')
+      cy.get("button.deleteButton").first()
+        .click();
 
-      cy.get(".").click({ force: true });
-      
+     // cy.get("button[class=deleteButton]").click();
+
+      //cy.get(".").click({ force: true });
 
       /*cy.contains("cypresskey")
         .children(".mat-chip-remove")
