@@ -29,7 +29,7 @@
     "@angular/pwa": "^0.803.18",
     "@angular/router": "^8.2.13",
     "@angular/service-worker": "^8.2.13",
-    "@ngrx/effects": "^8.5.0",
+    "@ngrx/effects": "^9.0.0",
     "@ngrx/router-store": "^8.5.0",
     "@ngrx/schematics": "^8.5.0",
     "@ngrx/store": "^8.5.0",
