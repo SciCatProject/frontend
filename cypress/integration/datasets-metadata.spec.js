@@ -7,7 +7,7 @@ describe("Datasets", () => {
     cy.login(Cypress.config("username"), Cypress.config("password"));
 
     cy.server();
-    cy.route("PUT", "/api/v3/Datasets/**/*").as("keyword");
+    cy.route("PUT", "/api/v3/Datasets/**/*").as("metadata");
     cy.route("GET", "*").as("fetch");
   });
 
@@ -19,7 +19,7 @@ describe("Datasets", () => {
     cy.removeDatasets();
   });
 
-  describe("Add keyword", () => {
+  describe("Add metadata item", () => {
     it("should go to dataset details and add a metatdata entry", () => {
       cy.createDataset("raw");
 
@@ -33,38 +33,43 @@ describe("Datasets", () => {
 
       cy.wait("@fetch");
 
-      //cy.get(".edit-metadata").click();
       cy.contains("Edit").click();
+      cy.wait(1000);
+
       cy.contains("Add row").click();
+      cy.wait(1000);
+
+      // simulate click event on the drop down
       cy.get("mat-select[formControlName=fieldType]")
-        .click()
-        .get("mat-option")
+        .first()
+        .click(); // opens the drop down
+
+      // simulate click event on the drop down item (mat-option)
+      cy.get(".mat-option-text")
         .contains("string")
-        .click();
+        .then(option => {
+          option[0].click();
+        });
+
       cy.get("#nameInput").type("some name{enter}");
       cy.get("#valueInput").type("some value{enter}");
+
       cy.contains("Save changes").click();
 
-      //cy.get("#unitsInput").type("some_units{enter}");
-
-      /*cy.get("#keywordInput").type("cypresskey{enter}");
-
-      cy.wait("@keyword").then(response => {
+      cy.wait("@metadata").then(response => {
         expect(response.method).to.eq("PUT");
         expect(response.status).to.eq(200);
       });
 
       cy.wait(5000);
 
-      cy.get(".done-edit-button").click({ force: true });
-
-      cy.get(".mat-chip-list")
-        .children()
-        .should("contain.text", "cypresskey");*/
+      cy.get("mat-select[formControlName=fieldType]")
+        .first()
+        .should("contain.text", "string");
     });
   });
-  
-  describe("Remove keyword", () => {
+
+  describe("Remove metadat item", () => {
     it("should go to dataset details and remove a metatdata entry", () => {
       cy.visit("/datasets");
 
@@ -77,25 +82,23 @@ describe("Datasets", () => {
       cy.wait(5000);
       cy.contains("Edit").click();
 
-      cy.get("button.deleteButton").first()
+      cy.get("button.deleteButton")
+        .first()
         .click();
 
-     // cy.get("button[class=deleteButton]").click();
+      cy.contains("Save changes").click();
 
-      //cy.get(".").click({ force: true });
-
-      /*cy.contains("cypresskey")
-        .children(".mat-chip-remove")
-        .click();*/
-
-      /*cy.wait("@keyword").then(response => {
+      cy.wait("@metadata").then(response => {
         expect(response.method).to.eq("PUT");
         expect(response.status).to.eq(200);
-      });*/
+      });
 
-      /*cy.get(".mat-chip-list")
-        .children()
-        .should("not.contain", "cypresskey");*/
+      cy.contains("View").click();
+      cy.wait(1000);
+      //cy.get("metadata-view").debug();
+      /*cy.get("metadata-view.ng-star-inserted")
+        .first()
+        .should("not.contain", "string");*/
     });
   });
 });
