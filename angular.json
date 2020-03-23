@@ -87,6 +87,10 @@
               "buildOptimizer": true,
               "fileReplacements": [
                 {
+                  "replace": "src/app/build-specifics/index.ts",
+                  "with": "src/app/build-specifics/index.prod.ts"
+                },
+                {
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.e2e.ts"
                 },
