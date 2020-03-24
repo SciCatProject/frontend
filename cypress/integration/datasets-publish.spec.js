@@ -7,8 +7,6 @@ describe("Datasets", () => {
     cy.login(Cypress.config("username"), Cypress.config("password"));
 
     cy.server();
-    //cy.route("PUT", "/api/v3/Datasets/**/*").as("metadata");
-    //cy.route("GET", "*").as("fetch");
   });
 
   after(() => {
@@ -19,7 +17,7 @@ describe("Datasets", () => {
     cy.removeDatasets();
   });
 
-  describe("Add item to cart", () => {
+  describe("Add item to cart and publish", () => {
     it("should add dataset to cart", () => {
       cy.createDataset("raw");
 
@@ -45,15 +43,9 @@ describe("Datasets", () => {
 
       cy.get("#publishButton").click();
 
+      cy.get("#doiRow").should("exist");
+
       cy.wait(1000);
     });
   });
-
-  /* describe("navigate to cart", () => {
-    it("should go to cart and click publish", () => {});
-  });
-
-  describe("Complete publish form", () => {
-    it("should fill in publish form and click publish", () => {});
-  });*/
 });
