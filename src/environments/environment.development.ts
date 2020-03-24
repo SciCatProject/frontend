@@ -19,8 +19,9 @@ export const environment = {
   shoppingCartEnabled: true,
   shoppingCartOnHeader: true,
   columnSelectEnabled: true,
-  ingestManual: "https://melanie.gitpages.psi.ch/SciCatPages/",
-  gettingStarted: "https://melanie.gitpages.psi.ch/SciCatPages/SciCatGettingStartedSLSSummary.pdf",
+  ingestManual: "http://melanie.gitpages.psi.ch/SciCatPages/",
+  gettingStarted: "http://melanie.gitpages.psi.ch/SciCatPages/SciCatGettingStartedSLSSummary.pdf",
+  jupyterHubUrl: "https://jupyterhub.apps.ocp4a.psi.ch/hub/login",
 
   fileserverBaseURL: "http://127.0.0.1:8889",
   synapseBaseUrl: "https://scitest.esss.lu.se",
