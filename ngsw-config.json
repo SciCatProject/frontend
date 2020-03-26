@@ -11,6 +11,8 @@
         "/panosc",
         "/auth",
         "/_matrix",
+        "/openaire",
+        "/plexus",
         "/scichat",
         "/riot"
       ],

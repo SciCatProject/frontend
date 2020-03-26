@@ -6,6 +6,7 @@
       id="descriptionInput"
       placeholder="Sample Description"
       formControlName="description"
+      required="required"
     />
   </mat-form-field>
   <mat-form-field>
@@ -31,11 +32,12 @@
       id="groupInput"
       placeholder="Owner Group"
       formControlName="ownerGroup"
+      required="required"
     />
     <mat-hint align="end">Use a group you have access to</mat-hint>
   </mat-form-field>
 </mat-dialog-content>
 <div mat-dialog-actions>
   <button mat-button (click)="close()">Close</button>
-  <button mat-button (click)="save()">Save</button>
+  <button mat-button [disabled]="!form.valid" (click)="save()">Save</button>
 </div>

@@ -23,6 +23,7 @@ import { StoreModule } from "@ngrx/store";
 import { UserApi } from "shared/sdk/services";
 import { UsersModule } from "users/users.module";
 import { routerReducer } from "@ngrx/router-store";
+import { extModules } from './build-specifics';
 
 import {
   MatMenuModule,
@@ -93,6 +94,7 @@ import { InstrumentsModule } from "./instruments/instruments.module";
         }
       }
     ),
+    extModules,
     RouterModule.forRoot(routes, { useHash: false }),
     StoreDevtoolsModule.instrument({
       maxAge: 25, //  Retains last 25 states
