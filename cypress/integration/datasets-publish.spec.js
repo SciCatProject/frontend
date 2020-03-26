@@ -45,7 +45,6 @@ describe("Datasets", () => {
 
       cy.get("#doiRow").should("exist");
 
-      cy.wait(1000);
     });
   });
 });
