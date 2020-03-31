@@ -78,7 +78,6 @@ export class PublishedDataEffects {
           mergeMap((publishedData: PublishedData) => [
             fromActions.publishDatasetCompleteAction({ publishedData }),
             fromActions.fetchPublishedDataAction({ id: publishedData.doi }),
-            // fromActions.registerPublishedDataAction({ doi: publishedData.doi })
           ]),
           catchError(() => of(fromActions.publishDatasetFailedAction()))
         )
@@ -121,7 +120,7 @@ export class PublishedDataEffects {
         this.publishedDataApi.register(encodeURIComponent(doi)).pipe(
           mergeMap((publishedData) => [
             fromActions.registerPublishedDataCompleteAction({ publishedData }),
-            // fromActions.fetchPublishedDataAction({ id: encodeURIComponent(doi) }),
+            fromActions.fetchPublishedDataAction({ id: doi }),
           ]),
           catchError(() => of(fromActions.registerPublishedDataFailedAction()))
         )

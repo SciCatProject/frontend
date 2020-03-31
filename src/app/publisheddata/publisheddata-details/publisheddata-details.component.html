@@ -17,7 +17,7 @@
         <button
           mat-raised-button
           color="primary"
-          *ngIf="publishedData.status === 'pending_registration'"
+          *ngIf="publishedData.status !== 'registered'"
           (click)="onRegisterClick(publishedData.doi)"
         >
           Register
