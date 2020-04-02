@@ -165,9 +165,6 @@ export class PublishComponent implements OnInit, OnDestroy {
     publishedData.thumbnail = this.form.thumbnail;
     publishedData.numberOfFiles = this.form.numberOfFiles;
     publishedData.sizeOfArchive = this.form.sizeOfArchive;
-    this.userName$.subscribe(name => {
-      publishedData.scicatUser = name;
-    });
 
     this.store.dispatch(publishDatasetAction({ data: publishedData }));
   }
