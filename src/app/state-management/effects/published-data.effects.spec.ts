@@ -185,23 +185,21 @@ describe("PublishedDataEffects", () => {
   });
 
   describe("publishDataset$", () => {
-    it("should result in a publishDatasetCompleteAction, a fetchPublishedDataAction, and a registerPublishedDataAction", () => {
+    it("should result in a publishDatasetCompleteAction, a fetchPublishedDataAction", () => {
       const id = "testDOI";
       const action = fromActions.publishDatasetAction({ data: publishedData });
       const outcome1 = fromActions.publishDatasetCompleteAction({
         publishedData
       });
       const outcome2 = fromActions.fetchPublishedDataAction({ id });
-      const outcome3 = fromActions.registerPublishedDataAction({ doi: id });
 
       actions = hot("-a", { a: action });
       const response = cold("-a|", { a: publishedData });
       publishedDataApi.create.and.returnValue(response);
 
-      const expected = cold("--(bcd)", {
+      const expected = cold("--(bc)", {
         b: outcome1,
         c: outcome2,
-        d: outcome3
       });
       expect(effects.publishDataset$).toBeObservable(expected);
     });
@@ -262,12 +260,14 @@ describe("PublishedDataEffects", () => {
       const outcome = fromActions.registerPublishedDataCompleteAction({
         publishedData
       });
+      const outcome1 = fromActions.fetchPublishedDataAction({ id: doi });
+
 
       actions = hot("-a", { a: action });
       const response = cold("-a|", { a: publishedData });
       publishedDataApi.register.and.returnValue(response);
 
-      const expected = cold("--b", { b: outcome });
+      const expected = cold("--(bc)", { b: outcome, c: outcome1 });
       expect(effects.registerPublishedData$).toBeObservable(expected);
     });
 

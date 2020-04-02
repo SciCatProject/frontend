@@ -1,22 +1,23 @@
 <div class="publishedData-detail" *ngIf="currentData$ | async as publishedData">
   <div fxLayout="row">
-    <div fxLayout="column">
+    <div fxFlex="140">
       <mat-card>
         <mat-card-header class="status-header">
           Publication Status
         </mat-card-header>
-
+        <mat-card-content>
         <table>
           <tr *ngIf="publishedData.status as value">
-            <th><mat-icon> label </mat-icon> Title</th>
-            <td>{{ value }}</td>
+            <th><mat-icon> public </mat-icon> Status</th>
+            <td>{{ value }}</td> 
           </tr>
         </table>
+      </mat-card-content>
 
         <button
           mat-raised-button
           color="primary"
-         
+          *ngIf="publishedData.status !== 'registered'"
           (click)="onRegisterClick(publishedData.doi)"
         >
           Register
@@ -58,8 +59,8 @@
         </mat-card-header>
 
         <table>
-          <tr *ngIf="publishedData.scicatUser as value">
-            <th><mat-icon> account_circle </mat-icon> Scicat User</th>
+          <tr *ngIf="publishedData.createdBy as value">
+            <th><mat-icon> account_circle </mat-icon> User</th>
             <td>{{ value }}</td>
           </tr>
           <tr *ngIf="publishedData.creator as value">
@@ -110,10 +111,15 @@
         </div>
       </mat-card>
     </div>
-    <div fxFlex="0 1 500px">
-      <mat-card *ngIf="publishedData.thumbnail">
-        <img mat-card-image src="{{ publishedData.thumbnail }}" />
-      </mat-card>
+    <div fxFlex="30">
+      <ng-container
+        *ngIf="publishedData.thumbnail as thumbnail; else noThumbnail"
+      >
+        <mat-card>
+          <img mat-card-image src="{{ thumbnail }}" />
+        </mat-card>
+      </ng-container>
     </div>
+    <div fxFlex="15"></div>
   </div>
 </div>

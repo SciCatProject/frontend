@@ -78,7 +78,6 @@ export class PublishedDataEffects {
           mergeMap((publishedData: PublishedData) => [
             fromActions.publishDatasetCompleteAction({ publishedData }),
             fromActions.fetchPublishedDataAction({ id: publishedData.doi }),
-            // fromActions.registerPublishedDataAction({ doi: publishedData.doi })
           ]),
           catchError(() => of(fromActions.publishDatasetFailedAction()))
         )
@@ -119,14 +118,29 @@ export class PublishedDataEffects {
       ofType(fromActions.registerPublishedDataAction),
       switchMap(({ doi }) =>
         this.publishedDataApi.register(encodeURIComponent(doi)).pipe(
-          map(publishedData =>
-            fromActions.registerPublishedDataCompleteAction({ publishedData })
-          ),
+          mergeMap((publishedData) => [
+            fromActions.registerPublishedDataCompleteAction({ publishedData }),
+            fromActions.fetchPublishedDataAction({ id: doi }),
+          ]),
           catchError(() => of(fromActions.registerPublishedDataFailedAction()))
         )
       )
     )
   );
+
+  registerPublishedDataFailedMessage$ = createEffect(() =>
+  this.actions$.pipe(
+    ofType(fromActions.registerPublishedDataFailedAction),
+    switchMap(() => {
+      const message = {
+        type: MessageType.Error,
+        content: "Registration Failed",
+        duration: 5000
+      };
+      return of(showMessageAction({ message }));
+    })
+  )
+);
 
   loading$ = createEffect(() =>
     this.actions$.pipe(
