@@ -31,7 +31,7 @@ Cypress.Commands.add("createPolicy", type => {
             const token = idCookie.value;
 
             cy.fixture("policy").then(policy => {
-                policy.manager = [user.email];
+                policy.manager = ["_cypress", user.email];
                 policy.ownerGroup = "cypress";
                 policy.createdBy = user.username;
                 policy.updatedBy = user.username;
@@ -44,6 +44,38 @@ Cypress.Commands.add("createPolicy", type => {
             });
         });
     });
+});
+
+Cypress.Commands.add("removePolicies", () => {
+  cy.getCookie("$LoopBackSDK$id").then(cookie => {
+      const token = cookie.value;
+
+      const filter = { where: { ownerGroup: "cypress" } };
+
+      cy.request(
+          "GET",
+          lbBaseUrl +
+              "/Policies?filter=" +
+              encodeURIComponent(JSON.stringify(filter)) +
+              "&access_token=" +
+              token
+      )
+          .its("body")
+          .as("policies");
+
+      cy.get("@policies").then(policies => {
+        policies.forEach(policy => {
+              cy.request(
+                  "DELETE",
+                  lbBaseUrl +
+                      "/Policies/" +
+                      encodeURIComponent(policy.id) +
+                      "?access_token=" +
+                      token
+              );
+          });
+      });
+  });
 });
 
 Cypress.Commands.add("createDataset", type => {
