@@ -19,8 +19,8 @@ describe("Datasets", () => {
     cy.removeDatasets();
   });
 
-  describe("Add metadata item", () => {
-    it("should go to dataset details and add a metatdata entry", () => {
+  describe("Reduce dataset", () => {
+    it("should go to dataset details reduce tab and step through the workflow", () => {
       cy.createDataset("raw");
 
       cy.visit("/datasets");
