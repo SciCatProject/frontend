@@ -13,6 +13,11 @@ const reducer = createReducer(
     datasets
   })),
 
+  on(fromActions.fetchPublicDatasetsCompleteAction, (state, { datasets }) => ({
+    ...state,
+    datasets
+  })),
+
   on(
     fromActions.fetchFacetCountsCompleteAction,
     (state, { facetCounts, allCounts }) => ({

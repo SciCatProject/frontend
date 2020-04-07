@@ -35,6 +35,37 @@ describe("Dataset Actions", () => {
     });
   });
 
+  describe("fetchPublicDatasetsAction", () => {
+    it("should create an action", () => {
+      const action = fromActions.fetchPublicDatasetsAction();
+      expect({ ...action }).toEqual({
+        type: "[Dataset] Fetch Public Datasets"
+      });
+    });
+  });
+
+  describe("fetchPublicDatasetsCompleteAction", () => {
+    it("should create an action", () => {
+      const datasets = [new Dataset()];
+      const action = fromActions.fetchPublicDatasetsCompleteAction({
+        datasets
+      });
+      expect({ ...action }).toEqual({
+        type: "[Dataset] Fetch Public Datasets Complete",
+        datasets
+      });
+    });
+  });
+
+  describe("fetchPublicDatasetsFailedAction", () => {
+    it("should create an action", () => {
+      const action = fromActions.fetchPublicDatasetsFailedAction();
+      expect({ ...action }).toEqual({
+        type: "[Dataset] Fetch Public Datasets Failed"
+      });
+    });
+  });
+
   describe("fetchFacetCountsAction", () => {
     it("should create an action", () => {
       const action = fromActions.fetchFacetCountsAction();

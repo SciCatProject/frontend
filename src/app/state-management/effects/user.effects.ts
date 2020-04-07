@@ -161,7 +161,7 @@ export class UserEffects {
     () =>
       this.actions$.pipe(
         ofType(fromActions.logoutCompleteAction),
-        tap(() => this.router.navigate(["/login"]))
+        tap(() => this.router.navigate([""]))
       ),
     { dispatch: false }
   );

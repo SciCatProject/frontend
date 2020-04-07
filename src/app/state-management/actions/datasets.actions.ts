@@ -18,6 +18,17 @@ export const fetchDatasetsFailedAction = createAction(
   "[Dataset] Fetch Datasets Failed"
 );
 
+export const fetchPublicDatasetsAction = createAction(
+  "[Dataset] Fetch Public Datasets"
+);
+export const fetchPublicDatasetsCompleteAction = createAction(
+  "[Dataset] Fetch Public Datasets Complete",
+  props<{ datasets: Dataset[] }>()
+);
+export const fetchPublicDatasetsFailedAction = createAction(
+  "[Dataset] Fetch Public Datasets Failed"
+);
+
 export const fetchFacetCountsAction = createAction(
   "[Dataset] Fetch Facet Counts"
 );

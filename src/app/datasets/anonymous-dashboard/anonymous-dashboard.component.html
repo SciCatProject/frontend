@@ -1,0 +1,25 @@
+<mat-sidenav-container [hasBackdrop]="false">
+  <mat-sidenav-content>
+    <div fxLayout="row" fxLayout.xs="column">
+      <div class="action-column" fxFlex="14" fxFlex.lt-xl="20">
+        <datasets-filter></datasets-filter>
+      </div>
+      <div class="table-column" fxFlex="85" fxFlex.lt-xl="80">
+        <dataset-table
+          [tableColumns]="tableColumns$ | async"
+          (settingsClick)="onSettingsClick()"
+        ></dataset-table>
+      </div>
+    </div>
+  </mat-sidenav-content>
+
+  <mat-sidenav #settings position="end" mode="push">
+    <dataset-table-settings
+      [selectableColumns]="tableColumns$ | async"
+      [clearSearchBar]="clearColumnSearch"
+      (closeClick)="onCloseClick()"
+      (columnSearch)="onColumnSearch($event)"
+      (selectColumn)="onSelectColumn($event)"
+    ></dataset-table-settings>
+  </mat-sidenav>
+</mat-sidenav-container>
