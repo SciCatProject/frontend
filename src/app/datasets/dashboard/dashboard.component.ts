@@ -107,6 +107,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
   }
 
+  onRowClick(dataset: Dataset): void {
+    const pid = encodeURIComponent(dataset.pid);
+    this.router.navigateByUrl("/datasets/" + pid);
+  }
+
   openDialog(): void {
     const dialogRef = this.dialog.open(AddDatasetDialogComponent, {
       width: "500px",

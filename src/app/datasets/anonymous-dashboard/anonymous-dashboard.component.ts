@@ -25,7 +25,7 @@ import { Subscription } from "rxjs";
 
 import * as deepEqual from "deep-equal";
 import * as rison from "rison";
-import { DatasetFilters } from "state-management/models";
+import { DatasetFilters, Dataset } from "state-management/models";
 import { SelectColumnEvent } from "datasets/dataset-table-settings/dataset-table-settings.component";
 import {
   selectColumnAction,
@@ -83,6 +83,11 @@ export class AnonymousDashboardComponent implements OnInit, OnDestroy {
         deselectColumnAction({ name: column.name, columnType: column.type })
       );
     }
+  }
+
+  onRowClick(dataset: Dataset): void {
+    const pid = encodeURIComponent(dataset.pid);
+    this.router.navigateByUrl("/anonymous/datasets/" + pid);
   }
 
   constructor(

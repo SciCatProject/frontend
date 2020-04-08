@@ -8,6 +8,7 @@
         <dataset-table
           [tableColumns]="tableColumns$ | async"
           (settingsClick)="onSettingsClick()"
+          (rowClick)="onRowClick($event)"
         ></dataset-table>
       </div>
     </div>

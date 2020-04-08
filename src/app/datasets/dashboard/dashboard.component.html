@@ -27,6 +27,7 @@
           [tableColumns]="tableColumns$ | async"
           [selectedSets]="selectedSets$ | async"
           (settingsClick)="onSettingsClick()"
+          (rowClick)="onRowClick($event)"
         ></dataset-table>
       </div>
     </div>

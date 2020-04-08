@@ -15,7 +15,7 @@ import { MockActivatedRoute, MockRouter, MockStore } from "shared/MockStubs";
 import { provideMockStore } from "@ngrx/store/testing";
 import { getHasPrefilledFilters } from "state-management/selectors/datasets.selectors";
 import { fetchMetadataKeysAction } from "state-management/actions/datasets.actions";
-import { TableColumn } from "state-management/models";
+import { TableColumn, Dataset } from "state-management/models";
 import { SelectColumnEvent } from "datasets/dataset-table-settings/dataset-table-settings.component";
 import {
   selectColumnAction,
@@ -26,6 +26,9 @@ describe("AnonymousDashboardComponent", () => {
   let component: AnonymousDashboardComponent;
   let fixture: ComponentFixture<AnonymousDashboardComponent>;
 
+  const router = {
+    navigateByUrl: jasmine.createSpy("navigateByUrl")
+  };
   let store: MockStore;
   let dispatchSpy;
 
@@ -44,7 +47,7 @@ describe("AnonymousDashboardComponent", () => {
       set: {
         providers: [
           { provide: ActivatedRoute, useClass: MockActivatedRoute },
-          { provide: Router, useClass: MockRouter }
+          { provide: Router, useValue: router }
         ]
       }
     });
@@ -149,6 +152,18 @@ describe("AnonymousDashboardComponent", () => {
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
         deselectColumnAction({ name: column.name, columnType: column.type })
+      );
+    });
+  });
+
+  describe("#onRowClick()", () => {
+    it("should navigate to a dataset", () => {
+      const dataset = new Dataset();
+      component.onRowClick(dataset);
+
+      expect(router.navigateByUrl).toHaveBeenCalledTimes(1);
+      expect(router.navigateByUrl).toHaveBeenCalledWith(
+        "/anonymous/datasets/" + encodeURIComponent(dataset.pid)
       );
     });
   });

@@ -46,7 +46,16 @@ export const routes: Routes = [
     children: [
       {
         path: "",
+        redirectTo: "anonymous/datasets",
+        pathMatch: "full"
+      },
+      {
+        path: "anonymous/datasets",
         component: AnonymousDashboardComponent
+      },
+      {
+        path: "anonymous/datasets/:id",
+        component: DatasetDetailsDashboardComponent,
       },
       { path: "login", component: LoginComponent },
       {
