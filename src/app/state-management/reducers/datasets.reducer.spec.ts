@@ -29,18 +29,6 @@ describe("DatasetsReducer", () => {
     });
   });
 
-  describe("on fetchPublicDatasetsCompleteAction", () => {
-    it("should set datasets property", () => {
-      const datasets = [dataset];
-      const action = fromActions.fetchPublicDatasetsCompleteAction({
-        datasets
-      });
-      const state = fromDatasets.datasetsReducer(initialDatasetState, action);
-
-      expect(state.datasets).toEqual(datasets);
-    });
-  });
-
   describe("on fetchFacetCountsCompleteAction", () => {
     it("should set facetCounts and totalCount properties", () => {
       const facetCounts: FacetCounts = {};

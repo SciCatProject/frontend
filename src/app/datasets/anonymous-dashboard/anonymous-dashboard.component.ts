@@ -19,7 +19,7 @@ import {
   fetchMetadataKeysAction,
   fetchFacetCountsAction,
   prefillFiltersAction,
-  fetchPublicDatasetsAction
+  fetchDatasetsAction
 } from "state-management/actions/datasets.actions";
 import { Subscription } from "rxjs";
 
@@ -102,7 +102,7 @@ export class AnonymousDashboardComponent implements OnInit, OnDestroy {
           distinctUntilChanged(deepEqual)
         )
         .subscribe(filters => {
-          this.store.dispatch(fetchPublicDatasetsAction());
+          this.store.dispatch(fetchDatasetsAction());
           this.store.dispatch(fetchFacetCountsAction());
           this.router.navigate([""], {
             queryParams: { args: rison.encode(filters) }

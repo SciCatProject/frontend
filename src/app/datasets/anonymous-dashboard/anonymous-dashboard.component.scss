@@ -1,5 +1,3 @@
-@import "../../../theme.scss";
-
 mat-sidenav-container {
   height: 97%;
 
@@ -8,6 +6,7 @@ mat-sidenav-container {
     background-color: #ffffff;
 
     .action-column {
+      margin-top: 4em;
       margin-right: 1em;
     }
 

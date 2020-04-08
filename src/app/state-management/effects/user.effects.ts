@@ -19,7 +19,8 @@ import {
   tap,
   withLatestFrom,
   distinctUntilChanged,
-  mergeMap
+  mergeMap,
+  skipWhile
 } from "rxjs/operators";
 import { of } from "rxjs";
 import { MessageType } from "state-management/models";
@@ -249,6 +250,7 @@ export class UserEffects {
     this.actions$.pipe(
       ofType(fromActions.updateUserSettingsAction),
       withLatestFrom(this.user$),
+      skipWhile(([action, user]) => !user),
       switchMap(([{ property }, { id }]) =>
         this.userApi.updateSettings(id, property).pipe(
           map(userSettings =>

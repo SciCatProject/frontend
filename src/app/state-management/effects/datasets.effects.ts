@@ -50,23 +50,6 @@ export class DatasetEffects {
     )
   );
 
-  fetchPublicDatasets$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(fromActions.fetchPublicDatasetsAction),
-      withLatestFrom(this.fullqueryParams$),
-      map(([action, params]) => params),
-      mergeMap(({ query, limits }) =>
-        this.datasetApi.anonymousquery(query, limits).pipe(
-          map(
-            datasets =>
-              fromActions.fetchPublicDatasetsCompleteAction({ datasets }),
-            catchError(() => of(fromActions.fetchPublicDatasetsFailedAction()))
-          )
-        )
-      )
-    )
-  );
-
   fetchFacetCounts$ = createEffect(() =>
     this.actions$.pipe(
       ofType(fromActions.fetchFacetCountsAction),
