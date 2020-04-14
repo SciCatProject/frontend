@@ -38,6 +38,7 @@ import { PoliciesDashboardComponent } from "policies/policies-dashboard/policies
 import { InstrumentsDashboardComponent } from "instruments/instruments-dashboard/instruments-dashboard.component";
 import { InstrumentDetailsComponent } from "instruments/instrument-details/instrument-details.component";
 import { AnonymousDashboardComponent } from "datasets/anonymous-dashboard/anonymous-dashboard.component";
+import { AnonymousDetailsDashboardComponent } from "datasets/anonymous-details-dashboard/anonymous-details-dashboard.component";
 
 export const routes: Routes = [
   {
@@ -55,7 +56,7 @@ export const routes: Routes = [
       },
       {
         path: "anonymous/datasets/:id",
-        component: DatasetDetailsDashboardComponent,
+        component: AnonymousDetailsDashboardComponent
       },
       { path: "login", component: LoginComponent },
       {
