@@ -58,6 +58,7 @@ export class MockActivatedRoute {
   snapshot = {
     queryParams: { returnUrl: "/" },
     paramMap: convertToParamMap({ name: "string" }),
+    params: { id: "string" },
     url: [{ path: "logbooks" }]
   };
   params = of([{ id: 1 }]);

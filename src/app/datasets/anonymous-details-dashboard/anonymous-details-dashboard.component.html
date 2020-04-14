@@ -1,1 +1,42 @@
-<p>anonymous-details-dashboard works!</p>
+<ng-container *ngIf="dataset$ | async as dataset">
+  <mat-tab-group>
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon> details </mat-icon> Details
+      </ng-template>
+
+      <div fxLayout="row">
+        <div fxFlex="auto">
+          <a
+            mat-raised-button
+            href="{{ appConfig.jupyterHubUrl }}"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="jupyter-button"
+            *ngIf="appConfig.jupyterHubUrl"
+          >
+            Jupyter Hub
+          </a>
+        </div>
+      </div>
+
+      <dataset-detail
+        [dataset]="dataset"
+        [datasetWithout]="datasetWithout$ | async"
+        [attachments]="attachments$ | async"
+      ></dataset-detail>
+    </mat-tab>
+
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon> cloud_download </mat-icon> Datafiles
+      </ng-template>
+    </mat-tab>
+
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon> loop </mat-icon> Lifecycle
+      </ng-template>
+    </mat-tab>
+  </mat-tab-group>
+</ng-container>
