@@ -9,7 +9,9 @@ import { InstrumentEffects } from "state-management/effects/instruments.effects"
 import { SharedCatanieModule } from "shared/shared.module";
 import { JsonHeadPipe } from "shared/pipes/json-head.pipe";
 import { InstrumentDetailsComponent } from "./instrument-details/instrument-details.component";
-import { MatCardModule, MatIconModule, MatTabsModule } from "@angular/material";
+import { MatCardModule } from "@angular/material/card";
+import { MatIconModule } from "@angular/material/icon";
+import { MatTabsModule } from "@angular/material/tabs";
 
 @NgModule({
   declarations: [InstrumentsDashboardComponent, InstrumentDetailsComponent],

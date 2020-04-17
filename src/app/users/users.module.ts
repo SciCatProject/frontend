@@ -10,16 +10,14 @@ import { SharedCatanieModule } from "shared/shared.module";
 import { StoreModule } from "@ngrx/store";
 import { UserSettingsComponent } from "users/user-settings/user-settings.component";
 import { userReducer } from "state-management/reducers/user.reducer";
-import {
-  MatCardModule,
-  MatCheckboxModule,
-  MatGridListModule,
-  MatButtonModule,
-  MatIconModule,
-  MatFormFieldModule,
-  MatInputModule,
-  MatDialogModule
-} from "@angular/material";
+import { MatButtonModule } from "@angular/material/button";
+import { MatCardModule } from "@angular/material/card";
+import { MatCheckboxModule } from "@angular/material/checkbox";
+import { MatDialogModule } from "@angular/material/dialog";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatGridListModule } from "@angular/material/grid-list";
+import { MatIconModule } from "@angular/material/icon";
+import { MatInputModule } from "@angular/material/input";
 import { PrivacyDialogComponent } from "./privacy-dialog/privacy-dialog.component";
 
 @NgModule({

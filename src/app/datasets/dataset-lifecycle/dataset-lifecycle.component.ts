@@ -14,7 +14,7 @@ import {
   animate
 } from "@angular/animations";
 import { DatePipe } from "@angular/common";
-import { PageEvent } from "@angular/material";
+import { PageEvent } from "@angular/material/paginator";
 
 export interface HistoryItem {
   property: string;

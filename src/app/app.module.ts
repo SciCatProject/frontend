@@ -25,15 +25,13 @@ import { UsersModule } from "users/users.module";
 import { routerReducer } from "@ngrx/router-store";
 import { extModules } from './build-specifics';
 
-import {
-  MatMenuModule,
-  MatNativeDateModule,
-  MatSnackBarModule,
-  MatToolbarModule,
-  MatProgressSpinnerModule,
-  MatIconModule,
-  MatBadgeModule
-} from "@angular/material";
+import { MatBadgeModule } from "@angular/material/badge";
+import { MatNativeDateModule } from "@angular/material/core";
+import { MatIconModule } from "@angular/material/icon";
+import { MatMenuModule } from "@angular/material/menu";
+import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
+import { MatSnackBarModule } from "@angular/material/snack-bar";
+import { MatToolbarModule } from "@angular/material/toolbar";
 import { ServiceWorkerModule } from "@angular/service-worker";
 import { environment } from "../environments/environment";
 import { LogbooksModule } from "./logbooks/logbooks.module";

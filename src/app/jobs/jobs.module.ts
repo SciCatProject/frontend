@@ -4,11 +4,9 @@ import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { JobsDashboardComponent } from "./jobs-dashboard/jobs-dashboard.component";
 import { JobsDetailComponent } from "./jobs-detail/jobs-detail.component";
-import {
-  MatCardModule,
-  MatButtonToggleModule,
-  MatIconModule
-} from "@angular/material";
+import { MatButtonToggleModule } from "@angular/material/button-toggle";
+import { MatCardModule } from "@angular/material/card";
+import { MatIconModule } from "@angular/material/icon";
 import { StoreModule } from "@ngrx/store";
 import { jobsReducer } from "state-management/reducers/jobs.reducer";
 import { FlexLayoutModule } from "@angular/flex-layout";
