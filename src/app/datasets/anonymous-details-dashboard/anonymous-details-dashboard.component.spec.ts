@@ -1,12 +1,21 @@
-import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+import {
+  async,
+  ComponentFixture,
+  TestBed,
+  inject
+} from "@angular/core/testing";
 
 import { AnonymousDetailsDashboardComponent } from "./anonymous-details-dashboard.component";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { AppConfigModule, APP_CONFIG } from "app-config.module";
 import { SharedCatanieModule } from "shared/shared.module";
-import { StoreModule } from "@ngrx/store";
+import { StoreModule, Store } from "@ngrx/store";
 import { ActivatedRoute, Router } from "@angular/router";
-import { MockActivatedRoute } from "shared/MockStubs";
+import { MockActivatedRoute, MockStore } from "shared/MockStubs";
+import {
+  clearFacetsAction,
+  addKeywordFilterAction
+} from "state-management/actions/datasets.actions";
 
 describe("AnonymousDetailsDashboardComponent", () => {
   let component: AnonymousDetailsDashboardComponent;
@@ -15,6 +24,8 @@ describe("AnonymousDetailsDashboardComponent", () => {
   const router = {
     navigateByUrl: jasmine.createSpy("navigateByUrl")
   };
+  let store: MockStore;
+  let dispatchSpy;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -40,7 +51,30 @@ describe("AnonymousDetailsDashboardComponent", () => {
     fixture.detectChanges();
   });
 
+  beforeEach(inject([Store], (mockStore: MockStore) => {
+    store = mockStore;
+  }));
+
+  afterEach(() => {
+    fixture.destroy();
+  });
+
   it("should create", () => {
     expect(component).toBeTruthy();
+  });
+
+  describe("#onClickKeyword()", () => {
+    it("should update datasets keyword filter and navigate to datasets table", () => {
+      dispatchSpy = spyOn(store, "dispatch");
+      const keyword = "test";
+      component.onClickKeyword(keyword);
+
+      expect(dispatchSpy).toHaveBeenCalledTimes(2);
+      expect(dispatchSpy).toHaveBeenCalledWith(clearFacetsAction());
+      expect(dispatchSpy).toHaveBeenCalledWith(
+        addKeywordFilterAction({ keyword })
+      );
+      expect(router.navigateByUrl).toHaveBeenCalledWith("/anonymous/datasets");
+    });
   });
 });

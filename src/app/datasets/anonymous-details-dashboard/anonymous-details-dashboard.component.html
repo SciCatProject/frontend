@@ -20,23 +20,48 @@
         </div>
       </div>
 
-      <dataset-detail
+      <anonymous-details
         [dataset]="dataset"
-        [datasetWithout]="datasetWithout$ | async"
+        [proposal]="proposal$ | async"
+        [sample]="sample$ | async"
         [attachments]="attachments$ | async"
-      ></dataset-detail>
+        (clickKeyword)="onClickKeyword($event)"
+      ></anonymous-details>
     </mat-tab>
 
-    <mat-tab>
+    <!-- <mat-tab>
       <ng-template mat-tab-label>
         <mat-icon> cloud_download </mat-icon> Datafiles
       </ng-template>
-    </mat-tab>
+
+      <mat-card>
+        <datafiles
+          [datablocks]="origDatablocks$ | async"
+          [data]="dataset"
+          [jwt]="'FGSGDFNAFEPFNEN'"
+        ></datafiles>
+        <div class="datablocks-table">
+          <h4>Original Datablocks</h4>
+          <datablocks-table
+            [datablocks]="origDatablocks$ | async"
+          ></datablocks-table>
+        </div>
+        <div
+          *ngIf="
+            (origDatablocks$ | async) && (origDatablocks$ | async).length === 0
+          "
+        >
+          <h3>No datafiles linked to this dataset</h3>
+        </div>
+      </mat-card>
+    </mat-tab> -->
 
     <mat-tab>
       <ng-template mat-tab-label>
         <mat-icon> loop </mat-icon> Lifecycle
       </ng-template>
+
+      <dataset-lifecycle [dataset]="dataset"></dataset-lifecycle>
     </mat-tab>
   </mat-tab-group>
 </ng-container>

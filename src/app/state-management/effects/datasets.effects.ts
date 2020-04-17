@@ -26,6 +26,7 @@ import {
   addCustomColumnsAction,
   updateUserSettingsAction
 } from "state-management/actions/user.actions";
+import { fetchProposalAction } from "state-management/actions/proposals.actions";
 
 @Injectable()
 export class DatasetEffects {
@@ -205,7 +206,7 @@ export class DatasetEffects {
     )
   );
 
-  updateAttchmentCaption$ = createEffect(() =>
+  updateAttachmentCaption$ = createEffect(() =>
     this.actions$.pipe(
       ofType(fromActions.updateAttachmentCaptionAction),
       switchMap(({ datasetId, attachmentId, caption }) => {

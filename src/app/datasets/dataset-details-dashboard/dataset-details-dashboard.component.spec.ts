@@ -190,7 +190,7 @@ describe("DetailsDashboardComponent", () => {
   });
 
   describe("#onClickKeyword()", () => {
-    it(" should update datasets keyword filter and navigate to datasets table", () => {
+    it("should update datasets keyword filter and navigate to datasets table", () => {
       dispatchSpy = spyOn(store, "dispatch");
       const keyword = "test";
       component.onClickKeyword(keyword);

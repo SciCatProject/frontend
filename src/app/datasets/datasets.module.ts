@@ -69,7 +69,8 @@ import { DatasetTableSettingsComponent } from "./dataset-table-settings/dataset-
 import { DatasetTableActionsComponent } from "./dataset-table-actions/dataset-table-actions.component";
 import { DatasetLifecycleComponent } from "./dataset-lifecycle/dataset-lifecycle.component";
 import { AnonymousDashboardComponent } from "./anonymous-dashboard/anonymous-dashboard.component";
-import { AnonymousDetailsDashboardComponent } from './anonymous-details-dashboard/anonymous-details-dashboard.component';
+import { AnonymousDetailsDashboardComponent } from "./anonymous-details-dashboard/anonymous-details-dashboard.component";
+import { AnonymousDetailsComponent } from "./anonymous-details/anonymous-details.component";
 
 @NgModule({
   imports: [
@@ -130,7 +131,8 @@ import { AnonymousDetailsDashboardComponent } from './anonymous-details-dashboar
     DatasetTableActionsComponent,
     DatasetLifecycleComponent,
     AnonymousDashboardComponent,
-    AnonymousDetailsDashboardComponent
+    AnonymousDetailsDashboardComponent,
+    AnonymousDetailsComponent
   ],
   entryComponents: [
     AddDatasetDialogComponent,
