@@ -194,7 +194,7 @@
       </mat-card-header>
 
       <ng-template [ngIf]="appConfig.tableSciDataEnabled" [ngIfElse]="jsonView">
-        <mat-tab-group>
+        <mat-tab-group class="metadataGroup">
           <mat-tab>
             <ng-template mat-tab-label>
               <mat-icon> list </mat-icon> View
@@ -203,7 +203,7 @@
               [metadata]="dataset.scientificMetadata"
             ></metadata-view>
           </mat-tab>
-          <mat-tab [hidden]="!appConfig.editMetadataEnabled">
+          <mat-tab class="editTab" [hidden]="!appConfig.editMetadataEnabled">
             <ng-template mat-tab-label>
               <mat-icon> edit </mat-icon> Edit
             </ng-template>
