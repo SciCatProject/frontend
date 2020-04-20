@@ -6,7 +6,7 @@ import {
 } from "@angular/core/testing";
 
 import { DatasetDetailsDashboardComponent } from "./dataset-details-dashboard.component";
-import { MockStore, MockActivatedRoute, MockUserApi } from "shared/MockStubs";
+import { MockStore, MockActivatedRoute, MockUserApi } from "../../shared/MockStubs";
 import { Store, StoreModule } from "@ngrx/store";
 import {
   clearFacetsAction,
@@ -15,15 +15,15 @@ import {
   updateAttachmentCaptionAction,
   removeAttachmentAction,
   updatePropertyAction
-} from "state-management/actions/datasets.actions";
-import { Dataset, UserApi, User } from "shared/sdk";
+} from "../../state-management/actions/datasets.actions";
+import { Dataset, UserApi, User } from "../../shared/sdk";
 import { ReadFile, ReadMode } from "ngx-file-helpers";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
-import { AppConfigModule, APP_CONFIG } from "app-config.module";
-import { SharedCatanieModule } from "shared/shared.module";
+import { AppConfigModule, APP_CONFIG } from "../../app-config.module";
+import { SharedCatanieModule } from "../../shared/shared.module";
 import { Router, ActivatedRoute } from "@angular/router";
-import { SubmitCaptionEvent } from "shared/modules/file-uploader/file-uploader.component";
-import { MatSlideToggleChange, MatSlideToggle } from "@angular/material";
+import { SubmitCaptionEvent } from "../../shared/modules/file-uploader/file-uploader.component";
+import { MatSlideToggleChange, MatSlideToggle } from "@angular/material/slide-toggle";
 
 describe("DetailsDashboardComponent", () => {
   let component: DatasetDetailsDashboardComponent;

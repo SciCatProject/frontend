@@ -3,8 +3,7 @@ import {
   DatasetTableComponent,
   SortChangeEvent
 } from "./dataset-table.component";
-import { MatTableModule, MatCheckboxChange } from "@angular/material";
-import { MockStore, MockDatasetApi } from "shared/MockStubs";
+import { MockStore, MockDatasetApi } from "../../shared/MockStubs";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { Router } from "@angular/router";
 import {

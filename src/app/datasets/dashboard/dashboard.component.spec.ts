@@ -8,12 +8,7 @@ import {
 } from "@angular/core/testing";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Store, StoreModule } from "@ngrx/store";
-import {
-  MatDialogModule,
-  MatDialog,
-  MatCheckboxChange,
-  MatSidenav
-} from "@angular/material";
+
 import {
   MockActivatedRoute,
   MockRouter,
@@ -36,6 +31,9 @@ import { provideMockStore } from "@ngrx/store/testing";
 import { getSelectedDatasets } from "state-management/selectors/datasets.selectors";
 import { TableColumn } from "state-management/models";
 import { getColumns } from "state-management/selectors/user.selectors";
+import { MatDialog, MatDialogModule } from "@angular/material/dialog";
+import { MatSidenav } from "@angular/material/sidenav";
+import { MatCheckboxChange } from "@angular/material/checkbox";
 
 class MockMatDialog {
   open() {

@@ -5,7 +5,7 @@ import { DatafilesComponent } from "./datafiles.component";
 import { MatTableModule } from "@angular/material";
 import { AppConfigModule } from "app-config.module";
 import { OrigDatablock } from "shared/sdk";
-import { PipesModule } from "shared/pipes/pipes.module";
+import { MatTableModule } from "@angular/material/table";
 
 /* tslint:disable:max-line-length */
 describe("DatafilesComponent", () => {

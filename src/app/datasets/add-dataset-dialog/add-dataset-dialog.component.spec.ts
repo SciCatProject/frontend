@@ -1,17 +1,15 @@
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { AddDatasetDialogComponent } from "./add-dataset-dialog.component";
-import {
-  MatFormFieldModule,
-  MatDialogModule,
-  MatSelectModule,
-  MatInputModule,
-  MatDialogRef,
-  MAT_DIALOG_DATA
-} from "@angular/material";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatSelectModule } from "@angular/material/select";
+import { MatInputModule } from "@angular/material/input";
+
+import {MatDialogRef, MAT_DIALOG_DATA, MatDialogModule} from "@angular/material/dialog";
+
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { MockMatDialogRef } from "shared/MockStubs";
+import { MockMatDialogRef } from "../../shared/MockStubs";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
 describe("AddDatasetDialogComponent", () => {
@@ -29,8 +27,8 @@ describe("AddDatasetDialogComponent", () => {
         MatFormFieldModule,
         MatInputModule,
         MatSelectModule,
-        ReactiveFormsModule
-      ]
+        ReactiveFormsModule,
+      ],
     });
     TestBed.overrideComponent(AddDatasetDialogComponent, {
       set: {
@@ -38,10 +36,10 @@ describe("AddDatasetDialogComponent", () => {
           { provide: MatDialogRef, useClass: MockMatDialogRef },
           {
             provide: MAT_DIALOG_DATA,
-            useValue: { userGroups: [] }
-          }
-        ]
-      }
+            useValue: { userGroups: [] },
+          },
+        ],
+      },
     });
     TestBed.compileComponents();
   }));
@@ -65,7 +63,7 @@ describe("AddDatasetDialogComponent", () => {
         description: "Test description",
         ownerGroup: "test",
         sourceFolder: "/nfs/test",
-        usedSoftware: "test software"
+        usedSoftware: "test software",
       };
 
       component.form.setValue(formValues);

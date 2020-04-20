@@ -4,7 +4,7 @@ import { LoginLayoutComponent } from "./login-layout.component";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { LoginHeaderComponent } from "_layout/login-header/login-header.component";
 import { BreadcrumbModule } from "shared/modules/breadcrumb/breadcrumb.module";
-import { MatToolbarModule } from "@angular/material";
+import { MatToolbarModule } from "@angular/material/toolbar";
 import { APP_CONFIG } from "app-config.module";
 import { Store } from "@ngrx/store";
 import { MockStore, MockActivatedRoute, MockRouter } from "shared/MockStubs";
