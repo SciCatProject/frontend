@@ -19,7 +19,8 @@
   },
   "files": [
     "main.ts",
-    "polyfills.ts"
+    "polyfills.ts",
+    "test.ts"
   ],
   "include": [
     "src/**/*.d.ts"
