@@ -14,11 +14,7 @@ import {
   MatCheckboxChange,
   MatSidenav
 } from "@angular/material";
-import {
-  MockActivatedRoute,
-  MockRouter,
-  MockStore
-} from "../../shared/MockStubs";
+import { MockActivatedRoute, MockStore } from "../../shared/MockStubs";
 import { DashboardComponent } from "./dashboard.component";
 import { of } from "rxjs";
 import {

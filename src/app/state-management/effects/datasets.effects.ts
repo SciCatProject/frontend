@@ -26,7 +26,6 @@ import {
   addCustomColumnsAction,
   updateUserSettingsAction
 } from "state-management/actions/user.actions";
-import { fetchProposalAction } from "state-management/actions/proposals.actions";
 
 @Injectable()
 export class DatasetEffects {

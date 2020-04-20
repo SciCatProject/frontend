@@ -11,7 +11,7 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { StoreModule, Store } from "@ngrx/store";
 import { MatSidenav, MatCheckboxChange } from "@angular/material";
 import { ActivatedRoute, Router } from "@angular/router";
-import { MockActivatedRoute, MockRouter, MockStore } from "shared/MockStubs";
+import { MockActivatedRoute, MockStore } from "shared/MockStubs";
 import { provideMockStore } from "@ngrx/store/testing";
 import { getHasPrefilledFilters } from "state-management/selectors/datasets.selectors";
 import { fetchMetadataKeysAction } from "state-management/actions/datasets.actions";
