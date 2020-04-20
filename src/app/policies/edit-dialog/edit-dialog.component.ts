@@ -33,8 +33,11 @@ export class EditDialogComponent implements /*OnChanges,*/ OnInit {
       this.data.selectedPolicy.archiveEmailsToBeNotified = [];
       this.data.selectedPolicy.retrieveEmailsToBeNotified = [];
     }
-
     this.form = new FormGroup({
+      manager: new FormControl({
+        value: null,
+        disabled: true
+      }),
       autoArchive: new FormControl({
         value: this.getPreFill(data.selectedPolicy.autoArchive, this.multiEdit),
         disabled: true
@@ -115,6 +118,20 @@ export class EditDialogComponent implements /*OnChanges,*/ OnInit {
     }
   }
 
+  addManager(event: MatChipInputEvent): void {
+    const input = event.input;
+    const value = event.value;
+
+    if ((value || "").trim()) {
+      this.data.selectedPolicy.manager.push(value.trim());
+    }
+
+    // Reset the input value
+    if (input) {
+      input.value = "";
+    }
+  }
+
   removeRetrieveEmail(chip: any): void {
     const index = this.data.selectedPolicy.retrieveEmailsToBeNotified.indexOf(
       chip
@@ -135,6 +152,17 @@ export class EditDialogComponent implements /*OnChanges,*/ OnInit {
     }
   }
 
+  removeManager(chip: any): void {
+    const index = this.data.selectedPolicy.manager.indexOf(
+      chip
+    );
+
+    if (index >= 0) {
+      this.data.selectedPolicy.manager.splice(index, 1);
+    }
+  }
+
+
   ngOnInit() {
     this.selectedGroups = this.data.selectedGroups;
   }
@@ -154,6 +182,11 @@ export class EditDialogComponent implements /*OnChanges,*/ OnInit {
     if (this.form.controls.retrieveEmailsToBeNotified.enabled) {
       this.form.controls.retrieveEmailsToBeNotified.setValue(
         this.data.selectedPolicy.retrieveEmailsToBeNotified
+      );
+    }
+    if (this.form.controls.manager.enabled) {
+      this.form.controls.manager.setValue(
+        this.data.selectedPolicy.manager
       );
     }
     const result = this.form.value;

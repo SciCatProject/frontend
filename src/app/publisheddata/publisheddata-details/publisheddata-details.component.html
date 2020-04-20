@@ -42,7 +42,7 @@
             <th><mat-icon> description </mat-icon> Abstract</th>
             <td>{{ value }}</td>
           </tr>
-          <tr *ngIf="publishedData.doi as value">
+          <tr *ngIf="publishedData.doi as value" id="doiRow">
             <th><mat-icon> fingerprint </mat-icon> DOI</th>
             <td>{{ value }}</td>
           </tr>

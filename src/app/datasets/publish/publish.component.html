@@ -6,6 +6,7 @@
       <form>
         <mat-form-field>
           <input
+            id="titleInput"
             required
             matInput
             placeholder="Title"
@@ -77,6 +78,7 @@
 
         <mat-form-field>
           <textarea
+            id="abstractInput"
             required
             matInput
             placeholder="Abstract"
@@ -88,6 +90,7 @@
         </mat-form-field>
 
         <button
+          id="publishButton"
           (click)="onPublish()"
           mat-raised-button
           color="primary"

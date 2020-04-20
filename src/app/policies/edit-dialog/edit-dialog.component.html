@@ -15,6 +15,29 @@
   <mat-card>
     <form [formGroup]="form" class="edit-dialog">
       <mat-dialog-content [formGroup]="form">
+        <mat-form-field (click)="controlClick(manager)">
+          <mat-chip-list #manager formControlName="manager" data-cy="managerChipList">
+            <mat-chip
+              *ngFor="let manager of data.selectedPolicy.manager"
+              (removed)="removeManager(manager)"
+              [selectable]="selectable"
+              [removable]="true"
+            >
+              {{ manager }}
+              <mat-icon matChipRemove>cancel</mat-icon>
+            </mat-chip>
+            <input
+              data-cy="managerInput"
+              matInput
+              placeholder="Manager"
+              [matChipInputFor]="manager"
+              [matChipInputAddOnBlur]="true"
+              [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+              (matChipInputTokenEnd)="addManager($event)"
+            />
+          </mat-chip-list>
+        </mat-form-field>
+
         <mat-form-field (click)="controlClick(autoArchive)">
           <mat-select
             placeholder="Auto Archive"
@@ -70,17 +93,17 @@
             #archiveEmailsToBeNotified
             formControlName="archiveEmailsToBeNotified"
           >
-              <mat-chip
-                *ngFor="
-                  let email of data.selectedPolicy.archiveEmailsToBeNotified
-                "
-                (removed)="removeArchiveEmail(email)"
-                [selectable]="selectable"
-                [removable]="true"
-              >
-                {{ email }}
-                <mat-icon matChipRemove>cancel</mat-icon>
-              </mat-chip>
+            <mat-chip
+              *ngFor="
+                let email of data.selectedPolicy.archiveEmailsToBeNotified
+              "
+              (removed)="removeArchiveEmail(email)"
+              [selectable]="selectable"
+              [removable]="true"
+            >
+              {{ email }}
+              <mat-icon matChipRemove>cancel</mat-icon>
+            </mat-chip>
             <input
               placeholder="Archive Emails to be Notified"
               formControlName="archiveEmailsToBeNotified"
@@ -136,6 +159,6 @@
 
   <mat-dialog-actions>
     <button class="mat-raised-button" (click)="close()">Close</button>
-    <button class="mat-raised-button mat-primary" (click)="save()">Save</button>
+    <button class="mat-raised-button mat-primary" (click)="save()" data-cy="saveButton">Save</button>
   </mat-dialog-actions>
 </div>
