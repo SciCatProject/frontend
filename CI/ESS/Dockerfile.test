@@ -21,8 +21,7 @@ RUN npm config set registry http://registry.npmjs.org/
 RUN npm config set strict-ssl false
 RUN npm install @angular/cli -g
 COPY package.json /usr/src/app/package.json
-COPY package-lock.json /usr/src/app/package-lock.json
 WORKDIR /usr/src/app
-RUN npm ci
+RUN npm install
 COPY . /usr/src/app
 #RUN  ng test --watch=false --browsers=ChromeHeadless
