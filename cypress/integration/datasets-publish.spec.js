@@ -25,13 +25,11 @@ describe("Datasets", () => {
 
       cy.wait(5000);
 
-      cy.get("#checkboxInput")
+      cy.get("[data-cy=checkboxInput]")
         .first()
         .click();
 
       cy.get("#addToBatchButton").click();
-
-      cy.wait(5000);
 
       cy.get("#cartOnHeaderButton").click();
 

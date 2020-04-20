@@ -44,7 +44,7 @@
 
       <mat-cell *matCellDef="let dataset">
         <mat-checkbox
-          id="checkboxInput"
+          data-cy="checkboxInput"
           *ngIf="!isInBatch(dataset); else in_batch"
           [checked]="isSelected(dataset)"
           (change)="onSelect($event, dataset)"
