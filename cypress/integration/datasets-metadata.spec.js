@@ -20,7 +20,7 @@ describe("Datasets", () => {
   });
 
   describe("Add metadata item", () => {
-    it("should go to dataset details and add a metatdata entry", () => {
+    it("should go to dataset details and add a metadata entry", () => {
       cy.createDataset("raw");
 
       cy.visit("/datasets");
@@ -69,8 +69,8 @@ describe("Datasets", () => {
     });
   });
 
-  describe("Remove metadat item", () => {
-    it("should go to dataset details and remove a metatdata entry", () => {
+  describe("Remove metadata item", () => {
+    it("should go to dataset details and remove a metadata entry", () => {
       cy.visit("/datasets");
 
       cy.wait(5000);
