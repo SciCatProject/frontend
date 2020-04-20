@@ -18,7 +18,6 @@ import { SampleApi, SDKBrowserModule } from "shared/sdk/index";
 import { SamplesModule } from "./samples/samples.module";
 import { SatDatepickerModule, SatNativeDateModule } from "saturn-datepicker";
 import { SharedCatanieModule } from "shared/shared.module";
-import { StoreDevtoolsModule } from "@ngrx/store-devtools";
 import { StoreModule } from "@ngrx/store";
 import { UserApi } from "shared/sdk/services";
 import { UsersModule } from "users/users.module";
@@ -94,10 +93,6 @@ import { InstrumentsModule } from "./instruments/instruments.module";
     ),
     extModules,
     RouterModule.forRoot(routes, { useHash: false }),
-    StoreDevtoolsModule.instrument({
-      maxAge: 25, //  Retains last 25 states
-      logOnly: environment.production // Restrict extension to log-only mode
-    }),
     EffectsModule.forRoot([]),
     ServiceWorkerModule.register("ngsw-worker.js", {
       enabled: environment.production
