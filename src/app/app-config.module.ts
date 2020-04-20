@@ -44,7 +44,7 @@ export class AppConfig {
 }
 
 export const APP_DI_CONFIG: AppConfig = {
-  externalAuthEndpoint: environment.externalAuthEndpoint,
+  externalAuthEndpoint: environment["externalAuthEndpoint"] || null,
   fileserverBaseURL: environment["fileserverBaseURL"] || null,
   synapseBaseUrl: environment["synapseBaseUrl"] || null,
   riotBaseUrl: environment["riotBaseUrl"] || null,
