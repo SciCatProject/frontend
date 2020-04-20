@@ -31,8 +31,6 @@ describe("Datasets", () => {
 
       cy.get("#addToBatchButton").click();
 
-      cy.wait(5000);
-
       cy.get("#cartOnHeaderButton").click();
 
       cy.get("a.button").click();
