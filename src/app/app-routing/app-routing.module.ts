@@ -37,6 +37,8 @@ import { AppLayoutComponent } from "_layout/app-layout/app-layout.component";
 import { PoliciesDashboardComponent } from "policies/policies-dashboard/policies-dashboard.component";
 import { InstrumentsDashboardComponent } from "instruments/instruments-dashboard/instruments-dashboard.component";
 import { InstrumentDetailsComponent } from "instruments/instrument-details/instrument-details.component";
+import { AnonymousDashboardComponent } from "datasets/anonymous-dashboard/anonymous-dashboard.component";
+import { AnonymousDetailsDashboardComponent } from "datasets/anonymous-details-dashboard/anonymous-details-dashboard.component";
 
 export const routes: Routes = [
   {
@@ -45,8 +47,16 @@ export const routes: Routes = [
     children: [
       {
         path: "",
-        redirectTo: "/datasets",
+        redirectTo: "anonymous/datasets",
         pathMatch: "full"
+      },
+      {
+        path: "anonymous/datasets",
+        component: AnonymousDashboardComponent
+      },
+      {
+        path: "anonymous/datasets/:id",
+        component: AnonymousDetailsDashboardComponent
       },
       { path: "login", component: LoginComponent },
       {
@@ -68,6 +78,11 @@ export const routes: Routes = [
     path: "",
     component: AppLayoutComponent,
     children: [
+      {
+        path: "",
+        redirectTo: "/datasets",
+        pathMatch: "full"
+      },
       {
         path: "datasets/batch/publish",
         component: PublishComponent,

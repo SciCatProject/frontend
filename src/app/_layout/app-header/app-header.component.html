@@ -52,10 +52,10 @@
   </mat-menu>
 
   <mat-toolbar class="mat-elevation-z1" color="primary">
-    <a [routerLink]="['/']">
+    <a [routerLink]="['/datasets']">
       <img class="logo" src="../../../assets/images/scicat-logo-white.png" />
     </a>
-    <a [routerLink]="['/']">
+    <a [routerLink]="['/datasets']">
       <ng-template [ngIf]="facility === 'ESS'" [ngIfElse]="otherFacility">
         <img class="logo" src="../../../assets/images/esslogo-white.png" />
       </ng-template>
@@ -63,7 +63,7 @@
         <img class="logo" src="../../../assets/images/esslogo.png" />
       </ng-template>
     </a>
-    <a class="toplink" [routerLink]="['/']">
+    <a class="toplink" [routerLink]="['/datasets']">
       <h3>{{ status }}</h3>
     </a>
 
@@ -88,6 +88,7 @@
 
     <span *ngIf="appConfig.shoppingCartOnHeader" [matMenuTriggerFor]="cartMenu">
       <button
+        id="cartOnHeaderButton"
         mat-icon-button
         matBadge="{{ inBatchIndicator }}"
         matBadgePosition="after"

@@ -330,14 +330,14 @@ describe("UserEffects", () => {
   });
 
   describe("logoutNavigate$", () => {
-    it("should navigate to login page", () => {
+    it("should navigate to anonymous view", () => {
       const action = fromActions.logoutCompleteAction();
 
       actions = hot("-a", { a: action });
 
       expect(effects.logoutNavigate$).toBeObservable(actions);
       expect(router.navigate).toHaveBeenCalledTimes(1);
-      expect(router.navigate).toHaveBeenCalledWith(["/login"]);
+      expect(router.navigate).toHaveBeenCalledWith([""]);
     });
   });
 

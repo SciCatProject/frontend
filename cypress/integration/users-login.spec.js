@@ -9,6 +9,14 @@ describe("Users Login", () => {
 
     cy.visit("/");
 
+    cy.url().should("include", "/anonymous/datasets");
+
+    cy.wait(5000);
+
+    cy.get("[data-cy=login-button]").click();
+
+    cy.wait(5000);
+
     cy.url().should("include", "/login");
 
     cy.get("#usernameInput")
@@ -28,6 +36,14 @@ describe("Users Login", () => {
     cy.wait(5000);
 
     cy.visit("/");
+
+    cy.url().should("include", "/anonymous/datasets");
+
+    cy.wait(5000);
+
+    cy.get("[data-cy=login-button]").click();
+
+    cy.wait(5000);
 
     cy.url().should("include", "/login");
 

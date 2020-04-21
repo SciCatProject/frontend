@@ -205,7 +205,7 @@ export class DatasetEffects {
     )
   );
 
-  updateAttchmentCaption$ = createEffect(() =>
+  updateAttachmentCaption$ = createEffect(() =>
     this.actions$.pipe(
       ofType(fromActions.updateAttachmentCaptionAction),
       switchMap(({ datasetId, attachmentId, caption }) => {

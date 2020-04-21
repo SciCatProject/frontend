@@ -407,7 +407,7 @@ describe("DatasetEffects", () => {
       datasetApi.updateByIdAttachments.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
-      expect(effects.updateAttchmentCaption$).toBeObservable(expected);
+      expect(effects.updateAttachmentCaption$).toBeObservable(expected);
     });
 
     it("should result in an addAttachmentCaptionFailedAction", () => {
@@ -423,7 +423,7 @@ describe("DatasetEffects", () => {
       datasetApi.updateByIdAttachments.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
-      expect(effects.updateAttchmentCaption$).toBeObservable(expected);
+      expect(effects.updateAttachmentCaption$).toBeObservable(expected);
     });
   });
 

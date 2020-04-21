@@ -12,7 +12,6 @@ import {
 } from "@angular/core";
 import { Dataset, TableColumn } from "state-management/models";
 import { MatCheckboxChange } from "@angular/material/checkbox";
-import { Router } from "@angular/router";
 import { Subscription } from "rxjs";
 import { select, Store } from "@ngrx/store";
 import {
@@ -70,9 +69,14 @@ export class DatasetTableComponent implements OnInit, OnDestroy, OnChanges {
   private subscriptions: Subscription[] = [];
 
   @Output() settingsClick = new EventEmitter<MouseEvent>();
+  @Output() rowClick = new EventEmitter<Dataset>();
 
   doSettingsClick(event: MouseEvent) {
     this.settingsClick.emit(event);
+  }
+
+  doRowClick(dataset: Dataset): void {
+    this.rowClick.emit(dataset);
   }
 
   // conditional to asses dataset status and assign correct icon ArchViewMode.work_in_progress
@@ -131,11 +135,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy, OnChanges {
       return true;
     }
     return false;
-  }
-
-  onRowClick(dataset: Dataset): void {
-    const pid = encodeURIComponent(dataset.pid);
-    this.router.navigateByUrl("/datasets/" + pid);
   }
 
   isSelected(dataset: Dataset): boolean {
@@ -206,7 +205,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy, OnChanges {
 
   constructor(
     @Inject(APP_CONFIG) public appConfig: AppConfig,
-    private router: Router,
     private store: Store<any>
   ) {}
 

@@ -11,7 +11,6 @@ import { Store, StoreModule } from "@ngrx/store";
 
 import {
   MockActivatedRoute,
-  MockRouter,
   MockStore,
 } from "shared/MockStubs";
 import { DashboardComponent } from "./dashboard.component";
@@ -54,6 +53,9 @@ describe("DashboardComponent", () => {
   let component: DashboardComponent;
   let fixture: ComponentFixture<DashboardComponent>;
 
+  const router = {
+    navigateByUrl: jasmine.createSpy("navigateByUrl")
+  };
   let store: MockStore;
   let dispatchSpy;
 
@@ -81,9 +83,9 @@ describe("DashboardComponent", () => {
           { provide: APP_CONFIG, useValue: { shoppingCartOnHeader: "true" } },
           { provide: ActivatedRoute, useClass: MockActivatedRoute },
           { provide: MatDialog, useClass: MockMatDialog },
-          { provide: Router, useClass: MockRouter },
-        ],
-      },
+          { provide: Router, useValue: router }
+        ]
+      }
     });
     TestBed.compileComponents();
   }));
@@ -186,6 +188,18 @@ describe("DashboardComponent", () => {
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
         deselectColumnAction({ name: column.name, columnType: column.type })
+      );
+    });
+  });
+
+  describe("#onRowClick()", () => {
+    it("should navigate to a dataset", () => {
+      const dataset = new Dataset();
+      component.onRowClick(dataset);
+
+      expect(router.navigateByUrl).toHaveBeenCalledTimes(1);
+      expect(router.navigateByUrl).toHaveBeenCalledWith(
+        "/datasets/" + encodeURIComponent(dataset.pid)
       );
     });
   });
