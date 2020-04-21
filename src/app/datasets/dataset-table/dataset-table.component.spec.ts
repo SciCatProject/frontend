@@ -6,7 +6,6 @@ import {
 import { MatTableModule, MatCheckboxChange } from "@angular/material";
 import { MockStore, MockDatasetApi } from "shared/MockStubs";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
-import { Router } from "@angular/router";
 import {
   async,
   ComponentFixture,
@@ -36,9 +35,6 @@ describe("DatasetTableComponent", () => {
   let component: DatasetTableComponent;
   let fixture: ComponentFixture<DatasetTableComponent>;
 
-  const router = {
-    navigateByUrl: jasmine.createSpy("navigateByUrl")
-  };
   let store: MockStore;
   let dispatchSpy;
 
@@ -65,8 +61,7 @@ describe("DatasetTableComponent", () => {
             provide: APP_CONFIG,
             useValue: {}
           },
-          { provide: DatasetApi, useClass: MockDatasetApi },
-          { provide: Router, useValue: router }
+          { provide: DatasetApi, useClass: MockDatasetApi }
         ]
       }
     });
@@ -101,6 +96,18 @@ describe("DatasetTableComponent", () => {
 
       expect(emitSpy).toHaveBeenCalledTimes(1);
       expect(emitSpy).toHaveBeenCalledWith(event);
+    });
+  });
+
+  describe("#doRowClick()", () => {
+    it("should emit the dataset clicked", () => {
+      const emitSpy = spyOn(component.rowClick, "emit");
+
+      const dataset = new Dataset();
+      component.doRowClick(dataset);
+
+      expect(emitSpy).toHaveBeenCalledTimes(1);
+      expect(emitSpy).toHaveBeenCalledWith(dataset);
     });
   });
 
@@ -289,18 +296,6 @@ describe("DatasetTableComponent", () => {
       const retrievable = component.retrievableCondition(dataset);
 
       expect(retrievable).toEqual(true);
-    });
-  });
-
-  describe("#onRowClick()", () => {
-    it("should navigate to a dataset", () => {
-      const dataset = new Dataset();
-      component.onRowClick(dataset);
-
-      expect(router.navigateByUrl).toHaveBeenCalledTimes(1);
-      expect(router.navigateByUrl).toHaveBeenCalledWith(
-        "/datasets/" + encodeURIComponent(dataset.pid)
-      );
     });
   });
 
