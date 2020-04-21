@@ -5,7 +5,7 @@
     "declaration": false,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "lib": ["es2017", "dom"],
+    "lib": ["es2018", "dom"],
     "mapRoot": "./",
     "module": "esnext",
     "moduleResolution": "node",
