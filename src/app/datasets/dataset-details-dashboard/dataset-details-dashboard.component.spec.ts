@@ -16,7 +16,7 @@ import {
   removeAttachmentAction,
   updatePropertyAction
 } from "../../state-management/actions/datasets.actions";
-import { Dataset, UserApi, User, BaseLoopBackApi } from "shared/sdk";
+import { Dataset, UserApi, User } from "shared/sdk";
 import { ReadFile, ReadMode } from "ngx-file-helpers";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { AppConfigModule, APP_CONFIG } from "app-config.module";
@@ -314,20 +314,6 @@ describe("DetailsDashboardComponent", () => {
       expect(pipeSpy).toHaveBeenCalledTimes(0);
     });
   });
-
-/*  interface File extends Blob {
-    readonly lastModified: number;
-    readonly name: string;
-}
-
-interface Blob {
-  readonly size: number;
-  readonly type: string;
-  arrayBuffer(): Promise<ArrayBuffer>;
-  slice(start?: number, end?: number, contentType?: string): Blob;
-  stream(): ReadableStream;
-  text(): Promise<string>;
-}*/
 
   describe("#onFileUploaderFilePicked()", () => {
     it("should set the value of pickedFile", () => {
