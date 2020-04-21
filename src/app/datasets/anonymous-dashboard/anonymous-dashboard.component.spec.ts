@@ -9,7 +9,6 @@ import { AnonymousDashboardComponent } from "./anonymous-dashboard.component";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { StoreModule, Store } from "@ngrx/store";
-import { MatSidenav, MatCheckboxChange } from "@angular/material";
 import { ActivatedRoute, Router } from "@angular/router";
 import { MockActivatedRoute, MockStore } from "shared/MockStubs";
 import { provideMockStore } from "@ngrx/store/testing";
@@ -21,6 +20,8 @@ import {
   selectColumnAction,
   deselectColumnAction
 } from "state-management/actions/user.actions";
+import { MatSidenav } from "@angular/material/sidenav";
+import { MatCheckboxChange } from "@angular/material/checkbox";
 
 describe("AnonymousDashboardComponent", () => {
   let component: AnonymousDashboardComponent;
