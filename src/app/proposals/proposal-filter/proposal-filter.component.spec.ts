@@ -1,20 +1,19 @@
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { ProposalFilterComponent } from "./proposal-filter.component";
-import {
-  MatDatepickerInputEvent,
-  MatCardModule,
-  MatIconModule,
-  MatButtonModule,
-  MatFormFieldModule,
-  MatInputModule,
-  MatExpansionModule
-} from "@angular/material";
+
 import { DateRange } from "datasets/datasets-filter/datasets-filter.component";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { SharedCatanieModule } from "shared/shared.module";
 import { SatDatepickerModule, SatNativeDateModule } from "saturn-datepicker";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { MatButtonModule } from "@angular/material/button";
+import { MatCardModule } from "@angular/material/card";
+import { MatExpansionModule } from "@angular/material/expansion";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatIconModule } from "@angular/material/icon";
+import { MatInputModule } from "@angular/material/input";
+import { MatDatepickerInputEvent } from "@angular/material/datepicker";
 
 describe("ProposalFilterComponent", () => {
   let component: ProposalFilterComponent;

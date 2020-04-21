@@ -2,8 +2,8 @@ import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { MetadataViewComponent } from "./metadata-view.component";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
-import { MatTableModule } from "@angular/material";
 import { PipesModule } from "shared/pipes/pipes.module";
+import { MatTableModule } from "@angular/material/table";
 
 describe("MetadataViewComponent", () => {
   let component: MetadataViewComponent;

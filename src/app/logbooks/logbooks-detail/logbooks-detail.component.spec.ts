@@ -1,12 +1,12 @@
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
-import { MatTableModule } from "@angular/material";
 import { LogbooksDetailComponent } from "./logbooks-detail.component";
 import { LinkyModule } from "ngx-linky";
 import {
   PageChangeEvent,
   SortChangeEvent
 } from "shared/modules/table/table.component";
+import { MatTableModule } from "@angular/material/table";
 
 describe("LogbooksDetailComponent", () => {
   let component: LogbooksDetailComponent;

@@ -5,7 +5,6 @@ import {
   TestBed,
   inject
 } from "@angular/core/testing";
-import { MatCardModule, MatIconModule } from "@angular/material";
 
 import { LogbooksDashboardComponent } from "./logbooks-dashboard.component";
 import { Store, StoreModule } from "@ngrx/store";
@@ -27,6 +26,8 @@ import {
   PageChangeEvent,
   SortChangeEvent
 } from "shared/modules/table/table.component";
+import { MatCardModule } from "@angular/material/card";
+import { MatIconModule } from "@angular/material/icon";
 
 describe("DashboardComponent", () => {
   let component: LogbooksDashboardComponent;

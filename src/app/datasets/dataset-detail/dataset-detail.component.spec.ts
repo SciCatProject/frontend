@@ -4,7 +4,7 @@ import { DatasetDetailComponent } from "./dataset-detail.component";
 import { LinkyPipe } from "ngx-linky";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
-import { SharedCatanieModule } from "../../shared/shared.module";
+import { SharedCatanieModule } from "shared/shared.module";
 import { MatTableModule } from "@angular/material/table";
 import { MatChipInputEvent } from "@angular/material/chips";
 

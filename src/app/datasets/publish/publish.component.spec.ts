@@ -1,13 +1,6 @@
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 import { PublishComponent } from "./publish.component";
-import {
-  MatFormFieldModule,
-  MatIconModule,
-  MatChipsModule,
-  MatCardModule,
-  MatInputModule,
-  MatSelectModule
-} from "@angular/material";
+
 import { Router } from "@angular/router";
 import { MockRouter, MockStore, MockPublishedDataApi } from "shared/MockStubs";
 import { Store, ActionsSubject } from "@ngrx/store";
@@ -20,6 +13,12 @@ import { provideMockStore } from "@ngrx/store/testing";
 import { getDatasetsInBatch } from "state-management/selectors/datasets.selectors";
 import { getCurrentPublishedData } from "state-management/selectors/published-data.selectors";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { MatCardModule } from "@angular/material/card";
+import { MatChipsModule } from "@angular/material/chips";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatIconModule } from "@angular/material/icon";
+import { MatInputModule } from "@angular/material/input";
+import { MatSelectModule } from "@angular/material/select";
 
 describe("PublishComponent", () => {
   let component: PublishComponent;

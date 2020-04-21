@@ -24,7 +24,7 @@ import { MatSortModule } from "@angular/material/sort";
 import { MatTableModule } from "@angular/material/table";
 import { MatTabsModule } from "@angular/material/tabs";
 import { MatTooltipModule } from "@angular/material/tooltip";
-import { SharedCatanieModule } from "../shared/shared.module";
+import { SharedCatanieModule } from "shared/shared.module";
 import { ProposalDashboardComponent } from "./proposal-dashboard/proposal-dashboard.component";
 import { FlexLayoutModule } from "@angular/flex-layout";
 import { FileSizePipe } from "shared/pipes/filesize.pipe";

@@ -6,7 +6,7 @@ import {
 } from "@angular/core/testing";
 
 import { DatasetDetailsDashboardComponent } from "./dataset-details-dashboard.component";
-import { MockStore, MockActivatedRoute, MockUserApi } from "../../shared/MockStubs";
+import { MockStore, MockActivatedRoute, MockUserApi } from "shared/MockStubs";
 import { Store, StoreModule } from "@ngrx/store";
 import {
   clearFacetsAction,
@@ -16,13 +16,13 @@ import {
   removeAttachmentAction,
   updatePropertyAction
 } from "../../state-management/actions/datasets.actions";
-import { Dataset, UserApi, User } from "../../shared/sdk";
+import { Dataset, UserApi, User, BaseLoopBackApi } from "shared/sdk";
 import { ReadFile, ReadMode } from "ngx-file-helpers";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
-import { AppConfigModule, APP_CONFIG } from "../../app-config.module";
-import { SharedCatanieModule } from "../../shared/shared.module";
+import { AppConfigModule, APP_CONFIG } from "app-config.module";
+import { SharedCatanieModule } from "shared/shared.module";
 import { Router, ActivatedRoute } from "@angular/router";
-import { SubmitCaptionEvent } from "../../shared/modules/file-uploader/file-uploader.component";
+import { SubmitCaptionEvent } from "shared/modules/file-uploader/file-uploader.component";
 import { MatSlideToggleChange, MatSlideToggle } from "@angular/material/slide-toggle";
 
 describe("DetailsDashboardComponent", () => {
@@ -315,6 +315,20 @@ describe("DetailsDashboardComponent", () => {
     });
   });
 
+/*  interface File extends Blob {
+    readonly lastModified: number;
+    readonly name: string;
+}
+
+interface Blob {
+  readonly size: number;
+  readonly type: string;
+  arrayBuffer(): Promise<ArrayBuffer>;
+  slice(start?: number, end?: number, contentType?: string): Blob;
+  stream(): ReadableStream;
+  text(): Promise<string>;
+}*/
+
   describe("#onFileUploaderFilePicked()", () => {
     it("should set the value of pickedFile", () => {
       expect(component.pickedFile).toBeUndefined();
@@ -329,7 +343,10 @@ describe("DetailsDashboardComponent", () => {
           name: "test",
           size: 100,
           type: "image/png",
-          slice: () => new Blob().slice()
+          arrayBuffer: () => new Blob().arrayBuffer(),
+          slice: () => new Blob().slice(),
+          stream: () => new Blob().stream(),
+          text: () => new Blob().text()
         }
       };
       component.onFileUploaderFilePicked(file);
@@ -363,7 +380,10 @@ describe("DetailsDashboardComponent", () => {
           name: "test",
           size: 100,
           type: "image/png",
-          slice: () => new Blob().slice()
+          arrayBuffer: () => new Blob().arrayBuffer(),
+          slice: () => new Blob().slice(),
+          stream: () => new Blob().stream(),
+          text: () => new Blob().text()
         }
       };
       component.onFileUploaderReadEnd(1);

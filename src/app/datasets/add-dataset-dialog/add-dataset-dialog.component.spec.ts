@@ -9,7 +9,7 @@ import {MatDialogRef, MAT_DIALOG_DATA, MatDialogModule} from "@angular/material/
 
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { MockMatDialogRef } from "../../shared/MockStubs";
+import { MockMatDialogRef } from "shared/MockStubs";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
 describe("AddDatasetDialogComponent", () => {

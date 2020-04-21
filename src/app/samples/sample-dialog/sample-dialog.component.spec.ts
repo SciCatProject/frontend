@@ -1,18 +1,15 @@
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { SampleDialogComponent } from "./sample-dialog.component";
-import {
-  MAT_DIALOG_DATA,
-  MatDialogModule,
-  MatDialogRef,
-  MatFormFieldModule,
-  MatInputModule,
-  MatSelectModule
-} from "@angular/material";
+
 import { FormBuilder, ReactiveFormsModule, FormsModule } from "@angular/forms";
 import { Store } from "@ngrx/store";
 import { MockStore } from "shared/MockStubs";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatInputModule } from "@angular/material/input";
+import { MatSelectModule } from "@angular/material/select";
 
 describe("SampleDialogComponent", () => {
   let component: SampleDialogComponent;

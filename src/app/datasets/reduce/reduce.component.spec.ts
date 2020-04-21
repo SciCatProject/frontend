@@ -9,15 +9,7 @@ import { Store, StoreModule } from "@ngrx/store";
 
 import { ReduceComponent } from "./reduce.component";
 import { MockStore } from "shared/MockStubs";
-import {
-  MatCardModule,
-  MatStepperModule,
-  MatButtonModule,
-  MatIconModule,
-  MatRadioModule,
-  MatSelectModule,
-  MatTableModule
-} from "@angular/material";
+
 import { Router } from "@angular/router";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { provideMockStore } from "@ngrx/store/testing";
@@ -28,6 +20,13 @@ import {
 import { Dataset } from "shared/sdk";
 import { reduceDatasetAction } from "state-management/actions/datasets.actions";
 import { FormBuilder } from "@angular/forms";
+import { MatButtonModule } from "@angular/material/button";
+import { MatCardModule } from "@angular/material/card";
+import { MatIconModule } from "@angular/material/icon";
+import { MatRadioModule } from "@angular/material/radio";
+import { MatSelectModule } from "@angular/material/select";
+import { MatStepperModule } from "@angular/material/stepper";
+import { MatTableModule } from "@angular/material/table";
 
 describe("ReduceComponent", () => {
   let component: ReduceComponent;

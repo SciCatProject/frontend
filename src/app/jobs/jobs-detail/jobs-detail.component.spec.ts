@@ -2,7 +2,7 @@ import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 import { ReactiveFormsModule } from "@angular/forms";
 import { Store, StoreModule } from "@ngrx/store";
-import { MockActivatedRoute, MockStore } from "../../shared/MockStubs";
+import { MockActivatedRoute, MockStore } from "shared/MockStubs";
 
 import { JobsDetailComponent } from "./jobs-detail.component";
 import { ActivatedRoute } from "@angular/router";

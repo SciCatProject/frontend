@@ -3,7 +3,7 @@ import {
   DatasetTableComponent,
   SortChangeEvent
 } from "./dataset-table.component";
-import { MockStore, MockDatasetApi } from "../../shared/MockStubs";
+import { MockStore, MockDatasetApi } from "shared/MockStubs";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { Router } from "@angular/router";
 import {
@@ -30,6 +30,8 @@ import {
   selectColumnAction,
   deselectColumnAction
 } from "state-management/actions/user.actions";
+import { MatTableModule } from "@angular/material/table";
+import { MatCheckboxChange } from "@angular/material/checkbox";
 
 describe("DatasetTableComponent", () => {
   let component: DatasetTableComponent;

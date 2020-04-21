@@ -2,10 +2,10 @@ import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 import { ReactiveFormsModule } from "@angular/forms";
 import { DatafilesComponent } from "./datafiles.component";
-import { MatTableModule } from "@angular/material";
 import { AppConfigModule } from "app-config.module";
 import { OrigDatablock } from "shared/sdk";
 import { MatTableModule } from "@angular/material/table";
+import { PipesModule } from "shared/pipes/pipes.module";
 
 /* tslint:disable:max-line-length */
 describe("DatafilesComponent", () => {

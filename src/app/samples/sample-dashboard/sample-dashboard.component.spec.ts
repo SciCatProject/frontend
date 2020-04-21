@@ -1,9 +1,5 @@
 import { APP_CONFIG } from "app-config.module";
-import {
-  MatTableModule,
-  MatCardModule,
-  MatDialogModule
-} from "@angular/material";
+
 import { MockStore, MockActivatedRoute } from "shared/MockStubs";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { Router, ActivatedRoute } from "@angular/router";
@@ -27,6 +23,9 @@ import {
 } from "shared/modules/table/table.component";
 import { DatePipe } from "@angular/common";
 import { SampleDialogComponent } from "samples/sample-dialog/sample-dialog.component";
+import { MatCardModule } from "@angular/material/card";
+import { MatDialogModule } from "@angular/material/dialog";
+import { MatTableModule } from "@angular/material/table";
 
 describe("SampleDashboardComponent", () => {
   let component: SampleDashboardComponent;

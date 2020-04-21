@@ -10,6 +10,7 @@ import { MatToolbarModule } from "@angular/material/toolbar";
 import { Store } from "@ngrx/store";
 import { ActivatedRoute, Router } from "@angular/router";
 import { APP_CONFIG } from "app-config.module";
+import { MockStore, MockActivatedRoute, MockRouter } from "shared/MockStubs";
 
 describe("AppLayoutComponent", () => {
   let component: AppLayoutComponent;
