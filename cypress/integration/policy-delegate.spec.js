@@ -39,8 +39,8 @@ describe("Datasets", () => {
         .eq(1)
         .click();
 
-      cy.get("[data-cy=editSelection]").click();
-      cy.get("[data-cy=managerInput]").click();
+      cy.get("[data-cy=editSelection]").click({ force: true });
+      cy.get("[data-cy=managerInput]").click({ force: true });
       cy.get("[data-cy=managerInput]").type("cypress@manager.com{enter}");
       cy.get("[data-cy=managerChipList]")
         .children()

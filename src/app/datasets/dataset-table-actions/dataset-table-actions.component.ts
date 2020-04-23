@@ -15,7 +15,7 @@ import {
 } from "state-management/selectors/datasets.selectors";
 import { getIsLoading } from "state-management/selectors/user.selectors";
 import { ArchivingService } from "datasets/archiving.service";
-import { MatDialog } from "@angular/material";
+import { MatDialog } from "@angular/material/dialog";
 import { DialogComponent } from "shared/modules/dialog/dialog.component";
 import { showMessageAction } from "state-management/actions/user.actions";
 import { getSubmitError } from "state-management/selectors/jobs.selectors";

@@ -10,16 +10,8 @@ import {
   DatasetsFilterComponent,
   DateRange
 } from "datasets/datasets-filter/datasets-filter.component";
-import { MockStore } from "../../shared/MockStubs";
-import {
-  MatAutocompleteModule,
-  MatFormFieldModule,
-  MatInputModule,
-  MatSelectModule,
-  MatDialogModule,
-  MatDatepickerInputEvent,
-  MatDialog
-} from "@angular/material";
+import { MockStore } from "shared/MockStubs";
+
 import * as moment from "moment";
 
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
@@ -50,6 +42,12 @@ import {
 } from "state-management/actions/user.actions";
 import { ScientificCondition } from "state-management/models";
 import { SharedCatanieModule } from "shared/shared.module";
+import { MatAutocompleteModule } from "@angular/material/autocomplete";
+import { MatDialogModule, MatDialog } from "@angular/material/dialog";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatInputModule } from "@angular/material/input";
+import { MatSelectModule } from "@angular/material/select";
+import { MatDatepickerInputEvent } from "@angular/material/datepicker";
 
 export class MockMatDialog {
   open() {

@@ -3,11 +3,9 @@ import { PublishedDataEffects } from './../state-management/effects/published-da
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { PublisheddataDetailsComponent } from "./publisheddata-details/publisheddata-details.component";
-import {
-  MatCardModule,
-  MatButtonModule,
-  MatIconModule
-} from "@angular/material";
+import { MatButtonModule } from "@angular/material/button";
+import { MatCardModule } from "@angular/material/card";
+import { MatIconModule } from "@angular/material/icon";
 import { SharedCatanieModule } from "shared/shared.module";
 import { LinkyModule } from "ngx-linky";
 import { NgxJsonViewerModule } from "ngx-json-viewer";

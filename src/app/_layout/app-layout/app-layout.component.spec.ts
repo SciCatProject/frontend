@@ -5,11 +5,12 @@ import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { BreadcrumbModule } from "shared/modules/breadcrumb/breadcrumb.module";
 import { AppHeaderComponent } from "_layout/app-header/app-header.component";
 import { RouterTestingModule } from "@angular/router/testing";
-import { MatMenuModule, MatToolbarModule } from "@angular/material";
-import { MockStore, MockActivatedRoute, MockRouter } from "shared/MockStubs";
+import {MatMenuModule} from "@angular/material/menu";
+import { MatToolbarModule } from "@angular/material/toolbar";
 import { Store } from "@ngrx/store";
 import { ActivatedRoute, Router } from "@angular/router";
 import { APP_CONFIG } from "app-config.module";
+import { MockStore, MockActivatedRoute, MockRouter } from "shared/MockStubs";
 
 describe("AppLayoutComponent", () => {
   let component: AppLayoutComponent;

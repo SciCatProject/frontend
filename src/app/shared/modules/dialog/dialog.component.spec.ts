@@ -1,14 +1,11 @@
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
-import {
-  MatDialogModule,
-  MatFormFieldModule,
-  MatDialogRef,
-  MAT_DIALOG_DATA
-} from "@angular/material";
+
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
 import { DialogComponent } from "./dialog.component";
 import { MockMatDialogRef, MockMatDialogData } from "shared/MockStubs";
+import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
+import { MatFormFieldModule } from "@angular/material/form-field";
 
 describe("DialogComponent", () => {
   let component: DialogComponent;

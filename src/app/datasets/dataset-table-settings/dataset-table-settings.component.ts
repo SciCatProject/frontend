@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
 import { TableColumn } from "state-management/models";
-import { MatCheckboxChange } from "@angular/material";
+import { MatCheckboxChange } from "@angular/material/checkbox";
 
 export interface SelectColumnEvent {
   checkBoxChange: MatCheckboxChange;

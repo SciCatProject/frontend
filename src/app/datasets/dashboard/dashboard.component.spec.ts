@@ -4,27 +4,25 @@ import {
   async,
   ComponentFixture,
   TestBed,
-  inject
+  inject,
 } from "@angular/core/testing";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Store, StoreModule } from "@ngrx/store";
+
 import {
-  MatDialogModule,
-  MatDialog,
-  MatCheckboxChange,
-  MatSidenav
-} from "@angular/material";
-import { MockActivatedRoute, MockStore } from "../../shared/MockStubs";
+  MockActivatedRoute,
+  MockStore,
+} from "shared/MockStubs";
 import { DashboardComponent } from "./dashboard.component";
 import { of } from "rxjs";
 import {
   addDatasetAction,
-  fetchMetadataKeysAction
+  fetchMetadataKeysAction,
 } from "state-management/actions/datasets.actions";
 import { User, Dataset } from "shared/sdk";
 import {
   selectColumnAction,
-  deselectColumnAction
+  deselectColumnAction,
 } from "state-management/actions/user.actions";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { SelectColumnEvent } from "datasets/dataset-table-settings/dataset-table-settings.component";
@@ -32,6 +30,9 @@ import { provideMockStore } from "@ngrx/store/testing";
 import { getSelectedDatasets } from "state-management/selectors/datasets.selectors";
 import { TableColumn } from "state-management/models";
 import { getColumns } from "state-management/selectors/user.selectors";
+import { MatDialog, MatDialogModule } from "@angular/material/dialog";
+import { MatSidenav } from "@angular/material/sidenav";
+import { MatCheckboxChange } from "@angular/material/checkbox";
 
 class MockMatDialog {
   open() {
@@ -42,8 +43,8 @@ class MockMatDialog {
           description: "Test description",
           ownerGroup: "test",
           sourceFolder: "/nfs/test",
-          usedSoftware: "test software"
-        })
+          usedSoftware: "test software",
+        }),
     };
   }
 }
@@ -64,17 +65,17 @@ describe("DashboardComponent", () => {
       imports: [
         BrowserAnimationsModule,
         MatDialogModule,
-        StoreModule.forRoot({})
+        StoreModule.forRoot({}),
       ],
       declarations: [DashboardComponent, MatSidenav],
       providers: [
         provideMockStore({
           selectors: [
             { selector: getSelectedDatasets, value: [] },
-            { selector: getColumns, value: [] }
-          ]
-        })
-      ]
+            { selector: getColumns, value: [] },
+          ],
+        }),
+      ],
     });
     TestBed.overrideComponent(DashboardComponent, {
       set: {
@@ -147,19 +148,19 @@ describe("DashboardComponent", () => {
       name: "test",
       order: 0,
       type: "standard",
-      enabled: false
+      enabled: false,
     };
 
     it("should dispatch a selectColumnAction if checkBoxChange.checked is true", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
       const checkBoxChange = {
-        checked: true
+        checked: true,
       } as MatCheckboxChange;
 
       const event: SelectColumnEvent = {
         checkBoxChange,
-        column
+        column,
       };
 
       component.onSelectColumn(event);
@@ -174,12 +175,12 @@ describe("DashboardComponent", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
       const checkBoxChange = {
-        checked: false
+        checked: false,
       } as MatCheckboxChange;
 
       const event: SelectColumnEvent = {
         checkBoxChange,
-        column
+        column,
       };
 
       component.onSelectColumn(event);
@@ -219,7 +220,7 @@ describe("DashboardComponent", () => {
         password: "testPassword",
         accessTokens: [],
         identities: [],
-        credentials: []
+        credentials: [],
       });
 
       const dataset = new Dataset({
@@ -237,7 +238,7 @@ describe("DashboardComponent", () => {
         packedSize: 0,
         size: 0,
         sourceFolder: "/nfs/test",
-        type: "derived"
+        type: "derived",
       });
       dataset["inputDatasets"] = [];
       dataset["investigator"] = currentUser.email;

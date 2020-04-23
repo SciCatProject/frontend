@@ -2,7 +2,7 @@ import { Component, Inject, Input, Output, EventEmitter } from "@angular/core";
 import { Attachment, Dataset, Proposal, Sample } from "shared/sdk/models";
 import { APP_CONFIG, AppConfig } from "app-config.module";
 import { ENTER, COMMA, SPACE } from "@angular/cdk/keycodes";
-import { MatChipInputEvent } from "@angular/material";
+import { MatChipInputEvent } from "@angular/material/chips";
 
 /**
  * Component to show details for a data set, using the

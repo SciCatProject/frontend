@@ -57,7 +57,10 @@ describe("FileUploaderComponent", () => {
           name: "test",
           size: 100,
           type: "image/png",
-          slice: () => new Blob().slice()
+          arrayBuffer: () => new Blob().arrayBuffer(),
+          slice: () => new Blob().slice(),
+          stream: () => new Blob().stream(),
+          text: () => new Blob().text()
         }
       };
       component.onFilePicked(file);

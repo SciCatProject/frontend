@@ -3,13 +3,12 @@ import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 import { SearchBarComponent } from "./search-bar.component";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { FormsModule } from "@angular/forms";
-import {
-  MatFormFieldModule,
-  MatIconModule,
-  MatInputModule,
-  MatAutocompleteModule
-} from "@angular/material";
+
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { MatAutocompleteModule } from "@angular/material/autocomplete";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatIconModule } from "@angular/material/icon";
+import { MatInputModule } from "@angular/material/input";
 
 describe("SearchBarComponent", () => {
   let component: SearchBarComponent;

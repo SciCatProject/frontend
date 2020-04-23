@@ -9,18 +9,20 @@ import {
   MockRouter,
   MockArchivingService,
   MockDatasetApi,
-  MockShareGroupApi
-} from "../../shared/MockStubs";
+  MockShareGroupApi,
+} from "shared/MockStubs";
 import { ArchivingService } from "../archiving.service";
+import { MatIconModule,  } from "@angular/material/icon";
+import { MatButtonModule } from "@angular/material/button";
+
 import {
   MatDialog,
-  MatIconModule,
-  MatButtonModule,
-  MatTableModule,
-  MatDialogModule
-} from "@angular/material";
-import { ShareGroupApi, DatasetApi } from "../../shared/sdk";
-import { SharedCatanieModule } from "../../shared/shared.module";
+  MatDialogModule,
+} from "@angular/material/dialog";
+
+import { ShareGroupApi, DatasetApi } from "shared/sdk";
+import { SharedCatanieModule } from "shared/shared.module";
+import { MatTableModule } from "@angular/material/table";
 
 describe("BatchViewComponent", () => {
   let component: BatchViewComponent;
@@ -35,8 +37,8 @@ describe("BatchViewComponent", () => {
         MatDialogModule,
         MatIconModule,
         MatTableModule,
-        SharedCatanieModule
-      ]
+        SharedCatanieModule,
+      ],
     });
 
     TestBed.overrideComponent(BatchViewComponent, {
@@ -47,9 +49,9 @@ describe("BatchViewComponent", () => {
           { provide: Router, useClass: MockRouter },
           { provide: ShareGroupApi, useClass: MockShareGroupApi },
           { provide: DatasetApi, useClass: MockDatasetApi },
-          { provide: MatDialog, useValue: {} }
-        ]
-      }
+          { provide: MatDialog, useValue: {} },
+        ],
+      },
     });
     TestBed.compileComponents();
   }));

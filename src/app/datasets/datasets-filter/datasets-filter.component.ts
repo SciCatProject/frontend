@@ -1,6 +1,7 @@
 import { APP_CONFIG, AppConfig } from "app-config.module";
 import { Component, Inject } from "@angular/core";
-import { MatDatepickerInputEvent, MatDialog } from "@angular/material";
+import { MatDatepickerInputEvent } from "@angular/material/datepicker";
+import { MatDialog } from "@angular/material/dialog";
 import * as moment from "moment";
 import "moment-timezone";
 import { select, Store } from "@ngrx/store";

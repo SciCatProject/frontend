@@ -10,19 +10,18 @@ import { Store, StoreModule } from "@ngrx/store";
 import { MockActivatedRoute, MockRouter, MockStore } from "shared/MockStubs";
 
 import { LoginComponent } from "./login.component";
-import {
-  MatCheckboxModule,
-  MatCardModule,
-  MatInputModule,
-  MatIconModule,
-  MatFormFieldModule,
-  MatButtonModule,
-  MatDialogModule
-} from "@angular/material";
+
 import { APP_CONFIG, AppConfigModule } from "app-config.module";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { loginAction } from "state-management/actions/user.actions";
 import { PrivacyDialogComponent } from "users/privacy-dialog/privacy-dialog.component";
+import { MatButtonModule } from "@angular/material/button";
+import { MatCardModule } from "@angular/material/card";
+import { MatDialogModule } from "@angular/material/dialog";
+import { MatCheckboxModule } from "@angular/material/checkbox";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatIconModule } from "@angular/material/icon";
+import { MatInputModule } from "@angular/material/input";
 
 describe("LoginComponent", () => {
   let component: LoginComponent;

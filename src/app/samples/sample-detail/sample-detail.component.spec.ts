@@ -1,11 +1,6 @@
 import { ActivatedRoute, Router } from "@angular/router";
-import {
-  MatCardModule,
-  MatTabsModule,
-  MatButtonModule,
-  MatIconModule
-} from "@angular/material";
-import { MockActivatedRoute, MockStore } from "../../shared/MockStubs";
+
+import { MockActivatedRoute, MockStore } from "shared/MockStubs";
 import { SampleDetailComponent } from "./sample-detail.component";
 import { Store, StoreModule } from "@ngrx/store";
 import {
@@ -32,6 +27,10 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { APP_CONFIG } from "app-config.module";
 import { SubmitCaptionEvent } from "shared/modules/file-uploader/file-uploader.component";
 import { ReadMode, ReadFile } from "ngx-file-helpers";
+import { MatButtonModule } from "@angular/material/button";
+import { MatCardModule } from "@angular/material/card";
+import { MatIconModule } from "@angular/material/icon";
+import { MatTabsModule } from "@angular/material/tabs";
 
 describe("SampleDetailComponent", () => {
   let component: SampleDetailComponent;
@@ -143,7 +142,10 @@ describe("SampleDetailComponent", () => {
           name: "test",
           size: 100,
           type: "image/png",
-          slice: () => new Blob().slice()
+          arrayBuffer: () => new Blob().arrayBuffer(),
+          slice: () => new Blob().slice(),
+          stream: () => new Blob().stream(),
+          text: () => new Blob().text()
         }
       };
       component.onFilePicked(file);
@@ -177,7 +179,10 @@ describe("SampleDetailComponent", () => {
           name: "test",
           size: 100,
           type: "image/png",
-          slice: () => new Blob().slice()
+          arrayBuffer: () => new Blob().arrayBuffer(),
+          slice: () => new Blob().slice(),
+          stream: () => new Blob().stream(),
+          text: () => new Blob().text()
         }
       };
       component.onReadEnd(1);

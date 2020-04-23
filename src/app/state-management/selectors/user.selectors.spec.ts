@@ -2,7 +2,7 @@ import * as fromSelectors from "./user.selectors";
 
 import { UserState } from "../state/user.store";
 import { User, UserIdentity, Settings } from "../models";
-import { AccessToken } from "../../shared/sdk";
+import { AccessToken } from "shared/sdk";
 
 const user = new User({
   id: "testId",

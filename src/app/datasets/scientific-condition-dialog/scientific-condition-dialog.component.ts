@@ -1,5 +1,5 @@
 import { Component, Inject } from "@angular/core";
-import { MatDialogRef } from "@angular/material";
+import { MatDialogRef } from "@angular/material/dialog";
 import { Store, select } from "@ngrx/store";
 import { Dataset } from "shared/sdk";
 import { fetchMetadataKeysAction } from "state-management/actions/datasets.actions";

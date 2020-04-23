@@ -17,8 +17,8 @@ import {
   clearSelectionAction
 } from "state-management/actions/datasets.actions";
 import { AppConfigModule, APP_CONFIG } from "app-config.module";
-import { MatDialogModule } from "@angular/material";
 import { ArchivingService } from "datasets/archiving.service";
+import { MatDialogModule } from "@angular/material/dialog";
 
 describe("DatasetTableActionsComponent", () => {
   let component: DatasetTableActionsComponent;

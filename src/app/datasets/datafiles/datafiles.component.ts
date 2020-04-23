@@ -1,5 +1,6 @@
 import { APP_CONFIG, AppConfig } from "app-config.module";
-import { MatTableDataSource, MatPaginator } from "@angular/material";
+import { MatPaginator } from "@angular/material/paginator";
+import { MatTableDataSource } from "@angular/material/table";
 import { OrigDatablock, Dataset } from "shared/sdk/models";
 import {
   Component,

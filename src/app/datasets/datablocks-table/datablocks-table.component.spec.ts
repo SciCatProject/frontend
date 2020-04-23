@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
-import { MatTableModule } from "@angular/material";
 import { DatablocksComponent } from "./datablocks-table.component";
+import { MatTableModule } from "@angular/material/table";
 import { SharedCatanieModule } from "shared/shared.module";
 
 describe("DatablocksComponent", () => {

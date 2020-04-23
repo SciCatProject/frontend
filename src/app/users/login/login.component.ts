@@ -10,7 +10,7 @@ import {
   getIsLoggingIn
 } from "state-management/selectors/user.selectors";
 import { APP_CONFIG, AppConfig } from "app-config.module";
-import { MatDialog } from "@angular/material";
+import { MatDialog } from "@angular/material/dialog";
 import { PrivacyDialogComponent } from "users/privacy-dialog/privacy-dialog.component";
 
 interface LoginForm {

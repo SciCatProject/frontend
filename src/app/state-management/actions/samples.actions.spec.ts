@@ -1,5 +1,5 @@
 import * as fromActions from "./samples.actions";
-import { Attachment, Sample, Dataset } from "../../shared/sdk/models";
+import { Attachment, Sample, Dataset } from "shared/sdk/models";
 import { SampleFilters } from "state-management/models";
 
 describe("Sample Actions", () => {

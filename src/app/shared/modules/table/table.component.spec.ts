@@ -7,14 +7,12 @@ import {
   CheckboxEvent
 } from "./table.component";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
-import {
-  MatListModule,
-  MatTableModule,
-  MatPaginatorModule,
-  MatCheckboxChange,
-  MatCheckbox
-} from "@angular/material";
+
 import { PipesModule } from "shared/pipes/pipes.module";
+import { MatListModule } from "@angular/material/list";
+import { MatPaginatorModule } from "@angular/material/paginator";
+import { MatTableModule } from "@angular/material/table";
+import { MatCheckboxChange } from "@angular/material/checkbox";
 
 describe("TableComponent", () => {
   let component: TableComponent;

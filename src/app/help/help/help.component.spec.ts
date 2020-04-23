@@ -1,8 +1,8 @@
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { HelpComponent } from "./help.component";
-import { MatCardModule } from "@angular/material";
 import { APP_CONFIG } from "app-config.module";
+import { MatCardModule } from "@angular/material/card";
 
 describe("HelpComponent", () => {
   let component: HelpComponent;
