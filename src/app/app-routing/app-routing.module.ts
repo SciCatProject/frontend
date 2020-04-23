@@ -39,11 +39,12 @@ import { InstrumentsDashboardComponent } from "instruments/instruments-dashboard
 import { InstrumentDetailsComponent } from "instruments/instrument-details/instrument-details.component";
 import { AnonymousDashboardComponent } from "datasets/anonymous-dashboard/anonymous-dashboard.component";
 import { AnonymousDetailsDashboardComponent } from "datasets/anonymous-details-dashboard/anonymous-details-dashboard.component";
+import { AnonymousLayoutComponent } from "_layout/anonymous-layout/anonymous-layout.component";
 
 export const routes: Routes = [
   {
     path: "",
-    component: LoginLayoutComponent,
+    component: AnonymousLayoutComponent,
     children: [
       {
         path: "",
@@ -58,15 +59,22 @@ export const routes: Routes = [
         path: "anonymous/datasets/:id",
         component: AnonymousDetailsDashboardComponent
       },
-      { path: "login", component: LoginComponent },
       {
-        path: "login/about",
+        path: "anonymous/about",
         component: AboutComponent
       },
       {
-        path: "login/help",
+        path: "anonymous/help",
         component: HelpComponent
-      },
+      }
+    ]
+  },
+  {
+    path: "",
+    component: LoginLayoutComponent,
+    children: [
+      { path: "", redirectTo: "/login", pathMatch: "full" },
+      { path: "login", component: LoginComponent },
       {
         path: "login/error",
         component: ErrorPageComponent,

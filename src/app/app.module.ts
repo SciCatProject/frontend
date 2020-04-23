@@ -22,7 +22,7 @@ import { StoreModule } from "@ngrx/store";
 import { UserApi } from "shared/sdk/services";
 import { UsersModule } from "users/users.module";
 import { routerReducer } from "@ngrx/router-store";
-import { extModules } from './build-specifics';
+import { extModules } from "./build-specifics";
 
 import { MatBadgeModule } from "@angular/material/badge";
 import { MatNativeDateModule } from "@angular/material/core";
@@ -38,19 +38,11 @@ import { AboutModule } from "about/about.module";
 import { HelpModule } from "help/help.module";
 import { PublisheddataModule } from "publisheddata/publisheddata.module";
 import { LayoutModule } from "_layout/layout.module";
-import { AppLayoutComponent } from "./_layout/app-layout/app-layout.component";
-import { LoginHeaderComponent } from "./_layout/login-header/login-header.component";
-import { LoginLayoutComponent } from "./_layout/login-layout/login-layout.component";
 import { JobsModule } from "jobs/jobs.module";
 import { InstrumentsModule } from "./instruments/instruments.module";
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    AppLayoutComponent,
-    LoginHeaderComponent,
-    LoginLayoutComponent
-  ],
+  declarations: [AppComponent],
   imports: [
     AboutModule,
     AppConfigModule,
