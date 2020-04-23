@@ -10,9 +10,20 @@ import {
 } from "@angular/material";
 import { RouterModule } from "@angular/router";
 import { DatasetsModule } from "datasets/datasets.module";
+import { AnonymousLayoutComponent } from "./anonymous-layout/anonymous-layout.component";
+import { AppLayoutComponent } from "./app-layout/app-layout.component";
+import { LoginHeaderComponent } from "./login-header/login-header.component";
+import { LoginLayoutComponent } from "./login-layout/login-layout.component";
+import { SharedCatanieModule } from "shared/shared.module";
 
 @NgModule({
-  declarations: [AppHeaderComponent],
+  declarations: [
+    AnonymousLayoutComponent,
+    AppHeaderComponent,
+    AppLayoutComponent,
+    LoginHeaderComponent,
+    LoginLayoutComponent
+  ],
   imports: [
     CommonModule,
     DatasetsModule,
@@ -21,8 +32,9 @@ import { DatasetsModule } from "datasets/datasets.module";
     MatIconModule,
     MatMenuModule,
     MatToolbarModule,
-    RouterModule
+    RouterModule,
+    SharedCatanieModule
   ],
-  exports: [AppHeaderComponent]
+  exports: []
 })
 export class LayoutModule {}
