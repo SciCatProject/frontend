@@ -27,11 +27,7 @@ import {
   changeEditablePageAction,
   sortEditableByColumnAction
 } from "state-management/actions/policies.actions";
-import {
-  MatCheckboxChange,
-  MatTabChangeEvent,
-  MatTab
-} from "@angular/material";
+
 import { Router } from "@angular/router";
 import { PolicyFilters } from "state-management/models";
 import * as rison from "rison";
@@ -41,6 +37,8 @@ import {
   getFilters,
   getEditableFilters
 } from "state-management/selectors/policies.selectors";
+import { MatTabChangeEvent, MatTab } from "@angular/material/tabs";
+import { MatCheckboxChange } from "@angular/material/checkbox";
 
 describe("PoliciesDashboardComponent", () => {
   let component: PoliciesDashboardComponent;

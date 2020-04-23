@@ -2,7 +2,7 @@ import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { AboutComponent } from "./about.component";
 import { APP_CONFIG } from "app-config.module";
-import { MatCardModule } from "@angular/material";
+import { MatCardModule } from "@angular/material/card";
 import { LinkyModule } from "ngx-linky";
 
 describe("AboutComponent", () => {

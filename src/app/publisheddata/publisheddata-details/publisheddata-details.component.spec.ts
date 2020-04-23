@@ -9,11 +9,12 @@ import {
 } from "shared/MockStubs";
 import { Store } from "@ngrx/store";
 import { PublishedDataApi } from "shared/sdk";
-import { MatCardModule, MatIconModule } from "@angular/material";
 import { NgxJsonViewerModule } from "ngx-json-viewer";
 import { Router, ActivatedRoute } from "@angular/router";
 import { LinkyModule } from "ngx-linky";
 import { SharedCatanieModule } from "shared/shared.module";
+import { MatCardModule } from "@angular/material/card";
+import { MatIconModule } from "@angular/material/icon";
 
 describe("PublisheddataDetailsComponent", () => {
   let component: PublisheddataDetailsComponent;

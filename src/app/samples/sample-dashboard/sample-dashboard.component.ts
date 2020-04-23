@@ -26,7 +26,7 @@ import {
 } from "state-management/selectors/samples.selectors";
 import { DatePipe } from "@angular/common";
 import { Router, ActivatedRoute } from "@angular/router";
-import { MatDialogConfig, MatDialog } from "@angular/material";
+import { MatDialogConfig, MatDialog } from "@angular/material/dialog";
 import { SampleDialogComponent } from "samples/sample-dialog/sample-dialog.component";
 import * as rison from "rison";
 import * as deepEqual from "deep-equal";

@@ -4,7 +4,7 @@ import { ReactiveFormsModule } from "@angular/forms";
 import { Store } from "@ngrx/store";
 import { MockConfigService, MockStore, MockUserApi } from "shared/MockStubs";
 import { UserApi } from "shared/sdk/services";
-import { ConfigService } from "../../shared/services";
+import { ConfigService } from "shared/services";
 
 import { UserSettingsComponent } from "./user-settings.component";
 import { SharedCatanieModule } from "shared/shared.module";

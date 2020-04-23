@@ -32,7 +32,8 @@ import {
   map,
   take
 } from "rxjs/operators";
-import { MatDialog, MatSidenav } from "@angular/material";
+import { MatDialog } from "@angular/material/dialog";
+import { MatSidenav } from "@angular/material/sidenav";
 import { AddDatasetDialogComponent } from "datasets/add-dataset-dialog/add-dataset-dialog.component";
 import { Subscription } from "rxjs";
 import {

@@ -1,7 +1,7 @@
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
-import { MatCheckboxModule, MatCheckboxChange } from "@angular/material";
 import { LogbookFilterComponent } from "./logbook-filter.component";
+import { MatCheckboxModule, MatCheckboxChange } from "@angular/material/checkbox";
 
 describe("LogbookFilterComponent", () => {
   let component: LogbookFilterComponent;

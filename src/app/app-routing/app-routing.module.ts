@@ -9,7 +9,7 @@ import { DatasetDetailsDashboardComponent } from "datasets/dataset-details-dashb
 import { JobsDashboardComponent } from "jobs/jobs-dashboard/jobs-dashboard.component";
 import { JobsDetailComponent } from "../jobs/jobs-detail/jobs-detail.component";
 
-import { ErrorPageComponent } from "../shared/modules/error-page/error-page.component";
+import { ErrorPageComponent } from "shared/modules/error-page/error-page.component";
 
 import { LoginComponent } from "../users/login/login.component";
 import { UserSettingsComponent } from "../users/user-settings/user-settings.component";

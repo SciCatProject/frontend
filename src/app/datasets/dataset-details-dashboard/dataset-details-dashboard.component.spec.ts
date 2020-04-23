@@ -15,7 +15,7 @@ import {
   updateAttachmentCaptionAction,
   removeAttachmentAction,
   updatePropertyAction
-} from "state-management/actions/datasets.actions";
+} from "../../state-management/actions/datasets.actions";
 import { Dataset, UserApi, User } from "shared/sdk";
 import { ReadFile, ReadMode } from "ngx-file-helpers";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
@@ -23,7 +23,7 @@ import { AppConfigModule, APP_CONFIG } from "app-config.module";
 import { SharedCatanieModule } from "shared/shared.module";
 import { Router, ActivatedRoute } from "@angular/router";
 import { SubmitCaptionEvent } from "shared/modules/file-uploader/file-uploader.component";
-import { MatSlideToggleChange, MatSlideToggle } from "@angular/material";
+import { MatSlideToggleChange, MatSlideToggle } from "@angular/material/slide-toggle";
 
 describe("DetailsDashboardComponent", () => {
   let component: DatasetDetailsDashboardComponent;
@@ -329,7 +329,10 @@ describe("DetailsDashboardComponent", () => {
           name: "test",
           size: 100,
           type: "image/png",
-          slice: () => new Blob().slice()
+          arrayBuffer: () => new Blob().arrayBuffer(),
+          slice: () => new Blob().slice(),
+          stream: () => new Blob().stream(),
+          text: () => new Blob().text()
         }
       };
       component.onFileUploaderFilePicked(file);
@@ -363,7 +366,10 @@ describe("DetailsDashboardComponent", () => {
           name: "test",
           size: 100,
           type: "image/png",
-          slice: () => new Blob().slice()
+          arrayBuffer: () => new Blob().arrayBuffer(),
+          slice: () => new Blob().slice(),
+          stream: () => new Blob().stream(),
+          text: () => new Blob().text()
         }
       };
       component.onFileUploaderReadEnd(1);

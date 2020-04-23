@@ -14,7 +14,7 @@ import {
   clearMessageAction,
   logoutAction
 } from "state-management/actions/user.actions";
-import { MatSnackBar } from "@angular/material";
+import { MatSnackBar } from "@angular/material/snack-bar";
 import { Meta, Title } from "@angular/platform-browser";
 import { environment } from "../environments/environment";
 import { Subscription } from "rxjs";

@@ -2,16 +2,14 @@ import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { LogbooksTableComponent } from "./logbooks-table/logbooks-table.component";
 import { LogbooksDetailComponent } from "./logbooks-detail/logbooks-detail.component";
-import {
-  MatCardModule,
-  MatIconModule,
-  MatTableModule,
-  MatCheckboxModule,
-  MatExpansionModule,
-  MatDividerModule,
-  MatPaginatorModule,
-  MatSortModule
-} from "@angular/material";
+import { MatCardModule } from "@angular/material/card";
+import { MatCheckboxModule } from "@angular/material/checkbox";
+import { MatDividerModule } from "@angular/material/divider";
+import { MatExpansionModule } from "@angular/material/expansion";
+import { MatIconModule } from "@angular/material/icon";
+import { MatPaginatorModule } from "@angular/material/paginator";
+import { MatSortModule } from "@angular/material/sort";
+import { MatTableModule } from "@angular/material/table";
 import { AppConfigModule } from "app-config.module";
 import { FlexLayoutModule } from "@angular/flex-layout";
 import { LinkyModule } from "ngx-linky";

@@ -1,12 +1,12 @@
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
-import { MatTableModule } from "@angular/material";
 import { Store } from "@ngrx/store";
 import { Router } from "@angular/router";
 
 import { LogbooksTableComponent } from "./logbooks-table.component";
 import { MockStore } from "shared/MockStubs";
 import { Logbook } from "shared/sdk";
+import { MatTableModule } from "@angular/material/table";
 
 describe("LogbooksTableComponent", () => {
   let component: LogbooksTableComponent;

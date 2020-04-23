@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { PrivacyDialogComponent } from "./privacy-dialog.component";
-import { MatDialogModule } from "@angular/material";
+import { MatDialogModule } from "@angular/material/dialog";
 
 describe("PrivacyDialogComponent", () => {
   let component: PrivacyDialogComponent;

@@ -18,7 +18,7 @@ import { ShareGroupApi } from "shared/sdk/services/custom/ShareGroup";
 import { DatasetApi } from "shared/sdk/services/custom/Dataset";
 import { ShareGroup } from "shared/sdk/models/ShareGroup";
 
-import { MatDialog } from "@angular/material";
+import { MatDialog } from "@angular/material/dialog";
 import { COMMA, ENTER } from "@angular/cdk/keycodes";
 import { MatChipInputEvent } from "@angular/material/chips";
 

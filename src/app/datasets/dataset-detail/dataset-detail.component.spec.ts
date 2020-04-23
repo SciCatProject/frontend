@@ -1,11 +1,12 @@
-import { APP_CONFIG, AppConfigModule } from "app-config.module";
-import { DatafilesComponent } from "datasets/datafiles/datafiles.component";
+import { APP_CONFIG, AppConfigModule } from "../../app-config.module";
+import { DatafilesComponent } from "../../datasets/datafiles/datafiles.component";
 import { DatasetDetailComponent } from "./dataset-detail.component";
 import { LinkyPipe } from "ngx-linky";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 import { SharedCatanieModule } from "shared/shared.module";
-import { MatTableModule, MatChipInputEvent } from "@angular/material";
+import { MatTableModule } from "@angular/material/table";
+import { MatChipInputEvent } from "@angular/material/chips";
 
 describe("DatasetDetailComponent", () => {
   let component: DatasetDetailComponent;

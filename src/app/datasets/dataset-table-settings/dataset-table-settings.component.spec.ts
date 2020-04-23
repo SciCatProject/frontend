@@ -5,15 +5,13 @@ import {
   SelectColumnEvent
 } from "./dataset-table-settings.component";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
-import {
-  MatButtonModule,
-  MatIconModule,
-  MatCheckboxModule,
-  MatCheckboxChange
-} from "@angular/material";
+
 import { SearchBarModule } from "shared/modules/search-bar/search-bar.module";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { TableColumn } from "state-management/models";
+import { MatButtonModule } from "@angular/material/button";
+import { MatCheckboxModule, MatCheckboxChange } from "@angular/material/checkbox";
+import { MatIconModule } from "@angular/material/icon";
 
 describe("DatasetTableSettingsComponent", () => {
   let component: DatasetTableSettingsComponent;

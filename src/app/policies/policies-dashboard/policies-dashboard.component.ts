@@ -21,12 +21,9 @@ import {
   getFilters,
   getEditableFilters
 } from "state-management/selectors/policies.selectors";
-import {
-  MatCheckboxChange,
-  MatDialogConfig,
-  MatDialog,
-  MatTabChangeEvent
-} from "@angular/material";
+import { MatCheckboxChange } from "@angular/material/checkbox";
+import { MatDialogConfig, MatDialog } from "@angular/material/dialog";
+import { MatTabChangeEvent } from "@angular/material/tabs";
 import {
   changePageAction,
   sortByColumnAction,

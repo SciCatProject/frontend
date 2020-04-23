@@ -1,5 +1,4 @@
 import { Component, OnInit, ViewChild, OnDestroy } from "@angular/core";
-import { MatSidenav } from "@angular/material";
 import { Store, select } from "@ngrx/store";
 import { ActivatedRoute, Router } from "@angular/router";
 import { getColumns } from "state-management/selectors/user.selectors";
@@ -31,6 +30,7 @@ import {
   selectColumnAction,
   deselectColumnAction
 } from "state-management/actions/user.actions";
+import { MatSidenav } from "@angular/material/sidenav";
 
 @Component({
   selector: "anonymous-dashboard",

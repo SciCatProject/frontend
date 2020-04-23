@@ -2,13 +2,12 @@ import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { MetadataEditComponent } from "./metadata-edit.component";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
-import {
-  MatFormFieldModule,
-  MatOptionModule,
-  MatSelectModule,
-  MatAutocompleteModule
-} from "@angular/material";
+
 import { FormBuilder } from "@angular/forms";
+import { MatAutocompleteModule } from "@angular/material/autocomplete";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatOptionModule } from "@angular/material/core";
+import { MatSelectModule } from "@angular/material/select";
 
 describe("MetadataEditComponent", () => {
   let component: MetadataEditComponent;

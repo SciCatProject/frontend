@@ -11,7 +11,7 @@ import {
   SimpleChange
 } from "@angular/core";
 import { Dataset, TableColumn } from "state-management/models";
-import { MatCheckboxChange } from "@angular/material";
+import { MatCheckboxChange } from "@angular/material/checkbox";
 import { Subscription } from "rxjs";
 import { select, Store } from "@ngrx/store";
 import {

@@ -12,8 +12,8 @@ import {
 } from "state-management/actions/published-data.actions";
 import { APP_CONFIG } from "app-config.module";
 
-import { PublishedDataApi } from "../../shared/sdk/services/custom";
-import { PublishedData } from "../../shared/sdk/models";
+import { PublishedDataApi } from "shared/sdk/services/custom";
+import { PublishedData } from "shared/sdk/models";
 import { formatDate } from "@angular/common";
 import { Router } from "@angular/router";
 import { getCurrentPublishedData } from "state-management/selectors/published-data.selectors";

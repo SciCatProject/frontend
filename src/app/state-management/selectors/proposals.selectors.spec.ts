@@ -3,7 +3,7 @@ import {
   Proposal,
   ProposalInterface,
   Attachment
-} from "../../shared/sdk/models";
+} from "shared/sdk/models";
 import { ProposalsState } from "state-management/state/proposals.store";
 
 const data: ProposalInterface = {

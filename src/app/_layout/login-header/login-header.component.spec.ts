@@ -2,7 +2,7 @@ import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { LoginHeaderComponent } from "./login-header.component";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
-import { MatToolbarModule } from "@angular/material";
+import { MatToolbarModule } from "@angular/material/toolbar";
 import { APP_CONFIG } from "app-config.module";
 
 describe("LoginHeaderComponent", () => {

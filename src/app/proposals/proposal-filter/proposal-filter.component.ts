@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
 import { DateRange } from "datasets/datasets-filter/datasets-filter.component";
-import { MatDatepickerInputEvent } from "@angular/material";
+import { MatDatepickerInputEvent } from "@angular/material/datepicker";
 
 @Component({
   selector: "proposal-filter",

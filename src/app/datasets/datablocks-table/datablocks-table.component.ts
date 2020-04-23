@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from "@angular/core";
 import { Datablock } from "shared/sdk/models";
-import { MatTableDataSource } from "@angular/material";
+import { MatTableDataSource } from "@angular/material/table";
 
 @Component({
   selector: "datablocks-table",

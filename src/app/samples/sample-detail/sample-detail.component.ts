@@ -1,7 +1,7 @@
 import { ActivatedRoute, Router } from "@angular/router";
 import { Component, OnDestroy, OnInit, Inject } from "@angular/core";
 import { Subscription } from "rxjs";
-import { Sample, Dataset, Attachment, User } from "../../shared/sdk/models";
+import { Sample, Dataset, Attachment, User } from "shared/sdk/models";
 import {
   getCurrentSample,
   getDatasets,
