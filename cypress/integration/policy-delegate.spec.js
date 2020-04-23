@@ -42,10 +42,9 @@ describe("Datasets", () => {
       cy.get("[data-cy=editSelection]").click({ force: true });
       cy.get("[data-cy=managerInput]").click({ force: true });
       cy.get("[data-cy=managerInput]").type("cypress@manager.com{enter}");
-      cy.wait(5000);
       cy.get("[data-cy=managerChipList]")
         .children()
-        .should("contain", "cypress@manager.com");
+        .should("contain.text", "cypress@manager.com");
       cy.wait(1000);
       cy.get("[data-cy=saveButton]").click({ force: true });
     });
