@@ -10,23 +10,39 @@ import {
   AfterViewInit,
   Inject,
   ChangeDetectorRef,
-  AfterViewChecked
+  AfterViewChecked,
+  OnDestroy,
+  OnChanges,
+  ComponentFactoryResolver,
 } from "@angular/core";
+import { Subscription, Observable } from "rxjs";
+import { Store, select } from "@ngrx/store";
+import {
+  getCurrentOrigDatablocks,
+  getCurrentDataset,
+} from "state-management/selectors/datasets.selectors";
+import {
+  TableColumn,
+  PageChangeEvent,
+} from "shared/modules/table/table.component";
+import { getIsLoading } from "state-management/selectors/user.selectors";
+import { ActivatedRoute } from "@angular/router";
+import { pluck } from "rxjs/operators";
+import { fetchDatasetAction } from "state-management/actions/datasets.actions";
 
 @Component({
   selector: "datafiles",
   templateUrl: "./datafiles.component.html",
-  styleUrls: ["./datafiles.component.scss"]
+  styleUrls: ["./datafiles.component.scss"],
 })
-export class DatafilesComponent
-  implements OnInit, AfterViewInit, AfterViewChecked {
-  @Input() datablocks: Array<OrigDatablock>;
-  // tslint:disable-next-line:no-input-rename
-  @Input("data") dataset: Dataset;
-  @Input() jwt: any;
+export class DatafilesComponent implements OnInit, OnDestroy, OnChanges {
+  datablocks$ = this.store.pipe(select(getCurrentOrigDatablocks));
+  loading$ = this.store.pipe(select(getIsLoading));
+  // currentDataset$ = this.store.pipe(select(getCurrentDataset));
 
-  count = 0;
-  files: Array<any> = [];
+  // jwt: any;
+  @Input() trash: boolean;
+
   tooLargeFile: boolean;
   totalFileSize = 0;
   selectedFileSize = 0;
@@ -34,89 +50,51 @@ export class DatafilesComponent
   areAllSelected = false;
   isNoneSelected = true;
 
-  fileDownloadEnabled: boolean = this.appConfig.fileDownloadEnabled;
+  subscriptions: Subscription[] = [];
+
+  files: Array<any> = [];
+
+  count = 0;
+  pageSize = 25;
+  currentPage = 0;
+
+  /*fileDownloadEnabled: boolean = this.appConfig.fileDownloadEnabled;
   multipleDownloadEnabled: boolean = this.appConfig.multipleDownloadEnabled;
   multipleDownloadAction: string = this.appConfig.multipleDownloadAction;
   maxFileSize: number = this.appConfig.maxDirectDownloadSize;
-  sftpHost: string = this.appConfig.sftpHost;
-  displayedColumns = (this.appConfig.multipleDownloadEnabled
-    ? ["select"]
-    : []
-  ).concat(["name", "size", "path"]);
+  sftpHost: string = this.appConfig.sftpHost;*/
 
-  dataSource: MatTableDataSource<any> | null;
-  @ViewChild(MatPaginator, { static: false })
-  paginator: MatPaginator;
+  tableColumns: TableColumn[] = [
+    {
+      name: "path",
+      icon: "brightness_high",
+      sort: false,
+      inList: true,
+    },
+    { name: "size", icon: "bubble_chart", sort: false, inList: true },
+    {
+      name: "time",
+      icon: "mail",
+      sort: false,
+      inList: true,
+    },
+  ];
 
-  /**
-   * Load datafiles and add to source for table viewing
-   * @param datablocks
-   */
-  getDatafiles(datablocks: Array<OrigDatablock>) {
-    datablocks.forEach(block => {
-      const selectable = block.dataFileList.map(file => {
-        this.totalFileSize += file.size;
-        return { ...file, selected: false };
-      });
-      this.files = this.files.concat(selectable);
-    });
-    this.tooLargeFile = this.hasTooLargeFiles(this.files);
-    this.dataSource.data = this.files;
-  }
+  tableData: any;
+  // paginator: MatPaginator;
+  constructor(
+    private route: ActivatedRoute,
 
-  getAreAllSelected() {
-    return this.dataSource.data.reduce(
-      (accum, curr) => accum && curr.selected,
-      true
-    );
-  }
+    private store: Store<Dataset>,
+    private cdRef: ChangeDetectorRef,
+    @Inject(APP_CONFIG) public appConfig: AppConfig
+  ) {}
 
-  getIsNoneSelected() {
-    return this.dataSource.data.reduce(
-      (accum, curr) => accum && !curr.selected,
-      true
-    );
-  }
+  getDatafiles(datablocks: Array<OrigDatablock>) {}
 
-  getSelectedFiles() {
-    if (!this.dataSource) {
-      return [];
-    }
-    return this.dataSource.data
-      .filter(file => file.selected)
-      .map(file => file.path);
-  }
-
-  updateSelectionStatus() {
-    this.areAllSelected = this.getAreAllSelected();
-    this.isNoneSelected = this.getIsNoneSelected();
-  }
-
-  onSelect(event, file) {
-    file.selected = event.checked;
-    this.updateSelectionStatus();
-    if (event.checked) {
-      this.selectedFileSize += file.size;
-    } else {
-      this.selectedFileSize -= file.size;
-    }
-  }
-
-  onSelectAll(event) {
-    for (const file of this.dataSource.data) {
-      file.selected = event.checked;
-      if (event.checked) {
-        this.selectedFileSize += file.size;
-      } else {
-        this.selectedFileSize = 0;
-      }
-    }
-    this.updateSelectionStatus();
-  }
-
-  hasTooLargeFiles(files: any[]) {
+  /* hasTooLargeFiles(files: any[]) {
     if (this.maxFileSize) {
-      const largeFiles = files.filter(file => {
+      const largeFiles = files.filter((file) => {
         return file.size > this.maxFileSize;
       });
       if (largeFiles.length > 0) {
@@ -127,25 +105,58 @@ export class DatafilesComponent
     } else {
       return false;
     }
+  }*/
+
+  onPageChange(event: PageChangeEvent) {
+    console.log("event.pageIndex", event.pageIndex, this.files);
+    this.currentPage = event.pageIndex;
+    const skip = this.currentPage * this.pageSize;
+    this.tableData = this.files.slice(skip, skip + this.pageSize);
   }
 
-  constructor(
-    private cdRef: ChangeDetectorRef,
-    @Inject(APP_CONFIG) private appConfig: AppConfig
-  ) {}
+  onRowClick(event: Event) {}
 
   ngOnInit() {}
 
   ngAfterViewInit() {
-    this.dataSource = new MatTableDataSource();
-    this.dataSource.paginator = this.paginator;
-    if (this.datablocks) {
-      this.getDatafiles(this.datablocks);
-    }
+    let myId: any;
+    this.route.params.pipe(pluck("id")).subscribe((id: string) => {
+      myId = id;
+      this.store.dispatch(fetchDatasetAction({ pid: id }));
+    });
+
+    this.subscriptions.push(
+      this.datablocks$.subscribe((datablocks) => {
+          console.log("observing datablocks$", datablocks);
+          datablocks.forEach((block) => {
+            if (block.datasetId === myId) {
+              block.dataFileList.map((file) => {
+                this.totalFileSize += file.size;
+                this.files = this.files.concat(file);
+                this.count = this.files.length;
+                this.tableData = this.files.slice(0, this.pageSize);
+              });
+             }
+          });
+          // this.tooLargeFile = this.hasTooLargeFiles(this.files);
+          // this.getDatafiles(datablocks);
+      })
+    );
   }
 
   ngAfterViewChecked() {
-    this.count = this.files.length;
     this.cdRef.detectChanges();
+  }
+
+  ngOnChanges(changes) {
+    console.log("changes ");
+  }
+
+  ngOnDestroy() {
+    this.trash = true;
+    console.log("on destroy!");
+    /// this.tableData
+    this.files = [];
+    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
 }
