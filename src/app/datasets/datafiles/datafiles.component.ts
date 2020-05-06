@@ -58,11 +58,11 @@ export class DatafilesComponent implements OnInit, OnDestroy, OnChanges {
   pageSize = 25;
   currentPage = 0;
 
-  /*fileDownloadEnabled: boolean = this.appConfig.fileDownloadEnabled;
+  fileDownloadEnabled: boolean = this.appConfig.fileDownloadEnabled;
   multipleDownloadEnabled: boolean = this.appConfig.multipleDownloadEnabled;
   multipleDownloadAction: string = this.appConfig.multipleDownloadAction;
   maxFileSize: number = this.appConfig.maxDirectDownloadSize;
-  sftpHost: string = this.appConfig.sftpHost;*/
+  sftpHost: string = this.appConfig.sftpHost;
 
   tableColumns: TableColumn[] = [
     {
@@ -92,7 +92,7 @@ export class DatafilesComponent implements OnInit, OnDestroy, OnChanges {
 
   getDatafiles(datablocks: Array<OrigDatablock>) {}
 
-  /* hasTooLargeFiles(files: any[]) {
+   hasTooLargeFiles(files: any[]) {
     if (this.maxFileSize) {
       const largeFiles = files.filter((file) => {
         return file.size > this.maxFileSize;
@@ -105,7 +105,7 @@ export class DatafilesComponent implements OnInit, OnDestroy, OnChanges {
     } else {
       return false;
     }
-  }*/
+  }
 
   onPageChange(event: PageChangeEvent) {
     console.log("event.pageIndex", event.pageIndex, this.files);
@@ -138,7 +138,7 @@ export class DatafilesComponent implements OnInit, OnDestroy, OnChanges {
               });
              }
           });
-          // this.tooLargeFile = this.hasTooLargeFiles(this.files);
+           this.tooLargeFile = this.hasTooLargeFiles(this.files);
           // this.getDatafiles(datablocks);
       })
     );
