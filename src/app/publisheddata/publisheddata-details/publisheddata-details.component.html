@@ -99,6 +99,14 @@
       </mat-card>
 
       <mat-card>
+        <button
+        mat-raised-button
+        color="primary"
+        *ngIf="editPublishedData"
+        (click)="onEditClick(publishedData.doi)"
+      >
+        Register
+      </button>
         <button mat-stroked-button (click)="show = !show">
           {{ show ? "Hide MetaData" : "Show Metadata" }}
         </button>
