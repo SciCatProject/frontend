@@ -1,25 +1,18 @@
 import { APP_CONFIG, AppConfig } from "app-config.module";
-import { MatPaginator } from "@angular/material/paginator";
-import { MatTableDataSource } from "@angular/material/table";
 import { OrigDatablock, Dataset } from "shared/sdk/models";
 import {
   Component,
   Input,
   OnInit,
-  ViewChild,
-  AfterViewInit,
   Inject,
   ChangeDetectorRef,
-  AfterViewChecked,
   OnDestroy,
   OnChanges,
-  ComponentFactoryResolver,
 } from "@angular/core";
-import { Subscription, Observable } from "rxjs";
+import { Subscription } from "rxjs";
 import { Store, select } from "@ngrx/store";
 import {
   getCurrentOrigDatablocks,
-  getCurrentDataset,
 } from "state-management/selectors/datasets.selectors";
 import {
   TableColumn,
@@ -108,7 +101,6 @@ export class DatafilesComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   onPageChange(event: PageChangeEvent) {
-    console.log("event.pageIndex", event.pageIndex, this.files);
     this.currentPage = event.pageIndex;
     const skip = this.currentPage * this.pageSize;
     this.tableData = this.files.slice(skip, skip + this.pageSize);
@@ -127,7 +119,6 @@ export class DatafilesComponent implements OnInit, OnDestroy, OnChanges {
 
     this.subscriptions.push(
       this.datablocks$.subscribe((datablocks) => {
-          console.log("observing datablocks$", datablocks);
           datablocks.forEach((block) => {
             if (block.datasetId === myId) {
               block.dataFileList.map((file) => {
@@ -139,7 +130,6 @@ export class DatafilesComponent implements OnInit, OnDestroy, OnChanges {
              }
           });
            this.tooLargeFile = this.hasTooLargeFiles(this.files);
-          // this.getDatafiles(datablocks);
       })
     );
   }
@@ -149,14 +139,9 @@ export class DatafilesComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   ngOnChanges(changes) {
-    console.log("changes ");
   }
 
   ngOnDestroy() {
-    this.trash = true;
-    console.log("on destroy!");
-    /// this.tableData
-    this.files = [];
     this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
 }
