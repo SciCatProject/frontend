@@ -51,18 +51,11 @@
       <ng-template mat-tab-label>
         <mat-icon> cloud_download </mat-icon> Datafiles
       </ng-template>
-      <mat-card>
+      <mat-card > 
         <datafiles
-          [datablocks]="origDatablocks$ | async"
-          [data]="dataset"
-          [jwt]="jwt$ | async"
+
         ></datafiles>
-        <div class="datablocks-table">
-          <h4>Original Datablocks</h4>
-          <datablocks-table
-            [datablocks]="origDatablocks$ | async"
-          ></datablocks-table>
-        </div>
+
         <div
           *ngIf="
             (origDatablocks$ | async) && (origDatablocks$ | async).length === 0
