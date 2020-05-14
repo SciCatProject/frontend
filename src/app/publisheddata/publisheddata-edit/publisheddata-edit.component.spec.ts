@@ -1,5 +1,5 @@
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
-import { PublishedDataEditComponent } from "./publisheddata-edit.component";
+import { PublisheddataEditComponent } from "./publisheddata-edit.component";
 
 import { Router } from "@angular/router";
 import { MockRouter, MockStore, MockPublishedDataApi } from "shared/MockStubs";
@@ -21,13 +21,13 @@ import { MatInputModule } from "@angular/material/input";
 import { MatSelectModule } from "@angular/material/select";
 
 describe("PublishComponent", () => {
-  let component: PublishedDataEditComponent;
-  let fixture: ComponentFixture<PublishedDataEditComponent>;
+  let component: PublisheddataEditComponent;
+  let fixture: ComponentFixture<PublisheddataEditComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
-      declarations: [PublishedDataEditComponent],
+      declarations: [PublisheddataEditComponent],
       imports: [
         BrowserAnimationsModule,
         FormsModule,
@@ -48,7 +48,7 @@ describe("PublishComponent", () => {
         })
       ]
     });
-    TestBed.overrideComponent(PublishedDataEditComponent, {
+    TestBed.overrideComponent(PublisheddataEditComponent, {
       set: {
         providers: [
           { provide: ActionsSubject, useValue: of({}) },
@@ -63,7 +63,7 @@ describe("PublishComponent", () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(PublishedDataEditComponent);
+    fixture = TestBed.createComponent(PublisheddataEditComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

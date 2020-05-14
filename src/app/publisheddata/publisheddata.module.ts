@@ -13,18 +13,20 @@ import { NgxJsonViewerModule } from "ngx-json-viewer";
 import { StoreModule } from "@ngrx/store";
 import { publishedDataReducer } from "state-management/reducers/published-data.reducer";
 import { PublisheddataDashboardComponent } from "./publisheddata-dashboard/publisheddata-dashboard.component";
-import { PublishedDataEditComponent } from "./publisheddata-edit/publisheddata-edit.component";
+import { PublisheddataEditComponent } from "./publisheddata-edit/publisheddata-edit.component";
 import { FlexLayoutModule } from "@angular/flex-layout";
 import { FormsModule } from "@angular/forms";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatChipsModule } from "@angular/material/chips";
 import { MatOptionModule } from "@angular/material/core";
+import { MatInputModule } from "@angular/material/input";
+import { MatSelectModule } from "@angular/material/select";
 
 @NgModule({
   declarations: [
     PublisheddataDetailsComponent,
     PublisheddataDashboardComponent,
-    PublishedDataEditComponent
+    PublisheddataEditComponent,
   ],
   imports: [
     CommonModule,
@@ -33,7 +35,9 @@ import { MatOptionModule } from "@angular/material/core";
     LinkyModule,
     MatButtonModule,
     MatCardModule,
+    MatInputModule,
     MatIconModule,
+    MatSelectModule,
     NgxJsonViewerModule,
     SharedCatanieModule,
     StoreModule.forFeature("publishedData", publishedDataReducer),

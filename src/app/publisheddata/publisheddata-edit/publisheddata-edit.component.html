@@ -1,7 +1,7 @@
 <div fxLayout="row" fxLayoutGap="50px">
   <div fxFlex="auto">
     <mat-card>
-      <p>You are about to publish {{ datasetCount }} datasets.</p>
+      <p>You are editing Published Data record.</p>
 
       <form>
         <mat-form-field>
@@ -96,12 +96,12 @@
           color="primary"
           [disabled]="!formIsValid()"
         >
-          Publish
+          Update Published Data
         </button>
       </form>
     </mat-card>
   </div>
-  <div fxFlex="auto">
+  <div fxFlex="30">
     <mat-card *ngIf="form.thumbnail">
       <img mat-card-image src="{{ form.thumbnail }}" />
     </mat-card>

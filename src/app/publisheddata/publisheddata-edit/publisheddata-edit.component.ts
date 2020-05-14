@@ -2,20 +2,21 @@ import { Component, Inject, OnInit, OnDestroy } from "@angular/core";
 import { COMMA, ENTER } from "@angular/cdk/keycodes";
 
 import { select, Store, ActionsSubject } from "@ngrx/store";
-import { first, tap } from "rxjs/operators";
+import { first, tap, pluck } from "rxjs/operators";
 
 import { getDatasetsInBatch } from "state-management/selectors/datasets.selectors";
 import { prefillBatchAction } from "state-management/actions/datasets.actions";
 import {
   publishDatasetAction,
-  fetchPublishedDataCompleteAction
+  fetchPublishedDataCompleteAction,
+  fetchPublishedDataAction,
 } from "state-management/actions/published-data.actions";
 import { APP_CONFIG } from "app-config.module";
 
 import { PublishedDataApi } from "shared/sdk/services/custom";
 import { PublishedData } from "shared/sdk/models";
 import { formatDate } from "@angular/common";
-import { Router } from "@angular/router";
+import { Router, ActivatedRoute } from "@angular/router";
 import { getCurrentPublishedData } from "state-management/selectors/published-data.selectors";
 import { Subscription } from "rxjs";
 import { getCurrentUserName } from "state-management/selectors/user.selectors";
@@ -23,16 +24,19 @@ import { getCurrentUserName } from "state-management/selectors/user.selectors";
 @Component({
   selector: "publisheddata-edit",
   templateUrl: "./publisheddata-edit.component.html",
-  styleUrls: ["./publisheddata-edit.component.scss"]
+  styleUrls: ["./publisheddata-edit.component.scss"],
 })
-export class PublishedDataEditComponent implements OnInit, OnDestroy {
+export class PublisheddataEditComponent implements OnInit, OnDestroy {
   public separatorKeysCodes: number[] = [ENTER, COMMA];
 
-  private datasets$ = this.store.pipe(select(getDatasetsInBatch));
-  private userName$ = this.store.pipe(select(getCurrentUserName));
+  // private datasets$ = this.store.pipe(select(getDatasetsInBatch));
+  // private userName$ = this.store.pipe(select(getCurrentUserName));
+  currentData$ = this.store.pipe(select(getCurrentPublishedData));
   public datasetCount: number;
   private countSubscription: Subscription;
   today: number = Date.now();
+
+  routeSubscription: Subscription;
 
   public form = {
     title: "",
@@ -47,7 +51,7 @@ export class PublishedDataEditComponent implements OnInit, OnDestroy {
     dataDescription: "",
     thumbnail: "",
     numberOfFiles: null,
-    sizeOfArchive: null
+    sizeOfArchive: null,
   };
 
   public formData = null;
@@ -87,49 +91,38 @@ export class PublishedDataEditComponent implements OnInit, OnDestroy {
   }
 
   constructor(
+    private route: ActivatedRoute,
+    private router: Router,
     private store: Store<any>,
     @Inject(APP_CONFIG) private appConfig,
     private publishedDataApi: PublishedDataApi,
-    private actionsSubj: ActionsSubject,
-    private router: Router
+    private actionsSubj: ActionsSubject
   ) {}
 
   ngOnInit() {
-    this.store.dispatch(prefillBatchAction());
-
-    this.datasets$
-      .pipe(
-        first(),
-        tap(datasets => {
-          if (datasets) {
-            const creator = datasets.map(dataset => dataset.owner);
-            const unique = creator.filter(
-              (item, i) => creator.indexOf(item) === i
-            );
-            this.form.creators = unique;
-            this.form.pidArray = datasets.map(dataset => dataset.pid);
-          }
-        })
-      )
-      .subscribe();
-
-    this.countSubscription = this.datasets$.subscribe(datasets => {
-      if (datasets) {
-        this.datasetCount = datasets.length;
-      }
-    });
-
-    this.publishedDataApi
-      .formPopulate(this.form.pidArray[0])
-      .subscribe(result => {
-        this.form.abstract = result.abstract;
-        this.form.title = result.title;
-        this.form.description = result.description;
-        this.form.resourceType = "raw";
-        this.form.thumbnail = result.thumbnail;
+    this.routeSubscription = this.route.params
+      .pipe(pluck("id"))
+      .subscribe((id: string) => {
+        this.store.dispatch(fetchPublishedDataAction({ id }));
       });
 
-    this.actionSubjectSubscription = this.actionsSubj.subscribe(data => {
+    this.currentData$.subscribe((data) => {
+      if (data) {
+        console.log("DATA", data);
+        this.form.abstract = data.abstract;
+        this.form.title = data.title;
+        this.form.description = data.dataDescription;
+        this.form.resourceType = "raw";
+        this.form.thumbnail = data.thumbnail;
+      }
+    });
+  }
+  /*this.publishedDataApi
+      .formPopulate(this.form.pidArray[0])
+      .subscribe(result => {
+      });*/
+
+  /*this.actionSubjectSubscription = this.actionsSubj.subscribe(data => {
       if (data.type === fetchPublishedDataCompleteAction.type) {
         this.store
           .pipe(select(getCurrentPublishedData))
@@ -139,12 +132,12 @@ export class PublishedDataEditComponent implements OnInit, OnDestroy {
           })
           .unsubscribe();
       }
-    });
-  }
+    });*/
 
   ngOnDestroy() {
     this.actionSubjectSubscription.unsubscribe();
     this.countSubscription.unsubscribe();
+    this.routeSubscription.unsubscribe();
   }
 
   public onPublish() {

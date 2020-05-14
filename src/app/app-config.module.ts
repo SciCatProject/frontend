@@ -41,6 +41,7 @@ export class AppConfig {
   userProfileImageEnabled: boolean;
   userNamePromptEnabled: boolean;
   landingPage: string;
+  editPublishedData: boolean;
 }
 
 export const APP_DI_CONFIG: AppConfig = {
@@ -93,7 +94,8 @@ export const APP_DI_CONFIG: AppConfig = {
   tableSciDataEnabled: environment["tableSciDataEnabled"] || false,
   userProfileImageEnabled: environment["userProfileImageEnabled"] || false,
   userNamePromptEnabled: environment["userNamePromptEnabled"] || false,
-  landingPage: environment["landingPage"] || null
+  landingPage: environment["landingPage"] || null,
+  editPublishedData: environment["editPublishedData"] || true,
 };
 
 @NgModule({

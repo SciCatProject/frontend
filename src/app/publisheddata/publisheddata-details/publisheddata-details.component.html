@@ -102,10 +102,10 @@
         <button
         mat-raised-button
         color="primary"
-        *ngIf="editPublishedData"
-        (click)="onEditClick(publishedData.doi)"
+        *ngIf="appConfig.editPublishedData"
+        (click)="onEditClick()"
       >
-        Register
+        Edit
       </button>
         <button mat-stroked-button (click)="show = !show">
           {{ show ? "Hide MetaData" : "Show Metadata" }}
