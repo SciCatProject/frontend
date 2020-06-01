@@ -364,6 +364,43 @@ export class PublishedDataApi extends BaseLoopBackApi {
   }
 
   /**
+   * <em>
+         * (The remote method definition does not provide any description.)
+         * </em>
+   *
+   * @param {object} data Request data.
+   *
+   *  - `id` – `{string}` - 
+   *
+   *  - `data` – `{object}` - 
+   *
+   * @returns {object} An empty reference that will be
+   *   populated with the actual data once the response is returned
+   *   from the server.
+   *
+   * Data properties:
+   *
+   *  - `doi` – `{string}` - 
+   */
+  public resync(id: any, data: any, customHeaders?: Function): Observable<any> {
+    console.log("eeeeeeeeeeee resync");
+
+    let _method: string = "POST";
+    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
+    "/PublishedData/:id/resync";
+    let _routeParams: any = {
+      id: id
+    };
+    let _postBody: any = {};
+    let _urlParams: any = {};
+    if (typeof data !== 'undefined' && data !== null) _urlParams.data = data;
+    console.log("dddddddddddddd resync");
+
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    return result;
+  }
+
+  /**
    * Creates a new instance in datasets of this model.
    *
    * @param {any} id PublishedData id

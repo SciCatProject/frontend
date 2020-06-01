@@ -54,7 +54,13 @@
             </div>
           </div>
         </mat-header-cell>
-        <mat-cell *matCellDef="let data"> {{ data[column.name] }}</mat-cell>
+        <div *ngIf="column.dateFormat">
+          <mat-cell *matCellDef="let data">
+            {{ data[column.name] | date: column.dateFormat }}</mat-cell>
+        </div>
+        <div *ngIf="!column.dateFormat">
+          <mat-cell *matCellDef="let data"> {{ data[column.name] }}</mat-cell>
+        </div>
       </ng-container>
     </ng-template>
 

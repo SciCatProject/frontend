@@ -16,7 +16,7 @@ export const initialPublishedDataState: PublishedDataState = {
   totalCount: 0,
 
   filters: {
-    sortField: "publicationYear:desc",
+    sortField: "createdAt desc",
     skip: 0,
     limit: 25
   }

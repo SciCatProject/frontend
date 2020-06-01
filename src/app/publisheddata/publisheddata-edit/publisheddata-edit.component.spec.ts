@@ -120,7 +120,9 @@ describe("PublishComponent", () => {
         dataDescription: "testDataDescription",
         thumbnail: "testThumbnail",
         numberOfFiles: 1,
-        sizeOfArchive: 100
+        sizeOfArchive: 100,
+        relatedPublications: ["testpub"],
+        downloadLink: "link"
       };
 
       const isValid = component.formIsValid();

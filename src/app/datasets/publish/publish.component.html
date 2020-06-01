@@ -1,5 +1,5 @@
-<div fxLayout="row" fxLayoutGap="50px">
-  <div fxFlex="auto">
+<div fxLayout="row">
+  <div fxFlex="140">
     <mat-card>
       <p>You are about to publish {{ datasetCount }} datasets.</p>
 
@@ -17,7 +17,7 @@
         </mat-form-field>
 
         <mat-form-field>
-          <mat-chip-list required #chipList>
+          <mat-chip-list required #chipListCreators>
             <mat-chip
               *ngFor="let name of form.creators"
               (removed)="removeCreator(name)"
@@ -28,7 +28,7 @@
             <input
               matInput
               placeholder="Creators"
-              [matChipInputFor]="chipList"
+              [matChipInputFor]="chipListCreators"
               [matChipInputAddOnBlur]="true"
               [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
               (matChipInputTokenEnd)="addCreator($event)"
@@ -89,6 +89,37 @@
           ></textarea>
         </mat-form-field>
 
+        <mat-form-field>
+          <input
+            matInput
+            placeholder="download link"
+            autocomplete="off"
+            [(ngModel)]="form.downloadLink"
+            name="downloadLink"
+          />
+        </mat-form-field>
+
+
+        <mat-form-field>
+          <mat-chip-list #chipListRelatedPub>
+            <mat-chip
+              *ngFor="let relatedPublication of form.relatedPublications"
+              (removed)="removeRelatedPublication(relatedPublication)"
+            >
+              {{ relatedPublication }}
+              <mat-icon matChipRemove>cancel</mat-icon>
+            </mat-chip>
+            <input
+              matInput
+              placeholder="related publications"
+              [matChipInputFor]="chipListRelatedPub"
+              [matChipInputAddOnBlur]="true"
+              [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+              (matChipInputTokenEnd)="addRelatedPublication($event)"
+            />
+          </mat-chip-list>
+        </mat-form-field>
+
         <button
           id="publishButton"
           (click)="onPublish()"
@@ -101,7 +132,7 @@
       </form>
     </mat-card>
   </div>
-  <div fxFlex="auto">
+  <div fxFlex="30">
     <mat-card *ngIf="form.thumbnail">
       <img mat-card-image src="{{ form.thumbnail }}" />
     </mat-card>

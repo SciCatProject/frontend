@@ -1,5 +1,5 @@
-<div fxLayout="row" fxLayoutGap="50px">
-  <div fxFlex="auto">
+<div fxLayout="row">
+  <div fxFlex="140">
     <mat-card>
       <p>You are editing Published Data record.</p>
 
@@ -89,9 +89,39 @@
           ></textarea>
         </mat-form-field>
 
+        <mat-form-field>
+          <input
+            matInput
+            placeholder="download link"
+            autocomplete="off"
+            [(ngModel)]="form.downloadLink"
+            name="downloadLink"
+          />
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-chip-list #chipListRelatedPub>
+            <mat-chip
+              *ngFor="let relatedPublication of form.relatedPublications"
+              (removed)="removeRelatedPublication(relatedPublication)"
+            >
+              {{ relatedPublication }}
+              <mat-icon matChipRemove>cancel</mat-icon>
+            </mat-chip>
+            <input
+              matInput
+              placeholder="related publications"
+              [matChipInputFor]="chipListRelatedPub"
+              [matChipInputAddOnBlur]="true"
+              [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+              (matChipInputTokenEnd)="addRelatedPublication($event)"
+            />
+          </mat-chip-list>
+        </mat-form-field>
+
         <button
           id="publishButton"
-          (click)="onPublish()"
+          (click)="onUpdate()"
           mat-raised-button
           color="primary"
           [disabled]="!formIsValid()"

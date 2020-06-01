@@ -10,6 +10,7 @@ import {
   publishDatasetAction,
   fetchPublishedDataCompleteAction,
   fetchPublishedDataAction,
+  resyncPublishedDataAction,
 } from "state-management/actions/published-data.actions";
 import { APP_CONFIG } from "app-config.module";
 
@@ -29,14 +30,10 @@ import { getCurrentUserName } from "state-management/selectors/user.selectors";
 export class PublisheddataEditComponent implements OnInit, OnDestroy {
   public separatorKeysCodes: number[] = [ENTER, COMMA];
 
-  // private datasets$ = this.store.pipe(select(getDatasetsInBatch));
-  // private userName$ = this.store.pipe(select(getCurrentUserName));
   currentData$ = this.store.pipe(select(getCurrentPublishedData));
-  public datasetCount: number;
-  private countSubscription: Subscription;
-  today: number = Date.now();
-
+  current: PublishedData;
   routeSubscription: Subscription;
+  actionSubjectSubscription: Subscription;
 
   public form = {
     title: "",
@@ -52,10 +49,11 @@ export class PublisheddataEditComponent implements OnInit, OnDestroy {
     thumbnail: "",
     numberOfFiles: null,
     sizeOfArchive: null,
+    downloadLink: "",
+    relatedPublications: [],
   };
 
   public formData = null;
-  actionSubjectSubscription: Subscription;
 
   addCreator(event) {
     if ((event.value || "").trim()) {
@@ -72,6 +70,24 @@ export class PublisheddataEditComponent implements OnInit, OnDestroy {
 
     if (index >= 0) {
       this.form.creators.splice(index, 1);
+    }
+  }
+
+  addRelatedPublication(event) {
+    if ((event.value || "").trim()) {
+      this.form.relatedPublications.push(event.value);
+    }
+
+    if (event.input) {
+      event.input.value = "";
+    }
+  }
+
+  removeRelatedPublication(relatedPublication) {
+    const index = this.form.relatedPublications.indexOf(relatedPublication);
+
+    if (index >= 0) {
+      this.form.relatedPublications.splice(index, 1);
     }
   }
 
@@ -95,35 +111,35 @@ export class PublisheddataEditComponent implements OnInit, OnDestroy {
     private router: Router,
     private store: Store<any>,
     @Inject(APP_CONFIG) private appConfig,
-    private publishedDataApi: PublishedDataApi,
     private actionsSubj: ActionsSubject
   ) {}
 
   ngOnInit() {
-    this.routeSubscription = this.route.params
-      .pipe(pluck("id"))
-      .subscribe((id: string) => {
-        this.store.dispatch(fetchPublishedDataAction({ id }));
-      });
-
     this.currentData$.subscribe((data) => {
+      this.routeSubscription = this.route.params
+        .pipe(pluck("id"))
+        .subscribe((id: string) => {
+          if (!data) {
+            this.store.dispatch(fetchPublishedDataAction({ id }));
+          }
+        });
       if (data) {
-        console.log("DATA", data);
+        this.current = data;
         this.form.abstract = data.abstract;
+        this.form.creators = data.creator;
         this.form.title = data.title;
         this.form.description = data.dataDescription;
         this.form.resourceType = "raw";
         this.form.thumbnail = data.thumbnail;
+        this.form.publicationYear = data.publicationYear;
+        this.form.downloadLink = data.downloadLink;
+        this.form.relatedPublications = data.relatedPublications;
       }
     });
-  }
-  /*this.publishedDataApi
-      .formPopulate(this.form.pidArray[0])
-      .subscribe(result => {
-      });*/
 
-  /*this.actionSubjectSubscription = this.actionsSubj.subscribe(data => {
-      if (data.type === fetchPublishedDataCompleteAction.type) {
+    // navigate away after completion
+    this.actionSubjectSubscription = this.actionsSubj.subscribe(sub => {
+      if (sub.type === fetchPublishedDataCompleteAction.type) {
         this.store
           .pipe(select(getCurrentPublishedData))
           .subscribe(publishedData => {
@@ -132,16 +148,16 @@ export class PublisheddataEditComponent implements OnInit, OnDestroy {
           })
           .unsubscribe();
       }
-    });*/
-
-  ngOnDestroy() {
-    this.actionSubjectSubscription.unsubscribe();
-    this.countSubscription.unsubscribe();
-    this.routeSubscription.unsubscribe();
+    });
   }
 
-  public onPublish() {
-    const publishedData = new PublishedData();
+  ngOnDestroy() {
+    this.routeSubscription.unsubscribe();
+    this.actionSubjectSubscription.unsubscribe();
+  }
+
+  public onUpdate() {
+    const publishedData = this.current;
     publishedData.title = this.form.title;
     publishedData.abstract = this.form.abstract;
     publishedData.dataDescription = this.form.description;
@@ -150,15 +166,13 @@ export class PublisheddataEditComponent implements OnInit, OnDestroy {
     publishedData.creator = this.form.creators;
     publishedData.pidArray = this.form.pidArray;
     publishedData.publisher = this.form.publisher;
-    publishedData.publicationYear = parseInt(
-      formatDate(this.today, "yyyy", "en_GB"),
-      10
-    );
+    publishedData.publicationYear = this.form.publicationYear;
     publishedData.url = this.form.url;
-    publishedData.thumbnail = this.form.thumbnail;
-    publishedData.numberOfFiles = this.form.numberOfFiles;
-    publishedData.sizeOfArchive = this.form.sizeOfArchive;
+    publishedData.relatedPublications = this.form.relatedPublications;
+    publishedData.downloadLink = this.form.downloadLink;
 
-    this.store.dispatch(publishDatasetAction({ data: publishedData }));
+    this.store.dispatch(
+      resyncPublishedDataAction({ doi: publishedData.doi, data: publishedData })
+    );
   }
 }

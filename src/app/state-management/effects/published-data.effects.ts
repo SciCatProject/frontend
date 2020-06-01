@@ -9,14 +9,14 @@ import {
   mergeMap,
   map,
   catchError,
-  switchMap
+  switchMap,
 } from "rxjs/operators";
 import { of } from "rxjs";
 import { MessageType } from "state-management/models";
 import {
   showMessageAction,
   loadingAction,
-  loadingCompleteAction
+  loadingCompleteAction,
 } from "state-management/actions/user.actions";
 
 @Injectable()
@@ -32,11 +32,11 @@ export class PublishedDataEffects {
       ),
       withLatestFrom(this.queryParams$),
       map(([action, params]) => params),
-      mergeMap(params =>
+      mergeMap((params) =>
         this.publishedDataApi.find(params).pipe(
           mergeMap((publishedData: PublishedData[]) => [
             fromActions.fetchAllPublishedDataCompleteAction({ publishedData }),
-            fromActions.fetchCountAction()
+            fromActions.fetchCountAction(),
           ]),
           catchError(() => of(fromActions.fetchAllPublishedDataFailedAction()))
         )
@@ -92,7 +92,7 @@ export class PublishedDataEffects {
         const message = {
           type: MessageType.Success,
           content: "Publication Successful",
-          duration: 5000
+          duration: 5000,
         };
         return of(showMessageAction({ message }));
       })
@@ -106,7 +106,7 @@ export class PublishedDataEffects {
         const message = {
           type: MessageType.Error,
           content: "Publication Failed",
-          duration: 5000
+          duration: 5000,
         };
         return of(showMessageAction({ message }));
       })
@@ -128,19 +128,34 @@ export class PublishedDataEffects {
     )
   );
 
+  resyncPublishedData$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(fromActions.resyncPublishedDataAction),
+      switchMap(( {doi, data }) =>
+        this.publishedDataApi.resync(encodeURIComponent(doi), data).pipe(
+          mergeMap((publishedData) => [
+            fromActions.resyncPublishedDataCompleteAction(publishedData),
+            fromActions.fetchPublishedDataAction({ id: doi }),
+          ]),
+          catchError(() => of(fromActions.resyncPublishedDataFailedAction()))
+        )
+      )
+    )
+  );
+
   registerPublishedDataFailedMessage$ = createEffect(() =>
-  this.actions$.pipe(
-    ofType(fromActions.registerPublishedDataFailedAction),
-    switchMap(() => {
-      const message = {
-        type: MessageType.Error,
-        content: "Registration Failed",
-        duration: 5000
-      };
-      return of(showMessageAction({ message }));
-    })
-  )
-);
+    this.actions$.pipe(
+      ofType(fromActions.registerPublishedDataFailedAction),
+      switchMap(() => {
+        const message = {
+          type: MessageType.Error,
+          content: "Registration Failed",
+          duration: 5000,
+        };
+        return of(showMessageAction({ message }));
+      })
+    )
+  );
 
   loading$ = createEffect(() =>
     this.actions$.pipe(
@@ -150,7 +165,8 @@ export class PublishedDataEffects {
         fromActions.sortByColumnAction,
         fromActions.fetchPublishedDataAction,
         fromActions.publishDatasetAction,
-        fromActions.registerPublishedDataAction
+        fromActions.registerPublishedDataAction,
+        fromActions.resyncPublishedDataCompleteAction
       ),
       switchMap(() => of(loadingAction()))
     )
@@ -168,7 +184,8 @@ export class PublishedDataEffects {
         fromActions.publishDatasetCompleteAction,
         fromActions.publishDatasetFailedAction,
         fromActions.registerPublishedDataCompleteAction,
-        fromActions.registerPublishedDataFailedAction
+        fromActions.registerPublishedDataFailedAction,
+        fromActions.resyncPublishedDataCompleteAction,
       ),
       switchMap(() => of(loadingCompleteAction()))
     )
