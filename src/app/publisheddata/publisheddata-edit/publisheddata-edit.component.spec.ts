@@ -1,8 +1,8 @@
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 import { PublisheddataEditComponent } from "./publisheddata-edit.component";
 
-import { Router } from "@angular/router";
-import { MockRouter, MockStore, MockPublishedDataApi } from "shared/MockStubs";
+import { Router, ActivatedRoute } from "@angular/router";
+import { MockRouter, MockStore, MockPublishedDataApi, MockActivatedRoute } from "shared/MockStubs";
 import { Store, ActionsSubject } from "@ngrx/store";
 import { APP_CONFIG } from "app-config.module";
 import { PublishedDataApi } from "shared/sdk";
@@ -20,7 +20,7 @@ import { MatIconModule } from "@angular/material/icon";
 import { MatInputModule } from "@angular/material/input";
 import { MatSelectModule } from "@angular/material/select";
 
-describe("PublishComponent", () => {
+describe("PublisheddataEditComponent", () => {
   let component: PublisheddataEditComponent;
   let fixture: ComponentFixture<PublisheddataEditComponent>;
 
@@ -51,6 +51,7 @@ describe("PublishComponent", () => {
     TestBed.overrideComponent(PublisheddataEditComponent, {
       set: {
         providers: [
+          { provide: ActivatedRoute, useClass: MockActivatedRoute },
           { provide: ActionsSubject, useValue: of({}) },
           { provide: APP_CONFIG, useValue: { facility: "test" } },
           { provide: PublishedDataApi, useClass: MockPublishedDataApi },

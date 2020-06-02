@@ -6,7 +6,6 @@ import {
   EventEmitter,
 } from "@angular/core";
 import { SelectionModel } from "@angular/cdk/collections";
-import { DatePipe } from "@angular/common";
 import { MatCheckboxChange } from "@angular/material/checkbox";
 
 export interface TableColumn {
@@ -61,7 +60,7 @@ export class TableComponent implements OnInit {
   @Output() selectAll = new EventEmitter<MatCheckboxChange>();
   @Output() selectOne = new EventEmitter<CheckboxEvent>();
 
-  constructor(private datePipe: DatePipe) {}
+  constructor() {}
 
   onPageChange(event: PageChangeEvent) {
     this.pageChange.emit(event);

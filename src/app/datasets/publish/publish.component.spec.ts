@@ -1,8 +1,13 @@
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 import { PublishComponent } from "./publish.component";
 
-import { Router } from "@angular/router";
-import { MockRouter, MockStore, MockPublishedDataApi } from "shared/MockStubs";
+import { Router, ActivatedRoute } from "@angular/router";
+import {
+  MockRouter,
+  MockStore,
+  MockPublishedDataApi,
+  MockActivatedRoute,
+} from "shared/MockStubs";
 import { Store, ActionsSubject } from "@ngrx/store";
 import { APP_CONFIG } from "app-config.module";
 import { PublishedDataApi } from "shared/sdk";
@@ -37,27 +42,28 @@ describe("PublishComponent", () => {
         MatIconModule,
         MatInputModule,
         MatSelectModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
       ],
       providers: [
         provideMockStore({
           selectors: [
             { selector: getDatasetsInBatch, value: [] },
-            { selector: getCurrentPublishedData, value: {} }
-          ]
-        })
-      ]
+            { selector: getCurrentPublishedData, value: {} },
+          ],
+        }),
+      ],
     });
     TestBed.overrideComponent(PublishComponent, {
       set: {
         providers: [
+          { provide: ActivatedRoute, useClass: MockActivatedRoute },
           { provide: ActionsSubject, useValue: of({}) },
           { provide: APP_CONFIG, useValue: { facility: "test" } },
           { provide: PublishedDataApi, useClass: MockPublishedDataApi },
           { provide: Router, useClass: MockRouter },
-          { provide: Store, useClass: MockStore }
-        ]
-      }
+          { provide: Store, useClass: MockStore },
+        ],
+      },
     });
     TestBed.compileComponents();
   }));
@@ -76,9 +82,9 @@ describe("PublishComponent", () => {
     it("should push a creator to the creator property in the form", () => {
       const event = {
         input: {
-          value: ""
+          value: "",
         },
-        value: "testCreator"
+        value: "testCreator",
       };
       component.addCreator(event);
 
@@ -122,7 +128,7 @@ describe("PublishComponent", () => {
         numberOfFiles: 1,
         sizeOfArchive: 100,
         relatedPublications: ["testpub"],
-        downloadLink: "testlink"
+        downloadLink: "testlink",
       };
 
       const isValid = component.formIsValid();
