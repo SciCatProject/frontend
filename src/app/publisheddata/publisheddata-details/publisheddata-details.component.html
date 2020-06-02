@@ -50,6 +50,14 @@
             <th><mat-icon> link </mat-icon> URL</th>
             <td><span [innerHTML]="landingPageUrl | linky"></span></td>
           </tr>
+          <tr *ngIf="publishedData.downloadLink as value">
+            <th><mat-icon> storage </mat-icon> Download Link</th>
+            <td>{{ value }}</td>
+          </tr>
+          <tr *ngIf="publishedData.relatedPublications?.length > 0">
+            <th><mat-icon> school </mat-icon> Related Publications</th>
+            <td>{{ publishedData.relatedPublications }}</td>
+          </tr>
         </table>
       </mat-card>
 
