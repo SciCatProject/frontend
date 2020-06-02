@@ -2,25 +2,19 @@ import { Component, Inject, OnInit, OnDestroy } from "@angular/core";
 import { COMMA, ENTER } from "@angular/cdk/keycodes";
 
 import { select, Store, ActionsSubject } from "@ngrx/store";
-import { first, tap, pluck } from "rxjs/operators";
+import { pluck } from "rxjs/operators";
 
-import { getDatasetsInBatch } from "state-management/selectors/datasets.selectors";
-import { prefillBatchAction } from "state-management/actions/datasets.actions";
 import {
-  publishDatasetAction,
   fetchPublishedDataCompleteAction,
   fetchPublishedDataAction,
   resyncPublishedDataAction,
 } from "state-management/actions/published-data.actions";
 import { APP_CONFIG } from "app-config.module";
 
-import { PublishedDataApi } from "shared/sdk/services/custom";
 import { PublishedData } from "shared/sdk/models";
-import { formatDate } from "@angular/common";
 import { Router, ActivatedRoute } from "@angular/router";
 import { getCurrentPublishedData } from "state-management/selectors/published-data.selectors";
 import { Subscription } from "rxjs";
-import { getCurrentUserName } from "state-management/selectors/user.selectors";
 
 @Component({
   selector: "publisheddata-edit",
