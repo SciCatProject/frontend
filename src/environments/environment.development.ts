@@ -12,6 +12,7 @@ export const environment = {
   externalAuthEndpoint: "/auth/msad",
   editMetadataEnabled: true,
   editSampleEnabled: true,
+  editPublishedData: true,
   scienceSearchEnabled: true,
   disabledDatasetColumns: [],
   facility: "PSI",

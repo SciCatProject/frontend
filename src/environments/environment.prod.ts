@@ -20,6 +20,7 @@ export const environment = {
   disabledDatasetColumns: [],
   editMetadataEnabled: false,
   editSampleEnabled: true,
+  editPublishedData: true,
   facility: "PSI",
   fileColorEnabled: false,
   localColumns: [
