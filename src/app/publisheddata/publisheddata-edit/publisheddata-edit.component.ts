@@ -11,7 +11,6 @@ import {
 } from "state-management/actions/published-data.actions";
 import { APP_CONFIG } from "app-config.module";
 
-import { PublishedData } from "shared/sdk/models";
 import { Router, ActivatedRoute } from "@angular/router";
 import { getCurrentPublishedData } from "state-management/selectors/published-data.selectors";
 import { Subscription } from "rxjs";
