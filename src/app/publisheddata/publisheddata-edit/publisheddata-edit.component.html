@@ -19,7 +19,7 @@
         <mat-form-field>
           <mat-chip-list required #chipList>
             <mat-chip
-              *ngFor="let name of form.creators"
+              *ngFor="let name of form.creator"
               (removed)="removeCreator(name)"
             >
               {{ name }}
@@ -70,7 +70,7 @@
             matInput
             placeholder="Description"
             autocomplete="off"
-            [(ngModel)]="form.description"
+            [(ngModel)]="form.dataDescription"
             name="Description"
             rows="5"
           ></textarea>
@@ -120,7 +120,6 @@
         </mat-form-field>
 
         <button
-          id="publishButton"
           (click)="onUpdate()"
           mat-raised-button
           color="primary"

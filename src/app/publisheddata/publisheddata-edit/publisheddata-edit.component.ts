@@ -25,16 +25,15 @@ export class PublisheddataEditComponent implements OnInit, OnDestroy {
   public separatorKeysCodes: number[] = [ENTER, COMMA];
 
   currentData$ = this.store.pipe(select(getCurrentPublishedData));
-  current: PublishedData;
   routeSubscription: Subscription;
   actionSubjectSubscription: Subscription;
 
   public form = {
+    doi: "",
     title: "",
-    creators: [],
+    creator: [],
     publisher: this.appConfig.facility,
     resourceType: "",
-    description: "",
     abstract: "",
     pidArray: [],
     publicationYear: null,
@@ -47,11 +46,9 @@ export class PublisheddataEditComponent implements OnInit, OnDestroy {
     relatedPublications: [],
   };
 
-  public formData = null;
-
   addCreator(event) {
     if ((event.value || "").trim()) {
-      this.form.creators.push(event.value);
+      this.form.creator.push(event.value);
     }
 
     if (event.input) {
@@ -60,10 +57,10 @@ export class PublisheddataEditComponent implements OnInit, OnDestroy {
   }
 
   removeCreator(creator) {
-    const index = this.form.creators.indexOf(creator);
+    const index = this.form.creator.indexOf(creator);
 
     if (index >= 0) {
-      this.form.creators.splice(index, 1);
+      this.form.creator.splice(index, 1);
     }
   }
 
@@ -90,9 +87,9 @@ export class PublisheddataEditComponent implements OnInit, OnDestroy {
       return (
         this.form.title.length > 0 &&
         this.form.resourceType.length > 0 &&
-        this.form.creators.length > 0 &&
+        this.form.creator.length > 0 &&
         this.form.publisher.length > 0 &&
-        this.form.description.length > 0 &&
+        this.form.dataDescription.length > 0 &&
         this.form.abstract.length > 0
       );
     } else {
@@ -118,25 +115,25 @@ export class PublisheddataEditComponent implements OnInit, OnDestroy {
           }
         });
       if (data) {
-        this.current = data;
+        this.form.doi = data.doi;
         this.form.abstract = data.abstract;
-        this.form.creators = data.creator;
+        this.form.dataDescription = data.dataDescription;
+        this.form.creator = data.creator;
         this.form.title = data.title;
-        this.form.description = data.dataDescription;
-        this.form.resourceType = "raw";
+        this.form.resourceType = data.resourceType;
         this.form.thumbnail = data.thumbnail;
         this.form.publicationYear = data.publicationYear;
-        this.form.downloadLink = data.downloadLink;
-        this.form.relatedPublications = data.relatedPublications;
+        this.form.downloadLink = data.downloadLink || null;
+        this.form.relatedPublications = data.relatedPublications || [] ;
       }
     });
 
     // navigate away after completion
-    this.actionSubjectSubscription = this.actionsSubj.subscribe(sub => {
+    this.actionSubjectSubscription = this.actionsSubj.subscribe((sub) => {
       if (sub.type === fetchPublishedDataCompleteAction.type) {
         this.store
           .pipe(select(getCurrentPublishedData))
-          .subscribe(publishedData => {
+          .subscribe((publishedData) => {
             const doi = encodeURIComponent(publishedData.doi);
             this.router.navigateByUrl("/publishedDatasets/" + doi);
           })
@@ -151,22 +148,8 @@ export class PublisheddataEditComponent implements OnInit, OnDestroy {
   }
 
   public onUpdate() {
-    const publishedData = this.current;
-    publishedData.title = this.form.title;
-    publishedData.abstract = this.form.abstract;
-    publishedData.dataDescription = this.form.description;
-    publishedData.resourceType = this.form.resourceType;
-
-    publishedData.creator = this.form.creators;
-    publishedData.pidArray = this.form.pidArray;
-    publishedData.publisher = this.form.publisher;
-    publishedData.publicationYear = this.form.publicationYear;
-    publishedData.url = this.form.url;
-    publishedData.relatedPublications = this.form.relatedPublications;
-    publishedData.downloadLink = this.form.downloadLink;
-
     this.store.dispatch(
-      resyncPublishedDataAction({ doi: publishedData.doi, data: publishedData })
+      resyncPublishedDataAction({ doi: this.form.doi, data: this.form })
     );
   }
 }
