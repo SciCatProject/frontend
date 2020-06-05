@@ -25,6 +25,8 @@ export interface DerivedDatasetInterface {
   "sourceFolderHost"?: string;
   "size"?: number;
   "packedSize"?: number;
+  "numberOfFiles"?: number;
+  "numberOfFilesArchived"?: number;
   "creationTime": Date;
   "type": string;
   "validationStatus"?: string;
@@ -73,6 +75,8 @@ export class DerivedDataset implements DerivedDatasetInterface {
   "sourceFolderHost": string;
   "size": number;
   "packedSize": number;
+  "numberOfFiles": number;
+  "numberOfFilesArchived": number;
   "creationTime": Date;
   "type": string;
   "validationStatus": string;
@@ -194,6 +198,14 @@ export class DerivedDataset implements DerivedDatasetInterface {
         },
         "packedSize": {
           name: 'packedSize',
+          type: 'number'
+        },
+        "numberOfFiles": {
+          name: 'numberOfFiles',
+          type: 'number'
+        },
+        "numberOfFilesArchived": {
+          name: 'numberOfFilesArchived',
           type: 'number'
         },
         "creationTime": {

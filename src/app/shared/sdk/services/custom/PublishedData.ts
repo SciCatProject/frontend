@@ -383,19 +383,16 @@ export class PublishedDataApi extends BaseLoopBackApi {
    *  - `doi` – `{string}` - 
    */
   public resync(id: any, data: any, customHeaders?: Function): Observable<any> {
-    console.log("eeeeeeeeeeee resync");
-
     let _method: string = "POST";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
     "/PublishedData/:id/resync";
     let _routeParams: any = {
       id: id
     };
-    let _postBody: any = {};
+    let _postBody: any = {
+      data: data
+    };
     let _urlParams: any = {};
-    if (typeof data !== 'undefined' && data !== null) _urlParams.data = data;
-    console.log("dddddddddddddd resync");
-
     let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
     return result;
   }

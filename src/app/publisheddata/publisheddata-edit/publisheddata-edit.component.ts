@@ -15,6 +15,8 @@ import { Router, ActivatedRoute } from "@angular/router";
 import { getCurrentPublishedData } from "state-management/selectors/published-data.selectors";
 import { Subscription } from "rxjs";
 
+import { ReadFile } from "ngx-file-helpers";
+
 @Component({
   selector: "publisheddata-edit",
   templateUrl: "./publisheddata-edit.component.html",
@@ -44,6 +46,8 @@ export class PublisheddataEditComponent implements OnInit, OnDestroy {
     downloadLink: "",
     relatedPublications: [],
   };
+  pickedFile: any;
+  attachment: any;
 
   addCreator(event) {
     if ((event.value || "").trim()) {
@@ -123,7 +127,7 @@ export class PublisheddataEditComponent implements OnInit, OnDestroy {
         this.form.thumbnail = data.thumbnail;
         this.form.publicationYear = data.publicationYear;
         this.form.downloadLink = data.downloadLink || null;
-        this.form.relatedPublications = data.relatedPublications || [] ;
+        this.form.relatedPublications = data.relatedPublications || [];
       }
     });
 
@@ -150,5 +154,24 @@ export class PublisheddataEditComponent implements OnInit, OnDestroy {
     this.store.dispatch(
       resyncPublishedDataAction({ doi: this.form.doi, data: this.form })
     );
+  }
+
+  public onCanel() {
+    const doi = encodeURIComponent(this.form.doi);
+    this.router.navigateByUrl("/publishedDatasets/" + doi);
+  }
+
+  onFileUploaderFilePicked(file: ReadFile) {
+    this.pickedFile = file;
+  }
+
+  public onFileUploaderReadEnd(fileCount: number) {
+    if (fileCount > 0) {
+      this.form.thumbnail = this.pickedFile.content;
+    }
+  }
+
+  deleteAttachment(attachmentId: string) {
+    this.form.thumbnail = "";
   }
 }

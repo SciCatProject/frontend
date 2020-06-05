@@ -127,10 +127,25 @@
         >
           Update Published Data
         </button>
+        <button
+          (click)="onCanel()"
+          mat-raised-button
+          color="white"
+        >
+          Cancel
+        </button>
       </form>
     </mat-card>
   </div>
   <div fxFlex="30">
+    <div class="file-uploader">
+      <app-file-uploader
+        [attachments]="attachment"
+        (filePicked)="onFileUploaderFilePicked($event)"
+        (readEnd)="onFileUploaderReadEnd($event)"
+        (deleteAttachment)="deleteAttachment($event)"
+      ></app-file-uploader>
+    </div>
     <mat-card *ngIf="form.thumbnail">
       <img mat-card-image src="{{ form.thumbnail }}" />
     </mat-card>
