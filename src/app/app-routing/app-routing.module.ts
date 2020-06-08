@@ -27,6 +27,8 @@ import { AboutComponent } from "about/about/about.component";
 import { HelpComponent } from "help/help/help.component";
 import { PublisheddataDashboardComponent } from "publisheddata/publisheddata-dashboard/publisheddata-dashboard.component";
 import { PublisheddataDetailsComponent } from "publisheddata/publisheddata-details/publisheddata-details.component";
+import { PublisheddataEditComponent } from "publisheddata/publisheddata-edit/publisheddata-edit.component";
+
 
 // handles external URLs by lookup in the env config
 import { RedirectGuard } from "app-routing/redirect-guard";
@@ -144,6 +146,11 @@ export const routes: Routes = [
       {
         path: "publishedDatasets",
         component: PublisheddataDashboardComponent,
+        canActivate: [AuthCheck]
+      },
+      {
+        path: "publishedDatasets/:id/edit",
+        component: PublisheddataEditComponent,
         canActivate: [AuthCheck]
       },
       {

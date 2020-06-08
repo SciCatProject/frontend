@@ -25,6 +25,8 @@ export interface RawDatasetInterface {
   "sourceFolderHost"?: string;
   "size"?: number;
   "packedSize"?: number;
+  "numberOfFiles"?: number;
+  "numberOfFilesArchived"?: number;
   "creationTime": Date;
   "type": string;
   "validationStatus"?: string;
@@ -76,6 +78,8 @@ export class RawDataset implements RawDatasetInterface {
   "sourceFolderHost": string;
   "size": number;
   "packedSize": number;
+  "numberOfFiles": number;
+  "numberOfFilesArchived": number;
   "creationTime": Date;
   "type": string;
   "validationStatus": string;
@@ -197,6 +201,14 @@ export class RawDataset implements RawDatasetInterface {
         },
         "packedSize": {
           name: 'packedSize',
+          type: 'number'
+        },
+        "numberOfFiles": {
+          name: 'numberOfFiles',
+          type: 'number'
+        },
+        "numberOfFilesArchived": {
+          name: 'numberOfFilesArchived',
           type: 'number'
         },
         "creationTime": {

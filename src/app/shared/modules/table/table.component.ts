@@ -1,4 +1,10 @@
-import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  Input,
+  Output,
+  EventEmitter,
+} from "@angular/core";
 import { SelectionModel } from "@angular/cdk/collections";
 import { MatCheckboxChange } from "@angular/material/checkbox";
 
@@ -7,6 +13,7 @@ export interface TableColumn {
   icon: string;
   sort: boolean;
   inList: boolean;
+  dateFormat?: string;
 }
 
 export interface PageChangeEvent {

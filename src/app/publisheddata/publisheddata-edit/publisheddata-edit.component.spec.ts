@@ -1,5 +1,5 @@
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
-import { PublishComponent } from "./publish.component";
+import { PublisheddataEditComponent } from "./publisheddata-edit.component";
 
 import { Router, ActivatedRoute } from "@angular/router";
 import {
@@ -25,14 +25,14 @@ import { MatIconModule } from "@angular/material/icon";
 import { MatInputModule } from "@angular/material/input";
 import { MatSelectModule } from "@angular/material/select";
 
-describe("PublishComponent", () => {
-  let component: PublishComponent;
-  let fixture: ComponentFixture<PublishComponent>;
+describe("PublisheddataEditComponent", () => {
+  let component: PublisheddataEditComponent;
+  let fixture: ComponentFixture<PublisheddataEditComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
-      declarations: [PublishComponent],
+      declarations: [PublisheddataEditComponent],
       imports: [
         BrowserAnimationsModule,
         FormsModule,
@@ -53,7 +53,7 @@ describe("PublishComponent", () => {
         }),
       ],
     });
-    TestBed.overrideComponent(PublishComponent, {
+    TestBed.overrideComponent(PublisheddataEditComponent, {
       set: {
         providers: [
           { provide: ActivatedRoute, useClass: MockActivatedRoute },
@@ -69,7 +69,7 @@ describe("PublishComponent", () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(PublishComponent);
+    fixture = TestBed.createComponent(PublisheddataEditComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -88,18 +88,18 @@ describe("PublishComponent", () => {
       };
       component.addCreator(event);
 
-      expect(component.form.creators).toContain(event.value);
+      expect(component.form.creator).toContain(event.value);
     });
   });
 
   describe("#removeCreator()", () => {
     it("should remove a creator from the creator property in the form", () => {
       const creator = "testCreator";
-      component.form.creators = [creator];
+      component.form.creator = [creator];
 
       component.removeCreator(creator);
 
-      expect(component.form.creators).not.toContain(creator);
+      expect(component.form.creator).not.toContain(creator);
     });
   });
 
@@ -114,21 +114,21 @@ describe("PublishComponent", () => {
 
     it("should return true if form has no undefined properties and their lengths > 0", () => {
       component.form = {
+        doi: "abc123",
         title: "testTitle",
-        creators: ["testCreator"],
+        creator: ["testCreator"],
         publisher: "testPublisher",
         resourceType: "testType",
-        description: "testDescription",
         abstract: "testAbstract",
-        pidArray: ["testPid"],
         publicationYear: 2019,
         url: "testUrl",
         dataDescription: "testDataDescription",
         thumbnail: "testThumbnail",
-        numberOfFiles: 1,
-        sizeOfArchive: 100,
         relatedPublications: ["testpub"],
-        downloadLink: "testlink",
+        downloadLink: "link",
+        pidArray: ["abc123"],
+        numberOfFiles: null,
+        sizeOfArchive: null,
       };
 
       const isValid = component.formIsValid();

@@ -19,6 +19,7 @@ export const environment = {
   datasetReduceEnabled: true,
   editMetadataEnabled: true,
   editSampleEnabled: true,
+  editPublishedData: true,
   facility: "ESS",
   fileColorEnabled: true,
   localColumns: [

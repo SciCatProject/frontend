@@ -7,17 +7,17 @@ import {
   getPublishedDataCount,
   getPage,
   getPublishedDataPerPage,
-  getFilters
+  getFilters,
 } from "state-management/selectors/published-data.selectors";
 import {
   fetchAllPublishedDataAction,
   changePageAction,
-  sortByColumnAction
+  sortByColumnAction,
 } from "state-management/actions/published-data.actions";
 import {
   PageChangeEvent,
   TableColumn,
-  SortChangeEvent
+  SortChangeEvent,
 } from "shared/modules/table/table.component";
 import { Subscription } from "rxjs";
 import * as rison from "rison";
@@ -25,7 +25,7 @@ import * as rison from "rison";
 @Component({
   selector: "app-publisheddata-dashboard",
   templateUrl: "./publisheddata-dashboard.component.html",
-  styleUrls: ["./publisheddata-dashboard.component.scss"]
+  styleUrls: ["./publisheddata-dashboard.component.scss"],
 })
 export class PublisheddataDashboardComponent implements OnInit, OnDestroy {
   public publishedData$ = this.store.pipe(select(getAllPublishedData));
@@ -37,8 +37,9 @@ export class PublisheddataDashboardComponent implements OnInit, OnDestroy {
     { name: "doi", icon: "fingerprint", sort: true, inList: false },
     { name: "title", icon: "description", sort: true, inList: true },
     { name: "creator", icon: "face", sort: true, inList: true },
-    { name: "publicationYear", icon: "date_range", sort: true, inList: true },
-    { name: "createdBy", icon: "account_circle", sort: true, inList: true }
+    // { name: "publicationYear", icon: "date_range", sort: true, inList: true },
+    { name: "createdBy", icon: "account_circle", sort: true, inList: true },
+    { name: "createdAt", icon: "date_range", sort: true, inList: true, dateFormat: "yyyy-MM-dd HH:mm" },
   ];
   paginate = true;
 
@@ -67,9 +68,9 @@ export class PublisheddataDashboardComponent implements OnInit, OnDestroy {
 
     this.filtersSubscription = this.store
       .pipe(select(getFilters))
-      .subscribe(filters => {
+      .subscribe((filters) => {
         this.router.navigate(["/publishedDatasets"], {
-          queryParams: { args: rison.encode(filters) }
+          queryParams: { args: rison.encode(filters) },
         });
       });
   }

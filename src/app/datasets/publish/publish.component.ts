@@ -47,7 +47,9 @@ export class PublishComponent implements OnInit, OnDestroy {
     dataDescription: "",
     thumbnail: "",
     numberOfFiles: null,
-    sizeOfArchive: null
+    sizeOfArchive: null,
+    downloadLink: "",
+    relatedPublications: [],
   };
 
   public formData = null;
@@ -70,6 +72,25 @@ export class PublishComponent implements OnInit, OnDestroy {
       this.form.creators.splice(index, 1);
     }
   }
+
+  addRelatedPublication(event) {
+    if ((event.value || "").trim()) {
+      this.form.relatedPublications.push(event.value);
+    }
+
+    if (event.input) {
+      event.input.value = "";
+    }
+  }
+
+  removeRelatedPublication(relatedPublication) {
+    const index = this.form.relatedPublications.indexOf(relatedPublication);
+
+    if (index >= 0) {
+      this.form.relatedPublications.splice(index, 1);
+    }
+  }
+
 
   public formIsValid() {
     if (!Object.values(this.form).includes(undefined)) {
@@ -165,6 +186,8 @@ export class PublishComponent implements OnInit, OnDestroy {
     publishedData.thumbnail = this.form.thumbnail;
     publishedData.numberOfFiles = this.form.numberOfFiles;
     publishedData.sizeOfArchive = this.form.sizeOfArchive;
+    publishedData.downloadLink = this.form.downloadLink;
+    publishedData.relatedPublications = this.form.relatedPublications;
 
     this.store.dispatch(publishDatasetAction({ data: publishedData }));
   }

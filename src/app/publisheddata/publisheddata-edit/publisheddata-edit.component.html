@@ -1,7 +1,7 @@
 <div fxLayout="row">
   <div fxFlex="140">
     <mat-card>
-      <p>You are about to publish {{ datasetCount }} datasets.</p>
+      <p>You are editing Published Data record.</p>
 
       <form>
         <mat-form-field>
@@ -17,9 +17,9 @@
         </mat-form-field>
 
         <mat-form-field>
-          <mat-chip-list required #chipListCreators>
+          <mat-chip-list required #chipList>
             <mat-chip
-              *ngFor="let name of form.creators"
+              *ngFor="let name of form.creator"
               (removed)="removeCreator(name)"
             >
               {{ name }}
@@ -28,7 +28,7 @@
             <input
               matInput
               placeholder="Creators"
-              [matChipInputFor]="chipListCreators"
+              [matChipInputFor]="chipList"
               [matChipInputAddOnBlur]="true"
               [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
               (matChipInputTokenEnd)="addCreator($event)"
@@ -70,7 +70,7 @@
             matInput
             placeholder="Description"
             autocomplete="off"
-            [(ngModel)]="form.description"
+            [(ngModel)]="form.dataDescription"
             name="Description"
             rows="5"
           ></textarea>
@@ -99,7 +99,6 @@
           />
         </mat-form-field>
 
-
         <mat-form-field>
           <mat-chip-list #chipListRelatedPub>
             <mat-chip
@@ -121,18 +120,32 @@
         </mat-form-field>
 
         <button
-          id="publishButton"
-          (click)="onPublish()"
+          (click)="onUpdate()"
           mat-raised-button
           color="primary"
           [disabled]="!formIsValid()"
         >
-          Publish
+          Update Published Data
+        </button>
+        <button
+          (click)="onCanel()"
+          mat-raised-button
+          color="white"
+        >
+          Cancel
         </button>
       </form>
     </mat-card>
   </div>
   <div fxFlex="30">
+    <div class="file-uploader">
+      <app-file-uploader
+        [attachments]="attachment"
+        (filePicked)="onFileUploaderFilePicked($event)"
+        (readEnd)="onFileUploaderReadEnd($event)"
+        (deleteAttachment)="deleteAttachment($event)"
+      ></app-file-uploader>
+    </div>
     <mat-card *ngIf="form.thumbnail">
       <img mat-card-image src="{{ form.thumbnail }}" />
     </mat-card>
