@@ -45,7 +45,8 @@ describe("Datasets", () => {
       cy.wait(5000);
       cy.get("[data-cy=managerChipList]")
         .children()
-        .should("contain.text", "cypress@manager.com");
+        .invoke("text")
+        .should("contain", "cypress@manager.com");
       cy.wait(1000);
       cy.get("[data-cy=saveButton]").click({ force: true });
     });
