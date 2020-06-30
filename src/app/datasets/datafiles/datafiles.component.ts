@@ -9,19 +9,23 @@ import {
   OnDestroy,
   OnChanges,
 } from "@angular/core";
-import { Subscription } from "rxjs";
+import { Subscription, Observable } from "rxjs";
 import { Store, select } from "@ngrx/store";
-import {
-  getCurrentOrigDatablocks,
-} from "state-management/selectors/datasets.selectors";
+import { getCurrentOrigDatablocks, getCurrentDataset } from "state-management/selectors/datasets.selectors";
 import {
   TableColumn,
   PageChangeEvent,
+  CheckboxEvent,
 } from "shared/modules/table/table.component";
 import { getIsLoading } from "state-management/selectors/user.selectors";
 import { ActivatedRoute } from "@angular/router";
 import { pluck } from "rxjs/operators";
 import { fetchDatasetAction } from "state-management/actions/datasets.actions";
+import {
+  selectPolicyAction,
+  deselectPolicyAction,
+} from "state-management/actions/policies.actions";
+import { UserApi } from "shared/sdk";
 
 @Component({
   selector: "datafiles",
@@ -30,11 +34,8 @@ import { fetchDatasetAction } from "state-management/actions/datasets.actions";
 })
 export class DatafilesComponent implements OnInit, OnDestroy, OnChanges {
   datablocks$ = this.store.pipe(select(getCurrentOrigDatablocks));
+  dataset$ = this.store.pipe(select(getCurrentDataset));
   loading$ = this.store.pipe(select(getIsLoading));
-  // currentDataset$ = this.store.pipe(select(getCurrentDataset));
-
-  // jwt: any;
-  @Input() trash: boolean;
 
   tooLargeFile: boolean;
   totalFileSize = 0;
@@ -56,6 +57,8 @@ export class DatafilesComponent implements OnInit, OnDestroy, OnChanges {
   multipleDownloadAction: string = this.appConfig.multipleDownloadAction;
   maxFileSize: number = this.appConfig.maxDirectDownloadSize;
   sftpHost: string = this.appConfig.sftpHost;
+  jwt$: Observable<any>;
+  jwt: any;
 
   tableColumns: TableColumn[] = [
     {
@@ -80,12 +83,13 @@ export class DatafilesComponent implements OnInit, OnDestroy, OnChanges {
 
     private store: Store<Dataset>,
     private cdRef: ChangeDetectorRef,
+    private userApi: UserApi,
+
     @Inject(APP_CONFIG) public appConfig: AppConfig
   ) {}
 
-  getDatafiles(datablocks: Array<OrigDatablock>) {}
 
-   hasTooLargeFiles(files: any[]) {
+  hasTooLargeFiles(files: any[]) {
     if (this.maxFileSize) {
       const largeFiles = files.filter((file) => {
         return file.size > this.maxFileSize;
@@ -108,7 +112,13 @@ export class DatafilesComponent implements OnInit, OnDestroy, OnChanges {
 
   onRowClick(event: Event) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.jwt$ = this.userApi.jwt();
+
+    this.jwt$.subscribe((jwt) => {
+      this.jwt = jwt;
+    });
+  }
 
   ngAfterViewInit() {
     let myId: any;
@@ -119,17 +129,18 @@ export class DatafilesComponent implements OnInit, OnDestroy, OnChanges {
 
     this.subscriptions.push(
       this.datablocks$.subscribe((datablocks) => {
-          datablocks.forEach((block) => {
-            if (block.datasetId === myId) {
-              block.dataFileList.map((file) => {
-                this.totalFileSize += file.size;
-                this.files = this.files.concat(file);
-                this.count = this.files.length;
-                this.tableData = this.files.slice(0, this.pageSize);
-              });
-             }
-          });
-           this.tooLargeFile = this.hasTooLargeFiles(this.files);
+        datablocks.forEach((block) => {
+          if (block.datasetId === myId) {
+            block.dataFileList.map((file) => {
+              this.totalFileSize += file.size;
+              file.selected = false;
+              this.files = this.files.concat(file);
+              this.count = this.files.length;
+              this.tableData = this.files.slice(0, this.pageSize);
+            });
+          }
+        });
+        this.tooLargeFile = this.hasTooLargeFiles(this.files);
       })
     );
   }
@@ -138,10 +149,57 @@ export class DatafilesComponent implements OnInit, OnDestroy, OnChanges {
     this.cdRef.detectChanges();
   }
 
-  ngOnChanges(changes) {
-  }
+  ngOnChanges(changes) {}
 
   ngOnDestroy() {
     this.subscriptions.forEach((subscription) => subscription.unsubscribe());
+  }
+
+  getAreAllSelected() {
+    return this.tableData.reduce((accum, curr) => accum && curr.selected, true);
+  }
+
+  getIsNoneSelected() {
+    return this.tableData.reduce(
+      (accum, curr) => accum && !curr.selected,
+      true
+    );
+  }
+
+  getSelectedFiles() {
+    if (!this.tableData) {
+      return [];
+    }
+    return this.tableData
+      .filter((file) => file.selected)
+      .map((file) => file.path);
+  }
+
+  updateSelectionStatus() {
+    this.areAllSelected = this.getAreAllSelected();
+    this.isNoneSelected = this.getIsNoneSelected();
+  }
+
+  onSelectOne(checkboxEvent: CheckboxEvent) {
+    const { event, row } = checkboxEvent;
+    row.selected = event.checked;
+    if (event.checked) {
+      this.selectedFileSize += row.size;
+    } else {
+      this.selectedFileSize -= row.size;
+    }
+    this.updateSelectionStatus();
+  }
+
+  onSelectAll(event) {
+    for (const file of this.tableData) {
+      file.selected = event.checked;
+      if (event.checked) {
+        this.selectedFileSize += file.size;
+      } else {
+        this.selectedFileSize = 0;
+      }
+    }
+    this.updateSelectionStatus();
   }
 }
