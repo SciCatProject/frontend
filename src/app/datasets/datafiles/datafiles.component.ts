@@ -42,6 +42,7 @@ export class DatafilesComponent implements OnInit, OnDestroy, OnChanges {
   subscriptions: Subscription[] = [];
 
   files: Array<any> = [];
+  sourcefolder: string;
 
   count = 0;
   pageSize = 25;
@@ -121,6 +122,10 @@ export class DatafilesComponent implements OnInit, OnDestroy, OnChanges {
       myId = id;
       this.store.dispatch(fetchDatasetAction({ pid: id }));
     });
+
+    this.subscriptions.push(this.dataset$.subscribe((dataset) => {
+      this.sourcefolder = dataset.sourceFolder;
+    }));
 
     this.subscriptions.push(
       this.datablocks$.subscribe((datablocks) => {
