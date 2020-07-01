@@ -72,6 +72,7 @@ describe("DatafilesComponent", () => {
       },
     ];
     component.tableData = component.files;
+    component.sourcefolder = "/test/";
     fixture.detectChanges();
   });
 
