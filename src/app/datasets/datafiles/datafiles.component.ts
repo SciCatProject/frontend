@@ -1,8 +1,7 @@
 import { APP_CONFIG, AppConfig } from "app-config.module";
-import { OrigDatablock, Dataset } from "shared/sdk/models";
+import { Dataset } from "shared/sdk/models";
 import {
   Component,
-  Input,
   OnInit,
   Inject,
   ChangeDetectorRef,
@@ -21,10 +20,6 @@ import { getIsLoading } from "state-management/selectors/user.selectors";
 import { ActivatedRoute } from "@angular/router";
 import { pluck } from "rxjs/operators";
 import { fetchDatasetAction } from "state-management/actions/datasets.actions";
-import {
-  selectPolicyAction,
-  deselectPolicyAction,
-} from "state-management/actions/policies.actions";
 import { UserApi } from "shared/sdk";
 
 @Component({
