@@ -29,7 +29,7 @@
     style="display: inline;"
   >
     <input type="hidden" name="jwt" [value]="jwt?.jwt" />
-    <!--input type="hidden" name="base" [value]="dataset.sourceFolder" /-->
+    <input type="hidden" name="base" [value]="(dataset$ | async).sourceFolder" />
     <input type="hidden" [name]="'files'" [value]="files" />
     <button
       mat-raised-button
@@ -50,7 +50,7 @@
     style="display: inline;"
   >
     <input type="hidden" name="jwt" [value]="jwt?.jwt" />
-    <!--input type="hidden" name="base" [value]="dataset.sourceFolder" -->
+    <input type="hidden" name="base" [value]="(dataset$ | async).sourceFolder" >
     <input
       *ngFor="let file of getSelectedFiles(); index as i"
       type="hidden"
