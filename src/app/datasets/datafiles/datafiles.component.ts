@@ -117,7 +117,7 @@ export class DatafilesComponent implements OnInit, OnDestroy, AfterViewInit, Aft
   }
 
   ngAfterViewInit() {
-    let myId: any;
+    let datasetPid: string;
     this.route.params.pipe(pluck("id")).subscribe((id: string) => {
       myId = id;
       this.store.dispatch(fetchDatasetAction({ pid: id }));
