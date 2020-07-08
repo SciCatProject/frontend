@@ -109,11 +109,11 @@ export class DatafilesComponent implements OnInit, OnDestroy, AfterViewInit, Aft
   onRowClick(event: Event) {}
 
   ngOnInit() {
-    this.jwt$ = this.userApi.jwt();
-
-    this.jwt$.subscribe((jwt) => {
-      this.jwt = jwt;
-    });
+    this.subscriptions.push(
+      this.userApi.jwt().subscribe((jwt) => {
+        this.jwt = jwt;
+      })
+    )
   }
 
   ngAfterViewInit() {
