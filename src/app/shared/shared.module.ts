@@ -10,6 +10,7 @@ import { TableModule } from "./modules/table/table.module";
 import { SearchBarModule } from "./modules/search-bar/search-bar.module";
 import { ScientificMetadataModule } from "./modules/scientific-metadata/scientific-metadata.module";
 import { UnitsService } from "./services/units.service";
+import { FilePathTruncate } from "./pipes/file-path-truncate.pipe";
 
 @NgModule({
   imports: [
@@ -25,7 +26,7 @@ import { UnitsService } from "./services/units.service";
     TableModule
   ],
   declarations: [],
-  providers: [ConfigService, UnitsService],
+  providers: [ConfigService, UnitsService, FilePathTruncate],
   exports: [
     BreadcrumbModule,
     FileUploaderModule,

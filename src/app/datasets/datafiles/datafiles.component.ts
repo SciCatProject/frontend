@@ -1,40 +1,43 @@
 import { APP_CONFIG, AppConfig } from "app-config.module";
-import { OrigDatablock, Dataset } from "shared/sdk/models";
+import { Dataset } from "shared/sdk/models";
 import {
   Component,
-  Input,
   OnInit,
   Inject,
   ChangeDetectorRef,
   OnDestroy,
-  OnChanges,
+  AfterViewInit,
+  AfterViewChecked,
 } from "@angular/core";
 import { Subscription } from "rxjs";
 import { Store, select } from "@ngrx/store";
 import {
   getCurrentOrigDatablocks,
+  getCurrentDataset,
 } from "state-management/selectors/datasets.selectors";
 import {
   TableColumn,
   PageChangeEvent,
+  CheckboxEvent,
 } from "shared/modules/table/table.component";
 import { getIsLoading } from "state-management/selectors/user.selectors";
 import { ActivatedRoute } from "@angular/router";
 import { pluck } from "rxjs/operators";
 import { fetchDatasetAction } from "state-management/actions/datasets.actions";
+import { UserApi } from "shared/sdk";
+import { FileSizePipe } from "shared/pipes/filesize.pipe";
+import { FilePathTruncate } from "shared/pipes/file-path-truncate.pipe";
 
 @Component({
   selector: "datafiles",
   templateUrl: "./datafiles.component.html",
   styleUrls: ["./datafiles.component.scss"],
 })
-export class DatafilesComponent implements OnInit, OnDestroy, OnChanges {
+export class DatafilesComponent
+  implements OnInit, OnDestroy, AfterViewInit, AfterViewChecked {
   datablocks$ = this.store.pipe(select(getCurrentOrigDatablocks));
+  dataset$ = this.store.pipe(select(getCurrentDataset));
   loading$ = this.store.pipe(select(getIsLoading));
-  // currentDataset$ = this.store.pipe(select(getCurrentDataset));
-
-  // jwt: any;
-  @Input() trash: boolean;
 
   tooLargeFile: boolean;
   totalFileSize = 0;
@@ -46,6 +49,7 @@ export class DatafilesComponent implements OnInit, OnDestroy, OnChanges {
   subscriptions: Subscription[] = [];
 
   files: Array<any> = [];
+  sourcefolder: string;
 
   count = 0;
   pageSize = 25;
@@ -56,36 +60,92 @@ export class DatafilesComponent implements OnInit, OnDestroy, OnChanges {
   multipleDownloadAction: string = this.appConfig.multipleDownloadAction;
   maxFileSize: number = this.appConfig.maxDirectDownloadSize;
   sftpHost: string = this.appConfig.sftpHost;
+  jwt: any;
 
   tableColumns: TableColumn[] = [
     {
       name: "path",
-      icon: "brightness_high",
+      icon: "folder",
       sort: false,
       inList: true,
+      pipe: FilePathTruncate,
     },
-    { name: "size", icon: "bubble_chart", sort: false, inList: true },
+    {
+      name: "size",
+      icon: "save",
+      sort: false,
+      inList: true,
+      pipe: FileSizePipe,
+    },
     {
       name: "time",
-      icon: "mail",
+      icon: "access_time",
       sort: false,
       inList: true,
+      dateFormat: "yyyy-MM-dd HH:mm",
     },
   ];
-
   tableData: any;
-  // paginator: MatPaginator;
+
+  getAreAllSelected() {
+    return this.tableData.reduce((accum, curr) => accum && curr.selected, true);
+  }
+
+  getIsNoneSelected() {
+    return this.tableData.reduce(
+      (accum, curr) => accum && !curr.selected,
+      true
+    );
+  }
+
+  getSelectedFiles() {
+    if (!this.tableData) {
+      return [];
+    }
+    return this.tableData
+      .filter((file) => file.selected)
+      .map((file) => file.path);
+  }
+
+  updateSelectionStatus() {
+    this.areAllSelected = this.getAreAllSelected();
+    this.isNoneSelected = this.getIsNoneSelected();
+  }
+
+  onSelectOne(checkboxEvent: CheckboxEvent) {
+    const { event, row } = checkboxEvent;
+    row.selected = event.checked;
+    if (event.checked) {
+      this.selectedFileSize += row.size;
+    } else {
+      this.selectedFileSize -= row.size;
+    }
+    this.updateSelectionStatus();
+  }
+
+  onSelectAll(event) {
+    for (const file of this.tableData) {
+      file.selected = event.checked;
+      if (event.checked) {
+        this.selectedFileSize += file.size;
+      } else {
+        this.selectedFileSize = 0;
+      }
+    }
+    this.updateSelectionStatus();
+  }
+
   constructor(
     private route: ActivatedRoute,
 
     private store: Store<Dataset>,
     private cdRef: ChangeDetectorRef,
+    private userApi: UserApi,
+
     @Inject(APP_CONFIG) public appConfig: AppConfig
   ) {}
 
-  getDatafiles(datablocks: Array<OrigDatablock>) {}
-
-   hasTooLargeFiles(files: any[]) {
+  hasTooLargeFiles(files: any[]) {
     if (this.maxFileSize) {
       const largeFiles = files.filter((file) => {
         return file.size > this.maxFileSize;
@@ -108,37 +168,47 @@ export class DatafilesComponent implements OnInit, OnDestroy, OnChanges {
 
   onRowClick(event: Event) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.subscriptions.push(
+      this.userApi.jwt().subscribe((jwt) => {
+        this.jwt = jwt;
+      })
+    );
+  }
 
   ngAfterViewInit() {
-    let myId: any;
+    let datasetPid: string;
     this.route.params.pipe(pluck("id")).subscribe((id: string) => {
-      myId = id;
+      datasetPid = id;
       this.store.dispatch(fetchDatasetAction({ pid: id }));
     });
 
     this.subscriptions.push(
+      this.dataset$.subscribe((dataset) => {
+        this.sourcefolder = dataset.sourceFolder;
+      })
+    );
+
+    this.subscriptions.push(
       this.datablocks$.subscribe((datablocks) => {
-          datablocks.forEach((block) => {
-            if (block.datasetId === myId) {
-              block.dataFileList.map((file) => {
-                this.totalFileSize += file.size;
-                this.files = this.files.concat(file);
-                this.count = this.files.length;
-                this.tableData = this.files.slice(0, this.pageSize);
-              });
-             }
-          });
-           this.tooLargeFile = this.hasTooLargeFiles(this.files);
+        datablocks.forEach((block) => {
+          if (block.datasetId === datasetPid) {
+            block.dataFileList.map((file) => {
+              this.totalFileSize += file.size;
+              file.selected = false;
+              this.files = this.files.concat(file);
+              this.count = this.files.length;
+              this.tableData = this.files.slice(0, this.pageSize);
+            });
+          }
+        });
+        this.tooLargeFile = this.hasTooLargeFiles(this.files);
       })
     );
   }
 
   ngAfterViewChecked() {
     this.cdRef.detectChanges();
-  }
-
-  ngOnChanges(changes) {
   }
 
   ngOnDestroy() {

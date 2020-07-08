@@ -58,7 +58,11 @@
           <mat-cell *matCellDef="let data">
             {{ data[column.name] | date: column.dateFormat }}</mat-cell>
         </div>
-        <div *ngIf="!column.dateFormat">
+        <div *ngIf="!column.dateFormat && column.pipe">
+          <mat-cell *matCellDef="let data">
+            {{ data[column.name] | dynamicPipe: column.pipe: [] }}</mat-cell>
+        </div>
+        <div *ngIf="!column.dateFormat && !column.pipe">
           <mat-cell *matCellDef="let data"> {{ data[column.name] }}</mat-cell>
         </div>
       </ng-container>

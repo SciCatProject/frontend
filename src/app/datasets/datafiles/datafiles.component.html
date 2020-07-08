@@ -1,3 +1,84 @@
+<ng-template [ngIf]="maxFileSize && tooLargeFile">
+  <span>
+    <mat-icon class="warning-icon"> warning </mat-icon>
+    One or more files are too large to be downloaded directly.
+    {{
+      sftpHost
+        ? "These files are available via sftp host " +
+          sftpHost +
+          " in directory " +
+          sourcefolder +
+          "."
+        : ""
+    }}
+  </span>
+</ng-template>
+
+<div class="datafiles-header">
+  <span [ngPlural]="count" class="nbr-of-files">
+    <ng-template ngPluralCase="=0">No datafiles.</ng-template>
+    <ng-template ngPluralCase="=1">1 datafile.</ng-template>
+    <ng-template ngPluralCase="other">{{ count }} datafiles.</ng-template>
+  </span>
+
+  <form
+    ngNoForm
+    method="POST"
+    [action]="multipleDownloadAction"
+    target="_blank"
+    style="display: inline;"
+  >
+    <input type="hidden" name="jwt" [value]="jwt?.jwt" />
+    <input type="hidden" name="base" [value]="sourcefolder" />
+    <button
+      mat-raised-button
+      class="download-button"
+      type="submit"
+      color="accent"
+      [disabled]="totalFileSize > maxFileSize"
+    >
+      Download All
+    </button>
+  </form>
+
+  <form
+    ngNoForm
+    method="POST"
+    [action]="multipleDownloadAction"
+    target="_blank"
+    style="display: inline;"
+  >
+    <input type="hidden" name="jwt" [value]="jwt?.jwt" />
+    <input type="hidden" name="base" [value]="sourcefolder" >
+    <input
+      *ngFor="let file of getSelectedFiles(); index as i"
+      type="hidden"
+      [name]="'files[' + i + ']'"
+      [value]="file"
+    />
+    <button
+      mat-raised-button
+      class="download-button"
+      type="submit"
+      color="accent"
+      [disabled]="
+        isNoneSelected || (maxFileSize && selectedFileSize > maxFileSize)
+      "
+    >
+      Download Selected
+    </button>
+  </form>
+  <div style="clear: both;"></div>
+</div>
+<ng-template [ngIf]="tableData">
+  <div fxLayout="row" fxLayoutAlign="space-evenly end">
+    <div fxFlex="auto" style="margin-bottom: 0.5em;">
+      Selected: {{ selectedFileSize | filesize
+      }}{{ maxFileSize ? " / " + (maxFileSize | filesize) : "" }}
+    </div>
+  </div>
+</ng-template>
+
 <app-table
   [data]="tableData"
   [columns]="tableColumns"
@@ -6,4 +87,7 @@
   [dataCount]="count"
   [dataPerPage]="pageSize"
   (pageChange)="onPageChange($event)"
+  [select]="fileDownloadEnabled"
+  (selectAll)="onSelectAll($event)"
+  (selectOne)="onSelectOne($event)"
 ></app-table>
