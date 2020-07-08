@@ -27,7 +27,7 @@ import { UserApi } from "shared/sdk";
   templateUrl: "./datafiles.component.html",
   styleUrls: ["./datafiles.component.scss"],
 })
-export class DatafilesComponent implements OnInit, OnDestroy, OnChanges {
+export class DatafilesComponent implements OnInit, OnDestroy, AfterViewInit, AfterViewChecked {
   datablocks$ = this.store.pipe(select(getCurrentOrigDatablocks));
   dataset$ = this.store.pipe(select(getCurrentDataset));
   loading$ = this.store.pipe(select(getIsLoading));
