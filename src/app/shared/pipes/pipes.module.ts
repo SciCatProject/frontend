@@ -9,6 +9,8 @@ import { TitleCasePipe } from "./title-case.pipe";
 import { FileSizePipe } from "./filesize.pipe";
 import { FilePathTruncate } from "./file-path-truncate.pipe";
 import { PrettyUnitPipe } from "./pretty-unit.pipe";
+import { DynamicPipe } from "./dynamicPipe.pipe";
+
 
 @NgModule({
   declarations: [
@@ -20,7 +22,8 @@ import { PrettyUnitPipe } from "./pretty-unit.pipe";
     ReplaceUnderscorePipe,
     StripProposalPrefixPipe,
     ThumbnailPipe,
-    TitleCasePipe
+    TitleCasePipe,
+    DynamicPipe
   ],
   imports: [CommonModule],
   exports: [
@@ -32,7 +35,8 @@ import { PrettyUnitPipe } from "./pretty-unit.pipe";
     ReplaceUnderscorePipe,
     StripProposalPrefixPipe,
     ThumbnailPipe,
-    TitleCasePipe
+    TitleCasePipe,
+    DynamicPipe
   ]
 })
 export class PipesModule {}

@@ -14,6 +14,7 @@ export interface TableColumn {
   sort: boolean;
   inList: boolean;
   dateFormat?: string;
+  pipe?: any;
 }
 
 export interface PageChangeEvent {

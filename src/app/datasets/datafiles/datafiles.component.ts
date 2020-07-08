@@ -6,11 +6,15 @@ import {
   Inject,
   ChangeDetectorRef,
   OnDestroy,
-  OnChanges,
+  AfterViewInit,
+  AfterViewChecked,
 } from "@angular/core";
-import { Subscription, Observable } from "rxjs";
+import { Subscription } from "rxjs";
 import { Store, select } from "@ngrx/store";
-import { getCurrentOrigDatablocks, getCurrentDataset } from "state-management/selectors/datasets.selectors";
+import {
+  getCurrentOrigDatablocks,
+  getCurrentDataset,
+} from "state-management/selectors/datasets.selectors";
 import {
   TableColumn,
   PageChangeEvent,
@@ -21,13 +25,16 @@ import { ActivatedRoute } from "@angular/router";
 import { pluck } from "rxjs/operators";
 import { fetchDatasetAction } from "state-management/actions/datasets.actions";
 import { UserApi } from "shared/sdk";
+import { FileSizePipe } from "shared/pipes/filesize.pipe";
+import { FilePathTruncate } from "shared/pipes/file-path-truncate.pipe";
 
 @Component({
   selector: "datafiles",
   templateUrl: "./datafiles.component.html",
   styleUrls: ["./datafiles.component.scss"],
 })
-export class DatafilesComponent implements OnInit, OnDestroy, AfterViewInit, AfterViewChecked {
+export class DatafilesComponent
+  implements OnInit, OnDestroy, AfterViewInit, AfterViewChecked {
   datablocks$ = this.store.pipe(select(getCurrentOrigDatablocks));
   dataset$ = this.store.pipe(select(getCurrentDataset));
   loading$ = this.store.pipe(select(getIsLoading));
@@ -53,106 +60,32 @@ export class DatafilesComponent implements OnInit, OnDestroy, AfterViewInit, Aft
   multipleDownloadAction: string = this.appConfig.multipleDownloadAction;
   maxFileSize: number = this.appConfig.maxDirectDownloadSize;
   sftpHost: string = this.appConfig.sftpHost;
-  jwt$: Observable<any>;
   jwt: any;
 
   tableColumns: TableColumn[] = [
     {
       name: "path",
-      icon: "brightness_high",
+      icon: "folder",
       sort: false,
       inList: true,
+      pipe: FilePathTruncate,
     },
-    { name: "size", icon: "bubble_chart", sort: false, inList: true },
+    {
+      name: "size",
+      icon: "save",
+      sort: false,
+      inList: true,
+      pipe: FileSizePipe,
+    },
     {
       name: "time",
-      icon: "mail",
+      icon: "access_time",
       sort: false,
       inList: true,
+      dateFormat: "yyyy-MM-dd HH:mm",
     },
   ];
-
   tableData: any;
-  // paginator: MatPaginator;
-  constructor(
-    private route: ActivatedRoute,
-
-    private store: Store<Dataset>,
-    private cdRef: ChangeDetectorRef,
-    private userApi: UserApi,
-
-    @Inject(APP_CONFIG) public appConfig: AppConfig
-  ) {}
-
-
-  hasTooLargeFiles(files: any[]) {
-    if (this.maxFileSize) {
-      const largeFiles = files.filter((file) => {
-        return file.size > this.maxFileSize;
-      });
-      if (largeFiles.length > 0) {
-        return true;
-      } else {
-        return false;
-      }
-    } else {
-      return false;
-    }
-  }
-
-  onPageChange(event: PageChangeEvent) {
-    this.currentPage = event.pageIndex;
-    const skip = this.currentPage * this.pageSize;
-    this.tableData = this.files.slice(skip, skip + this.pageSize);
-  }
-
-  onRowClick(event: Event) {}
-
-  ngOnInit() {
-    this.subscriptions.push(
-      this.userApi.jwt().subscribe((jwt) => {
-        this.jwt = jwt;
-      })
-    )
-  }
-
-  ngAfterViewInit() {
-    let datasetPid: string;
-    this.route.params.pipe(pluck("id")).subscribe((id: string) => {
-      myId = id;
-      this.store.dispatch(fetchDatasetAction({ pid: id }));
-    });
-
-    this.subscriptions.push(this.dataset$.subscribe((dataset) => {
-      this.sourcefolder = dataset.sourceFolder;
-    }));
-
-    this.subscriptions.push(
-      this.datablocks$.subscribe((datablocks) => {
-        datablocks.forEach((block) => {
-          if (block.datasetId === myId) {
-            block.dataFileList.map((file) => {
-              this.totalFileSize += file.size;
-              file.selected = false;
-              this.files = this.files.concat(file);
-              this.count = this.files.length;
-              this.tableData = this.files.slice(0, this.pageSize);
-            });
-          }
-        });
-        this.tooLargeFile = this.hasTooLargeFiles(this.files);
-      })
-    );
-  }
-
-  ngAfterViewChecked() {
-    this.cdRef.detectChanges();
-  }
-
-
-  ngOnDestroy() {
-    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
-  }
 
   getAreAllSelected() {
     return this.tableData.reduce((accum, curr) => accum && curr.selected, true);
@@ -200,5 +133,85 @@ export class DatafilesComponent implements OnInit, OnDestroy, AfterViewInit, Aft
       }
     }
     this.updateSelectionStatus();
+  }
+
+  constructor(
+    private route: ActivatedRoute,
+
+    private store: Store<Dataset>,
+    private cdRef: ChangeDetectorRef,
+    private userApi: UserApi,
+
+    @Inject(APP_CONFIG) public appConfig: AppConfig
+  ) {}
+
+  hasTooLargeFiles(files: any[]) {
+    if (this.maxFileSize) {
+      const largeFiles = files.filter((file) => {
+        return file.size > this.maxFileSize;
+      });
+      if (largeFiles.length > 0) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
+
+  onPageChange(event: PageChangeEvent) {
+    this.currentPage = event.pageIndex;
+    const skip = this.currentPage * this.pageSize;
+    this.tableData = this.files.slice(skip, skip + this.pageSize);
+  }
+
+  onRowClick(event: Event) {}
+
+  ngOnInit() {
+    this.subscriptions.push(
+      this.userApi.jwt().subscribe((jwt) => {
+        this.jwt = jwt;
+      })
+    );
+  }
+
+  ngAfterViewInit() {
+    let datasetPid: string;
+    this.route.params.pipe(pluck("id")).subscribe((id: string) => {
+      datasetPid = id;
+      this.store.dispatch(fetchDatasetAction({ pid: id }));
+    });
+
+    this.subscriptions.push(
+      this.dataset$.subscribe((dataset) => {
+        this.sourcefolder = dataset.sourceFolder;
+      })
+    );
+
+    this.subscriptions.push(
+      this.datablocks$.subscribe((datablocks) => {
+        datablocks.forEach((block) => {
+          if (block.datasetId === datasetPid) {
+            block.dataFileList.map((file) => {
+              this.totalFileSize += file.size;
+              file.selected = false;
+              this.files = this.files.concat(file);
+              this.count = this.files.length;
+              this.tableData = this.files.slice(0, this.pageSize);
+            });
+          }
+        });
+        this.tooLargeFile = this.hasTooLargeFiles(this.files);
+      })
+    );
+  }
+
+  ngAfterViewChecked() {
+    this.cdRef.detectChanges();
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
 }
