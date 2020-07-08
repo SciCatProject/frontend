@@ -149,7 +149,6 @@ export class DatafilesComponent implements OnInit, OnDestroy, AfterViewInit, Aft
     this.cdRef.detectChanges();
   }
 
-  ngOnChanges(changes) {}
 
   ngOnDestroy() {
     this.subscriptions.forEach((subscription) => subscription.unsubscribe());
