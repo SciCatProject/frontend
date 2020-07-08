@@ -87,6 +87,12 @@ export class DatafilesComponent
   ];
   tableData: any;
 
+  onPageChange(event: PageChangeEvent) {
+    this.currentPage = event.pageIndex;
+    const skip = this.currentPage * this.pageSize;
+    this.tableData = this.files.slice(skip, skip + this.pageSize);
+  }
+
   getAreAllSelected() {
     return this.tableData.reduce((accum, curr) => accum && curr.selected, true);
   }
@@ -159,14 +165,6 @@ export class DatafilesComponent
       return false;
     }
   }
-
-  onPageChange(event: PageChangeEvent) {
-    this.currentPage = event.pageIndex;
-    const skip = this.currentPage * this.pageSize;
-    this.tableData = this.files.slice(skip, skip + this.pageSize);
-  }
-
-  onRowClick(event: Event) {}
 
   ngOnInit() {
     this.subscriptions.push(
