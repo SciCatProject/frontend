@@ -1,6 +1,6 @@
 /// <reference types="Cypress" />
 
-describe("Datasets", () => {
+describe("Policies", () => {
   beforeEach(() => {
     cy.wait(5000);
 

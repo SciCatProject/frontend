@@ -10,20 +10,26 @@
       <span>Instruments</span>
     </button>
 
-    <button mat-menu-item routerLink="/user/jobs">
-      <mat-icon> transfer_within_a_station </mat-icon>
-      <span>Jobs</span>
-    </button>
+    <ng-container *ngIf="appConfig.jobsEnabled">
+      <button mat-menu-item routerLink="/user/jobs">
+        <mat-icon> transfer_within_a_station </mat-icon>
+        <span>Jobs</span>
+      </button>
+    </ng-container>
 
-    <button mat-menu-item routerLink="/logbooks/">
-      <mat-icon> book </mat-icon>
-      <span>Logbooks</span>
-    </button>
+    <ng-container *ngIf="appConfig.logbookEnabled">
+      <button mat-menu-item routerLink="/logbooks/">
+        <mat-icon> book </mat-icon>
+        <span>Logbooks</span>
+      </button>
+    </ng-container>
 
-    <button mat-menu-item routerLink="/policies/">
-      <mat-icon> cloud_download </mat-icon>
-      <span>Policies</span>
-    </button>
+    <ng-container *ngIf="appConfig.policiesEnabled">
+      <button mat-menu-item routerLink="/policies/">
+        <mat-icon> cloud_download </mat-icon>
+        <span>Policies</span>
+      </button>
+    </ng-container>
 
     <button mat-menu-item routerLink="/proposals/">
       <mat-icon> spa </mat-icon>

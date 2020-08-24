@@ -57,4 +57,6 @@ export const environment = {
   userProfileImageEnabled: true,
   ingestManual: "http://melanie.gitpages.psi.ch/SciCatPages/",
   gettingStarted: "http://melanie.gitpages.psi.ch/SciCatPages/SciCatGettingStartedSLSSummary.pdf",
+  jobsEnabled: true,
+  policiesEnabled: true,
 };

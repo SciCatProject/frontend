@@ -3,8 +3,15 @@ export const environment = {
   lbBaseURL: "http://scicat.maxiv.lu.se",
   externalAuthEndpoint: "/auth/msad",
   archiveWorkflowEnabled: false,
-  disabledDatasetColumns: ["select", "archiveStatus", "retrieveStatus", "ownerGroup"],
+  disabledDatasetColumns: [
+    "select",
+    "archiveStatus",
+    "retrieveStatus",
+    "ownerGroup",
+  ],
   facility: "MAX IV",
   shoppingCartEnabled: false,
   fileDownloadEnabled: true,
+  jobsEnabled: true,
+  policiesEnabled: true,
 };

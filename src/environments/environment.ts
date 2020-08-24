@@ -22,6 +22,8 @@ export const environment = {
   editPublishedData: true,
   facility: "ESS",
   fileColorEnabled: true,
+  jobsEnabled: true,
+  policiesEnabled: true,
   localColumns: [
     { name: "select", order: 0, type: "standard", enabled: true },
     { name: "datasetName", order: 1, type: "standard", enabled: true },
@@ -35,7 +37,7 @@ export const environment = {
     { name: "proposalId", order: 9, type: "standard", enabled: true },
     { name: "ownerGroup", order: 10, type: "standard", enabled: false },
     { name: "dataStatus", order: 11, type: "standard", enabled: false },
-    { name: "derivedDatasetsNum", order: 12, type: "standard", enabled: false }
+    { name: "derivedDatasetsNum", order: 12, type: "standard", enabled: false },
   ] as TableColumn[],
   landingPage: "doi2.psi.ch/detail/",
   logbookEnabled: true,
@@ -54,5 +56,5 @@ export const environment = {
   shoppingCartOnHeader: true,
   tableSciDataEnabled: true,
   userNamePromptEnabled: true,
-  userProfileImageEnabled: true
+  userProfileImageEnabled: true,
 };

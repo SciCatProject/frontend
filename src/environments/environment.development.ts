@@ -55,5 +55,7 @@ export const environment = {
   userProfileImageEnabled: true,
   searchPublicDataEnabled: true,
   landingPage: "doi2.psi.ch/detail/",
-  fileDownloadEnabled: false
+  fileDownloadEnabled: false,
+  jobsEnabled: true,
+  policiesEnabled: true
 };

@@ -23,6 +23,8 @@ export const environment = {
   editSampleEnabled: true,
   facility: "ESS",
   fileColorEnabled: true,
+  jobsEnabled: false,
+  policiesEnabled: false,
   localColumns: [
     { name: "select", order: 0, type: "standard", enabled: true },
     { name: "datasetName", order: 1, type: "standard", enabled: true },
@@ -36,7 +38,7 @@ export const environment = {
     { name: "proposalId", order: 9, type: "standard", enabled: true },
     { name: "ownerGroup", order: 10, type: "standard", enabled: false },
     { name: "dataStatus", order: 11, type: "standard", enabled: false },
-    { name: "derivedDatasetsNum", order: 12, type: "standard", enabled: false }
+    { name: "derivedDatasetsNum", order: 12, type: "standard", enabled: false },
   ] as TableColumn[],
   landingPage: "doi.esss.se/detail/",
   logbookEnabled: true,
@@ -55,5 +57,5 @@ export const environment = {
   tableSciDataEnabled: true,
   userNamePromptEnabled: true,
   userProfileImageEnabled: true,
-  fileDownloadEnabled: true
+  fileDownloadEnabled: true,
 };

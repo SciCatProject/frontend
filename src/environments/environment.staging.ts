@@ -5,5 +5,7 @@ export const environment = {
   externalAuthEndpoint: "/auth/msad",
   facility: "PSI",
   disabledDatasetColumns: [],
-  shoppingCartEnabled: false
+  shoppingCartEnabled: false,
+  jobsEnabled: true,
+  policiesEnabled: true,
 };

@@ -17,11 +17,14 @@ export class AppConfig {
   columnSelectEnabled: boolean;
   datasetReduceEnabled: boolean;
   editMetadataEnabled: boolean;
+  editPublishedData: boolean;
   editSampleEnabled: boolean;
   facility: string;
   fileColorEnabled: boolean;
   gettingStarted: string;
   ingestManual: string;
+  jobsEnabled: boolean;
+  landingPage: string;
   localColumns: TableColumn[];
   logbookEnabled: boolean;
   fileDownloadEnabled: boolean;
@@ -29,6 +32,7 @@ export class AppConfig {
   metadataPreviewEnabled: boolean;
   multipleDownloadAction?: string;
   multipleDownloadEnabled: boolean;
+  policiesEnabled: boolean;
   scienceSearchEnabled: boolean;
   scienceSearchUnitsEnabled: boolean;
   searchProposals: boolean;
@@ -40,8 +44,6 @@ export class AppConfig {
   tableSciDataEnabled: boolean;
   userProfileImageEnabled: boolean;
   userNamePromptEnabled: boolean;
-  landingPage: string;
-  editPublishedData: boolean;
 }
 
 export const APP_DI_CONFIG: AppConfig = {
@@ -62,6 +64,7 @@ export const APP_DI_CONFIG: AppConfig = {
   fileColorEnabled: environment["fileColorEnabled"] || false,
   gettingStarted: environment["gettingStarted"] || null,
   ingestManual: environment["ingestManual"] || null,
+  jobsEnabled: environment["jobsEnabled"] || false,
   logbookEnabled: environment["logbookEnabled"] || false,
   localColumns: environment["localColumns"] || [
     { name: "select", order: 0, type: "standard", enabled: true },
@@ -76,13 +79,14 @@ export const APP_DI_CONFIG: AppConfig = {
     { name: "proposalId", order: 9, type: "standard", enabled: true },
     { name: "ownerGroup", order: 10, type: "standard", enabled: true },
     { name: "dataStatus", order: 11, type: "standard", enabled: true },
-    { name: "derivedDatasetsNum", order: 12, type: "standard", enabled: false }
+    { name: "derivedDatasetsNum", order: 12, type: "standard", enabled: false },
   ],
   maxDirectDownloadSize: environment["maxDirectDownloadSize"] || null,
   fileDownloadEnabled: environment["fileDownloadEnabled"] || false,
   metadataPreviewEnabled: environment["metadataPreviewEnabled"] || false,
   multipleDownloadAction: environment["multipleDownloadAction"],
   multipleDownloadEnabled: environment["multipleDownloadEnabled"] || false,
+  policiesEnabled: environment["policiesEnabled"] || false,
   scienceSearchEnabled: environment["scienceSearchEnabled"] || null,
   scienceSearchUnitsEnabled: environment["scienceSearchUnitsEnabled"] || false,
   searchProposals: environment["searchProposals"] || false,
@@ -102,8 +106,8 @@ export const APP_DI_CONFIG: AppConfig = {
   providers: [
     {
       provide: APP_CONFIG,
-      useValue: APP_DI_CONFIG
-    }
-  ]
+      useValue: APP_DI_CONFIG,
+    },
+  ],
 })
 export class AppConfigModule {}

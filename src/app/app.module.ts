@@ -2,8 +2,6 @@ import { userReducer } from "state-management/reducers/user.reducer";
 import { AppComponent } from "./app.component";
 import { AppConfigModule } from "app-config.module";
 import { AppRoutingModule, routes } from "app-routing/app-routing.module";
-import { RedirectGuard } from "app-routing/redirect-guard";
-import { AuthCheck } from "./AuthCheck";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { BrowserModule, Title } from "@angular/platform-browser";
 import { DatasetsModule } from "datasets/datasets.module";
@@ -79,26 +77,19 @@ import { InstrumentsModule } from "./instruments/instruments.module";
           strictStateImmutability: false,
           strictActionImmutability: false,
           strictStateSerializability: false,
-          strictActionSerializability: false
-        }
+          strictActionSerializability: false,
+        },
       }
     ),
     extModules,
     RouterModule.forRoot(routes, { useHash: false }),
     EffectsModule.forRoot([]),
     ServiceWorkerModule.register("ngsw-worker.js", {
-      enabled: environment.production
-    })
+      enabled: environment.production,
+    }),
   ],
   exports: [MatNativeDateModule],
-  providers: [
-    AuthCheck,
-    UserApi,
-    SampleApi,
-    Title,
-    MatNativeDateModule,
-    RedirectGuard
-  ],
-  bootstrap: [AppComponent]
+  providers: [UserApi, SampleApi, Title, MatNativeDateModule],
+  bootstrap: [AppComponent],
 })
 export class AppModule {}

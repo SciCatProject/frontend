@@ -17,7 +17,7 @@ import { UserSettingsComponent } from "../users/user-settings/user-settings.comp
 import { ViewProposalPageComponent } from "../proposals/view-proposal-page/view-proposal-page.component";
 
 import { PublishComponent } from "datasets/publish/publish.component";
-import { AuthCheck } from "../AuthCheck";
+import { AuthGuard } from "./auth.guard";
 import { BatchViewComponent } from "datasets/batch-view/batch-view.component";
 import { SampleDetailComponent } from "../samples/sample-detail/sample-detail.component";
 
@@ -29,9 +29,8 @@ import { PublisheddataDashboardComponent } from "publisheddata/publisheddata-das
 import { PublisheddataDetailsComponent } from "publisheddata/publisheddata-details/publisheddata-details.component";
 import { PublisheddataEditComponent } from "publisheddata/publisheddata-edit/publisheddata-edit.component";
 
-
 // handles external URLs by lookup in the env config
-import { RedirectGuard } from "app-routing/redirect-guard";
+import { RedirectGuard } from "app-routing/redirect.guard";
 import { ProposalDashboardComponent } from "proposals/proposal-dashboard/proposal-dashboard.component";
 import { SampleDashboardComponent } from "samples/sample-dashboard/sample-dashboard.component";
 import { LoginLayoutComponent } from "_layout/login-layout/login-layout.component";
@@ -42,6 +41,9 @@ import { InstrumentDetailsComponent } from "instruments/instrument-details/instr
 import { AnonymousDashboardComponent } from "datasets/anonymous-dashboard/anonymous-dashboard.component";
 import { AnonymousDetailsDashboardComponent } from "datasets/anonymous-details-dashboard/anonymous-details-dashboard.component";
 import { AnonymousLayoutComponent } from "_layout/anonymous-layout/anonymous-layout.component";
+import { JobsGuard } from "app-routing/jobs.guard";
+import { PoliciesGuard } from "app-routing/policies.guard";
+import { LogbookGuard } from "app-routing/logbook.guard";
 
 export const routes: Routes = [
   {
@@ -51,25 +53,25 @@ export const routes: Routes = [
       {
         path: "",
         redirectTo: "anonymous/datasets",
-        pathMatch: "full"
+        pathMatch: "full",
       },
       {
         path: "anonymous/datasets",
-        component: AnonymousDashboardComponent
+        component: AnonymousDashboardComponent,
       },
       {
         path: "anonymous/datasets/:id",
-        component: AnonymousDetailsDashboardComponent
+        component: AnonymousDetailsDashboardComponent,
       },
       {
         path: "anonymous/about",
-        component: AboutComponent
+        component: AboutComponent,
       },
       {
         path: "anonymous/help",
-        component: HelpComponent
-      }
-    ]
+        component: HelpComponent,
+      },
+    ],
   },
   {
     path: "",
@@ -80,9 +82,9 @@ export const routes: Routes = [
       {
         path: "login/error",
         component: ErrorPageComponent,
-        data: { message: "Location Not Found", breadcrumb: "Error" }
-      }
-    ]
+        data: { message: "Location Not Found", breadcrumb: "Error" },
+      },
+    ],
   },
   {
     path: "",
@@ -91,161 +93,161 @@ export const routes: Routes = [
       {
         path: "",
         redirectTo: "/datasets",
-        pathMatch: "full"
+        pathMatch: "full",
       },
       {
         path: "datasets/batch/publish",
         component: PublishComponent,
-        canActivate: [AuthCheck]
+        canActivate: [AuthGuard],
       },
       {
         path: "datasets",
         component: DashboardComponent,
-        canActivate: [AuthCheck]
+        canActivate: [AuthGuard],
       },
       {
         path: "datasets/batch",
         component: BatchViewComponent,
-        canActivate: [AuthCheck]
+        canActivate: [AuthGuard],
       },
       {
         path: "datasets/:id",
         component: DatasetDetailsDashboardComponent,
-        canActivate: [AuthCheck]
+        canActivate: [AuthGuard],
       },
       {
         path: "datasets/:id/datablocks",
         component: DatablocksComponent,
-        canActivate: [AuthCheck]
+        canActivate: [AuthGuard],
       },
       {
         path: "datasets/:id/datafiles",
         component: DatafilesComponent,
-        canActivate: [AuthCheck]
+        canActivate: [AuthGuard],
       },
       {
         path: "instruments",
         component: InstrumentsDashboardComponent,
-        canActivate: [AuthCheck]
+        canActivate: [AuthGuard],
       },
       {
         path: "instruments/:id",
         component: InstrumentDetailsComponent,
-        canActivate: [AuthCheck]
+        canActivate: [AuthGuard],
       },
       {
         path: "proposals",
         component: ProposalDashboardComponent,
-        canActivate: [AuthCheck]
+        canActivate: [AuthGuard],
       },
       {
         path: "proposals/:id",
         component: ViewProposalPageComponent,
-        canActivate: [AuthCheck]
+        canActivate: [AuthGuard],
       },
       {
         path: "publishedDatasets",
         component: PublisheddataDashboardComponent,
-        canActivate: [AuthCheck]
+        canActivate: [AuthGuard],
       },
       {
         path: "publishedDatasets/:id/edit",
         component: PublisheddataEditComponent,
-        canActivate: [AuthCheck]
+        canActivate: [AuthGuard],
       },
       {
         path: "publishedDatasets/:id",
         component: PublisheddataDetailsComponent,
-        canActivate: [AuthCheck]
+        canActivate: [AuthGuard],
       },
       {
         path: "samples",
         component: SampleDashboardComponent,
-        canActivate: [AuthCheck]
+        canActivate: [AuthGuard],
       },
       {
         path: "samples/:id",
         component: SampleDetailComponent,
-        canActivate: [AuthCheck]
+        canActivate: [AuthGuard],
       },
 
       {
         path: "policies",
         component: PoliciesDashboardComponent,
-        canActivate: [AuthCheck]
+        canActivate: [AuthGuard, PoliciesGuard],
       },
 
       {
         path: "user",
         component: UserSettingsComponent,
-        canActivate: [AuthCheck]
+        canActivate: [AuthGuard],
       },
       {
         path: "user/settings",
         component: UserSettingsComponent,
-        canActivate: [AuthCheck]
+        canActivate: [AuthGuard],
       },
       {
         path: "user/jobs",
         component: JobsDashboardComponent,
-        canActivate: [AuthCheck]
+        canActivate: [AuthGuard, JobsGuard],
       },
       {
         path: "user/jobs/:id",
         component: JobsDetailComponent,
-        canActivate: [AuthCheck]
+        canActivate: [AuthGuard, JobsGuard],
       },
       {
         path: "about",
-        component: AboutComponent
+        component: AboutComponent,
       },
       {
         path: "help",
-        component: HelpComponent
+        component: HelpComponent,
       },
       {
         path: "logbooks",
         component: LogbooksTableComponent,
-        canActivate: [AuthCheck]
+        canActivate: [AuthGuard, LogbookGuard],
       },
       {
         path: "logbooks/:name",
         component: LogbooksDashboardComponent,
-        canActivate: [AuthCheck]
+        canActivate: [AuthGuard, LogbookGuard],
       },
       {
         path: "error",
         component: ErrorPageComponent,
-        data: { message: "Location Not Found", breadcrumb: "Error" }
+        data: { message: "Location Not Found", breadcrumb: "Error" },
       },
       {
         path: "help/ingestManual",
         canActivate: [RedirectGuard],
         component: RedirectGuard,
         data: {
-          urlConfigItem: "ingestManual"
-        }
+          urlConfigItem: "ingestManual",
+        },
       },
       {
         path: "help/SciCatGettingStartedSLSSummary",
         canActivate: [RedirectGuard],
         component: RedirectGuard,
         data: {
-          urlConfigItem: "gettingStarted"
-        }
+          urlConfigItem: "gettingStarted",
+        },
       },
       {
         path: "logout",
         component: LoginLayoutComponent,
-        canActivate: [AuthCheck]
-      }
-    ]
-  }
+        canActivate: [AuthGuard],
+      },
+    ],
+  },
 ];
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
-  providers: []
+  providers: [],
 })
 export class AppRoutingModule {
   constructor() {}
