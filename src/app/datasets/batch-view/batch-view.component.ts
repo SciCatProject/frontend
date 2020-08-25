@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, TemplateRef } from "@angular/core";
+import { Component, OnInit, ViewChild, TemplateRef, Inject } from "@angular/core";
 import { select, Store } from "@ngrx/store";
 import { first, switchMap, mergeMap } from "rxjs/operators";
 
@@ -21,6 +21,7 @@ import { ShareGroup } from "shared/sdk/models/ShareGroup";
 import { MatDialog } from "@angular/material/dialog";
 import { COMMA, ENTER } from "@angular/cdk/keycodes";
 import { MatChipInputEvent } from "@angular/material/chips";
+import { APP_CONFIG, AppConfig } from "app-config.module";
 
 export interface Share {
   name: string;
@@ -33,7 +34,6 @@ export interface Share {
 export class BatchViewComponent implements OnInit {
   @ViewChild("secondDialog", { static: true }) secondDialog: TemplateRef<any>;
 
-  visible = true;
   selectable = true;
   removable = true;
   addOnBlur = true;
@@ -188,6 +188,7 @@ export class BatchViewComponent implements OnInit {
   }
 
   constructor(
+    @Inject(APP_CONFIG) public appConfig: AppConfig,
     private store: Store<any>,
     private archivingSrv: ArchivingService,
     private router: Router,

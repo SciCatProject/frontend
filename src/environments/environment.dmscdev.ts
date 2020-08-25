@@ -17,7 +17,7 @@ export const environment = {
   archiveWorkflowEnabled: false,
   columnSelectEnabled: true,
   csvEnabled: false,
-  datasetReduceEnabled: true,
+  datasetReduceEnabled: false,
   disabledDatasetColumns: ["dataStatus"],
   editMetadataEnabled: true,
   editSampleEnabled: true,
