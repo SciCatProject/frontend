@@ -6,13 +6,13 @@
           Publication Status
         </mat-card-header>
         <mat-card-content>
-        <table>
-          <tr *ngIf="publishedData.status as value">
-            <th><mat-icon> public </mat-icon> Status</th>
-            <td>{{ value }}</td> 
-          </tr>
-        </table>
-      </mat-card-content>
+          <table>
+            <tr *ngIf="publishedData.status as value">
+              <th><mat-icon> public </mat-icon> Status</th>
+              <td>{{ value }}</td>
+            </tr>
+          </table>
+        </mat-card-content>
 
         <button
           mat-raised-button
@@ -108,23 +108,25 @@
 
       <mat-card>
         <button
-        mat-raised-button
-        color="primary"
-        *ngIf="appConfig.editPublishedData"
-        (click)="onEditClick()"
-      >
-        Edit
-      </button>
-        <button mat-stroked-button (click)="show = !show">
-          {{ show ? "Hide MetaData" : "Show Metadata" }}
+          mat-raised-button
+          color="primary"
+          *ngIf="appConfig.editPublishedData"
+          (click)="onEditClick()"
+        >
+          Edit
         </button>
-        <br />
-        <div *ngIf="show">
-          <ngx-json-viewer
-            [json]="currentData$ | async"
-            [expanded]="false"
-          ></ngx-json-viewer>
-        </div>
+        <ng-container *ngIf="!appConfig.production">
+          <button mat-stroked-button (click)="show = !show">
+            {{ show ? "Hide MetaData" : "Show Metadata" }}
+          </button>
+          <br />
+          <div *ngIf="show">
+            <ngx-json-viewer
+              [json]="currentData$ | async"
+              [expanded]="false"
+            ></ngx-json-viewer>
+          </div>
+        </ng-container>
       </mat-card>
     </div>
     <div fxFlex="30">

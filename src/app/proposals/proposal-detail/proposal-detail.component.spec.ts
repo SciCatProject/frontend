@@ -1,6 +1,7 @@
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { ProposalDetailComponent } from "./proposal-detail.component";
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+import { APP_CONFIG } from "app-config.module";
 
 describe("ProposalsDetailComponent", () => {
   let component: ProposalDetailComponent;
@@ -9,8 +10,14 @@ describe("ProposalsDetailComponent", () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
-      declarations: [ProposalDetailComponent]
-    }).compileComponents();
+      declarations: [ProposalDetailComponent],
+    });
+    TestBed.overrideComponent(ProposalDetailComponent, {
+      set: {
+        providers: [{ provide: APP_CONFIG, useValue: { production: false } }],
+      },
+    });
+    TestBed.compileComponents();
   }));
 
   beforeEach(() => {
