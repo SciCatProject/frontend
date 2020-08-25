@@ -12,17 +12,15 @@ import {
   MockShareGroupApi,
 } from "shared/MockStubs";
 import { ArchivingService } from "../archiving.service";
-import { MatIconModule,  } from "@angular/material/icon";
+import { MatIconModule } from "@angular/material/icon";
 import { MatButtonModule } from "@angular/material/button";
 
-import {
-  MatDialog,
-  MatDialogModule,
-} from "@angular/material/dialog";
+import { MatDialog, MatDialogModule } from "@angular/material/dialog";
 
 import { ShareGroupApi, DatasetApi } from "shared/sdk";
 import { SharedCatanieModule } from "shared/shared.module";
 import { MatTableModule } from "@angular/material/table";
+import { APP_CONFIG } from "app-config.module";
 
 describe("BatchViewComponent", () => {
   let component: BatchViewComponent;
@@ -50,6 +48,7 @@ describe("BatchViewComponent", () => {
           { provide: ShareGroupApi, useClass: MockShareGroupApi },
           { provide: DatasetApi, useClass: MockDatasetApi },
           { provide: MatDialog, useValue: {} },
+          { provide: APP_CONFIG, useValue: { archiveWorkflowEnabled: true } },
         ],
       },
     });
