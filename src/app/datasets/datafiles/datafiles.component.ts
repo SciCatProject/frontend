@@ -27,6 +27,18 @@ import { fetchDatasetAction } from "state-management/actions/datasets.actions";
 import { UserApi } from "shared/sdk";
 import { FileSizePipe } from "shared/pipes/filesize.pipe";
 import { FilePathTruncate } from "shared/pipes/file-path-truncate.pipe";
+import { MatCheckboxChange } from "@angular/material/checkbox";
+
+export interface File {
+  path: string;
+  size: number;
+  time: string;
+  chk: string;
+  uid: string;
+  gid: string;
+  perm: string;
+  selected: boolean;
+}
 
 @Component({
   selector: "datafiles",
@@ -85,7 +97,7 @@ export class DatafilesComponent
       dateFormat: "yyyy-MM-dd HH:mm",
     },
   ];
-  tableData: any;
+  tableData: File[];
 
   onPageChange(event: PageChangeEvent) {
     this.currentPage = event.pageIndex;
@@ -102,6 +114,13 @@ export class DatafilesComponent
       (accum, curr) => accum && !curr.selected,
       true
     );
+  }
+
+  getAllFiles() {
+    if (!this.tableData) {
+      return [];
+    }
+    return this.tableData.map((file) => file.path);
   }
 
   getSelectedFiles() {
@@ -129,27 +148,17 @@ export class DatafilesComponent
     this.updateSelectionStatus();
   }
 
-  onSelectAll(event) {
-    for (const file of this.tableData) {
+  onSelectAll(event: MatCheckboxChange) {
+    this.tableData.forEach((file) => {
       file.selected = event.checked;
       if (event.checked) {
         this.selectedFileSize += file.size;
       } else {
         this.selectedFileSize = 0;
       }
-    }
+    });
     this.updateSelectionStatus();
   }
-
-  constructor(
-    private route: ActivatedRoute,
-
-    private store: Store<Dataset>,
-    private cdRef: ChangeDetectorRef,
-    private userApi: UserApi,
-
-    @Inject(APP_CONFIG) public appConfig: AppConfig
-  ) {}
 
   hasTooLargeFiles(files: any[]) {
     if (this.maxFileSize) {
@@ -165,6 +174,14 @@ export class DatafilesComponent
       return false;
     }
   }
+
+  constructor(
+    private route: ActivatedRoute,
+    private store: Store<Dataset>,
+    private cdRef: ChangeDetectorRef,
+    private userApi: UserApi,
+    @Inject(APP_CONFIG) public appConfig: AppConfig
+  ) {}
 
   ngOnInit() {
     this.subscriptions.push(
@@ -189,17 +206,19 @@ export class DatafilesComponent
 
     this.subscriptions.push(
       this.datablocks$.subscribe((datablocks) => {
+        const files = [];
         datablocks.forEach((block) => {
           if (block.datasetId === datasetPid) {
             block.dataFileList.map((file) => {
               this.totalFileSize += file.size;
               file.selected = false;
-              this.files = this.files.concat(file);
-              this.count = this.files.length;
-              this.tableData = this.files.slice(0, this.pageSize);
+              files.push(file);
             });
           }
         });
+        this.files = files;
+        this.count = this.files.length;
+        this.tableData = this.files.slice(0, this.pageSize);
         this.tooLargeFile = this.hasTooLargeFiles(this.files);
       })
     );

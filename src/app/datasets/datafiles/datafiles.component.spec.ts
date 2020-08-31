@@ -128,6 +128,27 @@ describe("DatafilesComponent", () => {
     });
   });
 
+  describe("#getAllFiles()", () => {
+    it("should return an array of file paths of files in table", () => {
+      const files = component.getAllFiles();
+
+      expect(Array.isArray(files)).toEqual(true);
+      expect(files.includes("test1")).toEqual(true);
+      expect(files.includes("test2")).toEqual(true);
+    });
+  });
+
+  describe("#getSelectedFiles()", () => {
+    it("should return an array of file paths from selected files in table", () => {
+      component.tableData[0].selected = true;
+
+      const files = component.getSelectedFiles();
+
+      expect(Array.isArray(files)).toEqual(true);
+      expect(files.includes("test1")).toEqual(true);
+    });
+  });
+
   describe("#updateSelectionStatus()", () => {
     it("should set 'areAllSelected' to false and 'isNoneSelected' to true if no file is selected", () => {
       component.updateSelectionStatus();
@@ -158,9 +179,9 @@ describe("DatafilesComponent", () => {
   describe("#onSelectOne()", () => {
     it("should set 'selected' of the provided file to true if previously set to false and add the size of the file to 'selectedFileSize'", () => {
       const file = component.tableData[0];
-      const event = new MatCheckboxChange;
+      const event = new MatCheckboxChange();
       event.checked = true;
-      const checkboxEvent: CheckboxEvent = {event, row: file};
+      const checkboxEvent: CheckboxEvent = { event, row: file };
       component.onSelectOne(checkboxEvent);
 
       expect(component.tableData[0].selected).toEqual(true);
@@ -168,19 +189,21 @@ describe("DatafilesComponent", () => {
     });
 
     it("should set 'selected' of the provided file to false if previously set to true and subtract the size of the file from 'selectedFileSize'", () => {
-
       const firstFile = component.tableData[0];
-      const event = new MatCheckboxChange;
+      const event = new MatCheckboxChange();
       event.checked = true;
-      const firstCheckboxEvent: CheckboxEvent = {event, row: firstFile};
+      const firstCheckboxEvent: CheckboxEvent = { event, row: firstFile };
       component.onSelectOne(firstCheckboxEvent);
 
       expect(component.tableData[0].selected).toEqual(true);
       expect(component.selectedFileSize).toEqual(firstFile.size);
 
-      const event2 = new MatCheckboxChange;
+      const event2 = new MatCheckboxChange();
       event2.checked = false;
-      const secondCheckboxEvent: CheckboxEvent = {event: event2, row: firstFile};
+      const secondCheckboxEvent: CheckboxEvent = {
+        event: event2,
+        row: firstFile,
+      };
       component.onSelectOne(secondCheckboxEvent);
 
       expect(component.tableData[0].selected).toEqual(false);
@@ -192,7 +215,7 @@ describe("DatafilesComponent", () => {
     it("should set 'selected' of all files to true if previously set to false and add the size of the files to 'selectedFileSize'", () => {
       const event = {
         checked: true,
-      };
+      } as MatCheckboxChange;
       component.onSelectAll(event);
 
       component.tableData.forEach((file) => {
@@ -205,7 +228,7 @@ describe("DatafilesComponent", () => {
     it("should set 'selected' of all files to false if previously set to true and subtract the size of the files from 'selectedFileSize'", () => {
       const firstEvent = {
         checked: true,
-      };
+      } as MatCheckboxChange;
       component.onSelectAll(firstEvent);
 
       component.tableData.forEach((file) => {
@@ -216,7 +239,7 @@ describe("DatafilesComponent", () => {
 
       const secondEvent = {
         checked: false,
-      };
+      } as MatCheckboxChange;
       component.onSelectAll(secondEvent);
 
       component.tableData.forEach((file) => {

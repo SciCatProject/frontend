@@ -30,6 +30,12 @@
   >
     <input type="hidden" name="jwt" [value]="jwt?.jwt" />
     <input type="hidden" name="base" [value]="sourcefolder" />
+    <input
+      *ngFor="let file of getAllFiles(); index as i"
+      type="hidden"
+      [name]="'files[' + i + ']'"
+      [value]="file"
+    />
     <button
       mat-raised-button
       class="download-button"
