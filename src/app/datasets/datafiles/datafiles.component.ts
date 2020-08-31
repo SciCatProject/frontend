@@ -206,7 +206,7 @@ export class DatafilesComponent
 
     this.subscriptions.push(
       this.datablocks$.subscribe((datablocks) => {
-        const files = [];
+        const files: File[] = [];
         datablocks.forEach((block) => {
           if (block.datasetId === datasetPid) {
             block.dataFileList.map((file) => {
@@ -216,9 +216,15 @@ export class DatafilesComponent
             });
           }
         });
-        this.files = files;
-        this.count = this.files.length;
-        this.tableData = this.files.slice(0, this.pageSize);
+        this.count = files.length;
+        this.tableData = files.slice(0, this.pageSize);
+        this.files = files.map((file) => {
+          if (file.path.indexOf("/") !== -1) {
+            const splitPath = file.path.split("/");
+            file.path = splitPath[splitPath.length - 1];
+          }
+          return file;
+        });
         this.tooLargeFile = this.hasTooLargeFiles(this.files);
       })
     );
