@@ -11,7 +11,7 @@ export const environment = {
   fileserverBaseURL: "/fileserver",
   synapseBaseUrl: "https://scitest.esss.lu.se",
   riotBaseUrl: "http://scichat.esss.lu.se",
-  jupyterHubUrl: "https://jupyterhub.esss.lu.se",
+  jupyterHubUrl: null,
   externalAuthEndpoint: "/auth/msad",
   addDatasetEnabled: true,
   archiveWorkflowEnabled: false,
