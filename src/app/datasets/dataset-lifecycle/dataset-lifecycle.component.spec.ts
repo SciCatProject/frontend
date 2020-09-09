@@ -9,6 +9,7 @@ import { Dataset } from "shared/sdk";
 import { MatCardModule } from "@angular/material/card";
 import { MatIconModule } from "@angular/material/icon";
 import { MatTableModule } from "@angular/material/table";
+import { APP_CONFIG } from "app-config.module";
 
 describe("DatasetLifecycleComponent", () => {
   let component: DatasetLifecycleComponent;
@@ -19,7 +20,10 @@ describe("DatasetLifecycleComponent", () => {
       schemas: [NO_ERRORS_SCHEMA],
       declarations: [DatasetLifecycleComponent],
       imports: [MatCardModule, MatIconModule, MatTableModule, PipesModule],
-      providers: [DatePipe]
+      providers: [
+        DatePipe,
+        { provide: APP_CONFIG, useValue: { archiveWorkflowEnabled: true } },
+      ],
     }).compileComponents();
   }));
 
@@ -49,15 +53,15 @@ describe("DatasetLifecycleComponent", () => {
           id: "testId",
           keywords,
           updatedBy: "Test User",
-          updatedAt: new Date().toISOString()
-        }
+          updatedAt: new Date().toISOString(),
+        },
       ];
 
       component.dataset = dataset;
       const historyItems = component["parseHistoryItems"]();
 
       expect(historyItems.length).toEqual(1);
-      historyItems.forEach(item => {
+      historyItems.forEach((item) => {
         expect(Object.keys(item).includes("id")).toEqual(false);
         expect(item.property).toEqual("keywords");
         expect(item.value).toEqual(keywords);
