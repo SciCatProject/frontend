@@ -3,7 +3,8 @@ import {
   OnInit,
   Input,
   OnChanges,
-  SimpleChange
+  SimpleChange,
+  Inject,
 } from "@angular/core";
 import { Dataset } from "shared/sdk";
 import {
@@ -11,10 +12,11 @@ import {
   state,
   style,
   transition,
-  animate
+  animate,
 } from "@angular/animations";
 import { DatePipe } from "@angular/common";
 import { PageEvent } from "@angular/material/paginator";
+import { APP_CONFIG, AppConfig } from "app-config.module";
 
 export interface HistoryItem {
   property: string;
@@ -34,9 +36,9 @@ export interface HistoryItem {
       transition(
         "expanded <=> collapsed",
         animate("225ms cubic-bezier(0.4, 0.0, 0.2, 1)")
-      )
-    ])
-  ]
+      ),
+    ]),
+  ],
 })
 export class DatasetLifecycleComponent implements OnInit, OnChanges {
   @Input() dataset: Dataset;
@@ -61,10 +63,10 @@ export class DatasetLifecycleComponent implements OnInit, OnChanges {
   private parseHistoryItems(): HistoryItem[] {
     if (this.dataset) {
       return this.dataset.history
-        .map(item => {
+        .map((item) => {
           const property = Object.keys(item)
-            .filter(key => key !== "id")
-            .filter(key => !key.includes("updated"))
+            .filter((key) => key !== "id")
+            .filter((key) => !key.includes("updated"))
             .pop();
 
           return {
@@ -74,7 +76,7 @@ export class DatasetLifecycleComponent implements OnInit, OnChanges {
             updatedAt: this.datePipe.transform(
               item.updatedAt,
               "yyyy-MM-dd HH:mm"
-            )
+            ),
           };
         })
         .reverse();
@@ -83,7 +85,10 @@ export class DatasetLifecycleComponent implements OnInit, OnChanges {
     }
   }
 
-  constructor(private datePipe: DatePipe) {}
+  constructor(
+    @Inject(APP_CONFIG) public appConfig: AppConfig,
+    private datePipe: DatePipe
+  ) {}
 
   ngOnInit() {
     this.historyItems = this.parseHistoryItems();

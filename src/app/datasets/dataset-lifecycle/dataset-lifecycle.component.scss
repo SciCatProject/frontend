@@ -34,7 +34,7 @@ mat-card {
     }
 
     tr.item-row:not(.expanded-row):hover {
-      background: mat-color($grey, 500);
+      background: mat-color($grey, 100);
     }
 
     tr.item-row:not(.expanded-row):active {

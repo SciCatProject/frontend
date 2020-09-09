@@ -100,9 +100,12 @@ export class DatafilesComponent
   tableData: File[];
 
   onPageChange(event: PageChangeEvent) {
-    this.currentPage = event.pageIndex;
+    const { pageIndex, pageSize } = event;
+    this.currentPage = pageIndex;
+    this.pageSize = pageSize;
     const skip = this.currentPage * this.pageSize;
-    this.tableData = this.files.slice(skip, skip + this.pageSize);
+    const end = skip + this.pageSize;
+    this.tableData = this.files.slice(skip, end);
   }
 
   getAreAllSelected() {

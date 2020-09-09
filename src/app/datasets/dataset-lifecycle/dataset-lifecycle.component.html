@@ -7,15 +7,42 @@
         </mat-card-header>
         <div class="details">
           <table class="lifecycle-table" *ngIf="dataset.datasetlifecycle">
-            <tr *ngIf="dataset.datasetlifecycle.dateOfPublishing as value">
-              <th><mat-icon> radio </mat-icon> Data Publishing Date</th>
+            <tr *ngIf="dataset.creationTime as value">
+              <th><mat-icon> calendar_today </mat-icon> Creation Date</th>
               <td>{{ value | date: "yyyy-MM-dd" }}</td>
             </tr>
-            <tr *ngIf="dataset.datasetlifecycle.dateOfDiskPurging as value">
+            <tr
+              *ngIf="
+                !dataset.isPublished &&
+                dataset.datasetlifecycle.dateOfPublishing as value
+              "
+            >
+              <th><mat-icon> radio </mat-icon> End of Embargo Period</th>
+              <td>{{ value | date: "yyyy-MM-dd" }}</td>
+            </tr>
+            <tr
+              *ngIf="
+                dataset.isPublished && dataset.datasetlifecycle.publishedOn as value
+              "
+            >
+              <th><mat-icon> event_available </mat-icon> Publication Date</th>
+              <td>{{ value | date: "yyyy-MM-dd" }}</td>
+            </tr>
+            <tr
+              *ngIf="
+                appConfig.archiveWorkflowEnabled &&
+                dataset.datasetlifecycle.dateOfDiskPurging as value
+              "
+            >
               <th><mat-icon> gavel </mat-icon> Data Deletion Date</th>
               <td>{{ value | date: "yyyy-MM-dd" }}</td>
             </tr>
-            <tr *ngIf="dataset.datasetlifecycle.archiveRetentionTime as value">
+            <tr
+              *ngIf="
+                appConfig.archiveWorkflowEnabled &&
+                dataset.datasetlifecycle.archiveRetentionTime as value
+              "
+            >
               <th><mat-icon> save </mat-icon> Archive Retention Date</th>
               <td>{{ value | date: "yyyy-MM-dd" }}</td>
             </tr>

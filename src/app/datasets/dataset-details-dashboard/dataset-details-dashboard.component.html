@@ -51,10 +51,8 @@
       <ng-template mat-tab-label>
         <mat-icon> cloud_download </mat-icon> Datafiles
       </ng-template>
-      <mat-card > 
-        <datafiles
-
-        ></datafiles>
+      <div class="datafiles-container">
+        <datafiles></datafiles>
 
         <div
           *ngIf="
@@ -63,7 +61,7 @@
         >
           <h3>No datafiles linked to this dataset</h3>
         </div>
-      </mat-card>
+      </div>
     </mat-tab>
 
     <mat-tab *ngIf="appConfig.datasetReduceEnabled">
@@ -101,9 +99,7 @@
         <mat-icon> loop </mat-icon> Lifecycle
       </ng-template>
 
-      <dataset-lifecycle
-        [dataset]="dataset"
-      ></dataset-lifecycle>
+      <dataset-lifecycle [dataset]="dataset"></dataset-lifecycle>
     </mat-tab>
 
     <mat-tab *ngIf="isAdmin$ | async">
