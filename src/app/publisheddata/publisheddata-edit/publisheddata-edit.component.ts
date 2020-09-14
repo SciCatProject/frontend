@@ -128,6 +128,7 @@ export class PublisheddataEditComponent implements OnInit, OnDestroy {
         this.form.publicationYear = data.publicationYear;
         this.form.downloadLink = data.downloadLink || null;
         this.form.relatedPublications = data.relatedPublications || [];
+        this.form.pidArray = data.pidArray;
       }
     });
 
