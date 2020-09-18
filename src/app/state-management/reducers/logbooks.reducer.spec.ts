@@ -13,15 +13,15 @@ describe("LogbooksReducer", () => {
         new Logbook({
           roomId: "testId",
           name: "testName",
-          messages: [firstTestMessage, secondTestMessage]
-        })
+          messages: [firstTestMessage, secondTestMessage],
+        }),
       ];
 
       const action = fromActions.fetchLogbooksCompleteAction({ logbooks });
       const state = logbooksReducer(initialLogbookState, action);
 
       expect(state.logbooks).toEqual(logbooks);
-      state.logbooks.forEach(logbook => {
+      state.logbooks.forEach((logbook) => {
         expect(logbook.messages[0]).toEqual(secondTestMessage);
         expect(logbook.messages[1]).toEqual(firstTestMessage);
       });
@@ -59,7 +59,7 @@ describe("LogbooksReducer", () => {
   describe("on prefillFiltersAction", () => {
     it("should set filters and set hasPrefilledFilters to true", () => {
       const values: Partial<LogbookFilters> = {
-        textSearch: "test"
+        textSearch: "test",
       };
       const action = fromActions.prefillFiltersAction({ values });
       const state = logbooksReducer(initialLogbookState, action);
@@ -88,7 +88,7 @@ describe("LogbooksReducer", () => {
       const action = fromActions.setDisplayFiltersAction({
         showBotMessages,
         showImages,
-        showUserMessages
+        showUserMessages,
       });
       const state = logbooksReducer(initialLogbookState, action);
 
@@ -131,16 +131,16 @@ describe("LogbooksReducer", () => {
       const inputMessage = {
         content: {
           info: {
-            thumbnail_url: "mxc://"
+            thumbnail_url: "mxc://",
           },
           msgtype: "m.image",
-          url: "mxc://"
-        }
+          url: "mxc://",
+        },
       };
       logbook.messages = [inputMessage];
       const formattedLogbook = formatImageUrls(logbook);
 
-      formattedLogbook.messages.forEach(message => {
+      formattedLogbook.messages.forEach((message) => {
         expect(message.content.url).toEqual(
           APP_DI_CONFIG.synapseBaseUrl + "/_matrix/media/r0/download/"
         );
@@ -169,16 +169,16 @@ describe("LogbooksReducer", () => {
       const inputMessage = {
         content: {
           info: {
-            thumbnail_url: "mxc://"
+            thumbnail_url: "mxc://",
           },
           msgtype: "m.text",
-          url: "mxc://"
-        }
+          url: "mxc://",
+        },
       };
       logbook.messages = [inputMessage];
       const formattedLogbook = formatImageUrls(logbook);
 
-      formattedLogbook.messages.forEach(message => {
+      formattedLogbook.messages.forEach((message) => {
         expect(message.content.url).toEqual("mxc://");
         expect(message.content.info.thumbnail_url).toEqual("mxc://");
       });
@@ -190,13 +190,13 @@ describe("LogbooksReducer", () => {
         content: {
           info: {},
           msgtype: "m.image",
-          url: "mxc://"
-        }
+          url: "mxc://",
+        },
       };
       logbook.messages = [inputMessage];
       const formattedLogbook = formatImageUrls(logbook);
 
-      formattedLogbook.messages.forEach(message => {
+      formattedLogbook.messages.forEach((message) => {
         expect(message.content.url).toEqual(
           APP_DI_CONFIG.synapseBaseUrl + "/_matrix/media/r0/download/"
         );
@@ -209,15 +209,15 @@ describe("LogbooksReducer", () => {
       const inputMessage = {
         content: {
           info: {
-            thumbnail_url: "mxc://"
+            thumbnail_url: "mxc://",
           },
-          msgtype: "m.image"
-        }
+          msgtype: "m.image",
+        },
       };
       logbook.messages = [inputMessage];
       const formattedLogbook = formatImageUrls(logbook);
 
-      formattedLogbook.messages.forEach(message => {
+      formattedLogbook.messages.forEach((message) => {
         expect(message.content.url).toEqual(undefined);
         expect(message.content.info.thumbnail_url).toBe(
           APP_DI_CONFIG.synapseBaseUrl + "/_matrix/media/r0/download/"
@@ -230,16 +230,25 @@ describe("LogbooksReducer", () => {
       const inputMessage = {
         content: {
           info: {},
-          msgtype: "m.image"
-        }
+          msgtype: "m.image",
+        },
       };
       logbook.messages = [inputMessage];
       const formattedLogbook = formatImageUrls(logbook);
 
-      formattedLogbook.messages.forEach(message => {
+      formattedLogbook.messages.forEach((message) => {
         expect(message.content.url).toEqual(undefined);
         expect(message.content.info.thumbnail_url).toBe(undefined);
       });
+    });
+  });
+
+  describe("on clearLogbooksStateAction", () => {
+    it("should set logbook state to initialLogbookState", () => {
+      const action = fromActions.clearLogbooksStateAction();
+      const state = logbooksReducer(initialLogbookState, action);
+
+      expect(state).toEqual(initialLogbookState);
     });
   });
 });

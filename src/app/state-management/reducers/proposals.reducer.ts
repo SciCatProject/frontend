@@ -1,7 +1,7 @@
 import { Action, createReducer, on } from "@ngrx/store";
 import {
   initialProposalsState,
-  ProposalsState
+  ProposalsState,
 } from "../state/proposals.store";
 import * as fromActions from "../actions/proposals.actions";
 
@@ -10,17 +10,17 @@ const reducer = createReducer(
 
   on(fromActions.fetchProposalsCompleteAction, (state, { proposals }) => ({
     ...state,
-    proposals
+    proposals,
   })),
 
   on(fromActions.fetchCountCompleteAction, (state, { count }) => ({
     ...state,
-    proposalsCount: count
+    proposalsCount: count,
   })),
 
   on(fromActions.fetchProposalCompleteAction, (state, { proposal }) => ({
     ...state,
-    currentProposal: proposal
+    currentProposal: proposal,
   })),
 
   on(
@@ -44,7 +44,7 @@ const reducer = createReducer(
     fromActions.updateAttachmentCaptionCompleteAction,
     (state, { attachment }) => {
       const attachments = state.currentProposal.attachments.filter(
-        existingAttachment => existingAttachment.id !== attachment.id
+        (existingAttachment) => existingAttachment.id !== attachment.id
       );
       attachments.push(attachment);
       const currentProposal = { ...state.currentProposal, attachments };
@@ -54,7 +54,7 @@ const reducer = createReducer(
 
   on(fromActions.removeAttachmentCompleteAction, (state, { attachmentId }) => {
     const attachments = state.currentProposal.attachments.filter(
-      attachment => attachment.id !== attachmentId
+      (attachment) => attachment.id !== attachmentId
     );
     const currentProposal = { ...state.currentProposal, attachments };
     return { ...state, currentProposal };
@@ -76,12 +76,12 @@ const reducer = createReducer(
     return { ...state, proposalFilters };
   }),
 
-  on(fromActions.clearFacetsAction, state => {
+  on(fromActions.clearFacetsAction, (state) => {
     const limit = state.proposalFilters.limit; // Save limit
     const proposalFilters = {
       ...initialProposalsState.proposalFilters,
       skip: 0,
-      limit
+      limit,
     };
     return { ...state, proposalFilters };
   }),
@@ -101,7 +101,11 @@ const reducer = createReducer(
     const sortField = column + (direction ? ":" + direction : "");
     const proposalFilters = { ...state.proposalFilters, sortField, skip: 0 };
     return { ...state, proposalFilters };
-  })
+  }),
+
+  on(fromActions.clearProposalsStateAction, () => ({
+    ...initialProposalsState,
+  }))
 );
 
 export function proposalsReducer(

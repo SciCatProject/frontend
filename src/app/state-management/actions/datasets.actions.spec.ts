@@ -4,7 +4,7 @@ import { FacetCounts } from "state-management/state/datasets.store";
 import {
   ArchViewMode,
   DatasetFilters,
-  ScientificCondition
+  ScientificCondition,
 } from "state-management/models";
 
 describe("Dataset Actions", () => {
@@ -21,7 +21,7 @@ describe("Dataset Actions", () => {
       const action = fromActions.fetchDatasetsCompleteAction({ datasets });
       expect({ ...action }).toEqual({
         type: "[Dataset] Fetch Datasets Complete",
-        datasets
+        datasets,
       });
     });
   });
@@ -30,7 +30,7 @@ describe("Dataset Actions", () => {
     it("should create an action", () => {
       const action = fromActions.fetchDatasetsFailedAction();
       expect({ ...action }).toEqual({
-        type: "[Dataset] Fetch Datasets Failed"
+        type: "[Dataset] Fetch Datasets Failed",
       });
     });
   });
@@ -48,12 +48,12 @@ describe("Dataset Actions", () => {
       const allCounts = 0;
       const action = fromActions.fetchFacetCountsCompleteAction({
         facetCounts,
-        allCounts
+        allCounts,
       });
       expect({ ...action }).toEqual({
         type: "[Dataset] Fetch Facet Counts Complete",
         facetCounts,
-        allCounts
+        allCounts,
       });
     });
   });
@@ -62,7 +62,7 @@ describe("Dataset Actions", () => {
     it("should create an action", () => {
       const action = fromActions.fetchFacetCountsFailedAction();
       expect({ ...action }).toEqual({
-        type: "[Dataset] Fetch Facet Counts Failed"
+        type: "[Dataset] Fetch Facet Counts Failed",
       });
     });
   });
@@ -73,7 +73,7 @@ describe("Dataset Actions", () => {
       const action = fromActions.fetchMetadataKeysAction({ metadataKey });
       expect({ ...action }).toEqual({
         type: "[Dataset] Fetch Metadata Keys",
-        metadataKey
+        metadataKey,
       });
     });
   });
@@ -82,11 +82,11 @@ describe("Dataset Actions", () => {
     it("should create an action", () => {
       const metadataKeys = ["test"];
       const action = fromActions.fetchMetadataKeysCompleteAction({
-        metadataKeys
+        metadataKeys,
       });
       expect({ ...action }).toEqual({
         type: "[Dataset] Fetch Metadata Keys Complete",
-        metadataKeys
+        metadataKeys,
       });
     });
   });
@@ -95,7 +95,7 @@ describe("Dataset Actions", () => {
     it("should create an action", () => {
       const action = fromActions.fetchMetadataKeysFailedAction();
       expect({ ...action }).toEqual({
-        type: "[Dataset] Fetch Metadata Keys Failed"
+        type: "[Dataset] Fetch Metadata Keys Failed",
       });
     });
   });
@@ -114,7 +114,7 @@ describe("Dataset Actions", () => {
       const action = fromActions.fetchDatasetCompleteAction({ dataset });
       expect({ ...action }).toEqual({
         type: "[Dataset] Fetch Dataset Complete",
-        dataset
+        dataset,
       });
     });
   });
@@ -123,7 +123,7 @@ describe("Dataset Actions", () => {
     it("should create an action", () => {
       const action = fromActions.fetchDatasetFailedAction();
       expect({ ...action }).toEqual({
-        type: "[Dataset] Fetch Dataset Failed"
+        type: "[Dataset] Fetch Dataset Failed",
       });
     });
   });
@@ -141,7 +141,7 @@ describe("Dataset Actions", () => {
       const action = fromActions.prefillBatchCompleteAction({ batch });
       expect({ ...action }).toEqual({
         type: "[Dataset] Prefill Batch Complete",
-        batch
+        batch,
       });
     });
   });
@@ -159,7 +159,7 @@ describe("Dataset Actions", () => {
       const action = fromActions.removeFromBatchAction({ dataset });
       expect({ ...action }).toEqual({
         type: "[Dataset] Remove From Batch",
-        dataset
+        dataset,
       });
     });
   });
@@ -185,7 +185,7 @@ describe("Dataset Actions", () => {
       const action = fromActions.addDatasetCompleteAction({ dataset });
       expect({ ...action }).toEqual({
         type: "[Dataset] Add Dataset Complete",
-        dataset
+        dataset,
       });
     });
   });
@@ -205,7 +205,7 @@ describe("Dataset Actions", () => {
       expect({ ...action }).toEqual({
         type: "[Dataset] Update Property",
         pid,
-        property
+        property,
       });
     });
   });
@@ -214,7 +214,7 @@ describe("Dataset Actions", () => {
     it("should create an action", () => {
       const action = fromActions.updatePropertyCompleteAction();
       expect({ ...action }).toEqual({
-        type: "[Dataset] Update Property Complete"
+        type: "[Dataset] Update Property Complete",
       });
     });
   });
@@ -223,7 +223,7 @@ describe("Dataset Actions", () => {
     it("should create an action", () => {
       const action = fromActions.updatePropertyFailedAction();
       expect({ ...action }).toEqual({
-        type: "[Dataset] Update Property Failed"
+        type: "[Dataset] Update Property Failed",
       });
     });
   });
@@ -234,7 +234,7 @@ describe("Dataset Actions", () => {
       const action = fromActions.addAttachmentAction({ attachment });
       expect({ ...action }).toEqual({
         type: "[Dataset] Add Attachment",
-        attachment
+        attachment,
       });
     });
   });
@@ -245,7 +245,7 @@ describe("Dataset Actions", () => {
       const action = fromActions.addAttachmentCompleteAction({ attachment });
       expect({ ...action }).toEqual({
         type: "[Dataset] Add Attachment Complete",
-        attachment
+        attachment,
       });
     });
   });
@@ -254,7 +254,7 @@ describe("Dataset Actions", () => {
     it("should create an action", () => {
       const action = fromActions.addAttachmentFailedAction();
       expect({ ...action }).toEqual({
-        type: "[Dataset] Add Attachment Failed"
+        type: "[Dataset] Add Attachment Failed",
       });
     });
   });
@@ -267,13 +267,13 @@ describe("Dataset Actions", () => {
       const action = fromActions.updateAttachmentCaptionAction({
         datasetId,
         attachmentId,
-        caption
+        caption,
       });
       expect({ ...action }).toEqual({
         type: "[Dataset] Update Attachment Caption",
         datasetId,
         attachmentId,
-        caption
+        caption,
       });
     });
   });
@@ -282,11 +282,11 @@ describe("Dataset Actions", () => {
     it("should create an action", () => {
       const attachment = new Attachment();
       const action = fromActions.updateAttachmentCaptionCompleteAction({
-        attachment
+        attachment,
       });
       expect({ ...action }).toEqual({
         type: "[Dataset] Update Attachment Caption Complete",
-        attachment
+        attachment,
       });
     });
   });
@@ -295,7 +295,7 @@ describe("Dataset Actions", () => {
     it("should create an action", () => {
       const action = fromActions.updateAttachmentCaptionFailedAction();
       expect({ ...action }).toEqual({
-        type: "[Dataset] Update Attachment Action Failed"
+        type: "[Dataset] Update Attachment Action Failed",
       });
     });
   });
@@ -306,12 +306,12 @@ describe("Dataset Actions", () => {
       const attachmentId = "testId";
       const action = fromActions.removeAttachmentAction({
         datasetId,
-        attachmentId
+        attachmentId,
       });
       expect({ ...action }).toEqual({
         type: "[Dataset] Remove Attachment",
         datasetId,
-        attachmentId
+        attachmentId,
       });
     });
   });
@@ -320,11 +320,11 @@ describe("Dataset Actions", () => {
     it("should create an action", () => {
       const attachmentId = "testId";
       const action = fromActions.removeAttachmentCompleteAction({
-        attachmentId
+        attachmentId,
       });
       expect({ ...action }).toEqual({
         type: "[Dataset] Remove Attachment Complete",
-        attachmentId
+        attachmentId,
       });
     });
   });
@@ -333,7 +333,7 @@ describe("Dataset Actions", () => {
     it("should create an action", () => {
       const action = fromActions.removeAttachmentFailedAction();
       expect({ ...action }).toEqual({
-        type: "[Dataset] Remove Attachment Failed"
+        type: "[Dataset] Remove Attachment Failed",
       });
     });
   });
@@ -344,7 +344,7 @@ describe("Dataset Actions", () => {
       const action = fromActions.reduceDatasetAction({ dataset });
       expect({ ...action }).toEqual({
         type: "[Dataset] Reduce Dataset",
-        dataset
+        dataset,
       });
     });
   });
@@ -355,7 +355,7 @@ describe("Dataset Actions", () => {
       const action = fromActions.reduceDatasetCompleteAction({ result });
       expect({ ...action }).toEqual({
         type: "[Dataset] Reduce Dataset Complete",
-        result
+        result,
       });
     });
   });
@@ -364,7 +364,7 @@ describe("Dataset Actions", () => {
     it("should create an action", () => {
       const action = fromActions.reduceDatasetFailedAction();
       expect({ ...action }).toEqual({
-        type: "[Dataset] Reduce Dataset Failed"
+        type: "[Dataset] Reduce Dataset Failed",
       });
     });
   });
@@ -375,7 +375,7 @@ describe("Dataset Actions", () => {
       const action = fromActions.selectDatasetAction({ dataset });
       expect({ ...action }).toEqual({
         type: "[Dataset] Select Dataset",
-        dataset
+        dataset,
       });
     });
   });
@@ -386,7 +386,7 @@ describe("Dataset Actions", () => {
       const action = fromActions.deselectDatasetAction({ dataset });
       expect({ ...action }).toEqual({
         type: "[Dataset] Deselect Dataset",
-        dataset
+        dataset,
       });
     });
   });
@@ -395,7 +395,7 @@ describe("Dataset Actions", () => {
     it("should create an action", () => {
       const action = fromActions.selectAllDatasetsAction();
       expect({ ...action }).toEqual({
-        type: "[Dataset] Select All Datasets"
+        type: "[Dataset] Select All Datasets",
       });
     });
   });
@@ -404,7 +404,7 @@ describe("Dataset Actions", () => {
     it("should create an action", () => {
       const action = fromActions.clearSelectionAction();
       expect({ ...action }).toEqual({
-        type: "[Dataset] Clear Selection"
+        type: "[Dataset] Clear Selection",
       });
     });
   });
@@ -415,7 +415,7 @@ describe("Dataset Actions", () => {
       const action = fromActions.setDatasetsLimitFilterAction({ limit });
       expect({ ...action }).toEqual({
         type: "[Dataset] Set Limit Filter",
-        limit
+        limit,
       });
     });
   });
@@ -428,7 +428,7 @@ describe("Dataset Actions", () => {
       expect({ ...action }).toEqual({
         type: "[Dataset] Change Page",
         page,
-        limit
+        limit,
       });
     });
   });
@@ -441,7 +441,7 @@ describe("Dataset Actions", () => {
       expect({ ...action }).toEqual({
         type: "[Dataset] Sort By Column",
         column,
-        direction
+        direction,
       });
     });
   });
@@ -452,7 +452,7 @@ describe("Dataset Actions", () => {
       const action = fromActions.setSearchTermsAction({ terms });
       expect({ ...action }).toEqual({
         type: "[Dataset] Set Search Terms",
-        terms
+        terms,
       });
     });
   });
@@ -463,7 +463,7 @@ describe("Dataset Actions", () => {
       const action = fromActions.setArchiveViewModeAction({ modeToggle });
       expect({ ...action }).toEqual({
         type: "[Dataset] Set Archive View Mode",
-        modeToggle
+        modeToggle,
       });
     });
   });
@@ -474,7 +474,7 @@ describe("Dataset Actions", () => {
       const action = fromActions.setPublicViewModeAction({ isPublished });
       expect({ ...action }).toEqual({
         type: "[Dataset] Set Public View Mode",
-        isPublished
+        isPublished,
       });
     });
   });
@@ -485,7 +485,7 @@ describe("Dataset Actions", () => {
       const action = fromActions.prefillFiltersAction({ values });
       expect({ ...action }).toEqual({
         type: "[Dataset] Prefill Filters",
-        values
+        values,
       });
     });
   });
@@ -494,7 +494,7 @@ describe("Dataset Actions", () => {
     it("should create an action", () => {
       const action = fromActions.clearFacetsAction();
       expect({ ...action }).toEqual({
-        type: "[Dataset] Clear Facets"
+        type: "[Dataset] Clear Facets",
       });
     });
   });
@@ -505,7 +505,7 @@ describe("Dataset Actions", () => {
       const action = fromActions.setTextFilterAction({ text });
       expect({ ...action }).toEqual({
         type: "[Dataset] Set Text Filter",
-        text
+        text,
       });
     });
   });
@@ -516,7 +516,7 @@ describe("Dataset Actions", () => {
       const action = fromActions.addLocationFilterAction({ location });
       expect({ ...action }).toEqual({
         type: "[Dataset] Add Location Filter",
-        location
+        location,
       });
     });
   });
@@ -527,7 +527,7 @@ describe("Dataset Actions", () => {
       const action = fromActions.removeLocationFilterAction({ location });
       expect({ ...action }).toEqual({
         type: "[Dataset] Remove Location Filter",
-        location
+        location,
       });
     });
   });
@@ -538,7 +538,7 @@ describe("Dataset Actions", () => {
       const action = fromActions.addGroupFilterAction({ group });
       expect({ ...action }).toEqual({
         type: "[Dataset] Add Group Filter",
-        group
+        group,
       });
     });
   });
@@ -549,7 +549,7 @@ describe("Dataset Actions", () => {
       const action = fromActions.removeGroupFilterAction({ group });
       expect({ ...action }).toEqual({
         type: "[Dataset] Remove Group Filter",
-        group
+        group,
       });
     });
   });
@@ -560,7 +560,7 @@ describe("Dataset Actions", () => {
       const action = fromActions.addTypeFilterAction({ datasetType });
       expect({ ...action }).toEqual({
         type: "[Dataset] Add Type Filter",
-        datasetType
+        datasetType,
       });
     });
   });
@@ -571,7 +571,7 @@ describe("Dataset Actions", () => {
       const action = fromActions.removeTypeFilterAction({ datasetType });
       expect({ ...action }).toEqual({
         type: "[Dataset] Remove Type Filter",
-        datasetType
+        datasetType,
       });
     });
   });
@@ -582,7 +582,7 @@ describe("Dataset Actions", () => {
       const action = fromActions.addKeywordFilterAction({ keyword });
       expect({ ...action }).toEqual({
         type: "[Dataset] Add Keyword Filter",
-        keyword
+        keyword,
       });
     });
   });
@@ -593,7 +593,7 @@ describe("Dataset Actions", () => {
       const action = fromActions.removeKeywordFilterAction({ keyword });
       expect({ ...action }).toEqual({
         type: "[Dataset] Remove Keyword Filter",
-        keyword
+        keyword,
       });
     });
   });
@@ -606,7 +606,7 @@ describe("Dataset Actions", () => {
       expect({ ...action }).toEqual({
         type: "[Dataset] Set Date Range Filter",
         begin,
-        end
+        end,
       });
     });
   });
@@ -617,12 +617,12 @@ describe("Dataset Actions", () => {
         lhs: "lhsTest",
         relation: "LESS_THAN",
         rhs: 5,
-        unit: "s"
+        unit: "s",
       };
       const action = fromActions.addScientificConditionAction({ condition });
       expect({ ...action }).toEqual({
         type: "[Dataset] Add Scientific Condition",
-        condition
+        condition,
       });
     });
   });
@@ -633,8 +633,15 @@ describe("Dataset Actions", () => {
       const action = fromActions.removeScientificConditionAction({ index });
       expect({ ...action }).toEqual({
         type: "[Dataset] Remove Scientific Condition",
-        index
+        index,
       });
+    });
+  });
+
+  describe("clearDatasetsStateAction", () => {
+    it("should create an action", () => {
+      const action = fromActions.clearDatasetsStateAction();
+      expect({ ...action }).toEqual({ type: "[Dataset] Clear State" });
     });
   });
 });

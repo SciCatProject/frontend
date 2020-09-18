@@ -63,3 +63,5 @@ export const sortByColumnAction = createAction(
   "[Logbook] Sort By Column",
   props<{ column: string; direction: string }>()
 );
+
+export const clearLogbooksStateAction = createAction("[Logbook] Clear State");

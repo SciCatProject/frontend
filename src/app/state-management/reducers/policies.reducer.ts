@@ -1,7 +1,7 @@
 import { createReducer, on, Action } from "@ngrx/store";
 import {
   initialPolicyState,
-  PolicyState
+  PolicyState,
 } from "state-management/state/policies.store";
 import * as fromActions from "state-management/actions/policies.actions";
 
@@ -9,30 +9,30 @@ const reducer = createReducer(
   initialPolicyState,
   on(fromActions.fetchPoliciesCompleteAction, (state, { policies }) => ({
     ...state,
-    policies
+    policies,
   })),
 
   on(fromActions.fetchCountCompleteAction, (state, { count }) => ({
     ...state,
-    totalCount: count
+    totalCount: count,
   })),
 
   on(
     fromActions.fetchEditablePoliciesCompleteAction,
     (state, { policies }) => ({
       ...state,
-      editablePolicies: policies
+      editablePolicies: policies,
     })
   ),
 
   on(fromActions.fetchEditableCountCompleteAction, (state, { count }) => ({
     ...state,
-    editableCount: count
+    editableCount: count,
   })),
 
   on(fromActions.selectPolicyAction, (state, { policy }) => {
     const alreadySelected = state.selectedPolicies.find(
-      existing => existing.id === policy.id
+      (existing) => existing.id === policy.id
     );
     if (alreadySelected) {
       return state;
@@ -43,18 +43,18 @@ const reducer = createReducer(
   }),
   on(fromActions.deselectPolicyAction, (state, { policy }) => {
     const selectedPolicies = state.selectedPolicies.filter(
-      selectedPolicy => selectedPolicy.id !== policy.id
+      (selectedPolicy) => selectedPolicy.id !== policy.id
     );
     return { ...state, selectedPolicies };
   }),
 
-  on(fromActions.selectAllPoliciesAction, state => {
+  on(fromActions.selectAllPoliciesAction, (state) => {
     const selectedPolicies = state.editablePolicies;
     return { ...state, selectedPolicies };
   }),
-  on(fromActions.clearSelectionAction, state => ({
+  on(fromActions.clearSelectionAction, (state) => ({
     ...state,
-    selectedPolicies: []
+    selectedPolicies: [],
   })),
 
   on(fromActions.changePageAction, (state, { page, limit }) => {
@@ -77,7 +77,9 @@ const reducer = createReducer(
     const sortField = column + (direction ? " " + direction : "");
     const editableFilters = { ...state.editableFilters, sortField, skip: 0 };
     return { ...state, editableFilters };
-  })
+  }),
+
+  on(fromActions.clearPoliciesStateAction, () => ({ ...initialPolicyState }))
 );
 
 export function policiesReducer(

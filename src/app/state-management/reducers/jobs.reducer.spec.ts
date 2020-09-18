@@ -7,7 +7,7 @@ const data: JobInterface = {
   id: "testId",
   emailJobInitiator: "test@email.com",
   type: "archive",
-  datasetList: {}
+  datasetList: {},
 };
 const job = new Job(data);
 
@@ -105,6 +105,15 @@ describe("jobsReducer", () => {
 
       expect(state.filters.sortField).toEqual(sortField);
       expect(state.filters.skip).toEqual(0);
+    });
+  });
+
+  describe("on clearJobsStateAction", () => {
+    it("should set job state to initialJobsState", () => {
+      const action = fromActions.clearJobsStateAction();
+      const state = jobsReducer(initialJobsState, action);
+
+      expect(state).toEqual(initialJobsState);
     });
   });
 });

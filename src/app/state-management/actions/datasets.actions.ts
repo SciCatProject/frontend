@@ -4,7 +4,7 @@ import { FacetCounts } from "state-management/state/datasets.store";
 import {
   ArchViewMode,
   DatasetFilters,
-  ScientificCondition
+  ScientificCondition,
 } from "state-management/models";
 
 // === Effects ===
@@ -241,3 +241,5 @@ export const removeScientificConditionAction = createAction(
   "[Dataset] Remove Scientific Condition",
   props<{ index: number }>()
 );
+
+export const clearDatasetsStateAction = createAction("[Dataset] Clear State");

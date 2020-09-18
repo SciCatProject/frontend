@@ -121,3 +121,5 @@ export const sortByColumnAction = createAction(
   "[Proposal] Sort By Column",
   props<{ column: string; direction: string }>()
 );
+
+export const clearProposalsStateAction = createAction("[Proposal] Clear State");

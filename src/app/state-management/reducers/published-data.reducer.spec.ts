@@ -1,8 +1,7 @@
-import { PublishedDataState } from "state-management/state/published-data.store";
+import { initialPublishedDataState } from "state-management/state/published-data.store";
 import * as fromActions from "state-management/actions/published-data.actions";
 import { publishedDataReducer } from "./published-data.reducer";
 import { PublishedData, PublishedDataInterface } from "shared/sdk";
-import { PublishedDataFilters } from "state-management/models";
 
 const data: PublishedDataInterface = {
   doi: "testDOI",
@@ -18,27 +17,12 @@ const data: PublishedDataInterface = {
 };
 const publishedData = new PublishedData(data);
 
-const filters: PublishedDataFilters = {
-  sortField: "publicationYear desc",
-  skip: 0,
-  limit: 25
-};
-
-const initialPublishedDataState: PublishedDataState = {
-  publishedData: [],
-  currentPublishedData: publishedData,
-
-  totalCount: 0,
-
-  filters
-};
-
 describe("PublishedData Reducer", () => {
   describe("on fetchAllPublishedDataCompleteAction", () => {
     it("should set publishedData", () => {
       const allPublishedData = [publishedData];
       const action = fromActions.fetchAllPublishedDataCompleteAction({
-        publishedData: allPublishedData
+        publishedData: allPublishedData,
       });
       const state = publishedDataReducer(initialPublishedDataState, action);
 
@@ -59,7 +43,7 @@ describe("PublishedData Reducer", () => {
   describe("on fetchPublishedDataCompleteAction", () => {
     it("should set currentPublishedData", () => {
       const action = fromActions.fetchPublishedDataCompleteAction({
-        publishedData
+        publishedData,
       });
       const state = publishedDataReducer(initialPublishedDataState, action);
 
@@ -77,6 +61,15 @@ describe("PublishedData Reducer", () => {
 
       expect(state.filters.limit).toEqual(limit);
       expect(state.filters.skip).toEqual(skip);
+    });
+  });
+
+  describe("on clearPublishedDataStateAction", () => {
+    it("should set published data state to initialPublishedDataState", () => {
+      const action = fromActions.clearPublishedDataStateAction();
+      const state = publishedDataReducer(initialPublishedDataState, action);
+
+      expect(state).toEqual(initialPublishedDataState);
     });
   });
 });

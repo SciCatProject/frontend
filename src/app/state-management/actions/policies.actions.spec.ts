@@ -15,7 +15,7 @@ describe("Policies Actions", () => {
       const action = fromActions.fetchPoliciesCompleteAction({ policies });
       expect({ ...action }).toEqual({
         type: "[Policy] Fetch Policies Complete",
-        policies
+        policies,
       });
     });
   });
@@ -40,7 +40,7 @@ describe("Policies Actions", () => {
       const action = fromActions.fetchCountCompleteAction({ count });
       expect({ ...action }).toEqual({
         type: "[Policy] Fetch Count Complete",
-        count
+        count,
       });
     });
   });
@@ -56,7 +56,7 @@ describe("Policies Actions", () => {
     it("should create an action", () => {
       const action = fromActions.fetchEditablePoliciesAction();
       expect({ ...action }).toEqual({
-        type: "[Policy] Fetch Editable Policies"
+        type: "[Policy] Fetch Editable Policies",
       });
     });
   });
@@ -65,11 +65,11 @@ describe("Policies Actions", () => {
     it("should create an action", () => {
       const policies = [new Policy()];
       const action = fromActions.fetchEditablePoliciesCompleteAction({
-        policies
+        policies,
       });
       expect({ ...action }).toEqual({
         type: "[Policy] Fetch Editable Policies Complete",
-        policies
+        policies,
       });
     });
   });
@@ -78,7 +78,7 @@ describe("Policies Actions", () => {
     it("should create an action", () => {
       const action = fromActions.fetchEditablePoliciesFailedAction();
       expect({ ...action }).toEqual({
-        type: "[Policy] Fetch Editable Policies Failed"
+        type: "[Policy] Fetch Editable Policies Failed",
       });
     });
   });
@@ -87,7 +87,7 @@ describe("Policies Actions", () => {
     it("should create an action", () => {
       const action = fromActions.fetchEditableCountAction();
       expect({ ...action }).toEqual({
-        type: "[Policy] Fetch Editable Policies Count"
+        type: "[Policy] Fetch Editable Policies Count",
       });
     });
   });
@@ -98,7 +98,7 @@ describe("Policies Actions", () => {
       const action = fromActions.fetchEditableCountCompleteAction({ count });
       expect({ ...action }).toEqual({
         type: "[Policy] Fetch Editable Policies Count Complete",
-        count
+        count,
       });
     });
   });
@@ -107,7 +107,7 @@ describe("Policies Actions", () => {
     it("should create an action", () => {
       const action = fromActions.fetchEditableCountFailedAction();
       expect({ ...action }).toEqual({
-        type: "[Policy] Fetch Editable Policies Count Failed"
+        type: "[Policy] Fetch Editable Policies Count Failed",
       });
     });
   });
@@ -120,7 +120,7 @@ describe("Policies Actions", () => {
       expect({ ...action }).toEqual({
         type: "[Policy] Submit Policy",
         ownerList,
-        policy
+        policy,
       });
     });
   });
@@ -131,7 +131,7 @@ describe("Policies Actions", () => {
       const action = fromActions.submitPolicyCompleteAction({ policy });
       expect({ ...action }).toEqual({
         type: "[Policy] Submit Policy Complete",
-        policy
+        policy,
       });
     });
   });
@@ -149,7 +149,7 @@ describe("Policies Actions", () => {
       const action = fromActions.selectPolicyAction({ policy });
       expect({ ...action }).toEqual({
         type: "[Policy] Select Policy",
-        policy
+        policy,
       });
     });
   });
@@ -160,7 +160,7 @@ describe("Policies Actions", () => {
       const action = fromActions.deselectPolicyAction({ policy });
       expect({ ...action }).toEqual({
         type: "[Policy] Deselect Policy",
-        policy
+        policy,
       });
     });
   });
@@ -169,7 +169,7 @@ describe("Policies Actions", () => {
     it("should create an action", () => {
       const action = fromActions.selectAllPoliciesAction();
       expect({ ...action }).toEqual({
-        type: "[Policy] Select all"
+        type: "[Policy] Select all",
       });
     });
   });
@@ -178,7 +178,7 @@ describe("Policies Actions", () => {
     it("should create an action", () => {
       const action = fromActions.clearSelectionAction();
       expect({ ...action }).toEqual({
-        type: "[Policy] Clear Selection"
+        type: "[Policy] Clear Selection",
       });
     });
   });
@@ -191,7 +191,7 @@ describe("Policies Actions", () => {
       expect({ ...action }).toEqual({
         type: "[Policy] Change Page",
         page,
-        limit
+        limit,
       });
     });
   });
@@ -204,7 +204,7 @@ describe("Policies Actions", () => {
       expect({ ...action }).toEqual({
         type: "[Policy] Change Editable Page",
         page,
-        limit
+        limit,
       });
     });
   });
@@ -217,7 +217,7 @@ describe("Policies Actions", () => {
       expect({ ...action }).toEqual({
         type: "[Policy] Sort By Column",
         column,
-        direction
+        direction,
       });
     });
   });
@@ -228,13 +228,21 @@ describe("Policies Actions", () => {
       const direction = "desc";
       const action = fromActions.sortEditableByColumnAction({
         column,
-        direction
+        direction,
       });
       expect({ ...action }).toEqual({
         type: "[Policy] Sort Editable By Column",
         column,
-        direction
+        direction,
       });
+    });
+  });
+
+  describe("clearPoliciesStateAction", () => {
+    it("should create an action", () => {
+      const action = fromActions.clearPoliciesStateAction();
+
+      expect({ ...action }).toEqual({ type: "[Policy] Clear State" });
     });
   });
 });

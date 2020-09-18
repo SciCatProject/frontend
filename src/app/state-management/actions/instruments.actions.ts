@@ -54,3 +54,7 @@ export const sortByColumnAction = createAction(
   "[Instrument] Sort By Column",
   props<{ column: string; direction: string }>()
 );
+
+export const clearInstrumentsStateAction = createAction(
+  "[Instrument] Clear State"
+);

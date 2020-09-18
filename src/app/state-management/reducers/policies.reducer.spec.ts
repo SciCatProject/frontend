@@ -1,28 +1,7 @@
 import * as fromActions from "state-management/actions/policies.actions";
 import { policiesReducer } from "./policies.reducer";
 import { Policy } from "shared/sdk";
-import { PolicyState } from "state-management/state/policies.store";
-
-const initialPolicyState: PolicyState = {
-  policies: [],
-  editablePolicies: [],
-  selectedPolicies: [],
-
-  totalCount: 0,
-  editableCount: 0,
-
-  policiesFilters: {
-    sortField: "test:desc",
-    skip: 0,
-    limit: 25
-  },
-
-  editableFilters: {
-    sortField: "test:desc",
-    skip: 0,
-    limit: 25
-  }
-};
+import { initialPolicyState } from "state-management/state/policies.store";
 
 describe("PoliciesReducer", () => {
   describe("on fetchPoliciesCompleteAction", () => {
@@ -49,7 +28,7 @@ describe("PoliciesReducer", () => {
     it("should set editablePolicies", () => {
       const policies = [new Policy()];
       const action = fromActions.fetchEditablePoliciesCompleteAction({
-        policies
+        policies,
       });
       const state = policiesReducer(initialPolicyState, action);
 
@@ -91,7 +70,7 @@ describe("PoliciesReducer", () => {
       const firstPolicy = new Policy();
       firstPolicy.id = "1";
       const firstSelectAction = fromActions.selectPolicyAction({
-        policy: firstPolicy
+        policy: firstPolicy,
       });
       const intermediateState = policiesReducer(
         initialPolicyState,
@@ -100,7 +79,7 @@ describe("PoliciesReducer", () => {
       const secondPolicy = new Policy();
       secondPolicy.id = "2";
       const secondSelectAction = fromActions.selectPolicyAction({
-        policy: secondPolicy
+        policy: secondPolicy,
       });
       const state = policiesReducer(intermediateState, secondSelectAction);
 
@@ -192,12 +171,21 @@ describe("PoliciesReducer", () => {
       const sortField = column + " " + direction;
       const action = fromActions.sortEditableByColumnAction({
         column,
-        direction
+        direction,
       });
       const state = policiesReducer(initialPolicyState, action);
 
       expect(state.editableFilters.sortField).toEqual(sortField);
       expect(state.editableFilters.skip).toEqual(0);
+    });
+  });
+
+  describe("on clearPoliciesStateAction", () => {
+    it("should set policies state to initialPolicyState", () => {
+      const action = fromActions.clearPoliciesStateAction();
+      const state = policiesReducer(initialPolicyState, action);
+
+      expect(state).toEqual(initialPolicyState);
     });
   });
 });

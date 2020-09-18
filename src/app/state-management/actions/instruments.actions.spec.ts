@@ -14,12 +14,12 @@ describe("Instrument Actions", () => {
     it("should create an action", () => {
       const instruments = [new Instrument()];
       const action = fromActions.fetchInstrumentsCompleteAction({
-        instruments
+        instruments,
       });
 
       expect({ ...action }).toEqual({
         type: "[Instrument] Fetch Instruments Complete",
-        instruments
+        instruments,
       });
     });
   });
@@ -29,7 +29,7 @@ describe("Instrument Actions", () => {
       const action = fromActions.fetchInstrumentsFailedAction();
 
       expect({ ...action }).toEqual({
-        type: "[Instrument] Fetch Instruments Failed"
+        type: "[Instrument] Fetch Instruments Failed",
       });
     });
   });
@@ -39,7 +39,7 @@ describe("Instrument Actions", () => {
       const action = fromActions.fetchCountAction();
 
       expect({ ...action }).toEqual({
-        type: "[Instrument] Fetch Count"
+        type: "[Instrument] Fetch Count",
       });
     });
   });
@@ -51,7 +51,7 @@ describe("Instrument Actions", () => {
 
       expect({ ...action }).toEqual({
         type: "[Instrument] Fetch Count Complete",
-        count
+        count,
       });
     });
   });
@@ -61,7 +61,7 @@ describe("Instrument Actions", () => {
       const action = fromActions.fetchCountFailedAction();
 
       expect({ ...action }).toEqual({
-        type: "[Instrument] Fetch Count Failed"
+        type: "[Instrument] Fetch Count Failed",
       });
     });
   });
@@ -73,7 +73,7 @@ describe("Instrument Actions", () => {
 
       expect({ ...action }).toEqual({
         type: "[Instrument] Fetch Instrument",
-        pid
+        pid,
       });
     });
   });
@@ -82,12 +82,12 @@ describe("Instrument Actions", () => {
     it("should create an action", () => {
       const instrument = new Instrument();
       const action = fromActions.fetchInstrumentCompleteAction({
-        instrument
+        instrument,
       });
 
       expect({ ...action }).toEqual({
         type: "[Instrument] Fetch Instrument Complete",
-        instrument
+        instrument,
       });
     });
   });
@@ -97,7 +97,7 @@ describe("Instrument Actions", () => {
       const action = fromActions.fetchInstrumentFailedAction();
 
       expect({ ...action }).toEqual({
-        type: "[Instrument] Fetch Instrument Failed"
+        type: "[Instrument] Fetch Instrument Failed",
       });
     });
   });
@@ -108,12 +108,12 @@ describe("Instrument Actions", () => {
       const customMetadata = {};
       const action = fromActions.saveCustomMetadataAction({
         pid,
-        customMetadata
+        customMetadata,
       });
       expect({ ...action }).toEqual({
         type: "[Instrument] Save Custom Metadata",
         pid,
-        customMetadata
+        customMetadata,
       });
     });
   });
@@ -122,11 +122,11 @@ describe("Instrument Actions", () => {
     it("should create an action", () => {
       const instrument = new Instrument();
       const action = fromActions.saveCustomMetadataCompleteAction({
-        instrument
+        instrument,
       });
       expect({ ...action }).toEqual({
         type: "[Instrument] Save Custom Metadata Complete",
-        instrument
+        instrument,
       });
     });
   });
@@ -135,7 +135,7 @@ describe("Instrument Actions", () => {
     it("should create an action", () => {
       const action = fromActions.saveCustomMetadataFailedAction();
       expect({ ...action }).toEqual({
-        type: "[Instrument] Save Custom Metadata Failed"
+        type: "[Instrument] Save Custom Metadata Failed",
       });
     });
   });
@@ -149,7 +149,7 @@ describe("Instrument Actions", () => {
       expect({ ...action }).toEqual({
         type: "[Instrument] Change Page",
         page,
-        limit
+        limit,
       });
     });
   });
@@ -163,8 +163,16 @@ describe("Instrument Actions", () => {
       expect({ ...action }).toEqual({
         type: "[Instrument] Sort By Column",
         column,
-        direction
+        direction,
       });
+    });
+  });
+
+  describe("clearInstrumentsStateAction", () => {
+    it("should create an action", () => {
+      const action = fromActions.clearInstrumentsStateAction();
+
+      expect({ ...action }).toEqual({ type: "[Instrument] Clear State" });
     });
   });
 });

@@ -57,3 +57,5 @@ export const sortByColumnAction = createAction(
   "[Job] Sort By Column",
   props<{ column: string; direction: string }>()
 );
+
+export const clearJobsStateAction = createAction("[Job] Clear State");

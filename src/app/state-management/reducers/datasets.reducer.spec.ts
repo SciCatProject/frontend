@@ -3,7 +3,7 @@ import * as fromActions from "../actions/datasets.actions";
 import { Dataset, DatasetInterface, Attachment } from "shared/sdk/models";
 import {
   FacetCounts,
-  initialDatasetState
+  initialDatasetState,
 } from "state-management/state/datasets.store";
 import { ArchViewMode, ScientificCondition } from "../models";
 
@@ -14,7 +14,7 @@ const data: DatasetInterface = {
   creationTime: new Date(),
   type: "",
   ownerGroup: "",
-  attachments: []
+  attachments: [],
 };
 const dataset = new Dataset({ pid: "testPid", ...data });
 
@@ -35,7 +35,7 @@ describe("DatasetsReducer", () => {
       const allCounts = 0;
       const action = fromActions.fetchFacetCountsCompleteAction({
         facetCounts,
-        allCounts
+        allCounts,
       });
       const state = fromDatasets.datasetsReducer(initialDatasetState, action);
 
@@ -48,7 +48,7 @@ describe("DatasetsReducer", () => {
     it("should set metadataKeys property", () => {
       const metadataKeys = ["test"];
       const action = fromActions.fetchMetadataKeysCompleteAction({
-        metadataKeys
+        metadataKeys,
       });
       const state = fromDatasets.datasetsReducer(initialDatasetState, action);
 
@@ -78,10 +78,10 @@ describe("DatasetsReducer", () => {
   describe("on addToBatchAction", () => {
     it("should update batch property with selectedSets", () => {
       const batchedPids = initialDatasetState.batch.map(
-        batchSet => batchSet.pid
+        (batchSet) => batchSet.pid
       );
       const addition = initialDatasetState.selectedSets.filter(
-        selectedSet => batchedPids.indexOf(selectedSet.pid) === -1
+        (selectedSet) => batchedPids.indexOf(selectedSet.pid) === -1
       );
       const batch = [...initialDatasetState.batch, ...addition];
 
@@ -144,7 +144,7 @@ describe("DatasetsReducer", () => {
 
       const attachment = new Attachment();
       const action = fromActions.updateAttachmentCaptionCompleteAction({
-        attachment
+        attachment,
       });
       const state = fromDatasets.datasetsReducer(initialDatasetState, action);
 
@@ -162,7 +162,7 @@ describe("DatasetsReducer", () => {
       initialDatasetState.currentSet.attachments = [attachment];
 
       const action = fromActions.removeAttachmentCompleteAction({
-        attachmentId
+        attachmentId,
       });
       const state = fromDatasets.datasetsReducer(initialDatasetState, action);
 
@@ -285,7 +285,7 @@ describe("DatasetsReducer", () => {
   describe("on prefillFiltersAction", () => {
     it("should set searchTerms and set hasPrefilledFilters to true", () => {
       const values = {
-        text: "test"
+        text: "test",
       };
       const action = fromActions.prefillFiltersAction({ values });
       const state = fromDatasets.datasetsReducer(initialDatasetState, action);
@@ -442,7 +442,7 @@ describe("DatasetsReducer", () => {
         lhs: "lhsTest",
         relation: "EQUAL_TO_STRING",
         rhs: "rhsTest",
-        unit: ""
+        unit: "",
       };
 
       const action = fromActions.addScientificConditionAction({ condition });
@@ -458,7 +458,7 @@ describe("DatasetsReducer", () => {
         lhs: "lhsTest",
         relation: "EQUAL_TO_STRING",
         rhs: "rhsTest",
-        unit: ""
+        unit: "",
       };
       const act = fromActions.addScientificConditionAction({ condition });
       const sta = fromDatasets.datasetsReducer(initialDatasetState, act);
@@ -471,6 +471,15 @@ describe("DatasetsReducer", () => {
       const state = fromDatasets.datasetsReducer(initialDatasetState, action);
 
       expect(state.filters.scientific).not.toContain(condition);
+    });
+  });
+
+  describe("on clearDatasetsStateAction", () => {
+    it("should set dataset state to initialDatasetStata", () => {
+      const action = fromActions.clearDatasetsStateAction();
+      const state = fromDatasets.datasetsReducer(initialDatasetState, action);
+
+      expect(state).toEqual(initialDatasetState);
     });
   });
 });

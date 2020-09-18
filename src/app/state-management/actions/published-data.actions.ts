@@ -59,7 +59,7 @@ export const registerPublishedDataFailedAction = createAction(
 
 export const resyncPublishedDataAction = createAction(
   "[PublishedData] Resync Published Data",
-  props<{ doi: string, data: Object }>()
+  props<{ doi: string; data: Object }>()
 );
 export const resyncPublishedDataCompleteAction = createAction(
   "[PublishedData] Resync Published Data Complete",
@@ -77,4 +77,8 @@ export const changePageAction = createAction(
 export const sortByColumnAction = createAction(
   "[PublishedData] Sort By Column",
   props<{ column: string; direction: string }>()
+);
+
+export const clearPublishedDataStateAction = createAction(
+  "[PublischedData] Clear State"
 );

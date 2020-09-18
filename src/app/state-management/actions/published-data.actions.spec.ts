@@ -6,7 +6,7 @@ describe("Published Data Actions", () => {
     it("should create an action", () => {
       const action = fromActions.fetchAllPublishedDataAction();
       expect({ ...action }).toEqual({
-        type: "[PublishedData] Fetch All Published Data"
+        type: "[PublishedData] Fetch All Published Data",
       });
     });
   });
@@ -15,11 +15,11 @@ describe("Published Data Actions", () => {
     it("should create an action", () => {
       const publishedData = [new PublishedData()];
       const action = fromActions.fetchAllPublishedDataCompleteAction({
-        publishedData
+        publishedData,
       });
       expect({ ...action }).toEqual({
         type: "[PublishedData] Fetch All Published Data Complete",
-        publishedData
+        publishedData,
       });
     });
   });
@@ -28,7 +28,7 @@ describe("Published Data Actions", () => {
     it("should create an action", () => {
       const action = fromActions.fetchAllPublishedDataFailedAction();
       expect({ ...action }).toEqual({
-        type: "[PublishedData] Fetch All Published Datas Failed"
+        type: "[PublishedData] Fetch All Published Datas Failed",
       });
     });
   });
@@ -46,7 +46,7 @@ describe("Published Data Actions", () => {
       const action = fromActions.fetchCountCompleteAction({ count });
       expect({ ...action }).toEqual({
         type: "[PublishedData] Fetch Count Complete",
-        count
+        count,
       });
     });
   });
@@ -55,7 +55,7 @@ describe("Published Data Actions", () => {
     it("should create an action", () => {
       const action = fromActions.fetchCountFailedAction();
       expect({ ...action }).toEqual({
-        type: "[PublishedData] Fetch Count Failed"
+        type: "[PublishedData] Fetch Count Failed",
       });
     });
   });
@@ -66,7 +66,7 @@ describe("Published Data Actions", () => {
       const action = fromActions.fetchPublishedDataAction({ id });
       expect({ ...action }).toEqual({
         type: "[PublishedData] Fetch Published Data",
-        id
+        id,
       });
     });
   });
@@ -75,11 +75,11 @@ describe("Published Data Actions", () => {
     it("should create an action", () => {
       const publishedData = new PublishedData();
       const action = fromActions.fetchPublishedDataCompleteAction({
-        publishedData
+        publishedData,
       });
       expect({ ...action }).toEqual({
         type: "[PublishedData] Fetch Published Data Complete",
-        publishedData
+        publishedData,
       });
     });
   });
@@ -88,7 +88,7 @@ describe("Published Data Actions", () => {
     it("should create an action", () => {
       const action = fromActions.fetchPublishedDataFailedAction();
       expect({ ...action }).toEqual({
-        type: "[PublishedData] Fetch Published Data Failed"
+        type: "[PublishedData] Fetch Published Data Failed",
       });
     });
   });
@@ -99,7 +99,7 @@ describe("Published Data Actions", () => {
       const action = fromActions.publishDatasetAction({ data });
       expect({ ...action }).toEqual({
         type: "[PublishedData] Publish Dataset",
-        data
+        data,
       });
     });
   });
@@ -108,11 +108,11 @@ describe("Published Data Actions", () => {
     it("should create an action", () => {
       const publishedData = new PublishedData();
       const action = fromActions.publishDatasetCompleteAction({
-        publishedData
+        publishedData,
       });
       expect({ ...action }).toEqual({
         type: "[PublishedData] Publish Dataset Complete",
-        publishedData
+        publishedData,
       });
     });
   });
@@ -121,7 +121,7 @@ describe("Published Data Actions", () => {
     it("should create an action", () => {
       const action = fromActions.publishDatasetFailedAction();
       expect({ ...action }).toEqual({
-        type: "[PublishedData] Publish Dataset Failed"
+        type: "[PublishedData] Publish Dataset Failed",
       });
     });
   });
@@ -132,7 +132,7 @@ describe("Published Data Actions", () => {
       const action = fromActions.registerPublishedDataAction({ doi });
       expect({ ...action }).toEqual({
         type: "[PublishedData] Register Published Data",
-        doi
+        doi,
       });
     });
   });
@@ -141,11 +141,11 @@ describe("Published Data Actions", () => {
     it("should create an action", () => {
       const publishedData = new PublishedData();
       const action = fromActions.registerPublishedDataCompleteAction({
-        publishedData
+        publishedData,
       });
       expect({ ...action }).toEqual({
         type: "[PublishedData] Register Published Data Complete",
-        publishedData
+        publishedData,
       });
     });
   });
@@ -154,7 +154,7 @@ describe("Published Data Actions", () => {
     it("should create an action", () => {
       const action = fromActions.registerPublishedDataFailedAction();
       expect({ ...action }).toEqual({
-        type: "[PublishedData] Register Published Data Failed"
+        type: "[PublishedData] Register Published Data Failed",
       });
     });
   });
@@ -167,8 +167,16 @@ describe("Published Data Actions", () => {
       expect({ ...action }).toEqual({
         type: "[PublishedData] Change Page",
         page,
-        limit
+        limit,
       });
+    });
+  });
+
+  describe("clearPublishedDataStateAction", () => {
+    it("should create an action", () => {
+      const action = fromActions.clearPublishedDataStateAction();
+
+      expect({ ...action }).toEqual({ type: "[PublischedData] Clear State" });
     });
   });
 });

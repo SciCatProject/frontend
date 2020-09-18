@@ -15,7 +15,7 @@ describe("Logbook Actions", () => {
       const action = fromActions.fetchLogbooksCompleteAction({ logbooks });
       expect({ ...action }).toEqual({
         type: "[Logbook] Fetch Logbooks Complete",
-        logbooks
+        logbooks,
       });
     });
   });
@@ -24,7 +24,7 @@ describe("Logbook Actions", () => {
     it("should create an action", () => {
       const action = fromActions.fetchLogbooksFailedAction();
       expect({ ...action }).toEqual({
-        type: "[Logbook] Fetch Logbooks Failed"
+        type: "[Logbook] Fetch Logbooks Failed",
       });
     });
   });
@@ -43,7 +43,7 @@ describe("Logbook Actions", () => {
       const action = fromActions.fetchLogbookCompleteAction({ logbook });
       expect({ ...action }).toEqual({
         type: "[Logbook] Fetch Logbook Complete",
-        logbook
+        logbook,
       });
     });
   });
@@ -69,7 +69,7 @@ describe("Logbook Actions", () => {
       const action = fromActions.fetchCountCompleteAction({ count });
       expect({ ...action }).toEqual({
         type: "[Logbook] Fetch Count Complete",
-        count
+        count,
       });
     });
   });
@@ -84,12 +84,12 @@ describe("Logbook Actions", () => {
   describe("prefillFiltersAction", () => {
     it("should create an action", () => {
       const values: Partial<LogbookFilters> = {
-        textSearch: "test"
+        textSearch: "test",
       };
       const action = fromActions.prefillFiltersAction({ values });
       expect({ ...action }).toEqual({
         type: "[Logbook] Prefill Filters",
-        values
+        values,
       });
     });
   });
@@ -100,7 +100,7 @@ describe("Logbook Actions", () => {
       const action = fromActions.setTextFilterAction({ textSearch });
       expect({ ...action }).toEqual({
         type: "[Logbook] Set Text Filter",
-        textSearch
+        textSearch,
       });
     });
   });
@@ -113,13 +113,13 @@ describe("Logbook Actions", () => {
       const action = fromActions.setDisplayFiltersAction({
         showBotMessages,
         showImages,
-        showUserMessages
+        showUserMessages,
       });
       expect({ ...action }).toEqual({
         type: "[Logbook] Set Display Filters",
         showBotMessages,
         showImages,
-        showUserMessages
+        showUserMessages,
       });
     });
   });
@@ -132,7 +132,7 @@ describe("Logbook Actions", () => {
       expect({ ...action }).toEqual({
         type: "[Logbook] Change Page",
         page,
-        limit
+        limit,
       });
     });
   });
@@ -145,8 +145,16 @@ describe("Logbook Actions", () => {
       expect({ ...action }).toEqual({
         type: "[Logbook] Sort By Column",
         column,
-        direction
+        direction,
       });
+    });
+  });
+
+  describe("clearLogbooksStateAction", () => {
+    it("should create an action", () => {
+      const action = fromActions.clearLogbooksStateAction();
+
+      expect({ ...action }).toEqual({ type: "[Logbook] Clear State" });
     });
   });
 });

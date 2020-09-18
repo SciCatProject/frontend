@@ -140,3 +140,5 @@ export const setTextFilterAction = createAction(
   "[Sample] Set Text Filter",
   props<{ text: string }>()
 );
+
+export const clearSamplesStateAction = createAction("[Sample] Clear State");

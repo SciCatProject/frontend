@@ -16,7 +16,7 @@ describe("Sample Actions", () => {
       const action = fromActions.fetchSamplesCompleteAction({ samples });
       expect({ ...action }).toEqual({
         type: "[Sample] Fetch Samples Complete",
-        samples
+        samples,
       });
     });
   });
@@ -41,7 +41,7 @@ describe("Sample Actions", () => {
       const action = fromActions.fetchSamplesCountCompleteAction({ count });
       expect({ ...action }).toEqual({
         type: "[Sample] Fetch Samples Count Complete",
-        count
+        count,
       });
     });
   });
@@ -50,7 +50,7 @@ describe("Sample Actions", () => {
     it("should create an action", () => {
       const action = fromActions.fetchSamplesCountFailedAction();
       expect({ ...action }).toEqual({
-        type: "[Sample] Fetch Samples Count Failed"
+        type: "[Sample] Fetch Samples Count Failed",
       });
     });
   });
@@ -61,7 +61,7 @@ describe("Sample Actions", () => {
       const action = fromActions.fetchSampleAction({ sampleId });
       expect({ ...action }).toEqual({
         type: "[Sample] Fetch Sample",
-        sampleId
+        sampleId,
       });
     });
   });
@@ -72,7 +72,7 @@ describe("Sample Actions", () => {
       const action = fromActions.fetchSampleCompleteAction({ sample });
       expect({ ...action }).toEqual({
         type: "[Sample] Fetch Sample Complete",
-        sample
+        sample,
       });
     });
   });
@@ -90,7 +90,7 @@ describe("Sample Actions", () => {
       const action = fromActions.fetchSampleDatasetsAction({ sampleId });
       expect({ ...action }).toEqual({
         type: "[Sample] Fetch Datasets",
-        sampleId
+        sampleId,
       });
     });
   });
@@ -99,11 +99,11 @@ describe("Sample Actions", () => {
     it("should create an action", () => {
       const datasets = [new Dataset()];
       const action = fromActions.fetchSampleDatasetsCompleteAction({
-        datasets
+        datasets,
       });
       expect({ ...action }).toEqual({
         type: "[Sample] Fetch Datasets Complete",
-        datasets
+        datasets,
       });
     });
   });
@@ -112,7 +112,7 @@ describe("Sample Actions", () => {
     it("should create an action", () => {
       const action = fromActions.fetchSampleDatasetsFailedAction();
       expect({ ...action }).toEqual({
-        type: "[Sample] Fetch Datasets Failed"
+        type: "[Sample] Fetch Datasets Failed",
       });
     });
   });
@@ -123,7 +123,7 @@ describe("Sample Actions", () => {
       const action = fromActions.fetchSampleDatasetsCountAction({ sampleId });
       expect({ ...action }).toEqual({
         type: "[Sample] Fetch Datasets Count",
-        sampleId
+        sampleId,
       });
     });
   });
@@ -132,11 +132,11 @@ describe("Sample Actions", () => {
     it("should create an action", () => {
       const count = 100;
       const action = fromActions.fetchSampleDatasetsCountCompleteAction({
-        count
+        count,
       });
       expect({ ...action }).toEqual({
         type: "[Sample] Fetch Datasets Count Complete",
-        count
+        count,
       });
     });
   });
@@ -145,7 +145,7 @@ describe("Sample Actions", () => {
     it("should create an action", () => {
       const action = fromActions.fetchSampleDatasetsCountFailedAction();
       expect({ ...action }).toEqual({
-        type: "[Sample] Fetch Datasets Count Failed"
+        type: "[Sample] Fetch Datasets Count Failed",
       });
     });
   });
@@ -156,7 +156,7 @@ describe("Sample Actions", () => {
       const action = fromActions.addSampleAction({ sample });
       expect({ ...action }).toEqual({
         type: "[Sample] Add Sample",
-        sample
+        sample,
       });
     });
   });
@@ -167,7 +167,7 @@ describe("Sample Actions", () => {
       const action = fromActions.addSampleCompleteAction({ sample });
       expect({ ...action }).toEqual({
         type: "[Sample] Add Sample Complete",
-        sample
+        sample,
       });
     });
   });
@@ -185,12 +185,12 @@ describe("Sample Actions", () => {
       const characteristics = {};
       const action = fromActions.saveCharacteristicsAction({
         sampleId,
-        characteristics
+        characteristics,
       });
       expect({ ...action }).toEqual({
         type: "[Sample] Save Characteristics",
         sampleId,
-        characteristics
+        characteristics,
       });
     });
   });
@@ -201,7 +201,7 @@ describe("Sample Actions", () => {
       const action = fromActions.saveCharacteristicsCompleteAction({ sample });
       expect({ ...action }).toEqual({
         type: "[Sample] Save Characteristics Complete",
-        sample
+        sample,
       });
     });
   });
@@ -210,7 +210,7 @@ describe("Sample Actions", () => {
     it("should create an action", () => {
       const action = fromActions.saveCharacteristicsFailedAction();
       expect({ ...action }).toEqual({
-        type: "[Sample] Save Characteristics Failed"
+        type: "[Sample] Save Characteristics Failed",
       });
     });
   });
@@ -221,7 +221,7 @@ describe("Sample Actions", () => {
       const action = fromActions.addAttachmentAction({ attachment });
       expect({ ...action }).toEqual({
         type: "[Sample] Add Attachment",
-        attachment
+        attachment,
       });
     });
   });
@@ -232,7 +232,7 @@ describe("Sample Actions", () => {
       const action = fromActions.addAttachmentCompleteAction({ attachment });
       expect({ ...action }).toEqual({
         type: "[Sample] Add Attachment Complete",
-        attachment
+        attachment,
       });
     });
   });
@@ -241,7 +241,7 @@ describe("Sample Actions", () => {
     it("should create an action", () => {
       const action = fromActions.addAttachmentFailedAction();
       expect({ ...action }).toEqual({
-        type: "[Sample] Add Attachment Failed"
+        type: "[Sample] Add Attachment Failed",
       });
     });
   });
@@ -254,13 +254,13 @@ describe("Sample Actions", () => {
       const action = fromActions.updateAttachmentCaptionAction({
         sampleId,
         attachmentId,
-        caption
+        caption,
       });
       expect({ ...action }).toEqual({
         type: "[Sample] Update Attachment Caption",
         sampleId,
         attachmentId,
-        caption
+        caption,
       });
     });
   });
@@ -269,11 +269,11 @@ describe("Sample Actions", () => {
     it("should create an action", () => {
       const attachment = new Attachment();
       const action = fromActions.updateAttachmentCaptionCompleteAction({
-        attachment
+        attachment,
       });
       expect({ ...action }).toEqual({
         type: "[Sample] Update Attachment Caption Complete",
-        attachment
+        attachment,
       });
     });
   });
@@ -282,7 +282,7 @@ describe("Sample Actions", () => {
     it("should create an action", () => {
       const action = fromActions.updateAttachmentCaptionFailedAction();
       expect({ ...action }).toEqual({
-        type: "[Sample] Update Attachment Caption Failed"
+        type: "[Sample] Update Attachment Caption Failed",
       });
     });
   });
@@ -293,12 +293,12 @@ describe("Sample Actions", () => {
       const attachmentId = "abc123";
       const action = fromActions.removeAttachmentAction({
         sampleId,
-        attachmentId
+        attachmentId,
       });
       expect({ ...action }).toEqual({
         type: "[Sample] Remove Attachment",
         sampleId,
-        attachmentId
+        attachmentId,
       });
     });
   });
@@ -307,11 +307,11 @@ describe("Sample Actions", () => {
     it("should create an action", () => {
       const attachmentId = "abc123";
       const action = fromActions.removeAttachmentCompleteAction({
-        attachmentId
+        attachmentId,
       });
       expect({ ...action }).toEqual({
         type: "[Sample] Remove Attachment Complete",
-        attachmentId
+        attachmentId,
       });
     });
   });
@@ -320,7 +320,7 @@ describe("Sample Actions", () => {
     it("should create an action", () => {
       const action = fromActions.removeAttachmentFailedAction();
       expect({ ...action }).toEqual({
-        type: "[Sample] Remove Attachment Failed"
+        type: "[Sample] Remove Attachment Failed",
       });
     });
   });
@@ -333,7 +333,7 @@ describe("Sample Actions", () => {
       expect({ ...action }).toEqual({
         type: "[Sample] Change Page",
         page,
-        limit
+        limit,
       });
     });
   });
@@ -346,7 +346,7 @@ describe("Sample Actions", () => {
       expect({ ...action }).toEqual({
         type: "[Sample] Change Datasets Page",
         page,
-        limit
+        limit,
       });
     });
   });
@@ -359,7 +359,7 @@ describe("Sample Actions", () => {
       expect({ ...action }).toEqual({
         type: "[Sample] Sort By Column",
         column,
-        direction
+        direction,
       });
     });
   });
@@ -367,12 +367,12 @@ describe("Sample Actions", () => {
   describe("prefillFiltersAction", () => {
     it("should create an action", () => {
       const values: Partial<SampleFilters> = {
-        text: "test"
+        text: "test",
       };
       const action = fromActions.prefillFiltersAction({ values });
       expect({ ...action }).toEqual({
         type: "[Sample] Prefill Filters",
-        values
+        values,
       });
     });
   });
@@ -383,8 +383,16 @@ describe("Sample Actions", () => {
       const action = fromActions.setTextFilterAction({ text });
       expect({ ...action }).toEqual({
         type: "[Sample] Set Text Filter",
-        text
+        text,
       });
+    });
+  });
+
+  describe("clearSamplesStateAction", () => {
+    it("should create an action", () => {
+      const action = fromActions.clearSamplesStateAction();
+
+      expect({ ...action }).toEqual({ type: "[Sample] Clear State" });
     });
   });
 });

@@ -8,7 +8,7 @@ describe("InstrumentsReducer", () => {
     it("should set instruments property", () => {
       const instruments = [new Instrument()];
       const action = fromActions.fetchInstrumentsCompleteAction({
-        instruments
+        instruments,
       });
       const state = instrumentsReducer(initialInstrumentState, action);
 
@@ -30,7 +30,7 @@ describe("InstrumentsReducer", () => {
     it("should set currentInstrument property", () => {
       const instrument = new Instrument();
       const action = fromActions.fetchInstrumentCompleteAction({
-        instrument
+        instrument,
       });
       const state = instrumentsReducer(initialInstrumentState, action);
 
@@ -42,7 +42,7 @@ describe("InstrumentsReducer", () => {
     it("should set currentInstrument property", () => {
       const instrument = new Instrument();
       const action = fromActions.saveCustomMetadataCompleteAction({
-        instrument
+        instrument,
       });
       const state = instrumentsReducer(initialInstrumentState, action);
 
@@ -73,6 +73,15 @@ describe("InstrumentsReducer", () => {
 
       expect(state.filters.sortField).toEqual(sortField);
       expect(state.filters.skip).toEqual(0);
+    });
+  });
+
+  describe("on clearInstrumentsStateAction", () => {
+    it("should set instrument state to initialInstrumentState", () => {
+      const action = fromActions.clearInstrumentsStateAction();
+      const state = instrumentsReducer(initialInstrumentState, action);
+
+      expect(state).toEqual(initialInstrumentState);
     });
   });
 });

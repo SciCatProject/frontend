@@ -15,7 +15,7 @@ describe("Job Actions", () => {
       const action = fromActions.fetchJobsCompleteAction({ jobs });
       expect({ ...action }).toEqual({
         type: "[Job] Fetch Jobs Complete",
-        jobs
+        jobs,
       });
     });
   });
@@ -40,7 +40,7 @@ describe("Job Actions", () => {
       const action = fromActions.fetchCountCompleteAction({ count });
       expect({ ...action }).toEqual({
         type: "[Job] Fetch Count Complete",
-        count
+        count,
       });
     });
   });
@@ -132,8 +132,16 @@ describe("Job Actions", () => {
       expect({ ...action }).toEqual({
         type: "[Job] Sort By Column",
         column,
-        direction
+        direction,
       });
+    });
+  });
+
+  describe("clearJobsStateAction", () => {
+    it("should create an action", () => {
+      const action = fromActions.clearJobsStateAction();
+
+      expect({ ...action }).toEqual({ type: "[Job] Clear State" });
     });
   });
 });

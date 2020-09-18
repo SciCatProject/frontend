@@ -1,7 +1,7 @@
 import { createReducer, Action, on } from "@ngrx/store";
 import {
   initialPublishedDataState,
-  PublishedDataState
+  PublishedDataState,
 } from "state-management/state/published-data.store";
 import * as fromActions from "state-management/actions/published-data.actions";
 
@@ -12,20 +12,20 @@ const reducer = createReducer(
     fromActions.fetchAllPublishedDataCompleteAction,
     (state, { publishedData }) => ({
       ...state,
-      publishedData
+      publishedData,
     })
   ),
 
   on(fromActions.fetchCountCompleteAction, (state, { count }) => ({
     ...state,
-    totalCount: count
+    totalCount: count,
   })),
 
   on(
     fromActions.fetchPublishedDataCompleteAction,
     (state, { publishedData }) => ({
       ...state,
-      currentPublishedData: publishedData
+      currentPublishedData: publishedData,
     })
   ),
 
@@ -39,7 +39,11 @@ const reducer = createReducer(
     const sortField = column + (direction ? " " + direction : "");
     const filters = { ...state.filters, sortField, skip: 0 };
     return { ...state, filters };
-  })
+  }),
+
+  on(fromActions.clearPublishedDataStateAction, () => ({
+    ...initialPublishedDataState,
+  }))
 );
 
 export function publishedDataReducer(

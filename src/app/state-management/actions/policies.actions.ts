@@ -82,3 +82,5 @@ export const sortEditableByColumnAction = createAction(
   "[Policy] Sort Editable By Column",
   props<{ column: string; direction: string }>()
 );
+
+export const clearPoliciesStateAction = createAction("[Policy] Clear State");

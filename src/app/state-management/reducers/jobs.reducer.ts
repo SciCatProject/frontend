@@ -6,31 +6,31 @@ const reducer = createReducer(
   initialJobsState,
   on(fromActions.fetchJobsCompleteAction, (state, { jobs }) => ({
     ...state,
-    jobs
+    jobs,
   })),
 
   on(fromActions.fetchCountCompleteAction, (state, { count }) => ({
     ...state,
-    totalCount: count
+    totalCount: count,
   })),
 
   on(fromActions.fetchJobCompleteAction, (state, { job }) => ({
     ...state,
-    currentJob: job
+    currentJob: job,
   })),
 
-  on(fromActions.submitJobCompleteAction, state => ({
+  on(fromActions.submitJobCompleteAction, (state) => ({
     ...state,
-    submitError: undefined
+    submitError: undefined,
   })),
   on(fromActions.submitJobFailedAction, (state, { err }) => ({
     ...state,
-    submitError: err
+    submitError: err,
   })),
 
   on(fromActions.setJobViewModeAction, (state, { mode }) => ({
     ...state,
-    filters: { ...state.filters, mode, skip: 0 }
+    filters: { ...state.filters, mode, skip: 0 },
   })),
 
   on(fromActions.setJobsLimitFilterAction, (state, { limit }) => {
@@ -48,7 +48,9 @@ const reducer = createReducer(
     const sortField = column + (direction ? " " + direction : "");
     const filters = { ...state.filters, sortField, skip: 0 };
     return { ...state, filters };
-  })
+  }),
+
+  on(fromActions.clearJobsStateAction, () => ({ ...initialJobsState }))
 );
 
 export function jobsReducer(state: JobsState | undefined, action: Action) {

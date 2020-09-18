@@ -1,7 +1,7 @@
 import { createReducer, Action, on } from "@ngrx/store";
 import {
   SampleState,
-  initialSampleState
+  initialSampleState,
 } from "state-management/state/samples.store";
 import * as fromActions from "state-management/actions/samples.actions";
 
@@ -9,22 +9,22 @@ const reducer = createReducer(
   initialSampleState,
   on(fromActions.fetchSamplesCompleteAction, (state, { samples }) => ({
     ...state,
-    samples
+    samples,
   })),
 
   on(fromActions.fetchSamplesCountCompleteAction, (state, { count }) => ({
     ...state,
-    samplesCount: count
+    samplesCount: count,
   })),
 
   on(fromActions.fetchSampleCompleteAction, (state, { sample }) => ({
     ...state,
-    currentSample: sample
+    currentSample: sample,
   })),
 
   on(fromActions.fetchSampleDatasetsCompleteAction, (state, { datasets }) => ({
     ...state,
-    datasets
+    datasets,
   })),
 
   on(
@@ -40,12 +40,12 @@ const reducer = createReducer(
 
   on(fromActions.saveCharacteristicsCompleteAction, (state, { sample }) => ({
     ...state,
-    currentSample: sample
+    currentSample: sample,
   })),
 
   on(fromActions.addAttachmentCompleteAction, (state, { attachment }) => {
     const attachments = state.currentSample.attachments.filter(
-      existingAttachment => existingAttachment.id !== attachment.id
+      (existingAttachment) => existingAttachment.id !== attachment.id
     );
     attachments.push(attachment);
     const currentSample = { ...state.currentSample, attachments };
@@ -56,7 +56,7 @@ const reducer = createReducer(
     fromActions.updateAttachmentCaptionCompleteAction,
     (state, { attachment }) => {
       const attachments = state.currentSample.attachments.filter(
-        existingAttachment => existingAttachment.id !== attachment.id
+        (existingAttachment) => existingAttachment.id !== attachment.id
       );
       attachments.push(attachment);
       const currentSample = { ...state.currentSample, attachments };
@@ -66,7 +66,7 @@ const reducer = createReducer(
 
   on(fromActions.removeAttachmentCompleteAction, (state, { attachmentId }) => {
     const attachments = state.currentSample.attachments.filter(
-      attachment => attachment.id !== attachmentId
+      (attachment) => attachment.id !== attachmentId
     );
     const currentSample = { ...state.currentSample, attachments };
     return { ...state, currentSample };
@@ -97,8 +97,10 @@ const reducer = createReducer(
 
   on(fromActions.setTextFilterAction, (state, { text }) => ({
     ...state,
-    sampleFilters: { ...state.sampleFilters, text }
-  }))
+    sampleFilters: { ...state.sampleFilters, text },
+  })),
+
+  on(fromActions.clearSamplesStateAction, () => ({ ...initialSampleState }))
 );
 
 export function samplesReducer(state: SampleState | undefined, action: Action) {

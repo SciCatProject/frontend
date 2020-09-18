@@ -8,7 +8,7 @@ import {
   AccessToken,
   LoopBackAuth,
   SDKToken,
-  UserSetting
+  UserSetting,
 } from "shared/sdk";
 import { ADAuthService } from "users/adauth.service";
 import { TestBed } from "@angular/core/testing";
@@ -20,10 +20,22 @@ import { Router } from "@angular/router";
 import { provideMockStore } from "@ngrx/store/testing";
 import {
   getColumns,
-  getCurrentUser
+  getCurrentUser,
 } from "state-management/selectors/user.selectors";
-import { setDatasetsLimitFilterAction } from "state-management/actions/datasets.actions";
-import { setJobsLimitFilterAction } from "state-management/actions/jobs.actions";
+import {
+  clearDatasetsStateAction,
+  setDatasetsLimitFilterAction,
+} from "state-management/actions/datasets.actions";
+import {
+  clearJobsStateAction,
+  setJobsLimitFilterAction,
+} from "state-management/actions/jobs.actions";
+import { clearInstrumentsStateAction } from "state-management/actions/instruments.actions";
+import { clearLogbooksStateAction } from "state-management/actions/logbooks.actions";
+import { clearPoliciesStateAction } from "state-management/actions/policies.actions";
+import { clearProposalsStateAction } from "state-management/actions/proposals.actions";
+import { clearPublishedDataStateAction } from "state-management/actions/published-data.actions";
+import { clearSamplesStateAction } from "state-management/actions/samples.actions";
 
 describe("UserEffects", () => {
   let actions: Observable<any>;
@@ -42,16 +54,16 @@ describe("UserEffects", () => {
         provideMockStore({
           selectors: [
             { selector: getCurrentUser, value: {} },
-            { selector: getColumns, value: [] }
-          ]
+            { selector: getColumns, value: [] },
+          ],
         }),
         {
           provide: ADAuthService,
-          useValue: jasmine.createSpyObj("activeDirAuthService", ["login"])
+          useValue: jasmine.createSpyObj("activeDirAuthService", ["login"]),
         },
         {
           provide: LoopBackAuth,
-          useValue: jasmine.createSpyObj("loopBackAuth", ["setToken"])
+          useValue: jasmine.createSpyObj("loopBackAuth", ["setToken"]),
         },
         {
           provide: UserApi,
@@ -63,18 +75,18 @@ describe("UserEffects", () => {
             "getCurrent",
             "getSettings",
             "updateSettings",
-            "getCurrentToken"
-          ])
+            "getCurrentToken",
+          ]),
         },
         {
           provide: UserIdentityApi,
-          useValue: jasmine.createSpyObj("userIdentityApi", ["findOne"])
+          useValue: jasmine.createSpyObj("userIdentityApi", ["findOne"]),
         },
         {
           provide: Router,
-          useValue: jasmine.createSpyObj("router", ["navigate"])
-        }
-      ]
+          useValue: jasmine.createSpyObj("router", ["navigate"]),
+        },
+      ],
     });
 
     effects = TestBed.get(UserEffects);
@@ -90,13 +102,13 @@ describe("UserEffects", () => {
       const form = {
         username: "test",
         password: "test",
-        rememberMe: true
+        rememberMe: true,
       };
       const action = fromActions.loginAction({ form });
       const outcome = fromActions.activeDirLoginAction({
         username: form.username,
         password: form.password,
-        rememberMe: form.rememberMe
+        rememberMe: form.rememberMe,
       });
 
       actions = hot("-a", { a: action });
@@ -115,17 +127,17 @@ describe("UserEffects", () => {
       const loginRes = {
         body: {
           access_token: "testToken",
-          userId: "testId"
-        }
+          userId: "testId",
+        },
       };
       const action = fromActions.activeDirLoginAction({
         username,
         password,
-        rememberMe
+        rememberMe,
       });
       const outcome1 = fromActions.activeDirLoginSuccessAction();
       const outcome2 = fromActions.fetchUserAction({
-        adLoginResponse: loginRes.body
+        adLoginResponse: loginRes.body,
       });
 
       actions = hot("-a", { a: action });
@@ -140,12 +152,12 @@ describe("UserEffects", () => {
       const action = fromActions.activeDirLoginAction({
         username,
         password,
-        rememberMe
+        rememberMe,
       });
       const outcome = fromActions.activeDirLoginFailedAction({
         username,
         password,
-        rememberMe
+        rememberMe,
       });
 
       actions = hot("-a", { a: action });
@@ -161,7 +173,7 @@ describe("UserEffects", () => {
     const adLoginResponse = {};
     const token = new SDKToken({
       id: "testId",
-      userId: "testId"
+      userId: "testId",
     });
 
     it("should result in a fetchUserCompleteAction and a loginCompleteAction", () => {
@@ -202,12 +214,12 @@ describe("UserEffects", () => {
       const action = fromActions.activeDirLoginFailedAction({
         username,
         password,
-        rememberMe
+        rememberMe,
       });
       const outcome = fromActions.funcLoginAction({
         username,
         password,
-        rememberMe
+        rememberMe,
       });
 
       actions = hot("-a", { a: action });
@@ -228,7 +240,7 @@ describe("UserEffects", () => {
       const action = fromActions.funcLoginAction({
         username,
         password,
-        rememberMe
+        rememberMe,
       });
       const outcome1 = fromActions.funcLoginSuccessAction();
       const outcome2 = fromActions.loginCompleteAction({ user, accountType });
@@ -245,7 +257,7 @@ describe("UserEffects", () => {
       const action = fromActions.funcLoginAction({
         username,
         password,
-        rememberMe
+        rememberMe,
       });
       const outcome = fromActions.funcLoginFailedAction();
 
@@ -289,7 +301,7 @@ describe("UserEffects", () => {
       const message = {
         type: MessageType.Error,
         content: "Could not log in. Check your username and password.",
-        duration: 5000
+        duration: 5000,
       };
       const action = fromActions.loginFailedAction();
       const outcome = fromActions.showMessageAction({ message });
@@ -302,16 +314,34 @@ describe("UserEffects", () => {
   });
 
   describe("logout$", () => {
-    it("should result in a logoutCompleteAction", () => {
+    it("should result in clearDatasetsStateAction, clearInstrumentsStateAction, clearJobsStateAction, clearLogbooksStateAction, clearPoliciesStateAction, clearProposalsStateAction, clearPublishedDataStateAction, clearSamplesStateAction, logoutCompleteAction", () => {
       const action = fromActions.logoutAction();
-      const outcome = fromActions.logoutCompleteAction();
+      const outcome1 = clearDatasetsStateAction();
+      const outcome2 = clearInstrumentsStateAction();
+      const outcome3 = clearJobsStateAction();
+      const outcome4 = clearLogbooksStateAction();
+      const outcome5 = clearPoliciesStateAction();
+      const outcome6 = clearProposalsStateAction();
+      const outcome7 = clearPublishedDataStateAction();
+      const outcome8 = clearSamplesStateAction();
+      const outcome9 = fromActions.logoutCompleteAction();
 
       actions = hot("-a", { a: action });
       const response = cold("-a|", {});
       userApi.isAuthenticated.and.returnValue(true);
       userApi.logout.and.returnValue(response);
 
-      const expected = cold("--b", { b: outcome });
+      const expected = cold("--(bcdefghij)", {
+        b: outcome1,
+        c: outcome2,
+        d: outcome3,
+        e: outcome4,
+        f: outcome5,
+        g: outcome6,
+        h: outcome7,
+        i: outcome8,
+        j: outcome9,
+      });
       expect(effects.logout$).toBeObservable(expected);
     });
 
@@ -357,7 +387,7 @@ describe("UserEffects", () => {
       const expected = cold("--(bcd)", {
         b: outcome1,
         c: outcome2,
-        d: outcome3
+        d: outcome3,
       });
       expect(effects.fetchCurrentUser$).toBeObservable(expected);
     });
@@ -381,7 +411,7 @@ describe("UserEffects", () => {
       const userIdentity = new UserIdentity();
       const action = fromActions.fetchUserIdentityAction({ id });
       const outcome = fromActions.fetchUserIdentityCompleteAction({
-        userIdentity
+        userIdentity,
       });
 
       actions = hot("-a", { a: action });
@@ -415,11 +445,11 @@ describe("UserEffects", () => {
         datasetCount: 25,
         jobCount: 25,
         userId: "testId",
-        id: "testId"
+        id: "testId",
       });
       const action = fromActions.fetchUserSettingsAction({ id });
       const outcome = fromActions.fetchUserSettingsCompleteAction({
-        userSettings
+        userSettings,
       });
 
       actions = hot("-a", { a: action });
@@ -448,16 +478,16 @@ describe("UserEffects", () => {
       const userSettings = {
         columns: [],
         datasetCount: 10,
-        jobCount: 10
+        jobCount: 10,
       } as UserSetting;
       const action = fromActions.fetchUserSettingsCompleteAction({
-        userSettings
+        userSettings,
       });
       const outcome1 = setDatasetsLimitFilterAction({
-        limit: userSettings.datasetCount
+        limit: userSettings.datasetCount,
       });
       const outcome2 = setJobsLimitFilterAction({
-        limit: userSettings.jobCount
+        limit: userSettings.jobCount,
       });
 
       actions = hot("-a", { a: action });
@@ -544,11 +574,11 @@ describe("UserEffects", () => {
         datasetCount: 25,
         jobCount: 25,
         userId: "testId",
-        id: "testId"
+        id: "testId",
       });
       const action = fromActions.updateUserSettingsAction({ property });
       const outcome = fromActions.updateUserSettingsCompleteAction({
-        userSettings
+        userSettings,
       });
 
       actions = hot("-a", { a: action });
@@ -580,7 +610,7 @@ describe("UserEffects", () => {
         scopes: ["string"],
         created: new Date(),
         userId: "testId",
-        user: "testUser"
+        user: "testUser",
       };
       const action = fromActions.fetchCatamelTokenAction();
       const outcome = fromActions.fetchCatamelTokenCompleteAction({ token });

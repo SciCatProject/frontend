@@ -1,7 +1,7 @@
 import { createReducer, on, Action } from "@ngrx/store";
 import {
   initialLogbookState,
-  LogbookState
+  LogbookState,
 } from "state-management/state/logbooks.store";
 import * as fromActions from "state-management/actions/logbooks.actions";
 import { Logbook } from "shared/sdk";
@@ -10,7 +10,7 @@ import { APP_DI_CONFIG } from "app-config.module";
 const reducer = createReducer(
   initialLogbookState,
   on(fromActions.fetchLogbooksCompleteAction, (state, { logbooks }) => {
-    const formattedLogbooks = logbooks.map(logbook => {
+    const formattedLogbooks = logbooks.map((logbook) => {
       const descendingMessages = logbook.messages.reverse();
       logbook.messages = descendingMessages;
       return formatImageUrls(logbook);
@@ -25,7 +25,7 @@ const reducer = createReducer(
 
   on(fromActions.fetchCountCompleteAction, (state, { count }) => ({
     ...state,
-    totalCount: count
+    totalCount: count,
   })),
 
   on(fromActions.prefillFiltersAction, (state, { values }) => {
@@ -46,7 +46,7 @@ const reducer = createReducer(
         showBotMessages,
         showImages,
         showUserMessages,
-        skip: 0
+        skip: 0,
       };
       return { ...state, filters };
     }
@@ -62,7 +62,9 @@ const reducer = createReducer(
     const sortField = column + (direction ? ":" + direction : "");
     const filters = { ...state.filters, sortField, skip: 0 };
     return { ...state, filters };
-  })
+  }),
+
+  on(fromActions.clearLogbooksStateAction, () => ({ ...initialLogbookState }))
 );
 
 export function logbooksReducer(
@@ -77,7 +79,7 @@ export function logbooksReducer(
 
 export function formatImageUrls(logbook: Logbook): Logbook {
   if (logbook && logbook.messages) {
-    logbook.messages.forEach(message => {
+    logbook.messages.forEach((message) => {
       if (message.content.msgtype === "m.image") {
         if (
           message.content.info &&

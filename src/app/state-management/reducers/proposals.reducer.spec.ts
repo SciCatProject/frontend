@@ -1,7 +1,7 @@
 import { proposalsReducer } from "./proposals.reducer";
 import {
   initialProposalsState,
-  ProposalFilters
+  ProposalFilters,
 } from "../state/proposals.store";
 import * as fromActions from "../actions/proposals.actions";
 import { Attachment, Dataset, DatasetInterface, Proposal } from "../models";
@@ -11,7 +11,7 @@ const proposalData: ProposalInterface = {
   proposalId: "testId",
   email: "testEmail",
   ownerGroup: "testGroup",
-  attachments: []
+  attachments: [],
 };
 const proposal = new Proposal(proposalData);
 
@@ -53,11 +53,11 @@ describe("ProposalsReducer", () => {
         contactEmail: "testEmail",
         sourceFolder: "testFolder",
         creationTime: new Date(2019, 10, 7),
-        type: "raw"
+        type: "raw",
       };
       const datasets = [new Dataset(data)];
       const action = fromActions.fetchProposalDatasetsCompleteAction({
-        datasets
+        datasets,
       });
       const state = proposalsReducer(initialProposalsState, action);
 
@@ -69,7 +69,7 @@ describe("ProposalsReducer", () => {
     it("should set datasetsCount", () => {
       const count = 100;
       const action = fromActions.fetchProposalDatasetsCountCompleteAction({
-        count
+        count,
       });
       const state = proposalsReducer(initialProposalsState, action);
 
@@ -95,7 +95,7 @@ describe("ProposalsReducer", () => {
       initialProposalsState.currentProposal.attachments = [attachment];
 
       const action = fromActions.updateAttachmentCaptionCompleteAction({
-        attachment
+        attachment,
       });
       const state = proposalsReducer(initialProposalsState, action);
 
@@ -112,7 +112,7 @@ describe("ProposalsReducer", () => {
       initialProposalsState.currentProposal.attachments = [attachment];
 
       const action = fromActions.removeAttachmentCompleteAction({
-        attachmentId
+        attachmentId,
       });
       const state = proposalsReducer(initialProposalsState, action);
 
@@ -123,7 +123,7 @@ describe("ProposalsReducer", () => {
   describe("on prefillFiltersAction", () => {
     it("should set filters and set hasPrefilledFilters to true", () => {
       const values: Partial<ProposalFilters> = {
-        text: "test"
+        text: "test",
       };
       const action = fromActions.prefillFiltersAction({ values });
       const state = proposalsReducer(initialProposalsState, action);
@@ -149,7 +149,7 @@ describe("ProposalsReducer", () => {
       const end = new Date().toISOString();
       const action = fromActions.setDateRangeFilterAction({
         begin,
-        end
+        end,
       });
       const state = proposalsReducer(initialProposalsState, action);
 
@@ -214,6 +214,15 @@ describe("ProposalsReducer", () => {
 
       expect(state.proposalFilters.sortField).toEqual(sortField);
       expect(state.proposalFilters.skip).toEqual(0);
+    });
+  });
+
+  describe("on clearProposalsStateAction", () => {
+    it("it should set proposals state to initialProposState", () => {
+      const action = fromActions.clearProposalsStateAction();
+      const state = proposalsReducer(initialProposalsState, action);
+
+      expect(state).toEqual(initialProposalsState);
     });
   });
 });

@@ -1,5 +1,5 @@
 import { samplesReducer } from "./samples.reducer";
-import { SampleState } from "../state/samples.store";
+import { initialSampleState } from "../state/samples.store";
 import * as fromActions from "../actions/samples.actions";
 import { Attachment, Sample, Dataset, SampleFilters } from "../models";
 import { SampleInterface } from "shared/sdk";
@@ -7,33 +7,9 @@ import { SampleInterface } from "shared/sdk";
 const data: SampleInterface = {
   sampleId: "testId",
   ownerGroup: "testGroup",
-  attachments: []
+  attachments: [],
 };
 const sample = new Sample(data);
-
-const initialSampleState: SampleState = {
-  samples: [],
-  currentSample: sample,
-  datasets: [],
-
-  samplesCount: 0,
-  datasetsCount: 0,
-
-  hasPrefilledFilters: false,
-
-  sampleFilters: {
-    text: "",
-    sortField: "creationTime:desc",
-    skip: 0,
-    limit: 25
-  },
-  datasetFilters: {
-    text: "",
-    sortField: "createdAt:desc",
-    skip: 0,
-    limit: 25
-  }
-};
 
 describe("SamplesReducer", () => {
   describe("on fetchSamplesCompleteAction", () => {
@@ -69,7 +45,7 @@ describe("SamplesReducer", () => {
     it("should set datasets", () => {
       const datasets = [new Dataset()];
       const action = fromActions.fetchSampleDatasetsCompleteAction({
-        datasets
+        datasets,
       });
       const state = samplesReducer(initialSampleState, action);
 
@@ -81,7 +57,7 @@ describe("SamplesReducer", () => {
     it("should set datasetsCount", () => {
       const count = 100;
       const action = fromActions.fetchSampleDatasetsCountCompleteAction({
-        count
+        count,
       });
       const state = samplesReducer(initialSampleState, action);
 
@@ -109,9 +85,11 @@ describe("SamplesReducer", () => {
 
   describe("on addAttachmentCompleteAction", () => {
     it("should set attachments for currentSample", () => {
+      initialSampleState.currentSample = sample;
+
       const attachment = new Attachment();
       const action = fromActions.addAttachmentCompleteAction({
-        attachment
+        attachment,
       });
       const state = samplesReducer(initialSampleState, action);
 
@@ -121,9 +99,11 @@ describe("SamplesReducer", () => {
 
   describe("on updateAttachmentCaptionCompleteAction", () => {
     it("should set attachments for currentSample", () => {
+      initialSampleState.currentSample = sample;
+
       const attachment = new Attachment();
       const action = fromActions.updateAttachmentCaptionCompleteAction({
-        attachment
+        attachment,
       });
       const state = samplesReducer(initialSampleState, action);
 
@@ -133,13 +113,14 @@ describe("SamplesReducer", () => {
 
   describe("on removeAttachmentCompleteAction", () => {
     it("should set attachments for currentSample", () => {
+      initialSampleState.currentSample = sample;
       const attachment = new Attachment();
       const attachmentId = "testId";
       attachment.id = attachmentId;
       initialSampleState.currentSample.attachments = [attachment];
 
       const action = fromActions.removeAttachmentCompleteAction({
-        attachmentId
+        attachmentId,
       });
       const state = samplesReducer(initialSampleState, action);
 
@@ -189,7 +170,7 @@ describe("SamplesReducer", () => {
   describe("on prefillFiltersAction", () => {
     it("should set sampleFilters and set hasPrefilledFilters to true", () => {
       const values: Partial<SampleFilters> = {
-        text: "test"
+        text: "test",
       };
       const action = fromActions.prefillFiltersAction({ values });
       const state = samplesReducer(initialSampleState, action);
@@ -206,6 +187,15 @@ describe("SamplesReducer", () => {
       const state = samplesReducer(initialSampleState, action);
 
       expect(state.sampleFilters.text).toEqual(text);
+    });
+  });
+
+  describe("on clearSamplesStateAction", () => {
+    it("should set samples state to initialSampleState", () => {
+      const action = fromActions.clearSamplesStateAction();
+      const state = samplesReducer(initialSampleState, action);
+
+      expect(state).toEqual(initialSampleState);
     });
   });
 });
