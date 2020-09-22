@@ -29,6 +29,7 @@ export const environment = {
   riotBaseUrl: "http://scitest.esss.lu.se/riot",
   datasetReduceEnabled: true,
   fileColorEnabled: true,
+  jsonMetadataEnabled: true,
   localColumns: [
     { name: "select", order: 0, type: "standard", enabled: true },
     { name: "datasetName", order: 1, type: "standard", enabled: true },

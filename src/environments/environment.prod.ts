@@ -23,6 +23,7 @@ export const environment = {
   editPublishedData: true,
   facility: "PSI",
   fileColorEnabled: false,
+  jsonMetadataEnabled: true,
   localColumns: [
     { name: "select", order: 0, type: "standard", enabled: true },
     { name: "datasetName", order: 1, type: "standard", enabled: true },

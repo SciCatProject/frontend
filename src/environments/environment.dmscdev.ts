@@ -24,6 +24,7 @@ export const environment = {
   facility: "ESS",
   fileColorEnabled: true,
   jobsEnabled: false,
+  jsonMetadataEnabled: false,
   policiesEnabled: false,
   localColumns: [
     { name: "select", order: 0, type: "standard", enabled: true },

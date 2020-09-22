@@ -74,7 +74,7 @@
           </ng-template>
         </mat-card>
 
-        <mat-card *ngIf="!appConfig.production">
+        <mat-card *ngIf="appConfig.jsonMetadataEnabled">
           <button mat-stroked-button (click)="show = !show">
             {{ show ? "Hide MetaData" : "Show Metadata" }}
           </button>

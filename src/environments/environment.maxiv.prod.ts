@@ -13,5 +13,6 @@ export const environment = {
   shoppingCartEnabled: false,
   fileDownloadEnabled: true,
   jobsEnabled: true,
+  jsonMetadataEnabled: true,
   policiesEnabled: true,
 };

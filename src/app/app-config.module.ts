@@ -24,6 +24,7 @@ export class AppConfig {
   gettingStarted: string;
   ingestManual: string;
   jobsEnabled: boolean;
+  jsonMetadataEnabled: boolean;
   landingPage: string;
   localColumns: TableColumn[];
   logbookEnabled: boolean;
@@ -65,6 +66,7 @@ export const APP_DI_CONFIG: AppConfig = {
   gettingStarted: environment["gettingStarted"] || null,
   ingestManual: environment["ingestManual"] || null,
   jobsEnabled: environment["jobsEnabled"] || false,
+  jsonMetadataEnabled: environment["jsonMetadataEnabled"] || false,
   logbookEnabled: environment["logbookEnabled"] || false,
   localColumns: environment["localColumns"] || [
     { name: "select", order: 0, type: "standard", enabled: true },

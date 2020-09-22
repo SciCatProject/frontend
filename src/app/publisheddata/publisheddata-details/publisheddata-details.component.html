@@ -115,7 +115,7 @@
         >
           Edit
         </button>
-        <ng-container *ngIf="!appConfig.production">
+        <ng-container *ngIf="appConfig.jsonMetadataEnabled">
           <button mat-stroked-button (click)="show = !show">
             {{ show ? "Hide MetaData" : "Show Metadata" }}
           </button>

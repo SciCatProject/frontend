@@ -42,6 +42,7 @@ export const environment = {
   landingPage: "doi2.psi.ch/detail/",
   logbookEnabled: true,
   metadataPreviewEnabled: true,
+  jsonMetadataEnabled: true,
   fileDownloadEnabled: true,
   multipleDownloadEnabled: true,
   maxDirectDownloadSize: 5000000000,

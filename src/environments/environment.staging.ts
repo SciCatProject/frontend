@@ -7,5 +7,6 @@ export const environment = {
   disabledDatasetColumns: [],
   shoppingCartEnabled: false,
   jobsEnabled: true,
+  jsonMetadataEnabled: true,
   policiesEnabled: true,
 };
