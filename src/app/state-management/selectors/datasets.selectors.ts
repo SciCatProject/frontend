@@ -23,10 +23,10 @@ export const getCurrentDataset = createSelector(
   state => state.currentSet
 );
 
-export const getCurrentDatasetWithoutOrigData = createSelector(
+export const getCurrentDatasetWithoutFileInfo = createSelector(
   getDatasetState,
   state => {
-    const { origdatablocks, ...theRest } = state.currentSet;
+    const { origdatablocks, datablocks, ...theRest } = state.currentSet;
     return theRest;
   }
 );

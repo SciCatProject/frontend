@@ -72,13 +72,13 @@ describe("test dataset selectors", () => {
     });
   });
 
-  describe("getCurrentDatasetWithoutOrigData", () => {
+  describe("getCurrentDatasetWithoutFileInfo", () => {
     it("should get the current dataset without origDatablocks", () => {
       const datasetWithout = { ...dataset };
       delete datasetWithout.origdatablocks;
 
       expect(
-        fromDatasetSelectors.getCurrentDatasetWithoutOrigData.projector(
+        fromDatasetSelectors.getCurrentDatasetWithoutFileInfo.projector(
           initialDatasetState
         )
       ).toEqual(datasetWithout);

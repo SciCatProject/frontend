@@ -10,7 +10,7 @@ import { Store, select } from "@ngrx/store";
 import { Dataset, UserApi, User, Job, Attachment } from "shared/sdk";
 import {
   getCurrentDataset,
-  getCurrentDatasetWithoutOrigData,
+  getCurrentDatasetWithoutFileInfo,
   getCurrentOrigDatablocks,
   getCurrentDatablocks,
   getCurrentAttachments,
@@ -50,7 +50,7 @@ import { getCurrentSample } from "state-management/selectors/samples.selectors";
 })
 export class DatasetDetailsDashboardComponent
   implements OnInit, OnDestroy, AfterViewChecked {
-  datasetWithout$ = this.store.pipe(select(getCurrentDatasetWithoutOrigData));
+  datasetWithout$ = this.store.pipe(select(getCurrentDatasetWithoutFileInfo));
   origDatablocks$ = this.store.pipe(select(getCurrentOrigDatablocks));
   datablocks$ = this.store.pipe(select(getCurrentDatablocks));
   attachments$ = this.store.pipe(select(getCurrentAttachments));
