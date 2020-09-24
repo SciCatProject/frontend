@@ -1,0 +1,37 @@
+version: "3.2"
+
+networks:
+  proxy:
+    external: true
+
+services:
+  reverse-proxy:
+    image: traefik:v2.0
+    command: --api.insecure=true --providers.docker=true --entrypoints.web.address=:80
+    ports:
+      - "80:80"
+      - "8080:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+  catanie-test:
+    image: "docker.maxiv.lu.se/catanie-test"
+    networks:
+      - proxy
+    restart: always
+    ports:
+      - "3002:80"
+    labels:
+      - "traefik.frontend.rule=Host:scicat-test.maxiv.lu.se"
+      - "traefik.docker.network=proxy"
+      - "traefik.port=80"
+  catamel-test:
+    image: "docker.maxiv.lu.se/catamel-test"
+    networks:
+      - proxy
+    restart: always
+    ports:
+      - "3001:3000"
+    labels:
+      - "traefik.frontend.rule=Host:scicat-test.maxiv.lu.se; PathPrefix: /explorer, /api, /auth"
+      - "traefik.docker.network=proxy"
+      - "traefik.port=3000"
