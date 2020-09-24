@@ -20,8 +20,8 @@ RUN npm config set https-proxy  $http_proxy
 RUN npm config set registry http://registry.npmjs.org/
 RUN npm config set strict-ssl false
 RUN npm install @angular/cli -g
-COPY package.json /usr/src/app/package.json
+COPY package*.json /usr/src/app/
 WORKDIR /usr/src/app
-RUN npm install
+RUN npm ci
 COPY . /usr/src/app
 #RUN  ng test --watch=false --browsers=ChromeHeadless
