@@ -56,4 +56,7 @@ export const environment = {
   userNamePromptEnabled: true,
   userProfileImageEnabled: true,
   fileDownloadEnabled: true,
+  jobsEnabled: true,
+  jsonMetadataEnabled: true,
+  policiesEnabled: true,
 };
