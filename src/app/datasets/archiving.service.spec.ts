@@ -1,5 +1,6 @@
 import { TestBed, waitForAsync } from "@angular/core/testing";
 import { MockStore, provideMockStore } from "@ngrx/store/testing";
+import { RetrieveDestinations } from "app-config.module";
 import { Dataset, Job, User } from "shared/sdk";
 import { submitJobAction } from "state-management/actions/jobs.actions";
 import {
@@ -145,4 +146,31 @@ describe("ArchivingService", () => {
       );
     });
   });
+
+  describe("#generateDestPath()", () => {
+    it("should return the generated path", () => {
+      const result = { option: "option", location: "relative" };
+      const destinations = [{ option: "option", location: "/root/" }, { option: "option2" }];
+      expect(service.generateDestPath(result, destinations)).toEqual(
+        "option:/root/relative"
+      );
+    });
+  });
+
+  describe("#retriveDialogOptions()", () => {
+    it("should return the dialog options when retrieving", () => {
+      const destinations = [new RetrieveDestinations(), new RetrieveDestinations()];
+      expect(service.retriveDialogOptions(destinations)).toEqual(
+        {
+          width: "auto",
+          data: {
+            title: "Really retrieve?",
+            question: "",
+            choice: { title: "Optionally select destination", options: destinations }
+          }
+        }
+      );
+    });
+  });
+
 });

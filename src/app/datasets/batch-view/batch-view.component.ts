@@ -11,6 +11,7 @@ import {
 } from "state-management/actions/datasets.actions";
 import { Dataset, Message, MessageType } from "state-management/models";
 import { showMessageAction } from "state-management/actions/user.actions";
+import { DialogComponent } from "shared/modules/dialog/dialog.component";
 
 import { Router } from "@angular/router";
 import { ArchivingService } from "../archiving.service";
@@ -37,7 +38,7 @@ export class BatchViewComponent implements OnInit, OnDestroy {
     private dialog: MatDialog,
     private store: Store<any>,
     private archivingSrv: ArchivingService,
-    private router: Router
+    private router: Router,
   ) {}
 
   private clearBatch() {
@@ -107,26 +108,26 @@ export class BatchViewComponent implements OnInit, OnDestroy {
   }
 
   onRetrieve() {
-    this.batch$
-      .pipe(
-        first(),
-        switchMap((datasets) =>
-          this.archivingSrv.retrieve(datasets, "/archive/retrieve")
-        )
-      )
-      .subscribe(
-        () => this.clearBatch(),
-        (err) =>
-          this.store.dispatch(
-            showMessageAction({
-              message: {
-                type: MessageType.Error,
-                content: err.message,
-                duration: 5000,
-              },
-            })
-          )
-      );
+    let dialogOptions = this.archivingSrv.retriveDialogOptions(this.appConfig.retrieveDestinations);
+    const dialogRef = this.dialog.open(DialogComponent, dialogOptions);
+    dialogRef.afterClosed().subscribe(result => {
+      if (result && this.datasetList) {
+        const destPath = this.archivingSrv.generateDestPath(result, this.appConfig.retrieveDestinations);
+        this.archivingSrv.retrieve(this.datasetList, destPath).subscribe(
+          () => this.clearBatch(),
+          err =>
+            this.store.dispatch(
+              showMessageAction({
+                message: {
+                  type: MessageType.Error,
+                  content: err.message,
+                  duration: 5000
+                }
+              })
+            )
+        );
+      }
+    });
   }
 
   ngOnInit() {

@@ -1,5 +1,6 @@
 import { Injectable } from "@angular/core";
 import { select, Store } from "@ngrx/store";
+import { RetrieveDestinations } from "app-config.module";
 
 import { combineLatest, Observable } from "rxjs";
 import { first, map } from "rxjs/operators";
@@ -66,13 +67,13 @@ export class ArchivingService {
               "No email for this user could be found, the job will not be submitted"
             );
           }
-  
+
           if (datasets.length === 0) {
             throw new Error("No datasets selected");
           }
-  
+
           const job = this.createJob(user, datasets, archive, destPath);
-  
+
           this.store.dispatch(submitJobAction({ job }));
         }
       })
@@ -88,5 +89,36 @@ export class ArchivingService {
     destinationPath: string
   ): Observable<void> {
     return this.archiveOrRetrieve(datasets, false, destinationPath);
+  }
+
+  public generateDestPath(
+    result: RetrieveDestinations,
+    retrieveDestinations: RetrieveDestinations[] = []
+  ): string {
+    const prefix = retrieveDestinations.filter(
+      element => element.option == result.option
+    );
+    let location = prefix.length > 0 ? ":" + prefix[0].location + result.location : "";
+    let destPath = result.option + location || "/archive/retrieve";
+    if (!result.option &&
+      typeof retrieveDestinations !== "undefined" &&
+      retrieveDestinations.length > 0) {
+      location = retrieveDestinations[0].location ? ":" + retrieveDestinations[0].location : "";
+      destPath = retrieveDestinations[0].option + location;
+    }
+    return destPath;
+  }
+
+  public retriveDialogOptions(
+    retrieveDestinations: RetrieveDestinations[] = []
+  ): object {
+    return {
+      width: "auto",
+      data: {
+        title: "Really retrieve?",
+        question: "",
+        choice: { title: "Optionally select destination", options: retrieveDestinations }
+      }
+    };
   }
 }
