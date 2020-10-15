@@ -1,4 +1,4 @@
-# Catanie SciCat Client
+# Catanie: SciCat GUI
 
 
 
@@ -17,82 +17,8 @@
 
 SciCat is a data catalogue web application to provide a searchable interface for datasets, publish DOIs, 
 as well as the option to carry out actions (i.e. archiving and publishing) and acts as a place to reference datasets used in publications.
-See documentation at [scicatproject](https://scicatproject.github.io/)
 
-# Getting Started
-
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
-
-### Prerequisites
-
-What things you need to install the software and how to install them
-
-```
-Angular v8 or higher
-npm version 6 or higher
-node version 10 or higher
-```
-
-### Installing
-
-Use git to clone the repository
-```
-git clone https://github.com/SciCatProject/catanie
-cd catanie
-```
-First install the required modules
-```
-npm install
-```
-Then build with the Angular CLI
-```
-npx ng build
-```
-
-You can deploy a test server with the following command:
-
-```
-npx ng serve 
-```
-
-
-## Running the unit tests
-
-To run the unit tests, type:
-```
-npm test
-```
-
-
-### End to end tests
-
-To run the end to end tests, type:
-
-```
-npm run e2e
-```
-
-
-
-## Deployment
-
-Deploy with Docker
-
-## Built With
-
-* [NPM](http://npmjs.com) - node package manager
-* [Node](https://nodejs.org/) - node javascript runtime
-* [Angular](https://angular.io) - Web framework
-
-## Contributing
-
-Please read [CONTRIBUTING.md](https://github.com/SciCatProject/catanie/blob/develop/documentation/Catanie/Contributing.md) for details on our code of conduct, and the process for submitting pull requests to us.
-
-## Versioning
-
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/SciCatProject/catanie/tags). 
-
-
+For the full documentation please go to the [SciCat home page](https://scicatproject.github.io/) and follow the [documentation link](https://scicatproject.github.io/documentation)
 
 ## License
 
