@@ -122,6 +122,92 @@
               ],
               "serviceWorker": true
             },
+            "rfi-prod": {
+              "budgets": [
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "fileReplacements": [
+                {
+                  "replace": "src/app/build-specifics/index.ts",
+                  "with": "src/app/build-specifics/index.prod.ts"
+                },
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.rfi.prod.ts"
+                },
+                {
+                  "replace": "src/assets/images/ess-site.png",
+                  "with": "CI/RFI/site.png"
+                },
+                {
+                  "replace": "src/assets/images/esslogo.png",
+                  "with": "CI/RFI/site-logo.png"
+                },
+                {
+                  "replace": "src/favicon.ico",
+                  "with": "CI/RFI/favicon.ico"
+                },
+                {
+                  "replace": "src/theme.scss",
+                  "with": "CI/RFI/theme.scss"
+                }
+              ]
+            },
+            "rfi-dev": {
+              "budgets": [
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "fileReplacements": [
+                {
+                  "replace": "src/app/build-specifics/index.ts",
+                  "with": "src/app/build-specifics/index.prod.ts"
+                },
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.rfi.dev.ts"
+                },
+                {
+                  "replace": "src/assets/images/ess-site.png",
+                  "with": "CI/RFI/site.png"
+                },
+                {
+                  "replace": "src/assets/images/esslogo.png",
+                  "with": "CI/RFI/site-logo.png"
+                },
+                {
+                  "replace": "src/favicon.ico",
+                  "with": "CI/RFI/favicon.ico"
+                },
+                {
+                  "replace": "src/theme.scss",
+                  "with": "CI/RFI/theme.scss"
+                }
+              ]
+            },
             "maxiv-prod": {
               "budgets": [
                 {

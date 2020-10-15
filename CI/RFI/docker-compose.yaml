@@ -1,0 +1,77 @@
+version: "3.2"
+services:
+  reverse-proxy:
+    image: traefik:v2.0
+    command: --api.insecure=true --providers.docker=true --entrypoints.web.address=:80
+    ports:
+      - "80:80"
+      - "8080:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+  mongodb:
+    image: "bitnami/mongodb:latest"
+    volumes:
+      - "mongodb_data:/bitnami"
+  openldap:
+    image: osixia/openldap
+    container_name: openldap
+    hostname: openldap
+    environment:
+      LDAP_ORGANISATION: "LDAP Catamel Auth"
+      LDAP_SSL_HELPER_PREFIX: "ldap"
+      LDAP_TLS_VERIFY_CLIENT: "never"
+      LDAP_LOG_LEVEL: 256
+      LDAP_ADMIN_PASSWORD: "admin"
+  openldap-seed:
+    image: osixia/openldap
+    volumes:
+      - ./CI/ESS/ldif_files:/ldif_files
+    links:
+      - openldap
+    entrypoint: sh -c '/ldif_files/addAll.sh'
+  openldap-admin:
+    image: osixia/phpldapadmin
+    container_name: openldap-admin
+    hostname: openldap-admin
+    environment:
+      PHPLDAPADMIN_HTTPS=false:
+      PHPLDAPADMIN_LDAP_HOSTS: "openldap"
+    links:
+      - "openldap:openldap"
+    depends_on:
+      - openldap
+  catanie:
+    image: "dacat/catanie:latest"
+    labels:
+      - "traefik.http.routers.catanie.rule=Host(`scicat.com`)"
+      - "traefik.http.routers.catanie.rule=PathPrefix(`/`)"
+      - "traefik.http.routers.catanie.entrypoints=web"
+  cataniecypress:
+    image: "dacat/catanie:cypress"
+    command: ["npx", "cypress", "run"]
+    depends_on:
+      - mongodb
+      - catamel
+      - catanie
+      - openldap-seed
+    links:
+      - mongodb
+      - catamel
+      - catanie
+      - openldap
+  catamel:
+    image: "dacat/catamel"
+    depends_on:
+      - mongodb
+      - openldap-seed
+    links:
+      - mongodb
+      - openldap
+      - openldap-seed
+    labels:
+      - "traefik.http.routers.catamel.rule=Host(`scicat.com`)"
+      - "traefik.http.routers.catamel.rule=PathPrefix(`/api`, `/auth`)"
+      - "traefik.http.routers.catamel.entrypoints=web"
+volumes:
+  mongodb_data:
+    driver: local
