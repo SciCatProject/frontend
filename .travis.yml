@@ -2,7 +2,7 @@ sudo: required
 dist: trusty
 language: node_js
 node_js:
-  - '8.9'
+  - "10.16"
 
 addons:
 apt:
@@ -15,15 +15,16 @@ apt:
 before_install:
   - export CHROME_BIN=chromium-browser
   - export DISPLAY=:99.0
+  - export NG_CLI_ANALYTICS=ci
   - sh -e /etc/init.d/xvfb start
 
 before_script:
-- npm install
-- npx ng build --prod
+  - npm install
+  - npx ng build --prod
 
-scripts: 
-- npm install codecov -g
-- npm test
+scripts:
+  - npm install coveralls
+  - npm test
 
 after_success:
-  - codecov
+  - cat ./coverage/lcov.info | coveralls

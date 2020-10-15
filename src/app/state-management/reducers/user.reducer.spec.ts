@@ -1,86 +1,293 @@
 import { userReducer } from "./user.reducer";
 import { initialUserState } from "../state/user.store";
-import * as userActions from "../actions/user.actions";
-import { User, MessageType, Message, Settings } from "../models";
+import * as fromActions from "../actions/user.actions";
+import { User, MessageType, Message, Settings, UserIdentity } from "../models";
+import { AccessToken, UserSetting } from "shared/sdk";
 
 describe("UserReducer", () => {
-  it("should set currentUser", () => {
-    const user: User = {
-      realm: "",
-      username: "",
-      email: "",
-      emailVerified: true,
-      id: "",
-      password: "",
-      accessTokens: [],
-      identities: [],
-      credentials: []
-    };
-    const action = new userActions.RetrieveUserCompleteAction(user);
-    const state = userReducer(initialUserState, action);
-    expect(state.currentUser).toEqual(user);
+  describe("on loginAction", () => {
+    it("should set isLoggingIn to true and isLoggedIn to false", () => {
+      const form = {
+        username: "test",
+        password: "test",
+        rememberMe: true
+      };
+      const action = fromActions.loginAction({ form });
+      const state = userReducer(initialUserState, action);
+
+      expect(state.isLoggingIn).toEqual(true);
+      expect(state.isLoggedIn).toEqual(false);
+    });
   });
 
-  it("should set loading to false after login complete", () => {
-    const user: User = {
-      realm: "",
-      username: "",
-      email: "",
-      emailVerified: true,
-      id: "",
-      password: "",
-      accessTokens: [],
-      identities: [],
-      credentials: []
-    };
-    const action = new userActions.LoginCompleteAction(user, "account-type");
-    const state = userReducer(initialUserState, action);
-    expect(state.isLoggingIn).toEqual(false);
+  describe("on loginCompletAction", () => {
+    it("should set currentUser, accountType, and set isLoggingIn to false and isLoggedIn to true", () => {
+      const user = new User();
+      const accountType = "test";
+      const action = fromActions.loginCompleteAction({ user, accountType });
+      const state = userReducer(initialUserState, action);
+
+      expect(state.currentUser).toEqual(user);
+      expect(state.accountType).toEqual(accountType);
+      expect(state.isLoggingIn).toEqual(false);
+      expect(state.isLoggedIn).toEqual(true);
+    });
   });
 
-  it("should set isLoggingIn to false after login failed complete", () => {
-    const action = new userActions.LoginFailedAction();
-    const state = userReducer(initialUserState, action);
-    expect(state.isLoggingIn).toEqual(false);
+  describe("on loginFailedAction", () => {
+    it("should set both isLoggingIn and isLoggedIn to false", () => {
+      const action = fromActions.loginFailedAction();
+      const state = userReducer(initialUserState, action);
+
+      expect(state.isLoggingIn).toEqual(false);
+      expect(state.isLoggedIn).toEqual(false);
+    });
   });
 
-  it("should set message", () => {
-    const message: Message = {
-      content: "",
-      type: MessageType.Success,
-      duration: 500000
-    };
-    const action = new userActions.ShowMessageAction(message);
-    const state = userReducer(initialUserState, action);
-    expect(state.message).toEqual(message);
+  describe("on fetchCurrentUserCompleteAction", () => {
+    it("should set currentUser and set isLoggedIn to true", () => {
+      const user = new User();
+      const action = fromActions.fetchCurrentUserCompleteAction({ user });
+      const state = userReducer(initialUserState, action);
+
+      expect(state.currentUser).toEqual(user);
+      expect(state.isLoggedIn).toEqual(true);
+    });
   });
 
-  it("should clear message", () => {
-    const action = new userActions.ClearMessageAction();
-    const state = userReducer(initialUserState, action);
-    expect(state.message).toEqual(initialUserState.message);
+  describe("on fetchUserIdentityCompleteAction", () => {
+    it("should set profile", () => {
+      const userIdentity = new UserIdentity();
+      const action = fromActions.fetchUserIdentityCompleteAction({
+        userIdentity
+      });
+      const state = userReducer(initialUserState, action);
+
+      expect(state.profile).toEqual(userIdentity.profile);
+    });
   });
 
-  it("should set settings", () => {
-    const setting: Settings = {
-      tapeCopies: "",
-      datasetCount: 0,
-      jobCount: 0,
-      darkTheme: false
-    };
-    const action = new userActions.SaveSettingsAction(setting);
-    const state = userReducer(initialUserState, action);
-    expect(state.settings).toEqual(setting);
+  describe("on fetchUserSettingsCompleteAction", () => {
+    it("should set jobCount and datasetCount settings, and columns if not empty", () => {
+      const userSettings = new UserSetting({
+        columns: [{ name: "test", order: 0, type: "standard", enabled: true }],
+        datasetCount: 50,
+        jobCount: 50,
+        userId: "testId",
+        id: "testId"
+      });
+      const action = fromActions.fetchUserSettingsCompleteAction({
+        userSettings
+      });
+      const state = userReducer(initialUserState, action);
+
+      expect(state.settings.datasetCount).toEqual(userSettings.datasetCount);
+      expect(state.settings.jobCount).toEqual(userSettings.jobCount);
+      expect(state.columns).toEqual(userSettings.columns);
+    });
+
+    it("should set jobCount and datasetCount settings, and not columns if empty", () => {
+      const userSettings = new UserSetting({
+        columns: [],
+        datasetCount: 50,
+        jobCount: 50,
+        userId: "testId",
+        id: "testId"
+      });
+      const action = fromActions.fetchUserSettingsCompleteAction({
+        userSettings
+      });
+      const state = userReducer(initialUserState, action);
+
+      expect(state.settings.datasetCount).toEqual(userSettings.datasetCount);
+      expect(state.settings.jobCount).toEqual(userSettings.jobCount);
+      expect(state.columns).toEqual(initialUserState.columns);
+    });
   });
 
-  it("should set isLoggingIn to false after login complete", () => {
-    const info = {
-      username: "",
-      password: "",
-      rememberMe: true
-    };
-    const action = new userActions.LoginAction(info);
-    const state = userReducer(initialUserState, action);
-    expect(state.isLoggingIn).toEqual(true);
+  describe("on updateUserSettingsCompleteAction", () => {
+    it("should set jobCount and datasetCount settings, and columns if not empty", () => {
+      const userSettings = new UserSetting({
+        columns: [{ name: "test", order: 0, type: "standard", enabled: true }],
+        datasetCount: 50,
+        jobCount: 50,
+        userId: "testId",
+        id: "testId"
+      });
+      const action = fromActions.updateUserSettingsCompleteAction({
+        userSettings
+      });
+      const state = userReducer(initialUserState, action);
+
+      expect(state.settings.datasetCount).toEqual(userSettings.datasetCount);
+      expect(state.settings.jobCount).toEqual(userSettings.jobCount);
+      expect(state.columns).toEqual(userSettings.columns);
+    });
+
+    it("should set jobCount and datasetCount settings, and not columns if empty", () => {
+      const userSettings = new UserSetting({
+        columns: [],
+        datasetCount: 50,
+        jobCount: 50,
+        userId: "testId",
+        id: "testId"
+      });
+      const action = fromActions.updateUserSettingsCompleteAction({
+        userSettings
+      });
+      const state = userReducer(initialUserState, action);
+
+      expect(state.settings.datasetCount).toEqual(userSettings.datasetCount);
+      expect(state.settings.jobCount).toEqual(userSettings.jobCount);
+      expect(state.columns).toEqual(initialUserState.columns);
+    });
+  });
+
+  describe("on fetchCatamelTokenCompleteAction", () => {
+    it("should set catamelToken", () => {
+      const token = new AccessToken();
+      const action = fromActions.fetchCatamelTokenCompleteAction({ token });
+      const state = userReducer(initialUserState, action);
+
+      expect(state.catamelToken).toEqual(token);
+    });
+  });
+
+  describe("on logoutCompleteAction", () => {
+    it("should reset the state to initial state", () => {
+      const action = fromActions.logoutCompleteAction();
+      const state = userReducer(initialUserState, action);
+
+      expect(state).toEqual(initialUserState);
+    });
+  });
+
+  describe("on addColumnAction", () => {
+    it("should append a new column to the columns property", () => {
+      const names = ["test"];
+      const action = fromActions.addCustomColumnsAction({ names });
+      const state = userReducer(initialUserState, action);
+
+      expect(state.columns[state.columns.length - 1].name).toEqual("test");
+      expect(state.columns[state.columns.length - 1].order).toEqual(
+        state.columns.length - 1
+      );
+      expect(state.columns[state.columns.length - 1].enabled).toEqual(false);
+    });
+  });
+
+  describe("on selectColumnAction", () => {
+    it("should set enabled to true for a column in columns", () => {
+      const name = "dataStatus";
+      const columnType = "standard";
+
+      const action = fromActions.selectColumnAction({ name, columnType });
+      const state = userReducer(initialUserState, action);
+
+      state.columns.forEach(column => {
+        if (column.name === name && column.type === columnType) {
+          expect(column.enabled).toEqual(true);
+        }
+      });
+    });
+  });
+
+  describe("on deselectColumnAction", () => {
+    it("should set enabled to false for a column in columns", () => {
+      const name = "datasetName";
+      const columnType = "standard";
+
+      const action = fromActions.deselectColumnAction({ name, columnType });
+      const state = userReducer(initialUserState, action);
+
+      state.columns.forEach(column => {
+        if (column.name === name && column.type === columnType) {
+          expect(column.enabled).toEqual(false);
+        }
+      });
+    });
+  });
+
+  describe("on deselectAllCustomColumnsAction", () => {
+    it("should set enabled to false for all custom columns", () => {
+      const names = ["test"];
+      const addColumnsAction = fromActions.addCustomColumnsAction({ names });
+      const firstState = userReducer(initialUserState, addColumnsAction);
+      const selectColumnAction = fromActions.selectColumnAction({
+        name: "test",
+        columnType: "custom"
+      });
+      const secondState = userReducer(firstState, selectColumnAction);
+      secondState.columns.forEach(column => {
+        if (column.name === "test") {
+          expect(column.enabled).toEqual(true);
+        }
+      });
+
+      const action = fromActions.deselectAllCustomColumnsAction();
+      const state = userReducer(secondState, action);
+
+      state.columns.forEach(column => {
+        if (column.name === "test") {
+          expect(column.enabled).toEqual(false);
+        }
+      });
+    });
+  });
+
+  describe("on showMessageAction", () => {
+    it("should set message", () => {
+      const message: Message = {
+        content: "",
+        type: MessageType.Success,
+        duration: 500000
+      };
+      const action = fromActions.showMessageAction({ message });
+      const state = userReducer(initialUserState, action);
+
+      expect(state.message).toEqual(message);
+    });
+  });
+
+  describe("on clearMessageAction", () => {
+    it("should clear message", () => {
+      const action = fromActions.clearMessageAction();
+      const state = userReducer(initialUserState, action);
+
+      expect(state.message).toEqual(initialUserState.message);
+    });
+  });
+
+  describe("on saveSettingsAction", () => {
+    it("should set settings", () => {
+      const settings: Settings = {
+        tapeCopies: "",
+        datasetCount: 0,
+        jobCount: 0,
+        darkTheme: false
+      };
+      const action = fromActions.saveSettingsAction({ settings });
+      const state = userReducer(initialUserState, action);
+
+      expect(state.settings).toEqual(settings);
+    });
+  });
+
+  describe("on loadingAction", () => {
+    it("should set isLoading to true", () => {
+      const action = fromActions.loadingAction();
+      const state = userReducer(initialUserState, action);
+
+      expect(state.isLoading).toEqual(true);
+    });
+  });
+
+  describe("on loadingCompleteAction", () => {
+    it("should set isLoading to false", () => {
+      const action = fromActions.loadingCompleteAction();
+      const state = userReducer(initialUserState, action);
+
+      expect(state.isLoading).toEqual(false);
+    });
   });
 });

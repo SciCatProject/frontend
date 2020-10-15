@@ -1,0 +1,36 @@
+@import "../../../theme.scss";
+
+mat-sidenav-container {
+  mat-sidenav-content {
+    padding: 0.5em;
+    background-color: #ffffff;
+
+    .action-column {
+      margin-right: 1em;
+
+      .add-card {
+        margin: 1em 0 1em;
+        text-align: center;
+
+        mat-icon {
+          vertical-align: middle;
+          color: mat-color($accent);
+        }
+      }
+
+      .add-card:hover {
+        cursor: pointer;
+        background-color: rgba(0, 0, 0, 0.1);
+      }
+    }
+
+    .table-column {
+      margin-top: 1.5em;
+    }
+  }
+
+  mat-sidenav.mat-drawer-opened,
+  mat-sidenav.mat-drawer-opening {
+    box-shadow: 0 0 0 0 !important;
+  }
+}

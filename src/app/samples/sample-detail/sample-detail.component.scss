@@ -1,24 +1,42 @@
-.sample-detail .details {
-  padding: 1em;
+@import "../../../theme.scss";
 
-  table {
-    tr {
-      td {
-        padding: 0.9em;
-        vertical-align: middle;
-      }
+mat-card {
+  margin: 1em;
 
-      th {
-        text-align: left;
-        padding-right: 0.5em;
-        material-icons {
-          vertical-align: middle;
+  .about-header {
+    background-color: mat-color($primary, lighter);
+  }
+
+  .characteristics-header {
+    background-color: mat-color($accent, lighter);
+  }
+
+  .details {
+    padding: 1em;
+
+    table {
+      tr {
+        th {
+          text-align: left;
+          padding-right: 0.5em;
+
+          mat-icon {
+            vertical-align: middle;
+          }
+        }
+
+        td {
+          padding: 0.5em;
         }
       }
     }
   }
+}
 
-  h3 {
-    margin-top: 1em;
-  }
+.file-uploader {
+  margin: 1em;
+}
+
+.datasets-table {
+  margin: 1em;
 }

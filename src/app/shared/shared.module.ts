@@ -1,28 +1,41 @@
 import { BreadcrumbModule } from "shared/modules/breadcrumb/breadcrumb.module";
-import { ConfigFormModule } from "shared/modules/config-form/config-form.module";
 import { ConfigService } from "./services";
 import { DialogModule } from "shared/modules/dialog/dialog.module";
 import { ErrorPageModule } from "shared/modules/error-page/error-page.module";
-import { FileSizePipe } from "./pipes/filesize.pipe";
-import { FormsModule, ReactiveFormsModule} from "@angular/forms";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { NgModule } from "@angular/core";
-import { KeysPipe } from "./pipes";
-import { JsonHeadPipe } from "./pipes/json-head.pipe";
-import { ThumbnailPipe } from "./pipes/thumbnail.pipe";
+import { FileUploaderModule } from "./modules/file-uploader/file-uploader.module";
+import { PipesModule } from "./pipes/pipes.module";
+import { TableModule } from "./modules/table/table.module";
+import { SearchBarModule } from "./modules/search-bar/search-bar.module";
+import { ScientificMetadataModule } from "./modules/scientific-metadata/scientific-metadata.module";
+import { UnitsService } from "./services/units.service";
+import { FilePathTruncate } from "./pipes/file-path-truncate.pipe";
 
 @NgModule({
-  imports: [BreadcrumbModule, ConfigFormModule, ErrorPageModule, FormsModule, DialogModule, ReactiveFormsModule],
-  declarations: [FileSizePipe, KeysPipe, JsonHeadPipe, ThumbnailPipe],
-  providers: [ConfigService],
+  imports: [
+    BreadcrumbModule,
+    ErrorPageModule,
+    FileUploaderModule,
+    FormsModule,
+    DialogModule,
+    ReactiveFormsModule,
+    PipesModule,
+    ScientificMetadataModule,
+    SearchBarModule,
+    TableModule
+  ],
+  declarations: [],
+  providers: [ConfigService, UnitsService, FilePathTruncate],
   exports: [
     BreadcrumbModule,
-    ConfigFormModule,
-    FileSizePipe,
-    KeysPipe,
-    JsonHeadPipe,
-    ThumbnailPipe,
+    FileUploaderModule,
+    DialogModule,
     ErrorPageModule,
-    DialogModule
+    PipesModule,
+    ScientificMetadataModule,
+    SearchBarModule,
+    TableModule
   ]
 })
 export class SharedCatanieModule {}

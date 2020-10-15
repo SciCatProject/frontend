@@ -1,47 +1,51 @@
+import { SampleEffects } from './../state-management/effects/samples.effects';
+import { EffectsModule } from '@ngrx/effects';
 import { CommonModule } from "@angular/common";
-import { MatCardModule,
-  MatDialogModule,
-  MatFormFieldModule, MatIconModule, MatTableModule,
- MatInputModule, MatSortModule } from "@angular/material";
+import { MatButtonModule } from "@angular/material/button";
+import { MatCardModule } from "@angular/material/card";
+import { MatDialogModule } from "@angular/material/dialog";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatIconModule } from "@angular/material/icon";
+import { MatInputModule } from "@angular/material/input";
+import { MatSelectModule } from "@angular/material/select";
+import { MatTabsModule } from "@angular/material/tabs";
 import { NgModule } from "@angular/core";
-import { SampleApi } from "../shared/sdk/services/custom";
 import { SampleDetailComponent } from "./sample-detail/sample-detail.component";
-import { SampleTableComponent } from "./sample-table/sample-table.component";
-import { SampleDataFormComponent } from "./sample-data-form/sample-data-form.component";
 import { StoreModule } from "@ngrx/store";
 import { samplesReducer } from "../state-management/reducers/samples.reducer";
 import { SampleDialogComponent } from "./sample-dialog/sample-dialog.component";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { SampleService } from "./sample.service";
+import { SampleDashboardComponent } from "./sample-dashboard/sample-dashboard.component";
+import { FlexLayoutModule } from "@angular/flex-layout";
+import { NgxJsonViewerModule } from "ngx-json-viewer";
+import { SharedCatanieModule } from "shared/shared.module";
 
 @NgModule({
   imports: [
     CommonModule,
+    EffectsModule.forFeature([SampleEffects]),
+    FlexLayoutModule,
     FormsModule,
+    MatButtonModule,
     MatCardModule,
-    MatIconModule,
-    MatFormFieldModule,
-    MatInputModule,
     MatDialogModule,
-    MatSortModule,
-    MatTableModule,
+    MatFormFieldModule,
+    MatIconModule,
+    MatInputModule,
+    MatSelectModule,
+    MatTabsModule,
+    NgxJsonViewerModule,
     ReactiveFormsModule,
+    SharedCatanieModule,
     StoreModule.forFeature("samples", samplesReducer)
   ],
-  exports: [
-    SampleDetailComponent,
-    SampleTableComponent,
-    SampleDataFormComponent,
-    SampleDialogComponent
-  ],
+  exports: [SampleDetailComponent, SampleDialogComponent],
   declarations: [
     SampleDetailComponent,
-    SampleTableComponent,
-    SampleDataFormComponent,
-    SampleDialogComponent
+    SampleDialogComponent,
+    SampleDashboardComponent
   ],
-  providers: [SampleApi, SampleService],
+  providers: [],
   entryComponents: [SampleDialogComponent]
 })
-export class SamplesModule {
-}
+export class SamplesModule {}

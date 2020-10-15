@@ -1,25 +1,56 @@
-<br>
-<div>
-  <div fxLayout="row" fxLayout.xs="column" fxLayoutGap="0.5%" fxLayoutAlign="center center">
-    <div fxFlex="32%">
-        <img mat-card-image class=facility_logo src="assets/images/esslogo.png" >
-        <form [formGroup]="loginForm" (ngSubmit)="onLogin($event)" class="ui form">
-          <div class="field">
-            <label for="emailInput">Username:</label>
-            <input id="emailInput" formControlName="username" class="form-control" type="text" placeholder="Username">
-          </div>
-          <div class="field">
-            <label for="pwdInput">Password:</label>
-            <input id="pwdInput" formControlName="password" type="password" class="form-control" placeholder="Password">
-          </div>
-          <button type="submit" [ngClass]="{'loading': loading$ | async}" class="ui button login-btn" id="login-btn">Log
-            in
+<div class="login-container" fxLayoutAlign="center center">
+  <mat-card>
+    <div fxLayout="row" class="facility-logo">
+      <div fxFlex="auto"></div>
+      <div fxFlex="200px">
+        <img src="assets/images/esslogo.png" />
+      </div>
+      <div fxFlex="auto"></div>
+    </div>
+    <mat-card-content>
+      <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
+        <mat-form-field hintLabel="{{appConfig.facility}} account username">
+          <mat-label> <b> Username</b> </mat-label>
+          <span matPrefix> <mat-icon>person</mat-icon> &nbsp; </span>
+          <input matInput id="usernameInput" formControlName="username" />
+        </mat-form-field>
+
+        <mat-form-field hintLabel="{{appConfig.facility}} account password">
+          <mat-label> <b> Password</b> </mat-label>
+          <span matPrefix> <mat-icon>vpn_key</mat-icon> &nbsp; </span>
+          <input
+            matInput
+            id="passwordInput"
+            formControlName="password"
+            [type]="hide ? 'password' : 'text'"
+          />
+          <button
+            mat-icon-button
+            matSuffix
+            type="button"
+            (click)="hide = !hide"
+            [attr.aria-label]="'Hide password'"
+            [attr.aria-pressed]="hide"
+          >
+            <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
           </button>
-          <mat-checkbox name="rememberMe">Remember me</mat-checkbox>
-        </form>
-    </div>
-    <div fxFlex="62%">
-      <img mat-card-image src="assets/images/ess-site.png" alt="ESS site" style="object-fit: scale-down;">
-    </div>
-  </div>
+        </mat-form-field>
+        <p class="privacy-notice" *ngIf="appConfig.facility === 'ESS'">
+          <small>
+            <a (click)="openPrivacyDialog()">SciCat Privacy Notice</a>
+          </small>
+        </p>
+        <button
+          mat-raised-button
+          class="login-button"
+          type="submit"
+          color="primary"
+          [ngClass]="{ loading: loading$ | async }"
+        >
+          Log in
+        </button>
+        <mat-checkbox name="rememberMe">Remember me</mat-checkbox>
+      </form>
+    </mat-card-content>
+  </mat-card>
 </div>

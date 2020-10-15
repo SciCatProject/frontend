@@ -1,0 +1,77 @@
+<mat-card
+  class="dropzone"
+  ngxFileDropzone
+  [readMode]="readMode"
+  multiple
+  accept="image/*"
+  (readStart)="onReadStart($event)"
+  (fileDrop)="onFilePicked($event)"
+  (readEnd)="onReadEnd($event)"
+>
+  <div fxLayout="column" style="align-items: center">
+    <div class="instructions">
+      Drop a file here
+    </div>
+    <div class="instructions">or</div>
+    <div class="instructions">
+      <button
+        mat-raised-button
+        type="button"
+        color="accent"
+        ngxFilePicker
+        [readMode]="readMode"
+        multiple
+        accept="image/*,application/pdf"
+        (readStart)="onReadStart($event)"
+        (filePick)="onFilePicked($event)"
+        (readEnd)="onReadEnd($event)"
+      >
+        Browse
+      </button>
+    </div>
+  </div>
+</mat-card>
+
+<mat-card class="file-picker">
+  <div class="mat-title">Choose an image to upload</div>
+
+  <button
+    mat-raised-button
+    type="button"
+    color="accent"
+    ngxFilePicker
+    [readMode]="readMode"
+    multiple
+    accept="image/*,application/pdf"
+    (readStart)="onReadStart($event)"
+    (filePick)="onFilePicked($event)"
+    (readEnd)="onReadEnd($event)"
+  >
+    Browse
+  </button>
+</mat-card>
+
+<ng-template ngFor let-attachment [ngForOf]="attachments">
+  <mat-card class="attachment-card">
+    <img src="{{ attachment.thumbnail }}" />
+    <mat-card-actions>
+      <form (submit)="onSubmitCaption(attachment.id, caption.value)">
+        <mat-form-field>
+          <input
+            matInput
+            id="caption"
+            placeholder="Edit caption"
+            value="{{ attachment.caption }}"
+            #caption
+          />
+        </mat-form-field>
+        <button mat-button type="submit" color="primary" class="submit-button">
+          Submit
+        </button>
+      </form>
+      <button mat-button (click)="onDeleteAttachment(attachment.id)">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</ng-template>

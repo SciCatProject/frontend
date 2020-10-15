@@ -1,0 +1,67 @@
+<mat-tab-group (selectedTabChange)="onTabChange($event)">
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <ng-container>
+        Readable
+      </ng-container>
+    </ng-template>
+
+    <div fxLayout="row">
+      <div fxFlex="1"></div>
+      <div fxFlex="98">
+        <app-table
+          class="readable"
+          [data]="policies$ | async"
+          [columns]="tableColumns"
+          [paginate]="paginate"
+          [currentPage]="currentPage$ | async"
+          [dataCount]="policyCount$ | async"
+          [dataPerPage]="policiesPerPage$ | async"
+          (pageChange)="onPoliciesPageChange($event)"
+          (sortChange)="onPoliciesSortChange($event)"
+        ></app-table>
+      </div>
+      <div fxFlex="1"></div>
+    </div>
+  </mat-tab>
+  <mat-tab>
+    <ng-template mat-tab-label>
+      Editable
+    </ng-template>
+
+    <div fxLayout="column" fxLayoutGap="row" fxLayoutAlign="end end">
+      <ng-template [ngIf]="editEnabled">
+        <button
+          mat-button
+          [disabled]="selectedPolicies.length === 0"
+          (click)="openDialog()"
+          color="primary"
+          data-cy="editSelection"
+        >
+          <mat-icon>edit</mat-icon> Edit Selection
+        </button>
+      </ng-template>
+    </div>
+
+    <div fxLayout="row">
+      <div fxFlex="1"></div>
+      <div fxFlex="98">
+        <app-table
+          class="editable"
+          [data]="editablePolicies$ | async"
+          [columns]="tableColumns"
+          [select]="editEnabled"
+          [paginate]="paginate"
+          [currentPage]="currentEditablePage$ | async"
+          [dataCount]="editableCount$ | async"
+          [dataPerPage]="editablePoliciesPerPage$ | async"
+          (pageChange)="onEditablePoliciesPageChange($event)"
+          (sortChange)="onEditablePoliciesSortChange($event)"
+          (selectAll)="onSelectAll($event)"
+          (selectOne)="onSelectOne($event)"
+        ></app-table>
+      </div>
+      <div fxFlex="1"></div>
+    </div>
+  </mat-tab>
+</mat-tab-group>

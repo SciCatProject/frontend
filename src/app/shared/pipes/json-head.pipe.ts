@@ -4,22 +4,41 @@ import { Pipe, PipeTransform } from "@angular/core";
   name: "jsonHead"
 })
 export class JsonHeadPipe implements PipeTransform {
-
   transform(value: any, args?: any): any {
     if (!value) {
       return null;
     }
     const newvalue = {};
     let count = 0;
+    let outputString = "";
     for (const key of Object.keys(value)) {
       count = count + 1;
       newvalue[key] = value[key];
+
       if (count > 1) {
         break;
       }
     }
-    const newvalue2 = JSON.stringify(newvalue, null, 2);
-    return newvalue2;
+    const key1 = Object.keys(value).sort()[0];
+    let key2 = Object.keys(value).sort()[1];
+    let val1 = value[key1];
+    if (val1 !== undefined && val1.hasOwnProperty("unit")) {
+      val1 = val1.value.toString() + " " + val1.unit;
+    }
+    let val2 = " ";
+    if (key2 !== undefined) {
+      const prop = value[key2];
+      if (prop.hasOwnProperty("unit")) {
+        val2 = prop.value.toString() + " " + prop.unit;
+      }
+    } else {
+      key2 = " ";
+      val2 = " ";
+    }
+    outputString = key1 + ":" + val1 + "\n" + key2 + ":" + val2;
+    if (key1 === undefined) {
+      outputString = "No metadata found";
+    }
+    return outputString.slice(0, 100);
   }
-
 }

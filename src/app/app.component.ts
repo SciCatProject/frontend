@@ -1,25 +1,27 @@
 import { APP_CONFIG, AppConfig } from "./app-config.module";
-import { MatSidenav } from "@angular/material/sidenav";
 import {
   Component,
   Inject,
   OnDestroy,
   OnInit,
-  ViewChild,
-  ViewEncapsulation
+  ViewEncapsulation,
+  AfterViewChecked,
+  ChangeDetectorRef
 } from "@angular/core";
-import { Router } from "@angular/router";
 import { select, Store } from "@ngrx/store";
 import { LoopBackConfig } from "shared/sdk";
-import { UserApi } from "shared/sdk/services";
-import * as ua from "state-management/actions/user.actions";
-import { MatSnackBar } from "@angular/material";
+import {
+  clearMessageAction,
+  logoutAction
+} from "state-management/actions/user.actions";
+import { MatSnackBar } from "@angular/material/snack-bar";
 import { Meta, Title } from "@angular/platform-browser";
 import { environment } from "../environments/environment";
-import * as selectors from "state-management/selectors";
-import { getCurrentUser } from "state-management/selectors/users.selectors";
-
-import { LoginService } from "users/login.service";
+import { Subscription } from "rxjs";
+import {
+  getIsLoading,
+  getUserMessage
+} from "state-management/selectors/user.selectors";
 
 const { version: appVersion } = require("../../package.json");
 
@@ -27,59 +29,38 @@ const { version: appVersion } = require("../../package.json");
   selector: "app-root",
   templateUrl: "./app.component.html",
   styleUrls: ["./app.component.scss"],
-  providers: [UserApi],
   encapsulation: ViewEncapsulation.None
 })
-export class AppComponent implements OnDestroy, OnInit {
-  @ViewChild("sidenav")
-  sidenav: MatSidenav;
-  userObs$ = this.store.pipe(select(getCurrentUser));
+export class AppComponent implements OnDestroy, OnInit, AfterViewChecked {
+  loading$ = this.store.pipe(select(getIsLoading));
 
-
-  title = "SciCat";
-  appVersion = 0;
-  us: UserApi;
-  darkTheme$;
-  username: string = null;
-  message$ = null;
-  msgClass$ = null;
-  subscriptions = [];
-  public options = {
-    position: ["top", "right"],
-    lastOnBottom: true,
-    showProgressBar: true,
-    pauseOnHover: true,
-    clickToClose: true,
-    timeOut: 2000
-  };
+  title: string;
+  facility: string;
+  status: string;
+  appVersion: number;
+  userMessageSubscription: Subscription;
 
   constructor(
-    private router: Router,
-    private titleService: Title,
+    private cdRef: ChangeDetectorRef,
     private metaService: Meta,
     public snackBar: MatSnackBar,
-    private loginService: LoginService,
-    // private _notif_service: NotificationsService,
-    @Inject(APP_CONFIG) private appConfig: AppConfig,
+    private titleService: Title,
+    @Inject(APP_CONFIG) public appConfig: AppConfig,
     private store: Store<any>
   ) {
     this.appVersion = appVersion;
-    this.darkTheme$ = this.store.pipe(select(selectors.users.getTheme));
-    const facility = this.appConfig.facility;
-    let status = "test";
-    if (this.appConfig.production === true) {
-      status = "";
+    this.facility = this.appConfig.facility;
+    if (appConfig.production === true) {
+      this.status = "";
+    } else {
+      this.status = "test";
     }
-    this.title = "SciCat" + " " + facility + " " + status;
-    this.setTitle(this.title);
+    this.title = "SciCat " + this.facility + " " + this.status;
+    this.titleService.setTitle(this.title);
     this.metaService.addTag({
       name: "description",
-      content: "SciCat metadata catalogue at" + facility
+      content: "SciCat metadata catalogue at" + this.facility
     });
-  }
-
-  public setTitle(newTitle: string) {
-    this.titleService.setTitle(newTitle);
   }
 
   /**
@@ -95,64 +76,31 @@ export class AppComponent implements OnDestroy, OnInit {
       LoopBackConfig.setApiVersion(lbApiVersion);
     }
 
-    // localStorage.clear();
     if (window.location.pathname.indexOf("logout") !== -1) {
       this.logout();
-      // this.router.navigate(['/login']);
     }
 
-    this.subscriptions.push(
-      this.store
-        .pipe(select(state => state.root.user.message))
-        .subscribe(current => {
-          if (current.content !== undefined) {
-            this.snackBar.open(current.content, undefined, {
-              duration: current.duration
-            });
-            this.store.dispatch(new ua.ClearMessageAction());
-          }
-        })
-    );
-    this.subscriptions.push(
-      this.store
-        .pipe(select(state => state.root.user.currentUser))
-        .subscribe(current => {
-          console.log("current: ", current);
-          if (current) {
-            this.username = current.username.replace("ms-ad.", "");
-            if (!current.realm && current.id) {
-              this.loginService
-                .getUserIdent$(current.id)
-                .subscribe(currentIdent => {
-                  if (currentIdent) {
-                    this.username = currentIdent.profile.username;
-                  }
-                });
-            }
-            // TODO handle dataset loading
-          }
-        })
-    );
+    this.userMessageSubscription = this.store
+      .pipe(select(getUserMessage))
+      .subscribe(current => {
+        if (current.content !== undefined) {
+          this.snackBar.open(current.content, undefined, {
+            duration: current.duration
+          });
+          this.store.dispatch(clearMessageAction());
+        }
+      });
+  }
 
-    this.store.dispatch(new ua.RetrieveUserAction());
+  ngAfterViewChecked() {
+    this.cdRef.detectChanges();
   }
 
   ngOnDestroy() {
-    for (let i = 0; i < this.subscriptions.length; i++) {
-      this.subscriptions[i].unsubscribe();
-    }
+    this.userMessageSubscription.unsubscribe();
   }
 
-  logout() {
-    this.sidenav.close();
-    this.store.dispatch(new ua.LogoutAction());
-  }
-
-  login() {
-    this.router.navigateByUrl("/login");
-  }
-
-  sidenavToggle() {
-    this.sidenav.opened ? this.sidenav.close() : this.sidenav.open();
+  logout(): void {
+    this.store.dispatch(logoutAction());
   }
 }

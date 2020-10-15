@@ -2,7 +2,7 @@ import * as datasets from "./datasets.selectors";
 export { datasets };
 import * as jobs from "./jobs.selectors";
 export { jobs };
-import * as users from "./users.selectors";
+import * as users from "./user.selectors";
 export { users };
 import * as policies from "./policies.selectors";
 export { policies };

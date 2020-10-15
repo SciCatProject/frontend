@@ -1,70 +1,178 @@
-import { Action } from "@ngrx/store";
-import { initialUserState, UserState } from "state-management/state/user.store";
+import { UserState, initialUserState } from "state-management/state/user.store";
+import { Action, createReducer, on } from "@ngrx/store";
+import * as fromActions from "state-management/actions/user.actions";
+import { TableColumn } from "state-management/models";
 
-import {
-  SHOW_MESSAGE,
-  CLEAR_MESSAGE,
-  SAVE_SETTINGS,
-  LOGIN,
-  LOGIN_COMPLETE,
-  LOGIN_FAILED,
-  RETRIEVE_USER_COMPLETE,
-  RetrieveUserCompleteAction,
-  LOGOUT_COMPLETE,
-  LoginCompleteAction,
-  ShowMessageAction,
-  SaveSettingsAction,
-} from "state-management/actions/user.actions";
+const reducer = createReducer(
+  initialUserState,
+  on(fromActions.loginAction, state => ({
+    ...state,
+    isLoggingIn: true,
+    isLoggedIn: false
+  })),
 
-export function userReducer(
-  state = initialUserState,
-  action: Action
-): UserState {
+  on(fromActions.loginCompleteAction, (state, { user, accountType }) => ({
+    ...state,
+    currentUser: user,
+    accountType,
+    isLoggingIn: false,
+    isLoggedIn: true
+  })),
+  on(fromActions.loginFailedAction, state => ({
+    ...state,
+    isLoggingIn: false,
+    isLoggedIn: false
+  })),
+
+  on(fromActions.fetchCurrentUserCompleteAction, (state, { user }) => ({
+    ...state,
+    currentUser: user,
+    isLoggedIn: true
+  })),
+
+  on(
+    fromActions.fetchUserIdentityCompleteAction,
+    (state, { userIdentity }) => ({
+      ...state,
+      profile: userIdentity.profile
+    })
+  ),
+
+  on(fromActions.fetchUserSettingsCompleteAction, (state, { userSettings }) => {
+    const { datasetCount, jobCount, columns } = userSettings;
+    const settings = { ...state.settings, datasetCount, jobCount };
+    if (columns.length > 0) {
+      return { ...state, settings, columns };
+    } else {
+      return { ...state, settings };
+    }
+  }),
+
+  on(
+    fromActions.updateUserSettingsCompleteAction,
+    (state, { userSettings }) => {
+      const { datasetCount, jobCount, columns } = userSettings;
+      const settings = { ...state.settings, datasetCount, jobCount };
+      if (columns.length > 0) {
+        return { ...state, settings, columns };
+      } else {
+        return { ...state, settings };
+      }
+    }
+  ),
+
+  on(fromActions.fetchCatamelTokenCompleteAction, (state, { token }) => ({
+    ...state,
+    catamelToken: token
+  })),
+
+  on(fromActions.logoutCompleteAction, () => ({
+    ...initialUserState
+  })),
+
+  on(fromActions.addCustomColumnsAction, (state, { names }) => {
+    const existingColumns = [...state.columns];
+
+    const standardColumns = existingColumns.filter(
+      column => column.type === "standard"
+    );
+
+    let order = standardColumns.length;
+
+    const enabledCustomColumns = existingColumns.filter(
+      column => column.type === "custom" && column.enabled
+    );
+
+    enabledCustomColumns.forEach(column => {
+      column.order = order;
+      order++;
+    });
+
+    const enabledCustomColumnNames = enabledCustomColumns.map(
+      column => column.name
+    );
+
+    const newColumns = names
+      .filter(name => !enabledCustomColumnNames.includes(name))
+      .map(name => {
+        const column: TableColumn = {
+          name,
+          order,
+          type: "custom",
+          enabled: false
+        };
+        order++;
+        return column;
+      });
+
+    const columns = standardColumns
+      .concat(enabledCustomColumns)
+      .concat(newColumns);
+
+    return { ...state, columns };
+  }),
+
+  on(fromActions.selectColumnAction, (state, { name, columnType }) => {
+    const columns = [...state.columns];
+    columns.forEach(item => {
+      if (item.name === name && item.type === columnType) {
+        item.enabled = true;
+      }
+    });
+    return { ...state, columns };
+  }),
+  on(fromActions.deselectColumnAction, (state, { name, columnType }) => {
+    const columns = [...state.columns];
+    columns.forEach(item => {
+      if (item.name === name && item.type === columnType) {
+        item.enabled = false;
+      }
+    });
+    return { ...state, columns };
+  }),
+  on(fromActions.deselectAllCustomColumnsAction, state => {
+    const initialColumnNames = [...initialUserState.columns].map(
+      column => column.name
+    );
+    const customColumns = [...state.columns].filter(
+      column => !initialColumnNames.includes(column.name)
+    );
+    customColumns.forEach(column => (column.enabled = false));
+    const customColumnNames = customColumns.map(column => column.name);
+
+    const columns = [...state.columns]
+      .filter(column => !customColumnNames.includes(column.name))
+      .concat(customColumns);
+    return { ...state, columns };
+  }),
+
+  on(fromActions.showMessageAction, (state, { message }) => ({
+    ...state,
+    message
+  })),
+  on(fromActions.clearMessageAction, state => ({
+    ...state,
+    message: initialUserState.message
+  })),
+
+  on(fromActions.saveSettingsAction, (state, { settings }) => ({
+    ...state,
+    settings
+  })),
+
+  on(fromActions.loadingAction, state => ({
+    ...state,
+    isLoading: true
+  })),
+  on(fromActions.loadingCompleteAction, state => ({
+    ...state,
+    isLoading: false
+  }))
+);
+
+export function userReducer(state: UserState | undefined, action: Action) {
   if (action.type.indexOf("[User]") !== -1) {
     console.log("Action came in! " + action.type);
   }
-
-  switch (action.type) {
-    case RETRIEVE_USER_COMPLETE: {
-      const currentUser = (action as RetrieveUserCompleteAction).user;
-      return { ...state, currentUser };
-    }
-
-    case LOGIN_COMPLETE: {
-      const {user, accountType} = action as LoginCompleteAction;
-      return { ...state, currentUser: user, isLoggingIn: false, isLoggedIn: true, accountType };
-    }
-
-    case LOGIN_FAILED: {
-      return { ...state, isLoggingIn: false, isLoggedIn: false };
-    }
-
-    case SHOW_MESSAGE: {
-      const message = (action as ShowMessageAction).message;
-      return { ...state, message };
-    }
-
-    case CLEAR_MESSAGE: {
-      return { ...state, message: initialUserState.message };
-    }
-
-    case SAVE_SETTINGS: {
-      const settings = (action as SaveSettingsAction).values;
-      return { ...state, settings };
-    }
-
-    case LOGOUT_COMPLETE: {
-      return { ...initialUserState, currentUser: null };
-    }
-
-    case LOGIN: {
-      return { ...state, isLoggingIn: true };
-    }
-
-    default:
-      return state;
-  }
+  return reducer(state, action);
 }
-
-export const getEmail = (state: UserState) => state.email;
-export const getCurrentUser = (state: UserState) => state.currentUser;

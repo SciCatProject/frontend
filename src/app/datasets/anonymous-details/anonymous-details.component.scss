@@ -1,0 +1,48 @@
+@import "../../../theme.scss";
+
+mat-card {
+  margin: 1em;
+
+  .about-header {
+    background-color: mat-color($primary, lighter);
+  }
+
+  .structural-header {
+    background-color: mat-color($navy, 400);
+  }
+
+  .admin-header {
+    background-color: mat-color($accent, lighter);
+  }
+
+  .derived-header {
+    background-color: mat-color($forest, 400);
+  }
+
+  .scientific-header {
+    background-color: mat-color($purple, 400);
+  }
+
+  mat-icon {
+    vertical-align: middle;
+  }
+
+  table {
+    th {
+      text-align: left;
+      padding-right: 0.5em;
+    }
+
+    td {
+      padding: 0.5em;
+
+      a:hover {
+        cursor: pointer;
+      }
+
+      mat-chip:hover {
+        cursor: pointer;
+      }
+    }
+  }
+}

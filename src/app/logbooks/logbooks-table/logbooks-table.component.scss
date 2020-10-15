@@ -1,0 +1,47 @@
+@import "../../../theme.scss";
+
+.logbooks-table {
+  margin-top: 2em;
+
+  mat-header-row {
+    background: mat-color($primary);
+  }
+
+  mat-header-cell {
+    color: mat-color($primary, default-contrast);
+    justify-content: left;
+  }
+
+  mat-cell {
+    justify-content: left;
+  }
+
+  .mat-column-name {
+    max-width: 300px;
+  }
+
+  .mat-column-latestEntry {
+    max-width: 300px;
+  }
+
+  .mat-column-sender {
+    max-width: 300px;
+  }
+
+  .mat-column-entry {
+    min-width: 500px;
+  }
+
+  mat-row:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+  }
+}
+
+.no-logbooks-message {
+  text-align: center;
+
+  mat-icon {
+    vertical-align: middle;
+  }
+}

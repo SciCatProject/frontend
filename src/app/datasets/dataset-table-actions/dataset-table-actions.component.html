@@ -1,0 +1,65 @@
+<div class="mode-container">
+  <mat-button-toggle-group
+    class="public-toggle"
+    [value]="currentPublicViewMode"
+    *ngIf="searchPublicDataEnabled"
+  >
+    <mat-button-toggle [value]="false" (click)="onViewPublicChange(false)">
+      My Data
+    </mat-button-toggle>
+    <mat-button-toggle [value]="true" (click)="onViewPublicChange(true)">
+      Public Data
+    </mat-button-toggle>
+  </mat-button-toggle-group>
+  <mat-button-toggle-group
+    [value]="currentArchViewMode"
+    *ngIf="appConfig.archiveWorkflowEnabled"
+  >
+    <mat-button-toggle
+      *ngFor="let mode of modes"
+      (click)="onModeChange($event, mode)"
+      [value]="mode"
+      [ngClass]="mode"
+    >
+      {{ mode | titlecase }}
+    </mat-button-toggle>
+  </mat-button-toggle-group>
+</div>
+
+<div class="action-container" [class.hidden]="loading$ | async">
+  <button
+    mat-button
+    [disabled]="isEmptySelection()"
+    *ngIf="currentArchViewMode === viewModes.archivable"
+    class="archive-action-btn"
+    (click)="archiveClickHandle($event)"
+    color="primary"
+  >
+    <mat-icon> archive </mat-icon> Archive
+  </button>
+
+  <button
+    mat-button
+    [disabled]="isEmptySelection()"
+    *ngIf="currentArchViewMode === viewModes.retrievable"
+    class="retrieve-action-btn"
+    (click)="retrieveClickHandle($event)"
+    color="primary"
+  >
+    <mat-icon> cloud_upload </mat-icon> Retrieve
+  </button>
+
+  <button
+    id="addToBatchButton"
+    mat-button
+    [disabled]="isEmptySelection()"
+    *ngIf="appConfig.shoppingCartEnabled"
+    class="add-batch"
+    (click)="onAddToBatch()"
+    color="primary"
+  >
+    <mat-icon> shopping_cart </mat-icon> Add to Cart
+  </button>
+</div>
+
+<div style="clear: both"></div>

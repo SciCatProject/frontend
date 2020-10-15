@@ -1,0 +1,17 @@
+<div fxLayout="row" fxLayout.lt-lt="column">
+  <div fxFlex="14" fxFlex.lt-xl="10"></div>
+  <div fxFlex="60" fxFlex.lt-xl="80">
+    <app-table
+      [data]="publishedData$ | async"
+      [columns]="columns"
+      [paginate]="paginate"
+      [currentPage]="currentPage$ | async"
+      [dataCount]="count$ | async"
+      [dataPerPage]="itemsPerPage$ | async"
+      (pageChange)="onPageChange($event)"
+      (sortChange)="onSortChange($event)"
+      (rowClick)="onRowClick($event)"
+    ></app-table>
+  </div>
+  <div fxFlex="26" fxFlex.lt-xl="10"></div>
+</div>

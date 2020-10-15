@@ -11,6 +11,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "aot": true,
             "outputPath": "dist",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -24,18 +25,39 @@
               "src/favicon.ico",
               "src/robots.txt",
               "src/app/loopback_form",
-              "src/android-chrome-192x192.png",
-              "src/apple-touch-icon.png",
-              "src/favicon-16x16.png",
-              "src/favicon-32x32.png",
-              "src/mstile-150x150.png",
-              "src/safari-pinned-tab.svg"
+              "src/assets/icons/android-chrome-192x192.png",
+              "src/assets/icons/android-chrome-512x512.svg",
+              "src/assets/icons/apple-touch-icon-precomposed.png",
+              "src/assets/icons/apple-touch-icon.png",
+              "src/assets/icons/favicon-16x16.png",
+              "src/assets/icons/favicon-32x32.png",
+              "src/assets/icons/mstile-70x70.png",
+              "src/assets/icons/mstile-150x150.png",
+              "src/assets/icons/mstile-310x150.png",
+              "src/assets/icons/mstile-310x310.png",
+              "src/assets/icons/safari-pinned-tab.svg",
+              "src/manifest.json"
             ],
             "styles": ["src/styles.css", "src/theme.scss"],
             "scripts": ["node_modules/hammerjs/hammer.min.js"]
           },
           "configurations": {
             "dmscdev": {
+              "budgets": [
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
@@ -44,10 +66,29 @@
                 {
                   "replace": "src/assets/images/ess-site.png",
                   "with": "CI/ESS/ess-site.png"
+                },
+                {
+                  "replace": "src/assets/images/esslogo.png",
+                  "with": "CI/ESS/esslogo.png"
+                },
+                {
+                  "replace": "src/favicon.ico",
+                  "with": "CI/ESS/favicon.ico"
+                },
+                {
+                  "replace": "src/theme.scss",
+                  "with": "CI/ESS/theme.scss"
                 }
-              ]
+              ],
+              "serviceWorker": true
             },
-            "dmsc": {
+            "e2e": {
+              "budgets": [
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb"
+                }
+              ],
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
@@ -60,45 +101,34 @@
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.dmsc.ts"
-                }
-              ]
-            },
-            "ess": {
-              "optimization": true,
-              "outputHashing": "all",
-              "sourceMap": false,
-              "extractCss": true,
-              "namedChunks": false,
-              "aot": true,
-              "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true,
-              "fileReplacements": [
+                  "with": "src/environments/environment.e2e.ts"
+                },
                 {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.ess.ts"
-                }
-              ]
-            },
-            "dmscprod": {
-              "optimization": true,
-              "outputHashing": "all",
-              "sourceMap": false,
-              "extractCss": true,
-              "namedChunks": false,
-              "aot": true,
-              "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true,
-              "fileReplacements": [
+                  "replace": "src/assets/images/ess-site.png",
+                  "with": "CI/ESS/ess-site.png"
+                },
                 {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.dmscprod.ts"
+                  "replace": "src/assets/images/esslogo.png",
+                  "with": "CI/ESS/esslogo.png"
+                },
+                {
+                  "replace": "src/favicon.ico",
+                  "with": "CI/ESS/favicon.ico"
+                },
+                {
+                  "replace": "src/theme.scss",
+                  "with": "CI/ESS/theme.scss"
                 }
-              ]
+              ],
+              "serviceWorker": true
             },
             "maxiv-prod": {
+              "budgets": [
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb"
+                }
+              ],
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
@@ -109,13 +139,39 @@
               "vendorChunk": false,
               "buildOptimizer": true,
               "fileReplacements": [
+                {
+                  "replace": "src/app/build-specifics/index.ts",
+                  "with": "src/app/build-specifics/index.prod.ts"
+                },
                 {
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.maxiv.prod.ts"
+                },
+                {
+                  "replace": "src/assets/images/ess-site.png",
+                  "with": "CI/MAXIV/site.png"
+                },
+                {
+                  "replace": "src/assets/images/esslogo.png",
+                  "with": "CI/MAXIV/logo.png"
+                },
+                {
+                  "replace": "src/favicon.ico",
+                  "with": "CI/MAXIV/favicon.ico"
+                },
+                {
+                  "replace": "src/theme.scss",
+                  "with": "CI/MAXIV/theme.scss"
                 }
               ]
             },
             "development": {
+              "budgets": [
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb"
+                }
+              ],
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
@@ -124,10 +180,21 @@
                 {
                   "replace": "src/assets/images/ess-site.png",
                   "with": "CI/PSI/site.png"
+                },
+                {
+                  "replace": "src/assets/images/esslogo.png",
+                  "with": "CI/PSI/site-logo.png"
                 }
-              ]
+              ],
+              "serviceWorker": true
             },
-            "dmscproduction": {
+            "production": {
+              "budgets": [
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb"
+                }
+              ],
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
@@ -139,22 +206,9 @@
               "buildOptimizer": true,
               "fileReplacements": [
                 {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.dev.ts"
-                }
-              ]
-            },
-            "production": {
-              "optimization": true,
-              "outputHashing": "all",
-              "sourceMap": false,
-              "extractCss": true,
-              "namedChunks": false,
-              "aot": true,
-              "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true,
-              "fileReplacements": [
+                  "replace": "src/app/build-specifics/index.ts",
+                  "with": "src/app/build-specifics/index.prod.ts"
+                },
                 {
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.prod.ts"
@@ -170,6 +224,12 @@
               ]
             },
             "staging": {
+              "budgets": [
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb"
+                }
+              ],
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
@@ -195,6 +255,12 @@
               ]
             },
             "qa": {
+              "budgets": [
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb"
+                }
+              ],
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
@@ -208,14 +274,14 @@
                 {
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.qa.ts"
-                }
-              ]
-            },
-            "docker": {
-              "fileReplacements": [
+                },
                 {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.docker.ts"
+                  "replace": "src/assets/images/ess-site.png",
+                  "with": "CI/PSI/site.png"
+                },
+                {
+                  "replace": "src/assets/images/esslogo.png",
+                  "with": "CI/PSI/site-logo.png"
                 }
               ]
             }
@@ -232,23 +298,14 @@
             "dmscdev": {
               "browserTarget": "catanie:build:dmscdev"
             },
-            "dmsc": {
-              "browserTarget": "catanie:build:dmsc"
-            },
-            "ess": {
-              "browserTarget": "catanie:build:ess"
-            },
-            "dmscprod": {
-              "browserTarget": "catanie:build:dmscprod"
+            "e2e": {
+              "browserTarget": "catanie:build:e2e"
             },
             "maxiv-prod": {
               "browserTarget": "catanie:build:maxiv-prod"
             },
             "development": {
               "browserTarget": "catanie:build:development"
-            },
-            "dmscproduction": {
-              "browserTarget": "catanie:build:dmscproduction"
             },
             "production": {
               "browserTarget": "catanie:build:production"
@@ -258,9 +315,6 @@
             },
             "qa": {
               "browserTarget": "catanie:build:qa"
-            },
-            "docker": {
-              "browserTarget": "catanie:build:docker"
             }
           }
         },
@@ -282,13 +336,26 @@
             "assets": [
               "src/assets",
               "src/favicon.ico",
+              "src/robots.txt",
               "src/app/loopback_form",
-              "src/android-chrome-192x192.png",
-              "src/apple-touch-icon.png",
-              "src/favicon-16x16.png",
-              "src/favicon-32x32.png",
-              "src/mstile-150x150.png",
-              "src/safari-pinned-tab.svg"
+              "src/assets/icons/android-chrome-192x192.png",
+              "src/assets/icons/android-chrome-512x512.svg",
+              "src/assets/icons/apple-touch-icon-precomposed.png",
+              "src/assets/icons/apple-touch-icon.png",
+              "src/assets/icons/favicon-16x16.png",
+              "src/assets/icons/favicon-32x32.png",
+              "src/assets/icons/mstile-70x70.png",
+              "src/assets/icons/mstile-150x150.png",
+              "src/assets/icons/mstile-310x150.png",
+              "src/assets/icons/mstile-310x310.png",
+              "src/assets/icons/safari-pinned-tab.svg",
+              "src/manifest.json"
+            ],
+            "codeCoverageExclude": [
+              "src/app/shared/sdk/**",
+              "src/environments/**",
+              "src/polyfills.ts",
+              "src/test.ts"
             ]
           }
         },
@@ -326,10 +393,13 @@
   "schematics": {
     "@schematics/angular:component": {
       "prefix": "app",
-      "styleext": "css"
+      "style": "css"
     },
     "@schematics/angular:directive": {
       "prefix": "app"
     }
+  },
+  "cli": {
+    "defaultCollection": "@ngrx/schematics"
   }
 }

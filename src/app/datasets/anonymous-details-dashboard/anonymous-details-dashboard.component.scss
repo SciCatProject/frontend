@@ -1,0 +1,19 @@
+@import "../../../theme.scss";
+
+.jupyter-button {
+  margin: 1em 0 0 1em;
+  background-color: mat-color($orange, 1000);
+  color: mat-color($primary, default-contrast);
+}
+
+mat-card {
+  margin: 1em;
+
+  .scientific-header {
+    background-color: mat-color($purple, 400);
+  }
+}
+
+.datablocks-table {
+  margin-top: 5em;
+}

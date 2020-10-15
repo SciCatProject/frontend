@@ -1,0 +1,29 @@
+@import "../../../theme.scss";
+
+.jupyter-button {
+  margin: 1em 0 0 1em;
+  background-color: mat-color($orange, 1000);
+  color: mat-color($primary, default-contrast);
+}
+
+.public-toggle {
+  margin: 1em 1em 0 0;
+  float: right;
+}
+
+mat-card {
+  margin: 1em;
+
+  .reset-button {
+    background-color: mat-color($warn);
+    color: mat-color($warn, default-contrast);
+  }
+}
+
+.datafiles-container {
+  margin-top: 5em;
+}
+
+.file-uploader {
+  margin: 1em;
+}

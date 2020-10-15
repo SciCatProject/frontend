@@ -1,0 +1,123 @@
+<div fxLayout="row">
+  <div fxFlex="80">
+    <ng-container *ngIf="dataset">
+      <mat-card>
+        <mat-card-header class="lifecycle-header">
+          Lifecycle
+        </mat-card-header>
+        <div class="details">
+          <table class="lifecycle-table" *ngIf="dataset.datasetlifecycle">
+            <tr *ngIf="dataset.creationTime as value">
+              <th><mat-icon> calendar_today </mat-icon> Creation Date</th>
+              <td>{{ value | date: "yyyy-MM-dd" }}</td>
+            </tr>
+            <tr
+              *ngIf="
+                !dataset.isPublished &&
+                dataset.datasetlifecycle.dateOfPublishing as value
+              "
+            >
+              <th><mat-icon> radio </mat-icon> End of Embargo Period</th>
+              <td>{{ value | date: "yyyy-MM-dd" }}</td>
+            </tr>
+            <tr
+              *ngIf="
+                dataset.isPublished && dataset.datasetlifecycle.publishedOn as value
+              "
+            >
+              <th><mat-icon> event_available </mat-icon> Publication Date</th>
+              <td>{{ value | date: "yyyy-MM-dd" }}</td>
+            </tr>
+            <tr
+              *ngIf="
+                appConfig.archiveWorkflowEnabled &&
+                dataset.datasetlifecycle.dateOfDiskPurging as value
+              "
+            >
+              <th><mat-icon> gavel </mat-icon> Data Deletion Date</th>
+              <td>{{ value | date: "yyyy-MM-dd" }}</td>
+            </tr>
+            <tr
+              *ngIf="
+                appConfig.archiveWorkflowEnabled &&
+                dataset.datasetlifecycle.archiveRetentionTime as value
+              "
+            >
+              <th><mat-icon> save </mat-icon> Archive Retention Date</th>
+              <td>{{ value | date: "yyyy-MM-dd" }}</td>
+            </tr>
+          </table>
+        </div>
+      </mat-card>
+
+      <mat-card *ngIf="historyItemsCount > 0">
+        <mat-card-header class="history-header">
+          History
+        </mat-card-header>
+
+        <mat-paginator
+          [length]="historyItemsCount"
+          [pageIndex]="currentPage"
+          [pageSize]="itemsPerPage"
+          [pageSizeOptions]="pageSizeOptions"
+          (page)="onPageChange($event)"
+          showFirstLastButtons
+        ></mat-paginator>
+
+        <table
+          mat-table
+          [dataSource]="dataSource"
+          class="history-table"
+          multiTemplateDataRows
+        >
+          <ng-container
+            matColumnDef="{{ column }}"
+            *ngFor="let column of displayedColumns"
+          >
+            <th mat-header-cell *matHeaderCellDef>{{ column | titleCase }}</th>
+            <td mat-cell *matCellDef="let item">
+              {{ item[column] }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="expandedDetail">
+            <td
+              mat-cell
+              *matCellDef="let item"
+              [attr.colspan]="displayedColumns.length"
+            >
+              <div
+                class="item-detail"
+                [@detailExpand]="
+                  item == expandedItem ? 'expanded' : 'collapsed'
+                "
+              >
+                <div class="history-value">
+                  <ngx-json-viewer
+                    [json]="item.value"
+                    [expanded]="false"
+                  ></ngx-json-viewer>
+                </div>
+              </div>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr
+            mat-row
+            *matRowDef="let item; columns: displayedColumns"
+            class="item-row"
+            [class.expanded-row]="expandedItem === item"
+            (click)="expandedItem = expandedItem === item ? null : item"
+          ></tr>
+
+          <tr
+            mat-row
+            *matRowDef="let row; columns: ['expandedDetail']"
+            class="detail-row"
+          ></tr>
+        </table>
+      </mat-card>
+    </ng-container>
+  </div>
+</div>

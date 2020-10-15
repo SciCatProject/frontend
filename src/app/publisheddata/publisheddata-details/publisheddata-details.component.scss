@@ -1,0 +1,34 @@
+@import "../../../theme.scss";
+
+mat-card {
+  margin: 1em;
+
+  .status-header {
+    background-color: mat-color($warn, lighter);
+  }
+
+  .about-header {
+    background-color: mat-color($primary, lighter);
+  }
+
+  .admin-header {
+    background-color: mat-color($accent, lighter);
+  }
+
+  mat-icon {
+    vertical-align: middle;
+  }
+
+  table {
+    td,
+    th {
+      padding: 0.3em;
+    }
+
+    th {
+      text-align: left;
+      vertical-align: top;
+      min-width: 15em;
+    }
+  }
+}

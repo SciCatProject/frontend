@@ -10,7 +10,7 @@ import { APP_CONFIG, AppConfig } from "../app-config.module";
  * @class ADAuthService
  */
 
-export interface access_token {
+export interface AccessToken {
   access_token: string;
   userId;
 }
@@ -18,7 +18,7 @@ export interface access_token {
 @Injectable()
 export class ADAuthService {
   constructor(
-    public http: HttpClient,
+    private http: HttpClient,
     @Inject(APP_CONFIG) private config: AppConfig
   ) {}
 
@@ -34,13 +34,13 @@ export class ADAuthService {
   login(
     username: string,
     password: string
-  ): Observable<HttpResponse<access_token>> {
-    var creds = {};
+  ): Observable<HttpResponse<AccessToken>> {
+    const creds = {};
     creds["username"] = username;
     creds["password"] = password;
     const headers = new HttpHeaders();
     const url = LoopBackConfig.getPath() + this.config.externalAuthEndpoint;
     headers.append("Content-Type", "application/x-www-form-urlencoded");
-    return this.http.post<access_token>(url, creds, { observe: "response" });
+    return this.http.post<AccessToken>(url, creds, { observe: "response" });
   }
 }

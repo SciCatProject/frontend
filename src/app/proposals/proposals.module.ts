@@ -1,55 +1,67 @@
+import { NgxJsonViewerModule } from "ngx-json-viewer";
 import { NgModule } from "@angular/core";
-import { CommonModule } from "@angular/common";
+import { CommonModule, DatePipe, SlicePipe } from "@angular/common";
 import { RouterModule } from "@angular/router";
 
 import { StoreModule } from "@ngrx/store";
 import { EffectsModule } from "@ngrx/effects";
 
-import { ProposalsListComponent } from "./components/proposals-list/proposals-list.component";
-import { ProposalDetailComponent } from "./components/proposal-detail/proposal-detail.component";
+import { ProposalDetailComponent } from "./proposal-detail/proposal-detail.component";
 
-import { ListProposalsPageComponent } from "./containers/list-proposals-page/list-proposals-page.component";
-import { ViewProposalPageComponent } from "./containers/view-proposal-page/view-proposal-page.component";
-
-import { ProposalsService } from "./proposals.service";
-import { DatasetService } from "../datasets/dataset.service";
+import { ViewProposalPageComponent } from "./view-proposal-page/view-proposal-page.component";
 
 import { proposalsReducer } from "../state-management/reducers/proposals.reducer";
-import { ProposalsEffects } from "../state-management/effects/proposals.effects";
+import { ProposalEffects } from "../state-management/effects/proposals.effects";
 
-import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
-import {
-  MatListModule,
-  MatTableModule,
-  MatTooltipModule,
-  MatTabsModule,
-  MatCardModule,
-  MatIconModule
-} from "@angular/material";
-import { SharedCatanieModule } from "../shared/shared.module";
+import { MatButtonModule } from "@angular/material/button";
+import { MatCardModule } from "@angular/material/card";
+import { MatExpansionModule } from "@angular/material/expansion";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatIconModule } from "@angular/material/icon";
+import { MatInputModule } from "@angular/material/input";
+import { MatPaginatorModule } from "@angular/material/paginator";
+import { MatSortModule } from "@angular/material/sort";
+import { MatTableModule } from "@angular/material/table";
+import { MatTabsModule } from "@angular/material/tabs";
+import { MatTooltipModule } from "@angular/material/tooltip";
+import { SharedCatanieModule } from "shared/shared.module";
+import { ProposalDashboardComponent } from "./proposal-dashboard/proposal-dashboard.component";
+import { FlexLayoutModule } from "@angular/flex-layout";
+import { FileSizePipe } from "shared/pipes/filesize.pipe";
+import { SatDatepickerModule } from "saturn-datepicker";
+import { ProposalFilterComponent } from "./proposal-filter/proposal-filter.component";
+import { LogbooksModule } from "logbooks/logbooks.module";
 
 @NgModule({
   imports: [
     CommonModule,
-    RouterModule,
-    SharedCatanieModule,
-    FontAwesomeModule,
-    StoreModule.forFeature("proposals", proposalsReducer),
-    EffectsModule.forFeature([ProposalsEffects]),
-    MatIconModule,
-    MatTooltipModule,
-    MatListModule,
+    EffectsModule.forFeature([ProposalEffects]),
+    FlexLayoutModule,
+    LogbooksModule,
+    MatButtonModule,
     MatCardModule,
+    MatExpansionModule,
+    MatIconModule,
+    MatInputModule,
+    MatFormFieldModule,
+    MatPaginatorModule,
+    MatSortModule,
+    MatTableModule,
     MatTabsModule,
-    MatTableModule
+    MatTooltipModule,
+    NgxJsonViewerModule,
+    RouterModule,
+    SatDatepickerModule,
+    SharedCatanieModule,
+    StoreModule.forFeature("proposals", proposalsReducer)
   ],
   declarations: [
-    ListProposalsPageComponent,
     ViewProposalPageComponent,
-
-    ProposalsListComponent,
-    ProposalDetailComponent
+    ProposalDetailComponent,
+    ProposalDashboardComponent,
+    ProposalFilterComponent
   ],
-  providers: [ProposalsService, DatasetService]
+  exports: [],
+  providers: [DatePipe, FileSizePipe, SlicePipe]
 })
 export class ProposalsModule {}

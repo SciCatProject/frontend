@@ -1,80 +1,164 @@
-<div >
+<div>
+  <p mat-dialog-title align="center">Edit Settings</p>
+  <mat-expansion-panel [expanded]="selectedGroups.length < 5">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        {{ selectedGroups.length }} selected groups:
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <mat-list dense> </mat-list>
+    <mat-list-item *ngFor="let group of selectedGroups">{{
+      group
+    }}</mat-list-item>
+  </mat-expansion-panel>
+
   <mat-card>
-  <form [formGroup]="form" class="edit-dialog">
-    <mat-dialog-content [formGroup]="form" >
-      <p mat-dialog-title align="center" >Edit Settings</p>
-      <p align="left">Groups: {{selectedGroups}}</p>
+    <form [formGroup]="form" class="edit-dialog">
+      <mat-dialog-content [formGroup]="form">
+        <mat-form-field (click)="controlClick(manager)">
+          <mat-chip-list #manager formControlName="manager" data-cy="managerChipList">
+            <mat-chip
+              *ngFor="let manager of data.selectedPolicy.manager"
+              (removed)="removeManager(manager)"
+              [selectable]="selectable"
+              [removable]="true"
+            >
+              {{ manager }}
+              <mat-icon matChipRemove>cancel</mat-icon>
+            </mat-chip>
+            <input
+              data-cy="managerInput"
+              matInput
+              placeholder="Manager"
+              [matChipInputFor]="manager"
+              [matChipInputAddOnBlur]="true"
+              [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+              (matChipInputTokenEnd)="addManager($event)"
+            />
+          </mat-chip-list>
+        </mat-form-field>
 
-      <mat-form-field (click)="controlClick(autoArchive)">
-        <mat-select  placeholder="Auto Archive" formControlName="autoArchive"
-         aria-label="Auto Archive"  #autoArchive>
-          <mat-option value=true>
-            True</mat-option>
-          <mat-option value=false>
-            False</mat-option>
-        </mat-select>
-      </mat-form-field>
+        <mat-form-field (click)="controlClick(autoArchive)">
+          <mat-select
+            placeholder="Auto Archive"
+            formControlName="autoArchive"
+            aria-label="Auto Archive"
+            #autoArchive
+          >
+            <mat-option value="true"> True</mat-option>
+            <mat-option value="false"> False</mat-option>
+          </mat-select>
+        </mat-form-field>
 
-      <mat-form-field (click)="controlClick(autoArchiveDelay)">
-        <mat-select placeholder="Auto Archive Delay" formControlName="autoArchiveDelay"
-        aria-label="Auto Archive Delay"  #autoArchiveDelay>
-          <mat-option value="1">
-            1</mat-option>
-          <mat-option value="2">
-            2</mat-option>
-          <mat-option value="7">
-            7</mat-option>
-        </mat-select>
-      </mat-form-field>
+        <mat-form-field (click)="controlClick(autoArchiveDelay)">
+          <mat-select
+            placeholder="Auto Archive Delay"
+            formControlName="autoArchiveDelay"
+            aria-label="Auto Archive Delay"
+            #autoArchiveDelay
+          >
+            <mat-option value="1"> 1</mat-option>
+            <mat-option value="2"> 2</mat-option>
+            <mat-option value="7"> 7</mat-option>
+          </mat-select>
+        </mat-form-field>
 
-      <mat-form-field (click)="controlClick(tapeRedundancy)">
-        <mat-select placeholder="Tape Redundancy" formControlName="tapeRedundancy"
-        aria-label="Tape Redundancy"  #tapeRedundancy>
-          <mat-option value="low">
-            low</mat-option>
-          <mat-option value="medium">
-            medium</mat-option>
-          <mat-option value="high">
-            high</mat-option>
-        </mat-select>
-      </mat-form-field>
+        <mat-form-field (click)="controlClick(tapeRedundancy)">
+          <mat-select
+            placeholder="Tape Redundancy"
+            formControlName="tapeRedundancy"
+            aria-label="Tape Redundancy"
+            #tapeRedundancy
+          >
+            <mat-option value="low"> low</mat-option>
+            <mat-option value="medium"> medium</mat-option>
+            <mat-option value="high"> high</mat-option>
+          </mat-select>
+        </mat-form-field>
 
-      <mat-form-field (click)="controlClick(archiveEmailNotification)">
-        <mat-select placeholder="Archive Email Notification" formControlName="archiveEmailNotification"
-        aria-label="Archive Email Notification"  #archiveEmailNotification>
-          <mat-option value=true>
-            True</mat-option>
-          <mat-option value=false>
-            False</mat-option>
-        </mat-select>
-      </mat-form-field>
+        <mat-form-field (click)="controlClick(archiveEmailNotification)">
+          <mat-select
+            placeholder="Archive Email Notification"
+            formControlName="archiveEmailNotification"
+            aria-label="Archive Email Notification"
+            #archiveEmailNotification
+          >
+            <mat-option value="true"> True</mat-option>
+            <mat-option value="false"> False</mat-option>
+          </mat-select>
+        </mat-form-field>
 
-      <mat-form-field (click)="controlClick(archiveEmailsToBeNotified)">
-          <input matInput placeholder="Archive Emails to be Notified" formControlName="archiveEmailsToBeNotified"
-          aria-label="Archive Emails to be Notified"  #archiveEmailsToBeNotified >
-      </mat-form-field>
+        <mat-form-field (click)="controlClick(archiveEmailsToBeNotified)">
+          <mat-chip-list
+            #archiveEmailsToBeNotified
+            formControlName="archiveEmailsToBeNotified"
+          >
+            <mat-chip
+              *ngFor="
+                let email of data.selectedPolicy.archiveEmailsToBeNotified
+              "
+              (removed)="removeArchiveEmail(email)"
+              [selectable]="selectable"
+              [removable]="true"
+            >
+              {{ email }}
+              <mat-icon matChipRemove>cancel</mat-icon>
+            </mat-chip>
+            <input
+              placeholder="Archive Emails to be Notified"
+              formControlName="archiveEmailsToBeNotified"
+              [matChipInputFor]="archiveEmailsToBeNotified"
+              [matChipInputAddOnBlur]="true"
+              [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+              (matChipInputTokenEnd)="addArchiveEmails($event)"
+            />
+          </mat-chip-list>
+        </mat-form-field>
 
-      <mat-form-field (click)="controlClick(retrieveEmailNotification)">
-        <mat-select placeholder="Retrieve Email Notification" formControlName="retrieveEmailNotification"
-        aria-label="Retrieve Email Notification"  #retrieveEmailNotification>
-          <mat-option value=true>
-            True</mat-option>
-          <mat-option value=false>
-            False</mat-option>
-        </mat-select>
-      </mat-form-field>
+        <mat-form-field (click)="controlClick(retrieveEmailNotification)">
+          <mat-select
+            placeholder="Retrieve Email Notification"
+            formControlName="retrieveEmailNotification"
+            aria-label="Retrieve Email Notification"
+            #retrieveEmailNotification
+          >
+            <mat-option value="true"> True</mat-option>
+            <mat-option value="false"> False</mat-option>
+          </mat-select>
+        </mat-form-field>
 
-      <mat-form-field (click)="controlClick(retrieveEmailsToBeNotified)" >
-          <input matInput placeholder="Retrieve Emails to be Notified" formControlName="retrieveEmailsToBeNotified"
-          aria-label="Retrieve Emails to be Notified" #retrieveEmailsToBeNotified>
-      </mat-form-field>
+        <mat-form-field (click)="controlClick(retrieveEmailsToBeNotified)">
+          <mat-chip-list
+            #retrieveEmailsToBeNotified
+            formControlName="retrieveEmailsToBeNotified"
+          >
+            <mat-chip
+              *ngFor="
+                let email of data.selectedPolicy.retrieveEmailsToBeNotified
+              "
+              (removed)="removeRetrieveEmail(email)"
+              [selectable]="selectable"
+              [removable]="true"
+            >
+              {{ email }}
+              <mat-icon matChipRemove>cancel</mat-icon>
+            </mat-chip>
+            <input
+              placeholder="Retrieve Emails to be Notified"
+              formControlName="retrieveEmailsToBeNotified"
+              [matChipInputFor]="retrieveEmailsToBeNotified"
+              [matChipInputAddOnBlur]="true"
+              [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+              (matChipInputTokenEnd)="addRetrieveEmails($event)"
+            />
+          </mat-chip-list>
+        </mat-form-field>
+      </mat-dialog-content>
+    </form>
+  </mat-card>
 
-
-    </mat-dialog-content>
-    <mat-dialog-actions >
-      <button class="mat-raised-button" (click)="close()">Close</button>
-      <button class="mat-raised-button mat-primary" (click)="save()">Save</button>
-    </mat-dialog-actions>
-  </form>
-</mat-card>
+  <mat-dialog-actions>
+    <button class="mat-raised-button" (click)="close()">Close</button>
+    <button class="mat-raised-button mat-primary" (click)="save()" data-cy="saveButton">Save</button>
+  </mat-dialog-actions>
 </div>

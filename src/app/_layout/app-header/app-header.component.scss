@@ -1,0 +1,60 @@
+@import "src/theme.scss";
+
+.header {
+  position: sticky;
+  position: -webkit-sticky;
+  top: 0;
+  z-index: 1000;
+
+  mat-toolbar {
+    height: 7vh;
+
+    a {
+      color: mat-color($primary, default-contrast);
+    }
+
+    .logo {
+      height: 4vh;
+      margin-right: 1em;
+      padding-top: 0.5vh;
+    }
+
+    .spacer {
+      flex: 1 1 auto;
+    }
+
+    .toplink {
+      padding: 10px;
+      font: bold;
+      font-size: 11pt;
+
+      mat-icon {
+        vertical-align: middle;
+      }
+    }
+
+    button {
+      vertical-align: middle;
+    }
+
+    .user-button {
+      font-size: 11px;
+      line-height: 20px;
+
+      .user-image {
+        height: 3vh;
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 1279px) {
+  .large-screen-text {
+    display: none;
+  }
+}
+
+::ng-deep .custom-menu .mat-menu-content:not(:empty) {
+  padding-top: 1px;
+  padding-bottom: 1px;
+}

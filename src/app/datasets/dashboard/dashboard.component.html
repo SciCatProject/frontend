@@ -1,9 +1,45 @@
-<div fxLayout="row" fxLayout.xs="column">
-  <div fxFlex="14" style="margin-right: 1em">
-    <datasets-filter></datasets-filter>
-    <batch-card></batch-card>
-  </div>
-  <div fxFlex="85">
-    <dataset-table></dataset-table>
-  </div>
-</div>
+<mat-sidenav-container [hasBackdrop]="false">
+  <mat-sidenav-content>
+    <div fxLayout="row" fxLayout.xs="column">
+      <div class="action-column" fxFlex="14" fxFlex.lt-xl="20">
+        <datasets-filter></datasets-filter>
+
+        <mat-card
+          *ngIf="appConfig.addDatasetEnabled"
+          class="add-card"
+          (click)="openDialog()"
+        >
+          <mat-icon> add_circle </mat-icon>
+          Create Dataset
+        </mat-card>
+
+        <div *ngIf="!appConfig.shoppingCartOnHeader && nonEmpty$ | async">
+          <batch-card></batch-card>
+        </div>
+      </div>
+
+      <div class="table-column" fxFlex="85" fxFlex.lt-xl="80">
+        <dataset-table-actions
+          [selectedSets]="selectedSets$ | async"
+        ></dataset-table-actions>
+
+        <dataset-table
+          [tableColumns]="tableColumns$ | async"
+          [selectedSets]="selectedSets$ | async"
+          (settingsClick)="onSettingsClick()"
+          (rowClick)="onRowClick($event)"
+        ></dataset-table>
+      </div>
+    </div>
+  </mat-sidenav-content>
+
+  <mat-sidenav #settings position="end" mode="push">
+    <dataset-table-settings
+      [selectableColumns]="selectableColumns$ | async"
+      [clearSearchBar]="clearColumnSearch"
+      (closeClick)="onCloseClick()"
+      (columnSearch)="onColumnSearch($event)"
+      (selectColumn)="onSelectColumn($event)"
+    ></dataset-table-settings>
+  </mat-sidenav>
+</mat-sidenav-container>

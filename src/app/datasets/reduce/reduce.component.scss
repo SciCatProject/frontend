@@ -1,0 +1,82 @@
+@import "../../../theme.scss";
+
+mat-card {
+  margin: 1em;
+
+  .action-header {
+    background-color: mat-color($primary, lighter);
+  }
+
+  .derived-header {
+    background-color: mat-color($accent, lighter);
+  }
+
+  .details {
+    padding-left: 1em;
+
+    table {
+      margin: 1em 0;
+
+      th {
+        text-align: left;
+        padding-right: 0.5em;
+
+        mat-icon {
+          vertical-align: middle;
+        }
+      }
+
+      td {
+        padding: 0.5em;
+      }
+    }
+  }
+
+  .action-workflow {
+    .action-selector {
+      height: 5em;
+
+      mat-radio-button {
+        margin: 2em 0.5em;
+      }
+    }
+
+    .script-selector {
+      height: 5em;
+
+      .script-details {
+        border-left: 1px lightgrey solid;
+
+        padding: 0 0.5em;
+      }
+    }
+
+    .confirmation-table {
+      height: 5em;
+
+      table {
+        td {
+          padding: 0.5em;
+        }
+
+        th {
+          text-align: left;
+          padding-right: 0.5em;
+        }
+      }
+    }
+
+    button {
+      margin-top: 2em;
+    }
+  }
+
+  .history-table {
+    margin-top: 1em;
+
+    mat-row:hover {
+      background-color: rgba(0, 0, 0, 0.1);
+      cursor: pointer;
+    }
+  }
+}

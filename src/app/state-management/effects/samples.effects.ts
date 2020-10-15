@@ -1,79 +1,277 @@
-import { Action, Store } from "@ngrx/store";
-import { Actions, Effect, ofType } from "@ngrx/effects";
 import { Injectable } from "@angular/core";
-import { Observable, of } from "rxjs";
-import { Sample } from "../../shared/sdk/models";
-import { SampleApi } from "shared/sdk/services";
-import { SampleService } from "../../samples/sample.service";
-import { catchError, map, mergeMap, switchMap, withLatestFrom, tap } from "rxjs/operators";
+import { Actions, createEffect, ofType } from "@ngrx/effects";
+import { DatasetApi, SampleApi, Sample, Dataset } from "shared/sdk";
+import { Store, select } from "@ngrx/store";
 import {
-  FETCH_SAMPLE,
-  FETCH_SAMPLES,
-  FetchSampleAction,
-  FetchSampleCompleteAction,
-  FetchSampleFailedAction,
-  FetchSamplesCompleteAction,
-  FetchSamplesFailedAction,
-  ADD_SAMPLE,
-  AddSampleAction,
-  AddSampleCompleteAction,
-  AddSampleFailedAction
-} from "../actions/samples.actions";
-import {  getQuery } from "state-management/selectors/samples.selectors";
+  getFullqueryParams,
+  getDatasetsQueryParams
+} from "state-management/selectors/samples.selectors";
+import * as fromActions from "state-management/actions/samples.actions";
+import {
+  withLatestFrom,
+  mergeMap,
+  map,
+  catchError,
+  switchMap
+} from "rxjs/operators";
+import { of } from "rxjs";
+import {
+  loadingAction,
+  loadingCompleteAction
+} from "state-management/actions/user.actions";
 
 @Injectable()
-export class SamplesEffects {
-  private query$ = this.store.select(getQuery);
-  @Effect()
-  fetchSamples$: Observable<Action> = this.actions$.pipe(
-    ofType(FETCH_SAMPLES),
-    withLatestFrom(this.query$),
-    map(([action, params]) => params),
-    mergeMap(params =>
-      this.sampleApi.find(params ).pipe(
-        map((samples: Sample[]) => new FetchSamplesCompleteAction(samples)),
-        catchError(() => of(new FetchSamplesFailedAction()))
+export class SampleEffects {
+  private fullqueryParams$ = this.store.pipe(select(getFullqueryParams));
+  private datasetsQueryParams$ = this.store.pipe(
+    select(getDatasetsQueryParams)
+  );
+
+  fetchSamples$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(
+        fromActions.fetchSamplesAction,
+        fromActions.changePageAction,
+        fromActions.sortByColumnAction,
+        fromActions.setTextFilterAction
+      ),
+      withLatestFrom(this.fullqueryParams$),
+      map(([action, params]) => params),
+      mergeMap(({ query, limits }) =>
+        this.sampleApi.fullquery(query, limits).pipe(
+          mergeMap(samples => [
+            fromActions.fetchSamplesCompleteAction({ samples }),
+            fromActions.fetchSamplesCountAction()
+          ]),
+          catchError(() => of(fromActions.fetchSamplesFailedAction()))
+        )
       )
     )
   );
 
-  @Effect()
-  protected getSample$: Observable<Action> = this.actions$.pipe(
-    ofType(FETCH_SAMPLE),
-    map((action: FetchSampleAction) => action.samplelId),
-    mergeMap(samplelId =>
-      this.sampleService
-        .getSample(encodeURIComponent(samplelId))
-        .pipe(
-          map(
-            (currentSample: Sample) =>
-              new FetchSampleCompleteAction(currentSample),
-            catchError(() => of(new FetchSampleFailedAction()))
-          )
+  fetchCount$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(fromActions.fetchSamplesCountAction),
+      withLatestFrom(this.fullqueryParams$),
+      map(([action, params]) => params),
+      mergeMap(({ query }) =>
+        this.sampleApi.fullquery(query).pipe(
+          map(samples =>
+            fromActions.fetchSamplesCountCompleteAction({
+              count: samples.length
+            })
+          ),
+          catchError(() => of(fromActions.fetchSamplesCountFailedAction()))
         )
+      )
     )
   );
 
-  @Effect()
-  protected addSample$: Observable<Action> = this.actions$.pipe(
-    ofType(ADD_SAMPLE),
-    map((action: AddSampleAction) => action.sample),
-    mergeMap(sample =>
-      this.sampleService
-        .addSample(sample)
-        .pipe(
-          map(
-            res =>
-              new AddSampleCompleteAction(res[0]),
-            catchError(() => of(new AddSampleFailedAction(new Sample())))
-          )
-        )
+  fetchSample$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(fromActions.fetchSampleAction),
+      switchMap(({ sampleId }) => {
+        const sampleFilter = {
+          where: {
+            sampleId
+          },
+          include: [{ relation: "attachments" }]
+        };
+        return this.sampleApi.findOne(sampleFilter).pipe(
+          map((sample: Sample) =>
+            fromActions.fetchSampleCompleteAction({ sample })
+          ),
+          catchError(() => of(fromActions.fetchSampleFailedAction()))
+        );
+      })
     )
   );
+
+  fetchSampleDatasets$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(fromActions.fetchSampleDatasetsAction),
+      withLatestFrom(this.datasetsQueryParams$),
+      mergeMap(([{ sampleId }, { order, skip, limit }]) =>
+        this.datasetApi.find({ where: { sampleId }, order, skip, limit }).pipe(
+          mergeMap((datasets: Dataset[]) => [
+            fromActions.fetchSampleDatasetsCompleteAction({ datasets }),
+            fromActions.fetchSampleDatasetsCountAction({ sampleId })
+          ]),
+          catchError(() => of(fromActions.fetchSampleDatasetsFailedAction()))
+        )
+      )
+    )
+  );
+
+  fetchSampleDatasetsCount$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(fromActions.fetchSampleDatasetsCountAction),
+      switchMap(({ sampleId }) =>
+        this.datasetApi.find({ where: { sampleId } }).pipe(
+          map(datasets =>
+            fromActions.fetchSampleDatasetsCountCompleteAction({
+              count: datasets.length
+            })
+          ),
+          catchError(() =>
+            of(fromActions.fetchSampleDatasetsCountFailedAction())
+          )
+        )
+      )
+    )
+  );
+
+  saveCharacteristics$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(fromActions.saveCharacteristicsAction),
+      switchMap(({ sampleId, characteristics }) =>
+        this.sampleApi
+          .patchAttributes(sampleId, {
+            sampleCharacteristics: characteristics
+          })
+          .pipe(
+            map((sample: Sample) =>
+              fromActions.saveCharacteristicsCompleteAction({ sample })
+            ),
+            catchError(() => of(fromActions.saveCharacteristicsFailedAction()))
+          )
+      )
+    )
+  );
+
+  addSample$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(fromActions.addSampleAction),
+      mergeMap(({ sample }) =>
+        this.sampleApi.create(sample).pipe(
+          mergeMap(res => [
+            fromActions.addSampleCompleteAction({ sample: res }),
+            fromActions.fetchSamplesAction()
+          ]),
+          catchError(() => of(fromActions.addSampleFailedAction()))
+        )
+      )
+    )
+  );
+
+  addAttachment$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(fromActions.addAttachmentAction),
+      switchMap(({ attachment }) => {
+        delete attachment.id;
+        delete attachment.datasetId;
+        delete attachment.rawDatasetId;
+        delete attachment.derivedDatasetId;
+        delete attachment.proposalId;
+        return this.sampleApi
+          .createAttachments(
+            encodeURIComponent(attachment.sampleId),
+            attachment
+          )
+          .pipe(
+            map(res =>
+              fromActions.addAttachmentCompleteAction({ attachment: res })
+            ),
+            catchError(() => of(fromActions.addAttachmentFailedAction()))
+          );
+      })
+    )
+  );
+
+  updateAttachmentCaption$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(fromActions.updateAttachmentCaptionAction),
+      switchMap(({ sampleId, attachmentId, caption }) => {
+        const newCaption = { caption };
+        return this.sampleApi
+          .updateByIdAttachments(
+            encodeURIComponent(sampleId),
+            encodeURIComponent(attachmentId),
+            newCaption
+          )
+          .pipe(
+            map(res =>
+              fromActions.updateAttachmentCaptionCompleteAction({
+                attachment: res
+              })
+            ),
+            catchError(() =>
+              of(fromActions.updateAttachmentCaptionFailedAction())
+            )
+          );
+      })
+    )
+  );
+
+  removeAttachment$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(fromActions.removeAttachmentAction),
+      switchMap(({ sampleId, attachmentId }) =>
+        this.sampleApi
+          .destroyByIdAttachments(
+            encodeURIComponent(sampleId),
+            encodeURIComponent(attachmentId)
+          )
+          .pipe(
+            map(() =>
+              fromActions.removeAttachmentCompleteAction({ attachmentId })
+            ),
+            catchError(() => of(fromActions.removeAttachmentFailedAction()))
+          )
+      )
+    )
+  );
+
+  loading$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(
+        fromActions.fetchSamplesAction,
+        fromActions.fetchSamplesCountAction,
+        fromActions.fetchSampleAction,
+        fromActions.fetchSampleDatasetsAction,
+        fromActions.fetchSampleDatasetsCountAction,
+        fromActions.addSampleAction,
+        fromActions.saveCharacteristicsAction,
+        fromActions.addAttachmentAction,
+        fromActions.updateAttachmentCaptionAction,
+        fromActions.removeAttachmentAction
+      ),
+      switchMap(() => of(loadingAction()))
+    )
+  );
+
+  loadingComplete$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(
+        fromActions.fetchSamplesCompleteAction,
+        fromActions.fetchSamplesFailedAction,
+        fromActions.fetchSamplesCountCompleteAction,
+        fromActions.fetchSamplesCountFailedAction,
+        fromActions.fetchSampleCompleteAction,
+        fromActions.fetchSampleFailedAction,
+        fromActions.fetchSampleDatasetsCompleteAction,
+        fromActions.fetchSampleDatasetsFailedAction,
+        fromActions.fetchSampleDatasetsCountCompleteAction,
+        fromActions.fetchSampleDatasetsCountFailedAction,
+        fromActions.addSampleCompleteAction,
+        fromActions.addSampleFailedAction,
+        fromActions.saveCharacteristicsCompleteAction,
+        fromActions.saveCharacteristicsFailedAction,
+        fromActions.addAttachmentCompleteAction,
+        fromActions.addAttachmentFailedAction,
+        fromActions.updateAttachmentCaptionCompleteAction,
+        fromActions.updateAttachmentCaptionFailedAction,
+        fromActions.removeAttachmentCompleteAction,
+        fromActions.removeAttachmentFailedAction
+      ),
+      switchMap(() => of(loadingCompleteAction()))
+    )
+  );
+
   constructor(
     private actions$: Actions,
-    private store: Store<any>,
+    private datasetApi: DatasetApi,
     private sampleApi: SampleApi,
-    private sampleService: SampleService
-  ) { }
+    private store: Store<any>
+  ) {}
 }

@@ -1,32 +1,48 @@
 /* tslint:disable */
+import {
+  Dataset,
+  Attachment
+} from '../index';
 
 declare var Object: any;
 export interface SampleInterface {
-  "samplelId"?: string;
+  "sampleId"?: string;
   "owner"?: string;
   "description"?: string;
   "createdAt"?: Date;
   "sampleCharacteristics"?: any;
-  "attachments"?: Array<any>;
+  "isPublished"?: boolean;
   "ownerGroup": string;
   "accessGroups"?: Array<any>;
   "createdBy"?: string;
   "updatedBy"?: string;
+  "datasetsId"?: string;
+  "datasetId"?: string;
+  "rawDatasetId"?: string;
+  "derivedDatasetId"?: string;
   "updatedAt"?: Date;
+  datasets?: Dataset;
+  attachments?: Attachment[];
 }
 
 export class Sample implements SampleInterface {
-  "samplelId": string;
+  "sampleId": string;
   "owner": string;
   "description": string;
   "createdAt": Date;
   "sampleCharacteristics": any;
-  "attachments": Array<any>;
+  "isPublished": boolean;
   "ownerGroup": string;
   "accessGroups": Array<any>;
   "createdBy": string;
   "updatedBy": string;
+  "datasetsId": string;
+  "datasetId": string;
+  "rawDatasetId": string;
+  "derivedDatasetId": string;
   "updatedAt": Date;
+  datasets: Dataset;
+  attachments: Attachment[];
   constructor(data?: SampleInterface) {
     Object.assign(this, data);
   }
@@ -58,10 +74,10 @@ export class Sample implements SampleInterface {
       name: 'Sample',
       plural: 'Samples',
       path: 'Samples',
-      idName: 'samplelId',
+      idName: 'sampleId',
       properties: {
-        "samplelId": {
-          name: 'samplelId',
+        "sampleId": {
+          name: 'sampleId',
           type: 'string'
         },
         "owner": {
@@ -80,9 +96,9 @@ export class Sample implements SampleInterface {
           name: 'sampleCharacteristics',
           type: 'any'
         },
-        "attachments": {
-          name: 'attachments',
-          type: 'Array&lt;any&gt;'
+        "isPublished": {
+          name: 'isPublished',
+          type: 'boolean'
         },
         "ownerGroup": {
           name: 'ownerGroup',
@@ -100,12 +116,44 @@ export class Sample implements SampleInterface {
           name: 'updatedBy',
           type: 'string'
         },
+        "datasetsId": {
+          name: 'datasetsId',
+          type: 'string'
+        },
+        "datasetId": {
+          name: 'datasetId',
+          type: 'string'
+        },
+        "rawDatasetId": {
+          name: 'rawDatasetId',
+          type: 'string'
+        },
+        "derivedDatasetId": {
+          name: 'derivedDatasetId',
+          type: 'string'
+        },
         "updatedAt": {
           name: 'updatedAt',
           type: 'Date'
         },
       },
       relations: {
+        datasets: {
+          name: 'datasets',
+          type: 'Dataset',
+          model: 'Dataset',
+          relationType: 'belongsTo',
+                  keyFrom: 'datasetsId',
+          keyTo: 'pid'
+        },
+        attachments: {
+          name: 'attachments',
+          type: 'Attachment[]',
+          model: 'Attachment',
+          relationType: 'hasMany',
+                  keyFrom: 'sampleId',
+          keyTo: 'sampleId'
+        },
       }
     }
   }

@@ -1,5 +1,5 @@
 import { ThumbnailPipe } from "./thumbnail.pipe";
-import { MockDatasetAttachmentApi } from "shared/MockStubs";
+import { MockAttachmentApi } from "shared/MockStubs";
 
 describe("ThumbnailPipe", () => {
   it("create an instance", () => {

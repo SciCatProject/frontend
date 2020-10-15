@@ -1,13 +1,7 @@
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
-
-import { ActivatedRoute, Router } from "@angular/router";
-
-import { MatTableModule } from "@angular/material";
-
-import { MockActivatedRoute, MockRouter } from "shared/MockStubs";
-
 import { DatablocksComponent } from "./datablocks-table.component";
-import { FileSizePipe } from "../../shared/pipes/filesize.pipe";
+import { MatTableModule } from "@angular/material/table";
+import { SharedCatanieModule } from "shared/shared.module";
 
 describe("DatablocksComponent", () => {
   let component: DatablocksComponent;
@@ -15,16 +9,8 @@ describe("DatablocksComponent", () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [MatTableModule],
-      declarations: [DatablocksComponent, FileSizePipe]
-    });
-    TestBed.overrideComponent(DatablocksComponent, {
-      set: {
-        providers: [
-          { provide: ActivatedRoute, useClass: MockActivatedRoute },
-          { provide: Router, useClass: MockRouter }
-        ]
-      }
+      imports: [MatTableModule, SharedCatanieModule],
+      declarations: [DatablocksComponent]
     });
     TestBed.compileComponents();
   }));

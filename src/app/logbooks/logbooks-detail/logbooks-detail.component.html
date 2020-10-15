@@ -1,0 +1,216 @@
+<div *ngIf="logbook && logbook.messages">
+  <mat-paginator
+    [pageSizeOptions]="[10, 25, 50, 100, 500]"
+    [pageIndex]="currentPage"
+    [length]="entriesCount"
+    [pageSize]="entriesPerPage"
+    (page)="doPageChange($event)"
+    showFirstLastButtons
+  >
+  </mat-paginator>
+
+  <mat-table
+    [dataSource]="logbook.messages"
+    matSort
+    (matSortChange)="doSortChange($event)"
+    class="largeDetails mat-elevation-z2"
+    *ngIf="logbook && logbook.messages.length > 0; else noEntries"
+  >
+    <!-- Column Definitions -->
+
+    <!-- Timestamp Column -->
+    <ng-container matColumnDef="timestamp">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>
+        <div fxLayout="column" style="align-items: center">
+          <div>
+            <mat-icon>schedule</mat-icon>
+          </div>
+          <div>Timestamp</div>
+        </div>
+      </mat-header-cell>
+      <mat-cell *matCellDef="let message">
+        {{ message.origin_server_ts | date: "yyyy-MM-dd, EEE HH:mm" }}
+      </mat-cell>
+    </ng-container>
+
+    <!-- Sender Column -->
+    <ng-container matColumnDef="sender">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>
+        <div fxLayout="column" style="align-items: center">
+          <div>
+            <mat-icon>person</mat-icon>
+          </div>
+          <div>Sender</div>
+        </div>
+      </mat-header-cell>
+      <mat-cell *matCellDef="let message">
+        {{ message.sender | slice: 1:message.sender.indexOf(":") }}
+      </mat-cell>
+    </ng-container>
+
+    <!-- Entry Column -->
+    <ng-container matColumnDef="entry">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>
+        <div fxLayout="column" style="align-items: center">
+          <div>
+            <mat-icon>comment</mat-icon>
+          </div>
+          <div>Entry</div>
+        </div>
+      </mat-header-cell>
+      <mat-cell *matCellDef="let message">
+        <div fxLayout="column" *ngIf="message.content.msgtype !== 'm.image'">
+          <div
+            *ngIf="!message.content.formatted_body"
+            style="white-space:pre-wrap"
+            [innerHTML]="message.content.body | linky"
+          ></div>
+          <div
+            *ngIf="message.content.formatted_body"
+            [innerHTML]="message.content.formatted_body | linky"
+          ></div>
+        </div>
+        <div fxLayout="column" *ngIf="message.content.msgtype === 'm.image'">
+          <a
+            href="{{ message.content.url }}"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <img
+              src="{{ message.content.url }}"
+              alt="{{ message.content.body }}"
+              height="60px"
+            />
+          </a>
+        </div>
+      </mat-cell>
+    </ng-container>
+
+    <!-- End of Column Definitions -->
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+  </mat-table>
+
+  <mat-card class="smallDetails" *ngIf="logbook && logbook.messages.length > 0">
+    <div
+      *ngFor="let message of logbook.messages; let i = index; let first = first"
+    >
+      <mat-accordion>
+        <mat-expansion-panel
+          class="mat-elevation-z0"
+          *ngIf="
+            first ||
+            (!first &&
+              (message.origin_server_ts | date: 'yyyy-MM-dd') !==
+                (logbook.messages[i - 1].origin_server_ts | date: 'yyyy-MM-dd'))
+          "
+        >
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              {{ message.origin_server_ts | date: "MMM d, y" }}
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <div>
+            <div class="sender">
+              {{ message.sender | slice: 1:message.sender.indexOf(":") }},
+              {{ message.origin_server_ts | date: "HH:mm" }}:
+            </div>
+            <div>
+              <div
+                class="textContent"
+                *ngIf="message.content.msgtype !== 'm.image'"
+              >
+                <div
+                  *ngIf="!message.content.formatted_body"
+                  style="white-space: pre-wrap"
+                >
+                  {{ message.content.body }}
+                </div>
+                <div
+                  *ngIf="message.content.formatted_body"
+                  [innerHTML]="message.content.formatted_body"
+                ></div>
+              </div>
+              <div
+                fxLayout="column"
+                *ngIf="message.content.msgtype === 'm.image'"
+              >
+                <a
+                  href="{{ message.content.url }}"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <img
+                    src="{{ message.content.url }}"
+                    alt="{{ message.content.body }}"
+                    width="60px"
+                  />
+                </a>
+              </div>
+              <div *ngIf="i < logbook.messages.length - 1">
+                <mat-divider></mat-divider>
+              </div>
+            </div>
+          </div>
+          <div *ngFor="let value of logbook.messages">
+            <div
+              *ngIf="
+                value !== message &&
+                (value.origin_server_ts | date: 'yyyy-MM-dd') ===
+                  (message.origin_server_ts | date: 'yyyy-MM-dd')
+              "
+            >
+              <div class="sender">
+                {{ value.sender | slice: 1:value.sender.indexOf(":") }},
+                {{ value.origin_server_ts | date: "HH:mm" }}:
+              </div>
+              <div>
+                <div
+                  class="textContent"
+                  *ngIf="value.content.msgtype !== 'm.image'"
+                >
+                  <div
+                    *ngIf="!value.content.formatted_body"
+                    style="white-space: pre-wrap"
+                  >
+                    {{ value.content.body }}
+                  </div>
+                  <div
+                    *ngIf="value.content.formatted_body"
+                    [innerHTML]="value.content.formatted_body"
+                  ></div>
+                </div>
+                <div
+                  fxLayout="column"
+                  *ngIf="value.content.msgtype === 'm.image'"
+                >
+                  <a
+                    href="{{ value.content.url }}"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <img
+                      src="{{ value.content.url }}"
+                      alt="{{ value.content.body }}"
+                      width="60px"
+                    />
+                  </a>
+                </div>
+                <div *ngIf="i < logbook.messages.length - 1">
+                  <mat-divider></mat-divider>
+                </div>
+              </div>
+            </div>
+          </div>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+  </mat-card>
+</div>
+
+<ng-template #noEntries>
+  <mat-card class="no-entries-message">
+    <mat-icon>info</mat-icon> No entries available.
+  </mat-card>
+</ng-template>

@@ -1,0 +1,73 @@
+<div *ngIf="logbook">
+  <div fxLayout="row" fxLayout.lt-lg="column">
+    <div fxFlex="14">
+      <mat-card class="big-filter">
+        <div class="title">Filter</div>
+        <app-search-bar
+          [prefilledValue]="(filters$ | async).textSearch"
+          (onSearch)="onTextSearchChange($event)"
+          (onFocus)="onTextSearchChange($event)"
+        ></app-search-bar>
+        <logbook-filter
+          [filters]="filters$ | async"
+          (onSelect)="onFilterSelect($event)"
+        ></logbook-filter>
+      </mat-card>
+
+      <div class="small-filter">
+        <app-search-bar
+          [prefilledValue]="(filters$ | async).textSearch"
+          (onSearch)="onTextSearchChange($event)"
+          (onFocus)="onTextSearchChange($event)"
+        ></app-search-bar>
+
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <div class="title">Filter</div>
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <logbook-filter
+            [filters]="filters$ | async"
+            (onSelect)="onFilterSelect($event)"
+          ></logbook-filter>
+        </mat-expansion-panel>
+      </div>
+      <div fxLayout="column" fxLayout.lt-lg="row">
+        <div fxFlex="49">
+          <a
+            href="{{ appConfig.riotBaseUrl }}/#/room/{{ logbook.roomId }}"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <mat-card class="card-button">
+              <mat-icon> chat_bubble_outline </mat-icon> Go to chat
+            </mat-card>
+          </a>
+        </div>
+        <div fxFlex="auto"></div>
+        <div class="reverse-card" fxFlex="49">
+          <mat-card class="card-button" (click)="reverseTimeline()">
+            <mat-icon> swap_vert </mat-icon> Reverse
+          </mat-card>
+        </div>
+      </div>
+    </div>
+    <div fxFlex="85" class="details-container">
+      <app-logbooks-detail
+        [logbook]="logbook"
+        [entriesCount]="entriesCount$ | async"
+        [entriesPerPage]="entriesPerPage$ | async"
+        [currentPage]="currentPage$ | async"
+        (pageChange)="onPageChange($event)"
+        (sortChange)="onSortChange($event)"
+      ></app-logbooks-detail>
+    </div>
+  </div>
+</div>
+
+<ng-template [ngIf]="!logbook">
+  <mat-card class="no-logbook-message">
+    <mat-icon>info</mat-icon> No logbook available.
+  </mat-card>
+</ng-template>

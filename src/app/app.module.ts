@@ -1,132 +1,95 @@
+import { userReducer } from "state-management/reducers/user.reducer";
 import { AppComponent } from "./app.component";
 import { AppConfigModule } from "app-config.module";
 import { AppRoutingModule, routes } from "app-routing/app-routing.module";
-import { ArchivingService } from "datasets/archiving.service";
-import { AuthCheck } from "./AuthCheck";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { BrowserModule, Title } from "@angular/platform-browser";
-import { DatasetEffects } from "state-management/effects/datasets.effects";
-import { DatasetService } from "datasets/dataset.service";
 import { DatasetsModule } from "datasets/datasets.module";
 import { EffectsModule } from "@ngrx/effects";
-import { FlexLayoutModule} from "@angular/flex-layout";
-import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
-import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { FlexLayoutModule } from "@angular/flex-layout";
 import { HttpClientModule } from "@angular/common/http";
-import { JobsDetailComponent } from "./jobs/jobs-detail/jobs-detail.component";
-import { JobsEffects } from "state-management/effects/jobs.effects";
-import { JobsTableComponent } from "jobs/jobs-table/jobs-table.component";
 import { NgModule } from "@angular/core";
-import { NguiDatetimePickerModule } from "@ngui/datetime-picker";
-import { PoliciesEffects } from "state-management/effects/policies.effects";
 import { PoliciesModule } from "policies/policies.module";
 import { ProposalsModule } from "proposals/proposals.module";
 import { RouterModule } from "@angular/router";
 import { SampleApi, SDKBrowserModule } from "shared/sdk/index";
-import { SamplesModule} from "./samples/samples.module";
+import { SamplesModule } from "./samples/samples.module";
 import { SatDatepickerModule, SatNativeDateModule } from "saturn-datepicker";
 import { SharedCatanieModule } from "shared/shared.module";
-import { StoreDevtoolsModule } from "@ngrx/store-devtools";
 import { StoreModule } from "@ngrx/store";
 import { UserApi } from "shared/sdk/services";
-import { UserEffects } from "state-management/effects/user.effects";
 import { UsersModule } from "users/users.module";
-import { localStorageSync } from "ngrx-store-localstorage";
-import { rootReducer } from "state-management/reducers/root.reducer";
-import { routerReducer, StoreRouterConnectingModule } from "@ngrx/router-store";
-import { LoginService } from "users/login.service";
+import { routerReducer } from "@ngrx/router-store";
+import { extModules } from "./build-specifics";
 
-
-import {
-  MatCardModule,
-  MatDatepickerModule,
-  MatGridListModule,
-  MatIconModule,
-  MatListModule,
-  MatMenuModule,
-  MatNativeDateModule,
-  MatPaginatorModule,
-  MatSidenavModule,
-  MatSnackBarModule,
-  MatTableModule,
-  MatToolbarModule,
-  MatButtonToggleModule,
-} from "@angular/material";
-import { SampleService } from "./samples/sample.service";
-import { SamplesEffects } from "./state-management/effects/samples.effects";
-
-export function localStorageSyncWrapper(reducer: any) {
-  return localStorageSync({ keys: ["root"], rehydrate: true })(reducer);
-}
+import { MatBadgeModule } from "@angular/material/badge";
+import { MatNativeDateModule } from "@angular/material/core";
+import { MatIconModule } from "@angular/material/icon";
+import { MatMenuModule } from "@angular/material/menu";
+import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
+import { MatSnackBarModule } from "@angular/material/snack-bar";
+import { MatToolbarModule } from "@angular/material/toolbar";
+import { ServiceWorkerModule } from "@angular/service-worker";
+import { environment } from "../environments/environment";
+import { LogbooksModule } from "./logbooks/logbooks.module";
+import { AboutModule } from "about/about.module";
+import { HelpModule } from "help/help.module";
+import { PublisheddataModule } from "publisheddata/publisheddata.module";
+import { LayoutModule } from "_layout/layout.module";
+import { JobsModule } from "jobs/jobs.module";
+import { InstrumentsModule } from "./instruments/instruments.module";
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    JobsTableComponent,
-    JobsDetailComponent
-  ],
+  declarations: [AppComponent],
   imports: [
+    AboutModule,
     AppConfigModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     BrowserModule,
     DatasetsModule,
     FlexLayoutModule,
-    FontAwesomeModule,
-    FormsModule,
+    HelpModule,
     HttpClientModule,
-    MatCardModule,
-    MatDatepickerModule,
-    MatGridListModule,
+    InstrumentsModule,
+    JobsModule,
+    LogbooksModule,
+    LayoutModule,
+    MatBadgeModule,
     MatIconModule,
-    MatListModule,
     MatMenuModule,
-    MatNativeDateModule,
-    MatPaginatorModule,
-    MatSidenavModule,
+    MatProgressSpinnerModule,
     MatSnackBarModule,
-    MatTableModule,
     MatToolbarModule,
-    NguiDatetimePickerModule,
     PoliciesModule,
     ProposalsModule,
-    ReactiveFormsModule,
+    PublisheddataModule,
     SamplesModule,
     SatDatepickerModule,
     SatNativeDateModule,
     SharedCatanieModule,
     UsersModule,
-    MatButtonToggleModule,
-
     SDKBrowserModule.forRoot(),
-    // StoreModule.forRoot({router: routerReducer, root: rootReducer}, {metaReducers: [localStorageSyncWrapper]}),
-    StoreModule.forRoot({ router: routerReducer, root: rootReducer }),
+    StoreModule.forRoot(
+      { router: routerReducer, users: userReducer },
+      {
+        runtimeChecks: {
+          strictStateImmutability: false,
+          strictActionImmutability: false,
+          strictStateSerializability: false,
+          strictActionSerializability: false,
+        },
+      }
+    ),
+    extModules,
     RouterModule.forRoot(routes, { useHash: false }),
-    StoreDevtoolsModule.instrument({
-      maxAge: 25 //  Retains last 25 states
+    EffectsModule.forRoot([]),
+    ServiceWorkerModule.register("ngsw-worker.js", {
+      enabled: environment.production,
     }),
-    EffectsModule.forRoot([
-      DatasetEffects,
-      UserEffects,
-      JobsEffects,
-      PoliciesEffects,
-      SamplesEffects
-    ]),
-    StoreRouterConnectingModule
   ],
   exports: [MatNativeDateModule],
-  providers: [
-    AuthCheck,
-    DatasetService,
-    ArchivingService,
-    SampleService,
-    UserApi,
-    SampleApi,
-    Title,
-    MatNativeDateModule,
-    LoginService
-    //      {provide: RouteReuseStrategy, useClass: CustomReuseStrategy}
-  ],
-  bootstrap: [AppComponent]
+  providers: [UserApi, SampleApi, Title, MatNativeDateModule],
+  bootstrap: [AppComponent],
 })
 export class AppModule {}

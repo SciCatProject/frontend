@@ -1,0 +1,38 @@
+<mat-tab-group>
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <mat-icon> portrait </mat-icon>
+      Details
+    </ng-template>
+    <proposal-detail [proposal]="proposal"></proposal-detail>
+  </mat-tab>
+
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <mat-icon> folder </mat-icon>
+      Datasets
+    </ng-template>
+
+    <div class="dataset-table">
+      <app-table
+        [data]="tableData"
+        [columns]="tableColumns"
+        [paginate]="tablePaginate"
+        [currentPage]="currentPage$ | async"
+        [dataCount]="datasetCount$ | async"
+        [dataPerPage]="itemsPerPage$ | async"
+        (pageChange)="onPageChange($event)"
+        (rowClick)="onRowClick($event)"
+      ></app-table>
+    </div>
+  </mat-tab>
+
+  <mat-tab *ngIf="appConfig.logbookEnabled">
+    <ng-template mat-tab-label>
+      <mat-icon> book </mat-icon>
+      Logbook
+    </ng-template>
+
+    <app-logbooks-dashboard></app-logbooks-dashboard>
+  </mat-tab>
+</mat-tab-group>

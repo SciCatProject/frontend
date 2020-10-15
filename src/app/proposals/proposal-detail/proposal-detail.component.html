@@ -1,0 +1,107 @@
+<div *ngIf="proposal" class="tab-content">
+  <mat-card>
+    <mat-card-header class="about-header">
+      About the proposal
+    </mat-card-header>
+
+    <table>
+      <tr>
+        <th>
+          <mat-icon> fingerprint </mat-icon>
+          Title
+        </th>
+        <td>{{ proposal.title }}</td>
+      </tr>
+
+      <tr>
+        <th>
+          <mat-icon> person </mat-icon>
+          Main proposer
+        </th>
+        <td *ngIf="proposal.firstname && proposal.lastname; else noName">
+          <a href="mailto:{{ proposal.email }}"
+            >{{ proposal.firstname }} {{ proposal.lastname }}</a
+          >
+        </td>
+        <ng-template #noName>
+          <td>
+            <a href="mailto:{{ proposal.email }}">{{ proposal.email }}</a>
+          </td>
+        </ng-template>
+      </tr>
+      <tr *ngIf="proposal.pi_firstname && proposal.pi_lastname">
+        <th>
+          <mat-icon> security </mat-icon>
+          Principal investigator
+        </th>
+
+        <td *ngIf="proposal.pi_email; else withoutEmail">
+          <a href="mailto:{{ proposal.pi_email }}"
+            >{{ proposal.pi_firstname }} {{ proposal.pi_lastname }}</a
+          >
+        </td>
+        <ng-template #withoutEmail>
+          <td>{{ proposal.pi_firstname }} {{ proposal.pi_lastname }}</td>
+        </ng-template>
+      </tr>
+      <tr>
+        <th>
+          <mat-icon> description </mat-icon>
+          Abstract
+        </th>
+        <td>{{ proposal.abstract }}</td>
+      </tr>
+      <ng-template [ngIf]="proposal.MeasurementPeriodList.length > 0">
+        <ng-template
+          ngFor
+          let-period
+          [ngForOf]="proposal.MeasurementPeriodList"
+          let-i="index"
+          let-first="first"
+        >
+          <tr *ngIf="first">
+            <th>
+              <mat-icon> timer </mat-icon>
+              Start Time
+            </th>
+            <td>
+              {{ period.start | date }}
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template
+          ngFor
+          let-period
+          [ngForOf]="proposal.MeasurementPeriodList"
+          let-i="index"
+          let-last="last"
+        >
+          <tr *ngIf="last">
+            <th>
+              <mat-icon> timer_off </mat-icon>
+              End Time
+            </th>
+            <td>{{ period.end | date }}</td>
+          </tr>
+        </ng-template>
+      </ng-template>
+      <tr>
+        <th>
+          <mat-icon> perm_contact_calendar </mat-icon>
+          Identifier
+        </th>
+        <td>{{ proposal.proposalId }}</td>
+      </tr>
+    </table>
+  </mat-card>
+
+  <mat-card *ngIf="appConfig.jsonMetadataEnabled">
+    <button mat-stroked-button (click)="show = !show">
+      {{ show ? "Hide MetaData" : "Show Metadata" }}
+    </button>
+    <br />
+    <div *ngIf="show">
+      <ngx-json-viewer [json]="proposal" [expanded]="false"></ngx-json-viewer>
+    </div>
+  </mat-card>
+</div>

@@ -1,0 +1,69 @@
+@import "../../../../theme.scss";
+
+@media only screen and (min-width: 1280px) {
+  mat-table {
+    margin-bottom: 5em;
+
+    mat-header-row {
+      background: mat-color($primary);
+    }
+
+    ::ng-deep .mat-sort-header-arrow {
+      color: mat-color($primary, default-contrast);
+    }
+
+    .mat-column-select {
+      max-width: 75px;
+    }
+
+    mat-header-cell {
+      color: mat-color($primary, default-contrast);
+
+      ::ng-deep .mat-checkbox .mat-checkbox-frame {
+        border-color: mat-color($primary, default-contrast);
+      }
+    }
+
+    mat-header-cell:first-child {
+      justify-content: left;
+    }
+    mat-header-cell:nth-child(n + 2) {
+      justify-content: center;
+    }
+
+    mat-cell:first-child {
+      justify-content: left;
+    }
+    mat-cell:nth-child(n + 2) {
+      justify-content: center;
+    }
+
+    mat-row:hover {
+      background-color: rgba(0, 0, 0, 0.1);
+      cursor: pointer;
+    }
+  }
+
+  .smallData {
+    display: none;
+  }
+}
+
+@media only screen and (max-width: 1279px) {
+  .largeData {
+    display: none;
+  }
+
+  .smallData {
+    margin: 1em 0;
+
+    .title {
+      font-size: 1.1em;
+    }
+
+    mat-list-item:hover {
+      background-color: rgba(0, 0, 0, 0.1);
+      cursor: pointer;
+    }
+  }
+}

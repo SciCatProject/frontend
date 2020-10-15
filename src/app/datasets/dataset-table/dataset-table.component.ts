@@ -1,253 +1,150 @@
 import { APP_CONFIG, AppConfig } from "app-config.module";
-import { ArchivingService } from "../archiving.service";
-import { Component, Inject, OnDestroy, OnInit } from "@angular/core";
-import { Dataset, MessageType, ViewMode } from "state-management/models";
-import { DialogComponent } from "shared/modules/dialog/dialog.component";
-import { MatCheckboxChange, MatDialog } from "@angular/material";
-import { Router } from "@angular/router";
-import { ShowMessageAction } from "state-management/actions/user.actions";
-import { combineLatest, Subscription } from "rxjs";
-import { getCurrentEmail } from "../../state-management/selectors/users.selectors";
-import { getError, submitJob } from "state-management/selectors/jobs.selectors";
+import {
+  Component,
+  Inject,
+  OnDestroy,
+  OnInit,
+  Output,
+  EventEmitter,
+  Input,
+  OnChanges,
+  SimpleChange
+} from "@angular/core";
+import { Dataset, TableColumn } from "state-management/models";
+import { MatCheckboxChange } from "@angular/material/checkbox";
+import { Subscription } from "rxjs";
 import { select, Store } from "@ngrx/store";
 import {
-  AddToBatchAction,
-  ChangePageAction,
-  ClearSelectionAction,
-  DeselectDatasetAction,
-  ExportToCsvAction,
-  SelectAllDatasetsAction,
-  SelectDatasetAction,
-  SetViewModeAction,
-  SortByColumnAction
+  clearSelectionAction,
+  selectDatasetAction,
+  deselectDatasetAction,
+  selectAllDatasetsAction,
+  changePageAction,
+  sortByColumnAction
 } from "state-management/actions/datasets.actions";
 
 import {
   getDatasets,
-  getDatasetsInBatch,
   getDatasetsPerPage,
-  getFilters,
-  getIsEmptySelection,
-  getIsLoading,
   getPage,
-  getSelectedDatasets,
   getTotalSets,
-  getViewMode
+  getDatasetsInBatch
 } from "state-management/selectors/datasets.selectors";
-import { StylesCompileDependency } from "@angular/compiler";
-
-export interface PageChangeEvent {
-  pageIndex: number;
-  pageSize: number;
-  length: number;
-}
+import { PageChangeEvent } from "shared/modules/table/table.component";
+import {
+  selectColumnAction,
+  deselectColumnAction
+} from "state-management/actions/user.actions";
 
 export interface SortChangeEvent {
-  active: keyof Dataset;
+  active: string;
   direction: "asc" | "desc" | "";
 }
+
+interface DatasetDerivationsMap {
+  datasetPid: string;
+  derivedDatasetsNum: number;
+}
+
 @Component({
   selector: "dataset-table",
   templateUrl: "dataset-table.component.html",
   styleUrls: ["dataset-table.component.scss"]
 })
-export class DatasetTableComponent implements OnInit, OnDestroy {
-  datasets$ = this.store.pipe(select(getDatasets));
+export class DatasetTableComponent implements OnInit, OnDestroy, OnChanges {
   currentPage$ = this.store.pipe(select(getPage));
   datasetsPerPage$ = this.store.pipe(select(getDatasetsPerPage));
   datasetCount$ = this.store.select(getTotalSets);
-  loading$ = this.store.pipe(select(getIsLoading));
-  // These should be made part of the NgRX state management
-  public currentMode: string;
-  private selectedSets$ = this.store.pipe(select(getSelectedDatasets));
-  private batch$ = this.store.pipe(select(getDatasetsInBatch));
-  private mode$ = this.store.pipe(select(getViewMode));
-  private isEmptySelection$ = this.store.pipe(select(getIsEmptySelection));
-  private filters$ = this.store.pipe(select(getFilters));
-  private email$ = this.store.pipe(select(getCurrentEmail));
-  private allAreSeleted$ = combineLatest(
-    this.datasets$,
-    this.selectedSets$,
-    (datasets, selected) => {
-      const pids = selected.map(set => set.pid);
-      return (
-        datasets.length &&
-        datasets.find(dataset => pids.indexOf(dataset.pid) === -1) == null
-      );
-    }
-  );
-  private selectedPids: string[] = [];
-  private selectedPidsSubscription = this.selectedSets$.subscribe(datasets => {
-    this.selectedPids = datasets.map(dataset => dataset.pid);
-  });
+
+  @Input() tableColumns: TableColumn[];
+  displayedColumns: string[];
+  @Input() selectedSets: Dataset[] = [];
+
   private inBatchPids: string[] = [];
-  private inBatchPidsSubscription = this.batch$.subscribe(datasets => {
-    this.inBatchPids = datasets.map(dataset => dataset.pid);
-  });
 
-  private modes = ["view", "archive", "retrieve"];
-  private modeLabels = ["all", "archivable", "retrievable"];
-  // compatibility analogs of observables
-  private selectedSets: Dataset[] = [];
-  private selectedSetsSubscription = this.selectedSets$.subscribe(
-    selectedSets => (this.selectedSets = selectedSets)
-  );
-  private modeSubscription = this.mode$.subscribe((mode: ViewMode) => {
-    this.currentMode = mode;
-  });
-  // and eventually be removed.
-  private submitJobSubscription: Subscription;
-  private jobErrorSubscription: Subscription;
-  private readonly defaultColumns: string[] = [
-    "select",
-    "datasetName",
-    "sourceFolder",
-    "size",
-    "creationTime",
-    "type",
-    "image",
-    "metadata",
-    "proposalId",
-    "ownerGroup",
-    "archiveStatus",
-    "retrieveStatus"
-  ];
-  visibleColumns = this.defaultColumns.filter(
-    column => this.appConfig.disabledDatasetColumns.indexOf(column) === -1
-  );
+  datasets: Dataset[];
+  datasetDerivationsMaps: DatasetDerivationsMap[] = [];
+  derivationMapPids: string[] = [];
 
-  constructor(
-    private router: Router,
-    private store: Store<any>,
-    private archivingSrv: ArchivingService,
-    public dialog: MatDialog,
-    @Inject(APP_CONFIG) public appConfig: AppConfig
-  ) { }
+  private subscriptions: Subscription[] = [];
 
-  ngOnInit() {
-    this.submitJobSubscription = this.store.pipe(select(submitJob)).subscribe(
-      ret => {
-        if (ret && Array.isArray(ret)) {
-          console.log(ret);
-          this.store.dispatch(new ClearSelectionAction());
-        }
-      },
-      error => {
-        this.store.dispatch(
-          new ShowMessageAction({
-            type: MessageType.Error,
-            content: "Job not Submitted",
-            duration: 5000
-          })
-        );
-      }
-    );
+  @Output() settingsClick = new EventEmitter<MouseEvent>();
+  @Output() rowClick = new EventEmitter<Dataset>();
 
-    this.jobErrorSubscription = this.store
-      .pipe(select(getError))
-      .subscribe(err => {
-        if (err) {
-          this.store.dispatch(
-            new ShowMessageAction({
-              type: MessageType.Error,
-              content: err.message,
-              duration: 5000
-            })
-          );
-        }
-      });
+  doSettingsClick(event: MouseEvent) {
+    this.settingsClick.emit(event);
   }
 
-  ngOnDestroy() {
-    this.modeSubscription.unsubscribe();
-    this.selectedSetsSubscription.unsubscribe();
-    this.submitJobSubscription.unsubscribe();
-    this.jobErrorSubscription.unsubscribe();
-    this.selectedPidsSubscription.unsubscribe();
+  doRowClick(dataset: Dataset): void {
+    this.rowClick.emit(dataset);
   }
 
-  onExportClick(): void {
-    this.store.dispatch(new ExportToCsvAction());
+  // conditional to asses dataset status and assign correct icon ArchViewMode.work_in_progress
+  // TODO: when these concepts stabilise, we should move the definitions to site config
+  wipCondition(dataset: Dataset): boolean {
+    if (
+      !dataset.datasetlifecycle.archivable &&
+      !dataset.datasetlifecycle.retrievable &&
+      dataset.datasetlifecycle.archiveStatusMessage !==
+        "scheduleArchiveJobFailed" &&
+      dataset.datasetlifecycle.retrieveStatusMessage !==
+        "scheduleRetrieveJobFailed"
+    ) {
+      return true;
+    }
+    return false;
   }
 
-  /**
-   * Handle changing of view mode and disabling selected rows
-   * @param event
-   * @param mode
-   */
-  onModeChange(event, mode: ViewMode): void {
-    this.store.dispatch(new SetViewModeAction(mode));
+  systemErrorCondition(dataset: Dataset): boolean {
+    if (
+      (dataset.datasetlifecycle.retrievable &&
+        dataset.datasetlifecycle.archivable) ||
+      dataset.datasetlifecycle.archiveStatusMessage ===
+        "scheduleArchiveJobFailed" ||
+      dataset.datasetlifecycle.retrieveStatusMessage ===
+        "scheduleRetrieveJobFailed"
+    ) {
+      return true;
+    }
+    return false;
   }
 
-  /**
-   * Sends archive command for selected datasets (default includes all
-   * datablocks for now) to Dacat API
-   * @param {any} event - click handler (not currently used)
-   * @memberof DashboardComponent
-   */
-  archiveClickHandle(event): void {
-    const dialogRef = this.dialog.open(DialogComponent, {
-      width: "auto",
-      data: { title: "Really archive?", question: "" }
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.archivingSrv.archive(this.selectedSets).subscribe(
-          () => this.store.dispatch(new ClearSelectionAction()),
-          err =>
-            this.store.dispatch(
-              new ShowMessageAction({
-                type: MessageType.Error,
-                content: err.message,
-                duration: 5000
-              })
-            )
-        );
-      }
-      // this.onClose.emit(result);
-    });
+  userErrorCondition(dataset: Dataset): boolean {
+    if (dataset.datasetlifecycle.archiveStatusMessage === "missingFilesError") {
+      return true;
+    }
+    return false;
   }
 
-  /**
-   * Sends retrieve command for selected datasets
-   * @param {any} event - click handler (not currently used)
-   * @memberof DashboardComponent
-   */
-  retrieveClickHandle(event): void {
-    const destPath = "/archive/retrieve";
-    const dialogRef = this.dialog.open(DialogComponent, {
-      width: "auto",
-      data: {
-        title: "Really retrieve?",
-        question: ""
-      }
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.archivingSrv.retrieve(this.selectedSets, destPath).subscribe(
-          () => this.store.dispatch(new ClearSelectionAction()),
-          err =>
-            this.store.dispatch(
-              new ShowMessageAction({
-                type: MessageType.Error,
-                content: err.message,
-                duration: 5000
-              })
-            )
-        );
-      }
-    });
+  archivableCondition(dataset: Dataset): boolean {
+    if (
+      dataset.datasetlifecycle.archivable &&
+      !dataset.datasetlifecycle.retrievable &&
+      dataset.datasetlifecycle.archiveStatusMessage !== "missingFilesError"
+    ) {
+      return true;
+    }
+    return false;
   }
 
-  onClick(dataset: Dataset): void {
-    const pid = encodeURIComponent(dataset.pid);
-    this.router.navigateByUrl("/datasets/" + pid);
+  retrievableCondition(dataset: Dataset): boolean {
+    if (
+      !dataset.datasetlifecycle.archivable &&
+      dataset.datasetlifecycle.retrievable
+    ) {
+      return true;
+    }
+    return false;
   }
 
   isSelected(dataset: Dataset): boolean {
-    return this.selectedPids.indexOf(dataset.pid) !== -1;
+    return this.selectedSets.map(set => set.pid).indexOf(dataset.pid) !== -1;
+  }
+
+  isAllSelected(): boolean {
+    const numSelected = this.selectedSets ? this.selectedSets.length : 0;
+    const numRows = this.datasets ? this.datasets.length : 0;
+    return numSelected === numRows;
   }
 
   isInBatch(dataset: Dataset): boolean {
@@ -256,49 +153,103 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
 
   onSelect(event: MatCheckboxChange, dataset: Dataset): void {
     if (event.checked) {
-      this.store.dispatch(new SelectDatasetAction(dataset));
+      this.store.dispatch(selectDatasetAction({ dataset }));
     } else {
-      this.store.dispatch(new DeselectDatasetAction(dataset));
+      this.store.dispatch(deselectDatasetAction({ dataset }));
     }
   }
 
-  onSelectAll(event: MatCheckboxChange) {
+  onSelectAll(event: MatCheckboxChange): void {
     if (event.checked) {
-      this.store.dispatch(new SelectAllDatasetsAction());
+      this.store.dispatch(selectAllDatasetsAction());
     } else {
-      this.store.dispatch(new ClearSelectionAction());
+      this.store.dispatch(clearSelectionAction());
     }
   }
 
   onPageChange(event: PageChangeEvent): void {
-    this.store.dispatch(new ChangePageAction(event.pageIndex, event.pageSize));
+    this.store.dispatch(
+      changePageAction({ page: event.pageIndex, limit: event.pageSize })
+    );
+    if (event.pageSize < 50) {
+      this.store.dispatch(
+        selectColumnAction({ name: "image", columnType: "standard" })
+      );
+    } else {
+      this.store.dispatch(
+        deselectColumnAction({ name: "image", columnType: "standard" })
+      );
+    }
   }
 
   onSortChange(event: SortChangeEvent): void {
-    const { active: column, direction } = event;
-    this.store.dispatch(new SortByColumnAction(column, direction));
+    const { active, direction } = event;
+    const column = active.split("_")[1];
+    this.store.dispatch(sortByColumnAction({ column, direction }));
   }
 
-  onAddToBatch(): void {
-    this.store.dispatch(new AddToBatchAction());
-    this.store.dispatch(new ClearSelectionAction());
-  }
-
-
-  setWidthColor(datasetSize) {
-    let width = 10;
-    let color = "red";
-    if (datasetSize > 1000000000) {
-      width = 10;
-      color = "red";
-    } else {
-      width = 5;
-      color = "green";
+  countDerivedDatasets(dataset: Dataset): number {
+    let derivedDatasetsNum = 0;
+    if (dataset.history) {
+      dataset.history.forEach(item => {
+        if (
+          item.hasOwnProperty("derivedDataset") &&
+          this.datasets.map(set => set.pid).includes(item.derivedDataset.pid)
+        ) {
+          derivedDatasetsNum++;
+        }
+      });
     }
-    const styles = {
-      "background-color": "red",
-      "width.px": width
-    };
-    return styles;
+    return derivedDatasetsNum;
+  }
+
+  constructor(
+    @Inject(APP_CONFIG) public appConfig: AppConfig,
+    private store: Store<any>
+  ) {}
+
+  ngOnInit() {
+    this.subscriptions.push(
+      this.store.pipe(select(getDatasetsInBatch)).subscribe(datasets => {
+        this.inBatchPids = datasets.map(dataset => dataset.pid);
+      })
+    );
+
+    if (this.tableColumns) {
+      this.displayedColumns = this.tableColumns
+        .filter(column => column.enabled)
+        .map(column => column.type + "_" + column.name);
+    }
+
+    this.subscriptions.push(
+      this.store.pipe(select(getDatasets)).subscribe(datasets => {
+        this.datasets = datasets;
+
+        this.derivationMapPids = this.datasetDerivationsMaps.map(
+          datasetderivationMap => datasetderivationMap.datasetPid
+        );
+        this.datasetDerivationsMaps = datasets
+          .filter(({ pid }) => !this.derivationMapPids.includes(pid))
+          .map(dataset => ({
+            datasetPid: dataset.pid,
+            derivedDatasetsNum: this.countDerivedDatasets(dataset)
+          }));
+      })
+    );
+  }
+
+  ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
+    for (const propName in changes) {
+      if (propName === "tableColumns") {
+        this.tableColumns = changes[propName].currentValue;
+        this.displayedColumns = changes[propName].currentValue
+          .filter(column => column.enabled)
+          .map(column => column.type + "_" + column.name);
+      }
+    }
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach(subscription => subscription.unsubscribe());
   }
 }

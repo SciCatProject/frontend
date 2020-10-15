@@ -1,0 +1,22 @@
+<mat-form-field>
+  <input
+    #searchBar
+    matInput
+    class="search-input"
+    type="search"
+    aria-label="Search"
+    [value]="prefilledValue"
+    [placeholder]="placeholder"
+    [matAutocomplete]="options"
+    (click)="doSearch()"
+    (input)="doSearch()"
+    (keyup)="doSearch()"
+    (focus)="doFocus()"
+  />
+  <mat-icon matSuffix *ngIf="!placeholder">search</mat-icon>
+  <mat-autocomplete #options="matAutocomplete">
+    <mat-option *ngFor="let option of autocompleteOptions" [value]="option">
+      {{ option }}
+    </mat-option>
+  </mat-autocomplete>
+</mat-form-field>

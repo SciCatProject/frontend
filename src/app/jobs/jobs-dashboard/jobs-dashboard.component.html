@@ -1,0 +1,30 @@
+<div fxLayout="row" fxLayout.lt-lg="column">
+  <div fxFlex="14" fxFlex.lt-xl="10"></div>
+  <div fxFlex="60" fxFlex.lt-xl="80">
+    <mat-button-toggle-group [value]="currentMode">
+      <mat-button-toggle
+        *ngFor="let mode of modes"
+        [value]="mode"
+        [ngClass]="mode"
+        (click)="onModeChange($event, mode)"
+      >
+        {{ mode | titleCase }}
+      </mat-button-toggle>
+    </mat-button-toggle-group>
+    <app-table
+      [data]="jobs"
+      [columns]="tableColumns"
+      [paginate]="paginate"
+      [currentPage]="currentPage$ | async"
+      [dataCount]="jobsCount$ | async"
+      [dataPerPage]="jobsPerPage$ | async"
+      (pageChange)="onPageChange($event)"
+      (sortChange)="onSortChange($event)"
+      (rowClick)="onRowClick($event)"
+    ></app-table>
+    <div class="no-jobs-message" *ngIf="jobs.length === 0">
+      <mat-card> <mat-icon>info</mat-icon> You have no jobs yet. </mat-card>
+    </div>
+  </div>
+  <div fxFlex="26" fxFlex.lt-xl="10"></div>
+</div>

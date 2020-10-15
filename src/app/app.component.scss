@@ -1,72 +1,33 @@
-@import 'src/theme.scss';
+@import "src/theme.scss";
 
 a {
   color: mat-color($primary);
-}
-
-a:hover {
-  color: mat-color($accent);
-}
-
-.main {
-  padding: 1.5em;
-}
-
-.ui#content {
-  padding-top: 75px;
-}
-
-td {
-  overflow: hidden;
-}
-
-.dash-container {
-  width: 90%;
-  margin-left: 5%;
-}
-
-.container {
-  margin: 0 1%;
-  min-width: 98%;
-  min-height: 100%;
-}
-
-.app-title {
-  margin-left: 2%;
-}
-
-.example-spacer {
-  flex: 1 1 auto;
-}
-
-.sidenav-toggle {
-  padding-right: 0.5%;
-}
-
-.example-container {
-  /* position: absolute; */
-  /* margin-left: 10%; */
-  /* min-height: 100% !important; */
 }
 
 .mat-snack-bar-container {
   background-color: mat-color($primary);
 }
 
-.mat-drawer-backdrop {
-  opacity: 0;
-}
-
-footer {
-  position: absolute;
-  right: 0;
-  bottom: 0;
+.spinner {
+  position: fixed;
+  z-index: 999;
+  height: 2em;
+  width: 2em;
+  overflow: show;
+  margin: auto;
+  top: 0;
   left: 0;
-  padding: 1rem;
-  background-color: mat-color($accent, lighter, 0.5);
-  text-align: center;
+  bottom: 0;
+  right: 0;
 }
 
-.material-icons {
-  vertical-align: middle;
+.spinner:before {
+  content: "";
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.4);
 }

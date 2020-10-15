@@ -1,15 +1,58 @@
-import { Proposal, RawDataset } from "../models";
+import { Proposal, Dataset } from "../models";
+
+export interface ProposalFilters {
+  text: string;
+  skip: number;
+  limit: number;
+  sortField: string;
+  dateRange: {
+    begin: string;
+    end: string;
+  };
+}
+
+export interface ProposalDatesetFilters {
+  text: string;
+  skip: number;
+  limit: number;
+  sortField: string;
+}
 
 export interface ProposalsState {
-  proposals: { [proposalId: string]: Proposal };
-  datasets: { [datasetId: string]: RawDataset };
-  hasFetched: boolean;
-  selectedId: string;
+  proposals: Proposal[];
+  currentProposal: Proposal;
+  datasets: Dataset[];
+
+  proposalsCount: number;
+  datasetsCount: number;
+
+  hasPrefilledFilters: boolean;
+  proposalFilters: ProposalFilters;
+  datasetFilters: ProposalDatesetFilters;
 }
 
 export const initialProposalsState: ProposalsState = {
-  proposals: {},
-  datasets: {},
-  hasFetched: false,
-  selectedId: null
+  proposals: [],
+  currentProposal: null,
+  datasets: [],
+
+  proposalsCount: null,
+  datasetsCount: null,
+
+  hasPrefilledFilters: false,
+
+  proposalFilters: {
+    text: "",
+    skip: 0,
+    limit: 25,
+    sortField: "createdAt:desc",
+    dateRange: null
+  },
+
+  datasetFilters: {
+    text: "",
+    skip: 0,
+    limit: 25,
+    sortField: "creationTime:desc"
+  }
 };

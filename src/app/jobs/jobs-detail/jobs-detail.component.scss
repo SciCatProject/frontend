@@ -1,18 +1,20 @@
-.job-detail .details {
-  padding: 1em;
+.job-detail {
+  mat-card {
+    margin: 1em;
 
-  table {
-    td {
-      padding: 0.5em;
+    table {
+      td {
+        padding: 0.3em;
+      }
+
+      th {
+        text-align: left;
+        padding-right: 0.5em;
+
+        mat-icon {
+          vertical-align: middle;
+        }
+      }
     }
-
-    th {
-      text-align: left;
-      padding-right: 0.5em;
-    }
-  }
-
-  h3 {
-    margin-top: 1em;
   }
 }

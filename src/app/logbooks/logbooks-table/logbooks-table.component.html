@@ -1,0 +1,120 @@
+<div
+  class="logbooks-table"
+  *ngIf="(logbooks$ | async) && (logbooks$ | async).length > 0; else noLogbooks"
+>
+  <mat-table
+    [dataSource]="logbooks$ | async"
+    class="logbook-table mat-elevation-z2"
+  >
+    <!-- Column Definitions -->
+
+    <!-- Name Column -->
+    <ng-container matColumnDef="name">
+      <mat-header-cell *matHeaderCellDef>
+        <div fxLayout="column" style="align-items: center">
+          <div>
+            <mat-icon>fingerprint</mat-icon>
+          </div>
+          <div>Name</div>
+        </div>
+      </mat-header-cell>
+      <mat-cell *matCellDef="let logbook">{{ logbook.name }}</mat-cell>
+    </ng-container>
+
+    <!-- Latest Entry Column -->
+    <ng-container matColumnDef="latestEntry">
+      <mat-header-cell *matHeaderCellDef>
+        <div fxLayout="column" style="align-items: center">
+          <div>
+            <mat-icon>calendar_today</mat-icon>
+          </div>
+          <div>Latest&nbsp;Entry</div>
+        </div>
+      </mat-header-cell>
+      <mat-cell *matCellDef="let logbook">
+        <div fxLayout="column" *ngIf="logbook.messages.length > 0">
+          {{
+            logbook.messages[0].origin_server_ts | date: "yyyy-MM-dd, EEE HH:mm"
+          }}
+        </div>
+        <div fxLayout="column" *ngIf="logbook.messages.length === 0">
+          No entries.
+        </div>
+      </mat-cell>
+    </ng-container>
+
+    <!-- Sender Column -->
+    <ng-container matColumnDef="sender">
+      <mat-header-cell *matHeaderCellDef>
+        <div fxLayout="column" style="align-items: center">
+          <div>
+            <mat-icon>person</mat-icon>
+          </div>
+          <div>Sender</div>
+        </div>
+      </mat-header-cell>
+      <mat-cell *matCellDef="let logbook">
+        <div fxLayout="column" *ngIf="logbook.messages.length > 0">
+          {{
+            logbook.messages[0].sender
+              | slice: 1:logbook.messages[0].sender.indexOf(":")
+          }}
+        </div>
+        <div fxLayout="column" *ngIf="logbook.messages.length === 0">
+          --
+        </div>
+      </mat-cell>
+    </ng-container>
+
+    <!-- Entry Column -->
+    <ng-container matColumnDef="entry">
+      <mat-header-cell *matHeaderCellDef>
+        <div fxLayout="column" style="align-items: center">
+          <div>
+            <mat-icon>message</mat-icon>
+          </div>
+          <div>Entry</div>
+        </div>
+      </mat-header-cell>
+      <mat-cell *matCellDef="let logbook">
+        <div fxLayout="column" *ngIf="logbook.messages.length > 0">
+          <div *ngIf="logbook.messages[0].content.msgtype !== 'm.image'">
+            <div
+              *ngIf="!logbook.messages[0].content.formatted_body"
+              style="white-space:pre-wrap"
+              [innerHTML]="logbook.messages[0].content.body"
+            ></div>
+            <div
+              *ngIf="logbook.messages[0].content.formatted_body"
+              [innerHTML]="logbook.messages[0].content.formatted_body"
+            ></div>
+          </div>
+          <div *ngIf="logbook.messages[0].content.msgtype === 'm.image'">
+            <img
+              src="{{ logbook.messages[0].content.url }}"
+              alt="{{ logbook.messages[0].content.body }}"
+              height="60px"
+            />
+          </div>
+        </div>
+        <div fxLayout="column" *ngIf="logbook.messages.length === 0">
+          --
+        </div>
+      </mat-cell>
+    </ng-container>
+
+    <!-- End of Column Definitions -->
+
+    <mat-header-row *matHeaderRowDef="columnsToDisplay"></mat-header-row>
+    <mat-row
+      *matRowDef="let logbook; columns: columnsToDisplay"
+      (click)="onClick(logbook)"
+    ></mat-row>
+  </mat-table>
+</div>
+
+<ng-template #noLogbooks>
+  <mat-card class="no-logbooks-message">
+    <mat-icon>info</mat-icon> No logbooks available.
+  </mat-card>
+</ng-template>

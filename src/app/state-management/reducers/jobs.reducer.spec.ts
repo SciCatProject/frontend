@@ -1,99 +1,119 @@
 import { jobsReducer } from "./jobs.reducer";
-import { initialJobsState } from "../state/jobs.store";
-import * as jobsActions from "../actions/jobs.actions";
-import { Job } from "../models";
+import { JobInterface, Job } from "shared/sdk";
+import * as fromActions from "../actions/jobs.actions";
+import { initialJobsState } from "state-management/state/jobs.store";
 
-describe("DatasetsReducer", () => {
-  it("should set loading to true after sort update complete", () => {
-    const filter = { skip: 0, limit: 50 };
-    const action = new jobsActions.SortUpdateAction(filter.skip, filter.limit);
-    const state = jobsReducer(initialJobsState, action);
-    expect(state.loading).toEqual(true);
+const data: JobInterface = {
+  id: "testId",
+  emailJobInitiator: "test@email.com",
+  type: "archive",
+  datasetList: {},
+};
+const job = new Job(data);
+
+describe("jobsReducer", () => {
+  describe("on fetchJobsCompleteAction", () => {
+    it("should set jobs", () => {
+      const jobs = [job];
+      const action = fromActions.fetchJobsCompleteAction({ jobs });
+      const state = jobsReducer(initialJobsState, action);
+
+      expect(state.jobs).toEqual(jobs);
+    });
   });
 
-  it("should set filters", () => {
-    const filter = { skip: 0, limit: 50, mode: null };
-    const action = new jobsActions.SortUpdateAction(filter.skip, filter.limit, filter.mode);
-    const state = jobsReducer(initialJobsState, action);
-    expect(state.filters).toEqual(filter);
+  describe("on fetchCountCompleteAction", () => {
+    it("should set totalCount", () => {
+      const count = 100;
+      const action = fromActions.fetchCountCompleteAction({ count });
+      const state = jobsReducer(initialJobsState, action);
+
+      expect(state.totalCount).toEqual(count);
+    });
   });
 
-  it("should set ui", () => {
-    const ui = [];
-    const action = new jobsActions.ChildRetrieveAction(ui);
-    const state = jobsReducer(initialJobsState, action);
-    expect(state.ui).toEqual(ui);
+  describe("on fetchJobCompleteAction", () => {
+    it("should set currentJob", () => {
+      const action = fromActions.fetchJobCompleteAction({ job });
+      const state = jobsReducer(initialJobsState, action);
+
+      expect(state.currentJob).toEqual(job);
+    });
   });
 
-  it("should set jobSubmission to an empty array", () => {
-    const job = new Job();
-    const action = new jobsActions.SubmitCompleteAction(job);
-    const state = jobsReducer(initialJobsState, action);
-    expect(state.jobSubmission.length).toEqual(0);
+  describe("on submitJobCompleteAction", () => {
+    it("should set submitError to undefined", () => {
+      const action = fromActions.submitJobCompleteAction({ job });
+      const state = jobsReducer(initialJobsState, action);
+
+      expect(state.submitError).toBeUndefined();
+    });
   });
 
-  it("should set error", () => {
-    const error = new Error();
-    const action = new jobsActions.FailedAction(error);
-    const state = jobsReducer(initialJobsState, action);
-    expect(state.error).toEqual(error);
+  describe("on submitJobFailedAction", () => {
+    it("should set submitError", () => {
+      const err = new Error();
+      const action = fromActions.submitJobFailedAction({ err });
+      const state = jobsReducer(initialJobsState, action);
+
+      expect(state.submitError).toEqual(err);
+    });
   });
 
-  it("should set loading to false after sort retrieve complete", () => {
-    const jobset = new Job();
-    const jobsets = [jobset];
-    const action = new jobsActions.RetrieveCompleteAction(jobsets);
-    const state = jobsReducer(initialJobsState, action);
-    expect(state.loading).toEqual(false);
+  describe("on setJobViewModeAction", () => {
+    it("should set mode filter and set skip filter to 0", () => {
+      const mode = null;
+      const action = fromActions.setJobViewModeAction({ mode });
+      const state = jobsReducer(initialJobsState, action);
+
+      expect(state.filters.mode).toEqual(mode);
+      expect(state.filters.skip).toEqual(0);
+    });
   });
 
-  it("should set current jobs", () => {
-    const data: Job = {
-      id : "jfkler",
-      emailJobInitiator: "",
-      type: "",
-      creationTime: new Date(),
-      executionTime: new Date(),
-      jobParams: "",
-      jobStatusMessage: "",
-      archiveReturnMessage: "",
-      dateOfLastMessage: new Date(),
-      datasetList: "",
-      MessageHistory: [],
-      messageHistory: [],
-      createdAt: new Date(),
-      updatedAt: new Date()
-    };
+  describe("on setJobsLimitFilterAction", () => {
+    it("should set limit filter and set skip to 0", () => {
+      const limit = 10;
+      const action = fromActions.setJobsLimitFilterAction({ limit });
+      const state = jobsReducer(initialJobsState, action);
 
-    const jobsets = [
-      new Job({ ...data, id: "job 1" }),
-      new Job({ ...data, id: "job 2" }),
-      new Job({ ...data, id: "job 3" })
-    ];
-    const action = new jobsActions.RetrieveCompleteAction(jobsets);
-    const state = jobsReducer(initialJobsState, action);
-    expect(state.currentJobs.length).toEqual(jobsets.length);
+      expect(state.filters.limit).toEqual(limit);
+      expect(state.filters.skip).toEqual(0);
+    });
   });
 
-  it("should set loading to false after search id complete", () => {
-    const job: Job = {
-      emailJobInitiator: "",
-      type: "",
-      creationTime: new Date(),
-      executionTime: new Date(),
-      jobParams: "",
-      jobStatusMessage: "",
-      archiveReturnMessage: "",
-      dateOfLastMessage: new Date(),
-      datasetList: "",
-      MessageHistory: [],
-      messageHistory: [],
-      id: "",
-      createdAt: new Date(),
-      updatedAt: new Date()
-    };
-    const action = new jobsActions.SearchIDCompleteAction(job);
-    const state = jobsReducer(initialJobsState, action);
-    expect(state.loading).toEqual(false);
+  describe("on changePageAction", () => {
+    it("should set skip and limit filters", () => {
+      const page = 1;
+      const limit = 25;
+      const skip = page * limit;
+      const action = fromActions.changePageAction({ page, limit });
+      const state = jobsReducer(initialJobsState, action);
+
+      expect(state.filters.skip).toEqual(skip);
+      expect(state.filters.limit).toEqual(limit);
+    });
+  });
+
+  describe("on sortByColumnAction", () => {
+    it("should set sortField filter and set skip filter to 0", () => {
+      const column = "test";
+      const direction = "asc";
+      const sortField = column + " " + direction;
+      const action = fromActions.sortByColumnAction({ column, direction });
+      const state = jobsReducer(initialJobsState, action);
+
+      expect(state.filters.sortField).toEqual(sortField);
+      expect(state.filters.skip).toEqual(0);
+    });
+  });
+
+  describe("on clearJobsStateAction", () => {
+    it("should set job state to initialJobsState", () => {
+      const action = fromActions.clearJobsStateAction();
+      const state = jobsReducer(initialJobsState, action);
+
+      expect(state).toEqual(initialJobsState);
+    });
   });
 });

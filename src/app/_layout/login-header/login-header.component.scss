@@ -1,0 +1,39 @@
+@import "src/theme.scss";
+
+mat-toolbar {
+  position: sticky;
+  position: -webkit-sticky;
+  top: 0;
+  z-index: 1000;
+  height: 7vh;
+
+  a {
+    color: mat-color($primary, default-contrast);
+  }
+
+  .logo {
+    height: 4vh;
+    margin-right: 1em;
+    padding-top: 0.5vh;
+  }
+
+  .spacer {
+    flex: 1 1 auto;
+  }
+
+  .toplink {
+    padding: 10px;
+    font: bold;
+    font-size: 11pt;
+
+    mat-icon {
+      vertical-align: middle;
+    }
+  }
+}
+
+@media only screen and (max-width: 1279px) {
+  .large-screen-text {
+    display: none;
+  }
+}

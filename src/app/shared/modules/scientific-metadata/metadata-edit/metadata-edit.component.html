@@ -1,0 +1,112 @@
+<div class="container" *ngIf="metadata">
+  <form [formGroup]="metadataForm">
+    <div
+      formArrayName="items"
+      *ngFor="let item of metadataForm.get('items').controls; let i = index"
+    >
+      <div [formGroupName]="i">
+        <div class="formRow" fxLayout="row" fxLayout.lt-lg="column">
+          <div class="formColumn">
+            <mat-form-field class="selectField">
+              <mat-label>Type</mat-label>
+              <mat-select
+                formControlName="fieldType"
+                (selectionChange)="detectType(i)"
+              >
+                <mat-option *ngFor="let type of typeValues" [value]="type">{{
+                  type
+                }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="formColumn">
+            <mat-form-field class="inputField">
+              <input
+                id="nameInput"
+                matInput
+                autocomplete="off"
+                autocorrect="off"
+                autocapitalize="off"
+                spellcheck="false"
+                formControlName="fieldName"
+                placeholder="Name"
+                (blur)="getUnits(i)"
+              />
+            </mat-form-field>
+          </div>
+          <div class="formColumn">
+            <mat-form-field class="inputField">
+              <input
+                id="valueInput"
+                matInput
+                autocomplete="off"
+                autocorrect="off"
+                autocapitalize="off"
+                spellcheck="false"
+                formControlName="fieldValue"
+                placeholder="Value"
+              />
+            </mat-form-field>
+          </div>
+          <div class="formColumn">
+            <mat-form-field class="inputField">
+              <input
+                id="unitsInput"
+                matInput
+                autocomplete="off"
+                autocorrect="off"
+                autocapitalize="off"
+                spellcheck="false"
+                formControlName="fieldUnit"
+                placeholder="Unit"
+                [matAutocomplete]="metadataUnits"
+                (focus)="filterUnits(i)"
+              />
+              <mat-autocomplete #metadataUnits="matAutocomplete">
+                <mat-option
+                  *ngFor="let unit of filteredUnits$ | async"
+                  [value]="unit"
+                >
+                  {{ unit }}
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+          </div>
+          <div class="formColumn" fxFlexAlign="end">
+            <button
+              mat-icon-button
+              class="deleteButton"
+              type="button"
+              color="warn"
+              title="Delete row"
+              (click)="onRemove(i)"
+            >
+              <mat-icon> cancel </mat-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <button
+      mat-flat-button
+      type="button"
+      color="accent"
+      (click)="addMetadata()"
+    >
+      <mat-icon> add_circle </mat-icon>
+      Add row
+    </button>
+
+    <button
+      mat-flat-button
+      type="submit"
+      color="primary"
+      [disabled]="isInvalid()"
+      (click)="doSave()"
+    >
+      <mat-icon> save </mat-icon>
+      Save changes
+    </button>
+  </form>
+</div>

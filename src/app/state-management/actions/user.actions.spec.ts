@@ -1,154 +1,434 @@
-import { Message, User, Settings } from "../models";
-import { LoginAction, LOGIN } from "./user.actions";
-import { ActiveDirLoginAction, AD_LOGIN } from "./user.actions";
-import { LoginCompleteAction, LOGIN_COMPLETE } from "./user.actions";
-import { LoginFailedAction, LOGIN_FAILED } from "./user.actions";
-import { LogoutAction, LOGOUT } from "./user.actions";
-import { LogoutCompleteAction, LOGOUT_COMPLETE } from "./user.actions";
-import { RetrieveUserAction, RETRIEVE_USER } from "./user.actions";
-import {
-  RetrieveUserCompleteAction,
-  RETRIEVE_USER_COMPLETE
-} from "./user.actions";
-import { RetrieveUserFailedAction, RETRIEVE_USER_FAILED } from "./user.actions";
-/*
-import { AccessUserEmailAction, ACCESS_USER_EMAIL } from "./user.actions";
-import {
-  AccessUserEmailCompleteAction,
-  ACCESS_USER_EMAIL_COMPLETE
-} from "./user.actions";
-import {
-  AccessUserEmailFailedAction,
-  ACCESS_USER_EMAIL_FAILED
-} from "./user.actions";
-*/
-import { ShowMessageAction, SHOW_MESSAGE } from "./user.actions";
-import { ClearMessageAction, CLEAR_MESSAGE } from "./user.actions";
-import { SaveSettingsAction, SAVE_SETTINGS } from "./user.actions";
+import { Message, User, Settings, UserIdentity } from "../models";
+import * as fromActions from "./user.actions";
+import { AccessToken, UserSetting } from "shared/sdk";
 
-describe("LoginAction", () => {
-  it("should create an action", () => {
-    const form = {
-      username: "user",
-      password: "user",
-      rememberMe: true
-    };
-    const action = new LoginAction(form);
-    expect({ ...action }).toEqual({ type: LOGIN, form });
+describe("User Aactions", () => {
+  describe("loginAction", () => {
+    it("should create an action", () => {
+      const form = { username: "", password: "", rememberMe: true };
+      const action = fromActions.loginAction({ form });
+      expect({ ...action }).toEqual({
+        type: "[User] Login",
+        form
+      });
+    });
   });
-});
 
-describe("ActiveDirLoginAction", () => {
-  it("should create an action", () => {
-    const form = { username: "", password: "", rememberMe: true };
-    const action = new ActiveDirLoginAction(form);
-    expect({ ...action }).toEqual({ type: AD_LOGIN, form });
+  describe("loginCompleteAction", () => {
+    it("should create an action", () => {
+      const user = new User();
+      const accountType = "test";
+      const action = fromActions.loginCompleteAction({ user, accountType });
+      expect({ ...action }).toEqual({
+        type: "[User] Login Complete",
+        user,
+        accountType
+      });
+    });
   });
-});
 
-describe("LoginCompleteAction", () => {
-  it("should create an action", () => {
-    const user: User = new User({ username: "", email: "" });
-    const accountType = "account-type";
-    const action = new LoginCompleteAction(user, accountType);
-    expect({ ...action }).toEqual({ type: LOGIN_COMPLETE, user, accountType });
+  describe("loginFailedAction", () => {
+    it("should create an action", () => {
+      const action = fromActions.loginFailedAction();
+      expect({ ...action }).toEqual({
+        type: "[User] Login Failed"
+      });
+    });
   });
-});
 
-describe("LoginFailedAction", () => {
-  it("should create an action", () => {
-    const action = new LoginFailedAction();
-    expect({ ...action }).toEqual({ type: LOGIN_FAILED });
+  describe("activeDirLoginAction", () => {
+    it("should create an action", () => {
+      const username = "test";
+      const password = "test";
+      const rememberMe = true;
+      const action = fromActions.activeDirLoginAction({
+        username,
+        password,
+        rememberMe
+      });
+      expect({ ...action }).toEqual({
+        type: "[User] Active Directory Login",
+        username,
+        password,
+        rememberMe
+      });
+    });
   });
-});
 
-describe("LogoutAction", () => {
-  it("should create an action", () => {
-    const action = new LogoutAction();
-    expect({ ...action }).toEqual({ type: LOGOUT });
+  describe("activeDirLoginSuccessAction", () => {
+    it("should create an action", () => {
+      const action = fromActions.activeDirLoginSuccessAction();
+      expect({ ...action }).toEqual({
+        type: "[User] Active Directory Login Success"
+      });
+    });
   });
-});
 
-describe("LogoutCompleteAction", () => {
-  it("should create an action", () => {
-    const action = new LogoutCompleteAction();
-    expect({ ...action }).toEqual({ type: LOGOUT_COMPLETE });
+  describe("activeDirLoginFailedAction", () => {
+    it("should create an action", () => {
+      const username = "test";
+      const password = "test";
+      const rememberMe = true;
+      const action = fromActions.activeDirLoginFailedAction({
+        username,
+        password,
+        rememberMe
+      });
+      expect({ ...action }).toEqual({
+        type: "[User] Active Directory Login Failed",
+        username,
+        password,
+        rememberMe
+      });
+    });
   });
-});
 
-describe("RetrieveUserAction", () => {
-  it("should create an action", () => {
-    const action = new RetrieveUserAction();
-    expect({ ...action }).toEqual({ type: RETRIEVE_USER });
+  describe("funcLoginAction", () => {
+    it("should create an action", () => {
+      const username = "test";
+      const password = "test";
+      const rememberMe = true;
+      const action = fromActions.funcLoginAction({
+        username,
+        password,
+        rememberMe
+      });
+      expect({ ...action }).toEqual({
+        type: "[User] Functional Login",
+        username,
+        password,
+        rememberMe
+      });
+    });
   });
-});
 
-describe("RetrieveUserCompleteAction", () => {
-  it("should create an action", () => {
-    const user = new User();
-    const action = new RetrieveUserCompleteAction(user);
-    expect({ ...action }).toEqual({ type: RETRIEVE_USER_COMPLETE, user });
+  describe("funcLoginSuccessAction", () => {
+    it("should create an action", () => {
+      const action = fromActions.funcLoginSuccessAction();
+      expect({ ...action }).toEqual({
+        type: "[User] Functional Login Success"
+      });
+    });
   });
-});
 
-describe("RetrieveUserFailedAction", () => {
-  it("should create an action", () => {
-    const error = new Error();
-    const action = new RetrieveUserFailedAction(error);
-    expect({ ...action }).toEqual({ type: RETRIEVE_USER_FAILED, error });
+  describe("funcLoginFailedAction", () => {
+    it("should create an action", () => {
+      const action = fromActions.funcLoginFailedAction();
+      expect({ ...action }).toEqual({
+        type: "[User] Functional Login Failed"
+      });
+    });
   });
-});
 
-/*
-describe("AccessUserEmailAction", () => {
-  it("should create an action", () => {
-    const userId = "emailstring";
-    const action = new AccessUserEmailAction(userId);
-    expect({ ...action }).toEqual({ type: ACCESS_USER_EMAIL, userId });
+  describe("fetchUserAction", () => {
+    it("should create an action", () => {
+      const adLoginResponse = {};
+      const action = fromActions.fetchUserAction({ adLoginResponse });
+      expect({ ...action }).toEqual({
+        type: "[User] Fetch User",
+        adLoginResponse
+      });
+    });
   });
-});
 
-describe("AccessUserEmailCompleteAction", () => {
-  it("should create an action", () => {
-    const email = "emailstring";
-    const action = new AccessUserEmailCompleteAction(email);
-    expect({ ...action }).toEqual({ type: ACCESS_USER_EMAIL_COMPLETE, email });
+  describe("fetchUserCompleteAction", () => {
+    it("should create an action", () => {
+      const action = fromActions.fetchUserCompleteAction();
+      expect({ ...action }).toEqual({
+        type: "[User] Fetch User Complete"
+      });
+    });
   });
-});
 
-describe("AccessUserEmailFailedAction", () => {
-  it("should create an action", () => {
-    const error = new Error();
-    const action = new AccessUserEmailFailedAction(error);
-    expect({ ...action }).toEqual({ type: ACCESS_USER_EMAIL_FAILED, error });
+  describe("fetchUserFailedAction", () => {
+    it("should create an action", () => {
+      const action = fromActions.fetchUserFailedAction();
+      expect({ ...action }).toEqual({
+        type: "[User] Fetch User Failed"
+      });
+    });
   });
-});
-*/
 
-describe("ShowMessageAction", () => {
-  it("should create an action", () => {
-    const message = new Message();
-    const action = new ShowMessageAction(message);
-    expect({ ...action }).toEqual({ type: SHOW_MESSAGE, message });
+  describe("fetchCurrentUserAction", () => {
+    it("should create an action", () => {
+      const action = fromActions.fetchCurrentUserAction();
+      expect({ ...action }).toEqual({
+        type: "[User] Fetch Current User"
+      });
+    });
   });
-});
 
-describe("ClearMessageAction", () => {
-  it("should create an action", () => {
-    const action = new ClearMessageAction();
-    expect({ ...action }).toEqual({ type: CLEAR_MESSAGE });
+  describe("fetchCurrentUserCompleteAction", () => {
+    it("should create an action", () => {
+      const user = new User();
+      const action = fromActions.fetchCurrentUserCompleteAction({ user });
+      expect({ ...action }).toEqual({
+        type: "[User] Fetch Current User Complete",
+        user
+      });
+    });
   });
-});
 
-describe("SaveSettingsAction", () => {
-  it("should create an action", () => {
-    const values: Settings = {
-      tapeCopies: "",
-      datasetCount: 0,
-      jobCount: 0,
-      darkTheme: false
-    };
-    const action = new SaveSettingsAction(values);
-    expect({ ...action }).toEqual({ type: SAVE_SETTINGS, values });
+  describe("fetchCurrentUserFailedAction", () => {
+    it("should create an action", () => {
+      const action = fromActions.fetchCurrentUserFailedAction();
+      expect({ ...action }).toEqual({
+        type: "[User] Fetch Current User Failed"
+      });
+    });
+  });
+
+  describe("fetchUserIdentityAction", () => {
+    it("should create an action", () => {
+      const id = "testId";
+      const action = fromActions.fetchUserIdentityAction({ id });
+      expect({ ...action }).toEqual({ type: "[User] Fetch User Identity", id });
+    });
+  });
+
+  describe("fetchUserIdentityCompleteAction", () => {
+    it("should create an action", () => {
+      const userIdentity = new UserIdentity();
+      const action = fromActions.fetchUserIdentityCompleteAction({
+        userIdentity
+      });
+      expect({ ...action }).toEqual({
+        type: "[User] Fetch User Identity Complete",
+        userIdentity
+      });
+    });
+  });
+
+  describe("fetchUserIdentityFailedAction", () => {
+    it("should create an action", () => {
+      const action = fromActions.fetchUserIdentityFailedAction();
+      expect({ ...action }).toEqual({
+        type: "[User] Fetch User Identity Failed"
+      });
+    });
+  });
+
+  describe("fetchUserSettingsAction", () => {
+    it("should create an action", () => {
+      const id = "testId";
+      const action = fromActions.fetchUserSettingsAction({ id });
+      expect({ ...action }).toEqual({ type: "[User] Fetch User Settings", id });
+    });
+  });
+
+  describe("fetchUserSettingsCompleteAction", () => {
+    it("should create an action", () => {
+      const userSettings = new UserSetting({
+        columns: [],
+        datasetCount: 25,
+        jobCount: 25,
+        userId: "testId",
+        id: "testId"
+      });
+      const action = fromActions.fetchUserSettingsCompleteAction({
+        userSettings
+      });
+      expect({ ...action }).toEqual({
+        type: "[User] Fetch User Settings Complete",
+        userSettings
+      });
+    });
+  });
+
+  describe("fetchUserSettingsFailedAction", () => {
+    it("should create an action", () => {
+      const action = fromActions.fetchUserSettingsFailedAction();
+      expect({ ...action }).toEqual({
+        type: "[User] Fetch User Settings Failed"
+      });
+    });
+  });
+
+  describe("updateUserSettingsAction", () => {
+    it("should create an action", () => {
+      const property = { columns: [] };
+      const action = fromActions.updateUserSettingsAction({ property });
+      expect({ ...action }).toEqual({
+        type: "[User] Update User Settings",
+        property
+      });
+    });
+  });
+
+  describe("updateUserSettingsCompleteAction", () => {
+    it("should create an action", () => {
+      const userSettings = new UserSetting({
+        columns: [],
+        datasetCount: 25,
+        jobCount: 25,
+        userId: "testId",
+        id: "testId"
+      });
+      const action = fromActions.updateUserSettingsCompleteAction({
+        userSettings
+      });
+      expect({ ...action }).toEqual({
+        type: "[User] Update User Settings Complete",
+        userSettings
+      });
+    });
+  });
+
+  describe("updateUserSettingsFailedAction", () => {
+    it("should create an action", () => {
+      const action = fromActions.updateUserSettingsFailedAction();
+      expect({ ...action }).toEqual({
+        type: "[User] Update User Settings Failed"
+      });
+    });
+  });
+
+  describe("fetchCatamelTokenAction", () => {
+    it("should create an action", () => {
+      const action = fromActions.fetchCatamelTokenAction();
+      expect({ ...action }).toEqual({ type: "[User] Fetch Catamel Token" });
+    });
+  });
+
+  describe("fetchCatamelTokenCompleteAction", () => {
+    it("should create an action", () => {
+      const token = new AccessToken();
+      const action = fromActions.fetchCatamelTokenCompleteAction({ token });
+      expect({ ...action }).toEqual({
+        type: "[User] Fetch Catamel Token Complete",
+        token
+      });
+    });
+  });
+
+  describe("fetchCatamelTokenFailedAction", () => {
+    it("should create an action", () => {
+      const action = fromActions.fetchCatamelTokenFailedAction();
+      expect({ ...action }).toEqual({
+        type: "[User] Fetch Catamel Token Failed"
+      });
+    });
+  });
+
+  describe("logoutAction", () => {
+    it("should create an action", () => {
+      const action = fromActions.logoutAction();
+      expect({ ...action }).toEqual({ type: "[User] Logout" });
+    });
+  });
+
+  describe("logoutCompleteAction", () => {
+    it("should create an action", () => {
+      const action = fromActions.logoutCompleteAction();
+      expect({ ...action }).toEqual({ type: "[User] Logout Complete" });
+    });
+  });
+
+  describe("logoutFailedAction", () => {
+    it("should create an action", () => {
+      const action = fromActions.logoutFailedAction();
+      expect({ ...action }).toEqual({ type: "[User] Logout Failed" });
+    });
+  });
+
+  describe("addCustomColumnsAction", () => {
+    it("should create an action", () => {
+      const names = ["test"];
+      const action = fromActions.addCustomColumnsAction({ names });
+      expect({ ...action }).toEqual({
+        type: "[User] Add Custom Columns",
+        names
+      });
+    });
+  });
+
+  describe("addCustomColumnsCompleteAction", () => {
+    it("should create an action", () => {
+      const action = fromActions.addCustomColumnsCompleteAction();
+      expect({ ...action }).toEqual({
+        type: "[User] Add Custom Columns Complete"
+      });
+    });
+  });
+
+  describe("selectColumnAction", () => {
+    it("should create an action", () => {
+      const name = "test";
+      const columnType = "standard";
+      const action = fromActions.selectColumnAction({ name, columnType });
+      expect({ ...action }).toEqual({
+        type: "[User] Select Column",
+        name,
+        columnType
+      });
+    });
+  });
+
+  describe("deselectColumnAction", () => {
+    it("should create an action", () => {
+      const name = "test";
+      const columnType = "standard";
+      const action = fromActions.deselectColumnAction({ name, columnType });
+      expect({ ...action }).toEqual({
+        type: "[User] Deselect Column",
+        name,
+        columnType
+      });
+    });
+  });
+
+  describe("deselectAllCustomColumnsAction", () => {
+    it("should create an action", () => {
+      const action = fromActions.deselectAllCustomColumnsAction();
+      expect({ ...action }).toEqual({
+        type: "[User] Deselect All Custom Columns"
+      });
+    });
+  });
+
+  describe("showMessageAction", () => {
+    it("should create an action", () => {
+      const message = new Message();
+      const action = fromActions.showMessageAction({ message });
+      expect({ ...action }).toEqual({ type: "[User] Show Message", message });
+    });
+  });
+
+  describe("clearMessageAction", () => {
+    it("should create an action", () => {
+      const action = fromActions.clearMessageAction();
+      expect({ ...action }).toEqual({ type: "[User] Clear Message" });
+    });
+  });
+
+  describe("saveSettingsAction", () => {
+    it("should create an action", () => {
+      const settings: Settings = {
+        tapeCopies: "",
+        datasetCount: 0,
+        jobCount: 0,
+        darkTheme: false
+      };
+      const action = fromActions.saveSettingsAction({ settings });
+      expect({ ...action }).toEqual({ type: "[User] Save Settings", settings });
+    });
+  });
+
+  describe("loadingAction", () => {
+    it("should create an action", () => {
+      const action = fromActions.loadingAction();
+      expect({ ...action }).toEqual({
+        type: "[User] Loading"
+      });
+    });
+  });
+
+  describe("loadingCompleteAction", () => {
+    it("should create an action", () => {
+      const action = fromActions.loadingCompleteAction();
+      expect({ ...action }).toEqual({
+        type: "[User] Loading Complete"
+      });
+    });
   });
 });

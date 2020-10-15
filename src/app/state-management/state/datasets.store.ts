@@ -1,4 +1,4 @@
-import { DatasetFilters, Dataset } from "state-management/models";
+import { DatasetFilters, Dataset, ArchViewMode } from "state-management/models";
 
 export interface DateTriple {
   year: number;
@@ -19,50 +19,48 @@ export interface DatasetState {
   datasets: Dataset[];
   selectedSets: Dataset[];
   currentSet: Dataset;
-  facetCounts: FacetCounts;
   totalCount: number;
 
-  datasetsLoading: boolean;
-  facetCountsLoading: boolean;
-  deletingAttachment: boolean;
-  addingAttachment: boolean;
+  facetCounts: FacetCounts;
+  metadataKeys: string[];
   hasPrefilledFilters: boolean;
-
   searchTerms: string;
   keywordsTerms: string;
   filters: DatasetFilters;
 
   batch: Dataset[];
+
+  openwhiskResult: object;
 }
 
 export const initialDatasetState: DatasetState = {
   datasets: [],
   selectedSets: [],
   currentSet: null,
-  facetCounts: {},
   totalCount: 0,
 
-  datasetsLoading: true,
-  deletingAttachment: false,
-  addingAttachment: false,
-  facetCountsLoading: true,
+  facetCounts: {},
+  metadataKeys: [],
   hasPrefilledFilters: false,
-
   searchTerms: "",
   keywordsTerms: "",
-  batch: [],
-
   filters: {
-    mode: "view",
+    modeToggle: ArchViewMode.all,
+    mode: {},
     text: "",
     creationTime: null,
     type: [],
     creationLocation: [],
     ownerGroup: [],
     skip: 0,
-    limit: 30,
+    limit: 25,
     sortField: "creationTime:desc",
     keywords: [],
-    scientific: []
-  }
+    scientific: [],
+    isPublished: false
+  },
+
+  batch: [],
+
+  openwhiskResult: null
 };

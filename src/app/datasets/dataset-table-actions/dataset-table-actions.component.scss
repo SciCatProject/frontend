@@ -1,0 +1,23 @@
+@import "../../../theme.scss";
+
+.mode-container {
+  float: left;
+
+  .public-toggle {
+    margin-right: 1em;
+  }
+}
+
+.action-container {
+  float: right;
+
+  button {
+    mat-icon {
+      color: black;
+    }
+  }
+}
+
+.action-container.hidden {
+  visibility: hidden;
+}

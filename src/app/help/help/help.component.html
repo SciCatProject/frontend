@@ -1,0 +1,80 @@
+<p>
+  <mat-card class="help-card" *ngIf="gettingStarted">
+    <mat-card-header>
+      <mat-card-title>How to get started</mat-card-title>
+    </mat-card-header>
+    The
+    <a href="{{ gettingStarted }}" target="blank">Getting Started Guide</a>
+    gives a brief description on how to get started using the data catalog.
+  </mat-card>
+</p>
+
+<p>
+  <mat-card class="help-card" *ngIf="facility != 'PSI'">
+    <mat-card-header>
+      <mat-card-title>Where is my data?</mat-card-title>
+    </mat-card-header>
+    Your data is stored and can be accessed by logging into {{ facility }} using
+    sftp to download a file. Alternatively, individual datafiles can be
+    downloaded by clicking on a datafiles tab for a given dataset, however this
+    is not recommended for large datasets
+  </mat-card>
+</p>
+
+<p>
+  <mat-card class="help-card" *ngIf="facility == 'PSI'">
+    <mat-card-header>
+      <mat-card-title>Where is my data?</mat-card-title>
+    </mat-card-header>
+    Firstly, the ingestion process makes data on PSI central servers, known to
+    the catalog. Secondly, archiving makes a copy of the data in the storage
+    facility. Once archivng is complete, the data can be retrieved from the
+    storage facility using the retrieval workflow.
+  </mat-card>
+</p>
+
+<p>
+  <mat-card class="help-card" *ngIf="shoppingCartEnabled">
+    <mat-card-header>
+      <mat-card-title>How can I publish a dataset?</mat-card-title>
+    </mat-card-header>
+    Select datasets in the dataset table and add to <b>Cart</b>. Once in
+    <b>Cart</b>, click <b>Publish</b> and follow instructions.
+  </mat-card>
+</p>
+
+<p>
+  <mat-card class="help-card" *ngIf="ingestManual">
+    <mat-card-header>
+      <mat-card-title>Ingest Manual</mat-card-title>
+    </mat-card-header>
+    The
+    <a href="{{ ingestManual }}" target="blank">Ingest Manual</a>
+    provides detailed information on how to make your data available to the
+    catalog as well as archiving and retrieval of datasets.
+  </mat-card>
+</p>
+
+<p>
+  <mat-card class="help-card">
+    <mat-card-header>
+      <mat-card-title>
+        Where are my proposals?
+      </mat-card-title>
+    </mat-card-header>
+    Once logged in, you can see your proposals at
+    <a routerLink="/proposals" routerLinkActive="active">Proposals</a>
+  </mat-card>
+</p>
+
+<p>
+  <mat-card class="help-card">
+    <mat-card-header>
+      <mat-card-title>
+        Where are my samples?
+      </mat-card-title>
+    </mat-card-header>
+    Once logged in, you can see your samples at
+    <a routerLink="/samples" routerLinkActive="active">Samples</a>
+  </mat-card>
+</p>

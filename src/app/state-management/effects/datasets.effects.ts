@@ -1,177 +1,344 @@
 import { Injectable } from "@angular/core";
-import { Observable, of } from "rxjs";
-import { Actions, Effect, ofType } from "@ngrx/effects";
-import { Action, select, Store } from "@ngrx/store";
-import { Angular5Csv } from "angular5-csv/Angular5-csv";
-import { DatasetApi, DatasetAttachmentApi } from "shared/sdk/services";
-import * as DatasetActions from "state-management/actions/datasets.actions";
-import { Dataset } from "state-management/models";
-import { getDatasetsInBatch, getFullfacetsParams, getFullqueryParams, getRectangularRepresentation } from "../selectors/datasets.selectors";
-import { catchError, filter, map, mergeMap, switchMap, tap, withLatestFrom } from "rxjs/operators";
-import { getCurrentUser } from "../selectors/users.selectors";
-import { LOGOUT_COMPLETE } from "../actions/user.actions";
+import { Actions, createEffect, ofType } from "@ngrx/effects";
+import { DatasetApi, Dataset } from "shared/sdk";
+import { Store, select } from "@ngrx/store";
+import {
+  getFullqueryParams,
+  getFullfacetParams,
+  getDatasetsInBatch
+} from "state-management/selectors/datasets.selectors";
+import * as fromActions from "state-management/actions/datasets.actions";
+import {
+  withLatestFrom,
+  mergeMap,
+  map,
+  catchError,
+  switchMap,
+  tap,
+  filter
+} from "rxjs/operators";
+import { of } from "rxjs";
+import { getCurrentUser } from "state-management/selectors/user.selectors";
+import {
+  logoutCompleteAction,
+  loadingAction,
+  loadingCompleteAction,
+  addCustomColumnsAction,
+  updateUserSettingsAction
+} from "state-management/actions/user.actions";
 
 @Injectable()
 export class DatasetEffects {
-  @Effect()
-  protected removeAttachment$: Observable<Action> = this.actions$.pipe(
-    ofType(DatasetActions.DELETE_ATTACHMENT),
-    map((action: DatasetActions.DeleteAttachment) => action.attachment_id),
-    switchMap(attachment_id => {
-      console.log("deleting attachment", attachment_id);
-      return this.datasetAttachmentApi
-        .deleteById(attachment_id)
-        .pipe(
-          map(res => new DatasetActions.DeleteAttachmentComplete(attachment_id)),
-          catchError (err => of (new DatasetActions.DeleteAttachmentFailed(err)))
-        );
-    })
-  );
+  fullqueryParams$ = this.store.pipe(select(getFullqueryParams));
+  fullfacetParams$ = this.store.pipe(select(getFullfacetParams));
+  datasetsInBatch$ = this.store.pipe(select(getDatasetsInBatch));
+  currentUser$ = this.store.pipe(select(getCurrentUser));
 
-
-  @Effect()
-  protected saveDataset$: Observable<Action> = this.actions$.pipe(
-    ofType(DatasetActions.SAVE_DATASET),
-    map((action: DatasetActions.SaveDatasetAction) => action.dataset),
-    switchMap(dataset => {
-      return this.datasetApi.upsert(dataset);
-    })
-  );
-
-  @Effect()
-  protected addAttachment$: Observable<Action> = this.actions$.pipe(
-    ofType(DatasetActions.ADD_ATTACHMENT),
-    map((action: DatasetActions.AddAttachment) => action.attachment),
-    switchMap(attachment => {
-      console.log("creating attachment for", attachment.datasetId);
-      delete attachment.id;
-      return this.datasetAttachmentApi
-        .create(attachment)
-        .pipe(map(res => new DatasetActions.AddAttachmentComplete(attachment)),
-          catchError(err => of(new DatasetActions.AddAttachmentFailed(err)))
-        );
-    })
-  );
-
-  @Effect()
-  protected getDatablocks$: Observable<Action> = this.actions$.pipe(
-    ofType(DatasetActions.DATABLOCKS),
-    map((action: DatasetActions.DatablocksAction) => action.id),
-    switchMap(id => {
-      const blockFilter = {
-        include: [
-          { relation: "origdatablocks" },
-          { relation: "datablocks" },
-          { relation: "datasetattachments" },
-          { relation: "datasetlifecycle" }
-        ]
-      };
-
-      // TODO separate action for dataBlocks? or retrieve at once?
-
-      return this.datasetApi.findById(encodeURIComponent(id), blockFilter).pipe(
-        map(
-          (dataset: Dataset) =>
-            new DatasetActions.SearchIDCompleteAction(dataset)
-        ),
-        catchError(err => of(new DatasetActions.DatablocksFailedAction(err)))
-      );
-    })
-  );
-  @Effect({ dispatch: false })
-  protected clearBatchOnLogout$ = this.actions$.pipe(
-    ofType(LOGOUT_COMPLETE),
-    tap(() => this.storeBatch([], null))
-  );
-  private fullqueryParams$ = this.store.pipe(select(getFullqueryParams));
-  private fullfacetParams$ = this.store.pipe(select(getFullfacetsParams));
-  private rectangularRepresentation$ = this.store.pipe(
-    select(getRectangularRepresentation)
-  );
-  @Effect({ dispatch: false })
-  protected exportToCsv$: Observable<Action> = this.actions$.pipe(
-    ofType(DatasetActions.EXPORT_TO_CSV),
-    mergeMap(() => this.rectangularRepresentation$),
-    tap((rect: any) => {
-      const options = {
-        fieldSeparator: ",",
-        quoteStrings: "\"",
-        decimalseparator: ".",
-        showLabels: true,
-        showTitle: false,
-        useBom: true,
-        headers: Object.keys(rect[0])
-      };
-
-      const ts = new Angular5Csv(rect, "Datasets", options);
-    })
-  );
-  private datasetsInBatch$ = this.store.pipe(select(getDatasetsInBatch));
-  private currentUser$ = this.store.pipe(select(getCurrentUser));
-  @Effect({ dispatch: false })
-  protected storeBatch$ = this.actions$.pipe(
-    ofType(
-      DatasetActions.ADD_TO_BATCH,
-      DatasetActions.REMOVE_FROM_BATCH,
-      DatasetActions.CLEAR_BATCH
-    ),
-    withLatestFrom(this.datasetsInBatch$, this.currentUser$),
-    tap(([, batch, user]) => this.storeBatch(batch, user.id))
-  );
-  @Effect()
-  protected prefillBatch$ = this.actions$.pipe(
-    ofType(DatasetActions.PREFILL_BATCH),
-    withLatestFrom(this.currentUser$),
-    filter(([, user]) => user != null),
-    map(([, user]) => this.retrieveBatch(user.id)),
-    map(batch => new DatasetActions.PrefillBatchCompleteAction(batch))
-  );
-  @Effect()
-  private fetchDatasets$: Observable<Action> = this.actions$.pipe(
-    ofType(DatasetActions.FETCH_DATASETS),
-    withLatestFrom(this.fullqueryParams$),
-    map(([action, params]) => params),
-    mergeMap(({ query, limits }) =>
-      this.datasetApi.fullquery(query, limits).pipe(
-        map(
-          datasets =>
-            new DatasetActions.FetchDatasetsCompleteAction(
-              datasets as Dataset[]
-            )
-        ),
-        catchError(() => of(new DatasetActions.FetchDatasetsFailedAction()))
+  fetchDatasets$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(fromActions.fetchDatasetsAction),
+      withLatestFrom(this.fullqueryParams$),
+      map(([action, params]) => params),
+      mergeMap(({ query, limits }) =>
+        this.datasetApi.fullquery(query, limits).pipe(
+          map(datasets =>
+            fromActions.fetchDatasetsCompleteAction({ datasets })
+          ),
+          catchError(() => of(fromActions.fetchDatasetsFailedAction()))
+        )
       )
     )
   );
-  @Effect()
-  private fetchFacetCounts$: Observable<Action> = this.actions$.pipe(
-    ofType(DatasetActions.FETCH_FACET_COUNTS),
-    withLatestFrom(this.fullfacetParams$),
-    map(([action, params]) => params),
-    mergeMap(({ fields, facets }) => {
-      return this.datasetApi.fullfacet(fields, facets).pipe(
-        map(res => {
-          const { all, ...facetCounts } = res[0];
-          const allCounts = all && all.length > 0 ? all[0].totalSets : 0;
-          return new DatasetActions.FetchFacetCountsCompleteAction(
-            facetCounts,
-            allCounts
+
+  fetchFacetCounts$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(fromActions.fetchFacetCountsAction),
+      withLatestFrom(this.fullfacetParams$),
+      map(([action, params]) => params),
+      mergeMap(({ fields, facets }) =>
+        this.datasetApi.fullfacet(fields, facets).pipe(
+          map(res => {
+            const { all, ...facetCounts } = res[0];
+            const allCounts = all && all.length > 0 ? all[0].totalSets : 0;
+            return fromActions.fetchFacetCountsCompleteAction({
+              facetCounts,
+              allCounts
+            });
+          }),
+          catchError(() => of(fromActions.fetchFacetCountsFailedAction()))
+        )
+      )
+    )
+  );
+
+  fetchMetadataKeys$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(fromActions.fetchMetadataKeysAction),
+      withLatestFrom(this.fullqueryParams$),
+      mergeMap(([{ metadataKey }, { query }]) => {
+        const parsedQuery = JSON.parse(query);
+        parsedQuery.metadataKey = metadataKey;
+        return this.datasetApi.metadataKeys(JSON.stringify(parsedQuery)).pipe(
+          map(metadataKeys =>
+            fromActions.fetchMetadataKeysCompleteAction({ metadataKeys })
+          ),
+          catchError(() => of(fromActions.fetchMetadataKeysFailedAction()))
+        );
+      })
+    )
+  );
+
+  updateUserDatasetsLimit$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(fromActions.changePageAction),
+      map(({ limit }) =>
+        updateUserSettingsAction({ property: { datasetCount: limit } })
+      )
+    )
+  );
+
+  updateMetadataKeys$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(
+        fromActions.addScientificConditionAction,
+        fromActions.removeScientificConditionAction,
+        fromActions.clearFacetsAction
+      ),
+      map(() => fromActions.fetchMetadataKeysAction({ metadataKey: "" }))
+    )
+  );
+
+  addMetadataColumns$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(fromActions.fetchMetadataKeysCompleteAction),
+      switchMap(({ metadataKeys }) =>
+        of(addCustomColumnsAction({ names: metadataKeys }))
+      )
+    )
+  );
+
+  fetchDataset$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(fromActions.fetchDatasetAction),
+      switchMap(({ pid, filters }) => {
+        const datasetFilter = {
+          where: {
+            pid: pid
+          },
+          include: [
+            { relation: "origdatablocks" },
+            { relation: "datablocks" },
+            { relation: "attachments" }
+          ]
+        };
+
+        if (filters) {
+          Object.keys(filters).forEach(key => {
+            datasetFilter.where[key] = filters[key];
+          });
+        }
+
+        return this.datasetApi.findOne(datasetFilter).pipe(
+          map((dataset: Dataset) =>
+            fromActions.fetchDatasetCompleteAction({ dataset })
+          ),
+          catchError(() => of(fromActions.fetchDatasetFailedAction()))
+        );
+      })
+    )
+  );
+
+  addDataset$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(fromActions.addDatasetAction),
+      mergeMap(({ dataset }) =>
+        this.datasetApi.create(dataset).pipe(
+          mergeMap(res => [
+            fromActions.addDatasetCompleteAction({ dataset: res }),
+            fromActions.fetchDatasetsAction(),
+            fromActions.fetchDatasetAction({ pid: res.pid })
+          ]),
+          catchError(() => of(fromActions.addDatasetFailedAction()))
+        )
+      )
+    )
+  );
+
+  updateProperty$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(fromActions.updatePropertyAction),
+      switchMap(({ pid, property }) =>
+        this.datasetApi
+          .updateAttributes(encodeURIComponent(pid), property)
+          .pipe(
+            switchMap(() => [
+              fromActions.updatePropertyCompleteAction(),
+              fromActions.fetchDatasetAction({ pid })
+            ]),
+            catchError(() => of(fromActions.updatePropertyFailedAction()))
+          )
+      )
+    )
+  );
+
+  addAttachment$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(fromActions.addAttachmentAction),
+      switchMap(({ attachment }) => {
+        delete attachment.id;
+        delete attachment.rawDatasetId;
+        delete attachment.derivedDatasetId;
+        delete attachment.proposalId;
+        delete attachment.sampleId;
+        return this.datasetApi
+          .createAttachments(
+            encodeURIComponent(attachment.datasetId),
+            attachment
+          )
+          .pipe(
+            map(res =>
+              fromActions.addAttachmentCompleteAction({ attachment: res })
+            ),
+            catchError(() => of(fromActions.addAttachmentFailedAction()))
           );
-        }),
-        catchError(() => of(new DatasetActions.FetchFacetCountsFailedAction()))
-      );
-    })
+      })
+    )
+  );
+
+  updateAttachmentCaption$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(fromActions.updateAttachmentCaptionAction),
+      switchMap(({ datasetId, attachmentId, caption }) => {
+        const data = { caption };
+        return this.datasetApi
+          .updateByIdAttachments(
+            encodeURIComponent(datasetId),
+            encodeURIComponent(attachmentId),
+            data
+          )
+          .pipe(
+            map(attachment =>
+              fromActions.updateAttachmentCaptionCompleteAction({ attachment })
+            ),
+            catchError(() =>
+              of(fromActions.updateAttachmentCaptionFailedAction())
+            )
+          );
+      })
+    )
+  );
+
+  removeAttachment$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(fromActions.removeAttachmentAction),
+      switchMap(({ datasetId, attachmentId }) =>
+        this.datasetApi
+          .destroyByIdAttachments(encodeURIComponent(datasetId), attachmentId)
+          .pipe(
+            map(() =>
+              fromActions.removeAttachmentCompleteAction({ attachmentId })
+            ),
+            catchError(() => of(fromActions.removeAttachmentFailedAction()))
+          )
+      )
+    )
+  );
+
+  reduceDataset$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(fromActions.reduceDatasetAction),
+      mergeMap(({ dataset }) =>
+        this.datasetApi.reduceDataset(dataset).pipe(
+          map(result => fromActions.reduceDatasetCompleteAction({ result })),
+          catchError(() => of(fromActions.reduceDatasetFailedAction()))
+        )
+      )
+    )
+  );
+
+  loading$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(
+        fromActions.fetchDatasetsAction,
+        fromActions.fetchFacetCountsAction,
+        fromActions.fetchMetadataKeysAction,
+        fromActions.fetchDatasetAction,
+        fromActions.addDatasetAction,
+        fromActions.updatePropertyAction,
+        fromActions.addAttachmentAction,
+        fromActions.updateAttachmentCaptionAction,
+        fromActions.removeAttachmentAction
+      ),
+      switchMap(() => of(loadingAction()))
+    )
+  );
+
+  loadingComplete$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(
+        fromActions.fetchDatasetsCompleteAction,
+        fromActions.fetchDatasetsFailedAction,
+        fromActions.fetchFacetCountsCompleteAction,
+        fromActions.fetchFacetCountsFailedAction,
+        fromActions.fetchMetadataKeysCompleteAction,
+        fromActions.fetchMetadataKeysFailedAction,
+        fromActions.fetchDatasetCompleteAction,
+        fromActions.fetchDatasetFailedAction,
+        fromActions.addDatasetCompleteAction,
+        fromActions.addDatasetFailedAction,
+        fromActions.updatePropertyCompleteAction,
+        fromActions.updatePropertyFailedAction,
+        fromActions.addAttachmentCompleteAction,
+        fromActions.addAttachmentFailedAction,
+        fromActions.updateAttachmentCaptionCompleteAction,
+        fromActions.updateAttachmentCaptionFailedAction,
+        fromActions.removeAttachmentCompleteAction,
+        fromActions.removeAttachmentFailedAction
+      ),
+      switchMap(() => of(loadingCompleteAction()))
+    )
+  );
+
+  protected prefillBatch$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(fromActions.prefillBatchAction),
+      withLatestFrom(this.currentUser$),
+      filter(([, user]) => user != null),
+      map(([, user]) => this.retrieveBatch(user.id)),
+      map(batch => fromActions.prefillBatchCompleteAction({ batch }))
+    )
+  );
+
+  protected storeBatch$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(
+          fromActions.addToBatchAction,
+          fromActions.removeFromBatchAction,
+          fromActions.clearBatchAction
+        ),
+        withLatestFrom(this.datasetsInBatch$, this.currentUser$),
+        tap(([, batch, user]) => this.storeBatch(batch, user.id))
+      ),
+    { dispatch: false }
+  );
+
+  protected clearBatchOnLogout$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(logoutCompleteAction),
+        tap(() => this.storeBatch([], null))
+      ),
+    { dispatch: false }
   );
 
   constructor(
     private actions$: Actions,
-    private store: Store<any>,
     private datasetApi: DatasetApi,
-    private datasetAttachmentApi: DatasetAttachmentApi
-  ) {
-  }
+    private store: Store<any>
+  ) {}
 
-  private storeBatch(batch: Dataset[], userId: string): void {
+  private storeBatch(batch: Dataset[], userId: string) {
     const json = JSON.stringify(batch);
     localStorage.setItem("batch", json);
     localStorage.setItem("batchUser", userId);

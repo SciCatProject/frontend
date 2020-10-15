@@ -1,38 +1,34 @@
-import { PolicyFilters, Policy } from 'state-management/models';
-
-
+import { PolicyFilters, Policy } from "state-management/models";
 
 export interface PolicyState {
-    policies: Policy[];
-    selectedPolicies: Policy[];
-    currentPolicy: Policy;
-    policySubmission: Policy;
-    submissionResponse: Policy;
-    totalCount: number;
-    submitComplete: boolean;
+  policies: Policy[];
+  editablePolicies: Policy[];
+  selectedPolicies: Policy[];
 
-    policiesLoading: boolean;
-    error: Error;
+  totalCount: number;
+  editableCount: number;
 
-    filters: PolicyFilters;
-
-
+  policiesFilters: PolicyFilters;
+  editableFilters: PolicyFilters;
 }
 
 export const initialPolicyState: PolicyState = {
-    policies: [],
-    selectedPolicies: [],
-    currentPolicy: null,
-    policySubmission: null,
-    submissionResponse: null,
-    totalCount: 0,
-    submitComplete: false,
+  policies: [],
+  editablePolicies: [],
+  selectedPolicies: [],
 
-    policiesLoading: true,
-    error: undefined,
-    filters: {
-      skip: 0,
-      limit: 30,
-      sortField: "ownerGroup:desc"
-    }
+  totalCount: 0,
+  editableCount: 0,
+
+  policiesFilters: {
+    skip: 0,
+    limit: 25,
+    sortField: "ownerGroup:desc"
+  },
+
+  editableFilters: {
+    skip: 0,
+    limit: 25,
+    sortField: "ownerGroup:desc"
+  }
 };

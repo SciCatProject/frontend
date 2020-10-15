@@ -1,9 +1,11 @@
 /* tslint:disable */
 import {
-  DatasetLifecycle,
+  Sample,
+  PublishedData,
   Datablock,
-  DatasetAttachment,
-  OrigDatablock
+  OrigDatablock,
+  Attachment,
+  Instrument
 } from '../index';
 
 declare var Object: any;
@@ -13,39 +15,48 @@ export interface DerivedDatasetInterface {
   "usedSoftware": Array<any>;
   "jobParameters"?: any;
   "jobLogData"?: string;
+  "scientificMetadata"?: any;
   "pid"?: string;
   "owner": string;
   "ownerEmail"?: string;
   "orcidOfOwner"?: string;
   "contactEmail": string;
   "sourceFolder": string;
+  "sourceFolderHost"?: string;
   "size"?: number;
   "packedSize"?: number;
+  "numberOfFiles"?: number;
+  "numberOfFilesArchived"?: number;
   "creationTime": Date;
   "type": string;
   "validationStatus"?: string;
   "keywords"?: Array<any>;
   "description"?: string;
   "datasetName"?: string;
-  "userTargetLocation"?: string;
   "classification"?: string;
   "license"?: string;
   "version"?: string;
-  "doi"?: string;
   "isPublished"?: boolean;
-  "archivable"?: boolean;
-  "retrievable"?: boolean;
-  "publishable"?: boolean;
   "ownerGroup": string;
   "accessGroups"?: Array<any>;
   "createdBy"?: string;
   "updatedBy"?: string;
   "createdAt"?: Date;
   "updatedAt"?: Date;
-  datasetlifecycle?: DatasetLifecycle;
+  "publisheddataId"?: string;
+  "datasetlifecycle"?: any;
+  "history"?: Array<any>;
+  "instrumentId"?: string;
+  "techniques"?: Array<any>;
+  samples?: Sample[];
+  publisheddata?: PublishedData;
+  datasetLifecycle?: any[];
   datablocks?: Datablock[];
-  datasetattachments?: DatasetAttachment[];
   origdatablocks?: OrigDatablock[];
+  historyList?: any[];
+  attachments?: Attachment[];
+  instrument?: Instrument;
+  techniquesList?: any[];
 }
 
 export class DerivedDataset implements DerivedDatasetInterface {
@@ -54,39 +65,48 @@ export class DerivedDataset implements DerivedDatasetInterface {
   "usedSoftware": Array<any>;
   "jobParameters": any;
   "jobLogData": string;
+  "scientificMetadata": any;
   "pid": string;
   "owner": string;
   "ownerEmail": string;
   "orcidOfOwner": string;
   "contactEmail": string;
   "sourceFolder": string;
+  "sourceFolderHost": string;
   "size": number;
   "packedSize": number;
+  "numberOfFiles": number;
+  "numberOfFilesArchived": number;
   "creationTime": Date;
   "type": string;
   "validationStatus": string;
   "keywords": Array<any>;
   "description": string;
   "datasetName": string;
-  "userTargetLocation": string;
   "classification": string;
   "license": string;
   "version": string;
-  "doi": string;
   "isPublished": boolean;
-  "archivable": boolean;
-  "retrievable": boolean;
-  "publishable": boolean;
   "ownerGroup": string;
   "accessGroups": Array<any>;
   "createdBy": string;
   "updatedBy": string;
   "createdAt": Date;
   "updatedAt": Date;
-  datasetlifecycle: DatasetLifecycle;
+  "publisheddataId": string;
+  "datasetlifecycle": any;
+  "history": Array<any>;
+  "instrumentId": string;
+  "techniques": Array<any>;
+  samples: Sample[];
+  publisheddata: PublishedData;
+  datasetLifecycle: any[];
   datablocks: Datablock[];
-  datasetattachments: DatasetAttachment[];
   origdatablocks: OrigDatablock[];
+  historyList: any[];
+  attachments: Attachment[];
+  instrument: Instrument;
+  techniquesList: any[];
   constructor(data?: DerivedDatasetInterface) {
     Object.assign(this, data);
   }
@@ -140,6 +160,10 @@ export class DerivedDataset implements DerivedDatasetInterface {
           name: 'jobLogData',
           type: 'string'
         },
+        "scientificMetadata": {
+          name: 'scientificMetadata',
+          type: 'any'
+        },
         "pid": {
           name: 'pid',
           type: 'string'
@@ -164,12 +188,24 @@ export class DerivedDataset implements DerivedDatasetInterface {
           name: 'sourceFolder',
           type: 'string'
         },
+        "sourceFolderHost": {
+          name: 'sourceFolderHost',
+          type: 'string'
+        },
         "size": {
           name: 'size',
           type: 'number'
         },
         "packedSize": {
           name: 'packedSize',
+          type: 'number'
+        },
+        "numberOfFiles": {
+          name: 'numberOfFiles',
+          type: 'number'
+        },
+        "numberOfFilesArchived": {
+          name: 'numberOfFilesArchived',
           type: 'number'
         },
         "creationTime": {
@@ -196,10 +232,6 @@ export class DerivedDataset implements DerivedDatasetInterface {
           name: 'datasetName',
           type: 'string'
         },
-        "userTargetLocation": {
-          name: 'userTargetLocation',
-          type: 'string'
-        },
         "classification": {
           name: 'classification',
           type: 'string'
@@ -212,24 +244,8 @@ export class DerivedDataset implements DerivedDatasetInterface {
           name: 'version',
           type: 'string'
         },
-        "doi": {
-          name: 'doi',
-          type: 'string'
-        },
         "isPublished": {
           name: 'isPublished',
-          type: 'boolean'
-        },
-        "archivable": {
-          name: 'archivable',
-          type: 'boolean'
-        },
-        "retrievable": {
-          name: 'retrievable',
-          type: 'boolean'
-        },
-        "publishable": {
-          name: 'publishable',
           type: 'boolean'
         },
         "ownerGroup": {
@@ -256,28 +272,58 @@ export class DerivedDataset implements DerivedDatasetInterface {
           name: 'updatedAt',
           type: 'Date'
         },
+        "publisheddataId": {
+          name: 'publisheddataId',
+          type: 'string'
+        },
+        "datasetlifecycle": {
+          name: 'datasetlifecycle',
+          type: 'any'
+        },
+        "history": {
+          name: 'history',
+          type: 'Array&lt;any&gt;',
+          default: <any>[]
+        },
+        "instrumentId": {
+          name: 'instrumentId',
+          type: 'string'
+        },
+        "techniques": {
+          name: 'techniques',
+          type: 'Array&lt;any&gt;',
+          default: <any>[]
+        },
       },
       relations: {
-        datasetlifecycle: {
-          name: 'datasetlifecycle',
-          type: 'DatasetLifecycle',
-          model: 'DatasetLifecycle',
-          relationType: 'hasOne',
+        samples: {
+          name: 'samples',
+          type: 'Sample[]',
+          model: 'Sample',
+          relationType: 'hasMany',
                   keyFrom: 'pid',
           keyTo: 'derivedDatasetId'
+        },
+        publisheddata: {
+          name: 'publisheddata',
+          type: 'PublishedData',
+          model: 'PublishedData',
+          relationType: 'belongsTo',
+                  keyFrom: 'publisheddataId',
+          keyTo: 'doi'
+        },
+        datasetLifecycle: {
+          name: 'datasetLifecycle',
+          type: 'any[]',
+          model: '',
+          relationType: 'embedsOne',
+                  keyFrom: 'datasetlifecycle',
+          keyTo: 'id'
         },
         datablocks: {
           name: 'datablocks',
           type: 'Datablock[]',
           model: 'Datablock',
-          relationType: 'hasMany',
-                  keyFrom: 'pid',
-          keyTo: 'derivedDatasetId'
-        },
-        datasetattachments: {
-          name: 'datasetattachments',
-          type: 'DatasetAttachment[]',
-          model: 'DatasetAttachment',
           relationType: 'hasMany',
                   keyFrom: 'pid',
           keyTo: 'derivedDatasetId'
@@ -289,6 +335,38 @@ export class DerivedDataset implements DerivedDatasetInterface {
           relationType: 'hasMany',
                   keyFrom: 'pid',
           keyTo: 'derivedDatasetId'
+        },
+        historyList: {
+          name: 'historyList',
+          type: 'any[]',
+          model: '',
+          relationType: 'embedsMany',
+                  keyFrom: 'history',
+          keyTo: 'id'
+        },
+        attachments: {
+          name: 'attachments',
+          type: 'Attachment[]',
+          model: 'Attachment',
+          relationType: 'hasMany',
+                  keyFrom: 'pid',
+          keyTo: 'derivedDatasetId'
+        },
+        instrument: {
+          name: 'instrument',
+          type: 'Instrument',
+          model: 'Instrument',
+          relationType: 'belongsTo',
+                  keyFrom: 'instrumentId',
+          keyTo: 'pid'
+        },
+        techniquesList: {
+          name: 'techniquesList',
+          type: 'any[]',
+          model: '',
+          relationType: 'embedsMany',
+                  keyFrom: 'techniques',
+          keyTo: 'pid'
         },
       }
     }

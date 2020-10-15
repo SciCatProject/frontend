@@ -1,10 +1,10 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import * as JobActions from "state-management/actions/jobs.actions";
+import { fetchJobAction } from "state-management/actions/jobs.actions";
 import { Job } from "shared/sdk/models";
 import { select, Store } from "@ngrx/store";
 import { ActivatedRoute } from "@angular/router";
-import * as selectors from "state-management/selectors";
-import { getCurrentJob } from "../../state-management/selectors/jobs.selectors";
+import { getCurrentJob } from "state-management/selectors/jobs.selectors";
+import { Subscription } from "rxjs";
 
 @Component({
   selector: "app-jobs-detail",
@@ -13,31 +13,17 @@ import { getCurrentJob } from "../../state-management/selectors/jobs.selectors";
 })
 export class JobsDetailComponent implements OnInit, OnDestroy {
   job$ = this.store.pipe(select(getCurrentJob));
-  job: Job = undefined;
-  subscriptions = [];
+  routeSubscription: Subscription;
 
-
-  constructor(private route: ActivatedRoute, private store: Store<any>) {}
+  constructor(private route: ActivatedRoute, private store: Store<Job>) {}
 
   ngOnInit() {
-    this.subscriptions.push(
-      this.store.pipe(select(selectors.jobs.getCurrentJob)).subscribe(job => {
-        if (job && Object.keys(job).length > 0) {
-          this.job = <Job>job;
-        } else {
-          console.log("Searching from URL params");
-          this.route.params.subscribe(params => {
-            this.store.dispatch(new JobActions.SearchIDAction(params.id));
-          });
-        }
-      })
-    );
+    this.routeSubscription = this.route.params.subscribe(params => {
+      this.store.dispatch(fetchJobAction({ jobId: params.id }));
+    });
   }
 
   ngOnDestroy() {
-    for (let i = 0; i < this.subscriptions.length; i++) {
-      this.subscriptions[i].unsubscribe();
-    }
-    this.store.dispatch(new JobActions.CurrentJobAction(undefined));
+    this.routeSubscription.unsubscribe();
   }
 }

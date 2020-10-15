@@ -1,77 +1,174 @@
-<div style="margin-top: 1em">
-  <div *ngIf="hasBatch$ | async; else empty_batch">
-    <div style="text-align: right; margin-bottom: 1em">
+<div style="margin-top: 1em;">
+  <div *ngIf="hasBatch; else empty_batch">
+    <div style="text-align: right; margin-bottom: 1em;">
       <button (click)="onEmpty()" mat-button class="button" color="primary">
-        <i class="material-icons"> remove_circle </i> 
-        Empty Batch
+        <mat-icon> remove_shopping_cart </mat-icon>
+        Empty Cart
       </button>
-      <button mat-button class="button" color="primary">
-        <i class="material-icons"> school </i> 
+      <button
+        mat-button
+        id="publishButton"
+        (click)="onPublish()"
+        class="button"
+        color="primary"
+      >
+        <mat-icon> school </mat-icon>
         Publish
       </button>
-      <button mat-button class="button" color="primary">
-        <i class="material-icons"> table_chart </i> 
-        Export as CSV
+      <button
+        mat-button
+        (click)="openDialogWithoutRef()"
+        class="button"
+        color="primary"
+      >
+        <mat-icon> group_add </mat-icon>
+        Share
       </button>
-      <button mat-button (click)="onArchive()" class="button" color="primary">
-        <i class="material-icons"> archive </i> 
-        Archive
-      </button>
-      <button mat-button (click)="onRetrieve()" class="button" color="primary">
-        <i class="material-icons"> cloud_download </i> 
-        Retrieve
-      </button>
+      <ng-container *ngIf="appConfig.archiveWorkflowEnabled">
+        <button mat-button (click)="onArchive()" class="button" color="primary">
+          <mat-icon> archive </mat-icon>
+          Archive
+        </button>
+        <button
+          mat-button
+          (click)="onRetrieve()"
+          class="button"
+          color="primary"
+        >
+          <mat-icon> cloud_download </mat-icon>
+          Retrieve
+        </button>
+      </ng-container>
     </div>
 
-    <mat-table [dataSource]="batch$" class="mat-elevation-z2" style="margin-left: 1em">
+    <mat-table
+      [dataSource]="batch$"
+      class="mat-elevation-z2"
+      style="margin-left: 1em;"
+    >
       <ng-container matColumnDef="remove">
         <mat-header-cell *matHeaderCellDef>
-          <!-- Quite terrible hack to ensure column header and regular cells have same width -->
-          <button mat-button>
-        <i class="material-icons"> remove_circle </i> 
-          </button>
+          <div fxLayout="column" style="align-items: center;">
+            <div>
+              <mat-icon> remove_circle </mat-icon>
+            </div>
+            <div>
+              Remove
+            </div>
+          </div>
         </mat-header-cell>
 
         <mat-cell *matCellDef="let dataset">
-          <button mat-button (click)="onRemove(dataset)">
-        <i class="material-icons"> remove_circle </i> 
+          <button mat-icon-button color="warn" (click)="onRemove(dataset)">
+            <mat-icon> remove_circle </mat-icon>
           </button>
         </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="pid">
-        <mat-header-cell *matHeaderCellDef>PID</mat-header-cell>
-        <mat-cell *matCellDef="let dataset">{{dataset.pid}}</mat-cell>
+        <mat-header-cell *matHeaderCellDef>
+          <div fxLayout="column" style="align-items: center;">
+            <div>
+              <mat-icon> perm_contact_calendar </mat-icon>
+            </div>
+            <div>
+              PID
+            </div>
+          </div>
+        </mat-header-cell>
+        <mat-cell *matCellDef="let dataset">{{ dataset.pid }}</mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="sourceFolder">
-        <mat-header-cell *matHeaderCellDef>Source Folder</mat-header-cell>
-        <mat-cell *matCellDef="let dataset">{{dataset.sourceFolder}}</mat-cell>
+        <mat-header-cell *matHeaderCellDef>
+          <div fxLayout="column" style="align-items: center;">
+            <div>
+              <mat-icon> folder </mat-icon>
+            </div>
+            <div>
+              Source Folder
+            </div>
+          </div>
+        </mat-header-cell>
+        <mat-cell *matCellDef="let dataset">{{
+          dataset.sourceFolder
+        }}</mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="size">
-        <mat-header-cell *matHeaderCellDef>Size</mat-header-cell>
+        <mat-header-cell *matHeaderCellDef>
+          <div fxLayout="column" style="align-items: center;">
+            <div>
+              <mat-icon> save </mat-icon>
+            </div>
+            <div>
+              Size
+            </div>
+          </div>
+        </mat-header-cell>
         <mat-cell *matCellDef="let dataset">
-          {{dataset.size | filesize}}
+          {{ dataset.size | filesize }}
         </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="creationTime">
-        <mat-header-cell *matHeaderCellDef>Creation Time</mat-header-cell>
+        <mat-header-cell *matHeaderCellDef>
+          <div fxLayout="column" style="align-items: center;">
+            <div>
+              <mat-icon> calendar_today </mat-icon>
+            </div>
+            <div>
+              Creation Time
+            </div>
+          </div>
+        </mat-header-cell>
         <mat-cell *matCellDef="let dataset">
-          {{dataset.creationTime | date: 'dd/MM/yyyy HH:mm'}}
+          {{ dataset.creationTime | date: "yyyy-MM-dd HH:mm" }}
         </mat-cell>
       </ng-container>
 
-      <mat-header-row class='datasets-header' *matHeaderRowDef="visibleColumns">
+      <mat-header-row class="datasets-header" *matHeaderRowDef="visibleColumns">
       </mat-header-row>
 
-      <mat-row *matRowDef="let dataset; columns: visibleColumns">
-      </mat-row>
+      <mat-row *matRowDef="let dataset; columns: visibleColumns"> </mat-row>
     </mat-table>
   </div>
 
   <ng-template #empty_batch>
-    There are no datasets in the batch.
+    <mat-card class="empty-batch-message">
+      <mat-icon>info</mat-icon> There are no datasets in the batch.
+    </mat-card>
   </ng-template>
 </div>
+
+<ng-template #secondDialog>
+  <h2 matDialogTitle>Share Datasets</h2>
+  <mat-dialog-content>
+    <p><em>*insert user emails to share datasets with*</em></p>
+  </mat-dialog-content>
+  <mat-form-field class="chip-list">
+    <mat-chip-list #chipList>
+      <mat-chip
+        *ngFor="let share of shareEmails"
+        [selectable]="selectable"
+        [removable]="removable"
+        (removed)="remove(share)"
+      >
+        {{ share.name }}
+        <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+      </mat-chip>
+      <input
+        placeholder="New share..."
+        [matChipInputFor]="chipList"
+        [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+        [matChipInputAddOnBlur]="addOnBlur"
+        (matChipInputTokenEnd)="add($event)"
+      />
+    </mat-chip-list>
+  </mat-form-field>
+  <mat-dialog-actions align="end">
+    <button mat-button matDialogClose (click)="onShare()" color="primary">
+      Share Datasets
+    </button>
+  </mat-dialog-actions>
+</ng-template>

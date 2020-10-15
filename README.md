@@ -1,88 +1,24 @@
-# Catanie SciCat Client
+# Catanie: SciCat GUI
 
 
-![scicat-logo](https://github.com/SciCatProject/catanie/blob/develop/src/assets/images/esslogo.png)
+
+<img src="https://github.com/SciCatProject/catanie/blob/develop/src/assets/images/esslogo.png" alt="sci-cat-logo" width="100">
+
+
 
 [![Build Status](https://travis-ci.org/SciCatProject/catanie.svg?branch=develop)](https://travis-ci.org/SciCatProject/catanie)
-[![DeepScan grade](https://deepscan.io/api/projects/887/branches/19862/badge/grade.svg)](https://deepscan.io/dashboard#view=project&pid=887&bid=19862) [![DOI](https://zenodo.org/badge/106383330.svg)](https://zenodo.org/badge/latestdoi/106383330) [![Greenkeeper badge](https://badges.greenkeeper.io/SciCatProject/catanie.svg)](https://greenkeeper.io/)
+[![DeepScan grade](https://deepscan.io/api/projects/887/branches/19862/badge/grade.svg)](https://deepscan.io/dashboard#view=project&pid=887&bid=19862)
+[![Known Vulnerabilities](https://snyk.io/test/github/SciCatProject/catanie/develop/badge.svg?targetFile=package.json)](https://snyk.io/test/github/SciCatProject/catanie/develop?targetFile=package.json)
+[![DOI](https://zenodo.org/badge/106383330.svg)](https://zenodo.org/badge/latestdoi/106383330)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
-
+[![Coverage Status](https://coveralls.io/repos/github/SciCatProject/catanie/badge.svg?branch=develop)](https://coveralls.io/github/SciCatProject/catanie?branch=develop)
 
 ## Summary
 
-A data catalogue web application to provide a searchable interface for datasets,
+SciCat is a data catalogue web application to provide a searchable interface for datasets, publish DOIs, 
 as well as the option to carry out actions (i.e. archiving and publishing) and acts as a place to reference datasets used in publications.
-See documentation at [scicatproject](https://scicatproject.github.io/)
 
-# Getting Started
-
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
-
-### Prerequisites
-
-What things you need to install the software and how to install them
-
-```
-angular v6
-npm
-node
-```
-
-### Installing
-
-
-You can deploy with kubernetes or docker-compose
-
-```
-npm install
-npx ng build
-```
-
-And repeat
-
-```
-npx ng serve 
-```
-
-End with an example of getting some data out of the system or using it for a little demo
-
-## Running the tests
-
-Unit tests 
-
-```
-npm test
-```
-
-
-### Break down into end to end tests
-
-e2e tests check content is rendered correctly
-```
-npm run e2e
-```
-
-
-
-## Deployment
-
-Deploy with Docker
-
-## Built With
-
-* [NPM](http://npmjs.com) - node package manager
-* [Node](https://nodejs.org/) - node javascript runtime
-* [Angular](https://angular.io) - Web framework
-
-## Contributing
-
-Please read [CONTRIBUTING.md](https://github.com/SciCatProject/catanie/blob/develop/documentation/Catanie/Contributing.md) for details on our code of conduct, and the process for submitting pull requests to us.
-
-## Versioning
-
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/SciCatProject/catanie/tags). 
-
-
+For the full documentation please go to the [SciCat home page](https://scicatproject.github.io/) and follow the [documentation link](https://scicatproject.github.io/documentation)
 
 ## License
 

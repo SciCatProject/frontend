@@ -1,92 +1,125 @@
-import { Action } from "@ngrx/store";
-import { Dataset, Proposal } from "../models";
+import { createAction, props } from "@ngrx/store";
+import { Proposal, Dataset, Attachment } from "shared/sdk";
+import { ProposalFilters } from "state-management/state/proposals.store";
 
-export const SELECT_PROPOSAL = "[Proposals] Select Proposal";
+export const fetchProposalsAction = createAction("[Proposal] Fetch Proposals");
+export const fetchProposalsCompleteAction = createAction(
+  "[Proposal] Fetch Proposals Complete",
+  props<{ proposals: Proposal[] }>()
+);
+export const fetchProposalsFailedAction = createAction(
+  "[Proposal] Fetch Proposals Failed"
+);
 
-export const FETCH_PROPOSALS = "[Proposals] Get Proposals";
-export const FETCH_PROPOSALS_COMPLETE = "[Proposals] Get Proposals Complete";
-export const FETCH_PROPOSALS_FAILED = "[Proposals] Get Proposals Failed";
+export const fetchCountAction = createAction("[Proposal] Fetch Count");
+export const fetchCountCompleteAction = createAction(
+  "[Proposal] Fetch Count Complete",
+  props<{ count: number }>()
+);
+export const fetchCountFailedAction = createAction(
+  "[Proposal] Fetch Count Failed"
+);
 
-export const FETCH_PROPOSAL = "[Proposals] Get Proposal";
-export const FETCH_PROPOSAL_COMPLETE = "[Proposals] Get Proposal Complete";
-export const FETCH_PROPOSAL_FAILED = "[Proposals] Get Proposal Failed";
+export const fetchProposalAction = createAction(
+  "[Proposal] Fetch Proposal",
+  props<{ proposalId: string }>()
+);
+export const fetchProposalCompleteAction = createAction(
+  "[Proposal] Fetch Proposal Complete",
+  props<{ proposal: Proposal }>()
+);
+export const fetchProposalFailedAction = createAction(
+  "[Proposal] Fetch Proposal Failed"
+);
 
-export const FETCH_DATASETS_FOR_PROPOSAL =
-  "[Proposals] Fetch Datasets for Proposal";
-export const FETCH_DATASETS_FOR_PROPOSAL_COMPLETE =
-  "[Proposals] Fetch Datasets for Proposal Complete";
-export const FETCH_DATASETS_FOR_PROPOSAL_FAILED =
-  "[Proposals] Fetch Datasets for Proposal Failed";
+export const fetchProposalDatasetsAction = createAction(
+  "[Proposal] Fetch Datasets",
+  props<{ proposalId: string }>()
+);
+export const fetchProposalDatasetsCompleteAction = createAction(
+  "[Proposal] Fetch Datasets Complete",
+  props<{ datasets: Dataset[] }>()
+);
+export const fetchProposalDatasetsFailedAction = createAction(
+  "[Proposal] Fetch Datasets Failed"
+);
 
-export class SelectProposalAction implements Action {
-  type = SELECT_PROPOSAL;
+export const fetchProposalDatasetsCountAction = createAction(
+  "[Proposal] Fetch Datasets Count",
+  props<{ proposalId: string }>()
+);
+export const fetchProposalDatasetsCountCompleteAction = createAction(
+  "[Proposal] Fetch Datasets Count Complete",
+  props<{ count: number }>()
+);
+export const fetchProposalDatasetsCountFailedAction = createAction(
+  "[Proposal] Fetch Datasets Count Failed"
+);
 
-  constructor(readonly proposalId: string) {}
-}
+export const addAttachmentAction = createAction(
+  "[Proposal] Add Attachment",
+  props<{ attachment: Attachment }>()
+);
+export const addAttachmentCompleteAction = createAction(
+  "[Proposal] Add Attachment Complete",
+  props<{ attachment: Attachment }>()
+);
+export const addAttachmentFailedAction = createAction(
+  "[Proposal] Add Attachment Failed"
+);
 
-export class FetchProposalsAction implements Action {
-  type = FETCH_PROPOSALS;
-}
+export const updateAttachmentCaptionAction = createAction(
+  "[Proposal] Update Attachment Caption",
+  props<{ proposalId: string; attachmentId: string; caption: string }>()
+);
+export const updateAttachmentCaptionCompleteAction = createAction(
+  "[Proposal] Update Attachment Caption Complete",
+  props<{ attachment: Attachment }>()
+);
+export const updateAttachmentCaptionFailedAction = createAction(
+  "[Proposal] Update Attachment Caption Failed"
+);
 
-export class FetchProposalsCompleteAction implements Action {
-  type = FETCH_PROPOSALS_COMPLETE;
+export const removeAttachmentAction = createAction(
+  "[Proposal] Remove Attachment",
+  props<{ proposalId: string; attachmentId: string }>()
+);
+export const removeAttachmentCompleteAction = createAction(
+  "[Proposal] Remove Attachment Complete",
+  props<{ attachmentId: string }>()
+);
+export const removeAttachmentFailedAction = createAction(
+  "[Proposal] Remove Attachment Failed"
+);
 
-  constructor(readonly proposals: Proposal[]) {}
-}
+export const prefillFiltersAction = createAction(
+  "[Proposal] Prefill Filters",
+  props<{ values: Partial<ProposalFilters> }>()
+);
 
-export class FetchProposalsFailedAction implements Action {
-  type = FETCH_PROPOSALS_FAILED;
-}
+export const setTextFilterAction = createAction(
+  "[Proposal] Set Text Filter",
+  props<{ text: string }>()
+);
+export const setDateRangeFilterAction = createAction(
+  "[Proposal] Set Date Range Filter",
+  props<{ begin: string; end: string }>()
+);
 
-export class FetchProposalAction implements Action {
-  type = FETCH_PROPOSAL;
+export const clearFacetsAction = createAction("[Proposal] Clear Facets");
 
-  constructor(readonly proposalId: string) {}
-}
+export const changePageAction = createAction(
+  "[Proposal] Change Page",
+  props<{ page: number; limit: number }>()
+);
+export const changeDatasetsPageAction = createAction(
+  "[Proposal] Change Datasets Page",
+  props<{ page: number; limit: number }>()
+);
 
-export class FetchProposalCompleteAction implements Action {
-  type = FETCH_PROPOSAL_COMPLETE;
+export const sortByColumnAction = createAction(
+  "[Proposal] Sort By Column",
+  props<{ column: string; direction: string }>()
+);
 
-  constructor(readonly proposal: Proposal) {}
-}
-
-export class FetchProposalFailedAction implements Action {
-  type = FETCH_PROPOSAL_FAILED;
-}
-
-export class FetchDatasetsForProposalAction implements Action {
-  type = FETCH_DATASETS_FOR_PROPOSAL;
-
-  constructor(readonly proposalId: string) {}
-}
-
-export class FetchDatasetsForProposalCompleteAction implements Action {
-  type = FETCH_DATASETS_FOR_PROPOSAL_COMPLETE;
-
-  constructor(readonly datasets: Dataset[]) {}
-}
-
-export class FetchDatasetsForProposalFailedAction implements Action {
-  type = FETCH_DATASETS_FOR_PROPOSAL_FAILED;
-}
-
-export type FetchProposalsOutcomeAction =
-  | FetchProposalsCompleteAction
-  | FetchProposalsFailedAction;
-
-export type FetchProposalOutcomeAction =
-  | FetchProposalCompleteAction
-  | FetchProposalFailedAction;
-
-export type FetchDatasetsForProposalOutcomeAction =
-  | FetchDatasetsForProposalCompleteAction
-  | FetchDatasetsForProposalFailedAction;
-
-export type ProposalsAction =
-  | SelectProposalAction
-  | FetchProposalsAction
-  | FetchProposalsOutcomeAction
-  | FetchProposalAction
-  | FetchProposalOutcomeAction
-  | FetchDatasetsForProposalAction
-  | FetchDatasetsForProposalOutcomeAction;
+export const clearProposalsStateAction = createAction("[Proposal] Clear State");

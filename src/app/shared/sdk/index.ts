@@ -55,17 +55,18 @@ import { DerivedDatasetApi } from './services/custom/DerivedDataset';
 import { SampleApi } from './services/custom/Sample';
 import { ProposalApi } from './services/custom/Proposal';
 import { PublishedDataApi } from './services/custom/PublishedData';
-import { DatasetLifecycleApi } from './services/custom/DatasetLifecycle';
 import { DatablockApi } from './services/custom/Datablock';
-import { AccessUserApi } from './services/custom/AccessUser';
-import { AccessGroupApi } from './services/custom/AccessGroup';
 import { UserCredentialApi } from './services/custom/UserCredential';
 import { UserIdentityApi } from './services/custom/UserIdentity';
 import { ApplicationCredentialApi } from './services/custom/ApplicationCredential';
 import { PolicyApi } from './services/custom/Policy';
 import { JobApi } from './services/custom/Job';
-import { DatasetAttachmentApi } from './services/custom/DatasetAttachment';
+import { ShareGroupApi } from './services/custom/ShareGroup';
 import { OrigDatablockApi } from './services/custom/OrigDatablock';
+import { LogbookApi } from './services/custom/Logbook';
+import { AttachmentApi } from './services/custom/Attachment';
+import { UserSettingApi } from './services/custom/UserSetting';
+import { InstrumentApi } from './services/custom/Instrument';
 /**
 * @module SDKBrowserModule
 * @description
@@ -103,17 +104,18 @@ export class SDKBrowserModule {
         SampleApi,
         ProposalApi,
         PublishedDataApi,
-        DatasetLifecycleApi,
         DatablockApi,
-        AccessUserApi,
-        AccessGroupApi,
         UserCredentialApi,
         UserIdentityApi,
         ApplicationCredentialApi,
         PolicyApi,
         JobApi,
-        DatasetAttachmentApi,
+        ShareGroupApi,
         OrigDatablockApi,
+        LogbookApi,
+        AttachmentApi,
+        UserSettingApi,
+        InstrumentApi,
         internalStorageProvider,
         { provide: SDKStorage, useClass: StorageBrowser },
         { provide: SocketDriver, useClass: SocketBrowser }

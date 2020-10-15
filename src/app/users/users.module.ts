@@ -1,34 +1,45 @@
+import { UserEffects } from "./../state-management/effects/user.effects";
+import { EffectsModule } from "@ngrx/effects";
 import { ADAuthService } from "./adauth.service";
 import { CommonModule } from "@angular/common";
 import { FlexLayoutModule } from "@angular/flex-layout";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { LoginComponent } from "users/login/login.component";
-import { LoginService } from "./login.service";
 import { NgModule } from "@angular/core";
 import { SharedCatanieModule } from "shared/shared.module";
 import { StoreModule } from "@ngrx/store";
-import { UserDetailsComponent } from "users/user-details/user-details.component";
 import { UserSettingsComponent } from "users/user-settings/user-settings.component";
 import { userReducer } from "state-management/reducers/user.reducer";
-import {
-  MatCardModule,
-  MatCheckboxModule,
-  MatGridListModule
-} from "@angular/material";
+import { MatButtonModule } from "@angular/material/button";
+import { MatCardModule } from "@angular/material/card";
+import { MatCheckboxModule } from "@angular/material/checkbox";
+import { MatDialogModule } from "@angular/material/dialog";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatGridListModule } from "@angular/material/grid-list";
+import { MatIconModule } from "@angular/material/icon";
+import { MatInputModule } from "@angular/material/input";
+import { PrivacyDialogComponent } from "./privacy-dialog/privacy-dialog.component";
 
 @NgModule({
   imports: [
     CommonModule,
+    EffectsModule.forFeature([UserEffects]),
     FlexLayoutModule,
     FormsModule,
+    MatButtonModule,
     MatCardModule,
     MatCheckboxModule,
+    MatDialogModule,
+    MatFormFieldModule,
     MatGridListModule,
+    MatIconModule,
+    MatInputModule,
     ReactiveFormsModule,
     SharedCatanieModule,
     StoreModule.forFeature("users", userReducer)
   ],
-  declarations: [LoginComponent, UserDetailsComponent, UserSettingsComponent],
-  providers: [ADAuthService, LoginService]
+  declarations: [LoginComponent, UserSettingsComponent, PrivacyDialogComponent],
+  entryComponents: [PrivacyDialogComponent],
+  providers: [ADAuthService]
 })
 export class UsersModule {}

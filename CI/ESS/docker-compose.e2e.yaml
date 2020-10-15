@@ -1,0 +1,34 @@
+version: "3.2"
+services:
+  mongodb:
+    image: "bitnami/mongodb:latest"
+    volumes:
+      - "mongodb_data:/bitnami"
+  scichat-loopback:
+    image: "dacat/scichat-loopback:e2e"
+    command: ["./wait-for-it.sh", "mongodb:27017", "--", "npm", "start"]
+    environment: 
+      - SYNAPSE_BOT_NAME
+      - SYNAPSE_BOT_PASSWORD
+    depends_on:
+      - mongodb
+  catamel:
+    image: "dacat/catamel:latest"
+    environment: 
+      - SCICHAT_URL
+    depends_on:
+      - mongodb
+      - scichat-loopback
+  catanie:
+    image: "dacat/catanie:e2e"
+    command: ["./wait-for-it.sh", "catamel:3000", "--", "nginx", "-g", "daemon off;"]
+    depends_on:
+      - catamel
+  cypress:
+    image: "dacat/catanie:cypress"
+    command: ["./wait-for-it.sh", "catanie:80", "--", "npx", "cypress", "run"]
+    depends_on:
+      - catanie
+volumes:
+  mongodb_data:
+    driver: local

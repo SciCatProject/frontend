@@ -1,0 +1,38 @@
+<div fxLayout="row" fxLayout.lt-lg="column">
+  <div
+    fxFlex="14"
+    fxFlex.lt-xl="20"
+    *ngIf="appConfig.searchProposals; else spacer"
+  >
+    <proposal-filter
+      [hasAppliedFilters]="hasAppliedFilters$ | async"
+      [searchBarValue]="textFilter$ | async"
+      [clearSearchBar]="clearSearchBar"
+      [dateRangeValue]="dateRangeFilter$ | async"
+      (onClear)="onClear()"
+      (onSearchChange)="onTextSearchChange($event)"
+      (onDateChange)="onDateChange($event)"
+    ></proposal-filter>
+  </div>
+  <ng-template #spacer>
+    <div fxFlex="20" fxFlex.lt-xl="10"></div>
+  </ng-template>
+  <div fxFlex="63" fxFlex.lt-xl="80">
+    <app-table
+      [data]="tableData"
+      [columns]="tableColumns"
+      [paginate]="tablePaginate"
+      [currentPage]="currentPage$ | async"
+      [dataCount]="proposalsCount$ | async"
+      [dataPerPage]="proposalsPerPage$ | async"
+      (pageChange)="onPageChange($event)"
+      (sortChange)="onSortChange($event)"
+      (rowClick)="onRowClick($event)"
+    ></app-table>
+    <ng-template [ngIf]="tableData && tableData.length === 0">
+      <mat-card class="no-proposals-message">
+        <mat-icon>info</mat-icon> No proposals available.
+      </mat-card>
+    </ng-template>
+  </div>
+</div>

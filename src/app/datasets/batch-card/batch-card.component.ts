@@ -3,7 +3,7 @@ import { select, Store } from "@ngrx/store";
 import { map } from "rxjs/operators";
 
 import { getDatasetsInBatch } from "state-management/selectors/datasets.selectors";
-import { ClearBatchAction } from "state-management/actions/datasets.actions";
+import { clearBatchAction } from "state-management/actions/datasets.actions";
 
 @Component({
   selector: "batch-card",
@@ -17,7 +17,7 @@ export class BatchCardComponent {
 
   constructor(private store: Store<any>) {}
 
-  private clear(): void {
-    this.store.dispatch(new ClearBatchAction());
+  public clear(): void {
+    this.store.dispatch(clearBatchAction());
   }
 }

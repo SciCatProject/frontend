@@ -1,0 +1,28 @@
+@import "../../../theme.scss";
+
+.tab-content {
+  mat-card {
+    margin: 1em;
+
+    .about-header {
+      background-color: mat-color($primary, lighter);
+    }
+
+    mat-icon {
+      vertical-align: middle;
+    }
+
+    table {
+      td,
+      th {
+        padding: 0.3em;
+      }
+
+      th {
+        text-align: left;
+        vertical-align: top;
+        min-width: 15em;
+      }
+    }
+  }
+}

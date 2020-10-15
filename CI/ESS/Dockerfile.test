@@ -1,19 +1,27 @@
-FROM markadams/chromium-xvfb-js:8
+FROM node:12.6.0
 LABEL maintainer="gareth.murphy@esss.se"
 ENV http_proxy "http://192.168.1.1:8123"
 ENV https_proxy $http_proxy
 ENV no_proxy "localhost, 127.0.0.1"
 
-# Need git for npm install
-RUN apt-get update && apt-get install -y git
+RUN apt-get update && apt-get install -y git wget curl gnupg vim
+
+RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - && \
+  echo "deb http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google.list && \
+  apt-get update && \
+  apt-get install -y google-chrome-stable xvfb
+
+RUN apt update && apt install -y procps
+RUN apt clean
+
 
 RUN npm config set proxy  $http_proxy
 RUN npm config set https-proxy  $http_proxy
 RUN npm config set registry http://registry.npmjs.org/
 RUN npm config set strict-ssl false
-COPY package.json /usr/src/app/package.json
-RUN npm install
-COPY . /usr/src/app
-COPY CI/ESS/karma.conf.js /project/catanie/
+RUN npm install @angular/cli -g
+COPY package*.json /usr/src/app/
 WORKDIR /usr/src/app
-# RUN npm run -- ng test --watch false --single-run true
+RUN npm ci
+COPY . /usr/src/app
+#RUN  ng test --watch=false --browsers=ChromeHeadless

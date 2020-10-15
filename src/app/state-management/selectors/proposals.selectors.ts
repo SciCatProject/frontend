@@ -1,43 +1,116 @@
 import { createSelector, createFeatureSelector } from "@ngrx/store";
 import { ProposalsState } from "../state/proposals.store";
-// import { getDatasets } from './datasets.selectors';
 
 const getProposalsState = createFeatureSelector<ProposalsState>("proposals");
 
-const getProposals = createSelector(
+export const getProposals = createSelector(
   getProposalsState,
   state => state.proposals
 );
 
-const getDatasets = createSelector(getProposalsState, state => state.datasets);
-
-const getDatasetList = createSelector(getDatasets, datasets =>
-  Object.keys(datasets).map(id => datasets[id])
-);
-
-export const getHasFetched = createSelector(
+export const getCurrentProposal = createSelector(
   getProposalsState,
-  state => state.hasFetched
+  state => state.currentProposal
 );
 
-export const getProposalList = createSelector(getProposals, proposals =>
-  Object.keys(proposals).map(id => proposals[id])
+export const getCurrentAttachments = createSelector(
+  getCurrentProposal,
+  proposal => proposal.attachments
 );
 
-export const getSelectedProposalId = createSelector(
+export const getProposalDatasets = createSelector(
   getProposalsState,
-  state => state.selectedId
+  state => state.datasets
 );
 
-export const getSelectedProposal = createSelector(
-  getProposals,
-  getSelectedProposalId,
-  (proposals, selectedId) => proposals[selectedId] || null
+export const getProposalsCount = createSelector(
+  getProposalsState,
+  state => state.proposalsCount
 );
 
-export const getSelectedProposalDatasets = createSelector(
-  getDatasetList,
-  getSelectedProposalId,
-  (datasets, proposalId) =>
-    datasets.filter(dataset => dataset.proposalId === proposalId)
+export const getDatasetsCount = createSelector(
+  getProposalsState,
+  state => state.datasetsCount
+);
+
+export const getHasPrefilledFilters = createSelector(
+  getProposalsState,
+  state => state.hasPrefilledFilters
+);
+
+export const getFilters = createSelector(
+  getProposalsState,
+  state => state.proposalFilters
+);
+
+export const getTextFilter = createSelector(
+  getFilters,
+  filters => filters.text
+);
+
+export const getDateRangeFilter = createSelector(
+  getFilters,
+  filters => filters.dateRange
+);
+
+export const getHasAppliedFilters = createSelector(
+  getFilters,
+  filters =>
+    filters.text !== "" ||
+    (filters.dateRange &&
+      (filters.dateRange.begin !== null || filters.dateRange.end !== null))
+);
+
+export const getDatasetFilters = createSelector(
+  getProposalsState,
+  state => state.datasetFilters
+);
+
+export const getPage = createSelector(getFilters, filters => {
+  const { skip, limit } = filters;
+  return skip / limit;
+});
+
+export const getDatasetsPage = createSelector(getDatasetFilters, filters => {
+  const { skip, limit } = filters;
+  return skip / limit;
+});
+
+export const getProposalsPerPage = createSelector(
+  getFilters,
+  filters => filters.limit
+);
+
+export const getDatasetsPerPage = createSelector(
+  getDatasetFilters,
+  filters => filters.limit
+);
+
+function restrictFilter(filter: object, allowedKeys?: string[]) {
+  function isNully(value: any) {
+    const hasLength = typeof value === "string" || Array.isArray(value);
+    return value == null || (hasLength && value.length === 0);
+  }
+
+  const keys = allowedKeys || Object.keys(filter);
+  return keys.reduce((obj, key) => {
+    const val = filter[key];
+    return isNully(val) ? obj : { ...obj, [key]: val };
+  }, {});
+}
+
+export const getFullqueryParams = createSelector(getFilters, filters => {
+  const { skip, limit, sortField, ...theRest } = filters;
+  const limits = { order: sortField, skip, limit };
+  const query = restrictFilter(theRest);
+  return { query: JSON.stringify(query), limits };
+});
+
+export const getDatasetsQueryParams = createSelector(
+  getDatasetFilters,
+  filters => {
+    const { text, skip, limit, sortField } = filters;
+    const limits = { order: sortField, skip, limit };
+    return { query: JSON.stringify({ text }), limits };
+  }
 );

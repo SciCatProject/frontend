@@ -1,24 +1,32 @@
 import {
   User,
   UserIdentity,
-  AccessGroup,
+  UserSetting,
   Job,
   Dataset,
   RawDataset,
   Proposal,
   Policy,
-  Sample
+  Sample,
+  Logbook,
+  PublishedData,
+  Attachment,
+  Instrument
 } from "shared/sdk/models";
 export {
   User,
   UserIdentity,
-  AccessGroup,
+  UserSetting,
   Job,
   Dataset,
   RawDataset,
   Proposal,
   Policy,
-  Sample
+  Sample,
+  Logbook,
+  PublishedData,
+  Attachment,
+  Instrument
 };
 
 import { DatasetInterface } from "shared/sdk";
@@ -29,6 +37,13 @@ export interface Settings {
   datasetCount: number;
   jobCount: number;
   darkTheme: false;
+}
+
+export interface TableColumn {
+  name: string;
+  order: number;
+  type: "standard" | "custom";
+  enabled: boolean;
 }
 
 export enum MessageType {
@@ -42,8 +57,18 @@ export class Message {
   duration: number;
 }
 
-export type ViewMode = "view" | "archive" | "retrieve";
-export enum JobViewMode { myJobs = "my jobs", allJobs = "all jobs"}
+export enum ArchViewMode {
+  all = "all",
+  archivable = "archivable",
+  retrievable = "retrievable",
+  work_in_progress = "work in progress",
+  system_error = "system error",
+  user_error = "user error"
+}
+export enum JobViewMode {
+  myJobs = "my jobs",
+  allJobs = "all jobs"
+}
 
 type ScientificConditionRelation =
   | "EQUAL_TO_NUMERIC"
@@ -55,9 +80,11 @@ export interface ScientificCondition {
   lhs: string;
   relation: ScientificConditionRelation;
   rhs: string | number;
+  unit: string;
 }
 
 export interface DatasetFilters {
+  modeToggle: ArchViewMode;
   text: string;
   ownerGroup: string[];
   type: string[];
@@ -67,15 +94,48 @@ export interface DatasetFilters {
   limit: number;
   keywords: string[];
   sortField: string;
-  mode: ViewMode;
+  mode: {};
   scientific: ScientificCondition[];
+  isPublished: boolean;
 }
 
 export interface SampleFilters {
+  text: string;
   sortField: string;
+  skip: number;
+  limit: number;
+}
+
+export interface PublishedDataFilters {
+  sortField: string;
+  skip: number;
+  limit: number;
 }
 
 export interface PolicyFilters {
+  sortField: string;
+  skip: number;
+  limit: number;
+}
+
+export interface LogbookFilters {
+  textSearch: string;
+  showBotMessages: boolean;
+  showUserMessages: boolean;
+  showImages: boolean;
+  sortField: string;
+  skip: number;
+  limit: number;
+}
+
+export interface JobFilters {
+  mode: object;
+  sortField: string;
+  skip: number;
+  limit: number;
+}
+
+export interface InstrumentFilters {
   sortField: string;
   skip: number;
   limit: number;

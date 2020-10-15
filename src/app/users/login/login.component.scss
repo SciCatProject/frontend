@@ -1,0 +1,38 @@
+.login-container {
+  padding-top: 10em;
+
+  mat-card {
+    max-width: 300px;
+    background-color: rgba(255, 255, 255, 0.8);
+
+    .facility-logo {
+      margin: 2em 0;
+
+      img {
+        max-width: 200px;
+      }
+    }
+
+    mat-card-content {
+      mat-form-field {
+        width: 100%;
+
+        mat-icon {
+          vertical-align: middle;
+        }
+      }
+
+      .privacy-notice {
+        margin-top: 1em;
+      }
+
+      .login-button {
+        margin-top: 1em;
+      }
+
+      mat-checkbox {
+        margin-left: 1em;
+      }
+    }
+  }
+}

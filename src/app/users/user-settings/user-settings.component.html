@@ -1,4 +1,49 @@
 <ng-container *ngIf="user">
-    <h1>{{user['username']}} Settings</h1>
-    <config-form *ngIf="settings$" [sourceType]="'UserSettings'" [source]="settings$ | async" (onSubmit)="onSubmit($event)"></config-form>
+  <h1>{{ displayName }} Settings</h1>
+  <mat-card>
+    <img src="{{ profileImage }}" height="100px" alt="profile photo" />
+    <table>
+      <tr *ngIf="displayName as value">
+        <th><mat-icon> person </mat-icon> Name</th>
+        <td>{{ value }}</td>
+      </tr>
+      <tr *ngIf="user.email as value">
+        <th><mat-icon> mail </mat-icon> Email</th>
+        <td>{{ value }}</td>
+      </tr>
+      <tr *ngIf="id as value">
+        <th><mat-icon> person </mat-icon> Id</th>
+        <td>{{ value }}</td>
+      </tr>
+      <tr *ngIf="catamelToken as value">
+        <th><mat-icon> vpn_key </mat-icon> Catamel Token</th>
+        <td>
+          <span id="token" contenteditable="false">
+            {{ value }}
+          </span>
+          <button mat-icon-button (click)="onCopy(value)">
+            <mat-icon>post_add</mat-icon>
+          </button>
+        </td>
+      </tr>
+      <tr *ngIf="datasetCount as value">
+        <th><mat-icon> save </mat-icon> Dataset Count</th>
+        <td>{{ value }}</td>
+      </tr>
+      <tr *ngIf="jobCount as value">
+        <th><mat-icon> transfer_within_a_station </mat-icon> Job Count</th>
+        <td>{{ value }}</td>
+      </tr>
+      <tr *ngIf="groups as value">
+        <th><mat-icon> group_work </mat-icon> Groups</th>
+        <td>
+          <ul>
+            <li *ngFor="let group of value">
+              {{ group }}
+            </li>
+          </ul>
+        </td>
+      </tr>
+    </table>
+  </mat-card>
 </ng-container>

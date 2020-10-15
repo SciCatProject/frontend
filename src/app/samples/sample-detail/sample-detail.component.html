@@ -1,29 +1,136 @@
-<div class=sample-detail *ngIf="(sample$ | async) as sample">
-  <mat-card style="margin: 1em">
-    <div class="details">
-      Sample Details
-      <table>
-        <tr *ngIf="sample.owner as value">
-          <th><i class="material-icons" style="vertical-align: middle"> person </i>Sample Owner</th>
-          <td>{{ value }}</td>
-        </tr>
-        <tr *ngIf="sample.description as value">
-          <th><i class="material-icons" style="vertical-align: middle"> description </i>Description</th>
-          <td>{{ value }}</td>
-        </tr>
-        <tr *ngIf="sample.ownerGroup as value">
-          <th><i class="material-icons" style="vertical-align: middle"> group </i>Owner Group</th>
-          <td>{{ value }}</td>
-        </tr>
-        <tr *ngIf="sample.createdAt as value">
-          <th><i class="material-icons" style="vertical-align: middle"> event </i>Creation Time</th>
-          <td>{{ value | date: 'yyyy/MM/dd HH:mm'}}</td>
-        </tr>
-      </table>
-      <div *ngIf="sample.sampleCharacteristics as value">
-        <h3>Sample Characteristics</h3>
-        <pre>{{ value | json}}</pre>
+<mat-tab-group *ngIf="sample">
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <mat-icon> details </mat-icon> Details
+    </ng-template>
+
+    <div fxLayout="row" fxLayout.xs="column">
+      <div fxFlex="80%">
+        <mat-card>
+          <mat-card-header class="about-header">
+            Sample Details
+          </mat-card-header>
+          <div class="details">
+            <table>
+              <tr *ngIf="sample.description as value">
+                <th><mat-icon> description </mat-icon>Description</th>
+                <td>{{ value }}</td>
+              </tr>
+              <tr *ngIf="sample.createdAt as value">
+                <th><mat-icon> event </mat-icon>Creation Time</th>
+                <td>{{ value | date: "yyyy-MM-dd HH:mm" }}</td>
+              </tr>
+              <tr *ngIf="sample.owner as value">
+                <th><mat-icon> person </mat-icon>Sample Owner</th>
+                <td>{{ value }}</td>
+              </tr>
+              <tr *ngIf="sample.ownerGroup as value">
+                <th><mat-icon> group </mat-icon>Owner Group</th>
+                <td>{{ value }}</td>
+              </tr>
+              <tr *ngIf="sample.sampleId as value">
+                <th><mat-icon> fingerprint </mat-icon>Sample ID</th>
+                <td>{{ value }}</td>
+              </tr>
+            </table>
+          </div>
+        </mat-card>
+
+        <mat-card *ngIf="sample.sampleCharacteristics as value">
+          <mat-card-header class="characteristics-header">
+            Characteristics
+          </mat-card-header>
+
+          <ng-template
+            [ngIf]="appConfig.tableSciDataEnabled"
+            [ngIfElse]="jsonView"
+          >
+            <mat-tab-group>
+              <mat-tab>
+                <ng-template mat-tab-label>
+                  <mat-icon> list </mat-icon> View
+                </ng-template>
+
+                <metadata-view [metadata]="value"></metadata-view>
+              </mat-tab>
+              <mat-tab>
+                <ng-template mat-tab-label>
+                  <mat-icon> edit </mat-icon> Edit
+                </ng-template>
+
+                <metadata-edit
+                  [metadata]="value"
+                  (save)="onSaveCharacteristics($event)"
+                ></metadata-edit>
+              </mat-tab>
+            </mat-tab-group>
+          </ng-template>
+
+          <ng-template #jsonView>
+            <ngx-json-viewer
+              [json]="value"
+              [expanded]="false"
+            ></ngx-json-viewer>
+          </ng-template>
+        </mat-card>
+
+        <mat-card *ngIf="appConfig.jsonMetadataEnabled">
+          <button mat-stroked-button (click)="show = !show">
+            {{ show ? "Hide MetaData" : "Show Metadata" }}
+          </button>
+          <br />
+          <div *ngIf="show">
+            <ngx-json-viewer
+              [json]="sample"
+              [expanded]="false"
+            ></ngx-json-viewer>
+          </div>
+        </mat-card>
+      </div>
+
+      <div fxFlex="30%" *ngIf="attachments$ | async as attachments">
+        <ng-container *ngFor="let attachment of attachments">
+          <mat-card>
+            <img mat-card-image src="{{ attachment.thumbnail }}" />
+            <p>{{ attachment.caption }}</p>
+          </mat-card>
+        </ng-container>
       </div>
     </div>
-  </mat-card>
-</div>
+  </mat-tab>
+
+  <mat-tab *ngIf="attachments$ | async as attachments">
+    <ng-template mat-tab-label>
+      <mat-icon> insert_photo </mat-icon> Attachments
+    </ng-template>
+
+    <div class="file-uploader">
+      <app-file-uploader
+        [attachments]="attachments"
+        (filePicked)="onFilePicked($event)"
+        (readEnd)="onReadEnd($event)"
+        (submitCaption)="updateCaption($event)"
+        (deleteAttachment)="deleteAttachment($event)"
+      ></app-file-uploader>
+    </div>
+  </mat-tab>
+
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <mat-icon> folder </mat-icon> Datasets
+    </ng-template>
+
+    <div class="datasets-table">
+      <app-table
+        [data]="tableData"
+        [columns]="tableColumns"
+        [paginate]="tablePaginate"
+        [currentPage]="datasetsPage$ | async"
+        [dataCount]="datasetsCount$ | async"
+        [dataPerPage]="datasetsPerPage$ | async"
+        (pageChange)="onPageChange($event)"
+        (rowClick)="onRowClick($event)"
+      ></app-table>
+    </div>
+  </mat-tab>
+</mat-tab-group>

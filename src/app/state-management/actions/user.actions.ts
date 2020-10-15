@@ -1,145 +1,139 @@
-import { Action } from "@ngrx/store";
-import { Message, User, Settings } from "../models";
+import { createAction, props } from "@ngrx/store";
+import { User, AccessToken, UserIdentity, UserSetting } from "shared/sdk";
+import { Message, Settings } from "state-management/models";
 
-export const LOGIN = "[User] Login";
-export const LOGIN_COMPLETE = "[User] Login Complete";
-export const LOGIN_FAILED = "[User] Login Failed";
+export const loginAction = createAction(
+  "[User] Login",
+  props<{ form: { username: string; password: string; rememberMe: boolean } }>()
+);
+export const loginCompleteAction = createAction(
+  "[User] Login Complete",
+  props<{ user: User; accountType: string }>()
+);
+export const loginFailedAction = createAction("[User] Login Failed");
 
-export const LOGOUT = "[User] Logout";
-export const LOGOUT_COMPLETE = "[User] Logout Complete";
+export const activeDirLoginAction = createAction(
+  "[User] Active Directory Login",
+  props<{ username: string; password: string; rememberMe: boolean }>()
+);
+export const activeDirLoginSuccessAction = createAction(
+  "[User] Active Directory Login Success"
+);
+export const activeDirLoginFailedAction = createAction(
+  "[User] Active Directory Login Failed",
+  props<{ username: string; password: string; rememberMe: boolean }>()
+);
 
-export const AD_LOGIN = "[User] Active Directory Login";
-export const AD_LOGIN_COMPLETE = "[User] Active Directory Login Complete";
+export const funcLoginAction = createAction(
+  "[User] Functional Login",
+  props<{ username: string; password: string; rememberMe: boolean }>()
+);
+export const funcLoginSuccessAction = createAction(
+  "[User] Functional Login Success"
+);
+export const funcLoginFailedAction = createAction(
+  "[User] Functional Login Failed"
+);
 
-export const RETRIEVE_USER = "[User] Retrieve User";
-export const RETRIEVE_USER_COMPLETE = "[User] Retrieve User Complete";
-export const RETRIEVE_USER_FAILED = "[User] Retrieve User Failed";
+export const fetchUserAction = createAction(
+  "[User] Fetch User",
+  props<{ adLoginResponse: any }>()
+);
+export const fetchUserCompleteAction = createAction(
+  "[User] Fetch User Complete"
+);
+export const fetchUserFailedAction = createAction("[User] Fetch User Failed");
 
-export const RETRIEVE_USER_IDENTITY = "[UserIdentity] Retrieve User Identity";
-export const RETRIEVE_USER_IDENTITY_COMPLETE =
-  "[UserIdentity] Retrieve User Identity Complete";
-export const RETRIEVE_USER_IDENTITY_FAILED =
-  "[UserIdentity] Retrieve User Identity Failed";
+export const fetchCurrentUserAction = createAction("[User] Fetch Current User");
+export const fetchCurrentUserCompleteAction = createAction(
+  "[User] Fetch Current User Complete",
+  props<{ user: User }>()
+);
+export const fetchCurrentUserFailedAction = createAction(
+  "[User] Fetch Current User Failed"
+);
 
-export const ADD_GROUPS = "[User] Add Groups";
-export const ADD_GROUPS_FAILED = "[User] Add Groups Failed";
+export const fetchUserIdentityAction = createAction(
+  "[User] Fetch User Identity",
+  props<{ id: string }>()
+);
+export const fetchUserIdentityCompleteAction = createAction(
+  "[User] Fetch User Identity Complete",
+  props<{ userIdentity: UserIdentity }>()
+);
+export const fetchUserIdentityFailedAction = createAction(
+  "[User] Fetch User Identity Failed"
+);
 
-export const ACCESS_USER_EMAIL = "[User] Access User Email";
-export const ACCESS_USER_EMAIL_COMPLETE = "[User] Access User Email Complete";
-export const ACCESS_USER_EMAIL_FAILED = "[User] Access User Email Failed";
+export const fetchUserSettingsAction = createAction(
+  "[User] Fetch User Settings",
+  props<{ id: string }>()
+);
+export const fetchUserSettingsCompleteAction = createAction(
+  "[User] Fetch User Settings Complete",
+  props<{ userSettings: UserSetting }>()
+);
+export const fetchUserSettingsFailedAction = createAction(
+  "[User] Fetch User Settings Failed"
+);
 
-export const SHOW_MESSAGE = "[User] Message Show";
-export const CLEAR_MESSAGE = "[User] Message Clear";
-export const SAVE_SETTINGS = "[User] Settings Save";
+export const updateUserSettingsAction = createAction(
+  "[User] Update User Settings",
+  props<{ property: object }>()
+);
+export const updateUserSettingsCompleteAction = createAction(
+  "[User] Update User Settings Complete",
+  props<{ userSettings: UserSetting }>()
+);
+export const updateUserSettingsFailedAction = createAction(
+  "[User] Update User Settings Failed"
+);
 
-export class LoginAction implements Action {
-  readonly type = LOGIN;
-  constructor(
-    public form: { username: string; password: string; rememberMe: boolean }
-  ) {}
-}
+export const fetchCatamelTokenAction = createAction(
+  "[User] Fetch Catamel Token"
+);
+export const fetchCatamelTokenCompleteAction = createAction(
+  "[User] Fetch Catamel Token Complete",
+  props<{ token: AccessToken }>()
+);
+export const fetchCatamelTokenFailedAction = createAction(
+  "[User] Fetch Catamel Token Failed"
+);
 
-export class ActiveDirLoginAction implements Action {
-  readonly type = AD_LOGIN;
-  constructor(
-    public form: { username: string; password: string; rememberMe: boolean }
-  ) {}
-}
+export const logoutAction = createAction("[User] Logout");
+export const logoutCompleteAction = createAction("[User] Logout Complete");
+export const logoutFailedAction = createAction("[User] Logout Failed");
 
-export class LoginCompleteAction implements Action {
-  readonly type = LOGIN_COMPLETE;
-  constructor(readonly user: User, readonly accountType: string) {}
-}
+export const addCustomColumnsAction = createAction(
+  "[User] Add Custom Columns",
+  props<{ names: string[] }>()
+);
+export const addCustomColumnsCompleteAction = createAction(
+  "[User] Add Custom Columns Complete"
+);
 
-export class LoginFailedAction implements Action {
-  readonly type = LOGIN_FAILED;
-  constructor() {}
-}
+export const selectColumnAction = createAction(
+  "[User] Select Column",
+  props<{ name: string; columnType: "standard" | "custom" }>()
+);
+export const deselectColumnAction = createAction(
+  "[User] Deselect Column",
+  props<{ name: string; columnType: "standard" | "custom" }>()
+);
+export const deselectAllCustomColumnsAction = createAction(
+  "[User] Deselect All Custom Columns"
+);
 
-export class LogoutAction implements Action {
-  readonly type = LOGOUT;
-}
+export const showMessageAction = createAction(
+  "[User] Show Message",
+  props<{ message: Message }>()
+);
+export const clearMessageAction = createAction("[User] Clear Message");
 
-export class LogoutCompleteAction implements Action {
-  readonly type = LOGOUT_COMPLETE;
-}
+export const saveSettingsAction = createAction(
+  "[User] Save Settings",
+  props<{ settings: Settings }>()
+);
 
-export class RetrieveUserAction implements Action {
-  readonly type = RETRIEVE_USER;
-}
-
-export class RetrieveUserCompleteAction implements Action {
-  readonly type = RETRIEVE_USER_COMPLETE;
-  constructor(readonly user: User) {}
-}
-
-export class RetrieveUserFailedAction implements Action {
-  readonly type = RETRIEVE_USER_FAILED;
-  constructor(readonly error: Error) {}
-}
-
-/*
-export class RetrieveUserIdentityAction implements Action {
-  readonly type = RETRIEVE_USER_IDENTITY;
-}
-
-export class RetrieveUserIdentityCompleteAction implements Action {
-  readonly type = RETRIEVE_USER_IDENTITY_COMPLETE;
-  constructor(readonly userIdentity: UserIdentity) {}
-}
-
-export class RetrieveUserIdentityFailedAction implements Action {
-  readonly type = RETRIEVE_USER_IDENTITY_FAILED;
-  constructor(readonly error: Error) {}
-}
-
-export class AccessUserEmailAction implements Action {
-  readonly type = ACCESS_USER_EMAIL;
-  constructor(readonly userId: string) {}
-}
-
-export class AccessUserEmailCompleteAction implements Action {
-  readonly type = ACCESS_USER_EMAIL_COMPLETE;
-  constructor(readonly email: string) {}
-}
-
-export class AccessUserEmailFailedAction implements Action {
-  readonly type = ACCESS_USER_EMAIL_FAILED;
-  constructor(readonly error: Error) {}
-}
-*/
-
-export class ShowMessageAction implements Action {
-  readonly type = SHOW_MESSAGE;
-  constructor(readonly message: Message) {}
-}
-
-export class ClearMessageAction implements Action {
-  readonly type = CLEAR_MESSAGE;
-}
-
-export class SaveSettingsAction implements Action {
-  readonly type = SAVE_SETTINGS;
-  constructor(readonly values: Settings) {}
-}
-
-export type Actions =
-  | LoginAction
-  | LogoutCompleteAction
-  | LoginFailedAction
-  | LogoutAction
-  | LogoutCompleteAction
-  | RetrieveUserAction
-  | RetrieveUserCompleteAction
-  | RetrieveUserFailedAction
-  // | RetrieveUserIdentityAction
-  // | RetrieveUserIdentityCompleteAction
-  // | RetrieveUserIdentityFailedAction
-  | ActiveDirLoginAction
-  // | AccessUserEmailAction
-  // | AccessUserEmailCompleteAction
-  // | AccessUserEmailFailedAction
-  | ShowMessageAction
-  | ClearMessageAction
-  | SaveSettingsAction;
-// AddGroupsAction
+export const loadingAction = createAction("[User] Loading");
+export const loadingCompleteAction = createAction("[User] Loading Complete");

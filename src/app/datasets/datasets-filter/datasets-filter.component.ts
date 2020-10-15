@@ -1,7 +1,9 @@
 import { APP_CONFIG, AppConfig } from "app-config.module";
 import { Component, Inject } from "@angular/core";
-import { MatDatepickerInputEvent, MatDialog } from "@angular/material";
-
+import { MatDatepickerInputEvent } from "@angular/material/datepicker";
+import { MatDialog } from "@angular/material/dialog";
+import * as moment from "moment";
+import "moment-timezone";
 import { select, Store } from "@ngrx/store";
 import {
   debounceTime,
@@ -22,39 +24,45 @@ import {
   getLocationFilter,
   getScientificConditions,
   getSearchTerms,
-  getKeywordsTerms,
   getTypeFacetCounts,
-  getTypeFilter
+  getTypeFilter,
+  getKeywordsTerms
 } from "state-management/selectors/datasets.selectors";
 
 import {
-  AddGroupFilterAction,
-  AddKeywordFilterAction,
-  AddLocationFilterAction,
-  AddScientificConditionAction,
-  AddTypeFilterAction,
-  ClearFacetsAction,
-  RemoveGroupFilterAction,
-  RemoveKeywordFilterAction,
-  RemoveLocationFilterAction,
-  RemoveScientificConditionAction,
-  RemoveTypeFilterAction,
-  SetDateRangeFilterAction,
-  SetSearchTermsAction,
-  SetTextFilterAction
+  setTextFilterAction,
+  addKeywordFilterAction,
+  setSearchTermsAction,
+  addLocationFilterAction,
+  removeLocationFilterAction,
+  addGroupFilterAction,
+  removeGroupFilterAction,
+  removeKeywordFilterAction,
+  addTypeFilterAction,
+  removeTypeFilterAction,
+  setDateRangeFilterAction,
+  clearFacetsAction,
+  addScientificConditionAction,
+  removeScientificConditionAction
 } from "state-management/actions/datasets.actions";
 import { ScientificConditionDialogComponent } from "datasets/scientific-condition-dialog/scientific-condition-dialog.component";
 import { combineLatest, BehaviorSubject, Observable } from "rxjs";
+import {
+  selectColumnAction,
+  deselectColumnAction,
+  deselectAllCustomColumnsAction
+} from "state-management/actions/user.actions";
+import { ScientificCondition } from "state-management/models";
 
-type DateRange = {
+export interface DateRange {
   begin: Date;
   end: Date;
-};
+}
 
 @Component({
   selector: "datasets-filter",
   templateUrl: "datasets-filter.component.html",
-  styleUrls: ["datasets-filter.component.css"]
+  styleUrls: ["datasets-filter.component.scss"]
 })
 export class DatasetsFilterComponent {
   locationFacetCounts$ = this.store.pipe(select(getLocationFacetCounts));
@@ -76,23 +84,7 @@ export class DatasetsFilterComponent {
   typeInput$ = new BehaviorSubject<string>("");
   keywordsInput$ = new BehaviorSubject<string>("");
 
-  createSuggestionObserver(
-    facetCounts$: Observable<FacetCount[]>,
-    input$: BehaviorSubject<string>,
-    currentFilters$: Observable<string[]>
-  ): Observable<FacetCount[]> {
-    return combineLatest(facetCounts$, input$, currentFilters$).pipe(
-      map(([counts, filterString, currentFilters]) => {
-        if (!counts) return [];
-        return counts.filter(
-          count =>
-            typeof count._id === "string" &&
-            count._id.toLowerCase().includes(filterString.toLowerCase()) &&
-            currentFilters.indexOf(count._id) < 0
-        );
-      })
-    );
-  }
+  clearSearchBar = false;
   groupSuggestions$ = this.createSuggestionObserver(
     this.groupFacetCounts$,
     this.groupInput$,
@@ -126,7 +118,7 @@ export class DatasetsFilterComponent {
       distinctUntilChanged()
     )
     .subscribe(terms => {
-      this.store.dispatch(new SetTextFilterAction(terms));
+      this.store.dispatch(setTextFilterAction({ text: terms }));
     });
 
   private keywordSubscription = this.keywordsTerms$
@@ -136,14 +128,28 @@ export class DatasetsFilterComponent {
       distinctUntilChanged()
     )
     .subscribe(terms => {
-      this.store.dispatch(new AddKeywordFilterAction(terms));
+      this.store.dispatch(addKeywordFilterAction({ keyword: terms }));
     });
 
-  constructor(
-    public dialog: MatDialog,
-    private store: Store<any>,
-    @Inject(APP_CONFIG) public appConfig: AppConfig
-  ) {}
+  createSuggestionObserver(
+    facetCounts$: Observable<FacetCount[]>,
+    input$: BehaviorSubject<string>,
+    currentFilters$: Observable<string[]>
+  ): Observable<FacetCount[]> {
+    return combineLatest(facetCounts$, input$, currentFilters$).pipe(
+      map(([counts, filterString, currentFilters]) => {
+        if (!counts) {
+          return [];
+        }
+        return counts.filter(
+          count =>
+            typeof count._id === "string" &&
+            count._id.toLowerCase().includes(filterString.toLowerCase()) &&
+            currentFilters.indexOf(count._id) < 0
+        );
+      })
+    );
+  }
 
   getFacetId(facetCount: FacetCount, fallback: string = null): string {
     const id = facetCount._id;
@@ -155,68 +161,96 @@ export class DatasetsFilterComponent {
   }
 
   textSearchChanged(terms: string) {
-    this.store.dispatch(new SetSearchTermsAction(terms));
+    this.clearSearchBar = false;
+    this.store.dispatch(setSearchTermsAction({ terms }));
   }
 
   locationSelected(location: string | null) {
-    this.store.dispatch(new AddLocationFilterAction(location || ""));
+    const loc = location || "";
+    this.store.dispatch(addLocationFilterAction({ location: loc }));
     this.locationInput$.next("");
   }
 
   locationRemoved(location: string) {
-    this.store.dispatch(new RemoveLocationFilterAction(location));
+    this.store.dispatch(removeLocationFilterAction({ location }));
   }
 
   groupSelected(group: string) {
-    this.store.dispatch(new AddGroupFilterAction(group));
+    this.store.dispatch(addGroupFilterAction({ group }));
     this.groupInput$.next("");
   }
 
   groupRemoved(group: string) {
-    this.store.dispatch(new RemoveGroupFilterAction(group));
+    this.store.dispatch(removeGroupFilterAction({ group }));
   }
 
   keywordSelected(keyword: string) {
-    this.store.dispatch(new AddKeywordFilterAction(keyword));
+    this.store.dispatch(addKeywordFilterAction({ keyword }));
     this.keywordsInput$.next("");
   }
 
   keywordRemoved(keyword: string) {
-    this.store.dispatch(new RemoveKeywordFilterAction(keyword));
+    this.store.dispatch(removeKeywordFilterAction({ keyword }));
   }
 
   typeSelected(type: string) {
-    this.store.dispatch(new AddTypeFilterAction(type));
+    this.store.dispatch(addTypeFilterAction({ datasetType: type }));
     this.typeInput$.next("");
   }
 
   typeRemoved(type: string) {
-    this.store.dispatch(new RemoveTypeFilterAction(type));
+    this.store.dispatch(removeTypeFilterAction({ datasetType: type }));
   }
 
   dateChanged(event: MatDatepickerInputEvent<DateRange>) {
-    const { begin, end } = event.value;
-    this.store.dispatch(
-      new SetDateRangeFilterAction(begin.toISOString(), end.toISOString())
-    );
+    if (event.value) {
+      const { begin, end } = event.value;
+      this.store.dispatch(
+        setDateRangeFilterAction({
+          begin: moment(begin).tz("UTC").toISOString(),
+          end: moment(end)
+            .add(1, "days")
+            .toISOString()
+        })
+      );
+    } else {
+      this.store.dispatch(setDateRangeFilterAction({ begin: null, end: null }));
+    }
   }
 
   clearFacets() {
-    this.store.dispatch(new ClearFacetsAction());
+    this.clearSearchBar = true;
+    this.store.dispatch(clearFacetsAction());
+    this.store.dispatch(deselectAllCustomColumnsAction());
   }
 
   showAddConditionDialog() {
     this.dialog
       .open(ScientificConditionDialogComponent)
       .afterClosed()
-      .subscribe(({ data }) => {
-        if (data != null) {
-          this.store.dispatch(new AddScientificConditionAction(data));
+      .subscribe(res => {
+        if (res) {
+          const { data } = res;
+          this.store.dispatch(
+            addScientificConditionAction({ condition: data })
+          );
+          this.store.dispatch(
+            selectColumnAction({ name: data.lhs, columnType: "custom" })
+          );
         }
       });
   }
 
-  removeCondition(index: number) {
-    this.store.dispatch(new RemoveScientificConditionAction(index));
+  removeCondition(condition: ScientificCondition, index: number) {
+    this.store.dispatch(removeScientificConditionAction({ index }));
+    this.store.dispatch(
+      deselectColumnAction({ name: condition.lhs, columnType: "custom" })
+    );
   }
+
+  constructor(
+    public dialog: MatDialog,
+    private store: Store<any>,
+    @Inject(APP_CONFIG) public appConfig: AppConfig
+  ) {}
 }

@@ -1,83 +1,61 @@
-import { Action } from "@ngrx/store";
-import { initialJobsState, JobsState } from "state-management/state/jobs.store";
-import {
-  CHILD_RETRIEVE_COMPLETE,
-  ChildRetrieveCompleteAction,
-  CurrentJobAction,
-  FAILED,
-  FailedAction,
-  RETRIEVE_COMPLETE,
-  RetrieveCompleteAction,
-  SEARCH_ID_COMPLETE,
-  SearchIDCompleteAction,
-  SELECT_CURRENT,
-  SORT_UPDATE,
-  SortUpdateAction,
-  SUBMIT_COMPLETE,
-  UI_STORE,
-  GET_COUNT_COMPLETE,
-  GetCountCompleteAction
-} from "state-management/actions/jobs.actions";
+import { createReducer, Action, on } from "@ngrx/store";
+import { JobsState, initialJobsState } from "state-management/state/jobs.store";
+import * as fromActions from "state-management/actions/jobs.actions";
 
-export function jobsReducer(
-  state = initialJobsState,
-  action: Action
-): JobsState {
-  if (action.type.indexOf("[Jobs]") !== -1) {
+const reducer = createReducer(
+  initialJobsState,
+  on(fromActions.fetchJobsCompleteAction, (state, { jobs }) => ({
+    ...state,
+    jobs,
+  })),
+
+  on(fromActions.fetchCountCompleteAction, (state, { count }) => ({
+    ...state,
+    totalCount: count,
+  })),
+
+  on(fromActions.fetchJobCompleteAction, (state, { job }) => ({
+    ...state,
+    currentJob: job,
+  })),
+
+  on(fromActions.submitJobCompleteAction, (state) => ({
+    ...state,
+    submitError: undefined,
+  })),
+  on(fromActions.submitJobFailedAction, (state, { err }) => ({
+    ...state,
+    submitError: err,
+  })),
+
+  on(fromActions.setJobViewModeAction, (state, { mode }) => ({
+    ...state,
+    filters: { ...state.filters, mode, skip: 0 },
+  })),
+
+  on(fromActions.setJobsLimitFilterAction, (state, { limit }) => {
+    const filters = { ...state.filters, limit, skip: 0 };
+    return { ...state, filters };
+  }),
+
+  on(fromActions.changePageAction, (state, { page, limit }) => {
+    const skip = page * limit;
+    const filters = { ...state.filters, skip, limit };
+    return { ...state, filters };
+  }),
+
+  on(fromActions.sortByColumnAction, (state, { column, direction }) => {
+    const sortField = column + (direction ? " " + direction : "");
+    const filters = { ...state.filters, sortField, skip: 0 };
+    return { ...state, filters };
+  }),
+
+  on(fromActions.clearJobsStateAction, () => ({ ...initialJobsState }))
+);
+
+export function jobsReducer(state: JobsState | undefined, action: Action) {
+  if (action.type.indexOf("[Job]") !== -1) {
     console.log("Action came in! " + action.type);
   }
-
-  switch (action.type) {
-    case SORT_UPDATE: {
-      const { skip, limit, mode } = action as SortUpdateAction;
-      const filters = { skip, limit, mode };
-      return { ...state, filters, loading: true };
-    }
-
-    // TODO: These replace any field in the store with values from the payload.
-    // Should probably be made less destructive?
-    case UI_STORE:
-    case CHILD_RETRIEVE_COMPLETE: {
-      // Är inte ändrad från payload
-      const ui = (action as ChildRetrieveCompleteAction).payload;
-      return { ...state, ui };
-    }
-
-    case SUBMIT_COMPLETE: {
-      return { ...state, jobSubmission: [] };
-    }
-
-    case FAILED: {
-      const error = (action as FailedAction).error;
-      return { ...state, error, jobSubmission: [] };
-    }
-
-    case RETRIEVE_COMPLETE: {
-      const currentJobs = (action as RetrieveCompleteAction).jobsets;
-      return { ...state, loading: false, currentJobs };
-    }
-
-    case GET_COUNT_COMPLETE: {
-      const totalJobNumber = (action as GetCountCompleteAction).totalJobNumber;
-      return { ...state, totalJobNumber };
-    }
-
-    // TODO: There is no field in the store called currentSet
-    case SELECT_CURRENT: {
-      const s = Object.assign({}, state, {
-        currentSet: (action as CurrentJobAction).job
-      });
-      return s;
-    }
-
-    // TODO: There is no field in the store called currentSet
-    case SEARCH_ID_COMPLETE: {
-      const d = (action as SearchIDCompleteAction).jobset;
-      return Object.assign({}, state, { currentSet: d, loading: false });
-    }
-
-    default: {
-      return state;
-    }
-  }
+  return reducer(state, action);
 }

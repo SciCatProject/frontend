@@ -1,0 +1,130 @@
+<ng-template [ngIf]="dataset">
+  <mat-tab-group>
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon> details </mat-icon> Details
+      </ng-template>
+
+      <div fxLayout="row">
+        <div fxFlex="auto">
+          <a
+            mat-raised-button
+            href="{{ appConfig.jupyterHubUrl }}"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="jupyter-button"
+            *ngIf="appConfig.jupyterHubUrl"
+          >
+            Jupyter Hub
+          </a>
+        </div>
+        <div fxFlex="auto">
+          <mat-slide-toggle
+            class="public-toggle"
+            [checked]="dataset.isPublished"
+            [disabled]="!isPI()"
+            (change)="onSlidePublic($event)"
+          >
+            Public
+          </mat-slide-toggle>
+        </div>
+      </div>
+
+      <div style="clear: both;"></div>
+
+      <dataset-detail
+        [dataset]="dataset"
+        [datasetWithout]="datasetWithout$ | async"
+        [attachments]="attachments$ | async"
+        [proposal]="proposal$ | async"
+        [sample]="sample$ | async"
+        (clickKeyword)="onClickKeyword($event)"
+        (addKeyword)="onAddKeyword($event)"
+        (removeKeyword)="onRemoveKeyword($event)"
+        (clickProposal)="onClickProposal($event)"
+        (clickSample)="onClickSample($event)"
+        (saveMetadata)="onSaveMetadata($event)"
+      ></dataset-detail>
+    </mat-tab>
+
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon> cloud_download </mat-icon> Datafiles
+      </ng-template>
+      <div class="datafiles-container">
+        <datafiles></datafiles>
+
+        <div
+          *ngIf="
+            (origDatablocks$ | async) && (origDatablocks$ | async).length === 0
+          "
+        >
+          <h3>No datafiles linked to this dataset</h3>
+        </div>
+      </div>
+    </mat-tab>
+
+    <mat-tab *ngIf="appConfig.datasetReduceEnabled">
+      <ng-template mat-tab-label>
+        <mat-icon> tune </mat-icon> Reduce
+      </ng-template>
+      <reduce [dataset]="dataset"></reduce>
+    </mat-tab>
+
+    <mat-tab *ngIf="attachments$ | async as attachments">
+      <ng-template mat-tab-label>
+        <mat-icon> insert_photo </mat-icon> Attachments
+      </ng-template>
+
+      <div class="file-uploader">
+        <app-file-uploader
+          [attachments]="attachments"
+          (filePicked)="onFileUploaderFilePicked($event)"
+          (readEnd)="onFileUploaderReadEnd($event)"
+          (submitCaption)="updateCaption($event)"
+          (deleteAttachment)="deleteAttachment($event)"
+        ></app-file-uploader>
+      </div>
+    </mat-tab>
+
+    <mat-tab *ngIf="appConfig.logbookEnabled">
+      <ng-template mat-tab-label>
+        <mat-icon> book </mat-icon> Logbook
+      </ng-template>
+      <app-logbooks-dashboard></app-logbooks-dashboard>
+    </mat-tab>
+
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon> loop </mat-icon> Lifecycle
+      </ng-template>
+
+      <dataset-lifecycle [dataset]="dataset"></dataset-lifecycle>
+    </mat-tab>
+
+    <mat-tab *ngIf="isAdmin$ | async">
+      <ng-template mat-tab-label>
+        <mat-icon> settings </mat-icon> Admin
+      </ng-template>
+
+      <mat-card>
+        <button
+          mat-raised-button
+          class="reset-button"
+          (click)="resetDataset(dataset)"
+        >
+          Reset Status
+        </button>
+        <ng-container *ngIf="datablocks$ | async as datablocks">
+          <h3>Datablocks: {{ datablocks.length }}</h3>
+          <ul *ngFor="let block of datablocks">
+            <li>{{ block.id }}</li>
+            <ul>
+              <li>{{ block.archiveId }}</li>
+            </ul>
+          </ul>
+        </ng-container>
+      </mat-card>
+    </mat-tab>
+  </mat-tab-group>
+</ng-template>

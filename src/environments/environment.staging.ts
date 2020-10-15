@@ -1,9 +1,12 @@
 export const environment = {
   production: true,
-  lbBaseURL: 'https://dacat-staging.psi.ch',
+  lbBaseURL: "https://dacat-staging.psi.ch",
   archiveWorkflowEnabled: true,
-  externalAuthEndpoint: '/auth/msad',
-  facility: 'PSI',
+  externalAuthEndpoint: "/auth/msad",
+  facility: "PSI",
   disabledDatasetColumns: [],
-  shoppingCartEnabled: false
+  shoppingCartEnabled: false,
+  jobsEnabled: true,
+  jsonMetadataEnabled: true,
+  policiesEnabled: true,
 };

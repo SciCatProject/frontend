@@ -1,21 +1,28 @@
-import {Job} from "shared/sdk/models";
+import { Job, JobFilters } from "state-management/models";
 
 export interface JobsState {
-    currentJobs: Job[];
-    jobSubmission: Job[];
-    filters: object;
-    totalJobNumber: number;
-    ui: any;
-    loading: boolean;
-    error: Error;
+  jobs: Job[];
+  currentJob: Job;
+
+  totalCount: number;
+
+  submitError: Error;
+
+  filters: JobFilters;
 }
 
 export const initialJobsState: JobsState = {
-    currentJobs: [],
-    jobSubmission: undefined,
-    filters: {"skip": 0, "limit": 30, "mode": ""},
-    totalJobNumber: 0,
-    ui: [],
-    loading: false,
-    error: undefined
+  jobs: [],
+  currentJob: null,
+
+  totalCount: 0,
+
+  submitError: undefined,
+
+  filters: {
+    mode: null,
+    sortField: "creationTime:desc",
+    skip: 0,
+    limit: 25
+  }
 };
