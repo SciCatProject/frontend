@@ -6,14 +6,6 @@
   color: mat-color($primary, default-contrast);
 }
 
-mat-card {
-  margin: 1em;
-
-  .scientific-header {
-    background-color: mat-color($purple, 400);
-  }
-}
-
 .datafiles-container {
-  margin-top: 5em;
+  margin: 5em 1em;
 }
