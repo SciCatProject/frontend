@@ -19,3 +19,13 @@ jobs:
         ref: "master"
         host: "https://gitlab.esss.lu.se"
         debug: true
+    
+    - name: trigger MAXIV Job
+      uses: appleboy/gitlab-ci-action@master
+      with:
+        url: "https://gitlab.com/api/v4/projects/21902377/ref/master/trigger/pipeline"
+        token: ${{ secrets.MAXIV_TOKEN }}
+        project_id: 21902377
+        ref: "master"
+        host: "https://gitlab.com"
+        debug: true
