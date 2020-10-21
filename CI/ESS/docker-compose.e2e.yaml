@@ -20,7 +20,9 @@ services:
       - mongodb
       - scichat-loopback
   catanie:
-    image: "dacat/catanie:e2e"
+    build:
+      context: .
+      dockerfile: CI/ESS/Dockerfile.e2e
     command: ["./wait-for-it.sh", "catamel:3000", "--", "nginx", "-g", "daemon off;"]
     depends_on:
       - catamel
