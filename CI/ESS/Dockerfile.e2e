@@ -8,8 +8,8 @@ RUN npm config set registry http://registry.npmjs.org/
 RUN npm config set strict-ssl false
 ARG env=e2e
 WORKDIR /catanie
-COPY package.json  /catanie
-RUN npm install
+COPY package*.json  /catanie/
+RUN npm ci
 RUN wget https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh
 RUN chmod +x wait-for-it.sh
 COPY . /catanie/

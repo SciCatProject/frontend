@@ -7,8 +7,8 @@ RUN apt-get update && apt-get install -y git
 #RUN npm config set https-proxy http://192.168.1.1:8123/
 RUN npm config set registry http://registry.npmjs.org/
 RUN npm config set strict-ssl false
-COPY package.json /usr/src/app/package.json
-RUN npm install
+COPY package*.json /usr/src/app/
+RUN npm ci
 COPY . /usr/src/app
 WORKDIR /usr/src/app
 RUN npm test

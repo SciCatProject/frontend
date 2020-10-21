@@ -8,8 +8,8 @@ RUN npm config set registry http://registry.npmjs.org/
 RUN npm config set strict-ssl false
 ARG env=dmscdev
 WORKDIR /catanie
-COPY package.json  /catanie
-RUN npm install
+COPY package*.json  /catanie/
+RUN npm ci
 COPY . /catanie/
 RUN npx ng build --configuration=${env}
 
