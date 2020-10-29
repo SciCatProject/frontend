@@ -10,14 +10,15 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
   catanie-test:
-    # image: "docker.maxiv.lu.se/catanie-test"
     image: "catanie-local"
     restart: always
     ports:
-      - "3002:80"
+      - "3001:80"
   catamel-test:
-    # image: "docker.maxiv.lu.se/catamel-test"
     image: "catamel-local"
-    restart: always
+    volumes:
+      - ./datasources.json:/usr/src/app/server/datasources.json
+      - ./providers.json:/usr/src/app/server/providers.json
+      - ./config.local.js:/usr/src/app/server/config.local.js
     ports:
-      - "3001:3000"
+      - "3000:3000"
