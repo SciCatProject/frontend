@@ -67,7 +67,7 @@ export class ProposalDashboardComponent implements OnInit, OnDestroy {
     {
       name: "proposalId",
       icon: "perm_contact_calendar",
-      sort: false,
+      sort: true,
       inList: false
     },
     { name: "title", icon: "fingerprint", sort: true, inList: true },
