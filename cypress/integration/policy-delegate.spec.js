@@ -42,7 +42,7 @@ describe("Policies", () => {
       cy.get("[data-cy=editSelection]").click({ force: true });
       cy.get("[data-cy=managerInput]").click({ force: true });
       cy.get("[data-cy=managerInput]").type("cypress@manager.com{enter}");
-      cy.wait(5000);
+      cy.wait(6000);
       cy.get("[data-cy=managerChipList]")
         .children()
         .invoke("text")
