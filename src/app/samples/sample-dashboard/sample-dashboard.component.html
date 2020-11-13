@@ -17,6 +17,9 @@
           (onSearch)="onTextSearchChange($event)"
           (onFocus)="onTextSearchChange($event)"
         ></app-search-bar>
+        <button mat-button color="primary" (click)="openSearchParametersDialog()">
+          <mat-icon>add</mat-icon> Add Characteristic
+        </button>
       </mat-card>
       <div class="small-search" fxFlexOrder="2">
         <app-search-bar
