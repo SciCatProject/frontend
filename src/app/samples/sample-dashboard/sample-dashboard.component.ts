@@ -98,7 +98,9 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
 
   openSearchParametersDialog() {
     this.dialog
-      .open(SearchParametersDialogComponent)
+      .open(SearchParametersDialogComponent, {
+        data: { parameterKeys: ["test_value", "another"] },
+      })
       .afterClosed()
       .subscribe((res) => {
         if (res) {

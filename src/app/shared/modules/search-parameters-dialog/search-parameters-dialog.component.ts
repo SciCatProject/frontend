@@ -1,6 +1,6 @@
-import { Component, EventEmitter, Inject, Input, Output } from "@angular/core";
+import { Component, Inject } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { MatDialogRef } from "@angular/material/dialog";
+import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { AppConfig, APP_CONFIG } from "app-config.module";
 import { map, startWith } from "rxjs/operators";
 import { UnitsService } from "shared/services/units.service";
@@ -8,17 +8,15 @@ import { UnitsService } from "shared/services/units.service";
 @Component({
   selector: "search-parameters-dialog",
   templateUrl: "./search-parameters-dialog.component.html",
-  styleUrls: ["./search-parameters-dialog.component.scss"],
 })
 export class SearchParametersDialogComponent {
-  @Input() parameterKeys: string[];
-  @Output() onChange = new EventEmitter<string>();
+  parameterKeys = this.data.parameterKeys;
   unitsEnabled = this.appConfig.scienceSearchUnitsEnabled;
   units: string[] = [];
 
   parametersForm = new FormGroup({
     lhs: new FormControl("", [Validators.required, Validators.minLength(2)]),
-    relation: new FormControl("GREATHER_THAN", [
+    relation: new FormControl("GREATER_THAN", [
       Validators.required,
       Validators.minLength(9),
     ]),
@@ -35,7 +33,14 @@ export class SearchParametersDialogComponent {
     )
   );
 
-  doChange = (parameterKey: string): void => this.onChange.emit(parameterKey);
+  filteredKeys$ = this.parametersForm.get("lhs").valueChanges.pipe(
+    startWith(""),
+    map((value: string) =>
+      this.parameterKeys.filter((key) =>
+        key.toLowerCase().includes(value.toLowerCase())
+      )
+    )
+  );
 
   add = (): void => {
     const { lhs, relation, unit } = this.parametersForm.value;
@@ -44,14 +49,14 @@ export class SearchParametersDialogComponent {
       relation === "EQUAL_TO_STRING" ? String(rawRhs) : Number(rawRhs);
     this.parametersForm.patchValue({ rhs });
     this.dialogRef.close({ data: { lhs, relation, rhs, unit } });
-  };
+  }
 
   cancel = (): void => this.dialogRef.close();
 
   getUnits = (parameterKey: string): void => {
     this.units = this.unitsService.getUnits(parameterKey);
     this.toggleUnitField();
-  };
+  }
 
   toggleUnitField = (): void => {
     const lhsInvalid = this.parametersForm.get("lhs").invalid;
@@ -62,7 +67,7 @@ export class SearchParametersDialogComponent {
     if (lhsInvalid || isStringRelation) {
       unitField.disable();
     }
-  };
+  }
 
   isInvalid = (): boolean => {
     const { invalid } = this.parametersForm;
@@ -75,7 +80,7 @@ export class SearchParametersDialogComponent {
       return true;
     }
     return lhs.length * rhs.length === 0;
-  };
+  }
 
   get lhs(): string {
     return this.parametersForm.get("lhs").value;
@@ -83,6 +88,7 @@ export class SearchParametersDialogComponent {
 
   constructor(
     @Inject(APP_CONFIG) public appConfig: AppConfig,
+    @Inject(MAT_DIALOG_DATA) public data: { parameterKeys: string[] },
     public dialogRef: MatDialogRef<SearchParametersDialogComponent>,
     private unitsService: UnitsService
   ) {}
