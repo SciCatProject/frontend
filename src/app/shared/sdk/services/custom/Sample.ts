@@ -397,6 +397,35 @@ export class SampleApi extends BaseLoopBackApi {
   }
 
   /**
+   * Get a list of sample characteristic keys
+   *
+   * @param {object} fields Define the filter conditions by specifying the name of values of fields requested. There is also support for a `text` search to look for strings anywhere in the sample.
+   *
+   * @param {object} limits Define further query parameters like skip, limit, order
+   *
+   * @param {object} options 
+   *
+   * @returns {object[]} An empty reference that will be
+   *   populated with the actual data once the response is returned
+   *   from the server.
+   *
+   * Array of sample characteristic keys
+   */
+  public metadataKeys(fields: any = {}, limits: any = {}, customHeaders?: Function): Observable<any> {
+    let _method: string = "GET";
+    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
+    "/Samples/metadataKeys";
+    let _routeParams: any = {
+      fields: fields,
+      limits: limits
+    };
+    let _postBody: any = {};
+    let _urlParams: any = {};
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    return result;
+  }
+
+  /**
    * Creates a new instance in attachments of this model.
    *
    * @param {any} id Sample id
