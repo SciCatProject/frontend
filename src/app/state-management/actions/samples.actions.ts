@@ -22,6 +22,17 @@ export const fetchSamplesCountFailedAction = createAction(
   "[Sample] Fetch Samples Count Failed"
 );
 
+export const fetchMetadataKeysAction = createAction(
+  "[Sample] Fetch Metadata Keys"
+);
+export const fetchMetadataKeysCompleteAction = createAction(
+  "[Sample] Fetch Metadata Keys Complete",
+  props<{metadataKeys: string[]}>()
+);
+export const fetchMetadataKeysFailedAction = createAction(
+  "[Sample] Fetch Metadata Keys Failed"
+);
+
 export const fetchSampleAction = createAction(
   "[Sample] Fetch Sample",
   props<{ sampleId: string }>()

@@ -8,6 +8,11 @@ export const getSamples = createSelector(
   state => state.samples
 );
 
+export const getMetadataKeys = createSelector(
+  getSampleState,
+  state => state.metadataKeys
+);
+
 export const getCurrentSample = createSelector(
   getSampleState,
   state => state.currentSample

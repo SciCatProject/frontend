@@ -17,6 +17,10 @@ const reducer = createReducer(
     samplesCount: count,
   })),
 
+  on(fromActions.fetchMetadataKeysCompleteAction,
+    (state, {metadataKeys}) => ({...state, metadataKeys})
+    ),
+
   on(fromActions.fetchSampleCompleteAction, (state, { sample }) => ({
     ...state,
     currentSample: sample,

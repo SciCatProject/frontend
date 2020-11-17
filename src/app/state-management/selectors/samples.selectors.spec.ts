@@ -13,6 +13,7 @@ const initialSampleState: SampleState = {
   samples: [],
   currentSample: sample,
   datasets: [],
+  metadataKeys: [],
 
   samplesCount: 0,
   datasetsCount: 0,
@@ -40,6 +41,14 @@ describe("Sample Selectors", () => {
       expect(fromSelectors.getSamples.projector(initialSampleState)).toEqual(
         []
       );
+    });
+  });
+
+  describe("getMetadataKeys", () => {
+    it("should get metadataKeys", () => {
+      expect(
+        fromSelectors.getMetadataKeys.projector(initialSampleState)
+      ).toEqual([]);
     });
   });
 

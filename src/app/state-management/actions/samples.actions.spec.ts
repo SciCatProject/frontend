@@ -55,6 +55,35 @@ describe("Sample Actions", () => {
     });
   });
 
+  describe("fetchMetadataKeyKeysAction", () => {
+    it("should create an action", () => {
+      const action = fromActions.fetchMetadataKeysAction();
+      expect({ ...action }).toEqual({ type: "[Sample] Fetch Metadata Keys" });
+    });
+  });
+
+  describe("fetchMetadataKesCompleteAction", () => {
+    it("should create an action", () => {
+      const metadataKeys = [];
+      const action = fromActions.fetchMetadataKeysCompleteAction({
+        metadataKeys,
+      });
+      expect({ ...action }).toEqual({
+        type: "[Sample] Fetch Metadata Keys Complete",
+        metadataKeys,
+      });
+    });
+  });
+
+  describe("fetchMetadataKeysFailedAction", () => {
+    it("should create an action", () => {
+      const action = fromActions.fetchMetadataKeysFailedAction();
+      expect({ ...action }).toEqual({
+        type: "[Sample] Fetch Metadata Keys Failed",
+      });
+    });
+  });
+
   describe("fetchSampleAction", () => {
     it("should create an action", () => {
       const sampleId = "testId";

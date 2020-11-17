@@ -32,6 +32,18 @@ describe("SamplesReducer", () => {
     });
   });
 
+  describe("on fetchMetadataKeysCompleteAction", () => {
+    it("should set metadataKeys", () => {
+      const metadataKeys = ["volume"];
+      const action = fromActions.fetchMetadataKeysCompleteAction({
+        metadataKeys,
+      });
+      const state = samplesReducer(initialSampleState, action);
+
+      expect(state.metadataKeys).toEqual(metadataKeys);
+    });
+  });
+
   describe("on fetchSampleCompleteAction", () => {
     it("should set currentSample", () => {
       const action = fromActions.fetchSampleCompleteAction({ sample });

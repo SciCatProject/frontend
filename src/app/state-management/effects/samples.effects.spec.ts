@@ -220,6 +220,35 @@ describe("SampleEffects", () => {
     });
   });
 
+  describe("fetchMetadataKeys$", () => {
+    it("should result in a fetchMetadataKeysCompleteAction", () => {
+      const metadataKeys = [];
+      const action = fromActions.fetchMetadataKeysAction();
+      const outcome = fromActions.fetchMetadataKeysCompleteAction({
+        metadataKeys,
+      });
+
+      actions = hot("-a", { a: action });
+      const response = cold("-a|", { a: metadataKeys });
+      sampleApi.metadataKeys.and.returnValue(response);
+
+      const expected = cold("--b", { b: outcome });
+      expect(effects.fetchMetadataKeys$).toBeObservable(expected);
+    });
+
+    it("should result in a fetchMetadataKeysFailedAction", () => {
+      const action = fromActions.fetchMetadataKeysAction();
+      const outcome = fromActions.fetchMetadataKeysFailedAction();
+
+      actions = hot("-a", { a: action });
+      const response = cold("-#", {});
+      sampleApi.metadataKeys.and.returnValue(response);
+
+      const expected = cold("--b", { b: outcome });
+      expect(effects.fetchMetadataKeys$).toBeObservable(expected);
+    });
+  });
+
   describe("fetchSample$", () => {
     const sampleId = "testId";
 

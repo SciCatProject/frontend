@@ -4,6 +4,7 @@ export interface SampleState {
   samples: Sample[];
   currentSample: Sample;
   datasets: Dataset[];
+  metadataKeys: string[];
 
   samplesCount: number;
   datasetsCount: number;
@@ -18,6 +19,7 @@ export const initialSampleState: SampleState = {
   samples: [],
   currentSample: null,
   datasets: [],
+  metadataKeys: [],
 
   samplesCount: 0,
   datasetsCount: 0,
