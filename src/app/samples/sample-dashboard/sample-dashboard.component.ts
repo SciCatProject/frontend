@@ -8,6 +8,7 @@ import {
   sortByColumnAction,
   setTextFilterAction,
   prefillFiltersAction,
+  fetchMetadataKeysAction,
 } from "state-management/actions/samples.actions";
 import {
   TableColumn,
@@ -23,6 +24,7 @@ import {
   getFilters,
   getHasPrefilledFilters,
   getTextFilter,
+  getMetadataKeys,
 } from "state-management/selectors/samples.selectors";
 import { DatePipe } from "@angular/common";
 import { Router, ActivatedRoute } from "@angular/router";
@@ -57,6 +59,7 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
 
   subscriptions: Subscription[] = [];
 
+  metadataKeys: string[];
   tableData: any[];
   tableColumns: TableColumn[] = [
     { name: "sampleId", icon: "fingerprint", sort: true, inList: false },
@@ -144,6 +147,8 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
+    this.store.dispatch(fetchMetadataKeysAction());
+
     this.subscriptions.push(
       this.store.pipe(select(getSamples)).subscribe((samples) => {
         this.tableData = this.formatTableData(samples);
@@ -164,6 +169,13 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
             queryParams: { args: rison.encode(filters) },
           });
         })
+    );
+
+    this.subscriptions.push(
+      this.store.pipe(select(getMetadataKeys)).subscribe((metadataKeys) => {
+        this.metadataKeys = metadataKeys;
+        console.log({ metadataKeys });
+      })
     );
 
     this.subscriptions.push(
