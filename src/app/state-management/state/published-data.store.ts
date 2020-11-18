@@ -1,4 +1,4 @@
-import { PublishedData, PublishedDataFilters } from "state-management/models";
+import { PublishedData, GenericFilters } from "state-management/models";
 
 export interface PublishedDataState {
   publishedData: PublishedData[];
@@ -6,7 +6,7 @@ export interface PublishedDataState {
 
   totalCount: number;
 
-  filters: PublishedDataFilters;
+  filters: GenericFilters;
 }
 
 export const initialPublishedDataState: PublishedDataState = {

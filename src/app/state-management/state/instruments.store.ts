@@ -1,11 +1,11 @@
-import { Instrument, InstrumentFilters } from "../models";
+import { Instrument, GenericFilters } from "../models";
 
 export interface InstrumentState {
   instruments: Instrument[];
   currentInstrument: Instrument;
   totalCount: number;
 
-  filters: InstrumentFilters;
+  filters: GenericFilters;
 }
 
 export const initialInstrumentState: InstrumentState = {

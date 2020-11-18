@@ -29,7 +29,7 @@ import {
 } from "state-management/actions/policies.actions";
 
 import { Router } from "@angular/router";
-import { PolicyFilters } from "state-management/models";
+import { GenericFilters } from "state-management/models";
 import * as rison from "rison";
 import { RouterTestingModule } from "@angular/router/testing";
 import { provideMockStore } from "@ngrx/store/testing";
@@ -144,7 +144,7 @@ describe("PoliciesDashboardComponent", () => {
     it("should call router.navigate", () => {
       const navigateSpy = spyOn(router, "navigate");
 
-      const filters: PolicyFilters = {
+      const filters: GenericFilters = {
         sortField: "test asc",
         skip: 0,
         limit: 25

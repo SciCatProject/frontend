@@ -1,10 +1,10 @@
 import { InstrumentState } from "state-management/state/instruments.store";
 import * as fromSelectors from "./instruments.selectors";
-import { InstrumentFilters, Instrument } from "state-management/models";
+import { GenericFilters, Instrument } from "state-management/models";
 
 const instrument = new Instrument();
 
-const instrumentFilters: InstrumentFilters = {
+const instrumentFilters: GenericFilters = {
   sortField: "name desc",
   skip: 0,
   limit: 25

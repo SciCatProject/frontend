@@ -1,5 +1,5 @@
 import { PublishedDataInterface, PublishedData } from "shared/sdk";
-import { PublishedDataFilters } from "state-management/models";
+import { GenericFilters } from "state-management/models";
 import { PublishedDataState } from "state-management/state/published-data.store";
 import * as fromSelectors from "./published-data.selectors";
 
@@ -17,7 +17,7 @@ const data: PublishedDataInterface = {
 };
 const publishedData = new PublishedData(data);
 
-const filters: PublishedDataFilters = {
+const filters: GenericFilters = {
   sortField: "publicationYear desc",
   skip: 0,
   limit: 25

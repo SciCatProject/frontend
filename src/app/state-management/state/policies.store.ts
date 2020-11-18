@@ -1,4 +1,4 @@
-import { PolicyFilters, Policy } from "state-management/models";
+import { GenericFilters, Policy } from "state-management/models";
 
 export interface PolicyState {
   policies: Policy[];
@@ -8,8 +8,8 @@ export interface PolicyState {
   totalCount: number;
   editableCount: number;
 
-  policiesFilters: PolicyFilters;
-  editableFilters: PolicyFilters;
+  policiesFilters: GenericFilters;
+  editableFilters: GenericFilters;
 }
 
 export const initialPolicyState: PolicyState = {
