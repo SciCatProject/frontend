@@ -415,12 +415,11 @@ export class SampleApi extends BaseLoopBackApi {
     let _method: string = "GET";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
     "/Samples/metadataKeys";
-    let _routeParams: any = {
-      fields: fields,
-      limits: limits
-    };
+    let _routeParams: any = {};
     let _postBody: any = {};
     let _urlParams: any = {};
+    if (typeof fields !== 'undefined' && fields !== null) _urlParams.fields = fields;
+    if (typeof limits !== 'undefined' && limits !== null) _urlParams.limits = limits;
     let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
     return result;
   }
