@@ -1,6 +1,6 @@
 import * as fromActions from "./samples.actions";
 import { Attachment, Sample, Dataset } from "shared/sdk/models";
-import { SampleFilters } from "state-management/models";
+import { SampleFilters, ScientificCondition } from "state-management/models";
 
 describe("Sample Actions", () => {
   describe("fetchSamplesAction", () => {
@@ -413,6 +413,35 @@ describe("Sample Actions", () => {
       expect({ ...action }).toEqual({
         type: "[Sample] Set Text Filter",
         text,
+      });
+    });
+  });
+
+  describe("addCharacteristicsFilterAction", () => {
+    it("should create an action", () => {
+      const characteristic: ScientificCondition = {
+        lhs: "lhsTest",
+        relation: "LESS_THAN",
+        rhs: 5,
+        unit: "s",
+      };
+      const action = fromActions.addCharacteristicsFilterAction({
+        characteristic,
+      });
+      expect({ ...action }).toEqual({
+        type: "[Sample] Add Characteristics Filter",
+        characteristic,
+      });
+    });
+  });
+
+  describe("removeCharacteristicsFilterAction", () => {
+    it("should create an action", () => {
+      const index = 0;
+      const action = fromActions.removeCharacteristicsFilterAction({ index });
+      expect({ ...action }).toEqual({
+        type: "[Sample] Remove Characteristics Filter",
+        index,
       });
     });
   });
