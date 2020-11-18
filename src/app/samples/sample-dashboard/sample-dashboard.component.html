@@ -20,6 +20,35 @@
         <button mat-button color="primary" (click)="openSearchParametersDialog()">
           <mat-icon>add</mat-icon> Add Characteristic
         </button>
+
+        <mat-chip-list class="characteristic-chips" aria-orientation="vertical">
+          <mat-chip *ngFor="let characteristic of characteristics$ | async; index as i">
+            {{characteristic.lhs}}
+            <ng-container [ngSwitch]="characteristic.relation">
+              <ng-container *ngSwitchCase="'EQUAL_TO_NUMERIC'">
+                &nbsp;=&nbsp;
+              </ng-container>
+              <ng-container *ngSwitchCase="'EQUAL_TO_STRING'">
+                &nbsp;=&nbsp;
+              </ng-container>
+              <ng-container *ngSwitchCase="'LESS_THAN'">
+                &nbsp;&lt;&nbsp;
+              </ng-container>
+              <ng-container *ngSwitchCase="'GREATER_THAN'">
+                &nbsp;&gt;&nbsp;
+              </ng-container>
+            </ng-container>
+            {{
+              characteristic.relation === "EQUAL_TO_STRING"
+                ? '"' + characteristic.rhs + '"'
+                : characteristic.rhs
+            }}
+            {{ characteristic.unit | prettyUnit }}
+            <mat-icon matChipRemove (click)="removeCharacteristic(characteristic, i)">
+              cancel
+            </mat-icon>
+          </mat-chip>
+        </mat-chip-list>
       </mat-card>
       <div class="small-search" fxFlexOrder="2">
         <app-search-bar

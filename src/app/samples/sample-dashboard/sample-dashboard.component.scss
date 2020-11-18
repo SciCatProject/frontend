@@ -5,6 +5,12 @@
     .title {
       font-size: 1.25em;
     }
+
+    .characteristic-chips {
+      ::ng-deep .mat-chip-list-wrapper {
+        margin: 0;
+      }
+    }
   }
 
   .small-search {

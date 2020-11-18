@@ -73,6 +73,11 @@ export const getSamplesPerPage = createSelector(
   filters => filters.limit
 );
 
+export const getCharacteristicsFilter = createSelector(
+  getFilters,
+  filters => filters.characteristics
+);
+
 export const getDatasetsPerPage = createSelector(
   getDatasetFilters,
   filters => filters.limit

@@ -25,6 +25,7 @@ import {
   getHasPrefilledFilters,
   getTextFilter,
   getMetadataKeys,
+  getCharacteristicsFilter,
 } from "state-management/selectors/samples.selectors";
 import { DatePipe } from "@angular/common";
 import { Router, ActivatedRoute } from "@angular/router";
@@ -52,6 +53,7 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
   samplesPerPage$ = this.store.pipe(select(getSamplesPerPage));
   currentPage$ = this.store.pipe(select(getPage));
   textFilter$ = this.store.pipe(select(getTextFilter));
+  characteristics$ = this.store.pipe(select(getCharacteristicsFilter));
   readyToFetch$ = this.store.pipe(
     select(getHasPrefilledFilters),
     filter((has) => has)
