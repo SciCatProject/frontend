@@ -9,6 +9,8 @@ import {
   setTextFilterAction,
   prefillFiltersAction,
   fetchMetadataKeysAction,
+  addCharacteristicsFilterAction,
+  removeCharacteristicsFilterAction,
 } from "state-management/actions/samples.actions";
 import {
   TableColumn,
@@ -40,7 +42,7 @@ import {
   distinctUntilChanged,
   take,
 } from "rxjs/operators";
-import { SampleFilters } from "state-management/models";
+import { SampleFilters, ScientificCondition } from "state-management/models";
 import { SearchParametersDialogComponent } from "shared/modules/search-parameters-dialog/search-parameters-dialog.component";
 
 @Component({
@@ -101,6 +103,10 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
     });
   }
 
+  onTextSearchChange(query) {
+    this.store.dispatch(setTextFilterAction({ text: query }));
+  }
+
   openSearchParametersDialog() {
     this.dialog
       .open(SearchParametersDialogComponent, {
@@ -111,12 +117,17 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
         if (res) {
           const { data } = res;
           console.log({ data });
+          this.store.dispatch(
+            addCharacteristicsFilterAction({ characteristic: data })
+          );
         }
       });
   }
 
-  onTextSearchChange(query) {
-    this.store.dispatch(setTextFilterAction({ text: query }));
+  removeCharacteristic(characteristic: ScientificCondition, index: number) {
+    console.log({ characteristic });
+    console.log({ index });
+    this.store.dispatch(removeCharacteristicsFilterAction({ index }));
   }
 
   onPageChange(event: PageChangeEvent) {
