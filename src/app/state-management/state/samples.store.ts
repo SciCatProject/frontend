@@ -28,7 +28,7 @@ export const initialSampleState: SampleState = {
 
   sampleFilters: {
     text: "",
-    sortField: "creationTime:desc",
+    sortField: "createdAt:desc",
     skip: 0,
     limit: 25,
     characteristics: []
