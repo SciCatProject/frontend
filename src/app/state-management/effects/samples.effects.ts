@@ -71,7 +71,8 @@ export class SampleEffects {
     this.actions$.pipe(
       ofType(fromActions.fetchMetadataKeysAction),
       withLatestFrom(this.fullqueryParams$),
-      mergeMap(([{}, { query }]) => {
+      map(([action, params]) => params),
+      mergeMap(({ query }) => {
         const parsedQuery = JSON.parse(query);
         parsedQuery.metadataKey = "";
         return this.sampleApi.metadataKeys(JSON.stringify(parsedQuery)).pipe(
