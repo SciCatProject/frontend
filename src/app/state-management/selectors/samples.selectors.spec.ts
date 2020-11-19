@@ -24,11 +24,11 @@ const initialSampleState: SampleState = {
     text: "test",
     sortField: "creationTime:desc",
     skip: 0,
-    limit: 25
+    limit: 25,
+    characteristics: []
   },
 
   datasetFilters: {
-    text: "",
     sortField: "createdAt:desc",
     skip: 0,
     limit: 25
