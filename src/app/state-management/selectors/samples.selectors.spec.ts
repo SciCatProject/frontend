@@ -170,14 +170,12 @@ describe("Sample Selectors", () => {
 
   describe("getFullqueryParams", () => {
     it("should get the fullquery params", () => {
-      const { text, sortField, skip, limit } = initialSampleState.sampleFilters;
-      const limits = { order: sortField, skip, limit };
-      const params = { query: JSON.stringify({ text }), limits };
-      expect(
+      const fullqueryKeys = Object.keys(
         fromSelectors.getFullqueryParams.projector(
           initialSampleState.sampleFilters
         )
-      ).toEqual(params);
+      );
+      expect(fullqueryKeys).toContain("query");
     });
   });
 
