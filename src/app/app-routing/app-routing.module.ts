@@ -7,6 +7,8 @@ import { DatablocksComponent } from "../datasets/datablocks-table/datablocks-tab
 import { DatasetDetailsDashboardComponent } from "datasets/dataset-details-dashboard/dataset-details-dashboard.component";
 
 import { JobsDashboardComponent } from "jobs/jobs-dashboard/jobs-dashboard.component";
+import { JobsDashboardNewComponent } from "jobs/jobs-dashboard-new/jobs-dashboard-new.component";
+
 import { JobsDetailComponent } from "../jobs/jobs-detail/jobs-detail.component";
 
 import { ErrorPageComponent } from "shared/modules/error-page/error-page.component";
@@ -188,8 +190,13 @@ export const routes: Routes = [
         canActivate: [AuthGuard],
       },
       {
-        path: "user/jobs",
+        path: "user/jobsold",
         component: JobsDashboardComponent,
+        canActivate: [AuthGuard, JobsGuard],
+      },
+      {
+        path: "user/jobs",
+        component: JobsDashboardNewComponent,
         canActivate: [AuthGuard, JobsGuard],
       },
       {

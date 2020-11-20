@@ -80,7 +80,7 @@ export class DatafilesComponent
       icon: "folder",
       sort: false,
       inList: true,
-      pipe: FilePathTruncate,
+     // pipe: FilePathTruncate,
     },
     {
       name: "size",
