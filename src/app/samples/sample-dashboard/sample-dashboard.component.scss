@@ -1,3 +1,5 @@
+@import "../../../theme.scss";
+
 @media only screen and (min-width: 1280px) {
   .big-search {
     margin: 4em 1em 1em 0;
@@ -20,6 +22,11 @@
   .big-edit-sample {
     margin: 1em 1em 1em 0;
     text-align: center;
+
+    mat-icon {
+      vertical-align: middle;
+      color: mat-color($accent);
+    }
   }
 
   .big-edit-sample:hover {
@@ -47,5 +54,10 @@
 
   .small-edit-sample {
     margin-top: 1em;
+
+    mat-icon {
+      vertical-align: middle;
+      color: mat-color($accent);
+    }
   }
 }

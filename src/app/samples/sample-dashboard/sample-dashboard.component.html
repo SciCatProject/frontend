@@ -6,7 +6,7 @@
         class="small-edit-sample"
         (click)="openDialog()"
       >
-        <mat-icon>edit</mat-icon> Add Sample
+        <mat-icon>add_circle</mat-icon> Create Sample
       </button>
     </ng-template>
     <ng-template [ngIf]="appConfig.searchSamples">
@@ -60,7 +60,7 @@
     </ng-template>
     <ng-template [ngIf]="appConfig.editSampleEnabled">
       <mat-card class="big-edit-sample" (click)="openDialog()">
-        <mat-icon>edit</mat-icon> Add Sample
+        <mat-icon>add_circle</mat-icon> Create Sample
       </mat-card>
     </ng-template>
   </div>
