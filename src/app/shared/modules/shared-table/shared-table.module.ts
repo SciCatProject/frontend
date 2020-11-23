@@ -13,6 +13,9 @@ import { MatTableModule } from "@angular/material/table";
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
+import { MatButtonModule } from "@angular/material/button";
+import { FlexLayoutModule } from "@angular/flex-layout";
+import { FormsModule } from "@angular/forms";
 
 @NgModule({
   declarations: [SharedTableComponent],
@@ -28,8 +31,11 @@ import { MatInputModule } from "@angular/material/input";
     PipesModule,
     MatToolbarModule,
     MatFormFieldModule,
-    MatInputModule
+    MatInputModule,
+    MatButtonModule,
+    FlexLayoutModule,
+    FormsModule,
   ],
   exports: [SharedTableComponent]
 })
-export class SharedTableModule {}
+export class SharedTableModule { }
