@@ -70,8 +70,8 @@ describe("DatasetEffects", () => {
       ]
     });
 
-    effects = TestBed.get(DatasetEffects);
-    datasetApi = TestBed.get(DatasetApi);
+    effects = TestBed.inject(DatasetEffects);
+    datasetApi = TestBed.inject(DatasetApi);
   });
 
   describe("fetchDatasets$", () => {
