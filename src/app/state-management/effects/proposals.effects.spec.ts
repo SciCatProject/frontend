@@ -72,9 +72,9 @@ describe("ProposalEffects", () => {
       ]
     });
 
-    effects = TestBed.inject(ProposalEffects);
-    proposalApi = TestBed.inject(ProposalApi);
-    datasetApi = TestBed.inject(DatasetApi);
+    effects = TestBed.get(ProposalEffects);
+    proposalApi = TestBed.get(ProposalApi);
+    datasetApi = TestBed.get(DatasetApi);
   });
 
   describe("fetchProposals$", () => {

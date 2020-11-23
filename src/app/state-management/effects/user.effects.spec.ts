@@ -89,12 +89,12 @@ describe("UserEffects", () => {
       ],
     });
 
-    effects = TestBed.inject(UserEffects);
-    activeDirAuthService = TestBed.inject(ADAuthService);
-    loopBackAuth = TestBed.inject(LoopBackAuth);
-    userApi = TestBed.inject(UserApi);
-    userIdentityApi = TestBed.inject(UserIdentityApi);
-    router = TestBed.inject(Router);
+    effects = TestBed.get(UserEffects);
+    activeDirAuthService = TestBed.get(ADAuthService);
+    loopBackAuth = TestBed.get(LoopBackAuth);
+    userApi = TestBed.get(UserApi);
+    userIdentityApi = TestBed.get(UserIdentityApi);
+    router = TestBed.get(Router);
   });
 
   describe("login$", () => {

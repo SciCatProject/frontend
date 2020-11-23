@@ -48,8 +48,8 @@ describe("JobEffects", () => {
       ]
     });
 
-    effects = TestBed.inject(JobEffects);
-    jobApi = TestBed.inject(JobApi);
+    effects = TestBed.get(JobEffects);
+    jobApi = TestBed.get(JobApi);
   });
 
   describe("fetchJobs$", () => {

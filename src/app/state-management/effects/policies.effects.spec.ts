@@ -50,8 +50,8 @@ describe("PolicyEffects", () => {
       ]
     });
 
-    effects = TestBed.inject(PolicyEffects);
-    policyApi = TestBed.inject(PolicyApi);
+    effects = TestBed.get(PolicyEffects);
+    policyApi = TestBed.get(PolicyApi);
   });
 
   describe("fetchPolicies$", () => {

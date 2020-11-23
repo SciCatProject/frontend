@@ -41,8 +41,8 @@ describe("InstrumentEffects", () => {
       ]
     });
 
-    effects = TestBed.inject(InstrumentEffects);
-    instrumentApi = TestBed.inject(InstrumentApi);
+    effects = TestBed.get(InstrumentEffects);
+    instrumentApi = TestBed.get(InstrumentApi);
   });
 
   describe("fetchInstruments$", () => {

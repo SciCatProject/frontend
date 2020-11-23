@@ -62,7 +62,7 @@ describe("DashboardComponent", () => {
       }
     }).compileComponents();
 
-    router = TestBed.inject(Router);
+    router = TestBed.get(Router);
   }));
 
   beforeEach(() => {

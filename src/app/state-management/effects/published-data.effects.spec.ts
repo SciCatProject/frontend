@@ -58,8 +58,8 @@ describe("PublishedDataEffects", () => {
       ]
     });
 
-    effects = TestBed.inject(PublishedDataEffects);
-    publishedDataApi = TestBed.inject(PublishedDataApi);
+    effects = TestBed.get(PublishedDataEffects);
+    publishedDataApi = TestBed.get(PublishedDataApi);
   });
 
   describe("fetchAllPublishedData$", () => {

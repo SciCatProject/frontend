@@ -48,8 +48,8 @@ describe("LogbookEffects", () => {
       ]
     });
 
-    effects = TestBed.inject(LogbookEffects);
-    logbookApi = TestBed.inject(LogbookApi);
+    effects = TestBed.get(LogbookEffects);
+    logbookApi = TestBed.get(LogbookApi);
   });
 
   describe("fetchLogbooks$", () => {
