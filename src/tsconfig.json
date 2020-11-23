@@ -7,7 +7,7 @@
     "experimentalDecorators": true,
     "lib": ["es2017", "dom"],
     "mapRoot": "./",
-    "module": "es2020",
+    "module": "esnext",
     "moduleResolution": "node",
     "outDir": "../dist/out-tsc",
     "importHelpers": true,
