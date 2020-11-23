@@ -27,9 +27,7 @@ services:
     depends_on:
       - catamel
   cypress:
-    build:
-      context: .
-      dockerfile: CI/ESS/Dockerfile.cypress
+    image: "dacat/catanie:cypress"
     command: ["./wait-for-it.sh", "catanie:80", "--", "npx", "cypress", "run"]
     depends_on:
       - catanie
