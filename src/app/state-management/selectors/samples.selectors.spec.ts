@@ -13,6 +13,7 @@ const initialSampleState: SampleState = {
   samples: [],
   currentSample: sample,
   datasets: [],
+  metadataKeys: [],
 
   samplesCount: 0,
   datasetsCount: 0,
@@ -23,11 +24,11 @@ const initialSampleState: SampleState = {
     text: "test",
     sortField: "creationTime:desc",
     skip: 0,
-    limit: 25
+    limit: 25,
+    characteristics: []
   },
 
   datasetFilters: {
-    text: "",
     sortField: "createdAt:desc",
     skip: 0,
     limit: 25
@@ -40,6 +41,14 @@ describe("Sample Selectors", () => {
       expect(fromSelectors.getSamples.projector(initialSampleState)).toEqual(
         []
       );
+    });
+  });
+
+  describe("getMetadataKeys", () => {
+    it("should get metadataKeys", () => {
+      expect(
+        fromSelectors.getMetadataKeys.projector(initialSampleState)
+      ).toEqual([]);
     });
   });
 
@@ -161,14 +170,12 @@ describe("Sample Selectors", () => {
 
   describe("getFullqueryParams", () => {
     it("should get the fullquery params", () => {
-      const { text, sortField, skip, limit } = initialSampleState.sampleFilters;
-      const limits = { order: sortField, skip, limit };
-      const params = { query: JSON.stringify({ text }), limits };
-      expect(
+      const fullqueryKeys = Object.keys(
         fromSelectors.getFullqueryParams.projector(
           initialSampleState.sampleFilters
         )
-      ).toEqual(params);
+      );
+      expect(fullqueryKeys).toContain("query");
     });
   });
 

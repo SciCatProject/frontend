@@ -39,9 +39,9 @@ export class SampleEffects {
       map(([action, params]) => params),
       mergeMap(({ query, limits }) =>
         this.sampleApi.fullquery(query, limits).pipe(
-          mergeMap(samples => [
+          mergeMap((samples) => [
             fromActions.fetchSamplesCompleteAction({ samples }),
-            fromActions.fetchSamplesCountAction()
+            fromActions.fetchSamplesCountAction(),
           ]),
           catchError(() => of(fromActions.fetchSamplesFailedAction()))
         )
@@ -56,14 +56,32 @@ export class SampleEffects {
       map(([action, params]) => params),
       mergeMap(({ query }) =>
         this.sampleApi.fullquery(query).pipe(
-          map(samples =>
+          map((samples) =>
             fromActions.fetchSamplesCountCompleteAction({
-              count: samples.length
+              count: samples.length,
             })
           ),
           catchError(() => of(fromActions.fetchSamplesCountFailedAction()))
         )
       )
+    )
+  );
+
+  fetchMetadataKeys$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(fromActions.fetchMetadataKeysAction),
+      withLatestFrom(this.fullqueryParams$),
+      map(([action, params]) => params),
+      mergeMap(({ query }) => {
+        const parsedQuery = JSON.parse(query);
+        parsedQuery.metadataKey = "";
+        return this.sampleApi.metadataKeys(JSON.stringify(parsedQuery)).pipe(
+          map((metadataKeys) =>
+            fromActions.fetchMetadataKeysCompleteAction({ metadataKeys })
+          ),
+          catchError(() => of(fromActions.fetchMetadataKeysFailedAction()))
+        );
+      })
     )
   );
 
@@ -73,9 +91,9 @@ export class SampleEffects {
       switchMap(({ sampleId }) => {
         const sampleFilter = {
           where: {
-            sampleId
+            sampleId,
           },
-          include: [{ relation: "attachments" }]
+          include: [{ relation: "attachments" }],
         };
         return this.sampleApi.findOne(sampleFilter).pipe(
           map((sample: Sample) =>
@@ -95,7 +113,7 @@ export class SampleEffects {
         this.datasetApi.find({ where: { sampleId }, order, skip, limit }).pipe(
           mergeMap((datasets: Dataset[]) => [
             fromActions.fetchSampleDatasetsCompleteAction({ datasets }),
-            fromActions.fetchSampleDatasetsCountAction({ sampleId })
+            fromActions.fetchSampleDatasetsCountAction({ sampleId }),
           ]),
           catchError(() => of(fromActions.fetchSampleDatasetsFailedAction()))
         )
@@ -108,9 +126,9 @@ export class SampleEffects {
       ofType(fromActions.fetchSampleDatasetsCountAction),
       switchMap(({ sampleId }) =>
         this.datasetApi.find({ where: { sampleId } }).pipe(
-          map(datasets =>
+          map((datasets) =>
             fromActions.fetchSampleDatasetsCountCompleteAction({
-              count: datasets.length
+              count: datasets.length,
             })
           ),
           catchError(() =>
@@ -127,7 +145,7 @@ export class SampleEffects {
       switchMap(({ sampleId, characteristics }) =>
         this.sampleApi
           .patchAttributes(sampleId, {
-            sampleCharacteristics: characteristics
+            sampleCharacteristics: characteristics,
           })
           .pipe(
             map((sample: Sample) =>
@@ -144,9 +162,9 @@ export class SampleEffects {
       ofType(fromActions.addSampleAction),
       mergeMap(({ sample }) =>
         this.sampleApi.create(sample).pipe(
-          mergeMap(res => [
+          mergeMap((res) => [
             fromActions.addSampleCompleteAction({ sample: res }),
-            fromActions.fetchSamplesAction()
+            fromActions.fetchSamplesAction(),
           ]),
           catchError(() => of(fromActions.addSampleFailedAction()))
         )
@@ -169,7 +187,7 @@ export class SampleEffects {
             attachment
           )
           .pipe(
-            map(res =>
+            map((res) =>
               fromActions.addAttachmentCompleteAction({ attachment: res })
             ),
             catchError(() => of(fromActions.addAttachmentFailedAction()))
@@ -190,9 +208,9 @@ export class SampleEffects {
             newCaption
           )
           .pipe(
-            map(res =>
+            map((res) =>
               fromActions.updateAttachmentCaptionCompleteAction({
-                attachment: res
+                attachment: res,
               })
             ),
             catchError(() =>

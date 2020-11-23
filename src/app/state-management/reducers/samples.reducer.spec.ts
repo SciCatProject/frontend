@@ -1,7 +1,7 @@
 import { samplesReducer } from "./samples.reducer";
 import { initialSampleState } from "../state/samples.store";
 import * as fromActions from "../actions/samples.actions";
-import { Attachment, Sample, Dataset, SampleFilters } from "../models";
+import { Attachment, Sample, Dataset, SampleFilters, ScientificCondition } from "../models";
 import { SampleInterface } from "shared/sdk";
 
 const data: SampleInterface = {
@@ -29,6 +29,18 @@ describe("SamplesReducer", () => {
       const state = samplesReducer(initialSampleState, action);
 
       expect(state.samplesCount).toEqual(count);
+    });
+  });
+
+  describe("on fetchMetadataKeysCompleteAction", () => {
+    it("should set metadataKeys", () => {
+      const metadataKeys = ["volume"];
+      const action = fromActions.fetchMetadataKeysCompleteAction({
+        metadataKeys,
+      });
+      const state = samplesReducer(initialSampleState, action);
+
+      expect(state.metadataKeys).toEqual(metadataKeys);
     });
   });
 
@@ -187,6 +199,48 @@ describe("SamplesReducer", () => {
       const state = samplesReducer(initialSampleState, action);
 
       expect(state.sampleFilters.text).toEqual(text);
+    });
+  });
+
+  describe("on addCharacteristicsFilterAction", () => {
+    it("should add characteristic to characteristics filter", () => {
+      const characteristic: ScientificCondition = {
+        lhs: "lhsTest",
+        relation: "EQUAL_TO_STRING",
+        rhs: "rhsTest",
+        unit: "",
+      };
+
+      const action = fromActions.addCharacteristicsFilterAction({
+        characteristic,
+      });
+      const state = samplesReducer(initialSampleState, action);
+
+      expect(state.sampleFilters.characteristics).toContain(characteristic);
+    });
+  });
+
+  describe("on removeCharacteristicsFilterAction", () => {
+    it("should remove characteristic from characteristics filter", () => {
+      const characteristic: ScientificCondition = {
+        lhs: "lhsTest",
+        relation: "EQUAL_TO_STRING",
+        rhs: "rhsTest",
+        unit: "",
+      };
+
+      initialSampleState.sampleFilters.characteristics.push(characteristic);
+
+      expect(initialSampleState.sampleFilters.characteristics).toContain(
+        characteristic
+      );
+
+      const index = 0;
+
+      const action = fromActions.removeCharacteristicsFilterAction({ index });
+      const state = samplesReducer(initialSampleState, action);
+
+      expect(state.sampleFilters.characteristics).not.toContain(characteristic);
     });
   });
 

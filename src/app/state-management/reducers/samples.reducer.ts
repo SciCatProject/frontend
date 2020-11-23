@@ -17,6 +17,11 @@ const reducer = createReducer(
     samplesCount: count,
   })),
 
+  on(
+    fromActions.fetchMetadataKeysCompleteAction,
+    (state, { metadataKeys }) => ({ ...state, metadataKeys })
+  ),
+
   on(fromActions.fetchSampleCompleteAction, (state, { sample }) => ({
     ...state,
     currentSample: sample,
@@ -99,6 +104,27 @@ const reducer = createReducer(
     ...state,
     sampleFilters: { ...state.sampleFilters, text },
   })),
+
+  on(
+    fromActions.addCharacteristicsFilterAction,
+    (state, { characteristic }) => {
+      const currentFilters = state.sampleFilters;
+      const currentCharacteristics = currentFilters.characteristics;
+      const sampleFilters = {
+        ...currentFilters,
+        characteristics: [...currentCharacteristics, characteristic],
+      };
+      return { ...state, sampleFilters };
+    }
+  ),
+
+  on(fromActions.removeCharacteristicsFilterAction, (state, { index }) => {
+    const currentFilters = state.sampleFilters;
+    const characteristics = [...currentFilters.characteristics];
+    characteristics.splice(index, 1);
+    const sampleFilters = { ...currentFilters, characteristics };
+    return { ...state, sampleFilters };
+  }),
 
   on(fromActions.clearSamplesStateAction, () => ({ ...initialSampleState }))
 );

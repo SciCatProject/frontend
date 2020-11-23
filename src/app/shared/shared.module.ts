@@ -11,6 +11,7 @@ import { SearchBarModule } from "./modules/search-bar/search-bar.module";
 import { ScientificMetadataModule } from "./modules/scientific-metadata/scientific-metadata.module";
 import { UnitsService } from "./services/units.service";
 import { FilePathTruncate } from "./pipes/file-path-truncate.pipe";
+import { SearchParametersDialogModule } from './modules/search-parameters-dialog/search-parameters-dialog.module';
 
 @NgModule({
   imports: [
@@ -23,7 +24,8 @@ import { FilePathTruncate } from "./pipes/file-path-truncate.pipe";
     PipesModule,
     ScientificMetadataModule,
     SearchBarModule,
-    TableModule
+    TableModule,
+    SearchParametersDialogModule
   ],
   declarations: [],
   providers: [ConfigService, UnitsService, FilePathTruncate],

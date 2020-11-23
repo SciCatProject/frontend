@@ -6,25 +6,26 @@ import {
   SampleInterface,
   Sample,
   Dataset,
-  Attachment
+  Attachment,
 } from "shared/sdk";
 import { TestBed } from "@angular/core/testing";
 import { provideMockActions } from "@ngrx/effects/testing";
 import { provideMockStore } from "@ngrx/store/testing";
 import {
   getFullqueryParams,
-  getDatasetsQueryParams
+  getDatasetsQueryParams,
 } from "state-management/selectors/samples.selectors";
 import * as fromActions from "state-management/actions/samples.actions";
 import { hot, cold } from "jasmine-marbles";
 import {
   loadingAction,
-  loadingCompleteAction
+  loadingCompleteAction,
 } from "state-management/actions/user.actions";
+import { Type } from "@angular/core";
 
 const data: SampleInterface = {
   sampleId: "testId",
-  ownerGroup: "testGroup"
+  ownerGroup: "testGroup",
 };
 const sample = new Sample(data);
 
@@ -41,33 +42,41 @@ describe("SampleEffects", () => {
         provideMockActions(() => actions),
         provideMockStore({
           selectors: [
-            { selector: getFullqueryParams, value: {} },
-            { selector: getDatasetsQueryParams, value: {} }
-          ]
+            {
+              selector: getFullqueryParams,
+              value: { query: JSON.stringify({ text: "" }) },
+            },
+            { selector: getDatasetsQueryParams, value: {} },
+          ],
         }),
         {
           provide: SampleApi,
           useValue: jasmine.createSpyObj("sampleApi", [
             "fullquery",
             "findOne",
+            "metadataKeys",
             "patchAttributes",
             "create",
             "createAttachments",
             "updateByIdAttachments",
-            "destroyByIdAttachments"
-          ])
+            "destroyByIdAttachments",
+          ]),
         },
         {
           provide: DatasetApi,
-          useValue: jasmine.createSpyObj("datasetApi", ["find"])
-        }
-      ]
+          useValue: jasmine.createSpyObj("datasetApi", ["find"]),
+        },
+      ],
     });
 
-    effects = TestBed.get(SampleEffects);
-    sampleApi = TestBed.get(SampleApi);
-    datasetApi = TestBed.get(DatasetApi);
+    effects = TestBed.inject(SampleEffects);
+    sampleApi = injectedStub(SampleApi);
+    datasetApi = injectedStub(DatasetApi);
   });
+
+  function injectedStub<S>(service: Type<S>): jasmine.SpyObj<S> {
+    return TestBed.inject(service) as jasmine.SpyObj<S>;
+  }
 
   describe("fetchSamples$", () => {
     describe("ofType fetchSamplesAction", () => {
@@ -196,7 +205,7 @@ describe("SampleEffects", () => {
       const samples = [sample];
       const action = fromActions.fetchSamplesCountAction();
       const outcome = fromActions.fetchSamplesCountCompleteAction({
-        count: samples.length
+        count: samples.length,
       });
 
       actions = hot("-a", { a: action });
@@ -217,6 +226,35 @@ describe("SampleEffects", () => {
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchCount$).toBeObservable(expected);
+    });
+  });
+
+  describe("fetchMetadataKeys$", () => {
+    it("should result in a fetchMetadataKeysCompleteAction", () => {
+      const metadataKeys = ["test"];
+      const action = fromActions.fetchMetadataKeysAction();
+      const outcome = fromActions.fetchMetadataKeysCompleteAction({
+        metadataKeys,
+      });
+
+      actions = hot("-a", { a: action });
+      const response = cold("-a|", { a: metadataKeys });
+      sampleApi.metadataKeys.and.returnValue(response);
+
+      const expected = cold("--b", { b: outcome });
+      expect(effects.fetchMetadataKeys$).toBeObservable(expected);
+    });
+
+    it("should result in a fetchMetadataKeysFailedAction", () => {
+      const action = fromActions.fetchMetadataKeysAction();
+      const outcome = fromActions.fetchMetadataKeysFailedAction();
+
+      actions = hot("-a", { a: action });
+      const response = cold("-#", {});
+      sampleApi.metadataKeys.and.returnValue(response);
+
+      const expected = cold("--b", { b: outcome });
+      expect(effects.fetchMetadataKeys$).toBeObservable(expected);
     });
   });
 
@@ -255,7 +293,7 @@ describe("SampleEffects", () => {
       const datasets = [new Dataset()];
       const action = fromActions.fetchSampleDatasetsAction({ sampleId });
       const outcome1 = fromActions.fetchSampleDatasetsCompleteAction({
-        datasets
+        datasets,
       });
       const outcome2 = fromActions.fetchSampleDatasetsCountAction({ sampleId });
 
@@ -288,7 +326,7 @@ describe("SampleEffects", () => {
       const datasets = [new Dataset()];
       const action = fromActions.fetchSampleDatasetsCountAction({ sampleId });
       const outcome = fromActions.fetchSampleDatasetsCountCompleteAction({
-        count
+        count,
       });
 
       actions = hot("-a", { a: action });
@@ -345,7 +383,7 @@ describe("SampleEffects", () => {
       const characteristics = {};
       const action = fromActions.saveCharacteristicsAction({
         sampleId,
-        characteristics
+        characteristics,
       });
       const outcome = fromActions.saveCharacteristicsCompleteAction({ sample });
 
@@ -362,7 +400,7 @@ describe("SampleEffects", () => {
       const characteristics = {};
       const action = fromActions.saveCharacteristicsAction({
         sampleId,
-        characteristics
+        characteristics,
       });
       const outcome = fromActions.saveCharacteristicsFailedAction();
 
@@ -413,10 +451,10 @@ describe("SampleEffects", () => {
       const action = fromActions.updateAttachmentCaptionAction({
         sampleId,
         attachmentId,
-        caption
+        caption,
       });
       const outcome = fromActions.updateAttachmentCaptionCompleteAction({
-        attachment
+        attachment,
       });
 
       actions = hot("-a", { a: action });
@@ -431,7 +469,7 @@ describe("SampleEffects", () => {
       const action = fromActions.updateAttachmentCaptionAction({
         sampleId,
         attachmentId,
-        caption
+        caption,
       });
       const outcome = fromActions.updateAttachmentCaptionFailedAction();
 
@@ -451,10 +489,10 @@ describe("SampleEffects", () => {
     it("should result in a removeAttachmentCompleteAction", () => {
       const action = fromActions.removeAttachmentAction({
         sampleId,
-        attachmentId
+        attachmentId,
       });
       const outcome = fromActions.removeAttachmentCompleteAction({
-        attachmentId
+        attachmentId,
       });
 
       actions = hot("-a", { a: action });
@@ -468,7 +506,7 @@ describe("SampleEffects", () => {
     it("should result in a removeAttachmentFailedAction", () => {
       const action = fromActions.removeAttachmentAction({
         sampleId,
-        attachmentId
+        attachmentId,
       });
       const outcome = fromActions.removeAttachmentFailedAction();
 
@@ -563,7 +601,7 @@ describe("SampleEffects", () => {
         const characteristics = {};
         const action = fromActions.saveCharacteristicsAction({
           sampleId,
-          characteristics
+          characteristics,
         });
         const outcome = loadingAction();
 
@@ -595,7 +633,7 @@ describe("SampleEffects", () => {
         const action = fromActions.updateAttachmentCaptionAction({
           sampleId,
           attachmentId,
-          caption
+          caption,
         });
         const outcome = loadingAction();
 
@@ -612,7 +650,7 @@ describe("SampleEffects", () => {
         const attachmentId = "testId";
         const action = fromActions.removeAttachmentAction({
           sampleId,
-          attachmentId
+          attachmentId,
         });
         const outcome = loadingAction();
 
@@ -703,7 +741,7 @@ describe("SampleEffects", () => {
       it("should dispatch a loadingCompleteAction", () => {
         const datasets = [new Dataset()];
         const action = fromActions.fetchSampleDatasetsCompleteAction({
-          datasets
+          datasets,
         });
         const outcome = loadingCompleteAction();
 
@@ -730,7 +768,7 @@ describe("SampleEffects", () => {
       it("should dispatch a loadingCompleteAction", () => {
         const count = 100;
         const action = fromActions.fetchSampleDatasetsCountCompleteAction({
-          count
+          count,
         });
         const outcome = loadingCompleteAction();
 
@@ -780,7 +818,7 @@ describe("SampleEffects", () => {
     describe("ofType saveCharacteristicsCompleteAction", () => {
       it("should dispatch a loadingCompleteAction", () => {
         const action = fromActions.saveCharacteristicsCompleteAction({
-          sample
+          sample,
         });
         const outcome = loadingCompleteAction();
 
@@ -832,7 +870,7 @@ describe("SampleEffects", () => {
       it("should dispatch a loadingCompleteAction", () => {
         const attachment = new Attachment();
         const action = fromActions.updateAttachmentCaptionCompleteAction({
-          attachment
+          attachment,
         });
         const outcome = loadingCompleteAction();
 
@@ -859,7 +897,7 @@ describe("SampleEffects", () => {
       it("should dispatch a loadingCompleteAction", () => {
         const attachmentId = "testId";
         const action = fromActions.removeAttachmentCompleteAction({
-          attachmentId
+          attachmentId,
         });
         const outcome = loadingCompleteAction();
 

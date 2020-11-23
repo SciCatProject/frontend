@@ -1,9 +1,10 @@
-import { Sample, SampleFilters, Dataset } from "state-management/models";
+import { Sample, SampleFilters, Dataset, GenericFilters } from "state-management/models";
 
 export interface SampleState {
   samples: Sample[];
   currentSample: Sample;
   datasets: Dataset[];
+  metadataKeys: string[];
 
   samplesCount: number;
   datasetsCount: number;
@@ -11,13 +12,14 @@ export interface SampleState {
   hasPrefilledFilters: boolean;
   sampleFilters: SampleFilters;
 
-  datasetFilters: SampleFilters;
+  datasetFilters: GenericFilters;
 }
 
 export const initialSampleState: SampleState = {
   samples: [],
   currentSample: null,
   datasets: [],
+  metadataKeys: [],
 
   samplesCount: 0,
   datasetsCount: 0,
@@ -26,13 +28,13 @@ export const initialSampleState: SampleState = {
 
   sampleFilters: {
     text: "",
-    sortField: "creationTime:desc",
+    sortField: "createdAt:desc",
     skip: 0,
-    limit: 25
+    limit: 25,
+    characteristics: []
   },
 
   datasetFilters: {
-    text: "",
     sortField: "createdAt:desc",
     skip: 0,
     limit: 25

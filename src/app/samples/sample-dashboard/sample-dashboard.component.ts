@@ -7,12 +7,15 @@ import {
   fetchSamplesAction,
   sortByColumnAction,
   setTextFilterAction,
-  prefillFiltersAction
+  prefillFiltersAction,
+  fetchMetadataKeysAction,
+  addCharacteristicsFilterAction,
+  removeCharacteristicsFilterAction,
 } from "state-management/actions/samples.actions";
 import {
   TableColumn,
   PageChangeEvent,
-  SortChangeEvent
+  SortChangeEvent,
 } from "shared/modules/table/table.component";
 import { Subscription } from "rxjs";
 import {
@@ -22,7 +25,9 @@ import {
   getPage,
   getFilters,
   getHasPrefilledFilters,
-  getTextFilter
+  getTextFilter,
+  getMetadataKeys,
+  getCharacteristicsFilter,
 } from "state-management/selectors/samples.selectors";
 import { DatePipe } from "@angular/common";
 import { Router, ActivatedRoute } from "@angular/router";
@@ -35,34 +40,37 @@ import {
   combineLatest,
   map,
   distinctUntilChanged,
-  take
+  take,
 } from "rxjs/operators";
-import { SampleFilters } from "state-management/models";
+import { SampleFilters, ScientificCondition } from "state-management/models";
+import { SearchParametersDialogComponent } from "shared/modules/search-parameters-dialog/search-parameters-dialog.component";
 
 @Component({
   selector: "sample-dashboard",
   templateUrl: "./sample-dashboard.component.html",
-  styleUrls: ["./sample-dashboard.component.scss"]
+  styleUrls: ["./sample-dashboard.component.scss"],
 })
 export class SampleDashboardComponent implements OnInit, OnDestroy {
   sampleCount$ = this.store.pipe(select(getSamplesCount));
   samplesPerPage$ = this.store.pipe(select(getSamplesPerPage));
   currentPage$ = this.store.pipe(select(getPage));
   textFilter$ = this.store.pipe(select(getTextFilter));
+  characteristics$ = this.store.pipe(select(getCharacteristicsFilter));
   readyToFetch$ = this.store.pipe(
     select(getHasPrefilledFilters),
-    filter(has => has)
+    filter((has) => has)
   );
 
   subscriptions: Subscription[] = [];
 
+  metadataKeys: string[];
   tableData: any[];
   tableColumns: TableColumn[] = [
     { name: "sampleId", icon: "fingerprint", sort: true, inList: false },
     { name: "description", icon: "description", sort: false, inList: true },
     { name: "owner", icon: "face", sort: true, inList: true },
     { name: "creationTime", icon: "date_range", sort: true, inList: true },
-    { name: "ownerGroup", icon: "group", sort: false, inList: true }
+    { name: "ownerGroup", icon: "group", sort: false, inList: true },
   ];
   tablePaginate = true;
 
@@ -70,18 +78,9 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
   name: string;
   description: string;
 
-  constructor(
-    @Inject(APP_CONFIG) public appConfig: AppConfig,
-    private datePipe: DatePipe,
-    public dialog: MatDialog,
-    private route: ActivatedRoute,
-    private router: Router,
-    private store: Store<Sample>
-  ) {}
-
   formatTableData(samples: Sample[]): any {
     if (samples) {
-      return samples.map(sample => {
+      return samples.map((sample) => {
         return {
           sampleId: sample.sampleId,
           owner: sample.owner,
@@ -90,7 +89,7 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
             "yyyy-MM-dd, hh:mm"
           ),
           description: sample.description,
-          ownerGroup: sample.ownerGroup
+          ownerGroup: sample.ownerGroup,
         };
       });
     }
@@ -100,12 +99,35 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
     this.dialogConfig = new MatDialogConfig();
     this.dialog.open(SampleDialogComponent, {
       width: "250px",
-      data: { name: this.name, description: this.description }
+      data: { name: this.name, description: this.description },
     });
   }
 
   onTextSearchChange(query) {
     this.store.dispatch(setTextFilterAction({ text: query }));
+  }
+
+  openSearchParametersDialog() {
+    this.dialog
+      .open(SearchParametersDialogComponent, {
+        data: { parameterKeys: this.metadataKeys },
+      })
+      .afterClosed()
+      .subscribe((res) => {
+        if (res) {
+          const { data } = res;
+          console.log({ data });
+          this.store.dispatch(
+            addCharacteristicsFilterAction({ characteristic: data })
+          );
+        }
+      });
+  }
+
+  removeCharacteristic(characteristic: ScientificCondition, index: number) {
+    console.log({ characteristic });
+    console.log({ index });
+    this.store.dispatch(removeCharacteristicsFilterAction({ index }));
   }
 
   onPageChange(event: PageChangeEvent) {
@@ -128,9 +150,20 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
     this.router.navigateByUrl("/samples/" + id);
   }
 
+  constructor(
+    @Inject(APP_CONFIG) public appConfig: AppConfig,
+    private datePipe: DatePipe,
+    public dialog: MatDialog,
+    private route: ActivatedRoute,
+    private router: Router,
+    private store: Store<Sample>
+  ) {}
+
   ngOnInit() {
+    this.store.dispatch(fetchMetadataKeysAction());
+
     this.subscriptions.push(
-      this.store.pipe(select(getSamples)).subscribe(samples => {
+      this.store.pipe(select(getSamples)).subscribe((samples) => {
         this.tableData = this.formatTableData(samples);
       })
     );
@@ -143,28 +176,35 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
           map(([filters, _]) => filters),
           distinctUntilChanged(deepEqual)
         )
-        .subscribe(filters => {
+        .subscribe((filters) => {
           this.store.dispatch(fetchSamplesAction());
           this.router.navigate(["/samples"], {
-            queryParams: { args: rison.encode(filters) }
+            queryParams: { args: rison.encode(filters) },
           });
         })
     );
 
     this.subscriptions.push(
+      this.store.pipe(select(getMetadataKeys)).subscribe((metadataKeys) => {
+        this.metadataKeys = metadataKeys;
+        console.log({ metadataKeys });
+      })
+    );
+
+    this.subscriptions.push(
       this.route.queryParams
         .pipe(
-          map(params => params.args as string),
+          map((params) => params.args as string),
           take(1),
-          map(args => (args ? rison.decode<SampleFilters>(args) : {}))
+          map((args) => (args ? rison.decode<SampleFilters>(args) : {}))
         )
-        .subscribe(filters =>
+        .subscribe((filters) =>
           this.store.dispatch(prefillFiltersAction({ values: filters }))
         )
     );
   }
 
   ngOnDestroy() {
-    this.subscriptions.forEach(subscription => subscription.unsubscribe());
+    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
 }

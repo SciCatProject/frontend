@@ -1,14 +1,14 @@
 import * as fromSelectors from "./policies.selectors";
 import { PolicyState } from "../state/policies.store";
-import { PolicyFilters } from "state-management/models";
+import { GenericFilters } from "state-management/models";
 
-const policiesFilters: PolicyFilters = {
+const policiesFilters: GenericFilters = {
   sortField: "test desc",
   skip: 0,
   limit: 25
 };
 
-const editableFilters: PolicyFilters = {
+const editableFilters: GenericFilters = {
   sortField: "test desc",
   skip: 0,
   limit: 25

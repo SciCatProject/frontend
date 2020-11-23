@@ -1,6 +1,6 @@
 import { createAction, props } from "@ngrx/store";
 import { Sample, Dataset, Attachment } from "shared/sdk";
-import { SampleFilters } from "state-management/models";
+import { SampleFilters, ScientificCondition } from "state-management/models";
 
 export const fetchSamplesAction = createAction("[Sample] Fetch Samples");
 export const fetchSamplesCompleteAction = createAction(
@@ -20,6 +20,17 @@ export const fetchSamplesCountCompleteAction = createAction(
 );
 export const fetchSamplesCountFailedAction = createAction(
   "[Sample] Fetch Samples Count Failed"
+);
+
+export const fetchMetadataKeysAction = createAction(
+  "[Sample] Fetch Metadata Keys"
+);
+export const fetchMetadataKeysCompleteAction = createAction(
+  "[Sample] Fetch Metadata Keys Complete",
+  props<{metadataKeys: string[]}>()
+);
+export const fetchMetadataKeysFailedAction = createAction(
+  "[Sample] Fetch Metadata Keys Failed"
 );
 
 export const fetchSampleAction = createAction(
@@ -139,6 +150,16 @@ export const prefillFiltersAction = createAction(
 export const setTextFilterAction = createAction(
   "[Sample] Set Text Filter",
   props<{ text: string }>()
+);
+
+export const addCharacteristicsFilterAction = createAction(
+  "[Sample] Add Characteristics Filter",
+  props<{characteristic: ScientificCondition}>()
+);
+
+export const removeCharacteristicsFilterAction = createAction(
+  "[Sample] Remove Characteristics Filter",
+  props<{index: number}>()
 );
 
 export const clearSamplesStateAction = createAction("[Sample] Clear State");

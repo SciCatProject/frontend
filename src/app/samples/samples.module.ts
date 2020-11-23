@@ -1,5 +1,5 @@
-import { SampleEffects } from './../state-management/effects/samples.effects';
-import { EffectsModule } from '@ngrx/effects';
+import { SampleEffects } from "./../state-management/effects/samples.effects";
+import { EffectsModule } from "@ngrx/effects";
 import { CommonModule } from "@angular/common";
 import { MatButtonModule } from "@angular/material/button";
 import { MatCardModule } from "@angular/material/card";
@@ -19,6 +19,7 @@ import { SampleDashboardComponent } from "./sample-dashboard/sample-dashboard.co
 import { FlexLayoutModule } from "@angular/flex-layout";
 import { NgxJsonViewerModule } from "ngx-json-viewer";
 import { SharedCatanieModule } from "shared/shared.module";
+import { MatChipsModule } from "@angular/material/chips";
 
 @NgModule({
   imports: [
@@ -28,6 +29,7 @@ import { SharedCatanieModule } from "shared/shared.module";
     FormsModule,
     MatButtonModule,
     MatCardModule,
+    MatChipsModule,
     MatDialogModule,
     MatFormFieldModule,
     MatIconModule,
@@ -37,15 +39,15 @@ import { SharedCatanieModule } from "shared/shared.module";
     NgxJsonViewerModule,
     ReactiveFormsModule,
     SharedCatanieModule,
-    StoreModule.forFeature("samples", samplesReducer)
+    StoreModule.forFeature("samples", samplesReducer),
   ],
   exports: [SampleDetailComponent, SampleDialogComponent],
   declarations: [
     SampleDetailComponent,
     SampleDialogComponent,
-    SampleDashboardComponent
+    SampleDashboardComponent,
   ],
   providers: [],
-  entryComponents: [SampleDialogComponent]
+  entryComponents: [SampleDialogComponent],
 })
 export class SamplesModule {}
