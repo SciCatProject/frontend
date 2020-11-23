@@ -39,7 +39,7 @@
               "src/manifest.json"
             ],
             "styles": ["src/styles.css", "src/theme.scss"],
-            "scripts": ["node_modules/hammerjs/hammer.min.js"]
+            "scripts": []
           },
           "configurations": {
             "dmscdev": {
@@ -417,7 +417,7 @@
             "main": "src/test.ts",
             "karmaConfig": "./karma.conf.js",
             "polyfills": "src/polyfills.ts",
-            "scripts": ["node_modules/hammerjs/hammer.min.js"],
+            "scripts": [],
             "styles": ["src/styles.css", "src/theme.scss"],
             "assets": [
               "src/assets",
