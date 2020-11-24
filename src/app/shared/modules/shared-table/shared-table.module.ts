@@ -1,5 +1,5 @@
 import { NgModule } from "@angular/core";
-import { CommonModule } from "@angular/common";
+import { CommonModule, JsonPipe } from "@angular/common";
 import { SharedTableComponent } from "./shared-table.component";
 
 import { PipesModule } from "../../pipes/pipes.module";
@@ -36,6 +36,7 @@ import { FormsModule } from "@angular/forms";
     FlexLayoutModule,
     FormsModule,
   ],
-  exports: [SharedTableComponent]
+  exports: [SharedTableComponent],
+  providers: [JsonPipe]
 })
 export class SharedTableModule { }

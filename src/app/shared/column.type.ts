@@ -7,4 +7,5 @@ export interface Column {
     width?: number;
     canSort?: boolean;
     matchMode?: string;
+    pipe?: any;
 }

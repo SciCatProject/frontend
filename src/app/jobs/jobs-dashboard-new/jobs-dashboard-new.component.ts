@@ -3,6 +3,7 @@ import { Column } from "../../shared/column.type";
 import { SciCatDataSource } from "../../shared/services/scicat.datasource";
 import { ScicatDataService } from "../../shared/services/scicat-data-service";
 import { ExportExcelService } from "../../shared/services/export-excel.service";
+import { JsonPipe } from "@angular/common";
 
 @Component({
   selector: "app-jobs-new-dashboard",
@@ -17,7 +18,7 @@ export class JobsDashboardNewComponent implements OnInit, OnDestroy {
     { id: "emailJobInitiator", label: "Initiator", canSort: true, matchMode: "contains", hideOrder: 1, },
     { id: "type", label: "Type", canSort: true,  matchMode: "is", hideOrder: 2, },
     { id: "creationTime", label: "Created at", matchMode: "after", hideOrder: 3, },
-    { id: "jobParams", label: "Parameters", canSort: false, hideOrder: 4, },
+    { id: "jobParams", label: "Parameters", pipe: JsonPipe, canSort: false, hideOrder: 4, },
     { id: "jobStatusMessage", label: "Status", canSort: true, matchMode: "contains", hideOrder: 5, },
     { id: "datasetList", label: "Datasets", canSort: false, hideOrder: 6, },
     { id: "jobResultObject", label: "Result", canSort: false, matchMode: "contains", hideOrder: 7, },

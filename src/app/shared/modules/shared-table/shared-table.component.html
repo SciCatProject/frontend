@@ -56,7 +56,7 @@
         <mat-cell *matCellDef="let row" [fxFlex]="column.width + 'px'">
             <ng-container [ngSwitch]="column.type">
                 <ng-container *ngSwitchCase="'image'"><img [src]=row[column.id] /></ng-container>
-                <span *ngSwitchDefault class="ellipsis">{{ row[column.id] }}</span>
+                <span *ngSwitchDefault class="ellipsis"> {{ row[column.id] | dynamicPipe: column.pipe: [] }}</span>
             </ng-container>
         </mat-cell>
     </ng-container>
@@ -71,7 +71,7 @@
                 <span>
                     <ng-container [ngSwitch]="hiddenColumn.type">
                         <ng-container *ngSwitchCase="'image'"><img [src]=row[hiddenColumn.id] /></ng-container>
-                        <span *ngSwitchDefault class="ellipsis">{{ row[hiddenColumn.id] }}</span>
+                        <span *ngSwitchDefault class="ellipsis">{{ row[column.id] | dynamicPipe: column.pipe: [] }}</span>
                     </ng-container>
                 </span>
             </p>
