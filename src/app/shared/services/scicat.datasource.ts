@@ -17,7 +17,7 @@ export class SciCatDataSource implements DataSource<any> {
     private exportSubscription: Subscription;
     private dataForExcel = []
     private columnsdef = []
-    private url=""
+    private url = ""
 
     constructor(private scicatdataService: ScicatDataService, private ete: ExportExcelService, private tableDefinition: any,) {
         this.url = this.tableDefinition.api + this.tableDefinition.collection
@@ -56,7 +56,7 @@ export class SciCatDataSource implements DataSource<any> {
 
         this.loadingSubject.next(true);
 
-        this.scicatdataService.getCount(this.url,this.columnsdef, globalFilter, filterExpressions).subscribe(
+        this.scicatdataService.getCount(this.url, this.columnsdef, globalFilter, filterExpressions).subscribe(
             numData => numData[0] && numData[0].all[0] ? this.countSubject.next(numData[0].all[0].totalSets) : this.countSubject.next(0));
 
         this.scicatdataService.findAllData(this.url, this.columnsdef, globalFilter, filterExpressions, sortField, sortDirection,
@@ -66,14 +66,12 @@ export class SciCatDataSource implements DataSource<any> {
             )
             .subscribe(data => {
                 // extend with unique field per row
-                if (data.length > 0) {
-                    const rows = [];
-                    data.forEach((element: any, index: number) => {
-                        element['uniqueId'] = index + 1;
-                        rows.push(element)
-                    });
-                    this.dataSubject.next(rows)
-                }
+                const rows = [];
+                data.forEach((element: any, index: number) => {
+                    element['uniqueId'] = index + 1;
+                    rows.push(element)
+                });
+                this.dataSubject.next(rows)
             });
 
     }

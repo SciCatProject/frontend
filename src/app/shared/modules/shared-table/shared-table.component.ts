@@ -87,16 +87,15 @@ export class SharedTableComponent implements AfterContentInit, OnDestroy, OnInit
   ngAfterViewInit() {
 
     // reset the paginator after sorting
-    // TODO unsubscribe for cleanup
-
     this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
 
+    // TODO unsubscribe global search filter as well
     fromEvent(this.input.nativeElement, "keyup")
       .pipe(
         debounceTime(350),
         distinctUntilChanged(),
         tap(() => {
-          console.log("global key typed :", this.input.nativeElement.id)
+          // console.log("global key typed :", this.input.nativeElement.id)
           this.paginator.pageIndex = 0;
           this.loadDataPage();
         })
@@ -137,9 +136,11 @@ export class SharedTableComponent implements AfterContentInit, OnDestroy, OnInit
   }
 
   ngOnDestroy() {
+    // TODO unsubscribe ALL subscriptions for cleanup
+    //console.log("Unsubscribe on destroy")
     this.rulerSubscription.unsubscribe();
-    console.log("Unsubscribe on destroy")
     this.unsubscribeColumnFilters()
+    this.sort.sortChange.unsubscribe()
   }
 
   /**
@@ -178,7 +179,6 @@ export class SharedTableComponent implements AfterContentInit, OnDestroy, OnInit
   }
 
   activateColumnFilters() {
-    //TODO do I need to unsubscribe "lost" column filter handlers ?
     // the following does not work:this.unsubscribeColumnFilters()
     let i = 0;
     this.allFilters.toArray().forEach(filter => {
@@ -202,6 +202,18 @@ export class SharedTableComponent implements AfterContentInit, OnDestroy, OnInit
         .subscribe();
     });
   }
+
+  reloadFilterExpressions() {
+    this.allFilters.toArray().forEach(filter => {
+      const columnId = filter.nativeElement.id;
+      if (this.filterExpressions[columnId]) {
+        // console.log("Reloading filter expressions:", columnId, this.filterExpressions[columnId]);
+        filter.nativeElement.value = this.filterExpressions[columnId];
+      }
+    });
+  }
+
+  // TODO id column search geht noch nicht
 
   toggleColumns(tableWidth: number) {
     // console.log("Calling toggleColumns", tableWidth)
@@ -230,6 +242,7 @@ export class SharedTableComponent implements AfterContentInit, OnDestroy, OnInit
     });
 
     this._changeDetectorRef.detectChanges()
+    this.reloadFilterExpressions()
     this.activateColumnFilters()
   }
 
