@@ -44,6 +44,7 @@ import { AnonymousLayoutComponent } from "_layout/anonymous-layout/anonymous-lay
 import { JobsGuard } from "app-routing/jobs.guard";
 import { PoliciesGuard } from "app-routing/policies.guard";
 import { LogbookGuard } from "app-routing/logbook.guard";
+import { DatasetsGuard } from "./datasets.guard";
 
 export const routes: Routes = [
   {
@@ -103,7 +104,7 @@ export const routes: Routes = [
       {
         path: "datasets",
         component: DashboardComponent,
-        canActivate: [AuthGuard],
+        canActivate: [DatasetsGuard],
       },
       {
         path: "datasets/batch",
@@ -113,17 +114,17 @@ export const routes: Routes = [
       {
         path: "datasets/:id",
         component: DatasetDetailsDashboardComponent,
-        canActivate: [AuthGuard],
+        canActivate: [DatasetsGuard],
       },
       {
         path: "datasets/:id/datablocks",
         component: DatablocksComponent,
-        canActivate: [AuthGuard],
+        canActivate: [DatasetsGuard],
       },
       {
         path: "datasets/:id/datafiles",
         component: DatafilesComponent,
-        canActivate: [AuthGuard],
+        canActivate: [DatasetsGuard],
       },
       {
         path: "instruments",
