@@ -121,6 +121,8 @@ export class SharedTableComponent implements AfterContentInit, OnDestroy, OnInit
     );
   }
 
+  // TODO Known problem: API server can not filter on ObjectId fields
+
   loadDataPage() {
     this.dataSource.loadAllData(
       this.input.nativeElement.value,
@@ -212,8 +214,6 @@ export class SharedTableComponent implements AfterContentInit, OnDestroy, OnInit
       }
     });
   }
-
-  // TODO id column search geht noch nicht
 
   toggleColumns(tableWidth: number) {
     // console.log("Calling toggleColumns", tableWidth)
