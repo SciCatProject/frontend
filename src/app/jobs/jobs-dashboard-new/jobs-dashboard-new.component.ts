@@ -3,6 +3,8 @@ import { Column } from "../../shared/column.type";
 import { SciCatDataSource } from "../../shared/services/scicat.datasource";
 import { ScicatDataService } from "../../shared/services/scicat-data-service";
 import { ExportExcelService } from "../../shared/services/export-excel.service";
+import { Job } from 'shared/sdk';
+import { Router } from '@angular/router';
 
 @Component({
   selector: "app-jobs-new-dashboard",
@@ -23,7 +25,7 @@ export class JobsDashboardNewComponent implements OnInit, OnDestroy {
     { id: "jobResultObject", label: "Result", format: "json", canSort: true, hideOrder: 7, },
   ]
 
-  // TODO get the real API endpoint
+
   tableDefinition = {
     collection: "Jobs",
     columns: this.columns
@@ -32,7 +34,7 @@ export class JobsDashboardNewComponent implements OnInit, OnDestroy {
 
   dataSource: SciCatDataSource;
 
-  constructor(private dataService: ScicatDataService, private exportService: ExportExcelService) { }
+  constructor(private dataService: ScicatDataService, private exportService: ExportExcelService, private router: Router) { }
 
   ngOnInit() {
     this.dataSource = new SciCatDataSource(this.dataService, this.exportService, this.tableDefinition);
@@ -40,5 +42,11 @@ export class JobsDashboardNewComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.dataSource.disconnectExportData()
+  }
+
+  onRowClick(job: Job) {
+    console.log("Row clicked:", job)
+    const id = encodeURIComponent(job.id);
+    this.router.navigateByUrl("/user/jobs/" + id);
   }
 }

@@ -53,6 +53,8 @@ export class SharedTableComponent implements AfterContentInit, OnDestroy, OnInit
   @Input() pageSize = 10;
   @Input() pageSizeOptions: number[] = [5, 10, 25, 100];
 
+  @Output() rowClick = new EventEmitter<any>();
+
   // MatTable
   @ViewChild(MatTable, { static: true }) dataTable: MatTable<Element>;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
@@ -149,6 +151,11 @@ export class SharedTableComponent implements AfterContentInit, OnDestroy, OnInit
    * Lifecycle Hook End
    */
 
+
+  onRowClick(event: any) {
+    this.rowClick.emit(event);
+  }
+
   get visibleColumnsIds() {
     const visibleColumnsIds = this.visibleColumns.map(column => column.id);
 
@@ -169,13 +176,9 @@ export class SharedTableComponent implements AfterContentInit, OnDestroy, OnInit
     this._changeDetectorRef.detectChanges();
   }
 
-  onRowClicked(row) {
-    // TODO add some action here console.log('Row clicked: ', row);
-  }
-
   unsubscribeColumnFilters() {
     this.columnFilterSubscriptions.forEach(sub => {
-      console.log("Unsubscribing subscription sub:", sub)
+      // console.log("Unsubscribing subscription sub:", sub)
       sub.unsubscribe()
     })
   }

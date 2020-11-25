@@ -82,7 +82,7 @@
     <mat-header-row *matHeaderRowDef="visibleColumnsIds; sticky: true" class="matHeaderRow" ></mat-header-row>
 
     <mat-row *matRowDef="let row; let i = dataIndex; columns: visibleColumnsIds"
-        class="matRowVisible visible-row-{{row.uniqueId}}" (click)="onRowClicked(row)"></mat-row>
+        class="matRowVisible visible-row-{{row.uniqueId}}" (click)="onRowClick(row)"></mat-row>
 
     <!-- Body row definition for hidden columns -->
     <mat-row *matRowDef="let row; let i = dataIndex; columns: ['hidden'];" [@detailExpand]="getExpandFlag(row.uniqueId)"
