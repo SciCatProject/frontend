@@ -1,5 +1,9 @@
 import { NgModule } from "@angular/core";
-import { CommonModule, JsonPipe } from "@angular/common";
+import {
+  CommonModule,
+  CurrencyPipe, DatePipe, DecimalPipe, JsonPipe, KeyValuePipe, LowerCasePipe,
+  PercentPipe, SlicePipe, TitleCasePipe, UpperCasePipe
+} from "@angular/common";
 import { SharedTableComponent } from "./shared-table.component";
 
 import { PipesModule } from "../../pipes/pipes.module";
@@ -16,6 +20,7 @@ import { MatInputModule } from "@angular/material/input";
 import { MatButtonModule } from "@angular/material/button";
 import { FlexLayoutModule } from "@angular/flex-layout";
 import { FormsModule } from "@angular/forms";
+import { ObjKeysPipe } from 'shared/pipes/obj-keys.pipe';
 
 @NgModule({
   declarations: [SharedTableComponent],
@@ -37,6 +42,7 @@ import { FormsModule } from "@angular/forms";
     FormsModule,
   ],
   exports: [SharedTableComponent],
-  providers: [JsonPipe]
+  providers: [CurrencyPipe, DatePipe, DecimalPipe, JsonPipe, ObjKeysPipe, KeyValuePipe, LowerCasePipe,
+    PercentPipe, SlicePipe, TitleCasePipe, UpperCasePipe]
 })
 export class SharedTableModule { }
