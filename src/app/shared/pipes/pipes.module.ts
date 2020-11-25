@@ -10,6 +10,7 @@ import { FileSizePipe } from "./filesize.pipe";
 import { FilePathTruncate } from "./file-path-truncate.pipe";
 import { PrettyUnitPipe } from "./pretty-unit.pipe";
 import { DynamicPipe } from "./dynamicPipe.pipe";
+import { NewDynamicPipe } from "./newDynamicPipe.pipe";
 
 
 @NgModule({
@@ -23,7 +24,8 @@ import { DynamicPipe } from "./dynamicPipe.pipe";
     StripProposalPrefixPipe,
     ThumbnailPipe,
     TitleCasePipe,
-    DynamicPipe
+    DynamicPipe,
+    NewDynamicPipe,
   ],
   imports: [CommonModule],
   exports: [
@@ -36,7 +38,8 @@ import { DynamicPipe } from "./dynamicPipe.pipe";
     StripProposalPrefixPipe,
     ThumbnailPipe,
     TitleCasePipe,
-    DynamicPipe
+    DynamicPipe,
+    NewDynamicPipe
   ]
 })
 export class PipesModule {}

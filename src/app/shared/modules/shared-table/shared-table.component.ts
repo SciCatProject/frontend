@@ -42,6 +42,8 @@ export class SharedTableComponent implements AfterContentInit, OnDestroy, OnInit
   // unitialized values are effectively treated as false
   expandedElement = {};
 
+  columnFilterSubscriptions: Subscription[] = []
+
   // MatPaginator Inputs
   length = 100;
 
@@ -85,6 +87,7 @@ export class SharedTableComponent implements AfterContentInit, OnDestroy, OnInit
   ngAfterViewInit() {
 
     // reset the paginator after sorting
+    // TODO unsubscribe for cleanup
 
     this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
 
@@ -93,30 +96,14 @@ export class SharedTableComponent implements AfterContentInit, OnDestroy, OnInit
         debounceTime(350),
         distinctUntilChanged(),
         tap(() => {
+          console.log("global key typed :", this.input.nativeElement.id)
           this.paginator.pageIndex = 0;
           this.loadDataPage();
         })
       )
       .subscribe();
 
-    this.allFilters.toArray().forEach(filter => {
-      fromEvent(filter.nativeElement, "keyup")
-        .pipe(
-          debounceTime(350),
-          distinctUntilChanged(),
-          tap(() => {
-            this.paginator.pageIndex = 0;
-            const columnId = filter.nativeElement.id;
-            if (filter.nativeElement.value) {
-              this.filterExpressions[columnId] = filter.nativeElement.value;
-            } else {
-              delete this.filterExpressions[columnId];
-            }
-            this.loadDataPage();
-          })
-        )
-        .subscribe();
-    });
+    this.activateColumnFilters()
 
 
     merge(this.sort.sortChange, this.paginator.page)
@@ -151,6 +138,8 @@ export class SharedTableComponent implements AfterContentInit, OnDestroy, OnInit
 
   ngOnDestroy() {
     this.rulerSubscription.unsubscribe();
+    console.log("Unsubscribe on destroy")
+    this.unsubscribeColumnFilters()
   }
 
   /**
@@ -181,7 +170,42 @@ export class SharedTableComponent implements AfterContentInit, OnDestroy, OnInit
     // TODO add some action here console.log('Row clicked: ', row);
   }
 
+  unsubscribeColumnFilters() {
+    this.columnFilterSubscriptions.forEach(sub => {
+      console.log("Unsubscribing subscription sub:", sub)
+      sub.unsubscribe()
+    })
+  }
+
+  activateColumnFilters() {
+    //TODO do I need to unsubscribe "lost" column filter handlers ?
+    // the following does not work:this.unsubscribeColumnFilters()
+    let i = 0;
+    this.allFilters.toArray().forEach(filter => {
+      i++;
+      // console.log("Defining subscription for column :", i)
+      this.columnFilterSubscriptions[i] = fromEvent(filter.nativeElement, "keyup").pipe(
+        debounceTime(350),
+        distinctUntilChanged(),
+        tap(() => {
+          // console.log("key typed :", filter.nativeElement.id)
+          this.paginator.pageIndex = 0;
+          const columnId = filter.nativeElement.id;
+          if (filter.nativeElement.value) {
+            this.filterExpressions[columnId] = filter.nativeElement.value;
+          } else {
+            delete this.filterExpressions[columnId];
+          }
+          this.loadDataPage();
+        })
+      )
+        .subscribe();
+    });
+  }
+
   toggleColumns(tableWidth: number) {
+    // console.log("Calling toggleColumns", tableWidth)
+
     this.zone.runOutsideAngular(() => {
       const sortedColumns = this.columnsdef.slice()
         .map((column, index) => ({ ...column, order: index }))
@@ -205,7 +229,8 @@ export class SharedTableComponent implements AfterContentInit, OnDestroy, OnInit
       this.hiddenColumns = this.columnsdef.filter(column => !column.visible);
     });
 
-    this._changeDetectorRef.detectChanges();
+    this._changeDetectorRef.detectChanges()
+    this.activateColumnFilters()
   }
 
   exportToExcel() {
