@@ -25,7 +25,6 @@ export class JobsDashboardNewComponent implements OnInit, OnDestroy {
 
   // TODO get the real API endpoint
   tableDefinition = {
-    api: "http://localhost:3000/api/v3/",
     collection: "Jobs",
     columns: this.columns
   }

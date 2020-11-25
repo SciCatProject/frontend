@@ -3,6 +3,8 @@ import { Observable, Subject, BehaviorSubject, of, Subscription } from "rxjs";
 import { ScicatDataService } from './scicat-data-service';
 import { catchError, finalize } from "rxjs/operators";
 import { ExportExcelService } from './export-excel.service';
+import { environment } from "../../../environments/environment";
+import { LoopBackConfig } from 'shared/sdk';
 
 // For each different table type one instance of this class should be created
 export class SciCatDataSource implements DataSource<any> {
@@ -20,7 +22,7 @@ export class SciCatDataSource implements DataSource<any> {
     private url = ""
 
     constructor(private scicatdataService: ScicatDataService, private ete: ExportExcelService, private tableDefinition: any,) {
-        this.url = this.tableDefinition.api + this.tableDefinition.collection
+        this.url = environment.lbBaseURL + "/" + LoopBackConfig.getApiVersion() + "/" + this.tableDefinition.collection
         this.collection = this.tableDefinition.collection
         this.columnsdef = this.tableDefinition.columns
 
