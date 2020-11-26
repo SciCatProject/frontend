@@ -72,3 +72,7 @@ mat-cell > span.ellipsis {
   overflow: hidden; 
   white-space: nowrap;
 }
+
+mat-header-row {
+  align-items: initial;
+}

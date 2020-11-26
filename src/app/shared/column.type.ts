@@ -8,4 +8,5 @@ export interface Column {
     canSort?: boolean;
     matchMode?: string;
     format?: string;
+    icon?: string;
 }
