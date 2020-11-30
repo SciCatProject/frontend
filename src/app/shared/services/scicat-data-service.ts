@@ -4,6 +4,7 @@ import { Observable } from "rxjs";
 import { filter, map } from "rxjs/operators";
 import { Column } from "../column.type";
 import { LoopBackAuth } from "shared/sdk";
+import { ɵINTERNAL_BROWSER_DYNAMIC_PLATFORM_PROVIDERS } from '@angular/platform-browser-dynamic';
 
 
 @Injectable({
@@ -40,6 +41,10 @@ export class ScicatDataService {
             }
             case "lessThan": {
               result[key] = { $lt: Number(filterExpressions[key]) };
+              break;
+            }
+            case "after":{
+              result[key]  = { "$gte": filterExpressions[key] }
               break;
             }
             case "is": {

@@ -49,7 +49,7 @@
       <mat-header-cell *matHeaderCellDef class="col-search" fxLayoutAlign="start start" fxLayout="column">
         <div fxLayout="column" style="align-items: center">
           <mat-icon>{{ column.icon }}</mat-icon>
-          <span mat-sort-header>{{ column.label | titleCase }}</span>
+          <span mat-sort-header>{{ column.label }}</span>
         </div>
         <mat-form-field *ngIf="column.matchMode;">
           <input #allFilters matInput autocomplete="off" id="{{ column.id }}" placeholder="{{ column.matchMode }}" />
@@ -60,7 +60,7 @@
     <mat-cell *matCellDef="let row" [fxFlex]="column.width + 'px'">
       <ng-container [ngSwitch]="column.type">
         <ng-container *ngSwitchCase="'image'"><img [src]=row[column.id] /></ng-container>
-        <span *ngSwitchDefault class="ellipsis"> {{ row[column.id] | newDynamicPipe: column.format }}</span>
+        <span *ngSwitchDefault class="ellipsis"> {{ getPropertyByPath(row,column.id)  | newDynamicPipe: column.format }}</span>
       </ng-container>
     </mat-cell>
   </ng-container>
@@ -74,7 +74,7 @@
         <span>
           <ng-container [ngSwitch]="hiddenColumn.type">
             <ng-container *ngSwitchCase="'image'"><img [src]=row[hiddenColumn.id] /></ng-container>
-            <span *ngSwitchDefault>{{ row[hiddenColumn.id] | newDynamicPipe: hiddenColumn.format }}</span>
+            <span *ngSwitchDefault>{{ getPropertyByPath(row,hiddenColumn.id) | newDynamicPipe: hiddenColumn.format }}</span>
           </ng-container>
         </span>
       </p>

@@ -242,6 +242,7 @@ export class SharedTableComponent implements AfterContentInit, OnDestroy, OnInit
       this.columnsdef = sortedColumns.sort((a, b) => a.order - b.order);
       this.visibleColumns = this.columnsdef.filter(column => column.visible);
       this.hiddenColumns = this.columnsdef.filter(column => !column.visible);
+      // console.log("visible columns:",this.visibleColumns)
     });
 
     this._changeDetectorRef.detectChanges()
@@ -252,6 +253,10 @@ export class SharedTableComponent implements AfterContentInit, OnDestroy, OnInit
   exportToExcel() {
     // subscribes to the latest fetched data
     this.loadAllExportData();
+  }
+
+  getPropertyByPath(obj: Object, pathString: string) {
+    return pathString.split('.').reduce((o, i) => o[i], obj);
   }
 
 }

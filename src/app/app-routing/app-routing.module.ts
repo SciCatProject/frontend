@@ -46,6 +46,7 @@ import { AnonymousLayoutComponent } from "_layout/anonymous-layout/anonymous-lay
 import { JobsGuard } from "app-routing/jobs.guard";
 import { PoliciesGuard } from "app-routing/policies.guard";
 import { LogbookGuard } from "app-routing/logbook.guard";
+import { FilesDashboardComponent } from "files/files-dashboard/files-dashboard.component";
 
 export const routes: Routes = [
   {
@@ -126,6 +127,11 @@ export const routes: Routes = [
         path: "datasets/:id/datafiles",
         component: DatafilesComponent,
         canActivate: [AuthGuard],
+      },
+      {
+        path: "files",
+        component: FilesDashboardComponent,
+        canActivate: [AuthGuard]
       },
       {
         path: "instruments",
