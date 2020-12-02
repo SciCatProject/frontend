@@ -7,7 +7,7 @@ describe("Samples", function() {
     cy.login(Cypress.config("username"), Cypress.config("password"));
 
     cy.server();
-    cy.route("POST", "/api/v3/Samples").as("add");
+    cy.route("POST", "/api/v3/Samples").as("create");
     cy.route("GET", "*").as("fetch");
   });
 
@@ -15,14 +15,14 @@ describe("Samples", function() {
     cy.removeSamples();
   });
 
-  describe("Add sample", function() {
-    it("should add a new sample", function() {
+  describe("Create sample", function() {
+    it("should create a new sample", function() {
       cy.visit("/samples");
 
       cy.wait("@fetch");
 
       cy.get("mat-card")
-        .contains("Add Sample")
+        .contains("Create Sample")
         .click();
 
       cy.get("mat-dialog-container").should("contain.text", "Sample Entry");
@@ -34,7 +34,7 @@ describe("Samples", function() {
         .contains("Save")
         .click();
 
-      cy.wait("@add").then(response => {
+      cy.wait("@create").then(response => {
         expect(response.method).to.eq("POST");
         expect(response.status).to.eq(200);
       });

@@ -5,7 +5,7 @@ import { LinkyModule } from "ngx-linky";
 import { ArchivingService } from "./archiving.service";
 import { BatchCardComponent } from "./batch-card/batch-card.component";
 import { BatchViewComponent } from "./batch-view/batch-view.component";
-import { CommonModule } from "@angular/common";
+import { AsyncPipe, CommonModule } from "@angular/common";
 import { FlexLayoutModule } from "@angular/flex-layout";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MatButtonToggleModule } from "@angular/material/button-toggle";
@@ -50,7 +50,6 @@ import { MatTabsModule } from "@angular/material/tabs";
 import { MatTooltipModule } from "@angular/material/tooltip";
 
 import { PublishComponent } from "./publish/publish.component";
-import { ScientificConditionDialogComponent } from "./scientific-condition-dialog/scientific-condition-dialog.component";
 import { jobsReducer } from "../state-management/reducers/jobs.reducer";
 import { LogbooksModule } from "logbooks/logbooks.module";
 import { ReduceComponent } from "./reduce/reduce.component";
@@ -120,7 +119,6 @@ import { AnonymousDetailsComponent } from "./anonymous-details/anonymous-details
     DatasetTableComponent,
     DatasetsFilterComponent,
     PublishComponent,
-    ScientificConditionDialogComponent,
     ReduceComponent,
     DatasetDetailsDashboardComponent,
     AddDatasetDialogComponent,
@@ -132,11 +130,11 @@ import { AnonymousDetailsComponent } from "./anonymous-details/anonymous-details
     AnonymousDetailsComponent
   ],
   entryComponents: [
-    AddDatasetDialogComponent,
-    ScientificConditionDialogComponent
+    AddDatasetDialogComponent
   ],
   providers: [
     ArchivingService,
+    AsyncPipe,
     {
       provide: DateAdapter,
       useClass: MomentDateAdapter,

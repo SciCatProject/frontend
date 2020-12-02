@@ -19,7 +19,6 @@ export class DatasetTableSettingsComponent {
 
   @Output() closeClick = new EventEmitter<MouseEvent>();
   @Output() selectColumn = new EventEmitter<SelectColumnEvent>();
-  @Output() columnSearch = new EventEmitter<string>();
 
   doCloseClick(event: MouseEvent): void {
     this.closeClick.emit(event);
@@ -38,6 +37,5 @@ export class DatasetTableSettingsComponent {
     this.filteredColumns = this.selectableColumns.filter(({ name }) =>
       name.toLowerCase().includes(filterValue)
     );
-    this.columnSearch.emit(value.trim());
   }
 }

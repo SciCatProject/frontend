@@ -149,11 +149,9 @@ describe("DatasetEffects", () => {
   });
 
   describe("fetchMetadataKeys$", () => {
-    const metadataKey = "test";
-
     it("should result in a fetchMetadataKeysCompleteAction", () => {
       const metadataKeys = ["test"];
-      const action = fromActions.fetchMetadataKeysAction({ metadataKey });
+      const action = fromActions.fetchMetadataKeysAction();
       const outcome = fromActions.fetchMetadataKeysCompleteAction({
         metadataKeys
       });
@@ -167,7 +165,7 @@ describe("DatasetEffects", () => {
     });
 
     it("should result in a fetchMetadataKeysFailedAction", () => {
-      const action = fromActions.fetchMetadataKeysAction({ metadataKey });
+      const action = fromActions.fetchMetadataKeysAction();
       const outcome = fromActions.fetchMetadataKeysFailedAction();
 
       actions = hot("-a", { a: action });
@@ -204,9 +202,7 @@ describe("DatasetEffects", () => {
           unit: "s"
         };
         const action = fromActions.addScientificConditionAction({ condition });
-        const outcome = fromActions.fetchMetadataKeysAction({
-          metadataKey: ""
-        });
+        const outcome = fromActions.fetchMetadataKeysAction();
 
         actions = hot("-a", { a: action });
 
@@ -220,9 +216,7 @@ describe("DatasetEffects", () => {
         const action = fromActions.removeScientificConditionAction({
           index: 0
         });
-        const outcome = fromActions.fetchMetadataKeysAction({
-          metadataKey: ""
-        });
+        const outcome = fromActions.fetchMetadataKeysAction();
 
         actions = hot("-a", { a: action });
 
@@ -234,9 +228,7 @@ describe("DatasetEffects", () => {
     describe("ofType clearFacetsAction", () => {
       it("should result in a fetchMetadataKeysAction", () => {
         const action = fromActions.clearFacetsAction();
-        const outcome = fromActions.fetchMetadataKeysAction({
-          metadataKey: ""
-        });
+        const outcome = fromActions.fetchMetadataKeysAction();
 
         actions = hot("-a", { a: action });
 
@@ -518,8 +510,7 @@ describe("DatasetEffects", () => {
 
     describe("ofType fetchMetadataKeysAction", () => {
       it("should dispatch a loadingAction", () => {
-        const metadataKey = "test";
-        const action = fromActions.fetchMetadataKeysAction({ metadataKey });
+        const action = fromActions.fetchMetadataKeysAction();
         const outcome = loadingAction();
 
         actions = hot("-a", { a: action });

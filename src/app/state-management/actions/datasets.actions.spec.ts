@@ -69,11 +69,9 @@ describe("Dataset Actions", () => {
 
   describe("fetchMetadataKeysAction", () => {
     it("should create an action", () => {
-      const metadataKey = "test";
-      const action = fromActions.fetchMetadataKeysAction({ metadataKey });
+      const action = fromActions.fetchMetadataKeysAction();
       expect({ ...action }).toEqual({
-        type: "[Dataset] Fetch Metadata Keys",
-        metadataKey,
+        type: "[Dataset] Fetch Metadata Keys"
       });
     });
   });

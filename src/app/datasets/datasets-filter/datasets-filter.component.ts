@@ -26,7 +26,8 @@ import {
   getSearchTerms,
   getTypeFacetCounts,
   getTypeFilter,
-  getKeywordsTerms
+  getKeywordsTerms,
+  getMetadataKeys,
 } from "state-management/selectors/datasets.selectors";
 
 import {
@@ -45,7 +46,6 @@ import {
   addScientificConditionAction,
   removeScientificConditionAction
 } from "state-management/actions/datasets.actions";
-import { ScientificConditionDialogComponent } from "datasets/scientific-condition-dialog/scientific-condition-dialog.component";
 import { combineLatest, BehaviorSubject, Observable } from "rxjs";
 import {
   selectColumnAction,
@@ -53,6 +53,8 @@ import {
   deselectAllCustomColumnsAction
 } from "state-management/actions/user.actions";
 import { ScientificCondition } from "state-management/models";
+import { SearchParametersDialogComponent } from "shared/modules/search-parameters-dialog/search-parameters-dialog.component";
+import { AsyncPipe } from "@angular/common";
 
 export interface DateRange {
   begin: Date;
@@ -78,6 +80,7 @@ export class DatasetsFilterComponent {
   keywordsFilter$ = this.store.pipe(select(getKeywordsFilter));
   creationTimeFilter$ = this.store.pipe(select(getCreationTimeFilter));
   scientificConditions$ = this.store.pipe(select(getScientificConditions));
+  metadataKeys$ = this.store.pipe(select(getMetadataKeys));
 
   locationInput$ = new BehaviorSubject<string>("");
   groupInput$ = new BehaviorSubject<string>("");
@@ -226,7 +229,9 @@ export class DatasetsFilterComponent {
 
   showAddConditionDialog() {
     this.dialog
-      .open(ScientificConditionDialogComponent)
+      .open(SearchParametersDialogComponent, {
+        data: { parameterKeys: this.asyncPipe.transform(this.metadataKeys$) },
+      })
       .afterClosed()
       .subscribe(res => {
         if (res) {
@@ -249,6 +254,7 @@ export class DatasetsFilterComponent {
   }
 
   constructor(
+    private asyncPipe: AsyncPipe,
     public dialog: MatDialog,
     private store: Store<any>,
     @Inject(APP_CONFIG) public appConfig: AppConfig
