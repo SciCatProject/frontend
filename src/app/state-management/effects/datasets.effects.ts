@@ -75,9 +75,10 @@ export class DatasetEffects {
     this.actions$.pipe(
       ofType(fromActions.fetchMetadataKeysAction),
       withLatestFrom(this.fullqueryParams$),
-      mergeMap(([{ metadataKey }, { query }]) => {
+      map(([action, params]) => params),
+      mergeMap(({ query }) => {
         const parsedQuery = JSON.parse(query);
-        parsedQuery.metadataKey = metadataKey;
+        parsedQuery.metadataKey = "";
         return this.datasetApi.metadataKeys(JSON.stringify(parsedQuery)).pipe(
           map(metadataKeys =>
             fromActions.fetchMetadataKeysCompleteAction({ metadataKeys })
@@ -104,7 +105,7 @@ export class DatasetEffects {
         fromActions.removeScientificConditionAction,
         fromActions.clearFacetsAction
       ),
-      map(() => fromActions.fetchMetadataKeysAction({ metadataKey: "" }))
+      map(() => fromActions.fetchMetadataKeysAction())
     )
   );
 

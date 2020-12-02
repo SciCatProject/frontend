@@ -68,10 +68,6 @@ export class AnonymousDashboardComponent implements OnInit, OnDestroy {
     this.sideNav.close();
   }
 
-  onColumnSearch(metadataKey: string): void {
-    this.store.dispatch(fetchMetadataKeysAction({ metadataKey }));
-  }
-
   onSelectColumn(event: SelectColumnEvent): void {
     const { checkBoxChange, column } = event;
     if (checkBoxChange.checked) {
@@ -97,7 +93,7 @@ export class AnonymousDashboardComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.store.dispatch(fetchMetadataKeysAction({ metadataKey: "" }));
+    this.store.dispatch(fetchMetadataKeysAction());
 
     this.subscriptions.push(
       this.filters$

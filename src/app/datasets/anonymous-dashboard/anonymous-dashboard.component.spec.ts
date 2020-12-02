@@ -13,7 +13,6 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { MockActivatedRoute, MockStore } from "shared/MockStubs";
 import { provideMockStore } from "@ngrx/store/testing";
 import { getHasPrefilledFilters } from "state-management/selectors/datasets.selectors";
-import { fetchMetadataKeysAction } from "state-management/actions/datasets.actions";
 import { TableColumn, Dataset } from "state-management/models";
 import { SelectColumnEvent } from "datasets/dataset-table-settings/dataset-table-settings.component";
 import {
@@ -91,20 +90,6 @@ describe("AnonymousDashboardComponent", () => {
       component.onCloseClick();
 
       expect(closeSpy).toHaveBeenCalled();
-    });
-  });
-
-  describe("#onColumnSearch()", () => {
-    it("should dispatch a fetchMetadataKeysAction", () => {
-      dispatchSpy = spyOn(store, "dispatch");
-
-      const metadataKey = "test";
-      component.onColumnSearch(metadataKey);
-
-      expect(dispatchSpy).toHaveBeenCalledTimes(1);
-      expect(dispatchSpy).toHaveBeenCalledWith(
-        fetchMetadataKeysAction({ metadataKey })
-      );
     });
   });
 

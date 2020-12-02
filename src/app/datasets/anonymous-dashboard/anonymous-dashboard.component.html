@@ -19,7 +19,6 @@
       [selectableColumns]="tableColumns$ | async"
       [clearSearchBar]="clearColumnSearch"
       (closeClick)="onCloseClick()"
-      (columnSearch)="onColumnSearch($event)"
       (selectColumn)="onSelectColumn($event)"
     ></dataset-table-settings>
   </mat-sidenav>

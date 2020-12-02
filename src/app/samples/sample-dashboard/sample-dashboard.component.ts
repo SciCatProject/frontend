@@ -42,7 +42,7 @@ import {
   distinctUntilChanged,
   take,
 } from "rxjs/operators";
-import { SampleFilters, ScientificCondition } from "state-management/models";
+import { SampleFilters } from "state-management/models";
 import { SearchParametersDialogComponent } from "shared/modules/search-parameters-dialog/search-parameters-dialog.component";
 
 @Component({
@@ -124,9 +124,7 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
       });
   }
 
-  removeCharacteristic(characteristic: ScientificCondition, index: number) {
-    console.log({ characteristic });
-    console.log({ index });
+  removeCharacteristic(index: number) {
     this.store.dispatch(removeCharacteristicsFilterAction({ index }));
   }
 
@@ -187,7 +185,6 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.store.pipe(select(getMetadataKeys)).subscribe((metadataKeys) => {
         this.metadataKeys = metadataKeys;
-        console.log({ metadataKeys });
       })
     );
 
