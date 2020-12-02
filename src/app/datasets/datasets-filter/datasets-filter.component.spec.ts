@@ -16,7 +16,6 @@ import * as moment from "moment";
 
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { ScientificConditionDialogComponent } from "datasets/scientific-condition-dialog/scientific-condition-dialog.component";
 import { APP_CONFIG } from "app-config.module";
 import { FacetCount } from "state-management/state/datasets.store";
 import {
@@ -48,6 +47,8 @@ import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
 import { MatSelectModule } from "@angular/material/select";
 import { MatDatepickerInputEvent } from "@angular/material/datepicker";
+import { SearchParametersDialogComponent } from "shared/modules/search-parameters-dialog/search-parameters-dialog.component";
+import { AsyncPipe } from "@angular/common";
 
 export class MockMatDialog {
   open() {
@@ -84,8 +85,9 @@ describe("DatasetsFilterComponent", () => {
       ],
       declarations: [
         DatasetsFilterComponent,
-        ScientificConditionDialogComponent
-      ]
+        SearchParametersDialogComponent
+      ],
+      providers: [AsyncPipe]
     });
     TestBed.overrideComponent(DatasetsFilterComponent, {
       set: {
@@ -93,12 +95,12 @@ describe("DatasetsFilterComponent", () => {
           {
             provide: APP_CONFIG,
             useValue: {
-              scienceSearchEnabled: false
-            }
+              scienceSearchEnabled: false,
+            },
           },
           { provide: MatDialog, useClass: MockMatDialog }
-        ]
-      }
+        ],
+      },
     });
     TestBed.compileComponents();
   }));
@@ -373,17 +375,33 @@ describe("DatasetsFilterComponent", () => {
   });
 
   describe("#showAddConditionDialog()", () => {
-    it("should open ScientificConditionDialogComponent and dispatch an addScientificConditionAction and a selectColumnAction if dialog returns data", () => {
+    it("should open SearchParametersDialogComponent and dispatch an addScientificConditionAction and a selectColumnAction if dialog returns data", () => {
       spyOn(component.dialog, "open").and.callThrough();
       dispatchSpy = spyOn(store, "dispatch");
 
+      component.metadataKeys$ = of(["test", "keys"]);
       component.showAddConditionDialog();
 
-      expect(component.dialog.open).toHaveBeenCalled();
+      expect(component.dialog.open).toHaveBeenCalledTimes(1);
+      expect(component.dialog.open).toHaveBeenCalledWith(
+        SearchParametersDialogComponent,
+        {
+          data: {
+            parameterKeys: component["asyncPipe"].transform(
+              component.metadataKeys$
+            ),
+          },
+        }
+      );
       expect(dispatchSpy).toHaveBeenCalledTimes(2);
       expect(dispatchSpy).toHaveBeenCalledWith(
         addScientificConditionAction({
-          condition: { lhs: "", rhs: "", relation: "EQUAL_TO_STRING", unit: "" }
+          condition: {
+            lhs: "",
+            rhs: "",
+            relation: "EQUAL_TO_STRING",
+            unit: "",
+          },
         })
       );
       expect(dispatchSpy).toHaveBeenCalledWith(
