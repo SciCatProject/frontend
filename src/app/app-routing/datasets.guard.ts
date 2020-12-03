@@ -5,32 +5,25 @@ import {
   Router,
   RouterStateSnapshot,
 } from "@angular/router";
-import { select, Store } from "@ngrx/store";
-import { Observable } from "rxjs";
-import { map } from "rxjs/operators";
-import { User } from "shared/sdk";
-import { getIsLoggedIn } from "state-management/selectors/user.selectors";
+import { UserApi } from "shared/sdk";
 
 @Injectable({
   providedIn: "root",
 })
 export class DatasetsGuard implements CanActivate {
-  constructor(private router: Router, private store: Store<User>) {}
+  constructor(private router: Router, private userApi: UserApi) {}
 
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
-  ): Observable<boolean> {
-    return this.store.pipe(
-      select(getIsLoggedIn),
-      map((isLoggedIn) => {
-        if (isLoggedIn) {
-          return true;
-        }
-
+  ): Promise<boolean> {
+    return this.userApi
+      .getCurrent()
+      .toPromise()
+      .catch(() => {
         this.router.navigateByUrl("/anonymous" + state.url);
         return false;
       })
-    );
+      .then(() => true);
   }
 }
