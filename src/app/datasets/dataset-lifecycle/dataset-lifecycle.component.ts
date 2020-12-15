@@ -115,7 +115,7 @@ export class DatasetLifecycleComponent implements OnInit, OnChanges {
     const url = window.URL.createObjectURL(blob);
 
     a.href = url;
-    a.download = this.dataset.pid + "_history.csv";
+    a.download = "history.csv";
     a.click();
     window.URL.revokeObjectURL(url);
     a.remove();
