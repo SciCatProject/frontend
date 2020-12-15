@@ -55,6 +55,10 @@
           History
         </mat-card-header>
 
+        <button mat-icon-button (click)="downloadCsv()">
+          <mat-icon>cloud_download</mat-icon>
+        </button>
+
         <mat-paginator
           [length]="historyItemsCount"
           [pageIndex]="currentPage"

@@ -62,27 +62,63 @@ export class DatasetLifecycleComponent implements OnInit, OnChanges {
 
   private parseHistoryItems(): HistoryItem[] {
     if (this.dataset) {
-      return this.dataset.history
-        .map((item) => {
-          const property = Object.keys(item)
-            .filter((key) => key !== "id")
-            .filter((key) => !key.includes("updated"))
-            .pop();
-
-          return {
+      const history = this.dataset.history.map(
+        ({ updatedAt, updatedBy, id, ...properties }) =>
+          Object.keys(properties).map((property) => ({
             property,
-            value: item[property],
-            updatedBy: item.updatedBy.replace("ldap.", ""),
-            updatedAt: this.datePipe.transform(
-              item.updatedAt,
-              "yyyy-MM-dd HH:mm"
-            ),
-          };
-        })
-        .reverse();
-    } else {
-      return [];
+            value: properties[property],
+            updatedBy: updatedBy.replace("ldap.", ""),
+            updatedAt: this.datePipe.transform(updatedAt, "yyyy-MM-dd HH:mm"),
+          }))
+      );
+      // flatten and reverse array before return
+      return [].concat.apply([], history).reverse();
     }
+    return [];
+  }
+
+  downloadCsv(): void {
+    const replacer = (key, value) => (value === null ? "" : value);
+    const header = [
+      "property",
+      "currentValue",
+      "previousValue",
+      "updatedBy",
+      "updatedAt",
+    ];
+    const csv = this.historyItems.map((row) =>
+      header
+        .map((fieldName) => {
+          switch (fieldName) {
+            case "currentValue": {
+              return row.value[fieldName]
+                ? JSON.stringify(row.value[fieldName], replacer)
+                : JSON.stringify(row.value, replacer);
+            }
+            case "previousValue": {
+              return row.value[fieldName]
+                ? JSON.stringify(row.value[fieldName], replacer)
+                : "";
+            }
+            default: {
+              return JSON.stringify(row[fieldName], replacer);
+            }
+          }
+        })
+        .join(";")
+    );
+    csv.unshift(header.join(";"));
+    const csvArray = csv.join("\r\n");
+
+    const a = document.createElement("a");
+    const blob = new Blob([csvArray], { type: "text/csv" });
+    const url = window.URL.createObjectURL(blob);
+
+    a.href = url;
+    a.download = this.dataset.pid + "_history.csv";
+    a.click();
+    window.URL.revokeObjectURL(url);
+    a.remove();
   }
 
   constructor(
