@@ -24,6 +24,9 @@ module.exports = function (config) {
       './src/theme.scss': ['scss'],
       './src/app/app.component.scss': ['scss']
     },
+    proxies: {
+      '/assets/': '/base/src/assets/'
+    },
     mime: {
       'text/x-typescript': ['ts','tsx']
     },
