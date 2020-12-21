@@ -7,9 +7,10 @@ RUN npm config set registry http://registry.npmjs.org/
 RUN npm config set strict-ssl false
 ARG env=maxiv-prod
 WORKDIR /catanie
-COPY package.json  /catanie
-RUN npm install
+COPY package*.json  /catanie/
+RUN npm ci
 COPY . /catanie/
+COPY CI/MAXIV/maxiv-theme.scss src/theme.scss
 RUN npx ng build --configuration=${env}
 
 FROM nginx:alpine

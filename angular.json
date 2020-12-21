@@ -235,19 +235,15 @@
                 },
                 {
                   "replace": "src/assets/images/ess-site.png",
-                  "with": "CI/MAXIV/site.png"
+                  "with": "CI/MAXIV/maxiv-site.png"
                 },
                 {
                   "replace": "src/assets/images/esslogo.png",
-                  "with": "CI/MAXIV/logo.png"
+                  "with": "CI/MAXIV/maxiv-logo.png"
                 },
                 {
                   "replace": "src/favicon.ico",
-                  "with": "CI/MAXIV/favicon.ico"
-                },
-                {
-                  "replace": "src/theme.scss",
-                  "with": "CI/MAXIV/theme.scss"
+                  "with": "CI/MAXIV/maxiv-favicon.ico"
                 }
               ]
             },
