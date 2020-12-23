@@ -18,7 +18,6 @@ jobs:
       - name: Unit test
         run: |
           npm ci
-          npm install coveralls
           npm test
 
       - name: Coveralls
