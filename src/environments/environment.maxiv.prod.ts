@@ -43,7 +43,7 @@ export const environment = {
   maxDirectDownloadSize: 5000000000,
   metadataPreviewEnabled: true,
   multipleDownloadEnabled: true,
-  multipleDownloadAction: "https://scicatfileserver.maxiv.lu.se/zip",
+  multipleDownloadAction: "https://zip-service.maxiv.lu.se/zip",
   scienceSearchEnabled: true,
   scienceSearchUnitsEnabled: true,
   searchProposals: true,
