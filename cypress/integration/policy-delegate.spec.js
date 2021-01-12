@@ -7,7 +7,7 @@ describe("Policies", () => {
     cy.login(Cypress.config("username"), Cypress.config("password"));
 
     cy.server();
-    cy.route("PUT", "/api/v3/Policies/**/*").as("policy");
+    cy.route("POST", "/api/v3/Policies/**/*").as("update");
     cy.route("GET", "*").as("fetch");
   });
 
@@ -41,14 +41,24 @@ describe("Policies", () => {
 
       cy.get("[data-cy=editSelection]").click({ force: true });
       cy.get("[data-cy=managerInput]").click({ force: true });
+      cy.wait(3000);
       cy.get("[data-cy=managerInput]").type("cypress@manager.com{enter}");
-      cy.wait(6000);
       cy.get("[data-cy=managerChipList]")
         .children()
         .invoke("text")
         .should("contain", "cypress@manager.com");
-      cy.wait(1000);
       cy.get("[data-cy=saveButton]").click({ force: true });
+
+      cy.wait("@update").then(response =>{
+        expect(response.method).to.eq("POST");
+        expect(response.status).to.eq(200);
+      });
+
+      cy.wait("@fetch");
+      cy.wait(3000);
+      cy.get("mat-cell.mat-column-manager")
+        .first()
+        .should("contain.text", "cypress@manager.com");
     });
   });
 });

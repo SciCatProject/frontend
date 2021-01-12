@@ -10,6 +10,28 @@ import { MatCardModule } from "@angular/material/card";
 import { MatIconModule } from "@angular/material/icon";
 import { MatTableModule } from "@angular/material/table";
 import { APP_CONFIG } from "app-config.module";
+import { PageEvent } from "@angular/material/paginator";
+
+const historyItems = [
+  {
+    property: "datasetName",
+    value: {
+      currentValue: "Test Dataset",
+      previousValue: "Dataset for Tests",
+    },
+    updatedBy: "Test User",
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    property: "description",
+    value: {
+      currentValue: "A new dataset description",
+      previousValue: "An old dataset description",
+    },
+    updatedBy: "Test User",
+    updatedAt: new Date().toISOString(),
+  },
+];
 
 describe("DatasetLifecycleComponent", () => {
   let component: DatasetLifecycleComponent;
@@ -35,6 +57,23 @@ describe("DatasetLifecycleComponent", () => {
 
   it("should create", () => {
     expect(component).toBeTruthy();
+  });
+
+  describe("#onPageChange()", () => {
+    it("should update historyItems slice for dataSource", () => {
+      component.historyItems = historyItems;
+
+      const event: PageEvent = {
+        pageIndex: 0,
+        pageSize: 1,
+        length: 1,
+      };
+
+      component.onPageChange(event);
+
+      expect(component.dataSource.length).toEqual(1);
+      expect(component.dataSource[0]).toEqual(historyItems[0]);
+    });
   });
 
   describe("#parseHistoryItems()", () => {
@@ -68,4 +107,68 @@ describe("DatasetLifecycleComponent", () => {
       });
     });
   });
+
+  describe("#downloadCsv()", () => {
+    it("should create and download a csv file", () => {
+      const spyObj = jasmine.createSpyObj("a", ["click", "remove"]);
+      spyOn(document, "createElement").and.returnValue(spyObj);
+      const url = "testUrl";
+      spyOn(window.URL, "createObjectURL").and.returnValue(url);
+      spyOn(window.URL, "revokeObjectURL").and.callThrough();
+      
+      component.historyItems = historyItems;
+      const blob = createCsvBlob();
+
+      component.downloadCsv();
+
+      expect(document.createElement).toHaveBeenCalledTimes(1);
+      expect(document.createElement).toHaveBeenCalledWith("a");
+
+      expect(spyObj.href).toBe(url);
+      expect(spyObj.download).toBe("history.csv");
+      expect(spyObj.click).toHaveBeenCalledTimes(1);
+      expect(spyObj.remove).toHaveBeenCalledTimes(1);
+
+      expect(window.URL.createObjectURL).toHaveBeenCalledTimes(1);
+      expect(window.URL.createObjectURL).toHaveBeenCalledWith(blob);
+
+      expect(window.URL.revokeObjectURL).toHaveBeenCalledTimes(1);
+      expect(window.URL.revokeObjectURL).toHaveBeenCalledWith(url);
+    });
+  });
 });
+
+function createCsvBlob() {
+  const replacer = (key, value) => (value === null ? "" : value);
+  const header = [
+    "property",
+    "currentValue",
+    "previousValue",
+    "updatedBy",
+    "updatedAt",
+  ];
+  const csv = historyItems.map((row) =>
+    header
+      .map((fieldName) => {
+        switch (fieldName) {
+          case "currentValue": {
+            return row.value[fieldName]
+              ? JSON.stringify(row.value[fieldName], replacer)
+              : JSON.stringify(row.value, replacer);
+          }
+          case "previousValue": {
+            return row.value[fieldName]
+              ? JSON.stringify(row.value[fieldName], replacer)
+              : "";
+          }
+          default: {
+            return JSON.stringify(row[fieldName], replacer);
+          }
+        }
+      })
+      .join(";")
+  );
+  csv.unshift(header.join(";"));
+  const csvArray = csv.join("\r\n");
+  return new Blob([csvArray], { type: "text/csv" });
+}

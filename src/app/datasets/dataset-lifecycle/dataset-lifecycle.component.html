@@ -22,7 +22,8 @@
             </tr>
             <tr
               *ngIf="
-                dataset.isPublished && dataset.datasetlifecycle.publishedOn as value
+                dataset.isPublished &&
+                dataset.datasetlifecycle.publishedOn as value
               "
             >
               <th><mat-icon> event_available </mat-icon> Publication Date</th>
@@ -55,14 +56,26 @@
           History
         </mat-card-header>
 
-        <mat-paginator
-          [length]="historyItemsCount"
-          [pageIndex]="currentPage"
-          [pageSize]="itemsPerPage"
-          [pageSizeOptions]="pageSizeOptions"
-          (page)="onPageChange($event)"
-          showFirstLastButtons
-        ></mat-paginator>
+        <div fxLayout="row" fxLayoutAlign="space-evenly end">
+          <button
+            mat-stroked-button
+            class="download-button"
+            (click)="downloadCsv()"
+          >
+            <mat-icon>text_snippet</mat-icon> CSV
+          </button>
+
+          <div style="flex: 1;"></div>
+
+          <mat-paginator
+            [length]="historyItemsCount"
+            [pageIndex]="currentPage"
+            [pageSize]="itemsPerPage"
+            [pageSizeOptions]="pageSizeOptions"
+            (page)="onPageChange($event)"
+            showFirstLastButtons
+          ></mat-paginator>
+        </div>
 
         <table
           mat-table
