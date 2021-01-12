@@ -31,6 +31,8 @@ services:
     command: ["./wait-for-it.sh", "catanie:80", "--", "npx", "cypress", "run"]
     depends_on:
       - catanie
+    volumes:
+      - "cypress/screenshots:/tmp/screenshots"
 volumes:
   mongodb_data:
     driver: local
