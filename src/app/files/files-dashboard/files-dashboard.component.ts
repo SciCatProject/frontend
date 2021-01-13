@@ -20,7 +20,7 @@ export class FilesDashboardComponent implements OnInit, OnDestroy {
     { id: "dataFileList.uid",  icon: "person",       label: "UID", canSort: true, matchMode: "contains", hideOrder: 4, },
     { id: "dataFileList.gid",  icon: "group",        label: "GID", canSort: true, matchMode: "contains", hideOrder: 5, },
     { id: "ownerGroup",        icon: "group",        label: "Owner Group", canSort: true, matchMode: "contains", hideOrder: 6, },
-    { id: "datasetId",         icon: "list",         label: "Dataset PID", canSort: true, matchMode: "contains", hideOrder: 7, },
+    { id: "datasetId",         icon: "list",         label: "Dataset PID", type: "dataseturl", canSort: true, matchMode: "contains", hideOrder: 7, },
   ]
 
 

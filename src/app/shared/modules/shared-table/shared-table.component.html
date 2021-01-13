@@ -60,7 +60,8 @@
     <mat-cell *matCellDef="let row" [fxFlex]="column.width + 'px'">
       <ng-container [ngSwitch]="column.type">
         <ng-container *ngSwitchCase="'image'"><img [src]=row[column.id] /></ng-container>
-        <span *ngSwitchDefault class="ellipsis"> {{ getPropertyByPath(row,column.id)  | newDynamicPipe: column.format }}</span>
+        <ng-container *ngSwitchCase="'dataseturl'"><a [routerLink]="['/datasets/',getPropertyByPath(row,column.id)]">{{ getPropertyByPath(row,column.id) }}</a> </ng-container>
+        <ng-container  *ngSwitchDefault class="ellipsis"> {{ getPropertyByPath(row,column.id)  | newDynamicPipe: column.format }}</ng-container>
       </ng-container>
     </mat-cell>
   </ng-container>
@@ -74,7 +75,8 @@
         <span>
           <ng-container [ngSwitch]="hiddenColumn.type">
             <ng-container *ngSwitchCase="'image'"><img [src]=row[hiddenColumn.id] /></ng-container>
-            <span *ngSwitchDefault>{{ getPropertyByPath(row,hiddenColumn.id) | newDynamicPipe: hiddenColumn.format }}</span>
+            <ng-container *ngSwitchCase="'dataseturl'"><a [routerLink]="['/datasets/',getPropertyByPath(row,hiddenColumn.id)]">{{ getPropertyByPath(row,hiddenColumn.id) }}</a> </ng-container>
+            <ng-container *ngSwitchDefault> {{ getPropertyByPath(row,hiddenColumn.id) | newDynamicPipe: hiddenColumn.format }}</ng-container>
           </ng-container>
         </span>
       </p>

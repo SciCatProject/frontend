@@ -21,6 +21,7 @@ import { MatButtonModule } from "@angular/material/button";
 import { FlexLayoutModule } from "@angular/flex-layout";
 import { FormsModule } from "@angular/forms";
 import { ObjKeysPipe } from 'shared/pipes/obj-keys.pipe';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [SharedTableComponent],
@@ -40,6 +41,7 @@ import { ObjKeysPipe } from 'shared/pipes/obj-keys.pipe';
     MatButtonModule,
     FlexLayoutModule,
     FormsModule,
+    RouterModule
   ],
   exports: [SharedTableComponent],
   providers: [CurrencyPipe, DatePipe, DecimalPipe, JsonPipe, ObjKeysPipe, KeyValuePipe, LowerCasePipe,
