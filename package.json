@@ -31,7 +31,7 @@
     "@ngrx/effects": "^9.2.1",
     "@ngrx/router-store": "^9.2.0",
     "@ngrx/schematics": "^9.2.0",
-    "@ngrx/store": "^9.2.0",
+    "@ngrx/store": "^9.2.1",
     "autolinker": "^3.14.2",
     "deep-equal": "^2.0.5",
     "filesize": "^6.0.1",
