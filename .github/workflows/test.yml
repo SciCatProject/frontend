@@ -28,7 +28,6 @@ jobs:
   e2etests:
     name: E2E Tests
     runs-on: ubuntu-latest
-    needs: [unittest]
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
