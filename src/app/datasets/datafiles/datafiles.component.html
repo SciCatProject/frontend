@@ -14,6 +14,22 @@
   </span>
 </ng-template>
 
+<ng-template [ngIf]="maxFileSize">
+  <div>
+    <mat-icon> info </mat-icon>
+    Maximum allowed download size: {{ maxFileSize | filesize }}
+  </div>
+</ng-template>
+
+<ng-template [ngIf]="tableData && maxFileSize">
+  <div class="selected" fxLayout="row" fxLayoutAlign="space-evenly end">
+    <div fxFlex="auto" style="margin-bottom: 0.5em;">
+      Selected: {{ selectedFileSize | filesize
+      }}{{ maxFileSize ? " / " + (maxFileSize | filesize) : "" }}
+    </div>
+  </div>
+</ng-template>
+
 <div class="datafiles-header">
   <span [ngPlural]="count" class="nbr-of-files">
     <ng-template ngPluralCase="=0">No datafiles.</ng-template>
@@ -76,14 +92,6 @@
   </form>
   <div style="clear: both;"></div>
 </div>
-<ng-template [ngIf]="tableData">
-  <div fxLayout="row" fxLayoutAlign="space-evenly end">
-    <div fxFlex="auto" style="margin-bottom: 0.5em;">
-      Selected: {{ selectedFileSize | filesize
-      }}{{ maxFileSize ? " / " + (maxFileSize | filesize) : "" }}
-    </div>
-  </div>
-</ng-template>
 
 <app-table
   [data]="tableData"
