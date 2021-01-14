@@ -63,6 +63,7 @@ jobs:
 
   gitlab:
     name: Build and deploy
+    needs: [unittest, e2etests]
     if: github.ref == 'refs/heads/develop' && github.event == 'push'
     runs-on: ubuntu-latest
     steps:
