@@ -48,12 +48,12 @@ describe("MetadataEditComponent", () => {
   });
 
   describe("#detectType() ", () => {
-    it("should keep fieldUnit enabled if fieldType is 'measurement'", () => {
+    it("should keep fieldUnit enabled if fieldType is 'quantity'", () => {
       component.addMetadata();
       component.items
         .at(0)
         .get("fieldType")
-        .setValue("measurement");
+        .setValue("quantity");
 
       expect(component.items.at(0).get("fieldUnit").enabled).toEqual(true);
 
@@ -62,7 +62,7 @@ describe("MetadataEditComponent", () => {
       expect(component.items.at(0).get("fieldUnit").enabled).toEqual(true);
     });
 
-    it("should disable fieldUnit if fieldType is not 'measurement'", () => {
+    it("should disable fieldUnit if fieldType is not 'quantity'", () => {
       component.addMetadata();
       component.items
         .at(0)
@@ -107,7 +107,7 @@ describe("MetadataEditComponent", () => {
 
       component.metadata = {
         testName: {
-          type: "measurement",
+          type: "quantity",
           value: 100,
           unit: "Hz"
         }
@@ -118,7 +118,7 @@ describe("MetadataEditComponent", () => {
       expect(component.items.length).toEqual(1);
       expect(component.items.at(0).get("fieldName").value).toEqual("testName");
       expect(component.items.at(0).get("fieldType").value).toEqual(
-        "measurement"
+        "quantity"
       );
       expect(component.items.at(0).get("fieldValue").value).toEqual(100);
       expect(component.items.at(0).get("fieldUnit").value).toEqual("Hz");
@@ -187,7 +187,7 @@ describe("MetadataEditComponent", () => {
       expect(metadataObject["testName"].unit).toEqual("");
     });
 
-    it("should create a metadata object with type 'measurement' from the FormGroup array", () => {
+    it("should create a metadata object with type 'quantity' from the FormGroup array", () => {
       component.addMetadata();
       component.items
         .at(0)
@@ -196,7 +196,7 @@ describe("MetadataEditComponent", () => {
       component.items
         .at(0)
         .get("fieldType")
-        .setValue("measurement");
+        .setValue("quantity");
 
       component.detectType(0);
 
@@ -214,7 +214,7 @@ describe("MetadataEditComponent", () => {
       expect(metadataObject).toBeDefined();
       expect(Object.keys(metadataObject).length).toBe(1);
       expect(Object.keys(metadataObject)[0]).toEqual("testName");
-      expect(metadataObject["testName"].type).toEqual("measurement");
+      expect(metadataObject["testName"].type).toEqual("quantity");
       expect(metadataObject["testName"].value).toEqual(100);
       expect(metadataObject["testName"].unit).toEqual("Hz");
     });

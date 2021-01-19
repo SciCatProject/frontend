@@ -21,11 +21,11 @@ import { Observable } from "rxjs";
 @Component({
   selector: "metadata-edit",
   templateUrl: "./metadata-edit.component.html",
-  styleUrls: ["./metadata-edit.component.scss"]
+  styleUrls: ["./metadata-edit.component.scss"],
 })
 export class MetadataEditComponent implements OnInit, OnChanges {
   metadataForm: FormGroup;
-  typeValues: string[] = ["date", "measurement", "number", "string"];
+  typeValues: string[] = ["date", "quantity", "number", "string"];
   units: string[];
   filteredUnits$: Observable<string[]>;
 
@@ -37,44 +37,32 @@ export class MetadataEditComponent implements OnInit, OnChanges {
       fieldType: new FormControl("", [Validators.required]),
       fieldName: new FormControl("", [
         Validators.required,
-        Validators.minLength(2)
+        Validators.minLength(2),
       ]),
       fieldValue: new FormControl("", [
         Validators.required,
-        Validators.minLength(1)
+        Validators.minLength(1),
       ]),
       fieldUnit: new FormControl("", [
         Validators.required,
-        Validators.minLength(2)
-      ])
+        Validators.minLength(2),
+      ]),
     });
     this.items.push(field);
   }
 
   detectType(index: any) {
-    const typeValue = this.items.at(index).get("fieldType").value;
-    if (typeValue !== "measurement") {
-      this.items
-        .at(index)
-        .get("fieldUnit")
-        .clearValidators();
-      this.items
-        .at(index)
-        .get("fieldUnit")
-        .reset();
-      this.items
-        .at(index)
-        .get("fieldUnit")
-        .disable();
-    } else {
-      this.items
-        .at(index)
-        .get("fieldUnit")
-        .enable();
+    const value = this.items.at(index).get("fieldType").value;
+    if (value === "quantity" || value === "measurement") {
+      this.items.at(index).get("fieldUnit").enable();
       this.items
         .at(index)
         .get("fieldUnit")
         .setValidators([Validators.required, Validators.minLength(2)]);
+    } else {
+      this.items.at(index).get("fieldUnit").clearValidators();
+      this.items.at(index).get("fieldUnit").reset();
+      this.items.at(index).get("fieldUnit").disable();
     }
   }
 
@@ -89,21 +77,24 @@ export class MetadataEditComponent implements OnInit, OnChanges {
 
   addCurrentMetadata() {
     if (this.metadata) {
-      Object.keys(this.metadata).forEach(key => {
+      Object.keys(this.metadata).forEach((key) => {
         let field = {};
         if (this.metadata[key]["type"]) {
           field = {
             fieldName: key,
-            fieldType: this.metadata[key].type,
+            fieldType:
+              this.metadata[key].type === "measurement"
+                ? "quantity"
+                : this.metadata[key].type,
             fieldValue: this.metadata[key].value,
-            fieldUnit: this.metadata[key].unit
+            fieldUnit: this.metadata[key].unit,
           };
         } else {
           field = {
             fieldName: key,
             fieldType: "string",
             fieldValue: JSON.stringify(this.metadata[key]),
-            fieldUnit: ""
+            fieldUnit: "",
           };
         }
         this.items.push(this.formBuilder.group(field));
@@ -116,9 +107,9 @@ export class MetadataEditComponent implements OnInit, OnChanges {
 
   createMetadataObjects(): object {
     const metadata = {};
-    this.items.controls.forEach(control => {
+    this.items.controls.forEach((control) => {
       metadata[control.value.fieldName] = {
-        type: control.value.fieldType
+        type: control.value.fieldType,
       };
 
       switch (control.value.fieldType) {
@@ -129,7 +120,7 @@ export class MetadataEditComponent implements OnInit, OnChanges {
           metadata[control.value.fieldName].unit = "";
           break;
         }
-        case "measurement": {
+        case "quantity": {
           metadata[control.value.fieldName].value = Number(
             control.value.fieldValue
           );
@@ -178,7 +169,7 @@ export class MetadataEditComponent implements OnInit, OnChanges {
         startWith(""),
         map((value: string) => {
           const filterValue = value.toLowerCase();
-          return this.units.filter(unit =>
+          return this.units.filter((unit) =>
             unit.toLowerCase().includes(filterValue)
           );
         })
@@ -196,7 +187,7 @@ export class MetadataEditComponent implements OnInit, OnChanges {
 
   ngOnInit() {
     this.metadataForm = this.formBuilder.group({
-      items: this.formBuilder.array([])
+      items: this.formBuilder.array([]),
     });
 
     this.addCurrentMetadata();
@@ -208,7 +199,7 @@ export class MetadataEditComponent implements OnInit, OnChanges {
         this.metadata = changes[propName].currentValue;
 
         this.metadataForm = this.formBuilder.group({
-          items: this.formBuilder.array([])
+          items: this.formBuilder.array([]),
         });
 
         this.addCurrentMetadata();
