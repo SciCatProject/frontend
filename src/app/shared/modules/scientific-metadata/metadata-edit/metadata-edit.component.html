@@ -2,7 +2,7 @@
   <form [formGroup]="metadataForm">
     <div
       formArrayName="items"
-      *ngFor="let item of metadataForm.get('items').controls; let i = index"
+      *ngFor="let item of items.controls; let i = index"
     >
       <div [formGroupName]="i">
         <div class="formRow" fxLayout="row" fxLayout.lt-lg="column">

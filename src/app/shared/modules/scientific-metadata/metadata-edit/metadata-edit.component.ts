@@ -12,7 +12,9 @@ import {
   FormGroup,
   FormArray,
   FormControl,
-  Validators
+  Validators,
+  ValidatorFn,
+  AbstractControl
 } from "@angular/forms";
 import { UnitsService } from "shared/services/units.service";
 import { startWith, map } from "rxjs/operators";
@@ -45,7 +47,7 @@ export class MetadataEditComponent implements OnInit, OnChanges {
       ]),
       fieldUnit: new FormControl("", [
         Validators.required,
-        Validators.minLength(2),
+        this.unitValidator(),
       ]),
     });
     this.items.push(field);
@@ -58,7 +60,7 @@ export class MetadataEditComponent implements OnInit, OnChanges {
       this.items
         .at(index)
         .get("fieldUnit")
-        .setValidators([Validators.required, Validators.minLength(2)]);
+        .setValidators([Validators.required, this.unitValidator()]);
     } else {
       this.items.at(index).get("fieldUnit").clearValidators();
       this.items.at(index).get("fieldUnit").reset();
@@ -176,6 +178,13 @@ export class MetadataEditComponent implements OnInit, OnChanges {
       );
   }
 
+  unitValidator(): ValidatorFn {
+    return (control: AbstractControl): {[key: string]: any} | null => {
+      const allowed = this.units.includes(control.value);
+      return allowed ? null : {forbiddenUnit: {value: control.value}};
+    }
+  }
+
   get items() {
     return this.metadataForm.get("items") as FormArray;
   }
@@ -191,6 +200,8 @@ export class MetadataEditComponent implements OnInit, OnChanges {
     });
 
     this.addCurrentMetadata();
+    this.units = this.unitsService.getUnits();
+    console.log("units", this.units);
   }
 
   ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
