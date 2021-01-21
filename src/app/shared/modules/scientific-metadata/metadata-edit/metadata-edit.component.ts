@@ -61,6 +61,7 @@ export class MetadataEditComponent implements OnInit, OnChanges {
         .at(index)
         .get("fieldUnit")
         .setValidators([Validators.required, this.unitValidator()]);
+        this.items.at(index).get("fieldUnit").updateValueAndValidity();
     } else {
       this.items.at(index).get("fieldUnit").clearValidators();
       this.items.at(index).get("fieldUnit").setValue("");
@@ -70,9 +71,10 @@ export class MetadataEditComponent implements OnInit, OnChanges {
 
   unitValidator(): ValidatorFn {
     return (control: AbstractControl): { [key: string]: any } | null => {
+      console.log("value", control.value);
       const allowed =
-        this.unitsService.getUnits().includes(control.value) ||
-        control.value === "";
+      this.unitsService.getUnits().includes(control.value);
+      console.log("allowed", allowed);
       return allowed ? null : { forbiddenUnit: { value: control.value } };
     };
   }
