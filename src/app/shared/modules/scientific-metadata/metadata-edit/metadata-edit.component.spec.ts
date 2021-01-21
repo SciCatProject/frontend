@@ -277,8 +277,4 @@ describe("MetadataEditComponent", () => {
       expect(component.units.includes("seconds")).toEqual(true);
     });
   });
-
-  describe("#filterUnits()", () => {
-    xit("should filter units based on the value of fieldUnit", () => {});
-  });
 });

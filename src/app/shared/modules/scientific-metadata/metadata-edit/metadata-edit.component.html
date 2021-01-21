@@ -17,6 +17,9 @@
                   type
                 }}</mat-option>
               </mat-select>
+              <mat-error *ngIf="fieldHasError(i, 'fieldType')">
+                Type is required
+              </mat-error>
             </mat-form-field>
           </div>
           <div class="formColumn">
@@ -32,6 +35,9 @@
                 placeholder="Name"
                 (blur)="getUnits(i)"
               />
+              <mat-error *ngIf="fieldHasError(i, 'fieldName')">
+                Name is required
+              </mat-error>
             </mat-form-field>
           </div>
           <div class="formColumn">
@@ -47,6 +53,9 @@
                 formControlName="fieldValue"
                 placeholder="Value"
               />
+              <mat-error *ngIf="fieldHasError(i, 'fieldValue')">
+                Value is required
+              </mat-error>
             </mat-form-field>
           </div>
           <div class="formColumn">
@@ -71,6 +80,9 @@
                   {{ unit }}
                 </mat-option>
               </mat-autocomplete>
+              <mat-error *ngIf="fieldHasError(i, 'fieldUnit')">
+                A unit is required for quantities
+              </mat-error>
             </mat-form-field>
           </div>
           <div class="formColumn" fxFlexAlign="end">
