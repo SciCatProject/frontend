@@ -277,4 +277,50 @@ describe("MetadataEditComponent", () => {
       expect(component.units.includes("seconds")).toEqual(true);
     });
   });
+
+  describe("#setValueInputType()", () => {
+    it("should return 'number' if metadata type is 'number'", () => {
+      component.addMetadata();
+      component.items.at(0).get("fieldType").setValue("number");
+
+      const inputType = component.setValueInputType(0);
+
+      expect(inputType).toEqual("number");
+    });
+
+    it("should return 'number' if metadata type is 'quantity'", () => {
+      component.addMetadata();
+      component.items.at(0).get("fieldType").setValue("quantity");
+
+      const inputType = component.setValueInputType(0);
+
+      expect(inputType).toEqual("number");
+    });
+
+    it("should return 'text' if metadata type is 'string'", () => {
+      component.addMetadata();
+      component.items.at(0).get("fieldType").setValue("string");
+
+      const inputType = component.setValueInputType(0);
+
+      expect(inputType).toEqual("text");
+    });
+
+    it("should return 'datetime-local' if metadata type is 'date'", () => {
+      component.addMetadata();
+      component.items.at(0).get("fieldType").setValue("date");
+
+      const inputType = component.setValueInputType(0);
+
+      expect(inputType).toEqual("datetime-local");
+    });
+
+    it("should return 'text' if metadata type is undefined", () => {
+      component.addMetadata();
+
+      const inputType = component.setValueInputType(0);
+
+      expect(inputType).toEqual("text");
+    });
+  });
 });
