@@ -21,9 +21,9 @@ describe("MetadataEditComponent", () => {
         MatAutocompleteModule,
         MatFormFieldModule,
         MatOptionModule,
-        MatSelectModule
+        MatSelectModule,
       ],
-      providers: [FormBuilder]
+      providers: [FormBuilder],
     }).compileComponents();
   }));
 
@@ -50,10 +50,7 @@ describe("MetadataEditComponent", () => {
   describe("#detectType() ", () => {
     it("should keep fieldUnit enabled if fieldType is 'quantity'", () => {
       component.addMetadata();
-      component.items
-        .at(0)
-        .get("fieldType")
-        .setValue("quantity");
+      component.items.at(0).get("fieldType").setValue("quantity");
 
       expect(component.items.at(0).get("fieldUnit").enabled).toEqual(true);
 
@@ -64,10 +61,7 @@ describe("MetadataEditComponent", () => {
 
     it("should disable fieldUnit if fieldType is not 'quantity'", () => {
       component.addMetadata();
-      component.items
-        .at(0)
-        .get("fieldType")
-        .setValue("string");
+      component.items.at(0).get("fieldType").setValue("string");
 
       expect(component.items.at(0).get("fieldUnit").enabled).toEqual(true);
 
@@ -109,17 +103,15 @@ describe("MetadataEditComponent", () => {
         testName: {
           type: "quantity",
           value: 100,
-          unit: "Hz"
-        }
+          unit: "Hz",
+        },
       };
 
       component.addCurrentMetadata();
 
       expect(component.items.length).toEqual(1);
       expect(component.items.at(0).get("fieldName").value).toEqual("testName");
-      expect(component.items.at(0).get("fieldType").value).toEqual(
-        "quantity"
-      );
+      expect(component.items.at(0).get("fieldType").value).toEqual("quantity");
       expect(component.items.at(0).get("fieldValue").value).toEqual(100);
       expect(component.items.at(0).get("fieldUnit").value).toEqual("Hz");
     });
@@ -130,8 +122,8 @@ describe("MetadataEditComponent", () => {
       component.metadata = {
         testName: {
           v: 100,
-          u: "Hz"
-        }
+          u: "Hz",
+        },
       };
 
       component.addCurrentMetadata();
@@ -159,21 +151,12 @@ describe("MetadataEditComponent", () => {
   describe("#createMetaDataObject()", () => {
     it("should create a metadata object with type 'date' from the FormGroup array", () => {
       component.addMetadata();
-      component.items
-        .at(0)
-        .get("fieldName")
-        .setValue("testName");
-      component.items
-        .at(0)
-        .get("fieldType")
-        .setValue("date");
+      component.items.at(0).get("fieldType").setValue("date");
 
       component.detectType(0);
 
-      component.items
-        .at(0)
-        .get("fieldValue")
-        .setValue("2019-09-03 10:25:40");
+      component.items.at(0).get("fieldName").setValue("testName");
+      component.items.at(0).get("fieldValue").setValue("2019-09-03 10:25:40");
 
       const metadataObject = component.createMetadataObjects();
 
@@ -181,33 +164,19 @@ describe("MetadataEditComponent", () => {
       expect(Object.keys(metadataObject).length).toBe(1);
       expect(Object.keys(metadataObject)[0]).toEqual("testName");
       expect(metadataObject["testName"].type).toEqual("date");
-      expect(metadataObject["testName"].value).toEqual(
-        new Date("2019-09-03 10:25:40")
-      );
+      expect(metadataObject["testName"].value).toEqual("2019-09-03 10:25:40");
       expect(metadataObject["testName"].unit).toEqual("");
     });
 
     it("should create a metadata object with type 'quantity' from the FormGroup array", () => {
       component.addMetadata();
-      component.items
-        .at(0)
-        .get("fieldName")
-        .setValue("testName");
-      component.items
-        .at(0)
-        .get("fieldType")
-        .setValue("quantity");
+      component.items.at(0).get("fieldType").setValue("quantity");
 
       component.detectType(0);
 
-      component.items
-        .at(0)
-        .get("fieldValue")
-        .setValue(100);
-      component.items
-        .at(0)
-        .get("fieldUnit")
-        .setValue("Hz");
+      component.items.at(0).get("fieldName").setValue("testName");
+      component.items.at(0).get("fieldValue").setValue(100);
+      component.items.at(0).get("fieldUnit").setValue("Hz");
 
       const metadataObject = component.createMetadataObjects();
 
@@ -221,21 +190,12 @@ describe("MetadataEditComponent", () => {
 
     it("should create a metadata object with type 'number' from the FormGroup array", () => {
       component.addMetadata();
-      component.items
-        .at(0)
-        .get("fieldName")
-        .setValue("testName");
-      component.items
-        .at(0)
-        .get("fieldType")
-        .setValue("number");
+      component.items.at(0).get("fieldType").setValue("number");
 
       component.detectType(0);
 
-      component.items
-        .at(0)
-        .get("fieldValue")
-        .setValue(100);
+      component.items.at(0).get("fieldName").setValue("testName");
+      component.items.at(0).get("fieldValue").setValue(100);
 
       const metadataObject = component.createMetadataObjects();
 
@@ -249,21 +209,12 @@ describe("MetadataEditComponent", () => {
 
     it("should create a metadata object with type 'string' from the FormGroup array", () => {
       component.addMetadata();
-      component.items
-        .at(0)
-        .get("fieldName")
-        .setValue("testName");
-      component.items
-        .at(0)
-        .get("fieldType")
-        .setValue("string");
+      component.items.at(0).get("fieldType").setValue("string");
 
       component.detectType(0);
 
-      component.items
-        .at(0)
-        .get("fieldValue")
-        .setValue("test");
+      component.items.at(0).get("fieldName").setValue("testName");
+      component.items.at(0).get("fieldValue").setValue("test");
 
       const metadataObject = component.createMetadataObjects();
 
@@ -277,22 +228,12 @@ describe("MetadataEditComponent", () => {
 
     it("should create a metadata object with no type from the FormGroup array", () => {
       component.addMetadata();
-      component.items
-        .at(0)
-        .get("fieldName")
-        .setValue("testName");
-      component.items
-        .at(0)
-        .get("fieldType")
-        .setValue("");
-      component.items
-        .at(0)
-        .get("fieldValue")
-        .setValue("test");
-      component.items
-        .at(0)
-        .get("fieldUnit")
-        .setValue("test");
+      component.items.at(0).get("fieldType").setValue("");
+
+      component.detectType(0);
+
+      component.items.at(0).get("fieldName").setValue("testName");
+      component.items.at(0).get("fieldValue").setValue("test");
 
       const metadataObject = component.createMetadataObjects();
 
@@ -301,7 +242,6 @@ describe("MetadataEditComponent", () => {
       expect(Object.keys(metadataObject)[0]).toEqual("testName");
       expect(metadataObject["testName"].type).toEqual("");
       expect(metadataObject["testName"].value).toEqual("test");
-      expect(metadataObject["testName"].unit).toEqual("test");
     });
   });
 
@@ -316,19 +256,10 @@ describe("MetadataEditComponent", () => {
 
     it("should return false if the form is valid", () => {
       component.addMetadata();
-      component.items
-        .at(0)
-        .get("fieldType")
-        .setValue("string");
+      component.items.at(0).get("fieldType").setValue("string");
       component.detectType(0);
-      component.items
-        .at(0)
-        .get("fieldName")
-        .setValue("test");
-      component.items
-        .at(0)
-        .get("fieldValue")
-        .setValue("testValue");
+      component.items.at(0).get("fieldName").setValue("test");
+      component.items.at(0).get("fieldValue").setValue("testValue");
 
       const invalid = component.isInvalid();
 
@@ -339,10 +270,7 @@ describe("MetadataEditComponent", () => {
   describe("#getUnits()", () => {
     it("should get an array of units based on the value of fieldName", () => {
       component.addMetadata();
-      component.items
-        .at(0)
-        .get("fieldName")
-        .setValue("elapsed_time");
+      component.items.at(0).get("fieldName").setValue("elapsed_time");
 
       component.getUnits(0);
 

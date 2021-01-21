@@ -39,6 +39,7 @@
               <input
                 id="valueInput{{i}}"
                 matInput
+                [type]="setValueInputType(i)"
                 autocomplete="off"
                 autocorrect="off"
                 autocapitalize="off"
@@ -60,7 +61,7 @@
                 formControlName="fieldUnit"
                 placeholder="Unit"
                 [matAutocomplete]="metadataUnits"
-                (focus)="filterUnits(i)"
+                (focus)="getUnits(i)"
               />
               <mat-autocomplete #metadataUnits="matAutocomplete">
                 <mat-option
