@@ -62,6 +62,10 @@ export class DatasetDetailComponent {
     this.clickSample.emit(sampleId);
   }
 
+  editSample() {
+    console.log("EDIT SAMPLE");
+  }
+
   onSaveMetadata(metadata: object) {
     this.saveMetadata.emit(metadata);
   }

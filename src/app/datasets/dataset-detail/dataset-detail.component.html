@@ -100,8 +100,18 @@
         </tr>
         <tr *ngIf="dataset.sampleId && sample">
           <th><mat-icon> center_focus_weak </mat-icon> Sample</th>
-          <td (click)="onClickSample(sample.sampleId)">
-            <a>{{ sample.description }}</a>
+          <td>
+            <a (click)="onClickSample(sample.sampleId)">{{
+              sample.description
+            }}</a>
+            <button
+              mat-icon-button
+              class="sample-edit"
+              [disableRipple]="true"
+              (click)="editSample()"
+            >
+              <mat-icon>edit</mat-icon>
+            </button>
           </td>
         </tr>
         <tr *ngIf="dataset.size as value">

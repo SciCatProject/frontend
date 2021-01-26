@@ -39,6 +39,14 @@ mat-card {
       a:hover {
         cursor: pointer;
       }
+
+      .sample-edit {
+        height: 0.5em!important;
+        line-height: 0.5em!important;
+        mat-icon {
+          font-size: medium;
+        }
+      }
     }
   }
 
