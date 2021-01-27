@@ -41,11 +41,15 @@ mat-card {
       }
 
       .sample-edit {
-        height: 0.5em!important;
-        line-height: 0.5em!important;
+        padding-left: 0.5em;
+
         mat-icon {
           font-size: medium;
         }
+      }
+
+      .sample-edit:hover {
+        cursor: pointer;
       }
     }
   }

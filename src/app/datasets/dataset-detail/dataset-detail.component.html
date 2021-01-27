@@ -104,14 +104,13 @@
             <a (click)="onClickSample(sample.sampleId)">{{
               sample.description
             }}</a>
-            <button
+            <span
               mat-icon-button
               class="sample-edit"
-              [disableRipple]="disableRipple"
               (click)="editSample()"
             >
               <mat-icon>edit</mat-icon>
-            </button>
+            </span>
           </td>
         </tr>
         <tr *ngIf="dataset.size as value">
