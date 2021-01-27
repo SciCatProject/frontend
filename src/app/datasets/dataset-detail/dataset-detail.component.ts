@@ -34,7 +34,6 @@ export class DatasetDetailComponent {
   editEnabled: boolean;
   readonly separatorKeyCodes: number[] = [ENTER, COMMA, SPACE];
 
-  disableRipple = true;
   dialogConfig: MatDialogConfig;
 
   onClickKeyword(keyword: string): void {
@@ -67,12 +66,21 @@ export class DatasetDetailComponent {
     this.clickSample.emit(sampleId);
   }
 
-  editSample() {
-    console.log("EDIT SAMPLE");
+  openSampleEditDialog() {
     this.dialogConfig = new MatDialogConfig();
-    this.dialog.open(SampleEditComponent, {
-      width: "500px",
-    });
+    this.dialog
+      .open(SampleEditComponent, {
+        width: "500px",
+        data: {
+          ownerGroup: this.dataset.ownerGroup,
+          sampleId: this.sample.sampleId,
+        },
+      })
+      .afterClosed()
+      .subscribe((res) => {
+        const { sampleId } = res;
+        console.log({ sampleId });
+      });
   }
 
   onSaveMetadata(metadata: object) {

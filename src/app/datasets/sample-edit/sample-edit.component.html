@@ -1,8 +1,17 @@
 <h1 mat-dialog-title>Edit Dataset Sample</h1>
-<mat-dialog-content>
-  List of samples
+<mat-dialog-content [formGroup]="form">
+  <mat-form-field>
+    <mat-label>Samples</mat-label>
+    <mat-select formControlName="sample" (selectionChange)="checkValue()">
+      <input matInput type="text" placeholder="Search" />
+      <mat-option *ngFor="let sample of samples$ | async" [value]="sample">{{
+        sample.description
+      }}</mat-option>
+    </mat-select>
+    <mat-error *ngIf="fieldHasError()">This is the current sample</mat-error>
+  </mat-form-field>
 </mat-dialog-content>
-<div mat-dialog-actions>
-  <button mat-button (click)="close()">Close</button>
-  <button mat-button>Save</button>
-</div>
+<mat-dialog-actions>
+  <button mat-button (click)="cancel()">Cancel</button>
+  <button mat-button [disabled]="isInvalid()" (click)="save()">Save</button>
+</mat-dialog-actions>
