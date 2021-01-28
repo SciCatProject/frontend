@@ -111,7 +111,8 @@ export class SampleEditComponent {
     public dialogRef: MatDialogRef<SampleEditComponent>,
     private store: Store<Sample>
   ) {
-    this.store.dispatch(fetchSamplesAction());
+    this.store.dispatch(setTextFilterAction({ text: "" }));
     this.store.dispatch(changePageAction({ page: 0, limit: 10 }));
+    this.store.dispatch(fetchSamplesAction());
   }
 }

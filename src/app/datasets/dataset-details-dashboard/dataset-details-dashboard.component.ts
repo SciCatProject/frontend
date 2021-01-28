@@ -133,7 +133,9 @@ export class DatasetDetailsDashboardComponent
   }
 
   onSampleChange(sample: Sample) {
-    console.log({ sample });
+    const pid = this.dataset.pid;
+    const property = { sampleId: sample.sampleId };
+    this.store.dispatch(updatePropertyAction({ pid, property }));
   }
 
   onSaveMetadata(metadata: object) {
