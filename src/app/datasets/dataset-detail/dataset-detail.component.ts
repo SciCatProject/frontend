@@ -72,14 +72,15 @@ export class DatasetDetailComponent {
       .open(SampleEditComponent, {
         width: "1000px",
         data: {
-          ownerGroup: this.dataset.ownerGroup,
           sampleId: this.sample.sampleId,
         },
       })
       .afterClosed()
       .subscribe((res) => {
-        const { sampleId } = res;
-        console.log({ sampleId });
+        if (res) {
+          const { sample } = res;
+          console.log({ sample });
+        }
       });
   }
 

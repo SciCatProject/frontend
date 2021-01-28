@@ -1,0 +1,32 @@
+.mat-form-field {
+  width: 100%;
+
+  .clear-button {
+    cursor: pointer;
+  }
+}
+
+mat-table {
+  mat-header-cell:first-child {
+    justify-content: left;
+  }
+  mat-header-cell:nth-child(n + 2) {
+    justify-content: center;
+  }
+
+  mat-cell:first-child {
+    justify-content: left;
+  }
+  mat-cell:nth-child(n + 2) {
+    justify-content: center;
+  }
+
+  mat-row:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+  }
+
+  .highlight {
+    background-color: rgba(0, 0, 0, 0.3);
+  }
+}
