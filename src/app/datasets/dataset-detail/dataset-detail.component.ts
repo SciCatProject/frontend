@@ -3,7 +3,7 @@ import { Attachment, Dataset, Proposal, Sample } from "shared/sdk/models";
 import { APP_CONFIG, AppConfig } from "app-config.module";
 import { ENTER, COMMA, SPACE } from "@angular/cdk/keycodes";
 import { MatChipInputEvent } from "@angular/material/chips";
-import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
+import { MatDialog } from "@angular/material/dialog";
 import { SampleEditComponent } from "datasets/sample-edit/sample-edit.component";
 
 /**
@@ -36,8 +36,6 @@ export class DatasetDetailComponent {
   editEnabled: boolean;
   readonly separatorKeyCodes: number[] = [ENTER, COMMA, SPACE];
 
-  dialogConfig: MatDialogConfig;
-
   onClickKeyword(keyword: string): void {
     this.clickKeyword.emit(keyword);
   }
@@ -69,7 +67,6 @@ export class DatasetDetailComponent {
   }
 
   openSampleEditDialog() {
-    this.dialogConfig = new MatDialogConfig();
     this.dialog
       .open(SampleEditComponent, {
         width: "1000px",
@@ -82,7 +79,6 @@ export class DatasetDetailComponent {
       .subscribe((res) => {
         if (res) {
           const { sample } = res;
-          // console.log({ sample });
           this.sample = sample;
           this.sampleChange.emit(this.sample);
         }

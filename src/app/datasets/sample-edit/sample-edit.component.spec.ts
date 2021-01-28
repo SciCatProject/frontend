@@ -15,7 +15,7 @@ import {
   PageChangeEvent,
   SortChangeEvent,
 } from "shared/modules/table/table.component";
-import { Dataset, Sample } from "shared/sdk";
+import { Sample } from "shared/sdk";
 import {
   changePageAction,
   setTextFilterAction,

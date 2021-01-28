@@ -7,6 +7,10 @@ import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 import { SharedCatanieModule } from "shared/shared.module";
 import { MatTableModule } from "@angular/material/table";
 import { MatChipInputEvent } from "@angular/material/chips";
+import { of } from "rxjs";
+import { Dataset, Sample } from "shared/sdk";
+import { MatDialogRef } from "@angular/material/dialog";
+import { SampleEditComponent } from "datasets/sample-edit/sample-edit.component";
 
 describe("DatasetDetailComponent", () => {
   let component: DatasetDetailComponent;
@@ -16,7 +20,7 @@ describe("DatasetDetailComponent", () => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
       imports: [AppConfigModule, MatTableModule, SharedCatanieModule],
-      declarations: [DatasetDetailComponent, DatafilesComponent, LinkyPipe]
+      declarations: [DatasetDetailComponent, DatafilesComponent, LinkyPipe],
     });
     TestBed.overrideComponent(DatasetDetailComponent, {
       set: {
@@ -24,11 +28,11 @@ describe("DatasetDetailComponent", () => {
           {
             provide: APP_CONFIG,
             useValue: {
-              editMetadataEnabled: true
-            }
-          }
-        ]
-      }
+              editMetadataEnabled: true,
+            },
+          },
+        ],
+      },
     });
     TestBed.compileComponents();
   }));
@@ -60,7 +64,7 @@ describe("DatasetDetailComponent", () => {
       spyOn(component.addKeyword, "emit");
 
       const event = {
-        value: ""
+        value: "",
       };
       component.onAddKeyword(event as MatChipInputEvent);
 
@@ -71,7 +75,7 @@ describe("DatasetDetailComponent", () => {
       spyOn(component.addKeyword, "emit");
 
       const event = {
-        value: "test"
+        value: "test",
       };
       component.onAddKeyword(event as MatChipInputEvent);
 
@@ -113,6 +117,27 @@ describe("DatasetDetailComponent", () => {
 
       expect(component.clickSample.emit).toHaveBeenCalledTimes(1);
       expect(component.clickSample.emit).toHaveBeenCalledWith(sampleId);
+    });
+  });
+
+  describe("#openSampleEditDialog()", () => {
+    it("should open the sample edit dialog", () => {
+      const dialogOpenSpy = spyOn(component.dialog, "open").and.returnValue({
+        afterClosed: () => of({}),
+      } as MatDialogRef<SampleEditComponent>);
+
+      component.dataset = new Dataset();
+      component.dataset.ownerGroup = "test";
+      component.sample = new Sample();
+      component.sample.sampleId = "testId";
+
+      component.openSampleEditDialog();
+
+      expect(dialogOpenSpy).toHaveBeenCalledTimes(1);
+      expect(dialogOpenSpy).toHaveBeenCalledWith(SampleEditComponent, {
+        width: "1000px",
+        data: { ownerGroup: "test", sampleId: "testId" },
+      });
     });
   });
 
