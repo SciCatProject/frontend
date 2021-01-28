@@ -23,6 +23,7 @@ export class DatasetDetailComponent {
   @Input() attachments: Attachment[];
   @Input() proposal: Proposal;
   @Input() sample: Sample;
+  @Input() isPI: boolean;
 
   @Output() clickKeyword = new EventEmitter<string>();
   @Output() addKeyword = new EventEmitter<string>();
@@ -30,6 +31,7 @@ export class DatasetDetailComponent {
   @Output() clickProposal = new EventEmitter<string>();
   @Output() clickSample = new EventEmitter<string>();
   @Output() saveMetadata = new EventEmitter<object>();
+  @Output() sampleChange = new EventEmitter<Sample>();
 
   editEnabled: boolean;
   readonly separatorKeyCodes: number[] = [ENTER, COMMA, SPACE];
@@ -79,7 +81,9 @@ export class DatasetDetailComponent {
       .subscribe((res) => {
         if (res) {
           const { sample } = res;
-          console.log({ sample });
+          // console.log({ sample });
+          this.sample = sample;
+          this.sampleChange.emit(this.sample);
         }
       });
   }
