@@ -74,6 +74,7 @@ export class DatasetDetailComponent {
       .open(SampleEditComponent, {
         width: "1000px",
         data: {
+          ownerGroup: this.dataset.ownerGroup,
           sampleId: this.sample.sampleId,
         },
       })

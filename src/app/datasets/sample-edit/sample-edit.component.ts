@@ -8,6 +8,7 @@ import {
 } from "@angular/forms";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { select, Store } from "@ngrx/store";
+import { map } from "rxjs/operators";
 import {
   PageChangeEvent,
   SortChangeEvent,
@@ -39,7 +40,12 @@ export class SampleEditComponent {
   sampleCount$ = this.store.pipe(select(getSamplesCount));
   samplesPerPage$ = this.store.pipe(select(getSamplesPerPage));
   currentPage$ = this.store.pipe(select(getPage));
-  samples$ = this.store.pipe(select(getSamples));
+  samples$ = this.store.pipe(
+    select(getSamples),
+    map((samples) =>
+      samples.filter((sample) => sample.ownerGroup === this.data.ownerGroup)
+    )
+  );
 
   selectedSampleId: string;
   displayedColumns = [
@@ -107,7 +113,7 @@ export class SampleEditComponent {
 
   constructor(
     @Inject(MAT_DIALOG_DATA)
-    public data: { sampleId: string },
+    public data: { ownerGroup: string; sampleId: string },
     public dialogRef: MatDialogRef<SampleEditComponent>,
     private store: Store<Sample>
   ) {
