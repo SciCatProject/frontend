@@ -70,7 +70,7 @@ export class DatasetDetailComponent {
     this.dialogConfig = new MatDialogConfig();
     this.dialog
       .open(SampleEditComponent, {
-        width: "500px",
+        width: "1000px",
         data: {
           ownerGroup: this.dataset.ownerGroup,
           sampleId: this.sample.sampleId,

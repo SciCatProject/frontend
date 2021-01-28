@@ -1,3 +1,4 @@
+import { DatePipe } from "@angular/common";
 import { Component, Inject } from "@angular/core";
 import {
   AbstractControl,
@@ -9,9 +10,16 @@ import {
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { select, Store } from "@ngrx/store";
 import { map } from "rxjs/operators";
+import { TableColumn } from "shared/modules/table/table.component";
 import { Sample } from "shared/sdk";
 import { fetchSamplesAction } from "state-management/actions/samples.actions";
-import { getSamples } from "state-management/selectors/samples.selectors";
+import { samples } from "state-management/selectors";
+import {
+  getPage,
+  getSamples,
+  getSamplesCount,
+  getSamplesPerPage,
+} from "state-management/selectors/samples.selectors";
 
 @Component({
   selector: "app-sample-edit",
@@ -19,12 +27,39 @@ import { getSamples } from "state-management/selectors/samples.selectors";
   styleUrls: ["./sample-edit.component.scss"],
 })
 export class SampleEditComponent {
-  samples$ = this.store.pipe(
-    select(getSamples),
-    map((samples) =>
-      samples.filter((sample) => sample.ownerGroup === this.data.ownerGroup)
-    )
+  sampleCount$ = this.store.pipe(select(getSamplesCount));
+  samplesPerPage$ = this.store.pipe(select(getSamplesPerPage));
+  currentPage$ = this.store.pipe(select(getPage));
+  samples$ = this.store.pipe(select(getSamples));
+  tableData$ = this.samples$.pipe(
+    map((samples) => this.formatTableData(samples))
   );
+
+  tableColumns: TableColumn[] = [
+    { name: "sampleId", icon: "fingerprint", sort: true, inList: false },
+    { name: "description", icon: "description", sort: false, inList: true },
+    { name: "owner", icon: "face", sort: true, inList: true },
+    { name: "creationTime", icon: "date_range", sort: true, inList: true },
+    { name: "ownerGroup", icon: "group", sort: false, inList: true },
+  ];
+  tablePaginate = true;
+
+  formatTableData(samples: Sample[]): any {
+    if (samples) {
+      return samples.map((sample) => {
+        return {
+          sampleId: sample.sampleId,
+          owner: sample.owner,
+          creationTime: this.datePipe.transform(
+            sample.createdAt,
+            "yyyy-MM-dd, hh:mm"
+          ),
+          description: sample.description,
+          ownerGroup: sample.ownerGroup,
+        };
+      });
+    }
+  }
 
   form = new FormGroup({
     sample: new FormControl("", [Validators.required, this.sampleValidator()]),
@@ -41,10 +76,6 @@ export class SampleEditComponent {
     console.log("value", this.sample.value);
   }
 
-  fieldHasError(): boolean {
-    return this.sample.hasError("isCurrent");
-  }
-
   cancel = (): void => this.dialogRef.close();
 
   save = (): void =>
@@ -59,6 +90,7 @@ export class SampleEditComponent {
   constructor(
     @Inject(MAT_DIALOG_DATA)
     public data: { ownerGroup: string; sampleId: string },
+    private datePipe: DatePipe,
     public dialogRef: MatDialogRef<SampleEditComponent>,
     private store: Store<Sample>
   ) {

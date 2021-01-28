@@ -1,3 +1,4 @@
+import { DatePipe } from "@angular/common";
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 import {
   MatDialogModule,
@@ -18,6 +19,7 @@ describe("SampleEditComponent", () => {
       declarations: [SampleEditComponent],
       imports: [MatDialogModule],
       providers: [
+        DatePipe,
         { provide: MatDialogRef, useValue: {} },
         { provide: MAT_DIALOG_DATA, useValue: {} },
         { provide: Store, useClass: MockStore },
