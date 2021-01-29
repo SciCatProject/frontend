@@ -62,8 +62,10 @@ export class SampleEditComponent {
 
   sampleValidator(): ValidatorFn {
     return (control: AbstractControl): { [key: string]: any } | null => {
-      const sameSample = control.value.sampleId === this.data.sampleId;
-      return sameSample ? { isCurrent: { value: control.value } } : null;
+      const isCurrentSample = control.value.sampleId === this.data.sampleId;
+      return isCurrentSample
+        ? { isCurrentSample: { value: control.value } }
+        : null;
     };
   }
 

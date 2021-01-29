@@ -80,7 +80,7 @@
 <mat-dialog-actions>
   <button mat-button (click)="cancel()">Cancel</button>
   <button mat-button [disabled]="isInvalid()" (click)="save()">Save</button>
-  <mat-error *ngIf="sample.hasError('isCurrent')">
+  <mat-error *ngIf="sample.hasError('isCurrentSample')">
     This is the current sample
   </mat-error>
   <mat-error *ngIf="sample.hasError('required')">

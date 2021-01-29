@@ -311,7 +311,7 @@ describe("DetailsDashboardComponent", () => {
   });
 
   describe("#onSaveMetadata()", () => {
-    it("should dispatch a updatePropertyAction", () => {
+    it("should dispatch an updatePropertyAction", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
       const pid = "testPid";
