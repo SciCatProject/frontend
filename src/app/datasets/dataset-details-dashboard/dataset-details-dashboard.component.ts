@@ -69,21 +69,20 @@ export class DatasetDetailsDashboardComponent
   isPI(): boolean {
     if (this.user.username === "admin") {
       return true;
-    } else {
-      if (this.dataset.type === "raw") {
-        return (
-          this.user.email.toLowerCase() ===
-          this.dataset["principalInvestigator"].toLowerCase()
-        );
-      } else if (this.dataset.type === "derived") {
-        return (
-          this.user.email.toLowerCase() ===
-          this.dataset["investigator"].toLowerCase()
-        );
-      } else {
-        return false;
-      }
     }
+    if (this.dataset.type === "raw") {
+      return (
+        this.user.email.toLowerCase() ===
+        this.dataset["principalInvestigator"].toLowerCase()
+      );
+    }
+    if (this.dataset.type === "derived") {
+      return (
+        this.user.email.toLowerCase() ===
+        this.dataset["investigator"].toLowerCase()
+      );
+    }
+    return false;
   }
 
   onSlidePublic(event: MatSlideToggleChange) {
