@@ -16,6 +16,7 @@ export class AppConfig {
   archiveWorkflowEnabled: boolean;
   columnSelectEnabled: boolean;
   datasetReduceEnabled: boolean;
+  editDatasetSampleEnabled: boolean;
   editMetadataEnabled: boolean;
   editPublishedData: boolean;
   editSampleEnabled: boolean;
@@ -59,6 +60,7 @@ export const APP_DI_CONFIG: AppConfig = {
   columnSelectEnabled: environment["columnSelectEnabled"] || false,
   datasetReduceEnabled: environment["datasetReduceEnabled"] || false,
   disabledDatasetColumns: environment["disabledDatasetColumns"] || [],
+  editDatasetSampleEnabled: environment["editDatasetSampleEnabled"] || false,
   editMetadataEnabled: environment["editMetadataEnabled"] || null,
   editSampleEnabled: environment["editSampleEnabled"] || null,
   facility: environment["facility"] || null,

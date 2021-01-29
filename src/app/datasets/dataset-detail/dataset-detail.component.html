@@ -107,7 +107,7 @@
             <span
               class="sample-edit"
               (click)="openSampleEditDialog()"
-              *ngIf="isPI"
+              *ngIf="appConfig.editDatasetSampleEnabled && isPI"
             >
               <mat-icon>edit</mat-icon>
             </span>
