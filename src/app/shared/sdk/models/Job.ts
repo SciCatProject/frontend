@@ -2,20 +2,23 @@
 
 declare var Object: any;
 export interface JobInterface {
+  "id"?: string;
   "emailJobInitiator": string;
   "type": string;
   "creationTime"?: Date;
   "executionTime"?: Date;
   "jobParams"?: any;
   "jobStatusMessage"?: string;
-  "datasetList": any;
+  "datasetList"?: any;
   "jobResultObject"?: any;
-  "id"?: any;
+  "createdBy"?: string;
+  "updatedBy"?: string;
   "createdAt"?: Date;
   "updatedAt"?: Date;
 }
 
 export class Job implements JobInterface {
+  "id": string;
   "emailJobInitiator": string;
   "type": string;
   "creationTime": Date;
@@ -24,7 +27,8 @@ export class Job implements JobInterface {
   "jobStatusMessage": string;
   "datasetList": any;
   "jobResultObject": any;
-  "id": any;
+  "createdBy": string;
+  "updatedBy": string;
   "createdAt": Date;
   "updatedAt": Date;
   constructor(data?: JobInterface) {
@@ -60,6 +64,10 @@ export class Job implements JobInterface {
       path: 'Jobs',
       idName: 'id',
       properties: {
+        "id": {
+          name: 'id',
+          type: 'string'
+        },
         "emailJobInitiator": {
           name: 'emailJobInitiator',
           type: 'string'
@@ -93,9 +101,13 @@ export class Job implements JobInterface {
           name: 'jobResultObject',
           type: 'any'
         },
-        "id": {
-          name: 'id',
-          type: 'any'
+        "createdBy": {
+          name: 'createdBy',
+          type: 'string'
+        },
+        "updatedBy": {
+          name: 'updatedBy',
+          type: 'string'
         },
         "createdAt": {
           name: 'createdAt',

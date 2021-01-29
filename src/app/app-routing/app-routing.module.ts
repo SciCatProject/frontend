@@ -7,6 +7,8 @@ import { DatablocksComponent } from "../datasets/datablocks-table/datablocks-tab
 import { DatasetDetailsDashboardComponent } from "datasets/dataset-details-dashboard/dataset-details-dashboard.component";
 
 import { JobsDashboardComponent } from "jobs/jobs-dashboard/jobs-dashboard.component";
+import { JobsDashboardNewComponent } from "jobs/jobs-dashboard-new/jobs-dashboard-new.component";
+
 import { JobsDetailComponent } from "../jobs/jobs-detail/jobs-detail.component";
 
 import { ErrorPageComponent } from "shared/modules/error-page/error-page.component";
@@ -44,6 +46,7 @@ import { AnonymousLayoutComponent } from "_layout/anonymous-layout/anonymous-lay
 import { JobsGuard } from "app-routing/jobs.guard";
 import { PoliciesGuard } from "app-routing/policies.guard";
 import { LogbookGuard } from "app-routing/logbook.guard";
+import { FilesDashboardComponent } from "files/files-dashboard/files-dashboard.component";
 import { DatasetsGuard } from "./datasets.guard";
 
 export const routes: Routes = [
@@ -127,6 +130,11 @@ export const routes: Routes = [
         canActivate: [DatasetsGuard],
       },
       {
+        path: "files",
+        component: FilesDashboardComponent,
+        canActivate: [AuthGuard]
+      },
+      {
         path: "instruments",
         component: InstrumentsDashboardComponent,
         canActivate: [AuthGuard],
@@ -189,8 +197,13 @@ export const routes: Routes = [
         canActivate: [AuthGuard],
       },
       {
-        path: "user/jobs",
+        path: "user/jobsold",
         component: JobsDashboardComponent,
+        canActivate: [AuthGuard, JobsGuard],
+      },
+      {
+        path: "user/jobs",
+        component: JobsDashboardNewComponent,
         canActivate: [AuthGuard, JobsGuard],
       },
       {

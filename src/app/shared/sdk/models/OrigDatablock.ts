@@ -5,35 +5,37 @@ import {
 
 declare var Object: any;
 export interface OrigDatablockInterface {
-  "id"?: any;
+  "id"?: string;
   "size": number;
-  "dataFileList": Array<any>;
   "ownerGroup": string;
   "accessGroups"?: Array<any>;
   "createdBy"?: string;
   "updatedBy"?: string;
   "datasetId"?: string;
+  "dataFileList"?: Array<any>;
   "rawDatasetId"?: string;
   "derivedDatasetId"?: string;
   "createdAt"?: Date;
   "updatedAt"?: Date;
   dataset?: Dataset;
+  files?: any[];
 }
 
 export class OrigDatablock implements OrigDatablockInterface {
-  "id": any;
+  "id": string;
   "size": number;
-  "dataFileList": Array<any>;
   "ownerGroup": string;
   "accessGroups": Array<any>;
   "createdBy": string;
   "updatedBy": string;
   "datasetId": string;
+  "dataFileList": Array<any>;
   "rawDatasetId": string;
   "derivedDatasetId": string;
   "createdAt": Date;
   "updatedAt": Date;
   dataset: Dataset;
+  files: any[];
   constructor(data?: OrigDatablockInterface) {
     Object.assign(this, data);
   }
@@ -69,15 +71,11 @@ export class OrigDatablock implements OrigDatablockInterface {
       properties: {
         "id": {
           name: 'id',
-          type: 'any'
+          type: 'string'
         },
         "size": {
           name: 'size',
           type: 'number'
-        },
-        "dataFileList": {
-          name: 'dataFileList',
-          type: 'Array&lt;any&gt;'
         },
         "ownerGroup": {
           name: 'ownerGroup',
@@ -98,6 +96,11 @@ export class OrigDatablock implements OrigDatablockInterface {
         "datasetId": {
           name: 'datasetId',
           type: 'string'
+        },
+        "dataFileList": {
+          name: 'dataFileList',
+          type: 'Array&lt;any&gt;',
+          default: <any>[]
         },
         "rawDatasetId": {
           name: 'rawDatasetId',
@@ -124,6 +127,14 @@ export class OrigDatablock implements OrigDatablockInterface {
           relationType: 'belongsTo',
                   keyFrom: 'datasetId',
           keyTo: 'pid'
+        },
+        files: {
+          name: 'files',
+          type: 'any[]',
+          model: '',
+          relationType: 'embedsMany',
+                  keyFrom: 'dataFileList',
+          keyTo: 'path'
         },
       }
     }

@@ -49,22 +49,22 @@ import { SocketDriver } from './sockets/socket.driver';
 import { SocketConnection } from './sockets/socket.connections';
 import { RealTime } from './services/core/real.time';
 import { UserApi } from './services/custom/User';
+import { UserCredentialApi } from './services/custom/UserCredential';
+import { UserIdentityApi } from './services/custom/UserIdentity';
+import { ApplicationCredentialApi } from './services/custom/ApplicationCredential';
+import { LogbookApi } from './services/custom/Logbook';
+import { PublishedDataApi } from './services/custom/PublishedData';
 import { DatasetApi } from './services/custom/Dataset';
 import { RawDatasetApi } from './services/custom/RawDataset';
 import { DerivedDatasetApi } from './services/custom/DerivedDataset';
 import { SampleApi } from './services/custom/Sample';
 import { ProposalApi } from './services/custom/Proposal';
-import { PublishedDataApi } from './services/custom/PublishedData';
 import { DatablockApi } from './services/custom/Datablock';
-import { UserCredentialApi } from './services/custom/UserCredential';
-import { UserIdentityApi } from './services/custom/UserIdentity';
-import { ApplicationCredentialApi } from './services/custom/ApplicationCredential';
 import { PolicyApi } from './services/custom/Policy';
+import { OrigDatablockApi } from './services/custom/OrigDatablock';
+import { AttachmentApi } from './services/custom/Attachment';
 import { JobApi } from './services/custom/Job';
 import { ShareGroupApi } from './services/custom/ShareGroup';
-import { OrigDatablockApi } from './services/custom/OrigDatablock';
-import { LogbookApi } from './services/custom/Logbook';
-import { AttachmentApi } from './services/custom/Attachment';
 import { UserSettingApi } from './services/custom/UserSetting';
 import { InstrumentApi } from './services/custom/Instrument';
 /**
@@ -98,22 +98,22 @@ export class SDKBrowserModule {
         SDKModels,
         RealTime,
         UserApi,
+        UserCredentialApi,
+        UserIdentityApi,
+        ApplicationCredentialApi,
+        LogbookApi,
+        PublishedDataApi,
         DatasetApi,
         RawDatasetApi,
         DerivedDatasetApi,
         SampleApi,
         ProposalApi,
-        PublishedDataApi,
         DatablockApi,
-        UserCredentialApi,
-        UserIdentityApi,
-        ApplicationCredentialApi,
         PolicyApi,
+        OrigDatablockApi,
+        AttachmentApi,
         JobApi,
         ShareGroupApi,
-        OrigDatablockApi,
-        LogbookApi,
-        AttachmentApi,
         UserSettingApi,
         InstrumentApi,
         internalStorageProvider,

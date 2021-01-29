@@ -7,13 +7,13 @@ import {
 
 declare var Object: any;
 export interface AttachmentInterface {
+  "id"?: string;
   "thumbnail": string;
   "caption"?: string;
   "ownerGroup": string;
   "accessGroups"?: Array<any>;
   "createdBy"?: string;
   "updatedBy"?: string;
-  "id"?: any;
   "datasetId"?: string;
   "sampleId"?: string;
   "proposalId"?: string;
@@ -27,13 +27,13 @@ export interface AttachmentInterface {
 }
 
 export class Attachment implements AttachmentInterface {
+  "id": string;
   "thumbnail": string;
   "caption": string;
   "ownerGroup": string;
   "accessGroups": Array<any>;
   "createdBy": string;
   "updatedBy": string;
-  "id": any;
   "datasetId": string;
   "sampleId": string;
   "proposalId": string;
@@ -77,6 +77,10 @@ export class Attachment implements AttachmentInterface {
       path: 'Attachments',
       idName: 'id',
       properties: {
+        "id": {
+          name: 'id',
+          type: 'string'
+        },
         "thumbnail": {
           name: 'thumbnail',
           type: 'string',
@@ -102,10 +106,6 @@ export class Attachment implements AttachmentInterface {
         "updatedBy": {
           name: 'updatedBy',
           type: 'string'
-        },
-        "id": {
-          name: 'id',
-          type: 'any'
         },
         "datasetId": {
           name: 'datasetId',

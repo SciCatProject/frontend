@@ -28,14 +28,14 @@
       justify-content: left;
     }
     mat-header-cell:nth-child(n + 2) {
-      justify-content: center;
+      justify-content: left;
     }
 
     mat-cell:first-child {
       justify-content: left;
     }
     mat-cell:nth-child(n + 2) {
-      justify-content: center;
+      justify-content: left;
     }
 
     mat-row:hover {

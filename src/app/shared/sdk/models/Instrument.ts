@@ -8,6 +8,10 @@ export interface InstrumentInterface {
   "pid"?: string;
   "name": string;
   "customMetadata"?: any;
+  "createdBy"?: string;
+  "updatedBy"?: string;
+  "createdAt"?: Date;
+  "updatedAt"?: Date;
   datasets?: Dataset[];
 }
 
@@ -15,6 +19,10 @@ export class Instrument implements InstrumentInterface {
   "pid": string;
   "name": string;
   "customMetadata": any;
+  "createdBy": string;
+  "updatedBy": string;
+  "createdAt": Date;
+  "updatedAt": Date;
   datasets: Dataset[];
   constructor(data?: InstrumentInterface) {
     Object.assign(this, data);
@@ -60,6 +68,22 @@ export class Instrument implements InstrumentInterface {
         "customMetadata": {
           name: 'customMetadata',
           type: 'any'
+        },
+        "createdBy": {
+          name: 'createdBy',
+          type: 'string'
+        },
+        "updatedBy": {
+          name: 'updatedBy',
+          type: 'string'
+        },
+        "createdAt": {
+          name: 'createdAt',
+          type: 'Date'
+        },
+        "updatedAt": {
+          name: 'updatedAt',
+          type: 'Date'
         },
       },
       relations: {

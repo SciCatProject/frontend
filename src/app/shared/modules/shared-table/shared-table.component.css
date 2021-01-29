@@ -1,0 +1,80 @@
+.m8 {
+  margin: 8px;
+}
+
+.expanded {
+  height: min-content !important;
+  visibility: visible !important;
+}
+
+.hidColLength-0 {
+  height: 0px !important;
+  min-height: 0px !important;
+  visibility: hidden !important;
+}
+
+.btnToggleExpand {
+  position: relative;
+  display: inline-block;
+  width: 35px;
+  height: 35px;
+  cursor: pointer;
+}
+
+.btnToggleExpand.active:before {
+  content: '-';
+  background-color: #d33333;
+}
+
+.btnToggleExpand:before {
+  top: 9px;
+  left: 4px;
+  height: 14px;
+  width: 14px;
+  display: block;
+  position: absolute;
+  color: white;
+  border: 2px solid white;
+  border-radius: 14px;
+  box-shadow: 0 0 3px #444;
+  box-sizing: content-box;
+  text-align: center;
+  text-indent: 0 !important;
+  font-family: 'Courier New', Courier, monospace;
+  line-height: 14px;
+  content: '+';
+  background-color: #31b131;
+}
+
+.filterHeader {
+  padding: 0 24px;
+}
+
+.example-spacer {
+  flex: 1 1 auto;
+}
+
+
+.center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -moz-transform: translateX(-50%) translateY(-50%);
+  -webkit-transform: translateX(-50%) translateY(-50%);
+  transform: translateX(-50%) translateY(-50%);
+}
+
+
+.mat-table {
+  padding-top: 10px;
+}
+
+mat-cell > span.ellipsis {
+  text-overflow: ellipsis; 
+  overflow: hidden; 
+  white-space: nowrap;
+}
+
+mat-header-row {
+  align-items: initial;
+}

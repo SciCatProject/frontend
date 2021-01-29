@@ -5,14 +5,22 @@ export interface ShareGroupInterface {
   "groupID"?: string;
   "members"?: Array<any>;
   "datasets"?: Array<any>;
+  "createdBy"?: string;
+  "updatedBy"?: string;
   "id"?: any;
+  "createdAt"?: Date;
+  "updatedAt"?: Date;
 }
 
 export class ShareGroup implements ShareGroupInterface {
   "groupID": string;
   "members": Array<any>;
   "datasets": Array<any>;
+  "createdBy": string;
+  "updatedBy": string;
   "id": any;
+  "createdAt": Date;
+  "updatedAt": Date;
   constructor(data?: ShareGroupInterface) {
     Object.assign(this, data);
   }
@@ -58,9 +66,25 @@ export class ShareGroup implements ShareGroupInterface {
           name: 'datasets',
           type: 'Array&lt;any&gt;'
         },
+        "createdBy": {
+          name: 'createdBy',
+          type: 'string'
+        },
+        "updatedBy": {
+          name: 'updatedBy',
+          type: 'string'
+        },
         "id": {
           name: 'id',
           type: 'any'
+        },
+        "createdAt": {
+          name: 'createdAt',
+          type: 'Date'
+        },
+        "updatedAt": {
+          name: 'updatedAt',
+          type: 'Date'
         },
       },
       relations: {
