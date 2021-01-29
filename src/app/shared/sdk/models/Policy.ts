@@ -2,6 +2,7 @@
 
 declare var Object: any;
 export interface PolicyInterface {
+  "id"?: string;
   "manager"?: Array<any>;
   "tapeRedundancy"?: string;
   "autoArchive"?: boolean;
@@ -15,12 +16,12 @@ export interface PolicyInterface {
   "accessGroups"?: Array<any>;
   "createdBy"?: string;
   "updatedBy"?: string;
-  "id"?: any;
   "createdAt"?: Date;
   "updatedAt"?: Date;
 }
 
 export class Policy implements PolicyInterface {
+  "id": string;
   "manager": Array<any>;
   "tapeRedundancy": string;
   "autoArchive": boolean;
@@ -34,7 +35,6 @@ export class Policy implements PolicyInterface {
   "accessGroups": Array<any>;
   "createdBy": string;
   "updatedBy": string;
-  "id": any;
   "createdAt": Date;
   "updatedAt": Date;
   constructor(data?: PolicyInterface) {
@@ -70,6 +70,10 @@ export class Policy implements PolicyInterface {
       path: 'Policies',
       idName: 'id',
       properties: {
+        "id": {
+          name: 'id',
+          type: 'string'
+        },
         "manager": {
           name: 'manager',
           type: 'Array&lt;any&gt;'
@@ -127,10 +131,6 @@ export class Policy implements PolicyInterface {
         "updatedBy": {
           name: 'updatedBy',
           type: 'string'
-        },
-        "id": {
-          name: 'id',
-          type: 'any'
         },
         "createdAt": {
           name: 'createdAt',

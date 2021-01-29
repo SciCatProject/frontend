@@ -20,9 +20,9 @@ export interface ProposalInterface {
   "accessGroups"?: Array<any>;
   "createdBy"?: string;
   "updatedBy"?: string;
+  "MeasurementPeriodList"?: Array<any>;
   "createdAt"?: Date;
   "updatedAt"?: Date;
-  "MeasurementPeriodList"?: Array<any>;
   measurementPeriods?: any[];
   attachments?: Attachment[];
 }
@@ -43,9 +43,9 @@ export class Proposal implements ProposalInterface {
   "accessGroups": Array<any>;
   "createdBy": string;
   "updatedBy": string;
+  "MeasurementPeriodList": Array<any>;
   "createdAt": Date;
   "updatedAt": Date;
-  "MeasurementPeriodList": Array<any>;
   measurementPeriods: any[];
   attachments: Attachment[];
   constructor(data?: ProposalInterface) {
@@ -141,6 +141,11 @@ export class Proposal implements ProposalInterface {
           name: 'updatedBy',
           type: 'string'
         },
+        "MeasurementPeriodList": {
+          name: 'MeasurementPeriodList',
+          type: 'Array&lt;any&gt;',
+          default: <any>[]
+        },
         "createdAt": {
           name: 'createdAt',
           type: 'Date'
@@ -148,11 +153,6 @@ export class Proposal implements ProposalInterface {
         "updatedAt": {
           name: 'updatedAt',
           type: 'Date'
-        },
-        "MeasurementPeriodList": {
-          name: 'MeasurementPeriodList',
-          type: 'Array&lt;any&gt;',
-          default: <any>[]
         },
       },
       relations: {

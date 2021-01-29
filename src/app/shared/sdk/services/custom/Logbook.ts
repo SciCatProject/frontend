@@ -103,6 +103,36 @@ export class LogbookApi extends BaseLoopBackApi {
   }
 
   /**
+   * Send message to logbook
+   *
+   * @param {string} name The name of the logbook
+   *
+   * @param {object} data Request data.
+   *
+   *  - `data` – `{object}` - JSON object with the key `message`
+   *
+   * @returns {object} An empty reference that will be
+   *   populated with the actual data once the response is returned
+   *   from the server.
+   *
+   * Object containing the event id of the message
+   */
+  public sendMessage(name: any, data: any, customHeaders?: Function): Observable<any> {
+    let _method: string = "POST";
+    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
+    "/Logbooks/:name/message";
+    let _routeParams: any = {
+      name: name
+    };
+    let _postBody: any = {
+      data: data
+    };
+    let _urlParams: any = {};
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    return result;
+  }
+
+  /**
    * The name of the model represented by this $resource,
    * i.e. `Logbook`.
    */

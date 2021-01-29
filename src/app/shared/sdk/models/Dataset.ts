@@ -1,7 +1,7 @@
 /* tslint:disable */
 import {
-  Sample,
   PublishedData,
+  Sample,
   Datablock,
   OrigDatablock,
   Attachment,
@@ -35,23 +35,23 @@ export interface DatasetInterface {
   "accessGroups"?: Array<any>;
   "createdBy"?: string;
   "updatedBy"?: string;
+  "history"?: Array<any>;
+  "datasetlifecycle"?: any;
+  "publisheddataId"?: string;
+  "techniques"?: Array<any>;
+  "publishedDataId"?: string;
   "createdAt"?: Date;
   "updatedAt"?: Date;
-  "publishedDataId"?: string;
-  "publisheddataId"?: string;
-  "datasetlifecycle"?: any;
-  "history"?: Array<any>;
   "instrumentId"?: string;
-  "techniques"?: Array<any>;
-  samples?: Sample[];
-  publisheddata?: PublishedData;
+  historyList?: any[];
   datasetLifecycle?: any[];
+  publisheddata?: PublishedData;
+  techniquesList?: any[];
+  samples?: Sample[];
   datablocks?: Datablock[];
   origdatablocks?: OrigDatablock[];
-  historyList?: any[];
   attachments?: Attachment[];
   instrument?: Instrument;
-  techniquesList?: any[];
 }
 
 export class Dataset implements DatasetInterface {
@@ -80,23 +80,23 @@ export class Dataset implements DatasetInterface {
   "accessGroups": Array<any>;
   "createdBy": string;
   "updatedBy": string;
+  "history": Array<any>;
+  "datasetlifecycle": any;
+  "publisheddataId": string;
+  "techniques": Array<any>;
+  "publishedDataId": string;
   "createdAt": Date;
   "updatedAt": Date;
-  "publishedDataId": string;
-  "publisheddataId": string;
-  "datasetlifecycle": any;
-  "history": Array<any>;
   "instrumentId": string;
-  "techniques": Array<any>;
-  samples: Sample[];
-  publisheddata: PublishedData;
+  historyList: any[];
   datasetLifecycle: any[];
+  publisheddata: PublishedData;
+  techniquesList: any[];
+  samples: Sample[];
   datablocks: Datablock[];
   origdatablocks: OrigDatablock[];
-  historyList: any[];
   attachments: Attachment[];
   instrument: Instrument;
-  techniquesList: any[];
   constructor(data?: DatasetInterface) {
     Object.assign(this, data);
   }
@@ -230,6 +230,28 @@ export class Dataset implements DatasetInterface {
           name: 'updatedBy',
           type: 'string'
         },
+        "history": {
+          name: 'history',
+          type: 'Array&lt;any&gt;',
+          default: <any>[]
+        },
+        "datasetlifecycle": {
+          name: 'datasetlifecycle',
+          type: 'any'
+        },
+        "publisheddataId": {
+          name: 'publisheddataId',
+          type: 'string'
+        },
+        "techniques": {
+          name: 'techniques',
+          type: 'Array&lt;any&gt;',
+          default: <any>[]
+        },
+        "publishedDataId": {
+          name: 'publishedDataId',
+          type: 'string'
+        },
         "createdAt": {
           name: 'createdAt',
           type: 'Date'
@@ -238,41 +260,27 @@ export class Dataset implements DatasetInterface {
           name: 'updatedAt',
           type: 'Date'
         },
-        "publishedDataId": {
-          name: 'publishedDataId',
-          type: 'string'
-        },
-        "publisheddataId": {
-          name: 'publisheddataId',
-          type: 'string'
-        },
-        "datasetlifecycle": {
-          name: 'datasetlifecycle',
-          type: 'any'
-        },
-        "history": {
-          name: 'history',
-          type: 'Array&lt;any&gt;',
-          default: <any>[]
-        },
         "instrumentId": {
           name: 'instrumentId',
           type: 'string'
         },
-        "techniques": {
-          name: 'techniques',
-          type: 'Array&lt;any&gt;',
-          default: <any>[]
-        },
       },
       relations: {
-        samples: {
-          name: 'samples',
-          type: 'Sample[]',
-          model: 'Sample',
-          relationType: 'hasMany',
-                  keyFrom: 'pid',
-          keyTo: 'datasetId'
+        historyList: {
+          name: 'historyList',
+          type: 'any[]',
+          model: '',
+          relationType: 'embedsMany',
+                  keyFrom: 'history',
+          keyTo: 'id'
+        },
+        datasetLifecycle: {
+          name: 'datasetLifecycle',
+          type: 'any[]',
+          model: '',
+          relationType: 'embedsOne',
+                  keyFrom: 'datasetlifecycle',
+          keyTo: 'id'
         },
         publisheddata: {
           name: 'publisheddata',
@@ -282,13 +290,21 @@ export class Dataset implements DatasetInterface {
                   keyFrom: 'publisheddataId',
           keyTo: 'doi'
         },
-        datasetLifecycle: {
-          name: 'datasetLifecycle',
+        techniquesList: {
+          name: 'techniquesList',
           type: 'any[]',
           model: '',
-          relationType: 'embedsOne',
-                  keyFrom: 'datasetlifecycle',
-          keyTo: 'id'
+          relationType: 'embedsMany',
+                  keyFrom: 'techniques',
+          keyTo: 'pid'
+        },
+        samples: {
+          name: 'samples',
+          type: 'Sample[]',
+          model: 'Sample',
+          relationType: 'hasMany',
+                  keyFrom: 'pid',
+          keyTo: 'datasetId'
         },
         datablocks: {
           name: 'datablocks',
@@ -306,14 +322,6 @@ export class Dataset implements DatasetInterface {
                   keyFrom: 'pid',
           keyTo: 'datasetId'
         },
-        historyList: {
-          name: 'historyList',
-          type: 'any[]',
-          model: '',
-          relationType: 'embedsMany',
-                  keyFrom: 'history',
-          keyTo: 'id'
-        },
         attachments: {
           name: 'attachments',
           type: 'Attachment[]',
@@ -328,14 +336,6 @@ export class Dataset implements DatasetInterface {
           model: 'Instrument',
           relationType: 'belongsTo',
                   keyFrom: 'instrumentId',
-          keyTo: 'pid'
-        },
-        techniquesList: {
-          name: 'techniquesList',
-          type: 'any[]',
-          model: '',
-          relationType: 'embedsMany',
-                  keyFrom: 'techniques',
           keyTo: 'pid'
         },
       }

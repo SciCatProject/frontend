@@ -15,7 +15,7 @@ import { Router } from '@angular/router';
 export class JobsDashboardNewComponent implements OnInit, OnDestroy {
 
   columns: Column[] = [
-    //{ id: "id", label: "ID", canSort: true, matchMode: "contains", hideOrder: 0, },
+    { id: "id", label: "ID", canSort: true, icon: "perm_device_information", matchMode: "contains", hideOrder: 0, },
     { id: "emailJobInitiator", label: "Initiator", icon: "person", canSort: true, matchMode: "contains", hideOrder: 1, },
     { id: "type", label: "Type", icon: "unarchive", format: "uppercase", canSort: true, matchMode: "is", hideOrder: 2, },
     { id: "creationTime", icon: "schedule", label: "Created at", format: "date medium", canSort: true, matchMode: "after", hideOrder: 3, },
