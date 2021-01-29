@@ -2,7 +2,7 @@
   <form [formGroup]="metadataForm">
     <div
       formArrayName="items"
-      *ngFor="let item of metadataForm.get('items').controls; let i = index"
+      *ngFor="let item of items.controls; let i = index"
     >
       <div [formGroupName]="i">
         <div class="formRow" fxLayout="row" fxLayout.lt-lg="column">
@@ -17,12 +17,15 @@
                   type
                 }}</mat-option>
               </mat-select>
+              <mat-error *ngIf="fieldHasError(i, 'fieldType')">
+                Type is required
+              </mat-error>
             </mat-form-field>
           </div>
           <div class="formColumn">
             <mat-form-field class="inputField">
               <input
-                id="nameInput"
+                id="nameInput{{i}}"
                 matInput
                 autocomplete="off"
                 autocorrect="off"
@@ -32,13 +35,17 @@
                 placeholder="Name"
                 (blur)="getUnits(i)"
               />
+              <mat-error *ngIf="fieldHasError(i, 'fieldName')">
+                Name is required
+              </mat-error>
             </mat-form-field>
           </div>
           <div class="formColumn">
             <mat-form-field class="inputField">
               <input
-                id="valueInput"
+                id="valueInput{{i}}"
                 matInput
+                [type]="setValueInputType(i)"
                 autocomplete="off"
                 autocorrect="off"
                 autocapitalize="off"
@@ -46,12 +53,15 @@
                 formControlName="fieldValue"
                 placeholder="Value"
               />
+              <mat-error *ngIf="fieldHasError(i, 'fieldValue')">
+                Value is required
+              </mat-error>
             </mat-form-field>
           </div>
           <div class="formColumn">
             <mat-form-field class="inputField">
               <input
-                id="unitsInput"
+                id="unitsInput{{i}}"
                 matInput
                 autocomplete="off"
                 autocorrect="off"
@@ -60,7 +70,7 @@
                 formControlName="fieldUnit"
                 placeholder="Unit"
                 [matAutocomplete]="metadataUnits"
-                (focus)="filterUnits(i)"
+                (focus)="getUnits(i)"
               />
               <mat-autocomplete #metadataUnits="matAutocomplete">
                 <mat-option
@@ -70,6 +80,9 @@
                   {{ unit }}
                 </mat-option>
               </mat-autocomplete>
+              <mat-error *ngIf="fieldHasError(i, 'fieldUnit')">
+                A unit is required for quantities
+              </mat-error>
             </mat-form-field>
           </div>
           <div class="formColumn" fxFlexAlign="end">

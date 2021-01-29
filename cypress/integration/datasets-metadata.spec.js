@@ -51,8 +51,8 @@ describe("Datasets", () => {
           option[0].click();
         });
 
-      cy.get("#nameInput").type("some name{enter}");
-      cy.get("#valueInput").type("some value{enter}");
+      cy.get("#nameInput0").type("some name{enter}");
+      cy.get("#valueInput0").type("some value{enter}");
 
       cy.contains("Save changes").click();
 

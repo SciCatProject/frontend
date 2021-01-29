@@ -75,20 +75,15 @@ export class UnitsService {
     return symbol ? symbol : unit;
   }
 
-  getUnits(variable: string): string[] {
-    const kind = this.getKind(variable);
-    if (kind) {
-      return this.UNITS[kind];
-    } else {
-      return [].concat
-        .apply(
-          [],
-          Object.keys(this.UNITS).map(key => this.UNITS[key])
-        )
-        .sort((a: string, b: string) =>
-          a.toLowerCase().localeCompare(b.toLowerCase())
-        );
+  getUnits(variable?: string): string[] {
+    if (!variable) {
+      return this.flattenUnits();
     }
+    const kind = this.getKind(variable);
+    if (!kind) {
+      return this.flattenUnits();
+    }
+    return this.UNITS[kind];
   }
 
   private getKind(variable: string): string {
@@ -110,5 +105,16 @@ export class UnitsService {
       .filter(part => isNaN(Number(part)))
       .map(part => (part.includes("length") ? "length" : part))
       .map(part => part.replace(/\d+/, ""));
+  }
+
+  private flattenUnits(): string[] {
+    return [].concat
+        .apply(
+          [],
+          Object.keys(this.UNITS).map(key => this.UNITS[key])
+        )
+        .sort((a: string, b: string) =>
+          a.toLowerCase().localeCompare(b.toLowerCase())
+        );
   }
 }
