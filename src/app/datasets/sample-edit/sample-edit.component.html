@@ -1,0 +1,89 @@
+<h1 mat-dialog-title>Edit Dataset Sample</h1>
+<mat-dialog-content>
+  <div fxLayout="row" fxLayoutAlign="space-evenly end">
+    <div fxFlex="50">
+      <mat-form-field>
+        <mat-icon matPrefix>search</mat-icon>
+        <input matInput type="text" (keyup)="onTextSearchChange()" #searchBar />
+        <mat-icon matSuffix class="clear-button" (click)="onClear()"
+          >clear</mat-icon
+        >
+      </mat-form-field>
+    </div>
+    <div fxFlex="50">
+      <mat-paginator
+        [pageIndex]="currentPage$ | async"
+        [length]="sampleCount$ | async"
+        [pageSize]="samplesPerPage$ | async"
+        (page)="onPageChange($event)"
+        showFirstLastButtons
+      ></mat-paginator>
+    </div>
+  </div>
+
+  <mat-table
+    [dataSource]="samples$ | async"
+    matSort
+    class="mat-elevation-z2"
+    (matSortChange)="onSortChange($event)"
+  >
+    <!-- Id Column-->
+    <ng-container matColumnDef="sampleId">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>
+        Sample Id
+      </mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{ row.sampleId }} </mat-cell>
+    </ng-container>
+
+    <!-- Description Column-->
+    <ng-container matColumnDef="description">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>
+        Description
+      </mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{ row.description }} </mat-cell>
+    </ng-container>
+
+    <!-- Owner Column-->
+    <ng-container matColumnDef="owner">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>
+        Owner
+      </mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{ row.owner }} </mat-cell>
+    </ng-container>
+
+    <!-- Creation Time Column-->
+    <ng-container matColumnDef="createdAt">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>
+        Creation Time
+      </mat-header-cell>
+      <mat-cell *matCellDef="let row">
+        {{ row.createdAt | date: "yyyy-MM-dd, hh:mm" }}
+      </mat-cell>
+    </ng-container>
+
+    <!-- Owner Group Column-->
+    <ng-container matColumnDef="ownerGroup">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>
+        Owner Group
+      </mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{ row.ownerGroup }} </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row
+      *matRowDef="let row; columns: displayedColumns"
+      [ngClass]="{ highlight: selectedSampleId == row.sampleId }"
+      (click)="onRowClick(row)"
+    ></mat-row>
+  </mat-table>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button (click)="cancel()">Cancel</button>
+  <button mat-button [disabled]="isInvalid()" (click)="save()">Save</button>
+  <mat-error *ngIf="sample.hasError('isCurrentSample')">
+    This is the current sample
+  </mat-error>
+  <mat-error *ngIf="sample.hasError('required')">
+    Please choose a sample
+  </mat-error>
+</mat-dialog-actions>

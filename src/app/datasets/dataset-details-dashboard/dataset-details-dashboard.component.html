@@ -38,11 +38,13 @@
         [attachments]="attachments$ | async"
         [proposal]="proposal$ | async"
         [sample]="sample$ | async"
+        [isPI]="isPI()"
         (clickKeyword)="onClickKeyword($event)"
         (addKeyword)="onAddKeyword($event)"
         (removeKeyword)="onRemoveKeyword($event)"
         (clickProposal)="onClickProposal($event)"
         (clickSample)="onClickSample($event)"
+        (sampleChange)="onSampleChange($event)"
         (saveMetadata)="onSaveMetadata($event)"
       ></dataset-detail>
     </mat-tab>

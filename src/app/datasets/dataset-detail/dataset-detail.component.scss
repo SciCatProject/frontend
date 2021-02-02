@@ -39,6 +39,18 @@ mat-card {
       a:hover {
         cursor: pointer;
       }
+
+      .sample-edit {
+        padding-left: 0.5em;
+
+        mat-icon {
+          font-size: medium;
+        }
+      }
+
+      .sample-edit:hover {
+        cursor: pointer;
+      }
     }
   }
 

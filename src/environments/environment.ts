@@ -17,6 +17,7 @@ export const environment = {
   archiveWorkflowEnabled: true,
   columnSelectEnabled: true,
   datasetReduceEnabled: true,
+  editDatasetSampleEnabled: true,
   editMetadataEnabled: true,
   editSampleEnabled: true,
   editPublishedData: true,

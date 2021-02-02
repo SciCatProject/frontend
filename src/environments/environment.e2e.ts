@@ -19,6 +19,7 @@ export const environment = {
   csvEnabled: false,
   datasetReduceEnabled: true,
   disabledDatasetColumns: ["dataStatus"],
+  editDatasetSampleEnabled: true,
   editMetadataEnabled: true,
   editSampleEnabled: true,
   facility: "ESS",

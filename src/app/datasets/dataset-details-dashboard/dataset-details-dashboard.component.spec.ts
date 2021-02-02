@@ -2,7 +2,7 @@ import {
   async,
   ComponentFixture,
   TestBed,
-  inject
+  inject,
 } from "@angular/core/testing";
 
 import { DatasetDetailsDashboardComponent } from "./dataset-details-dashboard.component";
@@ -14,23 +14,26 @@ import {
   addAttachmentAction,
   updateAttachmentCaptionAction,
   removeAttachmentAction,
-  updatePropertyAction
+  updatePropertyAction,
 } from "../../state-management/actions/datasets.actions";
-import { Dataset, UserApi, User } from "shared/sdk";
+import { Dataset, UserApi, User, Sample } from "shared/sdk";
 import { ReadFile, ReadMode } from "ngx-file-helpers";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { AppConfigModule, APP_CONFIG } from "app-config.module";
 import { SharedCatanieModule } from "shared/shared.module";
 import { Router, ActivatedRoute } from "@angular/router";
 import { SubmitCaptionEvent } from "shared/modules/file-uploader/file-uploader.component";
-import { MatSlideToggleChange, MatSlideToggle } from "@angular/material/slide-toggle";
+import {
+  MatSlideToggleChange,
+  MatSlideToggle,
+} from "@angular/material/slide-toggle";
 
 describe("DetailsDashboardComponent", () => {
   let component: DatasetDetailsDashboardComponent;
   let fixture: ComponentFixture<DatasetDetailsDashboardComponent>;
 
   const router = {
-    navigateByUrl: jasmine.createSpy("navigateByUrl")
+    navigateByUrl: jasmine.createSpy("navigateByUrl"),
   };
   let store: MockStore;
   let dispatchSpy;
@@ -40,7 +43,7 @@ describe("DetailsDashboardComponent", () => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
       declarations: [DatasetDetailsDashboardComponent],
-      imports: [AppConfigModule, SharedCatanieModule, StoreModule.forRoot({})]
+      imports: [AppConfigModule, SharedCatanieModule, StoreModule.forRoot({})],
     });
     TestBed.overrideComponent(DatasetDetailsDashboardComponent, {
       set: {
@@ -49,13 +52,13 @@ describe("DetailsDashboardComponent", () => {
           {
             provide: APP_CONFIG,
             useValue: {
-              editMetadataEnabled: true
-            }
+              editMetadataEnabled: true,
+            },
           },
           { provide: ActivatedRoute, useClass: MockActivatedRoute },
-          { provide: UserApi, useClass: MockUserApi }
-        ]
-      }
+          { provide: UserApi, useClass: MockUserApi },
+        ],
+      },
     });
     TestBed.compileComponents();
   }));
@@ -87,7 +90,7 @@ describe("DetailsDashboardComponent", () => {
         sourceFolder: "test",
         creationTime: new Date(),
         type: "raw",
-        ownerGroup: "test"
+        ownerGroup: "test",
       });
       component.dataset["principalInvestigator"] = "test@email.com";
       component.dataset["creationLocation"] = "test";
@@ -105,7 +108,7 @@ describe("DetailsDashboardComponent", () => {
         sourceFolder: "test",
         creationTime: new Date(),
         type: "raw",
-        ownerGroup: "test"
+        ownerGroup: "test",
       });
       component.dataset["principalInvestigator"] = "test@email.com";
       component.dataset["creationLocation"] = "test";
@@ -123,7 +126,7 @@ describe("DetailsDashboardComponent", () => {
         sourceFolder: "test",
         creationTime: new Date(),
         type: "derived",
-        ownerGroup: "test"
+        ownerGroup: "test",
       });
       component.dataset["investigator"] = "test@email.com";
       component.dataset["inputDatasets"] = ["test"];
@@ -142,7 +145,7 @@ describe("DetailsDashboardComponent", () => {
         sourceFolder: "test",
         creationTime: new Date(),
         type: "derived",
-        ownerGroup: "test"
+        ownerGroup: "test",
       });
       component.dataset["investigator"] = "test@email.com";
       component.dataset["inputDatasets"] = ["test"];
@@ -161,7 +164,7 @@ describe("DetailsDashboardComponent", () => {
         sourceFolder: "test",
         creationTime: new Date(),
         type: "failTest",
-        ownerGroup: "test"
+        ownerGroup: "test",
       });
       component.dataset["principalInvestigator"] = "test@email.com";
       component.dataset["creationLocation"] = "test";
@@ -284,8 +287,31 @@ describe("DetailsDashboardComponent", () => {
     });
   });
 
+  describe("#onSampleChange()", () => {
+    it("should dispatch an updatePropertyAction", () => {
+      dispatchSpy = spyOn(store, "dispatch");
+
+      const pid = "testPid";
+      component.dataset = new Dataset();
+      component.dataset.pid = pid;
+
+      const sampleId = "testId";
+      const sample = new Sample();
+      sample.sampleId = sampleId;
+
+      const property = { sampleId };
+
+      component.onSampleChange(sample);
+
+      expect(dispatchSpy).toHaveBeenCalledTimes(1);
+      expect(dispatchSpy).toHaveBeenCalledWith(
+        updatePropertyAction({ pid, property })
+      );
+    });
+  });
+
   describe("#onSaveMetadata()", () => {
-    it("should dispatch a SaveDatasetAction", () => {
+    it("should dispatch an updatePropertyAction", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
       const pid = "testPid";
@@ -332,8 +358,8 @@ describe("DetailsDashboardComponent", () => {
           arrayBuffer: () => new Blob().arrayBuffer(),
           slice: () => new Blob().slice(),
           stream: () => new Blob().stream(),
-          text: () => new Blob().text()
-        }
+          text: () => new Blob().text(),
+        },
       };
       component.onFileUploaderFilePicked(file);
 
@@ -369,8 +395,8 @@ describe("DetailsDashboardComponent", () => {
           arrayBuffer: () => new Blob().arrayBuffer(),
           slice: () => new Blob().slice(),
           stream: () => new Blob().stream(),
-          text: () => new Blob().text()
-        }
+          text: () => new Blob().text(),
+        },
       };
       component.onFileUploaderReadEnd(1);
 
@@ -388,7 +414,7 @@ describe("DetailsDashboardComponent", () => {
       component.dataset = new Dataset();
       const event: SubmitCaptionEvent = {
         attachmentId: "testAttachmentId",
-        caption: "Test caption"
+        caption: "Test caption",
       };
       component.updateCaption(event);
 
@@ -397,7 +423,7 @@ describe("DetailsDashboardComponent", () => {
         updateAttachmentCaptionAction({
           datasetId: component.dataset.pid,
           attachmentId: event.attachmentId,
-          caption: event.caption
+          caption: event.caption,
         })
       );
     });
@@ -415,7 +441,7 @@ describe("DetailsDashboardComponent", () => {
       expect(dispatchSpy).toHaveBeenCalledWith(
         removeAttachmentAction({
           datasetId: component.dataset.pid,
-          attachmentId
+          attachmentId,
         })
       );
     });

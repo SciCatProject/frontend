@@ -4,21 +4,21 @@ import {
   OnDestroy,
   Inject,
   ChangeDetectorRef,
-  AfterViewChecked
+  AfterViewChecked,
 } from "@angular/core";
 import { Store, select } from "@ngrx/store";
-import { Dataset, UserApi, User, Job, Attachment } from "shared/sdk";
+import { Dataset, UserApi, User, Job, Attachment, Sample } from "shared/sdk";
 import {
   getCurrentDataset,
   getCurrentDatasetWithoutFileInfo,
   getCurrentOrigDatablocks,
   getCurrentDatablocks,
   getCurrentAttachments,
-  getPublicViewMode
+  getPublicViewMode,
 } from "state-management/selectors/datasets.selectors";
 import {
   getIsAdmin,
-  getCurrentUser
+  getCurrentUser,
 } from "state-management/selectors/user.selectors";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Subscription, Observable } from "rxjs";
@@ -31,7 +31,7 @@ import {
   updateAttachmentCaptionAction,
   removeAttachmentAction,
   fetchDatasetAction,
-  addAttachmentAction
+  addAttachmentAction,
 } from "state-management/actions/datasets.actions";
 import { submitJobAction } from "state-management/actions/jobs.actions";
 import { ReadFile } from "ngx-file-helpers";
@@ -46,7 +46,7 @@ import { getCurrentSample } from "state-management/selectors/samples.selectors";
 @Component({
   selector: "dataset-details-dashboard",
   templateUrl: "./dataset-details-dashboard.component.html",
-  styleUrls: ["./dataset-details-dashboard.component.scss"]
+  styleUrls: ["./dataset-details-dashboard.component.scss"],
 })
 export class DatasetDetailsDashboardComponent
   implements OnInit, OnDestroy, AfterViewChecked {
@@ -69,21 +69,20 @@ export class DatasetDetailsDashboardComponent
   isPI(): boolean {
     if (this.user.username === "admin") {
       return true;
-    } else {
-      if (this.dataset.type === "raw") {
-        return (
-          this.user.email.toLowerCase() ===
-          this.dataset["principalInvestigator"].toLowerCase()
-        );
-      } else if (this.dataset.type === "derived") {
-        return (
-          this.user.email.toLowerCase() ===
-          this.dataset["investigator"].toLowerCase()
-        );
-      } else {
-        return false;
-      }
     }
+    if (this.dataset.type === "raw") {
+      return (
+        this.user.email.toLowerCase() ===
+        this.dataset["principalInvestigator"].toLowerCase()
+      );
+    }
+    if (this.dataset.type === "derived") {
+      return (
+        this.user.email.toLowerCase() ===
+        this.dataset["investigator"].toLowerCase()
+      );
+    }
+    return false;
   }
 
   onSlidePublic(event: MatSlideToggleChange) {
@@ -132,6 +131,12 @@ export class DatasetDetailsDashboardComponent
     this.router.navigateByUrl("/samples/" + id);
   }
 
+  onSampleChange(sample: Sample) {
+    const pid = this.dataset.pid;
+    const property = { sampleId: sample.sampleId };
+    this.store.dispatch(updatePropertyAction({ pid, property }));
+  }
+
   onSaveMetadata(metadata: object) {
     const pid = this.dataset.pid;
     const property = { scientificMetadata: metadata };
@@ -153,7 +158,7 @@ export class DatasetDetailsDashboardComponent
       const fileList = [];
       fileObj["pid"] = dataset["pid"];
       if (dataset["datablocks"]) {
-        dataset["datablocks"].map(d => {
+        dataset["datablocks"].map((d) => {
           fileList.push(d["archiveId"]);
         });
       }
@@ -187,7 +192,7 @@ export class DatasetDetailsDashboardComponent
         proposal: null,
         proposalId: null,
         sample: null,
-        sampleId: null
+        sampleId: null,
       };
       this.store.dispatch(addAttachmentAction({ attachment: this.attachment }));
     }
@@ -198,7 +203,7 @@ export class DatasetDetailsDashboardComponent
       updateAttachmentCaptionAction({
         datasetId: this.dataset.pid,
         attachmentId: event.attachmentId,
-        caption: event.caption
+        caption: event.caption,
       })
     );
   }
@@ -224,12 +229,12 @@ export class DatasetDetailsDashboardComponent
         if (id) {
           this.store
             .pipe(select(getPublicViewMode))
-            .subscribe(viewPublic => {
+            .subscribe((viewPublic) => {
               if (viewPublic) {
                 this.store.dispatch(
                   fetchDatasetAction({
                     pid: id,
-                    filters: { isPublished: viewPublic }
+                    filters: { isPublished: viewPublic },
                   })
                 );
               } else {
@@ -242,7 +247,7 @@ export class DatasetDetailsDashboardComponent
     );
 
     this.subscriptions.push(
-      this.store.pipe(select(getCurrentDataset)).subscribe(dataset => {
+      this.store.pipe(select(getCurrentDataset)).subscribe((dataset) => {
         if (dataset) {
           this.dataset = dataset;
           if (dataset.type === "raw" && "proposalId" in dataset) {
@@ -263,7 +268,7 @@ export class DatasetDetailsDashboardComponent
     );
 
     this.subscriptions.push(
-      this.store.pipe(select(getCurrentUser)).subscribe(user => {
+      this.store.pipe(select(getCurrentUser)).subscribe((user) => {
         if (user) {
           this.user = user;
         }
@@ -278,7 +283,7 @@ export class DatasetDetailsDashboardComponent
   }
 
   ngOnDestroy() {
-    this.subscriptions.forEach(subscription => {
+    this.subscriptions.forEach((subscription) => {
       subscription.unsubscribe();
     });
   }

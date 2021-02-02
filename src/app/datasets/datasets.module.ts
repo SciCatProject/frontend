@@ -67,6 +67,7 @@ import { DatasetLifecycleComponent } from "./dataset-lifecycle/dataset-lifecycle
 import { AnonymousDashboardComponent } from "./anonymous-dashboard/anonymous-dashboard.component";
 import { AnonymousDetailsDashboardComponent } from "./anonymous-details-dashboard/anonymous-details-dashboard.component";
 import { AnonymousDetailsComponent } from "./anonymous-details/anonymous-details.component";
+import { SampleEditComponent } from './sample-edit/sample-edit.component';
 
 @NgModule({
   imports: [
@@ -127,7 +128,8 @@ import { AnonymousDetailsComponent } from "./anonymous-details/anonymous-details
     DatasetLifecycleComponent,
     AnonymousDashboardComponent,
     AnonymousDetailsDashboardComponent,
-    AnonymousDetailsComponent
+    AnonymousDetailsComponent,
+    SampleEditComponent
   ],
   entryComponents: [
     AddDatasetDialogComponent

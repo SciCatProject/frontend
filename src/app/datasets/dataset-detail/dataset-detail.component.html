@@ -100,8 +100,17 @@
         </tr>
         <tr *ngIf="dataset.sampleId && sample">
           <th><mat-icon> center_focus_weak </mat-icon> Sample</th>
-          <td (click)="onClickSample(sample.sampleId)">
-            <a>{{ sample.description }}</a>
+          <td>
+            <a (click)="onClickSample(sample.sampleId)">{{
+              sample.description
+            }}</a>
+            <span
+              class="sample-edit"
+              (click)="openSampleEditDialog()"
+              *ngIf="appConfig.editDatasetSampleEnabled && isPI"
+            >
+              <mat-icon>edit</mat-icon>
+            </span>
           </td>
         </tr>
         <tr *ngIf="dataset.size as value">
