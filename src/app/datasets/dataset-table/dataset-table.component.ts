@@ -41,10 +41,10 @@ export interface SortChangeEvent {
   direction: "asc" | "desc" | "";
 }
 
-interface DatasetDerivationsMap {
-  datasetPid: string;
-  derivedDatasetsNum: number;
-}
+// interface DatasetDerivationsMap {
+//   datasetPid: string;
+//   derivedDatasetsNum: number;
+// }
 
 @Component({
   selector: "dataset-table",
@@ -63,8 +63,8 @@ export class DatasetTableComponent implements OnInit, OnDestroy, OnChanges {
   private inBatchPids: string[] = [];
 
   datasets: Dataset[];
-  datasetDerivationsMaps: DatasetDerivationsMap[] = [];
-  derivationMapPids: string[] = [];
+  // datasetDerivationsMaps: DatasetDerivationsMap[] = [];
+  // derivationMapPids: string[] = [];
 
   private subscriptions: Subscription[] = [];
 
@@ -188,20 +188,20 @@ export class DatasetTableComponent implements OnInit, OnDestroy, OnChanges {
     this.store.dispatch(sortByColumnAction({ column, direction }));
   }
 
-  countDerivedDatasets(dataset: Dataset): number {
-    let derivedDatasetsNum = 0;
-    if (dataset.history) {
-      dataset.history.forEach(item => {
-        if (
-          item.hasOwnProperty("derivedDataset") &&
-          this.datasets.map(set => set.pid).includes(item.derivedDataset.pid)
-        ) {
-          derivedDatasetsNum++;
-        }
-      });
-    }
-    return derivedDatasetsNum;
-  }
+  // countDerivedDatasets(dataset: Dataset): number {
+  //   let derivedDatasetsNum = 0;
+  //   if (dataset.history) {
+  //     dataset.history.forEach(item => {
+  //       if (
+  //         item.hasOwnProperty("derivedDataset") &&
+  //         this.datasets.map(set => set.pid).includes(item.derivedDataset.pid)
+  //       ) {
+  //         derivedDatasetsNum++;
+  //       }
+  //     });
+  //   }
+  //   return derivedDatasetsNum;
+  // }
 
   constructor(
     @Inject(APP_CONFIG) public appConfig: AppConfig,
@@ -225,15 +225,15 @@ export class DatasetTableComponent implements OnInit, OnDestroy, OnChanges {
       this.store.pipe(select(getDatasets)).subscribe(datasets => {
         this.datasets = datasets;
 
-        this.derivationMapPids = this.datasetDerivationsMaps.map(
-          datasetderivationMap => datasetderivationMap.datasetPid
-        );
-        this.datasetDerivationsMaps = datasets
-          .filter(({ pid }) => !this.derivationMapPids.includes(pid))
-          .map(dataset => ({
-            datasetPid: dataset.pid,
-            derivedDatasetsNum: this.countDerivedDatasets(dataset)
-          }));
+        // this.derivationMapPids = this.datasetDerivationsMaps.map(
+        //   datasetderivationMap => datasetderivationMap.datasetPid
+        // );
+        // this.datasetDerivationsMaps = datasets
+        //   .filter(({ pid }) => !this.derivationMapPids.includes(pid))
+        //   .map(dataset => ({
+        //     datasetPid: dataset.pid,
+        //     derivedDatasetsNum: this.countDerivedDatasets(dataset)
+        //   }));
       })
     );
   }

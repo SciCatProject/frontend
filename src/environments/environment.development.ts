@@ -43,7 +43,7 @@ export const environment = {
     { name: "proposalId", order: 9, type: "standard", enabled: true },
     { name: "ownerGroup", order: 10, type: "standard", enabled: true },
     { name: "dataStatus", order: 11, type: "standard", enabled: true },
-    { name: "derivedDatasetsNum", order: 12, type: "standard", enabled: true }
+    // { name: "derivedDatasetsNum", order: 12, type: "standard", enabled: true }
   ] as TableColumn[],
   logbookEnabled: true,
   metadataPreviewEnabled: true,
