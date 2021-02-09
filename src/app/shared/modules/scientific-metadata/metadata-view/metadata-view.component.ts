@@ -22,17 +22,15 @@ export class MetadataViewComponent implements OnInit, OnChanges {
     const metadataArray = [];
     Object.keys(metadata).forEach(key => {
       let metadataObject: ScientificMetaData;
-      if (metadata[key]["type"]) {
+      if (metadata[key]["value"]) {
         metadataObject = {
           name: key,
-          type: metadata[key].type,
           value: metadata[key].value,
           unit: metadata[key].unit
         };
       } else {
         metadataObject = {
           name: key,
-          type: "",
           value: JSON.stringify(metadata[key]),
           unit: ""
         };
@@ -40,6 +38,19 @@ export class MetadataViewComponent implements OnInit, OnChanges {
       metadataArray.push(metadataObject);
     });
     return metadataArray;
+  }
+
+  isDate(scientificMetadata: ScientificMetaData): boolean {
+    if (scientificMetadata.unit.length > 0) {
+      return false;
+    }
+    if (typeof scientificMetadata.value === "number") {
+      return false;
+    }
+    if (isNaN(Date.parse(scientificMetadata.value))) {
+      return false;
+    }
+    return true;
   }
 
   constructor() {}

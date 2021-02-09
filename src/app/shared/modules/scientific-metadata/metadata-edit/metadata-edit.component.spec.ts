@@ -149,7 +149,7 @@ describe("MetadataEditComponent", () => {
   });
 
   describe("#createMetaDataObject()", () => {
-    it("should create a metadata object with type 'date' from the FormGroup array", () => {
+    it("should create a metadata object with a date value from the FormGroup array", () => {
       component.addMetadata();
       component.items.at(0).get("fieldType").setValue("date");
 
@@ -163,12 +163,11 @@ describe("MetadataEditComponent", () => {
       expect(metadataObject).toBeDefined();
       expect(Object.keys(metadataObject).length).toBe(1);
       expect(Object.keys(metadataObject)[0]).toEqual("testName");
-      expect(metadataObject["testName"].type).toEqual("date");
       expect(metadataObject["testName"].value).toEqual("2019-09-03 10:25:40");
       expect(metadataObject["testName"].unit).toEqual("");
     });
 
-    it("should create a metadata object with type 'quantity' from the FormGroup array", () => {
+    it("should create a metadata object with a quantity from the FormGroup array", () => {
       component.addMetadata();
       component.items.at(0).get("fieldType").setValue("quantity");
 
@@ -183,12 +182,11 @@ describe("MetadataEditComponent", () => {
       expect(metadataObject).toBeDefined();
       expect(Object.keys(metadataObject).length).toBe(1);
       expect(Object.keys(metadataObject)[0]).toEqual("testName");
-      expect(metadataObject["testName"].type).toEqual("quantity");
       expect(metadataObject["testName"].value).toEqual(100);
       expect(metadataObject["testName"].unit).toEqual("Hz");
     });
 
-    it("should create a metadata object with type 'number' from the FormGroup array", () => {
+    it("should create a metadata object with a number value from the FormGroup array", () => {
       component.addMetadata();
       component.items.at(0).get("fieldType").setValue("number");
 
@@ -202,12 +200,11 @@ describe("MetadataEditComponent", () => {
       expect(metadataObject).toBeDefined();
       expect(Object.keys(metadataObject).length).toBe(1);
       expect(Object.keys(metadataObject)[0]).toEqual("testName");
-      expect(metadataObject["testName"].type).toEqual("number");
       expect(metadataObject["testName"].value).toEqual(100);
       expect(metadataObject["testName"].unit).toEqual("");
     });
 
-    it("should create a metadata object with type 'string' from the FormGroup array", () => {
+    it("should create a metadata object with a string value from the FormGroup array", () => {
       component.addMetadata();
       component.items.at(0).get("fieldType").setValue("string");
 
@@ -221,27 +218,8 @@ describe("MetadataEditComponent", () => {
       expect(metadataObject).toBeDefined();
       expect(Object.keys(metadataObject).length).toBe(1);
       expect(Object.keys(metadataObject)[0]).toEqual("testName");
-      expect(metadataObject["testName"].type).toEqual("string");
       expect(metadataObject["testName"].value).toEqual("test");
       expect(metadataObject["testName"].unit).toEqual("");
-    });
-
-    it("should create a metadata object with no type from the FormGroup array", () => {
-      component.addMetadata();
-      component.items.at(0).get("fieldType").setValue("");
-
-      component.detectType(0);
-
-      component.items.at(0).get("fieldName").setValue("testName");
-      component.items.at(0).get("fieldValue").setValue("test");
-
-      const metadataObject = component.createMetadataObjects();
-
-      expect(metadataObject).toBeDefined();
-      expect(Object.keys(metadataObject).length).toBe(1);
-      expect(Object.keys(metadataObject)[0]).toEqual("testName");
-      expect(metadataObject["testName"].type).toEqual("");
-      expect(metadataObject["testName"].value).toEqual("test");
     });
   });
 

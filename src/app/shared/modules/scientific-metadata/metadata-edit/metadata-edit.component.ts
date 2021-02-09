@@ -55,13 +55,13 @@ export class MetadataEditComponent implements OnInit, OnChanges {
 
   detectType(index: any) {
     const type = this.items.at(index).get("fieldType").value;
-    if (type === "quantity" || type === "measurement") {
+    if (type === "quantity") {
       this.items.at(index).get("fieldUnit").enable();
       this.items
         .at(index)
         .get("fieldUnit")
         .setValidators([Validators.required, this.unitValidator()]);
-        this.items.at(index).get("fieldUnit").updateValueAndValidity();
+      this.items.at(index).get("fieldUnit").updateValueAndValidity();
     } else {
       this.items.at(index).get("fieldUnit").clearValidators();
       this.items.at(index).get("fieldUnit").setValue("");
@@ -71,8 +71,7 @@ export class MetadataEditComponent implements OnInit, OnChanges {
 
   unitValidator(): ValidatorFn {
     return (control: AbstractControl): { [key: string]: any } | null => {
-      const allowed =
-      this.unitsService.getUnits().includes(control.value);
+      const allowed = this.unitsService.getUnits().includes(control.value);
       return allowed ? null : { forbiddenUnit: { value: control.value } };
     };
   }
@@ -90,16 +89,36 @@ export class MetadataEditComponent implements OnInit, OnChanges {
     if (this.metadata) {
       Object.keys(this.metadata).forEach((key, index) => {
         let field: FormGroup;
-        if (this.metadata[key]["type"]) {
-          field = this.formBuilder.group({
-            fieldName: key,
-            fieldType:
-              this.metadata[key].type === "measurement"
-                ? "quantity"
-                : this.metadata[key].type,
-            fieldValue: this.metadata[key].value,
-            fieldUnit: this.metadata[key].unit,
-          });
+        if (this.metadata[key]["value"]) {
+          if (this.metadata[key]["unit"].length > 0) {
+            field = this.formBuilder.group({
+              fieldName: key,
+              fieldType: "quantity",
+              fieldValue: this.metadata[key].value,
+              fieldUnit: this.metadata[key].unit,
+            });
+          } else if (typeof this.metadata[key]["value"] === "number") {
+            field = this.formBuilder.group({
+              fieldName: key,
+              fieldType: "number",
+              fieldValue: Number(this.metadata[key].value),
+              fieldUnit: this.metadata[key].unit,
+            });
+          } else if (isNaN(Date.parse(this.metadata[key]["value"]))) {
+            field = this.formBuilder.group({
+              fieldName: key,
+              fieldType: "string",
+              fieldValue: this.metadata[key].value,
+              fieldUnit: this.metadata[key].unit,
+            });
+          } else {
+            field = this.formBuilder.group({
+              fieldName: key,
+              fieldType: "date",
+              fieldValue: this.metadata[key].value,
+              fieldUnit: this.metadata[key].unit,
+            });
+          }
         } else {
           field = this.formBuilder.group({
             fieldName: key,
@@ -119,7 +138,6 @@ export class MetadataEditComponent implements OnInit, OnChanges {
     this.items.controls.forEach((control) => {
       const { fieldName, fieldType, fieldValue, fieldUnit } = control.value;
       metadata[fieldName] = {
-        type: fieldType,
         value: fieldValue,
         unit: fieldType === "quantity" ? fieldUnit : "",
       };

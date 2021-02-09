@@ -39,7 +39,6 @@ export class ScientificMetadataModule {}
 
 export interface ScientificMetaData {
   name: string;
-  type: string;
   value: string | number;
   unit: string;
 }
