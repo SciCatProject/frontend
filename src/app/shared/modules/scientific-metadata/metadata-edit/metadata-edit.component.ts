@@ -89,7 +89,7 @@ export class MetadataEditComponent implements OnInit, OnChanges {
     if (this.metadata) {
       Object.keys(this.metadata).forEach((key, index) => {
         let field: FormGroup;
-        if (this.metadata[key]["value"]) {
+        if ("value" in this.metadata[key]) {
           if (this.metadata[key]["unit"].length > 0) {
             field = this.formBuilder.group({
               fieldName: key,

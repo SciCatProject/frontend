@@ -22,7 +22,7 @@ export class MetadataViewComponent implements OnInit, OnChanges {
     const metadataArray = [];
     Object.keys(metadata).forEach(key => {
       let metadataObject: ScientificMetaData;
-      if (metadata[key]["value"]) {
+      if ("value" in metadata[key]) {
         metadataObject = {
           name: key,
           value: metadata[key].value,
