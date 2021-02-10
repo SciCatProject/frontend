@@ -5,6 +5,7 @@ import { Injectable } from "@angular/core";
 })
 export class UnitsService {
   private UNITS = {
+    angle: ["rad", "deg", "grad", "arcsec", "arcmin"],
     area: ["cm^2", "m^2", "mm^2"],
     charge: ["coulomb"],
     current: ["ampere"],
