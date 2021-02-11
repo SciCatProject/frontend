@@ -45,7 +45,7 @@
     style="display: inline;"
   >
     <input type="hidden" name="jwt" [value]="jwt?.jwt" />
-    <input type="hidden" name="base" [value]="sourcefolder" />
+    <input type="hidden" name="directory" [value]="sourcefolder" />
     <input
       *ngFor="let file of getAllFiles(); index as i"
       type="hidden"
@@ -71,7 +71,7 @@
     style="display: inline;"
   >
     <input type="hidden" name="jwt" [value]="jwt?.jwt" />
-    <input type="hidden" name="base" [value]="sourcefolder" >
+    <input type="hidden" name="directory" [value]="sourcefolder" >
     <input
       *ngFor="let file of getSelectedFiles(); index as i"
       type="hidden"
