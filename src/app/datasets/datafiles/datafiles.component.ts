@@ -123,7 +123,11 @@ export class DatafilesComponent
     if (!this.tableData) {
       return [];
     }
-    return this.tableData.map((file) => file.path);
+    return this.tableData.map((file) =>
+      file.path.includes("/")
+        ? file.path.split("/")[file.path.split("/").length - 1]
+        : file.path
+    );
   }
 
   getSelectedFiles() {
@@ -132,7 +136,11 @@ export class DatafilesComponent
     }
     return this.tableData
       .filter((file) => file.selected)
-      .map((file) => file.path);
+      .map((file) =>
+        file.path.includes("/")
+          ? file.path.split("/")[file.path.split("/").length - 1]
+          : file.path
+      );
   }
 
   updateSelectionStatus() {
