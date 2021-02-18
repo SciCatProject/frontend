@@ -19,8 +19,17 @@ mat-card {
     background-color: mat-color($forest, 400);
   }
 
+  .new-header {
+    background-color: mat-color($orange, 400);
+  }
+
   .scientific-header {
     background-color: mat-color($purple, 400);
+  }
+
+  .section-icon {
+    height: auto!important;
+    width: auto!important;
   }
 
   mat-icon {
@@ -56,7 +65,7 @@ mat-card {
 
   .about-table {
     th {
-      min-width: 10em;
+      min-width: 6em;
     }
 
     td {

@@ -2,6 +2,244 @@
   <div fxFlex="80%">
     <mat-card>
       <mat-card-header class="about-header">
+        <div mat-card-avatar class="section-icon">
+          <mat-icon> description </mat-icon>
+        </div>
+        General Information
+      </mat-card-header>
+
+      <table class="about-table">
+        <tr *ngIf="dataset.datasetName as value">
+          <th>Name</th>
+          <td>{{ value }}</td>
+        </tr>
+        <tr *ngIf="dataset.description as value">
+          <th>Description</th>
+          <td><span [innerHTML]="value | linky"></span></td>
+        </tr>
+        <tr>
+          <th>PID</th>
+          <td>{{ dataset.pid }}</td>
+        </tr>
+        <tr *ngIf="dataset.type as value">
+          <th>Type</th>
+          <td>{{ value }}</td>
+        </tr>
+        <tr *ngIf="dataset.creationTime as value">
+          <th>Creation Time</th>
+          <td>{{ value | date: "yyyy-MM-dd HH:mm" }}</td>
+        </tr>
+        <tr class="keywords-row">
+          <th>Keywords</th>
+          <td *ngIf="!editEnabled">
+            <mat-chip-list #keywordChips>
+              <mat-chip
+                *ngFor="let keyword of dataset.keywords"
+                [removable]="true"
+                (removed)="onRemoveKeyword(keyword)"
+                (click)="onClickKeyword(keyword)"
+              >
+                {{ keyword }}
+                <mat-icon matChipRemove>cancel</mat-icon>
+              </mat-chip>
+              <mat-chip class="add-keyword-chip" (click)="editEnabled = true">
+                Add Keyword <mat-icon>add</mat-icon>
+              </mat-chip>
+            </mat-chip-list>
+          </td>
+          <td *ngIf="editEnabled">
+            <mat-form-field>
+              <mat-chip-list #keywordChips>
+                <mat-chip
+                  *ngFor="let keyword of dataset.keywords"
+                  [removable]="true"
+                  (removed)="onRemoveKeyword(keyword)"
+                  (click)="onClickKeyword(keyword)"
+                >
+                  {{ keyword }}
+                  <mat-icon matChipRemove>cancel</mat-icon>
+                </mat-chip>
+                <input
+                  id="keywordInput"
+                  [matChipInputFor]="keywordChips"
+                  [matChipInputSeparatorKeyCodes]="separatorKeyCodes"
+                  [matChipInputAddOnBlur]="true"
+                  (matChipInputTokenEnd)="onAddKeyword($event)"
+                />
+              </mat-chip-list>
+            </mat-form-field>
+            <button
+              mat-raised-button
+              class="done-edit-button"
+              color="accent"
+              (click)="editEnabled = false"
+            >
+              Done
+            </button>
+          </td>
+        </tr>
+      </table>
+    </mat-card>
+
+    <mat-card>
+      <mat-card-header class="structural-header">
+        <div mat-card-avatar class="section-icon">
+          <mat-icon> person </mat-icon>
+        </div>
+        Creator Information
+      </mat-card-header>
+
+      <table>
+        <tr *ngIf="dataset.owner as value">
+          <th>Owner</th>
+          <td>{{ value }}</td>
+        </tr>
+        <tr *ngIf="dataset.principalInvestigator as value">
+          <th>Principal Investigator</th>
+          <td><span [innerHTML]="value | linky"></span></td>
+        </tr>
+        <tr *ngIf="dataset.investigator as value">
+          <th>Investigator</th>
+          <td>{{ value }}</td>
+        </tr>
+        <tr *ngIf="dataset.orcidOfOwner as value">
+          <th>Orcid</th>
+          <td><span [innerHTML]="value | linky"></span></td>
+        </tr>
+        <tr *ngIf="dataset.contactEmail as value">
+          <th>Contact Email</th>
+          <td><span [innerHTML]="value | linky"></span></td>
+        </tr>
+        <tr *ngIf="dataset.ownerGroup as value">
+          <th>Owner Group</th>
+          <td>{{ value }}</td>
+        </tr>
+        <tr *ngIf="dataset.accessGroups as value">
+          <th>Access Groups</th>
+          <td>{{ value }}</td>
+        </tr>
+      </table>
+    </mat-card>
+
+    <mat-card>
+      <mat-card-header class="admin-header">
+        <div mat-card-avatar class="section-icon">
+          <mat-icon> folder </mat-icon>
+        </div>
+        File Information
+      </mat-card-header>
+
+      <table>
+        <tr *ngIf="dataset.sourceFolder as value">
+          <th>Source Folder</th>
+          <td>{{ value }}</td>
+        </tr>
+        <tr *ngIf="dataset.size as value">
+          <th>Size</th>
+          <td>{{ value | filesize }}</td>
+        </tr>
+        <tr *ngIf="dataset.dataFormat as value">
+          <th>Data Format</th>
+          <td>{{ value }}</td>
+        </tr>
+      </table>
+    </mat-card>
+
+    <mat-card>
+      <mat-card-header class="derived-header">
+        <div mat-card-avatar class="section-icon">
+          <mat-icon> library_books </mat-icon>
+        </div>
+        Related Documents
+      </mat-card-header>
+
+      <table>
+        <tr *ngIf="dataset.proposalId && proposal">
+          <th>Proposal</th>
+          <td (click)="onClickProposal(proposal.proposalId)">
+            <a>{{ proposal.title }}</a>
+          </td>
+        </tr>
+        <tr *ngIf="dataset.sampleId && sample">
+          <th>Sample</th>
+          <td>
+            <a (click)="onClickSample(sample.sampleId)">{{
+              sample.description
+            }}</a>
+            <span
+              class="sample-edit"
+              (click)="openSampleEditDialog()"
+              *ngIf="appConfig.editDatasetSampleEnabled && isPI"
+            >
+              <mat-icon>edit</mat-icon>
+            </span>
+          </td>
+        </tr>
+        <tr *ngIf="dataset.creationLocation as value">
+          <th>Creation Location</th>
+          <td>{{ value }}</td>
+        </tr>
+        <tr *ngIf="dataset.techniques.length > 0">
+          <th>Techniques</th>
+          <td>
+            <div *ngFor="let technique of dataset.techniques">
+              <span>
+                {{ technique.name }}
+              </span>
+              <span
+                *ngIf="
+                  dataset.techniques.indexOf(technique) <
+                  dataset.techniques.length - 1
+                "
+                >,
+              </span>
+            </div>
+          </td>
+        </tr>
+        <tr *ngIf="dataset.inputDatasets as value">
+          <th>Input Datasets</th>
+          <td>
+            <div *ngFor="let datasetPid of value">
+              <span>
+                <a [routerLink]="['/datasets/', datasetPid]">
+                  {{ datasetPid }}
+                </a>
+              </span>
+              <span *ngIf="value.indexOf(datasetPid) < value.length - 1"
+                >,
+              </span>
+            </div>
+          </td>
+        </tr>
+      </table>
+    </mat-card>
+
+    <mat-card *ngIf="dataset.type === 'derived'">
+      <mat-card-header class="new-header">
+        <div mat-card-avatar class="section-icon">
+          <mat-icon> analytics </mat-icon>
+        </div>
+        Derived Data
+      </mat-card-header>
+
+      <table>
+        <tr *ngIf="dataset.usedSoftware as value">
+          <th>Software Used</th>
+          <td>{{ value }}</td>
+        </tr>
+        <tr *ngIf="dataset.jobParameters as value">
+          <th>Job Parameters</th>
+          <td>{{ value | json }}</td>
+        </tr>
+        <tr *ngIf="dataset.jobLogData as value">
+          <th>Job Log Data</th>
+          <td>{{ value }}</td>
+        </tr>
+      </table>
+    </mat-card>
+
+    <!-- <mat-card>
+      <mat-card-header class="about-header">
         About the data
       </mat-card-header>
 
@@ -76,9 +314,9 @@
           </td>
         </tr>
       </table>
-    </mat-card>
+    </mat-card> -->
 
-    <mat-card>
+    <!-- <mat-card>
       <mat-card-header class="structural-header">
         Structural information
       </mat-card-header>
@@ -122,9 +360,9 @@
           <td><span [innerHTML]="value | linky"></span></td>
         </tr>
       </table>
-    </mat-card>
+    </mat-card> -->
 
-    <mat-card>
+    <!-- <mat-card>
       <mat-card-header class="admin-header">
         Administrative information
       </mat-card-header>
@@ -155,9 +393,9 @@
           <td><span [innerHTML]="value | linky"></span></td>
         </tr>
       </table>
-    </mat-card>
+    </mat-card> -->
 
-    <mat-card *ngIf="dataset.investigator">
+    <!-- <mat-card *ngIf="dataset.investigator">
       <mat-card-header class="derived-header">
         Derived Data
       </mat-card-header>
@@ -195,10 +433,13 @@
           <td>{{ value }}</td>
         </tr>
       </table>
-    </mat-card>
+    </mat-card> -->
 
     <mat-card>
       <mat-card-header class="scientific-header">
+        <div mat-card-avatar class="section-icon">
+          <mat-icon> science </mat-icon>
+        </div>
         Scientific Metadata
       </mat-card-header>
 
