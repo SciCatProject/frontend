@@ -1,16 +1,33 @@
 <div fxLayout="row" fxLayout.lt-lt="column">
   <div fxFlex="14" fxFlex.lt-xl="10"></div>
   <div fxFlex="60" fxFlex.lt-xl="80">
+    <div style="float: right;">
+      <button
+        mat-icon-button
+        [disabled]="selectedDOIs.length === 0"
+        (click)="onShareClick()"
+      >
+        <mat-icon matTooltip="Copy selected DOI's to clipboard">
+          share
+        </mat-icon>
+      </button>
+    </div>
+
+    <div style="clear: both;"></div>
+
     <app-table
       [data]="publishedData$ | async"
       [columns]="columns"
       [paginate]="paginate"
+      [select]="select"
       [currentPage]="currentPage$ | async"
       [dataCount]="count$ | async"
       [dataPerPage]="itemsPerPage$ | async"
       (pageChange)="onPageChange($event)"
       (sortChange)="onSortChange($event)"
       (rowClick)="onRowClick($event)"
+      (selectAll)="onSelectAll($event)"
+      (selectOne)="onSelectOne($event)"
     ></app-table>
   </div>
   <div fxFlex="26" fxFlex.lt-xl="10"></div>
