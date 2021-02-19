@@ -19,7 +19,7 @@ import {
   changePageAction,
   sortByColumnAction,
 } from "state-management/actions/published-data.actions";
-import { PublishedData, PublishedDataInterface } from "shared/sdk";
+import { PublishedData } from "shared/sdk";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { MatCheckboxChange } from "@angular/material/checkbox";
 import { of } from "rxjs";
