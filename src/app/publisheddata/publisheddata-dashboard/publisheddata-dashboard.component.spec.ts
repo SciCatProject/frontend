@@ -141,13 +141,27 @@ describe("PublisheddataDashboardComponent", () => {
 
   describe("#onSelectAll()", () => {
     it("should add all DOI's to selectedDOIs if checked is true", () => {
+      const published = new PublishedData({
+        doi: "test",
+        creator: ["test"],
+        publisher: "test",
+        publicationYear: 2021,
+        title: "test",
+        abstract: "test",
+        dataDescription: "test",
+        resourceType: "test",
+        pidArray: [],
+      });
+
+      spyOn(component.publishedData$, "pipe").and.returnValue(of([published]));
+
       const event = {
         checked: true,
       } as MatCheckboxChange;
 
       component.onSelectAll(event);
 
-      expect(component.selectedDOIs.length).toEqual(0);
+      expect(component.selectedDOIs.length).toEqual(1);
     });
 
     it("should remove all DOI's from selectedDOIs if checked is false", () => {
