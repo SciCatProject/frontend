@@ -17,8 +17,8 @@ export class JobsDashboardNewComponent implements OnInit, OnDestroy {
   columns: Column[] = [
     { id: "id", label: "ID", canSort: true, icon: "perm_device_information", matchMode: "contains", hideOrder: 0, },
     { id: "emailJobInitiator", label: "Initiator", icon: "person", canSort: true, matchMode: "contains", hideOrder: 1, },
-    { id: "type", label: "Type", icon: "unarchive", format: "uppercase", canSort: true, matchMode: "is", hideOrder: 2, },
-    { id: "creationTime", icon: "schedule", label: "Created at", format: "date medium", canSort: true, matchMode: "after", hideOrder: 3, },
+    { id: "type", label: "Type", icon: "unarchive", canSort: true, matchMode: "is", hideOrder: 2, },
+    { id: "creationTime", icon: "schedule", label: "Created at", format: "date medium", canSort: true, matchMode: "between", hideOrder: 3, },
     { id: "jobParams", icon: "work", label: "Parameters", format: "json", canSort: false, hideOrder: 4, },
     { id: "jobStatusMessage", icon: "traffic", label: "Status", format: "json", canSort: true, matchMode: "contains", hideOrder: 5, },
     { id: "datasetList", icon: "list", label: "Datasets", format: "json", canSort: true, hideOrder: 6, },

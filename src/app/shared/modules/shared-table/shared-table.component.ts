@@ -14,6 +14,13 @@ import { Column } from "./../../column.type";
 import { SciCatDataSource } from "../../services/scicat.datasource";
 import { debounceTime, distinctUntilChanged, tap } from "rxjs/operators";
 import { ExportExcelService } from "../../services/export-excel.service";
+import { MatDatepickerInputEvent } from '@angular/material/datepicker';
+import * as moment from 'moment';
+
+export interface DateRange {
+  begin: Date;
+  end: Date;
+}
 
 @Component({
   selector: "shared-table",
@@ -61,6 +68,8 @@ export class SharedTableComponent implements AfterContentInit, OnDestroy, OnInit
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild("input", { static: true }) input: ElementRef;
   @ViewChildren("allFilters") allFilters: QueryList<ElementRef>;
+
+
 
   private rulerSubscription: Subscription;
 
@@ -122,8 +131,6 @@ export class SharedTableComponent implements AfterContentInit, OnDestroy, OnInit
       this.sort.direction
     );
   }
-
-  // TODO Known problem: API server can not filter on ObjectId fields
 
   loadDataPage() {
     this.dataSource.loadAllData(
@@ -193,11 +200,12 @@ export class SharedTableComponent implements AfterContentInit, OnDestroy, OnInit
         debounceTime(350),
         distinctUntilChanged(),
         tap(() => {
-          // console.log("key typed :", filter.nativeElement.id)
+          // console.log("key typed from id,value:", filter.nativeElement.id,filter.nativeElement.value)
           this.paginator.pageIndex = 0;
           const columnId = filter.nativeElement.id;
           if (filter.nativeElement.value) {
             this.filterExpressions[columnId] = filter.nativeElement.value;
+            // console.log("columnid,filterexpression:",columnId,this.filterExpressions[columnId])
           } else {
             delete this.filterExpressions[columnId];
           }
@@ -259,4 +267,21 @@ export class SharedTableComponent implements AfterContentInit, OnDestroy, OnInit
     return pathString.split('.').reduce((o, i) => o[i], obj);
   }
 
+  dateChanged(event: MatDatepickerInputEvent<DateRange>, columnId: string) {
+    // console.log("dateChanged:",event.value,columnId)
+    // let columnId="creationTime"
+    if (event.value) {
+      const { begin, end } = event.value;
+      this.filterExpressions[columnId] = {
+        begin: moment(begin).tz("UTC").toISOString(),
+        end: moment(end)
+          .add(1, "days")
+          .toISOString()
+      }
+    } else {
+      delete this.filterExpressions[columnId];
+    }
+    // console.log("columnid,filterexpression:",columnId,this.filterExpressions[columnId])
+    this.loadDataPage();
+  }
 }

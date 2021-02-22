@@ -16,14 +16,16 @@ export class ScicatDataService {
 
   constructor(private http: HttpClient, private auth: LoopBackAuth) {
     this.accessToken = auth.getToken().id;
-    console.log("Got token:",this.accessToken)
+    console.log("Got token:", this.accessToken)
   }
 
   findDataById(url: string, dataId: number): Observable<any> {
     return this.http.get<any>(`${url}/${dataId}`);
   }
 
+  // TODO when do I need to use "mode" syntax (may be for nested keys ?)
   mapToMongoSyntax(columns: Column[], filterExpressions: any) {
+    // console.log("Filterexpressions:",filterExpressions)
     const result = {};
     if (filterExpressions) {
       Object.keys(filterExpressions).map(function (key, index) {
@@ -35,6 +37,15 @@ export class ScicatDataService {
               result[key] = { $regex: filterExpressions[key], $options: "i" };
               break;
             }
+            // TODO filter case if value is an object
+            //   $project: {
+            //     item: 1,
+            //     dimensions: { $objectToArray: "$dimensions" }
+            //  }
+            // case "containsValue": {
+            //   result[key] = { $regex: filterExpressions[key], $options: "i" };
+            //   break;
+            // }
             case "greaterThan": {
               result[key] = { $gt: Number(filterExpressions[key]) };
               break;
@@ -43,8 +54,12 @@ export class ScicatDataService {
               result[key] = { $lt: Number(filterExpressions[key]) };
               break;
             }
-            case "after":{
-              result[key]  = { "$gte": filterExpressions[key] }
+            case "after": {
+              result[key] = { "$gte": filterExpressions[key] }
+              break;
+            }
+            case "between": {
+              result[key] = filterExpressions[key];
               break;
             }
             case "is": {
@@ -59,6 +74,7 @@ export class ScicatDataService {
         }
       });
     }
+    // console.log("Result of map:",result)
     return result;
   }
 
@@ -83,11 +99,9 @@ export class ScicatDataService {
 
 
     // ("findalldata:", filterExpressions)
-    const filterFields = {};
-    const modeExpression = this.mapToMongoSyntax(columns, filterExpressions);
-    if (Object.keys(modeExpression).length !== 0) {
-      filterFields["mode"] = modeExpression;
-    }
+    const mongoExpression = this.mapToMongoSyntax(columns, filterExpressions);
+    let filterFields = { ...mongoExpression };
+
     if (globalFilter !== "") {
       filterFields["text"] = globalFilter;
     }
@@ -114,11 +128,9 @@ export class ScicatDataService {
   // facets	["type","creationTime","creationLocation","ownerGroup","keywords"]
   getCount(url: string, columns: Column[], globalFilter?: string, filterExpressions?: any): Observable<any> {
 
-    const filterFields = {};
-    const modeExpression = this.mapToMongoSyntax(columns, filterExpressions);
-    if (Object.keys(modeExpression).length !== 0) {
-      filterFields["mode"] = modeExpression;
-    }
+    const mongoExpression = this.mapToMongoSyntax(columns, filterExpressions);
+    let filterFields = { ...mongoExpression };
+
     if (globalFilter !== "") {
       filterFields["text"] = globalFilter;
     }

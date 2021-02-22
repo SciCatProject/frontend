@@ -22,6 +22,8 @@ import { FlexLayoutModule } from "@angular/flex-layout";
 import { FormsModule } from "@angular/forms";
 import { ObjKeysPipe } from 'shared/pipes/obj-keys.pipe';
 import { RouterModule } from '@angular/router';
+import { SatDatepickerModule, SatNativeDateModule } from 'saturn-datepicker';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 
 @NgModule({
   declarations: [SharedTableComponent],
@@ -41,7 +43,10 @@ import { RouterModule } from '@angular/router';
     MatButtonModule,
     FlexLayoutModule,
     FormsModule,
-    RouterModule
+    RouterModule,
+    SatDatepickerModule,
+    SatNativeDateModule,
+    MatDatepickerModule
   ],
   exports: [SharedTableComponent],
   providers: [CurrencyPipe, DatePipe, DecimalPipe, JsonPipe, ObjKeysPipe, KeyValuePipe, LowerCasePipe,
