@@ -37,7 +37,7 @@ import { submitJobAction } from "state-management/actions/jobs.actions";
 import { ReadFile } from "ngx-file-helpers";
 import { SubmitCaptionEvent } from "shared/modules/file-uploader/file-uploader.component";
 import { MatSlideToggleChange } from "@angular/material/slide-toggle";
-import { fetchLogbookAction } from "state-management/actions/logbooks.actions";
+import { clearLogbookAction, fetchLogbookAction } from "state-management/actions/logbooks.actions";
 import { fetchProposalAction } from "state-management/actions/proposals.actions";
 import { getCurrentProposal } from "state-management/selectors/proposals.selectors";
 import { fetchSampleAction } from "state-management/actions/samples.actions";
@@ -250,13 +250,15 @@ export class DatasetDetailsDashboardComponent
       this.store.pipe(select(getCurrentDataset)).subscribe((dataset) => {
         if (dataset) {
           this.dataset = dataset;
-          if (dataset.type === "raw" && "proposalId" in dataset) {
+          if ("proposalId" in dataset) {
             this.store.dispatch(
               fetchProposalAction({ proposalId: dataset["proposalId"] })
             );
             this.store.dispatch(
               fetchLogbookAction({ name: dataset["proposalId"] })
             );
+          } else {
+            this.store.dispatch(clearLogbookAction());
           }
           if ("sampleId" in dataset) {
             this.store.dispatch(
