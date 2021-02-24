@@ -55,6 +55,13 @@ describe("Logbook Actions", () => {
     });
   });
 
+  describe("clearLogbookAction", () => {
+    it("should create an action", () => {
+      const action = fromActions.clearLogbookAction();
+      expect({ ...action }).toEqual({ type: "[Logbook] Clear Logbook" });
+    });
+  });
+
   describe("fetchCountAction", () => {
     it("should create an action", () => {
       const name = "test";
