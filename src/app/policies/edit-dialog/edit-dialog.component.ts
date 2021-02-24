@@ -17,6 +17,8 @@ export class EditDialogComponent implements /*OnChanges,*/ OnInit {
 
   form: FormGroup;
 
+  selectable = true;
+
   constructor(
     private dialogRef: MatDialogRef<EditDialogComponent>,
     @Inject(MAT_DIALOG_DATA) data

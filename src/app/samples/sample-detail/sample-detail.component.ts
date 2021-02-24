@@ -60,6 +60,8 @@ export class SampleDetailComponent implements OnInit, OnDestroy {
     { name: "location", icon: "explore", sort: false, inList: true }
   ];
 
+  show = false;
+
   formatTableData(datasets: Dataset[]): any[] {
     if (datasets) {
       return datasets.map((dataset: any) => {

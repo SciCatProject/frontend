@@ -41,14 +41,14 @@ export class BatchViewComponent implements OnInit {
   shareEmails: Share[] = [];
   datasetList = [];
 
-  private visibleColumns: string[] = [
+  visibleColumns: string[] = [
     "remove",
     "pid",
     "sourceFolder",
     "creationTime"
   ];
 
-  private batch$: Observable<Dataset[]> = this.store.pipe(
+  batch$: Observable<Dataset[]> = this.store.pipe(
     select(getDatasetsInBatch)
   );
   public hasBatch: boolean;

@@ -36,6 +36,8 @@ export class DatasetDetailComponent {
   editEnabled: boolean;
   readonly separatorKeyCodes: number[] = [ENTER, COMMA, SPACE];
 
+  show = false;
+
   onClickKeyword(keyword: string): void {
     this.clickKeyword.emit(keyword);
   }

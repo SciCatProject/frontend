@@ -32,7 +32,7 @@ export class DatasetTableActionsComponent implements OnInit, OnDestroy {
 
   public currentArchViewMode: ArchViewMode;
   public viewModes = ArchViewMode;
-  private modes = [
+  modes = [
     ArchViewMode.all,
     ArchViewMode.archivable,
     ArchViewMode.retrievable,

@@ -7,7 +7,7 @@
         <th><mat-icon> person </mat-icon> Name</th>
         <td>{{ value }}</td>
       </tr>
-      <tr *ngIf="user.email as value">
+      <tr *ngIf="user['email'] as value">
         <th><mat-icon> mail </mat-icon> Email</th>
         <td>{{ value }}</td>
       </tr>

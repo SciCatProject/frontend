@@ -22,6 +22,7 @@ import { FlexLayoutModule } from "@angular/flex-layout";
 import { FormsModule } from "@angular/forms";
 import { ObjKeysPipe } from 'shared/pipes/obj-keys.pipe';
 import { RouterModule } from '@angular/router';
+import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 
 @NgModule({
   declarations: [SharedTableComponent],
@@ -33,6 +34,7 @@ import { RouterModule } from '@angular/router';
     MatListModule,
     MatPaginatorModule,
     MatSortModule,
+    MatProgressSpinnerModule,
     MatTableModule,
     PipesModule,
     MatToolbarModule,
