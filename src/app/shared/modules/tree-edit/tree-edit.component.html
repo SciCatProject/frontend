@@ -1,92 +1,105 @@
+<button mat-flat-button type="button" color="accent" (click)="addNewItem(null)">
+  <mat-icon> add_circle </mat-icon>
+  Add row
+</button>
+
+<button mat-flat-button type="submit" color="primary" (click)="doSave()">
+  <mat-icon> save </mat-icon>
+  Save changes
+</button>
 <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
-  <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle matTreeNodePadding>
+  <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle
+    matTreeNodePadding>
     <button mat-icon-button disabled></button>
     <div *ngIf="node.editing === false">
       {{node.key}} : {{node.value}}
+      <button mat-icon-button (click)="setCurrentEditingNode(node)">
+        <mat-icon>mode_edit</mat-icon>
+      </button>
+      <button mat-icon-button class="deleteButton" color="warn"
+        title="Delete row" (click)="deleteItem(node)">
+        <mat-icon>cancel</mat-icon>
+      </button>
     </div>
-
-    <div *ngIf="node.editing === true">
-      <form [formGroup]="metadataForm">
+    <div class="container">
+      <div *ngIf="node.editing === true">
+        <form [formGroup]="metadataForm">
           <div class="formRow" fxLayout="row" fxLayout.lt-lg="column">
             <div class="formColumn">
               <mat-form-field class="selectField">
-                <mat-select formControlName="fieldType" (selectionChange)="detectType(node)">
+                <mat-select formControlName="fieldType"
+                  (selectionChange)="detectType()">
                   <mat-option *ngFor="let type of typeValues" [value]="type">{{
                     type
                     }}</mat-option>
                 </mat-select>
-                <!-- <mat-error *ngIf="fieldHasError(i, 'fieldType')">
+                <mat-error *ngIf="fieldHasError('fieldType')">
                   Type is required
-                </mat-error> -->
+                </mat-error>
               </mat-form-field>
             </div>
             <div class="formColumn">
               <mat-form-field class="inputField">
-                <input matInput autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
-                  formControlName="fieldName" placeholder="Name" (blur)="getUnits(node)" />
-                <!-- <mat-error *ngIf="fieldHasError(i, 'fieldName')">
+                <input matInput autocomplete="off" autocorrect="off"
+                  autocapitalize="off" spellcheck="false"
+                  formControlName="fieldName" placeholder="Name"
+                  (blur)="getUnits()" />
+                <mat-error *ngIf="fieldHasError('fieldName')">
                   Name is required
-                </mat-error> -->
+                </mat-error>
               </mat-form-field>
             </div>
             <div class="formColumn">
               <mat-form-field class="inputField">
-                <input matInput autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
-                  formControlName="fieldValue" placeholder="Value" step=1 />
-                <!-- <mat-error *ngIf="fieldHasError(i, 'fieldValue')">
+                <input matInput autocomplete="off" autocorrect="off"
+                  autocapitalize="off" spellcheck="false"
+                  formControlName="fieldValue" placeholder="Value" step=1
+                  [type]="setValueInputType()" />
+                <mat-error *ngIf="fieldHasError('fieldValue')">
                   Value is required
-                </mat-error> -->
+                </mat-error>
               </mat-form-field>
             </div>
             <div class="formColumn">
               <mat-form-field class="inputField">
-                <input matInput autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
-                  formControlName="fieldUnit" placeholder="Unit" [matAutocomplete]="metadataUnits"
-                  (focus)="getUnits(node)" />
+                <input matInput autocomplete="off" autocorrect="off"
+                  autocapitalize="off" spellcheck="false"
+                  formControlName="fieldUnit" placeholder="Unit"
+                  [matAutocomplete]="metadataUnits" (focus)="getUnits()" />
                 <mat-autocomplete #metadataUnits="matAutocomplete">
-                  <!-- <mat-option
-                    *ngFor="let unit of filteredUnits$ | async"
-                    [value]="unit"
-                  >
+                  <mat-option *ngFor="let unit of filteredUnits$ | async"
+                    [value]="unit">
                     {{ unit }}
-                  </mat-option> -->
+                  </mat-option>
                 </mat-autocomplete>
-                <!-- <mat-error *ngIf="fieldHasError(i, 'fieldUnit')">
-                  A unit is required for quantities
-                </mat-error> -->
+                <mat-error *ngIf="fieldHasError('fieldUnit')">
+                  A unit is required for
+                  quantities
+                </mat-error>
               </mat-form-field>
             </div>
             <div class="formColumn" fxFlexAlign="end">
-              <button mat-icon-button class="deleteButton" type="button" color="warn" title="Delete row">
-                <mat-icon> cancel </mat-icon>
+              <button mat-icon-button class="deleteButton" color="warn"
+                title="Delete row" (click)="deleteItem(node)">
+                <mat-icon>cancel</mat-icon>
+              </button>
+              <button mat-icon-button (click)="editItem(node)">
+                <mat-icon>save</mat-icon>
               </button>
             </div>
           </div>
-        <!-- </div> -->
-      </form>
+          <!-- </div> -->
+        </form>
+      </div>
     </div>
-    <button mat-icon-button (click)="deleteItem(node)">
-      <mat-icon>delete</mat-icon>
-    </button>
-    <button *ngIf="node.editing === true" mat-icon-button (click)="editItem(node)">
-      <mat-icon>save</mat-icon>
-    </button>
-    <button *ngIf="node.editing === false" mat-icon-button (click)="toggleEditMode(node)">
-      <mat-icon>mode_edit</mat-icon>
-    </button>
-  </mat-tree-node>
 
-  <mat-tree-node *matTreeNodeDef="let node; when: hasNoContent" matTreeNodePadding>
-    <button mat-icon-button disabled></button>
-    <input matInput #key placeholder="Ex. Lettuce">
-    <input matInput #value placeholder="Ex. Lettuce">
-    <button mat-button (click)="saveNode(node, key.value, value.value)">Save</button>
   </mat-tree-node>
-
   <mat-tree-node *matTreeNodeDef="let node; when: hasChild" matTreeNodePadding>
-    <button mat-icon-button isIconButton="true" matTreeNodeToggle [attr.aria-label]="'Toggle ' + node.key">
+    <button mat-icon-button isIconButton="true" matTreeNodeToggle
+      [attr.aria-label]="'Toggle ' + node.key">
       <mat-icon class="mat-icon-rtl-mirror">
-        {{treeControl.isExpanded(node) ? 'arrow_drop_down': 'arrow_right'}}
+        {{treeControl.isExpanded(node) ?
+        'arrow_drop_down': 'arrow_right'}}
       </mat-icon>
     </button>
     {{node.key}}
