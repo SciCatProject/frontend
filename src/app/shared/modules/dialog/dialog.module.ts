@@ -14,9 +14,8 @@ import { MatInputModule } from "@angular/material/input";
     MatInputModule,
     MatButtonModule,
     MatFormFieldModule,
-    FormsModule
+    FormsModule,
   ],
-  entryComponents: [DialogComponent],
-  declarations: [DialogComponent]
+  declarations: [DialogComponent],
 })
 export class DialogModule {}

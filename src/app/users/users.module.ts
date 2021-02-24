@@ -36,10 +36,9 @@ import { PrivacyDialogComponent } from "./privacy-dialog/privacy-dialog.componen
     MatInputModule,
     ReactiveFormsModule,
     SharedCatanieModule,
-    StoreModule.forFeature("users", userReducer)
+    StoreModule.forFeature("users", userReducer),
   ],
   declarations: [LoginComponent, UserSettingsComponent, PrivacyDialogComponent],
-  entryComponents: [PrivacyDialogComponent],
-  providers: [ADAuthService]
+  providers: [ADAuthService],
 })
 export class UsersModule {}
