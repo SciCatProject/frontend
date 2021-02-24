@@ -3,23 +3,23 @@
 mat-card {
   margin: 1em;
 
-  .about-header {
+  .general-header {
     background-color: mat-color($primary, lighter);
   }
 
-  .structural-header {
+  .creator-header {
     background-color: mat-color($navy, 400);
   }
 
-  .admin-header {
+  .file-header {
     background-color: mat-color($accent, lighter);
   }
 
-  .derived-header {
+  .related-header {
     background-color: mat-color($forest, 400);
   }
 
-  .new-header {
+  .derived-header {
     background-color: mat-color($orange, 400);
   }
 
@@ -28,26 +28,24 @@ mat-card {
   }
 
   .section-icon {
-    height: auto!important;
-    width: auto!important;
-  }
+    height: auto !important;
+    width: auto !important;
 
-  mat-icon {
-    vertical-align: middle;
+    mat-icon {
+      vertical-align: middle;
+    }
   }
 
   table {
     th {
-      text-align: left;
+      min-width: 10em;
       padding-right: 0.5em;
+      text-align: left;
     }
 
     td {
+      width: 100%;
       padding: 0.5em;
-
-      a:hover {
-        cursor: pointer;
-      }
 
       .sample-edit {
         padding-left: 0.5em;
@@ -60,16 +58,6 @@ mat-card {
       .sample-edit:hover {
         cursor: pointer;
       }
-    }
-  }
-
-  .about-table {
-    th {
-      min-width: 6em;
-    }
-
-    td {
-      width: 100%;
     }
 
     .keywords-row {
