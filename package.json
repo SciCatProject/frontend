@@ -6,6 +6,7 @@
   "scripts": {
     "ng": "./node_modules/@angular/cli/bin/ng",
     "start": "./node_modules/@angular/cli/bin/ng serve --host $HOST",
+    "postinstall": "ngcc",
     "test": "./node_modules/@angular/cli/bin/ng test --watch=false --source-map=false --code-coverage",
     "cypress:open": "./node_modules/.bin/cypress open",
     "e2e": "ng e2e --project=catanie-e2e",
