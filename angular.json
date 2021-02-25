@@ -15,13 +15,15 @@
             "allowedCommonJsDependencies": [
               "deep-equal",
               "file-saver",
+              "moment-timezone",
               "rison",
+              "shortid",
               "socket.io-client"
             ],
             "outputPath": "dist",
             "index": "src/index.html",
             "main": "src/main.ts",
-            "tsConfig": "src/tsconfig.json",
+            "tsConfig": "src/tsconfig.app.json",
             "polyfills": "src/polyfills.ts",
             "stylePreprocessorOptions": {
               "includePaths": ["node_modules"]
@@ -415,7 +417,7 @@
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "tsConfig": "src/tsconfig.json",
+            "tsConfig": "src/tsconfig.spec.json",
             "main": "src/test.ts",
             "karmaConfig": "./karma.conf.js",
             "polyfills": "src/polyfills.ts",
@@ -450,8 +452,8 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": ["src/tsconfig.json"],
-            "exclude": []
+            "tsConfig": ["src/tsconfig.app.json", "src/tsconfig.spec.json"],
+            "exclude": ["**/node_modules/**"]
           }
         }
       }

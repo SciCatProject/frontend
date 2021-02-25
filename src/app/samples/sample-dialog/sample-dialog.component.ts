@@ -14,7 +14,7 @@ import {
 } from "state-management/selectors/user.selectors";
 import { Subscription } from "rxjs";
 
-const shortid = require("shortid");
+import * as shortid from "shortid";
 
 @Component({
   selector: "app-sample-dialog",

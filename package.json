@@ -60,6 +60,7 @@
     "@types/moment-timezone": "^0.5.12",
     "@types/node": "^12.11.1",
     "@types/rison": "^0.0.6",
+    "@types/shortid": "0.0.29",
     "@types/socket.io-client": "^1.4.32",
     "@types/source-map-support": "^0.5.0",
     "codelyzer": "^5.1.2",

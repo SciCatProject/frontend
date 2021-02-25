@@ -23,8 +23,6 @@ import {
   getUserMessage
 } from "state-management/selectors/user.selectors";
 
-const { version: appVersion } = require("../../package.json");
-
 @Component({
   selector: "app-root",
   templateUrl: "./app.component.html",
@@ -37,7 +35,6 @@ export class AppComponent implements OnDestroy, OnInit, AfterViewChecked {
   title: string;
   facility: string;
   status: string;
-  appVersion: number;
   userMessageSubscription: Subscription;
 
   constructor(
@@ -48,7 +45,6 @@ export class AppComponent implements OnDestroy, OnInit, AfterViewChecked {
     @Inject(APP_CONFIG) public appConfig: AppConfig,
     private store: Store<any>
   ) {
-    this.appVersion = appVersion;
     this.facility = this.appConfig.facility;
     if (appConfig.production === true) {
       this.status = "";
