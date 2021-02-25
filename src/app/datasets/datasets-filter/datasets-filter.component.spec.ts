@@ -49,6 +49,7 @@ import { MatSelectModule } from "@angular/material/select";
 import { MatDatepickerInputEvent } from "@angular/material/datepicker";
 import { SearchParametersDialogComponent } from "shared/modules/search-parameters-dialog/search-parameters-dialog.component";
 import { AsyncPipe } from "@angular/common";
+import { By } from "@angular/platform-browser";
 
 export class MockMatDialog {
   open() {
@@ -127,36 +128,24 @@ describe("DatasetsFilterComponent", () => {
     const compiled = fixture.debugElement.nativeElement;
     const beamline = compiled.querySelector(".date-input");
     expect(beamline).toBeTruthy();
-    expect(
-      beamline.attributes.getNamedItem("placeholder").textContent
-    ).toContain("Select a date range");
   });
 
   it("should contain a beamline input", () => {
     const compiled = fixture.debugElement.nativeElement;
     const beamline = compiled.querySelector(".location-input");
     expect(beamline).toBeTruthy();
-    expect(
-      beamline.attributes.getNamedItem("placeholder").textContent
-    ).toContain("Location");
   });
 
   it("should contain a groups input", () => {
     const compiled = fixture.debugElement.nativeElement;
     const group = compiled.querySelector(".group-input");
     expect(group).toBeTruthy();
-    expect(group.attributes.getNamedItem("placeholder").textContent).toContain(
-      "Group"
-    );
   });
 
   it("should contain a type input", () => {
     const compiled = fixture.debugElement.nativeElement;
     const type = compiled.querySelector(".type-input");
     expect(type).toBeTruthy();
-    expect(type.attributes.getNamedItem("placeholder").textContent).toContain(
-      "Type"
-    );
   });
 
   it("should contain a clear button", () => {

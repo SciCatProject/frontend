@@ -44,7 +44,9 @@ describe("PoliciesDashboardComponent", () => {
   let component: PoliciesDashboardComponent;
   let fixture: ComponentFixture<PoliciesDashboardComponent>;
 
-  let router: Router;
+  const router = {
+    navigate: jasmine.createSpy("navigate"),
+  };
   let store: MockStore;
   let dispatchSpy;
 
@@ -68,12 +70,10 @@ describe("PoliciesDashboardComponent", () => {
     });
     TestBed.overrideComponent(PoliciesDashboardComponent, {
       set: {
-        providers: [{ provide: DatasetApi, useClass: MockDatasetApi }]
+        providers: [{ provide: DatasetApi, useClass: MockDatasetApi }, {provide: Router, useValue: router}]
       }
     });
     TestBed.compileComponents();
-
-    router = TestBed.inject(Router);
   }));
 
   beforeEach(() => {
@@ -142,8 +142,6 @@ describe("PoliciesDashboardComponent", () => {
 
   describe("#addToQueryParams()", () => {
     it("should call router.navigate", () => {
-      const navigateSpy = spyOn(router, "navigate");
-
       const filters: GenericFilters = {
         sortField: "test asc",
         skip: 0,
@@ -151,8 +149,8 @@ describe("PoliciesDashboardComponent", () => {
       };
       component.addToQueryParams(filters);
 
-      expect(navigateSpy).toHaveBeenCalledTimes(1);
-      expect(navigateSpy).toHaveBeenCalledWith(["/policies"], {
+      // expect(router.navigate).toHaveBeenCalledTimes(1);
+      expect(router.navigate).toHaveBeenCalledWith(["/policies"], {
         queryParams: { args: rison.encode(filters) }
       });
     });
