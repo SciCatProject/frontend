@@ -417,11 +417,11 @@
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "tsConfig": "src/tsconfig.spec.json",
             "main": "src/test.ts",
             "karmaConfig": "./karma.conf.js",
             "polyfills": "src/polyfills.ts",
-            "scripts": ["node_modules/hammerjs/hammer.min.js"],
+            "tsConfig": "src/tsconfig.spec.json",
+            "scripts": [],
             "styles": ["src/styles.css", "src/theme.scss"],
             "assets": [
               "src/assets",
