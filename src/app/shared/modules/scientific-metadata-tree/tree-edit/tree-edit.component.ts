@@ -40,6 +40,7 @@ export class TreeEditComponent implements OnInit {
   nestNodeMap = new Map<TreeNodeEdit, FlatTreeNodeEdit>();
   dataTree: TreeNodeEdit[];
   filteredDataTree: TreeNodeEdit[];
+  expanded = false;
   constructor(private formBuilder: FormBuilder, private unitsService: UnitsService) {
     this.treeFlattener = new MatTreeFlattener(this.transformer, this.getLevel, this.isExpandable, this.getChildren);
     this.treeControl = new FlatTreeControl<FlatTreeNodeEdit>(this.getLevel, this.isExpandable);
@@ -57,6 +58,7 @@ export class TreeEditComponent implements OnInit {
   }
   set filterText(value: string) {
     this._filterKey = value;
+    this.treeControl.collapseAll();
     this.filteredDataTree = this._filterKey ? this.performFilter(this._filterKey) : this.dataTree;
     this.dataSource.data = this.filteredDataTree;
   }
@@ -312,5 +314,13 @@ export class TreeEditComponent implements OnInit {
   }
   doSave() {
     this.data = this.convertDataTreeToObject(this.dataTree);
+  }
+  toggleExpand(){
+    this.expanded = !this.expanded;
+    this.expanded? this.treeControl.expandAll() : this.treeControl.collapseAll();
+  }
+  getPadding(node: FlatTreeNodeEdit){
+    const indentPixel = 40;
+    return (node.level * indentPixel).toString();
   }
 }

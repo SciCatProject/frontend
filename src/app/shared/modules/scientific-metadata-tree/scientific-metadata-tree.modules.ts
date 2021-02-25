@@ -4,16 +4,18 @@ import { MatIconModule } from '@angular/material/icon';
 import { PipesModule } from 'shared/pipes/pipes.module';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
-import { TreeEditComponent } from './tree-edit.component';
+import { TreeEditComponent } from './tree-edit/tree-edit.component';
 import { MatSelectModule } from '@angular/material/select';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { CommonModule } from '@angular/common';
 import { MatInputModule } from '@angular/material/input';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { MatDividerModule } from '@angular/material/divider';
+import { TreeViewComponent } from './tree-view/tree-view.component';
 
 @NgModule({
-  declarations: [TreeEditComponent],
+  declarations: [TreeEditComponent, TreeViewComponent],
   imports: [
     MatFormFieldModule,
     MatTreeModule,
@@ -26,8 +28,9 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
+    MatDividerModule,
     FlexLayoutModule,
   ],
-  exports: [TreeEditComponent]
+  exports: [TreeEditComponent, TreeViewComponent]
 })
-export class TreeEditModule {}
+export class ScientificMetadataTreeModule {}

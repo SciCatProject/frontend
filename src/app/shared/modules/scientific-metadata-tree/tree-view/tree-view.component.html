@@ -1,0 +1,51 @@
+<div class='tool-bar'>
+  <mat-form-field>
+    <mat-icon matPrefix>search</mat-icon>
+    <mat-label>Search</mat-label>
+    <input matInput type="text" [(ngModel)]="filterText">
+    <button mat-button matSuffix mat-icon-button aria-label="Clear">
+      <mat-icon>close</mat-icon>
+    </button>
+  </mat-form-field>
+  <div>
+    <button mat-flat-button type="button" color="accent" (click)="toggleExpand()">
+      {{expanded? 'Collapse All' : 'Expand All'}}
+    </button>
+  </div>
+</div>
+<section>
+  <div class="key-cell" style="padding-left: 40px;">
+    <b>Name</b>
+  </div>
+  <div class="value-cell">
+    <b>Value</b>
+  </div>
+</section>
+<mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
+  <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>
+    <section>
+      <div class="key-cell" [style.padding-left.px]="getPadding(node)">
+        <button mat-icon-button disabled><mat-icon class="mat-icon-rtl-mirror" class="mat-icon-rtl-mirror">
+        </mat-icon></button>
+        <label>{{node.key |replaceUnderscore |titleCase}}</label>
+      </div>
+      <div class="value-cell">{{node.value}}</div>
+    </section>
+  </mat-tree-node>
+
+  <mat-tree-node *matTreeNodeDef="let node; when: hasChild">
+    <section>
+      <div class='key-cell' [style.padding-left.px]="getPadding(node)">
+        <button mat-icon-button matTreeNodeToggle
+          [attr.aria-label]="'Toggle ' + node.key">
+          <mat-icon class="mat-icon-rtl-mirror" class="mat-icon-rtl-mirror">
+            {{treeControl.isExpanded(node) ?
+            'arrow_drop_down': 'arrow_right'}}
+          </mat-icon>
+        </button>
+        {{node.key |replaceUnderscore |titleCase}}
+      </div>
+      <div class="value-cell"></div>
+    </section>
+  </mat-tree-node>
+</mat-tree>

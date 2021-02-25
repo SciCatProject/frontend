@@ -1,3 +1,17 @@
+<div class='row'>
+  <mat-form-field>
+    <mat-label>Search</mat-label>
+    <mat-icon>search</mat-icon>
+    <input matInput type="search" [(ngModel)]="filterText">
+  </mat-form-field>
+</div>
+<!-- <div>
+  <button mat-flat-button type="button" color="accent" (click)="toggleExpand()">
+    Expand All
+  </button>
+</div>
+
+
 <button mat-flat-button type="button" color="accent" (click)="addNewItem(null)">
   <mat-icon> add_circle </mat-icon>
   Add row
@@ -6,21 +20,29 @@
 <button mat-flat-button type="submit" color="primary" (click)="doSave()">
   <mat-icon> save </mat-icon>
   Save changes
-</button>
+</button> -->
 <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
-  <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle
-    matTreeNodePadding>
-    <button mat-icon-button disabled></button>
-    <div *ngIf="node.editing === false">
-      {{node.key}} : {{node.value}}
-      <button mat-icon-button (click)="setCurrentEditingNode(node)">
-        <mat-icon>mode_edit</mat-icon>
-      </button>
-      <button mat-icon-button class="deleteButton" color="warn"
-        title="Delete row" (click)="deleteItem(node)">
-        <mat-icon>cancel</mat-icon>
-      </button>
-    </div>
+  <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>
+    <section *ngIf="node.editing === false">
+      <div class="key-cell" [style.padding-left.px]="getPadding(node)">
+        <button mat-icon-button disabled></button>
+        <label>{{node.key}}</label>
+      </div>
+      <div class="value-cell">{{node.value}}</div>
+      <div class="button-cell">
+        <div class="display-flex">
+          <button mat-icon-button (click)="setCurrentEditingNode(node)">
+            <mat-icon>mode_edit</mat-icon>
+          </button>
+          <button mat-icon-button class="deleteButton" color="warn"
+            title="Delete row" (click)="deleteItem(node)">
+            <mat-icon>cancel</mat-icon>
+          </button>
+        </div>
+
+      </div>
+    </section>
+
     <div class="container">
       <div *ngIf="node.editing === true">
         <form [formGroup]="metadataForm">
@@ -83,6 +105,7 @@
                 title="Delete row" (click)="deleteItem(node)">
                 <mat-icon>cancel</mat-icon>
               </button>
+
               <button mat-icon-button (click)="editItem(node)">
                 <mat-icon>save</mat-icon>
               </button>
@@ -92,19 +115,28 @@
         </form>
       </div>
     </div>
-
   </mat-tree-node>
-  <mat-tree-node *matTreeNodeDef="let node; when: hasChild" matTreeNodePadding>
-    <button mat-icon-button isIconButton="true" matTreeNodeToggle
-      [attr.aria-label]="'Toggle ' + node.key">
-      <mat-icon class="mat-icon-rtl-mirror">
-        {{treeControl.isExpanded(node) ?
-        'arrow_drop_down': 'arrow_right'}}
-      </mat-icon>
-    </button>
-    {{node.key}}
-    <button mat-icon-button (click)="addNewItem(node)">
-      <mat-icon>add</mat-icon>
-    </button>
+  <mat-divider></mat-divider>
+  <mat-tree-node *matTreeNodeDef="let node; when: hasChild">
+    <section>
+      <div class='key-cell' [style.padding-left.px]="getPadding(node)">
+        <button mat-icon-button matTreeNodeToggle
+          [attr.aria-label]="'Toggle ' + node.key">
+          <mat-icon class="mat-icon-rtl-mirror">
+            {{treeControl.isExpanded(node) ?
+            'arrow_drop_down': 'arrow_right'}}
+          </mat-icon>
+        </button>
+        {{node.key}}
+      </div>
+      <div class="value-cell"></div>
+      <div class="button-cell">
+        <div class="display-flex">
+          <button mat-icon-button (click)="addNewItem(node)">
+            <mat-icon>add</mat-icon>
+          </button>
+        </div>
+      </div>
+    </section>
   </mat-tree-node>
 </mat-tree>
