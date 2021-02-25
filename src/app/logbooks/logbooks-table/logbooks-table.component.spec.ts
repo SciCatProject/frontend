@@ -1,5 +1,5 @@
 import { NO_ERRORS_SCHEMA } from "@angular/core";
-import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 import { Store } from "@ngrx/store";
 import { Router } from "@angular/router";
 
@@ -16,7 +16,7 @@ describe("LogbooksTableComponent", () => {
     navigateByUrl: jasmine.createSpy("navigateByUrl")
   };
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
       imports: [MatTableModule],

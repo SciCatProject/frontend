@@ -139,7 +139,7 @@ export class DatasetsFilterComponent {
     input$: BehaviorSubject<string>,
     currentFilters$: Observable<string[]>
   ): Observable<FacetCount[]> {
-    return combineLatest(facetCounts$, input$, currentFilters$).pipe(
+    return combineLatest([facetCounts$, input$, currentFilters$]).pipe(
       map(([counts, filterString, currentFilters]) => {
         if (!counts) {
           return [];

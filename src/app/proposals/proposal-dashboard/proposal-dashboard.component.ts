@@ -4,7 +4,7 @@ import { DatePipe } from "@angular/common";
 import { Router, ActivatedRoute } from "@angular/router";
 import { Store, select } from "@ngrx/store";
 import { Proposal } from "shared/sdk";
-import { Subscription } from "rxjs";
+import { combineLatest, Subscription } from "rxjs";
 import {
   getPage,
   getProposalsCount,
@@ -34,7 +34,6 @@ import { DateRange } from "datasets/datasets-filter/datasets-filter.component";
 import * as rison from "rison";
 import {
   filter,
-  combineLatest,
   map,
   distinctUntilChanged,
   take
@@ -195,17 +194,15 @@ export class ProposalDashboardComponent implements OnInit, OnDestroy {
     );
 
     this.subscriptions.push(
-      this.store
-        .pipe(select(getFilters))
+      combineLatest([this.store.pipe(select(getFilters)), this.readyToFetch$])
         .pipe(
-          combineLatest(this.readyToFetch$),
           map(([filters, _]) => filters),
           distinctUntilChanged(deepEqual)
         )
-        .subscribe(filters => {
+        .subscribe((filters) => {
           this.store.dispatch(fetchProposalsAction());
           this.router.navigate(["/proposals"], {
-            queryParams: { args: rison.encode(filters) }
+            queryParams: { args: rison.encode(filters) },
           });
         })
     );

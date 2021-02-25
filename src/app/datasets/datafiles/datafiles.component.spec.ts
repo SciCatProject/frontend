@@ -1,5 +1,5 @@
 import { NO_ERRORS_SCHEMA } from "@angular/core";
-import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 import { ReactiveFormsModule } from "@angular/forms";
 import { DatafilesComponent } from "./datafiles.component";
 import { AppConfigModule } from "app-config.module";
@@ -16,27 +16,29 @@ describe("DatafilesComponent", () => {
   let component: DatafilesComponent;
   let fixture: ComponentFixture<DatafilesComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      schemas: [NO_ERRORS_SCHEMA],
-      imports: [
-        ReactiveFormsModule,
-        MatTableModule,
-        AppConfigModule,
-        PipesModule,
-        RouterModule,
-        StoreModule.forRoot({}),
-        RouterModule.forRoot([]),
-      ],
-      declarations: [DatafilesComponent],
-    });
-    TestBed.overrideComponent(DatafilesComponent, {
-      set: {
-        providers: [{ provide: UserApi, useClass: MockUserApi }],
-      },
-    });
-    TestBed.compileComponents();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        schemas: [NO_ERRORS_SCHEMA],
+        imports: [
+          ReactiveFormsModule,
+          MatTableModule,
+          AppConfigModule,
+          PipesModule,
+          RouterModule,
+          StoreModule.forRoot({}),
+          RouterModule.forRoot([]),
+        ],
+        declarations: [DatafilesComponent],
+      });
+      TestBed.overrideComponent(DatafilesComponent, {
+        set: {
+          providers: [{ provide: UserApi, useClass: MockUserApi }],
+        },
+      });
+      TestBed.compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(DatafilesComponent);
@@ -177,7 +179,7 @@ describe("DatafilesComponent", () => {
   });
 
   describe("#onSelectOne()", () => {
-    it("should set 'selected' of the provided file to true if previously set to false and add the size of the file to 'selectedFileSize'", () => {
+    it("should set 'selected' to true and add the size of the file to 'selectedFileSize'", () => {
       const file = component.tableData[0];
       const event = new MatCheckboxChange();
       event.checked = true;
@@ -225,7 +227,7 @@ describe("DatafilesComponent", () => {
       expect(component.selectedFileSize).toEqual(15000);
     });
 
-    it("should set 'selected' of all files to false if previously set to true and subtract the size of the files from 'selectedFileSize'", () => {
+    it("should set 'selected' of all files to false and subtract the size of the files from 'selectedFileSize'", () => {
       const firstEvent = {
         checked: true,
       } as MatCheckboxChange;

@@ -1,8 +1,16 @@
 import { NgModule } from "@angular/core";
 import {
   CommonModule,
-  CurrencyPipe, DatePipe, DecimalPipe, JsonPipe, KeyValuePipe, LowerCasePipe,
-  PercentPipe, SlicePipe, TitleCasePipe, UpperCasePipe
+  CurrencyPipe,
+  DatePipe,
+  DecimalPipe,
+  JsonPipe,
+  KeyValuePipe,
+  LowerCasePipe,
+  PercentPipe,
+  SlicePipe,
+  TitleCasePipe,
+  UpperCasePipe,
 } from "@angular/common";
 import { SharedTableComponent } from "./shared-table.component";
 
@@ -20,8 +28,8 @@ import { MatInputModule } from "@angular/material/input";
 import { MatButtonModule } from "@angular/material/button";
 import { FlexLayoutModule } from "@angular/flex-layout";
 import { FormsModule } from "@angular/forms";
-import { ObjKeysPipe } from 'shared/pipes/obj-keys.pipe';
-import { RouterModule } from '@angular/router';
+import { ObjKeysPipe } from "shared/pipes/obj-keys.pipe";
+import { RouterModule } from "@angular/router";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 
 @NgModule({
@@ -43,10 +51,21 @@ import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
     MatButtonModule,
     FlexLayoutModule,
     FormsModule,
-    RouterModule
+    RouterModule,
   ],
   exports: [SharedTableComponent],
-  providers: [CurrencyPipe, DatePipe, DecimalPipe, JsonPipe, ObjKeysPipe, KeyValuePipe, LowerCasePipe,
-    PercentPipe, SlicePipe, TitleCasePipe, UpperCasePipe]
+  providers: [
+    CurrencyPipe,
+    DatePipe,
+    DecimalPipe,
+    JsonPipe,
+    ObjKeysPipe,
+    KeyValuePipe,
+    LowerCasePipe,
+    PercentPipe,
+    SlicePipe,
+    TitleCasePipe,
+    UpperCasePipe,
+  ],
 })
-export class SharedTableModule { }
+export class SharedTableModule {}

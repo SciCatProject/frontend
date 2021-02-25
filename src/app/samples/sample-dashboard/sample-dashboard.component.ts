@@ -17,7 +17,7 @@ import {
   PageChangeEvent,
   SortChangeEvent,
 } from "shared/modules/table/table.component";
-import { Subscription } from "rxjs";
+import { combineLatest, Subscription } from "rxjs";
 import {
   getSamples,
   getSamplesCount,
@@ -37,7 +37,6 @@ import * as rison from "rison";
 import * as deepEqual from "deep-equal";
 import {
   filter,
-  combineLatest,
   map,
   distinctUntilChanged,
   take,
@@ -167,10 +166,8 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
     );
 
     this.subscriptions.push(
-      this.store
-        .pipe(select(getFilters))
+      combineLatest([this.store.pipe(select(getFilters)), this.readyToFetch$])
         .pipe(
-          combineLatest(this.readyToFetch$),
           map(([filters, _]) => filters),
           distinctUntilChanged(deepEqual)
         )

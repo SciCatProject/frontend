@@ -26,7 +26,6 @@ import {
   getSelectedDatasets
 } from "state-management/selectors/datasets.selectors";
 import {
-  combineLatest,
   distinctUntilChanged,
   filter,
   map,
@@ -35,7 +34,7 @@ import {
 import { MatDialog } from "@angular/material/dialog";
 import { MatSidenav } from "@angular/material/sidenav";
 import { AddDatasetDialogComponent } from "datasets/add-dataset-dialog/add-dataset-dialog.component";
-import { Subscription } from "rxjs";
+import { combineLatest, Subscription } from "rxjs";
 import {
   getProfile,
   getCurrentUser,
@@ -162,17 +161,16 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.store.dispatch(fetchMetadataKeysAction());
 
     this.subscriptions.push(
-      this.filters$
+      combineLatest([this.filters$, this.readyToFetch$])
         .pipe(
-          combineLatest(this.readyToFetch$),
           map(([filters, _]) => filters),
           distinctUntilChanged(deepEqual)
         )
-        .subscribe(filters => {
+        .subscribe((filters) => {
           this.store.dispatch(fetchDatasetsAction());
           this.store.dispatch(fetchFacetCountsAction());
           this.router.navigate(["/datasets"], {
-            queryParams: { args: rison.encode(filters) }
+            queryParams: { args: rison.encode(filters) },
           });
         })
     );

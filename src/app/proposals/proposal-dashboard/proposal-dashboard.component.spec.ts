@@ -4,10 +4,10 @@ import { ProposalDashboardComponent } from "./proposal-dashboard.component";
 import { Router, ActivatedRoute } from "@angular/router";
 import { Store, StoreModule } from "@ngrx/store";
 import {
-  async,
   ComponentFixture,
   TestBed,
-  inject
+  inject,
+  waitForAsync
 } from "@angular/core/testing";
 import { SharedCatanieModule } from "shared/shared.module";
 import { DatePipe } from "@angular/common";
@@ -37,7 +37,7 @@ describe("ProposalDashboardComponent", () => {
   let store: MockStore;
   let dispatchSpy;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
       declarations: [ProposalDashboardComponent],

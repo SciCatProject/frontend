@@ -1,8 +1,8 @@
 import {
-  async,
   ComponentFixture,
   TestBed,
-  inject
+  inject,
+  waitForAsync
 } from "@angular/core/testing";
 
 import { AnonymousDashboardComponent } from "./anonymous-dashboard.component";
@@ -32,7 +32,7 @@ describe("AnonymousDashboardComponent", () => {
   let store: MockStore;
   let dispatchSpy;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
       imports: [BrowserAnimationsModule, StoreModule.forRoot({})],

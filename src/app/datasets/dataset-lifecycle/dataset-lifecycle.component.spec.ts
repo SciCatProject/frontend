@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 
 import { DatasetLifecycleComponent } from "./dataset-lifecycle.component";
 
@@ -37,7 +37,7 @@ describe("DatasetLifecycleComponent", () => {
   let component: DatasetLifecycleComponent;
   let fixture: ComponentFixture<DatasetLifecycleComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
       declarations: [DatasetLifecycleComponent],
@@ -78,10 +78,10 @@ describe("DatasetLifecycleComponent", () => {
 
   describe("#parseHistoryItems()", () => {
     it("should return empty array if dataset is undefined", () => {
-      const historyItems = component["parseHistoryItems"]();
+      const parsedHistoryItems = component["parseHistoryItems"]();
 
-      expect(Array.isArray(historyItems)).toEqual(true);
-      expect(historyItems.length).toEqual(0);
+      expect(Array.isArray(parsedHistoryItems)).toEqual(true);
+      expect(parsedHistoryItems.length).toEqual(0);
     });
 
     it("should parse dataset.history into a HistoryItem array if dataset is defined", () => {
@@ -97,10 +97,10 @@ describe("DatasetLifecycleComponent", () => {
       ];
 
       component.dataset = dataset;
-      const historyItems = component["parseHistoryItems"]();
+      const parsedHistoryItems = component["parseHistoryItems"]();
 
-      expect(historyItems.length).toEqual(1);
-      historyItems.forEach((item) => {
+      expect(parsedHistoryItems.length).toEqual(1);
+      parsedHistoryItems.forEach((item) => {
         expect(Object.keys(item).includes("id")).toEqual(false);
         expect(item.property).toEqual("keywords");
         expect(item.value).toEqual(keywords);
@@ -111,18 +111,18 @@ describe("DatasetLifecycleComponent", () => {
   describe("#downloadCsv()", () => {
     it("should create and download a csv file", () => {
       const spyObj = jasmine.createSpyObj("a", ["click", "remove"]);
-      spyOn(document, "createElement").and.returnValue(spyObj);
+      const createElementSpy = spyOn(document, "createElement").and.returnValue(spyObj);
       const url = "testUrl";
       spyOn(window.URL, "createObjectURL").and.returnValue(url);
       spyOn(window.URL, "revokeObjectURL").and.callThrough();
-      
+
       component.historyItems = historyItems;
       const blob = createCsvBlob();
 
       component.downloadCsv();
 
-      expect(document.createElement).toHaveBeenCalledTimes(1);
-      expect(document.createElement).toHaveBeenCalledWith("a");
+      expect(createElementSpy).toHaveBeenCalledTimes(1);
+      expect(createElementSpy).toHaveBeenCalledWith("a");
 
       expect(spyObj.href).toBe(url);
       expect(spyObj.download).toBe("history.csv");

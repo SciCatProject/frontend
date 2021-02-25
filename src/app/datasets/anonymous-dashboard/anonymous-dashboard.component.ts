@@ -6,7 +6,6 @@ import {
   map,
   filter,
   distinctUntilChanged,
-  combineLatest,
   take
 } from "rxjs/operators";
 import {
@@ -20,7 +19,7 @@ import {
   prefillFiltersAction,
   fetchDatasetsAction
 } from "state-management/actions/datasets.actions";
-import { Subscription } from "rxjs";
+import { combineLatest, Subscription } from "rxjs";
 
 import * as deepEqual from "deep-equal";
 import * as rison from "rison";
@@ -96,17 +95,16 @@ export class AnonymousDashboardComponent implements OnInit, OnDestroy {
     this.store.dispatch(fetchMetadataKeysAction());
 
     this.subscriptions.push(
-      this.filters$
+      combineLatest([this.filters$, this.readyToFetch$])
         .pipe(
-          combineLatest(this.readyToFetch$),
           map(([filters, _]) => filters),
           distinctUntilChanged(deepEqual)
         )
-        .subscribe(filters => {
+        .subscribe((filters) => {
           this.store.dispatch(fetchDatasetsAction());
           this.store.dispatch(fetchFacetCountsAction());
           this.router.navigate([""], {
-            queryParams: { args: rison.encode(filters) }
+            queryParams: { args: rison.encode(filters) },
           });
         })
     );

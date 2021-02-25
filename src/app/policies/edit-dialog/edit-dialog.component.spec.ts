@@ -1,28 +1,24 @@
-/*import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
-import {
-  MatDialogModule,
-  MatFormFieldModule
-  } from '@angular/material';
-import {CommonModule} from '@angular/common';
-import {FormsModule} from '@angular/forms';
-import { EditDialogComponent } from './edit-dialog.component';
-import { MockMatDialogRef, MockMatDialogData } from 'shared/MockStubs';
+import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
+import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { CommonModule } from "@angular/common";
+import { FormsModule } from "@angular/forms";
+import { EditDialogComponent } from "./edit-dialog.component";
+import { MockMatDialogRef, MockMatDialogData } from "shared/MockStubs";
 
-describe('EditDialogComponent', () => {
+describe("EditDialogComponent", () => {
   let component: EditDialogComponent;
   let fixture: ComponentFixture<EditDialogComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ EditDialogComponent ],
+      declarations: [EditDialogComponent],
       imports: [MatDialogModule, FormsModule, CommonModule, MatFormFieldModule],
       providers: [
-        {provide : MatDialogRef, useClass : MockMatDialogRef},
-        {provide: MAT_DIALOG_DATA, useClass: MockMatDialogData}
-      ]
-    })
-    .compileComponents();
+        { provide: MatDialogRef, useClass: MockMatDialogRef },
+        { provide: MAT_DIALOG_DATA, useClass: MockMatDialogData },
+      ],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -31,7 +27,7 @@ describe('EditDialogComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
-});*/
+});

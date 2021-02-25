@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 
 import { AddDatasetDialogComponent } from "./add-dataset-dialog.component";
 import { MatFormFieldModule } from "@angular/material/form-field";
@@ -16,7 +16,7 @@ describe("AddDatasetDialogComponent", () => {
   let component: AddDatasetDialogComponent;
   let fixture: ComponentFixture<AddDatasetDialogComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
       declarations: [AddDatasetDialogComponent],

@@ -1,9 +1,9 @@
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import {
-  async,
   ComponentFixture,
   TestBed,
-  inject
+  inject,
+  waitForAsync
 } from "@angular/core/testing";
 import { Store, StoreModule } from "@ngrx/store";
 import {
@@ -49,7 +49,6 @@ import { MatSelectModule } from "@angular/material/select";
 import { MatDatepickerInputEvent } from "@angular/material/datepicker";
 import { SearchParametersDialogComponent } from "shared/modules/search-parameters-dialog/search-parameters-dialog.component";
 import { AsyncPipe } from "@angular/common";
-import { By } from "@angular/platform-browser";
 
 export class MockMatDialog {
   open() {
@@ -69,7 +68,7 @@ describe("DatasetsFilterComponent", () => {
   let store: MockStore;
   let dispatchSpy;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
       imports: [

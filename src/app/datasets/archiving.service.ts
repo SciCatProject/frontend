@@ -67,7 +67,7 @@ export class ArchivingService {
     archive: boolean,
     destPath?: string
   ): Observable<void> {
-    return combineLatest(this.currentUser$, this.tapeCopies$).pipe(
+    return combineLatest([this.currentUser$, this.tapeCopies$]).pipe(
       first(),
       map(([user, tapeCopies]) => {
         const email = user.email;

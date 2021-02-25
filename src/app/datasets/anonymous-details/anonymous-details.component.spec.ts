@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 
 import { AnonymousDetailsComponent } from "./anonymous-details.component";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
@@ -10,7 +10,7 @@ describe("AnonymousDetailsComponent", () => {
   let component: AnonymousDetailsComponent;
   let fixture: ComponentFixture<AnonymousDetailsComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
       declarations: [AnonymousDetailsComponent, LinkyPipe],
