@@ -16,14 +16,14 @@ import { getCurrentInstrument } from "state-management/selectors/instruments.sel
 export class InstrumentDetailsComponent implements OnInit {
   instrument$ = this.store.pipe(select(getCurrentInstrument));
 
-  onSaveCustomMetadata(pid: string, customMetadata: object): void {
-    this.store.dispatch(saveCustomMetadataAction({ pid, customMetadata }));
-  }
-
   constructor(
     private route: ActivatedRoute,
     private store: Store<Instrument>
   ) {}
+
+  onSaveCustomMetadata(pid: string, customMetadata: object): void {
+    this.store.dispatch(saveCustomMetadataAction({ pid, customMetadata }));
+  }
 
   ngOnInit() {
     const pid = this.route.snapshot.paramMap.get("id");

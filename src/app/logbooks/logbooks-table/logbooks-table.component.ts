@@ -16,11 +16,11 @@ export class LogbooksTableComponent implements OnInit {
 
   columnsToDisplay: string[] = ["name", "latestEntry", "sender", "entry"];
 
+  constructor(private router: Router, private store: Store<Logbook>) {}
+
   onClick(logbook: Logbook): void {
     this.router.navigateByUrl("/logbooks/" + logbook.name);
   }
-
-  constructor(private router: Router, private store: Store<Logbook>) {}
 
   ngOnInit() {
     this.store.dispatch(fetchLogbooksAction());

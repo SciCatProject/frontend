@@ -1,5 +1,5 @@
 import { APP_CONFIG, AppConfig } from "app-config.module";
-import { Component, Inject } from "@angular/core";
+import { Component, Inject, OnDestroy, OnInit } from "@angular/core";
 import { MatDatepickerInputEvent } from "@angular/material/datepicker";
 import { MatDialog } from "@angular/material/dialog";
 import * as moment from "moment";
@@ -46,7 +46,7 @@ import {
   addScientificConditionAction,
   removeScientificConditionAction
 } from "state-management/actions/datasets.actions";
-import { combineLatest, BehaviorSubject, Observable } from "rxjs";
+import { combineLatest, BehaviorSubject, Observable, Subscription } from "rxjs";
 import {
   selectColumnAction,
   deselectColumnAction,
@@ -64,9 +64,11 @@ export interface DateRange {
 @Component({
   selector: "datasets-filter",
   templateUrl: "datasets-filter.component.html",
-  styleUrls: ["datasets-filter.component.scss"]
+  styleUrls: ["datasets-filter.component.scss"],
 })
-export class DatasetsFilterComponent {
+export class DatasetsFilterComponent implements OnInit, OnDestroy {
+  private subscriptions: Subscription[] = [];
+
   locationFacetCounts$ = this.store.pipe(select(getLocationFacetCounts));
   groupFacetCounts$ = this.store.pipe(select(getGroupFacetCounts));
   typeFacetCounts$ = this.store.pipe(select(getTypeFacetCounts));
@@ -114,38 +116,25 @@ export class DatasetsFilterComponent {
 
   hasAppliedFilters$ = this.store.pipe(select(getHasAppliedFilters));
 
-  private searchTermSubscription = this.searchTerms$
-    .pipe(
-      skipWhile(terms => terms === ""),
-      debounceTime(500),
-      distinctUntilChanged()
-    )
-    .subscribe(terms => {
-      this.store.dispatch(setTextFilterAction({ text: terms }));
-    });
-
-  private keywordSubscription = this.keywordsTerms$
-    .pipe(
-      skipWhile(terms => terms === ""),
-      debounceTime(500),
-      distinctUntilChanged()
-    )
-    .subscribe(terms => {
-      this.store.dispatch(addKeywordFilterAction({ keyword: terms }));
-    });
+  constructor(
+    private asyncPipe: AsyncPipe,
+    public dialog: MatDialog,
+    private store: Store<any>,
+    @Inject(APP_CONFIG) public appConfig: AppConfig
+  ) {}
 
   createSuggestionObserver(
     facetCounts$: Observable<FacetCount[]>,
     input$: BehaviorSubject<string>,
     currentFilters$: Observable<string[]>
   ): Observable<FacetCount[]> {
-    return combineLatest(facetCounts$, input$, currentFilters$).pipe(
+    return combineLatest([facetCounts$, input$, currentFilters$]).pipe(
       map(([counts, filterString, currentFilters]) => {
         if (!counts) {
           return [];
         }
         return counts.filter(
-          count =>
+          (count) =>
             typeof count._id === "string" &&
             count._id.toLowerCase().includes(filterString.toLowerCase()) &&
             currentFilters.indexOf(count._id) < 0
@@ -211,9 +200,7 @@ export class DatasetsFilterComponent {
       this.store.dispatch(
         setDateRangeFilterAction({
           begin: moment(begin).tz("UTC").toISOString(),
-          end: moment(end)
-            .add(1, "days")
-            .toISOString()
+          end: moment(end).add(1, "days").toISOString(),
         })
       );
     } else {
@@ -233,7 +220,7 @@ export class DatasetsFilterComponent {
         data: { parameterKeys: this.asyncPipe.transform(this.metadataKeys$) },
       })
       .afterClosed()
-      .subscribe(res => {
+      .subscribe((res) => {
         if (res) {
           const { data } = res;
           this.store.dispatch(
@@ -253,10 +240,33 @@ export class DatasetsFilterComponent {
     );
   }
 
-  constructor(
-    private asyncPipe: AsyncPipe,
-    public dialog: MatDialog,
-    private store: Store<any>,
-    @Inject(APP_CONFIG) public appConfig: AppConfig
-  ) {}
+  ngOnInit() {
+    this.subscriptions.push(
+      this.searchTerms$
+        .pipe(
+          skipWhile((terms) => terms === ""),
+          debounceTime(500),
+          distinctUntilChanged()
+        )
+        .subscribe((terms) => {
+          this.store.dispatch(setTextFilterAction({ text: terms }));
+        })
+    );
+
+    this.subscriptions.push(
+      this.keywordsTerms$
+        .pipe(
+          skipWhile((terms) => terms === ""),
+          debounceTime(500),
+          distinctUntilChanged()
+        )
+        .subscribe((terms) => {
+          this.store.dispatch(addKeywordFilterAction({ keyword: terms }));
+        })
+    );
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
+  }
 }

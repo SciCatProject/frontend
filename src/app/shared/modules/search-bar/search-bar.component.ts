@@ -52,8 +52,6 @@ export class SearchBarComponent implements OnChanges {
     this.searchBar.nativeElement.value = value;
   }
 
-  constructor() {}
-
   ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
     for (const propName in changes) {
       if (propName === "clear" && changes[propName].currentValue === true) {

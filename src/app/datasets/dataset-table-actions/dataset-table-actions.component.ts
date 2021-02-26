@@ -32,7 +32,7 @@ export class DatasetTableActionsComponent implements OnInit, OnDestroy {
 
   public currentArchViewMode: ArchViewMode;
   public viewModes = ArchViewMode;
-  private modes = [
+  modes = [
     ArchViewMode.all,
     ArchViewMode.archivable,
     ArchViewMode.retrievable,
@@ -45,6 +45,13 @@ export class DatasetTableActionsComponent implements OnInit, OnDestroy {
   currentPublicViewMode = false;
 
   subscriptions: Subscription[] = [];
+
+  constructor(
+    @Inject(APP_CONFIG) public appConfig: AppConfig,
+    private archivingSrv: ArchivingService,
+    public dialog: MatDialog,
+    private store: Store<any>
+  ) {}
 
   /**
    * Handle changing of view mode and disabling selected rows
@@ -135,13 +142,6 @@ export class DatasetTableActionsComponent implements OnInit, OnDestroy {
     this.store.dispatch(addToBatchAction());
     this.store.dispatch(clearSelectionAction());
   }
-
-  constructor(
-    @Inject(APP_CONFIG) public appConfig: AppConfig,
-    private archivingSrv: ArchivingService,
-    public dialog: MatDialog,
-    private store: Store<any>
-  ) {}
 
   ngOnInit() {
     this.subscriptions.push(

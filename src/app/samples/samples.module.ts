@@ -48,6 +48,5 @@ import { MatChipsModule } from "@angular/material/chips";
     SampleDashboardComponent,
   ],
   providers: [],
-  entryComponents: [SampleDialogComponent],
 })
 export class SamplesModule {}

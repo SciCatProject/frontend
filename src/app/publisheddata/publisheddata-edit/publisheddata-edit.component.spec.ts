@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 import { PublisheddataEditComponent } from "./publisheddata-edit.component";
 
 import { Router, ActivatedRoute } from "@angular/router";
@@ -29,7 +29,7 @@ describe("PublisheddataEditComponent", () => {
   let component: PublisheddataEditComponent;
   let fixture: ComponentFixture<PublisheddataEditComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
       declarations: [PublisheddataEditComponent],

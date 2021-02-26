@@ -99,6 +99,14 @@ export class DatafilesComponent
   ];
   tableData: File[];
 
+  constructor(
+    private route: ActivatedRoute,
+    private store: Store<Dataset>,
+    private cdRef: ChangeDetectorRef,
+    private userApi: UserApi,
+    @Inject(APP_CONFIG) public appConfig: AppConfig
+  ) {}
+
   onPageChange(event: PageChangeEvent) {
     const { pageIndex, pageSize } = event;
     this.currentPage = pageIndex;
@@ -185,14 +193,6 @@ export class DatafilesComponent
       return false;
     }
   }
-
-  constructor(
-    private route: ActivatedRoute,
-    private store: Store<Dataset>,
-    private cdRef: ChangeDetectorRef,
-    private userApi: UserApi,
-    @Inject(APP_CONFIG) public appConfig: AppConfig
-  ) {}
 
   ngOnInit() {
     this.subscriptions.push(

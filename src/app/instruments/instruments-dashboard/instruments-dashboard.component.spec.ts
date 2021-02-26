@@ -1,8 +1,8 @@
 import {
-  async,
   ComponentFixture,
   TestBed,
-  inject
+  inject,
+  waitForAsync
 } from "@angular/core/testing";
 
 import { InstrumentsDashboardComponent } from "./instruments-dashboard.component";
@@ -39,7 +39,7 @@ describe("InstrumentsDashboardComponent", () => {
   let store: MockStore;
   let dispatchSpy;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
       declarations: [InstrumentsDashboardComponent],

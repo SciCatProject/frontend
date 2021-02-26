@@ -36,6 +36,7 @@ import { clearPoliciesStateAction } from "state-management/actions/policies.acti
 import { clearProposalsStateAction } from "state-management/actions/proposals.actions";
 import { clearPublishedDataStateAction } from "state-management/actions/published-data.actions";
 import { clearSamplesStateAction } from "state-management/actions/samples.actions";
+import { Type } from "@angular/core";
 
 describe("UserEffects", () => {
   let actions: Observable<any>;
@@ -89,13 +90,17 @@ describe("UserEffects", () => {
       ],
     });
 
-    effects = TestBed.get(UserEffects);
-    activeDirAuthService = TestBed.get(ADAuthService);
-    loopBackAuth = TestBed.get(LoopBackAuth);
-    userApi = TestBed.get(UserApi);
-    userIdentityApi = TestBed.get(UserIdentityApi);
-    router = TestBed.get(Router);
+    effects = TestBed.inject(UserEffects);
+    activeDirAuthService = injectedStub(ADAuthService);
+    loopBackAuth = injectedStub(LoopBackAuth);
+    userApi = injectedStub(UserApi);
+    userIdentityApi = injectedStub(UserIdentityApi);
+    router = injectedStub(Router);
   });
+
+  function injectedStub<S>(service: Type<S>): jasmine.SpyObj<S> {
+    return TestBed.inject(service) as jasmine.SpyObj<S>;
+  }
 
   describe("login$", () => {
     it("should redirect loginAction to activeDirLoginAction", () => {

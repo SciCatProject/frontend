@@ -11,6 +11,7 @@ import {
   loadingAction,
   loadingCompleteAction
 } from "state-management/actions/user.actions";
+import { Type } from "@angular/core";
 
 describe("InstrumentEffects", () => {
   let actions: Observable<any>;
@@ -41,9 +42,13 @@ describe("InstrumentEffects", () => {
       ]
     });
 
-    effects = TestBed.get(InstrumentEffects);
-    instrumentApi = TestBed.get(InstrumentApi);
+    effects = TestBed.inject(InstrumentEffects);
+    instrumentApi = injectedStub(InstrumentApi);
   });
+
+  function injectedStub<S>(service: Type<S>): jasmine.SpyObj<S> {
+    return TestBed.inject(service) as jasmine.SpyObj<S>;
+  }
 
   describe("fetchInstruments$", () => {
     describe("ofType fetchInstrumentAction", () => {

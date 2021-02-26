@@ -1,8 +1,16 @@
 import { NgModule } from "@angular/core";
 import {
   CommonModule,
-  CurrencyPipe, DatePipe, DecimalPipe, JsonPipe, KeyValuePipe, LowerCasePipe,
-  PercentPipe, SlicePipe, TitleCasePipe, UpperCasePipe
+  CurrencyPipe,
+  DatePipe,
+  DecimalPipe,
+  JsonPipe,
+  KeyValuePipe,
+  LowerCasePipe,
+  PercentPipe,
+  SlicePipe,
+  TitleCasePipe,
+  UpperCasePipe,
 } from "@angular/common";
 import { SharedTableComponent } from "./shared-table.component";
 
@@ -24,6 +32,7 @@ import { ObjKeysPipe } from 'shared/pipes/obj-keys.pipe';
 import { RouterModule } from '@angular/router';
 import { SatDatepickerModule, SatNativeDateModule } from 'saturn-datepicker';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 
 @NgModule({
   declarations: [SharedTableComponent],
@@ -35,6 +44,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
     MatListModule,
     MatPaginatorModule,
     MatSortModule,
+    MatProgressSpinnerModule,
     MatTableModule,
     PipesModule,
     MatToolbarModule,
@@ -49,7 +59,18 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
     MatDatepickerModule
   ],
   exports: [SharedTableComponent],
-  providers: [CurrencyPipe, DatePipe, DecimalPipe, JsonPipe, ObjKeysPipe, KeyValuePipe, LowerCasePipe,
-    PercentPipe, SlicePipe, TitleCasePipe, UpperCasePipe]
+  providers: [
+    CurrencyPipe,
+    DatePipe,
+    DecimalPipe,
+    JsonPipe,
+    ObjKeysPipe,
+    KeyValuePipe,
+    LowerCasePipe,
+    PercentPipe,
+    SlicePipe,
+    TitleCasePipe,
+    UpperCasePipe,
+  ],
 })
-export class SharedTableModule { }
+export class SharedTableModule {}

@@ -61,8 +61,6 @@ export class TableComponent implements OnInit {
   @Output() selectAll = new EventEmitter<MatCheckboxChange>();
   @Output() selectOne = new EventEmitter<CheckboxEvent>();
 
-  constructor() {}
-
   onPageChange(event: PageChangeEvent) {
     this.pageChange.emit(event);
   }

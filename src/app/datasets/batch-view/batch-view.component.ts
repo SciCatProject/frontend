@@ -41,17 +41,31 @@ export class BatchViewComponent implements OnInit {
   shareEmails: Share[] = [];
   datasetList = [];
 
-  private visibleColumns: string[] = [
+  visibleColumns: string[] = [
     "remove",
     "pid",
     "sourceFolder",
     "creationTime"
   ];
 
-  private batch$: Observable<Dataset[]> = this.store.pipe(
+  batch$: Observable<Dataset[]> = this.store.pipe(
     select(getDatasetsInBatch)
   );
   public hasBatch: boolean;
+
+  constructor(
+    @Inject(APP_CONFIG) public appConfig: AppConfig,
+    private store: Store<any>,
+    private archivingSrv: ArchivingService,
+    private router: Router,
+    private shareGroupApi: ShareGroupApi,
+    private datasetApi: DatasetApi,
+    private dialog: MatDialog
+  ) {}
+
+  private clearBatch() {
+    this.store.dispatch(clearBatchAction());
+  }
 
   add(event: MatChipInputEvent): void {
     const input = event.input;
@@ -182,20 +196,6 @@ export class BatchViewComponent implements OnInit {
           )
       );
   }
-
-  private clearBatch() {
-    this.store.dispatch(clearBatchAction());
-  }
-
-  constructor(
-    @Inject(APP_CONFIG) public appConfig: AppConfig,
-    private store: Store<any>,
-    private archivingSrv: ArchivingService,
-    private router: Router,
-    private shareGroupApi: ShareGroupApi,
-    private datasetApi: DatasetApi,
-    private dialog: MatDialog
-  ) {}
 
   ngOnInit() {
     this.store.dispatch(prefillBatchAction());

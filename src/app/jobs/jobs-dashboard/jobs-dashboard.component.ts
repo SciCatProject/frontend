@@ -72,6 +72,12 @@ export class JobsDashboardComponent implements OnInit, OnDestroy {
     }
   ];
 
+  constructor(
+    private datePipe: DatePipe,
+    private router: Router,
+    private store: Store<Job>
+  ) {}
+
   formatTableData(jobs: Job[]): any[] {
     if (jobs) {
       return jobs.map(job => {
@@ -119,30 +125,23 @@ export class JobsDashboardComponent implements OnInit, OnDestroy {
   }
 
   onSortChange(event: SortChangeEvent) {
-    let { active: column, direction } = event;
     // map column names back to original names
-    switch (column) {
+    switch (event.active) {
       case "statusMessage": {
-        column = "jobStatusMessage";
+        event.active = "jobStatusMessage";
         break;
       }
       case "initiator": {
-        column = "emailJobInitiator";
+        event.active = "emailJobInitiator";
         break;
       }
       default: {
         break;
       }
     }
-
+    const { active: column, direction } = event;
     this.store.dispatch(sortByColumnAction({ column, direction }));
   }
-
-  constructor(
-    private datePipe: DatePipe,
-    private router: Router,
-    private store: Store<Job>
-  ) {}
 
   ngOnInit() {
     this.store.dispatch(fetchJobsAction());

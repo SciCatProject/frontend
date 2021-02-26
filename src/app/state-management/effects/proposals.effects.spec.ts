@@ -22,6 +22,7 @@ import {
   loadingAction,
   loadingCompleteAction
 } from "state-management/actions/user.actions";
+import { Type } from "@angular/core";
 
 const data: ProposalInterface = {
   proposalId: "testId",
@@ -72,10 +73,14 @@ describe("ProposalEffects", () => {
       ]
     });
 
-    effects = TestBed.get(ProposalEffects);
-    proposalApi = TestBed.get(ProposalApi);
-    datasetApi = TestBed.get(DatasetApi);
+    effects = TestBed.inject(ProposalEffects);
+    proposalApi = injectedStub(ProposalApi);
+    datasetApi = injectedStub(DatasetApi);
   });
+
+  function injectedStub<S>(service: Type<S>): jasmine.SpyObj<S> {
+    return TestBed.inject(service) as jasmine.SpyObj<S>;
+  }
 
   describe("fetchProposals$", () => {
     describe("ofType fetchProposalsAction", () => {

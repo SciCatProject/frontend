@@ -31,6 +31,12 @@ interface LoginForm {
   styleUrls: ["login.component.scss"]
 })
 export class LoginComponent implements OnInit, OnDestroy {
+  private proceedSubscription: Subscription;
+  private hasUser$ = this.store.pipe(
+    select(getIsLoggedIn),
+    filter(is => is)
+  );
+
   returnUrl: string;
   hide = true;
 
@@ -41,12 +47,17 @@ export class LoginComponent implements OnInit, OnDestroy {
   });
 
   loading$ = this.store.pipe(select(getIsLoggingIn));
-  private hasUser$ = this.store.pipe(
-    select(getIsLoggedIn),
-    filter(is => is)
-  );
 
-  private proceedSubscription: Subscription;
+  constructor(
+    public dialog: MatDialog,
+    public fb: FormBuilder,
+    private router: Router,
+    private route: ActivatedRoute,
+    private store: Store<any>,
+    @Inject(APP_CONFIG) public appConfig: AppConfig
+  ) {
+    this.returnUrl = this.route.snapshot.queryParams["returnUrl"] || "/";
+  }
 
   openPrivacyDialog() {
     this.dialog.open(PrivacyDialogComponent, {
@@ -62,25 +73,6 @@ export class LoginComponent implements OnInit, OnDestroy {
   onLogin() {
     const form: LoginForm = this.loginForm.value;
     this.store.dispatch(loginAction({ form }));
-  }
-
-  /**
-   * Creates an instance of LoginComponent.
-   * @param {FormBuilder} fb - generates model driven user login form
-   * @param {Router} router - handles page nav
-   * @param {ActivatedRoute} route - access parameters in URL
-   * @param {Store<any>} store
-   * @memberof LoginComponent
-   */
-  constructor(
-    public dialog: MatDialog,
-    public fb: FormBuilder,
-    private router: Router,
-    private route: ActivatedRoute,
-    private store: Store<any>,
-    @Inject(APP_CONFIG) public appConfig: AppConfig
-  ) {
-    this.returnUrl = this.route.snapshot.queryParams["returnUrl"] || "/";
   }
 
   ngOnInit() {

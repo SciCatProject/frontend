@@ -57,11 +57,11 @@
             <th><mat-icon> map </mat-icon> Version</th>
             <td>{{ value }}</td>
           </tr>
-          <tr *ngIf="dataset.proposalId && proposal">
+          <tr *ngIf="dataset['proposalId'] && proposal">
             <th><mat-icon> spa </mat-icon> Proposal</th>
             <td>{{ proposal.title }}</td>
           </tr>
-          <tr *ngIf="dataset.sampleId && sample">
+          <tr *ngIf="dataset['sampleId'] && sample">
             <th><mat-icon> center_focus_weak </mat-icon> Sample</th>
             <td>{{ sample.description }}</td>
           </tr>
@@ -86,11 +86,11 @@
             <th><mat-icon> calendar_today </mat-icon> Creation Time</th>
             <td>{{ value | date: "yyyy-MM-dd HH:mm" }}</td>
           </tr>
-          <tr *ngIf="dataset.principalInvestigator as value">
+          <tr *ngIf="dataset['principalInvestigator'] as value">
             <th><mat-icon> brightness_5 </mat-icon> Principal Investigator</th>
             <td><span [innerHTML]="value | linky"></span></td>
           </tr>
-          <tr *ngIf="dataset.creationLocation as value">
+          <tr *ngIf="dataset['creationLocation'] as value">
             <th><mat-icon> map </mat-icon> Creation Location</th>
             <td>{{ value }}</td>
           </tr>
@@ -109,17 +109,17 @@
         </table>
       </mat-card>
 
-      <mat-card *ngIf="dataset.investigator">
+      <mat-card *ngIf="dataset['investigator']">
         <mat-card-header class="derived-header">
           Derived Data
         </mat-card-header>
 
         <table>
-          <tr *ngIf="dataset.investigator as value">
+          <tr *ngIf="dataset['investigator'] as value">
             <th><mat-icon> school </mat-icon> Investigator</th>
             <td>{{ value }}</td>
           </tr>
-          <tr *ngIf="dataset.inputDatasets as value">
+          <tr *ngIf="dataset['inputDatasets'] as value">
             <th><mat-icon> input </mat-icon> Input Datasets</th>
             <td>
               <div *ngFor="let datasetPid of value">
@@ -134,15 +134,15 @@
               </div>
             </td>
           </tr>
-          <tr *ngIf="dataset.usedSoftware as value">
+          <tr *ngIf="dataset['usedSoftware'] as value">
             <th><mat-icon> screen_share</mat-icon> Software Used</th>
             <td>{{ value }}</td>
           </tr>
-          <tr *ngIf="dataset.jobParameters as value">
+          <tr *ngIf="dataset['jobParameters'] as value">
             <th><mat-icon> settings </mat-icon> Job Parameters</th>
             <td>{{ value | json }}</td>
           </tr>
-          <tr *ngIf="dataset.jobLogData as value">
+          <tr *ngIf="dataset['jobLogData'] as value">
             <th><mat-icon> ballot </mat-icon> Job Log Data</th>
             <td>{{ value }}</td>
           </tr>
@@ -159,13 +159,13 @@
           [ngIfElse]="jsonView"
         >
           <metadata-view
-            [metadata]="dataset.scientificMetadata"
+            [metadata]="dataset['scientificMetadata']"
           ></metadata-view>
         </ng-template>
 
         <ng-template #jsonView>
           <ngx-json-viewer
-            [json]="dataset.scientificMetadata"
+            [json]="dataset['scientificMetadata']"
             [expanded]="false"
           ></ngx-json-viewer>
         </ng-template>
