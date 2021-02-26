@@ -13,7 +13,7 @@ export class ExportExcelService {
     // Title, Header & Data
     const title = excelData.title;
     const header = excelData.headers;
-    const data = excelData.data;
+    // const data = excelData.data;
     const footerText = excelData.footerText;
     const sheetTitle = excelData.sheetTitle;
 
