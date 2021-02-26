@@ -38,6 +38,7 @@ import { PublisheddataModule } from "publisheddata/publisheddata.module";
 import { LayoutModule } from "_layout/layout.module";
 import { JobsModule } from "jobs/jobs.module";
 import { InstrumentsModule } from "./instruments/instruments.module";
+import { FilesModule } from "files/files.module";
 
 @NgModule({
   declarations: [AppComponent],
@@ -48,6 +49,7 @@ import { InstrumentsModule } from "./instruments/instruments.module";
     BrowserAnimationsModule,
     BrowserModule,
     DatasetsModule,
+    FilesModule,
     FlexLayoutModule,
     HelpModule,
     HttpClientModule,

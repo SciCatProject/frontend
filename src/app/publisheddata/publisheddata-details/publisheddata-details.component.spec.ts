@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 import { APP_CONFIG, AppConfigModule } from "app-config.module";
 import { PublisheddataDetailsComponent } from "./publisheddata-details.component";
 import {
@@ -20,7 +20,7 @@ describe("PublisheddataDetailsComponent", () => {
   let component: PublisheddataDetailsComponent;
   let fixture: ComponentFixture<PublisheddataDetailsComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [PublisheddataDetailsComponent],
       imports: [

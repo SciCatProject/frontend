@@ -1,22 +1,18 @@
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { Observable } from "rxjs";
-import { filter, map } from "rxjs/operators";
 import { Column } from "../column.type";
 import { LoopBackAuth } from "shared/sdk";
-import { ɵINTERNAL_BROWSER_DYNAMIC_PLATFORM_PROVIDERS } from '@angular/platform-browser-dynamic';
-
 
 @Injectable({
-  providedIn: "root"
+  providedIn: "root",
 })
 export class ScicatDataService {
-
   private accessToken: string;
 
   constructor(private http: HttpClient, private auth: LoopBackAuth) {
     this.accessToken = auth.getToken().id;
-    console.log("Got token:",this.accessToken)
+    console.log("Got token:", this.accessToken);
   }
 
   findDataById(url: string, dataId: number): Observable<any> {
@@ -26,10 +22,10 @@ export class ScicatDataService {
   mapToMongoSyntax(columns: Column[], filterExpressions: any) {
     const result = {};
     if (filterExpressions) {
-      Object.keys(filterExpressions).map(function (key, index) {
+      Object.keys(filterExpressions).forEach(function (key, index) {
         if (filterExpressions[key] !== "") {
-          const column = columns.find(c => c.id === key);
-          // TODO extend by further filter conditions 
+          const column = columns.find((c) => c.id === key);
+          // TODO extend by further filter conditions
           switch (column.matchMode) {
             case "contains": {
               result[key] = { $regex: filterExpressions[key], $options: "i" };
@@ -43,8 +39,8 @@ export class ScicatDataService {
               result[key] = { $lt: Number(filterExpressions[key]) };
               break;
             }
-            case "after":{
-              result[key]  = { "$gte": filterExpressions[key] }
+            case "after": {
+              result[key] = { $gte: filterExpressions[key] };
               break;
             }
             case "is": {
@@ -62,14 +58,20 @@ export class ScicatDataService {
     return result;
   }
 
-  findAllData(url: string, columns: Column[], globalFilter = "", filterExpressions = {},
-    sortField?: string, sortOrder = "asc", pageNumber = 0, pageSize = 10): Observable<any[]> {
-
+  findAllData(
+    url: string,
+    columns: Column[],
+    globalFilter = "",
+    filterExpressions = {},
+    sortField?: string,
+    sortOrder = "asc",
+    pageNumber = 0,
+    pageSize = 10
+  ): Observable<any[]> {
     // Dataset filter syntax (not used here)
     // {"limit":3,"skip":11,"where":{"ownerGroup":"p16633"},"order":"size ASC"}
 
-
-    // fullQuery syntax 
+    // fullQuery syntax
     // allows to including full text search and filter on individual fields
     // v3/Datasets/fullquery?fields=...&limits=
 
@@ -80,7 +82,6 @@ export class ScicatDataService {
     // and https://docs.mongodb.com/manual/reference/operator/query/
 
     // limits	{"skip":0,"limit":50,"order":"creationTime:desc"}
-
 
     // ("findalldata:", filterExpressions)
     const filterFields = {};
@@ -105,15 +106,17 @@ export class ScicatDataService {
       .set("limits", JSON.stringify(limits))
       .append("access_token", this.accessToken);
     return this.http.get<any[]>(`${url}/fullquery`, { params: params });
-
   }
-
 
   // use fullfacets instead of count to allow for more complex filters. facet "all" is default I assume
   // fields	{"mode":{},"text":"wasp","creationLocation":["/PSI/SLS/TOMCAT"],"isPublished":false}
   // facets	["type","creationTime","creationLocation","ownerGroup","keywords"]
-  getCount(url: string, columns: Column[], globalFilter?: string, filterExpressions?: any): Observable<any> {
-
+  getCount(
+    url: string,
+    columns: Column[],
+    globalFilter?: string,
+    filterExpressions?: any
+  ): Observable<any> {
     const filterFields = {};
     const modeExpression = this.mapToMongoSyntax(columns, filterExpressions);
     if (Object.keys(modeExpression).length !== 0) {
@@ -129,6 +132,4 @@ export class ScicatDataService {
 
     return this.http.get<any>(`${url}/fullfacet`, { params: params });
   }
-
-
 }

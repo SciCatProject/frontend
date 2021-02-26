@@ -14,6 +14,7 @@ import {
   updateUserSettingsAction
 } from "state-management/actions/user.actions";
 import { MessageType } from "state-management/models";
+import { Type } from "@angular/core";
 
 const data: JobInterface = {
   id: "testId",
@@ -48,9 +49,13 @@ describe("JobEffects", () => {
       ]
     });
 
-    effects = TestBed.get(JobEffects);
-    jobApi = TestBed.get(JobApi);
+    effects = TestBed.inject(JobEffects);
+    jobApi = injectedStub(JobApi);
   });
+
+  function injectedStub<S>(service: Type<S>): jasmine.SpyObj<S> {
+    return TestBed.inject(service) as jasmine.SpyObj<S>;
+  }
 
   describe("fetchJobs$", () => {
     describe("on fetchJobsAction", () => {

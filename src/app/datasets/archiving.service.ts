@@ -19,17 +19,6 @@ export class ArchivingService {
 
   constructor(private store: Store<any>) {}
 
-  public archive(datasets: Dataset[]): Observable<void> {
-    return this.archiveOrRetrieve(datasets, true);
-  }
-
-  public retrieve(
-    datasets: Dataset[],
-    destinationPath: string
-  ): Observable<void> {
-    return this.archiveOrRetrieve(datasets, false, destinationPath);
-  }
-
   private createJob(
     user: User,
     datasets: Dataset[],
@@ -67,7 +56,7 @@ export class ArchivingService {
     archive: boolean,
     destPath?: string
   ): Observable<void> {
-    return combineLatest(this.currentUser$, this.tapeCopies$).pipe(
+    return combineLatest([this.currentUser$, this.tapeCopies$]).pipe(
       first(),
       map(([user, tapeCopies]) => {
         const email = user.email;
@@ -86,5 +75,16 @@ export class ArchivingService {
         this.store.dispatch(submitJobAction({ job }));
       })
     );
+  }
+
+  public archive(datasets: Dataset[]): Observable<void> {
+    return this.archiveOrRetrieve(datasets, true);
+  }
+
+  public retrieve(
+    datasets: Dataset[],
+    destinationPath: string
+  ): Observable<void> {
+    return this.archiveOrRetrieve(datasets, false, destinationPath);
   }
 }

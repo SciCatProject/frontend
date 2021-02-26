@@ -60,6 +60,17 @@ export class SampleEditComponent {
     sample: new FormControl("", [Validators.required, this.sampleValidator()]),
   });
 
+  constructor(
+    @Inject(MAT_DIALOG_DATA)
+    public data: { ownerGroup: string; sampleId: string },
+    public dialogRef: MatDialogRef<SampleEditComponent>,
+    private store: Store<Sample>
+  ) {
+    this.store.dispatch(setTextFilterAction({ text: "" }));
+    this.store.dispatch(changePageAction({ page: 0, limit: 10 }));
+    this.store.dispatch(fetchSamplesAction());
+  }
+
   sampleValidator(): ValidatorFn {
     return (control: AbstractControl): { [key: string]: any } | null => {
       const isCurrentSample = control.value.sampleId === this.data.sampleId;
@@ -71,29 +82,29 @@ export class SampleEditComponent {
 
   onTextSearchChange = (): void => {
     this.store.dispatch(setTextFilterAction({ text: this.text }));
-  };
+  }
 
   onClear = (): void => {
     if (this.text.length > 0) {
       this.text = "";
       this.onTextSearchChange();
     }
-  };
+  }
 
   onPageChange = (event: PageChangeEvent): void =>
     this.store.dispatch(
       changePageAction({ page: event.pageIndex, limit: event.pageSize })
-    );
+    )
 
   onSortChange = (event: SortChangeEvent): void =>
     this.store.dispatch(
       sortByColumnAction({ column: event.active, direction: event.direction })
-    );
+    )
 
   onRowClick = (sample: Sample): void => {
     this.selectedSampleId = sample.sampleId;
     this.sample.setValue(sample);
-  };
+  }
 
   isInvalid = (): boolean => this.form.invalid;
 
@@ -111,16 +122,5 @@ export class SampleEditComponent {
 
   set text(value: string) {
     this.searchBar.nativeElement.value = value;
-  }
-
-  constructor(
-    @Inject(MAT_DIALOG_DATA)
-    public data: { ownerGroup: string; sampleId: string },
-    public dialogRef: MatDialogRef<SampleEditComponent>,
-    private store: Store<Sample>
-  ) {
-    this.store.dispatch(setTextFilterAction({ text: "" }));
-    this.store.dispatch(changePageAction({ page: 0, limit: 10 }));
-    this.store.dispatch(fetchSamplesAction());
   }
 }

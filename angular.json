@@ -12,10 +12,18 @@
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "aot": true,
+            "allowedCommonJsDependencies": [
+              "deep-equal",
+              "file-saver",
+              "moment-timezone",
+              "rison",
+              "shortid",
+              "socket.io-client"
+            ],
             "outputPath": "dist",
             "index": "src/index.html",
             "main": "src/main.ts",
-            "tsConfig": "src/tsconfig.json",
+            "tsConfig": "src/tsconfig.app.json",
             "polyfills": "src/polyfills.ts",
             "stylePreprocessorOptions": {
               "includePaths": ["node_modules"]
@@ -409,10 +417,10 @@
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "tsConfig": "src/tsconfig.json",
             "main": "src/test.ts",
             "karmaConfig": "./karma.conf.js",
             "polyfills": "src/polyfills.ts",
+            "tsConfig": "src/tsconfig.spec.json",
             "scripts": ["node_modules/hammerjs/hammer.min.js"],
             "styles": ["src/styles.css", "src/theme.scss"],
             "assets": [
@@ -433,6 +441,7 @@
               "src/assets/icons/safari-pinned-tab.svg",
               "src/manifest.json"
             ],
+            "codeCoverage": true,
             "codeCoverageExclude": [
               "src/app/shared/sdk/**",
               "src/environments/**",
@@ -444,8 +453,8 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": ["src/tsconfig.json"],
-            "exclude": []
+            "tsConfig": ["src/tsconfig.app.json", "src/tsconfig.spec.json"],
+            "exclude": ["**/node_modules/**"]
           }
         }
       }
@@ -475,7 +484,7 @@
   "schematics": {
     "@schematics/angular:component": {
       "prefix": "app",
-      "style": "css"
+      "style": "scss"
     },
     "@schematics/angular:directive": {
       "prefix": "app"

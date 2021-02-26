@@ -34,6 +34,11 @@ export class MetadataEditComponent implements OnInit, OnChanges {
   @Input() metadata: object;
   @Output() save = new EventEmitter<object>();
 
+  constructor(
+    private formBuilder: FormBuilder,
+    private unitsService: UnitsService
+  ) {}
+
   addMetadata() {
     const field = this.formBuilder.group({
       fieldType: new FormControl("", [Validators.required]),
@@ -193,11 +198,6 @@ export class MetadataEditComponent implements OnInit, OnChanges {
   get items() {
     return this.metadataForm.get("items") as FormArray;
   }
-
-  constructor(
-    private formBuilder: FormBuilder,
-    private unitsService: UnitsService
-  ) {}
 
   ngOnInit() {
     this.metadataForm = this.formBuilder.group({

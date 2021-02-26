@@ -49,6 +49,16 @@ export class ViewProposalPageComponent implements OnInit, OnDestroy {
     { name: "location", icon: "explore", sort: false, inList: true }
   ];
 
+  constructor(
+    @Inject(APP_CONFIG) public appConfig: AppConfig,
+    private datePipe: DatePipe,
+    private filesizePipe: FileSizePipe,
+    private route: ActivatedRoute,
+    private router: Router,
+    private slicePipe: SlicePipe,
+    private store: Store<any>
+  ) {}
+
   formatTableData(datasets: Dataset[]): any[] {
     if (datasets) {
       return datasets.map((dataset: any) => {
@@ -82,16 +92,6 @@ export class ViewProposalPageComponent implements OnInit, OnDestroy {
     const pid = encodeURIComponent(dataset.pid);
     this.router.navigateByUrl("/datasets/" + pid);
   }
-
-  constructor(
-    @Inject(APP_CONFIG) public appConfig: AppConfig,
-    private datePipe: DatePipe,
-    private filesizePipe: FileSizePipe,
-    private route: ActivatedRoute,
-    private router: Router,
-    private slicePipe: SlicePipe,
-    private store: Store<any>
-  ) {}
 
   ngOnInit() {
     this.subscriptions.push(

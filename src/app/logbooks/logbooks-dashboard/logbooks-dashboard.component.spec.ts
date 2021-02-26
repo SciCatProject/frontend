@@ -1,9 +1,9 @@
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import {
-  async,
   ComponentFixture,
   TestBed,
-  inject
+  inject,
+  waitForAsync
 } from "@angular/core/testing";
 
 import { LogbooksDashboardComponent } from "./logbooks-dashboard.component";
@@ -44,7 +44,7 @@ describe("DashboardComponent", () => {
   };
   const logbook = new Logbook(logbookData);
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
       declarations: [LogbooksDashboardComponent],
@@ -62,7 +62,7 @@ describe("DashboardComponent", () => {
       }
     }).compileComponents();
 
-    router = TestBed.get(Router);
+    router = TestBed.inject(Router);
   }));
 
   beforeEach(() => {

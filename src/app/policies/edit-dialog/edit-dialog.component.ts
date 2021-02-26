@@ -12,10 +12,12 @@ import { COMMA, ENTER } from "@angular/cdk/keycodes";
 export class EditDialogComponent implements /*OnChanges,*/ OnInit {
   data: any;
   multiEdit: boolean;
-  selectedGroups: string[];
+  selectedGroups: string[] = [];
   public separatorKeysCodes: number[] = [ENTER, COMMA];
 
   form: FormGroup;
+
+  selectable = true;
 
   constructor(
     private dialogRef: MatDialogRef<EditDialogComponent>,

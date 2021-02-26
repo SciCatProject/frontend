@@ -15,6 +15,7 @@ import {
   loadingAction,
   loadingCompleteAction
 } from "state-management/actions/user.actions";
+import { Type } from "@angular/core";
 
 const data: PolicyInterface = {
   id: "testId",
@@ -50,9 +51,13 @@ describe("PolicyEffects", () => {
       ]
     });
 
-    effects = TestBed.get(PolicyEffects);
-    policyApi = TestBed.get(PolicyApi);
+    effects = TestBed.inject(PolicyEffects);
+    policyApi = injectedStub(PolicyApi);
   });
+
+  function injectedStub<S>(service: Type<S>): jasmine.SpyObj<S> {
+    return TestBed.inject(service) as jasmine.SpyObj<S>;
+  }
 
   describe("fetchPolicies$", () => {
     describe("ofType fetchPoliciesAction", () => {

@@ -110,6 +110,13 @@ export class PoliciesDashboardComponent implements OnInit, OnDestroy {
     }
   ];
 
+  constructor(
+    private datasetApi: DatasetApi,
+    public dialog: MatDialog,
+    private router: Router,
+    private store: Store<Policy>
+  ) {}
+
   onTabChange(event: MatTabChangeEvent) {
     console.log("Click!", event);
     switch (event.index) {
@@ -250,13 +257,6 @@ export class PoliciesDashboardComponent implements OnInit, OnDestroy {
       });
     }
   }
-
-  constructor(
-    private datasetApi: DatasetApi,
-    public dialog: MatDialog,
-    private router: Router,
-    private store: Store<Policy>
-  ) {}
 
   ngOnInit() {
     this.store.dispatch(clearSelectionAction());

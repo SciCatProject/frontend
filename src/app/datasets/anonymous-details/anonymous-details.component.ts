@@ -15,9 +15,9 @@ export class AnonymousDetailsComponent {
 
   @Output() clickKeyword = new EventEmitter<string>();
 
+  constructor(@Inject(APP_CONFIG) public appConfig: AppConfig) {}
+
   onClickKeyword(keyword: string): void {
     this.clickKeyword.emit(keyword);
   }
-
-  constructor(@Inject(APP_CONFIG) public appConfig: AppConfig) {}
 }

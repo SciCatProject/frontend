@@ -94,11 +94,11 @@
           <th>Owner</th>
           <td>{{ value }}</td>
         </tr>
-        <tr *ngIf="dataset.principalInvestigator as value">
+        <tr *ngIf="dataset['principalInvestigator'] as value">
           <th>Principal Investigator</th>
           <td><span [innerHTML]="value | linky"></span></td>
         </tr>
-        <tr *ngIf="dataset.investigator as value">
+        <tr *ngIf="dataset['investigator'] as value">
           <th>Investigator</th>
           <td>{{ value }}</td>
         </tr>
@@ -138,7 +138,7 @@
           <th>Size</th>
           <td>{{ value | filesize }}</td>
         </tr>
-        <tr *ngIf="dataset.dataFormat as value">
+        <tr *ngIf="dataset['dataFormat'] as value">
           <th>Data Format</th>
           <td>{{ value }}</td>
         </tr>
@@ -154,13 +154,13 @@
       </mat-card-header>
 
       <table>
-        <tr *ngIf="dataset.proposalId && proposal">
+        <tr *ngIf="dataset['proposalId'] && proposal">
           <th>Proposal</th>
           <td (click)="onClickProposal(proposal.proposalId)">
             <a>{{ proposal.title }}</a>
           </td>
         </tr>
-        <tr *ngIf="dataset.sampleId && sample">
+        <tr *ngIf="dataset['sampleId'] && sample">
           <th>Sample</th>
           <td>
             <a (click)="onClickSample(sample.sampleId)">{{
@@ -175,7 +175,7 @@
             </span>
           </td>
         </tr>
-        <tr *ngIf="dataset.creationLocation as value">
+        <tr *ngIf="dataset['creationLocation'] as value">
           <th>Creation Location</th>
           <td>{{ value }}</td>
         </tr>
@@ -196,7 +196,7 @@
             </div>
           </td>
         </tr>
-        <tr *ngIf="dataset.inputDatasets as value">
+        <tr *ngIf="dataset['inputDatasets'] as value">
           <th>Input Datasets</th>
           <td>
             <div *ngFor="let datasetPid of value">
@@ -223,15 +223,15 @@
       </mat-card-header>
 
       <table>
-        <tr *ngIf="dataset.usedSoftware as value">
+        <tr *ngIf="dataset['usedSoftware'] as value">
           <th>Software Used</th>
           <td>{{ value }}</td>
         </tr>
-        <tr *ngIf="dataset.jobParameters as value">
+        <tr *ngIf="dataset['jobParameters'] as value">
           <th>Job Parameters</th>
           <td>{{ value | json }}</td>
         </tr>
-        <tr *ngIf="dataset.jobLogData as value">
+        <tr *ngIf="dataset['jobLogData'] as value">
           <th>Job Log Data</th>
           <td>{{ value }}</td>
         </tr>
@@ -253,7 +253,7 @@
               <mat-icon> list </mat-icon> View
             </ng-template>
             <metadata-view
-              [metadata]="dataset.scientificMetadata"
+              [metadata]="dataset['scientificMetadata']"
             ></metadata-view>
           </mat-tab>
           <mat-tab class="editTab" [hidden]="!appConfig.editMetadataEnabled">
@@ -261,7 +261,7 @@
               <mat-icon> edit </mat-icon> Edit
             </ng-template>
             <metadata-edit
-              [metadata]="dataset.scientificMetadata"
+              [metadata]="dataset['scientificMetadata']"
               (save)="onSaveMetadata($event)"
             ></metadata-edit>
           </mat-tab>
@@ -270,7 +270,7 @@
 
       <ng-template #jsonView>
         <ngx-json-viewer
-          [json]="dataset.scientificMetadata"
+          [json]="dataset['scientificMetadata']"
           [expanded]="false"
         ></ngx-json-viewer>
       </ng-template>

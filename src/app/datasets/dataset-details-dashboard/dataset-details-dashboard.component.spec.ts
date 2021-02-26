@@ -1,8 +1,8 @@
 import {
-  async,
   ComponentFixture,
   TestBed,
   inject,
+  waitForAsync,
 } from "@angular/core/testing";
 
 import { DatasetDetailsDashboardComponent } from "./dataset-details-dashboard.component";
@@ -39,7 +39,7 @@ describe("DetailsDashboardComponent", () => {
   let dispatchSpy;
   let pipeSpy;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
       declarations: [DatasetDetailsDashboardComponent],

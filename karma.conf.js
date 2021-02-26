@@ -11,7 +11,6 @@ module.exports = function (config) {
       require('karma-coverage-istanbul-reporter'),
       require('@angular-devkit/build-angular/plugins/karma'),
       require('karma-jasmine-html-reporter'),
-      require('karma-coverage-istanbul-reporter'),
       require('karma-scss-preprocessor')
     ],
     files: [
@@ -31,13 +30,12 @@ module.exports = function (config) {
     mime: {
       'text/x-typescript': ['ts','tsx']
     },
-    remapIstanbulReporter: {
-      dir: require('path').join(__dirname, 'coverage'), reports: {
-        html: 'coverage',
-        lcovonly: './coverage/coverage.lcov'
-      }
+    coverageIstanbulReporter: {
+      dir: require('path').join(__dirname, './coverage'),
+      reports: [ 'html', 'lcovonly' ],
+      fixWebpackSourcePaths: true,
     },
-    
+
     customLaunchers: {
       ChromeHeadless: {
         base: 'Chrome',

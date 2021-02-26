@@ -6,10 +6,10 @@ import {
 import { MockStore, MockDatasetApi } from "shared/MockStubs";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import {
-  async,
   ComponentFixture,
   TestBed,
-  inject
+  inject,
+  waitForAsync
 } from "@angular/core/testing";
 import { StoreModule, Store } from "@ngrx/store";
 import { Dataset, DatasetApi } from "shared/sdk";
@@ -39,7 +39,7 @@ describe("DatasetTableComponent", () => {
   let store: MockStore;
   let dispatchSpy;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
       imports: [

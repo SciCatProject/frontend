@@ -26,12 +26,12 @@ import { getCurrentUserName } from "state-management/selectors/user.selectors";
   styleUrls: ["./publish.component.scss"]
 })
 export class PublishComponent implements OnInit, OnDestroy {
-  public separatorKeysCodes: number[] = [ENTER, COMMA];
-
   private datasets$ = this.store.pipe(select(getDatasetsInBatch));
   private userName$ = this.store.pipe(select(getCurrentUserName));
-  public datasetCount: number;
   private countSubscription: Subscription;
+
+  public separatorKeysCodes: number[] = [ENTER, COMMA];
+  public datasetCount: number;
   today: number = Date.now();
 
   public form = {
@@ -54,6 +54,14 @@ export class PublishComponent implements OnInit, OnDestroy {
 
   public formData = null;
   actionSubjectSubscription: Subscription;
+
+  constructor(
+    private store: Store<any>,
+    @Inject(APP_CONFIG) private appConfig,
+    private publishedDataApi: PublishedDataApi,
+    private actionsSubj: ActionsSubject,
+    private router: Router
+  ) {}
 
   addCreator(event) {
     if ((event.value || "").trim()) {
@@ -106,14 +114,6 @@ export class PublishComponent implements OnInit, OnDestroy {
       return false;
     }
   }
-
-  constructor(
-    private store: Store<any>,
-    @Inject(APP_CONFIG) private appConfig,
-    private publishedDataApi: PublishedDataApi,
-    private actionsSubj: ActionsSubject,
-    private router: Router
-  ) {}
 
   ngOnInit() {
     this.store.dispatch(prefillBatchAction());

@@ -59,6 +59,13 @@ export class PublisheddataDashboardComponent implements OnInit, OnDestroy {
   selectedDOIs: string[] = [];
   filtersSubscription: Subscription;
 
+  constructor(
+    @Inject(DOCUMENT) private document: Document,
+    private router: Router,
+    private snackBar: MatSnackBar,
+    private store: Store<PublishedData>
+  ) {}
+
   onShareClick() {
     const selectionBox = this.document.createElement("textarea");
     selectionBox.style.position = "fixed";
@@ -116,13 +123,6 @@ export class PublisheddataDashboardComponent implements OnInit, OnDestroy {
       this.selectedDOIs.splice(this.selectedDOIs.indexOf(doiUrl), 1);
     }
   }
-
-  constructor(
-    @Inject(DOCUMENT) private document: Document,
-    private router: Router,
-    private snackBar: MatSnackBar,
-    private store: Store<PublishedData>
-  ) {}
 
   ngOnInit() {
     this.store.dispatch(fetchAllPublishedDataAction());

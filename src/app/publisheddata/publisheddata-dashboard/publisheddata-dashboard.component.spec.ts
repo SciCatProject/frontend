@@ -1,8 +1,8 @@
 import {
-  async,
   ComponentFixture,
   TestBed,
   inject,
+  waitForAsync,
 } from "@angular/core/testing";
 
 import { PublisheddataDashboardComponent } from "./publisheddata-dashboard.component";
@@ -37,7 +37,7 @@ describe("PublisheddataDashboardComponent", () => {
   let store: MockStore;
   let dispatchSpy;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
       declarations: [PublisheddataDashboardComponent],

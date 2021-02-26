@@ -11,6 +11,7 @@ import {
 } from "state-management/actions/user.actions";
 import { provideMockStore } from "@ngrx/store/testing";
 import { getFilters } from "state-management/selectors/logbooks.selectors";
+import { Type } from "@angular/core";
 
 const logbook: Logbook = {
   name: "test",
@@ -48,9 +49,13 @@ describe("LogbookEffects", () => {
       ]
     });
 
-    effects = TestBed.get(LogbookEffects);
-    logbookApi = TestBed.get(LogbookApi);
+    effects = TestBed.inject(LogbookEffects);
+    logbookApi = injectedStub(LogbookApi);
   });
+
+  function injectedStub<S>(service: Type<S>): jasmine.SpyObj<S> {
+    return TestBed.inject(service) as jasmine.SpyObj<S>;
+  }
 
   describe("fetchLogbooks$", () => {
     it("should result in a fetchLogbooksCompleteAction", () => {

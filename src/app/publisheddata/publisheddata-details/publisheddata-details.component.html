@@ -131,7 +131,7 @@
     </div>
     <div fxFlex="30">
       <ng-container
-        *ngIf="publishedData.thumbnail as thumbnail; else noThumbnail"
+        *ngIf="publishedData.thumbnail as thumbnail"
       >
         <mat-card>
           <img mat-card-image src="{{ thumbnail }}" />
