@@ -102,10 +102,5 @@
     "webpack-cli": "^3.3.10",
     "webpack-dev-server": "^3.11.0",
     "zone.js": "~0.11.4"
-  },
-  "greenkeeper": {
-    "ignore": [
-      "typescript"
-    ]
   }
 }
