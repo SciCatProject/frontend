@@ -22,7 +22,7 @@ export class ScicatDataService {
   mapToMongoSyntax(columns: Column[], filterExpressions: any) {
     const result = {};
     if (filterExpressions) {
-      Object.keys(filterExpressions).map(function (key, index) {
+      Object.keys(filterExpressions).forEach(function (key, index) {
         if (filterExpressions[key] !== "") {
           const column = columns.find((c) => c.id === key);
           // TODO extend by further filter conditions

@@ -76,21 +76,21 @@ export class ExportExcelService {
     });
 
     // Adding Data with Conditional Formatting
-    data.forEach((d) => {
-      const row = worksheet.addRow(d);
+    // data.forEach((d) => {
+    //   const row = worksheet.addRow(d);
 
-      /*       let sales = row.getCell(6);
-      let color = 'FF99FF99';
-      if (+sales.value < 200000) {
-        color = 'FF9999'
-      }
+    //   let sales = row.getCell(6);
+    //   let color = "FF99FF99";
+    //   if (+sales.value < 200000) {
+    //     color = "FF9999";
+    //   }
 
-      sales.fill = {
-        type: 'pattern',
-        pattern: 'solid',
-        fgColor: { argb: color }
-      } */
-    });
+    //   sales.fill = {
+    //     type: "pattern",
+    //     pattern: "solid",
+    //     fgColor: { argb: color },
+    //   };
+    // });
 
     // worksheet.getColumn(3).width = 20;
     worksheet.addRow([]);

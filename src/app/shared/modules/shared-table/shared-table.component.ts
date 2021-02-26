@@ -4,8 +4,6 @@ import {
   ChangeDetectionStrategy,
   AfterContentInit,
   QueryList,
-  ContentChildren,
-  TemplateRef,
   EventEmitter,
   Output,
   ElementRef,
