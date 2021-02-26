@@ -21,7 +21,6 @@ export class NewDynamicPipe implements PipeTransform {
   public constructor(private injector: Injector) { }
 
   transform(value: any, pipeDef: any): any {
-    //console.log("pipedef:", pipeDef, value);
     if (pipeDef) {
       const parts = pipeDef.split(" ");
       if (parts.length === 0) {
@@ -89,7 +88,7 @@ export class NewDynamicPipe implements PipeTransform {
             return value;
         }
         const pipeArgs = parts.length > 1 ? parts.slice(1, parts.length) : [];
-        const pipe = this.injector.get(pipeToken);
+        const pipe = this.injector.get<any>(pipeToken);
         return pipe.transform(value, ...pipeArgs);
       }
     } else {

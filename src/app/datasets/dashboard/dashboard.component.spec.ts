@@ -1,10 +1,10 @@
 import { APP_CONFIG } from "app-config.module";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import {
-  async,
   ComponentFixture,
   TestBed,
   inject,
+  waitForAsync,
 } from "@angular/core/testing";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Store, StoreModule } from "@ngrx/store";
@@ -56,7 +56,7 @@ describe("DashboardComponent", () => {
   let store: MockStore;
   let dispatchSpy;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
       imports: [

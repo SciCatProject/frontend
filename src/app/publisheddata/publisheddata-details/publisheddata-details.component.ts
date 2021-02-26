@@ -23,6 +23,8 @@ export class PublisheddataDetailsComponent implements OnInit, OnDestroy {
   landingPageUrl = "";
   doi: string;
 
+  show = false;
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,

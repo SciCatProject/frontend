@@ -53,8 +53,6 @@ export class MetadataViewComponent implements OnInit, OnChanges {
     return true;
   }
 
-  constructor() {}
-
   ngOnInit() {
     if (this.metadata) {
       this.tableData = this.createMetadataArray(this.metadata);

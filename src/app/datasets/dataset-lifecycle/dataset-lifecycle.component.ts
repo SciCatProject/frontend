@@ -53,12 +53,10 @@ export class DatasetLifecycleComponent implements OnInit, OnChanges {
   displayedColumns = ["property", "updatedBy", "updatedAt"];
   expandedItem: any | null;
 
-  onPageChange(event: PageEvent) {
-    const { pageIndex, pageSize } = event;
-    const skip = pageIndex * pageSize;
-    const end = skip + pageSize;
-    this.dataSource = this.historyItems.slice(skip, end);
-  }
+  constructor(
+    @Inject(APP_CONFIG) public appConfig: AppConfig,
+    private datePipe: DatePipe
+  ) {}
 
   private parseHistoryItems(): HistoryItem[] {
     if (this.dataset) {
@@ -75,6 +73,13 @@ export class DatasetLifecycleComponent implements OnInit, OnChanges {
       return [].concat.apply([], history).reverse();
     }
     return [];
+  }
+
+  onPageChange(event: PageEvent) {
+    const { pageIndex, pageSize } = event;
+    const skip = pageIndex * pageSize;
+    const end = skip + pageSize;
+    this.dataSource = this.historyItems.slice(skip, end);
   }
 
   downloadCsv(): void {
@@ -120,11 +125,6 @@ export class DatasetLifecycleComponent implements OnInit, OnChanges {
     window.URL.revokeObjectURL(url);
     a.remove();
   }
-
-  constructor(
-    @Inject(APP_CONFIG) public appConfig: AppConfig,
-    private datePipe: DatePipe
-  ) {}
 
   ngOnInit() {
     this.historyItems = this.parseHistoryItems();

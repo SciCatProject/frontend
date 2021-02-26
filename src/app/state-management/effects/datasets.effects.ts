@@ -300,7 +300,7 @@ export class DatasetEffects {
     )
   );
 
-  protected prefillBatch$ = createEffect(() =>
+  prefillBatch$ = createEffect(() =>
     this.actions$.pipe(
       ofType(fromActions.prefillBatchAction),
       withLatestFrom(this.currentUser$),
@@ -310,7 +310,7 @@ export class DatasetEffects {
     )
   );
 
-  protected storeBatch$ = createEffect(
+  storeBatch$ = createEffect(
     () =>
       this.actions$.pipe(
         ofType(
@@ -324,7 +324,7 @@ export class DatasetEffects {
     { dispatch: false }
   );
 
-  protected clearBatchOnLogout$ = createEffect(
+  clearBatchOnLogout$ = createEffect(
     () =>
       this.actions$.pipe(
         ofType(logoutCompleteAction),

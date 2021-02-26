@@ -8,11 +8,9 @@ import { Router } from "@angular/router";
 @Component({
   selector: "app-files-dashboard",
   templateUrl: "./files-dashboard.component.html",
-  styleUrls: ["./files-dashboard.component.css"]
+  styleUrls: ["./files-dashboard.component.css"],
 })
-
 export class FilesDashboardComponent implements OnInit, OnDestroy {
-
   columns: Column[] = [
     { id: "dataFileList.path", icon: "text_snippet", label: "Filename",  canSort: true, matchMode: "contains", hideOrder: 1, },
     { id: "dataFileList.size", icon: "save",         label: "Size",  canSort: true, matchMode: "greaterThan", hideOrder: 2, },
@@ -26,23 +24,30 @@ export class FilesDashboardComponent implements OnInit, OnDestroy {
 
   tableDefinition = {
     collection: "Origdatablocks",
-    columns: this.columns
-  }
-
+    columns: this.columns,
+  };
 
   dataSource: SciCatDataSource;
 
-  constructor(private dataService: ScicatDataService, private exportService: ExportExcelService, private router: Router) { }
+  constructor(
+    private dataService: ScicatDataService,
+    private exportService: ExportExcelService,
+    private router: Router
+  ) {}
 
   ngOnInit() {
-    this.dataSource = new SciCatDataSource(this.dataService, this.exportService, this.tableDefinition);
+    this.dataSource = new SciCatDataSource(
+      this.dataService,
+      this.exportService,
+      this.tableDefinition
+    );
   }
 
   ngOnDestroy() {
-    this.dataSource.disconnectExportData()
+    this.dataSource.disconnectExportData();
   }
 
   onRowClick(file: any) {
-    console.log("Row clicked:", file)
+    console.log("Row clicked:", file);
   }
 }

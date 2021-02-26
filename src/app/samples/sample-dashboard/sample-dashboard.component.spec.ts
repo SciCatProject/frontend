@@ -6,10 +6,10 @@ import { Router, ActivatedRoute } from "@angular/router";
 import { SampleDashboardComponent } from "./sample-dashboard.component";
 import { Store, StoreModule } from "@ngrx/store";
 import {
-  async,
   ComponentFixture,
   TestBed,
-  inject
+  inject,
+  waitForAsync
 } from "@angular/core/testing";
 import {
   setTextFilterAction,
@@ -37,7 +37,7 @@ describe("SampleDashboardComponent", () => {
   let store: MockStore;
   let dispatchSpy;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
       imports: [

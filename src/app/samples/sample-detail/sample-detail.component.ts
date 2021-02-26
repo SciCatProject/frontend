@@ -60,6 +60,18 @@ export class SampleDetailComponent implements OnInit, OnDestroy {
     { name: "location", icon: "explore", sort: false, inList: true }
   ];
 
+  show = false;
+
+  constructor(
+    @Inject(APP_CONFIG) public appConfig: AppConfig,
+    private datePipe: DatePipe,
+    private filesizePipe: FileSizePipe,
+    private router: Router,
+    private route: ActivatedRoute,
+    private slicePipe: SlicePipe,
+    private store: Store<Sample>
+  ) {}
+
   formatTableData(datasets: Dataset[]): any[] {
     if (datasets) {
       return datasets.map((dataset: any) => {
@@ -148,16 +160,6 @@ export class SampleDetailComponent implements OnInit, OnDestroy {
     const id = encodeURIComponent(dataset.pid);
     this.router.navigateByUrl("/datasets/" + id);
   }
-
-  constructor(
-    @Inject(APP_CONFIG) public appConfig: AppConfig,
-    private datePipe: DatePipe,
-    private filesizePipe: FileSizePipe,
-    private router: Router,
-    private route: ActivatedRoute,
-    private slicePipe: SlicePipe,
-    private store: Store<Sample>
-  ) {}
 
   ngOnInit() {
     this.subscriptions.push(

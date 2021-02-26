@@ -23,6 +23,8 @@ export const fetchLogbookFailedAction = createAction(
   "[Logbook] Fetch Logbook Failed"
 );
 
+export const clearLogbookAction = createAction("[Logbook] Clear Logbook");
+
 export const fetchCountAction = createAction(
   "[Logbook] Fetch Count",
   props<{ name: string }>()

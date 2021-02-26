@@ -6,6 +6,9 @@
     "comment-format": [true, "check-space"],
     "curly": true,
     "eofline": true,
+    "deprecation": {
+      "severity": "warning"
+    },
     "forin": true,
     "import-blacklist": [true],
     "import-spacing": true,
@@ -16,8 +19,29 @@
     "member-access": false,
     "member-ordering": [
       true,
-      "static-before-instance",
-      "variables-before-functions"
+      {
+        "order": [
+          "private-static-field",
+          "protected-static-field",
+          "public-static-field",
+
+          "private-static-method",
+          "protected-static-method",
+          "public-static-method",
+
+          "private-instance-field",
+          "protected-instance-field",
+          "public-instance-field",
+
+          "private-constructor",
+          "protected-constructor",
+          "public-constructor",
+
+          "private-instance-method",
+          "protected-instance-method",
+          "public-instance-method"
+        ]
+      }
     ],
     "no-arg": true,
     "no-bitwise": true,

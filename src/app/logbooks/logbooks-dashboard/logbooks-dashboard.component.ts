@@ -4,18 +4,18 @@ import {
   OnDestroy,
   Inject,
   ChangeDetectorRef,
-  AfterViewChecked
+  AfterViewChecked,
 } from "@angular/core";
 import { Store, select } from "@ngrx/store";
 import { Logbook } from "shared/sdk";
-import { Subscription } from "rxjs";
+import { combineLatest, Subscription } from "rxjs";
 import {
   getCurrentLogbook,
   getFilters,
   getHasPrefilledFilters,
   getEntriesCount,
   getEntriesPerPage,
-  getPage
+  getPage,
 } from "state-management/selectors/logbooks.selectors";
 import {
   fetchLogbookAction,
@@ -23,29 +23,23 @@ import {
   setTextFilterAction,
   setDisplayFiltersAction,
   changePageAction,
-  sortByColumnAction
+  sortByColumnAction,
 } from "state-management/actions/logbooks.actions";
 import { ActivatedRoute, Router } from "@angular/router";
 import { APP_CONFIG, AppConfig } from "app-config.module";
 import { LogbookFilters } from "state-management/models";
 import * as rison from "rison";
-import {
-  map,
-  take,
-  filter,
-  combineLatest,
-  distinctUntilChanged
-} from "rxjs/operators";
+import { map, take, filter, distinctUntilChanged } from "rxjs/operators";
 import * as deepEqual from "deep-equal";
 import {
   PageChangeEvent,
-  SortChangeEvent
+  SortChangeEvent,
 } from "shared/modules/table/table.component";
 
 @Component({
   selector: "app-logbooks-dashboard",
   templateUrl: "./logbooks-dashboard.component.html",
-  styleUrls: ["./logbooks-dashboard.component.scss"]
+  styleUrls: ["./logbooks-dashboard.component.scss"],
 })
 export class LogbooksDashboardComponent
   implements OnInit, OnDestroy, AfterViewChecked {
@@ -55,17 +49,25 @@ export class LogbooksDashboardComponent
   filters$ = this.store.pipe(select(getFilters));
   readyToFetch$ = this.store.pipe(
     select(getHasPrefilledFilters),
-    filter(has => has)
+    filter((has) => has)
   );
 
   logbook: Logbook;
 
   subscriptions: Subscription[] = [];
 
+  constructor(
+    private cdRef: ChangeDetectorRef,
+    private route: ActivatedRoute,
+    private router: Router,
+    private store: Store<Logbook>,
+    @Inject(APP_CONFIG) public appConfig: AppConfig
+  ) {}
+
   applyRouterState(name: string, filters: LogbookFilters) {
     if (this.route.snapshot.url[0].path === "logbooks") {
       this.router.navigate(["/logbooks", name], {
-        queryParams: { args: rison.encode(filters) }
+        queryParams: { args: rison.encode(filters) },
       });
     }
   }
@@ -101,25 +103,16 @@ export class LogbooksDashboardComponent
     this.logbook.messages.reverse();
   }
 
-  constructor(
-    private cdRef: ChangeDetectorRef,
-    private route: ActivatedRoute,
-    private router: Router,
-    private store: Store<Logbook>,
-    @Inject(APP_CONFIG) public appConfig: AppConfig
-  ) {}
-
   ngOnInit() {
     this.subscriptions.push(
-      this.store.pipe(select(getCurrentLogbook)).subscribe(logbook => {
+      this.store.pipe(select(getCurrentLogbook)).subscribe((logbook) => {
         this.logbook = logbook;
       })
     );
 
     this.subscriptions.push(
-      this.route.params
+      combineLatest([this.route.params, this.filters$, this.readyToFetch$])
         .pipe(
-          combineLatest(this.filters$, this.readyToFetch$),
           map(([params, filters, _]) => [params, filters]),
           distinctUntilChanged(deepEqual)
         )
@@ -134,11 +127,11 @@ export class LogbooksDashboardComponent
     this.subscriptions.push(
       this.route.queryParams
         .pipe(
-          map(params => params.args as string),
+          map((params) => params.args as string),
           take(1),
-          map(args => (args ? rison.decode<LogbookFilters>(args) : {}))
+          map((args) => (args ? rison.decode<LogbookFilters>(args) : {}))
         )
-        .subscribe(filters =>
+        .subscribe((filters) =>
           this.store.dispatch(prefillFiltersAction({ values: filters }))
         )
     );
@@ -149,6 +142,6 @@ export class LogbooksDashboardComponent
   }
 
   ngOnDestroy() {
-    this.subscriptions.forEach(subscription => subscription.unsubscribe());
+    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
 }

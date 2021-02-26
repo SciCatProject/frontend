@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 
 import { MetadataViewComponent } from "./metadata-view.component";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
@@ -9,13 +9,15 @@ describe("MetadataViewComponent", () => {
   let component: MetadataViewComponent;
   let fixture: ComponentFixture<MetadataViewComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      schemas: [NO_ERRORS_SCHEMA],
-      declarations: [MetadataViewComponent],
-      imports: [MatTableModule, PipesModule],
-    }).compileComponents();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        schemas: [NO_ERRORS_SCHEMA],
+        declarations: [MetadataViewComponent],
+        imports: [MatTableModule, PipesModule],
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(MetadataViewComponent);
@@ -52,7 +54,9 @@ describe("MetadataViewComponent", () => {
       const metadataArray = component.createMetadataArray(testMetadata);
 
       expect(metadataArray[0]["name"]).toEqual("untypedTestName");
-      expect(metadataArray[0]["value"]).toEqual('{"v":"test","u":""}');
+      expect(metadataArray[0]["value"]).toEqual(
+        JSON.stringify({ v: "test", u: "" })
+      );
       expect(metadataArray[0]["unit"]).toEqual("");
     });
   });

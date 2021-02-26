@@ -20,11 +20,11 @@ import {
   DateAdapter,
   MAT_DATE_FORMATS,
   MAT_DATE_LOCALE,
-  SatDatepickerModule
+  SatDatepickerModule,
 } from "saturn-datepicker";
 import {
   MAT_MOMENT_DATE_FORMATS,
-  MomentDateAdapter
+  MomentDateAdapter,
 } from "@angular/material-moment-adapter";
 
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
@@ -67,7 +67,7 @@ import { DatasetLifecycleComponent } from "./dataset-lifecycle/dataset-lifecycle
 import { AnonymousDashboardComponent } from "./anonymous-dashboard/anonymous-dashboard.component";
 import { AnonymousDetailsDashboardComponent } from "./anonymous-details-dashboard/anonymous-details-dashboard.component";
 import { AnonymousDetailsComponent } from "./anonymous-details/anonymous-details.component";
-import { SampleEditComponent } from './sample-edit/sample-edit.component';
+import { SampleEditComponent } from "./sample-edit/sample-edit.component";
 
 @NgModule({
   imports: [
@@ -108,7 +108,7 @@ import { SampleEditComponent } from './sample-edit/sample-edit.component';
     SharedCatanieModule,
     StoreModule.forFeature("datasets", datasetsReducer),
     StoreModule.forFeature("jobs", jobsReducer),
-    LogbooksModule
+    LogbooksModule,
   ],
   declarations: [
     BatchCardComponent,
@@ -129,10 +129,7 @@ import { SampleEditComponent } from './sample-edit/sample-edit.component';
     AnonymousDashboardComponent,
     AnonymousDetailsDashboardComponent,
     AnonymousDetailsComponent,
-    SampleEditComponent
-  ],
-  entryComponents: [
-    AddDatasetDialogComponent
+    SampleEditComponent,
   ],
   providers: [
     ArchivingService,
@@ -140,10 +137,10 @@ import { SampleEditComponent } from './sample-edit/sample-edit.component';
     {
       provide: DateAdapter,
       useClass: MomentDateAdapter,
-      deps: [MAT_DATE_LOCALE]
+      deps: [MAT_DATE_LOCALE],
     },
     { provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS },
-    { provide: MAT_DATE_LOCALE, useValue: "sv-SE" }
+    { provide: MAT_DATE_LOCALE, useValue: "sv-SE" },
   ],
   exports: [
     DashboardComponent,
@@ -152,7 +149,7 @@ import { SampleEditComponent } from './sample-edit/sample-edit.component';
     DatasetDetailComponent,
     DatasetTableComponent,
     DatasetsFilterComponent,
-    BatchCardComponent
-  ]
+    BatchCardComponent,
+  ],
 })
 export class DatasetsModule {}

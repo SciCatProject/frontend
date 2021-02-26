@@ -4,10 +4,10 @@ import { MockActivatedRoute, MockStore } from "shared/MockStubs";
 import { SampleDetailComponent } from "./sample-detail.component";
 import { Store, StoreModule } from "@ngrx/store";
 import {
-  async,
   ComponentFixture,
   TestBed,
-  inject
+  inject,
+  waitForAsync
 } from "@angular/core/testing";
 import { NgxJsonViewerModule } from "ngx-json-viewer";
 import { PageChangeEvent } from "shared/modules/table/table.component";
@@ -42,7 +42,7 @@ describe("SampleDetailComponent", () => {
   let store: MockStore;
   let dispatchSpy;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [SampleDetailComponent],
       imports: [
