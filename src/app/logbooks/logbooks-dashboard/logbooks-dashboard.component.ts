@@ -56,6 +56,14 @@ export class LogbooksDashboardComponent
 
   subscriptions: Subscription[] = [];
 
+  constructor(
+    private cdRef: ChangeDetectorRef,
+    private route: ActivatedRoute,
+    private router: Router,
+    private store: Store<Logbook>,
+    @Inject(APP_CONFIG) public appConfig: AppConfig
+  ) {}
+
   applyRouterState(name: string, filters: LogbookFilters) {
     if (this.route.snapshot.url[0].path === "logbooks") {
       this.router.navigate(["/logbooks", name], {
@@ -94,14 +102,6 @@ export class LogbooksDashboardComponent
   reverseTimeline(): void {
     this.logbook.messages.reverse();
   }
-
-  constructor(
-    private cdRef: ChangeDetectorRef,
-    private route: ActivatedRoute,
-    private router: Router,
-    private store: Store<Logbook>,
-    @Inject(APP_CONFIG) public appConfig: AppConfig
-  ) {}
 
   ngOnInit() {
     this.subscriptions.push(

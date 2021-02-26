@@ -77,6 +77,15 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
   name: string;
   description: string;
 
+  constructor(
+    @Inject(APP_CONFIG) public appConfig: AppConfig,
+    private datePipe: DatePipe,
+    public dialog: MatDialog,
+    private route: ActivatedRoute,
+    private router: Router,
+    private store: Store<Sample>
+  ) {}
+
   formatTableData(samples: Sample[]): any {
     if (samples) {
       return samples.map((sample) => {
@@ -146,15 +155,6 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
     const id = encodeURIComponent(sample.sampleId);
     this.router.navigateByUrl("/samples/" + id);
   }
-
-  constructor(
-    @Inject(APP_CONFIG) public appConfig: AppConfig,
-    private datePipe: DatePipe,
-    public dialog: MatDialog,
-    private route: ActivatedRoute,
-    private router: Router,
-    private store: Store<Sample>
-  ) {}
 
   ngOnInit() {
     this.store.dispatch(fetchMetadataKeysAction());

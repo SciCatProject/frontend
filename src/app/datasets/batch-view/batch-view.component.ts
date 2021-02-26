@@ -53,6 +53,20 @@ export class BatchViewComponent implements OnInit {
   );
   public hasBatch: boolean;
 
+  constructor(
+    @Inject(APP_CONFIG) public appConfig: AppConfig,
+    private store: Store<any>,
+    private archivingSrv: ArchivingService,
+    private router: Router,
+    private shareGroupApi: ShareGroupApi,
+    private datasetApi: DatasetApi,
+    private dialog: MatDialog
+  ) {}
+
+  private clearBatch() {
+    this.store.dispatch(clearBatchAction());
+  }
+
   add(event: MatChipInputEvent): void {
     const input = event.input;
     const value = event.value;
@@ -182,20 +196,6 @@ export class BatchViewComponent implements OnInit {
           )
       );
   }
-
-  private clearBatch() {
-    this.store.dispatch(clearBatchAction());
-  }
-
-  constructor(
-    @Inject(APP_CONFIG) public appConfig: AppConfig,
-    private store: Store<any>,
-    private archivingSrv: ArchivingService,
-    private router: Router,
-    private shareGroupApi: ShareGroupApi,
-    private datasetApi: DatasetApi,
-    private dialog: MatDialog
-  ) {}
 
   ngOnInit() {
     this.store.dispatch(prefillBatchAction());

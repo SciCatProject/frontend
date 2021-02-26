@@ -4,13 +4,13 @@ import {
   FormGroup,
   FormBuilder,
   Validators,
-  FormControl
+  FormControl,
 } from "@angular/forms";
 
 @Component({
   selector: "app-add-dataset-dialog",
   templateUrl: "./add-dataset-dialog.component.html",
-  styleUrls: ["./add-dataset-dialog.component.scss"]
+  styleUrls: ["./add-dataset-dialog.component.scss"],
 })
 export class AddDatasetDialogComponent {
   form: FormGroup;
@@ -19,20 +19,12 @@ export class AddDatasetDialogComponent {
   ownerGroup = new FormControl("", [Validators.required]);
   sourceFolder = new FormControl("/nfs/", [
     Validators.required,
-    Validators.minLength(5)
+    Validators.minLength(5),
   ]);
   usedSoftware = new FormControl("", [
     Validators.required,
-    Validators.minLength(2)
+    Validators.minLength(2),
   ]);
-
-  onSave(): void {
-    this.dialogRef.close(this.form.value);
-  }
-
-  onClose(): void {
-    this.dialogRef.close();
-  }
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: { userGroups: string[] },
@@ -44,7 +36,15 @@ export class AddDatasetDialogComponent {
       description: this.description,
       ownerGroup: this.ownerGroup,
       sourceFolder: this.sourceFolder,
-      usedSoftware: this.usedSoftware
+      usedSoftware: this.usedSoftware,
     });
+  }
+
+  onSave(): void {
+    this.dialogRef.close(this.form.value);
+  }
+
+  onClose(): void {
+    this.dialogRef.close();
   }
 }

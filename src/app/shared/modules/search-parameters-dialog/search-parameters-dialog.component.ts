@@ -42,6 +42,13 @@ export class SearchParametersDialogComponent {
     )
   );
 
+  constructor(
+    @Inject(APP_CONFIG) public appConfig: AppConfig,
+    @Inject(MAT_DIALOG_DATA) public data: { parameterKeys: string[] },
+    public dialogRef: MatDialogRef<SearchParametersDialogComponent>,
+    private unitsService: UnitsService
+  ) {}
+
   add = (): void => {
     const { lhs, relation, unit } = this.parametersForm.value;
     const rawRhs = this.parametersForm.get("rhs").value;
@@ -85,11 +92,4 @@ export class SearchParametersDialogComponent {
   get lhs(): string {
     return this.parametersForm.get("lhs").value;
   }
-
-  constructor(
-    @Inject(APP_CONFIG) public appConfig: AppConfig,
-    @Inject(MAT_DIALOG_DATA) public data: { parameterKeys: string[] },
-    public dialogRef: MatDialogRef<SearchParametersDialogComponent>,
-    private unitsService: UnitsService
-  ) {}
 }

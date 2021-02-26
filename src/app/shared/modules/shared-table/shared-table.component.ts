@@ -57,6 +57,7 @@ import { ExportExcelService } from "../../services/export-excel.service";
 })
 export class SharedTableComponent
   implements AfterContentInit, OnDestroy, OnInit, AfterViewInit {
+  private rulerSubscription: Subscription;
   public MIN_COLUMN_WIDTH = 200;
 
   // Filter Fields
@@ -88,8 +89,6 @@ export class SharedTableComponent
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild("input", { static: true }) input: ElementRef;
   @ViewChildren("allFilters") allFilters: QueryList<ElementRef>;
-
-  private rulerSubscription: Subscription;
 
   constructor(
     public ete: ExportExcelService,

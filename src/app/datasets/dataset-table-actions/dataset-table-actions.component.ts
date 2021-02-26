@@ -46,6 +46,13 @@ export class DatasetTableActionsComponent implements OnInit, OnDestroy {
 
   subscriptions: Subscription[] = [];
 
+  constructor(
+    @Inject(APP_CONFIG) public appConfig: AppConfig,
+    private archivingSrv: ArchivingService,
+    public dialog: MatDialog,
+    private store: Store<any>
+  ) {}
+
   /**
    * Handle changing of view mode and disabling selected rows
    * @param event
@@ -135,13 +142,6 @@ export class DatasetTableActionsComponent implements OnInit, OnDestroy {
     this.store.dispatch(addToBatchAction());
     this.store.dispatch(clearSelectionAction());
   }
-
-  constructor(
-    @Inject(APP_CONFIG) public appConfig: AppConfig,
-    private archivingSrv: ArchivingService,
-    public dialog: MatDialog,
-    private store: Store<any>
-  ) {}
 
   ngOnInit() {
     this.subscriptions.push(

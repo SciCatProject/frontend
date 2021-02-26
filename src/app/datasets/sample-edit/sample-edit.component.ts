@@ -60,6 +60,17 @@ export class SampleEditComponent {
     sample: new FormControl("", [Validators.required, this.sampleValidator()]),
   });
 
+  constructor(
+    @Inject(MAT_DIALOG_DATA)
+    public data: { ownerGroup: string; sampleId: string },
+    public dialogRef: MatDialogRef<SampleEditComponent>,
+    private store: Store<Sample>
+  ) {
+    this.store.dispatch(setTextFilterAction({ text: "" }));
+    this.store.dispatch(changePageAction({ page: 0, limit: 10 }));
+    this.store.dispatch(fetchSamplesAction());
+  }
+
   sampleValidator(): ValidatorFn {
     return (control: AbstractControl): { [key: string]: any } | null => {
       const isCurrentSample = control.value.sampleId === this.data.sampleId;
@@ -111,16 +122,5 @@ export class SampleEditComponent {
 
   set text(value: string) {
     this.searchBar.nativeElement.value = value;
-  }
-
-  constructor(
-    @Inject(MAT_DIALOG_DATA)
-    public data: { ownerGroup: string; sampleId: string },
-    public dialogRef: MatDialogRef<SampleEditComponent>,
-    private store: Store<Sample>
-  ) {
-    this.store.dispatch(setTextFilterAction({ text: "" }));
-    this.store.dispatch(changePageAction({ page: 0, limit: 10 }));
-    this.store.dispatch(fetchSamplesAction());
   }
 }

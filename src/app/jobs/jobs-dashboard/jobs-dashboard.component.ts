@@ -72,6 +72,12 @@ export class JobsDashboardComponent implements OnInit, OnDestroy {
     }
   ];
 
+  constructor(
+    private datePipe: DatePipe,
+    private router: Router,
+    private store: Store<Job>
+  ) {}
+
   formatTableData(jobs: Job[]): any[] {
     if (jobs) {
       return jobs.map(job => {
@@ -136,12 +142,6 @@ export class JobsDashboardComponent implements OnInit, OnDestroy {
     const { active: column, direction } = event;
     this.store.dispatch(sortByColumnAction({ column, direction }));
   }
-
-  constructor(
-    private datePipe: DatePipe,
-    private router: Router,
-    private store: Store<Job>
-  ) {}
 
   ngOnInit() {
     this.store.dispatch(fetchJobsAction());

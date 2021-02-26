@@ -52,6 +52,9 @@ export interface SortChangeEvent {
   styleUrls: ["dataset-table.component.scss"]
 })
 export class DatasetTableComponent implements OnInit, OnDestroy, OnChanges {
+  private inBatchPids: string[] = [];
+  private subscriptions: Subscription[] = [];
+
   currentPage$ = this.store.pipe(select(getPage));
   datasetsPerPage$ = this.store.pipe(select(getDatasetsPerPage));
   datasetCount$ = this.store.select(getTotalSets);
@@ -60,16 +63,17 @@ export class DatasetTableComponent implements OnInit, OnDestroy, OnChanges {
   displayedColumns: string[];
   @Input() selectedSets: Dataset[] = [];
 
-  private inBatchPids: string[] = [];
-
   datasets: Dataset[];
   // datasetDerivationsMaps: DatasetDerivationsMap[] = [];
   // derivationMapPids: string[] = [];
 
-  private subscriptions: Subscription[] = [];
-
   @Output() settingsClick = new EventEmitter<MouseEvent>();
   @Output() rowClick = new EventEmitter<Dataset>();
+
+  constructor(
+    @Inject(APP_CONFIG) public appConfig: AppConfig,
+    private store: Store<any>
+  ) {}
 
   doSettingsClick(event: MouseEvent) {
     this.settingsClick.emit(event);
@@ -202,11 +206,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy, OnChanges {
   //   }
   //   return derivedDatasetsNum;
   // }
-
-  constructor(
-    @Inject(APP_CONFIG) public appConfig: AppConfig,
-    private store: Store<any>
-  ) {}
 
   ngOnInit() {
     this.subscriptions.push(

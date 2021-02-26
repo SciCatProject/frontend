@@ -38,6 +38,11 @@ export class DatasetDetailComponent {
 
   show = false;
 
+  constructor(
+    @Inject(APP_CONFIG) public appConfig: AppConfig,
+    public dialog: MatDialog
+  ) {}
+
   onClickKeyword(keyword: string): void {
     this.clickKeyword.emit(keyword);
   }
@@ -90,9 +95,4 @@ export class DatasetDetailComponent {
   onSaveMetadata(metadata: object) {
     this.saveMetadata.emit(metadata);
   }
-
-  constructor(
-    @Inject(APP_CONFIG) public appConfig: AppConfig,
-    public dialog: MatDialog
-  ) {}
 }

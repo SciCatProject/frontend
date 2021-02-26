@@ -76,6 +76,14 @@ export class ProposalDashboardComponent implements OnInit, OnDestroy {
   ];
   tablePaginate = true;
 
+  constructor(
+    @Inject(APP_CONFIG) public appConfig: AppConfig,
+    private datePipe: DatePipe,
+    private route: ActivatedRoute,
+    private router: Router,
+    private store: Store<Proposal>
+  ) {}
+
   formatTableData(proposals: Proposal[]): any[] {
     if (proposals) {
       return proposals.map(proposal => {
@@ -177,14 +185,6 @@ export class ProposalDashboardComponent implements OnInit, OnDestroy {
     const id = encodeURIComponent(proposal.proposalId);
     this.router.navigateByUrl("/proposals/" + id);
   }
-
-  constructor(
-    @Inject(APP_CONFIG) public appConfig: AppConfig,
-    private datePipe: DatePipe,
-    private route: ActivatedRoute,
-    private router: Router,
-    private store: Store<Proposal>
-  ) {}
 
   ngOnInit() {
     this.subscriptions.push(

@@ -49,6 +49,14 @@ export class PublisheddataEditComponent implements OnInit, OnDestroy {
   pickedFile: any;
   attachment: any;
 
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private store: Store<any>,
+    @Inject(APP_CONFIG) private appConfig,
+    private actionsSubj: ActionsSubject
+  ) {}
+
   addCreator(event) {
     if ((event.value || "").trim()) {
       this.form.creator.push(event.value);
@@ -99,14 +107,6 @@ export class PublisheddataEditComponent implements OnInit, OnDestroy {
       return false;
     }
   }
-
-  constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private store: Store<any>,
-    @Inject(APP_CONFIG) private appConfig,
-    private actionsSubj: ActionsSubject
-  ) {}
 
   ngOnInit() {
     this.currentData$.subscribe((data) => {

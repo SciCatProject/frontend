@@ -8,17 +8,17 @@ import { LoopBackConfig } from "shared/sdk";
 
 // For each different table type one instance of this class should be created
 export class SciCatDataSource implements DataSource<any> {
-  private dataSubject = new BehaviorSubject<any[]>([]);
-  private dataExportSubject = new BehaviorSubject<any[]>([]);
-  private loadingSubject = new BehaviorSubject<boolean>(false);
-  public loading$ = this.loadingSubject.asObservable();
-  private countSubject = new BehaviorSubject<number>(0);
-  public count$ = this.countSubject.asObservable();
-  public collection = "";
   private exportSubscription: Subscription;
   private dataForExcel = [];
   private columnsdef = [];
   private url = "";
+  private dataSubject = new BehaviorSubject<any[]>([]);
+  private dataExportSubject = new BehaviorSubject<any[]>([]);
+  private loadingSubject = new BehaviorSubject<boolean>(false);
+  private countSubject = new BehaviorSubject<number>(0);
+  public loading$ = this.loadingSubject.asObservable();
+  public count$ = this.countSubject.asObservable();
+  public collection = "";
 
   constructor(
     private scicatdataService: ScicatDataService,

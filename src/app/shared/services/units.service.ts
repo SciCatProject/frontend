@@ -71,22 +71,6 @@ export class UnitsService {
     "mm^3": "mm\u00B3"
   };
 
-  getSymbol(unit: string): string {
-    const symbol = this.SYMBOLS[unit];
-    return symbol ? symbol : unit;
-  }
-
-  getUnits(variable?: string): string[] {
-    if (!variable) {
-      return this.flattenUnits();
-    }
-    const kind = this.getKind(variable);
-    if (!kind) {
-      return this.flattenUnits();
-    }
-    return this.UNITS[kind];
-  }
-
   private getKind(variable: string): string {
     const kinds = Object.keys(this.UNITS);
     return this.parse(variable).filter(suggestion =>
@@ -117,5 +101,21 @@ export class UnitsService {
         .sort((a: string, b: string) =>
           a.toLowerCase().localeCompare(b.toLowerCase())
         );
+  }
+
+  getSymbol(unit: string): string {
+    const symbol = this.SYMBOLS[unit];
+    return symbol ? symbol : unit;
+  }
+
+  getUnits(variable?: string): string[] {
+    if (!variable) {
+      return this.flattenUnits();
+    }
+    const kind = this.getKind(variable);
+    if (!kind) {
+      return this.flattenUnits();
+    }
+    return this.UNITS[kind];
   }
 }

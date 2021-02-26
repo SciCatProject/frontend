@@ -37,21 +37,27 @@ import { MatSidenav } from "@angular/material/sidenav";
   styleUrls: ["./anonymous-dashboard.component.scss"]
 })
 export class AnonymousDashboardComponent implements OnInit, OnDestroy {
+  private readyToFetch$ = this.store.pipe(
+    select(getHasPrefilledFilters),
+    filter(has => has)
+  );
   datasets$ = this.store.pipe(select(getDatasets));
   tableColumns$ = this.store
     .pipe(select(getColumns))
     .pipe(map(columns => columns.filter(column => column.name !== "select")));
   filters$ = this.store.pipe(select(getFilters));
-  private readyToFetch$ = this.store.pipe(
-    select(getHasPrefilledFilters),
-    filter(has => has)
-  );
 
   clearColumnSearch = false;
 
   subscriptions: Subscription[] = [];
 
   @ViewChild(MatSidenav, { static: false }) sideNav: MatSidenav;
+
+  constructor(
+    private store: Store<any>,
+    private route: ActivatedRoute,
+    private router: Router
+  ) {}
 
   onSettingsClick(): void {
     this.sideNav.toggle();
@@ -84,12 +90,6 @@ export class AnonymousDashboardComponent implements OnInit, OnDestroy {
     const pid = encodeURIComponent(dataset.pid);
     this.router.navigateByUrl("/anonymous/datasets/" + pid);
   }
-
-  constructor(
-    private store: Store<any>,
-    private route: ActivatedRoute,
-    private router: Router
-  ) {}
 
   ngOnInit() {
     this.store.dispatch(fetchMetadataKeysAction());

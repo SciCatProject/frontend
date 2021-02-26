@@ -19,6 +19,9 @@ export interface SubmitCaptionEvent {
   styleUrls: ["./file-uploader.component.scss"]
 })
 export class FileUploaderComponent {
+  @ViewChild(FilePickerDirective, { static: false })
+  private filePicker: FilePickerDirective;
+
   @Input() attachments: Attachment[];
 
   @Output() filePicked = new EventEmitter<ReadFile>();
@@ -28,9 +31,6 @@ export class FileUploaderComponent {
 
   public readMode = ReadMode.dataURL;
   public status: string;
-
-  @ViewChild(FilePickerDirective, { static: false })
-  private filePicker: FilePickerDirective;
 
   onReadStart(event: number) {
     this.status = `Started reading ${event} file(s) on ${new Date().toLocaleTimeString()}.`;

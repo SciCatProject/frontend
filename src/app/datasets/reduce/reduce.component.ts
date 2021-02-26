@@ -67,6 +67,12 @@ export class ReduceComponent implements OnInit, OnChanges {
 
   columnsToDisplay: string[] = ["timestamp", "name", "pid", "software"];
 
+  constructor(
+    private formBuilder: FormBuilder,
+    private router: Router,
+    private store: Store<any>
+  ) {}
+
   reduceDataset(dataset: Dataset): void {
     this.store.dispatch(reduceDatasetAction({ dataset }));
   }
@@ -87,12 +93,6 @@ export class ReduceComponent implements OnInit, OnChanges {
   get selectedScript() {
     return this.formArray.get([1]).get("scriptForm");
   }
-
-  constructor(
-    private formBuilder: FormBuilder,
-    private router: Router,
-    private store: Store<any>
-  ) {}
 
   ngOnInit() {
     this.store.dispatch(fetchDatasetsAction());

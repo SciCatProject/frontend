@@ -53,15 +53,15 @@ import { SelectColumnEvent } from "datasets/dataset-table-settings/dataset-table
   styleUrls: ["dashboard.component.scss"]
 })
 export class DashboardComponent implements OnInit, OnDestroy {
-  selectedSets$ = this.store.pipe(select(getSelectedDatasets));
-  tableColumns$ = this.store.pipe(select(getColumns));
-  selectableColumns$ = this.tableColumns$.pipe(
-    map(columns => columns.filter(column => column.name !== "select"))
-  );
   private filters$ = this.store.pipe(select(getFilters));
   private readyToFetch$ = this.store.pipe(
     select(getHasPrefilledFilters),
     filter(has => has)
+  );
+  selectedSets$ = this.store.pipe(select(getSelectedDatasets));
+  tableColumns$ = this.store.pipe(select(getColumns));
+  selectableColumns$ = this.tableColumns$.pipe(
+    map(columns => columns.filter(column => column.name !== "select"))
   );
   public nonEmpty$ = this.store.pipe(
     select(getDatasetsInBatch),
@@ -75,6 +75,15 @@ export class DashboardComponent implements OnInit, OnDestroy {
   clearColumnSearch = false;
 
   @ViewChild(MatSidenav, { static: false }) sideNav: MatSidenav;
+
+  constructor(
+    @Inject(APP_CONFIG) public appConfig: AppConfig,
+    private actionsSubj: ActionsSubject,
+    public dialog: MatDialog,
+    private store: Store<any>,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {}
 
   onSettingsClick(): void {
     this.sideNav.toggle();
@@ -146,15 +155,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
       }
     });
   }
-
-  constructor(
-    @Inject(APP_CONFIG) public appConfig: AppConfig,
-    private actionsSubj: ActionsSubject,
-    public dialog: MatDialog,
-    private store: Store<any>,
-    private router: Router,
-    private route: ActivatedRoute
-  ) {}
 
   ngOnInit() {
     this.store.dispatch(prefillBatchAction());
