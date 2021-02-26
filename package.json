@@ -8,6 +8,7 @@
     "start": "./node_modules/@angular/cli/bin/ng serve --host $HOST",
     "postinstall": "ngcc",
     "test": "ng test --no-watch --source-map=false",
+    "posttest": "ng lint",
     "cypress:open": "./node_modules/.bin/cypress open",
     "e2e": "ng e2e --project=catanie-e2e",
     "lint": "./node_modules/tslint/bin/tslint --project tslint.json --force --fix",
