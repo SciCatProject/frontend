@@ -47,7 +47,7 @@
               "src/manifest.json"
             ],
             "styles": ["src/styles.css", "src/theme.scss"],
-            "scripts": []
+            "scripts": ["node_modules/hammerjs/hammer.min.js"]
           },
           "configurations": {
             "dmscdev": {
@@ -421,7 +421,7 @@
             "karmaConfig": "./karma.conf.js",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.spec.json",
-            "scripts": [],
+            "scripts": ["node_modules/hammerjs/hammer.min.js"],
             "styles": ["src/styles.css", "src/theme.scss"],
             "assets": [
               "src/assets",
@@ -441,6 +441,7 @@
               "src/assets/icons/safari-pinned-tab.svg",
               "src/manifest.json"
             ],
+            "codeCoverage": true,
             "codeCoverageExclude": [
               "src/app/shared/sdk/**",
               "src/environments/**",
