@@ -33,8 +33,8 @@ import { Column } from "./../../column.type";
 import { SciCatDataSource } from "../../services/scicat.datasource";
 import { debounceTime, distinctUntilChanged, tap } from "rxjs/operators";
 import { ExportExcelService } from "../../services/export-excel.service";
-import { MatDatepickerInputEvent } from '@angular/material/datepicker';
-import * as moment from 'moment';
+import { MatDatepickerInputEvent } from "@angular/material/datepicker";
+import * as moment from "moment";
 
 export interface DateRange {
   begin: Date;
@@ -222,22 +222,26 @@ export class SharedTableComponent
     this.allFilters.toArray().forEach((filter) => {
       i++;
       // console.log("Defining subscription for column :", i)
-      this.columnFilterSubscriptions[i] = fromEvent(filter.nativeElement, "keyup").pipe(
-        debounceTime(350),
-        distinctUntilChanged(),
-        tap(() => {
-          // console.log("key typed from id,value:", filter.nativeElement.id,filter.nativeElement.value)
-          this.paginator.pageIndex = 0;
-          const columnId = filter.nativeElement.id;
-          if (filter.nativeElement.value) {
-            this.filterExpressions[columnId] = filter.nativeElement.value;
-            // console.log("columnid,filterexpression:",columnId,this.filterExpressions[columnId])
-          } else {
-            delete this.filterExpressions[columnId];
-          }
-          this.loadDataPage();
-        })
+      this.columnFilterSubscriptions[i] = fromEvent(
+        filter.nativeElement,
+        "keyup"
       )
+        .pipe(
+          debounceTime(350),
+          distinctUntilChanged(),
+          tap(() => {
+            // console.log("key typed from id,value:", filter.nativeElement.id,filter.nativeElement.value)
+            this.paginator.pageIndex = 0;
+            const columnId = filter.nativeElement.id;
+            if (filter.nativeElement.value) {
+              this.filterExpressions[columnId] = filter.nativeElement.value;
+              // console.log("columnid,filterexpression:",columnId,this.filterExpressions[columnId])
+            } else {
+              delete this.filterExpressions[columnId];
+            }
+            this.loadDataPage();
+          })
+        )
         .pipe(
           debounceTime(350),
           distinctUntilChanged(),
@@ -316,10 +320,8 @@ export class SharedTableComponent
       const { begin, end } = event.value;
       this.filterExpressions[columnId] = {
         begin: moment(begin).tz("UTC").toISOString(),
-        end: moment(end)
-          .add(1, "days")
-          .toISOString()
-      }
+        end: moment(end).add(1, "days").toISOString(),
+      };
     } else {
       delete this.filterExpressions[columnId];
     }

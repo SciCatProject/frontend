@@ -28,10 +28,10 @@ import { MatInputModule } from "@angular/material/input";
 import { MatButtonModule } from "@angular/material/button";
 import { FlexLayoutModule } from "@angular/flex-layout";
 import { FormsModule } from "@angular/forms";
-import { ObjKeysPipe } from 'shared/pipes/obj-keys.pipe';
-import { RouterModule } from '@angular/router';
-import { SatDatepickerModule, SatNativeDateModule } from 'saturn-datepicker';
-import { MatDatepickerModule } from '@angular/material/datepicker';
+import { ObjKeysPipe } from "shared/pipes/obj-keys.pipe";
+import { RouterModule } from "@angular/router";
+import { SatDatepickerModule, SatNativeDateModule } from "saturn-datepicker";
+import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 
 @NgModule({
@@ -56,7 +56,7 @@ import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
     RouterModule,
     SatDatepickerModule,
     SatNativeDateModule,
-    MatDatepickerModule
+    MatDatepickerModule,
   ],
   exports: [SharedTableComponent],
   providers: [

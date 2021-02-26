@@ -51,7 +51,7 @@ export class ScicatDataService {
               break;
             }
             case "after": {
-              result[key] = { "$gte": filterExpressions[key] }
+              result[key] = { $gte: filterExpressions[key] };
               break;
             }
             case "between": {
@@ -101,7 +101,7 @@ export class ScicatDataService {
 
     // ("findalldata:", filterExpressions)
     const mongoExpression = this.mapToMongoSyntax(columns, filterExpressions);
-    let filterFields = { ...mongoExpression };
+    const filterFields = { ...mongoExpression };
 
     if (globalFilter !== "") {
       filterFields["text"] = globalFilter;
@@ -125,10 +125,14 @@ export class ScicatDataService {
   // use fullfacets instead of count to allow for more complex filters. facet "all" is default I assume
   // fields	{"mode":{},"text":"wasp","creationLocation":["/PSI/SLS/TOMCAT"],"isPublished":false}
   // facets	["type","creationTime","creationLocation","ownerGroup","keywords"]
-  getCount(url: string, columns: Column[], globalFilter?: string, filterExpressions?: any): Observable<any> {
-
+  getCount(
+    url: string,
+    columns: Column[],
+    globalFilter?: string,
+    filterExpressions?: any
+  ): Observable<any> {
     const mongoExpression = this.mapToMongoSyntax(columns, filterExpressions);
-    let filterFields = { ...mongoExpression };
+    const filterFields = { ...mongoExpression };
 
     if (globalFilter !== "") {
       filterFields["text"] = globalFilter;
