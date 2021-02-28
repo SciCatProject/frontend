@@ -1,5 +1,5 @@
 import {
-  Component, Input, ChangeDetectionStrategy, AfterContentInit, QueryList, ContentChildren, TemplateRef,
+  Component, Input, ChangeDetectionStrategy, AfterContentInit, QueryList, 
   EventEmitter, Output, ElementRef, OnDestroy, ViewChild, ViewChildren, ChangeDetectorRef, NgZone, OnInit
 } from "@angular/core";
 import { ViewportRuler } from "@angular/cdk/scrolling";
