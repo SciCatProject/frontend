@@ -275,10 +275,8 @@ export class SharedTableComponent implements AfterContentInit, OnDestroy, OnInit
       const { begin, end } = event.value;
       this.filterExpressions[columnId] = {
         begin: moment(begin).tz("UTC").toISOString(),
-        end: moment(end)
-          .add(1, "days")
-          .toISOString()
-      }
+        end: moment(end).add(1, "days").toISOString(),
+      };
     } else {
       delete this.filterExpressions[columnId];
     }
