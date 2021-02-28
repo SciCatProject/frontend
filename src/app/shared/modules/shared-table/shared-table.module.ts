@@ -32,6 +32,7 @@ import { ObjKeysPipe } from 'shared/pipes/obj-keys.pipe';
 import { RouterModule } from '@angular/router';
 import { SatDatepickerModule, SatNativeDateModule } from 'saturn-datepicker';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 
 @NgModule({
   declarations: [SharedTableComponent],

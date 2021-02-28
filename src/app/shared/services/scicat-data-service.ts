@@ -12,7 +12,7 @@ export class ScicatDataService {
 
   constructor(private http: HttpClient, private auth: LoopBackAuth) {
     this.accessToken = auth.getToken().id;
-    console.log("Got token:", this.accessToken);
+    // console.log("Got token:", this.accessToken);
   }
 
   findDataById(url: string, dataId: number): Observable<any> {
@@ -33,15 +33,6 @@ export class ScicatDataService {
               result[key] = { $regex: filterExpressions[key], $options: "i" };
               break;
             }
-            // TODO filter case if value is an object
-            //   $project: {
-            //     item: 1,
-            //     dimensions: { $objectToArray: "$dimensions" }
-            //  }
-            // case "containsValue": {
-            //   result[key] = { $regex: filterExpressions[key], $options: "i" };
-            //   break;
-            // }
             case "greaterThan": {
               result[key] = { $gt: Number(filterExpressions[key]) };
               break;
@@ -131,11 +122,10 @@ export class ScicatDataService {
     globalFilter?: string,
     filterExpressions?: any
   ): Observable<any> {
-    const filterFields = {};
-    const modeExpression = this.mapToMongoSyntax(columns, filterExpressions);
-    if (Object.keys(modeExpression).length !== 0) {
-      filterFields["mode"] = modeExpression;
-    }
+
+    const mongoExpression = this.mapToMongoSyntax(columns, filterExpressions);
+    let filterFields = { ...mongoExpression };
+
     if (globalFilter !== "") {
       filterFields["text"] = globalFilter;
     }
