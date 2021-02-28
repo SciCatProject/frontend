@@ -12,14 +12,20 @@ import { Router } from "@angular/router";
 })
 export class FilesDashboardComponent implements OnInit, OnDestroy {
   columns: Column[] = [
-    { id: "dataFileList.path", icon: "text_snippet", label: "Filename",  canSort: true, matchMode: "contains", hideOrder: 1, },
-    { id: "dataFileList.size", icon: "save",         label: "Size",  canSort: true, matchMode: "greaterThan", hideOrder: 2, },
-    { id: "dataFileList.time", icon: "access_time",  label: "Created at", format: "date medium", canSort: true, matchMode: "between", hideOrder: 3, },
-    { id: "dataFileList.uid",  icon: "person",       label: "UID", canSort: true, matchMode: "contains", hideOrder: 4, },
-    { id: "dataFileList.gid",  icon: "group",        label: "GID", canSort: true, matchMode: "contains", hideOrder: 5, },
-    { id: "ownerGroup",        icon: "group",        label: "Owner Group", canSort: true, matchMode: "contains", hideOrder: 6, },
-    { id: "datasetId",         icon: "list",         label: "Dataset PID", type: "dataseturl", canSort: true, matchMode: "contains", hideOrder: 7, },
-  ]
+    { id: "dataFileList.path", icon: "text_snippet", label: "Filename", canSort: true, matchMode: "contains", hideOrder: 1, },
+    { id: "dataFileList.size", icon: "save", label: "Size", canSort: true, matchMode: "greaterThan", hideOrder: 2, },
+    {
+      id: "dataFileList.time", icon: "access_time", label: "Created at", format: "date medium", canSort: true,
+      matchMode: "between", hideOrder: 3,
+    },
+    { id: "dataFileList.uid", icon: "person", label: "UID", canSort: true, matchMode: "contains", hideOrder: 4, },
+    { id: "dataFileList.gid", icon: "group", label: "GID", canSort: true, matchMode: "contains", hideOrder: 5, },
+    { id: "ownerGroup", icon: "group", label: "Owner Group", canSort: true, matchMode: "contains", hideOrder: 6, },
+    {
+      id: "datasetId", icon: "list", label: "Dataset PID", type: "dataseturl", canSort: true, matchMode: "contains",
+      hideOrder: 7,
+    },
+  ];
 
 
   tableDefinition = {
@@ -33,7 +39,7 @@ export class FilesDashboardComponent implements OnInit, OnDestroy {
     private dataService: ScicatDataService,
     private exportService: ExportExcelService,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.dataSource = new SciCatDataSource(

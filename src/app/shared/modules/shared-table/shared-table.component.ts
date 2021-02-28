@@ -15,8 +15,8 @@ import { SciCatDataSource } from "../../services/scicat.datasource";
 import { debounceTime, distinctUntilChanged, tap } from "rxjs/operators";
 import { ExportExcelService } from "../../services/export-excel.service";
 
-import * as moment from 'moment';
-import { MatDatepickerInputEvent } from '@angular/material/datepicker/datepicker-input-base';
+import * as moment from "moment";
+import { MatDatepickerInputEvent } from "@angular/material/datepicker/datepicker-input-base";
 
 export interface DateRange {
   begin: Date;
@@ -38,6 +38,7 @@ export interface DateRange {
 })
 export class SharedTableComponent implements AfterContentInit, OnDestroy, OnInit {
 
+  private rulerSubscription: Subscription;
   public MIN_COLUMN_WIDTH = 200;
 
   // Filter Fields
@@ -50,7 +51,7 @@ export class SharedTableComponent implements AfterContentInit, OnDestroy, OnInit
   // unitialized values are effectively treated as false
   expandedElement = {};
 
-  columnFilterSubscriptions: Subscription[] = []
+  columnFilterSubscriptions: Subscription[] = [];
 
   // MatPaginator Inputs
   length = 100;
@@ -69,10 +70,6 @@ export class SharedTableComponent implements AfterContentInit, OnDestroy, OnInit
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild("input", { static: true }) input: ElementRef;
   @ViewChildren("allFilters") allFilters: QueryList<ElementRef>;
-
-
-
-  private rulerSubscription: Subscription;
 
   constructor(public ete: ExportExcelService, private ruler: ViewportRuler,
     private _changeDetectorRef: ChangeDetectorRef, private zone: NgZone) {
@@ -114,7 +111,7 @@ export class SharedTableComponent implements AfterContentInit, OnDestroy, OnInit
       )
       .subscribe();
 
-    this.activateColumnFilters()
+    this.activateColumnFilters();
 
 
     merge(this.sort.sortChange, this.paginator.page)
@@ -148,17 +145,10 @@ export class SharedTableComponent implements AfterContentInit, OnDestroy, OnInit
   }
 
   ngOnDestroy() {
-    // TODO unsubscribe ALL subscriptions for cleanup
-    //console.log("Unsubscribe on destroy")
     this.rulerSubscription.unsubscribe();
-    this.unsubscribeColumnFilters()
-    this.sort.sortChange.unsubscribe()
+    this.unsubscribeColumnFilters();
+    this.sort.sortChange.unsubscribe();
   }
-
-  /**
-   * Lifecycle Hook End
-   */
-
 
   onRowClick(event: any) {
     this.rowClick.emit(event);
@@ -175,7 +165,7 @@ export class SharedTableComponent implements AfterContentInit, OnDestroy, OnInit
   }
 
   getExpandFlag(i) {
-    let ex = Object.keys(this.expandedElement).length > 0 && this.expandedElement[i] ? "expanded" : "collapsed";
+    const ex = Object.keys(this.expandedElement).length > 0 && this.expandedElement[i] ? "expanded" : "collapsed";
     return ex;
   }
 
@@ -187,8 +177,8 @@ export class SharedTableComponent implements AfterContentInit, OnDestroy, OnInit
   unsubscribeColumnFilters() {
     this.columnFilterSubscriptions.forEach(sub => {
       // console.log("Unsubscribing subscription sub:", sub)
-      sub.unsubscribe()
-    })
+      sub.unsubscribe();
+    });
   }
 
   activateColumnFilters() {
@@ -254,9 +244,9 @@ export class SharedTableComponent implements AfterContentInit, OnDestroy, OnInit
       // console.log("visible columns:",this.visibleColumns)
     });
 
-    this._changeDetectorRef.detectChanges()
-    this.reloadFilterExpressions()
-    this.activateColumnFilters()
+    this._changeDetectorRef.detectChanges();
+    this.reloadFilterExpressions();
+    this.activateColumnFilters();
   }
 
   exportToExcel() {
@@ -265,7 +255,7 @@ export class SharedTableComponent implements AfterContentInit, OnDestroy, OnInit
   }
 
   getPropertyByPath(obj: Object, pathString: string) {
-    return pathString.split('.').reduce((o, i) => o[i], obj);
+    return pathString.split(".").reduce((o, i) => o[i], obj);
   }
 
   dateChanged(event: MatDatepickerInputEvent<DateRange>, columnId: string) {

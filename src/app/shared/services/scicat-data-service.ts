@@ -42,7 +42,7 @@ export class ScicatDataService {
               break;
             }
             case "after": {
-              result[key] = { $gte: filterExpressions[key] }
+              result[key] = { $gte: filterExpressions[key] };
               break;
             }
             case "between": {
@@ -124,7 +124,7 @@ export class ScicatDataService {
   ): Observable<any> {
 
     const mongoExpression = this.mapToMongoSyntax(columns, filterExpressions);
-    let filterFields = { ...mongoExpression };
+    const filterFields = { ...mongoExpression };
 
     if (globalFilter !== "") {
       filterFields["text"] = globalFilter;
