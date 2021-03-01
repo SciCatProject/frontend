@@ -13,16 +13,8 @@
     </button>
   </div>
 </div>
-<section>
-  <div class="key-cell" style="padding-left: 40px;">
-    <b>Name</b>
-  </div>
-  <div class="value-cell">
-    <b>Value</b>
-  </div>
-</section>
 <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
-  <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>
+  <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle [style.display]="isVisible(0,node)?'flex':'none' ">
     <section>
       <div class="key-cell" [style.padding-left.px]="getPadding(node)">
         <button mat-icon-button disabled><mat-icon class="mat-icon-rtl-mirror" class="mat-icon-rtl-mirror">
@@ -33,7 +25,7 @@
     </section>
   </mat-tree-node>
 
-  <mat-tree-node *matTreeNodeDef="let node; when: hasChild">
+  <mat-tree-node *matTreeNodeDef="let node; when: hasChild" [style.display]="isVisible(0,node)?'flex':'none'">
     <section>
       <div class='key-cell' [style.padding-left.px]="getPadding(node)">
         <button mat-icon-button matTreeNodeToggle
