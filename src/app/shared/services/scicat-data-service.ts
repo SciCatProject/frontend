@@ -12,14 +12,16 @@ export class ScicatDataService {
 
   constructor(private http: HttpClient, private auth: LoopBackAuth) {
     this.accessToken = auth.getToken().id;
-    console.log("Got token:", this.accessToken);
+    // console.log("Got token:", this.accessToken);
   }
 
   findDataById(url: string, dataId: number): Observable<any> {
     return this.http.get<any>(`${url}/${dataId}`);
   }
 
+  // TODO when do I need to use "mode" syntax (may be for nested keys ?)
   mapToMongoSyntax(columns: Column[], filterExpressions: any) {
+    // console.log("Filterexpressions:",filterExpressions)
     const result = {};
     if (filterExpressions) {
       Object.keys(filterExpressions).forEach(function (key, index) {
@@ -43,6 +45,10 @@ export class ScicatDataService {
               result[key] = { $gte: filterExpressions[key] };
               break;
             }
+            case "between": {
+              result[key] = filterExpressions[key];
+              break;
+            }
             case "is": {
               result[key] = filterExpressions[key];
               break;
@@ -55,6 +61,7 @@ export class ScicatDataService {
         }
       });
     }
+    // console.log("Result of map:",result)
     return result;
   }
 
@@ -84,11 +91,9 @@ export class ScicatDataService {
     // limits	{"skip":0,"limit":50,"order":"creationTime:desc"}
 
     // ("findalldata:", filterExpressions)
-    const filterFields = {};
-    const modeExpression = this.mapToMongoSyntax(columns, filterExpressions);
-    if (Object.keys(modeExpression).length !== 0) {
-      filterFields["mode"] = modeExpression;
-    }
+    const mongoExpression = this.mapToMongoSyntax(columns, filterExpressions);
+    const filterFields = { ...mongoExpression };
+
     if (globalFilter !== "") {
       filterFields["text"] = globalFilter;
     }
@@ -117,11 +122,10 @@ export class ScicatDataService {
     globalFilter?: string,
     filterExpressions?: any
   ): Observable<any> {
-    const filterFields = {};
-    const modeExpression = this.mapToMongoSyntax(columns, filterExpressions);
-    if (Object.keys(modeExpression).length !== 0) {
-      filterFields["mode"] = modeExpression;
-    }
+
+    const mongoExpression = this.mapToMongoSyntax(columns, filterExpressions);
+    const filterFields = { ...mongoExpression };
+
     if (globalFilter !== "") {
       filterFields["text"] = globalFilter;
     }

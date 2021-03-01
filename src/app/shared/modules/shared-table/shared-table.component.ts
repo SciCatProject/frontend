@@ -1,38 +1,27 @@
 import {
-  Component,
-  Input,
-  ChangeDetectionStrategy,
-  AfterContentInit,
-  QueryList,
-  EventEmitter,
-  Output,
-  ElementRef,
-  OnDestroy,
-  ViewChild,
-  ViewChildren,
-  ChangeDetectorRef,
-  NgZone,
-  OnInit,
-  AfterViewInit,
+  Component, Input, ChangeDetectionStrategy, AfterContentInit, QueryList,
+  EventEmitter, Output, ElementRef, OnDestroy, ViewChild, ViewChildren, ChangeDetectorRef, NgZone, OnInit
 } from "@angular/core";
 import { ViewportRuler } from "@angular/cdk/scrolling";
 import { FormControl } from "@angular/forms";
 import { MatPaginator } from "@angular/material/paginator";
 import { MatSort } from "@angular/material/sort";
 import { MatTable } from "@angular/material/table";
-import {
-  trigger,
-  state,
-  style,
-  animate,
-  transition,
-} from "@angular/animations";
+import { trigger, state, style, animate, transition } from "@angular/animations";
 import { fromEvent, merge, Subscription } from "rxjs";
 
 import { Column } from "./../../column.type";
 import { SciCatDataSource } from "../../services/scicat.datasource";
 import { debounceTime, distinctUntilChanged, tap } from "rxjs/operators";
 import { ExportExcelService } from "../../services/export-excel.service";
+
+import * as moment from "moment";
+import { MatDatepickerInputEvent } from "@angular/material/datepicker/datepicker-input-base";
+
+export interface DateRange {
+  begin: Date;
+  end: Date;
+}
 
 @Component({
   selector: "shared-table",
@@ -41,25 +30,19 @@ import { ExportExcelService } from "../../services/export-excel.service";
   changeDetection: ChangeDetectionStrategy.OnPush,
   animations: [
     trigger("detailExpand", [
-      state(
-        "collapsed",
-        style({ height: "0px", minHeight: "0", visibility: "hidden" })
-      ),
+      state("collapsed", style({ height: "0px", minHeight: "0", visibility: "hidden" })),
       state("expanded", style({ height: "*", visibility: "visible" })),
-      transition(
-        "expanded <=> collapsed",
-        animate("225ms cubic-bezier(0.4, 0.0, 0.2, 1)")
-      ),
+      transition("expanded <=> collapsed", animate("225ms cubic-bezier(0.4, 0.0, 0.2, 1)")),
     ]),
   ],
 })
-export class SharedTableComponent
-  implements AfterContentInit, OnDestroy, OnInit, AfterViewInit {
+export class SharedTableComponent implements AfterContentInit, OnDestroy, OnInit {
+
   private rulerSubscription: Subscription;
   public MIN_COLUMN_WIDTH = 200;
 
   // Filter Fields
-  generalFilter = new FormControl();
+  generalFilter = new FormControl;
   filterExpressions = {};
 
   // Visible Hidden Columns
@@ -88,20 +71,15 @@ export class SharedTableComponent
   @ViewChild("input", { static: true }) input: ElementRef;
   @ViewChildren("allFilters") allFilters: QueryList<ElementRef>;
 
-  constructor(
-    public ete: ExportExcelService,
-    private ruler: ViewportRuler,
-    private _changeDetectorRef: ChangeDetectorRef,
-    private zone: NgZone
-  ) {
+  constructor(public ete: ExportExcelService, private ruler: ViewportRuler,
+    private _changeDetectorRef: ChangeDetectorRef, private zone: NgZone) {
     // react to viewport width changes with column restructuring
-    this.rulerSubscription = this.ruler.change(100).subscribe((data) => {
+    this.rulerSubscription = this.ruler.change(100).subscribe(data => {
       // accesing clientWidth cause browser layout, cache it!
       // const tableWidth = this.table.nativeElement.clientWidth;
-      this.toggleColumns(
-        this.dataTable["_elementRef"].nativeElement.clientWidth
-      );
+      this.toggleColumns(this.dataTable["_elementRef"].nativeElement.clientWidth);
     });
+
   }
 
   /**
@@ -112,16 +90,18 @@ export class SharedTableComponent
     this.dataSource.loadAllData("", {}, "", "", 0, this.pageSize);
   }
 
+
   // link paginator and sort arrows to tables data source
 
   ngAfterViewInit() {
+
     // reset the paginator after sorting
-    this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
+    this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
 
     // TODO unsubscribe global search filter as well
     fromEvent(this.input.nativeElement, "keyup")
       .pipe(
-        debounceTime(350),
+        debounceTime(650),
         distinctUntilChanged(),
         tap(() => {
           // console.log("global key typed :", this.input.nativeElement.id)
@@ -133,8 +113,11 @@ export class SharedTableComponent
 
     this.activateColumnFilters();
 
+
     merge(this.sort.sortChange, this.paginator.page)
-      .pipe(tap(() => this.loadDataPage()))
+      .pipe(
+        tap(() => this.loadDataPage())
+      )
       .subscribe();
   }
 
@@ -147,8 +130,6 @@ export class SharedTableComponent
     );
   }
 
-  // TODO Known problem: API server can not filter on ObjectId fields
-
   loadDataPage() {
     this.dataSource.loadAllData(
       this.input.nativeElement.value,
@@ -156,8 +137,7 @@ export class SharedTableComponent
       this.sort.active,
       this.sort.direction,
       this.paginator.pageIndex,
-      this.paginator.pageSize
-    );
+      this.paginator.pageSize);
   }
 
   ngAfterContentInit() {
@@ -165,37 +145,27 @@ export class SharedTableComponent
   }
 
   ngOnDestroy() {
-    // TODO unsubscribe ALL subscriptions for cleanup
     this.rulerSubscription.unsubscribe();
     this.unsubscribeColumnFilters();
     this.sort.sortChange.unsubscribe();
   }
-
-  /**
-   * Lifecycle Hook End
-   */
 
   onRowClick(event: any) {
     this.rowClick.emit(event);
   }
 
   get visibleColumnsIds() {
-    const visibleColumnsIds = this.visibleColumns.map((column) => column.id);
+    const visibleColumnsIds = this.visibleColumns.map(column => column.id);
 
-    return this.hiddenColumns.length
-      ? ["trigger", ...visibleColumnsIds]
-      : visibleColumnsIds;
+    return this.hiddenColumns.length ? ["trigger", ...visibleColumnsIds] : visibleColumnsIds;
   }
 
   get hiddenColumnsIds() {
-    return this.hiddenColumns.map((column) => column.id);
+    return this.hiddenColumns.map(column => column.id);
   }
 
   getExpandFlag(i) {
-    const ex =
-      Object.keys(this.expandedElement).length > 0 && this.expandedElement[i]
-        ? "expanded"
-        : "collapsed";
+    const ex = Object.keys(this.expandedElement).length > 0 && this.expandedElement[i] ? "expanded" : "collapsed";
     return ex;
   }
 
@@ -205,7 +175,7 @@ export class SharedTableComponent
   }
 
   unsubscribeColumnFilters() {
-    this.columnFilterSubscriptions.forEach((sub) => {
+    this.columnFilterSubscriptions.forEach(sub => {
       // console.log("Unsubscribing subscription sub:", sub)
       sub.unsubscribe();
     });
@@ -214,34 +184,31 @@ export class SharedTableComponent
   activateColumnFilters() {
     // the following does not work:this.unsubscribeColumnFilters()
     let i = 0;
-    this.allFilters.toArray().forEach((filter) => {
+    this.allFilters.toArray().forEach(filter => {
       i++;
       // console.log("Defining subscription for column :", i)
-      this.columnFilterSubscriptions[i] = fromEvent(
-        filter.nativeElement,
-        "keyup"
+      this.columnFilterSubscriptions[i] = fromEvent(filter.nativeElement, "keyup").pipe(
+        debounceTime(650),
+        distinctUntilChanged(),
+        tap(() => {
+          // console.log("key typed from id,value:", filter.nativeElement.id,filter.nativeElement.value)
+          this.paginator.pageIndex = 0;
+          const columnId = filter.nativeElement.id;
+          if (filter.nativeElement.value) {
+            this.filterExpressions[columnId] = filter.nativeElement.value;
+            // console.log("columnid,filterexpression:",columnId,this.filterExpressions[columnId])
+          } else {
+            delete this.filterExpressions[columnId];
+          }
+          this.loadDataPage();
+        })
       )
-        .pipe(
-          debounceTime(350),
-          distinctUntilChanged(),
-          tap(() => {
-            // console.log("key typed :", filter.nativeElement.id)
-            this.paginator.pageIndex = 0;
-            const columnId = filter.nativeElement.id;
-            if (filter.nativeElement.value) {
-              this.filterExpressions[columnId] = filter.nativeElement.value;
-            } else {
-              delete this.filterExpressions[columnId];
-            }
-            this.loadDataPage();
-          })
-        )
         .subscribe();
     });
   }
 
   reloadFilterExpressions() {
-    this.allFilters.toArray().forEach((filter) => {
+    this.allFilters.toArray().forEach(filter => {
       const columnId = filter.nativeElement.id;
       if (this.filterExpressions[columnId]) {
         // console.log("Reloading filter expressions:", columnId, this.filterExpressions[columnId]);
@@ -254,8 +221,7 @@ export class SharedTableComponent
     // console.log("Calling toggleColumns", tableWidth)
 
     this.zone.runOutsideAngular(() => {
-      const sortedColumns = this.columnsdef
-        .slice()
+      const sortedColumns = this.columnsdef.slice()
         .map((column, index) => ({ ...column, order: index }))
         .sort((a, b) => a.hideOrder - b.hideOrder);
 
@@ -273,8 +239,8 @@ export class SharedTableComponent
       }
 
       this.columnsdef = sortedColumns.sort((a, b) => a.order - b.order);
-      this.visibleColumns = this.columnsdef.filter((column) => column.visible);
-      this.hiddenColumns = this.columnsdef.filter((column) => !column.visible);
+      this.visibleColumns = this.columnsdef.filter(column => column.visible);
+      this.hiddenColumns = this.columnsdef.filter(column => !column.visible);
       // console.log("visible columns:",this.visibleColumns)
     });
 
@@ -290,5 +256,21 @@ export class SharedTableComponent
 
   getPropertyByPath(obj: Object, pathString: string) {
     return pathString.split(".").reduce((o, i) => o[i], obj);
+  }
+
+  dateChanged(event: MatDatepickerInputEvent<DateRange>, columnId: string) {
+    // console.log("dateChanged:",event.value,columnId)
+    // let columnId="creationTime"
+    if (event.value) {
+      const { begin, end } = event.value;
+      this.filterExpressions[columnId] = {
+        begin: moment(begin).tz("UTC").toISOString(),
+        end: moment(end).add(1, "days").toISOString(),
+      };
+    } else {
+      delete this.filterExpressions[columnId];
+    }
+    // console.log("columnid,filterexpression:",columnId,this.filterExpressions[columnId])
+    this.loadDataPage();
   }
 }

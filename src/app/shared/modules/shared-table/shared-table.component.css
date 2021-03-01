@@ -2,6 +2,7 @@
   margin: 8px;
 }
 
+
 .expanded {
   height: min-content !important;
   visibility: visible !important;
@@ -78,3 +79,13 @@ mat-cell > span.ellipsis {
 mat-header-row {
   align-items: initial;
 }
+
+
+.mat-input-element {
+  color: green;
+}
+
+.mat-input-element::placeholder {
+  color: black;
+}
+
