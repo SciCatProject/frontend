@@ -1,6 +1,6 @@
 import {
   Component, Input, ChangeDetectionStrategy, AfterContentInit, QueryList,
-  EventEmitter, Output, ElementRef, OnDestroy, ViewChild, ViewChildren, ChangeDetectorRef, NgZone, OnInit
+  EventEmitter, Output, ElementRef, OnDestroy, ViewChild, ViewChildren, ChangeDetectorRef, NgZone, OnInit, AfterViewInit
 } from "@angular/core";
 import { ViewportRuler } from "@angular/cdk/scrolling";
 import { FormControl } from "@angular/forms";
@@ -36,7 +36,7 @@ export interface DateRange {
     ]),
   ],
 })
-export class SharedTableComponent implements AfterContentInit, OnDestroy, OnInit {
+export class SharedTableComponent implements AfterContentInit, AfterViewInit, OnDestroy, OnInit {
 
   private rulerSubscription: Subscription;
   public MIN_COLUMN_WIDTH = 200;
