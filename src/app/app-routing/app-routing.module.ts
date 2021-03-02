@@ -132,7 +132,7 @@ export const routes: Routes = [
       {
         path: "files",
         component: FilesDashboardComponent,
-        canActivate: [AuthGuard]
+        canActivate: [AuthGuard],
       },
       {
         path: "instruments",
@@ -259,7 +259,7 @@ export const routes: Routes = [
   },
 ];
 @NgModule({
-  imports: [RouterModule.forRoot(routes, { relativeLinkResolution: 'legacy' })],
+  imports: [RouterModule.forRoot(routes, { relativeLinkResolution: "legacy" })],
   exports: [RouterModule],
   providers: [],
 })
