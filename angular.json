@@ -26,7 +26,7 @@
             "tsConfig": "src/tsconfig.app.json",
             "polyfills": "src/polyfills.ts",
             "stylePreprocessorOptions": {
-              "includePaths": ["node_modules"]
+              "includePaths": ["src/theme"]
             },
             "assets": [
               "src/assets",
@@ -415,6 +415,9 @@
             "tsConfig": "src/tsconfig.spec.json",
             "scripts": [],
             "styles": ["src/styles.css", "src/theme.scss"],
+            "stylePreprocessorOptions": {
+              "includePaths": ["src/theme"]
+            },
             "assets": [
               "src/assets",
               "src/favicon.ico",

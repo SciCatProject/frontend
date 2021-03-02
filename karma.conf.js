@@ -10,19 +10,8 @@ module.exports = function (config) {
       require('karma-chrome-launcher'),
       require('karma-coverage'),
       require('@angular-devkit/build-angular/plugins/karma'),
-      require('karma-jasmine-html-reporter'),
-      require('karma-scss-preprocessor')
+      require('karma-jasmine-html-reporter')
     ],
-    files: [
-      
-      { pattern: './src/theme.scss', watched: true,  included: true, served: true },
-      { pattern: './src/app/app.component.scss', watched: true,  included: true, served: true }
-    ],
-    preprocessors: {
-      
-      './src/theme.scss': ['scss'],
-      './src/app/app.component.scss': ['scss']
-    },
     proxies: {
       '/assets/': '/base/src/assets/',
       'assets/': '/base/src/assets/'
