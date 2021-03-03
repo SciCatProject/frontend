@@ -1,0 +1,85 @@
+  <div class="container">
+    <form [formGroup]="metadataForm">
+      <div class="formRow" fxLayout="row" fxLayout.lt-lg="column">
+        <div class="formColumn">
+          <mat-form-field class="selectField">
+            <mat-label>Type</mat-label>
+            <mat-select
+              formControlName="fieldType"
+              (selectionChange)="detectType()">
+              <mat-option
+                *ngFor="let type of types"
+                [value]="type"
+                (click)="$event.stopPropagation()"
+              >
+                {{type}}</mat-option>
+            </mat-select>
+            <mat-error *ngIf="fieldHasError('fieldType')">
+              Type is required
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="formColumn">
+          <mat-form-field class="inputField">
+            <input
+              matInput
+              autocomplete="off"
+              autocorrect="off"
+              autocapitalize="off"
+              spellcheck="false"
+              formControlName="fieldName"
+              placeholder="Name"
+              (blur)="getUnits()" />
+            <mat-error *ngIf="fieldHasError('fieldName')">
+              Name is required
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="formColumn">
+          <mat-form-field class="inputField">
+            <input
+              matInput
+              autocomplete="off"
+              autocorrect="off"
+              autocapitalize="off"
+              spellcheck="false"
+              formControlName="fieldValue"
+              placeholder="Value" step=1
+              [type]="setValueInputType()" />
+            <mat-error *ngIf="fieldHasError('fieldValue')">
+              Value is required
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="formColumn">
+          <mat-form-field class="inputField">
+            <input
+              matInput
+              autocomplete="off"
+              autocorrect="off"
+              autocapitalize="off"
+              spellcheck="false"
+              formControlName="fieldUnit"
+              placeholder="Unit"
+              [matAutocomplete]="metadataUnits"
+              (focus)="getUnits()" />
+            <mat-autocomplete #metadataUnits="matAutocomplete">
+              <mat-option
+                *ngFor="let unit of filteredUnits$ | async"
+                [value]="unit"
+                (click)="$event.stopPropagation()"
+                >
+
+                {{ unit }}
+              </mat-option>
+            </mat-autocomplete>
+            <mat-error
+              *ngIf="fieldHasError('fieldUnit')"
+            >
+              A unit is required for
+              quantities
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+    </form>

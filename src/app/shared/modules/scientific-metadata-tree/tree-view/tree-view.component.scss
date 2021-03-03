@@ -52,7 +52,6 @@ mat-form-field {
 }
 .mat-tree-node {
   border-bottom: 1px solid rgba(0, 0, 0, 0.12);
-
   padding-left: 0px;
 }
 section {
@@ -62,7 +61,7 @@ section {
 .key-cell{
   display: table-cell;
   margin-left: 8px;
-  min-width:40% ;
+  min-width:60% ;
 }
 .value-cell {
   display: table-cell;

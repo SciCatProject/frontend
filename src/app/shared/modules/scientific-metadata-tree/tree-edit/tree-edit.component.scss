@@ -12,6 +12,14 @@
 mat-form-field {
   width: 100%;
 }
+.tool-bar{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.search-field{
+  width: 30%;
+}
 .mat-tree-node{
   width: 100%;
 }
@@ -43,7 +51,7 @@ mat-form-field {
   }
 }
 .mat-tree-node {
-  border-bottom: 1px solid rgba(0,0,0,.12);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
   padding-left: 0px;
 }
 section {
@@ -65,4 +73,12 @@ section {
 .display-flex{
   display: flex;
   justify-content: flex-end;
+}
+.tool-bar{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.clickable {
+  cursor: pointer;
 }

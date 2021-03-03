@@ -10,12 +10,16 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { CommonModule } from '@angular/common';
 import { MatInputModule } from '@angular/material/input';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { FlexLayoutModule } from '@angular/flex-layout';
+import { FlexModule } from '@angular/flex-layout';
 import { MatDividerModule } from '@angular/material/divider';
 import { TreeViewComponent } from './tree-view/tree-view.component';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatOptionModule } from '@angular/material/core';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MetadataInputComponent } from './metadata-input/metadata-input.component';
 
 @NgModule({
-  declarations: [TreeEditComponent, TreeViewComponent],
+  declarations: [TreeEditComponent, TreeViewComponent, MetadataInputComponent],
   imports: [
     MatFormFieldModule,
     MatTreeModule,
@@ -25,11 +29,14 @@ import { TreeViewComponent } from './tree-view/tree-view.component';
     MatSelectModule,
     MatAutocompleteModule,
     MatInputModule,
+    MatOptionModule,
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
     MatDividerModule,
-    FlexLayoutModule,
+    FlexModule,
+    MatButtonToggleModule,
+    MatTabsModule,
   ],
   exports: [TreeEditComponent, TreeViewComponent]
 })
