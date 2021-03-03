@@ -1,5 +1,5 @@
 FROM node:14-alpine as builder
-LABEL maintainer="gareth.murphy@esss.se"
+LABEL maintainer="henrik.johansson@ess.eu"
 RUN sed -i -e 's/^root::/root:!:/' /etc/shadow
 RUN apk update && apk upgrade && \
     apk add --no-cache bash git openssh wget
@@ -13,6 +13,8 @@ RUN npm ci
 RUN wget https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh
 RUN chmod +x wait-for-it.sh
 COPY . /catanie/
+# Site image needs to be copied to assets before building
+COPY CI/ESS/site.png /catanie/src/assets/images/site.png
 RUN npx ng build --configuration=${env}
 
 FROM nginx:alpine

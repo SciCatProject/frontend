@@ -25,27 +25,15 @@
             "main": "src/main.ts",
             "tsConfig": "src/tsconfig.app.json",
             "polyfills": "src/polyfills.ts",
-            "stylePreprocessorOptions": {
-              "includePaths": ["src/theme"]
-            },
             "assets": [
-              "src/assets",
+              "src/assets/",
               "src/favicon.ico",
               "src/robots.txt",
-              "src/app/loopback_form",
-              "src/assets/icons/android-chrome-192x192.png",
-              "src/assets/icons/android-chrome-512x512.svg",
-              "src/assets/icons/apple-touch-icon-precomposed.png",
-              "src/assets/icons/apple-touch-icon.png",
-              "src/assets/icons/favicon-16x16.png",
-              "src/assets/icons/favicon-32x32.png",
-              "src/assets/icons/mstile-70x70.png",
-              "src/assets/icons/mstile-150x150.png",
-              "src/assets/icons/mstile-310x150.png",
-              "src/assets/icons/mstile-310x310.png",
-              "src/assets/icons/safari-pinned-tab.svg",
               "src/manifest.json"
             ],
+            "stylePreprocessorOptions": {
+              "includePaths": ["src"]
+            },
             "styles": ["src/styles.css", "src/theme.scss"],
             "scripts": []
           },
@@ -54,7 +42,7 @@
               "budgets": [
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "6kb"
+                  "maximumWarning": "150kb"
                 }
               ],
               "optimization": true,
@@ -65,35 +53,39 @@
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true,
+              "assets": [
+                "src/assets/",
+                "src/robots.txt",
+                "src/manifest.json",
+                {
+                  "glob": "site.png",
+                  "input": "CI/ESS/",
+                  "output": "/assets/images/"
+                },
+                {
+                  "glob": "site-logo.png",
+                  "input": "CI/ESS/",
+                  "output": "/assets/images/"
+                },
+                { "glob": "favicon.ico", "input": "CI/ESS/", "output": "/" }
+              ],
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.dmscdev.ts"
-                },
-                {
-                  "replace": "src/assets/images/ess-site.png",
-                  "with": "CI/ESS/ess-site.png"
-                },
-                {
-                  "replace": "src/assets/images/esslogo.png",
-                  "with": "CI/ESS/esslogo.png"
-                },
-                {
-                  "replace": "src/favicon.ico",
-                  "with": "CI/ESS/favicon.ico"
-                },
-                {
-                  "replace": "src/theme.scss",
-                  "with": "CI/ESS/theme.scss"
                 }
               ],
+              "stylePreprocessorOptions": {
+                "includePaths": ["CI/ESS"]
+              },
+              "styles": ["src/styles.css", "CI/ESS/theme.scss"],
               "serviceWorker": true
             },
             "e2e": {
               "budgets": [
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "6kb"
+                  "maximumWarning": "150kb"
                 }
               ],
               "optimization": true,
@@ -104,35 +96,39 @@
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true,
+              "assets": [
+                "src/assets/",
+                "src/robots.txt",
+                "src/manifest.json",
+                {
+                  "glob": "site.png",
+                  "input": "CI/ESS/",
+                  "output": "/assets/images/"
+                },
+                {
+                  "glob": "site-logo.png",
+                  "input": "CI/ESS/",
+                  "output": "/assets/images/"
+                },
+                { "glob": "favicon.ico", "input": "CI/ESS/", "output": "/" }
+              ],
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.e2e.ts"
-                },
-                {
-                  "replace": "src/assets/images/ess-site.png",
-                  "with": "CI/ESS/ess-site.png"
-                },
-                {
-                  "replace": "src/assets/images/esslogo.png",
-                  "with": "CI/ESS/esslogo.png"
-                },
-                {
-                  "replace": "src/favicon.ico",
-                  "with": "CI/ESS/favicon.ico"
-                },
-                {
-                  "replace": "src/theme.scss",
-                  "with": "CI/ESS/theme.scss"
                 }
               ],
+              "stylePreprocessorOptions": {
+                "includePaths": ["CI/ESS"]
+              },
+              "styles": ["src/styles.css", "CI/ESS/theme.scss"],
               "serviceWorker": true
             },
             "rfi-prod": {
               "budgets": [
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "6kb"
+                  "maximumWarning": "150kb"
                 }
               ],
               "optimization": true,
@@ -143,6 +139,22 @@
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true,
+              "assets": [
+                "src/assets/",
+                "src/robots.txt",
+                "src/manifest.json",
+                {
+                  "glob": "site.png",
+                  "input": "CI/RFI/",
+                  "output": "/assets/images/"
+                },
+                {
+                  "glob": "site-logo.png",
+                  "input": "CI/RFI/",
+                  "output": "/assets/images"
+                },
+                { "glob": "favicon.ico", "input": "CI/RFI/", "output": "/" }
+              ],
               "fileReplacements": [
                 {
                   "replace": "src/app/build-specifics/index.ts",
@@ -151,30 +163,18 @@
                 {
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.rfi.prod.ts"
-                },
-                {
-                  "replace": "src/assets/images/ess-site.png",
-                  "with": "CI/RFI/site.png"
-                },
-                {
-                  "replace": "src/assets/images/esslogo.png",
-                  "with": "CI/RFI/site-logo.png"
-                },
-                {
-                  "replace": "src/favicon.ico",
-                  "with": "CI/RFI/favicon.ico"
-                },
-                {
-                  "replace": "src/theme.scss",
-                  "with": "CI/RFI/theme.scss"
                 }
-              ]
+              ],
+              "stylePreprocessorOptions": {
+                "includePaths": ["CI/RFI"]
+              },
+              "styles": ["src/styles.css", "CI/RFI/theme.scss"]
             },
             "rfi-dev": {
               "budgets": [
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "6kb"
+                  "maximumWarning": "150kb"
                 }
               ],
               "optimization": true,
@@ -185,6 +185,22 @@
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true,
+              "assets": [
+                "src/assets/",
+                "src/robots.txt",
+                "src/manifest.json",
+                {
+                  "glob": "site.png",
+                  "input": "CI/RFI/",
+                  "output": "/assets/images/"
+                },
+                {
+                  "glob": "site-logo.png",
+                  "input": "CI/RFI/",
+                  "output": "/assets/images/"
+                },
+                { "glob": "favicon.ico", "input": "CI/RFI/", "output": "/" }
+              ],
               "fileReplacements": [
                 {
                   "replace": "src/app/build-specifics/index.ts",
@@ -193,30 +209,18 @@
                 {
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.rfi.dev.ts"
-                },
-                {
-                  "replace": "src/assets/images/ess-site.png",
-                  "with": "CI/RFI/site.png"
-                },
-                {
-                  "replace": "src/assets/images/esslogo.png",
-                  "with": "CI/RFI/site-logo.png"
-                },
-                {
-                  "replace": "src/favicon.ico",
-                  "with": "CI/RFI/favicon.ico"
-                },
-                {
-                  "replace": "src/theme.scss",
-                  "with": "CI/RFI/theme.scss"
                 }
-              ]
+              ],
+              "stylePreprocessorOptions": {
+                "includePaths": ["CI/RFI"]
+              },
+              "styles": ["src/styles.css", "CI/RFI/theme.scss"]
             },
             "maxiv-prod": {
               "budgets": [
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "6kb"
+                  "maximumWarning": "150kb"
                 }
               ],
               "optimization": true,
@@ -227,6 +231,22 @@
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true,
+              "assets": [
+                "src/assets/",
+                "src/robots.txt",
+                "src/manifest.json",
+                {
+                  "glob": "site.png",
+                  "input": "CI/MAXIV/",
+                  "output": "/assets/images/"
+                },
+                {
+                  "glob": "site-logo.png",
+                  "input": "CI/MAXIV/",
+                  "output": "/assets/images/"
+                },
+                { "glob": "favicon.ico", "input": "CI/MAXIV/", "output": "/" }
+              ],
               "fileReplacements": [
                 {
                   "replace": "src/app/build-specifics/index.ts",
@@ -235,18 +255,6 @@
                 {
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.maxiv.prod.ts"
-                },
-                {
-                  "replace": "src/assets/images/ess-site.png",
-                  "with": "CI/MAXIV/maxiv-site.png"
-                },
-                {
-                  "replace": "src/assets/images/esslogo.png",
-                  "with": "CI/MAXIV/maxiv-logo.png"
-                },
-                {
-                  "replace": "src/favicon.ico",
-                  "with": "CI/MAXIV/maxiv-favicon.ico"
                 }
               ]
             },
@@ -254,21 +262,28 @@
               "budgets": [
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "6kb"
+                  "maximumWarning": "150kb"
+                }
+              ],
+              "assets": [
+                "src/assets/",
+                "src/robots.txt",
+                "src/manifest.json",
+                {
+                  "glob": "site.png",
+                  "input": "CI/PSI/",
+                  "output": "/assets/images/"
+                },
+                {
+                  "glob": "site-logo.png",
+                  "input": "CI/PSI/",
+                  "output": "/assets/images/"
                 }
               ],
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.development.ts"
-                },
-                {
-                  "replace": "src/assets/images/ess-site.png",
-                  "with": "CI/PSI/site.png"
-                },
-                {
-                  "replace": "src/assets/images/esslogo.png",
-                  "with": "CI/PSI/site-logo.png"
                 }
               ],
               "serviceWorker": true
@@ -277,7 +292,7 @@
               "budgets": [
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "6kb"
+                  "maximumWarning": "150kb"
                 }
               ],
               "optimization": true,
@@ -288,6 +303,21 @@
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true,
+              "assets": [
+                "src/assets/",
+                "src/robots.txt",
+                "src/manifest.json",
+                {
+                  "glob": "site.png",
+                  "input": "CI/PSI/",
+                  "output": "/assets/images/"
+                },
+                {
+                  "glob": "site-logo.png",
+                  "input": "CI/PSI/",
+                  "output": "/assets/images/"
+                }
+              ],
               "fileReplacements": [
                 {
                   "replace": "src/app/build-specifics/index.ts",
@@ -296,14 +326,6 @@
                 {
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.prod.ts"
-                },
-                {
-                  "replace": "src/assets/images/ess-site.png",
-                  "with": "CI/PSI/site.png"
-                },
-                {
-                  "replace": "src/assets/images/esslogo.png",
-                  "with": "CI/PSI/site-logo.png"
                 }
               ]
             },
@@ -311,7 +333,7 @@
               "budgets": [
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "6kb"
+                  "maximumWarning": "150kb"
                 }
               ],
               "optimization": true,
@@ -322,18 +344,25 @@
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true,
+              "assets": [
+                "src/assets/",
+                "src/robots.txt",
+                "src/manifest.json",
+                {
+                  "glob": "site.png",
+                  "input": "CI/PSI/",
+                  "output": "/assets/images/"
+                },
+                {
+                  "glob": "site-logo.png",
+                  "input": "CI/PSI/",
+                  "output": "/assets/images/"
+                }
+              ],
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.staging.ts"
-                },
-                {
-                  "replace": "src/assets/images/ess-site.png",
-                  "with": "CI/PSI/site.png"
-                },
-                {
-                  "replace": "src/assets/images/esslogo.png",
-                  "with": "CI/PSI/site-logo.png"
                 }
               ]
             },
@@ -341,7 +370,7 @@
               "budgets": [
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "6kb"
+                  "maximumWarning": "150kb"
                 }
               ],
               "optimization": true,
@@ -352,18 +381,25 @@
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true,
+              "assets": [
+                "src/assets/",
+                "src/robots.txt",
+                "src/manifest.json",
+                {
+                  "glob": "site.png",
+                  "input": "CI/PSI/",
+                  "output": "/assets/images/"
+                },
+                {
+                  "glob": "site-logo.png",
+                  "input": "CI/PSI/",
+                  "output": "/assets/images/"
+                }
+              ],
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.qa.ts"
-                },
-                {
-                  "replace": "src/assets/images/ess-site.png",
-                  "with": "CI/PSI/site.png"
-                },
-                {
-                  "replace": "src/assets/images/esslogo.png",
-                  "with": "CI/PSI/site-logo.png"
                 }
               ]
             }
@@ -416,7 +452,7 @@
             "scripts": [],
             "styles": ["src/styles.css", "src/theme.scss"],
             "stylePreprocessorOptions": {
-              "includePaths": ["src/theme"]
+              "includePaths": ["src"]
             },
             "assets": [
               "src/assets",

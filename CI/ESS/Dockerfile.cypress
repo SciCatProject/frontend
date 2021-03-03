@@ -1,5 +1,5 @@
 FROM cypress/base
-LABEL maintainer="gareth.murphy@esss.se"
+LABEL maintainer="henrik.johansson@ess.eu"
 RUN sed -i -e 's/^root::/root:!:/' /etc/shadow
 
 RUN apt-get update && apt-get install -y wget
