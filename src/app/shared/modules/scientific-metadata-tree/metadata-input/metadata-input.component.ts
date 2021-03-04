@@ -35,7 +35,6 @@ export class MetadataInputComponent implements OnInit {
     this.metadataForm = this.initilizeFormControl();
     this.types = this.typeValues;
     this.addCurrentMetadata(this.data);
-    console.log(this.data as FlatNodeEdit);
     this.metadataForm
     this.metadataForm.valueChanges.subscribe(this.changeDetection);
   }

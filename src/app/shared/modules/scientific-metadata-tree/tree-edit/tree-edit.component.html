@@ -11,10 +11,10 @@
     <button mat-button type="button" color="accent" (click)="toggleExpand()">
       <mat-icon>save</mat-icon>
     </button>
-    <button mat-button type="button" color="accent" (click)="undo()">
+    <button mat-button type="button" color="accent" [disabled]="!historyManager.hasUndo()" (click)="historyManager.undo()">
       <mat-icon>undo</mat-icon>
     </button>
-    <button mat-button type="button" color="accent" (click)="redo()">
+    <button mat-button type="button" color="accent" [disabled]="!historyManager.hasRedo()" (click)="historyManager.redo()">
       <mat-icon>redo</mat-icon>
     </button>
     <button mat-button type="button" color="accent" (click)="toggleExpand()">
@@ -23,7 +23,7 @@
   </mat-button-toggle-group>
 </div>
 <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
-  <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle
+  <mat-tree-node *matTreeNodeDef="let node"
     [style.display]="isVisible(0,node)?'flex':'none' ">
     <section *ngIf="node.editing === false">
       <div class="key-cell" [style.padding-left.px]="getPadding(node)">
@@ -31,15 +31,15 @@
           <mat-icon class="mat-icon-rtl-mirror" class="mat-icon-rtl-mirror">
           </mat-icon>
         </button>
-        <label class="clickable" (click)="setCurrentEditingNode(node); $event.stopPropagation()">
+        <label class="clickable" (click)="enableEditing(node); $event.stopPropagation()">
           {{node.key |replaceUnderscore|titleCase}}
         </label>
       </div>
-      <div class="value-cell">{{node.value}}</div>
+      <div class="value-cell">{{node.value}} {{node.unit}}</div>
       <div class="button-cell">
         <div class="display-flex">
           <button mat-icon-button class="deleteButton" color="warn"
-            title="Delete row" (click)="deleteItem(node)">
+            title="Delete row" (click)="deleteNode(node)">
             <mat-icon>cancel</mat-icon>
           </button>
         </div>
@@ -62,15 +62,19 @@
             'arrow_drop_down': 'arrow_right'}}
           </mat-icon>
         </button>
-        <label class="clickable" (click)="setCurrentEditingNode(node)">
+        <label class="clickable" (click)="enableEditing(node); $event.stopPropagation()">
           {{node.key |replaceUnderscore|titleCase}}
         </label>
       </div>
       <div class="value-cell"></div>
       <div class="button-cell">
         <div class="display-flex">
-          <button mat-icon-button (click)="addNewItem(node)">
+          <button mat-icon-button (click)="addNewNode(node)">
             <mat-icon>add</mat-icon>
+          </button>
+          <button mat-icon-button class="deleteButton" color="warn"
+            title="Delete row" [disabled]="node.expandable" (click)="deleteNode(node)">
+            <mat-icon>cancel</mat-icon>
           </button>
         </div>
       </div>
