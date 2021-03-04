@@ -42,7 +42,7 @@
         </div>
         <mat-form-field *ngIf="column.matchMode;">
           <ng-container *ngIf="column.matchMode == 'between'">
-            <input matInput class="date-input" placeholder="Select a date range" name="range-picker"
+            <input #allFilters matInput id="{{ column.id }}" class="date-input" placeholder="Select a date range" name="range-picker"
               [satDatepicker]="picker" (dateChange)="dateChanged($event,column.id)" />
             <sat-datepicker-toggle matSuffix [for]="picker"></sat-datepicker-toggle>
             <sat-datepicker #picker [rangeMode]="true"></sat-datepicker>
@@ -60,8 +60,17 @@
           <span mat-sort-header>{{ column.label }}</span>
         </div>
         <mat-form-field *ngIf="column.matchMode;">
-          <input #allFilters matInput autocomplete="off" id="{{ column.id }}" placeholder="{{ column.matchMode }}" />
+          <ng-container *ngIf="column.matchMode == 'between'">
+            <input #allFilters matInput id="{{ column.id }}" class="date-input" placeholder="Select a date range" name="range-picker"
+              [satDatepicker]="picker" (dateChange)="dateChanged($event,column.id)" />
+            <sat-datepicker-toggle matSuffix [for]="picker"></sat-datepicker-toggle>
+            <sat-datepicker #picker [rangeMode]="true"></sat-datepicker>
+          </ng-container>
+          <ng-container *ngIf="column.matchMode != 'between'">
+            <input #allFilters matInput autocomplete="off" id="{{ column.id }}" placeholder="{{ column.matchMode }}" />
+          </ng-container>
         </mat-form-field>
+
       </mat-header-cell>
     </ng-template>
 

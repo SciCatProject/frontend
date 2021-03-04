@@ -12,12 +12,15 @@ import { Router } from "@angular/router";
   styleUrls: ["./jobs-dashboard-new.component.css"],
 })
 export class JobsDashboardNewComponent implements OnInit, OnDestroy {
+  // not needed, date by default is shown in local time and using the locale of the browser (if installed, see app.module.ts)
+  // tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
   columns: Column[] = [
     { id: "id", label: "ID", canSort: true, icon: "perm_device_information", matchMode: "contains", hideOrder: 0, },
     { id: "emailJobInitiator", label: "Initiator", icon: "person", canSort: true, matchMode: "contains", hideOrder: 1, },
     { id: "type", label: "Type", icon: "unarchive", canSort: true, matchMode: "is", hideOrder: 2, },
     {
-      id: "creationTime", icon: "schedule", label: "Created at", format: "date medium", canSort: true,
+      id: "creationTime", icon: "schedule", label: "Created at local time", format: "date medium ", canSort: true,
       matchMode: "between", hideOrder: 3,
     },
     { id: "jobParams", icon: "work", label: "Parameters", format: "json", canSort: false, hideOrder: 4, },

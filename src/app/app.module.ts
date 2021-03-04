@@ -40,6 +40,12 @@ import { JobsModule } from "jobs/jobs.module";
 import { InstrumentsModule } from "./instruments/instruments.module";
 import { FilesModule } from "files/files.module";
 
+import { LOCALE_ID } from '@angular/core';
+import { registerLocaleData } from '@angular/common';
+import localeDECH from '@angular/common/locales/de-CH';
+
+registerLocaleData(localeDECH);
+
 @NgModule({
   declarations: [AppComponent],
   imports: [
@@ -91,7 +97,7 @@ import { FilesModule } from "files/files.module";
     }),
   ],
   exports: [MatNativeDateModule],
-  providers: [UserApi, SampleApi, Title, MatNativeDateModule],
+  providers: [UserApi, SampleApi, Title, MatNativeDateModule, { provide: LOCALE_ID, useValue: 'de-ch' }],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }
