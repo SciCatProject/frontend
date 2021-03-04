@@ -17,7 +17,7 @@ import { ExportExcelService } from "../../services/export-excel.service";
 
 import * as moment from "moment";
 import { MatDatepickerInputEvent } from "@angular/material/datepicker/datepicker-input-base";
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router } from "@angular/router";
 
 export interface DateRange {
   begin: Date;
@@ -93,15 +93,11 @@ export class SharedTableComponent implements AfterContentInit, OnDestroy, OnInit
    */
 
   ngOnInit() {
-
-  };
+  }
 
   // link paginator and sort arrows to tables data source
 
   ngAfterViewInit() {
-
-
-
     // reset the paginator after sorting
     this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
 
@@ -114,7 +110,7 @@ export class SharedTableComponent implements AfterContentInit, OnDestroy, OnInit
           this.paginator.pageIndex = 0;
           this.router.navigate([], {
             queryParams: { globalSearch: this.input.nativeElement.value },
-            queryParamsHandling: 'merge'
+            queryParamsHandling: "merge"
           });
           this.loadDataPage();
         })
@@ -133,33 +129,33 @@ export class SharedTableComponent implements AfterContentInit, OnDestroy, OnInit
     // TODO add sort, paginator fields to url as well
     this.route.queryParams.subscribe(queryParams => {
       /**
-       * If the query-string is '?genre=rpg&platform=xbox'
+       * If the query-string is "?genre=rpg&platform=xbox"
        * the queryParams object will look like
-       * { platform: 'xbox', genre: 'rpg }
+       * { platform: "xbox", genre: "rpg }
        * */
-      this.input.nativeElement.value = queryParams.globalSearch || ""
-      let lq = { ...queryParams }
+      this.input.nativeElement.value = queryParams.globalSearch || "";
+      const lq = { ...queryParams };
       // TODO in future delete also pagesize etc keys and treat them separately
-      delete lq["globalSearch"]
-      this.filterExpressions = lq
+      delete lq["globalSearch"];
+      this.filterExpressions = lq;
       this.allFilters.toArray().forEach(filter => {
         if (lq[filter.nativeElement.id]) {
           // TODO if this is an object tarnslate to string as expected in GUI, no begin, end syntax
           if (lq[filter.nativeElement.id].startsWith("{")) {
-            filter.nativeElement.value = Object.values(JSON.parse(lq[filter.nativeElement.id])).join(" ")
+            filter.nativeElement.value = Object.values(JSON.parse(lq[filter.nativeElement.id])).join(" ");
           } else {
-            filter.nativeElement.value = lq[filter.nativeElement.id]
+            filter.nativeElement.value = lq[filter.nativeElement.id];
           }
         } else {
-          filter.nativeElement.value = null
+          filter.nativeElement.value = null;
         }
-      })
+      });
       // next find the coreponding html fields
       /*        this.sort.active,
               this.sort.direction,
               this.paginator.pageIndex,
               this.paginator.pageSize */
-      this.loadDataPage()
+      this.loadDataPage();
     });
   }
 
@@ -237,7 +233,7 @@ export class SharedTableComponent implements AfterContentInit, OnDestroy, OnInit
           this.paginator.pageIndex = 0;
           const columnId = filter.nativeElement.id;
           if (filter.nativeElement.value) {
-            if (filter.nativeElement.name=="range-picker") {
+            if (filter.nativeElement.name === "range-picker") {
               const beginend = filter.nativeElement.value.split(" ");
               this.filterExpressions[columnId] = {
                 begin: beginend[0],
@@ -245,13 +241,13 @@ export class SharedTableComponent implements AfterContentInit, OnDestroy, OnInit
               };
               this.router.navigate([], {
                 queryParams: { [columnId]: JSON.stringify(this.filterExpressions[columnId]) },
-                queryParamsHandling: 'merge'
+                queryParamsHandling: "merge"
               });
             } else {
               this.filterExpressions[columnId] = filter.nativeElement.value;
               this.router.navigate([], {
                 queryParams: { [columnId]: this.filterExpressions[columnId] },
-                queryParamsHandling: 'merge'
+                queryParamsHandling: "merge"
               });
             }
             // console.log("columnid,filterexpression:",columnId,this.filterExpressions[columnId])
@@ -259,7 +255,7 @@ export class SharedTableComponent implements AfterContentInit, OnDestroy, OnInit
             delete this.filterExpressions[columnId];
             this.router.navigate([], {
               queryParams: { [columnId]: null },
-              queryParamsHandling: 'merge'
+              queryParamsHandling: "merge"
             });
           }
           this.loadDataPage();
@@ -324,18 +320,18 @@ export class SharedTableComponent implements AfterContentInit, OnDestroy, OnInit
     if (event.value) {
       const { begin, end } = event.value;
       this.filterExpressions[columnId] = {
-        begin: moment(begin).format('YYYY-MM-DD'),
-        end: moment(end).format('YYYY-MM-DD')
+        begin: moment(begin).format("YYYY-MM-DD"),
+        end: moment(end).format("YYYY-MM-DD")
       };
       this.router.navigate([], {
         queryParams: { [columnId]: JSON.stringify(this.filterExpressions[columnId]) },
-        queryParamsHandling: 'merge'
+        queryParamsHandling: "merge"
       });
     } else {
       delete this.filterExpressions[columnId];
       this.router.navigate([], {
         queryParams: { [columnId]: null },
-        queryParamsHandling: 'merge'
+        queryParamsHandling: "merge"
       });
     }
     // console.log("columnid,filterexpression:",columnId,this.filterExpressions[columnId])

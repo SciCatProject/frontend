@@ -18,7 +18,6 @@ import { PipesModule } from "../../pipes/pipes.module";
 import { MatCardModule } from "@angular/material/card";
 import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatIconModule } from "@angular/material/icon";
-import { MatListModule } from "@angular/material/list";
 import { MatPaginatorModule } from "@angular/material/paginator";
 import { MatSortModule } from "@angular/material/sort";
 import { MatTableModule } from "@angular/material/table";
@@ -41,7 +40,6 @@ import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
     MatCardModule,
     MatCheckboxModule,
     MatIconModule,
-    MatListModule,
     MatPaginatorModule,
     MatSortModule,
     MatProgressSpinnerModule,

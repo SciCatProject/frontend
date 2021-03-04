@@ -6,6 +6,7 @@ import { of } from "rxjs";
 import { SciCatDataSource } from "shared/services/scicat.datasource";
 
 import { SharedTableComponent } from "./shared-table.component";
+import { RouterTestingModule } from "@angular/router/testing";
 
 describe("SharedTableComponent", () => {
   let component: SharedTableComponent;
@@ -33,6 +34,7 @@ describe("SharedTableComponent", () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
+      imports: [RouterTestingModule],
       declarations: [SharedTableComponent],
     }).compileComponents();
   }));

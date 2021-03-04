@@ -3,7 +3,7 @@ import { HttpClient, HttpParams } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { Column } from "../column.type";
 import { LoopBackAuth } from "shared/sdk";
-import * as moment from 'moment';
+import * as moment from "moment";
 
 @Injectable({
   providedIn: "root",
@@ -47,24 +47,21 @@ export class ScicatDataService {
                 break;
               }
               case "between": {
-                console.log("============= between expression:",filterExpressions[key],typeof filterExpressions[key])
-                let be: any
-                if (typeof filterExpressions[key] == "object"){
-                  be=filterExpressions[key]
+                let be: any;
+                if (typeof filterExpressions[key] === "object") {
+                  be = filterExpressions[key];
                 } else {
-                  be=JSON.parse(filterExpressions[key])
+                  be = JSON.parse(filterExpressions[key]);
                 }
                 // TODO filterExpressions[key] can be a string or already on Object (the latter when I edit the date line directly)
                 // why two different types ?
                 // ============= between expression: {"begin":"2021-03-03","end":"2021-03-03"}
                 // convert to UTC and add one day to end expression
 
-                const tz=Intl.DateTimeFormat().resolvedOptions().timeZone
+                const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
                 const blocal = moment.tz(be.begin, tz);
-                const elocal = moment.tz(be.end, tz).add(1, 'days');
-                console.log("================ e,b,",elocal,blocal)
-                result[key] = {begin:blocal.toISOString(),end:elocal.toISOString()};
-                console.log("Resulting query:",result[key])
+                const elocal = moment.tz(be.end, tz).add(1, "days");
+                result[key] = { begin: blocal.toISOString(), end: elocal.toISOString() };
                 break;
               }
               case "is": {
@@ -78,7 +75,7 @@ export class ScicatDataService {
             }
           } else {
             // TODO allow for keys not defined inside table definition ?
-            console.log("Unknown key ignored:",key)
+            console.log("Unknown key ignored:", key);
           }
         }
       });
