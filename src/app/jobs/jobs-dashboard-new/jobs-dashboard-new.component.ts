@@ -56,8 +56,9 @@ export class JobsDashboardNewComponent implements OnInit, OnDestroy {
   }
 
   onRowClick(job: Job) {
-    console.log("Row clicked:", job);
+    // currently deactivated, no extra data available
+/*     console.log("Row clicked:", job);
     const id = encodeURIComponent(job.id);
-    this.router.navigateByUrl("/user/jobs/" + id);
+    this.router.navigateByUrl("/user/jobs/" + id); */
   }
 }
