@@ -12,7 +12,7 @@ import { fromEvent, merge, Subscription } from "rxjs";
 
 import { Column } from "./../../column.type";
 import { SciCatDataSource } from "../../services/scicat.datasource";
-import { debounceTime, distinctUntilChanged, switchMap, tap } from "rxjs/operators";
+import { debounceTime, distinctUntilChanged, tap } from "rxjs/operators";
 import { ExportExcelService } from "../../services/export-excel.service";
 
 import * as moment from "moment";

@@ -1,17 +1,21 @@
 import { Injectable } from "@angular/core";
 import * as fs from "file-saver";
-import * as logo from "./scicatLogo";
+// import * as logo from "./scicatLogo";
 import { Workbook } from "exceljs";
+import { Router } from "@angular/router";
 
 @Injectable({
   providedIn: "root",
 })
 export class ExportExcelService {
-  constructor() {}
+  constructor(private router: Router) { }
 
   exportExcel(excelData) {
     // Title, Header & Data
     const title = excelData.title;
+    const parsedUrl = new URL(window.location.href);
+    const baseUrl = parsedUrl.origin;
+    const url = baseUrl + this.router.url;
     const header = excelData.headers;
     // const data = excelData.data;
     const footerText = excelData.footerText;
@@ -22,7 +26,7 @@ export class ExportExcelService {
     const worksheet = workbook.addWorksheet(sheetTitle);
 
     // Add Row and formatting
-    worksheet.mergeCells("C1", "F4");
+    worksheet.mergeCells("C1", "H4");
     const titleRow = worksheet.getCell("C1");
     titleRow.value = title;
     titleRow.font = {
@@ -35,11 +39,11 @@ export class ExportExcelService {
     titleRow.alignment = { vertical: "middle", horizontal: "center" };
 
     // Date
-    worksheet.mergeCells("G1:H4");
+    worksheet.mergeCells("I1:J4");
     const date = new Date();
     const formattedDate =
       date.getDate() + "-" + date.getMonth() + "-" + date.getFullYear();
-    const dateCell = worksheet.getCell("G1");
+    const dateCell = worksheet.getCell("I1");
     dateCell.value = formattedDate;
     dateCell.font = {
       name: "Calibri",
@@ -49,19 +53,39 @@ export class ExportExcelService {
     dateCell.alignment = { vertical: "middle", horizontal: "center" };
 
     // Add Image
-    const myLogoImage = workbook.addImage({
-      base64: logo.imgBase64,
-      extension: "png",
-    });
-    worksheet.mergeCells("A1:B4");
-    worksheet.addImage(myLogoImage, "A1:B4");
+    /*     const myLogoImage = workbook.addImage({
+          base64: logo.imgBase64,
+          extension: "png",
+        });
+        worksheet.mergeCells("A1:B4");
+        worksheet.addImage(myLogoImage, "A1:B4"); */
+
+
+    // URL
+    worksheet.mergeCells("C5", "H6");
+    const urlRow = worksheet.getCell("C5");
+    urlRow.value = url;
+    urlRow.font = {
+      name: "Calibri",
+      size: 10,
+      underline: "single",
+      bold: false,
+      color: { argb: "0085A3" },
+    };
+    urlRow.alignment = { vertical: "middle", horizontal: "center" };
+
 
     // Blank Row
     worksheet.addRow([]);
 
     // Adding Header Row
     const headerRow = worksheet.addRow(header);
+    let icol = 0;
     headerRow.eachCell((cell, number) => {
+      // define some default column width
+      icol++;
+      worksheet.getColumn(icol).width = 25;
+
       cell.fill = {
         type: "pattern",
         pattern: "solid",
@@ -75,24 +99,25 @@ export class ExportExcelService {
       };
     });
 
-    // Adding Data with Conditional Formatting
-    // data.forEach((d) => {
-    //   const row = worksheet.addRow(d);
+    // Adding Data
+    excelData.data.forEach((d) => {
+      const row = worksheet.addRow(d);
 
-    //   let sales = row.getCell(6);
-    //   let color = "FF99FF99";
-    //   if (+sales.value < 200000) {
-    //     color = "FF9999";
-    //   }
+      // with Conditional Formatting
+      //   let sales = row.getCell(6);
+      //   let color = "FF99FF99";
+      //   if (+sales.value < 200000) {
+      //     color = "FF9999";
+      //   }
 
-    //   sales.fill = {
-    //     type: "pattern",
-    //     pattern: "solid",
-    //     fgColor: { argb: color },
-    //   };
-    // });
+      //   sales.fill = {
+      //     type: "pattern",
+      //     pattern: "solid",
+      //     fgColor: { argb: color },
+      //   };
+    });
 
-    // worksheet.getColumn(3).width = 20;
+
     worksheet.addRow([]);
 
     // Footer Row
