@@ -101,7 +101,7 @@ export class ExportExcelService {
 
     // Adding Data
     excelData.data.forEach((d) => {
-      const row = worksheet.addRow(d);
+      worksheet.addRow(d);
 
       // with Conditional Formatting
       //   let sales = row.getCell(6);
