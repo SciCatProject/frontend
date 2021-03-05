@@ -11,6 +11,15 @@ mat-card {
     background-color: mat-color($navy, 400);
   }
 
+  .section-icon {
+    height: auto !important;
+    width: auto !important;
+
+    mat-icon {
+      vertical-align: middle;
+    }
+  }
+
   .details {
     padding: 1em;
 
@@ -19,10 +28,6 @@ mat-card {
         th {
           text-align: left;
           padding-right: 0.5em;
-
-          mat-icon {
-            vertical-align: middle;
-          }
         }
 
         td {
