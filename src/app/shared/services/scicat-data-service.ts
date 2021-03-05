@@ -21,13 +21,14 @@ export class ScicatDataService {
   }
 
   // TODO when do I need to use "mode" syntax (may be for nested keys ?)
-  mapToMongoSyntax(columns: Column[], filterExpressions: any) {
+  createColumnFilterMongoExpression(columns: Column[], filterExpressions: any) {
     const result = {};
     if (filterExpressions) {
       Object.keys(filterExpressions).forEach(function (key, index) {
         if (filterExpressions[key] !== "") {
           // console.log("filterexpression:", key, filterExpressions[key], columns)
           const column = columns.find((c) => c.id === key);
+          // All non-column conditions are ignored here
           if (column) {
             switch (column.matchMode) {
               case "contains": {
@@ -53,11 +54,7 @@ export class ScicatDataService {
                 } else {
                   be = JSON.parse(filterExpressions[key]);
                 }
-                // TODO filterExpressions[key] can be a string or already on Object (the latter when I edit the date line directly)
-                // why two different types ?
-                // ============= between expression: {"begin":"2021-03-03","end":"2021-03-03"}
                 // convert to UTC and add one day to end expression
-
                 const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
                 const blocal = moment.tz(be.begin, tz);
                 const elocal = moment.tz(be.end, tz).add(1, "days");
@@ -73,9 +70,6 @@ export class ScicatDataService {
                 break;
               }
             }
-          } else {
-            // TODO allow for keys not defined inside table definition ?
-            console.log("Unknown key ignored:", key);
           }
         }
       });
@@ -110,7 +104,7 @@ export class ScicatDataService {
     // limits	{"skip":0,"limit":50,"order":"creationTime:desc"}
 
     // ("findalldata:", filterExpressions)
-    const mongoExpression = this.mapToMongoSyntax(columns, filterExpressions);
+    const mongoExpression = this.createColumnFilterMongoExpression(columns, filterExpressions);
     const filterFields = { ...mongoExpression };
 
     if (globalFilter !== "") {
@@ -142,7 +136,7 @@ export class ScicatDataService {
     filterExpressions?: any
   ): Observable<any> {
 
-    const mongoExpression = this.mapToMongoSyntax(columns, filterExpressions);
+    const mongoExpression = this.createColumnFilterMongoExpression(columns, filterExpressions);
     const filterFields = { ...mongoExpression };
 
     if (globalFilter !== "") {

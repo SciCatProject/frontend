@@ -101,6 +101,7 @@ export class SharedTableComponent implements AfterContentInit, OnDestroy, OnInit
     // reset the paginator after sorting
     this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
 
+    // global search handler
     fromEvent(this.input.nativeElement, "keyup")
       .pipe(
         debounceTime(650),
@@ -109,7 +110,7 @@ export class SharedTableComponent implements AfterContentInit, OnDestroy, OnInit
           // console.log("global key typed :", this.input.nativeElement.id)
           this.paginator.pageIndex = 0;
           this.router.navigate([], {
-            queryParams: { globalSearch: this.input.nativeElement.value },
+            queryParams: { globalSearch: this.input.nativeElement.value, pageIndex: 0 },
             queryParamsHandling: "merge"
           });
           this.loadDataPage();
@@ -119,28 +120,51 @@ export class SharedTableComponent implements AfterContentInit, OnDestroy, OnInit
 
     this.activateColumnFilters();
 
-
     merge(this.sort.sortChange, this.paginator.page)
       .pipe(
-        tap(() => this.loadDataPage())
+        tap(() => {
+          this.router.navigate([], {
+            queryParams: {
+              sortActive: this.sort.active,
+              sortDirection: this.sort.direction,
+              pageIndex: this.paginator.pageIndex,
+              pageSize: this.paginator.pageSize
+            },
+            queryParamsHandling: "merge"
+          });
+          this.loadDataPage();
+        }
+        )
       )
       .subscribe();
 
-    // TODO add sort, paginator fields to url as well
     this.route.queryParams.subscribe(queryParams => {
       /**
        * If the query-string is "?genre=rpg&platform=xbox"
        * the queryParams object will look like
        * { platform: "xbox", genre: "rpg }
        * */
+      if (queryParams.sortActive) {
+        this.sort.active = queryParams.sortActive;
+      }
+      if (queryParams.sortDirection) {
+        this.sort.direction = queryParams.sortDirection;
+      }
+      if (queryParams.pageIndex) {
+        this.paginator.pageIndex = Number(queryParams.pageIndex);
+      }
+      if (queryParams.pageSize) {
+        this.paginator.pageSize = Number(queryParams.pageSize);
+      }
+
       this.input.nativeElement.value = queryParams.globalSearch || "";
       const lq = { ...queryParams };
-      // TODO in future delete also pagesize etc keys and treat them separately
       delete lq["globalSearch"];
       this.filterExpressions = lq;
       this.allFilters.toArray().forEach(filter => {
         if (lq[filter.nativeElement.id]) {
-          // TODO if this is an object tarnslate to string as expected in GUI, no begin, end syntax
+          // if this is an object translate to string as expected in GUI, no begin, end syntax
+          // TODO use instead (filter.nativeElement.name === "range-picker")  ?
           if (lq[filter.nativeElement.id].startsWith("{")) {
             filter.nativeElement.value = Object.values(JSON.parse(lq[filter.nativeElement.id])).join(" ");
           } else {
@@ -150,11 +174,6 @@ export class SharedTableComponent implements AfterContentInit, OnDestroy, OnInit
           filter.nativeElement.value = null;
         }
       });
-      // next find the coreponding html fields
-      /*        this.sort.active,
-              this.sort.direction,
-              this.paginator.pageIndex,
-              this.paginator.pageSize */
       this.loadDataPage();
     });
   }
@@ -223,7 +242,17 @@ export class SharedTableComponent implements AfterContentInit, OnDestroy, OnInit
     // the following does not work:this.unsubscribeColumnFilters()
     let i = 0;
     this.allFilters.toArray().forEach(filter => {
+
+      if ("sortDefault" in this.columnsdef[i]) {
+        this.sort.active = this.columnsdef[i].id;
+        this.sort.direction = this.columnsdef[i].sortDefault;
+        this.router.navigate([], {
+          queryParams: { sortActive: this.sort.active, sortDirection: this.sort.direction },
+          queryParamsHandling: "merge"
+        });
+      }
       i++;
+
       // console.log("Defining subscription for column :", i)
       this.columnFilterSubscriptions[i] = fromEvent(filter.nativeElement, "keyup").pipe(
         debounceTime(650),
@@ -265,6 +294,7 @@ export class SharedTableComponent implements AfterContentInit, OnDestroy, OnInit
     });
   }
 
+  // TODO where is this needed ?
   reloadFilterExpressions() {
     this.allFilters.toArray().forEach(filter => {
       const columnId = filter.nativeElement.id;

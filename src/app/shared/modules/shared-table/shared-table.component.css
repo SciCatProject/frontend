@@ -2,6 +2,9 @@
   margin: 8px;
 }
 
+::ng-deep .mat-sort-header-arrow {
+  color: #31b131;
+}
 
 .expanded {
   height: min-content !important;
@@ -70,9 +73,9 @@
   padding-top: 10px;
 }
 
-mat-cell > span.ellipsis {
-  text-overflow: ellipsis; 
-  overflow: hidden; 
+mat-cell>span.ellipsis {
+  text-overflow: ellipsis;
+  overflow: hidden;
   white-space: nowrap;
 }
 
@@ -88,4 +91,3 @@ mat-header-row {
 .mat-input-element::placeholder {
   color: black;
 }
-

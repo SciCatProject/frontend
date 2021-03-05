@@ -1,3 +1,5 @@
+import { SortDirection } from "@angular/material/sort";
+
 export interface Column {
     id: string;
     type?: string;
@@ -9,4 +11,5 @@ export interface Column {
     matchMode?: string;
     format?: string;
     icon?: string;
+    sortDefault?: SortDirection;
 }
