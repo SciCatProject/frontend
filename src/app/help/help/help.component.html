@@ -1,4 +1,16 @@
 <p>
+  <mat-card class="help-card">
+    <mat-card-header>
+      <mat-card-title>Where is the official documentation ?</mat-card-title>
+    </mat-card-header>
+    This is our <a href="https://scicatproject.github.io/" target="blank">documentation homepage</a>. 
+    Following the documentation link (blue button at top left) you will find detailed information for 
+    Users, Developers, Operators and Ingestors
+  </mat-card>
+</p>
+
+
+<p>
   <mat-card class="help-card" *ngIf="gettingStarted">
     <mat-card-header>
       <mat-card-title>How to get started</mat-card-title>
@@ -26,10 +38,13 @@
     <mat-card-header>
       <mat-card-title>Where is my data?</mat-card-title>
     </mat-card-header>
-    Firstly, the ingestion process makes data on PSI central servers, known to
-    the catalog. Secondly, archiving makes a copy of the data in the storage
-    facility. Once archivng is complete, the data can be retrieved from the
-    storage facility using the retrieval workflow.
+    The data catalog keeps the *metadata* for your raw and derived datasets.
+    The actual files comprising the datasets are however stored outside the catalog.
+    Often the data will reside initially on disk.
+    The data catalog allows you to archive these files. In this way
+    the files on disk will be copied to tape and can be retrieved later to
+    a location of your choice. Here are the 
+    <a href="https://scicatproject.github.io/documentation/Users/Jobs.html">details on the archive and retrieve workflows</a> see 
   </mat-card>
 </p>
 
