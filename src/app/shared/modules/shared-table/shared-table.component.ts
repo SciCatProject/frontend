@@ -109,8 +109,12 @@ export class SharedTableComponent implements AfterContentInit, OnDestroy, OnInit
         tap(() => {
           // console.log("global key typed :", this.input.nativeElement.id)
           this.paginator.pageIndex = 0;
+          let globalSearch = this.input.nativeElement.value;
+          if (globalSearch === "") {
+            globalSearch = null;
+          }
           this.router.navigate([], {
-            queryParams: { globalSearch: this.input.nativeElement.value, pageIndex: 0 },
+            queryParams: { globalSearch: globalSearch, pageIndex: 0 },
             queryParamsHandling: "merge"
           });
           this.loadDataPage();
@@ -294,7 +298,7 @@ export class SharedTableComponent implements AfterContentInit, OnDestroy, OnInit
     });
   }
 
-  // TODO where is this needed ?
+  // fill input fields with current filter conditions
   reloadFilterExpressions() {
     this.allFilters.toArray().forEach(filter => {
       const columnId = filter.nativeElement.id;
@@ -306,8 +310,6 @@ export class SharedTableComponent implements AfterContentInit, OnDestroy, OnInit
   }
 
   toggleColumns(tableWidth: number) {
-    // console.log("Calling toggleColumns", tableWidth)
-
     this.zone.runOutsideAngular(() => {
       const sortedColumns = this.columnsdef.slice()
         .map((column, index) => ({ ...column, order: index }))
@@ -329,12 +331,10 @@ export class SharedTableComponent implements AfterContentInit, OnDestroy, OnInit
       this.columnsdef = sortedColumns.sort((a, b) => a.order - b.order);
       this.visibleColumns = this.columnsdef.filter(column => column.visible);
       this.hiddenColumns = this.columnsdef.filter(column => !column.visible);
-      // console.log("visible columns:",this.visibleColumns)
+      this.zone.run(() => { });
     });
-
     this._changeDetectorRef.detectChanges();
     this.reloadFilterExpressions();
-    this.activateColumnFilters();
   }
 
   exportToExcel() {
@@ -347,6 +347,7 @@ export class SharedTableComponent implements AfterContentInit, OnDestroy, OnInit
   }
 
   dateChanged(event: MatDatepickerInputEvent<DateRange>, columnId: string) {
+    // console.log("dateChanged event:", event, columnId)
     if (event.value) {
       const { begin, end } = event.value;
       this.filterExpressions[columnId] = {
