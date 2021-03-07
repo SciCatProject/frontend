@@ -245,7 +245,7 @@ export class SharedTableComponent implements AfterContentInit, OnDestroy, OnInit
   activateColumnFilters() {
     let i = 0;
     this.allFilters.toArray().forEach(filter => {
-      const col = this.columnsdef[i]
+      const col = this.columnsdef[i];
       if ("sortDefault" in col) {
         this.sort.active = col.id;
         this.sort.direction = col.sortDefault;
