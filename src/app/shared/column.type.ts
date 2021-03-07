@@ -12,4 +12,5 @@ export interface Column {
     format?: string;
     icon?: string;
     sortDefault?: SortDirection;
+    filterDefault?: any;
 }

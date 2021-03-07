@@ -243,18 +243,32 @@ export class SharedTableComponent implements AfterContentInit, OnDestroy, OnInit
   }
 
   activateColumnFilters() {
-    // the following does not work:this.unsubscribeColumnFilters()
     let i = 0;
     this.allFilters.toArray().forEach(filter => {
-
-      if ("sortDefault" in this.columnsdef[i]) {
-        this.sort.active = this.columnsdef[i].id;
-        this.sort.direction = this.columnsdef[i].sortDefault;
+      const col = this.columnsdef[i]
+      if ("sortDefault" in col) {
+        this.sort.active = col.id;
+        this.sort.direction = col.sortDefault;
         this.router.navigate([], {
           queryParams: { sortActive: this.sort.active, sortDirection: this.sort.direction },
           queryParamsHandling: "merge"
         });
       }
+      // set default filter only if not yet defined in URL state
+      if ("filterDefault" in col && !this.route.snapshot.queryParams[col.id]) {
+        if (typeof col.filterDefault === "object") {
+          this.router.navigate([], {
+            queryParams: { [col.id]: JSON.stringify(col.filterDefault) },
+            queryParamsHandling: "merge"
+          });
+        } else {
+          this.router.navigate([], {
+            queryParams: { [col.id]: col.filterDefault},
+            queryParamsHandling: "merge"
+          });
+        }
+      }
+
       i++;
 
       // console.log("Defining subscription for column :", i)
