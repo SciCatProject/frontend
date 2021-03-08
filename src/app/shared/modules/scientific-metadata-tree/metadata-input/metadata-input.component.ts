@@ -5,16 +5,20 @@ import { UnitsService } from 'shared/services/units.service';
 import { FlatNodeEdit } from '../tree-edit/tree-edit.component';
 import { startWith, map } from "rxjs/operators";
 
+export interface InputData {
+  type: string;
+  key: string;
+  value?: any;
+  unit?:string;
+}
 export interface MetadataInput {
-  fieldType: string;
-  fieldName: string;
-  fieldValue?: string;
-  fieldUnit?: string;
+  valid: boolean;
+  data: InputData;
 }
 @Component({
   selector: 'metadata-input',
   templateUrl: './metadata-input.component.html',
-  styleUrls: ['./metadata-input.component.css']
+  styleUrls: ['./metadata-input.component.scss']
 })
 export class MetadataInputComponent implements OnInit {
   typeValues: string[] = ["date", "quantity", "number", "string", "object", 'list'];
@@ -25,14 +29,18 @@ export class MetadataInputComponent implements OnInit {
   @Input() currentData: MetadataInput;
   @Input() data: FlatNodeEdit;
   @Output() save = new EventEmitter<MetadataInput | null>();
-  changeDetection : {next: (data :MetadataInput) => void};
+  changeDetection : {next: (data :InputData) => void};
   constructor(private formBuilder: FormBuilder, private unitsService: UnitsService) {
     this.changeDetection = {
-      next: (data: MetadataInput) => this.save.emit(data)
+      next: (data: InputData) => {
+        console.log(this.metadataForm);
+        this.save.emit({valid: this.metadataForm.valid, data})
+      }
     }
   }
   ngOnInit() {
     this.metadataForm = this.initilizeFormControl();
+
     this.types = this.typeValues;
     this.addCurrentMetadata(this.data);
     this.metadataForm
@@ -47,16 +55,16 @@ export class MetadataInputComponent implements OnInit {
   }
   initilizeFormControl() {
     const field = this.formBuilder.group({
-      fieldType: new FormControl("", [Validators.required]),
-      fieldName: new FormControl("", [
+      type: new FormControl("", [Validators.required]),
+      key: new FormControl("", [
         Validators.required,
         Validators.minLength(2),
       ]),
-      fieldValue: new FormControl("", [
+      value: new FormControl("", [
         Validators.required,
         Validators.minLength(1),
       ]),
-      fieldUnit: new FormControl("", [
+      unit: new FormControl("", [
         Validators.required,
         this.unitValidator(),
       ]),
@@ -65,37 +73,37 @@ export class MetadataInputComponent implements OnInit {
   }
   addCurrentMetadata(node: FlatNodeEdit) {
     if (node.expandable) {
-      this.metadataForm.get("fieldType").setValue("object");
-      this.metadataForm.get("fieldName").setValue(node.key);
+      this.metadataForm.get("type").setValue("object");
+      this.metadataForm.get("key").setValue(node.key);
     } else {
       if (node.unit) {
-        this.metadataForm.get("fieldType").setValue("quantity");
-        this.metadataForm.get("fieldName").setValue(node.key);
-        this.metadataForm.get("fieldValue").setValue(node.value || "");
-        this.metadataForm.get("fieldUnit").setValue(node.unit || "");
+        this.metadataForm.get("type").setValue("quantity");
+        this.metadataForm.get("key").setValue(node.key);
+        this.metadataForm.get("value").setValue(node.value || "");
+        this.metadataForm.get("unit").setValue(node.unit || "");
 
       } else if (typeof node.value === "number") {
-        this.metadataForm.get("fieldType").setValue("number");
-        this.metadataForm.get("fieldName").setValue(node.key);
-        this.metadataForm.get("fieldValue").setValue(node.value);
+        this.metadataForm.get("type").setValue("number");
+        this.metadataForm.get("key").setValue(node.key);
+        this.metadataForm.get("value").setValue(node.value);
 
       } else if (isNaN(Date.parse(node.value))) {
-        this.metadataForm.get("fieldType").setValue("string");
-        this.metadataForm.get("fieldName").setValue(node.key);
-        this.metadataForm.get("fieldValue").setValue(node.value);
+        this.metadataForm.get("type").setValue("string");
+        this.metadataForm.get("key").setValue(node.key);
+        this.metadataForm.get("value").setValue(node.value);
 
       } else {
-        this.metadataForm.get("fieldType").setValue("date");
-        this.metadataForm.get("fieldName").setValue(node.key);
-        this.metadataForm.get("fieldValue").setValue(node.value);
+        this.metadataForm.get("type").setValue("date");
+        this.metadataForm.get("key").setValue(node.key);
+        this.metadataForm.get("value").setValue(node.value);
       }
     }
     this.detectType();
   }
   getUnits(): void {
-    const name = this.metadataForm.get("fieldName").value;
+    const name = this.metadataForm.get("key").value;
     this.units = this.unitsService.getUnits(name);
-    this.filteredUnits$ = this.metadataForm.get("fieldUnit").valueChanges.pipe(
+    this.filteredUnits$ = this.metadataForm.get("unit").valueChanges.pipe(
       startWith(""),
       map((value: string) => {
         const filterValue = value.toLowerCase();
@@ -106,7 +114,7 @@ export class MetadataInputComponent implements OnInit {
     );
   }
   setValueInputType() {
-    const type = this.metadataForm.get("fieldType").value;
+    const type = this.metadataForm.get("type").value;
     switch (type) {
       case "number":
       case "quantity":
@@ -124,22 +132,22 @@ export class MetadataInputComponent implements OnInit {
   }
 
   detectType() {
-    const type = this.metadataForm.get("fieldType").value;
+    const type = this.metadataForm.get("type").value;
     switch (type) {
       case "quantity":
-        this.metadataForm.get("fieldUnit").enable();
-        this.metadataForm.get("fieldValue").enable();
+        this.metadataForm.get("unit").enable();
+        this.metadataForm.get("value").enable();
         break;
       case "object":
         if(this.data.expandable){
           this.types = ["object"];
         }
-        this.metadataForm.get("fieldValue").disable();
-        this.metadataForm.get("fieldUnit").disable();
+        this.metadataForm.get("value").disable();
+        this.metadataForm.get("unit").disable();
         break;
       default:
-        this.metadataForm.get("fieldValue").enable();
-        this.metadataForm.get("fieldUnit").disable();
+        this.metadataForm.get("value").enable();
+        this.metadataForm.get("unit").disable();
     }
   }
   fieldHasError(field: string): boolean {

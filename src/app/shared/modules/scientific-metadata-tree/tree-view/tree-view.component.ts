@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FlatTreeControl } from '@angular/cdk/tree';
 import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
-import { FlatNode, TreeBase, TreeNode } from 'shared/sdk/models/ScientificMetadataTree';
+import { FlatNode, TreeBase, TreeNode } from 'shared/modules/scientific-metadata-tree/tree-base';
 @Component({
   selector: 'tree-view',
   templateUrl: './tree-view.component.html',

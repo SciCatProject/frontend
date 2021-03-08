@@ -3,7 +3,7 @@
     <mat-icon matPrefix>search</mat-icon>
     <mat-label>Search</mat-label>
     <input matInput type="text" [(ngModel)]="filterText">
-    <button mat-button matSuffix mat-icon-button aria-label="Clear">
+    <button mat-button matSuffix mat-icon-button aria-label="Clear" (click)="filterText=''">
       <mat-icon>close</mat-icon>
     </button>
   </mat-form-field>
@@ -46,6 +46,7 @@
       </div>
     </section>
     <metadata-input
+      style="width: 100%;"
       *ngIf="node.editing === true"
       (save)="setCurrentInputData($event)"
       [data] = "node">
