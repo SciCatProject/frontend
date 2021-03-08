@@ -70,7 +70,7 @@ describe("PublisheddataDashboardComponent", () => {
   });
 
   describe("#onShareClick()", () => {
-    it("should copy the selected DOI's to the users clipboard and open the snackbar", () => {
+    it("should copy the selected DOI's to the users clipboard and dispatch a showMessageAction", () => {
       const commandSpy = spyOn(document, "execCommand");
       dispatchSpy = spyOn(store, "dispatch");
 
