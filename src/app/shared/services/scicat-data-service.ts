@@ -48,7 +48,7 @@ export class ScicatDataService {
                 break;
               }
               case "between": {
-                console.log("between case");
+                // console.log("between case");
                 let be: any;
                 // TODO why can the filterExpression be sometimes an object and sometimes not ?
                 // TODO: is between always date related (assume this for now)
@@ -62,9 +62,9 @@ export class ScicatDataService {
                 const blocal = moment.tz(be.begin, tz);
                 const elocal = moment.tz(be.end, tz).add(1, "days");
                 // TODO is treated as a full string, not a nested object if key contains
-                console.log("====== Key is nested :", key);
+                // console.log("====== Key is nested :", key);
                 result[key] = { begin: blocal.toISOString(), end: elocal.toISOString() };
-                console.log("result:", result);
+                // console.log("result:", result);
                 break;
               }
               case "is": {

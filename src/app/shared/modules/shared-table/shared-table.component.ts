@@ -166,7 +166,7 @@ export class SharedTableComponent implements AfterViewInit, AfterContentInit, On
         if (lq[filter.nativeElement.id]) {
           // if this is an object translate to string as expected in GUI, no begin, end syntax
           // TODO use instead (filter.nativeElement.name === "range-picker")  ?
-          console.log(" queryparams have changed:", filter.nativeElement.id, lq[filter.nativeElement.id]);
+          // console.log(" queryparams have changed:", filter.nativeElement.id, lq[filter.nativeElement.id]);
           if (lq[filter.nativeElement.id].startsWith("{")) {
             filter.nativeElement.value = Object.values(JSON.parse(lq[filter.nativeElement.id])).join(" ");
           } else {
@@ -278,7 +278,8 @@ export class SharedTableComponent implements AfterViewInit, AfterContentInit, On
           this.paginator.pageIndex = 0;
           const columnId = filter.nativeElement.id;
           if (filter.nativeElement.value) {
-            console.log("Modifying filter from key strokes: element name, value:", filter.nativeElement.name, filter.nativeElement.value);
+            // console.log("Modifying filter from key strokes: element name, value:",
+            // filter.nativeElement.name, filter.nativeElement.value);
             if (filter.nativeElement.name === "range-picker") {
               const beginend = filter.nativeElement.value.split(" ");
               this.filterExpressions[columnId] = {
@@ -313,11 +314,11 @@ export class SharedTableComponent implements AfterViewInit, AfterContentInit, On
 
   // fill input fields with current filter conditions
   reloadFilterExpressions() {
-    console.log("=== Reloading filter expressions from filterExpression array to GUI elements");
+    // console.log("=== Reloading filter expressions from filterExpression array to GUI elements");
     this.allFilters.toArray().forEach(filter => {
       const columnId = filter.nativeElement.id;
       if (this.filterExpressions[columnId]) {
-        console.log(" ====== Reloading filter expressions:", columnId, this.filterExpressions[columnId]);
+        // console.log(" ====== Reloading filter expressions:", columnId, this.filterExpressions[columnId]);
         if (this.filterExpressions[columnId].startsWith("{")) {
           filter.nativeElement.value = Object.values(JSON.parse(this.filterExpressions[columnId])).join(" ");
         } else {
@@ -365,7 +366,7 @@ export class SharedTableComponent implements AfterViewInit, AfterContentInit, On
   }
 
   dateChanged(event: MatDatepickerInputEvent<DateRange>, columnId: string) {
-    console.log("dateChanged event:", event, columnId);
+    // console.log("dateChanged event:", event, columnId);
     if (event.value) {
       const { begin, end } = event.value;
       this.filterExpressions[columnId] = {
