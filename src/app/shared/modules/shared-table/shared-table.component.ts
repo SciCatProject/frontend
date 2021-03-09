@@ -318,7 +318,11 @@ export class SharedTableComponent implements AfterViewInit, AfterContentInit, On
       const columnId = filter.nativeElement.id;
       if (this.filterExpressions[columnId]) {
         console.log(" ====== Reloading filter expressions:", columnId, this.filterExpressions[columnId]);
-        filter.nativeElement.value = this.filterExpressions[columnId];
+        if (this.filterExpressions[columnId].startsWith("{")) {
+          filter.nativeElement.value = Object.values(JSON.parse(this.filterExpressions[columnId])).join(" ");
+        } else {
+          filter.nativeElement.value = this.filterExpressions[columnId];
+        }
       }
     });
   }
