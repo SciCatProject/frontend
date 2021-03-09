@@ -40,11 +40,6 @@ import { JobsModule } from "jobs/jobs.module";
 import { InstrumentsModule } from "./instruments/instruments.module";
 import { FilesModule } from "files/files.module";
 
-import { registerLocaleData } from "@angular/common";
-import localeDECH from "@angular/common/locales/de-CH";
-
-registerLocaleData(localeDECH);
-
 @NgModule({
   declarations: [AppComponent],
   imports: [

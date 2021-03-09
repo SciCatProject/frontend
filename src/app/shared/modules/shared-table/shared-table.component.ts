@@ -1,6 +1,6 @@
 import {
   Component, Input, ChangeDetectionStrategy, AfterContentInit, QueryList,
-  EventEmitter, Output, ElementRef, OnDestroy, ViewChild, ViewChildren, ChangeDetectorRef, NgZone, OnInit
+  EventEmitter, Output, ElementRef, OnDestroy, ViewChild, ViewChildren, ChangeDetectorRef, NgZone, OnInit, AfterViewInit
 } from "@angular/core";
 import { ViewportRuler } from "@angular/cdk/scrolling";
 import { FormControl } from "@angular/forms";
@@ -10,7 +10,6 @@ import { MatTable } from "@angular/material/table";
 import { trigger, state, style, animate, transition } from "@angular/animations";
 import { fromEvent, merge, Subscription } from "rxjs";
 
-import { Column } from "./../../column.type";
 import { SciCatDataSource } from "../../services/scicat.datasource";
 import { debounceTime, distinctUntilChanged, tap } from "rxjs/operators";
 import { ExportExcelService } from "../../services/export-excel.service";
@@ -18,6 +17,7 @@ import { ExportExcelService } from "../../services/export-excel.service";
 import * as moment from "moment";
 import { MatDatepickerInputEvent } from "@angular/material/datepicker/datepicker-input-base";
 import { ActivatedRoute, Router } from "@angular/router";
+import { Column } from "./shared-table.module";
 
 export interface DateRange {
   begin: Date;
@@ -27,7 +27,7 @@ export interface DateRange {
 @Component({
   selector: "shared-table",
   templateUrl: "./shared-table.component.html",
-  styleUrls: ["./shared-table.component.css"],
+  styleUrls: ["./shared-table.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
   animations: [
     trigger("detailExpand", [
@@ -37,7 +37,7 @@ export interface DateRange {
     ]),
   ],
 })
-export class SharedTableComponent implements AfterContentInit, OnDestroy, OnInit {
+export class SharedTableComponent implements AfterViewInit, AfterContentInit, OnDestroy, OnInit {
 
   private rulerSubscription: Subscription;
   public MIN_COLUMN_WIDTH = 200;
@@ -85,7 +85,6 @@ export class SharedTableComponent implements AfterContentInit, OnDestroy, OnInit
       // const tableWidth = this.table.nativeElement.clientWidth;
       this.toggleColumns(this.dataTable["_elementRef"].nativeElement.clientWidth);
     });
-
   }
 
   /**
@@ -119,8 +118,7 @@ export class SharedTableComponent implements AfterContentInit, OnDestroy, OnInit
           });
           this.loadDataPage();
         })
-      )
-      .subscribe();
+      );
 
     this.activateColumnFilters();
 
@@ -139,8 +137,7 @@ export class SharedTableComponent implements AfterContentInit, OnDestroy, OnInit
           this.loadDataPage();
         }
         )
-      )
-      .subscribe();
+      );
 
     this.route.queryParams.subscribe(queryParams => {
       /**
@@ -169,6 +166,7 @@ export class SharedTableComponent implements AfterContentInit, OnDestroy, OnInit
         if (lq[filter.nativeElement.id]) {
           // if this is an object translate to string as expected in GUI, no begin, end syntax
           // TODO use instead (filter.nativeElement.name === "range-picker")  ?
+          console.log(" queryparams have changed:", filter.nativeElement.id, lq[filter.nativeElement.id]);
           if (lq[filter.nativeElement.id].startsWith("{")) {
             filter.nativeElement.value = Object.values(JSON.parse(lq[filter.nativeElement.id])).join(" ");
           } else {
@@ -263,7 +261,7 @@ export class SharedTableComponent implements AfterContentInit, OnDestroy, OnInit
           });
         } else {
           this.router.navigate([], {
-            queryParams: { [col.id]: col.filterDefault},
+            queryParams: { [col.id]: col.filterDefault },
             queryParamsHandling: "merge"
           });
         }
@@ -280,6 +278,7 @@ export class SharedTableComponent implements AfterContentInit, OnDestroy, OnInit
           this.paginator.pageIndex = 0;
           const columnId = filter.nativeElement.id;
           if (filter.nativeElement.value) {
+            console.log("Modifying filter from key strokes: element name, value:", filter.nativeElement.name, filter.nativeElement.value);
             if (filter.nativeElement.name === "range-picker") {
               const beginend = filter.nativeElement.value.split(" ");
               this.filterExpressions[columnId] = {
@@ -314,10 +313,11 @@ export class SharedTableComponent implements AfterContentInit, OnDestroy, OnInit
 
   // fill input fields with current filter conditions
   reloadFilterExpressions() {
+    console.log("=== Reloading filter expressions from filterExpression array to GUI elements");
     this.allFilters.toArray().forEach(filter => {
       const columnId = filter.nativeElement.id;
       if (this.filterExpressions[columnId]) {
-        // console.log("Reloading filter expressions:", columnId, this.filterExpressions[columnId]);
+        console.log(" ====== Reloading filter expressions:", columnId, this.filterExpressions[columnId]);
         filter.nativeElement.value = this.filterExpressions[columnId];
       }
     });
@@ -361,7 +361,7 @@ export class SharedTableComponent implements AfterContentInit, OnDestroy, OnInit
   }
 
   dateChanged(event: MatDatepickerInputEvent<DateRange>, columnId: string) {
-    // console.log("dateChanged event:", event, columnId)
+    console.log("dateChanged event:", event, columnId);
     if (event.value) {
       const { begin, end } = event.value;
       this.filterExpressions[columnId] = {

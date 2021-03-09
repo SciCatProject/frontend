@@ -1,9 +1,9 @@
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { Observable } from "rxjs";
-import { Column } from "../column.type";
 import { LoopBackAuth } from "shared/sdk";
 import * as moment from "moment";
+import { Column } from "shared/modules/shared-table/shared-table.module";
 
 @Injectable({
   providedIn: "root",
@@ -48,7 +48,10 @@ export class ScicatDataService {
                 break;
               }
               case "between": {
+                console.log("between case");
                 let be: any;
+                // TODO why can the filterExpression be sometimes an object and sometimes not ?
+                // TODO: is between always date related (assume this for now)
                 if (typeof filterExpressions[key] === "object") {
                   be = filterExpressions[key];
                 } else {
@@ -58,7 +61,10 @@ export class ScicatDataService {
                 const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
                 const blocal = moment.tz(be.begin, tz);
                 const elocal = moment.tz(be.end, tz).add(1, "days");
+                // TODO is treated as a full string, not a nested object if key contains
+                console.log("====== Key is nested :", key);
                 result[key] = { begin: blocal.toISOString(), end: elocal.toISOString() };
+                console.log("result:", result);
                 break;
               }
               case "is": {

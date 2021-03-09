@@ -3,7 +3,7 @@
 }
 
 ::ng-deep .mat-sort-header-arrow {
-  color: #31b131;
+  color:green;
 }
 
 .expanded {
@@ -27,7 +27,7 @@
 
 .btnToggleExpand.active:before {
   content: '-';
-  background-color: #d33333;
+  background-color: red;
 }
 
 .btnToggleExpand:before {
@@ -47,7 +47,7 @@
   font-family: 'Courier New', Courier, monospace;
   line-height: 14px;
   content: '+';
-  background-color: #31b131;
+  background-color: green;
 }
 
 .filterHeader {
