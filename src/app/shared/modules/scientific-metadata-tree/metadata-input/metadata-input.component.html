@@ -1,12 +1,11 @@
 <div class="container">
   <form [formGroup]="metadataForm">
-    <div class="formRow" fxLayout="row" fxLayout.lt-lg="column">
-      <div class="formColumn">
+    <div class="formRow" fxLayout="row" fxLayout.lt-lg="column" fxFlexAlign="center" fxLayoutAlign="flex-start end">
+      <div class="formColumn" >
         <mat-form-field class="selectField">
           <mat-label>Type</mat-label>
           <mat-select formControlName="type" (selectionChange)="detectType()">
-            <mat-option *ngFor="let type of types" [value]="type"
-              (click)="$event.stopPropagation()">
+            <mat-option *ngFor="let type of typeValues" [value]="type">
               {{type}}</mat-option>
           </mat-select>
           <mat-error *ngIf="fieldHasError('type')">
@@ -18,7 +17,7 @@
         <mat-form-field class="inputField">
           <input matInput autocomplete="off" autocorrect="off"
             autocapitalize="off" spellcheck="false" formControlName="key"
-            placeholder="Name" (blur)="getUnits()" />
+            placeholder="Name" (blur)="getUnits('key')" />
           <mat-error *ngIf="fieldHasError('key')">
             Name is required
           </mat-error>
@@ -39,10 +38,10 @@
           <input matInput autocomplete="off" autocorrect="off"
             autocapitalize="off" spellcheck="false" formControlName="unit"
             placeholder="Unit" [matAutocomplete]="metadataUnits"
-            (focus)="getUnits()" />
+            (focus)="getUnits('key')" />
           <mat-autocomplete #metadataUnits="matAutocomplete">
             <mat-option *ngFor="let unit of filteredUnits$ | async"
-              [value]="unit" (click)="$event.stopPropagation()">
+              [value]="unit">
 
               {{ unit }}
             </mat-option>
@@ -52,6 +51,26 @@
             quantities
           </mat-error>
         </mat-form-field>
+      </div>
+      <div class="formColumn" fxFlexAlign="center">
+        <button
+          mat-icon-button
+          [disabled]="this.metadataForm.invalid"
+          type="button"
+          color="primary"
+          title="Done"
+          (click)="onSave()"
+        >
+          <mat-icon>done</mat-icon>
+        </button>
+        <button
+          mat-icon-button
+          type="button"
+          title="Cancel"
+          (click)="onCancel()"
+        >
+           <mat-icon>close</mat-icon>
+        </button>
       </div>
     </div>
   </form>

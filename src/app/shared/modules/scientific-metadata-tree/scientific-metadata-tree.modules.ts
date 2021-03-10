@@ -17,9 +17,13 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatOptionModule } from '@angular/material/core';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MetadataInputComponent } from './metadata-input/metadata-input.component';
-
+import { MatTableModule } from '@angular/material/table';
+import { MetadataInputModalComponent } from './metadata-input-modal/metadata-input-modal.component';
+import {MatDialogModule} from '@angular/material/dialog';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 @NgModule({
-  declarations: [TreeEditComponent, TreeViewComponent, MetadataInputComponent],
+  declarations: [TreeEditComponent, TreeViewComponent, MetadataInputComponent, MetadataInputModalComponent],
   imports: [
     MatFormFieldModule,
     MatTreeModule,
@@ -33,10 +37,15 @@ import { MetadataInputComponent } from './metadata-input/metadata-input.componen
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
+    MatTableModule,
     MatDividerModule,
+    MatDialogModule,
     FlexModule,
     MatButtonToggleModule,
     MatTabsModule,
+    MatDividerModule,
+    MatMenuModule,
+    MatSnackBarModule
   ],
   exports: [TreeEditComponent, TreeViewComponent]
 })

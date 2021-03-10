@@ -25,11 +25,11 @@ export class TreeBase {
   dataSource: MatTreeFlatDataSource<TreeNode, FlatNode>;
   flatNodeMap: Map<FlatNode, TreeNode>;
   nestNodeMap: Map<TreeNode, FlatNode>;
-  expanded: boolean;
+  expand: boolean = false;
   dataTree: TreeNode[];
+
   _filterText = '';
   constructor() {
-    this.expanded = false;
   }
   get filterText(): string {
     return this._filterText;
@@ -67,7 +67,7 @@ export class TreeBase {
   setParentVisible(node: FlatNode){
     let currentNode = node;
     while (currentNode !== null) {
-      const parentNode = this.getParentNode(currentNode);
+      const parentNode = this.getFlatParentNode(currentNode);
       if (parentNode) {
         // Expand parent node contains filter text
         parentNode.visible = true;
@@ -85,7 +85,7 @@ export class TreeBase {
       }
     });
   }
-  getParentNode(node: FlatNode): FlatNode | null {
+  getFlatParentNode(node: FlatNode): FlatNode | null {
     const currentLevel = this.getLevel(node);
     if (currentLevel < 1) {
       return null;
@@ -101,16 +101,42 @@ export class TreeBase {
     }
     return null;
   }
+  getNestedParent(node: FlatNode){
+    const flatParentNode = this.getFlatParentNode(node);
+    return this.flatNodeMap.get(flatParentNode);
+  }
   toggleExpand() {
-    this.expanded = !this.expanded;
-    this.expanded ? this.treeControl.expandAll() : this.treeControl.collapseAll();
+    this.expand = !this.expand;
+    this.expand? this.treeControl.expandAll() : this.treeControl.collapseAll();
   }
   getLevel = (node: FlatNode) => node.level;
   isExpandable = (node: FlatNode) => node.expandable;
   getChildren = (node: TreeNode): TreeNode[] => node.children;
-  hasChild = (_: number, _nodeData: FlatNode) => _nodeData.expandable;
+  hasChild = (_: number, _nodeData: FlatNode) => {return _nodeData.expandable};
   getPadding(node: FlatNode) {
     const indentPixel = 40;
     return (node.level * indentPixel).toString();
+  }
+
+  insertNode(parentNode: TreeNode, node: TreeNode, index: number = -1) {
+    if (parentNode) {
+      index = index === -1 ? parentNode.children.length: index;
+      parentNode.children.splice(index, 0, node);
+    } else {
+      index = index === -1? 0 : index;
+      this.dataTree.splice(index, 0, node);
+    }
+    this.dataSource.data = this.dataTree;
+  }
+  removeNode(parentNode: TreeNode, nestedNode: TreeNode) {
+    if (parentNode) {
+      // remove node from list of children
+      parentNode.children = parentNode.children.filter(e => e !== nestedNode);
+
+    } else {
+      // node is on the root level
+      this.dataTree = this.dataTree.filter(e => e !== nestedNode);
+    }
+    this.dataSource.data = this.dataTree;
   }
 }

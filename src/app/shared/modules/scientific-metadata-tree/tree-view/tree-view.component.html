@@ -8,8 +8,8 @@
     </button>
   </mat-form-field>
   <div>
-    <button mat-flat-button type="button" color="accent" (click)="toggleExpand()">
-      {{expanded? 'Collapse All' : 'Expand All'}}
+    <button mat-stroked-button type="button" color="primary" (click)="toggleExpand()" [title]="expand? 'Collapse all': 'Expand all'">
+      <mat-icon>{{expand? 'expand_less': 'expand_more'}}</mat-icon>
     </button>
   </div>
 </div>
@@ -21,7 +21,7 @@
         </mat-icon></button>
         <label>{{node.key |replaceUnderscore |titleCase}}</label>
       </div>
-      <div class="value-cell">{{node.value}} {{node.unit}}</div>
+      <div class="value-cell">{{node.value}} {{node.unit? "[ "+ node.unit + " ]": null}}</div>
     </section>
   </mat-tree-node>
 

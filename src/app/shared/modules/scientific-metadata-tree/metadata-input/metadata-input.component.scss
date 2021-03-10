@@ -1,6 +1,4 @@
 .container {
-  margin: 1em;
-
   button {
     margin: 1em 1em 0 0;
   }
@@ -9,18 +7,11 @@
     vertical-align: middle;
   }
 }
-mat-form-field {
-  width: 100%;
-}
 @media only screen and (min-width: 1280px) {
   .container {
     .formRow {
       .formColumn {
         padding-right: 1em;
-        width: 25%;
-        // .selectField {
-        //   max-width: 8em;
-        // }
       }
     }
   }

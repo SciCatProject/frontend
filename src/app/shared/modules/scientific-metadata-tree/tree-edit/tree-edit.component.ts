@@ -2,10 +2,13 @@ import { Component, HostListener, Input, OnInit } from '@angular/core';
 import { FlatTreeControl } from '@angular/cdk/tree';
 import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
 import { Observable } from 'rxjs';
-import { FlatNode, TreeBase, TreeNode } from 'shared/modules/scientific-metadata-tree/tree-base';
+import { FlatNode, TreeBase, TreeNode } from 'shared/modules/scientific-metadata-tree/base-classes/tree-base';
 import { InputData, MetadataInput } from 'shared/modules/scientific-metadata-tree/metadata-input/metadata-input.component';
 import { HistoryManager } from 'shared/modules/scientific-metadata-tree/history-manager'
-import { resultMemoize } from '@ngrx/store';
+import { MatDialog } from '@angular/material/dialog';
+import { InputObject, MetadataInputModalComponent } from '../metadata-input-modal/metadata-input-modal.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
+
 export class FlatNodeEdit implements FlatNode {
   key: string;
   value: any;
@@ -26,7 +29,8 @@ export class TreeEditComponent extends TreeBase implements OnInit {
   filteredUnits$: Observable<string[]>;
   currentInputData: MetadataInput;
   historyManager: HistoryManager;
-  constructor() {
+  private changed: boolean = false;
+  constructor(public dialog: MatDialog, private snackBar: MatSnackBar) {
     super();
     this.treeFlattener = new MatTreeFlattener(this.transformer, this.getLevel, this.isExpandable, this.getChildren);
     this.treeControl = new FlatTreeControl<FlatNodeEdit>(this.getLevel, this.isExpandable);
@@ -46,7 +50,7 @@ export class TreeEditComponent extends TreeBase implements OnInit {
     flatNode.key = node.key;
     flatNode.level = level;
     flatNode.value = node.value;
-    flatNode.expandable = !!node.children?.length;
+    flatNode.expandable = node.children?.length > 0;
     flatNode.editing = node.key === '' ? true : false;
     flatNode.visible = true;
     flatNode.unit = node.unit;
@@ -54,17 +58,7 @@ export class TreeEditComponent extends TreeBase implements OnInit {
     this.nestNodeMap.set(node, flatNode);
     return flatNode;
   }
-  @HostListener('click', ['$event'])
-  stopPropagation(event) {
-    event.stopPropagation();
-  }
-  @HostListener('document:click')
-  saveData() {
-    if (this.currentEditingNode) {
-      const nextEditingNode = this.saveCurrentEditingNodeToDataTree()
-      this.setCurrentEditingNode(nextEditingNode);
-    }
-  }
+
   buildDataTree(obj: { [key: string]: any }, level: number): TreeNode[] {
     return Object.keys(obj).reduce<TreeNode[]>((accumulator, key) => {
       const value = obj[key];
@@ -85,9 +79,10 @@ export class TreeEditComponent extends TreeBase implements OnInit {
       return accumulator.concat(node);
     }, []);
   }
+
   convertDataTreeToObject(tree: TreeNode[]): { [key: string]: any } {
     return tree.reduce((accumulator, node) => {
-      if (!this.isEmptyNode(node)) {
+      if (!this.hasNoContent(node)) {
         if (node.value) {
           accumulator[node.key] = node.value;
         } else {
@@ -101,56 +96,106 @@ export class TreeEditComponent extends TreeBase implements OnInit {
       return accumulator;
     }, {})
   }
-  enableEditing(node: FlatNodeEdit) {
-    this.saveCurrentEditingNodeToDataTree();
-    this.setCurrentEditingNode(node);
+
+  openSnackbar(message: string, action: string = ""){
+    this.snackBar.open(message, action, {
+      duration: 3000
+    })
   }
-  setCurrentEditingNode(node: FlatNodeEdit | null) {
-    if (this.currentEditingNode) {
+  onSave(data: InputData){
+    const nestedNode = this.flatNodeMap.get(this.currentEditingNode);
+    const parentNode = this.getNestedParent(this.nestNodeMap.get(nestedNode));
+    const {children, ...oldData} = nestedNode;
+    const index = this.getIndex(parentNode, nestedNode);
+    this.historyManager.add({
+      undo: () => {
+        if(oldData.key === ""){
+          this.removeNode(parentNode, nestedNode);
+        } else {
+          nestedNode.key = oldData.key;
+          nestedNode.value = oldData.value;
+          nestedNode.unit = oldData.unit;
+        }
+        this.dataSource.data = this.dataTree;
+      },
+      redo: () => {
+        if(oldData.key === ""){
+          this.insertNode(parentNode, nestedNode, index);
+        }
+        this.updateNode(nestedNode, data);
+      }
+    });
+    this.updateNode(nestedNode, data);
+    this.currentEditingNode = null;
+    this.openSnackbar("Your changes is cached, hit the save button on the top to save permanently!");
+    this.disableEditing();
+  }
+  onCancel(){
+    this.disableEditing();
+  }
+  disableEditing() {
+    if(this.currentEditingNode){
       this.currentEditingNode.editing = false;
+      if (this.hasNoContent(this.currentEditingNode)) {
+        const parent = this.getNestedParent(this.currentEditingNode);
+        const node  = this.flatNodeMap.get(this.currentEditingNode);
+        this.removeNode(parent, node);
+      }
+    }
+    this.currentEditingNode = null;
+    this.changed = false;
+  }
+  enableEditing(node: FlatNodeEdit) {
+    if(this.currentEditingNode){
+      if (this.changed){
+        this.snackBar.open("You are uncached changes in another row, please close or save it first!","", {
+          duration: 3000,
+        });
+        return;
+      }
+      this.disableEditing();
     }
     this.currentEditingNode = node;
-    if (this.currentEditingNode) {
-      this.currentEditingNode.editing = true;
+    this.currentEditingNode.editing = true;
+  }
+  onChange(){
+    this.changed = true;
+  }
+  addNewNode(parentNode: FlatNodeEdit) {
+    if (this.currentEditingNode && this.changed){
+      this.openSnackbar("You are uncached changes in another row, please close or save it first!");
+      return;
+    }
+    const newNode = new TreeNode();
+    newNode.key = "";
+    const nestedParentNode = this.flatNodeMap.get(parentNode);
+    this.insertNode(nestedParentNode, newNode);
+    const index = this.getIndex(nestedParentNode, newNode);
+    this.treeControl.expand(parentNode);
+    this.enableEditing(this.nestNodeMap.get(newNode) as FlatNodeEdit);
+  }
+  getIndex(parentNode: TreeNode, node: TreeNode) {
+    if (parentNode) {
+      return parentNode.children.indexOf(node);
+    } else {
+      return this.dataTree.indexOf(node);
     }
   }
-  setCurrentInputData(data: MetadataInput) {
-    this.currentInputData = data;
-  }
-  saveCurrentEditingNodeToDataTree(): FlatNodeEdit | null {
-    if (this.currentEditingNode) {
-      if (this.currentInputData && this.currentInputData.valid) {
-        let nestedNode = this.flatNodeMap.get(this.currentEditingNode);
-        const oldData = { ...nestedNode };
-        const newData = { ...this.currentInputData };
-        this.historyManager.add({
-          undo: () => {
-            const { children, key, value, unit } = oldData;
-            nestedNode.key = key;
-            nestedNode.value = value;
-            nestedNode.unit = unit;
-            nestedNode.children = children;
-            nestedNode = {...oldData};
-            this.dataSource.data = this.dataTree;
-          },
-          redo: () => {
-            this.updateNodeData(nestedNode, newData.data);
-          }
-        });
-        const node = this.updateNodeData(nestedNode, this.currentInputData.data)
-        this.currentInputData = null;
-        return node;
+  deleteNode(node: FlatNodeEdit) {
+    const parentNode = this.getNestedParent(node);
+    const nestedNode = this.flatNodeMap.get(node);
+    const index = this.getIndex(parentNode, nestedNode);
+    this.historyManager.add({
+      undo: () => {
+        this.insertNode(parentNode, nestedNode, index);
+      },
+      redo: () => {
+        this.removeNode(parentNode, nestedNode);
       }
-      this.currentEditingNode.editing = false;
-      if (this.isEmptyNode(this.currentEditingNode)) {
-        this.deleteNode(this.currentEditingNode);
-      }
-      return null;
-    }
+    });
+    this.removeNode(parentNode, nestedNode);
   }
-
-  updateNodeData(node: TreeNode, data: InputData): (FlatNodeEdit | null) {
-    let nextEditingNode: FlatNodeEdit | null = null;
+  updateNode(node: TreeNode, data: InputData){
     switch (data.type) {
       case "date":
         node.key = data.key;
@@ -172,71 +217,47 @@ export class TreeEditComponent extends TreeBase implements OnInit {
         node.value = Number(data.value);
         node.unit = data.unit;
         break;
-      case "object":
-        node.key = data.key;
-        node.value = null;
-        node.unit = null;
-        if (!node.children || node.children.length === 0) {
-          node.children = [];
-          const childNode = new TreeNode();
-          childNode.key = "";
-          this.insertNode(-1, node, childNode);
-          this.treeControl.expand(this.nestNodeMap.get(node));
-          nextEditingNode = this.nestNodeMap.get(childNode) as FlatNodeEdit;
-        }
-        break;
       default:
     }
     this.dataSource.data = this.dataTree;
-    return nextEditingNode;
   }
-  addNewNode(parentNode: FlatNodeEdit) {
-    const newNode = new TreeNode();
-    newNode.key = "";
-    const nestedParentNode = this.flatNodeMap.get(parentNode);
-    this.insertNode(-1, nestedParentNode, newNode);
-    const index = this.getIndex(nestedParentNode, newNode);
-    this.treeControl.expand(parentNode);
-    this.historyManager.add({
-      undo: () => {
-        this.removeNode(nestedParentNode, newNode);
-      },
-      redo: () => {
-        this.insertNode(index, nestedParentNode, newNode);
-      }
-    })
-    this.setCurrentEditingNode(this.nestNodeMap.get(newNode) as FlatNodeEdit);
-  }
-  getIndex(parentNode: TreeNode, node: TreeNode) {
-    if (parentNode) {
-      return parentNode.children.indexOf(node);
-    } else {
-      return this.dataTree.indexOf(node);
-    }
-  }
-  deleteNode(node: FlatNodeEdit) {
-    // Get parent node
-    const parentNode = this.getNestedParent(node);
-    const nestedNode = this.flatNodeMap.get(node);
-    const index = this.getIndex(parentNode, nestedNode);
-    this.historyManager.add({
-      undo: () => {
-        this.insertNode(index, parentNode, nestedNode);
-      },
-      redo: () => {
-        this.removeNode(parentNode, nestedNode);
-      }
-    });
-    this.removeNode(parentNode, nestedNode);
-  }
-  isEmptyNode = (node: TreeNode | FlatNodeEdit) => node.key === "";
 
-  hasNoContent = (_: number, _nodeData: FlatNodeEdit) => _nodeData.key === '';
+  hasNoContent = (node: TreeNode | FlatNodeEdit) => node.key === '';
 
-  isEditing(_: number, node: FlatNodeEdit) {
-    return node.editing;
+  isEditing() {
+    return this.currentEditingNode && this.changed;
   }
   doSave() {
     this.data = this.convertDataTreeToObject(this.dataTree);
+  }
+
+  openObjectCreationDialog(node: FlatNodeEdit): void {
+    const dialogRef = this.dialog.open(MetadataInputModalComponent, {
+      width: "770px",
+      data: node
+    });
+
+    dialogRef.afterClosed().subscribe((data: InputObject) => {
+      const grandfatherNode = this.flatNodeMap.get(node);
+      const parentNode = new TreeNode();
+      parentNode.key = data.parent;
+      const childNode = new TreeNode();
+      const {parent, ...childData} = data;
+      parentNode.children = [];
+      this.insertNode(parentNode, childNode);
+      this.updateNode(childNode, {...childData, key: childData.child} );
+      this.insertNode(grandfatherNode, parentNode);
+      const index = this.getIndex(grandfatherNode, parentNode);
+      this.treeControl.expand(node);
+      this.historyManager.add({
+        undo: () => {
+          this.removeNode(grandfatherNode, parentNode);
+        },
+        redo: () => {
+          this.insertNode(grandfatherNode, parentNode, index);
+        }
+      })
+      this.dataSource.data = this.dataTree;
+    });
   }
 }

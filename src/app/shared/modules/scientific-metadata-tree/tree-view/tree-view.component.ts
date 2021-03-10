@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FlatTreeControl } from '@angular/cdk/tree';
 import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
-import { FlatNode, TreeBase, TreeNode } from 'shared/modules/scientific-metadata-tree/tree-base';
+import { FlatNode, TreeBase, TreeNode } from 'shared/modules/scientific-metadata-tree/base-classes/tree-base';
 @Component({
   selector: 'tree-view',
   templateUrl: './tree-view.component.html',
@@ -27,7 +27,7 @@ export class TreeViewComponent extends TreeBase implements OnInit {
     flatNode.key = node.key;
     flatNode.level = level;
     flatNode.value = node.value;
-    flatNode.expandable = !!node.children?.length;
+    flatNode.expandable = node.children?.length > 0;
     flatNode.visible = true;
     this.flatNodeMap.set(flatNode, node);
     this.nestNodeMap.set(node, flatNode);
