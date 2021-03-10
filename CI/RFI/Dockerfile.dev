@@ -11,6 +11,8 @@ WORKDIR /catanie
 COPY package.json  /catanie
 RUN npm install
 COPY . /catanie/
+# Site image needs to be copied to assets before building
+COPY CI/RFI/site.png /catanie/src/assets/images/site.png
 RUN npx ng build --configuration=${env}
 
 FROM nginx:alpine

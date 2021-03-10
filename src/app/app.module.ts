@@ -84,7 +84,10 @@ import { FilesModule } from "files/files.module";
       }
     ),
     extModules,
-    RouterModule.forRoot(routes, { useHash: false }),
+    RouterModule.forRoot(routes, {
+      useHash: false,
+      relativeLinkResolution: "legacy",
+    }),
     EffectsModule.forRoot([]),
     ServiceWorkerModule.register("ngsw-worker.js", {
       enabled: environment.production,
