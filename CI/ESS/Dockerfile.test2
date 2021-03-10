@@ -1,5 +1,5 @@
 FROM markadams/chromium-xvfb-js:8
-LABEL maintainer="gareth.murphy@esss.se"
+LABEL maintainer="henrik.johansson@ess.eu"
 
 RUN apt-get update && apt-get install -y git
 

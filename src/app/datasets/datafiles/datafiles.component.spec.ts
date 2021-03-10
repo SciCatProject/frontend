@@ -27,7 +27,7 @@ describe("DatafilesComponent", () => {
           PipesModule,
           RouterModule,
           StoreModule.forRoot({}),
-          RouterModule.forRoot([]),
+          RouterModule.forRoot([], { relativeLinkResolution: "legacy" }),
         ],
         declarations: [DatafilesComponent],
       });

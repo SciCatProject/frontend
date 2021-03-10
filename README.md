@@ -2,7 +2,7 @@
 
 
 
-<img src="https://github.com/SciCatProject/catanie/blob/develop/src/assets/images/esslogo.png" alt="sci-cat-logo" width="100">
+<img src="https://github.com/SciCatProject/catanie/blob/develop/src/assets/images/site-logo.png" alt="sci-cat-logo" width="100">
 
 
 
