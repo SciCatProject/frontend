@@ -11,7 +11,7 @@ import { FilePathTruncate } from "./file-path-truncate.pipe";
 import { PrettyUnitPipe } from "./pretty-unit.pipe";
 import { DynamicPipe } from "./dynamicPipe.pipe";
 import { NewDynamicPipe } from "./newDynamicPipe.pipe";
-
+import { DescriptionTitlePipe } from "./description-title.pipe";
 
 @NgModule({
   declarations: [
@@ -26,6 +26,7 @@ import { NewDynamicPipe } from "./newDynamicPipe.pipe";
     TitleCasePipe,
     DynamicPipe,
     NewDynamicPipe,
+    DescriptionTitlePipe,
   ],
   imports: [CommonModule],
   exports: [
@@ -39,7 +40,8 @@ import { NewDynamicPipe } from "./newDynamicPipe.pipe";
     ThumbnailPipe,
     TitleCasePipe,
     DynamicPipe,
-    NewDynamicPipe
-  ]
+    NewDynamicPipe,
+    DescriptionTitlePipe,
+  ],
 })
 export class PipesModule {}

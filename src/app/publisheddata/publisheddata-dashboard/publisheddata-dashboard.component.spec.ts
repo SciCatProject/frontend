@@ -20,9 +20,10 @@ import {
   sortByColumnAction,
 } from "state-management/actions/published-data.actions";
 import { PublishedData } from "shared/sdk";
-import { MatSnackBar } from "@angular/material/snack-bar";
 import { MatCheckboxChange } from "@angular/material/checkbox";
 import { of } from "rxjs";
+import { Message, MessageType } from "state-management/models";
+import { showMessageAction } from "state-management/actions/user.actions";
 
 describe("PublisheddataDashboardComponent", () => {
   let component: PublisheddataDashboardComponent;
@@ -31,28 +32,24 @@ describe("PublisheddataDashboardComponent", () => {
   const router = {
     navigateByUrl: jasmine.createSpy("navigateByUrl"),
   };
-  const snackBar = {
-    open: jasmine.createSpy("open"),
-  };
   let store: MockStore;
   let dispatchSpy;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      schemas: [NO_ERRORS_SCHEMA],
-      declarations: [PublisheddataDashboardComponent],
-      imports: [StoreModule.forRoot({})],
-    });
-    TestBed.overrideComponent(PublisheddataDashboardComponent, {
-      set: {
-        providers: [
-          { provide: Router, useValue: router },
-          { provide: MatSnackBar, useValue: snackBar },
-        ],
-      },
-    });
-    TestBed.compileComponents();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        schemas: [NO_ERRORS_SCHEMA],
+        declarations: [PublisheddataDashboardComponent],
+        imports: [StoreModule.forRoot({})],
+      });
+      TestBed.overrideComponent(PublisheddataDashboardComponent, {
+        set: {
+          providers: [{ provide: Router, useValue: router }],
+        },
+      });
+      TestBed.compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PublisheddataDashboardComponent);
@@ -73,21 +70,21 @@ describe("PublisheddataDashboardComponent", () => {
   });
 
   describe("#onShareClick()", () => {
-    it("should copy the selected DOI's to the users clipboard and open the snackbar", () => {
+    it("should copy the selected DOI's to the users clipboard and dispatch a showMessageAction", () => {
       const commandSpy = spyOn(document, "execCommand");
+      dispatchSpy = spyOn(store, "dispatch");
+
+      const message = new Message();
+      message.content = "The selected DOI's have been copied to your clipboard";
+      message.type = MessageType.Success;
+      message.duration = 5000;
 
       component.onShareClick();
 
       expect(commandSpy).toHaveBeenCalledTimes(1);
       expect(commandSpy).toHaveBeenCalledWith("copy");
-      expect(snackBar.open).toHaveBeenCalledTimes(1);
-      expect(
-        snackBar.open
-      ).toHaveBeenCalledWith(
-        "The selected DOI's have been copied to your clipboard",
-        "",
-        { duration: 5000 }
-      );
+      expect(dispatchSpy).toHaveBeenCalledTimes(1);
+      expect(dispatchSpy).toHaveBeenCalledWith(showMessageAction({ message }));
     });
   });
 

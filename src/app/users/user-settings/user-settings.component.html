@@ -1,49 +1,67 @@
-<ng-container *ngIf="user">
-  <h1>{{ displayName }} Settings</h1>
-  <mat-card>
-    <img src="{{ profileImage }}" height="100px" alt="profile photo" />
-    <table>
-      <tr *ngIf="displayName as value">
-        <th><mat-icon> person </mat-icon> Name</th>
-        <td>{{ value }}</td>
-      </tr>
-      <tr *ngIf="user['email'] as value">
-        <th><mat-icon> mail </mat-icon> Email</th>
-        <td>{{ value }}</td>
-      </tr>
-      <tr *ngIf="id as value">
-        <th><mat-icon> person </mat-icon> Id</th>
-        <td>{{ value }}</td>
-      </tr>
-      <tr *ngIf="catamelToken as value">
-        <th><mat-icon> vpn_key </mat-icon> Catamel Token</th>
-        <td>
-          <span id="token" contenteditable="false">
-            {{ value }}
-          </span>
-          <button mat-icon-button (click)="onCopy(value)">
-            <mat-icon>post_add</mat-icon>
-          </button>
-        </td>
-      </tr>
-      <tr *ngIf="datasetCount as value">
-        <th><mat-icon> save </mat-icon> Dataset Count</th>
-        <td>{{ value }}</td>
-      </tr>
-      <tr *ngIf="jobCount as value">
-        <th><mat-icon> transfer_within_a_station </mat-icon> Job Count</th>
-        <td>{{ value }}</td>
-      </tr>
-      <tr *ngIf="groups as value">
-        <th><mat-icon> group_work </mat-icon> Groups</th>
-        <td>
-          <ul>
-            <li *ngFor="let group of value">
-              {{ group }}
-            </li>
-          </ul>
-        </td>
-      </tr>
-    </table>
-  </mat-card>
-</ng-container>
+<div fxLayout="row" fxLayout.xs="column" *ngIf="user$ | async as user">
+  <div fxFlex="80">
+    <mat-card>
+      <mat-card-header class="general-header">
+        <div mat-card-avatar class="section-icon">
+          <mat-icon> person </mat-icon>
+        </div>
+        User Information
+      </mat-card-header>
+
+      <img
+        class="profile-image"
+        src="{{ profileImage$ | async }}"
+        height="65px"
+        alt="profile photo"
+      />
+
+      <table>
+        <tr *ngIf="displayName$ | async as value">
+          <th>Name</th>
+          <td>{{ value }}</td>
+        </tr>
+        <tr *ngIf="user['email'] as value">
+          <th>Email</th>
+          <td>{{ value }}</td>
+        </tr>
+        <tr *ngIf="user.id as value">
+          <th>Id</th>
+          <td>{{ value }}</td>
+        </tr>
+        <tr *ngIf="accessGroups$ | async as value">
+          <th>Groups</th>
+          <td>{{ value }}</td>
+        </tr>
+        <tr *ngIf="catamelToken$ | async as value">
+          <th>Catamel Token</th>
+          <td>
+            {{ value.id }}
+            <span class="copy-button" (click)="onCopy(value)">
+              <mat-icon matTooltip="Copy token to clipboard">post_add</mat-icon>
+            </span>
+          </td>
+        </tr>
+      </table>
+    </mat-card>
+
+    <mat-card *ngIf="settings$ | async as settings">
+      <mat-card-header class="settings-header">
+        <div mat-card-avatar class="section-icon">
+          <mat-icon> settings </mat-icon>
+        </div>
+        Settings
+      </mat-card-header>
+
+      <table>
+        <tr *ngIf="settings.datasetCount as value">
+          <th>Dataset Count</th>
+          <td>{{ value }}</td>
+        </tr>
+        <tr *ngIf="settings.jobCount as value">
+          <th>Job Count</th>
+          <td>{{ value }}</td>
+        </tr>
+      </table>
+    </mat-card>
+  </div>
+</div>

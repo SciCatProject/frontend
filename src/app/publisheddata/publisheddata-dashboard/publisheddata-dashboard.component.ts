@@ -24,8 +24,9 @@ import { Subscription } from "rxjs";
 import * as rison from "rison";
 import { MatCheckboxChange } from "@angular/material/checkbox";
 import { DOCUMENT } from "@angular/common";
-import { MatSnackBar } from "@angular/material/snack-bar";
 import { take } from "rxjs/operators";
+import { Message, MessageType } from "state-management/models";
+import { showMessageAction } from "state-management/actions/user.actions";
 
 @Component({
   selector: "app-publisheddata-dashboard",
@@ -62,7 +63,6 @@ export class PublisheddataDashboardComponent implements OnInit, OnDestroy {
   constructor(
     @Inject(DOCUMENT) private document: Document,
     private router: Router,
-    private snackBar: MatSnackBar,
     private store: Store<PublishedData>
   ) {}
 
@@ -79,11 +79,11 @@ export class PublisheddataDashboardComponent implements OnInit, OnDestroy {
     this.document.execCommand("copy");
     this.document.body.removeChild(selectionBox);
 
-    this.snackBar.open(
-      "The selected DOI's have been copied to your clipboard",
-      "",
-      { duration: 5000 }
-    );
+    const message = new Message();
+    message.content = "The selected DOI's have been copied to your clipboard";
+    message.type = MessageType.Success;
+    message.duration = 5000;
+    this.store.dispatch(showMessageAction({ message }));
   }
 
   onPageChange(event: PageChangeEvent) {
