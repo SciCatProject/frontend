@@ -18,9 +18,8 @@ import { PipesModule } from "../../pipes/pipes.module";
 import { MatCardModule } from "@angular/material/card";
 import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatIconModule } from "@angular/material/icon";
-import { MatListModule } from "@angular/material/list";
 import { MatPaginatorModule } from "@angular/material/paginator";
-import { MatSortModule } from "@angular/material/sort";
+import { MatSortModule, SortDirection  } from "@angular/material/sort";
 import { MatTableModule } from "@angular/material/table";
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { MatFormFieldModule } from "@angular/material/form-field";
@@ -34,6 +33,21 @@ import { SatDatepickerModule, SatNativeDateModule } from "saturn-datepicker";
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 
+export interface Column {
+    id: string;
+    type?: string;
+    visible?: boolean;
+    label: string;
+    hideOrder: number;
+    width?: number;
+    canSort?: boolean;
+    matchMode?: string;
+    format?: string;
+    icon?: string;
+    sortDefault?: SortDirection;
+    filterDefault?: any;
+}
+
 @NgModule({
   declarations: [SharedTableComponent],
   imports: [
@@ -41,7 +55,6 @@ import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
     MatCardModule,
     MatCheckboxModule,
     MatIconModule,
-    MatListModule,
     MatPaginatorModule,
     MatSortModule,
     MatProgressSpinnerModule,
