@@ -38,7 +38,6 @@ export interface DateRange {
   ],
 })
 export class SharedTableComponent implements AfterViewInit, AfterContentInit, OnDestroy, OnInit {
-
   private rulerSubscription: Subscription;
   public MIN_COLUMN_WIDTH = 200;
 
