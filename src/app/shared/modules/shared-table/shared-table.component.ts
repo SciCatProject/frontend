@@ -272,8 +272,9 @@ export class SharedTableComponent implements AfterViewInit, AfterContentInit, On
       // console.log("Defining subscription for column :", i)
       this.columnFilterSubscriptions[i] = fromEvent(filter.nativeElement, "keyup").pipe(
         debounceTime(650),
-        distinctUntilChanged(),
-        tap(() => {
+        distinctUntilChanged()
+      )
+        .subscribe(() => {
           // console.log("key typed from id,value:", filter.nativeElement.id,filter.nativeElement.value)
           this.paginator.pageIndex = 0;
           const columnId = filter.nativeElement.id;
@@ -306,9 +307,7 @@ export class SharedTableComponent implements AfterViewInit, AfterContentInit, On
             });
           }
           this.loadDataPage();
-        })
-      )
-        .subscribe();
+        });
     });
   }
 
