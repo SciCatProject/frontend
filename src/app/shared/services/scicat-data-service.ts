@@ -1,8 +1,9 @@
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { Observable } from "rxjs";
-import { Column } from "../column.type";
 import { LoopBackAuth } from "shared/sdk";
+import * as moment from "moment";
+import { Column } from "shared/modules/shared-table/shared-table.module";
 
 @Injectable({
   providedIn: "root",
@@ -20,42 +21,60 @@ export class ScicatDataService {
   }
 
   // TODO when do I need to use "mode" syntax (may be for nested keys ?)
-  mapToMongoSyntax(columns: Column[], filterExpressions: any) {
-    // console.log("Filterexpressions:",filterExpressions)
+  createColumnFilterMongoExpression(columns: Column[], filterExpressions: any) {
     const result = {};
     if (filterExpressions) {
       Object.keys(filterExpressions).forEach(function (key, index) {
         if (filterExpressions[key] !== "") {
+          // console.log("filterexpression:", key, filterExpressions[key], columns)
           const column = columns.find((c) => c.id === key);
-          // TODO extend by further filter conditions
-          switch (column.matchMode) {
-            case "contains": {
-              result[key] = { $regex: filterExpressions[key], $options: "i" };
-              break;
-            }
-            case "greaterThan": {
-              result[key] = { $gt: Number(filterExpressions[key]) };
-              break;
-            }
-            case "lessThan": {
-              result[key] = { $lt: Number(filterExpressions[key]) };
-              break;
-            }
-            case "after": {
-              result[key] = { $gte: filterExpressions[key] };
-              break;
-            }
-            case "between": {
-              result[key] = filterExpressions[key];
-              break;
-            }
-            case "is": {
-              result[key] = filterExpressions[key];
-              break;
-            }
-            default: {
-              result[key] = { $regex: filterExpressions[key], $options: "i" };
-              break;
+          // All non-column conditions are ignored here
+          if (column) {
+            switch (column.matchMode) {
+              case "contains": {
+                result[key] = { $regex: filterExpressions[key], $options: "i" };
+                break;
+              }
+              case "greaterThan": {
+                result[key] = { $gt: Number(filterExpressions[key]) };
+                break;
+              }
+              case "lessThan": {
+                result[key] = { $lt: Number(filterExpressions[key]) };
+                break;
+              }
+              case "after": {
+                result[key] = { $gte: filterExpressions[key] };
+                break;
+              }
+              case "between": {
+                // console.log("between case");
+                let be: any;
+                // TODO why can the filterExpression be sometimes an object and sometimes not ?
+                // TODO: is between always date related (assume this for now)
+                if (typeof filterExpressions[key] === "object") {
+                  be = filterExpressions[key];
+                } else {
+                  be = JSON.parse(filterExpressions[key]);
+                }
+                // convert to UTC and add one day to end expression
+                const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+                const blocal = moment.tz(be.begin, tz);
+                const elocal = moment.tz(be.end, tz).add(1, "days");
+                // TODO is treated as a full string, not a nested object if key contains
+                // console.log("====== Key is nested :", key);
+                result[key] = { begin: blocal.toISOString(), end: elocal.toISOString() };
+                // console.log("result:", result);
+                break;
+              }
+              case "is": {
+                result[key] = filterExpressions[key];
+                break;
+              }
+              default: {
+                result[key] = { $regex: filterExpressions[key], $options: "i" };
+                break;
+              }
             }
           }
         }
@@ -91,7 +110,7 @@ export class ScicatDataService {
     // limits	{"skip":0,"limit":50,"order":"creationTime:desc"}
 
     // ("findalldata:", filterExpressions)
-    const mongoExpression = this.mapToMongoSyntax(columns, filterExpressions);
+    const mongoExpression = this.createColumnFilterMongoExpression(columns, filterExpressions);
     const filterFields = { ...mongoExpression };
 
     if (globalFilter !== "") {
@@ -123,7 +142,7 @@ export class ScicatDataService {
     filterExpressions?: any
   ): Observable<any> {
 
-    const mongoExpression = this.mapToMongoSyntax(columns, filterExpressions);
+    const mongoExpression = this.createColumnFilterMongoExpression(columns, filterExpressions);
     const filterFields = { ...mongoExpression };
 
     if (globalFilter !== "") {
