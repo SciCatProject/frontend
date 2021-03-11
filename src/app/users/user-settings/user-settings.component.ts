@@ -37,7 +37,10 @@ export class UserSettingsComponent implements OnInit {
         : "assets/images/user.png"
     )
   );
-  catamelToken$ = this.store.pipe(select(getCatamelToken));
+  catamelToken$ = this.store.pipe(
+    select(getCatamelToken),
+    map((token) => token.id)
+  );
   settings$ = this.store.pipe(select(getSettings));
 
   constructor(

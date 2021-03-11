@@ -35,8 +35,8 @@
         <tr *ngIf="catamelToken$ | async as value">
           <th>Catamel Token</th>
           <td>
-            {{ value.id }}
-            <span class="copy-button" (click)="onCopy(value.id)">
+            {{ value }}
+            <span class="copy-button" (click)="onCopy(value)">
               <mat-icon matTooltip="Copy token to clipboard">post_add</mat-icon>
             </span>
           </td>
