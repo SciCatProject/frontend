@@ -7,28 +7,45 @@ mat-card {
     background-color: mat-color($warn, lighter);
   }
 
-  .about-header {
+  .general-header {
     background-color: mat-color($primary, lighter);
   }
 
-  .admin-header {
+  .creator-header {
+    background-color: mat-color($navy, 400);
+  }
+
+  .file-header {
     background-color: mat-color($accent, lighter);
   }
 
-  mat-icon {
-    vertical-align: middle;
+  .related-header {
+    background-color: mat-color($forest, 400);
+  }
+
+  .section-icon {
+    height: auto !important;
+    width: auto !important;
+
+    mat-icon {
+      vertical-align: middle;
+    }
   }
 
   table {
-    td,
     th {
-      padding: 0.3em;
+      min-width: 10em;
+      padding-right: 0.5em;
+      text-align: left;
     }
 
-    th {
-      text-align: left;
-      vertical-align: top;
-      min-width: 15em;
+    td {
+      width: 100%;
+      padding: 0.5em;
     }
+  }
+
+  .edit-button {
+    margin-right: 1em;
   }
 }
