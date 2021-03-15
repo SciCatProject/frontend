@@ -19,6 +19,7 @@ import { MatGridListModule } from "@angular/material/grid-list";
 import { MatIconModule } from "@angular/material/icon";
 import { MatInputModule } from "@angular/material/input";
 import { PrivacyDialogComponent } from "./privacy-dialog/privacy-dialog.component";
+import { MatTooltipModule } from "@angular/material/tooltip";
 
 @NgModule({
   imports: [
@@ -34,12 +35,12 @@ import { PrivacyDialogComponent } from "./privacy-dialog/privacy-dialog.componen
     MatGridListModule,
     MatIconModule,
     MatInputModule,
+    MatTooltipModule,
     ReactiveFormsModule,
     SharedCatanieModule,
-    StoreModule.forFeature("users", userReducer)
+    StoreModule.forFeature("users", userReducer),
   ],
   declarations: [LoginComponent, UserSettingsComponent, PrivacyDialogComponent],
-  entryComponents: [PrivacyDialogComponent],
-  providers: [ADAuthService]
+  providers: [ADAuthService],
 })
 export class UsersModule {}

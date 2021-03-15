@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 
 import { MetadataEditComponent } from "./metadata-edit.component";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
@@ -13,7 +13,7 @@ describe("MetadataEditComponent", () => {
   let component: MetadataEditComponent;
   let fixture: ComponentFixture<MetadataEditComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
       declarations: [MetadataEditComponent],

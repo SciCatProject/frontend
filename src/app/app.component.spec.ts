@@ -1,5 +1,5 @@
 import { NO_ERRORS_SCHEMA } from "@angular/core";
-import { async, TestBed } from "@angular/core/testing";
+import { TestBed, waitForAsync } from "@angular/core/testing";
 import { Store, StoreModule } from "@ngrx/store";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { AppComponent } from "./app.component";
@@ -31,17 +31,17 @@ describe("AppComponent", () => {
     TestBed.compileComponents();
   });
 
-  it("should create the app", async(() => {
+  it("should create the app", waitForAsync(() => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.debugElement.componentInstance;
-    app.store = TestBed.get(Store);
+    app.store = TestBed.inject(Store);
     expect(app).toBeTruthy();
   }));
 
-  it(`should have as title 'SciCat'`, async(() => {
+  it(`should have as title 'SciCat'`, waitForAsync(() => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.debugElement.componentInstance;
-    app.store = TestBed.get(Store);
+    app.store = TestBed.inject(Store);
     expect(app.title).toContain("SciCat");
   }));
 });

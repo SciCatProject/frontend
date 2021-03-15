@@ -17,6 +17,7 @@ import {
   loadingAction,
   loadingCompleteAction
 } from "state-management/actions/user.actions";
+import { Type } from "@angular/core";
 
 const data: PublishedDataInterface = {
   doi: "testDOI",
@@ -58,9 +59,13 @@ describe("PublishedDataEffects", () => {
       ]
     });
 
-    effects = TestBed.get(PublishedDataEffects);
-    publishedDataApi = TestBed.get(PublishedDataApi);
+    effects = TestBed.inject(PublishedDataEffects);
+    publishedDataApi = injectedStub(PublishedDataApi);
   });
+
+  function injectedStub<S>(service: Type<S>): jasmine.SpyObj<S> {
+    return TestBed.inject(service) as jasmine.SpyObj<S>;
+  }
 
   describe("fetchAllPublishedData$", () => {
     describe("ofType fetchAllPublishedDataAction", () => {

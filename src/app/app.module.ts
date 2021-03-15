@@ -8,7 +8,7 @@ import { DatasetsModule } from "datasets/datasets.module";
 import { EffectsModule } from "@ngrx/effects";
 import { FlexLayoutModule } from "@angular/flex-layout";
 import { HttpClientModule } from "@angular/common/http";
-import { NgModule } from "@angular/core";
+import { NgModule} from "@angular/core";
 import { PoliciesModule } from "policies/policies.module";
 import { ProposalsModule } from "proposals/proposals.module";
 import { RouterModule } from "@angular/router";
@@ -38,6 +38,7 @@ import { PublisheddataModule } from "publisheddata/publisheddata.module";
 import { LayoutModule } from "_layout/layout.module";
 import { JobsModule } from "jobs/jobs.module";
 import { InstrumentsModule } from "./instruments/instruments.module";
+import { FilesModule } from "files/files.module";
 
 @NgModule({
   declarations: [AppComponent],
@@ -48,6 +49,7 @@ import { InstrumentsModule } from "./instruments/instruments.module";
     BrowserAnimationsModule,
     BrowserModule,
     DatasetsModule,
+    FilesModule,
     FlexLayoutModule,
     HelpModule,
     HttpClientModule,
@@ -82,7 +84,10 @@ import { InstrumentsModule } from "./instruments/instruments.module";
       }
     ),
     extModules,
-    RouterModule.forRoot(routes, { useHash: false }),
+    RouterModule.forRoot(routes, {
+      useHash: false,
+      relativeLinkResolution: "legacy",
+    }),
     EffectsModule.forRoot([]),
     ServiceWorkerModule.register("ngsw-worker.js", {
       enabled: environment.production,
@@ -92,4 +97,4 @@ import { InstrumentsModule } from "./instruments/instruments.module";
   providers: [UserApi, SampleApi, Title, MatNativeDateModule],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }

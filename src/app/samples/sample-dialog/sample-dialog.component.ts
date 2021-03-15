@@ -14,7 +14,7 @@ import {
 } from "state-management/selectors/user.selectors";
 import { Subscription } from "rxjs";
 
-const shortid = require("shortid");
+import * as shortid from "shortid";
 
 @Component({
   selector: "app-sample-dialog",
@@ -29,6 +29,22 @@ export class SampleDialogComponent implements OnInit, OnDestroy {
   username: string;
   userGroups: string[];
   subscriptions: Subscription[] = [];
+
+  constructor(
+    private store: Store<any>,
+    private fb: FormBuilder,
+    public dialogRef: MatDialogRef<SampleDialogComponent>,
+    @Inject(MAT_DIALOG_DATA)
+    { description, sampleCharacteristics, ownerGroup }: Sample
+  ) {
+    this.description = description;
+
+    this.form = this.fb.group({
+      description: [description, Validators.required],
+      sampleCharacteristics: [sampleCharacteristics],
+      ownerGroup: [ownerGroup, Validators.required]
+    });
+  }
 
   save() {
     this.dialogRef.close(this.form.value);
@@ -60,22 +76,6 @@ export class SampleDialogComponent implements OnInit, OnDestroy {
 
   close() {
     this.dialogRef.close();
-  }
-
-  constructor(
-    private store: Store<any>,
-    private fb: FormBuilder,
-    public dialogRef: MatDialogRef<SampleDialogComponent>,
-    @Inject(MAT_DIALOG_DATA)
-    { description, sampleCharacteristics, ownerGroup }: Sample
-  ) {
-    this.description = description;
-
-    this.form = this.fb.group({
-      description: [description, Validators.required],
-      sampleCharacteristics: [sampleCharacteristics],
-      ownerGroup: [ownerGroup, Validators.required]
-    });
   }
 
   ngOnInit() {

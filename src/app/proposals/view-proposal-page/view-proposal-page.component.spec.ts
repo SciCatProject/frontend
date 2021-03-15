@@ -1,9 +1,9 @@
 import { ViewProposalPageComponent } from "./view-proposal-page.component";
 import {
   ComponentFixture,
-  async,
   TestBed,
-  inject
+  inject,
+  waitForAsync
 } from "@angular/core/testing";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { MockStore, MockActivatedRoute } from "shared/MockStubs";
@@ -29,7 +29,7 @@ describe("ViewProposalPageComponent", () => {
   let store: MockStore;
   let dispatchSpy;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
       declarations: [ViewProposalPageComponent],

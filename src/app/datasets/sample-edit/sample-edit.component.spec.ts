@@ -1,8 +1,8 @@
 import {
-  async,
   ComponentFixture,
   inject,
   TestBed,
+  waitForAsync,
 } from "@angular/core/testing";
 import {
   MatDialogModule,
@@ -31,7 +31,7 @@ describe("SampleEditComponent", () => {
   let store: MockStore;
   let dispatchSpy;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [SampleEditComponent],
       imports: [MatDialogModule],

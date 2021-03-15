@@ -30,10 +30,6 @@ export class AppHeaderComponent implements OnInit, OnDestroy {
   inBatchCount: number;
   inBatchIndicator: string;
 
-  logout(): void {
-    this.store.dispatch(logoutAction());
-  }
-
   constructor(
     private store: Store<any>,
     @Inject(APP_CONFIG) public appConfig: AppConfig
@@ -45,6 +41,10 @@ export class AppHeaderComponent implements OnInit, OnDestroy {
       this.status = "test";
     }
     this.profileImage = "assets/images/user.png";
+  }
+
+  logout(): void {
+    this.store.dispatch(logoutAction());
   }
 
   ngOnInit() {

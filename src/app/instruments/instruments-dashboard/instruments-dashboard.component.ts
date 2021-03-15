@@ -46,6 +46,12 @@ export class InstrumentsDashboardComponent implements OnInit {
     { name: "customMetadata", icon: "insert_chart", sort: false, inList: true }
   ];
 
+  constructor(
+    private jsonHeadPipe: JsonHeadPipe,
+    private router: Router,
+    private store: Store<Instrument>
+  ) {}
+
   onPageChange(event: PageChangeEvent): void {
     const { pageIndex: page, pageSize: limit } = event;
     this.store.dispatch(changePageAction({ page, limit }));
@@ -60,12 +66,6 @@ export class InstrumentsDashboardComponent implements OnInit {
     const pid = encodeURIComponent(instrument.pid);
     this.router.navigateByUrl("/instruments/" + pid);
   }
-
-  constructor(
-    private jsonHeadPipe: JsonHeadPipe,
-    private router: Router,
-    private store: Store<Instrument>
-  ) {}
 
   ngOnInit() {
     this.store.dispatch(fetchInstrumentsAction());

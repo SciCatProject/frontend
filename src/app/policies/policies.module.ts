@@ -64,10 +64,9 @@ import { FlexModule } from "@angular/flex-layout";
     StoreModule.forFeature("policies", policiesReducer),
     MatDialogModule,
     MatExpansionModule,
-    FlexModule
+    FlexModule,
   ],
   declarations: [EditDialogComponent, PoliciesDashboardComponent],
   exports: [],
-  entryComponents: [EditDialogComponent]
 })
 export class PoliciesModule {}

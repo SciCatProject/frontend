@@ -46,6 +46,24 @@ describe("LogbooksReducer", () => {
     });
   });
 
+  describe("on fetchLogbookFailedAction", () => {
+    it("should clear currentLogbook", () => {
+      const action = fromActions.fetchLogbookFailedAction();
+      const state = logbooksReducer(initialLogbookState, action);
+
+      expect(state.currentLogbook).toBeNull();
+    });
+  });
+
+  describe("on clearLogbookAction", () => {
+    it("should clear currentLogbook", () => {
+      const action = fromActions.clearLogbookAction();
+      const state = logbooksReducer(initialLogbookState, action);
+
+      expect(state.currentLogbook).toBeNull();
+    });
+  });
+
   describe("on fetchCountCompleteAction", () => {
     it("should set totalCount", () => {
       const count = 100;

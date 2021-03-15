@@ -7,8 +7,17 @@ mat-card {
     background-color: mat-color($primary, lighter);
   }
 
-  mat-icon {
-    vertical-align: middle;
+  .history-header {
+    background-color: mat-color($navy, 400);
+  }
+
+  .section-icon {
+    height: auto !important;
+    width: auto !important;
+
+    mat-icon {
+      vertical-align: middle;
+    }
   }
 
   .lifecycle-table {
@@ -24,10 +33,6 @@ mat-card {
 
   .download-button {
     margin-bottom: 0.5em;
-  }
-
-  .history-header {
-    background-color: mat-color($accent, lighter);
   }
 
   .history-table {

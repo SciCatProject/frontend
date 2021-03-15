@@ -20,7 +20,7 @@
 
   <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
   <mat-row
-    (click)="onSelect($event, row)"
+    (click)="onSelect($event)"
     *matRowDef="let row; columns: displayedColumns"
   ></mat-row>
 </mat-table>

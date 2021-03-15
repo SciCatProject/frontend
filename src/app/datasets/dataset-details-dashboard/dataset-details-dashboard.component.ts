@@ -37,7 +37,7 @@ import { submitJobAction } from "state-management/actions/jobs.actions";
 import { ReadFile } from "ngx-file-helpers";
 import { SubmitCaptionEvent } from "shared/modules/file-uploader/file-uploader.component";
 import { MatSlideToggleChange } from "@angular/material/slide-toggle";
-import { fetchLogbookAction } from "state-management/actions/logbooks.actions";
+import { clearLogbookAction, fetchLogbookAction } from "state-management/actions/logbooks.actions";
 import { fetchProposalAction } from "state-management/actions/proposals.actions";
 import { getCurrentProposal } from "state-management/selectors/proposals.selectors";
 import { fetchSampleAction } from "state-management/actions/samples.actions";
@@ -50,6 +50,7 @@ import { getCurrentSample } from "state-management/selectors/samples.selectors";
 })
 export class DatasetDetailsDashboardComponent
   implements OnInit, OnDestroy, AfterViewChecked {
+  private subscriptions: Subscription[] = [];
   datasetWithout$ = this.store.pipe(select(getCurrentDatasetWithoutFileInfo));
   origDatablocks$ = this.store.pipe(select(getCurrentOrigDatablocks));
   datablocks$ = this.store.pipe(select(getCurrentDatablocks));
@@ -64,7 +65,14 @@ export class DatasetDetailsDashboardComponent
   pickedFile: ReadFile;
   attachment: Attachment;
 
-  private subscriptions: Subscription[] = [];
+  constructor(
+    @Inject(APP_CONFIG) public appConfig: AppConfig,
+    private cdRef: ChangeDetectorRef,
+    private route: ActivatedRoute,
+    private router: Router,
+    private store: Store<Dataset>,
+    private userApi: UserApi
+  ) {}
 
   isPI(): boolean {
     if (this.user.username === "admin") {
@@ -214,15 +222,6 @@ export class DatasetDetailsDashboardComponent
     );
   }
 
-  constructor(
-    @Inject(APP_CONFIG) public appConfig: AppConfig,
-    private cdRef: ChangeDetectorRef,
-    private route: ActivatedRoute,
-    private router: Router,
-    private store: Store<Dataset>,
-    private userApi: UserApi
-  ) {}
-
   ngOnInit() {
     this.subscriptions.push(
       this.route.params.pipe(pluck("id")).subscribe((id: string) => {
@@ -250,13 +249,15 @@ export class DatasetDetailsDashboardComponent
       this.store.pipe(select(getCurrentDataset)).subscribe((dataset) => {
         if (dataset) {
           this.dataset = dataset;
-          if (dataset.type === "raw" && "proposalId" in dataset) {
+          if ("proposalId" in dataset) {
             this.store.dispatch(
               fetchProposalAction({ proposalId: dataset["proposalId"] })
             );
             this.store.dispatch(
               fetchLogbookAction({ name: dataset["proposalId"] })
             );
+          } else {
+            this.store.dispatch(clearLogbookAction());
           }
           if ("sampleId" in dataset) {
             this.store.dispatch(

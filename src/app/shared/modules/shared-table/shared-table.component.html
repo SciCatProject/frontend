@@ -4,10 +4,11 @@
   </div>
 </div>
 
+<!-- Top tool bar-->
 <mat-toolbar>
   <mat-form-field appearance="standard">
     <mat-icon>search</mat-icon>
-    <input type="search" matInput placeholder="global search" #input>
+    <input type="search" matInput placeholder="global word-search" #input>
   </mat-form-field>
   <span class="example-spacer"></span>
   <span>{{dataSource.collection}}</span>
@@ -41,7 +42,15 @@
           <span mat-sort-header>{{ column.label | titleCase }}</span>
         </div>
         <mat-form-field *ngIf="column.matchMode;">
-          <input #allFilters matInput autocomplete="off" id="{{ column.id }}" placeholder="{{ column.matchMode }}" />
+          <ng-container *ngIf="column.matchMode == 'between'">
+            <input #allFilters matInput id="{{ column.id }}" class="date-input" placeholder="Select a date range" name="range-picker"
+              [satDatepicker]="picker" (dateChange)="dateChanged($event,column.id)" />
+            <sat-datepicker-toggle matSuffix [for]="picker"></sat-datepicker-toggle>
+            <sat-datepicker #picker [rangeMode]="true"></sat-datepicker>
+          </ng-container>
+          <ng-container *ngIf="column.matchMode != 'between'">
+            <input #allFilters matInput autocomplete="off" id="{{ column.id }}" placeholder="{{ column.matchMode }}" />
+          </ng-container>
         </mat-form-field>
       </mat-header-cell>
     </ng-container>
@@ -52,16 +61,28 @@
           <span mat-sort-header>{{ column.label }}</span>
         </div>
         <mat-form-field *ngIf="column.matchMode;">
-          <input #allFilters matInput autocomplete="off" id="{{ column.id }}" placeholder="{{ column.matchMode }}" />
+          <ng-container *ngIf="column.matchMode == 'between'">
+            <input #allFilters matInput id="{{ column.id }}" class="date-input" placeholder="Select a date range" name="range-picker"
+              [satDatepicker]="picker" (dateChange)="dateChanged($event,column.id)" />
+            <sat-datepicker-toggle matSuffix [for]="picker"></sat-datepicker-toggle>
+            <sat-datepicker #picker [rangeMode]="true"></sat-datepicker>
+          </ng-container>
+          <ng-container *ngIf="column.matchMode != 'between'">
+            <input #allFilters matInput autocomplete="off" id="{{ column.id }}" placeholder="{{ column.matchMode }}" />
+          </ng-container>
         </mat-form-field>
+
       </mat-header-cell>
     </ng-template>
 
     <mat-cell *matCellDef="let row" [fxFlex]="column.width + 'px'">
       <ng-container [ngSwitch]="column.type">
         <ng-container *ngSwitchCase="'image'"><img [src]=row[column.id] /></ng-container>
-        <ng-container *ngSwitchCase="'dataseturl'"><a [routerLink]="['/datasets/',getPropertyByPath(row,column.id)]">{{ getPropertyByPath(row,column.id) }}</a> </ng-container>
-        <ng-container  *ngSwitchDefault class="ellipsis"> {{ getPropertyByPath(row,column.id)  | newDynamicPipe: column.format }}</ng-container>
+        <ng-container *ngSwitchCase="'dataseturl'"><a
+            [routerLink]="['/datasets/',getPropertyByPath(row,column.id)]">{{ getPropertyByPath(row,column.id) }}</a>
+        </ng-container>
+        <ng-container *ngSwitchDefault class="ellipsis">
+          {{ getPropertyByPath(row,column.id)  | newDynamicPipe: column.format }}</ng-container>
       </ng-container>
     </mat-cell>
   </ng-container>
@@ -75,8 +96,11 @@
         <span>
           <ng-container [ngSwitch]="hiddenColumn.type">
             <ng-container *ngSwitchCase="'image'"><img [src]=row[hiddenColumn.id] /></ng-container>
-            <ng-container *ngSwitchCase="'dataseturl'"><a [routerLink]="['/datasets/',getPropertyByPath(row,hiddenColumn.id)]">{{ getPropertyByPath(row,hiddenColumn.id) }}</a> </ng-container>
-            <ng-container *ngSwitchDefault> {{ getPropertyByPath(row,hiddenColumn.id) | newDynamicPipe: hiddenColumn.format }}</ng-container>
+            <ng-container *ngSwitchCase="'dataseturl'"><a
+                [routerLink]="['/datasets/',getPropertyByPath(row,hiddenColumn.id)]">{{ getPropertyByPath(row,hiddenColumn.id) }}</a>
+            </ng-container>
+            <ng-container *ngSwitchDefault>
+              {{ getPropertyByPath(row,hiddenColumn.id) | newDynamicPipe: hiddenColumn.format }}</ng-container>
           </ng-container>
         </span>
       </p>

@@ -1,13 +1,13 @@
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { ProposalDetailComponent } from "./proposal-detail.component";
-import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 import { APP_CONFIG } from "app-config.module";
 
 describe("ProposalsDetailComponent", () => {
   let component: ProposalDetailComponent;
   let fixture: ComponentFixture<ProposalDetailComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
       declarations: [ProposalDetailComponent],

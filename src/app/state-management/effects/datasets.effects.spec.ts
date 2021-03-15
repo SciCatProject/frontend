@@ -18,6 +18,7 @@ import {
   updateUserSettingsAction
 } from "state-management/actions/user.actions";
 import { ScientificCondition } from "state-management/models";
+import { Type } from "@angular/core";
 
 const data: DatasetInterface = {
   owner: "",
@@ -70,9 +71,13 @@ describe("DatasetEffects", () => {
       ]
     });
 
-    effects = TestBed.get(DatasetEffects);
-    datasetApi = TestBed.get(DatasetApi);
+    effects = TestBed.inject(DatasetEffects);
+    datasetApi = injectedStub(DatasetApi);
   });
+
+  function injectedStub<S>(service: Type<S>): jasmine.SpyObj<S> {
+    return TestBed.inject(service) as jasmine.SpyObj<S>;
+  }
 
   describe("fetchDatasets$", () => {
     it("should result in a fetchDatasetsCompleteAction", () => {

@@ -22,6 +22,13 @@ const reducer = createReducer(
     const currentLogbook = formatImageUrls(logbook);
     return { ...state, currentLogbook };
   }),
+  on(fromActions.fetchLogbookFailedAction, (state) => {
+    return { ...state, currentLogbook: null };
+  }),
+
+  on(fromActions.clearLogbookAction, (state) => {
+    return { ...state, currentLogbook: null };
+  }),
 
   on(fromActions.fetchCountCompleteAction, (state, { count }) => ({
     ...state,

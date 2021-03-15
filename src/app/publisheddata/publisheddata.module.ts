@@ -21,6 +21,7 @@ import { MatChipsModule } from "@angular/material/chips";
 import { MatOptionModule } from "@angular/material/core";
 import { MatInputModule } from "@angular/material/input";
 import { MatSelectModule } from "@angular/material/select";
+import { MatTooltipModule } from "@angular/material/tooltip";
 
 @NgModule({
   declarations: [
@@ -38,6 +39,7 @@ import { MatSelectModule } from "@angular/material/select";
     MatInputModule,
     MatIconModule,
     MatSelectModule,
+    MatTooltipModule,
     NgxJsonViewerModule,
     SharedCatanieModule,
     StoreModule.forFeature("publishedData", publishedDataReducer),

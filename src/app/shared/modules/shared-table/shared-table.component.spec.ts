@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 import { MatPaginator } from "@angular/material/paginator";
 import { MatSort } from "@angular/material/sort";
 import { MatTable } from "@angular/material/table";
@@ -6,6 +6,7 @@ import { of } from "rxjs";
 import { SciCatDataSource } from "shared/services/scicat.datasource";
 
 import { SharedTableComponent } from "./shared-table.component";
+import { RouterTestingModule } from "@angular/router/testing";
 
 describe("SharedTableComponent", () => {
   let component: SharedTableComponent;
@@ -31,8 +32,9 @@ describe("SharedTableComponent", () => {
     page: of({}),
   } as MatPaginator;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
+      imports: [RouterTestingModule],
       declarations: [SharedTableComponent],
     }).compileComponents();
   }));

@@ -6,7 +6,6 @@ import {
   map,
   filter,
   distinctUntilChanged,
-  combineLatest,
   take
 } from "rxjs/operators";
 import {
@@ -20,7 +19,7 @@ import {
   prefillFiltersAction,
   fetchDatasetsAction
 } from "state-management/actions/datasets.actions";
-import { Subscription } from "rxjs";
+import { combineLatest, Subscription } from "rxjs";
 
 import * as deepEqual from "deep-equal";
 import * as rison from "rison";
@@ -38,21 +37,27 @@ import { MatSidenav } from "@angular/material/sidenav";
   styleUrls: ["./anonymous-dashboard.component.scss"]
 })
 export class AnonymousDashboardComponent implements OnInit, OnDestroy {
+  private readyToFetch$ = this.store.pipe(
+    select(getHasPrefilledFilters),
+    filter(has => has)
+  );
   datasets$ = this.store.pipe(select(getDatasets));
   tableColumns$ = this.store
     .pipe(select(getColumns))
     .pipe(map(columns => columns.filter(column => column.name !== "select")));
   filters$ = this.store.pipe(select(getFilters));
-  private readyToFetch$ = this.store.pipe(
-    select(getHasPrefilledFilters),
-    filter(has => has)
-  );
 
   clearColumnSearch = false;
 
   subscriptions: Subscription[] = [];
 
   @ViewChild(MatSidenav, { static: false }) sideNav: MatSidenav;
+
+  constructor(
+    private store: Store<any>,
+    private route: ActivatedRoute,
+    private router: Router
+  ) {}
 
   onSettingsClick(): void {
     this.sideNav.toggle();
@@ -86,27 +91,20 @@ export class AnonymousDashboardComponent implements OnInit, OnDestroy {
     this.router.navigateByUrl("/anonymous/datasets/" + pid);
   }
 
-  constructor(
-    private store: Store<any>,
-    private route: ActivatedRoute,
-    private router: Router
-  ) {}
-
   ngOnInit() {
     this.store.dispatch(fetchMetadataKeysAction());
 
     this.subscriptions.push(
-      this.filters$
+      combineLatest([this.filters$, this.readyToFetch$])
         .pipe(
-          combineLatest(this.readyToFetch$),
           map(([filters, _]) => filters),
           distinctUntilChanged(deepEqual)
         )
-        .subscribe(filters => {
+        .subscribe((filters) => {
           this.store.dispatch(fetchDatasetsAction());
           this.store.dispatch(fetchFacetCountsAction());
           this.router.navigate([""], {
-            queryParams: { args: rison.encode(filters) }
+            queryParams: { args: rison.encode(filters) },
           });
         })
     );

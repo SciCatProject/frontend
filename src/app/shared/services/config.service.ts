@@ -17,12 +17,12 @@ export class ConfigService {
   /**
    * return a json file for the matching file
    * or an error if not found
-   * @param {any} filename
+   * @param {string} filename
    * @returns {Observable<any>}
    * @memberof ConfigService
    */
-  getConfigFile(filename): Observable<any> {
-    return Observable.create(observer => {
+  getConfigFile(filename: string): Observable<any> {
+    return new Observable((observer) => {
       this.http
         .get(this.url + filename + ".json", { observe: "response" })
         .subscribe(

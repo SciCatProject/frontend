@@ -2,6 +2,10 @@
   margin: 8px;
 }
 
+::ng-deep .mat-sort-header-arrow {
+  color:green;
+}
+
 .expanded {
   height: min-content !important;
   visibility: visible !important;
@@ -23,7 +27,7 @@
 
 .btnToggleExpand.active:before {
   content: '-';
-  background-color: #d33333;
+  background-color: red;
 }
 
 .btnToggleExpand:before {
@@ -43,7 +47,7 @@
   font-family: 'Courier New', Courier, monospace;
   line-height: 14px;
   content: '+';
-  background-color: #31b131;
+  background-color: green;
 }
 
 .filterHeader {
@@ -69,12 +73,21 @@
   padding-top: 10px;
 }
 
-mat-cell > span.ellipsis {
-  text-overflow: ellipsis; 
-  overflow: hidden; 
+mat-cell>span.ellipsis {
+  text-overflow: ellipsis;
+  overflow: hidden;
   white-space: nowrap;
 }
 
 mat-header-row {
   align-items: initial;
+}
+
+
+.mat-input-element {
+  color: green;
+}
+
+.mat-input-element::placeholder {
+  color: black;
 }

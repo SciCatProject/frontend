@@ -32,18 +32,18 @@ export class AnonymousDetailsDashboardComponent implements OnInit, OnDestroy {
 
   datasetSubscription: Subscription;
 
-  onClickKeyword(keyword: string): void {
-    this.store.dispatch(clearFacetsAction());
-    this.store.dispatch(addKeywordFilterAction({ keyword }));
-    this.router.navigateByUrl("/anonymous/datasets");
-  }
-
   constructor(
     @Inject(APP_CONFIG) public appConfig: AppConfig,
     private route: ActivatedRoute,
     private router: Router,
     private store: Store<any>
   ) {}
+
+  onClickKeyword(keyword: string): void {
+    this.store.dispatch(clearFacetsAction());
+    this.store.dispatch(addKeywordFilterAction({ keyword }));
+    this.router.navigateByUrl("/anonymous/datasets");
+  }
 
   ngOnInit() {
     const pid = this.route.snapshot.params.id;

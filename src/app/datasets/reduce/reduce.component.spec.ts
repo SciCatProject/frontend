@@ -1,9 +1,9 @@
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import {
-  async,
   ComponentFixture,
   TestBed,
-  inject
+  inject,
+  waitForAsync
 } from "@angular/core/testing";
 import { Store, StoreModule } from "@ngrx/store";
 
@@ -38,7 +38,7 @@ describe("ReduceComponent", () => {
   let store: MockStore;
   let dispatchSpy;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
       imports: [

@@ -1,5 +1,5 @@
 import { NO_ERRORS_SCHEMA } from "@angular/core";
-import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { APP_CONFIG } from "app-config.module";
@@ -10,7 +10,7 @@ describe("SearchParametersDialogComponent", () => {
   let component: SearchParametersDialogComponent;
   let fixture: ComponentFixture<SearchParametersDialogComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
       declarations: [SearchParametersDialogComponent],
