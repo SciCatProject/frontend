@@ -1,4 +1,4 @@
-/* tslint:disable */
+/* eslint-disable */
 import { Injectable, Inject, Optional } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { SDKModels } from './SDKModels';

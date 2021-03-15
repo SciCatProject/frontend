@@ -1,4 +1,4 @@
-/* tslint:disable */
+/* eslint-disable */
 import { Injectable } from '@angular/core';
 /**
 * @author Jonathan Casarrubias <twitter:@johncasarrubias> <github:@mean-expert-official>

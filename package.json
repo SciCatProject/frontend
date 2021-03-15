@@ -11,7 +11,7 @@
     "posttest": "ng lint",
     "cypress:open": "./node_modules/.bin/cypress open",
     "e2e": "ng e2e --project=catanie-e2e",
-    "lint": "./node_modules/tslint/bin/tslint --project tslint.json --force --fix",
+    "lint": "ng lint",
     "prune": "./node_modules/ts-prune/lib/index.js -p ./src/tsconfig.json | grep -v -e ./src/app/shared -e ./src/environments"
   },
   "private": true,
