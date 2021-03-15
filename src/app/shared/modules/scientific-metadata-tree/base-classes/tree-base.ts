@@ -139,4 +139,11 @@ export class TreeBase {
     }
     this.dataSource.data = this.dataTree;
   }
+  getIndex(parentNode: TreeNode, node: TreeNode) {
+    if (parentNode) {
+      return parentNode.children.indexOf(node);
+    } else {
+      return this.dataTree.indexOf(node);
+    }
+  }
 }

@@ -1,6 +1,6 @@
-import { Component, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, HostListener, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { FlatTreeControl } from '@angular/cdk/tree';
-import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
+import { MatTree, MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
 import { Observable } from 'rxjs';
 import { FlatNode, TreeBase, TreeNode } from 'shared/modules/scientific-metadata-tree/base-classes/tree-base';
 import { InputData, MetadataInput } from 'shared/modules/scientific-metadata-tree/metadata-input/metadata-input.component';
@@ -27,8 +27,9 @@ export class FlatNodeEdit implements FlatNode {
   styleUrls: ['./tree-edit.component.scss'],
 })
 export class TreeEditComponent extends TreeBase implements OnInit {
-  @Input() data: any;
+  @Input() metadata: any;
   currentEditingNode: FlatNodeEdit | null = null;
+  lastSavedChanges: number = -1;
   filteredUnits$: Observable<string[]>;
   currentInputData: MetadataInput;
   historyManager: HistoryManager;
@@ -44,7 +45,7 @@ export class TreeEditComponent extends TreeBase implements OnInit {
     this.historyManager = new HistoryManager();
   }
   ngOnInit() {
-    this.dataTree = this.buildDataTree(this.data, 0);
+    this.dataTree = this.buildDataTree(this.metadata, 0);
     this.dataSource.data = this.dataTree;
   }
 
@@ -176,20 +177,22 @@ export class TreeEditComponent extends TreeBase implements OnInit {
     this.treeControl.expand(parentNode);
     this.enableEditing(this.nestNodeMap.get(newNode) as FlatNodeEdit);
   }
-  getIndex(parentNode: TreeNode, node: TreeNode) {
-    if (parentNode) {
-      return parentNode.children.indexOf(node);
-    } else {
-      return this.dataTree.indexOf(node);
-    }
-  }
   deleteNode(node: FlatNodeEdit) {
     const parentNode = this.getNestedParent(node);
     const nestedNode = this.flatNodeMap.get(node);
-    const index = this.getIndex(parentNode, nestedNode);
+    const childIndex = this.getIndex(parentNode, nestedNode);
     this.historyManager.add({
       undo: () => {
-        this.insertNode(parentNode, nestedNode, index);
+        if (parentNode && parentNode.children.length === 0){
+          // Removing and readd parentNode before adding childNode is needed since matTree won't rerender the parentNode properly
+          const grandfatherNode = this.getNestedParent(this.nestNodeMap.get(parentNode));
+          const parentIndex = this.getIndex(grandfatherNode, parentNode);
+          this.removeNode(grandfatherNode, parentNode);
+          this.insertNode(parentNode, nestedNode, childIndex);
+          this.insertNode(grandfatherNode, parentNode, parentIndex);
+        } else {
+          this.insertNode(parentNode, nestedNode, childIndex);
+        }
       },
       redo: () => {
         this.removeNode(parentNode, nestedNode);
@@ -235,8 +238,9 @@ export class TreeEditComponent extends TreeBase implements OnInit {
     return this.currentEditingNode && this.changed;
   }
   doSave() {
-    const metadata = this.convertDataTreeToObject(this.dataTree);
-    this.save.emit(metadata);
+    this.lastSavedChanges = this.historyManager.currentIdx;
+    this.metadata = this.convertDataTreeToObject(this.dataTree);
+    this.save.emit(this.metadata);
   }
 
   openObjectCreationDialog(node: FlatNodeEdit): void {

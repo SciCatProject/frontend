@@ -68,6 +68,7 @@ export class MetadataInputComponent extends MetadataInputBase implements OnInit 
     if (node.expandable) {
       this.metadataForm.get("type").setValue(Type.string);
       this.metadataForm.get("key").setValue(node.key);
+      this.metadataForm.get("value").disable();
       this.typeValues = ['string'];
     } else {
       if (node.unit) {

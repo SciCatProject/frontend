@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChange } from '@angular/core';
 import { FlatTreeControl } from '@angular/cdk/tree';
 import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
 import { FlatNode, TreeBase, TreeNode } from 'shared/modules/scientific-metadata-tree/base-classes/tree-base';
@@ -7,8 +7,8 @@ import { FlatNode, TreeBase, TreeNode } from 'shared/modules/scientific-metadata
   templateUrl: './tree-view.component.html',
   styleUrls: ['./tree-view.component.scss'],
 })
-export class TreeViewComponent extends TreeBase implements OnInit {
-  @Input() data: any;
+export class TreeViewComponent extends TreeBase implements OnInit, OnChanges {
+  @Input() metadata: any;
   constructor() {
     super();
     this.treeFlattener = new MatTreeFlattener(this.transformer, this.getLevel, this.isExpandable, this.getChildren);
@@ -18,8 +18,17 @@ export class TreeViewComponent extends TreeBase implements OnInit {
     this.flatNodeMap = new Map<FlatNode, TreeNode>();
   }
   ngOnInit() {
-    this.dataTree = this.buildDataTree(this.data, 0);
+    this.dataTree = this.buildDataTree(this.metadata, 0);
     this.dataSource.data = this.dataTree;
+  }
+  ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
+    for (const propName in changes) {
+      if (propName === "metadata") {
+        this.metadata = changes[propName].currentValue;
+        this.dataTree = this.buildDataTree(this.metadata, 0);
+        this.dataSource.data = this.dataTree;
+      }
+    }
   }
   transformer = (node: TreeNode, level: number) => {
     const existingNode = this.nestNodeMap.get(node);
