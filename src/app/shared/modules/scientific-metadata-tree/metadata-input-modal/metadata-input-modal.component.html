@@ -1,6 +1,6 @@
-<mat-dialog-content>
+<mat-dialog-content class="container">
   <form [formGroup]="metadataForm">
-    <div class="formRow" fxLayout="row" fxLayout.lt-lg="column">
+    <div class="formRow" fxLayout="row" fxLayout.lt-lg="column" >
       <mat-form-field class="inputField">
         <input matInput autocomplete="off"
           autocorrect="off" autocapitalize="off" spellcheck="false"
@@ -10,7 +10,7 @@
         </mat-error>
       </mat-form-field>
     </div>
-    <div class="formRow" fxLayout="row" fxLayout.lt-lg="column">
+    <div class="formRow" fxLayout="row" fxLayout.lt-lg="column" fxLayoutAlign="flex-start end">
       <div class="formColumn">
         <mat-form-field class="selectField">
           <mat-label>Type</mat-label>
@@ -41,7 +41,7 @@
             spellcheck="false" formControlName="value" placeholder="Value"
             step=1 />
           <mat-error *ngIf="fieldHasError('value')">
-            Value is required
+            {{getError("value")}}
           </mat-error>
         </mat-form-field>
       </div>

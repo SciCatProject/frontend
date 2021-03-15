@@ -1,4 +1,4 @@
-import { AbstractControl, FormGroup, ValidatorFn } from "@angular/forms";
+import { AbstractControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from "@angular/forms";
 import { Observable } from "rxjs";
 import { UnitsService } from "shared/services/units.service";
 import { startWith, map } from "rxjs/operators";
@@ -6,7 +6,8 @@ export enum Type {
   quantity = "quantity",
   date = "date",
   number = "number",
-  string = "string"
+  string = "string",
+  boolean = "boolean"
 }
 export class MetadataInputBase {
   unitsService: UnitsService;
@@ -19,31 +20,80 @@ export class MetadataInputBase {
     this.unitsService.getUnits();
   }
   unitValidator(): ValidatorFn {
-    return (control: AbstractControl): { [key: string]: any } | null => {
+    return (control: AbstractControl): ValidationErrors | null => {
       const allowed = this.unitsService.getUnits().includes(control.value);
       return allowed ? null : { forbiddenUnit: { value: control.value } };
     };
   }
+  dateValidator(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const invalid = isNaN(Date.parse(control.value));
+      return invalid ? { invalidDate: "Invalid date" } : null
+    }
+  }
+  booleanValidator(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const value = (control.value as string).toLowerCase();
+      const valid = (value === "true" || value === "false");
+      return valid? null : {invalidBoolean: "Boolean must be \"true\" or \"false\""}
+    }
+  }
+  numberValidator(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const invalid = control.value === "" || isNaN(Number(control.value)) ;
+      return invalid? {invalidNumber: "Invalid number"} : null;
+    }
+  }
   detectType() {
     const type = this.metadataForm.get("type").value;
+    this.metadataForm.get("value").clearValidators();
     switch (type) {
       case Type.quantity:
         this.metadataForm.get("unit").enable();
-        this.metadataForm.get("value").enable();
+        this.metadataForm.get("value").setValidators([
+          Validators.required,
+          this.numberValidator()
+        ]);
+        this.metadataForm.updateValueAndValidity();
+        break;
+      case Type.date:
+        this.metadataForm.get("unit").disable();
+        this.metadataForm.get("value").setValidators([
+          Validators.required,
+          this.dateValidator(),
+        ]);
+        this.metadataForm.updateValueAndValidity();
+        break;
+      case Type.boolean:
+      this.metadataForm.get("unit").disable();
+      this.metadataForm.get("value").setValidators([
+        Validators.required,
+        this.booleanValidator(),
+      ]);
+      this.metadataForm.updateValueAndValidity();
+      break;
+      case Type.number:
+        this.metadataForm.get("unit").disable();
+        this.metadataForm.get("value").setValidators([
+          Validators.required,
+          this.numberValidator()
+        ]);
+
         break;
       default:
-        this.metadataForm.get("value").enable();
         this.metadataForm.get("unit").disable();
+        this.metadataForm.get("value").setValidators([
+          Validators.required,
+          Validators.minLength(1),
+        ]);
+        this.metadataForm.updateValueAndValidity();
     }
+    this.metadataForm.get("unit").updateValueAndValidity();
+    this.metadataForm.get("value").updateValueAndValidity();
   }
   setValueInputType() {
     const type = this.metadataForm.get("type").value;
     switch (type) {
-      case Type.number:
-      case Type.quantity:
-        return "number";
-      case Type.string:
-        return "text";
       case Type.date:
         return "datetime-local";
       default:
@@ -64,6 +114,23 @@ export class MetadataInputBase {
     );
   }
   fieldHasError(field: string): boolean {
-    return this.metadataForm.get(field).hasError("required");
+    return this.metadataForm.get(field).errors ? true : false;
+  }
+  getError(field: string) {
+    switch (field) {
+      case "value":
+        if (this.metadataForm.get(field).hasError('required')) {
+          return "Value is required";
+        }
+        if (this.metadataForm.get(field).hasError('invalidDate')) {
+          return this.metadataForm.get(field).getError('invalidDate');
+        }
+        if (this.metadataForm.get(field).hasError('invalidBoolean')) {
+          return this.metadataForm.get(field).getError('invalidBoolean');
+        }
+        if (this.metadataForm.get(field).hasError('invalidNumber')) {
+          return this.metadataForm.get(field).getError('invalidNumber');
+        }
+    }
   }
 }

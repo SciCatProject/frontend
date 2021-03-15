@@ -27,6 +27,7 @@ export class TreeViewComponent extends TreeBase implements OnInit {
     flatNode.key = node.key;
     flatNode.level = level;
     flatNode.value = node.value;
+    flatNode.unit = node.unit;
     flatNode.expandable = node.children?.length > 0;
     flatNode.visible = true;
     this.flatNodeMap.set(flatNode, node);

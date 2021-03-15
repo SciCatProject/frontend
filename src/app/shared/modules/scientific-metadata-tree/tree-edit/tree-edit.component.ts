@@ -1,4 +1,4 @@
-import { Component, HostListener, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
 import { FlatTreeControl } from '@angular/cdk/tree';
 import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
 import { Observable } from 'rxjs';
@@ -8,6 +8,8 @@ import { HistoryManager } from 'shared/modules/scientific-metadata-tree/history-
 import { MatDialog } from '@angular/material/dialog';
 import { InputObject, MetadataInputModalComponent } from '../metadata-input-modal/metadata-input-modal.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { ComponentCanDeactivate } from 'app-routing/pending-changes.guard';
+import { validateBasis } from '@angular/flex-layout';
 
 export class FlatNodeEdit implements FlatNode {
   key: string;
@@ -18,6 +20,7 @@ export class FlatNodeEdit implements FlatNode {
   visible: boolean;
   editing: boolean;
 }
+
 @Component({
   selector: 'tree-edit',
   templateUrl: './tree-edit.component.html',
@@ -29,6 +32,7 @@ export class TreeEditComponent extends TreeBase implements OnInit {
   filteredUnits$: Observable<string[]>;
   currentInputData: MetadataInput;
   historyManager: HistoryManager;
+  @Output() save = new EventEmitter<object>();
   private changed: boolean = false;
   constructor(public dialog: MatDialog, private snackBar: MatSnackBar) {
     super();
@@ -64,17 +68,15 @@ export class TreeEditComponent extends TreeBase implements OnInit {
       const value = obj[key];
       const node = new TreeNode();
       node.key = key;
-      if (value) {
-        if (typeof value === "object") {
-          if ("value" in value) {
-            node.value = value.value;
-            node.unit = value.unit || null;
-          } else {
-            node.children = this.buildDataTree(value, level + 1);
-          }
+      if (value !== null && typeof value !== undefined && typeof value === "object") {
+        if ("value" in value) {
+          node.value = value.value;
+          node.unit = value.unit || null;
         } else {
-          node.value = value;
+          node.children = this.buildDataTree(value, level + 1);
         }
+      } else {
+        node.value = value;
       }
       return accumulator.concat(node);
     }, []);
@@ -83,33 +85,33 @@ export class TreeEditComponent extends TreeBase implements OnInit {
   convertDataTreeToObject(tree: TreeNode[]): { [key: string]: any } {
     return tree.reduce((accumulator, node) => {
       if (!this.hasNoContent(node)) {
-        if (node.value) {
-          accumulator[node.key] = node.value;
+        if (node.children && node.children.length > 0) {
+          accumulator[node.key] = this.convertDataTreeToObject(node.children);
         } else {
-          if (node.children && node.children.length > 0) {
-            accumulator[node.key] = this.convertDataTreeToObject(node.children);
-          } else {
-            accumulator[node.key] = null;
+          if(node.unit){
+            accumulator[node.key] = { value: node.value, unit: node.unit};
+          }else {
+            accumulator[node.key] = node.value;
           }
         }
+        return accumulator;
       }
-      return accumulator;
     }, {})
   }
 
-  openSnackbar(message: string, action: string = ""){
+  openSnackbar(message: string, action: string = "") {
     this.snackBar.open(message, action, {
       duration: 3000
     })
   }
-  onSave(data: InputData){
+  onSave(data: InputData) {
     const nestedNode = this.flatNodeMap.get(this.currentEditingNode);
     const parentNode = this.getNestedParent(this.nestNodeMap.get(nestedNode));
-    const {children, ...oldData} = nestedNode;
+    const { children, ...oldData } = nestedNode;
     const index = this.getIndex(parentNode, nestedNode);
     this.historyManager.add({
       undo: () => {
-        if(oldData.key === ""){
+        if (oldData.key === "") {
           this.removeNode(parentNode, nestedNode);
         } else {
           nestedNode.key = oldData.key;
@@ -119,7 +121,7 @@ export class TreeEditComponent extends TreeBase implements OnInit {
         this.dataSource.data = this.dataTree;
       },
       redo: () => {
-        if(oldData.key === ""){
+        if (oldData.key === "") {
           this.insertNode(parentNode, nestedNode, index);
         }
         this.updateNode(nestedNode, data);
@@ -130,15 +132,15 @@ export class TreeEditComponent extends TreeBase implements OnInit {
     this.openSnackbar("Your changes is cached, hit the save button on the top to save permanently!");
     this.disableEditing();
   }
-  onCancel(){
+  onCancel() {
     this.disableEditing();
   }
   disableEditing() {
-    if(this.currentEditingNode){
+    if (this.currentEditingNode) {
       this.currentEditingNode.editing = false;
       if (this.hasNoContent(this.currentEditingNode)) {
         const parent = this.getNestedParent(this.currentEditingNode);
-        const node  = this.flatNodeMap.get(this.currentEditingNode);
+        const node = this.flatNodeMap.get(this.currentEditingNode);
         this.removeNode(parent, node);
       }
     }
@@ -146,9 +148,9 @@ export class TreeEditComponent extends TreeBase implements OnInit {
     this.changed = false;
   }
   enableEditing(node: FlatNodeEdit) {
-    if(this.currentEditingNode){
-      if (this.changed){
-        this.snackBar.open("You are uncached changes in another row, please close or save it first!","", {
+    if (this.currentEditingNode) {
+      if (this.changed) {
+        this.snackBar.open("You are uncached changes in another row, please close or save it first!", "", {
           duration: 3000,
         });
         return;
@@ -158,11 +160,11 @@ export class TreeEditComponent extends TreeBase implements OnInit {
     this.currentEditingNode = node;
     this.currentEditingNode.editing = true;
   }
-  onChange(){
+  onChange() {
     this.changed = true;
   }
   addNewNode(parentNode: FlatNodeEdit) {
-    if (this.currentEditingNode && this.changed){
+    if (this.currentEditingNode && this.changed) {
       this.openSnackbar("You are uncached changes in another row, please close or save it first!");
       return;
     }
@@ -195,7 +197,7 @@ export class TreeEditComponent extends TreeBase implements OnInit {
     });
     this.removeNode(parentNode, nestedNode);
   }
-  updateNode(node: TreeNode, data: InputData){
+  updateNode(node: TreeNode, data: InputData) {
     switch (data.type) {
       case "date":
         node.key = data.key;
@@ -210,6 +212,11 @@ export class TreeEditComponent extends TreeBase implements OnInit {
       case "number":
         node.key = data.key;
         node.value = Number(data.value);
+        node.unit = null;
+        break;
+      case "boolean":
+        node.key = data.key;
+        node.value = data.value === "true"? true: false;
         node.unit = null;
         break;
       case "quantity":
@@ -228,12 +235,13 @@ export class TreeEditComponent extends TreeBase implements OnInit {
     return this.currentEditingNode && this.changed;
   }
   doSave() {
-    this.data = this.convertDataTreeToObject(this.dataTree);
+    const metadata = this.convertDataTreeToObject(this.dataTree);
+    this.save.emit(metadata);
   }
 
   openObjectCreationDialog(node: FlatNodeEdit): void {
     const dialogRef = this.dialog.open(MetadataInputModalComponent, {
-      width: "770px",
+      width: "auto",
       data: node
     });
 
@@ -242,10 +250,10 @@ export class TreeEditComponent extends TreeBase implements OnInit {
       const parentNode = new TreeNode();
       parentNode.key = data.parent;
       const childNode = new TreeNode();
-      const {parent, ...childData} = data;
+      const { parent, ...childData } = data;
       parentNode.children = [];
       this.insertNode(parentNode, childNode);
-      this.updateNode(childNode, {...childData, key: childData.child} );
+      this.updateNode(childNode, { ...childData, key: childData.child });
       this.insertNode(grandfatherNode, parentNode);
       const index = this.getIndex(grandfatherNode, parentNode);
       this.treeControl.expand(node);

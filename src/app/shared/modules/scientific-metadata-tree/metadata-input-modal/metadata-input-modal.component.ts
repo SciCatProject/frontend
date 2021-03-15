@@ -15,11 +15,11 @@ export interface InputObject{
 @Component({
   selector: 'metadata-input-modal',
   templateUrl: './metadata-input-modal.component.html',
-  styleUrls: ['./metadata-input-modal.component.css']
+  styleUrls: ['./metadata-input-modal.component.scss']
 })
 
 export class MetadataInputModalComponent extends MetadataInputBase implements OnInit  {
-  constructor(private formBuilder: FormBuilder, @Inject(MAT_DIALOG_DATA) public data: FlatNodeEdit, public dialogRef: MatDialogRef<MetadataInputModalComponent>,) {
+  constructor(private formBuilder: FormBuilder, @Inject(MAT_DIALOG_DATA) public data: FlatNodeEdit, public dialogRef: MatDialogRef<MetadataInputModalComponent>) {
     super();
    }
   ngOnInit(): void {
@@ -54,7 +54,6 @@ export class MetadataInputModalComponent extends MetadataInputBase implements On
   }
 
   onClose(): void {
-    console.log(this.metadataForm);
     this.dialogRef.close();
   }
 }

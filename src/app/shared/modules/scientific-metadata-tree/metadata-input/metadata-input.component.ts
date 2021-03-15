@@ -2,7 +2,7 @@ import { Component, EventEmitter, HostListener, Input, OnInit, Output } from '@a
 import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { FlatNodeEdit } from '../tree-edit/tree-edit.component';
-import { MetadataInputBase } from '../base-classes/metadata-input-base';
+import { MetadataInputBase, Type } from '../base-classes/metadata-input-base';
 
 export interface InputData {
   type: string;
@@ -34,7 +34,10 @@ export class MetadataInputComponent extends MetadataInputBase implements OnInit 
   ngOnInit() {
     this.metadataForm = this.initilizeFormControl();
     this.addCurrentMetadata(this.data);
-    this.changeDetection = this.metadataForm.valueChanges.subscribe(() => {this.changed.emit(); this.changeDetection.unsubscribe()});
+    this.changeDetection = this.metadataForm.valueChanges.subscribe(() => {
+      this.changed.emit();
+      this.changeDetection.unsubscribe();
+    });
   }
 
   unitValidator(): ValidatorFn {
@@ -63,28 +66,29 @@ export class MetadataInputComponent extends MetadataInputBase implements OnInit 
   }
   addCurrentMetadata(node: FlatNodeEdit) {
     if (node.expandable) {
-      this.metadataForm.get("type").setValue("string");
+      this.metadataForm.get("type").setValue(Type.string);
       this.metadataForm.get("key").setValue(node.key);
       this.typeValues = ['string'];
     } else {
       if (node.unit) {
-        this.metadataForm.get("type").setValue("quantity");
+        this.metadataForm.get("type").setValue(Type.quantity);
         this.metadataForm.get("key").setValue(node.key);
         this.metadataForm.get("value").setValue(node.value || "");
         this.metadataForm.get("unit").setValue(node.unit || "");
-
-      } else if (typeof node.value === "number") {
-        this.metadataForm.get("type").setValue("number");
+      } else if (typeof node.value === Type.number) {
+        this.metadataForm.get("type").setValue(Type.number);
         this.metadataForm.get("key").setValue(node.key);
         this.metadataForm.get("value").setValue(node.value);
-
+      } else if (typeof node.value === Type.boolean){
+        this.metadataForm.get("type").setValue(Type.boolean);
+        this.metadataForm.get("key").setValue(node.key);
+        this.metadataForm.get("value").setValue(String(node.value));
       } else if (isNaN(Date.parse(node.value))) {
-        this.metadataForm.get("type").setValue("string");
+        this.metadataForm.get("type").setValue(Type.string);
         this.metadataForm.get("key").setValue(node.key);
         this.metadataForm.get("value").setValue(node.value);
-
       } else {
-        this.metadataForm.get("type").setValue("date");
+        this.metadataForm.get("type").setValue(Type.date);
         this.metadataForm.get("key").setValue(node.key);
         this.metadataForm.get("value").setValue(node.value);
       }

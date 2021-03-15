@@ -19,7 +19,7 @@
         <span>Add new object</span>
       </button>
     </mat-menu>
-    <button mat-icon-button type="button" color="primary" title="Save changes to database" (click)="toggleExpand()" [disabled]="isEditing()">
+    <button mat-icon-button type="button" color="primary" title="Save changes to database" (click)="doSave()" [disabled]="isEditing()">
       <mat-icon>save</mat-icon>
     </button>
     <button mat-button type="button" color="primary" title="undo" [disabled]="!historyManager.hasUndo() || isEditing()" (click)="historyManager.undo()">
