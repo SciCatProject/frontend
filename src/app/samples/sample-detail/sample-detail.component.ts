@@ -1,7 +1,7 @@
 import { ActivatedRoute, Router } from "@angular/router";
 import { Component, OnDestroy, OnInit, Inject } from "@angular/core";
 import { Subscription } from "rxjs";
-import { Sample, Dataset, Attachment, User } from "shared/sdk/models";
+import { Sample, Attachment, User, Dataset } from "shared/sdk/models";
 import {
   getCurrentSample,
   getDatasets,
@@ -46,7 +46,7 @@ export class SampleDetailComponent implements OnInit, OnDestroy {
   user: User;
   pickedFile: ReadFile;
   attachment: Attachment;
-
+  show: boolean;
   subscriptions: Subscription[] = [];
 
   tableData: any[];

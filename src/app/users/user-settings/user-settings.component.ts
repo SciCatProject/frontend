@@ -6,7 +6,7 @@ import {
   fetchCurrentUserAction,
   fetchCatamelTokenAction,
 } from "state-management/actions/user.actions";
-import { Message, MessageType } from "state-management/models";
+import { Message, MessageType, User } from "state-management/models";
 import {
   getSettings,
   getProfile,
