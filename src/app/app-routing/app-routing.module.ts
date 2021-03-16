@@ -48,6 +48,7 @@ import { PoliciesGuard } from "app-routing/policies.guard";
 import { LogbookGuard } from "app-routing/logbook.guard";
 import { FilesDashboardComponent } from "files/files-dashboard/files-dashboard.component";
 import { DatasetsGuard } from "./datasets.guard";
+import { LeavingPageGuard } from "./pending-changes.guard";
 
 export const routes: Routes = [
   {
@@ -118,6 +119,7 @@ export const routes: Routes = [
         path: "datasets/:id",
         component: DatasetDetailsDashboardComponent,
         canActivate: [DatasetsGuard],
+        canDeactivate: [LeavingPageGuard]
       },
       {
         path: "datasets/:id/datablocks",

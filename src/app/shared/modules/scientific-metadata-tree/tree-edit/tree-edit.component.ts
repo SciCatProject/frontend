@@ -1,15 +1,13 @@
 import { Component, EventEmitter, HostListener, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { FlatTreeControl } from '@angular/cdk/tree';
-import { MatTree, MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
+import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
 import { Observable } from 'rxjs';
 import { FlatNode, TreeBase, TreeNode } from 'shared/modules/scientific-metadata-tree/base-classes/tree-base';
 import { InputData, MetadataInput } from 'shared/modules/scientific-metadata-tree/metadata-input/metadata-input.component';
-import { HistoryManager } from 'shared/modules/scientific-metadata-tree/history-manager'
+import { HistoryManager } from 'shared/modules/scientific-metadata-tree/base-classes/history-manager'
 import { MatDialog } from '@angular/material/dialog';
 import { InputObject, MetadataInputModalComponent } from '../metadata-input-modal/metadata-input-modal.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ComponentCanDeactivate } from 'app-routing/pending-changes.guard';
-import { validateBasis } from '@angular/flex-layout';
 
 export class FlatNodeEdit implements FlatNode {
   key: string;
@@ -34,6 +32,7 @@ export class TreeEditComponent extends TreeBase implements OnInit {
   currentInputData: MetadataInput;
   historyManager: HistoryManager;
   @Output() save = new EventEmitter<object>();
+  @Output() hasUnsavedChanges = new EventEmitter<boolean>();
   private changed: boolean = false;
   constructor(public dialog: MatDialog, private snackBar: MatSnackBar) {
     super();
@@ -43,6 +42,10 @@ export class TreeEditComponent extends TreeBase implements OnInit {
     this.nestNodeMap = new Map<TreeNode, FlatNodeEdit>();
     this.flatNodeMap = new Map<FlatNodeEdit, TreeNode>();
     this.historyManager = new HistoryManager();
+    this.historyManager.indexChanged.subscribe((index: number) => {
+        this.hasUnsavedChanges.emit(!(this.lastSavedChanges === index));
+      },
+    );
   }
   ngOnInit() {
     this.dataTree = this.buildDataTree(this.metadata, 0);
@@ -89,9 +92,9 @@ export class TreeEditComponent extends TreeBase implements OnInit {
         if (node.children && node.children.length > 0) {
           accumulator[node.key] = this.convertDataTreeToObject(node.children);
         } else {
-          if(node.unit){
-            accumulator[node.key] = { value: node.value, unit: node.unit};
-          }else {
+          if (node.unit) {
+            accumulator[node.key] = { value: node.value, unit: node.unit };
+          } else {
             accumulator[node.key] = node.value;
           }
         }
@@ -183,7 +186,7 @@ export class TreeEditComponent extends TreeBase implements OnInit {
     const childIndex = this.getIndex(parentNode, nestedNode);
     this.historyManager.add({
       undo: () => {
-        if (parentNode && parentNode.children.length === 0){
+        if (parentNode && parentNode.children.length === 0) {
           // Removing and readd parentNode before adding childNode is needed since matTree won't rerender the parentNode properly
           const grandfatherNode = this.getNestedParent(this.nestNodeMap.get(parentNode));
           const parentIndex = this.getIndex(grandfatherNode, parentNode);
@@ -219,7 +222,7 @@ export class TreeEditComponent extends TreeBase implements OnInit {
         break;
       case "boolean":
         node.key = data.key;
-        node.value = data.value === "true"? true: false;
+        node.value = data.value === "true" ? true : false;
         node.unit = null;
         break;
       case "quantity":
@@ -239,6 +242,7 @@ export class TreeEditComponent extends TreeBase implements OnInit {
   }
   doSave() {
     this.lastSavedChanges = this.historyManager.currentIdx;
+    this.hasUnsavedChanges.emit(false);
     this.metadata = this.convertDataTreeToObject(this.dataTree);
     this.save.emit(this.metadata);
   }

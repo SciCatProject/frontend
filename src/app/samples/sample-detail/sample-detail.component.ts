@@ -60,8 +60,6 @@ export class SampleDetailComponent implements OnInit, OnDestroy {
     { name: "location", icon: "explore", sort: false, inList: true }
   ];
 
-  show = false;
-
   constructor(
     @Inject(APP_CONFIG) public appConfig: AppConfig,
     private datePipe: DatePipe,

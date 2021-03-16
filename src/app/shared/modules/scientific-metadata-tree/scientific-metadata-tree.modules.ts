@@ -10,7 +10,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { CommonModule } from '@angular/common';
 import { MatInputModule } from '@angular/material/input';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { FlexModule } from '@angular/flex-layout';
+import { FlexLayoutModule, FlexModule } from '@angular/flex-layout';
 import { MatDividerModule } from '@angular/material/divider';
 import { TreeViewComponent } from './tree-view/tree-view.component';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
@@ -41,6 +41,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     MatDividerModule,
     MatDialogModule,
     FlexModule,
+    FlexLayoutModule,
     MatButtonToggleModule,
     MatTabsModule,
     MatDividerModule,

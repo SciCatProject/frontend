@@ -1,6 +1,7 @@
 <div class="container">
   <form [formGroup]="metadataForm">
     <div class="formRow" fxLayout="row" fxLayout.lt-lg="column" fxFlexAlign="center" fxLayoutAlign="flex-start end">
+      <!-- Type Column -->
       <div class="formColumn" >
         <mat-form-field class="selectField">
           <mat-label>Type</mat-label>
@@ -13,6 +14,7 @@
           </mat-error>
         </mat-form-field>
       </div>
+      <!-- Name Column -->
       <div class="formColumn">
         <mat-form-field class="inputField">
           <input matInput autocomplete="off" autocorrect="off"
@@ -23,6 +25,7 @@
           </mat-error>
         </mat-form-field>
       </div>
+      <!-- Value Column -->
       <div class="formColumn">
         <mat-form-field class="inputField">
           <input matInput autocomplete="off" autocorrect="off"
@@ -33,6 +36,7 @@
           </mat-error>
         </mat-form-field>
       </div>
+      <!-- Unit Column -->
       <div class="formColumn">
         <mat-form-field class="inputField">
           <input matInput autocomplete="off" autocorrect="off"
@@ -52,7 +56,8 @@
           </mat-error>
         </mat-form-field>
       </div>
-      <div class="formColumn" fxFlexAlign="center">
+      <!-- Buttons Column -->
+      <div class="buttonColumn" fxLayout="row" fxFlexAlign="center" fxLayoutAlign="flex-end">
         <button
           mat-icon-button
           [disabled]="this.metadataForm.invalid"

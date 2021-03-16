@@ -1,21 +1,30 @@
 <mat-dialog-content class="container">
   <form [formGroup]="metadataForm">
-    <div class="formRow" fxLayout="row" fxLayout.lt-lg="column" >
+    <!-- Parent Field -->
+    <div class="formRow" fxLayout="row" fxLayout.lt-lg="column">
       <mat-form-field class="inputField">
-        <input matInput autocomplete="off"
-          autocorrect="off" autocapitalize="off" spellcheck="false"
-          formControlName="parent" placeholder="Parent field" />
+        <input matInput
+          autocomplete="off"
+          autocorrect="off"
+          autocapitalize="off"
+          spellcheck="false"
+          formControlName="parent"
+          placeholder="Parent field" />
         <mat-error *ngIf="fieldHasError('parent')">
           Parent field is required
         </mat-error>
       </mat-form-field>
     </div>
+
     <div class="formRow" fxLayout="row" fxLayout.lt-lg="column" fxLayoutAlign="flex-start end">
+      <!-- Type Field -->
       <div class="formColumn">
         <mat-form-field class="selectField">
           <mat-label>Type</mat-label>
-          <mat-select formControlName="type" (selectionChange)="detectType()">
-            <mat-option *ngFor="let type of typeValues" [value]="type">{{
+          <mat-select formControlName="type"
+            (selectionChange)="detectType()">
+            <mat-option *ngFor="let type of typeValues"
+              [value]="type">{{
               type
               }}</mat-option>
           </mat-select>
@@ -24,33 +33,51 @@
           </mat-error>
         </mat-form-field>
       </div>
+      <!-- Child Field -->
       <div class="formColumn">
         <mat-form-field class="inputField">
-          <input matInput autocomplete="off"
-            autocorrect="off" autocapitalize="off" spellcheck="false"
-            formControlName="child" placeholder="Child field" (blur)="getUnits('child')" />
+          <input matInput
+            autocomplete="off"
+            autocorrect="off"
+            autocapitalize="off"
+            spellcheck="false"
+            formControlName="child"
+            placeholder="Child field"
+            (blur)="getUnits('child')" />
           <mat-error *ngIf="fieldHasError('child')">
             Child field is required
           </mat-error>
         </mat-form-field>
       </div>
+      <!-- Value Field -->
       <div class="formColumn">
         <mat-form-field class="inputField">
-          <input matInput [type]="setValueInputType()"
-            autocomplete="off" autocorrect="off" autocapitalize="off"
-            spellcheck="false" formControlName="value" placeholder="Value"
+          <input matInput
+            [type]="setValueInputType()"
+            autocomplete="off"
+            autocorrect="off"
+            autocapitalize="off"
+            spellcheck="false"
+            formControlName="value"
+            placeholder="Value"
             step=1 />
           <mat-error *ngIf="fieldHasError('value')">
             {{getError("value")}}
           </mat-error>
         </mat-form-field>
       </div>
+      <!-- Unit Field -->
       <div class="formColumn">
         <mat-form-field class="inputField">
-          <input matInput autocomplete="off"
-            autocorrect="off" autocapitalize="off" spellcheck="false"
-            formControlName="unit" placeholder="Unit"
-            [matAutocomplete]="metadataUnits" (focus)="getUnits('child')" />
+          <input matInput
+            autocomplete="off"
+            autocorrect="off"
+            autocapitalize="off"
+            spellcheck="false"
+            formControlName="unit"
+            placeholder="Unit"
+            [matAutocomplete]="metadataUnits"
+            (focus)="getUnits('child')" />
           <mat-autocomplete #metadataUnits="matAutocomplete">
             <mat-option *ngFor="let unit of filteredUnits$ | async"
               [value]="unit">
@@ -65,10 +92,12 @@
     </div>
   </form>
 </mat-dialog-content>
-
 <mat-dialog-actions>
-  <button mat-button (click)="onClose()">Close</button>
-  <button mat-button color="primary" (click)="onSave()"
+  <button mat-button
+    (click)="onClose()">Close</button>
+  <button mat-button
+    color="primary"
+    (click)="onSave()"
     [disabled]="this.metadataForm.invalid">
     Save
   </button>

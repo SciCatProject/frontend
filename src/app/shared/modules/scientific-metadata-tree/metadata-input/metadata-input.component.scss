@@ -1,8 +1,4 @@
 .container {
-  button {
-    margin: 1em 1em 0 0;
-  }
-
   mat-icon {
     vertical-align: middle;
   }
@@ -12,6 +8,12 @@
     .formRow {
       .formColumn {
         padding-right: 1em;
+        .selectField {
+          max-width: 8em;
+        }
+      }
+      .buttonColumn {
+        padding-right: 0;
       }
     }
   }

@@ -17,13 +17,13 @@ mat-form-field {
   justify-content: space-between;
   align-items: center;
 }
-.search-field{
-  width: 30%;
-}
 .mat-tree-node{
   width: 100%;
 }
 @media only screen and (min-width: 1280px) {
+  .search-field{
+    width: 40%;
+  }
   .container {
     .formRow {
       .formColumn {
@@ -38,6 +38,9 @@ mat-form-field {
 }
 
 @media only screen and (max-width: 1279px) {
+  .search-field{
+    width: 50%;
+  }
   .container {
     .formRow {
       .formColumn {
