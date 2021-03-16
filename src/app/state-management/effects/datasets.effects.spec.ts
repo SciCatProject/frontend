@@ -9,13 +9,13 @@ import { DatasetEffects } from "./datasets.effects";
 import { FacetCounts } from "state-management/state/datasets.store";
 import {
   getFullqueryParams,
-  getFullfacetParams
+  getFullfacetParams,
 } from "state-management/selectors/datasets.selectors";
 import {
   loadingAction,
   loadingCompleteAction,
   addCustomColumnsAction,
-  updateUserSettingsAction
+  updateUserSettingsAction,
 } from "state-management/actions/user.actions";
 import { ScientificCondition } from "state-management/models";
 import { Type } from "@angular/core";
@@ -27,7 +27,7 @@ const data: DatasetInterface = {
   creationTime: new Date(),
   type: "",
   ownerGroup: "",
-  attachments: []
+  attachments: [],
 };
 const dataset = new Dataset({ pid: "testPid", ...data });
 
@@ -47,11 +47,11 @@ describe("DatasetEffects", () => {
               selector: getFullqueryParams,
               value: {
                 query: JSON.stringify({ isPublished: false }),
-                limits: { skip: 0, limit: 25, order: "test asc" }
-              }
+                limits: { skip: 0, limit: 25, order: "test asc" },
+              },
             },
-            { selector: getFullfacetParams, value: {} }
-          ]
+            { selector: getFullfacetParams, value: {} },
+          ],
         }),
         {
           provide: DatasetApi,
@@ -65,19 +65,18 @@ describe("DatasetEffects", () => {
             "createAttachments",
             "updateByIdAttachments",
             "destroyByIdAttachments",
-            "reduceDataset"
-          ])
-        }
-      ]
+            "reduceDataset",
+          ]),
+        },
+      ],
     });
 
     effects = TestBed.inject(DatasetEffects);
     datasetApi = injectedStub(DatasetApi);
   });
 
-  function injectedStub<S>(service: Type<S>): jasmine.SpyObj<S> {
-    return TestBed.inject(service) as jasmine.SpyObj<S>;
-  }
+  const injectedStub = <S>(service: Type<S>): jasmine.SpyObj<S> =>
+    TestBed.inject(service) as jasmine.SpyObj<S>;
 
   describe("fetchDatasets$", () => {
     it("should result in a fetchDatasetsCompleteAction", () => {
@@ -113,13 +112,13 @@ describe("DatasetEffects", () => {
         creationTime: [{ count: 0 }],
         keywords: [{ count: 0 }],
         ownerGroup: [{ count: 0 }],
-        type: [{ count: 0 }]
+        type: [{ count: 0 }],
       };
       const allCounts = 0;
       const action = fromActions.fetchFacetCountsAction();
       const outcome = fromActions.fetchFacetCountsCompleteAction({
         facetCounts,
-        allCounts
+        allCounts,
       });
 
       const responseArray = [
@@ -129,8 +128,8 @@ describe("DatasetEffects", () => {
           creationTime: [{ count: 0 }],
           keywords: [{ count: 0 }],
           ownerGroup: [{ count: 0 }],
-          type: [{ count: 0 }]
-        }
+          type: [{ count: 0 }],
+        },
       ];
       actions = hot("-a", { a: action });
       const response = cold("-a|", { a: responseArray });
@@ -158,7 +157,7 @@ describe("DatasetEffects", () => {
       const metadataKeys = ["test"];
       const action = fromActions.fetchMetadataKeysAction();
       const outcome = fromActions.fetchMetadataKeysCompleteAction({
-        metadataKeys
+        metadataKeys,
       });
 
       actions = hot("-a", { a: action });
@@ -204,7 +203,7 @@ describe("DatasetEffects", () => {
           lhs: "test",
           relation: "EQUAL_TO_NUMERIC",
           rhs: 1000,
-          unit: "s"
+          unit: "s",
         };
         const action = fromActions.addScientificConditionAction({ condition });
         const outcome = fromActions.fetchMetadataKeysAction();
@@ -219,7 +218,7 @@ describe("DatasetEffects", () => {
     describe("ofType removeScientificConditionAction", () => {
       it("should result in a fetchMetadataKeysAction", () => {
         const action = fromActions.removeScientificConditionAction({
-          index: 0
+          index: 0,
         });
         const outcome = fromActions.fetchMetadataKeysAction();
 
@@ -247,7 +246,7 @@ describe("DatasetEffects", () => {
     it("should dispatch an addColumnAction", () => {
       const metadataKeys = ["test"];
       const action = fromActions.fetchMetadataKeysCompleteAction({
-        metadataKeys
+        metadataKeys,
       });
       const outcome = addCustomColumnsAction({ names: ["test"] });
 
@@ -302,7 +301,7 @@ describe("DatasetEffects", () => {
       const expected = cold("--(bcd)", {
         b: outcome1,
         c: outcome2,
-        d: outcome3
+        d: outcome3,
       });
       expect(effects.addDataset$).toBeObservable(expected);
     });
@@ -326,7 +325,7 @@ describe("DatasetEffects", () => {
     it("should result in an updatePropertyCompleteAction and a fetchDatasetAction", () => {
       const action = fromActions.updatePropertyAction({
         pid,
-        property
+        property,
       });
       const outcome1 = fromActions.updatePropertyCompleteAction();
       const outcome2 = fromActions.fetchDatasetAction({ pid });
@@ -342,7 +341,7 @@ describe("DatasetEffects", () => {
     it("should result in a updatePropertyFailedAction", () => {
       const action = fromActions.updatePropertyAction({
         pid,
-        property
+        property,
       });
       const outcome = fromActions.updatePropertyFailedAction();
 
@@ -393,10 +392,10 @@ describe("DatasetEffects", () => {
       const action = fromActions.updateAttachmentCaptionAction({
         datasetId,
         attachmentId,
-        caption
+        caption,
       });
       const outcome = fromActions.updateAttachmentCaptionCompleteAction({
-        attachment
+        attachment,
       });
 
       actions = hot("-a", { a: action });
@@ -411,7 +410,7 @@ describe("DatasetEffects", () => {
       const action = fromActions.updateAttachmentCaptionAction({
         datasetId,
         attachmentId,
-        caption
+        caption,
       });
       const outcome = fromActions.updateAttachmentCaptionFailedAction();
 
@@ -431,10 +430,10 @@ describe("DatasetEffects", () => {
     it("should result in a removeAttachmentCompleteAction", () => {
       const action = fromActions.removeAttachmentAction({
         datasetId,
-        attachmentId
+        attachmentId,
       });
       const outcome = fromActions.removeAttachmentCompleteAction({
-        attachmentId
+        attachmentId,
       });
 
       actions = hot("-a", { a: action });
@@ -448,7 +447,7 @@ describe("DatasetEffects", () => {
     it("should result in a removeAttachmentFailedAction", () => {
       const action = fromActions.removeAttachmentAction({
         datasetId,
-        attachmentId
+        attachmentId,
       });
       const outcome = fromActions.removeAttachmentFailedAction();
 
@@ -542,7 +541,7 @@ describe("DatasetEffects", () => {
       it("should dispatch a loadingAction", () => {
         const derivedDataset = new Dataset();
         const action = fromActions.addDatasetAction({
-          dataset: derivedDataset
+          dataset: derivedDataset,
         });
         const outcome = loadingAction();
 
@@ -559,7 +558,7 @@ describe("DatasetEffects", () => {
         const property = { isPublished: true };
         const action = fromActions.updatePropertyAction({
           pid,
-          property
+          property,
         });
         const outcome = loadingAction();
 
@@ -591,7 +590,7 @@ describe("DatasetEffects", () => {
         const action = fromActions.updateAttachmentCaptionAction({
           datasetId,
           attachmentId,
-          caption
+          caption,
         });
         const outcome = loadingAction();
 
@@ -608,7 +607,7 @@ describe("DatasetEffects", () => {
         const attachmentId = "testId";
         const action = fromActions.removeAttachmentAction({
           datasetId,
-          attachmentId
+          attachmentId,
         });
         const outcome = loadingAction();
 
@@ -653,12 +652,12 @@ describe("DatasetEffects", () => {
           creationTime: [{ count: 0 }],
           keywords: [{ count: 0 }],
           ownerGroup: [{ count: 0 }],
-          type: [{ count: 0 }]
+          type: [{ count: 0 }],
         };
         const allCounts = 0;
         const action = fromActions.fetchFacetCountsCompleteAction({
           facetCounts,
-          allCounts
+          allCounts,
         });
         const outcome = loadingCompleteAction();
 
@@ -685,7 +684,7 @@ describe("DatasetEffects", () => {
       it("should dispatch a loadingCompleteAction", () => {
         const metadataKeys = ["test"];
         const action = fromActions.fetchMetadataKeysCompleteAction({
-          metadataKeys
+          metadataKeys,
         });
         const outcome = loadingCompleteAction();
 
@@ -809,7 +808,7 @@ describe("DatasetEffects", () => {
       it("should dispatch a loadingCompleteAction", () => {
         const attachment = new Attachment();
         const action = fromActions.updateAttachmentCaptionCompleteAction({
-          attachment
+          attachment,
         });
         const outcome = loadingCompleteAction();
 
@@ -836,7 +835,7 @@ describe("DatasetEffects", () => {
       it("should dispatch a loadingCompleteAction", () => {
         const attachmentId = "testId";
         const action = fromActions.removeAttachmentCompleteAction({
-          attachmentId
+          attachmentId,
         });
         const outcome = loadingCompleteAction();
 

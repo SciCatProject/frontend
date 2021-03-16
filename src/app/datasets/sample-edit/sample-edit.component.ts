@@ -82,29 +82,29 @@ export class SampleEditComponent {
 
   onTextSearchChange = (): void => {
     this.store.dispatch(setTextFilterAction({ text: this.text }));
-  }
+  };
 
   onClear = (): void => {
     if (this.text.length > 0) {
       this.text = "";
       this.onTextSearchChange();
     }
-  }
+  };
 
   onPageChange = (event: PageChangeEvent): void =>
     this.store.dispatch(
       changePageAction({ page: event.pageIndex, limit: event.pageSize })
-    )
+    );
 
   onSortChange = (event: SortChangeEvent): void =>
     this.store.dispatch(
       sortByColumnAction({ column: event.active, direction: event.direction })
-    )
+    );
 
   onRowClick = (sample: Sample): void => {
     this.selectedSampleId = sample.sampleId;
     this.sample.setValue(sample);
-  }
+  };
 
   isInvalid = (): boolean => this.form.invalid;
 

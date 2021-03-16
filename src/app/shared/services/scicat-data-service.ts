@@ -21,10 +21,10 @@ export class ScicatDataService {
   }
 
   // TODO when do I need to use "mode" syntax (may be for nested keys ?)
-  createColumnFilterMongoExpression(columns: Column[], filterExpressions: any) {
+  createColumnFilterMongoExpression = (columns: Column[], filterExpressions: any) => {
     const result = {};
     if (filterExpressions) {
-      Object.keys(filterExpressions).forEach(function (key, index) {
+      Object.keys(filterExpressions).forEach((key, index) => {
         if (filterExpressions[key] !== "") {
           // console.log("filterexpression:", key, filterExpressions[key], columns)
           const column = columns.find((c) => c.id === key);
@@ -82,7 +82,7 @@ export class ScicatDataService {
     }
     // console.log("Result of map:",result)
     return result;
-  }
+  };
 
   findAllData(
     url: string,
@@ -129,7 +129,7 @@ export class ScicatDataService {
       .set("fields", JSON.stringify(filterFields))
       .set("limits", JSON.stringify(limits))
       .append("access_token", this.accessToken);
-    return this.http.get<any[]>(`${url}/fullquery`, { params: params });
+    return this.http.get<any[]>(`${url}/fullquery`, { params });
   }
 
   // use fullfacets instead of count to allow for more complex filters. facet "all" is default I assume
@@ -153,6 +153,6 @@ export class ScicatDataService {
       .set("facets", JSON.stringify([]))
       .append("access_token", this.accessToken);
 
-    return this.http.get<any>(`${url}/fullfacet`, { params: params });
+    return this.http.get<any>(`${url}/fullfacet`, { params });
   }
 }

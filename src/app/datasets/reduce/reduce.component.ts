@@ -51,14 +51,14 @@ export class ReduceComponent implements OnInit, OnChanges {
 
   actions: string[] = ["Analyze", "Reduce"];
 
-  analyzeScripts: object[] = [
+  analyzeScripts: Record<string, unknown>[] = [
     {
       value: "Plot",
       description: "Create plot."
     }
   ];
 
-  reduceScripts: object[] = [
+  reduceScripts: Record<string, unknown>[] = [
     {
       value: "Noise Reduction",
       description: "Remove background noise."

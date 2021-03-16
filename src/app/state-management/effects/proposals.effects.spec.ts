@@ -4,7 +4,7 @@ import {
   ProposalApi,
   DatasetApi,
   Dataset,
-  Attachment
+  Attachment,
 } from "shared/sdk";
 import { Observable } from "rxjs";
 import { ProposalEffects } from "./proposals.effects";
@@ -14,13 +14,13 @@ import { provideMockActions } from "@ngrx/effects/testing";
 import {
   getFullqueryParams,
   getDatasetsQueryParams,
-  getCurrentProposal
+  getCurrentProposal,
 } from "state-management/selectors/proposals.selectors";
 import * as fromActions from "state-management/actions/proposals.actions";
 import { hot, cold } from "jasmine-marbles";
 import {
   loadingAction,
-  loadingCompleteAction
+  loadingCompleteAction,
 } from "state-management/actions/user.actions";
 import { Type } from "@angular/core";
 
@@ -28,7 +28,7 @@ const data: ProposalInterface = {
   proposalId: "testId",
   email: "testEmail",
   ownerGroup: "testGroup",
-  attachments: []
+  attachments: [],
 };
 const proposal = new Proposal(data);
 
@@ -50,11 +50,11 @@ describe("ProposalEffects", () => {
               selector: getDatasetsQueryParams,
               value: {
                 query: JSON.stringify({ text: "" }),
-                limits: { order: "", skip: 0, limit: 25 }
-              }
+                limits: { order: "", skip: 0, limit: 25 },
+              },
             },
-            { selector: getCurrentProposal, value: {} }
-          ]
+            { selector: getCurrentProposal, value: {} },
+          ],
         }),
         {
           provide: ProposalApi,
@@ -63,14 +63,14 @@ describe("ProposalEffects", () => {
             "findById",
             "createAttachments",
             "updateByIdAttachments",
-            "destroyByIdAttachments"
-          ])
+            "destroyByIdAttachments",
+          ]),
         },
         {
           provide: DatasetApi,
-          useValue: jasmine.createSpyObj("datasetApi", ["find"])
-        }
-      ]
+          useValue: jasmine.createSpyObj("datasetApi", ["find"]),
+        },
+      ],
     });
 
     effects = TestBed.inject(ProposalEffects);
@@ -78,9 +78,8 @@ describe("ProposalEffects", () => {
     datasetApi = injectedStub(DatasetApi);
   });
 
-  function injectedStub<S>(service: Type<S>): jasmine.SpyObj<S> {
-    return TestBed.inject(service) as jasmine.SpyObj<S>;
-  }
+  const injectedStub = <S>(service: Type<S>): jasmine.SpyObj<S> =>
+    TestBed.inject(service) as jasmine.SpyObj<S>;
 
   describe("fetchProposals$", () => {
     describe("ofType fetchProposalsAction", () => {
@@ -88,7 +87,7 @@ describe("ProposalEffects", () => {
         const proposals = [proposal];
         const action = fromActions.fetchProposalsAction();
         const outcome1 = fromActions.fetchProposalsCompleteAction({
-          proposals
+          proposals,
         });
         const outcome2 = fromActions.fetchCountAction();
 
@@ -121,7 +120,7 @@ describe("ProposalEffects", () => {
         const proposals = [proposal];
         const action = fromActions.changePageAction({ page, limit });
         const outcome1 = fromActions.fetchProposalsCompleteAction({
-          proposals
+          proposals,
         });
         const outcome2 = fromActions.fetchCountAction();
 
@@ -154,7 +153,7 @@ describe("ProposalEffects", () => {
         const proposals = [proposal];
         const action = fromActions.sortByColumnAction({ column, direction });
         const outcome1 = fromActions.fetchProposalsCompleteAction({
-          proposals
+          proposals,
         });
         const outcome2 = fromActions.fetchCountAction();
 
@@ -184,7 +183,7 @@ describe("ProposalEffects", () => {
         const proposals = [proposal];
         const action = fromActions.clearFacetsAction();
         const outcome1 = fromActions.fetchProposalsCompleteAction({
-          proposals
+          proposals,
         });
         const outcome2 = fromActions.fetchCountAction();
 
@@ -215,7 +214,7 @@ describe("ProposalEffects", () => {
       const proposals = [proposal];
       const action = fromActions.fetchCountAction();
       const outcome = fromActions.fetchCountCompleteAction({
-        count: proposals.length
+        count: proposals.length,
       });
 
       actions = hot("-a", { a: action });
@@ -274,10 +273,10 @@ describe("ProposalEffects", () => {
       const datasets = [new Dataset()];
       const action = fromActions.fetchProposalDatasetsAction({ proposalId });
       const outcome1 = fromActions.fetchProposalDatasetsCompleteAction({
-        datasets
+        datasets,
       });
       const outcome2 = fromActions.fetchProposalDatasetsCountAction({
-        proposalId
+        proposalId,
       });
 
       actions = hot("-a", { a: action });
@@ -308,10 +307,10 @@ describe("ProposalEffects", () => {
       const datasets = [new Dataset()];
       const count = 1;
       const action = fromActions.fetchProposalDatasetsCountAction({
-        proposalId
+        proposalId,
       });
       const outcome = fromActions.fetchProposalDatasetsCountCompleteAction({
-        count
+        count,
       });
 
       actions = hot("-a", { a: action });
@@ -324,7 +323,7 @@ describe("ProposalEffects", () => {
 
     it("should result in a fetchProposalDatasetsCountFailedAction", () => {
       const action = fromActions.fetchProposalDatasetsCountAction({
-        proposalId
+        proposalId,
       });
       const outcome = fromActions.fetchProposalDatasetsCountFailedAction();
 
@@ -375,10 +374,10 @@ describe("ProposalEffects", () => {
       const action = fromActions.updateAttachmentCaptionAction({
         proposalId,
         attachmentId,
-        caption
+        caption,
       });
       const outcome = fromActions.updateAttachmentCaptionCompleteAction({
-        attachment
+        attachment,
       });
 
       actions = hot("-a", { a: action });
@@ -393,7 +392,7 @@ describe("ProposalEffects", () => {
       const action = fromActions.updateAttachmentCaptionAction({
         proposalId,
         attachmentId,
-        caption
+        caption,
       });
       const outcome = fromActions.updateAttachmentCaptionFailedAction();
 
@@ -413,10 +412,10 @@ describe("ProposalEffects", () => {
     it("should result in a removeAttachmentCompleteAction", () => {
       const action = fromActions.removeAttachmentAction({
         proposalId,
-        attachmentId
+        attachmentId,
       });
       const outcome = fromActions.removeAttachmentCompleteAction({
-        attachmentId
+        attachmentId,
       });
 
       actions = hot("-a", { a: action });
@@ -430,7 +429,7 @@ describe("ProposalEffects", () => {
     it("should result in a removeAttachmentFailedAction", () => {
       const action = fromActions.removeAttachmentAction({
         proposalId,
-        attachmentId
+        attachmentId,
       });
       const outcome = fromActions.removeAttachmentFailedAction();
 
@@ -498,7 +497,7 @@ describe("ProposalEffects", () => {
       it("should dispatch a loadingAction", () => {
         const proposalId = "testId";
         const action = fromActions.fetchProposalDatasetsCountAction({
-          proposalId
+          proposalId,
         });
         const outcome = loadingAction();
 
@@ -530,7 +529,7 @@ describe("ProposalEffects", () => {
         const action = fromActions.updateAttachmentCaptionAction({
           proposalId,
           attachmentId,
-          caption
+          caption,
         });
         const outcome = loadingAction();
 
@@ -547,7 +546,7 @@ describe("ProposalEffects", () => {
         const attachmentId = "testId";
         const action = fromActions.removeAttachmentAction({
           proposalId,
-          attachmentId
+          attachmentId,
         });
         const outcome = loadingAction();
 
@@ -638,7 +637,7 @@ describe("ProposalEffects", () => {
       it("should dispatch a loadingCompleteAction", () => {
         const datasets = [new Dataset()];
         const action = fromActions.fetchProposalDatasetsCompleteAction({
-          datasets
+          datasets,
         });
         const outcome = loadingCompleteAction();
 
@@ -665,7 +664,7 @@ describe("ProposalEffects", () => {
       it("should dispatch a loadingCompleteAction", () => {
         const count = 100;
         const action = fromActions.fetchProposalDatasetsCountCompleteAction({
-          count
+          count,
         });
         const outcome = loadingCompleteAction();
 
@@ -717,7 +716,7 @@ describe("ProposalEffects", () => {
       it("should dispatch a loadingCompleteAction", () => {
         const attachment = new Attachment();
         const action = fromActions.updateAttachmentCaptionCompleteAction({
-          attachment
+          attachment,
         });
         const outcome = loadingCompleteAction();
 
@@ -744,7 +743,7 @@ describe("ProposalEffects", () => {
       it("should dispatch a loadingCompleteAction", () => {
         const attachmentId = "testId";
         const action = fromActions.removeAttachmentCompleteAction({
-          attachmentId
+          attachmentId,
         });
         const outcome = loadingCompleteAction();
 

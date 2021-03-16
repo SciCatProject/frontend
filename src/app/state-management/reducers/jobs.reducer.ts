@@ -53,9 +53,9 @@ const reducer = createReducer(
   on(fromActions.clearJobsStateAction, () => ({ ...initialJobsState }))
 );
 
-export function jobsReducer(state: JobsState | undefined, action: Action) {
+export const jobsReducer = (state: JobsState | undefined, action: Action) => {
   if (action.type.indexOf("[Job]") !== -1) {
     console.log("Action came in! " + action.type);
   }
   return reducer(state, action);
-}
+};

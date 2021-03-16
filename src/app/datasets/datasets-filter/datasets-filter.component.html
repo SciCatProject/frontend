@@ -2,7 +2,7 @@
   <div class="section-container">
     <span class="title">Search</span>
     <button
-      [disabled]="!(hasAppliedFilters$ | async)"
+      [disabled]="(hasAppliedFilters$ | async) === false"
       mat-button
       class="clear-button"
       color="primary"

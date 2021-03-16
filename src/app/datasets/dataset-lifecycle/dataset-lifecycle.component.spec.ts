@@ -138,7 +138,7 @@ describe("DatasetLifecycleComponent", () => {
   });
 });
 
-function createCsvBlob() {
+const createCsvBlob = () => {
   const replacer = (key, value) => (value === null ? "" : value);
   const header = [
     "property",
@@ -171,4 +171,4 @@ function createCsvBlob() {
   csv.unshift(header.join(";"));
   const csvArray = csv.join("\r\n");
   return new Blob([csvArray], { type: "text/csv" });
-}
+};

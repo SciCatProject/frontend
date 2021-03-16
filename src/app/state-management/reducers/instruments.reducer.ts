@@ -44,12 +44,12 @@ const reducer = createReducer(
   }))
 );
 
-export function instrumentsReducer(
+export const instrumentsReducer = (
   state: InstrumentState | undefined,
   action: Action
-) {
+) => {
   if (action.type.indexOf("[Instrument]") !== -1) {
     console.log("Action came in! " + action.type);
   }
   return reducer(state, action);
-}
+};

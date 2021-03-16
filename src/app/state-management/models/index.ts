@@ -97,7 +97,7 @@ export interface DatasetFilters extends GenericFilters {
   creationTime: { begin: string; end: string };
   creationLocation: string[];
   keywords: string[];
-  mode: {};
+  mode: Record<string, unknown>;
   scientific: ScientificCondition[];
   isPublished: boolean;
 }
@@ -115,6 +115,6 @@ export interface LogbookFilters extends GenericFilters {
 }
 
 export interface JobFilters extends GenericFilters {
-  mode: object;
+  mode: Record<string, unknown>;
 }
 
