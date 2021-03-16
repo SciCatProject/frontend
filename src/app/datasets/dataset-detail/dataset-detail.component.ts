@@ -32,6 +32,7 @@ export class DatasetDetailComponent {
   @Output() clickSample = new EventEmitter<string>();
   @Output() saveMetadata = new EventEmitter<object>();
   @Output() sampleChange = new EventEmitter<Sample>();
+  @Output() hasUnsavedChanges = new EventEmitter<boolean>();
 
   editEnabled: boolean;
   show: boolean;
@@ -92,5 +93,8 @@ export class DatasetDetailComponent {
 
   onSaveMetadata(metadata: object) {
     this.saveMetadata.emit(metadata);
+  }
+  onHasUnsavedChanges($event: boolean){
+    this.hasUnsavedChanges.emit($event);
   }
 }

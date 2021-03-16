@@ -21,7 +21,7 @@ import {
   getCurrentUser,
 } from "state-management/selectors/user.selectors";
 import { ActivatedRoute, Router } from "@angular/router";
-import { Subscription, Observable } from "rxjs";
+import { Subscription, Observable, fromEvent } from "rxjs";
 import { pluck, take } from "rxjs/operators";
 import { APP_CONFIG, AppConfig } from "app-config.module";
 import {
@@ -42,6 +42,8 @@ import { fetchProposalAction } from "state-management/actions/proposals.actions"
 import { getCurrentProposal } from "state-management/selectors/proposals.selectors";
 import { fetchSampleAction } from "state-management/actions/samples.actions";
 import { getCurrentSample } from "state-management/selectors/samples.selectors";
+import { EditableComponent } from "app-routing/pending-changes.guard";
+import { MatDialog } from "@angular/material/dialog";
 
 @Component({
   selector: "dataset-details-dashboard",
@@ -49,8 +51,9 @@ import { getCurrentSample } from "state-management/selectors/samples.selectors";
   styleUrls: ["./dataset-details-dashboard.component.scss"],
 })
 export class DatasetDetailsDashboardComponent
-  implements OnInit, OnDestroy, AfterViewChecked {
+  implements OnInit, OnDestroy, AfterViewChecked, EditableComponent {
   private subscriptions: Subscription[] = [];
+  private _hasUnsaveChanges: boolean = false;
   datasetWithout$ = this.store.pipe(select(getCurrentDatasetWithoutFileInfo));
   origDatablocks$ = this.store.pipe(select(getCurrentOrigDatablocks));
   datablocks$ = this.store.pipe(select(getCurrentDatablocks));
@@ -59,20 +62,25 @@ export class DatasetDetailsDashboardComponent
   sample$ = this.store.pipe(select(getCurrentSample));
   isAdmin$ = this.store.pipe(select(getIsAdmin));
   jwt$: Observable<any>;
-
   dataset: Dataset;
   user: User;
   pickedFile: ReadFile;
   attachment: Attachment;
-
   constructor(
     @Inject(APP_CONFIG) public appConfig: AppConfig,
     private cdRef: ChangeDetectorRef,
     private route: ActivatedRoute,
     private router: Router,
     private store: Store<Dataset>,
-    private userApi: UserApi
+    private userApi: UserApi,
+    public dialog: MatDialog
   ) {}
+  hasUnsavedChanges(){
+    return this._hasUnsaveChanges;
+  }
+  onHasUnsavedChanges(data: boolean){
+    this._hasUnsaveChanges = data;
+  }
 
   isPI(): boolean {
     if (this.user.username === "admin") {
@@ -276,6 +284,12 @@ export class DatasetDetailsDashboardComponent
       })
     );
 
+    // Prevent user from reloading page if there are unsave changes
+    this.subscriptions.push(fromEvent(window, 'beforeunload').subscribe(event => {
+        if (this.hasUnsavedChanges()){
+          event.returnValue = false;
+        }
+    }))
     this.jwt$ = this.userApi.jwt();
   }
 
