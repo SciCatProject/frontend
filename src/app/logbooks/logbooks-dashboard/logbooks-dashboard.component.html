@@ -10,7 +10,7 @@
         ></app-search-bar>
         <logbook-filter
           [filters]="filters$ | async"
-          (onSelect)="onFilterSelect($event)"
+          (filterSelect)="onFilterSelect($event)"
         ></logbook-filter>
       </mat-card>
 
@@ -29,7 +29,7 @@
           </mat-expansion-panel-header>
           <logbook-filter
             [filters]="filters$ | async"
-            (onSelect)="onFilterSelect($event)"
+            (filterSelect)="onFilterSelect($event)"
           ></logbook-filter>
         </mat-expansion-panel>
       </div>
