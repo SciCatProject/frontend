@@ -18,8 +18,8 @@
     [prefilledValue]="searchTerms$ | async"
     [placeholder]="'Text Search'"
     [clear]="clearSearchBar"
-    (onSearch)="textSearchChanged($event)"
-    (onFocus)="textSearchChanged($event)"
+    (search)="textSearchChanged($event)"
+    (searchBarFocus)="textSearchChanged($event)"
   >
   </app-search-bar>
 

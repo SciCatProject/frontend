@@ -13,8 +13,8 @@
   <app-search-bar
     [prefilledValue]="searchBarValue"
     [clear]="clearSearchBar"
-    (onSearch)="doSearchChange($event)"
-    (onFocus)="doSearchChange($event)"
+    (search)="doSearchChange($event)"
+    (searchBarFocus)="doSearchChange($event)"
   ></app-search-bar>
   <mat-form-field>
     <mat-icon matPrefix>date_range</mat-icon>
@@ -46,8 +46,8 @@
   <app-search-bar
     [prefilledValue]="searchBarValue"
     [clear]="clearSearchBar"
-    (onSearch)="doSearchChange($event)"
-    (onFocus)="doSearchChange($event)"
+    (search)="doSearchChange($event)"
+    (searchBarFocus)="doSearchChange($event)"
   ></app-search-bar>
   <mat-expansion-panel>
     <mat-expansion-panel-header>

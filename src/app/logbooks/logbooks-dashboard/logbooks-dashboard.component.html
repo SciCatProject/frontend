@@ -5,8 +5,8 @@
         <div class="title">Filter</div>
         <app-search-bar
           [prefilledValue]="(filters$ | async).textSearch"
-          (onSearch)="onTextSearchChange($event)"
-          (onFocus)="onTextSearchChange($event)"
+          (search)="onTextSearchChange($event)"
+          (searchBarFocus)="onTextSearchChange($event)"
         ></app-search-bar>
         <logbook-filter
           [filters]="filters$ | async"
@@ -17,8 +17,8 @@
       <div class="small-filter">
         <app-search-bar
           [prefilledValue]="(filters$ | async).textSearch"
-          (onSearch)="onTextSearchChange($event)"
-          (onFocus)="onTextSearchChange($event)"
+          (search)="onTextSearchChange($event)"
+          (searchBarFocus)="onTextSearchChange($event)"
         ></app-search-bar>
 
         <mat-expansion-panel>

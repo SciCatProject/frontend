@@ -14,8 +14,8 @@
         <div class="title">Search</div>
         <app-search-bar
           [prefilledValue]="textFilter$ | async"
-          (onSearch)="onTextSearchChange($event)"
-          (onFocus)="onTextSearchChange($event)"
+          (search)="onTextSearchChange($event)"
+          (searchBarFocus)="onTextSearchChange($event)"
         ></app-search-bar>
         <div *ngIf="appConfig.scienceSearchEnabled">
           <button mat-button color="primary" (click)="openSearchParametersDialog()">
@@ -55,8 +55,8 @@
       <div class="small-search" fxFlexOrder="2">
         <app-search-bar
           [prefilledValue]="textFilter$ | async"
-          (onSearch)="onTextSearchChange($event)"
-          (onFocus)="onTextSearchChange($event)"
+          (search)="onTextSearchChange($event)"
+          (searchBarFocus)="onTextSearchChange($event)"
         ></app-search-bar>
       </div>
     </ng-template>
