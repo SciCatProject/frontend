@@ -1,4 +1,4 @@
-/* tslint:disable */
+/* eslint-disable */
 /**
 * @module SDKModule
 * @author Jonathan Casarrubias <t:@johncasarrubias> <gh:jonathan-casarrubias>

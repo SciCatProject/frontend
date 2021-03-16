@@ -78,7 +78,7 @@ export const addDatasetFailedAction = createAction(
 
 export const updatePropertyAction = createAction(
   "[Dataset] Update Property",
-  props<{ pid: string; property: object }>()
+  props<{ pid: string; property: Record<string, unknown> }>()
 );
 export const updatePropertyCompleteAction = createAction(
   "[Dataset] Update Property Complete"
@@ -129,7 +129,7 @@ export const reduceDatasetAction = createAction(
 );
 export const reduceDatasetCompleteAction = createAction(
   "[Dataset] Reduce Dataset Complete",
-  props<{ result: object }>()
+  props<{ result: Record<string, unknown> }>()
 );
 export const reduceDatasetFailedAction = createAction(
   "[Dataset] Reduce Dataset Failed"

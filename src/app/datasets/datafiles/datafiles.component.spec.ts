@@ -190,7 +190,7 @@ describe("DatafilesComponent", () => {
       expect(component.selectedFileSize).toEqual(file.size);
     });
 
-    it("should set 'selected' of the provided file to false if previously set to true and subtract the size of the file from 'selectedFileSize'", () => {
+    it("should set 'selected' of the provided file to false and subtract the size of the file from 'selectedFileSize'", () => {
       const firstFile = component.tableData[0];
       const event = new MatCheckboxChange();
       event.checked = true;

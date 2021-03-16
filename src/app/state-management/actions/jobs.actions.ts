@@ -40,7 +40,7 @@ export const submitJobFailedAction = createAction(
 
 export const setJobViewModeAction = createAction(
   "[Job] Set Mode Filter",
-  props<{ mode: object }>()
+  props<{ mode: Record<string, unknown> }>()
 );
 
 export const setJobsLimitFilterAction = createAction(

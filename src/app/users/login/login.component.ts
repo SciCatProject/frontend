@@ -22,6 +22,7 @@ interface LoginForm {
 /**
  * Component to handle user login. Allows for AD and
  * functional account login.
+ *
  * @export
  * @class LoginComponent
  */

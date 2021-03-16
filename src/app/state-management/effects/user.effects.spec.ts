@@ -98,9 +98,8 @@ describe("UserEffects", () => {
     router = injectedStub(Router);
   });
 
-  function injectedStub<S>(service: Type<S>): jasmine.SpyObj<S> {
-    return TestBed.inject(service) as jasmine.SpyObj<S>;
-  }
+  const injectedStub = <S>(service: Type<S>): jasmine.SpyObj<S> =>
+    TestBed.inject(service) as jasmine.SpyObj<S>;
 
   describe("login$", () => {
     it("should redirect loginAction to activeDirLoginAction", () => {
@@ -319,7 +318,7 @@ describe("UserEffects", () => {
   });
 
   describe("logout$", () => {
-    it("should result in clearDatasetsStateAction, clearInstrumentsStateAction, clearJobsStateAction, clearLogbooksStateAction, clearPoliciesStateAction, clearProposalsStateAction, clearPublishedDataStateAction, clearSamplesStateAction, logoutCompleteAction", () => {
+    it("should result in clear[...]StateAction for all models and logoutCompleteAction", () => {
       const action = fromActions.logoutAction();
       const outcome1 = clearDatasetsStateAction();
       const outcome2 = clearInstrumentsStateAction();

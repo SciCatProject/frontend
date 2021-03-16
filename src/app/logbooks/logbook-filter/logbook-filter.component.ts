@@ -10,7 +10,7 @@ import { LogbookFilters } from "state-management/models";
 export class LogbookFilterComponent {
   @Input() filters: LogbookFilters;
 
-  @Output() onSelect = new EventEmitter<LogbookFilters>();
+  @Output() filterSelect = new EventEmitter<LogbookFilters>();
 
   public entries = ["Bot Messages", "User Messages", "Images"];
 
@@ -69,6 +69,6 @@ export class LogbookFilterComponent {
         }
       }
     }
-    this.onSelect.emit(this.filters);
+    this.filterSelect.emit(this.filters);
   }
 }

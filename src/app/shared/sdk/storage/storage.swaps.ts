@@ -1,4 +1,4 @@
-/* tslint:disable */
+/* eslint-disable */
 /**
  * @module Storage
  * @author Jonathan Casarrubias <t: johncasarrubias, gh: mean-expert-official>

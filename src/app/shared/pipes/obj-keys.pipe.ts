@@ -27,7 +27,7 @@ export class ObjKeysPipe implements PipeTransform {
     const keys = [];
     for (const key in value) {
       if (key) {
-        keys.push({ key: key, value: value[key] });
+        keys.push({ key, value: value[key] });
       }
     }
     return keys;

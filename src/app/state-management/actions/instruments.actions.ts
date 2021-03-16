@@ -35,7 +35,7 @@ export const fetchInstrumentFailedAction = createAction(
 
 export const saveCustomMetadataAction = createAction(
   "[Instrument] Save Custom Metadata",
-  props<{ pid: string; customMetadata: object }>()
+  props<{ pid: string; customMetadata: Record<string, unknown> }>()
 );
 export const saveCustomMetadataCompleteAction = createAction(
   "[Instrument] Save Custom Metadata Complete",

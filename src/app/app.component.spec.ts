@@ -6,8 +6,6 @@ import { AppComponent } from "./app.component";
 import { MockStore } from "./shared/MockStubs";
 import { APP_CONFIG } from "./app-config.module";
 
-/* tslint:disable:no-unused-variable */
-
 describe("AppComponent", () => {
   beforeEach(() => {
     TestBed.configureTestingModule({

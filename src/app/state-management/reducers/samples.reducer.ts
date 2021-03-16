@@ -129,9 +129,9 @@ const reducer = createReducer(
   on(fromActions.clearSamplesStateAction, () => ({ ...initialSampleState }))
 );
 
-export function samplesReducer(state: SampleState | undefined, action: Action) {
+export const samplesReducer = (state: SampleState | undefined, action: Action) => {
   if (action.type.indexOf("[Sample]") !== -1) {
     console.log("Action came in! " + action.type);
   }
   return reducer(state, action);
-}
+};

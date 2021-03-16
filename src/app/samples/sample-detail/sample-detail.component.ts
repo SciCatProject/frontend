@@ -34,7 +34,7 @@ import { getCurrentUser } from "state-management/selectors/user.selectors";
 @Component({
   selector: "app-sample-detail",
   templateUrl: "./sample-detail.component.html",
-  styleUrls: ["./sample-detail.component.scss"]
+  styleUrls: ["./sample-detail.component.scss"],
 })
 export class SampleDetailComponent implements OnInit, OnDestroy {
   attachments$ = this.store.pipe(select(getCurrentAttachments));
@@ -57,7 +57,7 @@ export class SampleDetailComponent implements OnInit, OnDestroy {
     { name: "size", icon: "save", sort: false, inList: true },
     { name: "creationTime", icon: "calendar_today", sort: false, inList: true },
     { name: "owner", icon: "face", sort: false, inList: true },
-    { name: "location", icon: "explore", sort: false, inList: true }
+    { name: "location", icon: "explore", sort: false, inList: true },
   ];
 
   show = false;
@@ -74,29 +74,27 @@ export class SampleDetailComponent implements OnInit, OnDestroy {
 
   formatTableData(datasets: Dataset[]): any[] {
     if (datasets) {
-      return datasets.map((dataset: any) => {
-        return {
-          pid: dataset.pid,
-          name: dataset.datasetName,
-          sourceFolder:
-            "..." + this.slicePipe.transform(dataset.sourceFolder, -14),
-          size: this.filesizePipe.transform(dataset.size),
-          creationTime: this.datePipe.transform(
-            dataset.creationTime,
-            "yyyy-MM-dd HH:mm"
-          ),
-          owner: dataset.owner,
-          location: dataset.creationLocation
-        };
-      });
+      return datasets.map((dataset: any) => ({
+        pid: dataset.pid,
+        name: dataset.datasetName,
+        sourceFolder:
+          "..." + this.slicePipe.transform(dataset.sourceFolder, -14),
+        size: this.filesizePipe.transform(dataset.size),
+        creationTime: this.datePipe.transform(
+          dataset.creationTime,
+          "yyyy-MM-dd HH:mm"
+        ),
+        owner: dataset.owner,
+        location: dataset.creationLocation,
+      }));
     }
   }
 
-  onSaveCharacteristics(characteristics: object) {
+  onSaveCharacteristics(characteristics: Record<string, unknown>) {
     this.store.dispatch(
       saveCharacteristicsAction({
         sampleId: this.sample.sampleId,
-        characteristics
+        characteristics,
       })
     );
   }
@@ -124,7 +122,7 @@ export class SampleDetailComponent implements OnInit, OnDestroy {
         rawDatasetId: null,
         derivedDatasetId: null,
         proposal: null,
-        proposalId: null
+        proposalId: null,
       };
       this.store.dispatch(addAttachmentAction({ attachment: this.attachment }));
     }
@@ -136,7 +134,7 @@ export class SampleDetailComponent implements OnInit, OnDestroy {
       updateAttachmentCaptionAction({
         sampleId: this.sample.sampleId,
         attachmentId,
-        caption
+        caption,
       })
     );
   }
@@ -163,25 +161,25 @@ export class SampleDetailComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.subscriptions.push(
-      this.store.pipe(select(getCurrentSample)).subscribe(sample => {
+      this.store.pipe(select(getCurrentSample)).subscribe((sample) => {
         this.sample = sample;
       })
     );
 
     this.subscriptions.push(
-      this.store.pipe(select(getDatasets)).subscribe(datasets => {
+      this.store.pipe(select(getDatasets)).subscribe((datasets) => {
         this.tableData = this.formatTableData(datasets);
       })
     );
 
     this.subscriptions.push(
-      this.store.pipe(select(getCurrentUser)).subscribe(user => {
+      this.store.pipe(select(getCurrentUser)).subscribe((user) => {
         this.user = user;
       })
     );
 
     this.subscriptions.push(
-      this.route.params.subscribe(params => {
+      this.route.params.subscribe((params) => {
         this.store.dispatch(fetchSampleAction({ sampleId: params.id }));
         this.store.dispatch(fetchSampleDatasetsAction({ sampleId: params.id }));
       })
@@ -189,6 +187,6 @@ export class SampleDetailComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.subscriptions.forEach(subscription => subscription.unsubscribe());
+    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
 }

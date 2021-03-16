@@ -1,4 +1,4 @@
-/* tslint:disable */
+/* eslint-disable */
 export * from './User';
 export * from './UserCredential';
 export * from './UserIdentity';

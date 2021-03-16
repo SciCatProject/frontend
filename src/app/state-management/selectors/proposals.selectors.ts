@@ -86,18 +86,18 @@ export const getDatasetsPerPage = createSelector(
   filters => filters.limit
 );
 
-function restrictFilter(filter: object, allowedKeys?: string[]) {
-  function isNully(value: any) {
+const restrictFilter = (filter: any, allowedKeys?: string[]) => {
+  const isNully = (value: any) => {
     const hasLength = typeof value === "string" || Array.isArray(value);
     return value == null || (hasLength && value.length === 0);
-  }
+  };
 
   const keys = allowedKeys || Object.keys(filter);
   return keys.reduce((obj, key) => {
     const val = filter[key];
     return isNully(val) ? obj : { ...obj, [key]: val };
   }, {});
-}
+};
 
 export const getFullqueryParams = createSelector(getFilters, filters => {
   const { skip, limit, sortField, ...theRest } = filters;

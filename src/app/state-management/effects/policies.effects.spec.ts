@@ -6,20 +6,20 @@ import { provideMockActions } from "@ngrx/effects/testing";
 import { provideMockStore } from "@ngrx/store/testing";
 import {
   getQueryParams,
-  getEditableQueryParams
+  getEditableQueryParams,
 } from "state-management/selectors/policies.selectors";
 import { getProfile } from "state-management/selectors/user.selectors";
 import * as fromActions from "state-management/actions/policies.actions";
 import { hot, cold } from "jasmine-marbles";
 import {
   loadingAction,
-  loadingCompleteAction
+  loadingCompleteAction,
 } from "state-management/actions/user.actions";
 import { Type } from "@angular/core";
 
 const data: PolicyInterface = {
   id: "testId",
-  ownerGroup: "testGroup"
+  ownerGroup: "testGroup",
 };
 const policy = new Policy(data);
 
@@ -37,27 +37,26 @@ describe("PolicyEffects", () => {
           selectors: [
             { selector: getQueryParams, value: {} },
             { selector: getEditableQueryParams, value: {} },
-            { selector: getProfile, value: { email: "test@email.com" } }
-          ]
+            { selector: getProfile, value: { email: "test@email.com" } },
+          ],
         }),
         {
           provide: PolicyApi,
           useValue: jasmine.createSpyObj("policyApi", [
             "find",
             "count",
-            "updatewhere"
-          ])
-        }
-      ]
+            "updatewhere",
+          ]),
+        },
+      ],
     });
 
     effects = TestBed.inject(PolicyEffects);
     policyApi = injectedStub(PolicyApi);
   });
 
-  function injectedStub<S>(service: Type<S>): jasmine.SpyObj<S> {
-    return TestBed.inject(service) as jasmine.SpyObj<S>;
-  }
+  const injectedStub = <S>(service: Type<S>): jasmine.SpyObj<S> =>
+    TestBed.inject(service) as jasmine.SpyObj<S>;
 
   describe("fetchPolicies$", () => {
     describe("ofType fetchPoliciesAction", () => {
@@ -75,7 +74,7 @@ describe("PolicyEffects", () => {
         const expected = cold("--(bcd)", {
           b: outcome1,
           c: outcome2,
-          d: outcome3
+          d: outcome3,
         });
         expect(effects.fetchPolicies$).toBeObservable(expected);
       });
@@ -110,7 +109,7 @@ describe("PolicyEffects", () => {
         const expected = cold("--(bcd)", {
           b: outcome1,
           c: outcome2,
-          d: outcome3
+          d: outcome3,
         });
         expect(effects.fetchPolicies$).toBeObservable(expected);
       });
@@ -147,7 +146,7 @@ describe("PolicyEffects", () => {
         const expected = cold("--(bcd)", {
           b: outcome1,
           c: outcome2,
-          d: outcome3
+          d: outcome3,
         });
         expect(effects.fetchPolicies$).toBeObservable(expected);
       });
@@ -201,7 +200,7 @@ describe("PolicyEffects", () => {
         const policies = [policy];
         const action = fromActions.fetchEditablePoliciesAction();
         const outcome1 = fromActions.fetchEditablePoliciesCompleteAction({
-          policies
+          policies,
         });
         const outcome2 = fromActions.fetchEditableCountAction();
 
@@ -233,7 +232,7 @@ describe("PolicyEffects", () => {
         const policies = [policy];
         const action = fromActions.changeEditablePageAction({ page, limit });
         const outcome1 = fromActions.fetchEditablePoliciesCompleteAction({
-          policies
+          policies,
         });
         const outcome2 = fromActions.fetchEditableCountAction();
 
@@ -267,10 +266,10 @@ describe("PolicyEffects", () => {
         const policies = [policy];
         const action = fromActions.sortEditableByColumnAction({
           column,
-          direction
+          direction,
         });
         const outcome1 = fromActions.fetchEditablePoliciesCompleteAction({
-          policies
+          policies,
         });
         const outcome2 = fromActions.fetchEditableCountAction();
 
@@ -287,7 +286,7 @@ describe("PolicyEffects", () => {
         const direction = "desc";
         const action = fromActions.sortEditableByColumnAction({
           column,
-          direction
+          direction,
         });
         const outcome = fromActions.fetchEditablePoliciesFailedAction();
 

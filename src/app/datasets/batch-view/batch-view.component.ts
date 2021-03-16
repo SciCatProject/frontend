@@ -29,7 +29,7 @@ export interface Share {
 @Component({
   selector: "batch-view",
   templateUrl: "./batch-view.component.html",
-  styleUrls: ["./batch-view.component.scss"]
+  styleUrls: ["./batch-view.component.scss"],
 })
 export class BatchViewComponent implements OnInit {
   @ViewChild("secondDialog", { static: true }) secondDialog: TemplateRef<any>;
@@ -41,16 +41,9 @@ export class BatchViewComponent implements OnInit {
   shareEmails: Share[] = [];
   datasetList = [];
 
-  visibleColumns: string[] = [
-    "remove",
-    "pid",
-    "sourceFolder",
-    "creationTime"
-  ];
+  visibleColumns: string[] = ["remove", "pid", "sourceFolder", "creationTime"];
 
-  batch$: Observable<Dataset[]> = this.store.pipe(
-    select(getDatasetsInBatch)
-  );
+  batch$: Observable<Dataset[]> = this.store.pipe(select(getDatasetsInBatch));
   public hasBatch: boolean;
 
   constructor(
@@ -112,8 +105,8 @@ export class BatchViewComponent implements OnInit {
   onShare() {
     // add new share group to model and update datasets access groups
     const myShare = new ShareGroup();
-    myShare.datasets = this.datasetList.map(dataset => dataset.pid);
-    myShare.members = this.shareEmails.map(share => share.name);
+    myShare.datasets = this.datasetList.map((dataset) => dataset.pid);
+    myShare.members = this.shareEmails.map((share) => share.name);
     this.shareGroupApi
       .upsert(myShare)
       .pipe(
@@ -128,28 +121,27 @@ export class BatchViewComponent implements OnInit {
         })
       )
       .subscribe(
-        success => {
+        (success) => {
           this.store.dispatch(
             showMessageAction({
               message: {
                 type: MessageType.Success,
                 content: "Share Successful",
-                duration: 5000
-              }
+                duration: 5000,
+              },
             })
           );
         },
-        err => {
-          return this.store.dispatch(
+        (err) =>
+          this.store.dispatch(
             showMessageAction({
               message: {
                 type: MessageType.Error,
                 content: "Share Failed",
-                duration: 5000
-              }
+                duration: 5000,
+              },
             })
-          );
-        }
+          )
       );
   }
 
@@ -157,18 +149,18 @@ export class BatchViewComponent implements OnInit {
     this.batch$
       .pipe(
         first(),
-        switchMap(datasets => this.archivingSrv.archive(datasets))
+        switchMap((datasets) => this.archivingSrv.archive(datasets))
       )
       .subscribe(
         () => this.clearBatch(),
-        err =>
+        (err) =>
           this.store.dispatch(
             showMessageAction({
               message: {
                 type: MessageType.Error,
                 content: err.message,
-                duration: 5000
-              }
+                duration: 5000,
+              },
             })
           )
       );
@@ -178,20 +170,20 @@ export class BatchViewComponent implements OnInit {
     this.batch$
       .pipe(
         first(),
-        switchMap(datasets =>
+        switchMap((datasets) =>
           this.archivingSrv.retrieve(datasets, "/archive/retrieve")
         )
       )
       .subscribe(
         () => this.clearBatch(),
-        err =>
+        (err) =>
           this.store.dispatch(
             showMessageAction({
               message: {
                 type: MessageType.Error,
                 content: err.message,
-                duration: 5000
-              }
+                duration: 5000,
+              },
             })
           )
       );
@@ -199,7 +191,7 @@ export class BatchViewComponent implements OnInit {
 
   ngOnInit() {
     this.store.dispatch(prefillBatchAction());
-    this.batch$.subscribe(result => {
+    this.batch$.subscribe((result) => {
       if (result) {
         this.datasetList = result;
         this.hasBatch = result.length > 0;

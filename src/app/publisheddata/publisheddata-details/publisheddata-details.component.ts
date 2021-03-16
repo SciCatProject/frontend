@@ -53,7 +53,7 @@ export class PublisheddataDetailsComponent implements OnInit, OnDestroy {
   }
 
   onRegisterClick(doi: string) {
-    this.store.dispatch(registerPublishedDataAction({ doi: doi }));
+    this.store.dispatch(registerPublishedDataAction({ doi }));
   }
 
   onEditClick() {

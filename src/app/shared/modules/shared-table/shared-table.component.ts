@@ -42,7 +42,7 @@ export class SharedTableComponent implements AfterViewInit, AfterContentInit, On
   public MIN_COLUMN_WIDTH = 200;
 
   // Filter Fields
-  generalFilter = new FormControl;
+  generalFilter = new FormControl();
   filterExpressions = {};
 
   // Visible Hidden Columns
@@ -112,7 +112,7 @@ export class SharedTableComponent implements AfterViewInit, AfterContentInit, On
             globalSearch = null;
           }
           this.router.navigate([], {
-            queryParams: { globalSearch: globalSearch, pageIndex: 0 },
+            queryParams: { globalSearch, pageIndex: 0 },
             queryParamsHandling: "merge"
           });
           this.loadDataPage();
@@ -359,7 +359,7 @@ export class SharedTableComponent implements AfterViewInit, AfterContentInit, On
     this.loadAllExportData();
   }
 
-  getPropertyByPath(obj: Object, pathString: string) {
+  getPropertyByPath(obj: Record<string, unknown>, pathString: string) {
     return pathString.split(".").reduce((o, i) => o[i], obj);
   }
 
