@@ -303,6 +303,52 @@
                 }
               ]
             },
+            "maxiv-dev": {
+              "budgets": [
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "150kb"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "assets": [
+                "src/assets/",
+                "src/robots.txt",
+                "src/manifest.json",
+                {
+                  "glob": "site.png",
+                  "input": "CI/MAXIV/",
+                  "output": "/assets/images/"
+                },
+                {
+                  "glob": "site-logo.png",
+                  "input": "CI/MAXIV/",
+                  "output": "/assets/images/"
+                },
+                {
+                  "glob": "favicon.ico",
+                  "input": "CI/MAXIV/",
+                  "output": "/"
+                }
+              ],
+              "fileReplacements": [
+                {
+                  "replace": "src/app/build-specifics/index.ts",
+                  "with": "src/app/build-specifics/index.prod.ts"
+                },
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.maxiv.dev.ts"
+                }
+              ]
+            },
             "development": {
               "budgets": [
                 {
