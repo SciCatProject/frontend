@@ -6,7 +6,7 @@
 
 
 
-[![Build Status](https://github.com/SciCatProject/catanie/actions/workflows/test_build/badge.svg?branch=develop)](https://github.com/SciCatProject/catanie/actions)
+[![Build Status](https://github.com/SciCatProject/catanie/actions/workflows/test_build.yml/badge.svg?branch=develop)](https://github.com/SciCatProject/catanie/actions)
 [![DeepScan grade](https://deepscan.io/api/projects/887/branches/19862/badge/grade.svg)](https://deepscan.io/dashboard#view=project&pid=887&bid=19862)
 [![Known Vulnerabilities](https://snyk.io/test/github/SciCatProject/catanie/develop/badge.svg?targetFile=package.json)](https://snyk.io/test/github/SciCatProject/catanie/develop?targetFile=package.json)
 [![DOI](https://zenodo.org/badge/106383330.svg)](https://zenodo.org/badge/latestdoi/106383330)
