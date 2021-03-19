@@ -117,7 +117,7 @@ export class SharedTableComponent implements AfterViewInit, AfterContentInit, On
           });
           this.loadDataPage();
         })
-      );
+      ).subscribe();
 
     this.activateColumnFilters();
 
@@ -136,7 +136,7 @@ export class SharedTableComponent implements AfterViewInit, AfterContentInit, On
           this.loadDataPage();
         }
         )
-      );
+      ).subscribe();
 
     this.route.queryParams.subscribe(queryParams => {
       /**
