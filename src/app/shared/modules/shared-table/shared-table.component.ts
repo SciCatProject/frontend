@@ -253,13 +253,13 @@ export class SharedTableComponent implements AfterViewInit, AfterContentInit, On
       }
       // set default filter only if no other filters defined in query parameters
       // TODO replace by newer queryParamMap
-      let qp={...this.route.snapshot.queryParams};
+      const qp = { ...this.route.snapshot.queryParams };
       // ignore non-filtering parameters
-      delete qp.sortActive
-      delete qp.sortDirection
-      delete qp.pageIndex
-      delete qp.pageSize
-      if ("filterDefault" in col && Object.keys(qp).length==0) {
+      delete qp.sortActive;
+      delete qp.sortDirection;
+      delete qp.pageIndex;
+      delete qp.pageSize;
+      if ("filterDefault" in col && Object.keys(qp).length === 0) {
         if (typeof col.filterDefault === "object") {
           this.router.navigate([], {
             queryParams: { [col.id]: JSON.stringify(col.filterDefault) },
