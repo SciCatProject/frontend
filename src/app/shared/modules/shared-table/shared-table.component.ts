@@ -121,6 +121,7 @@ export class SharedTableComponent implements AfterViewInit, AfterContentInit, On
 
     this.activateColumnFilters();
 
+    console.log("Sorting variable:", this.sort)
     merge(this.sort.sortChange, this.paginator.page)
       .pipe(
         tap(() => {
@@ -241,35 +242,39 @@ export class SharedTableComponent implements AfterViewInit, AfterContentInit, On
 
   activateColumnFilters() {
     let i = 0;
+    console.log("all filters:", this.allFilters)
     this.allFilters.toArray().forEach(filter => {
       const col = this.columnsdef[i];
-      if ("sortDefault" in col) {
-        this.sort.active = col.id;
-        this.sort.direction = col.sortDefault;
-        this.router.navigate([], {
-          queryParams: { sortActive: this.sort.active, sortDirection: this.sort.direction },
-          queryParamsHandling: "merge"
-        });
-      }
-      // set default filter only if no other filters defined in query parameters
-      // TODO replace by newer queryParamMap
-      const qp = { ...this.route.snapshot.queryParams };
-      // ignore non-filtering parameters
-      delete qp.sortActive;
-      delete qp.sortDirection;
-      delete qp.pageIndex;
-      delete qp.pageSize;
-      if ("filterDefault" in col && Object.keys(qp).length === 0) {
-        if (typeof col.filterDefault === "object") {
+      console.log("i,col:", i, col)
+      if (col) {
+        if ("sortDefault" in col) {
+          this.sort.active = col.id;
+          this.sort.direction = col.sortDefault;
           this.router.navigate([], {
-            queryParams: { [col.id]: JSON.stringify(col.filterDefault) },
+            queryParams: { sortActive: this.sort.active, sortDirection: this.sort.direction },
             queryParamsHandling: "merge"
           });
-        } else {
-          this.router.navigate([], {
-            queryParams: { [col.id]: col.filterDefault },
-            queryParamsHandling: "merge"
-          });
+        }
+        // set default filter only if no other filters defined in query parameters
+        // TODO replace by newer queryParamMap
+        const qp = { ...this.route.snapshot.queryParams };
+        // ignore non-filtering parameters
+        delete qp.sortActive;
+        delete qp.sortDirection;
+        delete qp.pageIndex;
+        delete qp.pageSize;
+        if ("filterDefault" in col && Object.keys(qp).length === 0) {
+          if (typeof col.filterDefault === "object") {
+            this.router.navigate([], {
+              queryParams: { [col.id]: JSON.stringify(col.filterDefault) },
+              queryParamsHandling: "merge"
+            });
+          } else {
+            this.router.navigate([], {
+              queryParams: { [col.id]: col.filterDefault },
+              queryParamsHandling: "merge"
+            });
+          }
         }
       }
 
@@ -370,14 +375,21 @@ export class SharedTableComponent implements AfterViewInit, AfterContentInit, On
     return pathString.split(".").reduce((o, i) => o[i], obj);
   }
 
-  dateChanged(event: MatDatepickerInputEvent<DateRange>, columnId: string) {
-    // console.log("dateChanged event:", event, columnId);
+  // both start and end trigger their own event on change
+  dateChanged(event: MatDatepickerInputEvent<Date>, columnId: string, type: string) {
+    console.log("dateChanged event:", event, columnId, type);
+    if (!(columnId in this.filterExpressions)) {
+      this.filterExpressions[columnId] = {}
+    }
+    console.log("=========== On input:filterexpressions:", this.filterExpressions)
     if (event.value) {
-      const { begin, end } = event.value;
-      this.filterExpressions[columnId] = {
-        begin: moment(begin).format("YYYY-MM-DD"),
-        end: moment(end).format("YYYY-MM-DD")
-      };
+      if (type === "start") {
+        this.filterExpressions[columnId].begin = moment(event.value).format("YYYY-MM-DD")
+      }
+      if (type === "end") {
+        this.filterExpressions[columnId].end = moment(event.value).format("YYYY-MM-DD")
+      }
+      console.log("=========== After mods:filterexpressions:", this.filterExpressions)
       this.router.navigate([], {
         queryParams: { [columnId]: JSON.stringify(this.filterExpressions[columnId]) },
         queryParamsHandling: "merge"

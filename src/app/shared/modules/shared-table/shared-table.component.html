@@ -35,45 +35,33 @@
   </ng-container>
   <!-- Toggle Button End -->
   <ng-container [matColumnDef]="column.id" *ngFor="let column of visibleColumns">
-    <ng-container *ngIf="column.canSort; else noSort">
-      <mat-header-cell *matHeaderCellDef class="col-search" fxLayoutAlign="start start" fxLayout="column">
-        <div fxLayout="column" style="align-items: center">
-          <mat-icon>{{ column.icon }}</mat-icon>
-          <span mat-sort-header>{{ column.label | titleCase }}</span>
-        </div>
-        <mat-form-field *ngIf="column.matchMode;">
-          <ng-container *ngIf="column.matchMode == 'between'">
-            <input #allFilters matInput id="{{ column.id }}" class="date-input" placeholder="Select a date range" name="range-picker"
-              [satDatepicker]="picker" (dateChange)="dateChanged($event,column.id)" />
-            <sat-datepicker-toggle matSuffix [for]="picker"></sat-datepicker-toggle>
-            <sat-datepicker #picker [rangeMode]="true"></sat-datepicker>
-          </ng-container>
-          <ng-container *ngIf="column.matchMode != 'between'">
-            <input #allFilters matInput autocomplete="off" id="{{ column.id }}" placeholder="{{ column.matchMode }}" />
-          </ng-container>
-        </mat-form-field>
-      </mat-header-cell>
-    </ng-container>
-    <ng-template #noSort>
-      <mat-header-cell *matHeaderCellDef class="col-search" fxLayoutAlign="start start" fxLayout="column">
-        <div fxLayout="column" style="align-items: center">
-          <mat-icon>{{ column.icon }}</mat-icon>
-          <span mat-sort-header>{{ column.label }}</span>
-        </div>
-        <mat-form-field *ngIf="column.matchMode;">
-          <ng-container *ngIf="column.matchMode == 'between'">
-            <input #allFilters matInput id="{{ column.id }}" class="date-input" placeholder="Select a date range" name="range-picker"
-              [satDatepicker]="picker" (dateChange)="dateChanged($event,column.id)" />
-            <sat-datepicker-toggle matSuffix [for]="picker"></sat-datepicker-toggle>
-            <sat-datepicker #picker [rangeMode]="true"></sat-datepicker>
-          </ng-container>
-          <ng-container *ngIf="column.matchMode != 'between'">
-            <input #allFilters matInput autocomplete="off" id="{{ column.id }}" placeholder="{{ column.matchMode }}" />
-          </ng-container>
-        </mat-form-field>
-
-      </mat-header-cell>
-    </ng-template>
+    <mat-header-cell *matHeaderCellDef class="col-search" fxLayoutAlign="start start" fxLayout="column">
+      <div fxLayout="row" style="align-items: center">
+        <mat-icon>{{ column.icon }}</mat-icon>
+        <span mat-sort-header [disabled]="!column.canSort">{{ column.label | titleCase }}</span>
+      </div>
+      <mat-form-field appearance="fill" *ngIf="column.matchMode;">
+        <ng-container *ngIf="column.matchMode == 'between'">
+          <div class="date_container">
+            <mat-date-range-input [rangePicker]="rangePicker">
+              <input #allFilters matStartDate placeholder="Start date"
+                (dateChange)="dateChanged($event,column.id,'start')">
+              <input #allFilters matEndDate placeholder="End date" (dateChange)="dateChanged($event,column.id,'end')">
+            </mat-date-range-input>
+            <mat-datepicker-toggle matSuffix [for]="rangePicker"></mat-datepicker-toggle>
+          </div>
+          <mat-date-range-picker #rangePicker>
+            <!--               <mat-date-range-picker-actions>
+                <button mat-button matDateRangePickerCancel>Cancel</button>
+                <button mat-raised-button color="primary" matDateRangePickerApply>Apply</button>
+              </mat-date-range-picker-actions> -->
+          </mat-date-range-picker>
+        </ng-container>
+        <ng-container *ngIf="column.matchMode != 'between'">
+          <input #allFilters matInput autocomplete="off" id="{{ column.id }}" placeholder="{{ column.matchMode }}" />
+        </ng-container>
+      </mat-form-field>
+    </mat-header-cell>
 
     <mat-cell *matCellDef="let row" [fxFlex]="column.width + 'px'">
       <ng-container [ngSwitch]="column.type">

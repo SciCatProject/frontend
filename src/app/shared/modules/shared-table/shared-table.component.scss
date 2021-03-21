@@ -91,3 +91,10 @@ mat-header-row {
 .mat-input-element::placeholder {
   color: black;
 }
+
+.date_container {        
+  float: left;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
