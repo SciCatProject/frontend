@@ -111,7 +111,7 @@ export class SharedTableComponent implements AfterViewInit, AfterContentInit, On
         })
       ).subscribe();
 
-    this.setDefaultFilters()
+    this.setDefaultFilters();
     this.activateColumnFilters();
 
     merge(this.sort.sortChange, this.paginator.page)
@@ -211,7 +211,7 @@ export class SharedTableComponent implements AfterViewInit, AfterContentInit, On
     });
   }
 
-  // fill default filters from table definition 
+  // fill default filters from table definition
   setDefaultFilters() {
     // copy default filters from column definitions to URL (which should trigger the filling of the GUI)
     this.columnsdef.forEach(col => {
@@ -250,7 +250,7 @@ export class SharedTableComponent implements AfterViewInit, AfterContentInit, On
     // define key handler in all filter input fields
     let i = 0;
     this.allFilters.toArray().forEach(filter => {
-      console.log("Defining subscription for column :", i)
+      // console.log("Defining subscription for column :", i);
       this.columnFilterSubscriptions[i] = fromEvent(filter.nativeElement, "keyup").pipe(
         debounceTime(650),
         distinctUntilChanged()
@@ -280,11 +280,11 @@ export class SharedTableComponent implements AfterViewInit, AfterContentInit, On
 
   // fill input fields with current filter conditions
   reloadFilterExpressions() {
-    console.log("=== Reloading filter expressions from filterExpression array to GUI elements");
+    // console.log("=== Reloading filter expressions from filterExpression array to GUI elements");
     this.allFilters.toArray().forEach(filter => {
       const columnId = filter.nativeElement.name;
       if (this.filterExpressions[columnId]) {
-        console.log(" ====== Reloading filter expressions:", columnId, this.filterExpressions[columnId]);
+        // console.log(" ====== Reloading filter expressions:", columnId, this.filterExpressions[columnId]);
         filter.nativeElement.value = this.filterExpressions[columnId];
       }
     });
