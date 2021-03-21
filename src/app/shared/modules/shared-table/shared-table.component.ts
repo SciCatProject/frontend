@@ -111,6 +111,7 @@ export class SharedTableComponent implements AfterViewInit, AfterContentInit, On
         })
       ).subscribe();
 
+    this.setDefaultFilters()
     this.activateColumnFilters();
 
     merge(this.sort.sortChange, this.paginator.page)
@@ -210,9 +211,8 @@ export class SharedTableComponent implements AfterViewInit, AfterContentInit, On
     });
   }
 
-  // fill default filters from table definition and define filter input field event handler
-  activateColumnFilters() {
-
+  // fill default filters from table definition 
+  setDefaultFilters() {
     // copy default filters from column definitions to URL (which should trigger the filling of the GUI)
     this.columnsdef.forEach(col => {
       if ("sortDefault" in col) {
@@ -243,12 +243,14 @@ export class SharedTableComponent implements AfterViewInit, AfterContentInit, On
         }
       }
     });
+  }
 
+  // define filter input field event handler
+  activateColumnFilters() {
     // define key handler in all filter input fields
     let i = 0;
     this.allFilters.toArray().forEach(filter => {
-      i++;
-      // console.log("Defining subscription for column :", i)
+      console.log("Defining subscription for column :", i)
       this.columnFilterSubscriptions[i] = fromEvent(filter.nativeElement, "keyup").pipe(
         debounceTime(650),
         distinctUntilChanged()
@@ -272,16 +274,17 @@ export class SharedTableComponent implements AfterViewInit, AfterContentInit, On
           }
           this.loadDataPage();
         });
+      i++;
     });
   }
 
   // fill input fields with current filter conditions
   reloadFilterExpressions() {
-    // console.log("=== Reloading filter expressions from filterExpression array to GUI elements");
+    console.log("=== Reloading filter expressions from filterExpression array to GUI elements");
     this.allFilters.toArray().forEach(filter => {
       const columnId = filter.nativeElement.name;
       if (this.filterExpressions[columnId]) {
-        // console.log(" ====== Reloading filter expressions:", columnId, this.filterExpressions[columnId]);
+        console.log(" ====== Reloading filter expressions:", columnId, this.filterExpressions[columnId]);
         filter.nativeElement.value = this.filterExpressions[columnId];
       }
     });
@@ -309,10 +312,13 @@ export class SharedTableComponent implements AfterViewInit, AfterContentInit, On
       this.columnsdef = sortedColumns.sort((a, b) => a.order - b.order);
       this.visibleColumns = this.columnsdef.filter(column => column.visible);
       this.hiddenColumns = this.columnsdef.filter(column => !column.visible);
-      this.zone.run(() => { });
+      this.zone.run(() => {
+        this._changeDetectorRef.detectChanges();
+        this.reloadFilterExpressions();
+        this.activateColumnFilters();
+      });
     });
-    this._changeDetectorRef.detectChanges();
-    this.reloadFilterExpressions();
+
   }
 
   exportToExcel() {
