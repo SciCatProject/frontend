@@ -13,14 +13,14 @@ import { Column } from "shared/modules/shared-table/shared-table.module";
 })
 export class FilesDashboardComponent implements OnInit, OnDestroy {
   end = moment();
-  begin = moment().subtract(7, "days");
+  start = moment().subtract(7, "days");
 
   columns: Column[] = [
     { id: "dataFileList.path", icon: "text_snippet", label: "Filename", canSort: true, matchMode: "contains", hideOrder: 1, },
     { id: "dataFileList.size", icon: "save", label: "Size", canSort: true, matchMode: "greaterThan", hideOrder: 2, },
     {
       id: "dataFileList.time", icon: "access_time", label: "Created at", format: "date medium", canSort: true,
-      matchMode: "between", filterDefault: { begin: this.begin.format("YYYY-MM-DD"), end: this.end.format("YYYY-MM-DD") }, hideOrder: 3,
+      matchMode: "between", filterDefault: { start: this.start.format("YYYY-MM-DD"), end: this.end.format("YYYY-MM-DD") }, hideOrder: 3,
     },
     { id: "dataFileList.uid", icon: "person", label: "UID", canSort: true, matchMode: "contains", hideOrder: 4, },
     { id: "dataFileList.gid", icon: "group", label: "GID", canSort: true, matchMode: "contains", hideOrder: 5, },

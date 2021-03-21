@@ -4,6 +4,7 @@ import { Observable } from "rxjs";
 import { LoopBackAuth } from "shared/sdk";
 import * as moment from "moment";
 import { Column } from "shared/modules/shared-table/shared-table.module";
+import { filter } from 'rxjs/operators';
 
 @Injectable({
   providedIn: "root",
@@ -24,10 +25,20 @@ export class ScicatDataService {
   createColumnFilterMongoExpression = (columns: Column[], filterExpressions: any) => {
     const result = {};
     if (filterExpressions) {
+      const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      var blocal: moment.Moment;
+      var elocal: moment.Moment;
+      var columnkey: string;
       Object.keys(filterExpressions).forEach((key, index) => {
         if (filterExpressions[key] !== "") {
-          // console.log("filterexpression:", key, filterExpressions[key], columns)
-          const column = columns.find((c) => c.id === key);
+          let columnkey = key;
+          if (key.endsWith('.start')) {
+            columnkey = key.slice(0, -6)
+          }
+          if (key.endsWith('.end')) {
+            columnkey = key.slice(0, -4)
+          }
+          const column = columns.find((c) => c.id === columnkey);
           // All non-column conditions are ignored here
           if (column) {
             switch (column.matchMode) {
@@ -48,23 +59,19 @@ export class ScicatDataService {
                 break;
               }
               case "between": {
-                // console.log("between case");
-                let be: any;
-                // TODO why can the filterExpression be sometimes an object and sometimes not ?
                 // TODO: is between always date related (assume this for now)
-                if (typeof filterExpressions[key] === "object") {
-                  be = filterExpressions[key];
-                } else {
-                  be = JSON.parse(filterExpressions[key]);
-                }
                 // convert to UTC and add one day to end expression
-                const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
-                const blocal = moment.tz(be.begin, tz);
-                const elocal = moment.tz(be.end, tz).add(1, "days");
-                // TODO is treated as a full string, not a nested object if key contains
-                // console.log("====== Key is nested :", key);
-                result[key] = { begin: blocal.toISOString(), end: elocal.toISOString() };
-                // console.log("result:", result);
+                if (!(columnkey in result)){
+                  result[columnkey]={}
+                }
+                if (key.endsWith('.start')) {
+                  blocal = moment.tz(filterExpressions[key], tz);
+                  result[columnkey]["begin"] = blocal.toISOString()
+                }
+                if (key.endsWith('.end')) {
+                  elocal = moment.tz(filterExpressions[key], tz).add(1, "days");
+                  result[columnkey]["end"] = elocal.toISOString()
+                }
                 break;
               }
               case "is": {
@@ -121,9 +128,6 @@ export class ScicatDataService {
     if (sortField) {
       limits["order"] = sortField + ":" + sortOrder;
     }
-
-    // console.log("Fields:", filterFields)
-    // console.log("Limits:", limits)
 
     const params = new HttpParams()
       .set("fields", JSON.stringify(filterFields))

@@ -8,7 +8,7 @@
 <mat-toolbar>
   <mat-form-field appearance="standard">
     <mat-icon>search</mat-icon>
-    <input type="search" matInput placeholder="global word-search" #input>
+    <input type="search" matInput placeholder="global word-search" #globalFilter>
   </mat-form-field>
   <span class="example-spacer"></span>
   <span>{{dataSource.collection}}</span>
@@ -44,21 +44,18 @@
         <ng-container *ngIf="column.matchMode == 'between'">
           <div class="date_container">
             <mat-date-range-input [rangePicker]="rangePicker">
-              <input #allFilters matStartDate placeholder="Start date"
-                (dateChange)="dateChanged($event,column.id,'start')">
-              <input #allFilters matEndDate placeholder="End date" (dateChange)="dateChanged($event,column.id,'end')">
+              <input #allFilters  name="{{ column.id + '.start' }}" matStartDate placeholder="Start date"
+                (dateChange)="dateChanged($event,column.id+'.start')">
+              <input #allFilters name="{{ column.id + '.end'}}" matEndDate placeholder="End date"
+                (dateChange)="dateChanged($event,column.id+'.end')">
             </mat-date-range-input>
             <mat-datepicker-toggle matSuffix [for]="rangePicker"></mat-datepicker-toggle>
           </div>
           <mat-date-range-picker #rangePicker>
-            <!--               <mat-date-range-picker-actions>
-                <button mat-button matDateRangePickerCancel>Cancel</button>
-                <button mat-raised-button color="primary" matDateRangePickerApply>Apply</button>
-              </mat-date-range-picker-actions> -->
           </mat-date-range-picker>
         </ng-container>
         <ng-container *ngIf="column.matchMode != 'between'">
-          <input #allFilters matInput autocomplete="off" id="{{ column.id }}" placeholder="{{ column.matchMode }}" />
+          <input #allFilters matInput autocomplete="off" name="{{ column.id }}" placeholder="{{ column.matchMode }}" />
         </ng-container>
       </mat-form-field>
     </mat-header-cell>
