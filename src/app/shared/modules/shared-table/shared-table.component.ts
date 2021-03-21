@@ -133,14 +133,14 @@ export class SharedTableComponent implements AfterViewInit, AfterContentInit, On
     // copy changes in URL parameters to corresponding GUI fields
     this.route.queryParams.subscribe(queryParams => {
       this.sort.active = queryParams.sortActive ? queryParams.sortActive : null;
-      this.sort.direction = queryParams.sortDirection ? queryParams.sortDirection : 'asc';
-      this.paginator.pageIndex = queryParams.pageIndex ? Number(queryParams.pageIndex) : 0
+      this.sort.direction = queryParams.sortDirection ? queryParams.sortDirection : "asc";
+      this.paginator.pageIndex = queryParams.pageIndex ? Number(queryParams.pageIndex) : 0;
       this.paginator.pageSize = queryParams.pageSize ? Number(queryParams.pageSize) : this.pageSize;
       this.globalFilter.nativeElement.value = queryParams.globalSearch ? queryParams.globalSearch : "";
       this.allFilters.toArray().forEach(filter => {
         if (filter.nativeElement.name in queryParams) {
-          filter.nativeElement.value = queryParams[filter.nativeElement.name]
-          this.filterExpressions[filter.nativeElement.name] = filter.nativeElement.value
+          filter.nativeElement.value = queryParams[filter.nativeElement.name];
+          this.filterExpressions[filter.nativeElement.name] = filter.nativeElement.value;
         } else {
           filter.nativeElement.value = null;
           delete this.filterExpressions[filter.nativeElement.name];
@@ -232,7 +232,7 @@ export class SharedTableComponent implements AfterViewInit, AfterContentInit, On
       if ("filterDefault" in col && Object.keys(qp).length === 0) {
         if (typeof col.filterDefault === "object") {
           this.router.navigate([], {
-            queryParams: { [col.id + '.start']: col.filterDefault.start, [col.id + '.end']: col.filterDefault.end },
+            queryParams: { [col.id + ".start"]: col.filterDefault.start, [col.id + ".end"]: col.filterDefault.end },
             queryParamsHandling: "merge"
           });
         } else {
@@ -242,11 +242,10 @@ export class SharedTableComponent implements AfterViewInit, AfterContentInit, On
           });
         }
       }
-    }
-    )
+    });
 
     // define key handler in all filter input fields
-    let i = 0
+    let i = 0;
     this.allFilters.toArray().forEach(filter => {
       i++;
       // console.log("Defining subscription for column :", i)
@@ -328,7 +327,7 @@ export class SharedTableComponent implements AfterViewInit, AfterContentInit, On
   // both start and end trigger their own event on change
   dateChanged(event: MatDatepickerInputEvent<Date>, columnId: string) {
     if (event.value) {
-      this.filterExpressions[columnId] = moment(event.value).format("YYYY-MM-DD")
+      this.filterExpressions[columnId] = moment(event.value).format("YYYY-MM-DD");
       this.router.navigate([], {
         queryParams: { [columnId]: this.filterExpressions[columnId] },
         queryParamsHandling: "merge"

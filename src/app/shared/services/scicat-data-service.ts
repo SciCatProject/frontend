@@ -4,7 +4,7 @@ import { Observable } from "rxjs";
 import { LoopBackAuth } from "shared/sdk";
 import * as moment from "moment";
 import { Column } from "shared/modules/shared-table/shared-table.module";
-import { filter } from 'rxjs/operators';
+import { filter } from "rxjs/operators";
 
 @Injectable({
   providedIn: "root",
@@ -26,17 +26,17 @@ export class ScicatDataService {
     const result = {};
     if (filterExpressions) {
       const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
-      var blocal: moment.Moment;
-      var elocal: moment.Moment;
-      var columnkey: string;
+      let blocal: moment.Moment;
+      let elocal: moment.Moment;
+      let columnkey: string;
       Object.keys(filterExpressions).forEach((key, index) => {
         if (filterExpressions[key] !== "") {
-          let columnkey = key;
-          if (key.endsWith('.start')) {
-            columnkey = key.slice(0, -6)
+          columnkey = key;
+          if (key.endsWith(".start")) {
+            columnkey = key.slice(0, -6);
           }
-          if (key.endsWith('.end')) {
-            columnkey = key.slice(0, -4)
+          if (key.endsWith(".end")) {
+            columnkey = key.slice(0, -4);
           }
           const column = columns.find((c) => c.id === columnkey);
           // All non-column conditions are ignored here
@@ -61,16 +61,16 @@ export class ScicatDataService {
               case "between": {
                 // TODO: is between always date related (assume this for now)
                 // convert to UTC and add one day to end expression
-                if (!(columnkey in result)){
-                  result[columnkey]={}
+                if (!(columnkey in result)) {
+                  result[columnkey] = {};
                 }
-                if (key.endsWith('.start')) {
+                if (key.endsWith(".start")) {
                   blocal = moment.tz(filterExpressions[key], tz);
-                  result[columnkey]["begin"] = blocal.toISOString()
+                  result[columnkey]["begin"] = blocal.toISOString();
                 }
-                if (key.endsWith('.end')) {
+                if (key.endsWith(".end")) {
                   elocal = moment.tz(filterExpressions[key], tz).add(1, "days");
-                  result[columnkey]["end"] = elocal.toISOString()
+                  result[columnkey]["end"] = elocal.toISOString();
                 }
                 break;
               }
