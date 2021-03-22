@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { AfterViewChecked, ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
 import { SciCatDataSource } from "../../shared/services/scicat.datasource";
 import { ScicatDataService } from "../../shared/services/scicat-data-service";
 import { ExportExcelService } from "../../shared/services/export-excel.service";
@@ -10,7 +10,7 @@ import { Column } from "shared/modules/shared-table/shared-table.module";
   templateUrl: "./jobs-dashboard-new.component.html",
   styleUrls: ["./jobs-dashboard-new.component.scss"],
 })
-export class JobsDashboardNewComponent implements OnInit, OnDestroy {
+export class JobsDashboardNewComponent implements OnInit, OnDestroy, AfterViewChecked {
   // not needed, date by default is shown in local time and using the locale of the browser (if installed, see app.module.ts)
   // tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
@@ -37,6 +37,7 @@ export class JobsDashboardNewComponent implements OnInit, OnDestroy {
   dataSource: SciCatDataSource;
 
   constructor(
+    private cdRef: ChangeDetectorRef,
     private dataService: ScicatDataService,
     private exportService: ExportExcelService,
   ) { }
@@ -47,6 +48,10 @@ export class JobsDashboardNewComponent implements OnInit, OnDestroy {
       this.exportService,
       this.tableDefinition
     );
+  }
+
+  ngAfterViewChecked() {
+    this.cdRef.detectChanges();
   }
 
   ngOnDestroy() {
