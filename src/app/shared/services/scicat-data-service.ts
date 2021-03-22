@@ -4,7 +4,6 @@ import { Observable } from "rxjs";
 import { LoopBackAuth } from "shared/sdk";
 import * as moment from "moment";
 import { Column } from "shared/modules/shared-table/shared-table.module";
-import { filter } from "rxjs/operators";
 
 @Injectable({
   providedIn: "root",
