@@ -11,11 +11,14 @@ WORKDIR /catanie
 COPY package.json  /catanie
 RUN npm install
 COPY . /catanie/
+COPY CI/ALS/dev/environment.als-dev.ts src/environments/environment.als.ts
 RUN npx ng build --configuration=${env}
+
 
 FROM nginx:alpine
 RUN sed -i -e 's/^root::/root:!:/' /etc/shadow
 RUN rm -rf /usr/share/nginx/html/*
 COPY --from=builder /catanie/dist/ /usr/share/nginx/html
-COPY scripts/nginx.conf /etc/nginx/nginx.conf
+COPY CI/ALS/prod/nginx/nginx.conf /etc/nginx/nginx.conf
+
 EXPOSE 80

@@ -7,7 +7,7 @@ import { TableColumn } from "state-management/models";
 
 export const environment = {
   production: true,
-  lbBaseURL: "http://lb.scicat.development.svc.spin.nersc.org",
+  lbBaseURL: "http://localhost:3000",
   // fileserverBaseURL: "http://127.0.0.1:8889",
   // synapseBaseUrl: "https://scitest.esss.lu.se",
   // riotBaseUrl: "http://scitest.esss.lu.se/riot",
@@ -45,7 +45,7 @@ export const environment = {
   fileDownloadEnabled: false,
   multipleDownloadEnabled: false,
   maxDirectDownloadSize: 5000000000,
-  multipleDownloadAction: "http://lb.scicat.development.svc.spin.nersc.org/zip",
+  multipleDownloadAction: "https://dataportal.als.lbl.gov/zip",
   scienceSearchEnabled: false,
   searchProposals: true,
   searchPublicDataEnabled: true,

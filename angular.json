@@ -305,7 +305,7 @@
                 },
                 {
                   "replace": "src/assets/images/ess-site.png",
-                  "with": "CI/PSI/site.png"
+                  "with": "CI/ALS/images/als-site.png"
                 },
                 {
                   "replace": "src/assets/images/esslogo.png",

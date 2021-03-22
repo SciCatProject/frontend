@@ -1,7 +1,7 @@
 
 TAG    			:= $$(git describe --tags)
 REGISTRY		:= registry.nersc.gov
-PROJECT 		:= m3793
+PROJECT 		:= als
 REGISTRY_NAME	:= ${REGISTRY}/${PROJECT}/${IMG}
 
 NAME_CATANIE  	:= catanie
