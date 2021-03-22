@@ -216,6 +216,8 @@ export class SharedTableComponent implements AfterViewInit, AfterContentInit, On
     // copy default filters from column definitions to URL (which should trigger the filling of the GUI)
     this.columnsdef.forEach(col => {
       if ("sortDefault" in col) {
+        this.sort.active = col.id;
+        this.sort.direction = col.sortDefault;
         this.router.navigate([], {
           queryParams: { sortActive: this.sort.active, sortDirection: this.sort.direction },
           queryParamsHandling: "merge"

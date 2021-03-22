@@ -21,7 +21,7 @@
   </mat-paginator>
 </mat-toolbar>
 
-<mat-table #dataTable [dataSource]="dataSource" matSort multiTemplateDataRows>
+<mat-table #dataTable [dataSource]="dataSource" matSort matSortStart="desc" multiTemplateDataRows>
 
   <!-- Toggle Button Start -->
   <ng-container matColumnDef="trigger">

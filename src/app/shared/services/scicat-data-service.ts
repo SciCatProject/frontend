@@ -87,7 +87,16 @@ export class ScicatDataService {
         }
       });
     }
-    // console.log("Result of map:",result)
+    // add missing time range limits
+    Object.keys(result).forEach((key, index) => {
+      if ("begin" in result[key] && ! ("end" in result[key])) {
+        result[key].end="2099-12-31";
+      } else if ( !("begin" in result[key]) && ("end" in result[key])) {
+        result[key].begin="1970-01-01";
+      }
+    });
+    // console.log("Result of map after single syntax:",result)
+
     return result;
   };
 
