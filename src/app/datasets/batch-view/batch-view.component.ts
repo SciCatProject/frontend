@@ -74,8 +74,8 @@ export class BatchViewComponent implements OnInit {
     }
   }
 
-  remove(fruit: Share): void {
-    const index = this.shareEmails.indexOf(fruit);
+  remove(value: Share): void {
+    const index = this.shareEmails.indexOf(value);
 
     if (index >= 0) {
       this.shareEmails.splice(index, 1);
