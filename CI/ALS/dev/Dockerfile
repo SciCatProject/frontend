@@ -12,13 +12,9 @@ COPY package.json  /catanie
 RUN npm install
 COPY . /catanie/
 COPY CI/ALS/dev/environment.als-dev.ts src/environments/environment.als.ts
-RUN npx ng build --configuration=${env}
+# RUN npx ng build --configuration=${env}
+ENTRYPOINT ./node_modules/@angular/cli/bin/ng serve --host $HOST --port 80
 
 
-FROM nginx:alpine
-RUN sed -i -e 's/^root::/root:!:/' /etc/shadow
-RUN rm -rf /usr/share/nginx/html/*
-COPY --from=builder /catanie/dist/ /usr/share/nginx/html
-COPY CI/ALS/prod/nginx/nginx.conf /etc/nginx/nginx.conf
 
 EXPOSE 80
