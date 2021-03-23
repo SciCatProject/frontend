@@ -19,7 +19,7 @@ import { MatCardModule } from "@angular/material/card";
 import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatIconModule } from "@angular/material/icon";
 import { MatPaginatorModule } from "@angular/material/paginator";
-import { MatSortModule, SortDirection  } from "@angular/material/sort";
+import { MatSortModule, SortDirection } from "@angular/material/sort";
 import { MatTableModule } from "@angular/material/table";
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { MatFormFieldModule } from "@angular/material/form-field";
@@ -29,23 +29,24 @@ import { FlexLayoutModule } from "@angular/flex-layout";
 import { FormsModule } from "@angular/forms";
 import { ObjKeysPipe } from "shared/pipes/obj-keys.pipe";
 import { RouterModule } from "@angular/router";
-import { SatDatepickerModule, SatNativeDateModule } from "saturn-datepicker";
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
+import { MAT_MOMENT_DATE_FORMATS, MomentDateAdapter } from "@angular/material-moment-adapter";
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from "@angular/material/core";
 
 export interface Column {
-    id: string;
-    type?: string;
-    visible?: boolean;
-    label: string;
-    hideOrder: number;
-    width?: number;
-    canSort?: boolean;
-    matchMode?: string;
-    format?: string;
-    icon?: string;
-    sortDefault?: SortDirection;
-    filterDefault?: any;
+  id: string;
+  type?: string;
+  visible?: boolean;
+  label: string;
+  hideOrder: number;
+  width?: number;
+  canSort?: boolean;
+  matchMode?: string;
+  format?: string;
+  icon?: string;
+  sortDefault?: SortDirection;
+  filterDefault?: any;
 }
 
 @NgModule({
@@ -67,8 +68,6 @@ export interface Column {
     FlexLayoutModule,
     FormsModule,
     RouterModule,
-    SatDatepickerModule,
-    SatNativeDateModule,
     MatDatepickerModule
   ],
   exports: [SharedTableComponent],
@@ -84,6 +83,8 @@ export interface Column {
     SlicePipe,
     TitleCasePipe,
     UpperCasePipe,
-  ],
+    { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
+    { provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS },
+  ]
 })
-export class SharedTableModule {}
+export class SharedTableModule { }
