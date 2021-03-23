@@ -15,7 +15,7 @@ describe("ArchivingService", () => {
   let store: MockStore<JobsState>;
   let dispatchSpy: jasmine.Spy;
 
-  beforeEach(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       providers: [
         ArchivingService,
@@ -37,7 +37,7 @@ describe("ArchivingService", () => {
 
     service = TestBed.inject(ArchivingService);
     store = TestBed.inject(MockStore);
-  });
+  }));
 
   it("should be created", () => {
     expect(service).toBeTruthy();
