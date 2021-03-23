@@ -1,6 +1,6 @@
 import {
   Component, Input, ChangeDetectionStrategy, AfterContentInit, QueryList,
-  EventEmitter, Output, ElementRef, OnDestroy, ViewChild, ViewChildren, ChangeDetectorRef, NgZone, OnInit, AfterViewInit
+  EventEmitter, Output, ElementRef, OnDestroy, ViewChild, ViewChildren, ChangeDetectorRef, NgZone, OnInit, AfterViewInit, AfterViewChecked
 } from "@angular/core";
 import { ViewportRuler } from "@angular/cdk/scrolling";
 import { FormControl } from "@angular/forms";
@@ -32,7 +32,7 @@ import { Column } from "./shared-table.module";
     ]),
   ],
 })
-export class SharedTableComponent implements AfterViewInit, AfterContentInit, OnDestroy, OnInit {
+export class SharedTableComponent implements AfterViewChecked, AfterViewInit, AfterContentInit, OnDestroy, OnInit {
   private rulerSubscription: Subscription;
   public MIN_COLUMN_WIDTH = 200;
 
@@ -83,6 +83,10 @@ export class SharedTableComponent implements AfterViewInit, AfterContentInit, On
    */
 
   ngOnInit() {
+  }
+
+  ngAfterViewChecked() {
+    this._changeDetectorRef.detectChanges();
   }
 
   // link paginator and sort arrows to tables data source
