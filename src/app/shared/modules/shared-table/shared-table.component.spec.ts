@@ -63,7 +63,7 @@ describe("SharedTableComponent", () => {
       component.loadAllExportData();
 
       expect(loadSpy).toHaveBeenCalledOnceWith(
-        component.input.nativeElement.value,
+        component.globalFilter.nativeElement.value,
         component.filterExpressions,
         component.sort.active,
         component.sort.direction
@@ -78,7 +78,7 @@ describe("SharedTableComponent", () => {
       component.loadDataPage();
 
       expect(loadSpy).toHaveBeenCalledOnceWith(
-        component.input.nativeElement.value,
+        component.globalFilter.nativeElement.value,
         component.filterExpressions,
         component.sort.active,
         component.sort.direction,
