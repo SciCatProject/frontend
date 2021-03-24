@@ -47,7 +47,7 @@ export const environment = {
   maxDirectDownloadSize: 5000000000,
   metadataPreviewEnabled: true,
   multipleDownloadEnabled: true,
-  multipleDownloadAction: "http://http://192.168.20.51:3012/zip",
+  multipleDownloadAction: "http://192.168.20.51:3012/zip",
   scienceSearchEnabled: true,
   scienceSearchUnitsEnabled: true,
   searchProposals: true,
