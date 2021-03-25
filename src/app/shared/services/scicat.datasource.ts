@@ -7,6 +7,11 @@ import { environment } from "../../../environments/environment";
 import { LoopBackConfig } from "shared/sdk";
 
 // For each different table type one instance of this class should be created
+
+const resolvePath = (object, path, defaultValue) => path
+  .split(".")
+  .reduce((o, p) => o ? o[p] : defaultValue, object);
+
 export class SciCatDataSource implements DataSource<any> {
   private exportSubscription: Subscription;
   private dataForExcel = [];
@@ -19,6 +24,7 @@ export class SciCatDataSource implements DataSource<any> {
   public loading$ = this.loadingSubject.asObservable();
   public count$ = this.countSubject.asObservable();
   public collection = "";
+
 
   constructor(
     private scicatdataService: ScicatDataService,
@@ -39,7 +45,7 @@ export class SciCatDataSource implements DataSource<any> {
       this.dataForExcel = [];
       if (data.length > 0) {
         data.forEach((row: any) => {
-          const rowSorted = this.columnsdef.map((col) => row[col.id]);
+          const rowSorted = this.columnsdef.map((col) => resolvePath(row, col.id, null));
           this.dataForExcel.push(Object.values(rowSorted));
         });
         const reportData = {

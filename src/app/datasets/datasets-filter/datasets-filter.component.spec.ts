@@ -363,7 +363,7 @@ describe("DatasetsFilterComponent", () => {
   });
 
   describe("#showAddConditionDialog()", () => {
-    it("should open SearchParametersDialogComponent and dispatch an addScientificConditionAction and a selectColumnAction if dialog returns data", () => {
+    it("should open SearchParametersDialog, dispatch addScientificConditionAction and selectColumnAction if dialog returns data", () => {
       spyOn(component.dialog, "open").and.callThrough();
       dispatchSpy = spyOn(store, "dispatch");
 

@@ -1,14 +1,48 @@
-table {
-  td {
-    padding: 0.3em;
+@import "../../../theme.scss";
+
+mat-card {
+  margin: 1em;
+
+  mat-icon {
+    vertical-align: middle;
   }
 
-  th {
-    text-align: left;
-    padding-right: 0.5em;
+  .general-header {
+    background-color: mat-color($primary, lighter);
+  }
 
-    mat-icon {
-      vertical-align: middle;
+  .settings-header {
+    background-color: mat-color($navy, 400);
+  }
+
+  .section-icon {
+    height: auto !important;
+    width: auto !important;
+  }
+
+  .profile-image {
+    margin: 1em 0em;
+  }
+
+  table {
+    th {
+      min-width: 10em;
+      padding-right: 0.5em;
+      text-align: left;
+    }
+
+    td {
+      width: 100%;
+      padding: 0.5em;
+      display: inline-block;
+
+      .copy-button {
+        padding-left: 0.5em;
+      }
+
+      .copy-button:hover {
+        cursor: pointer;
+      }
     }
   }
 }

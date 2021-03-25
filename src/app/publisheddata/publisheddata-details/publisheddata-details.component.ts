@@ -48,8 +48,12 @@ export class PublisheddataDetailsComponent implements OnInit, OnDestroy {
     });
   }
 
+  ngOnDestroy() {
+    this.routeSubscription.unsubscribe();
+  }
+
   onRegisterClick(doi: string) {
-    this.store.dispatch(registerPublishedDataAction({ doi: doi }));
+    this.store.dispatch(registerPublishedDataAction({ doi }));
   }
 
   onEditClick() {
@@ -57,7 +61,7 @@ export class PublisheddataDetailsComponent implements OnInit, OnDestroy {
     this.router.navigateByUrl("/publishedDatasets/" + id + "/edit");
   }
 
-  ngOnDestroy() {
-    this.routeSubscription.unsubscribe();
+  isUrl(dataDescription: string): boolean {
+    return dataDescription.includes("http");
   }
 }

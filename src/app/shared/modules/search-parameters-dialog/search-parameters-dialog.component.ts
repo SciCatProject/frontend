@@ -56,14 +56,14 @@ export class SearchParametersDialogComponent {
       relation === "EQUAL_TO_STRING" ? String(rawRhs) : Number(rawRhs);
     this.parametersForm.patchValue({ rhs });
     this.dialogRef.close({ data: { lhs, relation, rhs, unit } });
-  }
+  };
 
   cancel = (): void => this.dialogRef.close();
 
   getUnits = (parameterKey: string): void => {
     this.units = this.unitsService.getUnits(parameterKey);
     this.toggleUnitField();
-  }
+  };
 
   toggleUnitField = (): void => {
     const lhsInvalid = this.parametersForm.get("lhs").invalid;
@@ -74,7 +74,7 @@ export class SearchParametersDialogComponent {
     if (lhsInvalid || isStringRelation) {
       unitField.disable();
     }
-  }
+  };
 
   isInvalid = (): boolean => {
     const { invalid } = this.parametersForm;
@@ -87,7 +87,7 @@ export class SearchParametersDialogComponent {
       return true;
     }
     return lhs.length * rhs.length === 0;
-  }
+  };
 
   get lhs(): string {
     return this.parametersForm.get("lhs").value;

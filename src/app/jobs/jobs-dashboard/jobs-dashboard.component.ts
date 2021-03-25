@@ -32,7 +32,7 @@ import * as rison from "rison";
 @Component({
   selector: "app-jobs-dashboard",
   templateUrl: "./jobs-dashboard.component.html",
-  styleUrls: ["./jobs-dashboard.component.scss"]
+  styleUrls: ["./jobs-dashboard.component.scss"],
 })
 export class JobsDashboardComponent implements OnInit, OnDestroy {
   jobsCount$ = this.store.pipe(select(getJobsCount));
@@ -45,7 +45,7 @@ export class JobsDashboardComponent implements OnInit, OnDestroy {
 
   subscriptions: Subscription[] = [];
 
-  modes = Object.keys(JobViewMode).map(key => JobViewMode[key]);
+  modes = Object.keys(JobViewMode).map((key) => JobViewMode[key]);
   currentMode = JobViewMode.myJobs;
 
   paginate = true;
@@ -55,21 +55,21 @@ export class JobsDashboardComponent implements OnInit, OnDestroy {
       name: "initiator",
       icon: "mail",
       sort: true,
-      inList: true
+      inList: true,
     },
     { name: "type", icon: "bubble_chart", sort: true, inList: true },
     {
       name: "createdAt",
       icon: "brightness_high",
       sort: true,
-      inList: true
+      inList: true,
     },
     {
       name: "statusMessage",
       icon: "comment",
       sort: true,
-      inList: true
-    }
+      inList: true,
+    },
   ];
 
   constructor(
@@ -80,23 +80,21 @@ export class JobsDashboardComponent implements OnInit, OnDestroy {
 
   formatTableData(jobs: Job[]): any[] {
     if (jobs) {
-      return jobs.map(job => {
-        return {
-          id: job.id,
-          initiator: job.emailJobInitiator,
-          type: job.type,
-          createdAt: this.datePipe.transform(
-            job.creationTime,
-            "yyyy-MM-dd HH:mm"
-          ),
-          statusMessage: job.jobStatusMessage
-        };
-      });
+      return jobs.map((job) => ({
+        id: job.id,
+        initiator: job.emailJobInitiator,
+        type: job.type,
+        createdAt: this.datePipe.transform(
+          job.creationTime,
+          "yyyy-MM-dd HH:mm"
+        ),
+        statusMessage: job.jobStatusMessage,
+      }));
     }
   }
 
   onModeChange(event: any, mode: JobViewMode) {
-    let viewMode: object;
+    let viewMode: Record<string, unknown>;
     switch (mode) {
       case JobViewMode.allJobs: {
         viewMode = null;
@@ -147,18 +145,18 @@ export class JobsDashboardComponent implements OnInit, OnDestroy {
     this.store.dispatch(fetchJobsAction());
 
     this.subscriptions.push(
-      this.store.pipe(select(getJobs)).subscribe(jobs => {
+      this.store.pipe(select(getJobs)).subscribe((jobs) => {
         this.jobs = this.formatTableData(jobs);
       })
     );
 
     this.subscriptions.push(
-      this.store.pipe(select(getCurrentUser)).subscribe(current => {
+      this.store.pipe(select(getCurrentUser)).subscribe((current) => {
         if (current) {
           this.email = current.email;
 
           if (!current.realm) {
-            this.store.pipe(select(getProfile)).subscribe(profile => {
+            this.store.pipe(select(getProfile)).subscribe((profile) => {
               if (profile) {
                 this.profile = profile;
                 this.email = profile.email;
@@ -173,15 +171,15 @@ export class JobsDashboardComponent implements OnInit, OnDestroy {
     );
 
     this.subscriptions.push(
-      this.store.pipe(select(getFilters)).subscribe(filters => {
+      this.store.pipe(select(getFilters)).subscribe((filters) => {
         this.router.navigate(["/user/jobs"], {
-          queryParams: { args: rison.encode(filters) }
+          queryParams: { args: rison.encode(filters) },
         });
       })
     );
   }
 
   ngOnDestroy() {
-    this.subscriptions.forEach(subscription => subscription.unsubscribe());
+    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
 }

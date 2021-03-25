@@ -9,7 +9,7 @@ import { provideMockStore } from "@ngrx/store/testing";
 import { getFilters } from "state-management/selectors/instruments.selectors";
 import {
   loadingAction,
-  loadingCompleteAction
+  loadingCompleteAction,
 } from "state-management/actions/user.actions";
 import { Type } from "@angular/core";
 
@@ -27,28 +27,27 @@ describe("InstrumentEffects", () => {
           selectors: [
             {
               selector: getFilters,
-              value: { sortField: "test asc", skip: 0, limit: 25 }
-            }
-          ]
+              value: { sortField: "test asc", skip: 0, limit: 25 },
+            },
+          ],
         }),
         {
           provide: InstrumentApi,
           useValue: jasmine.createSpyObj("instrumentApi", [
             "find",
             "findById",
-            "patchAttributes"
-          ])
-        }
-      ]
+            "patchAttributes",
+          ]),
+        },
+      ],
     });
 
     effects = TestBed.inject(InstrumentEffects);
     instrumentApi = injectedStub(InstrumentApi);
   });
 
-  function injectedStub<S>(service: Type<S>): jasmine.SpyObj<S> {
-    return TestBed.inject(service) as jasmine.SpyObj<S>;
-  }
+  const injectedStub = <S>(service: Type<S>): jasmine.SpyObj<S> =>
+    TestBed.inject(service) as jasmine.SpyObj<S>;
 
   describe("fetchInstruments$", () => {
     describe("ofType fetchInstrumentAction", () => {
@@ -56,7 +55,7 @@ describe("InstrumentEffects", () => {
         const instruments = [new Instrument()];
         const action = fromActions.fetchInstrumentsAction();
         const outcome1 = fromActions.fetchInstrumentsCompleteAction({
-          instruments
+          instruments,
         });
         const outcome2 = fromActions.fetchCountAction();
 
@@ -89,7 +88,7 @@ describe("InstrumentEffects", () => {
         const instruments = [new Instrument()];
         const action = fromActions.changePageAction({ page, limit });
         const outcome1 = fromActions.fetchInstrumentsCompleteAction({
-          instruments
+          instruments,
         });
         const outcome2 = fromActions.fetchCountAction();
 
@@ -121,7 +120,7 @@ describe("InstrumentEffects", () => {
         const instruments = [new Instrument()];
         const action = fromActions.changePageAction({ page, limit });
         const outcome1 = fromActions.fetchInstrumentsCompleteAction({
-          instruments
+          instruments,
         });
         const outcome2 = fromActions.fetchCountAction();
 
@@ -154,7 +153,7 @@ describe("InstrumentEffects", () => {
         const instruments = [new Instrument()];
         const action = fromActions.sortByColumnAction({ column, direction });
         const outcome1 = fromActions.fetchInstrumentsCompleteAction({
-          instruments
+          instruments,
         });
         const outcome2 = fromActions.fetchCountAction();
 
@@ -185,7 +184,7 @@ describe("InstrumentEffects", () => {
       const instruments = [new Instrument()];
       const action = fromActions.fetchCountAction();
       const outcome = fromActions.fetchCountCompleteAction({
-        count: instruments.length
+        count: instruments.length,
       });
 
       actions = hot("-a", { a: action });
@@ -246,10 +245,10 @@ describe("InstrumentEffects", () => {
       const instrument = new Instrument();
       const action = fromActions.saveCustomMetadataAction({
         pid,
-        customMetadata
+        customMetadata,
       });
       const outcome = fromActions.saveCustomMetadataCompleteAction({
-        instrument
+        instrument,
       });
 
       actions = hot("-a", { a: action });
@@ -263,7 +262,7 @@ describe("InstrumentEffects", () => {
     it("should result in a saveCustomMetadataFailedAction", () => {
       const action = fromActions.saveCustomMetadataAction({
         pid,
-        customMetadata
+        customMetadata,
       });
       const outcome = fromActions.saveCustomMetadataFailedAction();
 
@@ -320,7 +319,7 @@ describe("InstrumentEffects", () => {
         const customMetadata = {};
         const action = fromActions.saveCustomMetadataAction({
           pid,
-          customMetadata
+          customMetadata,
         });
         const outcome = loadingAction();
 
@@ -337,7 +336,7 @@ describe("InstrumentEffects", () => {
       it("should dispatch a loadingCompleteAction", () => {
         const instruments = [new Instrument()];
         const action = fromActions.fetchInstrumentsCompleteAction({
-          instruments
+          instruments,
         });
         const outcome = loadingCompleteAction();
 
@@ -389,7 +388,7 @@ describe("InstrumentEffects", () => {
       it("should dispatch a loadingCompleteAction", () => {
         const instrument = new Instrument();
         const action = fromActions.fetchInstrumentCompleteAction({
-          instrument
+          instrument,
         });
         const outcome = loadingCompleteAction();
 
@@ -416,7 +415,7 @@ describe("InstrumentEffects", () => {
       it("should dispatch a loadingCompleteAction", () => {
         const instrument = new Instrument();
         const action = fromActions.saveCustomMetadataCompleteAction({
-          instrument
+          instrument,
         });
         const outcome = loadingCompleteAction();
 

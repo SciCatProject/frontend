@@ -18,9 +18,8 @@ import { PipesModule } from "../../pipes/pipes.module";
 import { MatCardModule } from "@angular/material/card";
 import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatIconModule } from "@angular/material/icon";
-import { MatListModule } from "@angular/material/list";
 import { MatPaginatorModule } from "@angular/material/paginator";
-import { MatSortModule } from "@angular/material/sort";
+import { MatSortModule, SortDirection } from "@angular/material/sort";
 import { MatTableModule } from "@angular/material/table";
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { MatFormFieldModule } from "@angular/material/form-field";
@@ -30,9 +29,25 @@ import { FlexLayoutModule } from "@angular/flex-layout";
 import { FormsModule } from "@angular/forms";
 import { ObjKeysPipe } from "shared/pipes/obj-keys.pipe";
 import { RouterModule } from "@angular/router";
-import { SatDatepickerModule, SatNativeDateModule } from "saturn-datepicker";
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
+import { MAT_MOMENT_DATE_FORMATS, MomentDateAdapter } from "@angular/material-moment-adapter";
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from "@angular/material/core";
+
+export interface Column {
+  id: string;
+  type?: string;
+  visible?: boolean;
+  label: string;
+  hideOrder: number;
+  width?: number;
+  canSort?: boolean;
+  matchMode?: string;
+  format?: string;
+  icon?: string;
+  sortDefault?: SortDirection;
+  filterDefault?: any;
+}
 
 @NgModule({
   declarations: [SharedTableComponent],
@@ -41,7 +56,6 @@ import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
     MatCardModule,
     MatCheckboxModule,
     MatIconModule,
-    MatListModule,
     MatPaginatorModule,
     MatSortModule,
     MatProgressSpinnerModule,
@@ -54,8 +68,6 @@ import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
     FlexLayoutModule,
     FormsModule,
     RouterModule,
-    SatDatepickerModule,
-    SatNativeDateModule,
     MatDatepickerModule
   ],
   exports: [SharedTableComponent],
@@ -71,6 +83,8 @@ import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
     SlicePipe,
     TitleCasePipe,
     UpperCasePipe,
-  ],
+    { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
+    { provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS },
+  ]
 })
-export class SharedTableModule {}
+export class SharedTableModule { }

@@ -7,37 +7,57 @@
     <div fxLayout="row" fxLayout.xs="column">
       <div fxFlex="80%">
         <mat-card>
-          <mat-card-header class="about-header">
-            Sample Details
+          <mat-card-header class="general-header">
+            <div mat-card-avatar class="section-icon">
+              <mat-icon> description </mat-icon>
+            </div>
+            General Information
           </mat-card-header>
-          <div class="details">
-            <table>
-              <tr *ngIf="sample.description as value">
-                <th><mat-icon> description </mat-icon>Description</th>
-                <td>{{ value }}</td>
-              </tr>
-              <tr *ngIf="sample.createdAt as value">
-                <th><mat-icon> event </mat-icon>Creation Time</th>
-                <td>{{ value | date: "yyyy-MM-dd HH:mm" }}</td>
-              </tr>
-              <tr *ngIf="sample.owner as value">
-                <th><mat-icon> person </mat-icon>Sample Owner</th>
-                <td>{{ value }}</td>
-              </tr>
-              <tr *ngIf="sample.ownerGroup as value">
-                <th><mat-icon> group </mat-icon>Owner Group</th>
-                <td>{{ value }}</td>
-              </tr>
-              <tr *ngIf="sample.sampleId as value">
-                <th><mat-icon> fingerprint </mat-icon>Sample ID</th>
-                <td>{{ value }}</td>
-              </tr>
-            </table>
-          </div>
+          <table>
+            <tr *ngIf="sample.description as value">
+              <th>Description</th>
+              <td>{{ value }}</td>
+            </tr>
+            <tr *ngIf="sample.sampleId as value">
+              <th>Sample ID</th>
+              <td>{{ value }}</td>
+            </tr>
+            <tr *ngIf="sample.createdAt as value">
+              <th>Creation Time</th>
+              <td>{{ value | date: "yyyy-MM-dd HH:mm" }}</td>
+            </tr>
+          </table>
+        </mat-card>
+
+        <mat-card>
+          <mat-card-header class="creator-header">
+            <div mat-card-avatar class="section-icon">
+              <mat-icon> person </mat-icon>
+              Creator Information
+            </div>
+          </mat-card-header>
+
+          <table>
+            <tr *ngIf="sample.owner as value">
+              <th>Sample Owner</th>
+              <td>{{ value }}</td>
+            </tr>
+            <tr *ngIf="sample.ownerGroup as value">
+              <th>Owner Group</th>
+              <td>{{ value }}</td>
+            </tr>
+            <tr *ngIf="sample.accessGroups as value">
+              <th>Access Groups</th>
+              <td>{{ value }}</td>
+            </tr>
+          </table>
         </mat-card>
 
         <mat-card *ngIf="sample.sampleCharacteristics as value">
           <mat-card-header class="characteristics-header">
+            <div mat-card-avatar class="section-icon">
+              <mat-icon> science </mat-icon>
+            </div>
             Characteristics
           </mat-card-header>
 

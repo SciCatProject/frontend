@@ -9,9 +9,9 @@
       [searchBarValue]="textFilter$ | async"
       [clearSearchBar]="clearSearchBar"
       [dateRangeValue]="dateRangeFilter$ | async"
-      (onClear)="onClear()"
-      (onSearchChange)="onTextSearchChange($event)"
-      (onDateChange)="onDateChange($event)"
+      (clear)="onClear()"
+      (searchChange)="onTextSearchChange($event)"
+      (dateChange)="onDateChange($event)"
     ></proposal-filter>
   </div>
   <ng-template #spacer>

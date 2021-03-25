@@ -1,4 +1,4 @@
-FROM node:12.6.0-alpine as builder
+FROM node:14-alpine as builder
 RUN sed -i -e 's/^root::/root:!:/' /etc/shadow
 RUN apk update && apk upgrade && \
     apk add --no-cache bash git openssh
@@ -10,6 +10,8 @@ WORKDIR /catanie
 COPY package*.json  /catanie/
 RUN npm ci
 COPY . /catanie/
+# Site image needs to be copied to assets before building
+COPY CI/MAXIV/maxiv-site.png /catanie/src/assets/images/site.png
 COPY CI/MAXIV/maxiv-theme.scss src/theme.scss
 RUN npx ng build --configuration=${env}
 

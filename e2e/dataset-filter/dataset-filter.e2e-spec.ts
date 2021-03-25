@@ -3,11 +3,11 @@ import { browser, by, element } from "protractor";
 import { DashboardPage } from "../dashboard/dashboard.po";
 import { LoginPage } from "../login/login.po";
 
-describe("catanie Dataset Filters", function() {
+describe("catanie Dataset Filters", () => {
   let lp: LoginPage;
   let page: DashboardPage;
   const urlParams =
-  // tslint:disable-next-line:max-line-length
+  // eslint-disable-next-line max-len
     "/datasets?args=(creationLocation:!(),creationTime:(end:!n,start:!n),keywords:!(),limit:30,mode:view,ownerGroup:!(p11114),skip:0,sortField:!n,text:house,type:!())";
 
   beforeAll(() => {

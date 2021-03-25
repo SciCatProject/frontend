@@ -1,6 +1,6 @@
 import { LoginPage } from "./login.po";
 import { browser, element, by } from "protractor";
-describe("catanie Login", function() {
+describe("catanie Login", () => {
   let lp: LoginPage;
 
   beforeAll(() => {

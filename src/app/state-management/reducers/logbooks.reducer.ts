@@ -22,13 +22,15 @@ const reducer = createReducer(
     const currentLogbook = formatImageUrls(logbook);
     return { ...state, currentLogbook };
   }),
-  on(fromActions.fetchLogbookFailedAction, (state) => {
-    return { ...state, currentLogbook: null };
-  }),
+  on(fromActions.fetchLogbookFailedAction, (state) => ({
+    ...state,
+    currentLogbook: null,
+  })),
 
-  on(fromActions.clearLogbookAction, (state) => {
-    return { ...state, currentLogbook: null };
-  }),
+  on(fromActions.clearLogbookAction, (state) => ({
+    ...state,
+    currentLogbook: null,
+  })),
 
   on(fromActions.fetchCountCompleteAction, (state, { count }) => ({
     ...state,
@@ -74,17 +76,17 @@ const reducer = createReducer(
   on(fromActions.clearLogbooksStateAction, () => ({ ...initialLogbookState }))
 );
 
-export function logbooksReducer(
+export const logbooksReducer = (
   state: LogbookState | undefined,
   action: Action
-) {
+) => {
   if (action.type.indexOf("[Logbook]") !== -1) {
     console.log("Action came in! " + action.type);
   }
   return reducer(state, action);
-}
+};
 
-export function formatImageUrls(logbook: Logbook): Logbook {
+export const formatImageUrls = (logbook: Logbook): Logbook => {
   if (logbook && logbook.messages) {
     logbook.messages.forEach((message) => {
       if (message.content.msgtype === "m.image") {
@@ -109,4 +111,4 @@ export function formatImageUrls(logbook: Logbook): Logbook {
     });
   }
   return logbook;
-}
+};

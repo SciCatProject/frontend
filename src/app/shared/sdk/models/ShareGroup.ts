@@ -1,4 +1,4 @@
-/* tslint:disable */
+/* eslint-disable */
 
 declare var Object: any;
 export interface ShareGroupInterface {

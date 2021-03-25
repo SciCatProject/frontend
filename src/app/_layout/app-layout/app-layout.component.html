@@ -1,6 +1,6 @@
 <div
   [class.dark-theme]="darkTheme$ | async"
-  [class.light-theme]="!(darkTheme$ | async)"
+  [class.light-theme]="(darkTheme$ | async) === false"
 >
   <app-app-header></app-app-header>
   <div class="main">

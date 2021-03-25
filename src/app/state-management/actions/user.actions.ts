@@ -79,7 +79,7 @@ export const fetchUserSettingsFailedAction = createAction(
 
 export const updateUserSettingsAction = createAction(
   "[User] Update User Settings",
-  props<{ property: object }>()
+  props<{ property: Record<string, unknown> }>()
 );
 export const updateUserSettingsCompleteAction = createAction(
   "[User] Update User Settings Complete",

@@ -30,7 +30,7 @@ export interface DatasetState {
 
   batch: Dataset[];
 
-  openwhiskResult: object;
+  openwhiskResult: Record<string, unknown>;
 }
 
 export const initialDatasetState: DatasetState = {

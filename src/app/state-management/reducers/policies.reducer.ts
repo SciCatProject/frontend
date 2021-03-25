@@ -82,12 +82,12 @@ const reducer = createReducer(
   on(fromActions.clearPoliciesStateAction, () => ({ ...initialPolicyState }))
 );
 
-export function policiesReducer(
+export const policiesReducer = (
   state: PolicyState | undefined,
   action: Action
-) {
+) => {
   if (action.type.indexOf("[Policy]") !== -1) {
     console.log("Action came in! " + action.type);
   }
   return reducer(state, action);
-}
+};

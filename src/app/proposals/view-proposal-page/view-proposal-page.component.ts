@@ -27,7 +27,7 @@ import { APP_CONFIG, AppConfig } from "app-config.module";
 @Component({
   selector: "view-proposal-page",
   templateUrl: "view-proposal-page.component.html",
-  styleUrls: ["view-proposal-page.component.scss"]
+  styleUrls: ["view-proposal-page.component.scss"],
 })
 export class ViewProposalPageComponent implements OnInit, OnDestroy {
   currentPage$ = this.store.pipe(select(getDatasetsPage));
@@ -46,7 +46,7 @@ export class ViewProposalPageComponent implements OnInit, OnDestroy {
     { name: "size", icon: "save", sort: false, inList: true },
     { name: "creationTime", icon: "calendar_today", sort: false, inList: true },
     { name: "owner", icon: "face", sort: false, inList: true },
-    { name: "location", icon: "explore", sort: false, inList: true }
+    { name: "location", icon: "explore", sort: false, inList: true },
   ];
 
   constructor(
@@ -61,21 +61,19 @@ export class ViewProposalPageComponent implements OnInit, OnDestroy {
 
   formatTableData(datasets: Dataset[]): any[] {
     if (datasets) {
-      return datasets.map((dataset: any) => {
-        return {
-          pid: dataset.pid,
-          name: dataset.datasetName,
-          sourceFolder:
-            "..." + this.slicePipe.transform(dataset.sourceFolder, -14),
-          size: this.filesizePipe.transform(dataset.size),
-          creationTime: this.datePipe.transform(
-            dataset.creationTime,
-            "yyyy-MM-dd HH:mm"
-          ),
-          owner: dataset.owner,
-          location: dataset.creationLocation
-        };
-      });
+      return datasets.map((dataset: any) => ({
+        pid: dataset.pid,
+        name: dataset.datasetName,
+        sourceFolder:
+          "..." + this.slicePipe.transform(dataset.sourceFolder, -14),
+        size: this.filesizePipe.transform(dataset.size),
+        creationTime: this.datePipe.transform(
+          dataset.creationTime,
+          "yyyy-MM-dd HH:mm"
+        ),
+        owner: dataset.owner,
+        location: dataset.creationLocation,
+      }));
     }
   }
 
@@ -95,7 +93,7 @@ export class ViewProposalPageComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.subscriptions.push(
-      this.store.pipe(select(getCurrentProposal)).subscribe(proposal => {
+      this.store.pipe(select(getCurrentProposal)).subscribe((proposal) => {
         if (proposal) {
           this.proposal = proposal;
           if (this.appConfig.logbookEnabled) {
@@ -108,7 +106,7 @@ export class ViewProposalPageComponent implements OnInit, OnDestroy {
     );
 
     this.subscriptions.push(
-      this.route.params.subscribe(params => {
+      this.route.params.subscribe((params) => {
         this.store.dispatch(fetchProposalAction({ proposalId: params.id }));
         this.store.dispatch(
           fetchProposalDatasetsAction({ proposalId: params.id })
@@ -117,13 +115,13 @@ export class ViewProposalPageComponent implements OnInit, OnDestroy {
     );
 
     this.subscriptions.push(
-      this.store.pipe(select(getProposalDatasets)).subscribe(datasets => {
+      this.store.pipe(select(getProposalDatasets)).subscribe((datasets) => {
         this.tableData = this.formatTableData(datasets);
       })
     );
   }
 
   ngOnDestroy() {
-    this.subscriptions.forEach(subscription => subscription.unsubscribe());
+    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
 }

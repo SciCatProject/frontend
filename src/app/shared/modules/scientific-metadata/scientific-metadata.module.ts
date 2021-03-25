@@ -37,7 +37,14 @@ import { FlexModule } from "@angular/flex-layout";
 })
 export class ScientificMetadataModule {}
 
-export interface ScientificMetaData {
+export interface ScientificMetadata {
+  value: string | number;
+  unit: string;
+  valueSI?: number;
+  unitSI?: string;
+}
+
+export interface ScientificMetadataTableData {
   name: string;
   value: string | number;
   unit: string;

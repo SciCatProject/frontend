@@ -1,8 +1,9 @@
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { Observable } from "rxjs";
-import { Column } from "../column.type";
 import { LoopBackAuth } from "shared/sdk";
+import * as moment from "moment";
+import { Column } from "shared/modules/shared-table/shared-table.module";
 
 @Injectable({
   providedIn: "root",
@@ -20,50 +21,85 @@ export class ScicatDataService {
   }
 
   // TODO when do I need to use "mode" syntax (may be for nested keys ?)
-  mapToMongoSyntax(columns: Column[], filterExpressions: any) {
-    // console.log("Filterexpressions:",filterExpressions)
+  createColumnFilterMongoExpression = (columns: Column[], filterExpressions: any) => {
     const result = {};
     if (filterExpressions) {
-      Object.keys(filterExpressions).forEach(function (key, index) {
+      const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      let blocal: moment.Moment;
+      let elocal: moment.Moment;
+      let columnkey: string;
+      Object.keys(filterExpressions).forEach((key, index) => {
         if (filterExpressions[key] !== "") {
-          const column = columns.find((c) => c.id === key);
-          // TODO extend by further filter conditions
-          switch (column.matchMode) {
-            case "contains": {
-              result[key] = { $regex: filterExpressions[key], $options: "i" };
-              break;
-            }
-            case "greaterThan": {
-              result[key] = { $gt: Number(filterExpressions[key]) };
-              break;
-            }
-            case "lessThan": {
-              result[key] = { $lt: Number(filterExpressions[key]) };
-              break;
-            }
-            case "after": {
-              result[key] = { $gte: filterExpressions[key] };
-              break;
-            }
-            case "between": {
-              result[key] = filterExpressions[key];
-              break;
-            }
-            case "is": {
-              result[key] = filterExpressions[key];
-              break;
-            }
-            default: {
-              result[key] = { $regex: filterExpressions[key], $options: "i" };
-              break;
+          columnkey = key;
+          if (key.endsWith(".start")) {
+            columnkey = key.slice(0, -6);
+          }
+          if (key.endsWith(".end")) {
+            columnkey = key.slice(0, -4);
+          }
+          const column = columns.find((c) => c.id === columnkey);
+          // All non-column conditions are ignored here
+          if (column) {
+            switch (column.matchMode) {
+              case "contains": {
+                result[key] = { $regex: filterExpressions[key], $options: "i" };
+                break;
+              }
+              case "greaterThan": {
+                result[key] = { $gt: Number(filterExpressions[key]) };
+                break;
+              }
+              case "lessThan": {
+                result[key] = { $lt: Number(filterExpressions[key]) };
+                break;
+              }
+              case "after": {
+                result[key] = { $gte: filterExpressions[key] };
+                break;
+              }
+              case "between": {
+                // TODO: is between always date related (assume this for now)
+                // convert to UTC and add one day to end expression
+                if (!(columnkey in result)) {
+                  result[columnkey] = {};
+                }
+                if (key.endsWith(".start")) {
+                  blocal = moment.tz(filterExpressions[key], tz);
+                  result[columnkey]["begin"] = blocal.toISOString();
+                }
+                if (key.endsWith(".end")) {
+                  elocal = moment.tz(filterExpressions[key], tz).add(1, "days");
+                  result[columnkey]["end"] = elocal.toISOString();
+                }
+                break;
+              }
+              case "is": {
+                result[key] = filterExpressions[key];
+                break;
+              }
+              default: {
+                result[key] = { $regex: filterExpressions[key], $options: "i" };
+                break;
+              }
             }
           }
         }
       });
     }
-    // console.log("Result of map:",result)
+    // add missing time range limits
+    Object.keys(result).forEach((key, index) => {
+      if (typeof result[key] === "object") {
+        if ("begin" in result[key] && !("end" in result[key])) {
+          result[key].end = "2099-12-31";
+        } else if (!("begin" in result[key]) && ("end" in result[key])) {
+          result[key].begin = "1970-01-01";
+        }
+      }
+    });
+    // console.log("Result of map after single syntax:",result)
+
     return result;
-  }
+  };
 
   findAllData(
     url: string,
@@ -91,7 +127,7 @@ export class ScicatDataService {
     // limits	{"skip":0,"limit":50,"order":"creationTime:desc"}
 
     // ("findalldata:", filterExpressions)
-    const mongoExpression = this.mapToMongoSyntax(columns, filterExpressions);
+    const mongoExpression = this.createColumnFilterMongoExpression(columns, filterExpressions);
     const filterFields = { ...mongoExpression };
 
     if (globalFilter !== "") {
@@ -103,14 +139,11 @@ export class ScicatDataService {
       limits["order"] = sortField + ":" + sortOrder;
     }
 
-    // console.log("Fields:", filterFields)
-    // console.log("Limits:", limits)
-
     const params = new HttpParams()
       .set("fields", JSON.stringify(filterFields))
       .set("limits", JSON.stringify(limits))
       .append("access_token", this.accessToken);
-    return this.http.get<any[]>(`${url}/fullquery`, { params: params });
+    return this.http.get<any[]>(`${url}/fullquery`, { params });
   }
 
   // use fullfacets instead of count to allow for more complex filters. facet "all" is default I assume
@@ -123,7 +156,7 @@ export class ScicatDataService {
     filterExpressions?: any
   ): Observable<any> {
 
-    const mongoExpression = this.mapToMongoSyntax(columns, filterExpressions);
+    const mongoExpression = this.createColumnFilterMongoExpression(columns, filterExpressions);
     const filterFields = { ...mongoExpression };
 
     if (globalFilter !== "") {
@@ -134,6 +167,6 @@ export class ScicatDataService {
       .set("facets", JSON.stringify([]))
       .append("access_token", this.accessToken);
 
-    return this.http.get<any>(`${url}/fullfacet`, { params: params });
+    return this.http.get<any>(`${url}/fullfacet`, { params });
   }
 }

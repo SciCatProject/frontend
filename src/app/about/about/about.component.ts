@@ -12,7 +12,7 @@ export class AboutComponent implements OnInit {
   SciCatDevopsDocIO: string;
   aboutText: string;
   accessText: string;
-  termsTextContinued: String;
+  termsTextContinued: string;
   termsText: string;
   SNFLink: string;
   PSIDataPolicy: string;

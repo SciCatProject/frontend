@@ -3,12 +3,15 @@
     <ng-container *ngIf="dataset">
       <mat-card>
         <mat-card-header class="lifecycle-header">
+          <div mat-card-avatar class="section-icon">
+            <mat-icon> update </mat-icon>
+          </div>
           Lifecycle
         </mat-card-header>
         <div class="details">
           <table class="lifecycle-table" *ngIf="dataset.datasetlifecycle">
             <tr *ngIf="dataset.creationTime as value">
-              <th><mat-icon> calendar_today </mat-icon> Creation Date</th>
+              <th>Creation Date</th>
               <td>{{ value | date: "yyyy-MM-dd" }}</td>
             </tr>
             <tr
@@ -17,7 +20,7 @@
                 dataset.datasetlifecycle.dateOfPublishing as value
               "
             >
-              <th><mat-icon> radio </mat-icon> End of Embargo Period</th>
+              <th>End of Embargo Period</th>
               <td>{{ value | date: "yyyy-MM-dd" }}</td>
             </tr>
             <tr
@@ -26,7 +29,7 @@
                 dataset.datasetlifecycle.publishedOn as value
               "
             >
-              <th><mat-icon> event_available </mat-icon> Publication Date</th>
+              <th>Publication Date</th>
               <td>{{ value | date: "yyyy-MM-dd" }}</td>
             </tr>
             <tr
@@ -35,7 +38,7 @@
                 dataset.datasetlifecycle.dateOfDiskPurging as value
               "
             >
-              <th><mat-icon> gavel </mat-icon> Data Deletion Date</th>
+              <th>Data Deletion Date</th>
               <td>{{ value | date: "yyyy-MM-dd" }}</td>
             </tr>
             <tr
@@ -44,7 +47,7 @@
                 dataset.datasetlifecycle.archiveRetentionTime as value
               "
             >
-              <th><mat-icon> save </mat-icon> Archive Retention Date</th>
+              <th>Archive Retention Date</th>
               <td>{{ value | date: "yyyy-MM-dd" }}</td>
             </tr>
           </table>
@@ -53,6 +56,9 @@
 
       <mat-card *ngIf="historyItemsCount > 0">
         <mat-card-header class="history-header">
+          <div mat-card-avatar class="section-icon">
+            <mat-icon> history </mat-icon>
+          </div>
           History
         </mat-card-header>
 

@@ -1,5 +1,5 @@
 FROM node:14-alpine as builder
-LABEL maintainer="gareth.murphy@esss.se"
+LABEL maintainer="henrik.johansson@ess.eu"
 RUN sed -i -e 's/^root::/root:!:/' /etc/shadow
 RUN apk update && apk upgrade && \
     apk add --no-cache bash git openssh
@@ -11,6 +11,8 @@ WORKDIR /catanie
 COPY package*.json  /catanie/
 RUN npm ci
 COPY . /catanie/
+# Site image needs to be copied to assets before building
+COPY CI/ESS/site.png /catanie/src/assets/images/site.png
 RUN npx ng build --configuration=${env}
 
 FROM nginx:alpine

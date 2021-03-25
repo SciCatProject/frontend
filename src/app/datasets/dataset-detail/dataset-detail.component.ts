@@ -30,7 +30,7 @@ export class DatasetDetailComponent {
   @Output() removeKeyword = new EventEmitter<string>();
   @Output() clickProposal = new EventEmitter<string>();
   @Output() clickSample = new EventEmitter<string>();
-  @Output() saveMetadata = new EventEmitter<object>();
+  @Output() saveMetadata = new EventEmitter<Record<string, unknown>>();
   @Output() sampleChange = new EventEmitter<Sample>();
 
   editEnabled: boolean;
@@ -92,7 +92,7 @@ export class DatasetDetailComponent {
       });
   }
 
-  onSaveMetadata(metadata: object) {
+  onSaveMetadata(metadata: Record<string, any>) {
     this.saveMetadata.emit(metadata);
   }
 }

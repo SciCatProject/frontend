@@ -313,12 +313,12 @@ const reducer = createReducer(
   })
 );
 
-export function datasetsReducer(
+export const datasetsReducer = (
   state: DatasetState | undefined,
   action: Action
-) {
+) => {
   if (action.type.indexOf("[Dataset]") !== -1) {
     console.log("Action came in! " + action.type);
   }
   return reducer(state, action);
-}
+};

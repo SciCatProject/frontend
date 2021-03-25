@@ -8,7 +8,7 @@ import { DatasetsModule } from "datasets/datasets.module";
 import { EffectsModule } from "@ngrx/effects";
 import { FlexLayoutModule } from "@angular/flex-layout";
 import { HttpClientModule } from "@angular/common/http";
-import { NgModule } from "@angular/core";
+import { NgModule} from "@angular/core";
 import { PoliciesModule } from "policies/policies.module";
 import { ProposalsModule } from "proposals/proposals.module";
 import { RouterModule } from "@angular/router";
@@ -84,7 +84,10 @@ import { FilesModule } from "files/files.module";
       }
     ),
     extModules,
-    RouterModule.forRoot(routes, { useHash: false }),
+    RouterModule.forRoot(routes, {
+      useHash: false,
+      relativeLinkResolution: "legacy",
+    }),
     EffectsModule.forRoot([]),
     ServiceWorkerModule.register("ngsw-worker.js", {
       enabled: environment.production,
@@ -94,4 +97,4 @@ import { FilesModule } from "files/files.module";
   providers: [UserApi, SampleApi, Title, MatNativeDateModule],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }

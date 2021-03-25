@@ -35,8 +35,7 @@ export const getIsAdmin = createSelector(
   getCurrentUserName,
   getCurrentUserAccountType,
   (name, type) =>
-    (name && ["ingestor", "admin", "archiveManager"].indexOf(name) !== -1) ||
-    (type && type === "functional")
+    (name && ["admin", "archiveManager"].indexOf(name) !== -1)
 );
 
 export const getCatamelToken = createSelector(

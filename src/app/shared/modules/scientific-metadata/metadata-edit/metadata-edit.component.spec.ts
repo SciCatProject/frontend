@@ -13,19 +13,21 @@ describe("MetadataEditComponent", () => {
   let component: MetadataEditComponent;
   let fixture: ComponentFixture<MetadataEditComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      schemas: [NO_ERRORS_SCHEMA],
-      declarations: [MetadataEditComponent],
-      imports: [
-        MatAutocompleteModule,
-        MatFormFieldModule,
-        MatOptionModule,
-        MatSelectModule,
-      ],
-      providers: [FormBuilder],
-    }).compileComponents();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        schemas: [NO_ERRORS_SCHEMA],
+        declarations: [MetadataEditComponent],
+        imports: [
+          MatAutocompleteModule,
+          MatFormFieldModule,
+          MatOptionModule,
+          MatSelectModule,
+        ],
+        providers: [FormBuilder],
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(MetadataEditComponent);
@@ -132,8 +134,7 @@ describe("MetadataEditComponent", () => {
       expect(component.items.at(0).get("fieldName").value).toEqual("testName");
       expect(component.items.at(0).get("fieldType").value).toEqual("string");
       expect(component.items.at(0).get("fieldValue").value).toEqual(
-        // tslint:disable-next-line: quotemark
-        '{"v":100,"u":"Hz"}'
+        JSON.stringify({ v: 100, u: "Hz" })
       );
       expect(component.items.at(0).get("fieldUnit").status).toEqual("DISABLED");
     });
@@ -158,7 +159,7 @@ describe("MetadataEditComponent", () => {
       component.items.at(0).get("fieldName").setValue("testName");
       component.items.at(0).get("fieldValue").setValue("2019-09-03 10:25:40");
 
-      const metadataObject = component.createMetadataObjects();
+      const metadataObject = component.createMetadataObject();
 
       expect(metadataObject).toBeDefined();
       expect(Object.keys(metadataObject).length).toBe(1);
@@ -177,7 +178,7 @@ describe("MetadataEditComponent", () => {
       component.items.at(0).get("fieldValue").setValue(100);
       component.items.at(0).get("fieldUnit").setValue("Hz");
 
-      const metadataObject = component.createMetadataObjects();
+      const metadataObject = component.createMetadataObject();
 
       expect(metadataObject).toBeDefined();
       expect(Object.keys(metadataObject).length).toBe(1);
@@ -195,7 +196,7 @@ describe("MetadataEditComponent", () => {
       component.items.at(0).get("fieldName").setValue("testName");
       component.items.at(0).get("fieldValue").setValue(100);
 
-      const metadataObject = component.createMetadataObjects();
+      const metadataObject = component.createMetadataObject();
 
       expect(metadataObject).toBeDefined();
       expect(Object.keys(metadataObject).length).toBe(1);
@@ -213,7 +214,7 @@ describe("MetadataEditComponent", () => {
       component.items.at(0).get("fieldName").setValue("testName");
       component.items.at(0).get("fieldValue").setValue("test");
 
-      const metadataObject = component.createMetadataObjects();
+      const metadataObject = component.createMetadataObject();
 
       expect(metadataObject).toBeDefined();
       expect(Object.keys(metadataObject).length).toBe(1);

@@ -8,21 +8,10 @@ module.exports = function (config) {
     plugins: [
       require('karma-jasmine'),
       require('karma-chrome-launcher'),
-      require('karma-coverage-istanbul-reporter'),
+      require('karma-coverage'),
       require('@angular-devkit/build-angular/plugins/karma'),
-      require('karma-jasmine-html-reporter'),
-      require('karma-scss-preprocessor')
+      require('karma-jasmine-html-reporter')
     ],
-    files: [
-      
-      { pattern: './src/theme.scss', watched: true,  included: true, served: true },
-      { pattern: './src/app/app.component.scss', watched: true,  included: true, served: true }
-    ],
-    preprocessors: {
-      
-      './src/theme.scss': ['scss'],
-      './src/app/app.component.scss': ['scss']
-    },
     proxies: {
       '/assets/': '/base/src/assets/',
       'assets/': '/base/src/assets/'
@@ -30,12 +19,14 @@ module.exports = function (config) {
     mime: {
       'text/x-typescript': ['ts','tsx']
     },
-    coverageIstanbulReporter: {
+    coverageReporter: {
       dir: require('path').join(__dirname, './coverage'),
-      reports: [ 'html', 'lcovonly' ],
-      fixWebpackSourcePaths: true,
+      reporters: [
+        {type: 'html', subdir: 'report-html'},
+        {type: 'lcovonly', subdir: '.', file: 'lcov.info'}
+      ],
+      fixWebpackSourcePaths: true
     },
-
     customLaunchers: {
       ChromeHeadless: {
         base: 'Chrome',
@@ -48,9 +39,7 @@ module.exports = function (config) {
         ]
       }
     },
-    reporters: config.angularCli && config.angularCli.codeCoverage
-              ? ['progress', 'coverage-istanbul']
-              : ['progress'],
+    reporters: ['progress', 'coverage'],
     port: 9876,
     colors: true,
     logLevel: config.LOG_DEBUG,

@@ -1,4 +1,4 @@
-describe("catanie Dataset Detail", function() {
+describe("catanie Dataset Detail", () => {
   // let lp: LoginPage;
   // let page: DatasetDetailPage;
   // beforeAll(() => {
