@@ -26,7 +26,6 @@ import { pluck } from "rxjs/operators";
 import { fetchDatasetAction } from "state-management/actions/datasets.actions";
 import { UserApi } from "shared/sdk";
 import { FileSizePipe } from "shared/pipes/filesize.pipe";
-import { FilePathTruncate } from "shared/pipes/file-path-truncate.pipe";
 import { MatCheckboxChange } from "@angular/material/checkbox";
 
 export interface File {
