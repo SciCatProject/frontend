@@ -53,7 +53,7 @@ import { MatDialog } from "@angular/material/dialog";
 export class DatasetDetailsDashboardComponent
   implements OnInit, OnDestroy, AfterViewChecked, EditableComponent {
   private subscriptions: Subscription[] = [];
-  private _hasUnsaveChanges: boolean = false;
+  private _hasUnsavedChanges: boolean = false;
   datasetWithout$ = this.store.pipe(select(getCurrentDatasetWithoutFileInfo));
   origDatablocks$ = this.store.pipe(select(getCurrentOrigDatablocks));
   datablocks$ = this.store.pipe(select(getCurrentDatablocks));
@@ -76,10 +76,10 @@ export class DatasetDetailsDashboardComponent
     public dialog: MatDialog
   ) {}
   hasUnsavedChanges(){
-    return this._hasUnsaveChanges;
+    return this._hasUnsavedChanges;
   }
   onHasUnsavedChanges(data: boolean){
-    this._hasUnsaveChanges = data;
+    this._hasUnsavedChanges = data;
   }
 
   isPI(): boolean {
