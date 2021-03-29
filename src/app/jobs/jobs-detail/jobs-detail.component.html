@@ -36,7 +36,7 @@
         </th>
         <td>{{ value | json }}</td>
       </tr>
-      <tr *ngIf="job.dateOfLastMessage as value">
+      <tr *ngIf="job.updatedAt as value">
         <th>
           <mat-icon> markunread </mat-icon>
           Date Of Last Message
