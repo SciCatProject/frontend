@@ -63,8 +63,6 @@ import { FilesModule } from "files/files.module";
     MatProgressSpinnerModule,
     MatSnackBarModule,
     MatToolbarModule,
-    MatButtonModule,
-    MatButtonToggleModule,
     PoliciesModule,
     ProposalsModule,
     PublisheddataModule,

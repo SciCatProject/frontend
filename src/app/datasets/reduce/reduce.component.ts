@@ -51,14 +51,14 @@ export class ReduceComponent implements OnInit, OnChanges {
 
   actions: string[] = ["Analyze", "Reduce"];
 
-  analyzeScripts: object[] = [
+  analyzeScripts = [
     {
       value: "Plot",
       description: "Create plot."
     }
   ];
 
-  reduceScripts: object[] = [
+  reduceScripts = [
     {
       value: "Noise Reduction",
       description: "Remove background noise."
@@ -114,5 +114,16 @@ export class ReduceComponent implements OnInit, OnChanges {
         );
       }
     }
+  }
+}
+
+
+const setState = (jsonObject:any, path: string[], newValue:any) => {
+  let obj = {...jsonObject};
+  for (let i = 0, n = path.length; i < n; ++i) {
+      let key = path[i];
+      if (key in obj) {
+        obj = obj[key];
+      }
   }
 }
