@@ -120,13 +120,14 @@
         </button>
         <label class="clickable"
           (click)="enableEditing(node); $event.stopPropagation()">
-          {{node.key |replaceUnderscore|titleCase}}
+          {{node.key}}
         </label>
       </div>
-      <div class="value-cell">{{node.value}} {{node.unit? "[ "+ node.unit + "
-        ]": null}}</div>
+      <div class="value-cell">
+        {{getValueRepresentation(node)}}
+      </div>
       <div class="button-cell">
-        <div class="display-flex">
+        <div class="display-flex" *ngIf="node.editable">
           <button mat-icon-button
             class="deleteButton"
             color="warn"
@@ -172,12 +173,12 @@
         </button>
         <label class="clickable"
           (click)="enableEditing(node); $event.stopPropagation()">
-          {{node.key |replaceUnderscore|titleCase}}
+          {{node.key}}
         </label>
       </div>
       <div class="value-cell"></div>
       <div class="button-cell">
-        <div class="display-flex">
+        <div class="display-flex" *ngIf="node.editable">
           <button mat-icon-button
             [matMenuTriggerFor]="menu"
             title="Add new row or object"

@@ -16,7 +16,6 @@ import { CommonModule } from "@angular/common";
 import { SharedTableModule } from "./modules/shared-table/shared-table.module";
 import { ScicatDataService } from "./services/scicat-data-service";
 import { ScientificMetadataTreeModule } from "./modules/scientific-metadata-tree/scientific-metadata-tree.modules";
-import { MetadataInputModalComponent } from './modules/scientific-metadata-tree/metadata-input-modal/metadata-input-modal.component';
 @NgModule({
   imports: [
     BreadcrumbModule,

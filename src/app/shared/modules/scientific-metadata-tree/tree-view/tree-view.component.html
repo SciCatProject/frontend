@@ -9,7 +9,8 @@
     <button mat-button
       matSuffix
       mat-icon-button
-      aria-label="Clear">
+      aria-label="Clear"
+      (click)="filterText=''">
       <mat-icon>close</mat-icon>
     </button>
   </mat-form-field>
@@ -40,9 +41,9 @@
             class="mat-icon-rtl-mirror">
           </mat-icon>
         </button>
-        <label>{{node.key |replaceUnderscore |titleCase}}</label>
+        <label>{{node.key}}</label>
       </div>
-      <div class="value-cell">{{node.value}} {{node.unit? "[ "+ node.unit + " ]": null}}</div>
+      <div class="value-cell">{{getValueRepresentation(node)}}</div>
     </section>
   </mat-tree-node>
   <!-- Only Key -->
@@ -60,7 +61,7 @@
             'arrow_drop_down': 'arrow_right'}}
           </mat-icon>
         </button>
-        {{node.key |replaceUnderscore |titleCase}}
+        {{node.key}}
       </div>
       <div class="value-cell"></div>
     </section>

@@ -146,4 +146,23 @@ export class TreeBase {
       return this.dataTree.indexOf(node);
     }
   }
+  getValueRepresentation(node: FlatNode){
+
+    if(node.value === null){
+      return 'null';
+    }
+    if(node.value === undefined){
+      return 'undefined';
+    }
+    if (Array.isArray(node.value) && node.value.length === 0){
+      return '[]';
+    }
+    if (node.value === ''){
+      return '\"\"';
+    }
+    if (node.unit){
+      return `${node.value} (${node.unit})`;
+    }
+    return node.value;
+  }
 }

@@ -11,6 +11,9 @@
   }
 }
 @media only screen and (min-width: 1280px) {
+  .search-field{
+    width: 40%;
+  }
   .container {
     .formRow {
       .formColumn {
@@ -25,6 +28,9 @@
 }
 
 @media only screen and (max-width: 1279px) {
+  .search-field{
+    width: 50%;
+  }
   .container {
     .formRow {
       .formColumn {
@@ -61,9 +67,9 @@ section {
 .key-cell{
   display: table-cell;
   margin-left: 8px;
-  min-width:60% ;
+  width:40% ;
 }
 .value-cell {
   display: table-cell;
-  min-width: 40%;
+  width: 60%;
 }
