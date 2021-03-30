@@ -32,9 +32,14 @@
               "src/manifest.json"
             ],
             "stylePreprocessorOptions": {
-              "includePaths": ["src"]
+              "includePaths": [
+                "src"
+              ]
             },
-            "styles": ["src/styles.css", "src/theme.scss"],
+            "styles": [
+              "src/styles.css",
+              "src/theme.scss"
+            ],
             "scripts": []
           },
           "configurations": {
@@ -67,7 +72,11 @@
                   "input": "CI/ESS/",
                   "output": "/assets/images/"
                 },
-                { "glob": "favicon.ico", "input": "CI/ESS/", "output": "/" }
+                {
+                  "glob": "favicon.ico",
+                  "input": "CI/ESS/",
+                  "output": "/"
+                }
               ],
               "fileReplacements": [
                 {
@@ -76,9 +85,66 @@
                 }
               ],
               "stylePreprocessorOptions": {
-                "includePaths": ["CI/ESS"]
+                "includePaths": [
+                  "CI/ESS"
+                ]
               },
-              "styles": ["src/styles.css", "CI/ESS/theme.scss"],
+              "styles": [
+                "src/styles.css",
+                "CI/ESS/theme.scss"
+              ],
+              "serviceWorker": true
+            },
+            "dmsc-ldpc": {
+              "budgets": [
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "150kb"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "assets": [
+                "src/assets/",
+                "src/robots.txt",
+                "src/manifest.json",
+                {
+                  "glob": "site.png",
+                  "input": "CI/ESS/",
+                  "output": "/assets/images/"
+                },
+                {
+                  "glob": "site-logo.png",
+                  "input": "CI/ESS/",
+                  "output": "/assets/images/"
+                },
+                {
+                  "glob": "favicon.ico",
+                  "input": "CI/ESS/",
+                  "output": "/"
+                }
+              ],
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.dmsc.ldpc.ts"
+                }
+              ],
+              "stylePreprocessorOptions": {
+                "includePaths": [
+                  "CI/ESS"
+                ]
+              },
+              "styles": [
+                "src/styles.css",
+                "CI/ESS/theme.scss"
+              ],
               "serviceWorker": true
             },
             "e2e": {
@@ -110,7 +176,11 @@
                   "input": "CI/ESS/",
                   "output": "/assets/images/"
                 },
-                { "glob": "favicon.ico", "input": "CI/ESS/", "output": "/" }
+                {
+                  "glob": "favicon.ico",
+                  "input": "CI/ESS/",
+                  "output": "/"
+                }
               ],
               "fileReplacements": [
                 {
@@ -119,9 +189,14 @@
                 }
               ],
               "stylePreprocessorOptions": {
-                "includePaths": ["CI/ESS"]
+                "includePaths": [
+                  "CI/ESS"
+                ]
               },
-              "styles": ["src/styles.css", "CI/ESS/theme.scss"],
+              "styles": [
+                "src/styles.css",
+                "CI/ESS/theme.scss"
+              ],
               "serviceWorker": true
             },
             "rfi-prod": {
@@ -153,7 +228,11 @@
                   "input": "CI/RFI/",
                   "output": "/assets/images"
                 },
-                { "glob": "favicon.ico", "input": "CI/RFI/", "output": "/" }
+                {
+                  "glob": "favicon.ico",
+                  "input": "CI/RFI/",
+                  "output": "/"
+                }
               ],
               "fileReplacements": [
                 {
@@ -166,9 +245,14 @@
                 }
               ],
               "stylePreprocessorOptions": {
-                "includePaths": ["CI/RFI"]
+                "includePaths": [
+                  "CI/RFI"
+                ]
               },
-              "styles": ["src/styles.css", "CI/RFI/theme.scss"]
+              "styles": [
+                "src/styles.css",
+                "CI/RFI/theme.scss"
+              ]
             },
             "rfi-dev": {
               "budgets": [
@@ -199,7 +283,11 @@
                   "input": "CI/RFI/",
                   "output": "/assets/images/"
                 },
-                { "glob": "favicon.ico", "input": "CI/RFI/", "output": "/" }
+                {
+                  "glob": "favicon.ico",
+                  "input": "CI/RFI/",
+                  "output": "/"
+                }
               ],
               "fileReplacements": [
                 {
@@ -212,9 +300,14 @@
                 }
               ],
               "stylePreprocessorOptions": {
-                "includePaths": ["CI/RFI"]
+                "includePaths": [
+                  "CI/RFI"
+                ]
               },
-              "styles": ["src/styles.css", "CI/RFI/theme.scss"]
+              "styles": [
+                "src/styles.css",
+                "CI/RFI/theme.scss"
+              ]
             },
             "maxiv-prod": {
               "budgets": [
@@ -245,7 +338,11 @@
                   "input": "CI/MAXIV/",
                   "output": "/assets/images/"
                 },
-                { "glob": "favicon.ico", "input": "CI/MAXIV/", "output": "/" }
+                {
+                  "glob": "favicon.ico",
+                  "input": "CI/MAXIV/",
+                  "output": "/"
+                }
               ],
               "fileReplacements": [
                 {
@@ -255,6 +352,52 @@
                 {
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.maxiv.prod.ts"
+                }
+              ]
+            },
+            "maxiv-dev": {
+              "budgets": [
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "150kb"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "assets": [
+                "src/assets/",
+                "src/robots.txt",
+                "src/manifest.json",
+                {
+                  "glob": "site.png",
+                  "input": "CI/MAXIV/",
+                  "output": "/assets/images/"
+                },
+                {
+                  "glob": "site-logo.png",
+                  "input": "CI/MAXIV/",
+                  "output": "/assets/images/"
+                },
+                {
+                  "glob": "favicon.ico",
+                  "input": "CI/MAXIV/",
+                  "output": "/"
+                }
+              ],
+              "fileReplacements": [
+                {
+                  "replace": "src/app/build-specifics/index.ts",
+                  "with": "src/app/build-specifics/index.prod.ts"
+                },
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.maxiv.dev.ts"
                 }
               ]
             },
@@ -450,9 +593,14 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.spec.json",
             "scripts": [],
-            "styles": ["src/styles.css", "src/theme.scss"],
+            "styles": [
+              "src/styles.css",
+              "src/theme.scss"
+            ],
             "stylePreprocessorOptions": {
-              "includePaths": ["src"]
+              "includePaths": [
+                "src"
+              ]
             },
             "assets": [
               "src/assets",
@@ -482,10 +630,12 @@
           }
         },
         "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
+          "builder": "@angular-eslint/builder:lint",
           "options": {
-            "tsConfig": ["src/tsconfig.app.json", "src/tsconfig.spec.json"],
-            "exclude": ["**/node_modules/**"]
+            "lintFilePatterns": [
+              "src/**/*.ts",
+              "src/**/*.html"
+            ]
           }
         }
       }
@@ -502,10 +652,12 @@
           }
         },
         "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
+          "builder": "@angular-eslint/builder:lint",
           "options": {
-            "tsConfig": "e2e/tsconfig.e2e.json",
-            "exclude": ["**/node_modules/**"]
+            "lintFilePatterns": [
+              "e2e/**/*.ts",
+              "e2e/**/*.html"
+            ]
           }
         }
       }

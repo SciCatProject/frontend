@@ -41,13 +41,13 @@ describe("SearchBarComponent", () => {
 
   describe("#doFocus()", () => {
     it("should emit an event", () => {
-      spyOn(component.onFocus, "emit");
+      spyOn(component.searchBarFocus, "emit");
 
       component.query = "test";
       component.doFocus();
 
-      expect(component.onFocus.emit).toHaveBeenCalledTimes(1);
-      expect(component.onFocus.emit).toHaveBeenCalledWith(component.query);
+      expect(component.searchBarFocus.emit).toHaveBeenCalledTimes(1);
+      expect(component.searchBarFocus.emit).toHaveBeenCalledWith(component.query);
     });
   });
 
@@ -62,16 +62,6 @@ describe("SearchBarComponent", () => {
       expect(component.searchSubject.next).toHaveBeenCalledWith(
         component.query
       );
-    });
-  });
-
-  describe("#focus()", () => {
-    it("should call focus on searchBar", () => {
-      spyOn(component.searchBar.nativeElement, "focus");
-
-      component.focus();
-
-      expect(component.searchBar.nativeElement.focus).toHaveBeenCalledTimes(1);
     });
   });
 });

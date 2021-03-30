@@ -5,7 +5,7 @@ import {
   OnChanges,
   SimpleChange
 } from "@angular/core";
-import { ScientificMetaData } from "../scientific-metadata.module";
+import { ScientificMetadataTableData, ScientificMetadata } from "../scientific-metadata.module";
 
 @Component({
   selector: "metadata-view",
@@ -13,20 +13,20 @@ import { ScientificMetaData } from "../scientific-metadata.module";
   styleUrls: ["./metadata-view.component.scss"]
 })
 export class MetadataViewComponent implements OnInit, OnChanges {
-  @Input() metadata: object;
+  @Input() metadata: Record<string, unknown>;
 
-  tableData: ScientificMetaData[];
+  tableData: ScientificMetadataTableData[];
   columnsToDisplay: string[] = ["name", "value", "unit"];
 
-  createMetadataArray(metadata: object): ScientificMetaData[] {
+  createMetadataArray(metadata: Record<string, unknown>): ScientificMetadataTableData[] {
     const metadataArray = [];
     Object.keys(metadata).forEach(key => {
-      let metadataObject: ScientificMetaData;
-      if (metadata[key] && metadata[key]["value"]) {
+      let metadataObject: ScientificMetadataTableData;
+      if ("value" in (metadata[key] as ScientificMetadata)) {
         metadataObject = {
           name: key,
-          value: metadata[key].value,
-          unit: metadata[key].unit
+          value: metadata[key]["value"],
+          unit: metadata[key]["unit"]
         };
       } else {
         metadataObject = {
@@ -40,7 +40,7 @@ export class MetadataViewComponent implements OnInit, OnChanges {
     return metadataArray;
   }
 
-  isDate(scientificMetadata: ScientificMetaData): boolean {
+  isDate(scientificMetadata: ScientificMetadataTableData): boolean {
     if (scientificMetadata.unit.length > 0) {
       return false;
     }

@@ -1,4 +1,4 @@
-/* tslint:disable */
+/* eslint-disable */
 import { merge, Observable, Subject } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { LoopBackFilter, StatFilter } from './index';

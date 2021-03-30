@@ -3,7 +3,7 @@ import { DashboardPage } from "./dashboard.po";
 import { browser, element, by } from "protractor";
 import { protractor } from "protractor/built/ptor";
 
-describe("catanie Dashboard", function() {
+describe("catanie Dashboard", () => {
   let lp: LoginPage;
   let page: DashboardPage;
 

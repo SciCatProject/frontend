@@ -21,7 +21,7 @@ export class InstrumentDetailsComponent implements OnInit {
     private store: Store<Instrument>
   ) {}
 
-  onSaveCustomMetadata(pid: string, customMetadata: object): void {
+  onSaveCustomMetadata(pid: string, customMetadata: Record<string, unknown>): void {
     this.store.dispatch(saveCustomMetadataAction({ pid, customMetadata }));
   }
 

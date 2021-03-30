@@ -7,7 +7,7 @@ import { LogbookApi, Logbook } from "shared/sdk";
 import * as fromActions from "state-management/actions/logbooks.actions";
 import {
   loadingAction,
-  loadingCompleteAction
+  loadingCompleteAction,
 } from "state-management/actions/user.actions";
 import { provideMockStore } from "@ngrx/store/testing";
 import { getFilters } from "state-management/selectors/logbooks.selectors";
@@ -16,7 +16,7 @@ import { Type } from "@angular/core";
 const logbook: Logbook = {
   name: "test",
   roomId: "!test@site",
-  messages: []
+  messages: [],
 };
 
 describe("LogbookEffects", () => {
@@ -37,25 +37,24 @@ describe("LogbookEffects", () => {
                 textSearch: "",
                 showBotMessages: true,
                 showImages: true,
-                showUserMessages: true
-              }
-            }
-          ]
+                showUserMessages: true,
+              },
+            },
+          ],
         }),
         {
           provide: LogbookApi,
-          useValue: jasmine.createSpyObj("logbookApi", ["findAll", "filter"])
-        }
-      ]
+          useValue: jasmine.createSpyObj("logbookApi", ["findAll", "filter"]),
+        },
+      ],
     });
 
     effects = TestBed.inject(LogbookEffects);
     logbookApi = injectedStub(LogbookApi);
   });
 
-  function injectedStub<S>(service: Type<S>): jasmine.SpyObj<S> {
-    return TestBed.inject(service) as jasmine.SpyObj<S>;
-  }
+  const injectedStub = <S>(service: Type<S>): jasmine.SpyObj<S> =>
+    TestBed.inject(service) as jasmine.SpyObj<S>;
 
   describe("fetchLogbooks$", () => {
     it("should result in a fetchLogbooksCompleteAction", () => {

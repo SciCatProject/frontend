@@ -113,7 +113,7 @@ describe("LogbookFilterComponent", () => {
 
   describe("#doSelect()", () => {
     it("should emit the new filter", () => {
-      spyOn(component.onSelect, "emit");
+      spyOn(component.filterSelect, "emit");
 
       component.filters = {
         textSearch: "test",
@@ -132,12 +132,12 @@ describe("LogbookFilterComponent", () => {
 
       component.filters.showBotMessages = false;
 
-      expect(component.onSelect.emit).toHaveBeenCalledTimes(1);
-      expect(component.onSelect.emit).toHaveBeenCalledWith(component.filters);
+      expect(component.filterSelect.emit).toHaveBeenCalledTimes(1);
+      expect(component.filterSelect.emit).toHaveBeenCalledWith(component.filters);
     });
 
     it("should emit the new filter", () => {
-      spyOn(component.onSelect, "emit");
+      spyOn(component.filterSelect, "emit");
 
       component.filters = {
         textSearch: "test",
@@ -156,12 +156,12 @@ describe("LogbookFilterComponent", () => {
 
       component.filters.showBotMessages = false;
 
-      expect(component.onSelect.emit).toHaveBeenCalledTimes(1);
-      expect(component.onSelect.emit).toHaveBeenCalledWith(component.filters);
+      expect(component.filterSelect.emit).toHaveBeenCalledTimes(1);
+      expect(component.filterSelect.emit).toHaveBeenCalledWith(component.filters);
     });
 
     it("should emit the new filter", () => {
-      spyOn(component.onSelect, "emit");
+      spyOn(component.filterSelect, "emit");
 
       component.filters = {
         textSearch: "test",
@@ -180,12 +180,12 @@ describe("LogbookFilterComponent", () => {
 
       component.filters.showBotMessages = false;
 
-      expect(component.onSelect.emit).toHaveBeenCalledTimes(1);
-      expect(component.onSelect.emit).toHaveBeenCalledWith(component.filters);
+      expect(component.filterSelect.emit).toHaveBeenCalledTimes(1);
+      expect(component.filterSelect.emit).toHaveBeenCalledWith(component.filters);
     });
 
     it("should emit the new filter", () => {
-      spyOn(component.onSelect, "emit");
+      spyOn(component.filterSelect, "emit");
 
       component.filters = {
         textSearch: "test",
@@ -204,12 +204,12 @@ describe("LogbookFilterComponent", () => {
 
       component.filters.showBotMessages = false;
 
-      expect(component.onSelect.emit).toHaveBeenCalledTimes(1);
-      expect(component.onSelect.emit).toHaveBeenCalledWith(component.filters);
+      expect(component.filterSelect.emit).toHaveBeenCalledTimes(1);
+      expect(component.filterSelect.emit).toHaveBeenCalledWith(component.filters);
     });
 
     it("should emit the new filter", () => {
-      spyOn(component.onSelect, "emit");
+      spyOn(component.filterSelect, "emit");
 
       component.filters = {
         textSearch: "test",
@@ -228,12 +228,12 @@ describe("LogbookFilterComponent", () => {
 
       component.filters.showBotMessages = false;
 
-      expect(component.onSelect.emit).toHaveBeenCalledTimes(1);
-      expect(component.onSelect.emit).toHaveBeenCalledWith(component.filters);
+      expect(component.filterSelect.emit).toHaveBeenCalledTimes(1);
+      expect(component.filterSelect.emit).toHaveBeenCalledWith(component.filters);
     });
 
     it("should emit the new filter", () => {
-      spyOn(component.onSelect, "emit");
+      spyOn(component.filterSelect, "emit");
 
       component.filters = {
         textSearch: "test",
@@ -252,8 +252,8 @@ describe("LogbookFilterComponent", () => {
 
       component.filters.showBotMessages = false;
 
-      expect(component.onSelect.emit).toHaveBeenCalledTimes(1);
-      expect(component.onSelect.emit).toHaveBeenCalledWith(component.filters);
+      expect(component.filterSelect.emit).toHaveBeenCalledTimes(1);
+      expect(component.filterSelect.emit).toHaveBeenCalledWith(component.filters);
     });
   });
 });

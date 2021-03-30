@@ -18,7 +18,7 @@ const user = new User({
 
 const userIdentity: UserIdentity = {
   id: "testId",
-  user: user,
+  user,
   provider: "testProvider",
   authScheme: "testScheme",
   externalId: "testId",

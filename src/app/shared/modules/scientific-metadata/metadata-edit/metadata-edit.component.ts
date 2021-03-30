@@ -19,6 +19,7 @@ import {
 import { UnitsService } from "shared/services/units.service";
 import { startWith, map } from "rxjs/operators";
 import { Observable } from "rxjs";
+import { ScientificMetadata } from "../scientific-metadata.module";
 
 @Component({
   selector: "metadata-edit",
@@ -31,8 +32,8 @@ export class MetadataEditComponent implements OnInit, OnChanges {
   units: string[];
   filteredUnits$: Observable<string[]>;
 
-  @Input() metadata: object;
-  @Output() save = new EventEmitter<object>();
+  @Input() metadata: Record<string, unknown>;
+  @Output() save = new EventEmitter<Record<string, unknown>>();
 
   constructor(
     private formBuilder: FormBuilder,
@@ -82,11 +83,11 @@ export class MetadataEditComponent implements OnInit, OnChanges {
   }
 
   doSave() {
-    this.metadata = this.createMetadataObjects();
+    this.metadata = this.createMetadataObject();
     this.save.emit(this.metadata);
   }
 
-  onRemove(index: any) {
+  onRemove(index: number) {
     this.items.removeAt(index);
   }
 
@@ -94,34 +95,34 @@ export class MetadataEditComponent implements OnInit, OnChanges {
     if (this.metadata) {
       Object.keys(this.metadata).forEach((key, index) => {
         let field: FormGroup;
-        if (this.metadata[key] && this.metadata[key]["value"]) {
+        if ("value" in (this.metadata[key] as ScientificMetadata)) {
           if (this.metadata[key]["unit"].length > 0) {
             field = this.formBuilder.group({
               fieldName: key,
               fieldType: "quantity",
-              fieldValue: this.metadata[key].value,
-              fieldUnit: this.metadata[key].unit,
+              fieldValue: this.metadata[key]["value"],
+              fieldUnit: this.metadata[key]["unit"],
             });
           } else if (typeof this.metadata[key]["value"] === "number") {
             field = this.formBuilder.group({
               fieldName: key,
               fieldType: "number",
-              fieldValue: Number(this.metadata[key].value),
-              fieldUnit: this.metadata[key].unit,
+              fieldValue: Number(this.metadata[key]["value"]),
+              fieldUnit: this.metadata[key]["unit"],
             });
           } else if (isNaN(Date.parse(this.metadata[key]["value"]))) {
             field = this.formBuilder.group({
               fieldName: key,
               fieldType: "string",
-              fieldValue: this.metadata[key].value,
-              fieldUnit: this.metadata[key].unit,
+              fieldValue: this.metadata[key]["value"],
+              fieldUnit: this.metadata[key]["unit"],
             });
           } else {
             field = this.formBuilder.group({
               fieldName: key,
               fieldType: "date",
-              fieldValue: this.metadata[key].value,
-              fieldUnit: this.metadata[key].unit,
+              fieldValue: this.metadata[key]["value"],
+              fieldUnit: this.metadata[key]["unit"],
             });
           }
         } else {
@@ -138,7 +139,7 @@ export class MetadataEditComponent implements OnInit, OnChanges {
     }
   }
 
-  createMetadataObjects(): object {
+  createMetadataObject(): Record<string, ScientificMetadata> {
     const metadata = {};
     this.items.controls.forEach((control) => {
       const { fieldName, fieldType, fieldValue, fieldUnit } = control.value;

@@ -153,7 +153,7 @@ export class DatasetDetailsDashboardComponent
     this.store.dispatch(updatePropertyAction({ pid, property }));
   }
 
-  onSaveMetadata(metadata: object) {
+  onSaveMetadata(metadata: Record<string, unknown>) {
     const pid = this.dataset.pid;
     const property = { scientificMetadata: metadata };
     this.store.dispatch(updatePropertyAction({ pid, property }));

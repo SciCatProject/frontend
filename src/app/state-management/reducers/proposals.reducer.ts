@@ -108,12 +108,12 @@ const reducer = createReducer(
   }))
 );
 
-export function proposalsReducer(
+export const proposalsReducer = (
   state: ProposalsState | undefined,
   action: Action
-) {
+) => {
   if (action.type.indexOf("[Proposal]") !== -1) {
     console.log("Action came in! " + action.type);
   }
   return reducer(state, action);
-}
+};

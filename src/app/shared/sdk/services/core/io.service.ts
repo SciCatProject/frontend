@@ -1,4 +1,4 @@
-/* tslint:disable */
+/* eslint-disable */
 import { Observable, Subject } from 'rxjs';
 
 export class IO {

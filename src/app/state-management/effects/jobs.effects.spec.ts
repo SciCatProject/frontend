@@ -11,7 +11,7 @@ import {
   showMessageAction,
   loadingAction,
   loadingCompleteAction,
-  updateUserSettingsAction
+  updateUserSettingsAction,
 } from "state-management/actions/user.actions";
 import { MessageType } from "state-management/models";
 import { Type } from "@angular/core";
@@ -20,7 +20,7 @@ const data: JobInterface = {
   id: "testId",
   emailJobInitiator: "test@email.com",
   type: "archive",
-  datasetList: {}
+  datasetList: {},
 };
 const job = new Job(data);
 
@@ -35,7 +35,7 @@ describe("JobEffects", () => {
         JobEffects,
         provideMockActions(() => actions),
         provideMockStore({
-          selectors: [{ selector: getQueryParams, value: {} }]
+          selectors: [{ selector: getQueryParams, value: {} }],
         }),
         {
           provide: JobApi,
@@ -43,19 +43,18 @@ describe("JobEffects", () => {
             "find",
             "count",
             "findById",
-            "create"
-          ])
-        }
-      ]
+            "create",
+          ]),
+        },
+      ],
     });
 
     effects = TestBed.inject(JobEffects);
     jobApi = injectedStub(JobApi);
   });
 
-  function injectedStub<S>(service: Type<S>): jasmine.SpyObj<S> {
-    return TestBed.inject(service) as jasmine.SpyObj<S>;
-  }
+  const injectedStub = <S>(service: Type<S>): jasmine.SpyObj<S> =>
+    TestBed.inject(service) as jasmine.SpyObj<S>;
 
   describe("fetchJobs$", () => {
     describe("on fetchJobsAction", () => {
@@ -268,7 +267,7 @@ describe("JobEffects", () => {
       const message = {
         type: MessageType.Success,
         content: "Job Created Successfully",
-        duration: 5000
+        duration: 5000,
       };
       const action = fromActions.submitJobCompleteAction({ job });
       const outcome = showMessageAction({ message });
@@ -286,7 +285,7 @@ describe("JobEffects", () => {
       const message = {
         type: MessageType.Error,
         content: "Job Not Submitted: " + err.message,
-        duration: 5000
+        duration: 5000,
       };
       const action = fromActions.submitJobFailedAction({ err });
       const outcome = showMessageAction({ message });

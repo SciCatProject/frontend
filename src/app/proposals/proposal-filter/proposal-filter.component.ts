@@ -13,19 +13,19 @@ export class ProposalFilterComponent {
   @Input() clearSearchBar: boolean;
   @Input() dateRangeValue: DateRange;
 
-  @Output() onClear = new EventEmitter<any>();
-  @Output() onSearchChange = new EventEmitter<string>();
-  @Output() onDateChange = new EventEmitter<DateRange>();
+  @Output() clear = new EventEmitter<any>();
+  @Output() searchChange = new EventEmitter<string>();
+  @Output() dateChange = new EventEmitter<DateRange>();
 
   doClear() {
-    this.onClear.emit();
+    this.clear.emit();
   }
 
   doSearchChange(query: string) {
-    this.onSearchChange.emit(query);
+    this.searchChange.emit(query);
   }
 
   doDateChange(event: MatDatepickerInputEvent<DateRange>) {
-    this.onDateChange.emit(event.value);
+    this.dateChange.emit(event.value);
   }
 }

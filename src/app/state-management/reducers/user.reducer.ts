@@ -170,9 +170,9 @@ const reducer = createReducer(
   }))
 );
 
-export function userReducer(state: UserState | undefined, action: Action) {
+export const userReducer = (state: UserState | undefined, action: Action) => {
   if (action.type.indexOf("[User]") !== -1) {
     console.log("Action came in! " + action.type);
   }
   return reducer(state, action);
-}
+};

@@ -81,7 +81,7 @@ export const addSampleFailedAction = createAction("[Sample] Add Sample Failed");
 
 export const saveCharacteristicsAction = createAction(
   "[Sample] Save Characteristics",
-  props<{ sampleId: string; characteristics: object }>()
+  props<{ sampleId: string; characteristics: Record<string, unknown> }>()
 );
 export const saveCharacteristicsCompleteAction = createAction(
   "[Sample] Save Characteristics Complete",

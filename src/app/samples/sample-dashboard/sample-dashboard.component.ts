@@ -88,18 +88,16 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
 
   formatTableData(samples: Sample[]): any {
     if (samples) {
-      return samples.map((sample) => {
-        return {
-          sampleId: sample.sampleId,
-          owner: sample.owner,
-          creationTime: this.datePipe.transform(
-            sample.createdAt,
-            "yyyy-MM-dd, hh:mm"
-          ),
-          description: sample.description,
-          ownerGroup: sample.ownerGroup,
-        };
-      });
+      return samples.map((sample) => ({
+        sampleId: sample.sampleId,
+        owner: sample.owner,
+        creationTime: this.datePipe.transform(
+          sample.createdAt,
+          "yyyy-MM-dd, hh:mm"
+        ),
+        description: sample.description,
+        ownerGroup: sample.ownerGroup,
+      }));
     }
   }
 

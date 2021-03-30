@@ -26,7 +26,6 @@ import { pluck } from "rxjs/operators";
 import { fetchDatasetAction } from "state-management/actions/datasets.actions";
 import { UserApi } from "shared/sdk";
 import { FileSizePipe } from "shared/pipes/filesize.pipe";
-import { FilePathTruncate } from "shared/pipes/file-path-truncate.pipe";
 import { MatCheckboxChange } from "@angular/material/checkbox";
 
 export interface File {
@@ -131,11 +130,7 @@ export class DatafilesComponent
     if (!this.tableData) {
       return [];
     }
-    return this.tableData.map((file) =>
-      file.path.includes("/")
-        ? file.path.split("/")[file.path.split("/").length - 1]
-        : file.path
-    );
+    return this.tableData.map((file) => file.path);
   }
 
   getSelectedFiles() {
@@ -144,11 +139,7 @@ export class DatafilesComponent
     }
     return this.tableData
       .filter((file) => file.selected)
-      .map((file) =>
-        file.path.includes("/")
-          ? file.path.split("/")[file.path.split("/").length - 1]
-          : file.path
-      );
+      .map((file) => file.path);
   }
 
   updateSelectionStatus() {
@@ -181,9 +172,7 @@ export class DatafilesComponent
 
   hasTooLargeFiles(files: any[]) {
     if (this.maxFileSize) {
-      const largeFiles = files.filter((file) => {
-        return file.size > this.maxFileSize;
-      });
+      const largeFiles = files.filter((file) => file.size > this.maxFileSize);
       if (largeFiles.length > 0) {
         return true;
       } else {
@@ -229,13 +218,7 @@ export class DatafilesComponent
         });
         this.count = files.length;
         this.tableData = files.slice(0, this.pageSize);
-        this.files = files.map((file) => {
-          // if (file.path.indexOf("/") !== -1) {
-          //   const splitPath = file.path.split("/");
-          //   file.path = splitPath[splitPath.length - 1];
-          // }
-          return file;
-        });
+        this.files = files;
         this.tooLargeFile = this.hasTooLargeFiles(this.files);
       })
     );

@@ -1,4 +1,4 @@
-/* tslint:disable */
+/* eslint-disable */
 /**
  * @module SocketDriver
  * @author Jonathan Casarrubias <t: johncasarrubias, gh: mean-expert-official>

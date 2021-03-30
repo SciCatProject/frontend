@@ -4,10 +4,11 @@ import { Store, select } from "@ngrx/store";
 import * as rison from "rison";
 import {
   getArchiveViewMode,
-  getFilters
+  getFilters,
 } from "state-management/selectors/datasets.selectors";
 import { take, filter, map } from "rxjs/operators";
 import { TitleCasePipe } from "shared/pipes/title-case.pipe";
+import { ArchViewMode } from "state-management/models";
 
 interface Breadcrumb {
   label: string;
@@ -27,7 +28,7 @@ interface Breadcrumb {
 @Component({
   selector: "breadcrumb",
   templateUrl: "./breadcrumb.component.html",
-  styleUrls: ["breadcrumb.component.scss"]
+  styleUrls: ["breadcrumb.component.scss"],
 })
 export class BreadcrumbComponent implements OnInit {
   // partially based on: http://brianflove.com/2016/10/23/angular2-breadcrumb-using-router/
@@ -38,11 +39,11 @@ export class BreadcrumbComponent implements OnInit {
   // the below selection makes sure a string reaches the last map() by providing fallback values
   // all along the way.
   public shouldDisplay$ = this.store.pipe(
-    select(state => state["router"] || {}),
-    select(router => router["state"] || {}),
-    select(state => state["url"] || ""),
-    select(url => url.split("?")[0]),
-    map(path => path !== "/datasets")
+    select((state) => state["router"] || {}),
+    select((router) => router["state"] || {}),
+    select((state) => state["url"] || ""),
+    select((url) => url.split("?")[0]),
+    map((path) => path !== "/datasets")
   );
 
   constructor(
@@ -56,8 +57,8 @@ export class BreadcrumbComponent implements OnInit {
     this.setBreadcrumbs();
     // Update breadcrumb when navigating to child routes
     this.router.events
-      .pipe(filter(event => event instanceof NavigationEnd))
-      .subscribe(event => {
+      .pipe(filter((event) => event instanceof NavigationEnd))
+      .subscribe((event) => {
         this.setBreadcrumbs();
       });
   }
@@ -68,18 +69,18 @@ export class BreadcrumbComponent implements OnInit {
    */
   setBreadcrumbs(): void {
     this.breadcrumbs = [];
-    this.route.children.forEach(root => {
+    this.route.children.forEach((root) => {
       let param;
-      Object.keys(root.snapshot.params).forEach(key => {
+      Object.keys(root.snapshot.params).forEach((key) => {
         param = root.snapshot.params[key];
       });
-      root.snapshot.url.forEach(url => {
+      root.snapshot.url.forEach((url) => {
         const crumb: Breadcrumb = {
           label: this.sanitise(url.path, param),
           path: url.path,
           params: url.parameters,
           url: "/" + encodeURIComponent(url.path),
-          fallback: "/" + encodeURIComponent(url.path + "s")
+          fallback: "/" + encodeURIComponent(url.path + "s"),
         };
         this.breadcrumbs.push(crumb);
       });
@@ -116,31 +117,80 @@ export class BreadcrumbComponent implements OnInit {
     }
     // this catches errors and redirects to the fallback, this could/should be set in the routing module?
     if (crumb.fallback === "/datasets") {
-      this.store
-        .pipe(
-          select(getFilters),
-          take(1)
-        )
-        .subscribe(filters => {
-          console.log(filters);
-          this.store
-            .pipe(
-              select(getArchiveViewMode),
-              take(1)
-            )
-            .subscribe(currentMode => {
-              filters["mode"] = currentMode;
-              console.log(currentMode);
-              this.router.navigate(["/datasets"], {
-                queryParams: { args: rison.encode(filters) }
-              });
+      this.store.pipe(select(getFilters), take(1)).subscribe((filters) => {
+        this.store
+          .pipe(select(getArchiveViewMode), take(1))
+          .subscribe((currentMode) => {
+            filters["mode"] = setMode(currentMode);
+            this.router.navigate(["/datasets"], {
+              queryParams: { args: rison.encode(filters) },
             });
-        });
+          });
+      });
     } else {
       this.router
         .navigateByUrl(url + crumb.url)
-        .catch(error => this.router.navigateByUrl(url + crumb.fallback));
+        .catch((error) => this.router.navigateByUrl(url + crumb.fallback));
     }
     // });
   }
 }
+
+const setMode = (modeToggle: ArchViewMode) => {
+  switch (modeToggle) {
+    case ArchViewMode.all:
+      return {};
+    case ArchViewMode.archivable:
+      return {
+        "datasetlifecycle.archivable": true,
+        "datasetlifecycle.retrievable": false,
+      };
+    case ArchViewMode.retrievable:
+      return {
+        "datasetlifecycle.retrievable": true,
+        "datasetlifecycle.archivable": false,
+      };
+    case ArchViewMode.work_in_progress:
+      return {
+        $or: [
+          {
+            "datasetlifecycle.retrievable": false,
+            "datasetlifecycle.archivable": false,
+            "datasetlifecycle.archiveStatusMessage": {
+              $ne: "scheduleArchiveJobFailed",
+            },
+            "datasetlifecycle.retrieveStatusMessage": {
+              $ne: "scheduleRetrieveJobFailed",
+            },
+          },
+        ],
+      };
+    case ArchViewMode.system_error:
+      return {
+        $or: [
+          {
+            "datasetlifecycle.retrievable": true,
+            "datasetlifecycle.archivable": true,
+          },
+          {
+            "datasetlifecycle.archiveStatusMessage": "scheduleArchiveJobFailed",
+          },
+          {
+            "datasetlifecycle.retrieveStatusMessage":
+              "scheduleRetrieveJobFailed",
+          },
+        ],
+      };
+    case ArchViewMode.user_error:
+      return {
+        $or: [
+          {
+            "datasetlifecycle.archiveStatusMessage": "missingFilesError",
+          },
+        ],
+      };
+    default: {
+      return {};
+    }
+  }
+};

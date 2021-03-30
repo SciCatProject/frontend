@@ -74,9 +74,8 @@ describe("SampleEffects", () => {
     datasetApi = injectedStub(DatasetApi);
   });
 
-  function injectedStub<S>(service: Type<S>): jasmine.SpyObj<S> {
-    return TestBed.inject(service) as jasmine.SpyObj<S>;
-  }
+  const injectedStub = <S>(service: Type<S>): jasmine.SpyObj<S> =>
+    TestBed.inject(service) as jasmine.SpyObj<S>;
 
   describe("fetchSamples$", () => {
     describe("ofType fetchSamplesAction", () => {

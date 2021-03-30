@@ -50,29 +50,29 @@ describe("ProposalFilterComponent", () => {
 
   describe("#doClear()", () => {
     it("should emit an event", () => {
-      spyOn(component.onClear, "emit");
+      spyOn(component.clear, "emit");
 
       component.doClear();
 
-      expect(component.onClear.emit).toHaveBeenCalled();
+      expect(component.clear.emit).toHaveBeenCalled();
     });
   });
 
   describe("#doSearchChange()", () => {
     it("should emit an event", () => {
-      spyOn(component.onSearchChange, "emit");
+      spyOn(component.searchChange, "emit");
 
       const query = "test";
       component.doSearchChange(query);
 
-      expect(component.onSearchChange.emit).toHaveBeenCalledTimes(1);
-      expect(component.onSearchChange.emit).toHaveBeenCalledWith(query);
+      expect(component.searchChange.emit).toHaveBeenCalledTimes(1);
+      expect(component.searchChange.emit).toHaveBeenCalledWith(query);
     });
   });
 
   describe("#doDateChange()", () => {
     it("should emit an event", () => {
-      spyOn(component.onDateChange, "emit");
+      spyOn(component.dateChange, "emit");
 
       const event = {
         value: {
@@ -82,8 +82,8 @@ describe("ProposalFilterComponent", () => {
       };
       component.doDateChange(event as MatDatepickerInputEvent<DateRange>);
 
-      expect(component.onDateChange.emit).toHaveBeenCalledTimes(1);
-      expect(component.onDateChange.emit).toHaveBeenCalledWith(event.value);
+      expect(component.dateChange.emit).toHaveBeenCalledTimes(1);
+      expect(component.dateChange.emit).toHaveBeenCalledWith(event.value);
     });
   });
 });

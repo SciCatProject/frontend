@@ -3,7 +3,7 @@ import { PublishedDataEffects } from "./published-data.effects";
 import {
   PublishedDataApi,
   PublishedDataInterface,
-  PublishedData
+  PublishedData,
 } from "shared/sdk";
 import { TestBed } from "@angular/core/testing";
 import { provideMockActions } from "@ngrx/effects/testing";
@@ -15,7 +15,7 @@ import { MessageType } from "state-management/models";
 import {
   showMessageAction,
   loadingAction,
-  loadingCompleteAction
+  loadingCompleteAction,
 } from "state-management/actions/user.actions";
 import { Type } from "@angular/core";
 
@@ -44,7 +44,7 @@ describe("PublishedDataEffects", () => {
         PublishedDataEffects,
         provideMockActions(() => actions),
         provideMockStore({
-          selectors: [{ selector: getQueryParams, value: {} }]
+          selectors: [{ selector: getQueryParams, value: {} }],
         }),
         {
           provide: PublishedDataApi,
@@ -53,19 +53,18 @@ describe("PublishedDataEffects", () => {
             "count",
             "findById",
             "create",
-            "register"
-          ])
-        }
-      ]
+            "register",
+          ]),
+        },
+      ],
     });
 
     effects = TestBed.inject(PublishedDataEffects);
     publishedDataApi = injectedStub(PublishedDataApi);
   });
 
-  function injectedStub<S>(service: Type<S>): jasmine.SpyObj<S> {
-    return TestBed.inject(service) as jasmine.SpyObj<S>;
-  }
+  const injectedStub = <S>(service: Type<S>): jasmine.SpyObj<S> =>
+    TestBed.inject(service) as jasmine.SpyObj<S>;
 
   describe("fetchAllPublishedData$", () => {
     describe("ofType fetchAllPublishedDataAction", () => {
@@ -73,7 +72,7 @@ describe("PublishedDataEffects", () => {
         const allPublishedData = [publishedData];
         const action = fromActions.fetchAllPublishedDataAction();
         const outcome1 = fromActions.fetchAllPublishedDataCompleteAction({
-          publishedData: allPublishedData
+          publishedData: allPublishedData,
         });
         const outcome2 = fromActions.fetchCountAction();
 
@@ -106,7 +105,7 @@ describe("PublishedDataEffects", () => {
         const allPublishedData = [publishedData];
         const action = fromActions.changePageAction({ page, limit });
         const outcome1 = fromActions.fetchAllPublishedDataCompleteAction({
-          publishedData: allPublishedData
+          publishedData: allPublishedData,
         });
         const outcome2 = fromActions.fetchCountAction();
 
@@ -164,7 +163,7 @@ describe("PublishedDataEffects", () => {
       const id = "testId";
       const action = fromActions.fetchPublishedDataAction({ id });
       const outcome = fromActions.fetchPublishedDataCompleteAction({
-        publishedData
+        publishedData,
       });
 
       actions = hot("-a", { a: action });
@@ -194,7 +193,7 @@ describe("PublishedDataEffects", () => {
       const id = "testDOI";
       const action = fromActions.publishDatasetAction({ data: publishedData });
       const outcome1 = fromActions.publishDatasetCompleteAction({
-        publishedData
+        publishedData,
       });
       const outcome2 = fromActions.fetchPublishedDataAction({ id });
 
@@ -227,10 +226,10 @@ describe("PublishedDataEffects", () => {
       const message = {
         type: MessageType.Success,
         content: "Publication Successful",
-        duration: 5000
+        duration: 5000,
       };
       const action = fromActions.publishDatasetCompleteAction({
-        publishedData
+        publishedData,
       });
       const outcome = showMessageAction({ message });
 
@@ -246,7 +245,7 @@ describe("PublishedDataEffects", () => {
       const message = {
         type: MessageType.Error,
         content: "Publication Failed",
-        duration: 5000
+        duration: 5000,
       };
       const action = fromActions.publishDatasetFailedAction();
       const outcome = showMessageAction({ message });
@@ -263,10 +262,9 @@ describe("PublishedDataEffects", () => {
       const doi = "testDOI";
       const action = fromActions.registerPublishedDataAction({ doi });
       const outcome = fromActions.registerPublishedDataCompleteAction({
-        publishedData
+        publishedData,
       });
       const outcome1 = fromActions.fetchPublishedDataAction({ id: doi });
-
 
       actions = hot("-a", { a: action });
       const response = cold("-a|", { a: publishedData });
@@ -332,7 +330,7 @@ describe("PublishedDataEffects", () => {
       it("should dispatch a loadingAction", () => {
         const id = "testId";
         const action = fromActions.publishDatasetAction({
-          data: publishedData
+          data: publishedData,
         });
         const outcome = loadingAction();
 
@@ -362,7 +360,7 @@ describe("PublishedDataEffects", () => {
       it("should dispatch a loadingCompleteAction", () => {
         const allPublishedData = [publishedData];
         const action = fromActions.fetchAllPublishedDataCompleteAction({
-          publishedData: allPublishedData
+          publishedData: allPublishedData,
         });
         const outcome = loadingCompleteAction();
 
@@ -413,7 +411,7 @@ describe("PublishedDataEffects", () => {
     describe("ofType publishDatasetCompleteAction", () => {
       it("should dispatch a loadingCompleteAction", () => {
         const action = fromActions.publishDatasetCompleteAction({
-          publishedData
+          publishedData,
         });
         const outcome = loadingCompleteAction();
 
@@ -439,7 +437,7 @@ describe("PublishedDataEffects", () => {
     describe("ofType registerPublishedDataCompleteAction", () => {
       it("should dispatch a loadingCompleteAction", () => {
         const action = fromActions.registerPublishedDataCompleteAction({
-          publishedData
+          publishedData,
         });
         const outcome = loadingCompleteAction();
 

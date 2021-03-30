@@ -26,22 +26,18 @@ export class SearchBarComponent implements OnChanges {
   @Input() autocompleteOptions = [];
   @Input() clear = false;
 
-  @Output() onSearch = this.searchSubject.pipe(
+  @Output() search = this.searchSubject.pipe(
     distinctUntilChanged(),
     debounceTime(this.searchDebounce)
   );
-  @Output() onFocus = new EventEmitter<string>();
+  @Output() searchBarFocus = new EventEmitter<string>();
 
   doSearch() {
     this.searchSubject.next(this.query);
   }
 
   doFocus() {
-    this.onFocus.emit(this.query);
-  }
-
-  focus() {
-    this.searchBar.nativeElement.focus();
+    this.searchBarFocus.emit(this.query);
   }
 
   get query() {

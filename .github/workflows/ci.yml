@@ -1,4 +1,4 @@
-name: Test and build
+name: CI
 
 on: [push, pull_request]
 
@@ -70,7 +70,6 @@ jobs:
       - name: Trigger ESS pipeline
         uses: appleboy/gitlab-ci-action@master
         with:
-          url: "https://gitlab.esss.lu.se/api/v4/projects/1805/ref/master/trigger/pipeline"
           token: ${{ secrets.TOKEN }}
           project_id: 1805
           ref: "master"
@@ -80,7 +79,6 @@ jobs:
       - name: Trigger MAXIV pipeline
         uses: appleboy/gitlab-ci-action@master
         with:
-          url: "https://gitlab.com/api/v4/projects/21902377/ref/master/trigger/pipeline"
           token: ${{ secrets.MAXIV_TOKEN }}
           project_id: 21902377
           ref: "master"

@@ -46,12 +46,12 @@ const reducer = createReducer(
   }))
 );
 
-export function publishedDataReducer(
+export const publishedDataReducer = (
   state: PublishedDataState | undefined,
   action: Action
-) {
+) => {
   if (action.type.indexOf("[PublishedData]") !== -1) {
     console.log("Action came in! " + action.type);
   }
   return reducer(state, action);
-}
+};
