@@ -19,7 +19,7 @@ export interface InputObject{
 })
 
 export class MetadataInputModalComponent extends MetadataInputBase implements OnInit  {
-  constructor(private formBuilder: FormBuilder, @Inject(MAT_DIALOG_DATA) public data: FlatNodeEdit, public dialogRef: MatDialogRef<MetadataInputModalComponent>) {
+  constructor(private formBuilder: FormBuilder, public dialogRef: MatDialogRef<MetadataInputModalComponent>) {
     super();
    }
   ngOnInit(): void {
