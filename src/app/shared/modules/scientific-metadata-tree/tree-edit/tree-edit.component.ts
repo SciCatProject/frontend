@@ -1,4 +1,4 @@
-import { Component, EventEmitter, HostListener, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange} from '@angular/core';
 import { FlatTreeControl } from '@angular/cdk/tree';
 import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
 import { Observable } from 'rxjs';
@@ -17,6 +17,7 @@ export class FlatNodeEdit implements FlatNode {
   expandable: boolean;
   visible: boolean;
   editing: boolean;
+  editable: boolean;
 }
 
 @Component({
@@ -24,7 +25,7 @@ export class FlatNodeEdit implements FlatNode {
   templateUrl: './tree-edit.component.html',
   styleUrls: ['./tree-edit.component.scss'],
 })
-export class TreeEditComponent extends TreeBase implements OnInit {
+export class TreeEditComponent extends TreeBase implements OnInit, OnChanges {
   @Input() metadata: any;
   currentEditingNode: FlatNodeEdit | null = null;
   lastSavedChanges: number = -1;
@@ -50,8 +51,18 @@ export class TreeEditComponent extends TreeBase implements OnInit {
   ngOnInit() {
     this.dataTree = this.buildDataTree(this.metadata, 0);
     this.dataSource.data = this.dataTree;
+    this.setEditable();
   }
-
+  ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
+    for (const propName in changes) {
+      if (propName === "metadata") {
+        this.metadata = changes[propName].currentValue;
+        this.dataTree = this.buildDataTree(this.metadata, 0);
+        this.dataSource.data = this.dataTree;
+        this.setEditable();
+      }
+    }
+  }
   transformer = (node: TreeNode, level: number): FlatNodeEdit => {
     const existingNode = this.nestNodeMap.get(node) as FlatNodeEdit;
     const flatNode = existingNode && existingNode.key === node.key ? existingNode : new FlatNodeEdit();
@@ -60,6 +71,7 @@ export class TreeEditComponent extends TreeBase implements OnInit {
     flatNode.value = node.value;
     flatNode.expandable = node.children?.length > 0;
     flatNode.editing = node.key === '' ? true : false;
+    flatNode.editable = Array.isArray(node.value)? false: true;
     flatNode.visible = true;
     flatNode.unit = node.unit;
     this.flatNodeMap.set(flatNode, node);
@@ -67,39 +79,51 @@ export class TreeEditComponent extends TreeBase implements OnInit {
     return flatNode;
   }
 
-  buildDataTree(obj: { [key: string]: any }, level: number): TreeNode[] {
-    return Object.keys(obj).reduce<TreeNode[]>((accumulator, key) => {
-      const value = obj[key];
-      const node = new TreeNode();
-      node.key = key;
-      if (value !== null && typeof value !== undefined && typeof value === "object") {
-        if ("value" in value) {
-          node.value = value.value;
-          node.unit = value.unit || null;
-        } else {
-          node.children = this.buildDataTree(value, level + 1);
+  setEditable(){
+    const length = this.treeControl.dataNodes.length;
+    let currentIdx = 0;
+    while ( currentIdx < length){
+      const node = this.treeControl.dataNodes[currentIdx] as FlatNodeEdit;
+      if(Array.isArray(node.value)){
+        node.editable = false;
+        currentIdx++;
+        while(currentIdx < length){
+          const childNode = this.treeControl.dataNodes[currentIdx] as FlatNodeEdit;
+          if (childNode.level > node.level){
+            //A child node
+            childNode.editable = false;
+            currentIdx++;
+          }else{
+            //Not a child node
+            break;
+          }
         }
-      } else {
-        node.value = value;
+      }else{
+        node.editable = true;
+        currentIdx++;
       }
-      return accumulator.concat(node);
-    }, []);
+    }
   }
 
   convertDataTreeToObject(tree: TreeNode[]): { [key: string]: any } {
     return tree.reduce((accumulator, node) => {
-      if (!this.hasNoContent(node)) {
-        if (node.children && node.children.length > 0) {
-          accumulator[node.key] = this.convertDataTreeToObject(node.children);
-        } else {
-          if (node.unit) {
-            accumulator[node.key] = { value: node.value, unit: node.unit };
-          } else {
-            accumulator[node.key] = node.value;
-          }
-        }
+      if (this.hasNoContent(node)) {
         return accumulator;
       }
+      if (Array.isArray(node.value)){
+        accumulator[node.key] = node.value;
+        return accumulator;
+      }
+      if (node.children && node.children.length > 0) {
+        accumulator[node.key] = this.convertDataTreeToObject(node.children);
+      } else {
+        if (node.unit) {
+          accumulator[node.key] = { value: node.value, unit: node.unit };
+        } else {
+          accumulator[node.key] = node.value;
+        }
+      }
+      return accumulator;
     }, {})
   }
 
@@ -161,8 +185,12 @@ export class TreeEditComponent extends TreeBase implements OnInit {
       }
       this.disableEditing();
     }
-    this.currentEditingNode = node;
-    this.currentEditingNode.editing = true;
+    if(node.editable){
+      this.currentEditingNode = node;
+      this.currentEditingNode.editing = true;
+    } else {
+      this.openSnackbar("This field is not editable");
+    }
   }
   onChange() {
     this.changed = true;
@@ -222,7 +250,7 @@ export class TreeEditComponent extends TreeBase implements OnInit {
         break;
       case "boolean":
         node.key = data.key;
-        node.value = data.value === "true" ? true : false;
+        node.value = data.value.toLowerCase() === "true" ? true : false;
         node.unit = null;
         break;
       case "quantity":

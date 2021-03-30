@@ -27,9 +27,28 @@ export class TreeBase {
   nestNodeMap: Map<TreeNode, FlatNode>;
   expand: boolean = false;
   dataTree: TreeNode[];
-
   _filterText = '';
+
   constructor() {
+  }
+  buildDataTree(obj: { [key: string]: any }, level: number): TreeNode[] {
+    return Object.keys(obj).reduce<TreeNode[]>((accumulator, key) => {
+      const value = obj[key];
+      const node = new TreeNode();
+      node.key = key;
+      if ( value !== null && value !== undefined && typeof value === 'object') {
+        if ('value' in value) {
+          node.value = value.value;
+          node.unit = value.unit || null;
+        }else {
+          node.children = this.buildDataTree(value, level + 1);
+          node.value = value;
+        }
+      } else {
+        node.value = value;
+      }
+      return accumulator.concat(node);
+    }, []);
   }
   get filterText(): string {
     return this._filterText;
@@ -132,7 +151,6 @@ export class TreeBase {
     if (parentNode) {
       // remove node from list of children
       parentNode.children = parentNode.children.filter(e => e !== nestedNode);
-
     } else {
       // node is on the root level
       this.dataTree = this.dataTree.filter(e => e !== nestedNode);

@@ -43,24 +43,4 @@ export class TreeViewComponent extends TreeBase implements OnInit, OnChanges {
     this.nestNodeMap.set(node, flatNode);
     return flatNode;
   }
-  buildDataTree(obj: { [key: string]: any }, level: number): TreeNode[] {
-    return Object.keys(obj).reduce<TreeNode[]>((accumulator, key) => {
-      const value = obj[key];
-      const node = new TreeNode();
-      node.key = key;
-      if (value) {
-        if (typeof value === "object") {
-          if ("value" in value){
-            node.value = value.value;
-            node.unit = value.unit || null;
-          } else {
-            node.children = this.buildDataTree(value, level + 1);
-          }
-        } else {
-          node.value = value;
-        }
-      }
-      return accumulator.concat(node);
-    }, []);
-  }
 }
