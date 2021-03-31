@@ -54,7 +54,7 @@ export const environment = {
   sftpHost: "",
   shoppingCartEnabled: true,
   shoppingCartOnHeader: true,
-  tableSciDataEnabled: true,
+  tableSciDataEnabled: false,
   userNamePromptEnabled: true,
   userProfileImageEnabled: true,
   jobsEnabled: true,
