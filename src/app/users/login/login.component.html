@@ -3,11 +3,25 @@
     <div fxLayout="row" class="facility-logo">
       <div fxFlex="auto"></div>
       <div fxFlex="200px">
-        <img src="assets/images/site-logo.png" />
+        <img src="assets/images/esslogo.png" />
       </div>
       <div fxFlex="auto"></div>
     </div>
     <mat-card-content>
+
+        <button
+        mat-raised-button
+        class="login-button"
+        type="submit"
+        color="primary"
+        [ngClass]="{ loading: loading$ | async }"
+        (click) = "redirectOIDC()"
+      >
+       OIDC Log in
+      </button>
+    
+      
+      <!-- <a href="http://localhost:3000/auth/oidc"><button class="btn btn-success pull-right" >OIDC login</button></a> -->
       <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
         <mat-form-field hintLabel="{{appConfig.facility}} account username">
           <mat-label> <b> Username</b> </mat-label>

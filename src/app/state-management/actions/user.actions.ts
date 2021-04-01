@@ -2,6 +2,12 @@ import { createAction, props } from "@ngrx/store";
 import { User, AccessToken, UserIdentity, UserSetting } from "shared/sdk";
 import { Message, Settings } from "state-management/models";
 
+
+export const loginOIDCAction = createAction(
+  "[User] OIDC Login",
+  props <{accessToken: string; userId: string}>()
+)
+
 export const loginAction = createAction(
   "[User] Login",
   props<{ form: { username: string; password: string; rememberMe: boolean } }>()

@@ -1,8 +1,9 @@
+import { DOCUMENT } from '@angular/common';
 import { Component, OnDestroy, OnInit, Inject } from "@angular/core";
 import { FormBuilder, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { select, Store } from "@ngrx/store";
-import { loginAction } from "state-management/actions/user.actions";
+import { loginAction, loginOIDCAction } from "state-management/actions/user.actions";
 import { Subscription } from "rxjs";
 import { filter } from "rxjs/operators";
 import {
@@ -55,9 +56,14 @@ export class LoginComponent implements OnInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     private store: Store<any>,
-    @Inject(APP_CONFIG) public appConfig: AppConfig
+    @Inject(APP_CONFIG) public appConfig: AppConfig,
+    @Inject(DOCUMENT) private document: Document
   ) {
     this.returnUrl = this.route.snapshot.queryParams["returnUrl"] || "/";
+  }
+
+  redirectOIDC() {
+    this.document.location.href = 'http://localhost:3000/auth/oidc';
   }
 
   openPrivacyDialog() {
@@ -76,11 +82,19 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.store.dispatch(loginAction({ form }));
   }
 
+
   ngOnInit() {
     this.proceedSubscription = this.hasUser$.subscribe(() => {
       console.log(this.returnUrl);
       this.router.navigateByUrl("/datasets");
     });
+
+    this.route.queryParams.subscribe(params => {
+      if (!!params.returnUrl){
+        console.log("!!!!!!!", params.returnUrl);
+        const urlqp = new URLSearchParams(params.returnUrl.split('?')[1]);
+        this.store.dispatch(loginOIDCAction({accessToken: urlqp.get('access-token'), userId: urlqp.get('user-id')}));
+      }});
   }
 
   ngOnDestroy() {

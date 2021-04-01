@@ -82,6 +82,28 @@ export class UserEffects {
     )
   );
 
+  oidcFetchUser$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(fromActions.loginOIDCAction),
+      switchMap(({ accessToken, userId }) => {
+        const token = new SDKToken({
+          id: accessToken,
+          userId: userId,
+        });
+        this.loopBackAuth.setToken(token);
+        return this.userApi.findById(userId).pipe(
+          switchMap((user: User) => [
+            fromActions.fetchUserCompleteAction(),
+            fromActions.loginCompleteAction({
+              user,
+              accountType: "external",
+            }),
+          ]),
+          catchError(() => of(fromActions.fetchUserFailedAction()))
+        );
+      })
+    )
+  );
   fetchUser$ = createEffect(() =>
     this.actions$.pipe(
       ofType(fromActions.fetchUserAction),
