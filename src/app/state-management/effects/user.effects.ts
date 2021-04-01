@@ -85,13 +85,13 @@ export class UserEffects {
   oidcFetchUser$ = createEffect(() =>
     this.actions$.pipe(
       ofType(fromActions.loginOIDCAction),
-      switchMap(({ accessToken, userId }) => {
+      switchMap(({ oidcLoginResponse }) => {
         const token = new SDKToken({
-          id: accessToken,
-          userId: userId,
+          id: oidcLoginResponse.accessToken,
+          userId: oidcLoginResponse.userId,
         });
         this.loopBackAuth.setToken(token);
-        return this.userApi.findById(userId).pipe(
+        return this.userApi.findById(oidcLoginResponse.userId).pipe(
           switchMap((user: User) => [
             fromActions.fetchUserCompleteAction(),
             fromActions.loginCompleteAction({

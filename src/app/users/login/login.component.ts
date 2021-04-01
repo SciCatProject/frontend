@@ -3,7 +3,7 @@ import { Component, OnDestroy, OnInit, Inject } from "@angular/core";
 import { FormBuilder, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { select, Store } from "@ngrx/store";
-import { loginAction, loginOIDCAction } from "state-management/actions/user.actions";
+import { fetchUserAction, loginAction, loginOIDCAction } from "state-management/actions/user.actions";
 import { Subscription } from "rxjs";
 import { filter } from "rxjs/operators";
 import {
@@ -90,10 +90,15 @@ export class LoginComponent implements OnInit, OnDestroy {
     });
 
     this.route.queryParams.subscribe(params => {
+      // OIDC logins eventually redirect to this componenet, adding information about user
+      // which are parsed here.
       if (!!params.returnUrl){
-        console.log("!!!!!!!", params.returnUrl);
         const urlqp = new URLSearchParams(params.returnUrl.split('?')[1]);
-        this.store.dispatch(loginOIDCAction({accessToken: urlqp.get('access-token'), userId: urlqp.get('user-id')}));
+        // dispatching to the loginOIDCAction passes information to eventually be added to Loopback AccessToken
+        const accessToken = urlqp.get('access-token');
+        const userId = urlqp.get('user-id')
+        this.store.dispatch(loginOIDCAction({ oidcLoginResponse: {accessToken: accessToken, userId: userId }}));
+        this.store.dispatch(fetchUserAction({ adLoginResponse: {access_token: accessToken, userId: userId }}))
       }});
   }
 

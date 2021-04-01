@@ -5,7 +5,7 @@ import { Message, Settings } from "state-management/models";
 
 export const loginOIDCAction = createAction(
   "[User] OIDC Login",
-  props <{accessToken: string; userId: string}>()
+  props <{oidcLoginResponse: any }>()
 )
 
 export const loginAction = createAction(
