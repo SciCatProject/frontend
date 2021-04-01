@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { FormBuilder } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { Type } from '../base-classes/metadata-input-base';
@@ -6,7 +6,7 @@ import { FlatNodeEdit } from '../tree-edit/tree-edit.component';
 
 import { MetadataInputComponent } from './metadata-input.component';
 
-fdescribe('MetadataInputComponent', () => {
+describe('MetadataInputComponent', () => {
   let component: MetadataInputComponent;
   let fixture: ComponentFixture<MetadataInputComponent>;
 
@@ -111,7 +111,7 @@ fdescribe('MetadataInputComponent', () => {
     it('should set values in form control (date)', () => {
       const data = new FlatNodeEdit();
       data.key = "date";
-      data.value = new Date();
+      data.value = new Date('2020-01-02').toISOString();
       data.level = 0;
       data.expandable = false;
       component.data = data;
@@ -120,8 +120,34 @@ fdescribe('MetadataInputComponent', () => {
       component.addCurrentMetadata(component.data);
       expect(component.metadataForm.get('type').value).toEqual(Type.date);
       expect(component.metadataForm.get('key').value).toEqual("date");
-      expect(component.metadataForm.get('value').value).toEqual();
+      expect(component.metadataForm.get('value').value).toEqual(data.value);
       expect(component.metadataForm.get('unit').disabled).toEqual(true);
+    });
+  });
+  describe("#onSave()", () => {
+    it("should emit an cancel event", () => {
+      spyOn(component.cancel, "emit");
+      spyOn(component.save, "emit");
+      component.onSave();
+      expect(component.cancel.emit).toHaveBeenCalledTimes(1);
+      // Should not emit save event if form is not dirty
+      expect(component.save.emit).toHaveBeenCalledTimes(0);
+    });
+    it("should emit an save event", () => {
+      spyOn(component.cancel, "emit");
+      spyOn(component.save, "emit");
+      component.metadataForm.markAsDirty();
+      component.onSave();
+      expect(component.cancel.emit).toHaveBeenCalledTimes(0);
+      expect(component.save.emit).toHaveBeenCalledTimes(1);
+      expect(component.save.emit).toHaveBeenCalledWith(component.metadataForm.value);
+    });
+  });
+  describe("#onCancle()", () => {
+    it("should emit an cancel event", () => {
+      spyOn(component.cancel, "emit");
+      component.onCancel();
+      expect(component.cancel.emit).toHaveBeenCalledTimes(1);
     });
   });
 });

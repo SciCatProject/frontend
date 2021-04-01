@@ -8,6 +8,7 @@ import { HistoryManager } from 'shared/modules/scientific-metadata-tree/base-cla
 import { MatDialog } from '@angular/material/dialog';
 import { InputObject, MetadataInputModalComponent } from '../metadata-input-modal/metadata-input-modal.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { DatePipe } from '@angular/common';
 
 export class FlatNodeEdit implements FlatNode {
   key: string;
@@ -35,8 +36,9 @@ export class TreeEditComponent extends TreeBase implements OnInit, OnChanges {
   @Output() save = new EventEmitter<object>();
   @Output() hasUnsavedChanges = new EventEmitter<boolean>();
   private changed: boolean = false;
-  constructor(public dialog: MatDialog, private snackBar: MatSnackBar) {
+  constructor(public dialog: MatDialog, private snackBar: MatSnackBar, datePipe: DatePipe) {
     super();
+    this.datePipe = datePipe;
     this.treeFlattener = new MatTreeFlattener(this.transformer, this.getLevel, this.isExpandable, this.getChildren);
     this.treeControl = new FlatTreeControl<FlatNodeEdit>(this.getLevel, this.isExpandable);
     this.dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
@@ -235,7 +237,7 @@ export class TreeEditComponent extends TreeBase implements OnInit, OnChanges {
     switch (data.type) {
       case "date":
         node.key = data.key;
-        node.value = Date.parse(data.value);
+        node.value = new Date(Date.parse(data.value)).toISOString();
         node.unit = null;
         break;
       case "string":

@@ -22,13 +22,13 @@ export class MetadataInputBase {
   unitValidator(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       const allowed = this.unitsService.getUnits().includes(control.value);
-      return allowed ? null : { forbiddenUnit: { value: control.value } };
+      return allowed ? null : { forbiddenUnit: "Invalid unit" };
     };
   }
   dateValidator(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       const invalid = isNaN(Date.parse(control.value));
-      return invalid ? { invalidDate: "Invalid date" } : null
+      return invalid ? { invalidDate: "Invalid date. Format: yyyy-MM-dd HH:mm:ss or yyyy-MM-dd" } : null
     }
   }
   booleanValidator(): ValidatorFn {
@@ -116,7 +116,7 @@ export class MetadataInputBase {
   fieldHasError(field: string): boolean {
     return this.metadataForm.get(field).errors ? true : false;
   }
-  getError(field: string) {
+  getErrorMessage(field: string) {
     switch (field) {
       case "value":
         if (this.metadataForm.get(field).hasError('required')) {
@@ -130,6 +130,13 @@ export class MetadataInputBase {
         }
         if (this.metadataForm.get(field).hasError('invalidNumber')) {
           return this.metadataForm.get(field).getError('invalidNumber');
+        }
+      case "unit":
+        if (this.metadataForm.get(field).hasError('required')) {
+          return "A unit is required for quantities";
+        }
+        if (this.metadataForm.get(field).hasError('forbiddenUnit')) {
+          return this.metadataForm.get(field).getError('forbiddenUnit');
         }
     }
   }

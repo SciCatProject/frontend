@@ -62,7 +62,7 @@
             placeholder="Value"
             step=1 />
           <mat-error *ngIf="fieldHasError('value')">
-            {{getError("value")}}
+            {{getErrorMessage("value")}}
           </mat-error>
         </mat-form-field>
       </div>
@@ -85,7 +85,7 @@
             </mat-option>
           </mat-autocomplete>
           <mat-error *ngIf="fieldHasError('unit')">
-            A unit is required for quantities
+            {{getErrorMessage("unit")}}
           </mat-error>
         </mat-form-field>
       </div>

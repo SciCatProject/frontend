@@ -1,5 +1,5 @@
 import { Component, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
-import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { FlatNodeEdit } from '../tree-edit/tree-edit.component';
 import { MetadataInputBase, Type } from '../base-classes/metadata-input-base';
@@ -40,12 +40,6 @@ export class MetadataInputComponent extends MetadataInputBase implements OnInit 
     });
   }
 
-  unitValidator(): ValidatorFn {
-    return (control: AbstractControl): { [key: string]: any } | null => {
-      const allowed = this.unitsService.getUnits().includes(control.value);
-      return allowed ? null : { forbiddenUnit: { value: control.value } };
-    };
-  }
   initilizeFormControl() {
     const field = this.formBuilder.group({
       type: new FormControl("", [Validators.required]),

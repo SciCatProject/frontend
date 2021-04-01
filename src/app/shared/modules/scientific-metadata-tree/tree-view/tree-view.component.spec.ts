@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { TreeViewComponent } from './tree-view.component';
@@ -8,7 +9,10 @@ fdescribe('TreeViewComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ TreeViewComponent ]
+      declarations: [ TreeViewComponent ],
+      providers:[
+        DatePipe,
+      ]
     })
     .compileComponents();
   }));

@@ -1,6 +1,8 @@
 import { FlatTreeControl } from "@angular/cdk/tree";
-import { Component } from "@angular/core";
+import { DatePipe } from "@angular/common";
+import { Component} from "@angular/core";
 import { MatTreeFlatDataSource, MatTreeFlattener } from "@angular/material/tree";
+import { UnitsService } from "shared/services/units.service";
 
 export class TreeNode{
   children: TreeNode[];
@@ -17,7 +19,8 @@ export class FlatNode{
   visible: boolean;
 }
 @Component({
-  template: ''
+  template: '',
+  providers: [DatePipe]
 })
 export class TreeBase {
   treeControl: FlatTreeControl<FlatNode>;
@@ -28,8 +31,10 @@ export class TreeBase {
   expand: boolean = false;
   dataTree: TreeNode[];
   _filterText = '';
-
+  datePipe : DatePipe;
+  unitsService: UnitsService;
   constructor() {
+    this.unitsService = new UnitsService();
   }
   buildDataTree(obj: { [key: string]: any }, level: number): TreeNode[] {
     return Object.keys(obj).reduce<TreeNode[]>((accumulator, key) => {
@@ -42,7 +47,9 @@ export class TreeBase {
           node.unit = value.unit || null;
         }else {
           node.children = this.buildDataTree(value, level + 1);
-          node.value = value;
+          if (Array.isArray(value)){
+            node.value = value;
+          }
         }
       } else {
         node.value = value;
@@ -179,7 +186,10 @@ export class TreeBase {
       return '\"\"';
     }
     if (node.unit){
-      return `${node.value} (${node.unit})`;
+      return `${node.value} (${this.unitsService.getSymbol(node.unit)})`;
+    }
+    if (typeof node.value === 'string' && !isNaN(Date.parse(node.value))){
+      return this.datePipe.transform(node.value, "yyyy-MM-dd, HH:mm:ss zzzz");
     }
     return node.value;
   }
