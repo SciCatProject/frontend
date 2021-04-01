@@ -9,6 +9,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { InputObject, MetadataInputModalComponent } from '../metadata-input-modal/metadata-input-modal.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DatePipe } from '@angular/common';
+import { Type } from '../base-classes/metadata-input-base';
 
 export class FlatNodeEdit implements FlatNode {
   key: string;
@@ -62,20 +63,24 @@ export class TreeEditComponent extends TreeBase implements OnInit, OnChanges {
         this.dataTree = this.buildDataTree(this.metadata, 0);
         this.dataSource.data = this.dataTree;
         this.setEditable();
+        this.filterText = this.filterText;
       }
     }
   }
   transformer = (node: TreeNode, level: number): FlatNodeEdit => {
     const existingNode = this.nestNodeMap.get(node) as FlatNodeEdit;
-    const flatNode = existingNode && existingNode.key === node.key ? existingNode : new FlatNodeEdit();
+    const flatNode = existingNode? existingNode: new FlatNodeEdit();
     flatNode.key = node.key;
     flatNode.level = level;
     flatNode.value = node.value;
     flatNode.expandable = node.children?.length > 0;
-    flatNode.editing = node.key === '' ? true : false;
-    flatNode.editable = Array.isArray(node.value)? false: true;
-    flatNode.visible = true;
     flatNode.unit = node.unit;
+    if (!existingNode){
+      // Important only set for new node
+      flatNode.editing = node.key === '' ? true : false;
+      flatNode.editable = Array.isArray(node.value)? false: true;
+      flatNode.visible = true;
+    }
     this.flatNodeMap.set(flatNode, node);
     this.nestNodeMap.set(node, flatNode);
     return flatNode;
@@ -158,8 +163,7 @@ export class TreeEditComponent extends TreeBase implements OnInit, OnChanges {
       }
     });
     this.updateNode(nestedNode, data);
-    this.currentEditingNode = null;
-    this.openSnackbar("Your changes is cached, hit the save button on the top to save permanently!");
+    this.openSnackbar("Your changes are cached, hit the save button to save to database !");
     this.disableEditing();
   }
   onCancel() {
@@ -198,10 +202,6 @@ export class TreeEditComponent extends TreeBase implements OnInit, OnChanges {
     this.changed = true;
   }
   addNewNode(parentNode: FlatNodeEdit) {
-    if (this.currentEditingNode && this.changed) {
-      this.openSnackbar("You are uncached changes in another row, please close or save it first!");
-      return;
-    }
     const newNode = new TreeNode();
     newNode.key = "";
     const nestedParentNode = this.flatNodeMap.get(parentNode);
@@ -235,27 +235,27 @@ export class TreeEditComponent extends TreeBase implements OnInit, OnChanges {
   }
   updateNode(node: TreeNode, data: InputData) {
     switch (data.type) {
-      case "date":
+      case Type.date:
         node.key = data.key;
         node.value = new Date(Date.parse(data.value)).toISOString();
         node.unit = null;
         break;
-      case "string":
+      case Type.string:
         node.key = data.key;
         node.value = data.value;
         node.unit = null;
         break;
-      case "number":
+      case Type.number:
         node.key = data.key;
         node.value = Number(data.value);
         node.unit = null;
         break;
-      case "boolean":
+      case Type.boolean:
         node.key = data.key;
         node.value = data.value.toLowerCase() === "true" ? true : false;
         node.unit = null;
         break;
-      case "quantity":
+      case Type.quantity:
         node.key = data.key;
         node.value = Number(data.value);
         node.unit = data.unit;
@@ -271,10 +271,11 @@ export class TreeEditComponent extends TreeBase implements OnInit, OnChanges {
     return this.currentEditingNode && this.changed;
   }
   doSave() {
-    this.lastSavedChanges = this.historyManager.currentIdx;
-    this.hasUnsavedChanges.emit(false);
     this.metadata = this.convertDataTreeToObject(this.dataTree);
     this.save.emit(this.metadata);
+    this.hasUnsavedChanges.emit(false);
+    this.historyManager.clearHistory();
+    this.lastSavedChanges = this.historyManager.currentIdx;;
   }
 
   openObjectCreationDialog(node: FlatNodeEdit): void {

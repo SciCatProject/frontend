@@ -158,6 +158,9 @@ export class TreeBase {
     if (parentNode) {
       // remove node from list of children
       parentNode.children = parentNode.children.filter(e => e !== nestedNode);
+      if(parentNode.children.length === 0){
+        parentNode.value = "";
+      }
     } else {
       // node is on the root level
       this.dataTree = this.dataTree.filter(e => e !== nestedNode);

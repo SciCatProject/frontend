@@ -43,4 +43,8 @@ export class HistoryManager {
   setLimit(limit: number): void{
     this.limit = limit;
   }
+  clearHistory(){
+    this.commands = [];
+    this.currentIdx = -1;
+  }
 }

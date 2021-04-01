@@ -29,6 +29,7 @@ export class TreeViewComponent extends TreeBase implements OnInit, OnChanges {
         this.metadata = changes[propName].currentValue;
         this.dataTree = this.buildDataTree(this.metadata, 0);
         this.dataSource.data = this.dataTree;
+        this.filterText = this.filterText;
       }
     }
   }
