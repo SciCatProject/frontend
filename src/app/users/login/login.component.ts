@@ -1,4 +1,4 @@
-import { DOCUMENT } from '@angular/common';
+import { DOCUMENT } from "@angular/common";
 import { Component, OnDestroy, OnInit, Inject } from "@angular/core";
 import { FormBuilder, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
@@ -63,7 +63,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   redirectOIDC() {
-    this.document.location.href = 'http://localhost:3000/auth/oidc';
+    this.document.location.href = "http://localhost:3000/auth/oidc";
   }
 
   openPrivacyDialog() {
@@ -93,13 +93,14 @@ export class LoginComponent implements OnInit, OnDestroy {
       // OIDC logins eventually redirect to this componenet, adding information about user
       // which are parsed here.
       if (!!params.returnUrl){
-        const urlqp = new URLSearchParams(params.returnUrl.split('?')[1]);
+        const urlqp = new URLSearchParams(params.returnUrl.split("?")[1]);
         // dispatching to the loginOIDCAction passes information to eventually be added to Loopback AccessToken
-        const accessToken = urlqp.get('access-token');
-        const userId = urlqp.get('user-id')
-        this.store.dispatch(loginOIDCAction({ oidcLoginResponse: {accessToken: accessToken, userId: userId }}));
-        this.store.dispatch(fetchUserAction({ adLoginResponse: {access_token: accessToken, userId: userId }}))
-      }});
+        const accessToken = urlqp.get("access-token");
+        const userId = urlqp.get("user-id");
+        this.store.dispatch(loginOIDCAction({ oidcLoginResponse: {accessToken, userId }}));
+        this.store.dispatch(fetchUserAction({ adLoginResponse: {access_token: accessToken, userId }}));
+      }
+});
   }
 
   ngOnDestroy() {

@@ -17,11 +17,8 @@
         [ngClass]="{ loading: loading$ | async }"
         (click) = "redirectOIDC()"
       >
-       OIDC Log in
+       Login with Google
       </button>
-    
-      
-      <!-- <a href="http://localhost:3000/auth/oidc"><button class="btn btn-success pull-right" >OIDC login</button></a> -->
       <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
         <mat-form-field hintLabel="{{appConfig.facility}} account username">
           <mat-label> <b> Username</b> </mat-label>
