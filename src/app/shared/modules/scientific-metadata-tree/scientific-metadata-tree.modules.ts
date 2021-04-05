@@ -7,7 +7,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { TreeEditComponent } from './tree-edit/tree-edit.component';
 import { MatSelectModule } from '@angular/material/select';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { MatInputModule } from '@angular/material/input';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FlexLayoutModule, FlexModule } from '@angular/flex-layout';
@@ -48,6 +48,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     MatMenuModule,
     MatSnackBarModule
   ],
-  exports: [TreeEditComponent, TreeViewComponent]
+  exports: [TreeEditComponent, TreeViewComponent],
+  providers:[DatePipe]
 })
 export class ScientificMetadataTreeModule {}

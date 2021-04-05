@@ -54,7 +54,6 @@ export class MetadataInputBase {
           Validators.required,
           this.numberValidator()
         ]);
-        this.metadataForm.updateValueAndValidity();
         break;
       case Type.date:
         this.metadataForm.get("unit").disable();
@@ -62,7 +61,6 @@ export class MetadataInputBase {
           Validators.required,
           this.dateValidator(),
         ]);
-        this.metadataForm.updateValueAndValidity();
         break;
       case Type.boolean:
       this.metadataForm.get("unit").disable();
@@ -70,7 +68,6 @@ export class MetadataInputBase {
         Validators.required,
         this.booleanValidator(),
       ]);
-      this.metadataForm.updateValueAndValidity();
       break;
       case Type.number:
         this.metadataForm.get("unit").disable();
@@ -86,7 +83,6 @@ export class MetadataInputBase {
           Validators.required,
           Validators.minLength(1),
         ]);
-        this.metadataForm.updateValueAndValidity();
     }
     this.metadataForm.get("unit").updateValueAndValidity();
     this.metadataForm.get("value").updateValueAndValidity();
@@ -138,6 +134,8 @@ export class MetadataInputBase {
         if (this.metadataForm.get(field).hasError('forbiddenUnit')) {
           return this.metadataForm.get(field).getError('forbiddenUnit');
         }
+      default:
+        return null;
     }
   }
 }

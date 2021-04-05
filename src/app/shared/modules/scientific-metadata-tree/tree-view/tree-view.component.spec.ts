@@ -3,7 +3,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { TreeViewComponent } from './tree-view.component';
 
-fdescribe('TreeViewComponent', () => {
+describe('TreeViewComponent', () => {
   let component: TreeViewComponent;
   let fixture: ComponentFixture<TreeViewComponent>;
 

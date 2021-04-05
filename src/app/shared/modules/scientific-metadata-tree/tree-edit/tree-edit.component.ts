@@ -206,7 +206,6 @@ export class TreeEditComponent extends TreeBase implements OnInit, OnChanges {
     newNode.key = "";
     const nestedParentNode = this.flatNodeMap.get(parentNode);
     this.insertNode(nestedParentNode, newNode);
-    const index = this.getIndex(nestedParentNode, newNode);
     this.treeControl.expand(parentNode);
     this.enableEditing(this.nestNodeMap.get(newNode) as FlatNodeEdit);
   }

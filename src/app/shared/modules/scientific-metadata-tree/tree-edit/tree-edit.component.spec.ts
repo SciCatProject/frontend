@@ -10,7 +10,7 @@ import { InputData } from '../metadata-input/metadata-input.component';
 
 import { FlatNodeEdit, TreeEditComponent } from './tree-edit.component';
 
-fdescribe('TreeEditComponent', () => {
+describe('TreeEditComponent', () => {
   let component: TreeEditComponent;
   let fixture: ComponentFixture<TreeEditComponent>;
 
@@ -380,13 +380,77 @@ fdescribe('TreeEditComponent', () => {
 
 
   describe("#enableEditing()", () => {
-    it("Should delete node correctly", () => {
-
+    it("Should enable node editing", () => {
+      component.metadata = {
+        motors: {
+          sampx: {
+            value: -0.03949844939218141,
+            unit: "mm"
+          },
+          sampy: {
+            value: 0.003037629787175808,
+            unit: "mm"
+          }
+        }
+      };
+      component.ngOnInit();
+      const node = component.treeControl.dataNodes[0] as FlatNodeEdit;
+      component.enableEditing(node);
+      expect(node.editing).toBeTrue();
+    });
+    it("Should not enable node editing when there is unsaved changes on another node", () => {
+      component.metadata = {
+        motors: {
+          sampx: {
+            value: -0.03949844939218141,
+            unit: "mm"
+          },
+          sampy: {
+            value: 0.003037629787175808,
+            unit: "mm"
+          }
+        }
+      };
+      component.ngOnInit();
+      const node0 = component.treeControl.dataNodes[0] as FlatNodeEdit;
+      const node1 = component.treeControl.dataNodes[1] as FlatNodeEdit;
+      component.enableEditing(node0);
+      component.onChange();
+      component.enableEditing(node1);
+      expect(node1.editing).toBeFalse();
+    });
+    it("Should not enable node editing when node is a element of an array", () => {
+      component.metadata = {
+        motors: ["motor1", "motor2", "motor3"]
+      };
+      component.ngOnInit();
+      const motor1 = component.treeControl.dataNodes[1] as FlatNodeEdit;
+      component.enableEditing(motor1);
+      expect(motor1.editing).toBeFalse();
     })
   });
   describe("#addNewNode()", () => {
-    it("Should delete node correctly", () => {
-
+    it("Should add a new node", () => {
+      component.metadata = {
+        motors: {
+          sampx: {
+            value: -0.03949844939218141,
+            unit: "mm"
+          },
+          sampy: {
+            value: 0.003037629787175808,
+            unit: "mm"
+          }
+        }
+      };
+      component.ngOnInit();
+      const node = component.treeControl.dataNodes[0] as FlatNodeEdit;
+      const nestedNode = component.flatNodeMap.get(node);
+      component.addNewNode(node);
+      expect(nestedNode.children.length).toEqual(3);
+      expect(component.treeControl.isExpanded(node));
+      const newNode = component.treeControl.dataNodes[component.treeControl.dataNodes.length - 1] as FlatNodeEdit;
+      expect(newNode.editing).toBeTrue();
     })
   });
   describe("#deleteNode()", () => {
