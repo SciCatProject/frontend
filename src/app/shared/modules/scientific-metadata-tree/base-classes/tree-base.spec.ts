@@ -346,7 +346,10 @@ describe("TreeBaseComponent", () => {
       };
       component.ngOnInit();
       const result = component.getValueRepresentation(component.treeControl.dataNodes[0]);
-      expect(result).toEqual("2020-04-01, 12:00:00 GMT+02:00");
+      //Difficult to verify the whole string at once due to timezone
+      expect(result).toContain("2020-04-01,");
+      expect(result).toContain("12:00:00");
+      expect(result).toContain("GMT");
     });
   });
 });
