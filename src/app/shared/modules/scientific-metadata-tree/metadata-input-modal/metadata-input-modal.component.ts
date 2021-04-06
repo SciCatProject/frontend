@@ -1,8 +1,8 @@
-import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, Validators } from '@angular/forms';
-import { FlatNodeEdit } from '../tree-edit/tree-edit.component';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { MetadataInputBase } from '../base-classes/metadata-input-base';
+import { Component, Inject, OnInit } from "@angular/core";
+import { FormBuilder, FormControl, Validators } from "@angular/forms";
+import { FlatNodeEdit } from "../tree-edit/tree-edit.component";
+import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
+import { MetadataInputBase } from "../base-classes/metadata-input-base";
 
 export interface InputObject{
   parent: string;
@@ -13,9 +13,9 @@ export interface InputObject{
 }
 
 @Component({
-  selector: 'metadata-input-modal',
-  templateUrl: './metadata-input-modal.component.html',
-  styleUrls: ['./metadata-input-modal.component.scss']
+  selector: "metadata-input-modal",
+  templateUrl: "./metadata-input-modal.component.html",
+  styleUrls: ["./metadata-input-modal.component.scss"]
 })
 
 export class MetadataInputModalComponent extends MetadataInputBase implements OnInit  {

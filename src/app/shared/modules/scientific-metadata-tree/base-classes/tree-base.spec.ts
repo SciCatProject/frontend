@@ -1,13 +1,13 @@
-import { DatePipe } from '@angular/common';
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { MatMenuModule } from '@angular/material/menu';
-import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { FlatNode, TreeNode } from '../base-classes/tree-base';
-import { TreeEditComponent } from '../tree-edit/tree-edit.component';
+import { DatePipe } from "@angular/common";
+import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
+import { MatDialog, MatDialogModule } from "@angular/material/dialog";
+import { MatMenuModule } from "@angular/material/menu";
+import { MatSnackBar, MatSnackBarModule } from "@angular/material/snack-bar";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { FlatNode, TreeNode } from "../base-classes/tree-base";
+import { TreeEditComponent } from "../tree-edit/tree-edit.component";
 
-describe('TreeBase', () => {
+describe("TreeBaseComponent", () => {
   let component: TreeEditComponent;
   let fixture: ComponentFixture<TreeEditComponent>;
 
@@ -47,7 +47,7 @@ describe('TreeBase', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 
@@ -166,7 +166,7 @@ describe('TreeBase', () => {
         } else {
           expect(node.visible).toBeTrue();
         }
-      })
+      });
     });
   });
   describe("#setParentVisible()", () => {
@@ -300,7 +300,7 @@ describe('TreeBase', () => {
     it("Should get string null", () => {
       component.metadata = {
         barCode: null
-      }
+      };
       component.ngOnInit();
       const result = component.getValueRepresentation(component.treeControl.dataNodes[0]);
       expect(result).toEqual("null");
@@ -308,7 +308,7 @@ describe('TreeBase', () => {
     it("Should get string undefined", () => {
       component.metadata = {
         barCode: undefined
-      }
+      };
       component.ngOnInit();
       const result = component.getValueRepresentation(component.treeControl.dataNodes[0]);
       expect(result).toEqual("undefined");
@@ -316,7 +316,7 @@ describe('TreeBase', () => {
     it("Should get string []", () => {
       component.metadata = {
         barCode: []
-      }
+      };
       component.ngOnInit();
       const result = component.getValueRepresentation(component.treeControl.dataNodes[0]);
       expect(result).toEqual("[]");
@@ -324,7 +324,7 @@ describe('TreeBase', () => {
     it("Should get string \"\" ", () => {
       component.metadata = {
         barCode: ""
-      }
+      };
       component.ngOnInit();
       const result = component.getValueRepresentation(component.treeControl.dataNodes[0]);
       expect(result).toEqual("\"\"");
@@ -335,7 +335,7 @@ describe('TreeBase', () => {
           value: 1,
           unit: "angstrom"
         }
-      }
+      };
       component.ngOnInit();
       const result = component.getValueRepresentation(component.treeControl.dataNodes[0]);
       expect(result).toEqual("1 (Å)");
@@ -343,7 +343,7 @@ describe('TreeBase', () => {
     it("Should get date string ", () => {
       component.metadata = {
         creationTime: "2020-04-01 12:00:00"
-      }
+      };
       component.ngOnInit();
       const result = component.getValueRepresentation(component.treeControl.dataNodes[0]);
       expect(result).toEqual("2020-04-01, 12:00:00 GMT+02:00");

@@ -124,7 +124,10 @@
         </label>
       </div>
       <div class="value-cell">
-        {{getValueRepresentation(node)}}
+        <label class="clickable"
+          (click)="enableEditing(node)">
+          {{getValueRepresentation(node)}}
+        </label>
       </div>
       <div class="button-cell">
         <div class="display-flex" *ngIf="node.editable">

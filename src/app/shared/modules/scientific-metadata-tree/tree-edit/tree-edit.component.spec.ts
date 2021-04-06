@@ -1,16 +1,16 @@
-import { DatePipe } from '@angular/common';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { MatMenuModule } from '@angular/material/menu';
-import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { Type } from '../base-classes/metadata-input-base';
-import { TreeNode } from '../base-classes/tree-base';
-import { InputData } from '../metadata-input/metadata-input.component';
+import { DatePipe } from "@angular/common";
+import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+import { MatDialog, MatDialogModule } from "@angular/material/dialog";
+import { MatMenuModule } from "@angular/material/menu";
+import { MatSnackBar, MatSnackBarModule } from "@angular/material/snack-bar";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { Type } from "../base-classes/metadata-input-base";
+import { TreeNode } from "../base-classes/tree-base";
+import { InputData } from "../metadata-input/metadata-input.component";
 
-import { FlatNodeEdit, TreeEditComponent } from './tree-edit.component';
+import { FlatNodeEdit, TreeEditComponent } from "./tree-edit.component";
 
-describe('TreeEditComponent', () => {
+describe("TreeEditComponent", () => {
   let component: TreeEditComponent;
   let fixture: ComponentFixture<TreeEditComponent>;
 
@@ -56,11 +56,11 @@ describe('TreeEditComponent', () => {
       cell: [0, 0, 0, 0, 0, 0],
       creationTime: "2020-10-01 18:01:30",
       comment: "Bad run"
-    }
+    };
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
   describe(("#buildDataTree()"), () => {
@@ -147,16 +147,16 @@ describe('TreeEditComponent', () => {
         expect(flatNode.expandable).toEqual(false);
         expect(flatNode.editing).toEqual(false);
         expect(flatNode.editable).toEqual(true);
-      })
+      });
     });
-  })
+  });
   describe("#setEditable()", () => {
     it("should set editable of node with value of an array to false ", () => {
       component.metadata = {
         editable1: "value",
         array: [1, 2],
         editable2: "value"
-      }
+      };
       component.dataTree = component.buildDataTree(component.metadata, 0);
       component.dataSource.data = component.dataTree;
       component.setEditable();
@@ -186,7 +186,7 @@ describe('TreeEditComponent', () => {
         },
         cell: [0, 0, 0, 0, 0, 0],
         creationTime: "2020-10-01 18:01:30"
-      }
+      };
       const expected_result = {
         motors: {
           sampx: {
@@ -203,7 +203,7 @@ describe('TreeEditComponent', () => {
         },
         cell: [0, 0, 0, 0, 0, 0],
         creationTime: "2020-10-01 18:01:30",
-      }
+      };
       component.dataTree = component.buildDataTree(component.metadata, 0);
       const result = component.convertDataTreeToObject(component.dataTree);
       expect(result).toEqual(expected_result);
@@ -221,10 +221,10 @@ describe('TreeEditComponent', () => {
         type: Type.string,
         key: "string",
         value: "value"
-      }
+      };
       component.ngOnInit();
       expect(component.dataTree.length).toEqual(1);
-      const flatNode = component.treeControl.dataNodes[0] as FlatNodeEdit
+      const flatNode = component.treeControl.dataNodes[0] as FlatNodeEdit;
       const nestedNode = component.dataTree[0];
       component.enableEditing(flatNode);
       component.onSave(inputData);
@@ -264,7 +264,7 @@ describe('TreeEditComponent', () => {
         type: Type.date,
         key: "new date",
         value: "2020-04-02 12:00:00"
-      }
+      };
       const expectedDate = new Date(inputData.value).toISOString();
       component.ngOnInit();
       const nestNode = component.dataTree[0];
@@ -285,7 +285,7 @@ describe('TreeEditComponent', () => {
         type: Type.string,
         key: "new comment",
         value: "new test"
-      }
+      };
       component.ngOnInit();
       const nestNode = component.dataTree[0];
       const flatNode = component.treeControl.dataNodes[0];
@@ -307,7 +307,7 @@ describe('TreeEditComponent', () => {
         type: Type.number,
         key: "number",
         value: "1"
-      }
+      };
       component.ngOnInit();
       const nestNode = component.dataTree[0];
       const flatNode = component.treeControl.dataNodes[0];
@@ -329,7 +329,7 @@ describe('TreeEditComponent', () => {
         type: Type.boolean,
         key: "boolean",
         value: "true"
-      }
+      };
       component.ngOnInit();
       const nestNode = component.dataTree[0];
       const flatNode = component.treeControl.dataNodes[0];
@@ -362,7 +362,7 @@ describe('TreeEditComponent', () => {
         key: "energy",
         value: "10",
         unit: "joule"
-      }
+      };
       component.ngOnInit();
       const nestNode = component.dataTree[0];
       const flatNode = component.treeControl.dataNodes[0];
@@ -427,7 +427,7 @@ describe('TreeEditComponent', () => {
       const motor1 = component.treeControl.dataNodes[1] as FlatNodeEdit;
       component.enableEditing(motor1);
       expect(motor1.editing).toBeFalse();
-    })
+    });
   });
   describe("#addNewNode()", () => {
     it("Should add a new node", () => {
@@ -451,7 +451,7 @@ describe('TreeEditComponent', () => {
       expect(component.treeControl.isExpanded(node));
       const newNode = component.treeControl.dataNodes[component.treeControl.dataNodes.length - 1] as FlatNodeEdit;
       expect(newNode.editing).toBeTrue();
-    })
+    });
   });
   describe("#deleteNode()", () => {
     beforeEach(() => {
@@ -468,9 +468,9 @@ describe('TreeEditComponent', () => {
         }
       };
       component.ngOnInit();
-    })
+    });
     it("Should delete first child node correctly", () => {
-      const flatNode = component.treeControl.dataNodes.filter((node: FlatNodeEdit) => node.key === 'sampx')[0] as FlatNodeEdit;
+      const flatNode = component.treeControl.dataNodes.filter((node: FlatNodeEdit) => node.key === "sampx")[0] as FlatNodeEdit;
       component.deleteNode(flatNode);
       expect(component.dataTree.length).toEqual(1);
       expect(component.dataTree[0].children.length).toEqual(1);

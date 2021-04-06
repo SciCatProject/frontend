@@ -53,7 +53,7 @@ import { MatDialog } from "@angular/material/dialog";
 export class DatasetDetailsDashboardComponent
   implements OnInit, OnDestroy, AfterViewChecked, EditableComponent {
   private subscriptions: Subscription[] = [];
-  private _hasUnsavedChanges: boolean = false;
+  private _hasUnsavedChanges = false;
   datasetWithout$ = this.store.pipe(select(getCurrentDatasetWithoutFileInfo));
   origDatablocks$ = this.store.pipe(select(getCurrentOrigDatablocks));
   datablocks$ = this.store.pipe(select(getCurrentDatablocks));
@@ -285,11 +285,11 @@ export class DatasetDetailsDashboardComponent
     );
 
     // Prevent user from reloading page if there are unsave changes
-    this.subscriptions.push(fromEvent(window, 'beforeunload').subscribe(event => {
+    this.subscriptions.push(fromEvent(window, "beforeunload").subscribe(event => {
         if (this.hasUnsavedChanges()){
           event.returnValue = false;
         }
-    }))
+    }));
     this.jwt$ = this.userApi.jwt();
   }
 

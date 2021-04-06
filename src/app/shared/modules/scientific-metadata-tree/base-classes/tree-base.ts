@@ -19,19 +19,19 @@ export class FlatNode{
   visible: boolean;
 }
 @Component({
-  template: '',
+  template: "",
   providers: [DatePipe]
 })
-export class TreeBase {
+export class TreeBaseComponent {
   treeControl: FlatTreeControl<FlatNode>;
   treeFlattener: MatTreeFlattener<TreeNode, FlatNode>;
   dataSource: MatTreeFlatDataSource<TreeNode, FlatNode>;
   flatNodeMap: Map<FlatNode, TreeNode>;
   nestNodeMap: Map<TreeNode, FlatNode>;
-  expand: boolean = false;
+  expand = false;
   dataTree: TreeNode[];
-  _filterText = '';
-  datePipe : DatePipe;
+  _filterText = "";
+  datePipe: DatePipe;
   unitsService: UnitsService;
   constructor() {
     this.unitsService = new UnitsService();
@@ -41,8 +41,8 @@ export class TreeBase {
       const value = obj[key];
       const node = new TreeNode();
       node.key = key;
-      if ( value !== null && value !== undefined && typeof value === 'object') {
-        if ('value' in value) {
+      if ( value !== null && value !== undefined && typeof value === "object") {
+        if ("value" in value) {
           node.value = value.value;
           node.unit = value.unit || null;
         }else {
@@ -63,7 +63,11 @@ export class TreeBase {
   set filterText(value: string) {
     this._filterText = value;
     this.treeControl.collapseAll();
-    this._filterText? this.performFilter(this._filterText) : this.showAllNodes();
+    if (this._filterText){
+      this.performFilter(this._filterText);
+    } else {
+      this.showAllNodes();
+    }
   }
 
   isVisible(_: number, node: FlatNode){
@@ -73,7 +77,7 @@ export class TreeBase {
     this.treeControl.dataNodes.forEach((node: FlatNode) => node.visible = true);
   }
   hideAllNodes() {
-    this.treeControl.dataNodes.forEach((node: FlatNode) => node.visible = false)
+    this.treeControl.dataNodes.forEach((node: FlatNode) => node.visible = false);
   }
   performFilter(filterText: string) {
     filterText = filterText.toLowerCase();
@@ -133,12 +137,16 @@ export class TreeBase {
   }
   toggleExpand() {
     this.expand = !this.expand;
-    this.expand? this.treeControl.expandAll() : this.treeControl.collapseAll();
+    if (this.expand) {
+      this.treeControl.expandAll();
+    } else {
+      this.treeControl.collapseAll();
+    }
   }
   getLevel = (node: FlatNode) => node.level;
   isExpandable = (node: FlatNode) => node.expandable;
   getChildren = (node: TreeNode): TreeNode[] => node.children;
-  hasChild = (_: number, _nodeData: FlatNode) => {return _nodeData.expandable};
+  hasChild = (_: number, _nodeData: FlatNode) => _nodeData.expandable;
   getPadding(node: FlatNode) {
     const indentPixel = 40;
     return (node.level * indentPixel).toString();
@@ -177,21 +185,21 @@ export class TreeBase {
   getValueRepresentation(node: FlatNode){
 
     if(node.value === null){
-      return 'null';
+      return "null";
     }
     if(node.value === undefined){
-      return 'undefined';
+      return "undefined";
     }
     if (Array.isArray(node.value) && node.value.length === 0){
-      return '[]';
+      return "[]";
     }
-    if (node.value === ''){
-      return '\"\"';
+    if (node.value === ""){
+      return "\"\"";
     }
     if (node.unit){
       return `${node.value} (${this.unitsService.getSymbol(node.unit)})`;
     }
-    if (typeof node.value === 'string' && !isNaN(Date.parse(node.value))){
+    if (typeof node.value === "string" && !isNaN(Date.parse(node.value))){
       return this.datePipe.transform(node.value, "yyyy-MM-dd, HH:mm:ss zzzz");
     }
     return node.value;

@@ -1,15 +1,15 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange} from '@angular/core';
-import { FlatTreeControl } from '@angular/cdk/tree';
-import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
-import { Observable } from 'rxjs';
-import { FlatNode, TreeBase, TreeNode } from 'shared/modules/scientific-metadata-tree/base-classes/tree-base';
-import { InputData, MetadataInput } from 'shared/modules/scientific-metadata-tree/metadata-input/metadata-input.component';
-import { HistoryManager } from 'shared/modules/scientific-metadata-tree/base-classes/history-manager'
-import { MatDialog } from '@angular/material/dialog';
-import { InputObject, MetadataInputModalComponent } from '../metadata-input-modal/metadata-input-modal.component';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { DatePipe } from '@angular/common';
-import { Type } from '../base-classes/metadata-input-base';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange} from "@angular/core";
+import { FlatTreeControl } from "@angular/cdk/tree";
+import { MatTreeFlatDataSource, MatTreeFlattener } from "@angular/material/tree";
+import { Observable } from "rxjs";
+import { FlatNode, TreeBaseComponent, TreeNode } from "shared/modules/scientific-metadata-tree/base-classes/tree-base";
+import { InputData, MetadataInput } from "shared/modules/scientific-metadata-tree/metadata-input/metadata-input.component";
+import { HistoryManager } from "shared/modules/scientific-metadata-tree/base-classes/history-manager";
+import { MatDialog } from "@angular/material/dialog";
+import { InputObject, MetadataInputModalComponent } from "../metadata-input-modal/metadata-input-modal.component";
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { DatePipe } from "@angular/common";
+import { Type } from "../base-classes/metadata-input-base";
 
 export class FlatNodeEdit implements FlatNode {
   key: string;
@@ -23,20 +23,21 @@ export class FlatNodeEdit implements FlatNode {
 }
 
 @Component({
-  selector: 'tree-edit',
-  templateUrl: './tree-edit.component.html',
-  styleUrls: ['./tree-edit.component.scss'],
+  selector: "tree-edit",
+  templateUrl: "./tree-edit.component.html",
+  styleUrls: ["./tree-edit.component.scss"],
 })
-export class TreeEditComponent extends TreeBase implements OnInit, OnChanges {
+export class TreeEditComponent extends TreeBaseComponent implements OnInit, OnChanges {
+  private changed = false;
   @Input() metadata: any;
   currentEditingNode: FlatNodeEdit | null = null;
-  lastSavedChanges: number = -1;
+  lastSavedChanges = -1;
   filteredUnits$: Observable<string[]>;
   currentInputData: MetadataInput;
   historyManager: HistoryManager;
-  @Output() save = new EventEmitter<object>();
+  @Output() save = new EventEmitter<Record<string, unknown>>();
   @Output() hasUnsavedChanges = new EventEmitter<boolean>();
-  private changed: boolean = false;
+
   constructor(public dialog: MatDialog, private snackBar: MatSnackBar, datePipe: DatePipe) {
     super();
     this.datePipe = datePipe;
@@ -77,14 +78,14 @@ export class TreeEditComponent extends TreeBase implements OnInit, OnChanges {
     flatNode.unit = node.unit;
     if (!existingNode){
       // Important only set for new node
-      flatNode.editing = node.key === '' ? true : false;
+      flatNode.editing = node.key === "" ? true : false;
       flatNode.editable = Array.isArray(node.value)? false: true;
       flatNode.visible = true;
     }
     this.flatNodeMap.set(flatNode, node);
     this.nestNodeMap.set(node, flatNode);
     return flatNode;
-  }
+  };
 
   setEditable(){
     const length = this.treeControl.dataNodes.length;
@@ -131,13 +132,13 @@ export class TreeEditComponent extends TreeBase implements OnInit, OnChanges {
         }
       }
       return accumulator;
-    }, {})
+    }, {});
   }
 
   openSnackbar(message: string, action: string = "") {
     this.snackBar.open(message, action, {
       duration: 3000
-    })
+    });
   }
   onSave(data: InputData) {
     const nestedNode = this.flatNodeMap.get(this.currentEditingNode);
@@ -184,7 +185,7 @@ export class TreeEditComponent extends TreeBase implements OnInit, OnChanges {
   enableEditing(node: FlatNodeEdit) {
     if (this.currentEditingNode) {
       if (this.changed) {
-        this.snackBar.open("You are uncached changes in another row, please close or save it first!", "", {
+        this.snackBar.open("You are making changes in another row, please cancle or cache the changes first!", "", {
           duration: 3000,
         });
         return;
@@ -264,7 +265,7 @@ export class TreeEditComponent extends TreeBase implements OnInit, OnChanges {
     this.dataSource.data = this.dataTree;
   }
 
-  hasNoContent = (node: TreeNode | FlatNodeEdit) => node.key === '';
+  hasNoContent = (node: TreeNode | FlatNodeEdit) => node.key === "";
 
   isEditing() {
     return this.currentEditingNode && this.changed;
@@ -302,7 +303,7 @@ export class TreeEditComponent extends TreeBase implements OnInit, OnChanges {
         redo: () => {
           this.insertNode(grandfatherNode, parentNode, index);
         }
-      })
+      });
       this.dataSource.data = this.dataTree;
     });
   }

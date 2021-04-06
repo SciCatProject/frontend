@@ -1,8 +1,8 @@
-import { Component, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
-import { Subscription } from 'rxjs';
-import { FlatNodeEdit } from '../tree-edit/tree-edit.component';
-import { MetadataInputBase, Type } from '../base-classes/metadata-input-base';
+import { Component, EventEmitter, HostListener, Input, OnInit, Output } from "@angular/core";
+import { FormBuilder, FormControl, FormGroup, ValidatorFn, Validators } from "@angular/forms";
+import { Subscription } from "rxjs";
+import { FlatNodeEdit } from "../tree-edit/tree-edit.component";
+import { MetadataInputBase, Type } from "../base-classes/metadata-input-base";
 
 export interface InputData {
   type: string;
@@ -16,9 +16,9 @@ export interface MetadataInput {
 }
 
 @Component({
-  selector: 'metadata-input',
-  templateUrl: './metadata-input.component.html',
-  styleUrls: ['./metadata-input.component.scss']
+  selector: "metadata-input",
+  templateUrl: "./metadata-input.component.html",
+  styleUrls: ["./metadata-input.component.scss"]
 })
 export class MetadataInputComponent extends MetadataInputBase implements OnInit {
   changeDetection: Subscription;
@@ -63,7 +63,7 @@ export class MetadataInputComponent extends MetadataInputBase implements OnInit 
       this.metadataForm.get("type").setValue(Type.string);
       this.metadataForm.get("key").setValue(node.key);
       this.metadataForm.get("value").disable();
-      this.typeValues = ['string'];
+      this.typeValues = ["string"];
     } else {
       if (node.unit) {
         this.metadataForm.get("type").setValue(Type.quantity);

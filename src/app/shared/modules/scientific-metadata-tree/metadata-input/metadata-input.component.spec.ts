@@ -1,12 +1,12 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { FormBuilder } from '@angular/forms';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { Type } from '../base-classes/metadata-input-base';
-import { FlatNodeEdit } from '../tree-edit/tree-edit.component';
+import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
+import { FormBuilder } from "@angular/forms";
+import { MatAutocompleteModule } from "@angular/material/autocomplete";
+import { Type } from "../base-classes/metadata-input-base";
+import { FlatNodeEdit } from "../tree-edit/tree-edit.component";
 
-import { MetadataInputComponent } from './metadata-input.component';
+import { MetadataInputComponent } from "./metadata-input.component";
 
-describe('MetadataInputComponent', () => {
+describe("MetadataInputComponent", () => {
   let component: MetadataInputComponent;
   let fixture: ComponentFixture<MetadataInputComponent>;
 
@@ -35,20 +35,20 @@ describe('MetadataInputComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
-  describe('#initilizeFormControl()', () => {
-    it('should initialize form control with empty string', () => {
+  describe("#initilizeFormControl()", () => {
+    it("should initialize form control with empty string", () => {
       const formControl = component.initilizeFormControl();
-      expect(formControl.get('type').value).toEqual("");
-      expect(formControl.get('key').value).toEqual("");
-      expect(formControl.get('value').value).toEqual("");
-      expect(formControl.get('unit').value).toEqual("");
+      expect(formControl.get("type").value).toEqual("");
+      expect(formControl.get("key").value).toEqual("");
+      expect(formControl.get("value").value).toEqual("");
+      expect(formControl.get("unit").value).toEqual("");
     });
   });
-  describe('#addCurrentMetadata()', () => {
-    it('should set values in form control (parent node)', () => {
+  describe("#addCurrentMetadata()", () => {
+    it("should set values in form control (parent node)", () => {
       const data = new FlatNodeEdit();
       data.key = "motor";
       data.visible = true;
@@ -56,12 +56,12 @@ describe('MetadataInputComponent', () => {
       component.data = data;
       component.initilizeFormControl();
       component.addCurrentMetadata(component.data);
-      expect(component.metadataForm.get('type').value).toEqual("string");
-      expect(component.metadataForm.get('key').value).toEqual("motor");
-      expect(component.metadataForm.get('value').disabled).toEqual(true);
-      expect(component.metadataForm.get('unit').disabled).toEqual(true);
+      expect(component.metadataForm.get("type").value).toEqual("string");
+      expect(component.metadataForm.get("key").value).toEqual("motor");
+      expect(component.metadataForm.get("value").disabled).toEqual(true);
+      expect(component.metadataForm.get("unit").disabled).toEqual(true);
     });
-    it('should set values in form control (physical quantity)', () => {
+    it("should set values in form control (physical quantity)", () => {
       const data = new FlatNodeEdit();
       data.key = "energy";
       data.value = 3;
@@ -73,12 +73,12 @@ describe('MetadataInputComponent', () => {
       component.data = data;
       component.initilizeFormControl();
       component.addCurrentMetadata(component.data);
-      expect(component.metadataForm.get('type').value).toEqual("quantity");
-      expect(component.metadataForm.get('key').value).toEqual("energy");
-      expect(component.metadataForm.get('value').value).toEqual(3);
-      expect(component.metadataForm.get('unit').value).toEqual("joule");
+      expect(component.metadataForm.get("type").value).toEqual("quantity");
+      expect(component.metadataForm.get("key").value).toEqual("energy");
+      expect(component.metadataForm.get("value").value).toEqual(3);
+      expect(component.metadataForm.get("unit").value).toEqual("joule");
     });
-    it('should set values in form control (number)', () => {
+    it("should set values in form control (number)", () => {
       const data = new FlatNodeEdit();
       data.key = "energy";
       data.value = 3;
@@ -88,12 +88,12 @@ describe('MetadataInputComponent', () => {
       component.data = data;
       component.initilizeFormControl();
       component.addCurrentMetadata(component.data);
-      expect(component.metadataForm.get('type').value).toEqual("number");
-      expect(component.metadataForm.get('key').value).toEqual("energy");
-      expect(component.metadataForm.get('value').value).toEqual(3);
-      expect(component.metadataForm.get('unit').disabled).toEqual(true);
+      expect(component.metadataForm.get("type").value).toEqual("number");
+      expect(component.metadataForm.get("key").value).toEqual("energy");
+      expect(component.metadataForm.get("value").value).toEqual(3);
+      expect(component.metadataForm.get("unit").disabled).toEqual(true);
     });
-    it('should set values in form control (boolean)', () => {
+    it("should set values in form control (boolean)", () => {
       const data = new FlatNodeEdit();
       data.key = "boolean";
       data.value = true;
@@ -103,25 +103,25 @@ describe('MetadataInputComponent', () => {
       component.data = data;
       component.initilizeFormControl();
       component.addCurrentMetadata(component.data);
-      expect(component.metadataForm.get('type').value).toEqual(Type.boolean);
-      expect(component.metadataForm.get('key').value).toEqual("boolean");
-      expect(component.metadataForm.get('value').value).toEqual("true");
-      expect(component.metadataForm.get('unit').disabled).toEqual(true);
+      expect(component.metadataForm.get("type").value).toEqual(Type.boolean);
+      expect(component.metadataForm.get("key").value).toEqual("boolean");
+      expect(component.metadataForm.get("value").value).toEqual("true");
+      expect(component.metadataForm.get("unit").disabled).toEqual(true);
     });
-    it('should set values in form control (date)', () => {
+    it("should set values in form control (date)", () => {
       const data = new FlatNodeEdit();
       data.key = "date";
-      data.value = new Date('2020-01-02').toISOString();
+      data.value = new Date("2020-01-02").toISOString();
       data.level = 0;
       data.expandable = false;
       component.data = data;
       component.data = data;
       component.initilizeFormControl();
       component.addCurrentMetadata(component.data);
-      expect(component.metadataForm.get('type').value).toEqual(Type.date);
-      expect(component.metadataForm.get('key').value).toEqual("date");
-      expect(component.metadataForm.get('value').value).toEqual(data.value);
-      expect(component.metadataForm.get('unit').disabled).toEqual(true);
+      expect(component.metadataForm.get("type").value).toEqual(Type.date);
+      expect(component.metadataForm.get("key").value).toEqual("date");
+      expect(component.metadataForm.get("value").value).toEqual(data.value);
+      expect(component.metadataForm.get("unit").disabled).toEqual(true);
     });
   });
   describe("#onSave()", () => {

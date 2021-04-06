@@ -1,17 +1,16 @@
 import { EventEmitter } from "@angular/core";
 interface Actions{
-  undo: () => void,
-  redo: () => void
+  undo: () => void;
+  redo: () => void;
 }
 export class HistoryManager {
-  commands:Actions[] = [];
+  commands: Actions[] = [];
   indexChanged = new EventEmitter<number>();
   currentIdx = -1;
-  limit:number = 0;
-  private execute(command:Actions , actionName: string){
+  limit = 0;
+  private execute(command: Actions , actionName: string){
     command[actionName]();
   }
-  constructor(){}
   add(command: Actions){
    this.commands.splice(this.currentIdx + 1, this.commands.length - this.currentIdx);
    this.commands.push(command);
@@ -31,7 +30,7 @@ export class HistoryManager {
     if (command){
       this.execute(command, "redo");
     }
-    this.currentIdx += 1
+    this.currentIdx += 1;
     this.indexChanged.emit(this.currentIdx);
   }
   hasUndo(){

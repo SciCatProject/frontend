@@ -1,14 +1,14 @@
-import { Component, Input, OnChanges, OnInit, SimpleChange } from '@angular/core';
-import { FlatTreeControl } from '@angular/cdk/tree';
-import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
-import { FlatNode, TreeBase, TreeNode } from 'shared/modules/scientific-metadata-tree/base-classes/tree-base';
-import { DatePipe } from '@angular/common';
+import { Component, Input, OnChanges, OnInit, SimpleChange } from "@angular/core";
+import { FlatTreeControl } from "@angular/cdk/tree";
+import { MatTreeFlatDataSource, MatTreeFlattener } from "@angular/material/tree";
+import { FlatNode, TreeBaseComponent, TreeNode } from "shared/modules/scientific-metadata-tree/base-classes/tree-base";
+import { DatePipe } from "@angular/common";
 @Component({
-  selector: 'tree-view',
-  templateUrl: './tree-view.component.html',
-  styleUrls: ['./tree-view.component.scss'],
+  selector: "tree-view",
+  templateUrl: "./tree-view.component.html",
+  styleUrls: ["./tree-view.component.scss"],
 })
-export class TreeViewComponent extends TreeBase implements OnInit, OnChanges {
+export class TreeViewComponent extends TreeBaseComponent implements OnInit, OnChanges {
   @Input() metadata: any;
   constructor(datePipe: DatePipe) {
     super();
@@ -45,5 +45,5 @@ export class TreeViewComponent extends TreeBase implements OnInit, OnChanges {
     this.flatNodeMap.set(flatNode, node);
     this.nestNodeMap.set(node, flatNode);
     return flatNode;
-  }
+  };
 }

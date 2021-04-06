@@ -28,21 +28,21 @@ export class MetadataInputBase {
   dateValidator(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       const invalid = isNaN(Date.parse(control.value));
-      return invalid ? { invalidDate: "Invalid date. Format: yyyy-MM-dd HH:mm:ss or yyyy-MM-dd" } : null
-    }
+      return invalid ? { invalidDate: "Invalid date. Format: yyyy-MM-dd HH:mm:ss or yyyy-MM-dd" } : null;
+    };
   }
   booleanValidator(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       const value = (control.value as string).toLowerCase();
       const valid = (value === "true" || value === "false");
-      return valid? null : {invalidBoolean: "Boolean must be \"true\" or \"false\""}
-    }
+      return valid? null : {invalidBoolean: "Boolean must be \"true\" or \"false\""};
+    };
   }
   numberValidator(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       const invalid = control.value === "" || isNaN(Number(control.value)) ;
       return invalid? {invalidNumber: "Invalid number"} : null;
-    }
+    };
   }
   detectType() {
     const type = this.metadataForm.get("type").value;
@@ -115,24 +115,24 @@ export class MetadataInputBase {
   getErrorMessage(field: string) {
     switch (field) {
       case "value":
-        if (this.metadataForm.get(field).hasError('required')) {
+        if (this.metadataForm.get(field).hasError("required")) {
           return "Value is required";
         }
-        if (this.metadataForm.get(field).hasError('invalidDate')) {
-          return this.metadataForm.get(field).getError('invalidDate');
+        if (this.metadataForm.get(field).hasError("invalidDate")) {
+          return this.metadataForm.get(field).getError("invalidDate");
         }
-        if (this.metadataForm.get(field).hasError('invalidBoolean')) {
-          return this.metadataForm.get(field).getError('invalidBoolean');
+        if (this.metadataForm.get(field).hasError("invalidBoolean")) {
+          return this.metadataForm.get(field).getError("invalidBoolean");
         }
-        if (this.metadataForm.get(field).hasError('invalidNumber')) {
-          return this.metadataForm.get(field).getError('invalidNumber');
+        if (this.metadataForm.get(field).hasError("invalidNumber")) {
+          return this.metadataForm.get(field).getError("invalidNumber");
         }
       case "unit":
-        if (this.metadataForm.get(field).hasError('required')) {
+        if (this.metadataForm.get(field).hasError("required")) {
           return "A unit is required for quantities";
         }
-        if (this.metadataForm.get(field).hasError('forbiddenUnit')) {
-          return this.metadataForm.get(field).getError('forbiddenUnit');
+        if (this.metadataForm.get(field).hasError("forbiddenUnit")) {
+          return this.metadataForm.get(field).getError("forbiddenUnit");
         }
       default:
         return null;
