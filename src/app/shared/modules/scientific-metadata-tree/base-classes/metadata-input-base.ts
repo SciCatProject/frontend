@@ -127,6 +127,7 @@ export class MetadataInputBase {
         if (this.metadataForm.get(field).hasError("invalidNumber")) {
           return this.metadataForm.get(field).getError("invalidNumber");
         }
+        break;
       case "unit":
         if (this.metadataForm.get(field).hasError("required")) {
           return "A unit is required for quantities";
@@ -134,6 +135,7 @@ export class MetadataInputBase {
         if (this.metadataForm.get(field).hasError("forbiddenUnit")) {
           return this.metadataForm.get(field).getError("forbiddenUnit");
         }
+        break;
       default:
         return null;
     }

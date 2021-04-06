@@ -1,7 +1,6 @@
-import { Component, Inject, OnInit } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormControl, Validators } from "@angular/forms";
-import { FlatNodeEdit } from "../tree-edit/tree-edit.component";
-import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
+import { MatDialogRef } from "@angular/material/dialog";
 import { MetadataInputBase } from "../base-classes/metadata-input-base";
 
 export interface InputObject{

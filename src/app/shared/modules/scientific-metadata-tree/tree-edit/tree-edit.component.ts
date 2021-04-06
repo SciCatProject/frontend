@@ -48,7 +48,7 @@ export class TreeEditComponent extends TreeBaseComponent implements OnInit, OnCh
     this.flatNodeMap = new Map<FlatNodeEdit, TreeNode>();
     this.historyManager = new HistoryManager();
     this.historyManager.indexChanged.subscribe((index: number) => {
-        this.hasUnsavedChanges.emit(!(this.lastSavedChanges === index));
+        this.hasUnsavedChanges.emit(this.lastSavedChanges !== index);
       },
     );
   }

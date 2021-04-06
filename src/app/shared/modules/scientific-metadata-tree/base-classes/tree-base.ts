@@ -107,7 +107,7 @@ export class TreeBaseComponent {
     };
   }
   setChildrenVisible(children: TreeNode[]){
-    children.map((node: TreeNode) => {
+    children.forEach((node: TreeNode) => {
       const flatNode = this.nestNodeMap.get(node);
       flatNode.visible = true;
       if (node.children){

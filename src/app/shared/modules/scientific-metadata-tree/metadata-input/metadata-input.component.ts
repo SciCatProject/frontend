@@ -1,5 +1,5 @@
-import { Component, EventEmitter, HostListener, Input, OnInit, Output } from "@angular/core";
-import { FormBuilder, FormControl, FormGroup, ValidatorFn, Validators } from "@angular/forms";
+import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { FormBuilder, FormControl, Validators } from "@angular/forms";
 import { Subscription } from "rxjs";
 import { FlatNodeEdit } from "../tree-edit/tree-edit.component";
 import { MetadataInputBase, Type } from "../base-classes/metadata-input-base";
@@ -69,7 +69,7 @@ export class MetadataInputComponent extends MetadataInputBase implements OnInit 
         this.metadataForm.get("type").setValue(Type.quantity);
         this.metadataForm.get("key").setValue(node.key);
         this.metadataForm.get("value").setValue(node.value || "");
-        this.metadataForm.get("unit").setValue(node.unit || "");
+        this.metadataForm.get("unit").setValue(node.unit);
       } else if (typeof node.value === Type.number) {
         this.metadataForm.get("type").setValue(Type.number);
         this.metadataForm.get("key").setValue(node.key);
