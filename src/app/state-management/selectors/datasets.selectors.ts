@@ -157,14 +157,14 @@ const restrictFilter = (filter: any, allowedKeys?: string[]) => {
 
 export const getFullqueryParams = createSelector(getFilters, filter => {
   // don't query with modeToggle, it's only in filters for persistent routing
-  const { skip, limit, sortField, modeToggle, ...theRest } = filter;
+  const { skip, limit, sortField, modeToggle, isPublished, ...theRest } = filter;
   const limits = { skip, limit, order: sortField };
   const query = restrictFilter(theRest);
   return { query: JSON.stringify(query), limits };
 });
 
 export const getFullfacetParams = createSelector(getFilters, filter => {
-  const { skip, limit, sortField, modeToggle, ...theRest } = filter;
+  const { skip, limit, sortField, modeToggle, isPublished, ...theRest } = filter;
   const fields = restrictFilter(theRest);
   const facets = [
     "type",
