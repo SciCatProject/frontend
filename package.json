@@ -44,7 +44,7 @@
     "ngx-file-helpers": "^5.0.3",
     "ngx-json-viewer": "^2.4.0",
     "ngx-linky": "^3.0.0",
-    "rison": "github:nanonid/rison",
+    "rison": "git+https://github.com/nanonid/rison.git",
     "rxjs": "^6.6.6",
     "saturn-datepicker": "^8.0.1",
     "shortid": "^2.2.16",
