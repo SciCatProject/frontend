@@ -2,22 +2,17 @@ import { Component, OnInit, ViewChild, OnDestroy } from "@angular/core";
 import { Store, select } from "@ngrx/store";
 import { ActivatedRoute, Router } from "@angular/router";
 import { getColumns } from "state-management/selectors/user.selectors";
+import { map, filter, distinctUntilChanged, take } from "rxjs/operators";
 import {
-  map,
-  filter,
-  distinctUntilChanged,
-  take
-} from "rxjs/operators";
-import {
-  getFilters,
   getHasPrefilledFilters,
-  getDatasets
+  getDatasets,
+  getAnonymousFilters,
 } from "state-management/selectors/datasets.selectors";
 import {
   fetchMetadataKeysAction,
   fetchFacetCountsAction,
   prefillFiltersAction,
-  fetchDatasetsAction
+  fetchDatasetsAction,
 } from "state-management/actions/datasets.actions";
 import { combineLatest, Subscription } from "rxjs";
 
@@ -27,25 +22,27 @@ import { DatasetFilters, Dataset } from "state-management/models";
 import { SelectColumnEvent } from "datasets/dataset-table-settings/dataset-table-settings.component";
 import {
   selectColumnAction,
-  deselectColumnAction
+  deselectColumnAction,
 } from "state-management/actions/user.actions";
 import { MatSidenav } from "@angular/material/sidenav";
 
 @Component({
   selector: "anonymous-dashboard",
   templateUrl: "./anonymous-dashboard.component.html",
-  styleUrls: ["./anonymous-dashboard.component.scss"]
+  styleUrls: ["./anonymous-dashboard.component.scss"],
 })
 export class AnonymousDashboardComponent implements OnInit, OnDestroy {
   private readyToFetch$ = this.store.pipe(
     select(getHasPrefilledFilters),
-    filter(has => has)
+    filter((has) => has)
   );
   datasets$ = this.store.pipe(select(getDatasets));
   tableColumns$ = this.store
     .pipe(select(getColumns))
-    .pipe(map(columns => columns.filter(column => column.name !== "select")));
-  filters$ = this.store.pipe(select(getFilters));
+    .pipe(
+      map((columns) => columns.filter((column) => column.name !== "select"))
+    );
+  filters$ = this.store.pipe(select(getAnonymousFilters));
 
   clearColumnSearch = false;
 
@@ -112,17 +109,17 @@ export class AnonymousDashboardComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.route.queryParams
         .pipe(
-          map(params => params.args as string),
+          map((params) => params.args as string),
           take(1),
-          map(args => (args ? rison.decode<DatasetFilters>(args) : {}))
+          map((args) => (args ? rison.decode<DatasetFilters>(args) : {}))
         )
-        .subscribe(filters =>
+        .subscribe((filters) =>
           this.store.dispatch(prefillFiltersAction({ values: filters }))
         )
     );
   }
 
   ngOnDestroy() {
-    this.subscriptions.forEach(subscription => subscription.unsubscribe());
+    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
 }
