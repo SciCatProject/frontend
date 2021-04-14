@@ -1,16 +1,16 @@
 import { FlatTreeControl } from "@angular/cdk/tree";
 import { DatePipe } from "@angular/common";
-import { Component} from "@angular/core";
+import { Component } from "@angular/core";
 import { MatTreeFlatDataSource, MatTreeFlattener } from "@angular/material/tree";
 import { UnitsService } from "shared/services/units.service";
 
-export class TreeNode{
+export class TreeNode {
   children: TreeNode[];
   key: string;
   value: any;
   unit: string;
 }
-export class FlatNode{
+export class FlatNode {
   key: string;
   value: any;
   unit: string;
@@ -41,18 +41,17 @@ export class TreeBaseComponent {
       const value = obj[key];
       const node = new TreeNode();
       node.key = key;
-      if ( value !== null && value !== undefined && typeof value === "object") {
-        if ("value" in value) {
-          node.value = value.value;
-          node.unit = value.unit || null;
-        }else {
-          node.children = this.buildDataTree(value, level + 1);
-          if (Array.isArray(value)){
-            node.value = value;
-          }
-        }
+      if (value?.unit || value?.unit === "") {
+        node.unit = value.unit || undefined;
+        node.value = value.value;
       } else {
         node.value = value;
+      }
+      if (node.value && typeof node.value === "object") {
+        node.children = this.buildDataTree(node.value, level + 1);
+        if (!Array.isArray(node.value)) {
+          node.value = undefined;
+        }
       }
       return accumulator.concat(node);
     }, []);
@@ -63,14 +62,14 @@ export class TreeBaseComponent {
   set filterText(value: string) {
     this._filterText = value;
     this.treeControl.collapseAll();
-    if (this._filterText){
+    if (this._filterText) {
       this.performFilter(this._filterText);
     } else {
       this.showAllNodes();
     }
   }
 
-  isVisible(_: number, node: FlatNode){
+  isVisible(_: number, node: FlatNode) {
     return node.visible;
   }
   showAllNodes() {
@@ -85,7 +84,7 @@ export class TreeBaseComponent {
     this.hideAllNodes();
     filteredNodes.forEach((node: FlatNode) => {
       node.visible = true;
-      if(node.expandable){
+      if (node.expandable) {
         const nestedNode = this.flatNodeMap.get(node);
         this.setChildrenVisible(nestedNode.children);
       }
@@ -94,7 +93,7 @@ export class TreeBaseComponent {
       }
     });
   }
-  setParentVisible(node: FlatNode){
+  setParentVisible(node: FlatNode) {
     let currentNode = node;
     while (currentNode !== null) {
       const parentNode = this.getFlatParentNode(currentNode);
@@ -106,11 +105,11 @@ export class TreeBaseComponent {
       currentNode = parentNode;
     };
   }
-  setChildrenVisible(children: TreeNode[]){
+  setChildrenVisible(children: TreeNode[]) {
     children.forEach((node: TreeNode) => {
       const flatNode = this.nestNodeMap.get(node);
       flatNode.visible = true;
-      if (node.children){
+      if (node.children) {
         this.setChildrenVisible(node.children);
       }
     });
@@ -131,7 +130,7 @@ export class TreeBaseComponent {
     }
     return null;
   }
-  getNestedParent(node: FlatNode){
+  getNestedParent(node: FlatNode) {
     const flatParentNode = this.getFlatParentNode(node);
     return this.flatNodeMap.get(flatParentNode);
   }
@@ -154,10 +153,10 @@ export class TreeBaseComponent {
 
   insertNode(parentNode: TreeNode, node: TreeNode, index: number = -1) {
     if (parentNode) {
-      index = index === -1 ? parentNode.children.length: index;
+      index = index === -1 ? parentNode.children.length : index;
       parentNode.children.splice(index, 0, node);
     } else {
-      index = index === -1? 0 : index;
+      index = index === -1 ? 0 : index;
       this.dataTree.splice(index, 0, node);
     }
     this.dataSource.data = this.dataTree;
@@ -166,7 +165,7 @@ export class TreeBaseComponent {
     if (parentNode) {
       // remove node from list of children
       parentNode.children = parentNode.children.filter(e => e !== nestedNode);
-      if(parentNode.children.length === 0){
+      if (parentNode.children.length === 0) {
         parentNode.value = "";
       }
     } else {
@@ -182,24 +181,24 @@ export class TreeBaseComponent {
       return this.dataTree.indexOf(node);
     }
   }
-  getValueRepresentation(node: FlatNode){
+  getValueRepresentation(node: FlatNode) {
 
-    if(node.value === null){
+    if (node.value === null) {
       return "null";
     }
-    if(node.value === undefined){
+    if (node.value === undefined) {
       return "undefined";
     }
-    if (Array.isArray(node.value) && node.value.length === 0){
+    if (Array.isArray(node.value) && node.value.length === 0) {
       return "[]";
     }
-    if (node.value === ""){
+    if (node.value === "") {
       return "\"\"";
     }
-    if (node.unit){
+    if (node.unit) {
       return `${node.value} (${this.unitsService.getSymbol(node.unit)})`;
     }
-    if (typeof node.value === "string" && !isNaN(Date.parse(node.value))){
+    if (typeof node.value === "string" && !isNaN(Date.parse(node.value))) {
       return this.datePipe.transform(node.value, "yyyy-MM-dd, HH:mm:ss zzzz");
     }
     return node.value;
