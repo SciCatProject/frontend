@@ -44,6 +44,7 @@ export class AppConfig {
   shoppingCartEnabled: boolean;
   shoppingCartOnHeader: boolean;
   tableSciDataEnabled: boolean;
+  metadataStructure: string;
   userProfileImageEnabled: boolean;
   userNamePromptEnabled: boolean;
 }
@@ -100,6 +101,7 @@ export const APP_DI_CONFIG: AppConfig = {
   shoppingCartEnabled: environment["shoppingCartEnabled"] || false,
   shoppingCartOnHeader: environment["shoppingCartOnHeader"] || false,
   tableSciDataEnabled: environment["tableSciDataEnabled"] || false,
+  metadataStructure: environment["metadataStructure"] || "",
   userProfileImageEnabled: environment["userProfileImageEnabled"] || false,
   userNamePromptEnabled: environment["userNamePromptEnabled"] || false,
   landingPage: environment["landingPage"] || null,

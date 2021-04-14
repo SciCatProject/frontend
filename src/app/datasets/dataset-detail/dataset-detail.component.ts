@@ -32,12 +32,11 @@ export class DatasetDetailComponent {
   @Output() clickSample = new EventEmitter<string>();
   @Output() saveMetadata = new EventEmitter<Record<string, unknown>>();
   @Output() sampleChange = new EventEmitter<Sample>();
+  @Output() hasUnsavedChanges = new EventEmitter<boolean>();
 
   editEnabled: boolean;
+  show: boolean;
   readonly separatorKeyCodes: number[] = [ENTER, COMMA, SPACE];
-
-  show = false;
-
   constructor(
     @Inject(APP_CONFIG) public appConfig: AppConfig,
     public dialog: MatDialog
@@ -94,5 +93,8 @@ export class DatasetDetailComponent {
 
   onSaveMetadata(metadata: Record<string, any>) {
     this.saveMetadata.emit(metadata);
+  }
+  onHasUnsavedChanges($event: boolean){
+    this.hasUnsavedChanges.emit($event);
   }
 }

@@ -1,0 +1,34 @@
+.container {
+  mat-icon {
+    vertical-align: middle;
+  }
+}
+@media only screen and (min-width: 1280px) {
+  .container {
+    .formRow {
+      .formColumn {
+        padding-right: 1em;
+        .selectField {
+          max-width: 8em;
+        }
+      }
+      .buttonColumn {
+        padding-right: 0;
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 1279px) {
+  .container {
+    .formRow {
+      .formColumn {
+        padding-right: none;
+
+        .selectField {
+          max-width: none;
+        }
+      }
+    }
+  }
+}

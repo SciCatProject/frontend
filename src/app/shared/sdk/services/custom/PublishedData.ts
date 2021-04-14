@@ -1,17 +1,14 @@
 /* eslint-disable */
 import { Injectable, Inject, Optional } from '@angular/core';
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { SDKModels } from './SDKModels';
 import { BaseLoopBackApi } from '../core/base.service';
 import { LoopBackConfig } from '../../lb.config';
 import { LoopBackAuth } from '../core/auth.service';
 import { LoopBackFilter,  } from '../../models/BaseModels';
 import { ErrorHandler } from '../core/error.service';
-import { Observable, Subject } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { PublishedData } from '../../models/PublishedData';
+import { Observable} from 'rxjs';
 import { SocketConnection } from '../../sockets/socket.connections';
-import { Dataset } from '../../models/Dataset';
 
 
 /**
@@ -132,7 +129,7 @@ export class PublishedDataApi extends BaseLoopBackApi {
    *
    * @param {any} id PublishedData id
    *
-   * @param {object} filter 
+   * @param {object} filter
    *
    * @returns {object[]} An empty reference that will be
    *   populated with the actual data once the response is returned
@@ -227,7 +224,7 @@ export class PublishedDataApi extends BaseLoopBackApi {
    *
    * Data properties:
    *
-   *  - `count` – `{number}` - 
+   *  - `count` – `{number}` -
    */
   public countDatasets(id: any, where: any = {}, customHeaders?: Function): Observable<any> {
     let _method: string = "GET";
@@ -306,13 +303,13 @@ export class PublishedDataApi extends BaseLoopBackApi {
   }
 
   /**
-   * Return facet counts relevant for the given selected subset of datasets. 
+   * Return facet counts relevant for the given selected subset of datasets.
    *
    * @param {object} fields Define the filter conditions by specifying the name and values of fields. There ia also support for a `text` search to look for strngs anywhere in the dataset.
    *
    * @param {any} facets Defines list of field names, for which facet counts should be calculated
    *
-   * @param {object} options 
+   * @param {object} options
    *
    * @returns {object} An empty reference that will be
    *   populated with the actual data once the response is returned
@@ -343,7 +340,7 @@ export class PublishedDataApi extends BaseLoopBackApi {
    *
    * @param {object} limits Define further query parameters like skip, limit, order
    *
-   * @param {object} options 
+   * @param {object} options
    *
    * @returns {object} An empty reference that will be
    *   populated with the actual data once the response is returned
@@ -372,7 +369,7 @@ export class PublishedDataApi extends BaseLoopBackApi {
          * (The remote method definition does not provide any description.)
          * </em>
    *
-   * @param {string} pid 
+   * @param {string} pid
    *
    * @returns {object} An empty reference that will be
    *   populated with the actual data once the response is returned
@@ -402,7 +399,7 @@ export class PublishedDataApi extends BaseLoopBackApi {
    *
    * @param {object} data Request data.
    *
-   *  - `id` – `{string}` - 
+   *  - `id` – `{string}` -
    *
    * @returns {object} An empty reference that will be
    *   populated with the actual data once the response is returned
@@ -410,7 +407,7 @@ export class PublishedDataApi extends BaseLoopBackApi {
    *
    * Data properties:
    *
-   *  - `doi` – `{string}` - 
+   *  - `doi` – `{string}` -
    */
   public register(id: any, customHeaders?: Function): Observable<any> {
     let _method: string = "POST";
@@ -432,9 +429,9 @@ export class PublishedDataApi extends BaseLoopBackApi {
    *
    * @param {object} data Request data.
    *
-   *  - `id` – `{string}` - 
+   *  - `id` – `{string}` -
    *
-   *  - `data` – `{object}` - 
+   *  - `data` – `{object}` -
    *
    * @returns {object} An empty reference that will be
    *   populated with the actual data once the response is returned
@@ -442,7 +439,7 @@ export class PublishedDataApi extends BaseLoopBackApi {
    *
    * Data properties:
    *
-   *  - `doi` – `{string}` - 
+   *  - `doi` – `{string}` -
    */
   public resync(id: any, data: any, customHeaders?: Function): Observable<any> {
     let _method: string = "POST";

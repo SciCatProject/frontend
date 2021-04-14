@@ -1,19 +1,13 @@
 /* eslint-disable */
 import { Injectable, Inject, Optional } from '@angular/core';
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { SDKModels } from './SDKModels';
 import { BaseLoopBackApi } from '../core/base.service';
 import { LoopBackConfig } from '../../lb.config';
 import { LoopBackAuth } from '../core/auth.service';
-import { LoopBackFilter,  } from '../../models/BaseModels';
 import { ErrorHandler } from '../core/error.service';
-import { Observable, Subject } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { Attachment } from '../../models/Attachment';
+import { Observable } from 'rxjs';
 import { SocketConnection } from '../../sockets/socket.connections';
-import { Dataset } from '../../models/Dataset';
-import { Sample } from '../../models/Sample';
-import { Proposal } from '../../models/Proposal';
 
 
 /**
@@ -41,7 +35,7 @@ export class AttachmentApi extends BaseLoopBackApi {
    *
    * @param {any} id Attachment id
    *
-   * @param {boolean} refresh 
+   * @param {boolean} refresh
    *
    * @returns {object} An empty reference that will be
    *   populated with the actual data once the response is returned
@@ -71,7 +65,7 @@ export class AttachmentApi extends BaseLoopBackApi {
    *
    * @param {any} id Attachment id
    *
-   * @param {boolean} refresh 
+   * @param {boolean} refresh
    *
    * @returns {object} An empty reference that will be
    *   populated with the actual data once the response is returned
@@ -101,7 +95,7 @@ export class AttachmentApi extends BaseLoopBackApi {
    *
    * @param {any} id Attachment id
    *
-   * @param {boolean} refresh 
+   * @param {boolean} refresh
    *
    * @returns {object} An empty reference that will be
    *   populated with the actual data once the response is returned
@@ -189,13 +183,13 @@ export class AttachmentApi extends BaseLoopBackApi {
   }
 
   /**
-   * Return facet counts relevant for the given selected subset of datasets. 
+   * Return facet counts relevant for the given selected subset of datasets.
    *
    * @param {object} fields Define the filter conditions by specifying the name and values of fields. There ia also support for a `text` search to look for strngs anywhere in the dataset.
    *
    * @param {any} facets Defines list of field names, for which facet counts should be calculated
    *
-   * @param {object} options 
+   * @param {object} options
    *
    * @returns {object} An empty reference that will be
    *   populated with the actual data once the response is returned
@@ -226,7 +220,7 @@ export class AttachmentApi extends BaseLoopBackApi {
    *
    * @param {object} limits Define further query parameters like skip, limit, order
    *
-   * @param {object} options 
+   * @param {object} options
    *
    * @returns {object} An empty reference that will be
    *   populated with the actual data once the response is returned
