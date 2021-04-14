@@ -199,9 +199,12 @@
       </mat-card-header>
 
       <ng-template [ngIf]="appConfig.tableSciDataEnabled" [ngIfElse]="jsonView">
-        <metadata-view
-          [metadata]="dataset['scientificMetadata']"
-        ></metadata-view>
+        <div [ngSwitch]="appConfig.metadataStructure">
+          <tree-view *ngSwitchCase="'tree'"
+            [metadata]="dataset['scientificMetadata']"></tree-view>
+          <metadata-view *ngSwitchDefault
+            [metadata]="dataset['scientificMetadata']"></metadata-view>
+        </div>
       </ng-template>
 
       <ng-template #jsonView>
