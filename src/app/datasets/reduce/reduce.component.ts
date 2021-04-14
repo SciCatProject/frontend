@@ -116,14 +116,3 @@ export class ReduceComponent implements OnInit, OnChanges {
     }
   }
 }
-
-
-const setState = (jsonObject: any, path: string[], newValue: any) => {
-  let obj = {...jsonObject};
-  for (let i = 0, n = path.length; i < n; ++i) {
-      const key = path[i];
-      if (key in obj) {
-        obj = obj[key];
-      }
-  }
-};

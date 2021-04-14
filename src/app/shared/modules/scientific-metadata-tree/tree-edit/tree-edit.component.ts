@@ -64,7 +64,7 @@ export class TreeEditComponent extends TreeBaseComponent implements OnInit, OnCh
         this.dataTree = this.buildDataTree(this.metadata, 0);
         this.dataSource.data = this.dataTree;
         this.setEditable();
-        this.filterText = this.filterText;
+        this.filterText = this._filterText;
       }
     }
   }

@@ -57,6 +57,7 @@ export const environment = {
   shoppingCartEnabled: true,
   shoppingCartOnHeader: true,
   tableSciDataEnabled: true,
+  metadataStructure: "tree",
   userNamePromptEnabled: true,
   userProfileImageEnabled: true,
 };
