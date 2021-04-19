@@ -20,8 +20,8 @@ export class LogbookEffects {
     this.actions$.pipe(
       ofType(fromActions.fetchLogbooksAction),
       mergeMap(() =>
-        this.logbookApi.findAll().pipe(
-          map(logbooks =>
+        this.logbookApi.find().pipe(
+          map((logbooks: Logbook[]) =>
             fromActions.fetchLogbooksCompleteAction({ logbooks })
           ),
           catchError(() => of(fromActions.fetchLogbooksFailedAction()))
@@ -36,7 +36,7 @@ export class LogbookEffects {
       withLatestFrom(this.filters$),
       mergeMap(([{ name }, filters]) =>
         this.logbookApi
-          .filter(encodeURIComponent(name), rison.encode_object(filters))
+          .findByName(encodeURIComponent(name), rison.encode_object(filters))
           .pipe(
             mergeMap(logbook => [
               fromActions.fetchLogbookCompleteAction({ logbook }),
@@ -55,7 +55,7 @@ export class LogbookEffects {
       mergeMap(([{ name }, filters]) => {
         const { skip, limit, ...theRest } = filters;
         return this.logbookApi
-          .filter(encodeURIComponent(name), rison.encode_object(theRest))
+          .findByName(encodeURIComponent(name), rison.encode_object(theRest))
           .pipe(
             map((logbook: Logbook) =>
               fromActions.fetchCountCompleteAction({
