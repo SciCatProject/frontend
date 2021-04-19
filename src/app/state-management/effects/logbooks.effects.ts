@@ -53,7 +53,7 @@ export class LogbookEffects {
       ofType(fromActions.fetchCountAction),
       withLatestFrom(this.filters$),
       mergeMap(([{ name }, filters]) => {
-        const { skip, limit, ...theRest } = filters;
+        const { skip, limit, sortField, ...theRest } = filters;
         return this.logbookApi
           .findByName(encodeURIComponent(name), rison.encode_object(theRest))
           .pipe(
