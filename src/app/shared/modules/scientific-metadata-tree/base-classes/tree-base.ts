@@ -2,6 +2,8 @@ import { FlatTreeControl } from "@angular/cdk/tree";
 import { DatePipe } from "@angular/common";
 import { Component } from "@angular/core";
 import { MatTreeFlatDataSource, MatTreeFlattener } from "@angular/material/tree";
+import { FormatNumberPipe } from "shared/pipes/format-number.pipe";
+import { PrettyUnitPipe } from "shared/pipes/pretty-unit.pipe";
 import { UnitsService } from "shared/services/units.service";
 
 export class TreeNode {
@@ -32,9 +34,13 @@ export class TreeBaseComponent {
   dataTree: TreeNode[];
   _filterText = "";
   datePipe: DatePipe;
+  formatNumberPipe: FormatNumberPipe;
+  prettyUnitPipe: PrettyUnitPipe;
   unitsService: UnitsService;
   constructor() {
     this.unitsService = new UnitsService();
+    this.prettyUnitPipe = new PrettyUnitPipe(this.unitsService);
+    this.formatNumberPipe = new FormatNumberPipe();
   }
   buildDataTree(obj: { [key: string]: any }, level: number): TreeNode[] {
     return Object.keys(obj).reduce<TreeNode[]>((accumulator, key) => {
@@ -196,7 +202,7 @@ export class TreeBaseComponent {
       return "\"\"";
     }
     if (node.unit) {
-      return `${node.value} (${this.unitsService.getSymbol(node.unit)})`;
+      return `${this.formatNumberPipe.transform(node.value)} (${this.prettyUnitPipe.transform(node.unit)})`;
     }
     if (typeof node.value === "string" && !isNaN(Date.parse(node.value))) {
       return this.datePipe.transform(node.value, "yyyy-MM-dd, HH:mm:ss zzzz");

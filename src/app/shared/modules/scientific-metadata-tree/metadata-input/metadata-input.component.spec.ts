@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 import { FormBuilder } from "@angular/forms";
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
+import { FormatNumberPipe } from "shared/pipes/format-number.pipe";
 import { Type } from "../base-classes/metadata-input-base";
 import { FlatNodeEdit } from "../tree-edit/tree-edit.component";
 
@@ -16,7 +17,7 @@ describe("MetadataInputComponent", () => {
       imports: [
         MatAutocompleteModule,
       ],
-      providers: [FormBuilder]
+      providers: [FormBuilder, FormatNumberPipe]
     })
       .compileComponents();
   }));
