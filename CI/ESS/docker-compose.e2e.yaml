@@ -6,7 +6,7 @@ services:
       - "mongodb_data:/bitnami"
   scichat-loopback:
     image: "dacat/scichat-loopback:e2e"
-    command: ["./wait-for-it.sh", "mongodb:27017", "--", "npm", "start"]
+    command: ["./wait-for-it.sh", "mongodb:27017", "--", "node", "-r", "dotenv/config", "."]
     volumes:
       - "./CI/ESS/.env:/home/node/app/.env"
     depends_on:
