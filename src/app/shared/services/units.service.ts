@@ -34,7 +34,8 @@ export class UnitsService {
       "minutes",
       "seconds"
     ],
-    volume: ["cm^3", "dm^3", "m^3", "mm^3"]
+    volume: ["cm^3", "dm^3", "m^3", "mm^3"],
+    flux: ["s^-1"]
   };
 
   private SYMBOLS = {
@@ -68,7 +69,8 @@ export class UnitsService {
     "cm^3": "cm\u00B3",
     "dm^3": "dm\u00B3",
     "m^3": "m\u00B3",
-    "mm^3": "mm\u00B3"
+    "mm^3": "mm\u00B3",
+    "s^-1":"s\u207b\u00B9"
   };
 
   private getKind(variable: string): string {
