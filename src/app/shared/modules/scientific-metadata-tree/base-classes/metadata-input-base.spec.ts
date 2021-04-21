@@ -4,6 +4,7 @@ import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { Type } from "../base-classes/metadata-input-base";
 import { FlatNodeEdit } from "../tree-edit/tree-edit.component";
 import { MetadataInputComponent} from "../metadata-input/metadata-input.component";
+import { FormatNumberPipe } from "shared/pipes/format-number.pipe";
 
 describe("MetadataInputBase", () => {
   let component: MetadataInputComponent;
@@ -15,7 +16,7 @@ describe("MetadataInputBase", () => {
       imports: [
         MatAutocompleteModule,
       ],
-      providers: [FormBuilder]
+      providers: [FormBuilder, FormatNumberPipe]
     })
       .compileComponents();
   }));

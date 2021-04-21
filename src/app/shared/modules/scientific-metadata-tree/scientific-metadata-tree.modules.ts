@@ -22,6 +22,8 @@ import { MetadataInputModalComponent } from "./metadata-input-modal/metadata-inp
 import {MatDialogModule} from "@angular/material/dialog";
 import { MatMenuModule } from "@angular/material/menu";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
+import { PrettyUnitPipe } from "shared/pipes/pretty-unit.pipe";
+import { FormatNumberPipe } from "shared/pipes/format-number.pipe";
 @NgModule({
   declarations: [TreeEditComponent, TreeViewComponent, MetadataInputComponent, MetadataInputModalComponent],
   imports: [
@@ -49,6 +51,6 @@ import { MatSnackBarModule } from "@angular/material/snack-bar";
     MatSnackBarModule
   ],
   exports: [TreeEditComponent, TreeViewComponent],
-  providers:[DatePipe]
+  providers:[DatePipe, PrettyUnitPipe, FormatNumberPipe]
 })
 export class ScientificMetadataTreeModule {}

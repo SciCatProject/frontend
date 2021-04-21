@@ -12,7 +12,7 @@ import { PrettyUnitPipe } from "./pretty-unit.pipe";
 import { DynamicPipe } from "./dynamicPipe.pipe";
 import { NewDynamicPipe } from "./newDynamicPipe.pipe";
 import { DescriptionTitlePipe } from "./description-title.pipe";
-
+import { FormatNumberPipe } from "./format-number.pipe";
 @NgModule({
   declarations: [
     FileSizePipe,
@@ -22,6 +22,7 @@ import { DescriptionTitlePipe } from "./description-title.pipe";
     PrettyUnitPipe,
     ReplaceUnderscorePipe,
     StripProposalPrefixPipe,
+    FormatNumberPipe,
     ThumbnailPipe,
     TitleCasePipe,
     DynamicPipe,
@@ -37,6 +38,7 @@ import { DescriptionTitlePipe } from "./description-title.pipe";
     PrettyUnitPipe,
     ReplaceUnderscorePipe,
     StripProposalPrefixPipe,
+    FormatNumberPipe,
     ThumbnailPipe,
     TitleCasePipe,
     DynamicPipe,

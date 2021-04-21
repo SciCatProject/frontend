@@ -1,5 +1,7 @@
 import { DatePipe } from "@angular/common";
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+import { FormatNumberPipe } from "shared/pipes/format-number.pipe";
+import { PrettyUnitPipe } from "shared/pipes/pretty-unit.pipe";
 
 import { TreeViewComponent } from "./tree-view.component";
 
@@ -12,6 +14,8 @@ describe("TreeViewComponent", () => {
       declarations: [ TreeViewComponent ],
       providers:[
         DatePipe,
+        PrettyUnitPipe,
+        FormatNumberPipe
       ]
     })
     .compileComponents();
