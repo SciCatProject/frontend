@@ -7,9 +7,8 @@ services:
   scichat-loopback:
     image: "dacat/scichat-loopback:e2e"
     command: ["./wait-for-it.sh", "mongodb:27017", "--", "npm", "start"]
-    environment: 
-      - SYNAPSE_BOT_NAME
-      - SYNAPSE_BOT_PASSWORD
+    volumes:
+      - "./CI/ESS/.env:/home/node/app/.env"
     depends_on:
       - mongodb
   catamel:
