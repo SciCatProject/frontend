@@ -313,8 +313,7 @@ describe("UserEffects", () => {
         content: "Could not log in. Check your username and password.",
         duration: 5000,
       };
-      const error = new HttpErrorResponse({status:401})
-      const action = fromActions.loginFailedAction({error});
+      const action = fromActions.loginFailedAction({error:new HttpErrorResponse({status:401})});
       const outcome = fromActions.showMessageAction({ message });
 
       actions = hot("-a", { a: action });
@@ -328,8 +327,7 @@ describe("UserEffects", () => {
         content: "Unable to connect to the authentication service. Please try again later or contact website maintainer.",
         duration: 5000,
       };
-      const error = new HttpErrorResponse({status:500})
-      const action = fromActions.loginFailedAction({error});
+      const action = fromActions.loginFailedAction({error:new HttpErrorResponse({status:500})});
       const outcome = fromActions.showMessageAction({ message });
 
       actions = hot("-a", { a: action });

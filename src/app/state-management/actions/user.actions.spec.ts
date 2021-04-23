@@ -89,7 +89,6 @@ describe("User Actions", () => {
   });
 
   describe("funcLoginAction", () => {
-    const error = new HttpErrorResponse({});
     it("should create an action", () => {
       const username = "test";
       const password = "test";
