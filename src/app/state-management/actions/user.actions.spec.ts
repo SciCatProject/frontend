@@ -1,8 +1,10 @@
 import { Message, User, Settings, UserIdentity } from "../models";
 import * as fromActions from "./user.actions";
 import { AccessToken, UserSetting } from "shared/sdk";
+import { HttpErrorResponse } from "@angular/common/http";
 
-describe("User Aactions", () => {
+describe("User Actions", () => {
+  const error = new HttpErrorResponse({});
   describe("loginAction", () => {
     it("should create an action", () => {
       const form = { username: "", password: "", rememberMe: true };
@@ -29,9 +31,10 @@ describe("User Aactions", () => {
 
   describe("loginFailedAction", () => {
     it("should create an action", () => {
-      const action = fromActions.loginFailedAction();
+      const action = fromActions.loginFailedAction({ error });
       expect({ ...action }).toEqual({
-        type: "[User] Login Failed"
+        type: "[User] Login Failed",
+        error
       });
     });
   });
@@ -72,18 +75,21 @@ describe("User Aactions", () => {
       const action = fromActions.activeDirLoginFailedAction({
         username,
         password,
-        rememberMe
+        rememberMe,
+        error
       });
       expect({ ...action }).toEqual({
         type: "[User] Active Directory Login Failed",
         username,
         password,
-        rememberMe
+        rememberMe,
+        error
       });
     });
   });
 
   describe("funcLoginAction", () => {
+    const error = new HttpErrorResponse({});
     it("should create an action", () => {
       const username = "test";
       const password = "test";
@@ -91,13 +97,15 @@ describe("User Aactions", () => {
       const action = fromActions.funcLoginAction({
         username,
         password,
-        rememberMe
+        rememberMe,
+        error
       });
       expect({ ...action }).toEqual({
         type: "[User] Functional Login",
         username,
         password,
-        rememberMe
+        rememberMe,
+        error
       });
     });
   });
@@ -113,9 +121,10 @@ describe("User Aactions", () => {
 
   describe("funcLoginFailedAction", () => {
     it("should create an action", () => {
-      const action = fromActions.funcLoginFailedAction();
+      const action = fromActions.funcLoginFailedAction({ error });
       expect({ ...action }).toEqual({
-        type: "[User] Functional Login Failed"
+        type: "[User] Functional Login Failed",
+        error
       });
     });
   });
@@ -142,9 +151,10 @@ describe("User Aactions", () => {
 
   describe("fetchUserFailedAction", () => {
     it("should create an action", () => {
-      const action = fromActions.fetchUserFailedAction();
+      const action = fromActions.fetchUserFailedAction({ error });
       expect({ ...action }).toEqual({
-        type: "[User] Fetch User Failed"
+        type: "[User] Fetch User Failed",
+        error
       });
     });
   });

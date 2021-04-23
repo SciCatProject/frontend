@@ -43,6 +43,7 @@ import { clearPoliciesStateAction } from "state-management/actions/policies.acti
 import { clearProposalsStateAction } from "state-management/actions/proposals.actions";
 import { clearPublishedDataStateAction } from "state-management/actions/published-data.actions";
 import { clearSamplesStateAction } from "state-management/actions/samples.actions";
+import { HttpErrorResponse } from "@angular/common/http";
 
 @Injectable()
 export class UserEffects {
@@ -68,12 +69,13 @@ export class UserEffects {
             fromActions.activeDirLoginSuccessAction(),
             fromActions.fetchUserAction({ adLoginResponse: body }),
           ]),
-          catchError(() =>
+          catchError((error: HttpErrorResponse) =>
             of(
               fromActions.activeDirLoginFailedAction({
                 username,
                 password,
                 rememberMe,
+                error
               })
             )
           )
@@ -99,7 +101,7 @@ export class UserEffects {
               accountType: "external",
             }),
           ]),
-          catchError(() => of(fromActions.fetchUserFailedAction()))
+          catchError((error: HttpErrorResponse) => of(fromActions.fetchUserFailedAction({error})))
         );
       })
     )
@@ -108,8 +110,8 @@ export class UserEffects {
   loginRedirect$ = createEffect(() =>
     this.actions$.pipe(
       ofType(fromActions.activeDirLoginFailedAction),
-      map(({ username, password, rememberMe }) =>
-        fromActions.funcLoginAction({ username, password, rememberMe })
+      map(({ username, password, rememberMe, error }) =>
+        fromActions.funcLoginAction({ username, password, rememberMe, error})
       )
     )
   );
@@ -117,7 +119,7 @@ export class UserEffects {
   funcLogin$ = createEffect(() =>
     this.actions$.pipe(
       ofType(fromActions.funcLoginAction),
-      switchMap(({ username, password, rememberMe }) =>
+      switchMap(({ username, password, rememberMe, error }) =>
         this.userApi.login({ username, password, rememberMe }).pipe(
           switchMap(({ user }) => [
             fromActions.funcLoginSuccessAction(),
@@ -126,7 +128,7 @@ export class UserEffects {
               accountType: "functional",
             }),
           ]),
-          catchError(() => of(fromActions.funcLoginFailedAction()))
+          catchError(() => of(fromActions.funcLoginFailedAction({error})))
         )
       )
     )
@@ -138,22 +140,31 @@ export class UserEffects {
         fromActions.fetchUserFailedAction,
         fromActions.funcLoginFailedAction
       ),
-      map(() => fromActions.loginFailedAction())
+      map(({ error }) => fromActions.loginFailedAction({error}))
     )
   );
 
   loginFailedMessage$ = createEffect(() =>
     this.actions$.pipe(
       ofType(fromActions.loginFailedAction),
-      map(() =>
-        fromActions.showMessageAction({
+      map(({ error }) => {
+        if (error.status === 500) {
+          return fromActions.showMessageAction({
+            message: {
+              content: "Unable to connect to the authentication service. Please try again later or contact website maintainer.",
+              type: MessageType.Error,
+              duration: 5000,
+            },
+          })
+        }
+        return fromActions.showMessageAction({
           message: {
             content: "Could not log in. Check your username and password.",
             type: MessageType.Error,
             duration: 5000,
           },
-        })
-      )
+        });
+      })
     )
   );
 

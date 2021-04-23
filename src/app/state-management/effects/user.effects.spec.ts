@@ -37,6 +37,7 @@ import { clearProposalsStateAction } from "state-management/actions/proposals.ac
 import { clearPublishedDataStateAction } from "state-management/actions/published-data.actions";
 import { clearSamplesStateAction } from "state-management/actions/samples.actions";
 import { Type } from "@angular/core";
+import { HttpErrorResponse } from "@angular/common/http";
 
 describe("UserEffects", () => {
   let actions: Observable<any>;
@@ -46,7 +47,7 @@ describe("UserEffects", () => {
   let userApi: jasmine.SpyObj<UserApi>;
   let userIdentityApi: jasmine.SpyObj<UserIdentityApi>;
   let router: jasmine.SpyObj<Router>;
-
+  const error = new HttpErrorResponse({});;
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
@@ -162,10 +163,11 @@ describe("UserEffects", () => {
         username,
         password,
         rememberMe,
+        error
       });
 
       actions = hot("-a", { a: action });
-      const response = cold("-#", {});
+      const response = cold("-#", {}, error);
       activeDirAuthService.login.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
@@ -198,10 +200,10 @@ describe("UserEffects", () => {
 
     it("should result in a fetchUserFailedAction", () => {
       const action = fromActions.fetchUserAction({ adLoginResponse });
-      const outcome = fromActions.fetchUserFailedAction();
+      const outcome = fromActions.fetchUserFailedAction({error});
 
       actions = hot("-a", { a: action });
-      const response = cold("-#", {});
+      const response = cold("-#", {}, error);
       loopBackAuth.setToken(token);
       userApi.findById.and.returnValue(response);
 
@@ -219,11 +221,13 @@ describe("UserEffects", () => {
         username,
         password,
         rememberMe,
+        error
       });
       const outcome = fromActions.funcLoginAction({
         username,
         password,
         rememberMe,
+        error
       });
 
       actions = hot("-a", { a: action });
@@ -245,6 +249,7 @@ describe("UserEffects", () => {
         username,
         password,
         rememberMe,
+        error
       });
       const outcome1 = fromActions.funcLoginSuccessAction();
       const outcome2 = fromActions.loginCompleteAction({ user, accountType });
@@ -262,8 +267,9 @@ describe("UserEffects", () => {
         username,
         password,
         rememberMe,
+        error
       });
-      const outcome = fromActions.funcLoginFailedAction();
+      const outcome = fromActions.funcLoginFailedAction({error});
 
       actions = hot("-a", { a: action });
       const response = cold("-#", {});
@@ -277,8 +283,8 @@ describe("UserEffects", () => {
   describe("loginFailed$", () => {
     describe("ofType fetchUserFailedAction", () => {
       it("should result in a loginFailedAction", () => {
-        const action = fromActions.fetchUserFailedAction();
-        const outcome = fromActions.loginFailedAction();
+        const action = fromActions.fetchUserFailedAction({error});
+        const outcome = fromActions.loginFailedAction({error});
 
         actions = hot("-a", { a: action });
 
@@ -289,8 +295,8 @@ describe("UserEffects", () => {
 
     describe("ofType funcLoginFailedAction", () => {
       it("should result in a loginFailedAction", () => {
-        const action = fromActions.funcLoginFailedAction();
-        const outcome = fromActions.loginFailedAction();
+        const action = fromActions.funcLoginFailedAction({error});
+        const outcome = fromActions.loginFailedAction({error});
 
         actions = hot("-a", { a: action });
 
@@ -307,7 +313,23 @@ describe("UserEffects", () => {
         content: "Could not log in. Check your username and password.",
         duration: 5000,
       };
-      const action = fromActions.loginFailedAction();
+      const error = new HttpErrorResponse({status:401})
+      const action = fromActions.loginFailedAction({error});
+      const outcome = fromActions.showMessageAction({ message });
+
+      actions = hot("-a", { a: action });
+
+      const expected = cold("-b", { b: outcome });
+      expect(effects.loginFailedMessage$).toBeObservable(expected);
+    });
+    it("should result in a showMessageAction Failed to connect to AD", () => {
+      const message = {
+        type: MessageType.Error,
+        content: "Unable to connect to the authentication service. Please try again later or contact website maintainer.",
+        duration: 5000,
+      };
+      const error = new HttpErrorResponse({status:500})
+      const action = fromActions.loginFailedAction({error});
       const outcome = fromActions.showMessageAction({ message });
 
       actions = hot("-a", { a: action });
