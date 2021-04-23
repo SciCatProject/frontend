@@ -30,9 +30,11 @@ export class LogbookApi extends BaseLoopBackApi {
   }
 
   /**
-   * Find Logbook model instance
+   * Find Logbook model instance by name
    *
    * @param {string} name Name of the Logbook
+   *
+   * @param {string} filters Filter rison object, keys: textSearch, showBotMessages, showUserMessages, showImages, skip, limit, sortField
    *
    * @returns {object} An empty reference that will be
    *   populated with the actual data once the response is returned
@@ -40,7 +42,7 @@ export class LogbookApi extends BaseLoopBackApi {
    *
    * Logbook model instance
    */
-  public findByName(name: any, customHeaders?: Function): Observable<Logbook> {
+  public findByName(name: any, filters: any = {}, customHeaders?: Function): Observable<Logbook> {
     let _method: string = "GET";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
     "/Logbooks/:name";
@@ -49,63 +51,15 @@ export class LogbookApi extends BaseLoopBackApi {
     };
     let _postBody: any = {};
     let _urlParams: any = {};
+    if (typeof filters !== 'undefined' && filters !== null) _urlParams.filters = filters;
     let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
     return result.pipe(map((instance: Logbook) => new Logbook(instance)));
   }
 
   /**
-   * Find all Logbook model instances
+   * Send message to a Logbook
    *
-   * @returns {object} An empty reference that will be
-   *   populated with the actual data once the response is returned
-   *   from the server.
-   *
-   * Array of Logbook model instances
-   */
-  public findAll(customHeaders?: Function): Observable<Logbook[]> {
-    let _method: string = "GET";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/Logbooks";
-    let _routeParams: any = {};
-    let _postBody: any = {};
-    let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
-    return result.pipe(map((instances: Array<Logbook>) =>
-        instances.map((instance: Logbook) => new Logbook(instance))
-    ));
-  }
-
-  /**
-   * Filter Logbook entries matching query
-   *
-   * @param {string} name The name of the Logbook
-   *
-   * @param {string} filters Filter rison object, keys: textSearch, showBotMessages, showUserMessages, showImages, skip, limit, sortField
-   *
-   * @returns {object} An empty reference that will be
-   *   populated with the actual data once the response is returned
-   *   from the server.
-   *
-   * Filtered Logbook model instance
-   */
-  public filter(name: any, filters: any, customHeaders?: Function): Observable<any> {
-    let _method: string = "GET";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/Logbooks/:name/:filters";
-    let _routeParams: any = {
-      name: name,
-      filters: filters
-    };
-    let _postBody: any = {};
-    let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
-    return result;
-  }
-
-  /**
-   * Send message to logbook
-   *
-   * @param {string} name The name of the logbook
+   * @param {string} name Name of the Logbook
    *
    * @param {object} data Request data.
    *
