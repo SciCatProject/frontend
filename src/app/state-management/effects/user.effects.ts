@@ -155,7 +155,7 @@ export class UserEffects {
               type: MessageType.Error,
               duration: 5000,
             },
-          })
+          });
         }
         return fromActions.showMessageAction({
           message: {
