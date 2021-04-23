@@ -3,6 +3,7 @@ import { initialUserState } from "../state/user.store";
 import * as fromActions from "../actions/user.actions";
 import { User, MessageType, Message, Settings, UserIdentity } from "../models";
 import { AccessToken, UserSetting } from "shared/sdk";
+import { HttpErrorResponse } from "@angular/common/http";
 
 describe("UserReducer", () => {
   describe("on loginAction", () => {
@@ -36,7 +37,8 @@ describe("UserReducer", () => {
 
   describe("on loginFailedAction", () => {
     it("should set both isLoggingIn and isLoggedIn to false", () => {
-      const action = fromActions.loginFailedAction();
+      const error = new HttpErrorResponse({});
+      const action = fromActions.loginFailedAction(error);
       const state = userReducer(initialUserState, action);
 
       expect(state.isLoggingIn).toEqual(false);

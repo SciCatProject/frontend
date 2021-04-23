@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from "@angular/common/http";
 import { createAction, props } from "@ngrx/store";
 import { User, AccessToken, UserIdentity, UserSetting } from "shared/sdk";
 import { Message, Settings } from "state-management/models";
@@ -10,7 +11,10 @@ export const loginCompleteAction = createAction(
   "[User] Login Complete",
   props<{ user: User; accountType: string }>()
 );
-export const loginFailedAction = createAction("[User] Login Failed");
+export const loginFailedAction = createAction(
+  "[User] Login Failed",
+  props<{ error: HttpErrorResponse }>()
+);
 
 export const activeDirLoginAction = createAction(
   "[User] Active Directory Login",
@@ -21,18 +25,19 @@ export const activeDirLoginSuccessAction = createAction(
 );
 export const activeDirLoginFailedAction = createAction(
   "[User] Active Directory Login Failed",
-  props<{ username: string; password: string; rememberMe: boolean }>()
+  props<{ username: string; password: string; rememberMe: boolean; error: HttpErrorResponse }>()
 );
 
 export const funcLoginAction = createAction(
   "[User] Functional Login",
-  props<{ username: string; password: string; rememberMe: boolean }>()
+  props<{ username: string; password: string; rememberMe: boolean; error: HttpErrorResponse }>()
 );
 export const funcLoginSuccessAction = createAction(
   "[User] Functional Login Success"
 );
 export const funcLoginFailedAction = createAction(
-  "[User] Functional Login Failed"
+  "[User] Functional Login Failed",
+  props<{ error: HttpErrorResponse }>()
 );
 
 export const fetchUserAction = createAction(
@@ -42,7 +47,10 @@ export const fetchUserAction = createAction(
 export const fetchUserCompleteAction = createAction(
   "[User] Fetch User Complete"
 );
-export const fetchUserFailedAction = createAction("[User] Fetch User Failed");
+export const fetchUserFailedAction = createAction(
+  "[User] Fetch User Failed",
+  props<{ error: HttpErrorResponse }>()
+);
 
 export const fetchCurrentUserAction = createAction("[User] Fetch Current User");
 export const fetchCurrentUserCompleteAction = createAction(
