@@ -30,7 +30,7 @@ import {
 
 import { Router } from "@angular/router";
 import { GenericFilters } from "state-management/models";
-import * as rison from "rison";
+
 import { RouterTestingModule } from "@angular/router/testing";
 import { provideMockStore } from "@ngrx/store/testing";
 import {
@@ -151,7 +151,7 @@ describe("PoliciesDashboardComponent", () => {
 
       // expect(router.navigate).toHaveBeenCalledTimes(1);
       expect(router.navigate).toHaveBeenCalledWith(["/policies"], {
-        queryParams: { args: rison.encode(filters) }
+        queryParams: { args: JSON.encode(filters) }
       });
     });
   });

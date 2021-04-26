@@ -34,7 +34,7 @@ export class LogbookApi extends BaseLoopBackApi {
    *
    * @param {string} name Name of the Logbook
    *
-   * @param {string} filters Filter rison object, keys: textSearch, showBotMessages, showUserMessages, showImages, skip, limit, sortField
+   * @param {string} filters Filter json object, keys: textSearch, showBotMessages, showUserMessages, showImages, skip, limit, sortField
    *
    * @returns {object} An empty reference that will be
    *   populated with the actual data once the response is returned

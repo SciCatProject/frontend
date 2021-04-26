@@ -28,7 +28,7 @@ import {
 import { ActivatedRoute, Router } from "@angular/router";
 import { APP_CONFIG, AppConfig } from "app-config.module";
 import { LogbookFilters } from "state-management/models";
-import * as rison from "rison";
+
 import { map, take, filter, distinctUntilChanged } from "rxjs/operators";
 import * as deepEqual from "deep-equal";
 import {
@@ -67,7 +67,7 @@ export class LogbooksDashboardComponent
   applyRouterState(name: string, filters: LogbookFilters) {
     if (this.route.snapshot.url[0].path === "logbooks") {
       this.router.navigate(["/logbooks", name], {
-        queryParams: { args: rison.encode(filters) },
+        queryParams: { args: JSON.stringify(filters) },
       });
     }
   }
@@ -129,7 +129,7 @@ export class LogbooksDashboardComponent
         .pipe(
           map((params) => params.args as string),
           take(1),
-          map((args) => (args ? rison.decode<LogbookFilters>(args) : {}))
+          map((args) => (args ? <LogbookFilters>JSON.parse(args) : {}))
         )
         .subscribe((filters) =>
           this.store.dispatch(prefillFiltersAction({ values: filters }))

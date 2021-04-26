@@ -33,7 +33,7 @@ import { DatePipe } from "@angular/common";
 import { Router, ActivatedRoute } from "@angular/router";
 import { MatDialogConfig, MatDialog } from "@angular/material/dialog";
 import { SampleDialogComponent } from "samples/sample-dialog/sample-dialog.component";
-import * as rison from "rison";
+
 import * as deepEqual from "deep-equal";
 import {
   filter,
@@ -172,7 +172,7 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
         .subscribe((filters) => {
           this.store.dispatch(fetchSamplesAction());
           this.router.navigate(["/samples"], {
-            queryParams: { args: rison.encode(filters) },
+            queryParams: { args: JSON.stringify(filters) },
           });
         })
     );
@@ -188,7 +188,7 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
         .pipe(
           map((params) => params.args as string),
           take(1),
-          map((args) => (args ? rison.decode<SampleFilters>(args) : {}))
+          map((args) => (args ? <SampleFilters>JSON.parse(args): {}))
         )
         .subscribe((filters) =>
           this.store.dispatch(prefillFiltersAction({ values: filters }))
