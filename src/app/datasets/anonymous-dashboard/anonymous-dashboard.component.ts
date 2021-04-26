@@ -113,7 +113,7 @@ export class AnonymousDashboardComponent implements OnInit, OnDestroy {
           map((params) => params.args as string),
           take(1),
           //map((args) => (args ? rison.decode<DatasetFilters>(args) : {}))
-          map((args) => (args ? JSON.parse<DatasetFilters>(args) : {}))
+          map((args) => (args ? <DatasetFilters>JSON.parse(args) : {}))
         )
         .subscribe((filters) =>
           this.store.dispatch(prefillFiltersAction({ values: filters }))

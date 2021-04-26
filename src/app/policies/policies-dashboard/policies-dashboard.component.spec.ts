@@ -151,7 +151,7 @@ describe("PoliciesDashboardComponent", () => {
 
       // expect(router.navigate).toHaveBeenCalledTimes(1);
       expect(router.navigate).toHaveBeenCalledWith(["/policies"], {
-        queryParams: { args: JSON.encode(filters) }
+        queryParams: { args: JSON.stringify(filters) }
       });
     });
   });
