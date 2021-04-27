@@ -212,7 +212,7 @@ export class ProposalDashboardComponent implements OnInit, OnDestroy {
         .pipe(
           map(params => params.args as string),
           take(1),
-          map(args => (args ? <ProposalFilters>JSON.parse(args) : {}))
+          map(args => (args ? JSON.parse(args) as ProposalFilters: {}))
         )
         .subscribe(filters =>
           this.store.dispatch(prefillFiltersAction({ values: filters }))

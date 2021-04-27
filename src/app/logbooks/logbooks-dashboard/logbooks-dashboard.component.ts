@@ -129,7 +129,7 @@ export class LogbooksDashboardComponent
         .pipe(
           map((params) => params.args as string),
           take(1),
-          map((args) => (args ? <LogbookFilters>JSON.parse(args) : {}))
+          map((args) => (args ? JSON.parse(args) as LogbookFilters: {}))
         )
         .subscribe((filters) =>
           this.store.dispatch(prefillFiltersAction({ values: filters }))

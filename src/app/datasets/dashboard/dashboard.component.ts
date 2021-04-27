@@ -179,7 +179,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         .pipe(
           map(params => params.args as string),
           take(1),
-          map(args => (args ? <DatasetFilters>JSON.parse(args) : {}))
+          map(args => (args ? JSON.parse(args) as DatasetFilters: {}))
         )
         .subscribe(filters =>
           this.store.dispatch(prefillFiltersAction({ values: filters }))
