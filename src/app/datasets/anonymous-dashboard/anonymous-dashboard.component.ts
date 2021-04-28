@@ -17,7 +17,7 @@ import {
 import { combineLatest, Subscription } from "rxjs";
 
 import * as deepEqual from "deep-equal";
-//import * as rison from "rison";
+
 import { DatasetFilters, Dataset } from "state-management/models";
 import { SelectColumnEvent } from "datasets/dataset-table-settings/dataset-table-settings.component";
 import {
@@ -101,7 +101,6 @@ export class AnonymousDashboardComponent implements OnInit, OnDestroy {
           this.store.dispatch(fetchDatasetsAction());
           this.store.dispatch(fetchFacetCountsAction());
           this.router.navigate([""], {
-            //queryParams: { args: rison.encode(filters) },
             queryParams: { args: JSON.stringify(filters) },
           });
         })
@@ -112,7 +111,6 @@ export class AnonymousDashboardComponent implements OnInit, OnDestroy {
         .pipe(
           map((params) => params.args as string),
           take(1),
-          //map((args) => (args ? rison.decode<DatasetFilters>(args) : {}))
           map((args) => (args ? JSON.parse(args) as DatasetFilters: {}))
         )
         .subscribe((filters) =>
