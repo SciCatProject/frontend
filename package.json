@@ -48,7 +48,7 @@
     "rxjs": "^6.6.6",
     "saturn-datepicker": "^8.0.1",
     "shortid": "^2.2.16",
-    "socket.io-client": "^2.4.0",
+    "socket.io-client": "^4.0.0",
     "tslib": "^2.0.0"
   },
   "devDependencies": {
@@ -67,7 +67,6 @@
     "@types/node": "^12.11.1",
     "@types/rison": "^0.0.6",
     "@types/shortid": "0.0.29",
-    "@types/socket.io-client": "^1.4.32",
     "@types/source-map-support": "^0.5.0",
     "@typescript-eslint/eslint-plugin": "4.16.1",
     "@typescript-eslint/parser": "4.16.1",
