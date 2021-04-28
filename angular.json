@@ -16,7 +16,6 @@
               "deep-equal",
               "file-saver",
               "moment-timezone",
-              "rison",
               "shortid",
               "socket.io-client"
             ],
