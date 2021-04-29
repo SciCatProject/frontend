@@ -3,7 +3,6 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { APP_CONFIG, AppConfig } from "app-config.module";
 import { select, Store, ActionsSubject } from "@ngrx/store";
 
-import * as rison from "rison";
 import * as deepEqual from "deep-equal";
 
 import { DatasetFilters, User } from "state-management/models";
@@ -170,7 +169,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
           this.store.dispatch(fetchDatasetsAction());
           this.store.dispatch(fetchFacetCountsAction());
           this.router.navigate(["/datasets"], {
-            queryParams: { args: rison.encode(filters) },
+            queryParams: { args: JSON.stringify(filters) },
           });
         })
     );
@@ -180,7 +179,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         .pipe(
           map(params => params.args as string),
           take(1),
-          map(args => (args ? rison.decode<DatasetFilters>(args) : {}))
+          map(args => (args ? JSON.parse(args) as DatasetFilters: {}))
         )
         .subscribe(filters =>
           this.store.dispatch(prefillFiltersAction({ values: filters }))

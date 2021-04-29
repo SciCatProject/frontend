@@ -21,7 +21,7 @@ import {
   CheckboxEvent,
 } from "shared/modules/table/table.component";
 import { Subscription } from "rxjs";
-import * as rison from "rison";
+
 import { MatCheckboxChange } from "@angular/material/checkbox";
 import { DOCUMENT } from "@angular/common";
 import { take } from "rxjs/operators";
@@ -131,7 +131,7 @@ export class PublisheddataDashboardComponent implements OnInit, OnDestroy {
       .pipe(select(getFilters))
       .subscribe((filters) => {
         this.router.navigate(["/publishedDatasets"], {
-          queryParams: { args: rison.encode(filters) },
+          queryParams: { args: JSON.stringify(filters) },
         });
       });
   }

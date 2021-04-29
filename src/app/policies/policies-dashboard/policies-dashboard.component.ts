@@ -39,7 +39,7 @@ import {
 import { EditDialogComponent } from "policies/edit-dialog/edit-dialog.component";
 import { map } from "rxjs/operators";
 import { Router } from "@angular/router";
-import * as rison from "rison";
+
 import { GenericFilters } from "state-management/models";
 
 @Component({
@@ -158,7 +158,7 @@ export class PoliciesDashboardComponent implements OnInit, OnDestroy {
 
   addToQueryParams(filters: GenericFilters) {
     this.router.navigate(["/policies"], {
-      queryParams: { args: rison.encode(filters) }
+      queryParams: { args: JSON.stringify(filters) }
     });
   }
 

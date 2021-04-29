@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { Router, ActivatedRoute, NavigationEnd, Params } from "@angular/router";
 import { Store, select } from "@ngrx/store";
-import * as rison from "rison";
+
 import {
   getArchiveViewMode,
   getFilters,
@@ -123,7 +123,7 @@ export class BreadcrumbComponent implements OnInit {
           .subscribe((currentMode) => {
             filters["mode"] = setMode(currentMode);
             this.router.navigate(["/datasets"], {
-              queryParams: { args: rison.encode(filters) },
+              queryParams: { args: JSON.stringify(filters) },
             });
           });
       });
