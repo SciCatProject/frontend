@@ -4,15 +4,22 @@ import { ActivatedRoute } from "@angular/router";
 @Component({
   selector: "error-page",
   templateUrl: "./error-page.component.html",
-  styleUrls: ["./error-page.component.css"]
+  styleUrls: ["./error-page.component.scss"]
 })
 export class ErrorPageComponent implements OnInit {
-  @Input()
-  message: string;
+  @Input() errorTitle: string;
+  @Input() message: string;
+
 
   constructor(private route: ActivatedRoute) {}
 
   ngOnInit() {
-    this.route.queryParams.subscribe(v => (this.message = v.message));
+    // get errorTitle and message from redirection
+    if(!this.errorTitle && !this.message){
+      this.route.data.subscribe(data => {
+        this.errorTitle = data.errorTitle;
+        this.message = data.message;
+      });
+    }
   }
 }

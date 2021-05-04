@@ -1,4 +1,4 @@
-<ng-container *ngIf="dataset$ | async as dataset">
+<ng-container *ngIf="(dataset$ | async) as dataset">
   <mat-tab-group>
     <mat-tab>
       <ng-template mat-tab-label>
@@ -54,4 +54,12 @@
       <dataset-lifecycle [dataset]="dataset"></dataset-lifecycle>
     </mat-tab>
   </mat-tab-group>
+</ng-container>
+<ng-container *ngIf="!(dataset$ | async) as dataset">
+  <error-page
+  *ngIf="!(loading$ | async)"
+  [errorTitle]="'Dataset information not found'"
+  [message]="'The dataset you are trying to view is either does not exist or requires authentication.'"
+  >
+  </error-page>
 </ng-container>

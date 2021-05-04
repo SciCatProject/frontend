@@ -19,6 +19,8 @@ import {
 import {
   getIsAdmin,
   getCurrentUser,
+  getProfile,
+  getIsLoading,
 } from "state-management/selectors/user.selectors";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Subscription, Observable, fromEvent } from "rxjs";
@@ -44,7 +46,7 @@ import { fetchSampleAction } from "state-management/actions/samples.actions";
 import { getCurrentSample } from "state-management/selectors/samples.selectors";
 import { EditableComponent } from "app-routing/pending-changes.guard";
 import { MatDialog } from "@angular/material/dialog";
-
+import { map } from "rxjs/operators";
 @Component({
   selector: "dataset-details-dashboard",
   templateUrl: "./dataset-details-dashboard.component.html",
@@ -61,9 +63,16 @@ export class DatasetDetailsDashboardComponent
   proposal$ = this.store.pipe(select(getCurrentProposal));
   sample$ = this.store.pipe(select(getCurrentSample));
   isAdmin$ = this.store.pipe(select(getIsAdmin));
+  currentUser = this.store.pipe(select(getCurrentUser));
+  userProfile$ = this.store.pipe(select(getProfile));
+  accessGroups$: Observable<string[]> = this.userProfile$.pipe(
+    map((profile) => (profile ? profile.accessGroups : []))
+  );
+  loading$ = this.store.pipe(select(getIsLoading));
   jwt$: Observable<any>;
   dataset: Dataset;
   user: User;
+  editingAllowed: boolean = false;
   pickedFile: ReadFile;
   attachment: Attachment;
   constructor(
@@ -257,6 +266,9 @@ export class DatasetDetailsDashboardComponent
       this.store.pipe(select(getCurrentDataset)).subscribe((dataset) => {
         if (dataset) {
           this.dataset = dataset;
+          this.accessGroups$.subscribe((groups: string[]) => {
+            this.editingAllowed = groups.indexOf(this.dataset.ownerGroup) !== -1;
+          });
           if ("proposalId" in dataset) {
             this.store.dispatch(
               fetchProposalAction({ proposalId: dataset["proposalId"] })

@@ -87,7 +87,7 @@ export const routes: Routes = [
       {
         path: "login/error",
         component: ErrorPageComponent,
-        data: { message: "Location Not Found", breadcrumb: "Error" },
+        data: { errorTitle: "Location Not Found", breadcrumb: "Error" },
       },
     ],
   },
@@ -234,7 +234,7 @@ export const routes: Routes = [
       {
         path: "error",
         component: ErrorPageComponent,
-        data: { message: "Location Not Found", breadcrumb: "Error" },
+        data: { errorTitle: "Location Not Found"},
       },
       {
         path: "help/ingestManual",
@@ -257,8 +257,18 @@ export const routes: Routes = [
         component: LoginLayoutComponent,
         canActivate: [AuthGuard],
       },
+      {
+        path: "404",
+        component: ErrorPageComponent,
+        data: { errorTitle: "404 Page not found" , message: "Sorry, the page you are trying to view doesn't exists"}
+      },
     ],
   },
+  {
+    path: "**",
+    pathMatch: "full",
+    redirectTo: "/404",
+  }
 ];
 @NgModule({
   imports: [RouterModule.forRoot(routes, { relativeLinkResolution: "legacy" })],
