@@ -57,9 +57,9 @@
 </ng-container>
 <ng-container *ngIf="!(dataset$ | async) as dataset">
   <error-page
-  *ngIf="!(loading$ | async)"
-  [errorTitle]="'Dataset information not found'"
-  [message]="'The dataset you are trying to view is either does not exist or requires authentication.'"
+    *ngIf="!(loading$ | async)"
+    [errorTitle]="'Dataset not found'"
+    [message]="'The dataset you are trying to view is either does not exist or requires authentication.'"
   >
   </error-page>
 </ng-container>

@@ -141,9 +141,9 @@
 </ng-template>
 <ng-template [ngIf]="!dataset">
   <error-page
-  *ngIf="!(loading$ | async)"
-  [errorTitle]="'Dataset information not found'"
-  [message]="'The dataset you are trying to view is either does not exist or you do not have permission to view it.'"
+    *ngIf="!(loading$ | async)"
+    [errorTitle]="'Dataset not found'"
+    [message]="'The dataset you are trying to view is either does not exist or you do not have permission to view it.'"
   >
   </error-page>
 </ng-template>
