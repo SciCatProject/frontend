@@ -24,7 +24,7 @@ import {
 } from "state-management/selectors/user.selectors";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Subscription, Observable, fromEvent } from "rxjs";
-import { pluck, take } from "rxjs/operators";
+import { pluck, take, map } from "rxjs/operators";
 import { APP_CONFIG, AppConfig } from "app-config.module";
 import {
   clearFacetsAction,
@@ -46,7 +46,6 @@ import { fetchSampleAction } from "state-management/actions/samples.actions";
 import { getCurrentSample } from "state-management/selectors/samples.selectors";
 import { EditableComponent } from "app-routing/pending-changes.guard";
 import { MatDialog } from "@angular/material/dialog";
-import { map } from "rxjs/operators";
 @Component({
   selector: "dataset-details-dashboard",
   templateUrl: "./dataset-details-dashboard.component.html",
@@ -72,7 +71,7 @@ export class DatasetDetailsDashboardComponent
   jwt$: Observable<any>;
   dataset: Dataset;
   user: User;
-  editingAllowed: boolean = false;
+  editingAllowed = false;
   pickedFile: ReadFile;
   attachment: Attachment;
   constructor(

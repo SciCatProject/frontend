@@ -25,7 +25,7 @@ describe("ErrorPageComponent", () => {
     fixture = TestBed.createComponent(ErrorPageComponent);
     component = fixture.componentInstance;
     component.errorTitle = "Error";
-    component.message = "Message"
+    component.message = "Message";
     fixture.detectChanges();
   });
 

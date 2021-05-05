@@ -1,4 +1,4 @@
-<ng-container *ngIf="(dataset$ | async) as dataset">
+<ng-container *ngIf="(dataset$ | async) as dataset; else notfound">
   <mat-tab-group>
     <mat-tab>
       <ng-template mat-tab-label>
@@ -55,11 +55,11 @@
     </mat-tab>
   </mat-tab-group>
 </ng-container>
-<ng-container *ngIf="!(dataset$ | async) as dataset">
+<ng-template #notfound>
   <error-page
-    *ngIf="!(loading$ | async)"
+    *ngIf="(loading$ | async) === false"
     [errorTitle]="'Dataset not found'"
     [message]="'The dataset you are trying to view is either does not exist or requires authentication.'"
   >
   </error-page>
-</ng-container>
+</ng-template>
