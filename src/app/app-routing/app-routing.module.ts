@@ -153,6 +153,11 @@ export const routes: Routes = [
         canActivate: [AuthGuard],
       },
       {
+        path: "proposalsold",
+        component: ProposalDashboardComponent,
+        canActivate: [AuthGuard],
+      },
+      {
         path: "proposals/:id",
         component: ViewProposalPageComponent,
         canActivate: [AuthGuard],
