@@ -21,7 +21,7 @@
   "license": "string",
   "version": "string",
   "isPublished": false,
-  "ownerGroup": "ess",
+  "ownerGroup": "cypress",
   "accessGroups": [],
   "createdBy": "string",
   "updatedBy": "string",
