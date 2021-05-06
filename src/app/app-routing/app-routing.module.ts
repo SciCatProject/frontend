@@ -49,6 +49,7 @@ import { LogbookGuard } from "app-routing/logbook.guard";
 import { FilesDashboardComponent } from "files/files-dashboard/files-dashboard.component";
 import { DatasetsGuard } from "./datasets.guard";
 import { LeavingPageGuard } from "./pending-changes.guard";
+import { ProposalDashboardNewComponent } from "proposals/proposal-dashboard-new/proposal-dashboard-new.component";
 
 export const routes: Routes = [
   {
@@ -148,6 +149,11 @@ export const routes: Routes = [
       },
       {
         path: "proposals",
+        component: ProposalDashboardNewComponent,
+        canActivate: [AuthGuard],
+      },
+      {
+        path: "proposalsold",
         component: ProposalDashboardComponent,
         canActivate: [AuthGuard],
       },
