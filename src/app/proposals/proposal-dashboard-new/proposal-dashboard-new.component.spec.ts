@@ -6,7 +6,7 @@ import { ScicatDataService } from "shared/services/scicat-data-service";
 
 import { ProposalDashboardNewComponent } from "./proposal-dashboard-new.component";
 
-fdescribe("ProposalDashboardNewComponent", () => {
+describe("ProposalDashboardNewComponent", () => {
   let component: ProposalDashboardNewComponent;
   let fixture: ComponentFixture<ProposalDashboardNewComponent>;
 

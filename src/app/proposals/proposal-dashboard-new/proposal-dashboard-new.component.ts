@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit } from "@angular/core";
+import { AfterViewChecked, ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { Column } from "shared/modules/shared-table/shared-table.module";
 import { Proposal } from "shared/sdk";
@@ -11,17 +11,19 @@ import { SciCatDataSource } from "shared/services/scicat.datasource";
   templateUrl: "./proposal-dashboard-new.component.html",
   styleUrls: ["./proposal-dashboard-new.component.scss"]
 })
-export class ProposalDashboardNewComponent implements OnInit {
+export class ProposalDashboardNewComponent implements OnInit, OnDestroy, AfterViewChecked {
   columns: Column[] = [
-    { id: "proposalId", label: "ID", canSort: true, icon: "perm_contact_calendar", matchMode: "contains", hideOrder: 0, },
-    { id: "title", label: "Title", icon: "fingerprint", canSort: true, matchMode: "contains", hideOrder: 1, },
+    { id: "proposalId", label: "Proposal ID", canSort: true, icon: "perm_device_information", matchMode: "contains", hideOrder: 0, },
+    { id: "title", label: "Title", icon: "description", canSort: true, matchMode: "contains", hideOrder: 1, },
+    { id: "firstname", label: "First Name", icon: "badge", canSort: true, matchMode: "contains", hideOrder: 2, },
+    { id: "lastname", label: "Last Name", icon: "badge", canSort: true, matchMode: "contains", hideOrder: 3, },
     {
       id: "startTime", icon: "timer", label: "Start Date", format: "date", canSort: true,
-      matchMode: "between", hideOrder: 3, sortDefault: "desc"
+      matchMode: "between", hideOrder: 4, sortDefault: "desc"
     },
     {
       id: "endTime", icon: "timer_off", label: "End Date", format: "date", canSort: true,
-      matchMode: "between", hideOrder: 4
+      matchMode: "between", hideOrder: 5
     },
   ];
   tableDefinition = {
