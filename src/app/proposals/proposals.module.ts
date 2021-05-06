@@ -31,6 +31,7 @@ import { FileSizePipe } from "shared/pipes/filesize.pipe";
 import { SatDatepickerModule } from "saturn-datepicker";
 import { ProposalFilterComponent } from "./proposal-filter/proposal-filter.component";
 import { LogbooksModule } from "logbooks/logbooks.module";
+import { ProposalDashboardNewComponent } from "./proposal-dashboard-new/proposal-dashboard-new.component";
 
 @NgModule({
   imports: [
@@ -59,7 +60,8 @@ import { LogbooksModule } from "logbooks/logbooks.module";
     ViewProposalPageComponent,
     ProposalDetailComponent,
     ProposalDashboardComponent,
-    ProposalFilterComponent
+    ProposalFilterComponent,
+    ProposalDashboardNewComponent
   ],
   exports: [],
   providers: [DatePipe, FileSizePipe, SlicePipe]
