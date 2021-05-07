@@ -23,7 +23,7 @@ import {
   getIsLoading,
 } from "state-management/selectors/user.selectors";
 import { ActivatedRoute, Router } from "@angular/router";
-import { Subscription, Observable, fromEvent } from "rxjs";
+import { Subscription, Observable, fromEvent, combineLatest } from "rxjs";
 import { pluck, take, map } from "rxjs/operators";
 import { APP_CONFIG, AppConfig } from "app-config.module";
 import {
@@ -265,8 +265,8 @@ export class DatasetDetailsDashboardComponent
       this.store.pipe(select(getCurrentDataset)).subscribe((dataset) => {
         if (dataset) {
           this.dataset = dataset;
-          this.accessGroups$.subscribe((groups: string[]) => {
-            this.editingAllowed = groups.indexOf(this.dataset.ownerGroup) !== -1;
+          combineLatest([this.accessGroups$, this.isAdmin$]).subscribe(([groups, isAdmin]) => {
+            this.editingAllowed = (groups.indexOf(this.dataset.ownerGroup) !== -1) || isAdmin;
           });
           if ("proposalId" in dataset) {
             this.store.dispatch(
