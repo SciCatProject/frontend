@@ -237,7 +237,7 @@ export class TreeEditComponent extends TreeBaseComponent implements OnInit, OnCh
     switch (data.type) {
       case Type.date:
         node.key = data.key;
-        node.value = new Date(Date.parse(data.value)).toISOString();
+        node.value = new Date(data.value);
         node.unit = null;
         break;
       case Type.string:
