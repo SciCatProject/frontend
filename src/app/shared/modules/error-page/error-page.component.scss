@@ -1,0 +1,18 @@
+@import "../../../../theme.scss";
+.center{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 30%;
+}
+h1{
+  font-size: 50px;
+  text-align: center;
+  color: mat-color($primary);
+}
+h3{
+  font-size: 20px;
+  text-align: center;
+  color: mat-color($primary);
+}
