@@ -31,9 +31,22 @@ import { ObjKeysPipe } from "shared/pipes/obj-keys.pipe";
 import { RouterModule } from "@angular/router";
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
-import { MAT_MOMENT_DATE_FORMATS, MomentDateAdapter } from "@angular/material-moment-adapter";
-import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from "@angular/material/core";
+import { DateAdapter, MatDateFormats, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from "@angular/material/core";
+import { LuxonDateAdapter } from 'ngx-material-luxon';
 
+export const MAT_LUXON_DATE_FORMATS: MatDateFormats = {
+
+  parse: {
+      dateInput: 'yyyy-LL-dd',
+  },
+
+  display: {
+      dateInput: 'yyyy-LL-dd',
+      monthYearLabel: 'LLL yyyy',
+      dateA11yLabel: 'MM',
+      monthYearA11yLabel: 'LLL yyyy'
+  },
+};
 export interface Column {
   id: string;
   type?: string;
@@ -84,8 +97,8 @@ export interface Column {
     SlicePipe,
     TitleCasePipe,
     UpperCasePipe,
-    { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
-    { provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS },
+    { provide: DateAdapter, useClass: LuxonDateAdapter, deps: [MAT_DATE_LOCALE] },
+    { provide: MAT_DATE_FORMATS, useValue: MAT_LUXON_DATE_FORMATS },
   ]
 })
 export class SharedTableModule { }

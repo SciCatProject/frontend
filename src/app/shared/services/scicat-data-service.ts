@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { LoopBackAuth } from "shared/sdk";
-import * as moment from "moment";
+import { DateTime } from "luxon";
 import { Column } from "shared/modules/shared-table/shared-table.module";
 
 @Injectable({
@@ -25,8 +25,8 @@ export class ScicatDataService {
     const result = {};
     if (filterExpressions) {
       const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
-      let blocal: moment.Moment;
-      let elocal: moment.Moment;
+      let blocal: DateTime;
+      let elocal: DateTime;
       let columnkey: string;
       Object.keys(filterExpressions).forEach((key, index) => {
         if (filterExpressions[key] !== "") {
@@ -64,12 +64,12 @@ export class ScicatDataService {
                   result[columnkey] = {};
                 }
                 if (key.endsWith(".start")) {
-                  blocal = moment.tz(filterExpressions[key], tz);
-                  result[columnkey]["begin"] = blocal.toISOString();
+                  blocal = DateTime.fromISO(filterExpressions[key]).toUTC();
+                  result[columnkey]["begin"] = blocal.toISO();
                 }
                 if (key.endsWith(".end")) {
-                  elocal = moment.tz(filterExpressions[key], tz).add(1, "days");
-                  result[columnkey]["end"] = elocal.toISOString();
+                  elocal = DateTime.fromISO(filterExpressions[key]).toUTC().plus({days: 1});
+                  result[columnkey]["end"] = elocal.toISO();
                 }
                 break;
               }
