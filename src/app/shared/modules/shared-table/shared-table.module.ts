@@ -32,21 +32,7 @@ import { RouterModule } from "@angular/router";
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { DateAdapter, MatDateFormats, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from "@angular/material/core";
-import { LuxonDateAdapter } from 'ngx-material-luxon';
-
-export const MAT_LUXON_DATE_FORMATS: MatDateFormats = {
-
-  parse: {
-      dateInput: 'yyyy-LL-dd',
-  },
-
-  display: {
-      dateInput: 'yyyy-LL-dd',
-      monthYearLabel: 'LLL yyyy',
-      dateA11yLabel: 'MM',
-      monthYearA11yLabel: 'LLL yyyy'
-  },
-};
+import { LuxonDateAdapter, MAT_LUXON_DATE_FORMATS } from 'ngx-material-luxon';
 export interface Column {
   id: string;
   type?: string;
