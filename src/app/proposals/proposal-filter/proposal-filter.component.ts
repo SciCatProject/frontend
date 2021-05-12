@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
-import { DateRange } from "datasets/datasets-filter/datasets-filter.component";
-import { MatDatepickerInputEvent } from "@angular/material/datepicker";
+import { SatDatepickerRangeValue } from "saturn-datepicker";
+import { DateTime } from "luxon";
 
 @Component({
   selector: "proposal-filter",
@@ -18,7 +18,7 @@ export class ProposalFilterComponent {
 
   @Output() clear = new EventEmitter<any>();
   @Output() searchChange = new EventEmitter<string>();
-  @Output() dateChange = new EventEmitter<DateRange>();
+  @Output() dateChange = new EventEmitter<SatDatepickerRangeValue<DateTime>>();
 
   doClear() {
     this.clear.emit();
@@ -28,7 +28,7 @@ export class ProposalFilterComponent {
     this.searchChange.emit(query);
   }
 
-  doDateChange(event: MatDatepickerInputEvent<DateRange>) {
-    this.dateChange.emit(event.value);
+  doDateChange(value: SatDatepickerRangeValue<DateTime>) {
+    this.dateChange.emit(value);
   }
 }
