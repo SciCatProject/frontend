@@ -31,8 +31,8 @@ import { ObjKeysPipe } from "shared/pipes/obj-keys.pipe";
 import { RouterModule } from "@angular/router";
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
-import { DateAdapter, MatDateFormats, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from "@angular/material/core";
-import { LuxonDateAdapter, MAT_LUXON_DATE_FORMATS } from 'ngx-material-luxon';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from "@angular/material/core";
+import { LuxonDateAdapter, MAT_LUXON_DATE_FORMATS } from "ngx-material-luxon";
 export interface Column {
   id: string;
   type?: string;

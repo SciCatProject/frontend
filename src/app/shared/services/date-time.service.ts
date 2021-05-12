@@ -12,9 +12,9 @@ export class DateTimeService {
       DateTime.fromFormat(input, "yyyy-MM-dd HH:mm:ss").isValid ||
       DateTime.fromFormat(input, "yyyy-MM-dd HH:mm:ss.SSS").isValid ||
       this.isISODateTime(input)
-    )
+    );
   }
-  isISODateTime(input:string){
+  isISODateTime(input: string){
     const regex = /^\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z)$/g;
     if(input.match(regex) && DateTime.fromISO(input).isValid){
       return true;

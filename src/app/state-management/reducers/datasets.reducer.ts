@@ -290,8 +290,7 @@ const reducer = createReducer(
 
   on(fromActions.setDateRangeFilterAction, (state, { begin, end }) => {
     const oldTime = state.filters.creationTime;
-    let creationTime: {begin: string, end: string} | null;
-    creationTime = (begin && end) ?  {...oldTime, begin, end } : null;
+    const creationTime = (begin && end) ?  {...oldTime, begin, end } : null;
     const filters = { ...state.filters, creationTime };
     return { ...state, filters };
   }),
