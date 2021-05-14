@@ -7,11 +7,11 @@ import { TableColumn } from "state-management/models";
 
 export const environment = {
   production: true,
-  lbBaseURL: "https://dataportal.als.lbl.gov",
+  lbBaseURL: "https://dataportal-staging.als.lbl.gov",
   // fileserverBaseURL: "http://127.0.0.1:8889",
   // synapseBaseUrl: "https://scitest.esss.lu.se",
   // riotBaseUrl: "http://scitest.esss.lu.se/riot",
-  jupyterHubUrl: "https://jupyterhub.apps.ocp4a.psi.ch/hub/login",
+  jupyterHubUrl: "https://jupyter.nersc.gov",
   externalAuthEndpoint: "/auth/msad",
   addDatasetEnabled: false,
   archiveWorkflowEnabled: true,
@@ -55,9 +55,9 @@ export const environment = {
   shoppingCartOnHeader: true,
   tableSciDataEnabled: false,
   userNamePromptEnabled: true,
-  userProfileImageEnabled: true,
-  ingestManual: "http://melanie.gitpages.psi.ch/SciCatPages/",
-  gettingStarted: "http://melanie.gitpages.psi.ch/SciCatPages/SciCatGettingStartedSLSSummary.pdf",
+  userProfileImageEnabled: false,
+  // ingestManual: "http://melanie.gitpages.psi.ch/SciCatPages/",
+  // gettingStarted: "http://melanie.gitpages.psi.ch/SciCatPages/SciCatGettingStartedSLSSummary.pdf",
   jobsEnabled: true,
   policiesEnabled: true,
 };
