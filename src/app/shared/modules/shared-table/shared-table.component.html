@@ -10,9 +10,6 @@
     <mat-icon>search</mat-icon>
     <input type="search" matInput placeholder="global word-search" #globalFilter>
   </mat-form-field>
-  <span class="example-spacer"></span>
-  <span>{{dataSource.collection}}</span>
-  <span class="example-spacer"></span>
   <button mat-icon-button (click)="exportToExcel()">
     <mat-icon>cloud_download</mat-icon>
   </button>
@@ -35,7 +32,7 @@
   </ng-container>
   <!-- Toggle Button End -->
   <ng-container [matColumnDef]="column.id" *ngFor="let column of visibleColumns">
-    <mat-header-cell *matHeaderCellDef class="col-search" fxLayoutAlign="start start" fxLayout="column">
+    <mat-header-cell *matHeaderCellDef class="col-name shared-table-{{column.matchMode}}" fxLayoutAlign="start start" fxLayout="column">
       <div fxLayout="row" style="align-items: center">
         <mat-icon>{{ column.icon }}</mat-icon>
         <span mat-sort-header [disabled]="!column.canSort">{{ column.label | titleCase }}</span>

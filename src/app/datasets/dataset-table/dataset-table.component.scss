@@ -20,7 +20,7 @@
 
     mat-header-cell {
       color: mat-color($primary, default-contrast);
-      justify-content: center;
+      justify-content: left;
 
       ::ng-deep .mat-checkbox .mat-checkbox-frame {
         border-color: mat-color($primary, default-contrast);

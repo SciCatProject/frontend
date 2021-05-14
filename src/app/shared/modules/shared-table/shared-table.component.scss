@@ -1,9 +1,11 @@
+@import "../../../../theme.scss";
+
 .m8 {
   margin: 8px;
 }
 
 ::ng-deep .mat-sort-header-arrow {
-  color:green;
+  color:rgb(128, 0, 128);
 }
 
 .expanded {
@@ -85,9 +87,9 @@ mat-header-row {
 
 
 .mat-input-element {
-  color: green;
+  color: white;
 }
-
+ß
 .mat-input-element::placeholder {
   color: black;
 }
@@ -97,4 +99,69 @@ mat-header-row {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+::ng-deep .mat-sort-header-content > div {
+  flex-direction: row;
+  > div {
+    display: inline;
+  }
+}
+
+.mat-focus-indicator {
+  margin-left: auto;
+}
+
+.mat-toolbar {
+  background-color: inherit;
+}
+
+.mat-form-field {
+  font-size: 14px;
+  width: 50%;
+}
+
+.mat-header-row {
+  background-color: mat-color($primary);
+}
+
+.mat-header-cell {
+  color: white;
+}
+
+::ng-deep .mat-form-field-wrapper {
+  padding-bottom: 0px;
+}
+
+::ng-deep .mat-form-field-underline {
+  bottom: 0px;
+}
+
+.mat-table .mat-header-row .mat-header-cell .mat-form-field {
+  width: 100%;
+}
+
+.mat-form-field-appearance-fill .mat-form-field-infix {
+  padding: 0.1em 0 0.25em;
+}
+
+.mat-form-field-flex {
+  padding: 0.15em 0.75em 0.25em;
+}
+
+.mat-form-field-infix {
+  width: auto;
+}
+
+.mat-start-date {
+  top: -3px;
+}
+
+.mat-datepicker-toggle {
+  color: white;
+}
+
+.mat-color-wrapper {
+  top: -4px;
+  position: relative;
 }
