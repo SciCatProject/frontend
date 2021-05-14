@@ -1,0 +1,75 @@
+@import "src/theme.scss";
+.container {
+  margin: 1em;
+
+  button {
+    margin: 1em 1em 0 0;
+  }
+
+  mat-icon {
+    vertical-align: middle;
+  }
+}
+@media only screen and (min-width: 1280px) {
+  .search-field{
+    width: 40%;
+  }
+  .container {
+    .formRow {
+      .formColumn {
+        padding-right: 1em;
+
+        .selectField {
+          max-width: 8em;
+        }
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 1279px) {
+  .search-field{
+    width: 50%;
+  }
+  .container {
+    .formRow {
+      .formColumn {
+        padding-right: none;
+
+        .selectField {
+          max-width: none;
+        }
+      }
+    }
+  }
+}
+mat-tree:first-child {
+  border-top: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+mat-form-field {
+  width: 40%;
+  // padding-left: 40px;
+}
+.tool-bar{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.mat-tree-node {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  padding-left: 0px;
+}
+section {
+  display: table;
+  width: 100%;
+}
+.key-cell{
+  display: table-cell;
+  margin-left: 8px;
+  width:40% ;
+}
+.value-cell {
+  display: table-cell;
+  width: 60%;
+}

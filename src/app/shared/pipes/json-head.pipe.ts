@@ -28,7 +28,7 @@ export class JsonHeadPipe implements PipeTransform {
     let val2 = " ";
     if (key2 !== undefined) {
       const prop = value[key2];
-      if (prop.hasOwnProperty("unit")) {
+      if (prop?.unit) {
         val2 = prop.value.toString() + " " + prop.unit;
       }
     } else {

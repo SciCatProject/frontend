@@ -21,7 +21,7 @@ export class DatablocksComponent implements OnInit {
     this.blockSource = new MatTableDataSource(this.datablocks);
   }
 
-  onSelect(event) {
-    console.log(event);
+  onSelect(event, row) {
+    console.log(event, row);
   }
 }

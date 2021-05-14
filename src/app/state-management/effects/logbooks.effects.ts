@@ -4,7 +4,7 @@ import { LogbookApi, Logbook } from "shared/sdk";
 import * as fromActions from "state-management/actions/logbooks.actions";
 import { mergeMap, catchError, map, withLatestFrom } from "rxjs/operators";
 import { of } from "rxjs";
-import * as rison from "rison";
+
 import {
   loadingAction,
   loadingCompleteAction
@@ -20,8 +20,8 @@ export class LogbookEffects {
     this.actions$.pipe(
       ofType(fromActions.fetchLogbooksAction),
       mergeMap(() =>
-        this.logbookApi.findAll().pipe(
-          map(logbooks =>
+        this.logbookApi.find().pipe(
+          map((logbooks: Logbook[]) =>
             fromActions.fetchLogbooksCompleteAction({ logbooks })
           ),
           catchError(() => of(fromActions.fetchLogbooksFailedAction()))
@@ -36,7 +36,7 @@ export class LogbookEffects {
       withLatestFrom(this.filters$),
       mergeMap(([{ name }, filters]) =>
         this.logbookApi
-          .filter(encodeURIComponent(name), rison.encode_object(filters))
+          .findByName(encodeURIComponent(name), JSON.stringify(filters))
           .pipe(
             mergeMap(logbook => [
               fromActions.fetchLogbookCompleteAction({ logbook }),
@@ -53,9 +53,9 @@ export class LogbookEffects {
       ofType(fromActions.fetchCountAction),
       withLatestFrom(this.filters$),
       mergeMap(([{ name }, filters]) => {
-        const { skip, limit, ...theRest } = filters;
+        const { skip, limit, sortField, ...theRest } = filters;
         return this.logbookApi
-          .filter(encodeURIComponent(name), rison.encode_object(theRest))
+          .findByName(encodeURIComponent(name), JSON.stringify(theRest))
           .pipe(
             map((logbook: Logbook) =>
               fromActions.fetchCountCompleteAction({

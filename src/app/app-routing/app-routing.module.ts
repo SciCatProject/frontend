@@ -48,6 +48,8 @@ import { PoliciesGuard } from "app-routing/policies.guard";
 import { LogbookGuard } from "app-routing/logbook.guard";
 import { FilesDashboardComponent } from "files/files-dashboard/files-dashboard.component";
 import { DatasetsGuard } from "./datasets.guard";
+import { LeavingPageGuard } from "./pending-changes.guard";
+import { ProposalDashboardNewComponent } from "proposals/proposal-dashboard-new/proposal-dashboard-new.component";
 
 export const routes: Routes = [
   {
@@ -86,7 +88,7 @@ export const routes: Routes = [
       {
         path: "login/error",
         component: ErrorPageComponent,
-        data: { message: "Location Not Found", breadcrumb: "Error" },
+        data: { errorTitle: "Location Not Found", breadcrumb: "Error" },
       },
     ],
   },
@@ -118,6 +120,7 @@ export const routes: Routes = [
         path: "datasets/:id",
         component: DatasetDetailsDashboardComponent,
         canActivate: [DatasetsGuard],
+        canDeactivate: [LeavingPageGuard]
       },
       {
         path: "datasets/:id/datablocks",
@@ -146,6 +149,11 @@ export const routes: Routes = [
       },
       {
         path: "proposals",
+        component: ProposalDashboardNewComponent,
+        canActivate: [AuthGuard],
+      },
+      {
+        path: "proposalsold",
         component: ProposalDashboardComponent,
         canActivate: [AuthGuard],
       },
@@ -232,7 +240,7 @@ export const routes: Routes = [
       {
         path: "error",
         component: ErrorPageComponent,
-        data: { message: "Location Not Found", breadcrumb: "Error" },
+        data: { errorTitle: "Location Not Found"},
       },
       {
         path: "help/ingestManual",
@@ -255,8 +263,18 @@ export const routes: Routes = [
         component: LoginLayoutComponent,
         canActivate: [AuthGuard],
       },
+      {
+        path: "404",
+        component: ErrorPageComponent,
+        data: { errorTitle: "404 Page not found" , message: "Sorry, the page you are trying to view doesn't exists"}
+      },
     ],
   },
+  {
+    path: "**",
+    pathMatch: "full",
+    redirectTo: "/404",
+  }
 ];
 @NgModule({
   imports: [RouterModule.forRoot(routes, { relativeLinkResolution: "legacy" })],

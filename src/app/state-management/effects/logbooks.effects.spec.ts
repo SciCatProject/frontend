@@ -44,7 +44,7 @@ describe("LogbookEffects", () => {
         }),
         {
           provide: LogbookApi,
-          useValue: jasmine.createSpyObj("logbookApi", ["findAll", "filter"]),
+          useValue: jasmine.createSpyObj("logbookApi", ["find", "findByName"]),
         },
       ],
     });
@@ -64,7 +64,7 @@ describe("LogbookEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-a|", { a: logbooks });
-      logbookApi.findAll.and.returnValue(response);
+      logbookApi.find.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchLogbooks$).toBeObservable(expected);
@@ -76,7 +76,7 @@ describe("LogbookEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-#", {});
-      logbookApi.findAll.and.returnValue(response);
+      logbookApi.find.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchLogbooks$).toBeObservable(expected);
@@ -93,7 +93,7 @@ describe("LogbookEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-a|", { a: logbook });
-      logbookApi.filter.and.returnValue(response);
+      logbookApi.findByName.and.returnValue(response);
 
       const expected = cold("--(bc)", { b: outcome1, c: outcome2 });
       expect(effects.fetchLogbook$).toBeObservable(expected);
@@ -105,7 +105,7 @@ describe("LogbookEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-#", {});
-      logbookApi.filter.and.returnValue(response);
+      logbookApi.findByName.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchLogbook$).toBeObservable(expected);
@@ -121,7 +121,7 @@ describe("LogbookEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-a|", { a: logbook });
-      logbookApi.filter.and.returnValue(response);
+      logbookApi.findByName.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchCount$).toBeObservable(expected);
@@ -133,7 +133,7 @@ describe("LogbookEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-#", {});
-      logbookApi.filter.and.returnValue(response);
+      logbookApi.findByName.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchCount$).toBeObservable(expected);

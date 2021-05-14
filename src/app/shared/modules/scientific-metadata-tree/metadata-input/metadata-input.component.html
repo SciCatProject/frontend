@@ -1,0 +1,81 @@
+<div class="container">
+  <form [formGroup]="metadataForm">
+    <div class="formRow" fxLayout="row" fxLayout.lt-lg="column" fxFlexAlign="center" fxLayoutAlign="flex-start end">
+      <!-- Type Column -->
+      <div class="formColumn" >
+        <mat-form-field class="selectField">
+          <mat-label>Type</mat-label>
+          <mat-select formControlName="type" (selectionChange)="detectType()">
+            <mat-option *ngFor="let type of typeValues" [value]="type">
+              {{type}}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="fieldHasError('type')">
+            Type is required
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <!-- Name Column -->
+      <div class="formColumn">
+        <mat-form-field class="inputField">
+          <input matInput autocomplete="off" autocorrect="off"
+            autocapitalize="off" spellcheck="false" formControlName="key"
+            placeholder="Name" (blur)="getUnits('key')" />
+          <mat-error *ngIf="fieldHasError('key')">
+            Name is required
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <!-- Value Column -->
+      <div class="formColumn">
+        <mat-form-field class="inputField">
+          <input matInput autocomplete="off" autocorrect="off"
+            autocapitalize="off" spellcheck="false" formControlName="value"
+            placeholder="Value" step=1 [type]="setValueInputType()" />
+          <mat-error *ngIf="fieldHasError('value')">
+            {{getErrorMessage('value')}}
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <!-- Unit Column -->
+      <div class="formColumn">
+        <mat-form-field class="inputField">
+          <input matInput autocomplete="off" autocorrect="off"
+            autocapitalize="off" spellcheck="false" formControlName="unit"
+            placeholder="Unit" [matAutocomplete]="metadataUnits"
+            (focus)="getUnits('key')" />
+          <mat-autocomplete #metadataUnits="matAutocomplete">
+            <mat-option *ngFor="let unit of filteredUnits$ | async"
+              [value]="unit">
+
+              {{ unit }}
+            </mat-option>
+          </mat-autocomplete>
+          <mat-error *ngIf="fieldHasError('unit')">
+            {{getErrorMessage('unit')}}
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <!-- Buttons Column -->
+      <div class="buttonColumn" fxLayout="row" fxFlexAlign="center" fxLayoutAlign="flex-end">
+        <button
+          mat-icon-button
+          [disabled]="this.metadataForm.invalid"
+          type="button"
+          color="primary"
+          title="Done"
+          (click)="onSave()"
+        >
+          <mat-icon>done</mat-icon>
+        </button>
+        <button
+          mat-icon-button
+          type="button"
+          title="Cancel"
+          (click)="onCancel()"
+        >
+           <mat-icon>close</mat-icon>
+        </button>
+      </div>
+    </div>
+  </form>
+</div>

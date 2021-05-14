@@ -27,7 +27,6 @@ import {
   getCurrentUser,
   getProfile
 } from "state-management/selectors/user.selectors";
-import * as rison from "rison";
 
 @Component({
   selector: "app-jobs-dashboard",
@@ -173,7 +172,7 @@ export class JobsDashboardComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.store.pipe(select(getFilters)).subscribe((filters) => {
         this.router.navigate(["/user/jobs"], {
-          queryParams: { args: rison.encode(filters) },
+          queryParams: { args: JSON.stringify(filters) },
         });
       })
     );

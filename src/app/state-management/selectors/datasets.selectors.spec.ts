@@ -25,7 +25,7 @@ const initialDatasetState: DatasetState = {
     text: "",
     creationTime: {
       begin: "2019-10-03",
-      end: "2019-10-04"
+      end: "2019-10-04",
     },
     type: [],
     creationLocation: [],
@@ -35,8 +35,8 @@ const initialDatasetState: DatasetState = {
     sortField: "creationTime:desc",
     keywords: [],
     scientific: [],
-    isPublished: false
-  }
+    isPublished: false,
+  },
 };
 
 describe("test dataset selectors", () => {
@@ -116,6 +116,16 @@ describe("test dataset selectors", () => {
       expect(
         fromDatasetSelectors.getFilters.projector(initialDatasetState)
       ).toEqual(filters);
+    });
+  });
+
+  describe("getAnonymousFilters", () => {
+    it("should get the dataset filters, isPublished excluded", () => {
+      const { isPublished, ...anonymousFilters } = initialDatasetState.filters;
+
+      expect(
+        fromDatasetSelectors.getAnonymousFilters.projector(initialDatasetState)
+      ).toEqual(anonymousFilters);
     });
   });
 
