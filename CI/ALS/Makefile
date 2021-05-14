@@ -11,7 +11,7 @@ REGISTRY_CATANIE	:= ${REGISTRY}/${PROJECT}/${NAME_CATANIE}:${TAG}
 
 
 # run from catani root dir (../.. from here), run
-#		make -C CI/ALS <taarget>
+#		make -C CI/ALS <target>
 
 .PHONY: build_catanie_dev build_catanie_prod push_catanie_prod
 
