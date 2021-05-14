@@ -117,4 +117,17 @@ describe("LoginComponent", () => {
       );
     });
   });
+
+  describe("#onLogin()", () => {
+    it("should dispatch a loginAction", () => {
+      dispatchSpy = spyOn(store, "dispatch");
+
+      component.ngOnInit();
+
+      expect(dispatchSpy).toHaveBeenCalledTimes(1);
+      expect(dispatchSpy).toHaveBeenCalledWith(
+        loginAction({ form: { username: "", password: "", rememberMe: true } })
+      );
+    });
+  });
 });

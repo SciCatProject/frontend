@@ -9,15 +9,37 @@
     </div>
     <mat-card-content>
 
-        <button
+      <button
         mat-raised-button
         class="login-button"
         type="submit"
         color="primary"
         [ngClass]="{ loading: loading$ | async }"
-        (click) = "redirectOIDC()"
+        (click) = "redirectOIDC('google')"
       >
        Login with Google
+      </button>
+      <br/>
+      <button
+        mat-raised-button
+        class="login-button"
+        type="submit"
+        color="primary"
+        [ngClass]="{ loading: loading$ | async }"
+        (click) = "redirectOIDC('globus')"
+      >
+       Login with Globus
+      </button>
+      <br/>
+      <button
+        mat-raised-button
+        class="login-button"
+        type="submit"
+        color="primary"
+        [ngClass]="{ loading: loading$ | async }"
+        (click) = "redirectOIDC('orcid')"
+      >
+       Login with ORCID
       </button>
       <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
         <mat-form-field hintLabel="{{appConfig.facility}} account username">
