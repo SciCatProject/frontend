@@ -8,6 +8,8 @@ NAME_CATANIE  	:= catanie
 IMG_CATANIE  		:= ${NAME_CATANIE}:${TAG}
 REGISTRY_CATANIE	:= ${REGISTRY}/${PROJECT}/${NAME_CATANIE}:${TAG}
 
+
+
 # run from catani root dir (../.. from here), run
 #		make -C CI/ALS <taarget>
 

@@ -6,12 +6,12 @@ RUN apk update && apk upgrade && \
 
 RUN npm config set registry http://registry.npmjs.org/
 RUN npm config set strict-ssl false
-ARG env=als
+ARG env=als-dev
 WORKDIR /catanie
 COPY package.json  /catanie
 RUN npm install
 COPY . /catanie/
-COPY CI/ALS/environment.als-dev.ts src/environments/environment.als.ts
+COPY CI/ALS/environment.als.dev.ts src/environments/environment.als.dev.ts
 RUN npx ng build --configuration=${env}
 ENTRYPOINT ./node_modules/@angular/cli/bin/ng serve --host $HOST --port 80
 
