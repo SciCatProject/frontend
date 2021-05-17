@@ -2,7 +2,7 @@ import { TestBed } from "@angular/core/testing";
 import { DateTimeService } from "./date-time.service";
 import { DateTime } from "luxon";
 
-fdescribe("DateTimeService", () => {
+describe("DateTimeService", () => {
   let service: DateTimeService;
 
   beforeEach(() => {
