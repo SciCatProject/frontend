@@ -24,7 +24,6 @@ export class ScicatDataService {
   createColumnFilterMongoExpression = (columns: Column[], filterExpressions: any) => {
     const result = {};
     if (filterExpressions) {
-      const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
       let blocal: DateTime;
       let elocal: DateTime;
       let columnkey: string;

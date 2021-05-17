@@ -10,7 +10,6 @@ export class DateTimeService {
       DateTime.fromFormat(input, "yyyy-MM-dd").isValid ||
       DateTime.fromFormat(input, "yyyy-MM-dd HH:mm").isValid ||
       DateTime.fromFormat(input, "yyyy-MM-dd HH:mm:ss").isValid ||
-      DateTime.fromFormat(input, "yyyy-MM-dd HH:mm:ss.SSS").isValid ||
       this.isISODateTime(input)
     );
   }

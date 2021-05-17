@@ -5,8 +5,6 @@ import { FlatNodeEdit } from "../tree-edit/tree-edit.component";
 import { MetadataInputBase, Type } from "../base-classes/metadata-input-base";
 import { FormatNumberPipe } from "shared/pipes/format-number.pipe";
 import { DateTime } from "luxon";
-import { DatePipe } from "@angular/common";
-
 export interface InputData {
   type: string;
   key: string;

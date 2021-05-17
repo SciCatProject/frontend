@@ -269,7 +269,7 @@ export class TreeEditComponent extends TreeBaseComponent implements OnInit, OnCh
   hasNoContent = (node: TreeNode | FlatNodeEdit) => node.key === "";
 
   isEditing() {
-    return this.currentEditingNode && this.changed;
+    return this.currentEditingNode? true: false;
   }
   doSave() {
     this.metadata = this.convertDataTreeToObject(this.dataTree);
