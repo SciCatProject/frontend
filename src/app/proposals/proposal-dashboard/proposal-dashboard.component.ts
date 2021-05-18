@@ -31,7 +31,7 @@ import {
   prefillFiltersAction
 } from "state-management/actions/proposals.actions";
 import { DateRange } from "datasets/datasets-filter/datasets-filter.component";
-import * as rison from "rison";
+
 import {
   filter,
   map,
@@ -202,7 +202,7 @@ export class ProposalDashboardComponent implements OnInit, OnDestroy {
         .subscribe((filters) => {
           this.store.dispatch(fetchProposalsAction());
           this.router.navigate(["/proposals"], {
-            queryParams: { args: rison.encode(filters) },
+            queryParams: { args: JSON.stringify(filters) },
           });
         })
     );
@@ -212,7 +212,7 @@ export class ProposalDashboardComponent implements OnInit, OnDestroy {
         .pipe(
           map(params => params.args as string),
           take(1),
-          map(args => (args ? rison.decode<ProposalFilters>(args) : {}))
+          map(args => (args ? JSON.parse(args) as ProposalFilters: {}))
         )
         .subscribe(filters =>
           this.store.dispatch(prefillFiltersAction({ values: filters }))

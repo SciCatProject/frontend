@@ -1,5 +1,5 @@
 /* eslint-disable */
-import * as io from 'socket.io-client';
+import { io } from "socket.io-client";
 /**
 * @author Jonathan Casarrubias <twitter:@johncasarrubias> <github:@mean-expert-official>
 * @module SocketBrowser

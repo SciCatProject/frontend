@@ -15,7 +15,7 @@ import { SearchParametersDialogModule } from "./modules/search-parameters-dialog
 import { CommonModule } from "@angular/common";
 import { SharedTableModule } from "./modules/shared-table/shared-table.module";
 import { ScicatDataService } from "./services/scicat-data-service";
-
+import { ScientificMetadataTreeModule } from "./modules/scientific-metadata-tree/scientific-metadata-tree.modules";
 @NgModule({
   imports: [
     BreadcrumbModule,
@@ -32,8 +32,8 @@ import { ScicatDataService } from "./services/scicat-data-service";
     CommonModule,
     FormsModule,
     SharedTableModule,
+    ScientificMetadataTreeModule
   ],
-  declarations: [],
   providers: [ConfigService, UnitsService, FilePathTruncate, ScicatDataService],
   exports: [
     BreadcrumbModule,
@@ -47,6 +47,7 @@ import { ScicatDataService } from "./services/scicat-data-service";
     CommonModule,
     FormsModule,
     SharedTableModule,
+    ScientificMetadataTreeModule
   ],
 })
 export class SharedCatanieModule {}

@@ -10,22 +10,22 @@ export const getDatasets = createSelector(
 
 export const getSelectedDatasets = createSelector(
   getDatasetState,
-  state => state.selectedSets
+  (state) => state.selectedSets
 );
 
 export const getMetadataKeys = createSelector(
   getDatasetState,
-  state => state.metadataKeys
+  (state) => state.metadataKeys
 );
 
 export const getCurrentDataset = createSelector(
   getDatasetState,
-  state => state.currentSet
+  (state) => state.currentSet
 );
 
 export const getCurrentDatasetWithoutFileInfo = createSelector(
   getDatasetState,
-  state => {
+  (state) => {
     const { origdatablocks, datablocks, ...theRest } = state.currentSet;
     return theRest;
   }
@@ -33,17 +33,17 @@ export const getCurrentDatasetWithoutFileInfo = createSelector(
 
 export const getCurrentOrigDatablocks = createSelector(
   getCurrentDataset,
-  dataset => dataset.origdatablocks
+  (dataset) => dataset.origdatablocks
 );
 
 export const getCurrentDatablocks = createSelector(
   getCurrentDataset,
-  dataset => dataset.datablocks
+  (dataset) => dataset.datablocks
 );
 
 export const getCurrentAttachments = createSelector(
   getCurrentDataset,
-  dataset => dataset.attachments
+  (dataset) => dataset.attachments
 );
 
 // === Filters ===
@@ -53,49 +53,57 @@ export const getFilters = createSelector(
   (state: DatasetState) => state.filters
 );
 
+export const getAnonymousFilters = createSelector(
+  getDatasetState,
+  (state: DatasetState) => {
+    const { isPublished, ...filters } = state.filters;
+    return filters;
+  }
+);
+
 export const getTextFilter = createSelector(
   getFilters,
-  filters => filters.text || ""
+  (filters) => filters.text || ""
 );
 
 export const getLocationFilter = createSelector(
   getFilters,
-  filters => filters.creationLocation
+  (filters) => filters.creationLocation
 );
 
 export const getGroupFilter = createSelector(
   getFilters,
-  filters => filters.ownerGroup
+  (filters) => filters.ownerGroup
 );
 
 export const getTypeFilter = createSelector(
   getFilters,
-  filters => filters.type
+  (filters) => filters.type
 );
 
 export const getKeywordsFilter = createSelector(
   getFilters,
-  filters => filters.keywords
+  (filters) => filters.keywords
 );
 
 export const getCreationTimeFilter = createSelector(
   getFilters,
-  filters => filters.creationTime
+  (filters) => filters.creationTime
 );
 
 export const getArchiveViewMode = createSelector(
   getFilters,
-  filters => filters.modeToggle
+  (filters) => filters.modeToggle
 );
 
 export const getPublicViewMode = createSelector(
   getFilters,
-  filters => filters.isPublished
+  (filters) => filters.isPublished
 );
 
 export const getHasAppliedFilters = createSelector(
   getFilters,
-  filters =>
+  (filters) =>
     filters.text !== "" ||
     filters.creationLocation.length > 0 ||
     filters.ownerGroup.length > 0 ||
@@ -109,34 +117,34 @@ export const getHasAppliedFilters = createSelector(
 
 export const getScientificConditions = createSelector(
   getFilters,
-  filters => filters.scientific
+  (filters) => filters.scientific
 );
 
 // === Facet Counts ===
 
 const getFacetCounts = createSelector(
   getDatasetState,
-  state => state.facetCounts || {}
+  (state) => state.facetCounts || {}
 );
 
 export const getLocationFacetCounts = createSelector(
   getFacetCounts,
-  counts => counts.creationLocation || []
+  (counts) => counts.creationLocation || []
 );
 
 export const getGroupFacetCounts = createSelector(
   getFacetCounts,
-  counts => counts.ownerGroup || []
+  (counts) => counts.ownerGroup || []
 );
 
 export const getTypeFacetCounts = createSelector(
   getFacetCounts,
-  counts => counts.type || []
+  (counts) => counts.type || []
 );
 
 export const getKeywordFacetCounts = createSelector(
   getFacetCounts,
-  counts => counts.keywords || []
+  (counts) => counts.keywords || []
 );
 
 // === Querying ===
@@ -155,23 +163,37 @@ const restrictFilter = (filter: any, allowedKeys?: string[]) => {
   }, {});
 };
 
-export const getFullqueryParams = createSelector(getFilters, filter => {
+export const getFullqueryParams = createSelector(getFilters, (filter) => {
   // don't query with modeToggle, it's only in filters for persistent routing
-  const { skip, limit, sortField, modeToggle, ...theRest } = filter;
+  const {
+    skip,
+    limit,
+    sortField,
+    modeToggle,
+    isPublished,
+    ...theRest
+  } = filter;
   const limits = { skip, limit, order: sortField };
   const query = restrictFilter(theRest);
   return { query: JSON.stringify(query), limits };
 });
 
-export const getFullfacetParams = createSelector(getFilters, filter => {
-  const { skip, limit, sortField, modeToggle, ...theRest } = filter;
+export const getFullfacetParams = createSelector(getFilters, (filter) => {
+  const {
+    skip,
+    limit,
+    sortField,
+    modeToggle,
+    isPublished,
+    ...theRest
+  } = filter;
   const fields = restrictFilter(theRest);
   const facets = [
     "type",
     "creationTime",
     "creationLocation",
     "ownerGroup",
-    "keywords"
+    "keywords",
   ];
   return { fields, facets };
 });
@@ -180,40 +202,40 @@ export const getFullfacetParams = createSelector(getFilters, filter => {
 
 export const getTotalSets = createSelector(
   getDatasetState,
-  state => state.totalCount
+  (state) => state.totalCount
 );
 
-export const getPage = createSelector(getFilters, filters => {
+export const getPage = createSelector(getFilters, (filters) => {
   const { skip, limit } = filters;
   return skip / limit;
 });
 
 export const getDatasetsPerPage = createSelector(
   getFilters,
-  filters => filters.limit
+  (filters) => filters.limit
 );
 
 export const getSearchTerms = createSelector(
   getDatasetState,
-  state => state.searchTerms
+  (state) => state.searchTerms
 );
 
 export const getKeywordsTerms = createSelector(
   getDatasetState,
-  state => state.keywordsTerms
+  (state) => state.keywordsTerms
 );
 
 export const getHasPrefilledFilters = createSelector(
   getDatasetState,
-  state => state.hasPrefilledFilters
+  (state) => state.hasPrefilledFilters
 );
 
 export const getDatasetsInBatch = createSelector(
   getDatasetState,
-  state => state.batch
+  (state) => state.batch
 );
 
 export const getOpenwhiskResult = createSelector(
   getDatasetState,
-  state => state.openwhiskResult
+  (state) => state.openwhiskResult
 );

@@ -19,10 +19,12 @@ import {
 import {
   getIsAdmin,
   getCurrentUser,
+  getProfile,
+  getIsLoading,
 } from "state-management/selectors/user.selectors";
 import { ActivatedRoute, Router } from "@angular/router";
-import { Subscription, Observable } from "rxjs";
-import { pluck, take } from "rxjs/operators";
+import { Subscription, Observable, fromEvent, combineLatest } from "rxjs";
+import { pluck, take, map } from "rxjs/operators";
 import { APP_CONFIG, AppConfig } from "app-config.module";
 import {
   clearFacetsAction,
@@ -42,15 +44,17 @@ import { fetchProposalAction } from "state-management/actions/proposals.actions"
 import { getCurrentProposal } from "state-management/selectors/proposals.selectors";
 import { fetchSampleAction } from "state-management/actions/samples.actions";
 import { getCurrentSample } from "state-management/selectors/samples.selectors";
-
+import { EditableComponent } from "app-routing/pending-changes.guard";
+import { MatDialog } from "@angular/material/dialog";
 @Component({
   selector: "dataset-details-dashboard",
   templateUrl: "./dataset-details-dashboard.component.html",
   styleUrls: ["./dataset-details-dashboard.component.scss"],
 })
 export class DatasetDetailsDashboardComponent
-  implements OnInit, OnDestroy, AfterViewChecked {
+  implements OnInit, OnDestroy, AfterViewChecked, EditableComponent {
   private subscriptions: Subscription[] = [];
+  private _hasUnsavedChanges = false;
   datasetWithout$ = this.store.pipe(select(getCurrentDatasetWithoutFileInfo));
   origDatablocks$ = this.store.pipe(select(getCurrentOrigDatablocks));
   datablocks$ = this.store.pipe(select(getCurrentDatablocks));
@@ -58,21 +62,33 @@ export class DatasetDetailsDashboardComponent
   proposal$ = this.store.pipe(select(getCurrentProposal));
   sample$ = this.store.pipe(select(getCurrentSample));
   isAdmin$ = this.store.pipe(select(getIsAdmin));
+  currentUser = this.store.pipe(select(getCurrentUser));
+  userProfile$ = this.store.pipe(select(getProfile));
+  accessGroups$: Observable<string[]> = this.userProfile$.pipe(
+    map((profile) => (profile ? profile.accessGroups : []))
+  );
+  loading$ = this.store.pipe(select(getIsLoading));
   jwt$: Observable<any>;
-
   dataset: Dataset;
   user: User;
+  editingAllowed = false;
   pickedFile: ReadFile;
   attachment: Attachment;
-
   constructor(
     @Inject(APP_CONFIG) public appConfig: AppConfig,
     private cdRef: ChangeDetectorRef,
     private route: ActivatedRoute,
     private router: Router,
     private store: Store<Dataset>,
-    private userApi: UserApi
+    private userApi: UserApi,
+    public dialog: MatDialog
   ) {}
+  hasUnsavedChanges(){
+    return this._hasUnsavedChanges;
+  }
+  onHasUnsavedChanges(data: boolean){
+    this._hasUnsavedChanges = data;
+  }
 
   isPI(): boolean {
     if (this.user.username === "admin") {
@@ -249,6 +265,9 @@ export class DatasetDetailsDashboardComponent
       this.store.pipe(select(getCurrentDataset)).subscribe((dataset) => {
         if (dataset) {
           this.dataset = dataset;
+          combineLatest([this.accessGroups$, this.isAdmin$]).subscribe(([groups, isAdmin]) => {
+            this.editingAllowed = (groups.indexOf(this.dataset.ownerGroup) !== -1) || isAdmin;
+          });
           if ("proposalId" in dataset) {
             this.store.dispatch(
               fetchProposalAction({ proposalId: dataset["proposalId"] })
@@ -276,6 +295,12 @@ export class DatasetDetailsDashboardComponent
       })
     );
 
+    // Prevent user from reloading page if there are unsave changes
+    this.subscriptions.push(fromEvent(window, "beforeunload").subscribe(event => {
+        if (this.hasUnsavedChanges()){
+          event.returnValue = false;
+        }
+    }));
     this.jwt$ = this.userApi.jwt();
   }
 

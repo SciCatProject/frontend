@@ -17,6 +17,7 @@ import { fetchSampleAction } from "state-management/actions/samples.actions";
 import { fetchProposalAction } from "state-management/actions/proposals.actions";
 import { getCurrentSample } from "state-management/selectors/samples.selectors";
 import { getCurrentProposal } from "state-management/selectors/proposals.selectors";
+import { getIsLoading } from "state-management/selectors/user.selectors";
 
 @Component({
   selector: "anonymous-details-dashboard",
@@ -25,6 +26,7 @@ import { getCurrentProposal } from "state-management/selectors/proposals.selecto
 })
 export class AnonymousDetailsDashboardComponent implements OnInit, OnDestroy {
   dataset$ = this.store.pipe(select(getCurrentDataset));
+  loading$ = this.store.pipe(select(getIsLoading));
   origDatablocks$ = this.store.pipe(select(getCurrentOrigDatablocks));
   attachments$ = this.store.pipe(select(getCurrentAttachments));
   proposal$ = this.store.pipe(select(getCurrentProposal));

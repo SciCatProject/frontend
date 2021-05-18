@@ -1,8 +1,15 @@
-FROM nginx 
+FROM nginx:1.19-alpine
 
-ARG env=production
-# RUN ./node_modules/@angular/cli/bin/ng build --prod
-COPY scripts/nginx.conf /etc/nginx/nginx.conf
-COPY dist/${env} /usr/share/nginx/html  
+ENV env=development
+WORKDIR /usr/src/app
 
-EXPOSE 80
+#npm ci
+COPY . /usr/src/app
+RUN apk update && apk upgrade && \
+    apk add --update nodejs npm
+RUN npm ci
+
+#nginx config
+COPY ./scripts/nginx.conf /etc/nginx/
+RUN echo "npx ng build --configuration=\${env} --output-path /usr/share/nginx/html" > /docker-entrypoint.d/npx_ng_build.sh && \
+    chmod +x /docker-entrypoint.d/npx_ng_build.sh

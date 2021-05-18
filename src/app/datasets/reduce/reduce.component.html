@@ -13,12 +13,12 @@
             <tr>
               <th><mat-icon>info</mat-icon> Status</th>
               <td *ngIf="result$ | async as result; else noResult">
-                <ng-container *ngIf="result.message as message">
+                <ng-container *ngIf="result['message'] as message">
                   {{ message }}
                 </ng-container>
 
-                <ng-container *ngIf="result.errno && result.code">
-                  Error reducing dataset: {{ result.code }}
+                <ng-container *ngIf="result['errno'] && result['code']">
+                  Error reducing dataset: {{ result['code'] }}
                 </ng-container>
               </td>
               <ng-template #noResult>

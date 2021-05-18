@@ -3,6 +3,7 @@ import { HttpClient, HttpResponse, HttpHeaders } from "@angular/common/http";
 import { LoopBackConfig } from "shared/sdk/lb.config";
 import { Observable } from "rxjs";
 import { APP_CONFIG, AppConfig } from "../app-config.module";
+import { timeout } from "rxjs/operators";
 
 /**
  * Handles log in requests for AD and Functional users
@@ -41,6 +42,6 @@ export class ADAuthService {
     const headers = new HttpHeaders();
     const url = LoopBackConfig.getPath() + this.config.externalAuthEndpoint;
     headers.append("Content-Type", "application/x-www-form-urlencoded");
-    return this.http.post<AccessToken>(url, creds, { observe: "response" });
+    return this.http.post<AccessToken>(url, creds, { observe: "response" }).pipe(timeout(3000));
   }
 }

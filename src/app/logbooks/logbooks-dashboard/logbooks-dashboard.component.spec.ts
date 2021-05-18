@@ -21,7 +21,7 @@ import {
 import { Logbook, LogbookInterface } from "shared/sdk";
 import { LogbookFilters } from "state-management/models";
 import { RouterTestingModule } from "@angular/router/testing";
-import * as rison from "rison";
+
 import {
   PageChangeEvent,
   SortChangeEvent
@@ -103,7 +103,7 @@ describe("DashboardComponent", () => {
       expect(navigateSpy).toHaveBeenCalledWith(
         ["/logbooks", component.logbook.name],
         {
-          queryParams: { args: rison.encode(filters) }
+          queryParams: { args: JSON.stringify(filters) }
         }
       );
     });

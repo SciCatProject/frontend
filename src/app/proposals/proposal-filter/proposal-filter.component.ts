@@ -11,7 +11,10 @@ export class ProposalFilterComponent {
   @Input() hasAppliedFilters: boolean;
   @Input() searchBarValue: string;
   @Input() clearSearchBar: boolean;
-  @Input() dateRangeValue: DateRange;
+  @Input() dateRangeValue:  {
+    begin: string;
+    end: string;
+  };
 
   @Output() clear = new EventEmitter<any>();
   @Output() searchChange = new EventEmitter<string>();

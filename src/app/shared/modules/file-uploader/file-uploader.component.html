@@ -20,7 +20,7 @@
         color="accent"
         ngxFilePicker
         [readMode]="readMode"
-        multiple
+        [multiple]="true"
         accept="image/*,application/pdf"
         (readStart)="onReadStart($event)"
         (filePick)="onFilePicked($event)"
@@ -41,7 +41,7 @@
     color="accent"
     ngxFilePicker
     [readMode]="readMode"
-    multiple
+    [multiple]="true"
     accept="image/*,application/pdf"
     (readStart)="onReadStart($event)"
     (filePick)="onFilePicked($event)"
