@@ -37,7 +37,7 @@
         <mat-icon>{{ column.icon }}</mat-icon>
         <span mat-sort-header [disabled]="!column.canSort">{{ column.label | titleCase }}</span>
       </div>
-      <mat-form-field appearance="fill" *ngIf="column.matchMode;">
+      <mat-form-field appearance="standard" *ngIf="column.matchMode;">
         <ng-container *ngIf="column.matchMode == 'between'">
           <div class="date_container">
             <mat-date-range-input [rangePicker]="rangePicker">

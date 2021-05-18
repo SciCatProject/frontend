@@ -108,13 +108,102 @@ mat-header-row {
   }
 }
 
+/*
 .mat-focus-indicator {
   margin-left: auto;
 }
+*/
 
 .mat-toolbar {
   background-color: inherit;
+  display: flex;
+  flex-direction: row;
+  > mat-form-field {
+    flex: 1 1 80%;
+  }
+  > .mat-focus-indicator {
+    flex: 0 0 auto;
+  }
+  > mat-paginator {
+    flex: 0 0 auto;
+    min-width: 450px;
+  }
 }
+
+
+.mat-form-field {
+  ::ng-deep .mat-form-field-flex {
+    padding: 0px;
+    width: 97%;
+    > .mat-form-field-infix {
+      color: black;
+      background-color: white;
+      padding: 1px 0.75em 0 4px;
+      border: 0;
+      margin: 0.75em 0;
+    }
+  }
+}
+
+.shared-table-between { 
+  :ng-deep .mat-form-field >.mat-form-field-wrapper >.mat-form-field-flex { 
+    padding: 0px;
+  }
+  ::ng-deep .date_container {
+    margin-top: -3px;
+    width: 100%;
+    align-items: flex-end;
+  }
+
+  ::ng-deep .mat-date-range-input-container {
+    display: flex;
+    flex-direction: row;
+  }
+        
+  ::ng-deep .mat-date-range-input-start-wrapper {
+    max-width: 45%;
+    //text-align: right;
+  }
+  ::ng-deep .mat-start-date {
+    position: unset;
+  }
+
+  ::ng-deep .mat-date-range-input-mirror {
+    display: none;
+  }
+
+  ::ng-deep .mat-date-range-input-end-wrapper {
+    max-width: 45%;
+    text-align: left;
+  }
+
+  ::ng-deep .mat-datepicker-toggle {
+    color: black;
+  }
+  ::ng-deep .mat-datepicker-toggle .mat-focus-indicator {
+    width: 24px;
+    height: 24px;
+    line-height: 24px;
+  }
+
+  ::ng-deep .mat-input-element {
+    color: black;
+  }
+}
+
+/*
+.mat-table {
+  .mat-form-field-wrapper .mat-form-field-flex {
+    padding-top: 0px;
+    > .mat-form-field-infix {
+      background-color: white;
+      padding: 1px 0.75em 4px;
+      border: 0;
+      margin: 0.75em 0;
+    }
+  }
+}
+*/
 
 .mat-form-field {
   font-size: 14px;
@@ -126,7 +215,8 @@ mat-header-row {
 }
 
 .mat-header-cell {
-  color: white;
+  //color: white;
+  color: mat-color($primary,default-contrast);
 }
 
 ::ng-deep .mat-form-field-wrapper {
