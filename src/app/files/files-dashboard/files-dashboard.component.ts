@@ -16,7 +16,7 @@ export class FilesDashboardComponent implements OnInit, OnDestroy {
     { id: "dataFileList.path", icon: "text_snippet", label: "Filename", canSort: true, matchMode: "contains", hideOrder: 1, },
     { id: "dataFileList.size", icon: "save", label: "Size", canSort: true, matchMode: "greaterThan", hideOrder: 2, },
     {
-      id: "dataFileList.createdAt", icon: "access_time", label: "Created at", format: "date medium", canSort: true,
+      id: "dataFileList.time", icon: "access_time", label: "Created at", format: "date medium", canSort: true,
       matchMode: "between", sortDefault: "desc", hideOrder: 3,
     },
     { id: "dataFileList.uid", icon: "person", label: "UID", canSort: true, matchMode: "contains", hideOrder: 4, },
