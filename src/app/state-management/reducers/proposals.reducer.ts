@@ -71,7 +71,7 @@ const reducer = createReducer(
   }),
   on(fromActions.setDateRangeFilterAction, (state, { begin, end }) => {
     const oldTime = state.proposalFilters.dateRange;
-    const dateRange = { ...oldTime, begin, end };
+    const dateRange = (begin && end)? { ...oldTime, begin, end } : null;
     const proposalFilters = { ...state.proposalFilters, dateRange };
     return { ...state, proposalFilters };
   }),

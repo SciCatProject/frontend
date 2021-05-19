@@ -4,6 +4,7 @@ import { MatDialog, MatDialogModule } from "@angular/material/dialog";
 import { MatMenuModule } from "@angular/material/menu";
 import { MatSnackBar, MatSnackBarModule } from "@angular/material/snack-bar";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { DateTime } from "luxon";
 import { Type } from "../base-classes/metadata-input-base";
 import { TreeNode } from "../base-classes/tree-base";
 import { InputData } from "../metadata-input/metadata-input.component";
@@ -265,10 +266,10 @@ describe("TreeEditComponent", () => {
         key: "new date",
         value: "2020-04-02 12:00:00"
       };
-      const expectedDate = new Date(inputData.value).toISOString();
       component.ngOnInit();
       const nestNode = component.dataTree[0];
       const flatNode = component.treeControl.dataNodes[0];
+      const expectedDate = DateTime.fromJSDate(new Date(inputData.value)).toUTC().toISO();
       component.updateNode(nestNode, inputData);
       expect(nestNode.key).toEqual(inputData.key);
       expect(nestNode.value).toEqual(expectedDate);

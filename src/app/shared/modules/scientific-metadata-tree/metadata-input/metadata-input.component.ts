@@ -4,7 +4,7 @@ import { Subscription } from "rxjs";
 import { FlatNodeEdit } from "../tree-edit/tree-edit.component";
 import { MetadataInputBase, Type } from "../base-classes/metadata-input-base";
 import { FormatNumberPipe } from "shared/pipes/format-number.pipe";
-
+import { DateTime } from "luxon";
 export interface InputData {
   type: string;
   key: string;
@@ -80,12 +80,12 @@ export class MetadataInputComponent extends MetadataInputBase implements OnInit 
         this.metadataForm.get("type").setValue(Type.boolean);
         this.metadataForm.get("key").setValue(node.key);
         this.metadataForm.get("value").setValue(String(node.value));
-      } else if (isNaN(Date.parse(node.value))) {
-        this.metadataForm.get("type").setValue(Type.string);
-        this.metadataForm.get("key").setValue(node.key);
-        this.metadataForm.get("value").setValue(node.value);
-      } else {
+      } else if (this.dateTimeService.isISODateTime(node.value)) {
         this.metadataForm.get("type").setValue(Type.date);
+        this.metadataForm.get("key").setValue(node.key);
+        this.metadataForm.get("value").setValue(DateTime.fromISO(node.value).toLocal().toISO());
+      } else {
+        this.metadataForm.get("type").setValue(Type.string);
         this.metadataForm.get("key").setValue(node.key);
         this.metadataForm.get("value").setValue(node.value);
       }

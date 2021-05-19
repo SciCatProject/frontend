@@ -30,8 +30,6 @@ import {
   clearFacetsAction,
   prefillFiltersAction
 } from "state-management/actions/proposals.actions";
-import { DateRange } from "datasets/datasets-filter/datasets-filter.component";
-
 import {
   filter,
   map,
@@ -40,6 +38,8 @@ import {
 } from "rxjs/operators";
 import * as deepEqual from "deep-equal";
 import { ProposalFilters } from "state-management/state/proposals.store";
+import { SatDatepickerRangeValue } from "saturn-datepicker";
+import { DateTime } from "luxon";
 
 @Component({
   selector: "proposal-dashboard",
@@ -132,21 +132,18 @@ export class ProposalDashboardComponent implements OnInit, OnDestroy {
     this.store.dispatch(fetchProposalsAction());
   }
 
-  onDateChange(event: DateRange) {
-    if (event) {
-      const { begin, end } = event;
+  onDateChange(values: SatDatepickerRangeValue<DateTime>) {
+    if (values) {
+      const { begin, end } = values;
       this.store.dispatch(
         setDateRangeFilterAction({
-          begin: begin.toISOString(),
-          end: end.toISOString()
+          begin: begin.toISO(),
+          end: end.toISO()
         })
       );
     } else {
       this.store.dispatch(
-        setDateRangeFilterAction({
-          begin: null,
-          end: null
-        })
+        setDateRangeFilterAction(null)
       );
     }
     this.store.dispatch(fetchProposalsAction());

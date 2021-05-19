@@ -266,7 +266,7 @@ export const routes: Routes = [
       {
         path: "404",
         component: ErrorPageComponent,
-        data: { errorTitle: "404 Page not found" , message: "Sorry, the page you are trying to view doesn't exists"}
+        data: { errorTitle: "404 Page not found" , message: "Sorry, the page you are trying to view doesn't exist"}
       },
     ],
   },
