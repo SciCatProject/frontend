@@ -101,7 +101,7 @@ export class UserEffects {
               accountType: "external",
             }),
           ]),
-          catchError(() => of(fromActions.fetchUserFailedAction()))
+          catchError((error: HttpErrorResponse) => of(fromActions.fetchUserFailedAction({error})))
         );
       })
     )
