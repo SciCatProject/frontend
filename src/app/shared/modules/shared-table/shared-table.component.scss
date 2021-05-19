@@ -108,12 +108,6 @@ mat-header-row {
   }
 }
 
-/*
-.mat-focus-indicator {
-  margin-left: auto;
-}
-*/
-
 .mat-toolbar {
   background-color: inherit;
   display: flex;
@@ -128,6 +122,9 @@ mat-header-row {
     flex: 0 0 auto;
     min-width: 450px;
   }
+  ::ng-deep .mat-form-field .mat-form-field-flex .mat-form-field-infix {
+    background-color: inherit;
+  }
 }
 
 
@@ -136,12 +133,16 @@ mat-header-row {
     padding: 0px;
     width: 97%;
     > .mat-form-field-infix {
-      color: black;
-      background-color: white;
+      color:mat-contrast($grey, 50);
+      background-color: mat-color($grey, 50);
       padding: 1px 0.75em 0 4px;
       border: 0;
       margin: 0.75em 0;
     }
+  }
+
+  ::ng-deep .mat-form-field-infix .mat-input-element {
+    color: mat-contrast($grey, 50);
   }
 }
 
@@ -162,7 +163,6 @@ mat-header-row {
         
   ::ng-deep .mat-date-range-input-start-wrapper {
     max-width: 45%;
-    //text-align: right;
   }
   ::ng-deep .mat-start-date {
     position: unset;
@@ -178,7 +178,7 @@ mat-header-row {
   }
 
   ::ng-deep .mat-datepicker-toggle {
-    color: black;
+    color: mat-contrast($grey, 50);
   }
   ::ng-deep .mat-datepicker-toggle .mat-focus-indicator {
     width: 24px;
@@ -186,24 +186,10 @@ mat-header-row {
     line-height: 24px;
   }
 
-  ::ng-deep .mat-input-element {
-    color: black;
+  ::ng-deep .mat-form-field-infix .mat-input-element {
+    color: mat-contrast($grey,50);
   }
 }
-
-/*
-.mat-table {
-  .mat-form-field-wrapper .mat-form-field-flex {
-    padding-top: 0px;
-    > .mat-form-field-infix {
-      background-color: white;
-      padding: 1px 0.75em 4px;
-      border: 0;
-      margin: 0.75em 0;
-    }
-  }
-}
-*/
 
 .mat-form-field {
   font-size: 14px;
@@ -215,7 +201,6 @@ mat-header-row {
 }
 
 .mat-header-cell {
-  //color: white;
   color: mat-color($primary,default-contrast);
 }
 
@@ -229,29 +214,4 @@ mat-header-row {
 
 .mat-table .mat-header-row .mat-header-cell .mat-form-field {
   width: 100%;
-}
-
-.mat-form-field-appearance-fill .mat-form-field-infix {
-  padding: 0.1em 0 0.25em;
-}
-
-.mat-form-field-flex {
-  padding: 0.15em 0.75em 0.25em;
-}
-
-.mat-form-field-infix {
-  width: auto;
-}
-
-.mat-start-date {
-  top: -3px;
-}
-
-.mat-datepicker-toggle {
-  color: white;
-}
-
-.mat-color-wrapper {
-  top: -4px;
-  position: relative;
 }
