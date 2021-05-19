@@ -41,7 +41,6 @@ import { InstrumentsModule } from "./instruments/instruments.module";
 import { FilesModule } from "files/files.module";
 import { MatButtonModule } from "@angular/material/button";
 import { MatButtonToggleModule } from "@angular/material/button-toggle";
-
 @NgModule({
   declarations: [AppComponent],
   imports: [

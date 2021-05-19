@@ -4,6 +4,7 @@ import { MatDialog, MatDialogModule } from "@angular/material/dialog";
 import { MatMenuModule } from "@angular/material/menu";
 import { MatSnackBar, MatSnackBarModule } from "@angular/material/snack-bar";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { DateTime } from "luxon";
 import { FlatNode, TreeNode } from "../base-classes/tree-base";
 import { TreeEditComponent } from "../tree-edit/tree-edit.component";
 
@@ -319,7 +320,7 @@ describe("TreeBaseComponent", () => {
       };
       component.ngOnInit();
       const result = component.getValueRepresentation(component.treeControl.dataNodes[0]);
-      expect(result).toEqual("[]");
+      expect(result).toEqual("[ ]");
     });
     it("Should get string \"\" ", () => {
       component.metadata = {
@@ -342,13 +343,13 @@ describe("TreeBaseComponent", () => {
     });
     it("Should get date string ", () => {
       component.metadata = {
-        creationTime: "2020-04-01 12:00:00"
+        creationTime: DateTime.fromISO("2016-05-25T00:00:00.000").toUTC().toISO()
       };
       component.ngOnInit();
       const result = component.getValueRepresentation(component.treeControl.dataNodes[0]);
       //Difficult to verify the whole string at once due to timezone
-      expect(result).toContain("2020-04-01,");
-      expect(result).toContain("12:00:00");
+      expect(result).toContain("2016-05-25,");
+      expect(result).toContain("00:00:00");
       expect(result).toContain("GMT");
     });
   });

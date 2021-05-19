@@ -1,9 +1,6 @@
 import { APP_CONFIG, AppConfig } from "app-config.module";
 import { Component, Inject, OnDestroy, OnInit } from "@angular/core";
-import { MatDatepickerInputEvent } from "@angular/material/datepicker";
 import { MatDialog } from "@angular/material/dialog";
-import * as moment from "moment";
-import "moment-timezone";
 import { select, Store } from "@ngrx/store";
 import {
   debounceTime,
@@ -55,12 +52,8 @@ import {
 import { ScientificCondition } from "state-management/models";
 import { SearchParametersDialogComponent } from "shared/modules/search-parameters-dialog/search-parameters-dialog.component";
 import { AsyncPipe } from "@angular/common";
-
-export interface DateRange {
-  begin: Date;
-  end: Date;
-}
-
+import { DateTime } from "luxon";
+import { SatDatepickerRangeValue } from "saturn-datepicker";
 @Component({
   selector: "datasets-filter",
   templateUrl: "datasets-filter.component.html",
@@ -194,17 +187,17 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     this.store.dispatch(removeTypeFilterAction({ datasetType: type }));
   }
 
-  dateChanged(event: MatDatepickerInputEvent<DateRange>) {
-    if (event.value) {
-      const { begin, end } = event.value;
+  dateChanged(values: SatDatepickerRangeValue<DateTime>) {
+    if (values) {
+      const { begin, end } = values;
       this.store.dispatch(
         setDateRangeFilterAction({
-          begin: moment(begin).tz("UTC").toISOString(),
-          end: moment(end).add(1, "days").toISOString(),
+          begin: begin.toUTC().toISO(),
+          end: end.toUTC().plus({days: 1}).toISO(),
         })
       );
     } else {
-      this.store.dispatch(setDateRangeFilterAction({ begin: null, end: null }));
+      this.store.dispatch(setDateRangeFilterAction(null));
     }
   }
 

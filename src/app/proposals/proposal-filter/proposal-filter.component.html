@@ -24,7 +24,7 @@
       name="range-picker"
       [satDatepicker]="largePicker"
       [value]="dateRangeValue"
-      (dateChange)="doDateChange($event)"
+      (dateChange)="doDateChange($event.value)"
     />
     <sat-datepicker-toggle matSuffix [for]="largePicker">
       <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
@@ -63,7 +63,7 @@
         name="range-picker"
         [satDatepicker]="smallPicker"
         [value]="dateRangeValue"
-        (dateChange)="doDateChange($event)"
+        (dateChange)="doDateChange($event.value)"
       />
       <sat-datepicker-toggle matSuffix [for]="smallPicker">
         <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>

@@ -24,8 +24,9 @@ import {
   clearFacetsAction,
   setDateRangeFilterAction
 } from "state-management/actions/proposals.actions";
-import { DateRange } from "datasets/datasets-filter/datasets-filter.component";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
+import { SatDatepickerRangeValue } from "saturn-datepicker";
+import { DateTime } from "luxon";
 
 describe("ProposalDashboardComponent", () => {
   let component: ProposalDashboardComponent;
@@ -119,17 +120,17 @@ describe("ProposalDashboardComponent", () => {
     it("should dispatch a setDateRangeFilterAction with begin and end dates and a fetchProposalsAction if event has value", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
-      const event: DateRange = {
-        begin: new Date(),
-        end: new Date()
+      const event: SatDatepickerRangeValue<DateTime> = {
+        begin: DateTime.local(),
+        end: DateTime.local()
       };
       component.onDateChange(event);
 
       expect(dispatchSpy).toHaveBeenCalledTimes(2);
       expect(dispatchSpy).toHaveBeenCalledWith(
         setDateRangeFilterAction({
-          begin: event.begin.toISOString(),
-          end: event.end.toISOString()
+          begin: event.begin.toISO(),
+          end: event.end.toISO()
         })
       );
       expect(dispatchSpy).toHaveBeenCalledWith(fetchProposalsAction());
@@ -142,7 +143,7 @@ describe("ProposalDashboardComponent", () => {
 
       expect(dispatchSpy).toHaveBeenCalledTimes(2);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        setDateRangeFilterAction({ begin: null, end: null })
+        setDateRangeFilterAction(null)
       );
       expect(dispatchSpy).toHaveBeenCalledWith(fetchProposalsAction());
     });

@@ -10,6 +10,7 @@ import { InputObject, MetadataInputModalComponent } from "../metadata-input-moda
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { DatePipe } from "@angular/common";
 import { Type } from "../base-classes/metadata-input-base";
+import { DateTime } from "luxon";
 
 export class FlatNodeEdit implements FlatNode {
   key: string;
@@ -237,7 +238,7 @@ export class TreeEditComponent extends TreeBaseComponent implements OnInit, OnCh
     switch (data.type) {
       case Type.date:
         node.key = data.key;
-        node.value = new Date(Date.parse(data.value)).toISOString();
+        node.value = DateTime.fromJSDate(new Date(data.value)).toUTC().toISO();
         node.unit = null;
         break;
       case Type.string:
@@ -268,7 +269,7 @@ export class TreeEditComponent extends TreeBaseComponent implements OnInit, OnCh
   hasNoContent = (node: TreeNode | FlatNodeEdit) => node.key === "";
 
   isEditing() {
-    return this.currentEditingNode && this.changed;
+    return this.currentEditingNode? true: false;
   }
   doSave() {
     this.metadata = this.convertDataTreeToObject(this.dataTree);

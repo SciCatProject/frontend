@@ -4,6 +4,7 @@ import { Component } from "@angular/core";
 import { MatTreeFlatDataSource, MatTreeFlattener } from "@angular/material/tree";
 import { FormatNumberPipe } from "shared/pipes/format-number.pipe";
 import { PrettyUnitPipe } from "shared/pipes/pretty-unit.pipe";
+import { DateTimeService } from "shared/services/date-time.service";
 import { UnitsService } from "shared/services/units.service";
 
 export class TreeNode {
@@ -37,10 +38,12 @@ export class TreeBaseComponent {
   formatNumberPipe: FormatNumberPipe;
   prettyUnitPipe: PrettyUnitPipe;
   unitsService: UnitsService;
+  dateTimeService: DateTimeService;
   constructor() {
     this.unitsService = new UnitsService();
     this.prettyUnitPipe = new PrettyUnitPipe(this.unitsService);
     this.formatNumberPipe = new FormatNumberPipe();
+    this.dateTimeService = new DateTimeService();
   }
   buildDataTree(obj: { [key: string]: any }, level: number): TreeNode[] {
     return Object.keys(obj).reduce<TreeNode[]>((accumulator, key) => {
@@ -196,7 +199,7 @@ export class TreeBaseComponent {
       return "undefined";
     }
     if (Array.isArray(node.value) && node.value.length === 0) {
-      return "[]";
+      return "[ ]";
     }
     if (node.value === "") {
       return "\"\"";
@@ -204,7 +207,7 @@ export class TreeBaseComponent {
     if (node.unit) {
       return `${this.formatNumberPipe.transform(node.value)} (${this.prettyUnitPipe.transform(node.unit)})`;
     }
-    if (typeof node.value === "string" && !isNaN(Date.parse(node.value))) {
+    if (typeof node.value === "string" && this.dateTimeService.isISODateTime(node.value)) {
       return this.datePipe.transform(node.value, "yyyy-MM-dd, HH:mm:ss zzzz");
     }
     return node.value;
