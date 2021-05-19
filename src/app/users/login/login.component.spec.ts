@@ -56,7 +56,8 @@ describe("LoginComponent", () => {
             provide: APP_CONFIG,
             useValue: {
               disabledDatasetColumns: [],
-              archiveWorkflowEnabled: true
+              archiveWorkflowEnabled: true,
+              loginFormEnabled: true
             }
           },
           { provide: ActivatedRoute, useClass: MockActivatedRoute },

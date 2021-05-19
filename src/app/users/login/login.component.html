@@ -8,40 +8,23 @@
       <div fxFlex="auto"></div>
     </div>
     <mat-card-content>
+      <div *ngFor="let endpoint of appConfig.oAuth2Endpoints">
 
-      <button
+        <button
         mat-raised-button
         class="login-button"
         type="submit"
         color="primary"
         [ngClass]="{ loading: loading$ | async }"
-        (click) = "redirectOIDC('google')"
+        (click) = "redirectOIDC(endpoint.authURL)"
       >
-       Login with Google
+       Login with {{endpoint.displayName}}
       </button>
       <br/>
-      <button
-        mat-raised-button
-        class="login-button"
-        type="submit"
-        color="primary"
-        [ngClass]="{ loading: loading$ | async }"
-        (click) = "redirectOIDC('globus')"
-      >
-       Login with Globus
-      </button>
-      <br/>
-      <button
-        mat-raised-button
-        class="login-button"
-        type="submit"
-        color="primary"
-        [ngClass]="{ loading: loading$ | async }"
-        (click) = "redirectOIDC('orcid')"
-      >
-       Login with ORCID
-      </button>
-      <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
+      </div>
+
+
+      <form [formGroup]="loginForm" (ngSubmit)="onLogin()" *ngIf="appConfig.loginFormEnabled">
         <mat-form-field hintLabel="{{appConfig.facility}} account username">
           <mat-label> <b> Username</b> </mat-label>
           <span matPrefix> <mat-icon>person</mat-icon> &nbsp; </span>
