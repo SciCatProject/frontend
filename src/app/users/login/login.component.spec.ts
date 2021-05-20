@@ -30,7 +30,7 @@ describe("LoginComponent", () => {
   let store: MockStore;
   let dispatchSpy;
 
-  let appConfig =  {
+  const appConfig =  {
     disabledDatasetColumns: [],
     archiveWorkflowEnabled: true,
     loginFormEnabled: true
