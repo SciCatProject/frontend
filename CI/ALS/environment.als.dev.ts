@@ -60,4 +60,6 @@ export const environment = {
   // gettingStarted: "http://melanie.gitpages.psi.ch/SciCatPages/SciCatGettingStartedSLSSummary.pdf",
   jobsEnabled: false,
   policiesEnabled: false,
+  loginFormEnabled: false,
+  oAuth2Endpoints: [{displayName: "Google", authURL: "/auth/google"}]
 };

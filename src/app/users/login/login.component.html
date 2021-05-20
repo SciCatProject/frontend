@@ -11,12 +11,12 @@
       <div *ngFor="let endpoint of appConfig.oAuth2Endpoints">
 
         <button
-        mat-raised-button
-        class="login-button"
-        type="submit"
-        color="primary"
-        [ngClass]="{ loading: loading$ | async }"
-        (click) = "redirectOIDC(endpoint.authURL)"
+          mat-raised-button
+          class="login-button oauth-login-button"
+          type="submit"
+          color="primary"
+          [ngClass]="{ loading: loading$ | async }"
+          (click) = "redirectOIDC(endpoint.authURL)"
       >
        Login with {{endpoint.displayName}}
       </button>

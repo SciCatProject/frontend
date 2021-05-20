@@ -10,6 +10,7 @@ export class OAuth2Endpoint {
 }
 
 export class AppConfig {
+  lbBaseURL: string;
   externalAuthEndpoint: string;
   fileserverBaseURL: string;
   synapseBaseUrl: string;
@@ -57,6 +58,7 @@ export class AppConfig {
 }
 
 export const APP_DI_CONFIG: AppConfig = {
+  lbBaseURL: environment["lbBaseURL"] || "https://127.0.0.1:3000",
   externalAuthEndpoint: environment["externalAuthEndpoint"] || null,
   fileserverBaseURL: environment["fileserverBaseURL"] || null,
   synapseBaseUrl: environment["synapseBaseUrl"] || null,

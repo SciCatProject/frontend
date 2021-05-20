@@ -33,7 +33,8 @@ describe("LoginComponent", () => {
   const appConfig =  {
     disabledDatasetColumns: [],
     archiveWorkflowEnabled: true,
-    loginFormEnabled: true
+    loginFormEnabled: true,
+    oAuth2Endpoints: []
   };
 
   beforeEach(waitForAsync(() => {
@@ -152,10 +153,31 @@ describe("LoginComponent", () => {
       fixture = TestBed.createComponent(LoginComponent);
       component = fixture.componentInstance;
       fixture.detectChanges();
+      TestBed.compileComponents();
     });
     it("should not appear if not loginFormEnabled", () => {
       const compiled = fixture.debugElement.nativeElement;
       expect(compiled.querySelector("form")).toBeNull();
+      expect(compiled.querySelector(".oauth-login-button")).toBeNull();
+    });
+
+  });
+
+
+  describe("oauth2 configuration", () => {
+    beforeEach(() => {
+      fixture = TestBed.createComponent(LoginComponent);
+      component = fixture.componentInstance;
+      fixture.detectChanges();
+      appConfig.oAuth2Endpoints = [{displayName: "oauth provider", authURL: "/auth/foo"}];
+    });
+    it("should display OAuth2 provider", () => {
+      dispatchSpy = spyOn(component, "redirectOIDC");
+
+      component.redirectOIDC("/auth/foo");
+
+      expect(dispatchSpy).toHaveBeenCalledTimes(1);
+      expect(dispatchSpy).toHaveBeenCalledWith("/auth/foo");
     });
 
   });
