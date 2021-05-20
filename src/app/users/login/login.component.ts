@@ -62,10 +62,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.returnUrl = this.route.snapshot.queryParams["returnUrl"] || "/";
   }
 
-  redirectOIDC(provider: string) {
-    this.document.location.href = "http://localhost:3000/auth/" + provider;
-  }
-
   openPrivacyDialog() {
     this.dialog.open(PrivacyDialogComponent, {
       width: "auto"
