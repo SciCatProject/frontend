@@ -65,7 +65,9 @@ describe("LoginComponent", () => {
         ]
       }
     });
+    TestBed.overrideProvider(Store, {useValue: store});
     TestBed.compileComponents();
+
   }));
 
   beforeEach(() => {
@@ -74,9 +76,9 @@ describe("LoginComponent", () => {
     fixture.detectChanges();
   });
 
-  beforeEach(inject([Store], (mockStore: MockStore) => {
-    store = mockStore;
-  }));
+  // beforeEach(inject([Store], (mockStore: MockStore) => {
+  //   store = mockStore;
+  // }));
 
   afterEach(() => {
     fixture.destroy();
@@ -106,6 +108,7 @@ describe("LoginComponent", () => {
     });
   });
 
+
   describe("#onLogin()", () => {
     it("should dispatch a loginAction", () => {
       dispatchSpy = spyOn(store, "dispatch");
@@ -118,4 +121,18 @@ describe("LoginComponent", () => {
       );
     });
   });
+
+  describe("form configuration", () => {
+    beforeEach(() => {
+      TestBed.overrideProvider(APP_CONFIG, { useValue: {
+        loginFormEnabled: false
+      }});
+    it("should not appear if not loginFormEnabled", () => {
+      const compiled = fixture.debugElement.nativeElement;
+      expect(compiled.querySelector("form")).toBeNull();
+    });
+    });
+  });
+
+
 });
