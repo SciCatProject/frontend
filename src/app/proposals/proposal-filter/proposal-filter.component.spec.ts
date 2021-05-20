@@ -1,11 +1,9 @@
 import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 
 import { ProposalFilterComponent } from "./proposal-filter.component";
-
-import { DateRange } from "datasets/datasets-filter/datasets-filter.component";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { SharedCatanieModule } from "shared/shared.module";
-import { SatDatepickerModule, SatNativeDateModule } from "saturn-datepicker";
+import { SatDatepickerModule, SatDatepickerRangeValue, SatNativeDateModule } from "saturn-datepicker";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { MatButtonModule } from "@angular/material/button";
 import { MatCardModule } from "@angular/material/card";
@@ -13,7 +11,7 @@ import { MatExpansionModule } from "@angular/material/expansion";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatIconModule } from "@angular/material/icon";
 import { MatInputModule } from "@angular/material/input";
-import { MatDatepickerInputEvent } from "@angular/material/datepicker";
+import { DateTime } from "luxon";
 
 describe("ProposalFilterComponent", () => {
   let component: ProposalFilterComponent;
@@ -74,16 +72,14 @@ describe("ProposalFilterComponent", () => {
     it("should emit an event", () => {
       spyOn(component.dateChange, "emit");
 
-      const event = {
-        value: {
-          begin: new Date(),
-          end: new Date()
-        }
+      const event: SatDatepickerRangeValue<DateTime> = {
+          begin: DateTime.local(),
+          end: DateTime.local()
       };
-      component.doDateChange(event as MatDatepickerInputEvent<DateRange>);
+      component.doDateChange(event);
 
       expect(component.dateChange.emit).toHaveBeenCalledTimes(1);
-      expect(component.dateChange.emit).toHaveBeenCalledWith(event.value);
+      expect(component.dateChange.emit).toHaveBeenCalledWith(event);
     });
   });
 });

@@ -155,7 +155,7 @@
       name="range-picker"
       [satDatepicker]="picker"
       [value]="creationTimeFilter$ | async"
-      (dateChange)="dateChanged($event)"
+      (dateChange)="dateChanged($event.value)"
     />
     <sat-datepicker-toggle matSuffix [for]="picker">
       <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>

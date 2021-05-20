@@ -8,11 +8,8 @@ import {
 import { Store, StoreModule } from "@ngrx/store";
 import {
   DatasetsFilterComponent,
-  DateRange
 } from "datasets/datasets-filter/datasets-filter.component";
 import { MockStore } from "shared/MockStubs";
-
-import * as moment from "moment";
 
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
@@ -46,9 +43,10 @@ import { MatDialogModule, MatDialog } from "@angular/material/dialog";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
 import { MatSelectModule } from "@angular/material/select";
-import { MatDatepickerInputEvent } from "@angular/material/datepicker";
 import { SearchParametersDialogComponent } from "shared/modules/search-parameters-dialog/search-parameters-dialog.component";
 import { AsyncPipe } from "@angular/common";
+import { DateTime } from "luxon";
+import { SatDatepickerRangeValue } from "saturn-datepicker";
 
 export class MockMatDialog {
   open() {
@@ -317,33 +315,30 @@ describe("DatasetsFilterComponent", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
 
-      const event = {
-        value: {
-          begin: new Date("1995-12-17T03:24:00.000Z"),
-          end: new Date("1995-12-17T03:24:00.000Z")
-        }
+      const event: SatDatepickerRangeValue<DateTime> = {
+          begin: DateTime.fromISO("1995-12-17T03:24:00.000Z"),
+          end: DateTime.fromISO("1995-12-17T03:24:00.000Z")
       };
-      component.dateChanged(event as MatDatepickerInputEvent<DateRange>);
-      const begin = moment(event.value.begin);
-      const endplus1day = moment(event.value.end).add(1, "days");
+      component.dateChanged(event);
+      const begin = event.begin.toUTC();
+      const endplus1day = event.end.toUTC().plus({days:1});
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
         setDateRangeFilterAction({
-          begin: begin.toISOString(),
-          end: endplus1day.milliseconds(0).toISOString()
+          begin: begin.toISO(),
+          end: endplus1day.toISO()
         })
       );
     });
     it("should dispatch a SetDateRangeFilterAction if event does not have value", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
-      const event = {};
-      component.dateChanged(event as MatDatepickerInputEvent<DateRange>);
-
+      const event = null;
+      component.dateChanged(event);
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        setDateRangeFilterAction({ begin: null, end: null })
+        setDateRangeFilterAction(null)
       );
     });
   });

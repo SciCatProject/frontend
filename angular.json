@@ -15,7 +15,6 @@
             "allowedCommonJsDependencies": [
               "deep-equal",
               "file-saver",
-              "moment-timezone",
               "shortid",
               "socket.io-client"
             ],

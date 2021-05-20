@@ -21,11 +21,8 @@ import {
   MAT_DATE_FORMATS,
   MAT_DATE_LOCALE,
   SatDatepickerModule,
+  SatNativeDateModule,
 } from "saturn-datepicker";
-import {
-  MAT_MOMENT_DATE_FORMATS,
-  MomentDateAdapter,
-} from "@angular/material-moment-adapter";
 
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { MatButtonModule } from "@angular/material/button";
@@ -68,6 +65,8 @@ import { AnonymousDashboardComponent } from "./anonymous-dashboard/anonymous-das
 import { AnonymousDetailsDashboardComponent } from "./anonymous-details-dashboard/anonymous-details-dashboard.component";
 import { AnonymousDetailsComponent } from "./anonymous-details/anonymous-details.component";
 import { SampleEditComponent } from "./sample-edit/sample-edit.component";
+import { LuxonDateAdapter, MAT_LUXON_DATE_FORMATS } from "ngx-material-luxon";
+import { MatDatepickerModule } from "@angular/material/datepicker";
 
 @NgModule({
   imports: [
@@ -105,6 +104,8 @@ import { SampleEditComponent } from "./sample-edit/sample-edit.component";
     ReactiveFormsModule,
     RouterModule,
     SatDatepickerModule,
+    SatNativeDateModule,
+    MatDatepickerModule,
     SharedCatanieModule,
     StoreModule.forFeature("datasets", datasetsReducer),
     StoreModule.forFeature("jobs", jobsReducer),
@@ -136,10 +137,10 @@ import { SampleEditComponent } from "./sample-edit/sample-edit.component";
     AsyncPipe,
     {
       provide: DateAdapter,
-      useClass: MomentDateAdapter,
+      useClass: LuxonDateAdapter,
       deps: [MAT_DATE_LOCALE],
     },
-    { provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS },
+    { provide: MAT_DATE_FORMATS, useValue: MAT_LUXON_DATE_FORMATS },
     { provide: MAT_DATE_LOCALE, useValue: "sv-SE" },
   ],
   exports: [
