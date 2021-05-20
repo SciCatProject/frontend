@@ -30,6 +30,12 @@ describe("LoginComponent", () => {
   let store: MockStore;
   let dispatchSpy;
 
+  let appConfig =  {
+    disabledDatasetColumns: [],
+    archiveWorkflowEnabled: true,
+    loginFormEnabled: true
+  };
+
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [LoginComponent],
@@ -54,47 +60,58 @@ describe("LoginComponent", () => {
         providers: [
           {
             provide: APP_CONFIG,
-            useValue: {
-              disabledDatasetColumns: [],
-              archiveWorkflowEnabled: true,
-              loginFormEnabled: true
-            }
+            useValue: appConfig
           },
           { provide: ActivatedRoute, useClass: MockActivatedRoute },
           { provide: Router, useClass: MockRouter }
         ]
       }
     });
-    TestBed.overrideProvider(Store, {useValue: store});
     TestBed.compileComponents();
 
   }));
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(LoginComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+  // beforeEach(() => {
+  //   fixture = TestBed.createComponent(LoginComponent);
+  //   component = fixture.componentInstance;
+  //   fixture.detectChanges();
+  // });
 
-  // beforeEach(inject([Store], (mockStore: MockStore) => {
-  //   store = mockStore;
-  // }));
+  beforeEach(inject([Store], (mockStore: MockStore) => {
+    store = mockStore;
+  }));
 
   afterEach(() => {
     fixture.destroy();
   });
 
-  it("should create component", () => {
-    expect(component).toBeTruthy();
+  describe("#openPrivacyDialog()", () => {
+    beforeEach(() => {
+      fixture = TestBed.createComponent(LoginComponent);
+      component = fixture.componentInstance;
+      fixture.detectChanges();
+      appConfig.loginFormEnabled = true;
+    });
+
+    it("should create component", () => {
+      expect(component).toBeTruthy();
+    });
+
+    it("should contain username and password fields", () => {
+      const compiled = fixture.debugElement.nativeElement;
+      expect(compiled.querySelector("form").textContent).toContain("Username");
+      expect(compiled.querySelector("form").textContent).toContain("Password");
+    });
   });
 
-  it("should contain username and password fields", () => {
-    const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector("form").textContent).toContain("Username");
-    expect(compiled.querySelector("form").textContent).toContain("Password");
-  });
+
 
   describe("#openPrivacyDialog()", () => {
+    beforeEach(() => {
+      fixture = TestBed.createComponent(LoginComponent);
+      component = fixture.componentInstance;
+      fixture.detectChanges();
+    });
     it("should open the privacy dialog", () => {
       spyOn(component.dialog, "open");
 
@@ -110,6 +127,12 @@ describe("LoginComponent", () => {
 
 
   describe("#onLogin()", () => {
+    beforeEach(() => {
+      fixture = TestBed.createComponent(LoginComponent);
+      component = fixture.componentInstance;
+      fixture.detectChanges();
+    });
+
     it("should dispatch a loginAction", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
@@ -122,17 +145,18 @@ describe("LoginComponent", () => {
     });
   });
 
+
   describe("form configuration", () => {
     beforeEach(() => {
-      TestBed.overrideProvider(APP_CONFIG, { useValue: {
-        loginFormEnabled: false
-      }});
+      appConfig.loginFormEnabled = false;
+      fixture = TestBed.createComponent(LoginComponent);
+      component = fixture.componentInstance;
+      fixture.detectChanges();
+    });
     it("should not appear if not loginFormEnabled", () => {
       const compiled = fixture.debugElement.nativeElement;
       expect(compiled.querySelector("form")).toBeNull();
     });
-    });
+
   });
-
-
 });
