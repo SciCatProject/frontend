@@ -101,7 +101,7 @@
       <button
         id="cartOnHeaderButton"
         mat-icon-button
-        matBadge="{{ inBatchIndicator }}"
+        matBadge="{{ inBatchIndicator === '0' ? null : inBatchIndicator }}"
         matBadgePosition="after"
         matBadgeColor="accent"
         matBadgeSize="medium"

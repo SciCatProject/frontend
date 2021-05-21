@@ -1,4 +1,11 @@
-import { Component, OnInit, ViewChild, TemplateRef, Inject } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  TemplateRef,
+  Inject,
+  OnDestroy,
+} from "@angular/core";
 import { select, Store } from "@ngrx/store";
 import { first, switchMap, mergeMap } from "rxjs/operators";
 
@@ -6,14 +13,14 @@ import { getDatasetsInBatch } from "state-management/selectors/datasets.selector
 import {
   clearBatchAction,
   prefillBatchAction,
-  removeFromBatchAction
+  removeFromBatchAction,
 } from "state-management/actions/datasets.actions";
 import { Dataset, MessageType } from "state-management/models";
 import { showMessageAction } from "state-management/actions/user.actions";
 
 import { Router } from "@angular/router";
 import { ArchivingService } from "../archiving.service";
-import { Observable } from "rxjs";
+import { Observable, Subscription } from "rxjs";
 import { ShareGroupApi } from "shared/sdk/services/custom/ShareGroup";
 import { DatasetApi } from "shared/sdk/services/custom/Dataset";
 import { ShareGroup } from "shared/sdk/models/ShareGroup";
@@ -31,7 +38,7 @@ export interface Share {
   templateUrl: "./batch-view.component.html",
   styleUrls: ["./batch-view.component.scss"],
 })
-export class BatchViewComponent implements OnInit {
+export class BatchViewComponent implements OnInit, OnDestroy {
   @ViewChild("secondDialog", { static: true }) secondDialog: TemplateRef<any>;
 
   selectable = true;
@@ -44,6 +51,7 @@ export class BatchViewComponent implements OnInit {
   visibleColumns: string[] = ["remove", "pid", "sourceFolder", "creationTime"];
 
   batch$: Observable<Dataset[]> = this.store.pipe(select(getDatasetsInBatch));
+  subscriptions: Subscription[] = [];
   public hasBatch: boolean;
 
   constructor(
@@ -191,11 +199,17 @@ export class BatchViewComponent implements OnInit {
 
   ngOnInit() {
     this.store.dispatch(prefillBatchAction());
-    this.batch$.subscribe((result) => {
-      if (result) {
-        this.datasetList = result;
-        this.hasBatch = result.length > 0;
-      }
-    });
+    this.subscriptions.push(
+      this.batch$.subscribe((result) => {
+        if (result) {
+          this.datasetList = result;
+          this.hasBatch = result.length > 0;
+        }
+      })
+    );
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
 }
