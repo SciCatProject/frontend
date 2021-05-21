@@ -1,3 +1,4 @@
+@use '~@angular/material' as mat;
 @import "src/theme.scss";
 
 mat-toolbar {
@@ -8,7 +9,7 @@ mat-toolbar {
   height: 7vh;
 
   a {
-    color: mat-color($primary, default-contrast);
+    color: mat.get-color-from-palette($primary, default-contrast);
   }
 
   .logo {

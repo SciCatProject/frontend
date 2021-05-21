@@ -1,3 +1,4 @@
+@use '~@angular/material' as mat;
 @import "../../../theme.scss";
 
 .no-entries-message {
@@ -11,15 +12,15 @@
 @media only screen and (min-width: 1280px) {
   .largeDetails {
     mat-header-row {
-      background: mat-color($primary);
+      background: mat.get-color-from-palette($primary);
     }
 
     ::ng-deep .mat-sort-header-arrow {
-      color: mat-color($primary, default-contrast);
+      color: mat.get-color-from-palette($primary, default-contrast);
     }
 
     mat-header-cell {
-      color: mat-color($primary, default-contrast);
+      color: mat.get-color-from-palette($primary, default-contrast);
       justify-content: left;
     }
 
