@@ -12,6 +12,7 @@ import { select, Store } from "@ngrx/store";
 import { LoopBackConfig } from "shared/sdk";
 import {
   clearMessageAction,
+  fetchCurrentUserAction,
   logoutAction
 } from "state-management/actions/user.actions";
 import { MatSnackBar } from "@angular/material/snack-bar";
@@ -65,6 +66,7 @@ export class AppComponent implements OnDestroy, OnInit, AfterViewChecked {
    * @memberof AppComponent
    */
   ngOnInit() {
+    this.store.dispatch(fetchCurrentUserAction());
     LoopBackConfig.setBaseURL(environment.lbBaseURL);
     console.log(LoopBackConfig.getPath());
     if ("lbApiVersion" in environment) {
