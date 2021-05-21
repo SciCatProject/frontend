@@ -1,11 +1,17 @@
 {
   "root": true,
-  "ignorePatterns": ["projects/**/*"],
+  "ignorePatterns": [
+    "projects/**/*"
+  ],
   "overrides": [
     {
-      "files": ["*.ts"],
+      "files": [
+        "*.ts"
+      ],
       "parserOptions": {
-        "project": ["src/tsconfig.json"],
+        "project": [
+          "src/tsconfig.json"
+        ],
         "createDefaultProgram": true
       },
       "extends": [
@@ -44,19 +50,15 @@
                 "private-static-field",
                 "protected-static-field",
                 "public-static-field",
-
                 "private-static-method",
                 "protected-static-method",
                 "public-static-method",
-
                 "private-instance-field",
                 "protected-instance-field",
                 "public-instance-field",
-
                 "private-constructor",
                 "protected-constructor",
                 "public-constructor",
-
                 "private-instance-method",
                 "protected-instance-method",
                 "public-instance-method"
@@ -67,8 +69,15 @@
         "@typescript-eslint/naming-convention": [
           "error",
           {
-            "format": ["camelCase", "snake_case", "UPPER_CASE"],
-            "selector": ["variable", "function"]
+            "format": [
+              "camelCase",
+              "snake_case",
+              "UPPER_CASE"
+            ],
+            "selector": [
+              "variable",
+              "function"
+            ]
           }
         ],
         "@typescript-eslint/no-inferrable-types": "error",
@@ -79,8 +88,14 @@
             "allowTemplateLiterals": true
           }
         ],
-        "@typescript-eslint/semi": ["error", "always"],
-        "brace-style": ["error", "1tbs"],
+        "@typescript-eslint/semi": [
+          "error",
+          "always"
+        ],
+        "brace-style": [
+          "error",
+          "1tbs"
+        ],
         "default-case": "error",
         "id-blacklist": "off",
         "id-match": "off",
@@ -94,8 +109,12 @@
       }
     },
     {
-      "files": ["*.html"],
-      "extends": ["plugin:@angular-eslint/template/recommended"],
+      "files": [
+        "*.html"
+      ],
+      "extends": [
+        "plugin:@angular-eslint/template/recommended"
+      ],
       "rules": {}
     }
   ]
