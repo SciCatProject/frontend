@@ -1,3 +1,4 @@
+@use '~@angular/material' as mat;
 @import "../../../theme.scss";
 
 .title {
@@ -7,5 +8,5 @@
 
 .close-button {
   float: right;
-  color: mat-color($grey, 500);
+  color: mat.get-color-from-palette($grey, 500);
 }

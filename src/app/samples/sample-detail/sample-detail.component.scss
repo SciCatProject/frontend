@@ -1,18 +1,19 @@
+@use '~@angular/material' as mat;
 @import "../../../theme.scss";
 
 mat-card {
   margin: 1em;
 
   .general-header {
-    background-color: mat-color($primary, lighter);
+    background-color: mat.get-color-from-palette($primary, lighter);
   }
 
   .creator-header {
-    background-color: mat-color($navy, 400);
+    background-color: mat.get-color-from-palette($navy, 400);
   }
 
   .characteristics-header {
-    background-color: mat-color($accent, lighter);
+    background-color: mat.get-color-from-palette($accent, lighter);
   }
 
   .section-icon {

@@ -9,7 +9,9 @@
         "*.ts"
       ],
       "parserOptions": {
-        "project": ["e2e/tsconfig.json"],
+        "project": [
+          "e2e/tsconfig.json"
+        ],
         "createDefaultProgram": true
       },
       "rules": {
@@ -42,7 +44,10 @@
             "allowTemplateLiterals": true
           }
         ],
-        "@typescript-eslint/semi": ["error", "always"],
+        "@typescript-eslint/semi": [
+          "error",
+          "always"
+        ],
         "brace-style": [
           "error",
           "1tbs"

@@ -1,3 +1,4 @@
+@use '~@angular/material' as mat;
 @import "../../../theme.scss";
 
 mat-sidenav-container {
@@ -14,7 +15,7 @@ mat-sidenav-container {
 
         mat-icon {
           vertical-align: middle;
-          color: mat-color($accent);
+          color: mat.get-color-from-palette($accent);
         }
       }
 

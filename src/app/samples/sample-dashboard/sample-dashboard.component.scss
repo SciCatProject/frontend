@@ -1,3 +1,4 @@
+@use '~@angular/material' as mat;
 @import "../../../theme.scss";
 
 @media only screen and (min-width: 1280px) {
@@ -25,7 +26,7 @@
 
     mat-icon {
       vertical-align: middle;
-      color: mat-color($accent);
+      color: mat.get-color-from-palette($accent);
     }
   }
 
@@ -57,7 +58,7 @@
 
     mat-icon {
       vertical-align: middle;
-      color: mat-color($accent);
+      color: mat.get-color-from-palette($accent);
     }
   }
 }
