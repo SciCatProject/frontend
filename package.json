@@ -88,7 +88,6 @@
     "karma-spec-reporter": "^0.0.32",
     "prettier": "^2.0.4",
     "protractor": "~7.0.0",
-    "reselect": "^4.0.0",
     "source-map-support": "^0.5.16",
     "ts-node": "^8.4.1",
     "ts-prune": "^0.3.0",
