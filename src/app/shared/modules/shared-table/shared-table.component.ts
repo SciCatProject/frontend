@@ -55,6 +55,7 @@ export class SharedTableComponent implements AfterViewChecked, AfterViewInit, Af
   @Input() columnsdef: Column[];
   @Input() pageSize = 10;
   @Input() pageSizeOptions: number[] = [5, 10, 25, 100];
+  @Input() title: string = "";
 
   @Output() rowClick = new EventEmitter<any>();
 

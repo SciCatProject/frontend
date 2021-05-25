@@ -6,16 +6,20 @@
 
 <!-- Top tool bar-->
 <mat-toolbar>
-  <mat-form-field appearance="standard">
-    <mat-icon>search</mat-icon>
-    <input type="search" matInput placeholder="global word-search" #globalFilter>
-  </mat-form-field>
-  <button mat-icon-button (click)="exportToExcel()">
-    <mat-icon>cloud_download</mat-icon>
-  </button>
-  <mat-paginator [length]="dataSource.count$ | async" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions"
-    showFirstLastButtons>
-  </mat-paginator>
+  <mat-toolbar-row *ngIf=title>
+   <div>{{title}}</div>
+  </mat-toolbar-row>
+  <mat-toolbar-row>
+    <mat-form-field appearance="standard">
+      <mat-icon>search</mat-icon>
+      <input type="search" matInput placeholder="global word-search" #globalFilter>
+    </mat-form-field>
+    <button mat-icon-button (click)="exportToExcel()">
+      <mat-icon>cloud_download</mat-icon>
+    </button>
+    <mat-paginator [length]="dataSource.count$ | async" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" showFirstLastButtons>
+    </mat-paginator>
+  </mat-toolbar-row>
 </mat-toolbar>
 
 <mat-table #dataTable [dataSource]="dataSource" matSort matSortStart="desc" multiTemplateDataRows>
