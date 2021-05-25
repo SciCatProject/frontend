@@ -15,7 +15,7 @@ COPY . /catanie/
 COPY CI/ESS/site.png /catanie/src/assets/images/site.png
 RUN npx ng build --configuration=${env}
 
-FROM nginx:alpine
+FROM nginx:1.21-alpine
 RUN sed -i -e 's/^root::/root:!:/' /etc/shadow
 RUN rm -rf /usr/share/nginx/html/*
 COPY --from=builder /catanie/dist/ /usr/share/nginx/html
