@@ -108,8 +108,14 @@ mat-header-row {
   }
 }
 
+div.shared-table-title {
+  text-align: center;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 32px;
+}
+
 .mat-toolbar {
-  
   background-color: inherit;
   display: flex;
   flex-direction: row;
