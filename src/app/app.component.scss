@@ -1,11 +1,12 @@
+@use '~@angular/material' as mat;
 @import "src/theme.scss";
 
 a {
-  color: mat-color($primary);
+  color: mat.get-color-from-palette($primary);
 }
 
 .mat-snack-bar-container {
-  background-color: mat-color($primary);
+  background-color: mat.get-color-from-palette($primary);
 }
 
 .spinner {

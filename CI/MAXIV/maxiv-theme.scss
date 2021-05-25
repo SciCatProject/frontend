@@ -1,10 +1,11 @@
+@use '~@angular/material' as mat;
 @import "../node_modules/@angular/material/_theming";
 
-$custom-typography: mat-typography-config(
+$custom-typography: mat.define-typography-config(
   $font-family: '"Titillium Web", Calibri, sans-serif;'
 );
 
-@include mat-core($custom-typography);
+@include mat.core($custom-typography);
 
 $cyan: (
   50: #f2f9fc,
@@ -166,20 +167,20 @@ $red: (
     200: #ffffff
   )
 );
-@include mat-core();
-$primary: mat-palette($mat-green, 600);
-$accent: mat-palette($mat-orange);
-$warn: mat-palette($mat-red);
-$theme: mat-light-theme($primary, $accent, $warn);
-@include angular-material-theme($theme);
+@include mat.core();
+$primary: mat.define-palette(mat.$green-palette, 600);
+$accent: mat.define-palette(mat.$orange-palette);
+$warn: mat.define-palette(mat.$red-palette);
+$theme: mat.define-light-theme($primary, $accent, $warn);
+@include mat.all-component-themes($theme);
 
 .dark-theme {
-  $primary: mat-palette($mat-green, 1000, 400, 800);
-  $accent: mat-palette($mat-orange, 1000, 400, 800);
-  $warn: mat-palette($mat-red, 100, 50, 200);
+  $primary: mat.define-palette(mat.$green-palette, 1000, 400, 800);
+  $accent: mat.define-palette(mat.$orange-palette, 1000, 400, 800);
+  $warn: mat.define-palette(mat.$red-palette, 100, 50, 200);
 
-  $theme: mat-dark-theme($primary, $accent, $warn);
+  $theme: mat.define-dark-theme($primary, $accent, $warn);
 
-  @include angular-material-theme($theme);
+  @include mat.all-component-themes($theme);
 }
 

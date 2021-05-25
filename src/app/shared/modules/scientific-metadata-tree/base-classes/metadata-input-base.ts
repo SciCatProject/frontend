@@ -2,6 +2,7 @@ import { AbstractControl, FormGroup, ValidationErrors, ValidatorFn, Validators }
 import { Observable } from "rxjs";
 import { UnitsService } from "shared/services/units.service";
 import { startWith, map } from "rxjs/operators";
+import { DateTimeService } from "shared/services/date-time.service";
 export enum Type {
   quantity = "quantity",
   date = "date",
@@ -15,9 +16,11 @@ export class MetadataInputBase {
   filteredUnits$: Observable<string[]>;
   units: string[];
   typeValues: string[] = Object.values(Type);
+  dateTimeService: DateTimeService;
   constructor() {
     this.unitsService = new UnitsService();
     this.unitsService.getUnits();
+    this.dateTimeService = new DateTimeService();
   }
   unitValidator(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
@@ -27,8 +30,8 @@ export class MetadataInputBase {
   }
   dateValidator(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
-      const invalid = isNaN(Date.parse(control.value));
-      return invalid ? { invalidDate: "Invalid date. Format: yyyy-MM-dd HH:mm:ss or yyyy-MM-dd" } : null;
+      const isValid = this.dateTimeService.isValidDateTime(control.value);
+      return isValid ? null : { invalidDate: "Invalid date. Format: yyyy-MM-dd HH:mm:ss or yyyy-MM-dd" };
     };
   }
   booleanValidator(): ValidatorFn {

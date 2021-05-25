@@ -1,14 +1,15 @@
+@use '~@angular/material' as mat;
 @import "../../../theme.scss";
 
 mat-card {
   margin: 1em;
 
   .action-header {
-    background-color: mat-color($primary, lighter);
+    background-color: mat.get-color-from-palette($primary, lighter);
   }
 
   .derived-header {
-    background-color: mat-color($accent, lighter);
+    background-color: mat.get-color-from-palette($accent, lighter);
   }
 
   .details {

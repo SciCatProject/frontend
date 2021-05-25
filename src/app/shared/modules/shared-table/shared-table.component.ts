@@ -13,8 +13,7 @@ import { fromEvent, merge, Subscription } from "rxjs";
 import { SciCatDataSource } from "../../services/scicat.datasource";
 import { debounceTime, distinctUntilChanged, tap } from "rxjs/operators";
 import { ExportExcelService } from "../../services/export-excel.service";
-
-import * as moment from "moment";
+import { DateTime } from "luxon";
 import { MatDatepickerInputEvent } from "@angular/material/datepicker/datepicker-input-base";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Column } from "./shared-table.module";
@@ -338,9 +337,9 @@ export class SharedTableComponent implements AfterViewChecked, AfterViewInit, Af
   }
 
   // both start and end trigger their own event on change
-  dateChanged(event: MatDatepickerInputEvent<Date>, columnId: string) {
+  dateChanged(event: MatDatepickerInputEvent<DateTime>, columnId: string) {
     if (event.value) {
-      this.filterExpressions[columnId] = moment(event.value).format("YYYY-MM-DD");
+      this.filterExpressions[columnId] = event.value.toISODate();
       this.router.navigate([], {
         queryParams: { [columnId]: this.filterExpressions[columnId] },
         queryParamsHandling: "merge"

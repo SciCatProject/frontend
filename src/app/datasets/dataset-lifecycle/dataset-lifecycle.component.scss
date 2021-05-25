@@ -1,14 +1,15 @@
+@use '~@angular/material' as mat;
 @import "../../../theme.scss";
 
 mat-card {
   margin: 1em;
 
   .lifecycle-header {
-    background-color: mat-color($primary, lighter);
+    background-color: mat.get-color-from-palette($primary, lighter);
   }
 
   .history-header {
-    background-color: mat-color($navy, 400);
+    background-color: mat.get-color-from-palette($navy, 400);
   }
 
   .section-icon {
@@ -43,11 +44,11 @@ mat-card {
     }
 
     tr.item-row:not(.expanded-row):hover {
-      background: mat-color($grey, 100);
+      background: mat.get-color-from-palette($grey, 100);
     }
 
     tr.item-row:not(.expanded-row):active {
-      background: mat-color($primary, default-accent);
+      background: mat.get-color-from-palette($primary, default-accent);
     }
 
     .item-row td {

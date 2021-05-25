@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 import { FormBuilder } from "@angular/forms";
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
+import { DateTime } from "luxon";
 import { FormatNumberPipe } from "shared/pipes/format-number.pipe";
 import { Type } from "../base-classes/metadata-input-base";
 import { FlatNodeEdit } from "../tree-edit/tree-edit.component";
@@ -112,7 +113,7 @@ describe("MetadataInputComponent", () => {
     it("should set values in form control (date)", () => {
       const data = new FlatNodeEdit();
       data.key = "date";
-      data.value = new Date("2020-01-02").toISOString();
+      data.value = DateTime.fromJSDate(new Date("2020-01-02")).toUTC().toISO();
       data.level = 0;
       data.expandable = false;
       component.data = data;
@@ -121,7 +122,7 @@ describe("MetadataInputComponent", () => {
       component.addCurrentMetadata(component.data);
       expect(component.metadataForm.get("type").value).toEqual(Type.date);
       expect(component.metadataForm.get("key").value).toEqual("date");
-      expect(component.metadataForm.get("value").value).toEqual(data.value);
+      expect(component.metadataForm.get("value").value).toEqual(DateTime.fromISO(data.value).toLocal().toISO());
       expect(component.metadataForm.get("unit").disabled).toEqual(true);
     });
   });

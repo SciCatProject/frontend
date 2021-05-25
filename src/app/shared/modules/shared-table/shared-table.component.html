@@ -55,7 +55,7 @@
           <mat-date-range-picker #rangePicker>
           </mat-date-range-picker>
         </ng-container>
-        <ng-container *ngIf="column.matchMode != 'between'">
+        <ng-container *ngIf="column.matchMode !== 'between'">
           <input #allFilters matInput autocomplete="off" name="{{ column.id }}" placeholder="{{ column.matchMode }}" />
         </ng-container>
       </mat-form-field>
