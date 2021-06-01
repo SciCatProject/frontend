@@ -44,7 +44,7 @@ export const environment = {
   metadataPreviewEnabled: true,
   fileDownloadEnabled: true,
   multipleDownloadEnabled: true,
-  maxDirectDownloadSize: 5000000000,
+  maxDirectDownloadSize: 10000000000,
   multipleDownloadAction: "/zip",
   scienceSearchEnabled: false,
   searchProposals: false,
@@ -61,5 +61,7 @@ export const environment = {
   jobsEnabled: false,
   policiesEnabled: false,
   loginFormEnabled: false,
-  oAuth2Endpoints: [{displayName: "Google", authURL: "/auth/google"}]
+  oAuth2Endpoints: [
+    {displayName: "Google", authURL: "auth/google"},
+    {displayName: "ORCID", authURL: "auth/orcid"}]
 };
