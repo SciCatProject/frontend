@@ -704,6 +704,9 @@
             },
             "qa": {
               "browserTarget": "catanie:build:qa"
+            },
+            "alsdev": {
+              "browserTarget": "catanie:build:als-dev"
             }
           }
         },
