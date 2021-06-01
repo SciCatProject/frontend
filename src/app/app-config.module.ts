@@ -5,6 +5,7 @@ import { TableColumn } from "state-management/models";
 export const APP_CONFIG = new InjectionToken<AppConfig>("app.config");
 
 export class AppConfig {
+  lbBaseURL: string;
   externalAuthEndpoint: string;
   fileserverBaseURL: string;
   synapseBaseUrl: string;
@@ -50,6 +51,7 @@ export class AppConfig {
 }
 
 export const APP_DI_CONFIG: AppConfig = {
+  lbBaseURL: environment["lbBaseURL"] || "http://localhost:3000",
   externalAuthEndpoint: environment["externalAuthEndpoint"] || null,
   fileserverBaseURL: environment["fileserverBaseURL"] || null,
   synapseBaseUrl: environment["synapseBaseUrl"] || null,
@@ -105,7 +107,7 @@ export const APP_DI_CONFIG: AppConfig = {
   userProfileImageEnabled: environment["userProfileImageEnabled"] || false,
   userNamePromptEnabled: environment["userNamePromptEnabled"] || false,
   landingPage: environment["landingPage"] || null,
-  editPublishedData: environment["editPublishedData"] || true,
+  editPublishedData: (environment["editPublishedData"] === undefined) ? true: environment["editPublishedData"]
 };
 
 @NgModule({

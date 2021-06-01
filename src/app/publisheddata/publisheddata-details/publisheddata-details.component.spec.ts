@@ -20,6 +20,13 @@ describe("PublisheddataDetailsComponent", () => {
   let component: PublisheddataDetailsComponent;
   let fixture: ComponentFixture<PublisheddataDetailsComponent>;
 
+  const appConfig =  {
+    editMetadataEnabled: true,
+    editPublishedData: true,
+    jsonMetadataEnabled: true
+  };
+
+
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [PublisheddataDetailsComponent],
@@ -41,9 +48,7 @@ describe("PublisheddataDetailsComponent", () => {
           { provide: PublishedDataApi, useClass: MockPublishedDataApi },
           {
             provide: APP_CONFIG,
-            useValue: {
-              editMetadataEnabled: true
-            }
+            useValue: appConfig
           }
         ]
       }
@@ -59,5 +64,22 @@ describe("PublisheddataDetailsComponent", () => {
 
   it("should create", () => {
     expect(component).toBeTruthy();
+  });
+
+  describe("appconfig settings", () => {
+    beforeEach(() => {
+      appConfig.editPublishedData = false;
+      appConfig.jsonMetadataEnabled = false;
+      fixture = TestBed.createComponent(PublisheddataDetailsComponent);
+      component = fixture.componentInstance;
+      fixture.detectChanges();
+      TestBed.compileComponents();
+    });
+    it("button should not appear if not loginFormEnabled", () => {
+      const compiled = fixture.debugElement.nativeElement;
+      expect(compiled.querySelector("#editBtn")).toBeNull();
+      expect(compiled.querySelector("#jsonMetadataContainer")).toBeNull();
+    });
+
   });
 });
