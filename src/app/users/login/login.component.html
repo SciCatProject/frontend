@@ -9,20 +9,21 @@
     </div>
     <mat-card-content>
       <div *ngFor="let endpoint of appConfig.oAuth2Endpoints">
-
         <button
+          class="oauth-login-button"
           mat-raised-button
-          class="login-button oauth-login-button"
           type="submit"
-          color="primary"
           [ngClass]="{ loading: loading$ | async }"
           (click) = "redirectOIDC(endpoint.authURL)"
-      >
-       Login with {{endpoint.displayName}}
-      </button>
-      <br/>
-      </div>
+        >
+          <img class="oauth-login-image" *ngIf="endpoint.displayImage" [src]="endpoint.displayImage">
+          Login with {{endpoint.displayText}}
 
+        </button> 
+        <br/>
+    
+
+      </div>
 
       <form [formGroup]="loginForm" (ngSubmit)="onLogin()" *ngIf="appConfig.loginFormEnabled">
         <mat-form-field hintLabel="{{appConfig.facility}} account username">

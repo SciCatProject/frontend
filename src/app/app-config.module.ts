@@ -5,7 +5,8 @@ import { TableColumn } from "state-management/models";
 export const APP_CONFIG = new InjectionToken<AppConfig>("app.config");
 
 export class OAuth2Endpoint {
-  displayName: string;
+  displayText: string;
+  displayImage?: string;
   authURL: string;
 }
 

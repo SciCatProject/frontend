@@ -62,6 +62,6 @@ export const environment = {
   policiesEnabled: false,
   loginFormEnabled: false,
   oAuth2Endpoints: [
-    {displayName: "Google", authURL: "auth/google"},
-    {displayName: "ORCID", authURL: "auth/orcid"}]
+    {displayText: "Google", displayImage: "../../../assets/images/btn_google_light_normal_ios.svg", authURL: "auth/google"},
+    {displayText: "ORCID", displayImage: "../../../assets/images/ORCIDiD_iconvector.svg", authURL: "auth/orcid"}]
 };
