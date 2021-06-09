@@ -26,16 +26,34 @@
         </mat-form-field>
       </div>
       <!-- Value Column -->
-      <div class="formColumn">
-        <mat-form-field class="inputField">
-          <input matInput autocomplete="off" autocorrect="off"
+      <div class="formColumn" *ngIf="getType() !== 'date'; else dateInput">
+          <mat-form-field class="inputField">
+            <input
+              matInput
+              autocomplete="off"
+              autocorrect="off"
+              autocapitalize="off"
+              spellcheck="false"
+              formControlName="value"
+              placeholder="Value"
+            />
+            <mat-error *ngIf="fieldHasError('value')">
+              {{getErrorMessage('value')}}
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <ng-template #dateInput>
+          <mat-form-field class="inputField">
+            <input matInput autocomplete="off" autocorrect="off"
             autocapitalize="off" spellcheck="false" formControlName="value"
-            placeholder="Value" step=1 [type]="setValueInputType()" />
-          <mat-error *ngIf="fieldHasError('value')">
-            {{getErrorMessage('value')}}
-          </mat-error>
-        </mat-form-field>
-      </div>
+            placeholder="Value" step=1 [ngxMatDatetimePicker]="picker"/>
+            <mat-datepicker-toggle matSuffix [for]="$any(picker)"></mat-datepicker-toggle>
+            <ngx-mat-datetime-picker #picker [showSeconds]="true"></ngx-mat-datetime-picker>
+            <mat-error *ngIf="fieldHasError('value')">
+              {{getErrorMessage('value')}}
+            </mat-error>
+          </mat-form-field>
+        </ng-template>
       <!-- Unit Column -->
       <div class="formColumn">
         <mat-form-field class="inputField">

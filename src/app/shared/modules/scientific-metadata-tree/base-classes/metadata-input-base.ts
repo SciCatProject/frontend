@@ -3,6 +3,7 @@ import { Observable } from "rxjs";
 import { UnitsService } from "shared/services/units.service";
 import { startWith, map } from "rxjs/operators";
 import { DateTimeService } from "shared/services/date-time.service";
+import { DateTime } from "luxon";
 export enum Type {
   quantity = "quantity",
   date = "date",
@@ -30,8 +31,13 @@ export class MetadataInputBase {
   }
   dateValidator(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
-      const isValid = this.dateTimeService.isValidDateTime(control.value);
-      return isValid ? null : { invalidDate: "Invalid date. Format: yyyy-MM-dd HH:mm:ss or yyyy-MM-dd" };
+      let isValid = false;
+      if (typeof control.value === 'string'){
+        isValid = DateTime.fromISO(control.value).isValid;
+      } else {
+        isValid = DateTime.fromJSDate(control.value).isValid;
+      }
+      return isValid ? null : { invalidDate: "Invalid date or format" };
     };
   }
   booleanValidator(): ValidatorFn {
@@ -43,12 +49,16 @@ export class MetadataInputBase {
   }
   numberValidator(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
-      const invalid = control.value === "" || isNaN(Number(control.value)) ;
+      const invalid = control.value === "" || isNaN(Number(control.value)) || control.value instanceof Date  ;
       return invalid? {invalidNumber: "Invalid number"} : null;
     };
   }
   detectType() {
     const type = this.metadataForm.get("type").value;
+    const value = this.metadataForm.get("value").value;
+    if(value instanceof Date){
+      this.metadataForm.get("value").setValue(value.toISOString());
+    }
     this.metadataForm.get("value").clearValidators();
     switch (type) {
       case Type.quantity:
@@ -90,14 +100,8 @@ export class MetadataInputBase {
     this.metadataForm.get("unit").updateValueAndValidity();
     this.metadataForm.get("value").updateValueAndValidity();
   }
-  setValueInputType() {
-    const type = this.metadataForm.get("type").value;
-    switch (type) {
-      case Type.date:
-        return "datetime-local";
-      default:
-        return "text";
-    }
+  getType() {
+    return this.metadataForm.get("type").value;
   }
   getUnits(fieldName: string): void {
     const name = this.metadataForm.get(fieldName).value;
@@ -118,7 +122,7 @@ export class MetadataInputBase {
   getErrorMessage(field: string) {
     switch (field) {
       case "value":
-        if (this.metadataForm.get(field).hasError("required")) {
+        if (this.metadataForm.get(field).hasError("required") && this.getType() !== 'date') {
           return "Value is required";
         }
         if (this.metadataForm.get(field).hasError("invalidDate")) {
