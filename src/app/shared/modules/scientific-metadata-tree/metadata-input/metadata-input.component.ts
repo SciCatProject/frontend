@@ -11,10 +11,6 @@ export interface InputData {
   value: any;
   unit?: string;
 }
-export interface MetadataInput {
-  valid: boolean;
-  data: InputData;
-}
 
 @Component({
   selector: "metadata-input",
@@ -25,7 +21,7 @@ export class MetadataInputComponent extends MetadataInputBase implements OnInit 
   changeDetection: Subscription;
   types: string[];
   @Input() data: FlatNodeEdit;
-  @Output() save = new EventEmitter<MetadataInput | null>();
+  @Output() save = new EventEmitter<InputData | null>();
   @Output() cancel = new EventEmitter();
   @Output() changed = new EventEmitter();
 
@@ -51,6 +47,10 @@ export class MetadataInputComponent extends MetadataInputBase implements OnInit 
       value: new FormControl("", [
         Validators.required,
         Validators.minLength(1),
+      ]),
+      date: new FormControl("", [
+        Validators.required,
+        this.dateValidator()
       ]),
       unit: new FormControl("", [
         Validators.required,
@@ -83,7 +83,7 @@ export class MetadataInputComponent extends MetadataInputBase implements OnInit 
       } else if (this.dateTimeService.isISODateTime(node.value)) {
         this.metadataForm.get("type").setValue(Type.date);
         this.metadataForm.get("key").setValue(node.key);
-        this.metadataForm.get("value").setValue(DateTime.fromISO(node.value).toLocal().toISO());
+        this.metadataForm.get("date").setValue(DateTime.fromISO(node.value).toLocal().toISO());
       } else {
         this.metadataForm.get("type").setValue(Type.string);
         this.metadataForm.get("key").setValue(node.key);
@@ -94,7 +94,14 @@ export class MetadataInputComponent extends MetadataInputBase implements OnInit 
   }
   onSave() {
     if (this.metadataForm.dirty) {
-      this.save.emit(this.metadataForm.value);
+      const {type, key, value, date, unit} = this.metadataForm.value;
+      const data: InputData = {
+        type,
+        key,
+        value: type === Type.date? new Date(date).toISOString(): value, // Date input could be string or Date
+        unit
+      }
+      this.save.emit(data);
     } else {
       this.cancel.emit();
     }

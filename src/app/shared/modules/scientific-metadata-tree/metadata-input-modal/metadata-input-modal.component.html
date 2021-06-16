@@ -67,13 +67,15 @@
       </div>
       <ng-template #dateInput>
         <mat-form-field class="inputField">
-          <input matInput autocomplete="off" autocorrect="off"
-          autocapitalize="off" spellcheck="false" formControlName="value"
-          placeholder="Value" step=1 [ngxMatDatetimePicker]="picker"/>
+          <input matInput
+            formControlName="date"
+            placeholder="Value"
+            [ngxMatDatetimePicker]="picker"
+          />
           <mat-datepicker-toggle matSuffix [for]="$any(picker)"></mat-datepicker-toggle>
           <ngx-mat-datetime-picker #picker [showSeconds]="true"></ngx-mat-datetime-picker>
-          <mat-error *ngIf="fieldHasError('value')">
-            {{getErrorMessage('value')}}
+          <mat-error *ngIf="fieldHasError('date')">
+            {{getErrorMessage('date')}}
           </mat-error>
         </mat-form-field>
       </ng-template>

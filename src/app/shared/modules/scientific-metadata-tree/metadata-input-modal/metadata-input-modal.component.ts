@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormControl, Validators } from "@angular/forms";
 import { MatDialogRef } from "@angular/material/dialog";
-import { MetadataInputBase } from "../base-classes/metadata-input-base";
+import { MetadataInputBase, Type } from "../base-classes/metadata-input-base";
 
 export interface InputObject{
   parent: string;
@@ -40,6 +40,10 @@ export class MetadataInputModalComponent extends MetadataInputBase implements On
         Validators.required,
         Validators.minLength(1),
       ]),
+      date: new FormControl("", [
+        Validators.required,
+        this.dateValidator()
+      ]),
       unit: new FormControl("", [
         Validators.required,
         this.unitValidator(),
@@ -49,7 +53,15 @@ export class MetadataInputModalComponent extends MetadataInputBase implements On
   }
 
   onSave(): void {
-    this.dialogRef.close(this.metadataForm.value);
+    const {parent, type, child, value, date, unit } = this.metadataForm.value
+    const data: InputObject = {
+      parent,
+      type,
+      child,
+      value: type === Type.date? new Date(date).toISOString(): value, // Date input could be string or Date
+      unit
+    }
+    this.dialogRef.close(data);
   }
 
   onClose(): void {
