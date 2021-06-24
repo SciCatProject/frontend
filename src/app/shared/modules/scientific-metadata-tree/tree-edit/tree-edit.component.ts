@@ -136,7 +136,7 @@ export class TreeEditComponent extends TreeBaseComponent implements OnInit, OnCh
     }, {});
   }
 
-  openSnackbar(message: string, action: string = "") {
+  openSnackbar(message: string, action = "") {
     this.snackBar.open(message, action, {
       duration: 3000
     });

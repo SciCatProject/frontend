@@ -1,6 +1,6 @@
 import {
   Component, Input, ChangeDetectionStrategy, AfterContentInit, QueryList,
-  EventEmitter, Output, ElementRef, OnDestroy, ViewChild, ViewChildren, ChangeDetectorRef, NgZone, OnInit, AfterViewInit, AfterViewChecked
+  EventEmitter, Output, ElementRef, OnDestroy, ViewChild, ViewChildren, ChangeDetectorRef, NgZone, AfterViewInit, AfterViewChecked
 } from "@angular/core";
 import { ViewportRuler } from "@angular/cdk/scrolling";
 import { FormControl } from "@angular/forms";
@@ -31,7 +31,7 @@ import { Column } from "./shared-table.module";
     ]),
   ],
 })
-export class SharedTableComponent implements AfterViewChecked, AfterViewInit, AfterContentInit, OnDestroy, OnInit {
+export class SharedTableComponent implements AfterViewChecked, AfterViewInit, AfterContentInit, OnDestroy {
   private rulerSubscription: Subscription;
   public MIN_COLUMN_WIDTH = 200;
 
@@ -76,13 +76,6 @@ export class SharedTableComponent implements AfterViewChecked, AfterViewInit, Af
     this.rulerSubscription = this.ruler.change(100).subscribe(data => {
       this.toggleColumns(this.dataTable["_elementRef"].nativeElement.clientWidth);
     });
-  }
-
-  /**
-   * Lifecycle Hook Start
-   */
-
-  ngOnInit() {
   }
 
   ngAfterViewChecked() {
