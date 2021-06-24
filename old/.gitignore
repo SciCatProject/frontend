@@ -1,17 +1,12 @@
+reports/
 # See http://help.github.com/ignore-files/ for more about ignoring files.
-
+*.sw*
 # compiled output
 /dist
 /tmp
-/out-tsc
-# Only exists if Bazel was run
-/bazel-out
 
 # dependencies
 /node_modules
-
-# profiling files
-chrome-profiler-events*.json
 
 # IDEs and editors
 /.idea
@@ -20,7 +15,6 @@ chrome-profiler-events*.json
 .c9/
 *.launch
 .settings/
-*.sublime-workspace
 
 # IDE - VSCode
 .vscode/*
@@ -28,25 +22,29 @@ chrome-profiler-events*.json
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
-.history/*
 
 # misc
 /.sass-cache
 /connect.lock
-/coverage
+/coverage/*
 /libpeerconnection.log
 npm-debug.log
-/reports
-yarn-error.log
 testem.log
 /typings
-*.sw*
 
-# System Files
+# e2e
+/e2e/*.js
+/e2e/*.map
+
+#System Files
 .DS_Store
 Thumbs.db
 
-# Cypress
-/cypress/screenshots/*
-/cypress/videos/*
+test-results.xml
+
+e2e/Datasets_01.csv
+.angulardoc.json
+
+cypress/screenshots/*
+cypress/videos/*
 *.mp4

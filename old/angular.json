@@ -4,22 +4,9 @@
   "newProjectRoot": "projects",
   "projects": {
     "catanie": {
-      "projectType": "application",
-      "schematics": {
-        "@schematics/angular:component": {
-          "prefix": "app",
-          "style": "scss"
-        },
-        "@schematics/angular:directive": {
-          "prefix": "app"
-        },
-        "@schematics/angular:application": {
-          "strict": true
-        }
-      },
       "root": "",
       "sourceRoot": "src",
-      "prefix": "app",
+      "projectType": "application",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
@@ -27,37 +14,70 @@
             "allowedCommonJsDependencies": [
               "deep-equal",
               "file-saver",
+              "shortid",
               "socket.io-client"
             ],
             "outputPath": "dist",
             "index": "src/index.html",
             "main": "src/main.ts",
+            "tsConfig": "src/tsconfig.app.json",
             "polyfills": "src/polyfills.ts",
-            "tsConfig": "tsconfig.app.json",
-            "inlineStyleLanguage": "scss",
             "assets": [
               "src/assets/",
               "src/favicon.ico",
               "src/robots.txt",
               "src/manifest.json"
             ],
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "src"
+              ]
+            },
             "styles": [
-              "src/styles.scss"
+              "src/styles.css",
+              "src/theme.scss"
             ],
-            "scripts": []
+            "scripts": [],
+            "vendorChunk": true,
+            "extractLicenses": false,
+            "buildOptimizer": false,
+            "sourceMap": true,
+            "optimization": false,
+            "namedChunks": true
           },
           "configurations": {
             "dmscdev": {
               "budgets": [
                 {
-                  "type": "initial",
-                  "maximumWarning": "500kb",
-                  "maximumError": "1mb"
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "150kb"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "assets": [
+                "src/assets/",
+                "src/robots.txt",
+                "src/manifest.json",
+                {
+                  "glob": "site.png",
+                  "input": "CI/ESS/",
+                  "output": "/assets/images/"
                 },
                 {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "2kb",
-                  "maximumError": "4kb"
+                  "glob": "site-logo.png",
+                  "input": "CI/ESS/",
+                  "output": "/assets/images/"
+                },
+                {
+                  "glob": "favicon.ico",
+                  "input": "CI/ESS/",
+                  "output": "/"
                 }
               ],
               "fileReplacements": [
@@ -66,6 +86,31 @@
                   "with": "src/environments/environment.dmscdev.ts"
                 }
               ],
+              "stylePreprocessorOptions": {
+                "includePaths": [
+                  "CI/ESS"
+                ]
+              },
+              "styles": [
+                "src/styles.css",
+                "CI/ESS/theme.scss"
+              ],
+              "serviceWorker": true
+            },
+            "dmsc-ldpc": {
+              "budgets": [
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "150kb"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
               "assets": [
                 "src/assets/",
                 "src/robots.txt",
@@ -84,22 +129,6 @@
                   "glob": "favicon.ico",
                   "input": "CI/ESS/",
                   "output": "/"
-                }
-              ],
-              "outputHashing": "all",
-              "serviceWorker": true
-            },
-            "dmsc-ldpc": {
-              "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "500kb",
-                  "maximumError": "1mb"
-                },
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "2kb",
-                  "maximumError": "4kb"
                 }
               ],
               "fileReplacements": [
@@ -108,6 +137,31 @@
                   "with": "src/environments/environment.dmsc.ldpc.ts"
                 }
               ],
+              "stylePreprocessorOptions": {
+                "includePaths": [
+                  "CI/ESS"
+                ]
+              },
+              "styles": [
+                "src/styles.css",
+                "CI/ESS/theme.scss"
+              ],
+              "serviceWorker": true
+            },
+            "e2e": {
+              "budgets": [
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "150kb"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
               "assets": [
                 "src/assets/",
                 "src/robots.txt",
@@ -126,22 +180,6 @@
                   "glob": "favicon.ico",
                   "input": "CI/ESS/",
                   "output": "/"
-                }
-              ],
-              "outputHashing": "all",
-              "serviceWorker": true
-            },
-            "e2e": {
-              "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "500kb",
-                  "maximumError": "1mb"
-                },
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "2kb",
-                  "maximumError": "4kb"
                 }
               ],
               "fileReplacements": [
@@ -150,52 +188,31 @@
                   "with": "src/environments/environment.e2e.ts"
                 }
               ],
-              "assets": [
-                "src/assets/",
-                "src/robots.txt",
-                "src/manifest.json",
-                {
-                  "glob": "site.png",
-                  "input": "CI/ESS/",
-                  "output": "/assets/images/"
-                },
-                {
-                  "glob": "site-logo.png",
-                  "input": "CI/ESS/",
-                  "output": "/assets/images/"
-                },
-                {
-                  "glob": "favicon.ico",
-                  "input": "CI/ESS/",
-                  "output": "/"
-                }
+              "stylePreprocessorOptions": {
+                "includePaths": [
+                  "CI/ESS"
+                ]
+              },
+              "styles": [
+                "src/styles.css",
+                "CI/ESS/theme.scss"
               ],
-              "outputHashing": "all",
               "serviceWorker": true
             },
             "rfi-prod": {
               "budgets": [
                 {
-                  "type": "initial",
-                  "maximumWarning": "500kb",
-                  "maximumError": "1mb"
-                },
-                {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "2kb",
-                  "maximumError": "4kb"
+                  "maximumWarning": "150kb"
                 }
               ],
-              "fileReplacements": [
-                {
-                  "replace": "src/app/build-specifics/index.ts",
-                  "with": "src/app/build-specifics/index.prod.ts"
-                },
-                {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.rfi.prod.ts"
-                }
-              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
               "assets": [
                 "src/assets/",
                 "src/robots.txt",
@@ -216,19 +233,58 @@
                   "output": "/"
                 }
               ],
-              "outputHashing": "all"
+              "fileReplacements": [
+                {
+                  "replace": "src/app/build-specifics/index.ts",
+                  "with": "src/app/build-specifics/index.prod.ts"
+                },
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.rfi.prod.ts"
+                }
+              ],
+              "stylePreprocessorOptions": {
+                "includePaths": [
+                  "CI/RFI"
+                ]
+              },
+              "styles": [
+                "src/styles.css",
+                "CI/RFI/theme.scss"
+              ]
             },
             "rfi-dev": {
               "budgets": [
                 {
-                  "type": "initial",
-                  "maximumWarning": "500kb",
-                  "maximumError": "1mb"
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "150kb"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "assets": [
+                "src/assets/",
+                "src/robots.txt",
+                "src/manifest.json",
+                {
+                  "glob": "site.png",
+                  "input": "CI/RFI/",
+                  "output": "/assets/images/"
                 },
                 {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "2kb",
-                  "maximumError": "4kb"
+                  "glob": "site-logo.png",
+                  "input": "CI/RFI/",
+                  "output": "/assets/images/"
+                },
+                {
+                  "glob": "favicon.ico",
+                  "input": "CI/RFI/",
+                  "output": "/"
                 }
               ],
               "fileReplacements": [
@@ -241,39 +297,48 @@
                   "with": "src/environments/environment.rfi.dev.ts"
                 }
               ],
+              "stylePreprocessorOptions": {
+                "includePaths": [
+                  "CI/RFI"
+                ]
+              },
+              "styles": [
+                "src/styles.css",
+                "CI/RFI/theme.scss"
+              ]
+            },
+            "maxiv-prod": {
+              "budgets": [
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "150kb"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
               "assets": [
                 "src/assets/",
                 "src/robots.txt",
                 "src/manifest.json",
                 {
                   "glob": "site.png",
-                  "input": "CI/RFI/",
+                  "input": "CI/MAXIV/",
                   "output": "/assets/images/"
                 },
                 {
                   "glob": "site-logo.png",
-                  "input": "CI/RFI/",
+                  "input": "CI/MAXIV/",
                   "output": "/assets/images/"
                 },
                 {
                   "glob": "favicon.ico",
-                  "input": "CI/RFI/",
+                  "input": "CI/MAXIV/",
                   "output": "/"
-                }
-              ],
-              "outputHashing": "all"
-            },
-            "maxiv-prod": {
-              "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "500kb",
-                  "maximumError": "1mb"
-                },
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "2kb",
-                  "maximumError": "4kb"
                 }
               ],
               "fileReplacements": [
@@ -285,7 +350,22 @@
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.maxiv.prod.ts"
                 }
+              ]
+            },
+            "maxiv-dev": {
+              "budgets": [
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "150kb"
+                }
               ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
               "assets": [
                 "src/assets/",
                 "src/robots.txt",
@@ -304,21 +384,6 @@
                   "glob": "favicon.ico",
                   "input": "CI/MAXIV/",
                   "output": "/"
-                }
-              ],
-              "outputHashing": "all"
-            },
-            "maxiv-dev": {
-              "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "500kb",
-                  "maximumError": "1mb"
-                },
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "2kb",
-                  "maximumError": "4kb"
                 }
               ],
               "fileReplacements": [
@@ -330,6 +395,14 @@
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.maxiv.dev.ts"
                 }
+              ]
+            },
+            "development": {
+              "budgets": [
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "150kb"
+                }
               ],
               "assets": [
                 "src/assets/",
@@ -337,33 +410,55 @@
                 "src/manifest.json",
                 {
                   "glob": "site.png",
-                  "input": "CI/MAXIV/",
+                  "input": "CI/PSI/",
                   "output": "/assets/images/"
                 },
                 {
                   "glob": "site-logo.png",
-                  "input": "CI/MAXIV/",
+                  "input": "CI/PSI/",
                   "output": "/assets/images/"
-                },
-                {
-                  "glob": "favicon.ico",
-                  "input": "CI/MAXIV/",
-                  "output": "/"
                 }
               ],
-              "outputHashing": "all"
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.development.ts"
+                }
+              ],
+              "serviceWorker": true
             },
             "als-dev": {
               "budgets": [
                 {
-                  "type": "initial",
-                  "maximumWarning": "500kb",
-                  "maximumError": "1mb"
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "150kb"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "assets": [
+                "src/assets/",
+                "src/robots.txt",
+                "src/manifest.json",
+                {
+                  "glob": "site.png",
+                  "input": "CI/ALS/",
+                  "output": "/assets/images/"
                 },
                 {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "2kb",
-                  "maximumError": "4kb"
+                  "glob": "site-logo.png",
+                  "input": "CI/ALS/",
+                  "output": "/assets/images/"
+                },
+                {
+                  "glob": "favicon.ico",
+                  "input": "CI/ALS/",
+                  "output": "/"
                 }
               ],
               "fileReplacements": [
@@ -371,7 +466,22 @@
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.als.dev.ts"
                 }
+              ]
+            },
+            "als-prod": {
+              "budgets": [
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "150kb"
+                }
               ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
               "assets": [
                 "src/assets/",
                 "src/robots.txt",
@@ -390,21 +500,6 @@
                   "glob": "favicon.ico",
                   "input": "CI/ALS/",
                   "output": "/"
-                }
-              ],
-              "outputHashing": "all"
-            },
-            "als-prod": {
-              "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "500kb",
-                  "maximumError": "1mb"
-                },
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "2kb",
-                  "maximumError": "4kb"
                 }
               ],
               "fileReplacements": [
@@ -416,7 +511,22 @@
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.als.prod.ts"
                 }
+              ]
+            },
+            "als-staging": {
+              "budgets": [
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "150kb"
+                }
               ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
               "assets": [
                 "src/assets/",
                 "src/robots.txt",
@@ -435,21 +545,6 @@
                   "glob": "favicon.ico",
                   "input": "CI/ALS/",
                   "output": "/"
-                }
-              ],
-              "outputHashing": "all"
-            },
-            "als-staging": {
-              "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "500kb",
-                  "maximumError": "1mb"
-                },
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "2kb",
-                  "maximumError": "4kb"
                 }
               ],
               "fileReplacements": [
@@ -457,112 +552,35 @@
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.als.staging.ts"
                 }
-              ],
-              "assets": [
-                "src/assets/",
-                "src/robots.txt",
-                "src/manifest.json",
-                {
-                  "glob": "site.png",
-                  "input": "CI/ALS/",
-                  "output": "/assets/images/"
-                },
-                {
-                  "glob": "site-logo.png",
-                  "input": "CI/ALS/",
-                  "output": "/assets/images/"
-                },
-                {
-                  "glob": "favicon.ico",
-                  "input": "CI/ALS/",
-                  "output": "/"
-                }
-              ],
-              "outputHashing": "all"
-            },
-            "staging": {
-              "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "500kb",
-                  "maximumError": "1mb"
-                },
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "2kb",
-                  "maximumError": "4kb"
-                }
-              ],
-              "fileReplacements": [
-                {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.staging.ts"
-                }
-              ],
-              "assets": [
-                "src/assets/",
-                "src/robots.txt",
-                "src/manifest.json",
-                {
-                  "glob": "site.png",
-                  "input": "CI/PSI/",
-                  "output": "/assets/images/"
-                },
-                {
-                  "glob": "site-logo.png",
-                  "input": "CI/PSI/",
-                  "output": "/assets/images/"
-                }
-              ],
-              "outputHashing": "all"
-            },
-            "qa": {
-              "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "500kb",
-                  "maximumError": "1mb"
-                },
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "2kb",
-                  "maximumError": "4kb"
-                }
-              ],
-              "fileReplacements": [
-                {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.qa.ts"
-                }
-              ],
-              "assets": [
-                "src/assets/",
-                "src/robots.txt",
-                "src/manifest.json",
-                {
-                  "glob": "site.png",
-                  "input": "CI/PSI/",
-                  "output": "/assets/images/"
-                },
-                {
-                  "glob": "site-logo.png",
-                  "input": "CI/PSI/",
-                  "output": "/assets/images/"
-                }
-              ],
-              "outputHashing": "all"
+              ]
             },
             "production": {
               "budgets": [
                 {
-                  "type": "initial",
-                  "maximumWarning": "500kb",
-                  "maximumError": "1mb"
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "150kb"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "assets": [
+                "src/assets/",
+                "src/robots.txt",
+                "src/manifest.json",
+                {
+                  "glob": "site.png",
+                  "input": "CI/PSI/",
+                  "output": "/assets/images/"
                 },
                 {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "2kb",
-                  "maximumError": "4kb"
+                  "glob": "site-logo.png",
+                  "input": "CI/PSI/",
+                  "output": "/assets/images/"
                 }
               ],
               "fileReplacements": [
@@ -574,7 +592,22 @@
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.prod.ts"
                 }
+              ]
+            },
+            "staging": {
+              "budgets": [
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "150kb"
+                }
               ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
               "assets": [
                 "src/assets/",
                 "src/robots.txt",
@@ -588,29 +621,29 @@
                   "glob": "site-logo.png",
                   "input": "CI/PSI/",
                   "output": "/assets/images/"
-                }
-              ],
-              "outputHashing": "all"
-            },
-            "development": {
-              "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "500kb",
-                  "maximumError": "1mb"
-                },
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "2kb",
-                  "maximumError": "4kb"
                 }
               ],
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.development.ts"
+                  "with": "src/environments/environment.staging.ts"
+                }
+              ]
+            },
+            "qa": {
+              "budgets": [
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "150kb"
                 }
               ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
               "assets": [
                 "src/assets/",
                 "src/robots.txt",
@@ -626,13 +659,22 @@
                   "output": "/assets/images/"
                 }
               ],
-              "serviceWorker": true
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.qa.ts"
+                }
+              ]
             }
-          },
-          "defaultConfiguration": "production"
+          }
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "catanie:build",
+            "port": 4200,
+            "host": "0.0.0.0"
+          },
           "configurations": {
             "dmscdev": {
               "browserTarget": "catanie:build:dmscdev"
@@ -643,20 +685,19 @@
             "maxiv-prod": {
               "browserTarget": "catanie:build:maxiv-prod"
             },
+            "development": {
+              "browserTarget": "catanie:build:development"
+            },
+            "production": {
+              "browserTarget": "catanie:build:production"
+            },
             "staging": {
               "browserTarget": "catanie:build:staging"
             },
             "qa": {
               "browserTarget": "catanie:build:qa"
-            },
-            "production": {
-              "browserTarget": "catanie:build:production"
-            },
-            "development": {
-              "browserTarget": "catanie:build:development"
             }
-          },
-          "defaultConfiguration": "development"
+          }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
@@ -668,10 +709,19 @@
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
             "main": "src/test.ts",
+            "karmaConfig": "./karma.conf.js",
             "polyfills": "src/polyfills.ts",
-            "tsConfig": "tsconfig.spec.json",
-            "karmaConfig": "karma.conf.js",
-            "inlineStyleLanguage": "scss",
+            "tsConfig": "src/tsconfig.spec.json",
+            "scripts": [],
+            "styles": [
+              "src/styles.css",
+              "src/theme.scss"
+            ],
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "src"
+              ]
+            },
             "assets": [
               "src/assets",
               "src/favicon.ico",
@@ -696,11 +746,7 @@
               "src/environments/**",
               "src/polyfills.ts",
               "src/test.ts"
-            ],
-            "styles": [
-              "src/styles.scss"
-            ],
-            "scripts": []
+            ]
           }
         },
         "lint": {
@@ -713,10 +759,42 @@
           }
         }
       }
+    },
+    "catanie-e2e": {
+      "root": "e2e/",
+      "projectType": "application",
+      "architect": {
+        "e2e": {
+          "builder": "@angular-devkit/build-angular:protractor",
+          "options": {
+            "protractorConfig": "e2e/protractor.conf.js",
+            "devServerTarget": "catanie:serve"
+          },
+          "configurations": {}
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "e2e/**/*.ts",
+              "e2e/**/*.html"
+            ]
+          }
+        }
+      }
     }
   },
   "defaultProject": "catanie",
+  "schematics": {
+    "@schematics/angular:component": {
+      "prefix": "app",
+      "style": "scss"
+    },
+    "@schematics/angular:directive": {
+      "prefix": "app"
+    }
+  },
   "cli": {
-    "defaultCollection": "@angular-eslint/schematics"
+    "defaultCollection": "@ngrx/schematics"
   }
 }

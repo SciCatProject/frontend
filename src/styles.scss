@@ -1,11 +1,20 @@
+
+// Custom Theming for Angular Material
+// For more information: https://material.angular.io/guide/theming
 @use '~@angular/material' as mat;
-@import "../node_modules/@angular/material/_theming";
+// Plus imports for other components in your app.
 
 $custom-typography: mat.define-typography-config(
   $font-family: '"Titillium Web", Calibri, sans-serif;'
 );
-
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// Be sure that you only ever include this mixin once!
 @include mat.core($custom-typography);
+
+// Define the palettes for your theme using the Material Design palettes available in palette.scss
+// (imported above). For each palette, you can optionally specify a default, lighter, and darker
+// hue. Available color palettes: https://material.io/design/color/
 
 $cyan: (
   50: #f2f9fc,
@@ -30,8 +39,8 @@ $cyan: (
     700: #ffffff,
     800: #ffffff,
     900: #ffffff,
-    1000: #ffffff
-  )
+    1000: #ffffff,
+  ),
 );
 
 $navy: (
@@ -49,8 +58,8 @@ $navy: (
     400: #000000,
     600: #ffffff,
     800: #ffffff,
-    1000: #ffffff
-  )
+    1000: #ffffff,
+  ),
 );
 
 $grass: (
@@ -68,8 +77,8 @@ $grass: (
     400: #000000,
     600: #ffffff,
     800: #ffffff,
-    1000: #ffffff
-  )
+    1000: #ffffff,
+  ),
 );
 
 $forest: (
@@ -87,8 +96,8 @@ $forest: (
     400: #000000,
     600: #ffffff,
     800: #ffffff,
-    1000: #ffffff
-  )
+    1000: #ffffff,
+  ),
 );
 
 $orange: (
@@ -106,8 +115,8 @@ $orange: (
     400: #000000,
     600: #ffffff,
     800: #ffffff,
-    1000: #ffffff
-  )
+    1000: #ffffff,
+  ),
 );
 
 $purple: (
@@ -125,8 +134,8 @@ $purple: (
     400: #000000,
     600: #ffffff,
     800: #ffffff,
-    1000: #ffffff
-  )
+    1000: #ffffff,
+  ),
 );
 
 $grey: (
@@ -142,8 +151,8 @@ $grey: (
     200: #000000,
     300: #000000,
     400: #000000,
-    500: #000000
-  )
+    500: #000000,
+  ),
 );
 
 $yellow: (
@@ -153,8 +162,8 @@ $yellow: (
   contrast: (
     50: #000000,
     100: #ffffff,
-    200: #ffffff
-  )
+    200: #ffffff,
+  ),
 );
 
 $red: (
@@ -164,24 +173,81 @@ $red: (
   contrast: (
     50: #000000,
     100: #ffffff,
-    200: #ffffff
-  )
+    200: #ffffff,
+  ),
 );
 
 $primary: mat.define-palette($cyan, 1000, 400, 800);
 $accent: mat.define-palette($grass, 1000, 400, 800);
 $warn: mat.define-palette($red, 100, 50, 200);
+$warn-2: mat.define-palette($yellow, 100, 50, 200);
+$header-1: mat.define-palette($navy, 1000, 400, 800);
+$header-2: mat.define-palette($forest, 1000, 400, 800);
+$header-3: mat.define-palette($orange, 1000, 400, 800);
+$header-4: mat.define-palette($purple, 1000, 400, 800);
+$hover: mat.define-palette($grey, 500, 200, 400);
 
-$theme: mat.define-light-theme($primary, $accent, $warn);
+@function custom-light-theme(
+  $primary,
+  $accent,
+  $warn,
+  $warn-2,
+  $header-1,
+  $header-2,
+  $header-3,
+  $header-4,
+  $hover
+) {
+  @return map-merge(
+    mat.define-light-theme($primary, $accent, $warn),
+    (
+      warn-2: $warn-2,
+      header-1: $header-1,
+      header-2: $header-2,
+      header-3: $header-4,
+      header-4: $header-4,
+      hover: $hover,
+    )
+  );
+}
 
+// Create the theme object. A theme consists of configurations for individual
+// theming systems such as "color" or "typography".
+$theme: custom-light-theme(
+  $primary,
+  $accent,
+  $warn,
+  $warn-2,
+  $header-1,
+  $header-2,
+  $header-3,
+  $header-4,
+  $hover
+);
+
+// Include theme styles for core and each component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component
+// that you are using.
 @include mat.all-component-themes($theme);
 
-.dark-theme {
-  $primary: mat.define-palette($cyan, 1000, 400, 800);
-  $accent: mat.define-palette($grass, 1000, 400, 800);
-  $warn: mat.define-palette($red, 100, 50, 200);
+/* You can add global styles to this file, and also import other style files */
 
-  $theme: mat.define-dark-theme($primary, $accent, $warn);
+html,
+body {
+  height: 100vh;
+  margin: 0;
+  border: 0;
+  padding: 0;
+}
 
-  @include mat.all-component-themes($theme);
+a {
+  text-decoration: none;
+}
+
+a:hover {
+  cursor: pointer;
+}
+
+.no-hover-effect.mat-button .mat-button-focus-overlay {
+  background-color: transparent;
 }
