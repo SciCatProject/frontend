@@ -25,7 +25,6 @@
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "allowedCommonJsDependencies": [
-              "deep-equal",
               "file-saver",
               "socket.io-client"
             ],
