@@ -4,6 +4,8 @@
   "compilerOptions": {
     "baseUrl": "./src/app",
     "outDir": "./dist/out-tsc",
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "noImplicitReturns": true,
