@@ -14,7 +14,7 @@ COPY . /catanie/
 COPY CI/MAXIV/maxiv-site.png /catanie/src/assets/images/site.png
 COPY CI/MAXIV/maxiv-logo.png /catanie/src/assets/images/site-logo.png
 COPY CI/MAXIV/scicat-logo.png /catanie/src/assets/images/scicat-logo-white.png
-COPY CI/MAXIV/maxiv-theme.scss src/theme.scss
+COPY CI/MAXIV/maxiv-theme.scss src/styles.scss
 RUN npx ng build --configuration=${env}
 
 FROM nginx:alpine
