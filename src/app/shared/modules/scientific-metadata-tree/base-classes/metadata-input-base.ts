@@ -52,7 +52,6 @@ export class MetadataInputBase {
     const type = this.metadataForm.get("type").value;
     this.metadataForm.get("value").clearValidators();
     this.metadataForm.get("date").disable();
-    console.log(type)
     switch (type) {
       case Type.quantity:
         this.metadataForm.get("unit").enable();
@@ -64,7 +63,6 @@ export class MetadataInputBase {
       case Type.date:
         this.metadataForm.get("unit").disable();
         this.metadataForm.get("date").enable();
-        console.log(typeof this.metadataForm.get("date").value, this.metadataForm.get("date").value)
         this.metadataForm.get("date").setValidators([
           Validators.required,
           this.dateValidator(),

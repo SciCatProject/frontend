@@ -55,8 +55,8 @@ describe("MetadataInputBase", () => {
     it("#getErrorMessage() && # dateValidator() invalid date", () => {
       component.metadataForm.get("type").setValue(Type.date);
       component.detectType();
-      const result = component.getErrorMessage("value");
-      expect(result).toEqual("Invalid date. Format: yyyy-MM-dd HH:mm:ss or yyyy-MM-dd");
+      const result = component.getErrorMessage("date");
+      expect(result).toEqual("Invalid date or format");
     });
     it("#getErrorMessage() && # dateValidator() should not return any error", () => {
       component.metadataForm.get("type").setValue(Type.date);
