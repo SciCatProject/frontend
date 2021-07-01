@@ -148,7 +148,7 @@
       </mat-card-header>
 
       <table>
-        <tr *ngIf="publishedData.relatedPublications?.length > 0">
+        <tr *ngIf="publishedData && publishedData.relatedPublications?.length > 0">
           <th>Related Publications</th>
           <td>{{ publishedData.relatedPublications }}</td>
         </tr>

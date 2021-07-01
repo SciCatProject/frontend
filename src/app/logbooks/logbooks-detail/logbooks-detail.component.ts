@@ -11,10 +11,10 @@ import {
   styleUrls: ["./logbooks-detail.component.scss"]
 })
 export class LogbooksDetailComponent {
-  @Input() logbook: Logbook;
-  @Input() entriesCount: number;
-  @Input() entriesPerPage: number;
-  @Input() currentPage: number;
+  @Input() logbook: Logbook = new Logbook();
+  @Input() entriesCount: number | null = 0;
+  @Input() entriesPerPage: number | null = 0;
+  @Input() currentPage: number | null = 0;
 
   @Output() pageChange = new EventEmitter<PageChangeEvent>();
   @Output() sortChange = new EventEmitter<SortChangeEvent>();

@@ -1,8 +1,15 @@
 import { Injectable } from "@angular/core";
-import * as fs from "file-saver";
-// import * as logo from "./scicatLogo";
+import fs from "file-saver";
 import { Workbook } from "exceljs";
 import { Router } from "@angular/router";
+
+export interface ExcelData {
+  title: string;
+  headers: unknown;
+  footerText: string;
+  sheetTitle: string;
+  data: unknown[];
+}
 
 @Injectable({
   providedIn: "root",
@@ -10,7 +17,7 @@ import { Router } from "@angular/router";
 export class ExportExcelService {
   constructor(private router: Router) { }
 
-  exportExcel(excelData) {
+  exportExcel(excelData: ExcelData) {
     // Title, Header & Data
     const title = excelData.title;
     const parsedUrl = new URL(window.location.href);

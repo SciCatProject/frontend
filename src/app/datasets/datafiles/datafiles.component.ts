@@ -50,7 +50,7 @@ export class DatafilesComponent
   dataset$ = this.store.pipe(select(getCurrentDataset));
   loading$ = this.store.pipe(select(getIsLoading));
 
-  tooLargeFile: boolean;
+  tooLargeFile = false;
   totalFileSize = 0;
   selectedFileSize = 0;
 
@@ -60,7 +60,7 @@ export class DatafilesComponent
   subscriptions: Subscription[] = [];
 
   files: Array<any> = [];
-  sourcefolder: string;
+  sourcefolder = "";
 
   count = 0;
   pageSize = 25;
@@ -68,9 +68,10 @@ export class DatafilesComponent
 
   fileDownloadEnabled: boolean = this.appConfig.fileDownloadEnabled;
   multipleDownloadEnabled: boolean = this.appConfig.multipleDownloadEnabled;
-  multipleDownloadAction: string = this.appConfig.multipleDownloadAction;
-  maxFileSize: number = this.appConfig.maxDirectDownloadSize;
-  sftpHost: string = this.appConfig.sftpHost;
+  multipleDownloadAction: string | undefined = this.appConfig
+    .multipleDownloadAction;
+  maxFileSize: number | null = this.appConfig.maxDirectDownloadSize;
+  sftpHost: string | null = this.appConfig.sftpHost;
   jwt: any;
 
   tableColumns: TableColumn[] = [
@@ -96,7 +97,7 @@ export class DatafilesComponent
       dateFormat: "yyyy-MM-dd HH:mm",
     },
   ];
-  tableData: File[];
+  tableData: File[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -172,7 +173,8 @@ export class DatafilesComponent
 
   hasTooLargeFiles(files: any[]) {
     if (this.maxFileSize) {
-      const largeFiles = files.filter((file) => file.size > this.maxFileSize);
+      const maxFileSize = this.maxFileSize;
+      const largeFiles = files.filter((file) => file.size > maxFileSize);
       if (largeFiles.length > 0) {
         return true;
       } else {
@@ -200,7 +202,9 @@ export class DatafilesComponent
 
     this.subscriptions.push(
       this.dataset$.subscribe((dataset) => {
-        this.sourcefolder = dataset.sourceFolder;
+        if (dataset) {
+          this.sourcefolder = dataset.sourceFolder;
+        }
       })
     );
 

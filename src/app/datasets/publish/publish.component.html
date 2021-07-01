@@ -1,7 +1,7 @@
 <div fxLayout="row">
   <div fxFlex="140">
     <mat-card>
-      <p>You are about to publish {{ datasetCount }} datasets.</p>
+      <p>You are about to publish {{ datasetCount$ | async }} datasets.</p>
 
       <form>
         <mat-form-field>
@@ -19,7 +19,7 @@
         <mat-form-field>
           <mat-chip-list required #chipListCreators>
             <mat-chip
-              *ngFor="let name of form.creators"
+              *ngFor="let name of form.creator"
               (removed)="removeCreator(name)"
             >
               {{ name }}
@@ -70,7 +70,7 @@
             matInput
             placeholder="Description"
             autocomplete="off"
-            [(ngModel)]="form.description"
+            [(ngModel)]="form.dataDescription"
             name="Description"
             rows="5"
           ></textarea>

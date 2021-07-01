@@ -59,11 +59,11 @@ export class DatasetTableComponent implements OnInit, OnDestroy, OnChanges {
   datasetsPerPage$ = this.store.pipe(select(getDatasetsPerPage));
   datasetCount$ = this.store.select(getTotalSets);
 
-  @Input() tableColumns: TableColumn[];
-  displayedColumns: string[];
-  @Input() selectedSets: Dataset[] = [];
+  @Input() tableColumns: TableColumn[] | null = null;
+  displayedColumns: string[] = [];
+  @Input() selectedSets: Dataset[] | null = null;
 
-  datasets: Dataset[];
+  datasets: Dataset[] = [];
   // datasetDerivationsMaps: DatasetDerivationsMap[] = [];
   // derivationMapPids: string[] = [];
 
@@ -142,7 +142,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   isSelected(dataset: Dataset): boolean {
-    return this.selectedSets.map(set => set.pid).indexOf(dataset.pid) !== -1;
+    return this.selectedSets?.map(set => set.pid).indexOf(dataset.pid) !== -1;
   }
 
   isAllSelected(): boolean {
@@ -242,8 +242,8 @@ export class DatasetTableComponent implements OnInit, OnDestroy, OnChanges {
       if (propName === "tableColumns") {
         this.tableColumns = changes[propName].currentValue;
         this.displayedColumns = changes[propName].currentValue
-          .filter(column => column.enabled)
-          .map(column => column.type + "_" + column.name);
+          .filter((column: TableColumn) => column.enabled)
+          .map((column: TableColumn) => column.type + "_" + column.name);
       }
     }
   }

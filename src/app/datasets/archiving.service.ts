@@ -23,7 +23,7 @@ export class ArchivingService {
     user: User,
     datasets: Dataset[],
     archive: boolean,
-    destinationPath: string
+    destinationPath?: string
     // Do not specify tape copies here
   ): Job {
     const extra = archive ? {} : { destinationPath };
@@ -59,20 +59,22 @@ export class ArchivingService {
     return combineLatest([this.currentUser$, this.tapeCopies$]).pipe(
       first(),
       map(([user, tapeCopies]) => {
-        const email = user.email;
-        if (email == null || email.length === 0) {
-          throw new Error(
-            "No email for this user could be found, the job will not be submitted"
-          );
+        if (user) {
+          const email = user.email;
+          if (email == null || email.length === 0) {
+            throw new Error(
+              "No email for this user could be found, the job will not be submitted"
+            );
+          }
+  
+          if (datasets.length === 0) {
+            throw new Error("No datasets selected");
+          }
+  
+          const job = this.createJob(user, datasets, archive, destPath);
+  
+          this.store.dispatch(submitJobAction({ job }));
         }
-
-        if (datasets.length === 0) {
-          throw new Error("No datasets selected");
-        }
-
-        const job = this.createJob(user, datasets, archive, destPath);
-
-        this.store.dispatch(submitJobAction({ job }));
       })
     );
   }

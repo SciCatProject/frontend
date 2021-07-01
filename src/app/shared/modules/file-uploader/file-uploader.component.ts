@@ -20,9 +20,9 @@ export interface SubmitCaptionEvent {
 })
 export class FileUploaderComponent {
   @ViewChild(FilePickerDirective, { static: false })
-  private filePicker: FilePickerDirective;
+  private filePicker!: FilePickerDirective;
 
-  @Input() attachments: Attachment[];
+  @Input() attachments: Attachment[] = [];
 
   @Output() filePicked = new EventEmitter<ReadFile>();
   @Output() readEnd = new EventEmitter<number>();
@@ -30,7 +30,7 @@ export class FileUploaderComponent {
   @Output() deleteAttachment = new EventEmitter<string>();
 
   public readMode = ReadMode.dataURL;
-  public status: string;
+  public status = "";
 
   onReadStart(event: number) {
     this.status = `Started reading ${event} file(s) on ${new Date().toLocaleTimeString()}.`;

@@ -37,21 +37,21 @@ export class SharedTableComponent implements AfterViewChecked, AfterViewInit, Af
 
   // Filter Fields (there can be more than 1 oper column)
   generalFilter = new FormControl();
-  filterExpressions = {};
+  filterExpressions: Record<string, unknown> = {};
   columnFilterSubscriptions: Subscription[] = [];
 
   // Visible Hidden Columns
-  visibleColumns: Column[];
-  hiddenColumns: Column[];
+  visibleColumns: Column[] = [];
+  hiddenColumns: Column[] = [];
   // unitialized values are effectively treated as false
-  expandedElement = {};
+  expandedElement: Record<string, unknown> = {};
 
   // MatPaginator Inputs
   length = 100;
 
   // Shared Variables
-  @Input() dataSource: SciCatDataSource;
-  @Input() columnsdef: Column[];
+  @Input() dataSource!: SciCatDataSource;
+  @Input() columnsdef: Column[] = [];
   @Input() pageSize = 10;
   @Input() pageSizeOptions: number[] = [5, 10, 25, 100];
   @Input() title = "";
@@ -59,11 +59,11 @@ export class SharedTableComponent implements AfterViewChecked, AfterViewInit, Af
   @Output() rowClick = new EventEmitter<any>();
 
   // MatTable
-  @ViewChild(MatTable, { static: true }) dataTable: MatTable<Element>;
-  @ViewChild(MatSort, { static: true }) sort: MatSort;
-  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
-  @ViewChild("globalFilter", { static: true }) globalFilter: ElementRef;
-  @ViewChildren("allFilters") allFilters: QueryList<ElementRef>;
+  @ViewChild(MatTable, { static: true }) dataTable!: MatTable<Element>;
+  @ViewChild(MatSort, { static: true }) sort!: MatSort;
+  @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
+  @ViewChild("globalFilter", { static: true }) globalFilter!: ElementRef;
+  @ViewChildren("allFilters") allFilters!: QueryList<ElementRef>;
 
   constructor(
     private router: Router,
@@ -191,12 +191,12 @@ export class SharedTableComponent implements AfterViewChecked, AfterViewInit, Af
     return this.hiddenColumns.map(column => column.id);
   }
 
-  getExpandFlag(i) {
+  getExpandFlag(i: string) {
     const ex = Object.keys(this.expandedElement).length > 0 && this.expandedElement[i] ? "expanded" : "collapsed";
     return ex;
   }
 
-  toggleExpandFlag(i) {
+  toggleExpandFlag(i: string) {
     this.expandedElement[i] = !this.expandedElement[i];
     this._changeDetectorRef.detectChanges();
   }
@@ -212,7 +212,7 @@ export class SharedTableComponent implements AfterViewChecked, AfterViewInit, Af
   setDefaultFilters() {
     // copy default filters from column definitions to URL (which should trigger the filling of the GUI)
     this.columnsdef.forEach(col => {
-      if ("sortDefault" in col) {
+      if (col.sortDefault) {
         this.sort.active = col.id;
         this.sort.direction = col.sortDefault;
         this.router.navigate([], {
@@ -325,8 +325,8 @@ export class SharedTableComponent implements AfterViewChecked, AfterViewInit, Af
     this.loadAllExportData();
   }
 
-  getPropertyByPath(obj: Record<string, unknown>, pathString: string) {
-    return pathString.split(".").reduce((o, i) => o[i], obj);
+  getPropertyByPath(row: any, id: string): string {
+    return id.split(".").reduce((o, i) => o[i], row);
   }
 
   // both start and end trigger their own event on change

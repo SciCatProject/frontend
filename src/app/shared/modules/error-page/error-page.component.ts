@@ -7,8 +7,8 @@ import { ActivatedRoute } from "@angular/router";
   styleUrls: ["./error-page.component.scss"]
 })
 export class ErrorPageComponent implements OnInit {
-  @Input() errorTitle: string;
-  @Input() message: string;
+  @Input() errorTitle = "";
+  @Input() message = "";
 
 
   constructor(private route: ActivatedRoute) {}

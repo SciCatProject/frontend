@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { Router } from "@angular/router";
-import { Store, select } from "@ngrx/store";
+import { Store, select, on } from "@ngrx/store";
 import { Job } from "shared/sdk";
 import { Subscription } from "rxjs";
 import {
@@ -8,25 +8,33 @@ import {
   getJobsCount,
   getJobsPerPage,
   getPage,
-  getFilters
+  getFilters,
 } from "state-management/selectors/jobs.selectors";
 import { DatePipe } from "@angular/common";
 import {
   TableColumn,
   PageChangeEvent,
-  SortChangeEvent
+  SortChangeEvent,
 } from "shared/modules/table/table.component";
 import { JobViewMode } from "state-management/models";
 import {
   changePageAction,
   setJobViewModeAction,
   fetchJobsAction,
-  sortByColumnAction
+  sortByColumnAction,
 } from "state-management/actions/jobs.actions";
 import {
   getCurrentUser,
-  getProfile
+  getProfile,
 } from "state-management/selectors/user.selectors";
+
+export interface JobsTableData {
+  id: string;
+  initiator: string;
+  type: string;
+  createdAt: string | null;
+  statusMessage: string;
+}
 
 @Component({
   selector: "app-jobs-dashboard",
@@ -38,14 +46,14 @@ export class JobsDashboardComponent implements OnInit, OnDestroy {
   jobsPerPage$ = this.store.pipe(select(getJobsPerPage));
   currentPage$ = this.store.pipe(select(getPage));
 
-  jobs: any[] = [];
+  jobs: JobsTableData[] = [];
   profile: any;
-  email: string;
+  email = "";
 
   subscriptions: Subscription[] = [];
 
-  modes = Object.keys(JobViewMode).map((key) => JobViewMode[key]);
-  currentMode = JobViewMode.myJobs;
+  modes = this.enumKeys(JobViewMode);
+  currentMode: "myJobs" | "allJobs" = "myJobs";
 
   paginate = true;
 
@@ -77,9 +85,16 @@ export class JobsDashboardComponent implements OnInit, OnDestroy {
     private store: Store<Job>
   ) {}
 
-  formatTableData(jobs: Job[]): any[] {
+  private enumKeys<T>(enumType: T): (keyof T)[] {
+    return (Object.keys(enumType) as Array<keyof T>).filter(
+      (value) => isNaN(Number(value)) !== false
+    );
+  }
+
+  formatTableData(jobs: Job[]): JobsTableData[] {
+    let tableData: JobsTableData[] = [];
     if (jobs) {
-      return jobs.map((job) => ({
+      tableData = jobs.map((job) => ({
         id: job.id,
         initiator: job.emailJobInitiator,
         type: job.type,
@@ -90,13 +105,27 @@ export class JobsDashboardComponent implements OnInit, OnDestroy {
         statusMessage: job.jobStatusMessage,
       }));
     }
+    return tableData;
   }
 
-  onModeChange(event: any, mode: JobViewMode) {
-    let viewMode: Record<string, unknown>;
+  onModeToggleChange() {
+    switch (this.currentMode) {
+      case "allJobs": {
+        this.onModeChange(JobViewMode.allJobs);
+        break;
+      }
+      case "myJobs": {
+        this.onModeChange(JobViewMode.myJobs);
+        break;
+      }
+    }
+  }
+
+  onModeChange(mode: JobViewMode) {
+    let viewMode: Record<string, string> | undefined = {};
     switch (mode) {
       case JobViewMode.allJobs: {
-        viewMode = null;
+        viewMode = undefined;
         break;
       }
       case JobViewMode.myJobs: {
@@ -160,10 +189,10 @@ export class JobsDashboardComponent implements OnInit, OnDestroy {
                 this.profile = profile;
                 this.email = profile.email;
               }
-              this.onModeChange(null, JobViewMode.myJobs);
+              this.onModeChange(JobViewMode.myJobs);
             });
           } else {
-            this.onModeChange(null, JobViewMode.myJobs);
+            this.onModeChange(JobViewMode.myJobs);
           }
         }
       })

@@ -13,13 +13,13 @@ import { ScientificMetadataTableData, ScientificMetadata } from "../scientific-m
   styleUrls: ["./metadata-view.component.scss"]
 })
 export class MetadataViewComponent implements OnInit, OnChanges {
-  @Input() metadata: Record<string, unknown>;
+  @Input() metadata: Record<string, unknown> = {};
 
-  tableData: ScientificMetadataTableData[];
+  tableData: ScientificMetadataTableData[] = [];
   columnsToDisplay: string[] = ["name", "value", "unit"];
 
-  createMetadataArray(metadata: Record<string, unknown>): ScientificMetadataTableData[] {
-    const metadataArray = [];
+  createMetadataArray(metadata: Record<string, any>): ScientificMetadataTableData[] {
+    const metadataArray: ScientificMetadataTableData[] = [];
     Object.keys(metadata).forEach(key => {
       let metadataObject: ScientificMetadataTableData;
       if ("value" in (metadata[key] as ScientificMetadata)) {

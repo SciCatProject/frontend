@@ -9,9 +9,9 @@ import { MatTableDataSource } from "@angular/material/table";
 })
 export class DatablocksComponent implements OnInit {
   @Input()
-  datablocks: Array<Datablock>;
+  datablocks: Datablock[] = [];
 
-  blockSource: MatTableDataSource<any> | null;
+  blockSource: MatTableDataSource<any> | null = null;
 
   displayedColumns = ["id", "size", "files"];
 
@@ -21,7 +21,7 @@ export class DatablocksComponent implements OnInit {
     this.blockSource = new MatTableDataSource(this.datablocks);
   }
 
-  onSelect(event, row) {
-    console.log(event, row);
+  onSelect(row: Record<string, unknown>) {
+    console.log(row);
   }
 }

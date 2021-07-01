@@ -41,15 +41,15 @@ export interface HistoryItem {
   ],
 })
 export class DatasetLifecycleComponent implements OnInit, OnChanges {
-  @Input() dataset: Dataset;
-  historyItems: HistoryItem[];
+  @Input() dataset: Dataset = new Dataset();
+  historyItems: HistoryItem[] = [];
 
   pageSizeOptions = [10, 25, 50, 100, 500, 1000];
   currentPage = 0;
   itemsPerPage = 10;
-  historyItemsCount: number;
+  historyItemsCount = 0;
 
-  dataSource: HistoryItem[];
+  dataSource: HistoryItem[] = [];
   displayedColumns = ["property", "updatedBy", "updatedAt"];
   expandedItem: any | null;
 
@@ -62,15 +62,21 @@ export class DatasetLifecycleComponent implements OnInit, OnChanges {
     if (this.dataset) {
       const history = this.dataset.history.map(
         ({ updatedAt, updatedBy, id, ...properties }) =>
-          Object.keys(properties).map((property) => ({
-            property,
-            value: properties[property],
-            updatedBy: updatedBy.replace("ldap.", ""),
-            updatedAt: this.datePipe.transform(updatedAt, "yyyy-MM-dd HH:mm"),
-          }))
+          Object.keys(properties).map(
+            (property) =>
+              ({
+                property,
+                value: properties[property],
+                updatedBy: updatedBy.replace("ldap.", ""),
+                updatedAt: this.datePipe.transform(
+                  updatedAt,
+                  "yyyy-MM-dd HH:mm"
+                ),
+              } as HistoryItem)
+          )
       );
       // flatten and reverse array before return
-      return [].concat.apply([], history).reverse();
+      return ([] as HistoryItem[]).concat(...history).reverse();
     }
     return [];
   }
@@ -83,7 +89,8 @@ export class DatasetLifecycleComponent implements OnInit, OnChanges {
   }
 
   downloadCsv(): void {
-    const replacer = (key, value) => (value === null ? "" : value);
+    const replacer = (key: string, value: string) =>
+      value === null ? "" : value;
     const header = [
       "property",
       "currentValue",
@@ -106,7 +113,7 @@ export class DatasetLifecycleComponent implements OnInit, OnChanges {
                 : "";
             }
             default: {
-              return JSON.stringify(row[fieldName], replacer);
+              return JSON.stringify((row??[fieldName]), replacer);
             }
           }
         })

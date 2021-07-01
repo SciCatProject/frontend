@@ -11,7 +11,7 @@ import {
   Logbook,
   PublishedData,
   Attachment,
-  Instrument
+  Instrument,
 } from "shared/sdk/models";
 export {
   User,
@@ -26,7 +26,7 @@ export {
   Logbook,
   PublishedData,
   Attachment,
-  Instrument
+  Instrument,
 };
 
 import { DatasetInterface } from "shared/sdk";
@@ -48,13 +48,21 @@ export interface TableColumn {
 
 export enum MessageType {
   Success = "success",
-  Error = "error"
+  Error = "error",
 }
 
-export class Message {
+export interface Message {
   content: string;
   type: MessageType;
   duration: number;
+}
+
+export class Message implements Message {
+  constructor(content: string, type: MessageType, duration: number) {
+    this.content = content;
+    this.type = type;
+    this.duration = duration;
+  }
 }
 
 export enum ArchViewMode {
@@ -63,11 +71,11 @@ export enum ArchViewMode {
   retrievable = "retrievable",
   work_in_progress = "work in progress",
   system_error = "system error",
-  user_error = "user error"
+  user_error = "user error",
 }
 export enum JobViewMode {
   myJobs = "my jobs",
-  allJobs = "all jobs"
+  allJobs = "all jobs",
 }
 
 type ScientificConditionRelation =
@@ -115,6 +123,5 @@ export interface LogbookFilters extends GenericFilters {
 }
 
 export interface JobFilters extends GenericFilters {
-  mode: Record<string, unknown>;
+  mode: Record<string, string> | undefined;
 }
-

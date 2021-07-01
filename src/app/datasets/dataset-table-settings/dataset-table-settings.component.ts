@@ -14,8 +14,8 @@ export interface SelectColumnEvent {
 })
 export class DatasetTableSettingsComponent {
   @Input() clearSearchBar = false;
-  @Input() selectableColumns: TableColumn[] = [];
-  filteredColumns: TableColumn[];
+  @Input() selectableColumns: TableColumn[] | null = null;
+  filteredColumns: TableColumn[] = [];
 
   @Output() closeClick = new EventEmitter<MouseEvent>();
   @Output() selectColumn = new EventEmitter<SelectColumnEvent>();
@@ -34,7 +34,7 @@ export class DatasetTableSettingsComponent {
 
   doSearch(value: string): void {
     const filterValue = value.toLowerCase();
-    this.filteredColumns = this.selectableColumns.filter(({ name }) =>
+    this.filteredColumns = this.selectableColumns!.filter(({ name }) =>
       name.toLowerCase().includes(filterValue)
     );
   }

@@ -6,7 +6,7 @@ import {
   debounceTime,
   distinctUntilChanged,
   skipWhile,
-  map
+  map,
 } from "rxjs/operators";
 
 import { FacetCount } from "state-management/state/datasets.store";
@@ -41,13 +41,13 @@ import {
   setDateRangeFilterAction,
   clearFacetsAction,
   addScientificConditionAction,
-  removeScientificConditionAction
+  removeScientificConditionAction,
 } from "state-management/actions/datasets.actions";
 import { combineLatest, BehaviorSubject, Observable, Subscription } from "rxjs";
 import {
   selectColumnAction,
   deselectColumnAction,
-  deselectAllCustomColumnsAction
+  deselectAllCustomColumnsAction,
 } from "state-management/actions/user.actions";
 import { ScientificCondition } from "state-management/models";
 import { SearchParametersDialogComponent } from "shared/modules/search-parameters-dialog/search-parameters-dialog.component";
@@ -136,7 +136,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     );
   }
 
-  getFacetId(facetCount: FacetCount, fallback: string = null): string {
+  getFacetId(facetCount: FacetCount, fallback = ""): string {
     const id = facetCount._id;
     return id ? String(id) : fallback;
   }
@@ -188,16 +188,16 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   }
 
   dateChanged(values: SatDatepickerRangeValue<DateTime>) {
-    if (values) {
-      const { begin, end } = values;
+    const { begin, end } = values;
+    if (begin && end) {
       this.store.dispatch(
         setDateRangeFilterAction({
           begin: begin.toUTC().toISO(),
-          end: end.toUTC().plus({days: 1}).toISO(),
+          end: end.toUTC().plus({ days: 1 }).toISO(),
         })
       );
     } else {
-      this.store.dispatch(setDateRangeFilterAction(null));
+      this.store.dispatch(setDateRangeFilterAction({ begin: "", end: "" }));
     }
   }
 

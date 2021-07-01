@@ -34,7 +34,7 @@
       </mat-chip>
     </mat-chip-list>
     <input
-      (input)="locationInput$.next($event.target.value)"
+      (input)="locationInput$.next($event.target?.value)"
       [value]="locationInput$ | async"
       matInput
       class="location-input"
@@ -65,7 +65,7 @@
       </mat-chip>
     </mat-chip-list>
     <input
-      (input)="groupInput$.next($event.target.value)"
+      (input)="groupInput$.next($event.target?.value)"
       [value]="groupInput$ | async"
       matInput
       class="group-input"
@@ -96,7 +96,7 @@
       </mat-chip>
     </mat-chip-list>
     <input
-      (input)="typeInput$.next($event.target.value)"
+      (input)="typeInput$.next($event.target?.value)"
       [value]="typeInput$ | async"
       matInput
       class="type-input"
@@ -127,7 +127,7 @@
       </mat-chip>
     </mat-chip-list>
     <input
-      (input)="keywordsInput$.next($event.target.value)"
+      (input)="keywordsInput$.next($event.target?.value)"
       [value]="keywordsInput$ | async"
       matInput
       class="keyword-input"

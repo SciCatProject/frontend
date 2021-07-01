@@ -9,13 +9,15 @@ import {
   fetchPublishedDataAction,
   resyncPublishedDataAction,
 } from "state-management/actions/published-data.actions";
-import { APP_CONFIG } from "app-config.module";
+import { AppConfig, APP_CONFIG } from "app-config.module";
 
 import { Router, ActivatedRoute } from "@angular/router";
 import { getCurrentPublishedData } from "state-management/selectors/published-data.selectors";
 import { Subscription } from "rxjs";
 
 import { ReadFile } from "ngx-file-helpers";
+import { MatChipInputEvent } from "@angular/material/chips";
+import { PublishedData } from "shared/sdk";
 
 @Component({
   selector: "publisheddata-edit",
@@ -26,23 +28,23 @@ export class PublisheddataEditComponent implements OnInit, OnDestroy {
   public separatorKeysCodes: number[] = [ENTER, COMMA];
 
   currentData$ = this.store.pipe(select(getCurrentPublishedData));
-  routeSubscription: Subscription;
-  actionSubjectSubscription: Subscription;
+  routeSubscription: Subscription = new Subscription();
+  actionSubjectSubscription: Subscription = new Subscription();
 
-  public form = {
+  public form: Partial<PublishedData> = {
     doi: "",
     title: "",
     creator: [],
-    publisher: this.appConfig.facility,
+    publisher: this.appConfig.facility ?? "",
     resourceType: "",
     abstract: "",
     pidArray: [],
-    publicationYear: null,
+    publicationYear: undefined,
     url: "",
     dataDescription: "",
     thumbnail: "",
-    numberOfFiles: null,
-    sizeOfArchive: null,
+    numberOfFiles: undefined,
+    sizeOfArchive: undefined,
     downloadLink: "",
     relatedPublications: [],
   };
@@ -53,13 +55,14 @@ export class PublisheddataEditComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private store: Store<any>,
-    @Inject(APP_CONFIG) private appConfig,
+    @Inject(APP_CONFIG) private appConfig: AppConfig,
     private actionsSubj: ActionsSubject
   ) {}
 
-  addCreator(event) {
-    if ((event.value || "").trim()) {
-      this.form.creator.push(event.value);
+  addCreator(event: MatChipInputEvent) {
+    const value = (event.value || "").trim();
+    if (value) {
+      this.form.creator?.push(value);
     }
 
     if (event.input) {
@@ -67,17 +70,18 @@ export class PublisheddataEditComponent implements OnInit, OnDestroy {
     }
   }
 
-  removeCreator(creator) {
-    const index = this.form.creator.indexOf(creator);
+  removeCreator(creator: string) {
+    const index = this.form.creator?.indexOf(creator);
 
-    if (index >= 0) {
-      this.form.creator.splice(index, 1);
+    if (index && index >= 0) {
+      this.form.creator?.splice(index, 1);
     }
   }
 
-  addRelatedPublication(event) {
-    if ((event.value || "").trim()) {
-      this.form.relatedPublications.push(event.value);
+  addRelatedPublication(event: MatChipInputEvent) {
+    const value = (event.value || "").trim();
+    if (value) {
+      this.form.relatedPublications?.push(value);
     }
 
     if (event.input) {
@@ -85,27 +89,29 @@ export class PublisheddataEditComponent implements OnInit, OnDestroy {
     }
   }
 
-  removeRelatedPublication(relatedPublication) {
-    const index = this.form.relatedPublications.indexOf(relatedPublication);
+  removeRelatedPublication(relatedPublication: string) {
+    const index = this.form.relatedPublications?.indexOf(relatedPublication);
 
-    if (index >= 0) {
-      this.form.relatedPublications.splice(index, 1);
+    if (index && index >= 0) {
+      this.form.relatedPublications?.splice(index, 1);
     }
   }
 
   public formIsValid() {
-    if (!Object.values(this.form).includes(undefined)) {
-      return (
-        this.form.title.length > 0 &&
-        this.form.resourceType.length > 0 &&
-        this.form.creator.length > 0 &&
-        this.form.publisher.length > 0 &&
-        this.form.dataDescription.length > 0 &&
-        this.form.abstract.length > 0
-      );
-    } else {
-      return false;
-    }
+    return (
+      this.form.title &&
+      this.form.title.length > 0 &&
+      this.form.resourceType &&
+      this.form.resourceType.length > 0 &&
+      this.form.creator &&
+      this.form.creator.length > 0 &&
+      this.form.publisher &&
+      this.form.publisher.length > 0 &&
+      this.form.dataDescription &&
+      this.form.dataDescription.length > 0 &&
+      this.form.abstract &&
+      this.form.abstract.length > 0
+    );
   }
 
   ngOnInit() {
@@ -126,7 +132,7 @@ export class PublisheddataEditComponent implements OnInit, OnDestroy {
         this.form.resourceType = data.resourceType;
         this.form.thumbnail = data.thumbnail;
         this.form.publicationYear = data.publicationYear;
-        this.form.downloadLink = data.downloadLink || null;
+        this.form.downloadLink = data.downloadLink || undefined;
         this.form.relatedPublications = data.relatedPublications || [];
         this.form.pidArray = data.pidArray;
       }
@@ -138,8 +144,10 @@ export class PublisheddataEditComponent implements OnInit, OnDestroy {
         this.store
           .pipe(select(getCurrentPublishedData))
           .subscribe((publishedData) => {
-            const doi = encodeURIComponent(publishedData.doi);
-            this.router.navigateByUrl("/publishedDatasets/" + doi);
+            if (publishedData) {
+              const doi = encodeURIComponent(publishedData.doi);
+              this.router.navigateByUrl("/publishedDatasets/" + doi);
+            }
           })
           .unsubscribe();
       }
@@ -152,14 +160,17 @@ export class PublisheddataEditComponent implements OnInit, OnDestroy {
   }
 
   public onUpdate() {
-    this.store.dispatch(
-      resyncPublishedDataAction({ doi: this.form.doi, data: this.form })
-    );
+    const doi = this.form.doi;
+    if (doi) {
+      this.store.dispatch(resyncPublishedDataAction({ doi, data: this.form }));
+    }
   }
 
-  public onCanel() {
-    const doi = encodeURIComponent(this.form.doi);
-    this.router.navigateByUrl("/publishedDatasets/" + doi);
+  public onCancel() {
+    if (this.form.doi) {
+      const doi = encodeURIComponent(this.form.doi);
+      this.router.navigateByUrl("/publishedDatasets/" + doi);
+    }
   }
 
   onFileUploaderFilePicked(file: ReadFile) {

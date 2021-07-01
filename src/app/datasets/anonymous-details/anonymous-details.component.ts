@@ -8,10 +8,10 @@ import { Dataset, Attachment, Proposal, Sample } from "shared/sdk";
   styleUrls: ["./anonymous-details.component.scss"]
 })
 export class AnonymousDetailsComponent {
-  @Input() dataset: Dataset;
-  @Input() attachments: Attachment[];
-  @Input() proposal: Proposal;
-  @Input() sample: Sample;
+  @Input() dataset: Dataset = new Dataset();
+  @Input() attachments: Attachment[] | null = null;
+  @Input() proposal: Proposal | null = null;
+  @Input() sample: Sample | null = null;
 
   @Output() clickKeyword = new EventEmitter<string>();
 

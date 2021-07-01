@@ -24,6 +24,16 @@ import { FileSizePipe } from "shared/pipes/filesize.pipe";
 import { fetchLogbookAction } from "state-management/actions/logbooks.actions";
 import { APP_CONFIG, AppConfig } from "app-config.module";
 
+export interface TableData {
+  pid: string;
+  name: string;
+  sourceFolder: string;
+  size: string;
+  creationTime: string | null;
+  owner: string;
+  location: string;
+}
+
 @Component({
   selector: "view-proposal-page",
   templateUrl: "view-proposal-page.component.html",
@@ -34,12 +44,12 @@ export class ViewProposalPageComponent implements OnInit, OnDestroy {
   datasetCount$ = this.store.pipe(select(getDatasetsCount));
   itemsPerPage$ = this.store.pipe(select(getDatasetsPerPage));
 
-  proposal: Proposal;
+  proposal: Proposal = new Proposal();
 
   subscriptions: Subscription[] = [];
 
   tablePaginate = true;
-  tableData: any[];
+  tableData: TableData[] = [];
   tableColumns: TableColumn[] = [
     { name: "name", icon: "portrait", sort: false, inList: true },
     { name: "sourceFolder", icon: "explore", sort: false, inList: true },
@@ -59,9 +69,10 @@ export class ViewProposalPageComponent implements OnInit, OnDestroy {
     private store: Store<any>
   ) {}
 
-  formatTableData(datasets: Dataset[]): any[] {
+  formatTableData(datasets: Dataset[]): TableData[] {
+    let tableData: TableData[] = [];
     if (datasets) {
-      return datasets.map((dataset: any) => ({
+      tableData = datasets.map((dataset: any) => ({
         pid: dataset.pid,
         name: dataset.datasetName,
         sourceFolder:
@@ -75,6 +86,7 @@ export class ViewProposalPageComponent implements OnInit, OnDestroy {
         location: dataset.creationLocation,
       }));
     }
+    return tableData;
   }
 
   onPageChange(event: PageChangeEvent) {

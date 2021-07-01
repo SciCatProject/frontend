@@ -4,7 +4,7 @@
       <mat-card class="big-filter">
         <div class="title">Filter</div>
         <app-search-bar
-          [prefilledValue]="(filters$ | async).textSearch"
+          [prefilledValue]="(filters$ | async).textSearch ?? null"
           (search)="onTextSearchChange($event)"
           (searchBarFocus)="onTextSearchChange($event)"
         ></app-search-bar>
@@ -16,7 +16,7 @@
 
       <div class="small-filter">
         <app-search-bar
-          [prefilledValue]="(filters$ | async).textSearch"
+          [prefilledValue]="(filters$ | async).textSearch ?? null"
           (search)="onTextSearchChange($event)"
           (searchBarFocus)="onTextSearchChange($event)"
         ></app-search-bar>

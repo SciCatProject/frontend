@@ -22,9 +22,9 @@ export interface MetadataInput {
   styleUrls: ["./metadata-input.component.scss"]
 })
 export class MetadataInputComponent extends MetadataInputBase implements OnInit {
-  changeDetection: Subscription;
-  types: string[];
-  @Input() data: FlatNodeEdit;
+  changeDetection: Subscription = new Subscription();
+  types: string[] = [];
+  @Input() data: FlatNodeEdit = new FlatNodeEdit();
   @Output() save = new EventEmitter<MetadataInput | null>();
   @Output() cancel = new EventEmitter();
   @Output() changed = new EventEmitter();
@@ -61,33 +61,33 @@ export class MetadataInputComponent extends MetadataInputBase implements OnInit 
   }
   addCurrentMetadata(node: FlatNodeEdit) {
     if (node.expandable) {
-      this.metadataForm.get("type").setValue(Type.string);
-      this.metadataForm.get("key").setValue(node.key);
-      this.metadataForm.get("value").disable();
+      this.metadataForm.get("type")?.setValue(Type.string);
+      this.metadataForm.get("key")?.setValue(node.key);
+      this.metadataForm.get("value")?.disable();
       this.typeValues = ["string"];
     } else {
       if (node.unit) {
-        this.metadataForm.get("type").setValue(Type.quantity);
-        this.metadataForm.get("key").setValue(node.key);
+        this.metadataForm.get("type")?.setValue(Type.quantity);
+        this.metadataForm.get("key")?.setValue(node.key);
         const formattedValue = this.formatNumberPipe.transform(node.value);
-        this.metadataForm.get("value").setValue(formattedValue || "");
-        this.metadataForm.get("unit").setValue(node.unit);
+        this.metadataForm.get("value")?.setValue(formattedValue || "");
+        this.metadataForm.get("unit")?.setValue(node.unit);
       } else if (typeof node.value === Type.number) {
-        this.metadataForm.get("type").setValue(Type.number);
-        this.metadataForm.get("key").setValue(node.key);
-        this.metadataForm.get("value").setValue(node.value);
+        this.metadataForm.get("type")?.setValue(Type.number);
+        this.metadataForm.get("key")?.setValue(node.key);
+        this.metadataForm.get("value")?.setValue(node.value);
       } else if (typeof node.value === Type.boolean){
-        this.metadataForm.get("type").setValue(Type.boolean);
-        this.metadataForm.get("key").setValue(node.key);
-        this.metadataForm.get("value").setValue(String(node.value));
+        this.metadataForm.get("type")?.setValue(Type.boolean);
+        this.metadataForm.get("key")?.setValue(node.key);
+        this.metadataForm.get("value")?.setValue(String(node.value));
       } else if (this.dateTimeService.isISODateTime(node.value)) {
-        this.metadataForm.get("type").setValue(Type.date);
-        this.metadataForm.get("key").setValue(node.key);
-        this.metadataForm.get("value").setValue(DateTime.fromISO(node.value).toLocal().toISO());
+        this.metadataForm.get("type")?.setValue(Type.date);
+        this.metadataForm.get("key")?.setValue(node.key);
+        this.metadataForm.get("value")?.setValue(DateTime.fromISO(node.value).toLocal().toISO());
       } else {
-        this.metadataForm.get("type").setValue(Type.string);
-        this.metadataForm.get("key").setValue(node.key);
-        this.metadataForm.get("value").setValue(node.value);
+        this.metadataForm.get("type")?.setValue(Type.string);
+        this.metadataForm.get("key")?.setValue(node.key);
+        this.metadataForm.get("value")?.setValue(node.value);
       }
     }
     this.detectType();

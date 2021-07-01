@@ -23,18 +23,18 @@ export class AppHeaderComponent implements OnInit, OnDestroy {
   facility: string;
   status: string;
 
-  username: string;
+  username = "";
   profileImage: string;
   batch$ = this.store.pipe(select(getDatasetsInBatch));
   inBatchPids: string[] = [];
-  inBatchCount: number;
-  inBatchIndicator: string;
+  inBatchCount = 0;
+  inBatchIndicator = "";
 
   constructor(
     private store: Store<any>,
     @Inject(APP_CONFIG) public appConfig: AppConfig
   ) {
-    this.facility = appConfig.facility;
+    this.facility = appConfig.facility ?? "";
     if (appConfig.production === true) {
       this.status = "";
     } else {

@@ -8,33 +8,33 @@ import { DateTimeService } from "shared/services/date-time.service";
 import { UnitsService } from "shared/services/units.service";
 
 export class TreeNode {
-  children: TreeNode[];
-  key: string;
+  children: TreeNode[] = [];
+  key = "";
   value: any;
-  unit: string;
+  unit: string | null | undefined;
 }
 export class FlatNode {
-  key: string;
+  key = "";
   value: any;
-  unit: string;
-  level: number;
-  expandable: boolean;
-  visible: boolean;
+  unit: string | null | undefined;
+  level = 0;
+  expandable = false;
+  visible = false;
 }
 @Component({
   template: "",
   providers: [DatePipe]
 })
 export class TreeBaseComponent {
-  treeControl: FlatTreeControl<FlatNode>;
-  treeFlattener: MatTreeFlattener<TreeNode, FlatNode>;
-  dataSource: MatTreeFlatDataSource<TreeNode, FlatNode>;
-  flatNodeMap: Map<FlatNode, TreeNode>;
-  nestNodeMap: Map<TreeNode, FlatNode>;
+  treeControl!: FlatTreeControl<FlatNode>;
+  treeFlattener!: MatTreeFlattener<TreeNode, FlatNode>;
+  dataSource!: MatTreeFlatDataSource<TreeNode, FlatNode>;
+  flatNodeMap!: Map<FlatNode, TreeNode>;
+  nestNodeMap!: Map<TreeNode, FlatNode>;
   expand = false;
-  dataTree: TreeNode[];
+  dataTree: TreeNode[] = [];
   _filterText = "";
-  datePipe: DatePipe;
+  datePipe!: DatePipe;
   formatNumberPipe: FormatNumberPipe;
   prettyUnitPipe: PrettyUnitPipe;
   unitsService: UnitsService;
@@ -95,7 +95,9 @@ export class TreeBaseComponent {
       node.visible = true;
       if (node.expandable) {
         const nestedNode = this.flatNodeMap.get(node);
-        this.setChildrenVisible(nestedNode.children);
+        if (nestedNode) {
+          this.setChildrenVisible(nestedNode.children);
+        }
       }
       if (node.level > 0) {
         this.setParentVisible(node);
@@ -110,14 +112,16 @@ export class TreeBaseComponent {
         // Expand parent node contains filter text
         parentNode.visible = true;
         this.treeControl.expand(parentNode);
+        currentNode = parentNode;
       }
-      currentNode = parentNode;
     };
   }
   setChildrenVisible(children: TreeNode[]) {
     children.forEach((node: TreeNode) => {
       const flatNode = this.nestNodeMap.get(node);
-      flatNode.visible = true;
+      if (flatNode) {
+        flatNode.visible = true;
+      }
       if (node.children) {
         this.setChildrenVisible(node.children);
       }
@@ -141,6 +145,9 @@ export class TreeBaseComponent {
   }
   getNestedParent(node: FlatNode) {
     const flatParentNode = this.getFlatParentNode(node);
+    if (!flatParentNode) {
+      return undefined;
+    }
     return this.flatNodeMap.get(flatParentNode);
   }
   toggleExpand() {

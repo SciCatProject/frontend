@@ -14,12 +14,12 @@ import {
   getHasAppliedFilters,
   getFilters,
   getHasPrefilledFilters,
-  getTextFilter
+  getTextFilter,
 } from "state-management/selectors/proposals.selectors";
 import {
   TableColumn,
   PageChangeEvent,
-  SortChangeEvent
+  SortChangeEvent,
 } from "shared/modules/table/table.component";
 import {
   changePageAction,
@@ -28,23 +28,26 @@ import {
   setTextFilterAction,
   setDateRangeFilterAction,
   clearFacetsAction,
-  prefillFiltersAction
+  prefillFiltersAction,
 } from "state-management/actions/proposals.actions";
-import {
-  filter,
-  map,
-  distinctUntilChanged,
-  take
-} from "rxjs/operators";
-import * as deepEqual from "deep-equal";
+import { filter, map, distinctUntilChanged, take } from "rxjs/operators";
+import deepEqual from "deep-equal";
 import { ProposalFilters } from "state-management/state/proposals.store";
 import { SatDatepickerRangeValue } from "saturn-datepicker";
 import { DateTime } from "luxon";
 
+interface ProposalTableData {
+  proposalId: string;
+  title: string;
+  author: string;
+  start: string;
+  end: string;
+}
+
 @Component({
   selector: "proposal-dashboard",
   templateUrl: "./proposal-dashboard.component.html",
-  styleUrls: ["./proposal-dashboard.component.scss"]
+  styleUrls: ["./proposal-dashboard.component.scss"],
 })
 export class ProposalDashboardComponent implements OnInit, OnDestroy {
   hasAppliedFilters$ = this.store.pipe(select(getHasAppliedFilters));
@@ -52,27 +55,27 @@ export class ProposalDashboardComponent implements OnInit, OnDestroy {
   dateRangeFilter$ = this.store.pipe(select(getDateRangeFilter));
   readyToFetch$ = this.store.pipe(
     select(getHasPrefilledFilters),
-    filter(has => has)
+    filter((has) => has)
   );
   currentPage$ = this.store.pipe(select(getPage));
   proposalsCount$ = this.store.pipe(select(getProposalsCount));
   proposalsPerPage$ = this.store.pipe(select(getProposalsPerPage));
 
-  clearSearchBar: boolean;
+  clearSearchBar = false;
   subscriptions: Subscription[] = [];
 
-  tableData: any[];
+  tableData: ProposalTableData[] = [];
   tableColumns: TableColumn[] = [
     {
       name: "proposalId",
       icon: "perm_contact_calendar",
       sort: true,
-      inList: false
+      inList: false,
     },
     { name: "title", icon: "fingerprint", sort: true, inList: true },
     { name: "author", icon: "face", sort: true, inList: true },
     { name: "start", icon: "timer", sort: true, inList: true },
-    { name: "end", icon: "timer_off", sort: true, inList: true }
+    { name: "end", icon: "timer_off", sort: true, inList: true },
   ];
   tablePaginate = true;
 
@@ -84,41 +87,39 @@ export class ProposalDashboardComponent implements OnInit, OnDestroy {
     private store: Store<Proposal>
   ) {}
 
-  formatTableData(proposals: Proposal[]): any[] {
-    if (proposals) {
-      return proposals.map(proposal => {
-        const data: any = {
-          proposalId: proposal.proposalId,
-          title: proposal.title,
-          author: proposal.firstname + " " + proposal.lastname
-        };
-        if (proposal.startTime && proposal.endTime) {
-          data.start = this.datePipe.transform(
-            proposal.startTime,
-            "yyyy-MM-dd"
-          );
-          data.end = this.datePipe.transform(proposal.endTime, "yyyy-MM-dd");
-        } else if (
-          proposal.MeasurementPeriodList &&
-          proposal.MeasurementPeriodList.length > 0
-        ) {
-          data.start = this.datePipe.transform(
+  formatTableData(proposals: Proposal[]): ProposalTableData[] {
+    return proposals.map((proposal) => {
+      const data: ProposalTableData = {
+        proposalId: proposal.proposalId,
+        title: proposal.title,
+        author: proposal.firstname + " " + proposal.lastname,
+        start: "--",
+        end: "--",
+      };
+      if (proposal.startTime && proposal.endTime) {
+        data.start =
+          this.datePipe.transform(proposal.startTime, "yyyy-MM-dd") ?? "--";
+        data.end =
+          this.datePipe.transform(proposal.endTime, "yyyy-MM-dd") ?? "--";
+      } else if (
+        proposal.MeasurementPeriodList &&
+        proposal.MeasurementPeriodList.length > 0
+      ) {
+        data.start =
+          this.datePipe.transform(
             proposal.MeasurementPeriodList[0].start,
             "yyyy-MM-dd"
-          );
-          data.end = this.datePipe.transform(
+          ) ?? "--";
+        data.end =
+          this.datePipe.transform(
             proposal.MeasurementPeriodList[
               proposal.MeasurementPeriodList.length - 1
             ].end,
             "yyyy-MM-dd"
-          );
-        } else {
-          data.start = "--";
-          data.end = "--";
-        }
-        return data;
-      });
-    }
+          ) ?? "--";
+      }
+      return data;
+    });
   }
 
   onClear() {
@@ -133,18 +134,16 @@ export class ProposalDashboardComponent implements OnInit, OnDestroy {
   }
 
   onDateChange(values: SatDatepickerRangeValue<DateTime>) {
-    if (values) {
-      const { begin, end } = values;
+    const { begin, end } = values;
+    if (begin && end) {
       this.store.dispatch(
         setDateRangeFilterAction({
           begin: begin.toISO(),
-          end: end.toISO()
+          end: end.toISO(),
         })
       );
     } else {
-      this.store.dispatch(
-        setDateRangeFilterAction(null)
-      );
+      this.store.dispatch(setDateRangeFilterAction({ begin: "", end: "" }));
     }
     this.store.dispatch(fetchProposalsAction());
   }
@@ -185,7 +184,7 @@ export class ProposalDashboardComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.subscriptions.push(
-      this.store.pipe(select(getProposals)).subscribe(proposals => {
+      this.store.pipe(select(getProposals)).subscribe((proposals) => {
         this.tableData = this.formatTableData(proposals);
       })
     );
@@ -207,17 +206,17 @@ export class ProposalDashboardComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.route.queryParams
         .pipe(
-          map(params => params.args as string),
+          map((params) => params.args as string),
           take(1),
-          map(args => (args ? JSON.parse(args) as ProposalFilters: {}))
+          map((args) => (args ? (JSON.parse(args) as ProposalFilters) : {}))
         )
-        .subscribe(filters =>
+        .subscribe((filters) =>
           this.store.dispatch(prefillFiltersAction({ values: filters }))
         )
     );
   }
 
   ngOnDestroy() {
-    this.subscriptions.forEach(subscription => subscription.unsubscribe());
+    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
 }

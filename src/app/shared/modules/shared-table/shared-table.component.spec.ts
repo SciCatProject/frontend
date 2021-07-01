@@ -7,6 +7,7 @@ import { SciCatDataSource } from "shared/services/scicat.datasource";
 
 import { SharedTableComponent } from "./shared-table.component";
 import { RouterTestingModule } from "@angular/router/testing";
+import { Column } from "./shared-table.module";
 
 describe("SharedTableComponent", () => {
   let component: SharedTableComponent;
@@ -26,7 +27,7 @@ describe("SharedTableComponent", () => {
     },
   } as unknown) as MatTable<Element>;
 
-  const columnsDef = [];
+  const columnsDef: Column[] = [];
 
   const paginator = {
     page: of({}),

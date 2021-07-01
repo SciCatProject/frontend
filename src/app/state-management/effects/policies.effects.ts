@@ -39,7 +39,7 @@ export class PolicyEffects {
       withLatestFrom(this.queryParams$),
       map(([action, params]) => params),
       switchMap(params =>
-        this.policyApi.find(params).pipe(
+        this.policyApi.find<Policy>(params).pipe(
           mergeMap((policies: Policy[]) => [
             fromActions.fetchPoliciesCompleteAction({ policies }),
             fromActions.fetchCountAction(),
@@ -81,7 +81,7 @@ export class PolicyEffects {
           const { order, skip, limit } = params;
           filter = { where: { manager: email }, order, skip, limit };
         }
-        return this.policyApi.find(filter).pipe(
+        return this.policyApi.find<Policy>(filter).pipe(
           mergeMap((policies: Policy[]) => [
             fromActions.fetchEditablePoliciesCompleteAction({ policies }),
             fromActions.fetchEditableCountAction()

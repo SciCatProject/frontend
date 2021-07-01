@@ -8,7 +8,7 @@ import {
   getDatasetsPerPage,
   getDatasetsPage,
   getDatasetsCount,
-  getCurrentAttachments
+  getCurrentAttachments,
 } from "../../state-management/selectors/samples.selectors";
 import { select, Store } from "@ngrx/store";
 import {
@@ -18,18 +18,28 @@ import {
   saveCharacteristicsAction,
   addAttachmentAction,
   updateAttachmentCaptionAction,
-  removeAttachmentAction
+  removeAttachmentAction,
 } from "../../state-management/actions/samples.actions";
 import { DatePipe, SlicePipe } from "@angular/common";
 import { FileSizePipe } from "shared/pipes/filesize.pipe";
 import {
   TableColumn,
-  PageChangeEvent
+  PageChangeEvent,
 } from "shared/modules/table/table.component";
 import { APP_CONFIG, AppConfig } from "app-config.module";
 import { ReadFile } from "ngx-file-helpers";
 import { SubmitCaptionEvent } from "shared/modules/file-uploader/file-uploader.component";
 import { getCurrentUser } from "state-management/selectors/user.selectors";
+
+export interface TableData {
+  pid: string;
+  name: string;
+  sourceFolder: string;
+  size: string;
+  creationTime: string | null;
+  owner: string;
+  location: string;
+}
 
 @Component({
   selector: "app-sample-detail",
@@ -42,14 +52,14 @@ export class SampleDetailComponent implements OnInit, OnDestroy {
   datasetsPage$ = this.store.pipe(select(getDatasetsPage));
   datasetsCount$ = this.store.pipe(select(getDatasetsCount));
 
-  sample: Sample;
-  user: User;
-  pickedFile: ReadFile;
-  attachment: Attachment;
-  show: boolean;
+  sample: Sample = new Sample();
+  user: User = new User();
+  pickedFile!: ReadFile;
+  attachment: Partial<Attachment> = new Attachment();
+  show = false;
   subscriptions: Subscription[] = [];
 
-  tableData: any[];
+  tableData: TableData[] = [];
   tablePaginate = true;
   tableColumns: TableColumn[] = [
     { name: "name", icon: "portrait", sort: false, inList: true },
@@ -70,9 +80,10 @@ export class SampleDetailComponent implements OnInit, OnDestroy {
     private store: Store<Sample>
   ) {}
 
-  formatTableData(datasets: Dataset[]): any[] {
+  formatTableData(datasets: Dataset[]): TableData[] {
+    let tableData: TableData[] = [];
     if (datasets) {
-      return datasets.map((dataset: any) => ({
+      tableData = datasets.map((dataset: any) => ({
         pid: dataset.pid,
         name: dataset.datasetName,
         sourceFolder:
@@ -86,6 +97,7 @@ export class SampleDetailComponent implements OnInit, OnDestroy {
         location: dataset.creationLocation,
       }));
     }
+    return tableData;
   }
 
   onSaveCharacteristics(characteristics: Record<string, unknown>) {
@@ -112,15 +124,14 @@ export class SampleDetailComponent implements OnInit, OnDestroy {
         updatedBy: this.user.username,
         createdAt: new Date(),
         updatedAt: new Date(),
-        id: null,
         sample: this.sample,
         sampleId: this.sample.sampleId,
-        dataset: null,
-        datasetId: null,
-        rawDatasetId: null,
-        derivedDatasetId: null,
-        proposal: null,
-        proposalId: null,
+        dataset: undefined,
+        datasetId: undefined,
+        rawDatasetId: undefined,
+        derivedDatasetId: undefined,
+        proposal: undefined,
+        proposalId: undefined,
       };
       this.store.dispatch(addAttachmentAction({ attachment: this.attachment }));
     }
@@ -160,7 +171,9 @@ export class SampleDetailComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.subscriptions.push(
       this.store.pipe(select(getCurrentSample)).subscribe((sample) => {
-        this.sample = sample;
+        if (sample) {
+          this.sample = sample;
+        }
       })
     );
 
@@ -172,7 +185,9 @@ export class SampleDetailComponent implements OnInit, OnDestroy {
 
     this.subscriptions.push(
       this.store.pipe(select(getCurrentUser)).subscribe((user) => {
-        this.user = user;
+        if (user) {
+          this.user = user;
+        }
       })
     );
 

@@ -30,7 +30,7 @@ import { APP_CONFIG, AppConfig } from "app-config.module";
 import { LogbookFilters } from "state-management/models";
 
 import { map, take, filter, distinctUntilChanged } from "rxjs/operators";
-import * as deepEqual from "deep-equal";
+import deepEqual from "deep-equal";
 import {
   PageChangeEvent,
   SortChangeEvent,
@@ -52,7 +52,7 @@ export class LogbooksDashboardComponent
     filter((has) => has)
   );
 
-  logbook: Logbook;
+  logbook: Logbook = new Logbook();
 
   subscriptions: Subscription[] = [];
 
@@ -106,7 +106,9 @@ export class LogbooksDashboardComponent
   ngOnInit() {
     this.subscriptions.push(
       this.store.pipe(select(getCurrentLogbook)).subscribe((logbook) => {
-        this.logbook = logbook;
+        if (logbook) {
+          this.logbook = logbook;
+        }
       })
     );
 

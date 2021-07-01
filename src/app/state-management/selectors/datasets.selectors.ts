@@ -24,26 +24,29 @@ export const getCurrentDataset = createSelector(
 );
 
 export const getCurrentDatasetWithoutFileInfo = createSelector(
-  getDatasetState,
-  (state) => {
-    const { origdatablocks, datablocks, ...theRest } = state.currentSet;
-    return theRest;
+  getCurrentDataset,
+  (currentSet) => {
+    if (currentSet) {
+      const { origdatablocks, datablocks, ...theRest } = currentSet;
+      return theRest;
+    }
+    return undefined;
   }
 );
 
 export const getCurrentOrigDatablocks = createSelector(
   getCurrentDataset,
-  (dataset) => dataset.origdatablocks
+  (dataset) => (dataset ? dataset.origdatablocks : [])
 );
 
 export const getCurrentDatablocks = createSelector(
   getCurrentDataset,
-  (dataset) => dataset.datablocks
+  (dataset) => (dataset ? dataset.datablocks : [])
 );
 
 export const getCurrentAttachments = createSelector(
   getCurrentDataset,
-  (dataset) => dataset.attachments
+  (dataset) => (dataset ? dataset.attachments : [])
 );
 
 // === Filters ===

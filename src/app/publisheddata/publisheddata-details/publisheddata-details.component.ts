@@ -18,10 +18,10 @@ import { getCurrentPublishedData } from "state-management/selectors/published-da
 })
 export class PublisheddataDetailsComponent implements OnInit, OnDestroy {
   currentData$ = this.store.pipe(select(getCurrentPublishedData));
-  show: boolean;
-  routeSubscription: Subscription;
+  show = false;
+  routeSubscription: Subscription = new Subscription();
   landingPageUrl = "";
-  doi: string;
+  doi = "";
 
   constructor(
     private route: ActivatedRoute,

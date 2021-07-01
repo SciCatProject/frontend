@@ -29,7 +29,7 @@ export class JobEffects {
       withLatestFrom(this.queryParams$),
       map(([action, params]) => params),
       switchMap(params =>
-        this.jobApi.find(params).pipe(
+        this.jobApi.find<Job>(params).pipe(
           switchMap((jobs: Job[]) => [
             fromActions.fetchJobsCompleteAction({ jobs }),
             fromActions.fetchCountAction()
@@ -69,7 +69,7 @@ export class JobEffects {
     this.actions$.pipe(
       ofType(fromActions.fetchJobAction),
       switchMap(({ jobId }) =>
-        this.jobApi.findById(jobId).pipe(
+        this.jobApi.findById<Job>(jobId).pipe(
           map((job: Job) => fromActions.fetchJobCompleteAction({ job })),
           catchError(() => of(fromActions.fetchJobFailedAction()))
         )

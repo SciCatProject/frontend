@@ -35,8 +35,8 @@
     <ng-container matColumnDef="standard_select">
       <mat-header-cell *matHeaderCellDef>
         <mat-checkbox
-          [checked]="selectedSets.length > 0 && isAllSelected()"
-          [indeterminate]="selectedSets.length > 0 && !isAllSelected()"
+          [checked]="(selectedSets?.length > 0) && isAllSelected()"
+          [indeterminate]="(selectedSets?.length > 0) && !isAllSelected()"
           (change)="onSelectAll($event)"
         >
         </mat-checkbox>
@@ -189,7 +189,7 @@
       </mat-header-cell>
       <mat-cell *matCellDef="let dataset">
         <img
-          *ngIf="(datasetsPerPage$ | async) < 50"
+          *ngIf="(datasetsPerPage$ | async) && ((datasetsPerPage$ | async) < 50)"
           src="{{ dataset.pid | thumbnail | async }}"
           height="60px"
         />

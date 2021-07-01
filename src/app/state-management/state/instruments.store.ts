@@ -2,7 +2,7 @@ import { Instrument, GenericFilters } from "../models";
 
 export interface InstrumentState {
   instruments: Instrument[];
-  currentInstrument: Instrument;
+  currentInstrument: Instrument | undefined;
   totalCount: number;
 
   filters: GenericFilters;
@@ -10,7 +10,7 @@ export interface InstrumentState {
 
 export const initialInstrumentState: InstrumentState = {
   instruments: [],
-  currentInstrument: null,
+  currentInstrument: undefined,
   totalCount: 0,
 
   filters: {

@@ -93,7 +93,7 @@ export class UserEffects {
           userId: adLoginResponse.userId,
         });
         this.loopBackAuth.setToken(token);
-        return this.userApi.findById(adLoginResponse.userId).pipe(
+        return this.userApi.findById<User>(adLoginResponse.userId).pipe(
           switchMap((user: User) => [
             fromActions.fetchUserCompleteAction(),
             fromActions.loginCompleteAction({
@@ -220,7 +220,7 @@ export class UserEffects {
     this.actions$.pipe(
       ofType(fromActions.fetchUserIdentityAction),
       switchMap(({ id }) =>
-        this.userIdentityApi.findOne({ where: { userId: id } }).pipe(
+        this.userIdentityApi.findOne<UserIdentity>({ where: { userId: id } }).pipe(
           map((userIdentity: UserIdentity) =>
             fromActions.fetchUserIdentityCompleteAction({ userIdentity })
           ),
@@ -284,8 +284,8 @@ export class UserEffects {
       ofType(fromActions.updateUserSettingsAction),
       withLatestFrom(this.user$),
       takeWhile(([action, user]) => !!user),
-      switchMap(([{ property }, { id }]) =>
-        this.userApi.updateSettings(id, property).pipe(
+      switchMap(([{ property }, user]) =>
+        this.userApi.updateSettings(user?.id, property).pipe(
           map((userSettings) =>
             fromActions.updateUserSettingsCompleteAction({ userSettings })
           ),

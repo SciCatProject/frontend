@@ -24,10 +24,10 @@ import * as shortid from "shortid";
 export class SampleDialogComponent implements OnInit, OnDestroy {
   public form: FormGroup;
   description: string;
-  sample: Sample;
+  sample: Sample = new Sample();
 
-  username: string;
-  userGroups: string[];
+  username = "";
+  userGroups: string[] = [];
   subscriptions: Subscription[] = [];
 
   constructor(

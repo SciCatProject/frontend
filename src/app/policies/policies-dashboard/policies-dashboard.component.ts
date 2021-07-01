@@ -72,9 +72,9 @@ export class PoliciesDashboardComponent implements OnInit, OnDestroy {
   selectedIds: string[] = [];
   selectedGroups: string[] = [];
   selectedPolicies: Policy[] = [];
-  selectedPoliciesSubscription: Subscription;
+  selectedPoliciesSubscription: Subscription = new Subscription();
 
-  dialogConfig: MatDialogConfig;
+  dialogConfig: MatDialogConfig = new MatDialogConfig();
 
   editEnabled = true;
   paginate = true;
@@ -211,7 +211,6 @@ export class PoliciesDashboardComponent implements OnInit, OnDestroy {
   }
 
   openDialog() {
-    this.dialogConfig = new MatDialogConfig();
     this.dialogConfig.disableClose = true;
     this.dialogConfig.autoFocus = true;
     this.dialogConfig.direction = "ltr";

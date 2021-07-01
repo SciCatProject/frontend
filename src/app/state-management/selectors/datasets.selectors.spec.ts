@@ -74,8 +74,7 @@ describe("test dataset selectors", () => {
 
   describe("getCurrentDatasetWithoutFileInfo", () => {
     it("should get the current dataset without origDatablocks", () => {
-      const datasetWithout = { ...dataset };
-      delete datasetWithout.origdatablocks;
+      const {origdatablocks, ...datasetWithout} = dataset;
 
       expect(
         fromDatasetSelectors.getCurrentDatasetWithoutFileInfo.projector(
