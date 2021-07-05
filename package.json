@@ -7,7 +7,7 @@
     "ng": "./node_modules/@angular/cli/bin/ng",
     "start": "./node_modules/@angular/cli/bin/ng serve --host $HOST",
     "postinstall": "ngcc",
-    "test": "ng test --watch --source-map=false",
+    "test": "ng test --no-watch --source-map=false",
     "posttest": "ng lint",
     "cypress:open": "./node_modules/.bin/cypress open",
     "e2e": "ng e2e --project=catanie-e2e",
