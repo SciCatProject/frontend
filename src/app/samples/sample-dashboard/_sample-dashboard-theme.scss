@@ -1,0 +1,26 @@
+@use "sass:map";
+@use "~@angular/material" as mat;
+
+@mixin color($theme) {
+  $color-config: mat.get-color-config($theme);
+  $accent: map.get($color-config, "accent");
+
+  .big-edit-sample {
+    mat-icon {
+      color: mat.get-color-from-palette($accent, "default");
+    }
+  }
+
+  .small-edit-sample {
+    mat-icon {
+      color: mat.get-color-from-palette($accent, "default");
+    }
+  }
+}
+
+@mixin theme($theme) {
+  $color-config: mat.get-color-config($theme);
+  @if $color-config != null {
+    @include color($theme);
+  }
+}

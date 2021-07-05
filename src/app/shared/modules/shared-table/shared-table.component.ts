@@ -1,6 +1,6 @@
 import {
   Component, Input, ChangeDetectionStrategy, AfterContentInit, QueryList,
-  EventEmitter, Output, ElementRef, OnDestroy, ViewChild, ViewChildren, ChangeDetectorRef, NgZone, AfterViewInit, AfterViewChecked
+  EventEmitter, Output, ElementRef, OnDestroy, ViewChild, ViewChildren, ChangeDetectorRef, NgZone, AfterViewInit, AfterViewChecked, ViewEncapsulation
 } from "@angular/core";
 import { ViewportRuler } from "@angular/cdk/scrolling";
 import { FormControl } from "@angular/forms";
@@ -23,6 +23,7 @@ import { Column } from "./shared-table.module";
   templateUrl: "./shared-table.component.html",
   styleUrls: ["./shared-table.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
   animations: [
     trigger("detailExpand", [
       state("collapsed", style({ height: "0px", minHeight: "0", visibility: "hidden" })),

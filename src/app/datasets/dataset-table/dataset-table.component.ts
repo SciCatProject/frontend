@@ -8,7 +8,8 @@ import {
   EventEmitter,
   Input,
   OnChanges,
-  SimpleChange
+  SimpleChange,
+  ViewEncapsulation
 } from "@angular/core";
 import { Dataset, TableColumn } from "state-management/models";
 import { MatCheckboxChange } from "@angular/material/checkbox";
@@ -49,7 +50,8 @@ export interface SortChangeEvent {
 @Component({
   selector: "dataset-table",
   templateUrl: "dataset-table.component.html",
-  styleUrls: ["dataset-table.component.scss"]
+  styleUrls: ["dataset-table.component.scss"],
+  encapsulation: ViewEncapsulation.None,
 })
 export class DatasetTableComponent implements OnInit, OnDestroy, OnChanges {
   private inBatchPids: string[] = [];

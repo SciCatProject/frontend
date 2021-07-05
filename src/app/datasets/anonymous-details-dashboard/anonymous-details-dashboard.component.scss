@@ -1,10 +1,5 @@
-@use '~@angular/material' as mat;
-@import "../../../styles.scss";
-
 .jupyter-button {
   margin: 1em 0 0 1em;
-  background-color: mat.get-color-from-palette($orange, 1000);
-  color: mat.get-color-from-palette($primary, default-contrast);
 }
 
 .datafiles-container {

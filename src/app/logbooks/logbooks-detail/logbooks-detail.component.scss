@@ -1,6 +1,3 @@
-@use '~@angular/material' as mat;
-@import "../../../styles.scss";
-
 .no-entries-message {
   text-align: center;
 
@@ -11,16 +8,7 @@
 
 @media only screen and (min-width: 1280px) {
   .largeDetails {
-    mat-header-row {
-      background: mat.get-color-from-palette($primary);
-    }
-
-    ::ng-deep .mat-sort-header-arrow {
-      color: mat.get-color-from-palette($primary, default-contrast);
-    }
-
     mat-header-cell {
-      color: mat.get-color-from-palette($primary, default-contrast);
       justify-content: left;
     }
 

@@ -1,0 +1,42 @@
+@use "sass:map";
+@use "~@angular/material" as mat;
+
+@mixin color($theme) {
+  $color-config: mat.get-color-config($theme);
+  $primary: map.get($color-config, "primary");
+  $hover: map.get($color-config, "hover");
+
+  .mat-form-field {
+    background-color: mat.get-color-from-palette($hover, "lighter");
+    color: mat.get-color-from-palette($hover, "lighter-contrast");
+
+    ::ng-deep .mat-form-field-infix .mat-input-element {
+      color: mat.get-color-from-palette($hover, "lighter-contrast");
+    }
+  }
+
+  .shared-table-between {
+    ::ng-deep .mat-datepicker-toggle {
+      color: mat.get-color-from-palette($hover, "lighter-contrast");
+    }
+
+    ::ng-deep .mat-form-field-infix .mat-input-element {
+      color: mat.get-color-from-palette($hover, "lighter-contrast");
+    }
+  }
+
+  .mat-header-row {
+    background-color: mat.get-color-from-palette($primary, "default");
+  }
+
+  .mat-header-cell {
+    color: mat.get-color-from-palette($primary, "default-contrast");
+  }
+}
+
+@mixin theme($theme) {
+  $color-config: mat.get-color-config($theme);
+  @if $color-config != null {
+    @include color($theme);
+  }
+}

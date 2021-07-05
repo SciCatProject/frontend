@@ -1,17 +1,6 @@
-@use '~@angular/material' as mat;
-@import "../../../styles.scss";
-
 .tab-content {
   mat-card {
     margin: 1em;
-
-    .general-header {
-      background-color: mat.get-color-from-palette($primary, lighter);
-    }
-
-    .creator-header {
-      background-color: mat.get-color-from-palette($navy, 400);
-    }
 
     .section-icon {
       height: auto !important;

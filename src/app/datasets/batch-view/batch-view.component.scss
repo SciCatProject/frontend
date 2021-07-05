@@ -1,15 +1,4 @@
-@use '~@angular/material' as mat;
-@import "../../../styles.scss";
-
 mat-table {
-  mat-header-row {
-    background: mat.get-color-from-palette($primary);
-  }
-
-  mat-header-cell {
-    color: mat.get-color-from-palette($primary, default-contrast);
-  }
-
   mat-header-cell:first-child {
     min-width: 75px;
     max-width: 75px;

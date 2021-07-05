@@ -3,7 +3,7 @@
 }
 
 ::ng-deep .mat-sort-header-arrow {
-  color:rgb(128, 0, 128);
+  color: rgb(128, 0, 128);
 }
 
 .expanded {
@@ -26,7 +26,7 @@
 }
 
 .btnToggleExpand.active:before {
-  content: '-';
+  content: "-";
   background-color: red;
 }
 
@@ -44,9 +44,9 @@
   box-sizing: content-box;
   text-align: center;
   text-indent: 0 !important;
-  font-family: 'Courier New', Courier, monospace;
+  font-family: "Courier New", Courier, monospace;
   line-height: 14px;
-  content: '+';
+  content: "+";
   background-color: green;
 }
 
@@ -58,7 +58,6 @@
   flex: 1 1 auto;
 }
 
-
 .center {
   position: absolute;
   top: 50%;
@@ -68,12 +67,11 @@
   transform: translateX(-50%) translateY(-50%);
 }
 
-
 .mat-table {
   padding-top: 10px;
 }
 
-mat-cell>span.ellipsis {
+mat-cell > span.ellipsis {
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
@@ -83,16 +81,14 @@ mat-header-row {
   align-items: initial;
 }
 
-
 .mat-input-element {
   color: white;
 }
-ß
-.mat-input-element::placeholder {
+ß .mat-input-element::placeholder {
   color: black;
 }
 
-.date_container {        
+.date_container {
   float: left;
   display: flex;
   align-items: center;
@@ -132,27 +128,20 @@ div.shared-table-title {
   }
 }
 
-
 .mat-form-field {
   ::ng-deep .mat-form-field-flex {
     padding: 0px;
     width: 97%;
     > .mat-form-field-infix {
-      color:mat-contrast($grey, 50);
-      background-color: mat-color($grey, 50);
       padding: 1px 0.75em 0 4px;
       border: 0;
       margin: 0.75em 0;
     }
   }
-
-  ::ng-deep .mat-form-field-infix .mat-input-element {
-    color: mat-contrast($grey, 50);
-  }
 }
 
-.shared-table-between { 
-  :ng-deep .mat-form-field >.mat-form-field-wrapper >.mat-form-field-flex { 
+.shared-table-between {
+  :ng-deep .mat-form-field > .mat-form-field-wrapper > .mat-form-field-flex {
     padding: 0px;
   }
   ::ng-deep .date_container {
@@ -165,7 +154,7 @@ div.shared-table-title {
     display: flex;
     flex-direction: row;
   }
-        
+
   ::ng-deep .mat-date-range-input-start-wrapper {
     max-width: 45%;
   }
@@ -182,31 +171,16 @@ div.shared-table-title {
     text-align: left;
   }
 
-  ::ng-deep .mat-datepicker-toggle {
-    color: mat-contrast($grey, 50);
-  }
   ::ng-deep .mat-datepicker-toggle .mat-focus-indicator {
     width: 24px;
     height: 24px;
     line-height: 24px;
-  }
-
-  ::ng-deep .mat-form-field-infix .mat-input-element {
-    color: mat-contrast($grey,50);
   }
 }
 
 .mat-form-field {
   font-size: 14px;
   width: 50%;
-}
-
-.mat-header-row {
-  background-color: mat-color($primary);
-}
-
-.mat-header-cell {
-  color: mat-color($primary,default-contrast);
 }
 
 ::ng-deep .mat-form-field-wrapper {

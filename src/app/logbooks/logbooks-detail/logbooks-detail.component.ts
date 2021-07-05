@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from "@angular/core";
+import { Component, Input, Output, EventEmitter, ViewEncapsulation } from "@angular/core";
 import { Logbook } from "state-management/models";
 import {
   PageChangeEvent,
@@ -8,7 +8,8 @@ import {
 @Component({
   selector: "app-logbooks-detail",
   templateUrl: "./logbooks-detail.component.html",
-  styleUrls: ["./logbooks-detail.component.scss"]
+  styleUrls: ["./logbooks-detail.component.scss"],
+  encapsulation: ViewEncapsulation.None,
 })
 export class LogbooksDetailComponent {
   @Input() logbook: Logbook = new Logbook();

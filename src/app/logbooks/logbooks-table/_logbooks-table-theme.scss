@@ -1,0 +1,24 @@
+@use "sass:map";
+@use "~@angular/material" as mat;
+
+@mixin color($theme) {
+  $color-config: mat.get-color-config($theme);
+  $primary: map.get($color-config, "primary");
+
+  .logbooks-table {
+    mat-header-row {
+      background: mat.get-color-from-palette($primary, "default");
+    }
+
+    mat-header-cell {
+      color: mat.get-color-from-palette($primary, "default-contrast");
+    }
+  }
+}
+
+@mixin theme($theme) {
+  $color-config: mat.get-color-config($theme);
+  @if $color-config != null {
+    @include color($theme);
+  }
+}

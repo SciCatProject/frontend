@@ -1,16 +1,5 @@
-@use '~@angular/material' as mat;
-@import "../../../styles.scss";
-
 mat-card {
   margin: 1em;
-
-  .lifecycle-header {
-    background-color: mat.get-color-from-palette($primary, lighter);
-  }
-
-  .history-header {
-    background-color: mat.get-color-from-palette($navy, 400);
-  }
 
   .section-icon {
     height: auto !important;
@@ -41,14 +30,6 @@ mat-card {
 
     tr.detail-row {
       height: 0;
-    }
-
-    tr.item-row:not(.expanded-row):hover {
-      background: mat.get-color-from-palette($grey, 100);
-    }
-
-    tr.item-row:not(.expanded-row):active {
-      background: mat.get-color-from-palette($primary, default-accent);
     }
 
     .item-row td {

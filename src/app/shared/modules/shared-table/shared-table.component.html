@@ -37,7 +37,7 @@
   <!-- Toggle Button End -->
   <ng-container [matColumnDef]="column.id" *ngFor="let column of visibleColumns">
     <mat-header-cell *matHeaderCellDef class="col-name shared-table-{{column.matchMode}}" fxLayoutAlign="start start" fxLayout="column">
-      <div fxLayout="row" style="align-items: center">
+      <div fxLayout="row" style="align-items: center;">
         <mat-icon>{{ column.icon }}</mat-icon>
         <span mat-sort-header [disabled]="!column.canSort">{{ column.label | titleCase }}</span>
       </div>
@@ -101,7 +101,7 @@
 
   <!-- Body row definition for hidden columns -->
   <mat-row *matRowDef="let row; let i = dataIndex; columns: ['hidden'];" [@detailExpand]="getExpandFlag(row.uniqueId)"
-    style="overflow: hidden" class="matRowHidden hidden-row-{{row.uniqueId}} hidColLength-{{hiddenColumns.length}}"
+    style="overflow: hidden;" class="matRowHidden hidden-row-{{row.uniqueId}} hidColLength-{{hiddenColumns.length}}"
     [ngClass]="expandedElement[row.uniqueId] ? 'expanded' : 'collapsed'"></mat-row>
 
 </mat-table>
