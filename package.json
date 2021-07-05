@@ -7,7 +7,7 @@
     "ng": "./node_modules/@angular/cli/bin/ng",
     "start": "./node_modules/@angular/cli/bin/ng serve --host $HOST",
     "postinstall": "ngcc",
-    "test": "ng test --no-watch --source-map=false",
+    "test": "ng test --watch --source-map=false",
     "posttest": "ng lint",
     "cypress:open": "./node_modules/.bin/cypress open",
     "e2e": "ng e2e --project=catanie-e2e",
@@ -16,6 +16,7 @@
   },
   "private": true,
   "dependencies": {
+    "@angular-material-components/datetime-picker": "^6.0.3",
     "@angular/animations": "^12.0.4",
     "@angular/cdk": "^12.0.4",
     "@angular/common": "^12.0.4",
