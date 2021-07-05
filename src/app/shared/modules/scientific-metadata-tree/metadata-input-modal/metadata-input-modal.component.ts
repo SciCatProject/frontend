@@ -53,14 +53,14 @@ export class MetadataInputModalComponent extends MetadataInputBase implements On
   }
 
   onSave(): void {
-    const {parent, type, child, value, date, unit } = this.metadataForm.value
+    const {parent, type, child, value, date, unit } = this.metadataForm.value;
     const data: InputObject = {
       parent,
       type,
       child,
       value: type === Type.date? new Date(date).toISOString(): value, // Date input could be string or Date
       unit
-    }
+    };
     this.dialogRef.close(data);
   }
 

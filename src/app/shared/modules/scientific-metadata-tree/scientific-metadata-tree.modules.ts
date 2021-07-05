@@ -61,7 +61,7 @@ import { NgxMatDatetimePickerModule, NgxMatNativeDateModule, NgxMatTimepickerMod
     DatePipe,
     PrettyUnitPipe,
     FormatNumberPipe,
-    { provide: MAT_DATE_LOCALE, useValue: 'sv-SE' },
+    { provide: MAT_DATE_LOCALE, useValue: "sv-SE" },
   ]
 })
 export class ScientificMetadataTreeModule { }

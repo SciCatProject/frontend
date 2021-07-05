@@ -9,7 +9,7 @@ export class DateTimeService {
     if (!input) {
       return false;
     }
-    if (typeof input === 'string'){
+    if (typeof input === "string"){
       return (
         DateTime.fromFormat(input, "yyyy-MM-dd").isValid ||
         DateTime.fromFormat(input, "yyyy-MM-dd HH:mm").isValid ||
@@ -17,7 +17,7 @@ export class DateTimeService {
         this.isISODateTime(input)
       );
     }
-    return DateTime.fromJSDate(input).isValid
+    return DateTime.fromJSDate(input).isValid;
   }
   isISODateTime(input: string){
     const regex = /^\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z)$/g;

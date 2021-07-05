@@ -100,7 +100,7 @@ export class MetadataInputComponent extends MetadataInputBase implements OnInit 
         key,
         value: type === Type.date? new Date(date).toISOString(): value, // Date input could be string or Date
         unit
-      }
+      };
       this.save.emit(data);
     } else {
       this.cancel.emit();

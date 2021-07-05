@@ -139,7 +139,7 @@ describe("MetadataInputComponent", () => {
       const expectedData = {
         ... component.metadataForm.value,
         unit: undefined
-      }
+      };
       spyOn(component.cancel, "emit");
       spyOn(component.save, "emit");
       component.metadataForm.markAsDirty();
