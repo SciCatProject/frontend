@@ -6,6 +6,27 @@
   $primary: map.get($color-config, "primary");
   $hover: map.get($color-config, "hover");
 
+  ::ng-deep .mat-sort-header-arrow {
+    color: rgb(128, 0, 128);
+  }
+
+  .btnToggleExpand.active:before {
+    background-color: red;
+  }
+
+  .btnToggleExpand:before {
+    color: white;
+    border-color: white;
+    background-color: green;
+  }
+
+  .mat-input-element {
+    color: white;
+  }
+  ß .mat-input-element::placeholder {
+    color: black;
+  }
+
   .mat-form-field {
     background-color: mat.get-color-from-palette($hover, "lighter");
     color: mat.get-color-from-palette($hover, "lighter-contrast");
