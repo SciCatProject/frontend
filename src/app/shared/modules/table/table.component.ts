@@ -72,7 +72,7 @@ export class TableComponent implements OnInit {
     if (this.isAllSelected()) {
       this.selection.clear();
     } else {
-      this.data.forEach((row) => this.selection.select(row));
+      this.data?.forEach((row) => this.selection.select(row));
     }
     this.selectAll.emit(event);
   }

@@ -25,6 +25,8 @@
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "allowedCommonJsDependencies": [
+              "deep-equal",
+              "exceljs",
               "file-saver",
               "socket.io-client"
             ],

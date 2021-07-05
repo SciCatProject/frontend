@@ -46,6 +46,7 @@ export const environment = {
   logbookEnabled: true,
   maxDirectDownloadSize: 5000000000,
   metadataPreviewEnabled: true,
+  metadataStructure: "",
   multipleDownloadEnabled: true,
   multipleDownloadAction: "https://scicatfileserver.esss.dk/zip",
   scienceSearchEnabled: true,
