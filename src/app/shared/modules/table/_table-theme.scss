@@ -10,14 +10,14 @@
       background: mat.get-color-from-palette($primary, "default");
     }
 
-    ::ng-deep .mat-sort-header-arrow {
+    .mat-sort-header-arrow {
       color: mat.get-color-from-palette($primary, "default-contrast");
     }
 
     mat-header-cell {
       color: mat.get-color-from-palette($primary, "default-contrast");
 
-      ::ng-deep .mat-checkbox .mat-checkbox-frame {
+      .mat-checkbox .mat-checkbox-frame {
         border-color: mat.get-color-from-palette($primary, "default-contrast");
       }
     }

@@ -298,6 +298,10 @@ a:hover {
   cursor: pointer;
 }
 
+.mat-form-field {
+  background-color: mat.get-color-from-palette($primary, "default-contrast");
+}
+
 .no-hover-effect.mat-button .mat-button-focus-overlay {
   background-color: transparent;
 }
