@@ -17,19 +17,15 @@
     (searchBarFocus)="doSearchChange($event)"
   ></app-search-bar>
   <mat-form-field>
-    <mat-icon matPrefix>date_range</mat-icon>
-    <input
-      matInput
-      class="date-input"
-      name="range-picker"
-      [satDatepicker]="largePicker"
-      [value]="dateRangeValue"
-      (dateChange)="doDateChange($event.value)"
-    />
-    <sat-datepicker-toggle matSuffix [for]="largePicker">
-      <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
-    </sat-datepicker-toggle>
-    <sat-datepicker #largePicker [rangeMode]="true"></sat-datepicker>
+    <mat-date-range-input [rangePicker]="largePicker">
+      <input matStartDate placeholder="Start Date" />
+      <input matEndDate placeholder="End Date" />
+    </mat-date-range-input>
+    <mat-datepicker-toggle
+      matPrefix
+      [for]="largePicker"
+    ></mat-datepicker-toggle>
+    <mat-date-range-picker #largePicker></mat-date-range-picker>
   </mat-form-field>
 </mat-card>
 <div class="small-filters">
@@ -56,19 +52,25 @@
       </mat-panel-title>
     </mat-expansion-panel-header>
     <mat-form-field>
-      <mat-icon matPrefix>date_range</mat-icon>
-      <input
-        matInput
-        class="date-input"
-        name="range-picker"
-        [satDatepicker]="smallPicker"
-        [value]="dateRangeValue"
-        (dateChange)="doDateChange($event.value)"
-      />
-      <sat-datepicker-toggle matSuffix [for]="smallPicker">
-        <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
-      </sat-datepicker-toggle>
-      <sat-datepicker #smallPicker [rangeMode]="true"></sat-datepicker>
+      <mat-date-range-input [rangePicker]="smallPicker">
+        <input
+          matStartDate
+          [value]="dateRangeValue.begin"
+          (dateChange)="doDateChange($event)"
+          placeholder="Start Date"
+        />
+        <input
+          matEndDate
+          [value]="dateRangeValue.end"
+          (dateChange)="doDateChange($event)"
+          placeholder="End Date"
+        />
+      </mat-date-range-input>
+      <mat-datepicker-toggle
+        matPrefix
+        [for]="smallPicker"
+      ></mat-datepicker-toggle>
+      <mat-date-range-picker #smallPicker></mat-date-range-picker>
     </mat-form-field>
   </mat-expansion-panel>
 </div>

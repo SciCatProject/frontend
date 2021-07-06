@@ -25,7 +25,6 @@ import {
   setDateRangeFilterAction
 } from "state-management/actions/proposals.actions";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
-import { SatDatepickerRangeValue } from "saturn-datepicker";
 import { DateTime } from "luxon";
 
 describe("ProposalDashboardComponent", () => {
@@ -120,7 +119,7 @@ describe("ProposalDashboardComponent", () => {
     it("should dispatch a setDateRangeFilterAction with begin and end dates and a fetchProposalsAction if event has value", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
-      const event: SatDatepickerRangeValue<DateTime> = {
+      const event = {
         begin: DateTime.local(),
         end: DateTime.local()
       };

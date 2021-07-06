@@ -46,7 +46,6 @@ import { MatSelectModule } from "@angular/material/select";
 import { SearchParametersDialogComponent } from "shared/modules/search-parameters-dialog/search-parameters-dialog.component";
 import { AsyncPipe } from "@angular/common";
 import { DateTime } from "luxon";
-import { SatDatepickerRangeValue } from "saturn-datepicker";
 
 export class MockMatDialog {
   open() {
@@ -315,7 +314,7 @@ describe("DatasetsFilterComponent", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
 
-      const event: SatDatepickerRangeValue<DateTime> = {
+      const event = {
           begin: DateTime.fromISO("1995-12-17T03:24:00.000Z"),
           end: DateTime.fromISO("1995-12-17T03:24:00.000Z")
       };

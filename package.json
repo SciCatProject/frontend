@@ -43,7 +43,6 @@
     "ngx-linky": "^3.0.0",
     "ngx-material-luxon": "^1.1.1",
     "rxjs": "^6.6.6",
-    "saturn-datepicker": "^8.0.1",
     "shortid": "^2.2.16",
     "socket.io-client": "^4.1.2",
     "tslib": "^2.3.0",

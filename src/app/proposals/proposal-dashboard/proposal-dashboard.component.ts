@@ -33,7 +33,7 @@ import {
 import { filter, map, distinctUntilChanged, take } from "rxjs/operators";
 import deepEqual from "deep-equal";
 import { ProposalFilters } from "state-management/state/proposals.store";
-import { SatDatepickerRangeValue } from "saturn-datepicker";
+import { MatDatepickerInputEvent } from "@angular/material/datepicker";
 import { DateTime } from "luxon";
 
 interface ProposalTableData {
@@ -133,19 +133,20 @@ export class ProposalDashboardComponent implements OnInit, OnDestroy {
     this.store.dispatch(fetchProposalsAction());
   }
 
-  onDateChange(values: SatDatepickerRangeValue<DateTime>) {
-    const { begin, end } = values;
-    if (begin && end) {
-      this.store.dispatch(
-        setDateRangeFilterAction({
-          begin: begin.toISO(),
-          end: end.toISO(),
-        })
-      );
-    } else {
-      this.store.dispatch(setDateRangeFilterAction({ begin: "", end: "" }));
-    }
-    this.store.dispatch(fetchProposalsAction());
+  onDateChange(event: MatDatepickerInputEvent<DateTime>) {
+    console.log(event);
+    // const { begin, end } = values;
+    // if (begin && end) {
+    //   this.store.dispatch(
+    //     setDateRangeFilterAction({
+    //       begin: begin.toISO(),
+    //       end: end.toISO(),
+    //     })
+    //   );
+    // } else {
+    //   this.store.dispatch(setDateRangeFilterAction({ begin: "", end: "" }));
+    // }
+    // this.store.dispatch(fetchProposalsAction());
   }
 
   onPageChange(event: PageChangeEvent) {

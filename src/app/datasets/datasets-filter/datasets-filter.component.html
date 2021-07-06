@@ -10,7 +10,7 @@
     >
       <mat-icon>clear_all</mat-icon> Clear
     </button>
-    <div style="clear: both"></div>
+    <div style="clear: both;"></div>
   </div>
 
   <app-search-bar
@@ -148,19 +148,22 @@
   </mat-form-field>
 
   <mat-form-field>
-    <input
-      matInput
-      class="date-input"
-      placeholder="Select a date range"
-      name="range-picker"
-      [satDatepicker]="picker"
-      [value]="creationTimeFilter$ | async"
-      (dateChange)="dateChanged($event.value)"
-    />
-    <sat-datepicker-toggle matSuffix [for]="picker">
-      <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
-    </sat-datepicker-toggle>
-    <sat-datepicker #picker [rangeMode]="true"></sat-datepicker>
+    <mat-date-range-input class="date-input" [rangePicker]="picker">
+      <input
+        matStartDate
+        [value]="(creationTimeFilter$ | async).begin"
+        (dateChange)="dateChanged($event)"
+        placeholder="Start Date"
+      />
+      <input
+        matEndDate
+        [value]="(creationTimeFilter$ | async).end"
+        (dateChange)="dateChanged($event)"
+        placeholder="End Date"
+      />
+    </mat-date-range-input>
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-date-range-picker #picker></mat-date-range-picker>
   </mat-form-field>
 
   <div class="section-container" *ngIf="appConfig.scienceSearchEnabled">

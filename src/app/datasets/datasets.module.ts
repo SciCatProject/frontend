@@ -16,19 +16,17 @@ import { RouterModule } from "@angular/router";
 import { SharedCatanieModule } from "shared/shared.module";
 import { StoreModule } from "@ngrx/store";
 import { datasetsReducer } from "state-management/reducers/datasets.reducer";
-import {
-  DateAdapter,
-  MAT_DATE_FORMATS,
-  MAT_DATE_LOCALE,
-  SatDatepickerModule,
-  SatNativeDateModule,
-} from "saturn-datepicker";
-
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { MatButtonModule } from "@angular/material/button";
 import { MatCardModule } from "@angular/material/card";
 import { MatCheckboxModule } from "@angular/material/checkbox";
-import { MatNativeDateModule, MatOptionModule } from "@angular/material/core";
+import {
+  DateAdapter,
+  MatNativeDateModule,
+  MatOptionModule,
+  MAT_DATE_FORMATS,
+  MAT_DATE_LOCALE,
+} from "@angular/material/core";
 import { MatDialogModule } from "@angular/material/dialog";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatGridListModule } from "@angular/material/grid-list";
@@ -82,6 +80,7 @@ import { MatDatepickerModule } from "@angular/material/datepicker";
     MatCardModule,
     MatCheckboxModule,
     MatChipsModule,
+    MatDatepickerModule,
     MatDialogModule,
     MatFormFieldModule,
     MatGridListModule,
@@ -103,9 +102,6 @@ import { MatDatepickerModule } from "@angular/material/datepicker";
     NgxJsonViewerModule,
     ReactiveFormsModule,
     RouterModule,
-    SatDatepickerModule,
-    SatNativeDateModule,
-    MatDatepickerModule,
     SharedCatanieModule,
     StoreModule.forFeature("datasets", datasetsReducer),
     StoreModule.forFeature("jobs", jobsReducer),

@@ -52,8 +52,8 @@ import {
 import { ScientificCondition } from "state-management/models";
 import { SearchParametersDialogComponent } from "shared/modules/search-parameters-dialog/search-parameters-dialog.component";
 import { AsyncPipe } from "@angular/common";
+import { MatDatepickerInputEvent } from "@angular/material/datepicker";
 import { DateTime } from "luxon";
-import { SatDatepickerRangeValue } from "saturn-datepicker";
 @Component({
   selector: "datasets-filter",
   templateUrl: "datasets-filter.component.html",
@@ -211,18 +211,19 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     this.store.dispatch(removeTypeFilterAction({ datasetType: type }));
   }
 
-  dateChanged(values: SatDatepickerRangeValue<DateTime>) {
-    const { begin, end } = values;
-    if (begin && end) {
-      this.store.dispatch(
-        setDateRangeFilterAction({
-          begin: begin.toUTC().toISO(),
-          end: end.toUTC().plus({ days: 1 }).toISO(),
-        })
-      );
-    } else {
-      this.store.dispatch(setDateRangeFilterAction({ begin: "", end: "" }));
-    }
+  dateChanged(event: MatDatepickerInputEvent<DateTime>) {
+    console.log(event);
+    // const { begin, end } = event.value;
+    // if (begin && end) {
+    //   this.store.dispatch(
+    //     setDateRangeFilterAction({
+    //       begin: begin.toUTC().toISO(),
+    //       end: end.toUTC().plus({ days: 1 }).toISO(),
+    //     })
+    //   );
+    // } else {
+    //   this.store.dispatch(setDateRangeFilterAction({ begin: "", end: "" }));
+    // }
   }
 
   clearFacets() {
