@@ -11,10 +11,6 @@ export interface InputData {
   value: any;
   unit?: string;
 }
-export interface MetadataInput {
-  valid: boolean;
-  data: InputData;
-}
 
 @Component({
   selector: "metadata-input",
@@ -25,7 +21,7 @@ export class MetadataInputComponent extends MetadataInputBase implements OnInit 
   changeDetection: Subscription = new Subscription();
   types: string[] = [];
   @Input() data: FlatNodeEdit = new FlatNodeEdit();
-  @Output() save = new EventEmitter<MetadataInput | null>();
+  @Output() save = new EventEmitter<InputData | null>();
   @Output() cancel = new EventEmitter();
   @Output() changed = new EventEmitter();
 

@@ -18,10 +18,7 @@ import {
   TreeBaseComponent,
   TreeNode,
 } from "shared/modules/scientific-metadata-tree/base-classes/tree-base";
-import {
-  InputData,
-  MetadataInput,
-} from "shared/modules/scientific-metadata-tree/metadata-input/metadata-input.component";
+import { InputData } from "shared/modules/scientific-metadata-tree/metadata-input/metadata-input.component";
 import { HistoryManager } from "shared/modules/scientific-metadata-tree/base-classes/history-manager";
 import { MatDialog } from "@angular/material/dialog";
 import {
@@ -56,14 +53,6 @@ export class TreeEditComponent extends TreeBaseComponent
   currentEditingNode: FlatNodeEdit | null = null;
   lastSavedChanges = -1;
   filteredUnits$: Observable<string[]> = new Observable<string[]>();
-  currentInputData: MetadataInput = {
-    valid: false,
-    data: {
-      type: "",
-      key: "",
-      value: "",
-    },
-  };
   historyManager: HistoryManager;
   @Output() save = new EventEmitter<Record<string, unknown>>();
   @Output() hasUnsavedChanges = new EventEmitter<boolean>();
