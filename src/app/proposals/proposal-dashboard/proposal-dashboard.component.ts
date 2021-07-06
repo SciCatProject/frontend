@@ -44,6 +44,11 @@ interface ProposalTableData {
   end: string;
 }
 
+interface DateRange {
+  begin: string;
+  end: string;
+}
+
 @Component({
   selector: "proposal-dashboard",
   templateUrl: "./proposal-dashboard.component.html",
@@ -62,6 +67,10 @@ export class ProposalDashboardComponent implements OnInit, OnDestroy {
   proposalsPerPage$ = this.store.pipe(select(getProposalsPerPage));
 
   clearSearchBar = false;
+  dateRange: DateRange = {
+    begin: "",
+    end: "",
+  };
   subscriptions: Subscription[] = [];
 
   tableData: ProposalTableData[] = [];
@@ -134,19 +143,24 @@ export class ProposalDashboardComponent implements OnInit, OnDestroy {
   }
 
   onDateChange(event: MatDatepickerInputEvent<DateTime>) {
-    console.log(event);
-    // const { begin, end } = values;
-    // if (begin && end) {
-    //   this.store.dispatch(
-    //     setDateRangeFilterAction({
-    //       begin: begin.toISO(),
-    //       end: end.toISO(),
-    //     })
-    //   );
-    // } else {
-    //   this.store.dispatch(setDateRangeFilterAction({ begin: "", end: "" }));
-    // }
-    // this.store.dispatch(fetchProposalsAction());
+    if (event.value) {
+      const name = event.targetElement.getAttribute("name");
+      if (name === "begin") {
+        this.dateRange.begin = event.value.toUTC().toISO();
+      }
+      if (name === "end") {
+        this.dateRange.end = event.value.toUTC().plus({ days: 1 }).toISO();
+      }
+      if (this.dateRange.begin.length > 0 && this.dateRange.end.length > 0) {
+        this.store.dispatch(
+          setDateRangeFilterAction({
+            begin: this.dateRange.begin,
+            end: this.dateRange.end,
+          })
+        );
+      }
+    }
+    this.store.dispatch(fetchProposalsAction());
   }
 
   onPageChange(event: PageChangeEvent) {

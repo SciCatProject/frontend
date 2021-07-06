@@ -54,6 +54,11 @@ import { SearchParametersDialogComponent } from "shared/modules/search-parameter
 import { AsyncPipe } from "@angular/common";
 import { MatDatepickerInputEvent } from "@angular/material/datepicker";
 import { DateTime } from "luxon";
+
+interface DateRange {
+  begin: string;
+  end: string;
+}
 @Component({
   selector: "datasets-filter",
   templateUrl: "datasets-filter.component.html",
@@ -108,6 +113,11 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   );
 
   hasAppliedFilters$ = this.store.pipe(select(getHasAppliedFilters));
+
+  dateRange: DateRange = {
+    begin: "",
+    end: "",
+  };
 
   constructor(
     private asyncPipe: AsyncPipe,
@@ -212,22 +222,31 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   }
 
   dateChanged(event: MatDatepickerInputEvent<DateTime>) {
-    console.log(event);
-    // const { begin, end } = event.value;
-    // if (begin && end) {
-    //   this.store.dispatch(
-    //     setDateRangeFilterAction({
-    //       begin: begin.toUTC().toISO(),
-    //       end: end.toUTC().plus({ days: 1 }).toISO(),
-    //     })
-    //   );
-    // } else {
-    //   this.store.dispatch(setDateRangeFilterAction({ begin: "", end: "" }));
-    // }
+    if (event.value) {
+      const name = event.targetElement.getAttribute("name");
+      if (name === "begin") {
+        this.dateRange.begin = event.value.toUTC().toISO();
+      }
+      if (name === "end") {
+        this.dateRange.end = event.value.toUTC().plus({ days: 1 }).toISO();
+      }
+      if (this.dateRange.begin.length > 0 && this.dateRange.end.length > 0) {
+        this.store.dispatch(
+          setDateRangeFilterAction({
+            begin: this.dateRange.begin,
+            end: this.dateRange.end,
+          })
+        );
+      }
+    }
   }
 
   clearFacets() {
     this.clearSearchBar = true;
+    this.dateRange = {
+      begin: "",
+      end: "",
+    };
     this.store.dispatch(clearFacetsAction());
     this.store.dispatch(deselectAllCustomColumnsAction());
   }
