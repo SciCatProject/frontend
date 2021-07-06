@@ -628,6 +628,14 @@
                 }
               ],
               "serviceWorker": true
+            },
+            "default": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true
             }
           },
           "defaultConfiguration": "production"
@@ -655,9 +663,12 @@
             },
             "development": {
               "browserTarget": "catanie:build:development"
+            },
+            "default": {
+              "browserTarget": "catanie:build:default"
             }
           },
-          "defaultConfiguration": "development"
+          "defaultConfiguration": "default"
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
