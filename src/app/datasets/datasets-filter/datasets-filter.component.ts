@@ -161,25 +161,21 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   }
 
   onLocationInput(event: any) {
-    console.log(event);
     const value = (<HTMLInputElement>event.target).value;
     this.locationInput$.next(value);
   }
 
   onGroupInput(event: any) {
-    console.log(event);
     const value = (<HTMLInputElement>event.target).value;
     this.groupInput$.next(value);
   }
 
   onKeywordInput(event: any) {
-    console.log(event);
     const value = (<HTMLInputElement>event.target).value;
     this.keywordsInput$.next(value);
   }
 
   onTypeInput(event: any) {
-    console.log(event);
     const value = (<HTMLInputElement>event.target).value;
     this.typeInput$.next(value);
   }
