@@ -151,13 +151,13 @@
     <mat-date-range-input class="date-input" [rangePicker]="picker">
       <input
         matStartDate
-        [value]="(creationTimeFilter$ | async).begin"
+        [value]="(creationTimeFilter$ | async)?.begin"
         (dateChange)="dateChanged($event)"
         placeholder="Start Date"
       />
       <input
         matEndDate
-        [value]="(creationTimeFilter$ | async).end"
+        [value]="(creationTimeFilter$ | async)?.end"
         (dateChange)="dateChanged($event)"
         placeholder="End Date"
       />
