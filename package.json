@@ -7,10 +7,11 @@
     "start": "ng serve",
     "postinstall": "ngcc",
     "build": "ng build",
-    "watch": "ng build --watch --configuration development",
+    "watch": "ng build --watch --configuration default",
     "test": "ng test --no-watch --source-map=false",
     "posttest": "betterer && ng lint",
     "lint": "ng lint",
+    "lint:fix": "ng lint --fix",
     "betterer": "betterer",
     "cypress:open": "./node_modules/.bin/cypress open"
   },
