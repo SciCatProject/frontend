@@ -10,7 +10,7 @@
 </div>
 
 <!-- Top tool bar-->
-<mat-toolbar>
+<mat-toolbar class="table-toolbar">
   <mat-form-field appearance="standard">
     <mat-icon>search</mat-icon>
     <input type="search" matInput placeholder="global word-search" #globalFilter>
@@ -43,7 +43,7 @@
       </div>
       <mat-form-field appearance="standard" *ngIf="column.matchMode;">
         <ng-container *ngIf="column.matchMode === 'between'">
-          <div class="date_container">
+          <div class="date-container">
             <mat-date-range-input [rangePicker]="rangePicker">
               <input #allFilters  name="{{ column.id + '.start' }}" matStartDate placeholder="Start date"
                 (dateChange)="dateChanged($event,column.id+'.start')">
