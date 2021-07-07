@@ -4,19 +4,19 @@
       <mat-card class="big-filter">
         <div class="title">Filter</div>
         <app-search-bar
-          [prefilledValue]="(filters$ | async).textSearch ?? null"
+          [prefilledValue]="filters.textSearch"
           (search)="onTextSearchChange($event)"
           (searchBarFocus)="onTextSearchChange($event)"
         ></app-search-bar>
         <logbook-filter
-          [filters]="filters$ | async"
+          [filters]="filters"
           (filterSelect)="onFilterSelect($event)"
         ></logbook-filter>
       </mat-card>
 
       <div class="small-filter">
         <app-search-bar
-          [prefilledValue]="(filters$ | async).textSearch ?? null"
+          [prefilledValue]="filters.textSearch"
           (search)="onTextSearchChange($event)"
           (searchBarFocus)="onTextSearchChange($event)"
         ></app-search-bar>
@@ -28,7 +28,7 @@
             </mat-panel-title>
           </mat-expansion-panel-header>
           <logbook-filter
-            [filters]="filters$ | async"
+            [filters]="filters"
             (filterSelect)="onFilterSelect($event)"
           ></logbook-filter>
         </mat-expansion-panel>

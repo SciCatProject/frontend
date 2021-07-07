@@ -175,8 +175,8 @@ export class TreeEditComponent extends TreeBaseComponent
       duration: 3000,
     });
   }
-  onSave(data: InputData) {
-    if (this.currentEditingNode) {
+  onSave(data: InputData | null) {
+    if (this.currentEditingNode && data) {
       const nestedNode = this.flatNodeMap.get(this.currentEditingNode);
       if (nestedNode) {
         const mappedNestedNode = this.nestNodeMap.get(nestedNode);

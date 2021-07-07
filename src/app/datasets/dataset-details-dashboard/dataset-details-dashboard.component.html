@@ -51,8 +51,8 @@
       <!-- Viewing public dataset while in read only mode  -->
       <anonymous-details *ngIf="!editingAllowed"
         [dataset]="dataset"
-        [proposal]="(proposal$ | async) ?? null"
-        [sample]="(sample$ | async) ?? null"
+        [proposal]="proposal$ | async"
+        [sample]="sample$ | async"
         [attachments]="attachments$ | async"
         (clickKeyword)="onClickKeyword($event)"
       ></anonymous-details>

@@ -1,7 +1,7 @@
 <div class="dataset-table">
   <!--https://tburleson-layouts-demos.firebaseapp.com/#/docs-->
   <div fxLayout="row" fxLayoutAlign="space-evenly end">
-    <div style="flex: 1"></div>
+    <div style="flex: 1;"></div>
 
     <mat-paginator
       [pageSizeOptions]="[10, 25, 50, 100, 500, 1000]"
@@ -35,8 +35,10 @@
     <ng-container matColumnDef="standard_select">
       <mat-header-cell *matHeaderCellDef>
         <mat-checkbox
-          [checked]="(selectedSets?.length > 0) && isAllSelected()"
-          [indeterminate]="(selectedSets?.length > 0) && !isAllSelected()"
+          [checked]="!!selectedSets && selectedSets.length > 0 && isAllSelected()"
+          [indeterminate]="
+            selectedSets && selectedSets.length > 0 && !isAllSelected()
+          "
           (change)="onSelectAll($event)"
         >
         </mat-checkbox>
@@ -60,10 +62,10 @@
     <!-- Name Column -->
     <ng-container
       matColumnDef="standard_datasetName"
-      style="align-content: center"
+      style="align-content: center;"
     >
       <mat-header-cell *matHeaderCellDef mat-sort-header>
-        <div fxLayout="column" style="align-items: center">
+        <div fxLayout="column" style="align-items: center;">
           <div>
             <mat-icon>fingerprint</mat-icon>
           </div>
@@ -78,7 +80,7 @@
     <!-- Source Folder Column -->
     <ng-container matColumnDef="standard_sourceFolder">
       <mat-header-cell *matHeaderCellDef mat-sort-header>
-        <div fxLayout="column" style="align-items: center">
+        <div fxLayout="column" style="align-items: center;">
           <div>
             <mat-icon>explore</mat-icon>
           </div>
@@ -96,7 +98,7 @@
     <!-- Run Number Column -->
     <ng-container matColumnDef="standard_runNumber">
       <mat-header-cell *matHeaderCellDef mat-sort-header>
-        <div fxLayout="column" style="align-items: center">
+        <div fxLayout="column" style="align-items: center;">
           <div>
             <mat-icon>directions_run</mat-icon>
           </div>
@@ -119,7 +121,7 @@
     <!-- Size Column -->
     <ng-container matColumnDef="standard_size">
       <mat-header-cell *matHeaderCellDef mat-sort-header>
-        <div fxLayout="column" style="align-items: center">
+        <div fxLayout="column" style="align-items: center;">
           <div>
             <mat-icon>save</mat-icon>
           </div>
@@ -149,7 +151,7 @@
     <!-- Start Time Column -->
     <ng-container matColumnDef="standard_creationTime">
       <mat-header-cell *matHeaderCellDef mat-sort-header>
-        <div fxLayout="column" style="align-items: center">
+        <div fxLayout="column" style="align-items: center;">
           <div>
             <mat-icon>calendar_today</mat-icon>
           </div>
@@ -167,7 +169,7 @@
     <!-- Type Column -->
     <ng-container matColumnDef="standard_type">
       <mat-header-cell *matHeaderCellDef>
-        <div fxLayout="column" style="align-items: center">
+        <div fxLayout="column" style="align-items: center;">
           <div>
             <mat-icon>bubble_chart</mat-icon>
           </div>
@@ -180,7 +182,7 @@
     <!-- Image Column -->
     <ng-container matColumnDef="standard_image">
       <mat-header-cell *matHeaderCellDef>
-        <div fxLayout="column" style="align-items: center">
+        <div fxLayout="column" style="align-items: center;">
           <div>
             <mat-icon>camera_alt</mat-icon>
           </div>
@@ -188,18 +190,20 @@
         </div>
       </mat-header-cell>
       <mat-cell *matCellDef="let dataset">
-        <img
-          *ngIf="(datasetsPerPage$ | async) && ((datasetsPerPage$ | async) < 50)"
-          src="{{ dataset.pid | thumbnail | async }}"
-          height="60px"
-        />
+        <ng-container *ngIf="datasetsPerPage$ | async as datasetsPerPage">
+          <img
+            *ngIf="datasetsPerPage < 50"
+            src="{{ dataset.pid | thumbnail | async }}"
+            height="60px"
+          />
+        </ng-container>
       </mat-cell>
     </ng-container>
 
     <!-- Metadata Column -->
     <ng-container matColumnDef="standard_metadata">
       <mat-header-cell *matHeaderCellDef>
-        <div fxLayout="column" style="align-items: center">
+        <div fxLayout="column" style="align-items: center;">
           <div>
             <mat-icon>assessment</mat-icon>
           </div>
@@ -231,7 +235,7 @@
     <!-- Proposal ID Column -->
     <ng-container matColumnDef="standard_proposalId">
       <mat-header-cell *matHeaderCellDef mat-sort-header>
-        <div fxLayout="column" style="align-items: center">
+        <div fxLayout="column" style="align-items: center;">
           <div>
             <mat-icon>spa</mat-icon>
           </div>
@@ -246,7 +250,7 @@
     <!-- Group Column -->
     <ng-container matColumnDef="standard_ownerGroup">
       <mat-header-cell *matHeaderCellDef mat-sort-header>
-        <div fxLayout="column" style="align-items: center">
+        <div fxLayout="column" style="align-items: center;">
           <div>
             <mat-icon>group</mat-icon>
           </div>
@@ -259,7 +263,7 @@
     <!-- Data Status Column -->
     <ng-container matColumnDef="standard_dataStatus">
       <mat-header-cell *matHeaderCellDef>
-        <div fxLayout="column" style="align-items: center">
+        <div fxLayout="column" style="align-items: center;">
           <div>
             <mat-icon>archive&#47;&nbsp;cloud_upload</mat-icon>
           </div>
@@ -347,7 +351,7 @@
       <ng-template [ngIf]="column.type === 'custom'">
         <ng-container matColumnDef="{{ column.type + '_' + column.name }}">
           <mat-header-cell *matHeaderCellDef>
-            <div fxLayout="column" style="align-items: center">
+            <div fxLayout="column" style="align-items: center;">
               <div>
                 <mat-icon>star</mat-icon>
               </div>

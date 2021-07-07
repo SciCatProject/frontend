@@ -33,7 +33,7 @@ export class AppConfig {
   fileDownloadEnabled = false;
   maxDirectDownloadSize: number | null = null;
   metadataPreviewEnabled = false;
-  multipleDownloadAction?: string;
+  multipleDownloadAction: string | null = null;
   multipleDownloadEnabled = false;
   policiesEnabled = false;
   scienceSearchEnabled = false;
@@ -91,7 +91,7 @@ export const APP_DI_CONFIG: AppConfig = {
   maxDirectDownloadSize: environment.maxDirectDownloadSize ?? null,
   fileDownloadEnabled: environment.fileDownloadEnabled ?? false,
   metadataPreviewEnabled: environment.metadataPreviewEnabled ?? false,
-  multipleDownloadAction: environment.multipleDownloadAction,
+  multipleDownloadAction: environment.multipleDownloadAction ?? null,
   multipleDownloadEnabled: environment.multipleDownloadEnabled ?? false,
   policiesEnabled: environment.policiesEnabled ?? false,
   scienceSearchEnabled: environment.scienceSearchEnabled ?? false,

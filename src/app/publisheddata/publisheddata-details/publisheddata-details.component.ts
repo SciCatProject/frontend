@@ -18,8 +18,9 @@ import { getCurrentPublishedData } from "state-management/selectors/published-da
 })
 export class PublisheddataDetailsComponent implements OnInit, OnDestroy {
   currentData$ = this.store.pipe(select(getCurrentPublishedData));
+  publishedData: PublishedData = new PublishedData();
+  subscriptions: Subscription[] = [];
   show = false;
-  routeSubscription: Subscription = new Subscription();
   landingPageUrl = "";
   doi = "";
 
@@ -31,23 +32,29 @@ export class PublisheddataDetailsComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.routeSubscription = this.route.params
-      .pipe(pluck("id"))
-      .subscribe((id: string) => {
+    this.subscriptions.push(
+      this.route.params.pipe(pluck("id")).subscribe((id: string) => {
         this.doi = id;
         this.store.dispatch(fetchPublishedDataAction({ id }));
-      });
+      })
+    );
 
-    this.currentData$.subscribe((data) => {
-      if (data && this.appConfig.landingPage) {
-        this.landingPageUrl =
-          this.appConfig.landingPage + encodeURIComponent(data.doi);
-      }
-    });
+    this.subscriptions.push(
+      this.currentData$.subscribe((data) => {
+        if (data) {
+          this.publishedData = data;
+
+          if (this.appConfig.landingPage) {
+            this.landingPageUrl =
+              this.appConfig.landingPage + encodeURIComponent(data.doi);
+          }
+        }
+      })
+    );
   }
 
   ngOnDestroy() {
-    this.routeSubscription.unsubscribe();
+    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
 
   onRegisterClick(doi: string) {

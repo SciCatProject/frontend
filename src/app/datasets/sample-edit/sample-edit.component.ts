@@ -1,4 +1,11 @@
-import { Component, ElementRef, Inject, ViewChild } from "@angular/core";
+import {
+  Component,
+  ElementRef,
+  Inject,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from "@angular/core";
 import {
   AbstractControl,
   FormControl,
@@ -8,6 +15,7 @@ import {
 } from "@angular/forms";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { select, Store } from "@ngrx/store";
+import { Subscription } from "rxjs";
 import { map } from "rxjs/operators";
 import {
   PageChangeEvent,
@@ -33,7 +41,7 @@ import {
   templateUrl: "./sample-edit.component.html",
   styleUrls: ["./sample-edit.component.scss"],
 })
-export class SampleEditComponent {
+export class SampleEditComponent implements OnInit, OnDestroy {
   @ViewChild("searchBar", { static: true }) searchBar!: ElementRef;
 
   textFilter$ = this.store.pipe(select(getTextFilter));
@@ -46,6 +54,9 @@ export class SampleEditComponent {
       samples.filter((sample) => sample.ownerGroup === this.data.ownerGroup)
     )
   );
+
+  samplesSubscription: Subscription = new Subscription();
+  samples: Sample[] = [];
 
   selectedSampleId = "";
   displayedColumns = [
@@ -69,6 +80,18 @@ export class SampleEditComponent {
     this.store.dispatch(setTextFilterAction({ text: "" }));
     this.store.dispatch(changePageAction({ page: 0, limit: 10 }));
     this.store.dispatch(fetchSamplesAction());
+  }
+
+  ngOnInit() {
+    this.samplesSubscription = this.samples$.subscribe((samples) => {
+      if (samples) {
+        this.samples = samples;
+      }
+    });
+  }
+
+  ngOnDestroy() {
+    this.samplesSubscription.unsubscribe();
   }
 
   sampleValidator(): ValidatorFn {

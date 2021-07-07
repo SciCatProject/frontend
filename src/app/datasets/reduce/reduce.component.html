@@ -5,12 +5,7 @@
         New Action
       </mat-card-header>
 
-      <ng-template
-        [ngIf]="
-          (result$ | async) ||
-          ((derivedDatasets$ | async) && (derivedDatasets$ | async).length > 0)
-        "
-      >
+      <ng-template [ngIf]="(result$ | async) || derivedDatasets.length > 0">
         <div class="details">
           <table>
             <tr>
@@ -25,12 +20,7 @@
                 </ng-container>
               </td>
               <ng-template #noResult>
-                <td
-                  *ngIf="
-                    (derivedDatasets$ | async) &&
-                    (derivedDatasets$ | async).length > 0
-                  "
-                >
+                <td *ngIf="derivedDatasets.length > 0">
                   Previously derived dataset available.
                 </td>
               </ng-template>
@@ -184,7 +174,7 @@
       </div>
     </mat-card>
 
-    <mat-card *ngIf="derivedDatasets$ | async as derivedDatasets">
+    <mat-card *ngIf="derivedDatasets">
       <mat-card-header class="derived-header">
         Derived Datasets
       </mat-card-header>

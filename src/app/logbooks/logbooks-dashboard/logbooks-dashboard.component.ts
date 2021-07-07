@@ -53,6 +53,15 @@ export class LogbooksDashboardComponent
   );
 
   logbook: Logbook = new Logbook();
+  filters: LogbookFilters = {
+    textSearch: "",
+    showBotMessages: true,
+    showImages: true,
+    showUserMessages: true,
+    sortField: "timestamp:desc",
+    skip: 0,
+    limit: 25,
+  };
 
   subscriptions: Subscription[] = [];
 
@@ -113,6 +122,14 @@ export class LogbooksDashboardComponent
     );
 
     this.subscriptions.push(
+      this.filters$.subscribe((filters) => {
+        if (filters) {
+          this.filters = filters;
+        }
+      })
+    );
+
+    this.subscriptions.push(
       combineLatest([this.route.params, this.filters$, this.readyToFetch$])
         .pipe(
           map(([params, filters, _]) => [params, filters]),
@@ -131,7 +148,7 @@ export class LogbooksDashboardComponent
         .pipe(
           map((params) => params.args as string),
           take(1),
-          map((args) => (args ? JSON.parse(args) as LogbookFilters: {}))
+          map((args) => (args ? (JSON.parse(args) as LogbookFilters) : {}))
         )
         .subscribe((filters) =>
           this.store.dispatch(prefillFiltersAction({ values: filters }))

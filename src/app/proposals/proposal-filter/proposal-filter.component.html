@@ -55,13 +55,13 @@
       <mat-date-range-input [rangePicker]="smallPicker">
         <input
           matStartDate
-          [value]="dateRangeValue.begin"
+          [value]="dateRangeValue?.begin"
           (dateChange)="doDateChange($event)"
           placeholder="Start Date"
         />
         <input
           matEndDate
-          [value]="dateRangeValue.end"
+          [value]="dateRangeValue?.end"
           (dateChange)="doDateChange($event)"
           placeholder="End Date"
         />

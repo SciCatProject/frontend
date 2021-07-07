@@ -57,7 +57,7 @@
       class="download-button"
       type="submit"
       color="accent"
-      [disabled]="totalFileSize > maxFileSize"
+      [disabled]="!!maxFileSize && (totalFileSize > maxFileSize)"
     >
       Download All
     </button>

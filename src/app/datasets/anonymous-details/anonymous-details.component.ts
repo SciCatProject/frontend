@@ -9,9 +9,9 @@ import { Dataset, Attachment, Proposal, Sample } from "shared/sdk";
 })
 export class AnonymousDetailsComponent {
   @Input() dataset: Dataset = new Dataset();
-  @Input() attachments: Attachment[] | null = null;
-  @Input() proposal: Proposal | null = null;
-  @Input() sample: Sample | null = null;
+  @Input() attachments: Attachment[] | null | undefined;
+  @Input() proposal: Proposal | null | undefined;
+  @Input() sample: Sample | null | undefined;
 
   @Output() clickKeyword = new EventEmitter<string>();
 

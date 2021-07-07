@@ -4,6 +4,7 @@ import {
   Input,
   OnChanges,
   SimpleChange,
+  OnDestroy,
 } from "@angular/core";
 import { Router } from "@angular/router";
 import { select, Store } from "@ngrx/store";
@@ -16,15 +17,16 @@ import {
   reduceDatasetAction,
   fetchDatasetsAction,
 } from "state-management/actions/datasets.actions";
-import { FormControl, Validators, FormBuilder } from "@angular/forms";
+import { FormControl, Validators, FormBuilder, AbstractControl } from "@angular/forms";
 import { map } from "rxjs/operators";
+import { Subscription } from "rxjs";
 
 @Component({
   selector: "reduce",
   templateUrl: "./reduce.component.html",
   styleUrls: ["./reduce.component.scss"],
 })
-export class ReduceComponent implements OnInit, OnChanges {
+export class ReduceComponent implements OnInit, OnChanges, OnDestroy {
   @Input() dataset: Dataset = new Dataset();
 
   derivedDatasets$ = this.store.pipe(
@@ -32,12 +34,15 @@ export class ReduceComponent implements OnInit, OnChanges {
     map((datasets) =>
       datasets
         .filter((dataset) => dataset.type === "derived")
-        .map((dataset: unknown) => (dataset as DerivedDataset))
+        .map((dataset: unknown) => dataset as DerivedDataset)
         .filter((dataset) =>
           dataset["inputDatasets"].includes(this.dataset.pid)
         )
     )
   );
+
+  derivedDatsetsSubscription: Subscription = new Subscription();
+  derivedDatasets: DerivedDataset[] = [];
 
   result$ = this.store.pipe(select(getOpenwhiskResult));
 
@@ -99,6 +104,14 @@ export class ReduceComponent implements OnInit, OnChanges {
 
   ngOnInit() {
     this.store.dispatch(fetchDatasetsAction());
+
+    this.derivedDatsetsSubscription = this.derivedDatasets$.subscribe(
+      (datasets) => {
+        if (datasets) {
+          this.derivedDatasets = datasets;
+        }
+      }
+    );
   }
 
   ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
@@ -110,7 +123,7 @@ export class ReduceComponent implements OnInit, OnChanges {
           map((datasets) =>
             datasets
               .filter((dataset) => dataset.type === "derived")
-              .map((dataset: unknown) => (dataset as DerivedDataset))
+              .map((dataset: unknown) => dataset as DerivedDataset)
               .filter((dataset) =>
                 dataset["inputDatasets"].includes(this.dataset.pid)
               )
@@ -118,5 +131,9 @@ export class ReduceComponent implements OnInit, OnChanges {
         );
       }
     }
+  }
+
+  ngOnDestroy() {
+    this.derivedDatsetsSubscription.unsubscribe();
   }
 }
