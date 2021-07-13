@@ -17,7 +17,7 @@ module.exports = function (config) {
       'assets/': '/base/src/assets/'
     },
     mime: {
-      'text/x-typescript': ['ts','tsx']
+      'text/x-typescript': ['ts', 'tsx']
     },
     client: {
       jasmine: {
@@ -34,8 +34,8 @@ module.exports = function (config) {
     coverageReporter: {
       dir: require('path').join(__dirname, './coverage'),
       reporters: [
-        {type: 'html', subdir: 'report-html'},
-        {type: 'lcovonly', subdir: '.', file: 'lcov.info'}
+        { type: 'html', subdir: 'report-html' },
+        { type: 'lcovonly', subdir: '.', file: 'lcov.info' }
       ],
       fixWebpackSourcePaths: true
     },

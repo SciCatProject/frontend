@@ -106,7 +106,7 @@ describe("TreeBaseComponent", () => {
       expect(component.dataTree.length).toEqual(1);
       expect(component.dataTree[0].key).toEqual("in_interleave");
       expect(component.dataTree[0].value).toEqual(false);
-      expect(component.dataTree[0].children).toEqual([]);
+      expect(component.dataTree[0].children).toEqual(undefined);
       expect(component.dataTree[0].unit).toEqual(undefined);
     });
     it("should build dataTree with one node and value is null", () => {
@@ -116,7 +116,7 @@ describe("TreeBaseComponent", () => {
       expect(component.dataTree.length).toEqual(1);
       expect(component.dataTree[0].key).toEqual("in_interleave");
       expect(component.dataTree[0].value).toEqual(null);
-      expect(component.dataTree[0].children).toEqual([]);
+      expect(component.dataTree[0].children).toEqual(undefined);
       expect(component.dataTree[0].unit).toEqual(undefined);
     });
     it("should build dataTree with two child nodes and value is array", () => {
@@ -139,7 +139,7 @@ describe("TreeBaseComponent", () => {
       expect(component.dataTree.length).toEqual(1);
       expect(component.dataTree[0].key).toEqual("angle");
       expect(component.dataTree[0].value).toEqual(1);
-      expect(component.dataTree[0].children).toEqual([]);
+      expect(component.dataTree[0].children).toEqual(undefined);
       expect(component.dataTree[0].unit).toEqual("deg");
     });
   });

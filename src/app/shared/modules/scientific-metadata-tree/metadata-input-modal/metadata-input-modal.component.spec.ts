@@ -4,14 +4,12 @@ import { MetadataInputModalComponent } from "./metadata-input-modal.component";
 import { FormBuilder } from "@angular/forms";
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { MatFormFieldModule } from "@angular/material/form-field";
-import { MatNativeDateModule, MatOptionModule } from "@angular/material/core";
+import { MatOptionModule } from "@angular/material/core";
 import { MatSelectModule } from "@angular/material/select";
 import { MatDialogModule, MatDialogRef } from "@angular/material/dialog";
 import { MockMatDialogRef } from "shared/MockStubs";
 import { MatInputModule } from "@angular/material/input";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { MatDatepickerModule } from "@angular/material/datepicker";
-import { MatButtonModule } from "@angular/material/button";
 
 describe("MetadataInputModalComponent", () => {
   let component: MetadataInputModalComponent;
@@ -22,16 +20,13 @@ describe("MetadataInputModalComponent", () => {
       TestBed.configureTestingModule({
         declarations: [MetadataInputModalComponent],
         imports: [
-          BrowserAnimationsModule,
           MatAutocompleteModule,
-          MatButtonModule,
-          MatDatepickerModule,
-          MatDialogModule,
           MatFormFieldModule,
-          MatInputModule,
-          MatNativeDateModule,
           MatOptionModule,
           MatSelectModule,
+          MatDialogModule,
+          MatInputModule,
+          BrowserAnimationsModule,
         ],
         providers: [
           FormBuilder,

@@ -1,14 +1,6 @@
 import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 import { FormBuilder } from "@angular/forms";
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
-import { MatButtonModule } from "@angular/material/button";
-import { MatNativeDateModule, MatOptionModule } from "@angular/material/core";
-import { MatDatepickerModule } from "@angular/material/datepicker";
-import { MatFormFieldModule } from "@angular/material/form-field";
-import { MatIconModule } from "@angular/material/icon";
-import { MatInputModule } from "@angular/material/input";
-import { MatSelectModule } from "@angular/material/select";
-import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { DateTime } from "luxon";
 import { FormatNumberPipe } from "shared/pipes/format-number.pipe";
 import { Type } from "../base-classes/metadata-input-base";
@@ -24,18 +16,7 @@ describe("MetadataInputComponent", () => {
     waitForAsync(() => {
       TestBed.configureTestingModule({
         declarations: [MetadataInputComponent],
-        imports: [
-          BrowserAnimationsModule,
-          MatAutocompleteModule,
-          MatButtonModule,
-          MatDatepickerModule,
-          MatFormFieldModule,
-          MatIconModule,
-          MatInputModule,
-          MatNativeDateModule,
-          MatOptionModule,
-          MatSelectModule,
-        ],
+        imports: [MatAutocompleteModule],
         providers: [FormBuilder, FormatNumberPipe],
       }).compileComponents();
     })

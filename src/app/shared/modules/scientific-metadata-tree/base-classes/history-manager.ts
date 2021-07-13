@@ -8,7 +8,7 @@ export class HistoryManager {
   indexChanged = new EventEmitter<number>();
   currentIdx = -1;
   limit = 0;
-  private execute(command: Actions , actionName: "undo" | "redo"){
+  private execute(command: Actions , actionName: string){
     command[actionName]();
   }
   add(command: Actions){
