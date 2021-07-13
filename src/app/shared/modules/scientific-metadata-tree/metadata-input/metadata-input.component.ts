@@ -48,6 +48,10 @@ export class MetadataInputComponent extends MetadataInputBase implements OnInit 
         Validators.required,
         Validators.minLength(1),
       ]),
+      date: new FormControl("", [
+        Validators.required,
+        this.dateValidator()
+      ]),
       unit: new FormControl("", [
         Validators.required,
         this.unitValidator(),
@@ -79,7 +83,7 @@ export class MetadataInputComponent extends MetadataInputBase implements OnInit 
       } else if (this.dateTimeService.isISODateTime(node.value)) {
         this.metadataForm.get("type")?.setValue(Type.date);
         this.metadataForm.get("key")?.setValue(node.key);
-        this.metadataForm.get("value")?.setValue(DateTime.fromISO(node.value).toLocal().toISO());
+        this.metadataForm.get("date")?.setValue(DateTime.fromISO(node.value).toLocal().toISO());
       } else {
         this.metadataForm.get("type")?.setValue(Type.string);
         this.metadataForm.get("key")?.setValue(node.key);
@@ -90,7 +94,14 @@ export class MetadataInputComponent extends MetadataInputBase implements OnInit 
   }
   onSave() {
     if (this.metadataForm.dirty) {
-      this.save.emit(this.metadataForm.value);
+      const {type, key, value, date, unit} = this.metadataForm.value;
+      const data: InputData = {
+        type,
+        key,
+        value: type === Type.date? new Date(date).toISOString(): value, // Date input could be string or Date
+        unit
+      };
+      this.save.emit(data);
     } else {
       this.cancel.emit();
     }

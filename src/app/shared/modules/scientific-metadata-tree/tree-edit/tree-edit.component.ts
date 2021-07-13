@@ -302,7 +302,7 @@ export class TreeEditComponent extends TreeBaseComponent
     switch (data.type) {
       case Type.date:
         node.key = data.key;
-        node.value = DateTime.fromJSDate(new Date(data.value)).toUTC().toISO();
+        node.value = DateTime.fromISO(data.value).toUTC().toISO();
         node.unit = null;
         break;
       case Type.string:
@@ -350,7 +350,7 @@ export class TreeEditComponent extends TreeBaseComponent
     });
 
     dialogRef.afterClosed().subscribe((data: InputObject) => {
-      if (node) {
+      if (data) {
         const grandfatherNode = this.flatNodeMap.get(node);
         const parentNode = new TreeNode();
         parentNode.key = data.parent;
@@ -359,21 +359,19 @@ export class TreeEditComponent extends TreeBaseComponent
         parentNode.children = [];
         this.insertNode(parentNode, childNode);
         this.updateNode(childNode, { ...childData, key: childData.child });
-        if (grandfatherNode) {
-          this.insertNode(grandfatherNode, parentNode);
-          const index = this.getIndex(grandfatherNode, parentNode);
-          this.treeControl.expand(node);
-          this.historyManager.add({
-            undo: () => {
-              this.removeNode(grandfatherNode, parentNode);
-            },
-            redo: () => {
-              this.insertNode(grandfatherNode, parentNode, index);
-            },
-          });
-          this.dataSource.data = this.dataTree;
+        this.insertNode(grandfatherNode, parentNode);
+        const index = this.getIndex(grandfatherNode, parentNode);
+        this.treeControl.expand(node);
+        this.historyManager.add({
+          undo: () => {
+            this.removeNode(grandfatherNode, parentNode);
+          },
+          redo: () => {
+            this.insertNode(grandfatherNode, parentNode, index);
+          }
+        });
+        this.dataSource.data = this.dataTree;
         }
-      }
     });
   }
 }
