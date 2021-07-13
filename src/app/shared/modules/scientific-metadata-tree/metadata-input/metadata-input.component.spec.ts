@@ -122,7 +122,7 @@ describe("MetadataInputComponent", () => {
       component.addCurrentMetadata(component.data);
       expect(component.metadataForm.get("type").value).toEqual(Type.date);
       expect(component.metadataForm.get("key").value).toEqual("date");
-      expect(component.metadataForm.get("value").value).toEqual(DateTime.fromISO(data.value).toLocal().toISO());
+      expect(component.metadataForm.get("date").value).toEqual(DateTime.fromISO(data.value).toLocal().toISO());
       expect(component.metadataForm.get("unit").disabled).toEqual(true);
     });
   });
@@ -136,13 +136,17 @@ describe("MetadataInputComponent", () => {
       expect(component.save.emit).toHaveBeenCalledTimes(0);
     });
     it("should emit an save event", () => {
+      const expectedData = {
+        ... component.metadataForm.value,
+        unit: undefined
+      };
       spyOn(component.cancel, "emit");
       spyOn(component.save, "emit");
       component.metadataForm.markAsDirty();
       component.onSave();
       expect(component.cancel.emit).toHaveBeenCalledTimes(0);
       expect(component.save.emit).toHaveBeenCalledTimes(1);
-      expect(component.save.emit).toHaveBeenCalledWith(component.metadataForm.value);
+      expect(component.save.emit).toHaveBeenCalledWith(expectedData);
     });
   });
   describe("#onCancle()", () => {
