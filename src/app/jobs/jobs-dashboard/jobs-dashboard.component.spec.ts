@@ -2,7 +2,7 @@ import {
   ComponentFixture,
   TestBed,
   inject,
-  waitForAsync
+  waitForAsync,
 } from "@angular/core/testing";
 
 import { JobsDashboardComponent } from "./jobs-dashboard.component";
@@ -16,39 +16,47 @@ import { DatePipe } from "@angular/common";
 import { JobViewMode } from "state-management/models";
 import {
   setJobViewModeAction,
-  changePageAction
+  changePageAction,
 } from "state-management/actions/jobs.actions";
 import { PageChangeEvent } from "shared/modules/table/table.component";
 import { MatButtonToggleModule } from "@angular/material/button-toggle";
+import { FlexLayoutModule } from "@angular/flex-layout";
+import { MatCardModule } from "@angular/material/card";
+import { MatIconModule } from "@angular/material/icon";
 
 describe("JobsDashboardComponent", () => {
   let component: JobsDashboardComponent;
   let fixture: ComponentFixture<JobsDashboardComponent>;
 
   const router = {
-    navigateByUrl: jasmine.createSpy("navigateByUrl")
+    navigateByUrl: jasmine.createSpy("navigateByUrl"),
   };
   let store: MockStore;
   let dispatchSpy;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      schemas: [NO_ERRORS_SCHEMA],
-      declarations: [JobsDashboardComponent],
-      imports: [
-        MatButtonToggleModule,
-        SharedCatanieModule,
-        StoreModule.forRoot({})
-      ],
-      providers: [DatePipe]
-    });
-    TestBed.overrideComponent(JobsDashboardComponent, {
-      set: {
-        providers: [{ provide: Router, useValue: router }]
-      }
-    });
-    TestBed.compileComponents();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        schemas: [NO_ERRORS_SCHEMA],
+        declarations: [JobsDashboardComponent],
+        imports: [
+          FlexLayoutModule,
+          MatButtonToggleModule,
+          MatCardModule,
+          MatIconModule,
+          SharedCatanieModule,
+          StoreModule.forRoot({}),
+        ],
+        providers: [DatePipe],
+      });
+      TestBed.overrideComponent(JobsDashboardComponent, {
+        set: {
+          providers: [{ provide: Router, useValue: router }],
+        },
+      });
+      TestBed.compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(JobsDashboardComponent);
@@ -81,7 +89,7 @@ describe("JobsDashboardComponent", () => {
       const data = component.formatTableData(jobs);
 
       expect(data.length).toEqual(1);
-      data.forEach(item => {
+      data.forEach((item) => {
         expect(item.id).toEqual(jobs[0].id);
       });
     });
@@ -123,7 +131,7 @@ describe("JobsDashboardComponent", () => {
       const event: PageChangeEvent = {
         pageIndex: 0,
         pageSize: 25,
-        length: 25
+        length: 25,
       };
       component.onPageChange(event);
 

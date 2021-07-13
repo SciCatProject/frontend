@@ -3,7 +3,7 @@ import {
   ComponentFixture,
   TestBed,
   inject,
-  waitForAsync
+  waitForAsync,
 } from "@angular/core/testing";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { MockStore, MockActivatedRoute } from "shared/MockStubs";
@@ -14,39 +14,49 @@ import { FileSizePipe } from "shared/pipes/filesize.pipe";
 import { Dataset, Proposal } from "shared/sdk";
 import {
   changeDatasetsPageAction,
-  fetchProposalDatasetsAction
+  fetchProposalDatasetsAction,
 } from "state-management/actions/proposals.actions";
 import { PageChangeEvent } from "shared/modules/table/table.component";
 import { APP_CONFIG } from "app-config.module";
+import { MatTabsModule } from "@angular/material/tabs";
+import { MatIconModule } from "@angular/material/icon";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
 describe("ViewProposalPageComponent", () => {
   let component: ViewProposalPageComponent;
   let fixture: ComponentFixture<ViewProposalPageComponent>;
 
   const router = {
-    navigateByUrl: jasmine.createSpy("navigateByUrl")
+    navigateByUrl: jasmine.createSpy("navigateByUrl"),
   };
   let store: MockStore;
   let dispatchSpy;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      schemas: [NO_ERRORS_SCHEMA],
-      declarations: [ViewProposalPageComponent],
-      imports: [StoreModule.forRoot({})],
-      providers: [DatePipe, FileSizePipe, SlicePipe]
-    });
-    TestBed.overrideComponent(ViewProposalPageComponent, {
-      set: {
-        providers: [
-          { provide: Router, useValue: router },
-          { provide: ActivatedRoute, useClass: MockActivatedRoute },
-          { provide: APP_CONFIG, useValue: { logbookEnabled: true } }
-        ]
-      }
-    });
-    TestBed.compileComponents();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        schemas: [NO_ERRORS_SCHEMA],
+        declarations: [ViewProposalPageComponent],
+        imports: [
+          BrowserAnimationsModule,
+          MatIconModule,
+          MatTabsModule,
+          StoreModule.forRoot({}),
+        ],
+        providers: [DatePipe, FileSizePipe, SlicePipe],
+      });
+      TestBed.overrideComponent(ViewProposalPageComponent, {
+        set: {
+          providers: [
+            { provide: Router, useValue: router },
+            { provide: ActivatedRoute, useClass: MockActivatedRoute },
+            { provide: APP_CONFIG, useValue: { logbookEnabled: true } },
+          ],
+        },
+      });
+      TestBed.compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ViewProposalPageComponent);
@@ -91,7 +101,7 @@ describe("ViewProposalPageComponent", () => {
       const event: PageChangeEvent = {
         pageIndex: 0,
         pageSize: 25,
-        length: 25
+        length: 25,
       };
       component.onPageChange(event);
 
@@ -99,7 +109,7 @@ describe("ViewProposalPageComponent", () => {
       expect(dispatchSpy).toHaveBeenCalledWith(
         changeDatasetsPageAction({
           page: event.pageIndex,
-          limit: event.pageSize
+          limit: event.pageSize,
         })
       );
       expect(dispatchSpy).toHaveBeenCalledWith(

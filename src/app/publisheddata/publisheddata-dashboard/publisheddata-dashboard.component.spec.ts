@@ -24,6 +24,9 @@ import { MatCheckboxChange } from "@angular/material/checkbox";
 import { of } from "rxjs";
 import { Message, MessageType } from "state-management/models";
 import { showMessageAction } from "state-management/actions/user.actions";
+import { FlexLayoutModule } from "@angular/flex-layout";
+import { MatButtonModule } from "@angular/material/button";
+import { MatIconModule } from "@angular/material/icon";
 
 describe("PublisheddataDashboardComponent", () => {
   let component: PublisheddataDashboardComponent;
@@ -39,8 +42,13 @@ describe("PublisheddataDashboardComponent", () => {
     waitForAsync(() => {
       TestBed.configureTestingModule({
         schemas: [NO_ERRORS_SCHEMA],
+        imports: [
+          FlexLayoutModule,
+          MatButtonModule,
+          MatIconModule,
+          StoreModule.forRoot({}),
+        ],
         declarations: [PublisheddataDashboardComponent],
-        imports: [StoreModule.forRoot({})],
       });
       TestBed.overrideComponent(PublisheddataDashboardComponent, {
         set: {

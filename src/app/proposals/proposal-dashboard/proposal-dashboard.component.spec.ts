@@ -27,6 +27,9 @@ import {
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { DateTime } from "luxon";
 import { MatDatepickerInputEvent } from "@angular/material/datepicker";
+import { FlexLayoutModule } from "@angular/flex-layout";
+import { MatCardModule } from "@angular/material/card";
+import { MatIconModule } from "@angular/material/icon";
 
 describe("ProposalDashboardComponent", () => {
   let component: ProposalDashboardComponent;
@@ -43,7 +46,13 @@ describe("ProposalDashboardComponent", () => {
       TestBed.configureTestingModule({
         schemas: [NO_ERRORS_SCHEMA],
         declarations: [ProposalDashboardComponent],
-        imports: [SharedCatanieModule, StoreModule.forRoot({})],
+        imports: [
+          FlexLayoutModule,
+          MatCardModule,
+          MatIconModule,
+          SharedCatanieModule,
+          StoreModule.forRoot({}),
+        ],
         providers: [DatePipe],
       });
       TestBed.overrideComponent(ProposalDashboardComponent, {

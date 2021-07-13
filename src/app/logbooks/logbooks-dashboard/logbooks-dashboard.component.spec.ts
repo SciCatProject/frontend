@@ -3,7 +3,7 @@ import {
   ComponentFixture,
   TestBed,
   inject,
-  waitForAsync
+  waitForAsync,
 } from "@angular/core/testing";
 
 import { LogbooksDashboardComponent } from "./logbooks-dashboard.component";
@@ -16,7 +16,7 @@ import {
   fetchLogbookAction,
   setDisplayFiltersAction,
   changePageAction,
-  sortByColumnAction
+  sortByColumnAction,
 } from "state-management/actions/logbooks.actions";
 import { Logbook, LogbookInterface } from "shared/sdk";
 import { LogbookFilters } from "state-management/models";
@@ -24,10 +24,12 @@ import { RouterTestingModule } from "@angular/router/testing";
 
 import {
   PageChangeEvent,
-  SortChangeEvent
+  SortChangeEvent,
 } from "shared/modules/table/table.component";
 import { MatCardModule } from "@angular/material/card";
 import { MatIconModule } from "@angular/material/icon";
+import { MatExpansionModule } from "@angular/material/expansion";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
 describe("DashboardComponent", () => {
   let component: LogbooksDashboardComponent;
@@ -40,30 +42,36 @@ describe("DashboardComponent", () => {
   const logbookData: LogbookInterface = {
     name: "tesName",
     roomId: "testId",
-    messages: [{ message: "test1" }, { message: "test2" }]
+    messages: [{ message: "test1" }, { message: "test2" }],
   };
   const logbook = new Logbook(logbookData);
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      schemas: [NO_ERRORS_SCHEMA],
-      declarations: [LogbooksDashboardComponent],
-      imports: [
-        AppConfigModule,
-        MatCardModule,
-        MatIconModule,
-        RouterTestingModule.withRoutes([]),
-        StoreModule.forRoot({})
-      ]
-    });
-    TestBed.overrideComponent(LogbooksDashboardComponent, {
-      set: {
-        providers: [{ provide: ActivatedRoute, useClass: MockActivatedRoute }]
-      }
-    }).compileComponents();
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        schemas: [NO_ERRORS_SCHEMA],
+        declarations: [LogbooksDashboardComponent],
+        imports: [
+          AppConfigModule,
+          BrowserAnimationsModule,
+          MatCardModule,
+          MatExpansionModule,
+          MatIconModule,
+          RouterTestingModule.withRoutes([]),
+          StoreModule.forRoot({}),
+        ],
+      });
+      TestBed.overrideComponent(LogbooksDashboardComponent, {
+        set: {
+          providers: [
+            { provide: ActivatedRoute, useClass: MockActivatedRoute },
+          ],
+        },
+      }).compileComponents();
 
-    router = TestBed.inject(Router);
-  }));
+      router = TestBed.inject(Router);
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(LogbooksDashboardComponent);
@@ -95,7 +103,7 @@ describe("DashboardComponent", () => {
         showUserMessages: true,
         sortField: "timestamp:desc",
         skip: 0,
-        limit: 25
+        limit: 25,
       };
       component.applyRouterState(logbook.name, filters);
 
@@ -103,7 +111,7 @@ describe("DashboardComponent", () => {
       expect(navigateSpy).toHaveBeenCalledWith(
         ["/logbooks", component.logbook.name],
         {
-          queryParams: { args: JSON.stringify(filters) }
+          queryParams: { args: JSON.stringify(filters) },
         }
       );
     });
@@ -123,7 +131,7 @@ describe("DashboardComponent", () => {
       );
       expect(dispatchSpy).toHaveBeenCalledWith(
         fetchLogbookAction({
-          name: component.logbook.name
+          name: component.logbook.name,
         })
       );
     });
@@ -142,7 +150,7 @@ describe("DashboardComponent", () => {
         showUserMessages: true,
         sortField: "timestamp:desc",
         skip: 0,
-        limit: 25
+        limit: 25,
       };
       const { showBotMessages, showImages, showUserMessages } = filters;
 
@@ -153,12 +161,12 @@ describe("DashboardComponent", () => {
         setDisplayFiltersAction({
           showBotMessages,
           showImages,
-          showUserMessages
+          showUserMessages,
         })
       );
       expect(dispatchSpy).toHaveBeenCalledWith(
         fetchLogbookAction({
-          name: component.logbook.name
+          name: component.logbook.name,
         })
       );
       expect(methodSpy).toHaveBeenCalled();
@@ -173,7 +181,7 @@ describe("DashboardComponent", () => {
       const event: PageChangeEvent = {
         pageIndex: 1,
         pageSize: 25,
-        length: 100
+        length: 100,
       };
 
       component.onPageChange(event);
@@ -195,7 +203,7 @@ describe("DashboardComponent", () => {
       component.logbook = logbook;
       const event: SortChangeEvent = {
         active: "test",
-        direction: "asc"
+        direction: "asc",
       };
 
       component.onSortChange(event);

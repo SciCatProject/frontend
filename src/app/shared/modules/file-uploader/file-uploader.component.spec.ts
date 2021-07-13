@@ -2,21 +2,36 @@ import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 import {
   FileUploaderComponent,
-  SubmitCaptionEvent
+  SubmitCaptionEvent,
 } from "./file-uploader.component";
-import { ReadFile, ReadMode } from "ngx-file-helpers";
+import { NgxFileHelpersModule, ReadFile, ReadMode } from "ngx-file-helpers";
+import { MatCardModule } from "@angular/material/card";
+import { MatButtonModule } from "@angular/material/button";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatInputModule } from "@angular/material/input";
+import { MatIconModule } from "@angular/material/icon";
 
 describe("FileUploaderComponent", () => {
   let component: FileUploaderComponent;
   let fixture: ComponentFixture<FileUploaderComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      schemas: [NO_ERRORS_SCHEMA],
-      declarations: [FileUploaderComponent]
-    });
-    TestBed.compileComponents();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        schemas: [NO_ERRORS_SCHEMA],
+        imports: [
+          MatButtonModule,
+          MatCardModule,
+          MatFormFieldModule,
+          MatIconModule,
+          MatInputModule,
+          NgxFileHelpersModule,
+        ],
+        declarations: [FileUploaderComponent],
+      });
+      TestBed.compileComponents();
+    })
+  );
 
   afterEach(() => {
     fixture.destroy();
@@ -60,8 +75,8 @@ describe("FileUploaderComponent", () => {
           arrayBuffer: () => new Blob().arrayBuffer(),
           slice: () => new Blob().slice(),
           stream: () => new Blob().stream(),
-          text: () => new Blob().text()
-        }
+          text: () => new Blob().text(),
+        },
       };
       component.onFilePicked(file);
 
@@ -89,7 +104,7 @@ describe("FileUploaderComponent", () => {
 
       const event: SubmitCaptionEvent = {
         attachmentId: "testId",
-        caption: "test"
+        caption: "test",
       };
       component.onSubmitCaption(event.attachmentId, event.caption);
 

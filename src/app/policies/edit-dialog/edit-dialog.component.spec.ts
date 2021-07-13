@@ -16,12 +16,15 @@ import { MatIconModule } from "@angular/material/icon";
 import { MatInputModule } from "@angular/material/input";
 import { MatSelectModule } from "@angular/material/select";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { MatListModule } from "@angular/material/list";
+import { MatOptionModule } from "@angular/material/core";
+import { MatButtonModule } from "@angular/material/button";
 
 const data = {
   selectedPolicy: {
     autoArchive: true,
   },
-  selectedGroups: []
+  selectedGroups: [],
 };
 
 describe("EditDialogComponent", () => {
@@ -36,6 +39,7 @@ describe("EditDialogComponent", () => {
           BrowserAnimationsModule,
           CommonModule,
           FormsModule,
+          MatButtonModule,
           MatCardModule,
           MatChipsModule,
           MatDialogModule,
@@ -43,6 +47,8 @@ describe("EditDialogComponent", () => {
           MatFormFieldModule,
           MatIconModule,
           MatInputModule,
+          MatListModule,
+          MatOptionModule,
           MatSelectModule,
           ReactiveFormsModule,
         ],

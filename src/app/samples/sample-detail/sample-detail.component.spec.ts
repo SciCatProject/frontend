@@ -7,7 +7,7 @@ import {
   ComponentFixture,
   TestBed,
   inject,
-  waitForAsync
+  waitForAsync,
 } from "@angular/core/testing";
 import { NgxJsonViewerModule } from "ngx-json-viewer";
 import { PageChangeEvent } from "shared/modules/table/table.component";
@@ -17,7 +17,7 @@ import {
   saveCharacteristicsAction,
   updateAttachmentCaptionAction,
   removeAttachmentAction,
-  addAttachmentAction
+  addAttachmentAction,
 } from "state-management/actions/samples.actions";
 import { Dataset, Sample, User } from "shared/sdk";
 import { SharedCatanieModule } from "shared/shared.module";
@@ -31,48 +31,52 @@ import { MatButtonModule } from "@angular/material/button";
 import { MatCardModule } from "@angular/material/card";
 import { MatIconModule } from "@angular/material/icon";
 import { MatTabsModule } from "@angular/material/tabs";
+import { FlexLayoutModule } from "@angular/flex-layout";
 
 describe("SampleDetailComponent", () => {
   let component: SampleDetailComponent;
   let fixture: ComponentFixture<SampleDetailComponent>;
 
   const router = {
-    navigateByUrl: jasmine.createSpy("navigateByUrl")
+    navigateByUrl: jasmine.createSpy("navigateByUrl"),
   };
   let store: MockStore;
   let dispatchSpy;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [SampleDetailComponent],
-      imports: [
-        BrowserAnimationsModule,
-        MatButtonModule,
-        MatCardModule,
-        MatIconModule,
-        MatTabsModule,
-        NgxJsonViewerModule,
-        SharedCatanieModule,
-        StoreModule.forRoot({})
-      ],
-      providers: [DatePipe, FileSizePipe, SlicePipe]
-    });
-    TestBed.overrideComponent(SampleDetailComponent, {
-      set: {
-        providers: [
-          {
-            provide: APP_CONFIG,
-            useValue: {
-              editMetadataEnabled: true
-            }
-          },
-          { provide: Router, useValue: router },
-          { provide: ActivatedRoute, useClass: MockActivatedRoute }
-        ]
-      }
-    });
-    TestBed.compileComponents();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [SampleDetailComponent],
+        imports: [
+          BrowserAnimationsModule,
+          FlexLayoutModule,
+          MatButtonModule,
+          MatCardModule,
+          MatIconModule,
+          MatTabsModule,
+          NgxJsonViewerModule,
+          SharedCatanieModule,
+          StoreModule.forRoot({}),
+        ],
+        providers: [DatePipe, FileSizePipe, SlicePipe],
+      });
+      TestBed.overrideComponent(SampleDetailComponent, {
+        set: {
+          providers: [
+            {
+              provide: APP_CONFIG,
+              useValue: {
+                editMetadataEnabled: true,
+              },
+            },
+            { provide: Router, useValue: router },
+            { provide: ActivatedRoute, useClass: MockActivatedRoute },
+          ],
+        },
+      });
+      TestBed.compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(SampleDetailComponent);
@@ -122,7 +126,7 @@ describe("SampleDetailComponent", () => {
       expect(dispatchSpy).toHaveBeenCalledWith(
         saveCharacteristicsAction({
           sampleId: sample.sampleId,
-          characteristics
+          characteristics,
         })
       );
     });
@@ -145,8 +149,8 @@ describe("SampleDetailComponent", () => {
           arrayBuffer: () => new Blob().arrayBuffer(),
           slice: () => new Blob().slice(),
           stream: () => new Blob().stream(),
-          text: () => new Blob().text()
-        }
+          text: () => new Blob().text(),
+        },
       };
       component.onFilePicked(file);
 
@@ -182,8 +186,8 @@ describe("SampleDetailComponent", () => {
           arrayBuffer: () => new Blob().arrayBuffer(),
           slice: () => new Blob().slice(),
           stream: () => new Blob().stream(),
-          text: () => new Blob().text()
-        }
+          text: () => new Blob().text(),
+        },
       };
       component.onReadEnd(1);
 
@@ -203,7 +207,7 @@ describe("SampleDetailComponent", () => {
       component.sample.sampleId = sampleId;
       const event: SubmitCaptionEvent = {
         attachmentId: "testId",
-        caption: "test"
+        caption: "test",
       };
       component.updateCaption(event);
 
@@ -212,7 +216,7 @@ describe("SampleDetailComponent", () => {
         updateAttachmentCaptionAction({
           sampleId,
           attachmentId: event.attachmentId,
-          caption: event.caption
+          caption: event.caption,
         })
       );
     });
@@ -245,7 +249,7 @@ describe("SampleDetailComponent", () => {
       const event: PageChangeEvent = {
         pageIndex: 1,
         pageSize: 25,
-        length: 25
+        length: 25,
       };
 
       component.onPageChange(event);
@@ -254,7 +258,7 @@ describe("SampleDetailComponent", () => {
       expect(dispatchSpy).toHaveBeenCalledWith(
         changeDatasetsPageAction({
           page: event.pageIndex,
-          limit: event.pageSize
+          limit: event.pageSize,
         })
       );
       expect(dispatchSpy).toHaveBeenCalledWith(

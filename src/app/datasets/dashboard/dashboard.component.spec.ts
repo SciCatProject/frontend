@@ -25,8 +25,10 @@ import { getSelectedDatasets } from "state-management/selectors/datasets.selecto
 import { TableColumn } from "state-management/models";
 import { getColumns } from "state-management/selectors/user.selectors";
 import { MatDialog, MatDialogModule } from "@angular/material/dialog";
-import { MatSidenav } from "@angular/material/sidenav";
+import { MatSidenav, MatSidenavModule } from "@angular/material/sidenav";
 import { MatCheckboxChange } from "@angular/material/checkbox";
+import { MatCardModule } from "@angular/material/card";
+import { MatIconModule } from "@angular/material/icon";
 
 class MockMatDialog {
   open() {
@@ -59,7 +61,10 @@ describe("DashboardComponent", () => {
         schemas: [NO_ERRORS_SCHEMA],
         imports: [
           BrowserAnimationsModule,
+          MatCardModule,
           MatDialogModule,
+          MatIconModule,
+          MatSidenavModule,
           StoreModule.forRoot({}),
         ],
         declarations: [DashboardComponent, MatSidenav],

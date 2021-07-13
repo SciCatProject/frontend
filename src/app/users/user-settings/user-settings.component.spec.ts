@@ -17,6 +17,9 @@ import {
   saveSettingsAction,
   showMessageAction,
 } from "state-management/actions/user.actions";
+import { FlexLayoutModule } from "@angular/flex-layout";
+import { MatCardModule } from "@angular/material/card";
+import { MatIconModule } from "@angular/material/icon";
 
 describe("UserSettingsComponent", () => {
   let component: UserSettingsComponent;
@@ -30,6 +33,9 @@ describe("UserSettingsComponent", () => {
       TestBed.configureTestingModule({
         schemas: [NO_ERRORS_SCHEMA],
         imports: [
+          FlexLayoutModule,
+          MatCardModule,
+          MatIconModule,
           ReactiveFormsModule,
           SharedCatanieModule,
           StoreModule.forRoot({}),

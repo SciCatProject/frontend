@@ -2,7 +2,7 @@ import {
   ComponentFixture,
   TestBed,
   inject,
-  waitForAsync
+  waitForAsync,
 } from "@angular/core/testing";
 
 import { DatasetTableActionsComponent } from "./dataset-table-actions.component";
@@ -14,11 +14,14 @@ import {
   setArchiveViewModeAction,
   setPublicViewModeAction,
   addToBatchAction,
-  clearSelectionAction
+  clearSelectionAction,
 } from "state-management/actions/datasets.actions";
 import { AppConfigModule, APP_CONFIG } from "app-config.module";
 import { ArchivingService } from "datasets/archiving.service";
 import { MatDialogModule } from "@angular/material/dialog";
+import { MatButtonToggleModule } from "@angular/material/button-toggle";
+import { MatButtonModule } from "@angular/material/button";
+import { MatIconModule } from "@angular/material/icon";
 
 describe("DatasetTableActionsComponent", () => {
   let component: DatasetTableActionsComponent;
@@ -27,22 +30,31 @@ describe("DatasetTableActionsComponent", () => {
   let store: MockStore;
   let dispatchSpy;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      schemas: [NO_ERRORS_SCHEMA],
-      declarations: [DatasetTableActionsComponent],
-      imports: [AppConfigModule, MatDialogModule, StoreModule.forRoot({})]
-    });
-    TestBed.overrideComponent(DatasetTableActionsComponent, {
-      set: {
-        providers: [
-          { provide: APP_CONFIG, useValue: { archiveWorkflowEnabled: true } },
-          { provide: ArchivingService, useClass: MockArchivingService }
-        ]
-      }
-    });
-    TestBed.compileComponents();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        schemas: [NO_ERRORS_SCHEMA],
+        declarations: [DatasetTableActionsComponent],
+        imports: [
+          AppConfigModule,
+          MatButtonModule,
+          MatButtonToggleModule,
+          MatDialogModule,
+          MatIconModule,
+          StoreModule.forRoot({}),
+        ],
+      });
+      TestBed.overrideComponent(DatasetTableActionsComponent, {
+        set: {
+          providers: [
+            { provide: APP_CONFIG, useValue: { archiveWorkflowEnabled: true } },
+            { provide: ArchivingService, useClass: MockArchivingService },
+          ],
+        },
+      });
+      TestBed.compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(DatasetTableActionsComponent);

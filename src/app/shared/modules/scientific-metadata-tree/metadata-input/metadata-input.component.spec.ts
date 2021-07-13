@@ -1,6 +1,14 @@
 import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 import { FormBuilder } from "@angular/forms";
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
+import { MatButtonModule } from "@angular/material/button";
+import { MatNativeDateModule, MatOptionModule } from "@angular/material/core";
+import { MatDatepickerModule } from "@angular/material/datepicker";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatIconModule } from "@angular/material/icon";
+import { MatInputModule } from "@angular/material/input";
+import { MatSelectModule } from "@angular/material/select";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { DateTime } from "luxon";
 import { FormatNumberPipe } from "shared/pipes/format-number.pipe";
 import { Type } from "../base-classes/metadata-input-base";
@@ -12,16 +20,26 @@ describe("MetadataInputComponent", () => {
   let component: MetadataInputComponent;
   let fixture: ComponentFixture<MetadataInputComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [MetadataInputComponent],
-      imports: [
-        MatAutocompleteModule,
-      ],
-      providers: [FormBuilder, FormatNumberPipe]
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [MetadataInputComponent],
+        imports: [
+          BrowserAnimationsModule,
+          MatAutocompleteModule,
+          MatButtonModule,
+          MatDatepickerModule,
+          MatFormFieldModule,
+          MatIconModule,
+          MatInputModule,
+          MatNativeDateModule,
+          MatOptionModule,
+          MatSelectModule,
+        ],
+        providers: [FormBuilder, FormatNumberPipe],
+      }).compileComponents();
     })
-      .compileComponents();
-  }));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(MetadataInputComponent);
@@ -122,7 +140,9 @@ describe("MetadataInputComponent", () => {
       component.addCurrentMetadata(component.data);
       expect(component.metadataForm.get("type").value).toEqual(Type.date);
       expect(component.metadataForm.get("key").value).toEqual("date");
-      expect(component.metadataForm.get("date").value).toEqual(DateTime.fromISO(data.value).toLocal().toISO());
+      expect(component.metadataForm.get("date").value).toEqual(
+        DateTime.fromISO(data.value).toLocal().toISO()
+      );
       expect(component.metadataForm.get("unit").disabled).toEqual(true);
     });
   });
@@ -137,8 +157,8 @@ describe("MetadataInputComponent", () => {
     });
     it("should emit an save event", () => {
       const expectedData = {
-        ... component.metadataForm.value,
-        unit: undefined
+        ...component.metadataForm.value,
+        unit: undefined,
       };
       spyOn(component.cancel, "emit");
       spyOn(component.save, "emit");

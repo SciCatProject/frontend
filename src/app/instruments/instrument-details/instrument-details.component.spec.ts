@@ -2,7 +2,7 @@ import {
   ComponentFixture,
   TestBed,
   inject,
-  waitForAsync
+  waitForAsync,
 } from "@angular/core/testing";
 
 import { InstrumentDetailsComponent } from "./instrument-details.component";
@@ -13,6 +13,10 @@ import { getCurrentInstrument } from "state-management/selectors/instruments.sel
 import { Store } from "@ngrx/store";
 import { ActivatedRoute } from "@angular/router";
 import { saveCustomMetadataAction } from "state-management/actions/instruments.actions";
+import { MatCardModule } from "@angular/material/card";
+import { MatIconModule } from "@angular/material/icon";
+import { MatTabsModule } from "@angular/material/tabs";
+import { FlexLayoutModule } from "@angular/flex-layout";
 
 describe("InstrumentDetailsComponent", () => {
   let component: InstrumentDetailsComponent;
@@ -21,23 +25,33 @@ describe("InstrumentDetailsComponent", () => {
   let store: MockStore;
   let dispatchSpy;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      schemas: [NO_ERRORS_SCHEMA],
-      declarations: [InstrumentDetailsComponent],
-      providers: [
-        provideMockStore({
-          selectors: [{ selector: getCurrentInstrument, value: {} }]
-        })
-      ]
-    });
-    TestBed.overrideComponent(InstrumentDetailsComponent, {
-      set: {
-        providers: [{ provide: ActivatedRoute, useClass: MockActivatedRoute }]
-      }
-    });
-    TestBed.compileComponents();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        schemas: [NO_ERRORS_SCHEMA],
+        declarations: [InstrumentDetailsComponent],
+        imports: [
+          FlexLayoutModule,
+          MatCardModule,
+          MatIconModule,
+          MatTabsModule,
+        ],
+        providers: [
+          provideMockStore({
+            selectors: [{ selector: getCurrentInstrument, value: {} }],
+          }),
+        ],
+      });
+      TestBed.overrideComponent(InstrumentDetailsComponent, {
+        set: {
+          providers: [
+            { provide: ActivatedRoute, useClass: MockActivatedRoute },
+          ],
+        },
+      });
+      TestBed.compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(InstrumentDetailsComponent);
