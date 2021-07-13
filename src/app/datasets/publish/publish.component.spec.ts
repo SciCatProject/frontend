@@ -103,7 +103,7 @@ describe("PublishComponent", () => {
   describe("#removeCreator()", () => {
     it("should remove a creator from the creator property in the form", () => {
       const creator = "testCreator";
-      component.form.creator.push(creator);
+      component.form.creator.push("firstCreator", creator);
 
       component.removeCreator(creator);
 

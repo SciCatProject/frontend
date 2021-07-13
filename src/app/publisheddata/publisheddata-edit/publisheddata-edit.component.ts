@@ -99,17 +99,11 @@ export class PublisheddataEditComponent implements OnInit, OnDestroy {
 
   public formIsValid() {
     return (
-      this.form.title &&
       this.form.title.length > 0 &&
-      this.form.resourceType &&
       this.form.resourceType.length > 0 &&
-      this.form.creator &&
       this.form.creator.length > 0 &&
-      this.form.publisher &&
       this.form.publisher.length > 0 &&
-      this.form.dataDescription &&
       this.form.dataDescription.length > 0 &&
-      this.form.abstract &&
       this.form.abstract.length > 0
     );
   }

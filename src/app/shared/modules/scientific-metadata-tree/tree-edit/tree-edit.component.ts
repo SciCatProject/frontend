@@ -176,7 +176,7 @@ export class TreeEditComponent extends TreeBaseComponent
     });
   }
   onSave(data: InputData | null) {
-    if (this.currentEditingNode && data) {
+    if (data) {
       const nestedNode = this.flatNodeMap.get(this.currentEditingNode);
       if (nestedNode) {
         const mappedNestedNode = this.nestNodeMap.get(nestedNode);
