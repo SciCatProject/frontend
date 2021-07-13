@@ -83,7 +83,7 @@ describe("DatasetTableActionsComponent", () => {
       const event = "test";
       const modeToggle = ArchViewMode.all;
 
-      component.onModeChange(event, modeToggle);
+      component.onModeChange(modeToggle);
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(

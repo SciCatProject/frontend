@@ -11,7 +11,7 @@ import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatIconModule } from "@angular/material/icon";
 import { MatInputModule } from "@angular/material/input";
 import { DateTime } from "luxon";
-import { MatDatepickerModule } from "@angular/material/datepicker";
+import { MatDatepickerInputEvent, MatDatepickerModule } from "@angular/material/datepicker";
 import { MatNativeDateModule } from "@angular/material/core";
 
 describe("ProposalFilterComponent", () => {
@@ -75,10 +75,7 @@ describe("ProposalFilterComponent", () => {
     it("should emit an event", () => {
       spyOn(component.dateChange, "emit");
 
-      const event = {
-        begin: DateTime.local(),
-        end: DateTime.local(),
-      };
+      const event = {} as MatDatepickerInputEvent<DateTime>;
       component.doDateChange(event);
 
       expect(component.dateChange.emit).toHaveBeenCalledTimes(1);

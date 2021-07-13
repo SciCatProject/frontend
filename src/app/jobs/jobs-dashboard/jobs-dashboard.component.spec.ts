@@ -69,10 +69,10 @@ describe("JobsDashboardComponent", () => {
   });
 
   describe("#formatTableData()", () => {
-    it("should return nothing if there are no jobs", () => {
-      const data = component.formatTableData(null);
+    it("should return an empty array if there are no jobs", () => {
+      const data = component.formatTableData([]);
 
-      expect(data).toBeUndefined();
+      expect(data).toEqual([]);
     });
 
     it("should return an array of data object jobs are defined", () => {
@@ -91,11 +91,10 @@ describe("JobsDashboardComponent", () => {
     it("should dispatch a setJobViewModeAction with an object on myJobs", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
-      const event = "test";
       const mode = JobViewMode.myJobs;
       component.email = "test@email.com";
       const viewMode = { emailJobInitiator: component.email };
-      component.onModeChange(event, mode);
+      component.onModeChange(mode);
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
@@ -106,10 +105,9 @@ describe("JobsDashboardComponent", () => {
     it("should dispatch a setJobViewModeAction with null on allJobs", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
-      const event = "test";
       const mode = JobViewMode.allJobs;
-      const viewMode = null;
-      component.onModeChange(event, mode);
+      const viewMode = undefined;
+      component.onModeChange(mode);
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(

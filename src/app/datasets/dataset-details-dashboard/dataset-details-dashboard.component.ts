@@ -91,8 +91,8 @@ export class DatasetDetailsDashboardComponent
   );
   loading$ = this.store.pipe(select(getIsLoading));
   jwt$: Observable<JWT> = new Observable<JWT>();
-  dataset: Dataset = new Dataset();
-  user: User = new User();
+  dataset: Dataset | undefined;
+  user: User | undefined;
   editingAllowed = false;
   pickedFile!: ReadFile;
   attachment: Partial<Attachment> = {};

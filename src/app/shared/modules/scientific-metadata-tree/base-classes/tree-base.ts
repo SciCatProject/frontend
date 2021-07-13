@@ -167,7 +167,7 @@ export class TreeBaseComponent {
     return (node.level * indentPixel).toString();
   }
 
-  insertNode(parentNode: TreeNode, node: TreeNode, index = -1) {
+  insertNode(parentNode: TreeNode | null, node: TreeNode, index = -1) {
     if (parentNode) {
       index = index === -1 ? parentNode.children.length : index;
       parentNode.children.splice(index, 0, node);
@@ -177,7 +177,7 @@ export class TreeBaseComponent {
     }
     this.dataSource.data = this.dataTree;
   }
-  removeNode(parentNode: TreeNode, nestedNode: TreeNode) {
+  removeNode(parentNode: TreeNode | null, nestedNode: TreeNode) {
     if (parentNode) {
       // remove node from list of children
       parentNode.children = parentNode.children.filter(e => e !== nestedNode);
@@ -190,7 +190,7 @@ export class TreeBaseComponent {
     }
     this.dataSource.data = this.dataTree;
   }
-  getIndex(parentNode: TreeNode, node: TreeNode) {
+  getIndex(parentNode: TreeNode | null, node: TreeNode) {
     if (parentNode) {
       return parentNode.children.indexOf(node);
     } else {

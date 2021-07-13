@@ -7,14 +7,14 @@ import {
   ComponentFixture,
   TestBed,
   inject,
-  waitForAsync
+  waitForAsync,
 } from "@angular/core/testing";
 import { SharedCatanieModule } from "shared/shared.module";
 import { DatePipe } from "@angular/common";
 import { Proposal } from "shared/sdk";
 import {
   PageChangeEvent,
-  SortChangeEvent
+  SortChangeEvent,
 } from "shared/modules/table/table.component";
 import {
   changePageAction,
@@ -22,39 +22,42 @@ import {
   setTextFilterAction,
   fetchProposalsAction,
   clearFacetsAction,
-  setDateRangeFilterAction
+  setDateRangeFilterAction,
 } from "state-management/actions/proposals.actions";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { DateTime } from "luxon";
+import { MatDatepickerInputEvent } from "@angular/material/datepicker";
 
 describe("ProposalDashboardComponent", () => {
   let component: ProposalDashboardComponent;
   let fixture: ComponentFixture<ProposalDashboardComponent>;
 
   const router = {
-    navigateByUrl: jasmine.createSpy("navigateByUrl")
+    navigateByUrl: jasmine.createSpy("navigateByUrl"),
   };
   let store: MockStore;
   let dispatchSpy;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      schemas: [NO_ERRORS_SCHEMA],
-      declarations: [ProposalDashboardComponent],
-      imports: [SharedCatanieModule, StoreModule.forRoot({})],
-      providers: [DatePipe]
-    });
-    TestBed.overrideComponent(ProposalDashboardComponent, {
-      set: {
-        providers: [
-          { provide: APP_CONFIG, useValue: { editSampleEnabled: true } },
-          { provide: Router, useValue: router },
-          { provide: ActivatedRoute, useClass: MockActivatedRoute }
-        ]
-      }
-    });
-    TestBed.compileComponents();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        schemas: [NO_ERRORS_SCHEMA],
+        declarations: [ProposalDashboardComponent],
+        imports: [SharedCatanieModule, StoreModule.forRoot({})],
+        providers: [DatePipe],
+      });
+      TestBed.overrideComponent(ProposalDashboardComponent, {
+        set: {
+          providers: [
+            { provide: APP_CONFIG, useValue: { editSampleEnabled: true } },
+            { provide: Router, useValue: router },
+            { provide: ActivatedRoute, useClass: MockActivatedRoute },
+          ],
+        },
+      });
+      TestBed.compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ProposalDashboardComponent);
@@ -75,10 +78,10 @@ describe("ProposalDashboardComponent", () => {
   });
 
   describe("#formatTableData()", () => {
-    it("should do nothing if there are no proposals", () => {
-      const data = component.formatTableData(null);
+    it("should return empty array if there are no proposals", () => {
+      const data = component.formatTableData([]);
 
-      expect(data).toBeUndefined();
+      expect(data).toEqual([]);
     });
 
     it("should return an array of data objects if proposals are defined", () => {
@@ -116,33 +119,74 @@ describe("ProposalDashboardComponent", () => {
   });
 
   describe("#onDateChange()", () => {
-    it("should dispatch a setDateRangeFilterAction with begin and end dates and a fetchProposalsAction if event has value", () => {
+    it("should dispatch a fetchProposalAction if event does not have a value", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
-      const event = {
-        begin: DateTime.local(),
-        end: DateTime.local()
-      };
+      const event = {} as MatDatepickerInputEvent<DateTime>;
       component.onDateChange(event);
 
-      expect(dispatchSpy).toHaveBeenCalledTimes(2);
-      expect(dispatchSpy).toHaveBeenCalledWith(
-        setDateRangeFilterAction({
-          begin: event.begin.toISO(),
-          end: event.end.toISO()
-        })
-      );
-      expect(dispatchSpy).toHaveBeenCalledWith(fetchProposalsAction());
+      expect(dispatchSpy).toHaveBeenCalledTimes(1);
+      expect(dispatchSpy).toHaveBeenCalledOnceWith(fetchProposalsAction());
     });
-    it("should dispatch a setDateRangeFilterAction with null and a fetchProposalsAction if event does not have value", () => {
+
+    it("should set dateRange.begin if event has value and event.targetElement name is begin, and dispatch a fetchProposalsAction", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
-      const event = null;
+      const beginDate = DateTime.fromJSDate(new Date("2021-01-01"));
+      const event = {
+        targetElement: {
+          getAttribute: (name: string) => "begin",
+        },
+        value: beginDate,
+      } as MatDatepickerInputEvent<DateTime>;
+
       component.onDateChange(event);
 
+      const expected = beginDate.toUTC().toISO();
+      expect(component.dateRange.begin).toEqual(expected);
+      expect(dispatchSpy).toHaveBeenCalledOnceWith(fetchProposalsAction());
+    });
+
+    it("should set dateRange.end if event has value and event.targetElement name is end, and dispatch a fetchProposalsAction", () => {
+      dispatchSpy = spyOn(store, "dispatch");
+
+      const endDate = DateTime.fromJSDate(new Date("2021-07-08"));
+      const event = {
+        targetElement: {
+          getAttribute: (name: string) => "end",
+        },
+        value: endDate,
+      } as MatDatepickerInputEvent<DateTime>;
+
+      component.onDateChange(event);
+
+      const expected = endDate.toUTC().plus({ days: 1 }).toISO();
+      expect(component.dateRange.end).toEqual(expected);
+      expect(dispatchSpy).toHaveBeenCalledOnceWith(fetchProposalsAction());
+    });
+
+    it("should dispatch a setDateRangeFilterAction if dateRange.begin and dateRange.end have values, and dispatch a fetchProposalsAction", () => {
+      dispatchSpy = spyOn(store, "dispatch");
+
+      const beginDate = DateTime.fromJSDate(new Date("2021-01-01"));
+      const endDate = DateTime.fromJSDate(new Date("2021-07-08"));
+      component.dateRange.begin = beginDate.toUTC().toISO();
+      const event = {
+        targetElement: {
+          getAttribute: (name: string) => "end",
+        },
+        value: endDate,
+      } as MatDatepickerInputEvent<DateTime>;
+
+      component.onDateChange(event);
+
+      const expected = {
+        begin: beginDate.toUTC().toISO(),
+        end: endDate.toUTC().plus({ days: 1 }).toISO(),
+      };
       expect(dispatchSpy).toHaveBeenCalledTimes(2);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        setDateRangeFilterAction(null)
+        setDateRangeFilterAction(expected)
       );
       expect(dispatchSpy).toHaveBeenCalledWith(fetchProposalsAction());
     });
@@ -155,7 +199,7 @@ describe("ProposalDashboardComponent", () => {
       const event: PageChangeEvent = {
         pageIndex: 0,
         pageSize: 25,
-        length: 100
+        length: 100,
       };
 
       component.onPageChange(event);
@@ -173,7 +217,7 @@ describe("ProposalDashboardComponent", () => {
 
       const event: SortChangeEvent = {
         active: "test",
-        direction: "asc"
+        direction: "asc",
       };
 
       component.onSortChange(event);

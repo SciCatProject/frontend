@@ -70,10 +70,11 @@ describe("UserSettingsComponent", () => {
     it("should dispatch a saveSettingsAction and a showMessageAction", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
-      const message = new Message();
-      message.content = "Settings saved locally";
-      message.type = MessageType.Success;
-      message.duration = 5000;
+      const message = new Message(
+        "Settings saved locally",
+        MessageType.Success,
+        5000
+      );
 
       const settings: Settings = {
         tapeCopies: "one",
@@ -97,10 +98,11 @@ describe("UserSettingsComponent", () => {
       const commandSpy = spyOn(document, "execCommand");
       dispatchSpy = spyOn(store, "dispatch");
 
-      const message = new Message();
-      message.content = "Catamel token has been copied to your clipboard";
-      message.type = MessageType.Success;
-      message.duration = 5000;
+      const message = new Message(
+        "Catamel token has been copied to your clipboard",
+        MessageType.Success,
+        5000
+      );
 
       component.onCopy("test");
 

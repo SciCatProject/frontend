@@ -329,13 +329,13 @@ describe("DetailsDashboardComponent", () => {
   });
 
   describe("#resetDataset()", () => {
-    it("should return 'null' without confirmation", () => {
+    it("should return 'undefined' without confirmation", () => {
       dispatchSpy = spyOn(store, "dispatch");
       pipeSpy = spyOn(store, "pipe");
       const dataset = new Dataset();
       const res = component.resetDataset(dataset);
 
-      expect(res).toBeNull();
+      expect(res).toBeUndefined();
       expect(dispatchSpy).toHaveBeenCalledTimes(0);
       expect(pipeSpy).toHaveBeenCalledTimes(0);
     });

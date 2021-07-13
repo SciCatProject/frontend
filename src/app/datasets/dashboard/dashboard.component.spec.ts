@@ -9,14 +9,11 @@ import {
 import { ActivatedRoute, Router } from "@angular/router";
 import { Store, StoreModule } from "@ngrx/store";
 
-import {
-  MockActivatedRoute,
-  MockStore,
-} from "shared/MockStubs";
+import { MockActivatedRoute, MockStore } from "shared/MockStubs";
 import { DashboardComponent } from "./dashboard.component";
 import { of } from "rxjs";
 import { addDatasetAction } from "state-management/actions/datasets.actions";
-import { User, Dataset } from "shared/sdk";
+import { User, Dataset, DerivedDataset } from "shared/sdk";
 import {
   selectColumnAction,
   deselectColumnAction,
@@ -51,41 +48,43 @@ describe("DashboardComponent", () => {
   let fixture: ComponentFixture<DashboardComponent>;
 
   const router = {
-    navigateByUrl: jasmine.createSpy("navigateByUrl")
+    navigateByUrl: jasmine.createSpy("navigateByUrl"),
   };
   let store: MockStore;
   let dispatchSpy;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      schemas: [NO_ERRORS_SCHEMA],
-      imports: [
-        BrowserAnimationsModule,
-        MatDialogModule,
-        StoreModule.forRoot({}),
-      ],
-      declarations: [DashboardComponent, MatSidenav],
-      providers: [
-        provideMockStore({
-          selectors: [
-            { selector: getSelectedDatasets, value: [] },
-            { selector: getColumns, value: [] },
-          ],
-        }),
-      ],
-    });
-    TestBed.overrideComponent(DashboardComponent, {
-      set: {
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        schemas: [NO_ERRORS_SCHEMA],
+        imports: [
+          BrowserAnimationsModule,
+          MatDialogModule,
+          StoreModule.forRoot({}),
+        ],
+        declarations: [DashboardComponent, MatSidenav],
         providers: [
-          { provide: APP_CONFIG, useValue: { shoppingCartOnHeader: "true" } },
-          { provide: ActivatedRoute, useClass: MockActivatedRoute },
-          { provide: MatDialog, useClass: MockMatDialog },
-          { provide: Router, useValue: router }
-        ]
-      }
-    });
-    TestBed.compileComponents();
-  }));
+          provideMockStore({
+            selectors: [
+              { selector: getSelectedDatasets, value: [] },
+              { selector: getColumns, value: [] },
+            ],
+          }),
+        ],
+      });
+      TestBed.overrideComponent(DashboardComponent, {
+        set: {
+          providers: [
+            { provide: APP_CONFIG, useValue: { shoppingCartOnHeader: "true" } },
+            { provide: ActivatedRoute, useClass: MockActivatedRoute },
+            { provide: MatDialog, useClass: MockMatDialog },
+            { provide: Router, useValue: router },
+          ],
+        },
+      });
+      TestBed.compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(DashboardComponent);
@@ -206,7 +205,7 @@ describe("DashboardComponent", () => {
         credentials: [],
       });
 
-      const dataset = new Dataset({
+      const dataset = new DerivedDataset({
         accessGroups: [],
         contactEmail: currentUser.email,
         createdBy: currentUser.username,
@@ -222,11 +221,11 @@ describe("DashboardComponent", () => {
         size: 0,
         sourceFolder: "/nfs/test",
         type: "derived",
+        inputDatasets: [],
+        investigator: currentUser.email,
+        scientificMetadata: {},
+        usedSoftware: ["test software"],
       });
-      dataset["inputDatasets"] = [];
-      dataset["investigator"] = currentUser.email;
-      dataset["scientificMetadata"] = {};
-      dataset["usedSoftware"] = ["test software"];
 
       component.currentUser = currentUser;
       component.userGroups = ["test"];

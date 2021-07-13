@@ -18,7 +18,7 @@ import { SampleEditComponent } from "datasets/sample-edit/sample-edit.component"
   styleUrls: ["./dataset-detail.component.scss"],
 })
 export class DatasetDetailComponent {
-  @Input() dataset: Dataset = new Dataset();
+  @Input() dataset: Dataset | null = null;
   @Input() datasetWithout: Partial<Dataset> | null = null;
   @Input() attachments: Attachment[] | null = null;
   @Input() proposal: Proposal | null = null;

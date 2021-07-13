@@ -74,10 +74,11 @@ describe("PublisheddataDashboardComponent", () => {
       const commandSpy = spyOn(document, "execCommand");
       dispatchSpy = spyOn(store, "dispatch");
 
-      const message = new Message();
-      message.content = "The selected DOI's have been copied to your clipboard";
-      message.type = MessageType.Success;
-      message.duration = 5000;
+      const message = new Message(
+        "The selected DOI's have been copied to your clipboard",
+        MessageType.Success,
+        5000
+      );
 
       component.onShareClick();
 

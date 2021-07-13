@@ -9,7 +9,7 @@ import {
   Input,
   OnChanges,
   SimpleChange,
-  ViewEncapsulation
+  ViewEncapsulation,
 } from "@angular/core";
 import { Dataset, TableColumn } from "state-management/models";
 import { MatCheckboxChange } from "@angular/material/checkbox";
@@ -21,7 +21,7 @@ import {
   deselectDatasetAction,
   selectAllDatasetsAction,
   changePageAction,
-  sortByColumnAction
+  sortByColumnAction,
 } from "state-management/actions/datasets.actions";
 
 import {
@@ -29,12 +29,12 @@ import {
   getDatasetsPerPage,
   getPage,
   getTotalSets,
-  getDatasetsInBatch
+  getDatasetsInBatch,
 } from "state-management/selectors/datasets.selectors";
 import { PageChangeEvent } from "shared/modules/table/table.component";
 import {
   selectColumnAction,
-  deselectColumnAction
+  deselectColumnAction,
 } from "state-management/actions/user.actions";
 
 export interface SortChangeEvent {
@@ -144,7 +144,10 @@ export class DatasetTableComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   isSelected(dataset: Dataset): boolean {
-    return this.selectedSets?.map(set => set.pid).indexOf(dataset.pid) !== -1;
+    if (!this.selectedSets) {
+      return false;
+    }
+    return this.selectedSets.map((set) => set.pid).indexOf(dataset.pid) !== -1;
   }
 
   isAllSelected(): boolean {
@@ -211,19 +214,19 @@ export class DatasetTableComponent implements OnInit, OnDestroy, OnChanges {
 
   ngOnInit() {
     this.subscriptions.push(
-      this.store.pipe(select(getDatasetsInBatch)).subscribe(datasets => {
-        this.inBatchPids = datasets.map(dataset => dataset.pid);
+      this.store.pipe(select(getDatasetsInBatch)).subscribe((datasets) => {
+        this.inBatchPids = datasets.map((dataset) => dataset.pid);
       })
     );
 
     if (this.tableColumns) {
       this.displayedColumns = this.tableColumns
-        .filter(column => column.enabled)
-        .map(column => column.type + "_" + column.name);
+        .filter((column) => column.enabled)
+        .map((column) => column.type + "_" + column.name);
     }
 
     this.subscriptions.push(
-      this.store.pipe(select(getDatasets)).subscribe(datasets => {
+      this.store.pipe(select(getDatasets)).subscribe((datasets) => {
         this.datasets = datasets;
 
         // this.derivationMapPids = this.datasetDerivationsMaps.map(
@@ -251,6 +254,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   ngOnDestroy() {
-    this.subscriptions.forEach(subscription => subscription.unsubscribe());
+    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
 }

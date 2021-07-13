@@ -19,7 +19,7 @@ import { getDatasetsInBatch } from "state-management/selectors/datasets.selector
 import { getCurrentPublishedData } from "state-management/selectors/published-data.selectors";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { MatCardModule } from "@angular/material/card";
-import { MatChipsModule } from "@angular/material/chips";
+import { MatChipInputEvent, MatChipsModule } from "@angular/material/chips";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatIconModule } from "@angular/material/icon";
 import { MatInputModule } from "@angular/material/input";
@@ -29,44 +29,46 @@ describe("PublisheddataEditComponent", () => {
   let component: PublisheddataEditComponent;
   let fixture: ComponentFixture<PublisheddataEditComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      schemas: [NO_ERRORS_SCHEMA],
-      declarations: [PublisheddataEditComponent],
-      imports: [
-        BrowserAnimationsModule,
-        FormsModule,
-        MatCardModule,
-        MatChipsModule,
-        MatFormFieldModule,
-        MatIconModule,
-        MatInputModule,
-        MatSelectModule,
-        ReactiveFormsModule,
-      ],
-      providers: [
-        provideMockStore({
-          selectors: [
-            { selector: getDatasetsInBatch, value: [] },
-            { selector: getCurrentPublishedData, value: {} },
-          ],
-        }),
-      ],
-    });
-    TestBed.overrideComponent(PublisheddataEditComponent, {
-      set: {
-        providers: [
-          { provide: ActivatedRoute, useClass: MockActivatedRoute },
-          { provide: ActionsSubject, useValue: of({}) },
-          { provide: APP_CONFIG, useValue: { facility: "test" } },
-          { provide: PublishedDataApi, useClass: MockPublishedDataApi },
-          { provide: Router, useClass: MockRouter },
-          { provide: Store, useClass: MockStore },
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        schemas: [NO_ERRORS_SCHEMA],
+        declarations: [PublisheddataEditComponent],
+        imports: [
+          BrowserAnimationsModule,
+          FormsModule,
+          MatCardModule,
+          MatChipsModule,
+          MatFormFieldModule,
+          MatIconModule,
+          MatInputModule,
+          MatSelectModule,
+          ReactiveFormsModule,
         ],
-      },
-    });
-    TestBed.compileComponents();
-  }));
+        providers: [
+          provideMockStore({
+            selectors: [
+              { selector: getDatasetsInBatch, value: [] },
+              { selector: getCurrentPublishedData, value: {} },
+            ],
+          }),
+        ],
+      });
+      TestBed.overrideComponent(PublisheddataEditComponent, {
+        set: {
+          providers: [
+            { provide: ActivatedRoute, useClass: MockActivatedRoute },
+            { provide: ActionsSubject, useValue: of({}) },
+            { provide: APP_CONFIG, useValue: { facility: "test" } },
+            { provide: PublishedDataApi, useClass: MockPublishedDataApi },
+            { provide: Router, useClass: MockRouter },
+            { provide: Store, useClass: MockStore },
+          ],
+        },
+      });
+      TestBed.compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PublisheddataEditComponent);
@@ -85,7 +87,7 @@ describe("PublisheddataEditComponent", () => {
           value: "",
         },
         value: "testCreator",
-      };
+      } as MatChipInputEvent;
       component.addCreator(event);
 
       expect(component.form.creator).toContain(event.value);
@@ -104,9 +106,7 @@ describe("PublisheddataEditComponent", () => {
   });
 
   describe("#formIsValid()", () => {
-    it("should return false if form has undefined properties", () => {
-      component.form.title = undefined;
-
+    it("should return false if form is not valid", () => {
       const isValid = component.formIsValid();
 
       expect(isValid).toEqual(false);
@@ -127,8 +127,8 @@ describe("PublisheddataEditComponent", () => {
         relatedPublications: ["testpub"],
         downloadLink: "link",
         pidArray: ["abc123"],
-        numberOfFiles: null,
-        sizeOfArchive: null,
+        numberOfFiles: undefined,
+        sizeOfArchive: undefined,
       };
 
       const isValid = component.formIsValid();

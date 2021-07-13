@@ -8,7 +8,7 @@ import { Dataset, Attachment, Proposal, Sample } from "shared/sdk";
   styleUrls: ["./anonymous-details.component.scss"]
 })
 export class AnonymousDetailsComponent {
-  @Input() dataset: Dataset = new Dataset();
+  @Input() dataset: Dataset | undefined;
   @Input() attachments: Attachment[] | null | undefined;
   @Input() proposal: Proposal | null | undefined;
   @Input() sample: Sample | null | undefined;

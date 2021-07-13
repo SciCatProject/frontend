@@ -41,7 +41,7 @@ export interface HistoryItem {
   ],
 })
 export class DatasetLifecycleComponent implements OnInit, OnChanges {
-  @Input() dataset: Dataset = new Dataset();
+  @Input() dataset: Dataset | undefined;
   historyItems: HistoryItem[] = [];
 
   pageSizeOptions = [10, 25, 50, 100, 500, 1000];
@@ -113,7 +113,7 @@ export class DatasetLifecycleComponent implements OnInit, OnChanges {
                 : "";
             }
             default: {
-              return JSON.stringify((row??[fieldName]), replacer);
+              return JSON.stringify(row ?? [fieldName], replacer);
             }
           }
         })

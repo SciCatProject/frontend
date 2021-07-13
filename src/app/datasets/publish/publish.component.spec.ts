@@ -19,59 +19,67 @@ import { getDatasetsInBatch } from "state-management/selectors/datasets.selector
 import { getCurrentPublishedData } from "state-management/selectors/published-data.selectors";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { MatCardModule } from "@angular/material/card";
-import { MatChipsModule } from "@angular/material/chips";
+import { MatChipInputEvent, MatChipsModule } from "@angular/material/chips";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatIconModule } from "@angular/material/icon";
 import { MatInputModule } from "@angular/material/input";
 import { MatSelectModule } from "@angular/material/select";
+import { MatButtonModule } from "@angular/material/button";
 
 describe("PublishComponent", () => {
   let component: PublishComponent;
   let fixture: ComponentFixture<PublishComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      schemas: [NO_ERRORS_SCHEMA],
-      declarations: [PublishComponent],
-      imports: [
-        BrowserAnimationsModule,
-        FormsModule,
-        MatCardModule,
-        MatChipsModule,
-        MatFormFieldModule,
-        MatIconModule,
-        MatInputModule,
-        MatSelectModule,
-        ReactiveFormsModule,
-      ],
-      providers: [
-        provideMockStore({
-          selectors: [
-            { selector: getDatasetsInBatch, value: [] },
-            { selector: getCurrentPublishedData, value: {} },
-          ],
-        }),
-      ],
-    });
-    TestBed.overrideComponent(PublishComponent, {
-      set: {
-        providers: [
-          { provide: ActivatedRoute, useClass: MockActivatedRoute },
-          { provide: ActionsSubject, useValue: of({}) },
-          { provide: APP_CONFIG, useValue: { facility: "test" } },
-          { provide: PublishedDataApi, useClass: MockPublishedDataApi },
-          { provide: Router, useClass: MockRouter },
-          { provide: Store, useClass: MockStore },
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        schemas: [NO_ERRORS_SCHEMA],
+        declarations: [PublishComponent],
+        imports: [
+          BrowserAnimationsModule,
+          FormsModule,
+          MatButtonModule,
+          MatCardModule,
+          MatChipsModule,
+          MatFormFieldModule,
+          MatIconModule,
+          MatInputModule,
+          MatSelectModule,
+          ReactiveFormsModule,
         ],
-      },
-    });
-    TestBed.compileComponents();
-  }));
+        providers: [
+          provideMockStore({
+            selectors: [
+              { selector: getDatasetsInBatch, value: [] },
+              { selector: getCurrentPublishedData, value: {} },
+            ],
+          }),
+        ],
+      });
+      TestBed.overrideComponent(PublishComponent, {
+        set: {
+          providers: [
+            { provide: ActivatedRoute, useClass: MockActivatedRoute },
+            { provide: ActionsSubject, useValue: of({}) },
+            { provide: APP_CONFIG, useValue: { facility: "test" } },
+            { provide: PublishedDataApi, useClass: MockPublishedDataApi },
+            { provide: Router, useClass: MockRouter },
+            { provide: Store, useClass: MockStore },
+          ],
+        },
+      });
+      TestBed.compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PublishComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    fixture.destroy();
   });
 
   it("should create", () => {
@@ -85,40 +93,43 @@ describe("PublishComponent", () => {
           value: "",
         },
         value: "testCreator",
-      };
+      } as MatChipInputEvent;
       component.addCreator(event);
 
-      expect(component.form.creators).toContain(event.value);
+      expect(component.form.get("creator")?.value).toContain(event.value);
     });
   });
 
   describe("#removeCreator()", () => {
     it("should remove a creator from the creator property in the form", () => {
       const creator = "testCreator";
-      component.form.creators = [creator];
+      component.form.get("creator").value.push(creator);
+      const valueBefore = component.form.get("creator").value;
+      console.log(">>>> CREATOR: ", valueBefore);
+      const index = component.form.get("creator").value.indexOf(creator);
+      console.log(">>>>> INDEX: ", index);
 
       component.removeCreator(creator);
+      const valueAfter = component.form.get("creator").value;
+      console.log(">>>> CREATOR: ", valueAfter);
 
-      expect(component.form.creators).not.toContain(creator);
+      expect(component.form.get("creator")?.value).not.toContain(creator);
     });
   });
 
   describe("#formIsValid()", () => {
-    it("should return false if form has undefined properties", () => {
-      component.form.title = undefined;
-
+    it("should return false if form is invalid", () => {
       const isValid = component.formIsValid();
 
       expect(isValid).toEqual(false);
     });
 
     it("should return true if form has no undefined properties and their lengths > 0", () => {
-      component.form = {
+      component.form.setValue({
         title: "testTitle",
-        creators: ["testCreator"],
+        creator: ["testCreator"],
         publisher: "testPublisher",
         resourceType: "testType",
-        description: "testDescription",
         abstract: "testAbstract",
         pidArray: ["testPid"],
         publicationYear: 2019,
@@ -129,7 +140,7 @@ describe("PublishComponent", () => {
         sizeOfArchive: 100,
         relatedPublications: ["testpub"],
         downloadLink: "testlink",
-      };
+      });
 
       const isValid = component.formIsValid();
 

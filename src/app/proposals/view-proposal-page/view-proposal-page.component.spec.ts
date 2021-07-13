@@ -67,10 +67,10 @@ describe("ViewProposalPageComponent", () => {
   });
 
   describe("#formatTableData()", () => {
-    it("should do nothing if there are no datasets", () => {
+    it("should return empty array if there are no datasets", () => {
       const data = component.formatTableData(null);
 
-      expect(data).toBeUndefined();
+      expect(data).toEqual([]);
     });
 
     it("should return an array of data objects if there are datasets", () => {

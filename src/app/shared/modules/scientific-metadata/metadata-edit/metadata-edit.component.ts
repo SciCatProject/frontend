@@ -34,7 +34,7 @@ export class MetadataEditComponent implements OnInit, OnChanges {
   units: string[] = [];
   filteredUnits$: Observable<string[]> | undefined = new Observable<string[]>();
 
-  @Input() metadata: Record<string, any> = {};
+  @Input() metadata: Record<string, any> | undefined;
   @Output() save = new EventEmitter<Record<string, unknown>>();
 
   constructor(

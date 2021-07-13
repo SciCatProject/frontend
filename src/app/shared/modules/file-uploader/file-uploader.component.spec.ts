@@ -34,7 +34,7 @@ describe("FileUploaderComponent", () => {
 
   describe("#onReadStart()", () => {
     it("should set the status", () => {
-      expect(component.status).toBeUndefined();
+      expect(component.status).toEqual("");
 
       component.onReadStart(1);
 
@@ -72,7 +72,7 @@ describe("FileUploaderComponent", () => {
 
   describe("#onReadEnd()", () => {
     it("should set the status and emit the number of files read", () => {
-      expect(component.status).toBeUndefined();
+      expect(component.status).toEqual("");
       spyOn(component.readEnd, "emit");
 
       component.onReadEnd(1);
