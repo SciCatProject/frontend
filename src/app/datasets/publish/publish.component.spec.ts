@@ -96,24 +96,18 @@ describe("PublishComponent", () => {
       } as MatChipInputEvent;
       component.addCreator(event);
 
-      expect(component.form.get("creator")?.value).toContain(event.value);
+      expect(component.form.creator).toContain(event.value);
     });
   });
 
   describe("#removeCreator()", () => {
     it("should remove a creator from the creator property in the form", () => {
       const creator = "testCreator";
-      component.form.get("creator").value.push(creator);
-      const valueBefore = component.form.get("creator").value;
-      console.log(">>>> CREATOR: ", valueBefore);
-      const index = component.form.get("creator").value.indexOf(creator);
-      console.log(">>>>> INDEX: ", index);
+      component.form.creator.push(creator);
 
       component.removeCreator(creator);
-      const valueAfter = component.form.get("creator").value;
-      console.log(">>>> CREATOR: ", valueAfter);
 
-      expect(component.form.get("creator")?.value).not.toContain(creator);
+      expect(component.form.creator).not.toContain(creator);
     });
   });
 
@@ -125,7 +119,7 @@ describe("PublishComponent", () => {
     });
 
     it("should return true if form has no undefined properties and their lengths > 0", () => {
-      component.form.setValue({
+      component.form = {
         title: "testTitle",
         creator: ["testCreator"],
         publisher: "testPublisher",
@@ -140,7 +134,7 @@ describe("PublishComponent", () => {
         sizeOfArchive: 100,
         relatedPublications: ["testpub"],
         downloadLink: "testlink",
-      });
+      };
 
       const isValid = component.formIsValid();
 

@@ -19,12 +19,6 @@ import { Router } from "@angular/router";
 import { getCurrentPublishedData } from "state-management/selectors/published-data.selectors";
 import { Observable, Subscription } from "rxjs";
 import { MatChipInputEvent } from "@angular/material/chips";
-import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators,
-} from "@angular/forms";
 
 @Component({
   selector: "publish",
@@ -46,36 +40,22 @@ export class PublishComponent implements OnInit, OnDestroy {
 
   public separatorKeysCodes: number[] = [ENTER, COMMA];
 
-  form: FormGroup;
-  title = new FormControl("", [Validators.required, Validators.minLength(1)]);
-  creator = new FormControl([], [Validators.required, Validators.minLength(1)]);
-  publisher = new FormControl(this.appConfig.facility, [
-    Validators.required,
-    Validators.minLength(1),
-  ]);
-  resourceType = new FormControl("", [
-    Validators.required,
-    Validators.minLength(1),
-  ]);
-  abstract = new FormControl("", [
-    Validators.required,
-    Validators.minLength(1),
-  ]);
-  pidArray = new FormControl([], []);
-  publicationYear = new FormControl(
-    parseInt(formatDate(Date.now(), "yyyy", "en_GB"), 10),
-    [Validators.required]
-  );
-  url = new FormControl("", []);
-  dataDescription = new FormControl("", [
-    Validators.required,
-    Validators.minLength(1),
-  ]);
-  numberOfFiles = new FormControl(0, []);
-  sizeOfArchive = new FormControl(0, []);
-  thumbnail = new FormControl("", []);
-  downloadLink = new FormControl("", []);
-  relatedPublications = new FormControl([], []);
+  public form: Partial<PublishedData> = {
+    title: "",
+    creator: [],
+    publisher: this.appConfig.facility ?? "",
+    resourceType: "",
+    abstract: "",
+    pidArray: [],
+    publicationYear: parseInt(formatDate(Date.now(), "yyyy", "en_GB"), 10),
+    url: "",
+    dataDescription: "",
+    numberOfFiles: 0,
+    sizeOfArchive: 0,
+    thumbnail: "",
+    downloadLink: "",
+    relatedPublications: [],
+  };
 
   actionSubjectSubscription: Subscription = new Subscription();
 
@@ -84,64 +64,62 @@ export class PublishComponent implements OnInit, OnDestroy {
     @Inject(APP_CONFIG) private appConfig: AppConfig,
     private publishedDataApi: PublishedDataApi,
     private actionsSubj: ActionsSubject,
-    private router: Router,
-    private fb: FormBuilder
-  ) {
-    this.form = this.fb.group({
-      title: this.title,
-      creator: this.creator,
-      publisher: this.publisher,
-      resourceType: this.resourceType,
-      abstract: this.abstract,
-      pidArray: this.pidArray,
-      publicationYear: this.publicationYear,
-      url: this.url,
-      dataDescription: this.dataDescription,
-      numberOfFiles: this.numberOfFiles,
-      sizeOfArchive: this.sizeOfArchive,
-      thumbnail: this.thumbnail,
-      downloadLink: this.downloadLink,
-      relatedPublications: this.relatedPublications,
-    });
-  }
+    private router: Router
+  ) {}
 
   addCreator(event: MatChipInputEvent) {
-    console.log({ event });
-    if ((event.value || "").trim()) {
-      this.form.get("creator").value.push(event.value);
+    const value = (event.value || "").trim();
+    if (value) {
+      this.form.creator?.push(value);
+    }
+
+    if (event.input) {
+      event.input.value = "";
     }
   }
 
   removeCreator(creator: string) {
-    const index = this.form.get("creator")?.value.indexOf(creator);
+    const index = this.form.creator?.indexOf(creator);
 
-    if (index && index > -1) {
-      this.form.get("creator")?.value.splice(index, 1);
+    if (index && index >= 0) {
+      this.form.creator?.splice(index, 1);
     }
   }
 
   addRelatedPublication(event: MatChipInputEvent) {
-    if ((event.value || "").trim()) {
-      this.form.get("relatedPublications").setValue(event.value);
+    const value = (event.value || "").trim();
+    if (value) {
+      this.form.relatedPublications?.push(value);
     }
 
-    if (event.chipInput?.inputElement) {
-      event.chipInput.inputElement.value = "";
+    if (event.input) {
+      event.input.value = "";
     }
   }
 
   removeRelatedPublication(relatedPublication: string) {
-    const index = this.form
-      .get("relatedPublications")
-      ?.value.indexOf(relatedPublication);
+    const index = this.form.relatedPublications?.indexOf(relatedPublication);
 
     if (index && index >= 0) {
-      this.form.get("relatedPublications")?.value.splice(index, 1);
+      this.form.relatedPublications?.splice(index, 1);
     }
   }
 
   public formIsValid(): boolean {
-    return this.form.valid;
+    return (
+      this.form.title &&
+      this.form.title.length > 0 &&
+      this.form.resourceType &&
+      this.form.resourceType.length > 0 &&
+      this.form.creator &&
+      this.form.creator.length > 0 &&
+      this.form.publisher &&
+      this.form.publisher.length > 0 &&
+      this.form.dataDescription &&
+      this.form.dataDescription.length > 0 &&
+      this.form.abstract &&
+      this.form.abstract.length > 0
+    );
   }
 
   ngOnInit() {
@@ -156,28 +134,26 @@ export class PublishComponent implements OnInit, OnDestroy {
             const unique = creator.filter(
               (item, i) => creator.indexOf(item) === i
             );
-            this.form.get("creator").setValue(unique);
-            this.form
-              .get("pidArray")
-              .setValue(datasets.map((dataset) => dataset.pid));
+            this.form.creator = unique;
+            this.form.pidArray = datasets.map((dataset) => dataset.pid);
             let size = 0;
             datasets.forEach((dataset) => {
               size += dataset.size;
             });
-            this.form.get("sizeOfArchive").setValue(size);
+            this.form.sizeOfArchive = size;
           }
         })
       )
       .subscribe();
 
     this.publishedDataApi
-      .formPopulate(this.form.get("pidArray")?.value[0])
+      .formPopulate(this.form.pidArray[0])
       .subscribe((result) => {
-        this.form.get("abstract").setValue(result.abstract);
-        this.form.get("title").setValue(result.title);
-        this.form.get("dataDescription").setValue(result.description);
-        this.form.get("resourceType").setValue("raw");
-        this.form.get("thumbnail").setValue(result.thumbnail);
+        this.form.abstract = result.abstract;
+        this.form.title = result.title;
+        this.form.dataDescription = result.description;
+        this.form.resourceType = "raw";
+        this.form.thumbnail = result.thumbnail;
       });
 
     this.actionSubjectSubscription = this.actionsSubj.subscribe((data) => {
@@ -201,22 +177,20 @@ export class PublishComponent implements OnInit, OnDestroy {
 
   public onPublish() {
     const publishedData = new PublishedData();
-    publishedData.title = this.form.get("title")?.value;
-    publishedData.abstract = this.form.get("abstract")?.value;
-    publishedData.dataDescription = this.form.get("dataDescription")?.value;
-    publishedData.resourceType = this.form.get("resourceType")?.value;
-    publishedData.creator = this.form.get("creator")?.value;
-    publishedData.pidArray = this.form.get("pidArray")?.value;
-    publishedData.publisher = this.form.get("publisher")?.value;
-    publishedData.publicationYear = this.form.get("publicationYear")?.value;
-    publishedData.url = this.form.get("url")?.value;
-    publishedData.thumbnail = this.form.get("thumbnail")?.value;
-    publishedData.numberOfFiles = this.form.get("numberOfFiles")?.value;
-    publishedData.sizeOfArchive = this.form.get("sizeOfArchive")?.value;
-    publishedData.downloadLink = this.form.get("downloadLink")?.value;
-    publishedData.relatedPublications = this.form.get(
-      "relatedPublications"
-    )?.value;
+    publishedData.title = this.form.title;
+    publishedData.abstract = this.form.abstract;
+    publishedData.dataDescription = this.form.dataDescription;
+    publishedData.resourceType = this.form.resourceType;
+    publishedData.creator = this.form.creator;
+    publishedData.pidArray = this.form.pidArray;
+    publishedData.publisher = this.form.publisher;
+    publishedData.publicationYear = this.form.publicationYear;
+    publishedData.url = this.form.url;
+    publishedData.thumbnail = this.form.thumbnail;
+    publishedData.numberOfFiles = this.form.numberOfFiles;
+    publishedData.sizeOfArchive = this.form.sizeOfArchive;
+    publishedData.downloadLink = this.form.downloadLink;
+    publishedData.relatedPublications = this.form.relatedPublications;
 
     this.store.dispatch(publishDatasetAction({ data: publishedData }));
   }

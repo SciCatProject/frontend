@@ -3,7 +3,7 @@
     <mat-card>
       <p>You are about to publish {{ datasetCount$ | async }} datasets.</p>
 
-      <form [formGroup]="form">
+      <form>
         <mat-form-field>
           <input
             id="titleInput"
@@ -11,7 +11,7 @@
             matInput
             placeholder="Title"
             autocomplete="off"
-            formControlName="title"
+            [(ngModel)]="form.title"
             name="title"
           />
         </mat-form-field>
@@ -19,7 +19,7 @@
         <mat-form-field>
           <mat-chip-list required #chipListCreators>
             <mat-chip
-              *ngFor="let name of creator.value"
+              *ngFor="let name of form.creator"
               (removed)="removeCreator(name)"
             >
               {{ name }}
@@ -42,7 +42,7 @@
             matInput
             placeholder="Publisher"
             autocomplete="off"
-            formControlName="publisher"
+            [(ngModel)]="form.publisher"
             name="publisher"
           />
         </mat-form-field>
@@ -53,14 +53,10 @@
             matInput
             placeholder="Resource Type"
             name="resourceType"
-            formControlName="resourceType"
+            [(ngModel)]="form.resourceType"
           >
-            <mat-option value="raw">
-              raw
-            </mat-option>
-            <mat-option value="derived">
-              derived
-            </mat-option>
+            <mat-option value="raw"> raw </mat-option>
+            <mat-option value="derived"> derived </mat-option>
           </mat-select>
         </mat-form-field>
 
@@ -70,7 +66,7 @@
             matInput
             placeholder="Description"
             autocomplete="off"
-            formControlName="dataDescription"
+            [(ngModel)]="form.dataDescription"
             name="Description"
             rows="5"
           ></textarea>
@@ -83,7 +79,7 @@
             matInput
             placeholder="Abstract"
             autocomplete="off"
-            formControlName="abstract"
+            [(ngModel)]="form.abstract"
             name="abstract"
             rows="5"
           ></textarea>
@@ -94,16 +90,15 @@
             matInput
             placeholder="download link"
             autocomplete="off"
-            formControlName="downloadLink"
+            [(ngModel)]="form.downloadLink"
             name="downloadLink"
           />
         </mat-form-field>
 
-
         <mat-form-field>
           <mat-chip-list #chipListRelatedPub>
             <mat-chip
-              *ngFor="let relatedPublication of relatedPublications.value"
+              *ngFor="let relatedPublication of form.relatedPublications"
               (removed)="removeRelatedPublication(relatedPublication)"
             >
               {{ relatedPublication }}
@@ -133,8 +128,8 @@
     </mat-card>
   </div>
   <div fxFlex="30">
-    <mat-card *ngIf="thumbnail.value">
-      <img mat-card-image src="{{ thumbnail.value }}" />
+    <mat-card *ngIf="form.thumbnail">
+      <img mat-card-image src="{{ form.thumbnail }}" />
     </mat-card>
   </div>
 </div>
