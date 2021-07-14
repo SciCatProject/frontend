@@ -19,13 +19,12 @@ import { getDatasetsInBatch } from "state-management/selectors/datasets.selector
 import { getCurrentPublishedData } from "state-management/selectors/published-data.selectors";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { MatCardModule } from "@angular/material/card";
-import { MatChipInputEvent, MatChipsModule } from "@angular/material/chips";
+import { MatChipsModule } from "@angular/material/chips";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatIconModule } from "@angular/material/icon";
 import { MatInputModule } from "@angular/material/input";
 import { MatSelectModule } from "@angular/material/select";
 import { MatButtonModule } from "@angular/material/button";
-import { MatOptionModule } from "@angular/material/core";
 
 describe("PublishComponent", () => {
   let component: PublishComponent;
@@ -45,7 +44,6 @@ describe("PublishComponent", () => {
           MatFormFieldModule,
           MatIconModule,
           MatInputModule,
-          MatOptionModule,
           MatSelectModule,
           ReactiveFormsModule,
         ],
@@ -80,10 +78,6 @@ describe("PublishComponent", () => {
     fixture.detectChanges();
   });
 
-  afterEach(() => {
-    fixture.destroy();
-  });
-
   it("should create", () => {
     expect(component).toBeTruthy();
   });
@@ -95,26 +89,28 @@ describe("PublishComponent", () => {
           value: "",
         },
         value: "testCreator",
-      } as MatChipInputEvent;
+      };
       component.addCreator(event);
 
-      expect(component.form.creator).toContain(event.value);
+      expect(component.form.creators).toContain(event.value);
     });
   });
 
   describe("#removeCreator()", () => {
     it("should remove a creator from the creator property in the form", () => {
       const creator = "testCreator";
-      component.form.creator.push("firstCreator", creator);
+      component.form.creators = [creator];
 
       component.removeCreator(creator);
 
-      expect(component.form.creator).not.toContain(creator);
+      expect(component.form.creators).not.toContain(creator);
     });
   });
 
   describe("#formIsValid()", () => {
-    it("should return false if form is invalid", () => {
+    it("should return false if form has undefined properties", () => {
+      component.form.title = undefined;
+
       const isValid = component.formIsValid();
 
       expect(isValid).toEqual(false);
@@ -123,9 +119,10 @@ describe("PublishComponent", () => {
     it("should return true if form has no undefined properties and their lengths > 0", () => {
       component.form = {
         title: "testTitle",
-        creator: ["testCreator"],
+        creators: ["testCreator"],
         publisher: "testPublisher",
         resourceType: "testType",
+        description: "testDescription",
         abstract: "testAbstract",
         pidArray: ["testPid"],
         publicationYear: 2019,
