@@ -1,21 +1,12 @@
 import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
-import { MatPaginator, MatPaginatorModule } from "@angular/material/paginator";
+import { MatPaginator } from "@angular/material/paginator";
 import { MatSort } from "@angular/material/sort";
-import { MatTable, MatTableModule } from "@angular/material/table";
+import { MatTable } from "@angular/material/table";
 import { of } from "rxjs";
 import { SciCatDataSource } from "shared/services/scicat.datasource";
 
 import { SharedTableComponent } from "./shared-table.component";
 import { RouterTestingModule } from "@angular/router/testing";
-import { Column } from "./shared-table.module";
-import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
-import { MatToolbarModule } from "@angular/material/toolbar";
-import { MatFormFieldModule } from "@angular/material/form-field";
-import { MatIconModule } from "@angular/material/icon";
-import { MatInputModule } from "@angular/material/input";
-import { MatButtonModule } from "@angular/material/button";
-import { MatDatepickerModule } from "@angular/material/datepicker";
-import { MatNativeDateModule } from "@angular/material/core";
 
 describe("SharedTableComponent", () => {
   let component: SharedTableComponent;
@@ -35,7 +26,7 @@ describe("SharedTableComponent", () => {
     },
   } as unknown as MatTable<Element>;
 
-  const columnsDef: Column[] = [];
+  const columnsDef = [];
 
   const paginator = {
     page: of({}),
@@ -44,19 +35,7 @@ describe("SharedTableComponent", () => {
   beforeEach(
     waitForAsync(() => {
       TestBed.configureTestingModule({
-        imports: [
-          MatButtonModule,
-          MatDatepickerModule,
-          MatFormFieldModule,
-          MatIconModule,
-          MatInputModule,
-          MatNativeDateModule,
-          MatPaginatorModule,
-          MatProgressSpinnerModule,
-          MatTableModule,
-          MatToolbarModule,
-          RouterTestingModule,
-        ],
+        imports: [RouterTestingModule],
         declarations: [SharedTableComponent],
       }).compileComponents();
     })
