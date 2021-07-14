@@ -347,4 +347,9 @@ export class SharedTableComponent implements AfterViewChecked, AfterViewInit, Af
       this.loadDataPage();
     }
   }
+  getFilterColumns(){
+    return this.visibleColumns.map((column) => {
+      return `${column.id}-filter`
+    })
+  }
 }

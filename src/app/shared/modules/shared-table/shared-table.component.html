@@ -22,43 +22,25 @@
   </mat-paginator>
 </mat-toolbar>
 
-<mat-table #dataTable [dataSource]="dataSource" matSort matSortStart="desc" multiTemplateDataRows>
+<mat-table #dataTable class="mat-elevation-z2" [dataSource]="dataSource" matSort matSortStart="desc" multiTemplateDataRows>
 
   <!-- Toggle Button Start -->
   <ng-container matColumnDef="trigger">
-    <mat-header-cell *matHeaderCellDef fxFlex="70px">
+    <mat-header-cell *matHeaderCellDef >
       <mat-icon>menu</mat-icon>
     </mat-header-cell>
-    <mat-cell *matCellDef="let row; let i = dataIndex;" fxFlex="70px">
+    <mat-cell *matCellDef="let row; let i = dataIndex;">
       <span (click)="toggleExpandFlag(row.uniqueId);"
         [ngClass]="[expandedElement[row.uniqueId] ?  'active' : 'inActive']" class="btnToggleExpand"></span>
     </mat-cell>
   </ng-container>
   <!-- Toggle Button End -->
   <ng-container [matColumnDef]="column.id" *ngFor="let column of visibleColumns">
-    <mat-header-cell *matHeaderCellDef class="col-name shared-table-{{column.matchMode}}" fxLayoutAlign="start start" fxLayout="column">
+    <mat-header-cell *matHeaderCellDef class="col-name shared-table-{{column.matchMode}} first-header-cell">
       <div fxLayout="row" style="align-items: center">
         <mat-icon>{{ column.icon }}</mat-icon>
         <span mat-sort-header [disabled]="!column.canSort">{{ column.label | titleCase }}</span>
       </div>
-      <mat-form-field appearance="standard" *ngIf="column.matchMode;">
-        <ng-container *ngIf="column.matchMode === 'between'">
-          <div class="date_container">
-            <mat-date-range-input [rangePicker]="rangePicker">
-              <input #allFilters  name="{{ column.id + '.start' }}" matStartDate placeholder="Start date"
-                (dateChange)="dateChanged($event,column.id+'.start')">
-              <input #allFilters name="{{ column.id + '.end'}}" matEndDate placeholder="End date"
-                (dateChange)="dateChanged($event,column.id+'.end')">
-            </mat-date-range-input>
-            <mat-datepicker-toggle matSuffix [for]="rangePicker"></mat-datepicker-toggle>
-          </div>
-          <mat-date-range-picker #rangePicker>
-          </mat-date-range-picker>
-        </ng-container>
-        <ng-container *ngIf="column.matchMode !== 'between'">
-          <input #allFilters matInput autocomplete="off" name="{{ column.id }}" placeholder="{{ column.matchMode }}" />
-        </ng-container>
-      </mat-form-field>
     </mat-header-cell>
 
     <mat-cell *matCellDef="let row" [fxFlex]="column.width + 'px'">
@@ -93,10 +75,29 @@
     </mat-cell>
   </ng-container>
 
+  <ng-container matColumnDef="{{column.id}}-filter" *ngFor="let column of visibleColumns">
+    <mat-header-cell *matHeaderCellDef="let row">
+      <mat-form-field appearance="outline" *ngIf="column.matchMode=='between'">
+          <mat-date-range-input [rangePicker]="rangePicker">
+            <input #allFilters   matStartDate placeholder="Start date"
+              (dateChange)="dateChanged($event,column.id+'.start')">
+            <input #allFilters  matEndDate placeholder="End date"
+              (dateChange)="dateChanged($event,column.id+'.end')">
+          </mat-date-range-input>
+          <mat-datepicker-toggle matSuffix [for]="rangePicker" ></mat-datepicker-toggle>
+        <mat-date-range-picker #rangePicker>
+        </mat-date-range-picker>
+      </mat-form-field>
 
-  <mat-header-row *matHeaderRowDef="visibleColumnsIds; sticky: true" class="matHeaderRow"></mat-header-row>
+      <mat-form-field appearance="outline" *ngIf="column.matchMode !== 'between'">
+        <input #allFilters matInput autocomplete="off" name="{{ column.id }}" placeholder="{{ column.matchMode }}" />
+      </mat-form-field>
+    </mat-header-cell>
+  </ng-container>
 
-  <mat-row *matRowDef="let row; let i = dataIndex; columns: visibleColumnsIds"
+  <mat-header-row *matHeaderRowDef="visibleColumnsIds; sticky: true" class="matHeaderRow first-header-row"></mat-header-row>
+  <mat-header-row *matHeaderRowDef="getFilterColumns()"></mat-header-row>
+  <mat-row *matRowDef="let row; let i = dataIndex; columns: visibleColumnsIds;"
     class="matRowVisible visible-row-{{row.uniqueId}}" (click)="onRowClick(row)"></mat-row>
 
   <!-- Body row definition for hidden columns -->
