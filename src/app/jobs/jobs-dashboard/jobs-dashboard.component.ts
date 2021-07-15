@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { Router } from "@angular/router";
-import { Store, select, on } from "@ngrx/store";
+import { Store, select } from "@ngrx/store";
 import { Job } from "shared/sdk";
 import { Subscription } from "rxjs";
 import {
