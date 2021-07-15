@@ -27,7 +27,7 @@ export class SampleDialogComponent implements OnInit, OnDestroy {
   sample: Sample = new Sample();
 
   username = "";
-  userGroups: string[] = [];
+  userGroups: string[] | undefined;
   subscriptions: Subscription[] = [];
 
   constructor(
