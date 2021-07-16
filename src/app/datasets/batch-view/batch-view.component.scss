@@ -1,12 +1,13 @@
+@use '~@angular/material' as mat;
 @import "../../../theme.scss";
 
 mat-table {
   mat-header-row {
-    background: mat-color($primary);
+    background: mat.get-color-from-palette($primary);
   }
 
   mat-header-cell {
-    color: mat-color($primary, default-contrast);
+    color: mat.get-color-from-palette($primary, default-contrast);
   }
 
   mat-header-cell:first-child {

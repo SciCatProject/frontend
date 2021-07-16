@@ -1,30 +1,31 @@
+@use '~@angular/material' as mat;
 @import "../../../theme.scss";
 
 mat-card {
   margin: 1em;
 
   .general-header {
-    background-color: mat-color($primary, lighter);
+    background-color: mat.get-color-from-palette($primary, lighter);
   }
 
   .creator-header {
-    background-color: mat-color($navy, 400);
+    background-color: mat.get-color-from-palette($navy, 400);
   }
 
   .file-header {
-    background-color: mat-color($accent, lighter);
+    background-color: mat.get-color-from-palette($accent, lighter);
   }
 
   .related-header {
-    background-color: mat-color($forest, 400);
+    background-color: mat.get-color-from-palette($forest, 400);
   }
 
   .derived-header {
-    background-color: mat-color($orange, 400);
+    background-color: mat.get-color-from-palette($orange, 400);
   }
 
   .scientific-header {
-    background-color: mat-color($purple, 400);
+    background-color: mat.get-color-from-palette($purple, 400);
   }
 
   .section-icon {

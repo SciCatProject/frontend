@@ -3,7 +3,7 @@ import { FlatTreeControl } from "@angular/cdk/tree";
 import { MatTreeFlatDataSource, MatTreeFlattener } from "@angular/material/tree";
 import { Observable } from "rxjs";
 import { FlatNode, TreeBaseComponent, TreeNode } from "shared/modules/scientific-metadata-tree/base-classes/tree-base";
-import { InputData, MetadataInput } from "shared/modules/scientific-metadata-tree/metadata-input/metadata-input.component";
+import { InputData } from "shared/modules/scientific-metadata-tree/metadata-input/metadata-input.component";
 import { HistoryManager } from "shared/modules/scientific-metadata-tree/base-classes/history-manager";
 import { MatDialog } from "@angular/material/dialog";
 import { InputObject, MetadataInputModalComponent } from "../metadata-input-modal/metadata-input-modal.component";
@@ -34,7 +34,6 @@ export class TreeEditComponent extends TreeBaseComponent implements OnInit, OnCh
   currentEditingNode: FlatNodeEdit | null = null;
   lastSavedChanges = -1;
   filteredUnits$: Observable<string[]>;
-  currentInputData: MetadataInput;
   historyManager: HistoryManager;
   @Output() save = new EventEmitter<Record<string, unknown>>();
   @Output() hasUnsavedChanges = new EventEmitter<boolean>();
@@ -238,7 +237,7 @@ export class TreeEditComponent extends TreeBaseComponent implements OnInit, OnCh
     switch (data.type) {
       case Type.date:
         node.key = data.key;
-        node.value = DateTime.fromJSDate(new Date(data.value)).toUTC().toISO();
+        node.value = DateTime.fromISO(data.value).toUTC().toISO();
         node.unit = null;
         break;
       case Type.string:
@@ -286,26 +285,28 @@ export class TreeEditComponent extends TreeBaseComponent implements OnInit, OnCh
     });
 
     dialogRef.afterClosed().subscribe((data: InputObject) => {
-      const grandfatherNode = this.flatNodeMap.get(node);
-      const parentNode = new TreeNode();
-      parentNode.key = data.parent;
-      const childNode = new TreeNode();
-      const { parent, ...childData } = data;
-      parentNode.children = [];
-      this.insertNode(parentNode, childNode);
-      this.updateNode(childNode, { ...childData, key: childData.child });
-      this.insertNode(grandfatherNode, parentNode);
-      const index = this.getIndex(grandfatherNode, parentNode);
-      this.treeControl.expand(node);
-      this.historyManager.add({
-        undo: () => {
-          this.removeNode(grandfatherNode, parentNode);
-        },
-        redo: () => {
-          this.insertNode(grandfatherNode, parentNode, index);
+      if (data) {
+        const grandfatherNode = this.flatNodeMap.get(node);
+        const parentNode = new TreeNode();
+        parentNode.key = data.parent;
+        const childNode = new TreeNode();
+        const { parent, ...childData } = data;
+        parentNode.children = [];
+        this.insertNode(parentNode, childNode);
+        this.updateNode(childNode, { ...childData, key: childData.child });
+        this.insertNode(grandfatherNode, parentNode);
+        const index = this.getIndex(grandfatherNode, parentNode);
+        this.treeControl.expand(node);
+        this.historyManager.add({
+          undo: () => {
+            this.removeNode(grandfatherNode, parentNode);
+          },
+          redo: () => {
+            this.insertNode(grandfatherNode, parentNode, index);
+          }
+        });
+        this.dataSource.data = this.dataTree;
         }
-      });
-      this.dataSource.data = this.dataTree;
     });
   }
 }

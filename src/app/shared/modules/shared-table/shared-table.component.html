@@ -4,20 +4,21 @@
   </div>
 </div>
 
+<!-- title -->
+<div *ngIf=title class="shared-table-title">
+  <div>{{title}}</div>
+</div>
+
 <!-- Top tool bar-->
 <mat-toolbar>
   <mat-form-field appearance="standard">
     <mat-icon>search</mat-icon>
     <input type="search" matInput placeholder="global word-search" #globalFilter>
   </mat-form-field>
-  <span class="example-spacer"></span>
-  <span>{{dataSource.collection}}</span>
-  <span class="example-spacer"></span>
   <button mat-icon-button (click)="exportToExcel()">
     <mat-icon>cloud_download</mat-icon>
   </button>
-  <mat-paginator [length]="dataSource.count$ | async" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions"
-    showFirstLastButtons>
+  <mat-paginator [length]="dataSource.count$ | async" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" showFirstLastButtons>
   </mat-paginator>
 </mat-toolbar>
 
@@ -35,13 +36,13 @@
   </ng-container>
   <!-- Toggle Button End -->
   <ng-container [matColumnDef]="column.id" *ngFor="let column of visibleColumns">
-    <mat-header-cell *matHeaderCellDef class="col-search" fxLayoutAlign="start start" fxLayout="column">
+    <mat-header-cell *matHeaderCellDef class="col-name shared-table-{{column.matchMode}}" fxLayoutAlign="start start" fxLayout="column">
       <div fxLayout="row" style="align-items: center">
         <mat-icon>{{ column.icon }}</mat-icon>
         <span mat-sort-header [disabled]="!column.canSort">{{ column.label | titleCase }}</span>
       </div>
-      <mat-form-field appearance="fill" *ngIf="column.matchMode;">
-        <ng-container *ngIf="column.matchMode == 'between'">
+      <mat-form-field appearance="standard" *ngIf="column.matchMode;">
+        <ng-container *ngIf="column.matchMode === 'between'">
           <div class="date_container">
             <mat-date-range-input [rangePicker]="rangePicker">
               <input #allFilters  name="{{ column.id + '.start' }}" matStartDate placeholder="Start date"
@@ -54,7 +55,7 @@
           <mat-date-range-picker #rangePicker>
           </mat-date-range-picker>
         </ng-container>
-        <ng-container *ngIf="column.matchMode != 'between'">
+        <ng-container *ngIf="column.matchMode !== 'between'">
           <input #allFilters matInput autocomplete="off" name="{{ column.id }}" placeholder="{{ column.matchMode }}" />
         </ng-container>
       </mat-form-field>

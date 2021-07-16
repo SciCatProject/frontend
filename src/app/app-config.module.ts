@@ -59,7 +59,7 @@ export class AppConfig {
 }
 
 export const APP_DI_CONFIG: AppConfig = {
-  lbBaseURL: environment["lbBaseURL"] || "https://127.0.0.1:3000",
+  lbBaseURL: environment["lbBaseURL"] || "http://localhost:3000",
   externalAuthEndpoint: environment["externalAuthEndpoint"] || null,
   fileserverBaseURL: environment["fileserverBaseURL"] || null,
   synapseBaseUrl: environment["synapseBaseUrl"] || null,
@@ -115,9 +115,9 @@ export const APP_DI_CONFIG: AppConfig = {
   userProfileImageEnabled: environment["userProfileImageEnabled"] || false,
   userNamePromptEnabled: environment["userNamePromptEnabled"] || false,
   landingPage: environment["landingPage"] || null,
-  editPublishedData: environment["editPublishedData"] || true,
   loginFormEnabled: (environment["loginFormEnabled"] === undefined) ? true : environment["loginFormEnabled"],
-  oAuth2Endpoints: environment["oAuth2Endpoints"] || null
+  oAuth2Endpoints: environment["oAuth2Endpoints"] || null,
+  editPublishedData: (environment["editPublishedData"] === undefined) ? true: environment["editPublishedData"]
 };
 
 @NgModule({

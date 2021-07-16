@@ -3,6 +3,7 @@ import { Observable } from "rxjs";
 import { UnitsService } from "shared/services/units.service";
 import { startWith, map } from "rxjs/operators";
 import { DateTimeService } from "shared/services/date-time.service";
+
 export enum Type {
   quantity = "quantity",
   date = "date",
@@ -31,25 +32,26 @@ export class MetadataInputBase {
   dateValidator(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       const isValid = this.dateTimeService.isValidDateTime(control.value);
-      return isValid ? null : { invalidDate: "Invalid date. Format: yyyy-MM-dd HH:mm:ss or yyyy-MM-dd" };
+      return isValid ? null : { invalidDate: "Invalid date or format" };
     };
   }
   booleanValidator(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
-      const value = (control.value as string).toLowerCase();
+      const value = String(control.value).toLowerCase();
       const valid = (value === "true" || value === "false");
       return valid? null : {invalidBoolean: "Boolean must be \"true\" or \"false\""};
     };
   }
   numberValidator(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
-      const invalid = control.value === "" || isNaN(Number(control.value)) ;
+      const invalid = control.value === "" || isNaN(Number(control.value));
       return invalid? {invalidNumber: "Invalid number"} : null;
     };
   }
   detectType() {
     const type = this.metadataForm.get("type").value;
     this.metadataForm.get("value").clearValidators();
+    this.metadataForm.get("date").disable();
     switch (type) {
       case Type.quantity:
         this.metadataForm.get("unit").enable();
@@ -60,7 +62,8 @@ export class MetadataInputBase {
         break;
       case Type.date:
         this.metadataForm.get("unit").disable();
-        this.metadataForm.get("value").setValidators([
+        this.metadataForm.get("date").enable();
+        this.metadataForm.get("date").setValidators([
           Validators.required,
           this.dateValidator(),
         ]);
@@ -78,7 +81,6 @@ export class MetadataInputBase {
           Validators.required,
           this.numberValidator()
         ]);
-
         break;
       default:
         this.metadataForm.get("unit").disable();
@@ -90,14 +92,8 @@ export class MetadataInputBase {
     this.metadataForm.get("unit").updateValueAndValidity();
     this.metadataForm.get("value").updateValueAndValidity();
   }
-  setValueInputType() {
-    const type = this.metadataForm.get("type").value;
-    switch (type) {
-      case Type.date:
-        return "datetime-local";
-      default:
-        return "text";
-    }
+  getType() {
+    return this.metadataForm.get("type").value;
   }
   getUnits(fieldName: string): void {
     const name = this.metadataForm.get(fieldName).value;
@@ -121,14 +117,16 @@ export class MetadataInputBase {
         if (this.metadataForm.get(field).hasError("required")) {
           return "Value is required";
         }
-        if (this.metadataForm.get(field).hasError("invalidDate")) {
-          return this.metadataForm.get(field).getError("invalidDate");
+        if (this.metadataForm.get(field).hasError("invalidNumber")) {
+          return this.metadataForm.get(field).getError("invalidNumber");
         }
         if (this.metadataForm.get(field).hasError("invalidBoolean")) {
           return this.metadataForm.get(field).getError("invalidBoolean");
         }
-        if (this.metadataForm.get(field).hasError("invalidNumber")) {
-          return this.metadataForm.get(field).getError("invalidNumber");
+        return null;
+      case "date":
+        if (this.metadataForm.get(field).hasError("invalidDate")) {
+          return this.metadataForm.get(field).getError("invalidDate");
         }
         return null;
       case "unit":

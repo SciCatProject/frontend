@@ -1,3 +1,4 @@
+@use '~@angular/material' as mat;
 @import "../../../../theme.scss";
 
 @media only screen and (min-width: 1280px) {
@@ -5,11 +6,11 @@
     margin-bottom: 5em;
 
     mat-header-row {
-      background: mat-color($primary);
+      background: mat.get-color-from-palette($primary);
     }
 
     ::ng-deep .mat-sort-header-arrow {
-      color: mat-color($primary, default-contrast);
+      color: mat.get-color-from-palette($primary, default-contrast);
     }
 
     .mat-column-select {
@@ -17,10 +18,10 @@
     }
 
     mat-header-cell {
-      color: mat-color($primary, default-contrast);
+      color: mat.get-color-from-palette($primary, default-contrast);
 
       ::ng-deep .mat-checkbox .mat-checkbox-frame {
-        border-color: mat-color($primary, default-contrast);
+        border-color: mat.get-color-from-palette($primary, default-contrast);
       }
     }
 

@@ -162,6 +162,7 @@
     <mat-card>
       <button
         mat-raised-button
+        id="editBtn"
         class="edit-button"
         color="primary"
         *ngIf="appConfig.editPublishedData"
@@ -169,7 +170,7 @@
       >
         Edit
       </button>
-      <ng-container *ngIf="appConfig.jsonMetadataEnabled">
+      <ng-container id="jsonMetadataContainer" *ngIf="appConfig.jsonMetadataEnabled">
         <button mat-stroked-button (click)="show = !show">
           {{ show ? "Hide MetaData" : "Show Metadata" }}
         </button>

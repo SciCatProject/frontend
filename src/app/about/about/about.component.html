@@ -8,7 +8,7 @@
       <br /><br />
       <ul>
         <li>
-          <a *ngIf="facility == 'PSI'" href="{{ SciCatGitHub }}" target="blank"
+          <a *ngIf="facility === 'PSI'" href="{{ SciCatGitHub }}" target="blank"
             >SciCat Github Project.</a
           >
         </li>
@@ -27,12 +27,12 @@
         <mat-card-title>Terms of Use</mat-card-title>
       </mat-card-header>
       {{ termsText }}
-      <a *ngIf="facility == 'PSI'" href="{{ SNFLink }}" target="blank"
+      <a *ngIf="facility === 'PSI'" href="{{ SNFLink }}" target="blank"
         >Open Research Data.</a
       >
       <br /><br />
       {{ termsTextContinued }}
-      <a *ngIf="facility == 'PSI'" href="{{ PSIDataPolicy }}" target="blank"
+      <a *ngIf="facility === 'PSI'" href="{{ PSIDataPolicy }}" target="blank"
         >Data Policy.</a
       >
     </mat-card>
