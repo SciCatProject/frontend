@@ -57,7 +57,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private store: Store<any>,
     @Inject(APP_CONFIG) public appConfig: AppConfig,
-    @Inject(DOCUMENT) private document: Document
+    @Inject(DOCUMENT) public document: Document
   ) {
     this.returnUrl = this.route.snapshot.queryParams["returnUrl"] || "/";
   }

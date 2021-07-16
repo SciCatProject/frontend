@@ -86,6 +86,9 @@ describe("LoginComponent", () => {
     fixture.destroy();
   });
 
+
+
+
   describe("#openPrivacyDialog()", () => {
     beforeEach(() => {
       fixture = TestBed.createComponent(LoginComponent);
@@ -105,7 +108,19 @@ describe("LoginComponent", () => {
     });
   });
 
+  describe("component construction", () => {
+    beforeEach(() => {
+      appConfig.loginFormEnabled = false;
+      fixture = TestBed.createComponent(LoginComponent);
+      component = fixture.componentInstance;
+      fixture.detectChanges();
+      TestBed.compileComponents();
+    });
+    it("should have a Document instance injected", () => {
+      expect(component.document).toBeTruthy();
+    });
 
+  });
 
   describe("#openPrivacyDialog()", () => {
     beforeEach(() => {
