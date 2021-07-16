@@ -3,9 +3,32 @@
 .m8 {
   margin: 8px;
 }
+.padding-right-1em{
+  padding-right: 1em;
+}
+.toolbar{
+  width: 100%;
+  display: flex;
+  align-items: center;
+  ::ng-deep mat-form-field{
+    flex-grow: 1;
+  }
+}
 
+.over-flow-scroll{
+  overflow-x: scroll;
+}
+
+::ng-deep .toolbar mat-form-field.mat-form-field-appearance-standard .mat-form-field-flex {
+  padding-top:0;
+}
+
+// Align search icon with placeholder
+::ng-deep .toolbar mat-form-field .mat-form-field-prefix, .mat-form-field-suffix {
+  align-self: flex-end;
+}
 ::ng-deep .mat-sort-header-arrow {
-  color:rgb(128, 0, 128);
+  color: white;
 }
 
 .expanded {
@@ -13,11 +36,17 @@
   visibility: visible !important;
 }
 
-.hidColLength-0 {
-  height: 0px !important;
-  min-height: 0px !important;
-  visibility: hidden !important;
+.hidden {
+  display: none;
 }
+
+// .hidColLength-0 {
+//   // display: none;
+//   height: 0px !important;
+//   min-height: 0px !important;
+//   visibility: hidden !important;
+//   max-width: 10px
+// }
 
 .btnToggleExpand {
   position: relative;
@@ -52,13 +81,15 @@
   background-color: green;
 }
 
-.filterHeader {
-  padding: 0 24px;
-}
+// Should remove
+// .filterHeader {
+//   padding: 0 24px;
+// }
 
-.example-spacer {
-  flex: 1 1 auto;
-}
+//Should remove
+// .example-spacer {
+//   flex: 1 1 auto;
+// }
 
 
 .center {
@@ -70,10 +101,10 @@
   transform: translateX(-50%) translateY(-50%);
 }
 
-
-.mat-table {
-  padding-top: 10px;
-}
+// Should remove
+// .mat-table {
+//   padding-top: 10px;
+// }
 
 mat-cell>span.ellipsis {
   text-overflow: ellipsis;
@@ -81,32 +112,36 @@ mat-cell>span.ellipsis {
   white-space: nowrap;
 }
 
-mat-header-row {
-  align-items: initial;
-}
+//Should remove
+// mat-header-row {
+//   align-items: initial;
+// }
 
+//Should remove
+// .mat-input-element {
+//   color: white;
+// }
 
-.mat-input-element {
-  color: white;
-}
-ß
-.mat-input-element::placeholder {
-  color: black;
-}
+//Should remove
+// .mat-input-element::placeholder {
+//   color: black;
+// }
 
-.date_container {        
-  float: left;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+//Should remove
+// .date_container {
+//   float: left;
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+// }
 
-::ng-deep .mat-sort-header-content > div {
-  flex-direction: row;
-  > div {
-    display: inline;
-  }
-}
+//Should remove
+// ::ng-deep .mat-sort-header-content > div {
+//   flex-direction: row;
+//   > div {
+//     display: inline;
+//   }
+// }
 
 div.shared-table-title {
   text-align: center;
@@ -115,110 +150,183 @@ div.shared-table-title {
   line-height: 32px;
 }
 
-.mat-toolbar {
-  background-color: inherit;
-  display: flex;
-  flex-direction: row;
-  > mat-form-field {
-    flex: 1 1 80%;
-  }
-  > .mat-focus-indicator {
-    flex: 0 0 auto;
-  }
-  > mat-paginator {
-    flex: 0 0 auto;
-    min-width: 450px;
-  }
-  ::ng-deep .mat-form-field .mat-form-field-flex .mat-form-field-infix {
-    background-color: inherit;
-  }
-}
+//Should remove
+// .mat-toolbar {
+//   background-color: inherit;
+//   display: flex;
+//   flex-direction: row;
+//   > mat-form-field {
+//     flex: 1 1 80%;
+//   }
+//   > .mat-focus-indicator {
+//     flex: 0 0 auto;
+//   }
+//   > mat-paginator {
+//     flex: 0 0 auto;
+//     min-width: 450px;
+//   }
+  // ::ng-deep .mat-form-field .mat-form-field-flex .mat-form-field-infix {
+  //   background-color: inherit;
+  // }
+// }
+
+//Should remove
+// .mat-form-field {
+//   ::ng-deep .mat-form-field-flex {
+//     padding: 0px;
+//     // width: 97%;
+//     > .mat-form-field-infix {
+//       // color:mat-contrast($grey, 50);
+//       // background-color: mat-color($grey, 50);
+//       // padding: 1px 0.75em 0 4px;
+//       border: 0;
+//       margin: 0.75em 0;
+//     }
+//   }
+
+  // ::ng-deep .mat-form-field-infix .mat-input-element {
+  //   color: mat-contrast($grey, 50);
+  // }
+// }
 
 
-.mat-form-field {
-  ::ng-deep .mat-form-field-flex {
-    padding: 0px;
-    width: 97%;
-    > .mat-form-field-infix {
-      color:mat-contrast($grey, 50);
-      background-color: mat-color($grey, 50);
-      padding: 1px 0.75em 0 4px;
-      border: 0;
-      margin: 0.75em 0;
-    }
-  }
+//Should remove
+// .shared-table-between {
+//   :ng-deep .mat-form-field >.mat-form-field-wrapper >.mat-form-field-flex {
+//     padding: 0px;
+//   }
+//   ::ng-deep .date_container {
+//     margin-top: -3px;
+//     width: 100%;
+//     align-items: flex-end;
+//   }
 
-  ::ng-deep .mat-form-field-infix .mat-input-element {
-    color: mat-contrast($grey, 50);
-  }
-}
+//   ::ng-deep .mat-date-range-input-container {
+//     display: flex;
+//     justify-content: space-evenly;
+//     align-items: stretch; // This is not working
+//   }
+//   //Should remove
+//   ::ng-deep .mat-date-range-input-start-wrapper {
+//     max-width: 45%;
+//   }
+//   ::ng-deep .mat-start-date {
+//     position: unset;
+//   }
 
-.shared-table-between { 
-  :ng-deep .mat-form-field >.mat-form-field-wrapper >.mat-form-field-flex { 
-    padding: 0px;
-  }
-  ::ng-deep .date_container {
-    margin-top: -3px;
-    width: 100%;
-    align-items: flex-end;
-  }
+//   //Should remove
+//   ::ng-deep .mat-date-range-input-mirror {
+//     display: none;
+//   }
 
-  ::ng-deep .mat-date-range-input-container {
-    display: flex;
-    flex-direction: row;
-  }
-        
-  ::ng-deep .mat-date-range-input-start-wrapper {
-    max-width: 45%;
-  }
-  ::ng-deep .mat-start-date {
-    position: unset;
-  }
+//   ::ng-deep .mat-date-range-input-end-wrapper {
+//     max-width: 45%;
+//     text-align: left;
+//   }
 
-  ::ng-deep .mat-date-range-input-mirror {
-    display: none;
-  }
+//   ::ng-deep .mat-datepicker-toggle {
+//     color: mat-contrast($grey, 50);
+//   }
+//   ::ng-deep .mat-datepicker-toggle .mat-focus-indicator {
+//     width: 24px;
+//     height: 24px;
+//     line-height: 24px;
+//   }
 
-  ::ng-deep .mat-date-range-input-end-wrapper {
-    max-width: 45%;
-    text-align: left;
-  }
+//   ::ng-deep .mat-form-field-infix .mat-input-element {
+//     color: mat-contrast($grey,50);
+//   }
+// }
 
-  ::ng-deep .mat-datepicker-toggle {
-    color: mat-contrast($grey, 50);
-  }
-  ::ng-deep .mat-datepicker-toggle .mat-focus-indicator {
-    width: 24px;
-    height: 24px;
-    line-height: 24px;
-  }
+// .mat-form-field {
+//   font-size: 14px;
+//   width: 50%;
+// }
 
-  ::ng-deep .mat-form-field-infix .mat-input-element {
-    color: mat-contrast($grey,50);
-  }
-}
-
-.mat-form-field {
-  font-size: 14px;
-  width: 50%;
-}
-
-.mat-header-row {
+.first-header-row {
   background-color: mat-color($primary);
 }
 
-.mat-header-cell {
+.first-header-cell {
   color: mat-color($primary,default-contrast);
 }
 
-::ng-deep .mat-form-field-wrapper {
-  padding-bottom: 0px;
-}
+//Should remove
+// ::ng-deep .mat-form-field-wrapper {
+//   padding-bottom: 0px;
+// }
+//Should remove
+// ::ng-deep .mat-form-field-underline {
+//   bottom: 0px;
+// }
 
-::ng-deep .mat-form-field-underline {
-  bottom: 0px;
-}
-
-.mat-table .mat-header-row .mat-header-cell .mat-form-field {
+.max-width {
   width: 100%;
 }
+
+
+// ::ng-deep .mat-form-field-appearance-outline .mat-form-field-infix {
+//   padding: 0.2em 0 0.2em 0;
+// }
+
+.trigger-column{
+  max-width: 36px;
+}
+
+//Styling for filter columns and row
+::ng-deep .mat-table {
+  mat-header-cell, mat-cell{
+    padding-right: 1em;
+  }
+  mat-form-field{
+    width:100%;
+  }
+
+  .mat-form-field-appearance-outline .mat-form-field-wrapper {
+    margin: 0.25em 0;
+  }
+  .mat-form-field-appearance-outline .mat-form-field-infix {
+    padding: 0.5em 0 0.5em 0;
+  }
+  .mat-form-field-wrapper {
+    padding-bottom: 0em;
+  }
+  .mat-form-field-appearance-outline .mat-form-field-outline {
+    background: white;
+  }
+}
+
+
+//Filter outline
+// ::ng-deep .mat-table {
+//   mat-header-cell{
+//     margin-top: 1em
+//   }
+//   mat-header-cell, mat-cell{
+//     padding-right: 1em;
+//   }
+//   mat-form-field{
+//     width:100%;
+//   }
+//   .mat-form-field-wrapper {
+//     padding-bottom: 0;
+//     background: white;
+//     margin-bottom: 1em;
+//   }
+//   .mat-input-element{
+//     color: gray;
+//     padding-left: 0.5em;
+//   }
+//   .mat-form-field-infix{
+//     padding-top:0;
+//   }
+//   .mat-form-field-underline {
+//     bottom: 0;
+//   }
+
+//   //Placeholder of datepicker
+//   .mat-date-range-input-inner{
+//     color: gray;
+//     padding-left: 0.5em;
+//   }
+// }

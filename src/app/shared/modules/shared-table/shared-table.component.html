@@ -133,11 +133,10 @@
 
   <!-- Cell Definition For Hidden Filter Start -->
   <ng-container matColumnDef="hidden-filter" >
-    <mat-header-cell *matHeaderCellDef="let row"  fxLayoutAlign="start" class="over-flow-scroll">
+    <mat-header-cell *matHeaderCellDef="let row" fxLayout="row" fxLayoutAlign="start" class="over-flow-scroll">
       <div *ngFor="let hiddenColumn of hiddenColumns" fxLayout="column" class="padding-right-1em" >
         <p>
           <strong>{{hiddenColumn.label}}</strong>
-        </p>
         <span>
           <mat-form-field appearance="outline" *ngIf="hiddenColumn.matchMode=='between'" class="max-width">
             <mat-date-range-input [rangePicker]="rangePicker">
@@ -155,6 +154,7 @@
           <input #allFilters matInput autocomplete="off" name="{{ hiddenColumn.id }}" placeholder="{{ hiddenColumn.matchMode }}" />
         </mat-form-field>
         </span>
+      </p>
       </div>
     </mat-header-cell>
   </ng-container>
