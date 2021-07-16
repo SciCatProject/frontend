@@ -215,6 +215,70 @@ describe("DatasetsFilterComponent", () => {
     });
   });
 
+  describe("#onLocationInput()", () => {
+    it("should call next on locationInput$", () => {
+      const nextSpy = spyOn(component.locationInput$, "next");
+
+      const event = {
+        target: {
+          value: "location",
+        },
+      };
+
+      component.onLocationInput(event);
+
+      expect(nextSpy).toHaveBeenCalledOnceWith(event.target.value);
+    });
+  });
+
+  describe("#onGroupInput()", () => {
+    it("should call next on groupInput$", () => {
+      const nextSpy = spyOn(component.groupInput$, "next");
+
+      const event = {
+        target: {
+          value: "group",
+        },
+      };
+
+      component.onGroupInput(event);
+
+      expect(nextSpy).toHaveBeenCalledOnceWith(event.target.value);
+    });
+  });
+
+  describe("#onKeywordInput()", () => {
+    it("should call next on keywordsInput$", () => {
+      const nextSpy = spyOn(component.keywordsInput$, "next");
+
+      const event = {
+        target: {
+          value: "keyword",
+        },
+      };
+
+      component.onKeywordInput(event);
+
+      expect(nextSpy).toHaveBeenCalledOnceWith(event.target.value);
+    });
+  });
+
+  describe("#onTypeInput()", () => {
+    it("should call next on typeInput$", () => {
+      const nextSpy = spyOn(component.typeInput$, "next");
+
+      const event = {
+        target: {
+          value: "type",
+        },
+      };
+
+      component.onTypeInput(event);
+
+      expect(nextSpy).toHaveBeenCalledOnceWith(event.target.value);
+    });
+  });
+
   describe("#locationSelected()", () => {
     it("should dispatch an AddLocationFilterAction", () => {
       dispatchSpy = spyOn(store, "dispatch");
