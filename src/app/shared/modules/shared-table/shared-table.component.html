@@ -9,32 +9,63 @@
   <div>{{title}}</div>
 </div>
 
-<!-- Top tool bar-->
-<mat-toolbar>
+<!-- Top ToolBar Start-->
+<div class="toolbar">
   <mat-form-field appearance="standard">
-    <mat-icon>search</mat-icon>
-    <input type="search" matInput placeholder="global word-search" #globalFilter>
+    <mat-icon matPrefix>search</mat-icon>
+    <input type="text" matInput placeholder="global word-search" #globalFilter>
   </mat-form-field>
+
   <button mat-icon-button (click)="exportToExcel()">
     <mat-icon>cloud_download</mat-icon>
   </button>
+
   <mat-paginator [length]="dataSource.count$ | async" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" showFirstLastButtons>
   </mat-paginator>
-</mat-toolbar>
 
+  <button
+    mat-icon-button
+    [matMenuTriggerFor]="menu"
+    class="settings-button"
+    matTooltip="Hide/Clear filter"
+  >
+    <mat-icon>settings</mat-icon>
+  </button>
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item (click)="toggleHideFilterFlag()">
+      <span>{{ hideFilterFlag? 'Show Filters' :'Hide Filters'}}</span>
+    </button>
+    <button mat-menu-item>
+      <span>Clear Filters</span>
+    </button>
+  </mat-menu>
+</div>
+<!-- Top ToolBar End -->
+
+<!-- Table Definition Start -->
 <mat-table #dataTable class="mat-elevation-z2" [dataSource]="dataSource" matSort matSortStart="desc" multiTemplateDataRows>
 
-  <!-- Toggle Button Start -->
+  <!-- Toggle Button For Hidden Filters Start -->
+  <ng-container matColumnDef="hidden-filter-trigger" >
+    <mat-header-cell  *matHeaderCellDef="let row" class="trigger-column">
+      <span class="btnToggleExpand" (click)="toggleExpandFlag($event,'filters')" [ngClass]="[expandedElement['filters'] ?  'active' : 'inActive']"></span>
+    </mat-header-cell>
+  </ng-container>
+  <!-- Toggle Button For Hidden Filter End -->
+
+  <!-- Toggle Button For Hidden Columns Start -->
   <ng-container matColumnDef="trigger">
-    <mat-header-cell *matHeaderCellDef >
+    <mat-header-cell *matHeaderCellDef class="trigger-column first-header-cell" >
       <mat-icon>menu</mat-icon>
     </mat-header-cell>
-    <mat-cell *matCellDef="let row; let i = dataIndex;">
-      <span (click)="toggleExpandFlag(row.uniqueId);"
+    <mat-cell *matCellDef="let row; let i = dataIndex;" class="trigger-column">
+      <span (click)="toggleExpandFlag($event, row.uniqueId);"
         [ngClass]="[expandedElement[row.uniqueId] ?  'active' : 'inActive']" class="btnToggleExpand"></span>
     </mat-cell>
   </ng-container>
-  <!-- Toggle Button End -->
+  <!-- Toggle Button Button For Hidden Columns End -->
+
+  <!-- Cell Definition For Visible Columns Start -->
   <ng-container [matColumnDef]="column.id" *ngFor="let column of visibleColumns">
     <mat-header-cell *matHeaderCellDef class="col-name shared-table-{{column.matchMode}} first-header-cell">
       <div fxLayout="row" style="align-items: center">
@@ -54,7 +85,9 @@
       </ng-container>
     </mat-cell>
   </ng-container>
+  <!-- Cell Definition For Visible Columns End -->
 
+  <!-- Cell Definition For Hidden Columns Start -->
   <ng-container matColumnDef="hidden">
     <mat-cell *matCellDef="let row;let i = dataIndex;" class="matCell" fxLayout="column" fxLayoutAlign="center start">
       <p *ngFor="let hiddenColumn of hiddenColumns" fxLayout="row" class="m8">
@@ -74,10 +107,12 @@
       </p>
     </mat-cell>
   </ng-container>
+  <!-- Cell Definition For Visible Columns End -->
 
+  <!-- Cell Definition For Visible Filter Start -->
   <ng-container matColumnDef="{{column.id}}-filter" *ngFor="let column of visibleColumns">
     <mat-header-cell *matHeaderCellDef="let row">
-      <mat-form-field appearance="outline" *ngIf="column.matchMode=='between'">
+      <mat-form-field appearance="outline" *ngIf="column.matchMode=='between'" class="max-width">
           <mat-date-range-input [rangePicker]="rangePicker">
             <input #allFilters   matStartDate placeholder="Start date"
               (dateChange)="dateChanged($event,column.id+'.start')">
@@ -94,15 +129,55 @@
       </mat-form-field>
     </mat-header-cell>
   </ng-container>
+  <!-- Cell Definition For Visible Filter End -->
+
+  <!-- Cell Definition For Hidden Filter Start -->
+  <ng-container matColumnDef="hidden-filter" >
+    <mat-header-cell *matHeaderCellDef="let row"  fxLayoutAlign="start" class="over-flow-scroll">
+      <div *ngFor="let hiddenColumn of hiddenColumns" fxLayout="column" class="padding-right-1em" >
+        <p>
+          <strong>{{hiddenColumn.label}}</strong>
+        </p>
+        <span>
+          <mat-form-field appearance="outline" *ngIf="hiddenColumn.matchMode=='between'" class="max-width">
+            <mat-date-range-input [rangePicker]="rangePicker">
+              <input #allFilters   matStartDate placeholder="Start date"
+                (dateChange)="dateChanged($event,hiddenColumn.id+'.start')">
+              <input #allFilters  matEndDate placeholder="End date"
+                (dateChange)="dateChanged($event,hiddenColumn.id+'.end')">
+            </mat-date-range-input>
+            <mat-datepicker-toggle matSuffix [for]="rangePicker" ></mat-datepicker-toggle>
+          <mat-date-range-picker #rangePicker>
+          </mat-date-range-picker>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" *ngIf="hiddenColumn.matchMode !== 'between'">
+          <input #allFilters matInput autocomplete="off" name="{{ hiddenColumn.id }}" placeholder="{{ hiddenColumn.matchMode }}" />
+        </mat-form-field>
+        </span>
+      </div>
+    </mat-header-cell>
+  </ng-container>
+  <!-- Cell Definition For Hidden Filters End -->
 
   <mat-header-row *matHeaderRowDef="visibleColumnsIds; sticky: true" class="matHeaderRow first-header-row"></mat-header-row>
-  <mat-header-row *matHeaderRowDef="getFilterColumns()"></mat-header-row>
+
+  <!-- Row definition for filter columns -->
+  <mat-header-row  *matHeaderRowDef="getFilterColumns(); sticky: true" [class.hidden]="hideFilterFlag"></mat-header-row>
+
+  <!-- Row definition for hidden filter columns on small screen -->
+  <mat-header-row  *matHeaderRowDef="['hidden-filter']; sticky: true" [@detailExpand]="getExpandFlag('filters')"></mat-header-row>
+
   <mat-row *matRowDef="let row; let i = dataIndex; columns: visibleColumnsIds;"
     class="matRowVisible visible-row-{{row.uniqueId}}" (click)="onRowClick(row)"></mat-row>
 
   <!-- Body row definition for hidden columns -->
   <mat-row *matRowDef="let row; let i = dataIndex; columns: ['hidden'];" [@detailExpand]="getExpandFlag(row.uniqueId)"
-    style="overflow: hidden" class="matRowHidden hidden-row-{{row.uniqueId}} hidColLength-{{hiddenColumns.length}}"
-    [ngClass]="expandedElement[row.uniqueId] ? 'expanded' : 'collapsed'"></mat-row>
-
+    style="overflow: hidden;"
+    class="matRowHidden hidden-row-{{row.uniqueId}} hidColLength-{{hiddenColumns.length}}"
+    [class.hidden]="getExpandFlag(row.uniqueId) === 'collapsed'"
+    [ngClass]="expandedElement[row.uniqueId] ? 'expanded' : 'collapsed'">
+  </mat-row>
+  <!-- [style.display]="getExpandFlag(row.uniqueId) === 'expanded'? 'flex':'none'" -->
 </mat-table>
+<!-- Table Definition End -->

@@ -39,13 +39,12 @@ export class SharedTableComponent implements AfterViewChecked, AfterViewInit, Af
   generalFilter = new FormControl();
   filterExpressions = {};
   columnFilterSubscriptions: Subscription[] = [];
-
+  hideFilterFlag = false;
   // Visible Hidden Columns
   visibleColumns: Column[];
   hiddenColumns: Column[];
   // unitialized values are effectively treated as false
-  expandedElement = {};
-
+  expandedElement = {"filters": false};
   // MatPaginator Inputs
   length = 100;
 
@@ -203,9 +202,13 @@ export class SharedTableComponent implements AfterViewChecked, AfterViewInit, Af
     return ex;
   }
 
-  toggleExpandFlag(i) {
+  toggleExpandFlag(event, i) {
     this.expandedElement[i] = !this.expandedElement[i];
     this._changeDetectorRef.detectChanges();
+    event.stopPropagation(); // prevent propagation in case there is a onRowClick function
+  }
+  toggleHideFilterFlag(){
+    this.hideFilterFlag = !this.hideFilterFlag;
   }
 
   unsubscribeColumnFilters() {
@@ -348,8 +351,15 @@ export class SharedTableComponent implements AfterViewChecked, AfterViewInit, Af
     }
   }
   getFilterColumns(){
-    return this.visibleColumns.map((column) => {
-      return `${column.id}-filter`
-    })
+    const filterColumns = this.visibleColumns.map((column) => (`${column.id}-filter`));
+    return this.hiddenColumns.length? [`hidden-filter-trigger`, ...filterColumns] : filterColumns;
+  }
+  getHiddenFilterColumns(){
+    return this.visibleColumns.map((column) => (`${column.id}-hidden-filter`));
+  }
+
+  showHiddenColumns(index: number, rowData ){
+    console.log("here",this.getExpandFlag(rowData.uniqueId))
+    return this.getExpandFlag(rowData.uniqueId) === 'expanded'
   }
 }
