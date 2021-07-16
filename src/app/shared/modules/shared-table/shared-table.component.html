@@ -112,11 +112,11 @@
   <!-- Cell Definition For Visible Filter Start -->
   <ng-container matColumnDef="{{column.id}}-filter" *ngFor="let column of visibleColumns">
     <mat-header-cell *matHeaderCellDef="let row">
-      <mat-form-field appearance="outline" *ngIf="column.matchMode=='between'" class="max-width">
+      <mat-form-field appearance="outline" *ngIf="column.matchMode === 'between'" class="max-width">
           <mat-date-range-input [rangePicker]="rangePicker">
-            <input #allFilters   matStartDate placeholder="Start date"
+            <input #allFilters name="{{ column.id + '.start' }}"  matStartDate placeholder="Start date"
               (dateChange)="dateChanged($event,column.id+'.start')">
-            <input #allFilters  matEndDate placeholder="End date"
+            <input #allFilters name="{{ column.id + '.end'}}" matEndDate placeholder="End date"
               (dateChange)="dateChanged($event,column.id+'.end')">
           </mat-date-range-input>
           <mat-datepicker-toggle matSuffix [for]="rangePicker" ></mat-datepicker-toggle>
@@ -178,6 +178,5 @@
     [class.hidden]="getExpandFlag(row.uniqueId) === 'collapsed'"
     [ngClass]="expandedElement[row.uniqueId] ? 'expanded' : 'collapsed'">
   </mat-row>
-  <!-- [style.display]="getExpandFlag(row.uniqueId) === 'expanded'? 'flex':'none'" -->
 </mat-table>
 <!-- Table Definition End -->

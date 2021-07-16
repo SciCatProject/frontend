@@ -208,6 +208,7 @@ export class SharedTableComponent implements AfterViewChecked, AfterViewInit, Af
     event.stopPropagation(); // prevent propagation in case there is a onRowClick function
   }
   toggleHideFilterFlag(){
+    this.expandedElement['filters'] = false;
     this.hideFilterFlag = !this.hideFilterFlag;
   }
 
@@ -358,8 +359,4 @@ export class SharedTableComponent implements AfterViewChecked, AfterViewInit, Af
     return this.visibleColumns.map((column) => (`${column.id}-hidden-filter`));
   }
 
-  showHiddenColumns(index: number, rowData ){
-    console.log("here",this.getExpandFlag(rowData.uniqueId))
-    return this.getExpandFlag(rowData.uniqueId) === 'expanded'
-  }
 }
