@@ -137,7 +137,7 @@
         <p>
           <strong>{{hiddenColumn.label}}</strong>
         <span>
-          <mat-form-field appearance="outline" *ngIf="hiddenColumn.matchMode=='between'" class="max-width">
+          <mat-form-field appearance="outline" *ngIf="hiddenColumn.matchMode==='between'" class="max-width">
             <mat-date-range-input [rangePicker]="rangePicker">
               <input #allFilters   matStartDate placeholder="Start date"
                 (dateChange)="dateChanged($event,hiddenColumn.id+'.start')">

@@ -44,7 +44,7 @@ export class SharedTableComponent implements AfterViewChecked, AfterViewInit, Af
   visibleColumns: Column[];
   hiddenColumns: Column[];
   // unitialized values are effectively treated as false
-  expandedElement = {"filters": false};
+  expandedElement = {filters: false};
   // MatPaginator Inputs
   length = 100;
 
@@ -208,7 +208,7 @@ export class SharedTableComponent implements AfterViewChecked, AfterViewInit, Af
     event.stopPropagation(); // prevent propagation in case there is a onRowClick function
   }
   toggleHideFilterFlag(){
-    this.expandedElement['filters'] = false;
+    this.expandedElement["filters"] = false;
     this.hideFilterFlag = !this.hideFilterFlag;
   }
 
@@ -309,11 +309,11 @@ export class SharedTableComponent implements AfterViewChecked, AfterViewInit, Af
     }, {});
 
     this.globalFilter.nativeElement.value = null;
-    delete defaultFilters['globalSearch'];
+    delete defaultFilters["globalSearch"];
 
     this.allFilters.forEach((filter) => {
       filter.nativeElement.value = null;
-    })
+    });
 
     this.filterExpressions = {};
 
