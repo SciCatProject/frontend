@@ -299,6 +299,19 @@ export class SharedTableComponent implements AfterViewChecked, AfterViewInit, Af
       }
     });
   }
+  resetFilters(){
+    const filterList = this.route.snapshot.queryParamMap;
+    const defaultFilters =  filterList.keys.reduce((acc, filter) => {
+      if(!this.filterExpressions[filter]){
+        acc[filter] = filterList.get(filter);
+      }
+      return acc;
+    }, {})
+    this.router.navigate([], {
+      queryParams: defaultFilters,
+    });
+    this.loadDataPage();
+  }
 
   toggleColumns(tableWidth: number) {
     this.zone.runOutsideAngular(() => {

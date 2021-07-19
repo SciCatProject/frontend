@@ -26,7 +26,7 @@
     mat-icon-button
     [matMenuTriggerFor]="menu"
     class="settings-button"
-    matTooltip="Hide/Clear filter"
+    matTooltip="Hide/Show/Reset filter"
   >
     <mat-icon>settings</mat-icon>
   </button>
@@ -34,8 +34,8 @@
     <button mat-menu-item (click)="toggleHideFilterFlag()">
       <span>{{ hideFilterFlag? 'Show Filters' :'Hide Filters'}}</span>
     </button>
-    <button mat-menu-item>
-      <span>Clear Filters</span>
+    <button mat-menu-item (click)="resetFilters()">
+      <span>Reset Filters</span>
     </button>
   </mat-menu>
 </div>
