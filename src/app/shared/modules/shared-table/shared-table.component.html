@@ -10,18 +10,17 @@
 </div>
 
 <!-- Top ToolBar Start-->
-<div class="toolbar">
+<div class="toolbar" fxLayout="row" fxLayoutAlign="space-between center">
   <mat-form-field appearance="standard">
     <mat-icon matPrefix>search</mat-icon>
     <input type="text" matInput placeholder="global word-search" #globalFilter>
   </mat-form-field>
 
+  <mat-paginator [length]="dataSource.count$ | async" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" showFirstLastButtons>
+  </mat-paginator>
   <button mat-icon-button (click)="exportToExcel()">
     <mat-icon>cloud_download</mat-icon>
   </button>
-
-  <mat-paginator [length]="dataSource.count$ | async" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" showFirstLastButtons>
-  </mat-paginator>
 
   <button
     mat-icon-button
@@ -68,7 +67,7 @@
   <!-- Cell Definition For Visible Columns Start -->
   <ng-container [matColumnDef]="column.id" *ngFor="let column of visibleColumns">
     <mat-header-cell *matHeaderCellDef class="col-name shared-table-{{column.matchMode}} first-header-cell">
-      <div fxLayout="row" style="align-items: center">
+      <div fxLayout="row" fxLayoutAlign="space-between center">
         <mat-icon>{{ column.icon }}</mat-icon>
         <span mat-sort-header [disabled]="!column.canSort">{{ column.label | titleCase }}</span>
       </div>

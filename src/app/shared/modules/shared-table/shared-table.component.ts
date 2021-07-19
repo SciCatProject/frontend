@@ -355,8 +355,4 @@ export class SharedTableComponent implements AfterViewChecked, AfterViewInit, Af
     const filterColumns = this.visibleColumns.map((column) => (`${column.id}-filter`));
     return this.hiddenColumns.length? [`hidden-filter-trigger`, ...filterColumns] : filterColumns;
   }
-  getHiddenFilterColumns(){
-    return this.visibleColumns.map((column) => (`${column.id}-hidden-filter`));
-  }
-
 }
