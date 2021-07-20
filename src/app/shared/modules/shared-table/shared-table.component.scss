@@ -7,8 +7,8 @@
   padding-right: 1em;
 }
 ::ng-deep .toolbar{
-  .mat-paginator-page-size{
-    // Hide page size on small screen
+  .mat-paginator-range-label{
+    // Hide range label on small screen
     @media only screen and (max-width: 1279px) {
       display: none;
     }
