@@ -23,6 +23,7 @@ export interface HistoryItem {
   value: any;
   updatedBy: string;
   updatedAt: string;
+  [key: string]: any;
 }
 
 @Component({
@@ -113,7 +114,7 @@ export class DatasetLifecycleComponent implements OnInit, OnChanges {
                 : "";
             }
             default: {
-              return JSON.stringify(row ?? [fieldName], replacer);
+              return JSON.stringify(row[fieldName], replacer);
             }
           }
         })

@@ -227,13 +227,10 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
         this.dateRange.end = event.value.toUTC().plus({ days: 1 }).toISO();
       }
       if (this.dateRange.begin.length > 0 && this.dateRange.end.length > 0) {
-        this.store.dispatch(
-          setDateRangeFilterAction({
-            begin: this.dateRange.begin,
-            end: this.dateRange.end,
-          })
-        );
+        this.store.dispatch(setDateRangeFilterAction(this.dateRange));
       }
+    } else {
+      this.store.dispatch(setDateRangeFilterAction({ begin: "", end: "" }));
     }
   }
 

@@ -390,7 +390,7 @@ describe("DatasetsFilterComponent", () => {
   });
 
   describe("#dateChanged()", () => {
-    it("should do nothing if event.value is null", () => {
+    it("should dispatch setDateRangeFilterAction with empty string values if event.value is null", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
       const event = {
@@ -402,7 +402,10 @@ describe("DatasetsFilterComponent", () => {
 
       component.dateChanged(event);
 
-      expect(dispatchSpy).not.toHaveBeenCalled();
+      expect(dispatchSpy).toHaveBeenCalledTimes(1);
+      expect(dispatchSpy).toHaveBeenCalledWith(
+        setDateRangeFilterAction({ begin: "", end: "" })
+      );
     });
 
     it("should set dateRange.begin if event has value and event.targetElement name is begin", () => {
