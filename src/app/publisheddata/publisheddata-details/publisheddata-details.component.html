@@ -1,8 +1,4 @@
-<div
-  fxLayout="row"
-  fxLayout.xs="column"
-  *ngIf="currentData$ | async as publishedData"
->
+<div fxLayout="row" fxLayout.xs="column" *ngIf="publishedData">
   <div fxFlex="60">
     <mat-card>
       <mat-card-header class="status-header">
@@ -148,7 +144,12 @@
       </mat-card-header>
 
       <table>
-        <tr *ngIf="publishedData.relatedPublications?.length > 0">
+        <tr
+          *ngIf="
+            publishedData.relatedPublications &&
+            publishedData.relatedPublications.length > 0
+          "
+        >
           <th>Related Publications</th>
           <td>{{ publishedData.relatedPublications }}</td>
         </tr>
@@ -170,7 +171,10 @@
       >
         Edit
       </button>
-      <ng-container id="jsonMetadataContainer" *ngIf="appConfig.jsonMetadataEnabled">
+      <ng-container
+        id="jsonMetadataContainer"
+        *ngIf="appConfig.jsonMetadataEnabled"
+      >
         <button mat-stroked-button (click)="show = !show">
           {{ show ? "Hide MetaData" : "Show Metadata" }}
         </button>

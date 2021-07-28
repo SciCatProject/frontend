@@ -4,7 +4,7 @@ import {
   DatasetState,
 } from "state-management/state/datasets.store";
 import * as fromActions from "state-management/actions/datasets.actions";
-import { ArchViewMode } from "state-management/models";
+import { ArchViewMode, Dataset } from "state-management/models";
 
 const reducer = createReducer(
   initialDatasetState,
@@ -54,21 +54,11 @@ const reducer = createReducer(
 
   on(fromActions.addDatasetCompleteAction, (state, { dataset }) => ({
     ...state,
-    currentSet: dataset,
+    currentSet: (dataset as unknown) as Dataset,
   })),
 
   on(fromActions.addAttachmentCompleteAction, (state, { attachment }) => {
-    const attachments = state.currentSet.attachments.filter(
-      (existingAttachment) => existingAttachment.id !== attachment.id
-    );
-    attachments.push(attachment);
-    const currentSet = { ...state.currentSet, attachments };
-    return { ...state, currentSet };
-  }),
-
-  on(
-    fromActions.updateAttachmentCaptionCompleteAction,
-    (state, { attachment }) => {
+    if (state.currentSet) {
       const attachments = state.currentSet.attachments.filter(
         (existingAttachment) => existingAttachment.id !== attachment.id
       );
@@ -76,14 +66,33 @@ const reducer = createReducer(
       const currentSet = { ...state.currentSet, attachments };
       return { ...state, currentSet };
     }
+    return { ...state };
+  }),
+
+  on(
+    fromActions.updateAttachmentCaptionCompleteAction,
+    (state, { attachment }) => {
+      if (state.currentSet) {
+        const attachments = state.currentSet.attachments.filter(
+          (existingAttachment) => existingAttachment.id !== attachment.id
+        );
+        attachments.push(attachment);
+        const currentSet = { ...state.currentSet, attachments };
+        return { ...state, currentSet };
+      }
+      return { ...state };
+    }
   ),
 
   on(fromActions.removeAttachmentCompleteAction, (state, { attachmentId }) => {
-    const attachments = state.currentSet.attachments.filter(
-      (attachment) => attachment.id !== attachmentId
-    );
-    const currentSet = { ...state.currentSet, attachments };
-    return { ...state, currentSet };
+    if (state.currentSet) {
+      const attachments = state.currentSet.attachments.filter(
+        (attachment) => attachment.id !== attachmentId
+      );
+      const currentSet = { ...state.currentSet, attachments };
+      return { ...state, currentSet };
+    }
+    return { ...state };
   }),
 
   on(fromActions.clearDatasetsStateAction, () => ({
@@ -290,7 +299,7 @@ const reducer = createReducer(
 
   on(fromActions.setDateRangeFilterAction, (state, { begin, end }) => {
     const oldTime = state.filters.creationTime;
-    const creationTime = (begin && end) ?  {...oldTime, begin, end } : null;
+    const creationTime = begin && end ? { ...oldTime, begin, end } : null;
     const filters = { ...state.filters, creationTime };
     return { ...state, filters };
   }),

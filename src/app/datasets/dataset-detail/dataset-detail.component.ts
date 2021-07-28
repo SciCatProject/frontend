@@ -18,12 +18,12 @@ import { SampleEditComponent } from "datasets/sample-edit/sample-edit.component"
   styleUrls: ["./dataset-detail.component.scss"],
 })
 export class DatasetDetailComponent {
-  @Input() dataset: Dataset;
-  @Input() datasetWithout: any;
-  @Input() attachments: Attachment[];
-  @Input() proposal: Proposal;
-  @Input() sample: Sample;
-  @Input() isPI: boolean;
+  @Input() dataset: Dataset | null = null;
+  @Input() datasetWithout: Partial<Dataset> | null = null;
+  @Input() attachments: Attachment[] | null = null;
+  @Input() proposal: Proposal | null = null;
+  @Input() sample: Sample | null = null;
+  @Input() isPI = false;
 
   @Output() clickKeyword = new EventEmitter<string>();
   @Output() addKeyword = new EventEmitter<string>();
@@ -34,8 +34,8 @@ export class DatasetDetailComponent {
   @Output() sampleChange = new EventEmitter<Sample>();
   @Output() hasUnsavedChanges = new EventEmitter<boolean>();
 
-  editEnabled: boolean;
-  show: boolean;
+  editEnabled = false;
+  show = false;
   readonly separatorKeyCodes: number[] = [ENTER, COMMA, SPACE];
   constructor(
     @Inject(APP_CONFIG) public appConfig: AppConfig,
@@ -78,7 +78,7 @@ export class DatasetDetailComponent {
         width: "1000px",
         data: {
           ownerGroup: this.dataset.ownerGroup,
-          sampleId: this.sample.sampleId,
+          sampleId: this.sample?.sampleId,
         },
       })
       .afterClosed()
@@ -86,7 +86,7 @@ export class DatasetDetailComponent {
         if (res) {
           const { sample } = res;
           this.sample = sample;
-          this.sampleChange.emit(this.sample);
+          this.sampleChange.emit(sample);
         }
       });
   }

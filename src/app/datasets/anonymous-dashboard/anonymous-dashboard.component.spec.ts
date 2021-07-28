@@ -2,7 +2,7 @@ import {
   ComponentFixture,
   TestBed,
   inject,
-  waitForAsync
+  waitForAsync,
 } from "@angular/core/testing";
 
 import { AnonymousDashboardComponent } from "./anonymous-dashboard.component";
@@ -17,9 +17,9 @@ import { TableColumn, Dataset } from "state-management/models";
 import { SelectColumnEvent } from "datasets/dataset-table-settings/dataset-table-settings.component";
 import {
   selectColumnAction,
-  deselectColumnAction
+  deselectColumnAction,
 } from "state-management/actions/user.actions";
-import { MatSidenav } from "@angular/material/sidenav";
+import { MatSidenav, MatSidenavModule } from "@angular/material/sidenav";
 import { MatCheckboxChange } from "@angular/material/checkbox";
 
 describe("AnonymousDashboardComponent", () => {
@@ -27,32 +27,38 @@ describe("AnonymousDashboardComponent", () => {
   let fixture: ComponentFixture<AnonymousDashboardComponent>;
 
   const router = {
-    navigateByUrl: jasmine.createSpy("navigateByUrl")
+    navigateByUrl: jasmine.createSpy("navigateByUrl"),
   };
   let store: MockStore;
   let dispatchSpy;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      schemas: [NO_ERRORS_SCHEMA],
-      imports: [BrowserAnimationsModule, StoreModule.forRoot({})],
-      declarations: [AnonymousDashboardComponent, MatSidenav],
-      providers: [
-        provideMockStore({
-          selectors: [{ selector: getHasPrefilledFilters, value: true }]
-        })
-      ]
-    });
-    TestBed.overrideComponent(AnonymousDashboardComponent, {
-      set: {
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        schemas: [NO_ERRORS_SCHEMA],
+        imports: [
+          BrowserAnimationsModule,
+          MatSidenavModule,
+          StoreModule.forRoot({}),
+        ],
+        declarations: [AnonymousDashboardComponent, MatSidenav],
         providers: [
-          { provide: ActivatedRoute, useClass: MockActivatedRoute },
-          { provide: Router, useValue: router }
-        ]
-      }
-    });
-    TestBed.compileComponents();
-  }));
+          provideMockStore({
+            selectors: [{ selector: getHasPrefilledFilters, value: true }],
+          }),
+        ],
+      });
+      TestBed.overrideComponent(AnonymousDashboardComponent, {
+        set: {
+          providers: [
+            { provide: ActivatedRoute, useClass: MockActivatedRoute },
+            { provide: Router, useValue: router },
+          ],
+        },
+      });
+      TestBed.compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(AnonymousDashboardComponent);
@@ -98,19 +104,19 @@ describe("AnonymousDashboardComponent", () => {
       name: "test",
       order: 0,
       type: "standard",
-      enabled: false
+      enabled: false,
     };
 
     it("should dispatch a selectColumnAction if checkBoxChange.checked is true", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
       const checkBoxChange = {
-        checked: true
+        checked: true,
       } as MatCheckboxChange;
 
       const event: SelectColumnEvent = {
         checkBoxChange,
-        column
+        column,
       };
 
       component.onSelectColumn(event);
@@ -125,12 +131,12 @@ describe("AnonymousDashboardComponent", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
       const checkBoxChange = {
-        checked: false
+        checked: false,
       } as MatCheckboxChange;
 
       const event: SelectColumnEvent = {
         checkBoxChange,
-        column
+        column,
       };
 
       component.onSelectColumn(event);

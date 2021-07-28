@@ -2,7 +2,7 @@
   <div class="title">Cart</div>
 
   <mat-card-content>
-    <div class="count" [ngPlural]="batchSize$ | async">
+    <div class="count" [ngPlural]="batchSize">
       <ng-template ngPluralCase="=0">No datasets.</ng-template>
       <ng-template ngPluralCase="=1">1 dataset.</ng-template>
       <ng-template ngPluralCase="other"

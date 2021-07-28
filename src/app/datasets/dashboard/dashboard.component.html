@@ -13,7 +13,7 @@
           Create Dataset
         </mat-card>
 
-        <div *ngIf="!appConfig.shoppingCartOnHeader && nonEmpty$ | async">
+        <div *ngIf="!appConfig.shoppingCartOnHeader && (nonEmpty$ | async)">
           <batch-card></batch-card>
         </div>
       </div>

@@ -1,17 +1,11 @@
-<div
-  class="logbooks-table"
-  *ngIf="(logbooks$ | async) && (logbooks$ | async).length > 0; else noLogbooks"
->
-  <mat-table
-    [dataSource]="logbooks$ | async"
-    class="logbook-table mat-elevation-z2"
-  >
+<div class="logbooks-table" *ngIf="logbooks.length > 0; else noLogbooks">
+  <mat-table [dataSource]="logbooks" class="logbook-table mat-elevation-z2">
     <!-- Column Definitions -->
 
     <!-- Name Column -->
     <ng-container matColumnDef="name">
       <mat-header-cell *matHeaderCellDef>
-        <div fxLayout="column" style="align-items: center">
+        <div fxLayout="column" style="align-items: center;">
           <div>
             <mat-icon>fingerprint</mat-icon>
           </div>
@@ -24,7 +18,7 @@
     <!-- Latest Entry Column -->
     <ng-container matColumnDef="latestEntry">
       <mat-header-cell *matHeaderCellDef>
-        <div fxLayout="column" style="align-items: center">
+        <div fxLayout="column" style="align-items: center;">
           <div>
             <mat-icon>calendar_today</mat-icon>
           </div>
@@ -46,7 +40,7 @@
     <!-- Sender Column -->
     <ng-container matColumnDef="sender">
       <mat-header-cell *matHeaderCellDef>
-        <div fxLayout="column" style="align-items: center">
+        <div fxLayout="column" style="align-items: center;">
           <div>
             <mat-icon>person</mat-icon>
           </div>
@@ -69,7 +63,7 @@
     <!-- Entry Column -->
     <ng-container matColumnDef="entry">
       <mat-header-cell *matHeaderCellDef>
-        <div fxLayout="column" style="align-items: center">
+        <div fxLayout="column" style="align-items: center;">
           <div>
             <mat-icon>message</mat-icon>
           </div>
@@ -81,7 +75,7 @@
           <div *ngIf="logbook.messages[0].content.msgtype !== 'm.image'">
             <div
               *ngIf="!logbook.messages[0].content.formatted_body"
-              style="white-space:pre-wrap"
+              style="white-space: pre-wrap;"
               [innerHTML]="logbook.messages[0].content.body"
             ></div>
             <div

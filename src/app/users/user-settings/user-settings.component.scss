@@ -1,19 +1,8 @@
-@use '~@angular/material' as mat;
-@import "../../../theme.scss";
-
 mat-card {
   margin: 1em;
 
   mat-icon {
     vertical-align: middle;
-  }
-
-  .general-header {
-    background-color: mat.get-color-from-palette($primary, lighter);
-  }
-
-  .settings-header {
-    background-color: mat.get-color-from-palette($navy, 400);
   }
 
   .section-icon {

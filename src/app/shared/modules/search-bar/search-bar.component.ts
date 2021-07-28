@@ -20,8 +20,8 @@ export class SearchBarComponent implements OnChanges {
   private searchDebounce = 300;
   searchSubject = new Subject<string>();
 
-  @ViewChild("searchBar", { static: true }) searchBar: ElementRef;
-  @Input() prefilledValue = "";
+  @ViewChild("searchBar", { static: true }) searchBar!: ElementRef;
+  @Input() prefilledValue: string | null = "";
   @Input() placeholder = "";
   @Input() autocompleteOptions = [];
   @Input() clear = false;

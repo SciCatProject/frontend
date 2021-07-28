@@ -59,7 +59,7 @@ export const registerPublishedDataFailedAction = createAction(
 
 export const resyncPublishedDataAction = createAction(
   "[PublishedData] Resync Published Data",
-  props<{ doi: string; data: Record<string, unknown> }>()
+  props<{ doi: string; data: Partial<PublishedData> }>()
 );
 export const resyncPublishedDataCompleteAction = createAction(
   "[PublishedData] Resync Published Data Complete",

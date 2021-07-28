@@ -13,7 +13,7 @@ import { Subscription } from "rxjs";
 })
 export class JobsDetailComponent implements OnInit, OnDestroy {
   job$ = this.store.pipe(select(getCurrentJob));
-  routeSubscription: Subscription;
+  routeSubscription: Subscription = new Subscription();
 
   constructor(private route: ActivatedRoute, private store: Store<Job>) {}
 

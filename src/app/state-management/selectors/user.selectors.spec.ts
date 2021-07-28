@@ -13,7 +13,7 @@ const user = new User({
   password: "testPassword",
   accessTokens: [],
   identities: [],
-  credentials: []
+  credentials: [],
 });
 
 const userIdentity: UserIdentity = {
@@ -31,8 +31,8 @@ const userIdentity: UserIdentity = {
     displayName: "testName",
     email: "test@email.com",
     username: "testName",
-    thumbnailPhoto: ""
-  }
+    thumbnailPhoto: "",
+  },
 };
 
 const catamelToken: AccessToken = {
@@ -41,14 +41,14 @@ const catamelToken: AccessToken = {
   scopes: ["string"],
   created: new Date(),
   userId: "testId",
-  user: null
+  user: null,
 };
 
 const settings: Settings = {
   tapeCopies: "one",
   datasetCount: 25,
   jobCount: 25,
-  darkTheme: false
+  darkTheme: false,
 };
 
 const initialUserState: UserState = {
@@ -60,14 +60,14 @@ const initialUserState: UserState = {
 
   settings,
 
-  message: { content: undefined, type: undefined, duration: undefined },
+  message: undefined,
 
   isLoggingIn: false,
   isLoggedIn: false,
 
   isLoading: false,
 
-  columns: [{ name: "datasetName", order: 1, type: "standard", enabled: true }]
+  columns: [{ name: "datasetName", order: 1, type: "standard", enabled: true }],
 };
 
 describe("User Selectors", () => {
@@ -116,9 +116,12 @@ describe("User Selectors", () => {
 
   describe("getIsAdmin", () => {
     it("should return false if currentUser is not a functional account", () => {
+      const username = initialUserState.currentUser
+        ? initialUserState.currentUser.username
+        : "";
       expect(
         fromSelectors.getIsAdmin.projector(
-          initialUserState.currentUser.username,
+          username,
           initialUserState.accountType
         )
       ).toEqual(false);
@@ -135,11 +138,9 @@ describe("User Selectors", () => {
 
   describe("getUserMessage", () => {
     it("should get message", () => {
-      expect(fromSelectors.getUserMessage.projector(initialUserState)).toEqual({
-        content: undefined,
-        type: undefined,
-        duration: undefined
-      });
+      expect(fromSelectors.getUserMessage.projector(initialUserState)).toBe(
+        undefined
+      );
     });
   });
 
@@ -194,7 +195,7 @@ describe("User Selectors", () => {
   describe("getColumns", () => {
     it("should get columns", () => {
       expect(fromSelectors.getColumns.projector(initialUserState)).toEqual([
-        { name: "datasetName", order: 1, type: "standard", enabled: true }
+        { name: "datasetName", order: 1, type: "standard", enabled: true },
       ]);
     });
   });

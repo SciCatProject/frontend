@@ -25,9 +25,18 @@ import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { PrettyUnitPipe } from "shared/pipes/pretty-unit.pipe";
 import { FormatNumberPipe } from "shared/pipes/format-number.pipe";
 import { MatDatepickerModule } from "@angular/material/datepicker";
-import { NgxMatDatetimePickerModule, NgxMatNativeDateModule, NgxMatTimepickerModule } from "@angular-material-components/datetime-picker";
+import {
+  NgxMatDatetimePickerModule,
+  NgxMatNativeDateModule,
+  NgxMatTimepickerModule,
+} from "@angular-material-components/datetime-picker";
 @NgModule({
-  declarations: [TreeEditComponent, TreeViewComponent, MetadataInputComponent, MetadataInputModalComponent],
+  declarations: [
+    TreeEditComponent,
+    TreeViewComponent,
+    MetadataInputComponent,
+    MetadataInputModalComponent,
+  ],
   imports: [
     MatFormFieldModule,
     MatTreeModule,
@@ -54,7 +63,7 @@ import { NgxMatDatetimePickerModule, NgxMatNativeDateModule, NgxMatTimepickerMod
     MatDatepickerModule,
     NgxMatDatetimePickerModule,
     NgxMatTimepickerModule,
-    NgxMatNativeDateModule
+    NgxMatNativeDateModule,
   ],
   exports: [TreeEditComponent, TreeViewComponent],
   providers: [
@@ -62,6 +71,6 @@ import { NgxMatDatetimePickerModule, NgxMatNativeDateModule, NgxMatTimepickerMod
     PrettyUnitPipe,
     FormatNumberPipe,
     { provide: MAT_DATE_LOCALE, useValue: "sv-SE" },
-  ]
+  ],
 })
-export class ScientificMetadataTreeModule { }
+export class ScientificMetadataTreeModule {}

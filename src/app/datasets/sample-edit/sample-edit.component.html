@@ -22,7 +22,7 @@
   </div>
 
   <mat-table
-    [dataSource]="samples$ | async"
+    [dataSource]="samples"
     matSort
     class="mat-elevation-z2"
     (matSortChange)="onSortChange($event)"
@@ -80,10 +80,10 @@
 <mat-dialog-actions>
   <button mat-button (click)="cancel()">Cancel</button>
   <button mat-button [disabled]="isInvalid()" (click)="save()">Save</button>
-  <mat-error *ngIf="sample.hasError('isCurrentSample')">
+  <mat-error *ngIf="sample?.hasError('isCurrentSample')">
     This is the current sample
   </mat-error>
-  <mat-error *ngIf="sample.hasError('required')">
+  <mat-error *ngIf="sample?.hasError('required')">
     Please choose a sample
   </mat-error>
 </mat-dialog-actions>

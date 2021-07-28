@@ -24,7 +24,7 @@ export class SearchParametersDialogComponent {
     unit: new FormControl(""),
   });
 
-  filteredUnits$ = this.parametersForm.get("unit").valueChanges.pipe(
+  filteredUnits$ = this.parametersForm.get("unit")?.valueChanges.pipe(
     startWith(""),
     map((value: string) =>
       this.units.filter((unit) =>
@@ -33,7 +33,7 @@ export class SearchParametersDialogComponent {
     )
   );
 
-  filteredKeys$ = this.parametersForm.get("lhs").valueChanges.pipe(
+  filteredKeys$ = this.parametersForm.get("lhs")?.valueChanges.pipe(
     startWith(""),
     map((value: string) =>
       this.parameterKeys.filter((key) =>
@@ -51,7 +51,7 @@ export class SearchParametersDialogComponent {
 
   add = (): void => {
     const { lhs, relation, unit } = this.parametersForm.value;
-    const rawRhs = this.parametersForm.get("rhs").value;
+    const rawRhs = this.parametersForm.get("rhs")?.value;
     const rhs =
       relation === "EQUAL_TO_STRING" ? String(rawRhs) : Number(rawRhs);
     this.parametersForm.patchValue({ rhs });
@@ -66,13 +66,13 @@ export class SearchParametersDialogComponent {
   };
 
   toggleUnitField = (): void => {
-    const lhsInvalid = this.parametersForm.get("lhs").invalid;
+    const lhsInvalid = this.parametersForm.get("lhs")?.invalid;
     const { relation } = this.parametersForm.value;
     const isStringRelation = relation === "EQUAL_TO_STRING" ? true : false;
     const unitField = this.parametersForm.get("unit");
-    unitField.enable();
+    unitField?.enable();
     if (lhsInvalid || isStringRelation) {
-      unitField.disable();
+      unitField?.disable();
     }
   };
 
@@ -90,6 +90,6 @@ export class SearchParametersDialogComponent {
   };
 
   get lhs(): string {
-    return this.parametersForm.get("lhs").value;
+    return this.parametersForm.get("lhs")?.value;
   }
 }

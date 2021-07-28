@@ -13,8 +13,8 @@ describe("MetadataViewComponent", () => {
     waitForAsync(() => {
       TestBed.configureTestingModule({
         schemas: [NO_ERRORS_SCHEMA],
-        declarations: [MetadataViewComponent],
         imports: [MatTableModule, PipesModule],
+        declarations: [MetadataViewComponent],
       }).compileComponents();
     })
   );

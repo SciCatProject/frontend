@@ -26,7 +26,11 @@ import { SubmitCaptionEvent } from "shared/modules/file-uploader/file-uploader.c
 import {
   MatSlideToggleChange,
   MatSlideToggle,
+  MatSlideToggleModule,
 } from "@angular/material/slide-toggle";
+import { MatTabsModule } from "@angular/material/tabs";
+import { MatIconModule } from "@angular/material/icon";
+import { MatButtonModule } from "@angular/material/button";
 
 describe("DetailsDashboardComponent", () => {
   let component: DatasetDetailsDashboardComponent;
@@ -39,29 +43,39 @@ describe("DetailsDashboardComponent", () => {
   let dispatchSpy;
   let pipeSpy;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      schemas: [NO_ERRORS_SCHEMA],
-      declarations: [DatasetDetailsDashboardComponent],
-      imports: [AppConfigModule, SharedCatanieModule, StoreModule.forRoot({})],
-    });
-    TestBed.overrideComponent(DatasetDetailsDashboardComponent, {
-      set: {
-        providers: [
-          { provide: Router, useValue: router },
-          {
-            provide: APP_CONFIG,
-            useValue: {
-              editMetadataEnabled: true,
-            },
-          },
-          { provide: ActivatedRoute, useClass: MockActivatedRoute },
-          { provide: UserApi, useClass: MockUserApi },
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        schemas: [NO_ERRORS_SCHEMA],
+        declarations: [DatasetDetailsDashboardComponent],
+        imports: [
+          AppConfigModule,
+          MatButtonModule,
+          MatIconModule,
+          MatSlideToggleModule,
+          MatTabsModule,
+          SharedCatanieModule,
+          StoreModule.forRoot({}),
         ],
-      },
-    });
-    TestBed.compileComponents();
-  }));
+      });
+      TestBed.overrideComponent(DatasetDetailsDashboardComponent, {
+        set: {
+          providers: [
+            { provide: Router, useValue: router },
+            {
+              provide: APP_CONFIG,
+              useValue: {
+                editMetadataEnabled: true,
+              },
+            },
+            { provide: ActivatedRoute, useClass: MockActivatedRoute },
+            { provide: UserApi, useClass: MockUserApi },
+          ],
+        },
+      });
+      TestBed.compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(DatasetDetailsDashboardComponent);
@@ -329,13 +343,13 @@ describe("DetailsDashboardComponent", () => {
   });
 
   describe("#resetDataset()", () => {
-    it("should return 'null' without confirmation", () => {
+    it("should return 'undefined' without confirmation", () => {
       dispatchSpy = spyOn(store, "dispatch");
       pipeSpy = spyOn(store, "pipe");
       const dataset = new Dataset();
       const res = component.resetDataset(dataset);
 
-      expect(res).toBeNull();
+      expect(res).toBeUndefined();
       expect(dispatchSpy).toHaveBeenCalledTimes(0);
       expect(pipeSpy).toHaveBeenCalledTimes(0);
     });

@@ -28,9 +28,9 @@ import { getSubmitError } from "state-management/selectors/jobs.selectors";
 export class DatasetTableActionsComponent implements OnInit, OnDestroy {
   loading$ = this.store.pipe(select(getIsLoading));
 
-  @Input() selectedSets: Dataset[] = [];
+  @Input() selectedSets: Dataset[] | null = [];
 
-  public currentArchViewMode: ArchViewMode;
+  public currentArchViewMode: ArchViewMode = ArchViewMode.all;
   public viewModes = ArchViewMode;
   modes = [
     ArchViewMode.all,
@@ -55,10 +55,9 @@ export class DatasetTableActionsComponent implements OnInit, OnDestroy {
 
   /**
    * Handle changing of view mode and disabling selected rows
-   * @param event
    * @param mode
    */
-  onModeChange(event, mode: ArchViewMode): void {
+  onModeChange(mode: ArchViewMode): void {
     this.store.dispatch(setArchiveViewModeAction({ modeToggle: mode }));
   }
 
@@ -70,23 +69,22 @@ export class DatasetTableActionsComponent implements OnInit, OnDestroy {
   }
 
   isEmptySelection(): boolean {
-    return this.selectedSets.length === 0;
+    return this.selectedSets?.length === 0;
   }
 
   /**
    * Sends archive command for selected datasets (default includes all
    * datablocks for now) to Dacat API
-   * @param {any} event - click handler (not currently used)
    * @memberof DashboardComponent
    */
-  archiveClickHandle(event): void {
+  archiveClickHandle(): void {
     const dialogRef = this.dialog.open(DialogComponent, {
       width: "auto",
       data: { title: "Really archive?", question: "" }
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if (result) {
+      if (result && this.selectedSets) {
         this.archivingSrv.archive(this.selectedSets).subscribe(
           () => this.store.dispatch(clearSelectionAction()),
           err =>
@@ -106,10 +104,9 @@ export class DatasetTableActionsComponent implements OnInit, OnDestroy {
 
   /**
    * Sends retrieve command for selected datasets
-   * @param {any} event - click handler (not currently used)
    * @memberof DashboardComponent
    */
-  retrieveClickHandle(event): void {
+  retrieveClickHandle(): void {
     const destPath = "/archive/retrieve";
     const dialogRef = this.dialog.open(DialogComponent, {
       width: "auto",
@@ -120,7 +117,7 @@ export class DatasetTableActionsComponent implements OnInit, OnDestroy {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if (result) {
+      if (result && this.selectedSets) {
         this.archivingSrv.retrieve(this.selectedSets, destPath).subscribe(
           () => this.store.dispatch(clearSelectionAction()),
           err =>

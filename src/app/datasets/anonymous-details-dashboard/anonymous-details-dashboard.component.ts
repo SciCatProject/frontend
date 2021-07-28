@@ -32,7 +32,7 @@ export class AnonymousDetailsDashboardComponent implements OnInit, OnDestroy {
   proposal$ = this.store.pipe(select(getCurrentProposal));
   sample$ = this.store.pipe(select(getCurrentSample));
 
-  datasetSubscription: Subscription;
+  datasetSubscription: Subscription = new Subscription();
 
   constructor(
     @Inject(APP_CONFIG) public appConfig: AppConfig,

@@ -16,7 +16,7 @@ import {
 } from "state-management/actions/datasets.actions";
 import { combineLatest, Subscription } from "rxjs";
 
-import * as deepEqual from "deep-equal";
+import deepEqual from "deep-equal";
 
 import { DatasetFilters, Dataset } from "state-management/models";
 import { SelectColumnEvent } from "datasets/dataset-table-settings/dataset-table-settings.component";
@@ -48,7 +48,7 @@ export class AnonymousDashboardComponent implements OnInit, OnDestroy {
 
   subscriptions: Subscription[] = [];
 
-  @ViewChild(MatSidenav, { static: false }) sideNav: MatSidenav;
+  @ViewChild(MatSidenav, { static: false }) sideNav!: MatSidenav;
 
   constructor(
     private store: Store<any>,

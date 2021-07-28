@@ -49,17 +49,7 @@ const reducer = createReducer(
   })),
 
   on(fromActions.addAttachmentCompleteAction, (state, { attachment }) => {
-    const attachments = state.currentSample.attachments.filter(
-      (existingAttachment) => existingAttachment.id !== attachment.id
-    );
-    attachments.push(attachment);
-    const currentSample = { ...state.currentSample, attachments };
-    return { ...state, currentSample };
-  }),
-
-  on(
-    fromActions.updateAttachmentCaptionCompleteAction,
-    (state, { attachment }) => {
+    if (state.currentSample) {
       const attachments = state.currentSample.attachments.filter(
         (existingAttachment) => existingAttachment.id !== attachment.id
       );
@@ -67,14 +57,33 @@ const reducer = createReducer(
       const currentSample = { ...state.currentSample, attachments };
       return { ...state, currentSample };
     }
+    return { ...state };
+  }),
+
+  on(
+    fromActions.updateAttachmentCaptionCompleteAction,
+    (state, { attachment }) => {
+      if (state.currentSample) {
+        const attachments = state.currentSample.attachments.filter(
+          (existingAttachment) => existingAttachment.id !== attachment.id
+        );
+        attachments.push(attachment);
+        const currentSample = { ...state.currentSample, attachments };
+        return { ...state, currentSample };
+      }
+      return { ...state };
+    }
   ),
 
   on(fromActions.removeAttachmentCompleteAction, (state, { attachmentId }) => {
-    const attachments = state.currentSample.attachments.filter(
-      (attachment) => attachment.id !== attachmentId
-    );
-    const currentSample = { ...state.currentSample, attachments };
-    return { ...state, currentSample };
+    if (state.currentSample) {
+      const attachments = state.currentSample.attachments.filter(
+        (attachment) => attachment.id !== attachmentId
+      );
+      const currentSample = { ...state.currentSample, attachments };
+      return { ...state, currentSample };
+    }
+    return { ...state };
   }),
 
   on(fromActions.changePageAction, (state, { page, limit }) => {
@@ -129,7 +138,10 @@ const reducer = createReducer(
   on(fromActions.clearSamplesStateAction, () => ({ ...initialSampleState }))
 );
 
-export const samplesReducer = (state: SampleState | undefined, action: Action) => {
+export const samplesReducer = (
+  state: SampleState | undefined,
+  action: Action
+) => {
   if (action.type.indexOf("[Sample]") !== -1) {
     console.log("Action came in! " + action.type);
   }

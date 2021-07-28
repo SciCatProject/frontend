@@ -8,7 +8,7 @@ export const getCurrentUser = createSelector(
   state => state.currentUser
 );
 
-export const getCurrentUserId = createSelector(getCurrentUser, user => user.id);
+export const getCurrentUserId = createSelector(getCurrentUser, user => user ? user.id : "");
 
 export const getCurrentUserAccountType = createSelector(
   getUserState,

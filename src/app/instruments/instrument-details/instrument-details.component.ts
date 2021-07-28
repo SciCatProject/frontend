@@ -26,7 +26,7 @@ export class InstrumentDetailsComponent implements OnInit {
   }
 
   ngOnInit() {
-    const pid = this.route.snapshot.paramMap.get("id");
+    const pid = this.route.snapshot.paramMap.get("id") ?? "";
     this.store.dispatch(fetchInstrumentAction({ pid }));
   }
 }

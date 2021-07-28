@@ -2,18 +2,20 @@ import {
   ComponentFixture,
   TestBed,
   inject,
-  waitForAsync
+  waitForAsync,
 } from "@angular/core/testing";
 
 import { AppHeaderComponent } from "./app-header.component";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
-import { MatMenuModule,  } from "@angular/material/menu";
-import { MatToolbarModule,  } from "@angular/material/toolbar";
+import { MatMenuModule } from "@angular/material/menu";
+import { MatToolbarModule } from "@angular/material/toolbar";
 
 import { Store, StoreModule } from "@ngrx/store";
 import { APP_CONFIG } from "app-config.module";
 import { logoutAction } from "state-management/actions/user.actions";
 import { MockStore } from "shared/MockStubs";
+import { MatIconModule } from "@angular/material/icon";
+import { MatButtonModule } from "@angular/material/button";
 
 describe("AppHeaderComponent", () => {
   let component: AppHeaderComponent;
@@ -22,19 +24,27 @@ describe("AppHeaderComponent", () => {
   let store: MockStore;
   let dispatchSpy;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      schemas: [NO_ERRORS_SCHEMA],
-      declarations: [AppHeaderComponent],
-      imports: [MatMenuModule, MatToolbarModule, StoreModule.forRoot({})]
-    });
-    TestBed.overrideComponent(AppHeaderComponent, {
-      set: {
-        providers: [{ provide: APP_CONFIG, useValue: { facility: "ESS" } }]
-      }
-    });
-    TestBed.compileComponents();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        schemas: [NO_ERRORS_SCHEMA],
+        declarations: [AppHeaderComponent],
+        imports: [
+          MatButtonModule,
+          MatIconModule,
+          MatMenuModule,
+          MatToolbarModule,
+          StoreModule.forRoot({}),
+        ],
+      });
+      TestBed.overrideComponent(AppHeaderComponent, {
+        set: {
+          providers: [{ provide: APP_CONFIG, useValue: { facility: "ESS" } }],
+        },
+      });
+      TestBed.compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(AppHeaderComponent);

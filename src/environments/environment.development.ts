@@ -23,7 +23,6 @@ export const environment = {
   ingestManual: "http://melanie.gitpages.psi.ch/SciCatPages/",
   gettingStarted: "http://melanie.gitpages.psi.ch/SciCatPages/SciCatGettingStartedSLSSummary.pdf",
   jupyterHubUrl: "https://jupyterhub.apps.ocp4a.psi.ch/hub/login",
-
   fileserverBaseURL: "http://127.0.0.1:8889",
   synapseBaseUrl: "https://scitest.esss.lu.se",
   riotBaseUrl: "http://scitest.esss.lu.se/riot",
@@ -58,5 +57,10 @@ export const environment = {
   landingPage: "doi2.psi.ch/detail/",
   fileDownloadEnabled: false,
   jobsEnabled: true,
-  policiesEnabled: true
+  policiesEnabled: true,
+  addDatasetEnabled: false,
+  editDatasetSampleEnabled: false,
+  scienceSearchUnitsEnabled: false,
+  metadataStructure: "",
+  userNamePromptEnabled: false
 };

@@ -2,7 +2,7 @@ import { Sample, SampleFilters, Dataset, GenericFilters } from "state-management
 
 export interface SampleState {
   samples: Sample[];
-  currentSample: Sample;
+  currentSample: Sample | undefined;
   datasets: Dataset[];
   metadataKeys: string[];
 
@@ -17,7 +17,7 @@ export interface SampleState {
 
 export const initialSampleState: SampleState = {
   samples: [],
-  currentSample: null,
+  currentSample: undefined,
   datasets: [],
   metadataKeys: [],
 

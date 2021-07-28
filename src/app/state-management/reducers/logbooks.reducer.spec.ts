@@ -51,7 +51,7 @@ describe("LogbooksReducer", () => {
       const action = fromActions.fetchLogbookFailedAction();
       const state = logbooksReducer(initialLogbookState, action);
 
-      expect(state.currentLogbook).toBeNull();
+      expect(state.currentLogbook).toBeUndefined();
     });
   });
 
@@ -60,7 +60,7 @@ describe("LogbooksReducer", () => {
       const action = fromActions.clearLogbookAction();
       const state = logbooksReducer(initialLogbookState, action);
 
-      expect(state.currentLogbook).toBeNull();
+      expect(state.currentLogbook).toBeUndefined();
     });
   });
 

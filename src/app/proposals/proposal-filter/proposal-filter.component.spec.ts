@@ -3,7 +3,6 @@ import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 import { ProposalFilterComponent } from "./proposal-filter.component";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { SharedCatanieModule } from "shared/shared.module";
-import { SatDatepickerModule, SatDatepickerRangeValue, SatNativeDateModule } from "saturn-datepicker";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { MatButtonModule } from "@angular/material/button";
 import { MatCardModule } from "@angular/material/card";
@@ -12,29 +11,33 @@ import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatIconModule } from "@angular/material/icon";
 import { MatInputModule } from "@angular/material/input";
 import { DateTime } from "luxon";
+import { MatDatepickerInputEvent, MatDatepickerModule } from "@angular/material/datepicker";
+import { MatNativeDateModule } from "@angular/material/core";
 
 describe("ProposalFilterComponent", () => {
   let component: ProposalFilterComponent;
   let fixture: ComponentFixture<ProposalFilterComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      schemas: [NO_ERRORS_SCHEMA],
-      declarations: [ProposalFilterComponent],
-      imports: [
-        BrowserAnimationsModule,
-        MatButtonModule,
-        MatCardModule,
-        MatExpansionModule,
-        MatFormFieldModule,
-        MatIconModule,
-        MatInputModule,
-        SatDatepickerModule,
-        SatNativeDateModule,
-        SharedCatanieModule
-      ]
-    }).compileComponents();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        schemas: [NO_ERRORS_SCHEMA],
+        declarations: [ProposalFilterComponent],
+        imports: [
+          BrowserAnimationsModule,
+          MatButtonModule,
+          MatCardModule,
+          MatDatepickerModule,
+          MatExpansionModule,
+          MatFormFieldModule,
+          MatIconModule,
+          MatInputModule,
+          MatNativeDateModule,
+          SharedCatanieModule,
+        ],
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ProposalFilterComponent);
@@ -72,10 +75,7 @@ describe("ProposalFilterComponent", () => {
     it("should emit an event", () => {
       spyOn(component.dateChange, "emit");
 
-      const event: SatDatepickerRangeValue<DateTime> = {
-          begin: DateTime.local(),
-          end: DateTime.local()
-      };
+      const event = {} as MatDatepickerInputEvent<DateTime>;
       component.doDateChange(event);
 
       expect(component.dateChange.emit).toHaveBeenCalledTimes(1);

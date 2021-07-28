@@ -1,12 +1,5 @@
-@use '~@angular/material' as mat;
-@import "../../../theme.scss";
-
 mat-icon {
   vertical-align: middle;
-}
-
-.warning-icon {
-  color: mat.get-color-from-palette($yellow, 100);
 }
 
 .selected {

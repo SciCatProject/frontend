@@ -11,6 +11,8 @@ import { StoreModule } from "@ngrx/store";
 import { CheckboxEvent } from "shared/modules/table/table.component";
 import { MockUserApi } from "shared/MockStubs";
 import { MatCheckboxChange } from "@angular/material/checkbox";
+import { MatIconModule } from "@angular/material/icon";
+import { MatButtonModule } from "@angular/material/button";
 
 describe("DatafilesComponent", () => {
   let component: DatafilesComponent;
@@ -21,13 +23,15 @@ describe("DatafilesComponent", () => {
       TestBed.configureTestingModule({
         schemas: [NO_ERRORS_SCHEMA],
         imports: [
-          ReactiveFormsModule,
-          MatTableModule,
           AppConfigModule,
+          MatButtonModule,
+          MatIconModule,
+          MatTableModule,
           PipesModule,
+          ReactiveFormsModule,
           RouterModule,
-          StoreModule.forRoot({}),
           RouterModule.forRoot([], { relativeLinkResolution: "legacy" }),
+          StoreModule.forRoot({}),
         ],
         declarations: [DatafilesComponent],
       });

@@ -3,11 +3,12 @@ import { MatChipInputEvent } from "@angular/material/chips";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { FormControl, FormGroup } from "@angular/forms";
 import { COMMA, ENTER } from "@angular/cdk/keycodes";
+import { Policy } from "shared/sdk";
 
 @Component({
   selector: "edit-dialog",
   templateUrl: "./edit-dialog.component.html",
-  styleUrls: ["./edit-dialog.component.scss"]
+  styleUrls: ["./edit-dialog.component.scss"],
 })
 export class EditDialogComponent implements /*OnChanges,*/ OnInit {
   data: any;
@@ -21,7 +22,8 @@ export class EditDialogComponent implements /*OnChanges,*/ OnInit {
 
   constructor(
     private dialogRef: MatDialogRef<EditDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) data
+    @Inject(MAT_DIALOG_DATA)
+    data: { multiSelect: boolean; selectedPolicy: Policy }
   ) {
     this.multiEdit = data.multiSelect;
     // clone input, do not mutate
@@ -35,11 +37,11 @@ export class EditDialogComponent implements /*OnChanges,*/ OnInit {
     this.form = new FormGroup({
       manager: new FormControl({
         value: null,
-        disabled: true
+        disabled: true,
       }),
       autoArchive: new FormControl({
         value: this.getPreFill(data.selectedPolicy.autoArchive, this.multiEdit),
-        disabled: true
+        disabled: true,
         /*, Validators.required*/
       }),
       tapeRedundancy: new FormControl({
@@ -47,37 +49,37 @@ export class EditDialogComponent implements /*OnChanges,*/ OnInit {
           data.selectedPolicy.tapeRedundancy,
           this.multiEdit
         ),
-        disabled: true
+        disabled: true,
       }),
       autoArchiveDelay: new FormControl({
         value: this.getPreFill(
           data.selectedPolicy.autoArchiveDelay,
           this.multiEdit
         ),
-        disabled: true
+        disabled: true,
       }),
       archiveEmailNotification: new FormControl({
         value: this.getPreFill(
           data.selectedPolicy.archiveEmailNotification,
           this.multiEdit
         ),
-        disabled: true
+        disabled: true,
       }),
       archiveEmailsToBeNotified: new FormControl({
         value: null,
-        disabled: true
+        disabled: true,
       }),
       retrieveEmailNotification: new FormControl({
         value: this.getPreFill(
           data.selectedPolicy.retrieveEmailNotification,
           this.multiEdit
         ),
-        disabled: true
+        disabled: true,
       }),
       retrieveEmailsToBeNotified: new FormControl({
         value: null, // value is not useable in chiplists
-        disabled: true
-      })
+        disabled: true,
+      }),
     });
   }
 
@@ -152,15 +154,12 @@ export class EditDialogComponent implements /*OnChanges,*/ OnInit {
   }
 
   removeManager(chip: any): void {
-    const index = this.data.selectedPolicy.manager.indexOf(
-      chip
-    );
+    const index = this.data.selectedPolicy.manager.indexOf(chip);
 
     if (index >= 0) {
       this.data.selectedPolicy.manager.splice(index, 1);
     }
   }
-
 
   ngOnInit() {
     this.selectedGroups = this.data.selectedGroups;
@@ -184,9 +183,7 @@ export class EditDialogComponent implements /*OnChanges,*/ OnInit {
       );
     }
     if (this.form.controls.manager.enabled) {
-      this.form.controls.manager.setValue(
-        this.data.selectedPolicy.manager
-      );
+      this.form.controls.manager.setValue(this.data.selectedPolicy.manager);
     }
     const result = this.form.value;
     for (const key in result) {

@@ -17,7 +17,7 @@
   >
     <mat-button-toggle
       *ngFor="let mode of modes"
-      (click)="onModeChange($event, mode)"
+      (click)="onModeChange(mode)"
       [value]="mode"
       [ngClass]="mode"
     >
@@ -32,7 +32,7 @@
     [disabled]="isEmptySelection()"
     *ngIf="currentArchViewMode === viewModes.archivable"
     class="archive-action-btn"
-    (click)="archiveClickHandle($event)"
+    (click)="archiveClickHandle()"
     color="primary"
   >
     <mat-icon> archive </mat-icon> Archive
@@ -43,7 +43,7 @@
     [disabled]="isEmptySelection()"
     *ngIf="currentArchViewMode === viewModes.retrievable"
     class="retrieve-action-btn"
-    (click)="retrieveClickHandle($event)"
+    (click)="retrieveClickHandle()"
     color="primary"
   >
     <mat-icon> cloud_upload </mat-icon> Retrieve

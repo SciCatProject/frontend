@@ -2,7 +2,14 @@ import { TestBed } from "@angular/core/testing";
 import { provideMockActions } from "@ngrx/effects/testing";
 import { provideMockStore } from "@ngrx/store/testing";
 import { cold, hot } from "jasmine-marbles";
-import { DatasetInterface, Dataset, DatasetApi, Attachment } from "shared/sdk";
+import {
+  DatasetInterface,
+  Dataset,
+  DatasetApi,
+  Attachment,
+  DerivedDataset,
+  DerivedDatasetInterface,
+} from "shared/sdk";
 import * as fromActions from "../actions/datasets.actions";
 import { Observable } from "rxjs";
 import { DatasetEffects } from "./datasets.effects";
@@ -19,6 +26,19 @@ import {
 } from "state-management/actions/user.actions";
 import { ScientificCondition } from "state-management/models";
 import { Type } from "@angular/core";
+
+const derivedData: DerivedDatasetInterface = {
+  investigator: "",
+  inputDatasets: [],
+  usedSoftware: [],
+  owner: "",
+  contactEmail: "",
+  sourceFolder: "",
+  creationTime: new Date(),
+  type: "derived",
+  ownerGroup: "",
+};
+const derivedDataset = new DerivedDataset({ pid: "testPid", ...derivedData });
 
 const data: DatasetInterface = {
   owner: "",
@@ -286,16 +306,18 @@ describe("DatasetEffects", () => {
   });
 
   describe("addDataset$", () => {
-    const derivedDataset = new Dataset();
-
     it("should result in an addDatasetCompleteAction, a fetchDatasetsAction and a fetchDatasetAction", () => {
       const action = fromActions.addDatasetAction({ dataset: derivedDataset });
-      const outcome1 = fromActions.addDatasetCompleteAction({ dataset });
+      const outcome1 = fromActions.addDatasetCompleteAction({
+        dataset: derivedDataset,
+      });
       const outcome2 = fromActions.fetchDatasetsAction();
-      const outcome3 = fromActions.fetchDatasetAction({ pid: dataset.pid });
+      const outcome3 = fromActions.fetchDatasetAction({
+        pid: derivedDataset.pid,
+      });
 
       actions = hot("-a", { a: action });
-      const response = cold("-a|", { a: dataset });
+      const response = cold("-a|", { a: derivedDataset });
       datasetApi.create.and.returnValue(response);
 
       const expected = cold("--(bcd)", {
@@ -539,7 +561,6 @@ describe("DatasetEffects", () => {
 
     describe("ofType addDatasetAction", () => {
       it("should dispatch a loadingAction", () => {
-        const derivedDataset = new Dataset();
         const action = fromActions.addDatasetAction({
           dataset: derivedDataset,
         });
@@ -733,7 +754,9 @@ describe("DatasetEffects", () => {
 
     describe("ofType addDatasetCompleteAction", () => {
       it("should dispatch a loadingCompleteAction", () => {
-        const action = fromActions.addDatasetCompleteAction({ dataset });
+        const action = fromActions.addDatasetCompleteAction({
+          dataset: derivedDataset,
+        });
         const outcome = loadingCompleteAction();
 
         actions = hot("-a", { a: action });

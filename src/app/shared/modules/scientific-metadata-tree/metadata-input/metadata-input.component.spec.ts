@@ -12,16 +12,15 @@ describe("MetadataInputComponent", () => {
   let component: MetadataInputComponent;
   let fixture: ComponentFixture<MetadataInputComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [MetadataInputComponent],
-      imports: [
-        MatAutocompleteModule,
-      ],
-      providers: [FormBuilder, FormatNumberPipe]
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [MetadataInputComponent],
+        imports: [MatAutocompleteModule],
+        providers: [FormBuilder, FormatNumberPipe],
+      }).compileComponents();
     })
-      .compileComponents();
-  }));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(MetadataInputComponent);
@@ -122,7 +121,9 @@ describe("MetadataInputComponent", () => {
       component.addCurrentMetadata(component.data);
       expect(component.metadataForm.get("type").value).toEqual(Type.date);
       expect(component.metadataForm.get("key").value).toEqual("date");
-      expect(component.metadataForm.get("date").value).toEqual(DateTime.fromISO(data.value).toLocal().toISO());
+      expect(component.metadataForm.get("date").value).toEqual(
+        DateTime.fromISO(data.value).toLocal().toISO()
+      );
       expect(component.metadataForm.get("unit").disabled).toEqual(true);
     });
   });
@@ -137,8 +138,8 @@ describe("MetadataInputComponent", () => {
     });
     it("should emit an save event", () => {
       const expectedData = {
-        ... component.metadataForm.value,
-        unit: undefined
+        ...component.metadataForm.value,
+        unit: undefined,
       };
       spyOn(component.cancel, "emit");
       spyOn(component.save, "emit");
