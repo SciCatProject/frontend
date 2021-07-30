@@ -222,6 +222,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
       const name = event.targetElement.getAttribute("name");
       if (name === "begin") {
         this.dateRange.begin = event.value.toUTC().toISO();
+        this.dateRange.end = "";
       }
       if (name === "end") {
         this.dateRange.end = event.value.toUTC().plus({ days: 1 }).toISO();
