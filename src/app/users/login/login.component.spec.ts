@@ -72,11 +72,6 @@ describe("LoginComponent", () => {
 
   }));
 
-  // beforeEach(() => {
-  //   fixture = TestBed.createComponent(LoginComponent);
-  //   component = fixture.componentInstance;
-  //   fixture.detectChanges();
-  // });
 
   beforeEach(inject([Store], (mockStore: MockStore) => {
     store = mockStore;
@@ -88,25 +83,6 @@ describe("LoginComponent", () => {
 
 
 
-
-  describe("#openPrivacyDialog()", () => {
-    beforeEach(() => {
-      fixture = TestBed.createComponent(LoginComponent);
-      component = fixture.componentInstance;
-      fixture.detectChanges();
-      appConfig.loginFormEnabled = true;
-    });
-
-    it("should create component", () => {
-      expect(component).toBeTruthy();
-    });
-
-    it("should contain username and password fields", () => {
-      const compiled = fixture.debugElement.nativeElement;
-      expect(compiled.querySelector("form").textContent).toContain("Username");
-      expect(compiled.querySelector("form").textContent).toContain("Password");
-    });
-  });
 
   describe("component construction", () => {
     beforeEach(() => {
@@ -162,22 +138,35 @@ describe("LoginComponent", () => {
   });
 
 
-  describe("form configuration", () => {
+  describe("form not configured", () => {
     beforeEach(() => {
       appConfig.loginFormEnabled = false;
       fixture = TestBed.createComponent(LoginComponent);
       component = fixture.componentInstance;
       fixture.detectChanges();
-      TestBed.compileComponents();
     });
+
     it("should not appear if not loginFormEnabled", () => {
       const compiled = fixture.debugElement.nativeElement;
       expect(compiled.querySelector("form")).toBeNull();
-      expect(compiled.querySelector(".oauth-login-button")).toBeNull();
     });
 
   });
 
+  describe("form configured", () => {
+    beforeEach(() => {
+      appConfig.loginFormEnabled = true;
+      fixture = TestBed.createComponent(LoginComponent);
+      component = fixture.componentInstance;
+      fixture.detectChanges();
+    });
+
+    it("should  appear if not loginFormEnabled", () => {
+      const compiled = fixture.debugElement.nativeElement;
+      expect(compiled.querySelector("form")).toBeTruthy();
+    });
+
+  });
 
   describe("oauth2 configuration", () => {
     beforeEach(() => {
