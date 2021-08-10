@@ -115,7 +115,9 @@ export const APP_DI_CONFIG: AppConfig = {
   userProfileImageEnabled: environment.userProfileImageEnabled ?? false,
   userNamePromptEnabled: environment.userNamePromptEnabled ?? false,
   landingPage: environment.landingPage ?? null,
-  editPublishedData: (environment.editPublishedData === undefined) ? true: environment.editPublishedData
+  editPublishedData: (environment.editPublishedData === undefined) ? true: environment.editPublishedData,
+  oAuth2Endpoints: environment.oAuth2Endpoints ?? [],
+  loginFormEnabled: (environment.loginFormEnabled == undefined) ? true: environment.loginFormEnabled
 };
 
 @NgModule({
