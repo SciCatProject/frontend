@@ -8,6 +8,9 @@ import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatOptionModule } from "@angular/material/core";
 import { MatSelectModule } from "@angular/material/select";
+import { MatInputModule } from "@angular/material/input";
+import { MatButtonModule } from "@angular/material/button";
+import { MatIconModule } from "@angular/material/icon";
 
 describe("MetadataEditComponent", () => {
   let component: MetadataEditComponent;
@@ -20,7 +23,10 @@ describe("MetadataEditComponent", () => {
         declarations: [MetadataEditComponent],
         imports: [
           MatAutocompleteModule,
+          MatButtonModule,
           MatFormFieldModule,
+          MatIconModule,
+          MatInputModule,
           MatOptionModule,
           MatSelectModule,
         ],

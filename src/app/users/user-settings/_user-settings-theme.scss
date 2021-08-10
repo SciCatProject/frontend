@@ -1,0 +1,25 @@
+@use "sass:map";
+@use "~@angular/material" as mat;
+
+@mixin color($theme) {
+  $color-config: mat.get-color-config($theme);
+  $primary: map.get($color-config, "primary");
+  $header-1: map.get($color-config, "header-1");
+
+  mat-card {
+    .general-header {
+      background-color: mat.get-color-from-palette($primary, "lighter");
+    }
+
+    .settings-header {
+      background-color: mat.get-color-from-palette($header-1, "lighter");
+    }
+  }
+}
+
+@mixin theme($theme) {
+  $color-config: mat.get-color-config($theme);
+  @if $color-config != null {
+    @include color($theme);
+  }
+}

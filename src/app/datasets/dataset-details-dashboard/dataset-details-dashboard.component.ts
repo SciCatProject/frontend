@@ -7,7 +7,16 @@ import {
   AfterViewChecked,
 } from "@angular/core";
 import { Store, select } from "@ngrx/store";
-import { Dataset, UserApi, User, Job, Attachment, Sample } from "shared/sdk";
+import {
+  Dataset,
+  UserApi,
+  User,
+  Job,
+  Attachment,
+  Sample,
+  RawDataset,
+  DerivedDataset,
+} from "shared/sdk";
 import {
   getCurrentDataset,
   getCurrentDatasetWithoutFileInfo,
@@ -39,13 +48,26 @@ import { submitJobAction } from "state-management/actions/jobs.actions";
 import { ReadFile } from "ngx-file-helpers";
 import { SubmitCaptionEvent } from "shared/modules/file-uploader/file-uploader.component";
 import { MatSlideToggleChange } from "@angular/material/slide-toggle";
-import { clearLogbookAction, fetchLogbookAction } from "state-management/actions/logbooks.actions";
+import {
+  clearLogbookAction,
+  fetchLogbookAction,
+} from "state-management/actions/logbooks.actions";
 import { fetchProposalAction } from "state-management/actions/proposals.actions";
 import { getCurrentProposal } from "state-management/selectors/proposals.selectors";
 import { fetchSampleAction } from "state-management/actions/samples.actions";
 import { getCurrentSample } from "state-management/selectors/samples.selectors";
 import { EditableComponent } from "app-routing/pending-changes.guard";
 import { MatDialog } from "@angular/material/dialog";
+
+export interface JWT {
+  jwt: string;
+}
+
+export interface FileObject {
+  pid: string;
+  files: string[];
+}
+
 @Component({
   selector: "dataset-details-dashboard",
   templateUrl: "./dataset-details-dashboard.component.html",
@@ -68,12 +90,12 @@ export class DatasetDetailsDashboardComponent
     map((profile) => (profile ? profile.accessGroups : []))
   );
   loading$ = this.store.pipe(select(getIsLoading));
-  jwt$: Observable<any>;
-  dataset: Dataset;
-  user: User;
+  jwt$: Observable<JWT> = new Observable<JWT>();
+  dataset: Dataset | undefined;
+  user: User | undefined;
   editingAllowed = false;
-  pickedFile: ReadFile;
-  attachment: Attachment;
+  pickedFile!: ReadFile;
+  attachment: Partial<Attachment> = {};
   constructor(
     @Inject(APP_CONFIG) public appConfig: AppConfig,
     private cdRef: ChangeDetectorRef,
@@ -83,10 +105,10 @@ export class DatasetDetailsDashboardComponent
     private userApi: UserApi,
     public dialog: MatDialog
   ) {}
-  hasUnsavedChanges(){
+  hasUnsavedChanges() {
     return this._hasUnsavedChanges;
   }
-  onHasUnsavedChanges(data: boolean){
+  onHasUnsavedChanges(data: boolean) {
     this._hasUnsavedChanges = data;
   }
 
@@ -97,13 +119,17 @@ export class DatasetDetailsDashboardComponent
     if (this.dataset.type === "raw") {
       return (
         this.user.email.toLowerCase() ===
-        this.dataset["principalInvestigator"].toLowerCase()
+        ((this.dataset as unknown) as RawDataset)[
+          "principalInvestigator"
+        ].toLowerCase()
       );
     }
     if (this.dataset.type === "derived") {
       return (
         this.user.email.toLowerCase() ===
-        this.dataset["investigator"].toLowerCase()
+        ((this.dataset as unknown) as DerivedDataset)[
+          "investigator"
+        ].toLowerCase()
       );
     }
     return false;
@@ -168,29 +194,33 @@ export class DatasetDetailsDashboardComponent
   }
 
   resetDataset(dataset: Dataset) {
-    if (!confirm("Reset datablocks?")) {
-      return null;
+    if (confirm("Reset datablocks?")) {
+      this.store.pipe(select(getCurrentUser), take(1)).subscribe((user) => {
+        if (user) {
+          const job = new Job();
+          job.emailJobInitiator = user.email;
+          job.jobParams = {};
+          job.jobParams["username"] = user.username;
+          job.creationTime = new Date();
+          job.type = "reset";
+          const fileObj: FileObject = {
+            pid: "",
+            files: [],
+          };
+          const fileList: string[] = [];
+          fileObj.pid = dataset["pid"];
+          if (dataset["datablocks"]) {
+            dataset["datablocks"].map((d) => {
+              fileList.push(d["archiveId"]);
+            });
+          }
+          fileObj.files = fileList;
+          job.datasetList = [fileObj];
+          console.log(job);
+          this.store.dispatch(submitJobAction({ job }));
+        }
+      });
     }
-    this.store.pipe(select(getCurrentUser), take(1)).subscribe((user: User) => {
-      const job = new Job();
-      job.emailJobInitiator = user.email;
-      job.jobParams = {};
-      job.jobParams["username"] = user.username;
-      job.creationTime = new Date();
-      job.type = "reset";
-      const fileObj = {};
-      const fileList = [];
-      fileObj["pid"] = dataset["pid"];
-      if (dataset["datablocks"]) {
-        dataset["datablocks"].map((d) => {
-          fileList.push(d["archiveId"]);
-        });
-      }
-      fileObj["files"] = fileList;
-      job.datasetList = [fileObj];
-      console.log(job);
-      this.store.dispatch(submitJobAction({ job }));
-    });
   }
 
   onFileUploaderFilePicked(file: ReadFile) {
@@ -208,15 +238,8 @@ export class DatasetDetailsDashboardComponent
         updatedBy: this.user.username,
         createdAt: new Date(),
         updatedAt: new Date(),
-        id: null,
         dataset: this.dataset,
         datasetId: this.dataset.pid,
-        rawDatasetId: null,
-        derivedDatasetId: null,
-        proposal: null,
-        proposalId: null,
-        sample: null,
-        sampleId: null,
       };
       this.store.dispatch(addAttachmentAction({ attachment: this.attachment }));
     }
@@ -265,9 +288,12 @@ export class DatasetDetailsDashboardComponent
       this.store.pipe(select(getCurrentDataset)).subscribe((dataset) => {
         if (dataset) {
           this.dataset = dataset;
-          combineLatest([this.accessGroups$, this.isAdmin$]).subscribe(([groups, isAdmin]) => {
-            this.editingAllowed = (groups.indexOf(this.dataset.ownerGroup) !== -1) || isAdmin;
-          });
+          combineLatest([this.accessGroups$, this.isAdmin$]).subscribe(
+            ([groups, isAdmin]) => {
+              this.editingAllowed =
+                groups.indexOf(this.dataset.ownerGroup) !== -1 || isAdmin;
+            }
+          );
           if ("proposalId" in dataset) {
             this.store.dispatch(
               fetchProposalAction({ proposalId: dataset["proposalId"] })
@@ -296,11 +322,13 @@ export class DatasetDetailsDashboardComponent
     );
 
     // Prevent user from reloading page if there are unsave changes
-    this.subscriptions.push(fromEvent(window, "beforeunload").subscribe(event => {
-        if (this.hasUnsavedChanges()){
+    this.subscriptions.push(
+      fromEvent(window, "beforeunload").subscribe((event) => {
+        if (this.hasUnsavedChanges()) {
           event.returnValue = false;
         }
-    }));
+      })
+    );
     this.jwt$ = this.userApi.jwt();
   }
 

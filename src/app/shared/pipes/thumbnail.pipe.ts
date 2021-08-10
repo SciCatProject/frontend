@@ -6,7 +6,6 @@ import { DatasetApi } from "shared/sdk";
   name: "thumbnail"
 })
 export class ThumbnailPipe implements PipeTransform {
-  attach: string;
   constructor(private datasetApi: DatasetApi) {}
 
   transform(value: any, args?: any): any {

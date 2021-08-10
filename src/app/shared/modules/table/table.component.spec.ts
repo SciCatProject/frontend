@@ -4,7 +4,7 @@ import {
   TableComponent,
   PageChangeEvent,
   SortChangeEvent,
-  CheckboxEvent
+  CheckboxEvent,
 } from "./table.component";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 
@@ -12,21 +12,40 @@ import { PipesModule } from "../../pipes/pipes.module";
 import { MatListModule } from "@angular/material/list";
 import { MatPaginatorModule } from "@angular/material/paginator";
 import { MatTableModule } from "@angular/material/table";
-import { MatCheckboxChange } from "@angular/material/checkbox";
+import {
+  MatCheckboxChange,
+  MatCheckboxModule,
+} from "@angular/material/checkbox";
+import { MatIconModule } from "@angular/material/icon";
+import { MatCardModule } from "@angular/material/card";
+import { MatDividerModule } from "@angular/material/divider";
+import { MatLineModule } from "@angular/material/core";
 
 describe("TableComponent", () => {
   let component: TableComponent;
   let fixture: ComponentFixture<TableComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      schemas: [NO_ERRORS_SCHEMA],
-      declarations: [TableComponent],
-      imports: [MatListModule, MatPaginatorModule, MatTableModule, PipesModule],
-      providers: [DatePipe]
-    });
-    TestBed.compileComponents();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        schemas: [NO_ERRORS_SCHEMA],
+        declarations: [TableComponent],
+        imports: [
+          MatCardModule,
+          MatCheckboxModule,
+          MatDividerModule,
+          MatIconModule,
+          MatLineModule,
+          MatListModule,
+          MatPaginatorModule,
+          MatTableModule,
+          PipesModule,
+        ],
+        providers: [DatePipe],
+      });
+      TestBed.compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(TableComponent);
@@ -45,7 +64,7 @@ describe("TableComponent", () => {
       const event: PageChangeEvent = {
         pageIndex: 0,
         pageSize: 25,
-        length: 25
+        length: 25,
       };
       component.onPageChange(event);
 
@@ -60,7 +79,7 @@ describe("TableComponent", () => {
 
       const event: SortChangeEvent = {
         active: "test",
-        direction: ""
+        direction: "",
       };
       component.onSortChange(event);
 
@@ -75,7 +94,7 @@ describe("TableComponent", () => {
 
       const data = {
         id: "123",
-        name: "test"
+        name: "test",
       };
       component.onRowClick(data);
 
@@ -102,7 +121,7 @@ describe("TableComponent", () => {
 
       const selectEvent: CheckboxEvent = {
         event: new MatCheckboxChange(),
-        row: {}
+        row: {},
       };
       component.onSelectOne(selectEvent.event, selectEvent.row);
 

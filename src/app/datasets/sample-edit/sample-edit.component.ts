@@ -1,4 +1,11 @@
-import { Component, ElementRef, Inject, ViewChild } from "@angular/core";
+import {
+  Component,
+  ElementRef,
+  Inject,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from "@angular/core";
 import {
   AbstractControl,
   FormControl,
@@ -8,6 +15,7 @@ import {
 } from "@angular/forms";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { select, Store } from "@ngrx/store";
+import { Subscription } from "rxjs";
 import { map } from "rxjs/operators";
 import {
   PageChangeEvent,
@@ -33,8 +41,8 @@ import {
   templateUrl: "./sample-edit.component.html",
   styleUrls: ["./sample-edit.component.scss"],
 })
-export class SampleEditComponent {
-  @ViewChild("searchBar", { static: true }) searchBar: ElementRef;
+export class SampleEditComponent implements OnInit, OnDestroy {
+  @ViewChild("searchBar", { static: true }) searchBar!: ElementRef;
 
   textFilter$ = this.store.pipe(select(getTextFilter));
   sampleCount$ = this.store.pipe(select(getSamplesCount));
@@ -47,7 +55,10 @@ export class SampleEditComponent {
     )
   );
 
-  selectedSampleId: string;
+  samplesSubscription: Subscription = new Subscription();
+  samples: Sample[] = [];
+
+  selectedSampleId = "";
   displayedColumns = [
     "sampleId",
     "description",
@@ -69,6 +80,18 @@ export class SampleEditComponent {
     this.store.dispatch(setTextFilterAction({ text: "" }));
     this.store.dispatch(changePageAction({ page: 0, limit: 10 }));
     this.store.dispatch(fetchSamplesAction());
+  }
+
+  ngOnInit() {
+    this.samplesSubscription = this.samples$.subscribe((samples) => {
+      if (samples) {
+        this.samples = samples;
+      }
+    });
+  }
+
+  ngOnDestroy() {
+    this.samplesSubscription.unsubscribe();
   }
 
   sampleValidator(): ValidatorFn {
@@ -103,14 +126,14 @@ export class SampleEditComponent {
 
   onRowClick = (sample: Sample): void => {
     this.selectedSampleId = sample.sampleId;
-    this.sample.setValue(sample);
+    this.sample?.setValue(sample);
   };
 
   isInvalid = (): boolean => this.form.invalid;
 
   cancel = (): void => this.dialogRef.close();
 
-  save = (): void => this.dialogRef.close({ sample: this.sample.value });
+  save = (): void => this.dialogRef.close({ sample: this.sample?.value });
 
   get sample() {
     return this.form.get("sample");

@@ -33,7 +33,7 @@ interface LoginForm {
   styleUrls: ["login.component.scss"]
 })
 export class LoginComponent implements OnInit, OnDestroy {
-  private proceedSubscription: Subscription;
+  private proceedSubscription = new Subscription();
   private hasUser$ = this.store.pipe(
     select(getIsLoggedIn),
     filter(is => is)

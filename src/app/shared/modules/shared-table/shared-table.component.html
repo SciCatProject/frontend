@@ -10,7 +10,7 @@
 </div>
 
 <!-- Top tool bar-->
-<mat-toolbar>
+<mat-toolbar class="table-toolbar">
   <mat-form-field appearance="standard">
     <mat-icon>search</mat-icon>
     <input type="search" matInput placeholder="global word-search" #globalFilter>
@@ -37,13 +37,13 @@
   <!-- Toggle Button End -->
   <ng-container [matColumnDef]="column.id" *ngFor="let column of visibleColumns">
     <mat-header-cell *matHeaderCellDef class="col-name shared-table-{{column.matchMode}}" fxLayoutAlign="start start" fxLayout="column">
-      <div fxLayout="row" style="align-items: center">
+      <div fxLayout="row" style="align-items: center;">
         <mat-icon>{{ column.icon }}</mat-icon>
         <span mat-sort-header [disabled]="!column.canSort">{{ column.label | titleCase }}</span>
       </div>
       <mat-form-field appearance="standard" *ngIf="column.matchMode;">
         <ng-container *ngIf="column.matchMode === 'between'">
-          <div class="date_container">
+          <div class="date-container">
             <mat-date-range-input [rangePicker]="rangePicker">
               <input #allFilters  name="{{ column.id + '.start' }}" matStartDate placeholder="Start date"
                 (dateChange)="dateChanged($event,column.id+'.start')">
@@ -101,7 +101,7 @@
 
   <!-- Body row definition for hidden columns -->
   <mat-row *matRowDef="let row; let i = dataIndex; columns: ['hidden'];" [@detailExpand]="getExpandFlag(row.uniqueId)"
-    style="overflow: hidden" class="matRowHidden hidden-row-{{row.uniqueId}} hidColLength-{{hiddenColumns.length}}"
+    style="overflow: hidden;" class="matRowHidden hidden-row-{{row.uniqueId}} hidColLength-{{hiddenColumns.length}}"
     [ngClass]="expandedElement[row.uniqueId] ? 'expanded' : 'collapsed'"></mat-row>
 
 </mat-table>

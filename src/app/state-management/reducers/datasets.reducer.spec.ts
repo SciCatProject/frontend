@@ -1,11 +1,24 @@
 import * as fromDatasets from "./datasets.reducer";
 import * as fromActions from "../actions/datasets.actions";
-import { Dataset, DatasetInterface, Attachment } from "shared/sdk/models";
+import { Dataset, DatasetInterface, Attachment, DerivedDatasetInterface, DerivedDataset } from "shared/sdk/models";
 import {
   FacetCounts,
   initialDatasetState,
 } from "state-management/state/datasets.store";
 import { ArchViewMode, ScientificCondition } from "../models";
+
+const derivedData: DerivedDatasetInterface = {
+  investigator: "",
+  inputDatasets: [],
+  usedSoftware: [],
+  owner: "",
+  contactEmail: "",
+  sourceFolder: "",
+  creationTime: new Date(),
+  type: "derived",
+  ownerGroup: "",
+};
+const derivedDataset = new DerivedDataset({ pid: "testPid", ...derivedData });
 
 const data: DatasetInterface = {
   owner: "",
@@ -67,7 +80,7 @@ describe("DatasetsReducer", () => {
 
   describe("on prefillBatchCompleteAction", () => {
     it("should set batch property", () => {
-      const batch = [];
+      const batch: Dataset[] = [];
       const action = fromActions.prefillBatchCompleteAction({ batch });
       const state = fromDatasets.datasetsReducer(initialDatasetState, action);
 
@@ -119,10 +132,10 @@ describe("DatasetsReducer", () => {
 
   describe("on addDatasetCompleteAction", () => {
     it("should set currentSet", () => {
-      const action = fromActions.addDatasetCompleteAction({ dataset });
+      const action = fromActions.addDatasetCompleteAction({ dataset: derivedDataset });
       const state = fromDatasets.datasetsReducer(initialDatasetState, action);
 
-      expect(state.currentSet).toEqual(dataset);
+      expect(state.currentSet).toEqual((derivedDataset as unknown) as Dataset);
     });
   });
 
@@ -134,7 +147,7 @@ describe("DatasetsReducer", () => {
       const action = fromActions.addAttachmentCompleteAction({ attachment });
       const state = fromDatasets.datasetsReducer(initialDatasetState, action);
 
-      expect(state.currentSet.attachments).toContain(attachment);
+      expect(state.currentSet?.attachments).toContain(attachment);
     });
   });
 
@@ -148,7 +161,7 @@ describe("DatasetsReducer", () => {
       });
       const state = fromDatasets.datasetsReducer(initialDatasetState, action);
 
-      expect(state.currentSet.attachments).toContain(attachment);
+      expect(state.currentSet?.attachments).toContain(attachment);
     });
   });
 
@@ -166,7 +179,7 @@ describe("DatasetsReducer", () => {
       });
       const state = fromDatasets.datasetsReducer(initialDatasetState, action);
 
-      expect(state.currentSet.attachments).toEqual([]);
+      expect(state.currentSet?.attachments).toEqual([]);
     });
   });
 

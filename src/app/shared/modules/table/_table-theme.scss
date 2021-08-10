@@ -1,0 +1,32 @@
+@use "sass:map";
+@use "~@angular/material" as mat;
+
+@mixin color($theme) {
+  $color-config: mat.get-color-config($theme);
+  $primary: map.get($color-config, "primary");
+
+  mat-table {
+    mat-header-row {
+      background: mat.get-color-from-palette($primary, "default");
+    }
+
+    .mat-sort-header-arrow {
+      color: mat.get-color-from-palette($primary, "default-contrast");
+    }
+
+    mat-header-cell {
+      color: mat.get-color-from-palette($primary, "default-contrast");
+
+      .mat-checkbox .mat-checkbox-frame {
+        border-color: mat.get-color-from-palette($primary, "default-contrast");
+      }
+    }
+  }
+}
+
+@mixin theme($theme) {
+  $color-config: mat.get-color-config($theme);
+  @if $color-config != null {
+    @include color($theme);
+  }
+}

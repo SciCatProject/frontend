@@ -30,7 +30,7 @@ import { APP_CONFIG, AppConfig } from "app-config.module";
 import { LogbookFilters } from "state-management/models";
 
 import { map, take, filter, distinctUntilChanged } from "rxjs/operators";
-import * as deepEqual from "deep-equal";
+import deepEqual from "deep-equal";
 import {
   PageChangeEvent,
   SortChangeEvent,
@@ -52,7 +52,16 @@ export class LogbooksDashboardComponent
     filter((has) => has)
   );
 
-  logbook: Logbook;
+  logbook: Logbook = new Logbook();
+  filters: LogbookFilters = {
+    textSearch: "",
+    showBotMessages: true,
+    showImages: true,
+    showUserMessages: true,
+    sortField: "timestamp:desc",
+    skip: 0,
+    limit: 25,
+  };
 
   subscriptions: Subscription[] = [];
 
@@ -106,7 +115,17 @@ export class LogbooksDashboardComponent
   ngOnInit() {
     this.subscriptions.push(
       this.store.pipe(select(getCurrentLogbook)).subscribe((logbook) => {
-        this.logbook = logbook;
+        if (logbook) {
+          this.logbook = logbook;
+        }
+      })
+    );
+
+    this.subscriptions.push(
+      this.filters$.subscribe((filters) => {
+        if (filters) {
+          this.filters = filters;
+        }
       })
     );
 
@@ -129,7 +148,7 @@ export class LogbooksDashboardComponent
         .pipe(
           map((params) => params.args as string),
           take(1),
-          map((args) => (args ? JSON.parse(args) as LogbookFilters: {}))
+          map((args) => (args ? (JSON.parse(args) as LogbookFilters) : {}))
         )
         .subscribe((filters) =>
           this.store.dispatch(prefillFiltersAction({ values: filters }))

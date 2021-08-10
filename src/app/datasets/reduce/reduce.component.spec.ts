@@ -27,6 +27,8 @@ import { MatRadioModule } from "@angular/material/radio";
 import { MatSelectModule } from "@angular/material/select";
 import { MatStepperModule } from "@angular/material/stepper";
 import { MatTableModule } from "@angular/material/table";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatOptionModule } from "@angular/material/core";
 
 describe("ReduceComponent", () => {
   let component: ReduceComponent;
@@ -45,7 +47,9 @@ describe("ReduceComponent", () => {
         BrowserAnimationsModule,
         MatButtonModule,
         MatCardModule,
+        MatFormFieldModule,
         MatIconModule,
+        MatOptionModule,
         MatRadioModule,
         MatSelectModule,
         MatStepperModule,

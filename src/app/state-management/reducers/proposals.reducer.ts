@@ -34,30 +34,39 @@ const reducer = createReducer(
   ),
 
   on(fromActions.addAttachmentCompleteAction, (state, { attachment }) => {
-    const attachments = state.currentProposal.attachments;
-    attachments.push(attachment);
-    const currentProposal = { ...state.currentProposal, attachments };
-    return { ...state, currentProposal };
+    if (state.currentProposal) {
+      const attachments = state.currentProposal.attachments;
+      attachments.push(attachment);
+      const currentProposal = { ...state.currentProposal, attachments };
+      return { ...state, currentProposal };
+    }
+    return { ...state };
   }),
 
   on(
     fromActions.updateAttachmentCaptionCompleteAction,
     (state, { attachment }) => {
-      const attachments = state.currentProposal.attachments.filter(
-        (existingAttachment) => existingAttachment.id !== attachment.id
-      );
-      attachments.push(attachment);
-      const currentProposal = { ...state.currentProposal, attachments };
-      return { ...state, currentProposal };
+      if (state.currentProposal) {
+        const attachments = state.currentProposal.attachments.filter(
+          (existingAttachment) => existingAttachment.id !== attachment.id
+        );
+        attachments.push(attachment);
+        const currentProposal = { ...state.currentProposal, attachments };
+        return { ...state, currentProposal };
+      }
+      return { ...state };
     }
   ),
 
   on(fromActions.removeAttachmentCompleteAction, (state, { attachmentId }) => {
-    const attachments = state.currentProposal.attachments.filter(
-      (attachment) => attachment.id !== attachmentId
-    );
-    const currentProposal = { ...state.currentProposal, attachments };
-    return { ...state, currentProposal };
+    if (state.currentProposal) {
+      const attachments = state.currentProposal.attachments.filter(
+        (attachment) => attachment.id !== attachmentId
+      );
+      const currentProposal = { ...state.currentProposal, attachments };
+      return { ...state, currentProposal };
+    }
+    return { ...state };
   }),
 
   on(fromActions.prefillFiltersAction, (state, { values }) => {
@@ -70,8 +79,7 @@ const reducer = createReducer(
     return { ...state, proposalFilters };
   }),
   on(fromActions.setDateRangeFilterAction, (state, { begin, end }) => {
-    const oldTime = state.proposalFilters.dateRange;
-    const dateRange = (begin && end)? { ...oldTime, begin, end } : null;
+    const dateRange = {begin, end};
     const proposalFilters = { ...state.proposalFilters, dateRange };
     return { ...state, proposalFilters };
   }),

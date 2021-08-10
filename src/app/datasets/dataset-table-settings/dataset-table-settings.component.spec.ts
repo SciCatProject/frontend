@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 
 import {
   DatasetTableSettingsComponent,
-  SelectColumnEvent
+  SelectColumnEvent,
 } from "./dataset-table-settings.component";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 
@@ -10,7 +10,10 @@ import { SearchBarModule } from "shared/modules/search-bar/search-bar.module";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { TableColumn } from "state-management/models";
 import { MatButtonModule } from "@angular/material/button";
-import { MatCheckboxModule, MatCheckboxChange } from "@angular/material/checkbox";
+import {
+  MatCheckboxModule,
+  MatCheckboxChange,
+} from "@angular/material/checkbox";
 import { MatIconModule } from "@angular/material/icon";
 
 describe("DatasetTableSettingsComponent", () => {
@@ -19,19 +22,21 @@ describe("DatasetTableSettingsComponent", () => {
 
   let emitSpy;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      schemas: [NO_ERRORS_SCHEMA],
-      declarations: [DatasetTableSettingsComponent],
-      imports: [
-        BrowserAnimationsModule,
-        MatButtonModule,
-        MatCheckboxModule,
-        MatIconModule,
-        SearchBarModule
-      ]
-    }).compileComponents();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        schemas: [NO_ERRORS_SCHEMA],
+        declarations: [DatasetTableSettingsComponent],
+        imports: [
+          BrowserAnimationsModule,
+          MatButtonModule,
+          MatCheckboxModule,
+          MatIconModule,
+          SearchBarModule,
+        ],
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(DatasetTableSettingsComponent);
@@ -65,12 +70,12 @@ describe("DatasetTableSettingsComponent", () => {
         name: "test",
         order: 0,
         type: "standard",
-        enabled: true
+        enabled: true,
       };
 
       const emittedEvent: SelectColumnEvent = {
         checkBoxChange: event,
-        column
+        column,
       };
 
       component.doSelectColumn(event, column);

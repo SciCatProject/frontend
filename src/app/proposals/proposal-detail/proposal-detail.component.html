@@ -20,7 +20,12 @@
         <th>Identifier</th>
         <td>{{ proposal.proposalId }}</td>
       </tr>
-      <ng-template [ngIf]="proposal.MeasurementPeriodList.length > 0">
+      <ng-template
+        [ngIf]="
+          proposal.MeasurementPeriodList &&
+          proposal.MeasurementPeriodList.length > 0
+        "
+      >
         <ng-template
           ngFor
           let-period

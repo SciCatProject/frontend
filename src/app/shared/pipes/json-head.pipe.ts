@@ -4,11 +4,11 @@ import { Pipe, PipeTransform } from "@angular/core";
   name: "jsonHead"
 })
 export class JsonHeadPipe implements PipeTransform {
-  transform(value: any, args?: any): any {
+  transform(value: Record<string, any>, args?: any): any {
     if (!value) {
       return null;
     }
-    const newvalue = {};
+    const newvalue: Record<string, unknown> = {};
     let count = 0;
     let outputString = "";
     for (const key of Object.keys(value)) {

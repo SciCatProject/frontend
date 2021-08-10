@@ -1,10 +1,6 @@
-@use '~@angular/material' as mat;
-@import "../../../theme.scss";
-
 .dataset-table {
   .settings-button {
     margin-bottom: 0.5em;
-    color: mat.get-color-from-palette($grey, 100);
   }
 
   mat-table {
@@ -12,20 +8,10 @@
 
     mat-header-row {
       min-width: 1200px;
-      background: mat.get-color-from-palette($primary);
-    }
-
-    ::ng-deep .mat-sort-header-arrow {
-      color: mat.get-color-from-palette($primary, default-contrast);
     }
 
     mat-header-cell {
-      color: mat-color($primary, default-contrast);
       justify-content: left;
-
-      ::ng-deep .mat-checkbox .mat-checkbox-frame {
-        border-color: mat.get-color-from-palette($primary, default-contrast);
-      }
     }
 
     mat-header-cell:nth-child(-n + 2) {

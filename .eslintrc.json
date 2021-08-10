@@ -10,25 +10,24 @@
       ],
       "parserOptions": {
         "project": [
-          "src/tsconfig.json"
+          "tsconfig.json"
         ],
         "createDefaultProgram": true
       },
       "extends": [
-        "plugin:@angular-eslint/ng-cli-compat",
-        "plugin:@angular-eslint/ng-cli-compat--formatting-add-on",
+        "plugin:@angular-eslint/recommended",
         "plugin:@angular-eslint/template/process-inline-templates"
       ],
       "rules": {
-        "@angular-eslint/component-selector": "off",
-        "@typescript-eslint/consistent-type-definitions": "error",
-        "@typescript-eslint/dot-notation": "off",
-        "@typescript-eslint/explicit-member-accessibility": [
-          "off",
+        "@angular-eslint/directive-selector": [
+          "error",
           {
-            "accessibility": "explicit"
+            "type": "attribute",
+            "prefix": "app",
+            "style": "camelCase"
           }
         ],
+        "@angular-eslint/component-selector": "off",
         "@typescript-eslint/member-delimiter-style": [
           "error",
           {
@@ -95,17 +94,7 @@
         "brace-style": [
           "error",
           "1tbs"
-        ],
-        "default-case": "error",
-        "id-blacklist": "off",
-        "id-match": "off",
-        "jsdoc/newline-after-description": "off",
-        "jsdoc/no-types": "off",
-        "no-duplicate-case": "error",
-        "no-duplicate-imports": "error",
-        "no-fallthrough": "off",
-        "no-redeclare": "error",
-        "no-underscore-dangle": "off"
+        ]
       }
     },
     {

@@ -130,7 +130,7 @@
           <th>Creation Location</th>
           <td>{{ value }}</td>
         </tr>
-        <tr *ngIf="dataset.techniques.length > 0">
+        <tr *ngIf="dataset.techniques && dataset.techniques.length > 0">
           <th>Techniques</th>
           <td>
             <div *ngFor="let technique of dataset.techniques">

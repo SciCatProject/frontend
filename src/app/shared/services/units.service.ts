@@ -1,10 +1,10 @@
 import { Injectable } from "@angular/core";
 
 @Injectable({
-  providedIn: "root"
+  providedIn: "root",
 })
 export class UnitsService {
-  private UNITS = {
+  private UNITS: Record<string, string[]> = {
     angle: ["rad", "deg", "grad", "arcsec", "arcmin"],
     area: ["cm^2", "m^2", "mm^2"],
     charge: ["coulomb"],
@@ -19,7 +19,7 @@ export class UnitsService {
       "meters",
       "micrometers",
       "millimeters",
-      "nanometers"
+      "nanometers",
     ],
     magnetism: ["tesla", "weber"],
     mass: ["grams", "kilograms", "milligrams"],
@@ -32,13 +32,13 @@ export class UnitsService {
       "milliseconds",
       "nanoseconds",
       "minutes",
-      "seconds"
+      "seconds",
     ],
     volume: ["cm^3", "dm^3", "m^3", "mm^3"],
-    flux: ["s^-1"]
+    flux: ["s^-1"],
   };
 
-  private SYMBOLS = {
+  private SYMBOLS: Record<string, string> = {
     "cm^2": "cm\u00B2",
     "m^2": "m\u00B2",
     "mm^2": "mm\u00B2",
@@ -70,12 +70,12 @@ export class UnitsService {
     "dm^3": "dm\u00B3",
     "m^3": "m\u00B3",
     "mm^3": "mm\u00B3",
-    "s^-1":"s\u207b\u00B9"
+    "s^-1": "s\u207b\u00B9",
   };
 
   private getKind(variable: string): string {
     const kinds = Object.keys(this.UNITS);
-    return this.parse(variable).filter(suggestion =>
+    return this.parse(variable).filter((suggestion) =>
       kinds.includes(suggestion)
     )[0];
   }
@@ -88,21 +88,19 @@ export class UnitsService {
       variableList = [variable];
     }
     return variableList
-      .map(part => part.toLowerCase())
-      .filter(part => isNaN(Number(part)))
-      .map(part => (part.includes("length") ? "length" : part))
-      .map(part => part.replace(/\d+/, ""));
+      .map((part) => part.toLowerCase())
+      .filter((part) => isNaN(Number(part)))
+      .map((part) => (part.includes("length") ? "length" : part))
+      .map((part) => part.replace(/\d+/, ""));
   }
 
   private flattenUnits(): string[] {
-    return [].concat
-        .apply(
-          [],
-          Object.keys(this.UNITS).map(key => this.UNITS[key])
-        )
-        .sort((a: string, b: string) =>
-          a.toLowerCase().localeCompare(b.toLowerCase())
-        );
+    const nestedUnits = Object.keys(this.UNITS).map((key) => this.UNITS[key]);
+    return ([] as string[])
+      .concat(...nestedUnits)
+      .sort((a: string, b: string) =>
+        a.toLowerCase().localeCompare(b.toLowerCase())
+      );
   }
 
   getSymbol(unit: string): string {

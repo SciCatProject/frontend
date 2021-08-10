@@ -70,7 +70,7 @@ export class BreadcrumbComponent implements OnInit {
   setBreadcrumbs(): void {
     this.breadcrumbs = [];
     this.route.children.forEach((root) => {
-      let param;
+      let param: string;
       Object.keys(root.snapshot.params).forEach((key) => {
         param = root.snapshot.params[key];
       });

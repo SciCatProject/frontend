@@ -11,77 +11,77 @@ export class OAuth2Endpoint {
 }
 
 export class AppConfig {
-  lbBaseURL: string;
-  externalAuthEndpoint: string;
-  fileserverBaseURL: string;
-  synapseBaseUrl: string;
-  riotBaseUrl: string;
-  jupyterHubUrl: string;
-  production: boolean;
-  disabledDatasetColumns: string[];
-  addDatasetEnabled: boolean;
-  archiveWorkflowEnabled: boolean;
-  columnSelectEnabled: boolean;
-  datasetReduceEnabled: boolean;
-  editDatasetSampleEnabled: boolean;
-  editMetadataEnabled: boolean;
-  editPublishedData: boolean;
-  editSampleEnabled: boolean;
-  facility: string;
-  fileColorEnabled: boolean;
-  gettingStarted: string;
-  ingestManual: string;
-  jobsEnabled: boolean;
-  jsonMetadataEnabled: boolean;
-  landingPage: string;
-  localColumns: TableColumn[];
-  logbookEnabled: boolean;
-  fileDownloadEnabled: boolean;
-  maxDirectDownloadSize: number;
-  metadataPreviewEnabled: boolean;
-  multipleDownloadAction?: string;
-  multipleDownloadEnabled: boolean;
-  policiesEnabled: boolean;
-  scienceSearchEnabled: boolean;
-  scienceSearchUnitsEnabled: boolean;
-  searchProposals: boolean;
-  searchPublicDataEnabled: boolean;
-  searchSamples: boolean;
-  sftpHost: string;
-  shoppingCartEnabled: boolean;
-  shoppingCartOnHeader: boolean;
-  tableSciDataEnabled: boolean;
-  metadataStructure: string;
-  userProfileImageEnabled: boolean;
-  userNamePromptEnabled: boolean;
+  lbBaseURL = "";
+  externalAuthEndpoint: string | null = null;
+  fileserverBaseURL: string | null = null;
+  synapseBaseUrl: string | null = null;
+  riotBaseUrl: string | null = null;
+  jupyterHubUrl: string | null = null;
+  production = false;
+  disabledDatasetColumns: string[] = [];
+  addDatasetEnabled = false;
+  archiveWorkflowEnabled = false;
+  columnSelectEnabled = false;
+  datasetReduceEnabled = false;
+  editDatasetSampleEnabled = false;
+  editMetadataEnabled = false;
+  editPublishedData = false;
+  editSampleEnabled = false;
+  facility: string | null = null;
+  fileColorEnabled = false;
+  gettingStarted: string | null = null;
+  ingestManual: string | null = null;
+  jobsEnabled = false;
+  jsonMetadataEnabled = false;
+  landingPage: string | null = null;
+  localColumns: TableColumn[] = [];
+  logbookEnabled = false;
+  fileDownloadEnabled = false;
+  maxDirectDownloadSize: number | null = null;
+  metadataPreviewEnabled = false;
+  multipleDownloadAction: string | null = null;
+  multipleDownloadEnabled = false;
+  policiesEnabled = false;
+  scienceSearchEnabled = false;
+  scienceSearchUnitsEnabled = false;
+  searchProposals = false;
+  searchPublicDataEnabled = false;
+  searchSamples = false;
+  sftpHost: string | null = null;
+  shoppingCartEnabled = false;
+  shoppingCartOnHeader = false;
+  tableSciDataEnabled = false;
+  metadataStructure = "";
+  userProfileImageEnabled = false;
+  userNamePromptEnabled = false;
   loginFormEnabled: boolean;
   oAuth2Endpoints: OAuth2Endpoint[];
 }
 
 export const APP_DI_CONFIG: AppConfig = {
-  lbBaseURL: environment["lbBaseURL"] || "http://localhost:3000",
-  externalAuthEndpoint: environment["externalAuthEndpoint"] || null,
-  fileserverBaseURL: environment["fileserverBaseURL"] || null,
-  synapseBaseUrl: environment["synapseBaseUrl"] || null,
-  riotBaseUrl: environment["riotBaseUrl"] || null,
-  jupyterHubUrl: environment["jupyterHubUrl"] || null,
+  lbBaseURL: environment.lbBaseURL ?? "http://localhost:3000",
+  externalAuthEndpoint: environment.externalAuthEndpoint ?? null,
+  fileserverBaseURL: environment.fileserverBaseURL ?? null,
+  synapseBaseUrl: environment.synapseBaseUrl ?? null,
+  riotBaseUrl: environment.riotBaseUrl ?? null,
+  jupyterHubUrl: environment.jupyterHubUrl ?? null,
   production: environment.production,
-  addDatasetEnabled: environment["addDatasetEnabled"] || false,
-  archiveWorkflowEnabled: environment["archiveWorkflowEnabled"] || null,
-  columnSelectEnabled: environment["columnSelectEnabled"] || false,
-  datasetReduceEnabled: environment["datasetReduceEnabled"] || false,
-  disabledDatasetColumns: environment["disabledDatasetColumns"] || [],
-  editDatasetSampleEnabled: environment["editDatasetSampleEnabled"] || false,
-  editMetadataEnabled: environment["editMetadataEnabled"] || null,
-  editSampleEnabled: environment["editSampleEnabled"] || null,
-  facility: environment["facility"] || null,
-  fileColorEnabled: environment["fileColorEnabled"] || false,
-  gettingStarted: environment["gettingStarted"] || null,
-  ingestManual: environment["ingestManual"] || null,
-  jobsEnabled: environment["jobsEnabled"] || false,
-  jsonMetadataEnabled: environment["jsonMetadataEnabled"] || false,
-  logbookEnabled: environment["logbookEnabled"] || false,
-  localColumns: environment["localColumns"] || [
+  addDatasetEnabled: environment.addDatasetEnabled ?? false,
+  archiveWorkflowEnabled: environment.archiveWorkflowEnabled ?? false,
+  columnSelectEnabled: environment.columnSelectEnabled ?? false,
+  datasetReduceEnabled: environment.datasetReduceEnabled ?? false,
+  disabledDatasetColumns: environment.disabledDatasetColumns ?? [],
+  editDatasetSampleEnabled: environment.editDatasetSampleEnabled ?? false,
+  editMetadataEnabled: environment.editMetadataEnabled ?? false,
+  editSampleEnabled: environment.editSampleEnabled ?? false,
+  facility: environment.facility ?? null,
+  fileColorEnabled: environment.fileColorEnabled ?? false,
+  gettingStarted: environment.gettingStarted ?? null,
+  ingestManual: environment.ingestManual ?? null,
+  jobsEnabled: environment.jobsEnabled ?? false,
+  jsonMetadataEnabled: environment.jsonMetadataEnabled ?? false,
+  logbookEnabled: environment.logbookEnabled ?? false,
+  localColumns: environment.localColumns ?? [
     { name: "select", order: 0, type: "standard", enabled: true },
     { name: "datasetName", order: 1, type: "standard", enabled: true },
     { name: "runNumber", order: 2, type: "standard", enabled: true },
@@ -96,28 +96,26 @@ export const APP_DI_CONFIG: AppConfig = {
     { name: "dataStatus", order: 11, type: "standard", enabled: true },
     { name: "derivedDatasetsNum", order: 12, type: "standard", enabled: false },
   ],
-  maxDirectDownloadSize: environment["maxDirectDownloadSize"] || null,
-  fileDownloadEnabled: environment["fileDownloadEnabled"] || false,
-  metadataPreviewEnabled: environment["metadataPreviewEnabled"] || false,
-  multipleDownloadAction: environment["multipleDownloadAction"],
-  multipleDownloadEnabled: environment["multipleDownloadEnabled"] || false,
-  policiesEnabled: environment["policiesEnabled"] || false,
-  scienceSearchEnabled: environment["scienceSearchEnabled"] || null,
-  scienceSearchUnitsEnabled: environment["scienceSearchUnitsEnabled"] || false,
-  searchProposals: environment["searchProposals"] || false,
-  searchPublicDataEnabled: environment["searchPublicDataEnabled"] || false,
-  searchSamples: environment["searchSamples"] || false,
-  sftpHost: environment["sftpHost"] || null,
-  shoppingCartEnabled: environment["shoppingCartEnabled"] || false,
-  shoppingCartOnHeader: environment["shoppingCartOnHeader"] || false,
-  tableSciDataEnabled: environment["tableSciDataEnabled"] || false,
-  metadataStructure: environment["metadataStructure"] || "",
-  userProfileImageEnabled: environment["userProfileImageEnabled"] || false,
-  userNamePromptEnabled: environment["userNamePromptEnabled"] || false,
-  landingPage: environment["landingPage"] || null,
-  loginFormEnabled: (environment["loginFormEnabled"] === undefined) ? true : environment["loginFormEnabled"],
-  oAuth2Endpoints: environment["oAuth2Endpoints"] || null,
-  editPublishedData: (environment["editPublishedData"] === undefined) ? true: environment["editPublishedData"]
+  maxDirectDownloadSize: environment.maxDirectDownloadSize ?? null,
+  fileDownloadEnabled: environment.fileDownloadEnabled ?? false,
+  metadataPreviewEnabled: environment.metadataPreviewEnabled ?? false,
+  multipleDownloadAction: environment.multipleDownloadAction ?? null,
+  multipleDownloadEnabled: environment.multipleDownloadEnabled ?? false,
+  policiesEnabled: environment.policiesEnabled ?? false,
+  scienceSearchEnabled: environment.scienceSearchEnabled ?? false,
+  scienceSearchUnitsEnabled: environment.scienceSearchUnitsEnabled ?? false,
+  searchProposals: environment.searchProposals ?? false,
+  searchPublicDataEnabled: environment.searchPublicDataEnabled ?? false,
+  searchSamples: environment.searchSamples ?? false,
+  sftpHost: environment.sftpHost ?? null,
+  shoppingCartEnabled: environment.shoppingCartEnabled ?? false,
+  shoppingCartOnHeader: environment.shoppingCartOnHeader ?? false,
+  tableSciDataEnabled: environment.tableSciDataEnabled ?? false,
+  metadataStructure: environment.metadataStructure ?? "",
+  userProfileImageEnabled: environment.userProfileImageEnabled ?? false,
+  userNamePromptEnabled: environment.userNamePromptEnabled ?? false,
+  landingPage: environment.landingPage ?? null,
+  editPublishedData: (environment.editPublishedData === undefined) ? true: environment.editPublishedData
 };
 
 @NgModule({

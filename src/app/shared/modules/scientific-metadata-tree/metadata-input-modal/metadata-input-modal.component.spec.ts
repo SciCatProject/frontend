@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed , waitForAsync} from "@angular/core/testing";
+import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 
 import { MetadataInputModalComponent } from "./metadata-input-modal.component";
 import { FormBuilder } from "@angular/forms";
@@ -15,25 +15,26 @@ describe("MetadataInputModalComponent", () => {
   let component: MetadataInputModalComponent;
   let fixture: ComponentFixture<MetadataInputModalComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [ MetadataInputModalComponent ],
-      imports: [
-        MatAutocompleteModule,
-        MatFormFieldModule,
-        MatOptionModule,
-        MatSelectModule,
-        MatDialogModule,
-        MatInputModule,
-        BrowserAnimationsModule
-      ],
-      providers: [
-        FormBuilder,
-        { provide: MatDialogRef, useClass: MockMatDialogRef }
-      ]
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [MetadataInputModalComponent],
+        imports: [
+          MatAutocompleteModule,
+          MatFormFieldModule,
+          MatOptionModule,
+          MatSelectModule,
+          MatDialogModule,
+          MatInputModule,
+          BrowserAnimationsModule,
+        ],
+        providers: [
+          FormBuilder,
+          { provide: MatDialogRef, useClass: MockMatDialogRef },
+        ],
+      }).compileComponents();
     })
-    .compileComponents();
-  }));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(MetadataInputModalComponent);

@@ -34,10 +34,10 @@
 
       <dataset-detail *ngIf="editingAllowed"
         [dataset]="dataset"
-        [datasetWithout]="datasetWithout$ | async"
+        [datasetWithout]="(datasetWithout$ | async) ?? null"
         [attachments]="attachments$ | async"
-        [proposal]="proposal$ | async"
-        [sample]="sample$ | async"
+        [proposal]="(proposal$ | async) ?? null"
+        [sample]="(sample$ | async) ?? null"
         [isPI]="isPI()"
         (clickKeyword)="onClickKeyword($event)"
         (addKeyword)="onAddKeyword($event)"
@@ -67,7 +67,7 @@
 
         <div
           *ngIf="
-            (origDatablocks$ | async) && (origDatablocks$ | async).length === 0
+            (origDatablocks$ | async) && (origDatablocks$ | async)?.length === 0
           "
         >
           <h3>No datafiles linked to this dataset</h3>

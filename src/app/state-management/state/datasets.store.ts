@@ -18,7 +18,7 @@ export interface FacetCounts {
 export interface DatasetState {
   datasets: Dataset[];
   selectedSets: Dataset[];
-  currentSet: Dataset;
+  currentSet: Dataset | undefined;
   totalCount: number;
 
   facetCounts: FacetCounts;
@@ -30,13 +30,13 @@ export interface DatasetState {
 
   batch: Dataset[];
 
-  openwhiskResult: Record<string, unknown>;
+  openwhiskResult: Record<string, unknown> | undefined;
 }
 
 export const initialDatasetState: DatasetState = {
   datasets: [],
   selectedSets: [],
-  currentSet: null,
+  currentSet: undefined,
   totalCount: 0,
 
   facetCounts: {},
@@ -62,5 +62,5 @@ export const initialDatasetState: DatasetState = {
 
   batch: [],
 
-  openwhiskResult: null
+  openwhiskResult: undefined
 };

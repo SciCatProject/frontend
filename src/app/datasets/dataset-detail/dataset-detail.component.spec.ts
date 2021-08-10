@@ -6,36 +6,57 @@ import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 import { SharedCatanieModule } from "shared/shared.module";
 import { MatTableModule } from "@angular/material/table";
-import { MatChipInputEvent } from "@angular/material/chips";
+import { MatChipInputEvent, MatChipsModule } from "@angular/material/chips";
 import { of } from "rxjs";
 import { Dataset, Sample } from "shared/sdk";
 import { MatDialogRef } from "@angular/material/dialog";
 import { SampleEditComponent } from "datasets/sample-edit/sample-edit.component";
+import { MatCardModule } from "@angular/material/card";
+import { MatIconModule } from "@angular/material/icon";
+import { MatInputModule } from "@angular/material/input";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatButtonModule } from "@angular/material/button";
+import { MatTabsModule } from "@angular/material/tabs";
+import { NgxJsonViewerModule } from "ngx-json-viewer";
 
 describe("DatasetDetailComponent", () => {
   let component: DatasetDetailComponent;
   let fixture: ComponentFixture<DatasetDetailComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      schemas: [NO_ERRORS_SCHEMA],
-      imports: [AppConfigModule, MatTableModule, SharedCatanieModule],
-      declarations: [DatasetDetailComponent, DatafilesComponent, LinkyPipe],
-    });
-    TestBed.overrideComponent(DatasetDetailComponent, {
-      set: {
-        providers: [
-          {
-            provide: APP_CONFIG,
-            useValue: {
-              editMetadataEnabled: true,
-            },
-          },
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        schemas: [NO_ERRORS_SCHEMA],
+        imports: [
+          AppConfigModule,
+          MatButtonModule,
+          MatCardModule,
+          MatChipsModule,
+          MatFormFieldModule,
+          MatIconModule,
+          MatInputModule,
+          MatTableModule,
+          MatTabsModule,
+          NgxJsonViewerModule,
+          SharedCatanieModule,
         ],
-      },
-    });
-    TestBed.compileComponents();
-  }));
+        declarations: [DatasetDetailComponent, DatafilesComponent, LinkyPipe],
+      });
+      TestBed.overrideComponent(DatasetDetailComponent, {
+        set: {
+          providers: [
+            {
+              provide: APP_CONFIG,
+              useValue: {
+                editMetadataEnabled: true,
+              },
+            },
+          ],
+        },
+      });
+      TestBed.compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(DatasetDetailComponent);

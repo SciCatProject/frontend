@@ -8,13 +8,12 @@ import { DatasetsModule } from "datasets/datasets.module";
 import { EffectsModule } from "@ngrx/effects";
 import { FlexLayoutModule } from "@angular/flex-layout";
 import { HttpClientModule } from "@angular/common/http";
-import { NgModule} from "@angular/core";
+import { NgModule } from "@angular/core";
 import { PoliciesModule } from "policies/policies.module";
 import { ProposalsModule } from "proposals/proposals.module";
 import { RouterModule } from "@angular/router";
 import { SampleApi, SDKBrowserModule } from "shared/sdk/index";
 import { SamplesModule } from "./samples/samples.module";
-import { SatDatepickerModule, SatNativeDateModule } from "saturn-datepicker";
 import { SharedCatanieModule } from "shared/shared.module";
 import { StoreModule } from "@ngrx/store";
 import { UserApi } from "shared/sdk/services";
@@ -41,6 +40,7 @@ import { InstrumentsModule } from "./instruments/instruments.module";
 import { FilesModule } from "files/files.module";
 import { MatButtonModule } from "@angular/material/button";
 import { MatButtonToggleModule } from "@angular/material/button-toggle";
+import { MatDatepickerModule } from "@angular/material/datepicker";
 @NgModule({
   declarations: [AppComponent],
   imports: [
@@ -59,8 +59,10 @@ import { MatButtonToggleModule } from "@angular/material/button-toggle";
     LogbooksModule,
     LayoutModule,
     MatBadgeModule,
+    MatDatepickerModule,
     MatIconModule,
     MatMenuModule,
+    MatNativeDateModule,
     MatProgressSpinnerModule,
     MatSnackBarModule,
     MatToolbarModule,
@@ -70,8 +72,6 @@ import { MatButtonToggleModule } from "@angular/material/button-toggle";
     ProposalsModule,
     PublisheddataModule,
     SamplesModule,
-    SatDatepickerModule,
-    SatNativeDateModule,
     SharedCatanieModule,
     UsersModule,
     SDKBrowserModule.forRoot(),
@@ -100,4 +100,4 @@ import { MatButtonToggleModule } from "@angular/material/button-toggle";
   providers: [UserApi, SampleApi, Title, MatNativeDateModule],
   bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

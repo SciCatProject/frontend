@@ -24,6 +24,9 @@ import { MatCheckboxChange } from "@angular/material/checkbox";
 import { of } from "rxjs";
 import { Message, MessageType } from "state-management/models";
 import { showMessageAction } from "state-management/actions/user.actions";
+import { FlexLayoutModule } from "@angular/flex-layout";
+import { MatButtonModule } from "@angular/material/button";
+import { MatIconModule } from "@angular/material/icon";
 
 describe("PublisheddataDashboardComponent", () => {
   let component: PublisheddataDashboardComponent;
@@ -39,8 +42,13 @@ describe("PublisheddataDashboardComponent", () => {
     waitForAsync(() => {
       TestBed.configureTestingModule({
         schemas: [NO_ERRORS_SCHEMA],
+        imports: [
+          FlexLayoutModule,
+          MatButtonModule,
+          MatIconModule,
+          StoreModule.forRoot({}),
+        ],
         declarations: [PublisheddataDashboardComponent],
-        imports: [StoreModule.forRoot({})],
       });
       TestBed.overrideComponent(PublisheddataDashboardComponent, {
         set: {
@@ -74,10 +82,11 @@ describe("PublisheddataDashboardComponent", () => {
       const commandSpy = spyOn(document, "execCommand");
       dispatchSpy = spyOn(store, "dispatch");
 
-      const message = new Message();
-      message.content = "The selected DOI's have been copied to your clipboard";
-      message.type = MessageType.Success;
-      message.duration = 5000;
+      const message = new Message(
+        "The selected DOI's have been copied to your clipboard",
+        MessageType.Success,
+        5000
+      );
 
       component.onShareClick();
 

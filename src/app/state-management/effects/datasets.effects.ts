@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { DatasetApi, Dataset } from "shared/sdk";
+import { DatasetApi, Dataset, LoopBackFilter } from "shared/sdk";
 import { Store, select } from "@ngrx/store";
 import {
   getFullqueryParams,
@@ -122,7 +122,7 @@ export class DatasetEffects {
     this.actions$.pipe(
       ofType(fromActions.fetchDatasetAction),
       switchMap(({ pid, filters }) => {
-        const datasetFilter = {
+        const datasetFilter: LoopBackFilter = {
           where: { pid },
           include: [
             { relation: "origdatablocks" },
@@ -137,7 +137,7 @@ export class DatasetEffects {
           });
         }
 
-        return this.datasetApi.findOne(datasetFilter).pipe(
+        return this.datasetApi.findOne<Dataset>(datasetFilter).pipe(
           map((dataset: Dataset) =>
             fromActions.fetchDatasetCompleteAction({ dataset })
           ),
@@ -184,16 +184,16 @@ export class DatasetEffects {
     this.actions$.pipe(
       ofType(fromActions.addAttachmentAction),
       switchMap(({ attachment }) => {
-        delete attachment.id;
-        delete attachment.rawDatasetId;
-        delete attachment.derivedDatasetId;
-        delete attachment.proposalId;
-        delete attachment.sampleId;
+        const {
+          id,
+          rawDatasetId,
+          derivedDatasetId,
+          proposalId,
+          sampleId,
+          ...theRest
+        } = attachment;
         return this.datasetApi
-          .createAttachments(
-            encodeURIComponent(attachment.datasetId),
-            attachment
-          )
+          .createAttachments(encodeURIComponent(theRest.datasetId!), theRest)
           .pipe(
             map((res) =>
               fromActions.addAttachmentCompleteAction({ attachment: res })
@@ -303,7 +303,7 @@ export class DatasetEffects {
       ofType(fromActions.prefillBatchAction),
       withLatestFrom(this.currentUser$),
       filter(([, user]) => user != null),
-      map(([, user]) => this.retrieveBatch(user.id)),
+      map(([, user]) => this.retrieveBatch(user?.id)),
       map((batch) => fromActions.prefillBatchCompleteAction({ batch }))
     )
   );
@@ -317,7 +317,7 @@ export class DatasetEffects {
           fromActions.clearBatchAction
         ),
         withLatestFrom(this.datasetsInBatch$, this.currentUser$),
-        tap(([, batch, user]) => this.storeBatch(batch, user.id))
+        tap(([, batch, user]) => this.storeBatch(batch, user?.id))
       ),
     { dispatch: false }
   );
@@ -326,7 +326,7 @@ export class DatasetEffects {
     () =>
       this.actions$.pipe(
         ofType(logoutCompleteAction),
-        tap(() => this.storeBatch([], null))
+        tap(() => this.storeBatch([], ""))
       ),
     { dispatch: false }
   );

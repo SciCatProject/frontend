@@ -28,10 +28,11 @@ import { SharedCatanieModule } from "shared/shared.module";
 import { ProposalDashboardComponent } from "./proposal-dashboard/proposal-dashboard.component";
 import { FlexLayoutModule } from "@angular/flex-layout";
 import { FileSizePipe } from "shared/pipes/filesize.pipe";
-import { SatDatepickerModule } from "saturn-datepicker";
 import { ProposalFilterComponent } from "./proposal-filter/proposal-filter.component";
 import { LogbooksModule } from "logbooks/logbooks.module";
 import { ProposalDashboardNewComponent } from "./proposal-dashboard-new/proposal-dashboard-new.component";
+import { MatDatepickerModule } from "@angular/material/datepicker";
+import { MatNativeDateModule } from "@angular/material/core";
 
 @NgModule({
   imports: [
@@ -41,10 +42,12 @@ import { ProposalDashboardNewComponent } from "./proposal-dashboard-new/proposal
     LogbooksModule,
     MatButtonModule,
     MatCardModule,
+    MatDatepickerModule,
     MatExpansionModule,
     MatIconModule,
     MatInputModule,
     MatFormFieldModule,
+    MatNativeDateModule,
     MatPaginatorModule,
     MatSortModule,
     MatTableModule,
@@ -52,7 +55,6 @@ import { ProposalDashboardNewComponent } from "./proposal-dashboard-new/proposal
     MatTooltipModule,
     NgxJsonViewerModule,
     RouterModule,
-    SatDatepickerModule,
     SharedCatanieModule,
     StoreModule.forFeature("proposals", proposalsReducer)
   ],

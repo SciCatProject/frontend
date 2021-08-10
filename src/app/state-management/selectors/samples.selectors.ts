@@ -5,85 +5,85 @@ const getSampleState = createFeatureSelector<SampleState>("samples");
 
 export const getSamples = createSelector(
   getSampleState,
-  state => state.samples
+  (state) => state.samples
 );
 
 export const getMetadataKeys = createSelector(
   getSampleState,
-  state => state.metadataKeys
+  (state) => state.metadataKeys
 );
 
 export const getCurrentSample = createSelector(
   getSampleState,
-  state => state.currentSample
+  (state) => state.currentSample
 );
 
 export const getCurrentAttachments = createSelector(
   getCurrentSample,
-  sample => sample.attachments
+  (sample) => (sample ? sample.attachments : [])
 );
 
 export const getDatasets = createSelector(
   getSampleState,
-  state => state.datasets
+  (state) => state.datasets
 );
 
 export const getSamplesCount = createSelector(
   getSampleState,
-  state => state.samplesCount
+  (state) => state.samplesCount
 );
 
 export const getDatasetsCount = createSelector(
   getSampleState,
-  state => state.datasetsCount
+  (state) => state.datasetsCount
 );
 
 export const getHasPrefilledFilters = createSelector(
   getSampleState,
-  state => state.hasPrefilledFilters
+  (state) => state.hasPrefilledFilters
 );
 
 export const getFilters = createSelector(
   getSampleState,
-  state => state.sampleFilters
+  (state) => state.sampleFilters
 );
 
 export const getTextFilter = createSelector(
   getFilters,
-  filters => filters.text
+  (filters) => filters.text
 );
 
 export const getDatasetFilters = createSelector(
   getSampleState,
-  state => state.datasetFilters
+  (state) => state.datasetFilters
 );
 
-export const getPage = createSelector(getFilters, filters => {
+export const getPage = createSelector(getFilters, (filters) => {
   const { skip, limit } = filters;
   return skip / limit;
 });
 
-export const getDatasetsPage = createSelector(getDatasetFilters, filters => {
+export const getDatasetsPage = createSelector(getDatasetFilters, (filters) => {
   const { skip, limit } = filters;
   return skip / limit;
 });
 
 export const getSamplesPerPage = createSelector(
   getFilters,
-  filters => filters.limit
+  (filters) => filters.limit
 );
 
 export const getCharacteristicsFilter = createSelector(
   getFilters,
-  filters => filters.characteristics
+  (filters) => filters.characteristics
 );
 
 export const getDatasetsPerPage = createSelector(
   getDatasetFilters,
-  filters => filters.limit
+  (filters) => filters.limit
 );
 
-export const getFullqueryParams = createSelector(getFilters, filters => {
+export const getFullqueryParams = createSelector(getFilters, (filters) => {
   const { sortField, skip, limit, ...theRest } = filters;
   const limits = { order: sortField, skip, limit };
   const query = restrictFilter(theRest);
@@ -92,7 +92,7 @@ export const getFullqueryParams = createSelector(getFilters, filters => {
 
 export const getDatasetsQueryParams = createSelector(
   getDatasetFilters,
-  filters => {
+  (filters) => {
     const { sortField, skip, limit } = filters;
     return { order: sortField, skip, limit };
   }

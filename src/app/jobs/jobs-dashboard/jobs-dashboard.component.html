@@ -1,12 +1,12 @@
 <div fxLayout="row" fxLayout.lt-lg="column">
   <div fxFlex="14" fxFlex.lt-xl="10"></div>
   <div fxFlex="60" fxFlex.lt-xl="80">
-    <mat-button-toggle-group [value]="currentMode">
+    <mat-button-toggle-group [(ngModel)]="currentMode">
       <mat-button-toggle
         *ngFor="let mode of modes"
         [value]="mode"
         [ngClass]="mode"
-        (click)="onModeChange($event, mode)"
+        (click)="onModeToggleChange()"
       >
         {{ mode | titleCase }}
       </mat-button-toggle>
