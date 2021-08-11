@@ -5,9 +5,9 @@ import { TableColumn } from "state-management/models";
 export const APP_CONFIG = new InjectionToken<AppConfig>("app.config");
 
 export class OAuth2Endpoint {
-  displayText: string;
-  displayImage?: string;
-  authURL: string;
+  displayText = "";
+  displayImage?: string | null = null;
+  authURL= "";
 }
 
 export class AppConfig {
@@ -54,8 +54,8 @@ export class AppConfig {
   metadataStructure = "";
   userProfileImageEnabled = false;
   userNamePromptEnabled = false;
-  loginFormEnabled: boolean;
-  oAuth2Endpoints: OAuth2Endpoint[];
+  loginFormEnabled = true;
+  oAuth2Endpoints: OAuth2Endpoint[] = [];
 }
 
 export const APP_DI_CONFIG: AppConfig = {

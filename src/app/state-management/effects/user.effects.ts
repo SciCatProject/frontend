@@ -93,7 +93,7 @@ export class UserEffects {
           userId: oidcLoginResponse.userId,
         });
         this.loopBackAuth.setToken(token);
-        return this.userApi.findById(oidcLoginResponse.userId).pipe(
+        return this.userApi.findById<User>(oidcLoginResponse.userId).pipe(
           switchMap((user: User) => [
             fromActions.fetchUserCompleteAction(),
             fromActions.loginCompleteAction({

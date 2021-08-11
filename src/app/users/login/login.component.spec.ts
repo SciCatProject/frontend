@@ -11,7 +11,7 @@ import { MockActivatedRoute, MockRouter, MockStore } from "shared/MockStubs";
 
 import { LoginComponent } from "./login.component";
 
-import { APP_CONFIG, AppConfigModule } from "app-config.module";
+import { APP_CONFIG, AppConfigModule, OAuth2Endpoint } from "app-config.module";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { loginAction } from "state-management/actions/user.actions";
 import { PrivacyDialogComponent } from "users/privacy-dialog/privacy-dialog.component";
@@ -30,11 +30,12 @@ describe("LoginComponent", () => {
   let store: MockStore;
   let dispatchSpy;
 
+  const endpoints: OAuth2Endpoint[] = [];
   const appConfig =  {
     disabledDatasetColumns: [],
     archiveWorkflowEnabled: true,
     loginFormEnabled: true,
-    oAuth2Endpoints: []
+    oAuth2Endpoints: endpoints
   };
 
   beforeEach(waitForAsync(() => {
@@ -173,7 +174,8 @@ describe("LoginComponent", () => {
       fixture = TestBed.createComponent(LoginComponent);
       component = fixture.componentInstance;
       fixture.detectChanges();
-      appConfig.oAuth2Endpoints = [{displayName: "oauth provider", authURL: "/auth/foo"}];
+      const endpoint: OAuth2Endpoint = {displayText: "oauth provider", authURL: "/auth/foo"};
+      appConfig.oAuth2Endpoints = [endpoint];
     });
     it("should display OAuth2 provider", () => {
       dispatchSpy = spyOn(component, "redirectOIDC");
