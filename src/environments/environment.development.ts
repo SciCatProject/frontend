@@ -62,5 +62,7 @@ export const environment = {
   editDatasetSampleEnabled: false,
   scienceSearchUnitsEnabled: false,
   metadataStructure: "",
-  userNamePromptEnabled: false
+  userNamePromptEnabled: true,
+  loginFormEnabled: true,
+  oAuth2Endpoints: []
 };

@@ -42,4 +42,6 @@ export const environment = {
   tableSciDataEnabled: false,
   userNamePromptEnabled: false,
   userProfileImageEnabled: false,
+  loginFormEnabled: true,
+  oAuth2Endpoints: []
 };
