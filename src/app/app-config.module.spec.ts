@@ -1,11 +1,7 @@
 import {
-  ComponentFixture,
   TestBed,
-  inject,
-  waitForAsync
 } from "@angular/core/testing";
-import { APP_CONFIG, AppConfigModule, OAuth2Endpoint } from "app-config.module";
-import { env } from "process";
+import { AppConfigModule, OAuth2Endpoint } from "app-config.module";
 import { environment } from "../environments/environment";
 
 describe("OAuth2Endpoint", () =>{
