@@ -1,13 +1,13 @@
 import {
   TestBed,
 } from "@angular/core/testing";
-import { AppConfigModule, OAuth2Endpoint } from "app-config.module";
+import {AppConfigModule, OAuth2Endpoint } from "app-config.module";
 import { environment } from "../environments/environment";
 
-describe("OAuth2Endpoint", () =>{
+describe("app config", () =>{
 
 
-  const endpoints: OAuth2Endpoint[] = [];
+ 
   beforeEach( () => {
     TestBed.configureTestingModule({
       imports: [AppConfigModule],
@@ -27,6 +27,19 @@ describe("OAuth2Endpoint", () =>{
     });
   });
   
+  describe("oauth endpoint", () => {
+
+    const endpoint: OAuth2Endpoint = {
+      displayText: "test",
+      authURL: "foo/bar"
+    };
+
+    it("is valid", () => {
+      expect(endpoint.displayText).toEqual("test");
+      expect(endpoint.authURL).toEqual("foo/bar");
+    });
+
+  });
 
 });
 
