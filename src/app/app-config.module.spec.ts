@@ -4,21 +4,22 @@ import {
 import {APP_DI_CONFIG, AppConfigModule, OAuth2Endpoint } from "app-config.module";
 import { environment } from "../environments/environment";
 
-describe("app config", () =>{
 
+// see https://testing-angular.com/testing-modules/
+describe("AppConfigModule", () =>{
 
- 
   beforeEach( () => {
     TestBed.configureTestingModule({
       imports: [AppConfigModule],
     });
   });
   
-  it("initialized", () => {
+  it("initializes", () => {
     const module = TestBed.inject(AppConfigModule);
     expect(module).toBeTruthy();
   });
 
+  
   describe("initial environment", () =>{
     
     it("initialized", () => {
