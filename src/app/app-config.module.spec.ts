@@ -1,7 +1,7 @@
 import {
   TestBed,
 } from "@angular/core/testing";
-import {AppConfigModule, OAuth2Endpoint } from "app-config.module";
+import {APP_DI_CONFIG, AppConfigModule, OAuth2Endpoint } from "app-config.module";
 import { environment } from "../environments/environment";
 
 describe("app config", () =>{
@@ -41,5 +41,13 @@ describe("app config", () =>{
 
   });
 
+
+  describe("APP_DI_CONFIG", () =>{
+    
+    it("initialized", () => {
+      expect(APP_DI_CONFIG.loginFormEnabled).toBeTruthy();
+      expect(APP_DI_CONFIG.oAuth2Endpoints.length).toEqual(0);
+    });
+  });
 });
 

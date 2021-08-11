@@ -169,7 +169,20 @@ describe("LoginComponent", () => {
 
   });
 
-  describe("oauth2 configuration", () => {
+  describe("oauth2 not configurated", () => {
+    beforeEach(() => {
+      fixture = TestBed.createComponent(LoginComponent);
+      component = fixture.componentInstance;
+      fixture.detectChanges();
+    });
+    it("should not display OAuth2 provider", () => {
+      const compiled = fixture.debugElement.nativeElement;
+      expect(compiled.querySelector("oauth-login-button")).toBeFalsy();
+    });
+
+  });
+
+  describe("oauth2 configurated", () => {
     beforeEach(() => {
       fixture = TestBed.createComponent(LoginComponent);
       component = fixture.componentInstance;
