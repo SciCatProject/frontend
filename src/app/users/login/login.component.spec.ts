@@ -36,7 +36,8 @@ describe("LoginComponent", () => {
     archiveWorkflowEnabled: true,
     facility: "not-ESS",
     loginFormEnabled: true,
-    oAuth2Endpoints: endpoints
+    oAuth2Endpoints: endpoints,
+    lbBaseURL: "http://foo"
   };
 
   beforeEach(waitForAsync(() => {
@@ -121,6 +122,21 @@ describe("LoginComponent", () => {
     });
   });
 
+  describe("not ESS", ()=> {
+    beforeEach(() => {
+      appConfig.facility = "not-ESS";
+      appConfig.loginFormEnabled = false;
+      fixture = TestBed.createComponent(LoginComponent);
+      component = fixture.componentInstance;
+      fixture.detectChanges();
+
+    });
+    it("should should not appear", () => {
+      const compiled = fixture.debugElement.nativeElement;  
+      expect(compiled.querySelector("privacy-notice")).toBeFalsy();
+    });
+  });
+
 
   describe("#onLogin()", () => {
     beforeEach(() => {
@@ -195,11 +211,13 @@ describe("LoginComponent", () => {
     });
     it("should display OAuth2 provider", () => {
       dispatchSpy = spyOn(component, "redirectOIDC");
-
+      console.log(`!!!!!     ${component.document.location.href}`);
       component.redirectOIDC("/auth/foo");
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith("/auth/foo");
+      console.log(`!!!!!     ${component.document.location.href}`);
+      // expect(component.document.location.href).toEqual(`${appConfig.lbBaseURL}/auth/foo`);
     });
 
   });
