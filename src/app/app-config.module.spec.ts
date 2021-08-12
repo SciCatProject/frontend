@@ -38,6 +38,7 @@ describe("AppConfigModule", () =>{
     it("is valid", () => {
       expect(endpoint.displayText).toEqual("test");
       expect(endpoint.authURL).toEqual("foo/bar");
+      expect(endpoint.displayImage).toBeUndefined();
     });
 
   });

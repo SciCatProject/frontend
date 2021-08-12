@@ -34,6 +34,7 @@ describe("LoginComponent", () => {
   const appConfig =  {
     disabledDatasetColumns: [],
     archiveWorkflowEnabled: true,
+    facility: "not-ESS",
     loginFormEnabled: true,
     oAuth2Endpoints: endpoints
   };
@@ -101,6 +102,8 @@ describe("LoginComponent", () => {
 
   describe("#openPrivacyDialog()", () => {
     beforeEach(() => {
+      appConfig.loginFormEnabled = false;
+      appConfig.facility = "ESS";
       fixture = TestBed.createComponent(LoginComponent);
       component = fixture.componentInstance;
       fixture.detectChanges();

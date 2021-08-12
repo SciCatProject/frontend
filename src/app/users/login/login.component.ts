@@ -41,7 +41,6 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   returnUrl: string;
   hide = true;
-
   public loginForm = this.fb.group({
     username: ["", Validators.required],
     password: ["", Validators.required],
