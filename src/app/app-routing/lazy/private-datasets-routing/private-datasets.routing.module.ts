@@ -43,7 +43,7 @@ const routes: Routes = [
   //   component: DatafilesComponent,
   //   canActivate: [DatasetsGuard],
   // },
-]
+];
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],

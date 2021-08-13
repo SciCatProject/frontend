@@ -13,7 +13,7 @@ const routes: Routes = [
     path: ":id",
     component: AnonymousDetailsDashboardComponent,
   },
-]
+];
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
