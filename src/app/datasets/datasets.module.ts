@@ -65,6 +65,13 @@ import { AnonymousDetailsComponent } from "./anonymous-details/anonymous-details
 import { SampleEditComponent } from "./sample-edit/sample-edit.component";
 import { LuxonDateAdapter, MAT_LUXON_DATE_FORMATS } from "ngx-material-luxon";
 import { MatDatepickerModule } from "@angular/material/datepicker";
+import { UserEffects } from "state-management/effects/user.effects";
+import { ADAuthService } from "users/adauth.service";
+import { FileSizePipe } from "shared/pipes/filesize.pipe";
+import { ProposalEffects } from "state-management/effects/proposals.effects";
+import { proposalsReducer } from "state-management/reducers/proposals.reducer";
+import { SampleEffects } from "state-management/effects/samples.effects";
+import { samplesReducer } from "state-management/reducers/samples.reducer";
 
 @NgModule({
   imports: [
@@ -105,6 +112,11 @@ import { MatDatepickerModule } from "@angular/material/datepicker";
     SharedCatanieModule,
     StoreModule.forFeature("datasets", datasetsReducer),
     StoreModule.forFeature("jobs", jobsReducer),
+    EffectsModule.forFeature([UserEffects]),
+    EffectsModule.forFeature([ProposalEffects]),
+    StoreModule.forFeature("proposals", proposalsReducer),
+    EffectsModule.forFeature([SampleEffects]),
+    StoreModule.forFeature("samples", samplesReducer),
     LogbooksModule,
   ],
   declarations: [
@@ -131,6 +143,8 @@ import { MatDatepickerModule } from "@angular/material/datepicker";
   providers: [
     ArchivingService,
     AsyncPipe,
+    ADAuthService,
+    FileSizePipe,
     {
       provide: DateAdapter,
       useClass: LuxonDateAdapter,

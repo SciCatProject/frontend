@@ -17,7 +17,6 @@ import { SamplesModule } from "./samples/samples.module";
 import { SharedCatanieModule } from "shared/shared.module";
 import { StoreModule } from "@ngrx/store";
 import { UserApi } from "shared/sdk/services";
-import { UsersModule } from "users/users.module";
 import { routerReducer } from "@ngrx/router-store";
 import { extModules } from "./build-specifics";
 
@@ -31,8 +30,6 @@ import { MatToolbarModule } from "@angular/material/toolbar";
 import { ServiceWorkerModule } from "@angular/service-worker";
 import { environment } from "../environments/environment";
 import { LogbooksModule } from "./logbooks/logbooks.module";
-import { AboutModule } from "about/about.module";
-import { HelpModule } from "help/help.module";
 import { PublisheddataModule } from "publisheddata/publisheddata.module";
 import { LayoutModule } from "_layout/layout.module";
 import { JobsModule } from "jobs/jobs.module";
@@ -44,17 +41,12 @@ import { MatDatepickerModule } from "@angular/material/datepicker";
 @NgModule({
   declarations: [AppComponent],
   imports: [
-    AboutModule,
     AppConfigModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     BrowserModule,
-    DatasetsModule,
-    FilesModule,
     FlexLayoutModule,
-    HelpModule,
     HttpClientModule,
-    InstrumentsModule,
     JobsModule,
     LogbooksModule,
     LayoutModule,
@@ -68,12 +60,7 @@ import { MatDatepickerModule } from "@angular/material/datepicker";
     MatToolbarModule,
     MatButtonModule,
     MatButtonToggleModule,
-    PoliciesModule,
-    ProposalsModule,
-    PublisheddataModule,
-    SamplesModule,
     SharedCatanieModule,
-    UsersModule,
     SDKBrowserModule.forRoot(),
     StoreModule.forRoot(
       { router: routerReducer, users: userReducer },
