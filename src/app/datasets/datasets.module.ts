@@ -72,6 +72,8 @@ import { ProposalEffects } from "state-management/effects/proposals.effects";
 import { proposalsReducer } from "state-management/reducers/proposals.reducer";
 import { SampleEffects } from "state-management/effects/samples.effects";
 import { samplesReducer } from "state-management/reducers/samples.reducer";
+import { PublishedDataEffects } from "state-management/effects/published-data.effects";
+import { publishedDataReducer } from "state-management/reducers/published-data.reducer";
 
 @NgModule({
   imports: [
@@ -117,7 +119,9 @@ import { samplesReducer } from "state-management/reducers/samples.reducer";
     StoreModule.forFeature("proposals", proposalsReducer),
     EffectsModule.forFeature([SampleEffects]),
     StoreModule.forFeature("samples", samplesReducer),
-    LogbooksModule,
+    EffectsModule.forFeature([PublishedDataEffects]),
+    StoreModule.forFeature("publishedData", publishedDataReducer),
+        LogbooksModule,
   ],
   declarations: [
     BatchCardComponent,
