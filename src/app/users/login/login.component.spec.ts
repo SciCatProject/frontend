@@ -125,7 +125,7 @@ describe("LoginComponent", () => {
   describe("not ESS", ()=> {
     beforeEach(() => {
       appConfig.facility = "not-ESS";
-      appConfig.loginFormEnabled = false;
+      appConfig.loginFormEnabled = true;
       fixture = TestBed.createComponent(LoginComponent);
       component = fixture.componentInstance;
       fixture.detectChanges();

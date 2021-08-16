@@ -28,6 +28,14 @@ describe("AppConfigModule", () =>{
     });
   });
 
+  describe("empty app_config", () => {
+    it("has defaults", () => {
+      const emptyAppConfig = new AppConfig();
+      expect(emptyAppConfig.lbBaseURL).toBe("");
+      expect(emptyAppConfig.externalAuthEndpoint).toBeNull();
+    });
+  });
+
   describe("AppConfig init", () =>{
     it ("constructs", () => {
       const appConfig: AppConfig = {
@@ -89,14 +97,23 @@ describe("AppConfigModule", () =>{
     });
   });
   
-  describe("oauth endpoint", () => {
+  describe("OAuth2Endpoint", () => {
 
-    const endpoint: OAuth2Endpoint = {
-      displayText: "test",
-      authURL: "foo/bar"
-    };
+  
+
+    it("has initial values", () => {
+      const endpoint2: OAuth2Endpoint = new OAuth2Endpoint();
+      expect(endpoint2.displayText).toEqual("");
+      expect(endpoint2.authURL).toEqual("");
+      expect(endpoint2.displayImage).toEqual(null);
+    });
 
     it("is valid", () => {
+      const endpoint: OAuth2Endpoint = {
+        displayText: "test",
+        authURL: "foo/bar"
+      };
+  
       expect(endpoint.displayText).toEqual("test");
       expect(endpoint.authURL).toEqual("foo/bar");
       expect(endpoint.displayImage).toBeUndefined();
@@ -106,10 +123,19 @@ describe("AppConfigModule", () =>{
 
 
   describe("APP_DI_CONFIG", () =>{
-    
     it("initialized", () => {
       expect(APP_DI_CONFIG.loginFormEnabled).toBeTruthy();
       expect(APP_DI_CONFIG.oAuth2Endpoints.length).toEqual(0);
+    });
+  });
+
+  describe("APP_DI_CONFIG with null environment", () =>{
+    beforeEach( () => {
+      environment.externalAuthEndpoint = null;
+    });
+    it("initialized", () => {
+      expect(APP_DI_CONFIG.loginFormEnabled).toBeTruthy();
+      expect(APP_DI_CONFIG.externalAuthEndpoint.length).toBe(10);
     });
   });
 });
