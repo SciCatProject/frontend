@@ -3,7 +3,6 @@ import { EffectsModule } from "@ngrx/effects";
 import { AppConfigModule } from "app-config.module";
 import { LinkyModule } from "ngx-linky";
 import { ArchivingService } from "./archiving.service";
-import { BatchCardComponent } from "./batch-card/batch-card.component";
 import { BatchViewComponent } from "./batch-view/batch-view.component";
 import { AsyncPipe, CommonModule } from "@angular/common";
 import { FlexLayoutModule } from "@angular/flex-layout";
@@ -74,6 +73,7 @@ import { SampleEffects } from "state-management/effects/samples.effects";
 import { samplesReducer } from "state-management/reducers/samples.reducer";
 import { PublishedDataEffects } from "state-management/effects/published-data.effects";
 import { publishedDataReducer } from "state-management/reducers/published-data.reducer";
+import { BatchCardModule } from "./batch-card/batch-card.module";
 
 @NgModule({
   imports: [
@@ -112,6 +112,7 @@ import { publishedDataReducer } from "state-management/reducers/published-data.r
     ReactiveFormsModule,
     RouterModule,
     SharedCatanieModule,
+    BatchCardModule,
     StoreModule.forFeature("datasets", datasetsReducer),
     StoreModule.forFeature("jobs", jobsReducer),
     EffectsModule.forFeature([UserEffects]),
@@ -124,7 +125,6 @@ import { publishedDataReducer } from "state-management/reducers/published-data.r
         LogbooksModule,
   ],
   declarations: [
-    BatchCardComponent,
     BatchViewComponent,
     DashboardComponent,
     DatablocksComponent,
@@ -164,7 +164,6 @@ import { publishedDataReducer } from "state-management/reducers/published-data.r
     DatasetDetailComponent,
     DatasetTableComponent,
     DatasetsFilterComponent,
-    BatchCardComponent,
   ],
 })
 export class DatasetsModule {}
