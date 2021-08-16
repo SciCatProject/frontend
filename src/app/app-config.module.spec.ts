@@ -129,14 +129,6 @@ describe("AppConfigModule", () =>{
     });
   });
 
-  describe("APP_DI_CONFIG with null environment", () =>{
-    beforeEach( () => {
-      environment.externalAuthEndpoint = null;
-    });
-    it("initialized", () => {
-      expect(APP_DI_CONFIG.loginFormEnabled).toBeTruthy();
-      expect(APP_DI_CONFIG.externalAuthEndpoint.length).toBe(10);
-    });
-  });
+
 });
 
