@@ -70,7 +70,7 @@ export class BreadcrumbComponent implements OnInit {
   setBreadcrumbs(): void {
     this.breadcrumbs = [];
     const children = this.route.children.reduce<ActivatedRoute[]>((accumulator, child) => {
-      accumulator.push(child, ...child.children)
+      accumulator.push(child, ...child.children);
       return accumulator;
     }, []);
     children.forEach((root) => {
