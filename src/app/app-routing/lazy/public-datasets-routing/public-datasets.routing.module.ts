@@ -2,7 +2,6 @@ import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
 import { AnonymousDashboardComponent } from "datasets/anonymous-dashboard/anonymous-dashboard.component";
 import { AnonymousDetailsDashboardComponent } from "datasets/anonymous-details-dashboard/anonymous-details-dashboard.component";
-import { AnonymousDetailsComponent } from "datasets/anonymous-details/anonymous-details.component";
 
 const routes: Routes = [
   {
